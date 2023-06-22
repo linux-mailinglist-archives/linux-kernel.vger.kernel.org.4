@@ -2,128 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC91873A42A
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 17:03:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6E9F73A430
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 17:04:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232084AbjFVPDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 11:03:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40516 "EHLO
+        id S232206AbjFVPE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 11:04:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232095AbjFVPDg (ORCPT
+        with ESMTP id S232194AbjFVPEX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 11:03:36 -0400
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29C26268F;
-        Thu, 22 Jun 2023 08:03:17 -0700 (PDT)
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-311099fac92so8393016f8f.0;
-        Thu, 22 Jun 2023 08:03:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687446160; x=1690038160;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=t/n7cyBQWBJrKRj8jxj2QgN2B2DXg9ROG/UR9O3ggiI=;
-        b=a4j/5BRe6ikbuTRZI5Ze/gfo7/DAUTTt/Asv4VPS1uMJMnPhnmuh7vFI2flJapVr4c
-         UC+yvK8fb+aDyyZvCRQqGDk+z6C2DKUUyx3wBFeXmEI9B0wmB5U9DE2jqY5GiagcJfrP
-         L8dbVkdFYlUXouFhKkFgQHP98vaipyQbb6tfM+JyUloqgfELr3LX9nXtijiuJAKg4IUy
-         bGq8hnjoDEAGee1IoRlEYtX8GaYpNcyfn+3JaDGggBdTUd/YydevihI5Qxys3woJHATZ
-         XJt4sFYP7WCONzGr3yDRDr7jzQStv5iZj3SNvu2G8J9O9dIuzKIOIs/NTwXlcElan5hc
-         NuOw==
-X-Gm-Message-State: AC+VfDyPcTNW4Dm1Yd08cbR4TKzHn8kKo3+YFCQJsXm9gb0Kn6EbXh3a
-        iWdghonOgUchIPWqbhymzMs=
-X-Google-Smtp-Source: ACHHUZ4+rOnjnE4sQgtZcmXX9Fey6w9aB4HaOV5Uy8o85WMhvf0KHxeyaE5uZbAjbZTWnWK8B5SjBw==
-X-Received: by 2002:adf:f34f:0:b0:30f:b1ee:5cd0 with SMTP id e15-20020adff34f000000b0030fb1ee5cd0mr16382265wrp.50.1687446159714;
-        Thu, 22 Jun 2023 08:02:39 -0700 (PDT)
-Received: from gmail.com (fwdproxy-cln-021.fbsv.net. [2a03:2880:31ff:15::face:b00c])
-        by smtp.gmail.com with ESMTPSA id n15-20020a5d4c4f000000b003111025ec67sm7266818wrt.25.2023.06.22.08.02.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jun 2023 08:02:39 -0700 (PDT)
-Date:   Thu, 22 Jun 2023 08:02:37 -0700
-From:   Breno Leitao <leitao@debian.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>, Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, leit@meta.com,
-        Arnd Bergmann <arnd@arndb.de>,
-        Steve French <stfrench@microsoft.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Stephen Hemminger <stephen@networkplumber.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Simon Ser <contact@emersion.fr>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:IO_URING" <io-uring@vger.kernel.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>
-Subject: Re: [PATCH] io_uring: Add io_uring command support for sockets
-Message-ID: <ZJRijTDv5lUsVo+j@gmail.com>
-References: <20230621232129.3776944-1-leitao@debian.org>
- <2023062231-tasting-stranger-8882@gregkh>
+        Thu, 22 Jun 2023 11:04:23 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60D5DA2;
+        Thu, 22 Jun 2023 08:04:22 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35MEY98K017868;
+        Thu, 22 Jun 2023 15:03:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=Xwns8bgbN+DZBzCG5yuxVv+dMc+AS4IDe7VBMkluO/E=;
+ b=ltSGrx3eyJqRz3tdgQEF6I2voYL9iDB5FyNgRQYWB2paybkS+3h6PJ9ik9Xn+BzSjf6n
+ 1npbf3P8L0I0OfOaEU7NvcY+mBnakZoh/SqZZ5cmyzcW7UuOsbE//t34VZvY/r55MYNU
+ u4xxASHI+P2V6INhxNZFw5XJdO1bptLOEW97GOWlumYk8rS6PHsupTFL3ac5A+30ek+p
+ csHALcTOXhqYyjWUiqy40wCN4M4snDl5D0eXgjYMVMcrY8+rXerzZCgaTyu64hZ//I2V
+ LxqDK57c7HdHGQFFV5QugSF1DlzivJqCMUnwMxflFCqZNFkSWo2DtQTNvFvUL4MjjmwK PA== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rc0sk39ag-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Jun 2023 15:03:51 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35MF3itp020582
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Jun 2023 15:03:45 GMT
+Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 22 Jun
+ 2023 08:03:09 -0700
+Message-ID: <3fbd766f-f847-33a5-228d-1f03438e6a32@quicinc.com>
+Date:   Thu, 22 Jun 2023 09:03:08 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2023062231-tasting-stranger-8882@gregkh>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,FSL_HELO_FAKE,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH 4/9] clk: qcom: mmcc-msm8998: Properly consume GPLL0
+ inputs
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Taniya Das <tdas@codeaurora.org>
+CC:     Marijn Suijten <marijn.suijten@somainline.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230622-topic-8998clk-v1-0-5b7a0d6e98b1@linaro.org>
+ <20230622-topic-8998clk-v1-4-5b7a0d6e98b1@linaro.org>
+From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
+In-Reply-To: <20230622-topic-8998clk-v1-4-5b7a0d6e98b1@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: PpJl3CUaQkqPzQVUk5a58MCDNp9ZLiFt
+X-Proofpoint-ORIG-GUID: PpJl3CUaQkqPzQVUk5a58MCDNp9ZLiFt
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-22_10,2023-06-22_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
+ phishscore=0 impostorscore=0 mlxlogscore=787 priorityscore=1501
+ malwarescore=0 adultscore=0 spamscore=0 clxscore=1015 lowpriorityscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306220127
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 22, 2023 at 07:20:48AM +0200, Greg Kroah-Hartman wrote:
-> On Wed, Jun 21, 2023 at 04:21:26PM -0700, Breno Leitao wrote:
-> > Enable io_uring commands on network sockets. Create two new
-> > SOCKET_URING_OP commands that will operate on sockets. Since these
-> > commands are similar to ioctl, uses the _IO{R,W} helpers to embedded the
-> > argument size and operation direction. Also allocates a unused ioctl
-> > chunk for uring command usage.
-> > 
-> > In order to call ioctl on sockets, use the file_operations->uring_cmd
-> > callbacks, and map it to a uring socket function, which handles the
-> > SOCKET_URING_OP accordingly, and calls socket ioctls.
-> > 
-> > This patches was tested by creating a new test case in liburing.
-> > Link: https://github.com/leitao/liburing/commit/3340908b742c6a26f662a0679c4ddf9df84ef431
-> > 
-> > Signed-off-by: Breno Leitao <leitao@debian.org>
-> > ---
+On 6/22/2023 5:57 AM, Konrad Dybcio wrote:
+> Up until now, the GPLL0_DIV MMSS input has been modeled as a fixed
+> child of MMSS_GPLL0_DIV that's always-on. Properly representing the
+> former in the GCC driver makes us unable to keep doing so.
 > 
-> Isn't this a new version of an older patch?
-
-Yes, this should have tagged as V2.
-
-[1] https://lore.kernel.org/lkml/20230406144330.1932798-1-leitao@debian.org/#r
-
-> > --- a/Documentation/userspace-api/ioctl/ioctl-number.rst
-> > +++ b/Documentation/userspace-api/ioctl/ioctl-number.rst
-> > @@ -361,6 +361,7 @@ Code  Seq#    Include File                                           Comments
-> >  0xCB  00-1F                                                          CBM serial IEC bus in development:
-> >                                                                       <mailto:michael.klein@puffin.lb.shuttle.de>
-> >  0xCC  00-0F  drivers/misc/ibmvmc.h                                   pseries VMC driver
-> > +0xCC  A0-BF  uapi/linux/io_uring.h                                   io_uring cmd subsystem
+> Consume MSS_GPLL0_DIV through fw_name ("gpll0_div") as well as add a
+> fixed .name link to keep backwards compatibility.
 > 
-> This change is nice, but not totally related to this specific one,
-> shouldn't it be separate?
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-This is related to this patch, since I am using it below, in the
-following part:
-
-	+#define SOCKET_URING_OP_SIOCINQ _IOR(0xcc, 0xa0, int)
-	+#define SOCKET_URING_OP_SIOCOUTQ _IOR(0xcc, 0xa1, int)
-
-Should I have a different patch, even if they are related?
-
-> > +EXPORT_SYMBOL_GPL(uring_sock_cmd);
-> 
-> Did you forget the "io_" prefix?
-
-Yes, I will rename the function.
-
-Thanks for the review.
+Reviewed-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
