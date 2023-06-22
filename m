@@ -2,59 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3102739498
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 03:32:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7674739476
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 03:27:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229898AbjFVBc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 21:32:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48842 "EHLO
+        id S229969AbjFVB06 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 21:26:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229806AbjFVBcX (ORCPT
+        with ESMTP id S229809AbjFVB0s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 21:32:23 -0400
-Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBF49118
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 18:32:21 -0700 (PDT)
-Received: from submission (posteo.de [185.67.36.169]) 
-        by mout02.posteo.de (Postfix) with ESMTPS id 9C527240104
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 03:32:20 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
-        t=1687397540; bh=V9k96scDZkwEItaNXbCiChE4dAzMQL5AXCtzZjXTyjY=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:
-         Content-Transfer-Encoding:From;
-        b=lBIvaDU2cgL+XJ78CbU1QOzvjxWxUEOE/UCb//cMF2huKX9dQgHMQFNlxekRPoZkV
-         HUZK1HXRcoro3PqE35yhfMPdXSvAdfwuNI7/yO9gNcCHxSYvmjthu/N9D2SXh1a91i
-         KTmjgch7Tkc+QqkXq1LScMr0WMyUtfPMWNd+plKwqUFwjrXQSq49zBDzI3t9ijrQ8L
-         tk4CxBLMM+DiQs2x4IkwLs+l/x89XBq4AM+QOoMh7UJXuAxjx+1FEVi4bVYwYZoyNx
-         QDArqUW9I3Xh7gF3VFK2/EMDI2k26T+GVwMe09zHKLx2GMUb7QnHUtLAIJ53wHn/78
-         TF2ptWQ6CmU7g==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4QmjXY1hkqz6txl;
-        Thu, 22 Jun 2023 03:32:12 +0200 (CEST)
-From:   Yueh-Shun Li <shamrocklee@posteo.net>
-To:     Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Kalle Valo <kvalo@kernel.org>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Andy Whitcroft <apw@canonical.com>,
-        Joe Perches <joe@perches.com>
-Cc:     linux-rdma@vger.kernel.org, netdev@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-scsi@vger.kernel.org,
-        mptcp@lists.linux.dev, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yueh-Shun Li <shamrocklee@posteo.net>
-Subject: [PATCH 3/8] zd1211rw: fix comment typo
-Date:   Thu, 22 Jun 2023 01:26:27 +0000
-Message-Id: <20230622012627.15050-4-shamrocklee@posteo.net>
-In-Reply-To: <20230622012627.15050-1-shamrocklee@posteo.net>
-References: <20230622012627.15050-1-shamrocklee@posteo.net>
+        Wed, 21 Jun 2023 21:26:48 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AE531BE1;
+        Wed, 21 Jun 2023 18:26:48 -0700 (PDT)
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35LKa9Pq030131;
+        Thu, 22 Jun 2023 01:26:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=corp-2023-03-30;
+ bh=svPBYVJ6uF8a0dzZl14TnWQ5QVs4SQ2y1VQ1ajeENSg=;
+ b=Kl0m50pNJt1cJPCdYFTfrw3BmcgMvK373OMU+fh+HUw/iykrpixvG04anQMSq9Qsvjhk
+ iACBjliAxBd5HzVdshfHw1Gb3kWwo2Rxagm03hyl50C0kDTbek03TLYfp2ynEPF1+Yf/
+ sJOkdNIj1sRKf0XzZgKmdL7jDVpWcZC0G565t8ejanzN8/HVgBtKGXRStU9qTwS+7bUw
+ fbOS7cyIMPQvnO7HOvveYym6xkywQw2ECPxGE1Eto5dYL32c1q3bsh6itxqkRoS3eXlk
+ LJDUBdfl6kupt74lqjf8CFmcpGy+GaOS40NwP99ZrYC4eX+SfYoEArnVPxuS1ONdutz0 uA== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3r93rbrtr3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 22 Jun 2023 01:26:38 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 35M0n8gF038624;
+        Thu, 22 Jun 2023 01:26:37 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3r9396tj0c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 22 Jun 2023 01:26:37 +0000
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 35M1QXb9038374;
+        Thu, 22 Jun 2023 01:26:36 GMT
+Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3r9396thxp-10;
+        Thu, 22 Jun 2023 01:26:36 +0000
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+To:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Po-Wen Kao <powen.kao@mediatek.com>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        wsd_upstream@mediatek.com, peter.wang@mediatek.com,
+        stanley.chu@mediatek.com, alice.chao@mediatek.com,
+        naomi.chu@mediatek.com, chun-hung.wu@mediatek.com,
+        cc.chou@mediatek.com, eddie.huang@mediatek.com
+Subject: Re: [PATCH v2 0/2] ufs: mcq: Share first hwq for dev comamnd and IO request
+Date:   Wed, 21 Jun 2023 21:26:28 -0400
+Message-Id: <168739587248.247655.10714489734933136058.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230610021553.1213-1-powen.kao@mediatek.com>
+References: <20230610021553.1213-1-powen.kao@mediatek.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-21_14,2023-06-16_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0 suspectscore=0
+ adultscore=0 mlxscore=0 mlxlogscore=928 malwarescore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306220009
+X-Proofpoint-ORIG-GUID: XEifMyZrz5mCUUAldDGKj5MnT_5x-lzL
+X-Proofpoint-GUID: XEifMyZrz5mCUUAldDGKj5MnT_5x-lzL
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,28 +85,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Spell "transmits" properly.
+On Sat, 10 Jun 2023 10:15:50 +0800, Po-Wen Kao wrote:
 
-Found by searching for keyword "tranm".
+> v1 -> v2:
+> - Remove accidentally added ufshcd_add_command_trace() call in
+>   [PATCH v1 1/2]
+> - Add Test-by tag for both patch and refactor commit message
+> 
+> Po-Wen Kao (1):
+>   scsi: ufs: core: Remove dedicated hwq for dev command
+> 
+> [...]
 
-Signed-off-by: Yueh-Shun Li <shamrocklee@posteo.net>
----
- drivers/net/wireless/zydas/zd1211rw/zd_usb.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Applied to 6.5/scsi-queue, thanks!
 
-diff --git a/drivers/net/wireless/zydas/zd1211rw/zd_usb.c b/drivers/net/wireless/zydas/zd1211rw/zd_usb.c
-index 850c26bc9524..8505d84eeed6 100644
---- a/drivers/net/wireless/zydas/zd1211rw/zd_usb.c
-+++ b/drivers/net/wireless/zydas/zd1211rw/zd_usb.c
-@@ -1006,7 +1006,7 @@ static void tx_urb_complete(struct urb *urb)
-  * @usb: the zd1211rw-private USB structure
-  * @skb: a &struct sk_buff pointer
-  *
-- * This function tranmits a frame to the device. It doesn't wait for
-+ * This function transmits a frame to the device. It doesn't wait for
-  * completion. The frame must contain the control set and have all the
-  * control set information available.
-  *
+[1/2] scsi: ufs: mcq: Fix the incorrect OCS value for the device command
+      https://git.kernel.org/mkp/scsi/c/0fef6bb730c4
+[2/2] scsi: ufs: core: Remove dedicated hwq for dev command
+      https://git.kernel.org/mkp/scsi/c/ccb23dc3435a
+
 -- 
-2.38.1
-
+Martin K. Petersen	Oracle Linux Engineering
