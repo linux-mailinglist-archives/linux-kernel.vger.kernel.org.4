@@ -2,120 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE74C7393B9
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 02:26:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 518C17393CF
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 02:34:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229593AbjFVA0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 20:26:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58306 "EHLO
+        id S229694AbjFVAee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 20:34:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjFVA0o (ORCPT
+        with ESMTP id S229472AbjFVAec (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 20:26:44 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F7E2A1;
-        Wed, 21 Jun 2023 17:26:40 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        Wed, 21 Jun 2023 20:34:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F0B71710
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 17:34:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Qmh4m6KjLz4wjC;
-        Thu, 22 Jun 2023 10:26:32 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1687393593;
-        bh=19SFAqyiGHIjSeaYz7gu4pZOvtfALbexMUSRYuNdHw4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=K2NPfU0uhfr4a623V49I9xDEFiNVzXEBZtWb2yE4khz5sixZ1qjbpqCfu6mCmGG6k
-         Ovt7SbKc2rFxzqCeZ1Wa/a0zPIleyHzpDRydr0pxbat3bOON2mx8If449AhECiVwVW
-         YhLBlSnhxFLTMtdrGlzzJPOcaTC9o0pGSvUNaQGxuw9esqGuwZNihZRs0WDVMFlK7K
-         +pRts073PhQfLZVCs+T5AcBMQLxNbvV7rTgzGCEGR3TGRoALOERJKf739flpYmVvEo
-         g9BPMtAEisCrjRbaLYUt4wA9jyfbs3BzNJ7zH7q5J72TRa5Idox/6YPsWV61oZYLUP
-         Cgu1DztPm7NFA==
-Date:   Thu, 22 Jun 2023 10:26:30 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
-Cc:     ARM <linux-arm-kernel@lists.infradead.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Rob Herring <robh@kernel.org>
-Subject: linux-next: manual merge of the amlogic tree with the arm-soc tree
-Message-ID: <20230622102630.263ae2b8@canb.auug.org.au>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 209B261702
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 00:34:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DF99C433C8;
+        Thu, 22 Jun 2023 00:34:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687394070;
+        bh=AiZo/yWVr6AaszhH++L2NsU42IKDuEpbVQ7bGj7ECf4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=vAorBcPFmLvJTgk2RkidGZUjcsqiRPLMtFSoPBlyahiZDWeOO6gojp2QwLG8RMcW1
+         fSdHDXu+oCcr3PMFKXtBDl2gDTDJVZXjJeKxUEqYuXipK1Pc7xlEXWyX5B3OOKSljV
+         t2iZEiz1qV0qI8FWEeIFvnC6GJpHu4jeqa44M7URp72oXtP92tP3x1K1XU2vERtEpb
+         INrVQx7HTI7Kme9INelS5Bvbb79anLy3CoZUNiqhBIOMbLzH4FBUTPw3dxHZbSfTnl
+         J6aC7wab7Z3jhSUBFGG6FtyEntEX+kBgn/eYcHHYUmd6IZZ6vCje5bheOVJOFZtoyM
+         yb9Td4DcPhCtQ==
+Date:   Wed, 21 Jun 2023 17:34:29 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     carlos.fernandez@technica-engineering.de
+Cc:     davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sabrina Dubroca <sd@queasysnail.net>
+Subject: Re: [PATCH v3] net: macsec SCI assignment for ES = 0
+Message-ID: <20230621173429.18348fc8@kernel.org>
+In-Reply-To: <20230620091301.21981-1-carlos.fernandez@technica-engineering.de>
+References: <20230620091301.21981-1-carlos.fernandez@technica-engineering.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/7kMeHOL46Wi1SEsNy3paLl4";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/7kMeHOL46Wi1SEsNy3paLl4
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+A few nit picks and questions, when you repost please make sure to CC 
+Sabrina Dubroca <sd@queasysnail.net>
 
-Hi all,
+On Tue, 20 Jun 2023 11:13:01 +0200
+carlos.fernandez@technica-engineering.de wrote:
+> -static sci_t macsec_frame_sci(struct macsec_eth_header *hdr, bool sci_present)
+> +static sci_t macsec_frame_sci(struct macsec_eth_header *hdr, bool sci_present,
+> +			      struct macsec_rxh_data *rxd)
+>  {
+> +	struct macsec_dev *macsec_device;
+>  	sci_t sci;
+>  
+> -	if (sci_present)
+> +	if (sci_present) {
+>  		memcpy(&sci, hdr->secure_channel_id,
+> -		       sizeof(hdr->secure_channel_id));
+> -	else
+> +			sizeof(hdr->secure_channel_id));
 
-Today's linux-next merge of the amlogic tree got a conflict in:
+the alignment of sizeof() was correct, don't change it
 
-  MAINTAINERS
+> +	} else if (0 == (hdr->tci_an & (MACSEC_TCI_ES | MACSEC_TCI_SC))) {
 
-between commit:
+Just
+	} else if (hdr->tci_an & (MACSEC_TCI_ES | MACSEC_TCI_SC)) {
 
-  724ba6751532 ("ARM: dts: Move .dts files to vendor sub-directories")
+> +		list_for_each_entry_rcu(macsec_device, &rxd->secys, secys) {
+> +			struct macsec_rx_sc *rx_sc;
+> +			struct macsec_secy *secy = &macsec_device->secy;
 
-from the arm-soc tree and commit:
+You should reorder these two declaration, networking likes local
+variable declaration lines longest to shortest.
 
-  9e70e49474bb ("MAINTAINERS: add PHY-related files to Amlogic SoC file lis=
-t")
+> +			for_each_rxsc(secy, rx_sc) {
+> +				rx_sc = rx_sc ? macsec_rxsc_get(rx_sc) : NULL;
+> +				if (rx_sc && rx_sc->active)
+> +					return rx_sc->sci;
+> +			}
 
-from the amlogic tree.
+I haven't looked in detail but are you possibly returning rx_sc->sci
+here just to ...
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+> +		}
+> +		/* If not found, use MAC in hdr as default*/
+>  		sci = make_sci(hdr->eth.h_source, MACSEC_PORT_ES);
+> -
+> +	} else {
+> +		sci = make_sci(hdr->eth.h_source, MACSEC_PORT_ES);
+> +	}
+>  	return sci;
+>  }
+>  
+> @@ -1150,11 +1165,12 @@ static rx_handler_result_t macsec_handle_frame(struct sk_buff **pskb)
+>  
+>  	macsec_skb_cb(skb)->has_sci = !!(hdr->tci_an & MACSEC_TCI_SC);
+>  	macsec_skb_cb(skb)->assoc_num = hdr->tci_an & MACSEC_AN_MASK;
+> -	sci = macsec_frame_sci(hdr, macsec_skb_cb(skb)->has_sci);
+>  
+>  	rcu_read_lock();
+>  	rxd = macsec_data_rcu(skb->dev);
+>  
+> +	sci = macsec_frame_sci(hdr, macsec_skb_cb(skb)->has_sci, rxd);
+> +
+>  	list_for_each_entry_rcu(macsec, &rxd->secys, secys) {
+>  		struct macsec_rx_sc *sc = find_rx_sc(&macsec->secy, sci);
 
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc MAINTAINERS
-index 7ad2bf6ac1af,9f769aa65936..000000000000
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@@ -1912,7 -1915,8 +1912,8 @@@ L:	linux-arm-kernel@lists.infradead.or
-  L:	linux-amlogic@lists.infradead.org
-  S:	Maintained
-  W:	http://linux-meson.com/
-+ F:	Documentation/devicetree/bindings/phy/amlogic*
- -F:	arch/arm/boot/dts/meson*
- +F:	arch/arm/boot/dts/amlogic/
-  F:	arch/arm/mach-meson/
-  F:	arch/arm64/boot/dts/amlogic/
-  F:	drivers/mmc/host/meson*
-
---Sig_/7kMeHOL46Wi1SEsNy3paLl4
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSTlTcACgkQAVBC80lX
-0GyURQgAl+Qbm7E2ysNSAIEmaeEJdqI4S7xHT6lY6Pjx2TqE4o22DDM+QYta5Q2g
-A6rjVOHGVNn3aBDExOobs/ZdilyTkGCMd4kny2MJmMpFLTl2cKAgTo6AWV8OB01e
-VeeOrP7MfQNeQgZVSQU4NSRG1P7XxujQWhjHdXJ5nabG9oZrUphbtUHBr+853MET
-Io6tmj5lJHcXUtkT56RbD/xQ15HtUH2Dbzt9FBzBg/NM1OEPtgDzud0+wDwDhPjX
-cx+ERt6xgT1CUOOMwYSKI7Q4Th4xLAJB5ICeaYMmrsz7V2gsiRJWapUmVQvk3NJL
-pIo+0+RCh4wpQ1Kfew9WtE9oleVYxg==
-=ZJRc
------END PGP SIGNATURE-----
-
---Sig_/7kMeHOL46Wi1SEsNy3paLl4--
+... look up the rx_sc based on the sci? 
+-- 
+pw-bot: cr
