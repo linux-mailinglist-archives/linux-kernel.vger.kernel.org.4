@@ -2,50 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76C91739E3E
+	by mail.lfdr.de (Postfix) with ESMTP id BFCDD739E3F
 	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 12:17:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230172AbjFVKRM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 06:17:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38204 "EHLO
+        id S230166AbjFVKRW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 06:17:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229866AbjFVKRI (ORCPT
+        with ESMTP id S230404AbjFVKRU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 06:17:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4956D107
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 03:17:07 -0700 (PDT)
+        Thu, 22 Jun 2023 06:17:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE942107
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 03:17:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D7B09617C3
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 10:17:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06E8AC433C8;
-        Thu, 22 Jun 2023 10:17:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 63AD861789
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 10:17:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D45E1C433C8;
+        Thu, 22 Jun 2023 10:17:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687429026;
-        bh=LKeF6N/V+xgw47jyD6tRnEV8eEabABkGvs7O5k9QKhM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Jxh4dVRbcJ+uww/w+YUjVODVegZPu/WRfX+VdZ0r1aRjnKLgoSlh3WIEG4sKDO/7+
-         4UYYdnjR8rbY4GwlXYSc97d2Wa7+FlAGKCLqGoggoHsdCY+JrXIMkH4/pi53S16Vdh
-         kzqWtrDvdoGAB3WVViZTz1rWUvgpG+LI1rv7RgYK5PiT8oCmN/Lr/00Ku63Uo8/VLY
-         SxOl15+TTXMh73Z7YD1a3hs/xFw/L117EpNiP0xTXpDMr+gyCulSEYTn6Ld6Sv5XKF
-         b7NpnTYZu4fF6/HLgl66MPtZkEXJHFFitbNndNgT5+CZlZDueYR2p+h8+ThvDJuPm6
-         yHIIpc5nFVa2A==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Mike Marshall <hubcap@omnibond.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Martin Brandenburg <martin@omnibond.com>,
-        devel@lists.orangefs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] orangefs: fix out-of-bounds fsid access
-Date:   Thu, 22 Jun 2023 12:16:52 +0200
-Message-Id: <20230622101701.3399585-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        s=k20201202; t=1687429037;
+        bh=McJw4yj+3Kf9jn1ZwGX0a9V4cQzBuo9RO+rqfuWeUZY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=J2ZDseyurBPtJqc0nQ1uYwN70v9wASKytD4EvYBP+SUkfk9OUd/hkgTQ6MWDUu3Ti
+         BFErVIXG2tQy2IGa23ZPj3sPXX9dhs9XsX/yYjDCFsM+cHEawoODeMWkfwDXtWd46Y
+         TxLx1aZj1uiW+qW/hpjjbZqp2C3LNmIVNFr6npM3N/TftslXT/sKe3I5hyGFwCnBD6
+         aXogCvhF+VsA4XSIbvMTWyr5a7XuGxsBVo6XvfN5E+ieck1B4oWnQaKqDvequLozH6
+         E7r6HNAeJPc9E46B+4nbW0LoJtAVXmfpUTDFWAOg0iktmy1bx2JkK8+PpTv1la4/7u
+         +ezH1yRfqO0eQ==
+From:   rfoss@kernel.org
+To:     linux-rockchip@lists.infradead.org,
+        =?UTF-8?q?Ond=C5=99ej=20Jirman?= <megi@xff.cz>
+Cc:     Robert Foss <rfoss@kernel.org>,
+        Archit Taneja <architt@codeaurora.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        David Airlie <airlied@gmail.com>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        Philippe CORNU <philippe.cornu@st.com>
+Subject: Re: [PATCH v2] drm: bridge: dw-mipi-dsi: Fix enable/disable of DSI controller
+Date:   Thu, 22 Jun 2023 12:17:10 +0200
+Message-Id: <168742902332.865433.11382317679096265094.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230617224915.1923630-1-megi@xff.cz>
+References: <20230617224915.1923630-1-megi@xff.cz>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,40 +68,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+From: Robert Foss <rfoss@kernel.org>
 
-orangefs_statfs() copies two consecutive fields of the superblock into
-the statfs structure, which triggers a warning from the string fortification
-helpers:
+On Sun, 18 Jun 2023 00:48:25 +0200, Ondřej Jirman wrote:
+> From: Ondrej Jirman <megi@xff.cz>
+> 
+> Before this patch, booting to Linux VT and doing a simple:
+> 
+>   echo 2 > /sys/class/graphics/fb0/blank
+>   echo 0 > /sys/class/graphics/fb0/blank
+> 
+> [...]
 
-In file included from fs/orangefs/super.c:8:
-include/linux/fortify-string.h:592:4: error: call to '__read_overflow2_field' declared with 'warning' attribute: detected read beyond size of field (2nd parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
-                        __read_overflow2_field(q_size_field, size);
+Applied, thanks!
 
-Change the memcpy() to an individual assignment of the two fields, which helps
-both the compiler and human readers understand better what it does.
+[1/1] drm: bridge: dw-mipi-dsi: Fix enable/disable of DSI controller
+      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=05aa61334592
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- fs/orangefs/super.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/fs/orangefs/super.c b/fs/orangefs/super.c
-index 5254256a224d7..509a74aca2dcb 100644
---- a/fs/orangefs/super.c
-+++ b/fs/orangefs/super.c
-@@ -201,7 +201,10 @@ static int orangefs_statfs(struct dentry *dentry, struct kstatfs *buf)
- 		     (long)new_op->downcall.resp.statfs.files_avail);
- 
- 	buf->f_type = sb->s_magic;
--	memcpy(&buf->f_fsid, &ORANGEFS_SB(sb)->fs_id, sizeof(buf->f_fsid));
-+	buf->f_fsid = (__kernel_fsid_t) {{
-+		ORANGEFS_SB(sb)->fs_id,
-+		ORANGEFS_SB(sb)->id,
-+	}};
- 	buf->f_bsize = new_op->downcall.resp.statfs.block_size;
- 	buf->f_namelen = ORANGEFS_NAME_MAX;
- 
--- 
-2.39.2
+
+Rob
 
