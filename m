@@ -2,189 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA83373A0A6
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 14:15:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6FBF73A0AC
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 14:16:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230517AbjFVMPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 08:15:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34672 "EHLO
+        id S231135AbjFVMQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 08:16:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230281AbjFVMPG (ORCPT
+        with ESMTP id S230172AbjFVMQ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 08:15:06 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2102.outbound.protection.outlook.com [40.107.244.102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70893171C;
-        Thu, 22 Jun 2023 05:15:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BLzqCl/AckUEl+QSfd51Ev2JYpVSghu8dI69YZi26KZWVmubwOMgSgBVwfgOEhyvGlnPjAfCC0JlI/3ZlP4eLG4XcQ4t2eNAHKul85tKRm8H3W3WyMq4CC44Cugbm6xCaggTGICYEsbZvGA8Q7qvftwdPgBovxUbwQri4R+3SzwITeKTZZpSpjfCjckFwSXzxAXZiU6XJwdIuNn2sm+vLfnhAu+p+v1iqrCslGJ7MDc9mScATXHtS3F5qeBD2e6kO0N8AT0k4I5UyyCTU05lQle5pb6Oomy3oDIelqdWsmCXqfZfvtbIvcGY2b7ipVtkIhXHDW4vh/7c3SdNkpBZcQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/aTfjldFCDTeAuTZgeuuUnTcdILxNU9B+BRHitthBaQ=;
- b=SBInTOQFQgLFKJYA9/pWHbbnXug5Ph//of82N67xoPYzckqJ7SeWY94YmlgIDikaRMDO76yOV0kSlqh/Ru2wucac9NshQHU4rJ++nXbA1GWtMduUxpviZbm9ZvtPbi6fgJrPM0m1xXO3uwdcBx3vb8BND0CPGmJNnqzGJWzwovf+6e5iAvaQFYbDxlLT2DH407I0nN2klC4IXXCcH/kILsMqVIoPL99R3RSWdm+XVRuq0xPGEWXmGzSCj/mT0Qdr/eBK1pNj2T969qeqzmTv0jAf0mehYmHqm0Oj78m/fTMqZIvy7tgF5JPKQZPycEZzGsJVDkuJqH8nGpjUu8RurQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/aTfjldFCDTeAuTZgeuuUnTcdILxNU9B+BRHitthBaQ=;
- b=iFXCCZwpqdKt1eGo3+r6PF9EPb/3xqQq7RF+VqZHITBPw2lzyl8Y/eiNAe+rcv8OrArUOubYDHhKss+GaeXaQcQgjdWVYHyszRzpNDiZB2xx9EQznNrA/mf4wstfxHVaAe87ZhmXD+l/UajREoioKFvU0Tk73teXBp/shddBU4s=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by SJ0PR13MB5660.namprd13.prod.outlook.com (2603:10b6:a03:403::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.19; Thu, 22 Jun
- 2023 12:15:01 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb8f:e482:76e0:fe6e]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb8f:e482:76e0:fe6e%5]) with mapi id 15.20.6521.023; Thu, 22 Jun 2023
- 12:15:01 +0000
-Date:   Thu, 22 Jun 2023 14:14:53 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
+        Thu, 22 Jun 2023 08:16:26 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F93199D;
+        Thu, 22 Jun 2023 05:16:25 -0700 (PDT)
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35MCFmk6014384;
+        Thu, 22 Jun 2023 12:16:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=phZ/ewYB2rSE60dhAYjcOXnd6Amu92ryCcWXav1bxsY=;
+ b=lZUeXEE0WhHpHYrFFiiFz6ZMphFhWFCopTtNTwzy4lSoW2VkbsvvcWA3GEblXGqdB4ag
+ hhw5sRUOEm67UVZek9zDoUQEeGwAC3Rdc4ignAxoYNoCEIoMnMaGiGazajAnfcSGTXS7
+ T9yc6dT2MjBfi9EzOZzzaEHbYeizg5c4+bYrA9eGbrH7bEwhATL7djlRApl5YqdgfzPe
+ qAEx6xqjZnn0aNfZRmtm72t9CGYPss+UU1gy5sYKc781y0c5oVR/lPXtykOQ10nRbSWd
+ +Do1hZr1LVcxmbtXTYBQYJPt6c2x41M4od6Id7RpubQbibYL8qWO0bbkqmK8J1nKAFlq yA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rcp5c80gt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Jun 2023 12:16:11 +0000
+Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 35MCG8SB015704;
+        Thu, 22 Jun 2023 12:16:10 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rcp5c80fr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Jun 2023 12:16:10 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35MAtjqb025362;
+        Thu, 22 Jun 2023 12:16:08 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3r943e2m5m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Jun 2023 12:16:08 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35MCG5aG19399216
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 22 Jun 2023 12:16:05 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EBC4B2004B;
+        Thu, 22 Jun 2023 12:16:04 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7EB4420040;
+        Thu, 22 Jun 2023 12:16:04 +0000 (GMT)
+Received: from [9.152.224.35] (unknown [9.152.224.35])
+        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 22 Jun 2023 12:16:04 +0000 (GMT)
+Message-ID: <3da03251-21ac-b41f-593d-cbc9ac9f86f6@linux.ibm.com>
+Date:   Thu, 22 Jun 2023 14:16:04 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.12.0
+Subject: Re: [PATCH] s390/net: lcs: fix build errors when FDDI is a loadable
+ module
+Content-Language: en-US
+To:     Simon Horman <simon.horman@corigine.com>
+Cc:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
+        kernel test robot <lkp@intel.com>,
+        Wenjia Zhang <wenjia@linux.ibm.com>,
+        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
         "David S . Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Junxiao Chang <junxiao.chang@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH net-next 07/11] net: stmmac: platform: provide
- stmmac_pltfr_remove_no_dt()
-Message-ID: <ZJQ7PX01NAXmr7RV@corigine.com>
-References: <20230621153650.440350-1-brgl@bgdev.pl>
- <20230621153650.440350-8-brgl@bgdev.pl>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230621153650.440350-8-brgl@bgdev.pl>
-X-ClientProxiedBy: AM0PR03CA0100.eurprd03.prod.outlook.com
- (2603:10a6:208:69::41) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SJ0PR13MB5660:EE_
-X-MS-Office365-Filtering-Correlation-Id: 65ba6acb-d358-4c70-44c0-08db731a4d7c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: cgEFbYOHrpzoAh8AJtQwGQP5ctKxF+TElStxU4grN+5FV4qETlMgF+T1DrbJbBInBwZpJ0PoazzpaJCjpY4Lu/p7X3F0QUXctr0VlG3ho2U8YbpdGFZrObJOrqMV60Jm2zUe6jpztGVQ0A8Z1f+eNf0xpJ03ZxV93gEx/gNTuhqcowdxdFjgKa50i7ic7gwPkLQIhpFirKSodt+5xxPIeAtucUR3qGreRTuhPZmyHq/pc/AHJ/XH0g522UWi2S9g5pekJMhBlisc8l5BvPA8c5fc/nhxfgFyH6iga8EDObBcnlUQ5OBetpOzCMbjTbsirME4d+Qdf05uFIMksoSpnsHliAb6tbq5dA39e50fV0J9FltBUSRASm9qPiCvoZQVbevH1jWI9a9hMCCaz1UgJPv+6JLSPDGfwySs03PtR91jxe/GEG+7n0Ck44w0tQ8KJJDfhz/moK7ZcdlMWaCfuyrsUmZ3y8Qpdulebuj8EfMuwDLQUI1EgwzRXPpUoSZ9wlQIeMhwA8OgGbxzfCYUazsGf5ujM30o47VZNEDSKDVSKLA8qBLPGbiB65s8OOp8EyzTxMTbbCwlFCJvdDJuisNUUBAeAtB8VSEvStK42kg=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(39830400003)(366004)(136003)(346002)(376002)(451199021)(38100700002)(83380400001)(478600001)(6506007)(186003)(6512007)(2616005)(8936002)(7416002)(6666004)(86362001)(44832011)(6916009)(6486002)(36756003)(5660300002)(316002)(66556008)(4326008)(2906002)(66946007)(66476007)(8676002)(41300700001)(54906003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?qZgP9GRSgs2QfUOKI17kZuUJVAyhU6NxGuwunzwAxwIwSCwqUuzscSaG2tjY?=
- =?us-ascii?Q?JP8MqnJyp6jEwBRz3tTCatBK09N/jOSGnDs5ysJCUsas291XbwoK0rz5Lbcw?=
- =?us-ascii?Q?b8jlWPywkTGyWoqVS8pHeTgwT0TBeNORRkduwAqrhYdNSKADNarbxgDogx89?=
- =?us-ascii?Q?FglJbGlz90mzcZK8tnhKqxUfgI6ZO43oBxPZgTk5siRTuaGQGHqBmwQeNM6p?=
- =?us-ascii?Q?J8bxMEQyda0XAsjldr07FzBzf6qv48HACG+oP9Oct8qOPLVemHKYwZGcHBjS?=
- =?us-ascii?Q?VWQPCx5se+eWdUaqK5lXOxhMmyzX0QtKx4XBjQDjZ1LwHwePw3T4iNYxKynX?=
- =?us-ascii?Q?2IPup+rD7xHAy2HK4HHPPP10iGUD5Gpocapi2Xe1icP4/eeTc9en5J6XU0nC?=
- =?us-ascii?Q?9rj6IGywubSdbWzIcV4DdTfP+CbWeErqLK3713jfRnqVghETri92LLJST59h?=
- =?us-ascii?Q?Apxl7ziovDbsYnWA/Ce1QeT9cw1b3HYXNyxHK0t906aySt4pL2XHIRm8Z6yn?=
- =?us-ascii?Q?psu7sM1hC/IpgqwuOZB2Wkb9rExA2VTFzOLGiPJ1ysPvYHYUnVtpBggiTGm6?=
- =?us-ascii?Q?k3RgiP6g/XAjXe5BwzCXhofMUEmkZ4SVraAHfXVgYtcGZOtQyhd5ycGhxq+d?=
- =?us-ascii?Q?4KVNuCtxPoeiSwkFbWLuvOcA6wbJ5tKYhQLubDs7toYTgLgEe85leS/C58VI?=
- =?us-ascii?Q?5wvun4P8BUZB4AgXsx+VdxS6N+ZvrWELI22v/t339gKaLQwF10cKpqV9cdMt?=
- =?us-ascii?Q?C4AwDflo5N6YgFr80Yfykd6xT9c+oV/JaA1YZ8pS7UBimlADk0cdis+xYp/x?=
- =?us-ascii?Q?kqU5mdZtjwm39B8wBiFqwe0yLeAytap8FKMKv7wlUEQ3GaMl1/9gYugbg1Rn?=
- =?us-ascii?Q?86GFpQW1kE8kMjatfNFnMDc8Z5TtBsb1k9cM5NVj0Lr85w4C/NtM0jSM+HxB?=
- =?us-ascii?Q?ASpf2ZyWEU/IaJAcW9vWW7Sou8LzN6ukp/aZSXGk0mJomMuUbQDg81KAgD8X?=
- =?us-ascii?Q?7yNpmSOdVnsan6okxuTPMU8ZImiEutR/REIcdKoHoTrpAYBy5kgQ5U4DDF4h?=
- =?us-ascii?Q?7JplSj6af6Ddi7cMLhqfLm+xi5jremegNP09FR3DJah7VzAZVWlumgKq97/B?=
- =?us-ascii?Q?Q+o8D7UbZuwsCCASI55bNV/vQ01buQdicFvckHbmQhtJKusTF9vSevqZrCtd?=
- =?us-ascii?Q?LyU+VIh7ALc8OkQlkC7OCrdNJxViYNGmGnUqMRgAvx62huxetr6wlzGH9iuo?=
- =?us-ascii?Q?XGnLsG4WSNUmVabmW6Wv431Is9iUjuV/8sZizczltZGxOFRkRgb12uxT4lFB?=
- =?us-ascii?Q?9AR1lH0JPq/4UE9zgb0p+ltAVl3sc4sASmziJejqZFrvnHiKVn3/FKa1A137?=
- =?us-ascii?Q?BsRy0a1Ai1hUnRVeJ/+cv5MGY+78ToDJi7JDOi0KayPFf3ZjFnvb+3NlbvIS?=
- =?us-ascii?Q?f1NGiGzPYNGu1Y1Q9Orw50NYO/b4NfK0XPzTB8ofUGPK2hIElZa74l9PkiwN?=
- =?us-ascii?Q?jqK4KaT92zKfQYZlqhfDXA39LNl8pOBtF3Bts2YE5P8uTzdRN4GBzD+JjDRH?=
- =?us-ascii?Q?tn9EL1H4WUy8UlmShiwxHAm3w8jm+9vLvG8svyM9D/EXKSBB8DiNMc2OUUKw?=
- =?us-ascii?Q?/QWAdofXFuuSFbuRSpYWdxHM3XmYTYCNre5AvkL76Qla7xCETwResHHaRHNo?=
- =?us-ascii?Q?RHI3EA=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 65ba6acb-d358-4c70-44c0-08db731a4d7c
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jun 2023 12:15:01.0854
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9BJhvCmnKe3VXlS7Nh6P5DZbXbC7CpXkGI1gpQmkOexJTkwTZnll5iE88MH8LcGS5RBJs/xmKbckLzVeVpO1QSCKdjq/F9vLZY7bSX9NERM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR13MB5660
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Paolo Abeni <pabeni@redhat.com>
+References: <20230621213742.8245-1-rdunlap@infradead.org>
+ <98375832-3d29-1f03-145f-8d6e763dd2d2@linux.ibm.com>
+ <ZJP99hSRt5MakBXC@corigine.com>
+From:   Alexandra Winter <wintera@linux.ibm.com>
+In-Reply-To: <ZJP99hSRt5MakBXC@corigine.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: YRNhdc74ZTrGB_DNBcX-HWGl-XOywLXD
+X-Proofpoint-GUID: DUbnREwnHO1FB1BjuyjMLfh5GDkSCDeE
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-22_08,2023-06-22_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ bulkscore=0 mlxlogscore=647 priorityscore=1501 malwarescore=0 mlxscore=0
+ adultscore=0 spamscore=0 impostorscore=0 phishscore=0 suspectscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306220100
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 05:36:46PM +0200, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+
+
+On 22.06.23 09:53, Simon Horman wrote:
+> On Thu, Jun 22, 2023 at 09:15:24AM +0200, Alexandra Winter wrote:
+>>
+>>
+>> On 21.06.23 23:37, Randy Dunlap wrote:
+>>> Require FDDI to be built-in if it is used. LCS needs FDDI to be
+>>> built-in to build without errors.
+>>>
+>>> Prevents these build errors:
+>>> s390-linux-ld: drivers/s390/net/lcs.o: in function `lcs_new_device':
+>>> drivers/s390/net/lcs.c:2150: undefined reference to `fddi_type_trans'
+>>> s390-linux-ld: drivers/s390/net/lcs.c:2151: undefined reference to `alloc_fddidev'
+>>>
+>>> This FDDI requirement effectively restores the previous condition
+>>> before the blamed patch, when #ifdef CONFIG_FDDI was used, without
+>>> testing for CONFIG_FDDI_MODULE.
+>>>
+>>> Fixes: 128272336120 ("s390/net: lcs: use IS_ENABLED() for kconfig detection")
+[...]
 > 
-> Add a variant of stmmac_pltfr_remove() that only frees resources
-> allocated by stmmac_pltfr_probe() and - unlike stmmac_pltfr_remove() -
-> does not call stmmac_remove_config_dt().
+>> 2) I wonder whether
+>>
+>>   	depends on CCW && NETDEVICES && (ETHERNET || FDDI)
+>>  +	depends on FDDI || FDDI=n
+>>
+>> would do what we want here:
+>> When FDDI is a loadable module, LCS mustn't be built-in.
+>>
+>> I will do some experiments and let you know.
 > 
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> ---
->  .../ethernet/stmicro/stmmac/stmmac_platform.c | 20 +++++++++++++++++--
->  .../ethernet/stmicro/stmmac/stmmac_platform.h |  1 +
->  2 files changed, 19 insertions(+), 2 deletions(-)
-> 
+> It does seem to on my side.
+> But checking would be much appreciated.
+ 
 
-Hi Bartosz,
+Here are my experiments:
 
-some minor feedback from my side as it looks like there will be a v2 anyway.
+Current net-next:
+-----------------
+if !IS_ENABLED(CONFIG_ETHERNET) && !IS_ENABLED(CONFIG_FDDI)
 
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-> index df417cdab8c1..58d5c5cc2269 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-> @@ -762,6 +762,23 @@ int stmmac_pltfr_probe(struct platform_device *pdev,
->  }
->  EXPORT_SYMBOL_GPL(stmmac_pltfr_probe);
->  
-> +/**
-> + * stmmac_pltfr_remove_no_dt
-> + * @pdev: pointer to the platform device
-> + * Description: This undoes the effects of stmmac_pltfr_probe() by removing the
-> + * driver and calling the platform's exit() callback.
-> + */
-> +void stmmac_pltfr_remove_no_dt(struct platform_device *pdev)
-> +{
-> +	struct net_device *ndev = platform_get_drvdata(pdev);
-> +	struct stmmac_priv *priv = netdev_priv(ndev);
-> +	struct plat_stmmacenet_data *plat = priv->plat;
+drivers/s390/net/KConfig:
+config LCS
+	def_tristate m
+	depends on CCW && NETDEVICES && (ETHERNET || FDDI)
 
-nit: please use reverse xmas tree - longest line to shortest - for
-     new Networking code.
+.config:
+ETHERNET  |  FDDI | LCS choices | LCS | compile
+--------------------------------------------------------
+n		m	m,n	  m	success (failed before Randy's fix)
+y		m	y,m,n	  m	success (failed before Randy's fix)
+y		m		  y	fails: undefined reference to `fddi_type_trans'
 
-     e.g.:
 
-	struct net_device *ndev = platform_get_drvdata(pdev);
-	struct stmmac_priv *priv = netdev_priv(ndev);
-	struct plat_stmmacenet_data *plat = plat;
+Simon's proposal:
+-----------------
+        depends on CCW && NETDEVICES && (ETHERNET || FDDI)
++       depends on FDDI=y || FDDI=n
 
-	plat = priv->plat;
+ETHERNET  |  FDDI | LCS choices | LCS | compile
+--------------------------------------------------------
+n		m	-
+y		m	-
+y		m	-
+y		n	y,m,n	  y	success
+y		n	y,m,n	  m	success
+y		y	y,m,n	  m	success
 
-> +
-> +	stmmac_dvr_remove(&pdev->dev);
-> +	stmmac_pltfr_exit(pdev, plat);
-> +}
-> +EXPORT_SYMBOL_GPL(stmmac_pltfr_remove_no_dt);
-> +
->  /**
->   * stmmac_pltfr_remove
->   * @pdev: platform device pointer
 
-...
+Alexandra's proposal:
+---------------------
+        depends on CCW && NETDEVICES && (ETHERNET || FDDI)
++       depends on FDDI || FDDI=n
+
+ETHERNET  |  FDDI | LCS choices | LCS | compile
+--------------------------------------------------------
+n		m	m,n	  m	success
+y		m	m,n	  m	success
+y		n	y,m,n	  y	success
+y		n	y,m,n	  m	success
+y		y	y,m,n	  m	success
+
+-----------------------------------------------------------
+
+Seems that 
+	A[tristate] depends on B[tristate]
+means that A cannot be 'higher' than B.
+Meaning, if B=n -> A= must be n
+	if B=m -> A can be m or n
+	if B=y -> A can be y or m or n
+
+Although I did not find documentation confirming that.
+
+
+@Randy, do you want give a v2 a try with that?
+
+I guess then it is safe to delete from drivers/s390/net/lcs.c
+-#if !IS_ENABLED(CONFIG_ETHERNET) && !IS_ENABLED(CONFIG_FDDI)
+-#error Cannot compile lcs.c without some net devices switched on.
+-#endif
+
+
