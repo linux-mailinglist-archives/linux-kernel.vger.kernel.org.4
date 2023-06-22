@@ -2,116 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C8EF73AD1E
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 01:21:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7621173AD23
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 01:22:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231569AbjFVXVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 19:21:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48774 "EHLO
+        id S231449AbjFVXWz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 19:22:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231548AbjFVXVd (ORCPT
+        with ESMTP id S231135AbjFVXWy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 19:21:33 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2100.outbound.protection.outlook.com [40.107.236.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3FCF19A6
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 16:21:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iGm7Ibf8wNajBnoQ8Pucl+H/sKLAj16HQRVeSTzRBPLSYCuMGKrWYT5SwkWsCLz7vliy5pqotvrSfJT1QkAEkk5Nx4HLANtHg1k0sJb99f3gaXcBcfnZhd7aljeqxTiS3J6zNL/Wed/rmn2LtKtz3Vr5pEMaOrwvs9en4pvGXCKi8LMqHgnBPOPZDskLU5JY3RJVzbZlzh3znfayGGcR77ISNY78q0lASkteB1TJzkYOFgDyZajO8ySVmSr+1I1LNnePPcT7+MbSmI2bCjD33t84s9N69qfqQqptNuWtf/29sw7KrXutlCZE3kTgzdctBb658y/fEjY+5B9VgWVzEA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fD93rjy+xSNq+7/hXsT3Y+Xk36VsXzyd3ROqAePS+6o=;
- b=Kts7Q+EUbprz4Amzrq4KyF/m9vfNtifVSeyA6I4Kiojwz/uEZi+zTH0ZFZ3J6nFSrx9V1+ufMo7dCUtAWOF5hdyqPwJmgKgGHcxzpsbe+aBdEJdqlbkpO97iHIuhXHE9pzSjcnj8YyFnELsKlaFw15PQ01BHhzjrfuugIjkB1Mre9ax3tFsjh5D8xjf6en/yYA6GgtmpBjEpcECZRaAmXAOvJiE5RmUKRCqcc8INgWk+fkVxA9yQmguPBuV9e31tBQp59NcQ6Bt+Va7X2+9w1rmL/E3dKLAxbZj13uPoN0V9DdcFOKYSyFVdYFqoHFJSKGkXqgKpQzqtUMAfha170g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fD93rjy+xSNq+7/hXsT3Y+Xk36VsXzyd3ROqAePS+6o=;
- b=MdjDiKas/hvw5wXdEyC95tdoaK3qq68DMw1qckHqaNcF1ij4FoKKiL7nIkb/asLSjQUIxwI9lw88jW87W1vXhcFcrcULprM2yRkgJCi0k1z1Wt4cHofflx1QbCh9TOhjBkSbPINiFDrvwuEVI7mD0BYU2svdcHngDzK6JRQystc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
-Received: from DM5PR0102MB3590.prod.exchangelabs.com (2603:10b6:4:a4::25) by
- CH0PR01MB6907.prod.exchangelabs.com (2603:10b6:610:104::15) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6521.23; Thu, 22 Jun 2023 23:21:26 +0000
-Received: from DM5PR0102MB3590.prod.exchangelabs.com
- ([fe80::a323:29a7:2fd7:621]) by DM5PR0102MB3590.prod.exchangelabs.com
- ([fe80::a323:29a7:2fd7:621%4]) with mapi id 15.20.6521.024; Thu, 22 Jun 2023
- 23:21:25 +0000
-Date:   Thu, 22 Jun 2023 16:21:11 -0700 (PDT)
-From:   Ilkka Koskinen <ilkka@os.amperecomputing.com>
-To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-cc:     Ilkka Koskinen <ilkka@os.amperecomputing.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Besar Wicaksono <bwicaksono@nvidia.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/4] perf: arm_cspmu: ampere_cspmu: Add support for Ampere
- SoC PMU
-In-Reply-To: <20230622095143.0000009f@Huawei.com>
-Message-ID: <d721983b-f25e-e27-795d-b841ad2fcf5@os.amperecomputing.com>
-References: <20230622011141.328029-1-ilkka@os.amperecomputing.com> <20230622011141.328029-5-ilkka@os.amperecomputing.com> <20230622095143.0000009f@Huawei.com>
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-ClientProxiedBy: CH0PR04CA0013.namprd04.prod.outlook.com
- (2603:10b6:610:76::18) To DM5PR0102MB3590.prod.exchangelabs.com
- (2603:10b6:4:a4::25)
+        Thu, 22 Jun 2023 19:22:54 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0D311739;
+        Thu, 22 Jun 2023 16:22:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687476169; x=1719012169;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=IojqZKic5r/WkJFOdy0/gAiJXa7L7cuDCuvjj0Wd/qg=;
+  b=LayX0PoGDt96JowdjGr1Dj2u6R1VqWaU3MAqNi0wxazFEQ9ztPQBE1iX
+   keuuKUqQudVT6AhFvnBNgunYDRpLxsECzFYUQwrkvf8Uh+3qaHMzwVQzt
+   HAtxwHmJsLN7a4caMXCHc/U67U8RE2TK6Slqxh7S2+yVO8jvypAgFMMbV
+   ULOKmE7xgfHdEcCbnfFm4GF2tijt5O1qtzM6/ZL1UFka5Po64R6/iXU1Q
+   Oou05L8f4nfj7cUJYguSaS4VIl0f6Gf5A//qmKZrdI0KRTS7Hfw9IoMCU
+   pNykYUIpB/+jRGrd+v003ADzN+m0ifH8gtadEsfGSu5XKpS0YfYeo6y0f
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="447014215"
+X-IronPort-AV: E=Sophos;i="6.01,150,1684825200"; 
+   d="scan'208";a="447014215"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 16:22:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="715118504"
+X-IronPort-AV: E=Sophos;i="6.01,150,1684825200"; 
+   d="scan'208";a="715118504"
+Received: from rwtamm-mobl2.amr.corp.intel.com (HELO [10.209.27.111]) ([10.209.27.111])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 16:22:48 -0700
+Message-ID: <e7aa803b-2b43-dc43-1d92-38bcca636e62@linux.intel.com>
+Date:   Thu, 22 Jun 2023 16:22:38 -0700
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM5PR0102MB3590:EE_|CH0PR01MB6907:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6de6b27e-5f66-4348-0c64-08db73776609
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: oDfpD0alp71oVKMbMxxI9EFIvEGzsJfYm+82MUZi/biSOJS31pcI0VbS3K/mWZPLdZYihJdhkqFHlsYEhkWewMdQ/cdXFKaHjz1r8kgZEGgZgazm/cLH7ddEH1DhXsmnERz+60CISW28z6o9BEOajP7vx+wSjMM52pgftxtUPkK/5bba+ua16BRUenbBUIxumAqrqye9DQJHo65ZOvnaoI/LO+rgC8RhYnTC/c2lHUudK0E20C39koN/cE4KLhJZhsl8x+VZZz1g8JWFYbggbGutOhwE33L3L+lpALLgJNoI7Ec5+mmyP3ar7QehVdbC+neIEYWWsxYctmJAR0Lc0pUb8s7alv6k2qvfTW8hn3g6brPXSLRutxsyXDTn8PrFYyJvDZzyoFWhdPtqEzYq5D+diWU8ZzZuRpo6oAJaExtEeO7ehm1wYqZyQytw0B6TE+BEbHDDRqmbmt6O36AqI8qIkt6c/qV/6ZJBms6csUYrlBnDE1yhKYM8jW2ZjAABieW8ain+kXrp2fJ1zl0X/LbRK8KG/6fXeNYBhWE1L5X6SXDF1ows3r0HwrfWxjCgdHXXLKhvFDGqYTHHUKRYdxJo8j6QTcbDXFme0IdOaH0PgPPb1zYek8icbCMGRDeP
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR0102MB3590.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(366004)(346002)(39850400004)(396003)(376002)(451199021)(6486002)(478600001)(6666004)(54906003)(2616005)(83380400001)(86362001)(2906002)(66946007)(186003)(26005)(52116002)(6512007)(38350700002)(38100700002)(6506007)(4326008)(66476007)(316002)(6916009)(8676002)(8936002)(66556008)(5660300002)(41300700001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?8bMspigsBp/+4+nAtGO2RAwa6Ijj2e/TGe00TuevkTQnbujU9Xh8G4N1ygSZ?=
- =?us-ascii?Q?NfAotl5pZu6FBdL0SPchcNkpZczcupxEy+eTNPgZ71FMTl3zHHituy+4IfKR?=
- =?us-ascii?Q?yBDjc4AX295y+lgS4pjBijiNrKjOlgXvZtK62mx4pCjYvW5GKYDO1IAivcIt?=
- =?us-ascii?Q?BNVR2zZUwheyQ3mi9tgY4lBnBKkwXOhV2wUbVRxyedVYq2BfUYncooV/cWyQ?=
- =?us-ascii?Q?VQTT/lynsbVJywfo6dCGS9TFpLGleXWHBoVdZjUVbyyZhsLdHHuJUgUqTRfG?=
- =?us-ascii?Q?3KOvJak9VevjFvsNXWHzyAc1zY7jtNfwc01n/c0iREPNPhkoEtMRutwKiEAz?=
- =?us-ascii?Q?MVuyH5hym8adyEwmHa2+6Y8Lpdc9UcF/PNflii1fMNU7tJu7hgjsQjvQ2K3m?=
- =?us-ascii?Q?Cem7x8GxjKpn2bf3LWxT/5mJSVI57oakkTcOG97qoBTmXISrTXP2TjQ1S6LP?=
- =?us-ascii?Q?2dyDI+w5s0GXIWVEY8UqAy79zN3rDNSUfYnlK/eT0EecPd2oZpVGS1WN8RYn?=
- =?us-ascii?Q?3vNb+j1+GX21dBQ+uJnKQFp0CRWrNKDV/912P32xLDgMYdVJPzx2RW/lpRte?=
- =?us-ascii?Q?g9IxvY100xb1Fnndy0wBY6TvYPGaGnRRWub9Yi4u0g+VpE2LX/PvKRbv14XH?=
- =?us-ascii?Q?OTpsdcT+9j4ftFa6srLGMvNpmlJ5ehFejaHPSLuTIXLOSg32jBZzHOskXse3?=
- =?us-ascii?Q?6yxEdi9q5sBNKV+VWppToaEorZFuc003WeiBo7BjZOUTI1j/j7i7Au2mYMve?=
- =?us-ascii?Q?eGBVPGPCIHaZlcz5mgoe3tz9KvzXAKrXWFBVSQoa+akiScAijMqIjf/cCQbC?=
- =?us-ascii?Q?k0r7q/Bg3YRkKEer9ioh1Gce/gbMdnRypaVgrD6KyplpDfWmz7vDOuheJsZ0?=
- =?us-ascii?Q?Y7CLX8UuCVKzVMsuNKC5HN5/zYbP6dXELLm9OvRizO/ayokQtFcvBy31Wcdo?=
- =?us-ascii?Q?h50wdb9PYpFr0whUHfo+KVJ8AFC/f0f0K3hEWUl9zui2fouYy8JhxK16E7YU?=
- =?us-ascii?Q?r4BjNPELMhXd79UQKA+eUXZIrDV8nPiemylCxVXspIsA5I5HJahAMTqx5uWG?=
- =?us-ascii?Q?RMlxmZ8RVvl9p5CaEoHm1fm5980i1eUgGDrjaZqZJcGBUAc4AnqyT1ZCdmCg?=
- =?us-ascii?Q?5WeZ7Eb2KGFyXtK0oCLZbWqctK2L8bNmwQ2HRLZzCARVcQBSOc1kT6NVtdPD?=
- =?us-ascii?Q?cibrQWzF2cX/NuNGcuglu56S+dHCpsIA05tiIS90EIwIb3EfyxRKdFqjKvyj?=
- =?us-ascii?Q?YNvgmQyW2psQq3o1shTceM3QslaQTqiXedqVhhKAyop1vnO6zgt17pFMIjr0?=
- =?us-ascii?Q?cx+oor+P+sjhNM7ywS61lvUAL8pGNJLvMWZdNWi788bouKq8dg+YMP7oUSTq?=
- =?us-ascii?Q?qa5lZbsOdji1Z6ddtz4yJ/N6+44KBMO3FseOd7js53hRewBMly+lx3FYNfG6?=
- =?us-ascii?Q?wnucCrRn9xCaiKZNfKugJWaBz4Ym5y9a4mtdlfGu1Sd3MWhefrnJ2FuIJbLp?=
- =?us-ascii?Q?cnTA1j1Fv9+YbQSIPGwCFDZbGpRzzJUhoSid1aPFzQ6Ct2DHaZOUwcq07TG0?=
- =?us-ascii?Q?zOIV2/L17fxfRQBB27+Okp582VzasKk0cUQPJ2K7KUAWFH93TtEM5qkAzV5O?=
- =?us-ascii?Q?CjVyGyAfZ4dGpJWAyeDEWfM=3D?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6de6b27e-5f66-4348-0c64-08db73776609
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR0102MB3590.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jun 2023 23:21:25.6666
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Cj0ZmWjhfO9nI9TKLlIRuAaDUhFoj3nfX7pjoZOwVpNlrZd+SPKj6JdfNdCIn1MUM6M7WJwpL7N1rQwrcHxrABmq0CCS+KWRgLcT8LbOIpeTcgyH8UpFevXpVfuD6NRx
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR01MB6907
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.11.0
+Subject: Re: [PATCH v3 1/2] PCI: pciehp: Add support for async hotplug with
+ native AER and DPC/EDR
+Content-Language: en-US
+To:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Bjorn Helgaas <bhelgaas@google.com>, oohall@gmail.com,
+        Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        Fontenot Nathan <Nathan.Fontenot@amd.com>
+References: <20230621185152.105320-1-Smita.KoralahalliChannabasappa@amd.com>
+ <20230621185152.105320-2-Smita.KoralahalliChannabasappa@amd.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <20230621185152.105320-2-Smita.KoralahalliChannabasappa@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -120,210 +72,169 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-Hi Jonathan
 
-On Thu, 22 Jun 2023, Jonathan Cameron wrote:
-> On Wed, 21 Jun 2023 18:11:41 -0700
-> Ilkka Koskinen <ilkka@os.amperecomputing.com> wrote:
->
->> Ampere SoC PMU follows CoreSight PMU architecture. It uses implementation
->> specific registers to filter events rather than PMEVFILTnR registers.
->>
->> Signed-off-by: Ilkka Koskinen <ilkka@os.amperecomputing.com>
-> Hi Ilkka,
->
-> Drive by review so not super detailed (I was curious) but a few questions/comments inline.
->
-> Jonathan
->
->> ---
->>  .../admin-guide/perf/ampere_cspmu.rst         |  29 +++
->>  drivers/perf/arm_cspmu/Makefile               |   2 +-
->>  drivers/perf/arm_cspmu/ampere_cspmu.c         | 232 ++++++++++++++++++
->>  drivers/perf/arm_cspmu/ampere_cspmu.h         |  17 ++
->>  drivers/perf/arm_cspmu/arm_cspmu.c            |   7 +
->>  5 files changed, 286 insertions(+), 1 deletion(-)
->>  create mode 100644 Documentation/admin-guide/perf/ampere_cspmu.rst
->>  create mode 100644 drivers/perf/arm_cspmu/ampere_cspmu.c
->>  create mode 100644 drivers/perf/arm_cspmu/ampere_cspmu.h
->>
->> diff --git a/Documentation/admin-guide/perf/ampere_cspmu.rst b/Documentation/admin-guide/perf/ampere_cspmu.rst
->> new file mode 100644
->> index 000000000000..bf86bffeef63
->> --- /dev/null
->> +++ b/Documentation/admin-guide/perf/ampere_cspmu.rst
->> @@ -0,0 +1,29 @@
->
->> +
->> +Example for perf tool use::
->> +
->> +  / # perf list ampere
->> +
->> +    ampere_mcu_pmu_0/act_sent/                         [Kernel PMU event]
->> +    <...>
->> +    ampere_mcu_pmu_1/rd_sent/                          [Kernel PMU event]
->> +    <...>
->> +
->> +  / # perf stat -a -e ampere_mcu_pmu_0/act_sent,filter_enable=3,bank=5,rank=3,threshold=2/,ampere_mcu_pmu_1/rd_sent/ \
->> +        sleep 1
->
-> Why filter_enable=3?
+On 6/21/23 11:51 AM, Smita Koralahalli wrote:
+> According to Section 6.7.6 of PCIe Base Specification [1], async removal
+> with DPC may result in surprise down error. This error is expected and
+> is just a side-effect of async remove.
+> 
+> Add support to handle the surprise down error generated as a side-effect
+> of async remove. Typically, this error is benign as the pciehp handler
+> invoked by PDC or/and DLLSC alongside DPC, de-enumerates and brings down
+> the device appropriately. But the error messages might confuse users. Get
+> rid of these irritating log messages with a 1s delay while pciehp waits
+> for dpc recovery.
+> 
+> The implementation is as follows: On an async remove a DPC is triggered
+> along with a Presence Detect State change and/or DLL State Change.
+> Determine it's an async remove by checking for DPC Trigger Status in DPC
+> Status Register and Surprise Down Error Status in AER Uncorrected Error
+> Status to be non-zero. If true, treat the DPC event as a side-effect of
+> async remove, clear the error status registers and continue with hot-plug
+> tear down routines. If not, follow the existing routine to handle AER and
+> DPC errors.
+> 
+> Please note that, masking Surprise Down Errors was explored as an
+> alternative approach, but left due to the odd behavior that masking only
+> avoids the interrupt, but still records an error per PCIe r6.0.1 Section
+> 6.2.3.2.2. That stale error is going to be reported the next time some
+> error other than Surprise Down is handled.
 
-Thanks for catching. That's from the first cspmu version and got 
-accidentally back there. The rest of the patch looks like what it was 
-supposed to be though.
+I think this fix is applicable to the EDR code path as well.
 
+> 
+> Dmesg before:
+> 
+>   pcieport 0000:00:01.4: DPC: containment event, status:0x1f01 source:0x0000
+>   pcieport 0000:00:01.4: DPC: unmasked uncorrectable error detected
+>   pcieport 0000:00:01.4: PCIe Bus Error: severity=Uncorrected (Fatal), type=Transaction Layer, (Receiver ID)
+>   pcieport 0000:00:01.4:   device [1022:14ab] error status/mask=00000020/04004000
+>   pcieport 0000:00:01.4:    [ 5] SDES (First)
+>   nvme nvme2: frozen state error detected, reset controller
+>   pcieport 0000:00:01.4: DPC: Data Link Layer Link Active not set in 1000 msec
+>   pcieport 0000:00:01.4: AER: subordinate device reset failed
+>   pcieport 0000:00:01.4: AER: device recovery failed
+>   pcieport 0000:00:01.4: pciehp: Slot(16): Link Down
+>   nvme2n1: detected capacity change from 1953525168 to 0
+>   pci 0000:04:00.0: Removing from iommu group 49
+> 
+> Dmesg after:
+> 
+>  pcieport 0000:00:01.4: pciehp: Slot(16): Link Down
+>  nvme1n1: detected capacity change from 1953525168 to 0
+>  pci 0000:04:00.0: Removing from iommu group 37
+> 
+> [1] PCI Express Base Specification Revision 6.0, Dec 16 2021.
+>     https://members.pcisig.com/wg/PCI-SIG/document/16609
+> 
+> Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+> ---
+> v2:
+> 	Indentation is taken care. (Bjorn)
+> 	Unrelevant dmesg logs are removed. (Bjorn)
+> 	Rephrased commit message, to be clear on native vs FW-First
+> 	handling. (Bjorn and Sathyanarayanan)
+> 	Prefix changed from pciehp_ to dpc_. (Lukas)
+> 	Clearing ARI and AtomicOp Requester are performed as a part of
+> 	(de-)enumeration in pciehp_unconfigure_device(). (Lukas)
+> 	Changed to clearing all optional capabilities in DEVCTL2.
+> 	OS-First -> native. (Sathyanarayanan)
+> 
+> v3:
+> 	Added error message when root port become inactive.
+> 	Modified commit description to add more details.
+> 	Rearranged code comments and function calls with no functional
+> 	change.
+> 	Additional check for is_hotplug_bridge.
+> 	dpc_completed_waitqueue to wakeup pciehp handler.
+> 	Cleared only Fatal error detected in DEVSTA.
+> ---
+>  drivers/pci/pcie/dpc.c | 58 ++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 58 insertions(+)
+> 
+> diff --git a/drivers/pci/pcie/dpc.c b/drivers/pci/pcie/dpc.c
+> index 3ceed8e3de41..5153ac8ea91c 100644
+> --- a/drivers/pci/pcie/dpc.c
+> +++ b/drivers/pci/pcie/dpc.c
+> @@ -292,10 +292,68 @@ void dpc_process_error(struct pci_dev *pdev)
+>  	}
+>  }
+>  
+> +static void pci_clear_surpdn_errors(struct pci_dev *pdev)
+> +{
+> +	u16 reg16;
+> +	u32 reg32;
+> +
+> +	pci_read_config_dword(pdev, pdev->dpc_cap + PCI_EXP_DPC_RP_PIO_STATUS, &reg32);
+> +	pci_write_config_dword(pdev, pdev->dpc_cap + PCI_EXP_DPC_RP_PIO_STATUS, reg32);
 
->> +static u32 ampere_cspmu_event_filter(const struct perf_event *event)
->> +{
->
-> Whilst lots of other comments on this - perhaps add another one here to
-> why this is a noop.
+It is not clear why you want to clear it.
 
-Sure, makes sense.
+> +
+> +	pci_read_config_word(pdev, PCI_STATUS, &reg16);
+> +	pci_write_config_word(pdev, PCI_STATUS, reg16);
 
->
->> +	return 0;
->> +}
+Same as above. Can you add some comment about why you are clearing it?
 
-...
+> +
+> +	pcie_capability_write_word(pdev, PCI_EXP_DEVSTA, PCI_EXP_DEVSTA_FED);
+> +}
+> +
+> +static void dpc_handle_surprise_removal(struct pci_dev *pdev)
+> +{
+> +	if (pdev->dpc_rp_extensions && dpc_wait_rp_inactive(pdev)) {
+> +		pci_err(pdev, "failed to retrieve DPC root port on async remove\n");
+> +		goto out;
+> +	}
+> +
+> +	pci_aer_raw_clear_status(pdev);
+> +	pci_clear_surpdn_errors(pdev);
+> +
+> +	pci_write_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_STATUS,
+> +			      PCI_EXP_DPC_STATUS_TRIGGER);
 
->> +static int ampere_cspmu_validate_event(struct arm_cspmu *cspmu,
->> +				       struct perf_event *new)
->> +{
->> +	struct perf_event *curr, *leader = new->group_leader;
->> +	unsigned int idx;
->> +	int ret;
->> +
->> +	ret = ampere_cspmu_validate_configs(new, leader);
->> +	if (ret)
->> +		return ret;
->> +
->> +	/* We compare the global filter settings to existing events */
->> +	idx = find_first_bit(cspmu->hw_events.used_ctrs,
->> +			     cspmu->cycle_counter_logical_idx);
->> +
->> +	/* This is the first event */
->
-> Maybe add why that matters to the comment?
+Don't you need to wait for the link to go down?
 
-Sure, I'll do that.
+> +
+> +out:
+> +	clear_bit(PCI_DPC_RECOVERED, &pdev->priv_flags);
+> +	wake_up_all(&dpc_completed_waitqueue);
+> +}
+> +
+> +static bool dpc_is_surprise_removal(struct pci_dev *pdev)
+> +{
+> +	u16 status;
+> +
+> +	pci_read_config_word(pdev, pdev->aer_cap + PCI_ERR_UNCOR_STATUS, &status);
+> +
+> +	if (!pdev->is_hotplug_bridge)
+> +		return false;
+> +
+> +	if (!(status & PCI_ERR_UNC_SURPDN))
+> +		return false;
+> +
+> +	return true;
+> +}
+> +
+>  static irqreturn_t dpc_handler(int irq, void *context)
+>  {
+>  	struct pci_dev *pdev = context;
+>  
+> +	/*
+> +	 * According to Section 6.7.6 of the PCIe Base Spec 6.0, since async
+> +	 * removal might be unexpected, errors might be reported as a side
+> +	 * effect of the event and software should handle them as an expected
+> +	 * part of this event.
+> +	 */
+> +	if (dpc_is_surprise_removal(pdev)) {
+> +		dpc_handle_surprise_removal(pdev);
+> +		return IRQ_HANDLED;
+> +	}
+> +
+>  	dpc_process_error(pdev);
+>  
+>  	/* We configure DPC so it only triggers on ERR_FATAL */
 
->
->> +	if (idx == cspmu->cycle_counter_logical_idx)
->> +		return 0;
->> +
->> +	curr = cspmu->hw_events.events[idx];
->> +
->> +	return ampere_cspmu_validate_configs(curr, new);
->> +}
->> +
->> +static char *ampere_cspmu_format_name(const struct arm_cspmu *cspmu,
->> +				      const char *name_pattern)
->> +{
->> +	struct device *dev = cspmu->dev;
->> +	static atomic_t pmu_generic_idx = {0};
->
-> Why not an ida?
->
-> If the pmu drivers ever become easy to unbind then you won't get ID
-> reusage like this an eventually you will run into overflow problems.
-
-Didn't appear in my mind when I wrote the submodule. I'll change it.
-
-Releasing devices would eventually require a release hook too to support 
-reusing the IDs but we can add that later.
-
->
->> +
->> +	return devm_kasprintf(dev, GFP_KERNEL, name_pattern,
->> +			      atomic_fetch_inc(&pmu_generic_idx));
->> +}
->> +
->> +int ampere_cspmu_init_ops(struct arm_cspmu *cspmu)
->> +{
->> +	struct device *dev = cspmu->dev;
->> +	struct ampere_cspmu_ctx *ctx;
->> +	struct arm_cspmu_impl_ops *impl_ops = &cspmu->impl.ops;
->> +
->> +	ctx = devm_kzalloc(dev, sizeof(struct ampere_cspmu_ctx), GFP_KERNEL);
->> +	if (!ctx)
->> +		return -ENOMEM;
->> +
->> +	ctx->event_attr		= ampereone_mcu_pmu_event_attrs;
->> +	ctx->format_attr	= ampereone_mcu_format_attrs;
->> +	ctx->name		= ampere_cspmu_format_name(cspmu,
->> +							   "ampere_mcu_pmu_%u");
->
-> Long line and need to break avoided if you don't bother trying to align the = signs...
-> Personally I don't like this style as it causes a lot of churn as drivers
-> evolve, but meh, it's up to you.
-
-I don't really have preference on either way. I remove the aligment and 
-combine those two lines.
-
->
-> Given the result is confusing if the allocation fails (name not what is expected)
-> I would also check that allocation and error out if it fails.  Obviously it won't
-> under realistic circumstances, but a bit of paranoia never hurt anyone.
-
-I agree, I fix it.
-
->
->> +	cspmu->impl.ctx = ctx;
->> +
->> +	impl_ops->event_filter		= ampere_cspmu_event_filter;
->> +	impl_ops->set_ev_filter		= ampere_cspmu_set_ev_filter;
->> +	impl_ops->validate_event	= ampere_cspmu_validate_event;
->> +	impl_ops->get_name		= ampere_cspmu_get_name;
->> +	impl_ops->get_event_attrs	= ampere_cspmu_get_event_attrs;
->> +	impl_ops->get_format_attrs	= ampere_cspmu_get_format_attrs;
->> +
->> +	return 0;
->> +}
->> +
->> +MODULE_LICENSE("GPL v2");
->
-> ...
->
->> diff --git a/drivers/perf/arm_cspmu/arm_cspmu.c b/drivers/perf/arm_cspmu/arm_cspmu.c
->> index 471d6d7ac81a..587515eea0b4 100644
->> --- a/drivers/perf/arm_cspmu/arm_cspmu.c
->> +++ b/drivers/perf/arm_cspmu/arm_cspmu.c
->> @@ -29,6 +29,7 @@
->>  #include <linux/perf_event.h>
->>  #include <linux/platform_device.h>
->>
->> +#include "ampere_cspmu.h"
->
-> I'd be tempted to keep the generic header in a separate block then
-> follow with the vendor ones.  Not particularly important though.
-
-I like your idea
-
->
->>  #include "arm_cspmu.h"
->>  #include "nvidia_cspmu.h"
->>
->> @@ -114,6 +115,7 @@
->>
->>  /* JEDEC-assigned JEP106 identification code */
->>  #define ARM_CSPMU_IMPL_ID_NVIDIA		0x36B
->> +#define ARM_CSPMU_IMPL_ID_AMPERE		0xA16
->>
->>  static unsigned long arm_cspmu_cpuhp_state;
->>
->> @@ -388,6 +390,11 @@ static const struct impl_match impl_match[] = {
->>  	  .mask = ARM_CSPMU_PMIIDR_IMPLEMENTER,
->>  	  .impl_init_ops = nv_cspmu_init_ops
->>  	},
->> +	{
->> +	  .pmiidr = ARM_CSPMU_IMPL_ID_AMPERE,
->> +	  .mask = ARM_CSPMU_PMIIDR_IMPLEMENTER,
->> +	  .impl_init_ops = ampere_cspmu_init_ops
->> +	},
->>  	{}
->>  };
->>
->
->
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
