@@ -2,77 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47CFF739D49
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 11:33:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12A98739D5D
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 11:34:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230080AbjFVJdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 05:33:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36416 "EHLO
+        id S232002AbjFVJeG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 05:34:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230132AbjFVJcA (ORCPT
+        with ESMTP id S229874AbjFVJdR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 05:32:00 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24703422C
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 02:23:19 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-988689a5f44so553342766b.1
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 02:23:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687425797; x=1690017797;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=F8M01lCnD4DiE1JI+G556h5bffwz8K8jNPJzf86AuQA=;
-        b=cgsSLGlTpnmoG8TcZ0v2kHDCIvk6b85rdF0rJgakzsH1bYHaIvPW19LsvQt7FfqJjW
-         rlmVPGUE+IFzQqa6eihJVj/7thEwLbihsHUqJ2QG0eZ1W7cOhii9hLANKxmfozLqF+Fh
-         xjDnvEhM5aBLNlb//OZRx3Yj9aGO68aBK74QutqZMja7f/3BhAV+UtKxVIM93KyZtM8Z
-         nyXRDOem10z3dTBNxab9QFw/h1PgTrNbNckOnvYvj+ukRA2HH8Cuphwf12RWGqFvu7wW
-         Qf1Zc1YWMcd35Flg5ItO4QqW5PSiwZrF9HXdi9GPqKPNomZnNmk2CmgnswTUnKenam6u
-         CFmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687425797; x=1690017797;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=F8M01lCnD4DiE1JI+G556h5bffwz8K8jNPJzf86AuQA=;
-        b=FIVASUiSAeSa9aIoV9t/p6C2iVtC/uSOr/Tup4CaVP1n+/dMpmOr0qgLS0pMYJjlE1
-         IavAS8LBz3JkqTdPI1t3/EU6rpVCdf5/EddZ+Tj+e41bwniLWQvcru31WAzN3SX7H6+r
-         dy4FiNv/IZHzG5iCmVbHH8p+HHLHgMpobPYDdijyEVF5YuPtmEhdjbvyeTNgV7L+ZBjw
-         8wCoofQK4G4CG8AJ1qitW7F3eIMcw0vOha8Ot24mWfYY+jkzj2F+X7DCjdq8df/CrwWR
-         3/c+Q6f7av1NgA7A98vLLGApsh99k1UPq4F5jU8qr8xWCLHDqKIX9gsH1QFrmiZtNPow
-         C49Q==
-X-Gm-Message-State: AC+VfDw31Auk4/CneSTy24b+cyacQaGrg2TfBsw7LtZJpEbMU35eHElC
-        0Ub6HwEbYQQUkD3vGI1Cl0LSTg==
-X-Google-Smtp-Source: ACHHUZ67N6RDSVlCAyezkx9e5tmGd7OPytl0GH6g/D0mbSUFF0qf7hIHMUksugkOYN96ZH2myVszaw==
-X-Received: by 2002:a17:907:940f:b0:98d:4aa0:ffce with SMTP id dk15-20020a170907940f00b0098d4aa0ffcemr266872ejc.18.1687425797617;
-        Thu, 22 Jun 2023 02:23:17 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id r20-20020a170906351400b009884035279bsm4348451eja.33.2023.06.22.02.23.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Jun 2023 02:23:17 -0700 (PDT)
-Message-ID: <0d1b3c55-4b11-9e63-e388-191d39d88df1@linaro.org>
-Date:   Thu, 22 Jun 2023 11:23:15 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 2/2] arch: arm64: configs: Enable UBI and UBIFS
-To:     kah.jing.lee@intel.com, Dinh Nguyen <dinguyen@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        Thu, 22 Jun 2023 05:33:17 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C69801BD4;
+        Thu, 22 Jun 2023 02:27:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1687426046; x=1718962046;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=avbGK7S7LV+7nn+z658JKvXE0ojq/Xd4FY7WvcVFmzg=;
+  b=h3P5621KdzQ3CwnSlfIuv2sSp+1NhJDwT9ksVkg+N63LjpJs/fvvcDwj
+   yJwTMsHormC0ZZ+iVGpvSYln4t4c1NMYK7mPnHXpWgmzIXsKZQryT1Ocw
+   WvMzPYzJ5vtJZrSdpF0d8oreSTtxREGa/AFlzWvEA4ZO3GkR4dTmnDEzs
+   aC5M7FzDQAM4qFba0leEs7/vw7amgsMTv4NJAr/X/4V7GT0d+t85/Gvab
+   cPzE8/UXE+hivzZXS1P2u/fQIdWBtNBb/v50Y2OMnQRp8vK+aGt/6+y4h
+   p7EHXqXk8eZnVVAawFVnLX6NQCRjNgUypmLwyK9oXLLjy43sTCRlumIcy
+   A==;
+X-IronPort-AV: E=Sophos;i="6.00,263,1681196400"; 
+   d="asc'?scan'208";a="158093292"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 Jun 2023 02:27:25 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 22 Jun 2023 02:26:47 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Thu, 22 Jun 2023 02:26:45 -0700
+Date:   Thu, 22 Jun 2023 10:26:18 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Lucas Tanure <tanure@linux.com>
+CC:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Alif Zakuan Yuslaimi <alif.zakuan.yuslaimi@intel.com>
-References: <20230622085349.573942-1-kah.jing.lee@intel.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230622085349.573942-1-kah.jing.lee@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>, Nick <nick@khadas.com>,
+        Artem <art@khadas.com>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Conor Dooley <conor@kernel.org>
+Subject: Re: [PATCH v4 2/3] dt-bindings: serial: amlogic,meson-uart: Add
+ compatible string for T7
+Message-ID: <20230622-unsent-willing-574906af5e1a@wendy>
+References: <20230622084045.519203-1-tanure@linux.com>
+ <20230622084045.519203-3-tanure@linux.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="ddIyo+hP71qlkpK4"
+Content-Disposition: inline
+In-Reply-To: <20230622084045.519203-3-tanure@linux.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,37 +76,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/06/2023 10:53, kah.jing.lee@intel.com wrote:
-> From: Alif Zakuan Yuslaimi <alif.zakuan.yuslaimi@intel.com>
-> 
-> This patch is to enable UBI and UBIFS in Linux defconfig.
+--ddIyo+hP71qlkpK4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Why? Which board needs it? It's quite unusual to have this on arm64...
+Hey Lucas,
 
-> 
-> Signed-off-by: Alif Zakuan Yuslaimi <alif.zakuan.yuslaimi@intel.com>
-> Signed-off-by: Kah Jing Lee <kah.jing.lee@intel.com>
+On Thu, Jun 22, 2023 at 09:40:44AM +0100, Lucas Tanure wrote:
+> Amlogic T7 SoCs uses the same UART controller as S4 SoCs and G12A.
+> There is no need for an extra compatible line in the driver, but
+> add T7 compatible line for documentation.
+>=20
+> Co-developed-by: Conor Dooley <conor@kernel.org>
+
+You can delete this, I don't need a Co-developed-by tag for review
+feedback.
+
+> Signed-off-by: Lucas Tanure <tanure@linux.com>
 > ---
->  arch/arm64/configs/defconfig | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-> index a24609e14d50..23a6ebcb1a9e 100644
-> --- a/arch/arm64/configs/defconfig
-> +++ b/arch/arm64/configs/defconfig
-> @@ -470,6 +470,8 @@ CONFIG_IPMI_DEVICE_INTERFACE=m
->  CONFIG_IPMI_SI=m
->  CONFIG_HW_RANDOM=y
->  CONFIG_HW_RANDOM_VIRTIO=y
-> +CONFIG_MTD_UBI=y
-> +CONFIG_UBIFS_FS=y
+>  .../devicetree/bindings/serial/amlogic,meson-uart.yaml      | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/serial/amlogic,meson-uart.=
+yaml b/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
+> index 01ec45b3b406..4ca4673169aa 100644
+> --- a/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
+> +++ b/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
+> @@ -46,6 +46,12 @@ properties:
+>            - amlogic,meson8b-uart
+>            - amlogic,meson-gx-uart
+>            - amlogic,meson-s4-uart
+> +      - description: Everything-Else power domain UART controller on G12=
+A compatible SoCs
 
-Not modules?
+s/Everything-Else/Always-on/
+Otherwise,
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
-Are you sure you added the lines in appropriate place (matching
-savedefconfig)?
+Perhaps it can be fixed on application, I don't know how the amlogic
+maintainers operate.
 
+Cheers,
+Conor.
 
-Best regards,
-Krzysztof
+> +        items:
+> +          - enum:
+> +              - amlogic,meson-t7-uart
+> +          - const: amlogic,meson-g12a-uart
+> +          - const: amlogic,meson-ao-uart
+>        - description: Everything-Else power domain UART controller on G12=
+A SoCs
+>          items:
+>            - const: amlogic,meson-g12a-uart
+> --=20
+> 2.41.0
+>=20
 
+--ddIyo+hP71qlkpK4
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJQTugAKCRB4tDGHoIJi
+0lalAQC26MkvYfk+N8oVCKB3gmbONVI77MG2hQKQm4gPBQBMpAEAmhCQCy5FYk2G
+fefLgjHl2z94F9oOu9SJ+Zj8fkWhOgg=
+=vwt5
+-----END PGP SIGNATURE-----
+
+--ddIyo+hP71qlkpK4--
