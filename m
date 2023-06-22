@@ -2,54 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8644173953F
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 04:08:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B51573953E
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 04:07:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230367AbjFVCH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 22:07:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37680 "EHLO
+        id S230327AbjFVCHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 22:07:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230308AbjFVCHw (ORCPT
+        with ESMTP id S230319AbjFVCHw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 21 Jun 2023 22:07:52 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CD9471BFF;
+Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F5361BD8;
         Wed, 21 Jun 2023 19:07:42 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 694EE1063;
-        Wed, 21 Jun 2023 19:08:26 -0700 (PDT)
-Received: from [10.162.40.20] (unknown [10.162.40.20])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 356A33F64C;
-        Wed, 21 Jun 2023 19:07:37 -0700 (PDT)
-Message-ID: <4dc97e9f-e103-9120-373d-8f4f472e8332@arm.com>
-Date:   Thu, 22 Jun 2023 07:37:35 +0530
+Received: by mail-il1-f178.google.com with SMTP id e9e14a558f8ab-341c362a851so25841685ab.2;
+        Wed, 21 Jun 2023 19:07:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687399662; x=1689991662;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nX4L8ejzBqvRUr9f62UT6M7EQgUf9/KqzPDQhJBYawU=;
+        b=aXePOFL9OvqiG6cIDeGr6SQANqkqilMshy02oVeNj5BNVDfsbpHBwCp0nUU+8YkKVV
+         ZpmbkhWdFrpRx4D/VxaMSfz+XvVHesuCg1umbatMEukePHwtEcJNLi1+NKki6U69cb9D
+         POjOvdlqtMp836OulpNgM5bXGqGnOo6lYZRGrbU9DJslwPw+33L0w7cJ6eCr3GfZ8M/U
+         GekRiRLrmEQmfzZublqCO5gsXYJ++Bp3ZGBdg5XKpBLKnHdCYPuvghQrHrziUDIoAFV2
+         Qi1MfcwapE+mqH4OTg960AJPbmz198vRPeAPwDdBUJzuNgyFwKbOheE0+7/9lQVekNoj
+         M6PQ==
+X-Gm-Message-State: AC+VfDz5Z98yPOGQWhkqBJQjf2q0iA5kVvBrnu2/93oS3UrpqnL5olYU
+        miJTYIveJblHLpQqbMSriQ==
+X-Google-Smtp-Source: ACHHUZ7tPd0zVOkisTOC6GV02QUpZy9KMeMbVVC0nbsj9YGKPDZv+3VOVws/Inlptwbj9LyRxwCEWg==
+X-Received: by 2002:a05:6e02:610:b0:331:9c03:dada with SMTP id t16-20020a056e02061000b003319c03dadamr13558953ils.13.1687399662203;
+        Wed, 21 Jun 2023 19:07:42 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id s14-20020a92cb0e000000b0034267d3fcc5sm1680494ilo.55.2023.06.21.19.07.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jun 2023 19:07:41 -0700 (PDT)
+Received: (nullmailer pid 67903 invoked by uid 1000);
+        Thu, 22 Jun 2023 02:07:39 -0000
+Date:   Wed, 21 Jun 2023 20:07:39 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Benjamin Bara <bbara93@gmail.com>
+Cc:     Matthias Kaehlcke <mka@chromium.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Benjamin Bara <benjamin.bara@skidata.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>
+Subject: Re: [PATCH v4 3/3] dt-bindings: usb: Add binding for Cypress HX3 USB
+ 3.0 family
+Message-ID: <168739965923.67844.7517249183491573877.robh@kernel.org>
+References: <20230620-hx3-v4-0-e56b3c6db60b@skidata.com>
+ <20230620-hx3-v4-3-e56b3c6db60b@skidata.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH V12 08/10] arm64/perf: Add struct brbe_regset helper
- functions
-Content-Language: en-US
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        will@kernel.org, catalin.marinas@arm.com,
-        Mark Brown <broonie@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Suzuki Poulose <suzuki.poulose@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-perf-users@vger.kernel.org
-References: <20230615133239.442736-1-anshuman.khandual@arm.com>
- <20230615133239.442736-9-anshuman.khandual@arm.com>
- <ZJL346ZgQRcHNA7E@FVFF77S0Q05N>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <ZJL346ZgQRcHNA7E@FVFF77S0Q05N>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230620-hx3-v4-3-e56b3c6db60b@skidata.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -57,89 +71,21 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+On Wed, 21 Jun 2023 20:04:05 +0200, Benjamin Bara wrote:
+> From: Benjamin Bara <benjamin.bara@skidata.com>
+> 
+> The HX3 family comes in different variants (up to 4 USB 3.0 ports;
+> multi-TT), e.g. CYUSB330x/CYUSB331x/CYUSB332x/CYUSB230x.
+> 
+> This initial version of the binding only describes USB related aspects
+> of the HX3 family, it does not cover the option of connecting the
+> controller as an i2c slave.
+> 
+> Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
+> ---
+>  .../devicetree/bindings/usb/cypress,hx3.yaml       | 77 ++++++++++++++++++++++
+>  1 file changed, 77 insertions(+)
+> 
 
-On 6/21/23 18:45, Mark Rutland wrote:
-> Hi Anshuman,
-> 
-> Thanks, this is looking much better; I just a have a couple of minor comments.
-> 
-> With those fixed up:
-> 
-> Acked-by: Mark Rutland <mark.rutland@arm.com>
-> 
-> Mark.
-> 
-> On Thu, Jun 15, 2023 at 07:02:37PM +0530, Anshuman Khandual wrote:
->> The primary abstraction level for fetching branch records from BRBE HW has
->> been changed as 'struct brbe_regset', which contains storage for all three
->> BRBE registers i.e BRBSRC, BRBTGT, BRBINF. Whether branch record processing
->> happens in the task sched out path, or in the PMU IRQ handling path, these
->> registers need to be extracted from the HW. Afterwards both live and stored
->> sets need to be stitched together to create final branch records set. This
->> adds required helper functions for such operations.
->>
->> Cc: Catalin Marinas <catalin.marinas@arm.com>
->> Cc: Will Deacon <will@kernel.org>
->> Cc: Mark Rutland <mark.rutland@arm.com>
->> Cc: linux-arm-kernel@lists.infradead.org
->> Cc: linux-kernel@vger.kernel.org
->> Tested-by: James Clark <james.clark@arm.com>
->> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
->> ---
->>  drivers/perf/arm_brbe.c | 127 ++++++++++++++++++++++++++++++++++++++++
->>  1 file changed, 127 insertions(+)
->>
->> diff --git a/drivers/perf/arm_brbe.c b/drivers/perf/arm_brbe.c
->> index 4729cb49282b..f6693699fade 100644
->> --- a/drivers/perf/arm_brbe.c
->> +++ b/drivers/perf/arm_brbe.c
->> @@ -44,6 +44,133 @@ static void select_brbe_bank(int bank)
->>  	isb();
->>  }
->>  
->> +static bool __read_brbe_regset(struct brbe_regset *entry, int idx)
->> +{
->> +	entry->brbinf = get_brbinf_reg(idx);
->> +
->> +	/*
->> +	 * There are no valid entries anymore on the buffer.
->> +	 * Abort the branch record processing to save some
->> +	 * cycles and also reduce the capture/process load
->> +	 * for the user space as well.
->> +	 */
-> 
-> This comment refers to the process of handling multiple entries, though it's
-> only handling one entry, and I don't think we need to mention saving cycles here.
-> 
-> Could we please delete this comment entirely? The comment above
-> capture_brbe_regset() already explains that we read until the first invalid
-> entry.
+Reviewed-by: Rob Herring <robh@kernel.org>
 
-Sure, will drop the comment.
-
-> 
->> +	if (brbe_invalid(entry->brbinf))
->> +		return false;
->> +
->> +	entry->brbsrc = get_brbsrc_reg(idx);
->> +	entry->brbtgt = get_brbtgt_reg(idx);
->> +	return true;
->> +}
->> +
->> +/*
->> + * This scans over BRBE register banks and captures individual branch records
->> + * [BRBSRC, BRBTGT, BRBINF] into a pre-allocated 'struct brbe_regset' buffer,
->> + * until an invalid one gets encountered. The caller for this function needs
->> + * to ensure BRBE is an appropriate state before the records can be captured.
->> + */
-> 
-> Could we simplify this to:
-> 
-> /*
->  * Read all BRBE entries in HW until the first invalid entry.
->  *
->  * The caller must ensure that the BRBE is not concurrently modifying these
->  * entries.
->  */
-
-Okay, will change the comment as suggested.
