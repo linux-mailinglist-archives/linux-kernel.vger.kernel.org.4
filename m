@@ -2,165 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E75C73A425
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 17:02:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC91873A42A
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 17:03:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232135AbjFVPCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 11:02:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39640 "EHLO
+        id S232084AbjFVPDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 11:03:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232103AbjFVPCu (ORCPT
+        with ESMTP id S232095AbjFVPDg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 11:02:50 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D147B1FF2
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 08:02:24 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1b51780bed0so56459435ad.3
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 08:02:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1687446130; x=1690038130;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=faWv91VP2z/YbKZA+qDwvC+H5Ebg0LphINaB6C6XGBI=;
-        b=mt+u4MU2N69BdCB48EipZPFZvxxegmfx/OHOcyc/fM4PZHcrYAkSQWkcdFUsmp5rNU
-         a6j2G9cgP05nAPrTpXTrKstR8E5BoO42DmiP6/AZUuIG/6/BBMLFuw5aAo/SAHPeZdEg
-         DNvDehDx9+J7nZG9sBU7G6/wpPi2vu+msKWiZ8QFox3/ruMzFIOZCnfnj843xufxdgu9
-         MeGUmiA7Z/dRVBK3NdT9B4ymhpM9c0qpwKNXpegEvvYhn5T1kxweIZjlNE+fattEVIvn
-         jG1RiXKH3SvzlebwvUPYmft34NdlnUAiikYo4SRSggxh+pPF10pxJtEKozp+lS8TepIG
-         aHrQ==
+        Thu, 22 Jun 2023 11:03:36 -0400
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29C26268F;
+        Thu, 22 Jun 2023 08:03:17 -0700 (PDT)
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-311099fac92so8393016f8f.0;
+        Thu, 22 Jun 2023 08:03:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687446130; x=1690038130;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20221208; t=1687446160; x=1690038160;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=faWv91VP2z/YbKZA+qDwvC+H5Ebg0LphINaB6C6XGBI=;
-        b=JVxc8giuyJaDtQf1RJ5Gl6R2J0VkXxzgKYBxhDWEP88NxAiENdbtsRRbmFfLb/v3i8
-         Ee41NomfEtMIh0Yt3k5zAwLM01AywxeW6Istv4ruduv2myVnPsqzYGp74FFrEcR2gI/Y
-         DBCbuFS6Qbv3XYsRG9FJTWHUVtL986ozMkPBqKS8tGGJV0F9jn21u0Tine1CXOonGaUg
-         0mZ1wOLGTpDYET3NWS+x6zr+KUPPgLBUAbucltQIQFanA6/XWZHKuaGWBV7yBCqW0aSD
-         wQqY/gOUClAOTdWrXHxpJnm80AWpXB53I3WbmAfaZt1tpLvbe630WN5M4WYLqneBfV3e
-         1XWQ==
-X-Gm-Message-State: AC+VfDz7Oy6VZBwForVg+XxgPJwXQzlGTw+rxJ6ZW1B+Jf4CldmqLZuN
-        GyX9/bxPkO4GHNehLU3Rib0olA==
-X-Google-Smtp-Source: ACHHUZ7sxI2/l9NYWY43UXjLd7//zIrvDML1M6VqO+WFrtnEGO/KRuc42ZZ7KlADjiu835vi4h/IOA==
-X-Received: by 2002:a17:902:f7c6:b0:1ae:14d:8d0a with SMTP id h6-20020a170902f7c600b001ae014d8d0amr15965819plw.29.1687446130063;
-        Thu, 22 Jun 2023 08:02:10 -0700 (PDT)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id z7-20020a170902708700b001b3dada0e78sm5466709plk.258.2023.06.22.08.02.09
+        bh=t/n7cyBQWBJrKRj8jxj2QgN2B2DXg9ROG/UR9O3ggiI=;
+        b=a4j/5BRe6ikbuTRZI5Ze/gfo7/DAUTTt/Asv4VPS1uMJMnPhnmuh7vFI2flJapVr4c
+         UC+yvK8fb+aDyyZvCRQqGDk+z6C2DKUUyx3wBFeXmEI9B0wmB5U9DE2jqY5GiagcJfrP
+         L8dbVkdFYlUXouFhKkFgQHP98vaipyQbb6tfM+JyUloqgfELr3LX9nXtijiuJAKg4IUy
+         bGq8hnjoDEAGee1IoRlEYtX8GaYpNcyfn+3JaDGggBdTUd/YydevihI5Qxys3woJHATZ
+         XJt4sFYP7WCONzGr3yDRDr7jzQStv5iZj3SNvu2G8J9O9dIuzKIOIs/NTwXlcElan5hc
+         NuOw==
+X-Gm-Message-State: AC+VfDyPcTNW4Dm1Yd08cbR4TKzHn8kKo3+YFCQJsXm9gb0Kn6EbXh3a
+        iWdghonOgUchIPWqbhymzMs=
+X-Google-Smtp-Source: ACHHUZ4+rOnjnE4sQgtZcmXX9Fey6w9aB4HaOV5Uy8o85WMhvf0KHxeyaE5uZbAjbZTWnWK8B5SjBw==
+X-Received: by 2002:adf:f34f:0:b0:30f:b1ee:5cd0 with SMTP id e15-20020adff34f000000b0030fb1ee5cd0mr16382265wrp.50.1687446159714;
+        Thu, 22 Jun 2023 08:02:39 -0700 (PDT)
+Received: from gmail.com (fwdproxy-cln-021.fbsv.net. [2a03:2880:31ff:15::face:b00c])
+        by smtp.gmail.com with ESMTPSA id n15-20020a5d4c4f000000b003111025ec67sm7266818wrt.25.2023.06.22.08.02.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jun 2023 08:02:09 -0700 (PDT)
-Date:   Thu, 22 Jun 2023 08:02:09 -0700 (PDT)
-X-Google-Original-Date: Thu, 22 Jun 2023 08:01:29 PDT (-0700)
-Subject:     Re: [PATCH 11/14] init: consolidate prototypes in linux/init.h
-In-Reply-To: <20230517131102.934196-12-arnd@kernel.org>
-CC:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        Arnd Bergmann <arnd@arndb.de>, linux@armlinux.org.uk,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, monstr@monstr.eu,
-        tsbogend@alpha.franken.de, deller@gmx.de, mpe@ellerman.id.au,
-        hca@linux.ibm.com, tglx@linutronix.de, mingo@redhat.com,
-        x86@kernel.org, rafael@kernel.org, paul@paul-moore.com,
-        eparis@redhat.com, dennis@kernel.org, tj@kernel.org, cl@linux.com,
-        pavel@ucw.cz, peterz@infradead.org, longman@redhat.com,
-        boqun.feng@gmail.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, audit@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     arnd@kernel.org
-Message-ID: <mhng-eb6e6d97-fe40-4755-9be5-eb75a690d88c@palmer-ri-x1c9a>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Thu, 22 Jun 2023 08:02:39 -0700 (PDT)
+Date:   Thu, 22 Jun 2023 08:02:37 -0700
+From:   Breno Leitao <leitao@debian.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>, Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, leit@meta.com,
+        Arnd Bergmann <arnd@arndb.de>,
+        Steve French <stfrench@microsoft.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Stephen Hemminger <stephen@networkplumber.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Simon Ser <contact@emersion.fr>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:IO_URING" <io-uring@vger.kernel.org>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>
+Subject: Re: [PATCH] io_uring: Add io_uring command support for sockets
+Message-ID: <ZJRijTDv5lUsVo+j@gmail.com>
+References: <20230621232129.3776944-1-leitao@debian.org>
+ <2023062231-tasting-stranger-8882@gregkh>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2023062231-tasting-stranger-8882@gregkh>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,FSL_HELO_FAKE,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 17 May 2023 06:10:59 PDT (-0700), arnd@kernel.org wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> The init/main.c file contains some extern declarations for functions
-> defined in architecture code, and it defines some other functions that
-> are called from architecture code with a custom prototype. Both of those
-> result in warnings with 'make W=1':
->
-> init/calibrate.c:261:37: error: no previous prototype for 'calibrate_delay_is_known' [-Werror=missing-prototypes]
-> init/main.c:790:20: error: no previous prototype for 'mem_encrypt_init' [-Werror=missing-prototypes]
-> init/main.c:792:20: error: no previous prototype for 'poking_init' [-Werror=missing-prototypes]
-> arch/arm64/kernel/irq.c:122:13: error: no previous prototype for 'init_IRQ' [-Werror=missing-prototypes]
-> arch/arm64/kernel/time.c:55:13: error: no previous prototype for 'time_init' [-Werror=missing-prototypes]
-> arch/x86/kernel/process.c:935:13: error: no previous prototype for 'arch_post_acpi_subsys_init' [-Werror=missing-prototypes]
-> init/calibrate.c:261:37: error: no previous prototype for 'calibrate_delay_is_known' [-Werror=missing-prototypes]
-> kernel/fork.c:991:20: error: no previous prototype for 'arch_task_cache_init' [-Werror=missing-prototypes]
->
-> Add prototypes for all of these in include/linux/init.h or another
-> appropriate header, and remove the duplicate declarations from
-> architecture specific code.
->
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  arch/arm/include/asm/irq.h          |  1 -
->  arch/microblaze/include/asm/setup.h |  2 --
->  arch/mips/include/asm/irq.h         |  1 -
->  arch/parisc/kernel/smp.c            |  1 -
->  arch/powerpc/include/asm/irq.h      |  1 -
->  arch/riscv/include/asm/irq.h        |  2 --
->  arch/riscv/include/asm/timex.h      |  2 --
->  arch/s390/kernel/entry.h            |  2 --
->  arch/sh/include/asm/irq.h           |  1 -
->  arch/sh/include/asm/rtc.h           |  2 --
->  arch/sparc/include/asm/irq_32.h     |  1 -
->  arch/sparc/include/asm/irq_64.h     |  1 -
->  arch/sparc/include/asm/timer_64.h   |  1 -
->  arch/sparc/kernel/kernel.h          |  4 ----
->  arch/x86/include/asm/irq.h          |  2 --
->  arch/x86/include/asm/mem_encrypt.h  |  3 ---
->  arch/x86/include/asm/time.h         |  1 -
->  arch/x86/include/asm/tsc.h          |  1 -
->  include/linux/acpi.h                |  3 ++-
->  include/linux/delay.h               |  1 +
->  include/linux/init.h                | 20 ++++++++++++++++++++
->  init/main.c                         | 18 ------------------
->  22 files changed, 23 insertions(+), 48 deletions(-)
+On Thu, Jun 22, 2023 at 07:20:48AM +0200, Greg Kroah-Hartman wrote:
+> On Wed, Jun 21, 2023 at 04:21:26PM -0700, Breno Leitao wrote:
+> > Enable io_uring commands on network sockets. Create two new
+> > SOCKET_URING_OP commands that will operate on sockets. Since these
+> > commands are similar to ioctl, uses the _IO{R,W} helpers to embedded the
+> > argument size and operation direction. Also allocates a unused ioctl
+> > chunk for uring command usage.
+> > 
+> > In order to call ioctl on sockets, use the file_operations->uring_cmd
+> > callbacks, and map it to a uring socket function, which handles the
+> > SOCKET_URING_OP accordingly, and calls socket ioctls.
+> > 
+> > This patches was tested by creating a new test case in liburing.
+> > Link: https://github.com/leitao/liburing/commit/3340908b742c6a26f662a0679c4ddf9df84ef431
+> > 
+> > Signed-off-by: Breno Leitao <leitao@debian.org>
+> > ---
+> 
+> Isn't this a new version of an older patch?
 
-...
+Yes, this should have tagged as V2.
 
-> diff --git a/arch/riscv/include/asm/irq.h b/arch/riscv/include/asm/irq.h
-> index 43b9ebfbd943..8e10a94430a2 100644
-> --- a/arch/riscv/include/asm/irq.h
-> +++ b/arch/riscv/include/asm/irq.h
-> @@ -16,6 +16,4 @@ void riscv_set_intc_hwnode_fn(struct fwnode_handle *(*fn)(void));
->
->  struct fwnode_handle *riscv_get_intc_hwnode(void);
->
-> -extern void __init init_IRQ(void);
-> -
->  #endif /* _ASM_RISCV_IRQ_H */
-> diff --git a/arch/riscv/include/asm/timex.h b/arch/riscv/include/asm/timex.h
-> index d6a7428f6248..a06697846e69 100644
-> --- a/arch/riscv/include/asm/timex.h
-> +++ b/arch/riscv/include/asm/timex.h
-> @@ -88,6 +88,4 @@ static inline int read_current_timer(unsigned long *timer_val)
->  	return 0;
->  }
->
-> -extern void time_init(void);
-> -
->  #endif /* _ASM_RISCV_TIMEX_H */
+[1] https://lore.kernel.org/lkml/20230406144330.1932798-1-leitao@debian.org/#r
 
-Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com> # RISC-V
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com> # RISC-V
+> > --- a/Documentation/userspace-api/ioctl/ioctl-number.rst
+> > +++ b/Documentation/userspace-api/ioctl/ioctl-number.rst
+> > @@ -361,6 +361,7 @@ Code  Seq#    Include File                                           Comments
+> >  0xCB  00-1F                                                          CBM serial IEC bus in development:
+> >                                                                       <mailto:michael.klein@puffin.lb.shuttle.de>
+> >  0xCC  00-0F  drivers/misc/ibmvmc.h                                   pseries VMC driver
+> > +0xCC  A0-BF  uapi/linux/io_uring.h                                   io_uring cmd subsystem
+> 
+> This change is nice, but not totally related to this specific one,
+> shouldn't it be separate?
 
-Thanks!
+This is related to this patch, since I am using it below, in the
+following part:
 
+	+#define SOCKET_URING_OP_SIOCINQ _IOR(0xcc, 0xa0, int)
+	+#define SOCKET_URING_OP_SIOCOUTQ _IOR(0xcc, 0xa1, int)
 
+Should I have a different patch, even if they are related?
+
+> > +EXPORT_SYMBOL_GPL(uring_sock_cmd);
+> 
+> Did you forget the "io_" prefix?
+
+Yes, I will rename the function.
+
+Thanks for the review.
