@@ -2,186 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5521273A89B
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 20:51:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 052E073A89D
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 20:51:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231377AbjFVSvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 14:51:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39926 "EHLO
+        id S231422AbjFVSvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 14:51:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230423AbjFVSvP (ORCPT
+        with ESMTP id S231414AbjFVSvi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 14:51:15 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D2D619AF;
-        Thu, 22 Jun 2023 11:51:13 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35MIp3R3098594;
-        Thu, 22 Jun 2023 13:51:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1687459863;
-        bh=UkJIUEvpcmY3eTc6Zb56DOVcjSEVJCb4axi5H8lFzaM=;
-        h=From:To:CC:Subject:Date;
-        b=RviaVqOjmNqohXY9MCf222pka/f5488yrZdyIpl2AtYBJiQX950NDEvHPa2YmeRBQ
-         KKYmRwPxLxMko6oMGMdftsVR7MGxToCLJDBD+8rQnljoCiVjmOnnAYF/6Qy8TUE6fe
-         jkS6huDy2frODCb9yoNbUKevzE/Lymk+NMD5JUqA=
-Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35MIp2G7009730
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 22 Jun 2023 13:51:02 -0500
-Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 22
- Jun 2023 13:51:02 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 22 Jun 2023 13:51:02 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35MIp1Dx023454;
-        Thu, 22 Jun 2023 13:51:01 -0500
-From:   Bhavya Kapoor <b-kapoor@ti.com>
-To:     <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <nm@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <u-kumar1@ti.com>, <b-kapoor@ti.com>
-Subject: [PATCH v4] arm64: dts: ti: k3-j721s2: Add support for CAN instances 3 and 5 in main domain
-Date:   Fri, 23 Jun 2023 00:21:00 +0530
-Message-ID: <20230622185100.12197-1-b-kapoor@ti.com>
-X-Mailer: git-send-email 2.39.2
+        Thu, 22 Jun 2023 14:51:38 -0400
+X-Greylist: delayed 106886 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 22 Jun 2023 11:51:35 PDT
+Received: from smtpng3.i.mail.ru (smtpng3.i.mail.ru [94.100.177.149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E07B71FF9;
+        Thu, 22 Jun 2023 11:51:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=inbox.ru; s=mail4;
+        h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc; bh=p+iWB5jlHu8J5NVdgbBRkf4lseuIbdgeu4gKikNjj+w=;
+        t=1687459896;x=1687549896; 
+        b=DqEAMuLs+a39CC9dXXG2F7NHOXOJf3Bxcq3LODyw9XXpdMFrdDJ3BKFbp4zfATYvPVUcXng8iWHKq7FtZRCtpZL7QpSLKHTR2dcAbWgPiJsSP6ExqrAD7Ip7sqxLynULGOLfcF4M0zIP/g0kLu0/F9NfboB3faMKa+eaXU8KE/RSsD81wF7Zs0QqDL5qPszM7eDGbytRbv0OlDjoaa972LAPbFsI0A2GlZ0fXph1kmwZknj2htbI8HvgPI7rOIv0ZKjbZW6EYhLlv3SYu3tOAV8xUOB3OhXsmVtW5nZy+2ttNMcHbbXGPaErtNJsxnpa5GXOB55u/6HGGnbRTAUNaA==;
+Received: by smtpng3.m.smailru.net with esmtpa (envelope-from <fido_max@inbox.ru>)
+        id 1qCPP3-0001CL-7p; Thu, 22 Jun 2023 21:51:33 +0300
+From:   Maxim Kochetkov <fido_max@inbox.ru>
+To:     netdev@vger.kernel.org
+Cc:     Maxim Kochetkov <fido_max@inbox.ru>,
+        Robert Hancock <robert.hancock@calian.com>,
+        Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Michal Simek <michal.simek@amd.com>,
+        Andre Przywara <andre.przywara@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 1/1] net: axienet: Move reset before DMA detection
+Date:   Thu, 22 Jun 2023 21:51:30 +0300
+Message-Id: <20230622185131.113717-1-fido_max@inbox.ru>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Authentication-Results: smtpng3.m.smailru.net; auth=pass smtp.auth=fido_max@inbox.ru smtp.mailfrom=fido_max@inbox.ru
+X-Mailru-Src: smtp
+X-7564579A: 646B95376F6C166E
+X-77F55803: 4F1203BC0FB41BD95D99986233CC4DDCD825FF3AA070ECA3C2EE242F31DB0C21182A05F538085040F499278726E560259E7EC9ACB4612EF05270372DAF44CC04427632CD680C1B4E
+X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE7CC84CC3AD347B910EA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F79006371005780D56A98C20EA1F7E6F0F101C6723150C8DA25C47586E58E00D9D99D84E1BDDB23E98D2D38BE5CCB53A13BC8DBA7860F8D68D0323F857C18BE58FF1278D20879F7C8C5043D14489FFFB0AA5F4BFA417C69337E82CC2CC7F00164DA146DAFE8445B8C89999728AA50765F790063741F7343E26298569389733CBF5DBD5E9C8A9BA7A39EFB766F5D81C698A659EA7CC7F00164DA146DA9985D098DBDEAEC8CE4AEF6198D26326F6B57BC7E6449061A352F6E88A58FB86F5D81C698A659EA7E827F84554CEF5019E625A9149C048EE9ECD01F8117BC8BEE2021AF6380DFAD18AA50765F790063735872C767BF85DA227C277FBC8AE2E8B08F9A42B2210255C75ECD9A6C639B01B4E70A05D1297E1BBCB5012B2E24CD356
+X-C1DE0DAB: 0D63561A33F958A5F843997C76389857B97932DC439E4282D4C195A55BD471C6F87CCE6106E1FC07E67D4AC08A07B9B01DAA61796BF5227B9C5DF10A05D560A950611B66E3DA6D700B0A020F03D25A0997E3FB2386030E77
+X-C8649E89: 1C3962B70DF3F0ADE00A9FD3E00BEEDF77DD89D51EBB7742D3581295AF09D3DF87807E0823442EA2ED31085941D9CD0AF7F820E7B07EA4CF8925DAA191E1713318F85A81DA1558E22CCEAEED2076469D72E08A9CF3BB8FE8422E0C78D0E15355B05B57073EAFDF971B30CF38DA3B874AF2E539E16A78A81621BEC6C0C71ED4F84C41F94D744909CEE921556F0E976A29E6EC0772259F8F8F8815B87D7EC76CB9
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojB41c+mu8Ac+Sc30P1oorFA==
+X-Mailru-Sender: 689FA8AB762F73930F533AC2B33E986B70B89E82614EDFD7B35E749CAF57FC7598CC072019C18A892CA7F8C7C9492E1F2F5E575105D0B01ADBE2EF17B331888EEAB4BC95F72C04283CDA0F3B3F5B9367
+X-Mras: Ok
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CAN instances 3 and 5 in the main domain are brought on the common
-processor board through header J27 and J28. The CAN High and Low lines
-from the SoC are routed through a mux on the SoM. The select lines need
-to be set for the CAN signals to get connected to the transceivers on
-the common processor board. Threfore, add respective mux, transceiver
-dt nodes to add support for these CAN instances.
+DMA detection will fail if axienet was started before (by boot loader,
+boot ROM, etc). In this state axienet will not start properly.
+XAXIDMA_TX_CDESC_OFFSET + 4 register (MM2S_CURDESC_MSB) is used to detect
+64 DMA capability here. But datasheet says: When DMACR.RS is 1
+(axienet is in enabled state), CURDESC_PTR becomes Read Only (RO) and
+is used to fetch the first descriptor. So iowrite32()/ioread32() trick
+to this register to detect DMA will not work.
+So move axienet reset before DMA detection.
 
-Reviewed-by: Udit Kumar <u-kumar1@ti.com>
-Signed-off-by: Bhavya Kapoor <b-kapoor@ti.com>
+Fixes: f735c40ed93c ("net: axienet: Autodetect 64-bit DMA capability")
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+Reviewed-by: Robert Hancock <robert.hancock@calian.com>
 ---
+ drivers/net/ethernet/xilinx/xilinx_axienet_main.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-Changelog v3->v4 :
-- Modified mux controller names
-
-Link to v3 : https://lore.kernel.org/all/20230526165505.45172-1-b-kapoor@ti.com/
-
- .../dts/ti/k3-j721s2-common-proc-board.dts    | 46 +++++++++++++++++++
- arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi  | 12 +++++
- 2 files changed, 58 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
-index b4b9edfe2d12..07016c87f4da 100644
---- a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
-+++ b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
-@@ -27,6 +27,8 @@ aliases {
- 		can0 = &main_mcan16;
- 		can1 = &mcu_mcan0;
- 		can2 = &mcu_mcan1;
-+		can3 = &main_mcan3;
-+		can4 = &main_mcan5;
- 	};
+diff --git a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
+index 3e310b55bce2..734822321e0a 100644
+--- a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
++++ b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
+@@ -2042,6 +2042,11 @@ static int axienet_probe(struct platform_device *pdev)
+ 		goto cleanup_clk;
+ 	}
  
- 	evm_12v0: fixedregulator-evm12v0 {
-@@ -107,6 +109,22 @@ transceiver2: can-phy2 {
- 		standby-gpios = <&wkup_gpio0 2 GPIO_ACTIVE_HIGH>;
- 	};
++	/* Reset core now that clocks are enabled, prior to accessing MDIO */
++	ret = __axienet_device_reset(lp);
++	if (ret)
++		goto cleanup_clk;
++
+ 	/* Autodetect the need for 64-bit DMA pointers.
+ 	 * When the IP is configured for a bus width bigger than 32 bits,
+ 	 * writing the MSB registers is mandatory, even if they are all 0.
+@@ -2096,11 +2101,6 @@ static int axienet_probe(struct platform_device *pdev)
+ 	lp->coalesce_count_tx = XAXIDMA_DFT_TX_THRESHOLD;
+ 	lp->coalesce_usec_tx = XAXIDMA_DFT_TX_USEC;
  
-+	transceiver3: can-phy3 {
-+		compatible = "ti,tcan1043";
-+		#phy-cells = <0>;
-+		max-bitrate = <5000000>;
-+		standby-gpios = <&exp2 7 GPIO_ACTIVE_LOW>;
-+		enable-gpios = <&exp2 6 GPIO_ACTIVE_HIGH>;
-+		mux-states = <&mux0 1>;
-+	};
-+
-+	transceiver4: can-phy4 {
-+		compatible = "ti,tcan1042";
-+		#phy-cells = <0>;
-+		max-bitrate = <5000000>;
-+		standby-gpios = <&exp_som 7 GPIO_ACTIVE_HIGH>;
-+		mux-states = <&mux1 1>;
-+	};
- };
- 
- &main_pmx0 {
-@@ -144,6 +162,20 @@ vdd_sd_dv_pins_default: vdd-sd-dv-pins-default {
- 			J721S2_IOPAD(0x020, PIN_INPUT, 7) /* (AA23) MCAN15_RX.GPIO0_8 */
- 		>;
- 	};
-+
-+	main_mcan3_pins_default: main-mcan3-pins-default {
-+		pinctrl-single,pins = <
-+			J721S2_IOPAD(0x080, PIN_INPUT, 0) /* (U26) MCASP0_AXR4.MCAN3_RX */
-+			J721S2_IOPAD(0x07c, PIN_OUTPUT, 0) /* (T27) MCASP0_AXR3.MCAN3_TX */
-+		>;
-+	};
-+
-+	main_mcan5_pins_default: main-mcan5-pins-default {
-+		pinctrl-single,pins = <
-+			J721S2_IOPAD(0x03c, PIN_INPUT, 0) /* (U27) MCASP0_AFSX.MCAN5_RX */
-+			J721S2_IOPAD(0x038, PIN_OUTPUT, 0) /* (AB28) MCASP0_ACLKX.MCAN5_TX */
-+		>;
-+	};
- };
- 
- &wkup_pmx0 {
-@@ -353,3 +385,17 @@ adc {
- 		ti,adc-channels = <0 1 2 3 4 5 6 7>;
- 	};
- };
-+
-+&main_mcan3 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&main_mcan3_pins_default>;
-+	phys = <&transceiver3>;
-+};
-+
-+&main_mcan5 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&main_mcan5_pins_default>;
-+	phys = <&transceiver4>;
-+};
-diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi
-index 6930efff8a5a..84e50e891ee2 100644
---- a/arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi
-@@ -31,6 +31,18 @@ secure_ddr: optee@9e800000 {
- 		};
- 	};
- 
-+	mux0: mux-controller@0 {
-+		compatible = "gpio-mux";
-+		#mux-state-cells = <1>;
-+		mux-gpios = <&exp_som 1 GPIO_ACTIVE_HIGH>;
-+	};
-+
-+	mux1: mux-controller@1 {
-+		compatible = "gpio-mux";
-+		#mux-state-cells = <1>;
-+		mux-gpios = <&exp_som 2 GPIO_ACTIVE_HIGH>;
-+	};
-+
- 	transceiver0: can-phy0 {
- 		/* standby pin has been grounded by default */
- 		compatible = "ti,tcan1042";
+-	/* Reset core now that clocks are enabled, prior to accessing MDIO */
+-	ret = __axienet_device_reset(lp);
+-	if (ret)
+-		goto cleanup_clk;
+-
+ 	ret = axienet_mdio_setup(lp);
+ 	if (ret)
+ 		dev_warn(&pdev->dev,
 -- 
-2.39.2
+2.40.1
 
