@@ -2,178 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16A4A7394E8
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 03:52:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82EC17394EB
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 03:53:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230143AbjFVBwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 21:52:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57566 "EHLO
+        id S229624AbjFVBw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 21:52:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230131AbjFVBwr (ORCPT
+        with ESMTP id S230158AbjFVBw4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 21:52:47 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2C64F1728;
-        Wed, 21 Jun 2023 18:52:46 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9257A1063;
-        Wed, 21 Jun 2023 18:53:29 -0700 (PDT)
-Received: from [10.162.40.20] (unknown [10.162.40.20])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 491493F64C;
-        Wed, 21 Jun 2023 18:52:40 -0700 (PDT)
-Message-ID: <6302d09f-0332-b8dc-cb91-8958a9bb9713@arm.com>
-Date:   Thu, 22 Jun 2023 07:22:37 +0530
+        Wed, 21 Jun 2023 21:52:56 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 914D31BD9;
+        Wed, 21 Jun 2023 18:52:52 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Qmk0H5YbVz4x04;
+        Thu, 22 Jun 2023 11:52:47 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1687398768;
+        bh=7C1ysdxUmJFw6qFlaEcbsPZAGNkDZMoL+CemQaGVg9E=;
+        h=Date:From:To:Cc:Subject:From;
+        b=OlgEXyTxjIPNuS+26+vBmH/saS/0llUCBIsYxPdzW1TP/FEdmVWmsyeaw6UqP0Q0T
+         64OKz50lQKPncGgdKuK+SUACO9+u4pM1s/h7x/H+0q4ADWQJdygzHtGfxmcY1McFoy
+         s85npCb2tbP+K+rR67CDUDFAihVguST11oc+/VSdhuXzxBj0/cf7aQbCccH5vvSgMG
+         pGmkN7R/dBbeTAODHCKZjxdVnymEreW9FKttP9n+Rej2GoJc4VEEzzZUZTUNi/armF
+         rIIai8dzmVcs6nY/9qOb0zpUl+TJqMC8sMTx9dLGhlmOjh8NjksnQkVDT/g0ueULcS
+         jOU7OOVajmCww==
+Date:   Thu, 22 Jun 2023 11:52:46 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Doug Ledford <dledford@redhat.com>,
+        Jason Gunthorpe <jgg@mellanox.com>
+Cc:     Bob Pearson <rpearsonhpe@gmail.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the rdma tree with Linus' tree
+Message-ID: <20230622115246.365d30ad@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH V12 05/10] arm64/perf: Add branch stack support in ARMV8
- PMU
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        kernel test robot <lkp@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        will@kernel.org, mark.rutland@arm.com, llvm@lists.linux.dev,
-        oe-kbuild-all@lists.linux.dev, Mark Brown <broonie@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Suzuki Poulose <suzuki.poulose@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-perf-users@vger.kernel.org
-References: <20230615133239.442736-6-anshuman.khandual@arm.com>
- <202306160706.Uei5XDoi-lkp@intel.com>
- <883f2a20-fe20-4d43-86cf-7847d59e2169@arm.com> <ZIwpma4SAJ/ZUyh5@arm.com>
- <f624966d-5973-0aed-bd73-29ef0530e5ce@arm.com> <87wmzzq0p4.wl-maz@kernel.org>
-Content-Language: en-US
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <87wmzzq0p4.wl-maz@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/gJH==1cKP9Yw_mWFpNapbUz";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--Sig_/gJH==1cKP9Yw_mWFpNapbUz
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-On 6/19/23 14:38, Marc Zyngier wrote:
-> On Mon, 19 Jun 2023 06:45:07 +0100,
-> Anshuman Khandual <anshuman.khandual@arm.com> wrote:
->>
->>
->>
->> On 6/16/23 14:51, Catalin Marinas wrote:
->>> On Fri, Jun 16, 2023 at 06:57:52AM +0530, Anshuman Khandual wrote:
->>>> On 6/16/23 05:12, kernel test robot wrote:
->>>>> kernel test robot noticed the following build errors:
->>>>>
->>>>> [auto build test ERROR on arm64/for-next/core]
->>>>> [also build test ERROR on tip/perf/core acme/perf/core linus/master v6.4-rc6 next-20230615]
->>>>> [If your patch is applied to the wrong git tree, kindly drop us a note.
->>>>> And when submitting patch, we suggest to use '--base' as documented in
->>>>> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->>>>>
->>>>> url:    https://github.com/intel-lab-lkp/linux/commits/Anshuman-Khandual/drivers-perf-arm_pmu-Add-new-sched_task-callback/20230615-223352
->>>>> base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
->>>>> patch link:    https://lore.kernel.org/r/20230615133239.442736-6-anshuman.khandual%40arm.com
->>>>> patch subject: [PATCH V12 05/10] arm64/perf: Add branch stack support in ARMV8 PMU
->>>>> config: arm-randconfig-r004-20230615 (https://download.01.org/0day-ci/archive/20230616/202306160706.Uei5XDoi-lkp@intel.com/config)
->>>>> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
->>>>> reproduce (this is a W=1 build):
->>>>>         mkdir -p ~/bin
->>>>>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->>>>>         chmod +x ~/bin/make.cross
->>>>>         # install arm cross compiling tool for clang build
->>>>>         # apt-get install binutils-arm-linux-gnueabi
->>>>>         git remote add arm64 https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
->>>>>         git fetch arm64 for-next/core
->>>>>         git checkout arm64/for-next/core
->>>>>         b4 shazam https://lore.kernel.org/r/20230615133239.442736-6-anshuman.khandual@arm.com
->>>>>         # save the config file
->>>>>         mkdir build_dir && cp config build_dir/.config
->>>>>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm olddefconfig
->>>>>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/perf/
->>>>
->>>> I am unable to reproduce this on mainline 6.4-rc6 via default cross compiler
->>>> on a W=1 build. Looking at all other problems reported on the file, it seems
->>>> something is not right here. Reported build problems around these callbacks,
->>>> i.e armv8pmu_branch_XXXX() do not make sense as they are available via config
->>>> CONFIG_PERF_EVENTS which is also enabled along with CONFIG_ARM_PMUV3 in this
->>>> test config.
->>>
->>> Have you tried applying this series on top of the arm64 for-next/core
->>> branch? That's what the robot it testing (in the absence of a --base
->>> option when generating the patches).
->>
->> Right, it turned out to be a build problem on arm (32 bit) platform instead.
->> After arm_pmuv3.c moved into common ./drivers/perf from ./arch/arm64/kernel/,
->> it can no longer access arch/arm64/include/asm/perf_event.h defined functions
->> without breaking arm (32) bit. The following code block needs to be moved out
->> from arch/arm64/include/asm/perf_event.h into include/linux/perf/arm_pmuv3.h
->> (which is preferred as all call sites are inside drivers/perf/arm_pmuv3.c) or
->> may be arm_pmu.h (which is one step higher in the abstraction).
-> 
-> No, that's the wrong approach. The 32bit backend must have its own
-> stubs for the stuff it implements or not.
+Today's linux-next merge of the rdma tree got a conflict in:
 
-Okay.
+  drivers/infiniband/sw/rxe/rxe_cq.c
 
+between commit:
 
-> 
-> Just add something like the patch below, and please *test* that a
-> 32bit VM using PMUv3 doesn't have any regression.
+  0c7e314a6352 ("RDMA/rxe: Fix rxe_cq_post")
 
-Sure.
+from the origin tree and commit:
 
-> 
-> Thanks,
-> 
-> 	M.
-> 
->>From 017362ca518e6d6ac3262514d1f7f27e73232799 Mon Sep 17 00:00:00 2001
-> From: Marc Zyngier <maz@kernel.org>
-> Date: Mon, 19 Jun 2023 10:05:52 +0100
-> Subject: [PATCH] 32bit hack
-> 
-> Signed-off-by: Marc Zyngier <maz@kernel.org>
-> ---
->  arch/arm/include/asm/arm_pmuv3.h | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
-> 
-> diff --git a/arch/arm/include/asm/arm_pmuv3.h b/arch/arm/include/asm/arm_pmuv3.h
-> index f4db3e75d75f..c4bcb7a18267 100644
-> --- a/arch/arm/include/asm/arm_pmuv3.h
-> +++ b/arch/arm/include/asm/arm_pmuv3.h
-> @@ -244,4 +244,22 @@ static inline bool is_pmuv3p5(int pmuver)
->  	return pmuver >= ARMV8_PMU_DFR_VER_V3P5;
->  }
->  
-> +/* BRBE stubs */
+  350b6dd4b2f8 ("RDMA/rxe: Simplify cq->notify code")
 
-These stubs also need to be wrapped around with #ifdef CONFIG_PERF_EVENTS
+from the rdma tree.
 
-> +static inline void armv8pmu_branch_enable(struct perf_event *event) { }
-> +static inline void armv8pmu_branch_disable(struct perf_event *event) { }
-> +static inline void armv8pmu_branch_read(struct pmu_hw_events * cpuc,
-> +					struct perf_event *event) { }
-> +static inline void armv8pmu_branch_save(struct arm_pmu *armpmu, void *ctx) {}
-> +static inline void armv8pmu_branch_reset(void) {}
-> +static inline bool armv8pmu_branch_attr_valid(struct perf_event *event)
-> +{
-> +	return false;
-> +}
-> +static inline void armv8pmu_branch_probe(struct arm_pmu *armpmu) {}
-> +static inline int armv8pmu_task_ctx_cache_alloc(struct arm_pmu *armpmu)
-> +{
-> +	return 0;
-> +}
-> +static inline void armv8pmu_task_ctx_cache_free(struct arm_pmu *armpmu) {}
-> +
->  #endif
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
-Sure, will make all the necessary changes.
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/infiniband/sw/rxe/rxe_cq.c
+index 6ca2a05b6a2a,31a25aaa44a0..000000000000
+--- a/drivers/infiniband/sw/rxe/rxe_cq.c
++++ b/drivers/infiniband/sw/rxe/rxe_cq.c
+@@@ -113,10 -113,11 +113,9 @@@ int rxe_cq_post(struct rxe_cq *cq, stru
+ =20
+  	queue_advance_producer(cq->queue, QUEUE_TYPE_TO_CLIENT);
+ =20
+- 	if ((cq->notify =3D=3D IB_CQ_NEXT_COMP) ||
+- 	    (cq->notify =3D=3D IB_CQ_SOLICITED && solicited)) {
+ -	spin_unlock_irqrestore(&cq->cq_lock, flags);
+ -
++ 	if ((cq->notify & IB_CQ_NEXT_COMP) ||
++ 	    (cq->notify & IB_CQ_SOLICITED && solicited)) {
+  		cq->notify =3D 0;
+-=20
+  		cq->ibcq.comp_handler(&cq->ibcq, cq->ibcq.cq_context);
+  	}
+ =20
+
+--Sig_/gJH==1cKP9Yw_mWFpNapbUz
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSTqW4ACgkQAVBC80lX
+0Gw4uwf+KLzc62nxBw6zlD4lV17Wc1xyxIUIACuA0iXfe5/5dhp68eYTiILXYa1+
+79S7sspc/uRO8YNVRYfnMH+2sO4lp00cVOFrw2YDi8mltA+EpUp5WZPvoYKUnzrl
+ThAixpUbRaf544B9nwPBZLvlmJ/rs/CeIpRu2PwA2nNfQrdJo8qp77HxC5hWTPhS
+Ak8HX1mKDOde+oGhCUWFVJ5qoBemamfFUDHlYYV639cwSCwE1ZROW6qYtXPKueNH
+YaMuTtWikmhe/01yoWjp0cmtp1AfJYvuK9nafa+/bqek8TtYJVFIMsHYQvVtsaDH
+m79NdflDGlC0Y3Wp+JTlZtVG6nhd5A==
+=Xl0E
+-----END PGP SIGNATURE-----
+
+--Sig_/gJH==1cKP9Yw_mWFpNapbUz--
