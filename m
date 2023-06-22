@@ -2,167 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5290373A4AC
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 17:21:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC8A673A4B9
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 17:24:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232148AbjFVPVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 11:21:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53854 "EHLO
+        id S232195AbjFVPYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 11:24:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231880AbjFVPVB (ORCPT
+        with ESMTP id S230229AbjFVPYP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 11:21:01 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7730E7E
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 08:20:59 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4f76a0a19d4so10139977e87.2
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 08:20:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687447258; x=1690039258;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=c9Nib1mjQ7HUVslIx9EtURK9z/yS/7mpl1B4Ox7/c/s=;
-        b=g15tA4+CNcniYf/OcLJKZt2ymRKzXESCDfPItGGf4pXM5u5X0DdAweQxDe+YuHymKN
-         HCYHcv4nhoMVPTvohDVk/2XxmWYeXhzfneaiKr082wMmGHZ2GKygtvUPPAEA524UAtxy
-         bmcqY6FuJBxlZe8TchhILJkH1GYMoqDZZEBGqK2JPaVajS3v2KvZYyenL/6VbHYFgEeg
-         VFfCihnzU9iwpvPRInH6mOxO8kkOUvkprS1mAxdvP3NFkz4XNjgeI9L8lqcM7R8ApVzi
-         DdPjtgvLR6ALfJQsKO6aF4PCymSNHzbj+dW7iimcPMQfrmOhBVn6daWWPgAUTd+M+PGG
-         6g3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687447258; x=1690039258;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=c9Nib1mjQ7HUVslIx9EtURK9z/yS/7mpl1B4Ox7/c/s=;
-        b=JemZUUWP0TLll2rl8vrh4/vP1pjb9jPZzLJp9S4rsFUYnOMwHo1LAUZusk62c70uaF
-         tCgZizG8AzI4kvKQqIjrsgFBb/jRKD3BOJ/OXWLiXvV/kyTh8N2lk/qOR0+xwojs0wvr
-         qdqmnAV76TumHPYSyBxu3xYGazTO6qH0dyVIuhmQLbFn9Rnb7C5oPRpe/d+4NhJ9LaCp
-         ijK0kf02sFJ8xGTU+ivFawm1DpbPlnEknvvWA+cCiQK6ejNvDTzmlipKTmh4q9xedKFl
-         2PsvCYXcQVryYwcN4joq37F60dwatkaDa2M/16W6Rc8ag4xrw51SSx1Z/8orR40Y4VtW
-         7/nw==
-X-Gm-Message-State: AC+VfDwwBr4eeA2KflZegE8QNCZPdDWHFRnm6hEHM0Q5SiHFttEjqjRI
-        SLAn3CRbLPw50JXL4ntpxSEG8A==
-X-Google-Smtp-Source: ACHHUZ65em47HxJ5uP2ScMq4wC1WUQ8IS3y4pSQ5ePJuf0EI86kFZ1IXZW0p0liht+sUtKhW1HKrpA==
-X-Received: by 2002:a19:6446:0:b0:4e9:bafc:88d0 with SMTP id b6-20020a196446000000b004e9bafc88d0mr11095123lfj.23.1687447257858;
-        Thu, 22 Jun 2023 08:20:57 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id d7-20020a056402516700b00514bcbfd9e0sm4134273ede.46.2023.06.22.08.20.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Jun 2023 08:20:57 -0700 (PDT)
-Message-ID: <218a76d9-d00b-3856-80b1-7d2f11b4ff1f@linaro.org>
-Date:   Thu, 22 Jun 2023 17:20:55 +0200
+        Thu, 22 Jun 2023 11:24:15 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2045.outbound.protection.outlook.com [40.107.92.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16F34107
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 08:24:14 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MFvYkHFPDGgpVEJuk/yk/1eU46jpMt96Zc7uJP9XboQva0ybHRFzMSAlqcpqlAZyQeqWjw6YDF4Jw6jLDdK98nLX3LAxrsAxZldE1vrcxazThwcCaMjbjrY5FR+TsqB5h4L7M/43z0u21dHkxaCBIBX7TBg1AfJflso2hNpT0mOWF80JDPmxzdwtOwN3ERaTrhUClqZa6kZY7B6CwsoAX8etD6+vPcwkSgQmfi2/eK691dlXulZmiq7O+OvgR5aGF8vFF34Enn00qLeNPo3zb8rKOQbqrUZ+uRcjtx8W+NEqZ/mxksgHjXRE3WqlUzhONATZImnWP0YVeG5cXet9mg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OChOH1lOIt4lZ7d/UGBrsMN0ddSaaJx0luKEOqEgkYA=;
+ b=AWWoCQ2h3iP6TNn/jGWKN2lUZC0+WIdqGW8wOYC30jwuD+luJ+Jr+cpSY1FA1nJeBPaxVapHE+h8WsAZWAQbGg09V0gKp/EbnhBagcWaPEGLuaKL6qK8z1oUa6yLAUrozjfkb0K6aRE2gDSjlyVCYXVe2aj3CuOOgfyi6HF3Z4BLskkmN6YKfw4OfG30ZVNklgmnBTpjfYvqTJ+vzPoV51XHHzfU63jIJaXSoTK6San6VrU9NT0G9g0n6vGaf/6kHes0ftAfUDFloTHL3zi6kSLJQKzMi1AaU4bxiWIPFtVIoV+sAPJDpQojda7RujafZGdrBm/ViQnG6vAhlIIoXA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OChOH1lOIt4lZ7d/UGBrsMN0ddSaaJx0luKEOqEgkYA=;
+ b=sd3okW54zybcuUfIHD3f2dWRBU/1V0XLHQ2NCwmzIq9Nm78BRCN8zEvEwIzIttT/ylC03tLVd47AsPRomeTEhK1qNLBZ4PHwRBf3Llrcfl9pJtrDRd3rWjfkgfibz8mZZCmU/ZMP0WX5mlScIQiAOLIepzFPmEKmhcZD63E2Uoc=
+Received: from CH2PR08CA0010.namprd08.prod.outlook.com (2603:10b6:610:5a::20)
+ by CH3PR12MB7497.namprd12.prod.outlook.com (2603:10b6:610:153::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.23; Thu, 22 Jun
+ 2023 15:24:12 +0000
+Received: from CO1PEPF000042AB.namprd03.prod.outlook.com
+ (2603:10b6:610:5a:cafe::2f) by CH2PR08CA0010.outlook.office365.com
+ (2603:10b6:610:5a::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24 via Frontend
+ Transport; Thu, 22 Jun 2023 15:24:12 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1PEPF000042AB.mail.protection.outlook.com (10.167.243.40) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6521.17 via Frontend Transport; Thu, 22 Jun 2023 15:24:11 +0000
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Thu, 22 Jun
+ 2023 10:24:10 -0500
+Received: from amd-B450M-DS3H.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.23 via Frontend
+ Transport; Thu, 22 Jun 2023 10:24:07 -0500
+From:   Syed Saba Kareem <Syed.SabaKareem@amd.com>
+To:     <broonie@kernel.org>, <alsa-devel@alsa-project.org>
+CC:     <Vijendar.Mukunda@amd.com>, <Basavaraj.Hiregoudar@amd.com>,
+        <Sunil-kumar.Dommati@amd.com>,
+        Syed Saba Kareem <Syed.SabaKareem@amd.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: [PATCH 01/12] ASoC: amd: acp: clear pdm dma interrupt mask
+Date:   Thu, 22 Jun 2023 20:53:38 +0530
+Message-ID: <20230622152406.3709231-1-Syed.SabaKareem@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 7/7] arm64: dts: qcom: msm8916-samsung-fortuna: Add NFC
-Content-Language: en-US
-To:     "Lin, Meng-Bo" <linmengbo0689@protonmail.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Nikita Travkin <nikita@trvn.ru>, soc@kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Joe Mason <buddyjojo06@outlook.com>
-References: <20230622000007.48219-1-linmengbo0689@protonmail.com>
- <20230622000437.48367-1-linmengbo0689@protonmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230622000437.48367-1-linmengbo0689@protonmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PEPF000042AB:EE_|CH3PR12MB7497:EE_
+X-MS-Office365-Filtering-Correlation-Id: 67389ea2-300f-4482-7818-08db7334bb31
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: O2VqgR/tCMomwCkxn3ZDnQtSK6PyUdL/6IpDP8EX4YGd4UUxuCwwtc+WCPDBZR247GyBG5ry3pB2CY9HGeE80N5XSVOU516liDmQ4ibsoF/DGUpzYb9Cd6Kccxm8yuHOmAgyRiD7l/DpSdXEqa8ARRH1orBjxWPhRsOInd4YFZ20/Y4UK+vul2mgIp2POH8HzC3ncZ3ZmMcut4po2A/N0aU9xeAGEPnwZWW9PISbVMR2xIYUaJ6Txs91xsoKJVK18IFA0A5mK/A4+6934mcoUPMcjcY76eVIpg1XxWvjjryTdCXVAC8LJDTFLao9m4Sj8u7c2XelBeXHYOoKNkvc+Ne4uJoQa5j0/9y7WPlxQI4VbgfiXvmpDssg52V0S7kiPXCb9rJD/rddGno0CO1Ts2CWh/HKVJqf+b6SDVPW/lAtvJWhzMUzPHaYOh4mstulHUQhlZlLYnDty/AqGZTBZM1xyynTef2mGfsVHMEvyU8pgXFvzsEuivRvWXM8c2nmcl+pq5Q+dAaqvuhhgagfG9qO+2+CQBiy48mw2cWXRSKfnrp+4TsGDYAtxD+nUdABZdQlxz6QYlmZ1BSsL0J2yRbidjyldDqZv6pXjIJO1HfArX0s03ok+D6G0bwlJVrYt+xDtbqQkrD53Vvd+J4axBodXLmtlwAiVrho2xswFAMkS1h6EBOkRh60q4OY0BCEygnQcTE5n/R+L25hK1C/LVbtDmah5cH0m7M9Uu21prrkWs2Ff2YQRYiHYOq9dH7M1E1VstEmvY/K+JcGGanYrQ==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(346002)(376002)(136003)(451199021)(46966006)(40470700004)(36840700001)(2616005)(47076005)(426003)(336012)(36860700001)(83380400001)(26005)(186003)(1076003)(356005)(82740400003)(81166007)(478600001)(54906003)(110136005)(36756003)(86362001)(6666004)(70586007)(70206006)(40480700001)(8936002)(8676002)(4326008)(316002)(4744005)(2906002)(7696005)(41300700001)(5660300002)(40460700003)(82310400005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jun 2023 15:24:11.7725
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 67389ea2-300f-4482-7818-08db7334bb31
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1PEPF000042AB.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB7497
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/06/2023 02:05, Lin, Meng-Bo wrote:
-> From: Joe Mason <buddyjojo06@outlook.com>
-> 
-> The Samsung Galaxy Ace 4, Core Prime and some Grand Prime have a
-> Samsung S3FWRN5 NFC chip that works quite well with the s3fwrn5 driver
-> in the Linux NFC subsystem.
-> 
-> The clock setup for the NFC chip is a bit special (although this
-> seems to be a common approach used for Qualcomm devices with NFC):
-> 
-> The NFC chip has an output GPIO that is asserted whenever the clock
-> is needed to function properly. On the A3/A5 this is wired up to
-> PM8916 GPIO2, which is then configured with a special function
-> (NFC_CLK_REQ or BB_CLK2_REQ).
-> 
-> Enabling the rpmcc RPM_SMD_BB_CLK2_PIN clock will then instruct
-> PM8916 to automatically enable the clock whenever the NFC chip
-> requests it. The advantage is that the clock is only enabled when
-> needed and we don't need to manage it ourselves from the NFC driver.
-> 
-> Grand Prime SM-G530Y (fortunaltezt) has a NXP PN547, which is supported
-> by the nxp-nci-i2c driver in mainline.
-> 
-> It seems to detect NFC tags using "nfctool" just fine, although more
-> testing is difficult given there seem to be very few useful applications
-> making use of the Linux NFC subsystem.
-> 
-> Signed-off-by: Joe Mason <buddyjojo06@outlook.com>
-> [Put i2c-nfc and NFC pinctrl into fortuna.dtsi to share it with other variants]
-> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
+Clear pdm dma interrupt mask in acp_dmic_shutdown().
 
-This and other SoB chains look like missing Co-developed-by.
+'Fixes: c32bd332ce5c9 ("ASoC: amd: acp: Add generic support for
+PDM controller on ACP")'
 
-> [Add pn547_nfc]
-> Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
-> ---
+Signed-off-by: Syed Saba Kareem <Syed.SabaKareem@amd.com>
+---
+ sound/soc/amd/acp/acp-pdm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-> +		/* Available NFC chip varies depending on model variant */
-> +		pn547_nfc: nfc@2b {
-> +			compatible = "nxp,pn547", "nxp,nxp-nci-i2c";
-> +			reg = <0x2b>;
-> +
-> +			interrupt-parent = <&tlmm>;
-> +			interrupts = <21 IRQ_TYPE_EDGE_RISING>;
-> +
-> +			enable-gpios = <&tlmm 20 GPIO_ACTIVE_HIGH>;
-> +			firmware-gpios = <&tlmm 49 GPIO_ACTIVE_HIGH>;
-> +
-> +			pinctrl-0 = <&nfc_default>;
-> +			pinctrl-names = "default";
-> +
-> +			status = "disabled";
-> +		};
-> +
-> +		s3fwrn5_nfc: nfc@27 {
-> +			compatible = "samsung,s3fwrn5-i2c";
-> +			reg = <0x27>;
-> +
-> +			interrupt-parent = <&tlmm>;
-> +			interrupts = <21 IRQ_TYPE_EDGE_RISING>;
-> +
-> +			en-gpios = <&tlmm 20 GPIO_ACTIVE_HIGH>;
-> +			wake-gpios = <&tlmm 49 GPIO_ACTIVE_HIGH>;
-> +
-> +			clocks = <&rpmcc RPM_SMD_BB_CLK2_PIN>;
-> +
-> +			pinctrl-0 = <&nfc_default>, <&nfc_clk_req>;
-> +			pinctrl-names = "default";
-> +
-> +			status = "disabled";
-
-Common part does not have two NFCs. It seems common part has zero
-NFCs... or should be put into different file.
-
-Best regards,
-Krzysztof
+diff --git a/sound/soc/amd/acp/acp-pdm.c b/sound/soc/amd/acp/acp-pdm.c
+index 66ec6b6a5972..f8030b79ac17 100644
+--- a/sound/soc/amd/acp/acp-pdm.c
++++ b/sound/soc/amd/acp/acp-pdm.c
+@@ -176,7 +176,7 @@ static void acp_dmic_dai_shutdown(struct snd_pcm_substream *substream,
+ 
+ 	/* Disable DMIC interrupts */
+ 	ext_int_ctrl = readl(ACP_EXTERNAL_INTR_CNTL(adata, 0));
+-	ext_int_ctrl |= ~PDM_DMA_INTR_MASK;
++	ext_int_ctrl &= ~PDM_DMA_INTR_MASK;
+ 	writel(ext_int_ctrl, ACP_EXTERNAL_INTR_CNTL(adata, 0));
+ }
+ 
+-- 
+2.25.1
 
