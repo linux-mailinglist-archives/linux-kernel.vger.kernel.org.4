@@ -2,95 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 320BC73980A
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 09:23:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42151739812
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 09:31:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231142AbjFVHXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 03:23:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41708 "EHLO
+        id S229564AbjFVHbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 03:31:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjFVHXW (ORCPT
+        with ESMTP id S229468AbjFVHbP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 03:23:22 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A3F1172C;
-        Thu, 22 Jun 2023 00:23:21 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 149655C0132;
-        Thu, 22 Jun 2023 03:23:21 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Thu, 22 Jun 2023 03:23:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1687418601; x=1687505001; bh=Al/ugtKM4zGeW
-        WIaAMkQdgD0733cU/poF8FmUXKG1wM=; b=dHyK1KKK4X+f8zzsAqFX7SD63cCe2
-        RnKjyvdMkUpzLnCdpBAo3+pETrEJntgIoBxOdJyjxYo3DE9BmEhkNnWtE1SAU3xq
-        16qt4glsM7bcBkURkpL3+LCEyCwNf8kgQhjjOEi7KeyiWgDVeUzxa9EtvHusno6k
-        42ggSi5Y8zI2DU2UpN7G6pRv3aGoNQfbw2zgVazkjQ2/ogqU/9tabDeCA5O1umx7
-        aGHDJ32jOO27litdrozEolso2fzrhGpmMDhhJQgeyx8a0xRRgKfPPYZk+62+uZ42
-        JmoKUBA4vN8YvLWHf4yRSd0UuL/ldjpdl9BjxCIaKiN3k4rIxrI5Q6fmw==
-X-ME-Sender: <xms:6PaTZBCdS47oNc9jmL1BZlBi4Q4jOmuV2mgjzXbH2lkVXVjxnbRFsA>
-    <xme:6PaTZPhbBHiZQjxFXautuNmWC4deIEjWFy7PfG8GCRXTyEvJ9eIdWwboJqkVlcQPi
-    NDe99cQP6W7JtMScdk>
-X-ME-Received: <xmr:6PaTZMlQfNQ9mMeHu8KkCHmV7Zw5W98m6CCbxoG-FWClFvCyAThCIxemElmKP5cWh2DyuystwbeWMdXD4A_qpfBH1o0zonWlqdE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeegtddgudduvdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefujgfkfhggtgesthdtredttddtvdenucfhrhhomhephfhinhhn
-    ucfvhhgrihhnuceofhhthhgrihhnsehlihhnuhigqdhmieekkhdrohhrgheqnecuggftrf
-    grthhtvghrnhepleeuheelheekgfeuvedtveetjeekhfffkeeffffftdfgjeevkeegfedv
-    ueehueelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epfhhthhgrihhnsehlihhnuhigqdhmieekkhdrohhrgh
-X-ME-Proxy: <xmx:6PaTZLxnsjV2EvyYtIGBpJpVL7nirlQRKAZZqM3W1BbBLfjSZvRS5w>
-    <xmx:6PaTZGTXvAvvcPHEdhNdKODlKktwA_uRdz33Ds4hU3Zpp9GsHcFOvQ>
-    <xmx:6PaTZOYpAnJlshSckggmGgArNupVkIs66AcsUwgNfekapyYbWgAeHg>
-    <xmx:6faTZDIMJgZM5x-STKCNkEeOX2uhiW-NpN5Zax7MMyI1wL-bXR-LNw>
-Feedback-ID: i58a146ae:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 22 Jun 2023 03:23:19 -0400 (EDT)
-Date:   Thu, 22 Jun 2023 17:24:03 +1000 (AEST)
-From:   Finn Thain <fthain@linux-m68k.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-cc:     Theodore Ts'o <tytso@mit.edu>, Jonathan Corbet <corbet@lwn.net>,
-        tech-board-discuss@lists.linux-foundation.org,
-        Kees Cook <keescook@chromium.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Documentation: Linux Contribution Maturity Model and
- the wider community
-In-Reply-To: <2023062245-engraver-antsy-005c@gregkh>
-Message-ID: <5243a27c-afcc-3b67-7481-5e4fb5620f67@linux-m68k.org>
-References: <20230620212502.GI286961@mit.edu> <5490402b-8b9f-f52d-3896-41090e639e51@linux-m68k.org> <2023062144-hefty-why-305d@gregkh> <04cd7204-cdee-c333-8815-57acbab82721@linux-m68k.org> <2023062245-engraver-antsy-005c@gregkh>
+        Thu, 22 Jun 2023 03:31:15 -0400
+Received: from out-36.mta0.migadu.com (out-36.mta0.migadu.com [IPv6:2001:41d0:1004:224b::24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F44B1730
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 00:31:13 -0700 (PDT)
+Message-ID: <888c9a8a-cba3-8757-b203-1c973ffb4fb4@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1687419071;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=e6H7zDwshsGuPpZFe9fSkRPGOnDz+XPvIqfRvjb63Xo=;
+        b=K7a3uG965oM1WGpdcTt0K5ZVmpgmYjtPRGM42Wxgbqv166ZI1O+9arjQpyt5vrki+zI+DE
+        bp2DSUN2EfDYKXzTd+zZkA7R7W2TKCval6VdspCXyHhuzEf3GCKnEmYH0uHial5SeaPmsF
+        Tzc6Fr+gxMUyTO9pZYYB3H69gE41i2c=
+Date:   Thu, 22 Jun 2023 15:30:44 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [for-next][PATCH 08/13] ftrace: Show all functions with addresses
+ in available_filter_functions_addrs
+To:     Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+References: <20230621162923.953123395@goodmis.org>
+ <20230621162945.920352371@goodmis.org>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Jackie Liu <liu.yun@linux.dev>
+In-Reply-To: <20230621162945.920352371@goodmis.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 22 Jun 2023, Greg Kroah-Hartman wrote:
 
+在 2023/6/22 00:29, Steven Rostedt 写道:
+> From: Jiri Olsa <jolsa@kernel.org>
 > 
-> > If there was consensus, it might be feasible to give a formula for 
-> > "recognized usage" which could be quantified. From there we could 
-> > create a kind of heat map to show which commits, maintainers, 
-> > processes, models, modules etc. were the most "useful" within some 
-> > time interval.
+> Adding new available_filter_functions_addrs file that shows all available
+> functions (same as available_filter_functions) together with addresses,
+> like:
 > 
-> Determining code use is difficult given that we are not going to add 
-> tracking to the kernel source for obvious reasons, so this is a 
-> non-starter, as you know.
+>    # cat available_filter_functions_addrs | head
+>    ffffffff81000770 __traceiter_initcall_level
+>    ffffffff810007c0 __traceiter_initcall_start
+>    ffffffff81000810 __traceiter_initcall_finish
+>    ffffffff81000860 trace_initcall_finish_cb
+>    ...
 > 
+> Note displayed address is the patch-site address and can differ from
+> /proc/kallsyms address.
+> 
+> It's useful to have address avilable for traceable symbols, so we don't
+> need to allways cross check kallsyms with available_filter_functions
+> (or the other way around) and have all the data in single file.
+> 
+> For backwards compatibility reasons we can't change the existing
+> available_filter_functions file output, but we need to add new file.
+> 
+> The problem is that we need to do 2 passes:
+> 
+>   - through available_filter_functions and find out if the function is traceable
+>   - through /proc/kallsyms to get the address for traceable function
+> 
+> Having available_filter_functions symbols together with addresses allow
+> us to skip the kallsyms step and we are ok with the address in
+> available_filter_functions_addr not being the function entry, because
+> kprobe_multi uses fprobe and that handles both entry and patch-site
+> address properly.
+> 
+> We have 2 interfaces how to create kprobe_multi link:
+> 
+>    a) passing symbols to kernel
+> 
+>       1) user gathers symbols and need to ensure that they are
+>          trace-able -> pass through available_filter_functions file
+> 
+>       2) kernel takes those symbols and translates them to addresses
+>          through kallsyms api
+> 
+>       3) addresses are passed to fprobe/ftrace through:
+> 
+>           register_fprobe_ips
+>           -> ftrace_set_filter_ips
+> 
+>    b) passing addresses to kernel
+> 
+>       1) user gathers symbols and needs to ensure that they are
+>          trace-able -> pass through available_filter_functions file
+> 
+>       2) user takes those symbols and translates them to addresses
+>         through /proc/kallsyms
+> 
+>       3) addresses are passed to the kernel and kernel calls:
+> 
+>           register_fprobe_ips
+>           -> ftrace_set_filter_ips
+> 
+> The new available_filter_functions_addrs file helps us with option b),
+> because we can make 'b 1' and 'b 2' in one step - while filtering traceable
+> functions, we get the address directly.
+> 
+> Link: https://lore.kernel.org/linux-trace-kernel/20230611130029.1202298-1-jolsa@kernel.org
+> 
+> Cc: Masami Hiramatsu <mhiramat@kernel.org>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+> Cc: Jackie Liu <liu.yun@linux.dev>
+> Suggested-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> ---
+>   Documentation/trace/ftrace.rst |  6 ++++++
+>   include/linux/ftrace.h         |  1 +
+>   kernel/trace/ftrace.c          | 37 ++++++++++++++++++++++++++++++++++
+>   3 files changed, 44 insertions(+)
+> 
+> diff --git a/Documentation/trace/ftrace.rst b/Documentation/trace/ftrace.rst
+> index df2d3e57a83f..b7308ab10c0e 100644
+> --- a/Documentation/trace/ftrace.rst
+> +++ b/Documentation/trace/ftrace.rst
+> @@ -324,6 +324,12 @@ of ftrace. Here is a list of some of the key files:
+>   	"set_graph_function", or "set_graph_notrace".
+>   	(See the section "dynamic ftrace" below for more details.)
+>   
+> +  available_filter_functions_addrs:
+> +
+> +	Similar to available_filter_functions, but with address displayed
+> +	for each function. The displayed address is the patch-site address
+> +	and can differ from /proc/kallsyms address.
+> +
+>     dyn_ftrace_total_info:
+>   
+>   	This file is for debugging purposes. The number of functions that
+> diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
+> index 49f279f4c3a1..8e59bd954153 100644
+> --- a/include/linux/ftrace.h
+> +++ b/include/linux/ftrace.h
+> @@ -633,6 +633,7 @@ enum {
+>   	FTRACE_ITER_MOD		= (1 << 5),
+>   	FTRACE_ITER_ENABLED	= (1 << 6),
+>   	FTRACE_ITER_TOUCHED	= (1 << 7),
+> +	FTRACE_ITER_ADDRS	= (1 << 8),
+>   };
+>   
+>   void arch_ftrace_update_code(int command);
+> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+> index 764668467155..b24c573934af 100644
+> --- a/kernel/trace/ftrace.c
+> +++ b/kernel/trace/ftrace.c
+> @@ -3861,6 +3861,9 @@ static int t_show(struct seq_file *m, void *v)
+>   	if (!rec)
+>   		return 0;
+>   
+> +	if (iter->flags & FTRACE_ITER_ADDRS)
+> +		seq_printf(m, "%lx ", rec->ip);
+> +
+>   	if (print_rec(m, rec->ip)) {
+>   		/* This should only happen when a rec is disabled */
+>   		WARN_ON_ONCE(!(rec->flags & FTRACE_FL_DISABLED));
+> @@ -3996,6 +3999,30 @@ ftrace_touched_open(struct inode *inode, struct file *file)
+>   	return 0;
+>   }
+>   
+> +static int
+> +ftrace_avail_addrs_open(struct inode *inode, struct file *file)
+> +{
+> +	struct ftrace_iterator *iter;
+> +	int ret;
+> +
+> +	ret = security_locked_down(LOCKDOWN_TRACEFS);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (unlikely(ftrace_disabled))
+> +		return -ENODEV;
+> +
+> +	iter = __seq_open_private(file, &show_ftrace_seq_ops, sizeof(*iter));
+> +	if (!iter)
+> +		return -ENOMEM;
+> +
+> +	iter->pg = ftrace_pages_start;
+> +	iter->flags = FTRACE_ITER_ADDRS;
+> +	iter->ops = &global_ops;
+> +
+> +	return 0;
+> +}
+> +
+>   /**
+>    * ftrace_regex_open - initialize function tracer filter files
+>    * @ops: The ftrace_ops that hold the hash filters
+> @@ -5916,6 +5943,13 @@ static const struct file_operations ftrace_touched_fops = {
+>   	.release = seq_release_private,
+>   };
+>   
+> +static const struct file_operations ftrace_avail_addrs_fops = {
+> +	.open = ftrace_avail_addrs_open,
+> +	.read = seq_read,
+> +	.llseek = seq_lseek,
+> +	.release = seq_release_private,
+> +};
+> +
+>   static const struct file_operations ftrace_filter_fops = {
+>   	.open = ftrace_filter_open,
+>   	.read = seq_read,
+> @@ -6377,6 +6411,9 @@ static __init int ftrace_init_dyn_tracefs(struct dentry *d_tracer)
+>   	trace_create_file("available_filter_functions", TRACE_MODE_READ,
+>   			d_tracer, NULL, &ftrace_avail_fops);
+>   
+> +	trace_create_file("available_filter_functions_addrs", TRACE_MODE_READ,
+> +			d_tracer, NULL, &ftrace_avail_addrs_fops);
+> +
 
-It never crossed my mind that the kernel might "phone home". Counting 
-execution events (privately) doesn't work either because it seems 
-hopelessly skewed towards fast processors, clusters and fast paths.
-Or am I missing something?
+Tested-by: Jackie Liu <liuyun01@kylinos.cn> # x86
+
+>   	trace_create_file("enabled_functions", TRACE_MODE_READ,
+>   			d_tracer, NULL, &ftrace_enabled_fops);
+>   
