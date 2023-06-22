@@ -2,230 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28A0C73A561
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 17:51:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E88E73A566
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 17:53:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231364AbjFVPvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 11:51:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42030 "EHLO
+        id S230381AbjFVPxa convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 22 Jun 2023 11:53:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231244AbjFVPvK (ORCPT
+        with ESMTP id S231244AbjFVPx1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 11:51:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F531713
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 08:51:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8947661883
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 15:51:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AB95C433C0;
-        Thu, 22 Jun 2023 15:51:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687449067;
-        bh=ftFYZCWnNe/1OVuJN9ptS3sPWxiUyv3i1Sf1E+OY2zs=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=YTpZF9vanAWQwjMOQzJU/WjMuLpiRASXqFeUWGWfX2aC5Ppdqd3ZnBy+E05kJsfnR
-         dJQRcEJGhBWfML+x09PEte1AUlygeXqL2qH99Hu0KUspFZLqkfcWN+kBznaFcdhRi3
-         kuAMsSnv3eKMt/TRDhKrab/uKJnXQyXqYUcU/+tBU3XL0Y95UPUiHOSavyocIXJq8Y
-         CTeCbHSDnOX5tPn5xU10CXSxfRuiJ1CSuaCWaORES9kItIUaQcxNMITuX4Oc6pPVk5
-         pj8z7dacp018df0imB8ZTJF1wot9dTb0eTUHFkAyaNBmtfeanzxtGP+lFwXeYzPPao
-         mPvM6c0BirCNA==
-From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
-        linux-riscv@lists.infradead.org, Bjorn Topel <bjorn@rivosinc.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux@rivosinc.com, alexghiti@rivosinc.com, joro@8bytes.org
-Subject: Re: [PATCH] riscv: mm: Pre-allocate PGD entries vmalloc/modules area
-In-Reply-To: <mhng-fc6025e7-ff1b-46e2-86a5-f74a3db74bd2@palmer-ri-x1c9a>
-References: <mhng-fc6025e7-ff1b-46e2-86a5-f74a3db74bd2@palmer-ri-x1c9a>
-Date:   Thu, 22 Jun 2023 17:51:03 +0200
-Message-ID: <87ilbfjy1k.fsf@all.your.base.are.belong.to.us>
+        Thu, 22 Jun 2023 11:53:27 -0400
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4839E10F8;
+        Thu, 22 Jun 2023 08:53:26 -0700 (PDT)
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-98502b12fd4so202445466b.1;
+        Thu, 22 Jun 2023 08:53:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687449205; x=1690041205;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LRq3IplvxHFodqnGJxa2C+GD1dW0/Z+gi8MyiCpWLqY=;
+        b=ezFP1kQ9UrqWGUQwuQdT2Q2yvFI7Zv2wYsBzvyMtP8AyryTNgXYIXPkrrLT648Knva
+         GUU7jraGSfoyW5EVCLhV/PwqGddKmcVUlXrMEh3DzsCsHYY/ORS5+ghJr/qEwWjb//af
+         Cy99O3byqxA/F7ATAPbt9RZIGEvqnjsg7DuePz6ka0umCmk1sNFP7t7sgWoa83gLhM5+
+         +bSziO57seBKN1t5WXORAanIcoE6iVN058fL6V0IMj2Y3b8snZbZksgOOTv0yvNJaOAv
+         lMMoBRVvj77OrIn+r4w/56HJZbj2LYM0oLRpF0JY0fiwwHOh1BRa5vGUQy36GIHb2V/Q
+         kTJA==
+X-Gm-Message-State: AC+VfDyNbC/c177HRBdi/hRuBN3LmiWcd6c/7sl1jh1mRKtRhmiB1Ssm
+        N1jqn+/IFaEjef2zfwuL7SAM3YPxn1Ob8La7NGY=
+X-Google-Smtp-Source: ACHHUZ7LVqAIgZ0Fgp4Dz8vORMJOFzWuw863n68A0YAIPuQ6+qD0UqtP8F+DsinsZ++jl9TQej2WkRT0VHhP8QAroDM=
+X-Received: by 2002:a17:906:100a:b0:987:81d:9d49 with SMTP id
+ 10-20020a170906100a00b00987081d9d49mr12869574ejm.7.1687449204470; Thu, 22 Jun
+ 2023 08:53:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230621151652.79579-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230621151652.79579-1-andriy.shevchenko@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 22 Jun 2023 17:53:13 +0200
+Message-ID: <CAJZ5v0jt8XCzUxQaBXLz0zXezih1Urq=dt-K9PWVY1JpN=Go6Q@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] ACPI: platform: Ignore SMB0001 only when it has resources
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, acpica-devel@lists.linuxfoundation.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Robert Moore <robert.moore@intel.com>,
+        Michael Brunner <michael.brunner@kontron.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Palmer Dabbelt <palmer@dabbelt.com> writes:
-
-> On Mon, 29 May 2023 11:00:23 PDT (-0700), bjorn@kernel.org wrote:
->> From: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
->>
->> The RISC-V port requires that kernel PGD entries are to be
->> synchronized between MMs. This is done via the vmalloc_fault()
->> function, that simply copies the PGD entries from init_mm to the
->> faulting one.
->>
->> Historically, faulting in PGD entries have been a source for both bugs
->> [1], and poor performance.
->>
->> One way to get rid of vmalloc faults is by pre-allocating the PGD
->> entries. Pre-allocating the entries potientially wastes 64 * 4K (65 on
->> SV39). The pre-allocation function is pulled from J=C3=B6rg R=C3=B6del's=
- x86
->> work, with the addition of 3-level page tables (PMD allocations).
->>
->> The pmd_alloc() function needs the ptlock cache to be initialized
->> (when split page locks is enabled), so the pre-allocation is done in a
->> RISC-V specific pgtable_cache_init() implementation.
->>
->> Pre-allocate the kernel PGD entries for the vmalloc/modules area, but
->> only for 64b platforms.
->>
->> Link: https://lore.kernel.org/lkml/20200508144043.13893-1-joro@8bytes.or=
-g/ # [1]
->> Signed-off-by: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
->> ---
->>  arch/riscv/mm/fault.c | 20 +++------------
->>  arch/riscv/mm/init.c  | 58 +++++++++++++++++++++++++++++++++++++++++++
->>  2 files changed, 62 insertions(+), 16 deletions(-)
->>
->> diff --git a/arch/riscv/mm/fault.c b/arch/riscv/mm/fault.c
->> index 8685f85a7474..6b0b5e517e12 100644
->> --- a/arch/riscv/mm/fault.c
->> +++ b/arch/riscv/mm/fault.c
->> @@ -230,32 +230,20 @@ void handle_page_fault(struct pt_regs *regs)
->>  		return;
->>
->>  	/*
->> -	 * Fault-in kernel-space virtual memory on-demand.
->> -	 * The 'reference' page table is init_mm.pgd.
->> +	 * Fault-in kernel-space virtual memory on-demand, for 32-bit
->> +	 * architectures.  The 'reference' page table is init_mm.pgd.
+On Wed, Jun 21, 2023 at 5:16 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 >
-> That wording seems a little odd to me: I think English allows for these=20
-> "add something after the comma to change the meaning of a sentence"=20
-> things, but they're kind of complicated.  Maybe it's easier to just flip=
-=20
-> the order?
->
-> That said, it's very early so maybe it's fine...
->
->>  	 *
->>  	 * NOTE! We MUST NOT take any locks for this case. We may
->>  	 * be in an interrupt or a critical region, and should
->>  	 * only copy the information from the master page table,
->>  	 * nothing more.
->>  	 */
->> -	if (unlikely((addr >=3D VMALLOC_START) && (addr < VMALLOC_END))) {
->> +	if (!IS_ENABLED(CONFIG_64BIT) &&
->> +	    unlikely(addr >=3D VMALLOC_START && addr < VMALLOC_END)) {
->>  		vmalloc_fault(regs, code, addr);
->>  		return;
->>  	}
->>
->> -#ifdef CONFIG_64BIT
->> -	/*
->> -	 * Modules in 64bit kernels lie in their own virtual region which is n=
-ot
->> -	 * in the vmalloc region, but dealing with page faults in this region
->> -	 * or the vmalloc region amounts to doing the same thing: checking that
->> -	 * the mapping exists in init_mm.pgd and updating user page table, so
->> -	 * just use vmalloc_fault.
->> -	 */
->> -	if (unlikely(addr >=3D MODULES_VADDR && addr < MODULES_END)) {
->> -		vmalloc_fault(regs, code, addr);
->> -		return;
->> -	}
->> -#endif
->>  	/* Enable interrupts if they were enabled in the parent context. */
->>  	if (!regs_irqs_disabled(regs))
->>  		local_irq_enable();
->> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
->> index 747e5b1ef02d..38bd4dd95276 100644
->> --- a/arch/riscv/mm/init.c
->> +++ b/arch/riscv/mm/init.c
->> @@ -1363,3 +1363,61 @@ int __meminit vmemmap_populate(unsigned long star=
-t, unsigned long end, int node,
->>  	return vmemmap_populate_basepages(start, end, node, NULL);
->>  }
->>  #endif
->> +
->> +#ifdef CONFIG_64BIT
->> +/*
->> + * Pre-allocates page-table pages for a specific area in the kernel
->> + * page-table. Only the level which needs to be synchronized between
->> + * all page-tables is allocated because the synchronization can be
->> + * expensive.
->> + */
->> +static void __init preallocate_pgd_pages_range(unsigned long start, uns=
-igned long end,
->> +					       const char *area)
->> +{
->> +	unsigned long addr;
->> +	const char *lvl;
->> +
->> +	for (addr =3D start; addr < end && addr >=3D start; addr =3D ALIGN(add=
-r + 1, PGDIR_SIZE)) {
->> +		pgd_t *pgd =3D pgd_offset_k(addr);
->> +		p4d_t *p4d;
->> +		pud_t *pud;
->> +		pmd_t *pmd;
->> +
->> +		lvl =3D "p4d";
->> +		p4d =3D p4d_alloc(&init_mm, pgd, addr);
->> +		if (!p4d)
->> +			goto failed;
->> +
->> +		if (pgtable_l5_enabled)
->> +			continue;
->> +
->> +		lvl =3D "pud";
->> +		pud =3D pud_alloc(&init_mm, p4d, addr);
->> +		if (!pud)
->> +			goto failed;
->> +
->> +		if (pgtable_l4_enabled)
->> +			continue;
->> +
->> +		lvl =3D "pmd";
->> +		pmd =3D pmd_alloc(&init_mm, pud, addr);
->> +		if (!pmd)
->> +			goto failed;
->> +	}
->> +	return;
->> +
->> +failed:
->> +	/*
->> +	 * The pages have to be there now or they will be missing in
->> +	 * process page-tables later.
->> +	 */
->> +	panic("Failed to pre-allocate %s pages for %s area\n", lvl, area);
->> +}
->> +
->> +void __init pgtable_cache_init(void)
->> +{
->> +	preallocate_pgd_pages_range(VMALLOC_START, VMALLOC_END, "vmalloc");
->> +	if (IS_ENABLED(CONFIG_MODULES))
->> +		preallocate_pgd_pages_range(MODULES_VADDR, MODULES_END, "bpf/modules"=
-);
->> +}
->> +#endif
->>
->> base-commit: ac9a78681b921877518763ba0e89202254349d1b
->
-> Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
->
-> aside from the build issue, which seems pretty straight-forward.  I'm=20
-> going to drop this from patchwork.
+> After switching i2c-scmi driver to be a plaform one, it stopped
 
-Hmm, you applied the V2 a couple of days ago [1], which fixes the build
-issue. Did you drop the V2 from the queue?
+"platform"
 
-[1]
-https://lore.kernel.org/linux-riscv/168727442024.569.16572247474971535604.g=
-it-patchwork-notify@kernel.org/
+> being enumerated on number of Kontron platforms, because it's
+> listed in the forbidden_id_list.
+>
+> To resolve the situation, split the list to generic one and
+> another that holds devices that has to be skipped if and only
 
+"have"
 
-Bj=C3=B6rn
+> if they have bogus resources attached (_CRS method returns some).
+>
+> Fixes: 03d4287add6e ("i2c: scmi: Convert to be a platform driver")
+> Closes: https://lore.kernel.org/r/60c1756765b9a3f1eab0dcbd84f59f00fe1caf48.camel@kontron.com
+> Reported-by: Michael Brunner <michael.brunner@kontron.com>
+> Tested-by: Michael Brunner <michael.brunner@kontron.com>
+> Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
+> Link: https://lore.kernel.org/r/20230620163534.1042-1-andriy.shevchenko@linux.intel.com
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+> v2: added tags (Andi, Michael), fixed spelling (Andi)
+>  drivers/acpi/acpi_platform.c | 27 +++++++++++++++++++++++++--
+>  1 file changed, 25 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/acpi/acpi_platform.c b/drivers/acpi/acpi_platform.c
+> index fe00a5783f53..089a98bd18bf 100644
+> --- a/drivers/acpi/acpi_platform.c
+> +++ b/drivers/acpi/acpi_platform.c
+> @@ -19,13 +19,17 @@
+>
+>  #include "internal.h"
+>
+> +static const struct acpi_device_id forbidden_id_with_resourses[] = {
+
+I don't quite like this name and the driver_data field could be used
+to indicate the need to check the resources.
+
+> +       {"SMB0001",  0},        /* ACPI SMBUS virtual device */
+> +       { }
+> +};
+> +
+>  static const struct acpi_device_id forbidden_id_list[] = {
+>         {"ACPI0009", 0},        /* IOxAPIC */
+>         {"ACPI000A", 0},        /* IOAPIC */
+>         {"PNP0000",  0},        /* PIC */
+>         {"PNP0100",  0},        /* Timer */
+>         {"PNP0200",  0},        /* AT DMA Controller */
+> -       {"SMB0001",  0},        /* ACPI SMBUS virtual device */
+>         { }
+>  };
+>
+> @@ -83,6 +87,15 @@ static void acpi_platform_fill_resource(struct acpi_device *adev,
+>                 dest->parent = pci_find_resource(to_pci_dev(parent), dest);
+>  }
+>
+> +static int acpi_platform_resource_count(struct acpi_resource *ares, void *data)
+> +{
+> +       int *count = data;
+> +
+> +       *count = *count + 1;
+
+Why not (*count)++?
+
+> +
+> +       return 1;
+> +}
+> +
+>  /**
+>   * acpi_create_platform_device - Create platform device for ACPI device node
+>   * @adev: ACPI device node to create a platform device for.
+> @@ -103,7 +116,8 @@ struct platform_device *acpi_create_platform_device(struct acpi_device *adev,
+>         struct resource_entry *rentry;
+>         struct list_head resource_list;
+>         struct resource *resources = NULL;
+> -       int count;
+> +       int count = 0;
+> +       int ret;
+>
+>         /* If the ACPI node already has a physical device attached, skip it. */
+>         if (adev->physical_node_count)
+> @@ -113,6 +127,15 @@ struct platform_device *acpi_create_platform_device(struct acpi_device *adev,
+>                 return ERR_PTR(-EINVAL);
+>
+>         INIT_LIST_HEAD(&resource_list);
+> +       ret = acpi_dev_get_resources(adev, &resource_list, acpi_platform_resource_count, &count);
+> +       if (ret < 0)
+> +               return ERR_PTR(ret);
+
+Why not use acpi_walk_resources() directly here?
+
+Also, this extra resources walk is only needed if the resources check
+is needed to decide whether or not to skip the device, so what's the
+benefit of doing it for every device that's not skipped?
+
+> +
+> +       acpi_dev_free_resource_list(&resource_list);
+> +
+> +       if (count > 0 && !acpi_match_device_ids(adev, forbidden_id_with_resourses))
+> +               return ERR_PTR(-EINVAL);
+> +
+>         count = acpi_dev_get_resources(adev, &resource_list, NULL, NULL);
+>         if (count < 0)
+>                 return NULL;
+> --
