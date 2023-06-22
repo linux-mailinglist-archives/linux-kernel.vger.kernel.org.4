@@ -2,137 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE6F073A186
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 15:11:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 697AE73A187
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 15:11:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231528AbjFVNK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 09:10:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59286 "EHLO
+        id S231548AbjFVNL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 09:11:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230009AbjFVNK4 (ORCPT
+        with ESMTP id S230509AbjFVNLY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 09:10:56 -0400
-Received: from mail-vk1-xa2a.google.com (mail-vk1-xa2a.google.com [IPv6:2607:f8b0:4864:20::a2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25B0410F8
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 06:10:54 -0700 (PDT)
-Received: by mail-vk1-xa2a.google.com with SMTP id 71dfb90a1353d-47169fc1a40so2157770e0c.0
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 06:10:54 -0700 (PDT)
+        Thu, 22 Jun 2023 09:11:24 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB7991BD2
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 06:11:21 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-3ff29d0dd1eso31043051cf.2
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 06:11:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1687439453; x=1690031453;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=P2ExnUNvm4puj2j+jBwDuVgUcMJgNpTHsaeUbPYv1HA=;
-        b=yGJPcTf5yJ0LAQHbCs0//5u7zTlviWAP4S4kkO82hHeGqqVnJDo/C15mxkMnjVBse6
-         sfzsKQg/tJSVZGfVAk+tv2ZXymwjUI5lj9RIwv2zgWtET1Lze47M1HqsNjk9drvIftQ0
-         pVzHirWFhN1bcVZtplp/G3rDRFkBvIk7Ohha7vbGdSWN68j99aBXZCkf8V4jrhPnbTP+
-         nhOe8iYPriWxHdLafESB8L8s6g/NsqEs7txzboyYTOG09Qzhiu6TWoV4V1fLyW2wxBud
-         pWUKDeA7HjpbY62da6LVs0OiSI+2C/hOb/HcR/1eqFf7XNA9+3dGBuxxi6RAqth1l4dS
-         18Ig==
+        d=joelfernandes.org; s=google; t=1687439481; x=1690031481;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IkEBNBPB7p37IMo+amIH4z6XxA/lZNBkaf1MRNBrflY=;
+        b=FGTSnQX8TrM5BmL5ib1AYN1S8uKceRwjORo/f+e06anur6h3COHPAJEP64+LsXNIs3
+         2ySpgY6v8FlvZvCdOSSiGpKzHO9zWs3GPPJ53ZOBdu7+BxC6bKY6ket/yES/NwfqQqKn
+         UFLMOJt3vT4NkEa5BE52SpjIUz5zEF/R3MCXA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687439453; x=1690031453;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=P2ExnUNvm4puj2j+jBwDuVgUcMJgNpTHsaeUbPYv1HA=;
-        b=B8/wkdZcdNMxr3GbAQ7N5ob2dXZ6WhiL7Fkr2r96gpdNxmoLtwp3xJvO7TBGJMIJOg
-         yonC+9ey4+4HGBPKxZ2zRu3P3u9A/IXfmKCzX2AAmc3x1iM1ZSu4j3Uc49F9swBfs7Zr
-         +ZC2K5MBl3+Ez2fklcqS2bORGhrgGGlmrr+4ddFgcH3lqQRGx2QDfD4dzGZbnpiYgnjg
-         iFJ1eAGoFhGjbYRSMrRbwy/snHVm64loqduYwyQN9wf/ziAfdMDBpfb8xBK7YU3q8mY6
-         HxeHw0dMZ+v+vHRT9QlfENEyryv4GPtgM2zuuLo4/nAQ/3iBLHnp7rys4MKHPT4Q1KPh
-         XRLA==
-X-Gm-Message-State: AC+VfDxu1EbbwTBVCUXJs/ceXNpPKBbaEqz48f1XqDuBTm5/IT4rqJAB
-        FS/6717p0xRoC9yuptCbFQ2qJFWG8UM7GYs7qSB9lg==
-X-Google-Smtp-Source: ACHHUZ51ts75wkyfRCqdLOdLzUY3leYxdAIzn0un4E/YRo60Xqah11aqcikjs7PUlI+S5vg4oKw+3YC6Mm8RyX4xhqs=
-X-Received: by 2002:a1f:e784:0:b0:471:6119:95cc with SMTP id
- e126-20020a1fe784000000b00471611995ccmr7694191vkh.14.1687439453218; Thu, 22
- Jun 2023 06:10:53 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687439481; x=1690031481;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IkEBNBPB7p37IMo+amIH4z6XxA/lZNBkaf1MRNBrflY=;
+        b=Fh7SmAF7bIKZ9/KP0XZSKiW3TSnMB7D1kLajnkLriS0KDQqIQywpd7eVLl9pA4KoLI
+         WD/A2A5NV6+xjMB3xTUSmdzCZHo2IuxKXcWWFJLKPtdPzPGaq4mbHX3/sx9IuBj+9mz9
+         REf4HBKqUKXDzv3Yt474/5+htOcrPCidrzbei9iy4gFInRDoPFRmw1d+nIFyd8JQ1C6j
+         Z6twvTScUitK3o6Ra92TvUndmfWpMfqbyiFu4owhWxHBBRL66HoE3GiN/oC79zjiwrFZ
+         FeeZoc70Y2tyDv3qhl9gLhK83U3RwWNjPYQSNcACxIRHhKCgm9YZTkxvagh95B9nFpCl
+         KMiw==
+X-Gm-Message-State: AC+VfDzUVAMMyOFF4f7spAAfymcAHGtRmhghEKbOvDiF5YpRcbucq/lv
+        hLW8704ri8nUyI55goOhcOV23Q==
+X-Google-Smtp-Source: ACHHUZ6TsDEYcMcbjqFBh48C06MfmJB8EuY0JmcU+rae0bpga83YM6Fb7g0gMV1/MJtwhajipsYggw==
+X-Received: by 2002:ac8:7f50:0:b0:3f4:f38d:a954 with SMTP id g16-20020ac87f50000000b003f4f38da954mr22435157qtk.15.1687439480724;
+        Thu, 22 Jun 2023 06:11:20 -0700 (PDT)
+Received: from [192.168.0.140] (c-98-249-43-138.hsd1.va.comcast.net. [98.249.43.138])
+        by smtp.gmail.com with ESMTPSA id v11-20020a05622a130b00b003f3c9754e1dsm3581136qtk.17.2023.06.22.06.11.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Jun 2023 06:11:19 -0700 (PDT)
+Message-ID: <139acc54-d24c-5437-7a9d-fa2438fffba4@joelfernandes.org>
+Date:   Thu, 22 Jun 2023 09:11:17 -0400
 MIME-Version: 1.0
-References: <20230621182558.544417-11-brgl@bgdev.pl> <202306220657.ikVUl0zU-lkp@intel.com>
-In-Reply-To: <202306220657.ikVUl0zU-lkp@intel.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Thu, 22 Jun 2023 15:10:42 +0200
-Message-ID: <CAMRc=McU+eo3TSFmpR71mak08qJsA19hz8rZo5qk=rMbxoKOzQ@mail.gmail.com>
-Subject: Re: [PATCH net-next 10/12] net: stmmac: replace the int_snapshot_en
- field with a flag
-To:     kernel test robot <lkp@intel.com>
-Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, llvm@lists.linux.dev,
-        oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 08/15] sched: Commit to EEVDF
+Content-Language: en-US
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>, vincent.guittot@linaro.org,
+        linux-kernel@vger.kernel.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, corbet@lwn.net,
+        qyousef@layalina.io, chris.hyser@oracle.com,
+        patrick.bellasi@matbug.net, pjt@google.com, pavel@ucw.cz,
+        qperret@google.com, tim.c.chen@linux.intel.com, joshdon@google.com,
+        timj@gnu.org, kprateek.nayak@amd.com, yu.c.chen@intel.com,
+        youssefesmat@chromium.org, efault@gmx.de, tglx@linutronix.de
+References: <20230531115839.089944915@infradead.org>
+ <20230531124604.137187212@infradead.org> <20230616212353.GA628850@google.com>
+ <ZJQ4A2Jm4VoGMKbl@gmail.com>
+From:   Joel Fernandes <joel@joelfernandes.org>
+In-Reply-To: <ZJQ4A2Jm4VoGMKbl@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 22, 2023 at 1:31=E2=80=AFAM kernel test robot <lkp@intel.com> w=
-rote:
->
-> Hi Bartosz,
->
-> kernel test robot noticed the following build errors:
->
-> [auto build test ERROR on net-next/main]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Bartosz-Golaszewsk=
-i/net-stmmac-replace-has_integrated_pcs-field-with-a-flag/20230622-022944
-> base:   net-next/main
-> patch link:    https://lore.kernel.org/r/20230621182558.544417-11-brgl%40=
-bgdev.pl
-> patch subject: [PATCH net-next 10/12] net: stmmac: replace the int_snapsh=
-ot_en field with a flag
-> config: i386-randconfig-i012-20230621 (https://download.01.org/0day-ci/ar=
-chive/20230622/202306220657.ikVUl0zU-lkp@intel.com/config)
-> compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git =
-8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-> reproduce: (https://download.01.org/0day-ci/archive/20230622/202306220657=
-.ikVUl0zU-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202306220657.ikVUl0zU-lkp=
-@intel.com/
->
-> All errors (new ones prefixed by >>):
->
-> >> drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c:612:2: error: use of=
- undeclared identifier 'priv'
->            priv->plat->flags &=3D ~STMMAC_FLAG_INT_SNAPSHOT_EN;
->            ^
->    1 error generated.
->
+On 6/22/23 08:01, Ingo Molnar wrote:
+> 
+> * Joel Fernandes <joel@joelfernandes.org> wrote:
+> 
+>> On Wed, May 31, 2023 at 01:58:47PM +0200, Peter Zijlstra wrote:
+>>> EEVDF is a better defined scheduling policy, as a result it has less
+>>> heuristics/tunables. There is no compelling reason to keep CFS around.
+>>>
+>>> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+>>> ---
+>>>   kernel/sched/debug.c    |    6
+>>>   kernel/sched/fair.c     |  465 +++---------------------------------------------
+>>
+>> Whether EEVDF helps us improve our CFS latency issues or not, I do like the
+>> merits of this diffstat alone and the lesser complexity and getting rid of
+>> those horrible knobs is kinda nice.
+> 
+> To to be fair, the "removal" in this patch is in significant part an
+> artifact of the patch series itself, because first EEVDF bits get added by
+> three earlier patches, in parallel to CFS:
+> 
+>   kernel/sched/fair.c     |  137 +++++++++++++++++++++++++++++++++++++++++++++++++--
+>   kernel/sched/fair.c     |  162 +++++++++++++++++++++++++++++++++++++-----------
+>   kernel/sched/fair.c     |  338 +++++++++++++++++++++++++++++++++++++++++-------
+> 
+> ... and then we remove the old CFS policy code in this 'commit to EEVDF' patch:
+> 
+>   kernel/sched/fair.c     |  465 +++---------------------------------------------
+> 
+> The combined diffstat is close to 50% / 50% balanced:
+> 
+>   kernel/sched/fair.c              | 1105 ++++++++++++++++++--------------------
+> 
+> But having said that, I do agree that EEVDF as submitted by Peter is better
+> defined, with fewer heuristics, which is an overall win - so no complaints
+> from me!
 
-Eek, must have disabled this driver in my config by accident. Now fixed for=
- v2.
+Agreed, thank you for correcting me on the statistics.
 
-Bart
+  - Joel
+
+
