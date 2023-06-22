@@ -2,77 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CAB273A213
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 15:42:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDAFB73A136
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 14:49:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230098AbjFVNmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 09:42:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44340 "EHLO
+        id S231500AbjFVMtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 08:49:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229874AbjFVNmk (ORCPT
+        with ESMTP id S231483AbjFVMtu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 09:42:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4874C1735
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 06:41:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687441314;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=eFmMS1U29te7tFKtgkPWLc+o83wVHmxe900XZpUTdy8=;
-        b=KYQsJetNVO4CB77BH1qhcrSzLyRnFbjUq87hVEoUpynS/XaVj1X5G7XOtNqw0byEwIsqmo
-        N6Z1eNDOaMKwAkw+OJfxRvGy11+oTdvYqbZu4KND/Dapd0muVW1/NNJQWHto7N8qnbNQeG
-        /A2YJtVns/hp15EEM4TH9vyrbmoldHg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-522-gHPWKO21MFaNd35SQfD9XQ-1; Thu, 22 Jun 2023 09:41:52 -0400
-X-MC-Unique: gHPWKO21MFaNd35SQfD9XQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D2FA8104458A;
-        Thu, 22 Jun 2023 13:41:48 +0000 (UTC)
-Received: from tpad.localdomain (ovpn-112-2.gru2.redhat.com [10.97.112.2])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9FD83112132C;
-        Thu, 22 Jun 2023 13:41:47 +0000 (UTC)
-Received: by tpad.localdomain (Postfix, from userid 1000)
-        id 7AF94400E05F5; Thu, 22 Jun 2023 09:47:22 -0300 (-03)
-Date:   Thu, 22 Jun 2023 09:47:22 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Yair Podemsky <ypodemsk@redhat.com>, ppandit@redhat.com,
-        david@redhat.com, linux@armlinux.org.uk, mpe@ellerman.id.au,
-        npiggin@gmail.com, christophe.leroy@csgroup.eu, hca@linux.ibm.com,
-        gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        davem@davemloft.net, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        keescook@chromium.org, paulmck@kernel.org, frederic@kernel.org,
-        will@kernel.org, ardb@kernel.org, samitolvanen@google.com,
-        juerg.haefliger@canonical.com, arnd@arndb.de,
-        rmk+kernel@armlinux.org.uk, geert+renesas@glider.be,
-        linus.walleij@linaro.org, akpm@linux-foundation.org,
-        sebastian.reichel@collabora.com, rppt@kernel.org,
-        aneesh.kumar@linux.ibm.com, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] send tlb_remove_table_smp_sync IPI only to
- necessary CPUs
-Message-ID: <ZJRC2s4sIuJ9V3A0@tpad>
-References: <20230620144618.125703-1-ypodemsk@redhat.com>
- <20230621074337.GF2046280@hirez.programming.kicks-ass.net>
+        Thu, 22 Jun 2023 08:49:50 -0400
+X-Greylist: delayed 61 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 22 Jun 2023 05:49:49 PDT
+Received: from smtpweb147.aruba.it (smtpweb147.aruba.it [62.149.158.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 593F3193
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 05:49:49 -0700 (PDT)
+Received: from [172.25.4.220] ([212.103.203.10])
+        by Aruba Outgoing Smtp  with ESMTPSA
+        id CJjyq23NPMemtCJjyqk33G; Thu, 22 Jun 2023 14:48:46 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+        t=1687438126; bh=OAGWq4P0iLWKK7POQSy2mIY+DvkEOnVeuEtcmCvffRs=;
+        h=Date:MIME-Version:Subject:To:From:Content-Type;
+        b=NIgtXs5fpTXh7WlHIavDkkKSrIis8rwsmdI/aGO7l82zVPFgNtY1H7HrnWwuR6VKq
+         vY4XFCcGh9yeR8f1RVnh9Znco3a0OeeP7QHl+neUl/4gsfQj0d7eeN1YLwerxlumWj
+         I/rEHIb+x0HD3/7fkMBMv83f89BAKEsnoPPmtppebN/uMdD1xVWNgCtcjnXBgTk8Rr
+         sIMFiP/n0qCSpx80MbwJpWsajF15StC8Y9O6WFEDLm01OlmgGfvO/uRDne044WPLOD
+         +5IMqjQLQwjTsaAt8SvnymXvckoIF++jeElDrkJdsowTKWgSfqADbWfqV7qwK5HIRw
+         1G1SfIgOG6ajQ==
+Message-ID: <12d3d3e7-da90-cc73-57e6-1aa7859dce90@benettiengineering.com>
+Date:   Thu, 22 Jun 2023 14:48:46 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230621074337.GF2046280@hirez.programming.kicks-ass.net>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] net: phy: broadcom: drop brcm_phy_setbits() and use
+ phy_set_bits() instead
+Content-Language: en-US, it
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230622123737.8649-1-giulio.benetti@benettiengineering.com>
+From:   Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <20230622123737.8649-1-giulio.benetti@benettiengineering.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfLJhKBVdCUUxsuCjp/CY3LttGD3fW8mXkVVzBjCREiW7Q4F+vWSIw+1uGY0JJURNY/CIy7gXayAAg8DeR5aUxcM+voz/cYKXl/g5xgl/ZpHXRdCJctK2
+ z4ketBj1sGjVUr5nb25IgKKEcDcKX37F+cmiVU4FpAFyurdXSeVxT/WQNX5ZdnVy/9xWE34273XWaaXOA46ipeimPQymIBrY1PPjU1XhTXktyW1do9lxNO5M
+ OPQsAUS+LFo2VPb2OQR70RZqGRY3VSlI1mqiZlUsGim9YpEbb0y82Y+Zuxu7tAmb4D6jHtntcuTANVZyXY1N7ZuNfW3Ms4s9X+Z/W66a1LR/E9ACElzbmUK5
+ rvI1iQKMVJEXKAnBLkvvxOI81YFrIIm9rYbayDCiyWJQinRzrO0RDnrZ1D363FQJIS1qoHtf2mHJ+w69MQ0mhwcdtMYJQlPOM3Nd+SVQAK4go/aJMYCvdqS1
+ +DZDpKdvr7dtfN38lxmyZK3QIsk6OwJNDjR6/NlDzTLdIFaXlr209wbKSw23C6S5vBdhj38Y0X+8sjYq
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,38 +67,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 09:43:37AM +0200, Peter Zijlstra wrote:
-> On Tue, Jun 20, 2023 at 05:46:16PM +0300, Yair Podemsky wrote:
-> > Currently the tlb_remove_table_smp_sync IPI is sent to all CPUs
-> > indiscriminately, this causes unnecessary work and delays notable in
-> > real-time use-cases and isolated cpus.
-> > By limiting the IPI to only be sent to cpus referencing the effected
-> > mm.
-> > a config to differentiate architectures that support mm_cpumask from
-> > those that don't will allow safe usage of this feature.
-> > 
-> > changes from -v1:
-> > - Previous version included a patch to only send the IPI to CPU's with
-> > context_tracking in the kernel space, this was removed due to race 
-> > condition concerns.
-> > - for archs that do not maintain mm_cpumask the mask used should be
-> >  cpu_online_mask (Peter Zijlstra).
-> >  
+Pardon,
+
+On 22/06/23 14:37, Giulio Benetti wrote:
+> Linux provides phy_set_bits() helper so let's drop brcm_phy_setbits() and
+> use phy_set_bits() in its place.
 > 
-> Would it not be much better to fix the root cause? As per the last time,
-> there's patches that cure the thp abuse of this.
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ---
+>   drivers/net/phy/broadcom.c | 15 ++-------------
+>   1 file changed, 2 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/net/phy/broadcom.c b/drivers/net/phy/broadcom.c
+> index ad71c88c87e7..d684c5be529a 100644
+> --- a/drivers/net/phy/broadcom.c
+> +++ b/drivers/net/phy/broadcom.c
+> @@ -608,17 +608,6 @@ static int bcm54616s_read_status(struct phy_device *phydev)
+>   	return err;
+>   }
+>   
+> -static int brcm_phy_setbits(struct phy_device *phydev, int reg, int set)
+> -{
+> -	int val;
+> -
+> -	val = phy_read(phydev, reg);
+> -	if (val < 0)
+> -		return val;
+> -
+> -	return phy_write(phydev, reg, val | set);
+> -}
+> -
+>   static int brcm_fet_config_init(struct phy_device *phydev)
+>   {
+>   	int reg, err, err2, brcmtest;
+> @@ -689,14 +678,14 @@ static int brcm_fet_config_init(struct phy_device *phydev)
+>   		goto done;
+>   
+>   	/* Enable auto MDIX */
+> -	err = brcm_phy_setbits(phydev, MII_BRCM_FET_SHDW_MISCCTRL,
+> +	err = phy_set_bits(phydev, MII_BRCM_FET_SHDW_MISCCTRL,
+>   				       MII_BRCM_FET_SHDW_MC_FAME);
 
-The other case where the IPI can happen is:
+I've missed to checkpatch.pl and there is a style error ^^^
 
-CPU-0                                   CPU-1
+>   	if (err < 0)
+>   		goto done;
+>   
+>   	if (phydev->dev_flags & PHY_BRCM_AUTO_PWRDWN_ENABLE) {
+>   		/* Enable auto power down */
+> -		err = brcm_phy_setbits(phydev, MII_BRCM_FET_SHDW_AUXSTAT2,
+> +		err = phy_set_bits(phydev, MII_BRCM_FET_SHDW_AUXSTAT2,
+>   					       MII_BRCM_FET_SHDW_AS2_APDE);
 
-tlb_remove_table
-tlb_remove_table_sync_one
-IPI
-                                        local_irq_disable
-                                        gup_fast
-                                        local_irq_enable
+                                       and here ^^^
 
+I wait some time for any feedback and then I send a V2.
 
-So its not only the THP case.
+Best regards
+-- 
+CEO/CTO@Benetti Engineering sas
+
+>   	}
+>   
 
