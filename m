@@ -2,217 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDDEC73ACDC
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 01:04:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5048973ACE0
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 01:05:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230458AbjFVXEy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 19:04:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37492 "EHLO
+        id S231261AbjFVXFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 19:05:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230255AbjFVXEq (ORCPT
+        with ESMTP id S230255AbjFVXFq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 19:04:46 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59B0A1BE7;
-        Thu, 22 Jun 2023 16:04:45 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35MN4aLl006637;
-        Thu, 22 Jun 2023 23:04:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=gEVNUB1zcKbvjNqD3ckCwvagRn7rUtsTyD/VLkXlut8=;
- b=oe656xEn3clCXA6ZoZTwkx6OHK7jBOaRKuRo8Y2Y1jsvtX5BLQMDeMYnJUp7RfYsD0G1
- dUOwtVijU0xW40tclEEh5dyOflghG7BXUj5PMEGYvM70qMCygA33f9iO4d0hr/XrI7gP
- LdQrlTHWbcv0DKM0q376owAppKtwtjwmV+YUT+EKKNwPqax0bL/i82WLu1GVG0JyMtTp
- xjy+BZRHNE19z8vwkRe5xE9zR16PYD/+tcu+WH7G7NE54Bu5vj4rbN/cdw4CESRHLADU
- rU06kVOrMkrnVi2xGk6pkt9PFZyimq+bSCELT+mG1BjExQA+TAEpEMzxL+zeFwwsys8U iA== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rc359kxc0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Jun 2023 23:04:36 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35MN4Z6D010733
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Jun 2023 23:04:35 GMT
-Received: from [10.134.70.142] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 22 Jun
- 2023 16:04:34 -0700
-Message-ID: <e594fed4-fc01-477b-1e7c-d1d58e1a0dda@quicinc.com>
-Date:   Thu, 22 Jun 2023 16:04:30 -0700
+        Thu, 22 Jun 2023 19:05:46 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 651591FE8;
+        Thu, 22 Jun 2023 16:05:45 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1b520c77de0so40402295ad.0;
+        Thu, 22 Jun 2023 16:05:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687475145; x=1690067145;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=WHjYmH8s3fnZQ0PvCppw8g8ikfZuwN8TA2ENp2THW84=;
+        b=eAOEFgW+SUOOsIZUBQ5ZgE642tNDIfwXJ6L4oP9aXgrupTZ1tUgw7T0wogkuR24dZQ
+         YFv4qDDUtKFDzXgwpz1fBj0VnBv+ua+QMCHH/FmLIMYBZiY1SujXyo18j+gk7DO+UpYe
+         jEfIz4q185Eyvv8vqBZjM1Fb1jfadiNxqXY6WkoD/qqUBwdWrF+T2RfxoWQNcrPlEiuv
+         Ey4NNNHOK7dFmiNLCjQxd5nglDKSPPgTN6ROFRiMditQ/WwzXLrekvEjfZgDzjk921jd
+         pwV94ilLj89ws35BYNAwLkVelhZEpdI+ZhjKudLjojGPWoHxGtNheCFh3WMOK4KP7cvs
+         8UdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687475145; x=1690067145;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WHjYmH8s3fnZQ0PvCppw8g8ikfZuwN8TA2ENp2THW84=;
+        b=BFC1MFC1vyBvGIXBMOf/a+0MyNOIyHWQu7C5fWst+hOLxxkB+MAQNc9juKnlot9J1+
+         L92xKYkCBHrdBXiOqLW1YN6xuSHz1tUIpKMj0bq9IhYoER0CbsYkzFhuIuyA2qIfGNlr
+         qj6ohaMr/jJ8NktLioxXKoHAqiWTXnVDzKPF1/ztv6yseY+68Xp2q58dODkWSFw0PVzf
+         zKIU5yUVjX4XbrQv+z7m/wMuuoRB589bHhTI8Vu8uQ58BLItdmtU2SFZ2ZNYcxt1I7xz
+         4EZg+pXgWx+IIl3Ax5LmyiVBFQRtuUFDUqOFhGdwzjweKxjx6124LFtuu6UfsQRIBwi1
+         0+Sg==
+X-Gm-Message-State: AC+VfDwM3DWLYRncYhmd0CmPZKzVMzzx0UuQGNTqKPLglDXa3bdX6lb7
+        04DQCGhe8D/wQ7kM9WY4nYY=
+X-Google-Smtp-Source: ACHHUZ6ru+1v6NWpJmTylauOMEIvxwUyCaIvmtsUZQDPZJgoa1K4P8fvczx61Nf0/EvctdapOtXTqQ==
+X-Received: by 2002:a17:90a:748f:b0:256:991a:19e with SMTP id p15-20020a17090a748f00b00256991a019emr9368441pjk.9.1687475144704;
+        Thu, 22 Jun 2023 16:05:44 -0700 (PDT)
+Received: from localhost (ec2-54-67-115-33.us-west-1.compute.amazonaws.com. [54.67.115.33])
+        by smtp.gmail.com with ESMTPSA id bv7-20020a17090af18700b0025edb720cc1sm235782pjb.22.2023.06.22.16.05.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jun 2023 16:05:44 -0700 (PDT)
+Date:   Thu, 22 Jun 2023 23:05:43 +0000
+From:   Bobby Eshleman <bobbyeshleman@gmail.com>
+To:     Stefano Garzarella <sgarzare@redhat.com>
+Cc:     Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Vishnu Dasa <vdasa@vmware.com>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        Simon Horman <simon.horman@corigine.com>,
+        Krasnov Arseniy <oxffffaa@gmail.com>, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH RFC net-next v4 4/8] vsock: make vsock bind reusable
+Message-ID: <ZJTTx0XJ2LeITNh0@bullseye>
+References: <20230413-b4-vsock-dgram-v4-0-0cebbb2ae899@bytedance.com>
+ <20230413-b4-vsock-dgram-v4-4-0cebbb2ae899@bytedance.com>
+ <p2tgn3wczd3t3dodyicczetr2nqnqpwcadz6ql5hpvg2cd2dxa@phheksxhxfna>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 3/3] drm/msm/dsi: Enable DATABUS_WIDEN for DSI command
- mode
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-References: <20230525-add-widebus-support-v1-0-c7069f2efca1@quicinc.com>
- <20230525-add-widebus-support-v1-3-c7069f2efca1@quicinc.com>
- <3a6cc492-6b54-2c70-402e-995c0b003c01@linaro.org>
- <mfzmioovf54lcuiuzvk4fuz26elag6iw3ohbdhgym7k3qzirhx@dd7vu7ms6azz>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <mfzmioovf54lcuiuzvk4fuz26elag6iw3ohbdhgym7k3qzirhx@dd7vu7ms6azz>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: LgExeXWfvtnKZBj17sv02QKilZNuLY4w
-X-Proofpoint-ORIG-GUID: LgExeXWfvtnKZBj17sv02QKilZNuLY4w
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-22_16,2023-06-22_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- suspectscore=0 bulkscore=0 mlxscore=0 malwarescore=0 mlxlogscore=999
- spamscore=0 impostorscore=0 clxscore=1015 phishscore=0 lowpriorityscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306220198
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <p2tgn3wczd3t3dodyicczetr2nqnqpwcadz6ql5hpvg2cd2dxa@phheksxhxfna>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/14/2023 3:03 AM, Marijn Suijten wrote:
-> On 2023-06-14 10:49:31, Dmitry Baryshkov wrote:
->> On 14/06/2023 04:57, Jessica Zhang wrote:
->>> DSI 6G v2.5.x+ supports a data-bus widen mode that allows DSI to send
->>> 48 bits of compressed data per pclk instead of 24.
->>>
->>> For all chipsets that support this mode, enable it whenever DSC is
->>> enabled as recommend by the hardware programming guide.
->>>
->>> Only enable this for command mode as we are currently unable to validate
->>> it for video mode.
->>>
->>> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
->>> ---
->>>
->>> Note: The dsi.xml.h changes were generated using the headergen2 script in
->>> envytools [1], but the changes to the copyright and rules-ng-ng source file
->>> paths were dropped.
->>>
->>> [1] https://github.com/freedreno/envytools/
->>>
->>>    drivers/gpu/drm/msm/dsi/dsi.xml.h  |  1 +
->>>    drivers/gpu/drm/msm/dsi/dsi_host.c | 19 ++++++++++++++++++-
->>>    2 files changed, 19 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/gpu/drm/msm/dsi/dsi.xml.h b/drivers/gpu/drm/msm/dsi/dsi.xml.h
->>> index a4a154601114..2a7d980e12c3 100644
->>> --- a/drivers/gpu/drm/msm/dsi/dsi.xml.h
->>> +++ b/drivers/gpu/drm/msm/dsi/dsi.xml.h
->>> @@ -664,6 +664,7 @@ static inline uint32_t DSI_CMD_MODE_MDP_CTRL2_INPUT_RGB_SWAP(enum dsi_rgb_swap v
->>>    	return ((val) << DSI_CMD_MODE_MDP_CTRL2_INPUT_RGB_SWAP__SHIFT) & DSI_CMD_MODE_MDP_CTRL2_INPUT_RGB_SWAP__MASK;
->>>    }
->>>    #define DSI_CMD_MODE_MDP_CTRL2_BURST_MODE			0x00010000
->>> +#define DSI_CMD_MODE_MDP_CTRL2_DATABUS_WIDEN			0x00100000
->>>
->>>    #define REG_DSI_CMD_MODE_MDP_STREAM2_CTRL			0x000001b8
->>>    #define DSI_CMD_MODE_MDP_STREAM2_CTRL_DATA_TYPE__MASK		0x0000003f
->>> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
->>> index 5d7b4409e4e9..1da5238e7105 100644
->>> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
->>> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
->>> @@ -927,6 +927,9 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
->>>    	u32 hdisplay = mode->hdisplay;
->>>    	u32 wc;
->>>    	int ret;
->>> +	bool widebus_supported = msm_host->cfg_hnd->major == MSM_DSI_VER_MAJOR_6G &&
->>> +			msm_host->cfg_hnd->minor >= MSM_DSI_6G_VER_MINOR_V2_5_0;
->>> +
->>>
->>>    	DBG("");
->>>
->>> @@ -973,8 +976,15 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
->>>    		 *
->>>    		 * hdisplay will be divided by 3 here to account for the fact
->>>    		 * that DPU sends 3 bytes per pclk cycle to DSI.
->>> +		 *
->>> +		 * If widebus is supported, set DATABUS_WIDEN register and divide hdisplay by 6
->>> +		 * instead of 3
->>
->> This is useless, it is already obvious from the code below. Instead
->> there should be something like "wide bus extends that to 6 bytes per
->> pclk cycle"
+On Thu, Jun 22, 2023 at 05:25:55PM +0200, Stefano Garzarella wrote:
+> On Sat, Jun 10, 2023 at 12:58:31AM +0000, Bobby Eshleman wrote:
+> > This commit makes the bind table management functions in vsock usable
+> > for different bind tables. For use by datagrams in a future patch.
+> > 
+> > Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
+> > ---
+> > net/vmw_vsock/af_vsock.c | 33 ++++++++++++++++++++++++++-------
+> > 1 file changed, 26 insertions(+), 7 deletions(-)
+> > 
+> > diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+> > index ef86765f3765..7a3ca4270446 100644
+> > --- a/net/vmw_vsock/af_vsock.c
+> > +++ b/net/vmw_vsock/af_vsock.c
+> > @@ -230,11 +230,12 @@ static void __vsock_remove_connected(struct vsock_sock *vsk)
+> > 	sock_put(&vsk->sk);
+> > }
+> > 
+> > -static struct sock *__vsock_find_bound_socket(struct sockaddr_vm *addr)
+> > +struct sock *vsock_find_bound_socket_common(struct sockaddr_vm *addr,
+> > +					    struct list_head *bind_table)
+> > {
+> > 	struct vsock_sock *vsk;
+> > 
+> > -	list_for_each_entry(vsk, vsock_bound_sockets(addr), bound_table) {
+> > +	list_for_each_entry(vsk, bind_table, bound_table) {
+> > 		if (vsock_addr_equals_addr(addr, &vsk->local_addr))
+> > 			return sk_vsock(vsk);
+> > 
+> > @@ -247,6 +248,11 @@ static struct sock *__vsock_find_bound_socket(struct sockaddr_vm *addr)
+> > 	return NULL;
+> > }
+> > 
+> > +static struct sock *__vsock_find_bound_socket(struct sockaddr_vm *addr)
+> > +{
+> > +	return vsock_find_bound_socket_common(addr, vsock_bound_sockets(addr));
+> > +}
+> > +
+> > static struct sock *__vsock_find_connected_socket(struct sockaddr_vm *src,
+> > 						  struct sockaddr_vm *dst)
+> > {
+> > @@ -646,12 +652,17 @@ static void vsock_pending_work(struct work_struct *work)
+> > 
+> > /**** SOCKET OPERATIONS ****/
+> > 
+> > -static int __vsock_bind_connectible(struct vsock_sock *vsk,
+> > -				    struct sockaddr_vm *addr)
+> > +static int vsock_bind_common(struct vsock_sock *vsk,
+> > +			     struct sockaddr_vm *addr,
+> > +			     struct list_head *bind_table,
+> > +			     size_t table_size)
+> > {
+> > 	static u32 port;
+> > 	struct sockaddr_vm new_addr;
+> > 
+> > +	if (table_size < VSOCK_HASH_SIZE)
+> > +		return -1;
 > 
-> Yes please.  In general, don't paraphrase the code, but explain _why_ it
-> is doing what it does.  Saying that the widebus feature doubles the
-> bandwidth per pclk tick is much more clear than "divide by 6 instead of
-> 3" - we can read that from the code.
-> 
-> Overall comments have been very good so far (such as the original "to
-> account for the fact that DPU sends 3 bytes per pclk cycle"), though!
-> 
->>>    		 */
->>> -		hdisplay = DIV_ROUND_UP(msm_dsc_get_bytes_per_line(msm_host->dsc), 3);
->>> +		if (!(msm_host->mode_flags & MIPI_DSI_MODE_VIDEO) && widebus_supported)
->>> +			hdisplay = DIV_ROUND_UP(msm_dsc_get_bytes_per_line(msm_host->dsc), 6);
->>> +		else
->>> +			hdisplay = DIV_ROUND_UP(msm_dsc_get_bytes_per_line(msm_host->dsc), 3);
->>> +
->>>    		h_total += hdisplay;
->>>    		ha_end = ha_start + hdisplay;
->>>    	}
->>> @@ -1027,6 +1037,13 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
->>>    		dsi_write(msm_host, REG_DSI_CMD_MDP_STREAM0_TOTAL,
->>>    			DSI_CMD_MDP_STREAM0_TOTAL_H_TOTAL(hdisplay) |
->>>    			DSI_CMD_MDP_STREAM0_TOTAL_V_TOTAL(mode->vdisplay));
->>> +
->>> +		if (msm_host->dsc && widebus_supported) {
->>> +			u32 mdp_ctrl2 = dsi_read(msm_host, REG_DSI_CMD_MODE_MDP_CTRL2);
->>> +
->>> +			mdp_ctrl2 |= DSI_CMD_MODE_MDP_CTRL2_DATABUS_WIDEN;
->>> +			dsi_write(msm_host, REG_DSI_CMD_MODE_MDP_CTRL2, mdp_ctrl2);
->>
->> Is widebus applicable only to the CMD mode, or video mode can employ it too?
-> 
-> The patch description states that it was not tested on video-mode yet,
-> so I assume it will.  But this should also be highlighted with a comment
-> (e.g. /* XXX: Allow for video-mode once tested/fixed */), _especially_
-> on the check for MIPI_DSI_MODE_VIDEO above.
->
-
-Sure, we can leave a comment.
-
-
-> If I understand this correctly DSC is not working for video mode at all
-> on these setups, right?  Or no-one was able to test it?  I'm inclined to
-> request dropping these artifical guards to have as little friction as
-> possible when someone starts enabling and testing this - and less
-> patches removing artificial bounds in the future.
+> Why we need this check now?
 > 
 
-Noone was able to test it. Like I have said before, we dont have or have 
-not brought up any DSI DSC panel with video mode. DP will be the first 
-to validate the video mode path for DSC so even that time we cannot test 
-DSI with DSC on video mode.
+If the table_size is not at least VSOCK_HASH_SIZE then the
+VSOCK_HASH(addr) used later could overflow the table.
 
-I think we should find a panel which supports cmd and video mode ( I 
-believe one of the HDKs does have that ) and bring that one up first to 
-validate this.
+Maybe this really deserves a WARN() and a comment?
 
-I believe we should keep this checks with the comment you have 
-suggested. If someone tests it and then removes it, I am comfortable 
-with that.
+> > +
+> > 	if (!port)
+> > 		port = get_random_u32_above(LAST_RESERVED_PORT);
+> > 
+> > @@ -667,7 +678,8 @@ static int __vsock_bind_connectible(struct vsock_sock *vsk,
+> > 
+> > 			new_addr.svm_port = port++;
+> > 
+> > -			if (!__vsock_find_bound_socket(&new_addr)) {
+> > +			if (!vsock_find_bound_socket_common(&new_addr,
+> > +							    &bind_table[VSOCK_HASH(addr)])) {
+> > 				found = true;
+> > 				break;
+> > 			}
+> > @@ -684,7 +696,8 @@ static int __vsock_bind_connectible(struct vsock_sock *vsk,
+> > 			return -EACCES;
+> > 		}
+> > 
+> > -		if (__vsock_find_bound_socket(&new_addr))
+> > +		if (vsock_find_bound_socket_common(&new_addr,
+> > +						   &bind_table[VSOCK_HASH(addr)]))
+> > 			return -EADDRINUSE;
+> > 	}
+> > 
+> > @@ -696,11 +709,17 @@ static int __vsock_bind_connectible(struct vsock_sock *vsk,
+> > 	 * by AF_UNIX.
+> > 	 */
+> > 	__vsock_remove_bound(vsk);
+> > -	__vsock_insert_bound(vsock_bound_sockets(&vsk->local_addr), vsk);
+> > +	__vsock_insert_bound(&bind_table[VSOCK_HASH(&vsk->local_addr)], vsk);
+> > 
+> > 	return 0;
+> > }
+> > 
+> > +static int __vsock_bind_connectible(struct vsock_sock *vsk,
+> > +				    struct sockaddr_vm *addr)
+> > +{
+> > +	return vsock_bind_common(vsk, addr, vsock_bind_table, VSOCK_HASH_SIZE + 1);
+> > +}
+> > +
+> > static int __vsock_bind_dgram(struct vsock_sock *vsk,
+> > 			      struct sockaddr_vm *addr)
+> > {
+> > 
+> > -- 
+> > 2.30.2
+> > 
+> 
+> The rest seems okay to me, but I agree with Simon's suggestion.
+> 
+> Stefano
+> 
 
-Till then, I would rather guard that configuration.
-
-> - Marijn
+Thanks,
+Bobby
