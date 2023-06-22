@@ -2,163 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EA4873ABAF
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 23:38:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 287FA73ABBA
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 23:41:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbjFVViV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 17:38:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40346 "EHLO
+        id S231211AbjFVVlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 17:41:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbjFVViS (ORCPT
+        with ESMTP id S231160AbjFVVlN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 17:38:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 656091FEF
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 14:37:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687469854;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ac6TALMjp+oI3nV9xAMyrOCGIlDYL7HgOvl9g+nuZj4=;
-        b=gxaVPgI+YkbtezhJ7GkaCXPIYeTdo21gX48z/L7H77+J80rkKoL0nS2oMDLLp3pdgGi6tZ
-        NUAC5cyiOmpkNc73NLkQxOVS0TnbSk/MNNXWiwqxf66rCnb7wQsP/llozdq759JuKCeDTn
-        coDA97kX02Q9trH+HBnLPin3DHvSTFE=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-426-mfON8RQlPb-ZwavZaOn7VQ-1; Thu, 22 Jun 2023 17:37:33 -0400
-X-MC-Unique: mfON8RQlPb-ZwavZaOn7VQ-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B602E2834760;
-        Thu, 22 Jun 2023 21:37:32 +0000 (UTC)
-Received: from lorien.usersys.redhat.com (unknown [10.22.9.68])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2E5ED492C13;
-        Thu, 22 Jun 2023 21:37:32 +0000 (UTC)
-Date:   Thu, 22 Jun 2023 17:37:30 -0400
-From:   Phil Auld <pauld@redhat.com>
-To:     Benjamin Segall <bsegall@google.com>
-Cc:     linux-kernel@vger.kernel.org, Juri Lelli <juri.lelli@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>
-Subject: Re: [PATCH] Sched/fair: Block nohz tick_stop when cfs bandwidth in
- use
-Message-ID: <20230622213730.GE727646@lorien.usersys.redhat.com>
-References: <20230622132751.2900081-1-pauld@redhat.com>
- <xm26zg4r8bnz.fsf@google.com>
+        Thu, 22 Jun 2023 17:41:13 -0400
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E8531FF1
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 14:41:11 -0700 (PDT)
+Received: by mail-qv1-xf33.google.com with SMTP id 6a1803df08f44-62ff0e0c5d7so60335836d6.1
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 14:41:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687470071; x=1690062071;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PKMhtKFgdWfySpTweTXU9j4cru4Ry9zStYx1evxgaA8=;
+        b=Y87dbw+cg+wTMcIpPAtf85ukrOYybmHletqopcUQkoSrYPCxLkeUlvHLlbETcKGAsq
+         ZNmZck/5BEnT8PesoEeeDhOXhQ48R6+TZ8vVR7DhbrSAUoqxT7zZv5AgWdC4lhSfZakI
+         g+Q1KhqrS0QbfALMKqALAWQJjiM+o+sRmd+v+dBmGGlGwBy1i3uvNkxst1ywqA/cC8kk
+         0EGRHcCeYrPMwgH7SKkgS+4wrp/CcpVAV3U9eftiJIHmApYlAqUg0VREho4AabQEtA9/
+         WdSj9HxWNNhpMhGAL8FAVQb/EzlwW61rZjQ7yjeEd4niYKFiUkp4Rayk8LLmVJbH0faV
+         DqjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687470071; x=1690062071;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PKMhtKFgdWfySpTweTXU9j4cru4Ry9zStYx1evxgaA8=;
+        b=bL1mQdxwwcMEPLz0xj8Hh2ZaU5TspMnEv7JWZpbhD72ffqtYZ4Nh95V5dAvNTiEoyY
+         Hp7e2+cr3VRBzQLvHLsltSQec4XgpoEGk9T6xrQOiqoezK3Kx47+OjuNlaxzBjNzYHuy
+         7q826lIyvyfiQnOq+6NBTmAAdC+LO7nI5VGHm1U8Yk/RE92XyLuFn9g83ypBxGA5gEHK
+         hHNua5sBMSq0PhtSv6BR9j+kqh6TkXarYuaokATc+i6dFh68O1nAqRw1m7uMCW0f+Tnj
+         djdXjJ7XPaQzwJGkfsWZyoQXhT1tfcLucIRV1Da19eF+yH1M0frmbKJeJpfJSfxNH1uR
+         yvrw==
+X-Gm-Message-State: AC+VfDyiRC2LK8mGIlyS2FeBgvNz/C0qLQSwpZU5fw8Dy8wTaHpfTqip
+        1LerV347wz8YJzkaXi5YmG6llU6GGeAnmEZ03cJLaisCN6RnR0F0rBo=
+X-Google-Smtp-Source: ACHHUZ6mCI1jN5S3s7ShvvInAUX/6XlWctrvaeIXm/Y08Ms1/dqk8yh1L7hnRjD6E7oASdxzNWEi8VTMlPOi9UYUjdc=
+X-Received: by 2002:a05:6214:2a8b:b0:62d:df48:baf0 with SMTP id
+ jr11-20020a0562142a8b00b0062ddf48baf0mr23221940qvb.61.1687470070594; Thu, 22
+ Jun 2023 14:41:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <xm26zg4r8bnz.fsf@google.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <mhng-1d790a82-44ad-4b9c-bfe4-6303f09b0705@palmer-ri-x1c9a> <mhng-ad2d02fa-2d4d-4bf1-ab2a-fd84fa4bcb40@palmer-ri-x1c9a>
+In-Reply-To: <mhng-ad2d02fa-2d4d-4bf1-ab2a-fd84fa4bcb40@palmer-ri-x1c9a>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Thu, 22 Jun 2023 14:40:59 -0700
+Message-ID: <CAKwvOd=bHe07O=eBimOg5G-XxXgs6=h5OXzkfS+ayfuAHGOUew@mail.gmail.com>
+Subject: Re: [PATCH v2 0/4] riscv: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     nathan@kernel.org, bjorn@kernel.org,
+        Conor Dooley <conor@kernel.org>, jszhang@kernel.org,
+        llvm@lists.linux.dev, Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, Arnd Bergmann <arnd@arndb.de>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 22, 2023 at 01:49:52PM -0700 Benjamin Segall wrote:
-> Phil Auld <pauld@redhat.com> writes:
-> 
-> > CFS bandwidth limits and NOHZ full don't play well together.  Tasks
-> > can easily run well past their quotas before a remote tick does
-> > accounting.  This leads to long, multi-period stalls before such
-> > tasks can run again. Currentlyi, when presented with these conflicting
-> > requirements the scheduler is favoring nohz_full and letting the tick
-> > be stopped. However, nohz tick stopping is already best-effort, there
-> > are a number of conditions that can prevent it, whereas cfs runtime
-> > bandwidth is expected to be enforced.
+On Wed, Jun 21, 2023 at 12:46=E2=80=AFPM Palmer Dabbelt <palmer@dabbelt.com=
+> wrote:
+>
+> On Wed, 21 Jun 2023 11:19:31 PDT (-0700), Palmer Dabbelt wrote:
+> > On Wed, 21 Jun 2023 10:51:15 PDT (-0700), bjorn@kernel.org wrote:
+> >> Conor Dooley <conor@kernel.org> writes:
+> >>
+> >> [...]
+> >>
+> >>>> So I'm no longer actually sure there's a hang, just something slow.
+> >>>> That's even more of a grey area, but I think it's sane to call a 1-h=
+our
+> >>>> link time a regression -- unless it's expected that this is just ver=
+y
+> >>>> slow to link?
+> >>>
+> >>> I dunno, if it was only a thing for allyesconfig, then whatever - but
+> >>> it's gonna significantly increase build times for any large kernels i=
+f LLD
+> >>> is this much slower than LD. Regression in my book.
+> >>>
+> >>> I'm gonna go and experiment with mixed toolchain builds, I'll report
+> >>> back..
+> >>
+> >> I took palmer/for-next (1bd2963b2175 ("Merge patch series "riscv: enab=
+le
+> >> HAVE_LD_DEAD_CODE_DATA_ELIMINATION"")) for a tuxmake build with llvm-1=
+6:
+> >>
+> >>   | ~/src/tuxmake/run -v --wrapper ccache --target-arch riscv \
+> >>   |     --toolchain=3Dllvm-16 --runtime docker --directory . -k \
+> >>   |     allyesconfig
+> >>
+> >> Took forever, but passed after 2.5h.
 > >
-> > Make the scheduler favor bandwidth over stopping the tick by setting
-> > TICK_DEP_BIT_SCHED when the only running task is a cfs task with
-> > runtime limit enabled.
+> > Thanks.  I just re-ran mine 17/trunk LLD under time (rather that just
+> > checking top sometimes), it's at 1.5h but even that seems quite long.
 > >
-> > Add sched_feat HZ_BW (off by default) to control this behavior.
+> > I guess this is sort of up to the LLVM folks: if it's expected that DCE
+> > takes a very long time to link then I'm not opposed to allowing it, but
+> > if this is probably a bug in LLD then it seems best to turn it off unti=
+l
+> > we sort things out over there.
 > >
-> > Signed-off-by: Phil Auld <pauld@redhat.com>
-> > Cc: Ingo Molnar <mingo@redhat.com>
-> > Cc: Peter Zijlstra <peterz@infradead.org>
-> > Cc: Vincent Guittot <vincent.guittot@linaro.org>
-> > Cc: Juri Lelli <juri.lelli@redhat.com>
-> > Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-> > Cc: Valentin Schneider <vschneid@redhat.com>
-> > Cc: Ben Segall <bsegall@google.com>
-> > ---
-> >  kernel/sched/fair.c     | 33 ++++++++++++++++++++++++++++++++-
-> >  kernel/sched/features.h |  2 ++
-> >  2 files changed, 34 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> > index 373ff5f55884..880eadfac330 100644
-> > --- a/kernel/sched/fair.c
-> > +++ b/kernel/sched/fair.c
-> > @@ -6139,6 +6139,33 @@ static void __maybe_unused unthrottle_offline_cfs_rqs(struct rq *rq)
-> >  	rcu_read_unlock();
-> >  }
-> >  
-> > +#ifdef CONFIG_NO_HZ_FULL
-> > +/* called from pick_next_task_fair() */
-> > +static void sched_fair_update_stop_tick(struct rq *rq, struct task_struct *p)
-> > +{
-> > +	struct cfs_rq *cfs_rq = task_cfs_rq(p);
-> > +	int cpu = cpu_of(rq);
-> > +
-> > +	if (!sched_feat(HZ_BW) || !cfs_bandwidth_used())
-> > +		return;
-> > +
-> > +	if (!tick_nohz_full_cpu(cpu))
-> > +		return;
-> > +
-> > +	if (rq->nr_running != 1 || !sched_can_stop_tick(rq))
-> > +		return;
-> > +
-> > +	/*
-> > +	 *  We know there is only one task runnable and we've just picked it. The
-> > +	 *  normal enqueue path will have cleared TICK_DEP_BIT_SCHED if we will
-> > +	 *  be otherwise able to stop the tick. Just need to check if we are using
-> > +	 *  bandwidth control.
-> > +	 */
-> > +	if (cfs_rq->runtime_enabled)
-> > +		tick_nohz_dep_set_cpu(cpu, TICK_DEP_BIT_SCHED);
-> > +}
-> > +#endif
-> 
-> So from a CFS_BANDWIDTH pov runtime_enabled && nr_running == 1 seems
-> fine. But working around sched_can_stop_tick instead of with it seems
-> sketchy in general, and in an edge case like "migrate a task onto the
-> cpu and then off again" you'd get sched_update_tick_dependency resetting
-> the TICK_DEP_BIT and then not call PNT (ie a task wakes up onto this cpu
-> without preempting, and then another cpu goes idle and pulls it, causing
-> this cpu to go into nohz_full).
-> 
+> > I think maybe Nick or Nathan is the best bet to know?
+>
+> Looks like it's about 2h for me.  I'm going to drop these from my
+> staging tree in the interest of making progress on other stuff, but if
+> this is just expected behavior them I'm OK taking them (though that's
+> too much compute for me to test regularly):
+>
+> $ time ../../../../llvm/install/bin/ld.lld -melf64lriscv -z noexecstack -=
+r -o vmlinux.o --whole-archive vmlinux.a --no-whole-archive --start-group .=
+/drivers/firmware/efi/libstub/lib.a --end-group
+>
+> real    111m50.678s
+> user    111m18.739s
+> sys     1m13.147s
 
-The information to make these tests is not available in sched_can_stop_tick.
-I did start there. When that is called, and we are likely to go nohz_full,
-curr is null so it's hard to find the right cfs_rq to make that
-runtime_enabled test against.  We could, maybe, plumb the task being enqueued
-in but it would not be valid for the dequeue path and would be a bit messy.
+Ah, I think you meant s/allmodconfig/allyesconfig/ in your initial
+report.  That makes more sense, and I can reproduce.  Let me work on a
+report.
 
-But yes, I suppose you could end up in a state that is just as bad as today.
-
-Maybe I could add a redundant check in sched_can_stop_tick for when
-nr_running == 1 and curr is not null and make sure the bit does not get
-cleared. I'll look into that.
+>
+> >> CONFIG_CC_VERSION_TEXT=3D"Debian clang version 16.0.6 (++2023061011330=
+7+7cbf1a259152-1~exp1~20230610233402.106)"
+> >>
+> >>
+> >> Bj=C3=B6rn
 
 
+
+--
 Thanks,
-Phil
-
--- 
-
+~Nick Desaulniers
