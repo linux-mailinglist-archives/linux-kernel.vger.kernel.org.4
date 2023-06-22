@@ -2,106 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0712E73A2B3
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 16:11:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F8C973A2B7
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 16:13:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231400AbjFVOLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 10:11:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57716 "EHLO
+        id S231421AbjFVONF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 10:13:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231377AbjFVOLa (ORCPT
+        with ESMTP id S231410AbjFVONC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 10:11:30 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B38118
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 07:11:27 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f90a7325f6so61699005e9.3
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 07:11:27 -0700 (PDT)
+        Thu, 22 Jun 2023 10:13:02 -0400
+Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4C4010F0
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 07:13:01 -0700 (PDT)
+Received: by mail-ua1-x932.google.com with SMTP id a1e0cc1a2514c-78caeb69125so2908128241.3
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 07:13:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687443086; x=1690035086;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GHxJuqmuhPWFpQhIFC68lKcmCkInE/kiaYAhaHcn0+Y=;
-        b=gEz/PAQ1qIP5WZun0LdTuL2gGMzh3DxKsvzmJ6Q0I9nak7WYgFwIua8o4b7DyFjInu
-         SH+yb8hYWg8DPwV1viEU6ZlC5W12dzJ0cpS2WhYFT+HXtgViha0pmeDj9pynoswZZOTF
-         P/sVO4e/j0gRgSpCoWweryl6LRW3mzxc+ShAtTe6cVPWa+CAxgZSyLrflRN7eA/KAapm
-         ub1C0L2rIcRzkgBqnTbcW75iwVmmT8HRAKNXuHDGEi4rT3fGAi2MDTpm1XQbWGrx9Gzd
-         RmYbgNRvkmPX0g4ourdc60JrhU8l+mRk/wFWm+1F6nQcKJZEAzhKd8wx7xJunOOfg0nk
-         9TzA==
+        d=gmail.com; s=20221208; t=1687443181; x=1690035181;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=znGg349Xo9TtHurkn031UR2KOdzyHK5vxKXGkG+tGZ0=;
+        b=kRWQfEeMXIg4iGoBcuXEPHaISfj5KEHhtIJDhV2uZkF4eHcvpXekCut5EEXlplg2fM
+         lfTgF3whFKJmR5uJBq5g9Y/o3i/I7o+lIGjZUsj9bnxVHIsfIvwaJ6dFcu1csQVhknBF
+         GtGc2AMe0XjdaUhrEAWELhWh3JeDVAxNC/ihFXm0boLk8XumAVfJdFgfqrv1N8H/lolH
+         QZI36BMS2GE6mpEu9jckabKwvr9vlNSr3+2BQa0gcLw/lfTSEWxyKiCw3sruYmTkRYpv
+         sYue3JICfMhVWcr/Kn9FTFaAkZFPrPMEgnjIYOzb1JhJ7QP6fzGUfaetLp1DZwHTUMoL
+         5ddA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687443086; x=1690035086;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GHxJuqmuhPWFpQhIFC68lKcmCkInE/kiaYAhaHcn0+Y=;
-        b=lKOlkLmbjjbzNICgo3Sxo9/Xvpzgmr4cBCU1w/g8bnY/RtvYt5xYvqOvCRpqZdxTLk
-         Lf1JB2cE+OLx2XPWDHDqGLXoG45W2nDYhIK+dFIoYD1XFagaZVQIpQr08l+7GiWULQmJ
-         u2O/a/L24GBzeSyCX2oSMa65ZCFohUOJHPStATlqJWpNAhYyG5TOujGhgiHeCOcq3cY3
-         zaUsvICw3Bbh4kYe5T1bNcaeK3bJCNgPw68dp5oCMN0cE1vDaZY/hFOguf4jTbXTT2/X
-         pMjUU5G3S9q6V3ssnqwTbDku2Kp/N79Xk7qn1QmkbRNBvwraA/9b0ib8bH6MTsCygxz3
-         HpFQ==
-X-Gm-Message-State: AC+VfDz6dBrfo1IvvZmHSRecR7B/Bn392mPc9ieTjFiKdXPwk41mz8bA
-        czC5n3+HZOo3lAYr1fjPuiHy8g==
-X-Google-Smtp-Source: ACHHUZ6BmQp3My+dLgyfXTj9FadTnh4ZdU89bg6m7H4+QQzmHulg0AjgY/idmg/TybIPzxG+o/8epA==
-X-Received: by 2002:a7b:c3d3:0:b0:3f9:b7cf:262f with SMTP id t19-20020a7bc3d3000000b003f9b7cf262fmr6889086wmj.4.1687443086247;
-        Thu, 22 Jun 2023 07:11:26 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id p24-20020a1c7418000000b003f9c859894esm3753202wmc.7.2023.06.22.07.11.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jun 2023 07:11:24 -0700 (PDT)
-Date:   Thu, 22 Jun 2023 17:11:19 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
-        ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
-        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        hverkuil-cisco@xs4all.nl, nicolas.dufresne@collabora.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        kernel@collabora.com
-Subject: Re: [PATCH v3 03/11] media: videobuf2: Remove VB2_MAX_FRAME limit on
- buffer storage
-Message-ID: <bddd6cb7-cd72-4fb5-8d4a-d02cb9c46dce@kadam.mountain>
-References: <20230622131349.144160-1-benjamin.gaignard@collabora.com>
- <20230622131349.144160-4-benjamin.gaignard@collabora.com>
+        d=1e100.net; s=20221208; t=1687443181; x=1690035181;
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=znGg349Xo9TtHurkn031UR2KOdzyHK5vxKXGkG+tGZ0=;
+        b=Iywe/i9hcXALnys/faWx4hy7V/GVKIin0RPybtbjcvBOMkCpNhxODDrABOZc0nX6Q7
+         9iHkN6QG/4LNbEhJtxmQKpm16L0yY7zLAk0dFwpC3jZpyA+d/fm/b+syvgnWo8+UZLK5
+         XcxAvCXi7zpdzHA2BRTMwtTPk2o94DBNRg3lgV+Omy13NWJuHtK3bAvZQddX/Jk0Y7Sf
+         D+USpSQFtF4DiM2j4+8yD+ai45wM+x8P3+2SVSAK2PvWdC4NZCT9xABAB37gFQ2FD6/s
+         ZaFH83WAuvz4LztvODLulgN0tR6BR1WI3nA813Efg0AlK9zVGnxZGFTHsh9d6Fcl1mb8
+         8UEw==
+X-Gm-Message-State: AC+VfDzfhwigbiQm+aZDNabl+lnwbQ1IQWPKuJFitjaxGSSaMuv/UOdY
+        kcdufTukj4sisRd5GXomuNRWycLEPu21IhJQido=
+X-Google-Smtp-Source: ACHHUZ5BHoKOTeiPAPe6J2DZlGR5OAGHzRNIWDjYkffqxFVXSl9qdjW6dvleIuJBjYueZmbww+Lw9N90yJido6b7bJ4=
+X-Received: by 2002:a67:ea8f:0:b0:440:cd2b:4787 with SMTP id
+ f15-20020a67ea8f000000b00440cd2b4787mr4526216vso.35.1687443180684; Thu, 22
+ Jun 2023 07:13:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230622131349.144160-4-benjamin.gaignard@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Sender: moonleepark07@gmail.com
+Received: by 2002:a59:b3a2:0:b0:3da:4546:c65c with HTTP; Thu, 22 Jun 2023
+ 07:13:00 -0700 (PDT)
+From:   Aisha Algaddafi <algaddafiaisha247@gmail.com>
+Date:   Thu, 22 Jun 2023 15:13:00 +0100
+X-Google-Sender-Auth: EKgiq0zkKZIsispvQcO06XnOqv8
+Message-ID: <CAMgr=-pX4qt9Zt-nGD+o6YsRd9UZXUTO8ZV=WB2nDc8v2FuX6g@mail.gmail.com>
+Subject: GREETINGS MY BELOVED ONE.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORM_FRAUD_5,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,
+        MONEY_FORM_SHORT,MONEY_FRAUD_5,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,SUBJ_ALL_CAPS,T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE,
+        UNDISC_MONEY,URG_BIZ autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:932 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5880]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [moonleepark07[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [moonleepark07[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  0.6 URG_BIZ Contains urgent matter
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 T_FILL_THIS_FORM_SHORT Fill in a short form with personal
+        *      information
+        *  0.0 MONEY_FORM_SHORT Lots of money if you fill out a short form
+        *  3.1 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+        *  0.0 MONEY_FRAUD_5 Lots of money and many fraud phrases
+        *  0.0 FORM_FRAUD_5 Fill a form and many fraud phrases
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 22, 2023 at 03:13:41PM +0200, Benjamin Gaignard wrote:
-> diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
-> index f1ff7af34a9f..86e1e926fa45 100644
-> --- a/drivers/media/common/videobuf2/videobuf2-core.c
-> +++ b/drivers/media/common/videobuf2/videobuf2-core.c
-> @@ -455,9 +455,9 @@ static int __vb2_queue_alloc(struct vb2_queue *q, enum vb2_memory memory,
->  	struct vb2_buffer *vb;
->  	int ret;
->  
-> -	/* Ensure that q->num_buffers+num_buffers is below VB2_MAX_FRAME */
-> +	/* Ensure that q->num_buffers + num_buffers is UINT_MAX */
->  	num_buffers = min_t(unsigned int, num_buffers,
-> -			    VB2_MAX_FRAME - q->num_buffers);
-> +			    UINT_MAX - q->num_buffers);
->  
->  	for (buffer = 0; buffer < num_buffers; ++buffer) {
->  		/* Allocate vb2 buffer structures */
+Please Permits me to use this medium to open a mutual conversations  with you
+seeking for your acceptance towards investing in your country under your
+management as my partner,
 
-Ah...  Here's one of the integer overflow bugs I was talking about.  The
-__vb2_queue_alloc() function returns an int so if num_buffers goes over
-INT_MAX we are hosed.
+My name is Aisha  Gaddaf and currently living in Omani, i am a Widow and
+single Mother with three Children, the only biological Daughter of late
+Libyan President (Late Colonel Muammar Gaddafi) and presently i am under
+political asylum protection by the Omani Government.
 
-regards,
-dan carpenter
+I have funds worth " [ $7.500.000.00 US Dollars ] which I want to entrust
+to you for investment projects in your country.
+If you are willing to handle this project on my behalf, kindly
+reply urgent to enable me provide you more details to start the transfer
+process, I shall appreciate your urgent response through my private email
+address below:
 
+algaddafiaisha247@gmail.com
+
+Thanks
+Yours Truly
+Aisha Gaddafi
