@@ -2,115 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A603739546
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 04:09:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9891573954C
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 04:11:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230308AbjFVCJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 22:09:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38746 "EHLO
+        id S230051AbjFVCLg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 22:11:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbjFVCJ3 (ORCPT
+        with ESMTP id S229618AbjFVCLe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 22:09:29 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95449AC;
-        Wed, 21 Jun 2023 19:09:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=Jh+sIBjTdpmN4bUdroe5Mom352UKBoihFU0ru+h1MFo=; b=ZnGaFtAYOb+yMjydAZycuQNc1U
-        Zc4s8vsOkWTz+/q7mdsTMXCu71SKCsIO2C4RRIK9Jqb8h6H9wc+Y/8ZVCdhYcy4rHFr5CWT6BhFmc
-        HnNoX4D+KWjgPf6r5FY8rX7JGdvUE4dgRR9bzvS8OKD2hVn6PeqmMCpW7WhtI3HAeS7EqsIYH9qv8
-        6fnxNk1UUA7f92Ik2vFbd7Fsu+OL4K1FL30ECew9m11Y4NDPUSxeFsAAP8jUZsY+yFFcD2X+xU3rY
-        /MCLzV9g7CsJrEyPZwt5r7y4xWa+nkaz78HRCGGdiGeuqL46/HppiVpnxNErSXh0Q11CjH/3wEl4N
-        H3rScSlA==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qC9l6-00GWGA-0w;
-        Thu, 22 Jun 2023 02:09:16 +0000
-Message-ID: <9860cb6c-8fd4-79c6-a64b-ea855298e339@infradead.org>
-Date:   Wed, 21 Jun 2023 19:09:15 -0700
+        Wed, 21 Jun 2023 22:11:34 -0400
+Received: from mail-4318.protonmail.ch (mail-4318.protonmail.ch [185.70.43.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E97AC;
+        Wed, 21 Jun 2023 19:11:34 -0700 (PDT)
+Date:   Thu, 22 Jun 2023 02:11:14 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1687399892; x=1687659092;
+        bh=S6fvHVWpgJ+++RTt92EIUdud4rBfU1qdLx0ipdC4tuM=;
+        h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+         Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+        b=ovs6Q24BdUyYfxH2Q8/cYNP2kar46JJiwhNcZSzQkEiAUyo/c6kZDSQsv0U0Y3CRk
+         CDA4iHzppsH9xvvuaer0ePGi5xhCAxWQ6fdhTE7gxA0xTBkmbUcAgsnZx6Tf+InncY
+         Fxz0FY5JMmHKnHazudjQJhg2nzH9JPWY7/HJ8+7U8WMTspMPPXcu2AMX0tUx96lAaB
+         qeYw6kUUPx/oiMX/KDTvFuqSzmoD41+0NigZo7czmPXPq0PSUF065Fk+vVT7/r8xoD
+         WRIb0mdPst1GgJquRDdIYu2DFUI6614EcFHVZuHbIM+pd3rfJDPC9JDvHJpDp0VHwG
+         D5hdnaOLAcyeg==
+To:     linux-kernel@vger.kernel.org
+From:   Raymond Hackley <raymondhackley@protonmail.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH] arm64: dts: qcom: msm8939-sony-xperia-kanuti-tulip: Add missing 'chassis-type'
+Message-ID: <20230622021105.66015-1-raymondhackley@protonmail.com>
+Feedback-ID: 49437091:user:proton
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 8/8] scripts/spelling.txt: Add "transmit" patterns
-Content-Language: en-US
-To:     Yueh-Shun Li <shamrocklee@posteo.net>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Kalle Valo <kvalo@kernel.org>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Andy Whitcroft <apw@canonical.com>,
-        Joe Perches <joe@perches.com>
-Cc:     linux-rdma@vger.kernel.org, netdev@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-scsi@vger.kernel.org,
-        mptcp@lists.linux.dev, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230622012627.15050-1-shamrocklee@posteo.net>
- <20230622012627.15050-9-shamrocklee@posteo.net>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230622012627.15050-9-shamrocklee@posteo.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Sony Xperia M4 Aqua is a handset. Add the chassis-type =3D "handset"; to it=
+.
+
+Signed-off-by: Raymond Hackley <raymondhackley@protonmail.com>
+---
+ arch/arm64/boot/dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm64/boot/dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts =
+b/arch/arm64/boot/dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts
+index 8613cf93dac5..0633e3006f17 100644
+--- a/arch/arm64/boot/dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts
++++ b/arch/arm64/boot/dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts
+@@ -16,6 +16,7 @@
+ / {
+ =09model =3D "Sony Xperia M4 Aqua";
+ =09compatible =3D "sony,kanuti-tulip", "qcom,msm8939";
++=09chassis-type =3D "handset";
+=20
+ =09qcom,board-id =3D <QCOM_BOARD_ID_MTP 0>;
+ =09qcom,msm-id =3D <QCOM_ID_MSM8939 0>, <QCOM_ID_MSM8939 0x30000>;
+--=20
+2.39.2
 
 
-On 6/21/23 18:26, Yueh-Shun Li wrote:
-> Add "transmit"-related patterns misspelled with the first "s" missing.
-> 
-> Signed-off-by: Yueh-Shun Li <shamrocklee@posteo.net>
-
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-
-Thanks.
-
-> ---
->  scripts/spelling.txt | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/scripts/spelling.txt b/scripts/spelling.txt
-> index f8bd6178d17b..c81e489ba4cf 100644
-> --- a/scripts/spelling.txt
-> +++ b/scripts/spelling.txt
-> @@ -1319,6 +1319,12 @@ ressource||resource
->  ressources||resources
->  restesting||retesting
->  resumbmitting||resubmitting
-> +retranmission||retransmission
-> +retranmissions||retransmissions
-> +retranmit||retransmit
-> +retranmits||retransmits
-> +retranmitted||retransmitted
-> +retranmitting||retransmitting
->  retransmited||retransmitted
->  retreived||retrieved
->  retreive||retrieve
-> @@ -1553,6 +1559,11 @@ tranasction||transaction
->  tranceiver||transceiver
->  tranfer||transfer
->  tranmission||transmission
-> +tranmissions||transmissions
-> +tranmit||transmit
-> +tranmits||transmits
-> +tranmitted||transmitted
-> +tranmitting||transmitting
->  transcevier||transceiver
->  transciever||transceiver
->  transferd||transferred
-
--- 
-~Randy
