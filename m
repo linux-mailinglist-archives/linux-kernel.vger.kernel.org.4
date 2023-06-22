@@ -2,114 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC2DE73A8BF
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 21:02:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A84E73A8C3
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 21:04:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231442AbjFVTC1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 15:02:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44692 "EHLO
+        id S231294AbjFVTDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 15:03:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230449AbjFVTCZ (ORCPT
+        with ESMTP id S229891AbjFVTDx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 15:02:25 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA4072100;
-        Thu, 22 Jun 2023 12:02:16 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id D9D685FD1D;
-        Thu, 22 Jun 2023 22:02:14 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1687460534;
-        bh=yqwFHUHVsnfkRLDg+tlWSM2fF7T9GBR3AoTi2RuucbA=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=ZyVUu9sawIlSc80T3PPczeJ9nWjxgxUWCED7U529qtl0aj8cLCC7m30XV7U6iMHl1
-         wXtBYpQyxgY1Y5SVcH2n2dbxnvcyGAbwTk9NEQ0lVgQEca1j9nQ0UjbWVCGX7e16P4
-         gZ0XogXRbbnywqxRgWNGR94SRieGsZNLzqwAICbQEzMXkLBADT66hQpqLKfe0ZknII
-         z1mfiOOGfTqKH08ZqJ+EAZ64cxX3BsQF6l9TRkXbMncjq1eZZJJ7oXHxMSZ/Mv5c7F
-         FEWOuOeuHwqR10DsB9GG/14iu2z1A9bNHsoOg3ttHhTa7e/WtvCoDCyLqB4hyqUecB
-         TKpcl7W51551w==
-Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Thu, 22 Jun 2023 22:02:13 +0300 (MSK)
-Date:   Thu, 22 Jun 2023 22:02:13 +0300
-From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-CC:     Jian Hu <jian.hu@amlogic.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <kernel-janitors@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] MAINTAINERS: repair pattern in ARM/Amlogic Meson SoC
- CLOCK FRAMEWORK
-Message-ID: <20230622190213.r3ru44ghucxnk7rc@CAB-WSD-L081021>
-References: <20230614084212.1359-1-lukas.bulwahn@gmail.com>
+        Thu, 22 Jun 2023 15:03:53 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DFF4186
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 12:03:51 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-51bec5c09ecso1024245a12.2
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 12:03:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687460629; x=1690052629;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Jd5WjCPFoP9daREip6mX62pgI0wMzSdCCjGL7ZKd2pU=;
+        b=QkgtomfQATAGzTsLuzh39mv8ZnW735GXGVwS9SOCx62YjErfuwNWw1HpGXOK0O0SdB
+         5ZLm6sIALaLBC3gOQGJHM4CcHObOzZ//DW0+hUxykKB5CG7plTCLK0NxOqGSF0kEjGMK
+         egzKGLrcQAf9cUQBogkETRuGmF1g6EHLOWJz8fddhdxBeAC/QZEFCvsvn2MlWCMRXbvM
+         3cr0FokqzK69WAORfD2VnjAR4guTon2Qw4mtqi7OQIZjrtcx7fcGd3XQmbLZr1u9fTd1
+         4Ub4MKksgvuaau/wIrcs0T0AyIQGhlIhtwdj0tUOFBEXrnhQBIXgzzm+Bbi58ufCMNlX
+         ZlbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687460629; x=1690052629;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Jd5WjCPFoP9daREip6mX62pgI0wMzSdCCjGL7ZKd2pU=;
+        b=AuMizgUMc/S+RE9jsapJMDgN61JzE8CEiBPSPKj4YNafuoeqo292mqNvkOM+OXQ0jQ
+         QWTMW3/1p+wTjH96wP0qUPllodlV7rwc1nn841WrFj/gRmX6prE5fu/+0br7Lusl2rnF
+         dBGFX5YiGJatBbge4llsa8P9qxsO5VqTDDDLKNlzRsvJs1LesRg5OTsIeuaRO3X2yD2z
+         28ksTCNYH/nXLKi4d8H5UPGywZBVIpThxjnfF/3BqnedQ2x3aEpno2AH+QQ3tFubj5DH
+         qn9+D680vOnIkCnu8gZrGmoXZMjGlWBwbl8NBSYvdo75C0zuc3h+XDP54i8hT5EczpJ5
+         8XNA==
+X-Gm-Message-State: AC+VfDz6yCxaItaHqByla/vBja1gq6GbkeLPNhHmD1jICW3l5CoU5WQh
+        FyYg2isNQKDkI2wYRELhpeKFywpNV2dd1219FD8IOA==
+X-Google-Smtp-Source: ACHHUZ5FPpu8RIJRu78y2BGapyPe97lCs0kqbcxbWD4gzS9XFDbyaz2lX0MVWr90I/F4TgxZ+lx8yg==
+X-Received: by 2002:aa7:d981:0:b0:51b:ebea:18ee with SMTP id u1-20020aa7d981000000b0051bebea18eemr1715358eds.22.1687460629655;
+        Thu, 22 Jun 2023 12:03:49 -0700 (PDT)
+Received: from hera (ppp089210114029.access.hol.gr. [89.210.114.29])
+        by smtp.gmail.com with ESMTPSA id b23-20020aa7c6d7000000b005187b5b82f7sm4405925eds.9.2023.06.22.12.03.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jun 2023 12:03:49 -0700 (PDT)
+Date:   Thu, 22 Jun 2023 22:03:47 +0300
+From:   Ilias Apalodimas <ilias.apalodimas@linaro.org>
+To:     Jan Kiszka <jan.kiszka@siemens.com>
+Cc:     Masahisa Kojima <masahisa.kojima@linaro.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: Re: [PATCH v6 0/4] introduce tee-based EFI Runtime Variable Service
+Message-ID: <ZJSbE/82z+319sTL@hera>
+References: <20230622085112.1521-1-masahisa.kojima@linaro.org>
+ <8ce9f761-347d-1e8c-17d7-241d88c82451@siemens.com>
+ <CAC_iWjJ28uKVpz_FrJ6dcUjCkrV9w5UO4WRr9SQxYFPmtmj59w@mail.gmail.com>
+ <65d010fa-c801-eb4f-352f-8bfb52a67c85@siemens.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230614084212.1359-1-lukas.bulwahn@gmail.com>
-User-Agent: NeoMutt/20220415
-X-Originating-IP: [100.64.160.123]
-X-ClientProxiedBy: p-i-exch-sc-m02.sberdevices.ru (172.16.192.103) To
- p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/06/22 14:26:00 #21556046
-X-KSMG-AntiVirus-Status: Clean, skipped
+In-Reply-To: <65d010fa-c801-eb4f-352f-8bfb52a67c85@siemens.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Lukas,
+On Thu, Jun 22, 2023 at 08:32:44PM +0200, Jan Kiszka wrote:
+> On 22.06.23 17:04, Ilias Apalodimas wrote:
+> > Hi Jan,
+> >
+> > On Thu, 22 Jun 2023 at 17:56, Jan Kiszka <jan.kiszka@siemens.com> wrote:
+> >>
+> >> On 22.06.23 10:51, Masahisa Kojima wrote:
+> >>> This series introduces the tee based EFI Runtime Variable Service.
+> >>>
+> >>> The eMMC device is typically owned by the non-secure world(linux in
+> >>> this case). There is an existing solution utilizing eMMC RPMB partition
+> >>> for EFI Variables, it is implemented by interacting with
+> >>> OP-TEE, StandaloneMM(as EFI Variable Service Pseudo TA), eMMC driver
+> >>> and tee-supplicant. The last piece is the tee-based variable access
+> >>> driver to interact with OP-TEE and StandaloneMM.
+> >>>
+> >>> Changelog:
+> >>> v5 -> v6
+> >>> - new patch #4 is added in this series, #1-#3 patches are unchanged.
+> >>>   automatically update super block flag when the efivarops support
+> >>>   SetVariable runtime service, so that user does not need to manually
+> >>>   remount the efivarfs as RW.
+> >>
+> >> But that is not yet resolving the architectural problem with that
+> >> userspace daemon dependency. What are the next steps for that now?
+> >
+> > We are trying to find some cycles to work on that, however, I don't
+> > have a time estimate on that.  But the question is different here.
+> > Since this addresses the problems distros have wrt to SetVariableRT
+> > (even for a limited set of platforms) are we ok pulling this in?  I
+> > can't think of a technical reason we shouldn't.  The supplicant
+> > limitations are known and the firrmwareTPM has a similar set of
+> > problems.
+>
+> It will not change we have to do on the distro side because we have to
+> deal not only with the startup issue and StMM but also with fTPM and
+> with shutdown. Only an in-kernel supplicant for RPMB would resolve that
+> according to my understanding.
+>
 
-I want to express my sincere gratitude for promptly correcting my
-mistake. Your help is truly appreciated. Thank you very much!
+Exactly and it's worth noting that even that will come with some minor
+limitations.  E.g the randomseed variables set by the efistub currently
+won't be supported as the modules will come alive way later.  But it's all
+reasonable compromises for hardware that wasn't designed to have a
+dedicated storage in the secure world and support runtime variables sanely.
 
-On Wed, Jun 14, 2023 at 10:42:12AM +0200, Lukas Bulwahn wrote:
-> Commit e6c6ddb397e2 ("dt-bindings: clock: meson: add A1 PLL clock
-> controller bindings") adds a file entry with pattern
-> "include/dt-bindings/clock/a1*" to the ARM/Amlogic Meson SoC CLOCK
-> FRAMEWORK section. However, all header files added in the patch series to
-> add Amlogic A1 clock controller drivers carry the prefix "amlogic,a1", and
-> there are not header files matching "a1*".
-> 
-> Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
-> broken reference.
-> 
-> Adjust the pattern of this file entry to match the headers actually added.
-> 
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> ---
->  MAINTAINERS | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 08c7efe271c3..08f7c69c67c4 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -1887,7 +1887,7 @@ L:	linux-amlogic@lists.infradead.org
->  S:	Maintained
->  F:	Documentation/devicetree/bindings/clock/amlogic*
->  F:	drivers/clk/meson/
-> -F:	include/dt-bindings/clock/a1*
-> +F:	include/dt-bindings/clock/amlogic,a1*
->  F:	include/dt-bindings/clock/gxbb*
->  F:	include/dt-bindings/clock/meson*
->  
+> But the question is fair if we can evolve from this stage here to an
+> in-kernel approach without causing breakages or other headache to
+> distros adopting it (too early). That's why I asked for the roadmap.
 
-Reviewed-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Exactly and this is my point as well.  I can't see a technical difference
+other than 'you won't need to launch the supplicant'.  The only thing we
+need to keep in mind is introduce the fallback between the supplicant and
+the (future) kernel supplicant gracefully.  People might still need to run
+the supplicant for other reasons.  But if we design it with the kernel
+module taking precedence over the supplicant we should be fine.
 
-> -- 
-> 2.17.1
-> 
+So since we lived with it a for a few years, I suggest we let it soak a bit
+and get tested while we try to move the supplicant bits needed over to the
+kernel. In the meantime patch #4 needs some adjustments, so I'll rethink
+the supplicant vs kernel module scenario in case I missed something.
 
--- 
-Thank you,
-Dmitry
+Thanks
+/Ilias
+
+>
+> Jan
+>
+> --
+> Siemens AG, Technology
+> Competence Center Embedded Linux
+>
