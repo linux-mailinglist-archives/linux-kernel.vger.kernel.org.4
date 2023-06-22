@@ -2,88 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49D12739414
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 02:48:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34FDF739417
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 02:48:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229957AbjFVAsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 20:48:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35016 "EHLO
+        id S230010AbjFVAs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 20:48:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbjFVAsP (ORCPT
+        with ESMTP id S229673AbjFVAsZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 20:48:15 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25B591713;
-        Wed, 21 Jun 2023 17:48:13 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        Wed, 21 Jun 2023 20:48:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E3271997;
+        Wed, 21 Jun 2023 17:48:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QmhYl09ndz4wjF;
-        Thu, 22 Jun 2023 10:48:10 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1687394891;
-        bh=/A+a6b6wStZD7DVXioWHEOlHI+OVMhNuuqsmWOvTMkU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=nJj2qsaIWFocn/2ylDPR6pYaDWaMyM2rp924XQlg5xkXYbtQKWODkHhSa85EuvrUL
-         jc+7TuDJdCvl5Zo8aPoN/md2lV7s6i+6IrjJ8I0Z5c03NLPgJXhBkvCI/QJJBVVheM
-         GmsWHQWip0v9aGXWorDU6olgHZcFbPT6UI6L7RFxww5r5hZOeI4VY2jptmSRkhxlhs
-         uTEuynUO3vSrvpDJFB+AGtvazbbJutC2HKLso6kRnv1vCfVKPjokAJNaWC8OPqNUhz
-         4qQ1cC27V3I0l6TBandxFdJBEqTmEpmomlZNb/djprRxO7MZk0p7b2rYW6CMhDOh7q
-         iaL56Hqj5ILIQ==
-Date:   Thu, 22 Jun 2023 10:48:10 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        ARM <linux-arm-kernel@lists.infradead.org>
-Cc:     Rob Herring <robh@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the arm-soc tree
-Message-ID: <20230622104810.30055fb1@canb.auug.org.au>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BDE76171F;
+        Thu, 22 Jun 2023 00:48:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6FD4C433C8;
+        Thu, 22 Jun 2023 00:48:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687394903;
+        bh=Bl7XRetwBpjJVy/aHPO0vt7E8lsSma1FzCd6OcpO2p8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=GfmvJ/ZAcNSa9DltdNwubGT3N8f7to5gGqKVO4PmFDFhazY3fVXSiqZhlp21WKGdc
+         HQFcDnN9Da7Ui70do729LK2NblrnURr6pwnKE5zmVld8afltWDtMeUofqWVK3u6Q1a
+         QewJ4W0lj5CsiJ6Mw/wUc+BEuZwsrUlkSTOPAXPke7duVM5j3KGrpRUwUgYuZHkL9W
+         2VdGEN9fPLWh0xgoDIt1wo0Qu+88MArmB5YAsrH7l8uI7BXwEiUe4crLsausSo9xbT
+         z/+ITR28vKSlt2PN/yYbt7Rp+WaSAFhl+qDEVF9JOnRZsMPycGceoy5qZCIPymeyz8
+         h6ux8BJiiStcA==
+Message-ID: <52614749-cbc9-b526-4241-75d553069b61@kernel.org>
+Date:   Thu, 22 Jun 2023 09:48:21 +0900
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/W7HhDb3.GYqYJDa/LPzIQi=";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 71/79] zonefs: switch to new ctime accessors
+Content-Language: en-US
+To:     Jeff Layton <jlayton@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Naohiro Aota <naohiro.aota@wdc.com>,
+        Johannes Thumshirn <jth@kernel.org>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230621144507.55591-1-jlayton@kernel.org>
+ <20230621144735.55953-1-jlayton@kernel.org>
+ <20230621144735.55953-70-jlayton@kernel.org>
+From:   Damien Le Moal <dlemoal@kernel.org>
+Organization: Western Digital Research
+In-Reply-To: <20230621144735.55953-70-jlayton@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/W7HhDb3.GYqYJDa/LPzIQi=
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 6/21/23 23:46, Jeff Layton wrote:
+> In later patches, we're going to change how the ctime.tv_nsec field is
+> utilized. Switch to using accessor functions instead of raw accesses of
+> inode->i_ctime.
+> 
+> Signed-off-by: Jeff Layton <jlayton@kernel.org>
 
-Hi all,
+Modulo the proposed renaming for inode_ctime_peek(), looks good.
 
-After merging the arm-soc tree, today's linux-next build (arm
-multi_v7_defconfig) produced this warning:
+Acked-by: Damien Le Moal <dlemoal@kernel.org>
 
-arch/arm/boot/dts/marvell/armada-390-db.dts:84.10-106.4: Warning (spi_bus_r=
-eg): /soc/spi@10680/flash@1: SPI bus unit address format error, expected "0"
+> ---
+>  fs/zonefs/super.c | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
+> 
+> diff --git a/fs/zonefs/super.c b/fs/zonefs/super.c
+> index bbe44a26a8e5..75be0e039ccf 100644
+> --- a/fs/zonefs/super.c
+> +++ b/fs/zonefs/super.c
+> @@ -658,7 +658,8 @@ static struct inode *zonefs_get_file_inode(struct inode *dir,
+>  
+>  	inode->i_ino = ino;
+>  	inode->i_mode = z->z_mode;
+> -	inode->i_ctime = inode->i_mtime = inode->i_atime = dir->i_ctime;
+> +	inode->i_mtime = inode->i_atime = inode_ctime_peek(dir);
+> +	inode_ctime_set(inode, inode->i_mtime);
+>  	inode->i_uid = z->z_uid;
+>  	inode->i_gid = z->z_gid;
+>  	inode->i_size = z->z_wpoffset;
+> @@ -694,7 +695,8 @@ static struct inode *zonefs_get_zgroup_inode(struct super_block *sb,
+>  	inode->i_ino = ino;
+>  	inode_init_owner(&nop_mnt_idmap, inode, root, S_IFDIR | 0555);
+>  	inode->i_size = sbi->s_zgroup[ztype].g_nr_zones;
+> -	inode->i_ctime = inode->i_mtime = inode->i_atime = root->i_ctime;
+> +	inode->i_mtime = inode->i_atime = inode_ctime_peek(root);
+> +	inode_ctime_set(inode, inode->i_mtime);
+>  	inode->i_private = &sbi->s_zgroup[ztype];
+>  	set_nlink(inode, 2);
+>  
+> @@ -1317,7 +1319,7 @@ static int zonefs_fill_super(struct super_block *sb, void *data, int silent)
+>  
+>  	inode->i_ino = bdev_nr_zones(sb->s_bdev);
+>  	inode->i_mode = S_IFDIR | 0555;
+> -	inode->i_ctime = inode->i_mtime = inode->i_atime = current_time(inode);
+> +	inode->i_atime = inode->i_mtime = inode_ctime_set_current(inode);
+>  	inode->i_op = &zonefs_dir_inode_operations;
+>  	inode->i_fop = &zonefs_dir_operations;
+>  	inode->i_size = 2;
 
-I am not sure why this has only shown up now.
+-- 
+Damien Le Moal
+Western Digital Research
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/W7HhDb3.GYqYJDa/LPzIQi=
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSTmkoACgkQAVBC80lX
-0GzfzQgAoGzIEoGYv3ciWAnqWhNQlwPfzPJxGZbKtlty6aJ0D7W39OsOuBdmVqzY
-H/AX6/oINOBRvR9ZIQEgtAz3bciM8gyOoe4Es/7VyDSfTLTwiiPNp85rpSf8XFPv
-aOLIVHYZeafPT80B9qhk52QTWr3ZDt7CuIsu1ONIwg8mH7qAvs4wWUhYtITFYYIt
-MXf9EwoKLYJxk1pB6L3y1kZdWpUqawge8JB6SnSuFceuw6wvAtPiOXDH3gAYIxoW
-PzKgbdLw6/rkFPVtG5zvDvTCqKJDUKXKR8YjiRczOcDV66JLvF/uY+FyScvwO06G
-LEEGBGL9WjW79BkbXRF6vdY9F5bcLw==
-=8ik5
------END PGP SIGNATURE-----
-
---Sig_/W7HhDb3.GYqYJDa/LPzIQi=--
