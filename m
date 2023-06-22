@@ -2,86 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F2AF73A75A
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 19:35:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5499173A75B
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 19:36:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231180AbjFVRfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 13:35:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33426 "EHLO
+        id S231247AbjFVRgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 13:36:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbjFVRfe (ORCPT
+        with ESMTP id S229676AbjFVRgX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 13:35:34 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9AD0195;
-        Thu, 22 Jun 2023 10:35:33 -0700 (PDT)
-Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35MHVNUu011491;
-        Thu, 22 Jun 2023 17:35:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=9tyzelE/CfhxIdLo1UoXcOp66NvdPJuzSlYJUTtmhiA=;
- b=QFABqxr/nFLm42jXrIFG8Xeiq7rWgNqdpu09LrWwWjOEMoJg4dsmw5Ttr/Zy1vtzibFR
- EBT1WXwEOw/BiFKBD8fuES15OssfxuwziSATcz8qNy+IxOT1m0RFdRhQQ5dFpYP4Pp40
- /2yg+ZkSpmxQc0nsOXqbZzfByySZbBNvPHV/CZm98Zxhd1H9MV/zHZQ+R5yPpGZurOgB
- ZYyCIrkiEJJgp9BdlpU05X5lDXqSJN6rLm9Wc6Sfka9xjSqvz89OaKqURhxoGjXaAgSN
- qoe/M0Ge5xjr+K4jgANG4zwtxI/L69soFccOVHe4H4gRGyM5N89+G0KrRI7pLkKyxULH AQ== 
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rctsa058y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Jun 2023 17:35:27 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35M4Q5je023820;
-        Thu, 22 Jun 2023 17:35:25 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-        by ppma05fra.de.ibm.com (PPS) with ESMTPS id 3r94f52rx5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Jun 2023 17:35:24 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35MHZL0247841648
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 22 Jun 2023 17:35:21 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1081620043;
-        Thu, 22 Jun 2023 17:35:21 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4D3D320040;
-        Thu, 22 Jun 2023 17:35:20 +0000 (GMT)
-Received: from li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com (unknown [9.171.59.34])
-        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Thu, 22 Jun 2023 17:35:20 +0000 (GMT)
-Date:   Thu, 22 Jun 2023 19:35:18 +0200
-From:   Alexander Gordeev <agordeev@linux.ibm.com>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 03/79] s390: switch to new ctime accessors
-Message-ID: <ZJSGVjryWEjbeW1U@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
-References: <20230621144507.55591-1-jlayton@kernel.org>
- <20230621144735.55953-1-jlayton@kernel.org>
- <20230621144735.55953-2-jlayton@kernel.org>
+        Thu, 22 Jun 2023 13:36:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1A12195
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 10:36:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 45F3A618BF
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 17:36:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46613C433C0;
+        Thu, 22 Jun 2023 17:36:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687455381;
+        bh=/OtlEWvMky8FwHoyDb4NvG0us2YcJyx1FBYe9wivhIo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=SDP/87huKee/Zv1UWW27EOV4jrMoXFTtOyzBCCVV2HyEgaNUlEEUByq9LhmSB4cQK
+         akKVNj+YyNFLugitTB+lUVjf2avCXVwEpZeOLECHKo91RYsbYxvVrgshCGdYAZSGn6
+         Pcbf/v/6u2sZGEpbffUiKeA3Vux7ZXH88rKG/+xBRKsxo3gfRv9pmhjl3KaRCQ7GGB
+         GT+jJOmenD9WBi2fLUfivHK5Jupp7GHhbEDJnkSS73TJVm4wegD6JxV9lNB/a+XeeA
+         iFHcQOnUsZswGhaDS+pRpwrShuald9jYkTRJ4R65G/STQ1uWc06QiHga7mojE0upT+
+         VoQDDDWWKH93g==
+From:   =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org
+Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>,
+        linux-kernel@vger.kernel.org, linux@rivosinc.com,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        =?UTF-8?q?R=C3=A9mi=20Denis-Courmont?= <remi@remlab.net>,
+        Darius Rad <darius@bluespec.com>,
+        Andy Chiu <andy.chiu@sifive.com>
+Subject: [PATCH] riscv: Discard vector state on syscalls
+Date:   Thu, 22 Jun 2023 19:36:13 +0200
+Message-Id: <20230622173613.30722-1-bjorn@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230621144735.55953-2-jlayton@kernel.org>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: L3e2459YKnOIRaNY1SUuDk5l6OLqSLq-
-X-Proofpoint-GUID: L3e2459YKnOIRaNY1SUuDk5l6OLqSLq-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-22_12,2023-06-22_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
- spamscore=0 priorityscore=1501 suspectscore=0 phishscore=0
- lowpriorityscore=0 adultscore=0 mlxlogscore=600 bulkscore=0 malwarescore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306220149
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -90,42 +61,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 10:45:16AM -0400, Jeff Layton wrote:
+From: Björn Töpel <bjorn@rivosinc.com>
 
-Hi Jeff,
-> In later patches, we're going to change how the ctime.tv_nsec field is
-> utilized. Switch to using accessor functions instead of raw accesses of
-> inode->i_ctime.
-> 
-> Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> ---
->  arch/s390/hypfs/inode.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/s390/hypfs/inode.c b/arch/s390/hypfs/inode.c
-> index ee919bfc8186..30fa336ec63e 100644
-> --- a/arch/s390/hypfs/inode.c
-> +++ b/arch/s390/hypfs/inode.c
-> @@ -53,7 +53,7 @@ static void hypfs_update_update(struct super_block *sb)
->  	struct inode *inode = d_inode(sb_info->update_file);
->  
->  	sb_info->last_update = ktime_get_seconds();
-> -	inode->i_atime = inode->i_mtime = inode->i_ctime = current_time(inode);
-> +	inode->i_atime = inode->i_mtime = inode_ctime_set_current(inode);
->  }
->  
->  /* directory tree removal functions */
-> @@ -101,7 +101,7 @@ static struct inode *hypfs_make_inode(struct super_block *sb, umode_t mode)
->  		ret->i_mode = mode;
->  		ret->i_uid = hypfs_info->uid;
->  		ret->i_gid = hypfs_info->gid;
-> -		ret->i_atime = ret->i_mtime = ret->i_ctime = current_time(ret);
-> +		ret->i_atime = ret->i_mtime = inode_ctime_set_current(ret);
->  		if (S_ISDIR(mode))
->  			set_nlink(ret, 2);
->  	}
+The RISC-V vector specification states:
+  Executing a system call causes all caller-saved vector registers
+  (v0-v31, vl, vtype) and vstart to become unspecified.
 
-I guess, inode_set_ctime() called from inode_ctime_set_current()
-updates i_ctime and is part of some other series?
+The vector registers are cleared, vill is set (invalid), and the
+vector status is set to Initial.
 
-Thanks!
+That way we can prevent userspace from accidentally relying on the
+stated save.
+
+Rémi pointed out [1] that clearing the registers might be superfluous,
+and setting vill is sufficient.
+
+Link: https://lore.kernel.org/linux-riscv/12784326.9UPPK3MAeB@basile.remlab.net/ # [1]
+Suggested-by: Palmer Dabbelt <palmer@rivosinc.com>
+Suggested-by: Rémi Denis-Courmont <remi@remlab.net>
+Signed-off-by: Björn Töpel <bjorn@rivosinc.com>
+---
+
+I figured I'd sent out a proper patch. I like Andy's optimization
+patch, but TBH I think we should do that as a follow up.
+
+As Rémi pointed out, the clearing might be opted out, but I left it in
+here.
+
+
+Björn
+
+---
+ arch/riscv/include/asm/vector.h | 25 +++++++++++++++++++++++++
+ arch/riscv/kernel/traps.c       |  2 ++
+ 2 files changed, 27 insertions(+)
+
+diff --git a/arch/riscv/include/asm/vector.h b/arch/riscv/include/asm/vector.h
+index 04c0b07bf6cd..692ce55e4a69 100644
+--- a/arch/riscv/include/asm/vector.h
++++ b/arch/riscv/include/asm/vector.h
+@@ -163,6 +163,30 @@ static inline void __switch_to_vector(struct task_struct *prev,
+ void riscv_v_vstate_ctrl_init(struct task_struct *tsk);
+ bool riscv_v_vstate_ctrl_user_allowed(void);
+ 
++static inline void riscv_v_vstate_discard(struct pt_regs *regs)
++{
++	unsigned long vl, vtype_inval = 1UL << (BITS_PER_LONG - 1);
++
++	if (!riscv_v_vstate_query(regs))
++		return;
++
++	riscv_v_enable();
++	asm volatile (
++		".option push\n\t"
++		".option arch, +v\n\t"
++		"vsetvli	%0, x0, e8, m8, ta, ma\n\t"
++		"vmv.v.i	v0, 0\n\t"
++		"vmv.v.i	v8, 0\n\t"
++		"vmv.v.i	v16, 0\n\t"
++		"vmv.v.i	v24, 0\n\t"
++		"vsetvl		%0, x0, %1\n\t"
++		".option pop\n\t"
++		: "=&r" (vl) : "r" (vtype_inval) : "memory");
++	riscv_v_disable();
++
++	riscv_v_vstate_on(regs);
++}
++
+ #else /* ! CONFIG_RISCV_ISA_V  */
+ 
+ struct pt_regs;
+@@ -178,6 +202,7 @@ static inline bool riscv_v_vstate_ctrl_user_allowed(void) { return false; }
+ #define __switch_to_vector(__prev, __next)	do {} while (0)
+ #define riscv_v_vstate_off(regs)		do {} while (0)
+ #define riscv_v_vstate_on(regs)			do {} while (0)
++#define riscv_v_vstate_discard(regs)		do {} while (0)
+ 
+ #endif /* CONFIG_RISCV_ISA_V */
+ 
+diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
+index 05ffdcd1424e..00c68b57ff88 100644
+--- a/arch/riscv/kernel/traps.c
++++ b/arch/riscv/kernel/traps.c
+@@ -295,6 +295,8 @@ asmlinkage __visible __trap_section void do_trap_ecall_u(struct pt_regs *regs)
+ 		regs->epc += 4;
+ 		regs->orig_a0 = regs->a0;
+ 
++		riscv_v_vstate_discard(regs);
++
+ 		syscall = syscall_enter_from_user_mode(regs, syscall);
+ 
+ 		if (syscall < NR_syscalls)
+
+base-commit: 4681dacadeefa5ca6017e00736adc1d7dc963c6a
+-- 
+2.39.2
+
