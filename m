@@ -2,332 +2,370 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A9EB73A64D
+	by mail.lfdr.de (Postfix) with ESMTP id 6493E73A64E
 	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 18:43:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230022AbjFVQnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 12:43:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37956 "EHLO
+        id S231305AbjFVQn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 12:43:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231318AbjFVQnN (ORCPT
+        with ESMTP id S231308AbjFVQnU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 12:43:13 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2042.outbound.protection.outlook.com [40.107.20.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 598AA2107;
-        Thu, 22 Jun 2023 09:43:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EA/DUTfqmB3gV9+rUppqpDrXrRo6DIOkirzU0nWj3eU=;
- b=8JdBDWmCQg1AmGWX+O79mq355t9UBwxJOiopXlCCXPQs71GVJFsRz5Tsfj0OWr3FKAvD9UAbqYwRekUOJVypyE5JXQ9Gs/+dSoBhdsoVYN9AYwUwOE9dKjjbziICFiEDtGhSBds/kT7U9rW88e4oKo+xZS7PERKB06sakJC8OXs=
-Received: from DUZPR01CA0115.eurprd01.prod.exchangelabs.com
- (2603:10a6:10:4bc::27) by AM7PR08MB5383.eurprd08.prod.outlook.com
- (2603:10a6:20b:102::7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.23; Thu, 22 Jun
- 2023 16:42:54 +0000
-Received: from DBAEUR03FT017.eop-EUR03.prod.protection.outlook.com
- (2603:10a6:10:4bc:cafe::28) by DUZPR01CA0115.outlook.office365.com
- (2603:10a6:10:4bc::27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24 via Frontend
- Transport; Thu, 22 Jun 2023 16:42:54 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=armh.onmicrosoft.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
- client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
- pr=C
-Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
- DBAEUR03FT017.mail.protection.outlook.com (100.127.142.243) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6521.24 via Frontend Transport; Thu, 22 Jun 2023 16:42:54 +0000
-Received: ("Tessian outbound 52217515e112:v142"); Thu, 22 Jun 2023 16:42:53 +0000
-X-CheckRecipientChecked: true
-X-CR-MTA-CID: 128e7f28d2ae9b1c
-X-CR-MTA-TID: 64aa7808
-Received: from f23967a44e06.1
-        by 64aa7808-outbound-1.mta.getcheckrecipient.com id 1E0577D1-55FA-47A6-B77C-3023F0419000.1;
-        Thu, 22 Jun 2023 16:42:46 +0000
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com
-    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id f23967a44e06.1
-    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
-    Thu, 22 Jun 2023 16:42:46 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=j9DJ1Q/QNuDRL/cI4RxzWmcmnhZkvzL0nsyt147gE+qx/6mg6MzQa3TxZgkdqy8jDFPtny1mpUcSYz0J+9wS2qriatfZMswi2ZF33nWNcEB9OPkQGckSowA9JAXkutjslpnxxYzLwIV5Jkz1Rt17bO8HdsviKRFNUrVr3VA4nzFIYCE6qFgd6IsjrApXAa53jinDdeu/lq/RQ85ntT0iVPv/Am4YPodnMWKqj54ibdWnNgIRr5gBJbGPXloxIqxmc8mlvWpnnR0UzG4v0cYCCIBWMRUMKGfo/K2UPKPQFUc5m17OK9iOhgnA00iO26MXvJ2SWI2dQ8WFu7R/wOPxIQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EA/DUTfqmB3gV9+rUppqpDrXrRo6DIOkirzU0nWj3eU=;
- b=EpRn7DfPXTuYfJfAkJeQQLnjc3CTwGHZ6wQZQjJm1pwN6Hjz0zfa8atsp89GJgtMeOdBDiTtKiQ0gOMi63SWUEHl9wMLGREkk3PjHok1sUzU2+hxd3XKIql6ioKwV9JUM3MhRmc3jwTuWGWKkILLGDLadTZmPKyKqKpicgvOpQbGblFOOo3QQHozaYrR0h+gr7ULIBBD62snXFpTS1Ys8OnH4kokwtyMhVzjTF5OqDK5wCqUBbDEQD5tCHMGjt7vAtPTjWg3Ud9kLe2t5KOWR4jEB/kKi2ECUjaD8X2gvZytM7RlVnFnQEx7Q2lH4CTLZ//OX3piQaND+06vkqfYUA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EA/DUTfqmB3gV9+rUppqpDrXrRo6DIOkirzU0nWj3eU=;
- b=8JdBDWmCQg1AmGWX+O79mq355t9UBwxJOiopXlCCXPQs71GVJFsRz5Tsfj0OWr3FKAvD9UAbqYwRekUOJVypyE5JXQ9Gs/+dSoBhdsoVYN9AYwUwOE9dKjjbziICFiEDtGhSBds/kT7U9rW88e4oKo+xZS7PERKB06sakJC8OXs=
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-Received: from DB9PR08MB7179.eurprd08.prod.outlook.com (2603:10a6:10:2cc::19)
- by DU2PR08MB10230.eurprd08.prod.outlook.com (2603:10a6:10:46e::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.23; Thu, 22 Jun
- 2023 16:42:41 +0000
-Received: from DB9PR08MB7179.eurprd08.prod.outlook.com
- ([fe80::43b7:3a83:5cbe:4559]) by DB9PR08MB7179.eurprd08.prod.outlook.com
- ([fe80::43b7:3a83:5cbe:4559%4]) with mapi id 15.20.6521.023; Thu, 22 Jun 2023
- 16:42:40 +0000
-Date:   Thu, 22 Jun 2023 17:42:11 +0100
-From:   "szabolcs.nagy@arm.com" <szabolcs.nagy@arm.com>
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "Xu, Pengfei" <pengfei.xu@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "kcc@google.com" <kcc@google.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "corbet@lwn.net" <corbet@lwn.net>, "nd@arm.com" <nd@arm.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "debug@rivosinc.com" <debug@rivosinc.com>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "bp@alien8.de" <bp@alien8.de>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "Torvalds, Linus" <torvalds@linux-foundation.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "Eranian, Stephane" <eranian@google.com>
-Subject: Re: [PATCH v9 23/42] Documentation/x86: Add CET shadow stack
- description
-Message-ID: <ZJR545en+dYx399c@arm.com>
-References: <ZImZ6eUxf5DdLYpe@arm.com>
- <64837d2af3ae39bafd025b3141a04f04f4323205.camel@intel.com>
- <ZJAWMSLfSaHOD1+X@arm.com>
- <5794e4024a01e9c25f0951a7386cac69310dbd0f.camel@intel.com>
- <ZJFukYxRbU1MZlQn@arm.com>
- <e676c4878c51ab4b6018c9426b5edacdb95f2168.camel@intel.com>
- <ZJLgp29mM3BLb3xa@arm.com>
- <c5ae83588a7e107beaf858ab04961e70d16fe32c.camel@intel.com>
- <ZJQR7slVHvjeCQG8@arm.com>
- <CALCETrW+30_a2QQE-yw9djVFPxSxm7-c2FZFwZ50dOEmnmkeDA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CALCETrW+30_a2QQE-yw9djVFPxSxm7-c2FZFwZ50dOEmnmkeDA@mail.gmail.com>
-X-ClientProxiedBy: DS7PR03CA0154.namprd03.prod.outlook.com
- (2603:10b6:5:3b2::9) To DB9PR08MB7179.eurprd08.prod.outlook.com
- (2603:10a6:10:2cc::19)
+        Thu, 22 Jun 2023 12:43:20 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B29D2113
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 09:42:51 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1b3ecb17721so12341295ad.0
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 09:42:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1687452171; x=1690044171;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oifDDt/8MZ0rdnM+EbP9Ms7uDYDrGRiSNH3qP5ivz9M=;
+        b=KKJR3vP/aDTBFoiL8C2VURDFgbQzXT8bt6jZJWvSavw2WDHezOeya5vW78vIkq8k4g
+         fSZUGN3oqSTVdWHH+8LY0PIzQhw7hdz+yovCjA0QKtoYFJSzVDV+UCRs73xDlUw5E1Rk
+         BX0FaUT2YiauHQkTsEmyVDzZHXJRtepniI+5WQ9N+kRL9P50Ciu+2AnXF1t3+S1BQlQY
+         m9l6LD/TrMu2kFtjdGSXnkWQ+rKLarz9e5SaMu+vm3nIOdIp4FP55r1f8pqlnAc1Cn2r
+         1KRsEo5qY8FG5GwnPXecA2uJiXZVJc8xfsyVlk1/VH0KqInyKkzrVmeqK6QU9hnL7iS9
+         FysQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687452171; x=1690044171;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oifDDt/8MZ0rdnM+EbP9Ms7uDYDrGRiSNH3qP5ivz9M=;
+        b=H0CwkhYZXgX0xlPvmwhRPS/mzD5WNiVzxucKD0vERvXxSDSJbrrCTUaWkRRTcxRtdu
+         gS6xAgAk+qBfSuMF5hbQL1Mt7ZMTbiNh/zX13uUiiBMX+RcjPb3T+m5ZJhoG1CNcHXl6
+         dt/mT6hCl+zOVTT749TF3a7Ll6YEHPU9MgrxZiCOuE0KrJiIfkMjwocZx9xH1U+lDKUa
+         YmUlZRSdTuSHVuCwpXg9tNEnz2sGraOKAtwHfkljOyWj3N/DUKUN92DU29VhPVR7fnZo
+         hZuoiLbzktG0SbwhUfRrIZyOg3g0iOaUvpDdQgfhp70EEmAmz/Ld41CUk0WaRjxLY167
+         cmGg==
+X-Gm-Message-State: AC+VfDxTse4kclkjb8631hnImXSs1abLhOA6isQA/LtPrQImQgYYj7xI
+        YYEkDQXctqlb5o51c+qgGQYinw==
+X-Google-Smtp-Source: ACHHUZ5eOaprsNeMGoS/c3YRbgjq0Q3etzQC5gGN62kzJzL3UknVNp4h1mzWf/mLVXZ4etMQnPzcug==
+X-Received: by 2002:a17:902:da91:b0:1b0:3d54:358f with SMTP id j17-20020a170902da9100b001b03d54358fmr22008253plx.0.1687452170916;
+        Thu, 22 Jun 2023 09:42:50 -0700 (PDT)
+Received: from [10.4.168.167] ([139.177.225.254])
+        by smtp.gmail.com with ESMTPSA id o5-20020a1709026b0500b001b077301a58sm5615540plk.79.2023.06.22.09.42.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Jun 2023 09:42:50 -0700 (PDT)
+Message-ID: <bfcf8b34-2efc-258e-bcec-d6ce10220205@bytedance.com>
+Date:   Fri, 23 Jun 2023 00:42:41 +0800
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic: DB9PR08MB7179:EE_|DU2PR08MB10230:EE_|DBAEUR03FT017:EE_|AM7PR08MB5383:EE_
-X-MS-Office365-Filtering-Correlation-Id: c3778a74-cb59-41b5-57a1-08db733fba09
-x-checkrecipientrouted: true
-NoDisclaimer: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: fKWg56gc052v8Z59iBUecFoVNqPWeWHoCPXiAQy7DZHgj4J45pDJRsgDiVUY83MOiLMyIqskN4LuMWrMTkhLDHpIrPfVh2KDIXhTk03W6LnqMETOD6MvstU0pz7M5vO9PTxdl/6pCYUn/v5hYIRmzdwkGp9Ha1V+MTvgoK4p6npsqp5d36fUg+Gqdqz1Z2QkvBzVirKg1PMM2U7QM34xAqqP2SJX62Y/XmNfvVLf2J4+6nBqc6rR1HQ38G6ClCdmt6J131BRxvhUeUSWSpbjSPa/AKkqE4fEBvafChGt5iFhRlAXK8unsGwJYg5gOor7wVW0VrOnsaHj4+G5SC/rDfxseqTqb+Ieani7pvsl/v4TkI5X4dzU+HfF1Qgurhw4V4Bf6A5DU/0sfwr+yb8NZHYE70V0YebBxfFbXZEQH4TciUbSnhxS5X/F5u4Zglx8uZYLWQ0P+GaB8dxVwK/tR/vutIICtGJ+YL5KboUIbsZOKCUCgNyCWCjYriMG4KaORYxBqYyE6zEWPC6yBi1KHZKY/BU7V41gWd4gjipjASMFgZ1x5ldLutBE1kw5XTpml3r478eXMRiwBPMuIXpnoah2ab7xcJtsscjJQ6Jyz4w=
-X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR08MB7179.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(39860400002)(366004)(346002)(136003)(396003)(451199021)(54906003)(4326008)(478600001)(6666004)(6512007)(53546011)(26005)(6486002)(2906002)(186003)(66476007)(66556008)(8936002)(316002)(7406005)(66946007)(6916009)(5660300002)(41300700001)(7416002)(8676002)(38100700002)(6506007)(36756003)(2616005)(83380400001)(86362001)(67856001);DIR:OUT;SFP:1101;
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR08MB10230
-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: DBAEUR03FT017.eop-EUR03.prod.protection.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs: d65093b2-bfcc-47e2-460c-08db733fb12d
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 5FC2es5rEd5D3YDcD3O9IZZCVwYoxkp9Tt+eMisyOOGOTSkho6/4nEePut3Cnj6ql1ftOZ6Vyavs+yHfSV8R11CHvdNXwpfbgDRTcP1FV9LG84t6c5zpp7KttlX4QFaYtGmAuES2zNGlzrijJ6+g4aKQnrKwRUI8rC/s1rK/L/163Flu8MR0lRy+9uJ6kwlXNY8Eo/8sJBDsu99kZlri67iOBvO/+KLaC8qacG7opj478ClmDDOGcVKLc+5W1uqqwhznLzaRJ9PW3qfQqhZOibgGFbRmvqCv2695WTre6ai4K8d9XKwnxMhwUPGhtSPS/oEC/ufoV0ad4m8PZ0rffe786Gu0iKE1a1gnni9SHa6uQLwTLfSUC8+lUlVq+FjYfKSQCTvyIUMFM2gBSr5quFYucM1qCDFqVmZxV4ifyBjIbZ8axfafPUZnRpKmLl/2Cil/7ZTh5frmgkivCftJg6DSdtzaewIFDBHst4dppwdLYWlnZyJstr53pEo0ElIoUSBmKTCq35Q773keyaue5PX+K/K7XGGxeNvvhEwA2yBgVDzC8gClG85xhrFIjl+9LSsHVp9yXnf3T4ufSYl0EdiwGY1FR8/whSCmc1OK7e3+EQGae7H07KVm0Cv2sPQo+6iblG+tPY16vfPKciR3Q9nChjBCIXSc4ezMROBQyPFibI0DAwOb7pvot+3AxAQitw4c8ZJHZfjiQleexcP7qUYpfHucdBNnghkcB4D/N4sVF4IDflWq7RcwBNl2Mz49MgjPy8L84uO90AgyUP+fvQ==
-X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(39860400002)(346002)(136003)(451199021)(36840700001)(46966006)(40470700004)(82310400005)(36860700001)(36756003)(53546011)(40460700003)(81166007)(70206006)(356005)(5660300002)(6862004)(41300700001)(86362001)(8676002)(4326008)(450100002)(40480700001)(316002)(8936002)(70586007)(82740400003)(107886003)(6486002)(47076005)(26005)(6506007)(186003)(2616005)(6512007)(2906002)(478600001)(336012)(6666004)(54906003)(83380400001)(67856001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jun 2023 16:42:54.4209
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c3778a74-cb59-41b5-57a1-08db733fba09
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
-X-MS-Exchange-CrossTenant-AuthSource: DBAEUR03FT017.eop-EUR03.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR08MB5383
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.12.0
+Subject: Re: [PATCH 24/29] mm: vmscan: make global slab shrink lockless
+Content-Language: en-US
+To:     Vlastimil Babka <vbabka@suse.cz>, akpm@linux-foundation.org,
+        david@fromorbit.com, tkhai@ya.ru, roman.gushchin@linux.dev,
+        djwong@kernel.org, brauner@kernel.org, paulmck@kernel.org,
+        tytso@mit.edu
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, dm-devel@redhat.com,
+        linux-raid@vger.kernel.org, linux-bcache@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org,
+        linux-btrfs@vger.kernel.org
+References: <20230622085335.77010-1-zhengqi.arch@bytedance.com>
+ <20230622085335.77010-25-zhengqi.arch@bytedance.com>
+ <cf0d9b12-6491-bf23-b464-9d01e5781203@suse.cz>
+From:   Qi Zheng <zhengqi.arch@bytedance.com>
+In-Reply-To: <cf0d9b12-6491-bf23-b464-9d01e5781203@suse.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 06/22/2023 08:26, Andy Lutomirski wrote:
-> On Thu, Jun 22, 2023 at 2:28 AM szabolcs.nagy@arm.com
-> <szabolcs.nagy@arm.com> wrote:
-> >
-> > The 06/21/2023 18:54, Edgecombe, Rick P wrote:
-> > > On Wed, 2023-06-21 at 12:36 +0100, szabolcs.nagy@arm.com wrote:
-> > > > > The 06/20/2023 19:34, Edgecombe, Rick P wrote:
-> > > > > > > I actually did a POC for this, but rejected it. The problem is,
-> > > > > > > if
-> > > > > > > there is a shadow stack overflow at that point then the kernel
-> > > > > > > > > can't
-> > > > > > > push the shadow stack token to the old stack. And shadow stack
-> > > > > > > > > overflow
-> > > > > > > is exactly the alt shadow stack use case. So it doesn't really
-> > > > > > > > > solve
-> > > > > > > the problem.
-> > > > >
-> > > > > the restore token in the alt shstk case does not regress anything
-> > > > > but
-> > > > > makes some use-cases work.
-> > > > >
-> > > > > alt shadow stack is important if code tries to jump in and out of
-> > > > > signal handlers (dosemu does this with swapcontext) and for that a
-> > > > > restore token is needed.
-> > > > >
-> > > > > alt shadow stack is important if the original shstk did not
-> > > > > overflow
-> > > > > but the signal handler would overflow it (small thread stack, huge
-> > > > > sigaltstack case).
-> > > > >
-> > > > > alt shadow stack is also important for crash reporting on shstk
-> > > > > overflow even if longjmp does not work then. longjmp to a
-> > > > > makecontext
-> > > > > stack would still work and longjmp back to the original stack can
-> > > > > be
-> > > > > made to mostly work by an altshstk option to overwrite the top
-> > > > > entry
-> > > > > with a restore token on overflow (this can break unwinding though).
-> > > > >
-> > >
-> > > There was previously a request to create an alt shadow stack for the
-> > > purpose of handling shadow stack overflow. So you are now suggesting to
-> > > to exclude that and instead target a different use case for alt shadow
-> > > stack?
-> >
-> > that is not what i said.
-> >
-> > > But I'm not sure how much we should change the ABI at this point since
-> > > we are constrained by existing userspace. If you read the history, we
-> > > may end up needing to deprecate the whole elf bit for this and other
-> > > reasons.
-> >
-> > i'm not against deprecating the elf bit, but i think binary
-> > marking will be difficult for this kind of feature no matter what
-> > (code may be incompatible for complex runtime dependent reasons).
-> >
-> > > So should we struggle to find a way to grow the existing ABI without
-> > > disturbing the existing userspace? Or should we start with something,
-> > > finally, and see where we need to grow and maybe get a chance at a
-> > > fresh start to grow it?
-> > >
-> > > Like, maybe 3 people will show up saying "hey, I *really* need to use
-> > > shadow stack and longjmp from a ucontext stack", and no one says
-> > > anything about shadow stack overflow. Then we know what to do. And
-> > > maybe dosemu decides it doesn't need to implement shadow stack (highly
-> > > likely I would think). Now that I think about it, AFAIU SS_AUTODISARM
-> > > was created for dosemu, and the alt shadow stack patch adopted this
-> > > behavior. So it's speculation that there is even a problem in that
-> > > scenario.
-> > >
-> > > Or maybe people just enable WRSS for longjmp() and directly jump back
-> > > to the setjmp() point. Do most people want fast setjmp/longjmp() at the
-> > > cost of a little security?
-> > >
-> > > Even if, with enough discussion, we could optimize for all
-> > > hypotheticals without real user feedback, I don't see how it helps
-> > > users to hold shadow stack. So I think we should move forward with the
-> > > current ABI.
-> >
-> > you may not get a second chance to fix a security feature.
-> > it will be just disabled if it causes problems.
+
+
+On 2023/6/22 23:12, Vlastimil Babka wrote:
+> On 6/22/23 10:53, Qi Zheng wrote:
+>> The shrinker_rwsem is a global read-write lock in
+>> shrinkers subsystem, which protects most operations
+>> such as slab shrink, registration and unregistration
+>> of shrinkers, etc. This can easily cause problems in
+>> the following cases.
+>>
+>> 1) When the memory pressure is high and there are many
+>>     filesystems mounted or unmounted at the same time,
+>>     slab shrink will be affected (down_read_trylock()
+>>     failed).
+>>
+>>     Such as the real workload mentioned by Kirill Tkhai:
+>>
+>>     ```
+>>     One of the real workloads from my experience is start
+>>     of an overcommitted node containing many starting
+>>     containers after node crash (or many resuming containers
+>>     after reboot for kernel update). In these cases memory
+>>     pressure is huge, and the node goes round in long reclaim.
+>>     ```
+>>
+>> 2) If a shrinker is blocked (such as the case mentioned
+>>     in [1]) and a writer comes in (such as mount a fs),
+>>     then this writer will be blocked and cause all
+>>     subsequent shrinker-related operations to be blocked.
+>>
+>> Even if there is no competitor when shrinking slab, there
+>> may still be a problem. If we have a long shrinker list
+>> and we do not reclaim enough memory with each shrinker,
+>> then the down_read_trylock() may be called with high
+>> frequency. Because of the poor multicore scalability of
+>> atomic operations, this can lead to a significant drop
+>> in IPC (instructions per cycle).
+>>
+>> We used to implement the lockless slab shrink with
+>> SRCU [1], but then kernel test robot reported -88.8%
+>> regression in stress-ng.ramfs.ops_per_sec test case [2],
+>> so we reverted it [3].
+>>
+>> This commit uses the refcount+RCU method [4] proposed by
+>> by Dave Chinner to re-implement the lockless global slab
+>> shrink. The memcg slab shrink is handled in the subsequent
+>> patch.
+>>
+>> Currently, the shrinker instances can be divided into
+>> the following three types:
+>>
+>> a) global shrinker instance statically defined in the kernel,
+>> such as workingset_shadow_shrinker.
+>>
+>> b) global shrinker instance statically defined in the kernel
+>> modules, such as mmu_shrinker in x86.
+>>
+>> c) shrinker instance embedded in other structures.
+>>
+>> For case a, the memory of shrinker instance is never freed.
+>> For case b, the memory of shrinker instance will be freed
+>> after the module is unloaded. But we will call synchronize_rcu()
+>> in free_module() to wait for RCU read-side critical section to
+>> exit. For case c, the memory of shrinker instance will be
+>> dynamically freed by calling kfree_rcu(). So we can use
+>> rcu_read_{lock,unlock}() to ensure that the shrinker instance
+>> is valid.
+>>
+>> The shrinker::refcount mechanism ensures that the shrinker
+>> instance will not be run again after unregistration. So the
+>> structure that records the pointer of shrinker instance can be
+>> safely freed without waiting for the RCU read-side critical
+>> section.
+>>
+>> In this way, while we implement the lockless slab shrink, we
+>> don't need to be blocked in unregister_shrinker() to wait
+>> RCU read-side critical section.
+>>
+>> The following are the test results:
+>>
+>> stress-ng --timeout 60 --times --verify --metrics-brief --ramfs 9 &
+>>
+>> 1) Before applying this patchset:
+>>
+>>   setting to a 60 second run per stressor
+>>   dispatching hogs: 9 ramfs
+>>   stressor       bogo ops real time  usr time  sys time   bogo ops/s     bogo ops/s
+>>                             (secs)    (secs)    (secs)   (real time) (usr+sys time)
+>>   ramfs            880623     60.02      7.71    226.93     14671.45        3753.09
+>>   ramfs:
+>>            1 System Management Interrupt
+>>   for a 60.03s run time:
+>>      5762.40s available CPU time
+>>         7.71s user time   (  0.13%)
+>>       226.93s system time (  3.94%)
+>>       234.64s total time  (  4.07%)
+>>   load average: 8.54 3.06 2.11
+>>   passed: 9: ramfs (9)
+>>   failed: 0
+>>   skipped: 0
+>>   successful run completed in 60.03s (1 min, 0.03 secs)
+>>
+>> 2) After applying this patchset:
+>>
+>>   setting to a 60 second run per stressor
+>>   dispatching hogs: 9 ramfs
+>>   stressor       bogo ops real time  usr time  sys time   bogo ops/s     bogo ops/s
+>>                             (secs)    (secs)    (secs)   (real time) (usr+sys time)
+>>   ramfs            847562     60.02      7.44    230.22     14120.66        3566.23
+>>   ramfs:
+>>            4 System Management Interrupts
+>>   for a 60.12s run time:
+>>      5771.95s available CPU time
+>>         7.44s user time   (  0.13%)
+>>       230.22s system time (  3.99%)
+>>       237.66s total time  (  4.12%)
+>>   load average: 8.18 2.43 0.84
+>>   passed: 9: ramfs (9)
+>>   failed: 0
+>>   skipped: 0
+>>   successful run completed in 60.12s (1 min, 0.12 secs)
+>>
+>> We can see that the ops/s has hardly changed.
+>>
+>> [1]. https://lore.kernel.org/lkml/20230313112819.38938-1-zhengqi.arch@bytedance.com/
+>> [2]. https://lore.kernel.org/lkml/202305230837.db2c233f-yujie.liu@intel.com/
+>> [3]. https://lore.kernel.org/all/20230609081518.3039120-1-qi.zheng@linux.dev/
+>> [4]. https://lore.kernel.org/lkml/ZIJhou1d55d4H1s0@dread.disaster.area/
+>>
+>> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+>> ---
+>>   include/linux/shrinker.h |  6 ++++++
+>>   mm/vmscan.c              | 33 ++++++++++++++-------------------
+>>   2 files changed, 20 insertions(+), 19 deletions(-)
+>>
+>> diff --git a/include/linux/shrinker.h b/include/linux/shrinker.h
+>> index 7bfeb2f25246..b0c6c2df9db8 100644
+>> --- a/include/linux/shrinker.h
+>> +++ b/include/linux/shrinker.h
+>> @@ -74,6 +74,7 @@ struct shrinker {
+>>   
+>>   	refcount_t refcount;
+>>   	struct completion completion_wait;
+>> +	struct rcu_head rcu;
+>>   
+>>   	void *private_data;
+>>   
+>> @@ -123,6 +124,11 @@ struct shrinker *shrinker_alloc_and_init(count_objects_cb count,
+>>   void shrinker_free(struct shrinker *shrinker);
+>>   void unregister_and_free_shrinker(struct shrinker *shrinker);
+>>   
+>> +static inline bool shrinker_try_get(struct shrinker *shrinker)
+>> +{
+>> +	return refcount_inc_not_zero(&shrinker->refcount);
+>> +}
+>> +
+>>   static inline void shrinker_put(struct shrinker *shrinker)
+>>   {
+>>   	if (refcount_dec_and_test(&shrinker->refcount))
+>> diff --git a/mm/vmscan.c b/mm/vmscan.c
+>> index 6f9c4750effa..767569698946 100644
+>> --- a/mm/vmscan.c
+>> +++ b/mm/vmscan.c
+>> @@ -57,6 +57,7 @@
+>>   #include <linux/khugepaged.h>
+>>   #include <linux/rculist_nulls.h>
+>>   #include <linux/random.h>
+>> +#include <linux/rculist.h>
+>>   
+>>   #include <asm/tlbflush.h>
+>>   #include <asm/div64.h>
+>> @@ -742,7 +743,7 @@ void register_shrinker_prepared(struct shrinker *shrinker)
+>>   	down_write(&shrinker_rwsem);
+>>   	refcount_set(&shrinker->refcount, 1);
+>>   	init_completion(&shrinker->completion_wait);
+>> -	list_add_tail(&shrinker->list, &shrinker_list);
+>> +	list_add_tail_rcu(&shrinker->list, &shrinker_list);
+>>   	shrinker->flags |= SHRINKER_REGISTERED;
+>>   	shrinker_debugfs_add(shrinker);
+>>   	up_write(&shrinker_rwsem);
+>> @@ -800,7 +801,7 @@ void unregister_shrinker(struct shrinker *shrinker)
+>>   	wait_for_completion(&shrinker->completion_wait);
+>>   
+>>   	down_write(&shrinker_rwsem);
+>> -	list_del(&shrinker->list);
+>> +	list_del_rcu(&shrinker->list);
+>>   	shrinker->flags &= ~SHRINKER_REGISTERED;
+>>   	if (shrinker->flags & SHRINKER_MEMCG_AWARE)
+>>   		unregister_memcg_shrinker(shrinker);
+>> @@ -845,7 +846,7 @@ EXPORT_SYMBOL(shrinker_free);
+>>   void unregister_and_free_shrinker(struct shrinker *shrinker)
+>>   {
+>>   	unregister_shrinker(shrinker);
+>> -	kfree(shrinker);
+>> +	kfree_rcu(shrinker, rcu);
+>>   }
+>>   EXPORT_SYMBOL(unregister_and_free_shrinker);
+>>   
+>> @@ -1067,33 +1068,27 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
+>>   	if (!mem_cgroup_disabled() && !mem_cgroup_is_root(memcg))
+>>   		return shrink_slab_memcg(gfp_mask, nid, memcg, priority);
+>>   
+>> -	if (!down_read_trylock(&shrinker_rwsem))
+>> -		goto out;
+>> -
+>> -	list_for_each_entry(shrinker, &shrinker_list, list) {
+>> +	rcu_read_lock();
+>> +	list_for_each_entry_rcu(shrinker, &shrinker_list, list) {
+>>   		struct shrink_control sc = {
+>>   			.gfp_mask = gfp_mask,
+>>   			.nid = nid,
+>>   			.memcg = memcg,
+>>   		};
+>>   
+>> +		if (!shrinker_try_get(shrinker))
+>> +			continue;
+>> +		rcu_read_unlock();
 > 
-> *I* would use altshadowstack.
+> I don't think you can do this unlock?
 > 
-> I run a production system (that cares about correctness *and*
-> performance, but that's not really relevant here -- SHSTK ought to be
-> fast).  And, if it crashes, I want to know why.  So I handle SIGSEGV,
-> etc so I have good logs if it crashes.  And I want those same logs if
-> I overflow the stack.
+>> +
+>>   		ret = do_shrink_slab(&sc, shrinker, priority);
+>>   		if (ret == SHRINK_EMPTY)
+>>   			ret = 0;
+>>   		freed += ret;
+>> -		/*
+>> -		 * Bail out if someone want to register a new shrinker to
+>> -		 * prevent the registration from being stalled for long periods
+>> -		 * by parallel ongoing shrinking.
+>> -		 */
+>> -		if (rwsem_is_contended(&shrinker_rwsem)) {
+>> -			freed = freed ? : 1;
+>> -			break;
+>> -		}
+>> -	}
+>>   
+>> -	up_read(&shrinker_rwsem);
+>> -out:
+>> +		rcu_read_lock();
 > 
-> That being said, I have no need for longjmp or siglongjmp for this.  I
-> use exit(2) to escape.
+> That new rcu_read_lock() won't help AFAIK, the whole
+> list_for_each_entry_rcu() needs to be under the single rcu_read_lock() to be
+> safe.
 
-the same crash handler that prints a log on shstk overflow should
-work when a different cause of SIGSEGV is recoverable via longjmp.
-to me this means that alt shstk must work with longjmp at least in
-the non-shstk overflow case (which can be declared non-recoverable).
+In the unregister_shrinker() path, we will wait for the refcount to zero
+before deleting the shrinker from the linked list. Here, we first took
+the rcu lock, and then decrement the refcount of this shrinker.
 
-> For what it's worth, setjmp/longjmp is a bad API.  The actual pattern
-> that ought to work well (and that could be supported well by fancy
-> compilers and non-C languages, as I understand it) is more like a
-> function call that has two ways out.  Like this (pseudo-C):
+     shrink_slab                 unregister_shrinker
+     ===========                 ===================
+				
+				/* wait for B */
+				wait_for_completion()
+   rcu_read_lock()
+
+   shrinker_put() --> (B)
+				list_del_rcu()
+                                 /* wait for rcu_read_unlock() */
+				kfree_rcu()
+
+   /*
+    * so this shrinker will not be freed here,
+    * and can be used to traverse the next node
+    * normally?
+    */
+   list_for_each_entry()
+
+   shrinker_try_get()
+   rcu_read_unlock()
+
+Did I miss something?
+
 > 
-> void function(struct better_jmp_buf &buf, args...)
-> {
->    ...
->        if (condition)
->           better_long_jump(buf);  // long jumps out!
->        // could also pass buf to another function
->    ...
->        // could also return normally
-> }
+> IIUC this is why Dave in [4] suggests unifying shrink_slab() with
+> shrink_slab_memcg(), as the latter doesn't iterate the list but uses IDR.
 > 
-> better_call_with_jmp_buf(function, args);
+>> +		shrinker_put(shrinker);
+>> +	}
+>> +	rcu_read_unlock();
+>>   	cond_resched();
+>>   	return freed;
+>>   }
 > 
-> *This* could support altshadowstack just fine.  And many users might
-> be okay with the understanding that, if altshadowstack is on, you have
-> to use a better long jump to get out (or a normal sigreturn or _exit).
-
-i don't understand why this would work fine when longjmp does not.
-how does the shstk switch happen?
-
-> No one is getting an altshadowstack signal handler without code
-> changes.
-
-assuming the same component is doing the alt shstk setup as the
-longjmp.
-
-> siglongjmp() could support altshadowstack with help from the kernel,
-> but we probably don't want to go there.
-
-what kind of help? maybe we need that help..
-
-e.g. if the signal frame token is detected by longjmp on
-the shstk then doing an rt_sigreturn with the right signal
-frame context allows longjmp to continue unwinding the shstk.
-however kernel sigcontext layout can change so userspace may
-not know it so longjmp needs a helper, but only in the jump
-across signal frame case.
-
-(this is a different design than what i proposed earlier,
-it also makes longjmp from alt shstk work without wrss,
-the downside is that longjmp across makecontext needs a
-separate solution then which implies that all shstk needs
-a detectable token at the end of the shstk.. so again
-something that we have to get right now and cannot add
-later.)
