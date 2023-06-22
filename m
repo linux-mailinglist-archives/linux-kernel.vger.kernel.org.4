@@ -2,68 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F22F739F1D
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 12:58:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D55E1739F22
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 12:59:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229889AbjFVK6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 06:58:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54388 "EHLO
+        id S229985AbjFVK7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 06:59:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbjFVK6O (ORCPT
+        with ESMTP id S229974AbjFVK7G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 06:58:14 -0400
-Received: from pegase1.c-s.fr (pegase1.c-s.fr [93.17.236.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E95B2105
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 03:58:03 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [192.168.12.233])
-        by localhost (Postfix) with ESMTP id 4Qmy293Bmpz9sRs;
-        Thu, 22 Jun 2023 12:55:13 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 0y8zvkea4ST8; Thu, 22 Jun 2023 12:55:13 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 4Qmy1z42L8z9sS0;
-        Thu, 22 Jun 2023 12:55:03 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 85FA68B77C;
-        Thu, 22 Jun 2023 12:55:03 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id ZAHRRKp1hzW3; Thu, 22 Jun 2023 12:55:03 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.232.14])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 0F4DF8B763;
-        Thu, 22 Jun 2023 12:55:03 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 35MAstH22382608
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Thu, 22 Jun 2023 12:54:55 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 35MAstt92382607;
-        Thu, 22 Jun 2023 12:54:55 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sathvika Vasireddy <sv@linux.ibm.com>,
-        Naveen N Rao <naveen@kernel.org>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH v2 14/14] powerpc: Implement UACCESS validation on PPC32
-Date:   Thu, 22 Jun 2023 12:54:36 +0200
-Message-Id: <be282f27ad808418c7475b51a00b4cb035f89a95.1687430631.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <cover.1687430631.git.christophe.leroy@csgroup.eu>
-References: <cover.1687430631.git.christophe.leroy@csgroup.eu>
+        Thu, 22 Jun 2023 06:59:06 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C6F61BE4
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 03:59:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=EsYjXjdA4B39SRBJvDACKAwszebQmf4U8+ommBHhjZE=; b=CVIbvJnxs+Kuh/dCkJbs0XSLOm
+        Q+4PbIzpQcjMUZB49jwkL3TA9KADA3GRn4SjyyL8fC8Af1ph2JO8UQ3cTB4MzGlbCJDS6PSi4erzG
+        a2KDPkwjBh4B9ryh23IUM0wDGBebxMpr4byhvOtI/NsXddIrR3E7+U2lvRsqaeQ5rO5jwAPzEFE8b
+        mjKXjRZ8MiBseWOp9bRgunQof7Kms12zjZL8KLBeJmbjdKv3ZrmtC1lG9mBU0BjTn7Akb1w7EDvvf
+        Vu65p5yeD1nuSZzCf0p0wCuRvPQi0JvW8X351Yrj+bwkjCRpf4HwkyT7qjWyT0pN0hzGBN4wX83bq
+        JcPsjVwg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qCI1T-00FWw8-3v; Thu, 22 Jun 2023 10:58:43 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E308A300274;
+        Thu, 22 Jun 2023 12:58:41 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 9A79F241BF9B4; Thu, 22 Jun 2023 12:58:41 +0200 (CEST)
+Date:   Thu, 22 Jun 2023 12:58:41 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     David Vernet <void@manifault.com>
+Cc:     linux-kernel@vger.kernel.org, mingo@redhat.com,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        rostedt@goodmis.org, dietmar.eggemann@arm.com, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        joshdon@google.com, roman.gushchin@linux.dev, tj@kernel.org,
+        kernel-team@meta.com
+Subject: Re: [RFC PATCH 3/3] sched: Implement shared wakequeue in CFS
+Message-ID: <20230622105841.GH4253@hirez.programming.kicks-ass.net>
+References: <20230613052004.2836135-1-void@manifault.com>
+ <20230613052004.2836135-4-void@manifault.com>
+ <20230621142020.GG2053369@hirez.programming.kicks-ass.net>
+ <20230621203445.GC15990@maniforge>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1687431272; l=13818; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=gGCZPMWcuDAJxDyLtoC/Wa9LU9DPZyUBcIAjsrrKoPY=; b=QkK2Cs1jjnRQKTzTCHOcUNHUkm4s6aDFRKDhP8tOH/rsWl73Ooqpyv2M4yf4CGAjeePgFRXbl GBuOQGO7jHZA/IZgD5pk2VfMWk7seVHjuPLs5vnVm11xS4f9gByLjpx
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230621203445.GC15990@maniforge>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,424 +65,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In order to implement UACCESS validation, objtool support
-for powerpc needs to be enhanced to decode more instructions.
+On Wed, Jun 21, 2023 at 03:34:45PM -0500, David Vernet wrote:
+> On Wed, Jun 21, 2023 at 04:20:20PM +0200, Peter Zijlstra wrote:
+> > On Tue, Jun 13, 2023 at 12:20:04AM -0500, David Vernet wrote:
+> > > +struct swqueue {
+> > > +	struct list_head list;
+> > > +	spinlock_t lock;
+> > > +} ____cacheline_aligned;
+> > 
+> > I'm thinking you can shard this just fine, it makes that pop() needs to
+> > iterate all shards, but that shouldn't be a problem, and it would still
+> > only need to take a single lock.
+> 
+> Is the idea here to have multiple sharded queues per LLC, with a single
+> lock protecting them? 
 
-It also requires implementation of switch tables finding.
-On PPC32 it is similar to x86, switch tables are anonymous in .rodata,
-the difference is that the value is relative to its index in the table.
+No, each shard will have it's own lock, each shard it's own cacheline.
 
-Then comes the UACCESS enabling/disabling instructions. On booke and
-8xx it is done with a mtspr instruction. For 8xx that's in SPRN_MD_AP,
-for booke that's in SPRN_PID. Annotate those instructions.
+> Or did I misunderstand your suggestion entirely?
 
-For book3s/32 that's a bit more complex and left aside for the moment.
+Yup, so each shard is basically the above struct, whole cacheline with a
+lock and list. Then on enqueue we hash to a shard (possibly based on cpu
+-- this gives the least amount of bounces) and stick it on.
 
-No work has been done for ASM files, they are not used for UACCESS
-so for the moment just tell objtool to ignore ASM files.
+Then on pop we iterate the shards, the first non-empty shard gets the
+lock taken, and pop'ed. If you start iteration based on the cpu->shard
+map used for enqueue you can even get a sense of 'locality' depending on
+the mapping.
 
-For relocable code, the .got2 relocation preceding each global
-function needs to be marked as ignored because some versions of GCC
-do this:
+So pop is O(n) in shards, but on average will only take a single lock --
+there is an obvious race where it might see a non-empty queue, but race
+on lock and find the queue empty once acquired, but meh.
 
-			120: R_PPC_REL32	.got2+0x7ff0
+> > I'm thinking 4 or 8 shards should be plenty, even for Intel LLC.
+> > 
+> > >  #ifdef CONFIG_SMP
+> > 
+> > > +static struct task_struct *swqueue_pull_task(struct swqueue *swqueue)
+> > > +{
+> > > +	unsigned long flags;
+> > > +
+> > > +	struct task_struct *p;
+> > > +
+> > > +	spin_lock_irqsave(&swqueue->lock, flags);
+> > > +	p = list_first_entry_or_null(&swqueue->list, struct task_struct,
+> > > +				     swqueue_node);
+> > > +	if (p)
+> > > +		list_del_init(&p->swqueue_node);
+> > > +	spin_unlock_irqrestore(&swqueue->lock, flags);
+> > > +
+> > > +	return p;
+> > > +}
+> > 
+> > Would this not normally be called pop() or somesuch?
+> 
+> Yes, I'll improve the name in the next iteration. swqueue_dequeue() and
+> swqueue_enqueue() seem like the most canonical. Let me know if you have another
+> preference.
 
-00000124 <tohex>:
-     124:	94 21 ff f0 	stwu    r1,-16(r1)
-     128:	7c 08 02 a6 	mflr    r0
-     12c:	42 9f 00 05 	bcl     20,4*cr7+so,130 <tohex+0xc>
-     130:	39 00 00 00 	li      r8,0
-     134:	39 20 00 08 	li      r9,8
-     138:	93 c1 00 08 	stw     r30,8(r1)
-     13c:	7f c8 02 a6 	mflr    r30
-     140:	90 01 00 14 	stw     r0,20(r1)
-     144:	80 1e ff f0 	lwz     r0,-16(r30)
-     148:	7f c0 f2 14 	add     r30,r0,r30
-     14c:	81 5e 80 00 	lwz     r10,-32768(r30)
-     150:	80 fe 80 04 	lwz     r7,-32764(r30)
+Well, there's two layers intermixed here, which is, I think, what gave
+rise to the whole wonky naming.
 
-While other versions do that:
+If you implement the queue primitives as: push, pop, del
+and then build, using them, the scheduler primitives: enqueue, dequeue,
+pick, things should become saner.
 
-00000120 <tohex>:
-     120:	94 21 ff f0 	stwu    r1,-16(r1)
-     124:	7c 08 02 a6 	mflr    r0
-     128:	42 9f 00 05 	bcl     20,4*cr7+so,12c <tohex+0xc>
-     12c:	39 00 00 00 	li      r8,0
-     130:	39 20 00 08 	li      r9,8
-     134:	93 c1 00 08 	stw     r30,8(r1)
-     138:	7f c8 02 a6 	mflr    r30
-     13c:	3f de 00 00 	addis   r30,r30,0
-			13e: R_PPC_REL16_HA	.got2+0x8012
-     140:	90 01 00 14 	stw     r0,20(r1)
-     144:	3b de 00 00 	addi    r30,r30,0
-			146: R_PPC_REL16_LO	.got2+0x801a
-     148:	81 5e 80 00 	lwz     r10,-32768(r30)
-     14c:	80 fe 80 04 	lwz     r7,-32764(r30)
+> > > +	if (!task_wakeup || task_migrated || p->nr_cpus_allowed == 1)
+> > > +		return;
+> > 
+> > Elsewhere you mentioned heuristics, this smells like them. This and the
+> > is_cpus_allowed() thing makes you loose plenty of opportunities.
+> 
+> Yeah fair enough, these certainly are heuristics as well.
+> 
+> I thought it best to try and avoid swqueue getting in the way of
+> select_task_rq_fair() (at least to start out with), but we could always
+> remove that and run other experiments to see how it does.
 
-Also declare longjmp() and start_secondary_resume() as global noreturn
-functions, and declare __copy_tofrom_user() and __arch_clear_user()
-as UACCESS safe.
+So, part of the problem is that you might be hooking at the wrong level
+(see also my earlier email about the queue only containing running tasks
+and none of the ready tasks).
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- arch/powerpc/Kconfig                         |  2 +
- arch/powerpc/include/asm/kup.h               | 12 +++
- arch/powerpc/include/asm/nohash/32/kup-8xx.h |  8 +-
- arch/powerpc/include/asm/nohash/kup-booke.h  |  8 +-
- arch/powerpc/kexec/core_32.c                 |  4 +-
- tools/objtool/arch/powerpc/decode.c          | 82 ++++++++++++++++++--
- tools/objtool/arch/powerpc/special.c         | 42 +++++++++-
- tools/objtool/check.c                        |  5 ++
- 8 files changed, 148 insertions(+), 15 deletions(-)
+If you were to hook at the __{en,de}queue_entity() level you'll
+automagically dequeue running tasks and enqueue any ready tasks. OTOH
+you get to deal with the problem that not all entities are tasks, but
+that shouldn't be too hard.
 
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index 8b955bc7b59f..8b613e520143 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -160,6 +160,7 @@ config PPC
- 	select ARCH_KEEP_MEMBLOCK
- 	select ARCH_MIGHT_HAVE_PC_PARPORT
- 	select ARCH_MIGHT_HAVE_PC_SERIO
-+	select ARCH_OBJTOOL_SKIP_ASM
- 	select ARCH_OPTIONAL_KERNEL_RWX		if ARCH_HAS_STRICT_KERNEL_RWX
- 	select ARCH_OPTIONAL_KERNEL_RWX_DEFAULT
- 	select ARCH_SPLIT_ARG64			if PPC32
-@@ -258,6 +259,7 @@ config PPC
- 	select HAVE_OPTPROBES
- 	select HAVE_OBJTOOL			if PPC32 || MPROFILE_KERNEL
- 	select HAVE_OBJTOOL_MCOUNT		if HAVE_OBJTOOL
-+	select HAVE_UACCESS_VALIDATION		if HAVE_OBJTOOL && PPC_KUAP && PPC32
- 	select HAVE_PERF_EVENTS
- 	select HAVE_PERF_EVENTS_NMI		if PPC64
- 	select HAVE_PERF_REGS
-diff --git a/arch/powerpc/include/asm/kup.h b/arch/powerpc/include/asm/kup.h
-index 132f1c7e1064..9f824cb93d8a 100644
---- a/arch/powerpc/include/asm/kup.h
-+++ b/arch/powerpc/include/asm/kup.h
-@@ -10,6 +10,8 @@
- #include <linux/types.h>
- 
- static __always_inline bool kuap_is_disabled(void);
-+static __always_inline void mtspr_uaccess_begin(int rn, unsigned long val);
-+static __always_inline void mtspr_uaccess_end(int rn, unsigned long val);
- #endif
- 
- #ifdef CONFIG_PPC_BOOK3S_64
-@@ -222,6 +224,16 @@ static __always_inline void prevent_current_write_to_user(void)
- 	prevent_user_access(KUAP_WRITE);
- }
- 
-+static __always_inline void mtspr_uaccess_begin(int rn, unsigned long val)
-+{
-+	asm(ASM_UACCESS_BEGIN "mtspr %0, %1\n\t" : : "i"(rn), "r"(val) : "memory");
-+}
-+
-+static __always_inline void mtspr_uaccess_end(int rn, unsigned long val)
-+{
-+	asm(ASM_UACCESS_END "mtspr %0, %1\n\t" : : "i"(rn), "r"(val) : "memory");
-+}
-+
- #endif /* !__ASSEMBLY__ */
- 
- #endif /* _ASM_POWERPC_KUAP_H_ */
-diff --git a/arch/powerpc/include/asm/nohash/32/kup-8xx.h b/arch/powerpc/include/asm/nohash/32/kup-8xx.h
-index 61067e4c8f22..9b59231d87c9 100644
---- a/arch/powerpc/include/asm/nohash/32/kup-8xx.h
-+++ b/arch/powerpc/include/asm/nohash/32/kup-8xx.h
-@@ -42,12 +42,12 @@ static __always_inline unsigned long __kuap_get_and_assert_locked(void)
- static __always_inline void __allow_user_access(void __user *to, const void __user *from,
- 						unsigned long size, unsigned long dir)
- {
--	mtspr(SPRN_MD_AP, MD_APG_INIT);
-+	mtspr_uaccess_begin(SPRN_MD_AP, MD_APG_INIT);
- }
- 
- static __always_inline void __prevent_user_access(unsigned long dir)
- {
--	mtspr(SPRN_MD_AP, MD_APG_KUAP);
-+	mtspr_uaccess_end(SPRN_MD_AP, MD_APG_KUAP);
- }
- 
- static __always_inline unsigned long __prevent_user_access_return(void)
-@@ -56,14 +56,14 @@ static __always_inline unsigned long __prevent_user_access_return(void)
- 
- 	flags = mfspr(SPRN_MD_AP);
- 
--	mtspr(SPRN_MD_AP, MD_APG_KUAP);
-+	mtspr_uaccess_end(SPRN_MD_AP, MD_APG_KUAP);
- 
- 	return flags;
- }
- 
- static __always_inline void __restore_user_access(unsigned long flags)
- {
--	mtspr(SPRN_MD_AP, flags);
-+	mtspr_uaccess_begin(SPRN_MD_AP, flags);
- }
- 
- static __always_inline bool
-diff --git a/arch/powerpc/include/asm/nohash/kup-booke.h b/arch/powerpc/include/asm/nohash/kup-booke.h
-index 416f3e0897d5..2967501c434e 100644
---- a/arch/powerpc/include/asm/nohash/kup-booke.h
-+++ b/arch/powerpc/include/asm/nohash/kup-booke.h
-@@ -64,13 +64,13 @@ static __always_inline unsigned long __kuap_get_and_assert_locked(void)
- static __always_inline void __allow_user_access(void __user *to, const void __user *from,
- 						unsigned long size, unsigned long dir)
- {
--	mtspr(SPRN_PID, current->thread.pid);
-+	mtspr_uaccess_begin(SPRN_PID, current->thread.pid);
- 	isync();
- }
- 
- static __always_inline void __prevent_user_access(unsigned long dir)
- {
--	mtspr(SPRN_PID, 0);
-+	mtspr_uaccess_end(SPRN_PID, 0);
- 	isync();
- }
- 
-@@ -78,7 +78,7 @@ static __always_inline unsigned long __prevent_user_access_return(void)
- {
- 	unsigned long flags = mfspr(SPRN_PID);
- 
--	mtspr(SPRN_PID, 0);
-+	mtspr_uaccess_end(SPRN_PID, 0);
- 	isync();
- 
- 	return flags;
-@@ -87,7 +87,7 @@ static __always_inline unsigned long __prevent_user_access_return(void)
- static __always_inline void __restore_user_access(unsigned long flags)
- {
- 	if (flags) {
--		mtspr(SPRN_PID, current->thread.pid);
-+		mtspr_uaccess_begin(SPRN_PID, current->thread.pid);
- 		isync();
- 	}
- }
-diff --git a/arch/powerpc/kexec/core_32.c b/arch/powerpc/kexec/core_32.c
-index c95f96850c9e..6e955f32e7c3 100644
---- a/arch/powerpc/kexec/core_32.c
-+++ b/arch/powerpc/kexec/core_32.c
-@@ -17,7 +17,7 @@
- typedef void (*relocate_new_kernel_t)(
- 				unsigned long indirection_page,
- 				unsigned long reboot_code_buffer,
--				unsigned long start_address) __noreturn;
-+				unsigned long start_address);
- 
- /*
-  * This is a generic machine_kexec function suitable at least for
-@@ -61,6 +61,8 @@ void default_machine_kexec(struct kimage *image)
- 	/* now call it */
- 	rnk = (relocate_new_kernel_t) reboot_code_buffer;
- 	(*rnk)(page_list, reboot_code_buffer_phys, image->start);
-+
-+	unreachable();	/* For objtool */
- }
- 
- int machine_kexec_prepare(struct kimage *image)
-diff --git a/tools/objtool/arch/powerpc/decode.c b/tools/objtool/arch/powerpc/decode.c
-index 53b55690f320..2ed5241eb7be 100644
---- a/tools/objtool/arch/powerpc/decode.c
-+++ b/tools/objtool/arch/powerpc/decode.c
-@@ -43,24 +43,94 @@ int arch_decode_instruction(struct objtool_file *file, const struct section *sec
- 			    unsigned long offset, unsigned int maxlen,
- 			    struct instruction *insn)
- {
--	unsigned int opcode;
-+	unsigned int opcode, xop;
-+	unsigned int rs, ra, rb, bo, bi, to, uimm, simm, lk, aa;
- 	enum insn_type typ;
- 	unsigned long imm;
- 	u32 ins;
- 
-+	if (file->elf->ehdr.e_flags & EF_PPC_RELOCATABLE_LIB) {
-+		struct reloc *reloc;
-+
-+		reloc = find_reloc_by_dest_range(file->elf, insn->sec, insn->offset, 4);
-+
-+		if (reloc && reloc->type == R_PPC_REL32 &&
-+		    !strncmp(reloc->sym->sec->name, ".got2", 5)) {
-+			insn->type = INSN_OTHER;
-+			insn->ignore = true;
-+			insn->len = 4;
-+
-+			return 0;
-+		}
-+	}
-+
- 	ins = bswap_if_needed(file->elf, *(u32 *)(sec->data->d_buf + offset));
- 	opcode = ins >> 26;
--	typ = INSN_OTHER;
--	imm = 0;
-+	xop = (ins >> 1) & 0x3ff;
-+	rs = bo = to = (ins >> 21) & 0x1f;
-+	ra = bi = (ins >> 16) & 0x1f;
-+	rb = (ins >> 11) & 0x1f;
-+	uimm = simm = (ins >> 0) & 0xffff;
-+	aa = ins & 2;
-+	lk = ins & 1;
- 
- 	switch (opcode) {
-+	case 3:
-+		if (to == 31 && ra == 0 && simm == 0) /* twi 31, r0, 0 */
-+			typ = INSN_BUG;
-+		else
-+			typ = INSN_OTHER;
-+		break;
-+	case 16: /* bc[l][a] */
-+		if (lk)	/* bcl[a] */
-+			typ = INSN_OTHER;
-+		else		/* bc[a] */
-+			typ = INSN_JUMP_CONDITIONAL;
-+
-+		imm = ins & 0xfffc;
-+		if (imm & 0x8000)
-+			imm -= 0x10000;
-+		insn->immediate = imm | aa;
-+		break;
- 	case 18: /* b[l][a] */
--		if ((ins & 3) == 1) /* bl */
-+		if (lk)	/* bl[a] */
- 			typ = INSN_CALL;
-+		else		/* b[a] */
-+			typ = INSN_JUMP_UNCONDITIONAL;
- 
- 		imm = ins & 0x3fffffc;
- 		if (imm & 0x2000000)
- 			imm -= 0x4000000;
-+		insn->immediate = imm | aa;
-+		break;
-+	case 19:
-+		if (xop == 16 && bo == 20 && bi == 0)	/* blr */
-+			typ = INSN_RETURN;
-+		else if (xop == 16)	/* bclr */
-+			typ = INSN_RETURN_CONDITIONAL;
-+		else if (xop == 50)	/* rfi */
-+			typ = INSN_JUMP_DYNAMIC;
-+		else if (xop == 528 && bo == 20 && bi == 0 && !lk)	/* bctr */
-+			typ = INSN_JUMP_DYNAMIC;
-+		else if (xop == 528 && bo == 20 && bi == 0 && lk)	/* bctrl */
-+			typ = INSN_CALL_DYNAMIC;
-+		else
-+			typ = INSN_OTHER;
-+		break;
-+	case 24:
-+		if (rs == 0 && ra == 0 && uimm == 0)
-+			typ = INSN_NOP;
-+		else
-+			typ = INSN_OTHER;
-+		break;
-+	case 31:
-+		if (xop == 4 && to == 31 && ra == 0 && rb == 0) /* trap */
-+			typ = INSN_BUG;
-+		else
-+			typ = INSN_OTHER;
-+		break;
-+	default:
-+		typ = INSN_OTHER;
- 		break;
- 	}
- 
-@@ -70,13 +140,15 @@ int arch_decode_instruction(struct objtool_file *file, const struct section *sec
- 		insn->len = 4;
- 
- 	insn->type = typ;
--	insn->immediate = imm;
- 
- 	return 0;
- }
- 
- unsigned long arch_jump_destination(struct instruction *insn)
- {
-+	if (insn->immediate & 2)
-+		return insn->immediate & ~2;
-+
- 	return insn->offset + insn->immediate;
- }
- 
-diff --git a/tools/objtool/arch/powerpc/special.c b/tools/objtool/arch/powerpc/special.c
-index 979b555b16ea..be37f4b455dc 100644
---- a/tools/objtool/arch/powerpc/special.c
-+++ b/tools/objtool/arch/powerpc/special.c
-@@ -15,5 +15,45 @@ bool arch_support_alt_relocation(struct special_alt *special_alt,
- struct reloc *arch_find_switch_table(struct objtool_file *file,
- 				     struct instruction *insn, bool *is_rel)
- {
--	exit(-1);
-+	struct reloc  *text_reloc, *rodata_reloc;
-+	struct section *table_sec;
-+	unsigned long table_offset;
-+
-+	/* look for a relocation which references .rodata */
-+	text_reloc = find_reloc_by_dest_range(file->elf, insn->sec,
-+					      insn->offset, insn->len);
-+	if (!text_reloc || text_reloc->sym->type != STT_SECTION ||
-+	    !text_reloc->sym->sec->rodata)
-+		return NULL;
-+
-+	table_offset = text_reloc->addend;
-+	table_sec = text_reloc->sym->sec;
-+
-+	/*
-+	 * Make sure the .rodata address isn't associated with a
-+	 * symbol.  GCC jump tables are anonymous data.
-+	 *
-+	 * Also support C jump tables which are in the same format as
-+	 * switch jump tables.  For objtool to recognize them, they
-+	 * need to be placed in the C_JUMP_TABLE_SECTION section.  They
-+	 * have symbols associated with them.
-+	 */
-+	if (find_symbol_containing(table_sec, table_offset)) {
-+		if (strcmp(table_sec->name, C_JUMP_TABLE_SECTION))
-+			return NULL;
-+		*is_rel = false;
-+	} else {
-+		*is_rel = true;
-+	}
-+
-+	/*
-+	 * Each table entry has a rela associated with it.  The rela
-+	 * should reference text in the same function as the original
-+	 * instruction.
-+	 */
-+	rodata_reloc = find_reloc_by_dest(file->elf, table_sec, table_offset);
-+	if (!rodata_reloc)
-+		return NULL;
-+
-+	return rodata_reloc;
- }
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index f850ab892ad5..8ac5711a055f 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -218,6 +218,7 @@ static bool __dead_end_function(struct objtool_file *file, struct symbol *func,
- 		"kthread_exit",
- 		"kunit_try_catch_throw",
- 		"lbug_with_loc",
-+		"longjmp",
- 		"machine_real_restart",
- 		"make_task_dead",
- 		"mpt_halt_firmware",
-@@ -230,7 +231,9 @@ static bool __dead_end_function(struct objtool_file *file, struct symbol *func,
- 		"sev_es_terminate",
- 		"snp_abort",
- 		"start_kernel",
-+		"start_secondary_resume",
- 		"stop_this_cpu",
-+		"unrecoverable_exception",
- 		"usercopy_abort",
- 		"x86_64_start_kernel",
- 		"x86_64_start_reservations",
-@@ -1335,6 +1338,8 @@ static const char *uaccess_safe_builtin[] = {
- 	"rep_stos_alternative",
- 	"rep_movs_alternative",
- 	"__copy_user_nocache",
-+	"__copy_tofrom_user",
-+	"__arch_clear_user",
- 	NULL
- };
- 
--- 
-2.40.1
+Also, you end up with more enqueue/dequeue -- so that might hurt.
+
+Also, at this point you're nr_cpus/N away from simply scanning the
+runqueues and pulling things from non-empty runqueues. But for large
+nr_cpus and smallish N it might be a win over-all. Dunno..
+
 
