@@ -2,82 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70878739F65
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 13:24:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 259BE739F6B
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 13:28:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230195AbjFVLYy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 07:24:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33192 "EHLO
+        id S229840AbjFVL2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 07:28:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbjFVLYx (ORCPT
+        with ESMTP id S229659AbjFVL2r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 07:24:53 -0400
+        Thu, 22 Jun 2023 07:28:47 -0400
 Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDDC819A9;
-        Thu, 22 Jun 2023 04:24:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 446B919A9;
+        Thu, 22 Jun 2023 04:28:46 -0700 (PDT)
 Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 3E8D05C00B1;
-        Thu, 22 Jun 2023 07:24:51 -0400 (EDT)
+        by mailout.nyi.internal (Postfix) with ESMTP id AA9415C00C9;
+        Thu, 22 Jun 2023 07:28:45 -0400 (EDT)
 Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 22 Jun 2023 07:24:51 -0400
+  by compute6.internal (MEProxy); Thu, 22 Jun 2023 07:28:45 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
         :cc:content-type:content-type:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1687433091; x=1687519491; bh=Ao
-        g9Wt7TDsOLeFf/oUN+PK0V2D/l+qGT79F3oMaxOv4=; b=wSVxF69bqU+7foITvm
-        btLlhWjR4nGZkGsc3YubNmpu6kdZEc4vlBaQIuQtZeKSChwf/7Qi9Eni/DMegslD
-        PQaeqGZRKYvTSJpTRzDBqwhdnVKDFOymCB5dzOYLA8xclekO8E3NwOGJYIozeqtK
-        CRlMKqGxEHRfFP+t3Lpc4RfwFRGIpkg2bAxbct8kIP2M3NWJ6Lem5JNltXwW5q3H
-        3HJ0HfZnZqt4vMo8n34yeNb+Af4CNCq4uyBPcC27vdy69Z2RoZfkbdHmwLJsQSXf
-        b2KDIb+MDQUYNQMB7GQtiTDmEwG3tI7cMivz7HSumVT6AyuHTXIqC6QRv+I1gFjE
-        euqg==
+        :subject:subject:to:to; s=fm1; t=1687433325; x=1687519725; bh=VQ
+        b5HqyYhYn4AL2jVh9Pn6Gc88Ux8RWGJJ1CyS/IapY=; b=Tek+suiEQ9ZBzcqjUm
+        V8S7vH6WVaK8nf1rxA85R+4BmTGkbJU89n1NZW1ME2PpMZ0ZnPWdxv4wbczIT3nr
+        R5d0bwFVuwTf6OS2xiFtkKOxE4qviWmotownu5eUAOzxWxqcK9ncZJX6mFM+Abxz
+        cVGxHwSCqi55K9ws7OKmSYulj7SS+dk50+dEwhc7xVjr0PESRswQkXWeI6pHVpHn
+        ZNhTqbOP4LRStM6cqcSMK1mat134Owpkb3XIVCyHvB/XYb9kiRdiBif926S3suE7
+        iEwggYNce6x4gb9lG3Wc4C41LXyYc6YtwzAeLtRwmzE2tP7KEbRBD6BXZwfMgwm2
+        jUzg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-type:content-type:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1687433091; x=1687519491; bh=Aog9Wt7TDsOLe
-        Ff/oUN+PK0V2D/l+qGT79F3oMaxOv4=; b=YA6SkFmksYRGHbfAYJrSiQf0cWr2a
-        YAOsdd6xggJ+YfCdEHapdGJ2xx6uV8cfxb2CAiJMUcTFeuTLTFLZTPb7u0vXEIR5
-        yi771tPQ0+UEHvA5LDCcqyh0jYW51AVALV9UFUP549ISbpa1BLHd3cLg+q0y5mTv
-        fRpOlhFlUID987U+LQWCt0b8PHQ5bj7D2P/12hkwMSkIp5zFskShlcgwsON3uPt/
-        laWj9RyWM4wck9w4qmy39CpHOHNQdxyquzpaeAPwWu0GpbyLcvTi/+d72sdIiEiz
-        dic51y7l6lxlG3QNN3ojSzcLhd25U1UvqeQOzCsQzbTuVT1c5AUhizIiQ==
-X-ME-Sender: <xms:gi-UZBNeSMGM9IAbCTI9rGqzHyB_-V57SiJZrVuUnY0MeSEy38EtrA>
-    <xme:gi-UZD88z8vlG6H3uMWhORZSIAFR7CIkn1jkhwLbBOxfEEvflzkiihjvY8ozTnQQQ
-    EhUAMJCiZm9Nv3koRw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeeguddgfeelucetufdoteggodetrfdotf
+        :x-sasl-enc; s=fm2; t=1687433325; x=1687519725; bh=VQb5HqyYhYn4A
+        L2jVh9Pn6Gc88Ux8RWGJJ1CyS/IapY=; b=C6NqYb+TRTAdq+Db9zHXNiABHSPNl
+        lF/pTUmF3pGyRps7r1kuQ3KDtHx5yQUveHXICn4fCtMt2rB1nwNsRQPT0r+LFzKo
+        tGSiMyjw05OJ7Pr/ZF/ObaeC3qyMjrWJRRl9JRD36LxwotK84nUC5D2hzMYVla5i
+        fF9XHcBB+oEYs09JIZbXOtlj9rQVT4YWgg/PlpgVf3lvTii9PtEGZFJ65IyBVKlS
+        633fEOqrAd2yJYAa2JhWVhIHgdFVJfsTLkeZ4vFdumKvqoSgRcyCjdt7F4ZrY9qa
+        hqkTFTCZwmIVTMihLqN0t/4STe9alt65EAciC4cIjc9T/fhq2nAY09A3Q==
+X-ME-Sender: <xms:bTCUZA5-hOQumNAavy2nD90BOy6rlYTuTwuhEnFtJqH3O1hz8NnEEA>
+    <xme:bTCUZB5ciPb-9OijI-RNTuvl9SXHLOd9dLPF-oAChPM2bLHzA-0rqYJUZZuOBxHRL
+    lDc_4PjFzULqmxBCLc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeeguddggedtucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
     nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:gi-UZASZ0RqA86Uv9RsS204GM4F7h1WtExGxmi393x9-SRPmAi1DRg>
-    <xmx:gi-UZNsqS4fEdMjTrp8usvMz7ws-1aEUagBGzulzqhJe34N5JZC3kg>
-    <xmx:gi-UZJfFqctxCaKkZf4KYGgAvgrA_VuVHPeu-ZqactEESx1IdGjnNw>
-    <xmx:gy-UZCGVtDmgM1JuH2eJMieSuhaE5KW2ZLhNoL8JMM88DziWLz2WAQ>
+    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
+    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:bTCUZPeE2mEvXn_m0OT0lbYiIrYgBYM4uPw0jdUuw77eqhIH3fOgnA>
+    <xmx:bTCUZFLzFwi41CXBmgosGA0-zqVUiO2eS_Sy_oRjIGI3wdSLOLyLuA>
+    <xmx:bTCUZEIKqp5iEy4aCjLZ2vzex9irEhtS7e4q8_Bkq3eXFXdEUXSSmw>
+    <xmx:bTCUZGhVMthvzUNrrvsmzNJn6UT_t4q1kf6UtkiIa6vhorY50ex-_A>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id CA308B60086; Thu, 22 Jun 2023 07:24:50 -0400 (EDT)
+        id 6BE07B60086; Thu, 22 Jun 2023 07:28:45 -0400 (EDT)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
 Mime-Version: 1.0
-Message-Id: <f28f78fc-84ce-4990-9126-4075f3d88e01@app.fastmail.com>
-In-Reply-To: <286cf2d8-2da8-7203-ee53-bf08332fa519@linaro.org>
-References: <20230622101813.3453772-1-arnd@kernel.org>
- <286cf2d8-2da8-7203-ee53-bf08332fa519@linaro.org>
-Date:   Thu, 22 Jun 2023 13:24:30 +0200
+Message-Id: <a7b27541-0ebb-4f2d-bd06-270a4d404613@app.fastmail.com>
+In-Reply-To: <ZJQvJZxZkYfqGAJu@mail.gmail.com>
+References: <20230622101525.3321642-1-arnd@kernel.org>
+ <ZJQvJZxZkYfqGAJu@mail.gmail.com>
+Date:   Thu, 22 Jun 2023 13:28:25 +0200
 From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Neil Armstrong" <neil.armstrong@linaro.org>,
-        "Arnd Bergmann" <arnd@kernel.org>,
-        "Heikki Krogerus" <heikki.krogerus@linux.intel.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>
-Cc:     "Bjorn Andersson" <andersson@kernel.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: nb7vpq904m: add CONFIG_DRM dependency
+To:     "Maxim Mikityanskiy" <maxtram95@gmail.com>,
+        "Arnd Bergmann" <arnd@kernel.org>
+Cc:     "Saeed Mahameed" <saeedm@nvidia.com>,
+        "Leon Romanovsky" <leon@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Eric Dumazet" <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        "Paolo Abeni" <pabeni@redhat.com>,
+        "Nathan Chancellor" <nathan@kernel.org>,
+        "Nick Desaulniers" <ndesaulniers@google.com>,
+        "Tom Rix" <trix@redhat.com>, "Tariq Toukan" <tariqt@nvidia.com>,
+        "Adham Faris" <afaris@nvidia.com>, Netdev <netdev@vger.kernel.org>,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH] mlx5: avoid integer overflow warning for large page size
 Content-Type: text/plain
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
@@ -89,48 +96,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 22, 2023, at 12:39, Neil Armstrong wrote:
-> Hi,
+On Thu, Jun 22, 2023, at 13:23, Maxim Mikityanskiy wrote:
+> On Thu, 22 Jun 2023 at 12:15:02 +0200, Arnd Bergmann wrote:
 >
-> On 22/06/2023 12:18, Arnd Bergmann wrote:
->> From: Arnd Bergmann <arnd@arndb.de>
->> 
->> This driver calls directly into DRM functions and fails to link if
->> that is disabled:
->> 
->> ld.lld: error: undefined symbol: devm_drm_bridge_add
->> ld.lld: error: undefined symbol: devm_drm_of_get_bridge
->>>>> referenced by nb7vpq904m.c
->>>>>                drivers/usb/typec/mux/nb7vpq904m.o:(nb7vpq904m_probe) in archive vmlinux.a
->> 
->> Fixes: 88d8f3ac9c67e ("usb: typec: add support for the nb7vpq904m Type-C Linear Redriver")
->> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
->> ---
->>   drivers/usb/typec/mux/Kconfig | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->> 
->> diff --git a/drivers/usb/typec/mux/Kconfig b/drivers/usb/typec/mux/Kconfig
->> index 8c4d6b8fb75c3..f53ae24b6c048 100644
->> --- a/drivers/usb/typec/mux/Kconfig
->> +++ b/drivers/usb/typec/mux/Kconfig
->> @@ -37,7 +37,7 @@ config TYPEC_MUX_INTEL_PMC
->>   
->>   config TYPEC_MUX_NB7VPQ904M
->>   	tristate "On Semiconductor NB7VPQ904M Type-C redriver driver"
->> -	depends on I2C
->> +	depends on I2C && DRM
->>   	select REGMAP_I2C
->>   	help
->>   	  Say Y or M if your system has a On Semiconductor NB7VPQ904M Type-C
+> I recall you already sent a fix to silence this warning before:
 >
-> I think it could be :
+> https://lore.kernel.org/netdev/20211015152056.2434853-1-arnd@kernel.org/
 >
-> +	depends on DRM || DRM=n
-> +	select DRM_PANEL_BRIDGE if DRM
+> I prefer that old one, as it's more future-proof to cast to size_t here
+> in place (chunk_size won't be bigger than size_t for sure). With your
+> new patch, if chunk_size is ever changed from u16 to u32, it's likely
+> that this place will be unnoticed, and a bug will be introduced.
+>
+>>  		mlx5_core_err(mdev, "XSK chunk size %u out of bounds [%u, %lu]\n", xsk->chunk_size,
+>>  			      MLX5E_MIN_XSK_CHUNK_SIZE, PAGE_SIZE);
 
-As far as I can tell, this would only avoid the link error
-against devm_drm_of_get_bridge(), but not the one against
-devm_drm_bridge_add(), which is defined in drm.ko through
-drivers/gpu/drm/drm_bridge.c.
+Indeed, I don't know why I no longer had the old patch in my randconfig
+tree, I completely forgot about that. The old patch is also ok.
 
-    Arnd
+   Arnd
