@@ -2,200 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10F6073A86A
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 20:43:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ED5573A86E
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 20:43:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230320AbjFVSnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 14:43:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34330 "EHLO
+        id S230445AbjFVSng (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 14:43:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229986AbjFVSnG (ORCPT
+        with ESMTP id S229948AbjFVSne (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 14:43:06 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2046.outbound.protection.outlook.com [40.107.244.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D99BC1FF2;
-        Thu, 22 Jun 2023 11:43:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kDeumnMobiZ6Pcol0fsK6Vxt8rdT7KqaCXevpIoV+UWQLIxQzNdb4Kw4nCueMuxZiIBUjh+pp0ewG98Jrvl+BboP8sqwqJTDATWEzT5y35mc5E2Rn4cE9FJ9U+jZzaBmZV4rHuVa+1xNvvTMmWBJM+M0yYoaa5mdedm36kZuxEnYp7+C6HxRHTG0+qlnJpMOkvVxP2SfEQVMnF11FxsJ4qrMCb8T9VH1enfjrP74BYJoDQgYNTEdSbly7zybxLoiDSTt1+YSiP8zDMou+IAWF6EbNZpwhj97OMSytCKcqcsqMez+Pic3TeLWBWQVLQf/rrpaBGOMqR4PbXUrDKbHYA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uEvECoNC55ZVS1zTHfyboNmzZMpWU8e6bXe0QY+7xHY=;
- b=nWIi8iAnoYmIKsiU17MFpxlKRx+EMXxPI9srIgjkALJDDxRi/xS1OfFmLJ9z/nrpgII8bmsV8yZsF3xNJqolSWTHK/DTkKI+H4q2TJy64s7iS03ZvA3UjnKB0WyYvNnvfJAMGFAppKvhIprQjMyM3h0bYS3dXGNQ/vTPcDlTRHrK8UIslEKob/NHTzW5M4vCrGoky6LpJfco4M1KK3EaxqrEdhCRtDaCg7ZZAE8vKDs7p1+YRJkwLhOMLUCZ7iStxzLQ5paz/xXyXol65FclmopmPc67QET0BaMtOlJtfuPicatP9Ka5Lhkt0+xbSymjn6WIHDyLdtdPZmmZ5vqRDw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uEvECoNC55ZVS1zTHfyboNmzZMpWU8e6bXe0QY+7xHY=;
- b=mvdkIK1b1aKpQP0HZ4zDU4hExKMsPTfL+OLw3+CXg8vQJ4SA2gQAFNb7ANS4WbLc7WAytFTmpYh0nPv/QVxNk0tOheo5lISsofQ9BmIbMCoZpDXvov6u7F0yBxw7ecx3hdYuU1cHFq5pJLlaIAm4UFRVzNZn+paaPhSjQ0SFLAU=
-Received: from MN0PR12MB5953.namprd12.prod.outlook.com (2603:10b6:208:37c::15)
- by PH7PR12MB9221.namprd12.prod.outlook.com (2603:10b6:510:2e8::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.23; Thu, 22 Jun
- 2023 18:43:02 +0000
-Received: from MN0PR12MB5953.namprd12.prod.outlook.com
- ([fe80::8368:23:db50:8f88]) by MN0PR12MB5953.namprd12.prod.outlook.com
- ([fe80::8368:23:db50:8f88%5]) with mapi id 15.20.6521.020; Thu, 22 Jun 2023
- 18:43:02 +0000
-From:   "Pandey, Radhey Shyam" <radhey.shyam.pandey@amd.com>
-To:     Maxim Kochetkov <fido_max@inbox.ru>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-CC:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Simek, Michal" <michal.simek@amd.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Robert Hancock <robert.hancock@calian.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2 1/1] net: axienet: Move reset before DMA detection
-Thread-Topic: [PATCH v2 1/1] net: axienet: Move reset before DMA detection
-Thread-Index: AQHZpTJJf5eUflWxuUSsEXI/drOhL6+XJ29Q
-Date:   Thu, 22 Jun 2023 18:43:02 +0000
-Message-ID: <MN0PR12MB59539C6540FA6B673A1A7FF8B722A@MN0PR12MB5953.namprd12.prod.outlook.com>
-References: <20230622175200.74033-1-fido_max@inbox.ru>
-In-Reply-To: <20230622175200.74033-1-fido_max@inbox.ru>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MN0PR12MB5953:EE_|PH7PR12MB9221:EE_
-x-ms-office365-filtering-correlation-id: 0e43f27f-af55-4cb2-a9e4-08db73508236
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: hQWpzn5cQkNK4nMfei0jrIa7byHFdCEvyKgnc30LIkpWFQwEVpknNa8++5ooeAwBDYN4qD8r+538EjqDGHhLWmVqBB4B/mVnozklb2vb+muSEgWcFK4a0MkDAKtGAvXvBXMNypngvh/3Do+PMQvNa1H4FO88c7nJj7xj/ozDi0KbyMpic2Xavknj+yYYTFTCNwheNbLL7yMUi5ES5RJ/n83BL5rQlMsqKkNEOKibb8N6TGcjzbCjGn5Lz4q1VAk6Cvquq2r5c04DlExZfY+e0I35122hr+jZOVZ/hE1ta3l1pma+XK0DXfW3L7C/FxtBa1anWqdzJc5yPQ28R8EaeHOPiDrpdpbEJlkPBWlD5JJRJMVmgXqzshg3yE2lTghpmF/iH1pyeDbpq5S/8vl6Deqaq7GUxjqh0A/EgjuidaqBLBjJiM26rnUZkRXL9NNd0Ne4PiWh8v9rQ7ratnPEoifrp6yUsIXKpdmq05D3wLxcjzRPS/rl2/cIL4pi4umJTKfXVDO5F5HGRpzoWpSOWyXn4V48bO4YHEBYsZlqiXe2d1ehPI/rKzmJYzYi5ElqAV6o7nIaFto0biuV3gZKJ7/H3vB1WBOSjODJU1GRkT3Z9Eb3rXdfksCxd9tN9HpU
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB5953.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(346002)(376002)(39860400002)(136003)(451199021)(7696005)(71200400001)(478600001)(83380400001)(38100700002)(186003)(122000001)(86362001)(38070700005)(55016003)(33656002)(53546011)(6506007)(9686003)(8676002)(8936002)(41300700001)(7416002)(52536014)(5660300002)(2906002)(110136005)(54906003)(66946007)(66476007)(66556008)(66446008)(316002)(64756008)(4326008)(76116006);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?70CfoE4y/TvUWzSuG8fWYEJWpBd3r+MxbKwoCmsj4KfzLNe3P5xQkHxOdsfw?=
- =?us-ascii?Q?o7B2UuCbhump8E4Uq9H/8Y1Shf4Oen2eQaCu6vMLUgPMsGl8VuKOO1EwLhHW?=
- =?us-ascii?Q?WcKiOkIx0dYOt3aVbHTA8Yqi5ZHKSpukj3kN3/nsAALEaZvbbSrSJCmJa8n1?=
- =?us-ascii?Q?e8SV+G1RuuPcBm8uv5T+XR1GEqhFsOozjmv0pgTg/iUi1tG8M5mNnWiYVhgv?=
- =?us-ascii?Q?e/4ykO4r1XsfUmA9xTNl73FF3brCaDpbtLY6q0bsXOXl193/jl/LhwPXbKD2?=
- =?us-ascii?Q?hd9aNE/FygWGIOX3otWT1mEuiUqeetd1uhJjz7yX7s1hl30Q8uvG7L+H2Qot?=
- =?us-ascii?Q?dWh34N2O86oJqp0Wl7ERl/bYJd47pM3tO4JsoXq/DD3HDWpLarHB7iYvdKbk?=
- =?us-ascii?Q?FndR3xQusCmyq4PVq8p2umJq7i2wweakJiuak2vZWMBZRm7akhAMqrXh7bwZ?=
- =?us-ascii?Q?kj6FS3qx1y95/tOP/p6Bqud5yKVQdNFkOsVTUE8tdrMYTsqbDZP99j6E9qBU?=
- =?us-ascii?Q?/9naL0pVRmbTWTILlyqVD5lzUE2pxWdr+wbj2zFUM3xq7mq3ihMH0YwLGXRP?=
- =?us-ascii?Q?/Sh/XZN1oxDk6/TpAyUHp9qw2R4mwDVx/fJbsZWiylwcIV1KgAUwI8w6Qpqp?=
- =?us-ascii?Q?ftpsaMMBH37vOb4v0tzh0W8dwmPTPXM0IcnRVmAr56X+K19go4DQmIwYcFXc?=
- =?us-ascii?Q?SkcNo6VbORJKcQgsUBMUJ+5U77doIbR3rl2FisA5S8amtKJGWYO2m6cHVNn8?=
- =?us-ascii?Q?NwnbCJSvhEh6+xirH6LheR8rsjK8C4/GNgH3FBDBmWo0CWEGQLy9hcCyQ69t?=
- =?us-ascii?Q?ibmbAgf8/JYdCdzxWc/eGXQHPicZZK6QQUzbvJsPC5FU3r6xUKHKzq2u1YtY?=
- =?us-ascii?Q?V4IV9JtGkVsUyQHETPx0EO1KnOiU/OHegMyaTFohdETCLKTdHNCufyzhHknv?=
- =?us-ascii?Q?MF9hkovpEvtOlzdGzpjgHLMNigmfh1I7zvxnSeFM2LP46DQjAW8javbeAdGe?=
- =?us-ascii?Q?lK8DrjxfrDKfBXXbRQdtsFVDybDNPviYqmhGnaW1g6yfFvU+MWAF+EO42X57?=
- =?us-ascii?Q?0KbK+M+91GWBqxDF+5BKjWxZl0kp1YxKf3gZA+zJ/jpM8Xgx539sAoJ2Sw7l?=
- =?us-ascii?Q?rGufYVHIvR9k1Wc+RIUZ/UbcV1IbbBKaiKjNmbOOpNL5ZU2KACSQAAHgcOjT?=
- =?us-ascii?Q?fvN7+M4Y0+Zd/xYM5UXohXOUEcICuWkcpsKFfF5Kj0tpnqWex6uO5CoBBZaV?=
- =?us-ascii?Q?9wH24We4y5/Y38PTcd+rcxyY1lHwNcH4/BIHnAQtlJfgJo8Zeqg7itj0TiXB?=
- =?us-ascii?Q?QMc4SYtyVZHm8jy93hykH1TnlZpcpZX5tzft9LwgBdKMHcZPzG/kH9JSjRZg?=
- =?us-ascii?Q?jIdkfUltpoyxFXH7L5NCoNqknpSfk8CHl1vD5ItIbnmomctlwTgXQikWROME?=
- =?us-ascii?Q?Cl9uCUDlXmBETwUZoCO5uszgltYUHlSZzCBa3I7MD1PX7Gj0Rz3icMZvGsi9?=
- =?us-ascii?Q?uOlGci6But0Jibjt/p5bSqj6fBDgkGAsnJOHWQfYoCWv3s+bpuLOhfWQtQjb?=
- =?us-ascii?Q?iyaNfZCbw/jsUnK6eOI1mMoQrmXmIu7qlb3td55+HJfZvyXRyK25kYreMCW1?=
- =?us-ascii?Q?soHpQpGcw7/B1anBGHgjQCk=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 22 Jun 2023 14:43:34 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D57FE1FFC
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 11:43:33 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 2BF9D3200935;
+        Thu, 22 Jun 2023 14:43:33 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Thu, 22 Jun 2023 14:43:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        invisiblethingslab.com; h=cc:cc:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1687459412; x=1687545812; bh=eBehM+By9caRLN1To9jpxpV1YmtkZ9cdehs
+        yjMSmcT8=; b=gB/SYAPTnJxEdyg0FJl/nqw57HV1pe4+VudP0ghdc4fq2CzgPah
+        qMirdHdSoJso86qPcsIMmfmU1tC/HHy82grih+D5WmKBsPK49OkQKJ5JU4/OZ/1E
+        k/Y9h8QYyl85BcD/G8vuQPxs5/ubJud0sZILO+8UrhJaENfDBfB2/4MY4XgScKf+
+        MmAvdfYnQJ4xcqJKbRdkHNmlVGnFaq3k+SdKv0xRo4Z0O0TuDqUL2qkYuPX+ZtiP
+        T3w4IqbSUZrpt9BcCtcupewGlYafMfYLoT5etmHNAVHgNWXbcgavK0kGBwX2Pr++
+        MtyVieWHZ92Y9oxfSkrOEdKhh64fEzQDMWA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1687459412; x=1687545812; bh=eBehM+By9caRL
+        N1To9jpxpV1YmtkZ9cdehsyjMSmcT8=; b=Bo3ilMKdlBQ30diAF4nCu/PBMxkHP
+        i86bAbjd+FDPno9WTgIQVUO9jmffNeemfHvNmYhlIqYT2/Sku6+cgR5/n1VNx1he
+        K4+vkAgZbYsOSUB3rGazGdljdp7vO0vbe1llDmKEfuyuM/+mhgJXGhyjkoVBunE6
+        GG1ITE1GQS7uuaS5OjC91NCaO+SVP6Nexg99ugzz/VTZEHcjOuk8V1s99fKci/Ba
+        zcqAL1MJR/RJFc/QqFgZ3zW2G3ZDovStxMMMxiUSoWBiKF7jwdB7S0JXmsdknWvv
+        nVhNYK5o1sZhUUxnZ4ta0v6jxXsOGxDdYyblv570/SruPYeTuRyOznoDg==
+X-ME-Sender: <xms:VJaUZAem5FStipcU4FIi_BsGmMDixLfqyIjbElUyEwzIx_ivcSO2Ww>
+    <xme:VJaUZCMX7_pZu1-JGZmV7xoh2hN4CVykgAy62J8Q7zhrC7QKR3ct-fMWXyau28gnp
+    QdttDSDcZ2OvR8>
+X-ME-Received: <xmr:VJaUZBikOkyrJ1sOruQgIvalg-AIk6lVqrZf5n1G5MdrBDvqTuGc3QLvEQ4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeeguddguddvkecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehgtdorredttdejnecuhfhrohhmpeffvghm
+    ihcuofgrrhhivgcuqfgsvghnohhurhcuoeguvghmihesihhnvhhishhisghlvghthhhinh
+    hgshhlrggsrdgtohhmqeenucggtffrrghtthgvrhhnpeefkefgkedvtefguedtffejlefh
+    leetveekhefgfeetvefgtdektedtkeeuiedtfeenucffohhmrghinhepkhgvrhhnvghlrd
+    horhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhep
+    uggvmhhisehinhhvihhsihgslhgvthhhihhnghhslhgrsgdrtghomh
+X-ME-Proxy: <xmx:VJaUZF_aaH81Hbvd9uYqol3HLHWL-SBKPMYsQvxX382EVMwbavxWaQ>
+    <xmx:VJaUZMsYrmHgkoZaIO5j3SSnP0mtdXw6OS4vFdUhcagGv-eyTemiew>
+    <xmx:VJaUZMGMcWdGr4RFDBAdzeBerU6AEAy_4CAB-sFuuBnwAOgoUEdcFg>
+    <xmx:VJaUZJUyNzhawX-eN0FgMbBN1qraifSlCy9WYseNebYNZFdu-1PbDQ>
+Feedback-ID: iac594737:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 22 Jun 2023 14:43:32 -0400 (EDT)
+Date:   Thu, 22 Jun 2023 14:43:29 -0400
+From:   Demi Marie Obenour <demi@invisiblethingslab.com>
+To:     Mike Snitzer <snitzer@kernel.org>
+Cc:     Alasdair Kergon <agk@redhat.com>, dm-devel@redhat.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 4/6] device-mapper: Avoid double-fetch of version
+Message-ID: <ZJSWUpKSCrxmGfqt@itl-email>
+References: <20230601212456.1533-1-demi@invisiblethingslab.com>
+ <20230603145244.1538-1-demi@invisiblethingslab.com>
+ <20230603145244.1538-5-demi@invisiblethingslab.com>
+ <ZJR02A79ljoUjbFl@redhat.com>
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB5953.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0e43f27f-af55-4cb2-a9e4-08db73508236
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Jun 2023 18:43:02.2120
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: MWkfcAHU/wAx9qs2FylIXSgCaLJbXxSFl5JZtxgtlmzw5Ru5GNGSGPQnSIxO/u4L
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB9221
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="w81VBFPtBLle1co8"
+Content-Disposition: inline
+In-Reply-To: <ZJR02A79ljoUjbFl@redhat.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> -----Original Message-----
-> From: Maxim Kochetkov <fido_max@inbox.ru>
-> Sent: Thursday, June 22, 2023 11:22 PM
-> To: netdev@vger.kernel.org
-> Cc: Maxim Kochetkov <fido_max@inbox.ru>; Pandey, Radhey Shyam
-> <radhey.shyam.pandey@amd.com>; David S. Miller
-> <davem@davemloft.net>; Eric Dumazet <edumazet@google.com>; Jakub
-> Kicinski <kuba@kernel.org>; Paolo Abeni <pabeni@redhat.com>; Simek,
-> Michal <michal.simek@amd.com>; Andrew Lunn <andrew@lunn.ch>; Robert
-> Hancock <robert.hancock@calian.com>; linux-arm-
-> kernel@lists.infradead.org; linux-kernel@vger.kernel.org
-> Subject: [PATCH v2 1/1] net: axienet: Move reset before DMA detection
->=20
-> DMA detection will fail if axinet was started before (by boot loader,
 
-:%s/axinet/axienet/g
+--w81VBFPtBLle1co8
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 22 Jun 2023 14:43:29 -0400
+From: Demi Marie Obenour <demi@invisiblethingslab.com>
+To: Mike Snitzer <snitzer@kernel.org>
+Cc: Alasdair Kergon <agk@redhat.com>, dm-devel@redhat.com,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 4/6] device-mapper: Avoid double-fetch of version
 
-> boot ROM, etc). In this state axinet will not start properly.
-> XAXIDMA_TX_CDESC_OFFSET + 4 register (MM2S_CURDESC_MSB) is used to
-> detect
-> 64 DMA capability here. But datasheet says: When DMACR.RS is 1
-> (axinet is in enabled state), CURDESC_PTR becomes Read Only (RO) and
-> is used to fetch the first descriptor. So iowrite32()/ioread32() trick
-> to this register to detect DMA will not work.
-> So move axinet reset before DMA detection.
+On Thu, Jun 22, 2023 at 12:20:40PM -0400, Mike Snitzer wrote:
+> On Sat, Jun 03 2023 at 10:52P -0400,
+> Demi Marie Obenour <demi@invisiblethingslab.com> wrote:
 >=20
-> Fixes: 04cc2da39698 ("net: axienet: reset core on initialization prior to=
- MDIO
+> > The version is fetched once in check_version(), which then does some
+> > validation and then overwrites the version in userspace with the API
+> > version supported by the kernel.  copy_params() then fetches the version
+> > from userspace *again*, and this time no validation is done.  The result
+> > is that the kernel's version number is completely controllable by
+> > userspace, provided that userspace can win a race condition.
+> >=20
+> > Fix this flaw by not copying the version back to the kernel the second
+> > time.  This is not exploitable as the version is not further used in the
+> > kernel.  However, it could become a problem if future patches start
+> > relying on the version field.
+> >=20
+> > Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Demi Marie Obenour <demi@invisiblethingslab.com>
+> > ---
+> >  drivers/md/dm-ioctl.c | 30 ++++++++++++++++++------------
+> >  1 file changed, 18 insertions(+), 12 deletions(-)
+> >=20
+> > diff --git a/drivers/md/dm-ioctl.c b/drivers/md/dm-ioctl.c
+> > index da6ca26b51d0953df380582bb3a51c2ec22c27cb..7510afe237d979a5ee71afe=
+87a20d49f631de1aa 100644
+> > --- a/drivers/md/dm-ioctl.c
+> > +++ b/drivers/md/dm-ioctl.c
+> > @@ -1873,30 +1873,33 @@ static ioctl_fn lookup_ioctl(unsigned int cmd, =
+int *ioctl_flags)
+> >   * As well as checking the version compatibility this always
+> >   * copies the kernel interface version out.
+> >   */
+> > -static int check_version(unsigned int cmd, struct dm_ioctl __user *use=
+r)
+> > +static int check_version(unsigned int cmd, struct dm_ioctl __user *use=
+r,
+> > +			 struct dm_ioctl *kernel_params)
+> >  {
+> > -	uint32_t version[3];
+> >  	int r =3D 0;
+> > =20
+> > -	if (copy_from_user(version, user->version, sizeof(version)))
+> > +	if (copy_from_user(kernel_params->version, user->version, sizeof(kern=
+el_params->version)))
+> >  		return -EFAULT;
+> > =20
+> > -	if ((version[0] !=3D DM_VERSION_MAJOR) ||
+> > -	    (version[1] > DM_VERSION_MINOR)) {
+> > +	if ((kernel_params->version[0] !=3D DM_VERSION_MAJOR) ||
+> > +	    (kernel_params->version[1] > DM_VERSION_MINOR)) {
+> >  		DMERR("ioctl interface mismatch: kernel(%u.%u.%u), user(%u.%u.%u), c=
+md(%d)",
+> >  		      DM_VERSION_MAJOR, DM_VERSION_MINOR,
+> >  		      DM_VERSION_PATCHLEVEL,
+> > -		      version[0], version[1], version[2], cmd);
+> > +		      kernel_params->version[0],
+> > +		      kernel_params->version[1],
+> > +		      kernel_params->version[2],
+> > +		      cmd);
+> >  		r =3D -EINVAL;
+> >  	}
+> > =20
+> >  	/*
+> >  	 * Fill in the kernel version.
+> >  	 */
+> > -	version[0] =3D DM_VERSION_MAJOR;
+> > -	version[1] =3D DM_VERSION_MINOR;
+> > -	version[2] =3D DM_VERSION_PATCHLEVEL;
+> > -	if (copy_to_user(user->version, version, sizeof(version)))
+> > +	kernel_params->version[0] =3D DM_VERSION_MAJOR;
+> > +	kernel_params->version[1] =3D DM_VERSION_MINOR;
+> > +	kernel_params->version[2] =3D DM_VERSION_PATCHLEVEL;
+> > +	if (copy_to_user(user->version, kernel_params->version, sizeof(kernel=
+_params->version)))
+> >  		return -EFAULT;
+> > =20
+> >  	return r;
+> > @@ -1922,7 +1925,10 @@ static int copy_params(struct dm_ioctl __user *u=
+ser, struct dm_ioctl *param_kern
+> >  	const size_t minimum_data_size =3D offsetof(struct dm_ioctl, data);
+> >  	unsigned int noio_flag;
+> > =20
+> > -	if (copy_from_user(param_kernel, user, minimum_data_size))
+> > +	/* Version has been copied from userspace already, avoid TOCTOU */
+> > +	if (copy_from_user((char *)param_kernel + sizeof(param_kernel->versio=
+n),
+> > +			   (char __user *)user + sizeof(param_kernel->version),
+> > +			   minimum_data_size - sizeof(param_kernel->version)))
+> >  		return -EFAULT;
+> > =20
+> >  	if (param_kernel->data_size < minimum_data_size) {
+> > @@ -2034,7 +2040,7 @@ static int ctl_ioctl(struct file *file, uint comm=
+and, struct dm_ioctl __user *us
+> >  	 * Check the interface version passed in.  This also
+> >  	 * writes out the kernel's interface version.
+> >  	 */
+> > -	r =3D check_version(cmd, user);
+> > +	r =3D check_version(cmd, user, &param_kernel);
+> >  	if (r)
+> >  		return r;
+> > =20
+>=20
+> I picked this patch up for 6.5, please see:
+> https://git.kernel.org/pub/scm/linux/kernel/git/device-mapper/linux-dm.gi=
+t/commit/?h=3Ddm-6.5&id=3Dc71878e9982075eab2e9f6dc5a09ba7b60ac1e24
 
-Is this fixes tag correct ? I think the failure is introduced after=20
-f735c40ed93c net: axienet: Autodetect 64-bit DMA capability?
+That=E2=80=99s great, thanks!
 
-> access")
-> Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
-> ---
->  drivers/net/ethernet/xilinx/xilinx_axienet_main.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
+> But FYI, I folded these changes in:
 >=20
-> diff --git a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
-> b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
-> index 3e310b55bce2..734822321e0a 100644
-> --- a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
-> +++ b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
-> @@ -2042,6 +2042,11 @@ static int axienet_probe(struct platform_device
-> *pdev)
->  		goto cleanup_clk;
->  	}
->=20
-> +	/* Reset core now that clocks are enabled, prior to accessing MDIO
-> */
-> +	ret =3D __axienet_device_reset(lp);
-> +	if (ret)
-> +		goto cleanup_clk;
+> diff --git a/drivers/md/dm-ioctl.c b/drivers/md/dm-ioctl.c
+> index 526464904fc1..b58a15e212a3 100644
+> --- a/drivers/md/dm-ioctl.c
+> +++ b/drivers/md/dm-ioctl.c
+> @@ -1838,6 +1838,9 @@ static int check_version(unsigned int cmd, struct d=
+m_ioctl __user *user,
+>  {
+>  	int r =3D 0;
+> =20
+> +	/* Make certain version is first member of dm_ioctl struct */
+> +	BUILD_BUG_ON(offsetof(struct dm_ioctl, version) !=3D 0);
 > +
->  	/* Autodetect the need for 64-bit DMA pointers.
->  	 * When the IP is configured for a bus width bigger than 32 bits,
->  	 * writing the MSB registers is mandatory, even if they are all 0.
-> @@ -2096,11 +2101,6 @@ static int axienet_probe(struct platform_device
-> *pdev)
->  	lp->coalesce_count_tx =3D XAXIDMA_DFT_TX_THRESHOLD;
->  	lp->coalesce_usec_tx =3D XAXIDMA_DFT_TX_USEC;
->=20
-> -	/* Reset core now that clocks are enabled, prior to accessing MDIO
-> */
-> -	ret =3D __axienet_device_reset(lp);
-> -	if (ret)
-> -		goto cleanup_clk;
-> -
->  	ret =3D axienet_mdio_setup(lp);
->  	if (ret)
->  		dev_warn(&pdev->dev,
-> --
-> 2.40.1
+>  	if (copy_from_user(kernel_params->version, user->version, sizeof(kernel=
+_params->version)))
+>  		return -EFAULT;
+> =20
+> @@ -1885,7 +1888,7 @@ static int copy_params(struct dm_ioctl __user *user=
+, struct dm_ioctl *param_kern
+>  	const size_t minimum_data_size =3D offsetof(struct dm_ioctl, data);
+>  	unsigned int noio_flag;
+> =20
+> -	/* Version has been copied from userspace already, avoid TOCTOU */
+> +	/* check_version() already copied version from userspace, avoid TOCTOU =
+*/
+>  	if (copy_from_user((char *)param_kernel + sizeof(param_kernel->version),
+>  			   (char __user *)user + sizeof(param_kernel->version),
+>  			   minimum_data_size - sizeof(param_kernel->version)))
 
+Those changes indeed make the code better, thanks for including them!
+--=20
+Sincerely,
+Demi Marie Obenour (she/her/hers)
+Invisible Things Lab
+
+--w81VBFPtBLle1co8
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEdodNnxM2uiJZBxxxsoi1X/+cIsEFAmSUllIACgkQsoi1X/+c
+IsHGaw/+OBQ6qqQ+9bo9YQkg1nj6MfuKLh81ZlnTdR/VEjDch6hEcnYeeVf8jctF
+x0QcB8odZp9ASSiwYn6pkWj3ZlXhfoQUeG+zSYZdOtMa+bao1ddEpqsBU5vPTex+
+uMHHTm9SVMQKAGbA/rcY+iKamz9lM6qSGgMcopmVlWYD+76yQ2b5HocNDQZhtEGI
+qeACZe8BlGlRhBN2os339ZllG8BeFx9xYU1AXLiJ6IjsUicOWdM1D8mQ1km7yhCE
+MNPMxvHAPe3jPLPjK+ZkoFtqn74i8ijI9gIxhTaeNr1ZSt8PvNm/FnKOgf+Ap4/o
+456us8OpKy5dflgzXmIFj8Ai0/yfbl54dBijOUKhJtqt7sLsWpxRHSLlIWQxZYv0
+8XccQqzGdDKOKSJs6tzC22UD4ZKuV0hD9BfZ8iq6WOOvzZQOFe89E4bugEMkeSpO
+XuzDrVdHkOXCLfWXAdOF2ty4xTCKh6Rr/PURsSin/NXathb1F50j47JBRGrTHqIC
+iQ700EwDo3ituhp2JcAiaBKA5SpVfNL4j2js5MeeMr/TDdK/sJL9v07e79B7Qgn/
+2U/EAE4aq8sdfF/jFjduZWR2Suv0EqeZAyynIchm2fFP7BASCxQwc1gG0JXoH/2J
+sfPwCECoTvkwjiBHhZVoSf4f5zkbjdr0TWdf0tgDcm+oVL7I/Xw=
+=Vywc
+-----END PGP SIGNATURE-----
+
+--w81VBFPtBLle1co8--
