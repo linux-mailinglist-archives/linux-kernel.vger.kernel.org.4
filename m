@@ -2,90 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45C7F73AD78
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 01:51:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E93073AD5C
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 01:50:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230097AbjFVXvF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 19:51:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58552 "EHLO
+        id S231770AbjFVXuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 19:50:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231790AbjFVXui (ORCPT
+        with ESMTP id S231282AbjFVXuK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 19:50:38 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09DE4212B;
-        Thu, 22 Jun 2023 16:50:37 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35MN47xP005500;
-        Thu, 22 Jun 2023 23:50:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : date :
- subject : mime-version : content-type : content-transfer-encoding :
- message-id : references : in-reply-to : to : cc; s=qcppdkim1;
- bh=SiWbOMCmpgwxxX3TlE2LyY2gp55DW7XcM5FPAL+Pfo0=;
- b=NNxFqeHoqOiEX0kOvvlPyyQOMyFiDOdFczZFDgnF2xkx1NZLMLdmcTxP59dFgPef3ay/
- EUpCdwgcvtCfQsKTng4rHKjr1eQ0SsnPycGpGzDsyN6pRHL8V+xLcbGUbMB9dQNWieE/
- ZgD3aiiG/C7y65CyGdRHgwe/C6Tjq0r3CApHVA9rtU7jHQP4d+bgKL9Z4v2oNoZo3MiV
- ulhF3IBEr9ebQsAFrbyrW7op2IHuqdlaD39Uqtf1MCSn2A8D7Qr1BI/EKzdOlNxG/8pL
- YsKB6atVQ59/rNEwAahMqdkS3P5DvWPZDCgvfWS2UmIaoKbVGb4gSPt0hHpuhNayrVfA qg== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rckn2t3vy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Jun 2023 23:50:28 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35MNoRq1004798
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Jun 2023 23:50:27 GMT
-Received: from hu-rmccann-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+        Thu, 22 Jun 2023 19:50:10 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D99D2121;
+        Thu, 22 Jun 2023 16:50:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687477810; x=1719013810;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=QECeKOTe33ly82afNg24TTDUBElGlctDInq1PjiqdBo=;
+  b=TRai92J2aJXCz9wPQ12482B3MN0cGNobzpuKscOud66sXJzrQNeHRYNl
+   hTCDX/9vwqnrMD74lGwbSpa0o/gpTuR6Hg5PeqiTC2uFjuXzvNe9D2jJW
+   j+CxlKKBh71+kMnPF5LZUeIh+V3Zc6II/HsAao/LTxW6TD123zQngqhGa
+   5SZzCuSsBUM6mEaCOtvl5/DOXHBuXIAwK/2nCwPnh/Afpfw9rspIS8ECM
+   3bInjIMj/bICXmf+4MYCunGWT9oeEUgCt5xeAhasMNTFnJ8Epu9sSyq7k
+   hCO0mNCg5cUMX+hbwMA9UdgDshWJN2YSkNDPUK6DXzn2k34+JF37T/W/a
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="390516459"
+X-IronPort-AV: E=Sophos;i="6.01,150,1684825200"; 
+   d="scan'208";a="390516459"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 16:50:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="715123931"
+X-IronPort-AV: E=Sophos;i="6.01,150,1684825200"; 
+   d="scan'208";a="715123931"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga002.jf.intel.com with ESMTP; 22 Jun 2023 16:50:09 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 22 Jun 2023 16:50:08 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 22 Jun 2023 16:50:08 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Thu, 22 Jun 2023 16:50:08 -0700
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (104.47.56.43) by
+ edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Thu, 22 Jun 2023 16:50:27 -0700
-From:   Ryan McCann <quic_rmccann@quicinc.com>
-Date:   Thu, 22 Jun 2023 16:48:58 -0700
-Subject: [PATCH 6/6] drm/msm/dpu: Update dev core dump to dump registers of
- sub blocks
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+ 15.1.2507.23; Thu, 22 Jun 2023 16:50:08 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SNvsL06Tcani2vvT/JHEJEBYox//4K7ip+C2So6L6Qju2Q0P4t6zkzkINTDfL+exWKrm+qe3FFtn5yi+gI45EVlzuB7N0Ox+jnIJbtBwrOZfPsbG1hkG3n5DY95Ds6TVAPvHyKIrGxSR8HnJh85sdCdhn16G+mFhTDRfmBGMTtuy8+f9MwPLEVC6Q4qCno/WW5yy82cJ3zZ0mzgX+v9WkHrXVbi8H/7UGqJwKzlYOPNnO7+e4gZm5r9BpVDBfRTrQzAl7C76SzNkGlgQcf7Hg1AWaf8KwFr72uvL+lR5NRt10eT4D2iboaii2jw5XNpIbHlK/Ig8RbNzFS0/9eJM6Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6sylTHtZ3/8cD4QU72QHzMONWpyDBOmHWIeJYUwQ/50=;
+ b=BI0YzGB7vtGKAP4NjuRAb2SL/6TwWXcdQt3SJRJyYG/2Rnz54AhPmqWz0jCKqe4Tqf7RKTKFiRLUbs/lLd90/JNP/7sPa2o4kdN4urYZQ7BC0WoYq2m5dYyhE9RtTZOBtUyeV3bI6zqKs5Xf5kI7Xspnc9ywNI0pOb+y2OSfnQlUW0PzGQ0R9ZqoPsKcHQsVxQhCGnm7ptq8JL0lpYuSgReCbTtEyouSlhh3yJaqmn6NyHAPIBETqCdewvSrSuqMgVnSKchPNmQ9paHN5dgzquZOqz0zooS0Wp/bk+xp5jF4xlVSwcA8lWyDAwpWQjLlnn23NreShPxWI6fVnePZ1w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH7PR11MB5984.namprd11.prod.outlook.com (2603:10b6:510:1e3::15)
+ by SJ0PR11MB4941.namprd11.prod.outlook.com (2603:10b6:a03:2d2::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24; Thu, 22 Jun
+ 2023 23:50:06 +0000
+Received: from PH7PR11MB5984.namprd11.prod.outlook.com
+ ([fe80::ef38:9181:fb78:b528]) by PH7PR11MB5984.namprd11.prod.outlook.com
+ ([fe80::ef38:9181:fb78:b528%7]) with mapi id 15.20.6521.024; Thu, 22 Jun 2023
+ 23:50:06 +0000
+Message-ID: <55979084-5034-5064-a9df-41a4e3050af9@intel.com>
+Date:   Thu, 22 Jun 2023 16:50:02 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Betterbird/102.11.1
+Subject: Re: [PATCH v6 13/27] cxl/mem: Prepare for early RCH dport component
+ register setup
+To:     Terry Bowman <terry.bowman@amd.com>, <alison.schofield@intel.com>,
+        <vishal.l.verma@intel.com>, <ira.weiny@intel.com>,
+        <bwidawsk@kernel.org>, <dan.j.williams@intel.com>,
+        <Jonathan.Cameron@huawei.com>, <linux-cxl@vger.kernel.org>
+CC:     <rrichter@amd.com>, <linux-kernel@vger.kernel.org>,
+        <bhelgaas@google.com>
+References: <20230622035126.4130151-1-terry.bowman@amd.com>
+ <20230622035126.4130151-14-terry.bowman@amd.com>
+Content-Language: en-US
+From:   Dave Jiang <dave.jiang@intel.com>
+In-Reply-To: <20230622035126.4130151-14-terry.bowman@amd.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-ID: <20230622-devcoredump_patch-v1-6-3b2cdcc6a576@quicinc.com>
-References: <20230622-devcoredump_patch-v1-0-3b2cdcc6a576@quicinc.com>
-In-Reply-To: <20230622-devcoredump_patch-v1-0-3b2cdcc6a576@quicinc.com>
-To:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-CC:     Rob Clark <robdclark@chromium.org>,
-        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        <quic_jesszhan@quicinc.com>, Ryan McCann <quic_rmccann@quicinc.com>
-X-Mailer: b4 0.13-dev-8a804
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1687477824; l=9099;
- i=quic_rmccann@quicinc.com; s=20230622; h=from:subject:message-id;
- bh=GPxUKbhVRNfWIyXk3T5WLt4/ZaogBUP0uckeyfQQy4s=;
- b=q+otuAwcBqj5+AUuode0cgyK8Ew6TfCfsv4Yb8SHTIZs+ukXypQE4NsP+AscDiDIlFk+2VJD9
- B6rdAZFE/4TDC+5Yg2yvnbU35CogUREVSqCHL2MKk3nverPe5u3iiT/
-X-Developer-Key: i=quic_rmccann@quicinc.com; a=ed25519;
- pk=d/uP3OwPGpj/bTtiHvV1RBZ2S6q4AL6j1+A5y+dmbTI=
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: Mn6Qi1SvhbsTxhfaxOqp2f5N9clFK8OR
-X-Proofpoint-ORIG-GUID: Mn6Qi1SvhbsTxhfaxOqp2f5N9clFK8OR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-22_17,2023-06-22_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxlogscore=956
- lowpriorityscore=0 malwarescore=0 phishscore=0 impostorscore=0 mlxscore=0
- spamscore=0 bulkscore=0 adultscore=0 suspectscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
- definitions=main-2306220205
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-ClientProxiedBy: BY5PR13CA0007.namprd13.prod.outlook.com
+ (2603:10b6:a03:180::20) To PH7PR11MB5984.namprd11.prod.outlook.com
+ (2603:10b6:510:1e3::15)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH7PR11MB5984:EE_|SJ0PR11MB4941:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0720872e-d6f2-42dc-a934-08db737b67cd
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: QKS8oD7Ar9FIlXC2W9Zja1GMI+Ne2/e4Zt5IINKLj9cAvhX18r5jP14SYAZy1jpTIZ98LEBVD93gbmCbc0uTjQhIQvyzKg59tUKuRlxi2U0gPHz8eu4QrLAjz/o4cf/YjHXR8PRfClRcvoVmAgi2sB9Kzjks38jo5EJ4P6WqsdOaIVtgcNLaokxNu3edvmTqgWAjpU5on5RHEctjbukalRqHY6PlbCuj7semfBh8uZbWQ9ekFStQSu5nCX4j/9/CJ1icCkjbWB4qTXhKjP6B++ZEVxJlV2dC4iaGNrAscM0cb6HVrhZq7/TSNnWn7qxhpsxZ9TJUJcODWkew82rMNQp8SDlYfMsDEhCwTLVUFF8oKqNHAmxHF89Sv/kJHwKufLZuFG5f6mvAVMiRu8m0ZyZ7Y4/FWqRpOIVCpOL6LwpjY+bVznM7+n4O5tEzykYMVMm6IE/uyLRFl0SqqQLmu5pqtR9WeEfKB/fngXANmYw9C7RNwcB09Sg8uMMgYiVXSZOq//XrFhYvvS0z14juIdkFUldcU4q0b3vt4bX0N6XC59m9D2pY+NPj/t6GgYYNikq4f5fTrJ52Sy603BjQnecENVEbQsxDY6iuOmQ5QnYrX5LvlP5ug/z9parK3hF2P3AP/QImKHby1VeLKjnP4A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR11MB5984.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(376002)(136003)(396003)(39860400002)(346002)(451199021)(44832011)(6666004)(31686004)(26005)(6512007)(5660300002)(186003)(82960400001)(53546011)(6506007)(478600001)(38100700002)(2616005)(31696002)(2906002)(8936002)(41300700001)(8676002)(66556008)(66476007)(66946007)(6486002)(83380400001)(36756003)(316002)(86362001)(4326008)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QUNkdmI2VTk5TC9LUFByS01XL3ZMZlY0ajZWT2pzSnZRUmROWXhvaHNibzFD?=
+ =?utf-8?B?TFdUdVJ4ZXpuc3VGcGNyN1hCdzg4ZFhhV2JpN0g1VmNkYjZHeFFiYXdmZk5r?=
+ =?utf-8?B?Z2JnU0N6SGNKQzlaT2JISTVNckd4aWRCemlBamV5TmFGSzdWcldYSEpUUEM0?=
+ =?utf-8?B?cFQ1clpYV1RLSnluRUhiNDRZdkt0Q0ZKOWQvbS8wWDFOSjVMblhpdjkwV1ZD?=
+ =?utf-8?B?UmROUGsydFAwNWNaZHFWMnNrSWNJN2F1MkxGUXk3d0VELzBCZWlPMzdJUDc5?=
+ =?utf-8?B?Qkhta0FQT1FaUmllOFl2TWZXUXhQdndwdzVQNDN1RnA2NkI5NTRqYXdSeTlL?=
+ =?utf-8?B?cy8vU3JkbFEzS0c1YVRCeDZTREo5Z2M5NEl5UzMwbm1GL3MvWjNwVDBLWnln?=
+ =?utf-8?B?R3phL1ZNWTNOQnFvbEJ0aE1BUjRYTWVvN0Y1TmFLUlJreVJLWDJFUHI1a24v?=
+ =?utf-8?B?ZWozQzE4WFlBdjE2OUNYQmNaajBNL2R4bGtXVGVSTVNkUEtrYitoemh4VU16?=
+ =?utf-8?B?VVJnQ3FKNi84V0trbWlMeThYOHFpWTcvd0FSQ1NrTzNsOHdIOFF1VCtMQ2lX?=
+ =?utf-8?B?NlFvZTJZN3h1VXVzMEI4V2xJWEFKdWtOZDhHRmc4ZXE1NFJKaG1YbVZlczBm?=
+ =?utf-8?B?U2JxOHl5V1M0R1dJTUdlQmg5ZnBPbjdZSHhJdnhtbkk5SDBvM1MrMkp0UDVS?=
+ =?utf-8?B?SlR5ZGVFM2Vib1pDVHFBcVNyOXgvMEYrSG10dHNRQjhnd1hyOWVaUTVBY0FD?=
+ =?utf-8?B?NFhIWkR0OW9TWUkvNkFDUEtaRlBYRkRIcGVyMys5c3N0VXZUU3B3WkRUZDd0?=
+ =?utf-8?B?aHlRRncxWmplcmdKRHEwbDQ1WTM2WnRKU2NUT0VGUk0vNXNsSzErajNrWHFr?=
+ =?utf-8?B?Q1pLVmYrQW5xdHlxZWJCcFVnQU4yOUZBL1JaTHB5NFBnb082aEJCZTlMQkZB?=
+ =?utf-8?B?NnhsT0NsSlRuTFROaFVaOG0rV21YaU8vQ25TUlFZYUNkNElZUGZ1MzROWlZS?=
+ =?utf-8?B?UjJ1ZHNyS0JiY0FoYVQ5NjBsWWdNdlQrZGlzRDAwWEE2ek44Mk1lMXZ4OFdx?=
+ =?utf-8?B?cU14MTJpaUlsejZxWGtRcDVyWWhhMkJLU1FKeEhWcTJwUjluRVJISjFkcjJ6?=
+ =?utf-8?B?THdxM2wxUVZic2tLYXY5MjJhWnRZZE81SG9YcG1oeXlLQkRpaEdTMlZjdFVn?=
+ =?utf-8?B?M0hDRG5mQitCTHVLbXhtTW1nVjhKWXYzSmtzKzYyVUliQWY2OUROZ003ZFpk?=
+ =?utf-8?B?RHVVTEFJUXZRWFB0dVV6d2JjMlNDeFJLSTF3OHN1Q2RudGRKZXNCMDh4OUlW?=
+ =?utf-8?B?YkZwN1UwNkRickVtdHVWRzErVHdVNnlMYjI1UVcydEdYOFRxcG0vNXJsckhT?=
+ =?utf-8?B?VnpIMXUzOGh6ZDhueXhJZzFEMDMrbXdGc2dmc08xc1YwY2FITkcwbGpRL21o?=
+ =?utf-8?B?aWc1a2VLR0R6MGFLWlpLVFZIVFM5MHl6bW1FRGloalRmcnl1SHRoV055TTM1?=
+ =?utf-8?B?RElZMDg3dnp1TnlxcDMwT1BpaU1hR1lxcFZmeHpqQXJtdDJwS2pPVnRaNWFJ?=
+ =?utf-8?B?TTl2Yi9IOG9jVmJDKzFtT01JK2Jsckl0cnI0UGduWVNoRm1CZlpmd3pnSXZO?=
+ =?utf-8?B?ZWVoR0Z5bEFmV0Joek1PQWRoOERDeEpZT3dPSkxBNmQ3NkVvdStzdUdvYlh6?=
+ =?utf-8?B?bE1oWC93T21pTGhiTUVPYlZnaVgvSFlzTTVNc1RtRnI0YmYxRmNTakdnWFFz?=
+ =?utf-8?B?ckFPdit0WDdMVjFhY0xiUEJxSktOVFYvOWE4cjYxcW1uUFV5Qm9maUFXNGRQ?=
+ =?utf-8?B?N3ltSTJpektHcEw4TzBLb2Zpd0tTd0xYbTN3TldxQVZnZGtnSTFQbnZTL3Vn?=
+ =?utf-8?B?Wll3cjRic0xPQ0ttU0dlcFJVeHRlUkRkYUttMDlEcFlFYTk5WXNZR3c0cFdK?=
+ =?utf-8?B?Rm84VGpqTklabEwvUWxrTEpodTYrTGVic3FESEFCbzZUSUVwSnFvKzdYVVBy?=
+ =?utf-8?B?L2tjMzI5VzJ1Q0FXZGxvSEd0eHp6cmhteFk0U3B1OFZzOWM0U000QVVsOGk2?=
+ =?utf-8?B?NkQrMnR2a3dZMXVLVXRFNzZYbzFPU1FoV3UxRE5NQVAzRjAzRmkwTmFuZm1J?=
+ =?utf-8?B?SDk1blpHWXBTU0NWVU5wRk5mVEwxUkNWSW13aHhwbkZ4d1gwdlBGMnBBTkFM?=
+ =?utf-8?B?Wmc9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0720872e-d6f2-42dc-a934-08db737b67cd
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR11MB5984.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jun 2023 23:50:06.5147
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Iw3GbqYCFjSz2ACKi3ql4SyVhGhaMaJTfzMYM2yymVkpqQOMu7LxnuhY8BQnwPSXx8tq98lhu4cMavA7QaO1ag==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB4941
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,249 +168,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, the device core dump mechanism does not dump registers of sub
-blocks within the DSPP, SSPP, DSC, and PINGPONG blocks. Add wrapper
-function to dump hardware blocks that contain sub blocks.
 
-Signed-off-by: Ryan McCann <quic_rmccann@quicinc.com>
----
- drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c | 194 +++++++++++++++++++++++++++-----
- 1 file changed, 168 insertions(+), 26 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-index aa8499de1b9f..9b1b1c382269 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-@@ -885,6 +885,154 @@ static int dpu_irq_postinstall(struct msm_kms *kms)
- 	return 0;
- }
- 
-+static void dpu_kms_mdp_snapshot_add_block(struct msm_disp_state *disp_state,
-+					   void __iomem *mmio, void *blk,
-+					   enum dpu_hw_blk_type blk_type)
-+{
-+	u32 base;
-+
-+	switch (blk_type) {
-+	case DPU_HW_BLK_TOP:
-+	{
-+		struct dpu_mdp_cfg *top = (struct dpu_mdp_cfg *)blk;
-+
-+		if (top->features & BIT(DPU_MDP_PERIPH_0_REMOVED)) {
-+			msm_disp_snapshot_add_block(disp_state, MDP_PERIPH_TOP0,
-+						    mmio + top->base, "top");
-+			msm_disp_snapshot_add_block(disp_state, top->len - MDP_PERIPH_TOP0_END,
-+						    mmio + top->base + MDP_PERIPH_TOP0_END,
-+						    "top_2");
-+		} else {
-+			msm_disp_snapshot_add_block(disp_state, top->len, mmio + top->base, "top");
-+		}
-+		break;
-+	}
-+	case DPU_HW_BLK_LM:
-+	{
-+		struct dpu_lm_cfg *mixer = (struct dpu_lm_cfg *)blk;
-+
-+		msm_disp_snapshot_add_block(disp_state, mixer->len, mmio + mixer->base, "%s",
-+					    mixer->name);
-+		break;
-+	}
-+	case DPU_HW_BLK_CTL:
-+	{
-+		struct dpu_ctl_cfg *ctl = (struct dpu_ctl_cfg *)blk;
-+
-+		msm_disp_snapshot_add_block(disp_state, ctl->len, mmio + ctl->base, "%s",
-+					    ctl->name);
-+		break;
-+	}
-+	case DPU_HW_BLK_INTF:
-+	{
-+		struct dpu_intf_cfg *intf = (struct dpu_intf_cfg *)blk;
-+
-+		msm_disp_snapshot_add_block(disp_state, intf->len, mmio + intf->base, "%s",
-+					    intf->name);
-+		break;
-+	}
-+	case DPU_HW_BLK_WB:
-+	{
-+		struct dpu_wb_cfg *wb = (struct dpu_wb_cfg *)blk;
-+
-+		msm_disp_snapshot_add_block(disp_state, wb->len, mmio + wb->base, "%s",
-+					    wb->name);
-+		break;
-+	}
-+	case DPU_HW_BLK_SSPP:
-+	{
-+		struct dpu_sspp_cfg *sspp_block = (struct dpu_sspp_cfg *)blk;
-+		const struct dpu_sspp_sub_blks *sblk = sspp_block->sblk;
-+
-+		base = sspp_block->base;
-+
-+		msm_disp_snapshot_add_block(disp_state, sspp_block->len, mmio + base, "%s",
-+					    sspp_block->name);
-+
-+		if (sspp_block->features & BIT(DPU_SSPP_SCALER_QSEED3) ||
-+		    sspp_block->features & BIT(DPU_SSPP_SCALER_QSEED3LITE) ||
-+		    sspp_block->features & BIT(DPU_SSPP_SCALER_QSEED4))
-+			msm_disp_snapshot_add_block(disp_state, sblk->scaler_blk.len,
-+						    mmio + base + sblk->scaler_blk.base, "%s_%s",
-+						    sspp_block->name, sblk->scaler_blk.name);
-+
-+		if (sspp_block->features & BIT(DPU_SSPP_CSC) || sspp_block->features
-+					& BIT(DPU_SSPP_CSC_10BIT))
-+			msm_disp_snapshot_add_block(disp_state, sblk->csc_blk.len,
-+						    mmio + base + sblk->csc_blk.base, "%s_%s",
-+						    sspp_block->name, sblk->csc_blk.name);
-+		break;
-+	}
-+	case DPU_HW_BLK_DSPP:
-+	{
-+		struct dpu_dspp_cfg *dspp_block = (struct dpu_dspp_cfg *)blk;
-+
-+		base = dspp_block->base;
-+
-+		msm_disp_snapshot_add_block(disp_state, dspp_block->len, mmio + base, "%s",
-+					    dspp_block->name);
-+
-+		if (dspp_block->features & BIT(DPU_DSPP_PCC))
-+			msm_disp_snapshot_add_block(disp_state, dspp_block->sblk->pcc.len,
-+						    mmio + base + dspp_block->sblk->pcc.base,
-+						    "%s_%s", dspp_block->name,
-+						    dspp_block->sblk->pcc.name);
-+		break;
-+	}
-+	case DPU_HW_BLK_PINGPONG:
-+	{
-+		struct dpu_pingpong_cfg *pingpong_block = (struct dpu_pingpong_cfg *)blk;
-+		const struct dpu_pingpong_sub_blks *sblk = pingpong_block->sblk;
-+
-+		base = pingpong_block->base;
-+
-+		msm_disp_snapshot_add_block(disp_state, pingpong_block->len, mmio + base, "%s",
-+					    pingpong_block->name);
-+
-+		if (pingpong_block->features & BIT(DPU_PINGPONG_TE2))
-+			msm_disp_snapshot_add_block(disp_state, sblk->te2.len,
-+						    mmio + base + sblk->te2.base, "%s_%s",
-+						    pingpong_block->name, sblk->te2.name);
-+
-+		if (pingpong_block->features & BIT(DPU_PINGPONG_DITHER))
-+			msm_disp_snapshot_add_block(disp_state, sblk->dither.len,
-+						    mmio + base + sblk->dither.base, "%s_%s",
-+						    pingpong_block->name, sblk->dither.name);
-+		break;
-+	}
-+	case DPU_HW_BLK_DSC:
-+	{
-+		struct dpu_dsc_cfg *dsc_block = (struct dpu_dsc_cfg *)blk;
-+
-+		base = dsc_block->base;
-+
-+		if (dsc_block->features & BIT(DPU_DSC_HW_REV_1_2)) {
-+			struct dpu_dsc_blk enc = dsc_block->sblk->enc;
-+			struct dpu_dsc_blk ctl = dsc_block->sblk->ctl;
-+
-+			/* For now, pass in a length of 0 because the DSC_BLK register space
-+			 * overlaps with the sblks' register space.
-+			 *
-+			 * TODO: Pass in a length of 0 t0 DSC_BLK_1_2 in the HW catalog where
-+			 * applicable.
-+			 */
-+			msm_disp_snapshot_add_block(disp_state, 0, mmio + base, "%s",
-+						    dsc_block->name);
-+			msm_disp_snapshot_add_block(disp_state, enc.len, mmio + base + enc.base,
-+						    "%s_%s", dsc_block->name, enc.name);
-+			msm_disp_snapshot_add_block(disp_state, ctl.len, mmio + base + ctl.base,
-+						    "%s_%s", dsc_block->name, ctl.name);
-+		} else {
-+			msm_disp_snapshot_add_block(disp_state, dsc_block->len, mmio + base, "%s",
-+						    dsc_block->name);
-+		}
-+		break;
-+	}
-+	default:
-+		DPU_ERROR("Block type not supported.");
-+	}
-+}
-+
- static void dpu_kms_mdp_snapshot(struct msm_disp_state *disp_state, struct msm_kms *kms)
- {
- 	int i;
-@@ -899,53 +1047,47 @@ static void dpu_kms_mdp_snapshot(struct msm_disp_state *disp_state, struct msm_k
- 
- 	/* dump CTL sub-blocks HW regs info */
- 	for (i = 0; i < cat->ctl_count; i++)
--		msm_disp_snapshot_add_block(disp_state, cat->ctl[i].len,
--				dpu_kms->mmio + cat->ctl[i].base, "ctl_%d", i);
-+		dpu_kms_mdp_snapshot_add_block(disp_state, dpu_kms->mmio, (void *)&cat->ctl[i],
-+					       DPU_HW_BLK_CTL);
- 
- 	/* dump DSPP sub-blocks HW regs info */
- 	for (i = 0; i < cat->dspp_count; i++)
--		msm_disp_snapshot_add_block(disp_state, cat->dspp[i].len,
--				dpu_kms->mmio + cat->dspp[i].base, "dspp_%d", i);
-+		dpu_kms_mdp_snapshot_add_block(disp_state, dpu_kms->mmio, (void *)&cat->dspp[i],
-+					       DPU_HW_BLK_DSPP);
- 
- 	/* dump INTF sub-blocks HW regs info */
- 	for (i = 0; i < cat->intf_count; i++)
--		msm_disp_snapshot_add_block(disp_state, cat->intf[i].len,
--				dpu_kms->mmio + cat->intf[i].base, "intf_%d", i);
-+		dpu_kms_mdp_snapshot_add_block(disp_state, dpu_kms->mmio, (void *)&cat->intf[i],
-+					       DPU_HW_BLK_INTF);
- 
- 	/* dump PP sub-blocks HW regs info */
- 	for (i = 0; i < cat->pingpong_count; i++)
--		msm_disp_snapshot_add_block(disp_state, cat->pingpong[i].len,
--				dpu_kms->mmio + cat->pingpong[i].base, "pingpong_%d", i);
-+		dpu_kms_mdp_snapshot_add_block(disp_state, dpu_kms->mmio, (void *)&cat->pingpong[i],
-+					       DPU_HW_BLK_PINGPONG);
- 
- 	/* dump SSPP sub-blocks HW regs info */
- 	for (i = 0; i < cat->sspp_count; i++)
--		msm_disp_snapshot_add_block(disp_state, cat->sspp[i].len,
--				dpu_kms->mmio + cat->sspp[i].base, "sspp_%d", i);
-+		dpu_kms_mdp_snapshot_add_block(disp_state, dpu_kms->mmio, (void *)&cat->sspp[i],
-+					       DPU_HW_BLK_SSPP);
- 
- 	/* dump LM sub-blocks HW regs info */
- 	for (i = 0; i < cat->mixer_count; i++)
--		msm_disp_snapshot_add_block(disp_state, cat->mixer[i].len,
--				dpu_kms->mmio + cat->mixer[i].base, "lm_%d", i);
-+		dpu_kms_mdp_snapshot_add_block(disp_state, dpu_kms->mmio, (void *)&cat->mixer[i],
-+					       DPU_HW_BLK_LM);
- 
- 	/* dump WB sub-blocks HW regs info */
- 	for (i = 0; i < cat->wb_count; i++)
--		msm_disp_snapshot_add_block(disp_state, cat->wb[i].len,
--				dpu_kms->mmio + cat->wb[i].base, "wb_%d", i);
--
--	if (cat->mdp[0].features & BIT(DPU_MDP_PERIPH_0_REMOVED)) {
--		msm_disp_snapshot_add_block(disp_state, MDP_PERIPH_TOP0,
--				dpu_kms->mmio + cat->mdp[0].base, "top");
--		msm_disp_snapshot_add_block(disp_state, cat->mdp[0].len - MDP_PERIPH_TOP0_END,
--				dpu_kms->mmio + cat->mdp[0].base + MDP_PERIPH_TOP0_END, "top_2");
--	} else {
--		msm_disp_snapshot_add_block(disp_state, cat->mdp[0].len,
--				dpu_kms->mmio + cat->mdp[0].base, "top");
--	}
-+		dpu_kms_mdp_snapshot_add_block(disp_state, dpu_kms->mmio, (void *)&cat->wb[i],
-+					       DPU_HW_BLK_WB);
-+
-+	/* dump top block */
-+	dpu_kms_mdp_snapshot_add_block(disp_state, dpu_kms->mmio, (void *)&cat->mdp[0],
-+				       DPU_HW_BLK_TOP);
- 
- 	/* dump DSC sub-blocks HW regs info */
- 	for (i = 0; i < cat->dsc_count; i++)
--		msm_disp_snapshot_add_block(disp_state, cat->dsc[i].len,
--				dpu_kms->mmio + cat->dsc[i].base, "dsc_%d", i);
-+		dpu_kms_mdp_snapshot_add_block(disp_state, dpu_kms->mmio, (void *)&cat->dsc[i],
-+					       DPU_HW_BLK_DSC);
- 
- 	pm_runtime_put_sync(&dpu_kms->pdev->dev);
- }
+On 6/21/23 20:51, Terry Bowman wrote:
+> From: Robert Richter <rrichter@amd.com>
+> 
+> In order to move the RCH dport component register setup to cxl_pci the
+> base address must be stored in CXL device state (cxlds) for both
+> modes, RCH and VH. Store it in cxlds->component_reg_phys and use it
+> for endpoint creation.
+> 
+> Signed-off-by: Robert Richter <rrichter@amd.com>
+> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
 
--- 
-2.25.1
-
+Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+> ---
+>   drivers/cxl/mem.c | 9 ++++-----
+>   1 file changed, 4 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/cxl/mem.c b/drivers/cxl/mem.c
+> index 4cc461c22b8b..7638a7f8f333 100644
+> --- a/drivers/cxl/mem.c
+> +++ b/drivers/cxl/mem.c
+> @@ -51,7 +51,6 @@ static int devm_cxl_add_endpoint(struct device *host, struct cxl_memdev *cxlmd,
+>   	struct cxl_port *parent_port = parent_dport->port;
+>   	struct cxl_dev_state *cxlds = cxlmd->cxlds;
+>   	struct cxl_port *endpoint, *iter, *down;
+> -	resource_size_t component_reg_phys;
+>   	int rc;
+>   
+>   	/*
+> @@ -72,11 +71,11 @@ static int devm_cxl_add_endpoint(struct device *host, struct cxl_memdev *cxlmd,
+>   	 * typical register locator mechanism.
+>   	 */
+>   	if (parent_dport->rch && cxlds->component_reg_phys == CXL_RESOURCE_NONE)
+> -		component_reg_phys =
+> +		cxlds->component_reg_phys =
+>   			cxl_rcd_component_reg_phys(&cxlmd->dev, parent_dport);
+> -	else
+> -		component_reg_phys = cxlds->component_reg_phys;
+> -	endpoint = devm_cxl_add_port(host, &cxlmd->dev, component_reg_phys,
+> +
+> +	endpoint = devm_cxl_add_port(host, &cxlmd->dev,
+> +				     cxlds->component_reg_phys,
+>   				     parent_dport);
+>   	if (IS_ERR(endpoint))
+>   		return PTR_ERR(endpoint);
