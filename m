@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C7B1739B8D
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 11:04:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5BDA739B83
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 11:04:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231671AbjFVJAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 05:00:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42898 "EHLO
+        id S231828AbjFVJBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 05:01:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231815AbjFVI74 (ORCPT
+        with ESMTP id S232060AbjFVJAX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 04:59:56 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAEB530C3
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 01:56:04 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1b52418c25bso12033635ad.0
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 01:56:04 -0700 (PDT)
+        Thu, 22 Jun 2023 05:00:23 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2CA63594
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 01:56:12 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id 41be03b00d2f7-54fd4a7ce25so1096256a12.0
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 01:56:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1687424164; x=1690016164;
+        d=bytedance.com; s=google; t=1687424172; x=1690016172;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FWRSgLiVxGu7by+bRdZCMSZgL2CmyzCgjcAmFywfg3g=;
-        b=W9Q0mEFJ4YX/Kxo42ZpDHLFmjt3CYHNqumMzPD6lCEJ/AclBj6ki+9nXx+XP2OFoT9
-         biokZFjtTO4s6n85EeiNgXVRb8aHb7r2IMBB+HnwNOlBqet/0l5xfJVO+DolK/U7XTWU
-         M277NuxA39AWH+q/lhKoP2vIlehvWLhpgJj/4uGWoGxCITX36OL+YHFtfzDKSSw2iPaX
-         MbP+C5V24hBPOg4LWw9eV/ZehzOW8RyY8zV5pnDOyFwQ720HnrExvRoWQvOw0JMgQMOU
-         XwvMcYncbAVdeNBjwwgU6wHkMwvamAyfgHl3RPNu98UxqyF0R9Sxc8Wx/1hGBgxkRDYX
-         Kkuw==
+        bh=zUNTs2D5J+Px6+8NyTz0IGsKdVlRq3fVdCNXQo6zMeo=;
+        b=PB56VJEtwK39jb6ujoKeOUgYB/PJLrruyxKRjJr7vrytJTdiBm6YHrGem+eoP0b4tN
+         ySO0Fp6iHJx1jYG5cUtED8VGJ9nuR5OzkvfKjRzGq011b3+5HaAEFO0JOZ1JrJyRnWbE
+         zD+J47hPkoBpD2IoCQquNzCqiGwmlgwN3y5YbOJ5VGLqEl2FtVJoITLOXOxAzhFddu+k
+         6lt/tmVHj10PbE9jdwz/MvuKMpEDpm3abrU9F/6h0dgBlWZ5OjmzxDq5+jKr9MCDVLPh
+         Sp8IUY5vM81KMKjfLSjlTI62E4wEBy9NQ8VxDpQ2xwoZwC4ItSHDc6u/r/EGjzaiDmrG
+         iUiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687424164; x=1690016164;
+        d=1e100.net; s=20221208; t=1687424172; x=1690016172;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=FWRSgLiVxGu7by+bRdZCMSZgL2CmyzCgjcAmFywfg3g=;
-        b=Hel2LXtjbLPmfnm1Gu5a7zFQMqgLlGnn0N7kwUf5scSeinLNjbHDsxwOXGuu/QgeJh
-         iB9as6xAc690HwuJJwmZUutewFBVcgoWg4FP0QYWC/afgu2WaUu2XL3Pq58KGSe4eEVm
-         P1Tt9/6Tml2WUj6sDOw9dy72RX1kExuG9nW3k1iDg/NEu9TNauvJyAHBBlF87RvjlA1v
-         wA8GOI7FD1a/v4q+Vny0Aw6u7DuDQAEVrXzPH/VX/umXWEU3dEPSbu73ZarYCKIrSnUG
-         /XaMvAYbTqI4txKAxFeo6TmkTOCUGCRrotGn98HsfMJvAts82gL/oXHkgKVCkmwtMXS6
-         DFtg==
-X-Gm-Message-State: AC+VfDxT2JSGd5iSRQXsjIZxiwWuOTjzcrEOSbDkV/jgQwqvpdFgi1Tx
-        p4MWrrBsh68i8wDk8atueCSCEw==
-X-Google-Smtp-Source: ACHHUZ4nYFfrGKqZLYUWSywLes9hZrkxqoQAJfwtv5FmoHmc5MLCqSR93ZcAMHhMn41B6ov+vpDAfw==
-X-Received: by 2002:a17:902:ea01:b0:1b0:4680:60 with SMTP id s1-20020a170902ea0100b001b046800060mr21968987plg.1.1687424164102;
-        Thu, 22 Jun 2023 01:56:04 -0700 (PDT)
+        bh=zUNTs2D5J+Px6+8NyTz0IGsKdVlRq3fVdCNXQo6zMeo=;
+        b=fB6X0A+2znz/clj88sGvzW8iwlQg3pl/AHLzq8x26PtGlsWQbUDsAPnLO+kqntJkPU
+         sWx2etxFy+DUt5S4LjidnT24gReHplsOBhK7dW1DpfeVoz6y9ziAUglMmwF71k47W1iI
+         peZQd+JJse6u2KJ5FHgSc1dkj/MKFCmpTo5kOdLgl5X5fK/kf5nobPbchPmNsLXFu1TW
+         5WPKZT/Dy81R8JjPWixItO7GXJPY1nbQjBjMz0qzhTYFal4VLNv+ZkFA65nUIVqcqPrJ
+         c1Xt55uPx3zKtGTDPUfah6D5sCy15AwJX1l7bb2Hp1BhWspTlQa0BqKQ+LEUNWqBf3de
+         E+WQ==
+X-Gm-Message-State: AC+VfDzyWL3oQrxJN1LEw6Yh7I/h5g0rLhKKJf1n89STz1CytKr23hNH
+        oayl7thioZjPm5JKx+x7Ew8gyA==
+X-Google-Smtp-Source: ACHHUZ7RZPPxDHHt9nXlq48w0UysjH5yX+GnVgYNyQdTPpVzG1MBfOvOCSKK+16aR/H5lLV5H8OFJg==
+X-Received: by 2002:a17:902:f688:b0:1ad:e3a8:3c4 with SMTP id l8-20020a170902f68800b001ade3a803c4mr20681104plg.4.1687424171977;
+        Thu, 22 Jun 2023 01:56:11 -0700 (PDT)
 Received: from C02DW0BEMD6R.bytedance.net ([139.177.225.254])
-        by smtp.gmail.com with ESMTPSA id h2-20020a170902f7c200b001b549fce345sm4806971plw.230.2023.06.22.01.55.56
+        by smtp.gmail.com with ESMTPSA id h2-20020a170902f7c200b001b549fce345sm4806971plw.230.2023.06.22.01.56.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jun 2023 01:56:03 -0700 (PDT)
+        Thu, 22 Jun 2023 01:56:11 -0700 (PDT)
 From:   Qi Zheng <zhengqi.arch@bytedance.com>
 To:     akpm@linux-foundation.org, david@fromorbit.com, tkhai@ya.ru,
         vbabka@suse.cz, roman.gushchin@linux.dev, djwong@kernel.org,
@@ -62,9 +62,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
         linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org,
         linux-btrfs@vger.kernel.org, Qi Zheng <zhengqi.arch@bytedance.com>
-Subject: [PATCH 15/29] NFSD: dynamically allocate the nfsd-client shrinker
-Date:   Thu, 22 Jun 2023 16:53:21 +0800
-Message-Id: <20230622085335.77010-16-zhengqi.arch@bytedance.com>
+Subject: [PATCH 16/29] NFSD: dynamically allocate the nfsd-reply shrinker
+Date:   Thu, 22 Jun 2023 16:53:22 +0800
+Message-Id: <20230622085335.77010-17-zhengqi.arch@bytedance.com>
 X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 In-Reply-To: <20230622085335.77010-1-zhengqi.arch@bytedance.com>
 References: <20230622085335.77010-1-zhengqi.arch@bytedance.com>
@@ -81,78 +81,108 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 In preparation for implementing lockless slab shrink,
-we need to dynamically allocate the nfsd-client shrinker,
+we need to dynamically allocate the nfsd-reply shrinker,
 so that it can be freed asynchronously using kfree_rcu().
 Then it doesn't need to wait for RCU read-side critical
 section when releasing the struct nfsd_net.
 
 Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
 ---
- fs/nfsd/netns.h     |  2 +-
- fs/nfsd/nfs4state.c | 20 ++++++++++++--------
- 2 files changed, 13 insertions(+), 9 deletions(-)
+ fs/nfsd/netns.h    |  2 +-
+ fs/nfsd/nfscache.c | 33 +++++++++++++++++++--------------
+ 2 files changed, 20 insertions(+), 15 deletions(-)
 
 diff --git a/fs/nfsd/netns.h b/fs/nfsd/netns.h
-index ec49b200b797..f669444d5336 100644
+index f669444d5336..ab303a8b77d5 100644
 --- a/fs/nfsd/netns.h
 +++ b/fs/nfsd/netns.h
-@@ -195,7 +195,7 @@ struct nfsd_net {
- 	int			nfs4_max_clients;
+@@ -177,7 +177,7 @@ struct nfsd_net {
+ 	/* size of cache when we saw the longest hash chain */
+ 	unsigned int             longest_chain_cachesize;
  
- 	atomic_t		nfsd_courtesy_clients;
--	struct shrinker		nfsd_client_shrinker;
-+	struct shrinker		*nfsd_client_shrinker;
- 	struct work_struct	nfsd_shrinker_work;
- };
+-	struct shrinker		nfsd_reply_cache_shrinker;
++	struct shrinker		*nfsd_reply_cache_shrinker;
  
-diff --git a/fs/nfsd/nfs4state.c b/fs/nfsd/nfs4state.c
-index 6e61fa3acaf1..a06184270548 100644
---- a/fs/nfsd/nfs4state.c
-+++ b/fs/nfsd/nfs4state.c
-@@ -4388,8 +4388,7 @@ static unsigned long
- nfsd4_state_shrinker_count(struct shrinker *shrink, struct shrink_control *sc)
+ 	/* tracking server-to-server copy mounts */
+ 	spinlock_t              nfsd_ssc_lock;
+diff --git a/fs/nfsd/nfscache.c b/fs/nfsd/nfscache.c
+index 041faa13b852..ec33de8e418b 100644
+--- a/fs/nfsd/nfscache.c
++++ b/fs/nfsd/nfscache.c
+@@ -173,19 +173,23 @@ int nfsd_reply_cache_init(struct nfsd_net *nn)
+ 	if (status)
+ 		goto out_nomem;
+ 
+-	nn->nfsd_reply_cache_shrinker.scan_objects = nfsd_reply_cache_scan;
+-	nn->nfsd_reply_cache_shrinker.count_objects = nfsd_reply_cache_count;
+-	nn->nfsd_reply_cache_shrinker.seeks = 1;
+-	status = register_shrinker(&nn->nfsd_reply_cache_shrinker,
+-				   "nfsd-reply:%s", nn->nfsd_name);
+-	if (status)
+-		goto out_stats_destroy;
+-
+ 	nn->drc_hashtbl = kvzalloc(array_size(hashsize,
+ 				sizeof(*nn->drc_hashtbl)), GFP_KERNEL);
+ 	if (!nn->drc_hashtbl)
++		goto out_stats_destroy;
++
++	nn->nfsd_reply_cache_shrinker =
++		shrinker_alloc_and_init(nfsd_reply_cache_count,
++					nfsd_reply_cache_scan,
++					0, 1, 0, nn);
++	if (!nn->nfsd_reply_cache_shrinker)
+ 		goto out_shrinker;
+ 
++	status = register_shrinker(nn->nfsd_reply_cache_shrinker,
++				   "nfsd-reply:%s", nn->nfsd_name);
++	if (status)
++		goto out_register;
++
+ 	for (i = 0; i < hashsize; i++) {
+ 		INIT_LIST_HEAD(&nn->drc_hashtbl[i].lru_head);
+ 		spin_lock_init(&nn->drc_hashtbl[i].cache_lock);
+@@ -193,8 +197,11 @@ int nfsd_reply_cache_init(struct nfsd_net *nn)
+ 	nn->drc_hashsize = hashsize;
+ 
+ 	return 0;
++
++out_register:
++	shrinker_free(nn->nfsd_reply_cache_shrinker);
+ out_shrinker:
+-	unregister_shrinker(&nn->nfsd_reply_cache_shrinker);
++	kvfree(nn->drc_hashtbl);
+ out_stats_destroy:
+ 	nfsd_reply_cache_stats_destroy(nn);
+ out_nomem:
+@@ -207,7 +214,7 @@ void nfsd_reply_cache_shutdown(struct nfsd_net *nn)
+ 	struct svc_cacherep	*rp;
+ 	unsigned int i;
+ 
+-	unregister_shrinker(&nn->nfsd_reply_cache_shrinker);
++	unregister_and_free_shrinker(nn->nfsd_reply_cache_shrinker);
+ 
+ 	for (i = 0; i < nn->drc_hashsize; i++) {
+ 		struct list_head *head = &nn->drc_hashtbl[i].lru_head;
+@@ -297,8 +304,7 @@ prune_cache_entries(struct nfsd_net *nn)
+ static unsigned long
+ nfsd_reply_cache_count(struct shrinker *shrink, struct shrink_control *sc)
  {
- 	int count;
 -	struct nfsd_net *nn = container_of(shrink,
--			struct nfsd_net, nfsd_client_shrinker);
+-				struct nfsd_net, nfsd_reply_cache_shrinker);
 +	struct nfsd_net *nn = shrink->private_data;
  
- 	count = atomic_read(&nn->nfsd_courtesy_clients);
- 	if (!count)
-@@ -8094,14 +8093,19 @@ static int nfs4_state_create_net(struct net *net)
- 	INIT_WORK(&nn->nfsd_shrinker_work, nfsd4_state_shrinker_worker);
- 	get_net(net);
+ 	return atomic_read(&nn->num_drc_entries);
+ }
+@@ -306,8 +312,7 @@ nfsd_reply_cache_count(struct shrinker *shrink, struct shrink_control *sc)
+ static unsigned long
+ nfsd_reply_cache_scan(struct shrinker *shrink, struct shrink_control *sc)
+ {
+-	struct nfsd_net *nn = container_of(shrink,
+-				struct nfsd_net, nfsd_reply_cache_shrinker);
++	struct nfsd_net *nn = shrink->private_data;
  
--	nn->nfsd_client_shrinker.scan_objects = nfsd4_state_shrinker_scan;
--	nn->nfsd_client_shrinker.count_objects = nfsd4_state_shrinker_count;
--	nn->nfsd_client_shrinker.seeks = DEFAULT_SEEKS;
--
--	if (register_shrinker(&nn->nfsd_client_shrinker, "nfsd-client"))
-+	nn->nfsd_client_shrinker = shrinker_alloc_and_init(nfsd4_state_shrinker_count,
-+							   nfsd4_state_shrinker_scan,
-+							   0, DEFAULT_SEEKS, 0,
-+							   nn);
-+	if (!nn->nfsd_client_shrinker)
- 		goto err_shrinker;
-+
-+	if (register_shrinker(nn->nfsd_client_shrinker, "nfsd-client"))
-+		goto err_register;
- 	return 0;
- 
-+err_register:
-+	shrinker_free(nn->nfsd_client_shrinker);
- err_shrinker:
- 	put_net(net);
- 	kfree(nn->sessionid_hashtbl);
-@@ -8197,7 +8201,7 @@ nfs4_state_shutdown_net(struct net *net)
- 	struct list_head *pos, *next, reaplist;
- 	struct nfsd_net *nn = net_generic(net, nfsd_net_id);
- 
--	unregister_shrinker(&nn->nfsd_client_shrinker);
-+	unregister_and_free_shrinker(nn->nfsd_client_shrinker);
- 	cancel_work(&nn->nfsd_shrinker_work);
- 	cancel_delayed_work_sync(&nn->laundromat_work);
- 	locks_end_grace(&nn->nfsd4_manager);
+ 	return prune_cache_entries(nn);
+ }
 -- 
 2.30.2
 
