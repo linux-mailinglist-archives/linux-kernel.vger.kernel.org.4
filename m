@@ -2,112 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17EAA739502
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 03:56:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D56177394FC
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 03:55:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229902AbjFVB4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 21:56:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59702 "EHLO
+        id S230105AbjFVBzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 21:55:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbjFVB4R (ORCPT
+        with ESMTP id S229843AbjFVBzr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 21:56:17 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CAF6198B;
-        Wed, 21 Jun 2023 18:56:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=jud17jsE6/Ga7sy3GJjdnGlQV0t2HqzZZz3k4YHmE2g=; b=ayqSlR67thHwZ0kw7SsHI3F6g7
-        EcxdtI+VOuNJ0gTuuJdzuu+TpJgXdYK7F5emB9hEEHX6C/vRoAAYwx+HCRSpRyCSg0XNczaXUsqvw
-        599/kdU8oZtE9n1qgXxmG8P60EugjCXR48EDDHODdOzcl3S5HhJkjJnwq13+lR9n2S08=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1qC9Xh-00HDK4-HB; Thu, 22 Jun 2023 03:55:25 +0200
-Date:   Thu, 22 Jun 2023 03:55:25 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Johannes Berg <johannes@sipsolutions.net>
-Cc:     "Limonciello, Mario" <mario.limonciello@amd.com>,
-        Evan Quan <evan.quan@amd.com>, rafael@kernel.org,
-        lenb@kernel.org, alexander.deucher@amd.com,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
-        daniel@ffwll.ch, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, mdaenzer@redhat.com,
-        maarten.lankhorst@linux.intel.com, tzimmermann@suse.de,
-        hdegoede@redhat.com, jingyuwang_vip@163.com, lijo.lazar@amd.com,
-        jim.cromie@gmail.com, bellosilicio@gmail.com,
-        andrealmeid@igalia.com, trix@redhat.com, jsg@jsg.id.au,
-        arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH V4 1/8] drivers/acpi: Add support for Wifi band RF
- mitigations
-Message-ID: <ef7dc1ab-c6d0-4761-8d0a-8949bfd3da80@lunn.ch>
-References: <216f3c5aa1299100a0009ddf4e95b019855a32be.camel@sipsolutions.net>
- <b1abec47-04df-4481-d680-43c5ff3cbb48@amd.com>
- <36902dda-9e51-41b3-b5fc-c641edf6f1fb@lunn.ch>
- <33d80292-e639-91d0-4d0f-3ed973f89e14@amd.com>
- <9159c3a5-390f-4403-854d-9b5e87b58d8c@lunn.ch>
- <a80c215a-c1d9-4c76-d4a8-9b5fd320a2b1@amd.com>
- <8d3340de-34f6-47ad-8024-f6f5ecd9c4bb@lunn.ch>
- <07ad6860-8ffb-cc6c-a8e5-e8dc4db4e87a@amd.com>
- <08dd8d17-6825-4e53-8441-85c709326f48@lunn.ch>
- <3e337dc0482e16e2aaa4090b613dc8dea7803fa8.camel@sipsolutions.net>
+        Wed, 21 Jun 2023 21:55:47 -0400
+Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D8FD1728;
+        Wed, 21 Jun 2023 18:55:47 -0700 (PDT)
+Received: by mail-io1-f54.google.com with SMTP id ca18e2360f4ac-780c8df59caso23074739f.3;
+        Wed, 21 Jun 2023 18:55:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687398946; x=1689990946;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uj9exNxaidLj6LcNK8tVeAT6pbRlNgwUovbHIdRSfsI=;
+        b=b67BAt1IFfirk+UNsMz0LH9RdcwxUC2ygHXZ1+QPGlDPP7ovGoBTkuXabpxnb4yZgm
+         w/FEzkRGwsN9AWL+cY4544Zx0GVEER1Yb7/BmYlq6TwqqW+S6A/KlEw6euhpEEEQDC4n
+         v38Mz6NrQBHAEUIjcrVAd2a0UShIm45+Gj65aYDSVot1PP/YX2+9lDAuDPheSUDcHM/Y
+         3lIflHkiyY80FeknzLWAR/1trqN7G+vYBA7hv6bMa2bn/FEUkGkhtghDrUKAm4PYfmC4
+         I6dszmbumdOPxiTj3zlwFzCaKHi3QkOSxafTpneerbN3itY0neE5a1gEiT9pJr73ciJI
+         gs4Q==
+X-Gm-Message-State: AC+VfDwN3XH0Zf2afp0CkrAH3dEf6KhxaoUO+/3QtwrHgizQz7KLV/Ws
+        bH3fBictfQtrfL4LE44zAr97b24z6Q==
+X-Google-Smtp-Source: ACHHUZ6w20XPuVngkj/XmETLkcCG1d7IpDJWIw84E9Aa0XnxTP2tqVb6Jf1PhWm4wc06Lutti4v4dw==
+X-Received: by 2002:a92:dcd2:0:b0:342:8d31:73db with SMTP id b18-20020a92dcd2000000b003428d3173dbmr7061039ilr.16.1687398946508;
+        Wed, 21 Jun 2023 18:55:46 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id n14-20020a056e0208ee00b00342612c48f6sm1719040ilt.53.2023.06.21.18.55.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jun 2023 18:55:45 -0700 (PDT)
+Received: (nullmailer pid 48109 invoked by uid 1000);
+        Thu, 22 Jun 2023 01:55:44 -0000
+Date:   Wed, 21 Jun 2023 19:55:44 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
+        Andy Gross <agross@kernel.org>, linux-clk@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [PATCH 2/3] dt-bindings: clock: qcom,gcc-sc8280xp: Add missing
+ GDSCs
+Message-ID: <168739894369.48049.5336113390716480314.robh@kernel.org>
+References: <20230620-topic-sc8280_gccgdsc-v1-0-0fd91a942bda@linaro.org>
+ <20230620-topic-sc8280_gccgdsc-v1-2-0fd91a942bda@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3e337dc0482e16e2aaa4090b613dc8dea7803fa8.camel@sipsolutions.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230620-topic-sc8280_gccgdsc-v1-2-0fd91a942bda@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Honestly I'm not sure though we need this complexity right now? I mean,
-> it'd be really easy to replace the calls in mac80211 with some other
-> more generalised calls in the future?
+
+On Tue, 20 Jun 2023 20:54:59 +0200, Konrad Dybcio wrote:
+> There are 10 more GDSCs that we've not been caring about, and by extension
+> (and perhaps even more importantly), not putting to sleep. Add them.
 > 
-> You need some really deep platform/hardware level knowledge and
-> involvement to do this, so I don't think it's something that someone
-> will come up with very easily for a DT-based platform...
+> Fixes: a66a82f2a55e ("dt-bindings: clock: Add Qualcomm SC8280XP GCC bindings")
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  include/dt-bindings/clock/qcom,gcc-sc8280xp.h | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
 
-What is this API about?
+Acked-by: Rob Herring <robh@kernel.org>
 
-It is a struct device says, i'm badly designed and make a mess of the
-following frequency bands. Optionally, if you ask me nicely, i might
-be able to tweak what i'm doing to avoid interfering with you.
-
-And it is about a struct device say, i'm using this particular
-frequency. If you can reduce the noise you make, i would be thankful.
-
-The one generating the noise could be anything. The PWM driving my
-laptop display back light?, What is being interfered with?  The 3.5mm
-audio jack?
-
-How much deep system knowledge is needed to call pwm_set_state() to
-move the base frequency up above 20Khz so only my dog will hear it?
-But at the cost of a loss of efficiency and my battery going flatter
-faster?
-
-Is the DDR memory really the only badly designed component, when you
-think of the range of systems Linux is used on from PHC to tiny
-embedded systems?
-
-Ideally we want any sort of receiver with a low noise amplifier to
-just unconditionally use this API to let rest of the system know about
-it. And ideally we want anything which is a source of noise to declare
-itself. What happens after that should be up to the struct device
-causing the interference.
-
-Mario did say:
-
-  The way that WBRF has been architected, it's intended to be able to
-  scale to any type of device pair that has harmonic issues.
-
-Andrew
