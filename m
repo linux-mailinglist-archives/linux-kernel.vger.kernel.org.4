@@ -2,149 +2,291 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E19D73A3D6
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 16:57:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4C9873A3F0
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 16:58:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231740AbjFVO54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 10:57:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34572 "EHLO
+        id S232087AbjFVO6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 10:58:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231384AbjFVO5v (ORCPT
+        with ESMTP id S231937AbjFVO6Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 10:57:51 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AE611FC6
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 07:57:49 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id C06FC21BB7;
-        Thu, 22 Jun 2023 14:57:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1687445867; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=L0uLN6wQ85HtOEXkPBAIfkWN0qBQrlhJvrnxaX5jjfM=;
-        b=HjNnNvarQ4oZ95OYljumd+UtwjJ59HnqTs8XjLVTFfyIraEUCpMgT/PXx2e9VI4sYR0BNg
-        9m4v7iD8tL4nnQZL2L3dul/R7njfg+CYwv93BIXGlTU4ZaMIVsuU3qNgYjTpXqAihTmAOf
-        oidUj5EBCSZJORjFlNOGs21hicr2s9Y=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1687445867;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=L0uLN6wQ85HtOEXkPBAIfkWN0qBQrlhJvrnxaX5jjfM=;
-        b=0tDf4r/W+AGCvhYAH4FIcOq2uMM2GGIplKOIkoU52k7YnYenC5VZBCWbxJE5AtXnQX/QA3
-        ibC3sQxUmE4EtoAw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B0DFA13905;
-        Thu, 22 Jun 2023 14:57:47 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id DAUfK2thlGR1JgAAMHmgww
-        (envelope-from <jack@suse.cz>); Thu, 22 Jun 2023 14:57:47 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 42F7CA0754; Thu, 22 Jun 2023 16:57:47 +0200 (CEST)
-Date:   Thu, 22 Jun 2023 16:57:47 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     Jan Kara <jack@suse.cz>, Christian Brauner <brauner@kernel.org>,
-        "Tigran A. Aivazian" <aivazian.tigran@gmail.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        linux-kernel@vger.kernel.org,
-        "damien.lemoal" <damien.lemoal@opensource.wdc.com>
-Subject: Re: [PATCH 15/79] bfs: switch to new ctime accessors
-Message-ID: <20230622145747.lokguccxtrrpgb3b@quack3>
-References: <20230621144507.55591-1-jlayton@kernel.org>
- <20230621144735.55953-1-jlayton@kernel.org>
- <20230621144735.55953-14-jlayton@kernel.org>
- <20230621164808.5lhujni7qb36hhtk@quack3>
- <646b7283ede4945b335ad16aea5ff60e1361241e.camel@kernel.org>
- <20230622123050.thpf7qdnmidq3thj@quack3>
- <d316dca7c248693575dae3d8032e9e3332bbae7a.camel@kernel.org>
+        Thu, 22 Jun 2023 10:58:16 -0400
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2FA7170C;
+        Thu, 22 Jun 2023 07:58:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:MIME-Version:References:
+        In-Reply-To:Message-Id:Date:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=sjxcNmJUMrkxXyd7HIf7H5sQeEy7LKNuRpoBhXqqIPM=; b=rxXDZ/Tyc/XK7Wx8nw/9VMAr6z
+        +VBaQFuEhZxlzs1c1VtN78Ke8HfQpQTU1Uwgii4H5Wmn2NrulKDEAxa371PxKrU1OY/Lxhhk6Jd7x
+        RwTa5wNnsznPxmIE+jkHVV6TJIoR6J3pdim9RxUzojSyw3XVAGOmhnoSGlgS4voy4L8k=;
+Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:55382 helo=localhost.localdomain)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1qCLlB-0002fr-67; Thu, 22 Jun 2023 10:58:10 -0400
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org
+Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hugo@hugovil.com,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Date:   Thu, 22 Jun 2023 10:57:48 -0400
+Message-Id: <20230622145800.2442116-6-hugo@hugovil.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230622145800.2442116-1-hugo@hugovil.com>
+References: <20230622145800.2442116-1-hugo@hugovil.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d316dca7c248693575dae3d8032e9e3332bbae7a.camel@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 184.161.19.61
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Subject: [PATCH v4 05/17] rtc: pcf2127: add variant-specific configuration structure
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 22-06-23 08:51:58, Jeff Layton wrote:
-> On Thu, 2023-06-22 at 14:30 +0200, Jan Kara wrote:
-> > On Wed 21-06-23 12:57:19, Jeff Layton wrote:
-> > > On Wed, 2023-06-21 at 18:48 +0200, Jan Kara wrote:
-> > > > On Wed 21-06-23 10:45:28, Jeff Layton wrote:
-> > > > > In later patches, we're going to change how the ctime.tv_nsec field is
-> > > > > utilized. Switch to using accessor functions instead of raw accesses of
-> > > > > inode->i_ctime.
-> > > > > 
-> > > > > Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> > > > 
-> > > > ...
-> > > > 
-> > > > > diff --git a/fs/bfs/inode.c b/fs/bfs/inode.c
-> > > > > index 1926bec2c850..c964316be32b 100644
-> > > > > --- a/fs/bfs/inode.c
-> > > > > +++ b/fs/bfs/inode.c
-> > > > > @@ -82,10 +82,10 @@ struct inode *bfs_iget(struct super_block *sb, unsigned long ino)
-> > > > >  	inode->i_blocks = BFS_FILEBLOCKS(di);
-> > > > >  	inode->i_atime.tv_sec =  le32_to_cpu(di->i_atime);
-> > > > >  	inode->i_mtime.tv_sec =  le32_to_cpu(di->i_mtime);
-> > > > > -	inode->i_ctime.tv_sec =  le32_to_cpu(di->i_ctime);
-> > > > > +	inode_ctime_set_sec(inode, le32_to_cpu(di->i_ctime));
-> > > > >  	inode->i_atime.tv_nsec = 0;
-> > > > >  	inode->i_mtime.tv_nsec = 0;
-> > > > > -	inode->i_ctime.tv_nsec = 0;
-> > > > > +	inode_ctime_set_nsec(inode, 0);
-> > > > 
-> > > > So I'm somewhat wondering here - in other filesystem you construct
-> > > > timespec64 and then use inode_ctime_set(). Here you use
-> > > > inode_ctime_set_sec() + inode_ctime_set_nsec(). What's the benefit? It
-> > > > seems these two functions are not used that much some maybe we could just
-> > > > live with just inode_ctime_set() and constructing timespec64 when needed?
-> > > > 
-> > > > 								Honza
-> > > 
-> > > The main advantage is that by using that, I didn't need to do quite so
-> > > much of this conversion by hand. My coccinelle skills are pretty
-> > > primitive. I went with whatever conversion was going to give minimal
-> > > changes, to the existing accesses for the most part.
-> > > 
-> > > We could certainly do it the way you suggest, it just means having to
-> > > re-touch a lot of this code by hand, or someone with better coccinelle
-> > > chops suggesting a way to declare a temporary variables in place.
-> > 
-> > Well, maybe temporary variables aren't that convenient but we could provide
-> > function setting ctime from sec & nsec value without having to declare
-> > temporary timespec64? Attached is a semantic patch that should deal with
-> > that - at least it seems to handle all the cases I've found.
-> > 
-> 
-> Ok, let me try respinning this with your cocci script and see how it
-> looks.
-> 
-> Damien also suggested in a reply to the zonefs patch a preference for
-> the naming style you have above. Should I also rename these like?
-> 
->     inode_ctime_peek -> inode_get_ctime
->     inode_ctime_set -> inode_set_ctime
-> 
-> This would be the time to change it if that's preferred.
+From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 
-I don't really care much so whatever you decide is better :)
+Create variant-specific configuration structures to simplify the
+implementation of new variants into this driver. It will also avoid
+to have too many tests for a specific variant, or a list of variants
+for new devices, inside the code itself.
 
-								Honza
+Add configuration options for the support of the NVMEM, bit CD0 in
+register WD_CTL as well as the maximum number of registers for each
+variant, instead of hardcoding the variant (PCF2127) inside the
+i2c_device_id and spi_device_id structures.
+
+Also specify a different maximum number of registers (max_register)
+for the PCF2129.
+
+Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+---
+ drivers/rtc/rtc-pcf2127.c | 98 +++++++++++++++++++++++++++++++--------
+ 1 file changed, 79 insertions(+), 19 deletions(-)
+
+diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
+index b10878a9224c..61918d7dc7a5 100644
+--- a/drivers/rtc/rtc-pcf2127.c
++++ b/drivers/rtc/rtc-pcf2127.c
+@@ -21,6 +21,7 @@
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/of_irq.h>
++#include <linux/of_device.h>
+ #include <linux/regmap.h>
+ #include <linux/watchdog.h>
+ 
+@@ -89,10 +90,24 @@
+ 		PCF2127_BIT_CTRL2_WDTF | \
+ 		PCF2127_BIT_CTRL2_TSF2)
+ 
++enum pcf21xx_type {
++	PCF2127,
++	PCF2129,
++	PCF21XX_LAST_ID
++};
++
++struct pcf21xx_config {
++	int type; /* IC variant */
++	int max_register;
++	unsigned int has_nvmem:1;
++	unsigned int has_bit_wd_ctl_cd0:1;
++};
++
+ struct pcf2127 {
+ 	struct rtc_device *rtc;
+ 	struct watchdog_device wdd;
+ 	struct regmap *regmap;
++	const struct pcf21xx_config *cfg;
+ 	time64_t ts;
+ 	bool ts_valid;
+ 	bool irq_enabled;
+@@ -606,8 +621,23 @@ static const struct attribute_group pcf2127_attr_group = {
+ 	.attrs	= pcf2127_attrs,
+ };
+ 
++static struct pcf21xx_config pcf21xx_cfg[] = {
++	[PCF2127] = {
++		.type = PCF2127,
++		.max_register = 0x1d,
++		.has_nvmem = 1,
++		.has_bit_wd_ctl_cd0 = 1,
++	},
++	[PCF2129] = {
++		.type = PCF2129,
++		.max_register = 0x19,
++		.has_nvmem = 0,
++		.has_bit_wd_ctl_cd0 = 0,
++	},
++};
++
+ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+-			 int alarm_irq, const char *name, bool is_pcf2127)
++			 int alarm_irq, const char *name, const struct pcf21xx_config *config)
+ {
+ 	struct pcf2127 *pcf2127;
+ 	int ret = 0;
+@@ -620,6 +650,7 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+ 		return -ENOMEM;
+ 
+ 	pcf2127->regmap = regmap;
++	pcf2127->cfg = config;
+ 
+ 	dev_set_drvdata(dev, pcf2127);
+ 
+@@ -663,7 +694,7 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+ 		set_bit(RTC_FEATURE_ALARM, pcf2127->rtc->features);
+ 	}
+ 
+-	if (is_pcf2127) {
++	if (pcf2127->cfg->has_nvmem) {
+ 		struct nvmem_config nvmem_cfg = {
+ 			.priv = pcf2127,
+ 			.reg_read = pcf2127_nvmem_read,
+@@ -709,7 +740,7 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+ 				 PCF2127_BIT_WD_CTL_TF1 |
+ 				 PCF2127_BIT_WD_CTL_TF0,
+ 				 PCF2127_BIT_WD_CTL_CD1 |
+-				 (is_pcf2127 ? PCF2127_BIT_WD_CTL_CD0 : 0) |
++				 (pcf2127->cfg->has_bit_wd_ctl_cd0 ? PCF2127_BIT_WD_CTL_CD0 : 0) |
+ 				 PCF2127_BIT_WD_CTL_TF1);
+ 	if (ret) {
+ 		dev_err(dev, "%s: watchdog config (wd_ctl) failed\n", __func__);
+@@ -774,9 +805,9 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+ 
+ #ifdef CONFIG_OF
+ static const struct of_device_id pcf2127_of_match[] = {
+-	{ .compatible = "nxp,pcf2127" },
+-	{ .compatible = "nxp,pcf2129" },
+-	{ .compatible = "nxp,pca2129" },
++	{ .compatible = "nxp,pcf2127", .data = &pcf21xx_cfg[PCF2127] },
++	{ .compatible = "nxp,pcf2129", .data = &pcf21xx_cfg[PCF2129] },
++	{ .compatible = "nxp,pca2129", .data = &pcf21xx_cfg[PCF2129] },
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(of, pcf2127_of_match);
+@@ -861,26 +892,40 @@ static const struct regmap_bus pcf2127_i2c_regmap = {
+ static struct i2c_driver pcf2127_i2c_driver;
+ 
+ static const struct i2c_device_id pcf2127_i2c_id[] = {
+-	{ "pcf2127", 1 },
+-	{ "pcf2129", 0 },
+-	{ "pca2129", 0 },
++	{ "pcf2127", PCF2127 },
++	{ "pcf2129", PCF2129 },
++	{ "pca2129", PCF2129 },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(i2c, pcf2127_i2c_id);
+ 
+ static int pcf2127_i2c_probe(struct i2c_client *client)
+ {
+-	const struct i2c_device_id *id = i2c_match_id(pcf2127_i2c_id, client);
+ 	struct regmap *regmap;
+-	static const struct regmap_config config = {
++	static struct regmap_config config = {
+ 		.reg_bits = 8,
+ 		.val_bits = 8,
+-		.max_register = 0x1d,
+ 	};
++	const struct pcf21xx_config *variant;
+ 
+ 	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
+ 		return -ENODEV;
+ 
++	if (client->dev.of_node) {
++		variant = of_device_get_match_data(&client->dev);
++		if (!variant)
++			return -ENODEV;
++	} else {
++		enum pcf21xx_type type =
++			i2c_match_id(pcf2127_i2c_id, client)->driver_data;
++
++		if (type >= PCF21XX_LAST_ID)
++			return -ENODEV;
++		variant = &pcf21xx_cfg[type];
++	}
++
++	config.max_register = variant->max_register,
++
+ 	regmap = devm_regmap_init(&client->dev, &pcf2127_i2c_regmap,
+ 					&client->dev, &config);
+ 	if (IS_ERR(regmap)) {
+@@ -890,7 +935,7 @@ static int pcf2127_i2c_probe(struct i2c_client *client)
+ 	}
+ 
+ 	return pcf2127_probe(&client->dev, regmap, client->irq,
+-			     pcf2127_i2c_driver.driver.name, id->driver_data);
++			     pcf2127_i2c_driver.driver.name, variant);
+ }
+ 
+ static struct i2c_driver pcf2127_i2c_driver = {
+@@ -928,17 +973,32 @@ static void pcf2127_i2c_unregister_driver(void)
+ #if IS_ENABLED(CONFIG_SPI_MASTER)
+ 
+ static struct spi_driver pcf2127_spi_driver;
++static const struct spi_device_id pcf2127_spi_id[];
+ 
+ static int pcf2127_spi_probe(struct spi_device *spi)
+ {
+-	static const struct regmap_config config = {
++	static struct regmap_config config = {
+ 		.reg_bits = 8,
+ 		.val_bits = 8,
+ 		.read_flag_mask = 0xa0,
+ 		.write_flag_mask = 0x20,
+-		.max_register = 0x1d,
+ 	};
+ 	struct regmap *regmap;
++	const struct pcf21xx_config *variant;
++
++	if (spi->dev.of_node) {
++		variant = of_device_get_match_data(&spi->dev);
++		if (!variant)
++			return -ENODEV;
++	} else {
++		enum pcf21xx_type type = spi_get_device_id(spi)->driver_data;
++
++		if (type >= PCF21XX_LAST_ID)
++			return -ENODEV;
++		variant = &pcf21xx_cfg[type];
++	}
++
++	config.max_register = variant->max_register,
+ 
+ 	regmap = devm_regmap_init_spi(spi, &config);
+ 	if (IS_ERR(regmap)) {
+@@ -949,13 +1009,13 @@ static int pcf2127_spi_probe(struct spi_device *spi)
+ 
+ 	return pcf2127_probe(&spi->dev, regmap, spi->irq,
+ 			     pcf2127_spi_driver.driver.name,
+-			     spi_get_device_id(spi)->driver_data);
++			     variant);
+ }
+ 
+ static const struct spi_device_id pcf2127_spi_id[] = {
+-	{ "pcf2127", 1 },
+-	{ "pcf2129", 0 },
+-	{ "pca2129", 0 },
++	{ "pcf2127", PCF2127 },
++	{ "pcf2129", PCF2129 },
++	{ "pca2129", PCF2129 },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(spi, pcf2127_spi_id);
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+2.30.2
+
