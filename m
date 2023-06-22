@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D10D7395FC
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 05:56:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25AFC7395FD
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 05:56:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230096AbjFVD4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 23:56:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57904 "EHLO
+        id S230260AbjFVD45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 23:56:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230214AbjFVDzu (ORCPT
+        with ESMTP id S230168AbjFVD40 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 23:55:50 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2079.outbound.protection.outlook.com [40.107.220.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8331272A;
-        Wed, 21 Jun 2023 20:55:14 -0700 (PDT)
+        Wed, 21 Jun 2023 23:56:26 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on20625.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e89::625])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EEED1BF5;
+        Wed, 21 Jun 2023 20:55:40 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fmdcu5qeo8R/YCVANohoWn8YC5ToU45aAZFCiBlGElcbbbrJ5VZmpQOVLAdmUps3o9K3L7i6Oucmp5m5Nw/SJLnhLXXc4le2ssnwY7kgdYeKvWnZDZuMYXH7WfO5qYDpVeHbJaH/wX/I4D45CoQyil6U2Lb9Htib64ZtzvJhwtVV7KdqFdmN/tknd4DSVzR4GiJeDRd7os7AlwgGVZlshTwdD0CLkO6HXT+KIW4pFj250XM3kJo58TlfCUkNqMwDeR3r1RtzHWLXz5sX4gSgagwNJzROy9+dnGt3uaM4W1iZZ13Ca8qlUbh2F+VBBFJhwYK2XbDXVpN2lMkpukPZaQ==
+ b=VbqsO23Otzktk0u6AkErMtKYnLYUZm5ngogr+pjzgoyln/ZLKOPm/3pD9fQR5izqANDrpRhVpT1qEgbABC+aSiz0cgR+ls3zKpAQnlx8nqrGrIELvwjS/LzbHvJM1A+Dm+nqnIJ/VzX2OcSPKb+WvnL75hIwlUQpuLdqh1+DdcBtNXeXlrGAMOnfnkMWd1vi2rtry+1MTgXwN0oNmiKC9aYJ2Lwc876rkql/DMs1mmN0ZsN0p4Ek2Y/c1d1uqbsVIDqBTyfS3i0EOTDOQQrNhTE81fLKGSxr5uGdI9XGljFFPwr020IFM7+/v3e5qismOe7m5bH5K7u2/pNcA/PB/w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8IqJ+mOd5KPwVI76S2Q/gRsUbFq6Y6yh5uPvLB4Nqb4=;
- b=jdOGFdlgiwzVuv3ItP1IlMi8trd1YvUmq8l/bUjEZg4YSdfwBz4MLJYXKhjzRJvufl/Qp6+b5xcXniz41yt1JcqE/RcimFyDbFz01Jlam8hOaQUZoh417j6rmQFPeJASXX2nGgQ0+vl/zGpAbHG5Kybla6EO7gxg8ir8jvRNFmIU6KTmr02IKR1KgkTv5EYWexAtZUzEm80mrI54OnVGEoxdIKyn+eRNKHo9fcXgpHW7k6rUOVH5BuJy+E+OKwM5FqW7Ug3VTZZ6GzgnLof0lrsVG1fYE6TLbIvCj7dlOs+0/0DKFf6rAMM488QccCXrso8cUgjmexP+rl6kbUZKrw==
+ bh=JImqAp9zoln5nJysoPYyHl2b/2Gg4IfkFwSEYsrRYgw=;
+ b=OOHdXyXwUE3/iH2/a1jtN79/Ph3+gHaPaTR/otjr7kWFEA7V5IjWjpqY94FYJSI2x1r957S119/5wSEp5ogU4Pa1/6tXxGNyPTub37R5aFO8AiSe7ewwM0rvvkmiDllg0DMADYzTW9oLXf0bxnr7jdmDmvg4/gKVlCo32Wq/0j3MqKlhxU2hkbdn1+OPo2w5FC4KCBfy+RFDPvMAbKjnTtgMNyii4qZBhwd8cabgx/HHliEE0AtIWcz+rZky5M7MtUZb4MqybLVKPI6TEByv9m3JTHqy0M2ti915jvuQcfK/2/fkBq6LOGq4xNH8aZhcrJnfqUCz+NvTzUo8dyI5Ig==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8IqJ+mOd5KPwVI76S2Q/gRsUbFq6Y6yh5uPvLB4Nqb4=;
- b=JzZQst2yBx5MdpMEGZYeTAb98VdxA32j+OdRrBUYg404//fFhbtaVJewPPfDXCgeqqZER3w3jqDNdsIR4fjNPHfyAY3jtpsdAldaQwATR+GDFT6TAEIHabcC3UKlmetakoyGPjmnVZhoERJ+6SIAx/3aX4dbB3Pdt9GN7TkUTQA=
-Received: from BN0PR03CA0011.namprd03.prod.outlook.com (2603:10b6:408:e6::16)
- by IA0PR12MB8747.namprd12.prod.outlook.com (2603:10b6:208:48b::15) with
+ bh=JImqAp9zoln5nJysoPYyHl2b/2Gg4IfkFwSEYsrRYgw=;
+ b=TGDfDePAe7VwIeOfnPEs+YA220Ll8jsFEuy6b7TcQpAHnvcJ1DzwicWhnkmQ+ZpoojrR2ogIGdX7dYOIO3Flx25AEawBea89NNgYlCwyVPPWS3hIAO/qvm7rMKdFydmV4jBdEyjqmu76JF/qdmq/PnND9nngFJ/y4ZtfwrRe9MM=
+Received: from BN1PR13CA0025.namprd13.prod.outlook.com (2603:10b6:408:e2::30)
+ by LV8PR12MB9109.namprd12.prod.outlook.com (2603:10b6:408:18a::20) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.35; Thu, 22 Jun
- 2023 03:54:55 +0000
-Received: from BN8NAM11FT030.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:e6:cafe::56) by BN0PR03CA0011.outlook.office365.com
- (2603:10b6:408:e6::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24 via Frontend
- Transport; Thu, 22 Jun 2023 03:54:55 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.23; Thu, 22 Jun
+ 2023 03:55:06 +0000
+Received: from BN8NAM11FT077.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:e2:cafe::c0) by BN1PR13CA0025.outlook.office365.com
+ (2603:10b6:408:e2::30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.9 via Frontend
+ Transport; Thu, 22 Jun 2023 03:55:06 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -47,13 +47,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT030.mail.protection.outlook.com (10.13.177.146) with Microsoft SMTP
+ BN8NAM11FT077.mail.protection.outlook.com (10.13.177.232) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6500.41 via Frontend Transport; Thu, 22 Jun 2023 03:54:55 +0000
+ 15.20.6500.41 via Frontend Transport; Thu, 22 Jun 2023 03:55:06 +0000
 Received: from ethanolx7ea3host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Wed, 21 Jun
- 2023 22:54:54 -0500
+ 2023 22:55:05 -0500
 From:   Terry Bowman <terry.bowman@amd.com>
 To:     <alison.schofield@intel.com>, <vishal.l.verma@intel.com>,
         <ira.weiny@intel.com>, <bwidawsk@kernel.org>,
@@ -61,9 +61,9 @@ To:     <alison.schofield@intel.com>, <vishal.l.verma@intel.com>,
         <Jonathan.Cameron@huawei.com>, <linux-cxl@vger.kernel.org>
 CC:     <terry.bowman@amd.com>, <rrichter@amd.com>,
         <linux-kernel@vger.kernel.org>, <bhelgaas@google.com>
-Subject: [PATCH v6 12/27] cxl/regs: Remove early capability checks in Component Register setup
-Date:   Wed, 21 Jun 2023 22:51:11 -0500
-Message-ID: <20230622035126.4130151-13-terry.bowman@amd.com>
+Subject: [PATCH v6 13/27] cxl/mem: Prepare for early RCH dport component register setup
+Date:   Wed, 21 Jun 2023 22:51:12 -0500
+Message-ID: <20230622035126.4130151-14-terry.bowman@amd.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230622035126.4130151-1-terry.bowman@amd.com>
 References: <20230622035126.4130151-1-terry.bowman@amd.com>
@@ -75,27 +75,27 @@ X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT030:EE_|IA0PR12MB8747:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2e69c060-30d2-4987-016d-08db72d470a6
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT077:EE_|LV8PR12MB9109:EE_
+X-MS-Office365-Filtering-Correlation-Id: d5c29e6e-a1b6-4476-db99-08db72d4772e
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: aw25LaJIPzsfACsn4YXYIzvQsRENHEFGulWlUWu8Kw5GDfrgMy/dtunw76LLRTOb+2TzaKXjL57tVVHamIzgZPBp2SWvxNCOYbiNoPFahCDxbmJlwtXPyS3THZaRaZbTo0tDWclNZIBoH50I3s9DFsaxXpkq3qq/THigvuwTmaiBr/3l1P2OEw6SUyxV7XW+0QvFJxlBjqcxZaic6EO7XXiZP5CUzVzKwstKXlKjiRm0+/YzzwT4pU0IGMWi5nhakza1G+UIUmihUhdyOVlYb0DPvLPx5l6DgvzXinPH6hguCusb+yuhqeCa6f2CNRZx6+DgBFWRmSS4qflqFNF8sSnlapGPbtbxnGSKiTlPhroLqYqsbDUF9P3JX5jXGuwnhIP162lz8q0yyM3P0HhkEDTG/7b/qYoe55QMUReEGBzI2Wa8CV0MWJtQngpkt5TB72YGHBkbtmuOa2TyrdTDbkMXcM1okBeXgdE3uXKPWJstVlBZbRZ/7RveAu0KimBB8OXQpQfm3XGdKvxIntbW5Bx9CZDNWhhT75EM+EYcBXeyt7jJAr5VIEbaAiglp50Rqnl8FgGHixoNntNFJksoRnyTHebE9RbafV3R4l40gQNyaJjHRQcOTu7g/VdAisMXHwMupxIvpcrT86Fvhw1JKGgDXH4GlA9VbHUB55C0XC8UC4kY/oLWjY1WGLvaAw3bKZp7nBkw4HyQtG9SRYZVvcyS/b7rqJjBGhjCM0qxQEU453T/ug/OBQnnn4VA7aXd3faBG788LkY39wMAFv0Zbg==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(346002)(39860400002)(136003)(451199021)(40470700004)(36840700001)(46966006)(7416002)(356005)(81166007)(336012)(426003)(2616005)(47076005)(83380400001)(86362001)(36860700001)(44832011)(2906002)(5660300002)(82740400003)(4326008)(54906003)(110136005)(16526019)(40460700003)(70206006)(8936002)(8676002)(82310400005)(186003)(26005)(478600001)(36756003)(41300700001)(1076003)(40480700001)(70586007)(316002)(7696005)(6666004)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: pA5VQX5d76RgfQpbyvQxpGcsF3qRo61NOCCl1Z/+9n9EDCtfBhXSd43Hi4x7bl236SH+RuzBrvFIDt70h2ZcfCbdKnKtaQYLdUDRB4Hz+JXlJLpSygB/atdmcaahZOWJTdiORuZ0XFzGxmBqRULSYX3v60IQ6jSflem8QZkknyDXtUe4i/I+e6NPAMHRvkH26qH+BUBSLWEHV1l1rK4DsQdd6xCEcoC/FTER89VuskzfOGyqvNwlcOu3aTTn/0VEMRSZM9CtrhNLuLuSPGsmtZz9upcM5gq9NClCW2HKGvGMyXfcUaFxq4dVQI7pMw8GfQrqksHW04jIsr+UexfY9NBWV1tdrJ5MR5tYCn4fc07Xlp11x6aCwTRccUnjG5VTidrR7blkwFQbhLfAdDyD3gtTbIgISHvf3O3slNP8XbP6l/4N7Zf3E8I6poeK2GVLELhxd4vkpHHrW7gPWINAEnBHZIIvNcldeT/yZI9qBixxeigZ+mO6jpnUid9+g8FHqKztYj9fcma6N9RkvPFYQ4tagGmP4uAI3MUyFQW1qOYsLnSmE8JoeLWNWQArxj1ffef4UT/qaqlUcwSTPQu6VZoO+fTDS43omA4y/mHZgIWXyh+W6J67vDqy/mSFbaJeesTOTwTSpR4Voj0W7sUJcTstNEaodIYQ2apiTmEmU3ORK5sZHjvxHvAuaBT1NIE1tHqHTWbLE/njQQF4VxrdJ51ztjoyRJztSO9puAoGxrgeadETMIWLGh2sYgLqlow5fhM1GtMIM1cl6yWYLUUSKw==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(136003)(39860400002)(376002)(451199021)(36840700001)(46966006)(40470700004)(6666004)(40460700003)(2906002)(426003)(336012)(16526019)(186003)(2616005)(36860700001)(47076005)(83380400001)(70206006)(70586007)(110136005)(7696005)(54906003)(316002)(7416002)(5660300002)(8936002)(26005)(478600001)(44832011)(1076003)(41300700001)(8676002)(40480700001)(81166007)(82740400003)(356005)(36756003)(82310400005)(86362001)(4326008)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jun 2023 03:54:55.0992
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jun 2023 03:55:06.0937
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2e69c060-30d2-4987-016d-08db72d470a6
+X-MS-Exchange-CrossTenant-Network-Message-Id: d5c29e6e-a1b6-4476-db99-08db72d4772e
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT030.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT077.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB8747
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR12MB9109
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -104,74 +104,45 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Robert Richter <rrichter@amd.com>
 
-When probing the Component Registers in function cxl_probe_regs()
-there are also checks for the existence of the HDM and RAS
-capabilities. The checks may fail for components that do not implement
-the HDM capability causing the Component Registers setup to fail too.
-
-Remove the checks for a generalized use of cxl_probe_regs() and check
-them directly before mapping the RAS or HDM capabilities. This allows
-it to setup other Component Registers esp. of an RCH Downstream Port,
-which will be implemented in a follow-on patch.
+In order to move the RCH dport component register setup to cxl_pci the
+base address must be stored in CXL device state (cxlds) for both
+modes, RCH and VH. Store it in cxlds->component_reg_phys and use it
+for endpoint creation.
 
 Signed-off-by: Robert Richter <rrichter@amd.com>
 Signed-off-by: Terry Bowman <terry.bowman@amd.com>
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 ---
- drivers/cxl/core/regs.c | 8 --------
- drivers/cxl/pci.c       | 2 ++
- drivers/cxl/port.c      | 5 ++++-
- 3 files changed, 6 insertions(+), 9 deletions(-)
+ drivers/cxl/mem.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/cxl/core/regs.c b/drivers/cxl/core/regs.c
-index e035ad8827a4..e68848075bb6 100644
---- a/drivers/cxl/core/regs.c
-+++ b/drivers/cxl/core/regs.c
-@@ -369,14 +369,6 @@ static int cxl_probe_regs(struct cxl_register_map *map)
- 	case CXL_REGLOC_RBI_COMPONENT:
- 		comp_map = &map->component_map;
- 		cxl_probe_component_regs(dev, base, comp_map);
--		if (!comp_map->hdm_decoder.valid) {
--			dev_err(dev, "HDM decoder registers not found\n");
--			return -ENXIO;
--		}
--
--		if (!comp_map->ras.valid)
--			dev_dbg(dev, "RAS registers not found\n");
--
- 		dev_dbg(dev, "Set up component registers\n");
- 		break;
- 	case CXL_REGLOC_RBI_MEMDEV:
-diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
-index ac17bc0430dc..945ca0304d68 100644
---- a/drivers/cxl/pci.c
-+++ b/drivers/cxl/pci.c
-@@ -630,6 +630,8 @@ static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 	rc = cxl_pci_setup_regs(pdev, CXL_REGLOC_RBI_COMPONENT, &map);
- 	if (rc)
- 		dev_warn(&pdev->dev, "No component registers (%d)\n", rc);
-+	else if (!map.component_map.ras.valid)
-+		dev_dbg(&pdev->dev, "RAS registers not found\n");
+diff --git a/drivers/cxl/mem.c b/drivers/cxl/mem.c
+index 4cc461c22b8b..7638a7f8f333 100644
+--- a/drivers/cxl/mem.c
++++ b/drivers/cxl/mem.c
+@@ -51,7 +51,6 @@ static int devm_cxl_add_endpoint(struct device *host, struct cxl_memdev *cxlmd,
+ 	struct cxl_port *parent_port = parent_dport->port;
+ 	struct cxl_dev_state *cxlds = cxlmd->cxlds;
+ 	struct cxl_port *endpoint, *iter, *down;
+-	resource_size_t component_reg_phys;
+ 	int rc;
  
- 	cxlds->component_reg_phys = map.resource;
- 
-diff --git a/drivers/cxl/port.c b/drivers/cxl/port.c
-index 4cef2bf45ad2..01e84ea54f56 100644
---- a/drivers/cxl/port.c
-+++ b/drivers/cxl/port.c
-@@ -102,8 +102,11 @@ static int cxl_endpoint_port_probe(struct cxl_port *port)
- 		return rc;
- 
- 	cxlhdm = devm_cxl_setup_hdm(port, &info);
--	if (IS_ERR(cxlhdm))
-+	if (IS_ERR(cxlhdm)) {
-+		if (PTR_ERR(cxlhdm) == -ENODEV)
-+			dev_err(&port->dev, "HDM decoder registers not found\n");
- 		return PTR_ERR(cxlhdm);
-+	}
- 
- 	/* Cache the data early to ensure is_visible() works */
- 	read_cdat_data(port);
+ 	/*
+@@ -72,11 +71,11 @@ static int devm_cxl_add_endpoint(struct device *host, struct cxl_memdev *cxlmd,
+ 	 * typical register locator mechanism.
+ 	 */
+ 	if (parent_dport->rch && cxlds->component_reg_phys == CXL_RESOURCE_NONE)
+-		component_reg_phys =
++		cxlds->component_reg_phys =
+ 			cxl_rcd_component_reg_phys(&cxlmd->dev, parent_dport);
+-	else
+-		component_reg_phys = cxlds->component_reg_phys;
+-	endpoint = devm_cxl_add_port(host, &cxlmd->dev, component_reg_phys,
++
++	endpoint = devm_cxl_add_port(host, &cxlmd->dev,
++				     cxlds->component_reg_phys,
+ 				     parent_dport);
+ 	if (IS_ERR(endpoint))
+ 		return PTR_ERR(endpoint);
 -- 
 2.34.1
 
