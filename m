@@ -2,226 +2,354 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DBC373A8DA
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 21:16:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EFAD73A8DE
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 21:17:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231463AbjFVTQx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 15:16:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49114 "EHLO
+        id S230008AbjFVTRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 15:17:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbjFVTQv (ORCPT
+        with ESMTP id S230334AbjFVTRI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 15:16:51 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E971BA
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 12:16:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687461409; x=1718997409;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uI2cugghMPMvRogKoZJ3oTm+3R3ufG4U0Yhvp+OeKGs=;
-  b=KagMnHGIvhPe7d7sQhkhDzRVV0U0oLIQ4VwA8TMT3HhYZf4b99T2Pp+F
-   zKvg9zXa49c8ThDVL33PZvZqZXa1Kp3EsxO5877HctYMrSNg3Z/5EMMGA
-   ayhsVxRTif4xLTrKNt58nLqltOohNl3CrE+EcQvow2RRBdwh08mkwhUAf
-   iyr6qGrJW5/nGw4pSq6zJ6p0qgiELH2fPeT9WaJl1Dc1vXdSEqx7k0MP9
-   MbcRwbU2NZtIWQPcMEl60+Z98fMamRyeFfB9HBIcNHGmsxEJCUBmHd5fh
-   bKLyA7dnBwFfkhvM7zSskQpqXmeZPpvzbFaF1OHKgZ0jYVbUMqXZU1sAX
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="359450996"
-X-IronPort-AV: E=Sophos;i="6.01,149,1684825200"; 
-   d="scan'208";a="359450996"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 12:16:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="961695680"
-X-IronPort-AV: E=Sophos;i="6.01,149,1684825200"; 
-   d="scan'208";a="961695680"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 22 Jun 2023 12:16:46 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qCPnR-0007kk-2R;
-        Thu, 22 Jun 2023 19:16:45 +0000
-Date:   Fri, 23 Jun 2023 03:16:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sathvika Vasireddy <sv@linux.ibm.com>,
-        Naveen N Rao <naveen@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v2 14/14] powerpc: Implement UACCESS validation on PPC32
-Message-ID: <202306230353.iPqv57lK-lkp@intel.com>
-References: <be282f27ad808418c7475b51a00b4cb035f89a95.1687430631.git.christophe.leroy@csgroup.eu>
+        Thu, 22 Jun 2023 15:17:08 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A497EEA;
+        Thu, 22 Jun 2023 12:17:06 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jvg82bjTkp24Liz4soZrROSGhgf70UxiK01jMlhv/ZSqOWUhZsaivWEGxvEUPt80L7b971IS+LlyfQI6VYVODA1OOPJsjIQmhXOXrLw6p4ECqAy9QfPF7oqyniVZ7WxgoCzfjKbSDpvE7D+QLjjpA+rDVNjA9eU84nbdoXiKSTFggMRXj85qdG5KhLAqZs1e44N1Q2GjuU3evX64XRtbngeYYcptplzYEU1a4zEK6R7ssOFKIY/f98DK+ZDwtdD248IWQWP6aMmiefQGS7YFPs0XnBcCQNfmXtainlCWAgnuEyhINKwegWo8ifZ+m8XCGcUJTAz/cgOqZtajIV/8ow==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hLjaAV6+7PyVsLj8c7zw3upmoOPC2jQMtDNatdCDsjI=;
+ b=Xx7iCptY5y28fLECEldKlsRkqKbTuurmNWBVTtuat/eCsemn8VatTRsn2pHrA3sCkjRQy4sLkBQ7dtu9Ey71c2/02XHqsaexFVG4tO/7wKeh+uxa8kmx9NDhocLB4gfKcp9CNLOyIN8yb99A8BzP/85CrhVPxx463+evSfZZ6jfFUa/5RlqA7+JO/oj+UmaUNlQqiIQFi0neHvQ96U23K7GyHSHZlfNepjhidPmOnpY9pGlq+mmuWyxPQtdM91XrimR+wnZ4pwc3R3mhQOkHtKXacx99gFJB58rmKjwDXaGap7+rmW0J44OIO+ZGx+VKgM01dzWTEd0Sc6bdjjSmdg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hLjaAV6+7PyVsLj8c7zw3upmoOPC2jQMtDNatdCDsjI=;
+ b=3CE0ElbB22erLh6DyGXh1xEqMqGYfPRFWH0QuktVUbZprxwpjsWvEV3d1F4LJyxy9mRdYwItTMLC1EreqN6nGHX/52CEjnLFAnqGdOyIl5quAJZKO2idn5SoN1ZqeEYiSUUbFsyNyHO1o08LLox+hurLligLbbIbBv+kYVWelvY=
+Received: from MN0PR12MB5953.namprd12.prod.outlook.com (2603:10b6:208:37c::15)
+ by MN2PR12MB4488.namprd12.prod.outlook.com (2603:10b6:208:24e::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24; Thu, 22 Jun
+ 2023 19:17:02 +0000
+Received: from MN0PR12MB5953.namprd12.prod.outlook.com
+ ([fe80::8368:23:db50:8f88]) by MN0PR12MB5953.namprd12.prod.outlook.com
+ ([fe80::8368:23:db50:8f88%5]) with mapi id 15.20.6521.020; Thu, 22 Jun 2023
+ 19:17:02 +0000
+From:   "Pandey, Radhey Shyam" <radhey.shyam.pandey@amd.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     "andersson@kernel.org" <andersson@kernel.org>,
+        "mathieu.poirier@linaro.org" <mathieu.poirier@linaro.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "conor+dt@kernel.org" <conor+dt@kernel.org>,
+        "Simek, Michal" <michal.simek@amd.com>,
+        "Levinsky, Ben" <ben.levinsky@amd.com>,
+        "Shah, Tanmay" <tanmay.shah@amd.com>,
+        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "git (AMD-Xilinx)" <git@amd.com>
+Subject: RE: [PATCH] dt-bindings: remoteproc: add Tightly Coupled Memory (TCM)
+ bindings
+Thread-Topic: [PATCH] dt-bindings: remoteproc: add Tightly Coupled Memory
+ (TCM) bindings
+Thread-Index: AQHZoE8KBE6u3kfKBUagIUdcnS3pjK+T8cGAgANH7NA=
+Date:   Thu, 22 Jun 2023 19:17:02 +0000
+Message-ID: <MN0PR12MB5953AC6EB4375BA16D3D9785B722A@MN0PR12MB5953.namprd12.prod.outlook.com>
+References: <1686918865-2330677-1-git-send-email-radhey.shyam.pandey@amd.com>
+ <20230620170351.GA3815971-robh@kernel.org>
+In-Reply-To: <20230620170351.GA3815971-robh@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MN0PR12MB5953:EE_|MN2PR12MB4488:EE_
+x-ms-office365-filtering-correlation-id: 56dc5bb2-185b-4db6-f0d3-08db73554266
+x-ld-processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: t7C71G/kaZatObsLB6RqY/g4fY3O6K8+UWku6eW9pHR6Ve6FwOVOrFYfz/bht0s5JXcVF/smTAAW8YAbV1TPD0JF3ozUROfl+KpbyBzgNVeRnbKbmh0CRc+yKtuMYsKKOLVZE3fYz5hkg/ml6slXUf6CTp+MzGE2Cnx18/De7GB/vDz4ujNypIS2FDk9gvKmL7F/ov6tLOmFvbWeGeDh7ap8E2wv/nTrzNosk9+X8scPsPCL/u6FLMgtH8xa2wu1hnUJz9YaFk5n20t4WBQQn8g01D5SRDr0qpr+9oZeEyGJ2n8fp9XUfScSL1agTGHBurMMJUh3qyLmZ96Qu79AJ4nFlm+dDxwzt7M7XhwkV+hmQPrumvJuuNxopHjLBrpoFAIofF2JDkurnvMgfiZzK58TeGMNwIr1JwmFs+u7DiVaPKCqJIeSKP2Px3iWZN7/xmO0k50lYaMDbeOGe9cQ0W7uyxBR/Hva/D//ITFzWQjvjGhilylM1TqTaGunc3SnzLA+8FQ6PuEWoZUgB8G2Bkvzenwggf3YEojYWv+tOkuYYt/V3710i8tV1pSCsep7qt4RcXUGSr2IP0RE4Al7bxHROf1mKz5k5m/WsqaSX9ELAOnUpU20fzS5KV2w2SO1
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB5953.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(366004)(376002)(39860400002)(346002)(451199021)(38070700005)(122000001)(38100700002)(55016003)(86362001)(316002)(66446008)(64756008)(66556008)(66476007)(6916009)(8676002)(41300700001)(8936002)(66946007)(4326008)(76116006)(33656002)(7416002)(5660300002)(6506007)(7696005)(53546011)(52536014)(71200400001)(478600001)(54906003)(83380400001)(9686003)(186003)(2906002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?236lDRSbO7VteP2IpyL6lnQt4L3EgUKRMJhFBR6iUmWJSqYjdgdXnveVmO17?=
+ =?us-ascii?Q?QSW9FaIqDCxlkwWYmkuPrWmvS2Nj3fZsfK7t63lyYZkxDlYpSJ6fc5Wf1BOD?=
+ =?us-ascii?Q?fJQZujpd29lzYtBXRqe9VZqrnPOCG/d752iy37+hmDAVin1G+dSlvD2htN4s?=
+ =?us-ascii?Q?qkQBH6QnhPCEdOPLWAUSJZ2Dcn6IxljG8bU2JC8RPoujd72FVR9NwfusxZJ5?=
+ =?us-ascii?Q?leafswjT2DV6+edY9d7jxEa4PZr20xk0tTOZjF2yBdUjl5E3xjGXR7HqGrs0?=
+ =?us-ascii?Q?HPWnQ2hiehQ2tMXs6MydLX0vJZursV6+AC/gZxVs4D0NPcJhmzPy2+5uj8iO?=
+ =?us-ascii?Q?RfS0ry+D58eveaAmMtC1mvVDz/1oKuQpxq7qwFVSURP5tky+WVgbJfx14KEJ?=
+ =?us-ascii?Q?CJPFeHTH3xlvbZZ/PlI/SyvRbHf87beU+bXLI0//7qaFp7bOFjaA0gGxVgjJ?=
+ =?us-ascii?Q?hNHXwAKJMzFH074zLbnWzxzyqaltYZR9xJZr2SI4FjE4A8YID0gLD1cYpw5D?=
+ =?us-ascii?Q?/2blQFOECgRyDi3p1fXiw4u3fYbEe/EcVJf15XRWQJDYWOwTzrjzj/Ix7BfG?=
+ =?us-ascii?Q?yUkZ5JzWiuiYNDzH4hWaRxMyHBAeeIny6PxJ196cVKPe07Zh5lmZEGVdY5xT?=
+ =?us-ascii?Q?znLJ8jswbWxKfiTMsvIbJDxDhsyngRP0ujK85OLFc/VIgPVLnfMeLV4fk1Gc?=
+ =?us-ascii?Q?4f+iwNw4PvcplOmobMgD8b41ZJCr58dD2zQd/506fn+G6DaRAukJVmVl2e7X?=
+ =?us-ascii?Q?N5OnoclOavZ6uxG25vdS0acphQixQ2Rrs81INMiO0Xwdg1r222hxbBiBSLA9?=
+ =?us-ascii?Q?xxJMpIGpSZR2EQ34nQ9SHjhYYAdYgElt8z/7QxFZzDuNe1uYkgI8IGuyOMFC?=
+ =?us-ascii?Q?ov3SJWu7/PRLPgB4FbYgf1FxDJOTM0QYNpsNhdESLbPp80iaXDKMF1fH0ic/?=
+ =?us-ascii?Q?+C42CuRR1H6QraX3S6pxVvEKJmJRgPs38T+LjIch2AoeWt25lwG/A2tDhtMc?=
+ =?us-ascii?Q?JUNifTeqBMr3c3P+16MP+gofwfdSf0Wo2xvk/i1Jkeqw0u3s6HgImvLhDFkb?=
+ =?us-ascii?Q?WZiMLxs9sLhv3Dmq4lSCyHMaBP41OdPt8uzNSSjA5igJdfgf1GG+ua+ea8fu?=
+ =?us-ascii?Q?+YUsykCErcGO5rVaEtn0d4rF6SF3iOGcHVlq+q8wCPvZBaPEVlFKPEjkd7cB?=
+ =?us-ascii?Q?2jeydxZl64udyZHw5l3y1Xoc8J8CjU+ABPqYZ5McdQAPr+kIh/Uye+EMY9WP?=
+ =?us-ascii?Q?K+0ytSQHhUpxnR7ilRvn/jiLajj6Sah03EEn3gPm+OZ1WHhmsvPZ4NlqRx40?=
+ =?us-ascii?Q?2DRXKgDh4j1xw1/L2HNjbp+BTASvd3MDzwuUu5bFz7RHuRmGz0SraFvnMmxk?=
+ =?us-ascii?Q?vcBwja/xMRGMLeIYGz9d3mp6UMb4whkjICaHUdTg5Qhs0IsOwXejOVFmY9kk?=
+ =?us-ascii?Q?in0OpXGqPaJyWffyu7m2fMrLpw7CYlSsNR+NepbfZR/2waeJmvhGIGivgv74?=
+ =?us-ascii?Q?D0c8OvmCrQjf8WbOWgK/l+IVfvevpSNkq3j/TR4BLfbcFLpDtR1nryWFl0Ch?=
+ =?us-ascii?Q?MPgj43vTjQo1/MZny3bcNtJXqaFfBo3yv9UOB4Rp7rR23WIAsaU63tTNGGas?=
+ =?us-ascii?Q?h2XRc6JQmf1Q0vCejLsi2cI=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <be282f27ad808418c7475b51a00b4cb035f89a95.1687430631.git.christophe.leroy@csgroup.eu>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB5953.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 56dc5bb2-185b-4db6-f0d3-08db73554266
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Jun 2023 19:17:02.6449
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: qjvA2Ds5otSIDLv0IqbOyW4zcJL0h5oE34xEny48uRSVbDMi/JXEqv2Q65VyieXx
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4488
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christophe,
+> -----Original Message-----
+> From: Rob Herring <robh@kernel.org>
+> Sent: Tuesday, June 20, 2023 10:34 PM
+> To: Pandey, Radhey Shyam <radhey.shyam.pandey@amd.com>
+> Cc: andersson@kernel.org; mathieu.poirier@linaro.org;
+> krzysztof.kozlowski+dt@linaro.org; conor+dt@kernel.org; Simek, Michal
+> <michal.simek@amd.com>; Levinsky, Ben <ben.levinsky@amd.com>; Shah,
+> Tanmay <tanmay.shah@amd.com>; linux-remoteproc@vger.kernel.org;
+> devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
+> kernel@vger.kernel.org; git (AMD-Xilinx) <git@amd.com>
+> Subject: Re: [PATCH] dt-bindings: remoteproc: add Tightly Coupled Memory
+> (TCM) bindings
+>=20
+> On Fri, Jun 16, 2023 at 06:04:25PM +0530, Radhey Shyam Pandey wrote:
+> > Introduce bindings for TCM memory address space on AMD-xilinx Zynq
+> > UltraScale+ platform. As of now TCM addresses are hardcoded in xilinx
+> > remoteproc driver. This binding will help in defining TCM in
+> > device-tree and make it's access platform agnostic and data-driven from
+> the driver.
+> >
+> > Tightly-coupled memories(TCMs) are low-latency memory that provides
+> > predictable instruction execution and predictable data load/store
+> > timing. Each Cortex-R5F processor contains two 64-bit wide 64 KB
+> > memory banks on the ATCM and BTCM ports, for a total of 128 KB of
+> memory.
+> >
+> > In split mode, TCM resources(reg, ranges and power-domain) are
+> > documented in each R5 node and in lockstep mode TCM resources are
+> > documented in any of the R5 node.
+> >
+> > It also extends the examples for TCM split and lockstep modes.
+> >
+> > Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+> > ---
+> > The inspiration for integrating TCM nodes in R5 nodes is taken from
+> > "5ee79c2ed5bd dt-bindings: remoteproc: Add bindings for R5F subsystem
+> > on TI K3 SoCs".Once the binding is reviewed/accepted will send out
+> > driver changes in follow-up series.
+> > ---
+> >  .../remoteproc/xlnx,zynqmp-r5fss.yaml         | 86 +++++++++++++++++--
+> >  1 file changed, 81 insertions(+), 5 deletions(-)
+> >
+> > diff --git
+> > a/Documentation/devicetree/bindings/remoteproc/xlnx,zynqmp-
+> r5fss.yaml
+> > b/Documentation/devicetree/bindings/remoteproc/xlnx,zynqmp-
+> r5fss.yaml
+> > index 9f677367dd9f..0bc3a8bb8374 100644
+> > ---
+> > a/Documentation/devicetree/bindings/remoteproc/xlnx,zynqmp-
+> r5fss.yaml
+> > +++ b/Documentation/devicetree/bindings/remoteproc/xlnx,zynqmp-
+> r5fss.y
+> > +++ aml
+> > @@ -20,6 +20,12 @@ properties:
+> >    compatible:
+> >      const: xlnx,zynqmp-r5fss
+> >
+> > +  "#address-cells":
+> > +    const: 1
+> > +
+> > +  "#size-cells":
+> > +    const: 1
+>=20
+> If these are translatable addresses, then you are missing 'ranges'.
 
-kernel test robot noticed the following build warnings:
+Thanks, will add ranges property in v2.
 
-[auto build test WARNING on powerpc/next]
-[also build test WARNING on powerpc/fixes masahiroy-kbuild/for-next masahiroy-kbuild/fixes linus/master v6.4-rc7]
-[cannot apply to next-20230622]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
++  ranges:
++    description: |
++      Standard ranges definition providing address translations for
++      local R5F TCM address spaces to bus addresses.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Christophe-Leroy/powerpc-kuap-Avoid-unnecessary-reads-of-MD_AP/20230622-185950
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
-patch link:    https://lore.kernel.org/r/be282f27ad808418c7475b51a00b4cb035f89a95.1687430631.git.christophe.leroy%40csgroup.eu
-patch subject: [PATCH v2 14/14] powerpc: Implement UACCESS validation on PPC32
-config: powerpc-randconfig-r025-20230622 (https://download.01.org/0day-ci/archive/20230623/202306230353.iPqv57lK-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 12.3.0
-reproduce: (https://download.01.org/0day-ci/archive/20230623/202306230353.iPqv57lK-lkp@intel.com/reproduce)
+>=20
+> > +
+> >    xlnx,cluster-mode:
+> >      $ref: /schemas/types.yaml#/definitions/uint32
+> >      enum: [0, 1, 2]
+> > @@ -37,7 +43,7 @@ properties:
+> >        2: single cpu mode
+> >
+> >  patternProperties:
+> > -  "^r5f-[a-f0-9]+$":
+> > +  "^r5f(.*)+$":
+>=20
+> That's just '^r5f'. If adding a unit-address is what you want then make t=
+he
+> regex define that: "^r5f(@[0-9a-f]+|-[a-f0-9]+)$"
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306230353.iPqv57lK-lkp@intel.com/
+Will use this regex in v2.
 
-All warnings (new ones prefixed by >>):
+>=20
+> >      type: object
+> >      description: |
+> >        The RPU is located in the Low Power Domain of the Processor
+> Subsystem.
+> > @@ -54,8 +60,27 @@ patternProperties:
+> >        compatible:
+> >          const: xlnx,zynqmp-r5f
+> >
+> > +      "#address-cells":
+> > +        const: 1
+> > +
+> > +      "#size-cells":
+> > +        const: 1
+>=20
+> These (and ranges) apply to child nodes, but you don't have any at this l=
+evel.
 
-   lib/ubsan.c:307:6: warning: no previous prototype for '__ubsan_handle_type_mismatch' [-Wmissing-prototypes]
-     307 | void __ubsan_handle_type_mismatch(struct type_mismatch_data *data,
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> lib/ubsan.o: warning: objtool: ubsan_type_mismatch_common+0x24: UACCESS-safe disables UACCESS
-   lib/ubsan.o: warning: objtool: __ubsan_handle_type_mismatch+0x54: call to _restgpr_30_x() with UACCESS enabled
-   lib/ubsan.o: warning: objtool: __ubsan_handle_type_mismatch_v1+0x5c: call to _restgpr_30_x() with UACCESS enabled
-   lib/ubsan.o: warning: objtool: __ubsan_handle_load_invalid_value+0x28: call to memset() with UACCESS enabled
-   lib/ubsan.o: warning: objtool: __ubsan_handle_shift_out_of_bounds+0x34: call to memset() with UACCESS enabled
---
->> arch/powerpc/kernel/ptrace/ptrace-view.o: warning: objtool: gpr32_set_common+0x2b8: redundant UACCESS disable
+Will drop address-cells and size-cells from core(xlnx,zynqmp-r5f) node
+and address it in v2.
 
-
-objdump-func vmlinux.o ubsan_type_mismatch_common:
-0000 00000000 <ubsan_type_mismatch_common>:
-0000    0:	94 21 ff e0 	stwu    r1,-32(r1)
-0004    4:	7c 08 02 a6 	mflr    r0
-0008    8:	bf 61 00 0c 	stmw    r27,12(r1)
-000c    c:	7c 7f 1b 78 	mr      r31,r3
-0010   10:	90 01 00 24 	stw     r0,36(r1)
-0014   14:	7c 9e 23 78 	mr      r30,r4
-0018   18:	48 00 00 01 	bl      18 <ubsan_type_mismatch_common+0x18>	18: R_PPC_REL24	__sanitizer_cov_trace_pc
-001c   1c:	7f 90 0a a6 	mfpid   r28
-0020   20:	39 20 00 00 	li      r9,0
-0024   24:	7d 30 0b a6 	mtpid   r9
-0028   28:	4c 00 01 2c 	isync
-002c   2c:	2c 1e 00 00 	cmpwi   r30,0
-0030   30:	40 e2 00 58 	bne+    88 <ubsan_type_mismatch_common+0x88>
-0034   34:	48 00 00 01 	bl      34 <ubsan_type_mismatch_common+0x34>	34: R_PPC_REL24	__sanitizer_cov_trace_pc
-0038   38:	80 7f 00 00 	lwz     r3,0(r31)
-003c   3c:	48 00 00 01 	bl      3c <ubsan_type_mismatch_common+0x3c>	3c: R_PPC_REL24	.text.suppress_report
-0040   40:	2c 03 00 00 	cmpwi   r3,0
-0044   44:	40 e2 01 30 	bne+    174 <ubsan_type_mismatch_common+0x174>
-0048   48:	48 00 00 01 	bl      48 <ubsan_type_mismatch_common+0x48>	48: R_PPC_REL24	__sanitizer_cov_trace_pc
-004c   4c:	80 7f 00 00 	lwz     r3,0(r31)
-0050   50:	3c 80 00 00 	lis     r4,0	52: R_PPC_ADDR16_HA	.rodata.ubsan_type_mismatch_common.str1.1
-0054   54:	38 84 00 00 	addi    r4,r4,0	56: R_PPC_ADDR16_LO	.rodata.ubsan_type_mismatch_common.str1.1
-0058   58:	48 00 00 01 	bl      58 <ubsan_type_mismatch_common+0x58>	58: R_PPC_REL24	.text.unlikely.ubsan_prologue
-005c   5c:	89 3f 00 0c 	lbz     r9,12(r31)
-0060   60:	3d 40 00 00 	lis     r10,0	62: R_PPC_ADDR16_HA	.rodata.type_check_kinds
-0064   64:	80 bf 00 04 	lwz     r5,4(r31)
-0068   68:	39 4a 00 00 	addi    r10,r10,0	6a: R_PPC_ADDR16_LO	.rodata.type_check_kinds
-006c   6c:	55 29 10 3a 	slwi    r9,r9,2
-0070   70:	7c 8a 48 2e 	lwzx    r4,r10,r9
-0074   74:	3c 60 00 00 	lis     r3,0	76: R_PPC_ADDR16_HA	.rodata.ubsan_type_mismatch_common.str1.1+0xf
-0078   78:	38 a5 00 04 	addi    r5,r5,4
-007c   7c:	38 63 00 00 	addi    r3,r3,0	7e: R_PPC_ADDR16_LO	.rodata.ubsan_type_mismatch_common.str1.1+0xf
-0080   80:	48 00 00 01 	bl      80 <ubsan_type_mismatch_common+0x80>	80: R_PPC_REL24	_printk
-0084   84:	48 00 00 ec 	b       170 <ubsan_type_mismatch_common+0x170>
-0088   88:	48 00 00 01 	bl      88 <ubsan_type_mismatch_common+0x88>	88: R_PPC_REL24	__sanitizer_cov_trace_pc
-008c   8c:	83 bf 00 08 	lwz     r29,8(r31)
-0090   90:	83 7f 00 00 	lwz     r27,0(r31)
-0094   94:	2c 1d 00 00 	cmpwi   r29,0
-0098   98:	41 c2 00 78 	beq-    110 <ubsan_type_mismatch_common+0x110>
-009c   9c:	3b bd ff ff 	addi    r29,r29,-1
-00a0   a0:	48 00 00 01 	bl      a0 <ubsan_type_mismatch_common+0xa0>	a0: R_PPC_REL24	__sanitizer_cov_trace_pc
-00a4   a4:	7f bd f0 39 	and.    r29,r29,r30
-00a8   a8:	41 e2 00 68 	beq+    110 <ubsan_type_mismatch_common+0x110>
-00ac   ac:	48 00 00 01 	bl      ac <ubsan_type_mismatch_common+0xac>	ac: R_PPC_REL24	__sanitizer_cov_trace_pc
-00b0   b0:	7f 63 db 78 	mr      r3,r27
-00b4   b4:	48 00 00 01 	bl      b4 <ubsan_type_mismatch_common+0xb4>	b4: R_PPC_REL24	.text.suppress_report
-00b8   b8:	2c 03 00 00 	cmpwi   r3,0
-00bc   bc:	40 e2 00 b8 	bne+    174 <ubsan_type_mismatch_common+0x174>
-00c0   c0:	48 00 00 01 	bl      c0 <ubsan_type_mismatch_common+0xc0>	c0: R_PPC_REL24	__sanitizer_cov_trace_pc
-00c4   c4:	80 7f 00 00 	lwz     r3,0(r31)
-00c8   c8:	3c 80 00 00 	lis     r4,0	ca: R_PPC_ADDR16_HA	.rodata.ubsan_type_mismatch_common.str1.1+0x2d
-00cc   cc:	38 84 00 00 	addi    r4,r4,0	ce: R_PPC_ADDR16_LO	.rodata.ubsan_type_mismatch_common.str1.1+0x2d
-00d0   d0:	48 00 00 01 	bl      d0 <ubsan_type_mismatch_common+0xd0>	d0: R_PPC_REL24	.text.unlikely.ubsan_prologue
-00d4   d4:	89 3f 00 0c 	lbz     r9,12(r31)
-00d8   d8:	3d 40 00 00 	lis     r10,0	da: R_PPC_ADDR16_HA	.rodata.type_check_kinds
-00dc   dc:	80 df 00 04 	lwz     r6,4(r31)
-00e0   e0:	39 4a 00 00 	addi    r10,r10,0	e2: R_PPC_ADDR16_LO	.rodata.type_check_kinds
-00e4   e4:	55 29 10 3a 	slwi    r9,r9,2
-00e8   e8:	7c 8a 48 2e 	lwzx    r4,r10,r9
-00ec   ec:	3c 60 00 00 	lis     r3,0	ee: R_PPC_ADDR16_HA	.rodata.ubsan_type_mismatch_common.str1.1+0x3f
-00f0   f0:	38 c6 00 04 	addi    r6,r6,4
-00f4   f4:	7f c5 f3 78 	mr      r5,r30
-00f8   f8:	38 63 00 00 	addi    r3,r3,0	fa: R_PPC_ADDR16_LO	.rodata.ubsan_type_mismatch_common.str1.1+0x3f
-00fc   fc:	48 00 00 01 	bl      fc <ubsan_type_mismatch_common+0xfc>	fc: R_PPC_REL24	_printk
-0100  100:	3c 60 00 00 	lis     r3,0	102: R_PPC_ADDR16_HA	.rodata.ubsan_type_mismatch_common.str1.1+0x67
-0104  104:	80 9f 00 08 	lwz     r4,8(r31)
-0108  108:	38 63 00 00 	addi    r3,r3,0	10a: R_PPC_ADDR16_LO	.rodata.ubsan_type_mismatch_common.str1.1+0x67
-010c  10c:	48 00 00 60 	b       16c <ubsan_type_mismatch_common+0x16c>
-0110  110:	48 00 00 01 	bl      110 <ubsan_type_mismatch_common+0x110>	110: R_PPC_REL24	__sanitizer_cov_trace_pc
-0114  114:	7f 63 db 78 	mr      r3,r27
-0118  118:	48 00 00 01 	bl      118 <ubsan_type_mismatch_common+0x118>	118: R_PPC_REL24	.text.suppress_report
-011c  11c:	2c 03 00 00 	cmpwi   r3,0
-0120  120:	40 e2 00 54 	bne+    174 <ubsan_type_mismatch_common+0x174>
-0124  124:	48 00 00 01 	bl      124 <ubsan_type_mismatch_common+0x124>	124: R_PPC_REL24	__sanitizer_cov_trace_pc
-0128  128:	80 7f 00 00 	lwz     r3,0(r31)
-012c  12c:	3c 80 00 00 	lis     r4,0	12e: R_PPC_ADDR16_HA	.rodata.ubsan_type_mismatch_common.str1.1+0x8c
-0130  130:	38 84 00 00 	addi    r4,r4,0	132: R_PPC_ADDR16_LO	.rodata.ubsan_type_mismatch_common.str1.1+0x8c
-0134  134:	48 00 00 01 	bl      134 <ubsan_type_mismatch_common+0x134>	134: R_PPC_REL24	.text.unlikely.ubsan_prologue
-0138  138:	89 3f 00 0c 	lbz     r9,12(r31)
-013c  13c:	3d 40 00 00 	lis     r10,0	13e: R_PPC_ADDR16_HA	.rodata.type_check_kinds
-0140  140:	39 4a 00 00 	addi    r10,r10,0	142: R_PPC_ADDR16_LO	.rodata.type_check_kinds
-0144  144:	55 29 10 3a 	slwi    r9,r9,2
-0148  148:	3c 60 00 00 	lis     r3,0	14a: R_PPC_ADDR16_HA	.rodata.ubsan_type_mismatch_common.str1.1+0xa1
-014c  14c:	7c 8a 48 2e 	lwzx    r4,r10,r9
-0150  150:	7f c5 f3 78 	mr      r5,r30
-0154  154:	38 63 00 00 	addi    r3,r3,0	156: R_PPC_ADDR16_LO	.rodata.ubsan_type_mismatch_common.str1.1+0xa1
-0158  158:	48 00 00 01 	bl      158 <ubsan_type_mismatch_common+0x158>	158: R_PPC_REL24	_printk
-015c  15c:	80 9f 00 04 	lwz     r4,4(r31)
-0160  160:	3c 60 00 00 	lis     r3,0	162: R_PPC_ADDR16_HA	.rodata.ubsan_type_mismatch_common.str1.1+0xca
-0164  164:	38 63 00 00 	addi    r3,r3,0	166: R_PPC_ADDR16_LO	.rodata.ubsan_type_mismatch_common.str1.1+0xca
-0168  168:	38 84 00 04 	addi    r4,r4,4
-016c  16c:	48 00 00 01 	bl      16c <ubsan_type_mismatch_common+0x16c>	16c: R_PPC_REL24	_printk
-0170  170:	48 00 00 01 	bl      170 <ubsan_type_mismatch_common+0x170>	170: R_PPC_REL24	.text.unlikely.ubsan_epilogue
-0174  174:	48 00 00 01 	bl      174 <ubsan_type_mismatch_common+0x174>	174: R_PPC_REL24	__sanitizer_cov_trace_pc
-0178  178:	2c 1c 00 00 	cmpwi   r28,0
-017c  17c:	41 e2 00 14 	beq+    190 <ubsan_type_mismatch_common+0x190>
-0180  180:	48 00 00 01 	bl      180 <ubsan_type_mismatch_common+0x180>	180: R_PPC_REL24	__sanitizer_cov_trace_pc
-0184  184:	81 22 0e b4 	lwz     r9,3764(r2)
-0188  188:	7d 30 0b a6 	mtpid   r9
-018c  18c:	4c 00 01 2c 	isync
-0190  190:	80 01 00 24 	lwz     r0,36(r1)
-0194  194:	83 61 00 0c 	lwz     r27,12(r1)
-0198  198:	83 81 00 10 	lwz     r28,16(r1)
-019c  19c:	83 a1 00 14 	lwz     r29,20(r1)
-01a0  1a0:	7c 08 03 a6 	mtlr    r0
-01a4  1a4:	83 c1 00 18 	lwz     r30,24(r1)
-01a8  1a8:	83 e1 00 1c 	lwz     r31,28(r1)
-01ac  1ac:	38 21 00 20 	addi    r1,r1,32
-01b0  1b0:	48 00 00 00 	b       1b0 <ubsan_type_mismatch_common+0x1b0>	1b0: R_PPC_REL24	__sanitizer_cov_trace_pc
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>=20
+> > +
+> > +      reg:
+> > +        items:
+> > +          - description: Address and Size of the ATCM internal memory =
+region
+> > +          - description: Address and Size of the BTCM internal memory
+> > + region
+> > +
+> > +      reg-names:
+> > +        items:
+> > +          - const: atcm
+> > +          - const: btcm
+> > +
+> > +      ranges: true
+> > +
+> >        power-domains:
+> > -        maxItems: 1
+> > +        minItems: 1
+> > +        maxItems: 3
+> >
+> >        mboxes:
+> >          minItems: 1
+> > @@ -112,13 +137,64 @@ additionalProperties: false
+> >
+> >  examples:
+> >    - |
+> > +    #include <dt-bindings/power/xlnx-zynqmp-power.h>
+> > +
+> > +    //Split mode configuration
+> > +    remoteproc {
+> > +        compatible =3D "xlnx,zynqmp-r5fss";
+> > +        xlnx,cluster-mode =3D <0>;
+> > +
+> > +        #address-cells =3D <1>;
+> > +        #size-cells =3D <1>;
+> > +        r5f_0: r5f@ffe00000 {
+> > +            compatible =3D "xlnx,zynqmp-r5f";
+> > +            #address-cells =3D <1>;
+> > +            #size-cells =3D <1>;
+> > +            reg =3D <0xffe00000 0x10000>, <0xffe20000 0x10000>;
+> > +            reg-names =3D "atcm", "btcm";
+> > +            ranges =3D <0x0 0xffe00000 0x10000>, <0x20000 0xffe20000
+> 0x10000>;
+> > +            power-domains =3D <&zynqmp_firmware PD_RPU_0>,
+> > +                            <&zynqmp_firmware PD_R5_0_ATCM>,
+> > +                            <&zynqmp_firmware PD_R5_0_BTCM>;
+> > +            memory-region =3D <&rproc_0_fw_image>, <&rpu0vdev0buffer>,
+> <&rpu0vdev0vring0>, <&rpu0vdev0vring1>;
+> > +            mboxes =3D <&ipi_mailbox_rpu0 0>, <&ipi_mailbox_rpu0 1>;
+> > +            mbox-names =3D "tx", "rx";
+> > +        };
+> > +
+> > +        r5f_1: r5f@ffe90000 {
+> > +            compatible =3D "xlnx,zynqmp-r5f";
+> > +            #address-cells =3D <1>;
+> > +            #size-cells =3D <1>;
+> > +            reg =3D <0xffe90000 0x10000>, <0xffeb0000 0x10000>;
+> > +            reg-names =3D "atcm", "btcm";
+> > +            ranges =3D <0x0 0xffe90000 0x10000>, <0x20000 0xffeb0000
+> 0x10000>;
+> > +            power-domains =3D <&zynqmp_firmware PD_RPU_1>,
+> > +                            <&zynqmp_firmware PD_R5_1_ATCM>,
+> > +                            <&zynqmp_firmware PD_R5_1_BTCM>;
+> > +            memory-region =3D <&rproc_1_fw_image>, <&rpu1vdev0buffer>,
+> <&rpu1vdev0vring0>, <&rpu1vdev0vring1>;
+> > +            mboxes =3D <&ipi_mailbox_rpu1 0>, <&ipi_mailbox_rpu1 1>;
+> > +            mbox-names =3D "tx", "rx";
+> > +        };
+> > +    };
+> > +
+> > +  - |
+> > +    //Lockstep configuration
+> >      remoteproc {
+> >          compatible =3D "xlnx,zynqmp-r5fss";
+> >          xlnx,cluster-mode =3D <1>;
+> >
+> > -        r5f-0 {
+> > +        #address-cells =3D <1>;
+> > +        #size-cells =3D <1>;
+> > +        r5f_00: r5f@ffe00000 {
+> >              compatible =3D "xlnx,zynqmp-r5f";
+> > -            power-domains =3D <&zynqmp_firmware 0x7>;
+> > +            #address-cells =3D <1>;
+> > +            #size-cells =3D <1>;
+> > +            reg =3D <0xffe00000 0x20000>, <0xffe20000 0x20000>;
+> > +            reg-names =3D "atcm", "btcm";
+> > +            ranges =3D <0x0 0xffe00000 0x20000>, <0x20000 0xffe20000
+> 0x20000>;
+> > +            power-domains =3D <&zynqmp_firmware PD_RPU_0>,
+> > +                            <&zynqmp_firmware PD_R5_0_ATCM>,
+> > +                            <&zynqmp_firmware PD_R5_0_BTCM>;
+> >              memory-region =3D <&rproc_0_fw_image>, <&rpu0vdev0buffer>,
+> <&rpu0vdev0vring0>, <&rpu0vdev0vring1>;
+> >              mboxes =3D <&ipi_mailbox_rpu0 0>, <&ipi_mailbox_rpu0 1>;
+> >              mbox-names =3D "tx", "rx";
+> > @@ -126,7 +202,7 @@ examples:
+> >
+> >          r5f-1 {
+> >              compatible =3D "xlnx,zynqmp-r5f";
+> > -            power-domains =3D <&zynqmp_firmware 0x8>;
+> > +            power-domains =3D <&zynqmp_firmware PD_RPU_1>;
+> >              memory-region =3D <&rproc_1_fw_image>, <&rpu1vdev0buffer>,
+> <&rpu1vdev0vring0>, <&rpu1vdev0vring1>;
+> >              mboxes =3D <&ipi_mailbox_rpu1 0>, <&ipi_mailbox_rpu1 1>;
+> >              mbox-names =3D "tx", "rx";
+> > --
+> > 2.25.1
+> >
