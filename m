@@ -2,64 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F0DF73C184
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 22:53:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD1F473BF7D
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 22:25:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232083AbjFWUxM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 16:53:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38220 "EHLO
+        id S231680AbjFWUZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 16:25:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232389AbjFWUwo (ORCPT
+        with ESMTP id S229668AbjFWUZV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 16:52:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E9642949;
-        Fri, 23 Jun 2023 13:50:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0385D61B59;
-        Fri, 23 Jun 2023 20:50:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61111C433A9;
-        Fri, 23 Jun 2023 20:50:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687553429;
-        bh=L+6CxdM/BMnLbI2k1ibKf0RAH8c1L0gztQ5UBezDVR8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=HPKXO7wP6NImxUExHPqC/aWnuJX+X+Mcj6fCGvAlfYMxHpu8dwTNuk7aOhHUKJjiz
-         SclNURIG8HmCfGiIQSVYerv30atjW1Jw9zveJFB45uWzbcIufe0qaJ+dpU/obrCe0e
-         DCpUepkEMQLt1xE94HtKGXLX0BsSNldR32ULCVu5+Mig/G5PK459eydA4++uCojxFy
-         K1zIgn8HWwnCQUhFvXS74ngs6PlxJGdVE1BHddLH+dhz59OuM1y2P31/dF056dhlCL
-         H4w0PE+5KY192bKP4uis465fnDb1+akMWHWZfK+DWB/ueaJnSOQVtfOHiDpSlvmVF3
-         oHYlhmlyI+P8Q==
-Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-2b45bc83f26so18668131fa.0;
-        Fri, 23 Jun 2023 13:50:29 -0700 (PDT)
-X-Gm-Message-State: AC+VfDyK70fTMbc7keckULTmrZ7YYjVbwh4ZuCdhJo0npr2MuYCm7/M3
-        /Ey2BdK2nkFaXU87hf/nGF0xTYEjPvMhWGbCsw==
-X-Google-Smtp-Source: ACHHUZ7XPdbDSO6fFPttpBHgX0oes55oWKYhlTk4zfNewB0e4KNRkHMN9UPS8Te16b23/SRNpvtL8i7GZAUllnlej10=
-X-Received: by 2002:a2e:9c98:0:b0:2b5:82c9:d85f with SMTP id
- x24-20020a2e9c98000000b002b582c9d85fmr6511427lji.11.1687553427421; Fri, 23
- Jun 2023 13:50:27 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230623201519.194269-1-afd@ti.com>
-In-Reply-To: <20230623201519.194269-1-afd@ti.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Fri, 23 Jun 2023 14:23:55 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqKWUCJq8b4qfXHCiVmtZG8E8MpcTm54Q19dWr9hw8WM2g@mail.gmail.com>
-Message-ID: <CAL_JsqKWUCJq8b4qfXHCiVmtZG8E8MpcTm54Q19dWr9hw8WM2g@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: mfd: ti,j721e-system-controller: Remove
- syscon from example
-To:     Andrew Davis <afd@ti.com>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Fri, 23 Jun 2023 16:25:21 -0400
+Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8A85135;
+        Fri, 23 Jun 2023 13:25:20 -0700 (PDT)
+Received: by mail-il1-f179.google.com with SMTP id e9e14a558f8ab-3422b2554e1so4101145ab.1;
+        Fri, 23 Jun 2023 13:25:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687551920; x=1690143920;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0Lq1owJ/IaDvQLEQ5ZIXuPqVSkcT5KXvETUiM77W/uA=;
+        b=I1ECPeBMciAANckMzeUnuR9m3T2B+ovRKu8eFw9jak78Tefdt6K5wDpUXg/plwzfBW
+         XOgL619lXRCK38xOkm38avSDU/OkR3hqKywN0xPfzBQFntNFSk3QcgDrlv7shsNbaoV3
+         JIgCSi833rw4vAAS5rvk7Usj2D7yPMM4HKu9qVRDcYq1q7u4aTaWQQBsxcrRgvpAMdtg
+         BbDUKhZI1exoWxLEgT+xP27T9v854uHE4huf+EFG+CMJP4gng6ukvRUHXa4KDZRzGZgy
+         sHiTUKH1SATz4XcFvAogK/Qkk4byeL3DrxG1e292vtwr6DppRKazY0UMuN+tscpsQrua
+         5X9g==
+X-Gm-Message-State: AC+VfDwMUs8vuMMwgHIS5gOw/pfNcxXxax4r4Kc6P7D6dhECY2Geb/IL
+        8tpVon2n+oj/l3vcxs2CpQ==
+X-Google-Smtp-Source: ACHHUZ5pUfmW+oXejyC7m63oSEnw24wNjmXx/26GuKi/vqFEgT30ODrJJKIfcuglsWmLVxB0vNyFRg==
+X-Received: by 2002:a92:dc85:0:b0:33e:7c8d:3cc with SMTP id c5-20020a92dc85000000b0033e7c8d03ccmr18089970iln.22.1687551919905;
+        Fri, 23 Jun 2023 13:25:19 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id 13-20020a92c64d000000b0034254a9e5f8sm54175ill.25.2023.06.23.13.25.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Jun 2023 13:25:19 -0700 (PDT)
+Received: (nullmailer pid 1059974 invoked by uid 1000);
+        Fri, 23 Jun 2023 20:25:16 -0000
+Date:   Fri, 23 Jun 2023 14:25:16 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Anson Huang <anson.huang@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-pwm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH] dt-bindings: pwm: drop unneeded quotes
+Message-ID: <168755191537.1059860.5101208294995710132.robh@kernel.org>
+References: <20230609140709.64655-1-krzysztof.kozlowski@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230609140709.64655-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,20 +78,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 23, 2023 at 2:15=E2=80=AFPM Andrew Davis <afd@ti.com> wrote:
->
-> The binding for ti,am654-ehrpwm-tbclk was updated to remove the syscon
-> compatible hint. Remove the same from the example in this binding.
->
-> Signed-off-by: Andrew Davis <afd@ti.com>
+
+On Fri, 09 Jun 2023 16:07:09 +0200, Krzysztof Kozlowski wrote:
+> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
+> checking for this can be enabled in yamllint.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
->  .../devicetree/bindings/mfd/ti,j721e-system-controller.yaml     | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  Documentation/devicetree/bindings/pwm/atmel,at91sam-pwm.yaml | 2 +-
+>  Documentation/devicetree/bindings/pwm/mxs-pwm.yaml           | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
 
-Thanks for the quick fix.
+Applied, thanks!
 
-Acked-by: Rob Herring <robh@kernel.org>
-
-Stephen should apply this.
-
-Rob
