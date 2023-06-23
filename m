@@ -2,196 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBCDA73BE50
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 20:13:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EADBE73BE53
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 20:17:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbjFWSNK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 14:13:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40352 "EHLO
+        id S229627AbjFWSRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 14:17:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjFWSNJ (ORCPT
+        with ESMTP id S229446AbjFWSRs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 14:13:09 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4FD5269F
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 11:13:07 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2b466744368so16059791fa.0
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 11:13:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687543985; x=1690135985;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=l+6IEeenRfWf/EqfOmmvm+NugflYscg70f5LhJK7HQ4=;
-        b=ec6ZiPGqXtMg2vQQIiLgbW3jAGSyhY5vsuC/5dKlRTG2vrC9/Gox25r1sWJIK2cmAQ
-         v0e2RRpex7dbYEBnNRZCquQuexWLEx4SxuLp3zM2FCiZTk+PqDE6hlWY2giBSeC5Npuc
-         I6zeU78aaI7kXj5EJAS5Wdj8Agl0FYhA9B2PhEb+qE5ZgtzE7DX9v7VLb3ymbfMDY7HG
-         PfZZXaEftRmQ2+FuHOS+Y1jhHAVoKfuM7kyvGarQC3HdDAbhUo84CwAFB7/hh3PosIfl
-         YDM/EmvEMt0j6tSi/Swl1DwWFS7mxNH+i8CJ+kpylnJY7mfD9iBP2zvKSbe+45CLUk+L
-         ZEhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687543985; x=1690135985;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=l+6IEeenRfWf/EqfOmmvm+NugflYscg70f5LhJK7HQ4=;
-        b=OtKmjyBDsNm7rfxNr3icW9Dfz0uABCcMNrxl8FOS2Rc7DZm/X7Z8alutdiBN4fMZAP
-         Jq/uQEni6R8wqOufnulBmL96fP5ihTrLUH/+ivkR57wOC/dCeqrb+Fvu4txfzePek0NK
-         q9h7KqPgNJpgyPFP7dma7qiymQGlkI6gOmuVaGoBAa1m5hQ3Erhu9kDWFq9so454Mmuf
-         LPB4dLpTJQvaGoTkqbPiAmp2/PLWgUmZD8hPodZ0DCIBbEOsdFPIH/+u66HagVLSHJmr
-         /RPYvAnjiLkYT/BcK9JMh55BhysddtkxgFSCbeRAnJvNlDknG7Fh9ADo395keqfUlOG3
-         nmHA==
-X-Gm-Message-State: AC+VfDzVCnk2TO16anKRToR1dtY7H8sBXtMJa8rtkOOMZRyFj8OXHwHa
-        xg7HdhKKVgJGotNe2+LKUSqTH/om2h2bw5NAbB7+Sek=
-X-Google-Smtp-Source: ACHHUZ758DGH0m1Xcz+HIdkyBveut7OT8mRqGPdiTWgfRb4vZjYknep8SSLjduruN5BqGZuQhTUU6ND0NP6QTad8Gds=
-X-Received: by 2002:a2e:3a19:0:b0:2b4:73bc:da9a with SMTP id
- h25-20020a2e3a19000000b002b473bcda9amr11285161lja.27.1687543984951; Fri, 23
- Jun 2023 11:13:04 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230622120750.5549-1-brgerst@gmail.com> <20230622120750.5549-3-brgerst@gmail.com>
-In-Reply-To: <20230622120750.5549-3-brgerst@gmail.com>
-From:   Brian Gerst <brgerst@gmail.com>
-Date:   Fri, 23 Jun 2023 14:12:52 -0400
-Message-ID: <CAMzpN2gPf_pOcsaoMKuNONusEjvxhHYonH4zvomnp-LeTxF_Jg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] x86: Rewrite ret_from_fork() in C
-To:     linux-kernel@vger.kernel.org, x86@kernel.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
+        Fri, 23 Jun 2023 14:17:48 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1E522705
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 11:17:42 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 76DB42199D;
+        Fri, 23 Jun 2023 18:17:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1687544261; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=t1uqCqPbLvdYT+hRmV0MBBOULi1G46OtarHmqDXAzJ0=;
+        b=KGh7V5u2aX/1HxzjaOzy9g5Ev/MinoQZGuXpMIPieNwHSCrU0z8zno1vZgDzYHVrFNIo2U
+        zJsTI9c9G+dlLQJHvm7PQ3S0WiNBkzrOwedOlAdFkG5ka5SZ4lkwz7wI7KGJ0T6Repmswq
+        DNsHC2hooT9DlC1Ton17bEDkYD3HPvo=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 553BE1331F;
+        Fri, 23 Jun 2023 18:17:41 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id MQHuEcXhlWQsRwAAMHmgww
+        (envelope-from <mhocko@suse.com>); Fri, 23 Jun 2023 18:17:41 +0000
+Date:   Fri, 23 Jun 2023 20:17:40 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        John Ogness <john.ogness@linutronix.de>,
+        Mel Gorman <mgorman@techsingularity.net>,
         Peter Zijlstra <peterz@infradead.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        alyssa.milburn@linux.intel.com, keescook@chromium.org,
-        jpoimboe@kernel.org, joao@overdrivepizza.com,
-        tim.c.chen@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Petr Mladek <pmladek@suse.com>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Waiman Long <longman@redhat.co>, Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v2 2/2] mm/page_alloc: Use write_seqlock_irqsave()
+ instead write_seqlock() + local_irq_save().
+Message-ID: <ZJXhxJU2jFccMjkg@dhcp22.suse.cz>
+References: <20230623171232.892937-1-bigeasy@linutronix.de>
+ <20230623171232.892937-3-bigeasy@linutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230623171232.892937-3-bigeasy@linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 22, 2023 at 8:08=E2=80=AFAM Brian Gerst <brgerst@gmail.com> wro=
-te:
->
-> When kCFI is enabled, special handling is needed for the indirect call
-> to the kernel thread function.  Rewrite the ret_from_fork() function in
-> C so that the compiler can properly handle the indirect call.
->
-> Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Signed-off-by: Brian Gerst <brgerst@gmail.com>
+On Fri 23-06-23 19:12:32, Sebastian Andrzej Siewior wrote:
+> __build_all_zonelists() acquires zonelist_update_seq by first disabling
+> interrupts via local_irq_save() and then acquiring the seqlock with
+> write_seqlock(). This is troublesome and leads to problems on
+> PREEMPT_RT. The problem is that the inner spinlock_t becomes a sleeping
+> lock on PREEMPT_RT and must not be acquired with disabled interrupts.
+> 
+> The API provides write_seqlock_irqsave() which does the right thing in
+> one step.
+> printk_deferred_enter() has to be invoked in non-migrate-able context to
+> ensure that deferred printing is enabled and disabled on the same CPU.
+> This is the case after zonelist_update_seq has been acquired.
+> 
+> There was discussion on the first submission that the order should be:
+> 	local_irq_disable();
+> 	printk_deferred_enter();
+> 	write_seqlock();
+> 
+> to avoid pitfalls like having an unaccounted printk() coming from
+> write_seqlock_irqsave() before printk_deferred_enter() is invoked. The
+> only origin of such a printk() can be a lockdep splat because the
+> lockdep annotation happens after the sequence count is incremented.
+> This is exceptional and subject to change.
+> 
+> It was also pointed that PREEMPT_RT can be affected by the printk
+> problem since its write_seqlock_irqsave() does not really disable
+> interrupts. This isn't the case because PREEMPT_RT's printk
+> implementation differs from the mainline implementation in two important
+> aspects:
+> - Printing happens in a dedicated threads and not at during the
+>   invocation of printk().
+> - In emergency cases where synchronous printing is used, a different
+>   driver is used which does not use tty_port::lock.
+> 
+> Acquire zonelist_update_seq with write_seqlock_irqsave() and then defer
+> printk output.
+> 
+> Fixes: 1007843a91909 ("mm/page_alloc: fix potential deadlock on zonelist_update_seq seqlock")
+> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+
+Thanks for extending the changelog. This is much more clearer IMO.
+
+One nit below which I haven't noticed before. Anyway
+Acked-by: Michal Hocko <mhocko@suse.com>
+
 > ---
->  arch/x86/entry/entry_32.S        | 30 +++++++--------------------
->  arch/x86/entry/entry_64.S        | 35 +++++++++-----------------------
->  arch/x86/include/asm/switch_to.h |  4 +++-
->  arch/x86/kernel/process.c        | 22 +++++++++++++++++++-
->  4 files changed, 41 insertions(+), 50 deletions(-)
->
-> diff --git a/arch/x86/entry/entry_32.S b/arch/x86/entry/entry_32.S
-> index 6c1ee76adc11..7932c14199fb 100644
-> --- a/arch/x86/entry/entry_32.S
-> +++ b/arch/x86/entry/entry_32.S
-> @@ -727,37 +727,21 @@ SYM_CODE_END(__switch_to_asm)
->   * edi: kernel thread arg
->   */
->  .pushsection .text, "ax"
-> -SYM_CODE_START(ret_from_fork)
-> +SYM_CODE_START(ret_from_fork_asm)
->         /* return address for the stack unwinder */
->         pushl   $.Lsyscall_32_done
->         FRAME_BEGIN
->
-> -       pushl   %eax
-> -       call    schedule_tail
-> +       /* prev already in EAX */
-> +       movl    %esp, %edx      /* regs */
-> +       movl    %ebx, %ecx      /* fn */
-> +       pushl   %edi            /* fn_arg */
-> +       call    ret_from_fork
->         addl    $4, %esp
->
-> -       testl   %ebx, %ebx
-> -       jnz     1f              /* kernel threads are uncommon */
-> -
-> -2:
-> -       /* When we fork, we trace the syscall return in the child, too. *=
-/
-> -       movl    %esp, %eax
-> -       call    syscall_exit_to_user_mode
-> -
->         FRAME_END
->         RET
-> -
-> -       /* kernel thread */
-> -1:     movl    %edi, %eax
-> -       CALL_NOSPEC ebx
-> -       /*
-> -        * A kernel thread is allowed to return here after successfully
-> -        * calling kernel_execve().  Exit to userspace to complete the ex=
-ecve()
-> -        * syscall.
-> -        */
-> -       movl    $0, PT_EAX(%esp)
-> -       jmp     2b
-> -SYM_CODE_END(ret_from_fork)
-> +SYM_CODE_END(ret_from_fork_asm)
->  .popsection
->
->  SYM_ENTRY(__begin_SYSENTER_singlestep_region, SYM_L_GLOBAL, SYM_A_NONE)
-> diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
-> index f31e286c2977..5ee32e7e29e8 100644
-> --- a/arch/x86/entry/entry_64.S
-> +++ b/arch/x86/entry/entry_64.S
-> @@ -284,36 +284,21 @@ SYM_FUNC_END(__switch_to_asm)
->   * r12: kernel thread arg
->   */
->  .pushsection .text, "ax"
-> -       __FUNC_ALIGN
-> -SYM_CODE_START_NOALIGN(ret_from_fork)
-> +SYM_CODE_START(ret_from_fork_asm)
->         UNWIND_HINT_END_OF_STACK
->         ANNOTATE_NOENDBR // copy_thread
->         CALL_DEPTH_ACCOUNT
-> -       movq    %rax, %rdi
-> -       call    schedule_tail                   /* rdi: 'prev' task param=
-eter */
-> -
-> -       testq   %rbx, %rbx                      /* from kernel_thread? */
-> -       jnz     1f                              /* kernel threads are unc=
-ommon */
->
-> -2:
-> -       UNWIND_HINT_REGS
-> -       movq    %rsp, %rdi
-> -       call    syscall_exit_to_user_mode       /* returns with IRQs disa=
-bled */
-> -       jmp     swapgs_restore_regs_and_return_to_usermode
-> +       /* return address for the stack unwinder */
-> +       pushq   $swapgs_restore_regs_and_return_to_usermode
-> +       UNWIND_HINT_FUNC
->
-> -1:
-> -       /* kernel thread */
-> -       UNWIND_HINT_END_OF_STACK
-> -       movq    %r12, %rdi
-> -       CALL_NOSPEC rbx
-> -       /*
-> -        * A kernel thread is allowed to return here after successfully
-> -        * calling kernel_execve().  Exit to userspace to complete the ex=
-ecve()
-> -        * syscall.
-> -        */
-> -       movq    $0, RAX(%rsp)
-> -       jmp     2b
-> -SYM_CODE_END(ret_from_fork)
-> +       movq    %rax, %rdi              /* prev */
-> +       movq    %rsp, %rsi              /* regs */
+>  mm/page_alloc.c | 11 ++++-------
+>  1 file changed, 4 insertions(+), 7 deletions(-)
+> 
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 47421bedc12b7..99b7e7d09c5c0 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -5808,11 +5808,10 @@ static void __build_all_zonelists(void *data)
+>  	unsigned long flags;
+>  
+>  	/*
+> -	 * Explicitly disable this CPU's interrupts before taking seqlock
+> -	 * to prevent any IRQ handler from calling into the page allocator
+> -	 * (e.g. GFP_ATOMIC) that could hit zonelist_iter_begin and livelock.
+> +	 * The zonelist_update_seq must be acquired with irqsave because the
+> +	 * reader can be invoked from IRQ with GFP_ATOMIC.
+>  	 */
+> -	local_irq_save(flags);
+> +	write_seqlock_irqsave(&zonelist_update_seq, flags);
+>  	/*
+>  	 * Explicitly disable this CPU's synchronous printk() before taking
+>  	 * seqlock to prevent any printk() from trying to hold port->lock, for
 
-The push above makes this give the wrong address for regs.  New version com=
-ing.
+This is not the case anymore because the locking ordering has flipped. I
+would just extend the comment above by something like:
 
-Brian Gerst
+	 * Also disable synchronous printk() to prevent any printk() from trying
+	 * to hold port->lock, for tty_insert_flip_string_and_push_buffer() on
+	 * other CPU might be calling kmalloc(GFP_ATOMIC | __GFP_NOWARN) with
+	 * port->lock held.
+
+> @@ -5820,7 +5819,6 @@ static void __build_all_zonelists(void *data)
+>  	 * calling kmalloc(GFP_ATOMIC | __GFP_NOWARN) with port->lock held.
+>  	 */
+>  	printk_deferred_enter();
+> -	write_seqlock(&zonelist_update_seq);
+>  
+>  #ifdef CONFIG_NUMA
+>  	memset(node_load, 0, sizeof(node_load));
+> @@ -5857,9 +5855,8 @@ static void __build_all_zonelists(void *data)
+>  #endif
+>  	}
+>  
+> -	write_sequnlock(&zonelist_update_seq);
+>  	printk_deferred_exit();
+> -	local_irq_restore(flags);
+> +	write_sequnlock_irqrestore(&zonelist_update_seq, flags);
+>  }
+>  
+>  static noinline void __init
+> -- 
+> 2.40.1
+
+-- 
+Michal Hocko
+SUSE Labs
