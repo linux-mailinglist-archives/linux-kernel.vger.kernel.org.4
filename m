@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37AEA73B8F4
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 15:44:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC65B73B8F0
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 15:44:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231789AbjFWNoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 09:44:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58494 "EHLO
+        id S231806AbjFWNoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 09:44:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbjFWNoN (ORCPT
+        with ESMTP id S231721AbjFWNoP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 09:44:13 -0400
+        Fri, 23 Jun 2023 09:44:15 -0400
 Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B75FA2688;
-        Fri, 23 Jun 2023 06:44:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2BBA1FE1;
+        Fri, 23 Jun 2023 06:44:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1687527850; bh=I9sBWXJarUacmT9tJVRaaV9L2voiD3I9Gx59y+JU7NY=;
+        t=1687527852; bh=ZJI78+EPNTp82LSUythHTSjkLEKJnQKH+YZh2u1h6f4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FnGl2zpNJcTOSoS6xm5nWi8rAtAahvSAYEgKmfK0DBi0WiLoKBbB/7sBsR7XOPXo+
-         P2ZfadFDDkDGkOQDEgdxm1y5Ur8ETZRC959WDAeAFuKU3PPeu8fuhMgcKZ+Jr094S/
-         i+oScUM/oUUXFDKK/KJq+8/OapsFgD+h+JjF4tu8=
+        b=OHJr2KhxCtSIMq1CF71GM745UnDdJH35CzRxq05bJNeYqqiBxqkZM3Pqgnyfgzp57
+         48tFm3jhTJiqAXRbaYE4Ny3ySfX14KOqMQHMlS8OkRQ6ii/oLkoI72b6PLK7ynma/N
+         hC2VOT3XAiAmNsw44ev5GL9UbmBDQZvovPjQRuFA=
 Received: from ld50.lan (unknown [101.88.25.181])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 7E1EC605E0;
-        Fri, 23 Jun 2023 21:44:10 +0800 (CST)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 3B330605E5;
+        Fri, 23 Jun 2023 21:44:12 +0800 (CST)
 From:   WANG Xuerui <kernel@xen0n.name>
 To:     Huacai Chen <chenhuacai@kernel.org>
 Cc:     WANG Rui <wangrui@loongson.cn>, Xi Ruoyao <xry111@xry111.site>,
         loongarch@lists.linux.dev, linux-kbuild@vger.kernel.org,
         llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
         WANG Xuerui <git@xen0n.name>
-Subject: [PATCH 3/9] LoongArch: Prepare for assemblers with proper FCSR bank support
-Date:   Fri, 23 Jun 2023 21:43:45 +0800
-Message-Id: <20230623134351.1898379-4-kernel@xen0n.name>
+Subject: [PATCH 4/9] LoongArch: Make {read,write}_fcsr compatible with LLVM/Clang
+Date:   Fri, 23 Jun 2023 21:43:46 +0800
+Message-Id: <20230623134351.1898379-5-kernel@xen0n.name>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230623134351.1898379-1-kernel@xen0n.name>
 References: <20230623134351.1898379-1-kernel@xen0n.name>
@@ -53,54 +53,61 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: WANG Xuerui <git@xen0n.name>
 
-The GNU assembler (as of 2.40) mis-treats FCSR operands as GPRs, but
-the LLVM IAS does not. Probe for this and refer to FCSRs as "$fcsrNN"
-if support is present.
+LLVM/Clang does not see FCSRs as GPRs, so make use of compiler
+built-ins instead for better maintainability with less code.
+
+The existing version cannot be wholly removed though, because the
+built-ins, while available on GCC too, is predicated TARGET_HARD_FLOAT,
+which means soft-float code cannot make use of them.
 
 Signed-off-by: WANG Xuerui <git@xen0n.name>
 ---
- arch/loongarch/Kconfig                | 3 +++
- arch/loongarch/include/asm/fpregdef.h | 7 +++++++
- 2 files changed, 10 insertions(+)
+ arch/loongarch/include/asm/loongarch.h | 19 +++++++++++++------
+ 1 file changed, 13 insertions(+), 6 deletions(-)
 
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index 743d87655742..c8e4f8b03c55 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -242,6 +242,9 @@ config SCHED_OMIT_FRAME_POINTER
- config AS_HAS_EXPLICIT_RELOCS
- 	def_bool $(as-instr,x:pcalau12i \$t0$(comma)%pc_hi20(x))
+diff --git a/arch/loongarch/include/asm/loongarch.h b/arch/loongarch/include/asm/loongarch.h
+index ac83e60c60d1..eedc313b5241 100644
+--- a/arch/loongarch/include/asm/loongarch.h
++++ b/arch/loongarch/include/asm/loongarch.h
+@@ -1445,12 +1445,6 @@ __BUILD_CSR_OP(tlbidx)
+ #define EXCCODE_INT_START	64
+ #define EXCCODE_INT_END		(EXCCODE_INT_START + EXCCODE_INT_NUM - 1)
  
-+config AS_HAS_FCSR_BANK
-+	def_bool $(as-instr,x:movfcsr2gr \$t0$(comma)\$fcsr0)
-+
- config CC_HAS_LSX_EXTENSION
- 	def_bool $(cc-option,-mlsx)
+-/* FPU register names */
+-#define LOONGARCH_FCSR0	$r0
+-#define LOONGARCH_FCSR1	$r1
+-#define LOONGARCH_FCSR2	$r2
+-#define LOONGARCH_FCSR3	$r3
+-
+ /* FPU Status Register Values */
+ #define FPU_CSR_RSVD	0xe0e0fce0
  
-diff --git a/arch/loongarch/include/asm/fpregdef.h b/arch/loongarch/include/asm/fpregdef.h
-index b6be527831dd..b0ac640db74c 100644
---- a/arch/loongarch/include/asm/fpregdef.h
-+++ b/arch/loongarch/include/asm/fpregdef.h
-@@ -40,6 +40,12 @@
- #define fs6	$f30
- #define fs7	$f31
+@@ -1487,6 +1481,18 @@ __BUILD_CSR_OP(tlbidx)
+ #define FPU_CSR_RU	0x200	/* towards +Infinity */
+ #define FPU_CSR_RD	0x300	/* towards -Infinity */
  
-+#ifdef CONFIG_AS_HAS_FCSR_BANK
-+#define fcsr0	$fcsr0
-+#define fcsr1	$fcsr1
-+#define fcsr2	$fcsr2
-+#define fcsr3	$fcsr3
-+#else
- /*
-  * Current binutils expects *GPRs* at FCSR position for the FCSR
-  * operation instructions, so define aliases for those used.
-@@ -48,5 +54,6 @@
- #define fcsr1	$r1
- #define fcsr2	$r2
- #define fcsr3	$r3
-+#endif
++#ifdef CONFIG_CC_IS_CLANG
++#define LOONGARCH_FCSR0	0
++#define LOONGARCH_FCSR1	1
++#define LOONGARCH_FCSR2	2
++#define LOONGARCH_FCSR3	3
++#define read_fcsr(source)	__movfcsr2gr(source)
++#define write_fcsr(dest, val)	__movgr2fcsr(dest, val)
++#else /* CONFIG_CC_IS_CLANG */
++#define LOONGARCH_FCSR0	$r0
++#define LOONGARCH_FCSR1	$r1
++#define LOONGARCH_FCSR2	$r2
++#define LOONGARCH_FCSR3	$r3
+ #define read_fcsr(source)	\
+ ({	\
+ 	unsigned int __res;	\
+@@ -1503,5 +1509,6 @@ do {	\
+ 	"	movgr2fcsr	"__stringify(dest)", %0	\n"	\
+ 	: : "r" (val));	\
+ } while (0)
++#endif /* CONFIG_CC_IS_CLANG */
  
- #endif /* _ASM_FPREGDEF_H */
+ #endif /* _ASM_LOONGARCH_H */
 -- 
 2.40.0
 
