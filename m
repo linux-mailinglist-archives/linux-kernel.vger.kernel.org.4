@@ -2,125 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCE7773B0A1
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 08:17:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B138573B0A4
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 08:18:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230242AbjFWGRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 02:17:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42166 "EHLO
+        id S231518AbjFWGST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 02:18:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbjFWGRC (ORCPT
+        with ESMTP id S230163AbjFWGSO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 02:17:02 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83A8C189;
-        Thu, 22 Jun 2023 23:17:00 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-988a2715b8cso260762866b.0;
-        Thu, 22 Jun 2023 23:17:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20221208; t=1687501019; x=1690093019;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bTzRTBwuHpC7/hhWw9l446CStpPhNQn+H0m14KUu0h8=;
-        b=VhM2vnJgCLaRCOzs0kOlroNdVzfrTvRkeuZIBNxezHdrD5f8hVG2zJtCjk15wJDIu9
-         E3xJORLjKw5yGUvWyEnyfHARLXnT+RXT5MPD/hpvgYdNSlMXCzFv8ZPW6MiO+xY2hsF8
-         nP2ScAqRqHyyJDKZzc/ikUla4De9zOcOpGIC33KJEu9csebDnzuh2nenlz25Fqw+PDFU
-         xDLuzmYKVuZgGXKpj3lLeR3HW4Ob67rVKC2+2LRyAedaLqVXsA6DoqxxDdOw0l4Dn1sh
-         YyKOHTFzUwvur5wsCqj1P3sXGmMA9wYIUEitkcaS3RoZxhVvuxeEFCYdKJJJVL+ARIHS
-         t8fw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687501019; x=1690093019;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bTzRTBwuHpC7/hhWw9l446CStpPhNQn+H0m14KUu0h8=;
-        b=Iomv6ZuJPXjezL8d72iwuL+3tQ4AvPNQyyzVyuynCJSEY+I8wtVQ/u1qintDMKckNl
-         cQF0LIk6WcdtPjckTiYaha9VnXNm5SLwnrP2+0rVu47yKo7D9nRqayK+N3aeHBwiJ7a1
-         Bq5gA1SlU2PME4D9wzaRr4Pf/YrERQXluPPqLnNi6ifdPIC2VgLw2p5fcdram4CMpd1w
-         Jt9Hs8vzXP0arfh47vTQ+KTH41eBVfRL24P3EBzAj5W5U8lHcY3gSrCi3hW643znzpZj
-         GK+0eNcB5EMv0DOhg0eGtutTLnD+XI3WyPracsg0By9a+e6Te+Qvk/PO/w106YOLoZgW
-         4W9g==
-X-Gm-Message-State: AC+VfDy3zSOPBkBPBtePky3L3uL/OBFhNG+r9Gd1Z1EcXhxBHsuMsPUv
-        E76hi5jxtfsv8P5iqjWGLOWq2GNVSRu5k51pLevNHgkcc90=
-X-Google-Smtp-Source: ACHHUZ7/k41yx67lWIal2QXf8cBmr9dIrsOBDzFQcnBkJqFbQY3pmpiYMLIDfCUFTJ2f2iU93/paSGzeBcAK9TsqaNg=
-X-Received: by 2002:a17:907:3e83:b0:987:fe18:1c58 with SMTP id
- hs3-20020a1709073e8300b00987fe181c58mr15265725ejc.35.1687501018686; Thu, 22
- Jun 2023 23:16:58 -0700 (PDT)
+        Fri, 23 Jun 2023 02:18:14 -0400
+Received: from striker.routify.me (striker.routify.me [IPv6:2602:fe90:604:1b::87c:418e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918071706
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 23:18:13 -0700 (PDT)
+Received: from glitch (unknown [IPv6:2602:24c:b8f:cd90::8eb3])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by striker.routify.me (Postfix) with ESMTPSA id 13E901639;
+        Fri, 23 Jun 2023 06:17:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 striker.routify.me 13E901639
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seangreenslade.com;
+        s=striker-outgoing; t=1687501068;
+        bh=kHwByngXCATF1lkNwacD8znlC4DBUO39C7FS8gXGYfc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DvkvmBVjtHyZbpHrKSYzk2Uk7duZ637CkLxvQnqf5wX05Bqk6DN3lH7KXoseIlRJS
+         vwX4RMX8EELSp2cgOF7gmhB41pE5RZZ2rsl7xDE1t9bw8ZdJUrlpOTshDAeB5EmStj
+         I8a2F62A/pVO2Rhfk9lfSlnyf9i9Uqhp4foH8DPM=
+Date:   Thu, 22 Jun 2023 23:18:04 -0700
+From:   Sean Greenslade <sean@seangreenslade.com>
+To:     Theodore Ts'o <tytso@mit.edu>
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>, linux-ext4@vger.kernel.org,
+        Ye Bin <yebin10@huawei.com>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>
+Subject: Re: RO mount of ext4 filesystem causes writes
+Message-ID: <ZJU5HN3bmXR3FvzE@glitch>
+References: <ZIauBR7YiV3rVAHL@glitch>
+ <ZIa5P1HqE62rmzqu@debian.me>
+ <ZJTv+it2x/glkmpp@debian.me>
+ <20230623044611.GD34229@mit.edu>
 MIME-Version: 1.0
-References: <20230623022334.791026-1-gnstark@sberdevices.ru> <20230623022334.791026-7-gnstark@sberdevices.ru>
-In-Reply-To: <20230623022334.791026-7-gnstark@sberdevices.ru>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Fri, 23 Jun 2023 08:16:47 +0200
-Message-ID: <CAFBinCBv993Xv_wk9fE-U0Tw2mzTB1z22Tj6x8Uy1rRw_dztng@mail.gmail.com>
-Subject: Re: [PATCH v2 6/6] meson saradc: support reading from channel7 mux inputs
-To:     George Stark <gnstark@sberdevices.ru>
-Cc:     jic23@kernel.org, lars@metafoo.de, neil.armstrong@linaro.org,
-        khilman@baylibre.com, jbrunet@baylibre.com,
-        andriy.shevchenko@linux.intel.com, nuno.sa@analog.com,
-        linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        kernel@sberdevices.ru
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230623044611.GD34229@mit.edu>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi George,
+On Fri, Jun 23, 2023 at 12:46:11AM -0400, Theodore Ts'o wrote:
+> On Fri, Jun 23, 2023 at 08:06:02AM +0700, Bagas Sanjaya wrote:
+> > 
+> > No reply so far from the culprit author (Ye Bin) nor from Ted. Can
+> > you help in this case?
+> 
+> There's been no reply because I haven't been able to replicate it, and
+> I didn't have the time do enough work to convince myself the report
+> was bogus.  At this point, I have spent time trying to reproduce it,
+> and I've had no luck.
+> 
+> So, unless you can give me a simple set of reproduction instructions,
+> I'm going to have to treat this report is invalid.
+> 
+> Regards,
+> 
+> 						- Ted
+> 
+> Note: this test was done using kvm-xfstests which can be found
+> https://github.com/tytso/xfstests-bld using the install-kconfig and
+> the kbuild script that can also be found in this report.  So if you
+> want to play along from home, feel free.  :-)
+> 
+> 
+> root@kvm-xfstests:~# mkfs.ext4 /dev/vdc
+> mke2fs 1.47.0 (5-Feb-2023)
+> Discarding device blocks: done                            
+> Creating filesystem with 1310720 4k blocks and 327680 inodes
+> Filesystem UUID: fe434060-6731-4b40-a94a-3a8517df0660
+> Superblock backups stored on blocks: 
+>         32768, 98304, 163840, 229376, 294912, 819200, 884736
+> 
+> Allocating group tables: done                            
+> Writing inode tables: done                            
+> Creating journal (16384 blocks): done
+> Writing superblocks and filesystem accounting information: done 
+> 
+> root@kvm-xfstests:~# md5sum /dev/vdc
+> fd38f9f8476ad63a744d179846ee7e18  /dev/vdc
+> root@kvm-xfstests:~# mount -o ro /dev/vdc /mnt
+> [  472.893614] EXT4-fs (vdc): orphan cleanup on readonly fs
+> [  472.894022] EXT4-fs (vdc): mounted filesystem fe434060-6731-4b40-a94a-3a8517df0660 ro with ordered data mode. Quota mode: none.
+> root@kvm-xfstests:~# umount /mnt
+> [  475.698053] EXT4-fs (vdc): unmounting filesystem fe434060-6731-4b40-a94a-3a8517df0660.
+> root@kvm-xfstests:~# md5sum /dev/vdc
+> fd38f9f8476ad63a744d179846ee7e18  /dev/vdc
+> 
+> Hmm.... OK, let's try it with LUKS, even though that *really*
+> shouldn't make a difference.  The cryptsetup lukeFormat and mkfs.ext4
+> steps are skipped here.  Also, note that I had to manually edit the
+> .config file to enable CONFIG_DM_CRYPT, since I dm_crypt is used by
+> xfstests, so my install-kconfig script doesn't enable CONFIG_DM_CRYPT.
+> 
+> 
+> root@kvm-xfstests:~# uname -a
+> Linux kvm-xfstests 6.4.0-rc6-xfstests-lockdep #200 SMP PREEMPT_DYNAMIC Fri Jun 23 00:33:39 EDT 2023 x86_64 GNU/Linux
+> 
+> root@kvm-xfstests:~# md5sum /dev/vdc
+> 28b75cc094e1e2a62ac25a730fc1dfee  /dev/vdc
+> root@kvm-xfstests:~# cryptsetup luksOpen /dev/vdc test
+> Enter passphrase for /dev/vdc: 
+> root@kvm-xfstests:~# mount -o ro /dev/mapper/test /mnt
+> [  812.073771] EXT4-fs (dm-0): orphan cleanup on readonly fs
+> [  812.074306] EXT4-fs (dm-0): mounted filesystem ac3f76f1-da0a-426e-85b2-08526afb2224 ro with ordered data mode. Quota mode: none.
+> root@kvm-xfstests:~# umount /mnt
+> [  814.383016] EXT4-fs (dm-0): unmounting filesystem ac3f76f1-da0a-426e-85b2-08526afb2224.
+> root@kvm-xfstests:~# cryptsetup luksClose /dev/mapper/test
+> [  830.001992] dm-0: detected capacity change from 10452992 to 0
+> root@kvm-xfstests:~# md5sum /dev/vdc
+> 28b75cc094e1e2a62ac25a730fc1dfee  /dev/vdc
 
-On Fri, Jun 23, 2023 at 4:23=E2=80=AFAM George Stark <gnstark@sberdevices.r=
-u> wrote:
-[...]
-> Meson saradc channel 7 is connected to muxer that can switch channel
-I think that this should read: ... is connected to a mux that ...
+Hi, Ted. Thanks for taking the time to look into this.
 
-[...]
->  static const struct iio_chan_spec meson_sar_adc_iio_channels[] =3D {
-> @@ -245,6 +280,11 @@ static const struct iio_chan_spec meson_sar_adc_iio_=
-channels[] =3D {
->         MESON_SAR_ADC_CHAN(INDEX_CHAN_6),
->         MESON_SAR_ADC_CHAN(INDEX_CHAN_7),
->         IIO_CHAN_SOFT_TIMESTAMP(INDEX_CHAN_SOFT_TIMESTAMP),
-> +       MESON_SAR_ADC_MUX(INDEX_MUX_0_VSS, 0),
-> +       MESON_SAR_ADC_MUX(INDEX_MUX_1_VDD_DIV4, 1),
-> +       MESON_SAR_ADC_MUX(INDEX_MUX_2_VDD_DIV2, 2),
-> +       MESON_SAR_ADC_MUX(INDEX_MUX_3_VDD_MUL3_DIV4, 3),
-> +       MESON_SAR_ADC_MUX(INDEX_MUX_4_VDD, 4),
->         MESON_SAR_ADC_TEMP_CHAN(), /* must be the last item */
-I haven't had the chance to run these patches yet but: I think they
-are breaking the temperature sensor readings on Meson8/8b/8m2 boards.
-See arch/arm/boot/dts/meson.dtsi where the temperature channel is
-being referenced:
-  io-channels =3D <&saradc 8>
+I perhaps should have been more explicit in my report. The issue is not
+that the image is any different after the mount; indeed, the md5sums are
+identical before and after on my machine as well. The issue is that
+something is issuing writes to the backing image, which bumps the mtime
+of the backing image. When handling the images with rsync, a difference
+in mtime causes the whole image to need to be read.
 
-With this series (this patch and I think also patch 3/6 "meson saradc:
-unite iio channel array definitions") the numbering of the temperature
-sensor channel changes.
+See this flow:
 
-To make things worse: in theory we can use meson_saradc to read the
-SoC temperature sensor on GXBB, GXL and GXM boards (possibly on AXG as
-well but I can't recall from the top of my head) instead of going
-through SCPI.
-I have experimented with this in the past but never got it to work.
-Doing so in the future could lead to another channel index change,
-depending on how we decide to go forward now.
+$ stat image.block | grep Modify
+Modify: 2023-06-22 23:00:15.211379972 -0700
 
-There's two that I can think of:
-- update meson.dtsi to use the new channel numbering (I don't expect
-many 32-bit SoC users out there using new kernel + old .dtbs, but it's
-impossible to say for sure)
-- or keep the driver backwards compatible (that involves re-adding the
-channel tables)
+# cryptsetup luksOpen image.block t2 && mount -o ro /dev/mapper/t2 /mnt/t2
+# umount /mnt/t2 && cryptsetup luksClose t2
 
-What do you think?
+$ stat image.block | grep Modify
+Modify: 2023-06-22 23:03:56.141139649 -0700
 
 
-Best regards,
-Martin
+The regression is the mtime bumping behavior, which doesn't happen prior
+to the eee00237 commit.
+
+Thanks,
+
+--Sean
+
