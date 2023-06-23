@@ -2,203 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EBC173B320
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 11:00:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B1CA73B328
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 11:01:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232034AbjFWJAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 05:00:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42866 "EHLO
+        id S231617AbjFWJBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 05:01:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232082AbjFWI7l (ORCPT
+        with ESMTP id S231922AbjFWJAu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 04:59:41 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBF0A2680;
-        Fri, 23 Jun 2023 01:59:11 -0700 (PDT)
-X-GND-Sasl: herve.codina@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1687510746;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WiCubefUJT8lqguruRQEQMdku90oEPaE9zL5TkFrvME=;
-        b=Er+F9DMUoyhxCT4e3wLHeMsS1VAU8PNH1Bul8bZKuE7b9UDWdIF+nl22bVCY4NHvZ9+3Xy
-        vnwe1qxOxH/XHl1klPoHe3AQjzL2rg2JKRWm9yPuf4iKAfdVFHAjeN5ojCxCEvtaNopi5e
-        WIpPlPZxrioUfayxbqdutoHsTZz+naztAStXu/QGtC7en9ibj7HvS9gznvcv9nqGW1rPS5
-        11Anc5P4V8bc6IpMlrf3gLKvD2d8Snf5O+TyQ/TBc8U6ZKAryVv1rRNFW5S7ANa8WTu1fd
-        38yb7/Tbgo2tth/LaCfHJC9M9i2KM33OLVDwtohEKTAWWkKjVCqC3D29bF9h5g==
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPA id 52723E000B;
-        Fri, 23 Jun 2023 08:59:04 +0000 (UTC)
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Herve Codina <herve.codina@bootlin.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        Wojciech Ziemba <wojciech.ziemba@intel.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH v6 13/13] ASoC: simple-card: Handle additional devices
-Date:   Fri, 23 Jun 2023 10:58:30 +0200
-Message-Id: <20230623085830.749991-14-herve.codina@bootlin.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230623085830.749991-1-herve.codina@bootlin.com>
-References: <20230623085830.749991-1-herve.codina@bootlin.com>
+        Fri, 23 Jun 2023 05:00:50 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C010F30D2;
+        Fri, 23 Jun 2023 02:00:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687510822; x=1719046822;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=HWj1VSHjeQifGegDV6SwXxM3IwTPiL+2f0IbuRC5FmI=;
+  b=K9HVQBUPwviHju8xiOJzhGOM9OrQ6EtxZXQ3PKAnayHY8kkaOOeUMK8n
+   DEVPu60SuTrwfLuS3g1bkrGsA5eNoAEVcPIIcueQXSj/sQ9Wi6PqeJiwS
+   sMIIgfs60B0yyjuGlul8RQDPDA+asj3QTnn8QMCwV2Tuc15h92gUHy2/0
+   pIz3wB96dudeK6Y/qWh1MaE+vzce0ToU/sFik/0xaH+I3X7byDV9Vx6KG
+   y4N9vfoZ+dcnH/yM7inA+YY05e0U6u/2eTmdKoQW38FXm2PxjLslUTAhr
+   sZMwvvDMhFMzuskwf+9luET8mjX82LDHr7IQt+nEr5wdxa8Cv6rqHqMf6
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="345477332"
+X-IronPort-AV: E=Sophos;i="6.01,151,1684825200"; 
+   d="scan'208";a="345477332"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2023 01:59:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="961901236"
+X-IronPort-AV: E=Sophos;i="6.01,151,1684825200"; 
+   d="scan'208";a="961901236"
+Received: from inesxmail01.iind.intel.com ([10.223.154.20])
+  by fmsmga006.fm.intel.com with ESMTP; 23 Jun 2023 01:59:23 -0700
+Received: from inlubt0246.localdomain (inlubt0246.iind.intel.com [10.67.198.165])
+        by inesxmail01.iind.intel.com (Postfix) with ESMTP id C345515B53;
+        Fri, 23 Jun 2023 14:29:22 +0530 (IST)
+Received: by inlubt0246.localdomain (Postfix, from userid 12088949)
+        id B8C965F772; Fri, 23 Jun 2023 14:29:22 +0530 (IST)
+From:   Kumari Pallavi <kumari.pallavi@intel.com>
+To:     rcsekar@samsung.com, wg@grandegger.com, mkl@pengutronix.de,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     mallikarjunappa.sangannavar@intel.com, jarkko.nikula@intel.com,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Kumari Pallavi <kumari.pallavi@intel.com>,
+        Srikanth Thokala <srikanth.thokala@intel.com>
+Subject: [RESEND] [PATCH 1/1] can: m_can: Control tx and rx flow to avoid communication stall
+Date:   Fri, 23 Jun 2023 14:29:20 +0530
+Message-Id: <20230623085920.12904-1-kumari.pallavi@intel.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-An additional-devs subnode can be present in the simple-card top node.
-This subnode is used to declared some "virtual" additional devices.
+In bi-directional CAN transfer using M_CAN IP, with
+the frame gap being set to '0', it leads to Protocol
+error in Arbitration phase resulting in communication
+stall.
+Discussed with Bosch M_CAN IP team and the stall issue
+can only be overcome by controlling the tx and rx 
+packets flow as done by the patch.
 
-Create related devices from this subnode and avoid this subnode presence
-to interfere with the already supported subnodes analysis.
+Rx packets would also be serviced when there is a tx 
+interrupt. The solution has been tested extensively for
+more than 10 days, and no issues has been observed.
 
-Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+Setup that is used to reproduce the issue: 
+
++---------------------+		+----------------------+
+|Intel ElkhartLake    |		|Intel ElkhartLake     |		
+|	+--------+    |		|	+--------+     |
+|	|m_can 0 |    |<=======>|	|m_can 0 |     |		    
+|	+--------+    |		|	+--------+     |		 
++---------------------+		+----------------------+           
+
+Steps to be run on the two Elkhartlake HW:
+
+1. ip link set can0 type can bitrate 1000000
+2. ip link set can0 txqueuelen 2048
+3. ip link set can0 up
+4. cangen -g 0 can0
+5. candump can0
+
+cangen -g 0 can0 & candump can0 commands are used for transmit and 
+receive on both the m_can HW simultaneously where -g is the frame gap 
+between two frames.
+
+Signed-off-by: Kumari Pallavi <kumari.pallavi@intel.com>
+Signed-off-by: Srikanth Thokala <srikanth.thokala@intel.com>
 ---
- sound/soc/generic/simple-card.c | 46 +++++++++++++++++++++++++++++++--
- 1 file changed, 44 insertions(+), 2 deletions(-)
+ drivers/net/can/m_can/m_can.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/sound/soc/generic/simple-card.c b/sound/soc/generic/simple-card.c
-index 6f044cc8357e..ae4a47018278 100644
---- a/sound/soc/generic/simple-card.c
-+++ b/sound/soc/generic/simple-card.c
-@@ -348,6 +348,7 @@ static int __simple_for_each_link(struct asoc_simple_priv *priv,
- 	struct device *dev = simple_priv_to_dev(priv);
- 	struct device_node *top = dev->of_node;
- 	struct device_node *node;
-+	struct device_node *add_devs;
- 	uintptr_t dpcm_selectable = (uintptr_t)of_device_get_match_data(dev);
- 	bool is_top = 0;
- 	int ret = 0;
-@@ -359,6 +360,8 @@ static int __simple_for_each_link(struct asoc_simple_priv *priv,
- 		is_top = 1;
+diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
+index a5003435802b..94aa0ba89202 100644
+--- a/drivers/net/can/m_can/m_can.c
++++ b/drivers/net/can/m_can/m_can.c
+@@ -1118,7 +1118,7 @@ static irqreturn_t m_can_isr(int irq, void *dev_id)
+ 			/* New TX FIFO Element arrived */
+ 			if (m_can_echo_tx_event(dev) != 0)
+ 				goto out_fail;
+-
++			m_can_write(cdev, M_CAN_IE, IR_ALL_INT & ~(IR_TEFN));
+ 			if (netif_queue_stopped(dev) &&
+ 			    !m_can_tx_fifo_full(cdev))
+ 				netif_wake_queue(dev);
+@@ -1787,6 +1787,7 @@ static netdev_tx_t m_can_start_xmit(struct sk_buff *skb,
+ 		}
+ 	} else {
+ 		cdev->tx_skb = skb;
++		m_can_write(cdev, M_CAN_IE, IR_ALL_INT & (IR_TEFN));
+ 		return m_can_tx_handler(cdev);
  	}
  
-+	add_devs = of_get_child_by_name(top, PREFIX "additional-devs");
-+
- 	/* loop for all dai-link */
- 	do {
- 		struct asoc_simple_data adata;
-@@ -367,6 +370,12 @@ static int __simple_for_each_link(struct asoc_simple_priv *priv,
- 		struct device_node *np;
- 		int num = of_get_child_count(node);
- 
-+		/* Skip additional-devs node */
-+		if (node == add_devs) {
-+			node = of_get_next_child(top, node);
-+			continue;
-+		}
-+
- 		/* get codec */
- 		codec = of_get_child_by_name(node, is_top ?
- 					     PREFIX "codec" : "codec");
-@@ -380,12 +389,15 @@ static int __simple_for_each_link(struct asoc_simple_priv *priv,
- 
- 		/* get convert-xxx property */
- 		memset(&adata, 0, sizeof(adata));
--		for_each_child_of_node(node, np)
-+		for_each_child_of_node(node, np) {
-+			if (np == add_devs)
-+				continue;
- 			simple_parse_convert(dev, np, &adata);
-+		}
- 
- 		/* loop for all CPU/Codec node */
- 		for_each_child_of_node(node, np) {
--			if (plat == np)
-+			if (plat == np || add_devs == np)
- 				continue;
- 			/*
- 			 * It is DPCM
-@@ -427,6 +439,7 @@ static int __simple_for_each_link(struct asoc_simple_priv *priv,
- 	} while (!is_top && node);
- 
-  error:
-+	of_node_put(add_devs);
- 	of_node_put(node);
- 	return ret;
- }
-@@ -464,6 +477,31 @@ static int simple_for_each_link(struct asoc_simple_priv *priv,
- 	return ret;
- }
- 
-+static void simple_depopulate_aux(void *data)
-+{
-+	struct asoc_simple_priv *priv = data;
-+
-+	of_platform_depopulate(simple_priv_to_dev(priv));
-+}
-+
-+static int simple_populate_aux(struct asoc_simple_priv *priv)
-+{
-+	struct device *dev = simple_priv_to_dev(priv);
-+	struct device_node *node;
-+	int ret;
-+
-+	node = of_get_child_by_name(dev->of_node, PREFIX "additional-devs");
-+	if (!node)
-+		return 0;
-+
-+	ret = of_platform_populate(node, NULL, NULL, dev);
-+	of_node_put(node);
-+	if (ret)
-+		return ret;
-+
-+	return devm_add_action_or_reset(dev, simple_depopulate_aux, priv);
-+}
-+
- static int simple_parse_of(struct asoc_simple_priv *priv, struct link_info *li)
- {
- 	struct snd_soc_card *card = simple_priv_to_card(priv);
-@@ -493,6 +531,10 @@ static int simple_parse_of(struct asoc_simple_priv *priv, struct link_info *li)
- 	if (ret < 0)
- 		return ret;
- 
-+	ret = simple_populate_aux(priv);
-+	if (ret < 0)
-+		return ret;
-+
- 	ret = snd_soc_of_parse_aux_devs(card, PREFIX "aux-devs");
- 
- 	return ret;
 -- 
-2.40.1
+2.17.1
 
