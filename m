@@ -2,152 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 252EF73BDA9
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 19:18:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0160873BDAC
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 19:18:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232217AbjFWRSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 13:18:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46436 "EHLO
+        id S231947AbjFWRSR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 13:18:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231947AbjFWRSC (ORCPT
+        with ESMTP id S232327AbjFWRSN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 13:18:02 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C29831993
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 10:18:00 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-6687446eaccso682799b3a.3
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 10:18:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687540680; x=1690132680;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=LfbqvLK9Qfv4YF15RNhH25UogTHD/trEiy3T/djOfaI=;
-        b=xOUmQpxHu7os+Nl9EESJkSZpvheHF8R0/sK0BJUwzYmbVPkrFsxgP0foSUrW6iU4aq
-         UF3xAkqE/VQAdENo2u2TZQK4mAiELlsY6HtfQ43Cm8EmQg1yaSwXCM5MBtld7piogO6f
-         +EhhdZef5ZKc8DVOi+seiGnsx3r8I2oEXhtM37lXnlpfMEFseJyRe83uUgPhvd+REw1j
-         PJBVzSmoaqCMXKyOoBrT+HjbScoIx8Uva/BygNV9SPRldIqdXvoicmEGg06guAEaRYaC
-         /P1XRwjnSw2pdUekcxWt35N5S23ReO09GHZaQGrQcOWzcAuU/4vfBkzun4QRLzoP07Ye
-         bvGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687540680; x=1690132680;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LfbqvLK9Qfv4YF15RNhH25UogTHD/trEiy3T/djOfaI=;
-        b=jc6HhkHuDGCBGHltwT2BDEU1kOsH6/6hC0tlDHwZu7k7VMJVNMDUToRcpFfPIQx493
-         RriZrxdf19t8MAfHWKTel6DnmJH30NQuzELmTqSdz0IgJXMP0Ty+h2OWeHinNJMtCUSG
-         vUKzzzlQcryKbgu13x6wDNLjj1ew9sRf1xLkxjahOOUuBnSMmHcDpoBXY6WzSwgamUJJ
-         blNSAixdXNoYSV6yoHXjWPfCfXscke/SnLAl6ZBvBqtx0fHSAffw9sYy1dKA32PcQTnX
-         Mj3Ludq2lKZpULLBMYih4zs5r2fUUnbiOs/FNkih9nDoy5jmGU9E/wJ7FCCsTqCGmYwa
-         pjzw==
-X-Gm-Message-State: AC+VfDwbFzRuMA/HZ8qLFAblFBkHfv9XGGKCdwoTh51pTBRNCoL+kjBd
-        XQTcTEoYlCApBbaS/75KcEMebg==
-X-Google-Smtp-Source: ACHHUZ4lpjXjmkmvEJ7+K6VgK2zU9ROdY2N4oWlN6oIFVB3ihHYUvHLy/UW9KTFd/fdmKnI/faz0Jg==
-X-Received: by 2002:a05:6a00:1989:b0:668:8b43:8ded with SMTP id d9-20020a056a00198900b006688b438dedmr15678103pfl.26.1687540680069;
-        Fri, 23 Jun 2023 10:18:00 -0700 (PDT)
-Received: from google.com ([2620:15c:2d1:203:bcd2:2fb7:43de:322f])
-        by smtp.gmail.com with ESMTPSA id g11-20020aa7818b000000b0064fd4a6b306sm6320547pfi.76.2023.06.23.10.17.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Jun 2023 10:17:59 -0700 (PDT)
-Date:   Fri, 23 Jun 2023 10:17:54 -0700
-From:   Nick Desaulniers <ndesaulniers@google.com>
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>, bjorn@kernel.org,
-        Conor Dooley <conor@kernel.org>, jszhang@kernel.org,
-        llvm@lists.linux.dev, Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, Arnd Bergmann <arnd@arndb.de>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: Re: [PATCH v2 0/4] riscv: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
-Message-ID: <ZJXTwqZIkXLxXaSi@google.com>
-References: <20230622215327.GA1135447@dev-arch.thelio-3990X>
- <mhng-6c34765c-126d-4e6c-8904-e002d49a4336@palmer-ri-x1c9a>
- <20230622231803.GA1790165@dev-arch.thelio-3990X>
+        Fri, 23 Jun 2023 13:18:13 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 542C72703;
+        Fri, 23 Jun 2023 10:18:11 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 97FB3838;
+        Fri, 23 Jun 2023 19:17:32 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1687540652;
+        bh=0YZ1lxPbJiyDK0Mx7CR1+kV4GfIdauMzmbmUCh2M2yg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=I80U+ueO1+v3u+Akn9EWaSLkx1e6Z1BF8fHrMrFnz3SNglr77oZHGHNOAV2/B6DaG
+         tXC7IHbwESkqu7MTeeYE2l+kqt4cTfaZGH2A9W9m924sfNsORuMF64ebfvEtEbzaBU
+         g6eaEz66f6uhobK56I8/6d5c9ZEmlggEQXKZe1Ig=
+Date:   Fri, 23 Jun 2023 20:18:08 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 38/39] drm: renesas: shmobile: Atomic conversion part 3
+Message-ID: <20230623171808.GN2112@pendragon.ideasonboard.com>
+References: <cover.1687423204.git.geert+renesas@glider.be>
+ <9fcb81f939a6c4f09204f084519bf29d993b005a.1687423204.git.geert+renesas@glider.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="Ntym+K/CqqiHps72"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230622231803.GA1790165@dev-arch.thelio-3990X>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <9fcb81f939a6c4f09204f084519bf29d993b005a.1687423204.git.geert+renesas@glider.be>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Geert,
 
---Ntym+K/CqqiHps72
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Thank you for the patch.
 
-On Thu, Jun 22, 2023 at 11:18:03PM +0000, Nathan Chancellor wrote:
-> If you wanted to restrict it to just LD_IS_BFD in arch/riscv/Kconfig,
-> that would be fine with me too.
+On Thu, Jun 22, 2023 at 11:21:50AM +0200, Geert Uytterhoeven wrote:
+> Complete the conversion to atomic mode setting by converting the
+> connector, and setting the DRIVER_ATOMIC flag.
 > 
->   select HAVE_LD_DEAD_CODE_DATA_ELIMINATION if LD_IS_BFD
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Hi Jisheng, would you mind sending a v3 with the attached patch applied
-on top / at the end of your series?
+Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 
+> ---
+>  drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c | 5 +----
+>  drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c  | 2 +-
+>  2 files changed, 2 insertions(+), 5 deletions(-)
 > 
-> Nick said he would work on a report for the LLVM side, so as long as
-> this issue is handled in some way to avoid regressing LLD builds until
-> it is resolved, I don't think there is anything else for the kernel to
-> do. We like to have breadcrumbs via issue links, not sure if the report
-> will be internal to Google or on LLVM's issue tracker though;
-> regardless, we will have to touch this block to add a version check
-> later, at which point we can add a link to the fix in LLD.
+> diff --git a/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c b/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c
+> index f2332bb0fbbd51a1..17456dde57637ab8 100644
+> --- a/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c
+> +++ b/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c
+> @@ -574,7 +574,6 @@ static void shmob_drm_connector_destroy(struct drm_connector *connector)
+>  }
+>  
+>  static const struct drm_connector_funcs connector_funcs = {
+> -	.dpms = drm_helper_connector_dpms,
+>  	.reset = drm_atomic_helper_connector_reset,
+>  	.fill_modes = drm_helper_probe_single_connector_modes,
+>  	.destroy = shmob_drm_connector_destroy,
+> @@ -644,9 +643,7 @@ int shmob_drm_connector_create(struct shmob_drm_device *sdev,
+>  	if (ret < 0)
+>  		goto error;
+>  
+> -	drm_helper_connector_dpms(connector, DRM_MODE_DPMS_OFF);
+> -	drm_object_property_set_value(&connector->base,
+> -		sdev->ddev.mode_config.dpms_property, DRM_MODE_DPMS_OFF);
+> +	connector->dpms = DRM_MODE_DPMS_OFF;
+>  
+>  	sdev->connector = connector;
+>  
+> diff --git a/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c b/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c
+> index c43f408d6b1fcc5b..576869164479ec6b 100644
+> --- a/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c
+> +++ b/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c
+> @@ -98,7 +98,7 @@ static irqreturn_t shmob_drm_irq(int irq, void *arg)
+>  DEFINE_DRM_GEM_DMA_FOPS(shmob_drm_fops);
+>  
+>  static const struct drm_driver shmob_drm_driver = {
+> -	.driver_features	= DRIVER_GEM | DRIVER_MODESET,
+> +	.driver_features	= DRIVER_GEM | DRIVER_MODESET | DRIVER_ATOMIC,
+>  	DRM_GEM_DMA_DRIVER_OPS,
+>  	.fops			= &shmob_drm_fops,
+>  	.name			= "shmob-drm",
 
-https://github.com/ClangBuiltLinux/linux/issues/1881
-
---Ntym+K/CqqiHps72
-Content-Type: text/x-diff; charset=us-ascii
-Content-Disposition: attachment;
-	filename="0001-riscv-disable-DEAD_CODE_ELIMINATION-for-LLD.patch"
-
-From 3e5e010958ee41b9fb408cfade8fb017c2fe7169 Mon Sep 17 00:00:00 2001
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 23 Jun 2023 10:06:17 -0700
-Subject: [PATCH] riscv: disable HAVE_LD_DEAD_CODE_DATA_ELIMINATION for LLD
-
-Linking allyesconfig with ld.lld-17 with CONFIG_DEAD_CODE_ELIMINATION=y
-takes hours.  Assuming this is a performance regression that can be
-fixed, tentatively disable this for now so that allyesconfig builds
-don't start timing out.  If and when there's a fix to ld.lld, this can
-be converted to a version check instead so that users of older but still
-supported versions of ld.lld don't hurt themselves by enabling
-CONFIG_LD_DEAD_CODE_DATA_ELIMINATION=y.
-
-Link: https://github.com/ClangBuiltLinux/linux/issues/1881
-Reported-by: Palmer Dabbelt <palmer@dabbelt.com>
-Suggested-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
----
-Hi Jisheng, would you mind sending a v3 with this patch on top/at the
-end of your patch series?
-
- arch/riscv/Kconfig | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 8effe5bb7788..0573991e9b78 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -116,7 +116,8 @@ config RISCV
- 	select HAVE_KPROBES if !XIP_KERNEL
- 	select HAVE_KPROBES_ON_FTRACE if !XIP_KERNEL
- 	select HAVE_KRETPROBES if !XIP_KERNEL
--	select HAVE_LD_DEAD_CODE_DATA_ELIMINATION
-+	# https://github.com/ClangBuiltLinux/linux/issues/1881
-+	select HAVE_LD_DEAD_CODE_DATA_ELIMINATION if !LD_IS_LLD
- 	select HAVE_MOVE_PMD
- 	select HAVE_MOVE_PUD
- 	select HAVE_PCI
 -- 
-2.41.0.162.gfafddb0af9-goog
+Regards,
 
-
---Ntym+K/CqqiHps72--
+Laurent Pinchart
