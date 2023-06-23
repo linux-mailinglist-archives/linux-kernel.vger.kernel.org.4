@@ -2,157 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B138573B0A4
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 08:18:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAD2273B0AA
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 08:20:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231518AbjFWGST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 02:18:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42604 "EHLO
+        id S231678AbjFWGUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 02:20:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230163AbjFWGSO (ORCPT
+        with ESMTP id S230163AbjFWGUQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 02:18:14 -0400
-Received: from striker.routify.me (striker.routify.me [IPv6:2602:fe90:604:1b::87c:418e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918071706
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 23:18:13 -0700 (PDT)
-Received: from glitch (unknown [IPv6:2602:24c:b8f:cd90::8eb3])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by striker.routify.me (Postfix) with ESMTPSA id 13E901639;
-        Fri, 23 Jun 2023 06:17:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 striker.routify.me 13E901639
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seangreenslade.com;
-        s=striker-outgoing; t=1687501068;
-        bh=kHwByngXCATF1lkNwacD8znlC4DBUO39C7FS8gXGYfc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DvkvmBVjtHyZbpHrKSYzk2Uk7duZ637CkLxvQnqf5wX05Bqk6DN3lH7KXoseIlRJS
-         vwX4RMX8EELSp2cgOF7gmhB41pE5RZZ2rsl7xDE1t9bw8ZdJUrlpOTshDAeB5EmStj
-         I8a2F62A/pVO2Rhfk9lfSlnyf9i9Uqhp4foH8DPM=
-Date:   Thu, 22 Jun 2023 23:18:04 -0700
-From:   Sean Greenslade <sean@seangreenslade.com>
-To:     Theodore Ts'o <tytso@mit.edu>
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>, linux-ext4@vger.kernel.org,
-        Ye Bin <yebin10@huawei.com>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>
-Subject: Re: RO mount of ext4 filesystem causes writes
-Message-ID: <ZJU5HN3bmXR3FvzE@glitch>
-References: <ZIauBR7YiV3rVAHL@glitch>
- <ZIa5P1HqE62rmzqu@debian.me>
- <ZJTv+it2x/glkmpp@debian.me>
- <20230623044611.GD34229@mit.edu>
+        Fri, 23 Jun 2023 02:20:16 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40F0F189;
+        Thu, 22 Jun 2023 23:20:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687501214; x=1719037214;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=2L8LbF2gBGTP8lafaNRC8LtBh5KQEJXn+zvdgG4MunU=;
+  b=dkyoEqW8y4h07tqo89FI/wPN3eCjSJO9reR2swVwZ9PA4zY76gBLcQj3
+   jtCpuqFYQovjkrtpgteljReUDJ+60t1fihhIJmyuzXDrEjsnd6jEr589Z
+   Afnp6dKDi0BObSjIrZZyX0L96jmiUx4QvgTnxXbKFamgpb9GD7kifdv8q
+   trffrmzE+4eaMN/RwrZMyNSJLjxCYE1GtVY87iOCuETe/R4tiSlTooZ21
+   vAxY1MlWce9rvH0jg85Drmg7FclcpgWi8IzK5HuIWdoDSgi5BncFuknA2
+   OPLraqqDOaxpXU4dPQF3YdCkdzJA/REIjnm7+0NNV7jHOGXEnPHtIjL/k
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="447077709"
+X-IronPort-AV: E=Sophos;i="6.01,151,1684825200"; 
+   d="scan'208";a="447077709"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 23:20:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="744885207"
+X-IronPort-AV: E=Sophos;i="6.01,151,1684825200"; 
+   d="scan'208";a="744885207"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.127]) ([10.239.159.127])
+  by orsmga008.jf.intel.com with ESMTP; 22 Jun 2023 23:19:58 -0700
+Message-ID: <a3c15dff-c165-57c7-16f6-072e251a9368@linux.intel.com>
+Date:   Fri, 23 Jun 2023 14:18:38 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230623044611.GD34229@mit.edu>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Cc:     baolu.lu@linux.intel.com, Kevin Tian <kevin.tian@intel.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Nicolin Chen <nicolinc@nvidia.com>,
+        Yi Liu <yi.l.liu@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        iommu@lists.linux.dev, linux-kselftest@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCHES 00/17] IOMMUFD: Deliver IO page faults to user space
+Content-Language: en-US
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+References: <20230530053724.232765-1-baolu.lu@linux.intel.com>
+ <ZHaV3GwYXCvfNUBn@ziepe.ca>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <ZHaV3GwYXCvfNUBn@ziepe.ca>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 23, 2023 at 12:46:11AM -0400, Theodore Ts'o wrote:
-> On Fri, Jun 23, 2023 at 08:06:02AM +0700, Bagas Sanjaya wrote:
-> > 
-> > No reply so far from the culprit author (Ye Bin) nor from Ted. Can
-> > you help in this case?
+On 5/31/23 8:33 AM, Jason Gunthorpe wrote:
+> On Tue, May 30, 2023 at 01:37:07PM +0800, Lu Baolu wrote:
+>> Hi folks,
+>>
+>> This series implements the functionality of delivering IO page faults to
+>> user space through the IOMMUFD framework. The use case is nested
+>> translation, where modern IOMMU hardware supports two-stage translation
+>> tables. The second-stage translation table is managed by the host VMM
+>> while the first-stage translation table is owned by the user space.
+>> Hence, any IO page fault that occurs on the first-stage page table
+>> should be delivered to the user space and handled there. The user space
+>> should respond the page fault handling result to the device top-down
+>> through the IOMMUFD response uAPI.
+>>
+>> User space indicates its capablity of handling IO page faults by setting
+>> a user HWPT allocation flag IOMMU_HWPT_ALLOC_FLAGS_IOPF_CAPABLE. IOMMUFD
+>> will then setup its infrastructure for page fault delivery. Together
+>> with the iopf-capable flag, user space should also provide an eventfd
+>> where it will listen on any down-top page fault messages.
+>>
+>> On a successful return of the allocation of iopf-capable HWPT, a fault
+>> fd will be returned. User space can open and read fault messages from it
+>> once the eventfd is signaled.
+> This is a performance path so we really need to think about this more,
+> polling on an eventfd and then reading a different fd is not a good
+> design.
 > 
-> There's been no reply because I haven't been able to replicate it, and
-> I didn't have the time do enough work to convince myself the report
-> was bogus.  At this point, I have spent time trying to reproduce it,
-> and I've had no luck.
+> What I would like is to have a design from the start that fits into
+> io_uring, so we can have pre-posted 'recvs' in io_uring that just get
+> completed at high speed when PRIs come in.
 > 
-> So, unless you can give me a simple set of reproduction instructions,
-> I'm going to have to treat this report is invalid.
-> 
-> Regards,
-> 
-> 						- Ted
-> 
-> Note: this test was done using kvm-xfstests which can be found
-> https://github.com/tytso/xfstests-bld using the install-kconfig and
-> the kbuild script that can also be found in this report.  So if you
-> want to play along from home, feel free.  :-)
-> 
-> 
-> root@kvm-xfstests:~# mkfs.ext4 /dev/vdc
-> mke2fs 1.47.0 (5-Feb-2023)
-> Discarding device blocks: done                            
-> Creating filesystem with 1310720 4k blocks and 327680 inodes
-> Filesystem UUID: fe434060-6731-4b40-a94a-3a8517df0660
-> Superblock backups stored on blocks: 
->         32768, 98304, 163840, 229376, 294912, 819200, 884736
-> 
-> Allocating group tables: done                            
-> Writing inode tables: done                            
-> Creating journal (16384 blocks): done
-> Writing superblocks and filesystem accounting information: done 
-> 
-> root@kvm-xfstests:~# md5sum /dev/vdc
-> fd38f9f8476ad63a744d179846ee7e18  /dev/vdc
-> root@kvm-xfstests:~# mount -o ro /dev/vdc /mnt
-> [  472.893614] EXT4-fs (vdc): orphan cleanup on readonly fs
-> [  472.894022] EXT4-fs (vdc): mounted filesystem fe434060-6731-4b40-a94a-3a8517df0660 ro with ordered data mode. Quota mode: none.
-> root@kvm-xfstests:~# umount /mnt
-> [  475.698053] EXT4-fs (vdc): unmounting filesystem fe434060-6731-4b40-a94a-3a8517df0660.
-> root@kvm-xfstests:~# md5sum /dev/vdc
-> fd38f9f8476ad63a744d179846ee7e18  /dev/vdc
-> 
-> Hmm.... OK, let's try it with LUKS, even though that *really*
-> shouldn't make a difference.  The cryptsetup lukeFormat and mkfs.ext4
-> steps are skipped here.  Also, note that I had to manually edit the
-> .config file to enable CONFIG_DM_CRYPT, since I dm_crypt is used by
-> xfstests, so my install-kconfig script doesn't enable CONFIG_DM_CRYPT.
-> 
-> 
-> root@kvm-xfstests:~# uname -a
-> Linux kvm-xfstests 6.4.0-rc6-xfstests-lockdep #200 SMP PREEMPT_DYNAMIC Fri Jun 23 00:33:39 EDT 2023 x86_64 GNU/Linux
-> 
-> root@kvm-xfstests:~# md5sum /dev/vdc
-> 28b75cc094e1e2a62ac25a730fc1dfee  /dev/vdc
-> root@kvm-xfstests:~# cryptsetup luksOpen /dev/vdc test
-> Enter passphrase for /dev/vdc: 
-> root@kvm-xfstests:~# mount -o ro /dev/mapper/test /mnt
-> [  812.073771] EXT4-fs (dm-0): orphan cleanup on readonly fs
-> [  812.074306] EXT4-fs (dm-0): mounted filesystem ac3f76f1-da0a-426e-85b2-08526afb2224 ro with ordered data mode. Quota mode: none.
-> root@kvm-xfstests:~# umount /mnt
-> [  814.383016] EXT4-fs (dm-0): unmounting filesystem ac3f76f1-da0a-426e-85b2-08526afb2224.
-> root@kvm-xfstests:~# cryptsetup luksClose /dev/mapper/test
-> [  830.001992] dm-0: detected capacity change from 10452992 to 0
-> root@kvm-xfstests:~# md5sum /dev/vdc
-> 28b75cc094e1e2a62ac25a730fc1dfee  /dev/vdc
+> This suggests that the PRI should be delivered via read() on a single
+> FD and pollability on the single FD without any eventfd.
 
-Hi, Ted. Thanks for taking the time to look into this.
+I will remove the eventfd and provide a single FD for both read() and
+write(). The userspace reads the FD to retrieve the fault messages while
+writing the FD to respond the handling of the faults. The user space
+could leverage the io_uring for asynchronous I/O. A sample userspace
+design could look like this:
 
-I perhaps should have been more explicit in my report. The issue is not
-that the image is any different after the mount; indeed, the md5sums are
-identical before and after on my machine as well. The issue is that
-something is issuing writes to the backing image, which bumps the mtime
-of the backing image. When handling the images with rsync, a difference
-in mtime causes the whole image to need to be read.
+[pseudo code for discussion only]
 
-See this flow:
+	struct io_uring ring;
 
-$ stat image.block | grep Modify
-Modify: 2023-06-22 23:00:15.211379972 -0700
+	io_uring_setup(IOPF_ENTRIES, &ring);
 
-# cryptsetup luksOpen image.block t2 && mount -o ro /dev/mapper/t2 /mnt/t2
-# umount /mnt/t2 && cryptsetup luksClose t2
+	while (1) {
+		struct io_uring_prep_read read;
+		struct io_uring_cqe *cqe;
 
-$ stat image.block | grep Modify
-Modify: 2023-06-22 23:03:56.141139649 -0700
+		read.fd = iopf_fd;
+		read.buf = malloc(IOPF_SIZE);
+		read.len = IOPF_SIZE;
+		read.flags = 0;
 
+		io_uring_prep_read(&ring, &read);
+		io_uring_submit(&ring);
 
-The regression is the mtime bumping behavior, which doesn't happen prior
-to the eee00237 commit.
+		// Wait for the read to complete
+		while ((cqe = io_uring_get_cqe(&ring)) != NULL) {
+			// Check if the read completed
+			if (cqe->res < 0)
+				break;
 
-Thanks,
+			if (page_fault_read_completion(cqe)) {
+				// Get the fault data
+				void *data = cqe->buf;
+				size_t size = cqe->res;
 
---Sean
+				// Handle the page fault
+				handle_page_fault(data);
 
+				// Respond the fault
+				struct io_uring_prep_write write;
+				write.fd = iopf_fd;
+				write.buf = malloc(IOPF_RESPONSE_SIZE);
+				write.len = IOPF_RESPONSE_SIZE;
+				write.flags = 0;
+
+				io_uring_prep_write(&ring, &write);
+             			io_uring_submit(&ring);
+			}
+
+			// Reap the cqe
+			io_uring_cqe_free(&ring, cqe);
+		}
+	}
+
+Did I understand you correctly?
+
+Best regards,
+baolu
