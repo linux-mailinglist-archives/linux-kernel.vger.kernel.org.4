@@ -2,152 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6361373AF6D
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 06:30:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC21673AF6F
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 06:31:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230456AbjFWEa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 00:30:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44202 "EHLO
+        id S231383AbjFWEbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 00:31:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjFWEaX (ORCPT
+        with ESMTP id S231175AbjFWEbO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 00:30:23 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592972126;
-        Thu, 22 Jun 2023 21:30:20 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QnPRZ4hpGz4wj9;
-        Fri, 23 Jun 2023 14:30:18 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1687494619;
-        bh=HLzyUWe2JdTNFgsbOVFqKpagFNhTmjAHxqDf7II5T4I=;
-        h=Date:From:To:Cc:Subject:From;
-        b=L57MqkawvTsztT6t1CeX2hsBVT21KqHEoLXcQDmZeobmJW4S8HX7SPI2QDWIxOCP8
-         HG1yUlSdC9RPiYCh6mP6tN3xrwEY0mKx0UHDwRmqG6ppqBnp3x2QudOk9SLN7iyTHv
-         AW7jio0wTwZVX6v3Zxy5UdoM/2+QzxoYp0utlliOaTUgI7dOVMvc/R3CCSmEHyhMar
-         UIBzWR2W6z9UtmNWfuKBJU2p5WQEKnjD7CwA7I+l8QCrSk1Znbz9QiusWw3jxC3HK9
-         Yyzwr3F8/vDoGSNvLAIVEBDwMwZV/aAmMIIQ6W7GfgwP2c0LgApcnqsSXRFexVoho3
-         w8lh1T3gM6Lzg==
-Date:   Fri, 23 Jun 2023 14:30:11 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alasdair G Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>
-Cc:     Demi Marie Obenour <demi@invisiblethingslab.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the device-mapper tree
-Message-ID: <20230623143011.7deba53c@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/LwocnfiZv+HSDnECGx87lz+";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 23 Jun 2023 00:31:14 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2C6E2129
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 21:31:12 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-bf34588085bso382730276.0
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 21:31:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687494672; x=1690086672;
+        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=cu9nI31LEpqxG6RFF3bTH+0H9TeY5MTdZFgwWUSRFwU=;
+        b=HDdKa5vorjtsTOrpdZyZbORmZaBWBLRNFyZz+mquVo87kCprIyIN8sJdGBbNPkAExV
+         lZsOFohZIZYXcx+EOi3cnPYVBgXSwuRwX+NN2SyjBHY+dZhlbeFPbvDTcrUYvX4iDgND
+         B/3N4GkPcRdJSTv8PAv+Ayi/kJFAETG/ktcG0BK1ipSkvvzQwQdd9b4hO+HNvdy4HHj0
+         QLMcbKt6YfIiTauaZuaOdy+BOR0vdfzOvUEXZzzZahsNRBWHTIK9DqfXmbpg8xvTmNEC
+         ggmowdUOKFgOlKsPkUOx4gckl6EE1Qrlwe5LqX69IpEeV9d2LTWQE8ayD2XjjG87s6cJ
+         dCXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687494672; x=1690086672;
+        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cu9nI31LEpqxG6RFF3bTH+0H9TeY5MTdZFgwWUSRFwU=;
+        b=eB70em7hr52/lZR8aISPZ/IRTxxVCipb3JKqcmUC7V2Art3NnOsXoM9nz5KTNvhDwP
+         yZSb3REx+mwK8mCZqboErcXHDtiAW0O9ivu5oSBf4w/T1tpsZ/KZAJMp+057vAiWGCTv
+         /PdlLv17O91w/jVA2zS3HxgtzNFo/Y3WnqBSApb/F5+NSUHuxkJxSDGDWSieRLbTOUQX
+         j118zYW0NAnsJkSpLI2KBybfrdILSeJGLkoips3QD404vwRlvzyRjrsOKyIYxtKT/tYA
+         +ZO1bOgrHEw0dIv+ghg6xwlbJCoQEIrbW3q/bkG2Bpb2OqQ0zP26xBMsyTZ+xu2YnE4j
+         cFZg==
+X-Gm-Message-State: AC+VfDyeCzrK+gZynNkrmqc61HjNfmAW37PlOajWFOY96y6yFbRRBauf
+        gvbMKpP5EH4SNHlRf0sEyllyMk2Xcx0q
+X-Google-Smtp-Source: ACHHUZ6Y8LjAHTkZi3zCabhg5Vde/FZX17mb7veqsintqlySiJ99zT4N14uiAb3OID4t2IMOa5kNVv3SNJgR
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:6559:8968:cdfe:35b6])
+ (user=irogers job=sendgmr) by 2002:a25:ab28:0:b0:bc5:2869:d735 with SMTP id
+ u37-20020a25ab28000000b00bc52869d735mr8255983ybi.13.1687494671922; Thu, 22
+ Jun 2023 21:31:11 -0700 (PDT)
+Date:   Thu, 22 Jun 2023 21:31:07 -0700
+Message-Id: <20230623043107.4077510-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+Subject: [PATCH v2] perf unwind: Fix map reference counts
+From:   Ian Rogers <irogers@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ivan Babrou <ivan@cloudflare.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/LwocnfiZv+HSDnECGx87lz+
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+The result of thread__find_map is the map in the passed in
+addr_location. Calling addr_location__exit puts that map and so copies
+need to do a map__get. Add in the corresponding map__puts.
 
-Hi all,
+Signed-off-by: Ian Rogers <irogers@google.com>
 
-After merging the device-mapper tree, today's linux-next build (i386
-defconfig) failed like this:
-
-In file included from include/linux/kernel.h:30,
-                 from arch/x86/include/asm/percpu.h:27,
-                 from arch/x86/include/asm/current.h:10,
-                 from include/linux/sched.h:12,
-                 from include/linux/kthread.h:6,
-                 from drivers/md/dm-core.h:13,
-                 from drivers/md/dm-ioctl.c:9:
-drivers/md/dm-ioctl.c: In function 'next_target':
-include/linux/kern_levels.h:5:25: error: format '%lu' expects argument of t=
-ype 'long unsigned int', but argument 3 has type 'unsigned int' [-Werror=3D=
-format=3D]
-    5 | #define KERN_SOH        "\001"          /* ASCII Start Of Header */
-      |                         ^~~~~~
-include/linux/printk.h:427:25: note: in definition of macro 'printk_index_w=
-rap'
-  427 |                 _p_func(_fmt, ##__VA_ARGS__);                      =
-     \
-      |                         ^~~~
-include/linux/printk.h:498:9: note: in expansion of macro 'printk'
-  498 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
-      |         ^~~~~~
-include/linux/kern_levels.h:11:25: note: in expansion of macro 'KERN_SOH'
-   11 | #define KERN_ERR        KERN_SOH "3"    /* error conditions */
-      |                         ^~~~~~~~
-include/linux/printk.h:498:16: note: in expansion of macro 'KERN_ERR'
-  498 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
-      |                ^~~~~~~~
-include/linux/device-mapper.h:626:25: note: in expansion of macro 'pr_err'
-  626 | #define DMERR(fmt, ...) pr_err(DM_FMT(fmt), ##__VA_ARGS__)
-      |                         ^~~~~~
-drivers/md/dm-ioctl.c:1421:17: note: in expansion of macro 'DMERR'
- 1421 |                 DMERR("Next dm_target_spec (offset %u) is not %lu-b=
-yte aligned",
-      |                 ^~~~~
-cc1: all warnings being treated as errors
-
-Caused by commit
-
-  5df1daff2cc6 ("dm ioctl: Check dm_target_spec is sufficiently aligned")
-
-I have applied the following patch for today:
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Fri, 23 Jun 2023 14:24:29 +1000
-Subject: [PATCH] fix up for "dm ioctl: Check dm_target_spec is sufficiently=
- aligned"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+v2. Add missing map__put when dso is missing.
 ---
- drivers/md/dm-ioctl.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/perf/util/unwind-libunwind-local.c | 19 ++++++++++++-------
+ 1 file changed, 12 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/md/dm-ioctl.c b/drivers/md/dm-ioctl.c
-index 5f0b641538d8..8b480d7825fe 100644
---- a/drivers/md/dm-ioctl.c
-+++ b/drivers/md/dm-ioctl.c
-@@ -1418,7 +1418,7 @@ static int next_target(struct dm_target_spec *last, u=
-int32_t next, const char *e
- 	}
-=20
- 	if (next % __alignof__(struct dm_target_spec)) {
--		DMERR("Next dm_target_spec (offset %u) is not %lu-byte aligned",
-+		DMERR("Next dm_target_spec (offset %u) is not %zu-byte aligned",
- 		      next, __alignof__(struct dm_target_spec));
+diff --git a/tools/perf/util/unwind-libunwind-local.c b/tools/perf/util/unwind-libunwind-local.c
+index 36bf5100bad2..ebfde537b99b 100644
+--- a/tools/perf/util/unwind-libunwind-local.c
++++ b/tools/perf/util/unwind-libunwind-local.c
+@@ -419,7 +419,8 @@ static struct map *find_map(unw_word_t ip, struct unwind_info *ui)
+ 	struct map *ret;
+ 
+ 	addr_location__init(&al);
+-	ret = thread__find_map(ui->thread, PERF_RECORD_MISC_USER, ip, &al);
++	thread__find_map(ui->thread, PERF_RECORD_MISC_USER, ip, &al);
++	ret = map__get(al.map);
+ 	addr_location__exit(&al);
+ 	return ret;
+ }
+@@ -440,8 +441,10 @@ find_proc_info(unw_addr_space_t as, unw_word_t ip, unw_proc_info_t *pi,
  		return -EINVAL;
+ 
+ 	dso = map__dso(map);
+-	if (!dso)
++	if (!dso) {
++		map__put(map);
+ 		return -EINVAL;
++	}
+ 
+ 	pr_debug("unwind: find_proc_info dso %s\n", dso->name);
+ 
+@@ -476,11 +479,11 @@ find_proc_info(unw_addr_space_t as, unw_word_t ip, unw_proc_info_t *pi,
+ 
+ 		memset(&di, 0, sizeof(di));
+ 		if (dwarf_find_debug_frame(0, &di, ip, base, symfile, start, map__end(map)))
+-			return dwarf_search_unwind_table(as, ip, &di, pi,
+-							 need_unwind_info, arg);
++			ret = dwarf_search_unwind_table(as, ip, &di, pi,
++							need_unwind_info, arg);
  	}
---=20
-2.39.2
+ #endif
+-
++	map__put(map);
+ 	return ret;
+ }
+ 
+@@ -534,12 +537,14 @@ static int access_dso_mem(struct unwind_info *ui, unw_word_t addr,
+ 
+ 	dso = map__dso(map);
+ 
+-	if (!dso)
++	if (!dso) {
++		map__put(map);
+ 		return -1;
++	}
+ 
+ 	size = dso__data_read_addr(dso, map, ui->machine,
+ 				   addr, (u8 *) data, sizeof(*data));
+-
++	map__put(map);
+ 	return !(size == sizeof(*data));
+ }
+ 
+-- 
+2.41.0.162.gfafddb0af9-goog
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/LwocnfiZv+HSDnECGx87lz+
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSVH9MACgkQAVBC80lX
-0GxLbgf/fKBB8K/ebmMUX37B2d0fLs8mbW0dAqDaNMg+VMjo1xq0990KQYLfusnn
-PKCuzwSQwxcvdHicYjGna+nKANhkW0WiajDPYT5AZ8fpRTdZeAP7TpFw51bbDUT5
-e+kiFzbT5glGA8stfbRtfJfz8p9PNuQDfWR0XBLAToHI1ris9tjmGStfa62iUy5e
-HSrmhPsWX5+7vTtKA9W5jVuAfmfihMRZFZLqPwM1tb8uRHbyS6cQnUwq7X9ZcWkk
-uL1gwTJ6uXydGNWERmsuqgzFGbWkhMoRAgSbx5mTovfCUSsvjlHGY9YX1FisAa6E
-JoqjEFh5zP7se/mpHXyDkPH4FzERcQ==
-=Iov+
------END PGP SIGNATURE-----
-
---Sig_/LwocnfiZv+HSDnECGx87lz+--
