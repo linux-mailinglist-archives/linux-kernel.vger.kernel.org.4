@@ -2,64 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDCAA73B89A
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 15:17:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1982673B8AA
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 15:20:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231449AbjFWNRu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 09:17:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49832 "EHLO
+        id S230379AbjFWNUi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 09:20:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231286AbjFWNRp (ORCPT
+        with ESMTP id S229647AbjFWNUg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 09:17:45 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77EC92944;
-        Fri, 23 Jun 2023 06:17:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1687526243; x=1719062243;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=dxzeWDMzY4Hn74R46d8Op9WFQlLjght93zTsTDis+rw=;
-  b=gtnXuOOKJfxDIz1P6prmtBVVcbiwyLQ5ufw8054ssGwhfFnwKusU6U2C
-   dlC96qrCd8TLi0o0iXo2vXDKFZF2HqTuRxuYieGgSPRUUv8Iw91D1+gLa
-   9imUDYfN1dzYBQ5nj085qLAfKhCf1keQn1mBWLtuSR6yNpsnaV1fefqMW
-   6AgdrTg9MaNAKoyjld/lJwT7q2P+Ub/lFzzEJbhUlCxwi/nofd9rJ1sSD
-   BzZYDO5wlU0igW61H74c8dEGIEjPjJ+MYAz0eNv/IHQuhg3jzl6AQca5X
-   5Fl70kXDa+RaNEfuYlT92k+kUDD6yJ8f3e9KFg/75ARS45yXORQAgsi1Y
-   g==;
-X-IronPort-AV: E=Sophos;i="6.01,152,1684825200"; 
-   d="scan'208";a="219484554"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Jun 2023 06:17:23 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 23 Jun 2023 06:16:50 -0700
-Received: from [10.159.245.112] (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
- Transport; Fri, 23 Jun 2023 06:16:49 -0700
-Message-ID: <66f00ffc-571b-86b3-5c35-b9ce566cc149@microchip.com>
-Date:   Fri, 23 Jun 2023 15:16:23 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: net: macb: sparse warning fixes
-Content-Language: en-US
-To:     Ben Dooks <ben.dooks@codethink.co.uk>, <netdev@vger.kernel.org>,
-        <pabeni@redhat.com>, <kuba@kernel.org>, <edumazet@google.com>,
-        <davem@davemloft.net>
-CC:     <linux-kernel@vger.kernel.org>, <claudiu.beznea@microchip.com>
-References: <20230622130507.606713-1-ben.dooks@codethink.co.uk>
-From:   Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-In-Reply-To: <20230622130507.606713-1-ben.dooks@codethink.co.uk>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        Fri, 23 Jun 2023 09:20:36 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07C08171E
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 06:20:28 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 453391F38D;
+        Fri, 23 Jun 2023 13:20:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1687526427; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=HR2cnKetgtyF4HmEnS3dEntpxT3sXcuGNxVsg9FcfzM=;
+        b=Wdt9Lth3hlWzW/6CN8Jdusli8kShNm7hcUNvr4yWp7osFYsHs4jF8zIgVcR14BPRyVpPCi
+        Sb4GjBhzxVlPkAU+07i/ic/NVgexP5TuwXvxIqK5FQSKgOqQXJUUhbZAvjWIey/AN2H6xH
+        ZX+X6pQ5FlbwqO8aqPPdhAgowDHlZFs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1687526427;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=HR2cnKetgtyF4HmEnS3dEntpxT3sXcuGNxVsg9FcfzM=;
+        b=x+msr6/4JVlsCYF8s1aGcm3We4Y3W9Hg83UaZT3RmbR7F0QCdZhFQsga4ZD5gMH2L65qZP
+        wSmf4dpUzKNgY2Dg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 221EE1331F;
+        Fri, 23 Jun 2023 13:20:27 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id lWqHBxuclWQcSgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Fri, 23 Jun 2023 13:20:27 +0000
+Date:   Fri, 23 Jun 2023 15:20:26 +0200
+Message-ID: <87352ixqlh.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] sound fixes for 6.4-final
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,T_SPF_TEMPERROR,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,35 +66,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ben,
+Linus,
 
-On 22/06/2023 at 15:05, Ben Dooks wrote:
-> These are 3 hopefully easy patches for fixing sparse errors due to
-> endian-ness warnings. There are still some left, but there are not
-> as easy as they mix host and network fields together.
-> 
-> For example, gem_prog_cmp_regs() has two u32 variables that it does
-> bitfield manipulation on for the tcp ports and these are __be16 into
-> u32, so not sure how these are meant to be changed. I've also no hardware
-> to test on, so even if these did get changed then I can't check if it is
-> working pre/post change.
+please pull sound fixes for v6.4-final from:
 
-Do you know if there could be any impact on performance (even if limited)?
+  git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git tags/sound-6.4
 
-Best regards,
-   Nicolas
+The topmost commit is 6f9441f4e3ebf86b8a0427f14ee1753f2183a3cf
 
-> Also gem_writel and gem_writel_n, it is not clear if both of these are
-> meant to be host order or not.
-> 
-> Ben Dooks (3):
->    net: macb: check constant to define and fix __be32 warnings
->    net: macb: add port constant to fix __be16 warnings
->    net: macb: fix __be32 warnings in debug code
-> 
->   drivers/net/ethernet/cadence/macb_main.c | 25 +++++++++++++-----------
->   1 file changed, 14 insertions(+), 11 deletions(-)
+----------------------------------------------------------------
 
--- 
-Nicolas Ferre
+sound fixes for 6.4-final
 
+Three oneliner fixes: one for a thinko in SOF SoundWire code and
+two HD-audio quirks for ASUS laptops.  All device-specific and
+should be safe to apply.
+
+----------------------------------------------------------------
+
+Charles Keepax (1):
+      ASoC: intel: sof_sdw: Fixup typo in device link checking
+
+Luke D. Jones (2):
+      ALSA: hda/realtek: Add quirk for ASUS ROG G634Z
+      ALSA: hda/realtek: Add quirk for ASUS ROG GV601V
+
+---
+ sound/pci/hda/patch_realtek.c    | 2 ++
+ sound/soc/intel/boards/sof_sdw.c | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+index 308ec7034cc9..dabfdecece26 100644
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -9527,6 +9527,7 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
+ 	SND_PCI_QUIRK(0x1043, 0x1427, "Asus Zenbook UX31E", ALC269VB_FIXUP_ASUS_ZENBOOK),
+ 	SND_PCI_QUIRK(0x1043, 0x1473, "ASUS GU604V", ALC285_FIXUP_ASUS_HEADSET_MIC),
+ 	SND_PCI_QUIRK(0x1043, 0x1483, "ASUS GU603V", ALC285_FIXUP_ASUS_HEADSET_MIC),
++	SND_PCI_QUIRK(0x1043, 0x1493, "ASUS GV601V", ALC285_FIXUP_ASUS_HEADSET_MIC),
+ 	SND_PCI_QUIRK(0x1043, 0x1517, "Asus Zenbook UX31A", ALC269VB_FIXUP_ASUS_ZENBOOK_UX31A),
+ 	SND_PCI_QUIRK(0x1043, 0x1662, "ASUS GV301QH", ALC294_FIXUP_ASUS_DUAL_SPK),
+ 	SND_PCI_QUIRK(0x1043, 0x1683, "ASUS UM3402YAR", ALC287_FIXUP_CS35L41_I2C_2),
+@@ -9552,6 +9553,7 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
+ 	SND_PCI_QUIRK(0x1043, 0x1c23, "Asus X55U", ALC269_FIXUP_LIMIT_INT_MIC_BOOST),
+ 	SND_PCI_QUIRK(0x1043, 0x1c62, "ASUS GU603", ALC289_FIXUP_ASUS_GA401),
+ 	SND_PCI_QUIRK(0x1043, 0x1c92, "ASUS ROG Strix G15", ALC285_FIXUP_ASUS_G533Z_PINS),
++	SND_PCI_QUIRK(0x1043, 0x1caf, "ASUS G634JYR/JZR", ALC285_FIXUP_ASUS_HEADSET_MIC),
+ 	SND_PCI_QUIRK(0x1043, 0x1ccd, "ASUS X555UB", ALC256_FIXUP_ASUS_MIC),
+ 	SND_PCI_QUIRK(0x1043, 0x1d42, "ASUS Zephyrus G14 2022", ALC289_FIXUP_ASUS_GA401),
+ 	SND_PCI_QUIRK(0x1043, 0x1d4e, "ASUS TM420", ALC256_FIXUP_ASUS_HPE),
+diff --git a/sound/soc/intel/boards/sof_sdw.c b/sound/soc/intel/boards/sof_sdw.c
+index 6faf4a43eaf5..144f082c63fd 100644
+--- a/sound/soc/intel/boards/sof_sdw.c
++++ b/sound/soc/intel/boards/sof_sdw.c
+@@ -1347,7 +1347,7 @@ static int sof_card_dai_links_create(struct device *dev,
+ 				if ((SDW_PART_ID(adr_link->adr_d[i].adr) !=
+ 				    SDW_PART_ID(adr_link->adr_d[j].adr)) ||
+ 				    (SDW_MFG_ID(adr_link->adr_d[i].adr) !=
+-				    SDW_MFG_ID(adr_link->adr_d[i].adr))) {
++				    SDW_MFG_ID(adr_link->adr_d[j].adr))) {
+ 					append_codec_type = true;
+ 					goto out;
+ 				}
