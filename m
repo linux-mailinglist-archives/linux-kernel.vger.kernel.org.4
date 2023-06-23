@@ -2,72 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C30FD73BD4C
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 19:00:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3630273BD4F
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 19:00:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231721AbjFWRAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 13:00:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34366 "EHLO
+        id S231888AbjFWRAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 13:00:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbjFWRAl (ORCPT
+        with ESMTP id S231610AbjFWRAn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 13:00:41 -0400
-Received: from xry111.site (xry111.site [89.208.246.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A1A91;
-        Fri, 23 Jun 2023 10:00:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
-        s=default; t=1687539640;
-        bh=6rmpokyTm1820Gky7UqivAdAm5uBlKSdZ2K2AKHvsoo=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=ELkuyH9EaOux9JN8Rzhe8b55zb5ry82dafuzWG1B32tILizw1CfgU+XgRTyd9E2se
-         8cNf1bTtjKFLsmP95eo/lRh0PFXNteJP5340qiSs/23bQb26RdpANzxlCSyAHyfDA/
-         xDyn0+MD4p1QKDjDMRiGC6zUuZphCej3sc5vYjjo=
-Received: from localhost.localdomain (xry111.site [IPv6:2001:470:683e::1])
+        Fri, 23 Jun 2023 13:00:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DA7A91;
+        Fri, 23 Jun 2023 10:00:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-384))
-        (Client did not present a certificate)
-        (Authenticated sender: xry111@xry111.site)
-        by xry111.site (Postfix) with ESMTPSA id CEA0E65DB9;
-        Fri, 23 Jun 2023 13:00:38 -0400 (EDT)
-Message-ID: <22d794613f70b04544e39e8861737af09365ae8a.camel@xry111.site>
-Subject: Re: [PATCH 7/9] LoongArch: Tweak CFLAGS for Clang compatibility
-From:   Xi Ruoyao <xry111@xry111.site>
-To:     WANG Xuerui <kernel@xen0n.name>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     WANG Rui <wangrui@loongson.cn>, loongarch@lists.linux.dev,
-        linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, WANG Xuerui <git@xen0n.name>
-Date:   Sat, 24 Jun 2023 01:00:37 +0800
-In-Reply-To: <20230623134351.1898379-8-kernel@xen0n.name>
-References: <20230623134351.1898379-1-kernel@xen0n.name>
-         <20230623134351.1898379-8-kernel@xen0n.name>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.3 
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 34DE061A8A;
+        Fri, 23 Jun 2023 17:00:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 033ECC433C9;
+        Fri, 23 Jun 2023 17:00:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687539641;
+        bh=8NvdvMOZhkf3ZWHCAYhr6IS/S3CpGzOG5wCKstBXM/A=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=h6/0i8b5U6xV3rDgMIBxRMocLpmNGFZY618h9D1Yg3zKzltu1gljLOo2TTiI43Cvp
+         N8emwr4aIVkqWlvGoDzPntH7XpThaon1gAVIyfSyQYW+hQnAzM2vBCTiuF+u/vBo7R
+         /wZFoJixy4+SS9Ns7Whew+fmlegNGLtSprWupskJDm9BDDW71ijdzXhCUJ/cOh0BuN
+         pAxFt8CgIOBjSdeUegTBRdu6N2sA/iF4ahxUmwJ6BR8s7SQAAgTXBWJxYx2Lr/4j7D
+         8qpPHfWStK1yOUwrtYFucxtWK+BNf3L4N4UydRvXKXSFbiQoQg8TOnI8t637yOZcAu
+         Wwf40LbpxIDDg==
+Date:   Fri, 23 Jun 2023 10:00:40 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     David Howells <dhowells@redhat.com>
+Cc:     netdev@vger.kernel.org,
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Ilya Dryomov <idryomov@gmail.com>,
+        Xiubo Li <xiubli@redhat.com>, Jeff Layton <jlayton@kernel.org>,
+        ceph-devel@vger.kernel.org
+Subject: Re: [PATCH net-next v4 03/15] ceph: Use sendmsg(MSG_SPLICE_PAGES)
+ rather than sendpage
+Message-ID: <20230623100040.4ebbeeb2@kernel.org>
+In-Reply-To: <20230623114425.2150536-4-dhowells@redhat.com>
+References: <20230623114425.2150536-1-dhowells@redhat.com>
+        <20230623114425.2150536-4-dhowells@redhat.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2023-06-23 at 21:43 +0800, WANG Xuerui wrote:
+On Fri, 23 Jun 2023 12:44:13 +0100 David Howells wrote:
+> @@ -494,9 +466,12 @@ static int write_partial_message_data(struct ceph_connection *con)
+>  
+>  		page = ceph_msg_data_next(cursor, &page_offset, &length);
+>  		if (length == cursor->total_resid)
+> -			more = MSG_MORE;
+> -		ret = ceph_tcp_sendpage(con->sock, page, page_offset, length,
+> -					more);
+> +			msghdr.msg_flags |= MSG_MORE;
 
-> -cflags-y=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-+=3D -G0 -pipe -msoft-float
+Should the condition also be flipped here, like you did below?
+(can be a follow up if so)
 
--msoft-float should not be removed.  Our consensus (made when I was
-developing https://gcc.gnu.org/r13-6500) is -mabi=3Dlp64s does *not*
-disable floating point instructions, but only disable FPRs for passing
-arguments and return values.  So w/o -msoft-float (or -mfpu=3Dnone) GCC is
-allowed to generate FP instructions everywhere in kernel and it may
-cause kernel FPD exception in the future.
-
---=20
-Xi Ruoyao <xry111@xry111.site>
-School of Aerospace Science and Technology, Xidian University
+> @@ -534,9 +512,11 @@ static int write_partial_skip(struct ceph_connection *con)
+>  		size_t size = min(con->v1.out_skip, (int)PAGE_SIZE);
+>  
+>  		if (size == con->v1.out_skip)
+> -			more = MSG_MORE;
+> -		ret = ceph_tcp_sendpage(con->sock, ceph_zero_page, 0, size,
+> -					more);
+> +			msghdr.msg_flags &= ~MSG_MORE;
+> +		bvec_set_page(&bvec, ZERO_PAGE(0), size, 0);
+> +		iov_iter_bvec(&msghdr.msg_iter, ITER_SOURCE, &bvec, 1, size);
