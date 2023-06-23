@@ -2,269 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B44373BC68
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 18:14:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0EAD73BC65
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 18:14:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232270AbjFWQOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 12:14:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38382 "EHLO
+        id S231888AbjFWQOI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 12:14:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232184AbjFWQO3 (ORCPT
+        with ESMTP id S231272AbjFWQOG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 12:14:29 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 606CF2711;
-        Fri, 23 Jun 2023 09:14:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1687536858; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=osUdcl8MJu6jJsPLPDRqGAOSsZs70O2+E7e3ygIL5kq/ePsZt6Dweq3wbPmBmyrgSr
-    RO6G6+VfOk61LczH5GnqVaDnaIcTI1HOs/Mn448Jw0gaMSX8JyufTgaD5vpbykiKbi6h
-    aCLFP/jFqdk0Ju1Gm/f/yuR+KpSkRa2WUneMoK1HvLGX3BDHQ9hH8IDOUIMvFI4SCvmf
-    a0hUD7teuxQuF1wSGkr9ADLTeLSA2oQ1RDKgWUqFn+APGb6MIeYRk2lAJ5Jm+3UVfevj
-    A1G1DFArmt4Ed9VDKet4qt+3dQx21Y4XAE0+P9mnftvfhoFr17O/EarIpFoeAsxKHD+n
-    dwMg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1687536858;
-    s=strato-dkim-0002; d=strato.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=KpBExheUMRdVCkQAUPzl1K67OZVQYc6gXpL1M+jXXoY=;
-    b=TPhjulZFoRKF79nUldir/AxsHV8FN7Peowg7rQ/nT+3ZMMHbF3q47w2izRjGGilxJh
-    KUMnsvpGJXBVlvx1+zuM5ZXWlkGkeGY6qbiQbn3hLRMB7USL8dj/Vqj4F7kzUjwYWCW3
-    E/tbcVdmZMRym4WEBRszYO4jojndEdHVXAs7jc6r/8O0ISpAY3XQ8yCzZy9lSWvCWhaQ
-    rlYa1NdHhszOu3wML8kAKPFpC3VyRzkIJ3eVeKVIei+5sc/aDfZlwQfshMP2qv5bGS7k
-    QQWMGOtVMkjfACVkxYaVVojdga9xbirOFCLM6lIcJJEIyhaRqVRu8sXXOkBlihiTGEcL
-    UF5w==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1687536858;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=KpBExheUMRdVCkQAUPzl1K67OZVQYc6gXpL1M+jXXoY=;
-    b=q7MBChHkJOMHkmGNuHEiBPNhRltEWZUettyRWW5YlPMWf7Depmn81GUPtl3Tpbdjvm
-    rhzkgd9lSuz03V9GZ8gCSILtXsH1SD8NfsQvlPfodFKcE40d4zkoLS8RjXMxA3b2K7mT
-    M7BjuHCisMUChmRv7hTCNDrZ4o8SA42IvsY3Mk20/PrYe6lmPnKJrZ7H4P9r1cLquocb
-    TqQKi4nIwYdo5/isUYI0VTO7we3RfyhEaF8C6BkO8IWxal96FSow5aAGjL/MdPKgV0pJ
-    oUt1YkYEMUOb3oHVIVCpbsLimGet5d5lHdHg0Isc4t4AqFtxcJTjUFV+a9CPfkhj0qAa
-    Nn4A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1687536858;
-    s=strato-dkim-0003; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=KpBExheUMRdVCkQAUPzl1K67OZVQYc6gXpL1M+jXXoY=;
-    b=+440NP/Cx8lPskk/wOyVk2hRHzkd+/r548PQHd9UwofCkc+o9JCPgJraDO517QFeo9
-    rJLyLccsGBiSzobA3/DA==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj5Apz9PSN6LgsXcGfq2U="
-Received: from imac.fritz.box
-    by smtp.strato.de (RZmta 49.6.0 DYNA|AUTH)
-    with ESMTPSA id jaf17fz5NGEHa3h
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Fri, 23 Jun 2023 18:14:17 +0200 (CEST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [PATCH] MIPS: DTS: CI20: Raise VDDCORE voltage to 1.125 volts
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <20230622175934.71601-1-paul@crapouillou.net>
-Date:   Fri, 23 Jun 2023 18:13:16 +0200
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        list@opendingux.net
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <59F0E1F0-C518-48D8-8AB9-97CA143DD36E@goldelico.com>
-References: <20230622175934.71601-1-paul@crapouillou.net>
-To:     Paul Cercueil <paul@crapouillou.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-X-Mailer: Apple Mail (2.3445.104.21)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 23 Jun 2023 12:14:06 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2072.outbound.protection.outlook.com [40.107.237.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD8CF19AF;
+        Fri, 23 Jun 2023 09:14:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jKOSu19Yors43oKAlM5S+Kq6xHOiPPF6pmjNHpMScH16mKpSJaI6iTQO3yf7z7NkyopxAUeSzShi2l+YmHoEYkvTwQyqrffItAtrka9mzYLWirNIdpt4yf2ATzPgrpyigOSjsxU0mgw7DpskaHsupSxuGBe5OjDaSsP/5dDzZZUvhmPggCEvZq87U/+8Lsp4AQy715nKO38/JwDILyvslehAlQxbkVM619+6My59jsd/lYL0JwNTlI3vtXApCm3/wdgxXDKp/oJNVDX3SolR68AHu0LI9XTYQ0dqVkVb7vCbGRIoHdOUlNaBegUuBc5TFBIh3Z6PjZJYE3E/zz0BKA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2+5Az2Ay6lnnR6Z4tHuf/2s7RNP64VI4vjYWeU/pOxA=;
+ b=aYcIZfgE+UvcR95Q6RGkEKIIUv+ZhobbdhCETbkWkaVlyATh7NofYORtp3AoCE893nEk5CvJ5P84xGeWQWbE1WIDafEiEiP3BVzgzymsXHW6kwUmb5lx5bzeSYUaA97Tri7b2PyLxTp9wRS7m+NiTHMEYamSwMLeTAFLK0KSEEY7Qec31LpvBhxDvh1HP/pav8xQI0Rh3t9K9Pxt6LujDUfqxM7ePHOuUOhSdmI2mRjqWYnOHbNsmKEM/gLm4qd0oXj8fiAnMWaSY8WorrcBYJmPrwjOfbsK6QbpK89fU25jFeWXFp8WOjiYX7qOCvqjByzNOg3xBpVJ33+u0wseag==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2+5Az2Ay6lnnR6Z4tHuf/2s7RNP64VI4vjYWeU/pOxA=;
+ b=MyPsuCxEuZzZ0GKIbDwmjiSuOLLr4LUG20XJwoTVKfOLiY4MZ+tnWH1I1YW9IDargzEFV9CB5Rp7hXsRwkg7RyN5kUoNnMwV1veMlRMEoaZiGxIpLu6D3dbYT50kfid+k3/qcsic2enK8LjGazDtfN89I1gmpKM9coJuooGEsa8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
+ by SA1PR12MB7294.namprd12.prod.outlook.com (2603:10b6:806:2b8::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.23; Fri, 23 Jun
+ 2023 16:14:02 +0000
+Received: from BN8PR12MB3108.namprd12.prod.outlook.com
+ ([fe80::1816:6426:34dd:426]) by BN8PR12MB3108.namprd12.prod.outlook.com
+ ([fe80::1816:6426:34dd:426%7]) with mapi id 15.20.6521.026; Fri, 23 Jun 2023
+ 16:14:02 +0000
+Message-ID: <5f40b5f0-3e19-5cf3-5bd3-eafa4d036119@amd.com>
+Date:   Fri, 23 Jun 2023 12:14:00 -0400
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Cc:     yazen.ghannam@amd.com,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>
+Subject: Re: [PATCH 1/2] x86/mce: Disable preemption for CPER decoding
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>, "Luck, Tony" <tony.luck@intel.com>
+References: <20230622131841.3153672-1-yazen.ghannam@amd.com>
+ <20230622131841.3153672-2-yazen.ghannam@amd.com>
+ <SJ1PR11MB6083664BCFC8047A5FE8F6A9FC22A@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <f03b6c61-1669-c03e-310c-cc1364cf30a8@amd.com>
+ <SJ1PR11MB6083961DFCA3D90922824189FC22A@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <77d51e2f-cd1c-9c30-5bd5-42b1d583db53@amd.com>
+ <SJ1PR11MB60831A6E82329E1C53257F3EFC22A@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <e6b1af5a-774a-c3ef-223e-4595b7ec532a@amd.com>
+ <SJ1PR11MB6083662CBA9A2F40512034D0FC23A@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <20230623160138.GBZJXB4hlFM/ahvROH@fat_crate.local>
+From:   Yazen Ghannam <yazen.ghannam@amd.com>
+In-Reply-To: <20230623160138.GBZJXB4hlFM/ahvROH@fat_crate.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BN0PR04CA0148.namprd04.prod.outlook.com
+ (2603:10b6:408:ed::33) To BN8PR12MB3108.namprd12.prod.outlook.com
+ (2603:10b6:408:40::20)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3108:EE_|SA1PR12MB7294:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6fa6f91b-90b5-4de1-e291-08db7404dc12
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: whsxfomDdZGFWdsPYZ8oUDr3jpgvIA7iHcJSya6ta1tS1PSqwe2R+kgaKPipSsVtXDGDV6k8AzPr9o+F99phnlVDL2e5qZrbvRfYHl5jFg8TOMUIAKnBkiFIXDr7xQOn0KF3N/4Hp3U8OFlvoJf535WCaq7qWEKzKDg5TWw4D9PkCcFqiQXvjzvW6bEIdn1G+Zd99nO6YY0aPLed8CeYGnYRlMwBvGx1LW6V74rhHWiQNlIONZkut30FuhamwwjMfo0WSujTxslww0d0GWELv6Us4T4Iq6srWrVnpTkp8YRWkI4SMCoPmckV4kAypR+0pXVqRCvl9xJotGmfIbmCsWOioQB4rnF+K2Bv11wJvque7tbW3VQhSwB8djeNzFYr6jQdH56e3U3DMTA1Fc0AAGOmFEH+yH12dr7BBj8JywRMSOypqh1gjVwwPtcsUpQDPv3jwoWh5xk41fzHg2sPmWtWXmVx5bej/HHnO+e6QfhKt1Cbi6an6tc2nR2ECmALhNjZY5t6ubdBH5YGuWFvZ3hxbXGa5BMRXf9D86cyk0ywKjdU/jgOTEd6pDLcseprIH1ua+xDlJAeMVS0OmVakuKCE6ftU1JMeZCzIV8tSvYe569JJzJJ2GCrcmEMTKVTaChbJEPGszzBIsGFbvjB3w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(136003)(366004)(39860400002)(376002)(451199021)(41300700001)(5660300002)(44832011)(8676002)(8936002)(4326008)(66476007)(66946007)(316002)(2906002)(4744005)(66556008)(2616005)(53546011)(186003)(6512007)(6506007)(83380400001)(26005)(36756003)(31686004)(31696002)(86362001)(38100700002)(6486002)(110136005)(54906003)(478600001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eitBTWFaYklkZ3pZc3kzOHpRSHlZN1NUNUhUVlpaQ0Q5Z2ZaQklmS2NXZExJ?=
+ =?utf-8?B?QWd2RlNCNnJGRnBYRlJyR04yT1U4bDZESzFCekVxaXJENUVhUkNRbmMxYlFM?=
+ =?utf-8?B?ODBWZElZRzQ5azFXSzdHYXVhYWg4R0tEeHFvSDJMV1NhSTFyRDBxQ01sTGZm?=
+ =?utf-8?B?MFJzWlhTL0lZNnNXNEtlQVlLWDhPMm1zUVdIQmRhZFlJeTlWeFhucjNxTEwr?=
+ =?utf-8?B?aUlDMVIwL0c0bkJqSWV1ZXVvWEZWTjFpZTRhSDRwOWdCRWdrUFJvSVByditD?=
+ =?utf-8?B?QkVhMEU2eDRxNnVaVzFOVWg4SmRUS1p4bWx3MlVwSWVrQXUwQ2QrRitVU0hH?=
+ =?utf-8?B?ZFZFK0g4TDIxSlJ1UUJyMjBxUWNKcTdXWG0wNHR2b1VVNlRyVllac3VVV3l5?=
+ =?utf-8?B?c1B0b3g1UjZWeXpKQ1JUajF6bzNja2hMR1BYMHZoMEFLKzlDcE50RDVua1lO?=
+ =?utf-8?B?NDF4WGxkdU41TWhud1M2aG15V1hwcDZEOGN3RllwOW1PYTQ4RHlMYkRoQ1M3?=
+ =?utf-8?B?d1B2OEVHaWlYS2dsZjhiQVJSMG5kaHdMS1o4TmlYVGtUZjF6RjVKYkZ2NnR5?=
+ =?utf-8?B?RUloeGo1NkE4VDN6cjNJODBKd1BPTFI5d1FXS2dBUWZOUmwxMXBSellkRm92?=
+ =?utf-8?B?OE9SQ09KaXFtaDZ1OWRucEFYNFpaSythc0FudERMS1k3aVdFRVJwaGxPdEdZ?=
+ =?utf-8?B?bkx5RVIxeldZSGNEbVJCb2tWSEg2S1R6b0Fjc1gveG9JbldWb0pYSGZhYkI1?=
+ =?utf-8?B?NnhCeWZ5NkRwQlZDYllLd0NpQnRCMDFMSkc0b0RIOTVLdGRMaFJtN2lkN3BG?=
+ =?utf-8?B?eUhJVXlFQkdWbkMzU2l2ZUV6SXQyRnRIMHI2RVBsZ1IzeFFvYUJhVzlJVTNw?=
+ =?utf-8?B?Rjg1T0pqZ0pMQVA3NDhVaHkrUzNlQnNualppcFVYM2lleXdLRXNYZ0FuNXhj?=
+ =?utf-8?B?c2V2RnplWWVZZCt2VU5OMXJZOVNaKzRKdUd1TFlVZUl1L2Y0NFFVSDI4UWN0?=
+ =?utf-8?B?OEd4cGltM2FkNmZId090YUxyUkExRDlrOVVhdzdWRUtpbWNDOFhqUVgrUXpD?=
+ =?utf-8?B?V24zcnRJZlIyQWc3cVExbE1wZnV4L29lWTdtWUgwbjlWMUZJbmVMMTFHd0RF?=
+ =?utf-8?B?NzRmZTJ3U3FEVkdkMEEyWmZ2OEo5QmJ3d3NzL0xURTRlSlhabFRQcHh3UEpx?=
+ =?utf-8?B?RWJGbWx1M0R3QVo1VkNEdWFjRDlKd3FMQlJESkl4MXV1ZU5HOHFqZ3Y5REdX?=
+ =?utf-8?B?RzJxdW9jN1lteXpuaGI2V0tXOFk4ckRWTFRzQldxOG84SE5lZnpwMjdtblEr?=
+ =?utf-8?B?RENUcnNDZnE5OHJ0d2JMeWxMaThnaStjbGRZdkx5ZGFxQThaSTIwTTB6b01S?=
+ =?utf-8?B?am1ycGtIQVUwYUE0VW9rVk1vK09lWFJnb29ER3JLNlBLWkxwQnlTOGFkSE9E?=
+ =?utf-8?B?L2tDT2lrc25sR1pta3JsYkZCUmJLdHlHVEsrY0NrWksyU1ZiZ28yOTk2d2dP?=
+ =?utf-8?B?RlpBR0MwZ2VNTUNnaS83Vm9UeUVWZ0ZpaGIxanNPelFoc1RRL3Q1QjBNNFRw?=
+ =?utf-8?B?K3B6cDhmbVp1bEJ2OERkbmZVR2R4RnNTSnF0YXY3NHB3T0hZZEdmcVpVUW9Z?=
+ =?utf-8?B?a3F3SU9EaVFYNVRsektCMERWTnZ2T0taYy9UQnFhOTJPVEQ4dVhoVWpnV2Ur?=
+ =?utf-8?B?eStiUW9wTjFlWjM2OGJ4TlRBUTRBaS9GTEhLamlXT1phVUd0U2lIYXFqZzVG?=
+ =?utf-8?B?bFpjMWc1Q0laUW44cFkzcVFWM1RTNWlxSHRWTy9Db1lFUGxTQnFlaytOWXkw?=
+ =?utf-8?B?Wlp3QkFSRDQ3ekQrTFVHZ0RqR2xBbHMxMTlRSmVYbDFTN1hzWE9VeE9ZWHBL?=
+ =?utf-8?B?ZzhsZzJPY0IyTFlQaVlVRVZHdWY4REhsTDdRT1VORWQ0bUxEc0JENlA1aGor?=
+ =?utf-8?B?cithbzAreUU0V2dyV2N1amduamdxQ2VHTFRJSENxVlgrVlBWQXBSY1JYd0N1?=
+ =?utf-8?B?VjRvYmhuSHRIYjR1ak05WFI3NmwxRU1SelFRV0g4UVQ1NVBVV3o5VGYrQTF4?=
+ =?utf-8?B?V0NOd0dvSjNTak5tSDBLSzZhbVJIVEMrR09ZazhyY2RFNFgyUGNsenF4Q25B?=
+ =?utf-8?Q?UVnicn6dIe1cP43h4OXYjqpPk?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6fa6f91b-90b5-4de1-e291-08db7404dc12
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jun 2023 16:14:02.5023
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: SqqoIb+j3RgSSEQ3h4cLjBSVQ3Km9hftHcz6sWhdLE8bKaZ/NBOWeeifSmsaO+OK0ETDh1Jtz7erusom6LOs7w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7294
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul, Thomas,
-here are my test results.
+On 6/23/2023 12:01 PM, Borislav Petkov wrote:
+> On Fri, Jun 23, 2023 at 03:44:06PM +0000, Luck, Tony wrote:
+>> There is (or was) support for mixed stepping in the microcode update
+>> code. Not sure if Boris and Ashok came to any agreement on keeping it.
+> 
+> Yap, needs to stay on AMD as the loader has always supported it.
+> 
 
-> Am 22.06.2023 um 19:59 schrieb Paul Cercueil <paul@crapouillou.net>:
->=20
-> Commit 08384e80a70f ("MIPS: DTS: CI20: Fix ACT8600 regulator node
-> names") caused the VDDCORE power supply (regulated by the ACT8600's
-> DCDC1 output) to drop from a voltage of 1.2V configured by the
-> bootloader, to the 1.1V set in the Device Tree.
->=20
-> According to the documentation, the VDDCORE supply should be between
-> 0.99V and 1.21V; both values are therefore within the supported range.
->=20
-> However, VDDCORE being 1.1V results in the CI20 being very unstable,
-> with corrupted memory, failures to boot, or reboots at random.
+I don't understand this. Maybe it's a wording thing. I see the following 
+in a PPR document.
 
-... and damaging the file system on SD card.
+Section: Mixed Processor Revision Supports
 
-> The
-> reason might be succint drops of the voltage below the minimum =
-required.
+AMD Family XXh Models XXh processors with different OPNs or different 
+revisions cannot be mixed in a multiprocessor system. If the BIOS 
+detects an unsupported configuration, the system will halt prior to X86 
+core release and signal a port 80 error code.
 
-1. with your patches (except this one) on top of upstream v6.4-rc7 and
-ci20_defconfig I can still not boot with 1.100V.
+Is stepping not included in this statement?
 
-2. but also not at 1.125V as by this patch.
-[    0.647637] DCDC1: Bringing 1200000uV into 1125000-1125000uV
+Or do you mean that we can support mixed microcode systems? Meaning the 
+processors are identical but with different microcode versions.
 
-3. my board needs 1.150V as minimum, reporting:
-[    0.647627] DCDC1: Bringing 1200000uV into 1150000-1150000uV
-
-That is good news that it does not need 1.200V at the upper limit.
-
-4. next, with this setup I can see the bluetooth chip (with default MAC
-address 43:30:B1:00:00:00), but it is not useable (maybe my user space).
-
-And there no WiFi. Rather, I have to disable the brcmfmac driver or
-otherwise I can't even complete boot (hangs in a later stage) at all.
-
-5. finally the mysterious result:
-
-With all this merged with the letux-os kernel (and manually fixing minor
-merge conflicts) and using letux_defconfig I can boot. Even with 1.100V
-in the device tree, checked with /sys/kernel/debug):
-
-root@letux:~# cat /sys/kernel/debug/regulator/regulator_summary=20
- regulator                      use open bypass  opmode voltage current  =
-   min     max
-=
---------------------------------------------------------------------------=
--------------
- regulator-dummy                  3    2      0 unknown     0mV     0mA  =
-   0mV     0mV=20
-    13500000.usb-vusb_a           1                                 0mA  =
-   0mV     0mV
-    13500000.usb-vusb_d           1                                 0mA  =
-   0mV     0mV
- eth0_power                       1    1      0 unknown  3300mV     0mA  =
-3300mV  3300mV=20
-    16000000.dm9000-vcc           1                                 0mA  =
-   0mV     0mV
- otg_power                        1    2      0 unknown  5000mV     0mA  =
-5000mV  5000mV=20
-    1000003c.usb-phy-vcc          1                                 0mA  =
-   0mV     0mV
-    usb_phy-vcc                   0                                 0mA  =
-   0mV     0mV
- vcc_33v                          8    9      0 unknown  3300mV     0mA  =
-3300mV  3300mV=20
-    13450000.mmc-vqmmc            1                                 0mA  =
-   0mV     0mV
-    13450000.mmc-vmmc             1                                 0mA  =
-3300mV  3400mV
-    DCDC1                         1    0      0 standby  1100mV     0mA  =
-1100mV  1100mV=20
-    DCDC2                         1    0      0 standby  1500mV     0mA  =
-1500mV  1500mV=20
-    DCDC3                         1    0      0 unknown  3300mV     0mA  =
-3300mV  3300mV=20
-    LDO5                          1    0      0 unknown  2500mV     0mA  =
-2500mV  2500mV=20
-    LDO6                          1    1      0  normal  1800mV     0mA  =
-1800mV  1800mV=20
-       13460000.mmc-vqmmc         1                                 0mA  =
-   0mV     0mV
-    LDO7                          0    0      0 unknown  2800mV     0mA  =
-2800mV  2800mV=20
-    LDO8                          0    0      0 unknown  1500mV     0mA  =
-1500mV  1500mV=20
- SUDCDC_REG4                      2    1      0  normal  5000mV     0mA  =
-5000mV  5000mV=20
-    bt_power                      2    1      0 unknown  3300mV     0mA  =
-3300mV  3300mV=20
-       wifi_power                 2    1      0 unknown  3300mV     0mA  =
-3300mV  3300mV=20
-          13460000.mmc-vmmc       1                                 0mA  =
-3300mV  3400mV
- LDO_REG9                         1    0      0 unknown  3300mV     0mA  =
-3300mV  3300mV=20
- LDO_REG10                        1    0      0 unknown  1200mV     0mA  =
-1200mV  1200mV=20
-root@letux:~# uname -a
-Linux letux 6.4.0-rc7-letux-ci20+ #13881 SMP PREEMPT Fri Jun 23 17:23:42 =
-CEST 2023 mips GNU/Linux
-root@letux:~#=20
-
-And I there have WiFi working fine.
-
-But no Bluetooth interface at all (although driver is compiled).
-
-A potential hint could be that DCDC1 is enabled a little later during =
-boot than with ci20_defconfig:
-
-[    1.077926] DCDC1: Bringing 1200000uV into 1100000-1100000uV
-[    1.096997] DCDC1: 1100 mV, enabled
-
-And another test with trying 1.000V hangs immediately after this:
-
-[    1.032846] DCDC1: Bringing 1200000uV into 1000000-1000000uV
-
-Maybe it is a too big step during operation.
-
-For the records:
-
-- I just swapped the clean compiled uImage, kernel modules and ci20.dtb
-  between all these tests (and fsck the SD card before).
-
-- we have some experimental SMP patches by Yanjie Zhou (and other nice
-  stuff not pushed upstream) in the Letux kernel so that any of thes
-  may have an influence.
-
-So I'd say let's postpone this 1.125V patch until your other patches
-arrive upstream. Then I will rebase our Letux kernel anyways and then
-I can analyse a little easier what makes all these differences (because
-then no merge and manual conflict resolution is involved any more and
-there are better chances for a bisect to be helpful).
-
-Best regards,
-Nikolaus
-
-
->=20
-> Raising the minimum voltage to 1.125 volts seems to be enough to =
-address
-> this issue, while still keeping a relatively low core voltage which
-> helps for power consumption and thermals.
->=20
-> Fixes: 08384e80a70f ("MIPS: DTS: CI20: Fix ACT8600 regulator node =
-names")
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
->=20
-> ---
-> Cc: H. Nikolaus Schaller <hns@goldelico.com>
-> ---
-> arch/mips/boot/dts/ingenic/ci20.dts | 4 ++--
-> 1 file changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/arch/mips/boot/dts/ingenic/ci20.dts =
-b/arch/mips/boot/dts/ingenic/ci20.dts
-> index cec0caa2350c..a141a699b790 100644
-> --- a/arch/mips/boot/dts/ingenic/ci20.dts
-> +++ b/arch/mips/boot/dts/ingenic/ci20.dts
-> @@ -298,8 +298,8 @@ act8600: act8600@5a {
->=20
-> 		regulators {
-> 			vddcore: DCDC1 {
-> -				regulator-min-microvolt =3D <1100000>;
-> -				regulator-max-microvolt =3D <1100000>;
-> +				regulator-min-microvolt =3D <1125000>;
-> +				regulator-max-microvolt =3D <1125000>;
-> 				vp1-supply =3D <&vcc_33v>;
-> 				regulator-always-on;
-> 			};
-> --=20
-> 2.40.1
->=20
-
+Thanks,
+Yazen
