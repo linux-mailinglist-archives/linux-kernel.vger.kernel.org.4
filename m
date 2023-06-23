@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ED9473BA30
+	by mail.lfdr.de (Postfix) with ESMTP id 8754D73BA31
 	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 16:30:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232209AbjFWOal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 10:30:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58956 "EHLO
+        id S232195AbjFWOat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 10:30:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232164AbjFWOa3 (ORCPT
+        with ESMTP id S231310AbjFWOab (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 10:30:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D85322681
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 07:29:48 -0700 (PDT)
+        Fri, 23 Jun 2023 10:30:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBABD1706
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 07:29:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
         s=mimecast20190719; t=1687530587;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=kqyY+x2QLggisqHxk6p5/e1iQd0i792KL+XWdM1gQLA=;
-        b=NYgDEUlu7/1y4OvD/pIcnpYOeQNQTjIlkpHLvKIl5eStysE7ntzvhuaHcxZE6t4n2G9CgF
-        R7UMpCh1NznQaXtWeRL9jAJguT8NdhuyKEJtYhHjDIRCPcfLzFGd0IdQunk0M4JrcVjC4P
-        4FunL9MOEH3DIG4yhMmlAUiHBLtIAD0=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=eaaAtm4E0YzeLzCpC+sle/rLwyV4UWhhjWGc4/kvdNw=;
+        b=LeRVe2YosrM8EFo6DWbVO/StP4LggomZjc2H2pqnTRMLTxU/KPVBk5crAHEy3ic7J63IzP
+        jwsL37jvGaWGCdEyusG7RjAzmxLyjIRDnunrXeQ9y1aNbCvxskBPbIHNcO0OF+6zcVEuXI
+        1RN68cGB4YSLXpjdv/Btc68UdS5VP5U=
+Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com
+ [209.85.167.198]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-281-rwDXeA9mOmG1LnIQeY9osg-1; Fri, 23 Jun 2023 10:29:44 -0400
-X-MC-Unique: rwDXeA9mOmG1LnIQeY9osg-1
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-3f8283a3a7aso1822091cf.1
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 07:29:44 -0700 (PDT)
+ us-mta-640-eXSct1RDNYqp0SuVv9vN6g-1; Fri, 23 Jun 2023 10:29:46 -0400
+X-MC-Unique: eXSct1RDNYqp0SuVv9vN6g-1
+Received: by mail-oi1-f198.google.com with SMTP id 5614622812f47-39cabe624deso48380b6e.1
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 07:29:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687530584; x=1690122584;
+        d=1e100.net; s=20221208; t=1687530585; x=1690122585;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=kqyY+x2QLggisqHxk6p5/e1iQd0i792KL+XWdM1gQLA=;
-        b=mHS1QSlwPkT4DoxpOmz4Yd2W90r1rn65J0dBpx6uD0zoW0VdnpycMYzGovMEJg4Sne
-         RVfl/oUiwRyFQitSO9oztFY1igHCP7eK9dnq/P+T4HDgKAzJUI7YkR64yFxqWu5aztFv
-         YXvepvwH1IbpaIaHhJOLKADyOuoRu25lKxjM0iqusgBX9kdTCPb2M3yutGcfcUBnOZge
-         BZSVkBtRtjEaV1wfRsp27wi0dPTLXxABD59Dy6J/jiIszvhk89D8HkuXZqsCX9BTK6fe
-         YNB3dYvYR3rLNNtjbtc2TDklMbJSxrcfYOFd4x+f9klGb+c1sK0rUw+z7myWNa9ibbM/
-         zCSQ==
-X-Gm-Message-State: AC+VfDyDCCWGOUQhwo2WvthaXpS0L/ZAYxBDTlwfaXIikp6BQ/MGmVw5
-        jRWSyZHMtQLmvCofD7KzUF72xoLGF4fEBjob6xnPGr+7FqQTZr7mxqlLAzs/L11NNvkOwUOVxoJ
-        g8RMHielV6rGdzxJO9WZxhAlh
-X-Received: by 2002:ad4:5b8a:0:b0:62f:e4de:5bed with SMTP id 10-20020ad45b8a000000b0062fe4de5bedmr25208991qvp.5.1687530583984;
-        Fri, 23 Jun 2023 07:29:43 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ73mR/vS6ro7yIhMCL42Ko8gAJI2pqYLlmvye+6zRW8sb2ZlI2HrV+rMo76OgVpAmu4iXJJhg==
-X-Received: by 2002:ad4:5b8a:0:b0:62f:e4de:5bed with SMTP id 10-20020ad45b8a000000b0062fe4de5bedmr25208969qvp.5.1687530583682;
-        Fri, 23 Jun 2023 07:29:43 -0700 (PDT)
+        bh=eaaAtm4E0YzeLzCpC+sle/rLwyV4UWhhjWGc4/kvdNw=;
+        b=gDq/ftp1IK/FhgHav3WPPFUGJa4IDAernAQFeSH6Cnfi/419jzbA2e1OqMRKk/L5lk
+         bGa2XcKKBd/ZRVkaSwNMG0H3Ia6CLwWxy07O4dPnjYkjW/GY9IPqZcBF+QpQWD/TrSwY
+         bJS/QZEiUfvIBHkju8e0zD6hg9DtKczWEMugnLvTF2sTrQcfRWqmAXdstXZSp/QvGPh8
+         obeLXLAe1/e3ZMk79yjixswi/xhl2+acYTbRWqLEUEbTgJojeIBKzyrUGasC6n9CuEgq
+         9IRTmry6t+9+gRKw7BX+oL5Mmhh2PMTqIgK9toiNoT3KViFzOhkYhOSNKeRtv6ZG9DKO
+         nltA==
+X-Gm-Message-State: AC+VfDzakg+vI8ZhpvKeU1979PhKyvoBXaUPtmoRktGL/mKUAQpk0u2G
+        +hXrpzq8vxxqAa8ZdhwIYs5KRup+aGm3rr7SB4jLOdg/kMa3EUyLlFPKNzoomoAf44MWqr1C2j6
+        J83c17Ip0tjQXBvNMxHp7gv4u
+X-Received: by 2002:aca:e1c6:0:b0:397:f116:8f67 with SMTP id y189-20020acae1c6000000b00397f1168f67mr15159992oig.0.1687530585229;
+        Fri, 23 Jun 2023 07:29:45 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6GO65T8HReZxqXh+dPcy+HPwi177tHnPRkclvjCV4jFXu/xj5JsB/zleCQUHHU+pcmmBAOMw==
+X-Received: by 2002:aca:e1c6:0:b0:397:f116:8f67 with SMTP id y189-20020acae1c6000000b00397f1168f67mr15159971oig.0.1687530584997;
+        Fri, 23 Jun 2023 07:29:44 -0700 (PDT)
 Received: from x1n.. (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
-        by smtp.gmail.com with ESMTPSA id b9-20020a0cc989000000b0062821057ac7sm5104827qvk.39.2023.06.23.07.29.42
+        by smtp.gmail.com with ESMTPSA id b9-20020a0cc989000000b0062821057ac7sm5104827qvk.39.2023.06.23.07.29.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Jun 2023 07:29:43 -0700 (PDT)
+        Fri, 23 Jun 2023 07:29:44 -0700 (PDT)
 From:   Peter Xu <peterx@redhat.com>
 To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
 Cc:     Lorenzo Stoakes <lstoakes@gmail.com>,
@@ -72,9 +72,9 @@ Cc:     Lorenzo Stoakes <lstoakes@gmail.com>,
         Mike Kravetz <mike.kravetz@oracle.com>,
         Hugh Dickins <hughd@google.com>,
         Jason Gunthorpe <jgg@nvidia.com>
-Subject: [PATCH v3 3/8] mm/hugetlb: Add page_mask for hugetlb_follow_page_mask()
-Date:   Fri, 23 Jun 2023 10:29:31 -0400
-Message-Id: <20230623142936.268456-4-peterx@redhat.com>
+Subject: [PATCH v3 4/8] mm/gup: Cleanup next_page handling
+Date:   Fri, 23 Jun 2023 10:29:32 -0400
+Message-Id: <20230623142936.268456-5-peterx@redhat.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230623142936.268456-1-peterx@redhat.com>
 References: <20230623142936.268456-1-peterx@redhat.com>
@@ -90,80 +90,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-follow_page() doesn't need it, but we'll start to need it when unifying gup
-for hugetlb.
+The only path that doesn't use generic "**pages" handling is the gate vma.
+Make it use the same path, meanwhile tune the next_page label upper to
+cover "**pages" handling.  This prepares for THP handling for "**pages".
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+Reviewed-by: Lorenzo Stoakes <lstoakes@gmail.com>
+Acked-by: David Hildenbrand <david@redhat.com>
 Signed-off-by: Peter Xu <peterx@redhat.com>
 ---
- include/linux/hugetlb.h | 8 +++++---
- mm/gup.c                | 3 ++-
- mm/hugetlb.c            | 5 ++++-
- 3 files changed, 11 insertions(+), 5 deletions(-)
+ mm/gup.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-index beb7c63d2871..2e2d89e79d6c 100644
---- a/include/linux/hugetlb.h
-+++ b/include/linux/hugetlb.h
-@@ -131,7 +131,8 @@ int move_hugetlb_page_tables(struct vm_area_struct *vma,
- int copy_hugetlb_page_range(struct mm_struct *, struct mm_struct *,
- 			    struct vm_area_struct *, struct vm_area_struct *);
- struct page *hugetlb_follow_page_mask(struct vm_area_struct *vma,
--				unsigned long address, unsigned int flags);
-+				      unsigned long address, unsigned int flags,
-+				      unsigned int *page_mask);
- long follow_hugetlb_page(struct mm_struct *, struct vm_area_struct *,
- 			 struct page **, unsigned long *, unsigned long *,
- 			 long, unsigned int, int *);
-@@ -297,8 +298,9 @@ static inline void adjust_range_if_pmd_sharing_possible(
- {
- }
- 
--static inline struct page *hugetlb_follow_page_mask(struct vm_area_struct *vma,
--				unsigned long address, unsigned int flags)
-+static inline struct page *hugetlb_follow_page_mask(
-+    struct vm_area_struct *vma, unsigned long address, unsigned int flags,
-+    unsigned int *page_mask)
- {
- 	BUILD_BUG(); /* should never be compiled in if !CONFIG_HUGETLB_PAGE*/
- }
 diff --git a/mm/gup.c b/mm/gup.c
-index abcd841d94b7..9fc9271cba8d 100644
+index 9fc9271cba8d..4a00d609033e 100644
 --- a/mm/gup.c
 +++ b/mm/gup.c
-@@ -780,7 +780,8 @@ static struct page *follow_page_mask(struct vm_area_struct *vma,
- 	 * Ordinary GUP uses follow_hugetlb_page for hugetlb processing.
- 	 */
- 	if (is_vm_hugetlb_page(vma))
--		return hugetlb_follow_page_mask(vma, address, flags);
-+		return hugetlb_follow_page_mask(vma, address, flags,
-+						&ctx->page_mask);
- 
- 	pgd = pgd_offset(mm, address);
- 
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 27367edf5c72..b4973edef9f2 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -6454,7 +6454,8 @@ static inline bool __follow_hugetlb_must_fault(struct vm_area_struct *vma,
- }
- 
- struct page *hugetlb_follow_page_mask(struct vm_area_struct *vma,
--				unsigned long address, unsigned int flags)
-+				      unsigned long address, unsigned int flags,
-+				      unsigned int *page_mask)
- {
- 	struct hstate *h = hstate_vma(vma);
- 	struct mm_struct *mm = vma->vm_mm;
-@@ -6502,6 +6503,8 @@ struct page *hugetlb_follow_page_mask(struct vm_area_struct *vma,
- 			page = ERR_PTR(ret);
+@@ -1124,7 +1124,7 @@ static long __get_user_pages(struct mm_struct *mm,
+ 			if (!vma && in_gate_area(mm, start)) {
+ 				ret = get_gate_page(mm, start & PAGE_MASK,
+ 						gup_flags, &vma,
+-						pages ? &pages[i] : NULL);
++						pages ? &page : NULL);
+ 				if (ret)
+ 					goto out;
+ 				ctx.page_mask = 0;
+@@ -1194,19 +1194,18 @@ static long __get_user_pages(struct mm_struct *mm,
+ 				ret = PTR_ERR(page);
+ 				goto out;
+ 			}
+-
+-			goto next_page;
+ 		} else if (IS_ERR(page)) {
+ 			ret = PTR_ERR(page);
  			goto out;
  		}
++next_page:
+ 		if (pages) {
+ 			pages[i] = page;
+ 			flush_anon_page(vma, page, start);
+ 			flush_dcache_page(page);
+ 			ctx.page_mask = 0;
+ 		}
+-next_page:
 +
-+		*page_mask = (1U << huge_page_order(h)) - 1;
- 	}
- out:
- 	spin_unlock(ptl);
+ 		page_increm = 1 + (~(start >> PAGE_SHIFT) & ctx.page_mask);
+ 		if (page_increm > nr_pages)
+ 			page_increm = nr_pages;
 -- 
 2.40.1
 
