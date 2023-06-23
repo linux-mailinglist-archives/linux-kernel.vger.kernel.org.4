@@ -2,221 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D420973B81B
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 14:50:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31F3873B81C
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 14:50:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231271AbjFWMuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 08:50:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37446 "EHLO
+        id S229745AbjFWMuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 08:50:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231817AbjFWMty (ORCPT
+        with ESMTP id S231768AbjFWMtx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 08:49:54 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54BA12696
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 05:49:16 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id 98e67ed59e1d1-25e934f1e6cso131109a91.0
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 05:49:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1687524556; x=1690116556;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=N8pNNe3/2YXc1UbpwIO0yIQjjCMHlVzYoQIGO6mvjFk=;
-        b=QGBZmpep2cOxIyWlosUFsMcpQ9kg5K87eUwaCkoJh4THNNRNLwHsme8TdeLzEMWIeP
-         VdLJNjtWaWRTs1BgqyEhXBtiEVFykoOa991SQObW/BJT+zi5DexUk11xpe7roRZxmWon
-         2pGVoZYSHZZ/jcf4PvMYbIbG4+IvNv5UsypZ1n69fFVKkkIf9VFUIy36CCJ41i5gEjmj
-         pEUDPSL4513Qlt5OfOQBEaAkajaH6+U57PEpyNffGcW5GRaJN9aybo3oePHHyCF2AmXB
-         fAsbevik08duVzt2PX0xDdykhFrKiqCqdIA2Nyt6p8FSXga6r8QFK1BCiiTQLBdQZfhD
-         b2Lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687524556; x=1690116556;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=N8pNNe3/2YXc1UbpwIO0yIQjjCMHlVzYoQIGO6mvjFk=;
-        b=KBIWdOdXL24kx3dJBVaFaRxkm3zO841M+zp7gGgw8GqmsChQlqZX+gKDUfsragcWgi
-         Z4z2OtxfqwFwoJY+iEg4LI5S2sTYOvk0FC+77EZnJCyM5Xr+KrenixtNaXLWIL8T9I9Y
-         V5qVpNx03Q4z6WKhNMngSqwnn9Reti2uCObnxrgHCJO3PWA7o4KXmzXpa/XacD/MFFrc
-         dyFC1ulDRbEzPe8fJ+cQupQs7yOt9i95rOdmyeT6yTgND3yVgr/jnT7+F+1/kaOFq2Yf
-         g6OaYzmRTzxIG7zIoIVzggL5StfdrmK0rGioQiUbQR578rokBMCtcl7g1pYKGvpVgjxm
-         5DSw==
-X-Gm-Message-State: AC+VfDzhuJqon6TUizzAmtcDfbCFSria1YSs5vQ6OWlFkdrO0Ma9El42
-        ioQYUWbdIw4f67S7cqEJUQYrnDU6HaojiQjOz/c=
-X-Google-Smtp-Source: ACHHUZ6eQKAAK+mFZK9b/rl5yBeScp7LGUAVTtY7Qwt+jrMMbGjG/tQ037wkOBUmA1P5xX8mDtOLpg==
-X-Received: by 2002:a17:90b:350f:b0:258:d367:63c with SMTP id ls15-20020a17090b350f00b00258d367063cmr24920553pjb.1.1687524555690;
-        Fri, 23 Jun 2023 05:49:15 -0700 (PDT)
-Received: from [10.4.168.167] ([139.177.225.254])
-        by smtp.gmail.com with ESMTPSA id 30-20020a17090a001e00b0026135208e97sm1471795pja.19.2023.06.23.05.49.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Jun 2023 05:49:15 -0700 (PDT)
-Message-ID: <d8632edc-5021-4dc8-b75a-3995a710f196@bytedance.com>
-Date:   Fri, 23 Jun 2023 20:49:05 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [PATCH 02/29] mm: vmscan: introduce some helpers for dynamically
- allocating shrinker
-Content-Language: en-US
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     akpm@linux-foundation.org, tkhai@ya.ru, vbabka@suse.cz,
-        roman.gushchin@linux.dev, djwong@kernel.org, brauner@kernel.org,
-        paulmck@kernel.org, tytso@mit.edu, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        dm-devel@redhat.com, linux-raid@vger.kernel.org,
-        linux-bcache@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org,
-        linux-btrfs@vger.kernel.org
-References: <20230622085335.77010-1-zhengqi.arch@bytedance.com>
- <20230622085335.77010-3-zhengqi.arch@bytedance.com>
- <ZJU3s8tyGsYTVS8f@dread.disaster.area>
-From:   Qi Zheng <zhengqi.arch@bytedance.com>
-In-Reply-To: <ZJU3s8tyGsYTVS8f@dread.disaster.area>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Fri, 23 Jun 2023 08:49:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48E4B10C1;
+        Fri, 23 Jun 2023 05:49:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CFC9961A41;
+        Fri, 23 Jun 2023 12:49:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3191BC433C0;
+        Fri, 23 Jun 2023 12:49:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687524591;
+        bh=9jQs0S7PGplotxU57o2pvvL0Cr/c4F03tmay59rArwI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=j8Wqa0v9XlimtVUmIin2dvD0fnRgMA7b4U28B0NWLIDYi1qvR9Ktx3/8v1bgNf5Jh
+         HXGZJIVO9MqsoeCUlVQBZWxz9SWcRaiySP/HwRetmN15uXQOb9Ky2YLq2OggS/c1Gi
+         1pO51CHvYn1hpFtK5Axn8lM8rsJlrINOm/fPDGowDJCoPORW0aDyoeIPo6yBrHYyJQ
+         E+4jyW7yToQsA2gz8bEkPRf+MRoL9N/WHa2ClDP//nL1rltx+/wFc7V83nU9tF0ATe
+         ZNtYzPE4oUmNiv/Q83eqM9P9SmtXG23njnA/JfHPq8lhd1sDQtJBy3wuE0+WLATwjb
+         VYeKusnC6qG/Q==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1qCgEW-007keF-Ga;
+        Fri, 23 Jun 2023 13:49:48 +0100
+Date:   Fri, 23 Jun 2023 13:49:47 +0100
+Message-ID: <86mt0qbaxg.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     Saravana Kannan <saravanak@google.com>,
+        Anup Patel <anup@brainfault.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Conor Dooley <conor@kernel.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, iommu@lists.linux.dev,
+        Android Kernel Team <kernel-team@android.com>
+Subject: Re: [PATCH v4 08/10] irqchip: Add RISC-V advanced PLIC driver
+In-Reply-To: <CAK9=C2XNAXaorxeNAB02o3_mYe3fsDSHS7rj=5+=q=d67Od60A@mail.gmail.com>
+References: <20230613153415.350528-1-apatel@ventanamicro.com>
+        <20230613153415.350528-9-apatel@ventanamicro.com>
+        <CAGETcx-hoPNanAwe4++6roqBXwSdc7z6Ei=-r9z6qFG1U7xVXg@mail.gmail.com>
+        <CAAhSdy3WH_nrKC-3AC4RHn9=crh6mPzaKO8jmAeo2j8-VJnT5g@mail.gmail.com>
+        <CAGETcx_DkuyZ+c50QmA7eu8vUByfVosABugZpd7R8NgR8Wc-FA@mail.gmail.com>
+        <CAK9=C2X4+aTs=+WdE0ba1qPDu67TiAKgE2Rx-qqD5+TJwYCKOQ@mail.gmail.com>
+        <CAGETcx_KJURkxEuZOgPZR=fA4CaHnAwwRfU_JLJ28absFWAtzg@mail.gmail.com>
+        <CAK9=C2XNAXaorxeNAB02o3_mYe3fsDSHS7rj=5+=q=d67Od60A@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: apatel@ventanamicro.com, saravanak@google.com, anup@brainfault.org, palmer@dabbelt.com, paul.walmsley@sifive.com, tglx@linutronix.de, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, robin.murphy@arm.com, joro@8bytes.org, will@kernel.org, frowand.list@gmail.com, atishp@atishpatra.org, ajones@ventanamicro.com, conor@kernel.org, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, iommu@lists.linux.dev, kernel-team@android.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dave,
+[here, let me trim all of this nonsense...]
 
-On 2023/6/23 14:12, Dave Chinner wrote:
-> On Thu, Jun 22, 2023 at 04:53:08PM +0800, Qi Zheng wrote:
->> Introduce some helpers for dynamically allocating shrinker instance,
->> and their uses are as follows:
->>
->> 1. shrinker_alloc_and_init()
->>
->> Used to allocate and initialize a shrinker instance, the priv_data
->> parameter is used to pass the pointer of the previously embedded
->> structure of the shrinker instance.
->>
->> 2. shrinker_free()
->>
->> Used to free the shrinker instance when the registration of shrinker
->> fails.
->>
->> 3. unregister_and_free_shrinker()
->>
->> Used to unregister and free the shrinker instance, and the kfree()
->> will be changed to kfree_rcu() later.
->>
->> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
->> ---
->>   include/linux/shrinker.h | 12 ++++++++++++
->>   mm/vmscan.c              | 35 +++++++++++++++++++++++++++++++++++
->>   2 files changed, 47 insertions(+)
->>
->> diff --git a/include/linux/shrinker.h b/include/linux/shrinker.h
->> index 43e6fcabbf51..8e9ba6fa3fcc 100644
->> --- a/include/linux/shrinker.h
->> +++ b/include/linux/shrinker.h
->> @@ -107,6 +107,18 @@ extern void unregister_shrinker(struct shrinker *shrinker);
->>   extern void free_prealloced_shrinker(struct shrinker *shrinker);
->>   extern void synchronize_shrinkers(void);
->>   
->> +typedef unsigned long (*count_objects_cb)(struct shrinker *s,
->> +					  struct shrink_control *sc);
->> +typedef unsigned long (*scan_objects_cb)(struct shrinker *s,
->> +					 struct shrink_control *sc);
->> +
->> +struct shrinker *shrinker_alloc_and_init(count_objects_cb count,
->> +					 scan_objects_cb scan, long batch,
->> +					 int seeks, unsigned flags,
->> +					 void *priv_data);
->> +void shrinker_free(struct shrinker *shrinker);
->> +void unregister_and_free_shrinker(struct shrinker *shrinker);
+On Fri, 23 Jun 2023 12:47:00 +0100,
+Anup Patel <apatel@ventanamicro.com> wrote:
+> > No. My previous email asking you to NOT use IRQCHIP_DECLARE() and
+> > instead use IRQCHIP_PLATFORM_DRIVER_BEGIN/END() macros.
 > 
-> Hmmmm. Not exactly how I envisioned this to be done.
-> 
-> Ok, this will definitely work, but I don't think it is an
-> improvement. It's certainly not what I was thinking of when I
-> suggested dynamically allocating shrinkers.
-> 
-> The main issue is that this doesn't simplify the API - it expands it
-> and creates a minefield of old and new functions that have to be
-> used in exactly the right order for the right things to happen.
-> 
-> What I was thinking of was moving the entire shrinker setup code
-> over to the prealloc/register_prepared() algorithm, where the setup
-> is already separated from the activation of the shrinker.
-> 
-> That is, we start by renaming prealloc_shrinker() to
-> shrinker_alloc(), adding a flags field to tell it everything that it
-> needs to alloc (i.e. the NUMA/MEMCG_AWARE flags) and having it
-> returned a fully allocated shrinker ready to register. Initially
-> this also contains an internal flag to say the shrinker was
-> allocated so that unregister_shrinker() knows to free it.
-> 
-> The caller then fills out the shrinker functions, seeks, etc. just
-> like the do now, and then calls register_shrinker_prepared() to make
-> the shrinker active when it wants to turn it on.
-> 
-> When it is time to tear down the shrinker, no API needs to change.
-> unregister_shrinker() does all the shutdown and frees all the
-> internal memory like it does now. If the shrinker is also marked as
-> allocated, it frees the shrinker via RCU, too.
-> 
-> Once everything is converted to this API, we then remove
-> register_shrinker(), rename register_shrinker_prepared() to
-> shrinker_register(), rename unregister_shrinker to
-> shrinker_unregister(), get rid of the internal "allocated" flag
-> and always free the shrinker.
+> I tried IRQCHIP_PLATFORM_DRIVER_BEGIN/END() macros but these
+> macros are not suitable for APLIC driver because we need platform device
+> pointer in the APLIC probe() to create platform MSI device domain (refer,
+> platform_msi_create_device_domain()).
 
-IIUC, you mean that we also need to convert the original statically
-defined shrinker instances to dynamically allocated.
+Oh come on. How hard have you tried? Have you even looked at the other
+drivers in the tree to see how they solve this insurmountable problem
+with a *single* line of code?
 
-I think this is a good idea, it helps to simplify the APIs and also
-remove special handling for case a and b (mentioned in cover letter).
+        pdev = of_find_device_by_node(node);
 
-> 
-> At the end of the patchset, every shrinker should be set
-> up in a manner like this:
-> 
-> 
-> 	sb->shrinker = shrinker_alloc(SHRINKER_MEMCG_AWARE|SHRINKER_NUMA_AWARE,
-> 				"sb-%s", type->name);
-> 	if (!sb->shrinker)
-> 		return -ENOMEM;
-> 
-> 	sb->shrinker->count_objects = super_cache_count;
-> 	sb->shrinker->scan_objects = super_cache_scan;
-> 	sb->shrinker->batch = 1024;
-> 	sb->shrinker->private = sb;
-> 
-> 	.....
-> 
-> 	shrinker_register(sb->shrinker);
-> 
-> And teardown is just a call to shrinker_unregister(sb->shrinker)
-> as it is now.
-> 
-> i.e. the entire shrinker regsitration API is now just three
-> functions, down from the current four, and much simpler than the
-> the seven functions this patch set results in...
-> 
-> The other advantage of this is that it will break all the existing
-> out of tree code and third party modules using the old API and will
-> no longer work with a kernel using lockless slab shrinkers. They
-> need to break (both at the source and binary levels) to stop bad
-> things from happening due to using uncoverted shrinkers in the new
-> setup.
+That's it.
 
-Got it. And totally agree.
+> Further, I tried setting the "suppress_bind_attrs" flag in "struct
+> platform_driver aplic_driver" just like the
+> IRQCHIP_PLATFORM_DRIVER_END() macro but this did not work.
 
-I will do it in the v2.
+I'm not sure how relevant this is to the conversation.
 
-Thanks,
-Qi
+	M.
 
-> 
-> -Dave.
+-- 
+Without deviation from the norm, progress is not possible.
