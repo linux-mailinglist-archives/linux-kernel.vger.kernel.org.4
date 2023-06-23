@@ -2,158 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E259673B865
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 15:07:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3152E73B86D
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 15:09:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231450AbjFWNHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 09:07:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44982 "EHLO
+        id S231228AbjFWNJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 09:09:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231278AbjFWNHW (ORCPT
+        with ESMTP id S229484AbjFWNJD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 09:07:22 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2049.outbound.protection.outlook.com [40.107.94.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C0012129;
-        Fri, 23 Jun 2023 06:07:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jRIQMfjSq6m7q7+nlkT2MUvcHQIY2c4yPchDmx8yXzrlVIWo1nTQeYr0+F1K1q0kzkPTD889z8TBpKKiGrTqx9FG72lDCoQNk/Of3ihd3ckgd9M+kn3VrFv3RoND7paAMPFXWX+XnqQfPZ0qfUYbtQbLGlNcLc+AC+4mnOVhsbFnPOFgKBMboBhRghEORodJcZH5nYTeBdswEefisCbticoHVYLZe7uhixRiL/+yCe44CiMRhPBFBjBKxQjaxMm2RjKmKNG+TOE09t7o6eqROclnaWfsa1NHqLgIzHlSt5d9h4ASOZOv+kt9JL5oKfq6bts88lUg1rbkKaZohmVbbg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=m1T4XFi+Blae8gHWJLFXceGHyPipylcPB/eKg+BLnyc=;
- b=YVRcVS/bcAc7fZwW2zVZgQhOYK6hKJ+TW1OyTnxe6WnMAPwt+rfvJQYYusnzmf8Db2Iea1F4rypkq1IZSTxPCGLHqIV/8S7Cj86eyGP9hL88OFMun5tDso42SRskxLnqeD7D0BPZLYjtHRSdR2PeWFNFcXmK+0dxS/tGe8LN+latYAWbpqoXwP0Sd+NtNqkN4SNGrdayvRBAcvzWmKaj/5gsEU7o2pBZBdLD6iPig10jtOf4S9geitpEZkNuMBS1zpKJYRai2trtfdAR4IJKaV+AGtIVv1RTgV4+b0vmve9sBXnafUzJRVaocmBrijX8eAqS4oBPtq2pklF2TLYr3w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=m1T4XFi+Blae8gHWJLFXceGHyPipylcPB/eKg+BLnyc=;
- b=WqVSyGXtLvnL8hNhHoHeqhJdiVjF4uo67jPfUHSNSALSKK3KmB68/WxDdDs3vWB9yYXYBWUtvr8grMXmuc/vHBekNB0SDP+1DMn/fIm55N3k+USZrtXWqOMAsamPAVPTMysS16gacmxmzOIoZSJZcgW96LmKRDZjWAd6B06cwlzpP97r4ARFFloM1vTYpmZGuZ0AxMfnezFZGiXFdGGKWdwd6Xv5xIrohz84hMpnngeN19MpQr2EPKMhUgd69RN37wesj6nB2HxB8uA7sVpZ3ouAPaSrGW1XKjERY76o+MopZyv0+yoqv2myTYHjS809dMZSZIFXfMYb7dMCqR1uQw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by SJ0PR12MB6966.namprd12.prod.outlook.com (2603:10b6:a03:449::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.21; Fri, 23 Jun
- 2023 13:07:18 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab%7]) with mapi id 15.20.6521.024; Fri, 23 Jun 2023
- 13:07:18 +0000
-Date:   Fri, 23 Jun 2023 10:07:15 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     =?utf-8?Q?C=C3=A9dric?= Le Goater <clegoate@redhat.com>
-Cc:     ankita@nvidia.com, alex.williamson@redhat.com, aniketa@nvidia.com,
-        cjia@nvidia.com, kwankhede@nvidia.com, targupta@nvidia.com,
-        vsethi@nvidia.com, acurrid@nvidia.com, apopple@nvidia.com,
-        jhubbard@nvidia.com, danw@nvidia.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/1] vfio/nvgpu: Add vfio pci variant module for grace
- hopper
-Message-ID: <ZJWZA8ogUlGegx2C@nvidia.com>
-References: <20230622030720.19652-1-ankita@nvidia.com>
- <46a79333-12f6-229f-86f9-1e79bdba7d11@redhat.com>
- <ZJWGbsaMzHvqqewi@nvidia.com>
- <62dcff6b-852d-4a85-dfd4-0ce1f324602e@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <62dcff6b-852d-4a85-dfd4-0ce1f324602e@redhat.com>
-X-ClientProxiedBy: CH2PR19CA0020.namprd19.prod.outlook.com
- (2603:10b6:610:4d::30) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Fri, 23 Jun 2023 09:09:03 -0400
+Received: from mail-ua1-x942.google.com (mail-ua1-x942.google.com [IPv6:2607:f8b0:4864:20::942])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 760842129;
+        Fri, 23 Jun 2023 06:09:02 -0700 (PDT)
+Received: by mail-ua1-x942.google.com with SMTP id a1e0cc1a2514c-78f6a9800c9so215222241.3;
+        Fri, 23 Jun 2023 06:09:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687525741; x=1690117741;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=g2gur0xTyOFyTfCQR7Vs6vSqivbDaTiXYcT1KXbo1Nc=;
+        b=o4bdvVEsKnnuG/AUZ+SvBanLkTmh7OmaSbskvWBViOapYz8Hb+CCJs0vrYxtweKowq
+         s+L3dmVMbvu3S0GxevKn1CziUe+sCgIYBGgJkbA03IiXylBAxgJnrG/SF2OazQ2LhNPp
+         dTIPJWtMA2uA1UzzpyEWhhhQzoQj92nt53lACKdKnmJqYjFJI+2ydY4lcLUxhKz+fVEY
+         bwfKbkC8VMeXmHJjF/9bee/i3v/iK1KBTDRXjPhtzxIVEWqGim/K1GNH9Il5vIHkWn8f
+         vsA6LAQdkgzKKwXYd4lwlJBmZICDxd4dplKz9+L1VtJ6N6XMti5CkbhZaBNrwzp5qu+u
+         IHbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687525741; x=1690117741;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=g2gur0xTyOFyTfCQR7Vs6vSqivbDaTiXYcT1KXbo1Nc=;
+        b=CRK7DEBFE7GH2hxdbdRHs4V+UVAzSdAexHI+WtXBVcpa4C0seg7SXvnZsNV2hRqGVj
+         v0v7Qj72K/XKnGUttGVJjt2NlaHmjdapBhzzqua9AmuRsNOKIFvFgWc+dEE6rpu95Vlw
+         fU85RzQ1D0PLA+jFYrZgBd6ai19MqyvO8H7v/lQeEvtXDWTctaTdQdbgQbs8wdpIVUsA
+         CL7MZU+qGHCpJQNQMmZfVl9f8tXO39KQuuFhIUeKR9+77FslEwWMaY2qZOJtF3IYzPks
+         3A0hHCur7Um2BSWtOa7avVCazRE3A+9wpowEE0cssVI1idxsvQ9wcbiC1RLqzm312MDG
+         lX2A==
+X-Gm-Message-State: AC+VfDxmkwmgDW5reVoOxjaJLdinX+XZew23XATDrvwB44PW64QQbXWt
+        l4coksvy2ZpDGxt4KTCrfjUw6zbo47yyr8jU3n8=
+X-Google-Smtp-Source: ACHHUZ721dDUmO3rfpLqG/sIqBq/DqFVJ+cLdKn1aZGWxRXenL5Eu7Vld0XBRnNaL7EAxZcWHwa4QYAB2eJ/HxBYa44=
+X-Received: by 2002:a67:d003:0:b0:440:cd04:dba0 with SMTP id
+ r3-20020a67d003000000b00440cd04dba0mr7190139vsi.13.1687525741220; Fri, 23 Jun
+ 2023 06:09:01 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|SJ0PR12MB6966:EE_
-X-MS-Office365-Filtering-Correlation-Id: 22c1f7a4-c776-4041-c3bd-08db73eac569
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: otydpx0l2F4M46elcJifBZWCK5VZoJBwPNhs04rkHGhZDY/y/W5rbig4SDKk+1isZVkCvnxoTtt376AccyiJ3K/x8/B1j1TbXaUF6tWcove8599HFuyymBYJK4w43fzoYUWJjnhd5m9KFadz+ykk+XOmq8W5GEyZb4K2AqdoRIHN3waLqf9oIPOsLn2/L0mcywxbA3Z72Y6wGhyqTGt9CnApK6JwIFEWyoXah+w+YlG+n65Od1OTGqiWGtXMW/1s1F9MqPrXuJr4Bw581lkd1KU6+vmlBQnMUTDPwZunhDD6p7zEU3CtlJq1+dj08TusQJeMFvhuagBT5nytzJBmbOEsv+vaSiCBMZaaQRjAtZpiKpPRe7CoUG1hpDMwWJnZFoyTjaSB4bo5jsyfNhDON512814I79LQaXTnsQONaIYG5Y08VPqZ7Mol8uhh9ju/R1Ewj85KweL9gniR3TegqgGbkjp3GNkAXat6QMjsQPBOMYEF7Ujdw+4GrBQXlv5zOGLhZMKja0JvowQb2ufQ4N8+ZGCtfHNSWS+KRXoEZywy59jtp+sGETpcB8qkV6DU
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(366004)(396003)(346002)(376002)(136003)(451199021)(36756003)(478600001)(26005)(4744005)(2616005)(6486002)(8676002)(6666004)(83380400001)(53546011)(2906002)(6512007)(5660300002)(66574015)(66476007)(316002)(66946007)(66556008)(6916009)(41300700001)(8936002)(86362001)(38100700002)(4326008)(6506007)(186003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?N3NOSmpjR0k0QjNQK291SEVrMDRMVlBsckEzMTUyVWRmK0p3UU9QWXIwNGo5?=
- =?utf-8?B?MlVWN0xXZmVwMFN1YXpVMC9ZSk1KL1d6ak5HZ2ZqUFoyWVZYM0RwQUxSUkc0?=
- =?utf-8?B?R3lqYm5HSjNXTnBmM0hDOXpyZkVWYjdjSGZaS0tIWXJEYzJhR3VkeXE3S1Nx?=
- =?utf-8?B?YStNWmVJSXRocEc5Z2pZYnVZbm1Dai9Fd1Zvd3pqYTZQSUEveVFaTUdIK0Yv?=
- =?utf-8?B?T2d0UmFHK25kTXh3Tno5MDd4TWttRDF6NWZzQUc1WFFKTHgzSmgvSEZHdTd0?=
- =?utf-8?B?MHZySTgvTWhHV2RRY21CTU1YWkRZVzBlWitHK3pscHJXL3F2TDdMdkZ4NEdT?=
- =?utf-8?B?M1RVTElCOTZIWDhSeGdPUXU4bVdIbTZQWk9hWDN4WndOelJqNlBnTHRzRWxC?=
- =?utf-8?B?VXRUUUpCSlFsRG1OYi9IS1YyY1lEV3BndUozYXJyeHlqblNDUTBSb3lGaTlB?=
- =?utf-8?B?NDRpM2paWkE5bzYrZjFaRmMvcGhaQnhkSDFwKzIzcUNITUFWbkdSczVCTmJH?=
- =?utf-8?B?dWx2TzlQYjlTbkp2V3lDVmxKVit1WFViMWZ1MS9LRmwzeUJORnhGbUMyYjZz?=
- =?utf-8?B?YVVrS1NjTGhNTE9nV1MxajkzOEFVczB1ZDFVT3lIcFhPR0FFaWgxYklNMG5R?=
- =?utf-8?B?RmZFazZZQzdvTE1Vdld0RmRPdTcxSk5HaWNuSm9ObURuNWhrcGtmUFZQRkFV?=
- =?utf-8?B?c0EzZzgxaStySTl5ZHdnZTFndVZ6Z052MHdWcm52d045azUyQTVnVi9iTlpy?=
- =?utf-8?B?WUJ0UHdmUzU1ZFo5eHVFSllTcWt2LzRkNnIvZFNjU1E0clpNNFcxQ09BYmJ4?=
- =?utf-8?B?MUllSmZPVUdFbi8zckpnVnp1M0Y3SlliWTJQeGxzYjh2ZGxjSE94SjNOSFJv?=
- =?utf-8?B?UUdhRjVyZU8ybzhzZXlxT053WllwUnJmUi96WndDcGpBdnlBVzBjZzhkQzVm?=
- =?utf-8?B?bnBPZlNLRU9rVGV6aFpFTkV1bWlRREFpaEZHYUNqMHZ3NzF2MW9EOStFRG0y?=
- =?utf-8?B?ZFlWYkFORXJJZHBNQ3ZjUmwzdE9vTEhBV1FzVDkyRWVUWWJqQWpTUWNmeHVs?=
- =?utf-8?B?d2pLSW9oYU9kbzFlOGZPOW8xYTNFcVMvNlNGaFNSS1lKUUJVY2VJZTFRMG95?=
- =?utf-8?B?WG5iditOSVVlSng0UHNDVURERzhVSVI1TlF4cjE3ZVNya0hpYmU4R0tsQnZE?=
- =?utf-8?B?MVpWd1hnY09lWElCSjg4S1Bid1FIZmEyK2Y1RkpKY3pQRVB4T2Qzc2d2dS9V?=
- =?utf-8?B?WUFDNEFaNHl4VG1lRzd1NHl0VWNTdmZJR2F0a05YdEd4aTNwajkyRVFtRWIv?=
- =?utf-8?B?elBjL3JyOXpVdU8zdWNWWWZ5cVJNVzNvZlNtOVN2TlFVUlcxZlFKRHFDc05l?=
- =?utf-8?B?MFFPcGNuRmZzSnBFMVlCMGpZdzlGNzJpRmp0MWNWQUhOeWk0VE03Vjlwb2px?=
- =?utf-8?B?Y1lOSFlsOWlDZWVIT1lncU9PYi9MdWtKVXU2RHI4Nm9KdnBtOENQT01WT1Z1?=
- =?utf-8?B?Y2lpMjNWSUZ5cEpkZFdPTElranNGWlNtRVFmQytBcG1NcjhNSnEwYytpSUZQ?=
- =?utf-8?B?dG5VbFpVbHRlcGtYcXdJRWYvUzVLV0t2R2pRNTd2OVlvdm1HRE9Vc2J0dVhJ?=
- =?utf-8?B?VG9VWFl6NzNTUFNVSUF0M21NSmpzeTFVUDdFbUI3Y2dBaFZvVzBkWlo2cFRX?=
- =?utf-8?B?WTZidHZMbm8yNDVBWGVyN1o5cVIxclNJbXRnZkJ4Q01wVEpBL2VTdTQvUjNF?=
- =?utf-8?B?Tkd6cTVvYW80REM4TDRmTDA2eFQzV1VRVGNucDgvSWMvME5Fb2RhRkZpd0Yz?=
- =?utf-8?B?SlVrVmlhVlZDQTg5WnZMVk9majdaMEZyaGdGa1Boam5LbW8zU1VwNEJNU0VE?=
- =?utf-8?B?UjhVWExtOUNsVHhabG41QkhMemJEYnpHV2EvVXJTVUl0V3E2ZVc4QlpVckdv?=
- =?utf-8?B?bWtqU0kvTmtSd21JOHE1MmlhMGNqVTNYdVJNbXd4RHpYSmlLNXMrZEVWK0Ja?=
- =?utf-8?B?QXAxSElHbXV4SG1IRHEwVjVPTjluNWFydG11TVpXNlZ4ZFJ4MjVpWGdhMGQ0?=
- =?utf-8?B?bUFOMzBrc3BvV1Uxc1ltVDdHN1RiNU9RdkdxWkhuZnJXM0NjaU5pMzRhajZF?=
- =?utf-8?Q?8ckE=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 22c1f7a4-c776-4041-c3bd-08db73eac569
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jun 2023 13:07:17.7740
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KdooQB7f7ppTDj6ytcvvUG+dxNBP1bGa5vebNsDxMZSZDqu6y1Om8J1upFWyXgzY
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6966
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20230613025226.3167956-1-imagedong@tencent.com>
+ <20230613025226.3167956-3-imagedong@tencent.com> <ca490974-0c5c-cfe9-0c6f-3ead163e7a7b@meta.com>
+ <7a82744f454944778f55c36e8445762f@AcuMS.aculab.com> <CADxym3bY5EcZhuJG=x5s7kH+BS93ySAyvV8yZ7yYoXf7HCsZVw@mail.gmail.com>
+ <84050129b8ce4db9b4579be0fc022723@AcuMS.aculab.com>
+In-Reply-To: <84050129b8ce4db9b4579be0fc022723@AcuMS.aculab.com>
+From:   Menglong Dong <menglong8.dong@gmail.com>
+Date:   Fri, 23 Jun 2023 21:08:49 +0800
+Message-ID: <CADxym3akFCuMgQTF5kM1THUd8yofc4hVrACYGi3APwySftCtxA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 2/3] bpf, x86: allow function arguments up to
+ 12 for TRACING
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Yonghong Song <yhs@meta.com>,
+        "alexei.starovoitov@gmail.com" <alexei.starovoitov@gmail.com>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "martin.lau@linux.dev" <martin.lau@linux.dev>,
+        "song@kernel.org" <song@kernel.org>, "yhs@fb.com" <yhs@fb.com>,
+        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
+        "kpsingh@kernel.org" <kpsingh@kernel.org>,
+        "sdf@google.com" <sdf@google.com>,
+        "haoluo@google.com" <haoluo@google.com>,
+        "jolsa@kernel.org" <jolsa@kernel.org>,
+        "benbjiang@tencent.com" <benbjiang@tencent.com>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Menglong Dong <imagedong@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 23, 2023 at 03:04:17PM +0200, Cédric Le Goater wrote:
-> On 6/23/23 13:47, Jason Gunthorpe wrote:
-> > On Fri, Jun 23, 2023 at 08:27:17AM +0200, Cédric Le Goater wrote:
-> > > > +	req_len = vma->vm_end - vma->vm_start;
-> > > > +	pgoff = vma->vm_pgoff &
-> > > > +		((1U << (VFIO_PCI_OFFSET_SHIFT - PAGE_SHIFT)) - 1);
-> > > > +	if (pgoff >= (nvdev->mem_prop.mem_length >> PAGE_SHIFT))
-> > > > +		return -EINVAL;
-> > > 
-> > > you cound introduce accessor macros for nvdev->mem_prop.mem_length and
-> > > nvdev->mem_prop.hpa
-> > 
-> > Accessors are not the usual style..
-> 
-> I meant something like
-> 
->   #define nvgpu_mem_size(nvdev) (nvdev)->mem_prop.mem_length
->   #define nvgpu_mem_pa_base(nvdev) (nvdev)->mem_prop.hpa
-> 
-> This is minor.
+On Thu, Jun 22, 2023 at 10:19=E2=80=AFPM David Laight <David.Laight@aculab.=
+com> wrote:
+>
+> ...
+> > > Is that right for 86-64?
+> > >
+> > > IIRC arguments always take (at least) 64bits.
+> > > For any 32bit argument (register or stack) the high bits are undefine=
+d.
+> > > (Maybe in kernel they are always zero?
+> > > From 32bit userspace they are definitely random.)
+> > >
+> >
+> > Hello,
+> >
+> > According to my testing, the compiler will always
+> > pass the arguments on 8-byte size with "push" insn
+> > if the count of the arguments that need to be passed
+> > on stack more than 1 and the size of the argument
+> > doesn't exceed 8-byte. In this case, there won't be
+> > garbage. For example, the high 4-byte will be made 0
+> > if the size of the argument is 4-byte, as the "push" insn
+> > will copy the argument from regs or imm into stack
+> > in 8-byte.
+>
+> You have to know whether a value is expected to be 4 or 8
+> bytes - a negative 32bit value is zero extended so can't
+> be treated as a 64bit value.
+>
+> That is even true for values passed in registers.
+>
+> There is also a common problem with values passed in registers
+> to system calls by 32bit code (maybe bpf is tracing these).
+> In this case the high 32 bits of the register are random.
+> They don't get zerod in 32bit mode.
+>
+> > If the count of the arguments on-stack is 1 and its size
+> > doesn't exceed 4-byte, some compiler, like clang, may
+> > not use the "push" insn. Instead, it allocates 4 bytes in the
+> > stack, and copies the arguments from regs or imm into
+> > stack in 4-byte. This is the case we deal with here.
+>
+> If the compiler sometimes writes a 4 byte (or smaller) value
+> to pre-allocated stack then it is always allowed to do that.
+> So the high bytes of the stack slot that contains a 32bit
+> argument might always be junk.
+> The count of on-stack arguments isn't relevant.
+>
 
-Yeah, this is what I thought you ment, I'm against this kind of
-obfuscation in the kernel without a very strong purpose, and if you do
-something like this it should be a static inline function.
+Yes, the way we clean garbage values is not
+relevant, which comes from assumption. However,
+It should be ok with the BPF program? like what Yonghong
+said.
 
-Jason
+> > I'm not sure if I understand you correctly. Do you mean
+> > that there will be garbage values for 32bit args?
+>
+> I'm pretty sure that the function call ABI doesn't require the
+> caller set the high bits of sub-64bit arguments.
+> The fact that they are often written with a push instruction
+> that zeros the high bytes isn't really relevant.
+>
+> > > I think the called code is also responsible form masking 8 and 16bit
+> > > values (in reality char/short args and return values just add code
+> > > bloat).
+> > >
+> > > A 128bit value is either passed in two registers or two stack
+> > > slots. If the last register is skipped it will be used for the
+> > > next argument.
+> > >
+> >
+> > Yeah, this point is considered in save_args(). Once
+> > this happen, the count of stack slots should more
+> > then 1, and the arguments on-stack will be stored with
+> > "push" insn in 8-byte. Therefore, there shouldn't be garbage
+> > values in this case?
+> >
+> > Do I miss something?
+>
+> The register/stack for these two calls is the same:
+>         foo(1, 2, 3, 4, 5, 6, (int128_t)7);
+>         bar(1, 2, 3, 4, 5, (int128_t)7, 6);
+>
+
+It is ok, as we already consider such cases. For
+the foo(), the order we copy args is:
+
+reg1, reg2, reg3, reg4, reg5, reg6, stack1, stack2
+
+and for the bar (), it is:
+
+reg1, reg2, reg3, reg4, reg5, stack1,stack2, reg6
+
+The order of the arguments in the array we passed
+to the BPF program is ok.
+
+Thanks!
+Menglong Dong
+
+>         David
+>
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1=
+ 1PT, UK
+> Registration No: 1397386 (Wales)
