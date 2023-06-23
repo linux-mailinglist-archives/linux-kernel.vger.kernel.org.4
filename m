@@ -2,231 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42E9F73B02D
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 07:41:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACFBF73B033
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 07:43:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230255AbjFWFlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 01:41:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58824 "EHLO
+        id S231249AbjFWFnc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 01:43:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjFWFlO (ORCPT
+        with ESMTP id S229445AbjFWFn3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 01:41:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB0771A4;
-        Thu, 22 Jun 2023 22:41:12 -0700 (PDT)
+        Fri, 23 Jun 2023 01:43:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B054E46;
+        Thu, 22 Jun 2023 22:43:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6001B6198B;
-        Fri, 23 Jun 2023 05:41:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8786C433CC;
-        Fri, 23 Jun 2023 05:41:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D8D061987;
+        Fri, 23 Jun 2023 05:43:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97FA4C433C0;
+        Fri, 23 Jun 2023 05:43:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687498871;
-        bh=qPapvU2ug5XUbs86vSozf1HW7Fb3vlj9IaJ8Cc/jUhc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=nc6tMgv5HOQX4XZ9WiULPUOvoFoQr1wOklN1Ab/DKOFOR1LR/VPo6fglicjtk6nQL
-         7bVs+K3n1Om48IszfVTJzdmt95vDF3BJ5Al5CXjce8zVZdF6qix6H9GdjnK2VA102z
-         J/86+fiwxg0uUj3IDhln0JWz+sIJbKakfNjmgc70IlepZwLrPZuIFgknJYptlfgwWb
-         IXmHDWFKkSZOOeCbUhT+VEoL58A5djkE7LxWdfejRtdKZP36sg4kPw6IbH0hb8GnAQ
-         Yvg3Q+LFIYX8Cy1J0DOJKdLSZWGkDivSNYSuCUw1Cc5Hf8XmASjR/4GA1eA0SbBzud
-         Ug1f50gFCOaRQ==
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-1a9a42edfc9so187059fac.0;
-        Thu, 22 Jun 2023 22:41:11 -0700 (PDT)
-X-Gm-Message-State: AC+VfDxIevFXfO3gn/NErQ5d1srMadBFygS/4AD71hCwmCwDv3+Xf9Ac
-        3zhPysUZgi7QK9vJRDiA5rIUhm6HcjrzDzFsq3g=
-X-Google-Smtp-Source: ACHHUZ7cMLVT4f0AnUJoGvZXjHjFR76NxU3gpI2Rf4Fsv/8GBKrljZEFaW5o+/iwXTDhjTp30q16bid6On7xomQ1uyE=
-X-Received: by 2002:a05:6871:288:b0:1a6:c3d3:969c with SMTP id
- i8-20020a056871028800b001a6c3d3969cmr19108557oae.45.1687498870905; Thu, 22
- Jun 2023 22:41:10 -0700 (PDT)
+        s=k20201202; t=1687499007;
+        bh=MYGG5cGrVBYsNDfhjkbhLquFlj7sZGMulbxa+VzidYE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KSahqqew1oabjk0qHPGkyWZkQbRye24+ZmhkAmK31tjBf34wBGPvyfhujOmgUipPy
+         uv753O6l+9Ti3s6XqElDRbPB9oZHTUjYkRZAwH6kuYApgZm4kJDCe4zTBoruEvZMo5
+         julQg7+6lMEdNCwv02fD//PaNuW7pPkFewQlSimO4W9xFgV3Vt1egrd+uz+kiPNqhI
+         WUyrBzGvBHZU1hcLQBO1pV9+2fQJyseB1BFhttCO7JU2GJgiEWLZLdVaRGx9Us/jlL
+         KNSJrmqrM729cMtMHQ2eQKntRU06OOUNH2qewiBZWMox+qSXNfGOGm8bcOjFw5s93h
+         apbrPh/FfI9Yw==
+Date:   Fri, 23 Jun 2023 11:13:13 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Krishna chaitanya chundru <quic_krichai@quicinc.com>
+Cc:     manivannan.sadhasivam@linaro.org, quic_vbadigan@quicinc.com,
+        quic_ramkri@quicinc.com, linux-arm-msm@vger.kernel.org,
+        konrad.dybcio@linaro.org,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "open list:PCI ENDPOINT SUBSYSTEM" <linux-pci@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH RFC v1 1/3] PCI: endpoint: Add wakeup host API to EPC core
+Message-ID: <20230623054313.GB5611@thinkpad>
+References: <1686754850-29817-1-git-send-email-quic_krichai@quicinc.com>
+ <1686754850-29817-2-git-send-email-quic_krichai@quicinc.com>
 MIME-Version: 1.0
-References: <20230409145358.2538266-1-masahiroy@kernel.org>
- <20230531213319.GA2201875@dev-arch.thelio-3990X> <20230602152519.GA3007575@dev-arch.thelio-3990X>
- <CAK7LNARjB8vgk-hsZmGqB0mwz=OBgyDtqBKJ2cueE+yQ02CQiA@mail.gmail.com> <CAFP8O3J1aiAgKzZ82erJseb_wwU7F2=+T0xCZ0BbcFKJOAQfUg@mail.gmail.com>
-In-Reply-To: <CAFP8O3J1aiAgKzZ82erJseb_wwU7F2=+T0xCZ0BbcFKJOAQfUg@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Fri, 23 Jun 2023 14:40:34 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAT+zj7fpE_-QewdCVFzz3smZq7V6XART+yOqKcAZCiTFA@mail.gmail.com>
-Message-ID: <CAK7LNAT+zj7fpE_-QewdCVFzz3smZq7V6XART+yOqKcAZCiTFA@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: add $(CLANG_CFLAGS) to KBUILD_CPPFLAGS
-To:     Fangrui Song <maskray@google.com>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tom Rini <trini@konsulko.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1686754850-29817-2-git-send-email-quic_krichai@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 23, 2023 at 2:07=E2=80=AFAM Fangrui Song <maskray@google.com> w=
-rote:
->
-> On Sat, Jun 3, 2023 at 9:33=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.=
-org> wrote:
-> >
-> > On Sat, Jun 3, 2023 at 12:25=E2=80=AFAM Nathan Chancellor <nathan@kerne=
-l.org> wrote:
-> > >
-> > > On Wed, May 31, 2023 at 02:33:23PM -0700, Nathan Chancellor wrote:
-> > > > Hi Masahiro,
-> > > >
-> > > > On Sun, Apr 09, 2023 at 11:53:57PM +0900, Masahiro Yamada wrote:
-> > > > > When preprocessing arch/*/kernel/vmlinux.lds.S, the target triple=
- is
-> > > > > not passed to $(CPP) because we add it only to KBUILD_{C,A}FLAGS.
-> > > > >
-> > > > > As a result, the linker script is preprocessed with predefined ma=
-cros
-> > > > > for the build host instead of the target.
-> > > > >
-> > > > > Assuming you use an x86 build machine, compare the following:
-> > > > >
-> > > > >  $ clang -dM -E -x c /dev/null
-> > > > >  $ clang -dM -E -x c /dev/null -target aarch64-linux-gnu
-> > > > >
-> > > > > There is no actual problem presumably because our linker scripts =
-do not
-> > > > > rely on such predefined macros, but it is better to define correc=
-t ones.
-> > > > >
-> > > > > Move $(CFLAGS_CFLAGS) to KBUILD_CPPFLAGS, so that all *.c, *.S, *=
-.lds.S
-> > > > > will be processed with the proper target triple.
-> > > > >
-> > > > > Reported-by: Tom Rini <trini@konsulko.com>
-> > > > > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> > > > > ---
-> > > > >
-> > > > >  scripts/Makefile.clang | 3 +--
-> > > > >  1 file changed, 1 insertion(+), 2 deletions(-)
-> > > > >
-> > > > > diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
-> > > > > index 70b354fa1cb4..93ca059cc3b8 100644
-> > > > > --- a/scripts/Makefile.clang
-> > > > > +++ b/scripts/Makefile.clang
-> > > > > @@ -38,6 +38,5 @@ CLANG_FLAGS       +=3D -Werror=3Dunknown-warnin=
-g-option
-> > > > >  CLANG_FLAGS        +=3D -Werror=3Dignored-optimization-argument
-> > > > >  CLANG_FLAGS        +=3D -Werror=3Doption-ignored
-> > > > >  CLANG_FLAGS        +=3D -Werror=3Dunused-command-line-argument
-> > > > > -KBUILD_CFLAGS      +=3D $(CLANG_FLAGS)
-> > > > > -KBUILD_AFLAGS      +=3D $(CLANG_FLAGS)
-> > > > > +KBUILD_CPPFLAGS    +=3D $(CLANG_FLAGS)
-> > > > >  export CLANG_FLAGS
-> > > > > --
-> > > > > 2.37.2
-> > > > >
-> > > >
-> > > > I am doubling back to this change, as the lack of '--target' in
-> > > > KBUILD_CPPFLAGS is now an active bug with clang-17 due to a new cha=
-nge
-> > > > that rejects '-mbig-endian' and '-mlittle-endian' when not supporte=
-d by
-> > > > the target, which breaks the arm64 vDSO build when preprocessing it=
-s
-> > > > linker script:
-> > > >
-> > > >   # Turn on CONFIG_CPU_BIG_ENDIAN in menuconfig
-> > > >   $ make -skj"$(nproc)" ARCH=3Darm64 LLVM=3D1 O=3Dbuild mrproper vi=
-rtconfig menuconfig arch/arm64/kernel/vdso/
-> > > >   ...
-> > > >   clang: error: unsupported option '-mbig-endian' for target 'x86_6=
-4-pc-linux-gnu'
-> > > >   make[3]: *** [.../scripts/Makefile.build:387: arch/arm64/kernel/v=
-dso/vdso.lds] Error 1
-> > > >   ...
-> > > >
-> > > >   https://github.com/llvm/llvm-project/commit/d81ce04587c006b673119=
-8956c522c93d0df1050
-> > > >   https://github.com/ClangBuiltLinux/linux/issues/1859
-> > > >
-> > > > This change resolves that issue. I was able to figure out why those=
- new
-> > > > warnings appeared for ARCH=3Dmips, it is the shell invocation for
-> > > > CHECKFLAGS. The following diff resolves it for me:
-> > > >
-> > > > diff --git a/arch/mips/Makefile b/arch/mips/Makefile
-> > > > index a7a4ee66a9d3..ef7b05ae92ce 100644
-> > > > --- a/arch/mips/Makefile
-> > > > +++ b/arch/mips/Makefile
-> > > > @@ -346,7 +346,7 @@ KBUILD_CFLAGS +=3D -fno-asynchronous-unwind-tab=
-les
-> > > >  KBUILD_LDFLAGS               +=3D -m $(ld-emul)
-> > > >
-> > > >  ifdef CONFIG_MIPS
-> > > > -CHECKFLAGS +=3D $(shell $(CC) $(KBUILD_CFLAGS) -dM -E -x c /dev/nu=
-ll | \
-> > > > +CHECKFLAGS +=3D $(shell $(CC) $(KBUILD_CPPFLAGS) $(KBUILD_CFLAGS) =
--dM -E -x c /dev/null | \
-> > > >       grep -E -vw '__GNUC_(MINOR_|PATCHLEVEL_)?_' | \
-> > > >       sed -e "s/^\#define /-D'/" -e "s/ /'=3D'/" -e "s/$$/'/" -e 's=
-/\$$/&&/g')
-> > > >  endif
-> > > >
-> > > > I will run this change plus that diff through my build matrix to se=
-e if
-> > > > any other issues pop up. If not, I will respond with some tags and
-> > > > perhaps this could be taken as a fix for 6.4 so that it could
-> > > > potentially be backported?
-> > >
-> > > I found two more issues lurking in PowerPC. I have attached suggested
-> > > patches for all the issues I have uncovered to this email, please fee=
-l
-> > > free to use them or do something different if you feel there is a bet=
-ter
-> > > fix. With those issues resolved in one way or another, consider the
-> > > original change:
-> > >
-> > > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> > > Tested-by: Nathan Chancellor <nathan@kernel.org>
-> > >
-> > > If it would work better for you, I am more than happy to take over th=
-is
-> > > series as well.
-> > >
-> > > Cheers,
-> > > Nathan
-> >
-> > Thanks. All the three patches look good to me.
-> >
-> > I will apply them, then mine on top.
->
-> Drive-by reply from
-> https://github.com/ClangBuiltLinux/continuous-integration2/pull/585
->
-> Hi Masahiro, one nit:) If the patch still has time to adjust the
-> commit message, perhaps consider replacing
->
-> -target aarch64-linux-gnu with --target=3Daarch64-linux-gnu
->
-> as the former is a deprecated driver option since Clang 3.x (long time ag=
-o).
->
-> > Assuming you use an x86 build machine, compare the following:
->
-> You may drop "Assuming you use an x86 build machine" and add
-> --target=3Dx86_64-linux-gnu to the `clang -dM -E -x c /dev/null` command
-> :)
+On Wed, Jun 14, 2023 at 08:30:47PM +0530, Krishna chaitanya chundru wrote:
+> Endpoint cannot send any data/MSI when the device state is in
+> D3cold or D3hot. Endpoint needs to bring the device back to D0
+> to send any kind of data.
+> 
+> For this endpoint can send inband PME the device is in D3hot or
+> toggle wake when the device is D3 cold.
+> 
 
-Thanks for the suggestion, but I do not want to change the commit ID
-unless there is something terribly wrong.
+Are you referring to "host" as the "device"? If so, then it is a wrong
+terminology.
 
-Nathan recorded the commit ID in the CBL bug tracker.
+> To support this adding wake up host to epc core.
+> 
 
+Commit message should be imperative.
 
+> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+> ---
+>  drivers/pci/endpoint/pci-epc-core.c | 29 +++++++++++++++++++++++++++++
+>  include/linux/pci-epc.h             |  3 +++
+>  2 files changed, 32 insertions(+)
+> 
+> diff --git a/drivers/pci/endpoint/pci-epc-core.c b/drivers/pci/endpoint/pci-epc-core.c
+> index 46c9a5c..d203947 100644
+> --- a/drivers/pci/endpoint/pci-epc-core.c
+> +++ b/drivers/pci/endpoint/pci-epc-core.c
+> @@ -167,6 +167,35 @@ const struct pci_epc_features *pci_epc_get_features(struct pci_epc *epc,
+>  EXPORT_SYMBOL_GPL(pci_epc_get_features);
+>  
+>  /**
+> + * pci_epc_wakeup_host() - interrupt the host system
 
---=20
-Best Regards
-Masahiro Yamada
+s/interrupt the host system/Wakeup the host
+
+> + * @epc: the EPC device which has to interrupt the host
+
+s/interrupt/wake
+
+> + * @func_no: the physical endpoint function number in the EPC device
+> + * @vfunc_no: the virtual endpoint function number in the physical function
+> + *
+> + * Invoke to wakeup host
+> + */
+> +int pci_epc_wakeup_host(struct pci_epc *epc, u8 func_no, u8 vfunc_no)
+> +{
+> +	int ret;
+> +
+> +	if (IS_ERR_OR_NULL(epc) || func_no >= epc->max_functions)
+> +		return -EINVAL;
+> +
+> +	if (vfunc_no > 0 && (!epc->max_vfs || vfunc_no > epc->max_vfs[func_no]))
+> +		return -EINVAL;
+> +
+
+Use proper errno for both of the above.
+
+- Mani
+
+> +	if (!epc->ops->wakeup_host)
+> +		return 0;
+> +
+> +	mutex_lock(&epc->lock);
+> +	ret = epc->ops->wakeup_host(epc, func_no, vfunc_no);
+> +	mutex_unlock(&epc->lock);
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(pci_epc_wakeup_host);
+> +
+> +/**
+>   * pci_epc_stop() - stop the PCI link
+>   * @epc: the link of the EPC device that has to be stopped
+>   *
+> diff --git a/include/linux/pci-epc.h b/include/linux/pci-epc.h
+> index 301bb0e..a8496be 100644
+> --- a/include/linux/pci-epc.h
+> +++ b/include/linux/pci-epc.h
+> @@ -59,6 +59,7 @@ pci_epc_interface_string(enum pci_epc_interface_type type)
+>   * @start: ops to start the PCI link
+>   * @stop: ops to stop the PCI link
+>   * @get_features: ops to get the features supported by the EPC
+> + * @wakeup_host: ops to wakeup the host
+>   * @owner: the module owner containing the ops
+>   */
+>  struct pci_epc_ops {
+> @@ -88,6 +89,7 @@ struct pci_epc_ops {
+>  	void	(*stop)(struct pci_epc *epc);
+>  	const struct pci_epc_features* (*get_features)(struct pci_epc *epc,
+>  						       u8 func_no, u8 vfunc_no);
+> +	int	(*wakeup_host)(struct pci_epc *epc, u8 func_no, u8 vfunc_no);
+>  	struct module *owner;
+>  };
+>  
+> @@ -232,6 +234,7 @@ int pci_epc_start(struct pci_epc *epc);
+>  void pci_epc_stop(struct pci_epc *epc);
+>  const struct pci_epc_features *pci_epc_get_features(struct pci_epc *epc,
+>  						    u8 func_no, u8 vfunc_no);
+> +int pci_epc_wakeup_host(struct pci_epc *epc, u8 func_no, u8 vfunc_no);
+>  enum pci_barno
+>  pci_epc_get_first_free_bar(const struct pci_epc_features *epc_features);
+>  enum pci_barno pci_epc_get_next_free_bar(const struct pci_epc_features
+> -- 
+> 2.7.4
+> 
+
+-- 
+மணிவண்ணன் சதாசிவம்
