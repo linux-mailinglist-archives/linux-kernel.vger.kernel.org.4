@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CCD573B313
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 10:59:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F10D673B31F
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 11:00:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231829AbjFWI7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 04:59:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42546 "EHLO
+        id S232088AbjFWI7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 04:59:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231980AbjFWI7R (ORCPT
+        with ESMTP id S232062AbjFWI7W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 04:59:17 -0400
+        Fri, 23 Jun 2023 04:59:22 -0400
 Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88DD2271B;
-        Fri, 23 Jun 2023 01:59:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4338A213E;
+        Fri, 23 Jun 2023 01:59:02 -0700 (PDT)
 X-GND-Sasl: herve.codina@bootlin.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1687510738;
+        t=1687510740;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=/3vY6PvUZlTSJ5HdHvT7yC0rLG7cHyF3d0FdWNs26M4=;
-        b=ffGwx+1NpPd8Gs4Bcn/9Y7DNE8c/5/vM1PDI/QXNuCi0EWVJEkH/as6BGMRRdbLxdmUWFG
-        al/MuOhaHQLiBAuDvZd0/rTMoFW1hOmVSpvZUxZY0oRT1HUlVCkt0lEchORrYXKC7IyzAT
-        nOEqag2Hq67673AvuRCJiu81sS1i1SFcmrg7Z7Pl7Qms3R/tLhupd/UxX5vv3B/tpL1V+0
-        L1lmIgHTpJIuc2cynxNL8eUxiFqWE+CIOX+N3Dkj97yfXpUA7jA+8thDfoH8yoz2yYzr8B
-        hw40pGBXx6gRVlrYzj50EOKxr6cdd/PHsgXv8lcJw/H3sQPnaNqbYU8cmjOoGA==
+        bh=LmVBaT1XSwl45bLGn3KFVgFskQ2sa3mEJW+ejheEDG4=;
+        b=PT79qeZ5ATXAGei2EHtmw9Ll9SzrHrts23MAxiEs48kmV+mYIKjyqryxF5IzGnCoJIPCci
+        Ac/kjN3O2X7biLtzVeYB1KM1qPgTvVUiWnWhJX7Cz2rjSjWoyP30cF8pm5Gdxps2CbdMgP
+        C7T6oUahuWlo+A72o3mauFbRB2Db5SGfVLD9i+LNhlUhL+an0dn9UfWF4567Tq5eSlfh2q
+        t67iyHTsaM9sONXuLIOM26hO8hr1aqohG72feAmtKuKIbp/jFJ8hwi1VBx0iy3tBjFU12H
+        f6JZKcVp2KWAy3EbVI76UhOKUF4kYOL/8dPc2wbgqNTYLfaUsH4U9cLgIwYnsw==
 X-GND-Sasl: herve.codina@bootlin.com
 X-GND-Sasl: herve.codina@bootlin.com
 X-GND-Sasl: herve.codina@bootlin.com
@@ -47,8 +47,8 @@ X-GND-Sasl: herve.codina@bootlin.com
 X-GND-Sasl: herve.codina@bootlin.com
 X-GND-Sasl: herve.codina@bootlin.com
 X-GND-Sasl: herve.codina@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPA id E3A52E0003;
-        Fri, 23 Jun 2023 08:58:55 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id C2558E000A;
+        Fri, 23 Jun 2023 08:58:58 +0000 (UTC)
 From:   Herve Codina <herve.codina@bootlin.com>
 To:     Herve Codina <herve.codina@bootlin.com>,
         Liam Girdwood <lgirdwood@gmail.com>,
@@ -68,9 +68,9 @@ Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
         Christophe Leroy <christophe.leroy@csgroup.eu>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH v6 09/13] iio: inkern: Replace a FIXME comment by a TODO one
-Date:   Fri, 23 Jun 2023 10:58:26 +0200
-Message-Id: <20230623085830.749991-10-herve.codina@bootlin.com>
+Subject: [PATCH v6 10/13] iio: inkern: Add a helper to query an available minimum raw value
+Date:   Fri, 23 Jun 2023 10:58:27 +0200
+Message-Id: <20230623085830.749991-11-herve.codina@bootlin.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230623085830.749991-1-herve.codina@bootlin.com>
 References: <20230623085830.749991-1-herve.codina@bootlin.com>
@@ -86,32 +86,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This FIXME comment is more a TODO one.
-It is a note when someone will need for this currently unsupported case.
+A helper, iio_read_max_channel_raw() exists to read the available
+maximum raw value of a channel but nothing similar exists to read the
+available minimum raw value.
 
-Change from FIXME to TODO.
+This new helper, iio_read_min_channel_raw(), fills the hole and can be
+used for reading the available minimum raw value of a channel.
+It is fully based on the existing iio_read_max_channel_raw().
 
 Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-Suggested-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 ---
- drivers/iio/inkern.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/iio/inkern.c         | 63 ++++++++++++++++++++++++++++++++++++
+ include/linux/iio/consumer.h | 12 +++++++
+ 2 files changed, 75 insertions(+)
 
 diff --git a/drivers/iio/inkern.c b/drivers/iio/inkern.c
-index 8bfd91f74101..19ddd77adb11 100644
+index 19ddd77adb11..7a1f6713318a 100644
 --- a/drivers/iio/inkern.c
 +++ b/drivers/iio/inkern.c
-@@ -879,7 +879,7 @@ static int iio_channel_read_max(struct iio_channel *chan,
- 			*val = max_array(vals, length);
- 			break;
- 		default:
--			/* FIXME: learn about max for other iio values */
-+			/* TODO: learn about max for other iio values */
- 			return -EINVAL;
- 		}
- 		return 0;
+@@ -909,6 +909,69 @@ int iio_read_max_channel_raw(struct iio_channel *chan, int *val)
+ }
+ EXPORT_SYMBOL_GPL(iio_read_max_channel_raw);
+ 
++static int iio_channel_read_min(struct iio_channel *chan,
++				int *val, int *val2, int *type,
++				enum iio_chan_info_enum info)
++{
++	const int *vals;
++	int length;
++	int ret;
++
++	ret = iio_channel_read_avail(chan, &vals, type, &length, info);
++	if (ret < 0)
++		return ret;
++
++	switch (ret) {
++	case IIO_AVAIL_RANGE:
++		switch (*type) {
++		case IIO_VAL_INT:
++			*val = vals[0];
++			break;
++		default:
++			*val = vals[0];
++			if (val2)
++				*val2 = vals[1];
++		}
++		return 0;
++
++	case IIO_AVAIL_LIST:
++		if (length <= 0)
++			return -EINVAL;
++		switch (*type) {
++		case IIO_VAL_INT:
++			*val = min_array(vals, length);
++			break;
++		default:
++			/* TODO: learn about min for other iio values */
++			return -EINVAL;
++		}
++		return 0;
++
++	default:
++		return -EINVAL;
++	}
++}
++
++int iio_read_min_channel_raw(struct iio_channel *chan, int *val)
++{
++	struct iio_dev_opaque *iio_dev_opaque = to_iio_dev_opaque(chan->indio_dev);
++	int ret;
++	int type;
++
++	mutex_lock(&iio_dev_opaque->info_exist_lock);
++	if (!chan->indio_dev->info) {
++		ret = -ENODEV;
++		goto err_unlock;
++	}
++
++	ret = iio_channel_read_min(chan, val, NULL, &type, IIO_CHAN_INFO_RAW);
++err_unlock:
++	mutex_unlock(&iio_dev_opaque->info_exist_lock);
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(iio_read_min_channel_raw);
++
+ int iio_get_channel_type(struct iio_channel *chan, enum iio_chan_type *type)
+ {
+ 	struct iio_dev_opaque *iio_dev_opaque = to_iio_dev_opaque(chan->indio_dev);
+diff --git a/include/linux/iio/consumer.h b/include/linux/iio/consumer.h
+index f536820b9cf2..e9910b41d48e 100644
+--- a/include/linux/iio/consumer.h
++++ b/include/linux/iio/consumer.h
+@@ -301,6 +301,18 @@ int iio_write_channel_raw(struct iio_channel *chan, int val);
+  */
+ int iio_read_max_channel_raw(struct iio_channel *chan, int *val);
+ 
++/**
++ * iio_read_min_channel_raw() - read minimum available raw value from a given
++ *				channel, i.e. the minimum possible value.
++ * @chan:		The channel being queried.
++ * @val:		Value read back.
++ *
++ * Note, if standard units are required, raw reads from iio channels
++ * need the offset (default 0) and scale (default 1) to be applied
++ * as (raw + offset) * scale.
++ */
++int iio_read_min_channel_raw(struct iio_channel *chan, int *val);
++
+ /**
+  * iio_read_avail_channel_raw() - read available raw values from a given channel
+  * @chan:		The channel being queried.
 -- 
 2.40.1
 
