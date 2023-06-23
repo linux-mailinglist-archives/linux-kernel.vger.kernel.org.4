@@ -2,54 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98EB973BF4B
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 22:15:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FF7E73BF4D
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 22:15:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231680AbjFWUPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 16:15:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42988 "EHLO
+        id S231861AbjFWUPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 16:15:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231464AbjFWUPC (ORCPT
+        with ESMTP id S231881AbjFWUPi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 16:15:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 960C82721;
-        Fri, 23 Jun 2023 13:15:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B50A619EF;
-        Fri, 23 Jun 2023 20:15:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16C10C433C0;
-        Fri, 23 Jun 2023 20:14:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687551300;
-        bh=cBdOmzREH23gQr5BLoIgKLXYX1NGEsq6gM/x9nbKeJA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=NSmPbphvqssng0ETNLPI8H7XtPiIAsT3lZTFpnU8blIbBjO+d1xLZgXWqS8jf6mqo
-         ZnZkoGIgh49/FAbKjkQg7T1BokS06BCe+EavA4tMKOVSUI2Lub4tVyJR8khoDNdRwD
-         d8aly1z5KAqgB/9hMH7Uy1sYXWa3UorUNGuwig2yqUEB6aNihq0A7RNFDWtUZXRoCD
-         79m3T1O8pe3TU48eh1KUxPBSvsjmAlvuPaWx+/J6724D9NW5/juV2i7U0E1Z+hVdul
-         GCad2nA1sT4b/vdch39iHd+FePWdd/ZhPJV43HcLvkJDSCzMIbx1K7SDwfLC0tES0V
-         dPxv6Hsp+hsWw==
-Date:   Fri, 23 Jun 2023 15:14:58 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     lpieralisi@kernel.org, kw@linux.com, kishon@kernel.org,
-        bhelgaas@google.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        dlemoal@kernel.org
-Subject: Re: [PATCH v6 2/9] PCI: endpoint: Pass EPF device ID to the probe
- function
-Message-ID: <20230623201458.GA201342@bhelgaas>
+        Fri, 23 Jun 2023 16:15:38 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C18E2733
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 13:15:21 -0700 (PDT)
+Date:   Fri, 23 Jun 2023 22:15:17 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1687551319;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+rOuJ0EojYhp+SwRjs1UE2wFsEuADPRbuu96NWj04jc=;
+        b=vklA3KHcYIeQ8abDfiavFibQAUoNowGOojA9cQTRd8eBLmpzSXU+KpI8o7ZjmxVJpVhuAa
+        /WmVzKWicviG9IRDI0XZvHO2R/yyXCqhomvIX5hjGO4MvCTqUQf9Avke39RqTKe0X8Atdf
+        3HsI/D/B51kPXEnxOs7aQtIeiPeEAtG/2ijD6q5/NtgxgWUhMdHlXveZAwQCvaLlkilQsX
+        3LVDhGM60kNGEqnvUVA668rJ1+xv5CA+sLmqe7giEarcIq2Pp8OdHvx2YCzqD0waE0QcGs
+        sLvgTNa3e/LzUxzx9kXPhCl43Xw5BcVOqj6gQ+wJkBKHnzMtmOChxdHohya0aA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1687551319;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+rOuJ0EojYhp+SwRjs1UE2wFsEuADPRbuu96NWj04jc=;
+        b=I11awLMBniQg45qxTqHudRDJCpolCWftDRg9wMpJy+7/uIdTho0BTQlNRsBhVE3Tp1dD1r
+        zEuZgrl/bW7TFCCw==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        John Ogness <john.ogness@linutronix.de>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>
+Subject: [PATCH v3 2/2] mm/page_alloc: Use write_seqlock_irqsave() instead
+ write_seqlock() + local_irq_save().
+Message-ID: <20230623201517.yw286Knb@linutronix.de>
+References: <20230623171232.892937-1-bigeasy@linutronix.de>
+ <20230623171232.892937-3-bigeasy@linutronix.de>
+ <ZJXhxJU2jFccMjkg@dhcp22.suse.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230602114756.36586-3-manivannan.sadhasivam@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <ZJXhxJU2jFccMjkg@dhcp22.suse.cz>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,39 +72,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 02, 2023 at 05:17:49PM +0530, Manivannan Sadhasivam wrote:
-> Currently, the EPF probe function doesn't get the device ID argument needed
-> to correctly identify the device table ID of the EPF device.
-> ...
+__build_all_zonelists() acquires zonelist_update_seq by first disabling
+interrupts via local_irq_save() and then acquiring the seqlock with
+write_seqlock(). This is troublesome and leads to problems on
+PREEMPT_RT. The problem is that the inner spinlock_t becomes a sleeping
+lock on PREEMPT_RT and must not be acquired with disabled interrupts.
 
-> +++ b/drivers/pci/endpoint/functions/pci-epf-ntb.c
-> @@ -2075,11 +2075,12 @@ static struct config_group *epf_ntb_add_cfs(struct pci_epf *epf,
->  /**
->   * epf_ntb_probe() - Probe NTB function driver
->   * @epf: NTB endpoint function device
-> + * @id: NTB endpoint function device ID
->   *
->   * Probe NTB function driver when endpoint function bus detects a NTB
->   * endpoint function.
->   */
-> -static int epf_ntb_probe(struct pci_epf *epf)
-> +static int epf_ntb_probe(struct pci_epf *epf, const struct pci_epf_device_id *id)
-> ...
+The API provides write_seqlock_irqsave() which does the right thing in
+one step.
+printk_deferred_enter() has to be invoked in non-migrate-able context to
+ensure that deferred printing is enabled and disabled on the same CPU.
+This is the case after zonelist_update_seq has been acquired.
 
-> +++ b/drivers/pci/endpoint/functions/pci-epf-vntb.c
-> @@ -1401,7 +1401,7 @@ static struct pci_epf_ops epf_ntb_ops = {
+There was discussion on the first submission that the order should be:
+	local_irq_disable();
+	printk_deferred_enter();
+	write_seqlock();
 
->   *
->   * Returns: Zero for success, or an error code in case of failure
->   */
-> -static int epf_ntb_probe(struct pci_epf *epf)
-> +static int epf_ntb_probe(struct pci_epf *epf, const struct pci_epf_device_id *id)
+to avoid pitfalls like having an unaccounted printk() coming from
+write_seqlock_irqsave() before printk_deferred_enter() is invoked. The
+only origin of such a printk() can be a lockdep splat because the
+lockdep annotation happens after the sequence count is incremented.
+This is exceptional and subject to change.
 
-I updated the pci/endpoint branch to add kernel-doc for the new "id",
-same as you did in pci-epf-ntb.c.
+It was also pointed that PREEMPT_RT can be affected by the printk
+problem since its write_seqlock_irqsave() does not really disable
+interrupts. This isn't the case because PREEMPT_RT's printk
+implementation differs from the mainline implementation in two important
+aspects:
+- Printing happens in a dedicated threads and not at during the
+  invocation of printk().
+- In emergency cases where synchronous printing is used, a different
+  driver is used which does not use tty_port::lock.
 
-Just FYI, Lorenzo & Krzysztof -- hopefully there are no more updates
-before the merge window, but if you do add anything to this branch,
-update it first.
+Acquire zonelist_update_seq with write_seqlock_irqsave() and then defer
+printk output.
 
-Bjorn
+Fixes: 1007843a91909 ("mm/page_alloc: fix potential deadlock on zonelist_up=
+date_seq seqlock")
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Acked-by: Michal Hocko <mhocko@suse.com>
+---
+v2=E2=80=A6v3
+  - Update comment as per Michal's suggestion.
+
+v1=E2=80=A6v2:
+  - Improve commit description
+
+ mm/page_alloc.c | 15 ++++++---------
+ 1 file changed, 6 insertions(+), 9 deletions(-)
+
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 47421bedc12b7..440e9af67b48d 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -5808,19 +5808,17 @@ static void __build_all_zonelists(void *data)
+ 	unsigned long flags;
+=20
+ 	/*
+-	 * Explicitly disable this CPU's interrupts before taking seqlock
+-	 * to prevent any IRQ handler from calling into the page allocator
+-	 * (e.g. GFP_ATOMIC) that could hit zonelist_iter_begin and livelock.
++	 * The zonelist_update_seq must be acquired with irqsave because the
++	 * reader can be invoked from IRQ with GFP_ATOMIC.
+ 	 */
+-	local_irq_save(flags);
++	write_seqlock_irqsave(&zonelist_update_seq, flags);
+ 	/*
+-	 * Explicitly disable this CPU's synchronous printk() before taking
+-	 * seqlock to prevent any printk() from trying to hold port->lock, for
++	 * Also disable synchronous printk() to prevent any printk() from
++	 * trying to hold port->lock, for
+ 	 * tty_insert_flip_string_and_push_buffer() on other CPU might be
+ 	 * calling kmalloc(GFP_ATOMIC | __GFP_NOWARN) with port->lock held.
+ 	 */
+ 	printk_deferred_enter();
+-	write_seqlock(&zonelist_update_seq);
+=20
+ #ifdef CONFIG_NUMA
+ 	memset(node_load, 0, sizeof(node_load));
+@@ -5857,9 +5855,8 @@ static void __build_all_zonelists(void *data)
+ #endif
+ 	}
+=20
+-	write_sequnlock(&zonelist_update_seq);
+ 	printk_deferred_exit();
+-	local_irq_restore(flags);
++	write_sequnlock_irqrestore(&zonelist_update_seq, flags);
+ }
+=20
+ static noinline void __init
+--=20
+2.40.1
+
