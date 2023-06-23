@@ -2,135 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC33673C4E0
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 01:43:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B550073C4E6
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 01:44:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232009AbjFWXnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 19:43:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55270 "EHLO
+        id S232191AbjFWXoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 19:44:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230010AbjFWXnS (ORCPT
+        with ESMTP id S230010AbjFWXoV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 19:43:18 -0400
-Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34EF02703;
-        Fri, 23 Jun 2023 16:43:17 -0700 (PDT)
-Received: by mail-io1-f46.google.com with SMTP id ca18e2360f4ac-78333585d28so32790139f.1;
-        Fri, 23 Jun 2023 16:43:17 -0700 (PDT)
+        Fri, 23 Jun 2023 19:44:21 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F9482701
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 16:44:20 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2b45a71c9caso20432791fa.3
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 16:44:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1687563858; x=1690155858;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=gVT3Ae52uNnNMAjvZ6ok3W1cvzQFVUDD1dzfpAkc+Ro=;
+        b=FKr6y0D7M7n2ZF8m2cxTyTM2x+KAmirSuNycbvhe3F2dpHrILwlDgmG1wD+uBpH85d
+         y9SaEcN/5s/p/BqAuuiEdmnSstGU0+ZYF5LuBmtmmPZTMeP5SEPorASF+frX0o66GKtF
+         ZnlRv3nz7hNMgexnZC050NeSL4U6f0ecCaFs4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687563796; x=1690155796;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=fTiyezCl+ncjMsIOOS0sUB9bYyrGCDjIJOvndxohyZs=;
-        b=JsAIoLHPQR83cIFWCg7WWq9dOFpHwbGPHK2yoY125gC8xVqx2+ttlxJX+sxoETmQlV
-         0nzPjnhz39qU6o87QsXUo3XE8rc8xVe1tCFq0v/HUv/SqKNKfCrP1E1R7lgXcGuOx6y2
-         Ye3G6ypunxQdjQzz2ukdGGZuVQNU006TpPpL8MAHc+uIiGpnV85+2gp/WvADNQ/2sRCU
-         AoLsbcQUu6qTlfBlobD2G6x4CJs0P6/7LAU5AFlr+R6jVOZVLv1PoQKKkeOqS1a/I5G5
-         iHh6o5EBG3JC2u0sVTRVWCc72uLnf7/POT8WGjwChV0ytJvnTeM9K3NQ4zI7JypbiFa8
-         xFfg==
-X-Gm-Message-State: AC+VfDw5DExrdMCkSqQcgXx602OXDOFT2Gsg8bbCY0m4jzAMeRS+bMz2
-        HjkFdCKixSxi9ODyQ8CMJA==
-X-Google-Smtp-Source: ACHHUZ704nUo/Qe+1L5BBq/vh9K03eeZluxsw6d51akGW3mbLVGxB1UGHdSEiXEdc5xMZV7l5fDOHg==
-X-Received: by 2002:a5d:9483:0:b0:760:e308:107e with SMTP id v3-20020a5d9483000000b00760e308107emr15001057ioj.0.1687563796356;
-        Fri, 23 Jun 2023 16:43:16 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id r27-20020a02c85b000000b0041407c67451sm72416jao.165.2023.06.23.16.43.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Jun 2023 16:43:15 -0700 (PDT)
-Received: (nullmailer pid 1606691 invoked by uid 1000);
-        Fri, 23 Jun 2023 23:43:09 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        d=1e100.net; s=20221208; t=1687563858; x=1690155858;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gVT3Ae52uNnNMAjvZ6ok3W1cvzQFVUDD1dzfpAkc+Ro=;
+        b=EJ/mn7mTgm4QvvSzYnhGU8LBpMvX4yQ/auZT/zXllAwmAzfgJzKcZOLSXWhSv/ygkm
+         KCdVcHfKOpeshLOMXEsSqAaht0KdMIcP0Jkp1TufMu23fOzY0mNAhdCsveUubdyuT9eU
+         wtXT2/H4F/sMH+U875FGDo5z4+Xv2m7mJUWw9uf+r/vvH8qTqCiNdLfyQjFr8h/ynSfr
+         9m834LghW/8utESbj7sfTpxL1BC82WvhZmPvmmFBFZAeHfB/lW9RvXc9FBCWGL9JMVq0
+         joK1BZnPrKhs4GzYw6nSivlakQnXqsew/jEJDiGsrQvrM4P28xWeJrPAZSKtTRn/6QAm
+         Pd3g==
+X-Gm-Message-State: AC+VfDx8LpKRnjwA/oJLpVn078GrT7h7UttT60UgT1yyIArEhT5JAM8v
+        DQEglCCY3nx3hyP7Y/ikpx7OfJV6J0U97ryWvOHlXHRC
+X-Google-Smtp-Source: ACHHUZ5B9eF6yR0rg4XLRNvj6y8BPu1OGFsACB5jmDE4bNWS31YJbSp3D0/+d3JI6H8QWZNpADpjvg==
+X-Received: by 2002:a2e:9d0f:0:b0:2b5:8606:f834 with SMTP id t15-20020a2e9d0f000000b002b58606f834mr5901557lji.40.1687563858323;
+        Fri, 23 Jun 2023 16:44:18 -0700 (PDT)
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com. [209.85.208.181])
+        by smtp.gmail.com with ESMTPSA id z20-20020a2e8e94000000b002af8aaebce4sm27573ljk.8.2023.06.23.16.44.17
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Jun 2023 16:44:17 -0700 (PDT)
+Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2b479d53d48so20642571fa.1
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 16:44:17 -0700 (PDT)
+X-Received: by 2002:a2e:6e16:0:b0:2b5:950a:711c with SMTP id
+ j22-20020a2e6e16000000b002b5950a711cmr3568282ljc.10.1687563857166; Fri, 23
+ Jun 2023 16:44:17 -0700 (PDT)
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Varshini Rajendran <varshini.rajendran@microchip.com>
-Cc:     ulf.hansson@linaro.org, krzysztof.kozlowski+dt@linaro.org,
-        edumazet@google.com, broonie@kernel.org, arnd@arndb.de,
-        maz@kernel.org, lgirdwood@gmail.com, alexandre.belloni@bootlin.com,
-        alain.volmat@foss.st.com, p.zabel@pengutronix.de,
-        mihai.sain@microchip.com, soc@kernel.org,
-        linux-mtd@lists.infradead.org, cristian.birsan@microchip.com,
-        jerry.ray@microchip.com, tudor.ambarus@linaro.org,
-        miquel.raynal@bootlin.com, richard@nod.at,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        balamanikandan.gunasundar@microchip.com, lee@kernel.org,
-        olivia@selenic.com, sboyd@kernel.org, mturquette@baylibre.com,
-        kuba@kernel.org, Hari.PrasathGE@microchip.com,
-        linux-kernel@vger.kernel.org, balakrishnan.s@microchip.com,
-        alsa-devel@alsa-project.org, durai.manickamkr@microchip.com,
-        sre@kernel.org, vkoul@kernel.org, linux-rtc@vger.kernel.org,
-        linux-serial@vger.kernel.org, andrew@lunn.ch,
-        devicetree@vger.kernel.org, nayabbasha.sayed@microchip.com,
-        linux-gpio@vger.kernel.org, nicolas.ferre@microchip.com,
-        davem@davemloft.net, pabeni@redhat.com,
-        linux-arm-kernel@lists.infradead.org, linux@roeck-us.net,
-        wim@linux-watchdog.org, tglx@linutronix.de,
-        horatiu.vultur@microchip.com, radu_nicolae.pirea@upb.ro,
-        dharma.b@microchip.com, a.zummo@towertech.it,
-        linux-mmc@vger.kernel.org, richard.genoud@gmail.com,
-        claudiu.beznea@microchip.com, linus.walleij@linaro.org,
-        conor+dt@kernel.org, herbert@gondor.apana.org.au,
-        eugen.hristev@collabora.com, dmaengine@vger.kernel.org,
-        netdev@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux@armlinux.org.uk, linux-watchdog@vger.kernel.org,
-        linux-pm@vger.kernel.org, robh+dt@kernel.org,
-        linux-i2c@vger.kernel.org, linux-crypto@vger.kernel.org,
-        neil.armstrong@linaro.org, vigneshr@ti.com,
-        manikandan.m@microchip.com, linux-clk@vger.kernel.org,
-        olof@lixom.net
-In-Reply-To: <20230623203056.689705-32-varshini.rajendran@microchip.com>
-References: <20230623203056.689705-1-varshini.rajendran@microchip.com>
- <20230623203056.689705-32-varshini.rajendran@microchip.com>
-Message-Id: <168756378936.1606652.14221929175769628362.robh@kernel.org>
-Subject: Re: [PATCH v2 31/45] dt-bindings: atmel-classd: add sam9x7
- compatible
-Date:   Fri, 23 Jun 2023 17:43:09 -0600
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20230623211808.7667-1-alexander.deucher@amd.com>
+In-Reply-To: <20230623211808.7667-1-alexander.deucher@amd.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 23 Jun 2023 16:44:00 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiOCgiwzVPOwORHPML9eBphnbtM2DhRcv+v=-tnRrgbYg@mail.gmail.com>
+Message-ID: <CAHk-=wiOCgiwzVPOwORHPML9eBphnbtM2DhRcv+v=-tnRrgbYg@mail.gmail.com>
+Subject: Re: [pull] amdgpu drm-fixes-6.4
+To:     Alex Deucher <alexander.deucher@amd.com>
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        airlied@gmail.com, daniel.vetter@ffwll.ch,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 23 Jun 2023 at 14:18, Alex Deucher <alexander.deucher@amd.com> wrote:
+>
+> are available in the Git repository at:
+>
+>   https://gitlab.freedesktop.org/agd5f/linux.git tags/amd-drm-fixes-6.4-2023-06-23
 
-On Sat, 24 Jun 2023 02:00:42 +0530, Varshini Rajendran wrote:
-> Add sam9x7 compatible to DT bindings documentation.
-> 
-> Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
-> ---
->  .../devicetree/bindings/sound/atmel,sama5d2-classd.yaml      | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
+That's not a valid signed tag.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Yes, it's a tag.  But it doesn't actually have any cryptographic
+signing, and I'm not willing to pull random content from git sites
+that I can't verify. In fact, these days I ask even kernel.org pull
+requests to be proper signed tags, although I haven't really gotten to
+the point where I *require* it.
 
-yamllint warnings/errors:
+So please sign your tags - use "git tag -s" (or "-u keyname" if you
+have some specific key you want to use, rather than one described by
+your regular git config file).
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/sound/atmel,sama5d2-classd.example.dtb: sound@fc048000: compatible: 'oneOf' conditional failed, one must be fixed:
-	['atmel,sama5d2-classd'] is too short
-	from schema $id: http://devicetree.org/schemas/sound/atmel,sama5d2-classd.yaml#
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230623203056.689705-32-varshini.rajendran@microchip.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+                  Linus
