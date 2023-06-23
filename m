@@ -2,118 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3CC473B448
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 11:59:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 204F573B42F
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 11:55:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231784AbjFWJ7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 05:59:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42770 "EHLO
+        id S231748AbjFWJzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 05:55:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbjFWJ7d (ORCPT
+        with ESMTP id S231732AbjFWJzT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 05:59:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D287E75;
-        Fri, 23 Jun 2023 02:59:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C4A82619E6;
-        Fri, 23 Jun 2023 09:59:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59253C433C0;
-        Fri, 23 Jun 2023 09:59:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687514371;
-        bh=4Sre3Xe85q5AdiCISxJI7jZ0ap6BzfWgIsXsmS9GAeg=;
-        h=Subject:From:To:Cc:In-Reply-To:References:Date:From;
-        b=qF0FqNbgti2kUjCNRZktFY/T7IkOS0lKFWJ9d35XUkpV//Dbgvb/A+EveLG/fgnVo
-         UBdskociHfOd35HYD5d9Ejx+hHn5FlaaMy1ZxRFsCZxAIRQMdjXNjn/LhxbPPpS4be
-         BwZ1+tg5L/ix1eyqDu0EpvEBHyMUsxCZMm5YLzXAE4Rg/2NbYGcaow+8cYsmm97kTk
-         AAWHCTCDYVo4rlXoCnoAy2LoQo9yGxuh3RbXT04+6Yc6HrBRpFZVUJ5Tq0X8HQNY8L
-         CVrz3xO+Qv32lcWcKkaFiQ3SLSVKXTK1PTXOcgc1jqkceav+NXiglVIbSD3TFJl6zl
-         chQQUgcz8Krmw==
-Message-ID: <3719669bc40890e3a8221593ff8a178411ad749b.camel@kernel.org>
-Subject: Re: [PATCH] fcntl.2: document F_UNLCK F_OFD_GETLK extension
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Stas Sergeev <stsp2@yandex.ru>, linux-kernel@vger.kernel.org
-Cc:     Chuck Lever <chuck.lever@oracle.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org, linux-api@vger.kernel.org
-In-Reply-To: <20230621152214.2720319-4-stsp2@yandex.ru>
-References: <20230621152214.2720319-1-stsp2@yandex.ru>
-         <20230621152214.2720319-4-stsp2@yandex.ru>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 23 Jun 2023 05:55:19 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8014DE75;
+        Fri, 23 Jun 2023 02:55:17 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-31297125334so447611f8f.0;
+        Fri, 23 Jun 2023 02:55:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687514116; x=1690106116;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=Qmh+oFPupR7SMi0EW4fghuDVJJeW4dIxynImVpI7xdU=;
+        b=eGa/V89BwHHOjZt+jUypN4x4W6+lXA0YeYl0gdt3wuqwV+MubBWHcTdwxBKdzJK87u
+         qdWZ8u4s3KEIoC+Ru/iRTVRB13quL8hwLjT1Dh3PRH9PFnn3x9P2d6J5SsiY3AzfYm9S
+         rWHHP//2EVNgLZPkofKWuOiq2wOaLhexpYpZt3qpebJ6EbvMEKPEcb7Pa3XOv7nL2krq
+         EZ+F1jvL8aGBx7LxhHPJWMFRrZxrHs2RjmPthTsvqXma5GSMoXzVfZmyEY8fvR5y4gbb
+         lGrSnWnge4NRg6OgLYxYcxy1tNwrWAhj/ok5KXtrUnzlLMJCvILSESNjwCTTewHf9ZZ9
+         zkwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687514116; x=1690106116;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Qmh+oFPupR7SMi0EW4fghuDVJJeW4dIxynImVpI7xdU=;
+        b=gKrKqgkOiOeQ17crO8hvpB8uUvxolTixlVURghnNRfw1ExHD4hHH6ljKnYjO1V19RD
+         EiKE1OKcK9sLmJpPiiL2Q4ZqXtcGLpYne7aLoIkO6R/Uc11lGLzoel30OoPxABGnq8ym
+         mLvXjboZ4c8Tfls9b7moAV6hV2ZpxLIR9YY0f7NRBWu8jec8HgQ/gRq9r5eo2IXErkOC
+         2vbfolnl6IUJohAatquxug8UXhwGaQPYE/ip1wuzsW1N3q0HCRLpN/fNcrILzJxwQPgK
+         tVZIuBw5KSqH8heSbqTW4ZKDgsqZy4wstjDZ/Yv5KIKDJl2WJ+KtrD05X+lmJGpD53iW
+         e7rA==
+X-Gm-Message-State: AC+VfDxS3VgSda93ODR8GAp7W9rj/71CbPRMJtxeK9cCtckngJ+IWCRw
+        DRTcStC3j6WLuLl7k70a9ws=
+X-Google-Smtp-Source: ACHHUZ4OSLVmtKTfKtcWCsrjtypAdFc6GlY7TFfwJHa8LbuQj2pKhDsE5iflF0+tykCL2iX3uLTbTQ==
+X-Received: by 2002:a5d:591c:0:b0:30f:bd4f:8f00 with SMTP id v28-20020a5d591c000000b0030fbd4f8f00mr18563321wrd.28.1687514115444;
+        Fri, 23 Jun 2023 02:55:15 -0700 (PDT)
+Received: from Ansuel-xps. (93-34-93-173.ip49.fastwebnet.it. [93.34.93.173])
+        by smtp.gmail.com with ESMTPSA id o16-20020a5d6850000000b003047ae72b14sm9171536wrw.82.2023.06.23.02.55.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Jun 2023 02:55:14 -0700 (PDT)
+Message-ID: <64956c02.5d0a0220.ed611.6b79@mx.google.com>
+X-Google-Original-Message-ID: <ZJUNN0RXrUnV8o96@Ansuel-xps.>
+Date:   Fri, 23 Jun 2023 05:10:47 +0200
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [net-next PATCH] net: dsa: qca8k: add support for additional
+ modes for netdev trigger
+References: <20230621095409.25859-1-ansuelsmth@gmail.com>
+ <20230622193120.5cc09fc3@kernel.org>
 MIME-Version: 1.0
-Date:   Thu, 22 Jun 2023 08:03:53 -0400
-User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230622193120.5cc09fc3@kernel.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-06-21 at 20:22 +0500, Stas Sergeev wrote:
-> F_UNLCK has the special meaning when used as a lock type on input.
-> It returns the information about any lock found in the specified
-> region on that particular file descriptor. Locks on other file
-> descriptors are ignored by F_UNLCK.
->=20
-> Signed-off-by: Stas Sergeev <stsp2@yandex.ru>
->=20
-> CC: Jeff Layton <jlayton@kernel.org>
-> CC: Chuck Lever <chuck.lever@oracle.com>
-> CC: Alexander Viro <viro@zeniv.linux.org.uk>
-> CC: Christian Brauner <brauner@kernel.org>
-> CC: linux-fsdevel@vger.kernel.org
-> CC: linux-kernel@vger.kernel.org
-> CC: Shuah Khan <shuah@kernel.org>
-> CC: linux-kselftest@vger.kernel.org
-> CC: linux-api@vger.kernel.org
->=20
-> ---
->  man2/fcntl.2 | 7 +++++++
->  1 file changed, 7 insertions(+)
->=20
-> diff --git a/man2/fcntl.2 b/man2/fcntl.2
-> index 7b5604e3a..e3e3e7b8c 100644
-> --- a/man2/fcntl.2
-> +++ b/man2/fcntl.2
-> @@ -604,6 +604,13 @@ then details about one of these locks are returned v=
-ia
->  .IR lock ,
->  as described above for
->  .BR F_GETLK .
-> +.B F_UNLCK
-> +has the special meaning when put into
-> +.I l_type
-> +as an input. It returns the information about any lock in the specified
-> +range on that particular file descriptor. The locks on other file
-> +descriptors are ignored by
-> +.BR F_UNLCK .
->  .PP
->  In the current implementation,
->  .\" commit 57b65325fe34ec4c917bc4e555144b4a94d9e1f7
+On Thu, Jun 22, 2023 at 07:31:20PM -0700, Jakub Kicinski wrote:
+> On Wed, 21 Jun 2023 11:54:09 +0200 Christian Marangi wrote:
+> > The QCA8K switch supports additional modes that can be handled in
+> > hardware for the LED netdev trigger.
+> > 
+> > Add these additional modes to further support the Switch LEDs and
+> > offload more blink modes.
+> 
+> Something may be funny with the date on your system, FWIW, because your
+> patches seem to arrive almost a day in the past.
 
+Lovely WSL istance (Windows Subsystem for Linux) that goes out of sync with
+the host machine sometimes. Does the time cause any problem? I will
+check that in the future before sending patches...
 
-We need to be pedantic for manpages. A "file description" is the
-representation of the open file in the kernel (basically, the "struct
-file" in the kernel). A file _descriptor_ is the numeric identifier
-returned by open() and similar functions.
-
-The locks are owned by the file description, so that would be the better
-term to use here. I think you want something like:
-
-"When the l_type is set to F_UNLCK, returned locks are limited to ones
-set on the given file description. Locks set on other file descriptions
-are ignored on F_GETLK requests with the l_type set to F_UNLCK."
-
---=20
-Jeff Layton <jlayton@kernel.org>
+-- 
+	Ansuel
