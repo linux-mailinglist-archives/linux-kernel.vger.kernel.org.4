@@ -2,81 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9BC173C199
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 22:58:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3E9773C1BB
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 23:04:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231523AbjFWU6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 16:58:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41840 "EHLO
+        id S231856AbjFWVEy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 17:04:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjFWU54 (ORCPT
+        with ESMTP id S229644AbjFWVEw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 16:57:56 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 335D32130
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 13:57:55 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 89B7E320091B;
-        Fri, 23 Jun 2023 16:57:52 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 23 Jun 2023 16:57:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
-         s=fm1; t=1687553872; x=1687640272; bh=tRa6faL8nedd+6K1urdZanKhA
-        GDHKhkp0FltEiRxjrc=; b=TwF0ATiRxsyGdeqS4T3aGJ64+692dHb8irSLjG1EN
-        iBWecmSb3AydJcCs1Pi0PVJ8QzHEK7454gF4HJb2tipNpB+AQGa0SYrYZGs+z0mj
-        19wzNbVny4JBDpbg/kffWJMerVhoEX2DlbT/8gIG2K1hJ8WQONyVIixQmkrnnR/a
-        U9GBZmuyATWIVa/cl2+T9+d1KlKlDYRfvm1llz2HuJ7zHe4mQ49Eh6WQl3uQ4FSI
-        OnPyaTiSNmE81zu5qlAsbkVEWdCdY9GoBlBPlgz4lxzV6kC/7bQ6qDgG7fQo0xGr
-        pTNDFUmz6pZolgrne0MY4DNH6bpJG/2WeV/aPhp9Z1QKw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1687553872; x=1687640272; bh=tRa6faL8nedd+6K1urdZanKhAGDHKhkp0Fl
-        tEiRxjrc=; b=Q85cYncPivm20vbdgI6SSmRAaYOsOGU0iDyA8JNZ3NMfdp9A6ir
-        QRTDpRCkwmbAUgPu2RJ1AAJ3hKO9EGBM5Mb6V7EQQ7VYFaOu4zHqGUSChMoOzeVq
-        FekFTMjd2gaGrQJgjpDyUzWLLq0WTfKWrAfDgB1dAZ1976/pICjIT+8WiS1xFaqD
-        oKamPThot9Rag2fc1M4TpfI8Zj1G1+93i0yeqWEmP6S419QIgI4HP0VEjTANI7aQ
-        jScubguDNBLsoyvnm2m+y08EKGqFkXjtWG4lpltiYGf/LHrgzZPCT9gyyiHhU8AT
-        8a8mBk4svt5JlXMvxV7SDTKzJSRlkIJscaA==
-X-ME-Sender: <xms:TweWZLDoxwtYY_a4kNu3kwHC0kHkHFHFUXGGrqgpszeo8DgmMfQtQQ>
-    <xme:TweWZBhPYglexVYfV3uv6qmPZLTNriAxlqmQw1-b_OwAm7EfE__8nP0G6rTkrhxQK
-    2TM8zVFQlwXHtz57Qc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeeggedgudehgecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeeffeeuhfekjeevtddvtdelledttddtjeegvdfhtdduvdfhueekudeihfejtefg
-    ieenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
-    enucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:TweWZGmVawOoX0ciW3xasRRliJYjyag0gE5tQjaRNC-pc8z3C2TiIg>
-    <xmx:TweWZNxfuiwghS0sO8ByLdbOFkDXeda16iXgDMF-xvhTLnWpKAGO3A>
-    <xmx:TweWZAQ9juBrlkXZBzzYyTaPH6MZ8P3QlBlcvuu1z7R0b9G5L8dARA>
-    <xmx:UAeWZGNY94__nHjRUBGix6tB2_92CYEt0vtgew1XyqmAfMzvKd8KEA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 861C1B60086; Fri, 23 Jun 2023 16:57:51 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
-Mime-Version: 1.0
-Message-Id: <fac1e7b7-4ba6-4334-a550-9d8a78037bf6@app.fastmail.com>
-Date:   Fri, 23 Jun 2023 22:57:31 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Linus Torvalds" <torvalds@linux-foundation.org>
-Cc:     soc@kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        "Bjorn Andersson" <andersson@kernel.org>,
-        "Doug Anderson" <dianders@chromium.org>,
-        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>
-Subject: [GIT PULL] ARM: SoC fixes for 6.4, part 3
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        Fri, 23 Jun 2023 17:04:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD3FC2114
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 14:04:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 686C161B5A
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 21:04:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 198ABC433C8;
+        Fri, 23 Jun 2023 21:04:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687554289;
+        bh=7hI9rVh1AROgGPI9A/ZuJDlHTrmVy3Qkk2LrdeMj2Kk=;
+        h=From:Date:Subject:To:Cc:From;
+        b=VlCJlzWiJhxlsIWBv4CSmwjV0upRi6bO6AsGQu1Ee+4kXm7LGHaaAD/uJGeLtSZjr
+         q9M9qjSpKlw+cYOXxUlhV+qwBt/zshTr73l3O7zRynpFoEINfId2hV8uMFHvPHbLib
+         DzuSLSfdOILXsnOUOu9tedmGJSejKmy+n+Rp7mTr9lV2MEaw1A7cZHj/xhZoqiwm/R
+         C581VpO+YtYn/NaaZl9NUR4dltaNMZxP6giVB+/VUmXO8vTKa72OUDIBOWQ36A7bWN
+         JPqa2n7fMeveCGq4CNTld6Lk+vgpKvSa66ztmQ26zFHZ5TbfUqwTMnQ8/x19I0yKUr
+         66I4HFPC6tFHg==
+From:   Mark Brown <broonie@kernel.org>
+Date:   Fri, 23 Jun 2023 22:04:39 +0100
+Subject: [PATCH] ASoC: core: Always store of_node when getting DAI link
+ component
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230623-asoc-fix-meson-probe-v1-1-82b2c2ec5ca4@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAOYIlmQC/x3NwQqDMBCE4VeRPXeLSazQvkrpIRvHmkMT2YVSE
+ N+90ePP8DEbGTTD6NFtpPhmy7W0cJeO0hLLG5yn1uR7H/rRB45WE8/5xx9YLbxqFfB9QJqcCwI
+ RalSigUVjScuBTzNeb8e0Kpo+H5+vff8DeQlCsoEAAAA=
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+X-Mailer: b4 0.13-dev-c6835
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2220; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=7hI9rVh1AROgGPI9A/ZuJDlHTrmVy3Qkk2LrdeMj2Kk=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBklgju/hRIWDmE+d0m//kTBjqBjvxFk+xPU8keL
+ uIdzkUSermJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZJYI7gAKCRAk1otyXVSH
+ 0KeCB/47Tcfz9mxx4ktjj+ob071MA3r7VDmxA4L4Y8SZmFa15oo3ev5L1UnwYw02OZciRhTspyB
+ DdRPC3Ws7UxmCX/cvSlAdcq9ZV6OcCzmhkTRlMC7coRblp5PuopGC40rNDXfI9pPri08Z6wGaHX
+ wk3TBK6iL1Rb7u1e/QL8Z+S6SUt1OVv4L1wWytnqb34u+zx4Aa1wPF+VJb7cOtU3b2ch9urcBCw
+ HzGE3jaKBWaWyhAG6irJ8zJcq2AbYXAIv99WxMahylDkz3UvAlU+cd4I2wQES+xtC7KFmxf803u
+ l/CQOrhnlNf/Qe6oIyUA/KQ6qIwxnRXMLx6sRq/kfH8VvHSE
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,71 +70,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 858fd168a95c5b9669aac8db6c14a9aeab446375:
+The generic snd_soc_dai_get_dlc() contains a default translation function
+for DAI names which has factored out common code in a number of card
+drivers, resolving the dai_name and of_node either using a driver provided
+translation function or with a generic implementation. Unfortunately the
+of_node can't be set by the translation function since it currently doesn't
+have an interface to do that but snd_soc_dai_get_dlc() only initialises the
+of_node in the case where there is no translation function.
 
-  Linux 6.4-rc6 (2023-06-11 14:35:30 -0700)
+This breaks the Meson support after conversion to use the generic helpers
+since the DPCM cards for it check which component of the SoC is connected
+to each link by checking the compatible for the component and the Meson
+components provide a custom operation so don't use the generic code.
 
-are available in the Git repository at:
+Fix this and potentially other cards by unconditionally storing the node in
+the dai_link_component, there shouldn't be a binding specific of_node
+selected since that's how we determine the translation function.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/arm-fixes-6.4-3
+Fixes: 2e1dbea1f8a3 ("ASoC: meson: use snd_soc_{of_}get_dlc()")
+Fixes: 3c8b5861850c ("ASoC: soc-core.c: add index on snd_soc_of_get_dai_name()")
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ sound/soc/soc-core.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-for you to fetch changes up to ed8ff046eddd916627e1e9a549eacd9c043fde7d:
+diff --git a/sound/soc/soc-core.c b/sound/soc/soc-core.c
+index f06a20773a34..11bc5250ffd0 100644
+--- a/sound/soc/soc-core.c
++++ b/sound/soc/soc-core.c
+@@ -3262,6 +3262,8 @@ int snd_soc_get_dlc(const struct of_phandle_args *args, struct snd_soc_dai_link_
+ 	struct snd_soc_component *pos;
+ 	int ret = -EPROBE_DEFER;
+ 
++	dlc->of_node = args->np;
++
+ 	mutex_lock(&client_mutex);
+ 	for_each_component(pos) {
+ 		struct device_node *component_of_node = soc_component_to_node(pos);
+@@ -3300,7 +3302,6 @@ int snd_soc_get_dlc(const struct of_phandle_args *args, struct snd_soc_dai_link_
+ 				id--;
+ 			}
+ 
+-			dlc->of_node	= args->np;
+ 			dlc->dai_name	= dai->driver->name;
+ 			if (!dlc->dai_name)
+ 				dlc->dai_name = pos->name;
 
-  Merge tag 'qcom-arm64-fixes-for-6.4-2' of https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into arm/fixes (2023-06-23 22:13:27 +0200)
+---
+base-commit: 154756319cc6f8b8b86241da02da6a8fcc6abd1f
+change-id: 20230623-asoc-fix-meson-probe-94ecd113bebb
 
-----------------------------------------------------------------
-ARM: SoC fixes for 6.4, part 3
+Best regards,
+-- 
+Mark Brown,,, <broonie@kernel.org>
 
-The final bug fixes for Qualcomm and Rockchips came in, all of them
-for devicetree files:
-
- - Devices on Qualcomm SC7180/SC7280 that are cache coherent are now
-   marked so correctly to fix a regression after a change in kernel behavior.
-
- - Rockchips has a few minor changes for correctness of regulator and cache
-   properties, as well as fixes for incorrect behavior of the RK3568 PCI
-   controller and reset pins on two boards.
-
-----------------------------------------------------------------
-Andrew Powers-Holmes (1):
-      arm64: dts: rockchip: Fix rk356x PCIe register and range mappings
-
-Arnd Bergmann (2):
-      Merge tag 'v6.4-rockchip-dtsfixes1' of git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip into arm/fixes
-      Merge tag 'qcom-arm64-fixes-for-6.4-2' of https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into arm/fixes
-
-Douglas Anderson (4):
-      dt-bindings: firmware: qcom,scm: Document that SCM can be dma-coherent
-      arm64: dts: qcom: sc7180: Mark SCM as dma-coherent for IDP
-      arm64: dts: qcom: sc7180: Mark SCM as dma-coherent for trogdor
-      arm64: dts: qcom: sc7280: Mark SCM as dma-coherent for chrome devices
-
-Krzysztof Kozlowski (1):
-      arm64: dts: rockchip: add missing cache properties
-
-Lorenz Brun (1):
-      arm64: dts: rockchip: fix USB regulator on ROCK64
-
-Nicolas Frattaroli (1):
-      arm64: dts: rockchip: fix nEXTRST on SOQuartz
-
-Tianling Shen (1):
-      arm64: dts: rockchip: fix button reset pin for nanopi r5c
-
- .../devicetree/bindings/firmware/qcom,scm.yaml     |  2 ++
- arch/arm64/boot/dts/qcom/sc7180-idp.dts            |  5 ++++
- arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi       |  5 ++++
- arch/arm64/boot/dts/qcom/sc7180.dtsi               |  2 +-
- arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi |  5 ++++
- arch/arm64/boot/dts/qcom/sc7280.dtsi               |  2 +-
- arch/arm64/boot/dts/rockchip/rk3308.dtsi           |  1 +
- arch/arm64/boot/dts/rockchip/rk3328-rock64.dts     | 14 ++---------
- arch/arm64/boot/dts/rockchip/rk3328.dtsi           |  1 +
- .../boot/dts/rockchip/rk3566-soquartz-cm4.dts      | 18 ++++++++------
- arch/arm64/boot/dts/rockchip/rk3566-soquartz.dtsi  | 29 ++++++++++------------
- arch/arm64/boot/dts/rockchip/rk3568-nanopi-r5c.dts |  2 +-
- arch/arm64/boot/dts/rockchip/rk3568-nanopi-r5s.dts |  1 -
- arch/arm64/boot/dts/rockchip/rk3568.dtsi           | 14 ++++++-----
- arch/arm64/boot/dts/rockchip/rk356x.dtsi           |  7 +++---
- arch/arm64/boot/dts/rockchip/rk3588s.dtsi          |  9 +++++++
- 16 files changed, 69 insertions(+), 48 deletions(-)
