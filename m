@@ -2,242 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCBEF73BA75
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 16:43:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6260873BA77
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 16:44:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231840AbjFWOnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 10:43:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39862 "EHLO
+        id S231895AbjFWOnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 10:43:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231769AbjFWOni (ORCPT
+        with ESMTP id S231880AbjFWOnj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 10:43:38 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88821BF2;
-        Fri, 23 Jun 2023 07:43:15 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1E0DEBC;
-        Fri, 23 Jun 2023 16:42:37 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1687531357;
-        bh=wdihR9kOfvIQ6G8MVle6NFFv5LJO2T8O0WCVNoKqb1c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VbcvcnwV642L1NkucKgXc8YtBoftMHpYjSn6AayKFnjm9KWOdNTZIwBoOh8YRg7Cr
-         rItp4abJJNREMYeDz1RHehAffaXManymW8Mn/eeMPNizWKR+4GbM8yOIIl23orQKMW
-         k9Emk67/9E9hMZ1YjHAAqDoJXQQ9lQpQL3d0DrS8=
-Date:   Fri, 23 Jun 2023 17:43:12 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
-Subject: Re: [PATCH 01/39] dt-bindings: display: Add Renesas SH-Mobile LCDC
- bindings
-Message-ID: <20230623144312.GE2112@pendragon.ideasonboard.com>
-References: <cover.1687423204.git.geert+renesas@glider.be>
- <2259ff548f007afcb5a315a4c95c83a0ee4b7e03.1687423204.git.geert+renesas@glider.be>
+        Fri, 23 Jun 2023 10:43:39 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09AD21FCC;
+        Fri, 23 Jun 2023 07:43:18 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1b505665e2fso13614595ad.0;
+        Fri, 23 Jun 2023 07:43:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687531397; x=1690123397;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YCmF5COxqcBz+bGliJVhA6+1kR4LAcgvJJb20tO8jM8=;
+        b=jcyqyMG1wIs6GJGoo7I3pPCED9Krx2Vaj0waG5amzO4Ns1tqpiLZ9M/qlewBCF4gwz
+         UGpn5RATeeCn54m9iuWWnOHqdwVJohXON9PmlJ5ZSBkCAxiEo5W1nYwc8E0r3gVT5cFK
+         A11zigd3kveLCiwk56rR87HO1BHKWrmp/nBeKbgwvxwQ/SMYbeDMNaLjMQ9vuWeMDeFm
+         IkWJdGZbRiUjPYr1YGV7ik7GXEH+/CcnBLL01ZXHG69uzW+C4jGZrqx8M3tx3j+wo4a1
+         RubQq84ZpE9WmTCW4EnIXYVre4n9nXZAk4i1zxrd4tN/zFy/HbHXC0hMpXspLbZyr3Ye
+         skwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687531397; x=1690123397;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YCmF5COxqcBz+bGliJVhA6+1kR4LAcgvJJb20tO8jM8=;
+        b=FCnFoKUCjPqKFNzuE5ATnaBAkE0ekQDsKPGkNFVEGT2kO5chsC3EbVwlR8djx1EG/e
+         SQrglHXqR5wjSiQ/WFrfaCedFjq3nZLYivE0+n+Dqb9853qnySs1MVezwudagjO62Fvp
+         RqiqRGqUoTWFuyFBUzLLph+gwxCIeROShgM7SplSiSix87V7MZOe8FigeXSLTBccr9Ye
+         aaZawuGCTlraZMRL6eh5tRKfyigV1UjhQXfHGxkBT2HZZ1+5tZAEoXfQZL9k9kjoOeiY
+         NjiNCWj5pluc32JLyXvlraRYjZ0VEADvFj5uLgClHpT6xszuqZ0WJy9iOXnM/qD2FN3S
+         /MSw==
+X-Gm-Message-State: AC+VfDy9ZEcdb+ZmEKaj/0FJeq4Usevq3mNF52HUIHcniFTeFFST901S
+        PHTQaR2dC5WkZIiQewWofpw=
+X-Google-Smtp-Source: ACHHUZ7ua2+VdjpIoG2bin7SPKhD7svUhBDP+s0RbDt8MG94CNs7CI3NKjv+L7lHnuAnF8fpRsO3Zg==
+X-Received: by 2002:a17:902:d4c9:b0:1b6:6dc8:edeb with SMTP id o9-20020a170902d4c900b001b66dc8edebmr19631665plg.21.1687531397261;
+        Fri, 23 Jun 2023 07:43:17 -0700 (PDT)
+Received: from localhost ([192.55.54.50])
+        by smtp.gmail.com with ESMTPSA id jn9-20020a170903050900b001b19d14a3d5sm7309227plb.68.2023.06.23.07.43.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Jun 2023 07:43:16 -0700 (PDT)
+Date:   Fri, 23 Jun 2023 07:43:15 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     "Huang, Kai" <kai.huang@intel.com>
+Cc:     "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "liam.merwick@oracle.com" <liam.merwick@oracle.com>,
+        "tobin@ibm.com" <tobin@ibm.com>,
+        "alpergun@google.com" <alpergun@google.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "jmattson@google.com" <jmattson@google.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "srinivas.pandruvada@linux.intel.com" 
+        <srinivas.pandruvada@linux.intel.com>,
+        "slp@redhat.com" <slp@redhat.com>,
+        "dovmurik@linux.ibm.com" <dovmurik@linux.ibm.com>,
+        "michael.roth@amd.com" <michael.roth@amd.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "pgonda@google.com" <pgonda@google.com>,
+        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
+        "rientjes@google.com" <rientjes@google.com>,
+        "Wang, Zhi A" <zhi.a.wang@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "bp@alien8.de" <bp@alien8.de>,
+        "Annapurve, Vishal" <vannapurve@google.com>,
+        "dgilbert@redhat.com" <dgilbert@redhat.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "marcorr@google.com" <marcorr@google.com>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "ashish.kalra@amd.com" <ashish.kalra@amd.com>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        "nikunj.dadhania@amd.com" <nikunj.dadhania@amd.com>,
+        "Rodel, Jorg" <jroedel@suse.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "kirill@shutemov.name" <kirill@shutemov.name>,
+        "jarkko@kernel.org" <jarkko@kernel.org>,
+        "ardb@kernel.org" <ardb@kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
+Subject: Re: [PATCH RFC v9 04/51] KVM: x86: Determine shared/private faults
+ using a configurable mask
+Message-ID: <20230623144315.GC3436214@ls.amr.corp.intel.com>
+References: <20230612042559.375660-5-michael.roth@amd.com>
+ <20230614164709.GT2244082@ls.amr.corp.intel.com>
+ <20230620202841.7qizls3u3kcck45g@amd.com>
+ <20230620211845.GV2244082@ls.amr.corp.intel.com>
+ <20230621230031.37hdnymbjzwjgbo2@amd.com>
+ <c116b7ab8ca02116f2b8d19a8214161c3b30576c.camel@intel.com>
+ <20230622153229.vjkrzi6rgiolstns@amd.com>
+ <25037dfe969698dd109daee8c6dbe0d08a874a08.camel@intel.com>
+ <20230622233906.GA3436214@ls.amr.corp.intel.com>
+ <5ec0664fe81df54019ef5934f2dc6dfadf1d649c.camel@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <2259ff548f007afcb5a315a4c95c83a0ee4b7e03.1687423204.git.geert+renesas@glider.be>
+In-Reply-To: <5ec0664fe81df54019ef5934f2dc6dfadf1d649c.camel@intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
+On Thu, Jun 22, 2023 at 11:52:56PM +0000,
+"Huang, Kai" <kai.huang@intel.com> wrote:
 
-Thank you for the patch.
-
-On Thu, Jun 22, 2023 at 11:21:13AM +0200, Geert Uytterhoeven wrote:
-> Add device tree bindings for the LCD Controller (LCDC) found in Renesas
-> SuperH SH-Mobile and ARM SH/R-Mobile SOCs.
+> On Thu, 2023-06-22 at 16:39 -0700, Isaku Yamahata wrote:
+> > On Thu, Jun 22, 2023 at 10:31:08PM +0000,
+> > "Huang, Kai" <kai.huang@intel.com> wrote:
+> > 
+> > > > If there are better ways to handle *how*
+> > > > that's done I don't have any complaints there, but moving/adding bits
+> > > > to GPA/error_flags after fault time just seems unecessary to me when
+> > > > fault->is_private field can serve that purpose just as well.
+> > > 
+> > > Perhaps you missed my point.  My point is arch.mmu_private_fault_mask and
+> > > arch.gfn_shared_mask seem redundant because the logic around them are exactly
+> > > the same.  I do believe we should have fault->is_private passing to the common
+> > > MMU code.
+> > > 
+> > > In fact, now I am wondering why we need to have "mmu_private_fault_mask" and
+> > > "gfn_shared_mask" in _common_ KVM MMU code.  We already have enough mechanism in
+> > > KVM common code:
+> > > 
+> > >   1) fault->is_private
+> > >   2) kvm_mmu_page_role.private
+> > >   3) an Xarray to tell whether a GFN is private or shared
+> > > 
+> > > I am not convinced that we need to have "mmu_private_fault_mask" and
+> > > "gfn_shared_mask" in common KVM MMU code.  Instead, they can be in AMD and
+> > > Intel's vendor code.
+> > > 
+> > > Maybe it makes sense to have "gfn_shared_mask" in the KVM common code so that
+> > > the fault handler can just strip away the "shared bit" at the very beginning (at
+> > > least for TDX), but for the rest of the time I think we should already have
+> > > enough infrastructure to handle private/shared mapping.
+> > > 
+> > > Btw, one minor issue is, if I recall correctly, for TDX the shared bit must be
+> > > applied to the GFN for shared mapping in normal EPT.  I guess AMD doesn't need
+> > > that for shared mapping.  So "gfn_shared_mask" maybe useful in this case, but
+> > > w/o it I believe we can also achieve in another way via vendor callback.
+> > 
+> > 
+> > "2) kvm_mmu_page_role.private" above has different meaning.
+> > 
+> > a). The fault is private or not.
+> > b). page table the fault handler is walking is private or conventional.
+> > 
+> > a.) is common for SNP, TDX and PROTECTED_VM. It makes sense in
+> > kvm_mmu_do_page_fault() and __kvm_faultin_pfn(). After kvm_faultin_pfn(), the
+> > fault handler can mostly forget it for SNP and PROTECTED_VM. (large page
+> > adjustment needs it, though.) This is what we're discussing in this thread.
+> > 
+> > b.) is specific to TDX. TDX KVM MMU introduces one more page table.
+> > 
+> > 
 > 
-> Based on a plain text prototype by Laurent Pinchart.
-> 
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> Cc: Conor Dooley <conor+dt@kernel.org>
-> Cc: devicetree@vger.kernel.org
-> ---
-> Changes compared to Laurent's original:
->   - Convert to json-schema,
->   - Rename compatible values from "renesas,lcdc-<SoC>" to
->     "renesas,<SoC>-lcdc",
->   - Add power-domains property,
->   - Add MIPI-DSI port on SH-Mobile AG5,
->   - Update example to reflect reality,
->   - Add to MAINTAINERS.
-> ---
->  .../display/renesas,shmobile-lcdc.yaml        | 108 ++++++++++++++++++
->  MAINTAINERS                                   |   1 +
->  2 files changed, 109 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/display/renesas,shmobile-lcdc.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/display/renesas,shmobile-lcdc.yaml b/Documentation/devicetree/bindings/display/renesas,shmobile-lcdc.yaml
-> new file mode 100644
-> index 0000000000000000..72a39fce7294d56d
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/display/renesas,shmobile-lcdc.yaml
-> @@ -0,0 +1,108 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/display/renesas,shmobile-lcdc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Renesas SH-Mobile LCD Controller (LCDC)
-> +
-> +maintainers:
-> +  - Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+> I don't buy the last sentence.  Even it's not necessarily for AMD from
+> hardware's perspective, but the concept remains true for AMD too.  So why cannot
+> we use it for AMD?
 
-I'd be happy if you co-maintained this with me :-) Or even took
-ownership completely.
-
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - renesas,r8a7740-lcdc # R-Mobile A1
-> +      - renesas,sh73a0-lcdc  # SH-Mobile AG5
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    minItems: 1
-> +    maxItems: 5
-> +    description:
-> +      Only the functional clock is mandatory.
-> +      Some of the optional clocks are model-dependent (e.g. "video" (a.k.a.
-> +      "vou" or "dv_clk") is available on R-Mobile A1 only).
-> +
-> +  clock-names:
-> +    minItems: 1
-> +    maxItems: 5
-> +    items:
-> +      enum: [ fck, media, lclk, hdmi, video ]
-
-Switching to per-item descriptions would allow documenting which clock
-applies to which SoC.
-
-Are enum items unique by default ?
-
-This would allow a combination of clocks that doesn't include the fck
-clock, that's not right.
-
-> +
-> +  power-domains:
-> +    maxItems: 1
-> +
-> +  ports:
-> +    $ref: /schemas/graph.yaml#/properties/ports
-> +    description: |
-> +      The connections to the output video ports are modeled using the OF graph
-> +      bindings specified in Documentation/devicetree/bindings/graph.txt.
-
-it's available in YAML form now. I'd just drop the "specified in ...".
-
-> +      The number of ports and their assignment are model-dependent.
-> +      Each port shall have a single endpoint.
-> +
-> +    properties:
-> +      port@0:
-> +        $ref: /schemas/graph.yaml#/properties/port
-> +        description: LCD port (R-Mobile A1 and SH-Mobile AG5)
-> +        unevaluatedProperties: false
-> +
-> +      port@1:
-> +        $ref: /schemas/graph.yaml#/properties/port
-> +        description: HDMI port (R-Mobile A1 LCDC1 and SH-Mobile AG5)
-> +        unevaluatedProperties: false
-> +
-> +      port@2:
-> +        $ref: /schemas/graph.yaml#/properties/port
-> +        description: MIPI-DSI port (SH-Mobile AG5)
-> +        unevaluatedProperties: false
-
-Let's condition the ports on the compatible value to enable automatic
-validation.
-
-> +
-> +    required:
-> +      - port@0
-
-Based on the above, port@1 is required too as it's present on all
-supported SoCs. Let's condition this on the compatible value too.
-
-> +
-> +    unevaluatedProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-> +  - power-domains
-> +  - ports
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/r8a7740-clock.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +    lcdc0: lcd-controller@fe940000 {
-> +        compatible = "renesas,r8a7740-lcdc";
-> +        reg = <0xfe940000 0x4000>;
-> +        interrupts = <GIC_SPI 177 IRQ_TYPE_LEVEL_HIGH>;
-> +        clocks = <&mstp1_clks R8A7740_CLK_LCDC0>,
-> +                 <&cpg_clocks R8A7740_CLK_M3>, <&lcdlclk0_clk>,
-> +                 <&vou_clk>;
-> +        clock-names = "fck", "media", "lclk", "video";
-> +        power-domains = <&pd_a4lc>;
-> +        status = "disabled";
-> +
-> +        ports {
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +
-> +            port@0 {
-> +                reg = <0>;
-> +
-> +                lcdc0_rgb: endpoint {
-> +                };
-> +            };
-> +        };
-> +    };
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 83e9f4ac6bedaa9f..dc1935c196cb0e0b 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -7023,6 +7023,7 @@ F:	Documentation/devicetree/bindings/display/bridge/renesas,dsi-csi2-tx.yaml
->  F:	Documentation/devicetree/bindings/display/bridge/renesas,dw-hdmi.yaml
->  F:	Documentation/devicetree/bindings/display/bridge/renesas,lvds.yaml
->  F:	Documentation/devicetree/bindings/display/renesas,du.yaml
-> +F:	Documentation/devicetree/bindings/display/renesas,shmobile-lcdc.yaml
->  F:	drivers/gpu/drm/renesas/
->  F:	include/linux/platform_data/shmob_drm.h
->  
-
+We can use it for AMD. Let me rephrase it.
+TDX only uses it now. SEV-SNP may or may not use it at their option.
 -- 
-Regards,
-
-Laurent Pinchart
+Isaku Yamahata <isaku.yamahata@gmail.com>
