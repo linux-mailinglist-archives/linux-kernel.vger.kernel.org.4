@@ -2,113 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5377073BDFB
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 19:42:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8936B73BE00
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 19:42:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232046AbjFWRmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 13:42:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56506 "EHLO
+        id S232339AbjFWRmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 13:42:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229834AbjFWRmW (ORCPT
+        with ESMTP id S232085AbjFWRm1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 13:42:22 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C39F1FDF;
-        Fri, 23 Jun 2023 10:42:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=ZE2GYYoocwBgPjiLb1xYgZs2emqro7KMYGivmEkTqsg=; b=PPJxEbV3jnNL1xyMrUuyW43bvW
-        VKkbtREhlPWT7zMINq9RDtkkNeXi3ZIUhuOeMwx9F82bBNfA2xg17/d13smRiZ6REzKVBr4BmwG59
-        zV66JV5WfY7lypmJFve7v4QSs/p+A7ijlUHiIs6sH+/vd26ltwUhMdtibDBKmfXixn5s=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1qCknQ-00HNdT-UT; Fri, 23 Jun 2023 19:42:08 +0200
-Date:   Fri, 23 Jun 2023 19:42:08 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Michael Walle <mwalle@kernel.org>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Yisen Zhuang <yisen.zhuang@huawei.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
-        Xu Liang <lxu@maxlinear.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v2 06/10] net: phy: print an info if a broken
- C45 bus is found
-Message-ID: <af166ce6-b9b2-44e0-9f45-2b2aa001fd6b@lunn.ch>
-References: <20230620-feature-c45-over-c22-v2-0-def0ab9ccee2@kernel.org>
- <20230620-feature-c45-over-c22-v2-6-def0ab9ccee2@kernel.org>
+        Fri, 23 Jun 2023 13:42:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 861451FDF;
+        Fri, 23 Jun 2023 10:42:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A27A61AEF;
+        Fri, 23 Jun 2023 17:42:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06578C433CD;
+        Fri, 23 Jun 2023 17:42:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687542145;
+        bh=B+ile9UQYyNQVSV2ovecEJKbv71x2PzA3Mu7PzfgpNM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=V3n+dW/7W+8e4ky/y2CyPQlPjv86avWhWcfjxymBA4Y+zefycJKi8ZcW3Y4UdCeDd
+         ecCGXt5OXv7xbAB2gFl4x15UlnXyZc7d65neHutk/85HFFdSo+PS1Lo6PB53sRFxBP
+         xiWSzo6wQ58H3gdEAxcIRxnTAuKcwgJGSmNmWy85pdv+5qBxweplEJc3T0tw4UYfjC
+         474rwzv8sdgGpqCsDussCzD4t1h39VW749/8df2hG14suPM2epAAy+wlHB3/rbie1h
+         FzKyo28RbTcpg2kD+y7/dzqUOjxloaopxsE4ZVy5svZ8OCnX1vNyVT0C9KkR38tRSO
+         kS4iSHMz7h+dQ==
+Date:   Fri, 23 Jun 2023 12:42:21 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Sricharan Ramabadhran <quic_srichara@quicinc.com>,
+        Manivannan Sadhasivam <mani@kernel.org>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, sboyd@kernel.org, mturquette@baylibre.com,
+        mani@kernel.org, lpieralisi@kernel.org, bhelgaas@google.com,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH 1/4] pcie: qcom: Fix the macro
+ PARF_SLV_ADDR_SPACE_SIZE_2_3_3
+Message-ID: <20230623174221.GA180338@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230620-feature-c45-over-c22-v2-6-def0ab9ccee2@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230623093445.3977772-2-quic_srichara@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 23, 2023 at 12:29:15PM +0200, Michael Walle wrote:
-> If there is an PHY which gets confused by C45 transactions on the MDIO
-> bus, print an info together with the PHY identifier of the offending
-> one.
+On Fri, Jun 23, 2023 at 03:04:42PM +0530, Sricharan Ramabadhran wrote:
+> PARF_SLV_ADDR_SPACE_SIZE_2_3_3 macro used for IPQ8074
+> pcie slave addr size was initially set to 0x358, but
+> was wrongly changed to 0x168 as a part of
+> 'PCI: qcom: Sort and group registers and bitfield definitions'
+> Fixing it back to right value here.
 > 
-> Signed-off-by: Michael Walle <mwalle@kernel.org>
+> Without this pcie bring up on IPQ8074 is broken now.
 > 
+> Fixes: 769e49d87b15 ("PCI: qcom: Sort and group registers and bitfield definitions")
+
+769e49d87b15 appeared in v6.4-rc1, so ideally this would get merged
+before v6.4 releases on Monday.  I can try to do that, given an ack
+from Manivannan.
+
+> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
 > ---
-> I wasn't sure if this should be phydev_dbg() or phydev_info(). I mainly
-> see this as an info to a user why some PHYs might not be probed (or
-> c45-over-c22 is used later).
-
-The information is useful to the DT writer, not the 'user'. I would
-assume the DT writer has a bit more kernel knowledge and can debug
-prints on. So i would suggest phydev_dbg().
-
-> @@ -617,10 +617,10 @@ static int mdiobus_scan_bus_c45(struct mii_bus *bus)
->   */
->  void mdiobus_scan_for_broken_c45_access(struct mii_bus *bus)
->  {
-> +	struct phy_device *phydev;
->  	int i;
->  
->  	for (i = 0; i < PHY_MAX_ADDR; i++) {
-> -		struct phy_device *phydev;
->  		u32 oui;
-
-It is not clear why you changed the scope of phydev. I guess another
-version used phydev_info(), where as now you have dev_info()?
-
-	Andrew
-
->  
->  		phydev = mdiobus_get_phy(bus, i);
-> @@ -633,6 +633,11 @@ void mdiobus_scan_for_broken_c45_access(struct mii_bus *bus)
->  			break;
->  		}
->  	}
-> +
-> +	if (bus->prevent_c45_access)
-> +		dev_info(&bus->dev,
-> +			 "Detected broken PHY (ID %08lx). Disabling C45 bus transactions.\n",
-> +			 (unsigned long)phydev->phy_id);
->  }
->  
->  /**
+>  drivers/pci/controller/dwc/pcie-qcom.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
+> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> index 4ab30892f6ef..59823beed13f 100644
+> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> @@ -43,7 +43,7 @@
+>  #define PARF_PHY_REFCLK				0x4c
+>  #define PARF_CONFIG_BITS			0x50
+>  #define PARF_DBI_BASE_ADDR			0x168
+> -#define PARF_SLV_ADDR_SPACE_SIZE_2_3_3		0x16c /* Register offset specific to IP ver 2.3.3 */
+> +#define PARF_SLV_ADDR_SPACE_SIZE_2_3_3		0x358 /* Register offset specific to IP ver 2.3.3 */
+>  #define PARF_MHI_CLOCK_RESET_CTRL		0x174
+>  #define PARF_AXI_MSTR_WR_ADDR_HALT		0x178
+>  #define PARF_AXI_MSTR_WR_ADDR_HALT_V2		0x1a8
 > -- 
-> 2.39.2
+> 2.34.1
 > 
