@@ -2,180 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DDA473C4BB
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 01:21:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64CAB73C4BD
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 01:22:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231210AbjFWXVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 19:21:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49364 "EHLO
+        id S231991AbjFWXWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 19:22:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjFWXVQ (ORCPT
+        with ESMTP id S231881AbjFWXWG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 19:21:16 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 998212136
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 16:21:15 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id 41be03b00d2f7-53425d37f33so663669a12.3
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 16:21:15 -0700 (PDT)
+        Fri, 23 Jun 2023 19:22:06 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9948B273D
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 16:21:56 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-9891c73e0fbso218811866b.1
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 16:21:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687562475; x=1690154475;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DUD5RYjo6Sx5P4lA1ER1U7bhRxM4zQjuiTOF9zGf3yE=;
-        b=QLiQ9fXbHiCe0qK57ildEM5KTuDKuavekOKc0qZAvV5TZ+Xns1ge/pltTmsuxkoXus
-         CfICaQaAOpMVJXBHhmmavEyPvBGphytxBo51EJ6dvPNto6RPjIBDKGvw0h50knpKPW+8
-         QCPdd2487OYHgEeNateURDQvlJYucy7BAt4B9d8YkURczWIKEWGBrEQUH4jEseSH23nG
-         qF6foUDt1tj/HRJcX3k97/Gq5jtf5goraEMESh8ywCs56xoT8tAt9BksEjfXi9yAAnYF
-         T5dTzZg8hLF3MikoSItK9TxF0D2Izn12udp7tSquqEBY5CrIZ9orHwfTBmvugM0f8AT8
-         mjbg==
+        d=linux-foundation.org; s=google; t=1687562515; x=1690154515;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=1uwDrPmN/ty8ZrjSO5qsAzCUv8oUyMnm2iO9QZdsZIk=;
+        b=Hqu+d2ih3jaLOoh7PyBBaEVojaUrMMYBGA2Rn776fOQSskIiUlc8yZNAJH+J/7o7qS
+         Wd8e/Ra0+5/cWpD9FcU8WNUzPqh+3VvfuaKgrsuzarhnT+X1KHT0J2CGK05mE4iRL6+V
+         9HO01lWIFbMXy/GPKG8XHYfCKV7bPq7uAaJXE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687562475; x=1690154475;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=DUD5RYjo6Sx5P4lA1ER1U7bhRxM4zQjuiTOF9zGf3yE=;
-        b=JXeyHa3d5/TbPuLUjWz3vbcMJzUfH7cq5cvH1TX/rIbj/L1z4ZHRPUn2bp7GF/EVES
-         onKZN6S2EqeoV1M6KIo8c/dsxYdQ40oDBwX8/zL/QWTFdV16SzyyGczEnUwtZ5NonJXv
-         WXek0GtErtsQwILBwKTHYxUqzYUoM9rqJyC3Yi3YVgdndK2fhKhDOcosARHi45XSoq0R
-         1j5jL8OYNSqtMVIvPeTUh4AbtxY/CRKsNzsG+mkoctBN9IUusn1sypVkXTzHjLD0tH7h
-         Xv3yeM18XnJDCxhvKN/TLtu0EqtCANeyXIhzCZgyea6BUYJ7ObM1zbJKeJLUEwgLtfpU
-         zxvg==
-X-Gm-Message-State: AC+VfDzTYYleakOdZ5hg0XZieMyOpwCsYovKSMWnD9UsoqLrZfkCJnjH
-        c/J+z217cxKVgQ2+xdN9HmHjhOaVSGo=
-X-Google-Smtp-Source: ACHHUZ76wCt3kLoU/pcmU3i2bY4ZdXcM+NFgKY37hXTE8tgyzFAFCtUFnXoZgC71g3fXutZxhceNY6B3278=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a63:4382:0:b0:551:eb6:1ea6 with SMTP id
- q124-20020a634382000000b005510eb61ea6mr2614071pga.10.1687562475077; Fri, 23
- Jun 2023 16:21:15 -0700 (PDT)
-Date:   Fri, 23 Jun 2023 16:21:13 -0700
-In-Reply-To: <f2708ad5-494c-c91e-cf5a-09f6e2d81e15@intel.com>
-Mime-Version: 1.0
-References: <20230511040857.6094-1-weijiang.yang@intel.com>
- <20230511040857.6094-8-weijiang.yang@intel.com> <ZG77wu4PyBn1z587@chao-email>
- <23169e5f-9793-9486-fd5f-287e3317b837@intel.com> <ZHXnP5bEvxPrDg3m@chao-email>
- <6e1e9de9-8def-46c3-a238-c1b4ef52e331@intel.com> <ZIuitcH7P1JpkzFH@google.com>
- <f2708ad5-494c-c91e-cf5a-09f6e2d81e15@intel.com>
-Message-ID: <ZJYo6aDtt0DQ5Tjv@google.com>
-Subject: Re: [PATCH v3 07/21] KVM:x86: Refresh CPUID on write to guest MSR_IA32_XSS
-From:   Sean Christopherson <seanjc@google.com>
-To:     Weijiang Yang <weijiang.yang@intel.com>
-Cc:     Chao Gao <chao.gao@intel.com>, pbonzini@redhat.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        peterz@infradead.org, rppt@kernel.org, binbin.wu@linux.intel.com,
-        rick.p.edgecombe@intel.com, john.allen@amd.com,
-        Zhang Yi Z <yi.z.zhang@linux.intel.com>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1687562515; x=1690154515;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1uwDrPmN/ty8ZrjSO5qsAzCUv8oUyMnm2iO9QZdsZIk=;
+        b=O+TYvo/A+C8dpnpLmVZm+Z/chgUsoG57hAVm3REFLJuLQOhnCAcLsrH0RtEx9dRQvH
+         slFWRJBJIOzBdrBZayJuoD8a9EGAFdSMqYtwpzam15pJsHV538LNkm4M4VsIAI3YvYVL
+         Zm/xMhh5U6VE8WZlzPXlhTXeBub7CuT+WBZHpH5RQfsozbyRWjqBiFDhydl6650PFv6B
+         NCFyz8/omZjvOrWlcPxZLusXuF2gXKalW+/YQr7LUf4spCraJi6XFb9mcQxpP8qO3Sh7
+         jlvR2/OefFpWzmYg7i1/w/fVScojb3PLnyBDXJGVynkXZ6Ty4qC2TrVWfS6iYUgBqxOh
+         4FPg==
+X-Gm-Message-State: AC+VfDzdoAjFOnz3CkLfN+WQxp34zYAk2CqtO9Sc7fSsE9cnFBH7LaPH
+        aAe4DZ9woQYeaCfo3gowCosaAC8pVYI8VzM2obYrsvV0
+X-Google-Smtp-Source: ACHHUZ7K4g/PdWk6Jby9uqU6c37IfbhmXkirU2a80ZIr+zXr00YZMspLn6ubYYfRI1nm5YwdE++LJw==
+X-Received: by 2002:a17:907:1c0b:b0:987:4b4a:916b with SMTP id nc11-20020a1709071c0b00b009874b4a916bmr21650831ejc.24.1687562514698;
+        Fri, 23 Jun 2023 16:21:54 -0700 (PDT)
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com. [209.85.208.53])
+        by smtp.gmail.com with ESMTPSA id e2-20020a170906080200b0098503ba0db4sm188408ejd.149.2023.06.23.16.21.53
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Jun 2023 16:21:54 -0700 (PDT)
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-51cff235226so517368a12.0
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 16:21:53 -0700 (PDT)
+X-Received: by 2002:a05:6402:b04:b0:51d:7f9f:4b56 with SMTP id
+ bm4-20020a0564020b0400b0051d7f9f4b56mr52877edb.9.1687562513692; Fri, 23 Jun
+ 2023 16:21:53 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230623152926.128aa568@gandalf.local.home>
+In-Reply-To: <20230623152926.128aa568@gandalf.local.home>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 23 Jun 2023 16:21:36 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whmnhEY6s1USY+hHX5+31orf7U_TxXvx+Y89xhL-Ydvzg@mail.gmail.com>
+Message-ID: <CAHk-=whmnhEY6s1USY+hHX5+31orf7U_TxXvx+Y89xhL-Ydvzg@mail.gmail.com>
+Subject: Re: [GIT PULL] tracing: user_event fix for 6.4
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Beau Belgrave <beaub@linux.microsoft.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        sunliming <sunliming@kylinos.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 16, 2023, Weijiang Yang wrote:
->=20
-> On 6/16/2023 7:45 AM, Sean Christopherson wrote:
-> > On Wed, May 31, 2023, Weijiang Yang wrote:
-> > > On 5/30/2023 8:08 PM, Chao Gao wrote:
-> > > > > > > --- a/arch/x86/kvm/x86.c
-> > > > > > > +++ b/arch/x86/kvm/x86.c
-> > > > > > > @@ -3776,8 +3776,10 @@ int kvm_set_msr_common(struct kvm_vcpu=
- *vcpu, struct msr_data *msr_info)
-> > > > > > > 		 */
-> > > > > > > 		if (data & ~kvm_caps.supported_xss)
-> > > > > > Shouldn't we check against the supported value of _this_ guest?=
- similar to
-> > > > > > guest_supported_xcr0.
-> > > > > I don't think it requires an extra variable to serve per guest pu=
-rpose.
-> > > > >=20
-> > > > > For guest XSS settings, now we don't add extra constraints like X=
-CR0, thus
-> > > > QEMU can impose constraints by configuring guest CPUID.0xd.1 to ind=
-icate
-> > > > certain supervisor state components cannot be managed by XSAVES, ev=
-en
-> > > > though KVM supports them. IOW, guests may differ in the supported v=
-alues
-> > > > for the IA32_XSS MSR.
-> > > OK, will change this part to align with xcr0 settings. Thanks!
-> > Please write KVM-Unit-Tests to verify KVM correctly handles the various=
- MSRs related
-> > to CET, e.g. a test_cet_msrs() subtest in msr.c would do nicely.  Hmm, =
-though testing
-> > the combinations of CPUID bits will require multiple x86/unittests.cfg =
-entries.
-> > Might be time to split up msr.c into a library and then multiple tests.
->=20
-> Since there's already a CET specific unit test app, do you mind adding al=
-l
-> CET related stuffs to the app to make it inclusive? e.g.,=EF=BF=BDvalidat=
-e constraints
-> between CET CPUIDs vs. CET/XSS MSRs?
+On Fri, 23 Jun 2023 at 12:29, Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> Before user events become an ABI, fix the return value of the write
+> operation when tracing is disabled. It should not return an error, but
+> simply report it wrote zero bytes. Just like any other write operation
+> that doesn't write data but does not "fail".
 
-Hmm, that will get a bit kludgy since the MSR testcases will want to toggle=
- IBT
-and SHSTK on and off.
+This makes no sense.
 
-Actually, I take back my suggestion to add a KUT test.  Except for a few sp=
-ecial
-cases, e.g. 32-bit support, selftests is a better framework for testing MSR=
-s than
-KUT, as it's relatively easy to create a custom vCPU model in selftests, wh=
-ereas
-in KUT it requires handcoding an entry in unittests.cfg, and having corresp=
-onding
-code in the test itself.
+A write() returning 0 means "Disk full". It's most definitely an
+error, and a failure.
 
-The biggest gap in selftests was the lack of decent reporting in guest code=
-, but
-Aaron is working on closing that gap[*].
+But zero is not a particularly _good_ failure code. At least not
+unless your tracing disk is full. Is it?
 
-I'm thinking something like this as a framework. =20
+If tracing is disabled, and you write something to it, I would expect
+to get a valid and reasonable error code back. Something like EINVAL
+or EIO or something to show "you did something wrong".
 
-	struct msr_data {
-		const uint32_t idx;
-		const char *name;
-		const struct kvm_x86_cpu_feature feature1;
-		const struct kvm_x86_cpu_feature feature2;
-		const uint32_t nr_values;
-		const uint64_t *values;
-	};
+I do not at all understand the sentence
 
-	#define TEST_MSR2(msr, f1, f2) { .idx =3D msr, .name =3D #msr, .feature1 =
-=3D f1, .feature2 =3D f2, .nr_values =3D ARRAY_SIZE(msr_VALUES), .values =
-=3D msr_VALUES }
-	#define TEST_MSR(msr, f) TEST_MSR2(msr, f, <a dummy value?>)
-	#define TEST_MSR0(msr) TEST_MSR(msr, <a dummy value?>)
+   "When user_events are disabled, its write operation should return zero"
 
-With CET usage looking like
+as an "explanation" for this, and my immediate reaction is "Really?
+Why? That makes no sense".
 
-	static const uint64_t MSR_IA32_S_CET_VALUES[] =3D {
-		<super interesting values>
-	};
-
-	TEST_MSR2(MSR_IA32_S_CET, X86_FEATURE_IBT, X86_FEATURE_SHSTK);
-
-Then the test could iterate over each entry and test the various combinatio=
-ns of
-features being enabled (if supported by KVM).  And it could also test ioctl=
-s(),
-which are all but impossible to test in KUT, e.g. verify that supported MSR=
-s are
-reported in KVM_GET_MSR_INDEX_LIST, verify that userspace can read/write MS=
-Rs
-regardless of guest CPUID, etc.  Ooh, and we can even test MSR filtering.
-
-I don't know that we'd want to cram all of those things in a single test, b=
-ut we
-can worry about that later as it shouldn't be difficult to put the framewor=
-k and
-MSR definitions in common code.
-
-[*] https://lore.kernel.org/all/20230607224520.4164598-1-aaronlewis@google.=
-com
+                  Linus
