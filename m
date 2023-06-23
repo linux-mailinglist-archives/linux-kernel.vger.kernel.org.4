@@ -2,105 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3889E73B274
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 10:14:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79EC873B284
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 10:16:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231824AbjFWIO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 04:14:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53032 "EHLO
+        id S231747AbjFWIQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 04:16:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231752AbjFWIOU (ORCPT
+        with ESMTP id S230387AbjFWIQQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 04:14:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67F252114;
-        Fri, 23 Jun 2023 01:14:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F2BC3619A0;
-        Fri, 23 Jun 2023 08:14:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D017AC433C0;
-        Fri, 23 Jun 2023 08:14:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687508049;
-        bh=SDTjvee9N2CAE/CTKG6FAPz/0RfNcCKI+LSM1re5DH0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YB0KFSljZiOmfr29BZAN5N6dBi0CPDPolglHVSNrXtkL7dYPS6HKJXZM+yq8OFXQh
-         IeGF5Dyr7kX9DPFUAY/NhPISaF2WxtiUGHun4gI07mPACw7ZaQXB4liB5TpSoz2oYV
-         RomMngHjALd5AdfaFmB8CUJDFOo9eqjlOpLe1RZP8b9n+wwRfMLARlH4FVehE3PBK4
-         +RNnhwF/4IGthTUHf3TneqtJK3J6YER93tmlheQUdogpwcioq+xsur7TleiOvKjKm2
-         OHEH3ujhE4vlASKpFi92UCQyYdhscAK7ZROgd32LlstB3PIcNmW/gNDBgxfzrN0yWS
-         dao90FdZHFX+Q==
-Date:   Fri, 23 Jun 2023 10:14:05 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     carlos.song@nxp.com
-Cc:     aisheng.dong@nxp.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, xiaoning.wang@nxp.com,
-        haibo.chen@nxp.com, linux-imx@nxp.com, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: imx-lpi2c: fix type char overflow issue when
- calculating the clock cycle
-Message-ID: <ZJVUTUkTFeRkVvg8@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>, carlos.song@nxp.com,
-        aisheng.dong@nxp.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, xiaoning.wang@nxp.com,
-        haibo.chen@nxp.com, linux-imx@nxp.com, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230529080251.3614380-1-carlos.song@nxp.com>
+        Fri, 23 Jun 2023 04:16:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF38E26AE
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 01:15:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687508130;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vvP94iL0b14tTM53kZ2sYxqnmPo54a4UlF6JdzA9tVs=;
+        b=JMn4iNSLn3l4Qb1sdhHb8UPtmHANKw4ZKYYhLL6P82eQi2+xZue/dV5VeN8r8irewF9liJ
+        SNVXClz1Ypx2FXqE45mu/lvtVe9o63YA/QAwXSy6OHNh0BKcx92ZHhQ9gyI2FAFRtc3Au8
+        uTJAPgPbe7VunQPZ6SY5DpCaXLfhf80=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-608-6sTddwS7Nc6gR7HIW6D2rg-1; Fri, 23 Jun 2023 04:15:28 -0400
+X-MC-Unique: 6sTddwS7Nc6gR7HIW6D2rg-1
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-95847b4b4e7so27251466b.3
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 01:15:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687508127; x=1690100127;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vvP94iL0b14tTM53kZ2sYxqnmPo54a4UlF6JdzA9tVs=;
+        b=NGmyHDSpLq+c+bdhCxwDbPmJNG1O12JQKpLjRYGTBxalix01ULYeT7kuSvOqEnCfv3
+         uM2ZYuPinH+Ndj8YDgfmB36xzwD1+6v65O7FBItZVHuX4TyJv1q7uw2mAJfEv6MWK4C/
+         FT7Y9Xh+Xbq/B+7XiHz2Lr5v44dlG2tyivSva/oE6PR9o/4TeQmmur30xjpjDs26g6x/
+         ahaM+2kiYEmMrePY7Ysfz+hMYOTRiIpSEvSCJj6ibMr/A8ej5zXAb2HULwI9eQWmIA8S
+         0kGk8+aWSjoI+xHXzROEco4H9RUBmSCNZWt44GyWxetVpXqVTb0319xo6p3nV6uyBnH+
+         kfQA==
+X-Gm-Message-State: AC+VfDwtThluci/pkjy9R/gAtXCf8bpamYbq68nNgQ+wDesmTCU8ndQ7
+        ZVHfJWaetGVEig8CwiZI5JOK+dqOHeUC93CYF0RC139egrvj92wXlYEinxJfsOB0ZR9AZ1imCHH
+        l/g83COFkxit1pFAiSe2Hb/Ag
+X-Received: by 2002:a17:907:969f:b0:947:335f:5a0d with SMTP id hd31-20020a170907969f00b00947335f5a0dmr18564019ejc.62.1687508127029;
+        Fri, 23 Jun 2023 01:15:27 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7sG50KKcb8/4d0k9Sa5DNa+zxv2rKJ2E9yej3gVqMAjHzgkvZGHjdevsBGJ9oYHGKr3rl2Pw==
+X-Received: by 2002:a17:907:969f:b0:947:335f:5a0d with SMTP id hd31-20020a170907969f00b00947335f5a0dmr18563999ejc.62.1687508126768;
+        Fri, 23 Jun 2023 01:15:26 -0700 (PDT)
+Received: from sgarzare-redhat (host-87-11-6-160.retail.telecomitalia.it. [87.11.6.160])
+        by smtp.gmail.com with ESMTPSA id o11-20020a17090608cb00b00985ed2f1584sm5635492eje.187.2023.06.23.01.15.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Jun 2023 01:15:26 -0700 (PDT)
+Date:   Fri, 23 Jun 2023 10:15:23 +0200
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Bobby Eshleman <bobbyeshleman@gmail.com>
+Cc:     Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Vishnu Dasa <vdasa@vmware.com>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        Simon Horman <simon.horman@corigine.com>,
+        Krasnov Arseniy <oxffffaa@gmail.com>, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH RFC net-next v4 4/8] vsock: make vsock bind reusable
+Message-ID: <oq5c2c4snksklko6tmq44g73d6ihrbnqjyugsvfbhtdsnlrioi@hklfspvyjmad>
+References: <20230413-b4-vsock-dgram-v4-0-0cebbb2ae899@bytedance.com>
+ <20230413-b4-vsock-dgram-v4-4-0cebbb2ae899@bytedance.com>
+ <p2tgn3wczd3t3dodyicczetr2nqnqpwcadz6ql5hpvg2cd2dxa@phheksxhxfna>
+ <ZJTTx0XJ2LeITNh0@bullseye>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ALs1mdHqpSviD39J"
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20230529080251.3614380-1-carlos.song@nxp.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ZJTTx0XJ2LeITNh0@bullseye>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jun 22, 2023 at 11:05:43PM +0000, Bobby Eshleman wrote:
+>On Thu, Jun 22, 2023 at 05:25:55PM +0200, Stefano Garzarella wrote:
+>> On Sat, Jun 10, 2023 at 12:58:31AM +0000, Bobby Eshleman wrote:
+>> > This commit makes the bind table management functions in vsock usable
+>> > for different bind tables. For use by datagrams in a future patch.
+>> >
+>> > Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
+>> > ---
+>> > net/vmw_vsock/af_vsock.c | 33 ++++++++++++++++++++++++++-------
+>> > 1 file changed, 26 insertions(+), 7 deletions(-)
+>> >
+>> > diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+>> > index ef86765f3765..7a3ca4270446 100644
+>> > --- a/net/vmw_vsock/af_vsock.c
+>> > +++ b/net/vmw_vsock/af_vsock.c
+>> > @@ -230,11 +230,12 @@ static void __vsock_remove_connected(struct vsock_sock *vsk)
+>> > 	sock_put(&vsk->sk);
+>> > }
+>> >
+>> > -static struct sock *__vsock_find_bound_socket(struct sockaddr_vm *addr)
+>> > +struct sock *vsock_find_bound_socket_common(struct sockaddr_vm *addr,
+>> > +					    struct list_head *bind_table)
+>> > {
+>> > 	struct vsock_sock *vsk;
+>> >
+>> > -	list_for_each_entry(vsk, vsock_bound_sockets(addr), bound_table) {
+>> > +	list_for_each_entry(vsk, bind_table, bound_table) {
+>> > 		if (vsock_addr_equals_addr(addr, &vsk->local_addr))
+>> > 			return sk_vsock(vsk);
+>> >
+>> > @@ -247,6 +248,11 @@ static struct sock *__vsock_find_bound_socket(struct sockaddr_vm *addr)
+>> > 	return NULL;
+>> > }
+>> >
+>> > +static struct sock *__vsock_find_bound_socket(struct sockaddr_vm *addr)
+>> > +{
+>> > +	return vsock_find_bound_socket_common(addr, vsock_bound_sockets(addr));
+>> > +}
+>> > +
+>> > static struct sock *__vsock_find_connected_socket(struct sockaddr_vm *src,
+>> > 						  struct sockaddr_vm *dst)
+>> > {
+>> > @@ -646,12 +652,17 @@ static void vsock_pending_work(struct work_struct *work)
+>> >
+>> > /**** SOCKET OPERATIONS ****/
+>> >
+>> > -static int __vsock_bind_connectible(struct vsock_sock *vsk,
+>> > -				    struct sockaddr_vm *addr)
+>> > +static int vsock_bind_common(struct vsock_sock *vsk,
+>> > +			     struct sockaddr_vm *addr,
+>> > +			     struct list_head *bind_table,
+>> > +			     size_t table_size)
+>> > {
+>> > 	static u32 port;
+>> > 	struct sockaddr_vm new_addr;
+>> >
+>> > +	if (table_size < VSOCK_HASH_SIZE)
+>> > +		return -1;
+>>
+>> Why we need this check now?
+>>
+>
+>If the table_size is not at least VSOCK_HASH_SIZE then the
+>VSOCK_HASH(addr) used later could overflow the table.
+>
+>Maybe this really deserves a WARN() and a comment?
 
---ALs1mdHqpSviD39J
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Yes, please WARN_ONCE() should be enough.
 
-On Mon, May 29, 2023 at 04:02:51PM +0800, carlos.song@nxp.com wrote:
-> From: Clark Wang <xiaoning.wang@nxp.com>
->=20
-> Claim clkhi and clklo as integer type to avoid possible calculation
-> errors caused by data overflow.
->=20
-> Fixes: a55fa9d0e42e ("i2c: imx-lpi2c: add low power i2c bus driver")
-> Signed-off-by: Clark Wang <xiaoning.wang@nxp.com>
-> Signed-off-by: Carlos Song <carlos.song@nxp.com>
+Stefano
 
-Applied to for-current, thanks!
-
-
---ALs1mdHqpSviD39J
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmSVVEkACgkQFA3kzBSg
-KbZTiQ//YuISdWs4hJK+4KPXuDRjbdwvXUrCQh2s+l0XBBT5v09eIsClih+eqG0r
-tm9xAWUdISmS/6nHfRM8SlxDN6bpDN/r01kkOv/dKD1dkSNo7a7wIU6CA0xVI2Rb
-q5ri6ExYHZUU7ItSn91J1NBqe0iIepHgX04KZrMBtUJqpiMfif4eikgEruUCaIUy
-C+7IhhLHPa4hejYJX3BWhz5wANkzbT8EY4ikFB5oqpYpuT9zo5GslYo81w9bcjT3
-JdFSGv0aDZVdWP0PqR99hF9k6SA9VZ7kEKlMvng5GOcfK/fccnMaJ0naMSmRCcWL
-cKAXDoSJZIolUoryrpuCf7M6neXNAbjZjAWv4FATKioO/wq6A944xvPAO+Rj7Tl+
-CNdCLN30ox87R+S4bUoZ9O35lf1FlZNtElHfja91K2Uc3fKUkn01mLQbYGr+7Duh
-qQO8mvTP8HWlWFqbEMoIDWbT/GW4QkP7yFMXQBhtfoffqTkVkGK4J/6EAs3CHCyA
-wfp1lk8SO85eNGsEJh3ku6CJY/B/dI95MfMDE551ICl5c7Gc9Fl7VIneSGpTHkX7
-cl1a//BOyoHnNWmWHG9eUPDksY+K8gUWwPfOonTAajDRN/BXEHnx03G2hQGNoWSf
-Tgacgwdy0ZgxjQ77n05DgHjjQdgLuuntYNxm8hZd2F9ux8CREtg=
-=mcHu
------END PGP SIGNATURE-----
-
---ALs1mdHqpSviD39J--
