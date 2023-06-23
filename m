@@ -2,100 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA26773BC4C
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 18:04:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF90C73BC56
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 18:06:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232008AbjFWQEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 12:04:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33578 "EHLO
+        id S232035AbjFWQG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 12:06:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231892AbjFWQEV (ORCPT
+        with ESMTP id S232017AbjFWQGZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 12:04:21 -0400
-Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57522270B
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 09:04:19 -0700 (PDT)
-Received: by mail-qv1-xf35.google.com with SMTP id 6a1803df08f44-6300f6ab032so7632756d6.2
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 09:04:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=maine.edu; s=google; t=1687536258; x=1690128258;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:date
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=jkCU27YeWYPr1I8vi2zgnQGLek516NQOwJppe/zcLRQ=;
-        b=adyk15Rey22YW24kQvynUdQZpNYqgF7LlhsDAWedX+3rCdpjtOLZ8DFTsDSozH2N35
-         typD0VRNKPBMXizi1O93czEa68cFdaLH4Qnu6bfhx+xDr5BpOvdxqXSfQVHzjHpCrN7b
-         5DIu1BGKHJiA0WF1DumHBLLRu3XV8yuMZBSdY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687536258; x=1690128258;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:date
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jkCU27YeWYPr1I8vi2zgnQGLek516NQOwJppe/zcLRQ=;
-        b=SAxZVOX4S5Q3e1kSBjEfOFDXnft1+fXv/d1oAxCED6hgWkS0cdrNeqvYJWlZj+23qm
-         vaUC7LmLPWiaqTKBMGPjgEgOm4Qa9JbBDtpshCbzLS/l+4KQMtkWt4FMvFdObzxXSRRN
-         BYkIaypktfOPdM5aHuD2VxGnS/2l+TloSkGHbuUVK01p12wQfZUxOAFTPoFaqwzEPCiG
-         o6+xF8nWx9Xhv5gfQYciih5V/8RRnhJENMP1K3IcqT2bxjCpPrsW7qkLgvgH4PILU5Cr
-         OEa67o1SXULyJexcQ3UYtBLWrjXygu+hVC3XlMDepOWtJXZkQCClFwtUz5wDO0/z2ug5
-         OVeQ==
-X-Gm-Message-State: AC+VfDw6te6xBtAndPRYn+x+HPoTlsdh+nhYRCRim2h5PkWZVuoiiL/K
-        GPH7ltSwB22gh+9/XgMQdmpFSQ==
-X-Google-Smtp-Source: ACHHUZ54R98ZBjwGvQadwUU6bIFsyMXtmyOo/WfF0ahv3XFa+m6/YpMz+OenWDUllWtc8BgqaqEIwg==
-X-Received: by 2002:ad4:5b81:0:b0:626:94f:6044 with SMTP id 1-20020ad45b81000000b00626094f6044mr25988971qvp.2.1687536258328;
-        Fri, 23 Jun 2023 09:04:18 -0700 (PDT)
-Received: from macbook-air.local (weaver.eece.maine.edu. [130.111.218.23])
-        by smtp.gmail.com with ESMTPSA id z14-20020a0cda8e000000b006255bcfca88sm5192184qvj.7.2023.06.23.09.04.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Jun 2023 09:04:17 -0700 (PDT)
-From:   Vince Weaver <vincent.weaver@maine.edu>
-X-Google-Original-From: Vince Weaver <vince@maine.edu>
-Date:   Fri, 23 Jun 2023 12:04:13 -0400 (EDT)
-To:     Ian Rogers <irogers@google.com>
-cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Eduard Zingerman <eddyz87@gmail.com>,
-        Jing Zhang <renyu.zj@linux.alibaba.com>,
-        Sohom Datta <sohomdatta1@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Perry Taylor <perry.taylor@intel.com>,
-        Samantha Alt <samantha.alt@intel.com>,
-        Caleb Biggers <caleb.biggers@intel.com>,
-        Weilin Wang <weilin.wang@intel.com>,
-        Edward Baker <edward.baker@intel.com>
-Subject: Re: [PATCH v2 07/12] perf vendor events intel: Update icelake to
- 1.19
-In-Reply-To: <20230623151016.4193660-8-irogers@google.com>
-Message-ID: <ac3b4a0c-7984-8b15-a7ed-9c0428bdb027@maine.edu>
-References: <20230623151016.4193660-1-irogers@google.com> <20230623151016.4193660-8-irogers@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Fri, 23 Jun 2023 12:06:25 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ACBF2129;
+        Fri, 23 Jun 2023 09:06:20 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 099CC5C0246;
+        Fri, 23 Jun 2023 12:06:18 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 23 Jun 2023 12:06:18 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1687536378; x=1687622778; bh=4E
+        KvCMTqubzjQT5Lt56FQ//yI5tr7An39f5NmpO/xXk=; b=YSrWn5+/N+WTfAtyd/
+        53cZoPdeFShSUIgITzeIjgYNHNXOqrZjWZDSK7vZPvn86V4Yw05EUJYhdHrLnzWc
+        cNocaQC6zCAt2MsVuONBJZovGeY0Aspl7Hdm0vvx9v4Otg4RHTtBrrDJZBQb0Utn
+        BXO5IC6iKJoMjc3Im7jUcY4YlAae2ePRcJONR+WQOWWQrAQ1avl9QpYJSxvOzlik
+        YAhYcMd/8UiBSrfrQCqERZHGAHk/VHTbuJi7HQ1rNDNSOZvgddd5xkcsKTb/ZEio
+        xhEFxKBeanAmAAXT6Y85apdJHjOd/HT3B7TU8hcMRbKEOoD21U5J1yp60RE012kt
+        IaAw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1687536378; x=1687622778; bh=4EKvCMTqubzjQ
+        T5Lt56FQ//yI5tr7An39f5NmpO/xXk=; b=dGxe5t3VFO/MwRXBe/nYlcBOko2IU
+        Nzbt492ATA5r0dnDfrYbs+2C9wBgPy65y6fLFHtYyA5LSLNfCLIB4tlRfFU3mSuT
+        VA05wg12hE846yXK1nJv9NfQ1qPdNDaEzDVyLSHvBfpOX/b2ICivEftlcpvlIH0I
+        +6sbcj3aKd5HRiipoJuqyIbRasb+grF7VS9BAV2IQ1ndZqCaCDAEydrn8keWCFb6
+        z69JZDarzdc2XntSaEbZaTM4TzbfqRw5vbsO0+kyFoUHlFwsv2rt6RHbkRlVlgt+
+        LiYb227tIxxQGOdCoAAAQNYVpi6LUI3hkiUK/dRJnbsVb9VAY+t6SQe4w==
+X-ME-Sender: <xms:-cKVZOjx5FGmstXBW-vnkYoV1rNcOOrV4Mru8xWtxRrGKBFPfoybUQ>
+    <xme:-cKVZPCLpwnzt8fycurOgWRJh7-7XnWXmVClPMLozkR8D3TwjRYrseuhBMDBH3S2E
+    CReGDRpKVFVNanLUMw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeeggedgleeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
+    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:-cKVZGGNsLxjbG3FmsUJd2VIzFNtaxtbCsvo2KhmWbqvuUkdMRUcoA>
+    <xmx:-cKVZHTEgK5CGUWpiyfbkeH61sCfTbKlSBZ11mcRMpF20YCtHWS8xQ>
+    <xmx:-cKVZLyhh-zpUqNiTXeXhyQMbDLFV5KgAQvr47mi0Rub-6vBYe3DOg>
+    <xmx:-sKVZCmQkfHSA_1Hky8JfUF-OqiUDXWBLOAwQ5Nm5qsHdg1SvLtW8g>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 76137B60086; Fri, 23 Jun 2023 12:06:17 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
+Mime-Version: 1.0
+Message-Id: <24986b5e-5cd1-4cd5-aff3-b5eab2c0fdde@app.fastmail.com>
+In-Reply-To: <7c4622e7-d7a8-ae5d-e381-f726cb511228@gmail.com>
+References: <20230623152443.2296825-1-arnd@kernel.org>
+ <7c4622e7-d7a8-ae5d-e381-f726cb511228@gmail.com>
+Date:   Fri, 23 Jun 2023 18:05:57 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Christian Lamparter" <chunkeey@gmail.com>,
+        "Arnd Bergmann" <arnd@kernel.org>, "Kalle Valo" <kvalo@kernel.org>,
+        "Kees Cook" <keescook@chromium.org>,
+        "Johannes Berg" <johannes.berg@intel.com>,
+        "Shiji Yang" <yangshiji66@outlook.com>,
+        "Nick Kossifidis" <mickflemm@gmail.com>,
+        "Jiri Slaby" <jirislaby@kernel.org>,
+        "Christian Marangi" <ansuelsmth@gmail.com>
+Cc:     linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] carl9170: re-fix fortified-memset warning
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 23 Jun 2023, Ian Rogers wrote:
+On Fri, Jun 23, 2023, at 17:38, Christian Lamparter wrote:
+> On 6/23/23 17:23, Arnd Bergmann wrote:
+>
+> Wait! I want to point out this funny thing is happening in ath too!
+>
+> https://lore.kernel.org/linux-wireless/TYAP286MB03154F9AAFD4C35BEEDE4A99BC4CA@TYAP286MB0315.JPNP286.PROD.OUTLOOK.COM/T/#mf1b8919a000fe661803c17073f48b3c410888541
+>
+> And that patch got NACK by Jiri Slaby because like me he suspects that
+> this is a compiler bug.
 
-> Updates were released in:
-> https://github.com/intel/perfmon/commit/f3d841189f8964bc240c86301f4c849845630b5b
-> A number of events are deprecated and event descriptions updated. Adds
-> events ICACHE_DATA.STALLS, ICACHE_TAG.STALLS and DECODE.LCP.
+FWIW, that is one I don't see with clang-17 or gcc-13. The one I'm addressing
+here is the only thing I see in ath wireless with the default set of
+warning options, though this driver does have a couple of others that
+are unrelated, when you enable the source data check in memcpy() by
+building with W=1.
 
-why are the events marked as deprecated rather than just being removed?
+ In file included from  drivers/net/wireless/ath/ath9k/xmit.c:17:
+In file included from  include/linux/dma-mapping.h:7:
+In file included from include/linux/string.h:254:
+/home/arnd/arm-soc/include/linux/fortify-string.h:592:4: error: call to '__read_overflow2_field' declared with 'warning' attribute: detected read beyond size of field (2nd parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
+                        __read_overflow2_field(q_size_field, size);
+                        ^
+include/linux/fortify-string.h:592:4: error: call to '__read_overflow2_field' declared with 'warning' attribute: detected read beyond size of field (2nd parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
+2 errors generated.
+/home/arnd/arm-soc/include/linux/fortify-string.h:592:4: error: call to '__read_overflow2_field' declared with 'warning' attribute: detected read beyond size of field (2nd parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
+                        __read_overflow2_field(q_size_field, size);
 
-Vince Weaver
-vincent.weaver@maine.edu
+> so, what's going wrong with fortified there?
+
+Kees might have a better answer to that, my best guess is that
+the one I'm addressing stems from the confusion between different
+union members.
+
+Doing the randconfig builds with the latest compilers, carl9170 is the
+only one I see with fortified-string warnings, and there are a few
+dozen other drivers that I see with W=1, including one that affects
+all wireless drivers.
+
+     Arnd
