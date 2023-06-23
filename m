@@ -2,117 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E13D73BBE2
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 17:41:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7A9073BBE0
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 17:41:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232655AbjFWPle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 11:41:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50970 "EHLO
+        id S232638AbjFWPlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 11:41:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232648AbjFWPla (ORCPT
+        with ESMTP id S232258AbjFWPlR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 11:41:30 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 963B02120
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 08:41:26 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1qCiuF-0005nd-N4; Fri, 23 Jun 2023 17:41:03 +0200
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1qCiuE-0007FL-Eg; Fri, 23 Jun 2023 17:41:02 +0200
-Date:   Fri, 23 Jun 2023 17:41:02 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Gerald Loacker <gerald.loacker@wolfvision.net>,
-        Bingbu Cao <bingbu.cao@intel.com>,
-        Mikhail Rudenko <mike.rudenko@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Vincent Shih <vincent.sunplus@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org
-Subject: Re: [PATCH] media: tc358746: select CONFIG_GENERIC_PHY
-Message-ID: <20230623154102.gjyorfxpzvbnfa4y@pengutronix.de>
-References: <20230623152318.2276816-1-arnd@kernel.org>
+        Fri, 23 Jun 2023 11:41:17 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F4B2120;
+        Fri, 23 Jun 2023 08:41:15 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4A8EF838;
+        Fri, 23 Jun 2023 17:40:37 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1687534837;
+        bh=ArqSpTQIPLlQGIEbrbSLaivyf0ENs3vlfTMm4U/5SAs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=wPzsCj056QJcxMA2HRsKQPOmZF6EdhSqvtkgvaVOL7ZfFp7bzuzwZ5MKa0lCU1jft
+         AXPw1OlUdeV6dOWa6nUXpNxVrtRul9BxYzLC1/jDdi9Xl/f+W1+2Fespvd0Q8WwvnD
+         6dWN0vv27FDdYa8xb/VziVjWS5YWO/OoT/wCHW6A=
+Date:   Fri, 23 Jun 2023 18:41:12 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 15/39] drm: renesas: shmobile: Improve error handling
+Message-ID: <20230623154112.GS2112@pendragon.ideasonboard.com>
+References: <cover.1687423204.git.geert+renesas@glider.be>
+ <100c650ab37ae09a142a93afa3734400a6a96757.1687423204.git.geert+renesas@glider.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230623152318.2276816-1-arnd@kernel.org>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <100c650ab37ae09a142a93afa3734400a6a96757.1687423204.git.geert+renesas@glider.be>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+Hi Geert,
 
-thanks for the patch.
+Thank you for the patch.
 
-On 23-06-23, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Thu, Jun 22, 2023 at 11:21:27AM +0200, Geert Uytterhoeven wrote:
+> Prepare for DT conversion, where panel probe can be deferred, by
+> streamlining error propagation and handling:
+>   - Use dev_err_probe() to avoid printing error messages in case of
+>     probe deferral,
+>   - Propagate errors where needed.
 > 
-> The tc358746 driver selects CONFIG_GENERIC_PHY_MIPI_DPHY and links to
-> that, but this fails when CONFIG_GENERIC_PHY is disabled, because Kbuild
-> then never enters the drivers/phy directory for building object files:
-> 
-> ERROR: modpost: "phy_mipi_dphy_get_default_config_for_hsclk" [drivers/media/i2c/tc358746.ko] undefined!
-> 
-> Add an explicit 'select GENERIC_PHY' here to ensure that the directory
-> is entered, and add another dependency on that symbol so make it
-> more obvious what is going on if another driver has the same problem,
-> as this will produce a Kconfig warning.
-> 
-> Fixes: 80a21da360516 ("media: tc358746: add Toshiba TC358746 Parallel to CSI-2 bridge driver")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Reviewed-by: Marco Felsch <m.felsch@pengutronix.de>
+Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 
 > ---
->  drivers/media/i2c/Kconfig | 1 +
->  drivers/phy/Kconfig       | 1 +
->  2 files changed, 2 insertions(+)
+>  drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c |  3 ++-
+>  drivers/gpu/drm/renesas/shmobile/shmob_drm_kms.c | 14 +++++++++++---
+>  2 files changed, 13 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
-> index cf675ac4b1326..226454b6a90dd 100644
-> --- a/drivers/media/i2c/Kconfig
-> +++ b/drivers/media/i2c/Kconfig
-> @@ -1305,6 +1305,7 @@ config VIDEO_TC358746
->  	select VIDEO_V4L2_SUBDEV_API
->  	select MEDIA_CONTROLLER
->  	select V4L2_FWNODE
-> +	select GENERIC_PHY
->  	select GENERIC_PHY_MIPI_DPHY
->  	select REGMAP_I2C
->  	help
-> diff --git a/drivers/phy/Kconfig b/drivers/phy/Kconfig
-> index f46e3148d286d..8dba9596408f2 100644
-> --- a/drivers/phy/Kconfig
-> +++ b/drivers/phy/Kconfig
-> @@ -18,6 +18,7 @@ config GENERIC_PHY
+> diff --git a/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c b/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c
+> index 9aa9800899976a23..50fca18282c5cb5e 100644
+> --- a/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c
+> +++ b/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c
+> @@ -228,7 +228,8 @@ static int shmob_drm_probe(struct platform_device *pdev)
 >  
->  config GENERIC_PHY_MIPI_DPHY
->  	bool
-> +	depends on GENERIC_PHY
->  	help
->  	  Generic MIPI D-PHY support.
+>  	ret = shmob_drm_modeset_init(sdev);
+>  	if (ret < 0) {
+> -		dev_err(&pdev->dev, "failed to initialize mode setting\n");
+> +		dev_err_probe(&pdev->dev, ret,
+> +			      "failed to initialize mode setting\n");
+>  		goto err_free_drm_dev;
+>  	}
 >  
-> -- 
-> 2.39.2
-> 
-> 
+> diff --git a/drivers/gpu/drm/renesas/shmobile/shmob_drm_kms.c b/drivers/gpu/drm/renesas/shmobile/shmob_drm_kms.c
+> index 3051318ddc7999bc..1a62e7f8a8a9e6df 100644
+> --- a/drivers/gpu/drm/renesas/shmobile/shmob_drm_kms.c
+> +++ b/drivers/gpu/drm/renesas/shmobile/shmob_drm_kms.c
+> @@ -157,9 +157,17 @@ int shmob_drm_modeset_init(struct shmob_drm_device *sdev)
+>  	if (ret)
+>  		return ret;
+>  
+> -	shmob_drm_crtc_create(sdev);
+> -	shmob_drm_encoder_create(sdev);
+> -	shmob_drm_connector_create(sdev, &sdev->encoder);
+> +	ret = shmob_drm_crtc_create(sdev);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ret = shmob_drm_encoder_create(sdev);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ret = shmob_drm_connector_create(sdev, &sdev->encoder);
+> +	if (ret < 0)
+> +		return ret;
+>  
+>  	drm_kms_helper_poll_init(sdev->ddev);
+>  
+
+-- 
+Regards,
+
+Laurent Pinchart
