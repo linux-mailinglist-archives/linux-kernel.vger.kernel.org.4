@@ -2,166 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 306CF73B3EA
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 11:44:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D32573B408
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 11:47:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231646AbjFWJof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 05:44:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33004 "EHLO
+        id S230168AbjFWJrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 05:47:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbjFWJoc (ORCPT
+        with ESMTP id S229451AbjFWJq5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 05:44:32 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F658E75
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 02:44:27 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-514ad92d1e3so5604a12.1
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 02:44:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687513466; x=1690105466;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uECgceGWceBpnEwgVEt1AFSmdXNTa/+8ZyNWq8IpWMk=;
-        b=Kbr+ZwwHYHvA0TCLJ0MdIwK/ccEwxx5KSPma0dmAvQIY6kj9M5JLiT59I+c/izkmv2
-         n9pmwQxDJQNjmwworyPbaKeC3Ld8nQ4YzJQUl81n0uzJKWW+y1YBMTq+bAxjaNy+2Uk1
-         2+c6VxKT2l9oN0UJs9rmXFiz2wziDEW+FMecIVeRpyPC+3p6h7YtB2bWAnfvkjFG019s
-         SvcL3SBhcYvAVeuiLFX4CwomKL1yZfd3JUWKnS/0/hgwcAMoHAZfCNAKfXwtIiCjg6jh
-         Ae993CrxqBpmSq0aTmVtiKkCd/JgjSefymLwf4R5lFK8ec0c85cp6c0CFc3gblvcnhWa
-         1m6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687513466; x=1690105466;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uECgceGWceBpnEwgVEt1AFSmdXNTa/+8ZyNWq8IpWMk=;
-        b=jeuG1gfaT/isleZits9+KvWTJr4crp9P4P6IUFUZEG9yHMU4fNSYrzfgkc56EZEhO0
-         st+DdigZksuvwGCdlmiscdL22Vy5js085iaQSmLSHNsybodsb5HgAN2Rok2lgBpwoCSd
-         Q1DxoMSs4mn8lsMiVNfOHEFGwRAwLI4Hayz1RYesslZ6eBOIZQYOtonUgL+cR8h1Ye0O
-         NUW8CVeR/baWpBX6Boxkw+K3Z0wsbVsLBN25eSwUmU+1N5Fvwb6byG99e4y0zFrxICQB
-         g8Ty5QZoovLdN0lFayyhJUuJhu+Kg7rQNYNUjcIKBldeqb6NQYbjFhQayfDXK8Ml885q
-         d0hg==
-X-Gm-Message-State: AC+VfDwosRj779/pOlsFYeNzwcG0ioe9ZmZVDQuQtaueVoCMPzovSLr9
-        6M47+uqcyknYIPWziynq3VvFnnkEbZZvCEEQMo2fiA==
-X-Google-Smtp-Source: ACHHUZ6rqOZ455iJdXd6CS4M6p+mA/ZNKARrMmKzGjtlcQiR2QyldrbL8+MKATVwRLr7V20zWPJywlF1j6AsPkZ9OkM=
-X-Received: by 2002:a50:d08c:0:b0:516:6453:1b76 with SMTP id
- v12-20020a50d08c000000b0051664531b76mr51906edd.5.1687513465752; Fri, 23 Jun
- 2023 02:44:25 -0700 (PDT)
+        Fri, 23 Jun 2023 05:46:57 -0400
+Received: from imap5.colo.codethink.co.uk (imap5.colo.codethink.co.uk [78.40.148.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98B1DE48;
+        Fri, 23 Jun 2023 02:46:55 -0700 (PDT)
+Received: from [78.40.148.178] (helo=webmail.codethink.co.uk)
+        by imap5.colo.codethink.co.uk with esmtpsa  (Exim 4.94.2 #2 (Debian))
+        id 1qCdNR-00Dbvf-Tr; Fri, 23 Jun 2023 10:46:50 +0100
 MIME-Version: 1.0
-References: <20230615141144.665148-1-usama.anjum@collabora.com>
- <20230615141144.665148-3-usama.anjum@collabora.com> <ZJHp6hSeS6lMo7qx@gmail.com>
- <1c1beeda-ceed-fdab-bbf5-1881e0a8b102@collabora.com> <ZJNTWV+JZ+tTMdcp@gmail.com>
- <c8c3f983-8189-e602-157a-84ca1d8984dd@collabora.com>
-In-Reply-To: <c8c3f983-8189-e602-157a-84ca1d8984dd@collabora.com>
-From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-Date:   Fri, 23 Jun 2023 11:44:14 +0200
-Message-ID: <CABb0KFFEiTr4TfYnAOOd8tODEaY_KBE2EjNBEJqX6RjxZpCjZA@mail.gmail.com>
-Subject: Re: [PATCH v19 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Andrei Vagin <avagin@gmail.com>, Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Date:   Fri, 23 Jun 2023 10:46:50 +0100
+From:   Ben Dooks <ben.dooks@codethink.co.uk>
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Cc:     Ben Dooks <ben.dooks@sifive.com>, linux-pwm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        u.kleine-koenig@pengutronix.de,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        William Salmon <william.salmon@sifive.com>,
+        Jude Onyenegecha <jude.onyenegecha@sifive.com>
+Subject: Re: [PATCH v8 0/5] DesignWare PWM driver updates
+In-Reply-To: <daffc540-3b99-f71d-538b-84c897730208@linux.intel.com>
+References: <20230614171457.69191-1-ben.dooks@sifive.com>
+ <daffc540-3b99-f71d-538b-84c897730208@linux.intel.com>
+Message-ID: <1634a34bcd0f1b6eed5e3d59126d7892@codethink.co.uk>
+X-Sender: ben.dooks@codethink.co.uk
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 22 Jun 2023 at 12:21, Muhammad Usama Anjum
-<usama.anjum@collabora.com> wrote:
-> On 6/22/23 12:45=E2=80=AFAM, Andrei Vagin wrote:
-> > On Wed, Jun 21, 2023 at 11:34:54AM +0500, Muhammad Usama Anjum wrote:
-> >> On 6/20/23 11:03=E2=80=AFPM, Andrei Vagin wrote:
-[...]
-> >>> should it be PM_SCAN_FOUND_MAX_PAGES? Otherwise, it fails the ioctl e=
-ven
-> >>> if it has handled some pages already.
-> >> It is a double edge sword. If we don't return error, user will never k=
-now
-> >> that he needs to specify more max_pages or his output buffer is small =
-and
-> >> not coverig the entire range. The real purpose here that user gets awa=
-re
-> >> that he needs to specify full hugetlb range and found pages should cov=
-er
-> >> the entire range as well.
-> >
-> > but if PM_SCAN_OP_WP is set, this error will be fatal, because some
-> > pages can be marked write-protected, but they are not be reported to
-> > user-space.
-> >
-> > I think the ioctl has to report back the end address of the handled
-> > region. It is like read and write syscalls that can return less data
-> > than requested.
-> This is good point. I'll abort the walk here instead of retuning the erro=
-r
-> to user.
 
-It would be great if the ioctl returned the address the walk finished
-at. This would remove the special case for "buffer full after full
-page was added" and if it happens that despite `max_pages` limit was
-reached but no more pages would need to be added the caller would not
-have to call the ioctl again on the remaining range.
 
-[...]
-> >>> How long can it take to run this loop? Should we interrupt it if a
-> >>> signal has been queued?
-> >> I'm following mincore and pagemap_read here. There is no such thing th=
-ere.
-> >> IOCTL is performing what user has requested.
-> >
-> > In case of pagemap, its buffer is limited by MAX_RW_COUNT (0x7ffff000),
-> > so it can handle maximum 0xffffe00 pages in one iteration.  Do you have=
- any
-> > limits for input parameters?
-> >
-> >> If the execution time is a
-> >> concern, user should have called the IOCTL on shorter address range.
-> >
-> > It doesn't work this way. There can be many users and signals has to be
-> > delivered in a reasonable time. One of the obvious examples when a sign=
-al
-> > has to be delivered asap is OOM.
-> This IOCTL is just like mincore, but with other flags and functionalities=
-.
-> Mincore doesn't put any limit like this. I don't think we should put any
-> limit here as well.
+On 2023-06-20 13:59, Jarkko Nikula wrote:
+> On 6/14/23 20:14, Ben Dooks wrote:
+>> This series is an update for the DesignWare PWM driver to add support 
+>> for
+>> OF (and split the PCI bits out if aynone else wants them). This is 
+>> mostly
+>> the same as the v7 series, but with code moved around and 
+>> module-namespace
+>> added, plus review comments processed.
+>> 
+>> Since we no longer have the hardware, the clock code hasn't been 
+>> changed to
+>> either lock the rate whilst the PWM is running, or to deal with any 
+>> sort
+>> of change callback. This is left to future work (and I would rather 
+>> get
+>> something in that does currently work) (second note, the hardware we 
+>> did
+>> use had a fixed clock tree anyway)
+>> 
+>> This account is probably going away soon, I have cc'd my main work
+>> email to catch any responses.
+>> 
+>> Thank you all for the reviews.
+>> 
+> I tested the patchset on Intel Elkhart Lake and didn't see issues.
+> 
+> Tested-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
 
-I don't think we should treat mincore() as a good API example. Its
-interface has similar performance problems to what select() or poll()
-does. In this ioctl's case, we can limit the output at this end (large
-anyway) as it won't affect the performance if for x TiB of memory the
-call is made twice instead of once. (Returning the end of the walk
-reached would be much help here.)
+Great, thank you.
 
-Best Regards
-Micha=C5=82 Miros=C5=82aw
+Is this series likely to get into the next kernel release?
+
+-- 
+ben
