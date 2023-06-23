@@ -2,111 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F015773B791
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 14:40:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF52773B7D0
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 14:43:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231522AbjFWMkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 08:40:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58868 "EHLO
+        id S231621AbjFWMnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 08:43:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjFWMko (ORCPT
+        with ESMTP id S229961AbjFWMnN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 08:40:44 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E51910C1
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 05:40:39 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-666e3b15370so302150b3a.0
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 05:40:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687524039; x=1690116039;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ISCGsibdUDqUNcisOUEtsn5XzzcugHFWIWC+2smDI/w=;
-        b=ZaQ6V3LFlsVPXQ1/nHw/8mokcLZlAHGv7k9rEhtVIGudRKVcbD9yIbaotUHUQC/VBU
-         SKX5xiijFqj2iBrA4nCKYMMjQcQBHC2HEptprgw4ihMlqRVfK1hCYfy9T7vJrGvj51Uk
-         5vGQGV0ZWgoQMGNkbSTlktLcL3Kux9kN/wi9eJeQu+WjTWevlW9mXx3yW/E1MCy4al7G
-         BDXhdIP+6xW3xhcr4FTpq3EjNucY9D/z4kRJOP9pOkF97DJflzcCMutQS1NEGWY1SrPX
-         7acRb8gTgOFzWX3NA5PAVvmgiqftvZmAgYVF01Di1uoTeNiDrSOfbY+sN78UBDUYYcVr
-         YFYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687524039; x=1690116039;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ISCGsibdUDqUNcisOUEtsn5XzzcugHFWIWC+2smDI/w=;
-        b=VSGtN/uYnmzYffRGBRckhlRpA8K1LmgzRBAAxVVdReKy6lagZzbZyuSQuz9zVP/ih2
-         m/s41zQPg+xgEDArUWpurvqpCRE83JpCMNDxAOL44D8l/dZqat6bG3WMj5ycEP3uto5+
-         CHeghFkvXd0+k+wcqkWhSFZ7TiHgQyoEtaF5ET1jqmJTbiuULrYBkCUorIMB/SiWk5M/
-         lTur1Stnmjd9aa+F9CNx1ZKddpxQeG+mqORK9+J8pQZ/ogMWjnFK9kkrNZimgiKhmdDb
-         oRHv4joNee1h8Cf8VoIkQtVDGkKoNl7TtsX9ID/JX7JGIrR4mHmnTpymv15zrvyjuItp
-         SxYg==
-X-Gm-Message-State: AC+VfDzHWu5qoyIE2RRw2b2unJl8YioKn5oVPpg/pOG3RP/dOud4zB+v
-        XLoDTXuzO60rc7KKkcXVSeAoR0XbRbIHo89u+NA=
-X-Google-Smtp-Source: ACHHUZ6beUCCKWcQZv8PMUIOiUxvk5oOmD1JrHaSMdAONNWSVlWOi04Y/5bh6NdWhcS4AORccJgq1GC6g2pQBxD6Res=
-X-Received: by 2002:a05:6a20:4410:b0:121:7454:be2a with SMTP id
- ce16-20020a056a20441000b001217454be2amr15686808pzb.45.1687524039092; Fri, 23
- Jun 2023 05:40:39 -0700 (PDT)
+        Fri, 23 Jun 2023 08:43:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDE7C2969;
+        Fri, 23 Jun 2023 05:42:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8268861A44;
+        Fri, 23 Jun 2023 12:42:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DB4BC433C8;
+        Fri, 23 Jun 2023 12:41:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687524146;
+        bh=ljQRDIRYG4TydFhjD0LuSn8BREerPmb4Ipkpa2QAq6Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=apfm6xvoeO6UvUfxPwNSOl0FaLWJ7ShkzzPeuSOb0bank70626+jFCCnlqxUCd2NX
+         mV+Eb3SlbyeKtShM0cPnGoccCVrProiQPYgaM4HyeW5epsbNbu8US+O9nrIP4r+ghW
+         Y8FmG2CVOdPNZ1eNovI71PsOzsGS/p5EOkEcjtA4zTWfFdhpQkNKBq1hEMuzxsWytK
+         w9zTBeB4xmhiyjllhLtRaoNC8lgBTTH19xNIsLsgb+18yFVUlxxLoSku7XQ5A1i1lR
+         WF4IRekFC21BVGIj1AxyqNGVCxMph3jwY74VjiaGchsSc5v31PlBNGYvRkbk2aFmu+
+         9KQZIm3JpdS0g==
+Date:   Fri, 23 Jun 2023 14:41:42 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>, Jeremy Kerr <jk@ozlabs.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arve =?utf-8?B?SGrDuG5uZXbDpWc=?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Carlos Llamas <cmllamas@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>,
+        Brad Warrum <bwarrum@linux.ibm.com>,
+        Ritu Agarwal <rituagar@linux.ibm.com>,
+        Eric Van Hensbergen <ericvh@kernel.org>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Christian Schoenebeck <linux_oss@crudebyte.com>,
+        David Sterba <dsterba@suse.com>,
+        David Howells <dhowells@redhat.com>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Ian Kent <raven@themaw.net>,
+        Luis de Bethencourt <luisbg@kernel.org>,
+        Salah Triki <salah.triki@gmail.com>,
+        "Tigran A. Aivazian" <aivazian.tigran@gmail.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>, Chris Mason <clm@fb.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Xiubo Li <xiubli@redhat.com>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Jan Harkes <jaharkes@cs.cmu.edu>, coda@cs.cmu.edu,
+        Joel Becker <jlbec@evilplan.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Nicolas Pitre <nico@fluxnic.net>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Tyler Hicks <code@tyhicks.com>,
+        Ard Biesheuvel <ardb@kernel.org>, Gao Xiang <xiang@kernel.org>,
+        Chao Yu <chao@kernel.org>, Yue Hu <huyue2@coolpad.com>,
+        Jeffle Xu <jefflexu@linux.alibaba.com>,
+        Namjae Jeon <linkinjeon@kernel.org>,
+        Sungjong Seo <sj1557.seo@samsung.com>,
+        Jan Kara <jack@suse.com>, Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Bob Peterson <rpeterso@redhat.com>,
+        Andreas Gruenbacher <agruenba@redhat.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Dave Kleikamp <shaggy@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Ryusuke Konishi <konishi.ryusuke@gmail.com>,
+        Anton Altaparmakov <anton@tuxera.com>,
+        Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
+        Mark Fasheh <mark@fasheh.com>,
+        Joseph Qi <joseph.qi@linux.alibaba.com>,
+        Bob Copeland <me@bobcopeland.com>,
+        Mike Marshall <hubcap@omnibond.com>,
+        Martin Brandenburg <martin@omnibond.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        Tony Luck <tony.luck@intel.com>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Anders Larsen <al@alarsen.net>,
+        Steve French <sfrench@samba.org>,
+        Paulo Alcantara <pc@manguebit.com>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Shyam Prasad N <sprasad@microsoft.com>,
+        Tom Talpey <tom@talpey.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Phillip Lougher <phillip@squashfs.org.uk>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Evgeniy Dushistov <dushistov@mail.ru>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        Naohiro Aota <naohiro.aota@wdc.com>,
+        Johannes Thumshirn <jth@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        John Johansen <john.johansen@canonical.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Juergen Gross <jgross@suse.com>,
+        Ruihan Li <lrh2000@pku.edu.cn>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Udipto Goswami <quic_ugoswami@quicinc.com>,
+        Linyu Yuan <quic_linyyuan@quicinc.com>,
+        John Keeping <john@keeping.me.uk>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Yuta Hayama <hayama@lineo.co.jp>,
+        Jozef Martiniak <jomajm@gmail.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Sandeep Dhavale <dhavale@google.com>,
+        Dave Chinner <dchinner@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        ZhangPeng <zhangpeng362@huawei.com>,
+        Viacheslav Dubeyko <slava@dubeyko.com>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        Aditya Garg <gargaditya08@live.com>,
+        Erez Zadok <ezk@cs.stonybrook.edu>,
+        Yifei Liu <yifeliu@cs.stonybrook.edu>,
+        Yu Zhe <yuzhe@nfschina.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Oleg Kanatov <okanatov@gmail.com>,
+        "Dr. David Alan Gilbert" <linux@treblig.org>,
+        Jiangshan Yi <yijiangshan@kylinos.cn>,
+        xu xin <cgel.zte@gmail.com>, Stefan Roesch <shr@devkernel.io>,
+        Zhihao Cheng <chengzhihao1@huawei.com>,
+        "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Seth Forshee <sforshee@digitalocean.com>,
+        Zeng Jingxiang <linuszeng@tencent.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Zhang Yi <yi.zhang@huawei.com>, Tom Rix <trix@redhat.com>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Chen Zhongjin <chenzhongjin@huawei.com>,
+        Zhengchao Shao <shaozhengchao@huawei.com>,
+        Rik van Riel <riel@surriel.com>,
+        Jingyu Wang <jingyuwang_vip@163.com>,
+        Hangyu Hua <hbh25y@gmail.com>, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-usb@vger.kernel.org,
+        v9fs@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+        linux-afs@lists.infradead.org, autofs@vger.kernel.org,
+        linux-mm@kvack.org, linux-btrfs@vger.kernel.org,
+        ceph-devel@vger.kernel.org, codalist@coda.cs.cmu.edu,
+        ecryptfs@vger.kernel.org, linux-efi@vger.kernel.org,
+        linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, cluster-devel@redhat.com,
+        linux-um@lists.infradead.org, linux-mtd@lists.infradead.org,
+        jfs-discussion@lists.sourceforge.net, linux-nfs@vger.kernel.org,
+        linux-nilfs@vger.kernel.org, linux-ntfs-dev@lists.sourceforge.net,
+        ntfs3@lists.linux.dev, ocfs2-devel@oss.oracle.com,
+        linux-karma-devel@lists.sourceforge.net, devel@lists.orangefs.org,
+        linux-unionfs@vger.kernel.org, linux-hardening@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org, linux-cifs@vger.kernel.org,
+        samba-technical@lists.samba.org,
+        linux-trace-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        bpf@vger.kernel.org, netdev@vger.kernel.org,
+        apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
+        selinux@vger.kernel.org
+Subject: Re: [PATCH 00/79] fs: new accessors for inode->i_ctime
+Message-ID: <20230623-wegelagerei-kanzlei-45cdcf5da157@brauner>
+References: <20230621144507.55591-1-jlayton@kernel.org>
+ <20230621152141.5961cf5f@gandalf.local.home>
+ <2a5a069572b46b59dd16fe8d54e549a9b5bbb6eb.camel@kernel.org>
 MIME-Version: 1.0
-References: <CA+fCnZfi_o6QbfDamUjsPXjtnEwKyBn8y+T8=zxV2mEpA=DUyQ@mail.gmail.com>
- <20230623075805.1630-1-chanho.min@lge.com>
-In-Reply-To: <20230623075805.1630-1-chanho.min@lge.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Fri, 23 Jun 2023 14:40:28 +0200
-Message-ID: <CA+fCnZfrUY+EZ8w6zDhfjOr=JSFS6bHO7JjVHx0pEykNXZQecg@mail.gmail.com>
-Subject: Re: [PATCH v2] kasan: fix mention for KASAN_HW_TAGS
-To:     Chanho Min <chanho.min@lge.com>
-Cc:     dvyukov@google.com, elver@google.com, glider@google.com,
-        gunho.lee@lge.com, kasan-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        ryabinin.a.a@gmail.com, vincenzo.frascino@arm.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2a5a069572b46b59dd16fe8d54e549a9b5bbb6eb.camel@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 23, 2023 at 9:58=E2=80=AFAM Chanho Min <chanho.min@lge.com> wro=
-te:
->
-> This patch fixes description of the KASAN_HW_TAGS's memory consumption.
-> KASAN_HW_TAGS are dependent on the HW implementation and are not reserved
-> from system memory like shadow memory.
->
-> Suggested-by: Andrey Konovalov <andreyknvl@gmail.com>
-> Signed-off-by: Chanho Min <chanho.min@lge.com>
-> ---
->  lib/Kconfig.kasan | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/lib/Kconfig.kasan b/lib/Kconfig.kasan
-> index fdca89c05745..f8f9e12510b7 100644
-> --- a/lib/Kconfig.kasan
-> +++ b/lib/Kconfig.kasan
-> @@ -124,7 +124,8 @@ config KASAN_HW_TAGS
->           Supported only on arm64 CPUs starting from ARMv8.5 and relies o=
-n
->           Memory Tagging Extension and Top Byte Ignore.
->
-> -         Consumes about 1/32nd of available memory.
-> +         Does not consume memory by itself but relies on the 1/32nd of
-> +         available memory being reserved by the firmware when MTE is ena=
-bled.
->
->           May potentially introduce problems related to pointer casting a=
-nd
->           comparison, as it embeds a tag into the top byte of each pointe=
-r.
-> --
-> 2.17.1
->
+On Wed, Jun 21, 2023 at 03:52:27PM -0400, Jeff Layton wrote:
+> On Wed, 2023-06-21 at 15:21 -0400, Steven Rostedt wrote:
+> > On Wed, 21 Jun 2023 10:45:05 -0400
+> > Jeff Layton <jlayton@kernel.org> wrote:
+> > 
+> > > Most of this conversion was done via coccinelle, with a few of the more
+> > > non-standard accesses done by hand. There should be no behavioral
+> > > changes with this set. That will come later, as we convert individual
+> > > filesystems to use multigrain timestamps.
+> > 
+> > BTW, Linus has suggested to me that whenever a conccinelle script is used,
+> > it should be included in the change log.
+> > 
+> 
+> Ok, here's what I have. I note again that my usage of coccinelle is
+> pretty primitive, so I ended up doing a fair bit of by-hand fixing after
+> applying these.
+> 
+> Given the way that this change is broken up into 77 patches by
+> subsystem, to which changelogs should I add it? I could add it to the
+> "infrastructure" patch, but that's the one where I _didn't_ use it. 
+> 
+> Maybe to patch #79 (the one that renames i_ctime)?
 
-Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
-
-Thank you!
+That works. I can also put this into a merge commit or pr message.
