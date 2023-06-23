@@ -2,120 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19EAD73BECA
+	by mail.lfdr.de (Postfix) with ESMTP id 6383373BECB
 	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 21:29:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231532AbjFWT3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 15:29:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60390 "EHLO
+        id S231655AbjFWT3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 15:29:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjFWT3b (ORCPT
+        with ESMTP id S229491AbjFWT3c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 15:29:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BECAD2705
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 12:29:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        Fri, 23 Jun 2023 15:29:32 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDF842703;
+        Fri, 23 Jun 2023 12:29:29 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 501FE61B04
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 19:29:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6455C433CA;
-        Fri, 23 Jun 2023 19:29:27 +0000 (UTC)
-Date:   Fri, 23 Jun 2023 15:29:26 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Beau Belgrave <beaub@linux.microsoft.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        sunliming <sunliming@kylinos.cn>
-Subject: [GIT PULL] tracing: user_event fix for 6.4
-Message-ID: <20230623152926.128aa568@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by ms.lwn.net (Postfix) with ESMTPSA id 4AF4435E;
+        Fri, 23 Jun 2023 19:29:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 4AF4435E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1687548569; bh=htIfBaDnzdpJnh1WUfGNFYFLCBr5jBeV4TBkIKkAvMU=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=TlTygBqdYcKD7C1N6NEKfSjAocl1ln450UKc0Fa+sGzErCLN4cKeSmatA7F13AKuo
+         FrU/hIIFbnarKTR4aDaiM3hqyGuXAhOTu7kKNksAtg5puqnwTLz/gQmCH4KV5oiW2/
+         5Gvfh9kyMxT+JGKybcY9rBRhi1AMS75Y4C6vv0gL7WdMVkMxjrhMi4uzwBjodB46o+
+         8EPsIfTDX11THAOxS5xOBKCfKgvVmVM3JvQzdYw6pXC7Oa1EzBd7OW/MRrQ2HbY671
+         OWX8e8FDs75uCjp65tm4OEpdPJTt9RIDMVY4bawGdCWCIoXz4fHSEwWga/RfdliC2H
+         rzyVjPpwNpZzA==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Chaitanya S Prakash <chaitanyas.prakash@arm.com>,
+        Will Deacon <will@kernel.org>, Anshuman.Khandual@arm.com,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH V2] Documentation/arm64: Add ptdump documentation
+In-Reply-To: <ZJP9joL+QZiVM9Tg@arm.com>
+References: <20230619083802.76092-1-chaitanyas.prakash@arm.com>
+ <168736253462.605140.8006082140297031307.b4-ty@arm.com>
+ <87ttv0pzt8.fsf@meer.lwn.net> <ZJP9joL+QZiVM9Tg@arm.com>
+Date:   Fri, 23 Jun 2023 13:29:28 -0600
+Message-ID: <87352im0yv.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Catalin Marinas <catalin.marinas@arm.com> writes:
 
-Linus,
+> Hi Jon,
+>
+> On Wed, Jun 21, 2023 at 10:04:03AM -0600, Jonathan Corbet wrote:
+>> Catalin Marinas <catalin.marinas@arm.com> writes:
+>> 
+>> > On Mon, 19 Jun 2023 14:08:02 +0530, Chaitanya S Prakash wrote:
+>> >> ptdump is a debugfs interface used to dump the kernel page tables. It
+>> >> provides a comprehensive overview about the kernel's virtual memory
+>> >> layout, page table entries and associated page attributes. A document
+>> >> detailing how to enable ptdump in the kernel and analyse its output has
+>> >> been added.
+>> >> 
+>> >> Changes in V2:
+>> >> 
+>> >> [...]
+>> >
+>> > Applied to arm64 (for-next/doc), thanks! I did some tidying up, minor
+>> > fixes.
+>> >
+>> > [1/1] Documentation/arm64: Add ptdump documentation
+>> >       https://git.kernel.org/arm64/c/a0238ada560f
+>> 
+>> Note that this will generate a conflict with the arm64 documentation
+>> move, which I dropped into -next today.  It's easily enough fixed up
+>> top, but if you'd rather carry the directory move in your tree just say
+>> the word.
+>
+> Ah, I forgot about this move. Are you ok to pull the arm64 for-next/doc
+> into your tree to avoid the conflict? There's also the arm64
+> for-next/acpi-doc branch that you could also pull.
 
-Tracing fix to user events return value on write
+That sounds a bit like the sort of merge-to-avoid-a-conflict that Linus
+gets annoyed about.  There's nothing too serious here, I can just warn
+him in my pull request.
 
-Before user events become an ABI, fix the return value of the write
-operation when tracing is disabled. It should not return an error, but
-simply report it wrote zero bytes. Just like any other write operation
-that doesn't write data but does not "fail".
+Thanks,
 
-This also includes test cases for this use case.
-
-
-Please pull the latest trace-v6.4-rc7 tree, which can be found at:
-
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git
-trace-v6.4-rc7
-
-Tag SHA1: ec925ce3a8456d2a527572e940ed52123a6083cd
-Head SHA1: 131966049074b8025a8cba0e99d3745311fcef5b
-
-
-sunliming (3):
-      tracing/user_events: Fix incorrect return value for writing operation when events are disabled
-      selftests/user_events: Enable the event before write_fault test in ftrace self-test
-      selftests/user_events: Add test cases when event is disabled
-
-----
- kernel/trace/trace_events_user.c                  | 3 ++-
- tools/testing/selftests/user_events/ftrace_test.c | 7 +++++++
- 2 files changed, 9 insertions(+), 1 deletion(-)
----------------------------
-diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
-index 8df0550415e7..902cae005df4 100644
---- a/kernel/trace/trace_events_user.c
-+++ b/kernel/trace/trace_events_user.c
-@@ -2096,7 +2096,8 @@ static ssize_t user_events_write_core(struct file *file, struct iov_iter *i)
- 
- 		if (unlikely(faulted))
- 			return -EFAULT;
--	}
-+	} else
-+		return 0;
- 
- 	return ret;
- }
-diff --git a/tools/testing/selftests/user_events/ftrace_test.c b/tools/testing/selftests/user_events/ftrace_test.c
-index eb6904d89f14..f42a20520175 100644
---- a/tools/testing/selftests/user_events/ftrace_test.c
-+++ b/tools/testing/selftests/user_events/ftrace_test.c
-@@ -324,6 +324,9 @@ TEST_F(user, write_events) {
- 	io[0].iov_base = &reg.write_index;
- 	io[0].iov_len = sizeof(reg.write_index);
- 
-+	/* Write should return zero when event is not enabled */
-+	ASSERT_EQ(0, writev(self->data_fd, (const struct iovec *)io, 3));
-+
- 	/* Enable event */
- 	self->enable_fd = open(enable_file, O_RDWR);
- 	ASSERT_NE(-1, write(self->enable_fd, "1", sizeof("1")))
-@@ -400,6 +403,10 @@ TEST_F(user, write_fault) {
- 	ASSERT_EQ(0, ioctl(self->data_fd, DIAG_IOCSREG, &reg));
- 	ASSERT_EQ(0, reg.write_index);
- 
-+	/* Enable event */
-+	self->enable_fd = open(enable_file, O_RDWR);
-+	ASSERT_NE(-1, write(self->enable_fd, "1", sizeof("1")))
-+
- 	/* Write should work normally */
- 	ASSERT_NE(-1, writev(self->data_fd, (const struct iovec *)io, 2));
- 
+jon
