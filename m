@@ -2,139 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D14573C43D
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 00:44:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3E4373C43F
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 00:45:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232328AbjFWWnu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 18:43:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34256 "EHLO
+        id S232391AbjFWWoy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 18:44:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232514AbjFWWnZ (ORCPT
+        with ESMTP id S232573AbjFWWo3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 18:43:25 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7FB62729
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 15:43:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687560203; x=1719096203;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=MhZLju72Wu953YaQliJabK/FxTEhlQ/IuuKL76TUfzs=;
-  b=UA4dzGFn2Kk6UeSz6drCM3FzqCqOOaSzO+/RMUmXIZmSnTOt77Za25Tz
-   BgIB8DhNFV3LJ2a6nzeoC370dCyhWPtH+13bHWX+OONJoAxJfUNP6FpKJ
-   iUKGfPG+B+zsBXmWi1bH4DQvq0LuWsDPpyPkNBaBPC121tLcm14dF4A/r
-   C+On1wHxCoznxykUuHiBhholsRq9A+3BqPoZDfuy4fSgpsz1UwWZ95NkN
-   MU0mIVDQ/4DJi2PfFdEBXJYROIarzv8gdBNL2/pdbz1aDeTvwsKXCPv37
-   waBMI+BzBwVbjIQdMcHPaNHdawnSmajk7fZZZae0Xg7R4ZFbSbzLEJpCT
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10750"; a="364323802"
-X-IronPort-AV: E=Sophos;i="6.01,153,1684825200"; 
-   d="scan'208";a="364323802"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2023 15:43:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10750"; a="718679708"
-X-IronPort-AV: E=Sophos;i="6.01,153,1684825200"; 
-   d="scan'208";a="718679708"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 23 Jun 2023 15:43:21 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qCpUu-0008Zf-0c;
-        Fri, 23 Jun 2023 22:43:20 +0000
-Date:   Sat, 24 Jun 2023 06:43:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>
-Subject: [tip:locking/core 37/43]
- drivers/char/ipmi/ipmi_msghandler.c:5194:13: warning: stack frame size
- (1032) exceeds limit (1024) in 'ipmi_panic_request_and_wait'
-Message-ID: <202306240641.rigy2zg2-lkp@intel.com>
+        Fri, 23 Jun 2023 18:44:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF5B12736
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 15:44:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 51D7B61182
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 22:44:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE4DBC433C8;
+        Fri, 23 Jun 2023 22:44:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687560265;
+        bh=XqCOUoRP2aujdv2QSKSNLE56ERnjK0/6sbB8vLn8vhE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=hvpg9c0Rc9J8KG7A4AlnG/gGbcwiDSvBt6Yif/Jsf6RORLzp/B679FIo0BYJgSb89
+         s3kfpNAxWdkLPv4z8FEncU/qFFwt/u/GxTVQ0k3hn5JKazAzPTruN23uKI9l/9mGpe
+         JhA72kS+WaUR7+IzYQEdyUgPduDd6xNZiu9JuRc7MoVKAOLSgpzOgfayzhnPCRepsZ
+         CdmWDbp14eqTXc92boMXtISMsqdQsISIS6R9j3Htb8wMGKP8AJazf3Co3U33QgT/Ig
+         DpFBFnCnPOY21EHlADzEfGFYaiOOe+/WYkPwvOFG51KIKOWZtB9On9r66E5HS86Bzm
+         QWuItuzn+jy+A==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=valley-girl.lan)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1qCpVv-007sPl-2i;
+        Fri, 23 Jun 2023 23:44:23 +0100
+From:   Marc Zyngier <maz@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Antonio Borneo <antonio.borneo@foss.st.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Binbin Zhou <zhoubinbin@loongson.cn>,
+        Chong Qiao <qiaochong@loongson.cn>,
+        Hanjun Guo <guohanjun@huawei.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        James Gowans <jgowans@amazon.com>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        KarimAllah Raslan <karahmed@amazon.com>,
+        Liao Chang <liaochang1@huawei.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Liu Peibao <liupeibao@loongson.cn>,
+        liuyun <liuyun@loongson.cn>, Marek Vasut <marex@denx.de>,
+        Rob Herring <robh@kernel.org>, Rob Landley <rob@landley.net>,
+        Shawn Guo <shawnguo@kernel.org>,
+        yangqiming <yangqiming@loongson.cn>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>,
+        Yipeng Zou <zouyipeng@huawei.com>,
+        Zhang Jianhua <chris.zjh@huawei.com>,
+        zhengyan <zhengyan@asrmicro.com>, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] irqchip updates for 6.5
+Date:   Fri, 23 Jun 2023 23:43:45 +0100
+Message-Id: <20230623224345.3577134-1-maz@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: tglx@linutronix.de, antonio.borneo@foss.st.com, arnd@arndb.de, zhoubinbin@loongson.cn, qiaochong@loongson.cn, guohanjun@huawei.com, chenhuacai@kernel.org, chenhuacai@loongson.cn, jgowans@amazon.com, lvjianmin@loongson.cn, glaubitz@physik.fu-berlin.de, karahmed@amazon.com, liaochang1@huawei.com, linus.walleij@linaro.org, liupeibao@loongson.cn, liuyun@loongson.cn, marex@denx.de, robh@kernel.org, rob@landley.net, shawnguo@kernel.org, yangqiming@loongson.cn, zhuyinbo@loongson.cn, zouyipeng@huawei.com, chris.zjh@huawei.com, zhengyan@asrmicro.com, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
+Thomas,
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+Here's the set of irqchip patches for 6.5. The only notable bit
+is the workaround for the GICv3 LPIs lacking an active state
+and having to be retriggered when firing concurrently on multiple
+CPUs. The rest is pretty benign, with mostly a bunch of Loongson
+fixes, errata workarounds, and various cleanups.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git locking/core
-head:   b33eb50a92b0a298fa8a6ac350e741c3ec100f6d
-commit: 1d78814d41701c216e28fcf2656526146dec4a1a [37/43] locking/atomic: scripts: simplify raw_atomic*() definitions
-config: arm-randconfig-r016-20230622 (https://download.01.org/0day-ci/archive/20230624/202306240641.rigy2zg2-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230624/202306240641.rigy2zg2-lkp@intel.com/reproduce)
+Please pull,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306240641.rigy2zg2-lkp@intel.com/
+        M.
 
-All warnings (new ones prefixed by >>):
+The following changes since commit 7877cb91f1081754a1487c144d85dc0d2e2e7fc4:
 
->> drivers/char/ipmi/ipmi_msghandler.c:5194:13: warning: stack frame size (1032) exceeds limit (1024) in 'ipmi_panic_request_and_wait' [-Wframe-larger-than]
-   static void ipmi_panic_request_and_wait(struct ipmi_smi *intf,
-               ^
-   1 warning generated.
+  Linux 6.4-rc4 (2023-05-28 07:49:00 -0400)
 
+are available in the Git repository at:
 
-vim +/ipmi_panic_request_and_wait +5194 drivers/char/ipmi/ipmi_msghandler.c
+  git://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git tags/irqchip-6.5
 
-895dcfd1cab84d Corey Minyard  2012-03-28  5190  
-895dcfd1cab84d Corey Minyard  2012-03-28  5191  /*
-895dcfd1cab84d Corey Minyard  2012-03-28  5192   * Inside a panic, send a message and wait for a response.
-895dcfd1cab84d Corey Minyard  2012-03-28  5193   */
-a567b6230066e3 Corey Minyard  2018-04-05 @5194  static void ipmi_panic_request_and_wait(struct ipmi_smi *intf,
-895dcfd1cab84d Corey Minyard  2012-03-28  5195  					struct ipmi_addr *addr,
-895dcfd1cab84d Corey Minyard  2012-03-28  5196  					struct kernel_ipmi_msg *msg)
-895dcfd1cab84d Corey Minyard  2012-03-28  5197  {
-895dcfd1cab84d Corey Minyard  2012-03-28  5198  	struct ipmi_smi_msg  smi_msg;
-895dcfd1cab84d Corey Minyard  2012-03-28  5199  	struct ipmi_recv_msg recv_msg;
-895dcfd1cab84d Corey Minyard  2012-03-28  5200  	int rv;
-895dcfd1cab84d Corey Minyard  2012-03-28  5201  
-895dcfd1cab84d Corey Minyard  2012-03-28  5202  	smi_msg.done = dummy_smi_done_handler;
-895dcfd1cab84d Corey Minyard  2012-03-28  5203  	recv_msg.done = dummy_recv_done_handler;
-895dcfd1cab84d Corey Minyard  2012-03-28  5204  	atomic_add(2, &panic_done_count);
-895dcfd1cab84d Corey Minyard  2012-03-28  5205  	rv = i_ipmi_request(NULL,
-895dcfd1cab84d Corey Minyard  2012-03-28  5206  			    intf,
-895dcfd1cab84d Corey Minyard  2012-03-28  5207  			    addr,
-895dcfd1cab84d Corey Minyard  2012-03-28  5208  			    0,
-895dcfd1cab84d Corey Minyard  2012-03-28  5209  			    msg,
-895dcfd1cab84d Corey Minyard  2012-03-28  5210  			    intf,
-895dcfd1cab84d Corey Minyard  2012-03-28  5211  			    &smi_msg,
-895dcfd1cab84d Corey Minyard  2012-03-28  5212  			    &recv_msg,
-895dcfd1cab84d Corey Minyard  2012-03-28  5213  			    0,
-5fdb1fb2abe647 Corey Minyard  2017-09-05  5214  			    intf->addrinfo[0].address,
-5fdb1fb2abe647 Corey Minyard  2017-09-05  5215  			    intf->addrinfo[0].lun,
-895dcfd1cab84d Corey Minyard  2012-03-28  5216  			    0, 1); /* Don't retry, and don't wait. */
-895dcfd1cab84d Corey Minyard  2012-03-28  5217  	if (rv)
-895dcfd1cab84d Corey Minyard  2012-03-28  5218  		atomic_sub(2, &panic_done_count);
-82802f968bd311 Hidehiro Kawai 2015-07-27  5219  	else if (intf->handlers->flush_messages)
-82802f968bd311 Hidehiro Kawai 2015-07-27  5220  		intf->handlers->flush_messages(intf->send_info);
-82802f968bd311 Hidehiro Kawai 2015-07-27  5221  
-895dcfd1cab84d Corey Minyard  2012-03-28  5222  	while (atomic_read(&panic_done_count) != 0)
-895dcfd1cab84d Corey Minyard  2012-03-28  5223  		ipmi_poll(intf);
-^1da177e4c3f41 Linus Torvalds 2005-04-16  5224  }
-^1da177e4c3f41 Linus Torvalds 2005-04-16  5225  
+for you to fetch changes up to a82f3119d543406ed5b242deabf83cdecb9fe523:
 
-:::::: The code at line 5194 was first introduced by commit
-:::::: a567b6230066e3a2c964e2dc914e7f9a436806c4 ipmi: Change ipmi_smi_t to struct ipmi_smi *
+  Merge branch irq/misc-6.5 into irq/irqchip-next (2023-06-21 13:53:41 +0100)
 
-:::::: TO: Corey Minyard <cminyard@mvista.com>
-:::::: CC: Corey Minyard <cminyard@mvista.com>
+----------------------------------------------------------------
+irqchip updates for 6.5
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+- A number of Loogson/Loogarch fixes
+
+- Allow the core code to retrigger an interrupt that has
+  fired while the same interrupt is being handled on another
+  CPU, papering over a GICv3 architecture issue
+
+- Work around an integration problem on ASR8601, where the CPU
+  numbering isn't representable in the GIC implementation...
+
+- Add some missing interrupt to the STM32 irqchip
+
+- A bunch of warning squashing triggered by W=1 builds
+
+----------------------------------------------------------------
+Antonio Borneo (1):
+      irqchip/stm32-exti: Fix warning on initialized field overwritten
+
+Arnd Bergmann (6):
+      irqdomain: Include internals.h for function prototypes
+      irqchip/ftintc010: Mark all function static
+      irqchip/mmp: Remove non-DT codepath
+      irqchip/clps711x: Remove unused clps711x_intc_init() function
+      irqchip/mxs: Include linux/irqchip/mxs.h
+      irqchip/gicv3: Add a iort_pmsi_get_dev_id() prototype
+
+Binbin Zhou (2):
+      dt-bindings: interrupt-controller: Add Loongson EIOINTC
+      irqchip/loongson-eiointc: Add DT init support
+
+James Gowans (3):
+      genirq: Expand doc for PENDING and REPLAY flags
+      genirq: Allow fasteoi handler to resend interrupts on concurrent handling
+      irqchip/gic-v3-its: Enable RESEND_WHEN_IN_PROGRESS for LPIs
+
+Jianmin Lv (3):
+      irqchip/loongson-pch-pic: Fix initialization of HT vector register
+      irqchip/loongson-liointc: Fix IRQ trigger polarity
+      irqchip/loongson-eiointc: Fix irq affinity setting during resume
+
+John Paul Adrian Glaubitz (1):
+      irqchip/jcore-aic: Fix missing allocation of IRQ descriptors
+
+Liu Peibao (1):
+      irqchip/loongson-pch-pic: Fix potential incorrect hwirq assignment
+
+Marc Zyngier (7):
+      irqchip/gic-v3: Improve affinity helper
+      Merge branch irq/gic-v3-asr8601 into irq/irqchip-next
+      genirq: Use BIT() for the IRQD_* state flags
+      Merge branch irq/lpi-resend into irq/irqchip-next
+      Merge branch irq/loongarch-fixes-6.5 into irq/irqchip-next
+      Revert "irqchip/mxs: Include linux/irqchip/mxs.h"
+      Merge branch irq/misc-6.5 into irq/irqchip-next
+
+Marek Vasut (1):
+      irqchip/stm32-exti: Add STM32MP15xx IWDG2 EXTI to GIC map
+
+Yinbo Zhu (1):
+      irqchip/loongson-liointc: Add IRQCHIP_SKIP_SET_WAKE flag
+
+zhengyan (1):
+      irqchip/gic-v3: Work around affinity issues on ASR8601
+
+ Documentation/arm64/silicon-errata.rst             |   4 +
+ .../interrupt-controller/loongson,eiointc.yaml     |  59 +++++++++
+ drivers/irqchip/irq-clps711x.c                     |   7 --
+ drivers/irqchip/irq-ftintc010.c                    |   4 +-
+ drivers/irqchip/irq-gic-v3-its.c                   |   2 +
+ drivers/irqchip/irq-gic-v3.c                       |  45 +++++--
+ drivers/irqchip/irq-jcore-aic.c                    |   7 ++
+ drivers/irqchip/irq-loongson-eiointc.c             | 135 +++++++++++++++------
+ drivers/irqchip/irq-loongson-liointc.c             |  13 +-
+ drivers/irqchip/irq-loongson-pch-pic.c             |  10 +-
+ drivers/irqchip/irq-mmp.c                          | 127 -------------------
+ drivers/irqchip/irq-stm32-exti.c                   |  13 ++
+ include/linux/acpi_iort.h                          |   3 +-
+ include/linux/irq.h                                |  59 +++++----
+ include/linux/irqchip/mmp.h                        |  10 --
+ kernel/irq/chip.c                                  |  16 ++-
+ kernel/irq/debugfs.c                               |   2 +
+ kernel/irq/internals.h                             |   7 +-
+ kernel/irq/irqdomain.c                             |   2 +
+ 19 files changed, 296 insertions(+), 229 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml
+ delete mode 100644 include/linux/irqchip/mmp.h
