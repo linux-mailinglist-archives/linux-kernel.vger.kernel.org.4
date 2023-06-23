@@ -2,112 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFF2273AF86
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 06:40:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D6F373AF8D
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 06:47:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231329AbjFWEkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 00:40:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46978 "EHLO
+        id S230169AbjFWErJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 00:47:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230237AbjFWEkl (ORCPT
+        with ESMTP id S230008AbjFWErE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 00:40:41 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F8932136
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 21:40:40 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-668711086f4so198524b3a.1
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 21:40:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1687495240; x=1690087240;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JXozlQ7AGAAc+Nx/NUdVZ9+4KpO/wevqL//8Wl3bnA8=;
-        b=JZkAmcGHq0XM4nsbfCm1f7kHv9MXYtpNPYSkjpMZEj94i95KEaw66wEhaDEXP14a0u
-         v8UJKbJSz5QSo+cbz1k/Jn3kM0ZCI73rrZrfiPok1GnRO+rKCsXMtzz+f6LH0ISwHvNg
-         PomoU6ex9zABeAcfQIPJ3ly1lyoWkasiGVFMY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687495240; x=1690087240;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JXozlQ7AGAAc+Nx/NUdVZ9+4KpO/wevqL//8Wl3bnA8=;
-        b=LWGS31mHYN1GZsYJA0ZT4U3AJSAUrTOxJJRnazQJ0QKUktCK7wyYJey2aBIvgZZljR
-         nWmrYbKPU6noFzESznC+umR78oQiVs7qfM/lSmdaMwleiIe9e9vGjQZIy0/yYV6UG3BK
-         UKVz+tEEjq6UjWflEFWjQr0nqhIrdGaxSVq/g4UdIGVkFdT/sUROyoJ7Hm8uuOG8DHxV
-         jlNqdb/FVc8rW/i40AfCV0y1ADI0l9ZF66F3A/CwQ1941KmIR8ithjbs2s+8frOXmT18
-         4GmMJ4Eag8CKxdPbTei9ubR+OP8g7O+Wi+7r6YVSfEQ89MfbvtN5X+oWubn9NfNUcxqN
-         HlIQ==
-X-Gm-Message-State: AC+VfDw7nhR7ymSTYcKMsrI7dRpFWFcUcIn/ssLbZmKM0tu1Pl6UaAla
-        rPG+IRfAV1czhtijRTN6zDhimQ==
-X-Google-Smtp-Source: ACHHUZ4n1mZuM7TTU/iqzcSryywffqB9jdQbsWlWm4H5TvuH/7J0J6/AUoSNwQC5ppUUQt0Nu5rzTA==
-X-Received: by 2002:a05:6a00:1309:b0:64d:42b9:6895 with SMTP id j9-20020a056a00130900b0064d42b96895mr39202386pfu.5.1687495240030;
-        Thu, 22 Jun 2023 21:40:40 -0700 (PDT)
-Received: from tigerii.tok.corp.google.com ([2401:fa00:8f:203:3383:b451:fa2:1538])
-        by smtp.gmail.com with ESMTPSA id q25-20020a62ae19000000b00666e17004a4sm4237350pff.58.2023.06.22.21.40.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jun 2023 21:40:39 -0700 (PDT)
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Minchan Kim <minchan@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: [PATCH 2/2] zsmalloc: move migration destination zspage inuse check
-Date:   Fri, 23 Jun 2023 13:40:02 +0900
-Message-ID: <20230623044016.366793-3-senozhatsky@chromium.org>
-X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-In-Reply-To: <20230623044016.366793-1-senozhatsky@chromium.org>
-References: <20230623044016.366793-1-senozhatsky@chromium.org>
+        Fri, 23 Jun 2023 00:47:04 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE491DC
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 21:47:03 -0700 (PDT)
+Received: from cwcc.thunk.org (pool-173-48-111-196.bstnma.fios.verizon.net [173.48.111.196])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 35N4kBao028696
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 23 Jun 2023 00:46:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1687495576; bh=OEyKCoUungp0u3TZdsQ1kTkqvt2C/vIWCgVVJqjpu8M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=i4S4C4NoQoCxVg8tZZiZoUSZ0Dx8tEIDgAR61N4OW7H/tJCrmvxvqTtSLJUnTzhoh
+         hiUahurRQtLKlqJJiyrIt0n/fSTHeOs+gkj9badQ71ADpxRzl4v0367juF0M3w8KDB
+         mPd3DBXVw0C0ySkgJWBb/8dLZHVnY7aS5jw12BZ36IiEnLUW6Hv0erbvdoaOkE/uq5
+         gKBV/ufV6fO4d3T5BMFrWGmBmnKW4zR6YZZ+lQBeNmvKJlwkypKogPmYo/ElxpWyv2
+         CzkI173ev6S9xeSwiJ0gEqLUbkPHpKuWjfNRz29yZJLMOFhrnvtFIdk31bCb8TmiMf
+         W4s7xPdHFfZ6A==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 6249015C027E; Fri, 23 Jun 2023 00:46:11 -0400 (EDT)
+Date:   Fri, 23 Jun 2023 00:46:11 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Sean Greenslade <sean@seangreenslade.com>,
+        linux-ext4@vger.kernel.org, Ye Bin <yebin10@huawei.com>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>
+Subject: Re: RO mount of ext4 filesystem causes writes
+Message-ID: <20230623044611.GD34229@mit.edu>
+References: <ZIauBR7YiV3rVAHL@glitch>
+ <ZIa5P1HqE62rmzqu@debian.me>
+ <ZJTv+it2x/glkmpp@debian.me>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZJTv+it2x/glkmpp@debian.me>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Destination zspage fullness check need to be done after
-zs_object_copy() because that's where source and destination
-zspages fullness change.  Checking destination zspage fullness
-before zs_object_copy() may cause migration to loop through
-source zspage sub-pages scanning for allocate objects just to
-find out at the end that the destination zspage is full.
+On Fri, Jun 23, 2023 at 08:06:02AM +0700, Bagas Sanjaya wrote:
+> 
+> No reply so far from the culprit author (Ye Bin) nor from Ted. Can
+> you help in this case?
 
-Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
----
- mm/zsmalloc.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+There's been no reply because I haven't been able to replicate it, and
+I didn't have the time do enough work to convince myself the report
+was bogus.  At this point, I have spent time trying to reproduce it,
+and I've had no luck.
 
-diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
-index 5d60eaedc3b7..4a84f7877669 100644
---- a/mm/zsmalloc.c
-+++ b/mm/zsmalloc.c
-@@ -1620,10 +1620,6 @@ static void migrate_zspage(struct zs_pool *pool, struct size_class *class,
- 			continue;
- 		}
- 
--		/* Stop if there is no more space */
--		if (zspage_full(class, get_zspage(d_page)))
--			break;
--
- 		used_obj = handle_to_obj(handle);
- 		free_obj = obj_malloc(pool, get_zspage(d_page), handle);
- 		zs_object_copy(class, free_obj, used_obj);
-@@ -1631,6 +1627,10 @@ static void migrate_zspage(struct zs_pool *pool, struct size_class *class,
- 		record_obj(handle, free_obj);
- 		obj_free(class->size, used_obj);
- 
-+		/* Stop if there is no more space */
-+		if (zspage_full(class, get_zspage(d_page)))
-+			break;
-+
- 		/* Stop if there are no more objects to migrate */
- 		if (zspage_empty(get_zspage(s_page)))
- 			break;
--- 
-2.41.0.162.gfafddb0af9-goog
+So, unless you can give me a simple set of reproduction instructions,
+I'm going to have to treat this report is invalid.
+
+Regards,
+
+						- Ted
+
+Note: this test was done using kvm-xfstests which can be found
+https://github.com/tytso/xfstests-bld using the install-kconfig and
+the kbuild script that can also be found in this report.  So if you
+want to play along from home, feel free.  :-)
+
+
+root@kvm-xfstests:~# mkfs.ext4 /dev/vdc
+mke2fs 1.47.0 (5-Feb-2023)
+Discarding device blocks: done                            
+Creating filesystem with 1310720 4k blocks and 327680 inodes
+Filesystem UUID: fe434060-6731-4b40-a94a-3a8517df0660
+Superblock backups stored on blocks: 
+        32768, 98304, 163840, 229376, 294912, 819200, 884736
+
+Allocating group tables: done                            
+Writing inode tables: done                            
+Creating journal (16384 blocks): done
+Writing superblocks and filesystem accounting information: done 
+
+root@kvm-xfstests:~# md5sum /dev/vdc
+fd38f9f8476ad63a744d179846ee7e18  /dev/vdc
+root@kvm-xfstests:~# mount -o ro /dev/vdc /mnt
+[  472.893614] EXT4-fs (vdc): orphan cleanup on readonly fs
+[  472.894022] EXT4-fs (vdc): mounted filesystem fe434060-6731-4b40-a94a-3a8517df0660 ro with ordered data mode. Quota mode: none.
+root@kvm-xfstests:~# umount /mnt
+[  475.698053] EXT4-fs (vdc): unmounting filesystem fe434060-6731-4b40-a94a-3a8517df0660.
+root@kvm-xfstests:~# md5sum /dev/vdc
+fd38f9f8476ad63a744d179846ee7e18  /dev/vdc
+
+Hmm.... OK, let's try it with LUKS, even though that *really*
+shouldn't make a difference.  The cryptsetup lukeFormat and mkfs.ext4
+steps are skipped here.  Also, note that I had to manually edit the
+.config file to enable CONFIG_DM_CRYPT, since I dm_crypt is used by
+xfstests, so my install-kconfig script doesn't enable CONFIG_DM_CRYPT.
+
+
+root@kvm-xfstests:~# uname -a
+Linux kvm-xfstests 6.4.0-rc6-xfstests-lockdep #200 SMP PREEMPT_DYNAMIC Fri Jun 23 00:33:39 EDT 2023 x86_64 GNU/Linux
+
+root@kvm-xfstests:~# md5sum /dev/vdc
+28b75cc094e1e2a62ac25a730fc1dfee  /dev/vdc
+root@kvm-xfstests:~# cryptsetup luksOpen /dev/vdc test
+Enter passphrase for /dev/vdc: 
+root@kvm-xfstests:~# mount -o ro /dev/mapper/test /mnt
+[  812.073771] EXT4-fs (dm-0): orphan cleanup on readonly fs
+[  812.074306] EXT4-fs (dm-0): mounted filesystem ac3f76f1-da0a-426e-85b2-08526afb2224 ro with ordered data mode. Quota mode: none.
+root@kvm-xfstests:~# umount /mnt
+[  814.383016] EXT4-fs (dm-0): unmounting filesystem ac3f76f1-da0a-426e-85b2-08526afb2224.
+root@kvm-xfstests:~# cryptsetup luksClose /dev/mapper/test
+[  830.001992] dm-0: detected capacity change from 10452992 to 0
+root@kvm-xfstests:~# md5sum /dev/vdc
+28b75cc094e1e2a62ac25a730fc1dfee  /dev/vdc
+
 
