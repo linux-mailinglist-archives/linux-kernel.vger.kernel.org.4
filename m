@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ACC973B54E
+	by mail.lfdr.de (Postfix) with ESMTP id 5D3BB73B54F
 	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 12:30:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231177AbjFWKab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 06:30:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36684 "EHLO
+        id S232296AbjFWKag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 06:30:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232400AbjFWKaK (ORCPT
+        with ESMTP id S232213AbjFWKaP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 06:30:10 -0400
+        Fri, 23 Jun 2023 06:30:15 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDBF810FD
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 03:29:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E11D7268E
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 03:29:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 730FF61A1B
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 10:29:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FF1EC433C8;
-        Fri, 23 Jun 2023 10:29:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F33A61A1E
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 10:29:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39768C4339A;
+        Fri, 23 Jun 2023 10:29:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687516189;
-        bh=h/wyoas79DZ6KTfkJ9+jTQgKoQB1VoPw7r90QcpSJeU=;
+        s=k20201202; t=1687516193;
+        bh=ix+vKAfBpwxnlJKw+L5AoviCMLKx2fPBzB19tGgvqkA=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=vB3MzkX4oj4tmkT1SKsRSUZg0wrSuMKJMAQ0dJvlFeECCRx1vb8rN/BR16D3p1zqd
-         4+7SJSZXmKwGdsGzSeSNTVaYks7MX7R2b1hgJ2Bo1Tn3YPeg20N5dQC4rUrppZ88EJ
-         6zI/yWqX9QYYZ9iwbF4/MSYoWWpX55M4bE/NHttvb27DvwozTzLbxTExtftkpvhfQ6
-         bGodJrJtQl8K31vwIcrrnXkkcr+kmfZw3LE/D9CwzatT6jilvpkeXGNMBwTVZgW/0z
-         Y2gWrs2aPiXSrWKTEBzUhOjest9B3iDfMFYui+JwKnM7SDNSxc6+E5z8RZ7WCKa13I
-         RoOLpdzCHxODw==
+        b=XB95Dcmc8wW4JD6DEXS1rgGOZ3p9hQXaQDnOEyCD1wlXpCZXNv6UbfGnRzpENIj+z
+         VNhwpnqp7isIRSIOiB4mwA5c9iciXrMUI2QS6ttZ15BfUARuOLziQfUgm6TV1c7SvW
+         o7wIIiRA2OpWWVs46jl12LGHMsjskm9c+dcKxwaFw5lKYFJEYs/9++Xs5XPWtq4G6d
+         zm//Jbll4UGQbAWhKle057rjMgHzgc9uHkOib3D5aYnUFgJrHE921KvI/WR+pGLtOa
+         BYS6UMXaRTRalUQtnr2ba8y2V4LmboZo08ULDWWy8DlP9Hd0rMiccCfsXMcSK07SVX
+         JQwia/4TOByfA==
 From:   Michael Walle <mwalle@kernel.org>
-Date:   Fri, 23 Jun 2023 12:29:17 +0200
-Subject: [PATCH net-next v2 08/10] net: phy: introduce phy_promote_to_c45()
+Date:   Fri, 23 Jun 2023 12:29:18 +0200
+Subject: [PATCH net-next v2 09/10] net: mdio: add C45-over-C22 fallback to
+ fwnode_mdiobus_register_phy()
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230620-feature-c45-over-c22-v2-8-def0ab9ccee2@kernel.org>
+Message-Id: <20230620-feature-c45-over-c22-v2-9-def0ab9ccee2@kernel.org>
 References: <20230620-feature-c45-over-c22-v2-0-def0ab9ccee2@kernel.org>
 In-Reply-To: <20230620-feature-c45-over-c22-v2-0-def0ab9ccee2@kernel.org>
 To:     Andrew Lunn <andrew@lunn.ch>,
@@ -69,128 +70,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If not explitly asked to be probed as a C45 PHY, on a bus which is
-capable of doing both C22 and C45 transfers, C45 PHYs are first tried to
-be probed as C22 PHYs. To be able to promote the PHY to be a C45 one,
-the driver can call phy_promote_to_c45() in its probe function.
-
-This was already done in the mxl-gpy driver by the following snippet:
-
-   if (!phy_is_c45(phydev)) {
-           ret = phy_get_c45_ids(phydev);
-           if (ret < 0)
-                   return ret;
-   }
-
-Move that code into the core as it could be used by other drivers, too.
-If a PHY is promoted C45-over-C22 access is automatically used as a
-fallback if the bus doesn't support C45 transactions.
+If trying to register a C45 PHY on an MDIO bus which isn't capable of
+C45 (either because the MDIO controller doesn't support it or because
+C45 accesses are prohibited due to faulty C22 PHYs) we can fall back to
+the new C45-over-C22 access method.
 
 Signed-off-by: Michael Walle <mwalle@kernel.org>
----
- drivers/net/phy/mxl-gpy.c    |  9 ++++-----
- drivers/net/phy/phy_device.c | 36 ++++++++++++++++++++++++++++++------
- include/linux/phy.h          |  7 ++++++-
- 3 files changed, 40 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/net/phy/mxl-gpy.c b/drivers/net/phy/mxl-gpy.c
-index 66411e46937b..b7fca1aae1c3 100644
---- a/drivers/net/phy/mxl-gpy.c
-+++ b/drivers/net/phy/mxl-gpy.c
-@@ -281,11 +281,10 @@ static int gpy_probe(struct phy_device *phydev)
- 	int fw_version;
- 	int ret;
+---
+Please note, that both with the old and the new code compatible =
+"ethernet-phy-idNNNN.NNNN" only works for the C22 case. I'm wondering if
+compatible = "ethernet-phy-idNNNN.NNNN", "ethernet-phy-ieee802.3-c45
+even makes sense because there might be multiple C45 ids. At least it is
+an allowed pattern according to the device tree bindings. But with the
+current code, the ethernet-phy-idNNNN.NNNN is ignored in the c45 case.
+---
+ drivers/net/mdio/fwnode_mdio.c | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/net/mdio/fwnode_mdio.c b/drivers/net/mdio/fwnode_mdio.c
+index 972c8932c2fe..fed056d82b4e 100644
+--- a/drivers/net/mdio/fwnode_mdio.c
++++ b/drivers/net/mdio/fwnode_mdio.c
+@@ -115,7 +115,6 @@ int fwnode_mdiobus_register_phy(struct mii_bus *bus,
+ 	struct mii_timestamper *mii_ts = NULL;
+ 	struct pse_control *psec = NULL;
+ 	struct phy_device *phy;
+-	bool is_c45;
+ 	u32 phy_id;
+ 	int rc;
  
--	if (!phy_is_c45(phydev)) {
--		ret = phy_get_c45_ids(phydev);
--		if (ret < 0)
--			return ret;
--	}
-+	/* This might have been probed as a C22 PHY, but this is a C45 PHY */
-+	ret = phy_promote_to_c45(phydev);
-+	if (ret)
-+		return ret;
+@@ -129,13 +128,19 @@ int fwnode_mdiobus_register_phy(struct mii_bus *bus,
+ 		goto clean_pse;
+ 	}
  
- 	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
- 	if (!priv)
-diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
-index 13d5ec7a7c21..3f9041a3ad72 100644
---- a/drivers/net/phy/phy_device.c
-+++ b/drivers/net/phy/phy_device.c
-@@ -1085,18 +1085,42 @@ void phy_device_remove(struct phy_device *phydev)
- EXPORT_SYMBOL(phy_device_remove);
- 
- /**
-- * phy_get_c45_ids - Read 802.3-c45 IDs for phy device.
-- * @phydev: phy_device structure to read 802.3-c45 IDs
-+ * phy_promote_to_c45 - Promote to a C45 PHY
-+ * @phydev: phy_device structure
-+ *
-+ * If a PHY supports both C22 and C45 and it isn't specifically asked to probe
-+ * as a C45 PHY it might be probed as a C22 PHY. The driver can call this
-+ * function to promote a PHY from C22 to C45.
-+ *
-+ * Can also be called if a PHY is already a C45 one. In that case it does
-+ * nothing.
-+ *
-+ * If the bus isn't capable of doing C45 transfers, C45-over-C22 access will be
-+ * used as a fallback.
-  *
-  * Returns zero on success, %-EIO on bus access error, or %-ENODEV if
-  * the "devices in package" is invalid.
-  */
--int phy_get_c45_ids(struct phy_device *phydev)
-+int phy_promote_to_c45(struct phy_device *phydev)
- {
--	return get_phy_c45_ids(phydev->mdio.bus, phydev->mdio.addr,
--			       &phydev->c45_ids, false);
-+	struct mii_bus *bus = phydev->mdio.bus;
+-	is_c45 = fwnode_device_is_compatible(child, "ethernet-phy-ieee802.3-c45");
+-	if (is_c45 || fwnode_get_phy_id(child, &phy_id))
+-		phy = get_phy_device(bus, addr,
+-				     is_c45 ? PHY_ACCESS_C45 : PHY_ACCESS_C22);
+-	else
++	if (fwnode_device_is_compatible(child, "ethernet-phy-ieee802.3-c45")) {
++		if (mdiobus_supports_c45(bus))
++			phy = get_phy_device(bus, addr, PHY_ACCESS_C45);
++		else
++			phy = get_phy_device(bus, addr,
++					     PHY_ACCESS_C45_OVER_C22);
++	} else if (fwnode_get_phy_id(child, &phy_id) == 0) {
+ 		phy = phy_device_create(bus, addr, phy_id, PHY_ACCESS_C22,
+ 					NULL);
++	} else {
++		phy = get_phy_device(bus, addr, PHY_ACCESS_C22);
++	}
 +
-+	if (phy_is_c45(phydev))
-+		return 0;
-+
-+	if (dev_of_node(&phydev->mdio.dev))
-+		phydev_info(phydev,
-+			    "Promoting PHY to a C45 one. Please consider using compatible=\"ethernet-phy-ieee802.3-c45\".");
-+
-+	if (mdiobus_supports_c45(bus))
-+		phydev->access_mode = PHY_ACCESS_C45;
-+	else
-+		phydev->access_mode = PHY_ACCESS_C45_OVER_C22;
-+
-+	return get_phy_c45_ids(bus, phydev->mdio.addr, &phydev->c45_ids,
-+			       phydev->access_mode == PHY_ACCESS_C45_OVER_C22);
- }
--EXPORT_SYMBOL(phy_get_c45_ids);
-+EXPORT_SYMBOL(phy_promote_to_c45);
- 
- /**
-  * phy_find_first - finds the first PHY device on the bus
-diff --git a/include/linux/phy.h b/include/linux/phy.h
-index 4852651f6326..f9c91766bc47 100644
---- a/include/linux/phy.h
-+++ b/include/linux/phy.h
-@@ -467,6 +467,11 @@ struct phy_device *mdiobus_scan_c22(struct mii_bus *bus, int addr);
- 
- void mdiobus_scan_for_broken_c45_access(struct mii_bus *bus);
- 
-+static inline bool mdiobus_supports_c45(struct mii_bus *bus)
-+{
-+	return bus->read_c45 && !bus->prevent_c45_access;
-+}
-+
- #define PHY_INTERRUPT_DISABLED	false
- #define PHY_INTERRUPT_ENABLED	true
- 
-@@ -1701,7 +1706,7 @@ static inline int phy_device_register(struct phy_device *phy)
- static inline void phy_device_free(struct phy_device *phydev) { }
- #endif /* CONFIG_PHYLIB */
- void phy_device_remove(struct phy_device *phydev);
--int phy_get_c45_ids(struct phy_device *phydev);
-+int phy_promote_to_c45(struct phy_device *phydev);
- int phy_init_hw(struct phy_device *phydev);
- int phy_suspend(struct phy_device *phydev);
- int phy_resume(struct phy_device *phydev);
+ 	if (IS_ERR(phy)) {
+ 		rc = PTR_ERR(phy);
+ 		goto clean_mii_ts;
 
 -- 
 2.39.2
