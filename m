@@ -2,90 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58D8973C4D1
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 01:33:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC33673C4E0
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 01:43:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231467AbjFWXdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 19:33:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54008 "EHLO
+        id S232009AbjFWXnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 19:43:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230010AbjFWXds (ORCPT
+        with ESMTP id S230010AbjFWXnS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 19:33:48 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 800AC2699
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 16:33:47 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-553a1f13d9fso995833a12.1
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 16:33:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1687563227; x=1690155227;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5BXr6eTNbrAAPMLfItUNBU1GV8gA8JI1s3w/GXSgtiQ=;
-        b=T4eNDvej4BSP1rQm+6xqQqAO5mSaxmUuOD4yVwd/MW16mp1HkVi7Gmt8TqmlwIPBsJ
-         yWUZHfhdLKjlPSoVnhyEAptnwbesES/JLcrRcxguBJzZNKQ7kUnz9gQDo7szvdxlsGwg
-         TX5y4PyA9zFvXsB2PFcRGADDVkbC3NKC14NSI=
+        Fri, 23 Jun 2023 19:43:18 -0400
+Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34EF02703;
+        Fri, 23 Jun 2023 16:43:17 -0700 (PDT)
+Received: by mail-io1-f46.google.com with SMTP id ca18e2360f4ac-78333585d28so32790139f.1;
+        Fri, 23 Jun 2023 16:43:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687563227; x=1690155227;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5BXr6eTNbrAAPMLfItUNBU1GV8gA8JI1s3w/GXSgtiQ=;
-        b=isIivzLhxyFWOgBqS6GACenTfsO3kbUXBBO1HbG2SxFYGehhkTIgtP6nN3dzJt9zNG
-         hz/qC5b4B3G+fsMovRAyMVAA4aJ6jbfOwrJwJylrsM9Mt5j4kUR9EfHWfKebjc7m0Yr8
-         AtnMtGLR9MGlnl2bvWwLWpoJfqQtArwN2gaay9RqtWiFLfxs8NsHnEZeycUnqfisCBY3
-         Ab3gvQNpYEb9/9CyTke7ViMA1/E/X5o1oBOcIQzevlwmhXCE2bpMBmUR4lpRXmlxcJcW
-         hXi9dXkw2pSl3JF4Z/GHaHq0e9zJw8Ugk+TQMgO/8+VpvyzHhAzG+KGEEoseFxc1dSNZ
-         AOaQ==
-X-Gm-Message-State: AC+VfDw+3u0BOr5EDAxP7Z+XOpaKWU7xOK5zBUCDWSJDxFRpF8TrdQdv
-        p7e5yLhmYLzuxX77zQX7ldZtWXL5aVJa5VeCkVc=
-X-Google-Smtp-Source: ACHHUZ69mWqFU5agnEl+Q83+Js77SJdoh72Y42y83F4lW+t475KKF3wSlBzxef4eC2MLbMqu1PNchw==
-X-Received: by 2002:a17:902:f68d:b0:1b6:ba60:780e with SMTP id l13-20020a170902f68d00b001b6ba60780emr703673plg.24.1687563227001;
-        Fri, 23 Jun 2023 16:33:47 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id lg13-20020a170902fb8d00b001b061dcdb6bsm112977plb.28.2023.06.23.16.33.46
+        d=1e100.net; s=20221208; t=1687563796; x=1690155796;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=fTiyezCl+ncjMsIOOS0sUB9bYyrGCDjIJOvndxohyZs=;
+        b=JsAIoLHPQR83cIFWCg7WWq9dOFpHwbGPHK2yoY125gC8xVqx2+ttlxJX+sxoETmQlV
+         0nzPjnhz39qU6o87QsXUo3XE8rc8xVe1tCFq0v/HUv/SqKNKfCrP1E1R7lgXcGuOx6y2
+         Ye3G6ypunxQdjQzz2ukdGGZuVQNU006TpPpL8MAHc+uIiGpnV85+2gp/WvADNQ/2sRCU
+         AoLsbcQUu6qTlfBlobD2G6x4CJs0P6/7LAU5AFlr+R6jVOZVLv1PoQKKkeOqS1a/I5G5
+         iHh6o5EBG3JC2u0sVTRVWCc72uLnf7/POT8WGjwChV0ytJvnTeM9K3NQ4zI7JypbiFa8
+         xFfg==
+X-Gm-Message-State: AC+VfDw5DExrdMCkSqQcgXx602OXDOFT2Gsg8bbCY0m4jzAMeRS+bMz2
+        HjkFdCKixSxi9ODyQ8CMJA==
+X-Google-Smtp-Source: ACHHUZ704nUo/Qe+1L5BBq/vh9K03eeZluxsw6d51akGW3mbLVGxB1UGHdSEiXEdc5xMZV7l5fDOHg==
+X-Received: by 2002:a5d:9483:0:b0:760:e308:107e with SMTP id v3-20020a5d9483000000b00760e308107emr15001057ioj.0.1687563796356;
+        Fri, 23 Jun 2023 16:43:16 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id r27-20020a02c85b000000b0041407c67451sm72416jao.165.2023.06.23.16.43.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Jun 2023 16:33:46 -0700 (PDT)
-Date:   Fri, 23 Jun 2023 16:33:45 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Christian Lamparter <chunkeey@gmail.com>,
-        Arnd Bergmann <arnd@kernel.org>, Kalle Valo <kvalo@kernel.org>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Shiji Yang <yangshiji66@outlook.com>,
-        Nick Kossifidis <mickflemm@gmail.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] carl9170: re-fix fortified-memset warning
-Message-ID: <202306231607.8632EBE15@keescook>
-References: <20230623152443.2296825-1-arnd@kernel.org>
- <7c4622e7-d7a8-ae5d-e381-f726cb511228@gmail.com>
- <24986b5e-5cd1-4cd5-aff3-b5eab2c0fdde@app.fastmail.com>
+        Fri, 23 Jun 2023 16:43:15 -0700 (PDT)
+Received: (nullmailer pid 1606691 invoked by uid 1000);
+        Fri, 23 Jun 2023 23:43:09 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <24986b5e-5cd1-4cd5-aff3-b5eab2c0fdde@app.fastmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Varshini Rajendran <varshini.rajendran@microchip.com>
+Cc:     ulf.hansson@linaro.org, krzysztof.kozlowski+dt@linaro.org,
+        edumazet@google.com, broonie@kernel.org, arnd@arndb.de,
+        maz@kernel.org, lgirdwood@gmail.com, alexandre.belloni@bootlin.com,
+        alain.volmat@foss.st.com, p.zabel@pengutronix.de,
+        mihai.sain@microchip.com, soc@kernel.org,
+        linux-mtd@lists.infradead.org, cristian.birsan@microchip.com,
+        jerry.ray@microchip.com, tudor.ambarus@linaro.org,
+        miquel.raynal@bootlin.com, richard@nod.at,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        balamanikandan.gunasundar@microchip.com, lee@kernel.org,
+        olivia@selenic.com, sboyd@kernel.org, mturquette@baylibre.com,
+        kuba@kernel.org, Hari.PrasathGE@microchip.com,
+        linux-kernel@vger.kernel.org, balakrishnan.s@microchip.com,
+        alsa-devel@alsa-project.org, durai.manickamkr@microchip.com,
+        sre@kernel.org, vkoul@kernel.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org, andrew@lunn.ch,
+        devicetree@vger.kernel.org, nayabbasha.sayed@microchip.com,
+        linux-gpio@vger.kernel.org, nicolas.ferre@microchip.com,
+        davem@davemloft.net, pabeni@redhat.com,
+        linux-arm-kernel@lists.infradead.org, linux@roeck-us.net,
+        wim@linux-watchdog.org, tglx@linutronix.de,
+        horatiu.vultur@microchip.com, radu_nicolae.pirea@upb.ro,
+        dharma.b@microchip.com, a.zummo@towertech.it,
+        linux-mmc@vger.kernel.org, richard.genoud@gmail.com,
+        claudiu.beznea@microchip.com, linus.walleij@linaro.org,
+        conor+dt@kernel.org, herbert@gondor.apana.org.au,
+        eugen.hristev@collabora.com, dmaengine@vger.kernel.org,
+        netdev@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux@armlinux.org.uk, linux-watchdog@vger.kernel.org,
+        linux-pm@vger.kernel.org, robh+dt@kernel.org,
+        linux-i2c@vger.kernel.org, linux-crypto@vger.kernel.org,
+        neil.armstrong@linaro.org, vigneshr@ti.com,
+        manikandan.m@microchip.com, linux-clk@vger.kernel.org,
+        olof@lixom.net
+In-Reply-To: <20230623203056.689705-32-varshini.rajendran@microchip.com>
+References: <20230623203056.689705-1-varshini.rajendran@microchip.com>
+ <20230623203056.689705-32-varshini.rajendran@microchip.com>
+Message-Id: <168756378936.1606652.14221929175769628362.robh@kernel.org>
+Subject: Re: [PATCH v2 31/45] dt-bindings: atmel-classd: add sam9x7
+ compatible
+Date:   Fri, 23 Jun 2023 17:43:09 -0600
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 23, 2023 at 06:05:57PM +0200, Arnd Bergmann wrote:
-> Doing the randconfig builds with the latest compilers, carl9170 is the
-> only one I see with fortified-string warnings, and there are a few
-> dozen other drivers that I see with W=1, including one that affects
-> all wireless drivers.
 
-Can you post the config that triggers this? I can't reproduce this
-warning...
+On Sat, 24 Jun 2023 02:00:42 +0530, Varshini Rajendran wrote:
+> Add sam9x7 compatible to DT bindings documentation.
+> 
+> Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
+> ---
+>  .../devicetree/bindings/sound/atmel,sama5d2-classd.yaml      | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
 
--Kees
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
--- 
-Kees Cook
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/sound/atmel,sama5d2-classd.example.dtb: sound@fc048000: compatible: 'oneOf' conditional failed, one must be fixed:
+	['atmel,sama5d2-classd'] is too short
+	from schema $id: http://devicetree.org/schemas/sound/atmel,sama5d2-classd.yaml#
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230623203056.689705-32-varshini.rajendran@microchip.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
