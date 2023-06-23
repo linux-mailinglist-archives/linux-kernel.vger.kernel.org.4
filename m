@@ -2,112 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0160873BDAC
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 19:18:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76C4C73BDAE
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 19:18:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231947AbjFWRSR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 13:18:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46572 "EHLO
+        id S232401AbjFWRST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 13:18:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232327AbjFWRSN (ORCPT
+        with ESMTP id S232355AbjFWRSO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 13:18:13 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 542C72703;
-        Fri, 23 Jun 2023 10:18:11 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 97FB3838;
-        Fri, 23 Jun 2023 19:17:32 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1687540652;
-        bh=0YZ1lxPbJiyDK0Mx7CR1+kV4GfIdauMzmbmUCh2M2yg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=I80U+ueO1+v3u+Akn9EWaSLkx1e6Z1BF8fHrMrFnz3SNglr77oZHGHNOAV2/B6DaG
-         tXC7IHbwESkqu7MTeeYE2l+kqt4cTfaZGH2A9W9m924sfNsORuMF64ebfvEtEbzaBU
-         g6eaEz66f6uhobK56I8/6d5c9ZEmlggEQXKZe1Ig=
-Date:   Fri, 23 Jun 2023 20:18:08 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 38/39] drm: renesas: shmobile: Atomic conversion part 3
-Message-ID: <20230623171808.GN2112@pendragon.ideasonboard.com>
-References: <cover.1687423204.git.geert+renesas@glider.be>
- <9fcb81f939a6c4f09204f084519bf29d993b005a.1687423204.git.geert+renesas@glider.be>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <9fcb81f939a6c4f09204f084519bf29d993b005a.1687423204.git.geert+renesas@glider.be>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 23 Jun 2023 13:18:14 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 796A32721
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 10:18:12 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-bd6df68105cso1310529276.2
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 10:18:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687540691; x=1690132691;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=llENVEVx7donIYNakxUVI5MpG0GOiTfcMTyN4fUp0rU=;
+        b=Ifcy3ssUA3HatTYBLoALBoi9rv2zfki+BjLQSSPjp/djklT3LGTpbVicEHGxmSnXhv
+         dhqArvs+Ka9XA9Tri/jrOYf5B+vXeVX1+q+tiKDdTFkiOKvv3EAezjH1wUFgtKhByuW4
+         nkuLUsoB2Co3FPIdNTySgRNJ1HruWY4kF/IM0BylsmhE0mHrAKKoD+NIPSBUOYCLVbkI
+         /WERtK+Cy+ZeRkzKDyBUC6XKmKcyZeB6y1mCNSUarLC+O2fzKDMJIo9yTOS0MYy8Umkn
+         2mv49pV0mG+U2D0L70810PlbXGmrm5mVRyGl4EMMPSGTO9gQhlDTLzmQIrbSGnpDgcaT
+         tjCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687540691; x=1690132691;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=llENVEVx7donIYNakxUVI5MpG0GOiTfcMTyN4fUp0rU=;
+        b=YobhPtPWsN/WFemdQ8VAlw1MrCy+Q3NjZFu3qVvbteXDDS1fT11UT8YPboWpCJWX6p
+         5oG+hg91ONzBgztljRl8kv27GGz15F0MixAkVNfurpA3RCIQw71LTVMOg19nF0YcRkwD
+         qWA078jT+RO4mF3W/hi3J3qd9ltKrQXVIz55StT0meAeXAAVs9zQkjaitKXAVA/RwV9K
+         YcewohRgj+U/Bo9EHN/QLuUmLNqnALZney67xuzro2v2yVui34njebfnmJrN6sd6IvI7
+         cD62x4T3lLUukIoadFqdJQkNqG+CgiEAcT+MEqk8SLyppMKE0PYl0GXdl+ZEQbjhah7+
+         e0KQ==
+X-Gm-Message-State: AC+VfDyVpI4kPHET+Rsv8JqHX6GtvJiDsFA11cY6MEKd/33Mvu4qh2E2
+        TZB/FZQ7v9K6WnAhtMrTshcdNfEPln4=
+X-Google-Smtp-Source: ACHHUZ62Gq2iXbpG7c3hMYxbvQB2JgxITH9gLGvurS/GarPXE22jpxvivXwTyq8j5ROsi0j8F8XOxvxGh9s=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:b1a3:0:b0:ba8:373e:acf1 with SMTP id
+ h35-20020a25b1a3000000b00ba8373eacf1mr9942356ybj.12.1687540691579; Fri, 23
+ Jun 2023 10:18:11 -0700 (PDT)
+Date:   Fri, 23 Jun 2023 10:18:09 -0700
+In-Reply-To: <20230623025429.GB3436214@ls.amr.corp.intel.com>
+Mime-Version: 1.0
+References: <cover.1687474039.git.isaku.yamahata@intel.com>
+ <b659f86ac7128965e05a7a660c38734667530fc0.1687474039.git.isaku.yamahata@intel.com>
+ <37b868c53c9f35e8ec051573562a4598df38d72d.camel@intel.com> <20230623025429.GB3436214@ls.amr.corp.intel.com>
+Message-ID: <ZJXS7tU6iukBXSuv@google.com>
+Subject: Re: [RFC PATCH v2 3/6] KVM: x86/mmu: Pass round full 64-bit error
+ code for the KVM page fault
+From:   Sean Christopherson <seanjc@google.com>
+To:     Isaku Yamahata <isaku.yamahata@gmail.com>
+Cc:     Kai Huang <kai.huang@intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        "michael.roth@amd.com" <michael.roth@amd.com>,
+        Vishal Annapurve <vannapurve@google.com>,
+        "ackerleytng@google.com" <ackerleytng@google.com>,
+        Bo2 Chen <chen.bo@intel.com>, Sagi Shahar <sagis@google.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "dmatlack@google.com" <dmatlack@google.com>,
+        "zhi.wang.linux@gmail.com" <zhi.wang.linux@gmail.com>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
+On Thu, Jun 22, 2023, Isaku Yamahata wrote:
+> On Thu, Jun 22, 2023 at 11:28:22PM +0000,
+> Kai Huang <kai.huang@intel.com> wrote:
+>=20
+> > On Thu, 2023-06-22 at 16:16 -0700, Yamahata, Isaku wrote:
+> > > The upper 32 bits of error code are discarded at kvm_mmu_page_fault()
+> > > by lower_32_bits().=EF=BF=BD Now it's passed down as full 64 bits.
+> > > Because only FNAME(page_fault) depends on it, move lower_32_bits() in=
+to
+> > > FNAME(page_fault).
+> >=20
+> > I haven't looked into the code yet, but the last sentence around
+> > FNAME(page_fault) doesn't make a lot sense IIUC?
+> >=20
+> > For instance, we can have a shadow EPT table when EPT is enabled in L0 =
+and
+> > exposed to L1.  If we want to pass 64-bit error code to the handler, ho=
+w can
+> > FRAME(page_fault)() depend on the lower 32-bit value?=20
+>=20
+> Probably "depend" was too strong. In short, I wanted to not change the va=
+lue
+> passed down as error_code from FNAME(page_fault).
+>=20
+> FNAME(page_fault) calls helper function to walk page tables. Some check
+> PFERR_IMPLICIT_ACCESS_MASK(48 bit).
 
-Thank you for the patch.
+Argh, IMPLICIT_ACCESS is a KVM-defined value without any sanity checks agai=
+nst it
+being used by hardware.
 
-On Thu, Jun 22, 2023 at 11:21:50AM +0200, Geert Uytterhoeven wrote:
-> Complete the conversion to atomic mode setting by converting the
-> connector, and setting the DRIVER_ATOMIC flag.
-> 
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> If we don't mask lower_32_bits(), it can
+> pass accidentally the bit.  Maybe we can audit the code carefully to chec=
+k if
+> IMPLICIT_ACCESS bit doesn't matter or fix it.  But I don't want to do it =
+with
+> this patch series.
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+No.  Going halfway on something like this is exactly how we end up with cod=
+e that
+no one understands and exists only because of "hysterical raisins".
 
-> ---
->  drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c | 5 +----
->  drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c  | 2 +-
->  2 files changed, 2 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c b/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c
-> index f2332bb0fbbd51a1..17456dde57637ab8 100644
-> --- a/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c
-> +++ b/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c
-> @@ -574,7 +574,6 @@ static void shmob_drm_connector_destroy(struct drm_connector *connector)
->  }
->  
->  static const struct drm_connector_funcs connector_funcs = {
-> -	.dpms = drm_helper_connector_dpms,
->  	.reset = drm_atomic_helper_connector_reset,
->  	.fill_modes = drm_helper_probe_single_connector_modes,
->  	.destroy = shmob_drm_connector_destroy,
-> @@ -644,9 +643,7 @@ int shmob_drm_connector_create(struct shmob_drm_device *sdev,
->  	if (ret < 0)
->  		goto error;
->  
-> -	drm_helper_connector_dpms(connector, DRM_MODE_DPMS_OFF);
-> -	drm_object_property_set_value(&connector->base,
-> -		sdev->ddev.mode_config.dpms_property, DRM_MODE_DPMS_OFF);
-> +	connector->dpms = DRM_MODE_DPMS_OFF;
->  
->  	sdev->connector = connector;
->  
-> diff --git a/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c b/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c
-> index c43f408d6b1fcc5b..576869164479ec6b 100644
-> --- a/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c
-> +++ b/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c
-> @@ -98,7 +98,7 @@ static irqreturn_t shmob_drm_irq(int irq, void *arg)
->  DEFINE_DRM_GEM_DMA_FOPS(shmob_drm_fops);
->  
->  static const struct drm_driver shmob_drm_driver = {
-> -	.driver_features	= DRIVER_GEM | DRIVER_MODESET,
-> +	.driver_features	= DRIVER_GEM | DRIVER_MODESET | DRIVER_ATOMIC,
->  	DRM_GEM_DMA_DRIVER_OPS,
->  	.fops			= &shmob_drm_fops,
->  	.name			= "shmob-drm",
+There's no reason not to fix this properly.  It's obviously not your fault =
+that
+commit 147277540bbc ("kvm: svm: Add support for additional SVM NPF error co=
+des")
+took a shortcut, but that doesn't mean it's ok to keep punting the proper f=
+ix to
+a future developer.
 
--- 
-Regards,
+One of the things I've been trying to drill into people's heads by harping =
+on
+writing tests is that trying to do the least amount of work to get some new=
+fangled
+feature merged is not a winning strategy.  The more work that is done upfro=
+nt by
+developers, the less work that needs to be done by reviewers and maintainer=
+s.  It's
+definitely not a 1:1 ratio, i.e. you doing an extra hour of work doesn't sa=
+ve me an
+hour of work, but since reviewers and maintainers are a relatively scarce r=
+esource,
+shifting work to developers almost always results in moving faster overall.=
+  And
+many times, doing more work upfront *does* require less effort overall, e.g=
+. in
+this case, we'll probably have spent more time discussing this than it woul=
+d have
+taken to audit the code in the first place.
 
-Laurent Pinchart
+As for IMPLICIT_ACCESS, that can and should be handled by asserting that th=
+e flag
+isn't set by hardware, and if it is, suppressing the bit so that KVM doesn'=
+t
+misinterpret an unknown hardware flag as IMPLICIT_ACCESS.
+
+I'll test the below and post it separately, but feel free to incorporate it=
+ into
+this series, I'll make sure everything gets ordered correctly if/when all o=
+f this
+gets applied.
+
+--
+From: Sean Christopherson <seanjc@google.com>
+Date: Fri, 23 Jun 2023 09:46:38 -0700
+Subject: [PATCH] KVM: x86/mmu: Guard against collision with KVM-defined
+ PFERR_IMPLICIT_ACCESS
+
+Add an assertion in kvm_mmu_page_fault() to ensure the error code provided
+by hardware doesn't conflict with KVM's software-defined IMPLICIT_ACCESS
+flag.  In the unlikely scenario that future hardware starts using bit 48
+for a hardware-defined flag, preserving the bit could result in KVM
+incorrectly interpreting the unknown flag as KVM's IMPLICIT_ACCESS flag.
+
+WARN so that any such conflict can be surfaced to KVM developers and
+resolved, but otherwise ignore the bit as KVM can't possibly rely on a
+flag it knows nothing about.
+
+Fixes: 4f4aa80e3b88 ("KVM: X86: Handle implicit supervisor access with SMAP=
+")
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/kvm/mmu/mmu.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index 60397a1beda3..228a483d3746 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -5742,6 +5742,17 @@ int noinline kvm_mmu_page_fault(struct kvm_vcpu *vcp=
+u, gpa_t cr2_or_gpa, u64 err
+ 	int r, emulation_type =3D EMULTYPE_PF;
+ 	bool direct =3D vcpu->arch.mmu->root_role.direct;
+=20
++	/*
++	 * IMPLICIT_ACCESS is a KVM-defined flag used to correctly perform SMAP
++	 * checks when emulating instructions that triggers implicit access.
++	 * WARN if hardware generates a fault with an error code that collides
++	 * with the KVM-defined value.  Clear the flag and continue on, i.e.
++	 * don't terminate the VM, as KVM can't possibly be relying on a flag
++	 * that KVM doesn't know about.
++	 */
++	if (WARN_ON_ONCE(error_code & PFERR_IMPLICIT_ACCESS))
++		error_code &=3D ~PFERR_IMPLICIT_ACCESS;
++
+ 	if (WARN_ON(!VALID_PAGE(vcpu->arch.mmu->root.hpa)))
+ 		return RET_PF_RETRY;
+=20
+
+base-commit: 293375bf2fd333e5563dd80b894725b90cd84c5d
+--
