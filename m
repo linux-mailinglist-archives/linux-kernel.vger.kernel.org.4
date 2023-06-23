@@ -2,124 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A76973ADCD
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 02:32:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70C9C73ADCF
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 02:33:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230149AbjFWAcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 20:32:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45638 "EHLO
+        id S230378AbjFWAdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 20:33:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230083AbjFWAch (ORCPT
+        with ESMTP id S230062AbjFWAdi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 20:32:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 007B12105;
-        Thu, 22 Jun 2023 17:32:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8545661937;
-        Fri, 23 Jun 2023 00:32:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 063D3C433C8;
-        Fri, 23 Jun 2023 00:32:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687480350;
-        bh=rGrpoxT2JrB6gIl6SWv/cI8uqEJ1qle+1MaoCZ8MyQo=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=UGKn0LdI9edM5zspg3LLVLtUP1m/qVoh5pTUFvB/oE81127MpoNWZrxWa0pCPa0k0
-         hKSytPl6HEI8MZ6qB4IuDl2ceb0xcsuWIh0ke0w8i/dtLim0LfA0LhLrUoW0bsQxla
-         JHAZ65/A2e4ButgEra8GNOroIdPKf3D9wsVWFaXUgWcsctbDF8GM8ibanQbSkHBde4
-         x31Eycwo8hjk7sLg2RKN5/sdaUaaCxT2ombsC9ibNP7gYG6GBNE7W8SeybUSxpPzgv
-         w+0j/kIioKqo8BC/XwrN9dHNHLfArPH99GRQ7Q3lnphEDjCki61vMt3atxGxfnxMrO
-         iC1ehJNJxh9YQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Cc:     Magnus Damm <magnus.damm@gmail.com>,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= 
-        <nfraprado@collabora.com>,
-        =?utf-8?q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>
-In-Reply-To: <20230622113341.657842-1-fabrizio.castro.jz@renesas.com>
-References: <20230622113341.657842-1-fabrizio.castro.jz@renesas.com>
-Subject: Re: [PATCH v2 0/5] spi: Add CSI support for Renesas RZ/V2M
-Message-Id: <168748034127.332493.277333132642198960.b4-ty@kernel.org>
-Date:   Fri, 23 Jun 2023 01:32:21 +0100
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-c6835
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 22 Jun 2023 20:33:38 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB49E2136
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 17:33:35 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-bc77a2d3841so97589276.3
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 17:33:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687480415; x=1690072415;
+        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=eM+aKH9lx0VNyUToM/Shhk5AIsdd6V2G7v2LKCRcFvg=;
+        b=5cf3stIZxi42dscGr8FOua/ouInJosegVhGTY1kxgHwpsW6EZecakTyIoKb1G9rSSK
+         7OpZFpcHjXuy8otP2GqjePkPmJ3Ke+1HpGOtDt8eq1+lAxACoa0un65V3XMtMoR6d1Ne
+         bCQV8JZtd9ageSTvxB01Y7E9TskgwluKk5z0YktA8CHIXxcDk6Zoqpnc+zJ/hzWUMMMR
+         1FAcvnVZUbDf1btJwyRsGi2KJSzs8K0vTvnr52J0rpPqa7ppSDDel55POHFfhVOAefc2
+         lLE1S4+xBM4LXkT9gte/VC5P2Jcmcjw3Bm/SbkFSZorDBlH0LJV4R1MIPZICZ+Ru2T3K
+         uJZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687480415; x=1690072415;
+        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eM+aKH9lx0VNyUToM/Shhk5AIsdd6V2G7v2LKCRcFvg=;
+        b=dRDkph9Z8NLJt9x23mhFLelJMFv9587cVc/YDaazJtUjvZihTr409tOJzfoB1JyMN4
+         eRoADf2AAalPO4Vr4THACSsl2rAzX69UKkY7fBn2pWWBhUmpvMdLeLJWNlqN0I0x5hKW
+         qCkur2N/77zTAtxS20+m2Bp3qHAdM0JCdPL+Qdrk+EPi00VO0Z/qKKPZgv3pW18qnTJH
+         5Pg9s6adX1eTw+XpTkuLKAtAcoEUtsQzAKLa14GXwtJTRm9cQBCaZdhldqAonE4n+rs3
+         d9c67bgvz2kRXumGpbkpKBi5LTFv+KfFgUkUiJfr+sxVm4omgeMwgPISlZ+O5kBpu/uw
+         +v1g==
+X-Gm-Message-State: AC+VfDwFxADJmNca5kBKC12stoS850mwU/fLRP3Grm1ghiNcm0SUFDWJ
+        WkKcOBGlrDlrl/skvS7RGQOJKlvlUX/O
+X-Google-Smtp-Source: ACHHUZ6rdrFsvxyUoY+WIMkoDSELok7Es78J5HoR5wcIkyIkUaRMfRpWzzcZjnoiaFcVn2R55ACsXlLMQiqE
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:6559:8968:cdfe:35b6])
+ (user=irogers job=sendgmr) by 2002:a05:6902:1363:b0:bea:918f:2ef6 with SMTP
+ id bt3-20020a056902136300b00bea918f2ef6mr2523829ybb.0.1687480415021; Thu, 22
+ Jun 2023 17:33:35 -0700 (PDT)
+Date:   Thu, 22 Jun 2023 17:33:00 -0700
+Message-Id: <20230623003312.3981075-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+Subject: [PATCH v1 00/12] Add metric has_event, update intel vendor events
+From:   Ian Rogers <irogers@google.com>
+To:     eter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Eduard Zingerman <eddyz87@gmail.com>,
+        Jing Zhang <renyu.zj@linux.alibaba.com>,
+        Sohom Datta <sohomdatta1@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Perry Taylor <perry.taylor@intel.com>,
+        Samantha Alt <samantha.alt@intel.com>,
+        Caleb Biggers <caleb.biggers@intel.com>,
+        Weilin Wang <weilin.wang@intel.com>,
+        Edward Baker <edward.baker@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
+        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 22 Jun 2023 12:33:36 +0100, Fabrizio Castro wrote:
-> This series is to add support for the Clocked Serial Interface (CSI)
-> IP found in the Renesas RZ/V2M SoC.
-> 
-> Thanks,
-> Fab
-> 
-> v2: edited list of include files in drivers/spi/spi-rzv2m-csi.c
-> 
-> [...]
+Add a new has_event function for metrics so that events that can be
+disabled by the kernel/firmware don't cause metrics to fail. Use this
+function for Intel transaction metrics fixing "perf all metrics test"
+on systems with TSX disabled. The update conversion script is posted in:
+https://github.com/intel/perfmon/pull/90
 
-Applied to
+Re-generate Intel vendor events using:
+https://github.com/intel/perfmon/blob/main/scripts/create_perf_json.py
+Adding rocketlake support, uncore and many core events for meteorlake,
+and smaller updates for cascakelakex, icelake, icelakex,
+sapphirerapids, skylake, skylakex and tigerlake.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Ian Rogers (12):
+  perf expr: Add has_event function
+  perf jevents: Support for has_event function
+  perf vendor metrics intel: Make transaction metrics conditional
+  perf vendor events intel: Add rocketlake events/metrics
+  perf vendor events intel: Update meteorlake to 1.03
+  perf vendor events intel: Update cascadelakex to 1.19
+  perf vendor events intel: Update icelake to 1.19
+  perf vendor events intel: Update icelakex to 1.21
+  perf vendor events intel: Update sapphirerapids to 1.14
+  perf vendor events intel: Update skylake to 57
+  perf vendor events intel: Update skylakex to 1.31
+  perf vendor events intel: Update tigerlake to 1.13
 
-Thanks!
+ .../arch/x86/alderlake/adl-metrics.json       |    8 +-
+ .../arch/x86/cascadelakex/clx-metrics.json    |    8 +-
+ .../arch/x86/cascadelakex/frontend.json       |   43 +-
+ .../arch/x86/cascadelakex/pipeline.json       |   17 +-
+ .../x86/cascadelakex/uncore-interconnect.json |    2 +-
+ .../arch/x86/cascadelakex/uncore-memory.json  |    2 +-
+ .../pmu-events/arch/x86/icelake/cache.json    |    8 +-
+ .../pmu-events/arch/x86/icelake/frontend.json |   32 +-
+ .../arch/x86/icelake/icl-metrics.json         |    8 +-
+ .../pmu-events/arch/x86/icelake/pipeline.json |    6 +-
+ .../arch/x86/icelakex/frontend.json           |   32 +-
+ .../arch/x86/icelakex/icx-metrics.json        |    8 +-
+ .../arch/x86/icelakex/pipeline.json           |    4 +-
+ .../x86/icelakex/uncore-interconnect.json     |    2 +-
+ tools/perf/pmu-events/arch/x86/mapfile.csv    |   17 +-
+ .../pmu-events/arch/x86/meteorlake/cache.json |  811 +++++++++
+ .../arch/x86/meteorlake/floating-point.json   |  143 ++
+ .../arch/x86/meteorlake/frontend.json         |  410 +++++
+ .../arch/x86/meteorlake/memory.json           |  142 +-
+ .../pmu-events/arch/x86/meteorlake/other.json |   57 +-
+ .../arch/x86/meteorlake/pipeline.json         | 1211 ++++++++++++-
+ .../arch/x86/meteorlake/uncore-cache.json     |   18 +
+ .../x86/meteorlake/uncore-interconnect.json   |   42 +
+ .../arch/x86/meteorlake/uncore-memory.json    |  126 ++
+ .../arch/x86/meteorlake/virtual-memory.json   |  257 +++
+ .../pmu-events/arch/x86/rocketlake/cache.json |  894 ++++++++++
+ .../arch/x86/rocketlake/floating-point.json   |  105 ++
+ .../arch/x86/rocketlake/frontend.json         |  377 ++++
+ .../arch/x86/rocketlake/memory.json           |  394 +++++
+ .../arch/x86/rocketlake/metricgroups.json     |  113 ++
+ .../pmu-events/arch/x86/rocketlake/other.json |  242 +++
+ .../arch/x86/rocketlake/pipeline.json         |  801 +++++++++
+ .../arch/x86/rocketlake/rkl-metrics.json      | 1571 +++++++++++++++++
+ .../x86/rocketlake/uncore-interconnect.json   |   74 +
+ .../arch/x86/rocketlake/uncore-other.json     |    9 +
+ .../arch/x86/rocketlake/virtual-memory.json   |  165 ++
+ .../arch/x86/sapphirerapids/pipeline.json     |    2 +-
+ .../arch/x86/sapphirerapids/spr-metrics.json  |    8 +-
+ .../arch/x86/sapphirerapids/uncore-cache.json |  308 ++++
+ .../sapphirerapids/uncore-interconnect.json   |    2 +-
+ .../pmu-events/arch/x86/skylake/frontend.json |   43 +-
+ .../pmu-events/arch/x86/skylake/pipeline.json |   17 +-
+ .../arch/x86/skylake/skl-metrics.json         |    8 +-
+ .../arch/x86/skylakex/frontend.json           |   43 +-
+ .../arch/x86/skylakex/pipeline.json           |   17 +-
+ .../arch/x86/skylakex/skx-metrics.json        |    8 +-
+ .../x86/skylakex/uncore-interconnect.json     |    2 +-
+ .../arch/x86/skylakex/uncore-memory.json      |    2 +-
+ .../arch/x86/tigerlake/frontend.json          |   32 +-
+ .../arch/x86/tigerlake/pipeline.json          |    6 +-
+ .../arch/x86/tigerlake/tgl-metrics.json       |    8 +-
+ tools/perf/pmu-events/metric.py               |    8 +-
+ tools/perf/tests/expr.c                       |    4 +
+ tools/perf/util/expr.c                        |   19 +
+ tools/perf/util/expr.h                        |    1 +
+ tools/perf/util/expr.l                        |    1 +
+ tools/perf/util/expr.y                        |    8 +-
+ 57 files changed, 8504 insertions(+), 202 deletions(-)
+ create mode 100644 tools/perf/pmu-events/arch/x86/meteorlake/floating-point.json
+ create mode 100644 tools/perf/pmu-events/arch/x86/meteorlake/uncore-cache.json
+ create mode 100644 tools/perf/pmu-events/arch/x86/meteorlake/uncore-interconnect.json
+ create mode 100644 tools/perf/pmu-events/arch/x86/meteorlake/uncore-memory.json
+ create mode 100644 tools/perf/pmu-events/arch/x86/rocketlake/cache.json
+ create mode 100644 tools/perf/pmu-events/arch/x86/rocketlake/floating-point.json
+ create mode 100644 tools/perf/pmu-events/arch/x86/rocketlake/frontend.json
+ create mode 100644 tools/perf/pmu-events/arch/x86/rocketlake/memory.json
+ create mode 100644 tools/perf/pmu-events/arch/x86/rocketlake/metricgroups.json
+ create mode 100644 tools/perf/pmu-events/arch/x86/rocketlake/other.json
+ create mode 100644 tools/perf/pmu-events/arch/x86/rocketlake/pipeline.json
+ create mode 100644 tools/perf/pmu-events/arch/x86/rocketlake/rkl-metrics.json
+ create mode 100644 tools/perf/pmu-events/arch/x86/rocketlake/uncore-interconnect.json
+ create mode 100644 tools/perf/pmu-events/arch/x86/rocketlake/uncore-other.json
+ create mode 100644 tools/perf/pmu-events/arch/x86/rocketlake/virtual-memory.json
 
-[1/5] spi: dt-bindings: Add bindings for RZ/V2M CSI
-      commit: db63e7ad2895409f78a04f331f781baa7a879dd7
-[2/5] clk: renesas: r9a09g011: Add CSI related clocks
-      commit: 7c78eb3e5d30eaa217cecaa32711e41cd849d498
-[3/5] spi: Add support for Renesas CSI
-      commit: dcf92036cb3e1b7bf3472109e4290a0937b270dd
-[4/5] arm64: dts: renesas: r9a09g011: Add CSI nodes
-      commit: ef643c6b57020ee279d18636d9d967ee048dbffa
-[5/5] arm64: defconfig: Enable Renesas RZ/V2M CSI driver
-      commit: dfbd12ae0e7c761e07369f5a2d55fe06eb54ad31
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+-- 
+2.41.0.162.gfafddb0af9-goog
 
