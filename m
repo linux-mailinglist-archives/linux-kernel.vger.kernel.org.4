@@ -2,65 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF97D73C081
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 22:40:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A25973C08D
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 22:41:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232445AbjFWUk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 16:40:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56034 "EHLO
+        id S232644AbjFWUlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 16:41:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232606AbjFWUkH (ORCPT
+        with ESMTP id S232460AbjFWUke (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 16:40:07 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 569EE2947
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 13:39:29 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-3fde9739e20so10889931cf.2
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 13:39:29 -0700 (PDT)
+        Fri, 23 Jun 2023 16:40:34 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32DD226AB
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 13:39:58 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id d75a77b69052e-40079620a83so70541cf.0
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 13:39:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687552763; x=1690144763;
+        d=google.com; s=20221208; t=1687552784; x=1690144784;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=KtZOBLXx1qaVh8dEPlOQudc9UC+Jo33p6yGPUYlrsSo=;
-        b=DjWYIE/gzUN0Iiva7mkvSSuTrCrrIFG8+k9bfhLiENXZkHv0LSIRyQV0CuChbMfFTm
-         4XSOIKNbfzd17E1SrZaTFUnAK5r2Xto887LdsWzt0fv8zc62b52Q8Z2eUB00mpYhgcRO
-         bWbHk+wzyFGPDcE3AVUhrqiEWJwLl8WMKYzfzcDRLojb49S4oKYZNbBs7c/tsEfEKjyz
-         Iay+x8Z6UtF/8ZP5ziuj5VMwzouWdrJ6SIbaqVPE5JnHoUibJhC8vHHs0fCZyvJjAiZR
-         DRuJ0HBURTHIY6tpRH7FpoYKCTsR01ENJ31VSTIKCGbqZKIlZgfL2p7cvhAN4WZLqRBr
-         n50w==
+        bh=gPqWdPkJs/nUcSq4t/ysEiwjvip+vYkENRmC8Nd4fVc=;
+        b=sWz5n6tK4xOCUrsaVvxIIoe9iKDtPXbUnViKV9bI83Gr2Kk0GG2IJldbvSpFxZqKl3
+         45I3cnkI6UAi6qCvYXmqs1B4MMpK6fBaPe4b/VrbL1DHf6zpqWpZXl1Vjk9FQ8snqXOW
+         yNTLbHaFLeD1z0agQFnZOz/lN5V0tHRG2CbCksqsPhOIZ4Z3AOYvn6Gmdnu9NOIWyq2Z
+         1XPZS51Q6+iYL7rLIo4hh3xBYdcPz/ZpUD5LfIrf53TW2IRa8PjeLiDziw7YRmhmooeN
+         aV9JyrSy/ST+5l1ZR0g4YeQH4Rv9oNeQoWwnoa8Uv7UXOsxXbFwkYW0MzU8K5f5gTbmt
+         5PzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687552763; x=1690144763;
+        d=1e100.net; s=20221208; t=1687552784; x=1690144784;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=KtZOBLXx1qaVh8dEPlOQudc9UC+Jo33p6yGPUYlrsSo=;
-        b=elQl6oR+bbqjpe6tfaEjeCc+7QFXOOv+wmvlQp25M/JlDK/6dnPhp6Q7EThFQuOZCL
-         e/VqO2fDML+iO8XpFavB7a7sTNIrOAZB5qCq4ZvsBRot0EC9LBPsy2p7e5oDTX5SG5eg
-         IB/ayXbIA0eL4lNtRDW4P5inbTkAfd12jPRvuiPRXB1OK6tBdy0o7h4wXHEHnWD1F1z8
-         ntCoCahtbiAy9d5pO/WCD4XmfwhS4rwiMYJVphsBfMXpNqaBsdgfWWs5TNB94gVz7eSX
-         lfSZFSOyrtB3RvI968MeRy3OZjWnpuvx5Nag9xbxFzdSYdD5NmhOLEzotrsSDvn60i66
-         GHNg==
-X-Gm-Message-State: AC+VfDy7vJdubEc8eH95qCCa9Bae9ODcJJd59H/9sNSSkFu6xf7K0Z/v
-        7tC/UQ6wl6gs8lASadktFho51VoaCezS+OdVQA3AZg==
-X-Google-Smtp-Source: ACHHUZ5C+T2n2aljTSPuz46L0evX9FbO0qx+MAMVKiVyMT4wrARHms0ylsHGzLcHQiWlg0CE6es1Md6wWggP55Pgz9w=
-X-Received: by 2002:a05:622a:1708:b0:3fb:426f:19c0 with SMTP id
- h8-20020a05622a170800b003fb426f19c0mr29888257qtk.29.1687552763059; Fri, 23
- Jun 2023 13:39:23 -0700 (PDT)
+        bh=gPqWdPkJs/nUcSq4t/ysEiwjvip+vYkENRmC8Nd4fVc=;
+        b=MMio292LCtKltYZeNYR3EqvTyuHHTdDL3WLumw23Rp/b5hwdyk8pgxemYMKVgF4GWc
+         2vliuvhFIASiWd24ndFmFeUsYcd1mRTVEVcqqrd2cbQxDcD3YXxYRp/AbsrVx/8tSRP4
+         d29WvQnK+aoGKsD69X9z8CYdDBdyjNpACE+M+Ux7nbehq6UzqGMOjmFhxJnRgc3/g3sW
+         TCLmzo4H0I2bvrewu5yOf4N08EOud5mdMe+wVANEoCUwO0CjArROgx8/ATHMelHfy8Yl
+         McQPis46nbm4qSBKGOGkPA8oI54EAaAwF+9vOAEb/fX+qWLH2jdAN0hmWxKyA2g8ycNI
+         Hxuw==
+X-Gm-Message-State: AC+VfDzwIIhigG9vk8RQrV44aqzQfH967RmpGmHXyvjPEoD+8Xu5TTS3
+        Q4wJJJ0eGrl9meGHVfxvXgekOrnocMPg6kp4+8+h/Nzi8PzNEabOM31Ngw==
+X-Google-Smtp-Source: ACHHUZ7BhsRpP0ZxbJV1Ob1pQJTPtBPEPQKVupWLukrcpuPRCLoL0XQfgfvatNlkSb4WcYoXIOwE5K+Rj/hJdi8hsWA=
+X-Received: by 2002:ac8:5a4d:0:b0:3ed:86f6:6eab with SMTP id
+ o13-20020ac85a4d000000b003ed86f66eabmr11972qta.14.1687552783963; Fri, 23 Jun
+ 2023 13:39:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230623001140.1111494-4-samitolvanen@google.com> <202306230932.539C9DC0@keescook>
-In-Reply-To: <202306230932.539C9DC0@keescook>
-From:   Sami Tolvanen <samitolvanen@google.com>
-Date:   Fri, 23 Jun 2023 13:38:45 -0700
-Message-ID: <CABCJKufmB+MwjEu=wjina1-F0q9vT--ig=SyLAGuXQViLV_1Uw@mail.gmail.com>
-Subject: Re: [PATCH 0/2] Fix CFI failures with GCOV_PROFILE_ALL
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
-        linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
+References: <20230621023053.432374-1-yosryahmed@google.com>
+In-Reply-To: <20230621023053.432374-1-yosryahmed@google.com>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Fri, 23 Jun 2023 14:39:07 -0600
+Message-ID: <CAOUHufbb6aspJANQf7m2FYr6K6f-z04ii3SP5ZnQ0rLHL1ia2Q@mail.gmail.com>
+Subject: Re: [PATCH 1/2] mm: memcg: rename and document global_reclaim()
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
@@ -75,35 +71,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 23, 2023 at 9:32=E2=80=AFAM Kees Cook <keescook@chromium.org> w=
-rote:
+On Tue, Jun 20, 2023 at 8:30=E2=80=AFPM Yosry Ahmed <yosryahmed@google.com>=
+ wrote:
 >
-> On Fri, Jun 23, 2023 at 12:11:41AM +0000, Sami Tolvanen wrote:
-> > Hi folks,
-> >
-> > The following two patches fix CFI failures with GCOV_PROFILE_ALL,
-> > where the compiler injects indirectly called functions to object
-> > files that otherwise contain no executable code, and are not
-> > processed by objtool or don't have CFI enabled. This results in
-> > missing or incorrect type hashes during boot and when modules are
-> > loaded.
-> >
-> > Sami Tolvanen (2):
-> >   kbuild: Fix CFI failures with GCOV
-> >   kbuild: Disable GCOV for *.mod.o
-> >
-> >  init/Makefile             | 1 +
-> >  scripts/Makefile.modfinal | 2 +-
-> >  scripts/Makefile.vmlinux  | 1 +
-> >  3 files changed, 3 insertions(+), 1 deletion(-)
+> Evidently, global_reclaim() can be a confusing name. Especially that it
+> used to exist before with a subtly different definition (removed by
+> commit b5ead35e7e1d ("mm: vmscan: naming fixes: global_reclaim() and
+> sane_reclaim()"). It can be interpreted as non-cgroup reclaim, even
+> though it returns true for cgroup reclaim on the root memcg
+> (through memory.reclaim).
 >
-> Nice hunting!
+> Rename it to root_reclaim() in an attempt to make it less ambiguous, and
+> add documentation to it as well as cgroup_reclaim.
 >
-> Reviewed-by: Kees Cook <keescook@chromium.org>
->
-> Should these get Cc: stable tags maybe?
+> Reported-by: Johannes Weiner <hannes@cmpxchg.org>
+> Closes: https://lore.kernel.org/lkml/20230405200150.GA35884@cmpxchg.org/
+> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
 
-I was under the impression that Fixes: tags would be sufficient these
-days, but agreed, explicit Cc: probably wouldn't hurt.
-
-Sami
+Acked-by: Yu Zhao <yuzhao@google.com>
