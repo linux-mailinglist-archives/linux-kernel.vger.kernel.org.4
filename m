@@ -2,263 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AC7473B8D7
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 15:33:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B06C073B8DF
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 15:36:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231464AbjFWNdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 09:33:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55720 "EHLO
+        id S230355AbjFWNgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 09:36:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbjFWNdg (ORCPT
+        with ESMTP id S230229AbjFWNge (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 09:33:36 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7243D2130
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 06:33:34 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1b5466bc5f8so910795ad.1
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 06:33:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1687527214; x=1690119214;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ACoox6lHywQa9wO0MGPPVAOCZzDjfudqnGd2G0lw0os=;
-        b=fa1yyl1XuChlZVeuHnAOkkfkq2hZyLQlU7Qx7FIzebWZlha3QE3pftRSrj+DJxI7Rv
-         UhXvlkHo3Vcdolq+ME68HhnTz0k5XIGoqWorIAsqCzinXOgMm/YBV2p6rPjxxhB9xA+p
-         CKbtixmq104K/XaeP7c/FRQEzfBhOolOJ13XEqLz2Vl/3W9UCdfjI5o3p38fxwPZQ7jM
-         f2Nv1spQskpxwNqmrAc0KV9Etlyt/W0NlU64HVCq3FTgTv7qi6xblmtVtEFrypVRLxTd
-         swjUrDnQOk53j5e/5rffnzu2n8zAvNVx/4KpVQ/7vpT1VvkShyKZT45f4U4Mq3kIEUCc
-         sA+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687527214; x=1690119214;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ACoox6lHywQa9wO0MGPPVAOCZzDjfudqnGd2G0lw0os=;
-        b=L7eZWcQB8ce6Za3Ttun+NuyYiQfRjfuBCtRNsD4WuVdrbSUpstWyJLAnW/3A8/EphO
-         k35WFiI+gNP+Xl+vOKcfVemEH7P7v66pB5cQrI4Fh0a3Fn2bN8TcHEx8yQppuvIkLdX4
-         s0bmNMkkKtUzhpf3MWsokInGHneIqIqONGsILTH2PCOeHxnFx5HVkyD46Jrz8Y7XXi29
-         FpPX56i1PeIDL1Xw0BpTOWnDOoa0fzHcak4GWoF2nekQUBUAzYHaxZCiRZYu5AIisSpv
-         fIvLuSodNbzEmp2v3QrXNVM9KjcCjmo/wsZVKiNNPXhDazmKOyCMiSY8gNuDx1pepPDg
-         wtVw==
-X-Gm-Message-State: AC+VfDxnYTyf//3CkTbnKM6ktf6jmVRQOJHChgYbNvj2CzaHzlcdxvqB
-        MKFnyIJCWR9r/i9N5vqU/+hnSw==
-X-Google-Smtp-Source: ACHHUZ7fC8cfi9SbpxWbw1P19vY2WFeiY5bxjWE/lWxj83YOdeMLdFfAi7QBoo42W5+SZOFqK06Ryw==
-X-Received: by 2002:a17:902:c945:b0:1ae:3ff8:7fa7 with SMTP id i5-20020a170902c94500b001ae3ff87fa7mr26069073pla.4.1687527213878;
-        Fri, 23 Jun 2023 06:33:33 -0700 (PDT)
-Received: from [10.4.168.167] ([139.177.225.254])
-        by smtp.gmail.com with ESMTPSA id kg14-20020a170903060e00b001b6a27dff99sm4341406plb.159.2023.06.23.06.33.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Jun 2023 06:33:33 -0700 (PDT)
-Message-ID: <43a07dbe-5049-8596-da58-51e0a0d6243c@bytedance.com>
-Date:   Fri, 23 Jun 2023 21:33:24 +0800
+        Fri, 23 Jun 2023 09:36:34 -0400
+Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E059D2130
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 06:36:32 -0700 (PDT)
+Received: from submission (posteo.de [185.67.36.169]) 
+        by mout02.posteo.de (Postfix) with ESMTPS id 8B173240101
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 15:36:30 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+        t=1687527390; bh=HEsqMhFRDkwmdAjCfvjXucvtqzCC+HB2ZMDR5SjPs/Y=;
+        h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:
+         Content-Disposition:From;
+        b=RvWrRRgls+9oQjfasr9n6K3i4ml7ebJvkAwgNUCloKRPtW/G8UliG7I4uZDBy3xKZ
+         gaLUTkNfRQfy4kh1OQWMhe85Twk4RgqfEkr6KIi1/PE2BxkgIW2dhaP4lP9gVXR8e7
+         l5HY4/20Klqvk3vY0/09ErSQjwsv/NSPol158f58EMps44pcF/d3A9Wv8I9CTYKBnq
+         wQTVlrYl6qU9+oMF6F4KWn2szR5HS46eCy3xGUHgWV9rSU9OdNsWHtefn3Fw6o4tRz
+         bPhMtsm+PZBD1MP5S7my65QIZewJhzf/bi90NiGYg+4LMI/skeSZymYJP9qC+thyqa
+         GszWQC3aklcLw==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4QndYn441yz6tvr;
+        Fri, 23 Jun 2023 15:36:29 +0200 (CEST)
+Date:   Fri, 23 Jun 2023 13:36:28 +0000
+From:   Wilken Gottwalt <wilken.gottwalt@posteo.net>
+To:     linux-kernel@vger.kernel.org
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org
+Subject: [PATCH] hwmon: corsair-psu: various cleanups
+Message-ID: <ZJWf3H972hGgLK-8@monster.localdomain>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [PATCH 05/29] drm/panfrost: dynamically allocate the drm-panfrost
- shrinker
-Content-Language: en-US
-To:     Steven Price <steven.price@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, dm-devel@redhat.com,
-        linux-raid@vger.kernel.org, linux-bcache@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, akpm@linux-foundation.org,
-        david@fromorbit.com, tkhai@ya.ru, vbabka@suse.cz,
-        roman.gushchin@linux.dev, djwong@kernel.org, brauner@kernel.org,
-        paulmck@kernel.org, tytso@mit.edu
-References: <20230622085335.77010-1-zhengqi.arch@bytedance.com>
- <20230622085335.77010-6-zhengqi.arch@bytedance.com>
-From:   Qi Zheng <zhengqi.arch@bytedance.com>
-In-Reply-To: <20230622085335.77010-6-zhengqi.arch@bytedance.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Steven,
+Fix some typos, adjust documentation and comments to current state of
+knowledge and update coding style to be more uniform.
 
-The email you replied to was the failed version (due to the error
-below), so I copied your reply and replied to you on this successful
-version.
+Signed-off-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
+---
+ Documentation/hwmon/corsair-psu.rst |  4 ++--
+ drivers/hwmon/corsair-psu.c         | 23 +++++++++++------------
+ 2 files changed, 13 insertions(+), 14 deletions(-)
 
-(4.7.1 Error: too many recipients from 49.7.199.173)
-
-On 2023/6/23 18:01, Steven Price wrote:
- > On 22/06/2023 09:39, Qi Zheng wrote:
- >> From: Qi Zheng <zhengqi.arch@bytedance.com>
- >>
- >> In preparation for implementing lockless slab shrink,
- >> we need to dynamically allocate the drm-panfrost shrinker,
- >> so that it can be freed asynchronously using kfree_rcu().
- >> Then it doesn't need to wait for RCU read-side critical
- >> section when releasing the struct panfrost_device.
- >>
- >> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
- >> ---
- >>   drivers/gpu/drm/panfrost/panfrost_device.h    |  2 +-
- >>   .../gpu/drm/panfrost/panfrost_gem_shrinker.c  | 24 ++++++++++---------
- >>   2 files changed, 14 insertions(+), 12 deletions(-)
- >>
- >> diff --git a/drivers/gpu/drm/panfrost/panfrost_device.h 
-b/drivers/gpu/drm/panfrost/panfrost_device.h
- >> index b0126b9fbadc..e667e5689353 100644
- >> --- a/drivers/gpu/drm/panfrost/panfrost_device.h
- >> +++ b/drivers/gpu/drm/panfrost/panfrost_device.h
- >> @@ -118,7 +118,7 @@ struct panfrost_device {
- >>
- >>   	struct mutex shrinker_lock;
- >>   	struct list_head shrinker_list;
- >> -	struct shrinker shrinker;
- >> +	struct shrinker *shrinker;
- >>
- >>   	struct panfrost_devfreq pfdevfreq;
- >>   };
- >> diff --git a/drivers/gpu/drm/panfrost/panfrost_gem_shrinker.c 
-b/drivers/gpu/drm/panfrost/panfrost_gem_shrinker.c
- >> index bf0170782f25..2a5513eb9e1f 100644
- >> --- a/drivers/gpu/drm/panfrost/panfrost_gem_shrinker.c
- >> +++ b/drivers/gpu/drm/panfrost/panfrost_gem_shrinker.c
- >> @@ -18,8 +18,7 @@
- >>   static unsigned long
- >>   panfrost_gem_shrinker_count(struct shrinker *shrinker, struct 
-shrink_control *sc)
- >>   {
- >> -	struct panfrost_device *pfdev =
- >> -		container_of(shrinker, struct panfrost_device, shrinker);
- >> +	struct panfrost_device *pfdev = shrinker->private_data;
- >>   	struct drm_gem_shmem_object *shmem;
- >>   	unsigned long count = 0;
- >>
- >> @@ -65,8 +64,7 @@ static bool panfrost_gem_purge(struct 
-drm_gem_object *obj)
- >>   static unsigned long
- >>   panfrost_gem_shrinker_scan(struct shrinker *shrinker, struct 
-shrink_control *sc)
- >>   {
- >> -	struct panfrost_device *pfdev =
- >> -		container_of(shrinker, struct panfrost_device, shrinker);
- >> +	struct panfrost_device *pfdev = shrinker->private_data;
- >>   	struct drm_gem_shmem_object *shmem, *tmp;
- >>   	unsigned long freed = 0;
- >>
- >> @@ -100,10 +98,15 @@ panfrost_gem_shrinker_scan(struct shrinker 
-*shrinker, struct shrink_control *sc)
- >>   void panfrost_gem_shrinker_init(struct drm_device *dev)
- >>   {
- >>   	struct panfrost_device *pfdev = dev->dev_private;
- >> -	pfdev->shrinker.count_objects = panfrost_gem_shrinker_count;
- >> -	pfdev->shrinker.scan_objects = panfrost_gem_shrinker_scan;
- >> -	pfdev->shrinker.seeks = DEFAULT_SEEKS;
- >> -	WARN_ON(register_shrinker(&pfdev->shrinker, "drm-panfrost"));
- >> +
- >> +	pfdev->shrinker = shrinker_alloc_and_init(panfrost_gem_shrinker_count,
- >> +						  panfrost_gem_shrinker_scan, 0,
- >> +						  DEFAULT_SEEKS, 0, pfdev);
- >> +	if (pfdev->shrinker &&
- >> +	    register_shrinker(pfdev->shrinker, "drm-panfrost")) {
- >> +		shrinker_free(pfdev->shrinker);
- >> +		WARN_ON(1);
- >> +	}
- >
- > So we didn't have good error handling here before, but this is
- > significantly worse. Previously if register_shrinker() failed then the
- > driver could safely continue without a shrinker - it would waste memory
- > but still function.
- >
- > However we now have two failure conditions:
- >   * shrinker_alloc_init() returns NULL. No warning and NULL deferences
- >     will happen later.
- >
- >   * register_shrinker() fails, shrinker_free() will free pdev->shrinker
- >     we get a warning, but followed by a use-after-free later.
- >
- > I think we need to modify panfrost_gem_shrinker_init() to be able to
- > return an error, so a change something like the below (untested) before
- > your change.
-
-Indeed. I will fix it in the v2.
-
-Thanks,
-Qi
-
- >
- > Steve
- >
- > ----8<---
- > diff --git a/drivers/gpu/drm/panfrost/panfrost_drv.c
- > b/drivers/gpu/drm/panfrost/panfrost_drv.c
- > index bbada731bbbd..f705bbdea360 100644
- > --- a/drivers/gpu/drm/panfrost/panfrost_drv.c
- > +++ b/drivers/gpu/drm/panfrost/panfrost_drv.c
- > @@ -598,10 +598,14 @@ static int panfrost_probe(struct platform_device
- > *pdev)
- >   	if (err < 0)
- >   		goto err_out1;
- >
- > -	panfrost_gem_shrinker_init(ddev);
- > +	err = panfrost_gem_shrinker_init(ddev);
- > +	if (err)
- > +		goto err_out2;
- >
- >   	return 0;
- >
- > +err_out2:
- > +	drm_dev_unregister(ddev);
- >   err_out1:
- >   	pm_runtime_disable(pfdev->dev);
- >   	panfrost_device_fini(pfdev);
- > diff --git a/drivers/gpu/drm/panfrost/panfrost_gem.h
- > b/drivers/gpu/drm/panfrost/panfrost_gem.h
- > index ad2877eeeccd..863d2ec8d4f0 100644
- > --- a/drivers/gpu/drm/panfrost/panfrost_gem.h
- > +++ b/drivers/gpu/drm/panfrost/panfrost_gem.h
- > @@ -81,7 +81,7 @@ panfrost_gem_mapping_get(struct panfrost_gem_object 
-*bo,
- >   void panfrost_gem_mapping_put(struct panfrost_gem_mapping *mapping);
- >   void panfrost_gem_teardown_mappings_locked(struct 
-panfrost_gem_object *bo);
- >
- > -void panfrost_gem_shrinker_init(struct drm_device *dev);
- > +int panfrost_gem_shrinker_init(struct drm_device *dev);
- >   void panfrost_gem_shrinker_cleanup(struct drm_device *dev);
- >
- >   #endif /* __PANFROST_GEM_H__ */
- > diff --git a/drivers/gpu/drm/panfrost/panfrost_gem_shrinker.c
- > b/drivers/gpu/drm/panfrost/panfrost_gem_shrinker.c
- > index bf0170782f25..90265b37636f 100644
- > --- a/drivers/gpu/drm/panfrost/panfrost_gem_shrinker.c
- > +++ b/drivers/gpu/drm/panfrost/panfrost_gem_shrinker.c
- > @@ -97,13 +97,17 @@ panfrost_gem_shrinker_scan(struct shrinker
- > *shrinker, struct shrink_control *sc)
- >    *
- >    * This function registers and sets up the panfrost shrinker.
- >    */
- > -void panfrost_gem_shrinker_init(struct drm_device *dev)
- > +int panfrost_gem_shrinker_init(struct drm_device *dev)
- >   {
- >   	struct panfrost_device *pfdev = dev->dev_private;
- > +	int ret;
- > +
- >   	pfdev->shrinker.count_objects = panfrost_gem_shrinker_count;
- >   	pfdev->shrinker.scan_objects = panfrost_gem_shrinker_scan;
- >   	pfdev->shrinker.seeks = DEFAULT_SEEKS;
- > -	WARN_ON(register_shrinker(&pfdev->shrinker, "drm-panfrost"));
- > +	ret = register_shrinker(&pfdev->shrinker, "drm-panfrost");
- > +
- > +	return ret;
- >   }
- >
- >   /**
- >
+diff --git a/Documentation/hwmon/corsair-psu.rst b/Documentation/hwmon/corsair-psu.rst
+index fc798c3df1d0..47f8ff632267 100644
+--- a/Documentation/hwmon/corsair-psu.rst
++++ b/Documentation/hwmon/corsair-psu.rst
+@@ -15,11 +15,11 @@ Supported devices:
+ 
+   Corsair HX850i
+ 
+-  Corsair HX1000i (revision 1 and 2)
++  Corsair HX1000i (Series 2022 and Series 2023)
+ 
+   Corsair HX1200i
+ 
+-  Corsair HX1500i
++  Corsair HX1500i (Series 2022)
+ 
+   Corsair RM550i
+ 
+diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
+index 2389f605ca16..9e3e3c0a3bdd 100644
+--- a/drivers/hwmon/corsair-psu.c
++++ b/drivers/hwmon/corsair-psu.c
+@@ -32,18 +32,17 @@
+  *	  but it is better to not rely on this (it is also hard to parse)
+  *	- the driver uses raw events to be accessible from userspace (though this is not really
+  *	  supported, it is just there for convenience, may be removed in the future)
+- *	- a reply always start with the length and command in the same order the request used it
++ *	- a reply always starts with the length and command in the same order the request used it
+  *	- length of the reply data is specific to the command used
+  *	- some of the commands work on a rail and can be switched to a specific rail (0 = 12v,
+  *	  1 = 5v, 2 = 3.3v)
+  *	- the format of the init command 0xFE is swapped length/command bytes
+  *	- parameter bytes amount and values are specific to the command (rail setting is the only
+- *	  for now that uses non-zero values)
+- *	- there are much more commands, especially for configuring the device, but they are not
+- *	  supported because a wrong command/length can lockup the micro-controller
++ *	  one for now that uses non-zero values)
+  *	- the driver supports debugfs for values not fitting into the hwmon class
+- *	- not every device class (HXi, RMi or AXi) supports all commands
+- *	- it is a pure sensors reading driver (will not support configuring)
++ *	- not every device class (HXi or RMi) supports all commands
++ *	- if configured wrong the PSU resets or shuts down, often before actually hitting the
++ *	- reported critical temperature
+  */
+ 
+ #define DRIVER_NAME		"corsair-psu"
+@@ -254,8 +253,8 @@ static int corsairpsu_get_value(struct corsairpsu_data *priv, u8 cmd, u8 rail, l
+ 	/*
+ 	 * the biggest value here comes from the uptime command and to exceed MAXINT total uptime
+ 	 * needs to be about 68 years, the rest are u16 values and the biggest value coming out of
+-	 * the LINEAR11 conversion are the watts values which are about 1200 for the strongest psu
+-	 * supported (HX1200i)
++	 * the LINEAR11 conversion are the watts values which are about 1500 for the strongest psu
++	 * supported (HX1500i)
+ 	 */
+ 	tmp = ((long)data[3] << 24) + (data[2] << 16) + (data[1] << 8) + data[0];
+ 	switch (cmd) {
+@@ -629,7 +628,7 @@ static const struct hwmon_ops corsairpsu_hwmon_ops = {
+ 	.read_string	= corsairpsu_hwmon_ops_read_string,
+ };
+ 
+-static const struct hwmon_channel_info * const corsairpsu_info[] = {
++static const struct hwmon_channel_info *const corsairpsu_info[] = {
+ 	HWMON_CHANNEL_INFO(chip,
+ 			   HWMON_C_REGISTER_TZ),
+ 	HWMON_CHANNEL_INFO(temp,
+@@ -873,15 +872,15 @@ static const struct hid_device_id corsairpsu_idtable[] = {
+ 	{ HID_USB_DEVICE(0x1b1c, 0x1c04) }, /* Corsair HX650i */
+ 	{ HID_USB_DEVICE(0x1b1c, 0x1c05) }, /* Corsair HX750i */
+ 	{ HID_USB_DEVICE(0x1b1c, 0x1c06) }, /* Corsair HX850i */
+-	{ HID_USB_DEVICE(0x1b1c, 0x1c07) }, /* Corsair HX1000i revision 1 */
++	{ HID_USB_DEVICE(0x1b1c, 0x1c07) }, /* Corsair HX1000i Series 2022 */
+ 	{ HID_USB_DEVICE(0x1b1c, 0x1c08) }, /* Corsair HX1200i */
+ 	{ HID_USB_DEVICE(0x1b1c, 0x1c09) }, /* Corsair RM550i */
+ 	{ HID_USB_DEVICE(0x1b1c, 0x1c0a) }, /* Corsair RM650i */
+ 	{ HID_USB_DEVICE(0x1b1c, 0x1c0b) }, /* Corsair RM750i */
+ 	{ HID_USB_DEVICE(0x1b1c, 0x1c0c) }, /* Corsair RM850i */
+ 	{ HID_USB_DEVICE(0x1b1c, 0x1c0d) }, /* Corsair RM1000i */
+-	{ HID_USB_DEVICE(0x1b1c, 0x1c1e) }, /* Corsair HX1000i revision 2 */
+-	{ HID_USB_DEVICE(0x1b1c, 0x1c1f) }, /* Corsair HX1500i */
++	{ HID_USB_DEVICE(0x1b1c, 0x1c1e) }, /* Corsair HX1000i Series 2023 */
++	{ HID_USB_DEVICE(0x1b1c, 0x1c1f) }, /* Corsair HX1500i Series 2022 */
+ 	{ },
+ };
+ MODULE_DEVICE_TABLE(hid, corsairpsu_idtable);
+-- 
+2.41.0
 
