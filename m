@@ -2,32 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A32D173B459
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 12:02:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD71573B45C
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 12:02:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231861AbjFWKCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 06:02:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43548 "EHLO
+        id S231466AbjFWKCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 06:02:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231860AbjFWKBu (ORCPT
+        with ESMTP id S231955AbjFWKCM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 06:01:50 -0400
-Received: from mail-4319.protonmail.ch (mail-4319.protonmail.ch [185.70.43.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 961E810D2;
-        Fri, 23 Jun 2023 03:01:40 -0700 (PDT)
-Date:   Fri, 23 Jun 2023 10:01:31 +0000
+        Fri, 23 Jun 2023 06:02:12 -0400
+Received: from mail-4324.protonmail.ch (mail-4324.protonmail.ch [185.70.43.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE923269E;
+        Fri, 23 Jun 2023 03:01:59 -0700 (PDT)
+Date:   Fri, 23 Jun 2023 10:01:48 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1687514497; x=1687773697;
+        s=protonmail3; t=1687514518; x=1687773718;
         bh=tDChsguxGV1DtxUOY3/1Y42T2+eyLtmbRl+XkwaJQzc=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=afoVKASO3K68rRSyDS1NBbYzJVmhn4DvsA4oi2o7E0AHchCTLggTw2vAvTvbPw09J
-         UGaNY8gZIbVSC0f+nVoBV90twWMOWXi/lAJ8tFIYrDbJ5jlu9HVPziv9Lk30H+qYpe
-         q4LYnW8TE1NtzUMJmeaFusN+d1aOzMhmbAwndz1N4aG+XXcAJoGrLyLUkGl3ecaGik
-         8tguWZDlMDzTT1TEyfVhTSi5Zk2am9Aqj/jJd/vGk7LNakD9+xC2bKkRsePYDaOgMM
-         o0e37pBN5GP5RQz1KTZifYFoHhK7yJMXZRD2i9jxVBn6vbzl7wYRfp/cAzqkQoM1Iq
-         Im6SPUQuQaGug==
+        h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+         Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+        b=e0d8A2qonsTE71wtc7hZdca8hKWGb7o0uihHbcvKL4tcF8S9mtZcnAf/Sfuw0O5rm
+         Hed6gauNdsuWRln9WaxQS1rTLKpBS5sHaTKUHEDOVJKjSKI2Q1r8gbaTioZmsWWNsu
+         3AoPSYivTpQwhCtIAOMimLfhBzLic+WCkF8FrE0qDhpGtwFy8gRvaYJAq3+l16Jbvr
+         yKFiTCqxy6cUMbYn4MsHFhKvy0Csexc0ORVI8gHtNGCpd95XVJMFbpxlkBqAGu5TRi
+         zst0LJy2LsMh5jRW67gbJkmVfVX5hEK4ss4YU7GMtTeZIzSjhDYJmAtH8DZsAuP8fe
+         9pDXjkyLdX7Gg==
 To:     linux-kernel@vger.kernel.org
 From:   "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
 Cc:     Andy Gross <agross@kernel.org>,
@@ -40,9 +39,7 @@ Cc:     Andy Gross <agross@kernel.org>,
         Nikita Travkin <nikita@trvn.ru>, linux-arm-msm@vger.kernel.org,
         devicetree@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
 Subject: [PATCH v2 0/2] arm64: dts: qcom: msm8939-samsung-a7: Add initial dts
-Message-ID: <20230623100113.5253-1-linmengbo0689@protonmail.com>
-In-Reply-To: <20230622020344.65745-1-linmengbo0689@protonmail.com>
-References: <20230622020344.65745-1-linmengbo0689@protonmail.com>
+Message-ID: <20230623100135.5269-1-linmengbo0689@protonmail.com>
 Feedback-ID: 40467236:user:proton
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
