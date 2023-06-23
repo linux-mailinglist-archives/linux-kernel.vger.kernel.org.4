@@ -2,80 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E7C773BEA6
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 20:59:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 660FB73BEA8
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 21:01:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229617AbjFWS7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 14:59:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53790 "EHLO
+        id S231523AbjFWTBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 15:01:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjFWS7Q (ORCPT
+        with ESMTP id S231228AbjFWTBQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 14:59:16 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4292C1FDF
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 11:59:12 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1b52875b8d9so25955ad.0
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 11:59:12 -0700 (PDT)
+        Fri, 23 Jun 2023 15:01:16 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42E991FCE
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 12:01:14 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2b45a71c9caso17174971fa.3
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 12:01:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687546752; x=1690138752;
-        h=mime-version:user-agent:message-id:in-reply-to:date:references
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Cbfaq/9T/wMpjvtED8ieY9JJoTnQ+cGmskLTct3IdWU=;
-        b=qgkIlOYvSJJvafVoLwl1hQkJDDG3ATGs46baEGWBueZgwwLrSBRDV0NCKtrNc+k0aq
-         H0Sn5RFeK52Ad+05UJOpKzjiR2yv7v1oiECEsehycHt0aRBst0/nCUeOLXxOmvLj40tq
-         5Krv1IUyyV7grK7TGKtch0DsYR6Lk4biVA+d7F+SkGdN4MNOwbOuchFDHWkpIwHWkHy2
-         8F3w+ut6A/eyhe15SACU2IGAAjSEes60M43sYjVqS5Bu4yHasl0nQ3Uwvw9HhgE0BOoZ
-         k2DgMdAp3PmsNuOSabKDI03wiS6oXj9LC+LX9Q72gnt2drFWq/t2aI2I4Eo1Fwn6pxas
-         DHzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687546752; x=1690138752;
-        h=mime-version:user-agent:message-id:in-reply-to:date:references
-         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
+        d=atishpatra.org; s=google; t=1687546872; x=1690138872;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Cbfaq/9T/wMpjvtED8ieY9JJoTnQ+cGmskLTct3IdWU=;
-        b=VrGL/t0l4OvQh/WddhNgNuRvBjfjQnUsbKopY8SCbCcCFNDSESgru/82t0Yz3qnHjV
-         CBjMm5ZYTcLUAbLgRw/ZRpRuJwOjMsRp0t+09JEYJX09I43dWrAoE4jN5a9szb8jKypY
-         IVyiRV2REppK+cPhMQltfgcbF3UOFLo5P8UYt7TGLybBIArUFB9Oconbl7X+p9E2HqQC
-         Xazyx9MzcyaisLtDdHv9wcoRbfLaShzjPol6a7OooLzkjJD+5QCJhTSTF9p0v/h8uAon
-         d7D48vBT6ARuE6HHUYTVjQr3SrMhWa2vMwtdDvvuzmqqoYAonD2JRzjyEe5So57NiJWd
-         euTw==
-X-Gm-Message-State: AC+VfDzTiFplb4r/kSAGbGaoMVZEFcDgnqKy/9cG10HgXnVSP3nL8jLg
-        sBN9eoXm7zeuyaa64opjNSp7wQ==
-X-Google-Smtp-Source: ACHHUZ4x3WhT8bCgiMCTdXjtT4W9bzjUc59MQ+ccVWCqltvcctLLBF3uCNgOEpWt/lWUBAS5rt9d8A==
-X-Received: by 2002:a17:902:c44a:b0:1a9:bb1d:64e with SMTP id m10-20020a170902c44a00b001a9bb1d064emr1607889plm.15.1687546751554;
-        Fri, 23 Jun 2023 11:59:11 -0700 (PDT)
-Received: from bsegall-glaptop.localhost (c-73-158-249-138.hsd1.ca.comcast.net. [73.158.249.138])
-        by smtp.gmail.com with ESMTPSA id s16-20020a62e710000000b0064ff855751fsm6355934pfh.4.2023.06.23.11.59.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Jun 2023 11:59:11 -0700 (PDT)
-From:   Benjamin Segall <bsegall@google.com>
-To:     Phil Auld <pauld@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, Juri Lelli <juri.lelli@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>
-Subject: Re: [PATCH] Sched/fair: Block nohz tick_stop when cfs bandwidth in use
-References: <20230622132751.2900081-1-pauld@redhat.com>
-        <xm26zg4r8bnz.fsf@google.com>
-        <20230622213730.GE727646@lorien.usersys.redhat.com>
-        <20230623130859.GA766130@lorien.usersys.redhat.com>
-Date:   Fri, 23 Jun 2023 11:59:09 -0700
-In-Reply-To: <20230623130859.GA766130@lorien.usersys.redhat.com> (Phil Auld's
-        message of "Fri, 23 Jun 2023 09:08:59 -0400")
-Message-ID: <xm26r0q280oy.fsf@google.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+        bh=00/Y6ptXh35aGcl0eDeOuw0hr2DowGhnnzQCBPE2/o0=;
+        b=IK507L00753xrSymrZD52v17Z1Yu5+ftbblUBW0TXY0SRqtXDcO8MvJ5dq3lQC/NnM
+         eUi1IRDlos3YzYdTtDlOioLr7x8gpQlIu08+R7xjpvHbTyvZaQ9Anc34eN2KUcKTdGNf
+         A56xbBUwGMP5vd0wamo/bvV7G/2+swSRuCbhk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687546872; x=1690138872;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=00/Y6ptXh35aGcl0eDeOuw0hr2DowGhnnzQCBPE2/o0=;
+        b=B+M05Lr8CMfnHrW4N0CAYFn8o7GpHKRmGxMKNIJiA9bX6UArBgY8UfADJMw7d2ANmo
+         vLy+1Jn4jj1VzhtSZXSEvQE9it2ErrhJJDVYkBwqiXIsO7pyrbQeed3y1dBiA0hyA//6
+         dyqMYxG1uQIvkbK8cBZ2Qe5lK6b822AK2MHtIsSZiHcAY2jlPPJXG3/8yh6+/lLzIw2X
+         IhUDYz0s/drYi9lkCmWCKbwxMpY7Bd7Ks2v/qav8B0qTmbucdnU/TzioVWeRBHvZt1pJ
+         LGvNxp6sREaEFutU1Ujrv+KtiuK0aRbcfv+iAAvmTiYiOhjb0HE7waoGrzkDvfe4Q7mh
+         wkZQ==
+X-Gm-Message-State: AC+VfDwhSr+N0sQmnlirwy12sr5cm42/vGxAD/fda/9z0rtOhYFxNgvt
+        jlQGc3bTjzCWQyEVGLBznQEyT+zIuz0GYawWwTO5
+X-Google-Smtp-Source: ACHHUZ6ZOyOCx6Oh8AEg5iMwbZ8jUGBWgHD+lAZfOT7YG84geuqIl15CpywJvjeYJ+eMQPrNCvi/nfGTts5WtZwXc2c=
+X-Received: by 2002:a2e:3211:0:b0:2b4:7d83:c807 with SMTP id
+ y17-20020a2e3211000000b002b47d83c807mr9418756ljy.50.1687546872091; Fri, 23
+ Jun 2023 12:01:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+References: <20230623095547.51881-1-alexghiti@rivosinc.com>
+In-Reply-To: <20230623095547.51881-1-alexghiti@rivosinc.com>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Fri, 23 Jun 2023 12:01:00 -0700
+Message-ID: <CAOnJCUKmwScQtA2E-3L__ixa8+HxjgMqPv1KaXtS4CdBZQ3mSQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] Documentation: arm: Add bootargs to the table of
+ added DT parameters
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Sunil V L <sunilvl@ventanamicro.com>,
+        Song Shuai <songshuaishuai@tinylab.org>,
+        linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,98 +76,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Phil Auld <pauld@redhat.com> writes:
-
-> On Thu, Jun 22, 2023 at 05:37:30PM -0400 Phil Auld wrote:
->> On Thu, Jun 22, 2023 at 01:49:52PM -0700 Benjamin Segall wrote:
->> > Phil Auld <pauld@redhat.com> writes:
->> > 
->> > > CFS bandwidth limits and NOHZ full don't play well together.  Tasks
->> > > can easily run well past their quotas before a remote tick does
->> > > accounting.  This leads to long, multi-period stalls before such
->> > > tasks can run again. Currentlyi, when presented with these conflicting
->> > > requirements the scheduler is favoring nohz_full and letting the tick
->> > > be stopped. However, nohz tick stopping is already best-effort, there
->> > > are a number of conditions that can prevent it, whereas cfs runtime
->> > > bandwidth is expected to be enforced.
->> > >
->> > > Make the scheduler favor bandwidth over stopping the tick by setting
->> > > TICK_DEP_BIT_SCHED when the only running task is a cfs task with
->> > > runtime limit enabled.
->> > >
->> > > Add sched_feat HZ_BW (off by default) to control this behavior.
->> > >
->> > > Signed-off-by: Phil Auld <pauld@redhat.com>
->> > > Cc: Ingo Molnar <mingo@redhat.com>
->> > > Cc: Peter Zijlstra <peterz@infradead.org>
->> > > Cc: Vincent Guittot <vincent.guittot@linaro.org>
->> > > Cc: Juri Lelli <juri.lelli@redhat.com>
->> > > Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
->> > > Cc: Valentin Schneider <vschneid@redhat.com>
->> > > Cc: Ben Segall <bsegall@google.com>
->> > > ---
->> > >  kernel/sched/fair.c     | 33 ++++++++++++++++++++++++++++++++-
->> > >  kernel/sched/features.h |  2 ++
->> > >  2 files changed, 34 insertions(+), 1 deletion(-)
->> > >
->> > > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
->> > > index 373ff5f55884..880eadfac330 100644
->> > > --- a/kernel/sched/fair.c
->> > > +++ b/kernel/sched/fair.c
->> > > @@ -6139,6 +6139,33 @@ static void __maybe_unused unthrottle_offline_cfs_rqs(struct rq *rq)
->> > >  	rcu_read_unlock();
->> > >  }
->> > >  
->> > > +#ifdef CONFIG_NO_HZ_FULL
->> > > +/* called from pick_next_task_fair() */
->> > > +static void sched_fair_update_stop_tick(struct rq *rq, struct task_struct *p)
->> > > +{
->> > > +	struct cfs_rq *cfs_rq = task_cfs_rq(p);
->> > > +	int cpu = cpu_of(rq);
->> > > +
->> > > +	if (!sched_feat(HZ_BW) || !cfs_bandwidth_used())
->> > > +		return;
->> > > +
->> > > +	if (!tick_nohz_full_cpu(cpu))
->> > > +		return;
->> > > +
->> > > +	if (rq->nr_running != 1 || !sched_can_stop_tick(rq))
->> > > +		return;
->> > > +
->> > > +	/*
->> > > +	 *  We know there is only one task runnable and we've just picked it. The
->> > > +	 *  normal enqueue path will have cleared TICK_DEP_BIT_SCHED if we will
->> > > +	 *  be otherwise able to stop the tick. Just need to check if we are using
->> > > +	 *  bandwidth control.
->> > > +	 */
->> > > +	if (cfs_rq->runtime_enabled)
->> > > +		tick_nohz_dep_set_cpu(cpu, TICK_DEP_BIT_SCHED);
->> > > +}
->> > > +#endif
->> > 
->> > So from a CFS_BANDWIDTH pov runtime_enabled && nr_running == 1 seems
->> > fine. But working around sched_can_stop_tick instead of with it seems
->> > sketchy in general, and in an edge case like "migrate a task onto the
->> > cpu and then off again" you'd get sched_update_tick_dependency resetting
->> > the TICK_DEP_BIT and then not call PNT (ie a task wakes up onto this cpu
->> > without preempting, and then another cpu goes idle and pulls it, causing
->> > this cpu to go into nohz_full).
->> > 
->> 
->> The information to make these tests is not available in sched_can_stop_tick.
->> I did start there. When that is called, and we are likely to go nohz_full,
->> curr is null so it's hard to find the right cfs_rq to make that
->> runtime_enabled test against.  We could, maybe, plumb the task being enqueued
->> in but it would not be valid for the dequeue path and would be a bit messy.
->>
+On Fri, Jun 23, 2023 at 2:56=E2=80=AFAM Alexandre Ghiti <alexghiti@rivosinc=
+.com> wrote:
 >
-> Sorry, mispoke... rq->curr == rq-idle not null. But still we don't have
-> access to the task and its cfs_rq which will have runtime_enabled set.
+> The bootargs node is also added by the EFI stub in the function
+> update_fdt(), so add it to the table.
 >
+> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+> ---
+>  Documentation/arm/uefi.rst | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/Documentation/arm/uefi.rst b/Documentation/arm/uefi.rst
+> index baebe688a006..2b7ad9bd7cd2 100644
+> --- a/Documentation/arm/uefi.rst
+> +++ b/Documentation/arm/uefi.rst
+> @@ -50,7 +50,7 @@ The stub populates the FDT /chosen node with (and the k=
+ernel scans for) the
+>  following parameters:
+>
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D  =3D=3D=3D=3D=3D=3D   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D
+> -Name                        Size     Description
+> +Name                        Type     Description
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D  =3D=3D=3D=3D=3D=3D   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D
+>  linux,uefi-system-table     64-bit   Physical address of the UEFI System=
+ Table.
+>
+> @@ -67,4 +67,6 @@ linux,uefi-mmap-desc-ver    32-bit   Version of the mma=
+p descriptor format.
+>
+>  kaslr-seed                  64-bit   Entropy used to randomize the kerne=
+l image
+>                                       base address location.
+> +
+> +bootargs                    String   Kernel command line
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D  =3D=3D=3D=3D=3D=3D   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D
+> --
+> 2.39.2
+>
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
 
-That is unfortunate. I suppose then you'd wind up needing both this
-extra bit in PNT to handle the switch into nr_running == 1 territory,
-and a "HZ_BW && nr_running == 1 && curr is fair && curr->on_rq &&
-curr->cfs_rq->runtime_enabled" check in sched_can_stop_tick to catch
-edge cases. (I think that would be sufficient, if an annoyingly long set
-of conditionals)
+
+Reviewed-by: Atish Patra <atishp@rivosinc.com>
+
+--=20
+Regards,
+Atish
