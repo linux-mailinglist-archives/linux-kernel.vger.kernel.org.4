@@ -2,129 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94E6773BD02
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 18:48:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AAAD73BCF4
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 18:47:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232281AbjFWQsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 12:48:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54844 "EHLO
+        id S232091AbjFWQrT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 12:47:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232442AbjFWQsH (ORCPT
+        with ESMTP id S231421AbjFWQrR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 12:48:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD1E271F
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 09:47:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687538845;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UT25gWFOeZcYmyA4boqdjMakUtDcuMgwh+wST0DBOXc=;
-        b=RXXPqsbegKRZnlBCZpkytWtDIrPqSKPY0s4mUmeGkTCw0h9sVuXGsBTM7QJcrot6JFRR6R
-        fVwl5yAP42d3RWiJTlysfAS8AVCv/Nxnl0TDHp8gH/qtJEQRs4ofnmiHo4LWa47Tandm+o
-        9qA0fNAUhYJ16isGE+Md9W9CIJ9ciB0=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-675-hERHwfvlNMeV20DvhAh4mQ-1; Fri, 23 Jun 2023 12:47:23 -0400
-X-MC-Unique: hERHwfvlNMeV20DvhAh4mQ-1
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-3fa7a851dadso5067895e9.0
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 09:47:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687538827; x=1690130827;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UT25gWFOeZcYmyA4boqdjMakUtDcuMgwh+wST0DBOXc=;
-        b=G9sj6xXhy757zC2Gqg2ckhN2yFV09q1nPlLsUthzrkT62SBYMHC5At3vpu2hDRzA02
-         fOkvYSXAqUoLX6PTk//VM3/FQS35LQNHpsvgDBy19Zfgjc7rw5rV46CIV5evePl0C12/
-         ivRP+AAvGTutpiyXyd9Ou46YHEjhB29H0A7CThjD1MfvTkCgtYh/w9YSRQjH8D9zIkCJ
-         ndDK1N7gmXGmDKmE/ao5c4Q07rp2ZS1JyA3uvQHKrm739pdZDGMu6AQ2MqbkROs41Dxa
-         JgdDdiro2JNXg9ikeZ0TOJXQrneuu5uDl+BeRqwyf4N6Q1CrvovTgxHeMdxbe+dCyJL3
-         HEdw==
-X-Gm-Message-State: AC+VfDxdSIbAHglb3QJQyz9mHtbXiIL456hwdt4Jf4N2wcoPSeCXTBQS
-        Bl7HjrhEkJT59Qn0LbDZgfivEqc4NXMMqarFwUh4ZG7OLHY4Oqk+fJHJDsDR5vLnqmulifrPgIy
-        3nU13N9dy0LadX0sfZnRwoS5/
-X-Received: by 2002:a7b:ce09:0:b0:3f6:536:a4b2 with SMTP id m9-20020a7bce09000000b003f60536a4b2mr17647192wmc.27.1687538826966;
-        Fri, 23 Jun 2023 09:47:06 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6EJk9dhev1qoAdmKkeWVaIhOgbkHJ+sXvtznIihjEJxvNuyEvMO1hdLFmvBFjIOnGCvqA7ZQ==
-X-Received: by 2002:a7b:ce09:0:b0:3f6:536:a4b2 with SMTP id m9-20020a7bce09000000b003f60536a4b2mr17647184wmc.27.1687538826642;
-        Fri, 23 Jun 2023 09:47:06 -0700 (PDT)
-Received: from vschneid.remote.csb ([154.57.232.159])
-        by smtp.gmail.com with ESMTPSA id t12-20020a7bc3cc000000b003f604793989sm2791348wmj.18.2023.06.23.09.47.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Jun 2023 09:47:06 -0700 (PDT)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        Luca Abeni <luca.abeni@santannapisa.it>,
-        Tommaso Cucinotta <tommaso.cucinotta@santannapisa.it>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Vineeth Pillai <vineeth@bitbyteword.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Daniel Bristot de Oliveira <bristot@kernel.org>
-Subject: Re: [RFC PATCH V3 4/6] sched/deadline: Introduce deadline servers
-In-Reply-To: <e08a76013ff2b6a83028e8fdf3b8a6a0aa677d58.1686239016.git.bristot@kernel.org>
-References: <cover.1686239016.git.bristot@kernel.org>
- <e08a76013ff2b6a83028e8fdf3b8a6a0aa677d58.1686239016.git.bristot@kernel.org>
-Date:   Fri, 23 Jun 2023 17:47:05 +0100
-Message-ID: <xhsmhpm5mw2gm.mognet@vschneid.remote.csb>
+        Fri, 23 Jun 2023 12:47:17 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8590B10C;
+        Fri, 23 Jun 2023 09:47:16 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id E017E5C0048;
+        Fri, 23 Jun 2023 12:47:15 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Fri, 23 Jun 2023 12:47:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        invisiblethingslab.com; h=cc:cc:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1687538835; x=1687625235; bh=FxZNrWvPKPTmkKt5iB7ImZO3THwWpV5+Ltb
+        CehNa1QQ=; b=Xx8eLf6FvI9QvBbx2NwBBbOsmcGespbXP7jpO3YIoJOsmmCs05F
+        G1GxEpmNgfJglbMjEtyEqGH0Zf+cSVoWPhh3/DEc8SmFLxap9J+Azi2CcLaSZggg
+        ir5DbER1EEFN+iffZq18yjjH1FtW3EHnkZ1h3p+CTXXwRi6Tp8EabSFgma5zIzT4
+        kAjcHYzZW2vD/Fh3f2NMrJjUhVniitoadBGEE8TzobZh6lKarAlvGG2Hb7P8V2x1
+        GAuewE4l9NMkJkPswneD7FzDRMbIkLa3A5MsKEnaIEcrLhfFUA2W4twOSgqRYWxt
+        8S2kIb13ZS+T/dshV+dsr69hu4KjOeSIpYg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1687538835; x=1687625235; bh=FxZNrWvPKPTmk
+        Kt5iB7ImZO3THwWpV5+LtbCehNa1QQ=; b=TQ9kPjqDlLIibATgeZ6muabnXmhlp
+        VGKp/xsc8zKPY+j1gBMNgiG8d2qfy1ALB024SWI9D+fCTDX3Aa/0uC1PjtXtULDw
+        QuiOnO8s0OQJ55y6XbSDK3Ifg4i4MwMML80ysJPrW0bZWUxo3WMhwmxcq9rFlFBz
+        t9w+3znKnGw/dgpQe5gERY3kRjwdA5FUMIVhP0K2mcUa96HJCXLuxu7LEFRw2o0j
+        JqmfcP5OnNcuop7kmobJD00YDRyuFvayeRbZ+Q1/UDclW/hT/oC9zqCQ3LNnG3q3
+        yYRmZV+UZP3+apd8ueDHFda9F5RDFgA86rIekeSD+UqM6H4wL1QReiOCQ==
+X-ME-Sender: <xms:k8yVZOcnm0yfnoZHOD7OmutPEAOQ7iHZVeJ5T3mpMh5RvVAGBHawgg>
+    <xme:k8yVZIOj02ZVTSaNvSo6l7bhsoEbYPb2v3LKZ_o310PCcKFUl0MLqaLXuG1_ujMSy
+    459YcjrZv20-5s>
+X-ME-Received: <xmr:k8yVZPioKDsGHcBZB5wzyJ3rd4NCUIsjkQlFmSXD1R8nbhgUzBVqkvI6-aY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeeggedguddtgecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehgtderredttdejnecuhfhrohhmpeffvghm
+    ihcuofgrrhhivgcuqfgsvghnohhurhcuoeguvghmihesihhnvhhishhisghlvghthhhinh
+    hgshhlrggsrdgtohhmqeenucggtffrrghtthgvrhhnpedvjeetgeekhfetudfhgfetffeg
+    fffguddvgffhffeifeeikeektdehgeetheffleenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpeguvghmihesihhnvhhishhisghlvghthhhinhhg
+    shhlrggsrdgtohhm
+X-ME-Proxy: <xmx:k8yVZL8totFP0UytnB7btrCcVJyQMWgcltBdCFWncCkVgBcrGkTs-A>
+    <xmx:k8yVZKvYfgGMY0uteS8dddhJaFJGPDYr_ToA17AT4KVzuWM7hQwkKw>
+    <xmx:k8yVZCF_NiI4fvwFgBLLkKLLBGRSVK1XIZvFw2UWndiAnb0n-3KnAQ>
+    <xmx:k8yVZD4wbjyrPMD2n47WouCHuuVVFM6dG6MarbQw5-nSEHkPQdWcww>
+Feedback-ID: iac594737:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 23 Jun 2023 12:47:14 -0400 (EDT)
+Date:   Fri, 23 Jun 2023 12:47:08 -0400
+From:   Demi Marie Obenour <demi@invisiblethingslab.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Alasdair G Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the device-mapper tree
+Message-ID: <ZJXMkd0eOEBnpUw2@itl-email>
+References: <20230623143011.7deba53c@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="PNJM2LfTtJi3ok2p"
+Content-Disposition: inline
+In-Reply-To: <20230623143011.7deba53c@canb.auug.org.au>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/06/23 17:58, Daniel Bristot de Oliveira wrote:
-> @@ -2033,9 +2147,20 @@ static struct task_struct *pick_next_task_dl(struct rq *rq)
->  	struct task_struct *p;
->  
->  	p = pick_task_dl(rq);
-> -	if (p)
-> +	if (!p)
-> +		return p;
-> +
-> +	/*
-> +	 * XXX: re-check !dl_server, changed from v2 because of
-> +	 * pick_next_task_dl change
-> +	 */
-> +	if (!dl_server(&p->dl))
->  		set_next_task_dl(rq, p, true);
->
 
-Should this be
+--PNJM2LfTtJi3ok2p
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 23 Jun 2023 12:47:08 -0400
+From: Demi Marie Obenour <demi@invisiblethingslab.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>,
+	Alasdair G Kergon <agk@redhat.com>,
+	Mike Snitzer <snitzer@kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the device-mapper tree
 
-       if (!p->server)
+On Fri, Jun 23, 2023 at 02:30:11PM +1000, Stephen Rothwell wrote:
+> Hi all,
+>=20
+> After merging the device-mapper tree, today's linux-next build (i386
+> defconfig) failed like this:
+>=20
+> In file included from include/linux/kernel.h:30,
+>                  from arch/x86/include/asm/percpu.h:27,
+>                  from arch/x86/include/asm/current.h:10,
+>                  from include/linux/sched.h:12,
+>                  from include/linux/kthread.h:6,
+>                  from drivers/md/dm-core.h:13,
+>                  from drivers/md/dm-ioctl.c:9:
+> drivers/md/dm-ioctl.c: In function 'next_target':
+> include/linux/kern_levels.h:5:25: error: format '%lu' expects argument of=
+ type 'long unsigned int', but argument 3 has type 'unsigned int' [-Werror=
+=3Dformat=3D]
+>     5 | #define KERN_SOH        "\001"          /* ASCII Start Of Header =
+*/
+>       |                         ^~~~~~
+> include/linux/printk.h:427:25: note: in definition of macro 'printk_index=
+_wrap'
+>   427 |                 _p_func(_fmt, ##__VA_ARGS__);                    =
+       \
+>       |                         ^~~~
+> include/linux/printk.h:498:9: note: in expansion of macro 'printk'
+>   498 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+>       |         ^~~~~~
+> include/linux/kern_levels.h:11:25: note: in expansion of macro 'KERN_SOH'
+>    11 | #define KERN_ERR        KERN_SOH "3"    /* error conditions */
+>       |                         ^~~~~~~~
+> include/linux/printk.h:498:16: note: in expansion of macro 'KERN_ERR'
+>   498 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+>       |                ^~~~~~~~
+> include/linux/device-mapper.h:626:25: note: in expansion of macro 'pr_err'
+>   626 | #define DMERR(fmt, ...) pr_err(DM_FMT(fmt), ##__VA_ARGS__)
+>       |                         ^~~~~~
+> drivers/md/dm-ioctl.c:1421:17: note: in expansion of macro 'DMERR'
+>  1421 |                 DMERR("Next dm_target_spec (offset %u) is not %lu=
+-byte aligned",
+>       |                 ^~~~~
+> cc1: all warnings being treated as errors
+>=20
+> Caused by commit
+>=20
+>   5df1daff2cc6 ("dm ioctl: Check dm_target_spec is sufficiently aligned")
 
-instead? AFAICT dl_server(&p->dl) can never be true since there's no
-pi_se-like link to the server via the dl_se, only via the task_struct, and
-the server pick cannot return the server itself (as it's a pure sched_entity).
+Ugh, sorry about that.  I=E2=80=99m pretty sure the code would actually work
+okay at runtime since unsigned long and unsigned int are passed the same
+way, but this is still a bug.
 
-> +	/* XXX not quite right */
-> +	if (hrtick_enabled(rq))
-> +		start_hrtick_dl(rq, &p->dl);
-> +
+> I have applied the following patch for today:
+>=20
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Fri, 23 Jun 2023 14:24:29 +1000
+> Subject: [PATCH] fix up for "dm ioctl: Check dm_target_spec is sufficient=
+ly aligned"
+>=20
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  drivers/md/dm-ioctl.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/md/dm-ioctl.c b/drivers/md/dm-ioctl.c
+> index 5f0b641538d8..8b480d7825fe 100644
+> --- a/drivers/md/dm-ioctl.c
+> +++ b/drivers/md/dm-ioctl.c
+> @@ -1418,7 +1418,7 @@ static int next_target(struct dm_target_spec *last,=
+ uint32_t next, const char *e
+>  	}
+> =20
+>  	if (next % __alignof__(struct dm_target_spec)) {
+> -		DMERR("Next dm_target_spec (offset %u) is not %lu-byte aligned",
+> +		DMERR("Next dm_target_spec (offset %u) is not %zu-byte aligned",
+>  		      next, __alignof__(struct dm_target_spec));
+>  		return -EINVAL;
+>  	}
+> --=20
+> 2.39.2
 
-IIUC that got hauled out of set_next_task_dl() to cover the case where we
-pick the server (+ the server pick) and want to more thoroughly enforce the
-server's bandwidth. If so, what's the issue with starting the hrtick here?
+That fix is correct, thanks!
+--=20
+Sincerely,
+Demi Marie Obenour (she/her/hers)
+Invisible Things Lab
 
->  	return p;
->  }
->  
+--PNJM2LfTtJi3ok2p
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEdodNnxM2uiJZBxxxsoi1X/+cIsEFAmSVzJAACgkQsoi1X/+c
+IsH60g/+NCH4eD7P5GyFdcqFNWM/aI3nn9Uu7FNb6Xr4y2T3cmIKrGvGHOYAunm4
+AF00Y0OuDq53do4Ruf6fc2Jufb4IDJR19rHU4dFX5r1L462SOno0e1eFmsgzvTat
+P9GnKuPTsHTgLf9oWV6ACNqdM7G4v57sRsGCm4cvpFSz8CreOM7P8lwer0gyJy0+
+Lfk+CIWJat+ICEhj2+qmXert16D3eQVNpnFHCMs09414J/GnL1E717bdJycZ3dug
+FSidDTf4t66rGcuU95AEzEFCrHEBnn5hJmKdQuW/Bg+QXFcPMWqPhOZ0DG/Yqw+S
+VKbaDfYcmCA03bwgVP9kNX8nU3sipJifXmqyGrFo6pOHbMcr3SBcW7SLeGSiPd3J
+TDja4Ja+bOIQjIPCrxzqwnNxS/FrGgiOwvHwNPJjxfpIsSGTonPDsq4D4A7S9D9k
+JtRx6U+mscjIwvz2O8qcsl9z0mwHBCIhQe28TZ1u3Yo1e9OLazrAkO28fHb3/U80
+l6arsce9dpWpKB4Dtc/sw6u/2XhnlCIUa2hoF8wzPVdOGcvlsX5utQG+vbiu04yW
+y+5bB/i2z09q2gZzCA+19qE0q8gvRSgSuKIDTVWgeTAndUb1YzUaOKAgk0izt/KQ
+pcgcv15XK19taV1Jo/LGey7jt6I3j2SQfwIMM4u8AX5+WAHxeqc=
+=qJJP
+-----END PGP SIGNATURE-----
+
+--PNJM2LfTtJi3ok2p--
