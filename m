@@ -2,109 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6320B73B102
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 09:02:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93A1973B106
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 09:03:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230373AbjFWHCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 03:02:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51126 "EHLO
+        id S230472AbjFWHCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 03:02:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbjFWHCe (ORCPT
+        with ESMTP id S230421AbjFWHCr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 03:02:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF154212F;
-        Fri, 23 Jun 2023 00:02:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Fri, 23 Jun 2023 03:02:47 -0400
+Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [IPv6:2001:4b7a:2000:18::171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 408E9212F
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 00:02:45 -0700 (PDT)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7734261986;
-        Fri, 23 Jun 2023 07:02:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFB32C433C8;
-        Fri, 23 Jun 2023 07:02:28 +0000 (UTC)
-Message-ID: <f21d6fce-155c-28f0-fdea-e9264ba1f7ba@xs4all.nl>
-Date:   Fri, 23 Jun 2023 09:02:26 +0200
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id AE3D53F32D;
+        Fri, 23 Jun 2023 09:02:42 +0200 (CEST)
+Date:   Fri, 23 Jun 2023 09:02:42 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] drm/msm/dsi: Enable DATABUS_WIDEN for DSI command
+ mode
+Message-ID: <qgqzbcoy5rbkya4vodicmty3pvhqj5laqb3sb5kcdicwityboq@m4hpqw3tofdz>
+References: <20230525-add-widebus-support-v1-0-c7069f2efca1@quicinc.com>
+ <20230525-add-widebus-support-v1-3-c7069f2efca1@quicinc.com>
+ <3a6cc492-6b54-2c70-402e-995c0b003c01@linaro.org>
+ <mfzmioovf54lcuiuzvk4fuz26elag6iw3ohbdhgym7k3qzirhx@dd7vu7ms6azz>
+ <e594fed4-fc01-477b-1e7c-d1d58e1a0dda@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 03/11] media: videobuf2: Remove VB2_MAX_FRAME limit on
- buffer storage
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Dan Carpenter <dan.carpenter@linaro.org>
-Cc:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
-        ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
-        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        nicolas.dufresne@collabora.com, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        kernel@collabora.com
-References: <20230622131349.144160-1-benjamin.gaignard@collabora.com>
- <20230622131349.144160-4-benjamin.gaignard@collabora.com>
- <bddd6cb7-cd72-4fb5-8d4a-d02cb9c46dce@kadam.mountain>
- <39aff680-316a-7382-c93b-d9ca61c389e9@collabora.com>
-Content-Language: en-US
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <39aff680-316a-7382-c93b-d9ca61c389e9@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e594fed4-fc01-477b-1e7c-d1d58e1a0dda@quicinc.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/06/2023 16:13, Benjamin Gaignard wrote:
+On 2023-06-22 16:04:30, Abhinav Kumar wrote:
+<snip>
+> >> Is widebus applicable only to the CMD mode, or video mode can employ it too?
+> > 
+> > The patch description states that it was not tested on video-mode yet,
+> > so I assume it will.  But this should also be highlighted with a comment
+> > (e.g. /* XXX: Allow for video-mode once tested/fixed */), _especially_
+> > on the check for MIPI_DSI_MODE_VIDEO above.
 > 
-> Le 22/06/2023 à 16:11, Dan Carpenter a écrit :
->> On Thu, Jun 22, 2023 at 03:13:41PM +0200, Benjamin Gaignard wrote:
->>> diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
->>> index f1ff7af34a9f..86e1e926fa45 100644
->>> --- a/drivers/media/common/videobuf2/videobuf2-core.c
->>> +++ b/drivers/media/common/videobuf2/videobuf2-core.c
->>> @@ -455,9 +455,9 @@ static int __vb2_queue_alloc(struct vb2_queue *q, enum vb2_memory memory,
->>>       struct vb2_buffer *vb;
->>>       int ret;
->>>   -    /* Ensure that q->num_buffers+num_buffers is below VB2_MAX_FRAME */
->>> +    /* Ensure that q->num_buffers + num_buffers is UINT_MAX */
->>>       num_buffers = min_t(unsigned int, num_buffers,
->>> -                VB2_MAX_FRAME - q->num_buffers);
->>> +                UINT_MAX - q->num_buffers);
->>>         for (buffer = 0; buffer < num_buffers; ++buffer) {
->>>           /* Allocate vb2 buffer structures */
->> Ah...  Here's one of the integer overflow bugs I was talking about.  The
->> __vb2_queue_alloc() function returns an int so if num_buffers goes over
->> INT_MAX we are hosed.
+> Sure, we can leave a comment.
+
+Thanks!
 > 
-> I will limit it to:
-> #define VB2_QUEUE_MAX_BUFFERS  (INT_MAX & PAGE_MASK)  /* The mask prevents 85% of integer overflows */
-> as you have suggest it.
-
-IMHO INT_MAX is way overkill. How about (1U << 20)? I would like some sort of
-sanity check here. 1048576 buffers of 640x480 and 4 bytes per pixel is 1.2 TB.
-
-Since a TB of memory is doable these days, I think this is a reasonable
-value for MAX_BUFFERS without allowing just anything.
-
-An alternative is to make this a kernel config.
-
-Regards,
-
-	Hans
-
+> > If I understand this correctly DSC is not working for video mode at all
+> > on these setups, right?  Or no-one was able to test it?  I'm inclined to
+> > request dropping these artifical guards to have as little friction as
+> > possible when someone starts enabling and testing this - and less
+> > patches removing artificial bounds in the future.
+> > 
 > 
-> That will be in version 4.
+> Noone was able to test it. Like I have said before, we dont have or have 
+> not brought up any DSI DSC panel with video mode. DP will be the first 
+> to validate the video mode path for DSC so even that time we cannot test 
+> DSI with DSC on video mode.
 > 
-> Thanks,
-> Benjamin
+> I think we should find a panel which supports cmd and video mode ( I 
+> believe one of the HDKs does have that ) and bring that one up first to 
+> validate this.
 > 
->>
->> regards,
->> dan carpenter
->>
+> I believe we should keep this checks with the comment you have 
+> suggested. If someone tests it and then removes it, I am comfortable 
+> with that.
+> 
+> Till then, I would rather guard that configuration.
 
+Sure.  On the one hand my suggestion to drop it would be to simplify
+DSC video-mode "bring-up" and not put up arbitrary barriers, but for
+distinct optional features like widebus it makes sense to keep them
+guarded so that a developer can enable them one at a time.  I'm just
+afraid that them being spread far and wide across the codebase makes it
+hard to find all the places where this guard is in place.
+
+Unless it is hopefully one of the current active developers testing
+video-mode, because we all know what's where now :)
+
+- Marijn
