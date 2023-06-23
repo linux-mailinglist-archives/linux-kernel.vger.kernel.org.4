@@ -2,89 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20A4473AFB3
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 07:04:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B1CD73AFB9
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 07:12:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230456AbjFWFEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 01:04:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53126 "EHLO
+        id S231363AbjFWFL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 01:11:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231501AbjFWFDn (ORCPT
+        with ESMTP id S229607AbjFWFLz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 01:03:43 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA32268C
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 22:03:42 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id 41be03b00d2f7-5440e98616cso1007146a12.0
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 22:03:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1687496621; x=1690088621;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PDo3MywNwQbl7iqfZb964ASJUvrMf42evsnlBRBIz08=;
-        b=OI2qzFjaTLyAIPV9ppUNzkTmREPPSH6496HI5As09/hOE6tg96PqV36VtmqBDNEaZq
-         6i32T4VJOCaiiXkzgq68rgZlCDEy5SsvuI7FGdOLU4uyh2q+XBGvgdqAU1twLO4hHwNe
-         0eoBXGQce8lEG9I5+8rmeBPMfExXx8nTmhDcA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687496621; x=1690088621;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PDo3MywNwQbl7iqfZb964ASJUvrMf42evsnlBRBIz08=;
-        b=fwa5vyrJqP2WUVUUydFwLpAiU9R1BC8/t8PU6Ku55ZX/odhj5nfuW9/+XLbs9nsbXU
-         yJgJJkyXGL0OqG1Dw2JBthhcPEJ4tjQlomWgKGEJFbFN3BuRZ04Mw7hLEIbkeMr0epc0
-         3bgy+9arS6DsXBhUIqYLhIGSAxPDpcpVdAIrmSHrW8CMd+WnSXgOD2ShAmxXXJMDuLs1
-         cjmhhyCRaMGtx+W1tehWm/qH5yAppHGDeamsyyHikz8sArthhWYbDA9AWe+G9UHbO4VY
-         3MHpAHD5tLM9KjCuvVLRVfU7ZNi8JIE9SKdZkxweq6ppwScsQIqcDd+XIFDMholhXF/V
-         Zgdg==
-X-Gm-Message-State: AC+VfDxHKbHIIOaIkbqm09McHm59ZMFD+xnQnH/pmD4pUdVUAGVlqBRW
-        Lpxwpih/F316iQdYdKHfFDeXJ7dklkiq9DBCqN0=
-X-Google-Smtp-Source: ACHHUZ5IBBvTRJJglgqFaQ+r5YeQ+2kgevBN570xdtq7R+7V0PmvfhDNPyADkaSe4ckj8E92hxlHsQ==
-X-Received: by 2002:a17:90b:2291:b0:262:a89a:b0c1 with SMTP id kx17-20020a17090b229100b00262a89ab0c1mr303242pjb.0.1687496621259;
-        Thu, 22 Jun 2023 22:03:41 -0700 (PDT)
-Received: from google.com ([2401:fa00:8f:203:3383:b451:fa2:1538])
-        by smtp.gmail.com with ESMTPSA id s3-20020a17090ad48300b0025eb5aafd3csm551911pju.32.2023.06.22.22.03.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jun 2023 22:03:40 -0700 (PDT)
-Date:   Fri, 23 Jun 2023 14:03:36 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Steve French <sfrench@samba.org>,
-        Paulo Alcantara <pc@manguebit.com>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Shyam Prasad N <sprasad@microsoft.com>,
-        Tom Talpey <tom@talpey.com>,
-        Namjae Jeon <linkinjeon@kernel.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 62/79] smb: switch to new ctime accessors
-Message-ID: <20230623050336.GC11488@google.com>
-References: <20230621144507.55591-1-jlayton@kernel.org>
- <20230621144735.55953-1-jlayton@kernel.org>
- <20230621144735.55953-61-jlayton@kernel.org>
+        Fri, 23 Jun 2023 01:11:55 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9160D1FE1;
+        Thu, 22 Jun 2023 22:11:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687497113; x=1719033113;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=HWj1VSHjeQifGegDV6SwXxM3IwTPiL+2f0IbuRC5FmI=;
+  b=BOm/Y9VP8j83tSpDB1+ZqUn4azyckgJJi5kw3VNoHWGytbUMqAO3qZHA
+   7lVqV7JozlIbW0CK10VIKk5sFXd2be4MaPj76j310EhXPa3T3gxdWPbmp
+   /X2ESiIpJbsg+ncq8QkxHL8qHiwiFmAFoTfN/3DMBfVOOO9Eqh94FlfDZ
+   a+zJyp2F52zLMHroCjXrBOoYDsaz5oP98Nc3mjdL4v9PuXG9zcXSfIDUe
+   X8QLzQRIKfPfNoerZU5CsGCD/LgBRkhLKapcZjdaQnKw1HJGUr/uccb2O
+   4bRmkztZaMEnVFDyRntdgwGE/kL/NeWzNIaQkL8MhJfXfD5uYlHbwEGoT
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="426671641"
+X-IronPort-AV: E=Sophos;i="6.01,151,1684825200"; 
+   d="scan'208";a="426671641"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 22:11:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="665353763"
+X-IronPort-AV: E=Sophos;i="6.01,151,1684825200"; 
+   d="scan'208";a="665353763"
+Received: from inesxmail01.iind.intel.com ([10.223.154.20])
+  by orsmga003.jf.intel.com with ESMTP; 22 Jun 2023 22:11:49 -0700
+Received: from inlubt0246.localdomain (inlubt0246.iind.intel.com [10.67.198.165])
+        by inesxmail01.iind.intel.com (Postfix) with ESMTP id 4A5F715B53;
+        Fri, 23 Jun 2023 10:41:48 +0530 (IST)
+Received: by inlubt0246.localdomain (Postfix, from userid 12088949)
+        id 3E86D5F772; Fri, 23 Jun 2023 10:41:48 +0530 (IST)
+From:   Kumari Pallavi <kumari.pallavi@intel.com>
+To:     rcsekar@samsung.com, wg@grandegger.com, mkl@pengutronix.de,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     mallikarjunappa.sangannavar@intel.com, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kumari Pallavi <kumari.pallavi@intel.com>,
+        Srikanth Thokala <srikanth.thokala@intel.com>
+Subject: [PATCH 1/1] can: m_can: Control tx and rx flow to avoid communication stall
+Date:   Fri, 23 Jun 2023 10:41:24 +0530
+Message-Id: <20230623051124.64132-1-kumari.pallavi@intel.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230621144735.55953-61-jlayton@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FSL_HELO_FAKE,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (23/06/21 10:46), Jeff Layton wrote:
-> 
-> In later patches, we're going to change how the ctime.tv_nsec field is
-> utilized. Switch to using accessor functions instead of raw accesses of
-> inode->i_ctime.
-> 
-> Signed-off-by: Jeff Layton <jlayton@kernel.org>
+In bi-directional CAN transfer using M_CAN IP, with
+the frame gap being set to '0', it leads to Protocol
+error in Arbitration phase resulting in communication
+stall.
+Discussed with Bosch M_CAN IP team and the stall issue
+can only be overcome by controlling the tx and rx 
+packets flow as done by the patch.
 
-Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+Rx packets would also be serviced when there is a tx 
+interrupt. The solution has been tested extensively for
+more than 10 days, and no issues has been observed.
+
+Setup that is used to reproduce the issue: 
+
++---------------------+		+----------------------+
+|Intel ElkhartLake    |		|Intel ElkhartLake     |		
+|	+--------+    |		|	+--------+     |
+|	|m_can 0 |    |<=======>|	|m_can 0 |     |		    
+|	+--------+    |		|	+--------+     |		 
++---------------------+		+----------------------+           
+
+Steps to be run on the two Elkhartlake HW:
+
+1. ip link set can0 type can bitrate 1000000
+2. ip link set can0 txqueuelen 2048
+3. ip link set can0 up
+4. cangen -g 0 can0
+5. candump can0
+
+cangen -g 0 can0 & candump can0 commands are used for transmit and 
+receive on both the m_can HW simultaneously where -g is the frame gap 
+between two frames.
+
+Signed-off-by: Kumari Pallavi <kumari.pallavi@intel.com>
+Signed-off-by: Srikanth Thokala <srikanth.thokala@intel.com>
+---
+ drivers/net/can/m_can/m_can.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
+index a5003435802b..94aa0ba89202 100644
+--- a/drivers/net/can/m_can/m_can.c
++++ b/drivers/net/can/m_can/m_can.c
+@@ -1118,7 +1118,7 @@ static irqreturn_t m_can_isr(int irq, void *dev_id)
+ 			/* New TX FIFO Element arrived */
+ 			if (m_can_echo_tx_event(dev) != 0)
+ 				goto out_fail;
+-
++			m_can_write(cdev, M_CAN_IE, IR_ALL_INT & ~(IR_TEFN));
+ 			if (netif_queue_stopped(dev) &&
+ 			    !m_can_tx_fifo_full(cdev))
+ 				netif_wake_queue(dev);
+@@ -1787,6 +1787,7 @@ static netdev_tx_t m_can_start_xmit(struct sk_buff *skb,
+ 		}
+ 	} else {
+ 		cdev->tx_skb = skb;
++		m_can_write(cdev, M_CAN_IE, IR_ALL_INT & (IR_TEFN));
+ 		return m_can_tx_handler(cdev);
+ 	}
+ 
+-- 
+2.17.1
+
