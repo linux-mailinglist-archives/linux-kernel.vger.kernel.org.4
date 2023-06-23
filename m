@@ -2,126 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28A8373BBD4
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 17:38:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC62373BBD8
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 17:39:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232474AbjFWPiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 11:38:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48812 "EHLO
+        id S232654AbjFWPjM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 11:39:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232181AbjFWPiO (ORCPT
+        with ESMTP id S232617AbjFWPi4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 11:38:14 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA2A2E5B;
-        Fri, 23 Jun 2023 08:38:12 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-312824aa384so781759f8f.1;
-        Fri, 23 Jun 2023 08:38:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687534691; x=1690126691;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qNXbjuOqHdtzZtqUY4ByxrF/CgsTtwnSlgbUWKLQCLw=;
-        b=IJdAgbrD9Tw+m6nq97yBcx8ID+jzUjScesGwDUwKrjfPLl5/AxNIiEKlLQ9uLPdSGk
-         TVWr9HscdRRAXLpg6/uiP+nrYj0I6HP/q0RUNGiCrUwcxsq01V2sRb9Cc/zVWfm+qMbQ
-         pKuA2mnKlA/RV+P/cHzD9oaoTZyX9zu8EQWze7WubA7nHbwCt5Xz4bcMUzfdROdL9qSs
-         D9kxcRaOyW3UgmjmcMaGp+DJm2xyarPlEsbl5JhUq3wrZW0eXXJMWCcaLfK76ovr6xnX
-         yKN19K6d/wHuVNxVOs3iPX8m5WU/vOR6h9TYMagzOxk8jqhzgDH/Y0/GwZCWSlLKpilZ
-         bLmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687534691; x=1690126691;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qNXbjuOqHdtzZtqUY4ByxrF/CgsTtwnSlgbUWKLQCLw=;
-        b=MN/ffxdUWMF0YQgbrBDqbpj5ttkKYsdwP6EZnTi48NG32OypwoK77Eq3AQaXU3xU2J
-         urvSQnTMvx1qLSlwf7T1C5lsThcxY/eukqdgFG0U2aAokyz/I+Y55I6qFzuR1WXNCCyI
-         K1Q8mK2eBZYVZq0N/DSVULZtJDM45rJ+0tQoJ9X+ZRZYD+bgEwMATwGofSkRIb7d2NKa
-         /Qq/H96jG85lZPg8bVFvfWSKckpWvo2ofiWT1Y7APF5+6zWL5DUHVh0lBoHAgXgbl9L7
-         fOwj6V7r9KXF9Y6GpG1tIX0tjbaBR87Fjkrzxkz003NdBgmTTEyDBdKHpLDFJqmqmwKN
-         ld6g==
-X-Gm-Message-State: AC+VfDyTMC/6gBoVAN/CWROnqPvo4fAuUP6BFi/2Rp4gyeYLFoaA6vhg
-        jIe7XqP2vY3Jw9OqOYjyaHY=
-X-Google-Smtp-Source: ACHHUZ5fQsTepIAGmk+q7diQzlvb77qb9u3WmJzUDuQEmEeTWTEimHchssqUJ9Wh4vD/Z9igZB0dzQ==
-X-Received: by 2002:a5d:4008:0:b0:2ff:f37:9d0f with SMTP id n8-20020a5d4008000000b002ff0f379d0fmr14901207wrp.57.1687534690924;
-        Fri, 23 Jun 2023 08:38:10 -0700 (PDT)
-Received: from shift.daheim (p200300d5ff176500aaa159fffeeb01f1.dip0.t-ipconnect.de. [2003:d5:ff17:6500:aaa1:59ff:feeb:1f1])
-        by smtp.gmail.com with ESMTPSA id k10-20020adff5ca000000b0030ae87bd3e3sm9844115wrp.18.2023.06.23.08.38.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Jun 2023 08:38:10 -0700 (PDT)
-Received: from localhost ([127.0.0.1])
-        by shift.daheim with esmtp (Exim 4.96)
-        (envelope-from <chunkeey@gmail.com>)
-        id 1qCirR-000CFs-22;
-        Fri, 23 Jun 2023 17:38:09 +0200
-Message-ID: <7c4622e7-d7a8-ae5d-e381-f726cb511228@gmail.com>
-Date:   Fri, 23 Jun 2023 17:38:09 +0200
+        Fri, 23 Jun 2023 11:38:56 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 600D22126;
+        Fri, 23 Jun 2023 08:38:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=Eaai/2aq87jv39+4nAJAoxKbCvsMFKJK4WRa82NziSY=; b=xTJ+PaaHmLU0TXGAu3Lh10OkQS
+        PQbBNyqDwbxlG3M5FODc72rEZf1AEvVGVkDdwXzKAlGtemmmisAobREPgMuAobacj5+3ihfqAXDEO
+        IpwIhdRXhH4VZ8sCAexv/l037yG7Ku7ioNZj2cMPHq9iDBd7yPpT++8QpNc51o4Fq1Lg=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1qCirq-00HN9f-Td; Fri, 23 Jun 2023 17:38:34 +0200
+Date:   Fri, 23 Jun 2023 17:38:34 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Nicolas Ferre <nicolas.ferre@microchip.com>
+Cc:     Ben Dooks <ben.dooks@codethink.co.uk>, netdev@vger.kernel.org,
+        pabeni@redhat.com, kuba@kernel.org, edumazet@google.com,
+        davem@davemloft.net, linux-kernel@vger.kernel.org,
+        claudiu.beznea@microchip.com
+Subject: Re: net: macb: sparse warning fixes
+Message-ID: <fe335672-6b8d-4fb0-81ce-34f029891d39@lunn.ch>
+References: <20230622130507.606713-1-ben.dooks@codethink.co.uk>
+ <66f00ffc-571b-86b3-5c35-b9ce566cc149@microchip.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 1/2] carl9170: re-fix fortified-memset warning
-To:     Arnd Bergmann <arnd@kernel.org>, Kalle Valo <kvalo@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Shiji Yang <yangshiji66@outlook.com>,
-        Nick Kossifidis <mickflemm@gmail.com>, jirislaby@kernel.org,
-        Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-wireless@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230623152443.2296825-1-arnd@kernel.org>
-Content-Language: de-DE
-From:   Christian Lamparter <chunkeey@gmail.com>
-In-Reply-To: <20230623152443.2296825-1-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <66f00ffc-571b-86b3-5c35-b9ce566cc149@microchip.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/23/23 17:23, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Fri, Jun 23, 2023 at 03:16:23PM +0200, Nicolas Ferre wrote:
+> Hi Ben,
 > 
-> The carl9170_tx_release() function sometimes triggers a fortified-memset
-> warning in my randconfig builds:
+> On 22/06/2023 at 15:05, Ben Dooks wrote:
+> > These are 3 hopefully easy patches for fixing sparse errors due to
+> > endian-ness warnings. There are still some left, but there are not
+> > as easy as they mix host and network fields together.
+> > 
+> > For example, gem_prog_cmp_regs() has two u32 variables that it does
+> > bitfield manipulation on for the tcp ports and these are __be16 into
+> > u32, so not sure how these are meant to be changed. I've also no hardware
+> > to test on, so even if these did get changed then I can't check if it is
+> > working pre/post change.
 > 
-> In file included from include/linux/string.h:254,
->                   from drivers/net/wireless/ath/carl9170/tx.c:40:
-> In function 'fortify_memset_chk',
->      inlined from 'carl9170_tx_release' at drivers/net/wireless/ath/carl9170/tx.c:283:2,
->      inlined from 'kref_put' at include/linux/kref.h:65:3,
->      inlined from 'carl9170_tx_put_skb' at drivers/net/wireless/ath/carl9170/tx.c:342:9:
-> include/linux/fortify-string.h:493:25: error: call to '__write_overflow_field' declared with attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror=attribute-warning]
->    493 |                         __write_overflow_field(p_size_field, size);
-> 
-> Kees previously tried to avoid this by using memset_after(), but it seems
-> this does not fully address the problem. I noticed that the memset_after()
-> here is done on a different part of the union (status) than the original
-> cast was from (rate_driver_data), which may confuse the compiler.
-> 
-> Unfortunately, the memset_after() trick does not work on driver_rates[]
-> because that is part of an anonymous struct, and I could not get
-> struct_group() to do this either. Using two separate memset() calls
-> on the two members does address the warning though.
-> 
-> Fixes: fb5f6a0e8063b ("mac80211: Use memset_after() to clear tx status")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Do you know if there could be any impact on performance (even if limited)?
 
+Hi Nicolas
 
-Wait! I want to point out this funny thing is happening in ath too!
+This is inside a netdev_dbg(). So 99% of the time it is compiled
+out. The other 1% of the time, your 115200 baud serial port is
+probably the bottleneck, not an endianness swap.
 
-https://lore.kernel.org/linux-wireless/TYAP286MB03154F9AAFD4C35BEEDE4A99BC4CA@TYAP286MB0315.JPNP286.PROD.OUTLOOK.COM/T/#mf1b8919a000fe661803c17073f48b3c410888541
-
-And that patch got NACK by Jiri Slaby because like me he suspects that
-this is a compiler bug.
-
-so, what's going wrong with fortified there?
-
-Thanks,
-Christian
+	 Andrew
