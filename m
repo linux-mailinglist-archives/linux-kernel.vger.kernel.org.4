@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89DA873BCCE
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 18:40:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E3A573BCCF
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 18:40:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232203AbjFWQk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 12:40:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49812 "EHLO
+        id S230235AbjFWQke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 12:40:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232389AbjFWQkX (ORCPT
+        with ESMTP id S232397AbjFWQkX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 23 Jun 2023 12:40:23 -0400
 Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EECC2273A
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 09:40:19 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id 41be03b00d2f7-553d27fe4baso690001a12.2
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 09:40:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC333273D
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 09:40:20 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id 41be03b00d2f7-528ab71c95cso507524a12.0
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 09:40:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687538419; x=1690130419;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=804BUznaRJxahSpZ+yggx/c4ITZ/f8vCCZVijpr48F0=;
-        b=jZtiAGYTk81uuMQHYSplK6RArvXfVokurmnT+Vp8LofB/qX9ED8oW1HAtA5pXXksBb
-         aIw+W3qBavUHtjsRfeRuaEtO1FRKQ78PAfLrP9rYwa4Op1nP7cp6WAn9O2HiKuFpgCky
-         1o+u+u51Ew8k+opL+LDIxrXpaAKFUnJI2VL7KDJdHB0LTq5kg8q/OGU/WIIEFRyx2DN2
-         UTCsrX1Bm7CGE0QSzXT6fyer9Jb+qNrn4lI17/UO9JQV/LQKUxWF4d64VlCQFjpRUlxJ
-         7eVuBzL20yR2RMclW5Tll2LhJ6WjDVhlCmzC8e4XXRRxBnSoLvZmWLvxaGOs/jNqeRwU
-         hD7g==
+        d=google.com; s=20221208; t=1687538420; x=1690130420;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Awz9MouaWvhYEsa6uGhopM2ZzPpu93glS/WPXSA5BTo=;
+        b=34QbFsFBy9aHUrBbbyPZvNf2E6cREYDEJ3OjWNnfkIABbwc6TGNrC1vrgVO6MW9NbF
+         eqg/aLoYmKTPEpf/V4fsvvxZE2OH/jKO4vFZZEDXI9Fw9rFIdjqAghj7mM553FLclePO
+         KLLFRlkp1ktiExq7SI5uSKhq1wmLqwGDDEZNOLOElvL4lS0kRfXPXgsWyOuJxhzdyMqv
+         nNxyqnDxgcoLV/l2B8Oh7QU4LpW04N+ipd0x+tjGDQNo7DnIZ+46hlrSdKqHVfqSfpu2
+         IMvjSxyQLqGS45aGc7DQuYRsR+7dKrGsp2eRYXyTB07mxB+Es4MLo7hX+4zKOg4KauQE
+         RrNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687538419; x=1690130419;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=804BUznaRJxahSpZ+yggx/c4ITZ/f8vCCZVijpr48F0=;
-        b=eM7NTJjK5nbiKlThIvjST2GbeXfxzIkcSSb3ealdjDl1w9FKCblw5KmM+deKHa0b0h
-         nv4sFSqgkUFqPHpO8iFiUDetUNTVdq4nFTIZrQnmYEewiED0hXzw6wwDUyT9qvi4vt7t
-         6JN1dGD2FhEWklvq+ExZwYiAExZMuHB8MVhCmonkFG6Kpv15TnLZPVISKih1kh1zefm+
-         aLToQqACYw/QRFyCLP7RfNb5qZpDWkZEPyRi5dRPszbraUXqcNIHU8NpWlO5k6NkGkgJ
-         x6hWjf+HAL5o6ga/cDdwXj6btXdTHT1Lt3fzgoo29Y1fvFBKbTpIQlCPJzAPjxfwV38m
-         tyjA==
-X-Gm-Message-State: AC+VfDyX4vWopz1TjpZI/X4ZwLE/pRYb6hg5Bd0bKFG16RcGQOKuJm8u
-        ZcKbLLqVMquwvwc+Ud22u1fjqP7qqxzTXA==
-X-Google-Smtp-Source: ACHHUZ6hZpPhnIyx5Qe+Ysjsk1wI49515RocMiYK0cPkTeizIG7/lNuGAnyLD/Atj+FQ4LQuCVD7fiYmsBUw5Q==
+        d=1e100.net; s=20221208; t=1687538420; x=1690130420;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Awz9MouaWvhYEsa6uGhopM2ZzPpu93glS/WPXSA5BTo=;
+        b=llkCglROWrpzNGpDxfUTFv008bipClTOGK8TU5ba5qOwBp5GlxaTZ/0b8+5PqVVWjQ
+         LkCxiijC2oIJYC6+EPBbhgPQYubC7Tj4Nc35ncGwwVzzFOhOoWq3+5V2yM9SrJ9kPGHZ
+         5vU5bdjTGjfQBHo1e30LkeF1K8zadHN0dqyUgqa4ImqkHnkj9H+pue29nqw0gK3PoEI/
+         Qfmm2bJbSIErjDC5RHM14JeVTky3SJxnMFSW4QOgksApYWpGGR45OdyHu5OC7xu5NVBN
+         pvRt4Ilps25cOFD1e/K6dZcXDIuRtb6bVLj9NWd3S6l3Z8n+AAtx0uoJPqPcmQTr7h0u
+         RwBg==
+X-Gm-Message-State: AC+VfDx76FurdaugeZQYjZfxo0HCTusvBxdPOxvL2TV5z8K/5q6NJJFs
+        hJcZLrn061slUOB2sVtuLOtfRRT0F/Vxtw==
+X-Google-Smtp-Source: ACHHUZ5jab1Tbf6QleE2xBkm4fTrRupoObLUsNIdT3ISEaHPrxP1Xi1eIjnLCw3mlAhfFGWA7aDdu24vu/Y4Uw==
 X-Received: from yjq3.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:272f])
- (user=jiaqiyan job=sendgmr) by 2002:a63:555d:0:b0:543:9759:1952 with SMTP id
- f29-20020a63555d000000b0054397591952mr2457037pgm.11.1687538419140; Fri, 23
- Jun 2023 09:40:19 -0700 (PDT)
-Date:   Fri, 23 Jun 2023 16:40:11 +0000
+ (user=jiaqiyan job=sendgmr) by 2002:a65:6793:0:b0:553:9251:558b with SMTP id
+ e19-20020a656793000000b005539251558bmr2555744pgr.8.1687538420513; Fri, 23 Jun
+ 2023 09:40:20 -0700 (PDT)
+Date:   Fri, 23 Jun 2023 16:40:12 +0000
+In-Reply-To: <20230623164015.3431990-1-jiaqiyan@google.com>
 Mime-Version: 1.0
+References: <20230623164015.3431990-1-jiaqiyan@google.com>
 X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-Message-ID: <20230623164015.3431990-1-jiaqiyan@google.com>
-Subject: [PATCH v2 0/4] Improve hugetlbfs read on HWPOISON hugepages
+Message-ID: <20230623164015.3431990-2-jiaqiyan@google.com>
+Subject: [PATCH v2 1/4] mm/hwpoison: delete all entries before traversal in __folio_free_raw_hwp
 From:   Jiaqi Yan <jiaqiyan@google.com>
 To:     mike.kravetz@oracle.com, naoya.horiguchi@nec.com
 Cc:     songmuchun@bytedance.com, shy828301@gmail.com,
@@ -69,55 +71,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Today when hardware memory is corrupted in a hugetlb hugepage,
-kernel leaves the hugepage in pagecache [1]; otherwise future mmap or
-read will suject to silent data corruption. This is implemented by
-returning -EIO from hugetlb_read_iter immediately if the hugepage has
-HWPOISON flag set.
+Traversal on llist (e.g. llist_for_each_safe) is only safe AFTER entries
+are deleted from the llist.
 
-Since memory_failure already tracks the raw HWPOISON subpages in a
-hugepage, a natural improvement is possible: if userspace only asks for
-healthy subpages in the pagecache, kernel can return these data.
+llist_del_all are lock free with itself. folio_clear_hugetlb_hwpoison()s
+from __update_and_free_hugetlb_folio and memory_failure won't need
+explicit locking when freeing the raw_hwp_list.
 
-This patchset implements this improvement. The 1st commit fixes an issue
-in __folio_free_raw_hwp. The 2nd commit exports the functionality to
-tell if a subpage inside a hugetlb hugepage is a raw HWPOISON page.
-The 3rd commit teaches hugetlbfs_read_iter to return as many healthy
-bytes as possible. The last commit properly tests this new feature.
+Signed-off-by: Jiaqi Yan <jiaqiyan@google.com>
+---
+ mm/memory-failure.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-[1] commit 8625147cafaa ("hugetlbfs: don't delete error page from pagecache")
-
-Changelog
-
-v1 => v2
-* __folio_free_raw_hwp deletes all entries in raw_hwp_list before it
-  traverses and frees raw_hwp_page.
-* find_raw_hwp_page => __is_raw_hwp_subpage and __is_raw_hwp_subpage
-  only returns bool instead of a raw_hwp_page entry.
-* is_raw_hwp_subpage holds hugetlb_lock while checking
-  __is_raw_hwp_subpage.
-* No need to do folio_lock in adjust_range_hwpoison.
-* v2 is based on commit a6e79df92e4a ("mm/gup: disallow FOLL_LONGTERM
-  GUP-fast writing to file-backed mappings")
-
-Jiaqi Yan (4):
-  mm/hwpoison: delete all entries before traversal in
-    __folio_free_raw_hwp
-  mm/hwpoison: check if a subpage of a hugetlb folio is raw HWPOISON
-  hugetlbfs: improve read HWPOISON hugepage
-  selftests/mm: add tests for HWPOISON hugetlbfs read
-
- fs/hugetlbfs/inode.c                          |  58 +++-
- include/linux/hugetlb.h                       |  19 ++
- include/linux/mm.h                            |   7 +
- mm/hugetlb.c                                  |  10 +
- mm/memory-failure.c                           |  42 ++-
- tools/testing/selftests/mm/.gitignore         |   1 +
- tools/testing/selftests/mm/Makefile           |   1 +
- .../selftests/mm/hugetlb-read-hwpoison.c      | 322 ++++++++++++++++++
- 8 files changed, 439 insertions(+), 21 deletions(-)
- create mode 100644 tools/testing/selftests/mm/hugetlb-read-hwpoison.c
-
+diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+index 004a02f44271..c415c3c462a3 100644
+--- a/mm/memory-failure.c
++++ b/mm/memory-failure.c
+@@ -1825,12 +1825,11 @@ static inline struct llist_head *raw_hwp_list_head(struct folio *folio)
+ 
+ static unsigned long __folio_free_raw_hwp(struct folio *folio, bool move_flag)
+ {
+-	struct llist_head *head;
+-	struct llist_node *t, *tnode;
++	struct llist_node *t, *tnode, *head;
+ 	unsigned long count = 0;
+ 
+-	head = raw_hwp_list_head(folio);
+-	llist_for_each_safe(tnode, t, head->first) {
++	head = llist_del_all(raw_hwp_list_head(folio));
++	llist_for_each_safe(tnode, t, head) {
+ 		struct raw_hwp_page *p = container_of(tnode, struct raw_hwp_page, node);
+ 
+ 		if (move_flag)
+@@ -1840,7 +1839,6 @@ static unsigned long __folio_free_raw_hwp(struct folio *folio, bool move_flag)
+ 		kfree(p);
+ 		count++;
+ 	}
+-	llist_del_all(head);
+ 	return count;
+ }
+ 
 -- 
 2.41.0.162.gfafddb0af9-goog
 
