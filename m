@@ -2,107 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 814B473B02A
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 07:39:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42E9F73B02D
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 07:41:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230423AbjFWFj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 01:39:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58000 "EHLO
+        id S230255AbjFWFlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 01:41:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbjFWFjs (ORCPT
+        with ESMTP id S229445AbjFWFlO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 01:39:48 -0400
-Received: from out162-62-57-49.mail.qq.com (out162-62-57-49.mail.qq.com [162.62.57.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 913DE1A4
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 22:39:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1687498782;
-        bh=NDFiwj2jmnIltHpVBQdpLmWhqFLwjPdlk5qSTa6ONks=;
-        h=From:To:Cc:Subject:Date;
-        b=KbcBfqpzkI+OH1meha/++gUwKhibpeblZ4vmivRENr15Z5cG2JEUvhDSSsytAadsu
-         sKEwDBSuo+Q0mdsEMvnNAwVA3aeCJoa1xILQ+Rb1X6pnXFKJGSlGRfYG9xowbmTOB9
-         Zi1U4uvXd9DFjYy9O5FSjqpSECCX5cbo6x6t1xeE=
-Received: from localhost.localdomain ([122.14.229.248])
-        by newxmesmtplogicsvrsza10-0.qq.com (NewEsmtp) with SMTP
-        id 9E7042E7; Fri, 23 Jun 2023 13:39:39 +0800
-X-QQ-mid: xmsmtpt1687498779t9pdo2mqh
-Message-ID: <tencent_3B3D24B66ED66A6BB73CC0E63C6A14E45109@qq.com>
-X-QQ-XMAILINFO: M0PjjqbLT90wUvlVOqntVEtkil74jGwBvxgJe2fQVtjXbypDeJWI8jCgYSFeh7
-         0U4ZBin3+OK1JVC06M+Wm4I4BuJGdJx8NKskaGBXmfqSz1zfgicJYCx0c021ykZr2u0ssl4LTIci
-         PZFA7jqARgi4++2aTlMVCUHgO3ODOVKtE4H25OGPa/+wgIAZlbRH1JaG29hzuURr0hLdY36qVLQn
-         c2K7C5JhVdkSjlGO3TKBAeyFHjTvENtzKc6ZlsdxiH2tjkSGgc/55jTV6+1whV+pIjnOlPpKJVv0
-         tlT7BZdOW4Hr9LJaM6P/+uF2ZrO8FjGfFg8Xs/jZqK7VR2yinRGtZySiqD2A/HAcKV9ba+56LuiD
-         T5Q3COUSbdfTg2SogDpUZA60lZu1YMHPLPKdG81FM5h3EU/9p5PWYfzzX55Gf+a706PjwO+8upk1
-         cQmpJsmKMo2uQUcffwK9jdMVHU23IP9ji4ZIgmmgn+dRKgTaR05fsE1Z+zPt0Wj1RxedPajP8Fud
-         l2TDQiUCMA1qiuW7+bYnhWbPX+z1o+05CMJXROWCYv51Wmx9x+ojrzD3TVckZOffsnf9++GEFdZn
-         6xveQt5aQM+ORILiUDM62tucyv48DjpS9Ly6ZZh955SMn7gyFPbCezmrB07+KyM/dXF3XDdlaLVs
-         fPJGJ2/I96MIf66EM23VqWXp6hHC9L/vwmf9zpsuACdYFdZDtCR7guTQn4l6/EcJP9E/i2lejzPW
-         GBr+3p5DRigqoQ721AefloZRitqSG+StWewFrSinIefjhJ5/K0eJR05kf0Ix/aInjLKUMWPGKTTd
-         W5feUVnDpmQn6X1pM9NUi9mwDlE7QidAiEZVvbu0qPv4h4stVCVklCu3dSmVdn5w5ipYH68o3o9p
-         Nzk/8Uo/enYeUZCfiywl0P8gRHsv+a8yAXE1dukTHSlPUN8PKhZfKur4kcIu+m3TX2O+jZWnkxzJ
-         pIibPgAMJyYoEEYt9LIQ9pX3PKS4nedIejddIf+PeGo0Rl5gcLFO2UHVmf0lcW
-X-QQ-XMRINFO: Mu10XATLq/IERfXGovp1cJndKWH8Kl+aSQ==
-From:   Zhang Shurong <zhang_shurong@foxmail.com>
-To:     o-takashi@sakamocchi.jp
-Cc:     linux1394-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org,
-        Zhang Shurong <zhang_shurong@foxmail.com>
-Subject: [PATCH] firewire: net: fix use after free in fwnet_finish_incoming_packet()
-Date:   Fri, 23 Jun 2023 13:39:35 +0800
-X-OQ-MSGID: <20230623053935.4192-1-zhang_shurong@foxmail.com>
-X-Mailer: git-send-email 2.41.0
+        Fri, 23 Jun 2023 01:41:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB0771A4;
+        Thu, 22 Jun 2023 22:41:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6001B6198B;
+        Fri, 23 Jun 2023 05:41:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8786C433CC;
+        Fri, 23 Jun 2023 05:41:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687498871;
+        bh=qPapvU2ug5XUbs86vSozf1HW7Fb3vlj9IaJ8Cc/jUhc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=nc6tMgv5HOQX4XZ9WiULPUOvoFoQr1wOklN1Ab/DKOFOR1LR/VPo6fglicjtk6nQL
+         7bVs+K3n1Om48IszfVTJzdmt95vDF3BJ5Al5CXjce8zVZdF6qix6H9GdjnK2VA102z
+         J/86+fiwxg0uUj3IDhln0JWz+sIJbKakfNjmgc70IlepZwLrPZuIFgknJYptlfgwWb
+         IXmHDWFKkSZOOeCbUhT+VEoL58A5djkE7LxWdfejRtdKZP36sg4kPw6IbH0hb8GnAQ
+         Yvg3Q+LFIYX8Cy1J0DOJKdLSZWGkDivSNYSuCUw1Cc5Hf8XmASjR/4GA1eA0SbBzud
+         Ug1f50gFCOaRQ==
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-1a9a42edfc9so187059fac.0;
+        Thu, 22 Jun 2023 22:41:11 -0700 (PDT)
+X-Gm-Message-State: AC+VfDxIevFXfO3gn/NErQ5d1srMadBFygS/4AD71hCwmCwDv3+Xf9Ac
+        3zhPysUZgi7QK9vJRDiA5rIUhm6HcjrzDzFsq3g=
+X-Google-Smtp-Source: ACHHUZ7cMLVT4f0AnUJoGvZXjHjFR76NxU3gpI2Rf4Fsv/8GBKrljZEFaW5o+/iwXTDhjTp30q16bid6On7xomQ1uyE=
+X-Received: by 2002:a05:6871:288:b0:1a6:c3d3:969c with SMTP id
+ i8-20020a056871028800b001a6c3d3969cmr19108557oae.45.1687498870905; Thu, 22
+ Jun 2023 22:41:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20230409145358.2538266-1-masahiroy@kernel.org>
+ <20230531213319.GA2201875@dev-arch.thelio-3990X> <20230602152519.GA3007575@dev-arch.thelio-3990X>
+ <CAK7LNARjB8vgk-hsZmGqB0mwz=OBgyDtqBKJ2cueE+yQ02CQiA@mail.gmail.com> <CAFP8O3J1aiAgKzZ82erJseb_wwU7F2=+T0xCZ0BbcFKJOAQfUg@mail.gmail.com>
+In-Reply-To: <CAFP8O3J1aiAgKzZ82erJseb_wwU7F2=+T0xCZ0BbcFKJOAQfUg@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Fri, 23 Jun 2023 14:40:34 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAT+zj7fpE_-QewdCVFzz3smZq7V6XART+yOqKcAZCiTFA@mail.gmail.com>
+Message-ID: <CAK7LNAT+zj7fpE_-QewdCVFzz3smZq7V6XART+yOqKcAZCiTFA@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: add $(CLANG_CFLAGS) to KBUILD_CPPFLAGS
+To:     Fangrui Song <maskray@google.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tom Rini <trini@konsulko.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The netif_rx() function frees the skb so we can't dereference it to
-save the skb->len.
+On Fri, Jun 23, 2023 at 2:07=E2=80=AFAM Fangrui Song <maskray@google.com> w=
+rote:
+>
+> On Sat, Jun 3, 2023 at 9:33=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.=
+org> wrote:
+> >
+> > On Sat, Jun 3, 2023 at 12:25=E2=80=AFAM Nathan Chancellor <nathan@kerne=
+l.org> wrote:
+> > >
+> > > On Wed, May 31, 2023 at 02:33:23PM -0700, Nathan Chancellor wrote:
+> > > > Hi Masahiro,
+> > > >
+> > > > On Sun, Apr 09, 2023 at 11:53:57PM +0900, Masahiro Yamada wrote:
+> > > > > When preprocessing arch/*/kernel/vmlinux.lds.S, the target triple=
+ is
+> > > > > not passed to $(CPP) because we add it only to KBUILD_{C,A}FLAGS.
+> > > > >
+> > > > > As a result, the linker script is preprocessed with predefined ma=
+cros
+> > > > > for the build host instead of the target.
+> > > > >
+> > > > > Assuming you use an x86 build machine, compare the following:
+> > > > >
+> > > > >  $ clang -dM -E -x c /dev/null
+> > > > >  $ clang -dM -E -x c /dev/null -target aarch64-linux-gnu
+> > > > >
+> > > > > There is no actual problem presumably because our linker scripts =
+do not
+> > > > > rely on such predefined macros, but it is better to define correc=
+t ones.
+> > > > >
+> > > > > Move $(CFLAGS_CFLAGS) to KBUILD_CPPFLAGS, so that all *.c, *.S, *=
+.lds.S
+> > > > > will be processed with the proper target triple.
+> > > > >
+> > > > > Reported-by: Tom Rini <trini@konsulko.com>
+> > > > > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > > > > ---
+> > > > >
+> > > > >  scripts/Makefile.clang | 3 +--
+> > > > >  1 file changed, 1 insertion(+), 2 deletions(-)
+> > > > >
+> > > > > diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
+> > > > > index 70b354fa1cb4..93ca059cc3b8 100644
+> > > > > --- a/scripts/Makefile.clang
+> > > > > +++ b/scripts/Makefile.clang
+> > > > > @@ -38,6 +38,5 @@ CLANG_FLAGS       +=3D -Werror=3Dunknown-warnin=
+g-option
+> > > > >  CLANG_FLAGS        +=3D -Werror=3Dignored-optimization-argument
+> > > > >  CLANG_FLAGS        +=3D -Werror=3Doption-ignored
+> > > > >  CLANG_FLAGS        +=3D -Werror=3Dunused-command-line-argument
+> > > > > -KBUILD_CFLAGS      +=3D $(CLANG_FLAGS)
+> > > > > -KBUILD_AFLAGS      +=3D $(CLANG_FLAGS)
+> > > > > +KBUILD_CPPFLAGS    +=3D $(CLANG_FLAGS)
+> > > > >  export CLANG_FLAGS
+> > > > > --
+> > > > > 2.37.2
+> > > > >
+> > > >
+> > > > I am doubling back to this change, as the lack of '--target' in
+> > > > KBUILD_CPPFLAGS is now an active bug with clang-17 due to a new cha=
+nge
+> > > > that rejects '-mbig-endian' and '-mlittle-endian' when not supporte=
+d by
+> > > > the target, which breaks the arm64 vDSO build when preprocessing it=
+s
+> > > > linker script:
+> > > >
+> > > >   # Turn on CONFIG_CPU_BIG_ENDIAN in menuconfig
+> > > >   $ make -skj"$(nproc)" ARCH=3Darm64 LLVM=3D1 O=3Dbuild mrproper vi=
+rtconfig menuconfig arch/arm64/kernel/vdso/
+> > > >   ...
+> > > >   clang: error: unsupported option '-mbig-endian' for target 'x86_6=
+4-pc-linux-gnu'
+> > > >   make[3]: *** [.../scripts/Makefile.build:387: arch/arm64/kernel/v=
+dso/vdso.lds] Error 1
+> > > >   ...
+> > > >
+> > > >   https://github.com/llvm/llvm-project/commit/d81ce04587c006b673119=
+8956c522c93d0df1050
+> > > >   https://github.com/ClangBuiltLinux/linux/issues/1859
+> > > >
+> > > > This change resolves that issue. I was able to figure out why those=
+ new
+> > > > warnings appeared for ARCH=3Dmips, it is the shell invocation for
+> > > > CHECKFLAGS. The following diff resolves it for me:
+> > > >
+> > > > diff --git a/arch/mips/Makefile b/arch/mips/Makefile
+> > > > index a7a4ee66a9d3..ef7b05ae92ce 100644
+> > > > --- a/arch/mips/Makefile
+> > > > +++ b/arch/mips/Makefile
+> > > > @@ -346,7 +346,7 @@ KBUILD_CFLAGS +=3D -fno-asynchronous-unwind-tab=
+les
+> > > >  KBUILD_LDFLAGS               +=3D -m $(ld-emul)
+> > > >
+> > > >  ifdef CONFIG_MIPS
+> > > > -CHECKFLAGS +=3D $(shell $(CC) $(KBUILD_CFLAGS) -dM -E -x c /dev/nu=
+ll | \
+> > > > +CHECKFLAGS +=3D $(shell $(CC) $(KBUILD_CPPFLAGS) $(KBUILD_CFLAGS) =
+-dM -E -x c /dev/null | \
+> > > >       grep -E -vw '__GNUC_(MINOR_|PATCHLEVEL_)?_' | \
+> > > >       sed -e "s/^\#define /-D'/" -e "s/ /'=3D'/" -e "s/$$/'/" -e 's=
+/\$$/&&/g')
+> > > >  endif
+> > > >
+> > > > I will run this change plus that diff through my build matrix to se=
+e if
+> > > > any other issues pop up. If not, I will respond with some tags and
+> > > > perhaps this could be taken as a fix for 6.4 so that it could
+> > > > potentially be backported?
+> > >
+> > > I found two more issues lurking in PowerPC. I have attached suggested
+> > > patches for all the issues I have uncovered to this email, please fee=
+l
+> > > free to use them or do something different if you feel there is a bet=
+ter
+> > > fix. With those issues resolved in one way or another, consider the
+> > > original change:
+> > >
+> > > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> > > Tested-by: Nathan Chancellor <nathan@kernel.org>
+> > >
+> > > If it would work better for you, I am more than happy to take over th=
+is
+> > > series as well.
+> > >
+> > > Cheers,
+> > > Nathan
+> >
+> > Thanks. All the three patches look good to me.
+> >
+> > I will apply them, then mine on top.
+>
+> Drive-by reply from
+> https://github.com/ClangBuiltLinux/continuous-integration2/pull/585
+>
+> Hi Masahiro, one nit:) If the patch still has time to adjust the
+> commit message, perhaps consider replacing
+>
+> -target aarch64-linux-gnu with --target=3Daarch64-linux-gnu
+>
+> as the former is a deprecated driver option since Clang 3.x (long time ag=
+o).
+>
+> > Assuming you use an x86 build machine, compare the following:
+>
+> You may drop "Assuming you use an x86 build machine" and add
+> --target=3Dx86_64-linux-gnu to the `clang -dM -E -x c /dev/null` command
+> :)
 
-Signed-off-by: Zhang Shurong <zhang_shurong@foxmail.com>
----
- drivers/firewire/net.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Thanks for the suggestion, but I do not want to change the commit ID
+unless there is something terribly wrong.
 
-diff --git a/drivers/firewire/net.c b/drivers/firewire/net.c
-index 538bd677c254..7a4d1a478e33 100644
---- a/drivers/firewire/net.c
-+++ b/drivers/firewire/net.c
-@@ -479,7 +479,7 @@ static int fwnet_finish_incoming_packet(struct net_device *net,
- 					struct sk_buff *skb, u16 source_node_id,
- 					bool is_broadcast, u16 ether_type)
- {
--	int status;
-+	int status, len;
- 
- 	switch (ether_type) {
- 	case ETH_P_ARP:
-@@ -533,13 +533,15 @@ static int fwnet_finish_incoming_packet(struct net_device *net,
- 		}
- 		skb->protocol = protocol;
- 	}
-+
-+	len = skb->len;
- 	status = netif_rx(skb);
- 	if (status == NET_RX_DROP) {
- 		net->stats.rx_errors++;
- 		net->stats.rx_dropped++;
- 	} else {
- 		net->stats.rx_packets++;
--		net->stats.rx_bytes += skb->len;
-+		net->stats.rx_bytes += len;
- 	}
- 
- 	return 0;
--- 
-2.41.0
+Nathan recorded the commit ID in the CBL bug tracker.
 
+
+
+--=20
+Best Regards
+Masahiro Yamada
