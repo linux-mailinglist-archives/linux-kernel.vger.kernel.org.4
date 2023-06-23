@@ -2,212 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E58573BAF0
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 17:00:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8E8973BB21
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 17:09:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231970AbjFWO7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 10:59:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51914 "EHLO
+        id S232454AbjFWPJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 11:09:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231876AbjFWO7p (ORCPT
+        with ESMTP id S231271AbjFWPJc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 10:59:45 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E05201987
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 07:59:43 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4f86a7a5499so983025e87.2
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 07:59:43 -0700 (PDT)
+        Fri, 23 Jun 2023 11:09:32 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB8C52693;
+        Fri, 23 Jun 2023 08:09:09 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f86d8a8fd4so1000806e87.3;
+        Fri, 23 Jun 2023 08:09:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687532382; x=1690124382;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=B4/OJdczlYExXAsvuIIQOlq/URlmPtl71pqrwUBjURI=;
-        b=fyI3NLEFUrtSIjj+s2A2JztYeLbDTeVfZncA9D3FZAEAsJaR+GA14hxIQ4DYVw05ro
-         Gx85vCarBgl/IDfY2sbA4sfkHITvmqGN/7NbAjlJVimzASSwsSI4t/IA0+DcAYDrTCoy
-         itJ1fAciQPIhIgesHi5JPuwU7MP0eAWxCexoQbPIS6330gMakFg/wGddI1d+BJF/VTJK
-         Me4MVHA4nOsIwhRCHbl1ydyBBPCMTM4ZX9IbDn5luJCe7siABaDx4/8ExuzYjKxpnoOq
-         Cpobm+whab7caxALV9FlddEzSszDyPucYMV0ZDYq1fi+DQ6UsJIvO8SnIozvldIeicSX
-         VxTg==
+        d=gmail.com; s=20221208; t=1687532948; x=1690124948;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=KyhSKyzxLiTaX2cHaiVENSWEBc27n/NollVdFdTZL5M=;
+        b=HaP8+r9KISVI7nfSmXrI/Dq3qHIobkZcJPoB7bvvpeHg7K4V8muuEU5CjwPF6yz/JJ
+         TNWeJFZve0S7yepHqm/kahqRzpEAzlDrzPlWIuWZVGgiE1WJgir+wIZ4zpaKs6yyozxT
+         b0R34BOp7MMU8HwBM33r5HaRVufWY/kRaw6XHYa9T7efpI9hoYkAzzOPEKsZK/EjW5RC
+         JIWA7ab2IZ/2ZGTSDz6coX0Siuy2GtLIGicw9MtYZ7ZPCGa3O5WJehBpxAL6s6+gB0Wg
+         WvFbyVrATONdFafoiUxCU5hEnBLjAi/IPbuXxQ3UHTbxFhAHLlKc4WVUO5ZUu/S+5ehT
+         x2hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687532382; x=1690124382;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=B4/OJdczlYExXAsvuIIQOlq/URlmPtl71pqrwUBjURI=;
-        b=DCquD8vCrtLY2HdKy5dFcszAMiAsy6dMzP8QfQENi1ucfVWVeRXr0elnAGolNVEqBg
-         4X21FjBHdRIiSCkWvsKK5CHVXg/IZhVE2nkbtoXwDD1aeAi7Vs9OUi1gE5aUAGPGhrjq
-         EdnhHUeIeIKknx0Grmxo+/nFjLxwo95zC2AQibq2FlN25egwIzD1nxPkAdGTUh9TEd0F
-         8puRrHIwfQXuBpHU/t9Yuu6HUepsX63wTZWF8F0eoJwe2DnDxmTgVVl6yJBgwUQffJjb
-         J6Hq9xR2umbQu1CP8Z0gmv4uJzdulgElLOoH0hWW3auzdkoYHMOMB7hfvMcFBGtEeQvG
-         8F/w==
-X-Gm-Message-State: AC+VfDxHJ1ygCQRvYPCdt+3IVSIcEbWFTUw/NYzhY+k316NjC7hWabG1
-        ndAVXAk9fCbl95j+GE4wIfM4rg==
-X-Google-Smtp-Source: ACHHUZ40p/DIccVDgVOPyFUWxm9saDGv2mPGJ0DeSVPwmIYQzPKvFhkIdsaR3YF2gzwz0bZzYhAP1g==
-X-Received: by 2002:a19:6d1b:0:b0:4f6:2cd8:5ff4 with SMTP id i27-20020a196d1b000000b004f62cd85ff4mr12620332lfc.2.1687532382109;
-        Fri, 23 Jun 2023 07:59:42 -0700 (PDT)
-Received: from [192.168.1.101] (abyk30.neoplus.adsl.tpnet.pl. [83.9.30.30])
-        by smtp.gmail.com with ESMTPSA id f28-20020ac251bc000000b004f13ca69dc8sm1479064lfk.72.2023.06.23.07.59.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Jun 2023 07:59:41 -0700 (PDT)
-Message-ID: <894163b0-65f7-60c4-4054-1c6af1683af9@linaro.org>
-Date:   Fri, 23 Jun 2023 16:59:40 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v4 6/6] soc: qcom: llcc: Add QDU1000 and QRU1000 LLCC
- support
-Content-Language: en-US
-To:     Komal Bajaj <quic_kbajaj@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        d=1e100.net; s=20221208; t=1687532948; x=1690124948;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KyhSKyzxLiTaX2cHaiVENSWEBc27n/NollVdFdTZL5M=;
+        b=OLIj0Qir7ZNM/Gd0kDeFFEMAkUmgsDj/xvEP3QGUqLG7yaL7CSGzVmc2D5qAxShL7P
+         iXD0ua3EW9cNHg6u1xMw5Daivfpbxs6rSmDqFuAkDmmnxeXsAmawzriujmjd/Nz7SC9T
+         gTsN9QU06bsbcdTQgc07GPICWuD6oxXHXZas7W0eLpoOdI1K7O2eZYadwLiMNW2Q3cdp
+         292mYwTNMafohjAect6hlASNg0z714kERD/yfXP8Xim934lRAL/o+yQm0WEWxC6vAmSi
+         u7H/14uV8L39uFkLOXXsfY2u10uuMzR02kyzseUkkexz9MT4X30ea7HK18qyvOJmkJLU
+         WOaw==
+X-Gm-Message-State: AC+VfDzb3tS+WZ4pGMvywRz7h9WbDC67WZ1bd671NP867SHUrJWnQ9Vu
+        YwAtemoP15WqeFrcrGa/h0WZJ6BH0j01
+X-Google-Smtp-Source: ACHHUZ73xQWanjeo0B3wORGVnreb3HkxQCneLZLTQefVJHXDwD6Tmyy2CwDZIzgnt2dF7FMxNeXrUg==
+X-Received: by 2002:a05:6512:2f7:b0:4f8:70d8:2902 with SMTP id m23-20020a05651202f700b004f870d82902mr10711352lfq.18.1687532947042;
+        Fri, 23 Jun 2023 08:09:07 -0700 (PDT)
+Received: from localhost.localdomain (mail.pulsar-telecom.ru. [94.181.180.60])
+        by smtp.gmail.com with ESMTPSA id w25-20020a19c519000000b004f842e58d08sm1465686lfe.84.2023.06.23.08.09.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Jun 2023 08:09:06 -0700 (PDT)
+From:   Aleksandr Shubin <privatesub2@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Aleksandr Shubin <privatesub2@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230623141806.13388-1-quic_kbajaj@quicinc.com>
- <20230623141806.13388-7-quic_kbajaj@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230623141806.13388-7-quic_kbajaj@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Conor Dooley <conor+dt@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>,
+        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-riscv@lists.infradead.org
+Subject: [PATCH v2 0/3] Add support for Allwinner PWM on D1/T113s/R329 SoCs
+Date:   Fri, 23 Jun 2023 17:59:58 +0300
+Message-Id: <20230623150012.1201552-1-privatesub2@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23.06.2023 16:18, Komal Bajaj wrote:
-> Add LLCC configuration data for QDU1000 and QRU1000 SoCs
-> and updating macro name for LLCC_DRE to LLCC_ECC as per
-> the latest specification.
-> 
-> Signed-off-by: Komal Bajaj <quic_kbajaj@quicinc.com>
-> ---
->  drivers/soc/qcom/llcc-qcom.c       | 65 +++++++++++++++++++++++++++++-
->  include/linux/soc/qcom/llcc-qcom.h |  2 +-
->  2 files changed, 65 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/soc/qcom/llcc-qcom.c b/drivers/soc/qcom/llcc-qcom.c
-> index 3c29612da1c5..d2826158ae60 100644
-> --- a/drivers/soc/qcom/llcc-qcom.c
-> +++ b/drivers/soc/qcom/llcc-qcom.c
-> @@ -187,7 +187,7 @@ static const struct llcc_slice_config sc8280xp_data[] = {
->  	{ LLCC_MMUHWT,   13, 1024, 1, 1, 0xfff, 0x0, 0, 0, 0, 0, 1, 0 },
->  	{ LLCC_DISP,     16, 6144, 1, 1, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
->  	{ LLCC_AUDHW,    22, 2048, 1, 1, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
-> -	{ LLCC_DRE,      26, 1024, 1, 1, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
-> +	{ LLCC_ECC,      26, 1024, 1, 1, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
->  	{ LLCC_CVP,      28, 512,  3, 1, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
->  	{ LLCC_APTCM,    30, 1024, 3, 1, 0x0,   0x1, 1, 0, 0, 1, 0, 0 },
->  	{ LLCC_WRCACHE,  31, 1024, 1, 1, 0xfff, 0x0, 0, 0, 0, 0, 1, 0 },
-> @@ -358,6 +358,36 @@ static const struct llcc_slice_config sm8550_data[] =  {
->  	{LLCC_VIDVSP,   28,  256, 4, 1, 0xFFFFFF, 0x0,   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
->  };
->  
-> +static const struct llcc_slice_config qdu1000_data_2ch[] = {
-> +	{LLCC_MDMHPGRW, 7, 512, 1, 1, 0xFFF, 0x0, 0, 0, 0, 1, 0, 0, 0 },
-> +	{LLCC_MODHW,    9, 256, 1, 1, 0xFFF, 0x0, 0, 0, 0, 1, 0, 0, 0 },
-> +	{LLCC_MDMPNG,  21, 256, 0, 1,   0x3, 0x0, 0, 0, 0, 1, 0, 0, 0 },
-> +	{LLCC_ECC,     26, 512, 3, 1, 0xFFC, 0x0, 0, 0, 0, 0, 1, 0, 0 },
-> +	{LLCC_MODPE,   29, 256, 1, 1, 0xFFF, 0x0, 0, 0, 0, 1, 0, 0, 0 },
-> +	{LLCC_APTCM,   30, 256, 3, 1,   0x0, 0xC, 1, 0, 0, 1, 0, 0, 0 },
-> +	{LLCC_WRCACHE, 31, 128, 1, 1,   0x3, 0x0, 0, 0, 0, 0, 1, 0, 0 },
-Please keep the style coherent with existing entries, so:
+Hi,
 
-- spacing between curly braces and data
-- tabs/spaces
-- hex should be lowercase
+This series adds support for PWM controller on new
+Allwinner's SoCs, such as D1, T113s and R329. The implemented driver
+provides basic functionality for control PWM channels.
 
-Konrad
-> +};
-> +
-> +static const struct llcc_slice_config qdu1000_data_4ch[] = {
-> +	{LLCC_MDMHPGRW, 7, 1024, 1, 1, 0xFFF, 0x0, 0, 0, 0, 1, 0, 0, 0 },
-> +	{LLCC_MODHW,    9, 512,  1, 1, 0xFFF, 0x0, 0, 0, 0, 1, 0, 0, 0 },
-> +	{LLCC_MDMPNG,  21, 512,  0, 1,   0x3, 0x0, 0, 0, 0, 1, 0, 0, 0 },
-> +	{LLCC_ECC,     26, 1024, 3, 1, 0xFFC, 0x0, 0, 0, 0, 0, 1, 0, 0 },
-> +	{LLCC_MODPE,   29, 512,  1, 1, 0xFFF, 0x0, 0, 0, 0, 1, 0, 0, 0 },
-> +	{LLCC_APTCM,   30, 512,  3, 1,   0x0, 0xC, 1, 0, 0, 1, 0, 0, 0 },
-> +	{LLCC_WRCACHE, 31, 256,  1, 1,   0x3, 0x0, 0, 0, 0, 0, 1, 0, 0 },
-> +};
-> +
-> +static const struct llcc_slice_config qdu1000_data_8ch[] = {
-> +	{LLCC_MDMHPGRW, 7, 2048, 1, 1, 0xFFF, 0x0, 0, 0, 0, 1, 0, 0, 0 },
-> +	{LLCC_MODHW,    9, 1024, 1, 1, 0xFFF, 0x0, 0, 0, 0, 1, 0, 0, 0 },
-> +	{LLCC_MDMPNG,  21, 1024, 0, 1,   0x3, 0x0, 0, 0, 0, 1, 0, 0, 0 },
-> +	{LLCC_ECC,     26, 2048, 3, 1, 0xFFC, 0x0, 0, 0, 0, 0, 1, 0, 0 },
-> +	{LLCC_MODPE,   29, 1024, 1, 1, 0xFFF, 0x0, 0, 0, 0, 1, 0, 0, 0 },
-> +	{LLCC_APTCM,   30, 1024, 3, 1,   0x0, 0xC, 1, 0, 0, 1, 0, 0, 0 },
-> +	{LLCC_WRCACHE, 31, 512,  1, 1,   0x3, 0x0, 0, 0, 0, 0, 1, 0, 0 },
-> +};
-> +
->  static const struct llcc_edac_reg_offset llcc_v1_edac_reg_offset = {
->  	.trp_ecc_error_status0 = 0x20344,
->  	.trp_ecc_error_status1 = 0x20348,
-> @@ -557,6 +587,38 @@ static const struct qcom_llcc_config sm8550_cfg[] = {
->  	{ },
->  };
->  
-> +static const struct qcom_llcc_config qdu1000_cfg[] = {
-> +	{
-> +		.sct_data       = qdu1000_data_8ch,
-> +		.size		= ARRAY_SIZE(qdu1000_data_8ch),
-> +		.need_llcc_cfg	= true,
-> +		.reg_offset	= llcc_v2_1_reg_offset,
-> +		.edac_reg_offset = &llcc_v2_1_edac_reg_offset,
-> +	},
-> +	{
-> +		.sct_data       = qdu1000_data_4ch,
-> +		.size           = ARRAY_SIZE(qdu1000_data_4ch),
-> +		.need_llcc_cfg  = true,
-> +		.reg_offset     = llcc_v2_1_reg_offset,
-> +		.edac_reg_offset = &llcc_v2_1_edac_reg_offset,
-> +	},
-> +	{
-> +		.sct_data       = qdu1000_data_4ch,
-> +		.size           = ARRAY_SIZE(qdu1000_data_4ch),
-> +		.need_llcc_cfg  = true,
-> +		.reg_offset     = llcc_v2_1_reg_offset,
-> +		.edac_reg_offset = &llcc_v2_1_edac_reg_offset,
-> +	},
-> +	{
-> +		.sct_data       = qdu1000_data_2ch,
-> +		.size           = ARRAY_SIZE(qdu1000_data_2ch),
-> +		.need_llcc_cfg  = true,
-> +		.reg_offset     = llcc_v2_1_reg_offset,
-> +		.edac_reg_offset = &llcc_v2_1_edac_reg_offset,
-> +	},
-> +	{ },
-> +};
-> +
->  static struct llcc_drv_data *drv_data = (void *) -EPROBE_DEFER;
->  
->  /**
-> @@ -1114,6 +1176,7 @@ static int qcom_llcc_probe(struct platform_device *pdev)
->  }
->  
->  static const struct of_device_id qcom_llcc_of_match[] = {
-> +	{ .compatible = "qcom,qdu1000-llcc", .data = qdu1000_cfg},
->  	{ .compatible = "qcom,sc7180-llcc", .data = sc7180_cfg },
->  	{ .compatible = "qcom,sc7280-llcc", .data = sc7280_cfg },
->  	{ .compatible = "qcom,sc8180x-llcc", .data = sc8180x_cfg },
-> diff --git a/include/linux/soc/qcom/llcc-qcom.h b/include/linux/soc/qcom/llcc-qcom.h
-> index 93417ba1ead4..1a886666bbb6 100644
-> --- a/include/linux/soc/qcom/llcc-qcom.h
-> +++ b/include/linux/soc/qcom/llcc-qcom.h
-> @@ -30,7 +30,7 @@
->  #define LLCC_NPU         23
->  #define LLCC_WLHW        24
->  #define LLCC_PIMEM       25
-> -#define LLCC_DRE         26
-> +#define LLCC_ECC         26
->  #define LLCC_CVP         28
->  #define LLCC_MODPE       29
->  #define LLCC_APTCM       30
+v2:
+ - fix dt-bindings
+ - fix a remark in the driver
+
+Aleksandr Shubin (3):
+  dt-bindings: pwm: Add binding for Allwinner D1/T113-S3/R329 PWM
+    controller
+  pwm: Add Allwinner's D1/T113-S3/R329 SoCs PWM support
+  riscv: dts: allwinner: d1: Add pwm node
+
+ .../bindings/pwm/allwinner,sun20i-pwm.yaml    |  83 +++++
+ .../boot/dts/allwinner/sunxi-d1s-t113.dtsi    |  12 +
+ drivers/pwm/Kconfig                           |  10 +
+ drivers/pwm/Makefile                          |   1 +
+ drivers/pwm/pwm-sun20i.c                      | 322 ++++++++++++++++++
+ 5 files changed, 428 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/pwm/allwinner,sun20i-pwm.yaml
+ create mode 100644 drivers/pwm/pwm-sun20i.c
+
+-- 
+2.25.1
+
