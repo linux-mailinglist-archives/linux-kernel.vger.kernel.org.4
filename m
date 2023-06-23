@@ -2,83 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB18973BA6D
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 16:42:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCBEF73BA75
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 16:43:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232122AbjFWOmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 10:42:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37650 "EHLO
+        id S231840AbjFWOnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 10:43:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232253AbjFWOmA (ORCPT
+        with ESMTP id S231769AbjFWOni (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 10:42:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 213A72129
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 07:41:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687531268;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sqYSUw7QzPfprFmPveFR/00tu6i/Fm8VFN1BravdvaE=;
-        b=UaU2yRrQ9Z1JP6d0Vro2Oa9wx0lCTWF2pFOSUYcYSXbxD6jQiM/XzFaYrZlG/olo9r0hkh
-        yUbIf/8H/DrtgkE7lcFu4ru1F+U7EkpFYmHamg3fw/DJg1tCBfcmd0qfiPWctfvUga3mDh
-        Uk9WmivgU1uIYvC/Ozen1FpSkJg0B04=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-65-U3lKntlrNE2i1AeNfk6TQw-1; Fri, 23 Jun 2023 10:41:06 -0400
-X-MC-Unique: U3lKntlrNE2i1AeNfk6TQw-1
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-765342b83faso17829985a.1
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 07:41:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687531266; x=1690123266;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sqYSUw7QzPfprFmPveFR/00tu6i/Fm8VFN1BravdvaE=;
-        b=V7quhT/aACc+ofn2rWFD6j5aaVQ7a+49bvpBmqm8qYADyjJVtVPKjqk2MTO4oJhwV/
-         F2BwaB0nZ1J9T+gwZ2wheV/mxkppNeyLdiW4OgrejVIY8s64Yl8CPYNR86uiJvC+WCeO
-         gKKgTKeBIEJzSNF2gNz/yePaZilFpoCtPa2kuwO6IWJ0Y2WEOXYkj/XM6mYxgsFID4UV
-         IKTzdfpcZ7Qne2CLMzVU/j44ITlB6eOTkQvGOxVT4LIeFNjscqUzeZfozEDOcDWZcy8v
-         5Eo5ALWkCeVdh+YetI1OW5gtWBg/8AZ3crf2Hbl0dWEGsBO6huumzafDaNmp+wR72s5K
-         OW/Q==
-X-Gm-Message-State: AC+VfDyF9IEIgWCP8XbXG+o361jPmFX4fwz7UGN49jqAznJUx3sf1qI9
-        q/V+J1sOg94rssYkyH3J7/ZAY5G/IkBv+NPcmto6Pm3/J8Yx3l8eTJ+ALfINQdSFe5sQGZp3wWD
-        CAYQIHtbxl71tVPKWtpJqIAkI
-X-Received: by 2002:a05:620a:c45:b0:75b:23a1:69e4 with SMTP id u5-20020a05620a0c4500b0075b23a169e4mr24288360qki.4.1687531265891;
-        Fri, 23 Jun 2023 07:41:05 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5N/IMdXrvX1b4+X6A/rHUywM2Pf2WsjHR+/tW1JW7belWg0QfWf7CK3sJH3AqiEPVgUJjNLQ==
-X-Received: by 2002:a05:620a:c45:b0:75b:23a1:69e4 with SMTP id u5-20020a05620a0c4500b0075b23a169e4mr24288332qki.4.1687531265552;
-        Fri, 23 Jun 2023 07:41:05 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-231-243.dyn.eolo.it. [146.241.231.243])
-        by smtp.gmail.com with ESMTPSA id r6-20020a05620a03c600b00761fc8a7bc4sm4585785qkm.22.2023.06.23.07.41.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Jun 2023 07:41:05 -0700 (PDT)
-Message-ID: <55a98e578c8654fec32bef22e811336b3c59ed68.camel@redhat.com>
-Subject: Re: [PATCH net-next 2/9] mptcp: track some aggregate data counters
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Eric Dumazet <edumazet@google.com>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>
-Cc:     mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Date:   Fri, 23 Jun 2023 16:41:01 +0200
-In-Reply-To: <CANn89iK+yWD8jKwvRO_4-Kz7Qumk5WwmtwJDWMKDU2oLyDdGxA@mail.gmail.com>
-References: <20230620-upstream-net-next-20230620-mptcp-expose-more-info-and-misc-v1-0-62b9444bfd48@tessares.net>
-         <20230620-upstream-net-next-20230620-mptcp-expose-more-info-and-misc-v1-2-62b9444bfd48@tessares.net>
-         <CANn89iK+yWD8jKwvRO_4-Kz7Qumk5WwmtwJDWMKDU2oLyDdGxA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Fri, 23 Jun 2023 10:43:38 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88821BF2;
+        Fri, 23 Jun 2023 07:43:15 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1E0DEBC;
+        Fri, 23 Jun 2023 16:42:37 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1687531357;
+        bh=wdihR9kOfvIQ6G8MVle6NFFv5LJO2T8O0WCVNoKqb1c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VbcvcnwV642L1NkucKgXc8YtBoftMHpYjSn6AayKFnjm9KWOdNTZIwBoOh8YRg7Cr
+         rItp4abJJNREMYeDz1RHehAffaXManymW8Mn/eeMPNizWKR+4GbM8yOIIl23orQKMW
+         k9Emk67/9E9hMZ1YjHAAqDoJXQQ9lQpQL3d0DrS8=
+Date:   Fri, 23 Jun 2023 17:43:12 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
+Subject: Re: [PATCH 01/39] dt-bindings: display: Add Renesas SH-Mobile LCDC
+ bindings
+Message-ID: <20230623144312.GE2112@pendragon.ideasonboard.com>
+References: <cover.1687423204.git.geert+renesas@glider.be>
+ <2259ff548f007afcb5a315a4c95c83a0ee4b7e03.1687423204.git.geert+renesas@glider.be>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <2259ff548f007afcb5a315a4c95c83a0ee4b7e03.1687423204.git.geert+renesas@glider.be>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,276 +56,188 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Geert,
 
-On Fri, 2023-06-23 at 16:25 +0200, Eric Dumazet wrote:
-> On Tue, Jun 20, 2023 at 6:30=E2=80=AFPM Matthieu Baerts
-> <matthieu.baerts@tessares.net> wrote:
-> >=20
-> > From: Paolo Abeni <pabeni@redhat.com>
-> >=20
-> > Currently there are no data transfer counters accounting for all
-> > the subflows used by a given MPTCP socket. The user-space can compute
-> > such figures aggregating the subflow info, but that is inaccurate
-> > if any subflow is closed before the MPTCP socket itself.
-> >=20
-> > Add the new counters in the MPTCP socket itself and expose them
-> > via the existing diag and sockopt. While touching mptcp_diag_fill_info(=
-),
-> > acquire the relevant locks before fetching the msk data, to ensure
-> > better data consistency
-> >=20
-> > Closes: https://github.com/multipath-tcp/mptcp_net-next/issues/385
-> > Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-> > Reviewed-by: Matthieu Baerts <matthieu.baerts@tessares.net>
-> > Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
-> > ---
-> >  include/uapi/linux/mptcp.h |  5 +++++
-> >  net/mptcp/options.c        | 10 ++++++++--
-> >  net/mptcp/protocol.c       | 11 ++++++++++-
-> >  net/mptcp/protocol.h       |  4 ++++
-> >  net/mptcp/sockopt.c        | 25 ++++++++++++++++++++-----
-> >  5 files changed, 47 insertions(+), 8 deletions(-)
-> >=20
-> > diff --git a/include/uapi/linux/mptcp.h b/include/uapi/linux/mptcp.h
-> > index 32af2d278cb4..a124be6ebbba 100644
-> > --- a/include/uapi/linux/mptcp.h
-> > +++ b/include/uapi/linux/mptcp.h
-> > @@ -123,6 +123,11 @@ struct mptcp_info {
-> >         __u8    mptcpi_local_addr_used;
-> >         __u8    mptcpi_local_addr_max;
-> >         __u8    mptcpi_csum_enabled;
-> > +       __u32   mptcpi_retransmits;
-> > +       __u64   mptcpi_bytes_retrans;
-> > +       __u64   mptcpi_bytes_sent;
-> > +       __u64   mptcpi_bytes_received;
-> > +       __u64   mptcpi_bytes_acked;
-> >  };
-> >=20
-> >  /*
-> > diff --git a/net/mptcp/options.c b/net/mptcp/options.c
-> > index 4bdcd2b326bd..c254accb14de 100644
-> > --- a/net/mptcp/options.c
-> > +++ b/net/mptcp/options.c
-> > @@ -1026,6 +1026,12 @@ u64 __mptcp_expand_seq(u64 old_seq, u64 cur_seq)
-> >         return cur_seq;
-> >  }
-> >=20
-> > +static void __mptcp_snd_una_update(struct mptcp_sock *msk, u64 new_snd=
-_una)
-> > +{
-> > +       msk->bytes_acked +=3D new_snd_una - msk->snd_una;
-> > +       msk->snd_una =3D new_snd_una;
-> > +}
-> > +
-> >  static void ack_update_msk(struct mptcp_sock *msk,
-> >                            struct sock *ssk,
-> >                            struct mptcp_options_received *mp_opt)
-> > @@ -1057,7 +1063,7 @@ static void ack_update_msk(struct mptcp_sock *msk=
-,
-> >                 __mptcp_check_push(sk, ssk);
-> >=20
-> >         if (after64(new_snd_una, old_snd_una)) {
-> > -               msk->snd_una =3D new_snd_una;
-> > +               __mptcp_snd_una_update(msk, new_snd_una);
-> >                 __mptcp_data_acked(sk);
-> >         }
-> >         mptcp_data_unlock(sk);
-> > @@ -1123,7 +1129,7 @@ bool mptcp_incoming_options(struct sock *sk, stru=
-ct sk_buff *skb)
-> >                 /* on fallback we just need to ignore the msk-level snd=
-_una, as
-> >                  * this is really plain TCP
-> >                  */
-> > -               msk->snd_una =3D READ_ONCE(msk->snd_nxt);
-> > +               __mptcp_snd_una_update(msk, READ_ONCE(msk->snd_nxt));
-> >=20
-> >                 __mptcp_data_acked(subflow->conn);
-> >                 mptcp_data_unlock(subflow->conn);
-> > diff --git a/net/mptcp/protocol.c b/net/mptcp/protocol.c
-> > index 9c756d675d4d..d5b8e488bce1 100644
-> > --- a/net/mptcp/protocol.c
-> > +++ b/net/mptcp/protocol.c
-> > @@ -377,6 +377,7 @@ static bool __mptcp_move_skb(struct mptcp_sock *msk=
-, struct sock *ssk,
-> >=20
-> >         if (MPTCP_SKB_CB(skb)->map_seq =3D=3D msk->ack_seq) {
-> >                 /* in sequence */
-> > +               msk->bytes_received +=3D copy_len;
-> >                 WRITE_ONCE(msk->ack_seq, msk->ack_seq + copy_len);
-> >                 tail =3D skb_peek_tail(&sk->sk_receive_queue);
-> >                 if (tail && mptcp_try_coalesce(sk, tail, skb))
-> > @@ -760,6 +761,7 @@ static bool __mptcp_ofo_queue(struct mptcp_sock *ms=
-k)
-> >                         MPTCP_SKB_CB(skb)->map_seq +=3D delta;
-> >                         __skb_queue_tail(&sk->sk_receive_queue, skb);
-> >                 }
-> > +               msk->bytes_received +=3D end_seq - msk->ack_seq;
-> >                 msk->ack_seq =3D end_seq;
-> >                 moved =3D true;
-> >         }
-> > @@ -1531,8 +1533,10 @@ static void mptcp_update_post_push(struct mptcp_=
-sock *msk,
-> >          * that has been handed to the subflow for transmission
-> >          * and skip update in case it was old dfrag.
-> >          */
-> > -       if (likely(after64(snd_nxt_new, msk->snd_nxt)))
-> > +       if (likely(after64(snd_nxt_new, msk->snd_nxt))) {
-> > +               msk->bytes_sent +=3D snd_nxt_new - msk->snd_nxt;
-> >                 msk->snd_nxt =3D snd_nxt_new;
-> > +       }
-> >  }
-> >=20
-> >  void mptcp_check_and_set_pending(struct sock *sk)
-> > @@ -2590,6 +2594,7 @@ static void __mptcp_retrans(struct sock *sk)
-> >         }
-> >         if (copied) {
-> >                 dfrag->already_sent =3D max(dfrag->already_sent, info.s=
-ent);
-> > +               msk->bytes_retrans +=3D copied;
-> >                 tcp_push(ssk, 0, info.mss_now, tcp_sk(ssk)->nonagle,
-> >                          info.size_goal);
-> >                 WRITE_ONCE(msk->allow_infinite_fallback, false);
-> > @@ -3102,6 +3107,10 @@ static int mptcp_disconnect(struct sock *sk, int=
- flags)
-> >         WRITE_ONCE(msk->csum_enabled, mptcp_is_checksum_enabled(sock_ne=
-t(sk)));
-> >         mptcp_pm_data_reset(msk);
-> >         mptcp_ca_reset(sk);
-> > +       msk->bytes_acked =3D 0;
-> > +       msk->bytes_received =3D 0;
-> > +       msk->bytes_sent =3D 0;
-> > +       msk->bytes_retrans =3D 0;
-> >=20
-> >         WRITE_ONCE(sk->sk_shutdown, 0);
-> >         sk_error_report(sk);
-> > diff --git a/net/mptcp/protocol.h b/net/mptcp/protocol.h
-> > index 47b46602870e..27adfcc5aaa2 100644
-> > --- a/net/mptcp/protocol.h
-> > +++ b/net/mptcp/protocol.h
-> > @@ -262,10 +262,13 @@ struct mptcp_sock {
-> >         u64             local_key;
-> >         u64             remote_key;
-> >         u64             write_seq;
-> > +       u64             bytes_sent;
-> >         u64             snd_nxt;
-> > +       u64             bytes_received;
-> >         u64             ack_seq;
-> >         atomic64_t      rcv_wnd_sent;
-> >         u64             rcv_data_fin_seq;
-> > +       u64             bytes_retrans;
-> >         int             rmem_fwd_alloc;
-> >         struct sock     *last_snd;
-> >         int             snd_burst;
-> > @@ -274,6 +277,7 @@ struct mptcp_sock {
-> >                                                  * recovery related fie=
-lds are under data_lock
-> >                                                  * protection
-> >                                                  */
-> > +       u64             bytes_acked;
-> >         u64             snd_una;
-> >         u64             wnd_end;
-> >         unsigned long   timer_ival;
-> > diff --git a/net/mptcp/sockopt.c b/net/mptcp/sockopt.c
-> > index e172a5848b0d..fa5055d5b029 100644
-> > --- a/net/mptcp/sockopt.c
-> > +++ b/net/mptcp/sockopt.c
-> > @@ -889,7 +889,9 @@ static int mptcp_getsockopt_first_sf_only(struct mp=
-tcp_sock *msk, int level, int
-> >=20
-> >  void mptcp_diag_fill_info(struct mptcp_sock *msk, struct mptcp_info *i=
-nfo)
-> >  {
-> > +       struct sock *sk =3D (struct sock *)msk;
-> >         u32 flags =3D 0;
-> > +       bool slow;
-> >=20
-> >         memset(info, 0, sizeof(*info));
-> >=20
-> > @@ -898,6 +900,9 @@ void mptcp_diag_fill_info(struct mptcp_sock *msk, s=
-truct mptcp_info *info)
-> >         info->mptcpi_add_addr_accepted =3D READ_ONCE(msk->pm.add_addr_a=
-ccepted);
-> >         info->mptcpi_local_addr_used =3D READ_ONCE(msk->pm.local_addr_u=
-sed);
-> >=20
-> > +       if (inet_sk_state_load(sk) =3D=3D TCP_LISTEN)
-> > +               return;
-> > +
-> >         /* The following limits only make sense for the in-kernel PM */
-> >         if (mptcp_pm_is_kernel(msk)) {
-> >                 info->mptcpi_subflows_max =3D
-> > @@ -915,11 +920,21 @@ void mptcp_diag_fill_info(struct mptcp_sock *msk,=
- struct mptcp_info *info)
-> >         if (READ_ONCE(msk->can_ack))
-> >                 flags |=3D MPTCP_INFO_FLAG_REMOTE_KEY_RECEIVED;
-> >         info->mptcpi_flags =3D flags;
-> > -       info->mptcpi_token =3D READ_ONCE(msk->token);
-> > -       info->mptcpi_write_seq =3D READ_ONCE(msk->write_seq);
-> > -       info->mptcpi_snd_una =3D READ_ONCE(msk->snd_una);
-> > -       info->mptcpi_rcv_nxt =3D READ_ONCE(msk->ack_seq);
-> > -       info->mptcpi_csum_enabled =3D READ_ONCE(msk->csum_enabled);
-> > +       mptcp_data_lock(sk);
-> > +       info->mptcpi_snd_una =3D msk->snd_una;
-> > +       info->mptcpi_rcv_nxt =3D msk->ack_seq;
-> > +       info->mptcpi_bytes_acked =3D msk->bytes_acked;
-> > +       mptcp_data_unlock(sk);
-> > +
-> > +       slow =3D lock_sock_fast(sk);
->=20
-> This causes a lockdep issue.
->=20
-> lock_sock_fast(sk) could sleep, if socket lock is owned by another proces=
-s.
->=20
-> But we are called from a context where both a spin lock and
-> rcu_read_lock() are held.
->=20
-> BUG: sleeping function called from invalid context at net/core/sock.c:354=
-9
-> in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 316, name: syz-exe=
-cutor.4
-> preempt_count: 1, expected: 0
-> RCU nest depth: 1, expected: 0
-> 7 locks held by syz-executor.4/316:
-> #0: ffffffff8e125408 (sock_diag_mutex){+.+.}-{3:3}, at:
-> sock_diag_rcv+0x1b/0x40 net/core/sock_diag.c:279
-> #1: ffffffff8e125588 (sock_diag_table_mutex){+.+.}-{3:3}, at:
-> sock_diag_rcv_msg net/core/sock_diag.c:259 [inline]
-> #1: ffffffff8e125588 (sock_diag_table_mutex){+.+.}-{3:3}, at:
-> sock_diag_rcv_msg+0x2d2/0x440 net/core/sock_diag.c:248
-> #2: ffff8880232bb688 (nlk_cb_mutex-SOCK_DIAG){+.+.}-{3:3}, at:
-> netlink_dump+0xbe/0xc50 net/netlink/af_netlink.c:2215
-> #3: ffffffff8e29a628 (inet_diag_table_mutex){+.+.}-{3:3}, at:
-> inet_diag_lock_handler+0x6e/0x100 net/ipv4/inet_diag.c:63
-> #4: ffffffff8c7990c0 (rcu_read_lock){....}-{1:2}, at:
-> mptcp_diag_dump_listeners net/mptcp/mptcp_diag.c:95 [inline]
-> #4: ffffffff8c7990c0 (rcu_read_lock){....}-{1:2}, at:
-> mptcp_diag_dump+0x7c8/0x1330 net/mptcp/mptcp_diag.c:197
-> #5: ffffc90001316bf0 (&h->lhash2[i].lock){+.+.}-{2:2}, at: spin_lock
-> include/linux/spinlock.h:350 [inline]
-> #5: ffffc90001316bf0 (&h->lhash2[i].lock){+.+.}-{2:2}, at:
-> mptcp_diag_dump_listeners net/mptcp/mptcp_diag.c:98 [inline]
-> #5: ffffc90001316bf0 (&h->lhash2[i].lock){+.+.}-{2:2}, at:
-> mptcp_diag_dump+0x838/0x1330 net/mptcp/mptcp_diag.c:197
-> #6: ffff88802c42a5f0 (msk_lock-AF_INET){+.+.}-{0:0}, at:
-> mptcp_diag_get_info+0x1ae/0x380 net/mptcp/mptcp_diag.c:224
-> Preemption disabled at:
-> [<0000000000000000>] 0x0
+Thank you for the patch.
 
-Thank you for the report.
+On Thu, Jun 22, 2023 at 11:21:13AM +0200, Geert Uytterhoeven wrote:
+> Add device tree bindings for the LCD Controller (LCDC) found in Renesas
+> SuperH SH-Mobile and ARM SH/R-Mobile SOCs.
+> 
+> Based on a plain text prototype by Laurent Pinchart.
+> 
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> Cc: Conor Dooley <conor+dt@kernel.org>
+> Cc: devicetree@vger.kernel.org
+> ---
+> Changes compared to Laurent's original:
+>   - Convert to json-schema,
+>   - Rename compatible values from "renesas,lcdc-<SoC>" to
+>     "renesas,<SoC>-lcdc",
+>   - Add power-domains property,
+>   - Add MIPI-DSI port on SH-Mobile AG5,
+>   - Update example to reflect reality,
+>   - Add to MAINTAINERS.
+> ---
+>  .../display/renesas,shmobile-lcdc.yaml        | 108 ++++++++++++++++++
+>  MAINTAINERS                                   |   1 +
+>  2 files changed, 109 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/display/renesas,shmobile-lcdc.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/display/renesas,shmobile-lcdc.yaml b/Documentation/devicetree/bindings/display/renesas,shmobile-lcdc.yaml
+> new file mode 100644
+> index 0000000000000000..72a39fce7294d56d
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/display/renesas,shmobile-lcdc.yaml
+> @@ -0,0 +1,108 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/display/renesas,shmobile-lcdc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Renesas SH-Mobile LCD Controller (LCDC)
+> +
+> +maintainers:
+> +  - Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 
-out-of-order patches here. "mptcp: track some aggregate data counters"
-should have landed to net-next only after:
+I'd be happy if you co-maintained this with me :-) Or even took
+ownership completely.
 
-57fc0f1ceaa4 mptcp: ensure listener is unhashed before updating the sk
-status
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - renesas,r8a7740-lcdc # R-Mobile A1
+> +      - renesas,sh73a0-lcdc  # SH-Mobile AG5
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    minItems: 1
+> +    maxItems: 5
+> +    description:
+> +      Only the functional clock is mandatory.
+> +      Some of the optional clocks are model-dependent (e.g. "video" (a.k.a.
+> +      "vou" or "dv_clk") is available on R-Mobile A1 only).
+> +
+> +  clock-names:
+> +    minItems: 1
+> +    maxItems: 5
+> +    items:
+> +      enum: [ fck, media, lclk, hdmi, video ]
 
-The latter should explicitly avoid the critical scenario above. Anyhow
-the current net-next tree (after merging back net) should be ok (at
-least I can't repro the issue here).
+Switching to per-item descriptions would allow documenting which clock
+applies to which SoC.
 
-Thanks,
+Are enum items unique by default ?
 
-Paolo
+This would allow a combination of clocks that doesn't include the fck
+clock, that's not right.
 
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +
+> +  ports:
+> +    $ref: /schemas/graph.yaml#/properties/ports
+> +    description: |
+> +      The connections to the output video ports are modeled using the OF graph
+> +      bindings specified in Documentation/devicetree/bindings/graph.txt.
+
+it's available in YAML form now. I'd just drop the "specified in ...".
+
+> +      The number of ports and their assignment are model-dependent.
+> +      Each port shall have a single endpoint.
+> +
+> +    properties:
+> +      port@0:
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +        description: LCD port (R-Mobile A1 and SH-Mobile AG5)
+> +        unevaluatedProperties: false
+> +
+> +      port@1:
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +        description: HDMI port (R-Mobile A1 LCDC1 and SH-Mobile AG5)
+> +        unevaluatedProperties: false
+> +
+> +      port@2:
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +        description: MIPI-DSI port (SH-Mobile AG5)
+> +        unevaluatedProperties: false
+
+Let's condition the ports on the compatible value to enable automatic
+validation.
+
+> +
+> +    required:
+> +      - port@0
+
+Based on the above, port@1 is required too as it's present on all
+supported SoCs. Let's condition this on the compatible value too.
+
+> +
+> +    unevaluatedProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - clock-names
+> +  - power-domains
+> +  - ports
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/r8a7740-clock.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +    lcdc0: lcd-controller@fe940000 {
+> +        compatible = "renesas,r8a7740-lcdc";
+> +        reg = <0xfe940000 0x4000>;
+> +        interrupts = <GIC_SPI 177 IRQ_TYPE_LEVEL_HIGH>;
+> +        clocks = <&mstp1_clks R8A7740_CLK_LCDC0>,
+> +                 <&cpg_clocks R8A7740_CLK_M3>, <&lcdlclk0_clk>,
+> +                 <&vou_clk>;
+> +        clock-names = "fck", "media", "lclk", "video";
+> +        power-domains = <&pd_a4lc>;
+> +        status = "disabled";
+> +
+> +        ports {
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +
+> +            port@0 {
+> +                reg = <0>;
+> +
+> +                lcdc0_rgb: endpoint {
+> +                };
+> +            };
+> +        };
+> +    };
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 83e9f4ac6bedaa9f..dc1935c196cb0e0b 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -7023,6 +7023,7 @@ F:	Documentation/devicetree/bindings/display/bridge/renesas,dsi-csi2-tx.yaml
+>  F:	Documentation/devicetree/bindings/display/bridge/renesas,dw-hdmi.yaml
+>  F:	Documentation/devicetree/bindings/display/bridge/renesas,lvds.yaml
+>  F:	Documentation/devicetree/bindings/display/renesas,du.yaml
+> +F:	Documentation/devicetree/bindings/display/renesas,shmobile-lcdc.yaml
+>  F:	drivers/gpu/drm/renesas/
+>  F:	include/linux/platform_data/shmob_drm.h
+>  
+
+-- 
+Regards,
+
+Laurent Pinchart
