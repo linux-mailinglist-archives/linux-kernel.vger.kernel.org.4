@@ -2,135 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14E1973B933
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 15:58:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C21073B94F
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 16:00:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232016AbjFWN6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 09:58:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39858 "EHLO
+        id S230516AbjFWOAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 10:00:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232011AbjFWN6Q (ORCPT
+        with ESMTP id S229469AbjFWOAp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 09:58:16 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21195E52
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 06:58:13 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4f86e1bdce5so866991e87.3
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 06:58:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687528691; x=1690120691;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=W6jndWPX8g/RkMlqUci+O1Pg3iw2GfjP5tf07sb/A2o=;
-        b=dKTmAAk1unTaguUb5PRb+mOCEnMd9/Ew/koIQi6g/d9jFBJmpJMQ0RUIvRatEqy/+W
-         9kFEK/981cTfEX6zuZu1niWIAXZyJ18FNth13ADJrP1BrvBKEhl+FNyl8m/fo93PAeAV
-         NlDinSNZ0+Bu7cX5uxuev5T6uEBRe9UscDjvxZfhZXyFmeJ1+cz511spcHb3JWyGBZDs
-         D+Ey/gnhVC3STTr4PM/ArciaypvNjcSufgXbpfuUcoTAb8y4GA3H0AEtzAhjSuzg1JYA
-         m6LsKowiV1gPbV7SCEXO6hbo+pyP29UEf4PqHoF/dtZ2GZTivhzyGIdxXIF9jGrFxgby
-         2g8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687528691; x=1690120691;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=W6jndWPX8g/RkMlqUci+O1Pg3iw2GfjP5tf07sb/A2o=;
-        b=BPptSGnz/PvKqlGfswVVpkBYNtAhHXSP5naL2PzTdz/ik4td0yzYD8EfXaN1lCByGD
-         cN7h2e4gQOqeYirQvJY3p+TrZxloXtxjLlXKcaWL0pLuvk96xfGTjkzfNyz2ZJzFJX8s
-         AVt958VOuGKiGk+Jxbbuh9Ds4oNAwL1+IGlJg7RLWc26ll8J3mTvXVmoqVz3SoOvRYRo
-         MAo+J6g61x0EOqKIvVowEcybLajrdZ4OTDSzETzHFsERLg20zmvj50uE4cRPsKLCYfV8
-         D1HfTxJsEu4PSUq6lGuJ513Pxh7KSuqIu71PkfDbbfK0hWMmw7m+9AG2kjpCzNKiOhCi
-         D7mg==
-X-Gm-Message-State: AC+VfDx+qXoICN+zZ/xuHM+V4J49c/SgDyIGurGJk+bddvioCN2ud4QF
-        uMOFCELtxuVSdYweV4NoO3AvWQ==
-X-Google-Smtp-Source: ACHHUZ4u9yMyuI7mFr8evCNJV8EmOBr8kiJdt1uVnBpthIzjn/dhfH39xVwJwnZHO7+er1/mIsk7Yg==
-X-Received: by 2002:a19:e34a:0:b0:4f4:c973:c97d with SMTP id c10-20020a19e34a000000b004f4c973c97dmr12247542lfk.25.1687528691143;
-        Fri, 23 Jun 2023 06:58:11 -0700 (PDT)
-Received: from [192.168.1.101] (abyk30.neoplus.adsl.tpnet.pl. [83.9.30.30])
-        by smtp.gmail.com with ESMTPSA id u24-20020ac25198000000b004eeec1261ecsm1457547lfi.31.2023.06.23.06.58.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Jun 2023 06:58:10 -0700 (PDT)
-Message-ID: <5b68b9ba-157b-067c-3926-9c5ecfecc311@linaro.org>
-Date:   Fri, 23 Jun 2023 15:58:09 +0200
+        Fri, 23 Jun 2023 10:00:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4246B189;
+        Fri, 23 Jun 2023 07:00:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C4F1361A5C;
+        Fri, 23 Jun 2023 14:00:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C5B3C433D9;
+        Fri, 23 Jun 2023 14:00:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687528843;
+        bh=sU0qvZS8lc5okVj+Wd/3PIl9/7CnriyY1ONPXUzclvg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=qAUdPn1VK3h4MfZkOBRgysXOcXGCCSnnEy2vUx5VsQVwb1UckT9ak0Ygke6HrEn3+
+         aU99bG0JVQK4y7kZKHVuFq9wr9JPteuA534X9JYs7AKyfIrQHVrFDIKuiGDFQaBXq4
+         DjWl1IBJQ6PcSVEcu9rwHraNB7q8OT1WaMFdc1TdfXY15kPuHyHV/kFVnxiZbp1YX0
+         y0HX+AkzNJ7f+nRB7QxRldiOzTExk4j0OyXH3w07vlaNIUy+dpJvJ3VnV1DPBPtTFS
+         FAdywzkkADKTTKvRijh6I5N1ndVe5wHkTBVZdJpse6XqpIsr58HYpb4KhtjBovvrpf
+         O+iy4EDLOxMWg==
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-4f87592eccfso811033e87.2;
+        Fri, 23 Jun 2023 07:00:42 -0700 (PDT)
+X-Gm-Message-State: AC+VfDytDiIB6TxMg0ZCMwXk6mYL28nt0C+YTowjVfaIB1osqWSe8E5g
+        xoAHiJGUYbLrNehPnRJBEfp/CGAiA0gZL893ITE=
+X-Google-Smtp-Source: ACHHUZ7dlvZFdLg6rqLtx54xFJSTh3bP79FeWHbu3TCecyS3reTwh0nF5kS4ALnX74kr/cXG7uP9L6LGJSG51Tmpkpk=
+X-Received: by 2002:a05:6512:3c88:b0:4f9:6a7b:b8de with SMTP id
+ h8-20020a0565123c8800b004f96a7bb8demr3628980lfv.3.1687528841114; Fri, 23 Jun
+ 2023 07:00:41 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Content-Language: en-US
-To:     neil.armstrong@linaro.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Mike Tipton <mdtipton@codeaurora.org>
-References: <20230619-topic-sm8550-upstream-interconnect-mask-vote-v2-0-709474b151cc@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Subject: Re: [PATCH v2 0/4] interconnect: qcom: rpmh: sm8550: mask to send as
- vote
-In-Reply-To: <20230619-topic-sm8550-upstream-interconnect-mask-vote-v2-0-709474b151cc@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230607072342.4054036-1-ardb@kernel.org> <20230607072342.4054036-6-ardb@kernel.org>
+ <20230621110852.GAZJLaRAuGBCc5R4yb@fat_crate.local>
+In-Reply-To: <20230621110852.GAZJLaRAuGBCc5R4yb@fat_crate.local>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Fri, 23 Jun 2023 16:00:30 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXEyWJ7GgcLBdqd1GkEGEEX=4vi7d6ZVEAJ0zjU1Y+ioUQ@mail.gmail.com>
+Message-ID: <CAMj1kXEyWJ7GgcLBdqd1GkEGEEX=4vi7d6ZVEAJ0zjU1Y+ioUQ@mail.gmail.com>
+Subject: Re: [PATCH v5 05/20] x86/decompressor: Use proper sequence to take
+ the address of the GOT
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Evgeniy Baskov <baskov@ispras.ru>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Peter Jones <pjones@redhat.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Dave Young <dyoung@redhat.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Kees Cook <keescook@chromium.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23.06.2023 14:50, neil.armstrong@linaro.org wrote:
-> On the SM8550 SoC, some nodes requires a specific bit mark
-> instead of a bandwidth when voting.
-> 
-> Add an enable_mask variable to be used instead of bandwidth.
-> 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
-After reviewing this patchset and taking a peek at older downstream,
-it looks like ACV should be using 0x8 bmask on *all RPMh SoCs*.
+On Wed, 21 Jun 2023 at 13:09, Borislav Petkov <bp@alien8.de> wrote:
+>
+> On Wed, Jun 07, 2023 at 09:23:27AM +0200, Ard Biesheuvel wrote:
+> > The 32-bit decompressor does not actually use a global offset table
+> > (GOT), but as is common for 32-bit position independent code, it uses
+> > the magic symbol _GLOBAL_OFFSET_TABLE_ as an anchor from which to derive
+> > the actual runtime addresses of other symbols, using special @GOTOFF
+> > symbol references that are resolved at link time, and populated with the
+> > distance between the address of the magic _GLOBAL_OFFSET_TABLE_ anchor
+> > and the address of the symbol in question.
+> >
+> > This means _GLOBAL_OFFSET_TABLE_ is the only symbol whose actual runtime
+> > address needs to be determined explicitly, which is one of the first
+> > things that happens in startup_32. However, it does so by taking the
+> > absolute address via the immediate field of an ADD instruction (plus a
+> > small offset), which seems to defeat the point.
+> >
+> > Fortunately, the assembler knows that _GLOBAL_OFFSET_TABLE_ is magic,
+> > and emits a special relative relocation instead, and so the resulting
+>
+> Which special relocation do you mean?
+>
+> This guy:
+>
+> Relocation section '.rel.head.text' at offset 0x3a0 contains 12 entries:
+>  Offset     Info    Type            Sym.Value  Sym. Name
+> 00000010  00000d0a R_386_GOTPC       00000000   _GLOBAL_OFFSET_TABLE_
+>
+> ?
 
-It's worth noting however, that 8350's downstream (the first msm
-kernel using the icc framework) did not incorporate that change.
-Not sure if intentionally or not. Probably not. Might be worth to
-poke Qcom to backport it in such case. If 8350 is still supported.
-Probably not.
+Yep.
 
-Check out these snippets:
+if you assemble this
 
-https://git.codelinaro.org/clo/la/kernel/msm-4.19/-/blob/LA.UM.10.2.1.c25/drivers/soc/qcom/msm_bus/msm_bus_arb_rpmh.c#L556-567
+movl $_GLOBAL_OFFSET_TABLE_, %eax
+movl $_GLOBAL_OFFSET_TABLE, %eax
 
-https://git.codelinaro.org/clo/la/kernel/msm-4.19/-/blob/LA.UM.10.2.1.c25/drivers/soc/qcom/msm_bus/msm_bus_arb_rpmh.c#L475-495
+you'll end up with
 
-Notice how acv is never updated beyond effectively setting =0 or =bmask,
-perhaps Qualcomm never implemented something else..
+   0: b8 01 00 00 00        mov    $0x1,%eax
+1: R_386_GOTPC _GLOBAL_OFFSET_TABLE_
+   5: b8 00 00 00 00        mov    $0x0,%eax
+6: R_386_32 _GLOBAL_OFFSET_TABLE
 
-Since this series is fine as-is, I'd be happy to see an incremental one.
-Reported-by would be cool as well :D
-
-Konrad
-> Changes in v2:
-> - Took downstream patch for patch 1
-> - Added konrad's reviewed tag
-> - Added changes for sm8450 and sa8775p
-> - Link to v1: https://lore.kernel.org/r/20230619-topic-sm8550-upstream-interconnect-mask-vote-v1-0-66663c0aa592@linaro.org
-> 
-> ---
-> Mike Tipton (1):
->       interconnect: qcom: Add support for mask-based BCMs
-> 
-> Neil Armstrong (3):
->       interconnect: qcom: sm8450: add enable_mask for bcm nodes
->       interconnect: qcom: sm8550: add enable_mask for bcm nodes
->       interconnect: qcom: sa8775p: add enable_mask for bcm nodes
-> 
->  drivers/interconnect/qcom/bcm-voter.c |  5 +++++
->  drivers/interconnect/qcom/icc-rpmh.h  |  2 ++
->  drivers/interconnect/qcom/sa8775p.c   |  1 +
->  drivers/interconnect/qcom/sm8450.c    |  9 +++++++++
->  drivers/interconnect/qcom/sm8550.c    | 17 +++++++++++++++++
->  5 files changed, 34 insertions(+)
-> ---
-> base-commit: 47045630bc409ce6606d97b790895210dd1d517d
-> change-id: 20230619-topic-sm8550-upstream-interconnect-mask-vote-96aa20355158
-> 
-> Best regards,
+So it is not possible to take the absolute address of
+_GLOBAL_OFFSET_TABLE_ via an absolute relocation, you will always get
+the relative offset instead.
