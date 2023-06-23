@@ -2,135 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B18273BDDE
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 19:35:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAA6A73BDD8
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 19:34:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232125AbjFWRe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 13:34:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53682 "EHLO
+        id S231983AbjFWReY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 13:34:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232128AbjFWRey (ORCPT
+        with ESMTP id S231806AbjFWReT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 13:34:54 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3786F2701;
-        Fri, 23 Jun 2023 10:34:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=Zc0pviPRoqlN0cN6TV+6Rt9skeFLXDyuOF3LOxVbwzY=; b=cH5aPWaEQ3Ue/RSs66k9jgPZdH
-        jWAECdkbd8oLhP90xTpGfsjlUhG2SbM74YRZ41+4apP9G3dyxR/0uG4+8ZaNZ/ChLTTkHgNGzRXY8
-        6X9JOZLQhIWVHKKHMUmT4kZaXX/Z5fRhPtgvnDEcjXXXmb7dic8gO2/3NKk5TBJmAlqM=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1qCkfu-00HNYx-Bx; Fri, 23 Jun 2023 19:34:22 +0200
-Date:   Fri, 23 Jun 2023 19:34:22 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Michael Walle <mwalle@kernel.org>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Yisen Zhuang <yisen.zhuang@huawei.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
-        Xu Liang <lxu@maxlinear.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v2 04/10] net: phy: replace is_c45 with
- phy_accces_mode
-Message-ID: <52cdebe9-0f94-430d-93ff-11f26d2e3c5b@lunn.ch>
-References: <20230620-feature-c45-over-c22-v2-0-def0ab9ccee2@kernel.org>
- <20230620-feature-c45-over-c22-v2-4-def0ab9ccee2@kernel.org>
+        Fri, 23 Jun 2023 13:34:19 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 36553212B;
+        Fri, 23 Jun 2023 10:34:17 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D05881042;
+        Fri, 23 Jun 2023 10:35:00 -0700 (PDT)
+Received: from [10.57.27.57] (unknown [10.57.27.57])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0471B3F64C;
+        Fri, 23 Jun 2023 10:34:14 -0700 (PDT)
+Message-ID: <86da9945-04d5-047a-cb2d-5fb63737839f@arm.com>
+Date:   Fri, 23 Jun 2023 18:34:31 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230620-feature-c45-over-c22-v2-4-def0ab9ccee2@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH V4] thermal/core/power_allocator: reset thermal governor
+ when trip point is changed
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Di Shen <di.shen@unisoc.com>
+Cc:     daniel.lezcano@linaro.org, rui.zhang@intel.com, amitk@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xuewen.yan@unisoc.com, jeson.gao@unisoc.com, zhanglyra@gmail.com,
+        orsonzhai@gmail.com
+References: <6aad180f-410c-5b11-b30b-c7bc02cbe054@linaro.org>
+ <20230619063534.12831-1-di.shen@unisoc.com>
+ <CAJZ5v0i9fyfNYyhAMqr0iYPbUNwrcvL7mxK1rMo+00mNRWKV6w@mail.gmail.com>
+ <CAJZ5v0gHBxbU7Q0KYKsSVk+9nzSxot_JxUkcaAXrDxQx5_a7_Q@mail.gmail.com>
+ <dbfe2b14-794a-e4d9-caf4-15d69ef86091@arm.com>
+ <CAJZ5v0iOSWDBU0d4QPpsKwAW9N2u1mf-BLdKCtJ_49e8P0ZD7g@mail.gmail.com>
+ <62c35d1c-7dcd-7bf2-253e-65cdfd6e92cc@arm.com>
+ <CAJZ5v0iX2WYVjXWecJHVB_w1HAAOLDJvFLTMALGQF3pfv-rKSw@mail.gmail.com>
+ <2884a54e-4db0-bf47-3b8a-0deb337208d8@arm.com>
+ <CAJZ5v0i5V8kpaaCsH4wuU83=zXpdJgR2CdCX-Wj=PmJx3OJ2Lg@mail.gmail.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <CAJZ5v0i5V8kpaaCsH4wuU83=zXpdJgR2CdCX-Wj=PmJx3OJ2Lg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> @@ -131,9 +131,11 @@ int fwnode_mdiobus_register_phy(struct mii_bus *bus,
->  
->  	is_c45 = fwnode_device_is_compatible(child, "ethernet-phy-ieee802.3-c45");
->  	if (is_c45 || fwnode_get_phy_id(child, &phy_id))
-> -		phy = get_phy_device(bus, addr, is_c45);
-> +		phy = get_phy_device(bus, addr,
-> +				     is_c45 ? PHY_ACCESS_C45 : PHY_ACCESS_C22);
->  	else
-> -		phy = phy_device_create(bus, addr, phy_id, 0, NULL);
-> +		phy = phy_device_create(bus, addr, phy_id, PHY_ACCESS_C22,
-> +					NULL);
 
-Documentation/devicetree/bindings/net/ethernet-phy.yaml says:
 
-  compatible:
-    oneOf:
-      - const: ethernet-phy-ieee802.3-c22
-        description: PHYs that implement IEEE802.3 clause 22
-      - const: ethernet-phy-ieee802.3-c45
-        description: PHYs that implement IEEE802.3 clause 45
+On 6/23/23 17:55, Rafael J. Wysocki wrote:
+> On Fri, Jun 23, 2023 at 9:43 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>
+>>
+>>
 
-It would be nice to make this documentation more specific. It now
-refers to 'bus transaction', so maybe we want to append that to these
-lines?
+[snip]
 
-> -static struct phy_device *mdiobus_scan(struct mii_bus *bus, int addr, bool c45)
-> +static struct phy_device *mdiobus_scan(struct mii_bus *bus, int addr,
-> +				       enum phy_access_mode mode)
+>>
+>> I agree, the patch header doesn't explain that properly. Here is the
+>> explanation for this Intelligent Power Allocator (IPA):
+>>
+>> The IPA controls temperature using PID mechanism. It's a closed
+>> feedback loop. That algorithm can 'learn' from the 'observed'
+>> in the past reaction for it's control decisions and accumulates that
+>> information in the part called 'error integral'. Those accumulated
+>> 'error' gaps are the differences between the set target value and the
+>> actually achieved value. In our case the target value is the target
+>> temperature which is coming from the trip point. That part is then used
+>> with the 'I' (of PID) component, so we can compensate for those
+>> 'learned' mistakes.
+>> Now, when you change the target temperature value - all your previous
+>> learned errors won't help you. That's why Intelligent Power Allocator
+>> should reset previously accumulated history.
+> 
+> Right.
+> 
+> And every other governor using information from the past for control
+> will have an analogous problem, won't it?
 
-> +/**
-> + * enum phy_access_mode - PHY register access mode definitions
-> + *
-> + * @PHY_ACCESS_C22: use 802.3 c22 MDIO transactions
-> + * @PHY_ACCESS_C45: use 802.3 c45 MDIO transactions
-> + */
-> +enum phy_access_mode {
-> +	PHY_ACCESS_C22,
-> +	PHY_ACCESS_C45,
-> +};
+Not necessarily, but to play safe I would go case-by-case and make
+sure other governors are aligned to this new feature.
 
-Was the change from bool to enum enough to make the compiler warn when
-passed the wrong type? i.e. a true/false? not PHY_ACCESS_C22 and
-PHY_ACCESS_C45? Maybe we could set these enum values to 22 and 45?
-true/false would then not match, and we get some sort of error, like
--EIO from the switch statement?
+E.g. the bang-bang governor operates only on current temperature and
+current trip value + trip hysteresis. The flow graph describes it [1].
+The control (state of the fan: ON or OFF) of that governor could be
+simply adjusted to the new reality -> new trip point temp. That would
+just mean 'toggling' the fan if needed. There are only 2 'target'
+states: 0 or 1 for the fan. You can images a situation when the
+temperature doesn't change, but we manipulate the trip value for that
+governor. The governor would react correctly always in such situation
+w/o a need of a reset IMO.
 
->  /**
->   * struct phy_device - An instance of a PHY
->   *
-> @@ -539,8 +550,8 @@ struct macsec_ops;
->   * @devlink: Create a link between phy dev and mac dev, if the external phy
->   *           used by current mac interface is managed by another mac interface.
->   * @phy_id: UID for this device found during discovery
-> - * @c45_ids: 802.3-c45 Device Identifiers if is_c45.
-> - * @is_c45:  Set to true if this PHY uses clause 45 addressing.
-> + * @access_mode:  MDIO access mode of the PHY.
-> + * @c45_ids: 802.3-c45 Device Identifiers if it's an C45 PHY.
->   * @is_internal: Set to true if this PHY is internal to a MAC.
->   * @is_pseudo_fixed_link: Set to true if this PHY is an Ethernet switch, etc.
->   * @is_gigabit_capable: Set to true if PHY supports 1000Mbps
-> @@ -637,8 +648,9 @@ struct phy_device {
->  
->  	u32 phy_id;
->  
-> +	enum phy_access_mode access_mode;
-> +
+> 
+>>>
+>>>>>
+>>>>>> For the 2nd case IIUC the code, we pass the 'trip.temperature'
+>>>>>> and should be ready for what you said (modification of that value).
+>>>>>
+>>>>> Generally speaking, it needs to be prepared for a simultaneous change
+>>>>> of multiple trip points (including active), in which case it may not
+>>>>> be useful to invoke the ->reset() callback for each of them
+>>>>> individually.
+>>>>
+>>>> Although, that looks more cleaner IMO. Resetting one by one in
+>>>> a temperature order would be easily maintainable, won't be?
+>>>
+>>> I wouldn't call it maintainable really.
+>>>
+>>> First of all, the trips may not be ordered.  There are no guarantees
+>>> whatsoever that they will be ordered, so the caller may have to
+>>> determine the temperature order in the first place.  This would be an
+>>> extra requirement that currently is not there.
+>>>
+>>> Apart from this, I don't see any fundamental difference between the
+>>> case when trip points are updated via sysfs and when they are updated
+>>> by the driver.  The governor should reset itself in any of those cases
+>>> and even if one trip point changes, the temperature order of all of
+>>> them may change, so the governor reset mechanism should be able to
+>>> handle the case when multiple trip points are updated at the same
+>>> time.  While you may argue that this is theoretical, the ACPI spec
+>>> clearly states that this is allowed to happen, for example.
+>>>
+>>> If you want a generic reset callback for governors, that's fine, but
+>>> make it generic and not specific to a particular use case.
+>>
+>> I think we agree here, but probably having slightly different
+>> implementation in mind. Based on you explanation I think you
+>> want simply this API:
+>> void (*reset)(struct thermal_zone_device *tz);
+>>
+>> 1. no return value
+>> 2. no specific trip ID as argument
+>>
+>> Do you agree?
+> 
+> Yes, I do.
 
-This enum might not pad too well between a u32 and struct? If you put
-it after the bitfields, or maybe next to the enum phy_state the
-compiler might make both a u16 and put them together?
+OK, thanks.
 
-	 Andrew
+Di could you implement that 'reset()' API according to this description,
+please?
+
+> 
+>> IMO such implementation and API would also work for this IPA
+>> purpose. Would that work for the ACPI use case as well?
+> 
+> It would AFAICS.
+
+Thanks Rafael for the comments and the progress that we made :)
+
+Regards,
+Lukasz
+
+[1] 
+https://elixir.bootlin.com/linux/v6.3/source/drivers/thermal/gov_bang_bang.c#L80
