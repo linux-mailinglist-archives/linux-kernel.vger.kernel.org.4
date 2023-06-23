@@ -2,159 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFC2B73BEB4
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 21:15:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1553573BEB6
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 21:16:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231421AbjFWTPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 15:15:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57242 "EHLO
+        id S231591AbjFWTQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 15:16:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbjFWTPs (ORCPT
+        with ESMTP id S229775AbjFWTQk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 15:15:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 607152697
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 12:15:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E4FA961AFD
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 19:15:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33C45C433C8;
-        Fri, 23 Jun 2023 19:15:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687547746;
-        bh=jnTBrbslxp9wjuZpk/G+lTdN3BwKxiUCagWOzSpADAk=;
-        h=Date:From:To:Subject:References:In-Reply-To:From;
-        b=Yst19NYT3zXJGrou6Zzh0yxyjM6theurBQUx3Nx4j3qnLNs/8udC/ajwe7ed+MmGi
-         CqI9Vp8SSbk2FUckSIudEFgmsAtLejfi7dQz0SYLleF48dCTOOVUEHiFvt3gN2k9hT
-         /XRKHObhVPr15REkiTzF2Fa+6eyjTg/H2OCt+3/UX1JMnEzSXLHtwYcX+Rfeoza+30
-         o2tNIpQbCuAlxA51CcIuHijfae/ViEV/UUTQmUYsRhRSAT1ytAzRWSVz8z/axM6uHA
-         j2MFDGR+vBtbLC3FeLZpYlFTOEoWioIQ4y+G8jTv3IMg8F5HZB0FJx/8tv+yODBidv
-         00dJjbENoiIZQ==
-Date:   Fri, 23 Jun 2023 12:15:44 -0700
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-Subject: Re: [f2fs-dev] [PATCH v4] f2fs: compress tmp files given extension
-Message-ID: <ZJXvYG/q7gZwEuap@google.com>
-References: <20230606203645.3926651-1-jaegeuk@kernel.org>
- <ZIjqKHDUmN6u9pXa@google.com>
- <ZJP0aoy03Vx2Q2K1@google.com>
+        Fri, 23 Jun 2023 15:16:40 -0400
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A55E2696
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 12:16:39 -0700 (PDT)
+Received: by mail-vs1-xe2f.google.com with SMTP id ada2fe7eead31-440ab3566cbso354627137.1
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 12:16:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687547798; x=1690139798;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=D2OV0HZ7lds/NcEpAufvexd01rNFbNdtfLFGpTpqJh4=;
+        b=mOuqRoloYWXqdXttJ4SiENhK9j3odCSfkF2rSqcDLxcb4xJYeffEYYqXPjbYBPwXlT
+         tpF4Su3vdFBellLTQ1mCtn/5IqSWyBdl435TTU9I/lbvQ9xxV8CACCovJVWlWbFdtg+a
+         2fnYcd+gpccPpe3D/7Lv+FVsfocP3SYUIqTfh6KAe8yexOyXCNHZ0GYOf3v+1F4JgsCJ
+         36hmgHPy6jIoQN4y9lpA1jowTd9oy0dogMNRVuDjcX9wOVNosroEhpVZCIggDgs5H3a4
+         P9Day28OQ96qJ7m2P7qoCl/Iwy+Tmm7DrafLBZkCoYe3Qy82+x1/rHeRGNLuGm+hsJve
+         q87w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687547798; x=1690139798;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=D2OV0HZ7lds/NcEpAufvexd01rNFbNdtfLFGpTpqJh4=;
+        b=jGHbeussdhMBZLIc0nnMzh75VDd62w0ifVqltzUk5zKLIPoglS8odZ6p79e1wpeSx5
+         jKbW8OWXlhloez3eugnPjT2l5CMWnX+anDIfSk2rO5pilNja1q7uf+EAO9v3oLGC/roG
+         12thhs4UmMSn4wgDmsbwLvttIiB831S26L04/KyaBXX29wW1utFcXyteYqbv69seonlu
+         qLxuUBM42QqYrfkpY86QOmJQEpi4vewi7c9FrNqlRPQH8QQjcrbr9EC4XfPXnNyqJ7h1
+         qlturVmoVSd/UU333nYxR3Tw8Gb1hE0bVMRugycXAdRsauK27tKYc3C0STXVui4pC6Zt
+         okkg==
+X-Gm-Message-State: AC+VfDzNF0qSO9zH0BKMgt/liN0hEpDWw8U1ajKbVKPLo+k5r7CyXDjr
+        o6w/qY1RbwgZIefTsgpNFHcAf059EVdtV63IWn7BhA==
+X-Google-Smtp-Source: ACHHUZ7dLdc6iZ0lclvwVLMg0VK4abWzcVY6CYBkgmGUKH3avprHyqDEQY0npO39Tzem12TMy9CbtCNfqZp6RKBzVrI=
+X-Received: by 2002:a67:f60e:0:b0:43f:5ad3:1905 with SMTP id
+ k14-20020a67f60e000000b0043f5ad31905mr7176733vso.29.1687547797847; Fri, 23
+ Jun 2023 12:16:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZJP0aoy03Vx2Q2K1@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <CAPM=9twNnV4zMCvrPkw3H-ajZOH-01JVh_kDrxdPYQErz8ZTdA@mail.gmail.com>
+ <CAHk-=wi=eDN4Ub0qSN27ztBAvHSXCyiY2stu3_XbTpYpQX4x7w@mail.gmail.com> <CAHk-=wg9p+oJtzC0582vke8whcWPNSC9eq0Z6kdnSqWMEpah7g@mail.gmail.com>
+In-Reply-To: <CAHk-=wg9p+oJtzC0582vke8whcWPNSC9eq0Z6kdnSqWMEpah7g@mail.gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Fri, 23 Jun 2023 12:16:26 -0700
+Message-ID: <CAKwvOd=dUWWSzQEWdguhe3SjYTw7a76skx370DbU2Y+5o=M8BA@mail.gmail.com>
+Subject: Re: arm32 build warnings in workqueue.c
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Dave Airlie <airlied@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Tejun Heo <tj@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Let's compress tmp files for the given extension list.
+On Fri, Jun 23, 2023 at 11:52=E2=80=AFAM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> [ Adding clang people. See this for background:
+>
+>     https://lore.kernel.org/all/CAHk-=3Dwi=3DeDN4Ub0qSN27ztBAvHSXCyiY2stu=
+3_XbTpYpQX4x7w@mail.gmail.com/
+>
+>   where that patch not only cleans things up, but seems to make a
+> difference to clang ]
+>
+> On Fri, 23 Jun 2023 at 11:24, Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+> >
+> > So I really think that code needs fixing, and the gcc warning was very =
+valid.
+> >
+> > Maybe something like the attached. Does this fix the gcc warning?
+> > Tejun, comments?
+>
+> Whee. Inexplicably, that patch also improves code generation with
+> clang, with things like this:
+>
+> -       movabsq $137438953440, %rcx             # imm =3D 0x1FFFFFFFE0
+> -       andq    %rax, %rcx
+> -       movabsq $68719476704, %rdx              # imm =3D 0xFFFFFFFE0
+> -       cmpq    %rdx, %rcx
+> +       shrq    $5, %rax
+> +       cmpl    $2147483647, %eax               # imm =3D 0x7FFFFFFF
+>
+> in several places.
 
-This patch does not change the previous behavior, but allow the cases as below.
+Sorry, are those equivalent?  Before looks to me like:
 
-Extention example: "ext"
+if (0xFFFFFFFE0 - (0x1FFFFFFFE0 & rax))
 
-- abc.ext : allow
-- abc.ext.abc : allow
-- abc.extm : not allow
+and after
 
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
----
-   Change log from v3:
-    - split temparature and compress extensions
+if (0x7FFFFFFF - (rax >> 5))
 
-   Change log from v2:
-    - fix parameters
- 
-   Change log from v1:
-    - refactor to allow abc.ext.dontcare only
+>
+> Or, even more amusingly, this:
+>
+> -       movabsq $68719476704, %rax              # imm =3D 0xFFFFFFFE0
+> -       orq     $1, %rax
+> +       movabsq $68719476705, %rax              # imm =3D 0xFFFFFFFE1
+>
+> where the old code was some truly crazy stuff.
 
- fs/f2fs/namei.c | 28 +++++++++++++++++++++-------
- 1 file changed, 21 insertions(+), 7 deletions(-)
+Yeah, that's stupid. Which symbol's disassembly are you looking at? I
+couldn't repro with a quick test: https://godbolt.org/z/dz1fEY9Wx.
 
-diff --git a/fs/f2fs/namei.c b/fs/f2fs/namei.c
-index 3e35eb7dbb8f..ff89de115272 100644
---- a/fs/f2fs/namei.c
-+++ b/fs/f2fs/namei.c
-@@ -23,7 +23,7 @@
- #include <trace/events/f2fs.h>
- 
- static inline bool is_extension_exist(const unsigned char *s, const char *sub,
--						bool tmp_ext)
-+						bool tmp_ext, bool tmp_dot)
- {
- 	size_t slen = strlen(s);
- 	size_t sublen = strlen(sub);
-@@ -49,13 +49,27 @@ static inline bool is_extension_exist(const unsigned char *s, const char *sub,
- 	for (i = 1; i < slen - sublen; i++) {
- 		if (s[i] != '.')
- 			continue;
--		if (!strncasecmp(s + i + 1, sub, sublen))
--			return true;
-+		if (!strncasecmp(s + i + 1, sub, sublen)) {
-+			if (!tmp_dot)
-+				return true;
-+			if (i == slen - sublen - 1 || s[i + 1 + sublen] == '.')
-+				return true;
-+		}
- 	}
- 
- 	return false;
- }
- 
-+static inline bool is_temperature_extension(const unsigned char *s, const char *sub)
-+{
-+	return is_extension_exist(s, sub, true, false);
-+}
-+
-+static inline bool is_compress_extension(const unsigned char *s, const char *sub)
-+{
-+	return is_extension_exist(s, sub, true, true);
-+}
-+
- int f2fs_update_extension_list(struct f2fs_sb_info *sbi, const char *name,
- 							bool hot, bool set)
- {
-@@ -148,7 +162,7 @@ static void set_compress_new_inode(struct f2fs_sb_info *sbi, struct inode *dir,
- 	cold_count = le32_to_cpu(sbi->raw_super->extension_count);
- 	hot_count = sbi->raw_super->hot_ext_count;
- 	for (i = cold_count; i < cold_count + hot_count; i++)
--		if (is_extension_exist(name, extlist[i], false))
-+		if (is_temperature_extension(name, extlist[i]))
- 			break;
- 	f2fs_up_read(&sbi->sb_lock);
- 	if (i < (cold_count + hot_count))
-@@ -156,12 +170,12 @@ static void set_compress_new_inode(struct f2fs_sb_info *sbi, struct inode *dir,
- 
- 	/* Don't compress unallowed extension. */
- 	for (i = 0; i < noext_cnt; i++)
--		if (is_extension_exist(name, noext[i], false))
-+		if (is_compress_extension(name, noext[i]))
- 			return;
- 
- 	/* Compress wanting extension. */
- 	for (i = 0; i < ext_cnt; i++) {
--		if (is_extension_exist(name, ext[i], false)) {
-+		if (is_compress_extension(name, ext[i])) {
- 			set_compress_context(inode);
- 			return;
- 		}
-@@ -189,7 +203,7 @@ static void set_file_temperature(struct f2fs_sb_info *sbi, struct inode *inode,
- 	cold_count = le32_to_cpu(sbi->raw_super->extension_count);
- 	hot_count = sbi->raw_super->hot_ext_count;
- 	for (i = 0; i < cold_count + hot_count; i++)
--		if (is_extension_exist(name, extlist[i], true))
-+		if (is_temperature_extension(name, extlist[i]))
- 			break;
- 	f2fs_up_read(&sbi->sb_lock);
- 
--- 
-2.41.0.162.gfafddb0af9-goog
+>
+> I have *no* idea what drugs clang is on, but clearly clang does some
+> really really bad things with large enums, and doesn't simplify things
+> correctly.
+>
+> That "I can't even do a constant 'or' at compile time when it involves
+> an enum" is all kinds of odd.
+>
+> Does this matter in the big picture? No. But I think the take-away
+> here should be that you really shouldn't use enums for random things.
+> Compilers know enums are used as small enumerated constants, and get
+> pissy and confused when you use them as some kind of generic storage
+> pool for values.
+>
+> My guess is that clang keeps an enum as an enum as long as possible -
+> including past some (really) simple simplification phases of the
+> optimizer.
+
+I don't think so.
+https://godbolt.org/z/M8746c49z
+That's LLVM IR as soon as it leaves the front end. Notice the use of
+`i32` types. AFAIK, the IR does not contain the notion of enums. Clang
+lowers enums to integral values of a specific width in LLVM IR.
+
+>
+> With gcc, code generation didn't change from that patch with my
+> defconfig on x86-64 (apart from line numbers changing).
+>
+> Now, clang improving code generation with that patch is obviously a
+> good thing for the patch, but it does mean that clang really messed up
+> before.
+>
+>                Linus
+
+
+
+--=20
+Thanks,
+~Nick Desaulniers
