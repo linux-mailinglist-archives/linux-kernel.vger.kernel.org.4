@@ -2,114 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4014473C437
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 00:42:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A499473C43B
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 00:43:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232361AbjFWWmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 18:42:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33686 "EHLO
+        id S232430AbjFWWmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 18:42:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232574AbjFWWmH (ORCPT
+        with ESMTP id S232440AbjFWWmU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 18:42:07 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EB54DC
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 15:42:06 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-98377c5d53eso125048766b.0
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 15:42:06 -0700 (PDT)
+        Fri, 23 Jun 2023 18:42:20 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55AE2E75
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 15:42:19 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4f870247d6aso1603821e87.0
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 15:42:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1687560124; x=1690152124;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+QcHhK4jpwXJft/HBulx5tPasW6Ux53Kat5uK7dahPQ=;
-        b=DMF0LQqLHOJr+4VsKkSs9BiO4DKyllZx1uoH+khfK/52BM+al+f/ORDqL4m0714RBR
-         IzmYd0V/Q2OMdpzxq12HN/XvYl4HSPAeeSW91iUkZly2N9Yhf/ZGo4s/f0uYB5fHDQ5Y
-         KFgTEO4JPPagFbA1ehi/izyQWedtxf9pLN1h4=
+        d=linaro.org; s=google; t=1687560137; x=1690152137;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ceYAW1D/l6c2aC4P/IW3chCmC7PvALUSV1nl27dPWYk=;
+        b=mgkAs6qZt8kuxOrDzoIZW4QCsDGDfDvOp5K8+jJ4wLDqBhPKx6vxhSTZZV3moO+sHv
+         Gpl3LzveWrWexOcqc3yoLXcC/NNwceYa3eFx4LX1qtxsrbz/+ERKLhl1x2jflZYEK/Cu
+         eyocr4i0CYgI3vCrc8iLDoZkExslBF20eEhcDAeUhtcsY4I5AD36soe0UWLmrgFnVAj8
+         lUOEhKtiLa0CabJfo2tuEZVrViL1AZZ5h+e9A4k49C/0YEHmwSgUdsF7Sk+e+feC1FDI
+         D/BeWmsvJSO1IObUhGsELs5V8UknLKu0b68376fK6X0KQwxO4dZWla+vZc7GWHhV/g6d
+         Jpkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687560124; x=1690152124;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+QcHhK4jpwXJft/HBulx5tPasW6Ux53Kat5uK7dahPQ=;
-        b=YLdOexKvTqKCpf8HGpq+XpQbqTUIxAT1f95E8zkdzMXSYPNTT7SQAkcy7tAvmtGaB7
-         fZXvh79sKKtY2THKyaHFmiWzl2ChRJgRYsXY9zuI2/TDG8Q1slAOY6CDIf5MWcXkraGj
-         J+bGDd0/933ZD1jLu2X/3hFwOf1whT32BxXu8erjp2L3W0/y0J+5YlpS6i+MlnWPBpHB
-         hXjQ74hMThNNiepEqI5ZDHtTu1kIDCIYwRmaC865VTfsj1GhI18XE/tCC7ee1s4/qsww
-         cfdgp6ibbKT1kMTgtqXAgJMqbi6ho7sk/J9T4ZAReURO6heLFrRAjbeAuhY9A3sc/2Oq
-         3QsA==
-X-Gm-Message-State: AC+VfDynIVGn1VVapCusYnkXY2Vula1Kwnpri2Of92rSQPSa3Gs1jJMq
-        46DiUsSw3supPMpWsKk5nd5Np4U2yN5W2E5osmf41l/o
-X-Google-Smtp-Source: ACHHUZ6DpamATC7S/r4HNqS6hWQ5+I8qIAWj0sl2/GyP+EoiOFWORCDl7Md0pKsGOO1pZVBo0dR6ig==
-X-Received: by 2002:a17:907:7faa:b0:987:fe18:1c51 with SMTP id qk42-20020a1709077faa00b00987fe181c51mr18254210ejc.58.1687560124522;
-        Fri, 23 Jun 2023 15:42:04 -0700 (PDT)
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com. [209.85.208.43])
-        by smtp.gmail.com with ESMTPSA id g25-20020a1709064e5900b0098696189722sm145010ejw.192.2023.06.23.15.42.03
-        for <linux-kernel@vger.kernel.org>
+        d=1e100.net; s=20221208; t=1687560137; x=1690152137;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ceYAW1D/l6c2aC4P/IW3chCmC7PvALUSV1nl27dPWYk=;
+        b=BFMVFOvJH+uyf6FdPElQeGyg23lAnVifGbWKdF9jqvVSvCTjMgHujXdJMpflqAPtNs
+         iDq4Hc2QXugzDmoFqhTDETP6V7wXRRy1salw0OnpkcUuA3oQTP7amMQUOD91QBhylJe7
+         DrO4QCO1K5BEFpWjgMm+hcPav+FnBwXmKbEjxw23nHVbLOPAtvXYhxRjIXUxMFL1CCxV
+         IUQj7RtG7wA9u9l7m9ZBniiO2s1Lpl7W0wG9CcT8BqoNVfsjaIHczd9V5Ntt7mPlieL5
+         VzHS/B2W29zu23I3hr0RJhL5+yTcMjcP8NoI1FLHBtDNZ2VyLyizMvwxbpY6WKHFGTdF
+         rNkw==
+X-Gm-Message-State: AC+VfDyfkLduVbBlQgVyb0ZkMZabLa95rAN5WP3Wnhd7iVHVBD2Lzy6Z
+        21hX7ObAJTYGXvPUsofn/e4kNQ==
+X-Google-Smtp-Source: ACHHUZ4GWtl3oNIy1/jbJrzgy1m8PE7Ek4gU3iSOPeZeCRWVhPUTCk0F6/icRBQLhgZBUNQ0e3Y2OQ==
+X-Received: by 2002:a05:6512:556:b0:4f9:5673:f6f4 with SMTP id h22-20020a056512055600b004f95673f6f4mr7400008lfl.59.1687560137537;
+        Fri, 23 Jun 2023 15:42:17 -0700 (PDT)
+Received: from [192.168.1.101] (abyk30.neoplus.adsl.tpnet.pl. [83.9.30.30])
+        by smtp.gmail.com with ESMTPSA id v15-20020ac2592f000000b004ec6252aa37sm54482lfi.116.2023.06.23.15.42.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Jun 2023 15:42:04 -0700 (PDT)
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-51d7d0dbec8so171108a12.2
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 15:42:03 -0700 (PDT)
-X-Received: by 2002:aa7:d597:0:b0:51b:ecb7:23d2 with SMTP id
- r23-20020aa7d597000000b0051becb723d2mr3683631edq.18.1687560123663; Fri, 23
- Jun 2023 15:42:03 -0700 (PDT)
+        Fri, 23 Jun 2023 15:42:17 -0700 (PDT)
+Message-ID: <144c5bff-6d81-b681-57ac-b1e51993c9b3@linaro.org>
+Date:   Sat, 24 Jun 2023 00:42:15 +0200
 MIME-Version: 1.0
-References: <2730511.1687559668@warthog.procyon.org.uk>
-In-Reply-To: <2730511.1687559668@warthog.procyon.org.uk>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 23 Jun 2023 15:41:46 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiXr2WTDFZi6y8c4TjZXfTnw28BkLF9Fpe=SyvmSCvP2Q@mail.gmail.com>
-Message-ID: <CAHk-=wiXr2WTDFZi6y8c4TjZXfTnw28BkLF9Fpe=SyvmSCvP2Q@mail.gmail.com>
-Subject: Re: [PATCH] pipe: Make a partially-satisfied blocking read wait for more
-To:     David Howells <dhowells@redhat.com>
-Cc:     Franck Grosjean <fgrosjea@redhat.com>,
-        Phil Auld <pauld@redhat.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v9 10/10] arm64: dts: qcom: sa8540-ride: Enable first port
+ of tertiary usb controller
+Content-Language: en-US
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Johan Hovold <johan@kernel.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com,
+        quic_jackp@quicinc.com, quic_harshq@quicinc.com,
+        ahalaney@redhat.com, quic_shazhuss@quicinc.com
+References: <20230621043628.21485-1-quic_kriskura@quicinc.com>
+ <20230621043628.21485-11-quic_kriskura@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230621043628.21485-11-quic_kriskura@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 23 Jun 2023 at 15:34, David Howells <dhowells@redhat.com> wrote:
->
-> Can you consider merging something like the attached patch?  Unfortunately,
-> there are applications out there that depend on a read from pipe() waiting
-> until the buffer is full under some circumstances.  Patch a28c8b9db8a1
-> removed the conditionality on there being an attached writer.
+On 21.06.2023 06:36, Krishna Kurapati wrote:
+> There is now support for the multiport USB controller this uses so
+> enable it.
+> 
+> The board only has a single port hooked up (despite it being wired up to
+> the multiport IP on the SoC). There's also a USB 2.0 mux hooked up,
+> which by default on boot is selected to mux properly. Grab the gpio
+> controlling that and ensure it stays in the right position so USB 2.0
+> continues to be routed from the external port to the SoC.
+> 
+> Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
+> [Krishna: Rebased on top of usb-next]
+If that's your only change to this patch, you should have kept the
+Author: field unchanged.
 
-This patch seems actively wrong, in that now it's possibly waiting for
-data that won't come, even if it's nonblocking.
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> ---
+Same comments as patch 9
 
-What are these alleged broken apps? That commit a28c8b9db8a1 ("pipe:
-remove 'waiting_writers' merging logic") is 3+ years old, and we
-haven't heard people complain about it.
-
-POSIX guarantees PIPE_BUF data, but that's 4kB. Your made-up test-case
-is not valid, and never has been.
-
-Yes, we used to do that write merging for performance reasons to avoid
-extra system calls. And yes, we'll maintain semantics if people
-actually end up having broken apps that depend on them, but I want to
-know *what* broken app depends on this before I re-instate the write
-merging.
-
-And if we do re-instate it, I'm afraid we will have to do so with that
-whole "waiting_writers" logic, so that we don't have the "reader waits
-for data that might not come".
-
-Because that patch of yours seems really broken. Nobody has *ever*
-said "a read() on a pipe will always satisfy the whole buffer". That's
-just completely bogus.
-
-So let's name and shame the code that actually depended on it. And
-maybe we'll have to revert commit a28c8b9db8a1, but after three+ years
-of nobody reporting it I'm not really super-convinced.
-
-               Linus
+Konrad
+>  arch/arm64/boot/dts/qcom/sa8540p-ride.dts | 22 ++++++++++++++++++++++
+>  1 file changed, 22 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
+> index 24fa449d48a6..53d47593306e 100644
+> --- a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
+> +++ b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
+> @@ -309,6 +309,19 @@ &usb_2_qmpphy0 {
+>  	status = "okay";
+>  };
+>  
+> +&usb_2 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&usb2_en_state>;
+> +
+> +	status = "okay";
+> +};
+> +
+> +&usb_2_dwc3 {
+> +	dr_mode = "host";
+> +	phy-names = "usb2-port0", "usb3-port0";
+> +	phys = <&usb_2_hsphy0>, <&usb_2_qmpphy0>;
+> +};
+> +
+>  &xo_board_clk {
+>  	clock-frequency = <38400000>;
+>  };
+> @@ -401,4 +414,13 @@ wake-pins {
+>  			bias-pull-up;
+>  		};
+>  	};
+> +
+> +	usb2_en_state: usb2-en-state {
+> +		/* TS3USB221A USB2.0 mux select */
+> +		pins = "gpio24";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +		bias-disable;
+> +		output-low;
+> +	};
+>  };
