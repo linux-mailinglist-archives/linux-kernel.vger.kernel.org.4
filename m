@@ -2,134 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ABE573AF79
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 06:36:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB9FD73AF7A
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 06:38:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230423AbjFWEg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 00:36:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45536 "EHLO
+        id S230151AbjFWEiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 00:38:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbjFWEg1 (ORCPT
+        with ESMTP id S229673AbjFWEis (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 00:36:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 524AC2126;
-        Thu, 22 Jun 2023 21:36:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CBE9A617E6;
-        Fri, 23 Jun 2023 04:36:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D33BDC433C0;
-        Fri, 23 Jun 2023 04:36:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687494985;
-        bh=wIIxQfC5WSJRvYJdfbpQqGmitcfaxB6kixNhBzHA9Bk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VHeDGp1qleQVq4JHlalZAEakskropekrk1RmNrSgOoiBsSu3R5mitQs8qoi3Q+lkZ
-         xXJ5Q2LvhPeal1GRY/3BhiEeTahi2y6Peqrvlj1UCBWtdivPXfd1v1staEENvZoz20
-         EDuG5+3oo/GioGXZysxI6Ov/4dGvX/ZiuPDK3cFeo4ZMGAGsPKVL/PgbL0GJLFBs1D
-         +INEDpQ6F/DQ4icsBAzXFGzk+igqwUJDtiNmTatnPo8iJtFog1Es8D4w5LqT5WPY02
-         Ynzw2JpAE11PN+mPfd+BpXBvcZQ+kSV8d0W+VkBOlm7QiNJm5SOTh3jPKqS4xx1cG2
-         uL5NbVbqpyZjg==
-Date:   Thu, 22 Jun 2023 21:36:23 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Eric Sandeen <sandeen@sandeen.net>
-Cc:     Dave Chinner <david@fromorbit.com>,
-        syzbot <syzbot+9d0b0d54a8bd799f6ae4@syzkaller.appspotmail.com>,
-        dchinner@redhat.com, djwong@kernel.org, hch@lst.de,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [xfs?] WARNING: Reset corrupted AGFL on AG NUM. NUM
- blocks leaked. Please unmount and run xfs_repair.
-Message-ID: <20230623043623.GA851@sol.localdomain>
-References: <000000000000ffcb2e05fe9a445c@google.com>
- <ZJKhoxnkNF3VspbP@dread.disaster.area>
- <20230621075421.GA56560@sol.localdomain>
- <ZJQNjFJhLh0C84u/@dread.disaster.area>
- <20230623005617.GA1949@sol.localdomain>
- <328c6e2c-e055-3391-3499-4963e351b0be@sandeen.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <328c6e2c-e055-3391-3499-4963e351b0be@sandeen.net>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 23 Jun 2023 00:38:48 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AEF22128
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 21:38:47 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5706641dda9so2283097b3.3
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 21:38:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687495126; x=1690087126;
+        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=VHB+5unyEfm7Ig6VLTzEIvUbjT+9ACzOcRF8S8mRQls=;
+        b=38jRhWEZWPmIwDRThyEn18yUpThwawsbXdeNAodETQgG/ffxHd2j9WTopC2bd+K9zV
+         cYmOZbEcLSK5ScUsDUKZ82t7Xpsod1Tl3ulx4pX+tUgtm4mRzKRA4npnTR5ma9xwACHz
+         tkZUdWw4w8H1XTp1oGm0kcFUpBYBliQ/GPIgCYGIZ8+xc1keUzf0vAmygmRDpuZa5zNi
+         Mj3GXZVG1ooX+6VvFPrFAW7ta81uskkl5jaIeddWMl/swe8dOst15OT1XuDjk9eCTqxe
+         FJGfP1VhjCasMyJ5OCE7kW0pbUDJ3Y1dO1P44qe5ZblbqVvs4VFjSdsbttcFZFG3mgZg
+         lhPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687495126; x=1690087126;
+        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VHB+5unyEfm7Ig6VLTzEIvUbjT+9ACzOcRF8S8mRQls=;
+        b=fFILyrTXuIVrNgNPpHc5vgwZGWTK9ECBLsCq1NMnamc61nI4HlBFH2NoMZhLN60JKT
+         and8LwFW83hkf5ND18+BNRtTXPOrHtrddpUXlHisfpZPy3XbTiuooBj8qJ3tQ6w5ZnJM
+         TK1PW+WPaOUTYBGLzr+f83NlLFkNvgXzpkHw/wiOM/3EwVnQLbnlJ2NPwU8o/BeM5LSQ
+         HSBWOWykS7rq5CPBA0WdNKNLBqCYJMZqVytDsG/68B6GA75PGX8EqPkIkYfMwkX7YH9B
+         kdWxcG80lfcAGcAKalwR/RJfcEKeDhxNWMrZwDdYN3KuTe8/kCrPTLAEMybtxiCJS6Vd
+         bYbg==
+X-Gm-Message-State: AC+VfDwFVdEyx7L8ObV+yE5O6mr8QHZRkt7rap9Kmldhyaldwbd/gxRN
+        iSDRYArEz9IAYAz8f8sGOWWI4pUFLmTJ
+X-Google-Smtp-Source: ACHHUZ4iR5iHIKt4T9w3pn8rs4NlJDKLNeEritoHOPXkEvPe7cSqXT15MBqO9D58MC6EAheteg0vhHZy+eD0
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:6559:8968:cdfe:35b6])
+ (user=irogers job=sendgmr) by 2002:a25:ab4e:0:b0:bff:1bc3:c12c with SMTP id
+ u72-20020a25ab4e000000b00bff1bc3c12cmr3599524ybi.7.1687495126798; Thu, 22 Jun
+ 2023 21:38:46 -0700 (PDT)
+Date:   Thu, 22 Jun 2023 21:38:42 -0700
+Message-Id: <20230623043843.4080180-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+Subject: [PATCH v2 1/2] perf pmus: Add notion of default PMU for JSON events
+From:   Ian Rogers <irogers@google.com>
+To:     Thomas Richter <tmricht@linux.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        James Clark <james.clark@arm.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
+        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 22, 2023 at 10:09:55PM -0500, Eric Sandeen wrote:
-> > Grepping for "WARNING:" is how other kernel testing systems find WARN_ON's in
-> > the log too.  For example, see _check_dmesg() in common/rc in xfstests.
-> > xfstests fails tests if "WARNING:" is logged.  You might be aware of this, as
-> > you reviewed and applied xfstests commit 47e5d7d2bb17 which added the code.
-> > 
-> > I understand it's frustrating that Dmitry's attempt to do something about this
-> > problem was incomplete.  I don't think it is helpful to then send a reflexive,
-> > adversarial response that shifts the blame for this longstanding problem with
-> > the kernel logs entirely onto syzbot and even Dmitry personally.  That just
-> > causes confusion about the problem that needs to be solved.
-> > 
-> > Anyway, either everything that parses the kernel logs needs to be smarter about
-> > identifying real WARN_ON's, or all instances of "WARNING:" need to be eliminated
-> > from the log (with existing code, coding style guidelines, and checkpatch
-> > updated as you mentioned).  I think I'm leaning towards the position that fake
-> > "WARNING:"s should be eliminated.  It does seem like a hack, but it makes the
-> > "obvious" log pattern matching that everyone tends to write work as expected...
-> > 
-> > If you don't want to help, fine, but at least please try not to be obstructive.
-> 
-> I didn't read Dave's reply as "obstructive." There's been a trend lately of
-> ever-growing hoards of people (with machines behind them) generating
-> ever-more work for a very small and fixed number of developers who are
-> burning out. It's not sustainable. The work-generators need to help make
-> things better, or the whole system is going to break.
-> 
-> Dave being frustrated that he has to deal with "bug reports" about a printk
-> phrase is valid, IMHO. There are many straws breaking the camel's back these
-> days.
-> 
-> You had asked for a constructive suggestion.
-> 
-> My specific suggestion is that the people who decided that printk("WARNING")
-> merits must-fix syzbot reports should submit patches to any subsystem they
-> plan to test, to replace printk("WARNING") with something that will not
-> trigger syzbot reports. Don't spread that pain onto every subsystem
-> developer who already has to deal with legitimate and pressing work. Or,
-> work out some other reliable way to discern WARN_ON from WARNING.
-> 
-> And add it to checkpatch etc, as Dave suggested.
-> 
-> This falls into the "help us help you" category. Early on, syszbot
-> filesystem reports presented filesystems only as a giant array of hex in a C
-> file, leaving it to the poor developer to work out how to use standard
-> filesystem tools to analyze the input. Now we get standard images. That's an
-> improvement, with some effort on the syzbot side that saves time and effort
-> for every filesystem developer forever more. Find more ways to make these
-> reports more relevant, more accurate, and more efficient to triage.
-> 
-> That's my constructive suggestion.
-> 
+JSON events created in pmu-events.c by jevents.py may not specify a
+PMU they are associated with, in which case it is implied that it is
+the first core PMU. Care is needed to select this for regular 'cpu',
+s390 'cpum_cf' and ARMs many names as at the point the name is first
+needed the core PMUs list hasn't been initialized. Add a helper in
+perf_pmus to create this value, in the worst case by scanning sysfs.
 
-I went ahead and filed an issue against syzkaller for this:
-https://github.com/google/syzkaller/issues/3980
+Signed-off-by: Ian Rogers <irogers@google.com>
+Tested-by: Thomas Richter <tmricht@linux.ibm.com>
 
-I still would like to emphasize that other testing systems such as xfstests do
-the same "dmesg | grep WARNING:" thing and therefore have the same problem, at
-least in principle.  (Whether a test actually finds anything depends on the code
-covered, of course.)  Again, I'm mentioning this not to try to absolve syzkaller
-of responsibility, but rather because it's important that everyone agrees on the
-problem here, and ideally its solution too.  If people continue operating under
-the mistaken belief that this is a syzkaller specific issue, it might be hard to
-get kernel patches merged to fix it, especially if those patches involve changes
-to checkpatch.pl, CodingStyle, and several dozen different kernel subsystems.
-Or, the syzkaller people might go off on their own and find and implement some
-way to parse the log reliably, without other the testing systems being fixed...
+v2. Add missing close if fdopendir fails.
+---
+ tools/perf/util/pmu.c  | 35 ++++++++++++++++-------------------
+ tools/perf/util/pmus.c | 37 ++++++++++++++++++++++++++++++++++++-
+ tools/perf/util/pmus.h |  1 +
+ 3 files changed, 53 insertions(+), 20 deletions(-)
 
-- Eric
+diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
+index 6142e4710a2f..963c12f910c5 100644
+--- a/tools/perf/util/pmu.c
++++ b/tools/perf/util/pmu.c
+@@ -741,9 +741,11 @@ static bool pmu_uncore_alias_match(const char *pmu_name, const char *name)
+ }
+ 
+ struct pmu_add_cpu_aliases_map_data {
++	/* List being added to. */
+ 	struct list_head *head;
+-	const char *name;
+-	const char *cpu_name;
++	/* If a pmu_event lacks a given PMU the default used. */
++	char *default_pmu_name;
++	/* The PMU that we're searching for events for. */
+ 	struct perf_pmu *pmu;
+ };
+ 
+@@ -752,37 +754,32 @@ static int pmu_add_cpu_aliases_map_callback(const struct pmu_event *pe,
+ 					void *vdata)
+ {
+ 	struct pmu_add_cpu_aliases_map_data *data = vdata;
+-	const char *pname = pe->pmu ? pe->pmu : data->cpu_name;
++	const char *pname = pe->pmu ?: data->default_pmu_name;
+ 
+-	if (data->pmu->is_uncore && pmu_uncore_alias_match(pname, data->name))
+-		goto new_alias;
+-
+-	if (strcmp(pname, data->name))
+-		return 0;
+-
+-new_alias:
+-	/* need type casts to override 'const' */
+-	__perf_pmu__new_alias(data->head, -1, (char *)pe->name, (char *)pe->desc,
+-			      (char *)pe->event, pe);
++	if (!strcmp(pname, data->pmu->name) ||
++	    (data->pmu->is_uncore && pmu_uncore_alias_match(pname, data->pmu->name))) {
++		/* need type casts to override 'const' */
++		__perf_pmu__new_alias(data->head, -1, (char *)pe->name, (char *)pe->desc,
++				      (char *)pe->event, pe);
++	}
+ 	return 0;
+ }
+ 
+ /*
+- * From the pmu_events_map, find the table of PMU events that corresponds
+- * to the current running CPU. Then, add all PMU events from that table
+- * as aliases.
++ * From the pmu_events_table, find the events that correspond to the given
++ * PMU and add them to the list 'head'.
+  */
+ void pmu_add_cpu_aliases_table(struct list_head *head, struct perf_pmu *pmu,
+-			       const struct pmu_events_table *table)
++			const struct pmu_events_table *table)
+ {
+ 	struct pmu_add_cpu_aliases_map_data data = {
+ 		.head = head,
+-		.name = pmu->name,
+-		.cpu_name = is_sysfs_pmu_core(pmu->name) ? pmu->name : "cpu",
++		.default_pmu_name = perf_pmus__default_pmu_name(),
+ 		.pmu = pmu,
+ 	};
+ 
+ 	pmu_events_table_for_each_event(table, pmu_add_cpu_aliases_map_callback, &data);
++	free(data.default_pmu_name);
+ }
+ 
+ static void pmu_add_cpu_aliases(struct list_head *head, struct perf_pmu *pmu)
+diff --git a/tools/perf/util/pmus.c b/tools/perf/util/pmus.c
+index d891d72c824e..0866dee3fc62 100644
+--- a/tools/perf/util/pmus.c
++++ b/tools/perf/util/pmus.c
+@@ -137,8 +137,10 @@ static void pmu_read_sysfs(bool core_only)
+ 		return;
+ 
+ 	dir = fdopendir(fd);
+-	if (!dir)
++	if (!dir) {
++		close(fd);
+ 		return;
++	}
+ 
+ 	while ((dent = readdir(dir))) {
+ 		if (!strcmp(dent->d_name, ".") || !strcmp(dent->d_name, ".."))
+@@ -524,6 +526,39 @@ bool perf_pmus__supports_extended_type(void)
+ 	return perf_pmus__do_support_extended_type;
+ }
+ 
++char *perf_pmus__default_pmu_name(void)
++{
++	int fd;
++	DIR *dir;
++	struct dirent *dent;
++	char *result = NULL;
++
++	if (!list_empty(&core_pmus))
++		return strdup(list_first_entry(&core_pmus, struct perf_pmu, list)->name);
++
++	fd = perf_pmu__event_source_devices_fd();
++	if (fd < 0)
++		return strdup("cpu");
++
++	dir = fdopendir(fd);
++	if (!dir) {
++		close(fd);
++		return strdup("cpu");
++	}
++
++	while ((dent = readdir(dir))) {
++		if (!strcmp(dent->d_name, ".") || !strcmp(dent->d_name, ".."))
++			continue;
++		if (is_pmu_core(dent->d_name)) {
++			result = strdup(dent->d_name);
++			break;
++		}
++	}
++
++	closedir(dir);
++	return result ?: strdup("cpu");
++}
++
+ struct perf_pmu *evsel__find_pmu(const struct evsel *evsel)
+ {
+ 	struct perf_pmu *pmu = evsel->pmu;
+diff --git a/tools/perf/util/pmus.h b/tools/perf/util/pmus.h
+index d02ffea5d3a4..a21464432d0f 100644
+--- a/tools/perf/util/pmus.h
++++ b/tools/perf/util/pmus.h
+@@ -20,5 +20,6 @@ void perf_pmus__print_pmu_events(const struct print_callbacks *print_cb, void *p
+ bool perf_pmus__have_event(const char *pname, const char *name);
+ int perf_pmus__num_core_pmus(void);
+ bool perf_pmus__supports_extended_type(void);
++char *perf_pmus__default_pmu_name(void);
+ 
+ #endif /* __PMUS_H */
+-- 
+2.41.0.162.gfafddb0af9-goog
+
