@@ -2,117 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F5C373B480
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 12:05:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FE0873B48F
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 12:08:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232113AbjFWKFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 06:05:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43816 "EHLO
+        id S231667AbjFWKIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 06:08:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231843AbjFWKEg (ORCPT
+        with ESMTP id S230071AbjFWKHh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 06:04:36 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD361BFC
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 03:04:35 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3fa7eb35a13so1443695e9.0
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 03:04:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1687514673; x=1690106673;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=E6sVXJ2cleHMEi/0WcOIV4n/ZjjS+cQY293Qzlx7CXQ=;
-        b=zuGv3jqXPXNst6BYdlNOz5i7R06BMmZUVLJVX6sdqiNUSMSJA2TAJOvJxpPq7poHFl
-         FHr5u/kNtB7MlgZf+OWwoWxJ6Jxu8gW0lGRZwQY8yPD1iznE9mpGFEjJM3mAoU7ZRbRK
-         MRYVo7oR/4TUl7HvpOZsCmJ5nu7qLJus9x9vo5gmUfvUhlC4qJsBa63p2GNLpiliJdH8
-         hV88Vin4HqHWY3tNDp3gTuszcYIIA1WEyz4n9c4yXp62IKJ36mBCCsXKu1PmbJQ1p11J
-         atLvDgsPjPDAdkzCsH3ErVKInQek3T5Hapaa49UXesn9QL4rWhG7caUsMcQi5XO7qFTV
-         xk3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687514673; x=1690106673;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=E6sVXJ2cleHMEi/0WcOIV4n/ZjjS+cQY293Qzlx7CXQ=;
-        b=dFcgX5I1OgrBBG87xuNQwCvwm0KlOZOqrgoE+90sX3h+ysO+/fXyXSoiyOXUIICjC0
-         5cTFNvy1cjtknq8YUed0s0QbQOf5kAgRv0NjvQ3979BD0a3UEvl1x0Jh2ZYhNpwQg082
-         7FRWDlq763K50c8gtz6LVdftOPQ/F7J4+FkS9f2Dgjzya3rFXYTeFVdmTumpo406aqzN
-         gezIFEMqBs5a8Tvg/z6nM4oYw7F4O1H2x6YlV4Z24vBuojPphW+/td2F3jvFVFJ3Sy1M
-         9DedGzd2umPSAzbiAxmSMHeD97qh9kn/rOPnH1CGz4qJhK+w5ITsY1jojDY1lRepg9xu
-         XiRg==
-X-Gm-Message-State: AC+VfDwO0lyy9Xq8gBXjhlJD1cNamUWdu+LpPebAZIkRq+XlicgVfscD
-        nF2O0xlAUtilX6IXI5OcZAC9Iw==
-X-Google-Smtp-Source: ACHHUZ6QwnIxjXMCCySl+cTuiFkXSm9Z1C26KrzkHt/AtwA5hawwYsHJNk48HZyL8sHOloJRl0dkvw==
-X-Received: by 2002:a7b:cd10:0:b0:3f9:b79b:e74e with SMTP id f16-20020a7bcd10000000b003f9b79be74emr7799589wmj.22.1687514673633;
-        Fri, 23 Jun 2023 03:04:33 -0700 (PDT)
-Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:ddc2:ce92:1ed6:27bd])
-        by smtp.gmail.com with ESMTPSA id x8-20020a5d54c8000000b0030fae360f14sm9079360wrv.68.2023.06.23.03.04.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Jun 2023 03:04:33 -0700 (PDT)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Junxiao Chang <junxiao.chang@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Cc:     netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH net-next v2 11/11] net: stmmac: dwmac-qcom-ethqos: use devm_stmmac_pltfr_probe()
-Date:   Fri, 23 Jun 2023 12:04:17 +0200
-Message-Id: <20230623100417.93592-12-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230623100417.93592-1-brgl@bgdev.pl>
-References: <20230623100417.93592-1-brgl@bgdev.pl>
+        Fri, 23 Jun 2023 06:07:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F182961;
+        Fri, 23 Jun 2023 03:06:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BD152619F3;
+        Fri, 23 Jun 2023 10:05:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A0B5C433C8;
+        Fri, 23 Jun 2023 10:05:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687514734;
+        bh=u13o1+rrFLOmxywhCwBs2AYh1dkZZnD42oB3y8jhIpU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fh+7VyxZB1iLWw7j5+UyckQsRocruM9cSwxZG9GvVHMa8SEm06fMMZ4eTxtrpmSXy
+         FmOYLwb7tc+/UkDHE9k/vuXLLiWesRnYqh2Pt5UU1C53VH03UU7i/a+x+j5ZOgCgXf
+         PWCtyZoZwnrn8tcPOHB7bzWadciBfS9s3kSdiakWyt3dX7mgMe40vCjKukoP469Uq7
+         5KK3Cn0zs2Fwkya5+kmy1/cGKnnfMkmIg46+8T3GCAiEtIs6jXgxuog1+thdql0Uwu
+         y/Jm/skSiuPnAKtWOfCXC6BPvU8Rz6faa8a5zRuex5xjVYzra7xshse/l1Q40KNNzr
+         U38C+9AV2c6BQ==
+Date:   Fri, 23 Jun 2023 11:05:30 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
+        <nfraprado@collabora.com>,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>
+Subject: Re: [PATCH v2 0/5] spi: Add CSI support for Renesas RZ/V2M
+Message-ID: <ZJVuan8ddJyhU23M@finisterre.sirena.org.uk>
+References: <20230622113341.657842-1-fabrizio.castro.jz@renesas.com>
+ <168748034127.332493.277333132642198960.b4-ty@kernel.org>
+ <CAMuHMdU53jn5UP-5xB_YLh2T5gPaxL1dxWY5Vr5D8p2mUDnqwA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="tNhmPaleGGTul9gb"
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdU53jn5UP-5xB_YLh2T5gPaxL1dxWY5Vr5D8p2mUDnqwA@mail.gmail.com>
+X-Cookie: Slow day.  Practice crawling.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-Use the devres variant of stmmac_pltfr_probe() and finally drop the
-remove() callback entirely.
+--tNhmPaleGGTul9gb
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
----
- drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+On Fri, Jun 23, 2023 at 08:49:05AM +0200, Geert Uytterhoeven wrote:
+> On Fri, Jun 23, 2023 at 2:32=E2=80=AFAM Mark Brown <broonie@kernel.org> w=
+rote:
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
-index 7b9fbcb8d84d..e62940414e54 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
-@@ -787,7 +787,7 @@ static int qcom_ethqos_probe(struct platform_device *pdev)
- 		plat_dat->serdes_powerdown  = qcom_ethqos_serdes_powerdown;
- 	}
- 
--	return stmmac_dvr_probe(dev, plat_dat, &stmmac_res);
-+	return devm_stmmac_pltfr_probe(pdev, plat_dat, &stmmac_res);
- }
- 
- static const struct of_device_id qcom_ethqos_match[] = {
-@@ -801,7 +801,6 @@ MODULE_DEVICE_TABLE(of, qcom_ethqos_match);
- 
- static struct platform_driver qcom_ethqos_driver = {
- 	.probe  = qcom_ethqos_probe,
--	.remove_new = stmmac_pltfr_remove_no_dt,
- 	.driver = {
- 		.name           = "qcom-ethqos",
- 		.pm		= &stmmac_pltfr_pm_ops,
--- 
-2.39.2
+> > [1/5] spi: dt-bindings: Add bindings for RZ/V2M CSI
+> >       commit: db63e7ad2895409f78a04f331f781baa7a879dd7
+> > [2/5] clk: renesas: r9a09g011: Add CSI related clocks
+> >       commit: 7c78eb3e5d30eaa217cecaa32711e41cd849d498
+> > [3/5] spi: Add support for Renesas CSI
+> >       commit: dcf92036cb3e1b7bf3472109e4290a0937b270dd
+> > [4/5] arm64: dts: renesas: r9a09g011: Add CSI nodes
+> >       commit: ef643c6b57020ee279d18636d9d967ee048dbffa
+> > [5/5] arm64: defconfig: Enable Renesas RZ/V2M CSI driver
+> >       commit: dfbd12ae0e7c761e07369f5a2d55fe06eb54ad31
+>=20
+> I hoped this would have been a bug in b4 thanks, but unfortunately it
+> is not.
+>=20
+> Please do not apply unreviewed clock, DTS, and defconfig patches to
+> your tree.  These are intended to go upstream through the renesas-clk
+> and clk, renesas-dt and soc, resp. renesas-defconfig and soc trees.
 
+Sorry, the series was only partially copied to me so it wasn't very
+visible that there were other patches - I just saw a simple 2 patch
+series in my inbox and it's not terribly visible in the rest of the
+process that there's more patches.
+
+--tNhmPaleGGTul9gb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSVbmkACgkQJNaLcl1U
+h9DFMgf/ehmxBqPaGijsQRJEGrYX5x/j1Agmk7LmRCreemyD/EaJyaB1aT3mdcoC
+7nS4KSunL13OM6AhhupjXibNhajMdQrVutiPRMQWoEOXlfTj8PU8wXCUrvlcIyMx
+DXzKAJR8GrRvHH8QiyoS0rngoyLqNrO+cU09zZeZ1oxo2tVLX5V9BmAzzvbtAOdl
+l5BpijDcQlRMLGVaZJ6NtJE4AcSZUCu3jjk96gqoIRM/GFoh4RfmL7XpqpxB/dBx
+QNXN6bRIpFOfALKmwjkM5YSD4lCVH4rd6NC8Tsu0cLzuw1OWbPUikjsQhUCcofl7
+RM/04tYgoCZb6kamopH8Ak4q8hydrA==
+=/eXQ
+-----END PGP SIGNATURE-----
+
+--tNhmPaleGGTul9gb--
