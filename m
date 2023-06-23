@@ -2,118 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37C5673B87C
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 15:12:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C94073B886
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 15:13:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231145AbjFWNMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 09:12:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47312 "EHLO
+        id S231806AbjFWNN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 09:13:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230185AbjFWNMe (ORCPT
+        with ESMTP id S231626AbjFWNNS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 09:12:34 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A0FC9D;
-        Fri, 23 Jun 2023 06:12:33 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1qCgaQ-0005IP-MF; Fri, 23 Jun 2023 15:12:26 +0200
-Message-ID: <ab67a069-81f1-cbf9-3bf0-a388c1cf3ef9@leemhuis.info>
-Date:   Fri, 23 Jun 2023 15:12:25 +0200
+        Fri, 23 Jun 2023 09:13:18 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 557002695
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 06:12:52 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1b5079b8cb3so1370355ad.1
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 06:12:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1687525972; x=1690117972;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ztC9JD/gutKJP42tTw7xRzDnyP1Mlz22AqRtCxWHul4=;
+        b=iReOyCzgXqjGHDqep4+7Y02y+2KsxvqbysTBx4QdxMakwFT9O9Z6y8UTRhYCpdiwGk
+         ivfBmaLpXRLdsg2xXtWNoGf0LJW9OuaoWVHjbG5+PmrhjKOTehTkz5xr7u03dJPl3Vvf
+         epR4VYk9iCpPZkMT+p54jmiUndhguXzeWsKZiPn3OwVHy+V1VU+7xSZ1lgncoZQcneJS
+         pVLxKUfpwqKrHzPfUfH95joX35kksCvYI/qVSfPkEqAU61Mo8RwQARiYkcVaAbzt+5qk
+         cYcyAi42FXf01kq9CxVaIQAWB9c34fULDSPKve/N0V/DkCTafLxv3dWbsj8Ke3WxSlSL
+         ozRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687525972; x=1690117972;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ztC9JD/gutKJP42tTw7xRzDnyP1Mlz22AqRtCxWHul4=;
+        b=NoHbcgqOPOwPIanCr3lMEaxKOajmiSRp1jcTRD/UQdKJLTMhGO68Id1fu3tg6QiYAO
+         bjH2eXsiFqg9f61CUGKaq61p2HvdnRp42ro14dkHdd1fLuFLZRkAem1zJBDVpWA3dY6m
+         OKbq0a1n5LgKqKJ3w7PYh1dxVydzQhbpRAOrUZ17tboIKw0nQ7eiR3MuYtLvUFW4W4Ge
+         7nKBTZ7msf3RNEAUaJWY/pUWQ2OT44TyMcohgwnuvEKYvbHuuYtr9WdfIAHt9VR5UUtX
+         2iqJRDJTDfZiSW4njbUPYFuiAsF2hWhvSvqNC+XIUF9/P5Wz0df4BjOc6B/Qz46B60Lr
+         zZ2Q==
+X-Gm-Message-State: AC+VfDx61BXy++1zlagoRrZ7KdJGDA6eTOntNOQ6xoTN07UjZducKvxe
+        eIZlX16nTLTkO2Sm3QmuTnPdHg==
+X-Google-Smtp-Source: ACHHUZ78dOQlFEQQrAnXInKb8JKnRB3NkeUnqCzTvDvkAqdG76W+IPYWNvfD8Ue2cdvcaNnPedDi+w==
+X-Received: by 2002:a17:902:dac6:b0:1ac:656f:a68d with SMTP id q6-20020a170902dac600b001ac656fa68dmr25602985plx.4.1687525971804;
+        Fri, 23 Jun 2023 06:12:51 -0700 (PDT)
+Received: from [10.4.168.167] ([139.177.225.254])
+        by smtp.gmail.com with ESMTPSA id c15-20020a170903234f00b001b694130c05sm5473889plh.1.2023.06.23.06.12.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Jun 2023 06:12:51 -0700 (PDT)
+Message-ID: <792beadd-7597-ec8c-e3b1-d8274d68d8c1@bytedance.com>
+Date:   Fri, 23 Jun 2023 21:12:42 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-Subject: Re: [tip: sched/core] sched: Fix performance regression introduced by
- mm_cid
-Content-Language: en-US, de-DE
-To:     Swapnil Sapkal <Swapnil.Sapkal@amd.com>,
-        linux-kernel@vger.kernel.org, linux-tip-commits@vger.kernel.org
-Cc:     Aaron Lu <aaron.lu@intel.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
-        Linux kernel regressions list <regressions@lists.linux.dev>
-References: <168214940343.404.10896712987516429042.tip-bot2@tip-bot2>
- <09e0f469-a3f7-62ef-75a1-e64cec2dcfc5@amd.com>
-From:   "Linux regression tracking #adding (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-In-Reply-To: <09e0f469-a3f7-62ef-75a1-e64cec2dcfc5@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1687525953;2d858438;
-X-HE-SMSGID: 1qCgaQ-0005IP-MF
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.12.0
+Subject: Re: [PATCH 29/29] mm: shrinker: move shrinker-related code into a
+ separate file
+Content-Language: en-US
+To:     Vlastimil Babka <vbabka@suse.cz>, akpm@linux-foundation.org,
+        david@fromorbit.com, tkhai@ya.ru, roman.gushchin@linux.dev,
+        djwong@kernel.org, brauner@kernel.org, paulmck@kernel.org,
+        tytso@mit.edu
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, dm-devel@redhat.com,
+        linux-raid@vger.kernel.org, linux-bcache@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org,
+        linux-btrfs@vger.kernel.org
+References: <20230622085335.77010-1-zhengqi.arch@bytedance.com>
+ <20230622085335.77010-30-zhengqi.arch@bytedance.com>
+ <f90772f6-11fe-0d8a-7b1c-d630b884d775@suse.cz>
+From:   Qi Zheng <zhengqi.arch@bytedance.com>
+In-Reply-To: <f90772f6-11fe-0d8a-7b1c-d630b884d775@suse.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[CCing the regression list, as it should be in the loop for regressions:
-https://docs.kernel.org/admin-guide/reporting-regressions.html]
+Hi Vlastimil,
 
-[TLDR: I'm adding this report to the list of tracked Linux kernel
-regressions; the text you find below is based on a few templates
-paragraphs you might have encountered already in similar form.
-See link in footer if these mails annoy you.]
-
-On 20.06.23 10:14, Swapnil Sapkal wrote:
+On 2023/6/22 22:53, Vlastimil Babka wrote:
+> On 6/22/23 10:53, Qi Zheng wrote:
+>> The mm/vmscan.c file is too large, so separate the shrinker-related
+>> code from it into a separate file. No functional changes.
+>>
+>> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
 > 
-> On 4/22/2023 1:13 PM, tip-bot2 for Mathieu Desnoyers wrote:
->> The following commit has been merged into the sched/core branch of tip:
->>
->> Commit-ID:     223baf9d17f25e2608dbdff7232c095c1e612268
->> Gitweb:       
->> https://git.kernel.org/tip/223baf9d17f25e2608dbdff7232c095c1e612268
->> Author:        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
->> AuthorDate:    Thu, 20 Apr 2023 10:55:48 -04:00
->> Committer:     Peter Zijlstra <peterz@infradead.org>
->> CommitterDate: Fri, 21 Apr 2023 13:24:20 +02:00
->>
->> sched: Fix performance regression introduced by mm_cid
->>
->> Introduce per-mm/cpu current concurrency id (mm_cid) to fix a PostgreSQL
->> sysbench regression reported by Aaron Lu.
-> [...]
-> I run standard benchmarks as a part of kernel performance regression
-> testing. When I run these benchmarks against v6.3.0 to v6.4-rc1,
-> I have seen performance regression in hackbench running with threads.
-> When I did
-> git bisect it pointed to this commit and reverting this commit helps
-> regains
-> the performance. This regression is not seen with hackbench processes.
-> Following are the results from 1 Socket 4th generation EPYC
-> Processor(1 X 96C/192T) configured in NPS1 mode. This regression
-> becomes more severe as the number of core count increases.
+> Maybe do this move as patch 01 so the further changes are done in the new
+> file already?
+
+Sure, I will do it in the v2.
+
+Thanks,
+Qi
+
 > 
-> The numbers on a 1 Socket Bergamo (1 X 128 cores/256 threads) is
-> significantly worse.
-> [...]
-
-Thanks for the report. To be sure the issue doesn't fall through the
-cracks unnoticed, I'm adding it to regzbot, the Linux kernel regression
-tracking bot:
-
-#regzbot ^introduced 223baf9d17f
-#regzbot title sched: performance regression in hackbench (partly solved
-in -next by c1753fd02a00, partially caused by df323337e50)
-#regzbot ignore-activity
-
-This isn't a regression? This issue or a fix for it are already
-discussed somewhere else? It was fixed already? You want to clarify when
-the regression started to happen? Or point out I got the title or
-something else totally wrong? Then just reply and tell me -- ideally
-while also telling regzbot about it, as explained by the page listed in
-the footer of this mail.
-
-Developers: When fixing the issue, remember to add 'Link:' tags pointing
-to the report (the parent of this mail). See page linked in footer for
-details.
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-That page also explains what to do if mails like this annoy you.
