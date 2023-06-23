@@ -2,141 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B3DB73C052
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 22:39:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF97D73C081
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 22:40:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232356AbjFWUjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 16:39:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55610 "EHLO
+        id S232445AbjFWUk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 16:40:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232285AbjFWUix (ORCPT
+        with ESMTP id S232606AbjFWUkH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 16:38:53 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF872E45
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 13:38:21 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-bcef239a9fbso5115529276.1
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 13:38:21 -0700 (PDT)
+        Fri, 23 Jun 2023 16:40:07 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 569EE2947
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 13:39:29 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-3fde9739e20so10889931cf.2
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 13:39:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687552694; x=1690144694;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QwNPgwiBQZGJeDnguHE5i5QhIkh5nKMqMyEPaR/bIi0=;
-        b=S+gS2IQYLrYxQ/9+oRMG1ahOtYGEn4Hx1tnys8TxBtT5IefCIFC0J1mYt2T2h0EOd8
-         Yhvyu9Epl+xfAOfKqWuXEOKQfKH1y790+4wYskDZ0Awt0AST/Kwvi3m4NVlsMeOsaAl2
-         HFduxVFkrks7NWvWafWc2IB48aAaJNaQzPaiMSpC5gNB8Kb15lJD5rnFWS9F1IACFvFO
-         TxhphQw8dS+VtPpXo/I2jouDnp01zylDHZfitq/+NpO+r/WfSv2akxEwxVEcjIgfYlxh
-         PDXMXqHGRSuegFHhwoHEF1o0CUiq7bc78FJzS3bXOQvJMNzZ2EewecUcbGxLjn1tiIlQ
-         DxkA==
+        d=google.com; s=20221208; t=1687552763; x=1690144763;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KtZOBLXx1qaVh8dEPlOQudc9UC+Jo33p6yGPUYlrsSo=;
+        b=DjWYIE/gzUN0Iiva7mkvSSuTrCrrIFG8+k9bfhLiENXZkHv0LSIRyQV0CuChbMfFTm
+         4XSOIKNbfzd17E1SrZaTFUnAK5r2Xto887LdsWzt0fv8zc62b52Q8Z2eUB00mpYhgcRO
+         bWbHk+wzyFGPDcE3AVUhrqiEWJwLl8WMKYzfzcDRLojb49S4oKYZNbBs7c/tsEfEKjyz
+         Iay+x8Z6UtF/8ZP5ziuj5VMwzouWdrJ6SIbaqVPE5JnHoUibJhC8vHHs0fCZyvJjAiZR
+         DRuJ0HBURTHIY6tpRH7FpoYKCTsR01ENJ31VSTIKCGbqZKIlZgfL2p7cvhAN4WZLqRBr
+         n50w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687552694; x=1690144694;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QwNPgwiBQZGJeDnguHE5i5QhIkh5nKMqMyEPaR/bIi0=;
-        b=Yp/zwJp6KsqdQy3O7s0KHLRHFgBDU9jpZwS7T0wZ5ba1DpgubOsV8aoKBQ+bYr0Qnp
-         AKcjfUtmsVJIsB2aTsB67NOU8BA11iVEFySTC/Ot9Ga1qNfUKa2N0heOZACEUjiThzve
-         5KD6Ghrf3qp58AsvD1zUsQihLxOzhy1KpXGb0Piv4KxVDZ937n6AnGrZSt3WU/A36YXV
-         5XnhIhBV7E3VPRw8FQhOyOuuKyNoA7ObMMgxwLz6mUabD5KNVlgOkum93jIArB8mgl5m
-         WvdV5dRye58A/7DaV8T64/spvcnWtR5ebM1JTr1YhMd2wu595idzvN7OiVe+GQzCXZhl
-         NI1w==
-X-Gm-Message-State: AC+VfDxMq0U2dgvS4tVhbFFG3YU+3QQ2TgQiozA1tmAucvkHhgNnY743
-        kdRA6VDR+20hbRK2VO8N3aN6sz3jVHU=
-X-Google-Smtp-Source: ACHHUZ6bgde2JCXrNsJtz06MCTZDowjFJv1N0BDCPuMZvZmiiAsrXclVeOU/48XYNaZZon8hj8RtdhjkyGk=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:2691:0:b0:ba8:1646:c15d with SMTP id
- m139-20020a252691000000b00ba81646c15dmr9694281ybm.1.1687552694461; Fri, 23
- Jun 2023 13:38:14 -0700 (PDT)
-Date:   Fri, 23 Jun 2023 13:38:12 -0700
-In-Reply-To: <20230616113353.45202-4-xiong.y.zhang@intel.com>
-Mime-Version: 1.0
-References: <20230616113353.45202-1-xiong.y.zhang@intel.com> <20230616113353.45202-4-xiong.y.zhang@intel.com>
-Message-ID: <ZJYCtDN+ITmrgCUs@google.com>
-Subject: Re: [PATCH 3/4] KVM: VMX/pmu: Enable inactive vLBR event in guest LBR
- MSR emulation
-From:   Sean Christopherson <seanjc@google.com>
-To:     Xiong Zhang <xiong.y.zhang@intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pbonzini@redhat.com, peterz@infradead.org, like.xu.linux@gmail.com,
-        kan.liang@linux.intel.com, zhenyuw@linux.intel.com,
-        zhiyuan.lv@intel.com
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1687552763; x=1690144763;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KtZOBLXx1qaVh8dEPlOQudc9UC+Jo33p6yGPUYlrsSo=;
+        b=elQl6oR+bbqjpe6tfaEjeCc+7QFXOOv+wmvlQp25M/JlDK/6dnPhp6Q7EThFQuOZCL
+         e/VqO2fDML+iO8XpFavB7a7sTNIrOAZB5qCq4ZvsBRot0EC9LBPsy2p7e5oDTX5SG5eg
+         IB/ayXbIA0eL4lNtRDW4P5inbTkAfd12jPRvuiPRXB1OK6tBdy0o7h4wXHEHnWD1F1z8
+         ntCoCahtbiAy9d5pO/WCD4XmfwhS4rwiMYJVphsBfMXpNqaBsdgfWWs5TNB94gVz7eSX
+         lfSZFSOyrtB3RvI968MeRy3OZjWnpuvx5Nag9xbxFzdSYdD5NmhOLEzotrsSDvn60i66
+         GHNg==
+X-Gm-Message-State: AC+VfDy7vJdubEc8eH95qCCa9Bae9ODcJJd59H/9sNSSkFu6xf7K0Z/v
+        7tC/UQ6wl6gs8lASadktFho51VoaCezS+OdVQA3AZg==
+X-Google-Smtp-Source: ACHHUZ5C+T2n2aljTSPuz46L0evX9FbO0qx+MAMVKiVyMT4wrARHms0ylsHGzLcHQiWlg0CE6es1Md6wWggP55Pgz9w=
+X-Received: by 2002:a05:622a:1708:b0:3fb:426f:19c0 with SMTP id
+ h8-20020a05622a170800b003fb426f19c0mr29888257qtk.29.1687552763059; Fri, 23
+ Jun 2023 13:39:23 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230623001140.1111494-4-samitolvanen@google.com> <202306230932.539C9DC0@keescook>
+In-Reply-To: <202306230932.539C9DC0@keescook>
+From:   Sami Tolvanen <samitolvanen@google.com>
+Date:   Fri, 23 Jun 2023 13:38:45 -0700
+Message-ID: <CABCJKufmB+MwjEu=wjina1-F0q9vT--ig=SyLAGuXQViLV_1Uw@mail.gmail.com>
+Subject: Re: [PATCH 0/2] Fix CFI failures with GCOV_PROFILE_ALL
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
+        linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 16, 2023, Xiong Zhang wrote:
-> vLBR event could be inactive in two case:
-> a. host per cpu pinned LBR event occupy LBR when vLBR event is created
-> b. vLBR event is preempted by host per cpu pinned LBR event during vm
-> exit handler.
-> When vLBR event is inactive, guest couldn't access LBR msr, and it is
-> forced into error state and is excluded from schedule by perf scheduler.
-> So vLBR event couldn't be active through perf scheduler even if host per
-> cpu pinned LBR event has released LBR, kvm could enable vLBR event
-> proactively, then vLBR event may be active and LBR msr could be passthrough
-> into guest.
-> 
-> Signed-off-by: Xiong Zhang <xiong.y.zhang@intel.com>
-> ---
->  arch/x86/kvm/vmx/pmu_intel.c | 11 ++++++++++-
->  1 file changed, 10 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
-> index 741efe2c497b..5a3ab8c8711b 100644
-> --- a/arch/x86/kvm/vmx/pmu_intel.c
-> +++ b/arch/x86/kvm/vmx/pmu_intel.c
-> @@ -314,7 +314,16 @@ static bool intel_pmu_handle_lbr_msrs_access(struct kvm_vcpu *vcpu,
->  	if (!intel_pmu_is_valid_lbr_msr(vcpu, index))
->  		return false;
->  
-> -	if (!lbr_desc->event && intel_pmu_create_guest_lbr_event(vcpu) < 0)
-> +	/* vLBR event may be inactive, but physical LBR may be free now.
+On Fri, Jun 23, 2023 at 9:32=E2=80=AFAM Kees Cook <keescook@chromium.org> w=
+rote:
+>
+> On Fri, Jun 23, 2023 at 12:11:41AM +0000, Sami Tolvanen wrote:
+> > Hi folks,
+> >
+> > The following two patches fix CFI failures with GCOV_PROFILE_ALL,
+> > where the compiler injects indirectly called functions to object
+> > files that otherwise contain no executable code, and are not
+> > processed by objtool or don't have CFI enabled. This results in
+> > missing or incorrect type hashes during boot and when modules are
+> > loaded.
+> >
+> > Sami Tolvanen (2):
+> >   kbuild: Fix CFI failures with GCOV
+> >   kbuild: Disable GCOV for *.mod.o
+> >
+> >  init/Makefile             | 1 +
+> >  scripts/Makefile.modfinal | 2 +-
+> >  scripts/Makefile.vmlinux  | 1 +
+> >  3 files changed, 3 insertions(+), 1 deletion(-)
+>
+> Nice hunting!
+>
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+>
+> Should these get Cc: stable tags maybe?
 
-	/*
-	 * This is the preferred block comment style.
-	 */
+I was under the impression that Fixes: tags would be sufficient these
+days, but agreed, explicit Cc: probably wouldn't hurt.
 
-> +	 * but vLBR event is pinned event, once it is inactive state, perf
-> +	 * will force it to error state in merge_sched_in() and exclude it from
-> +	 * perf schedule, so even if LBR is free now, vLBR event couldn't be active
-> +	 * through perf scheduler and vLBR event could be active through
-> +	 * perf_event_enable().
-> +	 */
-
-Trimming that down, is this what you mean?
-
-	/*
-	 * Attempt to re-enable the vLBR event if it was disabled due to
-	 * contention with host LBR usage, i.e. was put into an error state.
-	 * Perf doesn't notify KVM if the host stops using LBRs, i.e. KVM needs
-	 * to manually re-enable the event.
-	 */
-
-Which begs the question, why can't there be a notification of some form that the
-LBRs are once again available?
-
-Assuming that's too difficult for whatever reason, why wait until the guest tries
-to read LBRs?  E.g. why not be more aggressive and try to re-enable vLBRs on every
-VM-Exit.
-
-And if we do wait until the guest touches relevant MSRs, shouldn't writes to
-DEBUG_CTL that set DEBUGCTLMSR_LBR also try to re-enable the event?
-
-Lastly, what guarantees that the MSRs hold guest data?  I assume perf purges the
-MSRs at some point, but it would be helpful to call that out in the changelog.
-
-> +	if (lbr_desc->event && (lbr_desc->event->state == PERF_EVENT_STATE_ERROR))
-> +		perf_event_enable(lbr_desc->event);
-> +	else if (!lbr_desc->event && intel_pmu_create_guest_lbr_event(vcpu) < 0)
->  		goto dummy;
->  
->  	/*
-> -- 
-> 2.25.1
-> 
+Sami
