@@ -2,172 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBE8D73B86F
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 15:09:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6897F73B896
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 15:17:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231168AbjFWNJw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 09:09:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45774 "EHLO
+        id S231824AbjFWNQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 09:16:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjFWNJu (ORCPT
+        with ESMTP id S231181AbjFWNQm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 09:09:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CA892130
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 06:09:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687525746;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0K3DbJv11KIJK04q28nvvZV3mBzNSyKDIHy9E3PBbC0=;
-        b=GlllHkEgXmfIIBkSauU8NjaUSYGyYhXxUT1lC3ktXbKJOQnqRcx/KastGeX5uueolmfoFJ
-        K8eGABMWgWqCnp0SJDvftYhDFxm+7fwrF0mm3X0MokY7MTpmRdb2e/vGWVqynMgxUFHBYo
-        oZ2vxMprUm6F9ZLQ048H6ozSNM5Aptg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-483-8TuChi_9M2yIhVWc9M6lng-1; Fri, 23 Jun 2023 09:09:02 -0400
-X-MC-Unique: 8TuChi_9M2yIhVWc9M6lng-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3012910504B7;
-        Fri, 23 Jun 2023 13:09:02 +0000 (UTC)
-Received: from lorien.usersys.redhat.com (unknown [10.22.33.48])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 95519C00049;
-        Fri, 23 Jun 2023 13:09:01 +0000 (UTC)
-Date:   Fri, 23 Jun 2023 09:08:59 -0400
-From:   Phil Auld <pauld@redhat.com>
-To:     Benjamin Segall <bsegall@google.com>
-Cc:     linux-kernel@vger.kernel.org, Juri Lelli <juri.lelli@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>
-Subject: Re: [PATCH] Sched/fair: Block nohz tick_stop when cfs bandwidth in
- use
-Message-ID: <20230623130859.GA766130@lorien.usersys.redhat.com>
-References: <20230622132751.2900081-1-pauld@redhat.com>
- <xm26zg4r8bnz.fsf@google.com>
- <20230622213730.GE727646@lorien.usersys.redhat.com>
+        Fri, 23 Jun 2023 09:16:42 -0400
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EEF059D;
+        Fri, 23 Jun 2023 06:16:40 -0700 (PDT)
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+        id 1qCgeU-0002sl-00; Fri, 23 Jun 2023 15:16:38 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id D8D90C0346; Fri, 23 Jun 2023 15:09:38 +0200 (CEST)
+Date:   Fri, 23 Jun 2023 15:09:38 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        list@opendingux.net, "H . Nikolaus Schaller" <hns@goldelico.com>
+Subject: Re: [PATCH] MIPS: DTS: CI20: Raise VDDCORE voltage to 1.125 volts
+Message-ID: <20230623130938.GC11636@alpha.franken.de>
+References: <20230622175934.71601-1-paul@crapouillou.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230622213730.GE727646@lorien.usersys.redhat.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230622175934.71601-1-paul@crapouillou.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 22, 2023 at 05:37:30PM -0400 Phil Auld wrote:
-> On Thu, Jun 22, 2023 at 01:49:52PM -0700 Benjamin Segall wrote:
-> > Phil Auld <pauld@redhat.com> writes:
-> > 
-> > > CFS bandwidth limits and NOHZ full don't play well together.  Tasks
-> > > can easily run well past their quotas before a remote tick does
-> > > accounting.  This leads to long, multi-period stalls before such
-> > > tasks can run again. Currentlyi, when presented with these conflicting
-> > > requirements the scheduler is favoring nohz_full and letting the tick
-> > > be stopped. However, nohz tick stopping is already best-effort, there
-> > > are a number of conditions that can prevent it, whereas cfs runtime
-> > > bandwidth is expected to be enforced.
-> > >
-> > > Make the scheduler favor bandwidth over stopping the tick by setting
-> > > TICK_DEP_BIT_SCHED when the only running task is a cfs task with
-> > > runtime limit enabled.
-> > >
-> > > Add sched_feat HZ_BW (off by default) to control this behavior.
-> > >
-> > > Signed-off-by: Phil Auld <pauld@redhat.com>
-> > > Cc: Ingo Molnar <mingo@redhat.com>
-> > > Cc: Peter Zijlstra <peterz@infradead.org>
-> > > Cc: Vincent Guittot <vincent.guittot@linaro.org>
-> > > Cc: Juri Lelli <juri.lelli@redhat.com>
-> > > Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-> > > Cc: Valentin Schneider <vschneid@redhat.com>
-> > > Cc: Ben Segall <bsegall@google.com>
-> > > ---
-> > >  kernel/sched/fair.c     | 33 ++++++++++++++++++++++++++++++++-
-> > >  kernel/sched/features.h |  2 ++
-> > >  2 files changed, 34 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> > > index 373ff5f55884..880eadfac330 100644
-> > > --- a/kernel/sched/fair.c
-> > > +++ b/kernel/sched/fair.c
-> > > @@ -6139,6 +6139,33 @@ static void __maybe_unused unthrottle_offline_cfs_rqs(struct rq *rq)
-> > >  	rcu_read_unlock();
-> > >  }
-> > >  
-> > > +#ifdef CONFIG_NO_HZ_FULL
-> > > +/* called from pick_next_task_fair() */
-> > > +static void sched_fair_update_stop_tick(struct rq *rq, struct task_struct *p)
-> > > +{
-> > > +	struct cfs_rq *cfs_rq = task_cfs_rq(p);
-> > > +	int cpu = cpu_of(rq);
-> > > +
-> > > +	if (!sched_feat(HZ_BW) || !cfs_bandwidth_used())
-> > > +		return;
-> > > +
-> > > +	if (!tick_nohz_full_cpu(cpu))
-> > > +		return;
-> > > +
-> > > +	if (rq->nr_running != 1 || !sched_can_stop_tick(rq))
-> > > +		return;
-> > > +
-> > > +	/*
-> > > +	 *  We know there is only one task runnable and we've just picked it. The
-> > > +	 *  normal enqueue path will have cleared TICK_DEP_BIT_SCHED if we will
-> > > +	 *  be otherwise able to stop the tick. Just need to check if we are using
-> > > +	 *  bandwidth control.
-> > > +	 */
-> > > +	if (cfs_rq->runtime_enabled)
-> > > +		tick_nohz_dep_set_cpu(cpu, TICK_DEP_BIT_SCHED);
-> > > +}
-> > > +#endif
-> > 
-> > So from a CFS_BANDWIDTH pov runtime_enabled && nr_running == 1 seems
-> > fine. But working around sched_can_stop_tick instead of with it seems
-> > sketchy in general, and in an edge case like "migrate a task onto the
-> > cpu and then off again" you'd get sched_update_tick_dependency resetting
-> > the TICK_DEP_BIT and then not call PNT (ie a task wakes up onto this cpu
-> > without preempting, and then another cpu goes idle and pulls it, causing
-> > this cpu to go into nohz_full).
-> > 
+On Thu, Jun 22, 2023 at 07:59:34PM +0200, Paul Cercueil wrote:
+> Commit 08384e80a70f ("MIPS: DTS: CI20: Fix ACT8600 regulator node
+> names") caused the VDDCORE power supply (regulated by the ACT8600's
+> DCDC1 output) to drop from a voltage of 1.2V configured by the
+> bootloader, to the 1.1V set in the Device Tree.
 > 
-> The information to make these tests is not available in sched_can_stop_tick.
-> I did start there. When that is called, and we are likely to go nohz_full,
-> curr is null so it's hard to find the right cfs_rq to make that
-> runtime_enabled test against.  We could, maybe, plumb the task being enqueued
-> in but it would not be valid for the dequeue path and would be a bit messy.
->
-
-Sorry, mispoke... rq->curr == rq-idle not null. But still we don't have
-access to the task and its cfs_rq which will have runtime_enabled set.
-
-> But yes, I suppose you could end up in a state that is just as bad as today.
+> According to the documentation, the VDDCORE supply should be between
+> 0.99V and 1.21V; both values are therefore within the supported range.
 > 
-> Maybe I could add a redundant check in sched_can_stop_tick for when
-> nr_running == 1 and curr is not null and make sure the bit does not get
-> cleared. I'll look into that.
+> However, VDDCORE being 1.1V results in the CI20 being very unstable,
+> with corrupted memory, failures to boot, or reboots at random. The
+> reason might be succint drops of the voltage below the minimum required.
 > 
+> Raising the minimum voltage to 1.125 volts seems to be enough to address
+> this issue, while still keeping a relatively low core voltage which
+> helps for power consumption and thermals.
 > 
-> Thanks,
-> Phil
+> Fixes: 08384e80a70f ("MIPS: DTS: CI20: Fix ACT8600 regulator node names")
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 > 
+> ---
+> Cc: H. Nikolaus Schaller <hns@goldelico.com>
+> ---
+>  arch/mips/boot/dts/ingenic/ci20.dts | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/mips/boot/dts/ingenic/ci20.dts b/arch/mips/boot/dts/ingenic/ci20.dts
+> index cec0caa2350c..a141a699b790 100644
+> --- a/arch/mips/boot/dts/ingenic/ci20.dts
+> +++ b/arch/mips/boot/dts/ingenic/ci20.dts
+> @@ -298,8 +298,8 @@ act8600: act8600@5a {
+>  
+>  		regulators {
+>  			vddcore: DCDC1 {
+> -				regulator-min-microvolt = <1100000>;
+> -				regulator-max-microvolt = <1100000>;
+> +				regulator-min-microvolt = <1125000>;
+> +				regulator-max-microvolt = <1125000>;
+>  				vp1-supply = <&vcc_33v>;
+>  				regulator-always-on;
+>  			};
 > -- 
-> 
+> 2.40.1
+
+applied to mips-next.
+
+Thomas.
 
 -- 
-
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
