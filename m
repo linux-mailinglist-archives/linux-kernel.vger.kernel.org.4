@@ -2,67 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14FA573BAA8
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 16:51:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08AF273BAB3
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 16:52:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232302AbjFWOvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 10:51:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44802 "EHLO
+        id S232327AbjFWOv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 10:51:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232285AbjFWOvv (ORCPT
+        with ESMTP id S232295AbjFWOvy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 10:51:51 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B101FD2;
-        Fri, 23 Jun 2023 07:51:50 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f9c532fa45so8296035e9.2;
-        Fri, 23 Jun 2023 07:51:50 -0700 (PDT)
+        Fri, 23 Jun 2023 10:51:54 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDF9DE42;
+        Fri, 23 Jun 2023 07:51:52 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f9c2913133so9128135e9.1;
+        Fri, 23 Jun 2023 07:51:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687531909; x=1690123909;
+        d=gmail.com; s=20221208; t=1687531911; x=1690123911;
         h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OhZSgj6bpUo/705/plmFjcm6PUsGWACkSEON4vQAII4=;
-        b=rn1fual0Mz6TDpK+3vlaxFQtzuoeKXztrBpXY3wjAh+sHDrQ8xPI9QfS6voemk3Fwl
-         UVU6yV0ZpCpr9TNFQ/C/lP+5MmCA1skGpE8lBwZBL2j5DjHT1HeWimUwNJms5Xq6ANwL
-         9mKmwahi7YMaZx2M9bzmyfVC6mUn5rYhXZOK1w7Y+rLJeLCP+z7wuc5pnlGzfRaBHsm7
-         0ILKr9qaBUsyt/oSK22ey8RzopMtW3qzv6epOhdrhDOYf0RZVivhERgl4M59mnD2LOHq
-         iFv5g79lruagIKsDPvgvB+FqB+IDV+accT0vzfHAv+ieZoE93h+ze76L3t7eN7MII+JC
-         p6Kw==
+         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hC4ep1+h59om4yauA1VwwcEbv3QwCe9F10dzdxhuHQU=;
+        b=YfbjPq9z6gFIGNRuz+ReAScxPdPSebNU5HVlEND/mu2ZnwtAT604YYQLMJZFLx2/me
+         SK4p0hat9LiqoaVhKfK09nhdZF7XF9yVboJKxXZ4ikk1380AxIvH3qtLelifgi9P7skV
+         d5akFbBbrm23hp3IEg5TgsoothfdN6NG9ZUK+7jpP6Npy8DccrS7Jq1qgbF2rmVQAPdr
+         kU7w7QGYgeusZuEOlhXL/a3jGJ5iSgSSh5HTeQO8JGVKITSpdlTaV7BYYbQIM5TbHfqZ
+         AUy/G1KszZbSr1KrNv9wIUSsw3oyTGB1zYl+ux/Knn7C16EAE2QVBRYDpcTX9sI45ca0
+         t9/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687531909; x=1690123909;
+        d=1e100.net; s=20221208; t=1687531911; x=1690123911;
         h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=OhZSgj6bpUo/705/plmFjcm6PUsGWACkSEON4vQAII4=;
-        b=mBB1Sqr4xquEuugx1YQJV3QLXALE5mOKuWPkTyRNqwaiMIA47QZCZ8wuOAUKBjeWHR
-         8PZr30OJA3seM5zOnh6RpsHX7Vnvk8cAeiQ8aIg1JqFt4EKvwBLTrac1tmJ/0ZgOhWff
-         8y70MGRzHMEMzHupb8eyia4Y3KbEKbgFnNSySrdKOBBqKvuuDMoUPy29lUyM54+mhQHJ
-         1fnhYcL4aPcqMH8rPZC5y+k6oHQN3K2HV7xUtqbWMPMr3epH+TPTI300HpJFLgoClQta
-         7uArEspfbn/4/BsL916HcrewmqjZdu+g7wFUiUhOJeIsu65Pzxj7vhG8Rs6SjUSTcGeE
-         judQ==
-X-Gm-Message-State: AC+VfDxX0gOrKkiyL4W/jv/ZiL/12ICQVVj6A6bskBv0dcSpShjLqn73
-        VsbEB5hdYpjkTMAU1ouBed0=
-X-Google-Smtp-Source: ACHHUZ5B/eh6bQ1Zrp3umUoe7CU0DZsC4zBzCEUGrPSKaPyNWIHXvBnlhS7B3OlFNJbNgcGbQ1Ol0w==
-X-Received: by 2002:adf:fc47:0:b0:30f:ca87:8e09 with SMTP id e7-20020adffc47000000b0030fca878e09mr3818910wrs.30.1687531909041;
-        Fri, 23 Jun 2023 07:51:49 -0700 (PDT)
+        bh=hC4ep1+h59om4yauA1VwwcEbv3QwCe9F10dzdxhuHQU=;
+        b=WF5lLpl4lpG/BvYN4uaTsCKTKVwccCYn7bZYXmnPWTXRu0/QQpXWMtWosl2RY7vCzb
+         lDdnAzTZ3pEagcQN2MVD8frVlQTE4l5xcAZjHRPVVjzZCKJL+TWYjdSFUjfgBg4d8r6l
+         LuTO1Cr4Q5LQ7k2X4HHR0ZcgIOLRzhmdH4w+glTcyofoZIbMpPgV3XiahgKngMYZFCKZ
+         ZeHTsT9ae5pqQXc8oV5SgOuhs+r1cvEevS0unuiGbNkh6foB1Iujk9WscIhMGTpINh/x
+         L61wgMyR+pma9l/xpOJt201d8yiGMb0HbFaY1kD2hi2MRbCMYtalhMtMdQYGbg6Qob6A
+         gEdA==
+X-Gm-Message-State: AC+VfDylFuX50bR8ehHLIMNhyt7B2q3pXQNjamjf1aPrmwomDxHZNJC+
+        dgx+VmUe+MBdxZ9S796NIT2Smvpnkkg=
+X-Google-Smtp-Source: ACHHUZ6Dk4pM+se4xyfHwCmBYL3MyJh75PkWBKlN4YAmeSKs1UOdNhra3R0MVHuhaYCvWBw9i8QldQ==
+X-Received: by 2002:a05:600c:cb:b0:3f9:b4a0:6061 with SMTP id u11-20020a05600c00cb00b003f9b4a06061mr3980562wmm.34.1687531911041;
+        Fri, 23 Jun 2023 07:51:51 -0700 (PDT)
 Received: from localhost (p200300e41f305300f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f30:5300:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id k3-20020a5d4283000000b00312780bedc3sm9691276wrq.56.2023.06.23.07.51.48
+        by smtp.gmail.com with ESMTPSA id r19-20020a05600c285300b003f8ec58995fsm2606046wmb.6.2023.06.23.07.51.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Jun 2023 07:51:48 -0700 (PDT)
+        Fri, 23 Jun 2023 07:51:50 -0700 (PDT)
 From:   Thierry Reding <thierry.reding@gmail.com>
-To:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+To:     devicetree@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>,
-        Conor Dooley <conor.dooley@microchip.com>
-Cc:     Daire McNamara <daire.mcnamara@microchip.com>,
-        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v18 0/2] Microchip Soft IP corePWM driver
-Date:   Fri, 23 Jun 2023 16:51:32 +0200
-Message-ID: <168753171968.1191890.12812740879836968278.b4-ty@gmail.com>
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        John Crispin <john@phrozen.org>,
+        Daniel Golle <daniel@makrotopia.org>
+Subject: Re: [PATCH v3 0/2] Support PWM on MediaTek MT7981
+Date:   Fri, 23 Jun 2023 16:51:34 +0200
+Message-ID: <168753171954.1191890.17208643012944908213.b4-ty@gmail.com>
 X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230518-reactive-nursing-23b7fe093048@wendy>
-References: <20230518-reactive-nursing-23b7fe093048@wendy>
+In-Reply-To: <cover.1682007088.git.daniel@makrotopia.org>
+References: <cover.1682007088.git.daniel@makrotopia.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -77,22 +83,24 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Thu, 18 May 2023 13:29:19 +0100, Conor Dooley wrote:
-> Another version, although a lot smaller of a range-diff than previously!
-> All you get this time is the one change requested by Uwe on v17, along
-> with a rebase on -rc1.
+On Fri, 21 Apr 2023 00:22:20 +0100, Daniel Golle wrote:
+> Add support for PWM on the MediaTek MT7981 to pwm-mediatek.c as well
+> as new mediatek,mt7981-pwm compatible string to the existing bindings.
 > 
-> Thanks,
-> Conor.
+> Changes since v2:
+>  * improve commit message, adding that alphabetic order is restored
+> 
+> Changes since v1:
+>  * use pointer to reg_offset instead of u8 reg_ver and if-else
 > 
 > [...]
 
 Applied, thanks!
 
-[1/2] pwm: add microchip soft ip corePWM driver
-      commit: 2bf7ecf7b4fffd87d8eb5c072395239d6ff54728
-[2/2] MAINTAINERS: add pwm to PolarFire SoC entry
-      commit: de0bb6a8883342c19a5d20f28d5430169f87373e
+[1/2] dt-bindings: pwm: mediatek: Add mediatek,mt7981 compatible
+      commit: 88c66e018aa8b5a15d7fdba9908c01260c657bff
+[2/2] pwm: mediatek: Add support for MT7981
+      commit: 967da67a745fb73fd0fc7aa61fd197b76fceb273
 
 Best regards,
 -- 
