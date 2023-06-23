@@ -2,73 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA66573B2D2
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 10:41:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9764773B2D5
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 10:41:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231159AbjFWIlB convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 23 Jun 2023 04:41:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37426 "EHLO
+        id S231290AbjFWIlg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 04:41:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230170AbjFWIk7 (ORCPT
+        with ESMTP id S230008AbjFWIle (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 04:40:59 -0400
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC6801B4;
-        Fri, 23 Jun 2023 01:40:57 -0700 (PDT)
-Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-3ff274778feso4520591cf.1;
-        Fri, 23 Jun 2023 01:40:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687509657; x=1690101657;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=s3YbNGYLQjiL7Y5daSRoiDrXijuvl42Jh6Pko97orUI=;
-        b=FZOT9MzloR5f0rp1HVmPr3Ug1nyKl8xD9dclFAlBq+J/SZXjgAQfVYV5mXiMTdOmIy
-         Lmxn7QAmXzMnkNVhlDVUlF61o9at/3k8WwxvQgEmn/u/8chVt9sUCPK1g9Rf6n8mSggM
-         Fc6Stq97z34jknN+ZwD+6E+dyw6OHhXnNLjEzVc6E5VPvqA2FbyHc6aZaSvC3qScgZ1l
-         r1OsRbvtPlKZpr4Uqc9jJpjslh6YBeXhPneuiu59C6QSJTpKa8GkZ/V5p/vZ3KLO5C6f
-         om5GBnGalJ4eGzP7ulWyWoUW2VBrL+Iv/j42TXWkbD6EibwDjI+hQZoOFKTNfM7Itm0y
-         KVRQ==
-X-Gm-Message-State: AC+VfDz6pQmVvMQ/wI9VMfb6lCe0PCoHlzpmErhEBkFTK6m8KpzYGR2c
-        QBKGDjCTRQFFNfI7+xkkVrAreAmkrewJQg==
-X-Google-Smtp-Source: ACHHUZ4Q76RfxRS8IlEllxF68HdYht9dYb31qqmp9NGHxi1qDkU8TOsy+tGIrrFLojzKkonwhXjDmw==
-X-Received: by 2002:a05:622a:20f:b0:3f9:c539:c9d5 with SMTP id b15-20020a05622a020f00b003f9c539c9d5mr28207811qtx.68.1687509656750;
-        Fri, 23 Jun 2023 01:40:56 -0700 (PDT)
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
-        by smtp.gmail.com with ESMTPSA id v15-20020a2583cf000000b00bfee65aff13sm1382807ybm.40.2023.06.23.01.40.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Jun 2023 01:40:56 -0700 (PDT)
-Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-bd77424c886so448269276.0;
-        Fri, 23 Jun 2023 01:40:56 -0700 (PDT)
-X-Received: by 2002:a25:c746:0:b0:b9e:889:420f with SMTP id
- w67-20020a25c746000000b00b9e0889420fmr20362043ybe.12.1687509655921; Fri, 23
- Jun 2023 01:40:55 -0700 (PDT)
+        Fri, 23 Jun 2023 04:41:34 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC5F310C2;
+        Fri, 23 Jun 2023 01:41:32 -0700 (PDT)
+Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35N8ei0q008734;
+        Fri, 23 Jun 2023 08:41:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : in-reply-to : references : date : message-id : mime-version :
+ content-type; s=pp1; bh=wbDpukB6EcoDMgMhtdtYou3jl/+Z9bf22pAkaqy4JPQ=;
+ b=sSIyXqaZfghlh5i9uh2w1gT9JP5qu19yqZSo1hyyi6+8hJFsl+5XbyVcFKpsWiAoy8Pe
+ 81nfIiZCXFeAke0Vmit4I6pCd1a5eY0vHZcIa7cRLmBCtKkXd/MrM10Jxd4lFkVfoDjb
+ 8mAy4gX65hwxqO0rNSOSxHL+1i85R7Ahbxv1RW8y/Gsq0Wrf2mvPPahMUZ9vKA6qDjvw
+ 8WMePMuxXeNodKHVGDKoZIISjsXpfw5FQEf+jScxoemZ0IFMX3DEktdGbq2GWGu+LKw3
+ YRNPvt8WpUM+wGk2Gbm8BgnrJw2AvFdPGBQkRaH+sAXW+CzyFQXB/mem2GNqNr0gZBc2 DQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rd7upre2c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 23 Jun 2023 08:41:09 +0000
+Received: from m0353727.ppops.net (m0353727.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 35N8erGS009097;
+        Fri, 23 Jun 2023 08:41:09 GMT
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rd7upre1u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 23 Jun 2023 08:41:09 +0000
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35N7dHUt001270;
+        Fri, 23 Jun 2023 08:41:07 GMT
+Received: from smtprelay02.dal12v.mail.ibm.com ([9.208.130.97])
+        by ppma05wdc.us.ibm.com (PPS) with ESMTPS id 3r94f6e0gq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 23 Jun 2023 08:41:07 +0000
+Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
+        by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35N8f7D342991886
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 23 Jun 2023 08:41:07 GMT
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 113FB58068;
+        Fri, 23 Jun 2023 08:41:07 +0000 (GMT)
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CF3ED58056;
+        Fri, 23 Jun 2023 08:41:01 +0000 (GMT)
+Received: from skywalker.linux.ibm.com (unknown [9.43.18.202])
+        by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Fri, 23 Jun 2023 08:41:01 +0000 (GMT)
+X-Mailer: emacs 29.0.91 (via feedmail 11-beta-1 I)
+From:   "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+To:     Vishal Verma <vishal.l.verma@intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>
+Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, nvdimm@lists.linux.dev,
+        linux-cxl@vger.kernel.org, Huang Ying <ying.huang@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>
+Subject: Re: [PATCH 1/3] mm/memory_hotplug: Allow an override for the
+ memmap_on_memory param
+In-Reply-To: <20230613-vv-kmem_memmap-v1-1-f6de9c6af2c6@intel.com>
+References: <20230613-vv-kmem_memmap-v1-0-f6de9c6af2c6@intel.com>
+ <20230613-vv-kmem_memmap-v1-1-f6de9c6af2c6@intel.com>
+Date:   Fri, 23 Jun 2023 14:10:58 +0530
+Message-ID: <87mt0qy3j9.fsf@linux.ibm.com>
 MIME-Version: 1.0
-References: <20230623080135.15696-1-fabrizio.castro.jz@renesas.com>
-In-Reply-To: <20230623080135.15696-1-fabrizio.castro.jz@renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 23 Jun 2023 10:40:43 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVNG_LENbU_nu-W+x_snXxbz3vbs=Yb-__FF3DBR2JEUA@mail.gmail.com>
-Message-ID: <CAMuHMdVNG_LENbU_nu-W+x_snXxbz3vbs=Yb-__FF3DBR2JEUA@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: renesas: rzv2mevk2: Fix eMMC/SDHI pinctrl names
-To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: -2aAWK_DDa6XyaRL594jM6M3_jR34vSM
+X-Proofpoint-GUID: af9dV7ZApH8KD2C7zgQKTGsabPIJtEn6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-23_03,2023-06-22_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
+ spamscore=0 bulkscore=0 lowpriorityscore=0 adultscore=0 malwarescore=0
+ mlxlogscore=999 phishscore=0 clxscore=1011 suspectscore=0 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306230076
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,118 +102,201 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Fabrizio,
+Vishal Verma <vishal.l.verma@intel.com> writes:
 
-CC pinctrl
-
-Thanks for your patch!
-
-On Fri, Jun 23, 2023 at 10:01 AM Fabrizio Castro
-<fabrizio.castro.jz@renesas.com> wrote:
-> The original commit uses the same names ("data" and "ctrl")
-> for the subnodes of pinctrl definitions for both eMMC and
-> SDHI0 (emmc_pins, sdhi0_pins, and sdhi0_pins_uhs) leading to
-
-That should be fine, as the parents of these subnodes do have different
-names?
-
-> the below issue:
+> For memory hotplug to consider MHP_MEMMAP_ON_MEMORY behavior, the
+> 'memmap_on_memory' module parameter was a hard requirement.
 >
-> pinctrl-rzv2m b6250000.pinctrl: pin P8_2 already requested by 85000000.mmc; cannot claim for 85020000.mmc
-> pinctrl-rzv2m b6250000.pinctrl: pin-130 (85020000.mmc) status -22
-> renesas_sdhi_internal_dmac 85020000.mmc: Error applying setting, reverse things back
-
-To me, that sounds like a bug in the pinctrl core.
-Or am I missing something?
-
-> This commit fixes the problem by making the names for the
-> pinctrl subnodes of eMMC and SDHI0 unique.
+> In preparation for the dax/kmem driver to use memmap_on_memory
+> semantics, arrange for the module parameter check to be bypassed via the
+> appropriate mhp_flag.
 >
-> Fixes: b6c0be722b0c ("arm64: dts: renesas: rzv2mevk2: Add uSD card and eMMC support")
-> Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+> Recall that the kmem driver could contribute huge amounts of hotplugged
+> memory originating from special purposes devices such as CXL memory
+> expanders. In some cases memmap_on_memory may be the /only/ way this new
+> memory can be hotplugged. Hence it makes sense for kmem to have a way to
+> force memmap_on_memory without depending on a module param, if all the
+> other conditions for it are met.
+>
+> The only other user of this interface is acpi/acpi_memoryhotplug.c,
+> which only enables the mhp_flag if an initial
+> mhp_supports_memmap_on_memory() test passes. Maintain the existing
+> behavior and semantics for this by performing the initial check from
+> acpi without the MHP_MEMMAP_ON_MEMORY flag, so its decision falls back
+> to the module parameter.
+>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Len Brown <lenb@kernel.org>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: David Hildenbrand <david@redhat.com>
+> Cc: Oscar Salvador <osalvador@suse.de>
+> Cc: Dan Williams <dan.j.williams@intel.com>
+> Cc: Dave Jiang <dave.jiang@intel.com>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: Huang Ying <ying.huang@intel.com>
+> Signed-off-by: Vishal Verma <vishal.l.verma@intel.com>
 > ---
->  .../arm64/boot/dts/renesas/r9a09g011-v2mevk2.dts | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
+>  include/linux/memory_hotplug.h |  2 +-
+>  drivers/acpi/acpi_memhotplug.c |  2 +-
+>  mm/memory_hotplug.c            | 24 ++++++++++++++++--------
+>  3 files changed, 18 insertions(+), 10 deletions(-)
 >
-> diff --git a/arch/arm64/boot/dts/renesas/r9a09g011-v2mevk2.dts b/arch/arm64/boot/dts/renesas/r9a09g011-v2mevk2.dts
-> index 39fe3f94991e..11c5cffea5a5 100644
-> --- a/arch/arm64/boot/dts/renesas/r9a09g011-v2mevk2.dts
-> +++ b/arch/arm64/boot/dts/renesas/r9a09g011-v2mevk2.dts
-> @@ -167,7 +167,7 @@ &i2c2 {
+> diff --git a/include/linux/memory_hotplug.h b/include/linux/memory_hotplug.h
+> index 9fcbf5706595..c9ddcd3cad70 100644
+> --- a/include/linux/memory_hotplug.h
+> +++ b/include/linux/memory_hotplug.h
+> @@ -358,7 +358,7 @@ extern struct zone *zone_for_pfn_range(int online_type, int nid,
+>  extern int arch_create_linear_mapping(int nid, u64 start, u64 size,
+>  				      struct mhp_params *params);
+>  void arch_remove_linear_mapping(u64 start, u64 size);
+> -extern bool mhp_supports_memmap_on_memory(unsigned long size);
+> +extern bool mhp_supports_memmap_on_memory(unsigned long size, mhp_t mhp_flags);
+>  #endif /* CONFIG_MEMORY_HOTPLUG */
+>  
+>  #endif /* __LINUX_MEMORY_HOTPLUG_H */
+> diff --git a/drivers/acpi/acpi_memhotplug.c b/drivers/acpi/acpi_memhotplug.c
+> index 24f662d8bd39..119d3bb49753 100644
+> --- a/drivers/acpi/acpi_memhotplug.c
+> +++ b/drivers/acpi/acpi_memhotplug.c
+> @@ -211,7 +211,7 @@ static int acpi_memory_enable_device(struct acpi_memory_device *mem_device)
+>  		if (!info->length)
+>  			continue;
+>  
+> -		if (mhp_supports_memmap_on_memory(info->length))
+> +		if (mhp_supports_memmap_on_memory(info->length, 0))
+>  			mhp_flags |= MHP_MEMMAP_ON_MEMORY;
+>  		result = __add_memory(mgid, info->start_addr, info->length,
+>  				      mhp_flags);
+> diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
+> index 8e0fa209d533..bb3845830922 100644
+> --- a/mm/memory_hotplug.c
+> +++ b/mm/memory_hotplug.c
+> @@ -1283,15 +1283,21 @@ static int online_memory_block(struct memory_block *mem, void *arg)
+>  	return device_online(&mem->dev);
+>  }
+>  
+> -bool mhp_supports_memmap_on_memory(unsigned long size)
+> +bool mhp_supports_memmap_on_memory(unsigned long size, mhp_t mhp_flags)
+>  {
+>  	unsigned long nr_vmemmap_pages = size / PAGE_SIZE;
+>  	unsigned long vmemmap_size = nr_vmemmap_pages * sizeof(struct page);
+>  	unsigned long remaining_size = size - vmemmap_size;
+>  
+>  	/*
+> -	 * Besides having arch support and the feature enabled at runtime, we
+> -	 * need a few more assumptions to hold true:
+> +	 * The MHP_MEMMAP_ON_MEMORY flag indicates a caller that wants to force
+> +	 * memmap_on_memory (if other conditions are met), regardless of the
+> +	 * module parameter. drivers/dax/kmem.c is an example, where large
+> +	 * amounts of hotplug memory may come from, and the only option to
+> +	 * successfully online all of it is to place the memmap on this memory.
+> +	 *
+> +	 * Besides having arch support and the feature enabled at runtime or
+> +	 * via the mhp_flag, we need a few more assumptions to hold true:
+>  	 *
+>  	 * a) We span a single memory block: memory onlining/offlinin;g happens
+>  	 *    in memory block granularity. We don't want the vmemmap of online
+> @@ -1315,10 +1321,12 @@ bool mhp_supports_memmap_on_memory(unsigned long size)
+>  	 *       altmap as an alternative source of memory, and we do not exactly
+>  	 *       populate a single PMD.
+>  	 */
+> -	return mhp_memmap_on_memory() &&
+> -	       size == memory_block_size_bytes() &&
+> -	       IS_ALIGNED(vmemmap_size, PMD_SIZE) &&
+> -	       IS_ALIGNED(remaining_size, (pageblock_nr_pages << PAGE_SHIFT));
+> +
+> +	if ((mhp_flags & MHP_MEMMAP_ON_MEMORY) || mhp_memmap_on_memory())
+> +		return size == memory_block_size_bytes() &&
+> +		       IS_ALIGNED(vmemmap_size, PMD_SIZE) &&
+> +		       IS_ALIGNED(remaining_size, (pageblock_nr_pages << PAGE_SHIFT));
+> +	return false;
+>  }
+>  
+>  /*
+> @@ -1375,7 +1383,7 @@ int __ref add_memory_resource(int nid, struct resource *res, mhp_t mhp_flags)
+>  	 * Self hosted memmap array
+>  	 */
+>  	if (mhp_flags & MHP_MEMMAP_ON_MEMORY) {
+> -		if (!mhp_supports_memmap_on_memory(size)) {
+> +		if (!mhp_supports_memmap_on_memory(size, mhp_flags)) {
+>  			ret = -EINVAL;
+>  			goto error;
+>  		}
 >
->  &pinctrl {
->         emmc_pins: emmc {
-> -               data {
-> +               emmc_data {
->                         pinmux = <RZV2M_PORT_PINMUX(0, 0, 2)>, /* MMDAT0 */
->                                  <RZV2M_PORT_PINMUX(0, 1, 2)>, /* MMDAT1 */
->                                  <RZV2M_PORT_PINMUX(0, 2, 2)>, /* MMDAT2 */
-> @@ -179,7 +179,7 @@ data {
->                         power-source = <1800>;
->                 };
->
-> -               ctrl {
-> +               emmc_ctrl {
->                         pinmux = <RZV2M_PORT_PINMUX(0, 10, 2)>, /* MMCMD */
->                                  <RZV2M_PORT_PINMUX(0, 11, 2)>; /* MMCLK */
->                         power-source = <1800>;
-> @@ -197,7 +197,7 @@ i2c2_pins: i2c2 {
->         };
->
->         sdhi0_pins: sd0 {
-> -               data {
-> +               sd0_data {
->                         pinmux = <RZV2M_PORT_PINMUX(8, 2, 1)>, /* SD0DAT0 */
->                                  <RZV2M_PORT_PINMUX(8, 3, 1)>, /* SD0DAT1 */
->                                  <RZV2M_PORT_PINMUX(8, 4, 1)>, /* SD0DAT2 */
-> @@ -205,20 +205,20 @@ data {
->                         power-source = <3300>;
->                 };
->
-> -               ctrl {
-> +               sd0_ctrl {
->                         pinmux = <RZV2M_PORT_PINMUX(8, 0, 1)>, /* SD0CMD */
->                                  <RZV2M_PORT_PINMUX(8, 1, 1)>; /* SD0CLK */
->                         power-source = <3300>;
->                 };
->
-> -               cd {
-> +               sd0_cd {
->                         pinmux = <RZV2M_PORT_PINMUX(8, 7, 1)>; /* SD0CD */
->                         power-source = <3300>;
->                 };
->         };
->
->         sdhi0_pins_uhs: sd0-uhs {
-> -               data {
-> +               sd0_uhs_data {
->                         pinmux = <RZV2M_PORT_PINMUX(8, 2, 1)>, /* SD0DAT0 */
->                                  <RZV2M_PORT_PINMUX(8, 3, 1)>, /* SD0DAT1 */
->                                  <RZV2M_PORT_PINMUX(8, 4, 1)>, /* SD0DAT2 */
-> @@ -226,13 +226,13 @@ data {
->                         power-source = <1800>;
->                 };
->
-> -               ctrl {
-> +               sd0_uhs_ctrl {
->                         pinmux = <RZV2M_PORT_PINMUX(8, 0, 1)>, /* SD0CMD */
->                                  <RZV2M_PORT_PINMUX(8, 1, 1)>; /* SD0CLK */
->                         power-source = <1800>;
->                 };
->
-> -               cd {
-> +               sd0_uhs_cd {
->                         pinmux = <RZV2M_PORT_PINMUX(8, 7, 1)>; /* SD0CD */
->                         power-source = <1800>;
->                 };
 
-Gr{oetje,eeting}s,
+I was working on enabling memmap_on_memory for ppc64 and came across
+this. Can we do this as below?
 
-                        Geert
+commit d55eddf71032cad3e057d8fa4c61ad2b8e05aaa8
+Author: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+Date:   Fri Jun 23 12:11:31 2023 +0530
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+    mm/hotplug: Allow to force enable memmap on memory
+    
+    In some cases like DAX kmem, we want to enable memmap on memory
+    even if we have memory_hotplug.memmap_on_memory disabled. This
+    patch enables such usage. DAX kmem can use MHP_MEMMAP_ON_MEMORY
+    directly to request for memmap on memory.
+    
+    Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+diff --git a/drivers/acpi/acpi_memhotplug.c b/drivers/acpi/acpi_memhotplug.c
+index 24f662d8bd39..4d0096fc4cc2 100644
+--- a/drivers/acpi/acpi_memhotplug.c
++++ b/drivers/acpi/acpi_memhotplug.c
+@@ -211,8 +211,7 @@ static int acpi_memory_enable_device(struct acpi_memory_device *mem_device)
+ 		if (!info->length)
+ 			continue;
+ 
+-		if (mhp_supports_memmap_on_memory(info->length))
+-			mhp_flags |= MHP_MEMMAP_ON_MEMORY;
++		mhp_flags |= get_memmap_on_memory_flags();
+ 		result = __add_memory(mgid, info->start_addr, info->length,
+ 				      mhp_flags);
+ 
+diff --git a/include/linux/memory_hotplug.h b/include/linux/memory_hotplug.h
+index 9fcbf5706595..f7f534084393 100644
+--- a/include/linux/memory_hotplug.h
++++ b/include/linux/memory_hotplug.h
+@@ -359,6 +359,13 @@ extern int arch_create_linear_mapping(int nid, u64 start, u64 size,
+ 				      struct mhp_params *params);
+ void arch_remove_linear_mapping(u64 start, u64 size);
+ extern bool mhp_supports_memmap_on_memory(unsigned long size);
++bool mhp_memmap_on_memory(void);
+ #endif /* CONFIG_MEMORY_HOTPLUG */
+ 
++static inline unsigned long get_memmap_on_memory_flags(void)
++{
++	if (mhp_memmap_on_memory())
++		return MHP_MEMMAP_ON_MEMORY;
++	return 0;
++}
+ #endif /* __LINUX_MEMORY_HOTPLUG_H */
+diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
+index eb18d1ac7e84..85d29909fd89 100644
+--- a/mm/memory_hotplug.c
++++ b/mm/memory_hotplug.c
+@@ -50,7 +50,7 @@ static bool memmap_on_memory __ro_after_init;
+ module_param(memmap_on_memory, bool, 0444);
+ MODULE_PARM_DESC(memmap_on_memory, "Enable memmap on memory for memory hotplug");
+ 
+-static inline bool mhp_memmap_on_memory(void)
++bool mhp_memmap_on_memory(void)
+ {
+ 	return memmap_on_memory;
+ }
+@@ -1316,10 +1316,9 @@ bool mhp_supports_memmap_on_memory(unsigned long size)
+ 	 *       altmap as an alternative source of memory, and we do not exactly
+ 	 *       populate a single PMD.
+ 	 */
+-	return mhp_memmap_on_memory() &&
+-	       size == memory_block_size_bytes() &&
+-	       IS_ALIGNED(vmemmap_size, PMD_SIZE) &&
+-	       IS_ALIGNED(remaining_size, (pageblock_nr_pages << PAGE_SHIFT));
++	return size == memory_block_size_bytes() &&
++		IS_ALIGNED(vmemmap_size, PMD_SIZE) &&
++		IS_ALIGNED(remaining_size, (pageblock_nr_pages << PAGE_SHIFT));
+ }
+ 
+ /*
+
