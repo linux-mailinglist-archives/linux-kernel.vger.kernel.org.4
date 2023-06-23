@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7672F73B037
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 07:45:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD53473B039
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 07:45:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231281AbjFWFpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 01:45:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60200 "EHLO
+        id S231450AbjFWFpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 01:45:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230391AbjFWFp1 (ORCPT
+        with ESMTP id S231261AbjFWFp3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 01:45:27 -0400
+        Fri, 23 Jun 2023 01:45:29 -0400
 Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42CA81BF7
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 22:45:26 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-bb2202e0108so410582276.1
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 22:45:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E15A1BD6
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 22:45:28 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-bfee5fd909aso454865276.1
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 22:45:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687499125; x=1690091125;
-        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=xG7S9EdmjVVI6rCoFSNq3FA5xO2SVwNz93G04XmDDpE=;
-        b=68Z680TG3vm/v6niWksrjQzjzAkc3G3TDkGOKUG0WoHhGqC0SVX7RPuBg0oh4W0yb7
-         ruNpsGw1efaC8IOZv/zZjsG+odZmV5qqfWTC4ql2/Er/UraJSmAkvga43/PK4zjlQyXb
-         tSvt3LUqCBpryJG57liUyDuOKaG8D+Uhv3Z6Nr5boOIqM96NRC/3C/HgjXblgkomnHLy
-         hF+R8tXRjk3uMduojw203VtZx7lk9zo3aWz0GTQD4bGV6M44b24akj34EIa2YkRGTg0b
-         iA+7hLoMGQ0bRwqnNF1LuWNInTPRS8bC6D6/oD5brKW73tBJxNGSD64EwCK7tl2JpyG1
-         BLmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687499125; x=1690091125;
-        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+        d=google.com; s=20221208; t=1687499127; x=1690091127;
+        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=xG7S9EdmjVVI6rCoFSNq3FA5xO2SVwNz93G04XmDDpE=;
-        b=Fx1VuTuA7UbHvJUZgnlHoTeMwnlKzcElAh/QxhLx3BVda2ym/wmaL5KmAxjaAhASAL
-         dhdF4tDe/PONKzRSf76eqE45T7TqcDS0l+R+ElPihzCPK+CwgnqfMGrOz9OcXU6S9k3c
-         S+d5KgeBI8wQIgXfdQJfDoaS4YhJftPTpdDgyXkuW51D6C6iodO2szg7CBYyp13C2uk/
-         blKhtzsFw1Tu25mwFS/8fiRT1t2t2K4p/ALTRq67tV/aPvuvtF9d72Myam1vIUf2igyJ
-         mbrUKrfKH6qOM1b+GImcWGrO3S/tlIIJmpun77jaGzzRUzqDnaf5nnuJA2fpk7glN9vr
-         eGGw==
-X-Gm-Message-State: AC+VfDxEnsE0PW66AJHi3A9iWwu8U0+hHEe0BUhl0nKBZQA0IOU3AKUa
-        v7XEcNeGVU5N0qvSl/xdsIBpw1WfrlhN
-X-Google-Smtp-Source: ACHHUZ6g4NeBMT1mM78S4L8pcMUlh/TQSBMVetvWi1J1ml1BVg/J0qxr8XORzrMCJstmlNR0jN9tcog3h5X7
+        bh=NjLmKeMWSmb3eWAjfl0dBtX06VaF/92y1fARvMWRoy8=;
+        b=ujjd41VHK2+bXNq7ZNjAH7mDCfeO0Y1E82Bue8UXNFcth6koW8w3pcLTWS29IwS4pb
+         Rsdb5UqCppN5Nrm7KH5u5Do1K6fopPUgNgY0fPlQGoD4RruoTPi0QA2+AFOQXbIDu+H1
+         Z43oNAAc6XcsrAvMzrgOwo4mp3S3IqU3eRnvp74/caoTSiNaR4O7BkrHLbCMD9rSaB/S
+         IfghTZNjvttyxpD34zAWzwKrwC8GOSW0twtNQkr+IWGO3F1BOZLOE1q/OuZGJxAklmoT
+         1AEsCUk5erVlaHfnhMipyuc4+VXuwQPy4EAec0N5D99qryjfWQLAV/tTKl9E2XMwTNfe
+         cRIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687499127; x=1690091127;
+        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NjLmKeMWSmb3eWAjfl0dBtX06VaF/92y1fARvMWRoy8=;
+        b=FIany4NCMgHfUhRlji2uPdCwTKig3nNHppk1LAwJAZ6geKP3TtmUkOPJCcMexcCpvi
+         jRjrNgA1QRcMVW6kjM4QMcwvFfsQ0m9l/gGRNPbHbrjSmKzXThqpPbly6gLNXw1kKNGL
+         r4jSFeTcB71vtRtjkgrbzzY3hmCvu2FFEFzlo03gwAjxHHwz8PnuAGTk0VW0vUV71ZvT
+         4Ch/cdMqtJdRsLs0fnU9F9p4rtLZ0Y3TmDu8ZhGBYj9QtdE2SqcBF+UHYesEerQVYDVz
+         UxyB0X/I7+fm+0KZ8zR7cm93Nilm6oy9t6ayiza+Aw1h95zCoj972wO+l3iE/nmW5zDA
+         k49Q==
+X-Gm-Message-State: AC+VfDy0hF8hK+PoI7tSPpHBJdUUnz81jA2dnF0YkoaKszeJ1sBzicPk
+        07ojmECor0Tsx3jRnDkgFxFYy7XMBfyZ
+X-Google-Smtp-Source: ACHHUZ4yDDI92XqYt3wZe7Xq0xDJsuGhL3DizYVTIoA6MNMaXqogjb60TD2ATgy9O7AeH1sznK4Ih8I796Qj
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:6559:8968:cdfe:35b6])
- (user=irogers job=sendgmr) by 2002:a25:ce11:0:b0:bc3:9cd9:6e0e with SMTP id
- x17-20020a25ce11000000b00bc39cd96e0emr3015289ybe.10.1687499125559; Thu, 22
- Jun 2023 22:45:25 -0700 (PDT)
-Date:   Thu, 22 Jun 2023 22:45:17 -0700
-Message-Id: <20230623054520.4118442-1-irogers@google.com>
+ (user=irogers job=sendgmr) by 2002:a25:ad94:0:b0:ba8:3600:c3d0 with SMTP id
+ z20-20020a25ad94000000b00ba83600c3d0mr9031883ybi.8.1687499127719; Thu, 22 Jun
+ 2023 22:45:27 -0700 (PDT)
+Date:   Thu, 22 Jun 2023 22:45:18 -0700
+In-Reply-To: <20230623054520.4118442-1-irogers@google.com>
+Message-Id: <20230623054520.4118442-2-irogers@google.com>
 Mime-Version: 1.0
+References: <20230623054520.4118442-1-irogers@google.com>
 X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-Subject: [PATCH v3 0/3] Remove symbol_name_rb_node
+Subject: [PATCH v3 1/3] perf dso: Sort symbols under lock
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -80,35 +82,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use a sorted array of symbol pointers to avoid the potentially
-unnecessary 3 pointers (rb_node) for the name sorted symbols. Saves
-been 24 and 16 bytes per symbol.
+Determine if symbols are sorted, set the sorted flag and sort under
+the dso lock. Done in the interest of thread safety.
 
-v3. Move sort by name dso lock into its own patch.
-v2. map__find_symbol_by_name_idx so that map__find_symbol_by_name
-    doesn't need an optional parameter. Separate out
-    symbol_conf.sort_by_name removal.
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/perf/util/map.c    | 3 +--
+ tools/perf/util/symbol.c | 8 ++++++--
+ 2 files changed, 7 insertions(+), 4 deletions(-)
 
-Ian Rogers (3):
-  perf dso: Sort symbols under lock
-  perf symbol: Remove symbol_name_rb_node
-  perf symbol_conf: Remove now unused sort_by_name
-
- tools/perf/builtin-kallsyms.c    |   1 -
- tools/perf/builtin-lock.c        |   2 -
- tools/perf/builtin-report.c      |   1 -
- tools/perf/tests/builtin-test.c  |   1 -
- tools/perf/util/dso.c            |   7 +-
- tools/perf/util/dso.h            |   3 +-
- tools/perf/util/map.c            |  14 +++-
- tools/perf/util/map.h            |  12 +--
- tools/perf/util/probe-event.c    |  16 ++--
- tools/perf/util/symbol.c         | 131 ++++++++++++++++---------------
- tools/perf/util/symbol.h         |  12 +--
- tools/perf/util/symbol_conf.h    |   1 -
- tools/perf/util/symbol_fprintf.c |  10 +--
- 13 files changed, 106 insertions(+), 105 deletions(-)
-
+diff --git a/tools/perf/util/map.c b/tools/perf/util/map.c
+index f30d34903aa4..a45708289cc6 100644
+--- a/tools/perf/util/map.c
++++ b/tools/perf/util/map.c
+@@ -398,8 +398,7 @@ struct symbol *map__find_symbol_by_name(struct map *map, const char *name)
+ 		return NULL;
+ 
+ 	dso = map__dso(map);
+-	if (!dso__sorted_by_name(dso))
+-		dso__sort_by_name(dso);
++	dso__sort_by_name(dso);
+ 
+ 	return dso__find_symbol_by_name(dso, name);
+ }
+diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
+index d275d3bef7d5..bb02047e1c59 100644
+--- a/tools/perf/util/symbol.c
++++ b/tools/perf/util/symbol.c
+@@ -613,8 +613,12 @@ struct symbol *dso__find_symbol_by_name(struct dso *dso, const char *name)
+ 
+ void dso__sort_by_name(struct dso *dso)
+ {
+-	dso__set_sorted_by_name(dso);
+-	return symbols__sort_by_name(&dso->symbol_names, &dso->symbols);
++	mutex_lock(&dso->lock);
++	if (!dso__sorted_by_name(dso)) {
++		symbols__sort_by_name(&dso->symbol_names, &dso->symbols);
++		dso__set_sorted_by_name(dso);
++	}
++	mutex_unlock(&dso->lock);
+ }
+ 
+ /*
 -- 
 2.41.0.162.gfafddb0af9-goog
 
