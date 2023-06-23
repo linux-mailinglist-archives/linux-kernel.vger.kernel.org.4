@@ -2,107 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 492E873BF22
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 21:59:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A292073BF29
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 22:00:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229528AbjFWT7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 15:59:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39282 "EHLO
+        id S231636AbjFWUAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 16:00:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbjFWT7j (ORCPT
+        with ESMTP id S229620AbjFWUAp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 15:59:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C46E65;
-        Fri, 23 Jun 2023 12:59:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        Fri, 23 Jun 2023 16:00:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D5702736
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 12:59:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687550393;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bRaQkpW8TcfPoBNjOHA2HT8r7AuFWY474S3n34c5w7Y=;
+        b=WEJl1umWI5s29vHRlb6NTPYlpKzniH15JEjW+i9lcLbj6v+ivE9AIqQzd4bqP4h8i20e2k
+        EpRLehU2yT41F/wvl9Pp9CJRf7SRtvE0nuDXcaLg9Oz2Lphp4fVqNliJwD6RWHhod8D9iE
+        aggXv3RlvhWDGNM7HUT27ZdisOpmN88=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-344-ITDEfdwjNmy5KdCgUGIWsA-1; Fri, 23 Jun 2023 15:59:51 -0400
+X-MC-Unique: ITDEfdwjNmy5KdCgUGIWsA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3BAA861B07;
-        Fri, 23 Jun 2023 19:59:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 987A7C433CB;
-        Fri, 23 Jun 2023 19:59:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687550376;
-        bh=x69fHIP2je3gDZwqyjGBKo1jt2snNaQ3tcGdMwx/N+c=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=h+bwh8gf8SGSpQNtRQ/ZcPyyRsuy595Iwc7fBtTeSEMBchLYDMvIrMFZLcrWUEHdd
-         NYLwcBOc485+Q6KCuYQbdu1A3/PxPBDtqxJGs8OwbR/QHD7OwJMffJXX3iGH691c5K
-         55rvSD/aqtgFrSzed8Je8MQKUzG2wUq54uz5OgnMUAvMJX/e7vJjdM6cvuE/dIdfo4
-         VGBCUzaQdMlkt7c1mICHSu0yeQlX6rnL6yqiP//qrfKuUWNNko+3NaFYIZ40bYF106
-         xCL02yW/tdi4UUBu4xGZUO/sFDywwgTr838TxBl/5yEXPg/UxeEcvBLBU6t1vOZZba
-         5hij9z6V7kQYQ==
-Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-2b4636bb22eso17615711fa.2;
-        Fri, 23 Jun 2023 12:59:36 -0700 (PDT)
-X-Gm-Message-State: AC+VfDzcY66wGoMBZaPhnY9qv15ATDgIKD1F+xYOzsl0lFOpG6fn0Qij
-        jkG128SfL4arl+/d8nb2CIG2tn9c/uZoMoOT8A==
-X-Google-Smtp-Source: ACHHUZ4YXbnWqXIH9PucV4QWrhD1DoIEcrGRjoJNH9gv7TQjOZQ/B27CwVHmHZUHVvbtfIyJA/J1lD8HhD4jCdIPyfg=
-X-Received: by 2002:a05:651c:105b:b0:2a7:b986:3481 with SMTP id
- x27-20020a05651c105b00b002a7b9863481mr14772424ljm.41.1687550374565; Fri, 23
- Jun 2023 12:59:34 -0700 (PDT)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 942F93813F3C;
+        Fri, 23 Jun 2023 19:59:50 +0000 (UTC)
+Received: from lorien.usersys.redhat.com (unknown [10.22.33.48])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id DE86DC00049;
+        Fri, 23 Jun 2023 19:59:49 +0000 (UTC)
+Date:   Fri, 23 Jun 2023 15:59:47 -0400
+From:   Phil Auld <pauld@redhat.com>
+To:     Benjamin Segall <bsegall@google.com>
+Cc:     linux-kernel@vger.kernel.org, Juri Lelli <juri.lelli@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mel Gorman <mgorman@suse.de>
+Subject: Re: [PATCH] Sched/fair: Block nohz tick_stop when cfs bandwidth in
+ use
+Message-ID: <20230623195947.GC766130@lorien.usersys.redhat.com>
+References: <20230622132751.2900081-1-pauld@redhat.com>
+ <xm26zg4r8bnz.fsf@google.com>
+ <20230622213730.GE727646@lorien.usersys.redhat.com>
+ <20230623130859.GA766130@lorien.usersys.redhat.com>
+ <xm26r0q280oy.fsf@google.com>
 MIME-Version: 1.0
-References: <20230516184626.154892-1-afd@ti.com> <20230516184626.154892-2-afd@ti.com>
- <20230517075310.iduc2eisw7a5bm45@krzk-bin>
-In-Reply-To: <20230517075310.iduc2eisw7a5bm45@krzk-bin>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Fri, 23 Jun 2023 13:59:21 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqL7EPkBAigGJ8iR4t532R82N0fFFmb4BVUw84xpb0545w@mail.gmail.com>
-Message-ID: <CAL_JsqL7EPkBAigGJ8iR4t532R82N0fFFmb4BVUw84xpb0545w@mail.gmail.com>
-Subject: Re: [PATCH 2/2] dt-bindings: clock: ehrpwm: Remove unneeded syscon compatible
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andrew Davis <afd@ti.com>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vignesh Raghavendra <vigneshr@ti.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <xm26r0q280oy.fsf@google.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 1:53=E2=80=AFAM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On Tue, 16 May 2023 13:46:26 -0500, Andrew Davis wrote:
-> > This node's register space is not accessed by any other node, which
-> > is the traditional use for the "syscon" hint. It looks to have been
-> > added here to make use of a Linux kernel helper syscon_node_to_regmap()=
-.
-> > The Linux driver now uses a more appropriate helper that does not
-> > require the hint, so let's remove it from the binding.
+On Fri, Jun 23, 2023 at 11:59:09AM -0700 Benjamin Segall wrote:
+> Phil Auld <pauld@redhat.com> writes:
+> 
+> > On Thu, Jun 22, 2023 at 05:37:30PM -0400 Phil Auld wrote:
+> >> On Thu, Jun 22, 2023 at 01:49:52PM -0700 Benjamin Segall wrote:
+> >> > Phil Auld <pauld@redhat.com> writes:
+> >> > 
+> >> > > CFS bandwidth limits and NOHZ full don't play well together.  Tasks
+> >> > > can easily run well past their quotas before a remote tick does
+> >> > > accounting.  This leads to long, multi-period stalls before such
+> >> > > tasks can run again. Currentlyi, when presented with these conflicting
+> >> > > requirements the scheduler is favoring nohz_full and letting the tick
+> >> > > be stopped. However, nohz tick stopping is already best-effort, there
+> >> > > are a number of conditions that can prevent it, whereas cfs runtime
+> >> > > bandwidth is expected to be enforced.
+> >> > >
+> >> > > Make the scheduler favor bandwidth over stopping the tick by setting
+> >> > > TICK_DEP_BIT_SCHED when the only running task is a cfs task with
+> >> > > runtime limit enabled.
+> >> > >
+> >> > > Add sched_feat HZ_BW (off by default) to control this behavior.
+> >> > >
+> >> > > Signed-off-by: Phil Auld <pauld@redhat.com>
+> >> > > Cc: Ingo Molnar <mingo@redhat.com>
+> >> > > Cc: Peter Zijlstra <peterz@infradead.org>
+> >> > > Cc: Vincent Guittot <vincent.guittot@linaro.org>
+> >> > > Cc: Juri Lelli <juri.lelli@redhat.com>
+> >> > > Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> >> > > Cc: Valentin Schneider <vschneid@redhat.com>
+> >> > > Cc: Ben Segall <bsegall@google.com>
+> >> > > ---
+> >> > >  kernel/sched/fair.c     | 33 ++++++++++++++++++++++++++++++++-
+> >> > >  kernel/sched/features.h |  2 ++
+> >> > >  2 files changed, 34 insertions(+), 1 deletion(-)
+> >> > >
+> >> > > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> >> > > index 373ff5f55884..880eadfac330 100644
+> >> > > --- a/kernel/sched/fair.c
+> >> > > +++ b/kernel/sched/fair.c
+> >> > > @@ -6139,6 +6139,33 @@ static void __maybe_unused unthrottle_offline_cfs_rqs(struct rq *rq)
+> >> > >  	rcu_read_unlock();
+> >> > >  }
+> >> > >  
+> >> > > +#ifdef CONFIG_NO_HZ_FULL
+> >> > > +/* called from pick_next_task_fair() */
+> >> > > +static void sched_fair_update_stop_tick(struct rq *rq, struct task_struct *p)
+> >> > > +{
+> >> > > +	struct cfs_rq *cfs_rq = task_cfs_rq(p);
+> >> > > +	int cpu = cpu_of(rq);
+> >> > > +
+> >> > > +	if (!sched_feat(HZ_BW) || !cfs_bandwidth_used())
+> >> > > +		return;
+> >> > > +
+> >> > > +	if (!tick_nohz_full_cpu(cpu))
+> >> > > +		return;
+> >> > > +
+> >> > > +	if (rq->nr_running != 1 || !sched_can_stop_tick(rq))
+> >> > > +		return;
+> >> > > +
+> >> > > +	/*
+> >> > > +	 *  We know there is only one task runnable and we've just picked it. The
+> >> > > +	 *  normal enqueue path will have cleared TICK_DEP_BIT_SCHED if we will
+> >> > > +	 *  be otherwise able to stop the tick. Just need to check if we are using
+> >> > > +	 *  bandwidth control.
+> >> > > +	 */
+> >> > > +	if (cfs_rq->runtime_enabled)
+> >> > > +		tick_nohz_dep_set_cpu(cpu, TICK_DEP_BIT_SCHED);
+> >> > > +}
+> >> > > +#endif
+> >> > 
+> >> > So from a CFS_BANDWIDTH pov runtime_enabled && nr_running == 1 seems
+> >> > fine. But working around sched_can_stop_tick instead of with it seems
+> >> > sketchy in general, and in an edge case like "migrate a task onto the
+> >> > cpu and then off again" you'd get sched_update_tick_dependency resetting
+> >> > the TICK_DEP_BIT and then not call PNT (ie a task wakes up onto this cpu
+> >> > without preempting, and then another cpu goes idle and pulls it, causing
+> >> > this cpu to go into nohz_full).
+> >> > 
+> >> 
+> >> The information to make these tests is not available in sched_can_stop_tick.
+> >> I did start there. When that is called, and we are likely to go nohz_full,
+> >> curr is null so it's hard to find the right cfs_rq to make that
+> >> runtime_enabled test against.  We could, maybe, plumb the task being enqueued
+> >> in but it would not be valid for the dequeue path and would be a bit messy.
+> >>
 > >
-> > Signed-off-by: Andrew Davis <afd@ti.com>
-> > ---
-> >  .../devicetree/bindings/clock/ti,am654-ehrpwm-tbclk.yaml     | 5 ++---
-> >  1 file changed, 2 insertions(+), 3 deletions(-)
+> > Sorry, mispoke... rq->curr == rq-idle not null. But still we don't have
+> > access to the task and its cfs_rq which will have runtime_enabled set.
 > >
+> 
+> That is unfortunate. I suppose then you'd wind up needing both this
+> extra bit in PNT to handle the switch into nr_running == 1 territory,
+> and a "HZ_BW && nr_running == 1 && curr is fair && curr->on_rq &&
+> curr->cfs_rq->runtime_enabled" check in sched_can_stop_tick to catch
+> edge cases. (I think that would be sufficient, if an annoyingly long set
+> of conditionals)
 >
-> My bot found errors running 'make DT_CHECKER_FLAGS=3D-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
->
-> yamllint warnings/errors:
->
-> dtschema/dtc warnings/errors:
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/m=
-fd/ti,j721e-system-controller.example.dtb: scm-conf@100000: clock-controlle=
-r@4140:compatible: ['ti,am654-ehrpwm-tbclk', 'syscon'] is too long
->         From schema: /builds/robherring/dt-review-ci/linux/Documentation/=
-devicetree/bindings/mfd/ti,j721e-system-controller.yaml
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/m=
-fd/ti,j721e-system-controller.example.dtb: clock-controller@4140: compatibl=
-e: ['ti,am654-ehrpwm-tbclk', 'syscon'] is too long
->         From schema: /builds/robherring/dt-review-ci/linux/Documentation/=
-devicetree/bindings/clock/ti,am654-ehrpwm-tbclk.yaml
 
-Now failing in linux-next.
+Right. That's more or less what the version I'm testing now does.
 
-Rob
+Thanks again.
+
+
+Cheers,
+Phil
+
+-- 
+
