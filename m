@@ -2,61 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C063373B529
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 12:23:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15C2873B535
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 12:24:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232152AbjFWKW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 06:22:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32878 "EHLO
+        id S231980AbjFWKX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 06:23:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231991AbjFWKWt (ORCPT
+        with ESMTP id S231881AbjFWKXx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 06:22:49 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B53E1731
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 03:22:47 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2b46b11051aso7692171fa.3
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 03:22:46 -0700 (PDT)
+        Fri, 23 Jun 2023 06:23:53 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAD68E9
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 03:23:51 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4f954d78bf8so542650e87.3
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 03:23:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687515765; x=1690107765;
+        d=linaro.org; s=google; t=1687515830; x=1690107830;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=UhgEvVyNUt5/Q7JUxga8FPEpdH5L7dqFe7w5Qikinc8=;
-        b=ulmbaW7R3yXW6Y5BPFLdJuT85VuDEiHnwKkDLvQgeUnL5mDJdZ2J5ZeCxLlVYPwOzK
-         7azheeXIax6oXPosqO/csRedizRRtu9onew5GSM5YnlC/eZQPgASDS6qdgStk1hxGViP
-         K+UfNrJmfJwmrI44kVVAC0kVQRzCsOtZLrcxzinawKnNbYBSB39yBxPNmnym7PXV3ku0
-         fExpGXG4YtzfcTJjVfAep8rfCzQPGClQ5abM5gkvdOJHy2cZDndRQuyLo4RCRXzaB9Yc
-         /1lv5JubH6x2bGhPjcF0DYbsX/Y0laQnWux3+kKyC3W2FX2GjgYfSV1cpdSP/Hj1IToJ
-         UsRw==
+        bh=KWkn1j4YDLKl0IK4GIRfG+rZU5Zz9V3+MlpELBvyLnE=;
+        b=Lv5v6/WUOMe9EPELgwEGPtHCSnuEurKHRbsTC7Da2DPiVlnI09lyQs9/Ee2Uop4B3Z
+         jJL65HJQNb2jK4sKg3XVosgAq1emxCS5SrCcK7SEt7x5jYfYxBlwzT0ZXhpgNtme5xFy
+         oDI1HUald1kB6/GE5Z4VC0lEi7pOvE41wGDw5/IoKd8Gtlhr/+ygyXzZhxHhqwSY1dgT
+         QyxZfHGW4pAx1WS+Jpmi3uCntDaqCscHRow4SdskaGF+za0nS5bY3DWJPkm3s4RSpW4b
+         r5iD95vUN5xC7z+H6NIN69evurdfGM6VK8yatgH2a1YFop0LiFizrkFC99TqNi7Y5/A1
+         8kfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687515765; x=1690107765;
+        d=1e100.net; s=20221208; t=1687515830; x=1690107830;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UhgEvVyNUt5/Q7JUxga8FPEpdH5L7dqFe7w5Qikinc8=;
-        b=O6xb2IvcTyZs4MjXrfl9PqMcaD8PBOZ3hJAV+c+50skcvfp1uP/c8mQS6uFLoyA12R
-         xDKlUOV6fF4mwLrXk/2/T4d90jtpgveuSuJXubBTf5AwPPEKfaG6v4HDBZPWDhAFvk8p
-         /g9LLsMqvyKD43ijYvOGmsxuXzVL1hNssHUJ9nem1btqzXGXXxeq1540oyjYkLk6IuCz
-         m5M0wm8HmMiiNwL0MK5ezBlez1sENYmj5/df2GAdW7dDUAgERWaW1FYy9Pf0Jf0jjSlw
-         cmHjxpAxQzl4CRgLOEXmhEGcXOX5+9yuLYgJBjzeWbkSMpmCPBO1s5IEJofBCyu+FGsF
-         tyqA==
-X-Gm-Message-State: AC+VfDwe45dk/WmACuApH/rrB+j04tWP8DcZhA/OEtvlt2ekQqPyDhmw
-        67Okm7MZcGTrxvsH6GcXX5SfEg==
-X-Google-Smtp-Source: ACHHUZ4GE0bjgJrBNQZsrL2c0JJvp3yaIbHgR/Wb+zT2JgRq/cetteDiQe0i8aYUjWMN4q1OH9ZuNQ==
-X-Received: by 2002:a05:651c:1022:b0:2b4:636a:67f4 with SMTP id w2-20020a05651c102200b002b4636a67f4mr12907108ljm.20.1687515765251;
-        Fri, 23 Jun 2023 03:22:45 -0700 (PDT)
+        bh=KWkn1j4YDLKl0IK4GIRfG+rZU5Zz9V3+MlpELBvyLnE=;
+        b=ghHOshM8Z18cwR4r0Ioqp+uaFMC9WtkbPFFbIH+14w7KuZy1ZPBC4yFCp5FZR6+nF5
+         PK18ZFVapDrhEYvr8+tJuSVbr9IEBLWTviCzsSYEr3i2/SBVd/foqnTr3oqDpnKHr8vw
+         L+rEcpXQt7UIi9hOvtbpUJ0Gm9hySWMhRh8FEYoAZPDYU69hzphDay5KztO3kO2Dzsw/
+         OJtdobkusY2zDbpDp4jp8E2d8xGnkpACTLdj0LNj1/3MW9xJWqg4aBgJ3SN3J9X7CFWy
+         GM+YyDZVIXnpPN+qLWQ0IlLHbEa/HyoJ3jtRvgsghEsOKMMXJP3GCI8hIqRTSHWaoNdv
+         w01w==
+X-Gm-Message-State: AC+VfDyNCsbA3GxuNvtRzN/a5pg6IpacgCBr78ejzBvV5ykKLoQPfOtj
+        syVuTtuoogPy81hAk0r+Tn6xqg==
+X-Google-Smtp-Source: ACHHUZ7WiiXjygu0C97ZUwok3q3Sy/rHAJt5AmZivWrId/kBRMGzvsAMvd/W1h55AkUURdJrpuBWrg==
+X-Received: by 2002:a05:6512:252b:b0:4f9:644c:1edb with SMTP id be43-20020a056512252b00b004f9644c1edbmr3443015lfb.62.1687515830060;
+        Fri, 23 Jun 2023 03:23:50 -0700 (PDT)
 Received: from [192.168.1.101] (abxh63.neoplus.adsl.tpnet.pl. [83.9.1.63])
-        by smtp.gmail.com with ESMTPSA id v18-20020a2e7a12000000b002ad8174d025sm1674711ljc.122.2023.06.23.03.22.43
+        by smtp.gmail.com with ESMTPSA id b4-20020ac247e4000000b004f86db4ce65sm1408380lfp.55.2023.06.23.03.23.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Jun 2023 03:22:44 -0700 (PDT)
-Message-ID: <b3a1bca2-1867-aa4d-47c7-63c5f9df868f@linaro.org>
-Date:   Fri, 23 Jun 2023 12:22:43 +0200
+        Fri, 23 Jun 2023 03:23:49 -0700 (PDT)
+Message-ID: <e85ca82f-1c7f-76dd-3599-793883dd0700@linaro.org>
+Date:   Fri, 23 Jun 2023 12:23:48 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH 1/4] pcie: qcom: Fix the macro
- PARF_SLV_ADDR_SPACE_SIZE_2_3_3
+Subject: Re: [PATCH 4/4] dts: Reserve memory region for NSS and TZ
 Content-Language: en-US
 To:     Sricharan Ramabadhran <quic_srichara@quicinc.com>,
         agross@kernel.org, andersson@kernel.org, robh+dt@kernel.org,
@@ -67,9 +66,9 @@ To:     Sricharan Ramabadhran <quic_srichara@quicinc.com>,
         linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
         linux-pci@vger.kernel.org
 References: <20230623094403.3978838-1-quic_srichara@quicinc.com>
- <20230623094403.3978838-2-quic_srichara@quicinc.com>
+ <20230623094403.3978838-5-quic_srichara@quicinc.com>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230623094403.3978838-2-quic_srichara@quicinc.com>
+In-Reply-To: <20230623094403.3978838-5-quic_srichara@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -83,33 +82,42 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 23.06.2023 11:44, Sricharan Ramabadhran wrote:
-> PARF_SLV_ADDR_SPACE_SIZE_2_3_3 macro used for IPQ8074
-> pcie slave addr size was initially set to 0x358, but
-> was wrongly changed to 0x168 as a part of
-> 'PCI: qcom: Sort and group registers and bitfield definitions'
-Surely not, this commit only moved the definition containing 0x358 up.
-
-Konrad
-> Fixing it back to right value here.
+> Add reserved memory region for NSS and fix the name
+> for tz region explicitly.
 > 
-> Without this pcie bring up on IPQ8074 is broken now.
-> 
-> Fixes: 769e49d87b15 ("PCI: qcom: Sort and group registers and bitfield definitions")
 > Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
 > ---
->  drivers/pci/controller/dwc/pcie-qcom.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+The commit title is divergent from what's in the commit message and
+the patch body. Please separate these two changes.
+
+>  arch/arm64/boot/dts/qcom/ipq8074.dtsi | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-> index 4ab30892f6ef..59823beed13f 100644
-> --- a/drivers/pci/controller/dwc/pcie-qcom.c
-> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
-> @@ -43,7 +43,7 @@
->  #define PARF_PHY_REFCLK				0x4c
->  #define PARF_CONFIG_BITS			0x50
->  #define PARF_DBI_BASE_ADDR			0x168
-> -#define PARF_SLV_ADDR_SPACE_SIZE_2_3_3		0x16c /* Register offset specific to IP ver 2.3.3 */
-> +#define PARF_SLV_ADDR_SPACE_SIZE_2_3_3		0x358 /* Register offset specific to IP ver 2.3.3 */
->  #define PARF_MHI_CLOCK_RESET_CTRL		0x174
->  #define PARF_AXI_MSTR_WR_ADDR_HALT		0x178
->  #define PARF_AXI_MSTR_WR_ADDR_HALT_V2		0x1a8
+> diff --git a/arch/arm64/boot/dts/qcom/ipq8074.dtsi b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
+> index 791af73334cb..d51ff9b4f5c1 100644
+> --- a/arch/arm64/boot/dts/qcom/ipq8074.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
+> @@ -86,6 +86,11 @@ reserved-memory {
+>  		#size-cells = <2>;
+>  		ranges;
+>  
+> +		nss@40000000 {
+> +			reg = <0x0 0x40000000 0x0 0x01000000>;
+Drop the leading zeroes from the size part.
+
+Konrad
+> +			no-map;
+> +		};
+> +
+>  		bootloader@4a600000 {
+>  			reg = <0x0 0x4a600000 0x0 0x400000>;
+>  			no-map;
+> @@ -104,7 +109,7 @@ smem@4ab00000 {
+>  			hwlocks = <&tcsr_mutex 0>;
+>  		};
+>  
+> -		memory@4ac00000 {
+> +		tz@4ac00000 {
+>  			reg = <0x0 0x4ac00000 0x0 0x400000>;
+>  			no-map;
+>  		};
