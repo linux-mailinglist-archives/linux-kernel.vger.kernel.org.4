@@ -2,86 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D32573B408
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 11:47:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0029173B414
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 11:48:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230168AbjFWJrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 05:47:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35466 "EHLO
+        id S231316AbjFWJr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 05:47:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjFWJq5 (ORCPT
+        with ESMTP id S231267AbjFWJrz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 05:46:57 -0400
-Received: from imap5.colo.codethink.co.uk (imap5.colo.codethink.co.uk [78.40.148.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98B1DE48;
-        Fri, 23 Jun 2023 02:46:55 -0700 (PDT)
-Received: from [78.40.148.178] (helo=webmail.codethink.co.uk)
-        by imap5.colo.codethink.co.uk with esmtpsa  (Exim 4.94.2 #2 (Debian))
-        id 1qCdNR-00Dbvf-Tr; Fri, 23 Jun 2023 10:46:50 +0100
+        Fri, 23 Jun 2023 05:47:55 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A0541A3
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 02:47:54 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 22F9F6607136;
+        Fri, 23 Jun 2023 10:47:52 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1687513672;
+        bh=5xfPdsey5YOHDH601pEU4evj7XFemgGX/KLObcTGv3E=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=lGqHEpbBH6VBPV3ynNgTXGNqTtYiwGBNsQq2oQNUL9tFmx70p+4g3IagL5Gv9PDQ2
+         eRe2Htb0+bNAK95I8SFIkBYMay3Zaj7h65ZINYCy0ppsmfuLUVOwR3nA/Nb+VMHDxV
+         Dx94Jnoh0zP/HtS7NwLopph0UDXQQ8+r1bBZQsMKC9P5gETWCn5MmsWgJ3YDz3ioyJ
+         PH6EcNI+jR3BmD2DDFpvSl/b8jjyEu5e6TNwUV/qLiVeqwpVUPzfqG1B08gH8OJccS
+         ZzZe8nAyvUS47Yn5Mx49yD0q2AwptEogsIRKc3DX3ynWVg5s5isgdU1Z6GaCZa5ljZ
+         U5nkCdp/FHumQ==
+Message-ID: <735623c5-3eeb-bda3-db87-2b33d9ad3446@collabora.com>
+Date:   Fri, 23 Jun 2023 11:47:49 +0200
 MIME-Version: 1.0
-Date:   Fri, 23 Jun 2023 10:46:50 +0100
-From:   Ben Dooks <ben.dooks@codethink.co.uk>
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Cc:     Ben Dooks <ben.dooks@sifive.com>, linux-pwm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        u.kleine-koenig@pengutronix.de,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        William Salmon <william.salmon@sifive.com>,
-        Jude Onyenegecha <jude.onyenegecha@sifive.com>
-Subject: Re: [PATCH v8 0/5] DesignWare PWM driver updates
-In-Reply-To: <daffc540-3b99-f71d-538b-84c897730208@linux.intel.com>
-References: <20230614171457.69191-1-ben.dooks@sifive.com>
- <daffc540-3b99-f71d-538b-84c897730208@linux.intel.com>
-Message-ID: <1634a34bcd0f1b6eed5e3d59126d7892@codethink.co.uk>
-X-Sender: ben.dooks@codethink.co.uk
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] drm: mediatek: mtk_dsi: Fix NO_EOT_PACKET
+ settings/handling
+Content-Language: en-US
+To:     chunkuang.hu@kernel.org
+Cc:     p.zabel@pengutronix.de, airlied@gmail.com, daniel@ffwll.ch,
+        matthias.bgg@gmail.com, jitao.shi@mediatek.com, ck.hu@mediatek.com,
+        shaoming.chen@mediatek.com, yt.shen@mediatek.com,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230523104234.7849-1-angelogioacchino.delregno@collabora.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230523104234.7849-1-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023-06-20 13:59, Jarkko Nikula wrote:
-> On 6/14/23 20:14, Ben Dooks wrote:
->> This series is an update for the DesignWare PWM driver to add support 
->> for
->> OF (and split the PCI bits out if aynone else wants them). This is 
->> mostly
->> the same as the v7 series, but with code moved around and 
->> module-namespace
->> added, plus review comments processed.
->> 
->> Since we no longer have the hardware, the clock code hasn't been 
->> changed to
->> either lock the rate whilst the PWM is running, or to deal with any 
->> sort
->> of change callback. This is left to future work (and I would rather 
->> get
->> something in that does currently work) (second note, the hardware we 
->> did
->> use had a fixed clock tree anyway)
->> 
->> This account is probably going away soon, I have cc'd my main work
->> email to catch any responses.
->> 
->> Thank you all for the reviews.
->> 
-> I tested the patchset on Intel Elkhart Lake and didn't see issues.
+Il 23/05/23 12:42, AngeloGioacchino Del Regno ha scritto:
+> Due to the initial confusion about MIPI_DSI_MODE_EOT_PACKET, properly
+> renamed to MIPI_DSI_MODE_NO_EOT_PACKET, reflecting its actual meaning,
+> both the DSI_TXRX_CON register setting for bit (HSTX_)DIS_EOT and the
+> later calculation for horizontal sync-active (HSA), back (HBP) and
+> front (HFP) porches got incorrect due to the logic being inverted.
 > 
-> Tested-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+> This means that a number of settings were wrong because....:
+>   - DSI_TXRX_CON register setting: bit (HSTX_)DIS_EOT should be
+>     set in order to disable the End of Transmission packet;
+>   - Horizontal Sync and Back/Front porches: The delta used to
+>     calculate all of HSA, HBP and HFP should account for the
+>     additional EOT packet.
+> 
+> Before this change...
+>   - Bit (HSTX_)DIS_EOT was being set when EOT packet was enabled;
+>   - For HSA/HBP/HFP delta... all three were wrong, as words were
+>     added when EOT disabled, instead of when EOT packet enabled!
+> 
+> Invert the logic around flag MIPI_DSI_MODE_NO_EOT_PACKET in the
+> MediaTek DSI driver to fix the aforementioned issues.
+> 
+> Fixes: 8b2b99fd7931 ("drm/mediatek: dsi: Fine tune the line time caused by EOTp")
+> Fixes: 2d52bfba09d1 ("drm/mediatek: add non-continuous clock mode and EOT packet control")
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Great, thank you.
+Gentle ping for an important fix.
 
-Is this series likely to get into the next kernel release?
+Regards,
+Angelo
 
--- 
-ben
+> ---
+>   drivers/gpu/drm/mediatek/mtk_dsi.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediatek/mtk_dsi.c
+> index 7d5250351193..b0ab38e59db9 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_dsi.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
+> @@ -407,7 +407,7 @@ static void mtk_dsi_rxtx_control(struct mtk_dsi *dsi)
+>   	if (dsi->mode_flags & MIPI_DSI_CLOCK_NON_CONTINUOUS)
+>   		tmp_reg |= HSTX_CKLP_EN;
+>   
+> -	if (!(dsi->mode_flags & MIPI_DSI_MODE_NO_EOT_PACKET))
+> +	if (dsi->mode_flags & MIPI_DSI_MODE_NO_EOT_PACKET)
+>   		tmp_reg |= DIS_EOT;
+>   
+>   	writel(tmp_reg, dsi->regs + DSI_TXRX_CTRL);
+> @@ -484,7 +484,7 @@ static void mtk_dsi_config_vdo_timing(struct mtk_dsi *dsi)
+>   			  timing->da_hs_zero + timing->da_hs_exit + 3;
+>   
+>   	delta = dsi->mode_flags & MIPI_DSI_MODE_VIDEO_BURST ? 18 : 12;
+> -	delta += dsi->mode_flags & MIPI_DSI_MODE_NO_EOT_PACKET ? 2 : 0;
+> +	delta += dsi->mode_flags & MIPI_DSI_MODE_NO_EOT_PACKET ? 0 : 2;
+>   
+>   	horizontal_frontporch_byte = vm->hfront_porch * dsi_tmp_buf_bpp;
+>   	horizontal_front_back_byte = horizontal_frontporch_byte + horizontal_backporch_byte;
+
+
