@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F88273B541
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 12:29:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D22BB73B543
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 12:29:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232048AbjFWK3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 06:29:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35856 "EHLO
+        id S232113AbjFWK3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 06:29:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbjFWK3Z (ORCPT
+        with ESMTP id S232011AbjFWK33 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 06:29:25 -0400
+        Fri, 23 Jun 2023 06:29:29 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5A4E9
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 03:29:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4687D170B
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 03:29:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A4586196E
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 10:29:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F899C433C0;
-        Fri, 23 Jun 2023 10:29:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C9DD061A0A
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 10:29:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09EC6C433CD;
+        Fri, 23 Jun 2023 10:29:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687516163;
-        bh=vEp6e9pd3I6Zdh/O1E/anlFi8UY82+4KI4u5fMcKVkw=;
+        s=k20201202; t=1687516167;
+        bh=6hu2QLAnatQP5UFKHqQxLipPsz8mKS6yWJMOvqrfh4E=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=fl2VzWeGxHzb+H7YHngnlyV15as9Bo0BUqKBKHwIksx/JXSbfP39UPJDN8kM7VS7Z
-         /2zNRz6PFZ8hCxpvWr/6ACVaLwRcbQQth00pjag1gTwzBCGHGSGUXUyCr93jf5HlID
-         dskHpg/6Aa7ejr2L/JExuOKs1tjtLha8wXGva3K+b8YeWvI+8YoFT9QT1IECPE3Hy8
-         a40vA93nnHbq5c7oVevU7/JiBsWN3mPHXIaJCcQ8A2Ybht6VKD9j6PIZuDCnqhoxpe
-         oZolzu8I4VVaqfuG0GH/KbYRcK1o37iTDZIWnUrOc4YmV2Sq4zlBuVozGmxnU0oUXD
-         FwLAIAxRma7hA==
+        b=HB4DiJYFdsC6nwsmuBDgpqzoftv3wGE9kx2A/mRbaPiEWS39Oqg+CY8ll48GHQJBW
+         VXtDxP4I7g2jundKpNXZnzc22jw/AyQhuBaAZag0Do7EFWom6vRJhQN8FuVDOaXjST
+         gDd6u8/UwkNkhWnxOyZrHo0f/5I+y1eLyNtJmxFgF65bbTTEF3m1b3rD83F4s3Dyns
+         Ka1d3Wdk6nIWJQt4/vH4gtRHBXYuwRpxCpEJPEYIcSq9GYwHqKl1SpNN6xdv5sa+V6
+         sW6WMUGj+O+RKNnKHb2TPN1BnATO1gAqNWdgq5eKjAgRlkwJgh2nGTD/fGp1CcL8Co
+         gSy3OVqo7WZrA==
 From:   Michael Walle <mwalle@kernel.org>
-Date:   Fri, 23 Jun 2023 12:29:10 +0200
-Subject: [PATCH net-next v2 01/10] net: phy: add error checks in
- mmd_phy_indirect() and export it
+Date:   Fri, 23 Jun 2023 12:29:11 +0200
+Subject: [PATCH net-next v2 02/10] net: phy: get rid of redundant is_c45
+ information
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230620-feature-c45-over-c22-v2-1-def0ab9ccee2@kernel.org>
+Message-Id: <20230620-feature-c45-over-c22-v2-2-def0ab9ccee2@kernel.org>
 References: <20230620-feature-c45-over-c22-v2-0-def0ab9ccee2@kernel.org>
 In-Reply-To: <20230620-feature-c45-over-c22-v2-0-def0ab9ccee2@kernel.org>
 To:     Andrew Lunn <andrew@lunn.ch>,
@@ -70,112 +70,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add missing error checks in mmd_phy_indirect(). The error checks need to
-be disabled to retain the current behavior in phy_read_mmd() and
-phy_write_mmd(). Therefore, add a new parameter to enable the error
-checks. Add a thin wrapper __phy_mmd_indirect() which is then exported.
+phy_device_create() will be called with is_c45 and c45_ids. If c45_ids
+are set, is_c45 is (usually) true. Change the only caller which do
+things differently, then drop the is_c45 check in phy_device_create().
 
-Regarding the legacy handling, Russell states:
-
-| The reason for that goes back to commit a59a4d192166 ("phy: add the
-| EEE support and the way to access to the MMD registers.")
-|
-| and to maintain compatibility with that; if we start checking for
-| errors now, we might trigger a kernel regression sadly.
+This is a preparation patch to replace the is_c45 boolean with an enum
+which will indicate how the PHY is accessed (by c22, c45 or
+c45-over-c22).
 
 Signed-off-by: Michael Walle <mwalle@kernel.org>
 ---
- drivers/net/phy/phy-core.c | 42 ++++++++++++++++++++++++++++++++++--------
- include/linux/phy.h        |  2 ++
- 2 files changed, 36 insertions(+), 8 deletions(-)
+ drivers/net/phy/phy_device.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/phy/phy-core.c b/drivers/net/phy/phy-core.c
-index a64186dc53f8..65ff58b36fc0 100644
---- a/drivers/net/phy/phy-core.c
-+++ b/drivers/net/phy/phy-core.c
-@@ -524,19 +524,45 @@ int phy_speed_down_core(struct phy_device *phydev)
- 	return 0;
+diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
+index 0c2014accba7..226d5507c865 100644
+--- a/drivers/net/phy/phy_device.c
++++ b/drivers/net/phy/phy_device.c
+@@ -689,7 +689,7 @@ struct phy_device *phy_device_create(struct mii_bus *bus, int addr, u32 phy_id,
+ 	 * driver will get bored and give up as soon as it finds that
+ 	 * there's no driver _already_ loaded.
+ 	 */
+-	if (is_c45 && c45_ids) {
++	if (c45_ids) {
+ 		const int num_ids = ARRAY_SIZE(c45_ids->device_ids);
+ 		int i;
+ 
+@@ -970,7 +970,8 @@ struct phy_device *get_phy_device(struct mii_bus *bus, int addr, bool is_c45)
+ 						 true, &c45_ids);
+ 	}
+ 
+-	return phy_device_create(bus, addr, phy_id, is_c45, &c45_ids);
++	return phy_device_create(bus, addr, phy_id, is_c45,
++				 !is_c45 ? NULL : &c45_ids);
  }
+ EXPORT_SYMBOL(get_phy_device);
  
--static void mmd_phy_indirect(struct mii_bus *bus, int phy_addr, int devad,
--			     u16 regnum)
-+static int mmd_phy_indirect(struct mii_bus *bus, int phy_addr, int devad,
-+			    u16 regnum, bool check_rc)
- {
-+	int ret;
-+
- 	/* Write the desired MMD Devad */
--	__mdiobus_write(bus, phy_addr, MII_MMD_CTRL, devad);
-+	ret = __mdiobus_write(bus, phy_addr, MII_MMD_CTRL, devad);
-+	if (check_rc && ret)
-+		return ret;
- 
- 	/* Write the desired MMD register address */
--	__mdiobus_write(bus, phy_addr, MII_MMD_DATA, regnum);
-+	ret = __mdiobus_write(bus, phy_addr, MII_MMD_DATA, regnum);
-+	if (check_rc && ret)
-+		return ret;
- 
- 	/* Select the Function : DATA with no post increment */
--	__mdiobus_write(bus, phy_addr, MII_MMD_CTRL,
--			devad | MII_MMD_CTRL_NOINCR);
-+	ret = __mdiobus_write(bus, phy_addr, MII_MMD_CTRL,
-+			      devad | MII_MMD_CTRL_NOINCR);
-+
-+	return check_rc ? ret : 0;
-+}
-+
-+/**
-+ * __phy_mmd_indirect - prepare an indirect C45 register access
-+ *
-+ * @bus: the target MII bus
-+ * @phy_addr: PHY address on the MII bus
-+ * @devad: The target MMD (0..31)
-+ * @regnum: The target register on the MMD (0..65535)
-+ *
-+ * Prepare an indirect C45 read or write transfer using the MII_MMD_CTRL and
-+ * MII_MMD_DATA registers in C22 space.
-+ */
-+int __phy_mmd_indirect(struct mii_bus *bus, int phy_addr, int devad,
-+		       u16 regnum)
-+{
-+	return mmd_phy_indirect(bus, phy_addr, devad, regnum, true);
- }
-+EXPORT_SYMBOL(__phy_mmd_indirect);
- 
- /**
-  * __phy_read_mmd - Convenience function for reading a register
-@@ -563,7 +589,7 @@ int __phy_read_mmd(struct phy_device *phydev, int devad, u32 regnum)
- 		struct mii_bus *bus = phydev->mdio.bus;
- 		int phy_addr = phydev->mdio.addr;
- 
--		mmd_phy_indirect(bus, phy_addr, devad, regnum);
-+		mmd_phy_indirect(bus, phy_addr, devad, regnum, false);
- 
- 		/* Read the content of the MMD's selected register */
- 		val = __mdiobus_read(bus, phy_addr, MII_MMD_DATA);
-@@ -619,7 +645,7 @@ int __phy_write_mmd(struct phy_device *phydev, int devad, u32 regnum, u16 val)
- 		struct mii_bus *bus = phydev->mdio.bus;
- 		int phy_addr = phydev->mdio.addr;
- 
--		mmd_phy_indirect(bus, phy_addr, devad, regnum);
-+		mmd_phy_indirect(bus, phy_addr, devad, regnum, false);
- 
- 		/* Write the data into MMD's selected register */
- 		__mdiobus_write(bus, phy_addr, MII_MMD_DATA, val);
-diff --git a/include/linux/phy.h b/include/linux/phy.h
-index 11c1e91563d4..9521b815d3f0 100644
---- a/include/linux/phy.h
-+++ b/include/linux/phy.h
-@@ -1316,6 +1316,8 @@ int phy_read_mmd(struct phy_device *phydev, int devad, u32 regnum);
- 	__ret; \
- })
- 
-+int __phy_mmd_indirect(struct mii_bus *bus, int phy_addr, int devad,
-+		       u16 regnum);
- /*
-  * __phy_read_mmd - Convenience function for reading a register
-  * from an MMD on a given PHY.
 
 -- 
 2.39.2
