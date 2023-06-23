@@ -2,577 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A58B273B420
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 11:50:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBAF873B423
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 11:51:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229607AbjFWJu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 05:50:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37128 "EHLO
+        id S230358AbjFWJvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 05:51:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231467AbjFWJuN (ORCPT
+        with ESMTP id S230426AbjFWJvF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 05:50:13 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 737551A3
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 02:50:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1687513811; x=1719049811;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=e7oi/87CnZMya+TDawtivGQEUPJMZAuJdikbSQ688SM=;
-  b=gcrxYM9fKfWNTMnm2bgVyRPm65c0BmuIUxF+Ca7y0jMqUZFtZaKXOfeD
-   BolhfmOMmGn47QZtk7dcsD9j2WEZHIGsPCDgANaUBsxVyrcJDTxPuvWf3
-   C6P3pJ60sj3hEZv1Icu+Vo7U3J6F7Xg0EmAC4KV3/V7IRO/NqBVlA5HcI
-   BuBdsG/Nzx1bpsLwTsleNdwer2sYC+q4jHKKVg4cEeqn+P73q2qIRKpNh
-   wcL+A/qSmTpEx0vCqj8RB9cdO+y9nAQBTLFZdLAcSZzgyhwUj6Mie0hc3
-   gJuiytu69o7kr/QwtzgblSB6wZfzZcWcs3eihbKWcGHCrt1WOnhf6qn7H
-   g==;
-X-IronPort-AV: E=Sophos;i="6.01,151,1684825200"; 
-   d="asc'?scan'208";a="219452998"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Jun 2023 02:50:10 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 23 Jun 2023 02:50:10 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Fri, 23 Jun 2023 02:50:08 -0700
-Date:   Fri, 23 Jun 2023 10:49:41 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Heiko Stuebner <heiko@sntech.de>
-CC:     <palmer@dabbelt.com>, <paul.walmsley@sifive.com>,
-        <linux-riscv@lists.infradead.org>, <samuel@sholland.org>,
-        <guoren@kernel.org>, <christoph.muellner@vrull.eu>,
-        <linux-kernel@vger.kernel.org>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>
-Subject: Re: [PATCH v2 3/3] RISC-V: add T-Head vector errata handling
-Message-ID: <20230623-excluding-sprint-aea9cca0cb02@wendy>
-References: <20230622231305.631331-1-heiko@sntech.de>
- <20230622231305.631331-4-heiko@sntech.de>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="3sCCT1n91ymcjSi1"
+        Fri, 23 Jun 2023 05:51:05 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2081.outbound.protection.outlook.com [40.107.93.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA29B2D49
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 02:50:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dcNQqh0K2TGokZ0zL8MM0mS6sIytlIpadtczyHoZQcvqHThESOkFYDd/wxj99DKhRt7iqcv0zSDmDLsG56cJiu+ysdMb4THWOfzy/Td81MQkBWi2dUaa6ZvLwJkEAyh6q+IZGhyphte08WylVf5Ye0yxRrCRFiNEu736h2MxurnJ2PBEdQDHcCFHemLwwqi7CiRdgzM847hCQ2/fQey585VXgiMv+ysCmY5mZjTeDmvYOLf6jgzfilZ9JgNEjeMnVVyUtIhZ+aiYPK24d9Yg8/Sqnao3VfvzpDlll+FrGE+jPPJdbp9kDD1ynS/2PQkzHT07jHnnueGivEW240zKhA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Rt+hplchbSOjMGWE/urM2zor5pdCdKboDKad8r++AIY=;
+ b=lp+PCyXiVm/kMwoPf2GuLsVpjL4l8Tho66UVm9NVKN1wg+nvPr4ixESGtgvhPxObJWpxAYibRu97G0PvzG5CTH/pasli+VnAiQ6w1r+eP1MGohu3ZO5D9IDNy1L1SouegeSk2rNqYtIg+JoXB5glrD2mq8AJGB+27Sz+BM+T2e64/w9mz63W/r6D5cBoM0uKtZFmu+MGObWw1wFmTzTiBMtRfHRHmObBl2UAkzLp+oeyfDRVuLFlJR/11IWvkxgdTX0IOhauFGvfWlMeLojWhEdPg2BNsFhHANW8lx1iPFBS+k0HjD71Gek0fwyu2u+ZDk/rTdEMdvZOjDb6qFuZew==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Rt+hplchbSOjMGWE/urM2zor5pdCdKboDKad8r++AIY=;
+ b=B2LfznMi9Bm+pRS4cDbv/7kxwf5MfeXBmOEMg/ajAncGfJ1+sb4ra538tMkeaJWc1deduZMQhnsdCcDlVixvZ+sTegFOJJNnouKL4vmo9XFeoz7BogHywc906MQeZetLzJYX/Mg+/Mc9BWiXl+c2FANofUBE7mzUSz/2HwKrwmg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DS7PR12MB8252.namprd12.prod.outlook.com (2603:10b6:8:ee::7) by
+ IA1PR12MB7759.namprd12.prod.outlook.com (2603:10b6:208:420::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.23; Fri, 23 Jun
+ 2023 09:50:30 +0000
+Received: from DS7PR12MB8252.namprd12.prod.outlook.com
+ ([fe80::792f:873a:c975:1999]) by DS7PR12MB8252.namprd12.prod.outlook.com
+ ([fe80::792f:873a:c975:1999%6]) with mapi id 15.20.6521.024; Fri, 23 Jun 2023
+ 09:50:30 +0000
+Date:   Fri, 23 Jun 2023 15:20:15 +0530
+From:   "Gautham R. Shenoy" <gautham.shenoy@amd.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     David Vernet <void@manifault.com>, linux-kernel@vger.kernel.org,
+        mingo@redhat.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, rostedt@goodmis.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, joshdon@google.com,
+        roman.gushchin@linux.dev, tj@kernel.org, kernel-team@meta.com
+Subject: Re: [RFC PATCH 3/3] sched: Implement shared wakequeue in CFS
+Message-ID: <ZJVq1+dSkMAsOIKw@BLR-5CG11610CF.amd.com>
+References: <20230613052004.2836135-1-void@manifault.com>
+ <20230613052004.2836135-4-void@manifault.com>
+ <ZI/x+RkSqpct4bM3@BLR-5CG11610CF.amd.com>
+ <20230620200822.GC3027191@maniforge>
+ <ZJKx/LQwc3bWS5nh@BLR-5CG11610CF.amd.com>
+ <20230622014329.GD15990@maniforge>
+ <ZJQQXQ/+p4f5FcAd@BLR-5CG11610CF.amd.com>
+ <20230622102935.GG4253@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230622231305.631331-4-heiko@sntech.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230622102935.GG4253@hirez.programming.kicks-ass.net>
+X-ClientProxiedBy: PN2PR01CA0146.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:6::31) To DS7PR12MB8252.namprd12.prod.outlook.com
+ (2603:10b6:8:ee::7)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR12MB8252:EE_|IA1PR12MB7759:EE_
+X-MS-Office365-Filtering-Correlation-Id: 29dc1e64-5dae-4ab1-7841-08db73cf4722
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: l4wyQd9LISijxGCHHqHrIKHOFXwzoV/lbhtNtDj7Tao+oJn3WSy+Vsj8oYX7DhImiP/qWmEgZfQJXbEHgHLdXqUKTHM16OsOL8qSlAhOs6Ioen3SABn6zebKvC3yJ4yLFeGNjZA7XSJMkMRqvR47DK6Uov+fU7LR384jDz7Vo3+yNdpMlVKBHqbcozfn0k4EIQFK5UPJNymIMt8oUydsxpJvtg6l2/U/cMhexn36ddbf3dC9AefS7roGbxxkY435HYHkomgKLg8m/igwazdFtFYFwid3QH4bpqrqFOqS//mpI7gxdD+zJVWvcK92z/Kbt3PFkCGW/Vkt8TWcABSIthqlTOCJ8ZQTLgDNaGT/sWcv8etPQ4KQw5odk4YgH0Z8xhVfuXWB4dnsnfArnkRKQ55IHomOVBufHlyaF+AuZk/G5EDN87mA6rLfKMvmtoxLi4r1bIpenTAW9mug4Y5qao3tiBNuTLvVHudPEP4UVztu4gff1DhDIKpfoktsg41STbK1Eg/xTz00nh3OgS0h+ELDIxDYx1nASPbn66TV6FWy1v7VebRbvGC9RblxU3GZKburwIYWHopsp7hs93EcnHjx02stvnycXBt7YbHInUE=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB8252.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(39860400002)(376002)(396003)(366004)(451199021)(41300700001)(316002)(8676002)(8936002)(66556008)(66476007)(4326008)(66946007)(6916009)(2906002)(7416002)(5660300002)(6506007)(6512007)(186003)(26005)(38100700002)(83380400001)(478600001)(86362001)(6486002)(6666004)(67856001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?LxojtruQ1IH1W2wVKHfNIoK+2htAijdsbwpFFxJ6zRF6l3CKIoUqHTrJurzj?=
+ =?us-ascii?Q?QkhA+NtKLNKC3NRO/r8I4wxwdqtmPPsxO/X85lusGSdwO2zBaG2H+jTLVDHo?=
+ =?us-ascii?Q?tgu3FeJJh2F/KD9UtNvjU+7YG14IVZY0geoDCNBPgg/SUIgfGQFsgxTTiQCj?=
+ =?us-ascii?Q?mCt11XWNXTkjrwR1q/O9gd7I90j0Hbvz6h1S0LImHvMFtF/LKtMf15WSq9qw?=
+ =?us-ascii?Q?IBzpHyVonPRrGKKx4UObCrRg0KlGqc67T2rrYGH78Tr3jEaE531zER9MQCBJ?=
+ =?us-ascii?Q?SAFbxBG6kc2FM/bdasT9m34EmwodmN9hTW6ILj6K9pcUzP0CzNQX0hGxjRxB?=
+ =?us-ascii?Q?/saBQye9MwY5lBzUqmCtw7mbsM9Jt8mrXIlKN9XNTmR51n/vuwnsZZ2U3nDV?=
+ =?us-ascii?Q?HhoiIgMhOE2IntxXRsNpuef5tXUEXLm9NRRWVKTobJyzjYvgsnGb9apN0bt0?=
+ =?us-ascii?Q?avMozrxLtPp98R+/yB1izWyFzJCCqtttCwmUVsbQkcLCSyKZKuf5JR0UEd+l?=
+ =?us-ascii?Q?AP/zRX3XTlV16M9XCn56v2ce4h7zetcXKaL9ylVrGEQDh6zEzEM8m92p0v1z?=
+ =?us-ascii?Q?y+lseZ/CURzHdqdKo567IKYx3+dIw/r4BE1GSRtxVx25Bs5xNS8PUaQT5WjB?=
+ =?us-ascii?Q?pZqYCN2MUQ4T+xa4MT2ZaFcr5VDVQS6PFHvWiX34r4ZtIfpSkQC3M+z129Pd?=
+ =?us-ascii?Q?pE9fs86na19HgJq8HiLD422wWxvYsfGcGn4HujV+6RgqK1jXDyHHRuYV70YX?=
+ =?us-ascii?Q?7xiEAC7CEzd7FJ2GlyXzVAuRVaA5VbHBwtJnRZlsd+TQPvUCcDOv5XXjxtP5?=
+ =?us-ascii?Q?T5bbVXzVLlHNQxGHuykcdMmV6rZcVCvqw3j+QQD48vH6J79tgntZ2B46bPw+?=
+ =?us-ascii?Q?hHKkAl8Z8SYjS1whhFgNfM3h5xs7WaM4UwQoobzRrph3MCSJpbkVNfGcNvk0?=
+ =?us-ascii?Q?kDXL1BESNwmiOq5DqnJAsY4vXNlYQh6i50Rj4s/oAC4pmKF9fRhZ72Sk/fxD?=
+ =?us-ascii?Q?sP3oov2YV8snT64n6DdQtR9zydyKU/uSxeb1bHrPp52+LH8P6Lb2W4TcBzuM?=
+ =?us-ascii?Q?Z0xymsLaX5wKNnm8+C+J0IwezIGxdYSV+Z7zLt0+Hfd9KWKPb+eWVfiI59mB?=
+ =?us-ascii?Q?rELJ5mPsMxjBWEuuvpwLkzlP2Aijp9tde7jzFg7W8WYQN7JlODeO7vY1S+rv?=
+ =?us-ascii?Q?NEYSv2c2dk/loPm3WB3qmdKOWV/iw4iou7SluQAv9/oTyLGPpQJYxzSQjVlO?=
+ =?us-ascii?Q?zW7M99hf5F2SANbQyfsgCYlh+EeAX+m7V5bRsVsIGCbcVC2iYL8wQgKBV6vI?=
+ =?us-ascii?Q?7ucqkfeIVIF0oL03kQ2Ln6z2dNLk+Hm6CShLQ8dHgGoVKNt3e3DJrPoJK8zZ?=
+ =?us-ascii?Q?co1qSmHbVM3nw2MUBcLeO9PIg7+FbF6/WEXD9ggS3YfbPctIp5+oAlVnj+Mh?=
+ =?us-ascii?Q?pEye2hIvzzzSHwYx+U6XH+DlnZgeF29vqjAXqN7VRx9+bWS4WIeT3b3mRTpm?=
+ =?us-ascii?Q?rCpeOa4GkfikycbwA4QpeAL1zFw8OvMxSrtqDAq2xOudvhF/QvD3oCUl5aTR?=
+ =?us-ascii?Q?vryq1kmqXmYTbd/pUW0hfSah1RWDFZxqL7GDM220?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 29dc1e64-5dae-4ab1-7841-08db73cf4722
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB8252.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jun 2023 09:50:30.5982
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: +LhxwIvEzYNmeXaBpjcwzqIJ9WeBElI1A+Eiiel4Vmce8KXzHmYfIzKyq7UMzYtCrR1rrfTx3OFqvGK788DZqg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB7759
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---3sCCT1n91ymcjSi1
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Thu, Jun 22, 2023 at 12:29:35PM +0200, Peter Zijlstra wrote:
+> On Thu, Jun 22, 2023 at 02:41:57PM +0530, Gautham R. Shenoy wrote:
+> 
+> > --- a/kernel/sched/fair.c
+> > +++ b/kernel/sched/fair.c
+> > @@ -215,21 +215,17 @@ static void swqueue_enqueue(struct rq *rq, struct task_struct *p, int enq_flags)
+> >  {
+> >  	unsigned long flags;
+> >  	struct swqueue *swqueue;
+> > -	bool task_migrated = enq_flags & ENQUEUE_MIGRATED;
+> > -	bool task_wakeup = enq_flags & ENQUEUE_WAKEUP;
+> >  
+> >  	/*
+> >  	 * Only enqueue the task in the shared wakequeue if:
+> >  	 *
+> >  	 * - SWQUEUE is enabled
+> > -	 * - The task is on the wakeup path
+> > -	 * - The task wasn't purposefully migrated to the current rq by
+> > -	 *   select_task_rq()
+> > -	 * - The task isn't pinned to a specific CPU
+> > +	 * - select_idle_sibling() didn't find an idle CPU to enqueue this wakee task.
+> >  	 */
+> > -	if (!task_wakeup || task_migrated || p->nr_cpus_allowed == 1)
+> 
+> You lost the nr_cpus_allowed == 1 case, that actually made sense, except
+> he didn't don't have a hook in set_cpus_allowed() to fix it back up.
+>
 
-Hey Heiko,
+I didn't retain the "nr_cpus_allowed == 1" check because
+select_task_rq() calls select_task_rq_fair() only when
+p->nr_cpus_allowed > 1.
 
-On Fri, Jun 23, 2023 at 01:13:05AM +0200, Heiko Stuebner wrote:
-> From: Heiko Stuebner <heiko.stuebner@vrull.eu>
->=20
-> T-Head C9xx cores implement an older version (0.7.1) of the vector
-> specification.
->=20
-> Relevant changes concerning the kernel are:
-> - different placement of the SR_VS bit for the vector unit status
-> - different encoding of the vsetvli instruction
-> - different instructions for loads and stores
->=20
-> And a fixed VLEN of 128.
->=20
-> The in-kernel access to vector instances is limited to the save and
-> restore of process states so the above mentioned areas can simply be
-> handled via the alternatives framework, similar to other T-Head specific
-> issues.
->=20
-> Signed-off-by: Heiko Stuebner <heiko.stuebner@vrull.eu>
-> ---
->  arch/riscv/Kconfig.errata            |  13 +++
->  arch/riscv/errata/thead/errata.c     |  32 ++++++
->  arch/riscv/include/asm/csr.h         |  24 ++++-
->  arch/riscv/include/asm/errata_list.h |  45 ++++++++-
->  arch/riscv/include/asm/vector.h      | 139 +++++++++++++++++++++++++--
->  arch/riscv/kernel/vector.c           |   2 +-
->  6 files changed, 238 insertions(+), 17 deletions(-)
->=20
-> diff --git a/arch/riscv/Kconfig.errata b/arch/riscv/Kconfig.errata
-> index 0c8f4652cd82..b461312dd452 100644
-> --- a/arch/riscv/Kconfig.errata
-> +++ b/arch/riscv/Kconfig.errata
-> @@ -77,4 +77,17 @@ config ERRATA_THEAD_PMU
-> =20
->  	  If you don't know what to do here, say "Y".
-> =20
-> +config ERRATA_THEAD_VECTOR
-> +	bool "Apply T-Head Vector errata"
-> +	depends on ERRATA_THEAD && RISCV_ISA_V
-> +	default y
-> +	help
-> +	  The T-Head C9xx cores implement an earlier version 0.7.1
-> +	  of the vector extensions.
-> +
-> +	  This will apply the necessary errata to handle the non-standard
-> +	  behaviour via when switch to and from vector mode for processes.
-> +
-> +	  If you don't know what to do here, say "Y".
-> +
->  endmenu # "CPU errata selection"
-> diff --git a/arch/riscv/errata/thead/errata.c b/arch/riscv/errata/thead/e=
-rrata.c
-> index c259dc925ec1..c41ec84bc8a5 100644
-> --- a/arch/riscv/errata/thead/errata.c
-> +++ b/arch/riscv/errata/thead/errata.c
-> @@ -15,6 +15,7 @@
->  #include <asm/errata_list.h>
->  #include <asm/hwprobe.h>
->  #include <asm/patch.h>
-> +#include <asm/vector.h>
->  #include <asm/vendorid_list.h>
-> =20
->  static bool errata_probe_pbmt(unsigned int stage,
-> @@ -66,6 +67,34 @@ static bool errata_probe_pmu(unsigned int stage,
->  	return true;
->  }
-> =20
-> +static bool errata_probe_vector(unsigned int stage,
-> +				unsigned long arch_id, unsigned long impid)
-> +{
-> +	if (!IS_ENABLED(CONFIG_ERRATA_THEAD_VECTOR))
-> +		return false;
-> +
-> +	/* target-c9xx cores report arch_id and impid as 0 */
-> +	if (arch_id !=3D 0 || impid !=3D 0)
-> +		return false;
-> +
-> +	if (stage =3D=3D RISCV_ALTERNATIVES_EARLY_BOOT) {
-> +		/*
-> +		 * Disable VECTOR to detect illegal usage of vector in kernel.
-> +		 * This is normally done in _start_kernel but with the
-> +		 * vector-1.0 SR_VS bits. VS is using [24:23] on T-Head's
-> +		 * vector-0.7.1 and the vector-1.0-bits are unused there.
-> +		 */
-> +		csr_clear(CSR_STATUS, SR_VS_THEAD);
-> +		return false;
-> +	}
-> +
-> +	/* let has_vector() return true and set the static vlen */
+So if p was affined to a single CPU, it would always have
+p->sched_add_to_swq set to 0, thereby not queueing it on the 'queue'.
 
-Hmm, I was wondering about how you were going to communicate this to
-userspace, since you're not going to be setting "v" in your DT, so
-there'll be nothing in /proc/cpuinfo indicating it. (I am assuming that
-this is your intention, as you'd not need to drop the alternative-based
-stuff from has_vector() if it wasn't)
 
-I don't think you can do this, as things stand, because of how hwprobe
-operates:
+> > +	if (!READ_ONCE(p->sched_add_to_swq))
+> >  		return;
+> 
+> So suppose we fill all CPUs with tasks T_{0..n-n1}, sis finds them a
+> nice idle cpu and we don't get queued.
 
-static void hwprobe_isa_ext0(struct riscv_hwprobe *pair,
-			     const struct cpumask *cpus)
-{
-	...
+Yes. 
 
-	if (has_vector())
-		pair->value |=3D RISCV_HWPROBE_IMA_V;
+> 
+> Then wake up another n tasks T_{n...2n-1}, none of them find an idle
+> CPU, as per the above them all taken. These all do get queued.
 
-	...
-}
+Yes.
 
-  * :c:macro:`RISCV_HWPROBE_IMA_V`: The V extension is supported, as define=
-d by
-    version 1.0 of the RISC-V Vector extension manual.
+> 
+> However, suppose T>=n does a wakeup-preemption, and we end up with T>=n
+> running while T<n get queued on the rq, but not the 'queue' (I so hate
+> the swqueue name).
 
-You'll need to change hwprobe to use has_vector() &&
-riscv_has_extension_unlikely(v), or similar, as the condition for
-reporting. You'll also need some other way to communicate to userspace
-that T-Head's vector stuff is supported, no?
+Yes. But note that prior to running T>=n on the CPU, it will be
+removed from the 'queue'. So if every T>=n preempts the corresponding
+T<n, then, the queue becomes empty. And yes, in this case the queue
+served no purpose and does not justify the additional overhead.
 
-I'm also _really_ unconvinced that turning on extensions that were not
-indicated in the DT or via ACPI is something we should be doing. Have I
-missed something here that'd make that assessment inaccurate?
+> 
+> Then one CPU has both it's tasks go 'away' and becomes idle.
 
-Cheers,
-Conor.
+Yes, and this CPU prior to newidle_balance() will now search the
+'queue'.
 
-FWIW I am currently working on kernel-side support for the new
-extension properties that I have posted dt-binding patches for.
-I'll go post it once Palmer has merged his current set of patches in his
-staging repo into for-next, as I've got a lot of deps on riscv,isa
-parser changes.
-I'm really hoping that it provides an easier way to go off probing for
-vendor specific stuff for DT-based systems, since it will no longer
-require complex probing, just an of_property_match_string() for each
-possible cpu and we could very well provide a vendor hook during that
-process.
-Clearly though, that stuff is not yet merged as it has not even been
-posted yet.
+> 
+> At this point the 'queue' contains only running tasks that are not
+> migratable and all the tasks that could be migrated are not on the queue
+> -- IOW it is completely useless.
 
-Current WIP of that is here:
-https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/log/?h=3Dri=
-scv-extensions-strings-on-palmer
+At this point, the CPU will call swqueue_pick_next_task() and we can
+have one of the three cases:
 
-> +	riscv_vector_supported();
-> +	riscv_v_vsize =3D 128 / 8 * 32;
-> +
-> +	return true;
-> +}
-> +
->  static u32 thead_errata_probe(unsigned int stage,
->  			      unsigned long archid, unsigned long impid)
->  {
-> @@ -80,6 +109,9 @@ static u32 thead_errata_probe(unsigned int stage,
->  	if (errata_probe_pmu(stage, archid, impid))
->  		cpu_req_errata |=3D BIT(ERRATA_THEAD_PMU);
-> =20
-> +	if (errata_probe_vector(stage, archid, impid))
-> +		cpu_req_errata |=3D BIT(ERRATA_THEAD_VECTOR);
-> +
->  	return cpu_req_errata;
->  }
-> =20
-> diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
-> index 2d79bca6ffe8..521b3b939e51 100644
-> --- a/arch/riscv/include/asm/csr.h
-> +++ b/arch/riscv/include/asm/csr.h
-> @@ -24,11 +24,25 @@
->  #define SR_FS_CLEAN	_AC(0x00004000, UL)
->  #define SR_FS_DIRTY	_AC(0x00006000, UL)
-> =20
-> -#define SR_VS		_AC(0x00000600, UL) /* Vector Status */
-> -#define SR_VS_OFF	_AC(0x00000000, UL)
-> -#define SR_VS_INITIAL	_AC(0x00000200, UL)
-> -#define SR_VS_CLEAN	_AC(0x00000400, UL)
-> -#define SR_VS_DIRTY	_AC(0x00000600, UL)
-> +#define SR_VS_OFF		_AC(0x00000000, UL)
-> +
-> +#define SR_VS_1_0		_AC(0x00000600, UL) /* Vector Status */
-> +#define SR_VS_INITIAL_1_0	_AC(0x00000200, UL)
-> +#define SR_VS_CLEAN_1_0		_AC(0x00000400, UL)
-> +#define SR_VS_DIRTY_1_0		_AC(0x00000600, UL)
-> +
-> +#define SR_VS_THEAD		_AC(0x01800000, UL) /* Vector Status */
-> +#define SR_VS_INITIAL_THEAD	_AC(0x00800000, UL)
-> +#define SR_VS_CLEAN_THEAD	_AC(0x01000000, UL)
-> +#define SR_VS_DIRTY_THEAD	_AC(0x01800000, UL)
-> +
-> +/*
-> + * Always default to vector-1.0 handling in assembly and let the broken
-> + * implementations handle their case separately.
-> + */
-> +#ifdef __ASSEMBLY__
-> +#define SR_VS			SR_VS_1_0
-> +#endif
-> =20
->  #define SR_XS		_AC(0x00018000, UL) /* Extension Status */
->  #define SR_XS_OFF	_AC(0x00000000, UL)
-> diff --git a/arch/riscv/include/asm/errata_list.h b/arch/riscv/include/as=
-m/errata_list.h
-> index fb1a810f3d8c..ab21fadbe9c6 100644
-> --- a/arch/riscv/include/asm/errata_list.h
-> +++ b/arch/riscv/include/asm/errata_list.h
-> @@ -21,7 +21,8 @@
->  #define	ERRATA_THEAD_PBMT 0
->  #define	ERRATA_THEAD_CMO 1
->  #define	ERRATA_THEAD_PMU 2
-> -#define	ERRATA_THEAD_NUMBER 3
-> +#define	ERRATA_THEAD_VECTOR 3
-> +#define	ERRATA_THEAD_NUMBER 4
->  #endif
-> =20
->  #ifdef __ASSEMBLY__
-> @@ -154,6 +155,48 @@ asm volatile(ALTERNATIVE(						\
->  	: "=3Dr" (__ovl) :						\
->  	: "memory")
-> =20
-> +#ifdef CONFIG_ERRATA_THEAD_VECTOR
-> +
-> +#define THEAD_C9XX_CSR_VXSAT			0x9
-> +#define THEAD_C9XX_CSR_VXRM			0xa
-> +
-> +/*
-> + * Vector 0.7.1 as used for example on T-Head Xuantie cores, uses an old=
-er
-> + * encoding for vsetvli (ta, ma vs. d1), so provide an instruction for
-> + * vsetvli	t4, x0, e8, m8, d1
-> + */
-> +#define THEAD_VSETVLI_T4X0E8M8D1	".long	0x00307ed7\n\t"
-> +
-> +/*
-> + * While in theory, the vector-0.7.1 vsb.v and vlb.v result in the same
-> + * encoding as the standard vse8.v and vle8.v, compilers seem to optimize
-> + * the call resulting in a different encoding and then using a value for
-> + * the "mop" field that is not part of vector-0.7.1
-> + * So encode specific variants for vstate_save and _restore.
-> + */
-> +#define THEAD_VSB_V_V0T0		".long	0x02028027\n\t"
-> +#define THEAD_VSB_V_V8T0		".long	0x02028427\n\t"
-> +#define THEAD_VSB_V_V16T0		".long	0x02028827\n\t"
-> +#define THEAD_VSB_V_V24T0		".long	0x02028c27\n\t"
-> +#define THEAD_VLB_V_V0T0		".long	0x012028007\n\t"
-> +#define THEAD_VLB_V_V8T0		".long	0x012028407\n\t"
-> +#define THEAD_VLB_V_V16T0		".long	0x012028807\n\t"
-> +#define THEAD_VLB_V_V24T0		".long	0x012028c07\n\t"
-> +
-> +#define ALT_SR_VS_VECTOR_1_0_SHIFT	9
-> +#define ALT_SR_VS_THEAD_SHIFT		23
-> +
-> +#define ALT_SR_VS(_val, prot)						\
-> +asm(ALTERNATIVE("li %0, %1\t\nslli %0,%0,%3",				\
-> +		"li %0, %2\t\nslli %0,%0,%4", THEAD_VENDOR_ID,		\
-> +		ERRATA_THEAD_VECTOR, CONFIG_ERRATA_THEAD_VECTOR)	\
-> +		: "=3Dr"(_val)						\
-> +		: "I"(prot##_1_0 >> ALT_SR_VS_VECTOR_1_0_SHIFT),	\
-> +		  "I"(prot##_THEAD >> ALT_SR_VS_THEAD_SHIFT),		\
-> +		  "I"(ALT_SR_VS_VECTOR_1_0_SHIFT),			\
-> +		  "I"(ALT_SR_VS_THEAD_SHIFT))
-> +#endif /* CONFIG_ERRATA_THEAD_VECTOR */
-> +
->  #endif /* __ASSEMBLY__ */
-> =20
->  #endif
-> diff --git a/arch/riscv/include/asm/vector.h b/arch/riscv/include/asm/vec=
-tor.h
-> index 315c96d2b4d0..fa47f60f81e3 100644
-> --- a/arch/riscv/include/asm/vector.h
-> +++ b/arch/riscv/include/asm/vector.h
-> @@ -18,6 +18,55 @@
->  #include <asm/hwcap.h>
->  #include <asm/csr.h>
->  #include <asm/asm.h>
-> +#include <asm/errata_list.h>
-> +
-> +#ifdef CONFIG_ERRATA_THEAD_VECTOR
-> +
-> +static inline unsigned long riscv_sr_vs(void)
-> +{
-> +	u32 val;
-> +
-> +	ALT_SR_VS(val, SR_VS);
-> +	return val;
-> +}
-> +
-> +static inline unsigned long riscv_sr_vs_initial(void)
-> +{
-> +	u32 val;
-> +
-> +	ALT_SR_VS(val, SR_VS_INITIAL);
-> +	return val;
-> +}
-> +
-> +static inline unsigned long riscv_sr_vs_clean(void)
-> +{
-> +	u32 val;
-> +
-> +	ALT_SR_VS(val, SR_VS_CLEAN);
-> +	return val;
-> +}
-> +
-> +static inline unsigned long riscv_sr_vs_dirty(void)
-> +{
-> +	u32 val;
-> +
-> +	ALT_SR_VS(val, SR_VS_DIRTY);
-> +	return val;
-> +}
-> +
-> +#define SR_VS		riscv_sr_vs()
-> +#define SR_VS_INITIAL	riscv_sr_vs_initial()
-> +#define SR_VS_CLEAN	riscv_sr_vs_clean()
-> +#define SR_VS_DIRTY	riscv_sr_vs_dirty()
-> +
-> +#else /* CONFIG_ERRATA_THEAD_VECTOR */
-> +
-> +#define SR_VS		SR_VS_1_0
-> +#define SR_VS_INITIAL	SR_VS_INITIAL_1_0
-> +#define SR_VS_CLEAN	SR_VS_CLEAN_1_0
-> +#define SR_VS_DIRTY	SR_VS_DIRTY_1_0
-> +
-> +#endif /* CONFIG_ERRATA_THEAD_VECTOR */
-> =20
->  extern bool riscv_v_supported;
->  void riscv_vector_supported(void);
-> @@ -63,26 +112,74 @@ static __always_inline void riscv_v_disable(void)
-> =20
->  static __always_inline void __vstate_csr_save(struct __riscv_v_ext_state=
- *dest)
->  {
-> -	asm volatile (
-> +	register u32 t1 asm("t1") =3D (SR_FS);
-> +
-> +	/*
-> +	 * CSR_VCSR is defined as
-> +	 * [2:1] - vxrm[1:0]
-> +	 * [0] - vxsat
-> +	 * The earlier vector spec implemented by T-Head uses separate
-> +	 * registers for the same bit-elements, so just combine those
-> +	 * into the existing output field.
-> +	 *
-> +	 * Additionally T-Head cores need FS to be enabled when accessing
-> +	 * the VXRM and VXSAT CSRs, otherwise ending in illegal instructions.
-> +	 * Though the cores do not implement the VXRM and VXSAT fields in the
-> +	 * FCSR CSR that vector-0.7.1 specifies.
-> +	 */
-> +	asm volatile (ALTERNATIVE(
->  		"csrr	%0, " __stringify(CSR_VSTART) "\n\t"
->  		"csrr	%1, " __stringify(CSR_VTYPE) "\n\t"
->  		"csrr	%2, " __stringify(CSR_VL) "\n\t"
->  		"csrr	%3, " __stringify(CSR_VCSR) "\n\t"
-> +		__nops(5),
-> +		"csrs	sstatus, t1\n\t"
-> +		"csrr	%0, " __stringify(CSR_VSTART) "\n\t"
-> +		"csrr	%1, " __stringify(CSR_VTYPE) "\n\t"
-> +		"csrr	%2, " __stringify(CSR_VL) "\n\t"
-> +		"csrr	%3, " __stringify(THEAD_C9XX_CSR_VXRM) "\n\t"
-> +		"slliw	%3, %3, " __stringify(VCSR_VXRM_SHIFT) "\n\t"
-> +		"csrr	t4, " __stringify(THEAD_C9XX_CSR_VXSAT) "\n\t"
-> +		"or	%3, %3, t4\n\t"
-> +		"csrc	sstatus, t1\n\t",
-> +		THEAD_VENDOR_ID,
-> +		ERRATA_THEAD_VECTOR, CONFIG_ERRATA_THEAD_VECTOR)
->  		: "=3Dr" (dest->vstart), "=3Dr" (dest->vtype), "=3Dr" (dest->vl),
-> -		  "=3Dr" (dest->vcsr) : :);
-> +		  "=3Dr" (dest->vcsr) : "r"(t1) : "t4");
->  }
-> =20
->  static __always_inline void __vstate_csr_restore(struct __riscv_v_ext_st=
-ate *src)
->  {
-> -	asm volatile (
-> +	register u32 t1 asm("t1") =3D (SR_FS);
-> +
-> +	/*
-> +	 * Similar to __vstate_csr_save above, restore values for the
-> +	 * separate VXRM and VXSAT CSRs from the vcsr variable.
-> +	 */
-> +	asm volatile (ALTERNATIVE(
->  		".option push\n\t"
->  		".option arch, +v\n\t"
->  		"vsetvl	 x0, %2, %1\n\t"
->  		".option pop\n\t"
->  		"csrw	" __stringify(CSR_VSTART) ", %0\n\t"
->  		"csrw	" __stringify(CSR_VCSR) ", %3\n\t"
-> +		__nops(6),
-> +		"csrs	sstatus, t1\n\t"
-> +		".option push\n\t"
-> +		".option arch, +v\n\t"
-> +		"vsetvl	 x0, %2, %1\n\t"
-> +		".option pop\n\t"
-> +		"csrw	" __stringify(CSR_VSTART) ", %0\n\t"
-> +		"srliw	t4, %3, " __stringify(VCSR_VXRM_SHIFT) "\n\t"
-> +		"andi	t4, t4, " __stringify(VCSR_VXRM_MASK) "\n\t"
-> +		"csrw	" __stringify(THEAD_C9XX_CSR_VXRM) ", t4\n\t"
-> +		"andi	%3, %3, " __stringify(VCSR_VXSAT_MASK) "\n\t"
-> +		"csrw	" __stringify(THEAD_C9XX_CSR_VXSAT) ", %3\n\t"
-> +		"csrc	sstatus, t1\n\t",
-> +		THEAD_VENDOR_ID,
-> +		ERRATA_THEAD_VECTOR, CONFIG_ERRATA_THEAD_VECTOR)
->  		: : "r" (src->vstart), "r" (src->vtype), "r" (src->vl),
-> -		    "r" (src->vcsr) :);
-> +		    "r" (src->vcsr), "r"(t1) : "t4");
->  }
-> =20
->  static inline void __riscv_v_vstate_save(struct __riscv_v_ext_state *sav=
-e_to,
-> @@ -92,7 +189,8 @@ static inline void __riscv_v_vstate_save(struct __risc=
-v_v_ext_state *save_to,
-> =20
->  	riscv_v_enable();
->  	__vstate_csr_save(save_to);
-> -	asm volatile (
-> +	asm volatile (ALTERNATIVE(
-> +		"nop\n\t"
->  		".option push\n\t"
->  		".option arch, +v\n\t"
->  		"vsetvli	%0, x0, e8, m8, ta, ma\n\t"
-> @@ -103,8 +201,18 @@ static inline void __riscv_v_vstate_save(struct __ri=
-scv_v_ext_state *save_to,
->  		"vse8.v		v16, (%1)\n\t"
->  		"add		%1, %1, %0\n\t"
->  		"vse8.v		v24, (%1)\n\t"
-> -		".option pop\n\t"
-> -		: "=3D&r" (vl) : "r" (datap) : "memory");
-> +		".option pop\n\t",
-> +		"mv		t0, %1\n\t"
-> +		THEAD_VSETVLI_T4X0E8M8D1
-> +		THEAD_VSB_V_V0T0
-> +		"addi		t0, t0, 128\n\t"
-> +		THEAD_VSB_V_V8T0
-> +		"addi		t0, t0, 128\n\t"
-> +		THEAD_VSB_V_V16T0
-> +		"addi		t0, t0, 128\n\t"
-> +		THEAD_VSB_V_V24T0, THEAD_VENDOR_ID,
-> +		ERRATA_THEAD_VECTOR, CONFIG_ERRATA_THEAD_VECTOR)
-> +		: "=3D&r" (vl) : "r" (datap) : "t0", "t4", "memory");
->  	riscv_v_disable();
->  }
-> =20
-> @@ -114,7 +222,8 @@ static inline void __riscv_v_vstate_restore(struct __=
-riscv_v_ext_state *restore_
->  	unsigned long vl;
-> =20
->  	riscv_v_enable();
-> -	asm volatile (
-> +	asm volatile (ALTERNATIVE(
-> +		"nop\n\t"
->  		".option push\n\t"
->  		".option arch, +v\n\t"
->  		"vsetvli	%0, x0, e8, m8, ta, ma\n\t"
-> @@ -125,8 +234,18 @@ static inline void __riscv_v_vstate_restore(struct _=
-_riscv_v_ext_state *restore_
->  		"vle8.v		v16, (%1)\n\t"
->  		"add		%1, %1, %0\n\t"
->  		"vle8.v		v24, (%1)\n\t"
-> -		".option pop\n\t"
-> -		: "=3D&r" (vl) : "r" (datap) : "memory");
-> +		".option pop\n\t",
-> +		"mv		t0, %1\n\t"
-> +		THEAD_VSETVLI_T4X0E8M8D1
-> +		THEAD_VLB_V_V0T0
-> +		"addi		t0, t0, 128\n\t"
-> +		THEAD_VLB_V_V8T0
-> +		"addi		t0, t0, 128\n\t"
-> +		THEAD_VLB_V_V16T0
-> +		"addi		t0, t0, 128\n\t"
-> +		THEAD_VLB_V_V24T0, THEAD_VENDOR_ID,
-> +		ERRATA_THEAD_VECTOR, CONFIG_ERRATA_THEAD_VECTOR)
-> +		: "=3D&r" (vl) : "r" (datap) : "t0", "t4");
->  	__vstate_csr_restore(restore_from);
->  	riscv_v_disable();
->  }
-> diff --git a/arch/riscv/kernel/vector.c b/arch/riscv/kernel/vector.c
-> index 74178fb71805..51726890a4d0 100644
-> --- a/arch/riscv/kernel/vector.c
-> +++ b/arch/riscv/kernel/vector.c
-> @@ -140,7 +140,7 @@ bool riscv_v_first_use_handler(struct pt_regs *regs)
->  	u32 insn =3D (u32)regs->badaddr;
-> =20
->  	/* Do not handle if V is not supported, or disabled */
-> -	if (!(ELF_HWCAP & COMPAT_HWCAP_ISA_V))
-> +	if (!has_vector())
->  		return false;
-> =20
->  	/* If V has been enabled then it is not the first-use trap */
-> --=20
-> 2.39.2
->=20
+    * The 'queue' is empty: As mentioned above, the queue didn't do
+      anything for the tasks and was cmpletely useless.
 
---3sCCT1n91ymcjSi1
-Content-Type: application/pgp-signature; name="signature.asc"
+    * The task at the head of 'queue' is not runnable on the CPU which
+      is going idle. Again, wasted effort of adding this task to the
+      queue, because in the current implementation, the task is
+      removed from the 'queue' even when it is not runnable on this
+      CPU.
 
------BEGIN PGP SIGNATURE-----
+    * The 'queue' has some task which can be run on the CPU going
+      idle. The task is successfully migrated to this CPU, which no
+      longer has to do newidle_balance() and the task has reduced it
+      waiting period.
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJVqtQAKCRB4tDGHoIJi
-0sLOAQDKe17t2+/hrvGZr9uH9/epKeLlRKYnpveygwD5cQ1MWwEA9TGZIz+sAM3j
-LWBm/RvRk90WNOdRvTENLuY2FJEohwg=
-=JtJz
------END PGP SIGNATURE-----
+> 
+> Is this the intention?
 
---3sCCT1n91ymcjSi1--
+IIUC, the intention is to reduce the avg post-wakeup wait time of the
+task by running it on a newidle CPU, when the task's CPU is still busy
+running something else. This is assuming that the task won't win
+wakeup-preemption. But the flipside is the additional cost of swqueue
+enqueue/dequeue.
+
+I have queued a run across a set of benchmarks, but just to get an
+idea how the patch performs, I ran hackbench and this is what the
+results look like on a 2 Socket Gen3 EPYC configured in NPS=2 with 64
+cores 128 threads per socket:
+
+Test:            tip                  tip_swq_disabled        tip_swq_enabled
+=============================================================================
+1-groups:       3.82 (0.00 pct)       3.84 (-0.52 pct)        3.46 (+9.42 pct)
+2-groups:       4.40 (0.00 pct)       4.42 (-0.45 pct)        3.66 (+16.81 pct)
+4-groups:       4.84 (0.00 pct)       4.82 (+0.41 pct)        4.50 (+7.02 pct)
+8-groups:       5.45 (0.00 pct)       5.43 (+0.36 pct)        5.85 (-7.33 pct)
+16-groups:      6.94 (0.00 pct)       6.90 (+0.57 pct)        8.41 (-21.18 pct)
+ 
+We can see that patchset does quite well with 1,2,4 groups, but with 8
+and 16 groups as the system becomes overloaded, we can see the
+performance degrade. In the overloaded case, I could observe
+native_queued_spin_lock_slowpath() looming large in the perf profiles
+when the swqueue feature was enabled. So perhaps the cost of swqueue
+enqueue/dequeue is not justifiable, especially if the tasks are anyway
+going to run on their target CPUs.
+
+I will post more results later.
+--
+Thanks and Regards
+gautham.
