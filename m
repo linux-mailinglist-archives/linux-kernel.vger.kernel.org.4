@@ -2,71 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7466C73B6D5
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 13:55:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCE4F73B513
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 12:19:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229745AbjFWLzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 07:55:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45080 "EHLO
+        id S232222AbjFWKTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 06:19:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230280AbjFWLzT (ORCPT
+        with ESMTP id S232273AbjFWKSs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 07:55:19 -0400
-X-Greylist: delayed 1800 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 23 Jun 2023 04:55:16 PDT
-Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF7FBA;
-        Fri, 23 Jun 2023 04:55:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
-        s=42; h=From:Cc:To:Date:Message-ID;
-        bh=6vQmPuTY7+r8oEGoWdR7QXjNWbWLdLq/qWIKBX65su4=; b=hUuItrjAtIysZde3kgHWlnwafr
-        moYHXuqnRPgxEYFBCYrTLaHEKl/KxJXo1YqGg4cxOD1gw0Xa6fw7NOd5bhpKPMc1UedWHKm6yrykJ
-        Fkl9vrxuPJq4tDpQPnoc6Ot25Nq5dGmSjATqJsliEnXOwg5clY/psKFYSkYox95ULsB7OJ71QB8xA
-        rfpZk9upLEDGZdlD0d+MOhs0xdBCNtxKRykUd/+JEt9+NUcjFbXvWWQdasNYsRnPUGq2xCH0jOP0k
-        kIxd9lSVVQ1JZ2dGPnR97mpY05PHCGCIRZ5PxrZgDUifrbqYRQDg53gv41AxIf94ZW3iJrNdC4Kuy
-        Y+QvkgsA+piaOj4V2UBtfiWCZWFXBMs3DdmEWsCB78QxxTT1po0X2pAy7y0ZKx/+PM+2QVoojWt6B
-        Ysag1oWZZbi5TYYjarcEjySnL8FwrjTuR2ZV/SfkG7MrFvJvvqDkcZu9s/jmRmHipleTM9OTRR+v1
-        R03VUBIlMC5G7xCcO19jmgUA;
-Received: from [127.0.0.2] (localhost [127.0.0.1])
-        by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
-        (Exim)
-        id 1qCdql-003wDq-29;
-        Fri, 23 Jun 2023 10:17:07 +0000
-Message-ID: <e72f4c43-02a7-936c-e755-1b23596fc312@samba.org>
-Date:   Fri, 23 Jun 2023 12:17:35 +0200
+        Fri, 23 Jun 2023 06:18:48 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29E8626B9
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 03:18:09 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-31297125334so469112f8f.0
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 03:18:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687515485; x=1690107485;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nHZhWGgo76NH04cF8GjDPfERCPW0cF8Z2+fMP4OyHqQ=;
+        b=KotL6elRZiyHJbzzU4+dTZy09rPZ+IgouoMwJH7RGSLWSlSdV1mkJv7t/hIzx5UHLO
+         1usSOWcVS5tqcmu9y42pl4mh0WzHXaS+MYqkVQJz/5jYg72w4f3nqReTTG8s83ggX2TO
+         fHDeMeg/bq1VN8fUYUqObn/rq3zVsUkYWMAKzQfmxOHMzj5h5Xe1KAoWNJm2mCKdnXRQ
+         Bh/5cFNi93Rro4mB9hRXZ5kNWHg/OzEKvNTMbsp4wnl+jcoH0eP5UuQ6rA0g+cwyrkCA
+         Dufk4OdbChKRdjMnDCRt4b/7CiLH38so/fP0oWkWQ8A073iIVyLnJSHkglcXrzNAFu2r
+         EBzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687515485; x=1690107485;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nHZhWGgo76NH04cF8GjDPfERCPW0cF8Z2+fMP4OyHqQ=;
+        b=G9r6oqhiXq4dLW2rSeg19SDRFxBVkK7rtiR2wWWtfLBMkklexRo3ZEJeoV/xpBPZ5A
+         +RttMHTUC9lRocLajbjtC7BvyQND6F4zgnm6Gecqndfe47a/cQLCC8w/MfRk/+JW4Ij8
+         hp2OqC0Yw6uP32bYDkZD40MDmr6QQKuJH7Ne79uqAHWG7YoPBZSe4MqXwUG7shiP72H9
+         ojyVelJKMYVElT+2hr5aA/Ctu+ZT7ROB+GB0+CozdQsU+D9UOIP3B8LfnY4vr9q7SEVt
+         fVlecXZD91D3velz9jJFw+FeH3gQYh+ghpQATRdGhs1CGx8x451lKNajOfZ5yU5cpwi2
+         ltmw==
+X-Gm-Message-State: AC+VfDxKo3WAynGJh0ClhaUQcl8psDqvSL93QvM5PaBU1N8c5if961x/
+        prw04Tcj0uhgBMdWbKHxW3bDSA==
+X-Google-Smtp-Source: ACHHUZ54DxkRUdIGChdHo1KpYidQIMlPEVyjCTwb7Ch5HWkPJvWak6Qi61VB6TOh39zHDoWFCVIMgw==
+X-Received: by 2002:adf:e88a:0:b0:311:19ad:a082 with SMTP id d10-20020adfe88a000000b0031119ada082mr18835654wrm.3.1687515484807;
+        Fri, 23 Jun 2023 03:18:04 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id w3-20020adfee43000000b0030e5b1fffc3sm9272268wro.9.2023.06.23.03.18.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Jun 2023 03:18:03 -0700 (PDT)
+Message-ID: <125c849f-3746-864f-8b8f-6e0a33aca439@linaro.org>
+Date:   Fri, 23 Jun 2023 12:18:02 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [RFC PATCH v2 1/4] net: wire up support for
- file_operations->uring_cmd()
-Content-Language: en-US, de-DE
-To:     Breno Leitao <leitao@debian.org>, axboe@kernel.dk,
-        dsahern@kernel.org, asml.silence@gmail.com
-Cc:     io-uring@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Mat Martineau <martineau@kernel.org>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Xin Long <lucien.xin@gmail.com>, leit@fb.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dccp@vger.kernel.org, mptcp@lists.linux.dev,
-        linux-sctp@vger.kernel.org, ast@kernel.org, kuniyu@amazon.com,
-        martin.lau@kernel.org, Jason Xing <kernelxing@tencent.com>,
-        Joanne Koong <joannelkoong@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Guillaume Nault <gnault@redhat.com>,
-        Andrea Righi <andrea.righi@canonical.com>
-References: <20230614110757.3689731-1-leitao@debian.org>
- <20230614110757.3689731-2-leitao@debian.org>
- <6b5e5988-3dc7-f5d6-e447-397696c0d533@kernel.org>
- <ZJA6AwbRWtSiJ5pL@gmail.com>
-From:   Stefan Metzmacher <metze@samba.org>
-In-Reply-To: <ZJA6AwbRWtSiJ5pL@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 2/2] arch: arm64: configs: Enable UBI and UBIFS
+Content-Language: en-US
+To:     "Lee, Kah Jing" <kah.jing.lee@intel.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <0d1b3c55-4b11-9e63-e388-191d39d88df1@linaro.org>
+ <20230622122114.592791-1-kah.jing.lee@intel.com>
+ <25439c1e-c9ef-0dc6-8d91-883d7734d0fd@linaro.org>
+ <PH0PR11MB5673A862187810E9986E3C8BCB23A@PH0PR11MB5673.namprd11.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <PH0PR11MB5673A862187810E9986E3C8BCB23A@PH0PR11MB5673.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,149 +83,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 19.06.23 um 13:20 schrieb Breno Leitao:
-> On Wed, Jun 14, 2023 at 08:15:10AM -0700, David Ahern wrote:
->> On 6/14/23 5:07 AM, Breno Leitao wrote:
->> io_uring is just another in-kernel user of sockets. There is no reason
->> for io_uring references to be in core net code. It should be using
->> exposed in-kernel APIs and doing any translation of its op codes in
->> io_uring/  code.
-> 
-> Thanks for the feedback. If we want to keep the network subsystem
-> untouched, then I we can do it using an approach similar to the
-> following. Is this a better approach moving forward?
+On 23/06/2023 12:03, Lee, Kah Jing wrote:
+>>>>>
+>>>>> Signed-off-by: Alif Zakuan Yuslaimi <alif.zakuan.yuslaimi@intel.com>
+>>>>> Signed-off-by: Kah Jing Lee <kah.jing.lee@intel.com>
+>>>>> ---
+>>>>>  arch/arm64/configs/defconfig | 2 ++
+>>>>>  1 file changed, 2 insertions(+)
+>>>>>
+>>>>> diff --git a/arch/arm64/configs/defconfig
+>>>>> b/arch/arm64/configs/defconfig index a24609e14d50..23a6ebcb1a9e
+>>>> 100644
+>>>>> --- a/arch/arm64/configs/defconfig
+>>>>> +++ b/arch/arm64/configs/defconfig
+>>>>> @@ -470,6 +470,8 @@ CONFIG_IPMI_DEVICE_INTERFACE=m
+>>>> CONFIG_IPMI_SI=m
+>>>>> CONFIG_HW_RANDOM=y  CONFIG_HW_RANDOM_VIRTIO=y
+>>>>> +CONFIG_MTD_UBI=y
+>>>>> +CONFIG_UBIFS_FS=y
+>>>>
+>>>> Not modules?
+>>> Yes, we need to boot with rootfs with UBIFS.
+>>
+>> So you miss init ramdisk.
+> Currently we are using the bootargs to mount the rootfs from QSPI NOR flash:
+> [    0.000000] Kernel command line: earlycon panic=-1 ubi.mtd=1 root=ubi0:rootfs rootfstype=ubifs rw rootwait
+> Is it possible to mount the ubifs rootfs with the ubifs=m config during boot?
 
-I'd like to keep it passed to socket layer, so that sockets could
-implement some extra features in an async fashion.
+I think yes. rootfs devices are for example modules, so filesystem can
+be as well.
 
-What about having the function you posted below (and in v3)
-as a default implementation if proto_ops->uring_cmd is NULL?
 
-metze
-
-> --
-> 
-> From: Breno Leitao <leitao@debian.org>
-> Date: Mon, 19 Jun 2023 03:37:40 -0700
-> Subject: [RFC PATCH v2] io_uring: add initial io_uring_cmd support for sockets
-> 
-> Enable io_uring command operations on sockets. Create two
-> SOCKET_URING_OP commands that will operate on sockets.
-> 
-> For that, use the file_operations->uring_cmd callback, and map it to a
-> uring socket callback, which handles the SOCKET_URING_OP accordingly.
-> 
-> Signed-off-by: Breno Leitao <leitao@debian.org>
-> ---
->   include/linux/io_uring.h      |  6 ++++++
->   include/uapi/linux/io_uring.h |  8 ++++++++
->   io_uring/uring_cmd.c          | 27 +++++++++++++++++++++++++++
->   net/socket.c                  |  2 ++
->   4 files changed, 43 insertions(+)
-> 
-> diff --git a/include/linux/io_uring.h b/include/linux/io_uring.h
-> index 7fe31b2cd02f..d1b20e2a9fb0 100644
-> --- a/include/linux/io_uring.h
-> +++ b/include/linux/io_uring.h
-> @@ -71,6 +71,7 @@ static inline void io_uring_free(struct task_struct *tsk)
->   	if (tsk->io_uring)
->   		__io_uring_free(tsk);
->   }
-> +int uring_sock_cmd(struct io_uring_cmd *cmd, unsigned int issue_flags);
->   #else
->   static inline int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
->   			      struct iov_iter *iter, void *ioucmd)
-> @@ -102,6 +103,11 @@ static inline const char *io_uring_get_opcode(u8 opcode)
->   {
->   	return "";
->   }
-> +static inline int uring_sock_cmd(struct io_uring_cmd *cmd,
-> +				 unsigned int issue_flags)
-> +{
-> +	return -EOPNOTSUPP;
-> +}
->   #endif
->   
->   #endif
-> diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
-> index 0716cb17e436..d93a5ee7d984 100644
-> --- a/include/uapi/linux/io_uring.h
-> +++ b/include/uapi/linux/io_uring.h
-> @@ -703,6 +703,14 @@ struct io_uring_recvmsg_out {
->   	__u32 flags;
->   };
->   
-> +/*
-> + * Argument for IORING_OP_URING_CMD when file is a socket
-> + */
-> +enum {
-> +	SOCKET_URING_OP_SIOCINQ         = 0,
-> +	SOCKET_URING_OP_SIOCOUTQ,
-> +};
-> +
->   #ifdef __cplusplus
->   }
->   #endif
-> diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
-> index 5e32db48696d..dcbe6493b03f 100644
-> --- a/io_uring/uring_cmd.c
-> +++ b/io_uring/uring_cmd.c
-> @@ -7,6 +7,7 @@
->   #include <linux/nospec.h>
->   
->   #include <uapi/linux/io_uring.h>
-> +#include <uapi/asm-generic/ioctls.h>
->   
->   #include "io_uring.h"
->   #include "rsrc.h"
-> @@ -156,3 +157,29 @@ int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
->   	return io_import_fixed(rw, iter, req->imu, ubuf, len);
->   }
->   EXPORT_SYMBOL_GPL(io_uring_cmd_import_fixed);
-> +
-> +int uring_sock_cmd(struct io_uring_cmd *cmd, unsigned int issue_flags)
-> +{
-> +	struct socket *sock = cmd->file->private_data;
-> +	struct sock *sk = sock->sk;
-> +	int ret, arg = 0;
-> +
-> +	if (!sk->sk_prot || !sk->sk_prot->ioctl)
-> +		return -EOPNOTSUPP;
-> +
-> +	switch (cmd->sqe->cmd_op) {
-> +	case SOCKET_URING_OP_SIOCINQ:
-> +		ret = sk->sk_prot->ioctl(sk, SIOCINQ, &arg);
-> +		if (ret)
-> +			return ret;
-> +		return arg;
-> +	case SOCKET_URING_OP_SIOCOUTQ:
-> +		ret = sk->sk_prot->ioctl(sk, SIOCOUTQ, &arg);
-> +		if (ret)
-> +			return ret;
-> +		return arg;
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +}
-> +EXPORT_SYMBOL_GPL(uring_sock_cmd);
-> diff --git a/net/socket.c b/net/socket.c
-> index b778fc03c6e0..db11e94d2259 100644
-> --- a/net/socket.c
-> +++ b/net/socket.c
-> @@ -88,6 +88,7 @@
->   #include <linux/xattr.h>
->   #include <linux/nospec.h>
->   #include <linux/indirect_call_wrapper.h>
-> +#include <linux/io_uring.h>
->   
->   #include <linux/uaccess.h>
->   #include <asm/unistd.h>
-> @@ -159,6 +160,7 @@ static const struct file_operations socket_file_ops = {
->   #ifdef CONFIG_COMPAT
->   	.compat_ioctl = compat_sock_ioctl,
->   #endif
-> +	.uring_cmd =    uring_sock_cmd,
->   	.mmap =		sock_mmap,
->   	.release =	sock_close,
->   	.fasync =	sock_fasync,
+Best regards,
+Krzysztof
 
