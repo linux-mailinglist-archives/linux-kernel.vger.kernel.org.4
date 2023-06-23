@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49BCD73C25E
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 23:16:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C71573C25F
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 23:16:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232819AbjFWVQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 17:16:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50374 "EHLO
+        id S232856AbjFWVQU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 17:16:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232856AbjFWVPc (ORCPT
+        with ESMTP id S232866AbjFWVPd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 17:15:32 -0400
+        Fri, 23 Jun 2023 17:15:33 -0400
 Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E048726B9;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1F8626BD;
         Fri, 23 Jun 2023 14:15:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=inria.fr; s=dc;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=1b2qOiijM2SOFY49y/T4nNKOOzZTttGdtrLG5Lh64bI=;
-  b=uyu8z8wzWEtEgebrWGzG9i5oWEcHT9BaIjP0Cs8YqJ4Dnb9025dIo99d
-   UntoRq5hk/R+vCjtxjxaQzUluEwwNY91uXDdnCSwbykFbM7jOIMaPWqbb
-   mmDU8w2Ro+9cTiPSvq7ACpxLUR8sUeZ+2YhiHhuPAojA3G8yl102Og3hU
-   A=;
+  bh=8RgN37sI7dQZ+yBNJgvV+FVERbz2KA6A4JGbVoPo1D8=;
+  b=ZLSOgmbfYoFK1LfswZnkAko5w1qaeuRTBPVtfsuJhYufYAShfc08lrY5
+   GfmwSRRDmk+b4IYZGmpWxgs4LgkYSVKQuaZq7LE+mHoJVN5ZQicrxpb1d
+   qwR/n8FqYT1ATKyZe3Ay1Bz27c81Fou59W2Zj2TESMWOmR77CEA5urk0P
+   s=;
 Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
 X-IronPort-AV: E=Sophos;i="6.01,153,1684792800"; 
-   d="scan'208";a="59686176"
+   d="scan'208";a="59686177"
 Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
   by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2023 23:15:13 +0200
 From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     Claudiu Manoil <claudiu.manoil@nxp.com>
+To:     Selvin Xavier <selvin.xavier@broadcom.com>
 Cc:     keescook@chromium.org, kernel-janitors@vger.kernel.org,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 18/26] net: enetc: use array_size
-Date:   Fri, 23 Jun 2023 23:14:49 +0200
-Message-Id: <20230623211457.102544-19-Julia.Lawall@inria.fr>
+Subject: [PATCH 19/26] RDMA/bnxt_re: use array_size
+Date:   Fri, 23 Jun 2023 23:14:50 +0200
+Message-Id: <20230623211457.102544-20-Julia.Lawall@inria.fr>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20230623211457.102544-1-Julia.Lawall@inria.fr>
 References: <20230623211457.102544-1-Julia.Lawall@inria.fr>
@@ -80,29 +77,25 @@ The changes were done using the following Coccinelle semantic patch:
 Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
 ---
- drivers/net/ethernet/freescale/enetc/enetc.c |    4 ++--
+ drivers/infiniband/hw/bnxt_re/qplib_res.c |    4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/freescale/enetc/enetc.c b/drivers/net/ethernet/freescale/enetc/enetc.c
-index 9e1b2536e9a9..7231f8ea1ba4 100644
---- a/drivers/net/ethernet/freescale/enetc/enetc.c
-+++ b/drivers/net/ethernet/freescale/enetc/enetc.c
-@@ -1790,7 +1790,7 @@ static int enetc_alloc_tx_resource(struct enetc_bdr_resource *res,
- 	res->bd_count = bd_count;
- 	res->bd_size = sizeof(union enetc_tx_bd);
- 
--	res->tx_swbd = vzalloc(bd_count * sizeof(*res->tx_swbd));
-+	res->tx_swbd = vzalloc(array_size(bd_count, sizeof(*res->tx_swbd)));
- 	if (!res->tx_swbd)
+diff --git a/drivers/infiniband/hw/bnxt_re/qplib_res.c b/drivers/infiniband/hw/bnxt_re/qplib_res.c
+index 81b0c5e879f9..f049b627e734 100644
+--- a/drivers/infiniband/hw/bnxt_re/qplib_res.c
++++ b/drivers/infiniband/hw/bnxt_re/qplib_res.c
+@@ -118,11 +118,11 @@ static int __alloc_pbl(struct bnxt_qplib_res *res,
+ 	else
+ 		pages = sginfo->npages;
+ 	/* page ptr arrays */
+-	pbl->pg_arr = vmalloc(pages * sizeof(void *));
++	pbl->pg_arr = vmalloc(array_size(pages, sizeof(void *)));
+ 	if (!pbl->pg_arr)
  		return -ENOMEM;
  
-@@ -1878,7 +1878,7 @@ static int enetc_alloc_rx_resource(struct enetc_bdr_resource *res,
- 	if (extended)
- 		res->bd_size *= 2;
- 
--	res->rx_swbd = vzalloc(bd_count * sizeof(struct enetc_rx_swbd));
-+	res->rx_swbd = vzalloc(array_size(bd_count, sizeof(struct enetc_rx_swbd)));
- 	if (!res->rx_swbd)
- 		return -ENOMEM;
- 
+-	pbl->pg_map_arr = vmalloc(pages * sizeof(dma_addr_t));
++	pbl->pg_map_arr = vmalloc(array_size(pages, sizeof(dma_addr_t)));
+ 	if (!pbl->pg_map_arr) {
+ 		vfree(pbl->pg_arr);
+ 		pbl->pg_arr = NULL;
 
