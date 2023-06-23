@@ -2,101 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E062B73BE9F
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 20:55:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F3C173BEAC
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 21:04:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230506AbjFWSzk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 14:55:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52918 "EHLO
+        id S231610AbjFWTEa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 15:04:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229644AbjFWSzi (ORCPT
+        with ESMTP id S229647AbjFWTE3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 14:55:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E56251BD2
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 11:55:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E91F61AFB
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 18:55:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8AB8C433C8;
-        Fri, 23 Jun 2023 18:55:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687546536;
-        bh=VnxQJHaKQsPmcm1OKRvt1nu0tfgMb5k4v2j2VSOguZc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Z1mjN+yDK/HIBcVtmO4krGa3lR7Jd4OuPjTYnE8Pg/qhniSIqSbdcYaUXpKBYThWk
-         76uLDZhuBpLggR3JzNqU+i8IAPQQqouac8Z3AeofwMVpeImCUC9zy86pVWiRgDP1F3
-         NtZdZVwoMtngP7VElnLK6N5nq11+c3t8ahYsIumIQiCpLRkTToncYeLUcrMf8+2W/b
-         Tv8Vq5u4C4nPgsocTwDD27OznbmkOpr2eFEtNbBphJwSmHOe1v2qP4+qWB7y8zOmu5
-         2rFc90PF3Fftg4/uX9STN8pFLk6Rtp6eO2kui1nA+36oCEsnY4EAc/2c/hgDajGvY/
-         +FyDvcRrXhT3w==
-Date:   Fri, 23 Jun 2023 11:55:35 -0700
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Yunlei He <heyunlei@oppo.com>
-Cc:     chao@kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        Fri, 23 Jun 2023 15:04:29 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ABD71FE9;
+        Fri, 23 Jun 2023 12:04:28 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id B90301F88B;
+        Fri, 23 Jun 2023 19:04:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1687547066; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=4MmYwsBGJJnXZ3h7KxTBzFr25zuNofEdKLK6iBpVC6M=;
+        b=ARARTjQMi5BQQoukSOODqJBp1sOmH+Cn3SGMPv/PH2CWMrjynWB701j68gwEdc2BWNdKJd
+        zTYS2ZhvbM1H7wb2XHbfPNrEOrqr3QxVwf8qCsM8Mmlar0U/QVEPp1+E9DnuNfw04JaGWi
+        mWYwMkhnhxZ9sX6+umfkvqSDqCrJvTY=
+Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
+        by relay2.suse.de (Postfix) with ESMTP id A75F72C141;
+        Fri, 23 Jun 2023 19:04:26 +0000 (UTC)
+Received: by ds.suse.cz (Postfix, from userid 10065)
+        id 640ACDA85A; Fri, 23 Jun 2023 20:58:02 +0200 (CEST)
+From:   David Sterba <dsterba@suse.com>
+To:     torvalds@linux-foundation.org
+Cc:     David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [f2fs-dev][PATCH 1/2 v2] f2fs: update mtime and ctime in move
- file range method
-Message-ID: <ZJXqpw2Ckluo+20G@google.com>
-References: <20230622161647.742012-1-heyunlei@oppo.com>
+Subject: [GIT PULL] Btrfs fix for 6.4-rc7, part 2
+Date:   Fri, 23 Jun 2023 20:58:01 +0200
+Message-Id: <cover.1687448378.git.dsterba@suse.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230622161647.742012-1-heyunlei@oppo.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/23, Yunlei He wrote:
-> Mtime and ctime stay old value without update after move
-> file range ioctl. This patch add time update.
-> 
-> Signed-off-by: Yunlei He <heyunlei@oppo.com>
-> ---
-> v2:
-> -update both src and dst inode
->  fs/f2fs/file.c | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
-> 
-> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-> index cb42d8464ad9..e59fc8faa035 100644
-> --- a/fs/f2fs/file.c
-> +++ b/fs/f2fs/file.c
-> @@ -2886,6 +2886,19 @@ static int f2fs_move_file_range(struct file *file_in, loff_t pos_in,
->  		f2fs_up_write(&F2FS_I(dst)->i_gc_rwsem[WRITE]);
->  out_src:
->  	f2fs_up_write(&F2FS_I(src)->i_gc_rwsem[WRITE]);
-> +
-> +	if (!ret) {
+Hi,
 
-Applied with minor change like:
+unfortunately the recent u32 overflow fix was not complete, there was
+one conversion left, assertion not triggered by my tests but caught by
+Qu's fstests case. The "cleanup for later" has been promoted to a proper
+fix and wraps all uses of the stripe left shift so the diffstat has grown
+but leaves no potentially problematic uses. We should have done it that
+way before, sorry.
 
-	if (ret)
-		goto out_unlock;
-	...
+Please pull, thanks.
 
-> +		src->i_mtime = src->i_ctime = current_time(src);
-> +		f2fs_mark_inode_dirty_sync(src, false);
-> +
-> +		if (src != dst) {
-> +			dst->i_mtime = dst->i_ctime = current_time(dst);
-> +			f2fs_mark_inode_dirty_sync(dst, false);
-> +		}
-> +
-> +		f2fs_update_time(sbi, REQ_TIME);
-> +	}
-> +
->  out_unlock:
->  	if (src != dst)
->  		inode_unlock(dst);
-> -- 
-> 2.40.1
+----------------------------------------------------------------
+The following changes since commit a7299a18a179a9713651fce9ad00972a633c14a9:
+
+  btrfs: fix u32 overflows when left shifting stripe_nr (2023-06-20 19:10:31 +0200)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-6.4-rc7-tag
+
+for you to fetch changes up to cb091225a538005965b7c59c7c33ebe5358a5815:
+
+  btrfs: fix remaining u32 overflows when left shifting stripe_nr (2023-06-22 17:03:55 +0200)
+
+----------------------------------------------------------------
+Qu Wenruo (1):
+      btrfs: fix remaining u32 overflows when left shifting stripe_nr
+
+ fs/btrfs/block-group.c  |  2 +-
+ fs/btrfs/scrub.c        | 22 +++++++++++-----------
+ fs/btrfs/tree-checker.c |  4 ++--
+ fs/btrfs/volumes.c      | 29 +++++++++++++++--------------
+ fs/btrfs/volumes.h      | 11 +++++++++++
+ 5 files changed, 40 insertions(+), 28 deletions(-)
