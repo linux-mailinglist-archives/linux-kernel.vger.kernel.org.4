@@ -2,372 +2,385 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5FD473BCCD
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 18:40:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFB9A73BCD0
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 18:40:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232237AbjFWQkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 12:40:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49512 "EHLO
+        id S232440AbjFWQkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 12:40:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232300AbjFWQkI (ORCPT
+        with ESMTP id S231703AbjFWQkZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 12:40:08 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10F86294B;
-        Fri, 23 Jun 2023 09:39:54 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E6F33440;
-        Fri, 23 Jun 2023 18:39:14 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1687538355;
-        bh=XqmTIZlH3lB//uuFxHSBx3U7rk96tMdbubcB9xG35Bo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sNIAGVaJzAYOXqycaK/fuiw7F1N1h+g1Yf5DY23mLhTVMa+MZqWu/PrtAqfDs0srN
-         bPkbp8hrPbUZbz6ox3gw13uoTp22vnwSJsIumkF4X4Jsf10vqqj0t+Uv5Apv/LlNBw
-         WVzXxxYlgxnCXP6nAF6MKVIiMr+JKby0g9xBlUsU=
-Date:   Fri, 23 Jun 2023 19:39:50 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 23/39] drm: renesas: shmobile: Move interface handling to
- connector setup
-Message-ID: <20230623163950.GA2112@pendragon.ideasonboard.com>
-References: <cover.1687423204.git.geert+renesas@glider.be>
- <0032f38b474a8ff63a7cdfdbc8b73766c3561729.1687423204.git.geert+renesas@glider.be>
+        Fri, 23 Jun 2023 12:40:25 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A37EF2947
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 09:40:21 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-bcde2b13fe2so733040276.3
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 09:40:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687538420; x=1690130420;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=h+FHKatDr+jcK/HOnfDqSrTTHFQBX6gH0Sv7rCX0RAY=;
+        b=EFg8gBkNyJlmaty1/F7vR0BphOYFHVAHqn29CIOA8mKhx1JrPSNG2DZmqgMIyXW29f
+         0fXFp14H3OzjlonRHmhpjBbAucTQLTHLsKtHeE8z3tMBXmYQWr8tyTOt9Cj067THeTOR
+         69AJ2UEEwAlFMwuukQuOwBzHmcO7i1UpRU27ALNynDpmcRjtDTY0HfQRSI3DFje9Jneq
+         7kcQPvqgHXnyveGgAD5JKRmSbr28px23mu5j4zuU5sqviPDbz27eDU3ch/HQCjwzh2PF
+         2v809M4wfHjLt6xaOL5T4przAb84wqz/0iGSFHt0PFiaL+Ur8LW3LCza9215Z1hJUNId
+         NlOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687538420; x=1690130420;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=h+FHKatDr+jcK/HOnfDqSrTTHFQBX6gH0Sv7rCX0RAY=;
+        b=F1geNBgdxaoDL+PerChs1imJ6S6oKZCY04rfK/xXQQEe34z6ufpBrDMrdVX/f0W/kA
+         AFs4QkvNQGGqnOqZim4ekGoIpXVDIpmzkLHNSg7fzEGIKjUs3/md1ls3jSP2PV8JQsmm
+         Rgu9sLFfFNyGHeWuICCcbdesAhiLYCnftTF9oVuwtFnW5odavAlO5cuRQ6ztD8vg4uoo
+         43HgoeLgBVK2olprpUAthWmBq3SYnastHhQYVHyS0wfBXiy5h3TFtkGuFYo7nmMIdVzm
+         IbyZHcO9+zAtIgOJ+agmtTiJYuWmXzjEHbYovBcSJvAzJ2L+TP+Oy6K9Jdg/cL45La5i
+         fukA==
+X-Gm-Message-State: AC+VfDxK4EP1CIkDPkHPHVVLgvNB9K90dPtlYFMlLGe9/z1PjgQYdK9H
+        o1iJ8lslxLYfr2NFlUjfz5d8oR4qYRiZuOHvnuYR4w==
+X-Google-Smtp-Source: ACHHUZ66r30aoY0eazG6VEUjfL6NJpertwiFiURv84M2h66MkG9qph5y9X2D93N9wpbkLdmARmgq8Erq3tac+WRYca4=
+X-Received: by 2002:a25:2d02:0:b0:bcc:a4a6:bf34 with SMTP id
+ t2-20020a252d02000000b00bcca4a6bf34mr17333351ybt.37.1687538420562; Fri, 23
+ Jun 2023 09:40:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <0032f38b474a8ff63a7cdfdbc8b73766c3561729.1687423204.git.geert+renesas@glider.be>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <CACw3F52k=fhYpLpvDoVPcmKnOALLkPsGk08PdS_H0+miSYvhEQ@mail.gmail.com>
+ <20230612041901.GA3083591@ik1-406-35019.vs.sakura.ne.jp> <CACw3F51o1ZFSYZa+XLnk4Wwjy2w_q=Kn+aOQs0=qpfG-ZYDFKg@mail.gmail.com>
+ <20230616233447.GB7371@monkey> <CACw3F52iG5bqQbvZ9QkkRkVfy+NbSOu9hnkVOt5khukNNG73OQ@mail.gmail.com>
+ <20230617225927.GA3540@monkey> <20230619082330.GA1612447@ik1-406-35019.vs.sakura.ne.jp>
+ <20230620180533.GA3567@monkey> <20230620223909.GB3567@monkey>
+ <CACw3F53iPiLrJt4pyaX2aaZ5BVg9tj8x_k6-v7=9Xn1nrh=UCw@mail.gmail.com> <20230623041924.GA44732@monkey>
+In-Reply-To: <20230623041924.GA44732@monkey>
+From:   Jiaqi Yan <jiaqiyan@google.com>
+Date:   Fri, 23 Jun 2023 09:40:09 -0700
+Message-ID: <CACw3F501ON2pK+k9g5yC4ShtLbYQXQUVbNcpJeW7UVDUUsaUUQ@mail.gmail.com>
+Subject: Re: [PATCH v1 1/3] mm/hwpoison: find subpage in hugetlb HWPOISON list
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
+        <naoya.horiguchi@nec.com>,
+        "songmuchun@bytedance.com" <songmuchun@bytedance.com>,
+        "shy828301@gmail.com" <shy828301@gmail.com>,
+        "linmiaohe@huawei.com" <linmiaohe@huawei.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "duenwen@google.com" <duenwen@google.com>,
+        "axelrasmussen@google.com" <axelrasmussen@google.com>,
+        "jthoughton@google.com" <jthoughton@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
+On Thu, Jun 22, 2023 at 9:19=E2=80=AFPM Mike Kravetz <mike.kravetz@oracle.c=
+om> wrote:
+>
+> On 06/22/23 17:45, Jiaqi Yan wrote:
+> > On Tue, Jun 20, 2023 at 3:39=E2=80=AFPM Mike Kravetz <mike.kravetz@orac=
+le.com> wrote:
+> > >
+> > > On 06/20/23 11:05, Mike Kravetz wrote:
+> > > > On 06/19/23 17:23, Naoya Horiguchi wrote:
+> > > > >
+> > > > > Considering this issue as one specific to memory error handling, =
+checking
+> > > > > HPG_vmemmap_optimized in __get_huge_page_for_hwpoison() might be =
+helpful to
+> > > > > detect the race.  Then, an idea like the below diff (not tested) =
+can make
+> > > > > try_memory_failure_hugetlb() retry (with retaking hugetlb_lock) t=
+o wait
+> > > > > for complete the allocation of vmemmap pages.
+> > > > >
+> > > > > @@ -1938,8 +1938,11 @@ int __get_huge_page_for_hwpoison(unsigned =
+long pfn, int flags,
+> > > > >         int ret =3D 2;    /* fallback to normal page handling */
+> > > > >         bool count_increased =3D false;
+> > > > >
+> > > > > -       if (!folio_test_hugetlb(folio))
+> > > > > +       if (!folio_test_hugetlb(folio)) {
+> > > > > +               if (folio_test_hugetlb_vmemmap_optimized(folio))
+> > > > > +                       ret =3D -EBUSY;
+> > > >
+> > > > The hugetlb specific page flags (HPG_vmemmap_optimized here) reside=
+ in
+> > > > the folio->private field.
+> > > >
+> > > > In the case where the folio is a non-hugetlb folio, the folio->priv=
+ate field
+> > > > could be any arbitrary value.  As such, the test for vmemmap_optimi=
+zed may
+> > > > return a false positive.  We could end up retrying for an arbitrari=
+ly
+> > > > long time.
+> > > >
+> > > > I am looking at how to restructure the code which removes and frees
+> > > > hugetlb pages so that folio_test_hugetlb() would remain true until
+> > > > vmemmap pages are allocated.  The easiest way to do this would intr=
+oduce
+> > > > another hugetlb lock/unlock cycle in the page freeing path.  This w=
+ould
+> > > > undo some of the speedups in the series:
+> > > > https://lore.kernel.org/all/20210409205254.242291-4-mike.kravetz@or=
+acle.com/T/#m34321fbcbdf8bb35dfe083b05d445e90ecc1efab
+> > > >
+> > >
+> > > Perhaps something like this?  Minimal testing.
+> >
+> > Thanks for putting up a fix, Mike!
+> >
+> > >
+> > > From e709fb4da0b6249973f9bf0540c9da0e4c585fe2 Mon Sep 17 00:00:00 200=
+1
+> > > From: Mike Kravetz <mike.kravetz@oracle.com>
+> > > Date: Tue, 20 Jun 2023 14:48:39 -0700
+> > > Subject: [PATCH] hugetlb: Do not clear hugetlb dtor until allocating =
+vmemmap
+> > >
+> > > Freeing a hugetlb page and releasing base pages back to the underlyin=
+g
+> > > allocator such as buddy or cma is performed in two steps:
+> > > - remove_hugetlb_folio() is called to remove the folio from hugetlb
+> > >   lists, get a ref on the page and remove hugetlb destructor.  This
+> > >   all must be done under the hugetlb lock.  After this call, the page
+> > >   can be treated as a normal compound page or a collection of base
+> > >   size pages.
+> > > - update_and_free_hugetlb_folio() is called to allocate vmemmap if
+> > >   needed and the free routine of the underlying allocator is called
+> > >   on the resulting page.  We can not hold the hugetlb lock here.
+> > >
+> > > One issue with this scheme is that a memory error could occur between
+> > > these two steps.  In this case, the memory error handling code treats
+> > > the old hugetlb page as a normal compound page or collection of base
+> > > pages.  It will then try to SetPageHWPoison(page) on the page with an
+> > > error.  If the page with error is a tail page without vmemmap, a writ=
+e
+> > > error will occur when trying to set the flag.
+> > >
+> > > Address this issue by modifying remove_hugetlb_folio() and
+> > > update_and_free_hugetlb_folio() such that the hugetlb destructor is n=
+ot
+> > > cleared until after allocating vmemmap.  Since clearing the destructo=
+r
+> > > required holding the hugetlb lock, the clearing is done in
+> > > remove_hugetlb_folio() if the vmemmap is present.  This saves a
+> > > lock/unlock cycle.  Otherwise, destructor is cleared in
+> > > update_and_free_hugetlb_folio() after allocating vmemmap.
+> > >
+> > > Note that this will leave hugetlb pages in a state where they are mar=
+ked
+> > > free (by hugetlb specific page flag) and have a ref count.  This is n=
+ot
+> > > a normal state.  The only code that would notice is the memory error
+> > > code, and it is set up to retry in such a case.
+> > >
+> > > A subsequent patch will create a routine to do bulk processing of
+> > > vmemmap allocation.  This will eliminate a lock/unlock cycle for each
+> > > hugetlb page in the case where we are freeing a bunch of pages.
+> > >
+> > > Fixes: ???
+> > > Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
+> > > ---
+> > >  mm/hugetlb.c | 75 +++++++++++++++++++++++++++++++++++---------------=
+--
+> > >  1 file changed, 51 insertions(+), 24 deletions(-)
+> > >
+> > > diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> > > index d76574425da3..f7f64470aee0 100644
+> > > --- a/mm/hugetlb.c
+> > > +++ b/mm/hugetlb.c
+> > > @@ -1579,9 +1579,37 @@ static inline void destroy_compound_gigantic_f=
+olio(struct folio *folio,
+> > >                                                 unsigned int order) {=
+ }
+> > >  #endif
+> > >
+> > > +static inline void __clear_hugetlb_destructor(struct hstate *h,
+> > > +                                               struct folio *folio)
+> > > +{
+> > > +       lockdep_assert_held(&hugetlb_lock);
+> > > +
+> > > +       /*
+> > > +        * Very subtle
+> > > +        *
+> > > +        * For non-gigantic pages set the destructor to the normal co=
+mpound
+> > > +        * page dtor.  This is needed in case someone takes an additi=
+onal
+> > > +        * temporary ref to the page, and freeing is delayed until th=
+ey drop
+> > > +        * their reference.
+> > > +        *
+> > > +        * For gigantic pages set the destructor to the null dtor.  T=
+his
+> > > +        * destructor will never be called.  Before freeing the gigan=
+tic
+> > > +        * page destroy_compound_gigantic_folio will turn the folio i=
+nto a
+> > > +        * simple group of pages.  After this the destructor does not
+> > > +        * apply.
+> > > +        *
+> > > +        */
+> > > +       if (hstate_is_gigantic(h))
+> > > +               folio_set_compound_dtor(folio, NULL_COMPOUND_DTOR);
+> > > +       else
+> > > +               folio_set_compound_dtor(folio, COMPOUND_PAGE_DTOR);
+> > > +}
+> > > +
+> > >  /*
+> > > - * Remove hugetlb folio from lists, and update dtor so that the foli=
+o appears
+> > > - * as just a compound page.
+> > > + * Remove hugetlb folio from lists.
+> > > + * If vmemmap exists for the folio, update dtor so that the folio ap=
+pears
+> > > + * as just a compound page.  Otherwise, wait until after allocating =
+vmemmap
+> > > + * to update dtor.
+> > >   *
+> > >   * A reference is held on the folio, except in the case of demote.
+> > >   *
+> > > @@ -1612,31 +1640,19 @@ static void __remove_hugetlb_folio(struct hst=
+ate *h, struct folio *folio,
+> > >         }
+> > >
+> > >         /*
+> > > -        * Very subtle
+> > > -        *
+> > > -        * For non-gigantic pages set the destructor to the normal co=
+mpound
+> > > -        * page dtor.  This is needed in case someone takes an additi=
+onal
+> > > -        * temporary ref to the page, and freeing is delayed until th=
+ey drop
+> > > -        * their reference.
+> > > -        *
+> > > -        * For gigantic pages set the destructor to the null dtor.  T=
+his
+> > > -        * destructor will never be called.  Before freeing the gigan=
+tic
+> > > -        * page destroy_compound_gigantic_folio will turn the folio i=
+nto a
+> > > -        * simple group of pages.  After this the destructor does not
+> > > -        * apply.
+> > > -        *
+> > > -        * This handles the case where more than one ref is held when=
+ and
+> > > -        * after update_and_free_hugetlb_folio is called.
+> > > -        *
+> > > -        * In the case of demote we do not ref count the page as it w=
+ill soon
+> > > -        * be turned into a page of smaller size.
+> > > +        * We can only clear the hugetlb destructor after allocating =
+vmemmap
+> > > +        * pages.  Otherwise, someone (memory error handling) may try=
+ to write
+> > > +        * to tail struct pages.
+> > > +        */
+> > > +       if (!folio_test_hugetlb_vmemmap_optimized(folio))
+> > > +               __clear_hugetlb_destructor(h, folio);
+> > > +
+> > > +        /*
+> > > +         * In the case of demote we do not ref count the page as it =
+will soon
+> > > +         * be turned into a page of smaller size.
+> > >          */
+> > >         if (!demote)
+> > >                 folio_ref_unfreeze(folio, 1);
+> > > -       if (hstate_is_gigantic(h))
+> > > -               folio_set_compound_dtor(folio, NULL_COMPOUND_DTOR);
+> > > -       else
+> > > -               folio_set_compound_dtor(folio, COMPOUND_PAGE_DTOR);
+> > >
+> > >         h->nr_huge_pages--;
+> > >         h->nr_huge_pages_node[nid]--;
+> > > @@ -1705,6 +1721,7 @@ static void __update_and_free_hugetlb_folio(str=
+uct hstate *h,
+> > >  {
+> > >         int i;
+> > >         struct page *subpage;
+> > > +       bool clear_dtor =3D folio_test_hugetlb_vmemmap_optimized(foli=
+o);
+> >
+> > Can this test on vmemmap_optimized still tell us if we should
+> > __clear_hugetlb_destructor? From my reading:
+> > 1. If a hugetlb folio is still vmemmap optimized in
+> > __remove_hugetlb_folio, __remove_hugetlb_folio won't
+> > __clear_hugetlb_destructor.
+> > 2. Then hugetlb_vmemmap_restore in dissolve_free_huge_page will clear
+> > HPG_vmemmap_optimized if it succeeds.
+> > 3. Now when dissolve_free_huge_page gets into
+> > __update_and_free_hugetlb_folio, we will see clear_dtor to be false
+> > and __clear_hugetlb_destructor won't be called.
+>
+> Good catch!  That is indeed a problem with this patch.
 
-Thank you for the patch.
+Glad that I could help.
 
-On Thu, Jun 22, 2023 at 11:21:35AM +0200, Geert Uytterhoeven wrote:
-> Move legacy interface handling to the connector setup code.
-> Set up bus_flags and bus_formats in display_info according to the
-> bus format and panel information from platform data, to make it more
-> similar with DT-based connector/bridge/panel setup.
-> This will allows us to use the same LCD interface setup code for both
+>
+> >
+> > Or maybe I misunderstood, and what you really want to do is never
+> > __clear_hugetlb_destructor so that folio_test_hugetlb is always true?
+>
+> No, that was a bug with this patch.
+>
+> We could ALWAYS wait until __update_and_free_hugetlb_folio to clear the
+> hugetlb destructor.  However, we have to take hugetlb lock to clear it.
+> If the page does not have vmemmap optimized, the we can clear the
+> destructor earlier in __remove_hugetlb_folio and avoid the lock/unlock
+> cycle.  In the past, we have had complaints about the time required to
+> allocate and free a large quantity of hugetlb pages.  Most of that time
+> is spent in the low level allocators.  However, I do not want to add
+> something like an extra lock/unlock cycle unless absolutely necessary.
+>
+> I'll try to think of a cleaner and more fool proof way to address this.
+>
+> IIUC, this is an existing issue.  Your patch series does not depend
+> this being fixed.
 
-s/allows/allow/
+Thanks Mike, I was about to send out V2 today.
 
-> legacy and DT-based systems.
-> 
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
->  .../gpu/drm/renesas/shmobile/shmob_drm_crtc.c | 123 +++++++++++++++---
->  .../gpu/drm/renesas/shmobile/shmob_drm_drv.c  |  49 -------
->  .../gpu/drm/renesas/shmobile/shmob_drm_drv.h  |   3 +-
->  3 files changed, 109 insertions(+), 66 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c b/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c
-> index 5328910ebe09c832..28a70536693f7788 100644
-> --- a/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c
-> +++ b/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c
-> @@ -8,6 +8,7 @@
->   */
->  
->  #include <linux/clk.h>
-> +#include <linux/media-bus-format.h>
->  #include <linux/pm_runtime.h>
->  
->  #include <drm/drm_crtc.h>
-> @@ -66,15 +67,65 @@ static void shmob_drm_crtc_setup_geometry(struct shmob_drm_crtc *scrtc)
->  {
->  	struct drm_crtc *crtc = &scrtc->crtc;
->  	struct shmob_drm_device *sdev = to_shmob_device(crtc->dev);
-> -	enum display_flags dpy_flags = sdev->connector.mode->flags;
-> +	const struct drm_display_info *info = &sdev->connector->display_info;
->  	const struct drm_display_mode *mode = &crtc->mode;
->  	u32 value;
->  
-> -	value = sdev->ldmt1r
-> -	      | ((mode->flags & DRM_MODE_FLAG_PVSYNC) ? 0 : LDMT1R_VPOL)
-> -	      | ((mode->flags & DRM_MODE_FLAG_PHSYNC) ? 0 : LDMT1R_HPOL)
-> -	      | ((dpy_flags & DISPLAY_FLAGS_PIXDATA_POSEDGE) ? LDMT1R_DWPOL : 0)
-> -	      | ((dpy_flags & DISPLAY_FLAGS_DE_LOW) ? LDMT1R_DIPOL : 0);
-> +	if (!info->num_bus_formats || !info->bus_formats) {
-> +		dev_warn(sdev->dev, "No bus format reported, using RGB888\n");
-> +		value = LDMT1R_MIFTYP_RGB24;
-> +	} else {
-> +		switch (info->bus_formats[0]) {
-> +		case MEDIA_BUS_FMT_RGB888_3X8:
-> +			value = LDMT1R_MIFTYP_RGB8;
-> +			break;
-> +
-> +		case MEDIA_BUS_FMT_RGB666_2X9_BE:
-> +			value = LDMT1R_MIFTYP_RGB9;
-> +			break;
-> +
-> +		case MEDIA_BUS_FMT_RGB888_2X12_BE:
-> +			value = LDMT1R_MIFTYP_RGB12A;
-> +			break;
-> +
-> +		case MEDIA_BUS_FMT_RGB444_1X12:
-> +			value = LDMT1R_MIFTYP_RGB12B;
-> +			break;
-> +
-> +		case MEDIA_BUS_FMT_RGB565_1X16:
-> +			value = LDMT1R_MIFTYP_RGB16;
-> +			break;
-> +
-> +		case MEDIA_BUS_FMT_RGB666_1X18:
-> +			value = LDMT1R_MIFTYP_RGB18;
-> +			break;
-> +
-> +		case MEDIA_BUS_FMT_RGB888_1X24:
-> +			value = LDMT1R_MIFTYP_RGB24;
-> +			break;
-> +
-> +		case MEDIA_BUS_FMT_UYVY8_1X16:
-> +			value = LDMT1R_MIFTYP_YCBCR;
-> +			break;
-> +
-> +		default:
-> +			dev_warn(sdev->dev,
-> +				 "unsupported bus format 0x%x, using RGB888\n",
-> +				 info->bus_formats[0]);
-> +			value = LDMT1R_MIFTYP_RGB24;
-> +			break;
-> +		}
-
-It's a bit annoying to lose the ability to validate the bus format at
-probe time. Can it be kept. I'm also OK with restoring it later in the
-series if it gets in the way of the conversion, in which case a mention
-in the commit message would be nice.
-
-> +	}
-> +
-> +	if (info->bus_flags & DRM_BUS_FLAG_PIXDATA_DRIVE_POSEDGE)
-> +		value |= LDMT1R_DWPOL;
-> +	if (info->bus_flags & DRM_BUS_FLAG_DE_LOW)
-> +		value |= LDMT1R_DIPOL;
-> +
-> +	if (mode->flags & DRM_MODE_FLAG_NVSYNC)
-> +		value |= LDMT1R_VPOL;
-> +	if (mode->flags & DRM_MODE_FLAG_NHSYNC)
-> +		value |= LDMT1R_HPOL;
->  
->  	lcdc_write(sdev, LDMT1R, value);
->  
-> @@ -512,7 +563,7 @@ static bool shmob_drm_encoder_mode_fixup(struct drm_encoder *encoder,
->  {
->  	struct drm_device *dev = encoder->dev;
->  	struct shmob_drm_device *sdev = to_shmob_device(dev);
-> -	struct drm_connector *connector = &sdev->connector.connector;
-> +	struct drm_connector *connector = sdev->connector;
->  	const struct drm_display_mode *panel_mode;
->  
->  	if (list_empty(&connector->modes)) {
-> @@ -614,6 +665,8 @@ static void shmob_drm_connector_destroy(struct drm_connector *connector)
->  {
->  	drm_connector_unregister(connector);
->  	drm_connector_cleanup(connector);
-> +
-> +	kfree(connector);
->  }
->  
->  static const struct drm_connector_funcs connector_funcs = {
-> @@ -622,26 +675,64 @@ static const struct drm_connector_funcs connector_funcs = {
->  	.destroy = shmob_drm_connector_destroy,
->  };
->  
-> -int shmob_drm_connector_create(struct shmob_drm_device *sdev,
-> -			       struct drm_encoder *encoder)
-> +static struct drm_connector *
-> +shmob_drm_connector_init(struct shmob_drm_device *sdev,
-> +			 struct drm_encoder *encoder)
->  {
-> -	struct shmob_drm_connector *scon = &sdev->connector;
-> -	struct drm_connector *connector = &scon->connector;
-> +	struct shmob_drm_connector *scon;
-> +	struct drm_connector *connector;
-> +	struct drm_display_info *info;
->  	int ret;
->  
-> +	scon = kzalloc(sizeof(*scon), GFP_KERNEL);
-> +	if (!scon)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	connector = &scon->connector;
-> +	info = &connector->display_info;
-> +	info->width_mm = sdev->pdata->panel.width_mm;
-> +	info->height_mm = sdev->pdata->panel.height_mm;
-> +
->  	scon->encoder = encoder;
->  	scon->mode = &sdev->pdata->panel.mode;
->  
-> -	connector->display_info.width_mm = sdev->pdata->panel.width_mm;
-> -	connector->display_info.height_mm = sdev->pdata->panel.height_mm;
-> +	if (scon->mode->flags & DISPLAY_FLAGS_PIXDATA_POSEDGE)
-> +		info->bus_flags |= DRM_BUS_FLAG_PIXDATA_DRIVE_POSEDGE;
-> +	if (scon->mode->flags & DISPLAY_FLAGS_DE_LOW)
-> +		info->bus_flags |= DRM_BUS_FLAG_DE_LOW;
-
-Could you please keep the initialization of the info fields grouped
-together ? You can move the initialization of scon->encoder and
-scon->mode just after connector.
-
-> +
-> +	ret = drm_display_info_set_bus_formats(info,
-> +					       &sdev->pdata->iface.bus_fmt, 1);
-> +	if (ret < 0) {
-> +		kfree(scon);
-> +		return ERR_PTR(ret);
-> +	}
->  
->  	ret = drm_connector_init(&sdev->ddev, connector, &connector_funcs,
->  				 DRM_MODE_CONNECTOR_DPI);
-> -	if (ret < 0)
-> -		return ret;
-> +	if (ret < 0) {
-> +		kfree(scon);
-> +		return ERR_PTR(ret);
-> +	}
->  
->  	drm_connector_helper_add(connector, &connector_helper_funcs);
->  
-> +	return connector;
-> +}
-> +
-> +int shmob_drm_connector_create(struct shmob_drm_device *sdev,
-> +			       struct drm_encoder *encoder)
-> +{
-> +	struct drm_connector *connector;
-> +	int ret;
-> +
-> +	connector = shmob_drm_connector_init(sdev, encoder);
-> +	if (IS_ERR(connector)) {
-> +		dev_err(sdev->dev, "failed to created connector: %pe\n",
-> +			connector);
-> +		return PTR_ERR(connector);
-> +	}
-> +
->  	ret = drm_connector_attach_encoder(connector, encoder);
->  	if (ret < 0)
->  		goto error;
-> @@ -650,6 +741,8 @@ int shmob_drm_connector_create(struct shmob_drm_device *sdev,
->  	drm_object_property_set_value(&connector->base,
->  		sdev->ddev.mode_config.dpms_property, DRM_MODE_DPMS_OFF);
->  
-> +	sdev->connector = connector;
-> +
->  	return 0;
->  
->  error:
-> diff --git a/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c b/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c
-> index e5be0ae99bd970be..c15ebbe74cac501f 100644
-> --- a/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c
-> +++ b/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c
-> @@ -9,7 +9,6 @@
->  
->  #include <linux/clk.h>
->  #include <linux/io.h>
-> -#include <linux/media-bus-format.h>
->  #include <linux/mm.h>
->  #include <linux/module.h>
->  #include <linux/platform_device.h>
-> @@ -33,50 +32,6 @@
->   * Hardware initialization
->   */
->  
-> -static int shmob_drm_init_interface(struct shmob_drm_device *sdev)
-> -{
-> -	switch (sdev->pdata->iface.bus_fmt) {
-> -	case MEDIA_BUS_FMT_RGB888_3X8:
-> -		sdev->ldmt1r = LDMT1R_MIFTYP_RGB8;
-> -		break;
-> -
-> -	case MEDIA_BUS_FMT_RGB666_2X9_BE:
-> -		sdev->ldmt1r = LDMT1R_MIFTYP_RGB9;
-> -		break;
-> -
-> -	case MEDIA_BUS_FMT_RGB888_2X12_BE:
-> -		sdev->ldmt1r = LDMT1R_MIFTYP_RGB12A;
-> -		break;
-> -
-> -	case MEDIA_BUS_FMT_RGB444_1X12:
-> -		sdev->ldmt1r = LDMT1R_MIFTYP_RGB12B;
-> -		break;
-> -
-> -	case MEDIA_BUS_FMT_RGB565_1X16:
-> -		sdev->ldmt1r = LDMT1R_MIFTYP_RGB16;
-> -		break;
-> -
-> -	case MEDIA_BUS_FMT_RGB666_1X18:
-> -		sdev->ldmt1r = LDMT1R_MIFTYP_RGB18;
-> -		break;
-> -
-> -	case MEDIA_BUS_FMT_RGB888_1X24:
-> -		sdev->ldmt1r = LDMT1R_MIFTYP_RGB24;
-> -		break;
-> -
-> -	case MEDIA_BUS_FMT_UYVY8_1X16:
-> -		sdev->ldmt1r = LDMT1R_MIFTYP_YCBCR;
-> -		break;
-> -
-> -	default:
-> -		dev_err(sdev->dev, "invalid bus format 0x%x\n",
-> -			sdev->pdata->iface.bus_fmt);
-> -		return -EINVAL;
-> -	}
-> -
-> -	return 0;
-> -}
-> -
->  static int shmob_drm_setup_clocks(struct shmob_drm_device *sdev,
->  				  enum shmob_drm_clk_source clksrc)
->  {
-> @@ -235,10 +190,6 @@ static int shmob_drm_probe(struct platform_device *pdev)
->  	if (ret < 0)
->  		return ret;
->  
-> -	ret = shmob_drm_init_interface(sdev);
-> -	if (ret < 0)
-> -		return ret;
-> -
->  	ret = shmob_drm_modeset_init(sdev);
->  	if (ret < 0)
->  		return dev_err_probe(&pdev->dev, ret,
-> diff --git a/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.h b/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.h
-> index 5e55ba7a207865bd..18907e5ace51c681 100644
-> --- a/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.h
-> +++ b/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.h
-> @@ -27,7 +27,6 @@ struct shmob_drm_device {
->  	void __iomem *mmio;
->  	struct clk *clock;
->  	u32 lddckr;
-> -	u32 ldmt1r;
->  
->  	unsigned int irq;
->  	spinlock_t irq_lock;		/* Protects hardware LDINTR register */
-> @@ -36,7 +35,7 @@ struct shmob_drm_device {
->  
->  	struct shmob_drm_crtc crtc;
->  	struct drm_encoder encoder;
-> -	struct shmob_drm_connector connector;
-> +	struct drm_connector *connector;
->  };
->  
->  static inline struct shmob_drm_device *to_shmob_device(struct drm_device *dev)
-
--- 
-Regards,
-
-Laurent Pinchart
+> --
+> Mike Kravetz
+>
+> >
+> > >
+> > >         if (hstate_is_gigantic(h) && !gigantic_page_runtime_supported=
+())
+> > >                 return;
+> > > @@ -1735,6 +1752,16 @@ static void __update_and_free_hugetlb_folio(st=
+ruct hstate *h,
+> > >         if (unlikely(folio_test_hwpoison(folio)))
+> > >                 folio_clear_hugetlb_hwpoison(folio);
+> > >
+> > > +       /*
+> > > +        * If vmemmap pages were allocated above, then we need to cle=
+ar the
+> > > +        * hugetlb destructor under the hugetlb lock.
+> > > +        */
+> > > +       if (clear_dtor) {
+> > > +               spin_lock_irq(&hugetlb_lock);
+> > > +               __clear_hugetlb_destructor(h, folio);
+> > > +               spin_unlock_irq(&hugetlb_lock);
+> > > +       }
+> > > +
+> > >         for (i =3D 0; i < pages_per_huge_page(h); i++) {
+> > >                 subpage =3D folio_page(folio, i);
+> > >                 subpage->flags &=3D ~(1 << PG_locked | 1 << PG_error =
+|
+> > > --
+> > > 2.41.0
+> > >
