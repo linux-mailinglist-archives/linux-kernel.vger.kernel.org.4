@@ -2,103 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECBC373BCC2
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 18:38:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBCA073BCC9
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 18:39:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232328AbjFWQiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 12:38:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48302 "EHLO
+        id S231467AbjFWQjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 12:39:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230478AbjFWQiu (ORCPT
+        with ESMTP id S231894AbjFWQjj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 12:38:50 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5F1E9B
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 09:38:48 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1b6824141b4so14450565ad.1
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 09:38:48 -0700 (PDT)
+        Fri, 23 Jun 2023 12:39:39 -0400
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5FFF2D6B
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 09:39:14 -0700 (PDT)
+Received: by mail-qv1-xf32.google.com with SMTP id 6a1803df08f44-6237faa8677so7016596d6.1
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 09:39:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1687538328; x=1690130328;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/PqgxOGlm7JeknPbdLeTMxaNpvnqwn+/rBHeoNzP99Q=;
-        b=Fvu6J9RAuxOlIvBCs/wWJmY7LyKVzVmMsTQYDLGffI9IaezGB5zMp89ScbMMvQDguD
-         3zKkTDePTzXxvOLcRcveEubSrOFR+ik+0xXYPOAFRmlISt3lMVEhFYIMUkDZL3pCWD5W
-         xI5AVw4CmpyN7tJ73xlDgSPm+mo8SEIwZW/+U=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687538328; x=1690130328;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20221208; t=1687538354; x=1690130354;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/PqgxOGlm7JeknPbdLeTMxaNpvnqwn+/rBHeoNzP99Q=;
-        b=PxHu9KtF6U63TqmCdtlZFFDeK2B4uPQOqYMvAigDZFVJjhppYK1XhT5I7yJzzrUK/z
-         fn5zh4ToHdKFgnLHZ71e1SaDpqLRJszYghZEiWJ2QoTSds6O7gbdp6+Qn49uWndZ7ugU
-         q63WawV42WQSZMjX6cy9yXX4Mh2fOQc+1xe5f1881toX4ApYknnx7QT7iZUKlLnyakAu
-         tUSivrmuUVl8/CRVFCCA9gFzU8PENo57OZ3Ds4BWUDzxVXNRkf9Jv0oBmxfqkFxDuOIJ
-         G/epL97bvfT4nGRL79TKPxCSZ14cEeteinYFFcnfm297s9yNlOooEsiRE2/cS169z0Mk
-         ly4A==
-X-Gm-Message-State: AC+VfDzTU6yhlnW0b2M2NstSjM2cUU3HIF75lNx24FRL4XFCBZJxASn7
-        Cd7XzJrEGlzoswzmfVy47PSSvO5TlBm9Tzk8iQo=
-X-Google-Smtp-Source: ACHHUZ6Ea4cEX2yb7KtxAHZHvVCQ2kOV3aUY2rpTco4cDXWJWEhhPp7d0DQIgq2+csyN9udkqjSpKA==
-X-Received: by 2002:a17:902:bc43:b0:1b6:8233:6f5c with SMTP id t3-20020a170902bc4300b001b682336f5cmr12102473plz.19.1687538328318;
-        Fri, 23 Jun 2023 09:38:48 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id o1-20020a170902bcc100b001b0f727bc44sm7467396pls.16.2023.06.23.09.38.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Jun 2023 09:38:47 -0700 (PDT)
-Date:   Fri, 23 Jun 2023 09:38:46 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Baruch Siach <baruch@tkos.co.il>
-Cc:     Eric Biederman <ebiederm@xmission.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND] binfmt_elf: fix comment typo s/reset/regset/
-Message-ID: <202306230938.64FD809@keescook>
-References: <0b2967c4a4141875c493e835d5a6f8f2d19ae2d6.1687499804.git.baruch@tkos.co.il>
+        bh=8LECLQNnPYl0y9r0xDtUgl5E87ZKIYJNhvoef1Dor0g=;
+        b=dkKxv2jKnBQqAajzGXBmpV6B0eM8pL9kPs6CIVf+ThG9Iahm2kU+vQ0Fjnzn7i9vHT
+         GjUC5pNMkIyqj9rtWJMxzb91fel2sBJjFqzEVLiKyVhIYA6jE5UH/dZYxxYO/A2PtIv2
+         Hxp+jcSKewNrf5iuF5bOpEyTkxC3xH18HAChCnG98UD6p7dVREWfhjA/O7Ec3L8BiJDu
+         vRWYe+zjzPZ0+SU/QJXJ+Lg23sFoeHdWLozBEe5gMg8s0vgYl31aoKkfmib29RE8/OL/
+         9vrHrUCHluh78Smr69+sWBr0lNEnv64ao2hB5EIHKCE+asWMYAXE+cLz5VZr9CFy9CuS
+         xVaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687538354; x=1690130354;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8LECLQNnPYl0y9r0xDtUgl5E87ZKIYJNhvoef1Dor0g=;
+        b=W8gE8NFU3FcDfvlEKBt36LjCxKOZxUJcA2ZiSKU8v8ZueA4y60Kp0VBNVSNdpmPafG
+         O/mH2tjtQVZ3mUsypDyLk5IMDyEKxpjfU4XPEy0v0+5oFBWb1bXcUv9nkgOFOJE3AwLJ
+         TDjitFJZdMwy7WE6SEHbLxNE4eCQr24wKrzy11mjk6PWzLVPhGloimVSgWJ1pOdv+A0u
+         XPVr1Mdm7ZIpmbtmWzdMQAcDJE37OF3yRgy+Mocd/w4+UPvhUjri0Ml9S53XoPaBe6ZP
+         GWPLfft6fCJ6QU6xPwGLKIKkXPiPt38z60ryIdOXGLCpH9yT4v2IDdN3/eXjnp7T7NjV
+         3E9A==
+X-Gm-Message-State: AC+VfDznavGfUuOwnpllYC8qyMU3WmAg/QZyKY19rm/R/BG3IViJmv2r
+        Zabo2nAITqhpfhzTopAocq9ncq6g6upcLfDumuMehg==
+X-Google-Smtp-Source: ACHHUZ4nTMiMdzxcp5Dyr7rUsaaeYLVLKDx8ob6RuR0oNVQa3WXS6lje+VJiQNjFDZvvFpcBUUKXRlNvWTJhRtRJ3RU=
+X-Received: by 2002:ad4:5be4:0:b0:634:20f:471c with SMTP id
+ k4-20020ad45be4000000b00634020f471cmr1044805qvc.14.1687538353806; Fri, 23 Jun
+ 2023 09:39:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0b2967c4a4141875c493e835d5a6f8f2d19ae2d6.1687499804.git.baruch@tkos.co.il>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230623134351.1898379-1-kernel@xen0n.name> <20230623134351.1898379-8-kernel@xen0n.name>
+In-Reply-To: <20230623134351.1898379-8-kernel@xen0n.name>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Fri, 23 Jun 2023 09:39:03 -0700
+Message-ID: <CAKwvOdn5e+BzhGzDPnZYEjCuanABJmu5ZZo5x2uwHj4L44m5nA@mail.gmail.com>
+Subject: Re: [PATCH 7/9] LoongArch: Tweak CFLAGS for Clang compatibility
+To:     WANG Xuerui <kernel@xen0n.name>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Rui <wangrui@loongson.cn>, Xi Ruoyao <xry111@xry111.site>,
+        loongarch@lists.linux.dev, linux-kbuild@vger.kernel.org,
+        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        WANG Xuerui <git@xen0n.name>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 23, 2023 at 08:56:44AM +0300, Baruch Siach wrote:
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+On Fri, Jun 23, 2023 at 6:44=E2=80=AFAM WANG Xuerui <kernel@xen0n.name> wro=
+te:
+>
+> From: WANG Xuerui <git@xen0n.name>
+>
+> Now the arch code is mostly ready for LLVM/Clang consumption, it is time
+> to re-organize the CFLAGS a little to actually enable the LLVM build.
+>
+> A build with !RELOCATABLE && !MODULE is confirmed working within a QEMU
+> environment; support for the two features are currently blocked by
+> LLVM/Clang, and will come later.
+>
+> Signed-off-by: WANG Xuerui <git@xen0n.name>
 > ---
-> 
-> Resending with LKML in Cc. kvack.org MX does not like our mail server.
-> ---
->  fs/binfmt_elf.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git fs/binfmt_elf.c fs/binfmt_elf.c
-> index 8a884e795f6a..f304a3434c5a 100644
-> --- fs/binfmt_elf.c
-> +++ fs/binfmt_elf.c
+>  arch/loongarch/Makefile      | 14 +++++++++++---
+>  arch/loongarch/vdso/Makefile |  6 +++++-
+>  2 files changed, 16 insertions(+), 4 deletions(-)
+>
+> diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
+> index a27e264bdaa5..efe9b50bd829 100644
+> --- a/arch/loongarch/Makefile
+> +++ b/arch/loongarch/Makefile
+> @@ -46,12 +46,18 @@ ld-emul                     =3D $(64bit-emul)
+>  cflags-y               +=3D -mabi=3Dlp64s
+>  endif
+>
+> -cflags-y                       +=3D -G0 -pipe -msoft-float
 
-Same formatting issue with this one.
+This seems to drop -msoft-float for GCC. Intentional?
 
-> @@ -1773,7 +1773,7 @@ static int fill_thread_core_info(struct elf_thread_core_info *t,
->  	/*
->  	 * NT_PRSTATUS is the one special case, because the regset data
->  	 * goes into the pr_reg field inside the note contents, rather
-> -	 * than being the whole note contents.  We fill the reset in here.
-> +	 * than being the whole note contents.  We fill the regset in here.
->  	 * We assume that regset 0 is NT_PRSTATUS.
->  	 */
->  	fill_prstatus(&t->prstatus.common, t->task, signr);
+> -LDFLAGS_vmlinux                        +=3D -G0 -static -n -nostdlib
+> +ifndef CONFIG_CC_IS_CLANG
+> +cflags-y                       +=3D -G0
+> +LDFLAGS_vmlinux                        +=3D -G0
 
-But thank you; I've applied both to the execve tree:
+Thanks for the patch!
 
-https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/log/?h=for-next/execve
+I can understand not passing -G0 to clang if clang doesn't understand
+it, but should you be using CONFIG_LD_IS_LLD for LDFLAGS?
 
--Kees
+What does -G0 do?
 
--- 
-Kees Cook
+Is there a plan to support it in clang and lld?
+
+If so, please file a bug in LLVM's issue tracker
+https://github.com/llvm/llvm-project/issues
+then link to it in a comment in this Makefile above the relevant condition.
+
+> +endif
+> +cflags-y                       +=3D -pipe
+> +LDFLAGS_vmlinux                        +=3D -static -n -nostdlib
+>
+>  # When the assembler supports explicit relocation hint, we must use it.
+>  # GCC may have -mexplicit-relocs off by default if it was built with an =
+old
+> -# assembler, so we force it via an option.
+> +# assembler, so we force it via an option. For LLVM/Clang the desired be=
+havior
+> +# is the default, and the flag is not supported, so don't pass it if Cla=
+ng is
+> +# being used.
+>  #
+>  # When the assembler does not supports explicit relocation hint, we can'=
+t use
+>  # it.  Disable it if the compiler supports it.
+> @@ -61,8 +67,10 @@ LDFLAGS_vmlinux                      +=3D -G0 -static =
+-n -nostdlib
+>  # combination of a "new" assembler and "old" compiler is not supported. =
+ Either
+>  # upgrade the compiler or downgrade the assembler.
+>  ifdef CONFIG_AS_HAS_EXPLICIT_RELOCS
+> +ifndef CONFIG_CC_IS_CLANG
+>  cflags-y                       +=3D -mexplicit-relocs
+>  KBUILD_CFLAGS_KERNEL           +=3D -mdirect-extern-access
+> +endif
+
+Why would AS_HAS_EXPLICIT_RELOCS be set if -mexplicit-relocs isn't
+supported? Is the kconfig for that broken?
+
+Does AS_HAS_EXPLICIT_RELOCS also need to test for the support for
+-mdirect-extern-access or should there be a new config for that?
+CC_SUPPORTS_DIRECT_EXTERN_ACCESS
+
+>  else
+>  cflags-y                       +=3D $(call cc-option,-mno-explicit-reloc=
+s)
+>  KBUILD_AFLAGS_KERNEL           +=3D -Wa,-mla-global-with-pcrel
+> diff --git a/arch/loongarch/vdso/Makefile b/arch/loongarch/vdso/Makefile
+> index 4c859a0e4754..19f6c75a1106 100644
+> --- a/arch/loongarch/vdso/Makefile
+> +++ b/arch/loongarch/vdso/Makefile
+> @@ -25,13 +25,17 @@ endif
+>  cflags-vdso :=3D $(ccflags-vdso) \
+>         -isystem $(shell $(CC) -print-file-name=3Dinclude) \
+>         $(filter -W%,$(filter-out -Wa$(comma)%,$(KBUILD_CFLAGS))) \
+> -       -O2 -g -fno-strict-aliasing -fno-common -fno-builtin -G0 \
+> +       -O2 -g -fno-strict-aliasing -fno-common -fno-builtin \
+>         -fno-stack-protector -fno-jump-tables -DDISABLE_BRANCH_PROFILING =
+\
+>         $(call cc-option, -fno-asynchronous-unwind-tables) \
+>         $(call cc-option, -fno-stack-protector)
+>  aflags-vdso :=3D $(ccflags-vdso) \
+>         -D__ASSEMBLY__ -Wa,-gdwarf-2
+>
+> +ifndef CONFIG_CC_IS_CLANG
+> +cflags-vdso +=3D -G0
+> +endif
+> +
+>  ifneq ($(c-gettimeofday-y),)
+>    CFLAGS_vgettimeofday.o +=3D -include $(c-gettimeofday-y)
+>  endif
+> --
+> 2.40.0
+>
+>
+
+
+--=20
+Thanks,
+~Nick Desaulniers
