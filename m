@@ -2,171 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA09573C186
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 22:54:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F269D73C198
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 22:56:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232525AbjFWUyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 16:54:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38266 "EHLO
+        id S231773AbjFWU4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 16:56:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjFWUxk (ORCPT
+        with ESMTP id S232397AbjFWU4T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 16:53:40 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFEE02962
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 13:52:00 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id d2e1a72fcca58-66870d541b7so494033b3a.2
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 13:52:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687553520; x=1690145520;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uspspMky8TikfcgO17xdnQdY4tVzQxlzD9UOFv5URqQ=;
-        b=YiXMks3MPNFsB1OT+0qqYJ2rxlkMClQoWTKh3D6Hj/XNrDus7X4XwKxKHtpDZW3x4y
-         TGJf0Y8Nq66k/FYNBQfJsnjeU37M2PcXSZwVtSuwJeDoQFBXwzEelHIHopnh/p/LFsdj
-         MgloQtCba5KbDah8HuDUyyok5SopLpg3ubLkKILx1AEFrHutuJNaW0Bcg1CT/K7CMaBR
-         D+0Enn2INIjbmX9KxXfr1d1B1LrOUGrBC6zaoWWqWjdOVZpPtbMjj9qBMYKs/8i0hANy
-         C5Gknim/JFnVx13T/lo8FG5/hmU8AxGyVyJD31S8bBw8LzBapR2bAKxjcOLlKakiJFb2
-         cYIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687553520; x=1690145520;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=uspspMky8TikfcgO17xdnQdY4tVzQxlzD9UOFv5URqQ=;
-        b=RCaMUbrz82/u96iyAb1vD7HxQhsIebri/5fkjs7AVfpXPkThiz9HNoF+f56KzpfDtq
-         ktbGTOObTHTGqa3I7swtbdVHqjQh3TMiKt3Ndp9CXhUV44jz6af6CcPLWQrHDSiLMYWK
-         SMrA4eAikA3MX1n7kbEsj/SmTE9TzGXh26Vwtna+veepTOdZxTC9GhdGLQm/JrYU3dNV
-         wkQhkkAMpLUsLy7IpompNczP+kGzZem83noU7Q1Cg6LwF457poVVQOM4+6r9ObcOj2sA
-         QYx4qxLRMYhLoEc50ZRutVsJ8Q/v5cRkaUcuFz+H2BA5TTH/QbfOl3GT8Ay8yq1URjex
-         SugA==
-X-Gm-Message-State: AC+VfDy2qFJRlMQkOV7bNa8Um0+1yoFT6T5CjiIAebX1gOVF2Q8553yV
-        hke2ZJ55yTpLvUkc83aBrJ5vv6LeKdY=
-X-Google-Smtp-Source: ACHHUZ5tDD9Xnl2ftoPkz9hATloNCrnffXyV8YLuv9q99SkzEIZoBQw7GrDngn3qIdQ4xx8AcJqHEmFzyjw=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:3a0c:b0:668:69fa:f795 with SMTP id
- fj12-20020a056a003a0c00b0066869faf795mr4918321pfb.2.1687553520213; Fri, 23
- Jun 2023 13:52:00 -0700 (PDT)
-Date:   Fri, 23 Jun 2023 13:51:58 -0700
-In-Reply-To: <c438b5b1-b34d-3e77-d374-37053f4c14fa@intel.com>
-Mime-Version: 1.0
-References: <20230511040857.6094-1-weijiang.yang@intel.com>
- <ZIufL7p/ZvxjXwK5@google.com> <147246fc-79a2-3bb5-f51f-93dfc1cffcc0@intel.com>
- <ZIyiWr4sR+MqwmAo@google.com> <c438b5b1-b34d-3e77-d374-37053f4c14fa@intel.com>
-Message-ID: <ZJYF7haMNRCbtLIh@google.com>
-Subject: Re: [PATCH v3 00/21] Enable CET Virtualization
-From:   Sean Christopherson <seanjc@google.com>
-To:     Weijiang Yang <weijiang.yang@intel.com>
-Cc:     pbonzini@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, peterz@infradead.org,
-        rppt@kernel.org, binbin.wu@linux.intel.com,
-        rick.p.edgecombe@intel.com, john.allen@amd.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 23 Jun 2023 16:56:19 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F7801BF2;
+        Fri, 23 Jun 2023 13:55:52 -0700 (PDT)
+Received: from leknes.fjasle.eu ([46.142.49.205]) by mrelayeu.kundenserver.de
+ (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1MNbtF-1qS1JM46Dz-00P4i8; Fri, 23 Jun 2023 22:55:12 +0200
+Received: by leknes.fjasle.eu (Postfix, from userid 1000)
+        id F006F3EA3D; Fri, 23 Jun 2023 22:55:08 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fjasle.eu; s=mail;
+        t=1687553709; bh=/zs8pKuVXLztJtcOtsm1AgBqJ6bbce3gdJiuX7Qc3AE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=opQXZo2ktEW/Lu2ISSW6iZtO1fBrMM06STnPzvVkUVmLL06YnLwkiSymhlyL1jWG2
+         EC8rc3i6WOtIUw6pmlt3BkNTR6soVW0FJEeD/5yKIDdlFGxdS3IWQetFxL5hycxVjz
+         5WR5mrZ6KbfucrnGZ8VzKltEzmh1iEEOvsV8H+4k=
+Date:   Fri, 23 Jun 2023 22:55:08 +0200
+From:   Nicolas Schier <nicolas@fjasle.eu>
+To:     Josh Triplett <josh@joshtriplett.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Ben Hutchings <ben@decadent.org.uk>,
+        linux-snps-arc@lists.infradead.org,
+        Masahiro Yamada <masahiroy@kernel.org>
+Subject: Re: [PATCH] kbuild: builddeb: always make modules_install, to
+ install modules.builtin*
+Message-ID: <ZJYGrC+3l50kcNkl@fjasle.eu>
+References: <20230615111743.883891-1-masahiroy@kernel.org>
+ <f7e9220aad3d98bd174f7dcbd68031e1e15ea968.1687461492.git.josh@joshtriplett.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="eTEBsKav2BLy7Olg"
+Content-Disposition: inline
+In-Reply-To: <f7e9220aad3d98bd174f7dcbd68031e1e15ea968.1687461492.git.josh@joshtriplett.org>
+X-Provags-ID: V03:K1:WrZ7MfH0d46/XjgZv+BwCHXBbU2AcHmiUYZs4bF6vyW19YODJEv
+ OcnU/WZ5uUUWaWuylYMZZwAltu23VKq5SOKaI+10L09ys02CPeCIUVqqeJV+Fo1R6n7Fp0V
+ x7IbQadZN3R4OrYYQ9Zzhhyoddc+4IkURg/F1vy4fzyWesEfNgvDMZzSeJizm0K1g72tNvw
+ GP28NbRcj3gWqNj9S/BXg==
+UI-OutboundReport: notjunk:1;M01:P0:Wo85uib8gV4=;bMFL52HzeQnR0BtrNo8OniHR1h5
+ Xi/7hIGw8znmM1qv7FnUH4CauBtaohBXwcGX3mrY4xQoU+4zeYZAFMl2snrBv7sYqLmMwdIgn
+ z659cZtIs6w6x0WlmNWf3B5OgFBh/wfeAm2Ld0jIW+e/twNtxv0yj7ldHrtDYRGZzM7JFVI+H
+ tNMZPk8T/mtGVfy1a1K1Jaql1Hwd8jgG8twPuwZK1wgAp/3ZCPNJXcs2X6iaJwiYWBc+tcfFD
+ J3BK4MzqXsMKnFUIkI/bIYVtKxsZyMXsDKFzk1xBmA+y6b/A4/UcCNBF8ImU3LtTX1BJQu1uy
+ GtdHwStCTWSnFM1MCedt88BYMrQYeukg/hXsW48xK2/sZlJaOkBuu0uo8wcsGICYl0VxfUcFX
+ yzlrfeGHBHDGK8mJ9ThA2DYkLwbLXXdHNMgroYYNs/WDdcXXcygUdkYXOWakFIRCfbIJvIDre
+ 7NpQhFTTx+2wbL0PZhfgxRToivjvs1L4Fyabe71MSGeukMpk92ywuoZsjpqm1hEPzv/kwUjCB
+ /TqA8tYb1d71a2X4nu2HqfxXVO/GN6z0VWJNpA0CUew4hGHCZqi7Cj926IrTHtdzfHdu+dFk5
+ yrs7A811f9cFMsgE2AhfgSZycIwm0apEr5PwaTUaQcwXfx3leos6bhqwsZ+EqZC9ZALRv9sYN
+ vtvs+ZfXAId3rGYSqFjyVxqj9ctuIRmgHLKnOh2ROg==
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,URIBL_BLOCKED
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 19, 2023, Weijiang Yang wrote:
->=20
-> On 6/17/2023 1:56 AM, Sean Christopherson wrote:
-> > On Fri, Jun 16, 2023, Weijiang Yang wrote:
-> > > On 6/16/2023 7:30 AM, Sean Christopherson wrote:
-> > > > On Thu, May 11, 2023, Yang Weijiang wrote:
-> > > > > The last patch is introduced to support supervisor SHSTK but the =
-feature is
-> > > > > not enabled on Intel platform for now, the main purpose of this p=
-atch is to
-> > > > > facilitate AMD folks to enable the feature.
-> > > > I am beyond confused by the SDM's wording of CET_SSS.
-> > > >=20
-> > > > First, it says that CET_SSS says the CPU isn't buggy (or maybe "les=
-s buggy" is
-> > > > more appropriate phrasing).
-> > > >=20
-> > > >     Bit 18: CET_SSS. If 1, indicates that an operating system can e=
-nable supervisor
-> > > >     shadow stacks as long as it ensures that certain supervisor sha=
-dow-stack pushes
-> > > >     will not cause page faults (see Section 17.2.3 of the Intel=C2=
-=AE 64 and IA-32
-> > > >     Architectures Software Developer=E2=80=99s Manual, Volume 1).
-> > > >=20
-> > > > But then it says says VMMs shouldn't set the bit.
-> > > >=20
-> > > >     When emulating the CPUID instruction, a virtual-machine monitor=
- should return
-> > > >     this bit as 0 if those pushes can cause VM exits.
-> > > >=20
-> > > > Based on the Xen code (which is sadly a far better source of inform=
-ation than the
-> > > > SDM), I *think* that what the SDM is trying to say is that VMMs sho=
-uld not set
-> > > > CET_SS if VM-Exits can occur ***and*** the bit is not set in the ho=
-st CPU.  Because
-> > > > if the SDM really means "VMMs should never set the bit", then what =
-on earth is the
-> > > > point of the bit.
-> > > I need to double check for the vague description.
-> > >=20
-> > >  From my understanding, on bare metal side, if the bit is 1, OS can e=
-nable
-> > > SSS if pushes won't cause page fault. But for VM case, it's not recom=
-mended
-> > > (regardless of the bit state) to set the bit as vm-exits caused by gu=
-est SSS
-> > > pushes cannot be fully excluded.
-> > >=20
-> > > In other word, the bit is mainly for bare metal guidance now.
-> > >=20
-> > > > > In summary, this new series enables CET user SHSTK/IBT and kernel=
- IBT, but
-> > > > > doesn't fully support CET supervisor SHSTK, the enabling work is =
-left for
-> > > > > the future.
-> > > > Why?  If my interpretation of the SDM is correct, then all the piec=
-es are there.
-> > ...
-> >=20
-> > > And also based on above SDM description, I don't want to add the supp=
-ort
-> > > blindly now.
-> > *sigh*
-> >=20
-> > I got filled in on the details offlist.
-> >=20
-> > 1) In the next version of this series, please rework it to reincorporat=
-e Supervisor
-> >     Shadow Stack support into the main series, i.e. pretend Intel's imp=
-lemenation
-> >     isn't horribly flawed.
->=20
-> Let me make it clear, you want me to do two things:
->=20
-> 1)Add Supervisor Shadow Stack=C2=A0 state support(i.e., XSS.bit12(CET_S))=
- into
-> kernel so that host can support guest Supervisor Shadow Stack MSRs in g/h=
- FPU
-> context switch.
 
-If that's necessary for correct functionality, yes.
+--eTEBsKav2BLy7Olg
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> 2) Add Supervisor Shadow stack support into KVM part so that guest OS is
-> able to use SSS with risk.
+On Thu, Jun 22, 2023 at 12:19:53PM -0700 Josh Triplett wrote:
+> Even for a non-modular kernel, the kernel builds modules.builtin and
+> modules.builtin.modinfo, with information about the built-in modules.
+> Tools such as initramfs-tools need these files to build a working
+> initramfs on some systems, such as those requiring firmware.
+>=20
+> Now that `make modules_install` works even in non-modular kernels and
+> installs these files, unconditionally invoke it when building a Debian
+> package.
+>=20
+> Signed-off-by: Josh Triplett <josh@joshtriplett.org>
+> ---
 
-Yes.  Architecturally, if KVM advertises X86_FEATURE_SHSTK, then KVM needs =
-to
-provide both User and Supervisor support.  CET_SSS doesn't change the archi=
-tecture,
-it's little more than a hint.  And even if the guest follows SDM's recommen=
-dation
-to not enable shadow stacks, a clever kernel can still utilize SSS assets, =
-e.g. use
-the MSRs as scratch registers.
+thanks!
+
+Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
+
+
+> This patch depends on
+> https://lore.kernel.org/lkml/20230615111743.883891-1-masahiroy@kernel.org/
+>=20
+>  scripts/package/builddeb | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/scripts/package/builddeb b/scripts/package/builddeb
+> index 252faaa5561c..f500e3910158 100755
+> --- a/scripts/package/builddeb
+> +++ b/scripts/package/builddeb
+> @@ -62,8 +62,8 @@ install_linux_image () {
+>  		${MAKE} -f ${srctree}/Makefile INSTALL_DTBS_PATH=3D"${pdir}/usr/lib/li=
+nux-image-${KERNELRELEASE}" dtbs_install
+>  	fi
+> =20
+> +	${MAKE} -f ${srctree}/Makefile INSTALL_MOD_PATH=3D"${pdir}" modules_ins=
+tall
+>  	if is_enabled CONFIG_MODULES; then
+> -		${MAKE} -f ${srctree}/Makefile INSTALL_MOD_PATH=3D"${pdir}" modules_in=
+stall
+>  		rm -f "${pdir}/lib/modules/${KERNELRELEASE}/build"
+>  		rm -f "${pdir}/lib/modules/${KERNELRELEASE}/source"
+>  		if [ "${SRCARCH}" =3D um ] ; then
+> --=20
+> 2.40.1
+
+--=20
+epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
+=E2=86=B3 gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
+     -- frykten for herren er opphav til kunnskap --
+
+--eTEBsKav2BLy7Olg
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEh0E3p4c3JKeBvsLGB1IKcBYmEmkFAmSWBqwACgkQB1IKcBYm
+EmnWfRAAtP85RutI/lZit0ETIZsCYS4olhIri+eUsdAAXiMeRmh4QcDhuyEWgppK
+2J0oI1XOQY45GRmID28iGIPjhIG3/bd+TWnIC4tDc3/z+DWpmWIc8O3ICuqs5luJ
+MiWgPH6QVvGSl3WE+i48X8kP8AxizXeBP+SSxQuQsEMqfi8fCPm/l2wMReOTaKJ6
+3VMeDqvC8IPdTSOgyO4TrdShwsTRBsMUDzkZ8kYk9ElbgdO6DX8Pz4YENn473aaQ
+JgYlqgHkXDmUAcud+CA49Lsp+GDIV+SQPmcZTCuSKEvWkPBjOMM1/YoErUKeaTht
+DehzO3DqlWN+6yTzHUIE94DTQ/rBJ9qqir9psg/jE6Ud22QlOFc7Wp3FP47qNTkm
+lohdvXWQfRvkOAn9zb0IehTwHtW2zJ3I4+B1gN0kFrUyWA8xqHpzBIC17iJhHyJe
+XeTwnGAO51su8fqpESiISeGGt+3VTSpJJt39lGlAgsRFf8H1ETUF3vyTncM+vZos
+8/mgs7mCgN6kaiJYiTaMNgEctFUG6gG9t0SFJP5spGrz3pvaJwBv2DofQzahFSLk
+E5GAtaBuHf1pMVeR8BzwkCfFN7ajF/3xbm3fZbIbnLYFfJ5Sfw29VkUrPI8zyseg
+ne8e7LwfsP369WZYp64JMtEFnZfxkwxSaJa6csH4EYHUl1sBtuY=
+=xiGO
+-----END PGP SIGNATURE-----
+
+--eTEBsKav2BLy7Olg--
