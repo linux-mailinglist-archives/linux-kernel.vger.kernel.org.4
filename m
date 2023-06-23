@@ -2,176 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 966A573C417
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 00:25:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCAED73C402
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 00:24:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231782AbjFWWZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 18:25:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55586 "EHLO
+        id S229883AbjFWWYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 18:24:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231480AbjFWWZv (ORCPT
+        with ESMTP id S229558AbjFWWYD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 18:25:51 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69FCE2727
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 15:25:43 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3fa79605a3bso11268755e9.0
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 15:25:43 -0700 (PDT)
+        Fri, 23 Jun 2023 18:24:03 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA71172D
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 15:24:02 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id 41be03b00d2f7-54fb3c168fcso966413a12.0
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 15:24:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1687559142; x=1690151142;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XVDfyQp1D2UHXpL1ZVItWp64PNlbA4FYgRcewIHu8Ww=;
-        b=PRuOCVqjhaiUIaUxHpcOBEuD6ZfRhG69YI9VhpRhJBg/QRW8qHokII2mDUDfTkEvKb
-         j5XmH5Dnv+539X4Yu3HnU2WPe9mnfR6Lm4OVBFbS3IvhFBzZ6KHFOqoGVuXxWBd+BoMw
-         LNLpD2UixobZWhUHVRCICdr09zBrDVUX/tFNY=
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1687559041; x=1690151041;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2T74NvB61j3v2x3seml7lOG7zGtTOHQZiKI9MSy1E1w=;
+        b=2EFwKpEpn1GuiCAmqPCRobOJDLmPT0lTU5+mX/qqokC8SaZkni1sEd6wjT1x8qKcRY
+         dNT0eYjJCgXS/Q/dR3chEQTYwi4xFRQJbu5blR4pzfE3h6HZPLkY4jlTRHuF3pyF7lWp
+         4Zn3U4H7KcZy5oRilvTBMSFAHNsEwnk9XJAUccADwRq0dFw1AqHMlUoXkddAv025GINS
+         8mY0ueJmqA5CxgM7M71zf6Oj6uKQj1WmH72AgwMqxEwrePfKsVOYBPJApmjFeatj6s4J
+         YPAA6nyMGs2zJqY3GgSPTNUIce+PgAOwH839GsTPnttAOCmSHoxNSB/3q7IY70UxqN6/
+         wCfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687559142; x=1690151142;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XVDfyQp1D2UHXpL1ZVItWp64PNlbA4FYgRcewIHu8Ww=;
-        b=TQ4zZdTb9YKBx42zr3CVIIFu7IBCpGitsbSbjJEKyjT+iFYJTDWw56Fs6fE5idIseM
-         OV/+YyWXRztKJ5EN+buGNdNlgh2xr8A0t46XIEwIbNv0NDBC4wIzkdoVFEPbO4GkUBVt
-         6OX3XlCErtw2UnC08uPUbDyWIoL+2pXHhDWVbKVwR2VfUWJVYfkY1Yskjc39cu0XIMIQ
-         e0ls5GK0Uz5OuAstwJXmoVhamPGSUuxxeAco08xd5VsIRnHGTD805BCS43VrdmC8fHXF
-         oBXFe8tV1ykiIvlEdPK2EMQtFhCT2NMUAdkIHg3B007ER7mIuNnIyRiSDGJPAXw6FOBe
-         4Jew==
-X-Gm-Message-State: AC+VfDx+jpiJHjSdPbwKUWkYPuqQFa8i3xoPiPUtILdcHVhuDM11Ezf9
-        9RCIbUayh+jrb9fh4qM3pjPO+A==
-X-Google-Smtp-Source: ACHHUZ7pe50hzgM5iLC2579qWnSeqdzLoUZ3+Orq7sbVqA9W1K1hggz4Fbs/PlyG3wmdZULYjOJhjA==
-X-Received: by 2002:a05:600c:138c:b0:3fa:7bf0:7a81 with SMTP id u12-20020a05600c138c00b003fa7bf07a81mr2995293wmf.0.1687559141956;
-        Fri, 23 Jun 2023 15:25:41 -0700 (PDT)
-Received: from big-boopo.mynetworksettings.com (pool-108-46-233-209.nycmny.fios.verizon.net. [108.46.233.209])
-        by smtp.gmail.com with ESMTPSA id l6-20020a5d4106000000b0030c2e3c7fb3sm453223wrp.101.2023.06.23.15.25.40
+        d=1e100.net; s=20221208; t=1687559041; x=1690151041;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2T74NvB61j3v2x3seml7lOG7zGtTOHQZiKI9MSy1E1w=;
+        b=SHSByPasC8vHNuAlD2ugjbZqbah3hkn3+uBsSd3S5BWAiMKXun/geotAmjEA2XlMDb
+         flWz9rI9GK6BG6vrNzz7XLfILamPq6rW6o6/M6y9qtifdD8h8XhwURVxHYdgeRfzfXJo
+         5Jwb1YD+qODl2fv0G9ST62uqCMv9bfUV1WTe31OjYMuRMKy2eIv+KlwMXt9ksrnM7Iz6
+         m5+8bhWOTJIfY8CXO1SCtaSrBSQgxgEEGuLMLMFPMtBmTaM5s7dhATN/zN/uN2/s/yXo
+         FmZmpKRl2Rd7147tT3gViZYiPJKjmHuhkZPOEVqz5ry9jd+vv81FAxHUHwAY/x/W9hyr
+         dvaQ==
+X-Gm-Message-State: AC+VfDxdygjvm9LDNnMK1GzdFmWUog9RFXy8pPlaG7+kZLx0yxT/uAQC
+        QzGC3gIoB4WWfVM9E65oNVU9Yg==
+X-Google-Smtp-Source: ACHHUZ7h6vGDPAtA6v9YZudL2WUx8yi3iZ4W2PvpdY7L2JNMgMAhH95t/BMWZcJwI+1tYmX35sWHJQ==
+X-Received: by 2002:a05:6a21:3293:b0:10a:ee1b:fdc4 with SMTP id yt19-20020a056a21329300b0010aee1bfdc4mr28198131pzb.47.1687559041720;
+        Fri, 23 Jun 2023 15:24:01 -0700 (PDT)
+Received: from evan.ba.rivosinc.com ([66.220.2.162])
+        by smtp.gmail.com with ESMTPSA id m7-20020aa78a07000000b0063f1a1e3003sm19429pfa.166.2023.06.23.15.24.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Jun 2023 15:25:41 -0700 (PDT)
-From:   Jim Shargo <jshargo@chromium.org>
-To:     mairacanal@riseup.net, Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Haneen Mohammed <hamohammed.sa@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Melissa Wen <melissa.srw@gmail.com>,
-        Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     Jim Shargo <jshargo@chromium.org>, dri-devel@lists.freedesktop.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 6/6] drm/vkms: Add a module param to enable/disable the default device
-Date:   Fri, 23 Jun 2023 18:23:48 -0400
-Message-ID: <20230623222353.97283-7-jshargo@chromium.org>
-X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-In-Reply-To: <20230623222353.97283-1-jshargo@chromium.org>
-References: <20230623222353.97283-1-jshargo@chromium.org>
+        Fri, 23 Jun 2023 15:24:01 -0700 (PDT)
+From:   Evan Green <evan@rivosinc.com>
+To:     Palmer Dabbelt <palmer@rivosinc.com>
+Cc:     Evan Green <evan@rivosinc.com>, Albert Ou <aou@eecs.berkeley.edu>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Sunil V L <sunilvl@ventanamicro.com>,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: [PATCH] RISC-V: Show accurate per-hart isa in /proc/cpuinfo
+Date:   Fri, 23 Jun 2023 15:23:53 -0700
+Message-Id: <20230623222353.3742384-1-evan@rivosinc.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In many testing circumstances, we will want to just create a new device
-and test against that. If we create a default device, it can be annoying
-to have to manually select the new device instead of choosing the only
-one that exists.
+In /proc/cpuinfo, most of the information we show for each processor is
+specific to that hart: marchid, mvendorid, mimpid, processor, hart,
+compatible, and the mmu size. But the ISA string gets filtered through a
+lowest common denominator mask, so that if one CPU is missing an ISA
+extension, no CPUs will show it.
 
-The param, enable_default, is defaulted to true to maintain backwards
-compatibility.
+Now that we track the ISA extensions for each hart, let's report ISA
+extension info accurately per-hart in /proc/cpuinfo.
 
-Signed-off-by: Jim Shargo <jshargo@chromium.org>
+Signed-off-by: Evan Green <evan@rivosinc.com>
+
 ---
- drivers/gpu/drm/vkms/vkms_drv.c | 44 ++++++++++++++++++++++-----------
- 1 file changed, 29 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/gpu/drm/vkms/vkms_drv.c b/drivers/gpu/drm/vkms/vkms_drv.c
-index 314a04659c5f..1cb56c090a65 100644
---- a/drivers/gpu/drm/vkms/vkms_drv.c
-+++ b/drivers/gpu/drm/vkms/vkms_drv.c
-@@ -42,17 +42,26 @@
- #define DRIVER_MAJOR	1
- #define DRIVER_MINOR	0
+ arch/riscv/kernel/cpu.c | 16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
+
+diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
+index a2fc952318e9..7bb386f94f01 100644
+--- a/arch/riscv/kernel/cpu.c
++++ b/arch/riscv/kernel/cpu.c
+@@ -226,7 +226,7 @@ static struct riscv_isa_ext_data isa_ext_arr[] = {
+ 	__RISCV_ISA_EXT_DATA("", RISCV_ISA_EXT_MAX),
+ };
  
-+static bool enable_default_device = true;
-+module_param_named(enable_default_device, enable_default_device, bool, 0444);
-+MODULE_PARM_DESC(enable_default_device,
-+		 "Enable/Disable creating the default device");
-+
- static bool enable_cursor = true;
- module_param_named(enable_cursor, enable_cursor, bool, 0444);
--MODULE_PARM_DESC(enable_cursor, "Enable/Disable cursor support");
-+MODULE_PARM_DESC(enable_cursor,
-+		 "Enable/Disable cursor support for the default device");
- 
- static bool enable_writeback = true;
- module_param_named(enable_writeback, enable_writeback, bool, 0444);
--MODULE_PARM_DESC(enable_writeback, "Enable/Disable writeback connector support");
-+MODULE_PARM_DESC(
-+	enable_writeback,
-+	"Enable/Disable writeback connector support for the default device");
- 
- static bool enable_overlay;
- module_param_named(enable_overlay, enable_overlay, bool, 0444);
--MODULE_PARM_DESC(enable_overlay, "Enable/Disable overlay support");
-+MODULE_PARM_DESC(enable_overlay,
-+		 "Enable/Disable overlay support for the default device");
- 
- DEFINE_DRM_GEM_FOPS(vkms_driver_fops);
- 
-@@ -278,10 +287,7 @@ void vkms_remove_device(struct vkms_device *vkms_device)
- static int __init vkms_init(void)
+-static void print_isa_ext(struct seq_file *f)
++static void print_isa_ext(struct seq_file *f, unsigned long cpu)
  {
- 	int ret;
--	struct platform_device *pdev;
--	struct vkms_device_setup vkms_device_setup = {
--		.configfs = NULL,
--	};
-+	struct platform_device *default_pdev = NULL;
+ 	struct riscv_isa_ext_data *edata;
+ 	int i = 0, arr_sz;
+@@ -239,7 +239,8 @@ static void print_isa_ext(struct seq_file *f)
  
- 	ret = platform_driver_register(&vkms_platform_driver);
- 	if (ret) {
-@@ -289,19 +295,27 @@ static int __init vkms_init(void)
- 		return ret;
+ 	for (i = 0; i <= arr_sz; i++) {
+ 		edata = &isa_ext_arr[i];
+-		if (!__riscv_isa_extension_available(NULL, edata->isa_ext_id))
++		if (!__riscv_isa_extension_available(hart_isa[cpu].isa,
++						     edata->isa_ext_id))
+ 			continue;
+ 		seq_printf(f, "_%s", edata->uprop);
  	}
+@@ -253,7 +254,7 @@ static void print_isa_ext(struct seq_file *f)
+  */
+ static const char base_riscv_exts[13] = "imafdqcbkjpvh";
  
--	pdev = platform_device_register_data(NULL, DRIVER_NAME, 0,
--					     &vkms_device_setup,
--					     sizeof(vkms_device_setup));
--	if (IS_ERR(pdev)) {
--		DRM_ERROR("Unable to register default vkms device\n");
--		platform_driver_unregister(&vkms_platform_driver);
--		return PTR_ERR(pdev);
-+	if (enable_default_device) {
-+		struct vkms_device_setup vkms_device_setup = {
-+			.configfs = NULL,
-+		};
-+
-+		default_pdev = platform_device_register_data(
-+			NULL, DRIVER_NAME, 0, &vkms_device_setup,
-+			sizeof(vkms_device_setup));
-+		if (IS_ERR(default_pdev)) {
-+			DRM_ERROR("Unable to register default vkms device\n");
-+			platform_driver_unregister(&vkms_platform_driver);
-+			return PTR_ERR(default_pdev);
-+		}
+-static void print_isa(struct seq_file *f, const char *isa)
++static void print_isa(struct seq_file *f, const char *isa, unsigned long cpu)
+ {
+ 	int i;
+ 
+@@ -261,11 +262,12 @@ static void print_isa(struct seq_file *f, const char *isa)
+ 	/* Print the rv[64/32] part */
+ 	seq_write(f, isa, 4);
+ 	for (i = 0; i < sizeof(base_riscv_exts); i++) {
+-		if (__riscv_isa_extension_available(NULL, base_riscv_exts[i] - 'a'))
++		if (__riscv_isa_extension_available(hart_isa[cpu].isa,
++						    base_riscv_exts[i] - 'a'))
+ 			/* Print only enabled the base ISA extensions */
+ 			seq_write(f, &base_riscv_exts[i], 1);
  	}
+-	print_isa_ext(f);
++	print_isa_ext(f, cpu);
+ 	seq_puts(f, "\n");
+ }
  
- 	ret = vkms_init_configfs();
- 	if (ret) {
- 		DRM_ERROR("Unable to initialize configfs\n");
--		platform_device_unregister(pdev);
-+		if (default_pdev)
-+			platform_device_unregister(default_pdev);
-+
- 		platform_driver_unregister(&vkms_platform_driver);
+@@ -324,7 +326,7 @@ static int c_show(struct seq_file *m, void *v)
+ 	if (acpi_disabled) {
+ 		node = of_get_cpu_node(cpu_id, NULL);
+ 		if (!of_property_read_string(node, "riscv,isa", &isa))
+-			print_isa(m, isa);
++			print_isa(m, isa, cpu_id);
+ 
+ 		print_mmu(m);
+ 		if (!of_property_read_string(node, "compatible", &compat) &&
+@@ -334,7 +336,7 @@ static int c_show(struct seq_file *m, void *v)
+ 		of_node_put(node);
+ 	} else {
+ 		if (!acpi_get_riscv_isa(NULL, cpu_id, &isa))
+-			print_isa(m, isa);
++			print_isa(m, isa, cpu_id);
+ 
+ 		print_mmu(m);
  	}
- 
 -- 
-2.41.0.162.gfafddb0af9-goog
+2.34.1
 
