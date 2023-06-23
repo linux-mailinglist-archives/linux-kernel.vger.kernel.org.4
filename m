@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E6CD73B475
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 12:05:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97AA973B479
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 12:05:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232023AbjFWKFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 06:05:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44116 "EHLO
+        id S232053AbjFWKFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 06:05:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230421AbjFWKE3 (ORCPT
+        with ESMTP id S230125AbjFWKEa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 06:04:29 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 399DC26B8
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 03:04:26 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-31272fcedf6so429230f8f.2
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 03:04:26 -0700 (PDT)
+        Fri, 23 Jun 2023 06:04:30 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02CDA10F1
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 03:04:28 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-3090d3e9c92so678113f8f.2
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 03:04:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1687514664; x=1690106664;
+        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1687514666; x=1690106666;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fwzdC7/KLQBqsNQ9Z3vvCuyrSfrs5l5gzbo6Rxb7/UU=;
-        b=MZzt3xHdJawMjIK2dNuZKH1MQAxlWe/r3rUMF7qW6PE/PRdd83nOCHtiSYTzTXRTZ8
-         DfOMKIIuYCA6SbO8krzJuZyLEsx0eVPqghCXPV+sPuNm+1HPkve4i02Da+6rBpO85y/U
-         rAdHs49OjoVJ3tZNdwKgQ1kUPXnK0ApbjXvXPWTz1dHPYiI3DO0f6+ZtfK7izZev9wkF
-         PzKEunjLx4Vz3uIvjNBVRPvV/vP1u4Xqy8DsZWnsOpKdwZthRS7FxV88/w3hXWX7XAZD
-         IqKK82p2schhSdroYHKUEzX13ZeE6Tw1/zETkCK/zS9zBVC/kTT4RgzP3yzWBrjB17kO
-         1fvA==
+        bh=/JiCzEeqmjiEw3zDpGmObBnm4eT4Z865O2xg4BsYR1E=;
+        b=dLurroqnBfuZlrXTJOSO1ec8tkOeNMC7/5FOt5gGsGnx23ekrR748s6VoPpqzDKbl3
+         vWDMKD0wmLDtvfzCrlozDHyfcJeiN5yr+038ii6HY3l6YuEJqjShtFub/I0GFcC4U4Rr
+         6CXXMUTEGhm5w0hGK/fuJUOwY8YbXrOC+taP5VC3tIqIKij5+05rpXvb9eTReVJw0FN7
+         X5RfuLo8m7WYea1CwT8CcQCrZwdD0/O7CJK0yTqZsz8AGv7j/3DVE2f8OmP5261eyp3g
+         qmxa+PUTNAd68WMx25arfe7WHqgX23/QkOhrMBYsMnNWRm/KUMynJUcWHz9jmRSH8taH
+         xUUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687514664; x=1690106664;
+        d=1e100.net; s=20221208; t=1687514666; x=1690106666;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=fwzdC7/KLQBqsNQ9Z3vvCuyrSfrs5l5gzbo6Rxb7/UU=;
-        b=hULqqyi2gkuTOT66DLXy4xKC1/ruOYTdDeh4e0F+k/zWijZVfA3vSUII3B3skdimQb
-         mOuzuRFrznv3O/X4zwTaYAVXTq1BBxMnATBYjF2cEcvlOWwmYNHXZ3bgO2HTZ7LIb1Hu
-         qSFZp9RtWQAbNbTyi8o2x8ZHZJpy/jw7V+MfzZTf0mxlpdrd6DkmwCJaiX/M1ZkTb2TN
-         SBHo1KiXQpaLB+dpFQIkKyfBMPqV5Lb8eTB9V3uuE+06QuUTjL4evGoUBnTNvpu9of3L
-         2Tm7PZnFkLXX4MKwrVtE/SmVa9vx8dC9Aw7W8DSDn5rhN6t7eP/vPVtpo5XysNuzAWOB
-         CN6w==
-X-Gm-Message-State: AC+VfDx/9q0OZF1HBkCyL542FKUZAWbMHosbb5Rbwdg90b6r/EoJKznB
-        4wiIRJVWnVuzZAuunslj6M8WqQ==
-X-Google-Smtp-Source: ACHHUZ6X6W97yIjboRztdBubzybbieSu4zcX8uLRfqburrXXcSEhYItvMiMQsetiDQMMc/Ow/qJ8uQ==
-X-Received: by 2002:adf:f650:0:b0:2d1:3eb9:c3c2 with SMTP id x16-20020adff650000000b002d13eb9c3c2mr3471562wrp.54.1687514664694;
-        Fri, 23 Jun 2023 03:04:24 -0700 (PDT)
+        bh=/JiCzEeqmjiEw3zDpGmObBnm4eT4Z865O2xg4BsYR1E=;
+        b=cgIl2YjzdIxPvUXkmOf8YsboMoMkOwr69W7IxvP/fTcfRgpMMfIFy0FSQHzRrYJUv+
+         P7z0/bCGQNDs493WCYqnv0Qf5yYsyL60MOny/IP3I4zkx4AaAUJYjMxw01iWUTj/5zOT
+         SX53mn245HYpM7nOw9Mjh+Hn8tKvzkADtxgneZZXiZHS5V+bM18uoW+oZGetHmNBe6CW
+         +bRYqcdNMFnohRfpYsRXV5SJ/D2Z0g6Hz051otNO+ap///+wxVzjXzPxc1SOvki3pYZL
+         8kZc61XK4Qhkmgv74tvQxxV4H43j8oaaUkrVfQqZtBv2miYdxNcq6tNHksunTGeo4+gb
+         EYZQ==
+X-Gm-Message-State: AC+VfDxAR25dyeklMSoNTfEFy+l51cwjPW8aZxeqnmUuc46aU+/XmwMu
+        NLI/CoWgYFGRz8Zrd9f0+SZzDw==
+X-Google-Smtp-Source: ACHHUZ4qSPzss8jYv0izBVyPiiYbfcs2GaupcDqzwF7GJoL6obvzFc7cSfwPYlFhIi3eERWkxmjvhA==
+X-Received: by 2002:a5d:568a:0:b0:30a:eac8:e5c1 with SMTP id f10-20020a5d568a000000b0030aeac8e5c1mr20824466wrv.6.1687514665831;
+        Fri, 23 Jun 2023 03:04:25 -0700 (PDT)
 Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:ddc2:ce92:1ed6:27bd])
-        by smtp.gmail.com with ESMTPSA id x8-20020a5d54c8000000b0030fae360f14sm9079360wrv.68.2023.06.23.03.04.23
+        by smtp.gmail.com with ESMTPSA id x8-20020a5d54c8000000b0030fae360f14sm9079360wrv.68.2023.06.23.03.04.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Jun 2023 03:04:24 -0700 (PDT)
+        Fri, 23 Jun 2023 03:04:25 -0700 (PDT)
 From:   Bartosz Golaszewski <brgl@bgdev.pl>
 To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
         Alexandre Torgue <alexandre.torgue@foss.st.com>,
@@ -65,9 +65,9 @@ To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
 Cc:     netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH net-next v2 03/11] net: stmmac: platform: provide stmmac_pltfr_exit()
-Date:   Fri, 23 Jun 2023 12:04:09 +0200
-Message-Id: <20230623100417.93592-4-brgl@bgdev.pl>
+Subject: [PATCH net-next v2 04/11] net: stmmac: dwmac-generic: use stmmac_pltfr_exit()
+Date:   Fri, 23 Jun 2023 12:04:10 +0200
+Message-Id: <20230623100417.93592-5-brgl@bgdev.pl>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230623100417.93592-1-brgl@bgdev.pl>
 References: <20230623100417.93592-1-brgl@bgdev.pl>
@@ -85,75 +85,28 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-Provide a helper wrapper around calling the platform's exit() callback.
-This allows users to skip checking if the callback exists.
+Shrink the code in dwmac-generic by using the new stmmac_pltfr_exit()
+helper.
 
 Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 ---
- .../ethernet/stmicro/stmmac/stmmac_platform.c | 22 ++++++++++++++-----
- .../ethernet/stmicro/stmmac/stmmac_platform.h |  2 ++
- 2 files changed, 18 insertions(+), 6 deletions(-)
+ drivers/net/ethernet/stmicro/stmmac/dwmac-generic.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-index 41ca4fc9f863..5b2bc129cd85 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-@@ -720,6 +720,20 @@ int stmmac_pltfr_init(struct platform_device *pdev,
- }
- EXPORT_SYMBOL_GPL(stmmac_pltfr_init);
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-generic.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-generic.c
+index b7fc79864e8c..dabf05601221 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-generic.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-generic.c
+@@ -58,8 +58,7 @@ static int dwmac_generic_probe(struct platform_device *pdev)
+ 	return 0;
  
-+/**
-+ * stmmac_pltfr_exit
-+ * @pdev: pointer to the platform device
-+ * @plat: driver data platform structure
-+ * Description: Call the platform's exit callback (if any).
-+ */
-+void stmmac_pltfr_exit(struct platform_device *pdev,
-+		       struct plat_stmmacenet_data *plat)
-+{
-+	if (plat->exit)
-+		plat->exit(pdev, plat->bsp_priv);
-+}
-+EXPORT_SYMBOL_GPL(stmmac_pltfr_exit);
-+
- /**
-  * stmmac_pltfr_remove
-  * @pdev: platform device pointer
-@@ -733,10 +747,7 @@ void stmmac_pltfr_remove(struct platform_device *pdev)
- 	struct plat_stmmacenet_data *plat = priv->plat;
- 
- 	stmmac_dvr_remove(&pdev->dev);
--
--	if (plat->exit)
--		plat->exit(pdev, plat->bsp_priv);
--
-+	stmmac_pltfr_exit(pdev, plat);
- 	stmmac_remove_config_dt(pdev, plat);
- }
- EXPORT_SYMBOL_GPL(stmmac_pltfr_remove);
-@@ -756,8 +767,7 @@ static int __maybe_unused stmmac_pltfr_suspend(struct device *dev)
- 	struct platform_device *pdev = to_platform_device(dev);
- 
- 	ret = stmmac_suspend(dev);
--	if (priv->plat->exit)
--		priv->plat->exit(pdev, priv->plat->bsp_priv);
-+	stmmac_pltfr_exit(pdev, priv->plat);
- 
- 	return ret;
- }
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.h b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.h
-index 6a2cd47fedcd..e79134cc1d3d 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.h
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.h
-@@ -21,6 +21,8 @@ int stmmac_get_platform_resources(struct platform_device *pdev,
- 
- int stmmac_pltfr_init(struct platform_device *pdev,
- 		      struct plat_stmmacenet_data *plat);
-+void stmmac_pltfr_exit(struct platform_device *pdev,
-+		       struct plat_stmmacenet_data *plat);
- 
- void stmmac_pltfr_remove(struct platform_device *pdev);
- extern const struct dev_pm_ops stmmac_pltfr_pm_ops;
+ err_exit:
+-	if (plat_dat->exit)
+-		plat_dat->exit(pdev, plat_dat->bsp_priv);
++	stmmac_pltfr_exit(pdev, plat_dat);
+ err_remove_config_dt:
+ 	if (pdev->dev.of_node)
+ 		stmmac_remove_config_dt(pdev, plat_dat);
 -- 
 2.39.2
 
