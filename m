@@ -2,184 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9E5D73B186
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 09:28:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23A5B73B1A7
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 09:29:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231249AbjFWH2g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 03:28:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57928 "EHLO
+        id S229747AbjFWH3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 03:29:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231181AbjFWH2U (ORCPT
+        with ESMTP id S231270AbjFWH3o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 03:28:20 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65E8719BF;
-        Fri, 23 Jun 2023 00:28:19 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-988aefaa44eso33257866b.2;
-        Fri, 23 Jun 2023 00:28:19 -0700 (PDT)
+        Fri, 23 Jun 2023 03:29:44 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CBB82686
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 00:29:15 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-3094910b150so386338f8f.0
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 00:29:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687505298; x=1690097298;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vQAW8yZCFSnADhBud7nfo4RU3cNf5kaZDT6uTQ+OwQc=;
-        b=WLwNwwXJL81ydxxMH8W3bUqs1JkG9L3tzw5sYwCMGRUeSyKhrz3b3mn2sokXi56yNY
-         NISOHlpjPmelvIDtVkxsCzU8uAb/oH8+WE9gmuvkwesuPpNZT5AGV82+VvVLqIOTl7f4
-         5+bBBwqYadyM76vgEm6KAZfUr7GS4/+SWRn/cOLagB0Xm5NHOWt9xO0DGGyo3vSMXWXK
-         W5KnQAmuuFyPfZyAf+Z7VW1BjEY+Wk3u82V3aRdbwW0G35Mw6UUDro47d2m+KeX9SCwn
-         0RHezvIynmP3K1FWWqKwjnd/1E3TSK4qffhd5qH+nCNshCJ4ThTmLIQ9o4/3WunK/Ej7
-         qJEg==
+        d=linaro.org; s=google; t=1687505343; x=1690097343;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=74Pt8y9BLYayYvuaPPOjFJX++4vBERPSGc1K1bOgfPc=;
+        b=Y4LcbyKKH4D6Sc646yqtnsdFR8fsUfhWH/1ZHEzwtdsJ2yk8zc1Id8XVlOltQkHnRw
+         QOEMIZF8lARJZ6DwtHrkXJUM5ppaxzuno9eMOajvNiVVRauJQjgfI5z77h+YaaWHm0Pb
+         LIT/8+VGo1gkux9Gm0eWNJy5t2FQLi4gwjAy+/ASpPay5cTlS+kJA/Is381aaoo+z1TY
+         Bbq4uJmoUVRTHpOROfa+YIir1CtWiCJQBPgcqnIhQ42xSvYK2+2KRJtNbVv+Aq6b7+c/
+         7MqkFZv+o4R2+ucZPy/9fmXkuqzADq6kWRKTrQ5dkRxIZZPM8eJLdvaj6Ooo80jPhybu
+         VN7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687505298; x=1690097298;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vQAW8yZCFSnADhBud7nfo4RU3cNf5kaZDT6uTQ+OwQc=;
-        b=h0h/FWBXnBbUo4Y7bdkpdbH4qmzaAs3MrIJlwZxfZuhB0LfeBR0cGYo1gaznkFIXFz
-         s1RI02GmOwRo6T+x124f53rrOWmSss8Mu2W4XuBS0/m6LWbfkU12ObPZku3KN7VDhHmZ
-         7RCrW1Qu+GR4RLeTUeu69yzCDR1KAk3EOT+Bv0zFKgqZYODg2i2TnhNHga2BcsBiKB8D
-         E/UUhnHihMDGLAQEQuXevYZtU5DY9vAc47SM9HvfXmDK7jN1iGD2VTMpR2pzzK91STBd
-         HSVR6+wYKxNUEmRd9T8AUa7qfXqH8cHn0I24I4K3jcQNwC9vdR96id/zWt1/izfKhPBl
-         PZbA==
-X-Gm-Message-State: AC+VfDz+CBBOBQJ0s5fsQU0XfBBT+aXS4fosKOtIVQrkpKq8yM7aJxr4
-        XTLh4gZNDJv4Wlgz70fBJ9s=
-X-Google-Smtp-Source: ACHHUZ64S0PU2CibTDqtbntbr658so5FMj8Ky0zBReLz2hhtgAH/FxtzwPWKd9Kui2ozk94o+XyqKQ==
-X-Received: by 2002:a17:907:1c09:b0:988:2037:c67f with SMTP id nc9-20020a1709071c0900b009882037c67fmr16189345ejc.2.1687505297662;
-        Fri, 23 Jun 2023 00:28:17 -0700 (PDT)
-Received: from [127.0.1.1] ([91.230.2.244])
-        by smtp.gmail.com with ESMTPSA id y19-20020a17090614d300b00982d0563b11sm5637811ejc.197.2023.06.23.00.28.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Jun 2023 00:28:17 -0700 (PDT)
-From:   Benjamin Bara <bbara93@gmail.com>
-Date:   Fri, 23 Jun 2023 09:28:14 +0200
-Subject: [PATCH v7 3/3] dt-bindings: usb: Add binding for Cypress HX3 USB
- 3.0 family
+        d=1e100.net; s=20221208; t=1687505343; x=1690097343;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=74Pt8y9BLYayYvuaPPOjFJX++4vBERPSGc1K1bOgfPc=;
+        b=WqcXqHi9X97lw6GQYan8EWKrp+ThXmap8Uzg6rvZmAN94haGwmN0//vNEiRM6CNCWa
+         MKmupJFotXZrTTZA7EKIT8/8r9biiL+x3Y6ffE6nEudjujjuikK1EUTBvqLnFXYChQ7x
+         gOkAkrSYO2+vifeF7Bd3XXc4dkmGb3EHXNMD9tqCiylzMiXTVQVTCTyadmxcCb8bAn9i
+         zcIXTXwjrr2hEXPi+hn+SwqeXzNHTv7HQACwHf2TK+yLP53y2N/6G0WbFW1QUZBa85ea
+         /Ffv0ZgZRuiTXsQ0HZHUaP9FSsizxBylsjfHgzgnER8SAykXQB6B6B1rOPOHX4hA5hps
+         Dffw==
+X-Gm-Message-State: AC+VfDxjQq8tmL0wBOrE8xaQ5qPUMqvPqBYHlML6GYGPy9chtk3aJfRM
+        2dl1EZN+PVrmUtFGDlAni2rmmw==
+X-Google-Smtp-Source: ACHHUZ5R9hJ3wXhPhvbJVcGIHlACR3cX0dSORBCPRA3xKj+G+lmLhEIxWe2HnM4i26WPrqPkabi7bA==
+X-Received: by 2002:adf:f6c8:0:b0:311:d7d:e831 with SMTP id y8-20020adff6c8000000b003110d7de831mr15478208wrp.48.1687505343048;
+        Fri, 23 Jun 2023 00:29:03 -0700 (PDT)
+Received: from [192.168.27.65] (home.beaume.starnux.net. [82.66.176.246])
+        by smtp.gmail.com with ESMTPSA id p9-20020adfcc89000000b003113f0ba414sm8822488wrj.65.2023.06.23.00.29.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Jun 2023 00:29:02 -0700 (PDT)
+Message-ID: <b4b1552d-67ab-3ab4-641a-1e190ed4a707@linaro.org>
+Date:   Fri, 23 Jun 2023 09:29:00 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230620-hx3-v7-3-f79b4b22a1bf@skidata.com>
-References: <20230620-hx3-v7-0-f79b4b22a1bf@skidata.com>
-In-Reply-To: <20230620-hx3-v7-0-f79b4b22a1bf@skidata.com>
-To:     Matthias Kaehlcke <mka@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH 1/3] dt-bindings: display: msm: sm8350-mdss: document
+ displayport controller subnode
+Content-Language: en-US
+To:     Marijn Suijten <marijn.suijten@somainline.org>
+Cc:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Benjamin Bara <benjamin.bara@skidata.com>
-Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Robert Foss <rfoss@kernel.org>, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230621-topic-sm8x50-upstream-mdss-bindings-dp-subnode-v1-0-8bf386b373eb@linaro.org>
+ <20230621-topic-sm8x50-upstream-mdss-bindings-dp-subnode-v1-1-8bf386b373eb@linaro.org>
+ <xlr3rmz7wy5o3ka6cxo2tzl3hqbnk4vkm7jsgjdhyimiyyqnfr@pjjwjg37675s>
+Organization: Linaro Developer Services
+In-Reply-To: <xlr3rmz7wy5o3ka6cxo2tzl3hqbnk4vkm7jsgjdhyimiyyqnfr@pjjwjg37675s>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Benjamin Bara <benjamin.bara@skidata.com>
+On 23/06/2023 09:27, Marijn Suijten wrote:
+> On 2023-06-21 11:26:25, Neil Armstrong wrote:
+>> Document the optional document displayport controller subnode
+> 
+> document the optional *document*?  Same in the other patches IIRC.
 
-The HX3 family comes in different variants (up to 4 USB 3.0 ports;
-multi-TT), e.g. CYUSB330x/CYUSB331x/CYUSB332x/CYUSB230x.
+oops, will re-spin with this fixed
 
-This initial version of the binding only describes USB related aspects
-of the HX3 family, it does not cover the option of connecting the
-controller as an i2c slave.
+thanks!
 
-Reviewed-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
----
- .../devicetree/bindings/usb/cypress,hx3.yaml       | 77 ++++++++++++++++++++++
- 1 file changed, 77 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/usb/cypress,hx3.yaml b/Documentation/devicetree/bindings/usb/cypress,hx3.yaml
-new file mode 100644
-index 000000000000..47add0d85fb8
---- /dev/null
-+++ b/Documentation/devicetree/bindings/usb/cypress,hx3.yaml
-@@ -0,0 +1,77 @@
-+# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/usb/cypress,hx3.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Cypress HX3 USB 3.0 hub controller family
-+
-+maintainers:
-+  - Benjamin Bara <benjamin.bara@skidata.com>
-+
-+allOf:
-+  - $ref: usb-device.yaml#
-+
-+properties:
-+  compatible:
-+    enum:
-+      - usb4b4,6504
-+      - usb4b4,6506
-+
-+  reg: true
-+
-+  reset-gpios:
-+    items:
-+      - description: GPIO specifier for RESETN pin.
-+
-+  vdd-supply:
-+    description:
-+      1V2 power supply (VDD_EFUSE, AVDD12, DVDD12).
-+
-+  vdd2-supply:
-+    description:
-+      3V3 power supply (AVDD33, VDD_IO).
-+
-+  peer-hub:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description:
-+      phandle to the peer hub on the controller.
-+
-+required:
-+  - compatible
-+  - reg
-+  - peer-hub
-+  - vdd-supply
-+  - vdd2-supply
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+
-+    usb {
-+        dr_mode = "host";
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        /* 2.0 hub on port 1 */
-+        hub_2_0: hub@1 {
-+          compatible = "usb4b4,6504";
-+          reg = <1>;
-+          peer-hub = <&hub_3_0>;
-+          reset-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
-+          vdd-supply = <&reg_1v2_usb>;
-+          vdd2-supply = <&reg_3v3_usb>;
-+        };
-+
-+        /* 3.0 hub on port 2 */
-+        hub_3_0: hub@2 {
-+          compatible = "usb4b4,6506";
-+          reg = <2>;
-+          peer-hub = <&hub_2_0>;
-+          reset-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
-+          vdd-supply = <&reg_1v2_usb>;
-+          vdd2-supply = <&reg_3v3_usb>;
-+        };
-+    };
-
--- 
-2.34.1
+> 
+> - Marijn
+> 
+>> of the SM8350 MDSS.
+>>
+>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+>> ---
+>>   Documentation/devicetree/bindings/display/msm/qcom,sm8350-mdss.yaml | 6 ++++++
+>>   1 file changed, 6 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/display/msm/qcom,sm8350-mdss.yaml b/Documentation/devicetree/bindings/display/msm/qcom,sm8350-mdss.yaml
+>> index 79a226e4cc6a..f2cbeb435f1b 100644
+>> --- a/Documentation/devicetree/bindings/display/msm/qcom,sm8350-mdss.yaml
+>> +++ b/Documentation/devicetree/bindings/display/msm/qcom,sm8350-mdss.yaml
+>> @@ -52,6 +52,12 @@ patternProperties:
+>>         compatible:
+>>           const: qcom,sm8350-dpu
+>>   
+>> +  "^displayport-controller@[0-9a-f]+$":
+>> +    type: object
+>> +    properties:
+>> +      compatible:
+>> +        const: qcom,sm8350-dp
+>> +
+>>     "^dsi@[0-9a-f]+$":
+>>       type: object
+>>       properties:
+>>
+>> -- 
+>> 2.34.1
+>>
 
