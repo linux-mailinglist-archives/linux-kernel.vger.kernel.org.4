@@ -2,116 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5872173B55B
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 12:33:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BE7C73B58A
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 12:38:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231984AbjFWKdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 06:33:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39308 "EHLO
+        id S231764AbjFWKhw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 06:37:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232173AbjFWKdj (ORCPT
+        with ESMTP id S230516AbjFWKhp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 06:33:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FCCEE6E;
-        Fri, 23 Jun 2023 03:33:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E9FF361A11;
-        Fri, 23 Jun 2023 10:33:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7137C433C0;
-        Fri, 23 Jun 2023 10:33:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687516417;
-        bh=sfFnaH25gpS9v0cJjOQk7EIROwbjYpko9ASJcwzrEhc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=boBrJZWqR4cqNFXYKB2+LifLXTAABU48JqZrimo5aUe/KEwbyVHQnSQXUP7jjTern
-         u29kc/41kLgjFEy588K6k+AZT5Ax0wr5Sgx78rKzankDx2K9Nm8c4WUMZtuFhPIHS3
-         FJb9oq4/syOf70YWA45zzw0ywf/tL+rdaKpSfhkyJWj5Chr2JnGHlZLQGJX9g6Yc/7
-         JrQLLTKx5xmSMNPHX54v4aGT/U1WlBUwaqP71+Ip7IJnYCRirjR77jJEIp1nLQRUyv
-         QENo56jbyb5xqRbmIZkCFUw01WnipGREXGrtEi4m/8UNtx1bcV6KFaNeC/FzziA2vK
-         9gZTnMygAkVhw==
-Date:   Fri, 23 Jun 2023 12:33:33 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Sean Nyekjaer <sean@geanix.com>
-Cc:     Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-i2c@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: stm32f7: Add atomic_xfer method to driver
-Message-ID: <ZJV0/cbjn1Qa62u+@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Sean Nyekjaer <sean@geanix.com>,
-        Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-i2c@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230509132159.4160984-1-sean@geanix.com>
+        Fri, 23 Jun 2023 06:37:45 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71E75273B;
+        Fri, 23 Jun 2023 03:37:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=Lk442Og9qeSuSAMtnFnHXSps46eB9vX+oT9sJwzVZUI=;
+        t=1687516628; x=1688726228; b=rq5bX+DOoTX2QnoAPE1GARiXl9V3H5DCitMRncFeT4zT8+f
+        3VhnaJWnATEKIo4071AgtZ1OOWRrjXBVOXchZufuPAZ/HwbXq07yUYOuInhTc8Ax4nnIq8r/HKqMc
+        nIw+lMkNqbsIsw2f4Iebh/fIZ1/YAOHemBM4Wf0mWrvSJ05zAFWu1HzBTsv0cvX8ssc1nW6fEqyo/
+        l8/SkCW8KuKeBQX9ovadC+v0wKw/vXsH2o0oq/Mfx6wforJlchNlwJTPsKsfW3pyNpmMYYJKhuatx
+        ySNNYDa6eCD+2WK2AjUQnOhXV4kRYrZI/sO87WfjQ7DSgYVABHgqZeVM5g+X9JXw==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.96)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1qCe9m-00FgPV-1a;
+        Fri, 23 Jun 2023 12:36:46 +0200
+Message-ID: <19d17ee302892f48f9b6110ec6c2ccccf0c1b9ef.camel@sipsolutions.net>
+Subject: Re: [PATCH 0/8] Fix comment typos about "transmit"
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     Yueh-Shun Li <shamrocklee@posteo.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     jgg@ziepe.ca, leon@kernel.org, anthony.l.nguyen@intel.com,
+        davem@davemloft.net, kvalo@kernel.org, jejb@linux.ibm.com,
+        pabeni@redhat.com, apw@canonical.com, joe@perches.com,
+        linux-rdma@vger.kernel.org, netdev@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-scsi@vger.kernel.org,
+        mptcp@lists.linux.dev, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Fri, 23 Jun 2023 12:36:44 +0200
+In-Reply-To: <50a88781b9e2a80588438c315167bbec@posteo.net>
+References: <20230622012627.15050-1-shamrocklee@posteo.net>
+         <168748862634.32034.1394302200661050543.git-patchwork-notify@kernel.org>
+         <50a88781b9e2a80588438c315167bbec@posteo.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="uknG7jZmb7sNlYPD"
-Content-Disposition: inline
-In-Reply-To: <20230509132159.4160984-1-sean@geanix.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-malware-bazaar: not-scanned
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---uknG7jZmb7sNlYPD
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, May 09, 2023 at 03:21:59PM +0200, Sean Nyekjaer wrote:
-> Add an atomic_xfer method to the driver so that it behaves correctly
-> when controlling a PMIC that is responsible for device shutdown.
+On Fri, 2023-06-23 at 08:51 +0000, Yueh-Shun Li wrote:
 >=20
-> The atomic_xfer method added is similar to the one from the i2c-mv64xxx
-> driver. When running an atomic_xfer a bool flag in the driver data is
-> set, the interrupt is not unmasked on transfer start, and the IRQ
-> handler is manually invoked while waiting for pending transfers to
-> complete.
+> >   - [3/8] zd1211rw: fix comment typo
+> >     (no matching commit)
 >=20
-> Signed-off-by: Sean Nyekjaer <sean@geanix.com>
+> Should I rebase the local branch onto netdev/net-next/main
+> and send the "no matching commit" patches again?
+>=20
 
-Pierre-Yves, Alain, any further comments to this patch?
+The wireless one is on our radar, no need to resend.
 
-> Is it okay to keep the DMA transfer in atomic?
+But: https://lore.kernel.org/r/87y1kncuh4.fsf@kernel.org
 
-Will DMA actually run in atomic mode?
-
-
---uknG7jZmb7sNlYPD
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmSVdPkACgkQFA3kzBSg
-KbbxjQ/+K79nV1aTGPrTZkz9DkQ84yocXtzQ/Qw8yJMmWIe7Ld2ELs8iW0iVABTR
-lhD9nUCcVe4pT8h+lXoxJPEg8AsDD3dM6nLWTd95SIXk+wK2k68QMYCnH9Ej/lDW
-syrfeqqV3pW3rfCAdPQHPB/BDeAwqkOZ6KU8d8Ulkc6za4KFBB6UueOO0WOvcm4a
-wTwEM0jJuEijsOPcv3xR0YtDQ1wG6hlEo8xQoRv2dF8mSVvhLFBOZVjVmdCXP20K
-70ctiTHnht1Eqbxue8XvgGhJ07WPxmIG840vEpEcEkdfjYtE/v/4Ivo2T1fd6bLy
-mJheZ0gAJxZ6Ze0D93JHCDawP7i1DsOcxld4+KgnTBKRiMtpAlbsa+AbHTkX2tM/
-DM0zcoprB3V0BPOx3cgfa9Yf87BsMvFxhG5OIPEiJJNEtReiA0rG6iopE1PMB9xY
-smdddrd0KvMYS60Xql14vje2AbgP7SzDwxrMLOLemFqhs85pydtwRMFFl8sW9Lm0
-1XHMKyE6OkmS+hR+rK8NVRPuZ8kSTvzVXxa5pcGNvlyfY0LtbWaIln24HOfKeo2Q
-wfOEDSKPFxJuroFXm8Dzt2w919cw+GipDEhxVteUDkauuc2yveqjmKOJOJJ4K9h0
-EmdrZbmNefnsLyLaReTG46cViZ+4OwVL5yutM/ow8m+FYitRS4o=
-=JfaG
------END PGP SIGNATURE-----
-
---uknG7jZmb7sNlYPD--
+johannes
