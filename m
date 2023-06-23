@@ -2,113 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B472B73BD78
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 19:10:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE22873BD7C
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 19:10:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232108AbjFWRKP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 13:10:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38420 "EHLO
+        id S231715AbjFWRKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 13:10:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232281AbjFWRJq (ORCPT
+        with ESMTP id S232689AbjFWRKD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 13:09:46 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B9072D69;
-        Fri, 23 Jun 2023 10:09:05 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35NDf6qV010028;
-        Fri, 23 Jun 2023 17:08:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=czNt/8joIzOa1GCzQN/TG6UFZ73VTlS7L/4YiZu44dY=;
- b=As3Dk1lO9yf4DAtP+ZS0ENhbiwWoNGjz38uu/AaSF5Oaa720ymoc7WJ2ASzPaNko1t8n
- uVMNCRkmiGk0PyOVpmQw0AyPJr7xpJVPnWWA9HtJapgLTVVvxux1kgzQW3KUY409xqMz
- 6DykOnYGt0FW3gkroAyQsK42C4y+WGcZfe76HYkUc0Cr2/j0NzYx+TyKdKbAKd/iv0a+
- jnQQ3dU9JKM8KSHEHgqG74Wyf41+Ssp6pd4ZVXEdG2DJ8uoZoGjX+W6dy3L3wlx1t4oR
- sO8eBNUWPHhGqPq+ZnbjukqYAqXKNqgMGNYZu9h3Ugplsivoo9r7WEjvlbcWljmQ6kb6 8w== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rcw93j4bf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 23 Jun 2023 17:08:58 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35NH8vC6008169
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 23 Jun 2023 17:08:57 GMT
-Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Fri, 23 Jun 2023 10:08:57 -0700
-Date:   Fri, 23 Jun 2023 10:08:56 -0700
-From:   Bjorn Andersson <quic_bjorande@quicinc.com>
-To:     Andrew Halaney <ahalaney@redhat.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <viresh.kumar@linaro.org>,
-        <rafael@kernel.org>, <konrad.dybcio@linaro.org>,
-        <andersson@kernel.org>, <agross@kernel.org>
-Subject: Re: [PATCH] cpufreq: qcom-cpufreq-hw: Use dev_err_probe() when
- failing to get icc paths
-Message-ID: <20230623170856.GA1736857@hu-bjorande-lv.qualcomm.com>
-References: <20230623155707.944272-1-ahalaney@redhat.com>
+        Fri, 23 Jun 2023 13:10:03 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9112F30E9;
+        Fri, 23 Jun 2023 10:09:23 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 92E28838;
+        Fri, 23 Jun 2023 19:08:45 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1687540125;
+        bh=ho8g4d4+QSTop1taPB2ZsJswaSCq6PsVAP4v4ww2Dfk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Wz3uRXxrWjYUI9rpIY329Qo4BnsseqSPx+VyFaJEhK1+ionAWmL2pwWDFhpYEYtjH
+         aGX2kxWrD1IKhPYSNvgeSEQvNQ2617v1Fl5f+C4xkAw1jXkK2b22Kb7b9yZzcInG8d
+         hwis3GgME3SXmH9XuBTnQYyq2Up3el2mBMXVE3H8=
+Date:   Fri, 23 Jun 2023 20:09:21 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 31/39] drm: renesas: shmobile: Turn vblank on/off when
+ enabling/disabling CRTC
+Message-ID: <20230623170921.GI2112@pendragon.ideasonboard.com>
+References: <cover.1687423204.git.geert+renesas@glider.be>
+ <c299dd21b17c43b56d4bc8bc0b2cad8d3edda397.1687423204.git.geert+renesas@glider.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230623155707.944272-1-ahalaney@redhat.com>
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: ps1W09bcuLMUPMOYI_SbyqSZgazmL5fE
-X-Proofpoint-ORIG-GUID: ps1W09bcuLMUPMOYI_SbyqSZgazmL5fE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-23_09,2023-06-22_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
- adultscore=0 clxscore=1011 impostorscore=0 spamscore=0 phishscore=0
- mlxlogscore=999 bulkscore=0 lowpriorityscore=0 priorityscore=1501
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306230153
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <c299dd21b17c43b56d4bc8bc0b2cad8d3edda397.1687423204.git.geert+renesas@glider.be>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 23, 2023 at 10:57:07AM -0500, Andrew Halaney wrote:
-> This way, if there's an issue (in this case a -EPROBE_DEFER), you can
-> get useful output:
-> 
->     [root@dhcp19-243-150 ~]# cat /sys/kernel/debug/devices_deferred
->     18591000.cpufreq        qcom-cpufreq-hw: Failed to find icc paths
-> 
-> Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
+Hi Geert,
 
-Reviewed-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+Thank you for the patch.
 
-Regards,
-Bjorn
+On Thu, Jun 22, 2023 at 11:21:43AM +0200, Geert Uytterhoeven wrote:
+> The DRM core vblank handling mechanism requires drivers to forcefully
+> turn vblank reporting off when disabling the CRTC, and to restore the
+> vblank reporting status when enabling the CRTC.
+> Implement this using the drm_crtc_vblank_{on,off}() helpers.
+> 
+> Note that drm_crtc_vblank_off() must be called at startup to synchronize
+> the state of the vblank core code with the hardware, which is initially
+> disabled.  This is performed at CRTC creation time, requiring vertical
+> blank initialization to be moved before creating CRTCs.
+> 
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 
 > ---
->  drivers/cpufreq/qcom-cpufreq-hw.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c | 10 +++++++++-
+>  drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c  | 12 ++++++------
+>  2 files changed, 15 insertions(+), 7 deletions(-)
 > 
-> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-> index a78d7a27b4b5..f2830371d25f 100644
-> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
-> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-> @@ -661,7 +661,7 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
+> diff --git a/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c b/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c
+> index d2a0ac5f9368c11c..b184019d8b1ed89c 100644
+> --- a/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c
+> +++ b/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c
+> @@ -267,6 +267,9 @@ static void shmob_drm_crtc_start(struct shmob_drm_crtc *scrtc)
 >  
->  	ret = dev_pm_opp_of_find_icc_paths(cpu_dev, NULL);
->  	if (ret)
-> -		return ret;
-> +		return dev_err_probe(dev, ret, "Failed to find icc paths\n");
+>  	shmob_drm_crtc_start_stop(scrtc, true);
 >  
->  	for (num_domains = 0; num_domains < MAX_FREQ_DOMAINS; num_domains++)
->  		if (!platform_get_resource(pdev, IORESOURCE_MEM, num_domains))
-> -- 
-> 2.40.1
-> 
+> +	/* Turn vertical blank interrupt reporting back on. */
+> +	drm_crtc_vblank_on(crtc);
+> +
+>  	scrtc->started = true;
+>  }
+>  
+> @@ -332,10 +335,12 @@ static void shmob_drm_crtc_stop(struct shmob_drm_crtc *scrtc)
+>  		return;
+>  
+>  	/*
+> -	 * Wait for page flip completion before stopping the CRTC as userspace
+> +	 * Disable vertical blank interrupt reporting.  We first need to wait
+> +	 * for page flip completion before stopping the CRTC as userspace
+>  	 * expects page flips to eventually complete.
+>  	 */
+>  	shmob_drm_crtc_wait_page_flip(scrtc);
+> +	drm_crtc_vblank_off(crtc);
+>  
+>  	/* Stop the LCDC. */
+>  	shmob_drm_crtc_start_stop(scrtc, false);
+> @@ -571,6 +576,9 @@ int shmob_drm_crtc_create(struct shmob_drm_device *sdev)
+>  
+>  	drm_crtc_helper_add(crtc, &crtc_helper_funcs);
+>  
+> +	/* Start with vertical blank interrupt reporting disabled. */
+> +	drm_crtc_vblank_off(crtc);
+> +
+>  	return 0;
+>  }
+>  
+> diff --git a/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c b/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c
+> index 6eaf2c5a104f451a..a29c0c1093725b6e 100644
+> --- a/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c
+> +++ b/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c
+> @@ -189,17 +189,17 @@ static int shmob_drm_probe(struct platform_device *pdev)
+>  	if (ret < 0)
+>  		return ret;
+>  
+> -	ret = shmob_drm_modeset_init(sdev);
+> -	if (ret < 0)
+> -		return dev_err_probe(&pdev->dev, ret,
+> -				     "failed to initialize mode setting\n");
+> -
+>  	ret = drm_vblank_init(ddev, 1);
+>  	if (ret < 0) {
+>  		dev_err(&pdev->dev, "failed to initialize vblank\n");
+> -		goto err_modeset_cleanup;
+> +		return ret;
+>  	}
+>  
+> +	ret = shmob_drm_modeset_init(sdev);
+> +	if (ret < 0)
+> +		return dev_err_probe(&pdev->dev, ret,
+> +				     "failed to initialize mode setting\n");
+> +
+>  	ret = platform_get_irq(pdev, 0);
+>  	if (ret < 0)
+>  		goto err_modeset_cleanup;
+
+-- 
+Regards,
+
+Laurent Pinchart
