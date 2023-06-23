@@ -2,165 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C8DF73BC44
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 18:03:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C558673BC47
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 18:03:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231393AbjFWQDW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 12:03:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33238 "EHLO
+        id S232099AbjFWQDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 12:03:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbjFWQDV (ORCPT
+        with ESMTP id S232043AbjFWQDc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 12:03:21 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADD36210A
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 09:03:19 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2b45c289615so13845271fa.1
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 09:03:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1687536198; x=1690128198;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0UUUtE/gOtOOjIJp13FnV3LETjhgWLdpmIzdJhfUTGs=;
-        b=bgpuJMih2D6iVGs9Xa5gO+96mNDc14lvDPz0FcXhPj6i+71o9Y8XOK1/4zunB6U0ES
-         pVIkfpaQlP/oavJ7LNyDxzlF81wUlZXStHvDxEQOsBHvoN792/suVDOQGNUu1K0CC2ej
-         H4QhvVNvWhHzPd+DcvvBM0l/QezfgErqLTCHl2XL9WJmQUOllhryfx9fEDC5nNCBwNnP
-         aeCN46z/bUoQnVEoWCQ3ZZWGVzhVAaKLLe/PUB5CRcGramM9GW7nl6j8Gddi7Xuajgir
-         StLAN6Q1FZQIm/Tp/vC9rNlzbPpsQ/ukLlIN2tihbfr0PkjksUDK4wHDf4UicPwRsZmx
-         JcUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687536198; x=1690128198;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0UUUtE/gOtOOjIJp13FnV3LETjhgWLdpmIzdJhfUTGs=;
-        b=R6d9yw+B/lBG5Q+yZi7LBAgYUsjCDAVIN4Gh2/jezT4q7C9zalhItetMEU1EiHREek
-         TMP4J+0TrpHbAOP9aGIrPJPdqfbvpXqA9AkC6Pmf80i8xFva/PNdkRR3EhUEB9eXfP9O
-         uLvHBx7sLzT1ILaPAUD2OC5k4Ed2PxE4WWJfPqmcyk0yYI5Alm33jihDaUbb7OA0kMIk
-         AUKUfQ4U5RHdExemrVMvUnSoUSj/AWBArZowsefHvtYJuBSRABXCryG3Bic+CZyq5iOp
-         cV+qck8ImrssT0n0JzrLz2uOAqa+kIn3bl2ufETdAntzjpcPyJyt59JlTzhAgDS4CQ6K
-         H8fQ==
-X-Gm-Message-State: AC+VfDwxkfr3hLpZZqPgDRX4fy4rXHhDyf5dLHAN+l/tT75T2wcFilg0
-        EDt6hFGTH+aWQ7kQRUxDos6feWGs7oqQZq3BhB3mlA==
-X-Google-Smtp-Source: ACHHUZ5gs63B4OgKe4Z9bhc9XG9nQHRewAACqLwt9yH/6emVAQY9Sd7+t/U547Rfa15qOqIHkxiE83q7UsHMNWYeVOk=
-X-Received: by 2002:a2e:96d0:0:b0:2b4:7965:419f with SMTP id
- d16-20020a2e96d0000000b002b47965419fmr10755146ljj.40.1687536197874; Fri, 23
- Jun 2023 09:03:17 -0700 (PDT)
+        Fri, 23 Jun 2023 12:03:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D01D1270D;
+        Fri, 23 Jun 2023 09:03:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 58F8C61A9F;
+        Fri, 23 Jun 2023 16:03:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCA79C433CB;
+        Fri, 23 Jun 2023 16:03:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687536210;
+        bh=rJAiY7DvRusfqKQ/9tX+7NJbcDf3hYdW67SlVu6b8Ps=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=GUX+/5uQvg6Bg8M8YCLrvmARyhXRLswbU8k3dv9nbRrPpFW661aFVon7eaBwwbbPA
+         z1CnV7sztvuCj19ZOEE/A0zElh24Lts+gtFjNjmrRDG+Jc0jOWdiVdyPsBjPIk7h3f
+         Yz21LOC+pJXIDgGrP/xRVYkMFq3RO0Dhr/5XXfNPus1nej7ow5xt8gBeuYB0ZkcnbC
+         GxMtQrTXFWMOw3O5Dehd0Qgziy24xTMRGPBQvtjdJTIIFWfI+T3cj0uNqofHSuQaMD
+         kL5LGaHq1dAjehM2A1Jy8bIQMwpulI3vU+2hr2JuYy3bZZ+Fn/lwC+9YuaXOlhYTv8
+         ntCp/57bxACEQ==
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-4f96da99965so1036935e87.1;
+        Fri, 23 Jun 2023 09:03:30 -0700 (PDT)
+X-Gm-Message-State: AC+VfDxydiPehohwm8wXTafxqWF0fn3yy3EGGo+Ay80FDKqmIZhZYgE4
+        iOUJyIsRgvKw4QxGAdtsyZJIUlnQL0lu66pEvQg=
+X-Google-Smtp-Source: ACHHUZ7PLoQP8phTP8/WxALdhKuPT/UQWgdoR/LtQuoyLK6qpHOlqVvniIj8rDnEDu9b7l837IWIHuIOelrRoml6wU4=
+X-Received: by 2002:ac2:499e:0:b0:4f8:6f40:4776 with SMTP id
+ f30-20020ac2499e000000b004f86f404776mr10070198lfl.46.1687536208757; Fri, 23
+ Jun 2023 09:03:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230616063210.19063-1-eric.lin@sifive.com> <20230616063210.19063-3-eric.lin@sifive.com>
- <20230616-revision-speed-a83dc926b334@wendy> <CAPqJEFo5genyjY7qJBaESzeppbEnTiDe9qzv98ETLhWfMZeG4A@mail.gmail.com>
- <20230621-stupor-violin-930ccc7d7593@spud> <20230623132402.GA17369@willie-the-truck>
-In-Reply-To: <20230623132402.GA17369@willie-the-truck>
-From:   Eric Lin <eric.lin@sifive.com>
-Date:   Sat, 24 Jun 2023 00:03:05 +0800
-Message-ID: <CAPqJEFp0r5tZJZ48nLakRd92zNf1D93hbTeGUsTyVuF+JAsJEw@mail.gmail.com>
-Subject: Re: [PATCH 2/3] soc: sifive: Add SiFive private L2 cache PMU driver
-To:     Will Deacon <will@kernel.org>
-Cc:     Conor Dooley <conor@kernel.org>,
-        Conor Dooley <conor.dooley@microchip.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, aou@eecs.berkeley.edu, maz@kernel.org,
-        chenhuacai@kernel.org, baolu.lu@linux.intel.com,
-        kan.liang@linux.intel.com, nnac123@linux.ibm.com,
-        pierre.gondois@arm.com, jgross@suse.com, chao.gao@intel.com,
-        maobibo@loongson.cn, linux-riscv@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dslin1010@gmail.com, Greentime Hu <greentime.hu@sifive.com>,
-        Zong Li <zong.li@sifive.com>, Nick Hu <nick.hu@sifive.com>,
-        mark.rutland@arm.com, arnd@arndb.de
+References: <20230623134351.1898379-1-kernel@xen0n.name> <20230623134351.1898379-5-kernel@xen0n.name>
+In-Reply-To: <20230623134351.1898379-5-kernel@xen0n.name>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Sat, 24 Jun 2023 00:03:16 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H6=yLvVdyOCdjFWrUe_MbG6PymTn5=o2rQOrpXLzcvhdQ@mail.gmail.com>
+Message-ID: <CAAhV-H6=yLvVdyOCdjFWrUe_MbG6PymTn5=o2rQOrpXLzcvhdQ@mail.gmail.com>
+Subject: Re: [PATCH 4/9] LoongArch: Make {read,write}_fcsr compatible with LLVM/Clang
+To:     WANG Xuerui <kernel@xen0n.name>
+Cc:     WANG Rui <wangrui@loongson.cn>, Xi Ruoyao <xry111@xry111.site>,
+        loongarch@lists.linux.dev, linux-kbuild@vger.kernel.org,
+        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        WANG Xuerui <git@xen0n.name>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Will,
+Hi, Xuerui,
 
-On Fri, Jun 23, 2023 at 9:24=E2=80=AFPM Will Deacon <will@kernel.org> wrote=
-:
+On Fri, Jun 23, 2023 at 9:44=E2=80=AFPM WANG Xuerui <kernel@xen0n.name> wro=
+te:
 >
-> Hi folks,
+> From: WANG Xuerui <git@xen0n.name>
 >
-> On Wed, Jun 21, 2023 at 04:17:24PM +0100, Conor Dooley wrote:
-> > On Tue, Jun 20, 2023 at 11:14:32AM +0800, Eric Lin wrote:
-> > > On Fri, Jun 16, 2023 at 6:13=E2=80=AFPM Conor Dooley <conor.dooley@mi=
-crochip.com> wrote:
-> > > > On Fri, Jun 16, 2023 at 02:32:09PM +0800, Eric Lin wrote:
-> > > > >  drivers/soc/sifive/Kconfig            |   9 +
-> > > > >  drivers/soc/sifive/Makefile           |   1 +
-> > > > >  drivers/soc/sifive/sifive_pl2.h       |  20 +
-> > > > >  drivers/soc/sifive/sifive_pl2_cache.c |  16 +
-> > > > >  drivers/soc/sifive/sifive_pl2_pmu.c   | 669 ++++++++++++++++++++=
-++++++
-> > > >
-> > > > Perf drivers should be in drivers/perf, no?
-> > > >
-> > >
-> > > But I grep perf_pmu_register(), it seems not all the pmu drivers are
-> > > in drivers/perf as below:
-> > >
-> > > arch/arm/mach-imx/mmdc.c:517:   ret =3D
-> > > perf_pmu_register(&(pmu_mmdc->pmu), name, -1);
-> > > arch/arm/mm/cache-l2x0-pmu.c:552:       ret =3D
-> > > perf_pmu_register(l2x0_pmu, l2x0_name, -1);
-> > > ...
-> > > drivers/dma/idxd/perfmon.c:627: rc =3D perf_pmu_register(&idxd_pmu->p=
-mu,
-> > > idxd_pmu->name, -1);
-> > > drivers/fpga/dfl-fme-perf.c:904:static int
-> > > fme_perf_pmu_register(struct platform_device *pdev,
-> > > drivers/fpga/dfl-fme-perf.c:929:        ret =3D perf_pmu_register(pmu=
-, name, -1);
-> > > ...
-> > > drivers/gpu/drm/amd/amdgpu/amdgpu_pmu.c:549:    ret =3D
-> > > perf_pmu_register(&pmu_entry->pmu, pmu_name, -1);
-> > > drivers/gpu/drm/i915/i915_pmu.c:1190:   ret =3D
-> > > perf_pmu_register(&pmu->base, pmu->name, -1);
-> > > drivers/hwtracing/coresight/coresight-etm-perf.c:907:   ret =3D
-> > > perf_pmu_register(&etm_pmu, CORESIGHT_ETM_PMU_NAME, -1);
-> > > drivers/hwtracing/ptt/hisi_ptt.c:895:   ret =3D
-> > > perf_pmu_register(&hisi_ptt->hisi_ptt_pmu, pmu_name, -1);
-> > > drivers/iommu/intel/perfmon.c:570:      return
-> > > perf_pmu_register(&iommu_pmu->pmu, iommu_pmu->pmu.name, -1);
-> > > drivers/nvdimm/nd_perf.c:309:   rc =3D perf_pmu_register(&nd_pmu->pmu=
-,
-> > > nd_pmu->pmu.name, -1);
-> > > ...
-> > >
-> > > I just wondering what kind of pmu drivers should be in drivers/perf
-> > > and what kind of pmu drivers should not be in drivers/perf.
-> > > Thanks.
-> >
-> > To be quite honest, I have no idea.
-> > I'm just a wee bit wary of taking anything that appears to have another
-> > home via drivers/soc. I'd rather break drivers out, using the aux bus o=
-r
-> > similar if need be, so that people who are knowledgeable in an area are
-> > CCed on patches.
-> > Hopefully Arnd or the Perf people can offer some guidance here. If it
-> > does go into drivers/soc, it'll need a review from someone knowledgeabl=
-e
-> > of perf anyway.
+> LLVM/Clang does not see FCSRs as GPRs, so make use of compiler
+> built-ins instead for better maintainability with less code.
 >
-> I'm not territorial about the perf drivers at all, but L2CC PMUs like thi=
-s
-> one probably fit pretty well in drivers/perf. The usual reason for puttin=
-g
-> drivers elsewhere is if the PMU is tightly coupled with some other IP whi=
-ch
-> is handled by another subsystem (e.g. GPU).
+> The existing version cannot be wholly removed though, because the
+> built-ins, while available on GCC too, is predicated TARGET_HARD_FLOAT,
+> which means soft-float code cannot make use of them.
 >
-Thanks for the explanation. OK, I'll put the pl2 cache PMU driver in
-drivers/perf.
+> Signed-off-by: WANG Xuerui <git@xen0n.name>
+> ---
+>  arch/loongarch/include/asm/loongarch.h | 19 +++++++++++++------
+>  1 file changed, 13 insertions(+), 6 deletions(-)
+>
+> diff --git a/arch/loongarch/include/asm/loongarch.h b/arch/loongarch/incl=
+ude/asm/loongarch.h
+> index ac83e60c60d1..eedc313b5241 100644
+> --- a/arch/loongarch/include/asm/loongarch.h
+> +++ b/arch/loongarch/include/asm/loongarch.h
+> @@ -1445,12 +1445,6 @@ __BUILD_CSR_OP(tlbidx)
+>  #define EXCCODE_INT_START      64
+>  #define EXCCODE_INT_END                (EXCCODE_INT_START + EXCCODE_INT_=
+NUM - 1)
+>
+> -/* FPU register names */
+> -#define LOONGARCH_FCSR0        $r0
+> -#define LOONGARCH_FCSR1        $r1
+> -#define LOONGARCH_FCSR2        $r2
+> -#define LOONGARCH_FCSR3        $r3
+> -
+>  /* FPU Status Register Values */
+>  #define FPU_CSR_RSVD   0xe0e0fce0
+>
+> @@ -1487,6 +1481,18 @@ __BUILD_CSR_OP(tlbidx)
+>  #define FPU_CSR_RU     0x200   /* towards +Infinity */
+>  #define FPU_CSR_RD     0x300   /* towards -Infinity */
+>
+> +#ifdef CONFIG_CC_IS_CLANG
+> +#define LOONGARCH_FCSR0        0
+> +#define LOONGARCH_FCSR1        1
+> +#define LOONGARCH_FCSR2        2
+> +#define LOONGARCH_FCSR3        3
+> +#define read_fcsr(source)      __movfcsr2gr(source)
+> +#define write_fcsr(dest, val)  __movgr2fcsr(dest, val)
+> +#else /* CONFIG_CC_IS_CLANG */
+> +#define LOONGARCH_FCSR0        $r0
+> +#define LOONGARCH_FCSR1        $r1
+> +#define LOONGARCH_FCSR2        $r2
+> +#define LOONGARCH_FCSR3        $r3
+>  #define read_fcsr(source)      \
+>  ({     \
+>         unsigned int __res;     \
+Now the latest binutils also supports $fcsr, so I suggest to always
+use inline asm, and change CONFIG_CC_IS_CLANG to
+CONFIG_AS_HAS_FCSR_CLASS. And of course, Patch3 and Patch4 can be
+merged then.
 
-Best Regards,
-Eric Lin.
+Huacai
 
-> Will
+> @@ -1503,5 +1509,6 @@ do {      \
+>         "       movgr2fcsr      "__stringify(dest)", %0 \n"     \
+>         : : "r" (val)); \
+>  } while (0)
+> +#endif /* CONFIG_CC_IS_CLANG */
+>
+>  #endif /* _ASM_LOONGARCH_H */
+> --
+> 2.40.0
+>
