@@ -2,109 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2980273B258
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 10:09:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ED8573B25C
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 10:09:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231608AbjFWIJE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 04:09:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49864 "EHLO
+        id S231623AbjFWIJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 04:09:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230038AbjFWIJA (ORCPT
+        with ESMTP id S230038AbjFWIJO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 04:09:00 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E2972105
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 01:08:58 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-9875c2d949eso38632866b.0
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 01:08:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687507737; x=1690099737;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=61hnG3yUipEfgXuHCHhviz9DgCyYNvHGYoGPWJLkt/M=;
-        b=erVJdjwtwrJVStyE4E6L/LQ7dXXdbhaZpYTLFOPE5MP/FrFoqWsvDKNv1ZaVYZhBeY
-         8F0Ado+HM0ImBANx1Ix83OyqMUQUgfUILLke5lZaFPsZ0K+7ioCg1HIP9nyoTNqxHB3U
-         cbeHHcS0xow0A27FGCoHnzj0DthAj8z3Yt5hV8TOMgLTJ1bUWo2J1tyRE0BjeQJn8eLK
-         MziKEInTKThFdGKGiM81SC+3jYev2Dpg25Hn68yMzJZcrFtU0hwMCLyO/IHMgtE3Shb0
-         nMwho1uUPNvP6bdcWwHdQKUk/noVTXSwrlZyFogs0KXtyF+3G+16fCv2y9xvXhxUEpMd
-         Nrfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687507737; x=1690099737;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=61hnG3yUipEfgXuHCHhviz9DgCyYNvHGYoGPWJLkt/M=;
-        b=YAEl9KPTFdMBSP4emaPY3Izu63ybtEDTyqxbjc1pdoxnuvtqU7x89ntvqJZgO5m1yA
-         +KeE6oPkbmKJPQ+vGmiWSG7s/uBrtRG5xG1azCTUWmwEuZSXtj1wJTllKcSR0sRSy+YW
-         Wx8mjGbI2Rwf4lf+ZZ6j7oOrSfgNCp98jbGnAfY8akUWGUF/Ki+VBD8kiGdotjZbXGy3
-         vbVjKuXrGG+7B2BzIC0VO+2opTJI8NIaH1ZMK/GN0gAhjg8Sfszg8uTd36atQCWdPRQA
-         HE8wt4/nHNNvFTiRfiKFq4XlKNOohwxsAOWrdx8FvTFDQVx2VfTL8S6QFulJYUyLydlz
-         zhpw==
-X-Gm-Message-State: AC+VfDx+LxdPcVu7W7Pg2fZ31Tdt5aTuVxTBP0/ctO0xvoX82HSFW5kF
-        W8iqbaf0M4bD0J18nFT3XI80IA==
-X-Google-Smtp-Source: ACHHUZ5fEluowmDvQcOv9Mfk479MA+dnDrPOx6btNBBr0J7FqLU5b9fcKOilyObJt2z9EU0JqRmjfg==
-X-Received: by 2002:a17:906:da84:b0:988:f307:aea7 with SMTP id xh4-20020a170906da8400b00988f307aea7mr11442363ejb.7.1687507736928;
-        Fri, 23 Jun 2023 01:08:56 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id d1-20020a1709064c4100b0096f7cf96525sm5747617ejw.146.2023.06.23.01.08.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Jun 2023 01:08:56 -0700 (PDT)
-Message-ID: <dd12208c-baec-8628-163f-828575bf10b1@linaro.org>
-Date:   Fri, 23 Jun 2023 10:08:53 +0200
+        Fri, 23 Jun 2023 04:09:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6593A1FE7;
+        Fri, 23 Jun 2023 01:09:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BBD3B619A2;
+        Fri, 23 Jun 2023 08:09:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 984DEC433C8;
+        Fri, 23 Jun 2023 08:09:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1687507752;
+        bh=x8YJqDiZFJOVAVqo60AZcX0NUgfmu2n2j8kc3y3jm+0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=voTzrPmkWyo3rA9zp+7cRrpg8bPp9ALFPbe+bSEIa5lOVSi2Go8ycIl/j3ai9ruwC
+         8WMDnFbngIHjECnpT1WeJv6OXPMVJEJXKk8ft+F+BIVg4o/oee22bveAhE1FM9ax4c
+         WkACxJo3njKexq+DI54Q4n3nK2zvxTT9sWZ6WwUE=
+Date:   Fri, 23 Jun 2023 10:09:09 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Avadhut Naik <avadhut.naik@amd.com>
+Cc:     rafael@kernel.org, lenb@kernel.org, linux-acpi@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, yazen.ghannam@amd.com,
+        alexey.kardashevskiy@amd.com, linux-kernel@vger.kernel.org,
+        avadnaik@amd.com
+Subject: Re: [PATCH v4 3/4] platform/chrome: cros_ec_debugfs: Fix permissions
+ for panicinfo
+Message-ID: <2023062357-deceased-rejoicing-03d6@gregkh>
+References: <20230621035102.13463-1-avadhut.naik@amd.com>
+ <20230621035102.13463-4-avadhut.naik@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2 2/6] dt-bindings: phy: qcom,m31: Document qcom,m31 USB
- phy
-Content-Language: en-US
-To:     Varadarajan Narayanan <quic_varada@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, vkoul@kernel.org,
-        kishon@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        gregkh@linuxfoundation.org, catalin.marinas@arm.com,
-        will@kernel.org, p.zabel@pengutronix.de, arnd@arndb.de,
-        geert+renesas@glider.be, neil.armstrong@linaro.org,
-        nfraprado@collabora.com, broonie@kernel.org, rafal@milecki.pl,
-        quic_srichara@quicinc.com, quic_varada@quicinc.org,
-        quic_wcheng@quicinc.com, linux-arm-msm@vger.kernel.org,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <cover.1687414716.git.quic_varada@quicinc.com>
- <4f4136a91b24d3ad35fa12bd19fe14b83da9affe.1687414716.git.quic_varada@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <4f4136a91b24d3ad35fa12bd19fe14b83da9affe.1687414716.git.quic_varada@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230621035102.13463-4-avadhut.naik@amd.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/06/2023 08:22, Varadarajan Narayanan wrote:
-> Document the M31 USB2 phy present in IPQ5332.
+On Wed, Jun 21, 2023 at 03:51:01AM +0000, Avadhut Naik wrote:
+> From: Avadhut Naik <Avadhut.Naik@amd.com>
 > 
+> The debugfs_create_blob() function has been used to create read-only binary
+> blobs in debugfs. The function filters out permissions, other than S_IRUSR,
+> S_IRGRP and S_IROTH, provided while creating the blobs.
+> 
+> The very behavior though is being changed through previous patch in the
+> series (fs: debugfs: Add write functionality to debugfs blobs) which makes
+> the binary blobs writable.
+> 
+> As such, rectify the permissions of panicinfo file to ensure it remains
+> read-only.
+> 
+> Signed-off-by: Avadhut Naik <Avadhut.Naik@amd.com>
 
-> +description:
-> +  USB M31 PHY found in Qualcomm IPQ5018, IPQ5332 SoCs.
-> +
-> +properties:
-> +  compatible:
-> +    items:
-
-Also drop items.
-
-> +      - enum:
-> +          - qcom,ipq5332-usb-hsphy
-> +
-
-
-Best regards,
-Krzysztof
-
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
