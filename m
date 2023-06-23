@@ -2,54 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3A1973AF47
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 06:13:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A731373AF4A
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 06:14:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231286AbjFWENK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 00:13:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39998 "EHLO
+        id S231297AbjFWEOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 00:14:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230350AbjFWEND (ORCPT
+        with ESMTP id S229628AbjFWEOH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 00:13:03 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F10892117
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 21:12:58 -0700 (PDT)
+        Fri, 23 Jun 2023 00:14:07 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1B1B2116
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 21:14:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687493578; x=1719029578;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=vpq3KTccPLYbTcrUvpJYgigfCRCzXQUnV2vaEnLrOuE=;
-  b=mDHBJzHk9/AgVvi9Q0FeVq2lBp2vjiqaPKDGcl/oQOYnu/J6455Vp8d6
-   nTGeFnkEe+fIXY6EyBEte/rio4fb6Cql3i9BMFMyBApwEPPGGk6s+SHYg
-   jYwlVJHc/cwwM4lRPP6FjpPUAWXBzJ2i5ZKtpdCCPu657gkqMa5/v5jME
-   KyLq5QxyZ6XqJdJ4u2OpBKixO8BH0LlZ6YuciLsza3u6QZNX1Vf81XSoq
-   L/ZjmvAD/JD/yPKBnogpLcCsK3egWAGoiAxZknCeO9L/45Ut7R+lD54wk
-   Im1Rs78nPz+fR9kHKAO4VVhy5AUrV2DvihOR7IRng+A+cmoeticJuDtH+
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="360705353"
+  t=1687493645; x=1719029645;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=pezzVGVqtBDROV1XjDruKDPfTik1gHEt+FcVzS1lrbs=;
+  b=aMLOizBuTK42pxtHaLB5oCnm5cd0I8breUpreGiMsf+degFrOYbnUxql
+   xZvW7XOO46IJ44g6et3gn6wcomuzO3ek5fpoSE/Oh4IEKVhwHFAEq8155
+   BbkY+dM3A+3suiZIU4n5uEfrwQz76BH12nhoBc9ez3uV3MDkV9BAArxWk
+   HVX3G0TGLUrOT68l/X/8p6OO/5aNxyKE0/DAI+sow8Tts6cpXWf94OQWI
+   ZOGoNnTz5VF0M1g3imWAanwz0yRd3E9CrHz4sunXtRqOxGertmt5Mq1La
+   o/jV7Pzw7UzIkL6ov8AAa2fG2UnewglufHQkaPwhZ4Xl/CkJwI3NdxRET
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="359543346"
 X-IronPort-AV: E=Sophos;i="6.01,150,1684825200"; 
-   d="scan'208";a="360705353"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 21:12:58 -0700
-X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="749627071"
+   d="scan'208";a="359543346"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 21:14:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="665342239"
 X-IronPort-AV: E=Sophos;i="6.01,150,1684825200"; 
-   d="scan'208";a="749627071"
-Received: from unknown (HELO localhost.localdomain) ([10.226.216.90])
-  by orsmga001.jf.intel.com with ESMTP; 22 Jun 2023 21:12:55 -0700
-From:   tien.sung.ang@intel.com
-To:     Dinh Nguyen <dinguyen@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Ang Tien Sung <tien.sung.ang@intel.com>
-Subject: [PATCH 1/1] firmware: stratix10-svc: fix bug in saving controller data
-Date:   Fri, 23 Jun 2023 12:12:19 +0800
-Message-Id: <20230623041219.1865239-2-tien.sung.ang@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230623041219.1865239-1-tien.sung.ang@intel.com>
-References: <20230623041219.1865239-1-tien.sung.ang@intel.com>
+   d="scan'208";a="665342239"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 22 Jun 2023 21:13:56 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qCYBH-0007yl-2f;
+        Fri, 23 Jun 2023 04:13:55 +0000
+Date:   Fri, 23 Jun 2023 12:13:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Syed Saba Kareem <Syed.SabaKareem@amd.com>, broonie@kernel.org,
+        alsa-devel@alsa-project.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Vijendar.Mukunda@amd.com, Basavaraj.Hiregoudar@amd.com,
+        Sunil-kumar.Dommati@amd.com,
+        Syed Saba Kareem <Syed.SabaKareem@amd.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        V Sujith Kumar Reddy <vsujithkumar.reddy@amd.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Venkata Prasad Potturu <venkataprasad.potturu@amd.com>,
+        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 05/12] ASoC: amd: acp: remove the redundant acp
+ enable/disable interrupts functions
+Message-ID: <202306231233.NynpYomQ-lkp@intel.com>
+References: <20230622152406.3709231-9-Syed.SabaKareem@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230622152406.3709231-9-Syed.SabaKareem@amd.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -60,65 +79,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ang Tien Sung <tien.sung.ang@intel.com>
+Hi Syed,
 
-Fix the incorrect usage of platform_set_drvdata and dev_set_drvdata.
-They both are of the same data and overrides each other. This resulted
-in the rmmod of the svc driver to fail and throw a kernel panic for
-kthread_stop and fifo free.
+kernel test robot noticed the following build errors:
 
-Signed-off-by: Ang Tien Sung <tien.sung.ang@intel.com>
----
- drivers/firmware/stratix10-svc.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+[auto build test ERROR on broonie-sound/for-next]
+[also build test ERROR on linus/master v6.4-rc7 next-20230622]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/drivers/firmware/stratix10-svc.c b/drivers/firmware/stratix10-svc.c
-index 80f4e2d14e04..cb72e52bd681 100644
---- a/drivers/firmware/stratix10-svc.c
-+++ b/drivers/firmware/stratix10-svc.c
-@@ -133,6 +133,7 @@ struct stratix10_svc_data {
-  * @complete_status: state for completion
-  * @svc_fifo_lock: protect access to service message data queue
-  * @invoke_fn: function to issue secure monitor call or hypervisor call
-+ * @svc: manages the list of client svc drivers
-  *
-  * This struct is used to create communication channels for service clients, to
-  * handle secure monitor or hypervisor call.
-@@ -149,6 +150,7 @@ struct stratix10_svc_controller {
- 	struct completion complete_status;
- 	spinlock_t svc_fifo_lock;
- 	svc_invoke_fn *invoke_fn;
-+	struct stratix10_svc *svc;
- };
- 
- /**
-@@ -1191,6 +1193,7 @@ static int stratix10_svc_drv_probe(struct platform_device *pdev)
- 		ret = -ENOMEM;
- 		goto err_free_kfifo;
- 	}
-+	controller->svc = svc;
- 
- 	svc->stratix10_svc_rsu = platform_device_alloc(STRATIX10_RSU, 0);
- 	if (!svc->stratix10_svc_rsu) {
-@@ -1218,8 +1221,6 @@ static int stratix10_svc_drv_probe(struct platform_device *pdev)
- 		goto err_unregister_dev;
- 	}
- 
--	dev_set_drvdata(dev, svc);
--
- 	pr_info("Intel Service Layer Driver Initialized\n");
- 
- 	return 0;
-@@ -1235,8 +1236,8 @@ static int stratix10_svc_drv_probe(struct platform_device *pdev)
- 
- static int stratix10_svc_drv_remove(struct platform_device *pdev)
- {
--	struct stratix10_svc *svc = dev_get_drvdata(&pdev->dev);
- 	struct stratix10_svc_controller *ctrl = platform_get_drvdata(pdev);
-+	struct stratix10_svc *svc = ctrl->svc;
- 
- 	platform_device_unregister(svc->intel_svc_fcs);
- 	platform_device_unregister(svc->stratix10_svc_rsu);
+url:    https://github.com/intel-lab-lkp/linux/commits/Syed-Saba-Kareem/ASoC-amd-acp-remove-acp-poweroff-function/20230622-233145
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+patch link:    https://lore.kernel.org/r/20230622152406.3709231-9-Syed.SabaKareem%40amd.com
+patch subject: [PATCH 05/12] ASoC: amd: acp: remove the redundant acp enable/disable interrupts functions
+config: i386-buildonly-randconfig-r006-20230622 (https://download.01.org/0day-ci/archive/20230623/202306231233.NynpYomQ-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230623/202306231233.NynpYomQ-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306231233.NynpYomQ-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined symbol: acp_enable_interrupts
+   >>> referenced by acp-renoir.c:191 (sound/soc/amd/acp/acp-renoir.c:191)
+   >>>               sound/soc/amd/acp/acp-renoir.o:(renoir_audio_probe) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: acp_disable_interrupts
+   >>> referenced by acp-renoir.c:202 (sound/soc/amd/acp/acp-renoir.c:202)
+   >>>               sound/soc/amd/acp/acp-renoir.o:(renoir_audio_remove) in archive vmlinux.a
+   pahole: .tmp_vmlinux.btf: Invalid argument
+   ld.lld: error: .btf.vmlinux.bin.o: unknown file type
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
