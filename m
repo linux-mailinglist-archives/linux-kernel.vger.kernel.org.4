@@ -2,144 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 279BB73B134
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 09:20:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89C0973B132
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 09:19:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231159AbjFWHUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 03:20:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55358 "EHLO
+        id S230314AbjFWHTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 03:19:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230151AbjFWHT6 (ORCPT
+        with ESMTP id S229607AbjFWHTl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 03:19:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 206982134;
-        Fri, 23 Jun 2023 00:19:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Fri, 23 Jun 2023 03:19:41 -0400
+Received: from relay06.th.seeweb.it (relay06.th.seeweb.it [5.144.164.167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44E31C6;
+        Fri, 23 Jun 2023 00:19:40 -0700 (PDT)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 575AB61985;
-        Fri, 23 Jun 2023 07:19:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BF94C433C8;
-        Fri, 23 Jun 2023 07:19:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687504795;
-        bh=mRTvW/o0xmVdwrv39D1Fas9Eznwc5euBRtXh8CpBW0o=;
-        h=From:To:Cc:Subject:Date:From;
-        b=eIptzNpzAjuBrYBJgzYUHiNnP/v7uie4yD6pV7JQFjQqwmhlgC4/nhDdYUM02+8O9
-         3G7oa5knVtIplakMilPOwkiF3ZmEczXIM1gufU9nNrQ5t7jR6dIPagGytX2kAUrcHa
-         yMhSS84S70R8a8Bv2L/UQaKJmS6Nd23kstz2sT6nS4vrLDRUlMU9/jH92gMwVO72xm
-         K64bC+ABCK8JuKvtEUoOlcydNFLU90y0vKE6jl/1wwgAASOp0FXpRY/dtGyrp2AX85
-         Y7EMZ6BEe6K3d+Ay7Nzu4x2a39BxXZmV/Ev6VPqmul46ivLOoOMWNSQtfCMGPY7sSM
-         gEWAaRgepjNBA==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Functional Testing <lkft@linaro.org>,
-        Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] clk: imx: Drop inclusion of unused header <soc/imx/timer.h>
-Date:   Fri, 23 Jun 2023 09:19:19 +0200
-Message-Id: <20230623071948.3254789-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 6C97D3EBDD;
+        Fri, 23 Jun 2023 09:19:38 +0200 (CEST)
+Date:   Fri, 23 Jun 2023 09:19:35 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     Jessica Zhang <quic_jesszhan@quicinc.com>,
+        freedreno@lists.freedesktop.org, Sean Paul <sean@poorly.run>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Rob Clark <robdclark@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        David Airlie <airlied@gmail.com>
+Subject: Re: [Freedreno] [PATCH 3/3] drm/msm/dsi: Enable DATABUS_WIDEN for
+ DSI command mode
+Message-ID: <xrqiat4otnfwtss6zwubh77qx3frdyi77flna2xljzycvr6r2v@riimvmhoondt>
+References: <20230525-add-widebus-support-v1-0-c7069f2efca1@quicinc.com>
+ <20230525-add-widebus-support-v1-3-c7069f2efca1@quicinc.com>
+ <ky7sgsaohak2pcdf6pbhedfyrwk4ea7y3ekfqlw7rn6cpk4rhe@rjuhb23n37oz>
+ <cf968ab4-e4c4-dcad-f7d1-4edff6f08147@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cf968ab4-e4c4-dcad-f7d1-4edff6f08147@quicinc.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On 2023-06-22 17:01:34, Abhinav Kumar wrote:
+<snip>
+> > More interesting would be a link to the Mesa MR upstreaming this
+> > bitfield to dsi.xml [2] (which I have not found on my own yet).
+> > 
+> > [2]: https://gitlab.freedesktop.org/mesa/mesa/-/blame/main/src/freedreno/registers/dsi/dsi.xml
+> > 
+> 
+> Thats because we havent submitted a MR yet for this on mesa.
+> 
+> Generally, our team does not have legal permissions yet for mesa MRs 
+> other than mesa drm because we got permissions for the modetest.
+> 
+> Rob/Dmitry, can one of you pls help with the corresponding mesa MR for this?
 
-After removing this header in the clocksource tree, the clk drivers no
-longer build:
+Thanks!
 
-drivers/clk/imx/clk-imx1.c:13:10: fatal error: 'soc/imx/timer.h' file not found
-drivers/clk/imx/clk-imx27.c:11:10: fatal error: 'soc/imx/timer.h' file not found
+> The xml file change was autogenerated so this patch can go in.
+<snip>
+> >>   		 *
+> >>   		 * hdisplay will be divided by 3 here to account for the fact
+> >>   		 * that DPU sends 3 bytes per pclk cycle to DSI.
+> >> +		 *
+> >> +		 * If widebus is supported, set DATABUS_WIDEN register and divide hdisplay by 6
+> >> +		 * instead of 3
+> > 
+> > So this should allow us to divide pclk by 2, or have much lower latency?
+> > Otherwise it'll tick enough times to transmit the data twice.
+> > 
+> > Note that I brought up the exact same concerns when you used the 3:1
+> > ratio from dsi_bpp / dsc_bpp in your pclk reduction patch (instad of the
+> > number of bits/bytes that DPU sends to DSI per pclk), but no-one has
+> > replied to my inquiry yet.
+> > 
+> 
+> Ideally yes, we could have done pclk/2 on uncompressed pixels but we are 
+> not going to add support for widebus on DSI without DSC as that is not 
+> recommended in our docs.
 
-This patch was originally posted as part of a three-patch series, but only
-patches 1 and 3 got applied.
+No-one here mentioned uncompressed pixels?
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-Fixes: 9e9d7570485d7 ("clocksource/drivers/imx-gpt: Fold <soc/imx/timer.h> into its only user")
-Link: https://lore.kernel.org/all/20230328100531.879485-2-u.kleine-koenig@pengutronix.de/
-Signed-off-by: "Uwe Kleine-König" <u.kleine-koenig@pengutronix.de>
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
-I would suggest merging this through the clocksource tree as well, which
-now has the third patch.
----
- drivers/clk/imx/clk-imx1.c  | 1 -
- drivers/clk/imx/clk-imx27.c | 1 -
- drivers/clk/imx/clk-imx31.c | 1 -
- drivers/clk/imx/clk-imx35.c | 1 -
- 4 files changed, 4 deletions(-)
+None of this code suddenly makes DPU send twice as many pixels/bytes to
+the DSI, yet we are enabling a feature that makes the bus twice as wide,
+so the clock can be halved *for comressed pixels*?
 
-diff --git a/drivers/clk/imx/clk-imx1.c b/drivers/clk/imx/clk-imx1.c
-index 22fc7491ba008..f6ea7e5052d56 100644
---- a/drivers/clk/imx/clk-imx1.c
-+++ b/drivers/clk/imx/clk-imx1.c
-@@ -10,7 +10,6 @@
- #include <linux/of.h>
- #include <linux/of_address.h>
- #include <dt-bindings/clock/imx1-clock.h>
--#include <soc/imx/timer.h>
- #include <asm/irq.h>
- 
- #include "clk.h"
-diff --git a/drivers/clk/imx/clk-imx27.c b/drivers/clk/imx/clk-imx27.c
-index 5d177125728df..99618ded09397 100644
---- a/drivers/clk/imx/clk-imx27.c
-+++ b/drivers/clk/imx/clk-imx27.c
-@@ -8,7 +8,6 @@
- #include <linux/of_address.h>
- #include <dt-bindings/clock/imx27-clock.h>
- #include <soc/imx/revision.h>
--#include <soc/imx/timer.h>
- #include <asm/irq.h>
- 
- #include "clk.h"
-diff --git a/drivers/clk/imx/clk-imx31.c b/drivers/clk/imx/clk-imx31.c
-index c44e18c6f63f7..4c8d9ff0b2ad5 100644
---- a/drivers/clk/imx/clk-imx31.c
-+++ b/drivers/clk/imx/clk-imx31.c
-@@ -11,7 +11,6 @@
- #include <linux/of.h>
- #include <linux/of_address.h>
- #include <soc/imx/revision.h>
--#include <soc/imx/timer.h>
- #include <asm/irq.h>
- 
- #include "clk.h"
-diff --git a/drivers/clk/imx/clk-imx35.c b/drivers/clk/imx/clk-imx35.c
-index 7dcbaea3fea35..3b6fdb4e0be78 100644
---- a/drivers/clk/imx/clk-imx35.c
-+++ b/drivers/clk/imx/clk-imx35.c
-@@ -10,7 +10,6 @@
- #include <linux/of.h>
- #include <linux/err.h>
- #include <soc/imx/revision.h>
--#include <soc/imx/timer.h>
- #include <asm/irq.h>
- 
- #include "clk.h"
--- 
-2.39.2
+> So this cannot be done.
+> 
+> We tried our best to respond and explain to all your queries both on the 
+> bug and the patch but i guess it just kept coming :)
 
+Then send less patches!  As long as there is activity on the mailing
+list there'll always be questions going back and forth, and I don't
+think that's unreasonable.
+
+Unless you want to push patches into mainline without questioning.
+
+> I am going to try one more time to explain it in the documentation change.
+
+Would love to hear, why, for compressed streams, the bus is twice as
+wide yet pclk is not reduced to account for that.
+
+<snip>
+> > Can we also support widebus for uncompressed streams (sending 2 pixels
+> > of bpp=24 per pclk), and if so, is that something you want to add in the
+> > future (a comment would be nice)?
+> 
+> No, we cannot support widebus on uncompressed streams on DSI so we wont 
+> be adding that.
+
+And here we start talking about uncompressed pixels *separately*.  Okay,
+if it is not supported (e.g. widebus is specific to / reserved for DSC)
+it of course makes no sense to add it.
+
+- Marijn
