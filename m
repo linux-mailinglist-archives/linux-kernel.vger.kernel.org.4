@@ -2,72 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 532B873BAC3
+	by mail.lfdr.de (Postfix) with ESMTP id 9AE7473BAC4
 	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 16:52:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231145AbjFWOwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 10:52:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45300 "EHLO
+        id S231755AbjFWOws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 10:52:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232387AbjFWOwY (ORCPT
+        with ESMTP id S232389AbjFWOwY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 23 Jun 2023 10:52:24 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53946273E;
-        Fri, 23 Jun 2023 07:52:07 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3fa0253b9e7so7341735e9.1;
-        Fri, 23 Jun 2023 07:52:07 -0700 (PDT)
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 770E92947;
+        Fri, 23 Jun 2023 07:52:08 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f640e48bc3so912173e87.2;
+        Fri, 23 Jun 2023 07:52:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687531925; x=1690123925;
+        d=gmail.com; s=20221208; t=1687531926; x=1690123926;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=B3keFXyYxAjQYtSZa6MYtEortI8BrTUPT1JTwkzq5vU=;
-        b=V/C/eQtE7bkb3qRA18sldaife0yyK3/9rF2RuIMXV5U1f8na7mIjDXCldVpaBbaqNX
-         RTYx3naOUEX3CobqEzScq+3kq3/8jkiEilQFwIgzmS22QYac9ygwXSeb+/ZSFKPk/yIq
-         Q+f4U5IQZweGwZmjwmv992My8vdQQG5ewoEOJLOcIjdZeHSzoOmRCgUaCACVaJvmmagV
-         ZaOC2g/OJUGyMYsNyHGef6SOzUq1qvfGMQOCp04IxVzi4hyvo9uoA14M9MBx038r3sne
-         NxXOQzS1NC65IWUJtwzfRGBh8a5WGhmyGSvle9+vQMJIhd16QsjhqBTyApsvk05mS9xV
-         ge/Q==
+        bh=eOAX4+A4m0E167xtJYkA4sIkJeoCW8DDUIaJ2NdOXVE=;
+        b=q4pYrXPEdWuF5Buh+yCzF8VfQ/xYyEXosWT85bmj0Rto8DxK1sgsNrz0qhYYS+XZ/F
+         Dk4457EKCjzCCtnYHWgbVDyqsNn5pUU2baoicvltQQP35bvpiA64FXVI1qrWWWlPh/G8
+         wJXX91OwzCW0PkrkFqEoqp9L2C+CCF3Jt4iBb8Rv8HiDhxilldLINYOSb3b9czcPTDlC
+         qIP0bwSMakvAAHU+9yzn8e8vzxeKSEmUPlPgKIEks4XDIeHsWN4emxxFjgSYkabYPygT
+         eCdU5mE2IVUb6ioS2nOfG7o18K5Y5+8IMi1IT054uMGqRNg6cOYwsyGD7b5jbtju1mKc
+         0k8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687531925; x=1690123925;
+        d=1e100.net; s=20221208; t=1687531926; x=1690123926;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=B3keFXyYxAjQYtSZa6MYtEortI8BrTUPT1JTwkzq5vU=;
-        b=IdxJI92wDa3d+BlYs7fsc0FMHBUcNapO30duU2E0IYJondcHSH1QqiQydj8umkgv5t
-         dDtUJHu6/mf2X/SEOaNCZtHCN8nG/5lZ1PI2qhgQ1KixzmRdVB3OeCzy0qedJ+LWdTbC
-         WR6obdT3dvUjBKAfMdGrrt9WZ1DT/8VtQw0jYG03iPVI8EDnLPl+HU2hX3KXFHhdM6XT
-         COJp27rV0yMC0IEkwJ6Wyp59BqMrhd0Oxavjh6TmmtPTSD8X3xC6iYaLwfe6HJGLMv+W
-         j+f9uC24BUOT4YqvBtL26YxaAbupUl7ewJuMeGsuov4FVncDyBY55jN5jwssYeNfqlNy
-         Rf5Q==
-X-Gm-Message-State: AC+VfDxKltR+ju0p3OcAhtis0mNM6EGUXyo/lhDMdWqzPdpIuTE8x+mX
-        HqkYRcfxc1QMQ6Oqkx2n3RjzD9krLTY=
-X-Google-Smtp-Source: ACHHUZ4s7ag/+YAr5I+URwo1+sTL7+qmBGPPj8zPPmPW079qM6s3NeI17ljypQKQztEiAX4gcbAGaA==
-X-Received: by 2002:a05:600c:3b97:b0:3f9:b535:381a with SMTP id n23-20020a05600c3b9700b003f9b535381amr11838348wms.10.1687531925110;
-        Fri, 23 Jun 2023 07:52:05 -0700 (PDT)
+        bh=eOAX4+A4m0E167xtJYkA4sIkJeoCW8DDUIaJ2NdOXVE=;
+        b=YPNODfW98kpp+mPIrQmckptO1S+CR7mRddQsq76GfSXHvfIa4q2pM7d497VSvtCj05
+         btVhyGyhuSO/jmVwL1sGmKeQXjRNZAnDAYA43fVR18BNCQs1MnUQo+VoYftbOUPZIANF
+         0/pODt+xGM/Bv+y6gRdBUMG5iiVm9/Agp4LlZbC72nEfNNegnQ70qife7ButaQS3pfco
+         Kj2vnn1pcyKyAIutC0m/vYq8Fw/YEzqjtNYbx4m7XzZC+9X+aMiobhmSKnsI0UKwIZdg
+         Fs67Ass4mboZRP3MHjjdTal/yt+KHvk9JCDcjPBDVKrWywEPI06bc9MaRntpg78hrjNx
+         VEkg==
+X-Gm-Message-State: AC+VfDxcFfeH66YrBjgd+6eIIDz7ypqrvSei/x8sZE3IGf8RuILGVaj0
+        q3A4BAOrlVADmVX3HnMSDny78I1OtgU=
+X-Google-Smtp-Source: ACHHUZ71/qcV9YZh9KegTU/GA40seUiP9bMybgbNSWkr5zRGdgqoqHBfDqI6IUfw5FzqGKa1DnI/Fg==
+X-Received: by 2002:a19:6d12:0:b0:4f5:a181:97b8 with SMTP id i18-20020a196d12000000b004f5a18197b8mr12983661lfc.25.1687531926115;
+        Fri, 23 Jun 2023 07:52:06 -0700 (PDT)
 Received: from localhost (p200300e41f305300f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f30:5300:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id r19-20020a05600c285300b003f8ec58995fsm2606614wmb.6.2023.06.23.07.52.04
+        by smtp.gmail.com with ESMTPSA id f23-20020a1c6a17000000b003eddc6aa5fasm2522679wmc.39.2023.06.23.07.52.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Jun 2023 07:52:04 -0700 (PDT)
+        Fri, 23 Jun 2023 07:52:05 -0700 (PDT)
 From:   Thierry Reding <thierry.reding@gmail.com>
-To:     linux-pwm@vger.kernel.org,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-renesas-soc@vger.kernel.org,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: pwm: Add R-Car V3U device tree bindings
-Date:   Fri, 23 Jun 2023 16:51:42 +0200
-Message-ID: <168753171960.1191890.8754582983989632537.b4-ty@gmail.com>
+To:     u.kleine-koenig@pengutronix.de, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, festevam@gmail.com,
+        Clark Wang <xiaoning.wang@nxp.com>
+Cc:     kernel@pengutronix.de, linux-imx@nxp.com,
+        linux-pwm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] pwm: imx-tpm: force 'real_period' to be zero in suspend
+Date:   Fri, 23 Jun 2023 16:51:43 +0200
+Message-ID: <168753171965.1191890.769782299829517183.b4-ty@gmail.com>
 X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230502165330.55769-1-wsa+renesas@sang-engineering.com>
-References: <20230502165330.55769-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20230505065839.3973693-1-xiaoning.wang@nxp.com>
+References: <20230505065839.3973693-1-xiaoning.wang@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -82,14 +77,18 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Tue, 02 May 2023 18:53:29 +0200, Wolfram Sang wrote:
+On Fri, 05 May 2023 14:58:39 +0800, Clark Wang wrote:
+> During suspend, all the tpm registers will lose values.
+> So the 'real_period' value of struct 'imx_tpm_pwm_chip'
+> should be forced to be zero to force the period update
+> code can be executed after system resume back.
 > 
-
+> 
 
 Applied, thanks!
 
-[1/1] dt-bindings: pwm: Add R-Car V3U device tree bindings
-      commit: 5442c33f218b1aabbe699db978e407317a231d10
+[1/1] pwm: imx-tpm: force 'real_period' to be zero in suspend
+      commit: 661dfb7f46298e53f6c3deaa772fa527aae86193
 
 Best regards,
 -- 
