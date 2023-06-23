@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC03073C24B
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 23:15:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 226E873C24F
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 23:15:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232835AbjFWVP3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 17:15:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50160 "EHLO
+        id S232240AbjFWVPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 17:15:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232386AbjFWVPR (ORCPT
+        with ESMTP id S232392AbjFWVPR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 23 Jun 2023 17:15:17 -0400
 Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F786E65;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40E57189;
         Fri, 23 Jun 2023 14:15:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=inria.fr; s=dc;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=QJydWjDhcLcynf/rTVoWViPI3W7kgehSdj6sywGYPic=;
-  b=X2xeK3QMt9anv3maJ1FcmZls+/wbC9tReX04ZeglJ8Tk/S/H1TRdiR4A
-   N+T7YWnS5GqgRHq27/dWmJRtK5fZ7cwk083jSAk70KAam3mJz1yph40Bk
-   np73UEzsOMOdKfYhMSymqaeTbOBQD/p+RhfoGUUicKqk24X4ASAYRe3pU
-   s=;
+  bh=8WWGDy69qrtzavSblwBRgHQbwXA80r1Q53C16BTDHPg=;
+  b=Nf2/PyVP65m4zS14KRN+iZPPDLs/1MtgDOLaD5cMvJhgt0f/01EceRnR
+   jgPoDPxYGosXJu/ZTArJNQFAaCz5QS5fBWEzE7SX5MXsWerfQlC0Ssb1x
+   C5j6BWtq+9VXv9wmH8wzYLLYHbEQB/XuYhxgc+ye2WpqAzpvKugTAcvbM
+   8=;
 Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
 X-IronPort-AV: E=Sophos;i="6.01,153,1684792800"; 
-   d="scan'208";a="59686165"
+   d="scan'208";a="59686166"
 Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
   by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2023 23:15:11 +0200
 From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     Satish Kharat <satishkh@cisco.com>
+To:     David Hildenbrand <david@redhat.com>
 Cc:     keescook@chromium.org, kernel-janitors@vger.kernel.org,
-        Sesidhar Baddela <sebaddel@cisco.com>,
-        Karan Tilak Kumar <kartilak@cisco.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 07/26] scsi: fnic: use array_size
-Date:   Fri, 23 Jun 2023 23:14:38 +0200
-Message-Id: <20230623211457.102544-8-Julia.Lawall@inria.fr>
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 08/26] virtio-mem: use array_size
+Date:   Fri, 23 Jun 2023 23:14:39 +0200
+Message-Id: <20230623211457.102544-9-Julia.Lawall@inria.fr>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20230623211457.102544-1-Julia.Lawall@inria.fr>
 References: <20230623211457.102544-1-Julia.Lawall@inria.fr>
@@ -79,20 +79,38 @@ The changes were done using the following Coccinelle semantic patch:
 Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
 ---
- drivers/scsi/fnic/fnic_trace.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/virtio/virtio_mem.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/scsi/fnic/fnic_trace.c b/drivers/scsi/fnic/fnic_trace.c
-index f3c3a26a1384..74d428c9f7d3 100644
---- a/drivers/scsi/fnic/fnic_trace.c
-+++ b/drivers/scsi/fnic/fnic_trace.c
-@@ -465,7 +465,7 @@ int fnic_trace_buf_init(void)
- 	fnic_max_trace_entries = (trace_max_pages * PAGE_SIZE)/
- 					  FNIC_ENTRY_SIZE_BYTES;
+diff --git a/drivers/virtio/virtio_mem.c b/drivers/virtio/virtio_mem.c
+index 835f6cc2fb66..a4dfe7aab288 100644
+--- a/drivers/virtio/virtio_mem.c
++++ b/drivers/virtio/virtio_mem.c
+@@ -399,7 +399,7 @@ static int virtio_mem_bbm_bb_states_prepare_next_bb(struct virtio_mem *vm)
+ 	if (vm->bbm.bb_states && old_pages == new_pages)
+ 		return 0;
  
--	fnic_trace_buf_p = (unsigned long)vzalloc(trace_max_pages * PAGE_SIZE);
-+	fnic_trace_buf_p = (unsigned long)vzalloc(array_size(trace_max_pages, PAGE_SIZE));
- 	if (!fnic_trace_buf_p) {
- 		printk(KERN_ERR PFX "Failed to allocate memory "
- 				  "for fnic_trace_buf_p\n");
+-	new_array = vzalloc(new_pages * PAGE_SIZE);
++	new_array = vzalloc(array_size(new_pages, PAGE_SIZE));
+ 	if (!new_array)
+ 		return -ENOMEM;
+ 
+@@ -465,7 +465,7 @@ static int virtio_mem_sbm_mb_states_prepare_next_mb(struct virtio_mem *vm)
+ 	if (vm->sbm.mb_states && old_pages == new_pages)
+ 		return 0;
+ 
+-	new_array = vzalloc(new_pages * PAGE_SIZE);
++	new_array = vzalloc(array_size(new_pages, PAGE_SIZE));
+ 	if (!new_array)
+ 		return -ENOMEM;
+ 
+@@ -588,7 +588,7 @@ static int virtio_mem_sbm_sb_states_prepare_next_mb(struct virtio_mem *vm)
+ 	if (vm->sbm.sb_states && old_pages == new_pages)
+ 		return 0;
+ 
+-	new_bitmap = vzalloc(new_pages * PAGE_SIZE);
++	new_bitmap = vzalloc(array_size(new_pages, PAGE_SIZE));
+ 	if (!new_bitmap)
+ 		return -ENOMEM;
+ 
 
