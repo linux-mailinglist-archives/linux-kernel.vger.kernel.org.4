@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1C1E73B47D
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 12:05:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F5C373B480
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 12:05:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232122AbjFWKFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 06:05:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45482 "EHLO
+        id S232113AbjFWKFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 06:05:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231962AbjFWKEf (ORCPT
+        with ESMTP id S231843AbjFWKEg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 06:04:35 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2F092122
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 03:04:33 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-3110ab7110aso496283f8f.3
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 03:04:33 -0700 (PDT)
+        Fri, 23 Jun 2023 06:04:36 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD361BFC
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 03:04:35 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3fa7eb35a13so1443695e9.0
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 03:04:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1687514672; x=1690106672;
+        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1687514673; x=1690106673;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ii2x6MMLssuPPDNgYZGKvPLHM+c/zKC3YPgF49rTzdU=;
-        b=xSDCg+lQUTIDMHwkxHAv0qmSrhP3TF+2Q+0dynApoIaSJ5GIQM6boUZKpmYDJLDuIP
-         BOEE/sQ2caNPKZ1VaFG7OZwGiPYnsN9M90ejDCYrmbZJTTCLS/jfL3VuASK7IbdgtUm8
-         6PpCE0fAhax4EJ36dRSkksMuIH/rHPH7J1PBgvNevC22JeNI4uq1L9CEtfIUlw0Iaq30
-         WBH3cUDzzwurXlrJIDqzk3Vfd2W9XovQSWzJ+KylTKtr79sm7p8zwZZ4jw5WHgFoQLXT
-         ORDkSaDF2Xep9pqXC8oU4uxnl3oy3wSOhvV8X/TirT9j0K6ocU4LZH7IT1DirOgPUW9k
-         35fA==
+        bh=E6sVXJ2cleHMEi/0WcOIV4n/ZjjS+cQY293Qzlx7CXQ=;
+        b=zuGv3jqXPXNst6BYdlNOz5i7R06BMmZUVLJVX6sdqiNUSMSJA2TAJOvJxpPq7poHFl
+         FHr5u/kNtB7MlgZf+OWwoWxJ6Jxu8gW0lGRZwQY8yPD1iznE9mpGFEjJM3mAoU7ZRbRK
+         MRYVo7oR/4TUl7HvpOZsCmJ5nu7qLJus9x9vo5gmUfvUhlC4qJsBa63p2GNLpiliJdH8
+         hV88Vin4HqHWY3tNDp3gTuszcYIIA1WEyz4n9c4yXp62IKJ36mBCCsXKu1PmbJQ1p11J
+         atLvDgsPjPDAdkzCsH3ErVKInQek3T5Hapaa49UXesn9QL4rWhG7caUsMcQi5XO7qFTV
+         xk3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687514672; x=1690106672;
+        d=1e100.net; s=20221208; t=1687514673; x=1690106673;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ii2x6MMLssuPPDNgYZGKvPLHM+c/zKC3YPgF49rTzdU=;
-        b=dWhM32jJ8s0B7UMcGy+E+ogXi6CgaW3rnleSPUbITTcdeyynAe8QiZN1l8x8qEWfSS
-         IDFo3dBz7pGfHQI/tkDw8cKGLQ5hPA6g7qCqd4FL2ewbXUSSOPVEhlwvUJ1iaB6Zro0B
-         lbPk2T4ycnzwso3k8k/jByRxlbZGfdnvbaluOpzLyeA+SP/kE/mOWG/KlTZDN4bOY8Wo
-         hN18E4LA1dk+XAybFmcO7BLuJfgcPMiUSkKBgFCWRH5BCtv89R8e7H1oIonjfdliNya6
-         ne4lWIZwX8LUD22CLt69KpM91KvJFrWvtzBXTr60SyXJIyjUaLPZZvcQoVWRYOLdGm1b
-         q3fQ==
-X-Gm-Message-State: AC+VfDzshdgtaxcqmXnxSICof88b0Q9ugJEt72VDAWapB2dkGmkFbXXH
-        fqqoGqkPGF8HpCubRo961GaN+g==
-X-Google-Smtp-Source: ACHHUZ4zkuuP4XLvWsf7VK9/F+8V9/cJeGdLNhhFXFsK0B4wOm3wwwI0PE3dMoROI9fRkKxT0tyIbw==
-X-Received: by 2002:a5d:6ad1:0:b0:2f5:d3d7:7af4 with SMTP id u17-20020a5d6ad1000000b002f5d3d77af4mr16354365wrw.63.1687514672396;
-        Fri, 23 Jun 2023 03:04:32 -0700 (PDT)
+        bh=E6sVXJ2cleHMEi/0WcOIV4n/ZjjS+cQY293Qzlx7CXQ=;
+        b=dFcgX5I1OgrBBG87xuNQwCvwm0KlOZOqrgoE+90sX3h+ysO+/fXyXSoiyOXUIICjC0
+         5cTFNvy1cjtknq8YUed0s0QbQOf5kAgRv0NjvQ3979BD0a3UEvl1x0Jh2ZYhNpwQg082
+         7FRWDlq763K50c8gtz6LVdftOPQ/F7J4+FkS9f2Dgjzya3rFXYTeFVdmTumpo406aqzN
+         gezIFEMqBs5a8Tvg/z6nM4oYw7F4O1H2x6YlV4Z24vBuojPphW+/td2F3jvFVFJ3Sy1M
+         9DedGzd2umPSAzbiAxmSMHeD97qh9kn/rOPnH1CGz4qJhK+w5ITsY1jojDY1lRepg9xu
+         XiRg==
+X-Gm-Message-State: AC+VfDwO0lyy9Xq8gBXjhlJD1cNamUWdu+LpPebAZIkRq+XlicgVfscD
+        nF2O0xlAUtilX6IXI5OcZAC9Iw==
+X-Google-Smtp-Source: ACHHUZ6QwnIxjXMCCySl+cTuiFkXSm9Z1C26KrzkHt/AtwA5hawwYsHJNk48HZyL8sHOloJRl0dkvw==
+X-Received: by 2002:a7b:cd10:0:b0:3f9:b79b:e74e with SMTP id f16-20020a7bcd10000000b003f9b79be74emr7799589wmj.22.1687514673633;
+        Fri, 23 Jun 2023 03:04:33 -0700 (PDT)
 Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:ddc2:ce92:1ed6:27bd])
-        by smtp.gmail.com with ESMTPSA id x8-20020a5d54c8000000b0030fae360f14sm9079360wrv.68.2023.06.23.03.04.31
+        by smtp.gmail.com with ESMTPSA id x8-20020a5d54c8000000b0030fae360f14sm9079360wrv.68.2023.06.23.03.04.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Jun 2023 03:04:31 -0700 (PDT)
+        Fri, 23 Jun 2023 03:04:33 -0700 (PDT)
 From:   Bartosz Golaszewski <brgl@bgdev.pl>
 To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
         Alexandre Torgue <alexandre.torgue@foss.st.com>,
@@ -65,9 +65,9 @@ To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
 Cc:     netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH net-next v2 10/11] net: stmmac: platform: provide devm_stmmac_pltfr_probe()
-Date:   Fri, 23 Jun 2023 12:04:16 +0200
-Message-Id: <20230623100417.93592-11-brgl@bgdev.pl>
+Subject: [PATCH net-next v2 11/11] net: stmmac: dwmac-qcom-ethqos: use devm_stmmac_pltfr_probe()
+Date:   Fri, 23 Jun 2023 12:04:17 +0200
+Message-Id: <20230623100417.93592-12-brgl@bgdev.pl>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230623100417.93592-1-brgl@bgdev.pl>
 References: <20230623100417.93592-1-brgl@bgdev.pl>
@@ -75,8 +75,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -85,70 +84,35 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-Provide a devres variant of stmmac_pltfr_probe() which allows users to
-skip calling stmmac_pltfr_remove() at driver detach.
+Use the devres variant of stmmac_pltfr_probe() and finally drop the
+remove() callback entirely.
 
 Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 ---
- .../ethernet/stmicro/stmmac/stmmac_platform.c | 30 +++++++++++++++++++
- .../ethernet/stmicro/stmmac/stmmac_platform.h |  3 ++
- 2 files changed, 33 insertions(+)
+ drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-index 82d8a1c76476..231152ee5a32 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-@@ -803,6 +803,36 @@ int stmmac_pltfr_probe(struct platform_device *pdev,
- }
- EXPORT_SYMBOL_GPL(stmmac_pltfr_probe);
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
+index 7b9fbcb8d84d..e62940414e54 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
+@@ -787,7 +787,7 @@ static int qcom_ethqos_probe(struct platform_device *pdev)
+ 		plat_dat->serdes_powerdown  = qcom_ethqos_serdes_powerdown;
+ 	}
  
-+static void devm_stmmac_pltfr_remove(void *data)
-+{
-+	struct platform_device *pdev = data;
-+
-+	stmmac_pltfr_remove_no_dt(pdev);
-+}
-+
-+/**
-+ * devm_stmmac_pltfr_probe
-+ * @pdev: pointer to the platform device
-+ * @plat: driver data platform structure
-+ * @res: stmmac resources
-+ * Description: Devres variant of stmmac_pltfr_probe(). Allows users to skip
-+ * calling stmmac_pltfr_remove() on driver detach.
-+ */
-+int devm_stmmac_pltfr_probe(struct platform_device *pdev,
-+			    struct plat_stmmacenet_data *plat,
-+			    struct stmmac_resources *res)
-+{
-+	int ret;
-+
-+	ret = stmmac_pltfr_probe(pdev, plat, res);
-+	if (ret)
-+		return ret;
-+
-+	return devm_add_action_or_reset(&pdev->dev, devm_stmmac_pltfr_remove,
-+					pdev);
-+}
-+EXPORT_SYMBOL_GPL(devm_stmmac_pltfr_probe);
-+
- /**
-  * stmmac_pltfr_remove_no_dt
-  * @pdev: pointer to the platform device
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.h b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.h
-index 8c1e5b2e9dae..c5565b2a70ac 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.h
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.h
-@@ -29,6 +29,9 @@ void stmmac_pltfr_exit(struct platform_device *pdev,
- int stmmac_pltfr_probe(struct platform_device *pdev,
- 		       struct plat_stmmacenet_data *plat,
- 		       struct stmmac_resources *res);
-+int devm_stmmac_pltfr_probe(struct platform_device *pdev,
-+			    struct plat_stmmacenet_data *plat,
-+			    struct stmmac_resources *res);
- void stmmac_pltfr_remove_no_dt(struct platform_device *pdev);
- void stmmac_pltfr_remove(struct platform_device *pdev);
- extern const struct dev_pm_ops stmmac_pltfr_pm_ops;
+-	return stmmac_dvr_probe(dev, plat_dat, &stmmac_res);
++	return devm_stmmac_pltfr_probe(pdev, plat_dat, &stmmac_res);
+ }
+ 
+ static const struct of_device_id qcom_ethqos_match[] = {
+@@ -801,7 +801,6 @@ MODULE_DEVICE_TABLE(of, qcom_ethqos_match);
+ 
+ static struct platform_driver qcom_ethqos_driver = {
+ 	.probe  = qcom_ethqos_probe,
+-	.remove_new = stmmac_pltfr_remove_no_dt,
+ 	.driver = {
+ 		.name           = "qcom-ethqos",
+ 		.pm		= &stmmac_pltfr_pm_ops,
 -- 
 2.39.2
 
