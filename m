@@ -2,96 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 209CE73B083
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 08:06:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E768673B087
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 08:08:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231684AbjFWGGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 02:06:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40352 "EHLO
+        id S231703AbjFWGIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 02:08:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbjFWGGb (ORCPT
+        with ESMTP id S229902AbjFWGIk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 02:06:31 -0400
-Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [IPv6:2a01:37:3000::53df:4ef0:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B282E48;
-        Thu, 22 Jun 2023 23:06:30 -0700 (PDT)
-Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        Fri, 23 Jun 2023 02:08:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB3F910DB;
+        Thu, 22 Jun 2023 23:08:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL Global TLS RSA4096 SHA256 2022 CA1" (verified OK))
-        by bmailout2.hostsharing.net (Postfix) with ESMTPS id 412DE2800C986;
-        Fri, 23 Jun 2023 08:06:28 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id 304D9155F74; Fri, 23 Jun 2023 08:06:28 +0200 (CEST)
-Date:   Fri, 23 Jun 2023 08:06:28 +0200
-From:   Lukas Wunner <lukas@wunner.de>
-To:     Felix Kuehling <felix.kuehling@amd.com>
-Cc:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>, oohall@gmail.com,
-        Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        Fontenot Nathan <Nathan.Fontenot@amd.com>,
-        Jay Cornwall <Jay.Cornwall@amd.com>
-Subject: Re: [PATCH v3 2/2] PCI: pciehp: Clear the optional capabilities in
- DEVCTL2 on a hot-plug
-Message-ID: <20230623060628.GA28334@wunner.de>
-References: <20230621185152.105320-1-Smita.KoralahalliChannabasappa@amd.com>
- <20230621185152.105320-3-Smita.KoralahalliChannabasappa@amd.com>
- <20230622063105.GA624@wunner.de>
- <d64f8de4-cac1-ccca-33fe-1fda418837e2@amd.com>
- <20230622214247.GB11993@wunner.de>
- <8bb20976-97ec-0c5c-adc8-183896de6768@amd.com>
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5BB4161989;
+        Fri, 23 Jun 2023 06:08:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59347C433C9;
+        Fri, 23 Jun 2023 06:08:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1687500518;
+        bh=iEBo0nryUklKbwszNwaFOULRadSZTxMhgHNcODezBMU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=x8Vknzt0okM+8asd67EscMHeT04682pksCtlyF2tSNbUlnx+oXuvDIF9JUVF3YsQu
+         NvcOX40u7NAeTmaRq1/aLKec3VHu7EXX7fbmwuCfvdEyVd/QtIssbHKZHGIfj4De++
+         qe8u7RD1ZMgXTieEaksCDl+Fk+xk7dhrPGIG7y/Q=
+Date:   Fri, 23 Jun 2023 08:08:35 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linux regressions mailing list <regressions@lists.linux.dev>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+        Sachin Sant <sachinp@linux.ibm.com>
+Subject: Re: [PATCH] tpm: Ensure that tpm chip has ops to check if it's
+ defective
+Message-ID: <2023062317-daytime-angles-3c5a@gregkh>
+References: <20230623030427.908-1-mario.limonciello@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8bb20976-97ec-0c5c-adc8-183896de6768@amd.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230623030427.908-1-mario.limonciello@amd.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 23, 2023 at 05:59:55AM +0200, Felix Kuehling wrote:
-> On 2023-06-22 23:42, Lukas Wunner wrote:
-> > On Thu, Jun 22, 2023 at 02:02:12PM -0700, Smita Koralahalli wrote:
-> > > Would it be fair to just reuse pci_enable_atomic_ops_to_root() for
-> > > Atomic_Ops configuration?
-> > 
-> > Hm, that's a good question.  I'm not an expert on that corner of
-> > the PCI core.
-> > 
-> > But indeed what you could try is amend that function to not only
-> > *set* PCI_EXP_DEVCTL2_ATOMIC_REQ if it's supported, but to also
-> > *clear* it if it's not supported.
-> > 
-> > And you'd have to call pci_enable_atomic_ops_to_root() on enumeration,
-> > e.g. from pci_init_capabilities().
-> > 
-> > That should obviate the need to call pci_enable_atomic_ops_to_root()
-> > from drivers, so you could probably remove the call from all the
-> > drivers which currently call it (amdgpu, infiniband, mellanox),
-> > in one separate patch per driver.
-> > 
-> > An then you could drop the EXPORT clause for pci_enable_atomic_ops_to_root()
-> > and make it private to the PCI core.
+On Thu, Jun 22, 2023 at 10:04:27PM -0500, Mario Limonciello wrote:
+> The ibmvtpm doesn't have `chip->ops` set, and so trying to check
+> if it's a defective AMD fTPM doesn't work.
 > 
-> Then our driver would need an alternative way to determine whether atomic
-> capabilities are enabled for a device. We currently use the return value
-> from pci_enable_atomic_ops_to_root to determine this.
+> Add an extra check to tpm_amd_is_rng_defective() to ensure the
+> TPM being checked has `chip->ops`.
+> 
+> Cc: Linux regressions mailing list <regressions@lists.linux.dev>
+> Reported-by: Aneesh Kumar K. V <aneesh.kumar@linux.ibm.com>
+> Reported-by: Sachin Sant <sachinp@linux.ibm.com>
+> Link: https://lore.kernel.org/lkml/99B81401-DB46-49B9-B321-CF832B50CAC3@linux.ibm.com/
+> Tested-by: Sachin Sant <sachinp@linux.ibm.com>
+> Fixes: bd8621ca1510 ("tpm: Add !tpm_amd_is_rng_defective() to the hwrng_unregister() call site")
+> Fixes: f1324bbc4011 ("tpm: disable hwrng for fTPM on some AMD designs")
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+>  drivers/char/tpm/tpm-chip.c | 3 +++
+>  1 file changed, 3 insertions(+)
 
-Just read PCI_EXP_DEVCTL2 and check whether PCI_EXP_DEVCTL2_ATOMIC_REQ
-is set.  (I.e. has been set by the PCI core on device enumeration.)
+No cc: stable on that list above?
 
-Problem solved, I guess?
-
-Thanks,
-
-Lukas
+greg k-h
