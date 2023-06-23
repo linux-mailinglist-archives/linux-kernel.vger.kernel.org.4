@@ -2,217 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6FB973B1AC
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 09:30:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D51D73B1AF
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 09:30:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231300AbjFWH36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 03:29:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59402 "EHLO
+        id S231297AbjFWHas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 03:30:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231308AbjFWH3x (ORCPT
+        with ESMTP id S230091AbjFWHar (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 03:29:53 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6734F269E;
-        Fri, 23 Jun 2023 00:29:30 -0700 (PDT)
-Received: by linux.microsoft.com (Postfix, from userid 1099)
-        id DAE5821C252A; Fri, 23 Jun 2023 00:29:29 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com DAE5821C252A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1687505369;
-        bh=WxxAPKNGl0H+WTQ0UDLQ32a7/6XvpGgl1O/Ni4g9HfY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Eap/hEPhjwd5yosGaSuaJOIxVroA3M7faq1C9kS+rybdNoQP4FlLYAfS5x9fkrnL+
-         u5GtbHklLVumy8lRUXL4QKATNzsNWRCg83h9p17A12l3eoh4n3n2e2D8cHZB+kdzEv
-         tOWXns2Xy1e8Kei4Z2AMsV6Y5cCgaBS4Wgmk1xJQ=
-From:   souradeep chakrabarti <schakrabarti@linux.microsoft.com>
-To:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, longli@microsoft.com,
-        sharmaajay@microsoft.com, leon@kernel.org, cai.huoqing@linux.dev,
-        ssengar@linux.microsoft.com, vkuznets@redhat.com,
-        tglx@linutronix.de, linux-hyperv@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org
-Cc:     stable@vger.kernel.org, schakrabarti@microsoft.com,
-        Souradeep Chakrabarti <schakrabarti@linux.microsoft.com>
-Subject: [PATCH V2 net] net: mana: Fix MANA VF unload when host is unresponsive
-Date:   Fri, 23 Jun 2023 00:29:15 -0700
-Message-Id: <1687505355-29212-1-git-send-email-schakrabarti@linux.microsoft.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 23 Jun 2023 03:30:47 -0400
+Received: from mx6.didiglobal.com (mx6.didiglobal.com [111.202.70.123])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 5360F1BC1
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 00:30:44 -0700 (PDT)
+Received: from mail.didiglobal.com (unknown [10.79.65.12])
+        by mx6.didiglobal.com (Maildata Gateway V2.8) with ESMTPS id 25CA0110021108;
+        Fri, 23 Jun 2023 15:30:41 +0800 (CST)
+Received: from didi-ThinkCentre-M930t-N000 (10.79.64.101) by
+ ZJY02-ACTMBX-02.didichuxing.com (10.79.65.12) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 23 Jun 2023 15:30:40 +0800
+Date:   Fri, 23 Jun 2023 15:30:33 +0800
+X-MD-Sfrom: tiozhang@didiglobal.com
+X-MD-SrcIP: 10.79.65.12
+From:   tiozhang <tiozhang@didiglobal.com>
+To:     <rdunlap@infradead.org>, <tj@kernel.org>
+CC:     <jiangshanlai@gmail.com>, <linux-kernel@vger.kernel.org>,
+        <zyhtheonly@yeah.net>, <zwp10758@gmail.com>,
+        <zyhtheonly@gmail.com>, <tiozhang@didiglobal.com>
+Subject: [PATCH v2] workqueue: add cmdline parameter `workqueue_unbound_cpus`
+ to further constrain wq_unbound_cpumask at boot time
+Message-ID: <20230623073033.GA6584@didi-ThinkCentre-M930t-N000>
+Mail-Followup-To: rdunlap@infradead.org, tj@kernel.org,
+        jiangshanlai@gmail.com, linux-kernel@vger.kernel.org,
+        zyhtheonly@yeah.net, zwp10758@gmail.com, zyhtheonly@gmail.com
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <88e569b6-69d6-90c2-8000-9dd542aaf007@infradead.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Originating-IP: [10.79.64.101]
+X-ClientProxiedBy: ZJY01-PUBMBX-01.didichuxing.com (10.79.64.32) To
+ ZJY02-ACTMBX-02.didichuxing.com (10.79.65.12)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Souradeep Chakrabarti <schakrabarti@linux.microsoft.com>
+Motivation of doing this is to better improve boot times for devices when
+we want to prevent our workqueue works from running on some specific CPUs,
+e,g, some CPUs are busy with interrupts.
 
-This patch addresses  the VF unload issue, where mana_dealloc_queues()
-gets stuck in infinite while loop, because of host unresponsiveness.
-It adds a timeout in the while loop, to fix it.
-
-Also this patch adds a new attribute in mana_context, which gets set when
-mana_hwc_send_request() hits a timeout because of host unresponsiveness.
-This flag then helps to avoid the timeouts in successive calls.
-
-Signed-off-by: Souradeep Chakrabarti <schakrabarti@linux.microsoft.com>
+Signed-off-by: tiozhang <tiozhang@didiglobal.com>
 ---
-V1 -> V2:
-* Added net branch
-* Removed the typecasting to (struct mana_context*) of void pointer
-* Repositioned timeout variable in mana_dealloc_queues()
-* Repositioned vf_unload_timeout in mana_context struct, to utilise the
-  6 bytes hole
----
- .../net/ethernet/microsoft/mana/gdma_main.c   |  4 +++-
- .../net/ethernet/microsoft/mana/hw_channel.c  | 12 ++++++++++-
- drivers/net/ethernet/microsoft/mana/mana_en.c | 21 +++++++++++++++++--
- include/net/mana/mana.h                       |  2 ++
- 4 files changed, 35 insertions(+), 4 deletions(-)
+ .../admin-guide/kernel-parameters.txt         |  8 ++++++
+ kernel/workqueue.c                            | 25 +++++++++++++++++++
+ 2 files changed, 33 insertions(+)
 
-diff --git a/drivers/net/ethernet/microsoft/mana/gdma_main.c b/drivers/net/ethernet/microsoft/mana/gdma_main.c
-index 8f3f78b68592..6411f01be0d9 100644
---- a/drivers/net/ethernet/microsoft/mana/gdma_main.c
-+++ b/drivers/net/ethernet/microsoft/mana/gdma_main.c
-@@ -946,10 +946,12 @@ int mana_gd_deregister_device(struct gdma_dev *gd)
- 	struct gdma_context *gc = gd->gdma_context;
- 	struct gdma_general_resp resp = {};
- 	struct gdma_general_req req = {};
-+	struct mana_context *ac;
- 	int err;
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index a465d5242774..7f2fe8c60d5c 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -6780,6 +6780,14 @@
+ 			disables both lockup detectors. Default is 10
+ 			seconds.
  
- 	if (gd->pdid == INVALID_PDID)
- 		return -EINVAL;
-+	ac = gd->driver_data;
- 
- 	mana_gd_init_req_hdr(&req.hdr, GDMA_DEREGISTER_DEVICE, sizeof(req),
- 			     sizeof(resp));
-@@ -957,7 +959,7 @@ int mana_gd_deregister_device(struct gdma_dev *gd)
- 	req.hdr.dev_id = gd->dev_id;
- 
- 	err = mana_gd_send_request(gc, sizeof(req), &req, sizeof(resp), &resp);
--	if (err || resp.hdr.status) {
-+	if ((err || resp.hdr.status) && !ac->vf_unload_timeout) {
- 		dev_err(gc->dev, "Failed to deregister device: %d, 0x%x\n",
- 			err, resp.hdr.status);
- 		if (!err)
-diff --git a/drivers/net/ethernet/microsoft/mana/hw_channel.c b/drivers/net/ethernet/microsoft/mana/hw_channel.c
-index 9d1507eba5b9..492cb2c6e2cb 100644
---- a/drivers/net/ethernet/microsoft/mana/hw_channel.c
-+++ b/drivers/net/ethernet/microsoft/mana/hw_channel.c
-@@ -1,8 +1,10 @@
- // SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
- /* Copyright (c) 2021, Microsoft Corporation. */
- 
-+#include "asm-generic/errno.h"
- #include <net/mana/gdma.h>
- #include <net/mana/hw_channel.h>
-+#include <net/mana/mana.h>
- 
- static int mana_hwc_get_msg_index(struct hw_channel_context *hwc, u16 *msg_id)
- {
-@@ -786,12 +788,19 @@ int mana_hwc_send_request(struct hw_channel_context *hwc, u32 req_len,
- 	struct hwc_wq *txq = hwc->txq;
- 	struct gdma_req_hdr *req_msg;
- 	struct hwc_caller_ctx *ctx;
-+	struct mana_context *ac;
- 	u32 dest_vrcq = 0;
- 	u32 dest_vrq = 0;
- 	u16 msg_id;
- 	int err;
- 
- 	mana_hwc_get_msg_index(hwc, &msg_id);
-+	ac = hwc->gdma_dev->driver_data;
-+	if (ac->vf_unload_timeout) {
-+		dev_err(hwc->dev, "HWC: vport is already unloaded.\n");
-+		err = -ETIMEDOUT;
-+		goto out;
-+	}
- 
- 	tx_wr = &txq->msg_buf->reqs[msg_id];
- 
-@@ -825,9 +834,10 @@ int mana_hwc_send_request(struct hw_channel_context *hwc, u32 req_len,
- 		goto out;
- 	}
- 
--	if (!wait_for_completion_timeout(&ctx->comp_event, 30 * HZ)) {
-+	if (!wait_for_completion_timeout(&ctx->comp_event, 5 * HZ)) {
- 		dev_err(hwc->dev, "HWC: Request timed out!\n");
- 		err = -ETIMEDOUT;
-+		ac->vf_unload_timeout = true;
- 		goto out;
- 	}
- 
-diff --git a/drivers/net/ethernet/microsoft/mana/mana_en.c b/drivers/net/ethernet/microsoft/mana/mana_en.c
-index d907727c7b7a..cb2080b3a00c 100644
---- a/drivers/net/ethernet/microsoft/mana/mana_en.c
-+++ b/drivers/net/ethernet/microsoft/mana/mana_en.c
-@@ -2329,7 +2329,10 @@ static int mana_dealloc_queues(struct net_device *ndev)
- {
- 	struct mana_port_context *apc = netdev_priv(ndev);
- 	struct gdma_dev *gd = apc->ac->gdma_dev;
-+	unsigned long timeout;
- 	struct mana_txq *txq;
-+	struct sk_buff *skb;
-+	struct mana_cq *cq;
- 	int i, err;
- 
- 	if (apc->port_is_up)
-@@ -2348,13 +2351,26 @@ static int mana_dealloc_queues(struct net_device *ndev)
- 	 *
- 	 * Drain all the in-flight TX packets
- 	 */
++	workqueue_unbound_cpus=
++			[KNL,SMP]
++			Format: <cpu-list>
++			Specify to constrain one or some CPUs to use in
++			unbound workqueues.
++			By default, all online CPUs are available for
++			unbound workqueues.
 +
-+	timeout = jiffies + 120 * HZ;
- 	for (i = 0; i < apc->num_queues; i++) {
- 		txq = &apc->tx_qp[i].txq;
--
--		while (atomic_read(&txq->pending_sends) > 0)
-+		while (atomic_read(&txq->pending_sends) > 0 &&
-+		       time_before(jiffies, timeout)) {
- 			usleep_range(1000, 2000);
-+		}
- 	}
+ 	workqueue.watchdog_thresh=
+ 			If CONFIG_WQ_WATCHDOG is configured, workqueue can
+ 			warn stall conditions and dump internal state to
+diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+index 7cd5f5e7e0a1..1475f8f560cc 100644
+--- a/kernel/workqueue.c
++++ b/kernel/workqueue.c
+@@ -329,6 +329,9 @@ static bool workqueue_freezing;		/* PL: have wqs started freezing? */
+ /* PL: allowable cpus for unbound wqs and work items */
+ static cpumask_var_t wq_unbound_cpumask;
  
-+	for (i = 0; i < apc->num_queues; i++) {
-+		txq = &apc->tx_qp[i].txq;
-+		cq = &apc->tx_qp[i].tx_cq;
-+		while (atomic_read(&txq->pending_sends)) {
-+			skb = skb_dequeue(&txq->pending_skbs);
-+			mana_unmap_skb(skb, apc);
-+			napi_consume_skb(skb, cq->budget);
-+			atomic_sub(1, &txq->pending_sends);
-+		}
-+	}
- 	/* We're 100% sure the queues can no longer be woken up, because
- 	 * we're sure now mana_poll_tx_cq() can't be running.
- 	 */
-@@ -2605,6 +2621,7 @@ int mana_probe(struct gdma_dev *gd, bool resuming)
- 		}
- 	}
- 
-+	ac->vf_unload_timeout = false;
- 	err = add_adev(gd);
- out:
- 	if (err)
-diff --git a/include/net/mana/mana.h b/include/net/mana/mana.h
-index 9eef19972845..5f5affdca1eb 100644
---- a/include/net/mana/mana.h
-+++ b/include/net/mana/mana.h
-@@ -358,6 +358,8 @@ struct mana_context {
- 
- 	u16 num_ports;
- 
-+	bool vf_unload_timeout;
++/* for further constrain wq_unbound_cpumask by cmdline parameter*/
++static cpumask_var_t wq_cmdline_cpumask;
 +
- 	struct mana_eq *eqs;
+ /* CPU where unbound work was last round robin scheduled from this CPU */
+ static DEFINE_PER_CPU(int, wq_rr_cpu_last);
  
- 	struct net_device *ports[MAX_PORTS_IN_MANA_DEV];
+@@ -6006,6 +6009,10 @@ void __init workqueue_init_early(void)
+ 	cpumask_copy(wq_unbound_cpumask, housekeeping_cpumask(HK_TYPE_WQ));
+ 	cpumask_and(wq_unbound_cpumask, wq_unbound_cpumask, housekeeping_cpumask(HK_TYPE_DOMAIN));
+ 
++	if (!cpumask_empty(wq_cmdline_cpumask))
++		cpumask_and(wq_unbound_cpumask, wq_unbound_cpumask, wq_cmdline_cpumask);
++	free_bootmem_cpumask_var(wq_cmdline_cpumask);
++
+ 	pwq_cache = KMEM_CACHE(pool_workqueue, SLAB_PANIC);
+ 
+ 	/* initialize CPU pools */
+@@ -6129,3 +6136,21 @@ void __init workqueue_init(void)
+  */
+ void __warn_flushing_systemwide_wq(void) { }
+ EXPORT_SYMBOL(__warn_flushing_systemwide_wq);
++
++
++static int __init workqueue_unbound_cpus_setup(char *str)
++{
++	cpumask_var_t cpumask;
++
++	alloc_bootmem_cpumask_var(&wq_cmdline_cpumask);
++	alloc_bootmem_cpumask_var(&cpumask);
++	if (cpulist_parse(str, cpumask) < 0)
++		pr_warn("workqueue_unbound_cpus: incorrect CPU range\n");
++	else
++		cpumask_copy(wq_cmdline_cpumask, cpumask);
++
++	free_bootmem_cpumask_var(cpumask);
++
++	return 0;
++}
++__setup("workqueue_unbound_cpus=", workqueue_unbound_cpus_setup);
 -- 
-2.34.1
+2.17.1
 
