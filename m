@@ -2,128 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 279CC73BEE7
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 21:34:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5991E73BEEE
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 21:36:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231490AbjFWTeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 15:34:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33900 "EHLO
+        id S231752AbjFWTgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 15:36:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229834AbjFWTeT (ORCPT
+        with ESMTP id S229972AbjFWTgI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 15:34:19 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B9192705
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 12:34:18 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-51be5db4e35so1037036a12.1
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 12:34:18 -0700 (PDT)
+        Fri, 23 Jun 2023 15:36:08 -0400
+Received: from smtp-fw-52004.amazon.com (smtp-fw-52004.amazon.com [52.119.213.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F6892701;
+        Fri, 23 Jun 2023 12:36:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1687548857; x=1690140857;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=H1ZT5uDPau+Z6seT0VZfhVr+ahIhi7iWdRJoe/etFv4=;
-        b=FsegaqWNkcFZNgjC6QvgsHELtV1MFOcfAZBNSE/k42Mv+ZFsm7smXygU1dZxO4Zu4L
-         s1HBXGrF5XJDoo3vj8v/FxV8L4migIYEk27t++3VZPANQRe558yMx0EQ9UwqY38TdFnz
-         Zdfc7VOth7L/AxAAMFyazdYdjukyQ3LNlOpqE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687548857; x=1690140857;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=H1ZT5uDPau+Z6seT0VZfhVr+ahIhi7iWdRJoe/etFv4=;
-        b=DSX2OvVCkcXHDyDQWEvcRlR1agUif90tdFEQaHDGuYr3zEL63vMuSvLIzcb6USUKPn
-         Cml/1b5dtK4xHmildPt24ZrWw7yy9Qt/VoHOlZQ7EmuTEK8x4U1UIHcAL+LRNJBTEFKZ
-         o7hpjCUHB45UItYpT7iLmzeYdvBWXfqXVqNoGKmanHG40vItj4o6YGcdWL9hZMd9ZhqW
-         RthGwfKsSoX4udLo+YCuWJ2vWA1ckJ4cEHZt5uYG9/HgaqaVJBVX/+hr8r5NWN5viwMa
-         WUKmmZAuc+vjkXQiNnsGWQHXYs/MANmdpe50ldgJZuafsbhOxR6tKXlIYx3JwVY0pwG2
-         QeMQ==
-X-Gm-Message-State: AC+VfDzF5FjVlg0sRjG1fWpzRiaQ0/pGgMi6AduxeiWuHMicYtqburK4
-        y/wdwIiAbAkoUM3NgaoQt9v23TpUwdthYuE+zAe0XA==
-X-Google-Smtp-Source: ACHHUZ5F7yp7MoYj7ZVStBDMOjWhhFnvtE/tnMTRdBym3Qk0EUPemlUzpfsf59C6ak1XfEXgkGGGVw==
-X-Received: by 2002:a17:907:320a:b0:965:d18b:f03a with SMTP id xg10-20020a170907320a00b00965d18bf03amr19858261ejb.58.1687548856730;
-        Fri, 23 Jun 2023 12:34:16 -0700 (PDT)
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com. [209.85.208.52])
-        by smtp.gmail.com with ESMTPSA id n26-20020a1709065e1a00b0096f71ace804sm6286292eju.99.2023.06.23.12.34.15
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Jun 2023 12:34:15 -0700 (PDT)
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-51bea30ccbcso1045709a12.0
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 12:34:15 -0700 (PDT)
-X-Received: by 2002:aa7:d5c6:0:b0:51b:e803:83d4 with SMTP id
- d6-20020aa7d5c6000000b0051be80383d4mr4768055eds.21.1687548855130; Fri, 23 Jun
- 2023 12:34:15 -0700 (PDT)
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1687548966; x=1719084966;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=dNuGXLt0we9p+hFppdMGSMyPfBu4liJLrmYKjCSYNz8=;
+  b=cMe5GvGw7kk89ZjxYNC5nfJ0mIf65rdhw/f35LSzU4vPuId325tKY4W3
+   u8+K+eXewNOZ3iR+fpWJIyWLXOZv+gl7HCeP8M4QXPDItKAbSt66luzap
+   PEqf4cZjnITqOaDWq0PUWsiBeafvju2Fa954JVisl3z+EF56YkokNUuZr
+   o=;
+X-IronPort-AV: E=Sophos;i="6.01,152,1684800000"; 
+   d="scan'208";a="138824582"
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-pdx-2c-m6i4x-e7094f15.us-west-2.amazon.com) ([10.43.8.2])
+  by smtp-border-fw-52004.iad7.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2023 19:36:05 +0000
+Received: from EX19MTAUWB002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2c-m6i4x-e7094f15.us-west-2.amazon.com (Postfix) with ESMTPS id B9F1240DB4;
+        Fri, 23 Jun 2023 19:35:59 +0000 (UTC)
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Fri, 23 Jun 2023 19:35:44 +0000
+Received: from 88665a182662.ant.amazon.com.com (10.187.171.23) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.26;
+ Fri, 23 Jun 2023 19:35:41 +0000
+From:   Kuniyuki Iwashima <kuniyu@amazon.com>
+To:     <leitao@debian.org>
+CC:     <asml.silence@gmail.com>, <axboe@kernel.dk>, <davem@davemloft.net>,
+        <edumazet@google.com>, <gregkh@linuxfoundation.org>,
+        <io-uring@vger.kernel.org>, <kuba@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <pabeni@redhat.com>, <kuniyu@amazon.com>
+Subject: [PATCH v3] io_uring: Add io_uring command support for sockets
+Date:   Fri, 23 Jun 2023 12:35:32 -0700
+Message-ID: <20230623193532.88760-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230622215915.2565207-1-leitao@debian.org>
+References: <20230622215915.2565207-1-leitao@debian.org>
 MIME-Version: 1.0
-References: <CAPM=9twNnV4zMCvrPkw3H-ajZOH-01JVh_kDrxdPYQErz8ZTdA@mail.gmail.com>
- <CAHk-=wi=eDN4Ub0qSN27ztBAvHSXCyiY2stu3_XbTpYpQX4x7w@mail.gmail.com>
- <CAHk-=wg9p+oJtzC0582vke8whcWPNSC9eq0Z6kdnSqWMEpah7g@mail.gmail.com> <CAKwvOd=dUWWSzQEWdguhe3SjYTw7a76skx370DbU2Y+5o=M8BA@mail.gmail.com>
-In-Reply-To: <CAKwvOd=dUWWSzQEWdguhe3SjYTw7a76skx370DbU2Y+5o=M8BA@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 23 Jun 2023 12:33:58 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgsK5H=ejAfFaABzK5PCb3=wqarq+L5frcTjRJkON9S+Q@mail.gmail.com>
-Message-ID: <CAHk-=wgsK5H=ejAfFaABzK5PCb3=wqarq+L5frcTjRJkON9S+Q@mail.gmail.com>
-Subject: Re: arm32 build warnings in workqueue.c
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Dave Airlie <airlied@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Tejun Heo <tj@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,LOTS_OF_MONEY,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.187.171.23]
+X-ClientProxiedBy: EX19D045UWC003.ant.amazon.com (10.13.139.198) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 23 Jun 2023 at 12:16, Nick Desaulniers <ndesaulniers@google.com> wrote:
->
-> >
-> > -       movabsq $137438953440, %rcx             # imm = 0x1FFFFFFFE0
-> > -       andq    %rax, %rcx
-> > -       movabsq $68719476704, %rdx              # imm = 0xFFFFFFFE0
-> > -       cmpq    %rdx, %rcx
-> > +       shrq    $5, %rax
-> > +       cmpl    $2147483647, %eax               # imm = 0x7FFFFFFF
-> >
-> > in several places.
->
-> Sorry, are those equivalent?  Before looks to me like:
->
-> if (0xFFFFFFFE0 - (0x1FFFFFFFE0 & rax))
->
-> and after
->
-> if (0x7FFFFFFF - (rax >> 5))
+From: Breno Leitao <leitao@debian.org>
+Date: Thu, 22 Jun 2023 14:59:14 -0700
+> Enable io_uring commands on network sockets. Create two new
+> SOCKET_URING_OP commands that will operate on sockets.
+> 
+> In order to call ioctl on sockets, use the file_operations->io_uring_cmd
+> callbacks, and map it to a uring socket function, which handles the
+> SOCKET_URING_OP accordingly, and calls socket ioctls.
+> 
+> This patches was tested by creating a new test case in liburing.
+> Link: https://github.com/leitao/liburing/tree/io_uring_cmd
+> 
+> Signed-off-by: Breno Leitao <leitao@debian.org>
+> ---
+> V1 -> V2:
+> 	* Keep uring code outside of network core subsystem
+> 	* Uses ioctl to define uring operation
+> 	* Use a generic ioctl function, instead of copying it over
+> V2 -> V3:
+> 	* Do not use ioctl() helpers to create uring operations
+> 	* Rename uring_sock_cmd to io_uring_cmd_sock
+> ---
+>  include/linux/io_uring.h      |  6 ++++++
+>  include/uapi/linux/io_uring.h |  8 ++++++++
+>  io_uring/uring_cmd.c          | 27 +++++++++++++++++++++++++++
+>  net/socket.c                  |  2 ++
+>  4 files changed, 43 insertions(+)
+> 
+> diff --git a/include/linux/io_uring.h b/include/linux/io_uring.h
+> index 7fe31b2cd02f..f00baf2929ff 100644
+> --- a/include/linux/io_uring.h
+> +++ b/include/linux/io_uring.h
+> @@ -71,6 +71,7 @@ static inline void io_uring_free(struct task_struct *tsk)
+>  	if (tsk->io_uring)
+>  		__io_uring_free(tsk);
+>  }
+> +int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags);
+>  #else
+>  static inline int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
+>  			      struct iov_iter *iter, void *ioucmd)
+> @@ -102,6 +103,11 @@ static inline const char *io_uring_get_opcode(u8 opcode)
+>  {
+>  	return "";
+>  }
+> +static inline int io_uring_cmd_sock(struct io_uring_cmd *cmd,
+> +				    unsigned int issue_flags)
+> +{
+> +	return -EOPNOTSUPP;
+> +}
+>  #endif
+>  
+>  #endif
+> diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
+> index 0716cb17e436..5c25f8c98aa8 100644
+> --- a/include/uapi/linux/io_uring.h
+> +++ b/include/uapi/linux/io_uring.h
+> @@ -703,6 +703,14 @@ struct io_uring_recvmsg_out {
+>  	__u32 flags;
+>  };
+>  
+> +/*
+> + * Argument for IORING_OP_URING_CMD when file is a socket
+> + */
+> +enum {
+> +	SOCKET_URING_OP_SIOCINQ		= 0,
+> +	SOCKET_URING_OP_SIOCOUTQ,
+> +};
+> +
+>  #ifdef __cplusplus
+>  }
+>  #endif
+> diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
+> index 5e32db48696d..31ce59567295 100644
+> --- a/io_uring/uring_cmd.c
+> +++ b/io_uring/uring_cmd.c
+> @@ -7,6 +7,7 @@
+>  #include <linux/nospec.h>
+>  
+>  #include <uapi/linux/io_uring.h>
+> +#include <uapi/asm-generic/ioctls.h>
+>  
+>  #include "io_uring.h"
+>  #include "rsrc.h"
+> @@ -156,3 +157,29 @@ int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
+>  	return io_import_fixed(rw, iter, req->imu, ubuf, len);
+>  }
+>  EXPORT_SYMBOL_GPL(io_uring_cmd_import_fixed);
+> +
+> +int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags)
+> +{
+> +	struct socket *sock = cmd->file->private_data;
+> +	struct sock *sk = sock->sk;
+> +	int ret, arg = 0;
 
-I cut off some of the other changes, with the old (confused) code also doing
+Please cache READ_ONCE(sk->sk_prot) here and reuse it.
 
--       shrq    $5, %rax
+Thanks.
 
-later.
-
-And yes, as far as I can tell, the comparisons are 100% equivalent.
-Look at what happens when you shift that big mask down by 5..
-
-> > My guess is that clang keeps an enum as an enum as long as possible -
-> > including past some (really) simple simplification phases of the
-> > optimizer.
->
-> I don't think so.
-> https://godbolt.org/z/M8746c49z
-> That's LLVM IR as soon as it leaves the front end.
-
-Hmm. I have
-
-     clang version 15.0.7 (Fedora 15.0.7-2.fc37)
-
-and you can probably check the code generation of the current kernel
-with and without that patch.
-
-It might depend on exact config file - I'll send you mine in a
-separate email to not pollute the mailing list.
-
-                Linus
+> +
+> +	if (!sk->sk_prot || !sk->sk_prot->ioctl)
+> +		return -EOPNOTSUPP;
+> +
+> +	switch (cmd->sqe->cmd_op) {
+> +	case SOCKET_URING_OP_SIOCINQ:
+> +		ret = sk->sk_prot->ioctl(sk, SIOCINQ, &arg);
+> +		if (ret)
+> +			return ret;
+> +		return arg;
+> +	case SOCKET_URING_OP_SIOCOUTQ:
+> +		ret = sk->sk_prot->ioctl(sk, SIOCOUTQ, &arg);
+> +		if (ret)
+> +			return ret;
+> +		return arg;
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +EXPORT_SYMBOL_GPL(io_uring_cmd_sock);
+> diff --git a/net/socket.c b/net/socket.c
+> index b778fc03c6e0..09b105d00445 100644
+> --- a/net/socket.c
+> +++ b/net/socket.c
+> @@ -88,6 +88,7 @@
+>  #include <linux/xattr.h>
+>  #include <linux/nospec.h>
+>  #include <linux/indirect_call_wrapper.h>
+> +#include <linux/io_uring.h>
+>  
+>  #include <linux/uaccess.h>
+>  #include <asm/unistd.h>
+> @@ -159,6 +160,7 @@ static const struct file_operations socket_file_ops = {
+>  #ifdef CONFIG_COMPAT
+>  	.compat_ioctl = compat_sock_ioctl,
+>  #endif
+> +	.uring_cmd =    io_uring_cmd_sock,
+>  	.mmap =		sock_mmap,
+>  	.release =	sock_close,
+>  	.fasync =	sock_fasync,
+> -- 
+> 2.34.1
