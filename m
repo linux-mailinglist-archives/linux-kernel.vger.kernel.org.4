@@ -2,147 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F5BC73BB0C
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 17:07:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4530F73BB0D
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 17:08:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232376AbjFWPHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 11:07:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55838 "EHLO
+        id S232386AbjFWPH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 11:07:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230171AbjFWPHq (ORCPT
+        with ESMTP id S232389AbjFWPH4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 11:07:46 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E024919B;
-        Fri, 23 Jun 2023 08:07:45 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7A5A5838;
-        Fri, 23 Jun 2023 17:07:07 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1687532827;
-        bh=oD4kG/c9kCvZMwIuxM4/Cnj6csQMpqebLk5VGFFXC8A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aMJ4V7DWDxc2tAdcxE1nBJGIx3mcwonccDHBxz2tWwbvfmSiP0dA712+jvEf/NiqD
-         0zhdutTaI7JF5GweYH2qcgjygTY3IkEyNAckH8XDBM7BZ2LY1VlViSCFrzIioJFAHc
-         PfN4E/02XQtkjHLeJU6C9P1DHoPp5uyAeVn70VQA=
-Date:   Fri, 23 Jun 2023 18:07:42 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 06/39] drm: renesas: shmobile: Add support for Runtime PM
-Message-ID: <20230623150742.GK2112@pendragon.ideasonboard.com>
-References: <cover.1687423204.git.geert+renesas@glider.be>
- <742b3351c1aed1f546ac2dcc1de15e0d04cc24d4.1687423204.git.geert+renesas@glider.be>
+        Fri, 23 Jun 2023 11:07:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF1641FDF
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 08:07:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DA8D61A87
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 15:07:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2349C433CA;
+        Fri, 23 Jun 2023 15:07:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687532872;
+        bh=zEV2RKDHizUuqsg/GKSamDV5J/oB9i1p+vG1rVTtzt8=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=IchY5XGxI/2DQEDIkFjGD5WpWJK1obsXG6/iTyEfyBLwuuKkEQeeGfdfb8wnj5bmL
+         SAn0fRhmzBpXa7qMK8oUX44vM05Xai2FKeI5e9eW36qR4aXG6Nh0iWyYsTc9kIMolf
+         4ffVLS4VMFwlgQJK46uEhpTLTt1KimvOhbUMTLWPdmgEqr3NakWZlAs3XDF4mLfp4L
+         zh7n0zozS2UdBDp8YwYL7pZRhwExrDjJkbBIEOJbmdyadK07kPSGjpBXdx1DjYqSTE
+         eCohysBtUFbOi4yrqWd0LpySMMUL/wjkbRzIR7mRyCi/mcqP7R3BcninozTcvN0fYo
+         JFCGdVTkVO+/g==
+From:   Mark Brown <broonie@kernel.org>
+To:     alsa-devel@alsa-project.org,
+        Arun Gopal Kondaveeti <arungopal.kondaveeti@amd.com>
+Cc:     Vijendar.Mukunda@amd.com, Basavaraj.Hiregoudar@amd.com,
+        sunil-kumar.dommati@amd.com, venkataprasad.potturu@amd.com,
+        syed.sabakareem@amd.com, mario.limonciello@amd.com,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Syed Saba Kareem <Syed.SabaKareem@amd.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        open list <linux-kernel@vger.kernel.org>
+In-Reply-To: <20230623214150.4058721-1-arungopal.kondaveeti@amd.com>
+References: <20230623214150.4058721-1-arungopal.kondaveeti@amd.com>
+Subject: Re: [PATCH v2] ASoC: amd: update pm_runtime enable sequence
+Message-Id: <168753286853.678414.15580009562650782179.b4-ty@kernel.org>
+Date:   Fri, 23 Jun 2023 16:07:48 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <742b3351c1aed1f546ac2dcc1de15e0d04cc24d4.1687423204.git.geert+renesas@glider.be>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-c6835
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
-
-Thank you for the patch.
-
-On Thu, Jun 22, 2023 at 11:21:18AM +0200, Geert Uytterhoeven wrote:
-> The SH-Mobile LCD Controller is part of a PM Domain on all relevant SoCs
-> (clock domain on all, power domain on some).  Hence it may not be
-> sufficient to manage the LCDC module clock explicitly (e.g. if the
-> selected clock source differs from SHMOB_DRM_CLK_BUS).
+On Sat, 24 Jun 2023 03:11:40 +0530, Arun Gopal Kondaveeti wrote:
+> pm_runtime_allow() is not needed for ACP child platform devices.
+> Replace pm_runtime_allow() with pm_runtime_mark_last_busy()
+> & pm_runtime_set_active() in pm_runtime enable sequence for
+> ACP child platform drivers.
 > 
-> Fix this by using Runtime PM instead.
 > 
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
->  drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c | 11 ++++++++++-
->  drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c  |  5 +++++
->  2 files changed, 15 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c b/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c
-> index fbfd906844da490c..84dbf35025d7be63 100644
-> --- a/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c
-> +++ b/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c
-> @@ -9,6 +9,7 @@
->  
->  #include <linux/backlight.h>
->  #include <linux/clk.h>
-> +#include <linux/pm_runtime.h>
->  
->  #include <drm/drm_crtc.h>
->  #include <drm/drm_crtc_helper.h>
-> @@ -170,10 +171,16 @@ static void shmob_drm_crtc_start(struct shmob_drm_crtc *scrtc)
->  	if (WARN_ON(format == NULL))
->  		return;
->  
-> +	ret = pm_runtime_resume_and_get(sdev->dev);
-> +	if (ret)
-> +		return;
-> +
->  	/* Enable clocks before accessing the hardware. */
->  	ret = shmob_drm_clk_on(sdev);
 
-This would be best located in the runtime PM resume handler. Same for
-disabling clocks in the runtime PM suspend handler.
+Applied to
 
-> -	if (ret < 0)
-> +	if (ret < 0) {
-> +		pm_runtime_put(sdev->dev);
->  		return;
-> +	}
->  
->  	/* Reset and enable the LCDC. */
->  	lcdc_write(sdev, LDCNT2R, lcdc_read(sdev, LDCNT2R) | LDCNT2R_BR);
-> @@ -271,6 +278,8 @@ static void shmob_drm_crtc_stop(struct shmob_drm_crtc *scrtc)
->  	/* Stop clocks. */
->  	shmob_drm_clk_off(sdev);
->  
-> +	pm_runtime_put(sdev->dev);
-> +
->  	scrtc->started = false;
->  }
->  
-> diff --git a/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c b/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c
-> index 30493ce874192e3e..4f01caa119637032 100644
-> --- a/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c
-> +++ b/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c
-> @@ -13,6 +13,7 @@
->  #include <linux/module.h>
->  #include <linux/platform_device.h>
->  #include <linux/pm.h>
-> +#include <linux/pm_runtime.h>
->  #include <linux/slab.h>
->  
->  #include <drm/drm_drv.h>
-> @@ -216,6 +217,10 @@ static int shmob_drm_probe(struct platform_device *pdev)
->  	if (IS_ERR(sdev->mmio))
->  		return PTR_ERR(sdev->mmio);
->  
-> +	ret = devm_pm_runtime_enable(&pdev->dev);
-> +	if (ret)
-> +		return ret;
-> +
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-I would move this after shmob_drm_setup_clocks(), to ensure that the
-runtime PM suspend and resume handlers will have access to clocks.
+Thanks!
 
->  	ret = shmob_drm_setup_clocks(sdev, pdata->clk_source);
->  	if (ret < 0)
->  		return ret;
+[1/1] ASoC: amd: update pm_runtime enable sequence
+      commit: 154756319cc6f8b8b86241da02da6a8fcc6abd1f
 
--- 
-Regards,
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-Laurent Pinchart
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
