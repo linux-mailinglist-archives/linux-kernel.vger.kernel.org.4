@@ -2,110 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05A8573C4CE
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 01:32:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58D8973C4D1
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 01:33:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230491AbjFWXc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 19:32:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53604 "EHLO
+        id S231467AbjFWXdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 19:33:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230088AbjFWXcY (ORCPT
+        with ESMTP id S230010AbjFWXds (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 19:32:24 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A91EE2696
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 16:32:23 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2b4636bb22eso19729111fa.2
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 16:32:23 -0700 (PDT)
+        Fri, 23 Jun 2023 19:33:48 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 800AC2699
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 16:33:47 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-553a1f13d9fso995833a12.1
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 16:33:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1687563142; x=1690155142;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Apfq7AhNdXkzjdfdSdVi+dqQ3I5tsUXwD6FmqXc0zjI=;
-        b=GhxuHOMtbdUcSShbDvNYafl9pfOfd6C8va282O3ywbZvR+t/p39SBpkbaPQBjAxbR3
-         ECY1FdMZKen56LNaIkVkSoUdZbup6/JW+3+b2jAohLrBxRhHDuGmhXCEETCdDAigSwGb
-         Q9k48RVeA5YcZnEYsMV42MaqtCmnXtKLebNsI=
+        d=chromium.org; s=google; t=1687563227; x=1690155227;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=5BXr6eTNbrAAPMLfItUNBU1GV8gA8JI1s3w/GXSgtiQ=;
+        b=T4eNDvej4BSP1rQm+6xqQqAO5mSaxmUuOD4yVwd/MW16mp1HkVi7Gmt8TqmlwIPBsJ
+         yWUZHfhdLKjlPSoVnhyEAptnwbesES/JLcrRcxguBJzZNKQ7kUnz9gQDo7szvdxlsGwg
+         TX5y4PyA9zFvXsB2PFcRGADDVkbC3NKC14NSI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687563142; x=1690155142;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Apfq7AhNdXkzjdfdSdVi+dqQ3I5tsUXwD6FmqXc0zjI=;
-        b=XP3KOmGHdaZyUtjK7nNiSChg1OABaCHYrRrJmYQYNxW2MEPOiXWtY8MIunKRTKEC9R
-         WyRVMg5QiwKMV2amaXg54/Fy14jaNp2Vibq3h1lClh2ohKMA7KNkZBwRkWqMth2Qwl33
-         ffrn07u8H1PnhMtn7D3vwwJy9N7P6eysRsmbnZNtBUOnUtM3D5SUgDMd69wh21UJW//v
-         210dk0pbvvIXlYjpi5AkHj0q7hX24whQ8Bc5A3jl9kb4grBZRgVxMmOO1j5WLfzmWKyp
-         HYh6l3+CVAfrkJdgn1btRGffzjpRvwekHw8hsSAauCZ2Ny66kw3Bt7DyRH1aOteLOU9e
-         DDxw==
-X-Gm-Message-State: AC+VfDzhpgjaUQL4kwOL+4t8ti63aPXYR99cf/9yc6253hLu5hiBvGGZ
-        HjrDEnAtHcyMH3cc9MWWM+zrBtKwp53ExgwklqpC7jsa
-X-Google-Smtp-Source: ACHHUZ4OU9DWgCvY2yuFn6YGeztEVy3KSMXOYegbyZW/m5vVavB28fd8vuB4hhAZ91drwmdAR1YOWw==
-X-Received: by 2002:a2e:904f:0:b0:2b4:94ec:e8 with SMTP id n15-20020a2e904f000000b002b494ec00e8mr8808879ljg.39.1687563141683;
-        Fri, 23 Jun 2023 16:32:21 -0700 (PDT)
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com. [209.85.208.52])
-        by smtp.gmail.com with ESMTPSA id re3-20020a170906d8c300b00977ca5de275sm213158ejb.13.2023.06.23.16.32.20
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Jun 2023 16:32:21 -0700 (PDT)
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-51bdf83a513so1220711a12.2
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 16:32:20 -0700 (PDT)
-X-Received: by 2002:a05:6402:1344:b0:51b:e5d7:98eb with SMTP id
- y4-20020a056402134400b0051be5d798ebmr4390582edw.41.1687563140463; Fri, 23 Jun
- 2023 16:32:20 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687563227; x=1690155227;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5BXr6eTNbrAAPMLfItUNBU1GV8gA8JI1s3w/GXSgtiQ=;
+        b=isIivzLhxyFWOgBqS6GACenTfsO3kbUXBBO1HbG2SxFYGehhkTIgtP6nN3dzJt9zNG
+         hz/qC5b4B3G+fsMovRAyMVAA4aJ6jbfOwrJwJylrsM9Mt5j4kUR9EfHWfKebjc7m0Yr8
+         AtnMtGLR9MGlnl2bvWwLWpoJfqQtArwN2gaay9RqtWiFLfxs8NsHnEZeycUnqfisCBY3
+         Ab3gvQNpYEb9/9CyTke7ViMA1/E/X5o1oBOcIQzevlwmhXCE2bpMBmUR4lpRXmlxcJcW
+         hXi9dXkw2pSl3JF4Z/GHaHq0e9zJw8Ugk+TQMgO/8+VpvyzHhAzG+KGEEoseFxc1dSNZ
+         AOaQ==
+X-Gm-Message-State: AC+VfDw+3u0BOr5EDAxP7Z+XOpaKWU7xOK5zBUCDWSJDxFRpF8TrdQdv
+        p7e5yLhmYLzuxX77zQX7ldZtWXL5aVJa5VeCkVc=
+X-Google-Smtp-Source: ACHHUZ69mWqFU5agnEl+Q83+Js77SJdoh72Y42y83F4lW+t475KKF3wSlBzxef4eC2MLbMqu1PNchw==
+X-Received: by 2002:a17:902:f68d:b0:1b6:ba60:780e with SMTP id l13-20020a170902f68d00b001b6ba60780emr703673plg.24.1687563227001;
+        Fri, 23 Jun 2023 16:33:47 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id lg13-20020a170902fb8d00b001b061dcdb6bsm112977plb.28.2023.06.23.16.33.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Jun 2023 16:33:46 -0700 (PDT)
+Date:   Fri, 23 Jun 2023 16:33:45 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Christian Lamparter <chunkeey@gmail.com>,
+        Arnd Bergmann <arnd@kernel.org>, Kalle Valo <kvalo@kernel.org>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Shiji Yang <yangshiji66@outlook.com>,
+        Nick Kossifidis <mickflemm@gmail.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] carl9170: re-fix fortified-memset warning
+Message-ID: <202306231607.8632EBE15@keescook>
+References: <20230623152443.2296825-1-arnd@kernel.org>
+ <7c4622e7-d7a8-ae5d-e381-f726cb511228@gmail.com>
+ <24986b5e-5cd1-4cd5-aff3-b5eab2c0fdde@app.fastmail.com>
 MIME-Version: 1.0
-References: <2730511.1687559668@warthog.procyon.org.uk> <CAHk-=wiXr2WTDFZi6y8c4TjZXfTnw28BkLF9Fpe=SyvmSCvP2Q@mail.gmail.com>
- <CAHk-=wjjNErGaMCepX-2q_3kuZV_aNoqB5SE-LLR_eLk2+OHJA@mail.gmail.com>
-In-Reply-To: <CAHk-=wjjNErGaMCepX-2q_3kuZV_aNoqB5SE-LLR_eLk2+OHJA@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 23 Jun 2023 16:32:03 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjrsPMko==NyQ1Y=Cta-ATshCwzSn9OwCq6KAx8Gh8RLA@mail.gmail.com>
-Message-ID: <CAHk-=wjrsPMko==NyQ1Y=Cta-ATshCwzSn9OwCq6KAx8Gh8RLA@mail.gmail.com>
-Subject: Re: [PATCH] pipe: Make a partially-satisfied blocking read wait for more
-To:     David Howells <dhowells@redhat.com>
-Cc:     Franck Grosjean <fgrosjea@redhat.com>,
-        Phil Auld <pauld@redhat.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <24986b5e-5cd1-4cd5-aff3-b5eab2c0fdde@app.fastmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 23 Jun 2023 at 16:08, Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> In fact, I'd expect that patch to fail immediately on a perfectly
-> normal program that passes a token around by doing a small write to a
-> pipe, and have the "token reader" do a bigger write.
+On Fri, Jun 23, 2023 at 06:05:57PM +0200, Arnd Bergmann wrote:
+> Doing the randconfig builds with the latest compilers, carl9170 is the
+> only one I see with fortified-string warnings, and there are a few
+> dozen other drivers that I see with W=1, including one that affects
+> all wireless drivers.
 
-Bigger _read_, of course.
+Can you post the config that triggers this? I can't reproduce this
+warning...
 
-This might be hidden by such programs typically doing a single byte
-write and a single byte read, but I could easily imagine situations
-where people actually depend on the POSIX atomicity guarantees, ie you
-write a "token packet" that might be variable-sized, and the reader
-then just does a maximally sized read, knowing that it will get a full
-packet or nothing.
+-Kees
 
-So a read() of a pipe absolutely has to return when it has gotten
-*any* data. Except if it can know that there is a writer that is still
-busy and still in the process of writing more data.
-
-Which was that old 'pipe->waiting_writers' logic - it basically
-counted "there are <N> active writers that still have more data to
-write, but the buffer filled up".
-
-That logic went back to ancient times, when our pipe buffer was just a
-single page - so it helped throughput immensely if we had writers that
-did big writes, and readers would continue to read even when the small
-buffer was completely used up (rather than return data just one page
-at a time for each read() system call).
-
-               Linus
+-- 
+Kees Cook
