@@ -2,160 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9056373B5E0
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 13:11:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D1E073B5E6
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 13:14:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231713AbjFWLLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 07:11:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53826 "EHLO
+        id S231789AbjFWLOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 07:14:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231671AbjFWLLn (ORCPT
+        with ESMTP id S231272AbjFWLOQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 07:11:43 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB26510F6;
-        Fri, 23 Jun 2023 04:11:41 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4f973035d60so494415e87.3;
-        Fri, 23 Jun 2023 04:11:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687518700; x=1690110700;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=do2bpdVMJ85bRb47mVgKbZvqePYWno5Te4+1xoLO+cA=;
-        b=rAxKMbv6GqbOHjUiDS8dFT6/c0ePaFssDunkFQr3S5e+t+4F35gxilj77Tk8q7MQkC
-         e4Dep24F5Yy6ZmT2PDgYXix7AYefI8wsJ0p5iJvAvLqqR84cl94I1Lhge5eTQFf63Dyr
-         eK1vz+ynecIclLPAxSchNaK0fmn7s9kFllsgtIRYRz/V8eFqa238MQmiU10FZQtmd9Ql
-         8gOEsXyC6PBQzEvNTHvVf8RU3muJKRG5QCiccxPP2OhdQXwrMDBs7mJFzkmkBDdkQcBK
-         AcI6haW9a49UHk1qmsxk/7vEGA1G7Y+HD5D8DGtpih0IzR2Df1A0oJEyiKFGXDPrJbFq
-         iVOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687518700; x=1690110700;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=do2bpdVMJ85bRb47mVgKbZvqePYWno5Te4+1xoLO+cA=;
-        b=Zazk28F+R6v0VbnyEbvtoo9uZs1oLZPEDGEOOADJMZmp6BNwgMfAhhs9s6N97/3Zuh
-         d5ePPJutfbvRp0L1GVs+oFBoLEV5mE7dBy3jWzqCNrMUfTVPTJ7SlwLtyMSkISLU57eU
-         yoiUrdpZccrRBBt9qOJIbsiqfxhloiq880BKof4s+GO3GGCo1wyzU97/rfJwGSuIij+8
-         mCuu1fo6jkz+ggT9gdU0x/KfAfsharjCB0YRuJaQuonjAzdK4Qj5ugmdTGTGp/yi/qJg
-         lLbeCMfWRelxB9IWUTjucL5HnzgvXyaA2b7zBE6lCbhL536hr2HIGWehuyXgDYmUkqt9
-         KUAA==
-X-Gm-Message-State: AC+VfDwBvKfh/j6+J48FchWvTu0b2CILxVsbP1F/aC3r/v/OIK0hQtsP
-        2cgUr2vfK7721ZW1ZqIin7/UXHhG38I=
-X-Google-Smtp-Source: ACHHUZ4803QgZmjT5Dlbvcvt9KwmbS0zzuCrnTbJO0AFMNORcAcWIN2QouoqCxwoMM/Mg4OTgZGMyQ==
-X-Received: by 2002:a19:ab11:0:b0:4f8:7614:48a5 with SMTP id u17-20020a19ab11000000b004f8761448a5mr7273219lfe.66.1687518699691;
-        Fri, 23 Jun 2023 04:11:39 -0700 (PDT)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id c14-20020a7bc84e000000b003f8126bcf34sm2009848wml.48.2023.06.23.04.11.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Jun 2023 04:11:38 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Fri, 23 Jun 2023 13:11:36 +0200
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH] fprobe: Release rethook after the ftrace_ops is
- unregistered
-Message-ID: <ZJV96BqF8EAXAOOd@krava>
-References: <20230615115236.3476617-1-jolsa@kernel.org>
- <20230615085920.7dadac74@gandalf.local.home>
+        Fri, 23 Jun 2023 07:14:16 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F90F10A
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 04:14:15 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id B6FC41F390;
+        Fri, 23 Jun 2023 11:14:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1687518853; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=VPkRF0yMkyjofOEDttGkbk+ydecH5rRboOUBk8Lt91E=;
+        b=rf70uEgs8HTF81hkvHG9Llfel+MSbhSxdIiwAu8L7vgJxCp2RFS3r2w7mcKlCU62BTxvGA
+        pNaMuWKEvxFlPCKNMy8ML8nNxVkRWrRwkshFeiZzRTVS/x+M+eYX3JTT8yL5G4YNtKJYRp
+        RsZ6v6C0UwvqdQz2XiFS4DYo0VcN/bQ=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5BF5D1331F;
+        Fri, 23 Jun 2023 11:14:13 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 7jahE4V+lWTcFAAAMHmgww
+        (envelope-from <nik.borisov@suse.com>); Fri, 23 Jun 2023 11:14:13 +0000
+From:   Nikolay Borisov <nik.borisov@suse.com>
+To:     x86@kernel.org
+Cc:     linux-kernel@vger.kernel.org, mohocko@suse.com, jslaby@suse.cz,
+        Nikolay Borisov <nik.borisov@suse.com>
+Subject: [PATCH v4 0/6] Make IA32_EMULATION boot time overridable
+Date:   Fri, 23 Jun 2023 14:14:03 +0300
+Message-Id: <20230623111409.3047467-1-nik.borisov@suse.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230615085920.7dadac74@gandalf.local.home>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 08:59:20AM -0400, Steven Rostedt wrote:
-> 
-> Masami,
-> 
-> Want to take this via your probes/urgent branch and send it off to Linus?
+Here's v4 of the patchset, incorporating latest round of reviews, Namely,
 
-hi,
-did this one make it into some tree?
+* Split the first patch into 2  - one introducing the ia32_enabled() function
+which simply return true if IA32_EMULATION is selected.
 
-thanks,
-jirka
+* Some minor typos (rdunlap)
 
+* Reworked some changelogs.
 
-> 
-> -- Steve
-> 
-> 
-> On Thu, 15 Jun 2023 13:52:36 +0200
-> Jiri Olsa <jolsa@kernel.org> wrote:
-> 
-> > While running bpf selftests it's possible to get following fault:
-> > 
-> >   general protection fault, probably for non-canonical address \
-> >   0x6b6b6b6b6b6b6b6b: 0000 [#1] PREEMPT SMP DEBUG_PAGEALLOC NOPTI
-> >   ...
-> >   Call Trace:
-> >    <TASK>
-> >    fprobe_handler+0xc1/0x270
-> >    ? __pfx_bpf_testmod_init+0x10/0x10
-> >    ? __pfx_bpf_testmod_init+0x10/0x10
-> >    ? bpf_fentry_test1+0x5/0x10
-> >    ? bpf_fentry_test1+0x5/0x10
-> >    ? bpf_testmod_init+0x22/0x80
-> >    ? do_one_initcall+0x63/0x2e0
-> >    ? rcu_is_watching+0xd/0x40
-> >    ? kmalloc_trace+0xaf/0xc0
-> >    ? do_init_module+0x60/0x250
-> >    ? __do_sys_finit_module+0xac/0x120
-> >    ? do_syscall_64+0x37/0x90
-> >    ? entry_SYSCALL_64_after_hwframe+0x72/0xdc
-> >    </TASK>
-> > 
-> > In unregister_fprobe function we can't release fp->rethook while it's
-> > possible there are some of its users still running on another cpu.
-> > 
-> > Moving rethook_free call after fp->ops is unregistered with
-> > unregister_ftrace_function call.
-> > 
-> > Fixes: 5b0ab78998e3 ("fprobe: Add exit_handler support")
-> > Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > ---
-> >  kernel/trace/fprobe.c | 12 +++---------
-> >  1 file changed, 3 insertions(+), 9 deletions(-)
-> > 
-> > diff --git a/kernel/trace/fprobe.c b/kernel/trace/fprobe.c
-> > index 18d36842faf5..0121e8c0d54e 100644
-> > --- a/kernel/trace/fprobe.c
-> > +++ b/kernel/trace/fprobe.c
-> > @@ -364,19 +364,13 @@ int unregister_fprobe(struct fprobe *fp)
-> >  		    fp->ops.saved_func != fprobe_kprobe_handler))
-> >  		return -EINVAL;
-> >  
-> > -	/*
-> > -	 * rethook_free() starts disabling the rethook, but the rethook handlers
-> > -	 * may be running on other processors at this point. To make sure that all
-> > -	 * current running handlers are finished, call unregister_ftrace_function()
-> > -	 * after this.
-> > -	 */
-> > -	if (fp->rethook)
-> > -		rethook_free(fp->rethook);
-> > -
-> >  	ret = unregister_ftrace_function(&fp->ops);
-> >  	if (ret < 0)
-> >  		return ret;
-> >  
-> > +	if (fp->rethook)
-> > +		rethook_free(fp->rethook);
-> > +
-> >  	ftrace_free_filter(&fp->ops);
-> >  
-> >  	return ret;
-> 
+* Added one final patch which introduces the Kconfig/boot time parameter after
+everything is predicated on ia32_enabled. This allows the config switch to be
+fully operable when it's introduced. (tgxl)
+
+* Renamed the runtime parameter name to ia32_emulation and its format to bool.
+
+Nikolay Borisov (6):
+  x86: Introduce ia32_enabled
+  x86/entry: Rename ignore_sysret
+  x86/entry: Compile entry_SYSCALL32_ignore unconditionally
+  x86/elf: Make loading of 32bit processes depend on ia32_enabled()
+  x86/entry: Make IA32 syscalls' availability depend on ia32_enabled()
+  x86: Make IA32_EMULATION boot time configurable
+
+ .../admin-guide/kernel-parameters.txt         |  5 +++
+ arch/x86/Kconfig                              |  9 +++++
+ arch/x86/entry/common.c                       | 20 ++++++++++
+ arch/x86/entry/entry_64.S                     |  6 +--
+ arch/x86/include/asm/elf.h                    |  3 +-
+ arch/x86/include/asm/ia32.h                   | 16 +++++++-
+ arch/x86/include/asm/processor.h              |  2 +-
+ arch/x86/include/asm/proto.h                  |  3 ++
+ arch/x86/kernel/cpu/common.c                  | 37 ++++++++++---------
+ arch/x86/kernel/idt.c                         |  7 ++++
+ 10 files changed, 83 insertions(+), 25 deletions(-)
+
+--
+2.34.1
+
