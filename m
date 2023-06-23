@@ -2,60 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EB8073BE3B
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 20:00:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D1C473BE3C
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 20:01:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232330AbjFWSAz convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 23 Jun 2023 14:00:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36024 "EHLO
+        id S232350AbjFWSBl convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 23 Jun 2023 14:01:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231888AbjFWSAw (ORCPT
+        with ESMTP id S231888AbjFWSBb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 14:00:52 -0400
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5621D2710;
-        Fri, 23 Jun 2023 11:00:42 -0700 (PDT)
-Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-bfe97b3752bso790063276.1;
-        Fri, 23 Jun 2023 11:00:42 -0700 (PDT)
+        Fri, 23 Jun 2023 14:01:31 -0400
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9745A2724;
+        Fri, 23 Jun 2023 11:01:29 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-bd729434fa0so896507276.1;
+        Fri, 23 Jun 2023 11:01:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687543241; x=1690135241;
+        d=1e100.net; s=20221208; t=1687543289; x=1690135289;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wZbee8Wrt4IHu56BKlWH9qLpUr7swFliaPouDguQe8A=;
-        b=Ac4rAUn1KBRPZG+KGv5vJjnU98oyScav49dhu59mNDw8Q/zri41NmTys521IgBIte+
-         9gopcy5m3lAY1XA1NyPNkLfidWRdkRdHRsL9zjFx0bV/XZeU1dpMyB4/Ck8ZYiQ0ydsV
-         RTLHi+6YyErv7rhGtlScw3Z/cELVhxFM+veqDX79Juk4xyb1tIpjeVXuKGh2UjkhAJPl
-         7Zc52VpzdOsJ5yXGqe+jd3EZLzOqCCVB7z3QTy6HHAqI7iwNFo3dC17dvtokyDjda3/u
-         VaY2xweVRh0wx/8HSJxTET2pyhVesFQgrR5R7ZntlIfro9heMxZsUoThGUcy2tEL/NvR
-         6NpQ==
-X-Gm-Message-State: AC+VfDweVz4zq/YKQwmKLJSxmdfnpNhEcoVcMU9Kl3fY9ExjDDdLwTxI
-        h1wXEEwPVfTwMETFpm3NWsP2na34iRqPJA9X5ls=
-X-Google-Smtp-Source: ACHHUZ41z34vizvwiSSfkU+v+p7VGIx6uqBh25Dli5GXlHanAkugPcDGZHJ3hDPKtDzbEpU9+CllDsLjAFqnYRebGF8=
-X-Received: by 2002:a25:fc28:0:b0:bac:ff9d:dc63 with SMTP id
- v40-20020a25fc28000000b00bacff9ddc63mr18167897ybd.9.1687543241330; Fri, 23
- Jun 2023 11:00:41 -0700 (PDT)
+        bh=DrJkokJikgOCvzs7OI6rvSjtU00f06IG7Q3tiUY6Zfw=;
+        b=Isnl0Y4So3K+0swczEUS30tIlaJqZZdAHOQnMcJd70cjbdDms/qujwMAW7MVE91ter
+         q3LrJwHttgIuIjftucOfz3HYuHnEWzaE2aW+f79Wkth+B8wXiX1zKAbgHG9JiyuvVswX
+         fH5+Pzhp60AkGuK0oMKHDc9hzJDIOyH/Ws7FdrD92yAEGbaC3liL3rwJeYi33jlI0TCB
+         RKpCaIRPsPKAt09vmSd/27voHp/5ABJs3OtyepyvfLMZfW/BcO/To4dcYftTCSR98Z1R
+         lbfvv31I6Z90PlCTxOsZqjuIxXu90P5hJ3298ooozl6oZBQw5N+9fsgbyb8HcrsbyIbC
+         avkQ==
+X-Gm-Message-State: AC+VfDy3NoI6yeOsWqdPslSYWi8e49hVP588JCU7lCjHIKsjBGIC7bVG
+        pmKTnseKtVwD73Nd1m4d5Asha1zDoykOjNYUKio=
+X-Google-Smtp-Source: ACHHUZ7gcMe3ibKA/hNp9Z4n8zg1/7efJ7VqDxtomIKEicWZSRCUJthxrmNt1VrTXT93ysYlhgzVdaLiU1DTdSiYx08=
+X-Received: by 2002:a25:18d7:0:b0:bcd:f5f3:2e11 with SMTP id
+ 206-20020a2518d7000000b00bcdf5f32e11mr20184302yby.11.1687543288690; Fri, 23
+ Jun 2023 11:01:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230622101809.2431897-1-james.clark@arm.com> <2b1cec46-52a9-21f1-bfcd-fbb4298f072a@web.de>
-In-Reply-To: <2b1cec46-52a9-21f1-bfcd-fbb4298f072a@web.de>
+References: <1684835873-15956-1-git-send-email-yangtiezhu@loongson.cn>
+ <CAAhV-H4Es7qs54zr_hNPwn5MfgeLiKr3sgoTUP5iNj3JrH-1Uw@mail.gmail.com>
+ <7a085947-9011-ebc9-a97d-7a62c755a978@loongson.cn> <1c3c95c7-54e9-a65a-2f63-3a16af0fc2bf@loongson.cn>
+ <CAM9d7cj8mk_jAmK5KYrAJW248Nc1UY=_yD5BRBM+8aC+BaRBTw@mail.gmail.com>
+In-Reply-To: <CAM9d7cj8mk_jAmK5KYrAJW248Nc1UY=_yD5BRBM+8aC+BaRBTw@mail.gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Fri, 23 Jun 2023 11:00:30 -0700
-Message-ID: <CAM9d7ciTZGuoT=D2i+uYG8mcNdFVnYi-Rvue5sbDZAyb24eRrA@mail.gmail.com>
-Subject: Re: [PATCH] perf tests: Fix test_arm_callgraph_fp variable expansion
-To:     Markus Elfring <Markus.Elfring@web.de>
-Cc:     James Clark <james.clark@arm.com>,
-        linux-perf-users@vger.kernel.org, spoorts2@in.ibm.com,
-        kernel-janitors@vger.kernel.org,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        Ian Rogers <irogers@google.com>,
-        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
+Date:   Fri, 23 Jun 2023 11:01:17 -0700
+Message-ID: <CAM9d7cgZqyv6gPs=6LRNEgT_-PkRPz+TVRSSi-trSD9vb=59-A@mail.gmail.com>
+Subject: Re: [PATCH v2] perf symbol: Add LoongArch case in get_plt_sizes()
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>, cocci@inria.fr
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Leo Yan <leo.yan@linaro.org>, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+        loongson-kernel@lists.loongnix.cn
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -68,19 +69,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 23, 2023 at 9:56 AM Markus Elfring <Markus.Elfring@web.de> wrote:
+On Thu, Jun 22, 2023 at 3:33 PM Namhyung Kim <namhyung@kernel.org> wrote:
 >
-> …
-> > At the same time silence the shellcheck warning for that line and fix
-> > two more shellcheck errors at the end of the script.
+> Hello,
 >
-> Does such a wording really fit to the known requirement “Solve only one problem per patch.”?
-
-Maybe not, but I think it still falls into the shellcheck category.
-I don't mind having those trivial fixes together.
+> On Tue, Jun 20, 2023 at 9:36 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+> >
+> >
+> >
+> > On 06/08/2023 03:01 PM, Tiezhu Yang wrote:
+> > > Hi Arnaldo,
+> > >
+> > > On 05/23/2023 06:26 PM, Huacai Chen wrote:
+> > >> Acked-by: Huacai Chen <chenhuacai@loongson.cn>
+> > >>
+> > >> On Tue, May 23, 2023 at 5:57 PM Tiezhu Yang <yangtiezhu@loongson.cn>
+> > >> wrote:
+> > >>>
+> > >>> We can see the following definitions in bfd/elfnn-loongarch.c:
+> >
+> > ...
+> >
+> > >
+> > > Are you OK with this change?
+> > > Could you please pick it up in your tree?
+> >
+> > Ping. What is the status of this patch? Any more comments?
+> > Is there a chance to merge it for this coming merge window?
+>
+> Sorry for the late reply,  I'll apply it to the perf-tools-next tree.
 
 Applied to perf-tools-next, thanks!
-
->
-> See also:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/submitting-patches.rst?h=v6.4-rc7#n81
