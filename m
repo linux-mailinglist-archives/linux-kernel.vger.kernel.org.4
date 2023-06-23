@@ -2,143 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A12473B511
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 12:18:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7466C73B6D5
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 13:55:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232237AbjFWKSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 06:18:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57312 "EHLO
+        id S229745AbjFWLzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 07:55:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232146AbjFWKRk (ORCPT
+        with ESMTP id S230280AbjFWLzT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 06:17:40 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE2912122
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 03:17:26 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2b45b6adffbso7740631fa.3
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 03:17:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687515445; x=1690107445;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NmnwBRcLxlLaDdo6mB36QgEka2ETrjATB/p74yVLKR4=;
-        b=Ls+bHU7JH+ZotuHgx7MMfNQSeV8aoizw+J0UO2hPhtfTlUdcGzDNHCwcNzS1MWVe4X
-         Yd3uNLCfwZ2YatnWLHQbYHNq3NNRreR3T+oi56Lh/zZDICXtEJR93GP2GENWfU1gShkO
-         XyLRxNG0fd1teSNTSPkezsNGOCNoNXGbeRIdAMg9lfalrHPpIngW2Y0KL+6yb3fBIfyD
-         MOY4UQ2usjSAPxPc/8lbi5VQtbKh/3IzRUoEDRkiBeMA58IK2KOBVQ31NjgkT13OWW6F
-         P/uGlylgOZohW9I2NNjlKtj1DFRarqJ5B5/WprM5JbbbRSJPLWad4s3BfegWRewSMCk2
-         tUYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687515445; x=1690107445;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NmnwBRcLxlLaDdo6mB36QgEka2ETrjATB/p74yVLKR4=;
-        b=OatR4ebl1HJysH6Tcf32NVq93ZF2B9VgA/MLK6Juf270y+0CpMjz7uO3Lp9r7t9VYf
-         cpuBEHyKhTSseRnJBoCIsV/YTOBEQ38+YTRnKiqNWHLcKzF7+goQ/6r8RceCkA4nzbIP
-         OIv4iffuIVUe0zdwgj0BEbq0YlAxjvQZwtkVD93YDgYBouccDoDR52YI5j83Jc805scm
-         BS1TZGbKY1wKMXrBaSnJJlhu2RyG7YoU3h0Fu8KgVO5UFAbjFLIulmCVskxEgCrxudJE
-         YDYQOKs2qSsSXvJEZx0MESaM5lqupEGZlGTz7chyoiogcZThS3A65RvSh5PbRHXic0oI
-         nyxQ==
-X-Gm-Message-State: AC+VfDwGJslkTFPr4qkF0rBz2oVB7x0J3jsLSvDgytOVU9LWjQ0hQz4c
-        +Z/kZ8bIX7LCUxXWOcDawd4Ndg==
-X-Google-Smtp-Source: ACHHUZ7FWKxUD50yneBR1nDecy7OGIMWB1V0UiNuub6UxToUjE3EVp4xKbx0k2PURH6LH91Z1CYkaw==
-X-Received: by 2002:a2e:7003:0:b0:2b4:70b1:af01 with SMTP id l3-20020a2e7003000000b002b470b1af01mr11471024ljc.20.1687515444831;
-        Fri, 23 Jun 2023 03:17:24 -0700 (PDT)
-Received: from [192.168.1.101] (abxh63.neoplus.adsl.tpnet.pl. [83.9.1.63])
-        by smtp.gmail.com with ESMTPSA id y14-20020a2e95ce000000b002b4771cdc67sm1682352ljh.35.2023.06.23.03.17.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Jun 2023 03:17:24 -0700 (PDT)
-Message-ID: <c85284d9-c4e9-eae4-2551-5295c4462f3b@linaro.org>
-Date:   Fri, 23 Jun 2023 12:17:22 +0200
+        Fri, 23 Jun 2023 07:55:19 -0400
+X-Greylist: delayed 1800 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 23 Jun 2023 04:55:16 PDT
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF7FBA;
+        Fri, 23 Jun 2023 04:55:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+        s=42; h=From:Cc:To:Date:Message-ID;
+        bh=6vQmPuTY7+r8oEGoWdR7QXjNWbWLdLq/qWIKBX65su4=; b=hUuItrjAtIysZde3kgHWlnwafr
+        moYHXuqnRPgxEYFBCYrTLaHEKl/KxJXo1YqGg4cxOD1gw0Xa6fw7NOd5bhpKPMc1UedWHKm6yrykJ
+        Fkl9vrxuPJq4tDpQPnoc6Ot25Nq5dGmSjATqJsliEnXOwg5clY/psKFYSkYox95ULsB7OJ71QB8xA
+        rfpZk9upLEDGZdlD0d+MOhs0xdBCNtxKRykUd/+JEt9+NUcjFbXvWWQdasNYsRnPUGq2xCH0jOP0k
+        kIxd9lSVVQ1JZ2dGPnR97mpY05PHCGCIRZ5PxrZgDUifrbqYRQDg53gv41AxIf94ZW3iJrNdC4Kuy
+        Y+QvkgsA+piaOj4V2UBtfiWCZWFXBMs3DdmEWsCB78QxxTT1po0X2pAy7y0ZKx/+PM+2QVoojWt6B
+        Ysag1oWZZbi5TYYjarcEjySnL8FwrjTuR2ZV/SfkG7MrFvJvvqDkcZu9s/jmRmHipleTM9OTRR+v1
+        R03VUBIlMC5G7xCcO19jmgUA;
+Received: from [127.0.0.2] (localhost [127.0.0.1])
+        by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
+        (Exim)
+        id 1qCdql-003wDq-29;
+        Fri, 23 Jun 2023 10:17:07 +0000
+Message-ID: <e72f4c43-02a7-936c-e755-1b23596fc312@samba.org>
+Date:   Fri, 23 Jun 2023 12:17:35 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] PCI: qcom: configure the parf halt window size to 1GB
-To:     Devi Priya <quic_devipriy@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, lpieralisi@kernel.org, kw@linux.com,
-        robh@kernel.org, bhelgaas@google.com, mani@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     quic_srichara@quicinc.com, quic_sjaganat@quicinc.com,
-        quic_kathirav@quicinc.com, quic_anusha@quicinc.com,
-        quic_ipkumar@quicinc.com
-References: <20230623045731.29397-1-quic_devipriy@quicinc.com>
-Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230623045731.29397-1-quic_devipriy@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+ Thunderbird/102.11.0
+Subject: Re: [RFC PATCH v2 1/4] net: wire up support for
+ file_operations->uring_cmd()
+Content-Language: en-US, de-DE
+To:     Breno Leitao <leitao@debian.org>, axboe@kernel.dk,
+        dsahern@kernel.org, asml.silence@gmail.com
+Cc:     io-uring@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Mat Martineau <martineau@kernel.org>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Xin Long <lucien.xin@gmail.com>, leit@fb.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dccp@vger.kernel.org, mptcp@lists.linux.dev,
+        linux-sctp@vger.kernel.org, ast@kernel.org, kuniyu@amazon.com,
+        martin.lau@kernel.org, Jason Xing <kernelxing@tencent.com>,
+        Joanne Koong <joannelkoong@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Guillaume Nault <gnault@redhat.com>,
+        Andrea Righi <andrea.righi@canonical.com>
+References: <20230614110757.3689731-1-leitao@debian.org>
+ <20230614110757.3689731-2-leitao@debian.org>
+ <6b5e5988-3dc7-f5d6-e447-397696c0d533@kernel.org>
+ <ZJA6AwbRWtSiJ5pL@gmail.com>
+From:   Stefan Metzmacher <metze@samba.org>
+In-Reply-To: <ZJA6AwbRWtSiJ5pL@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23.06.2023 06:57, Devi Priya wrote:
-> Configure the ADDR_BIT_INDEX of PARF_AXI_MSTR_WR_ADDR_HALT_V2 register with
-> 0x1E to increase the halt window size to 1GB so that, when new inbound
-> posted write transactions whose address crosses 1G address range, the
-> controller would halt all the incoming writes until all the previous AXI
-> responses are received.
+Am 19.06.23 um 13:20 schrieb Breno Leitao:
+> On Wed, Jun 14, 2023 at 08:15:10AM -0700, David Ahern wrote:
+>> On 6/14/23 5:07 AM, Breno Leitao wrote:
+>> io_uring is just another in-kernel user of sockets. There is no reason
+>> for io_uring references to be in core net code. It should be using
+>> exposed in-kernel APIs and doing any translation of its op codes in
+>> io_uring/  code.
 > 
-> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
+> Thanks for the feedback. If we want to keep the network subsystem
+> untouched, then I we can do it using an approach similar to the
+> following. Is this a better approach moving forward?
+
+I'd like to keep it passed to socket layer, so that sockets could
+implement some extra features in an async fashion.
+
+What about having the function you posted below (and in v3)
+as a default implementation if proto_ops->uring_cmd is NULL?
+
+metze
+
+> --
+> 
+> From: Breno Leitao <leitao@debian.org>
+> Date: Mon, 19 Jun 2023 03:37:40 -0700
+> Subject: [RFC PATCH v2] io_uring: add initial io_uring_cmd support for sockets
+> 
+> Enable io_uring command operations on sockets. Create two
+> SOCKET_URING_OP commands that will operate on sockets.
+> 
+> For that, use the file_operations->uring_cmd callback, and map it to a
+> uring socket callback, which handles the SOCKET_URING_OP accordingly.
+> 
+> Signed-off-by: Breno Leitao <leitao@debian.org>
 > ---
-Has this been tested on anything except IPQ9574? Does it concern other
-SoCs?
-
-
->  This patch depends on the below series which adds support for PCIe 
->  controllers in IPQ9574
->  https://lore.kernel.org/linux-arm-msm/20230519090219.15925-1-quic_devipriy@quicinc.com/
+>   include/linux/io_uring.h      |  6 ++++++
+>   include/uapi/linux/io_uring.h |  8 ++++++++
+>   io_uring/uring_cmd.c          | 27 +++++++++++++++++++++++++++
+>   net/socket.c                  |  2 ++
+>   4 files changed, 43 insertions(+)
 > 
->  drivers/pci/controller/dwc/pcie-qcom.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-> index c7579dfa5b1c..26c40e006120 100644
-> --- a/drivers/pci/controller/dwc/pcie-qcom.c
-> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
-> @@ -116,6 +116,8 @@
->  
->  /* PARF_AXI_MSTR_WR_ADDR_HALT register fields */
->  #define EN					BIT(31)
-> +#define ADDR_BIT_INDEX				(BIT(0) | BIT(1) | BIT(2) | \
-> +						BIT(3) | BIT(4) | BIT(5))
-You surely should have the names of these bitfields, mind defining them?
-
->  
->  /* PARF_LTSSM register fields */
->  #define LTSSM_EN				BIT(8)
-> @@ -154,6 +156,8 @@
->  
->  #define QCOM_PCIE_CRC8_POLYNOMIAL		(BIT(2) | BIT(1) | BIT(0))
->  
-> +#define PARF_AXI_MSTR_WR_ADDR_HALT_WINDOW_SIZE	0x1e
+> diff --git a/include/linux/io_uring.h b/include/linux/io_uring.h
+> index 7fe31b2cd02f..d1b20e2a9fb0 100644
+> --- a/include/linux/io_uring.h
+> +++ b/include/linux/io_uring.h
+> @@ -71,6 +71,7 @@ static inline void io_uring_free(struct task_struct *tsk)
+>   	if (tsk->io_uring)
+>   		__io_uring_free(tsk);
+>   }
+> +int uring_sock_cmd(struct io_uring_cmd *cmd, unsigned int issue_flags);
+>   #else
+>   static inline int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
+>   			      struct iov_iter *iter, void *ioucmd)
+> @@ -102,6 +103,11 @@ static inline const char *io_uring_get_opcode(u8 opcode)
+>   {
+>   	return "";
+>   }
+> +static inline int uring_sock_cmd(struct io_uring_cmd *cmd,
+> +				 unsigned int issue_flags)
+> +{
+> +	return -EOPNOTSUPP;
+> +}
+>   #endif
+>   
+>   #endif
+> diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
+> index 0716cb17e436..d93a5ee7d984 100644
+> --- a/include/uapi/linux/io_uring.h
+> +++ b/include/uapi/linux/io_uring.h
+> @@ -703,6 +703,14 @@ struct io_uring_recvmsg_out {
+>   	__u32 flags;
+>   };
+>   
+> +/*
+> + * Argument for IORING_OP_URING_CMD when file is a socket
+> + */
+> +enum {
+> +	SOCKET_URING_OP_SIOCINQ         = 0,
+> +	SOCKET_URING_OP_SIOCOUTQ,
+> +};
 > +
->  #define QCOM_PCIE_1_0_0_MAX_CLOCKS		4
->  struct qcom_pcie_resources_1_0_0 {
->  	struct clk_bulk_data clks[QCOM_PCIE_1_0_0_MAX_CLOCKS];
-> @@ -1126,6 +1130,11 @@ static int qcom_pcie_post_init(struct qcom_pcie *pcie)
->  
->  	writel(0, pcie->parf + PARF_Q2A_FLUSH);
->  
-> +	val = readl(pcie->parf + PARF_AXI_MSTR_WR_ADDR_HALT_V2);
-> +	val &= ~ADDR_BIT_INDEX;
-> +	writel(val | PARF_AXI_MSTR_WR_ADDR_HALT_WINDOW_SIZE, pcie->parf +
-> +			PARF_AXI_MSTR_WR_ADDR_HALT_V2);
-val |= ..
-writel(val, pcie..)
-
-would be more readable
-
-Konrad
+>   #ifdef __cplusplus
+>   }
+>   #endif
+> diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
+> index 5e32db48696d..dcbe6493b03f 100644
+> --- a/io_uring/uring_cmd.c
+> +++ b/io_uring/uring_cmd.c
+> @@ -7,6 +7,7 @@
+>   #include <linux/nospec.h>
+>   
+>   #include <uapi/linux/io_uring.h>
+> +#include <uapi/asm-generic/ioctls.h>
+>   
+>   #include "io_uring.h"
+>   #include "rsrc.h"
+> @@ -156,3 +157,29 @@ int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
+>   	return io_import_fixed(rw, iter, req->imu, ubuf, len);
+>   }
+>   EXPORT_SYMBOL_GPL(io_uring_cmd_import_fixed);
 > +
->  	dw_pcie_dbi_ro_wr_en(pci);
->  	writel(PCIE_CAP_SLOT_VAL, pci->dbi_base + offset + PCI_EXP_SLTCAP);
->  
+> +int uring_sock_cmd(struct io_uring_cmd *cmd, unsigned int issue_flags)
+> +{
+> +	struct socket *sock = cmd->file->private_data;
+> +	struct sock *sk = sock->sk;
+> +	int ret, arg = 0;
+> +
+> +	if (!sk->sk_prot || !sk->sk_prot->ioctl)
+> +		return -EOPNOTSUPP;
+> +
+> +	switch (cmd->sqe->cmd_op) {
+> +	case SOCKET_URING_OP_SIOCINQ:
+> +		ret = sk->sk_prot->ioctl(sk, SIOCINQ, &arg);
+> +		if (ret)
+> +			return ret;
+> +		return arg;
+> +	case SOCKET_URING_OP_SIOCOUTQ:
+> +		ret = sk->sk_prot->ioctl(sk, SIOCOUTQ, &arg);
+> +		if (ret)
+> +			return ret;
+> +		return arg;
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +EXPORT_SYMBOL_GPL(uring_sock_cmd);
+> diff --git a/net/socket.c b/net/socket.c
+> index b778fc03c6e0..db11e94d2259 100644
+> --- a/net/socket.c
+> +++ b/net/socket.c
+> @@ -88,6 +88,7 @@
+>   #include <linux/xattr.h>
+>   #include <linux/nospec.h>
+>   #include <linux/indirect_call_wrapper.h>
+> +#include <linux/io_uring.h>
+>   
+>   #include <linux/uaccess.h>
+>   #include <asm/unistd.h>
+> @@ -159,6 +160,7 @@ static const struct file_operations socket_file_ops = {
+>   #ifdef CONFIG_COMPAT
+>   	.compat_ioctl = compat_sock_ioctl,
+>   #endif
+> +	.uring_cmd =    uring_sock_cmd,
+>   	.mmap =		sock_mmap,
+>   	.release =	sock_close,
+>   	.fasync =	sock_fasync,
+
