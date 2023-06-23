@@ -2,194 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D956773BD53
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 19:03:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7955273BD59
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 19:06:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230421AbjFWRDa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 13:03:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35652 "EHLO
+        id S231817AbjFWRGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 13:06:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229815AbjFWRD2 (ORCPT
+        with ESMTP id S231484AbjFWRGA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 13:03:28 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DBDD26B3
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 10:03:27 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1b539102474so5095475ad.1
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 10:03:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687539807; x=1690131807;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YGVbdq0PfdPRT7dxn3Byv/mEeTQHM8LBcocYU/UsfW8=;
-        b=L8n5f0pJhHI9pFcRr/v1kGwoAAQO+wkzpaiveuPI7CIfVCCbHlffN4OnAZrSdqt6Wl
-         O3Tw7TQjUwnqtEtGlu7cUkN3xdp0d9Me00Gl5PityqAPRhUn5dm35/qAS3VNLd0naprA
-         1RW5V8V4eFjPTV6xFH4H3ZnW6rfAc8vNNg77R2S0oOWM2f+o01QzvC66/YCa5T+ISwoG
-         wuX3RJcFzVm+TnXRebqTbbNx65gD7LcGcfo/aH1RAn7difklmt3yMvlw22iO3qxfSsyU
-         9I0fF3eUKSVkCdNpS7zuOvUkDh4H3AnsQJAn8VftQnz7GcJAjNbYb/zdx6fEsxTwNhpt
-         cCTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687539807; x=1690131807;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YGVbdq0PfdPRT7dxn3Byv/mEeTQHM8LBcocYU/UsfW8=;
-        b=LT1610lp4A/hWIPxEHPBo1U0n7V7zx516m1Qww8DpUmCzFGym2Y8QfEXGBJEmwfgT7
-         0Og4B7nPRNs6cXfsw2Iic2zStVfRjy4FThAVhiu8KH+V8IFFO8Ju+/qulI/7LA96Bsjc
-         FxTYbwC9WZexWw7pqcQg7EfmS092vKiSJVHZh8g3Gb59Ns5n5IkB4ocnxHiD+JQUb1q7
-         5MaUEdSsTnCv1i/+8fNqKdmhZw780CQPBiQ7r/kzc/gl5Ce1w0uH7h2+MjKrmRJ2ygEK
-         D1FwP7vLXPApwjvCLCmUWjuCir/4tYsBQF1qQtweccqZDrahSS/AE50pGwxH2pV7Z8PW
-         F2oQ==
-X-Gm-Message-State: AC+VfDxPpclbZ+qxAL64XWRrHOKZry1CW6NjM1gRF4otxr1n7atKPU3E
-        rpZs75bWmco+AjKMaOUI1fCGX/AbEJs=
-X-Google-Smtp-Source: ACHHUZ70raWdrpthTkLoDsElBp9EGBRlvIl2vWaEdMEjbRb/VN5DSrGDKT/T20qeMIO981voBs+F5Q==
-X-Received: by 2002:a17:903:1210:b0:1ae:305f:e949 with SMTP id l16-20020a170903121000b001ae305fe949mr18403825plh.6.1687539806956;
-        Fri, 23 Jun 2023 10:03:26 -0700 (PDT)
-Received: from google.com ([2620:15c:211:201:48fe:dc9f:b08a:e219])
-        by smtp.gmail.com with ESMTPSA id ju18-20020a170903429200b001b045c9ababsm7429654plb.264.2023.06.23.10.03.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Jun 2023 10:03:25 -0700 (PDT)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Fri, 23 Jun 2023 10:03:23 -0700
-From:   Minchan Kim <minchan@kernel.org>
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] zsmalloc: small compaction improvements
-Message-ID: <ZJXQW/EFNC5FVjkr@google.com>
-References: <20230623044016.366793-1-senozhatsky@chromium.org>
+        Fri, 23 Jun 2023 13:06:00 -0400
+Received: from pegase1.c-s.fr (pegase1.c-s.fr [93.17.236.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68DD326B3
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 10:05:59 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [192.168.12.233])
+        by localhost (Postfix) with ESMTP id 4QnkCK2GKcz9sgW;
+        Fri, 23 Jun 2023 19:05:49 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id mi-znP3KRdZb; Fri, 23 Jun 2023 19:05:49 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 4QnkCH4JZ2z9sgV;
+        Fri, 23 Jun 2023 19:05:47 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 8DA3B8B763;
+        Fri, 23 Jun 2023 19:05:47 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id GZNX2Lzm-f99; Fri, 23 Jun 2023 19:05:47 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.232.71])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 334298B76C;
+        Fri, 23 Jun 2023 19:05:47 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 35NH5exM2645714
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Fri, 23 Jun 2023 19:05:40 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 35NH5cgh2645709;
+        Fri, 23 Jun 2023 19:05:38 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Sathvika Vasireddy <sv@linux.ibm.com>,
+        Naveen N Rao <naveen@kernel.org>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH v3 00/15] powerpc/objtool: uaccess validation for PPC32 (v3)
+Date:   Fri, 23 Jun 2023 19:05:11 +0200
+Message-Id: <cover.1687539638.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230623044016.366793-1-senozhatsky@chromium.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1687539921; l=3460; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=4v2a3/oO/g7ZFbmfTr33UaW+Rjy5tAi53mJem5kaFfQ=; b=S+qOs6UhSOAnEJpFYJEvv83FF68NuzAnX0y/Lj9mVTgjd/e5Id/sdeoJtCAAUDYXZ9ahrBe1X fOnW4Q0OaiZAu+wG2FVNmQQ73PAGlgrNQMGz3rZl092UH8084EXWJEd
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 23, 2023 at 01:40:00PM +0900, Sergey Senozhatsky wrote:
-> Hi,
-> 	A tiny series that can reduce the number of
-> find_alloced_obj() invocations (which perform a linear
-> scan of sub-page) during compaction. Inspired by Alexey
-> Romanov's findings.
-> 
+This series adds UACCESS validation for PPC32. It includes half
+a dozen of changes to objtool core.
 
-Both patches looks good to me.
+It is almost mature, performs code analysis for all PPC32, only
+missing marking of UACCESS enable/disable for book3s/32.
 
-In this chance, can we have little more cleanup after these two patches?
+Most object files are correctly decoded, only a few
+'unreachable instruction' warnings remain due to more complex
+switch table cases:
+- Loading of table address after the dynamic jump
+- Nested switches
 
-From 3cfd4bb0bf395e271f270ee16cb08964ff785a3a Mon Sep 17 00:00:00 2001
-From: Minchan Kim <minchan@kernel.org>
-Date: Fri, 23 Jun 2023 09:45:33 -0700
-Subject: [PATCH] zsmalloc: remove zs_compact_control
+It allowed to detect some UACCESS mess in a few files. They've been
+fixed through other patches.
 
-__zs_compact always putback src_zspage into class list after
-migrate_zspage. Thus, we don't need to keep last position of
-src_zspage any more. Let's remove it.
+Changes in v3:
+- Rebased on top of a merge of powerpc tree and tip/objtool/core tree
+- Simplified support for relative switch tables based on relocation type
+- Taken comments from Peter
 
-Signed-off-by: Minchan Kim <minchan@kernel.org>
----
- mm/zsmalloc.c | 37 +++++++++----------------------------
- 1 file changed, 9 insertions(+), 28 deletions(-)
+Christophe Leroy (15):
+  powerpc/kuap: Avoid unnecessary reads of MD_AP
+  powerpc/kuap: Avoid useless jump_label on empty function
+  powerpc/kuap: Refactor static branch for disabling kuap
+  powerpc/kuap: Make disabling KUAP at boottime impossible except on
+    book3s/64
+  powerpc/kuap: KUAP enabling/disabling functions must be
+    __always_inline
+  Revert "powerpc/bug: Provide better flexibility to
+    WARN_ON/__WARN_FLAGS() with asm goto"
+  objtool: Allow an architecture to disable objtool on ASM files
+  objtool: Fix JUMP_ENTRY_SIZE for bi-arch like powerpc
+  objtool: Add INSN_RETURN_CONDITIONAL
+  objtool: Add support for relative switch tables
+  objtool: Remove too strict constraint in jump table search
+  objtool: Add support for more complex UACCESS control
+  objtool: Prepare noreturns.h for more architectures
+  powerpc/bug: Annotate reachable after warning trap
+  powerpc: Implement UACCESS validation on PPC32
 
-diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
-index 4a84f7877669..84beadc088b8 100644
---- a/mm/zsmalloc.c
-+++ b/mm/zsmalloc.c
-@@ -1590,25 +1590,14 @@ static unsigned long find_alloced_obj(struct size_class *class,
- 	return find_tagged_obj(class, page, obj_idx, OBJ_ALLOCATED_TAG);
- }
- 
--struct zs_compact_control {
--	/* Source spage for migration which could be a subpage of zspage */
--	struct page *s_page;
--	/* Destination page for migration which should be a first page
--	 * of zspage. */
--	struct page *d_page;
--	 /* Starting object index within @s_page which used for live object
--	  * in the subpage. */
--	int obj_idx;
--};
--
--static void migrate_zspage(struct zs_pool *pool, struct size_class *class,
--			   struct zs_compact_control *cc)
-+static void migrate_zspage(struct zs_pool *pool, struct zspage *src_zspage,
-+			   struct zspage *dst_zspage)
- {
- 	unsigned long used_obj, free_obj;
- 	unsigned long handle;
--	struct page *s_page = cc->s_page;
--	struct page *d_page = cc->d_page;
--	int obj_idx = cc->obj_idx;
-+	int obj_idx = 0;
-+	struct page *s_page = get_first_page(src_zspage);
-+	struct size_class *class = pool->size_class[src_zspage->class];
- 
- 	while (1) {
- 		handle = find_alloced_obj(class, s_page, &obj_idx);
-@@ -1621,24 +1610,20 @@ static void migrate_zspage(struct zs_pool *pool, struct size_class *class,
- 		}
- 
- 		used_obj = handle_to_obj(handle);
--		free_obj = obj_malloc(pool, get_zspage(d_page), handle);
-+		free_obj = obj_malloc(pool, dst_zspage, handle);
- 		zs_object_copy(class, free_obj, used_obj);
- 		obj_idx++;
- 		record_obj(handle, free_obj);
- 		obj_free(class->size, used_obj);
- 
- 		/* Stop if there is no more space */
--		if (zspage_full(class, get_zspage(d_page)))
-+		if (zspage_full(class, dst_zspage))
- 			break;
- 
- 		/* Stop if there are no more objects to migrate */
--		if (zspage_empty(get_zspage(s_page)))
-+		if (zspage_empty(src_zspage))
- 			break;
- 	}
--
--	/* Remember last position in this iteration */
--	cc->s_page = s_page;
--	cc->obj_idx = obj_idx;
- }
- 
- static struct zspage *isolate_src_zspage(struct size_class *class)
-@@ -2013,7 +1998,6 @@ static unsigned long zs_can_compact(struct size_class *class)
- static unsigned long __zs_compact(struct zs_pool *pool,
- 				  struct size_class *class)
- {
--	struct zs_compact_control cc;
- 	struct zspage *src_zspage = NULL;
- 	struct zspage *dst_zspage = NULL;
- 	unsigned long pages_freed = 0;
-@@ -2031,7 +2015,6 @@ static unsigned long __zs_compact(struct zs_pool *pool,
- 			if (!dst_zspage)
- 				break;
- 			migrate_write_lock(dst_zspage);
--			cc.d_page = get_first_page(dst_zspage);
- 		}
- 
- 		src_zspage = isolate_src_zspage(class);
-@@ -2040,9 +2023,7 @@ static unsigned long __zs_compact(struct zs_pool *pool,
- 
- 		migrate_write_lock_nested(src_zspage);
- 
--		cc.obj_idx = 0;
--		cc.s_page = get_first_page(src_zspage);
--		migrate_zspage(pool, class, &cc);
-+		migrate_zspage(pool, src_zspage, dst_zspage);
- 		fg = putback_zspage(class, src_zspage);
- 		migrate_write_unlock(src_zspage);
- 
+ arch/Kconfig                                  |  5 ++
+ arch/powerpc/Kconfig                          |  2 +
+ arch/powerpc/include/asm/book3s/32/kup.h      | 39 ++++-----
+ arch/powerpc/include/asm/book3s/64/kup.h      | 36 ++++----
+ arch/powerpc/include/asm/bug.h                | 77 ++++-------------
+ arch/powerpc/include/asm/kup.h                | 66 ++++++++++-----
+ arch/powerpc/include/asm/nohash/32/kup-8xx.h  | 52 +++++-------
+ arch/powerpc/include/asm/nohash/kup-booke.h   | 49 +++++------
+ arch/powerpc/include/asm/uaccess.h            |  6 +-
+ arch/powerpc/kernel/misc_32.S                 |  2 +-
+ arch/powerpc/kernel/traps.c                   |  9 +-
+ arch/powerpc/kexec/core_32.c                  |  4 +-
+ arch/powerpc/mm/book3s32/kuap.c               | 18 ++--
+ arch/powerpc/mm/init-common.c                 |  3 +
+ arch/powerpc/mm/nohash/kup.c                  | 11 +--
+ include/linux/objtool.h                       | 14 ++++
+ scripts/Makefile.build                        |  4 +
+ tools/objtool/arch/powerpc/decode.c           | 83 +++++++++++++++++--
+ .../arch/powerpc/include/arch/noreturns.h     | 11 +++
+ .../arch/powerpc/include/arch/special.h       |  2 +-
+ tools/objtool/arch/powerpc/special.c          | 34 +++++++-
+ .../objtool/arch/x86/include/arch/noreturns.h | 20 +++++
+ tools/objtool/check.c                         | 59 ++++++++++---
+ tools/objtool/include/objtool/arch.h          |  1 +
+ tools/objtool/noreturns.h                     | 14 +---
+ tools/objtool/special.c                       | 55 ++++++------
+ 26 files changed, 399 insertions(+), 277 deletions(-)
+ create mode 100644 tools/objtool/arch/powerpc/include/arch/noreturns.h
+ create mode 100644 tools/objtool/arch/x86/include/arch/noreturns.h
+
 -- 
-2.41.0.178.g377b9f9a00-goog
+2.40.1
 
