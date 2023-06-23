@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A068D73BB31
+	by mail.lfdr.de (Postfix) with ESMTP id E93BC73BB32
 	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 17:11:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232535AbjFWPLZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 11:11:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57746 "EHLO
+        id S232458AbjFWPL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 11:11:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232533AbjFWPLI (ORCPT
+        with ESMTP id S232415AbjFWPLL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 11:11:08 -0400
+        Fri, 23 Jun 2023 11:11:11 -0400
 Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA147294E
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 08:10:34 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-56fffdea2d0so10658147b3.1
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 08:10:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C4482697
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 08:10:37 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-565d1b86a64so10511377b3.3
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 08:10:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687533034; x=1690125034;
-        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=FUa7aJDe332KJMbrrfq8+rXTMZSs6TUcvwlXqFrw4f4=;
-        b=buCQ7AobFyOfUQhTRWfnpL5MysqUQy6IqKNAwfK/A6KTWMZksdzmTFv6Wc7f4LmdTH
-         Hg/32i9jG/ouG/ij8ApZliWIq2IEjLhPZ9jh4IjgYg3iCo8qHw2HIDw3UZ1ctk2pbLig
-         KKqm2HoLH+6KM4YvaEiTEb+gDsBVSE7QXxgKDCpFHT92yUnlElUr1b7cGBxsLIhRwV5r
-         WCagZ0aooyD1l6GXPaRksmmty5ExsrQQr7jZNlS7BicFZdMtYHsmO41PJInkoGWV+jPY
-         m2OWceI6IEXMb2YYGxAmxnKTvkrsdJz2dHQQ7N4LhUyOuDagxukM30bBLFnt0JuvNepz
-         KPdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687533034; x=1690125034;
-        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+        d=google.com; s=20221208; t=1687533037; x=1690125037;
+        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=FUa7aJDe332KJMbrrfq8+rXTMZSs6TUcvwlXqFrw4f4=;
-        b=T7x77Lx6CaIv14x/4I92a6V+lNQMFeqwkrsR31kjqxO92VR/7MoNihEA5s9ZzxSVDE
-         rCVNdztlnz/bITNNMchRdQQbCyPaQSexXRobOnvjJxDAFZZ+Zgg01L8JMBKZX6x70HD4
-         0BdVgUUdz8hwtXxmJ/yF0zSvp9qRV7AOhZBgAPP8l6ef5qkH2QYVAdtlUSTcdLGF9YoC
-         HhhduhAsM98UtLMsW6pID7hiZn1yAAgsEvimrv16EBe32EdOkHc9X4gk7165+NNK0Lnd
-         H6y6W++7qxQr0urcZRc0Xr6bOhnU9AaFStekXfGLU94rJsCOVNv3IhQUk8DsgAfljqCR
-         a63g==
-X-Gm-Message-State: AC+VfDzirkk3BLp+fH3JpiRinpwqMH1/mAK/pnux7KSHQco1rDdutFDH
-        +fF5p+6Va/rowV/Ir1pj1aFAGWTB7OlR
-X-Google-Smtp-Source: ACHHUZ4WlgrFOOhwbt6uy/HTsZGrBBXq9mACGq2atguqeN9H8kQB/yEfifsQH/TLhBk5JrHwbhcVmYecDzer
+        bh=esSkQJg/VtdJhfubiyHaspvmh3pr2CsZdqhGyqi+VGI=;
+        b=BbtAh9ac5DF4dqJL+tKfDgcikhys23/kTQxU8GAGBRYk4uDZu/SGEaUFqKvpKn5Ax4
+         6rIZvIiK1/a9bj+C/5spEM4Bn7Y685KQMzQzFjtpNfeBGApxVPHDoAXPKLCR1C0wKbMp
+         AKiKAiAdJPyqVsmU9vrQOKsqD7lAknecyC18SUDi2LvHzDdh+QFtPQGwReRaY0kbBuQA
+         +fVii9PMuzaWMY8Fyl+df7m7uzWGkEqQBANSExhDcDwK8VgvFC5NKAnUvnWUm5S/r7A6
+         8rncO5aD2Tk9nMNKxAUKB5Smbiu2JYD6ZzptVfdATqSwQ7W26wwYR+u2w0C9/q2GoEZ4
+         +meA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687533037; x=1690125037;
+        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=esSkQJg/VtdJhfubiyHaspvmh3pr2CsZdqhGyqi+VGI=;
+        b=CmJ6WYubxTxJoTy0t7CtES4ZiA9RbP8us6PZEQWH8puEXZju7HGLbHBo3Z97sKJlfZ
+         ZCtXMtbAJSg6NpqhNNIML73CRCkGY49MthqrVj2OFoCRVwT2KpCLUfiVB/uK8soEf/cj
+         gywWoVTFmPNw1LGyymSlciocFPBQP2M/jVIO8HRBmV8L3VBEmL1hh6fPmH3Yj0UxDBLL
+         7q+47aSF564LIkmoTGB/O+J0spVk0DaesbeZkStv9uzTE0mgyNiE6FwER+l6Kr3L1AJb
+         0KJJD36ykmbggQ6Ll7cf1yZ95LSd8KquTRtPNA7z/oILSJPLfgg0R8CVTKOf7yRhuvRD
+         dSjQ==
+X-Gm-Message-State: AC+VfDws36nsGIJx1G69eedBIIwc5uwGUa1WMjeRITUmbWvmPoUzuN87
+        Rt8EAC9cJgjFUm3H9gihi3SERTOAyA4B
+X-Google-Smtp-Source: ACHHUZ75MDw7mn4sXn5Uq8VKlTWFWHet5eyvj4ZZaU8jC/oEc/FXMcrQPiz3MQFCesfkpsISK/dijwhlaQqH
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:6559:8968:cdfe:35b6])
- (user=irogers job=sendgmr) by 2002:a25:748e:0:b0:bac:fd63:b567 with SMTP id
- p136-20020a25748e000000b00bacfd63b567mr10016177ybc.4.1687533034231; Fri, 23
- Jun 2023 08:10:34 -0700 (PDT)
-Date:   Fri, 23 Jun 2023 08:10:04 -0700
-Message-Id: <20230623151016.4193660-1-irogers@google.com>
+ (user=irogers job=sendgmr) by 2002:a81:4507:0:b0:568:c4ea:ce66 with SMTP id
+ s7-20020a814507000000b00568c4eace66mr9956723ywa.5.1687533036750; Fri, 23 Jun
+ 2023 08:10:36 -0700 (PDT)
+Date:   Fri, 23 Jun 2023 08:10:05 -0700
+In-Reply-To: <20230623151016.4193660-1-irogers@google.com>
+Message-Id: <20230623151016.4193660-2-irogers@google.com>
 Mime-Version: 1.0
+References: <20230623151016.4193660-1-irogers@google.com>
 X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-Subject: [PATCH v2 00/12] Add metric has_event, update intel vendor events
+Subject: [PATCH v2 01/12] perf expr: Add has_event function
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -78,116 +80,127 @@ To:     Peter Zijlstra <peterz@infradead.org>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
-        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a new has_event function for metrics so that events that can be
-disabled by the kernel/firmware don't cause metrics to fail. Use this
-function for Intel transaction metrics fixing "perf all metrics test"
-on systems with TSX disabled. The update conversion script is posted in:
-https://github.com/intel/perfmon/pull/90
+Some events are dependent on firmware/kernel enablement. Allow such
+events to be detected when the metric is parsed so that the metric's
+event parsing doesn't fail.
 
-Re-generate Intel vendor events using:
-https://github.com/intel/perfmon/blob/main/scripts/create_perf_json.py
-Adding rocketlake support, uncore and many core events for meteorlake,
-and smaller updates for cascakelakex, icelake, icelakex,
-sapphirerapids, skylake, skylakex and tigerlake.
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/perf/tests/expr.c |  4 ++++
+ tools/perf/util/expr.c  | 21 +++++++++++++++++++++
+ tools/perf/util/expr.h  |  1 +
+ tools/perf/util/expr.l  |  1 +
+ tools/perf/util/expr.y  |  8 +++++++-
+ 5 files changed, 34 insertions(+), 1 deletion(-)
 
-v2. Handle failed memory allocated for evlist, John Garry.
-
-Ian Rogers (12):
-  perf expr: Add has_event function
-  perf jevents: Support for has_event function
-  perf vendor metrics intel: Make transaction metrics conditional
-  perf vendor events intel: Add rocketlake events/metrics
-  perf vendor events intel: Update meteorlake to 1.03
-  perf vendor events intel: Update cascadelakex to 1.19
-  perf vendor events intel: Update icelake to 1.19
-  perf vendor events intel: Update icelakex to 1.21
-  perf vendor events intel: Update sapphirerapids to 1.14
-  perf vendor events intel: Update skylake to 57
-  perf vendor events intel: Update skylakex to 1.31
-  perf vendor events intel: Update tigerlake to 1.13
-
- .../arch/x86/alderlake/adl-metrics.json       |    8 +-
- .../arch/x86/cascadelakex/clx-metrics.json    |    8 +-
- .../arch/x86/cascadelakex/frontend.json       |   43 +-
- .../arch/x86/cascadelakex/pipeline.json       |   17 +-
- .../x86/cascadelakex/uncore-interconnect.json |    2 +-
- .../arch/x86/cascadelakex/uncore-memory.json  |    2 +-
- .../pmu-events/arch/x86/icelake/cache.json    |    8 +-
- .../pmu-events/arch/x86/icelake/frontend.json |   32 +-
- .../arch/x86/icelake/icl-metrics.json         |    8 +-
- .../pmu-events/arch/x86/icelake/pipeline.json |    6 +-
- .../arch/x86/icelakex/frontend.json           |   32 +-
- .../arch/x86/icelakex/icx-metrics.json        |    8 +-
- .../arch/x86/icelakex/pipeline.json           |    4 +-
- .../x86/icelakex/uncore-interconnect.json     |    2 +-
- tools/perf/pmu-events/arch/x86/mapfile.csv    |   17 +-
- .../pmu-events/arch/x86/meteorlake/cache.json |  811 +++++++++
- .../arch/x86/meteorlake/floating-point.json   |  143 ++
- .../arch/x86/meteorlake/frontend.json         |  410 +++++
- .../arch/x86/meteorlake/memory.json           |  142 +-
- .../pmu-events/arch/x86/meteorlake/other.json |   57 +-
- .../arch/x86/meteorlake/pipeline.json         | 1211 ++++++++++++-
- .../arch/x86/meteorlake/uncore-cache.json     |   18 +
- .../x86/meteorlake/uncore-interconnect.json   |   42 +
- .../arch/x86/meteorlake/uncore-memory.json    |  126 ++
- .../arch/x86/meteorlake/virtual-memory.json   |  257 +++
- .../pmu-events/arch/x86/rocketlake/cache.json |  894 ++++++++++
- .../arch/x86/rocketlake/floating-point.json   |  105 ++
- .../arch/x86/rocketlake/frontend.json         |  377 ++++
- .../arch/x86/rocketlake/memory.json           |  394 +++++
- .../arch/x86/rocketlake/metricgroups.json     |  113 ++
- .../pmu-events/arch/x86/rocketlake/other.json |  242 +++
- .../arch/x86/rocketlake/pipeline.json         |  801 +++++++++
- .../arch/x86/rocketlake/rkl-metrics.json      | 1571 +++++++++++++++++
- .../x86/rocketlake/uncore-interconnect.json   |   74 +
- .../arch/x86/rocketlake/uncore-other.json     |    9 +
- .../arch/x86/rocketlake/virtual-memory.json   |  165 ++
- .../arch/x86/sapphirerapids/pipeline.json     |    2 +-
- .../arch/x86/sapphirerapids/spr-metrics.json  |    8 +-
- .../arch/x86/sapphirerapids/uncore-cache.json |  308 ++++
- .../sapphirerapids/uncore-interconnect.json   |    2 +-
- .../pmu-events/arch/x86/skylake/frontend.json |   43 +-
- .../pmu-events/arch/x86/skylake/pipeline.json |   17 +-
- .../arch/x86/skylake/skl-metrics.json         |    8 +-
- .../arch/x86/skylakex/frontend.json           |   43 +-
- .../arch/x86/skylakex/pipeline.json           |   17 +-
- .../arch/x86/skylakex/skx-metrics.json        |    8 +-
- .../x86/skylakex/uncore-interconnect.json     |    2 +-
- .../arch/x86/skylakex/uncore-memory.json      |    2 +-
- .../arch/x86/tigerlake/frontend.json          |   32 +-
- .../arch/x86/tigerlake/pipeline.json          |    6 +-
- .../arch/x86/tigerlake/tgl-metrics.json       |    8 +-
- tools/perf/pmu-events/metric.py               |    8 +-
- tools/perf/tests/expr.c                       |    4 +
- tools/perf/util/expr.c                        |   21 +
- tools/perf/util/expr.h                        |    1 +
- tools/perf/util/expr.l                        |    1 +
- tools/perf/util/expr.y                        |    8 +-
- 57 files changed, 8506 insertions(+), 202 deletions(-)
- create mode 100644 tools/perf/pmu-events/arch/x86/meteorlake/floating-point.json
- create mode 100644 tools/perf/pmu-events/arch/x86/meteorlake/uncore-cache.json
- create mode 100644 tools/perf/pmu-events/arch/x86/meteorlake/uncore-interconnect.json
- create mode 100644 tools/perf/pmu-events/arch/x86/meteorlake/uncore-memory.json
- create mode 100644 tools/perf/pmu-events/arch/x86/rocketlake/cache.json
- create mode 100644 tools/perf/pmu-events/arch/x86/rocketlake/floating-point.json
- create mode 100644 tools/perf/pmu-events/arch/x86/rocketlake/frontend.json
- create mode 100644 tools/perf/pmu-events/arch/x86/rocketlake/memory.json
- create mode 100644 tools/perf/pmu-events/arch/x86/rocketlake/metricgroups.json
- create mode 100644 tools/perf/pmu-events/arch/x86/rocketlake/other.json
- create mode 100644 tools/perf/pmu-events/arch/x86/rocketlake/pipeline.json
- create mode 100644 tools/perf/pmu-events/arch/x86/rocketlake/rkl-metrics.json
- create mode 100644 tools/perf/pmu-events/arch/x86/rocketlake/uncore-interconnect.json
- create mode 100644 tools/perf/pmu-events/arch/x86/rocketlake/uncore-other.json
- create mode 100644 tools/perf/pmu-events/arch/x86/rocketlake/virtual-memory.json
-
+diff --git a/tools/perf/tests/expr.c b/tools/perf/tests/expr.c
+index 3d01eb5e2512..c1c3fcbc2753 100644
+--- a/tools/perf/tests/expr.c
++++ b/tools/perf/tests/expr.c
+@@ -254,6 +254,10 @@ static int test__expr(struct test_suite *t __maybe_unused, int subtest __maybe_u
+ 	TEST_ASSERT_VAL("source count", hashmap__size(ctx->ids) == 1);
+ 	TEST_ASSERT_VAL("source count", hashmap__find(ctx->ids, "EVENT1", &val_ptr));
+ 
++	/* has_event returns 1 when an event exists. */
++	expr__add_id_val(ctx, strdup("cycles"), 2);
++	ret = test(ctx, "has_event(cycles)", 1);
++
+ 	expr__ctx_free(ctx);
+ 
+ 	return 0;
+diff --git a/tools/perf/util/expr.c b/tools/perf/util/expr.c
+index f4e52919324e..4814262e3805 100644
+--- a/tools/perf/util/expr.c
++++ b/tools/perf/util/expr.c
+@@ -8,6 +8,7 @@
+ #include "cpumap.h"
+ #include "cputopo.h"
+ #include "debug.h"
++#include "evlist.h"
+ #include "expr.h"
+ #include "expr-bison.h"
+ #include "expr-flex.h"
+@@ -474,3 +475,23 @@ double expr__get_literal(const char *literal, const struct expr_scanner_ctx *ctx
+ 	pr_debug2("literal: %s = %f\n", literal, result);
+ 	return result;
+ }
++
++/* Does the event 'id' parse? Determine via ctx->ids if possible. */
++double expr__has_event(const struct expr_parse_ctx *ctx, bool compute_ids, const char *id)
++{
++	struct evlist *tmp;
++	double ret;
++
++	if (hashmap__find(ctx->ids, id, /*value=*/NULL))
++		return 1.0;
++
++	if (!compute_ids)
++		return 0.0;
++
++	tmp = evlist__new();
++	if (!tmp)
++		return NAN;
++	ret = parse_event(tmp, id) ? 0 : 1;
++	evlist__delete(tmp);
++	return ret;
++}
+diff --git a/tools/perf/util/expr.h b/tools/perf/util/expr.h
+index eaa44b24c555..3c1e49b3e35d 100644
+--- a/tools/perf/util/expr.h
++++ b/tools/perf/util/expr.h
+@@ -54,5 +54,6 @@ int expr__find_ids(const char *expr, const char *one,
+ double expr_id_data__value(const struct expr_id_data *data);
+ double expr_id_data__source_count(const struct expr_id_data *data);
+ double expr__get_literal(const char *literal, const struct expr_scanner_ctx *ctx);
++double expr__has_event(const struct expr_parse_ctx *ctx, bool compute_ids, const char *id);
+ 
+ #endif
+diff --git a/tools/perf/util/expr.l b/tools/perf/util/expr.l
+index 4fbf353e78e7..dbb117414710 100644
+--- a/tools/perf/util/expr.l
++++ b/tools/perf/util/expr.l
+@@ -113,6 +113,7 @@ min		{ return MIN; }
+ if		{ return IF; }
+ else		{ return ELSE; }
+ source_count	{ return SOURCE_COUNT; }
++has_event	{ return HAS_EVENT; }
+ {literal}	{ return literal(yyscanner, sctx); }
+ {number}	{ return value(yyscanner); }
+ {symbol}	{ return str(yyscanner, ID, sctx->runtime); }
+diff --git a/tools/perf/util/expr.y b/tools/perf/util/expr.y
+index f04963eb6be0..dd504afd8f36 100644
+--- a/tools/perf/util/expr.y
++++ b/tools/perf/util/expr.y
+@@ -37,7 +37,7 @@
+ 	} ids;
+ }
+ 
+-%token ID NUMBER MIN MAX IF ELSE LITERAL D_RATIO SOURCE_COUNT EXPR_ERROR
++%token ID NUMBER MIN MAX IF ELSE LITERAL D_RATIO SOURCE_COUNT HAS_EVENT EXPR_ERROR
+ %left MIN MAX IF
+ %left '|'
+ %left '^'
+@@ -199,6 +199,12 @@ expr: NUMBER
+ }
+ | ID				{ $$ = handle_id(ctx, $1, compute_ids, /*source_count=*/false); }
+ | SOURCE_COUNT '(' ID ')'	{ $$ = handle_id(ctx, $3, compute_ids, /*source_count=*/true); }
++| HAS_EVENT '(' ID ')'
++{
++	$$.val = expr__has_event(ctx, compute_ids, $3);
++	$$.ids = NULL;
++	free($3);
++}
+ | expr '|' expr
+ {
+ 	if (is_const($1.val) && is_const($3.val)) {
 -- 
 2.41.0.162.gfafddb0af9-goog
 
