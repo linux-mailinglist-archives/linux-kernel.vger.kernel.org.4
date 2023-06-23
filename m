@@ -2,134 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16B5873AE7C
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 04:11:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BB6073AE8C
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 04:24:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229673AbjFWCLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 22:11:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43472 "EHLO
+        id S231161AbjFWCYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 22:24:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229871AbjFWCLi (ORCPT
+        with ESMTP id S230380AbjFWCX6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 22:11:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A133F2122
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 19:11:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C73DA61944
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 02:11:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC2FCC433C9;
-        Fri, 23 Jun 2023 02:11:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687486296;
-        bh=ZGne4zj9CsGJycq2UzIiziKr2jVISNHV9G2s8oY3T0w=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=W0+Na6VIE5e9qEtp3Iw5o2+JnUz7ML9MeTL5L5dv4nHrgCds/5mbiypeU8fINlxbS
-         4x3mhFwo9JrNJmY97S4wC1Ni+2JoFU7QhQ/jmawOu9qV9IATatO3KF4781zWqCS/vb
-         b9cSd5Pr+VBSFGtiNAAxga7SEIrXhJFnGuj0q7i/1JrWVp+nPyDvCpEAOM2dq6j4ZN
-         m7VYqX9Dnp+tBjURpxNrHOimQhwCGMpF0zTOdWdKG2TCPLrUtmx8YksTo+3Mp/cDQ4
-         hNaMCs2rr6p/b2WhyzsGuzctQXD2mM6WTQzyfXWRZ3YEsrX2Q5iPu7UWvz1vZIb4ob
-         tjLGVCUVbt4Jw==
-Date:   Thu, 22 Jun 2023 19:11:34 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Eric Dumazet <edumazet@google.com>, netdev@vger.kernel.org,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Menglong Dong <imagedong@tencent.com>
-Subject: Re: [PATCH net-next v3 01/18] net: Copy slab data for
- sendmsg(MSG_SPLICE_PAGES)
-Message-ID: <20230622191134.54d5cb0b@kernel.org>
-In-Reply-To: <1958077.1687474471@warthog.procyon.org.uk>
-References: <20230622132835.3c4e38ea@kernel.org>
-        <20230622111234.23aadd87@kernel.org>
-        <20230620145338.1300897-1-dhowells@redhat.com>
-        <20230620145338.1300897-2-dhowells@redhat.com>
-        <1952674.1687462843@warthog.procyon.org.uk>
-        <1958077.1687474471@warthog.procyon.org.uk>
+        Thu, 22 Jun 2023 22:23:58 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8609A1BCA;
+        Thu, 22 Jun 2023 19:23:52 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 7B5075FD1D;
+        Fri, 23 Jun 2023 05:23:49 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1687487029;
+        bh=4DyGjQMn+es+mH1vT9Y4V2O51Aluf6NSHZpaGh0GwY0=;
+        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
+        b=egT3vADQODLoHOyyZ7SxtoiA1XgL2C/KMR5zVFMcaEaTfO4kFaAkoA+ALrH6oHxGg
+         W17FPY1cf4laxvuSLq9c5q07U8rN2aZ66N4KNth0rYJzv2FZOFXfSupVfpEAehAV31
+         uFx/aD3TMZiLU5BgbyeXVdQwSRzM3+dqrsSs2QqZl8IX4WGg+Qj1o++u9flm1SXphH
+         Opg0V4lG0Yy8DOttA/pscRjTHJ7rxAVebIYT3Gm20IKCwyB/nkhfpnz1I2Mm2b9Cvk
+         licMT//odGa2Hr3RZw9qQTva8meYMwHIkqZWH+FLKZG9NVM5Bclhj9GVzKG+SPIGzC
+         4XA7/1SA95mZg==
+Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Fri, 23 Jun 2023 05:23:46 +0300 (MSK)
+From:   George Stark <gnstark@sberdevices.ru>
+To:     <jic23@kernel.org>, <lars@metafoo.de>, <neil.armstrong@linaro.org>,
+        <khilman@baylibre.com>, <jbrunet@baylibre.com>,
+        <martin.blumenstingl@googlemail.com>,
+        <andriy.shevchenko@linux.intel.com>, <nuno.sa@analog.com>,
+        <gnstark@sberdevices.ru>
+CC:     <linux-iio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-amlogic@lists.infradead.org>, <kernel@sberdevices.ru>,
+        George Stark <GNStark@sberdevices.ru>
+Subject: [PATCH v2 0/6] meson saradc: add iio channels to read channel 7 mux inputs
+Date:   Fri, 23 Jun 2023 05:20:08 +0300
+Message-ID: <20230623022334.791026-1-gnstark@sberdevices.ru>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [100.64.160.123]
+X-ClientProxiedBy: p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) To
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/06/22 21:10:00 #21557945
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 22 Jun 2023 23:54:31 +0100 David Howells wrote:
-> > Maybe it's just me but I'd prefer to keep the clear rule that splice
-> > operates on pages not slab objects.  
-> 
-> sendpage isn't only being used for splice().  Or were you referring to
-> splicing pages into socket buffers more generally?
+From: George Stark <GNStark@sberdevices.ru>
 
-Yes, sorry, any sort of "zero-copy attachment of data onto a socket
-queue".
+Hello Andy
 
-> > SIW is the software / fake implementation of RDMA, right? You couldn't have
-> > picked a less important user :(  
-> 
-> ISCSI and sunrpc could both make use of this, as could ceph and others.  I
-> have patches for sunrpc to make it condense into a single bio_vec[] and
-> sendmsg() in the server code (ie. nfsd) but for the moment, Chuck wanted me to
-> just do the xdr payload.
+Thanks for review.
 
-But to be clear (and I'm not implying that it's not a strong enough
-reason) - the only benefit from letting someone pass headers in a slab
-object is that the code already uses kmalloc(), right? IOW it could be
-changed to use frags without much of a LoC bloat?
+Changelog:
+v1->v2:
+split refactoring patch [1] into 4 smaller patches, fix comment style
 
-> > Maybe we can get Eric to comment. The ability to identify "frag type"
-> > seems cool indeed, but I haven't thought about using it to attach
-> > slab objects.  
-> 
-> Unfortunately, you can't attach slab objects.  Their lifetime isn't controlled
-> by put_page() or folio_put().  kmalloc()/kfree() doesn't refcount them -
-> they're recycled immediately.  Hence why I was copying them.  (Well, you
-> could attach, but then you need a callback mechanism).
+[1] https://lore.kernel.org/lkml/20230621062715.455652-2-gnstark@sberdevices.ru/
 
-Right, right, I thought you were saying that _in the future_ we may try
-to attach the slab objects as frags (and presumably copy when someone
-tries to ref them). Maybe I over-interpreted.
+George Stark (6):
+  meson saradc: move enums declaration before variables declaration
+  meson saradc: move meson_sar_adc_set_chan7_mux routine upper
+  meson saradc: unite iio channel array definitions
+  meson saradc: add enum for iio channel array indexes
+  meson saradc: add channel labels
+  meson saradc: support reading from channel7 mux inputs
 
-> What I'm trying to do is make it so that the process of calling sock_sendmsg()
-> with MSG_SPLICE_PAGES looks exactly the same as without: You fill in a
-> bio_vec[] pointing to your protocol header, the payload and the trailer,
-> pointing as appropriate to bits of slab, static, stack data or ref'able pages,
-> and call sendmsg and then the data will get copied or spliced as appropriate
-> to the page type, whether the MSG_SPLICE_PAGES flag is supplied and whether
-> the flag is supported.
-> 
-> There are a couple of things I'd like to avoid: (1) having to call
-> sock_sendmsg() more than once per message and (2) having sendmsg allocate more
-> space and make a copy of data that you had to copy into a frag before calling
-> sendmsg.
+ drivers/iio/adc/meson_saradc.c | 164 +++++++++++++++++++++++----------
+ 1 file changed, 114 insertions(+), 50 deletions(-)
 
-If we're not planning to attach the slab objects as frags, then surely
-doing kmalloc() + free() in the caller, and then allocating a frag and
-copying the data over in the skb / socket code is also inefficient.
-Fixing the caller gives all the benefits you want, and then some.
+-- 
+2.38.4
 
-Granted some form of alloc_skb_frag() needs to be added so that callers
-don't curse us, I'd start with something based on sk_page_frag().
-
-Or we could pull the coping out into an intermediate helper which
-first replaces all slab objects in the iovec with page frags and then
-calls sock_sendmsg()? Maybe that's stupid...
-
-Let's hear what others think. If we can't reach instant agreement --
-can you strategically separate out the minimal set of changes required
-to just kill MSG_SENDPAGE_NOTLAST. IMHO it's worth getting that into
-6.5.
