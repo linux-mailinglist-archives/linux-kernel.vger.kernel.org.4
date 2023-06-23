@@ -2,86 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B57973B4B8
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 12:10:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95EEA73B4B5
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 12:10:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231621AbjFWKKI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 06:10:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45998 "EHLO
+        id S230060AbjFWKJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 06:09:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231895AbjFWKJv (ORCPT
+        with ESMTP id S230044AbjFWKJX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 06:09:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5355273A
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 03:07:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687514821;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=a8zctNHXPgKBvwmbSrMZOmVOWXmFLWvtXxUTrnOkd+k=;
-        b=O/7+dRYSXSGekk2lPzc6+dLlCHfMnpmhCzPfcCFRihR2Uq3IY0MhB2Ysq4MEliM8V7YwQm
-        RbMJeJct0YydFxIlIXaDD5Q+MT1YqJvc54BabKqEXnNx6hWHQ8bJc3UD+uICWseRS5efYU
-        XpMfEBhxoZ9jozr5zBVbnxCk1zQr7N0=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-140-kstXw8CJPgO8BATJTV0qIA-1; Fri, 23 Jun 2023 06:06:56 -0400
-X-MC-Unique: kstXw8CJPgO8BATJTV0qIA-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 42DE11C07257;
-        Fri, 23 Jun 2023 10:06:54 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.4])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CB61E2166B25;
-        Fri, 23 Jun 2023 10:06:52 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <ccf93f92b2539c9dddd1c45fcfa037bb21ccd808.camel@redhat.com>
-References: <ccf93f92b2539c9dddd1c45fcfa037bb21ccd808.camel@redhat.com> <20230622191134.54d5cb0b@kernel.org> <20230622132835.3c4e38ea@kernel.org> <20230622111234.23aadd87@kernel.org> <20230620145338.1300897-1-dhowells@redhat.com> <20230620145338.1300897-2-dhowells@redhat.com> <1952674.1687462843@warthog.procyon.org.uk> <1958077.1687474471@warthog.procyon.org.uk> <1969749.1687511298@warthog.procyon.org.uk>
-To:     Paolo Abeni <pabeni@redhat.com>
-Cc:     dhowells@redhat.com, Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>, netdev@vger.kernel.org,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Menglong Dong <imagedong@tencent.com>
-Subject: Re: [PATCH net-next v3 01/18] net: Copy slab data for sendmsg(MSG_SPLICE_PAGES)
+        Fri, 23 Jun 2023 06:09:23 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ADEC35AB;
+        Fri, 23 Jun 2023 03:07:56 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35N8TPLV026918;
+        Fri, 23 Jun 2023 10:07:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=zFqDMo7rpGAKhiEeRRQPX26218zJTZHgRvQDvL6TtYk=;
+ b=oxZre7cmiwcf61z+uEjxcpoYwvOa/fOEqQdjyS09V+BjQ8aJIC4NJZxiYG+Ghy4aHjgp
+ Bw4XHIUbO2K+DowgKssXvpTIUud+F31S6nHReZEnG0WhwtMAF/Jq39LCCH1VZBb8P1Ho
+ buFHDHjB+yLIjhT8G8uvuoFExPv4Wofur62+haCNqmEbxI4bTzmLUUybAajXQDLi4DWP
+ +1y56shWrfYHBbQq0hwNJhzPb1NCxh3MwB9hjiExPXHmVksUXO9ypC2oTl4KoLWEa7mG
+ HCdhmuaL48MS6sZtpRDPdjwWF2rt1/fNG+l8gLz0wwoUkHxyTmXdCkCfJbcI13oO9uzu qg== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rc0sk5bkr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 23 Jun 2023 10:07:36 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35NA7Z12014884
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 23 Jun 2023 10:07:35 GMT
+Received: from [10.218.48.111] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 23 Jun
+ 2023 03:07:30 -0700
+Message-ID: <84281f9f-18a3-2cd0-cb48-8cd64ae3391b@quicinc.com>
+Date:   Fri, 23 Jun 2023 15:37:17 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2048547.1687514811.1@warthog.procyon.org.uk>
-Date:   Fri, 23 Jun 2023 11:06:51 +0100
-Message-ID: <2048548.1687514811@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 0/2] Update GCC clocks for QDU1000 and QRU1000 SoCs
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+CC:     Melody Olvera <quic_molvera@quicinc.com>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Jagadeesh Kona <quic_jkona@quicinc.com>,
+        Satya Priya Kakitapalli <quic_skakitap@quicinc.com>,
+        Ajit Pandey <quic_ajipan@quicinc.com>
+References: <20230616104941.921555-1-quic_imrashai@quicinc.com>
+ <c963cc67-5c8d-4503-af0e-082ee0be8688@linaro.org>
+From:   Imran Shaik <quic_imrashai@quicinc.com>
+In-Reply-To: <c963cc67-5c8d-4503-af0e-082ee0be8688@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 8usBRA1Tp4urOLNEpEm55H2t7K_RWPa-
+X-Proofpoint-ORIG-GUID: 8usBRA1Tp4urOLNEpEm55H2t7K_RWPa-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-23_04,2023-06-22_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
+ phishscore=0 impostorscore=0 mlxlogscore=999 priorityscore=1501
+ malwarescore=0 adultscore=0 spamscore=0 clxscore=1015 lowpriorityscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306230090
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Paolo Abeni <pabeni@redhat.com> wrote:
 
-> I'm unsure I follow the above ?!? I *thought* sendpage could be killed
-> even without patch 1/18 and 2/18, leaving some patches in this series
-> unmodified, and mangling those explicitly leveraging 1/18 to use
-> multiple sendmsg()s with different flags?
 
-That's what I meant.
+On 6/16/2023 4:51 PM, Konrad Dybcio wrote:
+> On 16.06.2023 12:49, Imran Shaik wrote:
+>> Update GCC clocks and add support for GDSCs for QDU1000 and QRU1000 SoCs.
+>> Also, add support for v2 variant as well.
+> Does that imply the first submission concerned v1/pre-mass-production chips?
+> 
+> We usually don't support these upstream, as they are rather short-lived and
+> never (officially, anyway) escape Qualcomm internal..
+> 
+> Konrad
 
-With the example, I was showing the minimum needed replacement for a call to
-sendpage.
+Sure, will update the next series to support only the latest hardware 
+version.
 
-David
+Thanks,
+Imran
 
+>>
+>> Imran Shaik (2):
+>>    dt-bindings: clock: Update GCC clocks for QDU1000 and QRU1000 SoCs
+>>    clk: qcom: gcc-qdu1000: Update GCC clocks and add support for GDSCs
+>>
+>>   .../bindings/clock/qcom,qdu1000-gcc.yaml      |   6 +-
+>>   drivers/clk/qcom/gcc-qdu1000.c                | 162 ++++++++++++------
+>>   include/dt-bindings/clock/qcom,qdu1000-gcc.h  |   4 +-
+>>   3 files changed, 118 insertions(+), 54 deletions(-)
+>>
