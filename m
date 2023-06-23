@@ -2,182 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C33BE73C300
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 23:40:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45F2173C305
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 23:41:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231214AbjFWVkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 17:40:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36784 "EHLO
+        id S231808AbjFWVl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 17:41:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230355AbjFWVj5 (ORCPT
+        with ESMTP id S230355AbjFWVl0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 17:39:57 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DC30E8
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 14:39:55 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-98d25cbbb43so135435366b.1
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 14:39:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687556393; x=1690148393;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bDPCLE1RQkTvsneplUketcXAUHKug/HnPFR18EZ6AFs=;
-        b=rh8CgMHL2CJ0apk+OZNHOye2H6lF+tYhn+2PD+nbRiTI6VY/TE3CXI3qMGJ/pQkOWV
-         O1fMBNSm23YqBi1c1bdtCOJNaGe4wWgXtQg7zcPIUruue8qyzwQXKtyYyZC4VOBr3AJN
-         XAG61nRdd40N6PQ3wBhCw+/2CgS+8LMlRlTnRQ4H354o+fP8NTFga8FvlGdSF7CmZOVS
-         GYrcJgpxBdTbmPUSWjKjRCFaeqiwsZ4Yi7yAoyzB74Hx+jmMb7dmFTaujt0ykty3WqGS
-         BeNP+ZGqWGEcEKgGr4q/KqzE0Fu/kL71ff5lhSNjumKUzugAt9e5ebVr8+4dwFfhb5KB
-         WOLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687556393; x=1690148393;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bDPCLE1RQkTvsneplUketcXAUHKug/HnPFR18EZ6AFs=;
-        b=VIzNMvnPfYxanW+NFnzHwIHrYEdF5fYh19kw0qQITcU18d/zN79LU4A0H3UDO9wFM4
-         nHmbvW+cKJx4lfEGKEJnkIAPjcSqt/YacgXKCJ+aAcBj8lexidMTGPdyWCNqI6Oh54H8
-         CEEzb/89JT2xIuwMSbUwkGmbkBrJrKiwUF6auhRBE7J1/JqvE4/8XdoHRx8SiDob18g/
-         MNBWUnOlX1hM7dBpqtZjuB/+5b/6Uag7o72eazVWu3wX9qoi6PnBrM3WE28And5efWvP
-         9yKkYYo7w4NKHSdd92DvEC/UmMD0t6CcCDGDPBvR/lAOLamb0GoVQDgW7KuH7NBEwwt6
-         pRVQ==
-X-Gm-Message-State: AC+VfDxT2Nlpmf3HDly/G5xjy7qffEgI6B5DFq7GsXZ7OtwswEYZuHQH
-        do5ytMjymwWnafQtRr8wDOKbVVk9FtlcYXD/ebIDDzDCiTk=
-X-Google-Smtp-Source: ACHHUZ7jX9fQESz+mCRUFDUxcYHWjremM0Jjg5A7lhHtogW5QN8OXanaIBIKvu4MWWbX1yMKIdWTbXIhjHsI5zmujRc=
-X-Received: by 2002:a17:907:7e8b:b0:988:fafd:d93a with SMTP id
- qb11-20020a1709077e8b00b00988fafdd93amr13044572ejc.70.1687556393257; Fri, 23
- Jun 2023 14:39:53 -0700 (PDT)
+        Fri, 23 Jun 2023 17:41:26 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6849BE8;
+        Fri, 23 Jun 2023 14:41:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=WQCx5S2rzLd7RjvqC6LDqFRCoPVDdf+dtn8GX4ji/qw=; b=JnnXEtIGu6tZGGHN5/q8q6daj3
+        7lBAOb+CZlE8Q8ycc8GwVRgXk2p5SW/8zk5uR06Ebrvv8fPzn4pbEM7NfokWIbXNqWEAaso9EPvob
+        /yJ/ldkkKHwdzyzIceh8iTNtqB+yzfWatxdFxzOFidPd6JkhuMjQnA0zMB0no+tb5Ts0=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1qCoWk-00HOhO-4M; Fri, 23 Jun 2023 23:41:10 +0200
+Date:   Fri, 23 Jun 2023 23:41:10 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Jeroen Hofstee <jhofstee@victronenergy.com>
+Cc:     Simon Horman <simon.horman@corigine.com>,
+        =?iso-8859-1?Q?M=E5ns_Rullg=E5rd?= <mans@mansr.com>,
+        Tony Lindgren <tony@atomide.com>, netdev@vger.kernel.org,
+        Mugunthan V N <mugunthanvnm@ti.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        "open list:TI ETHERNET SWITCH DRIVER (CPSW)" 
+        <linux-omap@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] net: cpsw: fix obtaining mac address for am3517
+Message-ID: <675a346b-faed-4e86-87e7-b332da540055@lunn.ch>
+References: <1477668756-2651-1-git-send-email-jhofstee@victronenergy.com>
+ <20161028155213.2t3nwwe3lqaynaer@atomide.com>
+ <d8ad5cab-5183-cddf-fa9a-4e7b9b8c9377@victronenergy.com>
+ <20161028181914.mskebckucukzhxhz@atomide.com>
+ <yw1x7cru445g.fsf@mansr.com>
+ <ZJX9FBBvOTv10IO4@corigine.com>
+ <de546232-0638-318a-535f-169184933a20@victronenergy.com>
 MIME-Version: 1.0
-References: <20230623211808.7667-1-alexander.deucher@amd.com>
-In-Reply-To: <20230623211808.7667-1-alexander.deucher@amd.com>
-From:   Dave Airlie <airlied@gmail.com>
-Date:   Sat, 24 Jun 2023 07:39:40 +1000
-Message-ID: <CAPM=9tyQBhUftYrrQzTNwfZqoaXAwHDydKCFiYkqH18ESTapOA@mail.gmail.com>
-Subject: Re: [pull] amdgpu drm-fixes-6.4
-To:     Alex Deucher <alexander.deucher@amd.com>
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        daniel.vetter@ffwll.ch, torvalds@linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <de546232-0638-318a-535f-169184933a20@victronenergy.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+> > I feel like I am missing something here.
+> 
+> That is a weird response, you feel like something is missing
 
-Can you please pull this directly,
+There is. The patch.
 
-Thanks,
-Dave.
+Maintainers have a slightly better memory than a goldfish, but given
+the high volume of patches, we don't remember threads from 2016. Also,
+all our infrastructure has limited memory, this patch is not in lore,
+and it is not in patchworks. So in terms of getting merged, it does
+not exist.
 
-On Sat, 24 Jun 2023 at 07:18, Alex Deucher <alexander.deucher@amd.com> wrot=
-e:
->
-> Hi Dave, Daniel, Linus,
->
-> Last few fixes for 6.4.  Dave already sent out the drm-fixes PR this week=
-.
-> I was out of the office earlier in the week and just got this out now.
->
-> The following changes since commit 9bd9be5cbaf8a8faa175ef4fba04a5623281de=
-be:
->
->   Merge tag 'drm-misc-fixes-2023-06-21' of git://anongit.freedesktop.org/=
-drm/drm-misc into drm-fixes (2023-06-23 12:16:48 +1000)
->
-> are available in the Git repository at:
->
->   https://gitlab.freedesktop.org/agd5f/linux.git tags/amd-drm-fixes-6.4-2=
-023-06-23
->
-> for you to fetch changes up to 134ea95255cf359a2e6d70308c15243c3fdf8eaf:
->
->   drm/amd: Don't try to enable secure display TA multiple times (2023-06-=
-23 16:44:45 -0400)
->
-> ----------------------------------------------------------------
-> amd-drm-fixes-6.4-2023-06-23:
->
-> amdgpu:
-> - BO locking fixes
-> - MCBP fix
-> - GPU mapping clear fix for always valid BOs
-> - ASPM fixes
-> - SDMA4 hang fix
-> - Misc display fixes
-> - Parade TCON PSR hang fix
-> - SMU13 fixes
-> - Gang submit fence fix
-> - Secure display fix
->
-> ----------------------------------------------------------------
-> Alex Deucher (1):
->       drm/amdgpu/sdma4: set align mask to 255
->
-> Christian K=C3=B6nig (3):
->       drm/amdgpu: make sure BOs are locked in amdgpu_vm_get_memory
->       drm/amdgpu: make sure that BOs have a backing store
->       drm/amdgpu: fix number of fence calculations
->
-> Evan Quan (2):
->       drm/amd/pm: revise the ASPM settings for thunderbolt attached scena=
-rio
->       drm/amd/pm: update the LC_L1_INACTIVITY setting to address possible=
- noise issue
->
-> Hamza Mahfooz (1):
->       drm/amd/display: perform a bounds check before filling dirty rectan=
-gles
->
-> Ilya Bakoulin (1):
->       drm/amd/display: Fix 128b132b link loss handling
->
-> Jiadong Zhu (1):
->       drm/amdgpu: Skip mark offset for high priority rings
->
-> Kenneth Feng (1):
->       drm/amd/pm: add abnormal fan detection for smu 13.0.0
->
-> Leo Chen (1):
->       drm/amd/display: disable seamless boot if force_odm_combine is enab=
-led
->
-> Mario Limonciello (2):
->       drm/amd: Disable PSR-SU on Parade 0803 TCON
->       drm/amd: Don't try to enable secure display TA multiple times
->
-> Samuel Pitoiset (1):
->       drm/amdgpu: fix clearing mappings for BOs that are always valid in =
-VM
->
-> Sung-huai Wang (1):
->       drm/amd/display: add a NULL pointer check
->
-> Tao Zhou (1):
->       drm/amdgpu: check RAS irq existence for VCN/JPEG
->
->  drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c             | 11 +--
->  drivers/gpu/drm/amd/amdgpu/amdgpu_jpeg.c           |  3 +-
->  drivers/gpu/drm/amd/amdgpu/amdgpu_object.c         |  6 +-
->  drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c            |  2 +
->  drivers/gpu/drm/amd/amdgpu/amdgpu_ring_mux.c       |  3 +
->  drivers/gpu/drm/amd/amdgpu/amdgpu_vcn.c            |  3 +-
->  drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c             | 81 ++++++++++++++--=
-------
->  drivers/gpu/drm/amd/amdgpu/nbio_v2_3.c             | 13 ++--
->  drivers/gpu/drm/amd/amdgpu/sdma_v4_0.c             |  4 +-
->  drivers/gpu/drm/amd/amdgpu/sdma_v4_4_2.c           |  4 +-
->  drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c  | 13 ++--
->  drivers/gpu/drm/amd/display/dc/core/dc.c           |  3 +
->  .../drm/amd/display/dc/dce112/dce112_resource.c    | 10 +--
->  .../dc/link/protocols/link_dp_irq_handler.c        | 11 ++-
->  .../drm/amd/display/modules/power/power_helpers.c  |  2 +
->  .../gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_0_ppt.c   |  1 +
->  16 files changed, 108 insertions(+), 62 deletions(-)
+We do however recommend that if a patch has not been merged within 2
+weeks, it is rebased, any Acked-by: etc tags are added and the patch
+reposted.
+
+	Andrew
