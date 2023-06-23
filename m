@@ -2,132 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4356673B35D
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 11:19:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1783A73B36C
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 11:24:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231214AbjFWJTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 05:19:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50782 "EHLO
+        id S231266AbjFWJYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 05:24:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231267AbjFWJTt (ORCPT
+        with ESMTP id S231139AbjFWJYK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 05:19:49 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47E651BE4
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 02:19:46 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-9881b9d8cbdso283744866b.1
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 02:19:46 -0700 (PDT)
+        Fri, 23 Jun 2023 05:24:10 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 407481FC2
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 02:24:09 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-668842bc50dso59129b3a.1
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 02:24:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google; t=1687511985; x=1690103985;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pQ6QabPlq4SG93YlN4F2ainKra0lJ4TZXEDEZJ3pyxA=;
-        b=0axuMEg5f03qoxYkBU39Y6B7dmYmm4FMYEjsO8GOkZG74Jr2yt8GLFBXoWG3KVoOV1
-         BB49AvFjfeXy7pOh+ot0as7u3Hg2BNMDaK2Xv620QO06T4fTDhCFa4w8YezTRhKIrs51
-         mpAgBD5mkh6h014AHUFSASh2NIYisKH6JqgyuF9fUD/AgsdYYw3G+T8ql+ginJ2VJzf6
-         ge3We9/1tRYYE0+VUf6bH/G1YKEdWlz8CcSrTxHu4sfyKkgKfAjcfyn6urGlKS4FlHhk
-         JN2/j/omQBhqgCNZVjNCgqaPg4Tp6YpB7McC3ulIwA79Vz8Y5OrVwvbc5cmPTij8GJRu
-         5KdQ==
+        d=mihalicyn.com; s=mihalicyn; t=1687512249; x=1690104249;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hnToz1IZL5GBj4fgh3BY14k0jbKw0aTmg+ER3wMA0wY=;
+        b=CRpLsqXmFFdpkvSb4lHmleXQ458WNVV181189yDl4vSPPYOFuNZDBp5IuGAYZa9REL
+         sgavWXCaVtJhSk0JSWwT5hJHJmyCk2CAS81wP9XKg3kk3u6NNyDpxDhDLr2Crg/yx0KB
+         9gr/Uzz121jzcCOKJJm53MDVyMuAY4+SO1eJY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687511985; x=1690103985;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pQ6QabPlq4SG93YlN4F2ainKra0lJ4TZXEDEZJ3pyxA=;
-        b=O99/2zzfWxl5s8Xdm43xrhnWEldS64YaE05gFWdXZnXehAqAVlNfgSMyqOMzUB8A8k
-         qrplP29o8O7A5qhG6iRXwhV8K6zdNOXPqnW0ACqWXGDid4EKYFQW3ofd7z1LeG8liQTb
-         TqvhGc4LS/jVFagkwj7gd9ZJjtia5kXiRTxud5mpgPMJyuUWcMCCypyqtZInIp+pm5lQ
-         L3k1iriOWrLe6OFLi3hqCLOLO/cPoy7lvHVvlaxREC366ZsfX+p4p/vD+sR/Df0Uv3Xs
-         z0/Pm0eMHkWjKf/mJ9UdAuXM+jWNWlKQJ9Jj85CmAoXCwiQFSi68jb0O3RiIlbmGddGZ
-         lROw==
-X-Gm-Message-State: AC+VfDyTiwFF7bjC9wZEROVw/Q8damjiR/3d+hMHKmLrxA5NRAqc9y6T
-        gUYch6zhB1EZiD96UtDHq2Tzqw==
-X-Google-Smtp-Source: ACHHUZ52Fo1SOMyS9PnfNxeqPNIhe3ZVZpvWYLfgZDAsHyINH0WiPBBtpaP7I3qzkw0JoKFz3v5MXg==
-X-Received: by 2002:a17:907:6d26:b0:988:2037:c687 with SMTP id sa38-20020a1709076d2600b009882037c687mr14620975ejc.37.1687511984570;
-        Fri, 23 Jun 2023 02:19:44 -0700 (PDT)
-Received: from ?IPV6:2a02:578:8593:1200:7733:4d95:422b:f164? ([2a02:578:8593:1200:7733:4d95:422b:f164])
-        by smtp.gmail.com with ESMTPSA id j24-20020a170906279800b00986d8722e46sm5879974ejc.17.2023.06.23.02.19.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Jun 2023 02:19:44 -0700 (PDT)
-Message-ID: <e228646e-bd41-d6fd-b43d-11d3f9d3c029@tessares.net>
-Date:   Fri, 23 Jun 2023 11:19:42 +0200
+        d=1e100.net; s=20221208; t=1687512249; x=1690104249;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hnToz1IZL5GBj4fgh3BY14k0jbKw0aTmg+ER3wMA0wY=;
+        b=eG0wVdB1DsU8Vl8JtIsjfyJukcxsuC3q1THOcXdPhgisTN/TtQ7W0XFGqeyaxVyG29
+         z/ldQCuVxm+0J2XpE4mRGjJfAQMEVmfbsLxfB26sbtM8FPBZ6nJjOOMCl00fPbUZ1UoM
+         r8NM2Zw3TjHlcisGNcKaiSdBZmL6XC5CBTBAYf0MysetwQqdTepr7ioopbAY1sJm8lJu
+         JAZ8cO2C4sPoF2lLprLK9g1q4Az/23lmfr8vzg7lRXNKPsq7qtj2xo/LT+VS1R9J4zF5
+         FZKJQwAA4D5RFczsmzI2QQI5R9CT9kLIbEf60EwH54+Kt1Rtum5EPOOAwZbm1yIKilgO
+         M1Vg==
+X-Gm-Message-State: AC+VfDzYUjLX8igv6yTTp6fVefnUlf6iCylchqOlMj+uprPnBAFQ1R+Q
+        JRDgtcYBgiql5b3cFqtMmdpfDqBWXkADcC2bDVZP4A==
+X-Google-Smtp-Source: ACHHUZ72QSZObfuvlTdeYWEzJMe3xeAH+OOZFrhbQdKa/Iz7ostejHZoPRNxUAUIesn2ttWGG3OiKFVjaLlkCiKNF5g=
+X-Received: by 2002:a05:6a20:9190:b0:123:3ec2:360d with SMTP id
+ v16-20020a056a20919000b001233ec2360dmr8082518pzd.5.1687512248690; Fri, 23 Jun
+ 2023 02:24:08 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 0/8] Fix comment typos about "transmit"
-Content-Language: en-GB
-To:     Yueh-Shun Li <shamrocklee@posteo.net>,
+References: <PH0PR11MB51262F07CD4739BDCB920483D322A@PH0PR11MB5126.namprd11.prod.outlook.com>
+ <CAJqdLrpFcga4n7wxBhsFqPQiN8PKFVr6U10fKcJ9W7AcZn+o6Q@mail.gmail.com>
+In-Reply-To: <CAJqdLrpFcga4n7wxBhsFqPQiN8PKFVr6U10fKcJ9W7AcZn+o6Q@mail.gmail.com>
+From:   Alexander Mikhalitsyn <alexander@mihalicyn.com>
+Date:   Fri, 23 Jun 2023 11:23:57 +0200
+Message-ID: <CAJqdLrrVfQx4fWJjpf0Nz7AdiNshdFi7xgXis_iO1jgU0YeGXw@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the bluetooth tree
+To:     "Von Dentz, Luiz" <luiz.von.dentz@intel.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
         Jakub Kicinski <kuba@kernel.org>
-Cc:     jgg@ziepe.ca, leon@kernel.org, anthony.l.nguyen@intel.com,
-        davem@davemloft.net, kvalo@kernel.org, jejb@linux.ibm.com,
-        pabeni@redhat.com, apw@canonical.com, joe@perches.com,
-        linux-rdma@vger.kernel.org, netdev@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-scsi@vger.kernel.org,
-        mptcp@lists.linux.dev, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230622012627.15050-1-shamrocklee@posteo.net>
- <168748862634.32034.1394302200661050543.git-patchwork-notify@kernel.org>
- <50a88781b9e2a80588438c315167bbec@posteo.net>
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-In-Reply-To: <50a88781b9e2a80588438c315167bbec@posteo.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, Jun 23, 2023 at 10:34=E2=80=AFAM Alexander Mikhalitsyn
+<alexander@mihalicyn.com> wrote:
+>
+> On Fri, Jun 23, 2023 at 12:28=E2=80=AFAM Von Dentz, Luiz
+> <luiz.von.dentz@intel.com> wrote:
+> >
+> > Hi Stephen, Alexander,
+>
+> Dear friends,
+>
+> >
+> > Looks like we have a similar problem as to:
+> >
+> > https://lore.kernel.org/lkml/20230524081933.44dc8bea@kernel.org/
+> >
+> > That said for unix socket it was decided to not allow it to be build as=
+ module, which is something I don't think we are willing to do for bluetoot=
+h, so we have to find a way to get around pidfd_prepare, which seems to be =
+called due to the use of scm_recv (it is also used by netlink btw).
+>
+> Ugh, yep. That's bad and we can't workaround it like we did for unix sock=
+ets.
+>
+> Originally, Christian had objections against exporting the
+> pidfd_prepare function [1]
+>
+> [1] https://lore.kernel.org/all/20230523-flechten-ortsschild-e5724ecc4ed0=
+@brauner/
+>
+> +cc Christian
 
-On 23/06/2023 10:51, Yueh-Shun Li wrote:
-> Dear Maintainer,
-> 
-> On 23.06.2023 04:50, patchwork-bot+netdevbpf@kernel.org wrote:
->> Hello:
->>
->> This series was applied to netdev/net-next.git (main)
->> by Jakub Kicinski <kuba@kernel.org>:
->>
->> On Thu, 22 Jun 2023 01:26:21 +0000 you wrote:
->>> Fix typos about "transmit" missing the first "s"
->>> found by searching with keyword "tram" in the first 7
->>> patches.
->>>
->>> Add related patterns to "scripts/spelling.txt" in the
->>> last patch.
+Idea. (-: We can introduce a new function like "scm_recv_light" that
+will be just an old version of "scm_recv" without using pidfd,
+if this feature with SCM_PIDFD is not important for hci sockets.
 
-(...)
+Forgot to add Jakub to CC.
++cc Jakub
 
->>   - [7/8] selftests: mptcp: connect: fix comment typo
->>     (no matching commit)
-
-I just applied this patch 7/8 in MPTCP tree (features for net-next), no
-need to send it again elsewhere.
-
-New patches for t/upstream:
-- ba8a625a062a: selftests: mptcp: connect: fix comment typo
-- Results: e16a005b0d79..f186e81ff99c (export)
-
->>   - [8/8] scripts/spelling.txt: Add "transmit" patterns
->>     (no matching commit)
->>
->> You are awesome, thank you!
-> 
-> Should I rebase the local branch onto netdev/net-next/main
-> and send the "no matching commit" patches again?
-
-For the other ones, you might have to send them separately to the
-appropriated maintainers according to the MAINTAINERS file, not all of
-them in the same series I guess.
-
-Cheers,
-Matt
--- 
-Tessares | Belgium | Hybrid Access Solutions
-www.tessares.net
+>
+> Kind regards,
+> Alex
+>
+> >
+> >
+> > ________________________________ From: Stephen Rothwell
+> > Sent: Monday, June 12, 2023 8:02 PM
+> > To: Marcel Holtmann; Johan Hedberg
+> > Cc: Von Dentz, Luiz; Linux Kernel Mailing List; Linux Next Mailing List
+> > Subject: linux-next: build failure after merge of the bluetooth tree
+> >
+> > Hi all,
+> >
+> > After merging the bluetooth tree, today's linux-next build (arm
+> > multi_v7_defconfig) failed like this:
+> >
+> > ERROR: modpost: "pidfd_prepare" [net/bluetooth/bluetooth.ko] undefined!
+> >
+> > Caused by commit
+> >
+> >   817efd3cad74 ("Bluetooth: hci_sock: Forward credentials to monitor")
+> >
+> > I have reverted that commit for today.
+> >
+> > --
+> > Cheers,
+> > Stephen Rothwell
