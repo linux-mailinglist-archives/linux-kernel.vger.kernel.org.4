@@ -2,69 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C93E573B732
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 14:28:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CA8673B73A
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 14:30:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231249AbjFWM2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 08:28:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51926 "EHLO
+        id S231243AbjFWMaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 08:30:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230264AbjFWM2U (ORCPT
+        with ESMTP id S230264AbjFWMaW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 08:28:20 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD78F1B3
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 05:28:17 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1b693afe799so843795ad.1
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 05:28:17 -0700 (PDT)
+        Fri, 23 Jun 2023 08:30:22 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED9EB1B3
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 05:30:19 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3fa7512e599so7284895e9.2
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 05:30:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mihalicyn.com; s=mihalicyn; t=1687523297; x=1690115297;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+Lfzft8Qlu9KuiXFqRAce+TPCCogRgWHC0Sv/4lTqOY=;
-        b=TockwmMMk1TJFUKWDZ0ebGVXA6Fn6umo2YU8mCYTUMHZ8hwBNeTWEu7iRfcahvxn1I
-         am/xw2I6Ra/NCoXDuwwoQoixp/03SNAW/PomXuOkLGw+ViLMIXf+fgPOySEV5O//P8h+
-         tvu0lwBHPGqiEo7zY8BhfeiapCzGJ9gfX/vB0=
+        d=linaro.org; s=google; t=1687523418; x=1690115418;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fgCSN6z5W15lMDtsJXT1Gf4tJ7T/+vvkHu58nF2ZtfA=;
+        b=fz/yWa52ZNikb6G5rufIPmOQlqWVs4rQs0Yy0p4zx7bxhn1DddSiNBsLYvrfKlDSj0
+         5uZ1Z0M2SBdFDSUyYktgSd11Ut0WFLsbq1jnCNk3RBw4A7bt5ng2+vfpEi+BKFXHJYfR
+         ZrZvmXIBRk6GLSwb/Vg+udLHY1bQyrWpZs1pULUHIy4uNH47p1CJWpuotM5I5Ixe3hJW
+         RBq421wciLBrJoBouyyg1722SYCJDjjOjHJHQqqQbrhUTI57C0PxCkSTIau92ayjxNfA
+         Vim7UqtoFrssEWXGce9LuNDaU/KSeY/e15B/DlOPkD3nj/RjTcSrQoI3Wguags8hwUBF
+         eM/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687523297; x=1690115297;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+Lfzft8Qlu9KuiXFqRAce+TPCCogRgWHC0Sv/4lTqOY=;
-        b=UvLwBOtwqPCDcP5SGUf/1eywFByz9sHAgU375Dv+nfMdm7HQA9r6mhq8afYdBcrYHI
-         FqBm8MIZ4Ljxve1Dcd/bKLHxIT0pQdylqNw0g8TUA1yOHeg63ctE7rjSH6v6Aj4q0dcB
-         CxaT/OdCYuJak9O7Rnjwylc1pz0DAQEe55yxSD+sqzN9qgwNdvqwaK551rUcmkLWZKaj
-         SqznqomhOZKwbuNupUp/kbGr8jG5x1goXdjYswgyHkKGjYc1zl5HFV2EFXxTVIBcNuUs
-         0dfHsTiQJTtEz+rTaXhR3E78mCFz+lXPVPgtTTMzcKWSD5HzqQlOeX9tf33v2zR4bdaq
-         Fp6w==
-X-Gm-Message-State: AC+VfDyKsPmkFOSAeV1N8areRijWIp7yFOOve1Van8skdeyOi5V+fOuq
-        7IFKD0n/x41xNYaDz+G3oAUK585myFZnFThcaHGMyA==
-X-Google-Smtp-Source: ACHHUZ5uOG+xfDX2YyPZwahBbssKpKKf6sqmcfXqpXw72yNtcTh4on0X6sdMU0mldu9yTNriGhqtLsGe2b0BNsYZly0=
-X-Received: by 2002:a17:902:ea01:b0:1a9:6467:aa8d with SMTP id
- s1-20020a170902ea0100b001a96467aa8dmr25938120plg.1.1687523297091; Fri, 23 Jun
- 2023 05:28:17 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687523418; x=1690115418;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fgCSN6z5W15lMDtsJXT1Gf4tJ7T/+vvkHu58nF2ZtfA=;
+        b=Kn/+aqxNeZhbLHZ/UHh8/mCn7JINjEc5hq4fTJtIgt9sd7giBaxOdreRRY9okutDq6
+         JuY1JcPMw3MzevKfi7qOIo6s1hJVxd0q376GhgNW61V+BZMIda2AB/FV+Hw/XhZS6khN
+         azBPEuXye4oIptF63o4LGlzMC/lxKlJiPVkqFModZWxhBWNJdFZSxTAwM1OJzZa/pspx
+         16yojy4OMPeRKSXATxNT1oxU+mKFClLLqlC7tfbNXfehggHYizVma/QH9MQW8S7/GrSH
+         ATn8mX2Wpy1Su9bmJ3sVHPRjOfO7Xfrzy3JrFCxWOoHdDzh/qRqcXp7ugr1LOcjINNnx
+         6boA==
+X-Gm-Message-State: AC+VfDwjZzXpoWuxgFdG0ttBcqisiQdYGyGOOPQLeiIVFQywRnK7d6Z4
+        3tesmU0qVe/NkH2pmDf0Paic+w==
+X-Google-Smtp-Source: ACHHUZ7wt9RdVSy3OKCECoih6SD/+uvQDfgsS0bypu/tEx+4635YIzPFRnp0U7RG6QRoDRbhZ3h6pw==
+X-Received: by 2002:a1c:e90d:0:b0:3f8:f663:921d with SMTP id q13-20020a1ce90d000000b003f8f663921dmr19543787wmc.41.1687523418379;
+        Fri, 23 Jun 2023 05:30:18 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id r19-20020a05600c285300b003f8d85b481esm2249133wmb.21.2023.06.23.05.30.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Jun 2023 05:30:17 -0700 (PDT)
+Message-ID: <5620079e-cea8-7244-cc34-440b32b9a580@linaro.org>
+Date:   Fri, 23 Jun 2023 14:30:16 +0200
 MIME-Version: 1.0
-References: <PH0PR11MB51262F07CD4739BDCB920483D322A@PH0PR11MB5126.namprd11.prod.outlook.com>
- <CAJqdLrpFcga4n7wxBhsFqPQiN8PKFVr6U10fKcJ9W7AcZn+o6Q@mail.gmail.com>
- <CAJqdLrrVfQx4fWJjpf0Nz7AdiNshdFi7xgXis_iO1jgU0YeGXw@mail.gmail.com> <20230623-baldigen-eisstadion-38bd00a856fb@brauner>
-In-Reply-To: <20230623-baldigen-eisstadion-38bd00a856fb@brauner>
-From:   Alexander Mikhalitsyn <alexander@mihalicyn.com>
-Date:   Fri, 23 Jun 2023 14:28:06 +0200
-Message-ID: <CAJqdLrocJkzTFUeESTHwOAHpGcK7Tqx54XsdT-0g8Fm2=_xcnA@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the bluetooth tree
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     "Von Dentz, Luiz" <luiz.von.dentz@intel.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 3/5] scsi: dt-bindings: ufs: qcom: Add compatible for
+ sc8180x
+Content-Language: en-US
+To:     Abel Vesa <abel.vesa@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20230623113009.2512206-1-abel.vesa@linaro.org>
+ <20230623113009.2512206-4-abel.vesa@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230623113009.2512206-4-abel.vesa@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,48 +89,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 23, 2023 at 2:24=E2=80=AFPM Christian Brauner <brauner@kernel.o=
-rg> wrote:
->
-> On Fri, Jun 23, 2023 at 11:23:57AM +0200, Alexander Mikhalitsyn wrote:
-> > On Fri, Jun 23, 2023 at 10:34=E2=80=AFAM Alexander Mikhalitsyn
-> > <alexander@mihalicyn.com> wrote:
-> > >
-> > > On Fri, Jun 23, 2023 at 12:28=E2=80=AFAM Von Dentz, Luiz
-> > > <luiz.von.dentz@intel.com> wrote:
-> > > >
-> > > > Hi Stephen, Alexander,
-> > >
-> > > Dear friends,
-> > >
-> > > >
-> > > > Looks like we have a similar problem as to:
-> > > >
-> > > > https://lore.kernel.org/lkml/20230524081933.44dc8bea@kernel.org/
-> > > >
-> > > > That said for unix socket it was decided to not allow it to be buil=
-d as module, which is something I don't think we are willing to do for blue=
-tooth, so we have to find a way to get around pidfd_prepare, which seems to=
- be called due to the use of scm_recv (it is also used by netlink btw).
-> > >
-> > > Ugh, yep. That's bad and we can't workaround it like we did for unix =
-sockets.
-> > >
-> > > Originally, Christian had objections against exporting the
-> > > pidfd_prepare function [1]
-> > >
-> > > [1] https://lore.kernel.org/all/20230523-flechten-ortsschild-e5724ecc=
-4ed0@brauner/
-> > >
-> > > +cc Christian
-> >
-> > Idea. (-: We can introduce a new function like "scm_recv_light" that
->
-> Seems fine to me.
+On 23/06/2023 13:30, Abel Vesa wrote:
+> Add the compatible string for the UFS on sc8180x platforms.
+> 
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/ufs/qcom,ufs.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
 
-Thanks, Christian!
+https://lore.kernel.org/r/20230530162454.51708-5-vkoul@kernel.org
 
-Let's wait for Jakub's comment then :) Then I'll prepare and send a patch.
 
-Kind regards,
-Alex
+Best regards,
+Krzysztof
+
