@@ -2,153 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A86373B703
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 14:21:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0129073B705
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 14:21:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230270AbjFWMV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 08:21:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49650 "EHLO
+        id S231243AbjFWMVc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 08:21:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjFWMVY (ORCPT
+        with ESMTP id S230355AbjFWMV2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 08:21:24 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 29EE01BE4
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 05:21:23 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C94B51042;
-        Fri, 23 Jun 2023 05:22:06 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 760B33F59C;
-        Fri, 23 Jun 2023 05:21:19 -0700 (PDT)
-Message-ID: <509d5ee4-45ec-1279-97da-a308ec7f51aa@arm.com>
-Date:   Fri, 23 Jun 2023 14:21:16 +0200
+        Fri, 23 Jun 2023 08:21:28 -0400
+Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E5821BFA;
+        Fri, 23 Jun 2023 05:21:27 -0700 (PDT)
+Received: by mail-il1-f178.google.com with SMTP id e9e14a558f8ab-341ff6251f2so2056965ab.0;
+        Fri, 23 Jun 2023 05:21:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687522887; x=1690114887;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=yQSdFJAVTnk3qxJjfylhV8RKjwAoWiB8oCEQSQ64LXw=;
+        b=XBDdiwJc+DcefDw4HrP2TtB9UfY7/Wdb6EqGuvfKi1HqwYvF8aM1cONX4jaS+Aa5MB
+         MX0r3MwEiwgYTrHc827SEihECQ4t1e24t1GHV44e1wEZx/1h8bMTIru2MTmPgU+p5qt9
+         XzaP9yW0iFChDM2KnJo4306E9KCESZMhK9dFNTFMUsOIOUfsFKA9Znr6ppHZucOJy9yK
+         l2ChXlpU41tz2Edw3mH0t+PJuGi4dbc4u55tri9+MyHfnJJZRYHEX//IS++UDba8k8qp
+         ith83KATfse3RJRN6cJFRoDMrkkH4S3z7miRuXctwki3VYQJQVIZmFiX1LBPNYEb8Qqa
+         qzzA==
+X-Gm-Message-State: AC+VfDzwKYi3gRuspGPNJDWsJB/eEsYDbe8IkdaT17heYbf3xPv7u/Dd
+        3QlILtY4rVbTqaIASn4jpA==
+X-Google-Smtp-Source: ACHHUZ6PvkiRbelDYtDOJYRBqil07WdG7hR4Lr/TlrWUoohyLS1Z2dU2OmjmbHVB8LqMKTR0Hg67nQ==
+X-Received: by 2002:a92:c143:0:b0:33d:6988:bfea with SMTP id b3-20020a92c143000000b0033d6988bfeamr16680004ilh.21.1687522886662;
+        Fri, 23 Jun 2023 05:21:26 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id v2-20020a92d242000000b003443732257asm663017ilg.57.2023.06.23.05.21.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Jun 2023 05:21:25 -0700 (PDT)
+Received: (nullmailer pid 27048 invoked by uid 1000);
+        Fri, 23 Jun 2023 12:21:24 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v4 02/13] locking/ww_mutex: Remove wakeups from under
- mutex::wait_lock
-Content-Language: en-US
-To:     John Stultz <jstultz@google.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Joel Fernandes <joelaf@google.com>,
-        Qais Yousef <qyousef@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>,
-        Zimuzo Ezeozue <zezeozue@google.com>,
-        Youssef Esmat <youssefesmat@google.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>, kernel-team@android.com,
-        Connor O'Brien <connoro@google.com>
-References: <20230601055846.2349566-1-jstultz@google.com>
- <20230601055846.2349566-3-jstultz@google.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <20230601055846.2349566-3-jstultz@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Abel Vesa <abel.vesa@linaro.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        linux-scsi@vger.kernel.org,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+In-Reply-To: <20230623113009.2512206-5-abel.vesa@linaro.org>
+References: <20230623113009.2512206-1-abel.vesa@linaro.org>
+ <20230623113009.2512206-5-abel.vesa@linaro.org>
+Message-Id: <168752288418.27031.1090471926569361855.robh@kernel.org>
+Subject: Re: [PATCH 4/5] scsi: dt-bindings: ufs: qcom: Fix sm8450 clocks
+Date:   Fri, 23 Jun 2023 06:21:24 -0600
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi John,
 
-On 01/06/2023 07:58, John Stultz wrote:
-> From: Peter Zijlstra <peterz@infradead.org>
+On Fri, 23 Jun 2023 14:30:08 +0300, Abel Vesa wrote:
+> The sm8450 has an ICE clock, so move the compatible to the proper
+> clocks check.
 > 
-> In preparation to nest mutex::wait_lock under rq::lock we need to remove
-> wakeups from under it.
-
-[...]
-
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Signed-off-by: Connor O'Brien <connoro@google.com>
-> Signed-off-by: John Stultz <jstultz@google.com>
+> Fixes: 462c5c0aa798 ("dt-bindings: ufs: qcom,ufs: convert to dtschema")
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
 > ---
-> v2:
-> * Move wake_q_init() as suggested by Waiman Long
-> ---
->  include/linux/ww_mutex.h  |  3 +++
->  kernel/locking/mutex.c    |  8 ++++++++
->  kernel/locking/ww_mutex.h | 10 ++++++++--
->  3 files changed, 19 insertions(+), 2 deletions(-)
+>  Documentation/devicetree/bindings/ufs/qcom,ufs.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/include/linux/ww_mutex.h b/include/linux/ww_mutex.h
-> index bb763085479a..9335b2202017 100644
-> --- a/include/linux/ww_mutex.h
-> +++ b/include/linux/ww_mutex.h
-> @@ -19,6 +19,7 @@
->  
->  #include <linux/mutex.h>
->  #include <linux/rtmutex.h>
-> +#include <linux/sched/wake_q.h>
->  
->  #if defined(CONFIG_DEBUG_MUTEXES) || \
->     (defined(CONFIG_PREEMPT_RT) && defined(CONFIG_DEBUG_RT_MUTEXES))
-> @@ -58,6 +59,7 @@ struct ww_acquire_ctx {
->  	unsigned int acquired;
->  	unsigned short wounded;
->  	unsigned short is_wait_die;
-> +	struct wake_q_head wake_q;
 
-you told me that there is already an issue in this patch even w/o PE
-when running `insmod /lib/modules/test-ww_mutex.ko`.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-The issue is related to Connor's version (1):
+yamllint warnings/errors:
 
-https://lkml.kernel.org/r/20221003214501.2050087-2-connoro@google.com
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/ufs/qcom,ufs.example.dtb: ufs@1d84000: clocks: [[4294967295, 151], [4294967295, 10], [4294967295, 150], [4294967295, 166], [4294967295, 0], [4294967295, 164], [4294967295, 160], [4294967295, 162]] is too short
+	from schema $id: http://devicetree.org/schemas/ufs/qcom,ufs.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/ufs/qcom,ufs.example.dtb: ufs@1d84000: clock-names: ['core_clk', 'bus_aggr_clk', 'iface_clk', 'core_clk_unipro', 'ref_clk', 'tx_lane0_sync_clk', 'rx_lane0_sync_clk', 'rx_lane1_sync_clk'] is too short
+	from schema $id: http://devicetree.org/schemas/ufs/qcom,ufs.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/ufs/qcom,ufs.example.dtb: ufs@1d84000: reg: [[0, 30949376, 0, 12288]] is too short
+	from schema $id: http://devicetree.org/schemas/ufs/qcom,ufs.yaml#
 
-  struct ww_acquire_ctx {
+doc reference errors (make refcheckdocs):
 
-	  struct wake_q_head wake_q;
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230623113009.2512206-5-abel.vesa@linaro.org
 
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
 
-  __mutex_lock_common()
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-    if (ww_ctx)
-        ww_ctx_wake(ww_ctx)
+pip3 install dtschema --upgrade
 
-          wake_up_q(&ww_ctx->wake_q);
-          wake_q_init(&ww_ctx->wake_q);
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
-
-Juri's version (2):
-
-https://lkml.kernel.org/r/20181009092434.26221-3-juri.lelli@redhat.com
-
-  __mutex_lock_common()
-
-      DEFINE_WAKE_Q(wake_q) <-- !!!
-
-      __ww_mutex_check_waiters(..., wake_q)
-
-        __ww_mutex_die(..., wake_q)
-
-          wake_q_add(wake_q, waiter->task)
-
-      wake_up_q(&wake_q)
-
-
-`insmod /lib/modules/test-ww_mutex.ko` runs fine with (2) but not with
-(1) (both w/o the remaining PE patches).
-
-So to test the PE issues we talked about already which come with `[PATCH
-v4 09/13] sched: Add proxy execution` and CONFIG_PROXY_EXEC=y we need to
-fix (1) or go back to (2).
-
-I haven't found any clues why (2) was changed to (1) so far.
-
-[...]
