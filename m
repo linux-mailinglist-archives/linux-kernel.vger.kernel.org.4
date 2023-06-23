@@ -2,86 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40F9F73B5DB
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 13:08:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9056373B5E0
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 13:11:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231528AbjFWLIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 07:08:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53092 "EHLO
+        id S231713AbjFWLLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 07:11:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229830AbjFWLIf (ORCPT
+        with ESMTP id S231671AbjFWLLn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 07:08:35 -0400
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D120A10F4;
-        Fri, 23 Jun 2023 04:08:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-        Content-Type:References:In-Reply-To:Date:To:From:Subject:Message-ID:Sender:
-        Reply-To:Cc:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=7YE9sah6m6BOooMB9JhCskJMQwa//8HJtLtELm3K1WQ=;
-        t=1687518514; x=1688728114; b=iz9mOAa8fO4rth4sQlnfHl3X6lG1c2OSvIHAUc5uSMEywZh
-        bH9vfi07vUPVhRV2KW4j33GXvBC6PIDMIq4AlwQ4vEmG+CY+ApEs+zUHfI95KBUuLur2t/OGRSQmr
-        kvA2VXx43sowZrpjd8O57fb7Nz9bVqS4+iCukULdDB2hMYGo/KSizTZZVPQnPYtiCpDJ1NCoTbFTQ
-        Qqunrm7F0lqeiJq4WEpD2pWg5lo6vYKQSVCMJGz5ix4yILfWqFnzB7gLq/7dy0S2LyHtwT9gyvVUK
-        kdJkMoY8kQAsSGuH46IFok8XCOTQfb4WjOzcq5dz8vHONsdOVQDb/hcnwzuqlscQ==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.96)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1qCeeO-00FhOU-2T;
-        Fri, 23 Jun 2023 13:08:24 +0200
-Message-ID: <d15cd98d8612e756b4c22a10394d680342512c44.camel@sipsolutions.net>
-Subject: Re: [syzbot] [wireless?] [reiserfs?] general protection fault in
- __iterate_interfaces
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     syzbot <syzbot+1c54f0eff457978ad5f9@syzkaller.appspotmail.com>,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, reiserfs-devel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Date:   Fri, 23 Jun 2023 13:08:23 +0200
-In-Reply-To: <000000000000302fb805fd180f4a@google.com>
-References: <000000000000302fb805fd180f4a@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
+        Fri, 23 Jun 2023 07:11:43 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB26510F6;
+        Fri, 23 Jun 2023 04:11:41 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4f973035d60so494415e87.3;
+        Fri, 23 Jun 2023 04:11:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687518700; x=1690110700;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=do2bpdVMJ85bRb47mVgKbZvqePYWno5Te4+1xoLO+cA=;
+        b=rAxKMbv6GqbOHjUiDS8dFT6/c0ePaFssDunkFQr3S5e+t+4F35gxilj77Tk8q7MQkC
+         e4Dep24F5Yy6ZmT2PDgYXix7AYefI8wsJ0p5iJvAvLqqR84cl94I1Lhge5eTQFf63Dyr
+         eK1vz+ynecIclLPAxSchNaK0fmn7s9kFllsgtIRYRz/V8eFqa238MQmiU10FZQtmd9Ql
+         8gOEsXyC6PBQzEvNTHvVf8RU3muJKRG5QCiccxPP2OhdQXwrMDBs7mJFzkmkBDdkQcBK
+         AcI6haW9a49UHk1qmsxk/7vEGA1G7Y+HD5D8DGtpih0IzR2Df1A0oJEyiKFGXDPrJbFq
+         iVOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687518700; x=1690110700;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=do2bpdVMJ85bRb47mVgKbZvqePYWno5Te4+1xoLO+cA=;
+        b=Zazk28F+R6v0VbnyEbvtoo9uZs1oLZPEDGEOOADJMZmp6BNwgMfAhhs9s6N97/3Zuh
+         d5ePPJutfbvRp0L1GVs+oFBoLEV5mE7dBy3jWzqCNrMUfTVPTJ7SlwLtyMSkISLU57eU
+         yoiUrdpZccrRBBt9qOJIbsiqfxhloiq880BKof4s+GO3GGCo1wyzU97/rfJwGSuIij+8
+         mCuu1fo6jkz+ggT9gdU0x/KfAfsharjCB0YRuJaQuonjAzdK4Qj5ugmdTGTGp/yi/qJg
+         lLbeCMfWRelxB9IWUTjucL5HnzgvXyaA2b7zBE6lCbhL536hr2HIGWehuyXgDYmUkqt9
+         KUAA==
+X-Gm-Message-State: AC+VfDwBvKfh/j6+J48FchWvTu0b2CILxVsbP1F/aC3r/v/OIK0hQtsP
+        2cgUr2vfK7721ZW1ZqIin7/UXHhG38I=
+X-Google-Smtp-Source: ACHHUZ4803QgZmjT5Dlbvcvt9KwmbS0zzuCrnTbJO0AFMNORcAcWIN2QouoqCxwoMM/Mg4OTgZGMyQ==
+X-Received: by 2002:a19:ab11:0:b0:4f8:7614:48a5 with SMTP id u17-20020a19ab11000000b004f8761448a5mr7273219lfe.66.1687518699691;
+        Fri, 23 Jun 2023 04:11:39 -0700 (PDT)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id c14-20020a7bc84e000000b003f8126bcf34sm2009848wml.48.2023.06.23.04.11.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Jun 2023 04:11:38 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Fri, 23 Jun 2023 13:11:36 +0200
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH] fprobe: Release rethook after the ftrace_ops is
+ unregistered
+Message-ID: <ZJV96BqF8EAXAOOd@krava>
+References: <20230615115236.3476617-1-jolsa@kernel.org>
+ <20230615085920.7dadac74@gandalf.local.home>
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SORTED_RECIPS,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230615085920.7dadac74@gandalf.local.home>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-06-01 at 14:24 -0700, syzbot wrote:
-> Hello,
->=20
-> syzbot found the following issue on:
->=20
-> HEAD commit:    715abedee4cd Add linux-next specific files for 20230515
-> git tree:       linux-next
-> console output: https://syzkaller.appspot.com/x/log.txt?x=3D13c9672528000=
-0
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3D6a2745d066dda=
-0ec
-> dashboard link: https://syzkaller.appspot.com/bug?extid=3D1c54f0eff457978=
-ad5f9
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binuti=
-ls for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D1588e999280=
-000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D1013cbc128000=
-0
->=20
+On Thu, Jun 15, 2023 at 08:59:20AM -0400, Steven Rostedt wrote:
+> 
+> Masami,
+> 
+> Want to take this via your probes/urgent branch and send it off to Linus?
 
-Looking at the reproducers, there's basically nothing happening in wifi.
+hi,
+did this one make it into some tree?
 
-So seems likely it's just some really bad memory corruption issue in
-reiserfs?
+thanks,
+jirka
 
-johannes
+
+> 
+> -- Steve
+> 
+> 
+> On Thu, 15 Jun 2023 13:52:36 +0200
+> Jiri Olsa <jolsa@kernel.org> wrote:
+> 
+> > While running bpf selftests it's possible to get following fault:
+> > 
+> >   general protection fault, probably for non-canonical address \
+> >   0x6b6b6b6b6b6b6b6b: 0000 [#1] PREEMPT SMP DEBUG_PAGEALLOC NOPTI
+> >   ...
+> >   Call Trace:
+> >    <TASK>
+> >    fprobe_handler+0xc1/0x270
+> >    ? __pfx_bpf_testmod_init+0x10/0x10
+> >    ? __pfx_bpf_testmod_init+0x10/0x10
+> >    ? bpf_fentry_test1+0x5/0x10
+> >    ? bpf_fentry_test1+0x5/0x10
+> >    ? bpf_testmod_init+0x22/0x80
+> >    ? do_one_initcall+0x63/0x2e0
+> >    ? rcu_is_watching+0xd/0x40
+> >    ? kmalloc_trace+0xaf/0xc0
+> >    ? do_init_module+0x60/0x250
+> >    ? __do_sys_finit_module+0xac/0x120
+> >    ? do_syscall_64+0x37/0x90
+> >    ? entry_SYSCALL_64_after_hwframe+0x72/0xdc
+> >    </TASK>
+> > 
+> > In unregister_fprobe function we can't release fp->rethook while it's
+> > possible there are some of its users still running on another cpu.
+> > 
+> > Moving rethook_free call after fp->ops is unregistered with
+> > unregister_ftrace_function call.
+> > 
+> > Fixes: 5b0ab78998e3 ("fprobe: Add exit_handler support")
+> > Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > ---
+> >  kernel/trace/fprobe.c | 12 +++---------
+> >  1 file changed, 3 insertions(+), 9 deletions(-)
+> > 
+> > diff --git a/kernel/trace/fprobe.c b/kernel/trace/fprobe.c
+> > index 18d36842faf5..0121e8c0d54e 100644
+> > --- a/kernel/trace/fprobe.c
+> > +++ b/kernel/trace/fprobe.c
+> > @@ -364,19 +364,13 @@ int unregister_fprobe(struct fprobe *fp)
+> >  		    fp->ops.saved_func != fprobe_kprobe_handler))
+> >  		return -EINVAL;
+> >  
+> > -	/*
+> > -	 * rethook_free() starts disabling the rethook, but the rethook handlers
+> > -	 * may be running on other processors at this point. To make sure that all
+> > -	 * current running handlers are finished, call unregister_ftrace_function()
+> > -	 * after this.
+> > -	 */
+> > -	if (fp->rethook)
+> > -		rethook_free(fp->rethook);
+> > -
+> >  	ret = unregister_ftrace_function(&fp->ops);
+> >  	if (ret < 0)
+> >  		return ret;
+> >  
+> > +	if (fp->rethook)
+> > +		rethook_free(fp->rethook);
+> > +
+> >  	ftrace_free_filter(&fp->ops);
+> >  
+> >  	return ret;
+> 
