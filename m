@@ -2,76 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D64673B3E5
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 11:44:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DCDA73B3F2
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 11:45:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbjFWJoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 05:44:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60818 "EHLO
+        id S230180AbjFWJoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 05:44:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230189AbjFWJoF (ORCPT
+        with ESMTP id S231175AbjFWJod (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 05:44:05 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A53F2113
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 02:44:01 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-3113dabc549so667040f8f.1
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 02:44:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20221208.gappssmtp.com; s=20221208; t=1687513440; x=1690105440;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pcy5cyjz7F8/6l0R/EBOM5X+Qzp4ddDgR685z6/Mzss=;
-        b=ok4Ft78NCIBjvhxW6+v7MQjB26wxgcCwNpE1Ml0e0dES5zZCq7apHWlDFflAKjDAyc
-         h99BcsaBrDSYbom6kNsNjhUDrV14INYkboViGd7fIqL3q7IB+ZPqawgGMT4ekZA7STgx
-         IViXmHCmEnAUn9oVFg9sioxPx2fEWXgsC7E6WJ27QCwNSfaG7Af+tV7QzRFqdCQrlLLB
-         RozewenzHz1pqcTU64hm3p6EDzwQNHwYwy/uD4FiRPYvUsCvhIsM3eym3p0h5Au+PJQA
-         BsfvNGWOI4rk+dvwRD53tzJRxJP9FUrrVDXCSQWqJ262Ub+4UgQ2ELAwJhgG9cyDZDNZ
-         SgWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687513440; x=1690105440;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pcy5cyjz7F8/6l0R/EBOM5X+Qzp4ddDgR685z6/Mzss=;
-        b=Uff9o2/GIFXDwu1bKtv/UFVD+2ijhTSRJI/oQhWteuvTS5Kq7p6hW8srZT1wQ3dYrd
-         m9gSj/XMfzuP+7bPqMszjRzc1bTa6bciFtsQvfz2dyH6oQnz7lIpPcNUqCJ+LaAI7mmE
-         nc5LIJTYJmbuT88GBxFYENGnfAXWaTjomLlD2zQ0VoK/2orHtZe/Py5jyv9K2N9SL6dC
-         CrSlSULIx8BXp+fgHZ+UxZBbjImebskqWq3phdQ7UKFyucYFESv7nKRDVIHAGz7LBrmG
-         OAHJQ69x5pgQc7Wjk16Bu+etRueKTRIahwi+3EcDUE50lPYPoYUJbWgXqXXc0rRsgwjF
-         oQHA==
-X-Gm-Message-State: AC+VfDxMvOPO04NKq2OvytqoMv6RKiN8P8Wacn8CWIM8qUWQgfFJi0ZH
-        yN+UgPlosi29Bx16PqmZidgKaQ==
-X-Google-Smtp-Source: ACHHUZ7DMQ7qm38AjWRARvBdOxeZdZfTwYAdbda1YDLhCgkTQvc+wurTdcmndV+S22IzJxbEHx6UJA==
-X-Received: by 2002:a5d:58ea:0:b0:30f:bafb:2478 with SMTP id f10-20020a5d58ea000000b0030fbafb2478mr19835564wrd.42.1687513439618;
-        Fri, 23 Jun 2023 02:43:59 -0700 (PDT)
-Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
-        by smtp.gmail.com with ESMTPSA id o8-20020a5d4a88000000b003068f5cca8csm9069659wrq.94.2023.06.23.02.43.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Jun 2023 02:43:58 -0700 (PDT)
-Date:   Fri, 23 Jun 2023 11:43:57 +0200
-From:   Jiri Pirko <jiri@resnulli.us>
-To:     souradeep chakrabarti <schakrabarti@linux.microsoft.com>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, longli@microsoft.com,
-        sharmaajay@microsoft.com, leon@kernel.org, cai.huoqing@linux.dev,
-        ssengar@linux.microsoft.com, vkuznets@redhat.com,
-        tglx@linutronix.de, linux-hyperv@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, stable@vger.kernel.org,
-        schakrabarti@microsoft.com
-Subject: Re: [PATCH V2 net] net: mana: Fix MANA VF unload when host is
- unresponsive
-Message-ID: <ZJVpXR52RQxdYRY+@nanopsycho>
-References: <1687505355-29212-1-git-send-email-schakrabarti@linux.microsoft.com>
+        Fri, 23 Jun 2023 05:44:33 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87E461A3;
+        Fri, 23 Jun 2023 02:44:31 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35N9THrB025664;
+        Fri, 23 Jun 2023 09:44:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : subject
+ : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=0LTxr9YIR4qFghBO4pEabh9B3dPBGBcN1vi0qYLTj0s=;
+ b=mXzBqsMkErgY8L1tZvZIB05A5RSfE7AS1sRMx6Bkm4zqOQtgTMsjkmTFiWCjxR6F6tDw
+ ebhLaR4JAP/ouI6jEqE2wyPY/4d6FlO8RJesaoz3Fmv/etrtYGJLKYvVvVChJZIwDNPL
+ bONeyEkgXIIFcQj3BnPhXoxu2S38zAXPPrByrBbetzeSj3k/5dkRmhs9XMyWJId1C5Ov
+ /ovfj7SvTs0XEOPeJitv0iQiXbHTZckr0c6PvfrjljZX7UE+fnEO7PMf5wy8aikKmnjk
+ FQRDJEIaUu6hYx9Pk13VdhOvIIeWDG2lJPZYYyPZKoor4ktW9NTPsXJ4hcCrXQUzsrO/ FQ== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rbwvmdrb5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 23 Jun 2023 09:44:25 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35N9iOGv009014
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 23 Jun 2023 09:44:24 GMT
+Received: from win-platform-upstream01.qualcomm.com (10.80.80.8) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Fri, 23 Jun 2023 02:44:18 -0700
+From:   Sricharan Ramabadhran <quic_srichara@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <sboyd@kernel.org>, <mturquette@baylibre.com>, <mani@kernel.org>,
+        <lpieralisi@kernel.org>, <bhelgaas@google.com>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-pci@vger.kernel.org>, <quic_srichara@quicinc.com>
+Subject: [PATCH 0/4]  IPQ8074 pcie/wcss fixes
+Date:   Fri, 23 Jun 2023 15:13:59 +0530
+Message-ID: <20230623094403.3978838-1-quic_srichara@quicinc.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1687505355-29212-1-git-send-email-schakrabarti@linux.microsoft.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: pSPARl6IL4w2QmuxrUVJ8xyQSgrBkm6w
+X-Proofpoint-GUID: pSPARl6IL4w2QmuxrUVJ8xyQSgrBkm6w
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-23_04,2023-06-22_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
+ mlxlogscore=612 malwarescore=0 spamscore=0 mlxscore=0 lowpriorityscore=0
+ priorityscore=1501 impostorscore=0 bulkscore=0 clxscore=1015 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306230087
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,187 +80,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fri, Jun 23, 2023 at 09:29:15AM CEST, schakrabarti@linux.microsoft.com wrote:
->From: Souradeep Chakrabarti <schakrabarti@linux.microsoft.com>
->
->This patch addresses  the VF unload issue, where mana_dealloc_queues()
+These are required to have pcie/wcss working on IPQ8074 based
+boards. Pcie was broken recently, first patch fixes that and
+next 2 are for adding WCSS reset and 1 for adding reserved region
+for NSS.
 
-double space here    ^^
+Will be following this up with few more dts updates and pcie
+fixes.
 
->gets stuck in infinite while loop, because of host unresponsiveness.
->It adds a timeout in the while loop, to fix it.
->
->Also this patch adds a new attribute in mana_context, which gets set when
->mana_hwc_send_request() hits a timeout because of host unresponsiveness.
->This flag then helps to avoid the timeouts in successive calls.
+Sricharan Ramabadhran (4):
+  pcie: qcom: Fix the macro PARF_SLV_ADDR_SPACE_SIZE_2_3_3
+  dt-bindings: clock: qcom: Add reset for WCSSAON
+  clk: qcom: Add WCSSAON reset
+  dts: Reserve memory region for NSS and TZ
 
-You aparently combine 2 patches together. Please split.
+ arch/arm64/boot/dts/qcom/ipq8074.dtsi        | 7 ++++++-
+ drivers/clk/qcom/gcc-ipq8074.c               | 1 +
+ drivers/pci/controller/dwc/pcie-qcom.c       | 2 +-
+ include/dt-bindings/clock/qcom,gcc-ipq8074.h | 1 +
+ 4 files changed, 9 insertions(+), 2 deletions(-)
 
+-- 
+2.34.1
 
->
->Signed-off-by: Souradeep Chakrabarti <schakrabarti@linux.microsoft.com>
-
-Please provide a "Fixes" tag with pointer to the commit that introduced
-the problem.
-
-
->---
->V1 -> V2:
->* Added net branch
->* Removed the typecasting to (struct mana_context*) of void pointer
->* Repositioned timeout variable in mana_dealloc_queues()
->* Repositioned vf_unload_timeout in mana_context struct, to utilise the
->  6 bytes hole
->---
-> .../net/ethernet/microsoft/mana/gdma_main.c   |  4 +++-
-> .../net/ethernet/microsoft/mana/hw_channel.c  | 12 ++++++++++-
-> drivers/net/ethernet/microsoft/mana/mana_en.c | 21 +++++++++++++++++--
-> include/net/mana/mana.h                       |  2 ++
-> 4 files changed, 35 insertions(+), 4 deletions(-)
->
->diff --git a/drivers/net/ethernet/microsoft/mana/gdma_main.c b/drivers/net/ethernet/microsoft/mana/gdma_main.c
->index 8f3f78b68592..6411f01be0d9 100644
->--- a/drivers/net/ethernet/microsoft/mana/gdma_main.c
->+++ b/drivers/net/ethernet/microsoft/mana/gdma_main.c
->@@ -946,10 +946,12 @@ int mana_gd_deregister_device(struct gdma_dev *gd)
-> 	struct gdma_context *gc = gd->gdma_context;
-> 	struct gdma_general_resp resp = {};
-> 	struct gdma_general_req req = {};
->+	struct mana_context *ac;
-> 	int err;
-> 
-> 	if (gd->pdid == INVALID_PDID)
-> 		return -EINVAL;
->+	ac = gd->driver_data;
-> 
-> 	mana_gd_init_req_hdr(&req.hdr, GDMA_DEREGISTER_DEVICE, sizeof(req),
-> 			     sizeof(resp));
->@@ -957,7 +959,7 @@ int mana_gd_deregister_device(struct gdma_dev *gd)
-> 	req.hdr.dev_id = gd->dev_id;
-> 
-> 	err = mana_gd_send_request(gc, sizeof(req), &req, sizeof(resp), &resp);
->-	if (err || resp.hdr.status) {
->+	if ((err || resp.hdr.status) && !ac->vf_unload_timeout) {
-> 		dev_err(gc->dev, "Failed to deregister device: %d, 0x%x\n",
-> 			err, resp.hdr.status);
-> 		if (!err)
->diff --git a/drivers/net/ethernet/microsoft/mana/hw_channel.c b/drivers/net/ethernet/microsoft/mana/hw_channel.c
->index 9d1507eba5b9..492cb2c6e2cb 100644
->--- a/drivers/net/ethernet/microsoft/mana/hw_channel.c
->+++ b/drivers/net/ethernet/microsoft/mana/hw_channel.c
->@@ -1,8 +1,10 @@
-> // SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
-> /* Copyright (c) 2021, Microsoft Corporation. */
-> 
->+#include "asm-generic/errno.h"
-> #include <net/mana/gdma.h>
-> #include <net/mana/hw_channel.h>
->+#include <net/mana/mana.h>
-> 
-> static int mana_hwc_get_msg_index(struct hw_channel_context *hwc, u16 *msg_id)
-> {
->@@ -786,12 +788,19 @@ int mana_hwc_send_request(struct hw_channel_context *hwc, u32 req_len,
-> 	struct hwc_wq *txq = hwc->txq;
-> 	struct gdma_req_hdr *req_msg;
-> 	struct hwc_caller_ctx *ctx;
->+	struct mana_context *ac;
-> 	u32 dest_vrcq = 0;
-> 	u32 dest_vrq = 0;
-> 	u16 msg_id;
-> 	int err;
-> 
-> 	mana_hwc_get_msg_index(hwc, &msg_id);
->+	ac = hwc->gdma_dev->driver_data;
->+	if (ac->vf_unload_timeout) {
->+		dev_err(hwc->dev, "HWC: vport is already unloaded.\n");
->+		err = -ETIMEDOUT;
->+		goto out;
->+	}
-> 
-> 	tx_wr = &txq->msg_buf->reqs[msg_id];
-> 
->@@ -825,9 +834,10 @@ int mana_hwc_send_request(struct hw_channel_context *hwc, u32 req_len,
-> 		goto out;
-> 	}
-> 
->-	if (!wait_for_completion_timeout(&ctx->comp_event, 30 * HZ)) {
->+	if (!wait_for_completion_timeout(&ctx->comp_event, 5 * HZ)) {
-> 		dev_err(hwc->dev, "HWC: Request timed out!\n");
-> 		err = -ETIMEDOUT;
->+		ac->vf_unload_timeout = true;
-> 		goto out;
-> 	}
-> 
->diff --git a/drivers/net/ethernet/microsoft/mana/mana_en.c b/drivers/net/ethernet/microsoft/mana/mana_en.c
->index d907727c7b7a..cb2080b3a00c 100644
->--- a/drivers/net/ethernet/microsoft/mana/mana_en.c
->+++ b/drivers/net/ethernet/microsoft/mana/mana_en.c
->@@ -2329,7 +2329,10 @@ static int mana_dealloc_queues(struct net_device *ndev)
-> {
-> 	struct mana_port_context *apc = netdev_priv(ndev);
-> 	struct gdma_dev *gd = apc->ac->gdma_dev;
->+	unsigned long timeout;
-> 	struct mana_txq *txq;
->+	struct sk_buff *skb;
->+	struct mana_cq *cq;
-> 	int i, err;
-> 
-> 	if (apc->port_is_up)
->@@ -2348,13 +2351,26 @@ static int mana_dealloc_queues(struct net_device *ndev)
-> 	 *
-> 	 * Drain all the in-flight TX packets
-> 	 */
->+
->+	timeout = jiffies + 120 * HZ;
-> 	for (i = 0; i < apc->num_queues; i++) {
-> 		txq = &apc->tx_qp[i].txq;
->-
->-		while (atomic_read(&txq->pending_sends) > 0)
->+		while (atomic_read(&txq->pending_sends) > 0 &&
->+		       time_before(jiffies, timeout)) {
-> 			usleep_range(1000, 2000);
->+		}
-> 	}
-> 
->+	for (i = 0; i < apc->num_queues; i++) {
->+		txq = &apc->tx_qp[i].txq;
->+		cq = &apc->tx_qp[i].tx_cq;
->+		while (atomic_read(&txq->pending_sends)) {
->+			skb = skb_dequeue(&txq->pending_skbs);
->+			mana_unmap_skb(skb, apc);
->+			napi_consume_skb(skb, cq->budget);
->+			atomic_sub(1, &txq->pending_sends);
->+		}
->+	}
-> 	/* We're 100% sure the queues can no longer be woken up, because
-> 	 * we're sure now mana_poll_tx_cq() can't be running.
-> 	 */
->@@ -2605,6 +2621,7 @@ int mana_probe(struct gdma_dev *gd, bool resuming)
-> 		}
-> 	}
-> 
->+	ac->vf_unload_timeout = false;
-
-Pointless init. You have the struct zeroed during allocation.
-
-
-> 	err = add_adev(gd);
-> out:
-> 	if (err)
->diff --git a/include/net/mana/mana.h b/include/net/mana/mana.h
->index 9eef19972845..5f5affdca1eb 100644
->--- a/include/net/mana/mana.h
->+++ b/include/net/mana/mana.h
->@@ -358,6 +358,8 @@ struct mana_context {
-> 
-> 	u16 num_ports;
-> 
->+	bool vf_unload_timeout;
->+
-> 	struct mana_eq *eqs;
-> 
-> 	struct net_device *ports[MAX_PORTS_IN_MANA_DEV];
->-- 
->2.34.1
->
->
