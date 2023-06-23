@@ -2,49 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6A4873B04A
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 07:47:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89D9673B042
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 07:46:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230242AbjFWFrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 01:47:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33404 "EHLO
+        id S231392AbjFWFq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 01:46:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230151AbjFWFqx (ORCPT
+        with ESMTP id S231329AbjFWFqP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 01:46:53 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3216B26B8;
-        Thu, 22 Jun 2023 22:46:17 -0700 (PDT)
-Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QnR435cKhztQnc;
-        Fri, 23 Jun 2023 13:43:31 +0800 (CST)
-Received: from localhost.localdomain (10.67.174.95) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Fri, 23 Jun 2023 13:46:10 +0800
-From:   Yang Jihong <yangjihong1@huawei.com>
-To:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
-        <jolsa@kernel.org>, <namhyung@kernel.org>, <irogers@google.com>,
-        <adrian.hunter@intel.com>, <anshuman.khandual@arm.com>,
-        <jesussanp@google.com>, <linux-perf-users@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <yangjihong1@huawei.com>
-Subject: [PATCH v5 4/4] perf tools: Add printing perf_event_attr config symbol in perf_event_attr__fprintf()
-Date:   Fri, 23 Jun 2023 05:44:16 +0000
-Message-ID: <20230623054416.160858-5-yangjihong1@huawei.com>
-X-Mailer: git-send-email 2.30.GIT
-In-Reply-To: <20230623054416.160858-1-yangjihong1@huawei.com>
-References: <20230623054416.160858-1-yangjihong1@huawei.com>
+        Fri, 23 Jun 2023 01:46:15 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF99B2969;
+        Thu, 22 Jun 2023 22:45:56 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35N5KbxJ013113;
+        Fri, 23 Jun 2023 05:45:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=m0eZon9twmkZkc434FGAkX2VJzOfYrElusM5ziWPVSY=;
+ b=g86zOIowtThYIcHa+a9e5SMYhYYGRs9VCGV2uIjiSC3Qyj+CyyZfcBLDiHRY/ar3/oXl
+ 9UDanKdYuYc4+g53axKTZh3P62Rx/ZPBYX+ocdNzEGZucj9KMBI7tZIiHGilqTD7gxG9
+ U56MwdDEtsysNWcmgdoTCsNCwZ+fmpQ6xj2fRaz/w8m1oWu4CKK0iGNSSfJdaxyRk5vE
+ bZzVMGs8pF9Y6NzdfGyQknSH+Cp/a0KP9tqipo+JBnr7DcJbtz/dfI2CdCkKGCAn1Vsv
+ jAu7zRNpzfkd570Xw7oAyQuntCMh3z+LMibBTVPgxcbJC7PCDHT+yVvP0fn36QaVBQne /Q== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rcurrgyfh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 23 Jun 2023 05:45:22 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35N5jLUl006922
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 23 Jun 2023 05:45:21 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Thu, 22 Jun 2023 22:45:14 -0700
+Date:   Fri, 23 Jun 2023 11:15:10 +0530
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
+        <kishon@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <gregkh@linuxfoundation.org>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <p.zabel@pengutronix.de>, <arnd@arndb.de>,
+        <geert+renesas@glider.be>, <neil.armstrong@linaro.org>,
+        <nfraprado@collabora.com>, <broonie@kernel.org>,
+        <rafal@milecki.pl>, <quic_srichara@quicinc.com>,
+        <quic_varada@quicinc.org>, <quic_wcheng@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v2 2/6] dt-bindings: phy: qcom,m31: Document qcom,m31 USB
+ phy
+Message-ID: <20230623054508.GA13261@varda-linux.qualcomm.com>
+References: <cover.1687414716.git.quic_varada@quicinc.com>
+ <4f4136a91b24d3ad35fa12bd19fe14b83da9affe.1687414716.git.quic_varada@quicinc.com>
+ <20230622144627.GA1672260-robh@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.95]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230622144627.GA1672260-robh@kernel.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 8CorgTQKjorILKJnvr3SkE_IEfgEMSoy
+X-Proofpoint-ORIG-GUID: 8CorgTQKjorILKJnvr3SkE_IEfgEMSoy
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-23_02,2023-06-22_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 malwarescore=0 mlxlogscore=999 suspectscore=0 spamscore=0
+ adultscore=0 clxscore=1011 lowpriorityscore=0 phishscore=0 bulkscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306230052
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,411 +90,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When printing perf_event_attr, always display perf_event_attr config and
-its symbol to improve the readability of debugging information.
+On Thu, Jun 22, 2023 at 08:46:27AM -0600, Rob Herring wrote:
+> On Thu, Jun 22, 2023 at 11:52:09AM +0530, Varadarajan Narayanan wrote:
+> > Document the M31 USB2 phy present in IPQ5332.
+> >
+> > Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
+> > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> > ---
+> > v1:
+> > 	Rename qcom,m31.yaml -> qcom,ipq5332-usb-hsphy.yaml
+> > 	Drop default binding "m31,usb-hsphy"
+> > 	Add clock
+> > 	Remove 'oneOf' from compatible
+> > 	Remove 'qscratch' region from register space as it is not needed
+> > 	Remove reset-names
+> > 	Fix the example definition
+> > ---
+> >  .../bindings/phy/qcom,ipq5332-usb-hsphy.yaml       | 51 ++++++++++++++++++++++
+> >  1 file changed, 51 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/phy/qcom,ipq5332-usb-hsphy.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/phy/qcom,ipq5332-usb-hsphy.yaml b/Documentation/devicetree/bindings/phy/qcom,ipq5332-usb-hsphy.yaml
+> > new file mode 100644
+> > index 0000000..ab2e945
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/phy/qcom,ipq5332-usb-hsphy.yaml
+> > @@ -0,0 +1,51 @@
+> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/phy/qcom,ipq5332-usb-hsphy.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: M31 (https://www.m31tech.com) USB PHY
+>
+> Put the URL in 'description'.
 
-Before:
+Ok.
 
-  # perf --debug verbose=2 record -e cycles,cpu-clock,sched:sched_switch,branch-load-misses,r101,mem:0x0 -C 0 true
-  <SNIP>
-  ------------------------------------------------------------
-  perf_event_attr:
-    size                             136
-    { sample_period, sample_freq }   4000
-    sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
-    read_format                      ID
-    disabled                         1
-    inherit                          1
-    freq                             1
-    sample_id_all                    1
-    exclude_guest                    1
-  ------------------------------------------------------------
-  sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 5
-  ------------------------------------------------------------
-  perf_event_attr:
-    type                             1
-    size                             136
-    { sample_period, sample_freq }   4000
-    sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
-    read_format                      ID
-    disabled                         1
-    inherit                          1
-    freq                             1
-    sample_id_all                    1
-    exclude_guest                    1
-  ------------------------------------------------------------
-  sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 6
-  ------------------------------------------------------------
-  perf_event_attr:
-    type                             2
-    size                             136
-    config                           0x143
-    { sample_period, sample_freq }   1
-    sample_type                      IP|TID|TIME|CPU|PERIOD|RAW|IDENTIFIER
-    read_format                      ID
-    disabled                         1
-    inherit                          1
-    sample_id_all                    1
-    exclude_guest                    1
-  ------------------------------------------------------------
-  sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 7
-  ------------------------------------------------------------
-  perf_event_attr:
-    type                             3
-    size                             136
-    config                           0x10005
-    { sample_period, sample_freq }   4000
-    sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
-    read_format                      ID
-    disabled                         1
-    inherit                          1
-    freq                             1
-    sample_id_all                    1
-    exclude_guest                    1
-  ------------------------------------------------------------
-  sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 9
-  ------------------------------------------------------------
-  perf_event_attr:
-    type                             4
-    size                             136
-    config                           0x101
-    { sample_period, sample_freq }   4000
-    sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
-    read_format                      ID
-    disabled                         1
-    inherit                          1
-    freq                             1
-    sample_id_all                    1
-    exclude_guest                    1
-  ------------------------------------------------------------
-  sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 10
-  ------------------------------------------------------------
-  perf_event_attr:
-    type                             5
-    size                             136
-    { sample_period, sample_freq }   1
-    sample_type                      IP|TID|TIME|CPU|IDENTIFIER
-    read_format                      ID
-    disabled                         1
-    inherit                          1
-    sample_id_all                    1
-    exclude_guest                    1
-    bp_type                          3
-    { bp_len, config2 }              0x4
-  ------------------------------------------------------------
-  sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 11
-  <SNIP>
+> > +
+> > +maintainers:
+> > +  - Sricharan Ramabadhran <quic_srichara@quicinc.com>
+> > +  - Varadarajan Narayanan <quic_varada@quicinc.org>
+>
+> .org? It's .com everywhere else.
 
-After:
+Ok.
 
-  # perf --debug verbose=2 record -e cycles,cpu-clock,sched:sched_switch,branch-load-misses,r101,mem:0x0 -C 0 true
-  <SNIP>
-  ------------------------------------------------------------
-  perf_event_attr:
-    type                             0 (PERF_TYPE_HARDWARE)
-    size                             136
-    config                           0 (PERF_COUNT_HW_CPU_CYCLES)
-    { sample_period, sample_freq }   4000
-    sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
-    read_format                      ID
-    disabled                         1
-    inherit                          1
-    freq                             1
-    sample_id_all                    1
-    exclude_guest                    1
-  ------------------------------------------------------------
-  sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 5
-  ------------------------------------------------------------
-  perf_event_attr:
-    type                             1 (PERF_TYPE_SOFTWARE)
-    size                             136
-    config                           0 (PERF_COUNT_SW_CPU_CLOCK)
-    { sample_period, sample_freq }   4000
-    sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
-    read_format                      ID
-    disabled                         1
-    inherit                          1
-    freq                             1
-    sample_id_all                    1
-    exclude_guest                    1
-  ------------------------------------------------------------
-  sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 6
-  ------------------------------------------------------------
-  perf_event_attr:
-    type                             2 (PERF_TYPE_TRACEPOINT)
-    size                             136
-    config                           0x143 (sched:sched_switch)
-    { sample_period, sample_freq }   1
-    sample_type                      IP|TID|TIME|CPU|PERIOD|RAW|IDENTIFIER
-    read_format                      ID
-    disabled                         1
-    inherit                          1
-    sample_id_all                    1
-    exclude_guest                    1
-  ------------------------------------------------------------
-  sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 7
-  ------------------------------------------------------------
-  perf_event_attr:
-    type                             3 (PERF_TYPE_HW_CACHE)
-    size                             136
-    config                           0x10005 (PERF_COUNT_HW_CACHE_RESULT_MISS | PERF_COUNT_HW_CACHE_OP_READ | PERF_COUNT_HW_CACHE_BPU)
-    { sample_period, sample_freq }   4000
-    sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
-    read_format                      ID
-    disabled                         1
-    inherit                          1
-    freq                             1
-    sample_id_all                    1
-    exclude_guest                    1
-  ------------------------------------------------------------
-  sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 9
-  ------------------------------------------------------------
-  perf_event_attr:
-    type                             4 (PERF_TYPE_RAW)
-    size                             136
-    config                           0x101
-    { sample_period, sample_freq }   4000
-    sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
-    read_format                      ID
-    disabled                         1
-    inherit                          1
-    freq                             1
-    sample_id_all                    1
-    exclude_guest                    1
-  ------------------------------------------------------------
-  sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 10
-  ------------------------------------------------------------
-  perf_event_attr:
-    type                             5 (PERF_TYPE_BREAKPOINT)
-    size                             136
-    config                           0
-    { sample_period, sample_freq }   1
-    sample_type                      IP|TID|TIME|CPU|IDENTIFIER
-    read_format                      ID
-    disabled                         1
-    inherit                          1
-    sample_id_all                    1
-    exclude_guest                    1
-    bp_type                          3
-    { bp_len, config2 }              0x4
-  ------------------------------------------------------------
-  sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 11
-  ------------------------------------------------------------
-  perf_event_attr:
-    type                             1 (PERF_TYPE_SOFTWARE)
-    size                             136
-    config                           0x9 (PERF_COUNT_SW_DUMMY)
-    { sample_period, sample_freq }   4000
-    sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
-    read_format                      ID
-    inherit                          1
-    mmap                             1
-    comm                             1
-    freq                             1
-    task                             1
-    sample_id_all                    1
-    mmap2                            1
-    comm_exec                        1
-    ksymbol                          1
-    bpf_event                        1
-  ------------------------------------------------------------
-  sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 12
-  <SNIP>
+> > +
+> > +description:
+> > +  USB M31 PHY found in Qualcomm IPQ5018, IPQ5332 SoCs.
+>
+> Where's the IPQ5018 compatible?
 
-Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
-Acked-by: Adrian Hunter <adrian.hunter@intel.com>
----
- tools/perf/util/perf_event_attr_fprintf.c | 138 +++++++++++++++++++++-
- 1 file changed, 137 insertions(+), 1 deletion(-)
+In the previous version had a default and IPQ5332 specific
+compatible. IPQ5018 would have used the default compatible.
+However, in the review was asked to drop the default compatible.
+Hence planned to include ipq5018 compatible and post it in
+separate patchset while enabling IPQ5018 USB. IPQ5018 init is
+also diffferent from the init used here.
 
-diff --git a/tools/perf/util/perf_event_attr_fprintf.c b/tools/perf/util/perf_event_attr_fprintf.c
-index b16521afc31d..2247991451f3 100644
---- a/tools/perf/util/perf_event_attr_fprintf.c
-+++ b/tools/perf/util/perf_event_attr_fprintf.c
-@@ -1,11 +1,13 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <inttypes.h>
- #include <stdio.h>
-+#include <stdlib.h>
- #include <stdbool.h>
- #include <linux/kernel.h>
- #include <linux/types.h>
- #include <linux/perf_event.h>
- #include "util/evsel_fprintf.h"
-+#include "trace-event.h"
- 
- struct bit_names {
- 	int bit;
-@@ -85,6 +87,80 @@ static const char *stringify_perf_type_id(u64 value)
- 		return NULL;
- 	}
- }
-+
-+static const char *stringify_perf_hw_id(u64 value)
-+{
-+	switch (value) {
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_CPU_CYCLES)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_INSTRUCTIONS)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_CACHE_REFERENCES)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_CACHE_MISSES)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_BRANCH_INSTRUCTIONS)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_BRANCH_MISSES)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_BUS_CYCLES)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_STALLED_CYCLES_FRONTEND)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_STALLED_CYCLES_BACKEND)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_REF_CPU_CYCLES)
-+	default:
-+		return NULL;
-+	}
-+}
-+
-+static const char *stringify_perf_hw_cache_id(u64 value)
-+{
-+	switch (value) {
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_CACHE_L1D)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_CACHE_L1I)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_CACHE_LL)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_CACHE_DTLB)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_CACHE_ITLB)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_CACHE_BPU)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_CACHE_NODE)
-+	default:
-+		return NULL;
-+	}
-+}
-+
-+static const char *stringify_perf_hw_cache_op_id(u64 value)
-+{
-+	switch (value) {
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_CACHE_OP_READ)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_CACHE_OP_WRITE)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_CACHE_OP_PREFETCH)
-+	default:
-+		return NULL;
-+	}
-+}
-+
-+static const char *stringify_perf_hw_cache_op_result_id(u64 value)
-+{
-+	switch (value) {
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_CACHE_RESULT_ACCESS)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_CACHE_RESULT_MISS)
-+	default:
-+		return NULL;
-+	}
-+}
-+
-+static const char *stringify_perf_sw_id(u64 value)
-+{
-+	switch (value) {
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_SW_CPU_CLOCK)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_SW_TASK_CLOCK)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_SW_PAGE_FAULTS)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_SW_CONTEXT_SWITCHES)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_SW_CPU_MIGRATIONS)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_SW_PAGE_FAULTS_MIN)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_SW_PAGE_FAULTS_MAJ)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_SW_ALIGNMENT_FAULTS)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_SW_EMULATION_FAULTS)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_SW_DUMMY)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_SW_BPF_OUTPUT)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_SW_CGROUP_SWITCHES)
-+	default:
-+		return NULL;
-+	}
-+}
- #undef ENUM_ID_TO_STR_CASE
- 
- #define PRINT_ID(_s, _f)					\
-@@ -96,12 +172,71 @@ do {								\
- 		snprintf(buf, size, _f" (%s)", value, __s);	\
- } while (0)
- #define print_id_unsigned(_s)	PRINT_ID(_s, "%"PRIu64)
-+#define print_id_hex(_s)	PRINT_ID(_s, "%#"PRIx64)
- 
- static void __p_type_id(char *buf, size_t size, u64 value)
- {
- 	print_id_unsigned(stringify_perf_type_id(value));
- }
- 
-+static void __p_config_hw_id(char *buf, size_t size, u64 value)
-+{
-+	print_id_hex(stringify_perf_hw_id(value));
-+}
-+
-+static void __p_config_sw_id(char *buf, size_t size, u64 value)
-+{
-+	print_id_hex(stringify_perf_sw_id(value));
-+}
-+
-+static void __p_config_hw_cache_id(char *buf, size_t size, u64 value)
-+{
-+	const char *hw_cache_str = stringify_perf_hw_cache_id(value & 0xff);
-+	const char *hw_cache_op_str =
-+		stringify_perf_hw_cache_op_id((value & 0xff00) >> 8);
-+	const char *hw_cache_op_result_str =
-+		stringify_perf_hw_cache_op_result_id((value & 0xff0000) >> 16);
-+
-+	if (hw_cache_str == NULL || hw_cache_op_str == NULL ||
-+	    hw_cache_op_result_str == NULL) {
-+		snprintf(buf, size, "%#"PRIx64, value);
-+	} else {
-+		snprintf(buf, size, "%#"PRIx64" (%s | %s | %s)", value,
-+			 hw_cache_op_result_str, hw_cache_op_str, hw_cache_str);
-+	}
-+}
-+
-+#ifdef HAVE_LIBTRACEEVENT
-+static void __p_config_tracepoint_id(char *buf, size_t size, u64 value)
-+{
-+	char *str = tracepoint_id_to_name(value);
-+
-+	print_id_hex(str);
-+	free(str);
-+}
-+#endif
-+
-+static void __p_config_id(char *buf, size_t size, u32 type, u64 value)
-+{
-+	switch (type) {
-+	case PERF_TYPE_HARDWARE:
-+		return __p_config_hw_id(buf, size, value);
-+	case PERF_TYPE_SOFTWARE:
-+		return __p_config_sw_id(buf, size, value);
-+	case PERF_TYPE_HW_CACHE:
-+		return __p_config_hw_cache_id(buf, size, value);
-+	case PERF_TYPE_TRACEPOINT:
-+#ifdef HAVE_LIBTRACEEVENT
-+		return __p_config_tracepoint_id(buf, size, value);
-+#endif
-+	case PERF_TYPE_RAW:
-+	case PERF_TYPE_BREAKPOINT:
-+	default:
-+		snprintf(buf, size, "%#"PRIx64, value);
-+		return;
-+	}
-+}
-+
- #define BUF_SIZE		1024
- 
- #define p_hex(val)		snprintf(buf, BUF_SIZE, "%#"PRIx64, (uint64_t)(val))
-@@ -111,6 +246,7 @@ static void __p_type_id(char *buf, size_t size, u64 value)
- #define p_branch_sample_type(val) __p_branch_sample_type(buf, BUF_SIZE, val)
- #define p_read_format(val)	__p_read_format(buf, BUF_SIZE, val)
- #define p_type_id(val)		__p_type_id(buf, BUF_SIZE, val)
-+#define p_config_id(val)	__p_config_id(buf, BUF_SIZE, attr->type, val)
- 
- #define PRINT_ATTRn(_n, _f, _p, _a)			\
- do {							\
-@@ -130,7 +266,7 @@ int perf_event_attr__fprintf(FILE *fp, struct perf_event_attr *attr,
- 
- 	PRINT_ATTRn("type", type, p_type_id, true);
- 	PRINT_ATTRf(size, p_unsigned);
--	PRINT_ATTRf(config, p_hex);
-+	PRINT_ATTRn("config", config, p_config_id, true);
- 	PRINT_ATTRn("{ sample_period, sample_freq }", sample_period, p_unsigned, false);
- 	PRINT_ATTRf(sample_type, p_sample_type);
- 	PRINT_ATTRf(read_format, p_read_format);
--- 
-2.30.GIT
+> > +
+> > +properties:
+> > +  compatible:
+> > +    items:
+> > +      - enum:
+> > +          - qcom,ipq5332-usb-hsphy
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  clocks:
+> > +    maxItems: 1
+> > +
+> > +  clock-names:
+> > +    maxItems: 1
+> > +    contains:
+>
+> 'contains' is not appropriate here. Drop.
+>
+> > +      items:
+> > +        - const: cfg_ahb
+>
+> Don't need both items list and maxItems. Really, you don't need
+> 'clock-names' at all because there is only 1 clock.
 
+Will drop 'clock-names'.
+
+> > +
+> > +  resets:
+> > +    maxItems: 1
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/clock/qcom,ipq5332-gcc.h>
+> > +    usbphy0: ipq5332-hsphy@7b000 {
+>
+> Drop unused labels.
+
+Ok.
+
+> > +    	compatible = "qcom,ipq5332-usb-hsphy";
+> > +    	reg = <0x0007b000 0x12c>;
+> > +
+> > +    	clocks = <&gcc GCC_USB0_PHY_CFG_AHB_CLK>;
+> > +    	clock-names = "cfg_ahb";
+> > +
+> > +    	resets = <&gcc GCC_QUSB2_0_PHY_BCR>;
+>
+> Whitespace errors in here.
+
+Ok.
+
+Thanks
+Varada
+
+> > +    };
+> > +
+> > --
+> > 2.7.4
+> >
