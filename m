@@ -2,259 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1B1973BB4E
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 17:13:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B224673BB33
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 17:11:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232621AbjFWPNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 11:13:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57712 "EHLO
+        id S232587AbjFWPLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 11:11:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232288AbjFWPLn (ORCPT
+        with ESMTP id S232570AbjFWPLQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 11:11:43 -0400
+        Fri, 23 Jun 2023 11:11:16 -0400
 Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FA432724
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 08:11:10 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5704991ea05so10982667b3.1
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 08:11:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 790DE2D4E
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 08:10:45 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-569e7aec37bso9783397b3.2
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 08:10:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687533064; x=1690125064;
-        h=content-transfer-encoding:to:from:subject:references:mime-version
-         :message-id:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NjmwL8WseP3HzYigt6canmDc/9LLjtw4UlWBwZCWzrI=;
-        b=5pRYaw4oEivyTLfaXO50KNsphBBt2HZ3hzpCDKDYewdSu9CQNRTV1OGheLK/gzyCVk
-         K89jQmhYhcezy3Wa78KX9QJgrRvGSBDlcRH+Fs7hnTqxlU6ApNLCvpdWSmYC1dyHdLyz
-         qv0DoNCjN9CE+WKKhEzMt8kRaUB4uj2vJlLhP9EtcLy9dcgR6jFfx1sgt882D5cWMs39
-         kKN2oLxYvB4bI3Wazd1b61l/JNmvxPz/cbF66xEPWXuS3GLe3rc/A2ysSTE9+7byyHf4
-         FgUlCsYTHEKfPenSvSPabGmnuVoCSVvMigrLox3phKB+oyTAcnjRKV/S0hHdNcUhhgKO
-         I/Dg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687533064; x=1690125064;
-        h=content-transfer-encoding:to:from:subject:references:mime-version
-         :message-id:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+        d=google.com; s=20221208; t=1687533042; x=1690125042;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=NjmwL8WseP3HzYigt6canmDc/9LLjtw4UlWBwZCWzrI=;
-        b=ER2WSznqzp3JLndqi0PkxPnxsoKOp1YKfVacxIesIDuKOow18hnHXtXttX+CYad8Y0
-         8hfma5vyCTyQTCu+3yA0Ooq3TLBEs5jxgM13bdc3a6MxR6JDUwkvN5qTgQiaWvRM1ojW
-         wtZKk71gcxGJVFCsTteQD7v3fZd5xcfsN/WrxckN8htJYz5iPhX55weueViW3tUT7oXm
-         LghCxdJudSKm+a8PwqsKrV7RBV7jnAu6b0RpE3VTzeUKCa2fLPVmxJLlLIpUI7mFCYB5
-         70C9G/DvhGNv3pR1tp5W0EAepiLrcHdsb5ehh7zDBZHqjYaz9EIkh6i5PsZz9F1C6hTm
-         bylg==
-X-Gm-Message-State: AC+VfDylgQPxwaHqrX0ncSzkO1zTbi0fqhdNmaFLCDdhmGHc8/hvqKFl
-        nkeGAj5A/DE9SXF5+lwwBTMspmNc6BD6
-X-Google-Smtp-Source: ACHHUZ5ZRQOjBM7R9fyw55HuF/+F5cACymM0q4IeYxLU+rS3Qeb0hZjzxc7H/lioBzxTNs3m1wbJC2A5RVlQ
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:6559:8968:cdfe:35b6])
- (user=irogers job=sendgmr) by 2002:a81:b60a:0:b0:573:4c08:ec40 with SMTP id
- u10-20020a81b60a000000b005734c08ec40mr6253294ywh.7.1687533064442; Fri, 23 Jun
- 2023 08:11:04 -0700 (PDT)
-Date:   Fri, 23 Jun 2023 08:10:16 -0700
-In-Reply-To: <20230623151016.4193660-1-irogers@google.com>
-Message-Id: <20230623151016.4193660-13-irogers@google.com>
+        bh=xDW512AMWN2/l8Gl/XnRAjtww3e9CB3zNKNI+7nHZzU=;
+        b=2XRCyitvwHsFaseO2qHq/bXJOkP4xrmj5rEBBjiRGnqTp1l+mA57nY3tu5XumWk4QZ
+         mPN5wN2mTl2S+TRIuHPmM1nZm8jwfZGdifN5ah2itJnX0ehHHdh4fD2NRfTUXKDcOQdB
+         E22KFdK5y7Q3PweNqkeEWv//t3Y2eslsPp6Z+LQceN0RPTdo7a/5J/DtYCVFukS2lTEN
+         PCu+XcV2FNF/8Wkkvr/aqtJfqRmSLM2oBJi0FZaywwvTcf3j5jg9fRLkh2MwSC3aCcSJ
+         6TMpzkwpjn9bK1rLCBhnQUYK8W0LI0Mh8huoa5EllWkTsjSY3geq6Ennn+4OAEea/Suy
+         /BTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687533042; x=1690125042;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xDW512AMWN2/l8Gl/XnRAjtww3e9CB3zNKNI+7nHZzU=;
+        b=dQjmYHcSTbhtd/gZWQe1qt0lUMAtREJU3jTwa0iKObSaVcrtnQzoqT2rsnZxUj1cy2
+         dLPytv4vKd9JCc33mPy+HlfLMYd2CW2MNwjYgiKisZKBapTfsiypl2Ak4y7BjA6Gpof3
+         +KEh4BRhVJ2FDgO53Q9Lld4YCDM+3qwXXAUNVGk+c/z2TZXKvbpLInUmCI5TQRvRr2CH
+         ayGHCHNYPxTLtmqiPHW4/abXwYmsG7WpSOAnBajSZ64Hy82UQBzAw6iGiRNi6bN8X2CV
+         fZBFxg065a+NCMJhMoNQ5o8nLoJ1YUCdOK08evWe/9uWMQVnd2bB3qqJj1ik6tzimM+n
+         KwBw==
+X-Gm-Message-State: AC+VfDxYnsXI3rc+B5UJeVYeNnRBV90Hq2VxJ3OQcHhDGNxzork1fDqe
+        6YQpj2RnILKEl3/C2HLznXsA9XeQ6GV8
+X-Google-Smtp-Source: ACHHUZ5duT0Q2E0Bc88n4bLv6s1lkYEBuH2PD0kd/fBAJAijrWkmtz0YR1Rc4REacVm35/dVvpMG24QtfW80
+X-Received: from kyletso-p620lin01.ntc.corp.google.com ([2401:fa00:fc:202:5d47:84a:2819:bba4])
+ (user=kyletso job=sendgmr) by 2002:a5b:ccd:0:b0:bd1:7934:b4fe with SMTP id
+ e13-20020a5b0ccd000000b00bd17934b4femr9439305ybr.13.1687533042671; Fri, 23
+ Jun 2023 08:10:42 -0700 (PDT)
+Date:   Fri, 23 Jun 2023 23:10:33 +0800
 Mime-Version: 1.0
-References: <20230623151016.4193660-1-irogers@google.com>
 X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-Subject: [PATCH v2 12/12] perf vendor events intel: Update tigerlake to 1.13
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Eduard Zingerman <eddyz87@gmail.com>,
-        Jing Zhang <renyu.zj@linux.alibaba.com>,
-        Sohom Datta <sohomdatta1@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Perry Taylor <perry.taylor@intel.com>,
-        Samantha Alt <samantha.alt@intel.com>,
-        Caleb Biggers <caleb.biggers@intel.com>,
-        Weilin Wang <weilin.wang@intel.com>,
-        Edward Baker <edward.baker@intel.com>
+Message-ID: <20230623151036.3955013-1-kyletso@google.com>
+Subject: [PATCH v2 0/3] Some fixes for select_usb_power_delivery
+From:   Kyle Tso <kyletso@google.com>
+To:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org
+Cc:     badhri@google.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Kyle Tso <kyletso@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Updates were released in:
-https://github.com/intel/perfmon/commit/9a3cd5ad68aee46078c663fe0cd9484e395=
-6fd88
-Adds the events ICACHE_DATA.STALLS, ICACHE_TAG.STALLS and
-DECODE.LCP. Descriptions are also updated.
+Update v2
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/pmu-events/arch/x86/mapfile.csv    |  2 +-
- .../arch/x86/tigerlake/frontend.json          | 32 ++++++++++++++++---
- .../arch/x86/tigerlake/pipeline.json          |  6 ++--
- 3 files changed, 32 insertions(+), 8 deletions(-)
+- Add "Cc: stable@vger.kernel.org" to each patch
 
-diff --git a/tools/perf/pmu-events/arch/x86/mapfile.csv b/tools/perf/pmu-ev=
-ents/arch/x86/mapfile.csv
-index 7c6598a9b240..6650100830c4 100644
---- a/tools/perf/pmu-events/arch/x86/mapfile.csv
-+++ b/tools/perf/pmu-events/arch/x86/mapfile.csv
-@@ -30,7 +30,7 @@ GenuineIntel-6-(37|4A|4C|4D|5A),v15,silvermont,core
- GenuineIntel-6-(4E|5E|8E|9E|A5|A6),v57,skylake,core
- GenuineIntel-6-55-[01234],v1.31,skylakex,core
- GenuineIntel-6-86,v1.21,snowridgex,core
--GenuineIntel-6-8[CD],v1.12,tigerlake,core
-+GenuineIntel-6-8[CD],v1.13,tigerlake,core
- GenuineIntel-6-2C,v4,westmereep-dp,core
- GenuineIntel-6-25,v3,westmereep-sp,core
- GenuineIntel-6-2F,v3,westmereex,core
-diff --git a/tools/perf/pmu-events/arch/x86/tigerlake/frontend.json b/tools=
-/perf/pmu-events/arch/x86/tigerlake/frontend.json
-index 23b8528590b3..d7b972452c0e 100644
---- a/tools/perf/pmu-events/arch/x86/tigerlake/frontend.json
-+++ b/tools/perf/pmu-events/arch/x86/tigerlake/frontend.json
-@@ -7,6 +7,14 @@
-         "SampleAfterValue": "100003",
-         "UMask": "0x1"
-     },
-+    {
-+        "BriefDescription": "Stalls caused by changing prefix length of th=
-e instruction. [This event is alias to ILD_STALL.LCP]",
-+        "EventCode": "0x87",
-+        "EventName": "DECODE.LCP",
-+        "PublicDescription": "Counts cycles that the Instruction Length de=
-coder (ILD) stalls occurred due to dynamically changing prefix length of th=
-e decoded instruction (by operand size prefix instruction 0x66, address siz=
-e prefix instruction 0x67 or REX.W for Intel64). Count is proportional to t=
-he number of prefixes in a 16B-line. This may result in a three-cycle penal=
-ty for each LCP (Length changing prefix) in a 16-byte chunk. [This event is=
- alias to ILD_STALL.LCP]",
-+        "SampleAfterValue": "500009",
-+        "UMask": "0x1"
-+    },
-     {
-         "BriefDescription": "Decode Stream Buffer (DSB)-to-MITE transition=
-s count.",
-         "CounterMask": "1",
-@@ -213,10 +221,10 @@
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Cycles where a code fetch is stalled due to L=
-1 instruction cache miss.",
-+        "BriefDescription": "Cycles where a code fetch is stalled due to L=
-1 instruction cache miss. [This event is alias to ICACHE_DATA.STALLS]",
-         "EventCode": "0x80",
-         "EventName": "ICACHE_16B.IFDATA_STALL",
--        "PublicDescription": "Counts cycles where a code line fetch is sta=
-lled due to an L1 instruction cache miss. The legacy decode pipeline works =
-at a 16 Byte granularity.",
-+        "PublicDescription": "Counts cycles where a code line fetch is sta=
-lled due to an L1 instruction cache miss. The legacy decode pipeline works =
-at a 16 Byte granularity. [This event is alias to ICACHE_DATA.STALLS]",
-         "SampleAfterValue": "500009",
-         "UMask": "0x4"
-     },
-@@ -237,10 +245,26 @@
-         "UMask": "0x2"
-     },
-     {
--        "BriefDescription": "Cycles where a code fetch is stalled due to L=
-1 instruction cache tag miss.",
-+        "BriefDescription": "Cycles where a code fetch is stalled due to L=
-1 instruction cache tag miss. [This event is alias to ICACHE_TAG.STALLS]",
-         "EventCode": "0x83",
-         "EventName": "ICACHE_64B.IFTAG_STALL",
--        "PublicDescription": "Counts cycles where a code fetch is stalled =
-due to L1 instruction cache tag miss.",
-+        "PublicDescription": "Counts cycles where a code fetch is stalled =
-due to L1 instruction cache tag miss. [This event is alias to ICACHE_TAG.ST=
-ALLS]",
-+        "SampleAfterValue": "200003",
-+        "UMask": "0x4"
-+    },
-+    {
-+        "BriefDescription": "Cycles where a code fetch is stalled due to L=
-1 instruction cache miss. [This event is alias to ICACHE_16B.IFDATA_STALL]"=
-,
-+        "EventCode": "0x80",
-+        "EventName": "ICACHE_DATA.STALLS",
-+        "PublicDescription": "Counts cycles where a code line fetch is sta=
-lled due to an L1 instruction cache miss. The legacy decode pipeline works =
-at a 16 Byte granularity. [This event is alias to ICACHE_16B.IFDATA_STALL]"=
-,
-+        "SampleAfterValue": "500009",
-+        "UMask": "0x4"
-+    },
-+    {
-+        "BriefDescription": "Cycles where a code fetch is stalled due to L=
-1 instruction cache tag miss. [This event is alias to ICACHE_64B.IFTAG_STAL=
-L]",
-+        "EventCode": "0x83",
-+        "EventName": "ICACHE_TAG.STALLS",
-+        "PublicDescription": "Counts cycles where a code fetch is stalled =
-due to L1 instruction cache tag miss. [This event is alias to ICACHE_64B.IF=
-TAG_STALL]",
-         "SampleAfterValue": "200003",
-         "UMask": "0x4"
-     },
-diff --git a/tools/perf/pmu-events/arch/x86/tigerlake/pipeline.json b/tools=
-/perf/pmu-events/arch/x86/tigerlake/pipeline.json
-index 020801cbd7e3..541bf1dd1679 100644
---- a/tools/perf/pmu-events/arch/x86/tigerlake/pipeline.json
-+++ b/tools/perf/pmu-events/arch/x86/tigerlake/pipeline.json
-@@ -335,10 +335,10 @@
-         "UMask": "0x80"
-     },
-     {
--        "BriefDescription": "Stalls caused by changing prefix length of th=
-e instruction.",
-+        "BriefDescription": "Stalls caused by changing prefix length of th=
-e instruction. [This event is alias to DECODE.LCP]",
-         "EventCode": "0x87",
-         "EventName": "ILD_STALL.LCP",
--        "PublicDescription": "Counts cycles that the Instruction Length de=
-coder (ILD) stalls occurred due to dynamically changing prefix length of th=
-e decoded instruction (by operand size prefix instruction 0x66, address siz=
-e prefix instruction 0x67 or REX.W for Intel64). Count is proportional to t=
-he number of prefixes in a 16B-line. This may result in a three-cycle penal=
-ty for each LCP (Length changing prefix) in a 16-byte chunk.",
-+        "PublicDescription": "Counts cycles that the Instruction Length de=
-coder (ILD) stalls occurred due to dynamically changing prefix length of th=
-e decoded instruction (by operand size prefix instruction 0x66, address siz=
-e prefix instruction 0x67 or REX.W for Intel64). Count is proportional to t=
-he number of prefixes in a 16B-line. This may result in a three-cycle penal=
-ty for each LCP (Length changing prefix) in a 16-byte chunk. [This event is=
- alias to DECODE.LCP]",
-         "SampleAfterValue": "500009",
-         "UMask": "0x1"
-     },
-@@ -564,7 +564,7 @@
-         "BriefDescription": "TMA slots wasted due to incorrect speculation=
- by branch mispredictions",
-         "EventCode": "0xa4",
-         "EventName": "TOPDOWN.BR_MISPREDICT_SLOTS",
--        "PublicDescription": "Number of TMA slots that were wasted due to =
-incorrect speculation by branch mispredictions. This event estimates number=
- of operations that were issued but not retired from the specualtive path a=
-s well as the out-of-order engine recovery past a branch misprediction.",
-+        "PublicDescription": "Number of TMA slots that were wasted due to =
-incorrect speculation by branch mispredictions. This event estimates number=
- of operations that were issued but not retired from the speculative path a=
-s well as the out-of-order engine recovery past a branch misprediction.",
-         "SampleAfterValue": "10000003",
-         "UMask": "0x8"
-     },
---=20
+== original cover letter ==
+
+Hi, here are some fixes about the attribute "select_usb_power_delivery"
+in typec/class.c
+
+===
+
+usb: typec: Set port->pd before adding device for typec_port
+
+This one is about the visibility of the attribute. port->pd should be
+set before device_add otherwise the visibility will be false because
+port->pd is NULL.
+
+===
+
+usb: typec: Iterate pds array when showing the pd list
+
+This patch fixes a problem about the incorrect fetching of the pointers
+to each usb_power_delivery handle.
+
+===
+
+usb: typec: Use sysfs_emit_at when concatenating the string
+
+This patch changes the use of the API from sysfs_emit to sysfs_emit_at
+because the buffer address is not aligned to PAGE_SIZE.
+
+===
+
+Kyle Tso (3):
+  usb: typec: Set port->pd before adding device for typec_port
+  usb: typec: Iterate pds array when showing the pd list
+  usb: typec: Use sysfs_emit_at when concatenating the string
+
+ drivers/usb/typec/class.c | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
+
+-- 
 2.41.0.162.gfafddb0af9-goog
 
