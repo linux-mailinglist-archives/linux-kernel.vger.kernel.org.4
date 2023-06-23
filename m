@@ -2,113 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9237C73BE26
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 19:55:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31DEC73BE28
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 19:56:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232217AbjFWRzk convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 23 Jun 2023 13:55:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33790 "EHLO
+        id S232242AbjFWR4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 13:56:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231209AbjFWRzi (ORCPT
+        with ESMTP id S230237AbjFWR4T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 13:55:38 -0400
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 579332133;
-        Fri, 23 Jun 2023 10:55:37 -0700 (PDT)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-57012b2973eso8340457b3.2;
-        Fri, 23 Jun 2023 10:55:37 -0700 (PDT)
+        Fri, 23 Jun 2023 13:56:19 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEBEF197
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 10:56:16 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2b4826ba943so15332331fa.0
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 10:56:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687542975; x=1690134975;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Dqpntf/6Jri52Dcd19VIMHj5sv//Ye/CfucOhTnMjgU=;
+        b=Yj0UJFhh2g2V49OOG4n5Gda142ZxJ4dg235MQYhivc9d0ZojA3dKvfYOhxBujrF9QI
+         U4BTstcBKpe6uHtOYFF+W25IqepRYllfB/w9tYjAhM7uTCxl9/yr5plD/R6Lit+hFGmT
+         +jEV8l66VXQsCO+UXk+jU+tZl1o3rgu8HvvTzh0eD1n9/uHCn6h3Xn1wx5T3ckK3GCzr
+         eOr0wXf5u3FZdHmY2gYkQsBHuP+2xtzHU6w6ez03wHwx3JeJ5mxSAX2EhBASwKXh6aeD
+         LPewZFDqiWRhO9il6HKDANA87U9FjG7oTr2hV+wrrTHDgRDEYzARs/MDUSDiu7gqileL
+         VEwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687542936; x=1690134936;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GFXAla+djoi2aCew92bu3sbYORcetmmfg6s1u4vqHgw=;
-        b=PNE2n+t6MLUXVBprmn+obqUzyx0W+Foapp0JhQICtKXbMWM5jzVgrdW2KL87fw1Cbk
-         /Yi/p2jIYO6tdFtWE9QOkR3utxToEr3yKLKY4C2ty4bH46dpCNxIyCF1BPCM7Kpd0th0
-         Wb8IGlsHaMedYCCRJaVgqMjdtrWS+xW8iX+9FFhZCHhiANESwR4WHkZrffAllDO8dwri
-         AkC/fGJSqe3fdrtUgdjAcP4f8dmy7K6MRa0o1/EL+PQHXl8tMMJoQrmzStoytIksZqoO
-         zdshgjtTRz0/SXwQQoVe7TIMiljRDtMkkCFi6KFJ26C9H3R2oLgIKFO7RXu+8shzYty0
-         SmlA==
-X-Gm-Message-State: AC+VfDwwYzMwBMdsEa08/2ygwmcj6Xs7E+tDZoPWNIJ2w6ls2k8itY1Z
-        JCdSISVxBZM5vTj9ExEBfMJkNFAfc0sIAA==
-X-Google-Smtp-Source: ACHHUZ4aMXMvXpqYJAvOZoQGv7naNfa7ATWYqGLzSDzIfQKigwIXcQpgtQcQz8ni1Hxbpp/3QeYN+w==
-X-Received: by 2002:a81:8316:0:b0:56c:fbb4:7d46 with SMTP id t22-20020a818316000000b0056cfbb47d46mr26260526ywf.28.1687542936135;
-        Fri, 23 Jun 2023 10:55:36 -0700 (PDT)
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com. [209.85.219.181])
-        by smtp.gmail.com with ESMTPSA id o17-20020a0dcc11000000b005702597583fsm2555646ywd.26.2023.06.23.10.55.34
+        d=1e100.net; s=20221208; t=1687542975; x=1690134975;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Dqpntf/6Jri52Dcd19VIMHj5sv//Ye/CfucOhTnMjgU=;
+        b=IJWAOuIJDsSvqs19jdZxXh3je2aNWUMOLLYtZEuJWptm+lLOZzF6iZ8IOvMQsvBnLD
+         q90lW8w+STNAFwEMPsFeHoZabgyHUlR0oV813459/Bc/NIyNt4zhSwD4ZjW4CLuEvnZ1
+         Jd6Lpm6VWyrDIaU6NA419O0inPRkeGSzBhVZECcwexhZfj8ELJhCw7rFdhxg2PG8RrJZ
+         CWdwhFoyWar/5WCvwGSnIbWSlhqv9htBLxDeQdvI5QdrpiecZOwvL2Efsf9wj/+cQH1o
+         azX9SA9hZPnIRnhDCI/sEYx4PkE6wE2Q3izNyH43T97tjyLgz5JgSC5fn6M8EhEPPWe/
+         K2bg==
+X-Gm-Message-State: AC+VfDwq73EOcbwEK1qZ1o9jJ2z+vOWgOg4r9xfPS0JJz5If2h6cpUYH
+        tv4NRk++pX5dyWUNuPcB6ew4rxhqtq9d9oIf7xk=
+X-Google-Smtp-Source: ACHHUZ5Rb1W0hIZd8jNjDreq5gpwDgx93jadu/h6j65zS2ADyQMD99TR5ZTtPVk0E+fLejpNAIB9BQ==
+X-Received: by 2002:a05:651c:1022:b0:2b4:636a:67f4 with SMTP id w2-20020a05651c102200b002b4636a67f4mr13763243ljm.20.1687542974817;
+        Fri, 23 Jun 2023 10:56:14 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id w20-20020a1709060a1400b00977eec7b7e8sm6279522ejf.68.2023.06.23.10.56.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Jun 2023 10:55:35 -0700 (PDT)
-Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-bc40d4145feso744144276.1;
-        Fri, 23 Jun 2023 10:55:34 -0700 (PDT)
-X-Received: by 2002:a05:6902:18b:b0:bc6:c22f:581a with SMTP id
- t11-20020a056902018b00b00bc6c22f581amr17144067ybh.38.1687542933934; Fri, 23
- Jun 2023 10:55:33 -0700 (PDT)
+        Fri, 23 Jun 2023 10:56:14 -0700 (PDT)
+Message-ID: <4fba1603-5741-ec1b-122f-d6a92803f49a@linaro.org>
+Date:   Fri, 23 Jun 2023 19:56:12 +0200
 MIME-Version: 1.0
-References: <cover.1687423204.git.geert+renesas@glider.be> <95c2af42a89c65ca603126e56c0423407dfc873f.1687423204.git.geert+renesas@glider.be>
- <20230623165038.GB2112@pendragon.ideasonboard.com>
-In-Reply-To: <20230623165038.GB2112@pendragon.ideasonboard.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 23 Jun 2023 19:55:22 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWsDHMn4P1g_EYKzXyisUOnhJ0Q1Nd5Wq9H_CwPvaSaWw@mail.gmail.com>
-Message-ID: <CAMuHMdWsDHMn4P1g_EYKzXyisUOnhJ0Q1Nd5Wq9H_CwPvaSaWw@mail.gmail.com>
-Subject: Re: [PATCH 24/39] drm: renesas: shmobile: Unify plane allocation
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v5 2/4] dt-bindings: serial: amlogic,meson-uart: Add
+ compatible string for T7
+Content-Language: en-US
+To:     tanure@linux.com
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>, Nick <nick@khadas.com>,
+        Artem <art@khadas.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230623081242.109131-1-tanure@linux.com>
+ <20230623081242.109131-3-tanure@linux.com>
+ <a885b97e-aaf0-cb72-f25b-71054d6d3fe2@linaro.org>
+ <CAJX_Q+2qZg+RuwxmnM3rzs_akt_UMJRx+=aMxf72P-sGNjm9uw@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAJX_Q+2qZg+RuwxmnM3rzs_akt_UMJRx+=aMxf72P-sGNjm9uw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Laurent,
+On 23/06/2023 19:53, Lucas Tanure wrote:
+> On Fri, Jun 23, 2023 at 9:51 AM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>>
+>> On 23/06/2023 10:12, Lucas Tanure wrote:
+>>> Amlogic T7 SoCs uses the same UART controller as S4 SoCs and G12A.
+>>> There is no need for an extra compatible line in the driver, but
+>>> add T7 compatible line for documentation.
+>>>
+>>> Signed-off-by: Lucas Tanure <tanure@linux.com>
+>>> ---
+>>>  .../devicetree/bindings/serial/amlogic,meson-uart.yaml        | 4 ++++
+>>>  1 file changed, 4 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml b/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
+>>> index 01ec45b3b406..ad970c9ed1c7 100644
+>>> --- a/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
+>>> +++ b/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
+>>> @@ -50,6 +50,10 @@ properties:
+>>>          items:
+>>>            - const: amlogic,meson-g12a-uart
+>>>            - const: amlogic,meson-gx-uart
+>>> +      - description: UART controller on T7 compatible SoCs
+>>
+>> Your description is rather incorrect. This is UART on SoCs compatible
+>> with S4, not with T7. Otherwise what do you expect to grow later when
+>> adding more compatible devices? Just drop the description, it's kind of
+>> obvious when done correctly (but can be misleading if done wrong).
+>>
+>> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>
+> Sorry, but S4 is already added in another way, which accepts just an
+> S4 compatible string.
+> But for T7 we need a fallback.
+> Could you let me know what you're asking here? Redo S4 and add T7? Or
+> do T7 in another different way that I didn't get?
 
-On Fri, Jun 23, 2023 at 6:50 PM Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
-> On Thu, Jun 22, 2023 at 11:21:36AM +0200, Geert Uytterhoeven wrote:
-> > Unify primary and overlay plane allocation:
-> >   - Enhance shmob_drm_plane_create() so it can be used to create the
-> >     primary plane, too,
-> >   - Move overlay plane creation next to primary plane creation.
-> >
-> > As overlay plane index zero now means the primary plane, this requires
-> > shifting all overlay plane indices by one.
->
-> Do you use index zero to identify the primary plane just for
-> shmob_drm_plane_create(), or somewhere else too ? If it's just to create
-> the plane, you could instead pass the plane type to the function.
+I comment only about the description, so why touching anything else? You
+did not add here T7 compatible SoCs. You added here S4 compatible SoCs.
 
-Index zero is just used for the creation.
-I guess this sort of goes together with my question below...
+> Do you want a v6 patch series? If yes, could you be more clear about
+> how you want it?
 
-> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > ---
-> > Perhaps it would be better to not use dynamic allocation, but store
-> > "struct drm_plane primary" and "struct shmob_drm_plane planes[5]" in
-> > struct drm_shmob_device instead, like is done for the crtc and encoder?
+No need. If you are going to send v6, you can as well drop the description.
 
-... as embedding separate primary and planes[] would also get rid of
-the need to adjust the plane indices when converting from logical to physical
-overlay plane indices.
 
-Gr{oetje,eeting}s,
+---
 
-                        Geert
+This is an automated instruction, just in case, because many review tags
+are being ignored. If you do not know the process, here is a short
+explanation:
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Please add Acked-by/Reviewed-by/Tested-by tags when posting new
+versions, under or above your Signed-off-by tag. Tools like b4 can help
+here. However, there's no need to repost patches *only* to add the tags.
+The upstream maintainer will do that for acks received on the version
+they apply.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
+
+Best regards,
+Krzysztof
+
