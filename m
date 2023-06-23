@@ -2,52 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D86D273BD64
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 19:07:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3465073BD6B
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 19:08:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232128AbjFWRH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 13:07:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37976 "EHLO
+        id S232268AbjFWRIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 13:08:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231228AbjFWRHR (ORCPT
+        with ESMTP id S232401AbjFWRID (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 13:07:17 -0400
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA719C7;
-        Fri, 23 Jun 2023 10:07:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1687540020; bh=kjKd/MMfTv+/haFGlQ1tj3Dy+jsmWNlUJXETIqambKY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=grz78a/jWVbCtEPL2kmt6niKVZO1tfgCOiy/8eI1pw17B1+cMMsWYrtjaZHsmiHpm
-         Rv1exG6vZ153foM5WNMfVr2qgBjnqfk6oXVIBH9oIA5JWdx2rheyKZ2SZM25DYukQH
-         DosCLAAzTMhln6xLeChZVychPMi2FwpVJR6eBOVo=
-Received: from [192.168.9.172] (unknown [101.88.25.181])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 0E467600A9;
-        Sat, 24 Jun 2023 01:07:00 +0800 (CST)
-Message-ID: <64955942-274c-047d-aab3-308fbbe6dfbc@xen0n.name>
-Date:   Sat, 24 Jun 2023 01:06:59 +0800
+        Fri, 23 Jun 2023 13:08:03 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A3F30D1
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 10:07:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=02timQVtu6aTaDZlo3R3D4w+fsAbkYRbfC53CEOsKBw=; b=e5lTG91llhH4wWPjAixCgHASoQ
+        gEle+9UxZ6FBfNOKYQG5tbXufVqeX2JO/BNMifZCSCFBf+Eu+u6KxoYOmP7zTnftJyD/f7PuJAfO+
+        GhBUJKrVqcLzsJzVrH2HyzuFShUiMSqkikpXxPKcT0/0caDupaOYyKzNzwb6w6jCU7dOb1+brYkY2
+        WgmpzocQzziisZKh986bzrE0Vz6Cn7SfuzwKH0EFww5gkSfJGjAPX7lddtAAIOiWrC4NxRFfVr8/r
+        XNf1aSU/OI5IhQuHwb2yQL9iaD+fQ8BY8EYj4gBjtT1CVumUxqG7z9c0fWEkomcqJIrJSgJGZ7Pcd
+        xd38NNSw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qCkG4-00GdfI-Oa; Fri, 23 Jun 2023 17:07:40 +0000
+From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] mm: Fix sparse warnings in backing-dev.h
+Date:   Fri, 23 Jun 2023 18:07:37 +0100
+Message-Id: <20230623170737.3965705-1-willy@infradead.org>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 7/9] LoongArch: Tweak CFLAGS for Clang compatibility
-Content-Language: en-US
-To:     Xi Ruoyao <xry111@xry111.site>, Huacai Chen <chenhuacai@kernel.org>
-Cc:     WANG Rui <wangrui@loongson.cn>, loongarch@lists.linux.dev,
-        linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, WANG Xuerui <git@xen0n.name>
-References: <20230623134351.1898379-1-kernel@xen0n.name>
- <20230623134351.1898379-8-kernel@xen0n.name>
- <22d794613f70b04544e39e8861737af09365ae8a.camel@xry111.site>
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <22d794613f70b04544e39e8861737af09365ae8a.camel@xry111.site>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,22 +47,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/24/23 01:00, Xi Ruoyao wrote:
-> On Fri, 2023-06-23 at 21:43 +0800, WANG Xuerui wrote:
->
->> -cflags-y                       += -G0 -pipe -msoft-float
-> -msoft-float should not be removed.  Our consensus (made when I was
-> developing https://gcc.gnu.org/r13-6500) is -mabi=lp64s does *not*
-> disable floating point instructions, but only disable FPRs for passing
-> arguments and return values.  So w/o -msoft-float (or -mfpu=none) GCC is
-> allowed to generate FP instructions everywhere in kernel and it may
-> cause kernel FPD exception in the future.
-Hmm, now I remember (still vaguely) about the discussion... I'll have to 
-check how to minimize churn around FPU-touching code though if 
--msoft-float is to be kept.
+Sparse reports a context imbalance, and indeed _begin() returns
+with the RCU lock held and _end() releases it.  Reassure sparse that
+this is fine by adding appropriate annotations.
 
+Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+---
+ include/linux/backing-dev.h | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/include/linux/backing-dev.h b/include/linux/backing-dev.h
+index fbad4fcd408e..69bb13412a3e 100644
+--- a/include/linux/backing-dev.h
++++ b/include/linux/backing-dev.h
+@@ -284,8 +284,9 @@ static inline struct bdi_writeback *inode_to_wb_wbc(
+  * can't sleep during the transaction.  IRQs may or may not be disabled on
+  * return.
+  */
+-static inline struct bdi_writeback *
+-unlocked_inode_to_wb_begin(struct inode *inode, struct wb_lock_cookie *cookie)
++static inline
++struct bdi_writeback *unlocked_inode_to_wb_begin(struct inode *inode,
++		struct wb_lock_cookie *cookie) __acquires(RCU)
+ {
+ 	rcu_read_lock();
+ 
+@@ -311,7 +312,7 @@ unlocked_inode_to_wb_begin(struct inode *inode, struct wb_lock_cookie *cookie)
+  * @cookie: @cookie from unlocked_inode_to_wb_begin()
+  */
+ static inline void unlocked_inode_to_wb_end(struct inode *inode,
+-					    struct wb_lock_cookie *cookie)
++		struct wb_lock_cookie *cookie) __releases(RCU)
+ {
+ 	if (unlikely(cookie->locked))
+ 		xa_unlock_irqrestore(&inode->i_mapping->i_pages, cookie->flags);
 -- 
-WANG "xen0n" Xuerui
-
-Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
+2.39.2
 
