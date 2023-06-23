@@ -2,161 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A15B73C42A
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 00:38:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB83773C430
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 00:39:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232224AbjFWWig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 18:38:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60354 "EHLO
+        id S231667AbjFWWjr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 18:39:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231667AbjFWWie (ORCPT
+        with ESMTP id S231617AbjFWWjo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 18:38:34 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9828195;
-        Fri, 23 Jun 2023 15:38:33 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35NM0CV2020915;
-        Fri, 23 Jun 2023 22:37:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=Lkk7I2+IYh68ojJ88vO1tjD2YjVsZK55v9XQRtsp3FQ=;
- b=eq/u832igTA2KuUpT3iC4ttAoLhnznde9iuYxAIo94K60jl3w2A3P8O/J/kjcwCqPobm
- uOlB7rGsQc7VtW7MkDA7C+qjU7nTmO7DnpkX9s8I0hSxxYWIl+xjY5/uMP+cFhf5x0sL
- arVbuiaq/b40pmViG5WBArKPUk63WxJ76b4psmPBffvISmVrPqQz5lM2C0JiMiI8Iv1U
- lGr669ZKX37nTveZSup4Zt5Tx6+yvqPSlW4hQYd4uFz/foBh2wFUzVQOehYozzvv2rtg
- +gofVqSXHX44cmwNxoq0aTCvGpjFT8pEybftg3LNfHFhVMQfYCG5/7+mN5anzVlg3jfq zA== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rcurrk0qd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 23 Jun 2023 22:37:59 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35NMbwJR015376
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 23 Jun 2023 22:37:58 GMT
-Received: from [10.110.109.161] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 23 Jun
- 2023 15:37:57 -0700
-Message-ID: <9f30e9f9-280e-b381-fecc-2a032c1117af@quicinc.com>
-Date:   Fri, 23 Jun 2023 15:37:55 -0700
+        Fri, 23 Jun 2023 18:39:44 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFE08186
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 15:39:40 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2b46cfde592so19222621fa.0
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 15:39:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687559979; x=1690151979;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QMQGlIRe2vdR7Of+NYba5B20bPRAZmFxIYcydbS5390=;
+        b=WWXDK7NhiQbnTqksdAM+GhIWvNjlbEWF2Jm+YNFiyfJau/2pS0RgGzarl60g2ad7lD
+         +APL+ctO1bb/nzVFINtwx7JWH4CPiEVHt/9ZF5gIYFethaF63pJyfKHZMMJ74wefzXqr
+         9cOKkNC/PNI0xeVQkh91aMlkMaTOO8AaGsX82I+yI3r1wVQQCDwVTjm6NnsUXw3Bx50t
+         jtj8m4Qsrc7pQh02CYePsjeXrmJE5CeLdNsMe6eViXsuKV9xTbMPYUujTNjcIrQq0RL8
+         FkcTvMxHc+XRDm1B7q6T6EsDu7fZbUQyFWQP871e71Mq9RNUt+SLabw4e8o0IPmGCpiT
+         EbIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687559979; x=1690151979;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QMQGlIRe2vdR7Of+NYba5B20bPRAZmFxIYcydbS5390=;
+        b=mAE8cSYPto5D33m8c29PAIyYkP8X+KqhFTjjToa6lWM8YVbZdVQwMHFmPuRwF90AFn
+         ddM/vaDEih+tWe2+g/Mm4HqhLRqsXN2nWp7YgPj+ZEwAtg2rGnuPfSdKH0a4bMuqonpa
+         9UpW6ybkSv8k5Xllxm1H2U8F3OQckpjHjPC4kx03IHtHv+mJ/aa3R9efQKjnrPv/mpW3
+         IKvfM7FHU5T08vC6XlvkNm29/0EyLJSxHlzJo6k4M5hcYnYx1ZXCM45VKz37waYD4Ro1
+         EQum/+03EjrywK7YYhTIYES6z0ACwS9KahvsMQCPf5gP3FLqlFur1HxqYGKAPWPQMC1M
+         HS/w==
+X-Gm-Message-State: AC+VfDxBefE6ZSMk8+LH1gJUkO8AR4W21GLKqrzsr923IB4Eqm/Usc3e
+        Kiyo2g/U7JibdhdHVTpPB1VYOA==
+X-Google-Smtp-Source: ACHHUZ7NOMcegf/kVg5wepRkY9BvsOQqW4O7Zc0MiLmWC5tNd0vsa1LDls1VVurP4oBK2BC5HG7Xgw==
+X-Received: by 2002:a2e:a0d8:0:b0:2b5:7f93:b3ad with SMTP id f24-20020a2ea0d8000000b002b57f93b3admr8181871ljm.16.1687559978955;
+        Fri, 23 Jun 2023 15:39:38 -0700 (PDT)
+Received: from [192.168.1.101] (abyk30.neoplus.adsl.tpnet.pl. [83.9.30.30])
+        by smtp.gmail.com with ESMTPSA id n15-20020a2eb78f000000b002b32fde1ee6sm2380ljo.95.2023.06.23.15.39.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Jun 2023 15:39:38 -0700 (PDT)
+Message-ID: <2eab503f-fa0d-990e-bed2-2445c5496798@linaro.org>
+Date:   Sat, 24 Jun 2023 00:39:36 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v3 01/28] xhci: Add support to allocate several
- interrupters
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v9 08/10] arm64: dts: qcom: sc8280xp: Add multiport
+ controller node for SC8280
 Content-Language: en-US
-From:   Wesley Cheng <quic_wcheng@quicinc.com>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
-        <perex@perex.cz>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
-        <krzysztof.kozlowski+dt@linaro.org>, <agross@kernel.org>,
-        <Thinh.Nguyen@synopsys.com>, <bgoswami@quicinc.com>,
-        <andersson@kernel.org>, <robh+dt@kernel.org>,
-        <gregkh@linuxfoundation.org>, <tiwai@suse.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <quic_jackp@quicinc.com>,
-        <quic_plai@quicinc.com>
-References: <20230308235751.495-1-quic_wcheng@quicinc.com>
- <20230308235751.495-2-quic_wcheng@quicinc.com>
- <a45ff335-0563-85c7-3b31-d6ca23a54a3f@linux.intel.com>
- <ed0397eb-da17-fbee-647e-f3a2a57577fe@quicinc.com>
-In-Reply-To: <ed0397eb-da17-fbee-647e-f3a2a57577fe@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: _FYRk7PT04XMXr5Zf8zMOWSTWAk_QCFv
-X-Proofpoint-ORIG-GUID: _FYRk7PT04XMXr5Zf8zMOWSTWAk_QCFv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-23_12,2023-06-22_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- impostorscore=0 malwarescore=0 mlxlogscore=986 suspectscore=0 spamscore=0
- adultscore=0 clxscore=1015 lowpriorityscore=0 phishscore=0 bulkscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306230204
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Johan Hovold <johan@kernel.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com,
+        quic_jackp@quicinc.com, quic_harshq@quicinc.com,
+        ahalaney@redhat.com, quic_shazhuss@quicinc.com
+References: <20230621043628.21485-1-quic_kriskura@quicinc.com>
+ <20230621043628.21485-9-quic_kriskura@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230621043628.21485-9-quic_kriskura@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mathias,
-
-On 3/13/2023 1:32 PM, Wesley Cheng wrote:
-> Hi Mathias,
+On 21.06.2023 06:36, Krishna Kurapati wrote:
+> Add USB and DWC3 node for tertiary port of SC8280 along with multiport
+> IRQ's and phy's. This will be used as a base for SA8295P and SA8295-Ride
+> platforms.
 > 
-> On 3/10/2023 7:07 AM, Mathias Nyman wrote:
->> On 9.3.2023 1.57, Wesley Cheng wrote:
->>> From: Mathias Nyman <mathias.nyman@linux.intel.com>
->>>
->>> Introduce xHCI APIs to allow for clients to allocate and free
->>> interrupters.  This allocates an array of interrupters, which is 
->>> based on
->>> the max_interrupters parameter.  The primary interrupter is set as the
->>> first entry in the array, and secondary interrupters following after.
->>>
->>
->> I'm thinking about changing this offloading xHCI API
->> xhci should be aware and keep track of which devices and endpoints that
->> are offloaded to avoid device getting offloaded twice, avoid xhci driver
->> from queuing anything itself for these, and act properly if the offloaded
->> device or entire host is removed.
->>
->> So first thing audio side would need to do do is register/create an
->> offload entry for the device using the API:
->>
->> struct xhci_sideband *xhci_sideband_register(struct usb_device *udev)
->>
->> (xHCI specs calls offload sideband)
->> Then endpoints and interrupters can be added and removed from this
->> offload entry
->>
->> I have some early thoughts written as non-compiling code in:
->>
->> git://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git 
->> feature_interrupters
->> https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/log/?h=feature_interrupters 
->>
->>
->> Let me know what you think about this.
->>
->>> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
->>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
->>
->> My Signed-off-by tag is being misused here.
->>
->> I wrote a chunk of the code in this patch as PoC that I shared in a 
->> separate topic branch.
->> It was incomplete and not intended for upstream yet. (lacked locking, 
->> several fixme parts, etc..)
->> The rest of the code in this patch is completely new to me.
->>
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> ---
+>  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 77 ++++++++++++++++++++++++++
+>  1 file changed, 77 insertions(+)
 > 
-> Sorry about this.  I cherry picked the change directly from your branch, 
-> so it carried your signed off tag with it.  Will make to include them 
-> properly next time.
-> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> index 8fa9fbfe5d00..0dfa350ea3b3 100644
+> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> @@ -3013,6 +3013,83 @@ system-cache-controller@9200000 {
+>  			interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
+>  		};
+>  
+> +		usb_2: usb@a4f8800 {
+> +			compatible = "qcom,sc8280xp-dwc3-mp", "qcom,dwc3";
+> +			reg = <0 0x0a4f8800 0 0x400>;
 
-I'm about ready to submit the next revision for this set of changes, and 
-I was wondering how we should handle the changes you made on:
-https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/log/?h=feature_interrupters
+> +			#address-cells = <2>;
+> +			#size-cells = <2>;
+> +			ranges;
+These three properties, please stick just before status
 
-I did make some modifications to some of the interrupter fixme tags you 
-had, and also updated the xhci-sideband APIs with the proper logic.  I 
-don't believe it is correct for me to submit a set of patches authored 
-by you without your signed off tag. (checkpatch throws an error saying 
-the author did not sign off on the change)
+> +
+> +			clocks = <&gcc GCC_CFG_NOC_USB3_MP_AXI_CLK>,
+> +				 <&gcc GCC_USB30_MP_MASTER_CLK>,
+> +				 <&gcc GCC_AGGRE_USB3_MP_AXI_CLK>,
+> +				 <&gcc GCC_USB30_MP_SLEEP_CLK>,
+> +				 <&gcc GCC_USB30_MP_MOCK_UTMI_CLK>,
+> +				 <&gcc GCC_AGGRE_USB_NOC_AXI_CLK>,
+> +				 <&gcc GCC_AGGRE_USB_NOC_NORTH_AXI_CLK>,
+> +				 <&gcc GCC_AGGRE_USB_NOC_SOUTH_AXI_CLK>,
+> +				 <&gcc GCC_SYS_NOC_USB_AXI_CLK>;
+> +			clock-names = "cfg_noc", "core", "iface", "sleep", "mock_utmi",
+> +				      "noc_aggr", "noc_aggr_north", "noc_aggr_south", "noc_sys";
+Please make it one per line
 
-Thanks
-Wesley Cheng
+> +
+> +			assigned-clocks = <&gcc GCC_USB30_MP_MOCK_UTMI_CLK>,
+> +					  <&gcc GCC_USB30_MP_MASTER_CLK>;
+> +			assigned-clock-rates = <19200000>, <200000000>;
+And here
+
+> +
+> +			interrupts-extended = <&pdc 127 IRQ_TYPE_EDGE_RISING>,
+> +					      <&pdc 126 IRQ_TYPE_EDGE_RISING>,
+> +					      <&pdc 129 IRQ_TYPE_EDGE_RISING>,
+> +					      <&pdc 128 IRQ_TYPE_EDGE_RISING>,
+> +					      <&pdc 131 IRQ_TYPE_EDGE_RISING>,
+> +					      <&pdc 130 IRQ_TYPE_EDGE_RISING>,
+> +					      <&pdc 133 IRQ_TYPE_EDGE_RISING>,
+> +					      <&pdc 132 IRQ_TYPE_EDGE_RISING>,
+> +					      <&pdc 16 IRQ_TYPE_LEVEL_HIGH>,
+> +					      <&pdc 17 IRQ_TYPE_LEVEL_HIGH>,
+Not a comment to the patch, but very nice that Qcom ensured every
+endpoint is wakeup-capable, this used not to be the case before :D
+
+> +					      <&intc GIC_SPI 130 IRQ_TYPE_LEVEL_HIGH>,
+> +					      <&intc GIC_SPI 135 IRQ_TYPE_LEVEL_HIGH>,
+> +					      <&intc GIC_SPI 857 IRQ_TYPE_LEVEL_HIGH>,
+> +					      <&intc GIC_SPI 856 IRQ_TYPE_LEVEL_HIGH>;
+> +
+Remove this newline
+
+> +			interrupt-names = "dp1_hs_phy_irq", "dm1_hs_phy_irq",
+> +					  "dp2_hs_phy_irq", "dm2_hs_phy_irq",
+> +					  "dp3_hs_phy_irq", "dm3_hs_phy_irq",
+> +					  "dp4_hs_phy_irq", "dm4_hs_phy_irq",
+> +					  "ss1_phy_irq", "ss2_phy_irq",
+> +					  "pwr_event_1",
+> +					  "pwr_event_2",
+> +					  "pwr_event_3",
+> +					  "pwr_event_4";
+Please make it one per line
+
+> +
+> +			power-domains = <&gcc USB30_MP_GDSC>;
+> +			required-opps = <&rpmhpd_opp_nom>;
+> +
+> +			resets = <&gcc GCC_USB30_MP_BCR>;
+> +
+> +			interconnects = <&aggre1_noc MASTER_USB3_MP 0 &mc_virt SLAVE_EBI1 0>,
+> +					<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_USB3_MP 0>;
+> +			interconnect-names = "usb-ddr", "apps-usb";
+> +
+> +			wakeup-source;
+> +
+> +			status = "disabled";
+> +
+> +			usb_2_dwc3: usb@a400000 {
+> +				compatible = "snps,dwc3";
+> +				reg = <0 0x0a400000 0 0xcd00>;
+> +				interrupts = <GIC_SPI 133 IRQ_TYPE_LEVEL_HIGH>;
+> +				iommus = <&apps_smmu 0x800 0x0>;
+> +				phys = <&usb_2_hsphy0>, <&usb_2_qmpphy0>,
+> +				       <&usb_2_hsphy1>, <&usb_2_qmpphy1>,
+> +				       <&usb_2_hsphy2>,
+> +				       <&usb_2_hsphy3>;
+And here
+> +				phy-names = "usb2-port0", "usb3-port0",
+> +					    "usb2-port1", "usb3-port1",
+> +					    "usb2-port2",
+> +					    "usb2-port3";
+And here
+
+Thanks for working on this!
+
+Konrad
+> +			};
+> +		};
+> +
+>  		usb_0: usb@a6f8800 {
+>  			compatible = "qcom,sc8280xp-dwc3", "qcom,dwc3";
+>  			reg = <0 0x0a6f8800 0 0x400>;
