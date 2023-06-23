@@ -2,47 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E91F73BD94
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 19:14:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3B1473BD98
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 19:15:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231750AbjFWROa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 13:14:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43806 "EHLO
+        id S232132AbjFWRPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 13:15:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230506AbjFWRO2 (ORCPT
+        with ESMTP id S230506AbjFWRPb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 13:14:28 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D93B519A1;
-        Fri, 23 Jun 2023 10:14:26 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 853A9838;
-        Fri, 23 Jun 2023 19:13:48 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1687540428;
-        bh=Hwj1sni2JgJtJBI4VRhBNo1sZRyJ35p3cME8oscy48M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=N9NYJs/KuoQaWH9irpsEwRW8YIl+ceC0BH39JRR2GkFGTO44IOADX+Mqz0beMYjSW
-         b0k3/wVEBSYn/4mJ15o505xDMHAZhGtvDhoaTOtEf5znZnW3Yt8NcvxutGedR5dfKF
-         rlxSVWFyKs2EqF6fsDkGy0yJUyXcmHd0O5Fkn50Y=
-Date:   Fri, 23 Jun 2023 20:14:24 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
+        Fri, 23 Jun 2023 13:15:31 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD56D1993;
+        Fri, 23 Jun 2023 10:15:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=SeZTfRboSph8q/9PONDYfM5X/v8kIxHGYo8hlYw/b/Y=; b=meYin7AxcWQF4kyiUAioa1rkH1
+        z+2iBH71xpT8KAa5S0W3LvLOCrjWqT6SOBi9bx1MNbBW1xqVJEooaKLqesJ81ZiC6l84Et5IuBgvT
+        UGX/OpMWWR/h2kCH2P/loqD/7o4e5ekOU+rguSW/maUHm7P5soIeRPtYshhYZfwegkNs=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1qCkNE-00HNVL-So; Fri, 23 Jun 2023 19:15:04 +0200
+Date:   Fri, 23 Jun 2023 19:15:04 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Michael Walle <mwalle@kernel.org>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Yisen Zhuang <yisen.zhuang@huawei.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
+        Xu Liang <lxu@maxlinear.com>, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 36/39] drm: renesas: shmobile: Use suspend/resume helpers
-Message-ID: <20230623171424.GL2112@pendragon.ideasonboard.com>
-References: <cover.1687423204.git.geert+renesas@glider.be>
- <dfc123f733f907c70b4365676c2211bdeca44ad2.1687423204.git.geert+renesas@glider.be>
+Subject: Re: [PATCH net-next v2 03/10] net: phy: introduce phy_is_c45()
+Message-ID: <583f9636-74ca-411b-80aa-87574a20a7a7@lunn.ch>
+References: <20230620-feature-c45-over-c22-v2-0-def0ab9ccee2@kernel.org>
+ <20230620-feature-c45-over-c22-v2-3-def0ab9ccee2@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <dfc123f733f907c70b4365676c2211bdeca44ad2.1687423204.git.geert+renesas@glider.be>
+In-Reply-To: <20230620-feature-c45-over-c22-v2-3-def0ab9ccee2@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
@@ -53,100 +61,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
+On Fri, Jun 23, 2023 at 12:29:12PM +0200, Michael Walle wrote:
+> Provide a helper to determine if the PHY is a C45 one. This is a
+> preparation patch to remove the is_c45 field. No functional change.
 
-Thank you for the patch.
+Part of the problem you are addressing in this patchset is the mix up
+between the c45 register space and the access method to the c45
+register space.
 
-On Thu, Jun 22, 2023 at 11:21:48AM +0200, Geert Uytterhoeven wrote:
-> Replace the custom suspend/resume handling by calls into
-> drm_mode_config_helper_{suspend,resume}().
-> 
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> +static inline bool phy_is_c45(struct phy_device *phydev)
+> +{
+> +	return phydev->is_c45;
+> +}
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+This helper, in the end, is about c45 registers. It is a bit wordy,
+but how about calling it phy_has_c45_registers()?
 
-> ---
->  drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c | 13 -------------
->  drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.h |  2 --
->  drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c  | 13 +++----------
->  3 files changed, 3 insertions(+), 25 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c b/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c
-> index cf7152d64424e720..b11bb666de3bac46 100644
-> --- a/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c
-> +++ b/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c
-> @@ -339,19 +339,6 @@ static void shmob_drm_crtc_stop(struct shmob_drm_crtc *scrtc)
->  	scrtc->started = false;
->  }
->  
-> -void shmob_drm_crtc_suspend(struct shmob_drm_crtc *scrtc)
-> -{
-> -	shmob_drm_crtc_stop(scrtc);
-> -}
-> -
-> -void shmob_drm_crtc_resume(struct shmob_drm_crtc *scrtc)
-> -{
-> -	if (scrtc->dpms != DRM_MODE_DPMS_ON)
-> -		return;
-> -
-> -	shmob_drm_crtc_start(scrtc);
-> -}
-> -
->  static inline struct shmob_drm_crtc *to_shmob_crtc(struct drm_crtc *crtc)
->  {
->  	return container_of(crtc, struct shmob_drm_crtc, base);
-> diff --git a/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.h b/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.h
-> index fe41e42d6cc55275..37380c815f1f5a08 100644
-> --- a/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.h
-> +++ b/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.h
-> @@ -40,8 +40,6 @@ struct shmob_drm_connector {
->  
->  int shmob_drm_crtc_create(struct shmob_drm_device *sdev);
->  void shmob_drm_crtc_finish_page_flip(struct shmob_drm_crtc *scrtc);
-> -void shmob_drm_crtc_suspend(struct shmob_drm_crtc *scrtc);
-> -void shmob_drm_crtc_resume(struct shmob_drm_crtc *scrtc);
->  
->  int shmob_drm_encoder_create(struct shmob_drm_device *sdev);
->  int shmob_drm_connector_create(struct shmob_drm_device *sdev,
-> diff --git a/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c b/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c
-> index 9107f84224602683..c43f408d6b1fcc5b 100644
-> --- a/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c
-> +++ b/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c
-> @@ -20,6 +20,7 @@
->  #include <drm/drm_drv.h>
->  #include <drm/drm_fbdev_generic.h>
->  #include <drm/drm_gem_dma_helper.h>
-> +#include <drm/drm_modeset_helper.h>
->  #include <drm/drm_module.h>
->  #include <drm/drm_probe_helper.h>
->  #include <drm/drm_vblank.h>
-> @@ -115,22 +116,14 @@ static int shmob_drm_pm_suspend(struct device *dev)
->  {
->  	struct shmob_drm_device *sdev = dev_get_drvdata(dev);
->  
-> -	drm_kms_helper_poll_disable(&sdev->ddev);
-> -	shmob_drm_crtc_suspend(&sdev->crtc);
-> -
-> -	return 0;
-> +	return drm_mode_config_helper_suspend(&sdev->ddev);
->  }
->  
->  static int shmob_drm_pm_resume(struct device *dev)
->  {
->  	struct shmob_drm_device *sdev = dev_get_drvdata(dev);
->  
-> -	drm_modeset_lock_all(&sdev->ddev);
-> -	shmob_drm_crtc_resume(&sdev->crtc);
-> -	drm_modeset_unlock_all(&sdev->ddev);
-> -
-> -	drm_kms_helper_poll_enable(&sdev->ddev);
-> -	return 0;
-> +	return drm_mode_config_helper_resume(&sdev->ddev);
->  }
->  
->  static DEFINE_SIMPLE_DEV_PM_OPS(shmob_drm_pm_ops,
-
--- 
-Regards,
-
-Laurent Pinchart
+    Andrew
