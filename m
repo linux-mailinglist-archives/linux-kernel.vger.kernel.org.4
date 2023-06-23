@@ -2,183 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB09073BC26
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 17:55:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C30573BC28
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 17:55:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232136AbjFWPzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 11:55:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57638 "EHLO
+        id S231236AbjFWPz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 11:55:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231501AbjFWPzI (ORCPT
+        with ESMTP id S229673AbjFWPzy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 11:55:08 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C5482129;
-        Fri, 23 Jun 2023 08:54:59 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A82CC838;
-        Fri, 23 Jun 2023 17:54:20 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1687535660;
-        bh=qEimjjGheFgbhWQXyKIsZNL1k704juka4xzkdRWfhmA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=d0Bg9TXGisodDm3LzjjgUR+BvGhzJ/BuM8XmwOltXmcFnTJJiYuFF0XbkaaYKEq3I
-         dcETVQ/tMoR7Um8MNvboCFmNnK/u6pbg4QlHMwOJsFsj5oFPv0r9VJKugekDlkIfR/
-         +FuSEj9egekqCoYrBX0L2DzuZY6JP4JluaPGgMIk=
-Date:   Fri, 23 Jun 2023 18:54:56 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 22/39] drm: renesas: shmobile: Use media bus formats in
- platform data
-Message-ID: <20230623155456.GZ2112@pendragon.ideasonboard.com>
-References: <cover.1687423204.git.geert+renesas@glider.be>
- <3599b9ee249afea0e5b5ced45ab3523e17503d31.1687423204.git.geert+renesas@glider.be>
+        Fri, 23 Jun 2023 11:55:54 -0400
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1572210F4;
+        Fri, 23 Jun 2023 08:55:53 -0700 (PDT)
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-312863a983fso873188f8f.2;
+        Fri, 23 Jun 2023 08:55:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687535751; x=1690127751;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uh2s7pfKdwDVYLhDB6xiD5fS/jgZntuMD4WczwZds+c=;
+        b=W5cTMJDIB4AEdIXR8/zwjnYTvAutrUXDTc+YRmfzDuUBOeeEj2FaTjqhFRaWVypcQu
+         BX7Nb7cQdM6oL1+5N6wKxUp14uAm1T/mWmcOzAPnDvfDjcXfE4AgSpsfHPliwEffVlyn
+         kaHdAOSP5SdGjAH2ffpc5wN0yYBhph/KU7+4Ftk3ttCIm2hX7XI2LAGsQNP3P8/B/RDW
+         UYZwde5psvEs00sMAB+sc5JxCgL56VSG8IjoX5xGmb4NEMgAPyl8h7XisjeZGWutvzgZ
+         IEoTJmmbBni6BsumIS9MCa9/zfNlo0j373s0Q3QviwJ612p1LDs0Z7olR1ZhRiq0QGYD
+         R2VA==
+X-Gm-Message-State: AC+VfDxQLCzvXxlkBhZ/J+2F3fke5I8Y0T1xmmY/FObZgfS1GhbnJC06
+        HVltNCx/Ebq2VU8WSRZrWPc=
+X-Google-Smtp-Source: ACHHUZ6Zp6T87cPbwjyq2Omci50vJWOHyJKeJos303G8+PX7I3bWhWvhQBcgABRbjRIfjewho9XkFA==
+X-Received: by 2002:adf:e982:0:b0:30a:f3ca:17bb with SMTP id h2-20020adfe982000000b0030af3ca17bbmr14850056wrm.35.1687535751248;
+        Fri, 23 Jun 2023 08:55:51 -0700 (PDT)
+Received: from gmail.com (fwdproxy-cln-117.fbsv.net. [2a03:2880:31ff:75::face:b00c])
+        by smtp.gmail.com with ESMTPSA id r15-20020a5d52cf000000b0030af72bca98sm9849120wrv.103.2023.06.23.08.55.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Jun 2023 08:55:50 -0700 (PDT)
+Date:   Fri, 23 Jun 2023 08:55:48 -0700
+From:   Breno Leitao <leitao@debian.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "open list:IO_URING" <io-uring@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>
+Subject: Re: [PATCH v3] io_uring: Add io_uring command support for sockets
+Message-ID: <ZJXAhINndD49qo5M@gmail.com>
+References: <20230622215915.2565207-1-leitao@debian.org>
+ <2023062351-tastiness-half-034f@gregkh>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <3599b9ee249afea0e5b5ced45ab3523e17503d31.1687423204.git.geert+renesas@glider.be>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2023062351-tastiness-half-034f@gregkh>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
-
-Thank you for the patch.
-
-
-On Thu, Jun 22, 2023 at 11:21:34AM +0200, Geert Uytterhoeven wrote:
-> Replace the custom shmob_drm_interface enumeration values with standard
-> media bus formats.  This simplifies driver handling of bus formats and
-> prepares for DT support.
+On Fri, Jun 23, 2023 at 08:39:02AM +0200, Greg KH wrote:
+> On Thu, Jun 22, 2023 at 02:59:14PM -0700, Breno Leitao wrote:
+> > --- a/io_uring/uring_cmd.c
+> > +++ b/io_uring/uring_cmd.c
+> > @@ -7,6 +7,7 @@
+> >  #include <linux/nospec.h>
+> >  
+> >  #include <uapi/linux/io_uring.h>
+> > +#include <uapi/asm-generic/ioctls.h>
 > 
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Is this still needed?
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+Yes, this is what is providing the definitions for SIOCINQ and SIOCOUTQ.
+If we don't include these headers, we get the following compilation
+failure:
 
-> ---
->  .../gpu/drm/renesas/shmobile/shmob_drm_drv.c  | 52 +++++++++++++------
->  include/linux/platform_data/shmob_drm.h       | 13 +----
->  2 files changed, 38 insertions(+), 27 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c b/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c
-> index 1a1d66c6e817e227..e5be0ae99bd970be 100644
-> --- a/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c
-> +++ b/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c
-> @@ -9,6 +9,7 @@
->  
->  #include <linux/clk.h>
->  #include <linux/io.h>
-> +#include <linux/media-bus-format.h>
->  #include <linux/mm.h>
->  #include <linux/module.h>
->  #include <linux/platform_device.h>
-> @@ -34,24 +35,45 @@
->  
->  static int shmob_drm_init_interface(struct shmob_drm_device *sdev)
->  {
-> -	static const u32 ldmt1r[] = {
-> -		[SHMOB_DRM_IFACE_RGB8] = LDMT1R_MIFTYP_RGB8,
-> -		[SHMOB_DRM_IFACE_RGB9] = LDMT1R_MIFTYP_RGB9,
-> -		[SHMOB_DRM_IFACE_RGB12A] = LDMT1R_MIFTYP_RGB12A,
-> -		[SHMOB_DRM_IFACE_RGB12B] = LDMT1R_MIFTYP_RGB12B,
-> -		[SHMOB_DRM_IFACE_RGB16] = LDMT1R_MIFTYP_RGB16,
-> -		[SHMOB_DRM_IFACE_RGB18] = LDMT1R_MIFTYP_RGB18,
-> -		[SHMOB_DRM_IFACE_RGB24] = LDMT1R_MIFTYP_RGB24,
-> -		[SHMOB_DRM_IFACE_YUV422] = LDMT1R_MIFTYP_YCBCR,
-> -	};
-> -
-> -	if (sdev->pdata->iface.interface >= ARRAY_SIZE(ldmt1r)) {
-> -		dev_err(sdev->dev, "invalid interface type %u\n",
-> -			sdev->pdata->iface.interface);
-> +	switch (sdev->pdata->iface.bus_fmt) {
-> +	case MEDIA_BUS_FMT_RGB888_3X8:
-> +		sdev->ldmt1r = LDMT1R_MIFTYP_RGB8;
-> +		break;
-> +
-> +	case MEDIA_BUS_FMT_RGB666_2X9_BE:
-> +		sdev->ldmt1r = LDMT1R_MIFTYP_RGB9;
-> +		break;
-> +
-> +	case MEDIA_BUS_FMT_RGB888_2X12_BE:
-> +		sdev->ldmt1r = LDMT1R_MIFTYP_RGB12A;
-> +		break;
-> +
-> +	case MEDIA_BUS_FMT_RGB444_1X12:
-> +		sdev->ldmt1r = LDMT1R_MIFTYP_RGB12B;
-> +		break;
-> +
-> +	case MEDIA_BUS_FMT_RGB565_1X16:
-> +		sdev->ldmt1r = LDMT1R_MIFTYP_RGB16;
-> +		break;
-> +
-> +	case MEDIA_BUS_FMT_RGB666_1X18:
-> +		sdev->ldmt1r = LDMT1R_MIFTYP_RGB18;
-> +		break;
-> +
-> +	case MEDIA_BUS_FMT_RGB888_1X24:
-> +		sdev->ldmt1r = LDMT1R_MIFTYP_RGB24;
-> +		break;
-> +
-> +	case MEDIA_BUS_FMT_UYVY8_1X16:
-> +		sdev->ldmt1r = LDMT1R_MIFTYP_YCBCR;
-> +		break;
-> +
-> +	default:
-> +		dev_err(sdev->dev, "invalid bus format 0x%x\n",
-> +			sdev->pdata->iface.bus_fmt);
->  		return -EINVAL;
->  	}
->  
-> -	sdev->ldmt1r = ldmt1r[sdev->pdata->iface.interface];
->  	return 0;
->  }
->  
-> diff --git a/include/linux/platform_data/shmob_drm.h b/include/linux/platform_data/shmob_drm.h
-> index f3cb19ff9f818aca..5047e66f0a6823ba 100644
-> --- a/include/linux/platform_data/shmob_drm.h
-> +++ b/include/linux/platform_data/shmob_drm.h
-> @@ -18,17 +18,6 @@ enum shmob_drm_clk_source {
->  	SHMOB_DRM_CLK_EXTERNAL,
->  };
->  
-> -enum shmob_drm_interface {
-> -	SHMOB_DRM_IFACE_RGB8,		/* 24bpp, 8:8:8 */
-> -	SHMOB_DRM_IFACE_RGB9,		/* 18bpp, 9:9 */
-> -	SHMOB_DRM_IFACE_RGB12A,		/* 24bpp, 12:12 */
-> -	SHMOB_DRM_IFACE_RGB12B,		/* 12bpp */
-> -	SHMOB_DRM_IFACE_RGB16,		/* 16bpp */
-> -	SHMOB_DRM_IFACE_RGB18,		/* 18bpp */
-> -	SHMOB_DRM_IFACE_RGB24,		/* 24bpp */
-> -	SHMOB_DRM_IFACE_YUV422,		/* 16bpp */
-> -};
-> -
->  struct shmob_drm_panel_data {
->  	unsigned int width_mm;		/* Panel width in mm */
->  	unsigned int height_mm;		/* Panel height in mm */
-> @@ -36,7 +25,7 @@ struct shmob_drm_panel_data {
->  };
->  
->  struct shmob_drm_interface_data {
-> -	enum shmob_drm_interface interface;
-> +	unsigned int bus_fmt;		/* MEDIA_BUS_FMT_RGB888_* */
->  	unsigned int clk_div;
->  };
->  
-
--- 
-Regards,
-
-Laurent Pinchart
+	In file included from ./include/linux/socket.h:7,
+			 from ./include/net/af_unix.h:5,
+			 from io_uring/rsrc.h:5,
+			 from io_uring/uring_cmd.c:12:
+	io_uring/uring_cmd.c: In function ‘io_uring_cmd_sock’:
+	./include/uapi/linux/sockios.h:26:18: error: ‘FIONREAD’ undeclared (first use in this function); did you mean ‘READ’?
+	 #define SIOCINQ  FIONREAD
+			  ^~~~~~~~
+	io_uring/uring_cmd.c:171:32: note: in expansion of macro ‘SIOCINQ’
+	   ret = sk->sk_prot->ioctl(sk, SIOCINQ, &arg);
+					^~~~~~~
+	./include/uapi/linux/sockios.h:26:18: note: each undeclared identifier is reported only once for each function it appears in
+	 #define SIOCINQ  FIONREAD
+			  ^~~~~~~~
+	io_uring/uring_cmd.c:171:32: note: in expansion of macro ‘SIOCINQ’
+	   ret = sk->sk_prot->ioctl(sk, SIOCINQ, &arg);
+					^~~~~~~
+	./include/uapi/linux/sockios.h:27:18: error: ‘TIOCOUTQ’ undeclared (first use in this function); did you mean ‘SIOCOUTQ’?
+	 #define SIOCOUTQ TIOCOUTQ        /* output queue size (not sent + not acked) */
+			  ^~~~~~~~
+	io_uring/uring_cmd.c:176:32: note: in expansion of macro ‘SIOCOUTQ’
+	   ret = sk->sk_prot->ioctl(sk, SIOCOUTQ, &arg);
+					^~~~~~~~
+	make[2]: *** [scripts/Makefile.build:252: io_uring/uring_cmd.o] Error 1
