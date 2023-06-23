@@ -2,137 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B89DE73AF21
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 05:39:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 157C873AF24
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 05:44:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230351AbjFWDjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 23:39:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34880 "EHLO
+        id S230165AbjFWDoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 23:44:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbjFWDjE (ORCPT
+        with ESMTP id S229445AbjFWDoK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 23:39:04 -0400
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD2510F4;
-        Thu, 22 Jun 2023 20:39:03 -0700 (PDT)
-Received: by mail-qv1-xf31.google.com with SMTP id 6a1803df08f44-6300f6ab032so2275386d6.2;
-        Thu, 22 Jun 2023 20:39:03 -0700 (PDT)
+        Thu, 22 Jun 2023 23:44:10 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA1C11BC1;
+        Thu, 22 Jun 2023 20:44:09 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id 5614622812f47-39ecbb4c7d3so135818b6e.3;
+        Thu, 22 Jun 2023 20:44:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687491543; x=1690083543;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nQCkd4lI+x6yZWQGbIGjk8nvglDFNi+aN+K8MOcwH6c=;
-        b=obkzvxCGresnf5FRfVrvj4b/znqPUmGMMwKvIvfk8JFNu1deF5iG2IClXFSs/hqBes
-         0DchAnN9jcxuJK+1+ZKd23RORLAtCB1aaCRRAW/OhJcfqCqUQNLBzTBpbxJmpuWbKfjS
-         GHJW8WsTLXwJYS5PMKJOMqwGF/WhlRObHMiD0r0si8DOzKdhQ3DRjzuP54tE28VCyLvh
-         LV9mOcap4BQfgiSa4vCLx3tJr5yWQgnZ2UsTStLz9NxYkxX8IS7oFayaE3MrbO0dEpB/
-         K0gDAaORiA1jbA+zNdWb4SjSRPyF9Y1hEdIFkFam1bjGmw9MYsZEQu4LxQURWeFd5nOn
-         uaSw==
+        d=gmail.com; s=20221208; t=1687491849; x=1690083849;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Pzk5WeXY5PESFs8BoVAqoYmY5ozRoBtfovjqPqBGXys=;
+        b=aWva0+jEsYqoKec9WGNAQpfdxmkVktCPucqPay1ltBM4v1d0Msv13dY7Jr7J8QIZQI
+         VKukSIPa7U5FP3k4tnw6m1pbcCJgSLlpTprRJ+Nhw9eZWTFN2SugYTDcM4Hw1g1gVBZg
+         B0Rpuy72vbcRV3yBN+SSUKUqXQ6jsWK4QKbU4trSHubep3wd5sbkpFCAI2r448td4T/2
+         cPSeXurVpS9d7LQZ3csNRXglfBiqdwAkyXiDvLj1AC/F24mh6+zg5FpmXf0SroP6gSI1
+         +FmHkUwlKLlJyxFwZ/q1x5n1N5Rq0qkjYrKxoeDpQT1fx00gIQb5BkAfHdIhGBSn5lkV
+         930Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687491543; x=1690083543;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nQCkd4lI+x6yZWQGbIGjk8nvglDFNi+aN+K8MOcwH6c=;
-        b=ZfJrInugmkS/UKtvFOlT79aPxal+88tkbnvrasUdO+GOBbGPPJJJ2jMdcDXCRbLuBe
-         /xy+dLj90SvvjkBFBhmliS5sjwTd60+3VzF1n2qt9xGpJZp+lfS4zjJ7dzR8WNeq3Xi8
-         p9LcnC1v+HtWvLXjKLqIreDv9YxYSFW5rHqQz2W8ayMR5sP1rN8PE7qBI5zNQGdKV0Ax
-         IQwrNKkdURvrnI6wketgPOucEDQrUHP0dp/MB4KBtpGXoF4BAdRqKy5yakGdPXbDTIVm
-         Q1VTFI/3Kktk/R3MeInRbcQZupZKoFmLvmI2B8S/T6vjz8aTI6asgM/s0/dSS3ikXhy2
-         bZeg==
-X-Gm-Message-State: AC+VfDw2TN1V+6uv5bzAbj+dVg8oKFrfG7i09+o86M08c3V4gG4Jfvye
-        aPnRUfpwyHQnyMw5F3Y/dreR6fsdQ8Ui4yrO3F4=
-X-Google-Smtp-Source: ACHHUZ4TEnCYuyVXkOaJkrxqOvUh5TaEibt2frAQVMu4v4pRBqRYzpLpvZ5Z+pdQLYqT/hxYRfdn3rRiaTS4M+MnTIo=
-X-Received: by 2002:a05:6214:29c8:b0:62d:f35c:a477 with SMTP id
- gh8-20020a05621429c800b0062df35ca477mr28990227qvb.1.1687491542761; Thu, 22
- Jun 2023 20:39:02 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687491849; x=1690083849;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Pzk5WeXY5PESFs8BoVAqoYmY5ozRoBtfovjqPqBGXys=;
+        b=FIxCC8MnBDPVN7AfnrE7G+uhpBJvLD2eJOSZChZ+pQTibh3ruk1XR8iwgTph1XXDNv
+         AgnujAfHf3frup8WccZ7jP7zycUHupYwW4SoN2BwtT/Xzx3HWIIGrERD9+vVjg9uWiwc
+         iU3tPUXfSv4LMXNab+HJi8XyrhzfclrAQjtyCZxs/tBCwGNxwyhejJFjIjb7teEPELIx
+         FuxoitzXWswA0ASbSvSoJuVUefQgJfNs67IVGCZGyw5UpkJHf2dCLmWip89fJN304VBz
+         4yBJFax/s2AkAm4nSmjdoy8ZUJY7lhmWuxqHsdbBen5Cg3zxGB+yyybzEVe70rQnXxvn
+         795w==
+X-Gm-Message-State: AC+VfDw8Mr2xEeEMuajbbihoxcCIOXfk8blHvi/nmfTBm0PLEINdeLpQ
+        PhE1NRtC2KvZ4SlJQ8Ir1nuukgWLbLxDmF0A
+X-Google-Smtp-Source: ACHHUZ62+MbpeNiwiGjnsTDcieQaCL2adS30aSdQPfcxkgIyg6LZYunjxjs88TStY0PIY+gYsmG+Kg==
+X-Received: by 2002:a05:6808:1d9:b0:3a0:567f:35f5 with SMTP id x25-20020a05680801d900b003a0567f35f5mr5181247oic.47.1687491849050;
+        Thu, 22 Jun 2023 20:44:09 -0700 (PDT)
+Received: from [192.168.1.5] ([113.66.180.22])
+        by smtp.gmail.com with ESMTPSA id nt10-20020a17090b248a00b0023d386e4806sm417926pjb.57.2023.06.22.20.44.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Jun 2023 20:44:08 -0700 (PDT)
+Message-ID: <c2d0b37a-3ee1-e07e-e265-c71895474ba8@gmail.com>
+Date:   Fri, 23 Jun 2023 11:44:04 +0800
 MIME-Version: 1.0
-References: <20230620144618.125703-1-ypodemsk@redhat.com> <20230620144618.125703-3-ypodemsk@redhat.com>
- <10050BB1-15A4-4E84-B900-B21500B2079B@gmail.com>
-In-Reply-To: <10050BB1-15A4-4E84-B900-B21500B2079B@gmail.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Thu, 22 Jun 2023 20:38:51 -0700
-Message-ID: <CAHbLzko2rNj8jdHVUw+kxF8Pz7b3o4im1ndoLbW611e2T3-LzA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] mm/mmu_gather: send tlb_remove_table_smp_sync IPI
- only to MM CPUs
-To:     Nadav Amit <nadav.amit@gmail.com>, Jann Horn <jannh@google.com>
-Cc:     Yair Podemsky <ypodemsk@redhat.com>, mtosatti@redhat.com,
-        ppandit@redhat.com, David Hildenbrand <david@redhat.com>,
-        "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Heiko Carstens <hca@linux.ibm.com>, gor@linux.ibm.com,
-        agordeev@linux.ibm.com,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        svens@linux.ibm.com, "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>, frederic@kernel.org,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, ardb@kernel.org,
-        samitolvanen@google.com, juerg.haefliger@canonical.com,
-        Arnd Bergmann <arnd@arndb.de>, rmk+kernel@armlinux.org.uk,
-        geert+renesas@glider.be, linus.walleij@linaro.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        sebastian.reichel@collabora.com, Mike Rapoport <rppt@kernel.org>,
-        aneesh.kumar@linux.ibm.com,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm <linux-mm@kvack.org>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] usb: ohci-at91: Fix the unhandle interrupt when resume
+Content-Language: en-US
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     gregkh@linuxfoundation.org, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20230622025739.13934-1-aarongt.shen@gmail.com>
+ <4cf867a9-3c78-403a-aaeb-91f6cf099a3d@rowland.harvard.edu>
+From:   Guiting Shen <aarongt.shen@gmail.com>
+In-Reply-To: <4cf867a9-3c78-403a-aaeb-91f6cf099a3d@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 11:02=E2=80=AFAM Nadav Amit <nadav.amit@gmail.com> =
-wrote:
->
-> >
-> > On Jun 20, 2023, at 7:46 AM, Yair Podemsky <ypodemsk@redhat.com> wrote:
-> >
-> > @@ -1525,7 +1525,7 @@ static void collapse_and_free_pmd(struct mm_struc=
-t *mm, struct vm_area_struct *v
-> >                               addr + HPAGE_PMD_SIZE);
-> >       mmu_notifier_invalidate_range_start(&range);
-> >       pmd =3D pmdp_collapse_flush(vma, addr, pmdp);
-> > -     tlb_remove_table_sync_one();
-> > +     tlb_remove_table_sync_one(mm);
->
-> Can=E2=80=99t pmdp_collapse_flush() have one additional argument =E2=80=
-=9Cfreed_tables=E2=80=9D
-> that it would propagate, for instance on x86 to flush_tlb_mm_range() ?
-> Then you would not need tlb_remove_table_sync_one() to issue an additiona=
-l
-> IPI, no?
->
-> It just seems that you might still have 2 IPIs in many cases instead of
-> one, and unless I am missing something, I don=E2=80=99t see why.
 
-The tlb_remove_table_sync_one() is used to serialize against fast GUP
-for the architectures which don't broadcast TLB flush by IPI, for
-example, arm64, etc. It may incur one extra IPI for x86 and some
-others, but x86 virtualization needs this since the guest may not
-flush TLB by sending IPI IIUC. So if the one extra IPI is really a
-problem, we may be able to define an arch-specific function to deal
-with it, for example, a pv ops off the top of my head. But I'm not a
-virtualization expert, I'm not entirely sure whether it is the best
-way or not.  But the complexity seems overkilling TBH since khugepaged
-is usually not called that often.
 
+On Thu,Jun 22,2023 at 22:29:43PM GMT+8, Alan Stern wrote:
+> On Thu, Jun 22, 2023 at 10:57:39AM +0800, Guiting Shen wrote:
+>> The ohci_hcd_at91_drv_suspend() sets ohci->rh_state to OHCI_RH_HALTED when
+>> suspend which will let the ohci_irq() skip the interrupt after resume. And
+>> nobody to handle this interrupt.
+>>
+>> Set the ohci->rh_state to OHCI_RH_SUSPEND instead of OHCI_RH_HALTED when
+>> suspend to fix it.
+>>
+>> Signed-off-by: Guiting Shen <aarongt.shen@gmail.com>
+>> ---
+>>   drivers/usb/host/ohci-at91.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/usb/host/ohci-at91.c b/drivers/usb/host/ohci-at91.c
+>> index b9ce8d80f20b..7a970e573668 100644
+>> --- a/drivers/usb/host/ohci-at91.c
+>> +++ b/drivers/usb/host/ohci-at91.c
+>> @@ -645,7 +645,7 @@ ohci_hcd_at91_drv_suspend(struct device *dev)
+>>   	 * REVISIT: some boards will be able to turn VBUS off...
+>>   	 */
+>>   	if (!ohci_at91->wakeup) {
+>> -		ohci->rh_state = OHCI_RH_HALTED;
+>> +		ohci->rh_state = OHCI_RH_SUSPENDED;
+> 
+> It looks like this change ignores the comment immediately above it
+> (just before the start of this hunk).
+> 
+> If you want to find a way to handle IRQs better after the controller
+> resumes, maybe you should change the resume routine instead of the
+> suspend routine.
 >
->
+> Alan Stern
+
+The comment which was added with commit-id 0365ee0a8f745 may be outdated
+because ohci_suspend() and ohci_at91_port_suspend() is used to suspend 
+instead of setting ohci->rh_state to OHCI_RH_HALTED.
+
+What's more, I found that only ohci-at91 driver to set the 
+ohci->rh_state which may be unnessory because the ohci_suspend() disable 
+irq emission and mark HW unaccessible and ohci_at91_port_suspend() 
+suspend the controller.
+
+Is it really need to set ohci->rh_state in ohci_hcd_at91_drv_suspend()?
+
+It maybe confused to set ohci->rh_state to OHCI_RH_SUSPEND in resume 
+routine.
+
+-- 
+Best regards,
+Guiting Shen
