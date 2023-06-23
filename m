@@ -2,122 +2,393 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D2BB73BBC7
+	by mail.lfdr.de (Postfix) with ESMTP id CF3DE73BBC8
 	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 17:36:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231175AbjFWPgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 11:36:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47410 "EHLO
+        id S231627AbjFWPgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 11:36:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230498AbjFWPgM (ORCPT
+        with ESMTP id S229972AbjFWPgS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 11:36:12 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 304112116
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 08:36:07 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id 5614622812f47-3909756b8b1so482805b6e.1
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 08:36:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1687534566; x=1690126566;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=d9CymSRMDbqHIro+JW8XfRWWOAA5tcI4JPlypVJojtE=;
-        b=Pf+IdItQ+K7ft3zprVXyNENnCmGH3dYMxT1fLOl9w4HG38AetOQbLU2CWhjQE7/wrb
-         z6EFB6v1DVPj4Gj/KUd/i/q/D9WcsxPpSD0JEGFhLK251PPkuWryOYQV7mj2XzqT6i40
-         783h5cO75omYeCslDqu1KZ2qxl32r/B3aTjm0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687534566; x=1690126566;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=d9CymSRMDbqHIro+JW8XfRWWOAA5tcI4JPlypVJojtE=;
-        b=jbXjIqefI185dsbHwpRuCF1XNv/Pa1WObljLxBh07yoQuV8XJmUzq98zF+J5V911RX
-         6x8Cw9b99IYYs32qTJuXJS9UV+EHwJK53h4zP5kncBthaxuyDnzWLdcGLX40tdbnORK5
-         KElU2OxKT+CjXCgRQqxnrFcy7LsV1EO7jycPvXRwFD3K+2eovySCNdj1RzwIDAWJvLhX
-         O/oAwuAsu5XygOgDlGynzNWWIUOO9tFKAjxLvLK53pAr/yotvJ1PXWi/LxOPqrhuhr6d
-         aPdVHSTC5q8++uWp91Fynncy2se0yGAzS+2pNVHDgtdnS57lupfuNRaNijFAtPqXP4fa
-         n2hg==
-X-Gm-Message-State: AC+VfDxngaQR2uuy5LbihM/Ecdr5G9tKaKsoxE0HBzRJE/3fRWYkqGcE
-        zjNOaQDzhjrzFm7VGa44Oi/TEsZCF2I8c933E0nBFw==
-X-Google-Smtp-Source: ACHHUZ6DrDzdNIVXxAvx+TDFfseQBiZYeDasVgGvYaxuMsethdsP9RLn0x0lPg7v26V7PlRq40/fpnKgOZISMPftpDQ=
-X-Received: by 2002:a05:6808:10c3:b0:3a0:4feb:41bc with SMTP id
- s3-20020a05680810c300b003a04feb41bcmr8168171ois.29.1687534566267; Fri, 23 Jun
- 2023 08:36:06 -0700 (PDT)
+        Fri, 23 Jun 2023 11:36:18 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 800A11FC0;
+        Fri, 23 Jun 2023 08:36:16 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 21714838;
+        Fri, 23 Jun 2023 17:35:38 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1687534538;
+        bh=LCavfPralCxSZPu8pFawH9/iSenladEu+QDeNLLrSXs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qfHQ+shFmhKAbjh7hVVWw6ZPUylKstvmCfbsxkgyhmbjexz7VVWLDb2NI+olDSEwN
+         N03B2ABnhjyZCw7O77R7RvBZu6LFxFVxHSq3KjIvu7Cg1XQkcyh3iTZpR4wEbJx6pr
+         b65qDrfswMlbwQ5KehdavHFo6E90DE8qencQIuVI=
+Date:   Fri, 23 Jun 2023 18:36:13 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 11/39] drm: renesas: shmobile: Remove backlight support
+Message-ID: <20230623153613.GR2112@pendragon.ideasonboard.com>
+References: <cover.1687423204.git.geert+renesas@glider.be>
+ <144586844da90c6cff9c608a9d7e472811d45151.1687423204.git.geert+renesas@glider.be>
 MIME-Version: 1.0
-References: <20230623152204.2216297-1-arnd@kernel.org>
-In-Reply-To: <20230623152204.2216297-1-arnd@kernel.org>
-From:   Florent Revest <revest@chromium.org>
-Date:   Fri, 23 Jun 2023 17:35:55 +0200
-Message-ID: <CABRcYmJcCWTNHZjh2m75wKUzpvH-vkhkOaG87CU=ZXpDCzrZFw@mail.gmail.com>
-Subject: Re: [PATCH] arm64: ftrace: fix build error with CONFIG_FUNCTION_GRAPH_TRACER=n
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Donglin Peng <pengdonglin@sangfor.com.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <144586844da90c6cff9c608a9d7e472811d45151.1687423204.git.geert+renesas@glider.be>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 23, 2023 at 5:22=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wro=
-te:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> It appears that a merge conflict ended up hiding a newly added constant
-> in some configurations:
->
-> arch/arm64/kernel/entry-ftrace.S: Assembler messages:
-> arch/arm64/kernel/entry-ftrace.S:59: Error: undefined symbol FTRACE_OPS_D=
-IRECT_CALL used as an immediate value
->
-> FTRACE_OPS_DIRECT_CALL is still used when CONFIG_DYNAMIC_FTRACE_WITH_DIRE=
-CT_CALLS
-> is enabled, even if CONFIG_FUNCTION_GRAPH_TRACER is disabled, so change t=
-he
-> ifdef accordingly.
->
-> Fixes: 3646970322464 ("arm64: ftrace: Enable HAVE_FUNCTION_GRAPH_RETVAL")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Hi Geert,
+
+Thank you for the patch.
+
+On Thu, Jun 22, 2023 at 11:21:23AM +0200, Geert Uytterhoeven wrote:
+> From: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+> 
+> Backlight support should be implemented by panels, not by the LCDC
+> driver.  As the feature is currently unused anyway, remove it.
+> 
+> Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+> [geert: Cleanups]
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+
 > ---
->  arch/arm64/kernel/asm-offsets.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/arch/arm64/kernel/asm-offsets.c b/arch/arm64/kernel/asm-offs=
-ets.c
-> index 757d01a68ffd0..5ff1942b04fcf 100644
-> --- a/arch/arm64/kernel/asm-offsets.c
-> +++ b/arch/arm64/kernel/asm-offsets.c
-> @@ -213,9 +213,9 @@ int main(void)
->    DEFINE(FGRET_REGS_X7,                        offsetof(struct fgraph_re=
-t_regs, regs[7]));
->    DEFINE(FGRET_REGS_FP,                        offsetof(struct fgraph_re=
-t_regs, fp));
->    DEFINE(FGRET_REGS_SIZE,              sizeof(struct fgraph_ret_regs));
-> +#endif
->  #ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
->    DEFINE(FTRACE_OPS_DIRECT_CALL,       offsetof(struct ftrace_ops, direc=
-t_call));
-> -#endif
->  #endif
->    return 0;
+> Changes compared to Laurent's original:
+>   - Rebase,
+>   - Remove unused variable ‘scon’,
+>   - Remove now unused to_shmob_encoder() macro,
+>   - Remove now empty shmob_drm_encoder wrapper.
+> ---
+>  drivers/gpu/drm/renesas/shmobile/Makefile     |  3 +-
+>  .../renesas/shmobile/shmob_drm_backlight.c    | 82 -------------------
+>  .../renesas/shmobile/shmob_drm_backlight.h    | 19 -----
+>  .../gpu/drm/renesas/shmobile/shmob_drm_crtc.c | 33 +-------
+>  .../gpu/drm/renesas/shmobile/shmob_drm_crtc.h |  8 --
+>  .../gpu/drm/renesas/shmobile/shmob_drm_drv.h  |  2 +-
+>  .../gpu/drm/renesas/shmobile/shmob_drm_kms.c  |  2 +-
+>  include/linux/platform_data/shmob_drm.h       |  8 --
+>  8 files changed, 7 insertions(+), 150 deletions(-)
+>  delete mode 100644 drivers/gpu/drm/renesas/shmobile/shmob_drm_backlight.c
+>  delete mode 100644 drivers/gpu/drm/renesas/shmobile/shmob_drm_backlight.h
+> 
+> diff --git a/drivers/gpu/drm/renesas/shmobile/Makefile b/drivers/gpu/drm/renesas/shmobile/Makefile
+> index 861edafed8562c87..2679555d61a70207 100644
+> --- a/drivers/gpu/drm/renesas/shmobile/Makefile
+> +++ b/drivers/gpu/drm/renesas/shmobile/Makefile
+> @@ -1,6 +1,5 @@
+>  # SPDX-License-Identifier: GPL-2.0
+> -shmob-drm-y := shmob_drm_backlight.o \
+> -	       shmob_drm_crtc.o \
+> +shmob-drm-y := shmob_drm_crtc.o \
+>  	       shmob_drm_drv.o \
+>  	       shmob_drm_kms.o \
+>  	       shmob_drm_plane.o
+> diff --git a/drivers/gpu/drm/renesas/shmobile/shmob_drm_backlight.c b/drivers/gpu/drm/renesas/shmobile/shmob_drm_backlight.c
+> deleted file mode 100644
+> index 794573badfe86076..0000000000000000
+> --- a/drivers/gpu/drm/renesas/shmobile/shmob_drm_backlight.c
+> +++ /dev/null
+> @@ -1,82 +0,0 @@
+> -// SPDX-License-Identifier: GPL-2.0+
+> -/*
+> - * shmob_drm_backlight.c  --  SH Mobile DRM Backlight
+> - *
+> - * Copyright (C) 2012 Renesas Electronics Corporation
+> - *
+> - * Laurent Pinchart (laurent.pinchart@ideasonboard.com)
+> - */
+> -
+> -#include <linux/backlight.h>
+> -
+> -#include "shmob_drm_backlight.h"
+> -#include "shmob_drm_crtc.h"
+> -#include "shmob_drm_drv.h"
+> -
+> -static int shmob_drm_backlight_update(struct backlight_device *bdev)
+> -{
+> -	struct shmob_drm_connector *scon = bl_get_data(bdev);
+> -	struct shmob_drm_device *sdev = scon->connector.dev->dev_private;
+> -	const struct shmob_drm_backlight_data *bdata = &sdev->pdata->backlight;
+> -	int brightness = backlight_get_brightness(bdev);
+> -
+> -	return bdata->set_brightness(brightness);
+> -}
+> -
+> -static int shmob_drm_backlight_get_brightness(struct backlight_device *bdev)
+> -{
+> -	struct shmob_drm_connector *scon = bl_get_data(bdev);
+> -	struct shmob_drm_device *sdev = scon->connector.dev->dev_private;
+> -	const struct shmob_drm_backlight_data *bdata = &sdev->pdata->backlight;
+> -
+> -	return bdata->get_brightness();
+> -}
+> -
+> -static const struct backlight_ops shmob_drm_backlight_ops = {
+> -	.options	= BL_CORE_SUSPENDRESUME,
+> -	.update_status	= shmob_drm_backlight_update,
+> -	.get_brightness	= shmob_drm_backlight_get_brightness,
+> -};
+> -
+> -void shmob_drm_backlight_dpms(struct shmob_drm_connector *scon, int mode)
+> -{
+> -	if (scon->backlight == NULL)
+> -		return;
+> -
+> -	scon->backlight->props.power = mode == DRM_MODE_DPMS_ON
+> -				     ? FB_BLANK_UNBLANK : FB_BLANK_POWERDOWN;
+> -	backlight_update_status(scon->backlight);
+> -}
+> -
+> -int shmob_drm_backlight_init(struct shmob_drm_connector *scon)
+> -{
+> -	struct shmob_drm_device *sdev = scon->connector.dev->dev_private;
+> -	const struct shmob_drm_backlight_data *bdata = &sdev->pdata->backlight;
+> -	struct drm_connector *connector = &scon->connector;
+> -	struct drm_device *dev = connector->dev;
+> -	struct backlight_device *backlight;
+> -
+> -	if (!bdata->max_brightness)
+> -		return 0;
+> -
+> -	backlight = backlight_device_register(bdata->name, dev->dev, scon,
+> -					      &shmob_drm_backlight_ops, NULL);
+> -	if (IS_ERR(backlight)) {
+> -		dev_err(dev->dev, "unable to register backlight device: %ld\n",
+> -			PTR_ERR(backlight));
+> -		return PTR_ERR(backlight);
+> -	}
+> -
+> -	backlight->props.max_brightness = bdata->max_brightness;
+> -	backlight->props.brightness = bdata->max_brightness;
+> -	backlight->props.power = FB_BLANK_POWERDOWN;
+> -	backlight_update_status(backlight);
+> -
+> -	scon->backlight = backlight;
+> -	return 0;
+> -}
+> -
+> -void shmob_drm_backlight_exit(struct shmob_drm_connector *scon)
+> -{
+> -	backlight_device_unregister(scon->backlight);
+> -}
+> diff --git a/drivers/gpu/drm/renesas/shmobile/shmob_drm_backlight.h b/drivers/gpu/drm/renesas/shmobile/shmob_drm_backlight.h
+> deleted file mode 100644
+> index d9abb7a60be5c414..0000000000000000
+> --- a/drivers/gpu/drm/renesas/shmobile/shmob_drm_backlight.h
+> +++ /dev/null
+> @@ -1,19 +0,0 @@
+> -/* SPDX-License-Identifier: GPL-2.0+ */
+> -/*
+> - * shmob_drm_backlight.h  --  SH Mobile DRM Backlight
+> - *
+> - * Copyright (C) 2012 Renesas Electronics Corporation
+> - *
+> - * Laurent Pinchart (laurent.pinchart@ideasonboard.com)
+> - */
+> -
+> -#ifndef __SHMOB_DRM_BACKLIGHT_H__
+> -#define __SHMOB_DRM_BACKLIGHT_H__
+> -
+> -struct shmob_drm_connector;
+> -
+> -void shmob_drm_backlight_dpms(struct shmob_drm_connector *scon, int mode);
+> -int shmob_drm_backlight_init(struct shmob_drm_connector *scon);
+> -void shmob_drm_backlight_exit(struct shmob_drm_connector *scon);
+> -
+> -#endif /* __SHMOB_DRM_BACKLIGHT_H__ */
+> diff --git a/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c b/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c
+> index 9bfdfa7c6e2b1001..c775c1d49f0e1ce9 100644
+> --- a/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c
+> +++ b/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c
+> @@ -7,7 +7,6 @@
+>   * Laurent Pinchart (laurent.pinchart@ideasonboard.com)
+>   */
+>  
+> -#include <linux/backlight.h>
+>  #include <linux/clk.h>
+>  #include <linux/pm_runtime.h>
+>  
+> @@ -24,7 +23,6 @@
+>  #include <drm/drm_simple_kms_helper.h>
+>  #include <drm/drm_vblank.h>
+>  
+> -#include "shmob_drm_backlight.h"
+>  #include "shmob_drm_crtc.h"
+>  #include "shmob_drm_drv.h"
+>  #include "shmob_drm_kms.h"
+> @@ -520,21 +518,9 @@ int shmob_drm_crtc_create(struct shmob_drm_device *sdev)
+>   * Encoder
+>   */
+>  
+> -#define to_shmob_encoder(e) \
+> -	container_of(e, struct shmob_drm_encoder, encoder)
+> -
+>  static void shmob_drm_encoder_dpms(struct drm_encoder *encoder, int mode)
+>  {
+> -	struct shmob_drm_encoder *senc = to_shmob_encoder(encoder);
+> -	struct shmob_drm_device *sdev = encoder->dev->dev_private;
+> -	struct shmob_drm_connector *scon = &sdev->connector;
+> -
+> -	if (senc->dpms == mode)
+> -		return;
+> -
+> -	shmob_drm_backlight_dpms(scon, mode);
+> -
+> -	senc->dpms = mode;
+> +	/* No-op, everything is handled in the CRTC code. */
 >  }
-> --
-> 2.39.2
->
+>  
+>  static bool shmob_drm_encoder_mode_fixup(struct drm_encoder *encoder,
+> @@ -586,11 +572,9 @@ static const struct drm_encoder_helper_funcs encoder_helper_funcs = {
+>  
+>  int shmob_drm_encoder_create(struct shmob_drm_device *sdev)
+>  {
+> -	struct drm_encoder *encoder = &sdev->encoder.encoder;
+> +	struct drm_encoder *encoder = &sdev->encoder;
+>  	int ret;
+>  
+> -	sdev->encoder.dpms = DRM_MODE_DPMS_OFF;
+> -
+>  	encoder->possible_crtcs = 1;
+>  
+>  	ret = drm_simple_encoder_init(sdev->ddev, encoder,
+> @@ -655,9 +639,6 @@ static const struct drm_connector_helper_funcs connector_helper_funcs = {
+>  
+>  static void shmob_drm_connector_destroy(struct drm_connector *connector)
+>  {
+> -	struct shmob_drm_connector *scon = to_shmob_connector(connector);
+> -
+> -	shmob_drm_backlight_exit(scon);
+>  	drm_connector_unregister(connector);
+>  	drm_connector_cleanup(connector);
+>  }
+> @@ -686,13 +667,9 @@ int shmob_drm_connector_create(struct shmob_drm_device *sdev,
+>  
+>  	drm_connector_helper_add(connector, &connector_helper_funcs);
+>  
+> -	ret = shmob_drm_backlight_init(&sdev->connector);
+> -	if (ret < 0)
+> -		goto err_cleanup;
+> -
+>  	ret = drm_connector_attach_encoder(connector, encoder);
+>  	if (ret < 0)
+> -		goto err_backlight;
+> +		goto error;
+>  
+>  	drm_helper_connector_dpms(connector, DRM_MODE_DPMS_OFF);
+>  	drm_object_property_set_value(&connector->base,
+> @@ -700,9 +677,7 @@ int shmob_drm_connector_create(struct shmob_drm_device *sdev,
+>  
+>  	return 0;
+>  
+> -err_backlight:
+> -	shmob_drm_backlight_exit(&sdev->connector);
+> -err_cleanup:
+> +error:
+>  	drm_connector_cleanup(connector);
+>  	return ret;
+>  }
+> diff --git a/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.h b/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.h
+> index 21718843f46d3d19..bce6926269453b77 100644
+> --- a/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.h
+> +++ b/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.h
+> @@ -14,7 +14,6 @@
+>  #include <drm/drm_connector.h>
+>  #include <drm/drm_encoder.h>
+>  
+> -struct backlight_device;
+>  struct drm_pending_vblank_event;
+>  struct shmob_drm_device;
+>  struct shmob_drm_format_info;
+> @@ -31,16 +30,9 @@ struct shmob_drm_crtc {
+>  	bool started;
+>  };
+>  
+> -struct shmob_drm_encoder {
+> -	struct drm_encoder encoder;
+> -	int dpms;
+> -};
+> -
+>  struct shmob_drm_connector {
+>  	struct drm_connector connector;
+>  	struct drm_encoder *encoder;
+> -
+> -	struct backlight_device *backlight;
+>  };
+>  
+>  int shmob_drm_crtc_create(struct shmob_drm_device *sdev);
+> diff --git a/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.h b/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.h
+> index 4964ddd5ab7472b0..16d830168b2ada21 100644
+> --- a/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.h
+> +++ b/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.h
+> @@ -35,7 +35,7 @@ struct shmob_drm_device {
+>  	struct drm_device *ddev;
+>  
+>  	struct shmob_drm_crtc crtc;
+> -	struct shmob_drm_encoder encoder;
+> +	struct drm_encoder encoder;
+>  	struct shmob_drm_connector connector;
+>  };
+>  
+> diff --git a/drivers/gpu/drm/renesas/shmobile/shmob_drm_kms.c b/drivers/gpu/drm/renesas/shmobile/shmob_drm_kms.c
+> index 8fd360149743f8e2..3051318ddc7999bc 100644
+> --- a/drivers/gpu/drm/renesas/shmobile/shmob_drm_kms.c
+> +++ b/drivers/gpu/drm/renesas/shmobile/shmob_drm_kms.c
+> @@ -159,7 +159,7 @@ int shmob_drm_modeset_init(struct shmob_drm_device *sdev)
+>  
+>  	shmob_drm_crtc_create(sdev);
+>  	shmob_drm_encoder_create(sdev);
+> -	shmob_drm_connector_create(sdev, &sdev->encoder.encoder);
+> +	shmob_drm_connector_create(sdev, &sdev->encoder);
+>  
+>  	drm_kms_helper_poll_init(sdev->ddev);
+>  
+> diff --git a/include/linux/platform_data/shmob_drm.h b/include/linux/platform_data/shmob_drm.h
+> index d661399b217dfc4b..b6b5b6607fb5e52c 100644
+> --- a/include/linux/platform_data/shmob_drm.h
+> +++ b/include/linux/platform_data/shmob_drm.h
+> @@ -40,13 +40,6 @@ enum shmob_drm_interface {
+>  	SHMOB_DRM_IFACE_SYS24,		/* 24bpp */
+>  };
+>  
+> -struct shmob_drm_backlight_data {
+> -	const char *name;
+> -	int max_brightness;
+> -	int (*get_brightness)(void);
+> -	int (*set_brightness)(int brightness);
+> -};
+> -
+>  struct shmob_drm_panel_data {
+>  	unsigned int width_mm;		/* Panel width in mm */
+>  	unsigned int height_mm;		/* Panel height in mm */
+> @@ -83,7 +76,6 @@ struct shmob_drm_platform_data {
+>  	enum shmob_drm_clk_source clk_source;
+>  	struct shmob_drm_interface_data iface;
+>  	struct shmob_drm_panel_data panel;
+> -	struct shmob_drm_backlight_data backlight;
+>  };
+>  
+>  #endif /* __SHMOB_DRM_H__ */
 
-Acked-by: Florent Revest <revest@chromium.org>
+-- 
+Regards,
 
-Good catch, thank you Arnd!
+Laurent Pinchart
