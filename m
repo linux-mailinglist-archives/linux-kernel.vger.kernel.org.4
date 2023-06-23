@@ -2,171 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C919473BFEF
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 22:35:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E80F573C00E
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 22:36:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232136AbjFWUfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 16:35:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51210 "EHLO
+        id S232182AbjFWUg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 16:36:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232139AbjFWUej (ORCPT
+        with ESMTP id S232159AbjFWUgT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 16:34:39 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 811FB2728;
-        Fri, 23 Jun 2023 13:34:16 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35NK17Qa010999;
-        Fri, 23 Jun 2023 20:34:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=9UDnCFpdM4OwJ1V1McJjMa8iTd+WLOlQ/OmL9IFPRLY=;
- b=pGAH6lfF3IeRGi9uK7xgNzIG4pqhl33RqehFTvNfooKAVpEUo3dIAIu2lfyjsfaZw19Z
- T1RJrStH/PPjjsgQj49S53C88keChqfuYbg/ZstleRrtFMAAAppAL3BY2k2QMmV4PSBT
- hw30XqToQpvrlAqhSNEYS8hCLTB8/Z7NiMtVc3EmLaj2+E06FeEwoMA0q/ZqezhNOAnm
- 6GQAAan5GhMiQmcBlgihXK+TfAK8UFOHkUiEVcZ0JaQBZr+nqljFlWgPS6yn/ppHBEP2
- mkkAxfY5rx3eVcMf5rJ856J6y83ykHXYADblqF0Zgp5YTsacCZCIkNEt63jsAsei5MEK jA== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rdcuurw2f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 23 Jun 2023 20:34:10 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35NKY9X0004373
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 23 Jun 2023 20:34:09 GMT
-Received: from [10.110.61.170] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 23 Jun
- 2023 13:34:07 -0700
-Message-ID: <117d21da-aa44-9439-5d5b-9a9144b53979@quicinc.com>
-Date:   Fri, 23 Jun 2023 13:34:06 -0700
+        Fri, 23 Jun 2023 16:36:19 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2137.outbound.protection.outlook.com [40.107.220.137])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B72492728;
+        Fri, 23 Jun 2023 13:35:48 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bj5INSm+hVQFY2BXP1OEtvI4DGWU5c33Wa+tbhMI1QBJAgRqesCO1h9W1YqHTbMJtGffKvELLPaNCHJJZzd2prmQSWkEVA7gA6tMU+43UireIV4ymQbpEr3IajvsLnuJIwGvo4hR5I2cAsCgP0hemWlSk5OQVL3G6YxbBwThFZit9o5EKTL4T/qNgDLqmYXPBkZ4f+1IYZ79pIo06KibtmWkCsZaPI1pIz9WzKNjQY7V6/Mr3rw2tjSZu/mmqrcAn2RO/TgDO4en4DF5mnOGdwN2pSf9NKv6R51PQecTVv6nMtZeWV59uBRhMbIKwEBL3oC05If6HnAy/iARVmGtbA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2MWAnSCtg2nZ+ZiOCxtfm+6oQoUOHmnAw7aohQcR9cc=;
+ b=AN26NWxeTkG9+5j9zuoLYfYjDXtSrEQi3ydKeYJqyzLbwvH8ZOL1TfbmCGmEIEB1d9rXDiiXzyIcS5h8qmZNxE689E2a3I9eZDsfg59NJeNVC10JTnudaDA5RfneLNXBRnq8O/Gh5FIFoThDfsiRCGx53Ad93e/FFoPy1NtuvdDE/S6+nBEDdMQveBKVzlGkPCJORCQn2wFrfq6NZmrNUQXMMRdK7+A5Z/L0A190w7F7nILq22chdewbDUcVavF0FKvI/Xuam//9Af6DLjupfSGLVoumYxT3HRKE62WB9ovgT/qRte9qEk0FPFbiKUJFCoKJUprpN+/LwnCulu+hSg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2MWAnSCtg2nZ+ZiOCxtfm+6oQoUOHmnAw7aohQcR9cc=;
+ b=YiB/lQ1C78DPE6iFA+uJ4WnfUO4J6yGcmsYJFgPm2o/kmXKg1nQbCV3zIoB9xLNgTLyOW/5Inv/6nfDXLIA0Af82OO9IbIclUnrhwhVs5FRZ6TZNpKuALPZaqAIt20F8IwgcS7jiblAQZY5IOq0gllIN/86/nX3QGdBkYUvcEms=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by BY3PR13MB5028.namprd13.prod.outlook.com (2603:10b6:a03:360::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.26; Fri, 23 Jun
+ 2023 20:35:24 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb8f:e482:76e0:fe6e]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb8f:e482:76e0:fe6e%5]) with mapi id 15.20.6521.023; Fri, 23 Jun 2023
+ 20:35:24 +0000
+Date:   Fri, 23 Jun 2023 22:35:17 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Michael Walle <mwalle@kernel.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Yisen Zhuang <yisen.zhuang@huawei.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
+        Xu Liang <lxu@maxlinear.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v2 06/10] net: phy: print an info if a broken
+ C45 bus is found
+Message-ID: <ZJYCBeKdXBot/9Xd@corigine.com>
+References: <20230620-feature-c45-over-c22-v2-0-def0ab9ccee2@kernel.org>
+ <20230620-feature-c45-over-c22-v2-6-def0ab9ccee2@kernel.org>
+ <af166ce6-b9b2-44e0-9f45-2b2aa001fd6b@lunn.ch>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <af166ce6-b9b2-44e0-9f45-2b2aa001fd6b@lunn.ch>
+X-ClientProxiedBy: AS4PR10CA0020.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5d8::10) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [Freedreno] [PATCH 3/3] drm/msm/dsi: Enable DATABUS_WIDEN for DSI
- command mode
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>
-CC:     Jessica Zhang <quic_jesszhan@quicinc.com>,
-        <freedreno@lists.freedesktop.org>, Sean Paul <sean@poorly.run>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        <linux-arm-msm@vger.kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        David Airlie <airlied@gmail.com>
-References: <20230525-add-widebus-support-v1-0-c7069f2efca1@quicinc.com>
- <20230525-add-widebus-support-v1-3-c7069f2efca1@quicinc.com>
- <ky7sgsaohak2pcdf6pbhedfyrwk4ea7y3ekfqlw7rn6cpk4rhe@rjuhb23n37oz>
- <cf968ab4-e4c4-dcad-f7d1-4edff6f08147@quicinc.com>
- <xrqiat4otnfwtss6zwubh77qx3frdyi77flna2xljzycvr6r2v@riimvmhoondt>
- <654ccc4c-40c2-bef6-9f47-847216e16cb0@quicinc.com>
- <daqhyz4rtgdxthsezmgk6t2egbdsvzsdy3cihrqrhyveoqbizi@etq2tafkucg2>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <daqhyz4rtgdxthsezmgk6t2egbdsvzsdy3cihrqrhyveoqbizi@etq2tafkucg2>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 44jk4GD9bYKowD1H7qB85hyaMzvQxOu_
-X-Proofpoint-ORIG-GUID: 44jk4GD9bYKowD1H7qB85hyaMzvQxOu_
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-23_12,2023-06-22_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=718
- phishscore=0 spamscore=0 suspectscore=0 lowpriorityscore=0 malwarescore=0
- clxscore=1015 priorityscore=1501 bulkscore=0 impostorscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
- definitions=main-2306230184
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|BY3PR13MB5028:EE_
+X-MS-Office365-Filtering-Correlation-Id: 59a92630-3c9c-4219-fdbb-08db74295f4d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 1KRxLjhpUupTlXGrWyxbqYozHzRjgRlTn+USPPQ49Og/nppSnkeO6EzJDwr4gWEDoYMG7sJNhmSH7705GFtx6cNVSzGvMQCvYK2IAgQMRIh2Z/Y/UPyLGgptrjEHX8TPWXeb4gmqwea/vM+8L3COUP/gzEwvWjhgtgBeUr3zZEXRvGRvC6PKRsa2hIo72k2S4dlrI3CjQPRmQQ4LYm7sbnfqG8y7Hp/KVVkgOahFkOMlQJs+0tKrC7eYCcb40JBNplz9ipymN+lg8nkbf5kWEl0FftaoWun6v2QSzrx9pVTz/O8pM4434dByYsjGpWAaxAe2+P5Fq4Pdj65Wvxhiyi/mifOYR7utXKHMQ9hAI2GU7FtmJRg7Szsa16SnzSLnHv/q1lFnURiw2iHY07/WrrU+t84XZjL0YzKkPldZByIk6KHXD9PAEZXvlZjdFwJJOXU2cQeNKwILNfNIQOXGqmJnPTviMSs2jPM9YX+g2vcOStvU2mhvhWvP8R5ZYl6V9rLuXoK5BuJUdUhOGXjOwPBkHSZaeAGnmgCqOCNXHVKyfhW8nriq290MoaJwKODxYpuTJ/1x53mF48mTbgb8QSwEWXeRCD3Dc9OhPngH5nE=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(346002)(376002)(39840400004)(366004)(451199021)(2906002)(6486002)(83380400001)(6666004)(38100700002)(2616005)(6506007)(6512007)(186003)(41300700001)(86362001)(54906003)(316002)(478600001)(66946007)(66556008)(66476007)(36756003)(6916009)(4326008)(5660300002)(7416002)(8936002)(8676002)(44832011);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?dnYU5Q2GRDSkkCaJkxjSYErkZFsN0PEWaAfaTuj5cD+dvzJPcFKkDTC+TSRO?=
+ =?us-ascii?Q?1SR+cTqaXrGLgMtfr93f5GHZ/L2tSP1jQCz89hrkD+4YXAwbn6nbJVkeMiU9?=
+ =?us-ascii?Q?E+BXT1xD5HUtQCiPIWdXnTycyqxEqJGOMX4lIulzFuLaozKDJ1GahrxJqdn1?=
+ =?us-ascii?Q?ssoia8AjfBanqkWdBQcYLCHOtanf3qIZtlGxdY3KdHt1xxsf1lGoXVswNWcg?=
+ =?us-ascii?Q?ymdLcpuNuBtzb3YcJyHUHogYe6DkZYWyVre5hZj7TqOD1r4loFDFobupqM5A?=
+ =?us-ascii?Q?PmHkeaiR/DqlaIZlRH5i2NNrqPSsYdizGT15Nf3SPThnms/YfoJyLdoe5idD?=
+ =?us-ascii?Q?8BGvyagBhxALgwxkMlgn3PIV/W5XUmCf8TwjpzPE/ZvdAO3m1cpEb3R+Laxr?=
+ =?us-ascii?Q?/zLL6ldZS4t4gFznnv0hL1aFTJKXI8uu9h3L/m7HCAfLPTUswaKccBccShI4?=
+ =?us-ascii?Q?VKRt3XcOKY1jIjAbHSZrna1TmPwI5L4/zr0iD5/GEt4Mdw7Pqt2XqTpEKeSO?=
+ =?us-ascii?Q?/eu5MdBtpE0z2qa6krOqVWzMpReGXp7IE9NC5x6yNPl2wArQoERNQH4tLAp5?=
+ =?us-ascii?Q?plYdxAngT1UXyJfU16idvDmQO4FohHLFMUKUVLRD3PVbgVJ6+iUSPFV91bl9?=
+ =?us-ascii?Q?tA0tddDLyOsA+OGc1nCyTmzKGFmtHZFkuW34B61sPTP/KXGhPCOgIeJbt6gB?=
+ =?us-ascii?Q?J96OnFs5fnZFcTTsEeSghpOtQsmoKFarBELzzARdsd/mTwH4DHW9LhEC5/4t?=
+ =?us-ascii?Q?eryxqYKeoG01QzHvsdCq8epmnH9kmrIUrGvzFv95oh1Tkdf7+yKM0AAWBhDw?=
+ =?us-ascii?Q?RnCK5Lwyg4ud8pUS2ParLsxy2OJ+X9L+l0PHFXqVd+snCiXGIOrIqJVicsjn?=
+ =?us-ascii?Q?xiZ7WcII1BykLrixqerrtReJiJXoDtKA3vA9gBj2xaJYrKOKpWH1qwG2Ez84?=
+ =?us-ascii?Q?VdoMYKVeXbhB7ojtcW2fD9BEIclxGh0dmEhXQquCBJwI3Cc27rq8w70jm6sI?=
+ =?us-ascii?Q?5RVNZimAymVP7Zy36+2mzcboYonhjnbxkRCefZ1YLXEB2jS6eeVSzJg6LjFc?=
+ =?us-ascii?Q?+SiqhwkYFBntOyBGGAzAZHXQm0OEa5qUuvWjwU8kKIUSiyyWdSMfbpzMyuLY?=
+ =?us-ascii?Q?si37eMPSoy7ixd/PXxEFdE5E1O/Ha6n2SWe8QInOvgRlPY5th7MY661hEKa5?=
+ =?us-ascii?Q?Gt+mxHAWZC/eEC/5VSovYZUXN1pSLhsW0Glp7Xgi1vmy8RO262Pi/0B1PwHz?=
+ =?us-ascii?Q?btK1N3APH8+5yuNiQHJflxwVTybIC5V5xfx0+zXX9D/yzGrhZ9xSELXT0hyM?=
+ =?us-ascii?Q?mBwQd2tENdhSqVDED3cewrhRDDf4gVMn8sFPhAaaWYd2h46GsEoTnLXdR4Iz?=
+ =?us-ascii?Q?izyFACpIiOAUf1NPhkwlcfyScd8E25/LNMKsKOWpIpMk+V2zmhOKb0zJftDp?=
+ =?us-ascii?Q?bzBwU4ljnpTVU9whodIFDs3L5P3st5JuhDiRgJFdKV1pr5ZnmlPdti/yUgay?=
+ =?us-ascii?Q?dT2Wd+YEhLNAhtcAZH8vPAgy/pqKMT2Qq6jYQfN22G5IFLd1NFhmIb7Y7exL?=
+ =?us-ascii?Q?8FqCa/rjRfAM+3bJ7MHfb8GyGWgMCJzQlntxhyI3nYwTVgkFJLuNWe9eYb5x?=
+ =?us-ascii?Q?i8iChoKh+yKAsWb0xAAICcw3GrUYtQ13emRrq9Auo/F3GjelI6xR7BZ97sIk?=
+ =?us-ascii?Q?xxgWzQ=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 59a92630-3c9c-4219-fdbb-08db74295f4d
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jun 2023 20:35:24.5922
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: cue6vw3SReiGC/sPLFYz1wIdc/XQTd5QmgDEz4GCrCFgPJR1V90ss8Umo9skkocYA/rnQG7ppINWpvcqDhnGkLXd03ivGIZknZOveV5r4TU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY3PR13MB5028
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/23/2023 1:14 PM, Marijn Suijten wrote:
-> On 2023-06-23 10:29:51, Abhinav Kumar wrote:
-> <snip>
->> The concept is quite simple
->>
->> one pixel per clock for uncompresssed without widebubus
->>
->> 2 pixels per clock for uncompressed with widebus (only enabled for DP
->> not DSI)
->>
->> 3 bytes worth of data for compressed without widebus
->>
->> 6 bytes worth of data for compressed with widebus
->>
->> When compression happens, we cannot quantify with pixels as the boundary
->> is not defined with respect to bytes.
->>
->> You brought up uncompressed in your below comment so I assumed your
->> question of /2 was about uncompressed too.
+On Fri, Jun 23, 2023 at 07:42:08PM +0200, Andrew Lunn wrote:
+> On Fri, Jun 23, 2023 at 12:29:15PM +0200, Michael Walle wrote:
+> > If there is an PHY which gets confused by C45 transactions on the MDIO
+> > bus, print an info together with the PHY identifier of the offending
+> > one.
+> > 
+> > Signed-off-by: Michael Walle <mwalle@kernel.org>
+> > 
+> > ---
+> > I wasn't sure if this should be phydev_dbg() or phydev_info(). I mainly
+> > see this as an info to a user why some PHYs might not be probed (or
+> > c45-over-c22 is used later).
 > 
-> No clue where things are going wrong, but you either avoid or
-> misunderstand the question.
+> The information is useful to the DT writer, not the 'user'. I would
+> assume the DT writer has a bit more kernel knowledge and can debug
+> prints on. So i would suggest phydev_dbg().
 > 
-> (Talking exclusively about compressed data here!)
+> > @@ -617,10 +617,10 @@ static int mdiobus_scan_bus_c45(struct mii_bus *bus)
+> >   */
+> >  void mdiobus_scan_for_broken_c45_access(struct mii_bus *bus)
+> >  {
+> > +	struct phy_device *phydev;
+> >  	int i;
+> >  
+> >  	for (i = 0; i < PHY_MAX_ADDR; i++) {
+> > -		struct phy_device *phydev;
+> >  		u32 oui;
 > 
-> pclk is determined based on the number of bytes.
+> It is not clear why you changed the scope of phydev. I guess another
+> version used phydev_info(), where as now you have dev_info()?
+
+I think it is so it can be used in the dev_info() call below.
+However Smatch has it's doubts that it is always initialised there.
+
+  .../mdio_bus.c:638 mdiobus_scan_for_broken_c45_access() error: we previously assumed 'phydev' could be null (see line 627)
+
+> >  		phydev = mdiobus_get_phy(bus, i);
+
+Line 627 immediately follows the line above, like this:
+
+		if (!phydev)
+			continue;
+
+> > @@ -633,6 +633,11 @@ void mdiobus_scan_for_broken_c45_access(struct mii_bus *bus)
+> >  			break;
+> >  		}
+> >  	}
+> > +
+> > +	if (bus->prevent_c45_access)
+> > +		dev_info(&bus->dev,
+> > +			 "Detected broken PHY (ID %08lx). Disabling C45 bus transactions.\n",
+> > +			 (unsigned long)phydev->phy_id);
+> >  }
+> >  
+> >  /**
+> > 
+> > -- 
+> > 2.39.2
+> > 
 > 
-> When widebus is enabled, we transfer twice as many bytes per pclk cycle.
-> 
-> Can pclk be reduced by a factor two, as that should still be enough to
-> transfer the same amount of bytes when widebus is enabled?
-> 
-
-I dont know where the misunderstanding is too.
-
-I already did answer that pclk can be /2 for uncompressed.
-
-But for compressed it will be divided by the compression ration.
-
-What is still missing here. Please clarify.
-
->>>> We tried our best to respond and explain to all your queries both on the
->>>> bug and the patch but i guess it just kept coming :)
->>>
->>> Then send less patches!  As long as there is activity on the mailing
->>> list there'll always be questions going back and forth, and I don't
->>> think that's unreasonable.
->>>
->>> Unless you want to push patches into mainline without questioning.
->>>
->>
->> the comments were bordering the line of becoming irrelevant to the
->> patches like discussing video mode on a command mode patch when we had
->> explained many many times that we did not validate them.
-> 
-> You(r team) came up with irrelevant video-mode checks in these patches,
-> and you keep bringing up topics that I did not mention (such as
-> suddently talking about uncompressed formats above).  Stop pretending
-> there's any nefarious intent here unless you intend to push external
-> contributors away.
-> 
-
-There is no nefarious intent. If it was there we would not have spent 2 
-weeks to answer every question on the bug and explaining every math 
-about it despite calling our patches hacks.
-
-So either something is still missing in our answers or the questions.
-
-So please ask the question whatever has not been answered one more time.
-
->> I dont want to add more comments to this. Lets stop discussing this and
->> focus more on this patch.
-> 
-> Perhaps if you answer the question?
-> 
-> - Marijn
