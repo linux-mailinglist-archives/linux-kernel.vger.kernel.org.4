@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1134973B1D6
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 09:41:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E88B73B1D8
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 09:41:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231424AbjFWHlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 03:41:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36588 "EHLO
+        id S231449AbjFWHlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 03:41:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231414AbjFWHlj (ORCPT
+        with ESMTP id S231433AbjFWHlm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 03:41:39 -0400
-Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2045.outbound.protection.outlook.com [40.107.247.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 405C719BF;
-        Fri, 23 Jun 2023 00:41:38 -0700 (PDT)
+        Fri, 23 Jun 2023 03:41:42 -0400
+Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2043.outbound.protection.outlook.com [40.107.247.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D0621988;
+        Fri, 23 Jun 2023 00:41:41 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BM8yc7DMeld/tWw96Sjnad52WFWtDFdZj7RBewWqssDKJKE4QLPxDejXqtvHpwCiLZHCNNfSjzppu+3vsIt53HM6/qWYg5zx/5kvm917/bg/IXF9d+QRs2Y0mg68/EbNGhoufzCxwUZkarvkR9ZTYRfW53NOomw+T6W2t1vIcDzTavwjgZ1Yi02HCyN7EletczJfFgVY1geCXhGT0McaU6Qduta940T/fpTIvI3JAb7nfe4Try0p4tt18Lt9OdgGhUg51piXc4U9sSKZUsgFMAIRUILMZxXFOXPXiHCstQT3ZsiRA8OtPFjwDeJ+IA1AJyeWxet1uO6QcNUuqao8/Q==
+ b=aVrK6tOiYGVGPLJcMBHnM7DQhv14BXvesTOlTDnDQmxzUwpTSdw9rdF4+kBY/ircZ0oLwtwCGC//GufxYDcOQOT5NertkLzil6k/ymzVORHJOxuqsVQ1+phwXQILmSCeyGQ0rI6LUdyTfq9vTfkB3ol7zprdL+/W10o4UEZTlBTeKd6Q7kAD9GIYxO56nREO+GCItZY/qk+MYywoHICxoFtteavrfvtI2NpN08W1po2f6RFb06l0Y34gcwJSMW2kGhMdtZYvEWHRXe5bJSJ3JthIc9FeQpT2TVO9aUESPuUy9yoVkmD7se4lZ0aJmkNem/iswcxqy9XA2XRLNSV1Fw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=F27nP82DYzFtxAIMeBG2K1lb9MDVi5jZlZntDP6gI6A=;
- b=kIBwz9tCdhY+0b5BjgU8Wh3ikSt6NnxwbKasOf1wr1C6sTl8NJrwGxmAAjK3WlhF2VuI+54jsMlWLHUijebE+d/BtMQhjtGVis/ZN6eqmmdgiIvxgBkpslz52+QB/qjFBxZmgT5sVINe3EODjIVdMlL2WuOgUxP4S8qTz0zPALXsjpedln1uFIkEsVEXzIGX8eRcbnkdvmnr05BHr6j3THjbwix3omoV+6MG0HKdPZ4C6S1s9buUKEgEOIhHluK68jxnHaBlbXU/y0YIoGh4knt8ymfD31cieGaKrRiQKhpKxY70VMZgx741Hq6/6kX82WiHIW6whQBP2e0Wum6ljg==
+ bh=LxMfKSZjw9iJJALUQPrHA+AaTIEfFkPKjuaWkV4v0zk=;
+ b=j2F4XOqPH7LDuqVNes/2I/nozKXgpjC8/71H9EC1MhSlk+ehbEK1TANT65k9T5BNKgqxSiNQWE3JzNcwWBpnr82eo5EdpwM9FLWWkyHFA580krAIZe6bcNw+jCMSULvryD88yTFXfHWTrp+TxJxy8TGyksrgJ+LYdpqyJmpjCP/giZhzIBv+1Rjmu0kTw2tzpqUZDYtguNEXiIMwnO/fW3+GAtV2s7qNpX2EiFSNNFoeZXsnSjRX/rb0daAXABhoboPEBz5rqB/PXhVboDGLmdYN2DXgNiCGW6AqFUXpRcr35BG3EBgNzXMrFCbY+Na+5X+Ym2vLsYeH0FrS6syiiA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
  dkim=pass header.d=oss.nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
  s=selector2-NXP1-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=F27nP82DYzFtxAIMeBG2K1lb9MDVi5jZlZntDP6gI6A=;
- b=lNP+aLRiR5z4LQ5MUaP2fX08QRN//CUX0EnZYjej7qUxTtOQbgIebIjb1Gr9EfN3Wlj1K4fcAu4vznuFKf/M1FbO670aHe+duh3E/StexWhtIHBqjG+tkTdhfDgeFu6SaMefq0C46ntXgvPmCC5jR1VgiTNI5mVAmg4asYETFzw=
+ bh=LxMfKSZjw9iJJALUQPrHA+AaTIEfFkPKjuaWkV4v0zk=;
+ b=dm+ZWRlu1UUemrRlUpaT7Bxjdsu12ESVC+IrczW77/E5R/aG9ankafyhFHjEShqzcnEROskSr26gQRnhGAZBYvgkSapDpLHxTIojXVvre4nkyH5hlc4USQA2IL/scCVa580PBaHCnVbTk9yiPWkRKj9Ed48S+lywYi/uFvP+0tg=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=oss.nxp.com;
 Received: from AM9PR04MB8954.eurprd04.prod.outlook.com (2603:10a6:20b:409::7)
  by AS8PR04MB7557.eurprd04.prod.outlook.com (2603:10a6:20b:294::5) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.26; Fri, 23 Jun
- 2023 07:41:35 +0000
+ 2023 07:41:38 +0000
 Received: from AM9PR04MB8954.eurprd04.prod.outlook.com
  ([fe80::5356:c79f:ef9f:dc29]) by AM9PR04MB8954.eurprd04.prod.outlook.com
  ([fe80::5356:c79f:ef9f:dc29%4]) with mapi id 15.20.6521.026; Fri, 23 Jun 2023
- 07:41:35 +0000
+ 07:41:38 +0000
 From:   "Radu Pirea (NXP OSS)" <radu-nicolae.pirea@oss.nxp.com>
 To:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
         davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
@@ -48,10 +48,12 @@ To:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
 Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         sebastian.tobuschat@nxp.com,
         "Radu Pirea (NXP OSS)" <radu-nicolae.pirea@oss.nxp.com>
-Subject: [PATCH v2 00/13] Add TJA1120 support
-Date:   Fri, 23 Jun 2023 10:41:10 +0300
-Message-Id: <20230623074123.152931-1-radu-nicolae.pirea@oss.nxp.com>
+Subject: [PATCH v2 01/13] net: phy: nxp-c45-tja11xx: use phylib master/slave implementation
+Date:   Fri, 23 Jun 2023 10:41:11 +0300
+Message-Id: <20230623074123.152931-2-radu-nicolae.pirea@oss.nxp.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230623074123.152931-1-radu-nicolae.pirea@oss.nxp.com>
+References: <20230623074123.152931-1-radu-nicolae.pirea@oss.nxp.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-ClientProxiedBy: VI1PR0502CA0011.eurprd05.prod.outlook.com
@@ -61,52 +63,52 @@ MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: AM9PR04MB8954:EE_|AS8PR04MB7557:EE_
-X-MS-Office365-Filtering-Correlation-Id: eb8e9db1-95b0-489e-2d83-08db73bd453d
+X-MS-Office365-Filtering-Correlation-Id: 4129872a-cb61-49be-4d27-08db73bd473b
 X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: JU5Nnnda2twatTUNi+9oR8o8yuof4lsf1HArA4n42qKqL7BuCuYU17ZCz3YYOKUfo/mApNMY7dynngzAk5ccs5GfIm3O02GR0JXOyM+MoTXfEcVsM9UOeiSTatir1Oksr6pOFTZ9gm+VaAe8T+IX1eL24FmrpWcIaGQnzHYCPaNG+YBVMZeD2flLnNAdKb8MjWYh+MT3CzsRnkIP3TDbmW+Lm9N2iMNrk3FDGRL9hhAFuNNXwffTlk4hm2IFc0S0Dwz4soOLjOgnPRd+hYq6cK8C+cTPxQ/+EGMN3qVrqLoJ6gWNp9RqWzjv4uVwUoM2e29EAxR7lkCh4xLjDpq1nb5qxjdmBfboXKyEI4ikL634k9xAtglSF8OtnhF1dBiAyZXuaoTWFRypbwHOQXOfcaI/Fs6hOVGDX2yhJN9JaW1WpMXjDPYVDuRSZRgKL2JVCLtVzeaY75RHGUpyBC7lXJehFSJwnbd9vpeZpHW7NEuz6PwbJNB6OY2jE0hdqJqGdo7Ro7A+ck20DmKxi3e9D64GhMKbQUp697WgLCFjXh8k84vYxVejOlfmBXWWgLdKTaCEjODouVCyeWQlmTn+sTUU/+/iDGbHS5H+FrQmJSQWhpGRVFvpExzz6dsj+JRu
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8954.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(376002)(136003)(396003)(39860400002)(346002)(451199021)(41300700001)(8676002)(316002)(8936002)(6486002)(52116002)(66574015)(66556008)(66946007)(4326008)(66476007)(86362001)(6666004)(478600001)(186003)(26005)(6512007)(6506007)(1076003)(83380400001)(2616005)(5660300002)(2906002)(7416002)(38350700002)(38100700002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: XuanLkobmcXgC89q4sCh+1Nt9gpsB5ZODrfkrEHGUNOinUVNgM83kCZyPW1ZhfBeZR6XETk8ILHRiedaA9qEYo3D/zOTIz1A7pqzVA957UUKh4iDdtcgHZ/HiLjjFH3bMdMQEe/UGYViPCOcIKYghp1Xcyd10mxxHE/AdHK630eVT9eiWQvtUzl3Rt4kD4B4N99FUYCge1DMyCU9UP2eFtAhevpoJ60hy5CTPlBHmG2GKiV0lYBLXM5RSrmMtf3/0equgFg36vpRVUfgUOI5KgpBk967CIJCr2RfRvxyaK9pRrC2qTwXJ8Q4AWvmhzSTu/NdMHKJUCW2+5AN4Io7TqZToqnuu41zB9KVHobHgKfnOQVXNZup50NZoMEkOsljAMC4EmQNqZhAUWSxDau0JQUk5VDLn4wRlp7jW9Zp8GzQyzjZxbnOoeu13geyLA9vZT0UCAW19MSkvk8r89fbQxOJNruIooiG2aNSg9VG/7OGu023of1ujU+CaiIC9cQxGvNp+qoupBpsWNO2oHvfGdZ/m97ieIx5dkte4VYPw4ddFXaVO1ZROItineT//WopPkVhDAcVZLKSqKz9sxmpT37Ra2L7z6oS1bL8mN/zgBJ3jH6gscaxMvEgwz+f3K2B
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8954.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(376002)(136003)(396003)(39860400002)(346002)(451199021)(41300700001)(8676002)(316002)(8936002)(6486002)(52116002)(66556008)(66946007)(4326008)(66476007)(86362001)(6666004)(478600001)(186003)(26005)(6512007)(6506007)(1076003)(83380400001)(2616005)(5660300002)(2906002)(7416002)(38350700002)(38100700002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?febRcSKboq4DZstcR3XTlp9Wt3dGa/XE1zEHKmVA6b+B1g+HztMPDFhVYy5w?=
- =?us-ascii?Q?wmlV4IK1M4LlYE1nM7uUF0DPHMK1O0EHdKsYlgN0CiwB7Q5wdmlHnSYcq0Ho?=
- =?us-ascii?Q?P6DU6EoZMfXQ+4kvrAIzfc5WqBIaq7fG6QqRAua8SVJkttSwVIdvJmQ6DIQl?=
- =?us-ascii?Q?izwVyVZ97KNseiKnLSY4+UEIwP59A/rcE/ZS3Ino1IQ6Lpc6KFPOQC76Z4N3?=
- =?us-ascii?Q?YTYlShFg+H1Xp6JP//9G7ncog6/rUGFh6g8x9e35/EiLrFG9hdXqwWuWkE+V?=
- =?us-ascii?Q?e4iP7RMFLZJV0q46+/i5fBCmusAB/XGCVuupz0mDKKOUBW/NNjwx8IBB4iD5?=
- =?us-ascii?Q?0CX13VwpdX9WesenjDhlXr3wnQnDLxzeAL+z68uF0pV2/+5Q60LKx0eXZ0yj?=
- =?us-ascii?Q?GWMp6I8XDxEN2FjJdLBpz3cyxczCpAovYin82A6kebZqFHM2IlrSRaDV0eFY?=
- =?us-ascii?Q?DdOQRK+waxni7gUeRL+mUCHmFVfvI6clwFMp0Iz/GrUV6raxRJF/C0yVeo2Z?=
- =?us-ascii?Q?GhjH8P6UYHcgusklnmEjhQLtV3HRszXfqR7MG8+Vb43/KOla/Z2A7mrYuakB?=
- =?us-ascii?Q?Ujp61fFYGa08140tEMkV6oetdQAT1VD8Ag1ODPc9pWyd8UBUb5Omp1gK0rHg?=
- =?us-ascii?Q?dVMGdOu3bxYccweKFCzwwEgEBMfgSDWg1cYpDJRA7IaQrJw9lxKpI9y5ey5/?=
- =?us-ascii?Q?17v/83ScK81KwIs1Qa2+WBEOkRCbX6BjZ4RHzYpFETEmGAaCy5JSe+ykmyQi?=
- =?us-ascii?Q?61dskA9ZYc/dBFmz6McGsSS36WjSBRrjJ3C/yyLnSGicZvGHbmSUVzKY5SGf?=
- =?us-ascii?Q?EWitSyRquQf7RpkERNfzNfd2JJ5UMi+sl2ff7y9ilE6c0ERVCd92DVHxv/tP?=
- =?us-ascii?Q?RXwNp/NYSgWrijX6LgshBHRwSUNRJg5MLqtE/gTfr8R1sQ9z6I5ZYCcu0zqq?=
- =?us-ascii?Q?ADpqF1g4GYNwhXESUFaANBUiP07XK4BaokzaRJMa8YKd3T3yVxx4b8hfYJSH?=
- =?us-ascii?Q?fUuHnUrc88nInTFGogfnLij9lzcaMH8B+inKKRq4VueZx+Dr8ru8YsENQ5KD?=
- =?us-ascii?Q?YGGFMZy3UtHfqNNe6eU0t0Om2lvY2EeQowWnTJJ39lyKAUbzOlM2+ebS4G87?=
- =?us-ascii?Q?kh8IngLvhcLWODdSY3yT+TLdnfVUWyP+0O7mf9Z5aByY9NBzmyye9AklbfHZ?=
- =?us-ascii?Q?SQ7lbDTL5aaP66895kDo7kLCm8HGfP7v+iiOpChYhHmmRzm9IyxSpwuVrTMU?=
- =?us-ascii?Q?iUcFN/ZSm4VfXX/J2ZzgSXjh0SQ25ZwDXjR1FeDHXlPQC24jeTYEHKO71Ao1?=
- =?us-ascii?Q?G0h4ofWTb5Qnc+BqU0lpJU5P7jqzLuDdDO4SJLjhAo18FKm5i4UGMAuOH7fG?=
- =?us-ascii?Q?C1GP11fVz3zS+OKD2fUpLtztWgAvr4m8K3tUi9hkJVB2DP6MLjJoZPNMqKsW?=
- =?us-ascii?Q?dFnYo11XvW5CUHopn94JDzzm1vyak3OGqLGLsVNziAHFmGU3E5HJNX3FXR3x?=
- =?us-ascii?Q?e5gpZuaAB65szBhE2rkTVjdudTTAOsmagaD/0tCrvSvJeD4CgOhQzpEopJ6a?=
- =?us-ascii?Q?rY7Mr0gzptTI0OLWjuIsAYSsgd8+Wwy9VwvEvGE1NHfXkIQMUNe2R1SusmSZ?=
- =?us-ascii?Q?lQ=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?1+9N/TxgN/Pla/Y6C11Mn/Eh8TrRayts3FLhfTaLdTtQShpPWD/iZqHaROwC?=
+ =?us-ascii?Q?Wprp7zp4iuuP2cJ6eTHNF7dU4qd2R4KenWzym/LJW1cx+QIHkbTvZIxQN37e?=
+ =?us-ascii?Q?nbAJD/TsNFUTJ8PJEOKKLH0afxA9SRpRg6MaWhurp2oFwj+iJxM7Zfd/m62J?=
+ =?us-ascii?Q?cAuYqHxxmIlGf3em4Vqf280YY36+87vWne6hjr3DTCRaTe3YyF4Jj3vtSOju?=
+ =?us-ascii?Q?oL9MKWNIhsUhXRkQmJb6dUPh7YTkX4RNLP0GagAyO1bodXbrubxpbYazAfXd?=
+ =?us-ascii?Q?kCv00Eb3dGFCEHRPlWEY9F6+EY9NhIENggNth8w9fpHcMMZhi+M7OH05e4yY?=
+ =?us-ascii?Q?ahDEMqjK7lMutL8cXnX4WKvdup/dD+pDVPm1z0QfGEC/0nfLlN9177Oo3pHE?=
+ =?us-ascii?Q?YhjyY+9qsx58JE2BX5O5QoKWTgOeOdOnXsPKPBsZJUuFh09T3kn6M5uwLRSb?=
+ =?us-ascii?Q?taLO157vplGTNdr8QUznIhiCtilFPiqRwk+VCsjcgRZZ4Z1JJbWgjkZx/VjF?=
+ =?us-ascii?Q?rj88WnUQR/ubtzEb2UXYiLMGVGPrSEEwAew2EorfO7sfNjNvKxaeEwfl29Jc?=
+ =?us-ascii?Q?ZfNmZ//dFoPgaXKNqVTnQCKiPOdJTrMLg6T3KRc/e1NOSSUgi4vjLYg85oIh?=
+ =?us-ascii?Q?EISZOsiS0Zv/UxT4GogQxGMn/yf6kcr0yQrJiE/v4zkzLxrc5DNmJCwelkCg?=
+ =?us-ascii?Q?IsEuozDK6yzhyWXXB9sc318FMqyOxS6j8QbMOeIJQxjm0mToIIZIOJ+0GT+J?=
+ =?us-ascii?Q?6ktiIn9TvgIMGrC/Wz883v0QiBjfoSew/akl4VluIFWmPYRaupFWgnC0JwdT?=
+ =?us-ascii?Q?Lmae1QhXm2pfpdnSamDQyNnplJUK+On+si7uXbQXPLcf08j1suVgSjbSYVoY?=
+ =?us-ascii?Q?GCLteULzKqPnulC6iYeWZoBvGqEaVCzaLUMQTB+RVXQruqP8dJ2wb8KAfYH9?=
+ =?us-ascii?Q?FQ94OBsl5Vm6jeyvv8TcI9AGGX/Qi8e8gfQAz8cdBtMByzKxcOkuP0gAjy0A?=
+ =?us-ascii?Q?1WGnLT1h7CPSXWEPIoP2ZhyQMyYTfEWrYrkqsgm6hGXbbrcbrbr2yyl2Jyc7?=
+ =?us-ascii?Q?7AfQ92q+EgvZbYkC8kwboLwPvvBMBaOse5lONTT0ojjKxK8nO6zDftY4Oj9F?=
+ =?us-ascii?Q?kIc8TZEeLrt7t71matwBDZk9flP30sKJU9kQHpHnvzMqBfeZ7RiNT9YaH/Eu?=
+ =?us-ascii?Q?XGbi42NiZCGRZa3bGaJSJk2qv4Hu0tm3pHGXOrHPGzXaTgpZ7Ase1XmqDrwR?=
+ =?us-ascii?Q?LlqU0gYYnGg2JftmEbmtp9nFHwvwcHn/BvwPy5vJzhJ+OP6I8+ml/P+EcT5n?=
+ =?us-ascii?Q?om9ovYwUKOsPcIY4ZbKTQlRq9B515Em7qWKi016sCMtpulFmRlouq/Bwc+oU?=
+ =?us-ascii?Q?N6dMsPJ9AdfLp/lc00RcEI/bdRc8y4EIS9/9T6RdXlsWxjzArqB060MN+kbL?=
+ =?us-ascii?Q?M3OpllJVo3Ul7rXymWk9esOqpvbp8A+iqJHL0zBdprBQ7crKxy4UsScteeXp?=
+ =?us-ascii?Q?FHZjw9Ki2Soxib35+Z84E0Q8LW6xOCI4fYPw6D0kXAcFxVwl6y3eCGjvFXbj?=
+ =?us-ascii?Q?ORoDaKshNaj6WijJkmqjNjJWUtZN6MjO5nIj34Cf9oKT3eEGiQpaUvIbBqrQ?=
+ =?us-ascii?Q?5w=3D=3D?=
 X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: eb8e9db1-95b0-489e-2d83-08db73bd453d
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4129872a-cb61-49be-4d27-08db73bd473b
 X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8954.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jun 2023 07:41:35.3059
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jun 2023 07:41:38.5838
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: VXEyMkUtJqwFbC/tc3Y7p8d/xf/sXFDAkCFuBaPdHvXMaPBn7IKX7sdJ157+uECuzSiBvGxy+Bk/lsi+r0GZLpi3uY/v/E1iEPZGg+0MD8k=
+X-MS-Exchange-CrossTenant-UserPrincipalName: LNSqX4G+znOC7LUE1KNeKgHXfIPrCK9zoe9rOpHCnG/sTvheayni9Ce0Ski+IInLQL5KQGCSFm3CUISlLzs5AVmgT0BIcMe9qFZF8JuSh3k=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB7557
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
@@ -117,60 +119,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello everyone,
+Remove the custom implementation of master/save setup and read status
+and use genphy_c45_config_aneg and genphy_c45_read_status since phylib
+has support for master/slave setup and master/slave status.
 
-This patch series got bigger than I expected. It cleans up the
-next-c45-tja11xx driver and adds support for the TJA1120(1000BaseT1
-automotive phy).
+Signed-off-by: Radu Pirea (NXP OSS) <radu-nicolae.pirea@oss.nxp.com>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+---
+ drivers/net/phy/nxp-c45-tja11xx.c | 77 +------------------------------
+ 1 file changed, 2 insertions(+), 75 deletions(-)
 
-Master/slave custom implementation was replaced with the generic
-implementation (genphy_c45_config_aneg/genphy_c45_read_status).
-
-The TJA1120 and TJA1103 are a bit different when it comes to the PTP
-interface. The timestamp read procedure was changed, some addresses were
-changed and some bits were moved from one register to another. Adding
-TJA1120 support was tricky, and I tried not to duplicate the code. If
-something looks too hacky to you, I am open to suggestions.
-
-Cheers,
-Radu P
-
-Changes in v2:
-- dropped "net: phy: nxp-c45-tja11xx: fix the PTP interrupt
- enablig/disabling"
-- added error msgs to nxp_c45_set_reg_field and nxp_c45_clear_reg_field
-- used phy_err instead of phy_warn in nxp_c45_write_reg_field and
- nxp_c45_read_reg_field
-- removed null checks for .driver_data and its fields
-- added 100BT1 and 1000BT1 features bit
-- replaced .features with .get_features
-- dropped changed on TJA1103 EXT TS behaviour
-- improved timestamp reading workarounds
-- merged patch "net: phy: nxp-c45-tja11xx: timestamp reading workaround for
- TJA1120" to 9 and 12
-- implemented PCS reset workaround in link_change_notify callback
-
-Radu Pirea (NXP OSS) (13):
-  net: phy: nxp-c45-tja11xx: use phylib master/slave implementation
-  net: phy: nxp-c45-tja11xx: remove RX BIST frame counters
-  net: phy: nxp-c45-tja11xx: add *_reg_field functions
-  net: phy: nxp-c45-tja11xx: prepare the ground for TJA1120
-  net: phy: c45: detect 100BaseT1 and 1000BaseT1 PMA abilites
-  net: phy: nxp-c45-tja11xx: use get_features
-  net: phy: nxp-c45-tja11xx: add TJA1120 support
-  net: phy: nxp-c45-tja11xx: enable LTC sampling on both ext_ts edges
-  net: phy: nxp-c45-tja11xx: read egress ts on TJA1120
-  net: phy: nxp-c45-tja11xx: handle FUSA irq
-  net: phy: nxp-c45-tja11xx: run cable test with the PHY in test mode
-  net: phy: nxp-c45-tja11xx: read ext trig ts on TJA1120
-  net: phy: nxp-c45-tja11xx: reset PCS if the link goes down
-
- drivers/net/phy/Kconfig           |    2 +-
- drivers/net/phy/nxp-c45-tja11xx.c | 1134 ++++++++++++++++++++++-------
- drivers/net/phy/phy-c45.c         |    8 +
- include/uapi/linux/mdio.h         |    2 +
- 4 files changed, 873 insertions(+), 273 deletions(-)
-
+diff --git a/drivers/net/phy/nxp-c45-tja11xx.c b/drivers/net/phy/nxp-c45-tja11xx.c
+index 029875a59ff8..41b8af0547e4 100644
+--- a/drivers/net/phy/nxp-c45-tja11xx.c
++++ b/drivers/net/phy/nxp-c45-tja11xx.c
+@@ -19,13 +19,6 @@
+ 
+ #define PHY_ID_TJA_1103			0x001BB010
+ 
+-#define PMAPMD_B100T1_PMAPMD_CTL	0x0834
+-#define B100T1_PMAPMD_CONFIG_EN		BIT(15)
+-#define B100T1_PMAPMD_MASTER		BIT(14)
+-#define MASTER_MODE			(B100T1_PMAPMD_CONFIG_EN | \
+-					 B100T1_PMAPMD_MASTER)
+-#define SLAVE_MODE			(B100T1_PMAPMD_CONFIG_EN)
+-
+ #define VEND1_DEVICE_CONTROL		0x0040
+ #define DEVICE_CONTROL_RESET		BIT(15)
+ #define DEVICE_CONTROL_CONFIG_GLOBAL_EN	BIT(14)
+@@ -988,72 +981,6 @@ static int nxp_c45_cable_test_get_status(struct phy_device *phydev,
+ 	return nxp_c45_start_op(phydev);
+ }
+ 
+-static int nxp_c45_setup_master_slave(struct phy_device *phydev)
+-{
+-	switch (phydev->master_slave_set) {
+-	case MASTER_SLAVE_CFG_MASTER_FORCE:
+-	case MASTER_SLAVE_CFG_MASTER_PREFERRED:
+-		phy_write_mmd(phydev, MDIO_MMD_PMAPMD, PMAPMD_B100T1_PMAPMD_CTL,
+-			      MASTER_MODE);
+-		break;
+-	case MASTER_SLAVE_CFG_SLAVE_PREFERRED:
+-	case MASTER_SLAVE_CFG_SLAVE_FORCE:
+-		phy_write_mmd(phydev, MDIO_MMD_PMAPMD, PMAPMD_B100T1_PMAPMD_CTL,
+-			      SLAVE_MODE);
+-		break;
+-	case MASTER_SLAVE_CFG_UNKNOWN:
+-	case MASTER_SLAVE_CFG_UNSUPPORTED:
+-		return 0;
+-	default:
+-		phydev_warn(phydev, "Unsupported Master/Slave mode\n");
+-		return -EOPNOTSUPP;
+-	}
+-
+-	return 0;
+-}
+-
+-static int nxp_c45_read_master_slave(struct phy_device *phydev)
+-{
+-	int reg;
+-
+-	phydev->master_slave_get = MASTER_SLAVE_CFG_UNKNOWN;
+-	phydev->master_slave_state = MASTER_SLAVE_STATE_UNKNOWN;
+-
+-	reg = phy_read_mmd(phydev, MDIO_MMD_PMAPMD, PMAPMD_B100T1_PMAPMD_CTL);
+-	if (reg < 0)
+-		return reg;
+-
+-	if (reg & B100T1_PMAPMD_MASTER) {
+-		phydev->master_slave_get = MASTER_SLAVE_CFG_MASTER_FORCE;
+-		phydev->master_slave_state = MASTER_SLAVE_STATE_MASTER;
+-	} else {
+-		phydev->master_slave_get = MASTER_SLAVE_CFG_SLAVE_FORCE;
+-		phydev->master_slave_state = MASTER_SLAVE_STATE_SLAVE;
+-	}
+-
+-	return 0;
+-}
+-
+-static int nxp_c45_config_aneg(struct phy_device *phydev)
+-{
+-	return nxp_c45_setup_master_slave(phydev);
+-}
+-
+-static int nxp_c45_read_status(struct phy_device *phydev)
+-{
+-	int ret;
+-
+-	ret = genphy_c45_read_status(phydev);
+-	if (ret)
+-		return ret;
+-
+-	ret = nxp_c45_read_master_slave(phydev);
+-	if (ret)
+-		return ret;
+-
+-	return 0;
+-}
+-
+ static int nxp_c45_get_sqi(struct phy_device *phydev)
+ {
+ 	int reg;
+@@ -1355,11 +1282,11 @@ static struct phy_driver nxp_c45_driver[] = {
+ 		.features		= PHY_BASIC_T1_FEATURES,
+ 		.probe			= nxp_c45_probe,
+ 		.soft_reset		= nxp_c45_soft_reset,
+-		.config_aneg		= nxp_c45_config_aneg,
++		.config_aneg		= genphy_c45_config_aneg,
+ 		.config_init		= nxp_c45_config_init,
+ 		.config_intr		= nxp_c45_config_intr,
+ 		.handle_interrupt	= nxp_c45_handle_interrupt,
+-		.read_status		= nxp_c45_read_status,
++		.read_status		= genphy_c45_read_status,
+ 		.suspend		= genphy_c45_pma_suspend,
+ 		.resume			= genphy_c45_pma_resume,
+ 		.get_sset_count		= nxp_c45_get_sset_count,
 -- 
 2.34.1
 
