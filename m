@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A3DE73BB43
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 17:12:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFF8473BB45
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 17:12:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231249AbjFWPMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 11:12:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57852 "EHLO
+        id S232574AbjFWPMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 11:12:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232528AbjFWPLX (ORCPT
+        with ESMTP id S232211AbjFWPL1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 11:11:23 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0131D2D7C
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 08:10:58 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5766e49d151so17938087b3.1
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 08:10:58 -0700 (PDT)
+        Fri, 23 Jun 2023 11:11:27 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F7630D1
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 08:11:02 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5704991ea05so10979557b3.1
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 08:11:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687533048; x=1690125048;
+        d=google.com; s=20221208; t=1687533051; x=1690125051;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=T40jLz8j0sR+fx+XMBB91BKek6keV7mMBCBlptKA/U8=;
-        b=GnnRHZDe78YBLKXJsdQtn7wz3MkeuX+BclwIgqwJFM92Ezl8Gmz/QpSXK/IrbzRumx
-         UCPt21Pys2hdv88fERmfDTCmDXa7lquNN3A9HTzsh6jP/LxNjSQ9QBmcAzFlvJIUL//R
-         tiFvjot++QA5yrakJedMekfntctSIgo7XdYLzDffzizBo6h79Uqpu7Xzaz0EVaejgAx7
-         OkB0v2UAeKvPpJTUWk0PGQN2kQuOKxGchi+pha+AvghMsYsGT4xnH4eBiEJm1VHaqg6l
-         r1KGooFP6ySFnWuxCIHVNPsGFbzcv5Z6j6muXmoeq48xqlx5avSulHon1VMKeI6xhRu8
-         O4jQ==
+        bh=cWOe4G+wpmnb5gd06s9NrCHMZgll/w3qfqnd7bhy3bc=;
+        b=Jj/yxG+yIyl39+9PshdtRNnQl83V3MTYlDVNl2fs3iI/PzAP7RW+vmUWf0Jq5kskqI
+         MAqHQHyV+XcyIU9ROSTPZNbAKeZgucUc5lJA+Ow7aq/A3kQADTei3VqyDa2QfhEXO7Fb
+         Vxzr+Hk82hDzH1ANycuG1Xy1obuPKlPXDgzYTLk9o3FL51Vxv2xG8PC/KVsmp9iXTCei
+         7vaUP0erVNLILVods2i8ukaat4uzp0cG1UyEq2usWryDXM9FjjY/i/XIX85UAKX+lVIL
+         BxRL/43kV2S06krC83sjJwXjNCJcIH6hGMkQznNvpQGS8xagGSm86mf6Hcy91QxwV64z
+         lmfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687533048; x=1690125048;
+        d=1e100.net; s=20221208; t=1687533051; x=1690125051;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=T40jLz8j0sR+fx+XMBB91BKek6keV7mMBCBlptKA/U8=;
-        b=PJZzw/8M5WiB3S2LnxT/vUE70z3VceV4gO7DyKsMKTEC34XaKZHf6lQ8b2rszQfO6x
-         SpyPrtHKQz23towyW0C9Ol7xnpWlzMY/s26nT5f9zMez8Z3U65UKrivcot69C2S6J1HE
-         wWqbdIPhid20dEzLlJrjiECuYDFE0LMFYHXou+uCQXjqoXuxu9VTm7/md0QgIMeQIQuC
-         cxX4+y6z4uAcL4m6pRhOWqWZ2C1/3RAL7msIqSP90ZBze8o+gMGZW1VWEq2mtNz0nCnj
-         ONcjhjRdhTNVmF9x1y0YAmC0+iQb3Iv6JVBq0sElQXhTppmxhQ0khTzqXTO1iVvgplp2
-         1mvA==
-X-Gm-Message-State: AC+VfDxAOfAFvRhWO5OEN6ncBGY/DRacLLQKpojgZ5CJ9S21IuMhQ2EC
-        wN7qY0Et1tN1PrZGu6zbYDNw1jnVUqS/
-X-Google-Smtp-Source: ACHHUZ6xY5RzJ8jDAd/nnL1MFEmFnRw+b+2byYBxQxlp3osCgR5yLOzm7tYWrL9Eq5BCrSo55OJeCuPi3wlP
+        bh=cWOe4G+wpmnb5gd06s9NrCHMZgll/w3qfqnd7bhy3bc=;
+        b=dYhPx1lC69lPUb00ibTdBeeDbmZlpI2+BOIgdwL4P417BveGzahAPcav9e+GXt0eAK
+         col53/zijgBOIikYtqDmePiizJ8maFoC29TPjVrG/aKLI6uFOAdQEl7kdD7f62ASiCgq
+         t7mmM7pjUu2m1xFyr2cxeKx6pRcSeQW79Hq1QpBNjAKTcdvotOJcVekh5nWNonLbYo1g
+         hbUrNxXnu/rVZGxj0EDhUguhX/T2znAPvcz/5I5OCCiMe1ftdblYjiZcxKM4HmqMNKcN
+         Ou1l2fAyFIJf3cpZ3UhkIc5xJcVuG4o+Q8wLcEGRmjVUSqzhtAVTimaduFHxnvghGTSW
+         IziQ==
+X-Gm-Message-State: AC+VfDza6tM5ueThz46HajGO/oTVy/02l20u5mK/tA+7cT604Z0rcVSi
+        V/bG96O9WqWgDsPSa+NcRLk+UiC6RnfO
+X-Google-Smtp-Source: ACHHUZ4gPafdv3C+UoOxNcOU9t72cQxJhDlpjLvIlSWm84SE09aIWG7IELM5dB5Eknx0Q3cgRbrtrnpXFHvV
 X-Received: from kyletso-p620lin01.ntc.corp.google.com ([2401:fa00:fc:202:5d47:84a:2819:bba4])
- (user=kyletso job=sendgmr) by 2002:a05:690c:b92:b0:565:8b2e:b324 with SMTP id
- ck18-20020a05690c0b9200b005658b2eb324mr14438059ywb.3.1687533047959; Fri, 23
- Jun 2023 08:10:47 -0700 (PDT)
-Date:   Fri, 23 Jun 2023 23:10:34 +0800
+ (user=kyletso job=sendgmr) by 2002:a25:6989:0:b0:ba8:9096:df50 with SMTP id
+ e131-20020a256989000000b00ba89096df50mr3687174ybc.9.1687533051741; Fri, 23
+ Jun 2023 08:10:51 -0700 (PDT)
+Date:   Fri, 23 Jun 2023 23:10:35 +0800
 In-Reply-To: <20230623151036.3955013-1-kyletso@google.com>
 Mime-Version: 1.0
 References: <20230623151036.3955013-1-kyletso@google.com>
 X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-Message-ID: <20230623151036.3955013-2-kyletso@google.com>
-Subject: [PATCH v2 1/3] usb: typec: Set port->pd before adding device for typec_port
+Message-ID: <20230623151036.3955013-3-kyletso@google.com>
+Subject: [PATCH v2 2/3] usb: typec: Iterate pds array when showing the pd list
 From:   Kyle Tso <kyletso@google.com>
 To:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org
 Cc:     badhri@google.com, linux-usb@vger.kernel.org,
@@ -69,46 +69,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When calling device_add in the registration of typec_port, it will do
-the NULL check on usb_power_delivery handle in typec_port for the
-visibility of the device attributes. It is always NULL because port->pd
-is set in typec_port_set_usb_power_delivery which is later than the
-device_add call.
-
-Set port->pd before device_add and only link the device after that.
+The pointers of each usb_power_delivery handles are stored in "pds"
+array returned from the pd_get ops but not in the adjacent memory
+calculated from "pd". Get the handles from "pds" array directly instead
+of deriving them from "pd".
 
 Fixes: a7cff92f0635 ("usb: typec: USB Power Delivery helpers for ports and partners")
 Cc: stable@vger.kernel.org
 Signed-off-by: Kyle Tso <kyletso@google.com>
 ---
-update v2:
+Update v2:
 - Add "Cc: stable@vger.kernel.org"
 
-drivers/usb/typec/class.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+drivers/usb/typec/class.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-index faa184ae3dac..3b30948bf4b0 100644
+index 3b30948bf4b0..e7312295f8c9 100644
 --- a/drivers/usb/typec/class.c
 +++ b/drivers/usb/typec/class.c
-@@ -2288,6 +2288,8 @@ struct typec_port *typec_register_port(struct device *parent,
- 		return ERR_PTR(ret);
+@@ -1277,8 +1277,7 @@ static ssize_t select_usb_power_delivery_show(struct device *dev,
+ {
+ 	struct typec_port *port = to_typec_port(dev);
+ 	struct usb_power_delivery **pds;
+-	struct usb_power_delivery *pd;
+-	int ret = 0;
++	int i, ret = 0;
+ 
+ 	if (!port->ops || !port->ops->pd_get)
+ 		return -EOPNOTSUPP;
+@@ -1287,11 +1286,11 @@ static ssize_t select_usb_power_delivery_show(struct device *dev,
+ 	if (!pds)
+ 		return 0;
+ 
+-	for (pd = pds[0]; pd; pd++) {
+-		if (pd == port->pd)
+-			ret += sysfs_emit(buf + ret, "[%s] ", dev_name(&pd->dev));
++	for (i = 0; pds[i]; i++) {
++		if (pds[i] == port->pd)
++			ret += sysfs_emit(buf + ret, "[%s] ", dev_name(&pds[i]->dev));
+ 		else
+-			ret += sysfs_emit(buf + ret, "%s ", dev_name(&pd->dev));
++			ret += sysfs_emit(buf + ret, "%s ", dev_name(&pds[i]->dev));
  	}
  
-+	port->pd = cap->pd;
-+
- 	ret = device_add(&port->dev);
- 	if (ret) {
- 		dev_err(parent, "failed to register port (%d)\n", ret);
-@@ -2295,7 +2297,7 @@ struct typec_port *typec_register_port(struct device *parent,
- 		return ERR_PTR(ret);
- 	}
- 
--	ret = typec_port_set_usb_power_delivery(port, cap->pd);
-+	ret = usb_power_delivery_link_device(port->pd, &port->dev);
- 	if (ret) {
- 		dev_err(&port->dev, "failed to link pd\n");
- 		device_unregister(&port->dev);
+ 	buf[ret - 1] = '\n';
 -- 
 2.41.0.162.gfafddb0af9-goog
 
