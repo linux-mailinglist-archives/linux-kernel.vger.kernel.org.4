@@ -2,141 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB67B73AECC
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 04:52:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11F2473AECF
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 04:54:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230444AbjFWCwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 22:52:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52680 "EHLO
+        id S231363AbjFWCyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 22:54:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbjFWCwk (ORCPT
+        with ESMTP id S229907AbjFWCyd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 22:52:40 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE4C32110;
-        Thu, 22 Jun 2023 19:52:38 -0700 (PDT)
-Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35N2lgCc006723;
-        Fri, 23 Jun 2023 02:52:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type :
- mime-version : subject : from : in-reply-to : date : cc :
- content-transfer-encoding : message-id : references : to; s=pp1;
- bh=RVm125GpA+1HVQbzGy//ia9dU0l+5tLkVFavKaQYjzw=;
- b=sw7IO5Yr5ooD7hVnf1f+5UcLFKHQpGeUj6942kPhFdBBj3i7J0Dx2EppuOUQKCVbHOl8
- mkIm3VVuDoK4TCiaqoc2zTDTLmJedbn1y4KFf7SlIMaRSkZ0ZzNdmx/TVyg7e84m5oAT
- wYikFR/BLFuYgiajKYp7+QK5rONto6Vhn8wJW5doRAC9WLPmKNzRunV0b/8TKRWpyU6B
- yBxFO/dQSaC06PgOsGLLXk4e1AdlQ9woRlgNXIYgd6HhysLE0e6miUub9jSOjfcRO8S4
- hSPcwYSC7nCsEvxVSlpBTlAdYma9Tzb8uJS0kF0GXSWeNv/BkaVquSXdg6mDE/MtOMQ6 sg== 
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rd2wv01kn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 23 Jun 2023 02:52:21 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35N0KUfT027259;
-        Fri, 23 Jun 2023 02:52:19 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3r943e3vy4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 23 Jun 2023 02:52:19 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35N2qGMs58720550
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 23 Jun 2023 02:52:16 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CD1DB20040;
-        Fri, 23 Jun 2023 02:52:16 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4312F20043;
-        Fri, 23 Jun 2023 02:52:15 +0000 (GMT)
-Received: from smtpclient.apple (unknown [9.43.65.200])
-        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 23 Jun 2023 02:52:15 +0000 (GMT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.600.7\))
-Subject: Re: [6.4-rc6] Crash during a kexec operation
- (tpm_amd_is_rng_defective)
-From:   Sachin Sant <sachinp@linux.ibm.com>
-In-Reply-To: <3f5a37f1-70e0-3dcf-3bd3-acc8a04e53ee@amd.com>
-Date:   Fri, 23 Jun 2023 08:22:04 +0530
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Linux regressions mailing list <regressions@lists.linux.dev>,
-        open list <linux-kernel@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, jarkko@kernel.org,
-        linux-integrity@vger.kernel.org,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <425CE5FE-FE54-493D-A74E-7EBC812544BB@linux.ibm.com>
-References: <99B81401-DB46-49B9-B321-CF832B50CAC3@linux.ibm.com>
- <87o7lhfmoh.fsf@mail.lhotse>
- <CA0088E4-2851-4AFF-94F8-2A07C5CDA8D8@linux.ibm.com>
- <675a8893-429d-05be-b647-089b249c814c@leemhuis.info>
- <87o7l7oer1.fsf@mail.lhotse> <3f5a37f1-70e0-3dcf-3bd3-acc8a04e53ee@amd.com>
-To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>
-X-Mailer: Apple Mail (2.3731.600.7)
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Fzee60I0I2G4wkal38UFV33R3U9zVDls
-X-Proofpoint-GUID: Fzee60I0I2G4wkal38UFV33R3U9zVDls
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-22_18,2023-06-22_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- clxscore=1011 priorityscore=1501 impostorscore=0 malwarescore=0 mlxscore=0
- phishscore=0 spamscore=0 mlxlogscore=999 bulkscore=0 adultscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306230020
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 22 Jun 2023 22:54:33 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 234882110;
+        Thu, 22 Jun 2023 19:54:32 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-52cb8e5e9f5so159317a12.0;
+        Thu, 22 Jun 2023 19:54:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687488871; x=1690080871;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=t2juHvoY/mcC9iiq57nWmyC1+9+zcIWhH/stlgFuOrU=;
+        b=pYEzQadLI48mLv2E3taVm1A3CUWVlYAWQXiyu8DM4jjj+0SwiaHhjQMJzx5D5IxFs0
+         cpSlN74mn6Tye6vQ2ArCd1RZxMXLGz9M/+JFzmgFh0l5Xj3t4jGJuybFTfbi39nkSmbs
+         YnFv8l/Nb8p37Rfmv2GvAkeh/eUjWBNYrii4IRyDetIIMu4zgq9U6dNA7ZPjEcY8NS+d
+         mryz4m5olAt3SrjSuJLizb+lNxErUljkb7RULtHMkBebBop+4NnuP77x5XW9EkG2auQF
+         QGKtUOKjO6yw5ET239gNLcxvYOKYTXrYYDNLeFLV3i5kFgXjmEdOapK8PXQx5aPtLshC
+         WNTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687488871; x=1690080871;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=t2juHvoY/mcC9iiq57nWmyC1+9+zcIWhH/stlgFuOrU=;
+        b=jzU8Vbyp2UsNRyADot6O1RdxRjyJANl58uJCnRUlhCW8fFHgQVZcTZkX5GNlOL27KU
+         9dT8Qxyw5/4RmnMh0SqQiGGbifpgdphNl9/zm3Yn06qjnHw9EKTwYjWZ+8f/oXFKmkuU
+         Pqus9gQGifbgNGGJOqtssfEdZ4Vsc/kHMfRMFvPF6Mwsl8PtM7JVBHDxk4b6O9qTQXdD
+         QOiHZprmEIX9LaN9ZVOL00j1kapmvwjZl48Y9S1KATk6JaIL2h4Cz5mhfClcQT+PUozO
+         d2FZ3TxthdTl1C1LYoJl3hW6Dmm0W2Pcwba0IRFdJsTm4OG9k98TYQhUbb5evS6r2MIk
+         B8Hg==
+X-Gm-Message-State: AC+VfDwS1QoiPGHLSAZt2IkFj+RRMXR+NdZYaMiUwQPteiYEcTmVT6Y4
+        QaL2jfrLtdTGki87hW1i0bI=
+X-Google-Smtp-Source: ACHHUZ5JJ2k9e9xfcKcc1NjbpAw2nX2k3oA3LDDnRxY6qZDvpS0ZU1fCwskxROcZ6ZRXfW/QBXkd1Q==
+X-Received: by 2002:a05:6a21:900c:b0:10b:6b1f:c8c8 with SMTP id tq12-20020a056a21900c00b0010b6b1fc8c8mr18587734pzb.31.1687488871379;
+        Thu, 22 Jun 2023 19:54:31 -0700 (PDT)
+Received: from localhost ([192.55.54.50])
+        by smtp.gmail.com with ESMTPSA id k4-20020aa790c4000000b00652c103d534sm5088322pfk.118.2023.06.22.19.54.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jun 2023 19:54:30 -0700 (PDT)
+Date:   Thu, 22 Jun 2023 19:54:29 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     "Huang, Kai" <kai.huang@intel.com>
+Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "michael.roth@amd.com" <michael.roth@amd.com>,
+        "Annapurve, Vishal" <vannapurve@google.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "ackerleytng@google.com" <ackerleytng@google.com>,
+        "Chen, Bo2" <chen.bo@intel.com>, "Shahar, Sagi" <sagis@google.com>,
+        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
+        "Aktas, Erdem" <erdemaktas@google.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "dmatlack@google.com" <dmatlack@google.com>,
+        "zhi.wang.linux@gmail.com" <zhi.wang.linux@gmail.com>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>
+Subject: Re: [RFC PATCH v2 3/6] KVM: x86/mmu: Pass round full 64-bit error
+ code for the KVM page fault
+Message-ID: <20230623025429.GB3436214@ls.amr.corp.intel.com>
+References: <cover.1687474039.git.isaku.yamahata@intel.com>
+ <b659f86ac7128965e05a7a660c38734667530fc0.1687474039.git.isaku.yamahata@intel.com>
+ <37b868c53c9f35e8ec051573562a4598df38d72d.camel@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <37b868c53c9f35e8ec051573562a4598df38d72d.camel@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jun 22, 2023 at 11:28:22PM +0000,
+"Huang, Kai" <kai.huang@intel.com> wrote:
 
+> On Thu, 2023-06-22 at 16:16 -0700, Yamahata, Isaku wrote:
+> > The upper 32 bits of error code are discarded at kvm_mmu_page_fault()
+> > by lower_32_bits().  Now it's passed down as full 64 bits.
+> > Because only FNAME(page_fault) depends on it, move lower_32_bits() into
+> > FNAME(page_fault).
+> 
+> I haven't looked into the code yet, but the last sentence around
+> FNAME(page_fault) doesn't make a lot sense IIUC?
+> 
+> For instance, we can have a shadow EPT table when EPT is enabled in L0 and
+> exposed to L1.  If we want to pass 64-bit error code to the handler, how can
+> FRAME(page_fault)() depend on the lower 32-bit value? 
 
-> On 22-Jun-2023, at 8:08 PM, Limonciello, Mario =
-<Mario.Limonciello@amd.com> wrote:
->=20
->=20
-> On 6/22/2023 7:36 AM, Michael Ellerman wrote:
->> "Linux regression tracking (Thorsten Leemhuis)" =
-<regressions@leemhuis.info> writes:
->>> Hi, Thorsten here, the Linux kernel's regression tracker. =
-Top-posting
->>> for once, to make this easily accessible to everyone.
->>>=20
->>> As Linus will likely release 6.4 on this or the following Sunday a =
-quick
->>> question: is there any hope this regression might be fixed any time
->>> soon?
->> No.
->>=20
->> I have added the author of the commit to Cc, maybe they can help?
->>=20
->> The immediate question is, is it expected for chip->ops to be NULL in
->> this path? Obviously on actual AMD systems that isn't the case,
->> otherwise the code would crash there. But is the fact that chip->ops =
-is
->> NULL a bug in the ibmvtpm driver, or a possibility that has been
->> overlooked by the checking code.
->>=20
->> cheers
->=20
-> All that code assumes that the TPM is still functional which
-> seems not to be the case for your TPM.
->=20
-> This should fix it:
+Probably "depend" was too strong. In short, I wanted to not change the value
+passed down as error_code from FNAME(page_fault).
 
-Yes, with this change kexec works correctly.
-
-Since Aneesh first reported this problem including reported by credit =
-for him
-
-Reported-by: Aneesh Kumar K. V <aneesh.kumar@linux.ibm.com>
-Reported-by: Sachin Sant <sachinp@linux.ibm.com>
-Tested-by: Sachin Sant <sachinp@linux.ibm.com>
-
--Sachin=
+FNAME(page_fault) calls helper function to walk page tables. Some check
+PFERR_IMPLICIT_ACCESS_MASK(48 bit).  If we don't mask lower_32_bits(), it can
+pass accidentally the bit.  Maybe we can audit the code carefully to check if
+IMPLICIT_ACCESS bit doesn't matter or fix it.  But I don't want to do it with
+this patch series.
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>
