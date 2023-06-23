@@ -2,58 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A95AF73B4AC
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 12:09:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF03273B4B7
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 12:10:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231714AbjFWKJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 06:09:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46088 "EHLO
+        id S231270AbjFWKKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 06:10:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231424AbjFWKJO (ORCPT
+        with ESMTP id S230491AbjFWKJa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 06:09:14 -0400
-X-Greylist: delayed 62093 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 23 Jun 2023 03:07:49 PDT
-Received: from forward502b.mail.yandex.net (forward502b.mail.yandex.net [IPv6:2a02:6b8:c02:900:1:45:d181:d502])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3791D10F1;
-        Fri, 23 Jun 2023 03:07:49 -0700 (PDT)
-Received: from mail-nwsmtp-smtp-production-main-36.sas.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-36.sas.yp-c.yandex.net [IPv6:2a02:6b8:c08:a497:0:640:fcbf:0])
-        by forward502b.mail.yandex.net (Yandex) with ESMTP id 6CAAA5E6F7;
-        Fri, 23 Jun 2023 13:07:46 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-36.sas.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id h7EVnbTDUqM0-ElAawmfA;
-        Fri, 23 Jun 2023 13:07:45 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1687514865;
-        bh=ypufzCakK8SokYucAEE7VSUnBPAaMt3NHttyycgl8oQ=;
-        h=From:In-Reply-To:Cc:Date:References:To:Subject:Message-ID;
-        b=BcbxT0a4yghZPCJpFPVDIzZh0rtc6FX4SgQteBgtMRRa+lSqA8E6v9++RJqVCpiO0
-         2KcAUYG9ijvExnhW1VTNx6S3kgFoE29MJF0SI3xzJ1IuxoPgCuft9Tk1Jqzwa93PAb
-         Wa4uosc0RQhGqDoyGO0SvkQwDYg6RV4wZojPdhnI=
-Authentication-Results: mail-nwsmtp-smtp-production-main-36.sas.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
-Message-ID: <12ea42ec-95f3-6213-95e8-77c5ad64da25@yandex.ru>
-Date:   Fri, 23 Jun 2023 15:07:43 +0500
+        Fri, 23 Jun 2023 06:09:30 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 189A135BF;
+        Fri, 23 Jun 2023 03:08:10 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35N9U8oQ018099;
+        Fri, 23 Jun 2023 10:08:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=ygEbhuiI8pLfm7ETYtlsObwi1/BhXLuO5IFucVI7iyg=;
+ b=joCOk+w0e8FO0d94MaqY1hxE6UtcLZ3AI+h8xV78CBh6uS5R09UMTjWaw8cfiZKkoBBl
+ cL0k6akyst/GudPTQFjj0PG2mQgD+v3NSjK2ausRQjQypd2OUGJRWRgjfCO7bKCZBjIw
+ /IB2o+GZmRLM7gzcqwXclK0Yy0tUdZ0plNgL1qqqgXkK1SY1lfTjEshsajX0HpToeydy
+ mzZ9jsOPjHHuOst3aCvMguTp31ubnQxScLvgO0jU/bsv/OIaUENBIrtoO+6aPtsxu+Qw
+ ykgvqgY2Y/mjIDX3hhyhNw0Ea9lZvP6JW79+83jbLYXO/mSljRgnmIGTrSxLkn0J1ez9 YA== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rcurrhf0b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 23 Jun 2023 10:08:06 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35NA85da000380
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 23 Jun 2023 10:08:05 GMT
+Received: from [10.218.48.111] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 23 Jun
+ 2023 03:08:00 -0700
+Message-ID: <febf5078-2433-641d-52ec-0dea0e849c5b@quicinc.com>
+Date:   Fri, 23 Jun 2023 15:37:56 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH] fcntl.2: document F_UNLCK F_OFD_GETLK extension
+Subject: Re: [PATCH 1/2] dt-bindings: clock: Update GCC clocks for QDU1000 and
+ QRU1000 SoCs
 Content-Language: en-US
-To:     Jeff Layton <jlayton@kernel.org>, linux-kernel@vger.kernel.org
-Cc:     Chuck Lever <chuck.lever@oracle.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org, linux-api@vger.kernel.org
-References: <20230621152214.2720319-1-stsp2@yandex.ru>
- <20230621152214.2720319-4-stsp2@yandex.ru>
- <3719669bc40890e3a8221593ff8a178411ad749b.camel@kernel.org>
-From:   stsp <stsp2@yandex.ru>
-In-Reply-To: <3719669bc40890e3a8221593ff8a178411ad749b.camel@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+CC:     Melody Olvera <quic_molvera@quicinc.com>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Jagadeesh Kona <quic_jkona@quicinc.com>,
+        Satya Priya Kakitapalli <quic_skakitap@quicinc.com>,
+        Ajit Pandey <quic_ajipan@quicinc.com>
+References: <20230616104941.921555-1-quic_imrashai@quicinc.com>
+ <20230616104941.921555-2-quic_imrashai@quicinc.com>
+ <cee56c57-060a-2fce-a2af-25404b9afe48@linaro.org>
+ <fe3b02e4-9f01-eb36-bf99-6bc3b15b28c2@linaro.org>
+From:   Imran Shaik <quic_imrashai@quicinc.com>
+In-Reply-To: <fe3b02e4-9f01-eb36-bf99-6bc3b15b28c2@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: yK5_66_puFCHPjnZmKpv7dnOx-vHOLMf
+X-Proofpoint-ORIG-GUID: yK5_66_puFCHPjnZmKpv7dnOx-vHOLMf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-23_04,2023-06-22_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 malwarescore=0 mlxlogscore=999 suspectscore=0 spamscore=0
+ adultscore=0 clxscore=1011 lowpriorityscore=0 phishscore=0 bulkscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306230091
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -61,25 +97,59 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-22.06.2023 17:03, Jeff Layton пишет:
-> We need to be pedantic for manpages. A "file description" is the
-> representation of the open file in the kernel (basically, the "struct
-> file" in the kernel). A file _descriptor_ is the numeric identifier
-> returned by open() and similar functions.
 
-OK.
+On 6/22/2023 7:15 PM, Krzysztof Kozlowski wrote:
+> On 16/06/2023 13:33, Krzysztof Kozlowski wrote:
+>> On 16/06/2023 12:49, Imran Shaik wrote:
+>>> Update the qcom GCC clock bindings and add v2 compatible string for QDU1000
+>>> and QRU1000 SoCs.
+>>>
+>>> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
+>>> Signed-off-by: Imran Shaik <quic_imrashai@quicinc.com>
+>>> ---
+>>>   .../devicetree/bindings/clock/qcom,qdu1000-gcc.yaml         | 6 +++++-
+>>>   include/dt-bindings/clock/qcom,qdu1000-gcc.h                | 4 +++-
+>>>   2 files changed, 8 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/clock/qcom,qdu1000-gcc.yaml b/Documentation/devicetree/bindings/clock/qcom,qdu1000-gcc.yaml
+>>> index 767a9d03aa32..030953d258c1 100644
+>>> --- a/Documentation/devicetree/bindings/clock/qcom,qdu1000-gcc.yaml
+>>> +++ b/Documentation/devicetree/bindings/clock/qcom,qdu1000-gcc.yaml
+>>> @@ -8,6 +8,8 @@ title: Qualcomm Global Clock & Reset Controller for QDU1000 and QRU1000
+>>>   
+>>>   maintainers:
+>>>     - Melody Olvera <quic_molvera@quicinc.com>
+>>> +  - Taniya Das <quic_tdas@quicinc.com>
+>>> +  - Imran Shaik <quic_imrashai@quicinc.com>
+>>
+>> I appreciate adding more maintainers, it is welcomed and needed.
+>>
+>> However many of Qualcomm folks, including some of you, did not care
+>> enough to fix their old/incorrect email in existing entries, thus we
+>> have hundreds of wrong addresses and email bounces.
+>>
+>> We already raised this internally and publicly, with just small effect,
+>> so I am not sure what to do more. For me, allowing to have outdated
+>> email in maintainers is an easiest proof that maintainer does not care.
+>> Adding more maintainer entries, while maintainer does not care, would
+>> not feel right. Maybe let's start with fixing existing entries?
+> 
+> +Cc Alex,
+> 
+> Let me emphasize more, because I did not see any follow up patches since
+> my previous email - there are many, many stale maintainer entries from
+> Qualcomm. Several of them have codeaurora.org email. Some have just old
+> emails of folks who left.
+> 
+> Can we expect fixing these?
 
+Sure, will post a separate clean up patch for fixing all the 
+old/incorrect maintainers email addresses from all the binding files.
 
-> The locks are owned by the file description, so that would be the better
-> term to use here. I think you want something like:
->
-> "When the l_type is set to F_UNLCK, returned locks are limited to ones
-> set on the given file description.
-This is also inaccurate, because "limited"
-implies other operations act widely.
-But actually other operations do not
-consider the "same fd" at all. So the
-reported sets by F_UNLCK and other
-ops do not overlap. Which is why I
-decided to describe it as a "special
-meaning".
+Thanks,
+Imran
+
+> 
+> Best regards,
+> Krzysztof
+> 
