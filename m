@@ -2,98 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E44F673C401
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 00:22:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FAAF73C405
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 00:24:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229709AbjFWWWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 18:22:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53944 "EHLO
+        id S230036AbjFWWYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 18:24:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbjFWWWn (ORCPT
+        with ESMTP id S229787AbjFWWYb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 18:22:43 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E278219AB
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 15:22:41 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f86dbce369so1552019e87.0
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 15:22:41 -0700 (PDT)
+        Fri, 23 Jun 2023 18:24:31 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D49B2693
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 15:24:30 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-313e12db357so112251f8f.0
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 15:24:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1687558960; x=1690150960;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rvN0kECg6txQDm3l8YgQDgQlz8OGdukT1rUSdEC/b8s=;
-        b=Pugyc4fmIjlij/N3c77/Dkuisre12LEpKE8R2btjyuYw4w0OHH/Q8LvzH5PRm9RXzn
-         lLxb/TTtrXO7sjlBWv2+B3VHEGXxwuArmKJm5dfIW6neiDEQKxDzBuunAoDKKj2qOwt3
-         1wGHA1epucIBFkjqNTS+KoYSe+GlDWRnNgt6E=
+        d=chromium.org; s=google; t=1687559069; x=1690151069;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HCQm6L24JN7h7YAY5YLo/KLz+bCxV7q1iWuvA+ssee8=;
+        b=McMM8qRf4LAPhKWB+qH1vWr0eILwaa28nZl4EwjAWZ5JKyWCc8F1KZlflgu6Fenu2z
+         8p2L+NJkoq1mwTE13Ec9GlGjDot7H36L526dLhIaQv8q0/BLChNebSU4/0uceAIGt8Zi
+         NKWhVtZ/polveq8TKpGBx8XRlKQR8ytpc3EzQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687558960; x=1690150960;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1687559069; x=1690151069;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=rvN0kECg6txQDm3l8YgQDgQlz8OGdukT1rUSdEC/b8s=;
-        b=lEtNavfq+nf8nsGC04jREgiRa1aY3BSAgHhT7UlwGoLJQGqYwT91CzPMXfjvkBqEVf
-         B27mqEf+El9iRggJTAqPY8zcMpYuMlfr9i123ilhvArTIkBuZAX1tELsiplitTfu4ufh
-         oIe5ZR8Xy4IZErePAoBU49KB1CCQd7O/tTDRkd8gv6sSpKeJiOkazj6EYFmjeOAeity4
-         p8Ia8TAigZFUgjBsB4fNdXQ6Dlf8MDj83lwMSfPfE9ZEy1NKvbEKfO2ByRpoMZDRM1N/
-         sJVtYU7k6Oqn5/JNq1r4Fe3Gy0zK9wd2KpfR/reVMxCiw+VZAVvp5x+5tyABuvdwFHyK
-         k5FQ==
-X-Gm-Message-State: AC+VfDzSG5ZdckpOIicWJRz0fW4USKKelxnLajqMeUUrKaNcWzcAArDV
-        ZWempGYQUioNPCXJx3i98aZ/mZ4ZKEDP/qJELMQJG/H0
-X-Google-Smtp-Source: ACHHUZ6M1/x3HVCB/QB/YctS9BHAD+FJzmkS525n+BugeTijCcdCkku/6HwWXB2MtqjPRqsBtcefGg==
-X-Received: by 2002:a05:6512:291:b0:4f8:6e26:9347 with SMTP id j17-20020a056512029100b004f86e269347mr12365062lfp.68.1687558959802;
-        Fri, 23 Jun 2023 15:22:39 -0700 (PDT)
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com. [209.85.208.178])
-        by smtp.gmail.com with ESMTPSA id q10-20020ac24a6a000000b004f875238d95sm45911lfp.173.2023.06.23.15.22.39
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Jun 2023 15:22:39 -0700 (PDT)
-Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2b46a06c553so19443401fa.1
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 15:22:39 -0700 (PDT)
-X-Received: by 2002:a2e:b046:0:b0:2b4:75f0:b9e0 with SMTP id
- d6-20020a2eb046000000b002b475f0b9e0mr10639869ljl.37.1687558958759; Fri, 23
- Jun 2023 15:22:38 -0700 (PDT)
+        bh=HCQm6L24JN7h7YAY5YLo/KLz+bCxV7q1iWuvA+ssee8=;
+        b=VlTw99x0sSi4numV7hvLtCZqBgZXvj/EBKvpRVUJFepzNcc6EFUNz7/uO8VWiESKHv
+         h7uC6jQn3lLNrVO6P4kKTx8ua3b5RM+ehnpesAKS6kIj1iN/EhOe7kqZa2FK/Htlp9Mg
+         cboQHM/IUa4ai6wigWjdVk/HIm/YCgLCsT5ppvo/u8QJJ1ZIML/9nZDtv2QL7kq+6afk
+         VoldTECHDniOHEE9ePPMzazZB/s4KSGAI68H3R4bH4mGfCUHt4sdkz6szQV4Tgp9D5sG
+         9gDEelQEsK3nukCV1aQTmgJaLxz1Qsc3bFGk4ImlcAyhI+eh+hEW/tQOppe/CAHOJSY2
+         6gRg==
+X-Gm-Message-State: AC+VfDxEwDzluOm5GPt+dqia6X1RhH0EF31A4XnH++KI9y8TP7Fj3BQg
+        hYauqqIIQPF6dcsSnsAQWmY4jg==
+X-Google-Smtp-Source: ACHHUZ5i4VyTlmfKvSj9N4tKIp95whP30Srd/cZr5yJyHkGu1U/UsDNCUViF0aar0wPXbGemSw+J5w==
+X-Received: by 2002:adf:e387:0:b0:30f:fec1:ac0f with SMTP id e7-20020adfe387000000b0030ffec1ac0fmr23653128wrm.36.1687559068747;
+        Fri, 23 Jun 2023 15:24:28 -0700 (PDT)
+Received: from big-boopo.mynetworksettings.com (pool-108-46-233-209.nycmny.fios.verizon.net. [108.46.233.209])
+        by smtp.gmail.com with ESMTPSA id l6-20020a5d4106000000b0030c2e3c7fb3sm453223wrp.101.2023.06.23.15.24.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Jun 2023 15:24:28 -0700 (PDT)
+From:   Jim Shargo <jshargo@chromium.org>
+To:     mairacanal@riseup.net, Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Haneen Mohammed <hamohammed.sa@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Melissa Wen <melissa.srw@gmail.com>,
+        Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     Jim Shargo <jshargo@chromium.org>, dri-devel@lists.freedesktop.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/6] Adds support for ConfigFS to VKMS!
+Date:   Fri, 23 Jun 2023 18:23:42 -0400
+Message-ID: <20230623222353.97283-1-jshargo@chromium.org>
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
 MIME-Version: 1.0
-References: <CAPM=9twNnV4zMCvrPkw3H-ajZOH-01JVh_kDrxdPYQErz8ZTdA@mail.gmail.com>
- <CAHk-=wi=eDN4Ub0qSN27ztBAvHSXCyiY2stu3_XbTpYpQX4x7w@mail.gmail.com>
- <ZJX27JDyrgvdeCe4@slm.duckdns.org> <CAHk-=wiKoRSXMkwcMN=70nG8aOAJxuF3PUqHSBRJ7dTfnZ1n=g@mail.gmail.com>
-In-Reply-To: <CAHk-=wiKoRSXMkwcMN=70nG8aOAJxuF3PUqHSBRJ7dTfnZ1n=g@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 23 Jun 2023 15:22:21 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgj45awSzkC2CnavVcpxXWxR9yoqx=VJd3CxMEKmSVTtg@mail.gmail.com>
-Message-ID: <CAHk-=wgj45awSzkC2CnavVcpxXWxR9yoqx=VJd3CxMEKmSVTtg@mail.gmail.com>
-Subject: Re: arm32 build warnings in workqueue.c
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Dave Airlie <airlied@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 23 Jun 2023 at 15:15, Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> I had to go look at what sparse does, because I didn't think I would
-> ever have made it match that crazy gcc behavior.
->
-> But it does - because a few years ago Luc added the logic to match
-> gcc, and it never triggered me.
->
-> Oh, how very horrible.
+Intro
+=====
 
-Yeah, I just went back and checked an older version of sparse - and
-that older version actually DTRT, and gave every enum the proper type
-(ie in that example I posted, every enum size was 8 bytes).
+At long last, we're back!
 
-So even sparse now gets this wrong, because sparse was explicitly made
-to match that horrid gcc behavior. I guess we got warnings from
-sparse, and then that caused Luc to "fix" sparse and nobody realized
-that the warnings were good.
+This patchset adds basic ConfigFS support to VKMS, allowing users to
+build new DRM devices with user-defined DRM objects and object
+relationships by creating, writing, and symlinking files.
 
-                Linus
+Usage
+=====
+
+After installing these patches, you can create a VKMS device with two
+displays and a movable overlay like so (this is documented in the
+patches):
+
+  $ modprobe vkms enable_overlay=1 enable_cursor=1 enable_writeback=1
+  $ mkdir -p /config/
+  $ mount -t configfs none /config
+
+  $ export DRM_PLANE_TYPE_PRIMARY=1
+  $ export DRM_PLANE_TYPE_CURSOR=2
+  $ export DRM_PLANE_TYPE_OVERLAY=0
+
+  $ mkdir /config/vkms/test
+
+  $ mkdir /config/vkms/test/planes/primary
+  $ echo $DRM_PLANE_TYPE_PRIMARY > /config/vkms/test/planes/primary/type
+
+  $ mkdir /config/vkms/test/planes/other_primary
+  $ echo $DRM_PLANE_TYPE_PRIMARY > /config/vkms/test/planes/other_primary/type
+
+  $ mkdir /config/vkms/test/planes/cursor
+  $ echo $DRM_PLANE_TYPE_CURSOR > /config/vkms/test/planes/cursor/type
+
+  $ mkdir /config/vkms/test/planes/overlay
+  $ echo $DRM_PLANE_TYPE_OVERLAY > /config/vkms/test/planes/overlay/type
+
+  $ mkdir /config/vkms/test/crtcs/crtc
+  $ mkdir /config/vkms/test/crtcs/crtc_other
+  $ mkdir /config/vkms/test/encoders/encoder
+  $ mkdir /config/vkms/test/connectors/connector
+
+  $ ln -s /config/vkms/test/encoders/encoder /config/vkms/test/connectors/connector/possible_encoders
+  $ ln -s /config/vkms/test/crtcs/crtc /config/vkms/test/encoders/encoder/possible_crtcs/
+  $ ln -s /config/vkms/test/crtcs/crtc /config/vkms/test/planes/primary/possible_crtcs/
+  $ ln -s /config/vkms/test/crtcs/crtc /config/vkms/test/planes/cursor/possible_crtcs/
+  $ ln -s /config/vkms/test/crtcs/crtc /config/vkms/test/planes/overlay/possible_crtcs/
+  $ ln -s /config/vkms/test/crtcs/crtc_other /config/vkms/test/planes/overlay/possible_crtcs/
+  $ ln -s /config/vkms/test/crtcs/crtc_other /config/vkms/test/planes/other_primary/possible_crtcs/
+
+  $ echo 1 > /config/vkms/test/enabled
+
+Changes within core VKMS
+========================
+
+This introduces a few important changes to the overall structure of
+VKMS:
+
+  - Devices are now memory managed!
+  - Support for multiple CRTCs and other objects has been added
+
+Since v1
+========
+
+  - Added DRMM memory management to automatically clean up resources
+  - Added a param to disable the default device
+  - Renamed "cards" to "devices" to improve legibility
+  - Added a lock for the configfs setup handler
+  - Moved all the new docs into the relevant .c file
+  - Addressed as many of sean@poorly.run as possible
+
+Testing
+=======
+
+  - New IGT tests (see
+    gitlab.freedesktop.org/jshargo/igt-gpu-tools/-/merge_requests/1)
+  - Existing IGT tests (excluding .*suspend.*, including .*kms_flip.*
+    .*kms_writeback.* .*kms_cursor_crc.*, .*kms_plane.*)
+
+Outro
+=====
+
+I'm excited to share these changes, it's my still my first kernel patch
+and I've been putting a lot of love into these.
+
+Jim Shargo (6):
+  drm/vkms: Back VKMS with DRM memory management instead of static
+    objects
+  drm/vkms: Support multiple DRM objects (crtcs, etc.) per VKMS device
+  drm/vkms: Provide platform data when creating VKMS devices
+  drm/vkms: Add ConfigFS scaffolding to VKMS
+  drm/vkms: Support enabling ConfigFS devices
+  drm/vkms: Add a module param to enable/disable the default device
+
+ Documentation/gpu/vkms.rst            |  17 +-
+ drivers/gpu/drm/Kconfig               |   1 +
+ drivers/gpu/drm/vkms/Makefile         |   1 +
+ drivers/gpu/drm/vkms/vkms_composer.c  |  28 +-
+ drivers/gpu/drm/vkms/vkms_configfs.c  | 657 ++++++++++++++++++++++++++
+ drivers/gpu/drm/vkms/vkms_crtc.c      |  97 ++--
+ drivers/gpu/drm/vkms/vkms_drv.c       | 208 +++++---
+ drivers/gpu/drm/vkms/vkms_drv.h       | 166 +++++--
+ drivers/gpu/drm/vkms/vkms_output.c    | 299 ++++++++++--
+ drivers/gpu/drm/vkms/vkms_plane.c     |  44 +-
+ drivers/gpu/drm/vkms/vkms_writeback.c |  26 +-
+ 11 files changed, 1312 insertions(+), 232 deletions(-)
+ create mode 100644 drivers/gpu/drm/vkms/vkms_configfs.c
+
+-- 
+2.41.0.162.gfafddb0af9-goog
+
