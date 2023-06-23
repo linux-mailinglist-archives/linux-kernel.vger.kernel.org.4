@@ -2,76 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87F5273C0C9
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 22:43:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B43C73C0D3
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 22:44:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232606AbjFWUn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 16:43:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57336 "EHLO
+        id S232442AbjFWUoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 16:44:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232369AbjFWUm5 (ORCPT
+        with ESMTP id S232340AbjFWUoD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 16:42:57 -0400
-Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5584B30D8;
-        Fri, 23 Jun 2023 13:42:16 -0700 (PDT)
-Received: by mail-io1-f41.google.com with SMTP id ca18e2360f4ac-78333585d28so27860739f.1;
-        Fri, 23 Jun 2023 13:42:16 -0700 (PDT)
+        Fri, 23 Jun 2023 16:44:03 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A352114;
+        Fri, 23 Jun 2023 13:43:03 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id ca18e2360f4ac-78336da9b40so13172039f.1;
+        Fri, 23 Jun 2023 13:43:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687552873; x=1690144873;
+        d=1e100.net; s=20221208; t=1687552905; x=1690144905;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kg94xVxU+KBk6JV80YmvR4uIRCIi8Yio8OJz8y0ssbk=;
-        b=J1XjXY1MEHAwAXZnoWli13HnNOgJyV+YHTDPE1gmC/2XzFMYFe/jAkyK86jmu8WfkN
-         wWOTXXj8F6f+1qsqFqAYVPLQBSIbB2bN5GI7mwZLtkjuz1RfwStmOHqLk9XnsplN/LHh
-         em7JQbSjUQMhCGuwPUBHP8VGzyAuix94hQCLlZGV96a+TqjSbHUFK6H70IiGGXwYbpjd
-         4cHSzpLJkhlJ04SGO+Wk9xLeBslzT/zo/4UUIT4oqA6FZEzkebV6zhwRgkUPLn1mkwaC
-         wslITwOEMdZM4UY4lIesG8coF4JILNyrMHPL6Gh1/gvEmkmDMUGv5sRpo/w4Ki7jLpA9
-         OjlA==
-X-Gm-Message-State: AC+VfDwhkCVbBhb5Etxr66kGuvMcfpwxgeupCeqK5IEMzFeUh53PNFhJ
-        MGY302EOHbiImG5jXpxIrg==
-X-Google-Smtp-Source: ACHHUZ4LUHt4NfXfv/satE+F1gFdH3T1avoQDVlD2XXbG2ZJJT/R6HUWYFMBKKHGXAU0Cl+v8ZbCqg==
-X-Received: by 2002:a05:6602:2995:b0:760:f795:ccdf with SMTP id o21-20020a056602299500b00760f795ccdfmr20481712ior.8.1687552873011;
-        Fri, 23 Jun 2023 13:41:13 -0700 (PDT)
+        bh=GVwIruNM27XzOclde1ez2sYDl8Db/9ES8i/lIk7F8q8=;
+        b=H9vA6dPhJm2TKhAaIQrHZllHXdCIQnrn4HFyPElLlc8aFP3SeFQw4/c/DovcSjjjNN
+         qsaS6J9poDhbwB8HAOpbdIfwPBXiuzsj9cK8yjspEUDXYeNQA8sgqnO/rGnHnHT4/XI2
+         PNsYllK0VhQv4Q+g0e8wzNPhIl8/VlsapV4UemAtHHz6TAJMfHl0yAQ156yQRm4xtd4I
+         b7X8Zdkgw9JUIP7DoDSQ2hLE19QkuqpC02gjJvq/bPFmCDXKdFgJvL4NgoZSCpAl6wtM
+         XRsyWhSSJsJxCbmG8dsbRlZQPDic6zE5BFQnj8d8gGqfJ8GfGcdavhuec6j2ZuXofBkj
+         bppg==
+X-Gm-Message-State: AC+VfDxa6+fsyX/Azlp2Ee6sX27+PWxEmMZDWQM+sOLtu4Na30Jh1a4A
+        n05vJteTJ6CXhjhla0QjTQ==
+X-Google-Smtp-Source: ACHHUZ5qydroL5WvfYXA6b3iHRDviES8vdnm1IRv0G1kn2uF+632UINuFwXA3DFOyWNQirLohamf5w==
+X-Received: by 2002:a6b:c306:0:b0:780:c023:c071 with SMTP id t6-20020a6bc306000000b00780c023c071mr5691888iof.8.1687552905274;
+        Fri, 23 Jun 2023 13:41:45 -0700 (PDT)
 Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id a15-20020a056602208f00b0077e3acd5ea1sm38156ioa.53.2023.06.23.13.41.10
+        by smtp.gmail.com with ESMTPSA id c11-20020a6bfd0b000000b0077e24ace3edsm36879ioi.52.2023.06.23.13.41.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Jun 2023 13:41:11 -0700 (PDT)
-Received: (nullmailer pid 1083781 invoked by uid 1000);
-        Fri, 23 Jun 2023 20:41:09 -0000
-Date:   Fri, 23 Jun 2023 14:41:09 -0600
+        Fri, 23 Jun 2023 13:41:44 -0700 (PDT)
+Received: (nullmailer pid 1085584 invoked by uid 1000);
+        Fri, 23 Jun 2023 20:41:42 -0000
+Date:   Fri, 23 Jun 2023 14:41:42 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Krishna Kurapati <quic_kriskura@quicinc.com>
-Cc:     Felipe Balbi <balbi@kernel.org>, ahalaney@redhat.com,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
         Bjorn Andersson <andersson@kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        quic_ppratap@quicinc.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        quic_harshq@quicinc.com, linux-usb@vger.kernel.org,
+        quic_pkondeti@quicinc.com, Johan Hovold <johan@kernel.org>,
+        quic_shazhuss@quicinc.com,
         Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        devicetree@vger.kernel.org, Philipp Zabel <p.zabel@pengutronix.de>,
-        quic_shazhuss@quicinc.com, Johan Hovold <johan@kernel.org>,
-        quic_jackp@quicinc.com, linux-kernel@vger.kernel.org,
-        quic_pkondeti@quicinc.com, linux-arm-msm@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Subject: Re: [PATCH v9 01/10] dt-bindings: usb: qcom,dwc3: Add bindings for
- SC8280 Multiport
-Message-ID: <168755286916.1083702.6661052967683571256.robh@kernel.org>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>, ahalaney@redhat.com,
+        linux-usb@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        quic_jackp@quicinc.com, Wesley Cheng <quic_wcheng@quicinc.com>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Felipe Balbi <balbi@kernel.org>, devicetree@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>, quic_harshq@quicinc.com,
+        quic_ppratap@quicinc.com
+Subject: Re: [PATCH v9 02/10] dt-bindings: usb: Add bindings for multiport
+ properties on DWC3 controller
+Message-ID: <168755290184.1084879.7352265342083179543.robh@kernel.org>
 References: <20230621043628.21485-1-quic_kriskura@quicinc.com>
- <20230621043628.21485-2-quic_kriskura@quicinc.com>
+ <20230621043628.21485-3-quic_kriskura@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230621043628.21485-2-quic_kriskura@quicinc.com>
+In-Reply-To: <20230621043628.21485-3-quic_kriskura@quicinc.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -79,23 +79,15 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Wed, 21 Jun 2023 10:06:19 +0530, Krishna Kurapati wrote:
-> Add the compatible string for SC8280 Multiport USB controller from
-> Qualcomm.
+On Wed, 21 Jun 2023 10:06:20 +0530, Krishna Kurapati wrote:
+> Add bindings to indicate properties required to support multiport
+> on Snps Dwc3 controller.
 > 
-> There are 4 power event irq interrupts supported by this controller
-> (one for each port of multiport). Added all the 4 as non-optional
-> interrupts for SC8280XP-MP
-> 
-> Also each port of multiport has one DP and oen DM IRQ. Add all DP/DM
-> IRQ's related to 4 ports of SC8280XP Teritiary controller.
-> 
-> Also added ss phy irq for both SS Ports.
-> 
+> Suggested-by: Bjorn Andersson <quic_bjorande@quicinc.com>
 > Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
 > ---
->  .../devicetree/bindings/usb/qcom,dwc3.yaml    | 29 +++++++++++++++++++
->  1 file changed, 29 insertions(+)
+>  .../devicetree/bindings/usb/snps,dwc3.yaml          | 13 +++++++------
+>  1 file changed, 7 insertions(+), 6 deletions(-)
 > 
 
 Reviewed-by: Rob Herring <robh@kernel.org>
