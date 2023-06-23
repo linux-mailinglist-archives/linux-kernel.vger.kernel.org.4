@@ -2,142 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5C4E73BB8B
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 17:23:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F73173BB8D
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 17:23:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232272AbjFWPXG convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 23 Jun 2023 11:23:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40502 "EHLO
+        id S232171AbjFWPXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 11:23:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231848AbjFWPXD (ORCPT
+        with ESMTP id S232211AbjFWPX2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 11:23:03 -0400
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7678AC2;
-        Fri, 23 Jun 2023 08:22:57 -0700 (PDT)
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-570282233ceso6522497b3.1;
-        Fri, 23 Jun 2023 08:22:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687533776; x=1690125776;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lDiyFgY/P4UigW7QW8bCP4HR3ID78EGLq0qXlWW8WmE=;
-        b=YS31wU9Q3tuw0LIK1A3OHIMTBb473Z6VpKc4uDsE71tG8ZqmTrk/lMu0nP79v1BZEp
-         xYQyN0Em5HkGL1eCJlnDu2l6F6StBMUUtdo9ZwHHLXxesjaBSHXYMa/J6vcfh8ajMG7h
-         NNKGKWrHvB6zxi1fcuQvEzrbUv0ytDBcBUwjM77ocpyT6hMK0zmOopfA03M5lE7KfbbL
-         t2ZDGINt13ryBjtbq6zxyadB5RUULdDIAP1oDGIlFRo+gq/QBI4SOGrkcIOQPNFO2cXJ
-         cjbhHOuKH3LflMJCxDqt8LLKYtJBYyHHYM14gC5V9xTjI8vdF1GhBNi0vYgI1OAuwarY
-         cQoQ==
-X-Gm-Message-State: AC+VfDxXUuC4WfheZSqnq3m4qVCuS0UVdiVMqw4x4S36eQ1LzBpU38tw
-        wcmd8Bcm9EHR9F6TcaFXejCIodF7GmN5aw==
-X-Google-Smtp-Source: ACHHUZ4UElqC7Vy3EKUT/W6Tkh5PCjCEwUEfd52nMxSeicHrrGDfgcElSyvHbrZxFxrRHiPZmNnP8Q==
-X-Received: by 2002:a81:4fd7:0:b0:573:9e0a:b8bf with SMTP id d206-20020a814fd7000000b005739e0ab8bfmr8792657ywb.9.1687533776427;
-        Fri, 23 Jun 2023 08:22:56 -0700 (PDT)
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
-        by smtp.gmail.com with ESMTPSA id d12-20020a81ab4c000000b00545a08184cesm2479333ywk.94.2023.06.23.08.22.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Jun 2023 08:22:56 -0700 (PDT)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-5702415be17so6472877b3.2;
-        Fri, 23 Jun 2023 08:22:56 -0700 (PDT)
-X-Received: by 2002:a25:f802:0:b0:b9e:712f:4a17 with SMTP id
- u2-20020a25f802000000b00b9e712f4a17mr15639096ybd.6.1687533776073; Fri, 23 Jun
- 2023 08:22:56 -0700 (PDT)
+        Fri, 23 Jun 2023 11:23:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2444319B;
+        Fri, 23 Jun 2023 08:23:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A775761A87;
+        Fri, 23 Jun 2023 15:23:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CD60C433C0;
+        Fri, 23 Jun 2023 15:23:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687533806;
+        bh=6tFbzhaBjmMoKkG1CNrCXK+CWNwGbleX71IfZSZAiRQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=mDEZWbDgdq4hMs2Z9jt15TcgjRbUQiak6kDW7/sDpz1hUykHwK4yFRVHb8XXp6T2U
+         ce3AcuUDeo4JGbomgkEqmbOvufUqNXyZxgNQNbTdQI5cpffJae8QEhZ7Hzx0m+w4uj
+         eunRKNh3i1N+O/ugxP03zzduODf/mgqaf2/jbpakUccSSKzbEtaECmCdKmI1rYNKOq
+         3ZctNYWyNmGJj3Xb4+5ZvTvknnYPl8OG4O0yQ9q284fsyMio13ObzjE5InpVP0uyFQ
+         QR4zMlZpyRjNvTocgOiyBcGvw1YZ84AOnn7cm5RkbGbbJVdWzok9eEPN4xhmWOVxO8
+         C15PaBm99di3Q==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Gerald Loacker <gerald.loacker@wolfvision.net>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Mikhail Rudenko <mike.rudenko@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Vincent Shih <vincent.sunplus@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org
+Subject: [PATCH] media: tc358746: select CONFIG_GENERIC_PHY
+Date:   Fri, 23 Jun 2023 17:23:09 +0200
+Message-Id: <20230623152318.2276816-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <cover.1687423204.git.geert+renesas@glider.be> <742b3351c1aed1f546ac2dcc1de15e0d04cc24d4.1687423204.git.geert+renesas@glider.be>
- <20230623150742.GK2112@pendragon.ideasonboard.com> <20230623151109.GL2112@pendragon.ideasonboard.com>
-In-Reply-To: <20230623151109.GL2112@pendragon.ideasonboard.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 23 Jun 2023 17:22:45 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWn-V5b61t7SDDEW_fUt09Y=EVPdXCmAiht0c4uD67siA@mail.gmail.com>
-Message-ID: <CAMuHMdWn-V5b61t7SDDEW_fUt09Y=EVPdXCmAiht0c4uD67siA@mail.gmail.com>
-Subject: Re: [PATCH 06/39] drm: renesas: shmobile: Add support for Runtime PM
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Laurent,
+From: Arnd Bergmann <arnd@arndb.de>
 
-On Fri, Jun 23, 2023 at 5:11 PM Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
-> On Fri, Jun 23, 2023 at 06:07:44PM +0300, Laurent Pinchart wrote:
-> > On Thu, Jun 22, 2023 at 11:21:18AM +0200, Geert Uytterhoeven wrote:
-> > > The SH-Mobile LCD Controller is part of a PM Domain on all relevant SoCs
-> > > (clock domain on all, power domain on some).  Hence it may not be
-> > > sufficient to manage the LCDC module clock explicitly (e.g. if the
-> > > selected clock source differs from SHMOB_DRM_CLK_BUS).
-> > >
-> > > Fix this by using Runtime PM instead.
-> > >
-> > > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > > ---
-> > >  drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c | 11 ++++++++++-
-> > >  drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c  |  5 +++++
-> > >  2 files changed, 15 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c b/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c
-> > > index fbfd906844da490c..84dbf35025d7be63 100644
-> > > --- a/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c
-> > > +++ b/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c
-> > > @@ -9,6 +9,7 @@
-> > >
-> > >  #include <linux/backlight.h>
-> > >  #include <linux/clk.h>
-> > > +#include <linux/pm_runtime.h>
-> > >
-> > >  #include <drm/drm_crtc.h>
-> > >  #include <drm/drm_crtc_helper.h>
-> > > @@ -170,10 +171,16 @@ static void shmob_drm_crtc_start(struct shmob_drm_crtc *scrtc)
-> > >     if (WARN_ON(format == NULL))
-> > >             return;
-> > >
-> > > +   ret = pm_runtime_resume_and_get(sdev->dev);
-> > > +   if (ret)
-> > > +           return;
-> > > +
-> > >     /* Enable clocks before accessing the hardware. */
-> > >     ret = shmob_drm_clk_on(sdev);
-> >
-> > This would be best located in the runtime PM resume handler. Same for
-> > disabling clocks in the runtime PM suspend handler.
->
-> The driver should then depend on CONFIG_PM. There's no indirect
-> dependency through CONFIG_DRM as far as I can tell, but there's one
-> through ARCH_SHMOBILE. This then got me puzzled, as ARCH_SHMOBILE is
-> defined in arch/sh/Kconfig, and this driver depends on ARM. Am I missing
-> something ?
+The tc358746 driver selects CONFIG_GENERIC_PHY_MIPI_DPHY and links to
+that, but this fails when CONFIG_GENERIC_PHY is disabled, because Kbuild
+then never enters the drivers/phy directory for building object files:
 
-Vommit 4bd65789ba847f39 ("drm: shmobile: Make DRM_SHMOBILE visible on
-Renesas SoC platforms") in drm-next:
+ERROR: modpost: "phy_mipi_dphy_get_default_config_for_hsclk" [drivers/media/i2c/tc358746.ko] undefined!
 
--       depends on DRM && ARM
--       depends on ARCH_SHMOBILE || COMPILE_TEST
-+       depends on DRM
-+       depends on ARCH_RENESAS || ARCH_SHMOBILE || COMPILE_TEST
+Add an explicit 'select GENERIC_PHY' here to ensure that the directory
+is entered, and add another dependency on that symbol so make it
+more obvious what is going on if another driver has the same problem,
+as this will produce a Kconfig warning.
 
-Gr{oetje,eeting}s,
+Fixes: 80a21da360516 ("media: tc358746: add Toshiba TC358746 Parallel to CSI-2 bridge driver")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/media/i2c/Kconfig | 1 +
+ drivers/phy/Kconfig       | 1 +
+ 2 files changed, 2 insertions(+)
 
-                        Geert
-
+diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
+index cf675ac4b1326..226454b6a90dd 100644
+--- a/drivers/media/i2c/Kconfig
++++ b/drivers/media/i2c/Kconfig
+@@ -1305,6 +1305,7 @@ config VIDEO_TC358746
+ 	select VIDEO_V4L2_SUBDEV_API
+ 	select MEDIA_CONTROLLER
+ 	select V4L2_FWNODE
++	select GENERIC_PHY
+ 	select GENERIC_PHY_MIPI_DPHY
+ 	select REGMAP_I2C
+ 	help
+diff --git a/drivers/phy/Kconfig b/drivers/phy/Kconfig
+index f46e3148d286d..8dba9596408f2 100644
+--- a/drivers/phy/Kconfig
++++ b/drivers/phy/Kconfig
+@@ -18,6 +18,7 @@ config GENERIC_PHY
+ 
+ config GENERIC_PHY_MIPI_DPHY
+ 	bool
++	depends on GENERIC_PHY
+ 	help
+ 	  Generic MIPI D-PHY support.
+ 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.39.2
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
