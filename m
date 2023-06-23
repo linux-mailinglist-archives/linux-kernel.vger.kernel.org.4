@@ -2,147 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F269D73C198
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 22:56:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9BC173C199
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 22:58:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231773AbjFWU4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 16:56:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41240 "EHLO
+        id S231523AbjFWU6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 16:58:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232397AbjFWU4T (ORCPT
+        with ESMTP id S229446AbjFWU54 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 16:56:19 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F7801BF2;
-        Fri, 23 Jun 2023 13:55:52 -0700 (PDT)
-Received: from leknes.fjasle.eu ([46.142.49.205]) by mrelayeu.kundenserver.de
- (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MNbtF-1qS1JM46Dz-00P4i8; Fri, 23 Jun 2023 22:55:12 +0200
-Received: by leknes.fjasle.eu (Postfix, from userid 1000)
-        id F006F3EA3D; Fri, 23 Jun 2023 22:55:08 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fjasle.eu; s=mail;
-        t=1687553709; bh=/zs8pKuVXLztJtcOtsm1AgBqJ6bbce3gdJiuX7Qc3AE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=opQXZo2ktEW/Lu2ISSW6iZtO1fBrMM06STnPzvVkUVmLL06YnLwkiSymhlyL1jWG2
-         EC8rc3i6WOtIUw6pmlt3BkNTR6soVW0FJEeD/5yKIDdlFGxdS3IWQetFxL5hycxVjz
-         5WR5mrZ6KbfucrnGZ8VzKltEzmh1iEEOvsV8H+4k=
-Date:   Fri, 23 Jun 2023 22:55:08 +0200
-From:   Nicolas Schier <nicolas@fjasle.eu>
-To:     Josh Triplett <josh@joshtriplett.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Ben Hutchings <ben@decadent.org.uk>,
-        linux-snps-arc@lists.infradead.org,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: Re: [PATCH] kbuild: builddeb: always make modules_install, to
- install modules.builtin*
-Message-ID: <ZJYGrC+3l50kcNkl@fjasle.eu>
-References: <20230615111743.883891-1-masahiroy@kernel.org>
- <f7e9220aad3d98bd174f7dcbd68031e1e15ea968.1687461492.git.josh@joshtriplett.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="eTEBsKav2BLy7Olg"
-Content-Disposition: inline
-In-Reply-To: <f7e9220aad3d98bd174f7dcbd68031e1e15ea968.1687461492.git.josh@joshtriplett.org>
-X-Provags-ID: V03:K1:WrZ7MfH0d46/XjgZv+BwCHXBbU2AcHmiUYZs4bF6vyW19YODJEv
- OcnU/WZ5uUUWaWuylYMZZwAltu23VKq5SOKaI+10L09ys02CPeCIUVqqeJV+Fo1R6n7Fp0V
- x7IbQadZN3R4OrYYQ9Zzhhyoddc+4IkURg/F1vy4fzyWesEfNgvDMZzSeJizm0K1g72tNvw
- GP28NbRcj3gWqNj9S/BXg==
-UI-OutboundReport: notjunk:1;M01:P0:Wo85uib8gV4=;bMFL52HzeQnR0BtrNo8OniHR1h5
- Xi/7hIGw8znmM1qv7FnUH4CauBtaohBXwcGX3mrY4xQoU+4zeYZAFMl2snrBv7sYqLmMwdIgn
- z659cZtIs6w6x0WlmNWf3B5OgFBh/wfeAm2Ld0jIW+e/twNtxv0yj7ldHrtDYRGZzM7JFVI+H
- tNMZPk8T/mtGVfy1a1K1Jaql1Hwd8jgG8twPuwZK1wgAp/3ZCPNJXcs2X6iaJwiYWBc+tcfFD
- J3BK4MzqXsMKnFUIkI/bIYVtKxsZyMXsDKFzk1xBmA+y6b/A4/UcCNBF8ImU3LtTX1BJQu1uy
- GtdHwStCTWSnFM1MCedt88BYMrQYeukg/hXsW48xK2/sZlJaOkBuu0uo8wcsGICYl0VxfUcFX
- yzlrfeGHBHDGK8mJ9ThA2DYkLwbLXXdHNMgroYYNs/WDdcXXcygUdkYXOWakFIRCfbIJvIDre
- 7NpQhFTTx+2wbL0PZhfgxRToivjvs1L4Fyabe71MSGeukMpk92ywuoZsjpqm1hEPzv/kwUjCB
- /TqA8tYb1d71a2X4nu2HqfxXVO/GN6z0VWJNpA0CUew4hGHCZqi7Cj926IrTHtdzfHdu+dFk5
- yrs7A811f9cFMsgE2AhfgSZycIwm0apEr5PwaTUaQcwXfx3leos6bhqwsZ+EqZC9ZALRv9sYN
- vtvs+ZfXAId3rGYSqFjyVxqj9ctuIRmgHLKnOh2ROg==
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,URIBL_BLOCKED
-        autolearn=no autolearn_force=no version=3.4.6
+        Fri, 23 Jun 2023 16:57:56 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 335D32130
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 13:57:55 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 89B7E320091B;
+        Fri, 23 Jun 2023 16:57:52 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 23 Jun 2023 16:57:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm1; t=1687553872; x=1687640272; bh=tRa6faL8nedd+6K1urdZanKhA
+        GDHKhkp0FltEiRxjrc=; b=TwF0ATiRxsyGdeqS4T3aGJ64+692dHb8irSLjG1EN
+        iBWecmSb3AydJcCs1Pi0PVJ8QzHEK7454gF4HJb2tipNpB+AQGa0SYrYZGs+z0mj
+        19wzNbVny4JBDpbg/kffWJMerVhoEX2DlbT/8gIG2K1hJ8WQONyVIixQmkrnnR/a
+        U9GBZmuyATWIVa/cl2+T9+d1KlKlDYRfvm1llz2HuJ7zHe4mQ49Eh6WQl3uQ4FSI
+        OnPyaTiSNmE81zu5qlAsbkVEWdCdY9GoBlBPlgz4lxzV6kC/7bQ6qDgG7fQo0xGr
+        pTNDFUmz6pZolgrne0MY4DNH6bpJG/2WeV/aPhp9Z1QKw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1687553872; x=1687640272; bh=tRa6faL8nedd+6K1urdZanKhAGDHKhkp0Fl
+        tEiRxjrc=; b=Q85cYncPivm20vbdgI6SSmRAaYOsOGU0iDyA8JNZ3NMfdp9A6ir
+        QRTDpRCkwmbAUgPu2RJ1AAJ3hKO9EGBM5Mb6V7EQQ7VYFaOu4zHqGUSChMoOzeVq
+        FekFTMjd2gaGrQJgjpDyUzWLLq0WTfKWrAfDgB1dAZ1976/pICjIT+8WiS1xFaqD
+        oKamPThot9Rag2fc1M4TpfI8Zj1G1+93i0yeqWEmP6S419QIgI4HP0VEjTANI7aQ
+        jScubguDNBLsoyvnm2m+y08EKGqFkXjtWG4lpltiYGf/LHrgzZPCT9gyyiHhU8AT
+        8a8mBk4svt5JlXMvxV7SDTKzJSRlkIJscaA==
+X-ME-Sender: <xms:TweWZLDoxwtYY_a4kNu3kwHC0kHkHFHFUXGGrqgpszeo8DgmMfQtQQ>
+    <xme:TweWZBhPYglexVYfV3uv6qmPZLTNriAxlqmQw1-b_OwAm7EfE__8nP0G6rTkrhxQK
+    2TM8zVFQlwXHtz57Qc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeeggedgudehgecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeeffeeuhfekjeevtddvtdelledttddtjeegvdfhtdduvdfhueekudeihfejtefg
+    ieenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
+    enucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:TweWZGmVawOoX0ciW3xasRRliJYjyag0gE5tQjaRNC-pc8z3C2TiIg>
+    <xmx:TweWZNxfuiwghS0sO8ByLdbOFkDXeda16iXgDMF-xvhTLnWpKAGO3A>
+    <xmx:TweWZAQ9juBrlkXZBzzYyTaPH6MZ8P3QlBlcvuu1z7R0b9G5L8dARA>
+    <xmx:UAeWZGNY94__nHjRUBGix6tB2_92CYEt0vtgew1XyqmAfMzvKd8KEA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 861C1B60086; Fri, 23 Jun 2023 16:57:51 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
+Mime-Version: 1.0
+Message-Id: <fac1e7b7-4ba6-4334-a550-9d8a78037bf6@app.fastmail.com>
+Date:   Fri, 23 Jun 2023 22:57:31 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc:     soc@kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        "Doug Anderson" <dianders@chromium.org>,
+        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>
+Subject: [GIT PULL] ARM: SoC fixes for 6.4, part 3
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The following changes since commit 858fd168a95c5b9669aac8db6c14a9aeab446375:
 
---eTEBsKav2BLy7Olg
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+  Linux 6.4-rc6 (2023-06-11 14:35:30 -0700)
 
-On Thu, Jun 22, 2023 at 12:19:53PM -0700 Josh Triplett wrote:
-> Even for a non-modular kernel, the kernel builds modules.builtin and
-> modules.builtin.modinfo, with information about the built-in modules.
-> Tools such as initramfs-tools need these files to build a working
-> initramfs on some systems, such as those requiring firmware.
->=20
-> Now that `make modules_install` works even in non-modular kernels and
-> installs these files, unconditionally invoke it when building a Debian
-> package.
->=20
-> Signed-off-by: Josh Triplett <josh@joshtriplett.org>
-> ---
+are available in the Git repository at:
 
-thanks!
+  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/arm-fixes-6.4-3
 
-Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
+for you to fetch changes up to ed8ff046eddd916627e1e9a549eacd9c043fde7d:
 
+  Merge tag 'qcom-arm64-fixes-for-6.4-2' of https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into arm/fixes (2023-06-23 22:13:27 +0200)
 
-> This patch depends on
-> https://lore.kernel.org/lkml/20230615111743.883891-1-masahiroy@kernel.org/
->=20
->  scripts/package/builddeb | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/scripts/package/builddeb b/scripts/package/builddeb
-> index 252faaa5561c..f500e3910158 100755
-> --- a/scripts/package/builddeb
-> +++ b/scripts/package/builddeb
-> @@ -62,8 +62,8 @@ install_linux_image () {
->  		${MAKE} -f ${srctree}/Makefile INSTALL_DTBS_PATH=3D"${pdir}/usr/lib/li=
-nux-image-${KERNELRELEASE}" dtbs_install
->  	fi
-> =20
-> +	${MAKE} -f ${srctree}/Makefile INSTALL_MOD_PATH=3D"${pdir}" modules_ins=
-tall
->  	if is_enabled CONFIG_MODULES; then
-> -		${MAKE} -f ${srctree}/Makefile INSTALL_MOD_PATH=3D"${pdir}" modules_in=
-stall
->  		rm -f "${pdir}/lib/modules/${KERNELRELEASE}/build"
->  		rm -f "${pdir}/lib/modules/${KERNELRELEASE}/source"
->  		if [ "${SRCARCH}" =3D um ] ; then
-> --=20
-> 2.40.1
+----------------------------------------------------------------
+ARM: SoC fixes for 6.4, part 3
 
---=20
-epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
-=E2=86=B3 gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
-     -- frykten for herren er opphav til kunnskap --
+The final bug fixes for Qualcomm and Rockchips came in, all of them
+for devicetree files:
 
---eTEBsKav2BLy7Olg
-Content-Type: application/pgp-signature; name="signature.asc"
+ - Devices on Qualcomm SC7180/SC7280 that are cache coherent are now
+   marked so correctly to fix a regression after a change in kernel behavior.
 
------BEGIN PGP SIGNATURE-----
+ - Rockchips has a few minor changes for correctness of regulator and cache
+   properties, as well as fixes for incorrect behavior of the RK3568 PCI
+   controller and reset pins on two boards.
 
-iQIzBAABCAAdFiEEh0E3p4c3JKeBvsLGB1IKcBYmEmkFAmSWBqwACgkQB1IKcBYm
-EmnWfRAAtP85RutI/lZit0ETIZsCYS4olhIri+eUsdAAXiMeRmh4QcDhuyEWgppK
-2J0oI1XOQY45GRmID28iGIPjhIG3/bd+TWnIC4tDc3/z+DWpmWIc8O3ICuqs5luJ
-MiWgPH6QVvGSl3WE+i48X8kP8AxizXeBP+SSxQuQsEMqfi8fCPm/l2wMReOTaKJ6
-3VMeDqvC8IPdTSOgyO4TrdShwsTRBsMUDzkZ8kYk9ElbgdO6DX8Pz4YENn473aaQ
-JgYlqgHkXDmUAcud+CA49Lsp+GDIV+SQPmcZTCuSKEvWkPBjOMM1/YoErUKeaTht
-DehzO3DqlWN+6yTzHUIE94DTQ/rBJ9qqir9psg/jE6Ud22QlOFc7Wp3FP47qNTkm
-lohdvXWQfRvkOAn9zb0IehTwHtW2zJ3I4+B1gN0kFrUyWA8xqHpzBIC17iJhHyJe
-XeTwnGAO51su8fqpESiISeGGt+3VTSpJJt39lGlAgsRFf8H1ETUF3vyTncM+vZos
-8/mgs7mCgN6kaiJYiTaMNgEctFUG6gG9t0SFJP5spGrz3pvaJwBv2DofQzahFSLk
-E5GAtaBuHf1pMVeR8BzwkCfFN7ajF/3xbm3fZbIbnLYFfJ5Sfw29VkUrPI8zyseg
-ne8e7LwfsP369WZYp64JMtEFnZfxkwxSaJa6csH4EYHUl1sBtuY=
-=xiGO
------END PGP SIGNATURE-----
+----------------------------------------------------------------
+Andrew Powers-Holmes (1):
+      arm64: dts: rockchip: Fix rk356x PCIe register and range mappings
 
---eTEBsKav2BLy7Olg--
+Arnd Bergmann (2):
+      Merge tag 'v6.4-rockchip-dtsfixes1' of git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip into arm/fixes
+      Merge tag 'qcom-arm64-fixes-for-6.4-2' of https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into arm/fixes
+
+Douglas Anderson (4):
+      dt-bindings: firmware: qcom,scm: Document that SCM can be dma-coherent
+      arm64: dts: qcom: sc7180: Mark SCM as dma-coherent for IDP
+      arm64: dts: qcom: sc7180: Mark SCM as dma-coherent for trogdor
+      arm64: dts: qcom: sc7280: Mark SCM as dma-coherent for chrome devices
+
+Krzysztof Kozlowski (1):
+      arm64: dts: rockchip: add missing cache properties
+
+Lorenz Brun (1):
+      arm64: dts: rockchip: fix USB regulator on ROCK64
+
+Nicolas Frattaroli (1):
+      arm64: dts: rockchip: fix nEXTRST on SOQuartz
+
+Tianling Shen (1):
+      arm64: dts: rockchip: fix button reset pin for nanopi r5c
+
+ .../devicetree/bindings/firmware/qcom,scm.yaml     |  2 ++
+ arch/arm64/boot/dts/qcom/sc7180-idp.dts            |  5 ++++
+ arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi       |  5 ++++
+ arch/arm64/boot/dts/qcom/sc7180.dtsi               |  2 +-
+ arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi |  5 ++++
+ arch/arm64/boot/dts/qcom/sc7280.dtsi               |  2 +-
+ arch/arm64/boot/dts/rockchip/rk3308.dtsi           |  1 +
+ arch/arm64/boot/dts/rockchip/rk3328-rock64.dts     | 14 ++---------
+ arch/arm64/boot/dts/rockchip/rk3328.dtsi           |  1 +
+ .../boot/dts/rockchip/rk3566-soquartz-cm4.dts      | 18 ++++++++------
+ arch/arm64/boot/dts/rockchip/rk3566-soquartz.dtsi  | 29 ++++++++++------------
+ arch/arm64/boot/dts/rockchip/rk3568-nanopi-r5c.dts |  2 +-
+ arch/arm64/boot/dts/rockchip/rk3568-nanopi-r5s.dts |  1 -
+ arch/arm64/boot/dts/rockchip/rk3568.dtsi           | 14 ++++++-----
+ arch/arm64/boot/dts/rockchip/rk356x.dtsi           |  7 +++---
+ arch/arm64/boot/dts/rockchip/rk3588s.dtsi          |  9 +++++++
+ 16 files changed, 69 insertions(+), 48 deletions(-)
