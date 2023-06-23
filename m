@@ -2,112 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4E9A73B77A
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 14:36:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B197573B781
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 14:37:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231214AbjFWMgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 08:36:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56662 "EHLO
+        id S231561AbjFWMhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 08:37:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230168AbjFWMgr (ORCPT
+        with ESMTP id S231558AbjFWMhV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 08:36:47 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57CBB10C1;
-        Fri, 23 Jun 2023 05:36:45 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1b52bf6e66aso3024775ad.3;
-        Fri, 23 Jun 2023 05:36:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687523805; x=1690115805;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fRFszYI+9Qw1I1IAdyHoXb57hiMrn2v6H8gZ9EF6v9U=;
-        b=L5R0/RAydkwltXsXehskQEBkNzFK4/MVvfMkBTioAsH8bRDuO3IsG058ILG/Fm3Y/G
-         q/d127dskB6hmxwbGWh72gS2E/dzane7nlYj+aDK8vEV6KJtLCHGE5s24WDq7f1/BDo0
-         EIGRIDHQz+aC+jDkbF/4t+wzL9pazKMWD/PqHjXsGbK7iX5Ug7fKqsmDnxuZkBVvHIFn
-         LvppyyltF194+L4JZb7xQ2O6NPZ4xxbASCq+5d5RjthX5JsMVWm5GJwpDh20+51pm3C9
-         AhS/RolaCcrYEbRterYhnk+hzAO0w1GzAgJh0YH+Ei4eisrgOEEFOVqQj+Ne1HjR+bv1
-         Gwtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687523805; x=1690115805;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=fRFszYI+9Qw1I1IAdyHoXb57hiMrn2v6H8gZ9EF6v9U=;
-        b=kR4n74m6xIU+L0MGm+7t4nroC9svQXNketNgeOYbpx+qOQkf7Vo4ivf1GnRg2Tn61r
-         BhiHk7VkWfMamwkqthnG/Cdz17JKtuwJ7k2Y+FosW5IE5en6BoXY1gm7UXIFEXXlM1Gu
-         2HU0MjziJJR/hF2agNrABL6N35GwJ/24mSd1XajN1hqg4BMvYb8t0H3LuXKALXWLQmTR
-         i/bSQIIpIJ5E6Mfsh02G3GeFDnpxHqKGYIhul288xkVWvXlrOPqBqb8sgQ1EhyAihuTX
-         HJjYny/WW9nfa+BOoucxlYghcrjUjAAu11e2QDTKfbHd21wWKfQD8ksoUDpXv3PyQHTt
-         0n2A==
-X-Gm-Message-State: AC+VfDxLKPvR5zJ6CtqaMCa51LyQmrCxMLfOUASVVRavFcgPP7/KBvq3
-        28LgYJsQxi+iiLdc5Ff03cE=
-X-Google-Smtp-Source: ACHHUZ5G3Xm07SkD9tSvZjIav/cQnBT+Rn3G8kuel8ZSZvnXQ5c9RcE/3DmDQVTFKqgtT1WcEiasPA==
-X-Received: by 2002:a17:902:bb96:b0:1ac:8837:de9 with SMTP id m22-20020a170902bb9600b001ac88370de9mr8065763pls.3.1687523804673;
-        Fri, 23 Jun 2023 05:36:44 -0700 (PDT)
-Received: from [192.168.0.103] ([103.131.18.64])
-        by smtp.gmail.com with ESMTPSA id c15-20020a170903234f00b001b694130c05sm5414045plh.1.2023.06.23.05.36.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Jun 2023 05:36:44 -0700 (PDT)
-Message-ID: <5d4959b7-61da-8ab0-6bc6-21305d37c7aa@gmail.com>
-Date:   Fri, 23 Jun 2023 19:36:21 +0700
+        Fri, 23 Jun 2023 08:37:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 945671FE3
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 05:36:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687523789;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=dtGrfm495E45d+YHItqZvu/mH6EDCO2k98c0kIi0BvU=;
+        b=XDoWvXTR+oMzWCyiQ45iUv55hcu/WMw48FYZmf7BxhXAQPYo2gyWUfd199ttUABb+IX5h/
+        v5HId7egTsaLRfb5uNuy2oyc6aIToPbU6MnM9wGtnZpR2B4fSxoCvrAihQFd5OAW5D+6RN
+        1ZLYmrGdgJtuKvOQDHoHCy4p5DyAcAI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-120-8i2q_hhINHGWIFsi3Xo9cw-1; Fri, 23 Jun 2023 08:36:26 -0400
+X-MC-Unique: 8i2q_hhINHGWIFsi3Xo9cw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F032C8E44E1;
+        Fri, 23 Jun 2023 12:36:25 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 55FDFC1ED97;
+        Fri, 23 Jun 2023 12:36:25 +0000 (UTC)
+From:   Emanuele Giuseppe Esposito <eesposit@redhat.com>
+To:     x86@kernel.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexander Potapenko <glider@google.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        =?UTF-8?q?Daniel=20P=20=2E=20Berrang=C3=A9?= <berrange@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>
+Subject: [RFC PATCH] x86/boot: add .sbat section to the bzImage
+Date:   Fri, 23 Jun 2023 08:36:22 -0400
+Message-Id: <20230623123622.4126234-1-eesposit@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Content-Language: en-US
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Elmar Stellnberger <estellnb@elstel.org>,
-        Thorsten Leemhuis <regressions@leemhuis.info>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux Memory Management <linux-mm@kvack.org>,
-        Linux Stable <stable@vger.kernel.org>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: Fwd: kernel fault on hibernation: get_zeroed_page/swsusp_write
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+*Important*: this is just an RFC, as I am not expert in this area and
+I don't know what's the best way to achieve this.
 
-I notice a regression report on Bugzilla [1]. Quoting from it:
+The aim of this patch is to add a .sbat section to the linux binary
+(https://github.com/rhboot/shim/blob/main/SBAT.md).
+We mainly need SBAT in UKIs (Unified Kernel Images), as we might want
+to revoke authorizations to specific signed PEs that were initially
+considered as trusted. The reason might be for example a security issue
+related to a specific linux release.
 
-> page allocation error using kernel 6.3.7-desktop-1.mga9 #1 SMP PREEMPT_DYNAMIC, from Fr 09 Jun 2023 22:57:31, Key ID b742fa8b80420f66; see the backtrace in the dmesg
->> cat /proc/cpuinfo
-> siblings	: 4
-> core id		: 1
-> cpu cores	: 2
-> ...
-> type: regression, worked with the previous kernel, namely 6.3.6, Mo 05 Jun 2023 21:37:15, Key ID b742fa8b80420f66 before updating today
+A .sbat is simply a section containing a string with the component name
+and a version number. This version number is compared with the value in
+OVMF_VARS, and if it's less than the variable, the binary is not trusted,
+even if it is correctly signed.
 
-And then:
+Right now an UKI is built with a .sbat section containing the
+systemd-stub sbat string (upstream + vendor), we would like to add
+also a per-component specific string (ie vmlinux has its own sbat,
+again upstream + vendor, each signed add-on its own and so on).
+In this way, if a specific kernel version has an issue, we can revoke
+it without compromising all other UKIs that are using a different
+kernel with the same stub/initrd/something else.
 
-> The first hibernation attempt resulted in the backtrace you can see in the dmesg above, my second hibernation attempt from a text console (vt03 or so) has worked without errors and the third one I tried to do from the GUI/X11 again; see the debug options I had turned on). On the third attempt something strange did happen. It seemed to write to disk as it should, the screen turned black but the power led and button still stayed alighted. Waking up by pressing the power button did not yield any effect, nor the SysRq keys (alas forgot to write 511 to >/proc/sys/kernel/sysrq). After a hard power reset it booted as if not hibernated. On the first hibernation attempt I could see lengthy and intermittent disk access. On the third attempt I had waited for some considerable time.
+Issues with this patch:
+* the string is added in a file but it is never deleted
+* if the code is not modified but make is issued again, objcopy will
+  be called again and will fail because .sbat exists already, making
+  compilation fail
+* minor display issue: objcopy command is printed in the make logs
 
-See Bugzilla for the full thread and attached infos (dmesg, journalctl,
-stack trace disassembly).
+Signed-off-by: Emanuele Giuseppe Esposito <eesposit@redhat.com>
+---
+ arch/x86/boot/Makefile | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Unfortunately, the reporter can't provide /proc/kcore output
-and haven't performed bisection yet (he can't build custom kernel).
-
-Anyway, I'm adding it to regzbot (as stable-specific regression) for now:
-
-#regzbot introduced: v6.3.6..v6.3.7 https://bugzilla.kernel.org/show_bug.cgi?id=217544
-#regzbot title: page allocation error (kernel fault on hibernation involving get_zeroed_page/swsusp_write)
-#regzbot link: https://bugs.mageia.org/show_bug.cgi?id=32044
-
-Thanks.
-
-[1]: https://bugzilla.kernel.org/show_bug.cgi?id=217544
-
+diff --git a/arch/x86/boot/Makefile b/arch/x86/boot/Makefile
+index 9e38ffaadb5d..65ff6fcf5372 100644
+--- a/arch/x86/boot/Makefile
++++ b/arch/x86/boot/Makefile
+@@ -83,6 +83,8 @@ cmd_image = $(obj)/tools/build $(obj)/setup.bin $(obj)/vmlinux.bin \
+ 
+ $(obj)/bzImage: $(obj)/setup.bin $(obj)/vmlinux.bin $(obj)/tools/build FORCE
+ 	$(call if_changed,image)
++	@$(kecho) "linux,1,The Linux Developers,linux,$(KERNELVERSION),https://linux.org" > linux.sbat;
++	$(OBJCOPY) --set-section-alignment '.sbat=512' --add-section .sbat=linux.sbat $@;
+ 	@$(kecho) 'Kernel: $@ is ready' ' (#'$(or $(KBUILD_BUILD_VERSION),`cat .version`)')'
+ 
+ OBJCOPYFLAGS_vmlinux.bin := -O binary -R .note -R .comment -S
 -- 
-An old man doll... just what I always wanted! - Clara
+2.39.1
+
