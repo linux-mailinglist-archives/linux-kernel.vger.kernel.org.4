@@ -2,49 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78FBE73BF4A
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 22:15:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98EB973BF4B
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 22:15:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229531AbjFWUPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 16:15:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42962 "EHLO
+        id S231680AbjFWUPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 16:15:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231824AbjFWUOu (ORCPT
+        with ESMTP id S231464AbjFWUPC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 16:14:50 -0400
-Received: from relay05.th.seeweb.it (relay05.th.seeweb.it [5.144.164.166])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42D152721;
-        Fri, 23 Jun 2023 13:14:48 -0700 (PDT)
-Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        Fri, 23 Jun 2023 16:15:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 960C82721;
+        Fri, 23 Jun 2023 13:15:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 01A583EBA4;
-        Fri, 23 Jun 2023 22:14:45 +0200 (CEST)
-Date:   Fri, 23 Jun 2023 22:14:44 +0200
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc:     Jessica Zhang <quic_jesszhan@quicinc.com>,
-        freedreno@lists.freedesktop.org, Sean Paul <sean@poorly.run>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Rob Clark <robdclark@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        David Airlie <airlied@gmail.com>
-Subject: Re: [Freedreno] [PATCH 3/3] drm/msm/dsi: Enable DATABUS_WIDEN for
- DSI command mode
-Message-ID: <daqhyz4rtgdxthsezmgk6t2egbdsvzsdy3cihrqrhyveoqbizi@etq2tafkucg2>
-References: <20230525-add-widebus-support-v1-0-c7069f2efca1@quicinc.com>
- <20230525-add-widebus-support-v1-3-c7069f2efca1@quicinc.com>
- <ky7sgsaohak2pcdf6pbhedfyrwk4ea7y3ekfqlw7rn6cpk4rhe@rjuhb23n37oz>
- <cf968ab4-e4c4-dcad-f7d1-4edff6f08147@quicinc.com>
- <xrqiat4otnfwtss6zwubh77qx3frdyi77flna2xljzycvr6r2v@riimvmhoondt>
- <654ccc4c-40c2-bef6-9f47-847216e16cb0@quicinc.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B50A619EF;
+        Fri, 23 Jun 2023 20:15:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16C10C433C0;
+        Fri, 23 Jun 2023 20:14:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687551300;
+        bh=cBdOmzREH23gQr5BLoIgKLXYX1NGEsq6gM/x9nbKeJA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=NSmPbphvqssng0ETNLPI8H7XtPiIAsT3lZTFpnU8blIbBjO+d1xLZgXWqS8jf6mqo
+         ZnZkoGIgh49/FAbKjkQg7T1BokS06BCe+EavA4tMKOVSUI2Lub4tVyJR8khoDNdRwD
+         d8aly1z5KAqgB/9hMH7Uy1sYXWa3UorUNGuwig2yqUEB6aNihq0A7RNFDWtUZXRoCD
+         79m3T1O8pe3TU48eh1KUxPBSvsjmAlvuPaWx+/J6724D9NW5/juV2i7U0E1Z+hVdul
+         GCad2nA1sT4b/vdch39iHd+FePWdd/ZhPJV43HcLvkJDSCzMIbx1K7SDwfLC0tES0V
+         dPxv6Hsp+hsWw==
+Date:   Fri, 23 Jun 2023 15:14:58 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     lpieralisi@kernel.org, kw@linux.com, kishon@kernel.org,
+        bhelgaas@google.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        dlemoal@kernel.org
+Subject: Re: [PATCH v6 2/9] PCI: endpoint: Pass EPF device ID to the probe
+ function
+Message-ID: <20230623201458.GA201342@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <654ccc4c-40c2-bef6-9f47-847216e16cb0@quicinc.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <20230602114756.36586-3-manivannan.sadhasivam@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -53,60 +57,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-06-23 10:29:51, Abhinav Kumar wrote:
-<snip>
-> The concept is quite simple
-> 
-> one pixel per clock for uncompresssed without widebubus
-> 
-> 2 pixels per clock for uncompressed with widebus (only enabled for DP 
-> not DSI)
-> 
-> 3 bytes worth of data for compressed without widebus
-> 
-> 6 bytes worth of data for compressed with widebus
-> 
-> When compression happens, we cannot quantify with pixels as the boundary 
-> is not defined with respect to bytes.
-> 
-> You brought up uncompressed in your below comment so I assumed your 
-> question of /2 was about uncompressed too.
+On Fri, Jun 02, 2023 at 05:17:49PM +0530, Manivannan Sadhasivam wrote:
+> Currently, the EPF probe function doesn't get the device ID argument needed
+> to correctly identify the device table ID of the EPF device.
+> ...
 
-No clue where things are going wrong, but you either avoid or
-misunderstand the question.
+> +++ b/drivers/pci/endpoint/functions/pci-epf-ntb.c
+> @@ -2075,11 +2075,12 @@ static struct config_group *epf_ntb_add_cfs(struct pci_epf *epf,
+>  /**
+>   * epf_ntb_probe() - Probe NTB function driver
+>   * @epf: NTB endpoint function device
+> + * @id: NTB endpoint function device ID
+>   *
+>   * Probe NTB function driver when endpoint function bus detects a NTB
+>   * endpoint function.
+>   */
+> -static int epf_ntb_probe(struct pci_epf *epf)
+> +static int epf_ntb_probe(struct pci_epf *epf, const struct pci_epf_device_id *id)
+> ...
 
-(Talking exclusively about compressed data here!)
+> +++ b/drivers/pci/endpoint/functions/pci-epf-vntb.c
+> @@ -1401,7 +1401,7 @@ static struct pci_epf_ops epf_ntb_ops = {
 
-pclk is determined based on the number of bytes.
+>   *
+>   * Returns: Zero for success, or an error code in case of failure
+>   */
+> -static int epf_ntb_probe(struct pci_epf *epf)
+> +static int epf_ntb_probe(struct pci_epf *epf, const struct pci_epf_device_id *id)
 
-When widebus is enabled, we transfer twice as many bytes per pclk cycle.
+I updated the pci/endpoint branch to add kernel-doc for the new "id",
+same as you did in pci-epf-ntb.c.
 
-Can pclk be reduced by a factor two, as that should still be enough to
-transfer the same amount of bytes when widebus is enabled?
+Just FYI, Lorenzo & Krzysztof -- hopefully there are no more updates
+before the merge window, but if you do add anything to this branch,
+update it first.
 
-> >> We tried our best to respond and explain to all your queries both on the
-> >> bug and the patch but i guess it just kept coming :)
-> > 
-> > Then send less patches!  As long as there is activity on the mailing
-> > list there'll always be questions going back and forth, and I don't
-> > think that's unreasonable.
-> > 
-> > Unless you want to push patches into mainline without questioning.
-> > 
-> 
-> the comments were bordering the line of becoming irrelevant to the 
-> patches like discussing video mode on a command mode patch when we had 
-> explained many many times that we did not validate them.
-
-You(r team) came up with irrelevant video-mode checks in these patches,
-and you keep bringing up topics that I did not mention (such as
-suddently talking about uncompressed formats above).  Stop pretending
-there's any nefarious intent here unless you intend to push external
-contributors away.
-
-> I dont want to add more comments to this. Lets stop discussing this and 
-> focus more on this patch.
-
-Perhaps if you answer the question?
-
-- Marijn
+Bjorn
