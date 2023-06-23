@@ -2,233 +2,524 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 152F573B34A
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 11:11:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1D5C73B34C
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 11:12:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230120AbjFWJLX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 05:11:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48426 "EHLO
+        id S230081AbjFWJMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 05:12:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbjFWJLV (ORCPT
+        with ESMTP id S229561AbjFWJM1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 05:11:21 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFDE5AC;
-        Fri, 23 Jun 2023 02:11:19 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35N8w2oS024484;
-        Fri, 23 Jun 2023 11:11:10 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=omZ0zQt1pwfFhIi98bamv9Vd4R9xMlAoJM5+IlZeCM8=;
- b=GGogktkeQ+MBzfvQNS8MR/4cUuG/NNQ/GCInUAheJnNHnkUoY/W/0Sj7QeGTqfy54Vng
- 5Hvwm/lOfQUbUs6gbLp9Us8UZ6yqlOx0SEsisolOefIdf29xp9SxmG4cyjk8810XPScL
- qm3c2GVdyqnUSEOkrYlaxwXct7K8RaRHMaRVMLSQAOCYuCWVBYr+3qwXKawtGiPBWOqd
- HzsoVtsbh3RoUyigR+sLGBS+UIfSjeoZrp6IHDgdVuxoSDGXZKmmLDohcDqGM60mTOju
- xva3XFsHbP9uWTbdpGBuborOK5Oy8WzHP0OmMNcnsLzOzDq8n8W5MFS9gkwoQO6lObpG +Q== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3rd8bp02y6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 23 Jun 2023 11:11:10 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 7448B100073;
-        Fri, 23 Jun 2023 11:11:06 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 6C9B4218613;
-        Fri, 23 Jun 2023 11:11:06 +0200 (CEST)
-Received: from [10.201.21.9] (10.201.21.9) by SHFDAG1NODE2.st.com
- (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Fri, 23 Jun
- 2023 11:11:04 +0200
-Message-ID: <d0e5a6bf-e89f-bcf0-7009-94edfbcf2a83@foss.st.com>
-Date:   Fri, 23 Jun 2023 11:11:03 +0200
+        Fri, 23 Jun 2023 05:12:27 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE1C6C2
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 02:12:24 -0700 (PDT)
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com [209.85.222.198])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id EE2733F18D
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 09:12:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1687511540;
+        bh=KFsSxKg0fjfznhicIfMHQlOmSjN+PVRg8x167vcTUcg=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=Kl9Q48W9J052ti/ahZYXnkL5h45vSnPqVn46TvmrjXP1Iye1v2w+YizrLvryDf04c
+         rYXh9OaavCz7JVnrVuAc4x4eM5eY/azeUu8zq8AmsMWrAsrD/HGtLxoIhrDVfhpNV9
+         4fGEV8jWa//l/d3iby2WTqnOOT9hE0Ws+jgr0prsRHcMmrpYh7fCPsJtiB8HKghGki
+         Hc7QUs3wk5iTPjPxIcnsel2z1SXMzq08aVe/peqEglyCW9vrmoCnTY0Ufe+nxgGsZB
+         RpE9LEKHWMWDsN7P69d/gc6wa88m051bxEyabeYbUcdT8PWgcosQIt+moKNqz8lL6j
+         hd49EA7RbDcXg==
+Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-76240ab6d72so52068985a.2
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 02:12:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687511539; x=1690103539;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KFsSxKg0fjfznhicIfMHQlOmSjN+PVRg8x167vcTUcg=;
+        b=dFc8mwa9BtbUgu5/X0JTqgLwGS7g8MGqupqpCXXA+ldnlmzYSD7y2UJynLsom2rYee
+         +aa90E4dRkolkAlzGbQbWQpFvVyz1CA4Ho4rgk/fQ5tWGq3i+Q7QdHnHuSGVXs5vNjiL
+         z5t0Uck+ovvLltslFlgeqoY9VAoMKxsKnqIwFxH1QdxsBjaloogQKutxANZvtmGvBeNt
+         jt8Yy5+PAO/oecQFbs6QBUJHg63wNtcWtcnzaWlq9OlAF3sB/sKnFX9elZ8jc+PPm8Zu
+         UxdysBfoJOi5kUArqu9va8aItlOcWnSMxrJpA3QQxa5NL+TaaTQdeFf5oX/0Wy7uYitz
+         86gQ==
+X-Gm-Message-State: AC+VfDy7tJVf3PIo2HNkSSWa1D1BjG6u7L8dH/zmRit95fNzzw9Djbq/
+        uwLNReujzgUtKe/DLu752wqKDYmq8s7LNv7rximHuHTqETZWDb5jXwdpjFyOsbYkXUtPgF0/KWZ
+        fXQEI02UUE9n4gkBfG7P2bX1lgzpIHPZUrNFKg8O8q4KMOFkL6J24XZvrcg==
+X-Received: by 2002:a05:622a:20b:b0:3f4:dec2:76cc with SMTP id b11-20020a05622a020b00b003f4dec276ccmr16083599qtx.49.1687511538943;
+        Fri, 23 Jun 2023 02:12:18 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4S0zZ9I6LFJdzcnCgnIflAUsGc2Y0T/BdRYb6VyEod8M93pZHx62Ir3GUE+Zfsc192u9F6fs5rju7QnKMi93g=
+X-Received: by 2002:a05:622a:20b:b0:3f4:dec2:76cc with SMTP id
+ b11-20020a05622a020b00b003f4dec276ccmr16083578qtx.49.1687511538573; Fri, 23
+ Jun 2023 02:12:18 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH V8 3/3] rpmsg: char: Add RPMSG GET/SET FLOWCONTROL IOCTL
- support
-Content-Language: en-US
-To:     Sarannya S <quic_sarannya@quicinc.com>,
-        <quic_bjorande@quicinc.com>, <swboyd@chromium.org>,
-        <quic_clew@quicinc.com>, <mathieu.poirier@linaro.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>,
-        Deepak Kumar Singh <quic_deesin@quicinc.com>,
-        Bjorn Andersson <andersson@kernel.org>
-References: <1687361648-27688-1-git-send-email-quic_sarannya@quicinc.com>
- <1687361648-27688-4-git-send-email-quic_sarannya@quicinc.com>
-From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
-Organization: STMicroelectronics
-In-Reply-To: <1687361648-27688-4-git-send-email-quic_sarannya@quicinc.com>
+References: <20230228215435.3366914-1-heiko@sntech.de> <20230228215435.3366914-3-heiko@sntech.de>
+In-Reply-To: <20230228215435.3366914-3-heiko@sntech.de>
+From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Date:   Fri, 23 Jun 2023 11:12:02 +0200
+Message-ID: <CAJM55Z_wLRaQsBHQu4Cdot4KDgUOjfh1G_b4TD4z=VFQwCmpPg@mail.gmail.com>
+Subject: Re: [PATCH RFC 2/2] RISC-V: add T-Head vector errata handling
+To:     Heiko Stuebner <heiko@sntech.de>
+Cc:     palmer@dabbelt.com, linux-riscv@lists.infradead.org,
+        samuel@sholland.org, guoren@kernel.org,
+        christoph.muellner@vrull.eu, conor.dooley@microchip.com,
+        linux-kernel@vger.kernel.org,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.201.21.9]
-X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-23_04,2023-06-22_02,2023-05-22_02
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/21/23 17:34, Sarannya S wrote:
-> From: Chris Lew <quic_clew@quicinc.com>
-> 
-> Add RPMSG_GET_OUTGOING_FLOWCONTROL and RPMSG_SET_INCOMING_FLOWCONTROL
-> IOCTL support for rpmsg char device nodes to get/set the low level
-> transport signals.
-> 
-> Signed-off-by: Chris Lew <quic_clew@quicinc.com>
-> Signed-off-by: Deepak Kumar Singh <quic_deesin@quicinc.com>
-> Signed-off-by: Sarannya S <quic_sarannya@quicinc.com>
+On Tue, 28 Feb 2023 at 22:56, Heiko Stuebner <heiko@sntech.de> wrote:
+>
+> From: Heiko Stuebner <heiko.stuebner@vrull.eu>
+>
+> T-Head C9xx cores implement an older version (0.7.1) of the vector
+> specification.
+>
+> Relevant changes concerning the kernel are:
+> - different placement of the SR_VS bit for the vector unit status
+> - different encoding of the vsetvli instruction
+> - different instructions for loads and stores
+>
+> And a fixed VLEN of 128.
+>
+> The in-kernel access to vector instances is limited to the save and
+> restore of process states so the above mentioned areas can simply be
+> handled via the alternatives framework, similar to other T-Head specific
+> issues.
+>
+> Signed-off-by: Heiko Stuebner <heiko.stuebner@vrull.eu>
 > ---
->  drivers/rpmsg/rpmsg_char.c | 50 ++++++++++++++++++++++++++++++++++++++++------
->  include/uapi/linux/rpmsg.h | 10 ++++++++++
->  2 files changed, 54 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/rpmsg/rpmsg_char.c b/drivers/rpmsg/rpmsg_char.c
-> index a271fce..2cdd31e 100644
-> --- a/drivers/rpmsg/rpmsg_char.c
-> +++ b/drivers/rpmsg/rpmsg_char.c
-> @@ -52,6 +52,8 @@ static DEFINE_IDA(rpmsg_minor_ida);
->   * @readq:	wait object for incoming queue
->   * @default_ept: set to channel default endpoint if the default endpoint should be re-used
->   *              on device open to prevent endpoint address update.
-> + * remote_flow_restricted: to indicate if the remote has requested for flow to be limited
-> + * remote_flow_updated:	to indicate if the flow control has been requested
-
-replace tab by space after ':'
-
->   */
->  struct rpmsg_eptdev {
->  	struct device dev;
-> @@ -68,6 +70,8 @@ struct rpmsg_eptdev {
->  	struct sk_buff_head queue;
->  	wait_queue_head_t readq;
->  
-> +	bool remote_flow_restricted;
-> +	bool remote_flow_updated;
->  };
->  
->  int rpmsg_chrdev_eptdev_destroy(struct device *dev, void *data)
-> @@ -116,6 +120,18 @@ static int rpmsg_ept_cb(struct rpmsg_device *rpdev, void *buf, int len,
->  	return 0;
+>  arch/riscv/Kconfig.erratas           |  13 +++
+>  arch/riscv/errata/thead/errata.c     |  32 ++++++
+>  arch/riscv/include/asm/csr.h         |  26 ++++-
+>  arch/riscv/include/asm/errata_list.h |  62 +++++++++++-
+>  arch/riscv/include/asm/vector.h      | 139 +++++++++++++++++++++++++--
+>  5 files changed, 256 insertions(+), 16 deletions(-)
+>
+> diff --git a/arch/riscv/Kconfig.erratas b/arch/riscv/Kconfig.erratas
+> index 69621ae6d647..624cefc9fcd7 100644
+> --- a/arch/riscv/Kconfig.erratas
+> +++ b/arch/riscv/Kconfig.erratas
+> @@ -79,4 +79,17 @@ config ERRATA_THEAD_PMU
+>
+>           If you don't know what to do here, say "Y".
+>
+> +config ERRATA_THEAD_VECTOR
+> +       bool "Apply T-Head Vector errata"
+> +       depends on ERRATA_THEAD && RISCV_ISA_V
+> +       default y
+> +       help
+> +         The T-Head C9xx cores implement an earlier version 0.7.1
+> +         of the vector extensions.
+> +
+> +         This will apply the necessary errata to handle the non-standard
+> +         behaviour via when switch to and from vector mode for processes.
+> +
+> +         If you don't know what to do here, say "Y".
+> +
+>  endmenu # "CPU errata selection"
+> diff --git a/arch/riscv/errata/thead/errata.c b/arch/riscv/errata/thead/errata.c
+> index fac5742d1c1e..55b3aaa2468a 100644
+> --- a/arch/riscv/errata/thead/errata.c
+> +++ b/arch/riscv/errata/thead/errata.c
+> @@ -12,6 +12,7 @@
+>  #include <asm/cacheflush.h>
+>  #include <asm/errata_list.h>
+>  #include <asm/patch.h>
+> +#include <asm/vector.h>
+>  #include <asm/vendorid_list.h>
+>
+>  static bool errata_probe_pbmt(unsigned int stage,
+> @@ -63,6 +64,34 @@ static bool errata_probe_pmu(unsigned int stage,
+>         return true;
 >  }
->  
-> +static int rpmsg_ept_flow_cb(struct rpmsg_device *rpdev, void *priv, bool enable)
+>
+> +static bool errata_probe_vector(unsigned int stage,
+> +                               unsigned long arch_id, unsigned long impid)
 > +{
-> +	struct rpmsg_eptdev *eptdev = priv;
+> +       if (!IS_ENABLED(CONFIG_ERRATA_THEAD_VECTOR))
+> +               return false;
 > +
-> +	eptdev->remote_flow_restricted = enable;
-> +	eptdev->remote_flow_updated = true;
+> +       /* target-c9xx cores report arch_id and impid as 0 */
+> +       if (arch_id != 0 || impid != 0)
+> +               return false;
 > +
-> +	wake_up_interruptible(&eptdev->readq);
+> +       if (stage == RISCV_ALTERNATIVES_EARLY_BOOT) {
+> +               /*
+> +                * Disable VECTOR to detect illegal usage of vector in kernel.
+> +                * This is normally done in _start_kernel but with the
+> +                * vector-1.0 SR_VS bits. VS is using [24:23] on T-Head's
+> +                * vector-0.7.1 and the vector-1.0-bits are unused there.
+> +                */
+> +               csr_clear(CSR_STATUS, SR_VS_THEAD);
+> +               return false;
+> +       }
 > +
-> +	return 0;
+> +       /* let has_vector() return true and set the static vlen */
+> +       static_branch_enable(&riscv_isa_ext_keys[RISCV_ISA_EXT_KEY_VECTOR]);
+> +       riscv_vsize = 128 / 8 * 32;
+> +
+> +       return true;
 > +}
 > +
->  static int rpmsg_eptdev_open(struct inode *inode, struct file *filp)
+>  static u32 thead_errata_probe(unsigned int stage,
+>                               unsigned long archid, unsigned long impid)
 >  {
->  	struct rpmsg_eptdev *eptdev = cdev_to_eptdev(inode->i_cdev);
-> @@ -152,6 +168,7 @@ static int rpmsg_eptdev_open(struct inode *inode, struct file *filp)
->  		return -EINVAL;
->  	}
->  
-> +	ept->flow_cb = rpmsg_ept_flow_cb;
->  	eptdev->ept = ept;
->  	filp->private_data = eptdev;
->  	mutex_unlock(&eptdev->ept_lock);
-> @@ -172,6 +189,7 @@ static int rpmsg_eptdev_release(struct inode *inode, struct file *filp)
->  		eptdev->ept = NULL;
->  	}
->  	mutex_unlock(&eptdev->ept_lock);
-> +	eptdev->remote_flow_updated = false;
->  
->  	/* Discard all SKBs */
->  	skb_queue_purge(&eptdev->queue);
-> @@ -285,6 +303,9 @@ static __poll_t rpmsg_eptdev_poll(struct file *filp, poll_table *wait)
->  	if (!skb_queue_empty(&eptdev->queue))
->  		mask |= EPOLLIN | EPOLLRDNORM;
->  
-> +	if (eptdev->remote_flow_updated)
-> +		mask |= EPOLLPRI;
+> @@ -77,6 +106,9 @@ static u32 thead_errata_probe(unsigned int stage,
+>         if (errata_probe_pmu(stage, archid, impid))
+>                 cpu_req_errata |= BIT(ERRATA_THEAD_PMU);
+>
+> +       if (errata_probe_vector(stage, archid, impid))
+> +               cpu_req_errata |= BIT(ERRATA_THEAD_VECTOR);
 > +
->  	mutex_lock(&eptdev->ept_lock);
->  	mask |= rpmsg_poll(eptdev->ept, filp, wait);
->  	mutex_unlock(&eptdev->ept_lock);
-> @@ -297,14 +318,31 @@ static long rpmsg_eptdev_ioctl(struct file *fp, unsigned int cmd,
->  {
->  	struct rpmsg_eptdev *eptdev = fp->private_data;
->  
-> -	if (cmd != RPMSG_DESTROY_EPT_IOCTL)
-> -		return -EINVAL;
-> +	bool set;
-> +	int ret;
->  
-> -	/* Don't allow to destroy a default endpoint. */
-> -	if (eptdev->default_ept)
-> -		return -EINVAL;
-> +	switch (cmd) {
-> +	case RPMSG_GET_OUTGOING_FLOWCONTROL:
-> +		eptdev->remote_flow_updated = false;
-> +		ret = put_user(eptdev->remote_flow_restricted, (int __user *)arg);
-> +		break;
-> +	case RPMSG_SET_INCOMING_FLOWCONTROL:
-> +		set = !!arg;
-> +		ret = rpmsg_set_flow_control(eptdev->ept, set, eptdev->chinfo.dst);
-> +		break;
-> +	case RPMSG_DESTROY_EPT_IOCTL:
-> +		/* Don't allow to destroy a default endpoint. */
-> +		if (eptdev->default_ept) {
-> +			ret = -EINVAL;
-> +			break;
-> +		}
-> +		ret = rpmsg_chrdev_eptdev_destroy(&eptdev->dev, NULL);
-> +		break;
-> +	default:
-> +		ret = -EINVAL;
-> +	}
->  
-> -	return rpmsg_chrdev_eptdev_destroy(&eptdev->dev, NULL);
-> +	return ret;
+>         return cpu_req_errata;
 >  }
->  
->  static const struct file_operations rpmsg_eptdev_fops = {
-> diff --git a/include/uapi/linux/rpmsg.h b/include/uapi/linux/rpmsg.h
-> index 1637e68..b0a6c17 100644
-> --- a/include/uapi/linux/rpmsg.h
-> +++ b/include/uapi/linux/rpmsg.h
-> @@ -43,4 +43,14 @@ struct rpmsg_endpoint_info {
->   */
->  #define RPMSG_RELEASE_DEV_IOCTL	_IOW(0xb5, 0x4, struct rpmsg_endpoint_info)
->  
-> +/**
-> + * Set the flow control for the remote rpmsg char device.
-> + */
-> +#define RPMSG_GET_OUTGOING_FLOWCONTROL _IOW(0xb5, 0x5, struct rpmsg_endpoint_info)
+>
+> diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
+> index 8b06f2472915..8d16c11487aa 100644
+> --- a/arch/riscv/include/asm/csr.h
+> +++ b/arch/riscv/include/asm/csr.h
+> @@ -24,11 +24,27 @@
+>  #define SR_FS_CLEAN    _AC(0x00004000, UL)
+>  #define SR_FS_DIRTY    _AC(0x00006000, UL)
+>
+> -#define SR_VS           _AC(0x00000600, UL) /* Vector Status */
+> -#define SR_VS_OFF       _AC(0x00000000, UL)
+> -#define SR_VS_INITIAL   _AC(0x00000200, UL)
+> -#define SR_VS_CLEAN     _AC(0x00000400, UL)
+> -#define SR_VS_DIRTY     _AC(0x00000600, UL)
+> +#define SR_VS_OFF              _AC(0x00000000, UL)
 > +
-> +/**
-> + * Set the flow control for the local rpmsg char device.
-> + */
-> +#define RPMSG_SET_INCOMING_FLOWCONTROL _IOW(0xb5, 0x6, struct rpmsg_endpoint_info)
-
-
-Perhaps I missed something, but you use "rpmsg_endpoint_info" as argument.
-In rpmsg_eptdev_ioctl the argument is treated as a boolean.
-Seems to me that something is wrong here.
-
-regards,
-Arnaud
-
+> +#define SR_VS_1_0              _AC(0x00000600, UL) /* Vector Status */
+> +#define SR_VS_INITIAL_1_0      _AC(0x00000200, UL)
+> +#define SR_VS_CLEAN_1_0                _AC(0x00000400, UL)
+> +#define SR_VS_DIRTY_1_0                _AC(0x00000600, UL)
 > +
+> +#define SR_VS_THEAD            _AC(0x01800000, UL) /* Vector Status */
+> +#define SR_VS_INITIAL_THEAD    _AC(0x00800000, UL)
+> +#define SR_VS_CLEAN_THEAD      _AC(0x01000000, UL)
+> +#define SR_VS_DIRTY_THEAD      _AC(0x01800000, UL)
+> +
+> +/*
+> + * Always default to vector-1.0 handling in assembly and let the broken
+> + * implementations handle their case separately.
+> + */
+> +#ifdef __ASSEMBLY__
+> +#define SR_VS                  SR_VS_1_0
+> +#else
+> +
+> +#endif
+>
+>  #define SR_XS          _AC(0x00018000, UL) /* Extension Status */
+>  #define SR_XS_OFF      _AC(0x00000000, UL)
+> diff --git a/arch/riscv/include/asm/errata_list.h b/arch/riscv/include/asm/errata_list.h
+> index 95e626b7281e..3f93cdd1599f 100644
+> --- a/arch/riscv/include/asm/errata_list.h
+> +++ b/arch/riscv/include/asm/errata_list.h
+> @@ -19,7 +19,8 @@
+>  #define        ERRATA_THEAD_PBMT 0
+>  #define        ERRATA_THEAD_CMO 1
+>  #define        ERRATA_THEAD_PMU 2
+> -#define        ERRATA_THEAD_NUMBER 3
+> +#define        ERRATA_THEAD_VECTOR 3
+> +#define        ERRATA_THEAD_NUMBER 4
 >  #endif
+>
+>  #define        CPUFEATURE_SVPBMT 0
+> @@ -157,6 +158,65 @@ asm volatile(ALTERNATIVE(                                          \
+>         : "=r" (__ovl) :                                                \
+>         : "memory")
+>
+> +#ifdef CONFIG_ERRATA_THEAD_PBMT
+> +
+> +#define ALT_VS_SHIFT 61
+> +#define ALT_THEAD_VS_SHIFT 59
+> +#define ALT_THEAD_SR_VS(_val, _vs)                                     \
+> +asm(ALTERNATIVE(  "li %0, %1\t\nslli %0,%0,%3",                                \
+> +                 "li %0, %2\t\nslli %0,%0,%4", THEAD_VENDOR_ID,        \
+> +                       ERRATA_THEAD_PBMT, CONFIG_ERRATA_THEAD_PBMT)    \
+> +               : "=r"(_val)                                            \
+> +               : "I"(prot##_MAIN >> ALT_SVPBMT_SHIFT),         \
+> +                 "I"(prot##_THEAD >> ALT_THEAD_PBMT_SHIFT),            \
+> +                 "I"(ALT_SVPBMT_SHIFT),                                \
+> +                 "I"(ALT_THEAD_PBMT_SHIFT))
+> +#else
+> +#define ALT_THEAD_SR_VS(_val ## _MAIN)
+> +#endif
+> +
+> +#ifdef CONFIG_ERRATA_THEAD_VECTOR
+> +
+> +#define THEAD_C9XX_CSR_VXSAT                   0x9
+> +#define THEAD_C9XX_CSR_VXRM                    0xa
+> +
+> +/*
+> + * Vector 0.7.1 as used for example on T-Head Xuantie cores, uses an older
+> + * encoding for vsetvli (ta, ma vs. d1), so provide an instruction for
+> + * vsetvli     t4, x0, e8, m8, d1
+> + */
+> +#define THEAD_VSETVLI_T4X0E8M8D1       ".long  0x00307ed7\n\t"
+> +
+> +/*
+> + * While in theory, the vector-0.7.1 vsb.v and vlb.v result in the same
+> + * encoding as the standard vse8.v and vle8.v, compilers seem to optimize
+> + * the call resulting in a different encoding and then using a value for
+> + * the "mop" field that is not part of vector-0.7.1
+> + * So encode specific variants for vstate_save and _restore.
+> + */
+> +#define THEAD_VSB_V_V0T0               ".long  0x02028027\n\t"
+> +#define THEAD_VSB_V_V8T0               ".long  0x02028427\n\t"
+> +#define THEAD_VSB_V_V16T0              ".long  0x02028827\n\t"
+> +#define THEAD_VSB_V_V24T0              ".long  0x02028c27\n\t"
+> +#define THEAD_VLB_V_V0T0               ".long  0x012028007\n\t"
+> +#define THEAD_VLB_V_V8T0               ".long  0x012028407\n\t"
+> +#define THEAD_VLB_V_V16T0              ".long  0x012028807\n\t"
+> +#define THEAD_VLB_V_V24T0              ".long  0x012028c07\n\t"
+> +
+> +#define ALT_SR_VS_VECTOR_1_0_SHIFT     9
+> +#define ALT_SR_VS_THEAD_SHIFT          23
+> +
+> +#define ALT_SR_VS(_val, prot)                                          \
+> +asm(ALTERNATIVE("li %0, %1\t\nslli %0,%0,%3",                          \
+> +               "li %0, %2\t\nslli %0,%0,%4", THEAD_VENDOR_ID,          \
+> +               ERRATA_THEAD_VECTOR, CONFIG_ERRATA_THEAD_VECTOR)        \
+> +               : "=r"(_val)                                            \
+> +               : "I"(prot##_1_0 >> ALT_SR_VS_VECTOR_1_0_SHIFT),        \
+> +                 "I"(prot##_THEAD >> ALT_SR_VS_THEAD_SHIFT),           \
+> +                 "I"(ALT_SR_VS_VECTOR_1_0_SHIFT),                      \
+> +                 "I"(ALT_SR_VS_THEAD_SHIFT))
+> +#endif /* CONFIG_ERRATA_THEAD_VECTOR */
+> +
+>  #endif /* __ASSEMBLY__ */
+>
+>  #endif
+> diff --git a/arch/riscv/include/asm/vector.h b/arch/riscv/include/asm/vector.h
+> index ad9e6161dd89..ad91f783316e 100644
+> --- a/arch/riscv/include/asm/vector.h
+> +++ b/arch/riscv/include/asm/vector.h
+> @@ -15,6 +15,55 @@
+>  #include <asm/hwcap.h>
+>  #include <asm/csr.h>
+>  #include <asm/asm.h>
+> +#include <asm/errata_list.h>
+> +
+> +#ifdef CONFIG_ERRATA_THEAD_VECTOR
+> +
+> +static inline u32 riscv_sr_vs(void)
+> +{
+> +       u32 val;
+> +
+> +       ALT_SR_VS(val, SR_VS);
+> +       return val;
+> +}
+> +
+> +static inline u32 riscv_sr_vs_initial(void)
+> +{
+> +       u32 val;
+> +
+> +       ALT_SR_VS(val, SR_VS_INITIAL);
+> +       return val;
+> +}
+> +
+> +static inline u32 riscv_sr_vs_clean(void)
+> +{
+> +       u32 val;
+> +
+> +       ALT_SR_VS(val, SR_VS_CLEAN);
+> +       return val;
+> +}
+> +
+> +static inline u32 riscv_sr_vs_dirty(void)
+> +{
+> +       u32 val;
+> +
+> +       ALT_SR_VS(val, SR_VS_DIRTY);
+> +       return val;
+> +}
+> +
+> +#define SR_VS          riscv_sr_vs()
+> +#define SR_VS_INITIAL  riscv_sr_vs_initial()
+> +#define SR_VS_CLEAN    riscv_sr_vs_clean()
+> +#define SR_VS_DIRTY    riscv_sr_vs_dirty()
+> +
+> +#else /* CONFIG_ERRATA_THEAD_VECTOR */
+> +
+> +#define SR_VS          SR_VS_1_0
+> +#define SR_VS_INITIAL  SR_VS_INITIAL_1_0
+> +#define SR_VS_CLEAN    SR_VS_CLEAN_1_0
+> +#define SR_VS_DIRTY    SR_VS_DIRTY_1_0
+> +
+> +#endif /* CONFIG_ERRATA_THEAD_VECTOR */
+>
+>  #define CSR_STR(x) __ASM_STR(x)
+>
+> @@ -29,6 +78,7 @@ static __always_inline bool has_vector(void)
+>  static inline void __vstate_clean(struct pt_regs *regs)
+>  {
+>         regs->status = (regs->status & ~(SR_VS)) | SR_VS_CLEAN;
+> +
+>  }
+>
+>  static inline void vstate_off(struct pt_regs *regs)
+> @@ -58,30 +108,75 @@ static __always_inline void rvv_disable(void)
+>
+>  static __always_inline void __vstate_csr_save(struct __riscv_v_state *dest)
+>  {
+> -       asm volatile (
+> +       register u32 t1 asm("t1") = (SR_FS);
+> +
+> +       /*
+> +        * CSR_VCSR is defined as
+> +        * [2:1] - vxrm[1:0]
+> +        * [0] - vxsat
+> +        * The earlier vector spec implemented by T-Head uses separate
+> +        * registers for the same bit-elements, so just combine those
+> +        * into the existing output field.
+> +        *
+> +        * Additionally T-Head cores need FS to be enabled when accessing
+> +        * the VXRM and VXSAT CSRs, otherwise ending in illegal instructions.
+> +        */
+> +       asm volatile (ALTERNATIVE(
+>                 "csrr   %0, " CSR_STR(CSR_VSTART) "\n\t"
+>                 "csrr   %1, " CSR_STR(CSR_VTYPE) "\n\t"
+>                 "csrr   %2, " CSR_STR(CSR_VL) "\n\t"
+>                 "csrr   %3, " CSR_STR(CSR_VCSR) "\n\t"
+> +               __nops(5),
+> +               "csrs   sstatus, t1\n\t"
+> +               "csrr   %0, " CSR_STR(CSR_VSTART) "\n\t"
+> +               "csrr   %1, " CSR_STR(CSR_VTYPE) "\n\t"
+> +               "csrr   %2, " CSR_STR(CSR_VL) "\n\t"
+> +               "csrr   %3, " CSR_STR(THEAD_C9XX_CSR_VXRM) "\n\t"
+> +               "slliw  %3, %3, " CSR_STR(VCSR_VXRM_SHIFT) "\n\t"
+> +               "csrr   t4, " CSR_STR(THEAD_C9XX_CSR_VXSAT) "\n\t"
+> +               "or     %3, %3, t4\n\t"
+> +               "csrc   sstatus, t1\n\t",
+> +               THEAD_VENDOR_ID,
+> +               ERRATA_THEAD_VECTOR, CONFIG_ERRATA_THEAD_VECTOR)
+>                 : "=r" (dest->vstart), "=r" (dest->vtype), "=r" (dest->vl),
+> -                 "=r" (dest->vcsr) : :);
+> +                 "=r" (dest->vcsr) : "r"(t1) : "t4");
+>  }
+>
+>  static __always_inline void __vstate_csr_restore(struct __riscv_v_state *src)
+>  {
+> -       asm volatile (
+> +       register u32 t1 asm("t1") = (SR_FS);
+> +
+> +       /*
+> +        * Similar to __vstate_csr_save above, restore values for the
+> +        * separate VXRM and VXSAT CSRs from the vcsr variable.
+> +        */
+> +       asm volatile (ALTERNATIVE(
+>                 "vsetvl  x0, %2, %1\n\t"
+>                 "csrw   " CSR_STR(CSR_VSTART) ", %0\n\t"
+>                 "csrw   " CSR_STR(CSR_VCSR) ", %3\n\t"
+> +               __nops(6),
+> +               "csrs   sstatus, t1\n\t"
+> +               "vsetvl  x0, %2, %1\n\t"
+> +               "csrw   " CSR_STR(CSR_VSTART) ", %0\n\t"
+> +               "srliw  t4, %3, " CSR_STR(VCSR_VXRM_SHIFT) "\n\t"
+> +               "andi   t4, t4, " CSR_STR(VCSR_VXRM_MASK) "\n\t"
+> +               "csrw   " CSR_STR(THEAD_C9XX_CSR_VXRM) ", t4\n\t"
+> +               "andi   %3, %3, " CSR_STR(VCSR_VXSAT_MASK) "\n\t"
+> +               "csrw   " CSR_STR(THEAD_C9XX_CSR_VXSAT) ", %3\n\t"
+> +               "csrc   sstatus, t1\n\t",
+> +               THEAD_VENDOR_ID,
+> +               ERRATA_THEAD_VECTOR, CONFIG_ERRATA_THEAD_VECTOR)
+>                 : : "r" (src->vstart), "r" (src->vtype), "r" (src->vl),
+> -                   "r" (src->vcsr) :);
+> +                   "r" (src->vcsr), "r"(t1): "t4");
+>  }
+
+Hi Heiko,
+
+Just for my understanding. Here you're adding 5 and 6 nops to the (in
+the future) common case? If so, then why not use a static branch? That
+should only add 1 nop and be easier to read/understand.
+
+/Emil
+
+>  static inline void __vstate_save(struct __riscv_v_state *save_to, void *datap)
+>  {
+>         rvv_enable();
+>         __vstate_csr_save(save_to);
+> -       asm volatile (
+> +
+> +       asm volatile (ALTERNATIVE(
+> +               "nop\n\t"
+>                 "vsetvli        t4, x0, e8, m8, ta, ma\n\t"
+>                 "vse8.v         v0, (%0)\n\t"
+>                 "add            %0, %0, t4\n\t"
+> @@ -89,8 +184,18 @@ static inline void __vstate_save(struct __riscv_v_state *save_to, void *datap)
+>                 "add            %0, %0, t4\n\t"
+>                 "vse8.v         v16, (%0)\n\t"
+>                 "add            %0, %0, t4\n\t"
+> -               "vse8.v         v24, (%0)\n\t"
+> -               : : "r" (datap) : "t4", "memory");
+> +               "vse8.v         v24, (%0)\n\t",
+> +               "mv             t0, %0\n\t"
+> +               THEAD_VSETVLI_T4X0E8M8D1
+> +               THEAD_VSB_V_V0T0
+> +               "addi           t0, t0, 128\n\t"
+> +               THEAD_VSB_V_V8T0
+> +               "addi           t0, t0, 128\n\t"
+> +               THEAD_VSB_V_V16T0
+> +               "addi           t0, t0, 128\n\t"
+> +               THEAD_VSB_V_V24T0, THEAD_VENDOR_ID,
+> +               ERRATA_THEAD_VECTOR, CONFIG_ERRATA_THEAD_VECTOR)
+> +               : : "r" (datap) : "t0", "t4", "memory");
+>         rvv_disable();
+>  }
+>
+> @@ -98,7 +203,9 @@ static inline void __vstate_restore(struct __riscv_v_state *restore_from,
+>                                     void *datap)
+>  {
+>         rvv_enable();
+> -       asm volatile (
+> +
+> +       asm volatile (ALTERNATIVE(
+> +               "nop\n\t"
+>                 "vsetvli        t4, x0, e8, m8, ta, ma\n\t"
+>                 "vle8.v         v0, (%0)\n\t"
+>                 "add            %0, %0, t4\n\t"
+> @@ -106,8 +213,20 @@ static inline void __vstate_restore(struct __riscv_v_state *restore_from,
+>                 "add            %0, %0, t4\n\t"
+>                 "vle8.v         v16, (%0)\n\t"
+>                 "add            %0, %0, t4\n\t"
+> -               "vle8.v         v24, (%0)\n\t"
+> -               : : "r" (datap) : "t4");
+> +               "vle8.v         v24, (%0)\n\t",
+> +
+> +               "mv             t0, %0\n\t"
+> +               THEAD_VSETVLI_T4X0E8M8D1
+> +               THEAD_VLB_V_V0T0
+> +               "addi           t0, t0, 128\n\t"
+> +               THEAD_VLB_V_V8T0
+> +               "addi           %0, %0, 128\n\t"
+> +               THEAD_VLB_V_V16T0
+> +               "addi           %0, %0, 128\n\t"
+> +               THEAD_VLB_V_V24T0, THEAD_VENDOR_ID,
+> +               ERRATA_THEAD_VECTOR, CONFIG_ERRATA_THEAD_VECTOR)
+> +               : : "r" (datap) : "t0", "t4");
+> +
+>         __vstate_csr_restore(restore_from);
+>         rvv_disable();
+>  }
+> --
+> 2.39.0
+>
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
