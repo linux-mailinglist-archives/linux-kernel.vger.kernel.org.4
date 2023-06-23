@@ -2,173 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 565C373B129
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 09:18:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 279BB73B134
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 09:20:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231165AbjFWHSK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 03:18:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54320 "EHLO
+        id S231159AbjFWHUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 03:20:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230503AbjFWHSG (ORCPT
+        with ESMTP id S230151AbjFWHT6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 03:18:06 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18BAA10C2;
-        Fri, 23 Jun 2023 00:18:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687504685; x=1719040685;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=X0oSPt8MKPSCdlW2qvnEeXQx55EsL81HO4NU7W+GvPE=;
-  b=chRqgEWRsnT1iFUMC8bkt8r3TBC/l2eji47cPeQpMtdZ/W2mrXNM3KxU
-   wrHhkzPjeRoR6Dx4IMv2sH74/iyqYB9FGk7yLDSP0A24rE9vmoD2eH+L+
-   s7ZtyuKRWwXKkhzTby0Q8w/HF/cbPOMVUyULNyUz69VMnQ5pUrEwFtY+f
-   GMoUxz5JJXg5dCM5OQ1V2GeDemLI8IBoJRj/z6Ro6rqveQKSooptE8nMn
-   XfgwQmhRW39E7zc0dmGpQThktzA55EkJENYgnw2Husd7QvC4G5tIJkPqK
-   5xw5VH/DfCP/huAFapXeFgIOHc4Lr3/1EAUMKs+x4BoN+RBq6mpo/dyeI
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="358197912"
-X-IronPort-AV: E=Sophos;i="6.01,151,1684825200"; 
-   d="scan'208";a="358197912"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2023 00:18:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="889382382"
-X-IronPort-AV: E=Sophos;i="6.01,151,1684825200"; 
-   d="scan'208";a="889382382"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 23 Jun 2023 00:18:01 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qCb3Q-00084f-1K;
-        Fri, 23 Jun 2023 07:18:00 +0000
-Date:   Fri, 23 Jun 2023 15:17:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Benjamin Bara <bbara93@gmail.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Benjamin Bara <benjamin.bara@skidata.com>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v6 1/3] usb: misc: onboard-hub: support multiple power
- supplies
-Message-ID: <202306231557.18uGlgSW-lkp@intel.com>
-References: <20230620-hx3-v6-1-6a1d6f8ce689@skidata.com>
+        Fri, 23 Jun 2023 03:19:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 206982134;
+        Fri, 23 Jun 2023 00:19:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 575AB61985;
+        Fri, 23 Jun 2023 07:19:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BF94C433C8;
+        Fri, 23 Jun 2023 07:19:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687504795;
+        bh=mRTvW/o0xmVdwrv39D1Fas9Eznwc5euBRtXh8CpBW0o=;
+        h=From:To:Cc:Subject:Date:From;
+        b=eIptzNpzAjuBrYBJgzYUHiNnP/v7uie4yD6pV7JQFjQqwmhlgC4/nhDdYUM02+8O9
+         3G7oa5knVtIplakMilPOwkiF3ZmEczXIM1gufU9nNrQ5t7jR6dIPagGytX2kAUrcHa
+         yMhSS84S70R8a8Bv2L/UQaKJmS6Nd23kstz2sT6nS4vrLDRUlMU9/jH92gMwVO72xm
+         K64bC+ABCK8JuKvtEUoOlcydNFLU90y0vKE6jl/1wwgAASOp0FXpRY/dtGyrp2AX85
+         Y7EMZ6BEe6K3d+Ay7Nzu4x2a39BxXZmV/Ev6VPqmul46ivLOoOMWNSQtfCMGPY7sSM
+         gEWAaRgepjNBA==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Functional Testing <lkft@linaro.org>,
+        Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] clk: imx: Drop inclusion of unused header <soc/imx/timer.h>
+Date:   Fri, 23 Jun 2023 09:19:19 +0200
+Message-Id: <20230623071948.3254789-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230620-hx3-v6-1-6a1d6f8ce689@skidata.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Benjamin,
+From: Arnd Bergmann <arnd@arndb.de>
 
-kernel test robot noticed the following build warnings:
+After removing this header in the clocksource tree, the clk drivers no
+longer build:
 
-[auto build test WARNING on 45a3e24f65e90a047bef86f927ebdc4c710edaa1]
+drivers/clk/imx/clk-imx1.c:13:10: fatal error: 'soc/imx/timer.h' file not found
+drivers/clk/imx/clk-imx27.c:11:10: fatal error: 'soc/imx/timer.h' file not found
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Bara/usb-misc-onboard-hub-support-multiple-power-supplies/20230623-142256
-base:   45a3e24f65e90a047bef86f927ebdc4c710edaa1
-patch link:    https://lore.kernel.org/r/20230620-hx3-v6-1-6a1d6f8ce689%40skidata.com
-patch subject: [PATCH v6 1/3] usb: misc: onboard-hub: support multiple power supplies
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230623/202306231557.18uGlgSW-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.3.0
-reproduce: (https://download.01.org/0day-ci/archive/20230623/202306231557.18uGlgSW-lkp@intel.com/reproduce)
+This patch was originally posted as part of a three-patch series, but only
+patches 1 and 3 got applied.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306231557.18uGlgSW-lkp@intel.com/
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Fixes: 9e9d7570485d7 ("clocksource/drivers/imx-gpt: Fold <soc/imx/timer.h> into its only user")
+Link: https://lore.kernel.org/all/20230328100531.879485-2-u.kleine-koenig@pengutronix.de/
+Signed-off-by: "Uwe Kleine-König" <u.kleine-koenig@pengutronix.de>
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+I would suggest merging this through the clocksource tree as well, which
+now has the third patch.
+---
+ drivers/clk/imx/clk-imx1.c  | 1 -
+ drivers/clk/imx/clk-imx27.c | 1 -
+ drivers/clk/imx/clk-imx31.c | 1 -
+ drivers/clk/imx/clk-imx35.c | 1 -
+ 4 files changed, 4 deletions(-)
 
-All warnings (new ones prefixed by >>):
-
-   drivers/usb/misc/onboard_usb_hub.c: In function 'onboard_hub_probe':
->> drivers/usb/misc/onboard_usb_hub.c:262:59: warning: format '%ld' expects argument of type 'long int', but argument 4 has type 'unsigned int' [-Wformat=]
-     262 |                 return dev_err_probe(dev, -EINVAL, "max %ld supplies supported!\n",
-         |                                                         ~~^
-         |                                                           |
-         |                                                           long int
-         |                                                         %d
-
-
-vim +262 drivers/usb/misc/onboard_usb_hub.c
-
-   240	
-   241	static int onboard_hub_probe(struct platform_device *pdev)
-   242	{
-   243		const struct of_device_id *of_id;
-   244		struct device *dev = &pdev->dev;
-   245		struct onboard_hub *hub;
-   246		unsigned int i;
-   247		int err;
-   248	
-   249		hub = devm_kzalloc(dev, sizeof(*hub), GFP_KERNEL);
-   250		if (!hub)
-   251			return -ENOMEM;
-   252	
-   253		of_id = of_match_device(onboard_hub_match, &pdev->dev);
-   254		if (!of_id)
-   255			return -ENODEV;
-   256	
-   257		hub->pdata = of_id->data;
-   258		if (!hub->pdata)
-   259			return -EINVAL;
-   260	
-   261		if (hub->pdata->num_supplies > MAX_SUPPLIES)
- > 262			return dev_err_probe(dev, -EINVAL, "max %ld supplies supported!\n",
-   263					     MAX_SUPPLIES);
-   264	
-   265		for (i = 0; i < hub->pdata->num_supplies; i++)
-   266			hub->supplies[i].supply = supply_names[i];
-   267	
-   268		err = devm_regulator_bulk_get(dev, hub->pdata->num_supplies, hub->supplies);
-   269		if (err) {
-   270			dev_err(dev, "Failed to get regulator supplies: %d\n", err);
-   271			return err;
-   272		}
-   273	
-   274		hub->reset_gpio = devm_gpiod_get_optional(dev, "reset",
-   275							  GPIOD_OUT_HIGH);
-   276		if (IS_ERR(hub->reset_gpio))
-   277			return dev_err_probe(dev, PTR_ERR(hub->reset_gpio), "failed to get reset GPIO\n");
-   278	
-   279		hub->dev = dev;
-   280		mutex_init(&hub->lock);
-   281		INIT_LIST_HEAD(&hub->udev_list);
-   282	
-   283		dev_set_drvdata(dev, hub);
-   284	
-   285		err = onboard_hub_power_on(hub);
-   286		if (err)
-   287			return err;
-   288	
-   289		/*
-   290		 * The USB driver might have been detached from the USB devices by
-   291		 * onboard_hub_remove() (e.g. through an 'unbind' by userspace),
-   292		 * make sure to re-attach it if needed.
-   293		 *
-   294		 * This needs to be done deferred to avoid self-deadlocks on systems
-   295		 * with nested onboard hubs.
-   296		 */
-   297		schedule_work(&attach_usb_driver_work);
-   298	
-   299		return 0;
-   300	}
-   301	
-
+diff --git a/drivers/clk/imx/clk-imx1.c b/drivers/clk/imx/clk-imx1.c
+index 22fc7491ba008..f6ea7e5052d56 100644
+--- a/drivers/clk/imx/clk-imx1.c
++++ b/drivers/clk/imx/clk-imx1.c
+@@ -10,7 +10,6 @@
+ #include <linux/of.h>
+ #include <linux/of_address.h>
+ #include <dt-bindings/clock/imx1-clock.h>
+-#include <soc/imx/timer.h>
+ #include <asm/irq.h>
+ 
+ #include "clk.h"
+diff --git a/drivers/clk/imx/clk-imx27.c b/drivers/clk/imx/clk-imx27.c
+index 5d177125728df..99618ded09397 100644
+--- a/drivers/clk/imx/clk-imx27.c
++++ b/drivers/clk/imx/clk-imx27.c
+@@ -8,7 +8,6 @@
+ #include <linux/of_address.h>
+ #include <dt-bindings/clock/imx27-clock.h>
+ #include <soc/imx/revision.h>
+-#include <soc/imx/timer.h>
+ #include <asm/irq.h>
+ 
+ #include "clk.h"
+diff --git a/drivers/clk/imx/clk-imx31.c b/drivers/clk/imx/clk-imx31.c
+index c44e18c6f63f7..4c8d9ff0b2ad5 100644
+--- a/drivers/clk/imx/clk-imx31.c
++++ b/drivers/clk/imx/clk-imx31.c
+@@ -11,7 +11,6 @@
+ #include <linux/of.h>
+ #include <linux/of_address.h>
+ #include <soc/imx/revision.h>
+-#include <soc/imx/timer.h>
+ #include <asm/irq.h>
+ 
+ #include "clk.h"
+diff --git a/drivers/clk/imx/clk-imx35.c b/drivers/clk/imx/clk-imx35.c
+index 7dcbaea3fea35..3b6fdb4e0be78 100644
+--- a/drivers/clk/imx/clk-imx35.c
++++ b/drivers/clk/imx/clk-imx35.c
+@@ -10,7 +10,6 @@
+ #include <linux/of.h>
+ #include <linux/err.h>
+ #include <soc/imx/revision.h>
+-#include <soc/imx/timer.h>
+ #include <asm/irq.h>
+ 
+ #include "clk.h"
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.39.2
+
