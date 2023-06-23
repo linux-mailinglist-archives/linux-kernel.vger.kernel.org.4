@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA15173B1E4
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 09:42:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21C5573B1E5
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 09:42:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231561AbjFWHmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 03:42:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37188 "EHLO
+        id S231663AbjFWHmv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 03:42:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231548AbjFWHmT (ORCPT
+        with ESMTP id S231565AbjFWHmV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 03:42:19 -0400
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2049.outbound.protection.outlook.com [40.107.6.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85BB5273F;
-        Fri, 23 Jun 2023 00:41:55 -0700 (PDT)
+        Fri, 23 Jun 2023 03:42:21 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2085.outbound.protection.outlook.com [40.107.6.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 784022955;
+        Fri, 23 Jun 2023 00:41:56 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VnzShAbj9jOJosl67bNuU6yN/j+qqQfC9rLQ8T+tJdWnfJTqi8IpgEGzoZ0U+vfD/vVv76STWhlCLmu9CFUfq0dCXC557ouXo2YR98L95wPErtsb39XJZGmGNC5htnN+YQTFB1HAFwj11lyIhpaB/+XdjrTKlXSUrG5aD92dDwtZKn9U6NZtZxMPU1DCYNGod1UHG7JjNcqdtQsxoW0J5+hUCHSYSt4wNtDI7NAtpabapFGUB5cBhBBWIw8mgnBO3Z4PRPTLJbKVftd74YT6D44mpKGDRP+J8r2tD27/2zxrfB0XT5ABv0UsFwrS5IsF2TpOqbwArXt+ogWS1elyGg==
+ b=V8LKSGx3QivaPJc27yciD08whPwfLAJroFrXDJjw+esk6sorGQ/11iwuS9IC8BrMxZyYWbkRc6nhPveU4RqNUxjFFHViG6r/nOHu2+ADOVwzQlMqPh1UhJjt7n4gRqMyQOEbO11IwYtAAP+tN3WHr75Gu7wldEbpWu0OkKapnzEFrCsthfkzo+e1BhYyc+Dr+TKPBqEbJBYAJ2XAW5tptm5RccgSXSNyvZa1WcseF43SZfAeScoRAW6ds+pbMbCTZokGjpUsDOs9GC/eLlbsHBcOE7eCgViyNOracc18zaCXORvnv+XprCWAFNx5oduE5ZWNc/5dPbGy6qMCcSR/Gg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=v8OoMy6NT2MnY99JjceKOZ9IyTrApvR8V/eFj2JrOIU=;
- b=DPM6EW+giv+gWBdWgArwW9AW4qAz2PixjjwQxthi5seoefqQyABAd7q3n0B6bDG/GQorEBpgEF888iFi+Zz+X12mKTBRFJZ5xhMIWxXxlk+J5FYFvPMO1JTVQiyNcsd42f7b+c45VjUPp2pIKhhmWZQajuyI2ZFQxVeeeGZJB91fAEomzLGuLqG2tFWsl/Dvt4MWV+NtfACV/ULRA0W4mZD7VCwa2WnXEktpQ6OLvYt7IGpzpQZqbGmlLnMsge3aDE06aWcVYcLX1stalMyycQOmWXV8tkA8p9q2R1E/RS/O9PC2haEGS30pDRaI97QT4mlizbBT1fLYP+Ck2WnC5w==
+ bh=pRKdQk4T78qqn0zSrv3cwexxZjrW5PhNRfs/03xKwEw=;
+ b=iDSrWXSqaZ4B29dy0Er4Pt8Rrz77C/mdDwPj0IRdahjdvpyyAEhpMCuBxlF3XujVMoS8oPcKHONEjQIpeFmX450LTBvG1T+mINXuIdKy/9kquRmnJWEvNzz+mO/54mrrW2AISZ1WQi8e3fs7xImndJ7RTiGL6lj1ACSrEWMHpZTSw3ZhLj9/6hmOQPWu4F3NisiWMdyi6+8tuPA91HVUI3ZPl87QXGVSSyhTdOL47C+VU4uJSnl9GcqCUaoUyzHpdoQ5la2kkx6a1LstEujLz+x4TS7POj8Z5MWRJwdqIYkaz6Pj30GqbnC+lIZXrXR1g4Y26MQoWKKJsH/O5lOq8A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
  dkim=pass header.d=oss.nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
  s=selector2-NXP1-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=v8OoMy6NT2MnY99JjceKOZ9IyTrApvR8V/eFj2JrOIU=;
- b=NSDIU2XUtR7Dj8lc0BSJ2NtSgJc9ql4vVDsGPJVg9dOjLjQGN5xxbUvZW0BbsTBFjKxr1mKKhUd9vWQ7DiGZOe6Q6pxNKj2TdI9oi/MVPV3SSrzcn6skJ5AbSKZz1nvDSjr6ozE2x3++KaKSmo3Z4vXyE8QUc1Pt5hjQWl70L84=
+ bh=pRKdQk4T78qqn0zSrv3cwexxZjrW5PhNRfs/03xKwEw=;
+ b=QzKjiDFTQTMLr1okAuu2IvAv4oRMjYlzsWv3rfgIPyFTkjMl/EaIGHsDp5tYphZuJ5M6udXqtyppys3TtaNZx6dlYdU+YWF4YtF1Tgu/QrS3IERPfqdmZZQFP/1uAKv+IVnHcMmjueKf+In0xcF7QtgiUvczvdxNprdYDKwQSzY=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=oss.nxp.com;
 Received: from AM9PR04MB8954.eurprd04.prod.outlook.com (2603:10a6:20b:409::7)
  by VI1PR04MB9905.eurprd04.prod.outlook.com (2603:10a6:800:1df::22) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24; Fri, 23 Jun
- 2023 07:41:44 +0000
+ 2023 07:41:45 +0000
 Received: from AM9PR04MB8954.eurprd04.prod.outlook.com
  ([fe80::5356:c79f:ef9f:dc29]) by AM9PR04MB8954.eurprd04.prod.outlook.com
  ([fe80::5356:c79f:ef9f:dc29%4]) with mapi id 15.20.6521.026; Fri, 23 Jun 2023
- 07:41:44 +0000
+ 07:41:45 +0000
 From:   "Radu Pirea (NXP OSS)" <radu-nicolae.pirea@oss.nxp.com>
 To:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
         davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
@@ -48,9 +48,9 @@ To:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
 Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         sebastian.tobuschat@nxp.com,
         "Radu Pirea (NXP OSS)" <radu-nicolae.pirea@oss.nxp.com>
-Subject: [PATCH v2 07/13] net: phy: nxp-c45-tja11xx: add TJA1120 support
-Date:   Fri, 23 Jun 2023 10:41:17 +0300
-Message-Id: <20230623074123.152931-8-radu-nicolae.pirea@oss.nxp.com>
+Subject: [PATCH v2 08/13] net: phy: nxp-c45-tja11xx: enable LTC sampling on both ext_ts edges
+Date:   Fri, 23 Jun 2023 10:41:18 +0300
+Message-Id: <20230623074123.152931-9-radu-nicolae.pirea@oss.nxp.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230623074123.152931-1-radu-nicolae.pirea@oss.nxp.com>
 References: <20230623074123.152931-1-radu-nicolae.pirea@oss.nxp.com>
@@ -63,52 +63,52 @@ MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: AM9PR04MB8954:EE_|VI1PR04MB9905:EE_
-X-MS-Office365-Filtering-Correlation-Id: 67d5977e-40ca-4788-2fff-08db73bd4af7
+X-MS-Office365-Filtering-Correlation-Id: 7f24513a-3a7a-45d2-21ba-08db73bd4b92
 X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: NS2pjQoOPsTm8cojinaqYeHo23OWu3lRAM+9syPhcRU3lcQqbu6K4pp6v+d2ohLLt/EC/fjt+fojc60U8DBdaR9E+3Hj1Rmy62lYSswnG0mbHqdWEaxElIfYP+V/rv+gLpokm5jkaWr7DKkNV6aLAItZCjlJWjt2QxtPqzsADZv0aVLA2eZOfO2lUfZ11QbqiL2TT7GE0dQOsqPisMi6tMGY0vYhvl+f/3GUihDEX286ouFTJRD3bBI9+wM+SspUAoASFHgbOqdAfsDVsvx895xakXfkvtDV9uU3pTxGkKwVE3xHCtUiQWwOpVx29k4J0PaV+YbdJdDxS61IkUuvRfr1ZqUd+uvY2fyu1p3XhRK0vTVTNDEQ2FL0zKpvokOeB6QRVK6AQEvMupOdbGUDFDeddOQnEWXqB8nqJOCMiZYsKQ/Inver5sPS1RfefgU6rClNzV4F/4NCztW60gvx10B3I7Fyreq2lcGWvCs9KV3Bt9agODSwIbY2nVaqIRjhxNUemD+BRVmPT4XuPO8kQqneVjJE1NIwTPycwlI5PtyH53M6Rb1z8dOMO0lc4NkHaUHwRRIDku1W4/N0ovOMv1jBGYH4xwpDp+PDc5urFPluch7GAaLxWp19vM2tdE07
+X-Microsoft-Antispam-Message-Info: T6w5IUChpzoN3ik1uLrEbzwl5vkL2QU8GJAY68lOOqTzAoNSxBxGW4KU8FMrF6f6gnH3VijJlqldkCQ25z6QUzGxkslWRQ8hmsvphg/O6Fn52KY8/wn2QDm/sFgBNpKxdHc9t7OLCBqpGoSrkKZgAs5BSTGO6Ub72IfIwpHiH0TGMP/PWGRgc5ZAn4kuBchTjLmSK7VkLDaem+p6BhW8wCJWRpKw6s4y1s03SsnJKB/SEA6tdxZ28Xu1eRgXZh5xgwM11CpiCIPG92zJfHg++zTGZDjw0UdAm1CWLzYnWccdDkk8968HR555N0er0ypdWuVIzxEj52bADGf0EV8x0NS4wRBBtD11Xv3eXJdVcxjtcgKsdWr9+P7efkGMZ/jD/zoUqHmpDn5jooVwa8FRfsB4AI/Lg7U5hkQE4eamTAUe+JyXLAe+aJ0BKD+wnQwhQwe31OtHpIENIdZMWutxCOgaUl9Sd/PEM/er/lJwSN9iebG1qGZ13O9PFH1b7b1mOvKZWqHtqzFsqKZ3xuT1M0lI+UYJRyn00r92+uljmXd9M1CcK6ShAbmcUggauzFDIZVTJixJNY913C5tOFKZA7EM07f+QwQrzeLAtX4ojekLJlLE9tg0Rj2u+ustEPNe
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8954.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(39860400002)(366004)(396003)(136003)(346002)(451199021)(8936002)(8676002)(5660300002)(7416002)(38350700002)(38100700002)(2906002)(478600001)(6486002)(186003)(6666004)(2616005)(86362001)(52116002)(66476007)(6512007)(1076003)(66556008)(66946007)(83380400001)(26005)(6506007)(316002)(41300700001)(4326008)(66574015);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?t6r5hSfGCDfFcZXnqEww7avXYMyjjExNrKCkFEe+Ht74JqwLwHNWWcwfB9FX?=
- =?us-ascii?Q?K8IJkaL32Kl5LLtEgu/LD2Uc45OEfirbyijWiyp/6MAgWT0E5U7dV1tWZ1NT?=
- =?us-ascii?Q?urp8jMOrojv8UJkrThcKm4Dr9/Xwdjjt7mMj2o+nFwp9nQCTNSuIVUbOQW0F?=
- =?us-ascii?Q?iDa/jatLERGp6TUdcYuyCZ+ASCDP+ownVmsfvRaL/6/C5DgGc9FAidvfHRnE?=
- =?us-ascii?Q?rTezJkimAk371S1wOFH1aaZ9wACbMBqIqR4G7AUFvXn96sS0EWN8UjIDppxW?=
- =?us-ascii?Q?xy1M9ai00BbQHQsGyCmoF9bUbzYjdyKqEVkpLC6fz3xl/uNjFmZ3Z7P4yo2Q?=
- =?us-ascii?Q?gnWZtLj9treE+wkYUe8Sj4Y+7FTrczEMbHvK+MKXBngq60MNdamnjlA8Cqs2?=
- =?us-ascii?Q?OibIhIRRUuh1YwfBILRd3b2sjs24J1q7zr1vAqNhz7zOJ1jQyzJceDlWCKie?=
- =?us-ascii?Q?OfoQNdWpZzdaviGizpdmUEsGYpDp8To3Qbc2y/CH0vb32R76JygHWC2YX4HB?=
- =?us-ascii?Q?AkwRCE2wRudcxQetNj6FbdoS98ABO7SSLio8NNWvnHMEo1yEcBTRGVqMu8J3?=
- =?us-ascii?Q?cch8jOgkAA2PkNm+Bd6O+Ix4r3dkhXPy08r1HD/slKU16e38ru5uEwRyiujm?=
- =?us-ascii?Q?N5H1gfrf6UudJFAo8l/ArJUpJRZxm2O5l6lSgHYX1JZD9mcph0dz9Nzvwt2k?=
- =?us-ascii?Q?MVVKyMH9tnoALTjjrwlX6Gmnu+Nr7jwp9OJ4w7H2+9CpCaez4bei76/1ZIuZ?=
- =?us-ascii?Q?txiQtSmlb6g00Yx/svsbX6tzEjhGoVIs/8P/vvft5AeOmSP33BRxm2OPNiAf?=
- =?us-ascii?Q?Dqf4hln2z0n8bqYpxKzZi1OQD2mWV1BFUqy4e+lA3ZasR/0O4cYD20lIaBaI?=
- =?us-ascii?Q?w7NbLoYtWYRuWSUBaIAC6Cq0CAyqg1fj3yIoS/KjFWNCLLaj84VtcKwgpDsS?=
- =?us-ascii?Q?CWV2IQCqYgl7nG2LoqDmGIBFCsni4fouCmckIkYmjLGu9jfjz3DZKTMf4xo+?=
- =?us-ascii?Q?5TQnfNtHAS6diut990ZB/FSQIr3w9aJV87y0cFpTjqfQIOkIi8KRcgimFYtb?=
- =?us-ascii?Q?FRzwTmXnYSnmF+NEH5EhAajVHQqvNp5IJ/dnxNwrvoEMG6fUaq5nyZRI7fRN?=
- =?us-ascii?Q?Qo/LKDbCQ7YKeBgsdPwxOYSfVD1U/ZovQSUA51eV4tUcdNhCDJRbAW2Vf+p0?=
- =?us-ascii?Q?UsBHRTG0vi2qsfcoRhutlEWlg/rr7N6VwEKNulKXpQo69oZxufTB6dUenLtf?=
- =?us-ascii?Q?OUA3qbt2WB1eJqHrr11OOJA7V5x9WfijcO5w1mGSpZLpZKgMAGtgcF27Wgal?=
- =?us-ascii?Q?sjtOGwTZ2k4DRr2E5jusuH9Ir+llWaeiEpkVciNJB9HOat+M+em/HV5YEoNq?=
- =?us-ascii?Q?E1cQbGa7XQiRAKhAL8vjgr9GIhn+Z97EcGKgjDkSNK6O9s99D0PeIA1PToue?=
- =?us-ascii?Q?B32EHF3w1adztk6LuQdxBIcr0Ivq7Bc4G0N1rq0J14p6q2soOhQdXxKCNWk1?=
- =?us-ascii?Q?lJ+RJIw/zqeY3rYewSjd4LAUNJhge8RtJcH2YVOm5YRgTaiDJXTm7pnpkElz?=
- =?us-ascii?Q?fEV/K3cyhNRCLk1BPGuyZvdFPKigZhjwZEs0Ugd4SIAG0OnzuaRXUm3LCUUB?=
- =?us-ascii?Q?Ng=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?0e1L6SbjcK+LiJVCvPao1WRg9ErcZjNiujXDcOK9CYO/+pDsCIKhnSgbbXR5?=
+ =?us-ascii?Q?ItY+D/LRmc5TCT5suFSJdYgHC9EuZdmN7e56WerESElgVSwyrD3piSNidQ+m?=
+ =?us-ascii?Q?ggf39VMZIjVDIXOMTY8HjilNuP7DsMfEFQk+7y9PUTrsUWv5Ys2L+PFGaWOO?=
+ =?us-ascii?Q?FLr6bPOpCHVFkNkPGv5AV/lGMdYQXEJkba9fAVUiiPNGdjGPU//+n51v5lzU?=
+ =?us-ascii?Q?w0aRnJ1xH2+uBRqTpjDCvaM39mfJa3PIqBBoeXgdV4xMOEERCi0YgA6dzTQj?=
+ =?us-ascii?Q?8eUGNLozpfqiTbR3qEMez5+sumKEl4Ex+glvvPsBJiyLyDPPeJ70s1Pw//Nx?=
+ =?us-ascii?Q?ST/zRICiPzOwHjjpTOippEjdYqyXwRyXNBw4xLZwhV4BIjd/m+rcs4T2IjQI?=
+ =?us-ascii?Q?B2LQRyep7CT8qTZbzcKywnCEbpucWxew2IbyGTLLQytD/O5EpSV8pyPvkRiB?=
+ =?us-ascii?Q?wQEHtlYCL1/L3iaCtu+tvtqZSLM9JmLmVMLPnHwBDov4igcEZAKjsI7SKmpy?=
+ =?us-ascii?Q?AHX+WPPvV8L2/YdOitIP/wryVMD8JzT/OWXevy9KQFq/uvEMeet8n5kSRP7J?=
+ =?us-ascii?Q?IYKA2tm657TWRhafWsAhTSSdbkLgZYHHfhJX1P4yzBPaMz61zgSZPPuFoZxj?=
+ =?us-ascii?Q?WOw4yjNo1Z1aTGEHySKmfyqlWV1usCzArQRewoNFqkSGEHeXjue4+6nZcfqj?=
+ =?us-ascii?Q?NRdgTxaX+CoerB5A+cI2qWPHvyNf5QyRXsSm1V4+o2e87CRA1U6j89LS3+qm?=
+ =?us-ascii?Q?7X32mFHx7qYuo52U7gReFKDgxiux/pdvZApJEcUpDUADjjS9PtD1ry6B8fp+?=
+ =?us-ascii?Q?YEbQAxvfv1N+j3ilob/F9pIl9ZTO7cph9Q132/IhmifDpnzdi5ufGc/DuQ8h?=
+ =?us-ascii?Q?2MqqYrL/HrVX1da5bl+tRcOc//D70uela4DYC4jTWqpQe7aiwsBZona0Y0aS?=
+ =?us-ascii?Q?qLmRgqBF18KUuDxg0K3zzA+kC+uoBFsm6YsGJ5nBp3wlO0L++h8iOXq2BJ8c?=
+ =?us-ascii?Q?1/HCBt8LfTG1o5Jik3K/ApAxammiYo29E9cRaApIw+EJz0r3BOgOF+Diw0rv?=
+ =?us-ascii?Q?henDofFtvzwDe+Tuv3L010wbCoTdx7G3NqRPDpUVbf9hykiW2G5Sr3kmfR8w?=
+ =?us-ascii?Q?Zc0LWs7D1qZkuHbzAwcrxuV1DKb6BBS/zCrMhU0evnVr5EOji2Lugt457+Vx?=
+ =?us-ascii?Q?AFyUjopDnNks3Bmv82PyPNAolSH5mqD9HKUgSPtqkZyPC45UuKZkP6V8CzCW?=
+ =?us-ascii?Q?/JVtWQRPlviMWxD0dBjWcDRYo5pBdXx+MzZzp8fe34TuSNrBVkBmuVn2k7DY?=
+ =?us-ascii?Q?S3/dw1bNm+pNOHVRuNVb8YQ6EM33I2wbJoW9W+02z7WJCui12bbGsdVuv7vo?=
+ =?us-ascii?Q?Ih3qgji8I+Xxwyyhr1iacvljyalwq4M+QCmEiVpoNGZNUn8F67VZ5IH3HxCF?=
+ =?us-ascii?Q?Iq03UV3eEzvWDmEx/SHXoCTz1RAAgPvO4wyp6ixaQxQ7VgcxCTd/AGggaIct?=
+ =?us-ascii?Q?tgyzbXzP9neYItU9/WcT1BtEgyJfDeiD0qmo+PmDlU+lU3HTbUvxOUOtLeJV?=
+ =?us-ascii?Q?va/0O8rs0TK/bGB9oJqb0G+uaEnJlTjub3Lw13jb35JYgse36Ohf6Tnv5wXq?=
+ =?us-ascii?Q?ZQ=3D=3D?=
 X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 67d5977e-40ca-4788-2fff-08db73bd4af7
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7f24513a-3a7a-45d2-21ba-08db73bd4b92
 X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8954.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jun 2023 07:41:44.8222
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jun 2023 07:41:45.8584
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: dr0jLjpaXV+DJ6DlaVFxfqfa4wkBQZsB0BX1U4M+nxoISkMyye0TbnUgpPVHMKkkLIeBDVoSFJ4I/WoU1PE2Pq4tmxr67RCbgWpil7ua9WU=
+X-MS-Exchange-CrossTenant-UserPrincipalName: i4G5NLpJgTawoM10tifBCxZ0ud3ZnPeEFQjS0Tg97EhjSvGN8RQPEW1m/nSwN0osrgoAYFp7qmIGUwsh7ADsIXDNxvKXvg3tjrpVS7FCEWY=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB9905
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
@@ -119,251 +119,130 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add TJA1120 driver entry and its driver_data.
+The external trigger configuration for TJA1120 has changed. The PHY
+supports sampling of the LTC on rising and on falling edge.
 
 Signed-off-by: Radu Pirea (NXP OSS) <radu-nicolae.pirea@oss.nxp.com>
 ---
- drivers/net/phy/Kconfig           |   2 +-
- drivers/net/phy/nxp-c45-tja11xx.c | 159 ++++++++++++++++++++++++++++++
- 2 files changed, 160 insertions(+), 1 deletion(-)
+ drivers/net/phy/nxp-c45-tja11xx.c | 60 ++++++++++++++++++++++++++-----
+ 1 file changed, 52 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/net/phy/Kconfig b/drivers/net/phy/Kconfig
-index a40269c17597..aaed6d73f9f5 100644
---- a/drivers/net/phy/Kconfig
-+++ b/drivers/net/phy/Kconfig
-@@ -300,7 +300,7 @@ config NXP_C45_TJA11XX_PHY
- 	depends on PTP_1588_CLOCK_OPTIONAL
- 	help
- 	  Enable support for NXP C45 TJA11XX PHYs.
--	  Currently supports only the TJA1103 PHY.
-+	  Currently supports the TJA1103 and TJA1120 PHYs.
- 
- config NXP_TJA11XX_PHY
- 	tristate "NXP TJA11xx PHYs support"
 diff --git a/drivers/net/phy/nxp-c45-tja11xx.c b/drivers/net/phy/nxp-c45-tja11xx.c
-index 11fb5a4f47fb..47decf2677e1 100644
+index 47decf2677e1..62be1712167e 100644
 --- a/drivers/net/phy/nxp-c45-tja11xx.c
 +++ b/drivers/net/phy/nxp-c45-tja11xx.c
-@@ -18,12 +18,17 @@
- #include <linux/net_tstamp.h>
+@@ -101,6 +101,10 @@
+ #define VEND1_PTP_CONFIG		0x1102
+ #define EXT_TRG_EDGE			BIT(1)
  
- #define PHY_ID_TJA_1103			0x001BB010
-+#define PHY_ID_TJA_1120			0x001BB031
- 
- #define VEND1_DEVICE_CONTROL		0x0040
- #define DEVICE_CONTROL_RESET		BIT(15)
- #define DEVICE_CONTROL_CONFIG_GLOBAL_EN	BIT(14)
- #define DEVICE_CONTROL_CONFIG_ALL_EN	BIT(13)
- 
-+#define VEND1_DEVICE_CONFIG		0x0048
++#define TJA1120_SYNC_TRIG_FILTER	0x1010
++#define PTP_TRIG_RISE_TS		BIT(3)
++#define PTP_TRIG_FALLING_TS		BIT(2)
 +
-+#define TJA1120_VEND1_EXT_TS_MODE	0x1012
-+
- #define VEND1_PHY_IRQ_ACK		0x80A0
- #define VEND1_PHY_IRQ_EN		0x80A1
- #define VEND1_PHY_IRQ_STATUS		0x80A2
-@@ -76,6 +81,14 @@
- #define MII_BASIC_CONFIG_RMII		0x5
- #define MII_BASIC_CONFIG_MII		0x4
+ #define CLK_RATE_ADJ_LD			BIT(15)
+ #define CLK_RATE_ADJ_DIR		BIT(14)
  
-+#define VEND1_SYMBOL_ERROR_CNT_XTD	0x8351
-+#define EXTENDED_CNT_EN			BIT(15)
-+#define VEND1_MONITOR_STATUS		0xAC80
-+#define MONITOR_RESET			BIT(15)
-+#define VEND1_MONITOR_CONFIG		0xAC86
-+#define LOST_FRAMES_CNT_EN		BIT(9)
-+#define ALL_FRAMES_CNT_EN		BIT(8)
-+
- #define VEND1_SYMBOL_ERROR_COUNTER	0x8350
- #define VEND1_LINK_DROP_COUNTER		0x8352
- #define VEND1_LINK_LOSSES_AND_FAILURES	0x8353
-@@ -94,6 +107,10 @@
- #define VEND1_RX_TS_INSRT_CTRL		0x114D
- #define TJA1103_RX_TS_INSRT_MODE2	0x02
+@@ -238,6 +242,7 @@ struct nxp_c45_phy_data {
+ 	const struct nxp_c45_phy_stats *stats;
+ 	int n_stats;
+ 	u8 ptp_clk_period;
++	bool ext_ts_both_edges;
+ 	void (*counters_enable)(struct phy_device *phydev);
+ 	void (*ptp_init)(struct phy_device *phydev);
+ 	void (*ptp_enable)(struct phy_device *phydev, bool enable);
+@@ -684,9 +689,48 @@ static int nxp_c45_perout_enable(struct nxp_c45_phy *priv,
+ 	return 0;
+ }
  
-+#define TJA1120_RX_TS_INSRT_CTRL	0x9012
-+#define TJA1120_RX_TS_INSRT_EN		BIT(15)
-+#define TJA1120_TS_INSRT_MODE		BIT(4)
-+
- #define VEND1_EGR_RING_DATA_0		0x114E
- #define VEND1_EGR_RING_CTRL		0x1154
- 
-@@ -110,6 +127,7 @@
- #define PORT_PTP_CONTROL_BYPASS		BIT(11)
- 
- #define PTP_CLK_PERIOD_100BT1		15ULL
-+#define PTP_CLK_PERIOD_1000BT1		8ULL
- 
- #define EVENT_MSG_FILT_ALL		0x0F
- #define EVENT_MSG_FILT_NONE		0x00
-@@ -929,6 +947,27 @@ static const struct nxp_c45_phy_stats tja1103_hw_stats[] = {
- 		NXP_C45_REG_FIELD(0xAFD1, MDIO_MMD_VEND1, 0, 9), },
- };
- 
-+static const struct nxp_c45_phy_stats tja1120_hw_stats[] = {
-+	{ "phy_symbol_error_cnt_ext",
-+		NXP_C45_REG_FIELD(0x8351, MDIO_MMD_VEND1, 0, 14) },
-+	{ "tx_frames_xtd",
-+		NXP_C45_REG_FIELD(0xACA1, MDIO_MMD_VEND1, 0, 8), },
-+	{ "tx_frames",
-+		NXP_C45_REG_FIELD(0xACA0, MDIO_MMD_VEND1, 0, 16), },
-+	{ "rx_frames_xtd",
-+		NXP_C45_REG_FIELD(0xACA3, MDIO_MMD_VEND1, 0, 8), },
-+	{ "rx_frames",
-+		NXP_C45_REG_FIELD(0xACA2, MDIO_MMD_VEND1, 0, 16), },
-+	{ "tx_lost_frames_xtd",
-+		NXP_C45_REG_FIELD(0xACA5, MDIO_MMD_VEND1, 0, 8), },
-+	{ "tx_lost_frames",
-+		NXP_C45_REG_FIELD(0xACA4, MDIO_MMD_VEND1, 0, 16), },
-+	{ "rx_lost_frames_xtd",
-+		NXP_C45_REG_FIELD(0xACA7, MDIO_MMD_VEND1, 0, 8), },
-+	{ "rx_lost_frames",
-+		NXP_C45_REG_FIELD(0xACA6, MDIO_MMD_VEND1, 0, 16), },
-+};
-+
- static int nxp_c45_get_sset_count(struct phy_device *phydev)
- {
- 	const struct nxp_c45_phy_data *phy_data = nxp_c45_get_data(phydev);
-@@ -1511,6 +1550,101 @@ static const struct nxp_c45_phy_data tja1103_phy_data = {
- 	.ptp_enable = tja1103_ptp_enable,
- };
- 
-+static void tja1120_counters_enable(struct phy_device *phydev)
++static void nxp_c45_set_rising_or_falling(struct phy_device *phydev,
++					  struct ptp_extts_request *extts)
 +{
-+	phy_set_bits_mmd(phydev, MDIO_MMD_VEND1, VEND1_SYMBOL_ERROR_CNT_XTD,
-+			 EXTENDED_CNT_EN);
-+	phy_set_bits_mmd(phydev, MDIO_MMD_VEND1, VEND1_MONITOR_STATUS,
-+			 MONITOR_RESET);
-+	phy_set_bits_mmd(phydev, MDIO_MMD_VEND1, VEND1_MONITOR_CONFIG,
-+			 ALL_FRAMES_CNT_EN | LOST_FRAMES_CNT_EN);
-+}
++	if (extts->flags & PTP_RISING_EDGE)
++		phy_clear_bits_mmd(phydev, MDIO_MMD_VEND1,
++				   VEND1_PTP_CONFIG, EXT_TRG_EDGE);
 +
-+static void tja1120_ptp_init(struct phy_device *phydev)
-+{
-+	phy_write_mmd(phydev, MDIO_MMD_VEND1, TJA1120_RX_TS_INSRT_CTRL,
-+		      TJA1120_RX_TS_INSRT_EN | TJA1120_TS_INSRT_MODE);
-+	phy_write_mmd(phydev, MDIO_MMD_VEND1, TJA1120_VEND1_EXT_TS_MODE,
-+		      TJA1120_TS_INSRT_MODE);
-+	phy_set_bits_mmd(phydev, MDIO_MMD_VEND1, VEND1_DEVICE_CONFIG,
-+			 PTP_ENABLE);
-+}
-+
-+static void tja1120_ptp_enable(struct phy_device *phydev, bool enable)
-+{
-+	if (enable)
++	if (extts->flags & PTP_FALLING_EDGE)
 +		phy_set_bits_mmd(phydev, MDIO_MMD_VEND1,
-+				 VEND1_PORT_FUNC_ENABLES,
-+				 PTP_ENABLE);
++				 VEND1_PTP_CONFIG, EXT_TRG_EDGE);
++}
++
++static void nxp_c45_set_rising_and_falling(struct phy_device *phydev,
++					   struct ptp_extts_request *extts)
++{
++	/* PTP_EXTTS_REQUEST may have only the PTP_ENABLE_FEATURE flag set. In
++	 * this case external ts will be enabled on rising edge.
++	 */
++	if (extts->flags & PTP_RISING_EDGE ||
++	    extts->flags == PTP_ENABLE_FEATURE)
++		phy_set_bits_mmd(phydev, MDIO_MMD_VEND1,
++				 TJA1120_SYNC_TRIG_FILTER,
++				 PTP_TRIG_RISE_TS);
 +	else
 +		phy_clear_bits_mmd(phydev, MDIO_MMD_VEND1,
-+				   VEND1_PORT_FUNC_ENABLES,
-+				   PTP_ENABLE);
++				   TJA1120_SYNC_TRIG_FILTER,
++				   PTP_TRIG_RISE_TS);
++
++	if (extts->flags & PTP_FALLING_EDGE)
++		phy_set_bits_mmd(phydev, MDIO_MMD_VEND1,
++				 TJA1120_SYNC_TRIG_FILTER,
++				 PTP_TRIG_FALLING_TS);
++	else
++		phy_clear_bits_mmd(phydev, MDIO_MMD_VEND1,
++				   TJA1120_SYNC_TRIG_FILTER,
++				   PTP_TRIG_FALLING_TS);
 +}
 +
-+static const struct nxp_c45_regmap tja1120_regmap = {
-+	.vend1_ptp_clk_period	= 0x1020,
-+	.vend1_event_msg_filt	= 0x9010,
-+	.pps_enable		=
-+		NXP_C45_REG_FIELD(0x1006, MDIO_MMD_VEND1, 4, 1),
-+	.pps_polarity		=
-+		NXP_C45_REG_FIELD(0x1006, MDIO_MMD_VEND1, 5, 1),
-+	.ltc_lock_ctrl		=
-+		NXP_C45_REG_FIELD(0x1006, MDIO_MMD_VEND1, 2, 1),
-+	.ltc_read		=
-+		NXP_C45_REG_FIELD(0x1000, MDIO_MMD_VEND1, 1, 1),
-+	.ltc_write		=
-+		NXP_C45_REG_FIELD(0x1000, MDIO_MMD_VEND1, 2, 1),
-+	.vend1_ltc_wr_nsec_0	= 0x1040,
-+	.vend1_ltc_wr_nsec_1	= 0x1041,
-+	.vend1_ltc_wr_sec_0	= 0x1042,
-+	.vend1_ltc_wr_sec_1	= 0x1043,
-+	.vend1_ltc_rd_nsec_0	= 0x1048,
-+	.vend1_ltc_rd_nsec_1	= 0x1049,
-+	.vend1_ltc_rd_sec_0	= 0x104A,
-+	.vend1_ltc_rd_sec_1	= 0x104B,
-+	.vend1_rate_adj_subns_0	= 0x1030,
-+	.vend1_rate_adj_subns_1	= 0x1031,
-+	.irq_egr_ts_en		=
-+		NXP_C45_REG_FIELD(0x900A, MDIO_MMD_VEND1, 1, 1),
-+	.irq_egr_ts_status	=
-+		NXP_C45_REG_FIELD(0x900C, MDIO_MMD_VEND1, 1, 1),
-+	.domain_number		=
-+		NXP_C45_REG_FIELD(0x9061, MDIO_MMD_VEND1, 8, 8),
-+	.msg_type		=
-+		NXP_C45_REG_FIELD(0x9061, MDIO_MMD_VEND1, 4, 4),
-+	.sequence_id		=
-+		NXP_C45_REG_FIELD(0x9062, MDIO_MMD_VEND1, 0, 16),
-+	.sec_1_0		=
-+		NXP_C45_REG_FIELD(0x9065, MDIO_MMD_VEND1, 0, 2),
-+	.sec_4_2		=
-+		NXP_C45_REG_FIELD(0x9065, MDIO_MMD_VEND1, 2, 3),
-+	.nsec_15_0		=
-+		NXP_C45_REG_FIELD(0x9063, MDIO_MMD_VEND1, 0, 16),
-+	.nsec_29_16		=
-+		NXP_C45_REG_FIELD(0x9064, MDIO_MMD_VEND1, 0, 14),
-+	.vend1_ext_trg_data_0	= 0x1071,
-+	.vend1_ext_trg_data_1	= 0x1072,
-+	.vend1_ext_trg_data_2	= 0x1073,
-+	.vend1_ext_trg_data_3	= 0x1074,
-+	.vend1_ext_trg_ctrl	= 0x1075,
-+	.cable_test		= 0x8360,
-+	.cable_test_valid	=
-+		NXP_C45_REG_FIELD(0x8361, MDIO_MMD_VEND1, 15, 1),
-+	.cable_test_result	=
-+		NXP_C45_REG_FIELD(0x8361, MDIO_MMD_VEND1, 0, 3),
-+};
-+
-+static const struct nxp_c45_phy_data tja1120_phy_data = {
-+	.regmap = &tja1120_regmap,
-+	.stats = tja1120_hw_stats,
-+	.n_stats = ARRAY_SIZE(tja1120_hw_stats),
-+	.ptp_clk_period = PTP_CLK_PERIOD_1000BT1,
-+	.counters_enable = tja1120_counters_enable,
-+	.ptp_init = tja1120_ptp_init,
-+	.ptp_enable = tja1120_ptp_enable,
-+};
-+
- static struct phy_driver nxp_c45_driver[] = {
- 	{
- 		PHY_ID_MATCH_MODEL(PHY_ID_TJA_1103),
-@@ -1536,12 +1670,37 @@ static struct phy_driver nxp_c45_driver[] = {
- 		.get_sqi_max		= nxp_c45_get_sqi_max,
- 		.remove			= nxp_c45_remove,
- 	},
-+	{
-+		PHY_ID_MATCH_MODEL(PHY_ID_TJA_1120),
-+		.name			= "NXP C45 TJA1120",
-+		.get_features		= nxp_c45_get_features,
-+		.driver_data		= &tja1120_phy_data,
-+		.probe			= nxp_c45_probe,
-+		.soft_reset		= nxp_c45_soft_reset,
-+		.config_aneg		= genphy_c45_config_aneg,
-+		.config_init		= nxp_c45_config_init,
-+		.config_intr		= nxp_c45_config_intr,
-+		.handle_interrupt	= nxp_c45_handle_interrupt,
-+		.read_status		= genphy_c45_read_status,
-+		.suspend		= genphy_c45_pma_suspend,
-+		.resume			= genphy_c45_pma_resume,
-+		.get_sset_count		= nxp_c45_get_sset_count,
-+		.get_strings		= nxp_c45_get_strings,
-+		.get_stats		= nxp_c45_get_stats,
-+		.cable_test_start	= nxp_c45_cable_test_start,
-+		.cable_test_get_status	= nxp_c45_cable_test_get_status,
-+		.set_loopback		= genphy_c45_loopback,
-+		.get_sqi		= nxp_c45_get_sqi,
-+		.get_sqi_max		= nxp_c45_get_sqi_max,
-+		.remove			= nxp_c45_remove,
-+	},
- };
+ static int nxp_c45_extts_enable(struct nxp_c45_phy *priv,
+ 				struct ptp_extts_request *extts, int on)
+ {
++	const struct nxp_c45_phy_data *data = nxp_c45_get_data(priv->phydev);
+ 	int pin;
  
- module_phy_driver(nxp_c45_driver);
+ 	if (extts->flags & ~(PTP_ENABLE_FEATURE |
+@@ -697,7 +741,8 @@ static int nxp_c45_extts_enable(struct nxp_c45_phy *priv,
  
- static struct mdio_device_id __maybe_unused nxp_c45_tbl[] = {
- 	{ PHY_ID_MATCH_MODEL(PHY_ID_TJA_1103) },
-+	{ PHY_ID_MATCH_MODEL(PHY_ID_TJA_1120) },
- 	{ /*sentinel*/ },
- };
+ 	/* Sampling on both edges is not supported */
+ 	if ((extts->flags & PTP_RISING_EDGE) &&
+-	    (extts->flags & PTP_FALLING_EDGE))
++	    (extts->flags & PTP_FALLING_EDGE) &&
++	    !data->ext_ts_both_edges)
+ 		return -EOPNOTSUPP;
  
+ 	pin = ptp_find_pin(priv->ptp_clock, PTP_PF_EXTTS, extts->index);
+@@ -711,13 +756,10 @@ static int nxp_c45_extts_enable(struct nxp_c45_phy *priv,
+ 		return 0;
+ 	}
+ 
+-	if (extts->flags & PTP_RISING_EDGE)
+-		phy_clear_bits_mmd(priv->phydev, MDIO_MMD_VEND1,
+-				   VEND1_PTP_CONFIG, EXT_TRG_EDGE);
+-
+-	if (extts->flags & PTP_FALLING_EDGE)
+-		phy_set_bits_mmd(priv->phydev, MDIO_MMD_VEND1,
+-				 VEND1_PTP_CONFIG, EXT_TRG_EDGE);
++	if (data->ext_ts_both_edges)
++		nxp_c45_set_rising_and_falling(priv->phydev, extts);
++	else
++		nxp_c45_set_rising_or_falling(priv->phydev, extts);
+ 
+ 	nxp_c45_gpio_config(priv, pin, GPIO_EXTTS_OUT_CFG);
+ 	priv->extts = true;
+@@ -1545,6 +1587,7 @@ static const struct nxp_c45_phy_data tja1103_phy_data = {
+ 	.stats = tja1103_hw_stats,
+ 	.n_stats = ARRAY_SIZE(tja1103_hw_stats),
+ 	.ptp_clk_period = PTP_CLK_PERIOD_100BT1,
++	.ext_ts_both_edges = false,
+ 	.counters_enable = tja1103_counters_enable,
+ 	.ptp_init = tja1103_ptp_init,
+ 	.ptp_enable = tja1103_ptp_enable,
+@@ -1640,6 +1683,7 @@ static const struct nxp_c45_phy_data tja1120_phy_data = {
+ 	.stats = tja1120_hw_stats,
+ 	.n_stats = ARRAY_SIZE(tja1120_hw_stats),
+ 	.ptp_clk_period = PTP_CLK_PERIOD_1000BT1,
++	.ext_ts_both_edges = true,
+ 	.counters_enable = tja1120_counters_enable,
+ 	.ptp_init = tja1120_ptp_init,
+ 	.ptp_enable = tja1120_ptp_enable,
 -- 
 2.34.1
 
