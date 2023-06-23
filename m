@@ -2,119 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 841A473BE1A
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 19:53:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 855C973BE1D
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 19:53:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232003AbjFWRxs convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 23 Jun 2023 13:53:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60744 "EHLO
+        id S232076AbjFWRxz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 13:53:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231342AbjFWRxq (ORCPT
+        with ESMTP id S232063AbjFWRxv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 13:53:46 -0400
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF45E2136;
-        Fri, 23 Jun 2023 10:53:45 -0700 (PDT)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-5728df0a7d9so8371437b3.1;
-        Fri, 23 Jun 2023 10:53:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687542825; x=1690134825;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mvsLdT639PCbMIODrmN1JmfHHDk3gCbxCBi4kyaJ9fk=;
-        b=cPC8oMX/iNTjnqqtlRw8ZkssLewcdWmf4d19+JCNwWXuKm3HoYGFkJat0YB0KS4oMF
-         FAf60dASGavmxdumXNW/cAmWQIEIHsmPiuz6BWDlZ0zPVSSoFa1Hlx1OacfT47zh0THN
-         bpJj8kinB/krZ5aTII8RWuFSwmrWhR5T7KtXUyJNI6JjbQDQn8SKXZe5cBL3eXZ1zaO8
-         I14iDxohnKDOQPbWzIilrJCw5qHk7PIoEbUBloJjYNWxx3lu4tmFtbE+l0shbbz4szbS
-         sKGwWWiIkWgU0Ri+ZWOS9kuoMMx4A6Ov4+FCaT5Jl/f5iadj0+7oj8uv9RrhTCBGpBRJ
-         ZcsQ==
-X-Gm-Message-State: AC+VfDwnecGhMYvq+8QVD7rQwzBNGwcfq4Gryrz0b3Y40Nu4KFSqQAgv
-        x72hkBLDWjdo9PxyqYgGsTVJROPPTJlYgdPm
-X-Google-Smtp-Source: ACHHUZ7HZpOiRR30jhKaLUjJRu/yiBEdFbrmQ9OVVmIviloPYphYHFGW1nqdqos7Tpgl+tmRUwgvYw==
-X-Received: by 2002:a0d:dd88:0:b0:561:9d66:e1a with SMTP id g130-20020a0ddd88000000b005619d660e1amr25139437ywe.34.1687542824639;
-        Fri, 23 Jun 2023 10:53:44 -0700 (PDT)
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
-        by smtp.gmail.com with ESMTPSA id t62-20020a815f41000000b0057682d3f95fsm196889ywb.136.2023.06.23.10.53.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Jun 2023 10:53:44 -0700 (PDT)
-Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-bb2ffa1e235so752794276.0;
-        Fri, 23 Jun 2023 10:53:43 -0700 (PDT)
-X-Received: by 2002:a81:60d6:0:b0:570:7fcb:9506 with SMTP id
- u205-20020a8160d6000000b005707fcb9506mr21842972ywb.37.1687542823789; Fri, 23
- Jun 2023 10:53:43 -0700 (PDT)
+        Fri, 23 Jun 2023 13:53:51 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E3F26AF;
+        Fri, 23 Jun 2023 10:53:49 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2B478838;
+        Fri, 23 Jun 2023 19:53:11 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1687542791;
+        bh=RvSeLhGa/5gGKnl6MJifYRRStnLqOA15rBU2GyZaIAA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gpnPOGGnWbbNI6mgE/vyt+WOZ1wWZzWwHWSoazzgcDny10E8pmnqPdNpGZbl43Okx
+         dXpw1JyL4BKYs4zYs2rLqk0GM7lN4RiA1F2VVWslyPLMJqenM0x9fndnOTJyCUDCKB
+         BvbX9hAxZ1iKm6DxHoEvS7JKjxMjGLu58PSVk8kk=
+Date:   Fri, 23 Jun 2023 20:53:46 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 23/39] drm: renesas: shmobile: Move interface handling to
+ connector setup
+Message-ID: <20230623175346.GQ2112@pendragon.ideasonboard.com>
+References: <cover.1687423204.git.geert+renesas@glider.be>
+ <0032f38b474a8ff63a7cdfdbc8b73766c3561729.1687423204.git.geert+renesas@glider.be>
+ <20230623163950.GA2112@pendragon.ideasonboard.com>
+ <CAMuHMdU_gvs1+KtN14DxAMY+Qa2YTo8KL3L4VnL3yG2zYiH6JQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230623081242.109131-1-tanure@linux.com> <20230623081242.109131-3-tanure@linux.com>
- <a885b97e-aaf0-cb72-f25b-71054d6d3fe2@linaro.org>
-In-Reply-To: <a885b97e-aaf0-cb72-f25b-71054d6d3fe2@linaro.org>
-Reply-To: tanure@linux.com
-From:   Lucas Tanure <tanure@linux.com>
-Date:   Fri, 23 Jun 2023 18:53:32 +0100
-X-Gmail-Original-Message-ID: <CAJX_Q+2qZg+RuwxmnM3rzs_akt_UMJRx+=aMxf72P-sGNjm9uw@mail.gmail.com>
-Message-ID: <CAJX_Q+2qZg+RuwxmnM3rzs_akt_UMJRx+=aMxf72P-sGNjm9uw@mail.gmail.com>
-Subject: Re: [PATCH v5 2/4] dt-bindings: serial: amlogic,meson-uart: Add
- compatible string for T7
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>, Nick <nick@khadas.com>,
-        Artem <art@khadas.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMuHMdU_gvs1+KtN14DxAMY+Qa2YTo8KL3L4VnL3yG2zYiH6JQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 23, 2023 at 9:51 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 23/06/2023 10:12, Lucas Tanure wrote:
-> > Amlogic T7 SoCs uses the same UART controller as S4 SoCs and G12A.
-> > There is no need for an extra compatible line in the driver, but
-> > add T7 compatible line for documentation.
+On Fri, Jun 23, 2023 at 07:51:07PM +0200, Geert Uytterhoeven wrote:
+> Hi Laurent,
+> 
+> On Fri, Jun 23, 2023 at 6:39 PM Laurent Pinchart
+> <laurent.pinchart@ideasonboard.com> wrote:
+> > On Thu, Jun 22, 2023 at 11:21:35AM +0200, Geert Uytterhoeven wrote:
+> > > Move legacy interface handling to the connector setup code.
+> > > Set up bus_flags and bus_formats in display_info according to the
+> > > bus format and panel information from platform data, to make it more
+> > > similar with DT-based connector/bridge/panel setup.
+> > > This will allows us to use the same LCD interface setup code for both
 > >
-> > Signed-off-by: Lucas Tanure <tanure@linux.com>
-> > ---
-> >  .../devicetree/bindings/serial/amlogic,meson-uart.yaml        | 4 ++++
-> >  1 file changed, 4 insertions(+)
+> > s/allows/allow/
 > >
-> > diff --git a/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml b/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
-> > index 01ec45b3b406..ad970c9ed1c7 100644
-> > --- a/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
-> > +++ b/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
-> > @@ -50,6 +50,10 @@ properties:
-> >          items:
-> >            - const: amlogic,meson-g12a-uart
-> >            - const: amlogic,meson-gx-uart
-> > +      - description: UART controller on T7 compatible SoCs
->
-> Your description is rather incorrect. This is UART on SoCs compatible
-> with S4, not with T7. Otherwise what do you expect to grow later when
-> adding more compatible devices? Just drop the description, it's kind of
-> obvious when done correctly (but can be misleading if done wrong).
->
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->
-Sorry, but S4 is already added in another way, which accepts just an
-S4 compatible string.
-But for T7 we need a fallback.
-Could you let me know what you're asking here? Redo S4 and add T7? Or
-do T7 in another different way that I didn't get?
-Do you want a v6 patch series? If yes, could you be more clear about
-how you want it?
+> > > legacy and DT-based systems.
+> > >
+> > > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> 
+> > > --- a/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c
+> > > +++ b/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c
+> > > @@ -8,6 +8,7 @@
+> > >   */
+> > >
+> > >  #include <linux/clk.h>
+> > > +#include <linux/media-bus-format.h>
+> > >  #include <linux/pm_runtime.h>
+> > >
+> > >  #include <drm/drm_crtc.h>
+> > > @@ -66,15 +67,65 @@ static void shmob_drm_crtc_setup_geometry(struct shmob_drm_crtc *scrtc)
+> > >  {
+> > >       struct drm_crtc *crtc = &scrtc->crtc;
+> > >       struct shmob_drm_device *sdev = to_shmob_device(crtc->dev);
+> > > -     enum display_flags dpy_flags = sdev->connector.mode->flags;
+> > > +     const struct drm_display_info *info = &sdev->connector->display_info;
+> > >       const struct drm_display_mode *mode = &crtc->mode;
+> > >       u32 value;
+> > >
+> > > -     value = sdev->ldmt1r
+> > > -           | ((mode->flags & DRM_MODE_FLAG_PVSYNC) ? 0 : LDMT1R_VPOL)
+> > > -           | ((mode->flags & DRM_MODE_FLAG_PHSYNC) ? 0 : LDMT1R_HPOL)
+> > > -           | ((dpy_flags & DISPLAY_FLAGS_PIXDATA_POSEDGE) ? LDMT1R_DWPOL : 0)
+> > > -           | ((dpy_flags & DISPLAY_FLAGS_DE_LOW) ? LDMT1R_DIPOL : 0);
+> > > +     if (!info->num_bus_formats || !info->bus_formats) {
+> > > +             dev_warn(sdev->dev, "No bus format reported, using RGB888\n");
+> > > +             value = LDMT1R_MIFTYP_RGB24;
+> > > +     } else {
+> > > +             switch (info->bus_formats[0]) {
+> > > +             case MEDIA_BUS_FMT_RGB888_3X8:
+> > > +                     value = LDMT1R_MIFTYP_RGB8;
+> > > +                     break;
+> > > +
+> > > +             case MEDIA_BUS_FMT_RGB666_2X9_BE:
+> > > +                     value = LDMT1R_MIFTYP_RGB9;
+> > > +                     break;
+> > > +
+> > > +             case MEDIA_BUS_FMT_RGB888_2X12_BE:
+> > > +                     value = LDMT1R_MIFTYP_RGB12A;
+> > > +                     break;
+> > > +
+> > > +             case MEDIA_BUS_FMT_RGB444_1X12:
+> > > +                     value = LDMT1R_MIFTYP_RGB12B;
+> > > +                     break;
+> > > +
+> > > +             case MEDIA_BUS_FMT_RGB565_1X16:
+> > > +                     value = LDMT1R_MIFTYP_RGB16;
+> > > +                     break;
+> > > +
+> > > +             case MEDIA_BUS_FMT_RGB666_1X18:
+> > > +                     value = LDMT1R_MIFTYP_RGB18;
+> > > +                     break;
+> > > +
+> > > +             case MEDIA_BUS_FMT_RGB888_1X24:
+> > > +                     value = LDMT1R_MIFTYP_RGB24;
+> > > +                     break;
+> > > +
+> > > +             case MEDIA_BUS_FMT_UYVY8_1X16:
+> > > +                     value = LDMT1R_MIFTYP_YCBCR;
+> > > +                     break;
+> > > +
+> > > +             default:
+> > > +                     dev_warn(sdev->dev,
+> > > +                              "unsupported bus format 0x%x, using RGB888\n",
+> > > +                              info->bus_formats[0]);
+> > > +                     value = LDMT1R_MIFTYP_RGB24;
+> > > +                     break;
+> > > +             }
+> >
+> > It's a bit annoying to lose the ability to validate the bus format at
+> > probe time. Can it be kept. I'm also OK with restoring it later in the
+> > series if it gets in the way of the conversion, in which case a mention
+> > in the commit message would be nice.
+> 
+> I guess I can keep it, somewhere.
+> Probably it should be validated for the DT case later, too.
+> BTW, drivers/gpu/drm/renesas/rcar-du/rcar_lvds.s doesn't check this
+> either, so I copied the bad example from the expert ;-)
 
->
-> Best regards,
-> Krzysztof
->
+There's an endless amount of issues to fix. Patches are of course
+welcome :-)
+
+-- 
+Regards,
+
+Laurent Pinchart
