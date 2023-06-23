@@ -2,265 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3C6273BE31
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 20:00:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18FE773BE33
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 20:00:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232267AbjFWSAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 14:00:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35384 "EHLO
+        id S232301AbjFWSAP convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 23 Jun 2023 14:00:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232466AbjFWSAC (ORCPT
+        with ESMTP id S232272AbjFWSAL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 14:00:02 -0400
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E692136;
-        Fri, 23 Jun 2023 11:00:00 -0700 (PDT)
-Received: by mail-qt1-x82a.google.com with SMTP id d75a77b69052e-40079c67a1fso9171251cf.0;
-        Fri, 23 Jun 2023 11:00:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687543200; x=1690135200;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=NR3XgMRotW/m3BP5L8wvyTpmLFOPidYrOBArMrDIUuE=;
-        b=ZInovtcfIjAC5AmsoOrRnq9sIdFaPfJYJ3ViHjt0BrAxyCS+ZH48IzFA8hfba3xgd1
-         EOOA+Dd/urJqCr9SQ+qpunLjF9ifVo4G1GWShxcP6x6FXcVljLbXoa3cZyMu18ZUqIQ3
-         XzwITGgxpISNG3U/zxyQcy+NNtCN7Ns2ijiBEQkvSCxrQLyJQFj/lFpWRI+AlOv/YMKT
-         3PoVx8CCb5mvUwcsUaYsBLAWi2M6rQnrla5T2T4oMgA+DMveH7zQ48xDlGjVhNC3mxVZ
-         larXH7Xa0J05esPOMblLQPZtuCu7yDMds52eZRL5L8bbhnR6hreagcNB/vkC3x6B5fUO
-         YEpg==
+        Fri, 23 Jun 2023 14:00:11 -0400
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF9026B0;
+        Fri, 23 Jun 2023 11:00:09 -0700 (PDT)
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-988a4a7be58so21496266b.0;
+        Fri, 23 Jun 2023 11:00:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687543200; x=1690135200;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NR3XgMRotW/m3BP5L8wvyTpmLFOPidYrOBArMrDIUuE=;
-        b=Ff1OlFvC/7wxMlxFf3U6NL+Jin3m/cPEmYxfqSQ6RWDOL0iMd7+Qq3ifvD8QcDwPKZ
-         UpMaSYkp87NmfTK2l156b4oZnrLfPyBw7Cn0bYGDTuqZRH7hs1hXxa/gt7uo4/ggHjuU
-         mwIT0dLQZqCM+ARSVL4VroUumrDz+NhEGvDubjT9tog0UqiLycwWsBcN1k6UAG8OiaSj
-         t5N3SN12LCfh3xt04HXYvJ32A0izrl66CB7QHOi5QDKemB/Sb0VrRB3hsg1oDAjYidh4
-         hktYul3TkJPmVoYpE8IgMxGh+9wzJXnqYHb7fBMJ4zI1E7+vac9AjQFOeWfi9K5TUPwp
-         oWBg==
-X-Gm-Message-State: AC+VfDxVkK01Mw2x5I+z0RXCQBVtziDLDTOqsZP1lAUM7UwPUN9R6SNm
-        DMZcnf5sqrMBzGwW/4mumAMhwrPLxwmez3r92Z1UDac8
-X-Google-Smtp-Source: ACHHUZ6pAhUSyAV5+Fc5LuKxFFGuZzhNTgoDstA8CLrpHcHcwUXTydnf4yaD3frUVaD9IcPBhuzlvk9VQtuscAkobAk=
-X-Received: by 2002:ac8:7f43:0:b0:3fd:eb04:344f with SMTP id
- g3-20020ac87f43000000b003fdeb04344fmr23929782qtk.54.1687543199819; Fri, 23
- Jun 2023 10:59:59 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687543208; x=1690135208;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0va1mb6bq4MZFowSDRaXkuLvgSfhyk8ksAjyHi+zCc8=;
+        b=YiVm2Radc7W0XYPKVwGh9sIKa4kFDTip965gCMXeXNPu4Y0136XOo55LixKtfuIN/7
+         75ZgbZHDlFAbMk4ASAdTLEbf1i0N/rdtPPYM7F+4E+bbOWA6F8Xo+9FZ9k0Aa2dixSI+
+         eMNrwPo9z/fV3kCTtjmhNXusbMajgMPLRYUhUXKDKTJn33l7SSE64fpvWbbUE3M0fLK/
+         /29p0DiExXH3+Kw3i1LGHvwKb/K3ISyAr4ZYGRXNjfXi/NL3MjZKvbH6U5anrAob3wmm
+         INv330NSOjNhzKBRZy86AXK9j3SWON05KP6bL6HipiL4B+3miqgPi5DzJuG7XRuYRYeq
+         L5EQ==
+X-Gm-Message-State: AC+VfDxU/zv+/7cq9RknetX+Quziz2gmJmKhBmDwAgJDSRXdipN2Pm9M
+        Z9/gDp8UxSiQq+TE81XXZ/qzj9B9lOsyYxu2ZsHWxBvz
+X-Google-Smtp-Source: ACHHUZ6SSV5uqRZfR8iaGkDSPwib5HccxZ0D4VdalRzFBXljVpzSCynKj7zZYJfUvtnN0CZ1rhvmYoXLJX184aGzuGk=
+X-Received: by 2002:a17:906:728b:b0:988:f9ba:e18d with SMTP id
+ b11-20020a170906728b00b00988f9bae18dmr9880639ejl.6.1687543207701; Fri, 23 Jun
+ 2023 11:00:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <f591b13c-4600-e2a4-8efa-aac6ad828dd1@linaro.org>
- <CAFX2Jfmz7QqZBEdzbPUhPs0yctnXVaVF68tX1c57YX=6ki=0TA@mail.gmail.com>
- <4fe39d77-eb7c-a578-aefa-45b76e2247c2@linaro.org> <CAFX2JfmdRMsHPTySiw4vm7BwJfRZj3s0V3_v7NJ+XwMxBBSo9A@mail.gmail.com>
- <a3683dd3-3f30-bb4c-539d-d1519de6e5bf@linaro.org> <CAFX2JfnS9GVc4NaxKhr9E4y10NNv6SPgcv1yoeHTfEw5NvZgMg@mail.gmail.com>
- <86d8e252-975f-5d48-4567-0911d5ef9a44@linaro.org> <CAFX2Jfn_DSs38WQYsRs2ifLi5w+T3BhZfSU2W80T6dK48_Bb5g@mail.gmail.com>
- <e8d31e48-df6a-fde4-4c6b-c4ccf1664ded@linaro.org> <c8d454b0-d355-f599-f720-b7e64374fb56@linaro.org>
- <CAFX2JfmvMZ7DzD9znWeOHXywgPbUKDS1irMjUerEuborjRBpcg@mail.gmail.com>
- <CAFX2JfnhOz+HiOd4vBwBK+5d19Kb8wfBNQhxRZHQoP8S2qiwFw@mail.gmail.com>
- <CAFX2Jf=5WV=dY9J4-7tp5NB85fDOkwiv8rxQqHziqG+ED1cUJw@mail.gmail.com>
- <CAFX2Jf=TxojviigtdQ=F_8FcHFFC4RNdfkoS=157jnXQCQSq5g@mail.gmail.com>
- <85851031-cf43-07d2-8ec7-b40c8c00be91@linaro.org> <CAFX2JfnH_rOFxn+uT4e1Eutea5En4_z26a-u_qCwOsnr5EowRw@mail.gmail.com>
- <dfcc114f-56f1-e4ab-7b36-f9a4ce3e8c8c@linaro.org>
-In-Reply-To: <dfcc114f-56f1-e4ab-7b36-f9a4ce3e8c8c@linaro.org>
-From:   Anna Schumaker <schumaker.anna@gmail.com>
-Date:   Fri, 23 Jun 2023 13:59:43 -0400
-Message-ID: <CAFX2Jf=uaOC2oDceShnNNJdSeW-MNwh7N=Jh=S9zYjP_Ci-DuQ@mail.gmail.com>
-Subject: Re: Regression: NULL pointer dereference after NFS_V4_2_READ_PLUS
- (commit 7fd461c47)
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Trond Myklebust <trondmy@hammerspace.com>,
-        Anna Schumaker <Anna.Schumaker@netapp.com>,
-        linux-nfs <linux-nfs@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-Content-Type: multipart/mixed; boundary="000000000000f823fb05fecfc466"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230525140135.3589917-1-daniel.lezcano@linaro.org>
+ <20230525140135.3589917-5-daniel.lezcano@linaro.org> <CAJZ5v0iv6HkxmV08JyUO3K1YMPXerEb5qNobVkUNv2zW+qVh+w@mail.gmail.com>
+ <93448681-8a0b-f565-1a98-a8607ff37488@linaro.org>
+In-Reply-To: <93448681-8a0b-f565-1a98-a8607ff37488@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 23 Jun 2023 19:59:55 +0200
+Message-ID: <CAJZ5v0iKmtWcGVk_NZNgCR-r3UvgpAi_tEDe5v90aF7xbVUTCg@mail.gmail.com>
+Subject: Re: [PATCH 4/8] thermal/core: Update the generic trip points
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        thierry.reding@gmail.com, Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000f823fb05fecfc466
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-Hi Krzysztof,
-
-On Wed, Jun 21, 2023 at 9:27=E2=80=AFAM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
+On Tue, Jun 20, 2023 at 8:35 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
 >
-> On 21/06/2023 14:49, Anna Schumaker wrote:
-> > On Sat, Jun 17, 2023 at 6:09=E2=80=AFAM Krzysztof Kozlowski
-> > <krzysztof.kozlowski@linaro.org> wrote:
+>
+> Hi Rafael,
+>
+> thanks for the comments
+>
+>
+> On 20/06/2023 13:28, Rafael J. Wysocki wrote:
+> > On Thu, May 25, 2023 at 4:02 PM Daniel Lezcano
+> > <daniel.lezcano@linaro.org> wrote:
 > >>
-> >> On 15/06/2023 21:38, Anna Schumaker wrote:
-> >>> On Thu, Jun 15, 2023 at 1:16=E2=80=AFPM Anna Schumaker <schumaker.ann=
-a@gmail.com> wrote:
-> >>>>
-> >>>> On Thu, Jun 15, 2023 at 1:04=E2=80=AFPM Anna Schumaker <schumaker.an=
-na@gmail.com> wrote:
-> >>>>>
-> >>>>> On Thu, Jun 15, 2023 at 9:01=E2=80=AFAM Anna Schumaker <schumaker.a=
-nna@gmail.com> wrote:
-> >>>>>>
-> >>>>>> On Thu, Jun 15, 2023 at 4:55=E2=80=AFAM Krzysztof Kozlowski
-> >>>>>> <krzysztof.kozlowski@linaro.org> wrote:
-> >>>>>>>
-> >>>>>>> On 15/06/2023 10:52, Krzysztof Kozlowski wrote:
-> >>>>>>>> On 14/06/2023 22:55, Anna Schumaker wrote:
-> >>>>>>>>>>>> Still null ptr (built on 420b2d4 with your patch):
-> >>>>>>>>>>>
-> >>>>>>>>>>> We're through the merge window and at rc1 now, so I can spend=
- more
-> >>>>>>>>>>> time scratching my head over your bug again. We've come up wi=
-th a
-> >>>>>>>>>>> patch (attached) that adds a bunch of printks to show us what=
- the
-> >>>>>>>>>>> kernel thinks is going on. Do you mind trying it out and lett=
-ing us
-> >>>>>>>>>>> know what gets printed out? You'll need to make sure
-> >>>>>>>>>>> CONFIG_NFS_V4_2_READ_PLUS is enabled when compiling the kerne=
-l.
-> >>>>>>>>>>
-> >>>>>>>>>> The patch does not apply. I tried: v6.4-rc1, v6.4-rc5, next-20=
-230609.
-> >>>>>>>>>
-> >>>>>>>>> Can you try the attached patch on top of my 3-patch series from=
- the
-> >>>>>>>>> other day, and let me know what gets printed out? It adds a bun=
-ch of
-> >>>>>>>>> printk()s at strategic points to print out what is going on wit=
-h the
-> >>>>>>>>> xdr scratch buffer since it's suddenly a bad memory address aft=
-er
-> >>>>>>>>> working for a bit on your machine.
-> >>>>>>>>>
-> >>>>>>>>
-> >>>>>>>> Here you have entire log - attached (113 kB, I hope goes past ma=
-iling
-> >>>>>>>> lists/spam filters).
-> >>>>>>>
-> >>>>>>> As expected this bounced from the mailing lists, but I hope you g=
-ot it.
-> >>>>>>> If not, let me know.
-> >>>>>>
-> >>>>>> I did still receive it. Thanks!
-> >>>>>
-> >>>>> Can you swap out yesterday's patch with this patch? I've adjusted w=
-hat
-> >>>>> gets printed out, and added printk()s to xdr_copy_to_scratch().  I'=
-m
-> >>>>> starting to think that the xdr scratch buffer is fine, and that it'=
-s
-> >>>>> the other pointer passed to memcpy() in that function that's the
-> >>>>> problem, and the output from this patch will confirm for me.
-> >>>>
-> >>>> Oh, and can you add this one on top of the v2 patch as well?
-> >>>
-> >>> Sorry about the noise today. Can you use this patch instead of the tw=
-o
-> >>> I attached earlier? I cleaned up the output and cut down on extra
-> >>> output..
-> >>>
+> >> At this point, the generic trip points rework allows to create a
+> >> thermal zone with a fixed number of trip points. This usage satisfy
+> >> almost all of the existing drivers.
 > >>
-> >> Here you have - attached.
+> >> A few remaining drivers have a mechanism where the firmware updates
+> >> the trip points. But there is no such update mechanism for the generic
+> >> trip points, thus those drivers can not be converted to the generic
+> >> approach.
+> >>
+> >> This patch provides a function 'thermal_zone_trips_update()' allowing
+> >> to change the trip points of a thermal zone.
+> >>
+> >> At the same time, with the logic the trip points array is passed as a
+> >> parameter to the thermal zone at creation time, we make our own
+> >> private trip points array by copying the one passed as parameter.
 > >
-> > This is good, thanks! I was finally able to figure out how to hit the
-> > bug using a 32bit x86 VM, so hopefully the next thing you hear from me
-> > is a patch fixing the bug!
+> > So the design seems to require the caller to create a new array of
+> > trip points and pass it to thermal_zone_trips_update(), so it can
+> > replace the zone's trips array with it.
+> >
+> > If only one trip point changes and there are multiple defined, this is
+> > rather not efficient.
+>
+> This update is only for replacing the current trip array when one or
+> several trip points are added or removed. We can see that in one or two
+> drivers only.
 
-I'm really hopeful that the attached patch finally fixes the issue.
-Can you try it and let me know?
+Well, I'm not sure about this adding/removing idea, because of the
+sysfs issue mentioned below.
 
-Thanks,
-Anna
+Surely, some trip points can be made invalid by setting their
+temperatures to the "invalid" value, but they cannot be removed,
+because they are already represented in sysfs and may have been
+enumerated by user space which will get confused by removing them.
+
+Conversely, if new trip points are added, they will not appear in
+sysfs and so user space will never become aware of them.
+
+> This function is supposed to be called rarely (and I doubt there is
+> really a lot of hardware sending notification to add/remove trip points).
+>
+> For changing a trip point property like its temperature or its
+> hysteresis, we keep the usual set_trip_point() function.
+
+Do you mean the ->set_trip_temp/hyst() zone callback?
+
+But isn't that to be used by the core in order to notify the driver of
+a change, rather than the other way around?
+
+Here, we have a situation where the driver needs to let the core know
+that something has changed.
+
+> > Do you want to prevent the core from using stale trip points this way?
+> >   If so, it should be stated here.
+>
+> No, that will be a side effect. We can put this point apart, it will be
+> addressed in a cleanup series after everything is converted to the
+> generic trip points.
+
+I think we need to talk about the design.  It looks like you have one
+in mind, but I'm not really sure what it is.
 
 >
-> QEMU also has 32-bit ARM and x86...
+> > Moreover, at least in the cases when num_trips doesn't change, it
+> > might be more efficient to walk the new trips[] array and only copy
+> > the ones that have changed over their old versions.
 >
-> Best regards,
-> Krzysztof
+> IMO, that is over-engineered, especially for dedicating this
+> optimization for a very few drivers and ultra rare usages.
+
+I'm not sure.
+
+One thing to remember is that, in general, the core and the drivers
+need to communicate both ways regarding trip points.  For example,
+when a trip point is updated via sysfs, the core needs to tell the
+driver about that.  Conversely, if a trip point is updated by the
+platform firmware (say), the driver needs to tell the core about that.
+
+> > I am also not sure if this interface is going to be convenient from
+> > the user's perspective, especially if the trips get sorted by the core
+> > (in the future).  They would need to recreate the entire trips array
+> > every time from scratch, even if only one trip point changes, which
+> > means quite a bit of churn for thermal zones with many trip points.
 >
+> Actually, the driver is not supposed to deal with the array. It can
+> create the array on the stack, pass it to the
+> thermal_zone_device_register_with_trips() function and forget about it.
+>
+> The trip points array should not be used by a driver anymore.
 
---000000000000f823fb05fecfc466
-Content-Type: text/x-patch; charset="US-ASCII"; 
-	name="0001-SUNRPC-kmap-the-xdr-pages-during-decode.patch"
-Content-Disposition: attachment; 
-	filename="0001-SUNRPC-kmap-the-xdr-pages-during-decode.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_lj8vm1s50>
-X-Attachment-Id: f_lj8vm1s50
+Well, say that the core invokes ->set_trip_temp() for a certain trip
+point.  How is the driver going to know which trip point this is about
+if it cannot access the trip points table in the zone?
 
-RnJvbSA4OGJlNjIxZmM2ODdkODU4OTE2MzZlZDQ2OTVhYjk5M2UxZjJjYjNiIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBBbm5hIFNjaHVtYWtlciA8QW5uYS5TY2h1bWFrZXJATmV0YXBw
-LmNvbT4KRGF0ZTogRnJpLCAyMyBKdW4gMjAyMyAxMTo0MzoxNCAtMDQwMApTdWJqZWN0OiBbUEFU
-Q0hdIFNVTlJQQzoga21hcCgpIHRoZSB4ZHIgcGFnZXMgZHVyaW5nIGRlY29kZQoKSWYgdGhlIHBh
-Z2VzIGFyZSBpbiBISUdITUVNIHRoZW4gd2UgbmVlZCB0byBtYWtlIHN1cmUgdGhleSdyZSBtYXBw
-ZWQKYmVmb3JlIHRyeWluZyB0byByZWFkIGRhdGEgb2ZmIG9mIHRoZW0sIG90aGVyd2lzZSB3ZSBj
-b3VsZCBlbmQgdXAgd2l0aCBhCk5VTEwgcG9pbnRlciBkZXJlZmVyZW5jZS4KClJlcG9ydGVkLWJ5
-OiBLcnp5c3p0b2YgS296bG93c2tpIDxrcnp5c3p0b2Yua296bG93c2tpQGxpbmFyby5vcmc+ClNp
-Z25lZC1vZmYtYnk6IEFubmEgU2NodW1ha2VyIDxBbm5hLlNjaHVtYWtlckBOZXRhcHAuY29tPgot
-LS0KIGluY2x1ZGUvbGludXgvc3VucnBjL3hkci5oIHwgIDIgKysKIG5ldC9zdW5ycGMvY2xudC5j
-ICAgICAgICAgIHwgIDEgKwogbmV0L3N1bnJwYy94ZHIuYyAgICAgICAgICAgfCAyMCArKysrKysr
-KysrKysrKy0tLS0tLQogMyBmaWxlcyBjaGFuZ2VkLCAxNyBpbnNlcnRpb25zKCspLCA2IGRlbGV0
-aW9ucygtKQoKZGlmZiAtLWdpdCBhL2luY2x1ZGUvbGludXgvc3VucnBjL3hkci5oIGIvaW5jbHVk
-ZS9saW51eC9zdW5ycGMveGRyLmgKaW5kZXggZDkxNzYxOGEzMDU4Li5mNTYyYWFiNDY4ZjUgMTAw
-NjQ0Ci0tLSBhL2luY2x1ZGUvbGludXgvc3VucnBjL3hkci5oCisrKyBiL2luY2x1ZGUvbGludXgv
-c3VucnBjL3hkci5oCkBAIC0yMjgsNiArMjI4LDcgQEAgc3RydWN0IHhkcl9zdHJlYW0gewogCXN0
-cnVjdCBrdmVjICppb3Y7CS8qIHBvaW50ZXIgdG8gdGhlIGN1cnJlbnQga3ZlYyAqLwogCXN0cnVj
-dCBrdmVjIHNjcmF0Y2g7CS8qIFNjcmF0Y2ggYnVmZmVyICovCiAJc3RydWN0IHBhZ2UgKipwYWdl
-X3B0cjsJLyogcG9pbnRlciB0byB0aGUgY3VycmVudCBwYWdlICovCisJdm9pZCAqcGFnZV9rYWRk
-cjsJLyoga21hcHBlZCBhZGRyZXNzIG9mIHRoZSBjdXJyZW50IHBhZ2UgKi8KIAl1bnNpZ25lZCBp
-bnQgbndvcmRzOwkvKiBSZW1haW5pbmcgZGVjb2RlIGJ1ZmZlciBsZW5ndGggKi8KIAogCXN0cnVj
-dCBycGNfcnFzdCAqcnFzdDsJLyogRm9yIGRlYnVnZ2luZyAqLwpAQCAtMjU0LDYgKzI1NSw3IEBA
-IGV4dGVybiB2b2lkIHhkcl90cnVuY2F0ZV9kZWNvZGUoc3RydWN0IHhkcl9zdHJlYW0gKnhkciwg
-c2l6ZV90IGxlbik7CiBleHRlcm4gaW50IHhkcl9yZXN0cmljdF9idWZsZW4oc3RydWN0IHhkcl9z
-dHJlYW0gKnhkciwgaW50IG5ld2J1Zmxlbik7CiBleHRlcm4gdm9pZCB4ZHJfd3JpdGVfcGFnZXMo
-c3RydWN0IHhkcl9zdHJlYW0gKnhkciwgc3RydWN0IHBhZ2UgKipwYWdlcywKIAkJdW5zaWduZWQg
-aW50IGJhc2UsIHVuc2lnbmVkIGludCBsZW4pOworZXh0ZXJuIHZvaWQgeGRyX3N0cmVhbV91bm1h
-cF9jdXJyZW50X3BhZ2Uoc3RydWN0IHhkcl9zdHJlYW0gKnhkcik7CiBleHRlcm4gdW5zaWduZWQg
-aW50IHhkcl9zdHJlYW1fcG9zKGNvbnN0IHN0cnVjdCB4ZHJfc3RyZWFtICp4ZHIpOwogZXh0ZXJu
-IHVuc2lnbmVkIGludCB4ZHJfcGFnZV9wb3MoY29uc3Qgc3RydWN0IHhkcl9zdHJlYW0gKnhkcik7
-CiBleHRlcm4gdm9pZCB4ZHJfaW5pdF9kZWNvZGUoc3RydWN0IHhkcl9zdHJlYW0gKnhkciwgc3Ry
-dWN0IHhkcl9idWYgKmJ1ZiwKZGlmZiAtLWdpdCBhL25ldC9zdW5ycGMvY2xudC5jIGIvbmV0L3N1
-bnJwYy9jbG50LmMKaW5kZXggZDJlZTU2NjM0MzA4Li4zYjdlNjc2ZDg5MzUgMTAwNjQ0Ci0tLSBh
-L25ldC9zdW5ycGMvY2xudC5jCisrKyBiL25ldC9zdW5ycGMvY2xudC5jCkBAIC0yNTkwLDYgKzI1
-OTAsNyBAQCBjYWxsX2RlY29kZShzdHJ1Y3QgcnBjX3Rhc2sgKnRhc2spCiAJY2FzZSAwOgogCQl0
-YXNrLT50a19hY3Rpb24gPSBycGNfZXhpdF90YXNrOwogCQl0YXNrLT50a19zdGF0dXMgPSBycGNh
-dXRoX3Vud3JhcF9yZXNwKHRhc2ssICZ4ZHIpOworCQl4ZHJfc3RyZWFtX3VubWFwX2N1cnJlbnRf
-cGFnZSgmeGRyKTsKIAkJcmV0dXJuOwogCWNhc2UgLUVBR0FJTjoKIAkJdGFzay0+dGtfc3RhdHVz
-ID0gMDsKZGlmZiAtLWdpdCBhL25ldC9zdW5ycGMveGRyLmMgYi9uZXQvc3VucnBjL3hkci5jCmlu
-ZGV4IDM5MWIzMzZkOTdkZS4uYjA3M2Y1MWU2MDE4IDEwMDY0NAotLS0gYS9uZXQvc3VucnBjL3hk
-ci5jCisrKyBiL25ldC9zdW5ycGMveGRyLmMKQEAgLTEzMDgsNiArMTMwOCwxNCBAQCBzdGF0aWMg
-dW5zaWduZWQgaW50IHhkcl9zZXRfdGFpbF9iYXNlKHN0cnVjdCB4ZHJfc3RyZWFtICp4ZHIsCiAJ
-cmV0dXJuIHhkcl9zZXRfaW92KHhkciwgYnVmLT50YWlsLCBiYXNlLCBsZW4pOwogfQogCit2b2lk
-IHhkcl9zdHJlYW1fdW5tYXBfY3VycmVudF9wYWdlKHN0cnVjdCB4ZHJfc3RyZWFtICp4ZHIpCit7
-CisJaWYgKHhkci0+cGFnZV9rYWRkcikgeworCQlrdW5tYXBfbG9jYWwoeGRyLT5wYWdlX2thZGRy
-KTsKKwkJeGRyLT5wYWdlX2thZGRyID0gTlVMTDsKKwl9Cit9CisKIHN0YXRpYyB1bnNpZ25lZCBp
-bnQgeGRyX3NldF9wYWdlX2Jhc2Uoc3RydWN0IHhkcl9zdHJlYW0gKnhkciwKIAkJCQkgICAgICB1
-bnNpZ25lZCBpbnQgYmFzZSwgdW5zaWduZWQgaW50IGxlbikKIHsKQEAgLTEzMTUsNyArMTMyMyw2
-IEBAIHN0YXRpYyB1bnNpZ25lZCBpbnQgeGRyX3NldF9wYWdlX2Jhc2Uoc3RydWN0IHhkcl9zdHJl
-YW0gKnhkciwKIAl1bnNpZ25lZCBpbnQgbWF4bGVuOwogCXVuc2lnbmVkIGludCBwZ29mZjsKIAl1
-bnNpZ25lZCBpbnQgcGdlbmQ7Ci0Jdm9pZCAqa2FkZHI7CiAKIAltYXhsZW4gPSB4ZHItPmJ1Zi0+
-cGFnZV9sZW47CiAJaWYgKGJhc2UgPj0gbWF4bGVuKQpAQCAtMTMzMCwxNSArMTMzNywxNSBAQCBz
-dGF0aWMgdW5zaWduZWQgaW50IHhkcl9zZXRfcGFnZV9iYXNlKHN0cnVjdCB4ZHJfc3RyZWFtICp4
-ZHIsCiAKIAlwZ25yID0gYmFzZSA+PiBQQUdFX1NISUZUOwogCXhkci0+cGFnZV9wdHIgPSAmeGRy
-LT5idWYtPnBhZ2VzW3BnbnJdOwotCWthZGRyID0gcGFnZV9hZGRyZXNzKCp4ZHItPnBhZ2VfcHRy
-KTsKKwl4ZHItPnBhZ2Vfa2FkZHIgPSBrbWFwX2xvY2FsX3BhZ2UoKnhkci0+cGFnZV9wdHIpOwog
-CiAJcGdvZmYgPSBiYXNlICYgflBBR0VfTUFTSzsKLQl4ZHItPnAgPSAoX19iZTMyKikoa2FkZHIg
-KyBwZ29mZik7CisJeGRyLT5wID0gKF9fYmUzMiopKHhkci0+cGFnZV9rYWRkciArIHBnb2ZmKTsK
-IAogCXBnZW5kID0gcGdvZmYgKyBsZW47CiAJaWYgKHBnZW5kID4gUEFHRV9TSVpFKQogCQlwZ2Vu
-ZCA9IFBBR0VfU0laRTsKLQl4ZHItPmVuZCA9IChfX2JlMzIqKShrYWRkciArIHBnZW5kKTsKKwl4
-ZHItPmVuZCA9IChfX2JlMzIqKSh4ZHItPnBhZ2Vfa2FkZHIgKyBwZ2VuZCk7CiAJeGRyLT5pb3Yg
-PSBOVUxMOwogCXJldHVybiBsZW47CiB9CkBAIC0xMzY2LDkgKzEzNzMsMTAgQEAgc3RhdGljIHZv
-aWQgeGRyX3NldF9uZXh0X3BhZ2Uoc3RydWN0IHhkcl9zdHJlYW0gKnhkcikKIAogc3RhdGljIGJv
-b2wgeGRyX3NldF9uZXh0X2J1ZmZlcihzdHJ1Y3QgeGRyX3N0cmVhbSAqeGRyKQogewotCWlmICh4
-ZHItPnBhZ2VfcHRyICE9IE5VTEwpCisJaWYgKHhkci0+cGFnZV9wdHIgIT0gTlVMTCkgeworCQl4
-ZHJfc3RyZWFtX3VubWFwX2N1cnJlbnRfcGFnZSh4ZHIpOwogCQl4ZHJfc2V0X25leHRfcGFnZSh4
-ZHIpOwotCWVsc2UgaWYgKHhkci0+aW92ID09IHhkci0+YnVmLT5oZWFkKQorCX0gZWxzZSBpZiAo
-eGRyLT5pb3YgPT0geGRyLT5idWYtPmhlYWQpCiAJCXhkcl9zZXRfcGFnZSh4ZHIsIDAsIHhkcl9z
-dHJlYW1fcmVtYWluaW5nKHhkcikpOwogCXJldHVybiB4ZHItPnAgIT0geGRyLT5lbmQ7CiB9Ci0t
-IAoyLjQxLjAKCg==
---000000000000f823fb05fecfc466--
+> > It might be better to allow them to update trips in place and notify
+> > the core about the change, all under the zone lock to prevent the core
+> > from using trips simultaneously.
+>
+> I'm not sure to understand. The core code is called with this function
+> and takes the lock.
+>
+> > And arguably, changing num_trips would be questionable due to the
+> > sysfs consistency reasons mentioned below.
+>
+> [ ... ]
+>
+> >> Note, no code has been found where the trip points update leads to a
+> >> refresh of the trip points in sysfs, so it is very unlikey the number
+> >> of trip points changes. However, for the sake of consistency it would
+> >> be nicer to have the trip points being refreshed in sysfs also, but
+> >> that could be done in a separate set of changes.
+> >
+> > So at this point user space has already enumerated the trip points, so
+> > it may fail if some of them go away or it may not be able to use any
+> > new trip points appearing in sysfs.
+>
+> Yes, that is why I think the adding/removal of the trip points was never
+> really supported. I would be very curious to see a platform with such a
+> feature.
+>
+> > For this reason, until there is a way to notify user space about the
+> > need to re-enumerate trip points (and user space indicates support for
+> > it), the only trip point property that may change in sysfs is the
+> > temperature.
+>
+> The userspace can be notified when there is a change with:
+>
+> THERMAL_GENL_EVENT_TZ_TRIP_CHANGE
+> THERMAL_GENL_EVENT_TZ_TRIP_ADD
+> THERMAL_GENL_EVENT_TZ_TRIP_DELETE
+>
+> The last two ones are not implemented today but that could be done after
+> as that would be a new feature.
+>
+> Let me summarize the situation:
+>
+>   - The trip point crossing events are not correctly detected because of
+> how they are handled and we need to sort them out.
+
+Sure.
+
+>   - In order to sort them out, we need to convert the drivers to the
+> generic trip point and remove all those get_trip_* | set_trip_* ops
+
+IIUC, there are cases when the trip point temperature may be set via
+sysfs.  In some of them, the core needs to tell the driver what
+temperature to set for the trip, so the hardware or the platform
+notifies it of excursions.  The ->set_* callbacks are still going to
+be needed for that if I'm not mistaken.
+
+>   - Almost all the drivers are converted except the ACPI thermal and the
+> intel_soc_dts_iosf drivers which are blocking the feature
+
+Sorry about that.  Hopefully, I'll have some time to sort this out
+during the next couple of weeks.
+
+I still would like to discuss the design related to that, though.
+
+>   - The ACPI thermal driver can potentially add or remove a trip point
+> but we are not sure that can happen
+
+It may as per the spec, but whether or not this case needs to be
+handled is a good question.
+
+This depends on whether or not user space is prepared to deal with
+trip points appearing and going away.  I suspect that it isn't.
+
+>   - We need to decorrelate the trip id and the array index for the ACPI
+> thermal driver
+
+That should be doable.
+
+> The generic trip points change is a big chunk of work and I would like
+> to have some progress to fix the trip crossing detection along with the
+> removal of the resulting dead code.
+>
+> Given there may not be a real usage of the thermal trip number update,
+> can we stay simple and keep the proposed change but forcing the same
+> number of trip points ?
+
+I suppose so.
+
+> We can then improve the existing code if it is really needed
