@@ -2,91 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C14EE73BB84
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 17:21:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66C3F73BB86
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 17:22:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232157AbjFWPUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 11:20:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38404 "EHLO
+        id S231808AbjFWPW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 11:22:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232741AbjFWPUa (ORCPT
+        with ESMTP id S232376AbjFWPWM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 11:20:30 -0400
+        Fri, 23 Jun 2023 11:22:12 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0FCBE52;
-        Fri, 23 Jun 2023 08:20:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45FDD19B
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 08:22:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5344C61A0F;
-        Fri, 23 Jun 2023 15:20:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C576C433C8;
-        Fri, 23 Jun 2023 15:20:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D4B9F61A97
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 15:22:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B2ECC433CC;
+        Fri, 23 Jun 2023 15:22:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687533627;
-        bh=p4YqjWlpHfO8CnjWmeHcdlXPNWLtBviMP1yIdFYTk8o=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=O5nav8yk4i7R8Bxuad4YzSjTKcNENCreuMYJUXw2hQcEJi470MFVjfg3oVVw0Qd5B
-         E/h3b5PsjK8WM6ySOa8Pa/un2odzdkXyXWr9Znbl/I3sSWDAAAJC/keOhPJYtwzBl5
-         AKuzfoXv5jbkrvN+uaNgmcmcq+19En6tzkjgZKhoybY5xwMdSbmVTop5i80SreRUpC
-         Q1vSHPV3uw7a0IWSrRUV8ZHftSVR855VD2CeVckiO2SS5ZSdTNWsfSfJRjepSvACAq
-         7WGIg1AbbfGUUdY0FSikwshCoGNusmZ0mSTVqRJR2iG9LJJpu+cDnKf8YZGibR42a3
-         v70BIi37bCZDA==
-Message-ID: <5c6dc00b-9e25-501f-1497-ce7f67694a0e@kernel.org>
-Date:   Fri, 23 Jun 2023 08:20:25 -0700
+        s=k20201202; t=1687533730;
+        bh=PDmC4YA2NsJQMxRbgNA3iKcTYPuiiTgA/RrritCht8o=;
+        h=From:To:Cc:Subject:Date:From;
+        b=OyfYhhQ7N237/hBj0FLMeGBea8pEcu3RQWI27ZCWysCZGfIv0vRYz6ctD95U5UHWa
+         QRxn2Z1AMJfKwZAW7ntxRBM4P2yKXZh4vZHZ1elQrxHXBM7GVltXBk9yAZqHyWxxax
+         cty0ioHXO81m12xAyhfWBtxL4gyI1cdsAy7TbG9WnovHKP36Ilz47rKGv4hhdIro2o
+         jJvP+Eslv17xAIwqgJmVe7clfkqizwYlFRnR9bSZz2VzXCbM8515zAKupay8Z3CXKD
+         tUMwC/pGoIOmGs6tAcF3YB0pv7V5fWDFcHW0JQvIfE68VDM9AOIS1P7skh9dLMLatO
+         5VW6QKj/uE3Rg==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Donglin Peng <pengdonglin@sangfor.com.cn>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Florent Revest <revest@chromium.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: ftrace: fix build error with CONFIG_FUNCTION_GRAPH_TRACER=n
+Date:   Fri, 23 Jun 2023 17:21:55 +0200
+Message-Id: <20230623152204.2216297-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [RFC PATCH v2 1/4] net: wire up support for
- file_operations->uring_cmd()
-To:     Stefan Metzmacher <metze@samba.org>,
-        Breno Leitao <leitao@debian.org>, axboe@kernel.dk,
-        asml.silence@gmail.com
-Cc:     io-uring@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Mat Martineau <martineau@kernel.org>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Xin Long <lucien.xin@gmail.com>, leit@fb.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dccp@vger.kernel.org, mptcp@lists.linux.dev,
-        linux-sctp@vger.kernel.org, ast@kernel.org, kuniyu@amazon.com,
-        martin.lau@kernel.org, Jason Xing <kernelxing@tencent.com>,
-        Joanne Koong <joannelkoong@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Guillaume Nault <gnault@redhat.com>,
-        Andrea Righi <andrea.righi@canonical.com>
-References: <20230614110757.3689731-1-leitao@debian.org>
- <20230614110757.3689731-2-leitao@debian.org>
- <6b5e5988-3dc7-f5d6-e447-397696c0d533@kernel.org>
- <ZJA6AwbRWtSiJ5pL@gmail.com> <e72f4c43-02a7-936c-e755-1b23596fc312@samba.org>
-Content-Language: en-US
-From:   David Ahern <dsahern@kernel.org>
-In-Reply-To: <e72f4c43-02a7-936c-e755-1b23596fc312@samba.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/23/23 3:17 AM, Stefan Metzmacher wrote:
-> 
-> I'd like to keep it passed to socket layer, so that sockets could
-> implement some extra features in an async fashion.
-> 
-> What about having the function you posted below (and in v3)
-> as a default implementation if proto_ops->uring_cmd is NULL?
-> 
+From: Arnd Bergmann <arnd@arndb.de>
 
-Nothing about this set needs uring_cmd added to proto ops. It adds uring
-commands which are wrappers to networking APIs. Let's keep proper APIs
-between subsystems.
+It appears that a merge conflict ended up hiding a newly added constant
+in some configurations:
+
+arch/arm64/kernel/entry-ftrace.S: Assembler messages:
+arch/arm64/kernel/entry-ftrace.S:59: Error: undefined symbol FTRACE_OPS_DIRECT_CALL used as an immediate value
+
+FTRACE_OPS_DIRECT_CALL is still used when CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+is enabled, even if CONFIG_FUNCTION_GRAPH_TRACER is disabled, so change the
+ifdef accordingly.
+
+Fixes: 3646970322464 ("arm64: ftrace: Enable HAVE_FUNCTION_GRAPH_RETVAL")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ arch/arm64/kernel/asm-offsets.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm64/kernel/asm-offsets.c b/arch/arm64/kernel/asm-offsets.c
+index 757d01a68ffd0..5ff1942b04fcf 100644
+--- a/arch/arm64/kernel/asm-offsets.c
++++ b/arch/arm64/kernel/asm-offsets.c
+@@ -213,9 +213,9 @@ int main(void)
+   DEFINE(FGRET_REGS_X7,			offsetof(struct fgraph_ret_regs, regs[7]));
+   DEFINE(FGRET_REGS_FP,			offsetof(struct fgraph_ret_regs, fp));
+   DEFINE(FGRET_REGS_SIZE,		sizeof(struct fgraph_ret_regs));
++#endif
+ #ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+   DEFINE(FTRACE_OPS_DIRECT_CALL,	offsetof(struct ftrace_ops, direct_call));
+-#endif
+ #endif
+   return 0;
+ }
+-- 
+2.39.2
+
