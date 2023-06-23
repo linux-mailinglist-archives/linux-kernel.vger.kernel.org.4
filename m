@@ -2,101 +2,325 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED87973BDBD
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 19:21:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8247873BDBF
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 19:21:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232593AbjFWRVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 13:21:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49276 "EHLO
+        id S232549AbjFWRVP convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 23 Jun 2023 13:21:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232597AbjFWRVB (ORCPT
+        with ESMTP id S232096AbjFWRVI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 13:21:01 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2163F2952
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 10:20:48 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-94ea38c90ccso18971766b.1
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 10:20:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687540846; x=1690132846;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Wm1WVoIbn3lR/yYEwl05EQlAoyEzS9kcMhjBtJTS530=;
-        b=Qgmk66gpXSiGi9NZhO6CuX/XFzR7A1R0Tm6p/GxMbmWSmO0O4mXQgeQYAha59aNOW7
-         nySIl2nAiMoGJrC/XIqueQdWfDmG5MY6UOOAbAnOrnJ+rXNCswAWECNzhMYhnOAOra8r
-         rN/O4Kkq/6kNhfk4D41p3+oAquI+iHN1UhQcRUE3EMG9mKkZ7mRxMRqeP+bBXAZG046O
-         9Bu9qYMIQM6TXHfiH8KRj/lJ2n1uOrYw3H+02zVyLiaLu59Aw0b9MGTtoYsPgr9/EYP8
-         EfZK2VzRw0r6HeBuCLx0c1N1zC+7n4v0n3q27s7VKKBJG5TzjV+5rsH/5rc96FuI9qLb
-         yBxw==
+        Fri, 23 Jun 2023 13:21:08 -0400
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC37F1997;
+        Fri, 23 Jun 2023 10:21:06 -0700 (PDT)
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-3f8fdaf09cbso2467155e9.0;
+        Fri, 23 Jun 2023 10:21:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687540846; x=1690132846;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Wm1WVoIbn3lR/yYEwl05EQlAoyEzS9kcMhjBtJTS530=;
-        b=h7ARBj87qH/KnxlFSiyUPTopeVoOXs+xqwdH3tqm1W/EXocybvm4Hhn5CMcVfUqhuy
-         w6I8+BypLMGncQxUXFxZ1e/zaHDisxca+dlOv54Rl2b575UhKcfSesa5T+3xA3Q6fD8f
-         XZ+CGuP6vlf1Isvu7XDF6gYU9YlsittDD65605NXe0jHKaxn70OUqLOYQ75Ika5qbSQr
-         6lXSWMh9iCWbtCxIRp+zRJ5hphLA4ZwpMfxvYvwG8/0Q0sSMqokk+WIj9TU6mFn6rYne
-         7D44qnELvjiRYnkYDv+JEydxtY5v+Z/yR5OnV/P9CEAEKLVlrsl/NayXrNB6dRU1TPpA
-         lqfQ==
-X-Gm-Message-State: AC+VfDxy/wOo9dwj7IFX9tiOeonLPAyNlR7Jtrs3bLcdpqb+NoqVYKwZ
-        xb1TdYpoFZ1WsuGY+zj6Sig=
-X-Google-Smtp-Source: ACHHUZ6liZZCJdt+mtGxv5CyN1Yl6kvTStu+cUKc2NRwZ0GEhpbyH8XanIfHLIfaEBG58yvuWzKt0g==
-X-Received: by 2002:a17:906:73cc:b0:98d:b10f:f3cd with SMTP id n12-20020a17090673cc00b0098db10ff3cdmr591020ejl.7.1687540846180;
-        Fri, 23 Jun 2023 10:20:46 -0700 (PDT)
-Received: from [192.168.0.103] (p57ba2e0b.dip0.t-ipconnect.de. [87.186.46.11])
-        by smtp.gmail.com with ESMTPSA id a20-20020a170906369400b0094e7d196aa4sm6163147ejc.160.2023.06.23.10.20.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Jun 2023 10:20:44 -0700 (PDT)
-Message-ID: <2d1ba862-961c-ec91-3a28-7f2f221b90d4@gmail.com>
-Date:   Fri, 23 Jun 2023 19:20:42 +0200
+        d=1e100.net; s=20221208; t=1687540865; x=1690132865;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ntAK1B+5vw3HAAUlUGNV/vS4Q4AxWXXi49cu3T21XNk=;
+        b=IYE7jS2VUQcplFvc7VWE1X3XDYLK4TEvxgZ0+xVARYhiED+2F3hVeaoJB4mmALEzPA
+         zQD768P1V+Qe4I9q5Uruc+mMMvfJMugdHHQj1b694t9dGebGxw5amqfShLs5AfpsKV0r
+         m4WGhRhqI4wzT+B1jyA3hVnUQYAhR22aNZ2WR7e9H8cDWLZzDIrFiK+hXKflLmOG7+LO
+         hSmx1+YYgONiNORAoPrapIeKhgiPZbp6bUHIm6H/RPOfqRdf+2lB6cPuG95yBUUnBUVE
+         vLhtabX9pj6G4mFWwRahJmujWui/qVLpo2XZnKeTMdWyNyRpo+RjtSPraZ7/F3sg8wY2
+         oY3w==
+X-Gm-Message-State: AC+VfDw9TMKvvRpEBJ7pMMmv8x+FpZk21dwj6rQbhfH2Nzb92BbP+lTT
+        z58dMVg4D1ArZ83IacJBHCTWHS9iHMpeOH1/QSw=
+X-Google-Smtp-Source: ACHHUZ5s7hIjRJWt2aNq/S9RVpCQRl3gycJ+MNERVjT2XPdcuh3lJ7bAqXNkUY7jxXN5Vx151d0Yb1vi8LdPv7jO4kM=
+X-Received: by 2002:a05:600c:1e12:b0:3f9:92e:4d99 with SMTP id
+ ay18-20020a05600c1e1200b003f9092e4d99mr15246678wmb.0.1687540864915; Fri, 23
+ Jun 2023 10:21:04 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 0/5] Fix some checkpatch issues
-To:     Franziska Naepelt <franziska.naepelt@googlemail.com>
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        eperi1024@gmail.com, hdegoede@redhat.com, quic_vjakkam@quicinc.com,
-        johannes.berg@intel.com, tegongkang@gmail.com,
-        Franziska Naepelt <franziska.naepelt@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-References: <20230621184635.25064-1-franziska.naepelt@gmail.com>
- <2023062306-reload-squeezing-633a@gregkh>
-Content-Language: en-US
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-In-Reply-To: <2023062306-reload-squeezing-633a@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230614093755.88881-1-wangliupu@loongson.cn> <CAJZ5v0iTKPbpskDVcsnVaWnhdvb5a-W2TVBfd0c=H2hVv8mOog@mail.gmail.com>
+ <CAAhV-H7=+cyLK=whuYL3qD+CwFqxvSWywnLEVJ5W=0uqH+ZKiQ@mail.gmail.com>
+In-Reply-To: <CAAhV-H7=+cyLK=whuYL3qD+CwFqxvSWywnLEVJ5W=0uqH+ZKiQ@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 23 Jun 2023 19:20:53 +0200
+Message-ID: <CAJZ5v0jQD2ABKy3h9FXaKpvW9gcyTXngDAcVikZKQ5PxbyEH=g@mail.gmail.com>
+Subject: Re: [PATCH] LoongArch: Add SMT (Simultaneous Multi-Threading) support
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Liupu Wang <wangliupu@loongson.cn>,
+        WANG Xuerui <kernel@xen0n.name>, Len Brown <lenb@kernel.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Marc Zyngier <maz@kernel.org>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Binbin Zhou <zhoubinbin@loongson.cn>,
+        Bibo Mao <maobibo@loongson.cn>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        loongarch@lists.linux.dev, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Huacai Chen <chenhuacai@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/23/23 10:18, Greg KH wrote:
-> On Wed, Jun 21, 2023 at 08:46:35PM +0200, Franziska Naepelt wrote:
->> This is a series of patches to fix some trivial checkpatch issues. Not all
->> issues have been fixed. I intend to submit another series to fix more stuff.
-> 
-> None of these apply to my staging-next branch :(
+On Thu, Jun 15, 2023 at 4:31 AM Huacai Chen <chenhuacai@kernel.org> wrote:
 >
+> Hi, Rafael,
+>
+> On Thu, Jun 15, 2023 at 2:24 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> >
+> > On Wed, Jun 14, 2023 at 11:38 AM Liupu Wang <wangliupu@loongson.cn> wrote:
+> > >
+> > > From: Huacai Chen <chenhuacai@loongson.cn>
+> > >
+> > > Loongson-3A6000 has SMT (Simultaneous Multi-Threading) support, each
+> > > physical core has two logical cores (threads). This patch add SMT probe
+> > > and scheduler support via ACPI PPTT.
+> > >
+> > > If SCHED_SMT enabled, Loongson-3A6000 is treated as 4 cores, 8 threads;
+> > > If SCHED_SMT disabled, Loongson-3A6000 is treated as 8 cores, 8 threads.
+> > >
+> > > Remove smp_num_siblings to support HMP (Heterogeneous Multi-Processing).
+> > >
+> > > Signed-off-by: Liupu Wang <wangliupu@loongson.cn>
+> > > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> > > ---
+> > >  arch/loongarch/Kconfig                |  8 +++++++
+> > >  arch/loongarch/include/asm/acpi.h     |  9 ++++++++
+> > >  arch/loongarch/include/asm/cpu-info.h |  1 +
+> > >  arch/loongarch/kernel/acpi.c          | 32 +++++++++++++++++++++++++++
+> > >  arch/loongarch/kernel/proc.c          |  1 +
+> > >  arch/loongarch/kernel/smp.c           | 24 +++++++++-----------
+> > >  drivers/acpi/Kconfig                  |  2 +-
+> > >  7 files changed, 62 insertions(+), 15 deletions(-)
+> > >
+> > > diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+> > > index d38b066fc931..6d36b681068e 100644
+> > > --- a/arch/loongarch/Kconfig
+> > > +++ b/arch/loongarch/Kconfig
+> > > @@ -5,6 +5,7 @@ config LOONGARCH
+> > >         select ACPI
+> > >         select ACPI_GENERIC_GSI if ACPI
+> > >         select ACPI_MCFG if ACPI
+> > > +       select ACPI_PPTT if ACPI
+> > >         select ACPI_SYSTEM_POWER_STATES_SUPPORT if ACPI
+> > >         select ARCH_BINFMT_ELF_STATE
+> > >         select ARCH_ENABLE_MEMORY_HOTPLUG
+> > > @@ -372,6 +373,13 @@ config EFI_STUB
+> > >           This kernel feature allows the kernel to be loaded directly by
+> > >           EFI firmware without the use of a bootloader.
+> > >
+> > > +config SCHED_SMT
+> > > +       bool "SMT scheduler support"
+> > > +       default y
+> > > +       help
+> > > +         Improves scheduler's performance when there are multiple
+> > > +         threads in one physical core.
+> > > +
+> > >  config SMP
+> > >         bool "Multi-Processing support"
+> > >         help
+> > > diff --git a/arch/loongarch/include/asm/acpi.h b/arch/loongarch/include/asm/acpi.h
+> > > index 976a810352c6..5c78b5d2bfb7 100644
+> > > --- a/arch/loongarch/include/asm/acpi.h
+> > > +++ b/arch/loongarch/include/asm/acpi.h
+> > > @@ -13,6 +13,7 @@ extern int acpi_strict;
+> > >  extern int acpi_disabled;
+> > >  extern int acpi_pci_disabled;
+> > >  extern int acpi_noirq;
+> > > +extern int pptt_enabled;
+> > >
+> > >  #define acpi_os_ioremap acpi_os_ioremap
+> > >  void __iomem *acpi_os_ioremap(acpi_physical_address phys, acpi_size size);
+> > > @@ -30,6 +31,14 @@ static inline bool acpi_has_cpu_in_madt(void)
+> > >  }
+> > >
+> > >  extern struct list_head acpi_wakeup_device_list;
+> > > +extern struct acpi_madt_core_pic acpi_core_pic[NR_CPUS];
+> > > +
+> > > +extern int __init parse_acpi_topology(void);
+> > > +
+> > > +static inline u32 get_acpi_id_for_cpu(unsigned int cpu)
+> > > +{
+> > > +       return acpi_core_pic[cpu_logical_map(cpu)].processor_id;
+> > > +}
+> > >
+> > >  #endif /* !CONFIG_ACPI */
+> > >
+> > > diff --git a/arch/loongarch/include/asm/cpu-info.h b/arch/loongarch/include/asm/cpu-info.h
+> > > index cd73a6f57fe3..900589cb159d 100644
+> > > --- a/arch/loongarch/include/asm/cpu-info.h
+> > > +++ b/arch/loongarch/include/asm/cpu-info.h
+> > > @@ -54,6 +54,7 @@ struct cpuinfo_loongarch {
+> > >         struct cache_desc       cache_leaves[CACHE_LEAVES_MAX];
+> > >         int                     core;   /* physical core number in package */
+> > >         int                     package;/* physical package number */
+> > > +       int                     global_id; /* physical global thread number */
+> > >         int                     vabits; /* Virtual Address size in bits */
+> > >         int                     pabits; /* Physical Address size in bits */
+> > >         unsigned int            ksave_mask; /* Usable KSave mask. */
+> > > diff --git a/arch/loongarch/kernel/acpi.c b/arch/loongarch/kernel/acpi.c
+> > > index 98f431157e4c..9450e09073eb 100644
+> > > --- a/arch/loongarch/kernel/acpi.c
+> > > +++ b/arch/loongarch/kernel/acpi.c
+> > > @@ -33,6 +33,8 @@ u64 acpi_saved_sp;
+> > >
+> > >  #define PREFIX                 "ACPI: "
+> > >
+> > > +struct acpi_madt_core_pic acpi_core_pic[NR_CPUS];
+> > > +
+> > >  void __init __iomem * __acpi_map_table(unsigned long phys, unsigned long size)
+> > >  {
+> > >
+> > > @@ -99,6 +101,7 @@ acpi_parse_processor(union acpi_subtable_headers *header, const unsigned long en
+> > >
+> > >         acpi_table_print_madt_entry(&header->common);
+> > >  #ifdef CONFIG_SMP
+> > > +       acpi_core_pic[processor->core_id] = *processor;
+> > >         set_processor_mask(processor->core_id, processor->flags);
+> > >  #endif
+> > >
+> > > @@ -140,6 +143,35 @@ static void __init acpi_process_madt(void)
+> > >         loongson_sysconf.nr_cpus = num_processors;
+> > >  }
+> > >
+> > > +int pptt_enabled;
+> > > +
+> > > +int __init parse_acpi_topology(void)
+> > > +{
+> > > +       int cpu, topology_id;
+> > > +
+> > > +       for_each_possible_cpu(cpu) {
+> > > +               topology_id = find_acpi_cpu_topology(cpu, 0);
+> > > +               if (topology_id < 0) {
+> > > +                       pr_warn("Invalid BIOS PPTT\n");
+> > > +                       return -ENOENT;
+> > > +               }
+> > > +
+> > > +               if (acpi_pptt_cpu_is_thread(cpu) <= 0)
+> > > +                       cpu_data[cpu].core = topology_id;
+> > > +               else {
+> > > +                       topology_id = find_acpi_cpu_topology(cpu, 1);
+> > > +                       if (topology_id < 0)
+> > > +                               return -ENOENT;
+> > > +
+> > > +                       cpu_data[cpu].core = topology_id;
+> > > +               }
+> > > +       }
+> > > +
+> > > +       pptt_enabled = 1;
+> > > +
+> > > +       return 0;
+> > > +}
+> > > +
+> > >  #ifndef CONFIG_SUSPEND
+> > >  int (*acpi_suspend_lowlevel)(void);
+> > >  #else
+> > > diff --git a/arch/loongarch/kernel/proc.c b/arch/loongarch/kernel/proc.c
+> > > index 0d82907b5404..d4b270630bb5 100644
+> > > --- a/arch/loongarch/kernel/proc.c
+> > > +++ b/arch/loongarch/kernel/proc.c
+> > > @@ -49,6 +49,7 @@ static int show_cpuinfo(struct seq_file *m, void *v)
+> > >         seq_printf(m, "processor\t\t: %ld\n", n);
+> > >         seq_printf(m, "package\t\t\t: %d\n", cpu_data[n].package);
+> > >         seq_printf(m, "core\t\t\t: %d\n", cpu_data[n].core);
+> > > +       seq_printf(m, "global_id\t\t: %d\n", cpu_data[n].global_id);
+> > >         seq_printf(m, "CPU Family\t\t: %s\n", __cpu_family[n]);
+> > >         seq_printf(m, "Model Name\t\t: %s\n", __cpu_full_name[n]);
+> > >         seq_printf(m, "CPU Revision\t\t: 0x%02x\n", version);
+> > > diff --git a/arch/loongarch/kernel/smp.c b/arch/loongarch/kernel/smp.c
+> > > index ed167e244cda..062f3fe8df60 100644
+> > > --- a/arch/loongarch/kernel/smp.c
+> > > +++ b/arch/loongarch/kernel/smp.c
+> > > @@ -8,6 +8,7 @@
+> > >   * Copyright (C) 2000, 2001 Silicon Graphics, Inc.
+> > >   * Copyright (C) 2000, 2001, 2003 Broadcom Corporation
+> > >   */
+> > > +#include <linux/acpi.h>
+> > >  #include <linux/cpu.h>
+> > >  #include <linux/cpumask.h>
+> > >  #include <linux/init.h>
+> > > @@ -37,10 +38,6 @@ EXPORT_SYMBOL(__cpu_number_map);
+> > >  int __cpu_logical_map[NR_CPUS];                /* Map logical to physical */
+> > >  EXPORT_SYMBOL(__cpu_logical_map);
+> > >
+> > > -/* Number of threads (siblings) per CPU core */
+> > > -int smp_num_siblings = 1;
+> > > -EXPORT_SYMBOL(smp_num_siblings);
+> > > -
+> > >  /* Representing the threads (siblings) of each logical CPU */
+> > >  cpumask_t cpu_sibling_map[NR_CPUS] __read_mostly;
+> > >  EXPORT_SYMBOL(cpu_sibling_map);
+> > > @@ -228,9 +225,12 @@ void __init loongson_prepare_cpus(unsigned int max_cpus)
+> > >  {
+> > >         int i = 0;
+> > >
+> > > +       parse_acpi_topology();
+> > > +
+> > >         for (i = 0; i < loongson_sysconf.nr_cpus; i++) {
+> > >                 set_cpu_present(i, true);
+> > >                 csr_mail_send(0, __cpu_logical_map[i], 0);
+> > > +               cpu_data[i].global_id = __cpu_logical_map[i];
+> > >         }
+> > >
+> > >         per_cpu(cpu_state, smp_processor_id()) = CPU_ONLINE;
+> > > @@ -271,10 +271,10 @@ void loongson_init_secondary(void)
+> > >         numa_add_cpu(cpu);
+> > >  #endif
+> > >         per_cpu(cpu_state, cpu) = CPU_ONLINE;
+> > > -       cpu_data[cpu].core =
+> > > -                    cpu_logical_map(cpu) % loongson_sysconf.cores_per_package;
+> > >         cpu_data[cpu].package =
+> > >                      cpu_logical_map(cpu) / loongson_sysconf.cores_per_package;
+> > > +       cpu_data[cpu].core = pptt_enabled ? cpu_data[cpu].core :
+> > > +                    cpu_logical_map(cpu) % loongson_sysconf.cores_per_package;
+> > >  }
+> > >
+> > >  void loongson_smp_finish(void)
+> > > @@ -380,14 +380,10 @@ static inline void set_cpu_sibling_map(int cpu)
+> > >
+> > >         cpumask_set_cpu(cpu, &cpu_sibling_setup_map);
+> > >
+> > > -       if (smp_num_siblings <= 1)
+> > > -               cpumask_set_cpu(cpu, &cpu_sibling_map[cpu]);
+> > > -       else {
+> > > -               for_each_cpu(i, &cpu_sibling_setup_map) {
+> > > -                       if (cpus_are_siblings(cpu, i)) {
+> > > -                               cpumask_set_cpu(i, &cpu_sibling_map[cpu]);
+> > > -                               cpumask_set_cpu(cpu, &cpu_sibling_map[i]);
+> > > -                       }
+> > > +       for_each_cpu(i, &cpu_sibling_setup_map) {
+> > > +               if (cpus_are_siblings(cpu, i)) {
+> > > +                       cpumask_set_cpu(i, &cpu_sibling_map[cpu]);
+> > > +                       cpumask_set_cpu(cpu, &cpu_sibling_map[i]);
+> > >                 }
+> > >         }
+> > >  }
+> > > diff --git a/drivers/acpi/Kconfig b/drivers/acpi/Kconfig
+> > > index ccbeab9500ec..00dd309b6682 100644
+> > > --- a/drivers/acpi/Kconfig
+> > > +++ b/drivers/acpi/Kconfig
+> > > @@ -542,10 +542,10 @@ config ACPI_PFRUT
+> > >
+> > >  if ARM64
+> > >  source "drivers/acpi/arm64/Kconfig"
+> > > +endif
+> > >
+> > >  config ACPI_PPTT
+> > >         bool
+> > > -endif
+> >
+> > x86 doesn't use PPTT as of today.  Why do you enable it for them?
+> ACPI_PPTT is an invisible symbol, it cannot be enabled by explicitly
+> selecting and its default value is n, so I think it isn't enabled for
+> x86. On the other hand, moving it out of ARM64 can make other archs
+> don't need to modify this file any more if they need PPTT.
 
-Hi,
+AFAICS, setting ACPI_PPTT causes pptt.c to be compiled and if it is
+never going to be used by the given arch, it will just be dead code.
 
-this is the repo and branch I use:
-
-git remote show origin
-* remote origin
-   Fetch URL: 
-git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git
-...
-git branch -a
-my branch: staging-testing
-
-Bye Philipp
+Can't this be avoided?
