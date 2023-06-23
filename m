@@ -2,58 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C20973AEA4
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 04:31:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0C9A73AEA6
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 04:32:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231342AbjFWCbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 22:31:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48888 "EHLO
+        id S229830AbjFWCcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 22:32:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231286AbjFWCbX (ORCPT
+        with ESMTP id S229628AbjFWCco (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 22:31:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 926D8E2
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 19:31:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 267686192D
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 02:31:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30553C433C0;
-        Fri, 23 Jun 2023 02:31:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687487481;
-        bh=jSwD819d6vzn1nQLBLA8tpzXQqn13wWvKCPwPru/PdM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=cpwzxnw9N3kv46R9cSZIavbUhGDpjQa4cZPus3bjviz9tKnFhvFcT7dT2MdZwxzu4
-         1Lt+HehGq0CqGLE1KCNMjMoMDyvcEpjp70VWZFL0ehX/ToNoqQ9E0bTxoFeUr/eoyQ
-         9rLA6FlIaSZl+Fi8hLvJSSSSGGC2QY/S7upU3pdGLDluAVzdnoo8g/wdsfQy0Cm/6Y
-         JP5uuUUfiiSjAGIpfhmgv2BK6p6rt7d38CPoDVS1OJGc1bsRJ6omLUYo0ZgRqLdcm/
-         dCwyLmPCgmhFykjqL5xNw5PdvR1JJUzPPBuVJhAlKeU6Nzd2dg0XB+Tyv10BlrONEh
-         n7jQAnd1C0vxw==
-Date:   Thu, 22 Jun 2023 19:31:20 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [net-next PATCH] net: dsa: qca8k: add support for additional
- modes for netdev trigger
-Message-ID: <20230622193120.5cc09fc3@kernel.org>
-In-Reply-To: <20230621095409.25859-1-ansuelsmth@gmail.com>
-References: <20230621095409.25859-1-ansuelsmth@gmail.com>
+        Thu, 22 Jun 2023 22:32:44 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61D611706;
+        Thu, 22 Jun 2023 19:32:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=xE1C24/lOyIj9IRbTbWR5/l6UaBcPrS9L49Zb3ZxlL0=; b=fj6j9TJyOUwx/I2H7kk/hHJMJX
+        /Dcnt3VgJDz6cdL2Hz+z32T+wd5elrijJOwf9TOl6Rm9uRrma3oM66Eg/f4IBWN94Y/KAuSJ/SLAc
+        tIKQMd1zoPL1wuG7gkFZX9LV+G8oFxZWzVIt87eQWD+cxEjEylQpVCsgS4H/igPHdno2sRoOZuBpl
+        T6yfxjqYDvt+t/1TvViR/OOAuKbESE/gmWqnviLdeVfgr9Pg0ZEr4xoPbRpBZtiANBIKd+/5EFBQ7
+        +QZawx+BkIwgncROL0PE3VLCZbdO2BwcqOrim6ozC2rUR+LW0A09lPDeXjy7xWOkqMpLVcPARRT1H
+        w7eawjMQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qCWb6-00G6hp-Qd; Fri, 23 Jun 2023 02:32:28 +0000
+Date:   Fri, 23 Jun 2023 03:32:28 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Finn Thain <fthain@linux-m68k.org>
+Cc:     Theodore Ts'o <tytso@mit.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        tech-board-discuss@lists.linux-foundation.org,
+        Kees Cook <keescook@chromium.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Documentation: Linux Contribution Maturity Model and the
+ wider community
+Message-ID: <ZJUEPPSIRsOFNoWP@casper.infradead.org>
+References: <20230620212502.GI286961@mit.edu>
+ <5490402b-8b9f-f52d-3896-41090e639e51@linux-m68k.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5490402b-8b9f-f52d-3896-41090e639e51@linux-m68k.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,12 +56,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 21 Jun 2023 11:54:09 +0200 Christian Marangi wrote:
-> The QCA8K switch supports additional modes that can be handled in
-> hardware for the LED netdev trigger.
-> 
-> Add these additional modes to further support the Switch LEDs and
-> offload more blink modes.
+On Wed, Jun 21, 2023 at 11:51:19AM +1000, Finn Thain wrote:
+> - The roles of maintainer and reviewer should be taught in universities at 
+>   a post-graduate level to increase the talent pool.
 
-Something may be funny with the date on your system, FWIW, because your
-patches seem to arrive almost a day in the past.
+Umm.  I can't say that I know anyone who studied computer science at a
+post-graduate level and then became a Linux maintainer.  They probably
+exist, but I'm not aware of them.  In contrast, I can name two people
+who started a PhD in another subject and then got lured into Linux
+development, abandoning their PhD.  I suspect most have a bachelors.
+Some do not have a degree.
+
+I don't think it's the role of a computer science department to do
+this kind of teaching.  It feels more practical.  Now maybe it's part
+of a software engineering curriculum, but then I don't think it's a
+post-graduate topic.
+
+It could also be something a professional society pushes.  The British
+Computer Society were really into that kind of thing twenty-five years
+ago when they were trying to persuade me to join.
