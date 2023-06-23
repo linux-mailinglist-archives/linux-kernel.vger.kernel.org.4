@@ -2,293 +2,286 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A74D73BB94
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 17:25:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BADA73B958
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 16:05:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232350AbjFWPZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 11:25:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41780 "EHLO
+        id S231529AbjFWOFS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 10:05:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232533AbjFWPZB (ORCPT
+        with ESMTP id S231622AbjFWOE7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 11:25:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 752E5C2
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 08:24:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687533859;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=M/S7PlGAxyYZzFvK0bsc5hgdhJYvUxmCp25URDm0iv8=;
-        b=gMOET0b/kuhZ39XliiIIsZL2HYwZC1l7JzNFWCqcf6aBwaPr9Ugf0XIPOh1bRYYjFE3rrJ
-        Gp2BSbpOn3bc1UOKPUjwCDrJB7NSWp6m8eh9NdSXY16OsCuFiv2DAEIixv3Q4q3+vyEW/t
-        TK65n8zf1ifJ2eAoM/Ekr7TX7jKNCXY=
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com
- [209.85.214.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-513-E3s0A8mnP_eGx-FHUMfKeg-1; Fri, 23 Jun 2023 11:24:17 -0400
-X-MC-Unique: E3s0A8mnP_eGx-FHUMfKeg-1
-Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-1b506eb8798so5407505ad.3
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 08:24:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687533856; x=1690125856;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=M/S7PlGAxyYZzFvK0bsc5hgdhJYvUxmCp25URDm0iv8=;
-        b=WVFPWY4m8clglJ6d4ShN+Dc7aB0b98RZySZmY4lrY/faMBqesEZHNWGNIeDLVGyBGi
-         KW+C8A1OQZCGXJr+OnT770TxQZ9sffle6PxPuuHm8qrtX/7PnM0uxxB7vrXfOQUTAP0Q
-         kU7GfHMk0+7DIYm4V43e4NrouFbqeOPL3b6wtDLZG8FD62lvcW5nJB3vjevx8KrNOv9l
-         f+m9ax7+ENyotSJSgFZOugepl59Gx84Bvy+Y+qRAzjDD12r8fuItqPmEv5LfddSgom/6
-         fXMqwapb9ODJ708VfDOSn9vK+JhXcrVvhpJgiSRqGPfofyweRW6lVtbBqHol+OyI26OM
-         4KIw==
-X-Gm-Message-State: AC+VfDxObgr3besuWTgkqNWELBCShZ9YVB/wEXxRjKMQpycKIH72rmLN
-        09dh86evz1VlEqW3kFZx7ZdMMkRtXqYelOwDiarTEqHt/nH/tlgDJxpy+WLgQAb+6nMNEEepccg
-        9KboRb8Mszq8MHbOlttMRSUd1
-X-Received: by 2002:a17:902:efcb:b0:1b5:11e:e48a with SMTP id ja11-20020a170902efcb00b001b5011ee48amr19497403plb.69.1687533855748;
-        Fri, 23 Jun 2023 08:24:15 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4RurcfAp7lRzkU6veda3yFfLKhnT+ZP/W2E7cRQ76Iy3mMxyblmZ4BOb9jbh0S7Ay8fzqw7w==
-X-Received: by 2002:a17:902:efcb:b0:1b5:11e:e48a with SMTP id ja11-20020a170902efcb00b001b5011ee48amr19497390plb.69.1687533855411;
-        Fri, 23 Jun 2023 08:24:15 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:4b3f:de9c:642:1aff:fe31:a15c? ([2a02:810d:4b3f:de9c:642:1aff:fe31:a15c])
-        by smtp.gmail.com with ESMTPSA id o16-20020a170902779000b001b03cda6389sm7387865pll.10.2023.06.23.08.24.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Jun 2023 08:24:15 -0700 (PDT)
-Message-ID: <d18a4ea5-4e8e-be69-84c3-ca658f5cfd24@redhat.com>
-Date:   Fri, 23 Jun 2023 15:55:24 +0200
+        Fri, 23 Jun 2023 10:04:59 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0187C2693;
+        Fri, 23 Jun 2023 07:04:53 -0700 (PDT)
+Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35NDuriM028139;
+        Fri, 23 Jun 2023 14:04:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : content-type : mime-version; s=pp1;
+ bh=err5CMmGfZX6yghBvdJwQ2rOl/tPn2f2raSRJUGn2XA=;
+ b=q3+bfzV4MdtjCwpgUooIhOjAaDwa2Nbe4eMPI8qXfanxMa5dazVay8KhhXILz+jbjIbA
+ 2IfEVnzHExG0nl4QIMbPokqpwZb7RbftYeq6ms0+HJchwM+gCKSAHMLTzXAohyW/YNAA
+ kxhiNMV77vwgVmweu04XTxILmaPggSmv+wJQm4cXBrB5xcHIimSAEs1bUTsifiSXohIc
+ 0tNtrqtiAIYbMSJJy3e1N2jrELHgOKBzHfdyCIMUdsTi+0O6rbsYr50ckx5IIJr7q46H
+ zumdJRUKRUBsFe3TQzls05r7YWYARUhnXNyFH0fScZ99sCMC6duYxZKWZnrHj7WDp5BU Gg== 
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rdcqrg425-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 23 Jun 2023 14:04:40 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35NBjGos011443;
+        Fri, 23 Jun 2023 14:01:17 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma05fra.de.ibm.com (PPS) with ESMTPS id 3r94f5358m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 23 Jun 2023 14:01:17 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35NE1DOI42861130
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 23 Jun 2023 14:01:13 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9BAFE20049;
+        Fri, 23 Jun 2023 14:01:13 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 71B2E20043;
+        Fri, 23 Jun 2023 14:01:13 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Fri, 23 Jun 2023 14:01:13 +0000 (GMT)
+Date:   Fri, 23 Jun 2023 16:01:12 +0200
+From:   Alexander Gordeev <agordeev@linux.ibm.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
+Subject: [GIT PULL] s390 updates for 6.5
+Message-ID: <ZJWlqGlx6LymL7lO@tuxmaker.boeblingen.de.ibm.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: _HIEVLSU3GF6zRsFylz6yAj1nRFuIXT1
+X-Proofpoint-GUID: _HIEVLSU3GF6zRsFylz6yAj1nRFuIXT1
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH drm-next v5 03/14] drm: manager to keep track of GPUs VA
- mappings
-Content-Language: en-US
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        airlied@gmail.com, daniel@ffwll.ch, tzimmermann@suse.de,
-        mripard@kernel.org, corbet@lwn.net, bskeggs@redhat.com,
-        Liam.Howlett@oracle.com, matthew.brost@intel.com,
-        boris.brezillon@collabora.com, alexdeucher@gmail.com,
-        ogabbay@kernel.org, bagasdotme@gmail.com, willy@infradead.org,
-        jason@jlekstrand.net
-Cc:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Donald Robson <donald.robson@imgtec.com>,
-        Dave Airlie <airlied@redhat.com>
-References: <20230620004217.4700-1-dakr@redhat.com>
- <20230620004217.4700-4-dakr@redhat.com>
- <cf6846ea-5bd0-0b41-b7e6-901c70701751@amd.com>
- <a8edf75b-e0f7-a6c7-7d29-f0d39923549b@redhat.com>
- <41aecd10-9956-0752-2838-34c97834f0c8@amd.com>
- <bcde7ea3-fbab-3a18-e810-64b6589ddb18@redhat.com>
- <86ef9898-c4b6-f4c0-7ad3-3ffe5358365a@amd.com>
- <c1f05169-dec0-22ee-52fa-c8070678394e@redhat.com>
- <2f502150-c1f8-615c-66d9-c3fb59b8c409@redhat.com>
- <4a52ac7c-19ba-8906-5902-fbf75673bf59@amd.com>
-From:   Danilo Krummrich <dakr@redhat.com>
-Organization: RedHat
-In-Reply-To: <4a52ac7c-19ba-8906-5902-fbf75673bf59@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-23_08,2023-06-22_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 impostorscore=0 mlxlogscore=999 suspectscore=0
+ clxscore=1011 lowpriorityscore=0 bulkscore=0 mlxscore=0 adultscore=0
+ spamscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306230128
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/23/23 09:16, Christian König wrote:
-> Am 22.06.23 um 17:07 schrieb Danilo Krummrich:
->> On 6/22/23 17:04, Danilo Krummrich wrote:
->>> On 6/22/23 16:42, Christian König wrote:
->>>> Am 22.06.23 um 16:22 schrieb Danilo Krummrich:
->>>>> On 6/22/23 15:54, Christian König wrote:
->>>>>> Am 20.06.23 um 14:23 schrieb Danilo Krummrich:
->>>>>>> Hi Christian,
->>>>>>>
->>>>>>> On 6/20/23 08:45, Christian König wrote:
->>>>>>>> Hi Danilo,
->>>>>>>>
->>>>>>>> sorry for the delayed reply. I've trying to dig myself out of a 
->>>>>>>> hole at the moment.
->>>>>>>
->>>>>>> No worries, thank you for taking a look anyway!
->>>>>>>
->>>>>>>>
->>>>>>>> Am 20.06.23 um 02:42 schrieb Danilo Krummrich:
->>>>>>>>> [SNIP]
->>>>>>>>> diff --git a/include/drm/drm_gem.h b/include/drm/drm_gem.h
->>>>>>>>> index bbc721870c13..5ec8148a30ee 100644
->>>>>>>>> --- a/include/drm/drm_gem.h
->>>>>>>>> +++ b/include/drm/drm_gem.h
->>>>>>>>> @@ -36,6 +36,8 @@
->>>>>>>>>   #include <linux/kref.h>
->>>>>>>>>   #include <linux/dma-resv.h>
->>>>>>>>> +#include <linux/list.h>
->>>>>>>>> +#include <linux/mutex.h>
->>>>>>>>>   #include <drm/drm_vma_manager.h>
->>>>>>>>> @@ -379,6 +381,18 @@ struct drm_gem_object {
->>>>>>>>>        */
->>>>>>>>>       struct dma_resv _resv;
->>>>>>>>> +    /**
->>>>>>>>> +     * @gpuva:
->>>>>>>>> +     *
->>>>>>>>> +     * Provides the list of GPU VAs attached to this GEM object.
->>>>>>>>> +     *
->>>>>>>>> +     * Drivers should lock list accesses with the GEMs 
->>>>>>>>> &dma_resv lock
->>>>>>>>> +     * (&drm_gem_object.resv).
->>>>>>>>> +     */
->>>>>>>>> +    struct {
->>>>>>>>> +        struct list_head list;
->>>>>>>>> +    } gpuva;
->>>>>>>>> +
->>>>>>>>>       /**
->>>>>>>>>        * @funcs:
->>>>>>>>>        *
->>>>>>>>
->>>>>>>> I'm pretty sure that it's not a good idea to attach this 
->>>>>>>> directly to the GEM object.
->>>>>>>
->>>>>>> Why do you think so? IMHO having a common way to connect mappings 
->>>>>>> to their backing buffers is a good thing, since every driver 
->>>>>>> needs this connection anyway.
->>>>>>>
->>>>>>> E.g. when a BO gets evicted, drivers can just iterate the list of 
->>>>>>> mappings and, as the circumstances require, invalidate the 
->>>>>>> corresponding mappings or to unmap all existing mappings of a 
->>>>>>> given buffer.
->>>>>>>
->>>>>>> What would be the advantage to let every driver implement a 
->>>>>>> driver specific way of keeping this connection?
->>>>>>
->>>>>> Flexibility. For example on amdgpu the mappings of a BO are groups 
->>>>>> by VM address spaces.
->>>>>>
->>>>>> E.g. the BO points to multiple bo_vm structures which in turn have 
->>>>>> lists of their mappings.
->>>>>
->>>>> Isn't this (almost) the same relationship I introduce with the 
->>>>> GPUVA manager?
->>>>>
->>>>> If you would switch over to the GPUVA manager right now, it would 
->>>>> be that every GEM has a list of it's mappings (the gpuva list). The 
->>>>> mapping is represented by struct drm_gpuva (of course embedded in 
->>>>> driver specific structure(s)) which has a pointer to the VM address 
->>>>> space it is part of, namely the GPUVA manager instance. And the 
->>>>> GPUVA manager keeps a maple tree of it's mappings as well.
->>>>>
->>>>> If you still would like to *directly* (indirectly you already have 
->>>>> that relationship) keep a list of GPUVA managers (VM address 
->>>>> spaces) per GEM, you could still do that in a driver specific way.
->>>>>
->>>>> Do I miss something?
->>>>
->>>> How do you efficiently find only the mappings of a BO in one VM?
->>>
->>> Actually, I think this case should even be more efficient than with a 
->>> BO having a list of GPUVAs (or mappings):
->>
->> *than with a BO having a list of VMs:
->>
->>>
->>> Having a list of GPUVAs per GEM, each GPUVA has a pointer to it's VM. 
->>> Hence, you'd only need to iterate the list of mappings for a given BO 
->>> and check the mappings VM pointer.
-> 
-> Yeah, and that is extremely time consuming if you have tons of mappings 
-> in different VMs.
-> 
->>>
->>> Having a list of VMs per BO, you'd have to iterate the whole VM to 
->>> find the mappings having a pointer to the given BO, right?
-> 
-> No, you don't seem to understand what I'm suggesting.
-> 
-> Currently you have a list of mappings attached to the BO, so when you 
-> need to make sure that a specific BO is up to date in a specific VM you 
-> either need to iterate over the VM or the BO. Neither of that is a good 
-> idea.
-> 
-> What you need is a representation of the data used for each BO+VM 
-> combination. In other words another indirection which allows you to 
-> handle all the mappings of a BO inside a VM at once.
+Hello Linus,
 
-Ok, after having a quick look at amdgpu, I can see what you mean.
+please pull s390 changes for 6.5.
 
-The missing piece for me was that the BO+VM abstraction itself keeps a 
-list of mappings for this specific BO and VM.
+Thank you,
+Alexander
 
-Just to make it obvious for other people following the discussion, let 
-me quickly sketch up how this approach would look like for the GPUVA 
-manager:
+The following changes since commit 03c5c83b70dca3729a3eb488e668e5044bd9a5ea:
 
-1. We would need a new structure to represent the BO+VM combination, 
-something like:
+  s390/purgatory: disable branch profiling (2023-05-25 19:41:45 +0200)
 
-	struct drm_gpuva_mgr_gem {
-     		struct drm_gpuva_manager *mgr;
-		struct drm_gem_object *obj;
-		struct list_head gpuva_list;
-	};
+are available in the Git repository at:
 
-with a less horrible name, hopefully.
+  git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git tags/s390-6.4-4
 
-2. Create an instance of struct drm_gpuva_mgr_gem once a GEM becomes 
-associated with a GPUVA manager (VM) and attach it to the GEMs, as by 
-now, "gpuva" list.
+for you to fetch changes up to ad3d770b83afffd10abf624ec80c408254343a20:
 
-In amdgpu, for example, this seems to be the case once a GEM object is 
-opened, since there is one VM per file_priv.
+  s390/defconfigs: set CONFIG_NET_TC_SKB_EXT=y (2023-06-02 16:09:27 +0200)
 
-However, for other drivers this could be different, hence drivers would 
-need to take care about this.
+----------------------------------------------------------------
+s390 updates for 6.5
 
+- Use correct type for size of memory allocated for ELF core
+  header on kernel crash.
 
-3. Attach GPUVAs to the new gpuva_list of the corresponding instance of
-struct drm_gpuva_mgr_gem.
+- Fix insecure W+X mapping warning when KASAN shadow memory
+  range is not aligned on page boundary.
 
-4. Drivers would need to clean up the instance of struct 
-drm_gpuva_mgr_gem, once the GEM is not associated with the GPUVA manager 
-anymore.
+- Avoid allocation of short by one page KASAN shadow memory
+  when the original memory range is less than (PAGE_SIZE << 3).
 
-As pointed out by Christian, this would optimize the "get all mappings 
-backed by a specific BO from a given VM" use case.
+- Fix virtual vs physical address confusion in physical memory
+  enumerator. It is not a real issue, since virtual and physical
+  addresses are currently the same.
 
-The question for me is, do other drivers than amdgpu commonly need this?
+- Set CONFIG_NET_TC_SKB_EXT=y in s390 config files as it is
+  required for offloading TC as well as bridges on switchdev
+  capable ConnectX devices.
 
-And what does amdgpu need this for? Maybe amdgpu does something we're 
-not doing (yet)?
+----------------------------------------------------------------
 
-Christian - I know you didn't ask for "do it the way amdgpu does", 
-instead you voted for keeping it entirely driver specific. But I think 
-everyone is pretty close and I'm still optimistic that we could just 
-generalize this.
+Alexander Gordeev (3):
+  s390/kasan: fix insecure W+X mapping warning
+  s390/kasan: avoid short by one page shadow memory
+  s390/boot: fix physmem_info virtual vs physical address confusion
 
-- Danilo
+Christophe JAILLET (1):
+  s390/crash: use the correct type for memory allocation
 
-> 
->>>
->>> I'd think that a single VM potentially has more mapping entries than 
->>> a single BO was mapped in multiple VMs.
->>>
->>> Another case to consider is the case I originally had in mind 
->>> choosing this relationship: finding all mappings for a given BO, 
->>> which I guess all drivers need to do in order to invalidate mappings 
->>> on BO eviction.
->>>
->>> Having a list of VMs per BO, wouldn't you need to iterate all of the 
->>> VMs entirely?
-> 
-> No, see how amdgpu works.
-> 
-> Regards,
-> Christian.
-> 
+Niklas Schnelle (1):
+  s390/defconfigs: set CONFIG_NET_TC_SKB_EXT=y
 
+ arch/s390/boot/vmem.c                | 15 +++++++++++----
+ arch/s390/configs/debug_defconfig    |  1 +
+ arch/s390/configs/defconfig          |  1 +
+ arch/s390/include/asm/physmem_info.h |  5 +++--
+ arch/s390/kernel/crash_dump.c        |  2 +-
+ arch/s390/mm/vmem.c                  | 14 ++++++++++----
+ 6 files changed, 27 insertions(+), 11 deletions(-)
+
+diff --git a/arch/s390/boot/vmem.c b/arch/s390/boot/vmem.c
+index acb1f8b53105..c67f59db7a51 100644
+--- a/arch/s390/boot/vmem.c
++++ b/arch/s390/boot/vmem.c
+@@ -45,6 +45,13 @@ static void pgtable_populate(unsigned long addr, unsigned long end, enum populat
+ 
+ static pte_t pte_z;
+ 
++static inline void kasan_populate(unsigned long start, unsigned long end, enum populate_mode mode)
++{
++	start = PAGE_ALIGN_DOWN(__sha(start));
++	end = PAGE_ALIGN(__sha(end));
++	pgtable_populate(start, end, mode);
++}
++
+ static void kasan_populate_shadow(void)
+ {
+ 	pmd_t pmd_z = __pmd(__pa(kasan_early_shadow_pte) | _SEGMENT_ENTRY);
+@@ -95,17 +102,17 @@ static void kasan_populate_shadow(void)
+ 	 */
+ 
+ 	for_each_physmem_usable_range(i, &start, &end)
+-		pgtable_populate(__sha(start), __sha(end), POPULATE_KASAN_MAP_SHADOW);
++		kasan_populate(start, end, POPULATE_KASAN_MAP_SHADOW);
+ 	if (IS_ENABLED(CONFIG_KASAN_VMALLOC)) {
+ 		untracked_end = VMALLOC_START;
+ 		/* shallowly populate kasan shadow for vmalloc and modules */
+-		pgtable_populate(__sha(VMALLOC_START), __sha(MODULES_END), POPULATE_KASAN_SHALLOW);
++		kasan_populate(VMALLOC_START, MODULES_END, POPULATE_KASAN_SHALLOW);
+ 	} else {
+ 		untracked_end = MODULES_VADDR;
+ 	}
+ 	/* populate kasan shadow for untracked memory */
+-	pgtable_populate(__sha(ident_map_size), __sha(untracked_end), POPULATE_KASAN_ZERO_SHADOW);
+-	pgtable_populate(__sha(MODULES_END), __sha(_REGION1_SIZE), POPULATE_KASAN_ZERO_SHADOW);
++	kasan_populate(ident_map_size, untracked_end, POPULATE_KASAN_ZERO_SHADOW);
++	kasan_populate(MODULES_END, _REGION1_SIZE, POPULATE_KASAN_ZERO_SHADOW);
+ }
+ 
+ static bool kasan_pgd_populate_zero_shadow(pgd_t *pgd, unsigned long addr,
+diff --git a/arch/s390/configs/debug_defconfig b/arch/s390/configs/debug_defconfig
+index be3bf03bf361..aa95cf6dfabb 100644
+--- a/arch/s390/configs/debug_defconfig
++++ b/arch/s390/configs/debug_defconfig
+@@ -116,6 +116,7 @@ CONFIG_UNIX=y
+ CONFIG_UNIX_DIAG=m
+ CONFIG_XFRM_USER=m
+ CONFIG_NET_KEY=m
++CONFIG_NET_TC_SKB_EXT=y
+ CONFIG_SMC=m
+ CONFIG_SMC_DIAG=m
+ CONFIG_INET=y
+diff --git a/arch/s390/configs/defconfig b/arch/s390/configs/defconfig
+index 769c7eed8b6a..f041945f9148 100644
+--- a/arch/s390/configs/defconfig
++++ b/arch/s390/configs/defconfig
+@@ -107,6 +107,7 @@ CONFIG_UNIX=y
+ CONFIG_UNIX_DIAG=m
+ CONFIG_XFRM_USER=m
+ CONFIG_NET_KEY=m
++CONFIG_NET_TC_SKB_EXT=y
+ CONFIG_SMC=m
+ CONFIG_SMC_DIAG=m
+ CONFIG_INET=y
+diff --git a/arch/s390/include/asm/physmem_info.h b/arch/s390/include/asm/physmem_info.h
+index 8e9c582592b3..9e41a74fce9a 100644
+--- a/arch/s390/include/asm/physmem_info.h
++++ b/arch/s390/include/asm/physmem_info.h
+@@ -3,6 +3,7 @@
+ #define _ASM_S390_MEM_DETECT_H
+ 
+ #include <linux/types.h>
++#include <asm/page.h>
+ 
+ enum physmem_info_source {
+ 	MEM_DETECT_NONE = 0,
+@@ -133,7 +134,7 @@ static inline const char *get_rr_type_name(enum reserved_range_type t)
+ 
+ #define for_each_physmem_reserved_type_range(t, range, p_start, p_end)				\
+ 	for (range = &physmem_info.reserved[t], *p_start = range->start, *p_end = range->end;	\
+-	     range && range->end; range = range->chain,						\
++	     range && range->end; range = range->chain ? __va(range->chain) : NULL,		\
+ 	     *p_start = range ? range->start : 0, *p_end = range ? range->end : 0)
+ 
+ static inline struct reserved_range *__physmem_reserved_next(enum reserved_range_type *t,
+@@ -145,7 +146,7 @@ static inline struct reserved_range *__physmem_reserved_next(enum reserved_range
+ 			return range;
+ 	}
+ 	if (range->chain)
+-		return range->chain;
++		return __va(range->chain);
+ 	while (++*t < RR_MAX) {
+ 		range = &physmem_info.reserved[*t];
+ 		if (range->end)
+diff --git a/arch/s390/kernel/crash_dump.c b/arch/s390/kernel/crash_dump.c
+index 8a617be28bb4..7af69948b290 100644
+--- a/arch/s390/kernel/crash_dump.c
++++ b/arch/s390/kernel/crash_dump.c
+@@ -568,9 +568,9 @@ static size_t get_elfcorehdr_size(int mem_chunk_cnt)
+ int elfcorehdr_alloc(unsigned long long *addr, unsigned long long *size)
+ {
+ 	Elf64_Phdr *phdr_notes, *phdr_loads;
++	size_t alloc_size;
+ 	int mem_chunk_cnt;
+ 	void *ptr, *hdr;
+-	u32 alloc_size;
+ 	u64 hdr_off;
+ 
+ 	/* If we are not in kdump or zfcp/nvme dump mode return */
+diff --git a/arch/s390/mm/vmem.c b/arch/s390/mm/vmem.c
+index 5b22c6e24528..b9dcb4ae6c59 100644
+--- a/arch/s390/mm/vmem.c
++++ b/arch/s390/mm/vmem.c
+@@ -667,7 +667,15 @@ static void __init memblock_region_swap(void *a, void *b, int size)
+ 
+ #ifdef CONFIG_KASAN
+ #define __sha(x)	((unsigned long)kasan_mem_to_shadow((void *)x))
++
++static inline int set_memory_kasan(unsigned long start, unsigned long end)
++{
++	start = PAGE_ALIGN_DOWN(__sha(start));
++	end = PAGE_ALIGN(__sha(end));
++	return set_memory_rwnx(start, (end - start) >> PAGE_SHIFT);
++}
+ #endif
++
+ /*
+  * map whole physical memory to virtual memory (identity mapping)
+  * we reserve enough space in the vmalloc area for vmemmap to hotplug
+@@ -737,10 +745,8 @@ void __init vmem_map_init(void)
+ 	}
+ 
+ #ifdef CONFIG_KASAN
+-	for_each_mem_range(i, &base, &end) {
+-		set_memory_rwnx(__sha(base),
+-				(__sha(end) - __sha(base)) >> PAGE_SHIFT);
+-	}
++	for_each_mem_range(i, &base, &end)
++		set_memory_kasan(base, end);
+ #endif
+ 	set_memory_rox((unsigned long)_stext,
+ 		       (unsigned long)(_etext - _stext) >> PAGE_SHIFT);
