@@ -2,125 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4D6573B629
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 13:30:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92B6D73B62D
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 13:30:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231284AbjFWLaP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 07:30:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59780 "EHLO
+        id S231538AbjFWLaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 07:30:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbjFWLaN (ORCPT
+        with ESMTP id S230180AbjFWLaR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 07:30:13 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74761268A;
-        Fri, 23 Jun 2023 04:30:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=D0ozaDmhNyFK25SoDuRwst2ICRzooGIruMu1J/0UTdw=; b=e1VU5HupzKjPk3tMn37weKC8T1
-        Df1rHFJLyS3VCJbM9W9xH+rDHA24BxaSXm97nyn8vtwSmOLplRM2ZDCtGw+4a6TjR7AjmkoE7e3WM
-        IeNesvLOTnPILGjPWBqyUEq2PniAppsVbh3FrVT29eidMgR7UlyvrLrj4qR3c/QZntS3HScTq2sLX
-        x1HLlKfB1VC8ypOT+frAyYy08Ax0GAZxV93p6Kbjl2H7UH8cgYjVKV1D8pIYVXY7pXyu3b8jEhSC5
-        LhQtrKd4nRYZKTNDsfWIx0mOmSHJ/gGRl96XDvwWvaGYx9AgEM8MaoWTZ0pZT7NMFtNipd6FQ4gk9
-        dvEdDP0w==;
-Received: from sslproxy03.your-server.de ([88.198.220.132])
-        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1qCezJ-0000a8-PL; Fri, 23 Jun 2023 13:30:01 +0200
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1qCezJ-000G0O-7d; Fri, 23 Jun 2023 13:30:01 +0200
-Subject: Re: [PATCH] bpf: Replace deprecated -target with --target= for Clang
-To:     Quentin Monnet <quentin@isovalent.com>,
-        Fangrui Song <maskray@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>, bpf@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20230623020908.1410959-1-maskray@google.com>
- <a5d419e4-f2ea-27f6-9259-a7b6486ab616@isovalent.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <bab57007-ddf6-7134-cefd-dfd1c8be17be@iogearbox.net>
-Date:   Fri, 23 Jun 2023 13:30:00 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Fri, 23 Jun 2023 07:30:17 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D2F82686
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 04:30:15 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-9896216338cso45189366b.3
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 04:30:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687519814; x=1690111814;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=JUTP9KVdzCwXWEwQEK/WejGY1+tnzW8te7FkC1dLoUk=;
+        b=Ryr1CDxaKF6klmfgzieOQd0RUv82RS6cdmB4lzrb2CxCHmGN58GhreizxfG5yU/BRR
+         PnVaoMBV54RF4gSMlQWwEuBqiN7sU84FCjWpqTav3GPGNxvGtrveqtU7qZ85URuvR0Lg
+         oY6f25j+rOfWqd3Yqab+/D84yb2Vr9s4LEb2zDOUp5Zl92YpmAHJLDOR8StSU4fyZqBN
+         KYV7JsgR+mlmKhV5Dr+LHDtJikqPcnXoizq9+Z7wE4ObxYjmj1DHtOqkJHZD0Z8lxVSp
+         Eyavsq0gisJd8fGV6IuTNw/V/H0m/vNf/PouoavbQxwW0Sb9RLW+MeIo+MsOSkllodUL
+         c88Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687519814; x=1690111814;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JUTP9KVdzCwXWEwQEK/WejGY1+tnzW8te7FkC1dLoUk=;
+        b=CBMNsGQ++tkLMhuZPXxBUreFXkzdBHjx/Xu+BgpzMc1XJeU+TpfWGGmbc+bYZO2QsW
+         2veQrXKLI2YvxugagIujv+e5DNreNz5VdEJv8RymkOonF7gTS9vE7Vfq237E8Z9XKnrk
+         3a41oel37N7Fc0fvN+GT6+69vcXVXAyCgyOUz8EKGq73GZ60OBjaFgrYTXuDHJ9FfFKu
+         j/zb9Srpgj8OIE5RmHir+X8KmgEm3XyzGKCFwJxkm1NoI6Ql0xMrOYtPR7mbOjSQWSu8
+         fTuNwbyXIM0feCEnEuyMCgPA7AN5MQr1DL6PqKkGAWn2er75a2C2Ao+pZCPKVntDIwJI
+         aIvg==
+X-Gm-Message-State: AC+VfDx/Bq+I72yeKlXRrRbXlJo1L4pyU6QykW00EEezVUCn1tEkrdIl
+        xvoha/BksFjfWzH4FQeL4jrzEA==
+X-Google-Smtp-Source: ACHHUZ4be4+kKq0mciVEYRYbXmHEBQgeyuORUYXwDn/q+SYYNMtYOzdSeAFZMWMlYLVGaLxRvHATwA==
+X-Received: by 2002:a17:907:1c9c:b0:960:d9d:ffb5 with SMTP id nb28-20020a1709071c9c00b009600d9dffb5mr21446151ejc.41.1687519813731;
+        Fri, 23 Jun 2023 04:30:13 -0700 (PDT)
+Received: from hackbox.lan ([62.231.110.100])
+        by smtp.gmail.com with ESMTPSA id z17-20020a1709063ad100b009821ce1ea33sm5908033ejd.7.2023.06.23.04.30.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Jun 2023 04:30:13 -0700 (PDT)
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Manivannan Sadhasivam <mani@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [PATCH 0/5] scsi: dt-bindings: ufs: qcom: Some fixes to clear all dtbs_check warnings
+Date:   Fri, 23 Jun 2023 14:30:04 +0300
+Message-Id: <20230623113009.2512206-1-abel.vesa@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <a5d419e4-f2ea-27f6-9259-a7b6486ab616@isovalent.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.8/26948/Fri Jun 23 09:28:15 2023)
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/23/23 10:51 AM, Quentin Monnet wrote:
-> 2023-06-23 02:09 UTC+0000 ~ Fangrui Song <maskray@google.com>
->> -target has been deprecated since Clang 3.4 in 2013. Use the preferred
->> --target=bpf form instead. This matches how we use --target= in
->> scripts/Makefile.clang.
-> 
-> This seems to be the relevant commit, for reference:
-> 
-> https://github.com/llvm/llvm-project/commit/274b6f0c87a6a1798de0a68135afc7f95def6277
-> 
->>
->> Signed-off-by: Fangrui Song <maskray@google.com>
->> ---
->>   Documentation/bpf/bpf_devel_QA.rst              | 10 +++++-----
->>   Documentation/bpf/btf.rst                       |  4 ++--
->>   Documentation/bpf/llvm_reloc.rst                |  6 +++---
->>   drivers/hid/bpf/entrypoints/Makefile            |  2 +-
->>   kernel/bpf/preload/iterators/Makefile           |  2 +-
->>   samples/bpf/Makefile                            |  6 +++---
->>   samples/bpf/gnu/stubs.h                         |  3 ++-
->>   samples/bpf/test_lwt_bpf.sh                     |  2 +-
->>   samples/hid/Makefile                            |  6 +++---
->>   tools/bpf/bpftool/Documentation/bpftool-gen.rst |  4 ++--
->>   tools/bpf/bpftool/Makefile                      |  2 +-
->>   tools/bpf/runqslower/Makefile                   |  2 +-
->>   tools/build/feature/Makefile                    |  2 +-
->>   tools/perf/Documentation/perf-config.txt        |  2 +-
->>   tools/perf/Makefile.perf                        |  4 ++--
->>   tools/perf/util/llvm-utils.c                    |  4 ++--
->>   tools/testing/selftests/bpf/Makefile            |  6 +++---
->>   tools/testing/selftests/bpf/gnu/stubs.h         |  3 ++-
->>   tools/testing/selftests/hid/Makefile            |  6 +++---
->>   tools/testing/selftests/net/Makefile            |  4 ++--
->>   tools/testing/selftests/tc-testing/Makefile     |  2 +-
->>   21 files changed, 42 insertions(+), 40 deletions(-)
->>
-> 
->> diff --git a/samples/bpf/gnu/stubs.h b/samples/bpf/gnu/stubs.h
->> index 719225b16626..cc37155fbfa5 100644
->> --- a/samples/bpf/gnu/stubs.h
->> +++ b/samples/bpf/gnu/stubs.h
->> @@ -1 +1,2 @@
->> -/* dummy .h to trick /usr/include/features.h to work with 'clang -target bpf' */
->> +/* SPDX-License-Identifier: GPL-2.0 */
-> 
-> Are these necessary, seeing that the files only contain this single-line
-> comment?
+These are all the warnings left to fix for qcom,ufs schema.
 
-Yeah, lets drop that one. Otherwise looks good. Could you split out the tools/perf/
-changes into a separate commit? I would assume that Arnaldo wants to take these
-changes via perf tree instead.
+Abel Vesa (5):
+  scsi: dt-bindings: ufs: qcom: Fix ICE phandle
+  scsi: dt-bindings: ufs: qcom: Add compatible for sm6115 and sm6125
+  scsi: dt-bindings: ufs: qcom: Add compatible for sc8180x
+  scsi: dt-bindings: ufs: qcom: Fix sm8450 clocks
+  scsi: dt-bindings: ufs: qcom: Fix warning for sdm845 by adding
+    reg-names
 
->> +/* dummy .h to trick /usr/include/features.h to work with 'clang --target=bpf' */
-> 
-> Other than this, the change looks good, thanks. Although it should
-> probably target bpf-next rather than bpf?
-> 
-> Acked-by: Quentin Monnet <quentin@isovalent.com>
+ .../devicetree/bindings/ufs/qcom,ufs.yaml     | 49 ++++++++++++++++---
+ 1 file changed, 43 insertions(+), 6 deletions(-)
+
+-- 
+2.34.1
+
