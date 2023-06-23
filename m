@@ -2,132 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A16C173B2EB
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 10:51:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9006873B2F3
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 10:51:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231765AbjFWIvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 04:51:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40234 "EHLO
+        id S231940AbjFWIvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 04:51:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231572AbjFWIve (ORCPT
+        with ESMTP id S231824AbjFWIvr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 04:51:34 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA227170B
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 01:51:32 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4f973035d60so308515e87.3
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 01:51:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1687510291; x=1690102291;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FBp/5we+F098cYxjClAH39IPPmeDVkhswEY+vCjkrLU=;
-        b=Ldb53M44W8TbeL/H4zJekM/7x63/asS5bW6zXQ9hJOyWbKLNY7keLnKXhRj4QrC0l/
-         DLXXI4bXuMJbOq8ckfyr5v1acn0wXTqUNlru42rjmYpwkXm+H96OgZgoI/kCnW2k7oxl
-         5Da53GQIaNEpKCSkb9q0VDRLUTm8EeZ/Egqsr8ggJ3t+EiI4Mf3FiuOKj5/uk1Ro4Szo
-         5fx2JdV1Gj8eUq+940HvdiGUJOJJoB464Of3kP4xSxRYeC/5T4GTYNjml1HW49/4/0Mg
-         nTS0IoQC1ppNOJGvTDABxyXAPGh/iA1087WWe5v1Fr96c6G0LMb6JgKCuGj+56lCYl3C
-         Jyww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687510291; x=1690102291;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FBp/5we+F098cYxjClAH39IPPmeDVkhswEY+vCjkrLU=;
-        b=KGH7MiajEyQ0qj1gE12KuWoQAa165sYtVDDJytYar8IYLVb9IXd/ac+2knNMci2JFt
-         aawFQeEYqneUQZCzL33iMcd+kFBe8kO4TJCOUgAngL7R4Xlvn5Gs5Q/uA+D96W14JGeg
-         +kKWhTPlcPr9ifGG/0BRn+GbZznOiI4FNOg1oP75BHbFzFbG+wO4lV0FIwo2NouOicwF
-         XbEExv3DEyFJH32dTtn8OtEJ+gcb2+yYmmNjhI6VvqH6wbsaBrE6EFodIg4+K7Tndpz5
-         LwjcNbT+lKySkDOz9G89lO29o7awBEv57zkzmIVcJnCcB818qBS1hkmFq9aCT9elW1Vs
-         Ef+Q==
-X-Gm-Message-State: AC+VfDxKykKOhkaD9XNaqSsONwB6AQnPJ//zLmg6G3YQ/KvAvgJovIYr
-        VIg2yBGvJuN4XOAmmQlbjq52Ow==
-X-Google-Smtp-Source: ACHHUZ4bJ8bVgtgP/IjbqRrFOwLkmmEY0vE1BaZUiA+/j8tie7A0E3PJlHa8tG/xQQi6uTLzNyUNhA==
-X-Received: by 2002:a19:6544:0:b0:4f6:d7b:2f19 with SMTP id c4-20020a196544000000b004f60d7b2f19mr11832148lfj.24.1687510290980;
-        Fri, 23 Jun 2023 01:51:30 -0700 (PDT)
-Received: from ?IPV6:2a02:8011:e80c:0:9cb8:f81f:3342:3b44? ([2a02:8011:e80c:0:9cb8:f81f:3342:3b44])
-        by smtp.gmail.com with ESMTPSA id f23-20020a1c6a17000000b003eddc6aa5fasm1671290wmc.39.2023.06.23.01.51.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Jun 2023 01:51:30 -0700 (PDT)
-Message-ID: <a5d419e4-f2ea-27f6-9259-a7b6486ab616@isovalent.com>
-Date:   Fri, 23 Jun 2023 09:51:29 +0100
+        Fri, 23 Jun 2023 04:51:47 -0400
+Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D75F3172A
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 01:51:44 -0700 (PDT)
+Received: from submission (posteo.de [185.67.36.169]) 
+        by mout01.posteo.de (Postfix) with ESMTPS id 6FC1E24002F
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 10:51:42 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+        t=1687510302; bh=B1c7aclKQlYnbAu4S2v+VVqp1E6daoHU8MjvPcNrGNA=;
+        h=MIME-Version:Content-Transfer-Encoding:Date:From:To:Cc:Subject:
+         Message-ID:From;
+        b=g/FFazuPoHXK0hRGWywrWG3suHsNGWkJB0tV+CHSY+gdr7TjUDRy7KN1VoyTCfnq8
+         1ypKDAbljvq19ZK6620XsQ1i5hPA3HdwyGEDf3YhJOXQ34v8zCBZfLPMZb6zKOfpVZ
+         dSQVS65rds9WP31vcLE6imHgkknbx7ZrCk3gHFhQSXxnGgLpUNmT1zmLom2dVAX1u/
+         9INrxqC0tJIMaVAiDcpNoj4XQqBGV5Odt+O9t1TLgwbpnMTi+mhI04yVrHy4ohKSE2
+         7UWn8h3J10tUu8s0xUHXYGPzkFD57BOLQfggmKBqXj4gtbL/QcXthHPvBNA4gmXmPL
+         p+BcoUxt7Z13g==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4QnWF755Jkz9rxQ;
+        Fri, 23 Jun 2023 10:51:39 +0200 (CEST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] bpf: Replace deprecated -target with --target= for Clang
-Content-Language: en-GB
-To:     Fangrui Song <maskray@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>, bpf@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20230623020908.1410959-1-maskray@google.com>
-From:   Quentin Monnet <quentin@isovalent.com>
-In-Reply-To: <20230623020908.1410959-1-maskray@google.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Date:   Fri, 23 Jun 2023 08:51:39 +0000
+From:   Yueh-Shun Li <shamrocklee@posteo.net>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     jgg@ziepe.ca, leon@kernel.org, anthony.l.nguyen@intel.com,
+        davem@davemloft.net, kvalo@kernel.org, jejb@linux.ibm.com,
+        pabeni@redhat.com, apw@canonical.com, joe@perches.com,
+        linux-rdma@vger.kernel.org, netdev@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-scsi@vger.kernel.org,
+        mptcp@lists.linux.dev, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/8] Fix comment typos about "transmit"
+In-Reply-To: <168748862634.32034.1394302200661050543.git-patchwork-notify@kernel.org>
+References: <20230622012627.15050-1-shamrocklee@posteo.net>
+ <168748862634.32034.1394302200661050543.git-patchwork-notify@kernel.org>
+Message-ID: <50a88781b9e2a80588438c315167bbec@posteo.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2023-06-23 02:09 UTC+0000 ~ Fangrui Song <maskray@google.com>
-> -target has been deprecated since Clang 3.4 in 2013. Use the preferred
-> --target=bpf form instead. This matches how we use --target= in
-> scripts/Makefile.clang.
+Dear Maintainer,
 
-This seems to be the relevant commit, for reference:
-
-https://github.com/llvm/llvm-project/commit/274b6f0c87a6a1798de0a68135afc7f95def6277
-
+On 23.06.2023 04:50, patchwork-bot+netdevbpf@kernel.org wrote:
+> Hello:
 > 
-> Signed-off-by: Fangrui Song <maskray@google.com>
-> ---
->  Documentation/bpf/bpf_devel_QA.rst              | 10 +++++-----
->  Documentation/bpf/btf.rst                       |  4 ++--
->  Documentation/bpf/llvm_reloc.rst                |  6 +++---
->  drivers/hid/bpf/entrypoints/Makefile            |  2 +-
->  kernel/bpf/preload/iterators/Makefile           |  2 +-
->  samples/bpf/Makefile                            |  6 +++---
->  samples/bpf/gnu/stubs.h                         |  3 ++-
->  samples/bpf/test_lwt_bpf.sh                     |  2 +-
->  samples/hid/Makefile                            |  6 +++---
->  tools/bpf/bpftool/Documentation/bpftool-gen.rst |  4 ++--
->  tools/bpf/bpftool/Makefile                      |  2 +-
->  tools/bpf/runqslower/Makefile                   |  2 +-
->  tools/build/feature/Makefile                    |  2 +-
->  tools/perf/Documentation/perf-config.txt        |  2 +-
->  tools/perf/Makefile.perf                        |  4 ++--
->  tools/perf/util/llvm-utils.c                    |  4 ++--
->  tools/testing/selftests/bpf/Makefile            |  6 +++---
->  tools/testing/selftests/bpf/gnu/stubs.h         |  3 ++-
->  tools/testing/selftests/hid/Makefile            |  6 +++---
->  tools/testing/selftests/net/Makefile            |  4 ++--
->  tools/testing/selftests/tc-testing/Makefile     |  2 +-
->  21 files changed, 42 insertions(+), 40 deletions(-)
+> This series was applied to netdev/net-next.git (main)
+> by Jakub Kicinski <kuba@kernel.org>:
 > 
+> On Thu, 22 Jun 2023 01:26:21 +0000 you wrote:
+>> Fix typos about "transmit" missing the first "s"
+>> found by searching with keyword "tram" in the first 7
+>> patches.
+>> 
+>> Add related patterns to "scripts/spelling.txt" in the
+>> last patch.
+>> 
+>> [...]
 
-> diff --git a/samples/bpf/gnu/stubs.h b/samples/bpf/gnu/stubs.h
-> index 719225b16626..cc37155fbfa5 100644
-> --- a/samples/bpf/gnu/stubs.h
-> +++ b/samples/bpf/gnu/stubs.h
-> @@ -1 +1,2 @@
-> -/* dummy .h to trick /usr/include/features.h to work with 'clang -target bpf' */
-> +/* SPDX-License-Identifier: GPL-2.0 */
+Thanks for merging!
 
-Are these necessary, seeing that the files only contain this single-line
-comment?
+> Here is the summary with links:
+>   - [1/8] RDMA/rxe: fix comment typo
+>     (no matching commit)
+>   - [2/8] i40e, xsk: fix comment typo
+>     https://git.kernel.org/netdev/net-next/c/b028813ac973
+>   - [3/8] zd1211rw: fix comment typo
+>     (no matching commit)
+>   - [4/8] scsi: fix comment typo
+>     (no matching commit)
+>   - [5/8] tcp: fix comment typo
+>     https://git.kernel.org/netdev/net-next/c/304b1875ba02
+>   - [6/8] net/tls: fix comment typo
+>     https://git.kernel.org/netdev/net-next/c/a0e128ef88e4
+>   - [7/8] selftests: mptcp: connect: fix comment typo
+>     (no matching commit)
+>   - [8/8] scripts/spelling.txt: Add "transmit" patterns
+>     (no matching commit)
+> 
+> You are awesome, thank you!
 
-> +/* dummy .h to trick /usr/include/features.h to work with 'clang --target=bpf' */
+Should I rebase the local branch onto netdev/net-next/main
+and send the "no matching commit" patches again?
 
-Other than this, the change looks good, thanks. Although it should
-probably target bpf-next rather than bpf?
+Best regards,
 
-Acked-by: Quentin Monnet <quentin@isovalent.com>
-
+Shamrock
