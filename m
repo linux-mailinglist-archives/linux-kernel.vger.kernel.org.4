@@ -2,126 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00CB473B741
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 14:32:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3BF673B74F
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 14:33:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231356AbjFWMb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 08:31:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53038 "EHLO
+        id S231418AbjFWMdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 08:33:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231300AbjFWMb4 (ORCPT
+        with ESMTP id S229564AbjFWMc7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 08:31:56 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5555710A
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 05:31:54 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f9002a1a39so6494425e9.2
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 05:31:54 -0700 (PDT)
+        Fri, 23 Jun 2023 08:32:59 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A121683
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 05:32:58 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3fa7cd95dacso6288765e9.3
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 05:32:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687523513; x=1690115513;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XgzDLcXuxZvPzDXTcXShPjq83v8v5x+qH2Z62iL4DPg=;
-        b=CD+qIGYvt+dSmpznE82wTIGr4VptpJ/PIixLD99ZuOBsha/Jq9ouAFjL58nrH0dBxy
-         zfBzaz0xgNKbkIRHM9tX9uNEr1tTDXMr4AwPe1G+ONtNpSzXGNa3VSWq0DVAvTUwdc1Q
-         rh2+hc8fh/gbSyrYA1rgITta0tFAxGxtDJDrIYapoGgmRzFP33WSSB3NnVdOPPidsNxX
-         JLR9t1ISQyqWq0Dp57CJze9kcRWeNxAfmSrBeY+tvN4HhudyjxQktJc1HCXs98D7qGlN
-         XbEkzduwUNeghh5R0helD2Vgvg1972rl08aOOhc9hf0XrjoVV03J4f8HudUCwMRXN1Zh
-         6ezw==
+        d=linaro.org; s=google; t=1687523577; x=1690115577;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3nioVLaBlmpUmAJOY/G29NwVsUk826AqisUa8G22+3E=;
+        b=ekPXno6XspMm889bu/+d0e+13NvrGvILCP9a4IA3MYLR+C1KDGPFjvx5DMtJFjwSlM
+         RR+DVUtPO/hEvmkuz09fLP2a1aL2vUmB8CBHq3I6gXMktJiozuBiBPAOYvVMPkg8/NkC
+         zp2FkWQZxujCMjWU+sZj3JzA8Sft69Nnk8kl+wR27GX9VY6ZahRKypHfQsam18LFXM3t
+         V9jrAZNug2GeT+wTPjup8VW3cRc+mVdEYWN23sAZ3D5WxeOSyVMCSplosaEc1USchsUU
+         uSvQUWTYAd0F3LYzUbwP7Kpc7PzRMBS0WaXjEqcUni1nAhOsyuk10IP4Fp0cUmrOX7ek
+         Eogw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687523513; x=1690115513;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XgzDLcXuxZvPzDXTcXShPjq83v8v5x+qH2Z62iL4DPg=;
-        b=TCh75a4XNplVUVGFxBogjlHmYwENEHfEXyt1hKXt1FjhRbEJpriyv6DenfBOEncR43
-         IeyKfQKL5XwGl9sFMD2FxuP0FfD7Ak4Q9KED49Q2vf7j6TCTiaklm+keeGxHfL2xjd0Z
-         Bi2fxPRmoDdZtBIdG1D4sV4nJbFQ7FVn5UKgv14oeJfmtDdDrTbvyTdi2+F1cjSPwINK
-         t3KQNpfiyeYwNMUfpkex370vbKm2T3OeR1+ktUL5L5G7Ex/5K6XT1G5C+8wtO3QWdJk8
-         TqKbnrKsqXjmS/7qeHfElnDB7Z5gV+K4b9sDgFGajzps5vME6ruLsjelozfN38SrISUd
-         MEtQ==
-X-Gm-Message-State: AC+VfDyUGl9xXNT1QA5M24IiR+4whginl4f1KKHimTzw7K0dG6oRL4wm
-        ba+FRU22HtdTw61sdAnu6ITYbQ==
-X-Google-Smtp-Source: ACHHUZ5e6B4A10qr4sU19GSEERbThxTSpkM5Nxxs2SbsMRH0g1fPLSc0U76ji2Me1MW1Q0bA5+BR2g==
-X-Received: by 2002:a05:600c:ad9:b0:3fa:7db9:86b0 with SMTP id c25-20020a05600c0ad900b003fa7db986b0mr951097wmr.37.1687523512696;
-        Fri, 23 Jun 2023 05:31:52 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id x13-20020a1c7c0d000000b003f9c859894esm2273353wmc.7.2023.06.23.05.31.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Jun 2023 05:31:52 -0700 (PDT)
-Message-ID: <cd84b8c6-fac7-ecef-26be-792a1b04a102@linaro.org>
-Date:   Fri, 23 Jun 2023 14:31:49 +0200
+        d=1e100.net; s=20221208; t=1687523577; x=1690115577;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3nioVLaBlmpUmAJOY/G29NwVsUk826AqisUa8G22+3E=;
+        b=HIJ842CY8fuVHfWVf++oDZzOW2i0/WLySTyX1xHgDr2q8SdZay2GNgKeKCzGEtxNrj
+         g/EMYFaDFOSPeQ48RoATAl6m8pCONhJ+gk88Xar4q2F8OxPeQm+adV2dCYvJIDeHqqvn
+         bX5jj+hdUtBtyB34Ure7GhPT8Lq07y0+4SuOxeRgErleW5JeSDdARCNpD0S3BTxVkKEa
+         plck4yP75P3sC1hxG/kSTGpQ6uNFcZYJvKtOI+ABvZnY0dRIW9PhnH2hd8/XWRSlTzwy
+         pxFIF+mRZKLvX1ClLS12ly+QrmvQWioX34UNYPhcqNPmX5XPHEm57IaDUtnKG+zNft4n
+         eBOg==
+X-Gm-Message-State: AC+VfDxysXS0ndm/WQlKat3DXsCjFWJLD10N0Myl7r22q2azTXecgUCJ
+        km0bpqkXrQrl3IeLj4a/WnTJlg==
+X-Google-Smtp-Source: ACHHUZ4Zw4foLCPx7ofG1ffKiCC6zFfB3Lk8C//VZfUT2SyK9JctQKgOA0us5B+yLQJv5lAN/j0oRg==
+X-Received: by 2002:a1c:4b12:0:b0:3fa:7875:35f0 with SMTP id y18-20020a1c4b12000000b003fa787535f0mr2584392wma.39.1687523577057;
+        Fri, 23 Jun 2023 05:32:57 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
+        by smtp.gmail.com with ESMTPSA id t24-20020a1c7718000000b003f91e32b1ebsm2228105wmi.17.2023.06.23.05.32.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Jun 2023 05:32:56 -0700 (PDT)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [PATCH v2 0/3] dt-bindings: display: msm: document the SM8[345]50
+ displayport MDSS subnode
+Date:   Fri, 23 Jun 2023 14:32:52 +0200
+Message-Id: <20230621-topic-sm8x50-upstream-mdss-bindings-dp-subnode-v2-0-733ed383f6b6@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 5/5] scsi: dt-bindings: ufs: qcom: Fix warning for sdm845
- by adding reg-names
-Content-Language: en-US
-To:     Abel Vesa <abel.vesa@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAPSQlWQC/52OSw6DMAwFr4Kyrisg5aOueo+KRUwMWIIExYCoE
+ HdvyhG6nFm8N4cSCkyinsmhAm0s7F2E/JaodjCuJ2AbWeVprtMyz2DxM7cgU70XKayzLIHMBJM
+ VAWRn2fUCdgZZ0XlL8OhIlxV2RYuk4igaIcBgXDvEWbeOY5RzoI73q+LdRB5YFh8+V9SW/ezf/
+ 1sGKdTY6bpEXWnC18jOBH/3oVfNeZ5fjX3aRwIBAAA=
+To:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Luca Weiss <luca.weiss@fairphone.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20230623113009.2512206-1-abel.vesa@linaro.org>
- <20230623113009.2512206-6-abel.vesa@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230623113009.2512206-6-abel.vesa@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        Robert Foss <rfoss@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Rob Herring <robh@kernel.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1479;
+ i=neil.armstrong@linaro.org; h=from:subject:message-id;
+ bh=EBIjcCxyg5V/PvWq7nOKGJCN4FMlGSX8kOFs3sv4mBw=;
+ b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBklZD2Fk5SGjv9uNP5erhI9WFOG3oimSfHcp5eD5p4
+ pWEm6N2JAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZJWQ9gAKCRB33NvayMhJ0cwUEA
+ CeJSeV2sCo7oNl4rkT3AJ/aIPaZ4dvPGAO3S8fVdBwtvpONLu/CX/6d6ss56iavBVde4NfIA3BaoP4
+ MG6Rkh1wGIdcRHwUNgcXoWTOg++hu5/5CjBOm865tWSGM5nNHKlxhXocIPke49574cYe0Tx9z2jicX
+ 1a9J4dB20ejBiwPAv/51DovMh4BYY//k3TBp76QUJo/q2bJK2eTebVL1dZxz6SMs108wIE8PSya54Q
+ KPpkss/2DBgZj7SLsxhg1dSY6XIWg7ez4hTT8iRw/jNfk5uaLakqamNBXrg+hLJQYnENYikN4Cxm4X
+ 2AIX55QuhZ2aaXxwDIRz6iefBTkmJZEA5c5db8V5Q1J908xtdCFqEruaRZeqSnRWLmh/ictVuiiGIS
+ mEUWCWT6l9VDwEhayOqqxQJUzKf0ruSFzJjfturbUDxf3zsGQYQMcSojt+wvGsLhe1MVDzJLMMtkUL
+ m0JfCR7tOTAyLkAghp+GhVw/LixEDeawKdNDzy3fzrfNE3YUi6izd3GQ68AuyKWqtjX2CsGd7sE2lr
+ nhlKx6IrFYzVLcCw7Kt4nb4OLA99LbQceXhLslFlX6l5Rldm1mZ6usbGgzeDCA+CfPmAt6snrAR8De
+ bp3AhG62NLACEdCgxe864l/TxdDmKGNhpvv2DKEnB+aUkKdBxPc8/c80NmyA==
+X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
+ fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/06/2023 13:30, Abel Vesa wrote:
-> There is a warning on dtbs check for sdm845, amongst other platforms,
-> about the reg-names being unevaluated. Fix that by adding reg-names to
-> the clocks and reg properties check for such platforms.
-> 
-> Fixes: 462c5c0aa798 ("dt-bindings: ufs: qcom,ufs: convert to dtschema")
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> ---
->  Documentation/devicetree/bindings/ufs/qcom,ufs.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-> index 0209713d1f88..894b57117314 100644
-> --- a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-> +++ b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-> @@ -166,6 +166,10 @@ allOf:
->          reg:
->            minItems: 2
->            maxItems: 2
-> +        reg-names:
-> +          items:
-> +            - const: std
-> +            - const: ice
+Document the displayport subnode to fix the bindings check error:
 
-reg-names looks like a new property, so it should be defined in
-top-level and just constrained per-variant.
+arch/arm64/boot/dts/qcom/sm8550-mtp.dtb: display-subsystem@ae00000: Unevaluated properties are not allowed ('displayport-controller@ae90000' was unexpected)   
+        From schema: Documentation/devicetree/bindings/display/msm/qcom,sm8550-mdss.yaml                                                                 
 
-Also there was similar approach:
-https://lore.kernel.org/all/20221209-dt-binding-ufs-v2-2-dc7a04699579@fairphone.com/
+And same for SM8350 and SM8450.
 
-but I guess no resends and it can be superseded.
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+---
+Changes in v2:
+- Removed duplicate "document" in commit messages
+- Added review trailers
+- Link to v1: https://lore.kernel.org/r/20230621-topic-sm8x50-upstream-mdss-bindings-dp-subnode-v1-0-8bf386b373eb@linaro.org
+
+---
+Neil Armstrong (3):
+      dt-bindings: display: msm: sm8350-mdss: document displayport controller subnode
+      dt-bindings: display: msm: sm8450-mdss: document displayport controller subnode
+      dt-bindings: display: msm: sm8550-mdss: document displayport controller subnode
+
+ .../devicetree/bindings/display/msm/qcom,sm8350-mdss.yaml         | 6 ++++++
+ .../devicetree/bindings/display/msm/qcom,sm8450-mdss.yaml         | 8 ++++++++
+ .../devicetree/bindings/display/msm/qcom,sm8550-mdss.yaml         | 8 ++++++++
+ 3 files changed, 22 insertions(+)
+---
+base-commit: 15e71592dbae49a674429c618a10401d7f992ac3
+change-id: 20230621-topic-sm8x50-upstream-mdss-bindings-dp-subnode-4fe367bf5cbe
 
 Best regards,
-Krzysztof
+-- 
+Neil Armstrong <neil.armstrong@linaro.org>
 
