@@ -2,74 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6563073C4BC
+	by mail.lfdr.de (Postfix) with ESMTP id 1DDA473C4BB
 	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 01:21:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232224AbjFWXVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 19:21:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49412 "EHLO
+        id S231210AbjFWXVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 19:21:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231966AbjFWXVZ (ORCPT
+        with ESMTP id S229509AbjFWXVQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 19:21:25 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEB5A268C;
-        Fri, 23 Jun 2023 16:21:24 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id 3f1490d57ef6-be49ca27e1fso1023235276.3;
-        Fri, 23 Jun 2023 16:21:24 -0700 (PDT)
+        Fri, 23 Jun 2023 19:21:16 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 998212136
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 16:21:15 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id 41be03b00d2f7-53425d37f33so663669a12.3
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 16:21:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687562484; x=1690154484;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CIcDOxSgYfTWQoRXEeO2BXTTJbFMCm7RzYAzqqvmBNc=;
-        b=lRm3Tn1w4WERZrYiGeQnJKhVaxTdc7BWUh4M1reqsMMoKP4b/auEpW3lop5obVq33K
-         1SxhpabJEvvLijxU1Uzm4Cu05Y1766fVPRCG/hyxLamKM1jzvYlNjqZqgF8M9H6IcjkF
-         l4QOw7p5HUAIJ4ifsKT1cAovFWtXYOHgeqm2vLkiAvRoqHHtvXnYoCsaKlZMDs+KA0Y/
-         AJjNYMi30dPQPyZK7EHn9TObR653WJCueJRT+b/a4kvZPtGl3qX3Nd+7JkqOSmCuDlUi
-         rGcsmdQed7lJHttGbG/0bKTBMflSOVYBIkZqY/PfiCrXiO1JhOUz3JxLR8VX8luJGPzz
-         lZKg==
+        d=google.com; s=20221208; t=1687562475; x=1690154475;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DUD5RYjo6Sx5P4lA1ER1U7bhRxM4zQjuiTOF9zGf3yE=;
+        b=QLiQ9fXbHiCe0qK57ildEM5KTuDKuavekOKc0qZAvV5TZ+Xns1ge/pltTmsuxkoXus
+         CfICaQaAOpMVJXBHhmmavEyPvBGphytxBo51EJ6dvPNto6RPjIBDKGvw0h50knpKPW+8
+         QCPdd2487OYHgEeNateURDQvlJYucy7BAt4B9d8YkURczWIKEWGBrEQUH4jEseSH23nG
+         qF6foUDt1tj/HRJcX3k97/Gq5jtf5goraEMESh8ywCs56xoT8tAt9BksEjfXi9yAAnYF
+         T5dTzZg8hLF3MikoSItK9TxF0D2Izn12udp7tSquqEBY5CrIZ9orHwfTBmvugM0f8AT8
+         mjbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687562484; x=1690154484;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CIcDOxSgYfTWQoRXEeO2BXTTJbFMCm7RzYAzqqvmBNc=;
-        b=V8ixmKXkMVy7sTvxG/FfdsMS0O+f1myGppxzsl5a3Nd66wSQZoDR0MGydKm9YUWLCG
-         N8fKjaa1tjE3A6D1kkf2Ve8jo8vX6YCZaOJTjAM5IUp0WukXyriNX6IKIgaXfzh6BGXG
-         VRS+/bgOKiyqS0PzB2n7AjN4pucAkCdEBVsKF87tpWIL8WkwnOAwM4azdms+Zu27JHcc
-         CWOoh57PG5WHCgELJxZF69QCfj/QJz90yIuosnXn6DAe7kLq7FT95IEtx17aaMgLw+Ao
-         pWHcy0vd91wfK/JgioLpe32SUyTrNNTjuSx+xP+YfbDJUGt6s9VEWvCPGiczvfshhTpP
-         OKDw==
-X-Gm-Message-State: AC+VfDw7cPUubEKuCVKHcT/SbZQYr5EdY3IBT3HBevvtO0Ty7Jz9dAlX
-        4lhwhurhrf0F7c02kA4fC131YT5HB6+VJ6tPJeg=
-X-Google-Smtp-Source: ACHHUZ4xaFsULhkJ3ijaoJIsOJ+CoLabgxJEJYfyP0l5jfcK8Omoo6a/9uSrOUhbFUsvyD+dwdRN6WnVIMiKjUHX84w=
-X-Received: by 2002:a25:b190:0:b0:bd4:8ea4:39bb with SMTP id
- h16-20020a25b190000000b00bd48ea439bbmr18189014ybj.4.1687562483982; Fri, 23
- Jun 2023 16:21:23 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230622065351.1092893-1-anshuman.khandual@arm.com> <20230622065351.1092893-4-anshuman.khandual@arm.com>
-In-Reply-To: <20230622065351.1092893-4-anshuman.khandual@arm.com>
-From:   Namhyung Kim <namhyung@gmail.com>
-Date:   Fri, 23 Jun 2023 16:21:12 -0700
-Message-ID: <CAM9d7cgTyowSHTydOUprPMn80POvbtYetrHTA_eU-wL0B_Cr8g@mail.gmail.com>
-Subject: Re: [PATCH V13 03/10] arm64/perf: Add branch stack support in struct arm_pmu
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        will@kernel.org, catalin.marinas@arm.com, mark.rutland@arm.com,
-        Mark Brown <broonie@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Suzuki Poulose <suzuki.poulose@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-perf-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        d=1e100.net; s=20221208; t=1687562475; x=1690154475;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=DUD5RYjo6Sx5P4lA1ER1U7bhRxM4zQjuiTOF9zGf3yE=;
+        b=JXeyHa3d5/TbPuLUjWz3vbcMJzUfH7cq5cvH1TX/rIbj/L1z4ZHRPUn2bp7GF/EVES
+         onKZN6S2EqeoV1M6KIo8c/dsxYdQ40oDBwX8/zL/QWTFdV16SzyyGczEnUwtZ5NonJXv
+         WXek0GtErtsQwILBwKTHYxUqzYUoM9rqJyC3Yi3YVgdndK2fhKhDOcosARHi45XSoq0R
+         1j5jL8OYNSqtMVIvPeTUh4AbtxY/CRKsNzsG+mkoctBN9IUusn1sypVkXTzHjLD0tH7h
+         Xv3yeM18XnJDCxhvKN/TLtu0EqtCANeyXIhzCZgyea6BUYJ7ObM1zbJKeJLUEwgLtfpU
+         zxvg==
+X-Gm-Message-State: AC+VfDzTYYleakOdZ5hg0XZieMyOpwCsYovKSMWnD9UsoqLrZfkCJnjH
+        c/J+z217cxKVgQ2+xdN9HmHjhOaVSGo=
+X-Google-Smtp-Source: ACHHUZ76wCt3kLoU/pcmU3i2bY4ZdXcM+NFgKY37hXTE8tgyzFAFCtUFnXoZgC71g3fXutZxhceNY6B3278=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a63:4382:0:b0:551:eb6:1ea6 with SMTP id
+ q124-20020a634382000000b005510eb61ea6mr2614071pga.10.1687562475077; Fri, 23
+ Jun 2023 16:21:15 -0700 (PDT)
+Date:   Fri, 23 Jun 2023 16:21:13 -0700
+In-Reply-To: <f2708ad5-494c-c91e-cf5a-09f6e2d81e15@intel.com>
+Mime-Version: 1.0
+References: <20230511040857.6094-1-weijiang.yang@intel.com>
+ <20230511040857.6094-8-weijiang.yang@intel.com> <ZG77wu4PyBn1z587@chao-email>
+ <23169e5f-9793-9486-fd5f-287e3317b837@intel.com> <ZHXnP5bEvxPrDg3m@chao-email>
+ <6e1e9de9-8def-46c3-a238-c1b4ef52e331@intel.com> <ZIuitcH7P1JpkzFH@google.com>
+ <f2708ad5-494c-c91e-cf5a-09f6e2d81e15@intel.com>
+Message-ID: <ZJYo6aDtt0DQ5Tjv@google.com>
+Subject: Re: [PATCH v3 07/21] KVM:x86: Refresh CPUID on write to guest MSR_IA32_XSS
+From:   Sean Christopherson <seanjc@google.com>
+To:     Weijiang Yang <weijiang.yang@intel.com>
+Cc:     Chao Gao <chao.gao@intel.com>, pbonzini@redhat.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        peterz@infradead.org, rppt@kernel.org, binbin.wu@linux.intel.com,
+        rick.p.edgecombe@intel.com, john.allen@amd.com,
+        Zhang Yi Z <yi.z.zhang@linux.intel.com>
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,88 +77,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, Jun 16, 2023, Weijiang Yang wrote:
+>=20
+> On 6/16/2023 7:45 AM, Sean Christopherson wrote:
+> > On Wed, May 31, 2023, Weijiang Yang wrote:
+> > > On 5/30/2023 8:08 PM, Chao Gao wrote:
+> > > > > > > --- a/arch/x86/kvm/x86.c
+> > > > > > > +++ b/arch/x86/kvm/x86.c
+> > > > > > > @@ -3776,8 +3776,10 @@ int kvm_set_msr_common(struct kvm_vcpu=
+ *vcpu, struct msr_data *msr_info)
+> > > > > > > 		 */
+> > > > > > > 		if (data & ~kvm_caps.supported_xss)
+> > > > > > Shouldn't we check against the supported value of _this_ guest?=
+ similar to
+> > > > > > guest_supported_xcr0.
+> > > > > I don't think it requires an extra variable to serve per guest pu=
+rpose.
+> > > > >=20
+> > > > > For guest XSS settings, now we don't add extra constraints like X=
+CR0, thus
+> > > > QEMU can impose constraints by configuring guest CPUID.0xd.1 to ind=
+icate
+> > > > certain supervisor state components cannot be managed by XSAVES, ev=
+en
+> > > > though KVM supports them. IOW, guests may differ in the supported v=
+alues
+> > > > for the IA32_XSS MSR.
+> > > OK, will change this part to align with xcr0 settings. Thanks!
+> > Please write KVM-Unit-Tests to verify KVM correctly handles the various=
+ MSRs related
+> > to CET, e.g. a test_cet_msrs() subtest in msr.c would do nicely.  Hmm, =
+though testing
+> > the combinations of CPUID bits will require multiple x86/unittests.cfg =
+entries.
+> > Might be time to split up msr.c into a library and then multiple tests.
+>=20
+> Since there's already a CET specific unit test app, do you mind adding al=
+l
+> CET related stuffs to the app to make it inclusive? e.g.,=EF=BF=BDvalidat=
+e constraints
+> between CET CPUIDs vs. CET/XSS MSRs?
 
-On Wed, Jun 21, 2023 at 11:55=E2=80=AFPM Anshuman Khandual
-<anshuman.khandual@arm.com> wrote:
->
-> This updates 'struct arm_pmu' for branch stack sampling support being add=
-ed
-> later. This adds an element 'reg_trbidr' to capture BRBE attribute detail=
-s.
+Hmm, that will get a bit kludgy since the MSR testcases will want to toggle=
+ IBT
+and SHSTK on and off.
 
-reg_brbidr, right?
+Actually, I take back my suggestion to add a KUT test.  Except for a few sp=
+ecial
+cases, e.g. 32-bit support, selftests is a better framework for testing MSR=
+s than
+KUT, as it's relatively easy to create a custom vCPU model in selftests, wh=
+ereas
+in KUT it requires handcoding an entry in unittests.cfg, and having corresp=
+onding
+code in the test itself.
 
-Thanks,
-Namhyung
+The biggest gap in selftests was the lack of decent reporting in guest code=
+, but
+Aaron is working on closing that gap[*].
 
+I'm thinking something like this as a framework. =20
 
-> These updates here will help in tracking any branch stack sampling suppor=
-t.
->
-> This also enables perf branch stack sampling event on all 'struct arm pmu=
-',
-> supporting the feature but after removing the current gate that blocks su=
-ch
-> events unconditionally in armpmu_event_init(). Instead a quick probe can =
-be
-> initiated via arm_pmu->has_branch_stack to ascertain the support.
->
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-kernel@vger.kernel.org
-> Tested-by: James Clark <james.clark@arm.com>
-> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
-> ---
->  drivers/perf/arm_pmu.c       | 3 +--
->  include/linux/perf/arm_pmu.h | 9 ++++++++-
->  2 files changed, 9 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/perf/arm_pmu.c b/drivers/perf/arm_pmu.c
-> index aada47e3b126..d9ffe9e56e74 100644
-> --- a/drivers/perf/arm_pmu.c
-> +++ b/drivers/perf/arm_pmu.c
-> @@ -510,8 +510,7 @@ static int armpmu_event_init(struct perf_event *event=
-)
->                 !cpumask_test_cpu(event->cpu, &armpmu->supported_cpus))
->                 return -ENOENT;
->
-> -       /* does not support taken branch sampling */
-> -       if (has_branch_stack(event))
-> +       if (has_branch_stack(event) && !armpmu->has_branch_stack)
->                 return -EOPNOTSUPP;
->
->         return __hw_perf_event_init(event);
-> diff --git a/include/linux/perf/arm_pmu.h b/include/linux/perf/arm_pmu.h
-> index f7fbd162ca4c..ba4204bdcebf 100644
-> --- a/include/linux/perf/arm_pmu.h
-> +++ b/include/linux/perf/arm_pmu.h
-> @@ -102,7 +102,9 @@ struct arm_pmu {
->         int             (*map_event)(struct perf_event *event);
->         void            (*sched_task)(struct perf_event_pmu_context *pmu_=
-ctx, bool sched_in);
->         int             num_events;
-> -       bool            secure_access; /* 32-bit ARM only */
-> +       unsigned int    secure_access   : 1, /* 32-bit ARM only */
-> +                       has_branch_stack: 1, /* 64-bit ARM only */
-> +                       reserved        : 30;
->  #define ARMV8_PMUV3_MAX_COMMON_EVENTS          0x40
->         DECLARE_BITMAP(pmceid_bitmap, ARMV8_PMUV3_MAX_COMMON_EVENTS);
->  #define ARMV8_PMUV3_EXT_COMMON_EVENT_BASE      0x4000
-> @@ -118,6 +120,11 @@ struct arm_pmu {
->
->         /* Only to be used by ACPI probing code */
->         unsigned long acpi_cpuid;
-> +
-> +       /* Implementation specific attributes */
-> +#ifdef CONFIG_ARM64_BRBE
-> +       u64             reg_brbidr;
-> +#endif
->  };
->
->  #define to_arm_pmu(p) (container_of(p, struct arm_pmu, pmu))
-> --
-> 2.25.1
->
+	struct msr_data {
+		const uint32_t idx;
+		const char *name;
+		const struct kvm_x86_cpu_feature feature1;
+		const struct kvm_x86_cpu_feature feature2;
+		const uint32_t nr_values;
+		const uint64_t *values;
+	};
+
+	#define TEST_MSR2(msr, f1, f2) { .idx =3D msr, .name =3D #msr, .feature1 =
+=3D f1, .feature2 =3D f2, .nr_values =3D ARRAY_SIZE(msr_VALUES), .values =
+=3D msr_VALUES }
+	#define TEST_MSR(msr, f) TEST_MSR2(msr, f, <a dummy value?>)
+	#define TEST_MSR0(msr) TEST_MSR(msr, <a dummy value?>)
+
+With CET usage looking like
+
+	static const uint64_t MSR_IA32_S_CET_VALUES[] =3D {
+		<super interesting values>
+	};
+
+	TEST_MSR2(MSR_IA32_S_CET, X86_FEATURE_IBT, X86_FEATURE_SHSTK);
+
+Then the test could iterate over each entry and test the various combinatio=
+ns of
+features being enabled (if supported by KVM).  And it could also test ioctl=
+s(),
+which are all but impossible to test in KUT, e.g. verify that supported MSR=
+s are
+reported in KVM_GET_MSR_INDEX_LIST, verify that userspace can read/write MS=
+Rs
+regardless of guest CPUID, etc.  Ooh, and we can even test MSR filtering.
+
+I don't know that we'd want to cram all of those things in a single test, b=
+ut we
+can worry about that later as it shouldn't be difficult to put the framewor=
+k and
+MSR definitions in common code.
+
+[*] https://lore.kernel.org/all/20230607224520.4164598-1-aaronlewis@google.=
+com
