@@ -2,129 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AD6273B8CB
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 15:29:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E933273B8CD
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 15:30:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231645AbjFWN3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 09:29:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53800 "EHLO
+        id S229666AbjFWNaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 09:30:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231336AbjFWN33 (ORCPT
+        with ESMTP id S229873AbjFWNaP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 09:29:29 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B02AF19AF
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 06:29:28 -0700 (PDT)
-Received: from notapiano (unknown [IPv6:2600:4041:5b1a:cd00:524d:e95d:1a9c:492a])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 38A836607135;
-        Fri, 23 Jun 2023 14:29:25 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1687526966;
-        bh=f25KcXi6OI+LncvpOIXHkVRpkniDYC2VeUuLYp3b3hU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GLoJELngos//bZbPLg0c9rK5fE1moLGbuBfaJuukcPv1OZHhXtJXzQnO0p0SuSOSF
-         YflGSif3EVcWaJZPQ/Ss7JdCihtzPiVnNyq+OC26k7ddMYw7tZ/MUbSoetTk0UXqhi
-         z+e892o09ky/Aokfifx2YsCjZetTknHB+KY/NQHuba0upMz6yD0oqxMFENcShbyNNj
-         UchGt5ZzYuaboFhGI7oKokhZLWtUqkYXbOoQn6aUl3MWWSBvTi2iTX7LAkNT35qi7e
-         Dv6a5IT46JGNvrCfhXDp5b0Hk/i5kngBTBrhUXKw8vNCSoKG7FWEah0ylUhmSVxIhc
-         CWsdwwA/U3w5w==
-Date:   Fri, 23 Jun 2023 09:29:21 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     chunkuang.hu@kernel.org, p.zabel@pengutronix.de, airlied@gmail.com,
-        daniel@ffwll.ch, matthias.bgg@gmail.com,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kernel@collabora.com,
-        wenst@chromium.org
-Subject: Re: [PATCH v3 9/9] drm/mediatek: dp: Add support for embedded
- DisplayPort aux-bus
-Message-ID: <d7d8db9c-a646-46f7-ab88-d41184b51f26@notapiano>
-References: <20230404104800.301150-1-angelogioacchino.delregno@collabora.com>
- <20230404104800.301150-10-angelogioacchino.delregno@collabora.com>
+        Fri, 23 Jun 2023 09:30:15 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 929B62688;
+        Fri, 23 Jun 2023 06:30:14 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4QndMK29Prz6GD5l;
+        Fri, 23 Jun 2023 21:27:25 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Fri, 23 Jun
+ 2023 14:30:12 +0100
+Date:   Fri, 23 Jun 2023 14:30:11 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Terry Bowman <terry.bowman@amd.com>
+CC:     <alison.schofield@intel.com>, <vishal.l.verma@intel.com>,
+        <ira.weiny@intel.com>, <bwidawsk@kernel.org>,
+        <dan.j.williams@intel.com>, <dave.jiang@intel.com>,
+        <linux-cxl@vger.kernel.org>, <rrichter@amd.com>,
+        <linux-kernel@vger.kernel.org>, <bhelgaas@google.com>
+Subject: Re: [PATCH v7 27/27] cxl/core/regs: Rename phys_addr in
+ cxl_map_component_regs()
+Message-ID: <20230623143011.00007076@Huawei.com>
+In-Reply-To: <20230622205523.85375-28-terry.bowman@amd.com>
+References: <20230622205523.85375-1-terry.bowman@amd.com>
+        <20230622205523.85375-28-terry.bowman@amd.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230404104800.301150-10-angelogioacchino.delregno@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml500001.china.huawei.com (7.191.163.213) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 04, 2023 at 12:48:00PM +0200, AngeloGioacchino Del Regno wrote:
-> For the eDP case we can support using aux-bus on MediaTek DP: this
-> gives us the possibility to declare our panel as generic "panel-edp"
-> which will automatically configure the timings and available modes
-> via the EDID that we read from it.
+On Thu, 22 Jun 2023 15:55:23 -0500
+Terry Bowman <terry.bowman@amd.com> wrote:
+
+> From: Robert Richter <rrichter@amd.com>
 > 
-> To do this, move the panel parsing at the end of the probe function
-> so that the hardware is initialized beforehand and also initialize
-> the DPTX AUX block and power both on as, when we populate the
-> aux-bus, the panel driver will trigger an EDID read to perform
-> panel detection.
+> Trivial change that renames variable phys_addr in
+> cxl_map_component_regs() to shorten its length to keep the 80 char
+> size limit for the line and also for consistency between the different
+> paths.
 > 
-> Last but not least, since now the AUX transfers can happen in the
-> separated aux-bus, it was necessary to add an exclusion for the
-> cable_plugged_in check in `mtk_dp_aux_transfer()` and the easiest
-> way to do this is to simply ignore checking that when the bridge
-> type is eDP.
-> 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Signed-off-by: Robert Richter <rrichter@amd.com>
+> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
+
+Fair enough on consistency side.  I don't care about being just over 80 chars :)
+
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 > ---
->  drivers/gpu/drm/mediatek/mtk_dp.c | 61 ++++++++++++++++++++++++++-----
->  1 file changed, 51 insertions(+), 10 deletions(-)
+>  drivers/cxl/core/regs.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/gpu/drm/mediatek/mtk_dp.c b/drivers/gpu/drm/mediatek/mtk_dp.c
-> index a67143c22024..8109f5b4392b 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_dp.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_dp.c
-[..]
-> @@ -2571,6 +2585,33 @@ static int mtk_dp_probe(struct platform_device *pdev)
->  	mtk_dp->need_debounce = true;
->  	timer_setup(&mtk_dp->debounce_timer, mtk_dp_debounce_timer, 0);
+> diff --git a/drivers/cxl/core/regs.c b/drivers/cxl/core/regs.c
+> index 982ef79670c7..ba351a887040 100644
+> --- a/drivers/cxl/core/regs.c
+> +++ b/drivers/cxl/core/regs.c
+> @@ -216,16 +216,16 @@ int cxl_map_component_regs(struct cxl_register_map *map,
 >  
-> +	if (mtk_dp->bridge.type == DRM_MODE_CONNECTOR_eDP) {
-> +		/* Initialize, reset and poweron the DPTX AUX block */
-> +		mtk_dp_initialize_aux_settings(mtk_dp);
-> +		mtk_dp_power_enable(mtk_dp);
-> +
-> +		/* Power on the panel to allow EDID read from aux-bus */
-> +		mtk_dp_aux_panel_poweron(mtk_dp, true);
-> +
-> +		ret = devm_of_dp_aux_populate_bus(&mtk_dp->aux, NULL);
+>  	for (i = 0; i < ARRAY_SIZE(mapinfo); i++) {
+>  		struct mapinfo *mi = &mapinfo[i];
+> -		resource_size_t phys_addr;
+> +		resource_size_t addr;
+>  		resource_size_t length;
+>  
+>  		if (!mi->rmap->valid)
+>  			continue;
+>  		if (!test_bit(mi->rmap->id, &map_mask))
+>  			continue;
+> -		phys_addr = map->resource + mi->rmap->offset;
+> +		addr = map->resource + mi->rmap->offset;
+>  		length = mi->rmap->size;
+> -		*(mi->addr) = devm_cxl_iomap_block(dev, phys_addr, length);
+> +		*(mi->addr) = devm_cxl_iomap_block(dev, addr, length);
+>  		if (!*(mi->addr))
+>  			return -ENOMEM;
+>  	}
 
-This patch causes
-
-.../bin/aarch64-none-linux-gnu-ld: Unexpected GOT/PLT entries detected!
-.../bin/aarch64-none-linux-gnu-ld: Unexpected run-time procedure linkages detected!
-.../bin/aarch64-none-linux-gnu-ld: drivers/gpu/drm/mediatek/mtk_dp.o: in function `mtk_dp_probe':
-.../drivers/gpu/drm/mediatek/mtk_dp.c:2595: undefined reference to `devm_of_dp_aux_populate_bus'
-
-You need
-
-diff --git a/drivers/gpu/drm/mediatek/Kconfig b/drivers/gpu/drm/mediatek/Kconfig
-index b451dee64d34..76cab28e010c 100644
---- a/drivers/gpu/drm/mediatek/Kconfig
-+++ b/drivers/gpu/drm/mediatek/Kconfig
-@@ -26,6 +26,7 @@ config DRM_MEDIATEK_DP
-        select PHY_MTK_DP
-        select DRM_DISPLAY_HELPER
-        select DRM_DISPLAY_DP_HELPER
-+       select DRM_DP_AUX_BUS
-        help
-          DRM/KMS Display Port driver for MediaTek SoCs.
-
-Thanks,
-Nícolas
