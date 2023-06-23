@@ -2,87 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27CE073B5F8
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 13:20:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63C7173B606
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 13:24:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230163AbjFWLUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 07:20:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57314 "EHLO
+        id S230459AbjFWLXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 07:23:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjFWLUW (ORCPT
+        with ESMTP id S229501AbjFWLXv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 07:20:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C715B7;
-        Fri, 23 Jun 2023 04:20:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ED58061A2D;
-        Fri, 23 Jun 2023 11:20:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3F0ABC433C9;
-        Fri, 23 Jun 2023 11:20:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687519220;
-        bh=HE9jkOtOoyDv0Q75oB+XoqEDHM4V4Xs9EiPT4vC6Om8=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=RZCSBXHo8Y7px28LcuhKSF2i2zvdLL25rGbmWQw8k4HTrkRgXmtC4mcKyHv6LY1Mi
-         JynCQ3M6h0qgbHSQJl6LWlq9Q0qUT3GZawHLeVzHrJZMFMJxVn93Nci7xLlCW1LHp0
-         VP/zwkclE+Bk0gKZYXKOSSInCAbUg3o2UPGk00m63+8Ah2QVpcVcdzSXODpWBHvgLw
-         vZmp16UN3NLFebnuvDqy7TaRZyJev0mV2jkHp7IyG6fs8Bsz98Mky4fEY9nfLQRQYl
-         61RxxhVDXb1nCgspRFAHJTocJp/I2cReOcO21/FraJfkNH2+ApEyBhkc1Cz2r23TwE
-         FU3n07sFA7/Tg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 13A6BC43169;
-        Fri, 23 Jun 2023 11:20:20 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 23 Jun 2023 07:23:51 -0400
+Received: from mx0.infotecs.ru (mx0.infotecs.ru [91.244.183.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1323D1739;
+        Fri, 23 Jun 2023 04:23:49 -0700 (PDT)
+Received: from mx0.infotecs-nt (localhost [127.0.0.1])
+        by mx0.infotecs.ru (Postfix) with ESMTP id 1178A110A562;
+        Fri, 23 Jun 2023 14:23:47 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx0.infotecs.ru 1178A110A562
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=infotecs.ru; s=mx;
+        t=1687519427; bh=kIEjeLlwMyGE/F2FO5BfREgq/lnS99K0Zaa4Lod/2nY=;
+        h=From:To:CC:Subject:Date:From;
+        b=qpxoJe2b/id7wbMIsRr4KeQdxLDYmXrDXbGiC6yBrxGnm4uuRjXR4Lmpyt28kt9nZ
+         mbCwcL1afIAw0A9gmsOie/Ou4K/W8EtbyEiGWbPrC4Ctoc9UhJIul4PWjWLhREMl6K
+         oh49fI2zqizyqTFnATQj5e4YRJ/No4UV/jY0pg+0=
+Received: from msk-exch-01.infotecs-nt (msk-exch-01.infotecs-nt [10.0.7.191])
+        by mx0.infotecs-nt (Postfix) with ESMTP id 0DFC430CDD64;
+        Fri, 23 Jun 2023 14:23:47 +0300 (MSK)
+From:   Gavrilov Ilia <Ilia.Gavrilov@infotecs.ru>
+To:     Pablo Neira Ayuso <pablo@netfilter.org>
+CC:     Gavrilov Ilia <Ilia.Gavrilov@infotecs.ru>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Patrick McHardy <kaber@trash.net>,
+        "netfilter-devel@vger.kernel.org" <netfilter-devel@vger.kernel.org>,
+        "coreteam@netfilter.org" <coreteam@netfilter.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "lvc-project@linuxtesting.org" <lvc-project@linuxtesting.org>,
+        Simon Horman <simon.horman@corigine.com>
+Subject: [PATCH net] netfilter: nf_conntrack_sip: fix the
+ ct_sip_parse_numerical_param() return value.
+Thread-Topic: [PATCH net] netfilter: nf_conntrack_sip: fix the
+ ct_sip_parse_numerical_param() return value.
+Thread-Index: AQHZpcUtMQS/azgYmUuZ/5v6pmZwlQ==
+Date:   Fri, 23 Jun 2023 11:23:46 +0000
+Message-ID: <20230623112247.1468836-1-Ilia.Gavrilov@infotecs.ru>
+Accept-Language: ru-RU, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.17.0.10]
+x-exclaimer-md-config: 208ac3cd-1ed4-4982-a353-bdefac89ac0a
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] dt-bindings: net: altr,tse: Fix error in
- "compatible" conditional schema
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168751922007.31575.12644715744862183773.git-patchwork-notify@kernel.org>
-Date:   Fri, 23 Jun 2023 11:20:20 +0000
-References: <20230621231012.3816139-1-robh@kernel.org>
-In-Reply-To: <20230621231012.3816139-1-robh@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, maxime.chevallier@bootlin.com,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-KLMS-Rule-ID: 1
+X-KLMS-Message-Action: clean
+X-KLMS-AntiSpam-Lua-Profiles: 178208 [Jun 23 2023]
+X-KLMS-AntiSpam-Version: 5.9.59.0
+X-KLMS-AntiSpam-Envelope-From: Ilia.Gavrilov@infotecs.ru
+X-KLMS-AntiSpam-Rate: 0
+X-KLMS-AntiSpam-Status: not_detected
+X-KLMS-AntiSpam-Method: none
+X-KLMS-AntiSpam-Auth: dkim=none
+X-KLMS-AntiSpam-Info: LuaCore: 517 517 b0056c19d8e10afbb16cb7aad7258dedb0179a79, {Tracking_uf_ne_domains}, {Tracking_from_domain_doesnt_match_to}, lore.kernel.org:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2;infotecs.ru:7.1.1, FromAlignment: s
+X-MS-Exchange-Organization-SCL: -1
+X-KLMS-AntiSpam-Interceptor-Info: scan successful
+X-KLMS-AntiPhishing: Clean, bases: 2023/06/23 08:19:00
+X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, bases: 2023/06/23 08:45:00 #21561595
+X-KLMS-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+From: "Ilia.Gavrilov" <Ilia.Gavrilov@infotecs.ru>
 
-This patch was applied to netdev/net-next.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
+ct_sip_parse_numerical_param() returns only 0 or 1 now.
+But process_register_request() and process_register_response() imply
+checking for a negative value if parsing of a numerical header parameter
+failed.
+The invocation in nf_nat_sip() looks correct:
+ 	if (ct_sip_parse_numerical_param(...) > 0 &&
+ 	    ...) { ... }
 
-On Wed, 21 Jun 2023 17:10:12 -0600 you wrote:
-> The conditional if/then schema has an error as the "enum" values have
-> "const" in them. Drop the "const".
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  Documentation/devicetree/bindings/net/altr,tse.yaml | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+Make the return value of the function ct_sip_parse_numerical_param()
+a tristate to fix all the cases
+a) return 1 if value is found; *val is set
+b) return 0 if value is not found; *val is unchanged
+c) return -1 on error; *val is undefined
 
-Here is the summary with links:
-  - [net-next] dt-bindings: net: altr,tse: Fix error in "compatible" conditional schema
-    https://git.kernel.org/netdev/net-next/c/faaa5fd30344
+Found by InfoTeCS on behalf of Linux Verification Center
+(linuxtesting.org) with SVACE.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Fixes: 0f32a40fc91a ("[NETFILTER]: nf_conntrack_sip: create signalling expe=
+ctations")
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
+Signed-off-by: Ilia.Gavrilov <Ilia.Gavrilov@infotecs.ru>
+---
+- Fix description
+- Repost according
+    https://lore.kernel.org/all/20230622144325.GC29784@breakpoint.cc/
+ net/netfilter/nf_conntrack_sip.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
+diff --git a/net/netfilter/nf_conntrack_sip.c b/net/netfilter/nf_conntrack_=
+sip.c
+index 77f5e82d8e3f..d0eac27f6ba0 100644
+--- a/net/netfilter/nf_conntrack_sip.c
++++ b/net/netfilter/nf_conntrack_sip.c
+@@ -611,7 +611,7 @@ int ct_sip_parse_numerical_param(const struct nf_conn *=
+ct, const char *dptr,
+ 	start +=3D strlen(name);
+ 	*val =3D simple_strtoul(start, &end, 0);
+ 	if (start =3D=3D end)
+-		return 0;
++		return -1;
+ 	if (matchoff && matchlen) {
+ 		*matchoff =3D start - dptr;
+ 		*matchlen =3D end - start;
+--=20
+2.39.2
