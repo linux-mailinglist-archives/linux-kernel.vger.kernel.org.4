@@ -2,88 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D530A73B28A
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 10:18:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09D6073B28B
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 10:18:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231835AbjFWISD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 04:18:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55844 "EHLO
+        id S231857AbjFWISX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 04:18:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230387AbjFWISB (ORCPT
+        with ESMTP id S231834AbjFWISV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 04:18:01 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E432DC;
-        Fri, 23 Jun 2023 01:18:00 -0700 (PDT)
-Date:   Fri, 23 Jun 2023 10:17:56 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1687508278;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6HIEiQwq/tiP0YESCXeQonSoeZwDOLqCYGYuM4G0DQI=;
-        b=3ekUUU7ZpkEtF97la18Ks6zNbqeqemw8Tw0ZA3E3KPFcxuSCXKMoIk29oTtaolRW+F764p
-        qag5av8B5AGlBiAUKGsAGfrxAa1hZW66CyqbhytsYZwPwYmHNmZ9idYm8N1ZHo/EHAxw1b
-        LF8yd/sl1WgcXBAI6DEtYssf0zhpT78GOTnupvIUytINDLWcIQKg4hVgO3d/ALr3iaxlaZ
-        O+VyOiV4lVdByTlci/xbRSQMJlkpgYlDwRIWZCqarUTkZrFG+rX8Jsy8Z3HO7ZxgY5cJma
-        q34oN4QlOTE633IP09/NSvB97QJGGWLFoWKplvFZaoC3123NGgj7RPaet/HFSQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1687508278;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6HIEiQwq/tiP0YESCXeQonSoeZwDOLqCYGYuM4G0DQI=;
-        b=RohMQUn73P2BpROh8L3N42/8g/wWP/dCmMA4QWkIOHlozfQSzucJjudWNjXDzP1hP58Z5m
-        rL/His4MHkbGupDg==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     John Johansen <john.johansen@canonical.com>
-Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Swapnil Sapkal <Swapnil.Sapkal@amd.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-tip-commits@vger.kernel.org,
-        Aaron Lu <aaron.lu@intel.com>, x86@kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [tip: sched/core] sched: Fix performance regression introduced
- by mm_cid
-Message-ID: <20230623081756.vVHIjkC9@linutronix.de>
-References: <09e0f469-a3f7-62ef-75a1-e64cec2dcfc5@amd.com>
- <20230620091139.GZ4253@hirez.programming.kicks-ass.net>
- <44428f1e-ca2c-466f-952f-d5ad33f12073@amd.com>
- <3e9eaed6-4708-9e58-c80d-143760d6b23a@efficios.com>
- <ddbd1564-8135-5bc3-72b4-afb7c6e9caba@amd.com>
- <a73761e4-b791-e9a2-a276-e1551628e33b@efficios.com>
- <6c693e3b-b941-9acf-6821-179e7a7fe2b8@efficios.com>
- <f94cd9fa-1a83-1f54-0259-123fcd86d549@canonical.com>
- <20230623063726.ejuc6v9D@linutronix.de>
- <ed287d2f-5b53-dffb-dec3-e5b28fa70a52@canonical.com>
+        Fri, 23 Jun 2023 04:18:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04DE41A3
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 01:18:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 95F75619A0
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 08:18:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ECACC433C0;
+        Fri, 23 Jun 2023 08:18:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1687508300;
+        bh=JCFIGYLHdPDTxnWe0rqNvIgH7ZUiUB4HgWHe9auF49o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rR1rNCnuPhJ2OZH1ja/OSyX2834u6LlwMMxzxtxErn2vlAV4HcN6TCJ2lhlYjA/ez
+         fIy8wVh27SboStti2YpZVRNnXgJ9BdeOetRCIv8GNfoJwq40IhQhjubc1xRDfIL2fT
+         vtH6nRfq0SfQ3ojBmzlEl5Vx+8Es5TTaeYxbiD80=
+Date:   Fri, 23 Jun 2023 10:18:17 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Franziska Naepelt <franziska.naepelt@googlemail.com>
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        eperi1024@gmail.com, hdegoede@redhat.com, quic_vjakkam@quicinc.com,
+        johannes.berg@intel.com, tegongkang@gmail.com,
+        Franziska Naepelt <franziska.naepelt@gmail.com>
+Subject: Re: [PATCH v2 0/5] Fix some checkpatch issues
+Message-ID: <2023062306-reload-squeezing-633a@gregkh>
+References: <20230621184635.25064-1-franziska.naepelt@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ed287d2f-5b53-dffb-dec3-e5b28fa70a52@canonical.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230621184635.25064-1-franziska.naepelt@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-06-23 00:35:29 [-0700], John Johansen wrote:
-> > 
-> iirc the difference with the earlier version, is in the put case. Where in
-> the earlier version, if there was lock contention the buffer would always
-> get pushed onto the percpu list. With some debug patches on top we
-> saw some degenerate cases where this would result in percpu lists that
-> had excessive buffers on them.
-> 
-> So this version added a condition to force putting the buffer back
-> in to the global pool if the percpu list already has 2 buffers
-> cached on it.
+On Wed, Jun 21, 2023 at 08:46:35PM +0200, Franziska Naepelt wrote:
+> This is a series of patches to fix some trivial checkpatch issues. Not all
+> issues have been fixed. I intend to submit another series to fix more stuff.
 
-So none of the versions perform memory allocation/ deallocation in a
-preempt disabled section so it is fine from PREEMPT_RT point of view.
-
-Sebastian
+None of these apply to my staging-next branch :(
