@@ -2,153 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 769E473BCDE
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 18:41:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46FFC73BCD6
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 18:40:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231820AbjFWQlO convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 23 Jun 2023 12:41:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50344 "EHLO
+        id S232096AbjFWQkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 12:40:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232135AbjFWQks (ORCPT
+        with ESMTP id S232418AbjFWQkd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 12:40:48 -0400
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 022562735;
-        Fri, 23 Jun 2023 09:40:33 -0700 (PDT)
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-97ea801b0d0so17668766b.1;
-        Fri, 23 Jun 2023 09:40:32 -0700 (PDT)
+        Fri, 23 Jun 2023 12:40:33 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 868502954
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 09:40:26 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-3110ab7110aso916235f8f.3
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 09:40:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687538425; x=1690130425;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=a++H1TBaoMInjxf1VRNayHFgIoMRZUfsbrwobdRMHxM=;
+        b=UWiFZVq9PviMA6JRGjbHqEt+m9IevMv3xp08xFnUHTcxXbIJufUKkHCG+g3uh+Bqep
+         f09l1smOXN9rsdbfj6XW4vFE26shZo/BIsb61P+5bhujL27vIlx/p4VkWSsUZWeYPs8v
+         LQMLUpkfdLNIBN52677r14e/RBOrRq0H2DkcK1s8qtqyczyPJ033/hdjuLEwqw9mHdaX
+         uOjnDidevxLrQiYKTYmwtRREs2pw34BhtewvSNz0G30GHLbO5FjPCi/2OZ2/2uGeIaWv
+         bIZ3/6W+ro7KtdEZZfvqBIaV/woq/vJHc6a0tDHYxD+K6GRFVVepV/bBlnlR4nej/jIH
+         hZlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687538431; x=1690130431;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RI6u41EPWnXmYM2KqVmefAwYHHL4vqTlKsNGHSEOQT4=;
-        b=YQyqAadBGAE0W4Ywx/T7E//VTOUS1re4gAUJSNOQ7GcbtIeDst8Dy3LsayYsV5GtFq
-         lSZoMGryQCQ8HVj/GxPoB9sJfbTJhxuk1XUOjolj4w0LYjYiQHpZza1tEOQmBimDDr+u
-         Y9VRBoztYU9GUXYqHoaQc7n5NHbs7PPLP3HvHuFM3mWz3srr9N1/xeORrVmK8x4/DXml
-         HU7gsQv7NU1dB+0AWwnD7ifMrSrq+Qn3NI1cUS8diwSqallSHyKks0XG/Fuqlf6IJhud
-         ifkGJsvAbv5aI36pwKv1wpVA677X7EhfnfxCrihwKNShdoSmnyCvh7VLkXjQzvpmESXy
-         nWnw==
-X-Gm-Message-State: AC+VfDyZIlbAmrnQyaBpipchwIIlM/WB0VBovp2eNsLIVSS6Dl/GRWDJ
-        S5uz0Xq0Fp1UxKp+l/1IbuqtZ/cAe/oMGmSdfg8=
-X-Google-Smtp-Source: ACHHUZ6u/PlpkclYSi875jYrROJw7UCvViJ23MJYrpxzmDBFFNBlsc/1K3dgaYxtfHEKbf+L0MwmtOYcfY6BFYA2Sew=
-X-Received: by 2002:a17:906:729e:b0:988:c8bb:e3ac with SMTP id
- b30-20020a170906729e00b00988c8bbe3acmr10300946ejl.7.1687538431246; Fri, 23
- Jun 2023 09:40:31 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687538425; x=1690130425;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=a++H1TBaoMInjxf1VRNayHFgIoMRZUfsbrwobdRMHxM=;
+        b=N1rf5qCRhUkA+m//JkT5ddE1I3Wr4r/xkWBUvt6wKDzJMmZWh9LvSdLw1Od8e1b15g
+         f+Avl7nkRbzRlG/9SJJ8d0A1+QevMClbOS4j5bCsvABcGe7AqJ7GDKeqe/tqi76NZHxx
+         E0IJpXAwIf2xFx0b2l9JUOgw0hUZQaYb9ldUJnyJYzM7w4g5jASRbAmeYY0ODbvedh17
+         V56GD/sfkzdKim9Z6ylBZD3j7mqPDu/5ldg0JwsKk2pcz3HMAcfzm3mrXqztMpTMhgJO
+         rCxET1uz6urs6Lyk1cWDcY1SjvdfqVWXWVlYHwxZQmIniyVFWKatWfi5yzHE+vyGf/yP
+         3T6w==
+X-Gm-Message-State: AC+VfDz136PcFooDrp4hmOUbOQQvoamaIuL4X4ESikuW/beZZBCUkmih
+        qBEi7KHeRvbEckKTJUR/E1OSNg==
+X-Google-Smtp-Source: ACHHUZ4fKA6Pm2fcKNkv0rlEk+sJhe5V3FlXTeOrwsHbnoKloMGvxBbGqNJdKkvKTV5uhcjK5HvYDA==
+X-Received: by 2002:adf:e507:0:b0:30f:bc98:ede1 with SMTP id j7-20020adfe507000000b0030fbc98ede1mr18707632wrm.8.1687538424854;
+        Fri, 23 Jun 2023 09:40:24 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id t16-20020a5d49d0000000b0030aed4223e0sm9881032wrs.105.2023.06.23.09.40.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Jun 2023 09:40:24 -0700 (PDT)
+Message-ID: <ea4dd457-eba6-9068-fb4e-c1761ce80343@linaro.org>
+Date:   Fri, 23 Jun 2023 18:40:21 +0200
 MIME-Version: 1.0
-References: <20230519032719.2581689-1-evalenti@kernel.org> <20230519032719.2581689-6-evalenti@kernel.org>
- <CAJZ5v0hho1B6TiwshT4kYhs+Z4Q6xvnbgf8aoEZop=owkJHqxg@mail.gmail.com> <ZJKAYAx5768atJa8@uf8f119305bce5e.ant.amazon.com>
-In-Reply-To: <ZJKAYAx5768atJa8@uf8f119305bce5e.ant.amazon.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 23 Jun 2023 18:40:20 +0200
-Message-ID: <CAJZ5v0jVL69QYpUFCMBeZ9eACca4XoeR6Js_qoDd2K5PfU9BwA@mail.gmail.com>
-Subject: Re: [PATCH 5/7] thermal: stats: introduce tz time in trip
-To:     Eduardo Valentin <evalenti@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, eduval@amazon.com,
-        linux-pm@vger.kernel.org,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 1/9] dt-bindings: clk: qcom,gcc-msm8998: Add missing
+ GPU/MMSS GPLL0 legs
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Taniya Das <tdas@codeaurora.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230622-topic-8998clk-v1-0-5b7a0d6e98b1@linaro.org>
+ <20230622-topic-8998clk-v1-1-5b7a0d6e98b1@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230622-topic-8998clk-v1-1-5b7a0d6e98b1@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 6:45 AM Eduardo Valentin <evalenti@kernel.org> wrote:
->
-> On Tue, Jun 20, 2023 at 07:27:57PM +0200, Rafael J. Wysocki wrote:
-> >
-> >
-> >
-> > On Fri, May 19, 2023 at 5:27 AM Eduardo Valentin <evalenti@kernel.org> wrote:
-> > >
-> > > From: Eduardo Valentin <eduval@amazon.com>
-> > >
-> > > This patch adds a statistic to report how long
-> > > the thermal zone spent on temperature intervals
-> > > created by each trip point. The first interval
-> > > is the range below the first trip point. All
-> > > subsequent intervals are accounted when temperature
-> > > is above the trip point temperature value.
-> > >
-> > > Samples:
-> > > $ cat /sys//class/thermal/thermal_zone0/stats/time_in_trip_ms
-> > > trip-1  0       0
-> >
-> > The above line is confusing.
-> >
-> > > trip0   -10000  35188
-> > > trip1   25000   0
-> >
-> > And the format violates the "one value per attribute" sysfs rule.
-> >
-> > > $ cat /sys//class/thermal/thermal_zone0/stats/time_in_trip_ms
-> > > trip-1  0       0
-> > > trip0   -10000  36901
-> > > trip1   25000   0
-> > > $ echo 25001 > /sys//class/thermal/thermal_zone0/emul_temp
-> > > $ cat /sys//class/thermal/thermal_zone0/stats/time_in_trip_ms
-> > > trip-1  0       0
-> > > trip0   -10000  47810
-> > > trip1   25000   2259
-> > > $ cat /sys//class/thermal/thermal_zone0/stats/time_in_trip_ms
-> > > trip-1  0       0
-> > > trip0   -10000  47810
-> > > trip1   25000   3224
-> > > $ echo 24001 > /sys//class/thermal/thermal_zone0/emul_temp
-> > > $ cat /sys//class/thermal/thermal_zone0/stats/time_in_trip_ms
-> > > trip-1  0       0
-> > > trip0   -10000  48960
-> > > trip1   25000   10080
-> > > $ cat /sys//class/thermal/thermal_zone0/stats/time_in_trip_ms
-> > > trip-1  0       0
-> > > trip0   -10000  49844
-> > > trip1   25000   10080
-> > >
-> > > Cc: "Rafael J. Wysocki" <rafael@kernel.org> (supporter:THERMAL)
-> > > Cc: Daniel Lezcano <daniel.lezcano@linaro.org> (supporter:THERMAL)
-> > > Cc: Amit Kucheria <amitk@kernel.org> (reviewer:THERMAL)
-> > > Cc: Zhang Rui <rui.zhang@intel.com> (reviewer:THERMAL)
-> > > Cc: Jonathan Corbet <corbet@lwn.net> (maintainer:DOCUMENTATION)
-> > > Cc: linux-pm@vger.kernel.org (open list:THERMAL)
-> > > Cc: linux-doc@vger.kernel.org (open list:DOCUMENTATION)
-> > > Cc: linux-kernel@vger.kernel.org (open list)
-> > >
-> > > Signed-off-by: Eduardo Valentin <eduval@amazon.com>
-> > > ---
-> > >  .../driver-api/thermal/sysfs-api.rst          |  2 +
-> > >  drivers/thermal/thermal_sysfs.c               | 86 +++++++++++++++++++
-> > >  2 files changed, 88 insertions(+)
-> > >
-> > > diff --git a/Documentation/driver-api/thermal/sysfs-api.rst b/Documentation/driver-api/thermal/sysfs-api.rst
-> > > index ed5e6ba4e0d7..4a2b92a7488c 100644
-> > > --- a/Documentation/driver-api/thermal/sysfs-api.rst
-> > > +++ b/Documentation/driver-api/thermal/sysfs-api.rst
-> > > @@ -359,6 +359,8 @@ Thermal zone device sys I/F, created once it's registered::
-> > >      |---stats/reset_tz_stats:  Writes to this file resets the statistics.
-> > >      |---stats/max_gradient:    The maximum recorded dT/dt in uC/ms.
-> > >      |---stats/min_gradient:    The minimum recorded dT/dt in uC/ms.
-> > > +    |---stats/time_in_trip_ms: Time spent on each temperature interval of
-> > > +                               trip points.
-> >
-> > I would write "in each temperature interval between consecutive trip points".
->
-> Ok
->
-> >
-> > Doesn't this assume a specific temperature ordering of trip points?
-> > And so what if they are not ordered?
->
-> It does. I believe other things will break if they are not ordered.
+On 22/06/2023 13:57, Konrad Dybcio wrote:
+> GPLL0 has two separate outputs to both GPUSS and MMSS: one that's
+> 2-divided and one that runs at the same rate as the GPLL0 itself.
+> 
+> Add the missing ones to the binding.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-But there's no guarantee that they will be ordered, so it looks like
-those other things are already broken.
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
