@@ -2,123 +2,358 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27E8073ADA0
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 02:11:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CDBE73ADA4
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 02:13:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231876AbjFWALy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 20:11:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39638 "EHLO
+        id S231234AbjFWANM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 20:13:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231658AbjFWALt (ORCPT
+        with ESMTP id S230469AbjFWANJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 20:11:49 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8841AC7
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 17:11:48 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id d9443c01a7336-1b52f9b8b19so185245ad.1
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 17:11:48 -0700 (PDT)
+        Thu, 22 Jun 2023 20:13:09 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AC341FE6
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 17:13:07 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2b45e347266so2107701fa.0
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 17:13:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687479108; x=1690071108;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vo1O88LBn12GePGGmuhdEP/k87jpAuHnXHVbobu4PRQ=;
-        b=QksAuYQ4h9HkiWUUDuUJe286BNS/KxSd9WfVtRDqdPoNN9R3SdorrFx4XiozyaaNG7
-         Rb8GIkwqVwR0lMbldf+pOEFtxPakHz9Zizvom7UKdoWLLi5HCtAoIBcbLhEu3x7JI0EF
-         q8YmN9W2MVTs0f/67FbgxFfm1i6YOJ+ynwnLsu8VEVI+ARdpUGz0vXwxmVY/DdPJyU4j
-         CXoSh0ehZHdwKxkNmjS0wQ/6y+KuhZsG0uXdbaVwWahEY/HgR6pc23egaX89uG1CExlM
-         CV0acJV5vk2D9HpYijnsHbuCykfCGu6WCWzCrk7XS0hUlZAy85YXtaRPg8jD8qGp6BRs
-         OCiA==
+        d=linaro.org; s=google; t=1687479185; x=1690071185;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7OBMWiQz5SKlQFOgJtcvGQb/Je3ERsxAOPrGehz6pFc=;
+        b=s3uRz10048rHjIkbkzzNcnVpx4K4H57Z1xiig/1EJadsZ/CIlukZgGA2aYEBlcjRqy
+         y4WPbemfowigrNbuc3X2Tc/jYYhwPNwYANWLo0HMD6kinxoONwe12yJjIA2EUNrl0/Vb
+         C0rmK9dWExZIax1zcmYgtdRjwrJjDiD1j3mddjMXbsqVwJ33bq0B9a7EesVmPvAoVDO9
+         eHqsxAWtx3RgYILjw7LfxQRWuRveZtUkBoVJBAvyUGxscdNTceAH28opg1ZfSXZBpVrA
+         yb6FL9FSJquPYdw0HWEYUGaQQbI+w2nXspNU+z/yBRm5QBAla9BJckGN57kHY/aO6sug
+         q9hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687479108; x=1690071108;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vo1O88LBn12GePGGmuhdEP/k87jpAuHnXHVbobu4PRQ=;
-        b=N7YDD5TR3odFgU9BBLI3htYt1e1A/pE28a29KJQS1Kbgq2Lbc5YA8ItjGlnj8Kl9hv
-         gmm6SQnlQhVsnc9Jljyar6P3/5f+2aS6VYV8vooMCrOE+nGdTjIT/d0yxdrwBc2WZyKf
-         xdDMSNrDA20Z9jk3cqZ690tbeDqKm3o7KRQd3Jt32+SaQGj3ETHT/YQJdknL1X4XA+UE
-         hvb04NOvnqe7WZiQlPX1pxGUI4Y2XmEWLdzpKwu9t1Rb2aSqzvvcJf0iql0sWIdlt5+p
-         O8HYwi6g3VsrwOtDVMkDOprBQKp9DMomZxLIFAaY+PIrwFw5TghgkFbo/E7cNWlRVhZV
-         CXfQ==
-X-Gm-Message-State: AC+VfDzTzzDtmuj76P4vPpLg2OO9A9/CJR2KRFAS28qS7Ii4B/CAiwSW
-        bxGpEMtldGqnyON9aK7wu2q9v3dR2oePTV4QVTQ=
-X-Google-Smtp-Source: ACHHUZ4OnEboURrAFGT5NncSVmStBjl8m7dSDlpD9av6g2qjlhgFEguEOrde8Lesqms2juJvliUkzAJKrOlFaDLLv14=
-X-Received: from samitolvanen.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:4f92])
- (user=samitolvanen job=sendgmr) by 2002:a17:902:f811:b0:1a2:3436:4119 with
- SMTP id ix17-20020a170902f81100b001a234364119mr2901699plb.8.1687479108018;
- Thu, 22 Jun 2023 17:11:48 -0700 (PDT)
-Date:   Fri, 23 Jun 2023 00:11:43 +0000
-In-Reply-To: <20230623001140.1111494-4-samitolvanen@google.com>
-Mime-Version: 1.0
-References: <20230623001140.1111494-4-samitolvanen@google.com>
-X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1491; i=samitolvanen@google.com;
- h=from:subject; bh=vz8JtYFBMZ6JrswVYldeog2RjlQc50BCAyUkbrZYc88=;
- b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBklOM9pyZClW2Hp8UbFrWSquBEPCjWlPQquZ198
- cauUcsQF4CJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCZJTjPQAKCRBMtfaEi7xW
- 7vh7C/42zRx8PHZksPRLtj/W3ew78/fa4rX9uyohW/fQWdFjU353MF0DOlLvB+HMwvd2ScZzNJc
- A2Q59WjNYMQI66abJdyKo53NSJaFpKE9jUguxSMEbg94h+97MmLb+I783T1xWnA9/s5XAyXy2CG
- 6vTmjFnSter4GgvRm/1L2a/Xr4xfsfpr2cQSe5moZKEN5w6z2SjKp/xUuvFkd6b+3Uj7t5jf7U9
- Eg/3aV4wP3Ear17oOZ/56pcr7tuFb7RSWTyBcFkaoE6OUSfkk4k40eI1kwyqGaQCMdWB3YxWxjd
- Koe2LaCPMhC+vSRPiwMoRwSntCi02YciGfW+S7XXKUt/CazCfkNcSPcjqtOUt1Jah73z/j8PkSY
- ODqPGiSGUHMVQuUcKK+LHaZkpr+EKJok+pFYvu2LlREZVJeiCL0fg2q6Vro/M2AX1t2XtJH869U +eOKmEGBoBmH2K5IGBMFShQFH5V+Xtj0bo6fwZ45aW3fGOdeffsUXqNzzrS9lRYwBcIzo=
-X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-Message-ID: <20230623001140.1111494-6-samitolvanen@google.com>
-Subject: [PATCH 2/2] kbuild: Disable GCOV for *.mod.o
-From:   Sami Tolvanen <samitolvanen@google.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
-        linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Joe Fradley <joefradley@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1687479185; x=1690071185;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7OBMWiQz5SKlQFOgJtcvGQb/Je3ERsxAOPrGehz6pFc=;
+        b=WGiK0sS/aq/0lq//4l3vF5x9Nzbo1VPjpEbCAZBeBh/z2gGNmsqbVFrPehYqIBLpWT
+         j9M3vQrlidhG3pQ8f5wu3qkLOpRQ52OMHz3gfH3KL8F49kUP6H0Zq85PSDzgv1NK1CZI
+         OAV+rvWz9Qk4Df7dBSj3R1yct6cvle7ufY85zEGGA2ORMiOHaP6ovPCMIO+Ev7iR5nOZ
+         Ebc9PhjDDDGD7OPdq7HImLWQUo9xWQ5r1X7AbzU40kBcjqxIzzZXShJ73EurvilcCKcS
+         OpbiP0wQxzN0qcZ1Z5KYVLRgP93MRGEaZkBNrvyC9xB27/RQQZKemWsqmSulQG69QORr
+         FBzQ==
+X-Gm-Message-State: AC+VfDwFQcVNPLLUsJ9D4nP7ynW0VuwVtPpLLxcUpCcs+WkXGflVSyNk
+        iP+/q2/ze4FLqoFE+J8pOmBH2g==
+X-Google-Smtp-Source: ACHHUZ6J0cGRchjcolAtWC9ovD1xV3EIViBTVz11rROZiFot+lLsFkdRvnYYz9Ketg5J7htNaIEeWg==
+X-Received: by 2002:a2e:a401:0:b0:2b4:809a:1c7c with SMTP id p1-20020a2ea401000000b002b4809a1c7cmr7920540ljn.19.1687479185415;
+        Thu, 22 Jun 2023 17:13:05 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id f14-20020a2e918e000000b002b47d704330sm1493431ljg.6.2023.06.22.17.13.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Jun 2023 17:13:04 -0700 (PDT)
+Message-ID: <114f34dd-e5ce-f878-5b23-4c14dc800547@linaro.org>
+Date:   Fri, 23 Jun 2023 03:13:03 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 6/6] drm/msm/dpu: Update dev core dump to dump registers
+ of sub blocks
+Content-Language: en-GB
+To:     Ryan McCann <quic_rmccann@quicinc.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Rob Clark <robdclark@chromium.org>, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, quic_jesszhan@quicinc.com
+References: <20230622-devcoredump_patch-v1-0-3b2cdcc6a576@quicinc.com>
+ <20230622-devcoredump_patch-v1-6-3b2cdcc6a576@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230622-devcoredump_patch-v1-6-3b2cdcc6a576@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With GCOV_PROFILE_ALL, Clang injects __llvm_gcov_* functions to each
-object file, including the *.mod.o. As we filter out CC_FLAGS_CFI
-for *.mod.o, the compiler won't generate type hashes for the
-injected functions, and therefore indirectly calling them during
-module loading trips indirect call checking.
+On 23/06/2023 02:48, Ryan McCann wrote:
+> Currently, the device core dump mechanism does not dump registers of sub
+> blocks within the DSPP, SSPP, DSC, and PINGPONG blocks. Add wrapper
+> function to dump hardware blocks that contain sub blocks.
+> 
+> Signed-off-by: Ryan McCann <quic_rmccann@quicinc.com>
+> ---
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c | 194 +++++++++++++++++++++++++++-----
+>   1 file changed, 168 insertions(+), 26 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> index aa8499de1b9f..9b1b1c382269 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> @@ -885,6 +885,154 @@ static int dpu_irq_postinstall(struct msm_kms *kms)
+>   	return 0;
+>   }
+>   
+> +static void dpu_kms_mdp_snapshot_add_block(struct msm_disp_state *disp_state,
+> +					   void __iomem *mmio, void *blk,
+> +					   enum dpu_hw_blk_type blk_type)
 
-Enabling CFI for *.mod.o isn't sufficient to fix this issue after
-commit 0c3e806ec0f9 ("x86/cfi: Add boot time hash randomization"),
-as *.mod.o aren't processed by objtool, which means any hashes
-emitted there won't be randomized. Therefore, in addition to
-disabling CFI for *.mod.o, also disable GCOV, as the object files
-don't otherwise contain any executable code.
+No. Such multiplexers add no value to the code. Please inline it.
 
-Fixes: cf68fffb66d6 ("add support for Clang CFI")
-Reported-by: Joe Fradley <joefradley@google.com>
-Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
----
- scripts/Makefile.modfinal | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Not to mention that this patch is hard to review. You both move existing 
+code and add new features. If it were to go, it should have been split 
+into two patches: one introducing the multiplexer and another one adding 
+subblocks.
 
-diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
-index 4703f652c009..fc19f67039bd 100644
---- a/scripts/Makefile.modfinal
-+++ b/scripts/Makefile.modfinal
-@@ -23,7 +23,7 @@ modname = $(notdir $(@:.mod.o=))
- part-of-module = y
- 
- quiet_cmd_cc_o_c = CC [M]  $@
--      cmd_cc_o_c = $(CC) $(filter-out $(CC_FLAGS_CFI), $(c_flags)) -c -o $@ $<
-+      cmd_cc_o_c = $(CC) $(filter-out $(CC_FLAGS_CFI) $(CFLAGS_GCOV), $(c_flags)) -c -o $@ $<
- 
- %.mod.o: %.mod.c FORCE
- 	$(call if_changed_dep,cc_o_c)
+> +{
+> +	u32 base;
+> +
+> +	switch (blk_type) {
+> +	case DPU_HW_BLK_TOP:
+> +	{
+> +		struct dpu_mdp_cfg *top = (struct dpu_mdp_cfg *)blk;
+> +
+> +		if (top->features & BIT(DPU_MDP_PERIPH_0_REMOVED)) {
+> +			msm_disp_snapshot_add_block(disp_state, MDP_PERIPH_TOP0,
+> +						    mmio + top->base, "top");
+> +			msm_disp_snapshot_add_block(disp_state, top->len - MDP_PERIPH_TOP0_END,
+> +						    mmio + top->base + MDP_PERIPH_TOP0_END,
+> +						    "top_2");
+> +		} else {
+> +			msm_disp_snapshot_add_block(disp_state, top->len, mmio + top->base, "top");
+> +		}
+> +		break;
+> +	}
+> +	case DPU_HW_BLK_LM:
+> +	{
+> +		struct dpu_lm_cfg *mixer = (struct dpu_lm_cfg *)blk;
+> +
+> +		msm_disp_snapshot_add_block(disp_state, mixer->len, mmio + mixer->base, "%s",
+> +					    mixer->name);
+> +		break;
+> +	}
+> +	case DPU_HW_BLK_CTL:
+> +	{
+> +		struct dpu_ctl_cfg *ctl = (struct dpu_ctl_cfg *)blk;
+> +
+> +		msm_disp_snapshot_add_block(disp_state, ctl->len, mmio + ctl->base, "%s",
+> +					    ctl->name);
+> +		break;
+> +	}
+> +	case DPU_HW_BLK_INTF:
+> +	{
+> +		struct dpu_intf_cfg *intf = (struct dpu_intf_cfg *)blk;
+> +
+> +		msm_disp_snapshot_add_block(disp_state, intf->len, mmio + intf->base, "%s",
+> +					    intf->name);
+> +		break;
+> +	}
+> +	case DPU_HW_BLK_WB:
+> +	{
+> +		struct dpu_wb_cfg *wb = (struct dpu_wb_cfg *)blk;
+> +
+> +		msm_disp_snapshot_add_block(disp_state, wb->len, mmio + wb->base, "%s",
+> +					    wb->name);
+> +		break;
+> +	}
+> +	case DPU_HW_BLK_SSPP:
+> +	{
+> +		struct dpu_sspp_cfg *sspp_block = (struct dpu_sspp_cfg *)blk;
+> +		const struct dpu_sspp_sub_blks *sblk = sspp_block->sblk;
+> +
+> +		base = sspp_block->base;
+> +
+> +		msm_disp_snapshot_add_block(disp_state, sspp_block->len, mmio + base, "%s",
+> +					    sspp_block->name);
+> +
+> +		if (sspp_block->features & BIT(DPU_SSPP_SCALER_QSEED3) ||
+> +		    sspp_block->features & BIT(DPU_SSPP_SCALER_QSEED3LITE) ||
+> +		    sspp_block->features & BIT(DPU_SSPP_SCALER_QSEED4))
+> +			msm_disp_snapshot_add_block(disp_state, sblk->scaler_blk.len,
+> +						    mmio + base + sblk->scaler_blk.base, "%s_%s",
+> +						    sspp_block->name, sblk->scaler_blk.name);
+
+Actually, it would be better to:
+- drop name from all sblk instances (and use known string instead of the 
+sblk name here)
+- Use sblk->foo_blk.len to check if it should be printed or not.
+
+> +
+> +		if (sspp_block->features & BIT(DPU_SSPP_CSC) || sspp_block->features
+> +					& BIT(DPU_SSPP_CSC_10BIT))
+
+A very bad use of indentation. In future please split logically rather 
+than just filling the line up to the line width.
+
+> +			msm_disp_snapshot_add_block(disp_state, sblk->csc_blk.len,
+> +						    mmio + base + sblk->csc_blk.base, "%s_%s",
+> +						    sspp_block->name, sblk->csc_blk.name);
+> +		break;
+> +	}
+> +	case DPU_HW_BLK_DSPP:
+> +	{
+> +		struct dpu_dspp_cfg *dspp_block = (struct dpu_dspp_cfg *)blk;
+> +
+> +		base = dspp_block->base;
+> +
+> +		msm_disp_snapshot_add_block(disp_state, dspp_block->len, mmio + base, "%s",
+> +					    dspp_block->name);
+> +
+> +		if (dspp_block->features & BIT(DPU_DSPP_PCC))
+> +			msm_disp_snapshot_add_block(disp_state, dspp_block->sblk->pcc.len,
+> +						    mmio + base + dspp_block->sblk->pcc.base,
+> +						    "%s_%s", dspp_block->name,
+> +						    dspp_block->sblk->pcc.name);
+> +		break;
+> +	}
+> +	case DPU_HW_BLK_PINGPONG:
+> +	{
+> +		struct dpu_pingpong_cfg *pingpong_block = (struct dpu_pingpong_cfg *)blk;
+> +		const struct dpu_pingpong_sub_blks *sblk = pingpong_block->sblk;
+> +
+> +		base = pingpong_block->base;
+> +
+> +		msm_disp_snapshot_add_block(disp_state, pingpong_block->len, mmio + base, "%s",
+> +					    pingpong_block->name);
+> +
+> +		if (pingpong_block->features & BIT(DPU_PINGPONG_TE2))
+> +			msm_disp_snapshot_add_block(disp_state, sblk->te2.len,
+> +						    mmio + base + sblk->te2.base, "%s_%s",
+> +						    pingpong_block->name, sblk->te2.name);
+> +
+> +		if (pingpong_block->features & BIT(DPU_PINGPONG_DITHER))
+> +			msm_disp_snapshot_add_block(disp_state, sblk->dither.len,
+> +						    mmio + base + sblk->dither.base, "%s_%s",
+> +						    pingpong_block->name, sblk->dither.name);
+> +		break;
+> +	}
+> +	case DPU_HW_BLK_DSC:
+> +	{
+> +		struct dpu_dsc_cfg *dsc_block = (struct dpu_dsc_cfg *)blk;
+> +
+> +		base = dsc_block->base;
+> +
+> +		if (dsc_block->features & BIT(DPU_DSC_HW_REV_1_2)) {
+> +			struct dpu_dsc_blk enc = dsc_block->sblk->enc;
+> +			struct dpu_dsc_blk ctl = dsc_block->sblk->ctl;
+> +
+> +			/* For now, pass in a length of 0 because the DSC_BLK register space
+> +			 * overlaps with the sblks' register space.
+> +			 *
+> +			 * TODO: Pass in a length of 0 t0 DSC_BLK_1_2 in the HW catalog where
+> +			 * applicable.
+
+Nice catch, thank you. We should fix that.
+
+> +			 */
+> +			msm_disp_snapshot_add_block(disp_state, 0, mmio + base, "%s",
+> +						    dsc_block->name);
+
+
+
+> +			msm_disp_snapshot_add_block(disp_state, enc.len, mmio + base + enc.base,
+> +						    "%s_%s", dsc_block->name, enc.name);
+> +			msm_disp_snapshot_add_block(disp_state, ctl.len, mmio + base + ctl.base,
+> +						    "%s_%s", dsc_block->name, ctl.name);
+> +		} else {
+> +			msm_disp_snapshot_add_block(disp_state, dsc_block->len, mmio + base, "%s",
+> +						    dsc_block->name);
+> +		}
+> +		break;
+> +	}
+> +	default:
+> +		DPU_ERROR("Block type not supported.");
+> +	}
+> +}
+> +
+>   static void dpu_kms_mdp_snapshot(struct msm_disp_state *disp_state, struct msm_kms *kms)
+>   {
+>   	int i;
+> @@ -899,53 +1047,47 @@ static void dpu_kms_mdp_snapshot(struct msm_disp_state *disp_state, struct msm_k
+>   
+>   	/* dump CTL sub-blocks HW regs info */
+>   	for (i = 0; i < cat->ctl_count; i++)
+> -		msm_disp_snapshot_add_block(disp_state, cat->ctl[i].len,
+> -				dpu_kms->mmio + cat->ctl[i].base, "ctl_%d", i);
+> +		dpu_kms_mdp_snapshot_add_block(disp_state, dpu_kms->mmio, (void *)&cat->ctl[i],
+> +					       DPU_HW_BLK_CTL);
+>   
+>   	/* dump DSPP sub-blocks HW regs info */
+>   	for (i = 0; i < cat->dspp_count; i++)
+> -		msm_disp_snapshot_add_block(disp_state, cat->dspp[i].len,
+> -				dpu_kms->mmio + cat->dspp[i].base, "dspp_%d", i);
+> +		dpu_kms_mdp_snapshot_add_block(disp_state, dpu_kms->mmio, (void *)&cat->dspp[i],
+> +					       DPU_HW_BLK_DSPP);
+>   
+>   	/* dump INTF sub-blocks HW regs info */
+>   	for (i = 0; i < cat->intf_count; i++)
+> -		msm_disp_snapshot_add_block(disp_state, cat->intf[i].len,
+> -				dpu_kms->mmio + cat->intf[i].base, "intf_%d", i);
+> +		dpu_kms_mdp_snapshot_add_block(disp_state, dpu_kms->mmio, (void *)&cat->intf[i],
+> +					       DPU_HW_BLK_INTF);
+>   
+>   	/* dump PP sub-blocks HW regs info */
+>   	for (i = 0; i < cat->pingpong_count; i++)
+> -		msm_disp_snapshot_add_block(disp_state, cat->pingpong[i].len,
+> -				dpu_kms->mmio + cat->pingpong[i].base, "pingpong_%d", i);
+> +		dpu_kms_mdp_snapshot_add_block(disp_state, dpu_kms->mmio, (void *)&cat->pingpong[i],
+> +					       DPU_HW_BLK_PINGPONG);
+>   
+>   	/* dump SSPP sub-blocks HW regs info */
+>   	for (i = 0; i < cat->sspp_count; i++)
+> -		msm_disp_snapshot_add_block(disp_state, cat->sspp[i].len,
+> -				dpu_kms->mmio + cat->sspp[i].base, "sspp_%d", i);
+> +		dpu_kms_mdp_snapshot_add_block(disp_state, dpu_kms->mmio, (void *)&cat->sspp[i],
+> +					       DPU_HW_BLK_SSPP);
+>   
+>   	/* dump LM sub-blocks HW regs info */
+>   	for (i = 0; i < cat->mixer_count; i++)
+> -		msm_disp_snapshot_add_block(disp_state, cat->mixer[i].len,
+> -				dpu_kms->mmio + cat->mixer[i].base, "lm_%d", i);
+> +		dpu_kms_mdp_snapshot_add_block(disp_state, dpu_kms->mmio, (void *)&cat->mixer[i],
+> +					       DPU_HW_BLK_LM);
+>   
+>   	/* dump WB sub-blocks HW regs info */
+>   	for (i = 0; i < cat->wb_count; i++)
+> -		msm_disp_snapshot_add_block(disp_state, cat->wb[i].len,
+> -				dpu_kms->mmio + cat->wb[i].base, "wb_%d", i);
+> -
+> -	if (cat->mdp[0].features & BIT(DPU_MDP_PERIPH_0_REMOVED)) {
+> -		msm_disp_snapshot_add_block(disp_state, MDP_PERIPH_TOP0,
+> -				dpu_kms->mmio + cat->mdp[0].base, "top");
+> -		msm_disp_snapshot_add_block(disp_state, cat->mdp[0].len - MDP_PERIPH_TOP0_END,
+> -				dpu_kms->mmio + cat->mdp[0].base + MDP_PERIPH_TOP0_END, "top_2");
+> -	} else {
+> -		msm_disp_snapshot_add_block(disp_state, cat->mdp[0].len,
+> -				dpu_kms->mmio + cat->mdp[0].base, "top");
+> -	}
+> +		dpu_kms_mdp_snapshot_add_block(disp_state, dpu_kms->mmio, (void *)&cat->wb[i],
+> +					       DPU_HW_BLK_WB);
+> +
+> +	/* dump top block */
+> +	dpu_kms_mdp_snapshot_add_block(disp_state, dpu_kms->mmio, (void *)&cat->mdp[0],
+> +				       DPU_HW_BLK_TOP);
+>   
+>   	/* dump DSC sub-blocks HW regs info */
+>   	for (i = 0; i < cat->dsc_count; i++)
+> -		msm_disp_snapshot_add_block(disp_state, cat->dsc[i].len,
+> -				dpu_kms->mmio + cat->dsc[i].base, "dsc_%d", i);
+> +		dpu_kms_mdp_snapshot_add_block(disp_state, dpu_kms->mmio, (void *)&cat->dsc[i],
+> +					       DPU_HW_BLK_DSC);
+>   
+>   	pm_runtime_put_sync(&dpu_kms->pdev->dev);
+>   }
+> 
+
 -- 
-2.41.0.162.gfafddb0af9-goog
+With best wishes
+Dmitry
 
