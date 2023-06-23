@@ -2,97 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 204F573B42F
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 11:55:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B4D173B248
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 10:03:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231748AbjFWJzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 05:55:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40438 "EHLO
+        id S231286AbjFWIDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 04:03:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231732AbjFWJzT (ORCPT
+        with ESMTP id S229999AbjFWIDp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 05:55:19 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8014DE75;
-        Fri, 23 Jun 2023 02:55:17 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-31297125334so447611f8f.0;
-        Fri, 23 Jun 2023 02:55:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687514116; x=1690106116;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qmh+oFPupR7SMi0EW4fghuDVJJeW4dIxynImVpI7xdU=;
-        b=eGa/V89BwHHOjZt+jUypN4x4W6+lXA0YeYl0gdt3wuqwV+MubBWHcTdwxBKdzJK87u
-         qdWZ8u4s3KEIoC+Ru/iRTVRB13quL8hwLjT1Dh3PRH9PFnn3x9P2d6J5SsiY3AzfYm9S
-         rWHHP//2EVNgLZPkofKWuOiq2wOaLhexpYpZt3qpebJ6EbvMEKPEcb7Pa3XOv7nL2krq
-         EZ+F1jvL8aGBx7LxhHPJWMFRrZxrHs2RjmPthTsvqXma5GSMoXzVfZmyEY8fvR5y4gbb
-         lGrSnWnge4NRg6OgLYxYcxy1tNwrWAhj/ok5KXtrUnzlLMJCvILSESNjwCTTewHf9ZZ9
-         zkwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687514116; x=1690106116;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Qmh+oFPupR7SMi0EW4fghuDVJJeW4dIxynImVpI7xdU=;
-        b=gKrKqgkOiOeQ17crO8hvpB8uUvxolTixlVURghnNRfw1ExHD4hHH6ljKnYjO1V19RD
-         EiKE1OKcK9sLmJpPiiL2Q4ZqXtcGLpYne7aLoIkO6R/Uc11lGLzoel30OoPxABGnq8ym
-         mLvXjboZ4c8Tfls9b7moAV6hV2ZpxLIR9YY0f7NRBWu8jec8HgQ/gRq9r5eo2IXErkOC
-         2vbfolnl6IUJohAatquxug8UXhwGaQPYE/ip1wuzsW1N3q0HCRLpN/fNcrILzJxwQPgK
-         tVZIuBw5KSqH8heSbqTW4ZKDgsqZy4wstjDZ/Yv5KIKDJl2WJ+KtrD05X+lmJGpD53iW
-         e7rA==
-X-Gm-Message-State: AC+VfDxS3VgSda93ODR8GAp7W9rj/71CbPRMJtxeK9cCtckngJ+IWCRw
-        DRTcStC3j6WLuLl7k70a9ws=
-X-Google-Smtp-Source: ACHHUZ4OSLVmtKTfKtcWCsrjtypAdFc6GlY7TFfwJHa8LbuQj2pKhDsE5iflF0+tykCL2iX3uLTbTQ==
-X-Received: by 2002:a5d:591c:0:b0:30f:bd4f:8f00 with SMTP id v28-20020a5d591c000000b0030fbd4f8f00mr18563321wrd.28.1687514115444;
-        Fri, 23 Jun 2023 02:55:15 -0700 (PDT)
-Received: from Ansuel-xps. (93-34-93-173.ip49.fastwebnet.it. [93.34.93.173])
-        by smtp.gmail.com with ESMTPSA id o16-20020a5d6850000000b003047ae72b14sm9171536wrw.82.2023.06.23.02.55.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Jun 2023 02:55:14 -0700 (PDT)
-Message-ID: <64956c02.5d0a0220.ed611.6b79@mx.google.com>
-X-Google-Original-Message-ID: <ZJUNN0RXrUnV8o96@Ansuel-xps.>
-Date:   Fri, 23 Jun 2023 05:10:47 +0200
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [net-next PATCH] net: dsa: qca8k: add support for additional
- modes for netdev trigger
-References: <20230621095409.25859-1-ansuelsmth@gmail.com>
- <20230622193120.5cc09fc3@kernel.org>
+        Fri, 23 Jun 2023 04:03:45 -0400
+Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B6931BE2;
+        Fri, 23 Jun 2023 01:03:43 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=joseph.qi@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VllSQm1_1687507418;
+Received: from 30.121.25.227(mailfrom:joseph.qi@linux.alibaba.com fp:SMTPD_---0VllSQm1_1687507418)
+          by smtp.aliyun-inc.com;
+          Fri, 23 Jun 2023 16:03:39 +0800
+Message-ID: <6f0dfe19-426a-19cd-05f2-7184377b4862@linux.alibaba.com>
+Date:   Fri, 23 Jun 2023 16:03:38 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230622193120.5cc09fc3@kernel.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.2
+Subject: Re: [PATCH][next] ocfs2: remove redundant assignment to variable
+ bit_off
+Content-Language: en-US
+To:     Colin Ian King <colin.i.king@gmail.com>,
+        Mark Fasheh <mark@fasheh.com>,
+        Joel Becker <jlbec@evilplan.org>, ocfs2-devel@oss.oracle.com,
+        akpm <akpm@linux-foundation.org>
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230622102736.2831126-1-colin.i.king@gmail.com>
+From:   Joseph Qi <joseph.qi@linux.alibaba.com>
+In-Reply-To: <20230622102736.2831126-1-colin.i.king@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 22, 2023 at 07:31:20PM -0700, Jakub Kicinski wrote:
-> On Wed, 21 Jun 2023 11:54:09 +0200 Christian Marangi wrote:
-> > The QCA8K switch supports additional modes that can be handled in
-> > hardware for the LED netdev trigger.
-> > 
-> > Add these additional modes to further support the Switch LEDs and
-> > offload more blink modes.
+
+
+On 6/22/23 6:27 PM, Colin Ian King wrote:
+> Variable bit_off is being assigned a value that is never read, it is
+> being re-assigned a new value in the following while loop. Remove the
+> assignment. Cleans up clang scan build warning:
 > 
-> Something may be funny with the date on your system, FWIW, because your
-> patches seem to arrive almost a day in the past.
+> fs/ocfs2/localalloc.c:976:18: warning: Although the value stored to
+> 'bit_off' is used in the enclosing expression, the value is never
+> actually read from 'bit_off' [deadcode.DeadStores]
+> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 
-Lovely WSL istance (Windows Subsystem for Linux) that goes out of sync with
-the host machine sometimes. Does the time cause any problem? I will
-check that in the future before sending patches...
-
--- 
-	Ansuel
+Reviewed-by: Joseph Qi <joseph.qi@linux.alibaba.com>
+> ---
+>  fs/ocfs2/localalloc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/fs/ocfs2/localalloc.c b/fs/ocfs2/localalloc.c
+> index c4426d12a2ad..c803c10dd97e 100644
+> --- a/fs/ocfs2/localalloc.c
+> +++ b/fs/ocfs2/localalloc.c
+> @@ -973,7 +973,7 @@ static int ocfs2_sync_local_to_main(struct ocfs2_super *osb,
+>  	la_start_blk = ocfs2_clusters_to_blocks(osb->sb,
+>  						le32_to_cpu(la->la_bm_off));
+>  	bitmap = la->la_bitmap;
+> -	start = count = bit_off = 0;
+> +	start = count = 0;
+>  	left = le32_to_cpu(alloc->id1.bitmap1.i_total);
+>  
+>  	while ((bit_off = ocfs2_find_next_zero_bit(bitmap, left, start))
