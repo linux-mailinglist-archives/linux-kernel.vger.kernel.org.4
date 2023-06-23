@@ -2,182 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF9EC73ADAB
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 02:15:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF08073ADAF
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 02:15:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230498AbjFWAPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 20:15:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41198 "EHLO
+        id S230186AbjFWAPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 20:15:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbjFWAPS (ORCPT
+        with ESMTP id S229853AbjFWAPu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 20:15:18 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4107C7
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 17:15:15 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4f769c37d26so10908080e87.1
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 17:15:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687479314; x=1690071314;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mwHzVLTtnHqsMBGC/FQz0dqtXzYxkIgtPAX7zoSxuL4=;
-        b=SoClXjsERx79ZMZPpfyw8UKuqcOCAxhoaAsSuKiUYGsU5CEqD/FsQwAwIeBgqEVWm4
-         7yuyvJI7EegWt8ura5VIvwFTucZf1vsNs+ZnJUC+dv4oyMfA3JdH9bPj20gZ0s7jYtXB
-         TTsfonEHK8sSKEmrZypHZvVnu9xTKWV7PHEd+wjG/YVoyCdX1qofBCti1dHwiymKAbgC
-         X+ARR5ci6HHLktG1jM+f2bGCWo8EvlcQNU4V4H8g0BjCC07+PPInZ5K8TED2tsoNSl5+
-         QZImD9QP4JAKa21SfeeKvq1JRENG/JBvsUmyB4X+SXPEgverM25ZlIPtcxSbNdvf090J
-         aIQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687479314; x=1690071314;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mwHzVLTtnHqsMBGC/FQz0dqtXzYxkIgtPAX7zoSxuL4=;
-        b=GTbaM4cLvRbZI4CFKOkkG4mk8PDbvEemkTEzPZs+xWqOdlM/CR+dRoSy+oxCHmTeX8
-         SVK1fnWwgR5yWvgBU3YrK/CV8prC5VRGBOWZhqpp5rtFLYoDD8x3axULA9v5wVUicQsj
-         9q+/5tHpEKpfZJP427KhHo3z+thYUfKt6raEMayc0uB5Hc7h7FmcCugLHIueZN5bWlxq
-         xXIMvnQHVzU+U8Wth/5re7AmUqr2n0ZAsMbeg5OHV9x7GCNffd9efc2ws/IWknbevTJ+
-         yrA3BIv4XqcsDjxvAGrlHTAP/PImn+/kyUfCmD+IupC8F3osPyj1nSHOubqfJwmXLPp/
-         Tvtw==
-X-Gm-Message-State: AC+VfDyySkxOTehDyhXyqQO9qlAkPQPRRYf/w/6r/TTxM0YiTDSSWtR0
-        GF4VpKavJJai3fKBRfkGKcAAZA==
-X-Google-Smtp-Source: ACHHUZ4Jrm2gqG4uJaH179xMkyfeTBx4XcT8MrEfOAlu9CWo5wtOhHNGfL7MI1bnecP0/lwiYPT38A==
-X-Received: by 2002:a19:6909:0:b0:4f8:7513:8cb0 with SMTP id e9-20020a196909000000b004f875138cb0mr7444566lfc.2.1687479313847;
-        Thu, 22 Jun 2023 17:15:13 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id y10-20020ac255aa000000b004f842478f9asm1242246lfg.88.2023.06.22.17.15.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Jun 2023 17:15:13 -0700 (PDT)
-Message-ID: <a87e51e5-416f-307f-fe7c-368a5942e998@linaro.org>
-Date:   Fri, 23 Jun 2023 03:15:12 +0300
+        Thu, 22 Jun 2023 20:15:50 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAF411FDF;
+        Thu, 22 Jun 2023 17:15:49 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35N0AAs9006051;
+        Fri, 23 Jun 2023 00:15:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=nMfZvSzRH2TbV9TJZ+CkTmJiIbNVMbcnwxPKyzp9vLc=;
+ b=mxWV480hV7wR1oBnCFfKmR8FG1I+EZtu1325ABZTCWy2lJB73cIXu1rVzWQFbwnNcOwy
+ UQ+VCpVWp4YKCdOzBXRibfa1NwPjuBqQ6o5aqUOUf+5Yyym461xFwYlpkJiI3Cn8TuU0
+ mlYsIwHrge7OxOWHKQchzmSpvlSUlLoYPYHMBOskQl3oBWk34yiECv7XusHYpzmnjCKT
+ zuRPQCkropJzlbwdDzdhh195XKVHOM3d6IIifTO+SnMHUjxfMkqMysbvhCllPRUdf3Ia
+ jH1LCm9xCdENRPRyYRvD+JOOjtGehpUL2uNTNhDVFpTIHP8a7D+5d2HgqX9dE6WUY/Fg HQ== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rcju8291u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 23 Jun 2023 00:15:28 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35N0FRna025305
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 23 Jun 2023 00:15:27 GMT
+Received: from [10.110.109.161] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 22 Jun
+ 2023 17:15:26 -0700
+Message-ID: <82734575-4dc4-b65b-533b-6a7d7eebacc9@quicinc.com>
+Date:   Thu, 22 Jun 2023 17:15:20 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 2/6] drm/msm/dpu: Drop unused num argument from relevant
- macros
-Content-Language: en-GB
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Ryan McCann <quic_rmccann@quicinc.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Rob Clark <robdclark@chromium.org>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, quic_jesszhan@quicinc.com
-References: <20230622-devcoredump_patch-v1-0-3b2cdcc6a576@quicinc.com>
- <20230622-devcoredump_patch-v1-2-3b2cdcc6a576@quicinc.com>
- <0d702a8d-c9fa-1fd4-1c2b-a1a10abca22f@linaro.org>
-In-Reply-To: <0d702a8d-c9fa-1fd4-1c2b-a1a10abca22f@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v3 20/28] ASoC: dt-bindings: Add Q6USB backend bindings
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
+        <perex@perex.cz>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
+        <krzysztof.kozlowski+dt@linaro.org>, <agross@kernel.org>,
+        <Thinh.Nguyen@synopsys.com>, <bgoswami@quicinc.com>,
+        <andersson@kernel.org>, <robh+dt@kernel.org>,
+        <gregkh@linuxfoundation.org>, <tiwai@suse.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <quic_jackp@quicinc.com>,
+        <quic_plai@quicinc.com>
+References: <20230308235751.495-1-quic_wcheng@quicinc.com>
+ <20230308235751.495-21-quic_wcheng@quicinc.com>
+ <499ee440-0c52-bb21-d04d-086aebc0cf4e@linaro.org>
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <499ee440-0c52-bb21-d04d-086aebc0cf4e@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: fcLlSCXP6j2eCOPTqGENQFjIFwAq7SJO
+X-Proofpoint-GUID: fcLlSCXP6j2eCOPTqGENQFjIFwAq7SJO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-22_18,2023-06-22_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
+ clxscore=1011 phishscore=0 suspectscore=0 mlxlogscore=999
+ priorityscore=1501 lowpriorityscore=0 bulkscore=0 malwarescore=0
+ impostorscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2305260000 definitions=main-2306220207
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/06/2023 02:57, Dmitry Baryshkov wrote:
-> On 23/06/2023 02:48, Ryan McCann wrote:
->> Drop unused parameter "num" from VIG_SBLK_NOSCALE and DMA sub block
->> macros. Update calls to relevant macros to reflect change.
-> 
-> This is not relevant for this patchset.
+Hi Krzysztof,
 
-Ok, after reviewing the rest of the patches, I see that it is indeed 
-relevant. However could you please follow another path (outlined in the 
-review for patch 6).
-
-Note, that for the sake of subblock dumping we can ignore the issue with 
-the names completely and drop them in the separate patchset.
-
-> 
-> With https://patchwork.freedesktop.org/patch/534745/?series=116851&rev=2 
-> in place, VIG_SBLK and VIG_SBLK_ROT should also stop using num. But 
-> let's probably take another step forward and drop both arguments and use 
-> just a single instance of sblk per platform. I'll send a patch for it.
-> 
+On 3/10/2023 12:54 AM, Krzysztof Kozlowski wrote:
+> On 09/03/2023 00:57, Wesley Cheng wrote:
+>> Add a dt-binding to describe the definition of enabling the Q6 USB backend
+>> device for audio offloading.  The node carries information, which is passed
+>> along to the QC USB SND class driver counterpart.  These parameters will be
+>> utilized during QMI stream enable requests.
 >>
->> Signed-off-by: Ryan McCann <quic_rmccann@quicinc.com>
+>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
 >> ---
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c | 22 
->> +++++++++++-----------
->>   1 file changed, 11 insertions(+), 11 deletions(-)
+>>   .../bindings/sound/qcom,q6usb-dais.yaml       | 49 +++++++++++++++++++
+>>   1 file changed, 49 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/sound/qcom,q6usb-dais.yaml
 >>
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c 
->> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->> index 0de507d4d7b7..69200b4cf210 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->> @@ -288,7 +288,7 @@ static const uint32_t wb2_formats[] = {
->>       .rotation_cfg = rot_cfg, \
->>       }
->> -#define _DMA_SBLK(num, sdma_pri) \
->> +#define _DMA_SBLK(sdma_pri) \
->>       { \
->>       .maxdwnscale = SSPP_UNITY_SCALE, \
->>       .maxupscale = SSPP_UNITY_SCALE, \
->> @@ -323,10 +323,10 @@ static const struct dpu_sspp_sub_blks 
->> sdm845_vig_sblk_2 =
->>   static const struct dpu_sspp_sub_blks sdm845_vig_sblk_3 =
->>                   _VIG_SBLK("3", 8, DPU_SSPP_SCALER_QSEED3);
->> -static const struct dpu_sspp_sub_blks sdm845_dma_sblk_0 = 
->> _DMA_SBLK("8", 1);
->> -static const struct dpu_sspp_sub_blks sdm845_dma_sblk_1 = 
->> _DMA_SBLK("9", 2);
->> -static const struct dpu_sspp_sub_blks sdm845_dma_sblk_2 = 
->> _DMA_SBLK("10", 3);
->> -static const struct dpu_sspp_sub_blks sdm845_dma_sblk_3 = 
->> _DMA_SBLK("11", 4);
->> +static const struct dpu_sspp_sub_blks sdm845_dma_sblk_0 = _DMA_SBLK(1);
->> +static const struct dpu_sspp_sub_blks sdm845_dma_sblk_1 = _DMA_SBLK(2);
->> +static const struct dpu_sspp_sub_blks sdm845_dma_sblk_2 = _DMA_SBLK(3);
->> +static const struct dpu_sspp_sub_blks sdm845_dma_sblk_3 = _DMA_SBLK(4);
->>   #define SSPP_BLK(_name, _id, _base, _len, _features, \
->>           _sblk, _xinid, _type, _clkctrl) \
->> @@ -365,11 +365,11 @@ static const struct dpu_sspp_sub_blks 
->> sm8550_vig_sblk_1 =
->>   static const struct dpu_sspp_sub_blks sm8550_vig_sblk_2 =
->>                   _VIG_SBLK("2", 9, DPU_SSPP_SCALER_QSEED4);
->>   static const struct dpu_sspp_sub_blks sm8550_vig_sblk_3 =
->> -                _VIG_SBLK("3", 10, DPU_SSPP_SCALER_QSEED4);
->> -static const struct dpu_sspp_sub_blks sm8550_dma_sblk_4 = 
->> _DMA_SBLK("12", 5);
->> -static const struct dpu_sspp_sub_blks sm8550_dma_sblk_5 = 
->> _DMA_SBLK("13", 6);
->> +                _VIG_SBLK(10, DPU_SSPP_SCALER_QSEED4);
->> +static const struct dpu_sspp_sub_blks sm8550_dma_sblk_4 = _DMA_SBLK(5);
->> +static const struct dpu_sspp_sub_blks sm8550_dma_sblk_5 = _DMA_SBLK(6);
->> -#define _VIG_SBLK_NOSCALE(num, sdma_pri) \
->> +#define _VIG_SBLK_NOSCALE(sdma_pri) \
->>       { \
->>       .maxdwnscale = SSPP_UNITY_SCALE, \
->>       .maxupscale = SSPP_UNITY_SCALE, \
->> @@ -380,8 +380,8 @@ static const struct dpu_sspp_sub_blks 
->> sm8550_dma_sblk_5 = _DMA_SBLK("13", 6);
->>       .virt_num_formats = ARRAY_SIZE(plane_formats), \
->>       }
->> -static const struct dpu_sspp_sub_blks qcm2290_vig_sblk_0 = 
->> _VIG_SBLK_NOSCALE("0", 2);
->> -static const struct dpu_sspp_sub_blks qcm2290_dma_sblk_0 = 
->> _DMA_SBLK("8", 1);
->> +static const struct dpu_sspp_sub_blks qcm2290_vig_sblk_0 = 
->> _VIG_SBLK_NOSCALE(2);
->> +static const struct dpu_sspp_sub_blks qcm2290_dma_sblk_0 = _DMA_SBLK(1);
->>   /*************************************************************
->>    * MIXER sub blocks config
->>
+>> diff --git a/Documentation/devicetree/bindings/sound/qcom,q6usb-dais.yaml b/Documentation/devicetree/bindings/sound/qcom,q6usb-dais.yaml
+>> new file mode 100644
+>> index 000000000000..8477abc511dd
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/sound/qcom,q6usb-dais.yaml
+>> @@ -0,0 +1,49 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/sound/qcom,q6usb-dais.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Qualcomm ASoC USB backend DAI
+>> +
+>> +maintainers:
+>> +  - Wesley Cheng <quic_wcheng@quicinc.com>
+>> +
+>> +description:
+>> +  The Q6USB backend is a supported AFE port on the Q6DSP. This backend
+>> +  driver will communicate the required settings to the QC USB SND class
+> 
+> What does the "driver" mean? Linux driver? Then drop and focus on
+> hardware/Q6DSP.
 > 
 
--- 
-With best wishes
-Dmitry
+Sorry for the late reply, was side tracked on some other priorities, and 
+reviving this series again.
 
+The driver here is a Linux ASoC based DPCM backend driver, which will 
+interface with the CPU dai (q6afe).
+
+>> +  driver for properly enabling the audio stream.  Parameters defined
+>> +  under this node will carry settings, which will be passed along during
+>> +  the QMI stream enable request.
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - qcom,q6usb-dais
+> 
+> Can q6usb mean anything else? Why "-dais" suffix?
+> 
+
+As of now, no...will remove the dai suffix.
+
+>> +
+>> +  iommus:
+>> +    maxItems: 1
+>> +
+>> +  "#sound-dai-cells":
+>> +    const: 1
+>> +
+>> +  qcom,usb-audio-intr-num:
+>> +    description:
+>> +      Desired XHCI interrupter number to use.
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+> 
+> Why this should be configurable per board or SoC? It's the first use in
+> DT and in the same time sounds generic...
+> 
+
+Would depend on which interrupter we want to use.  This should be 
+configurable per platform in case the audio DSP decides to work off a 
+specific interrupter.
+
+Thanks
+Wesley Cheng
+
+>> +
+>> +required:
+>> +  - compatible
+>> +  - "#sound-dai-cells"
+>> +  - qcom,usb-audio-intr-num
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    dais {
+>> +      compatible = "qcom,q6usb-dais";
+>> +      #sound-dai-cells = <1>;
+>> +      iommus = <&apps_smmu 0x180f 0x0>;
+>> +      qcom,usb-audio-intr-num = <2>;
+>> +    };
+> 
+> Best regards,
+> Krzysztof
+> 
