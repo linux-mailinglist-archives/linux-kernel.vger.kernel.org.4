@@ -2,78 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2302E73B6E7
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 14:09:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93B4C73B6ED
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 14:10:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230387AbjFWMJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 08:09:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47542 "EHLO
+        id S231129AbjFWMJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 08:09:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjFWMJ0 (ORCPT
+        with ESMTP id S229484AbjFWMJu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 08:09:26 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 375FC1724;
-        Fri, 23 Jun 2023 05:09:24 -0700 (PDT)
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4F5B11EC041E;
-        Fri, 23 Jun 2023 14:09:22 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1687522162;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=M/dFIGeObXNSK0+1Vrh8UN2vBkMfuX0DSniP7oF6zVc=;
-        b=XtcQ9jj1rD6NHncvrJ+irOwTz/ZgbAvLGDyUpvlFEQiizWAoPdfaHG5lE+LS1DWZJXyp2r
-        euaiWfItr5qx77dcps0kn2hELb+gxH48FilIsIcnLpELOYiKWcP6208FFENCy3UA+NO2Ha
-        bUv1n/kc5ocL148c64ItZRBAXsWyG+0=
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-        header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id DFGmczbKggKd; Fri, 23 Jun 2023 12:09:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-        t=1687522158; bh=M/dFIGeObXNSK0+1Vrh8UN2vBkMfuX0DSniP7oF6zVc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KdrTBOkliNkjURxqsJdzGgczP38MWSAa37VDidfRhAx66Fg8z9FcZX7Q8DcYH80XG
-         bCRXJx2fjcMfvgCOPz1CiWUQAWTMW/QRzwnXYzHjB27O1xijwQopICr0lSiY5PNDAY
-         Gi/aGj4H/VsvWMW7Y5jbKIvO9rjIoWN9iXs/VqEjmHmIV4RWZCo3v9gz3l98DJ/aHE
-         iR48lFziRd9OiP0zzwlIX13chBZo+bnMMcaqPQDTrvO9xFG9w1EJ3QayA77+8weRD+
-         XuiyC7y8amYRsLM0/YfSWJIM/rQK/u250MD8bcJXFkfS/DclcCNXMV+etzMt/KVMO9
-         mszJCYABngkZBk2/6CxhXKY4lJvsbY/Qf3cEQrvc3EomPhUBVxch0ePCqHVCysoHwG
-         VLO6vQIdsh/KUQ5V1VY/gLOVs//FyUV34atwcN4i4nSYGiLBMeejRyBuhFBMjP6pOX
-         10zlTyEbH+9VDHxiXaz9aIkmV3CwXdixvW0n1Gd/Am/VF1ZtdklSZVEmavc9YrWbnf
-         tEfLLdtj7b5BeKVcxu31HjdXXe0DJ3E5KA0rdW62raY8MO3/LWcef99d0xZMCwDAmx
-         sfUBIFcN3LNs7R0nh0SgcV7RRfm9xAgdOflsJdZjxNrjfSK8ts9MbQdP09BocEAJrX
-         YvTSRZ5zS/lGO8uyJMm0eLbY=
-Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-        (No client certificate requested)
-        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 411D940E01D0;
-        Fri, 23 Jun 2023 12:09:10 +0000 (UTC)
-Date:   Fri, 23 Jun 2023 14:09:04 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Tony Luck <tony.luck@intel.com>
-Cc:     Yazen Ghannam <yazen.ghannam@amd.com>,
-        Smita.KoralahalliChannabasappa@amd.com,
-        dave.hansen@linux.intel.com, x86@kernel.org,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev
-Subject: Re: [PATCH v6 2/4] x86/mce: Add per-bank CMCI storm mitigation
-Message-ID: <20230623120904.GAZJWLYMP0XxIr5k7s@fat_crate.local>
-References: <20230411173841.70491-1-tony.luck@intel.com>
- <20230616182744.17632-1-tony.luck@intel.com>
- <20230616182744.17632-3-tony.luck@intel.com>
+        Fri, 23 Jun 2023 08:09:50 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2D231988;
+        Fri, 23 Jun 2023 05:09:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+ s=s31663417; t=1687522173; x=1688126973; i=ps.report@gmx.net;
+ bh=nv2bzB1C2AQZlX9aGSbBKP1OcMxpOO9dNbBAP7tNZLQ=;
+ h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
+ b=fPs0lk32Z2ULDQaI/zNek5M+nr05yiTLj0NOG+Mmonf/0GjxsaKWa1svG+A7qdZ1daWH2Wj
+ +tjXc16mOl1qW+G7tX7LaLttkmaOnIzMeXdxJZKO8elgykwK+X/JZBapEhOY6Nz3fLH6Ebnkw
+ 29uALKARvXW+WLnadGvqWz3FsSSX2Ous5Y/8u68yVo90qDOuPPA63aU7pSn68NKI2NRB49E4L
+ OwZNBdlNvuWf9C0wpzEO96LicDPyyje/oaYUt4T+f+S4smmd6PUcmajcbK7aBKzCpP2QX8W1c
+ uZ8x0ua1Q7LtxACxFrdd7apt+1pkFyR/mclw7kZ5Fa7EjECeUT1Q==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from localhost ([62.216.208.233]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mwwdf-1pt5DK1xGN-00yPUM; Fri, 23
+ Jun 2023 14:09:33 +0200
+Date:   Fri, 23 Jun 2023 14:09:32 +0200
+From:   Peter Seiderer <ps.report@gmx.net>
+To:     Eric Stahl <ericstahl@limntech.com>
+Cc:     Vincent Mailhol <vincent.mailhol@gmail.com>, marm@hms-networks.de,
+        linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v9] can: usb: IXXAT USB-to-CAN adapters drivers
+Message-ID: <20230623140932.61b7769c@gmx.net>
+In-Reply-To: <afff3b9a-8d84-49c9-4fc0-a07a792d4177@limntech.com>
+References: <20230522200144.15949-1-ps.report@gmx.net>
+        <CAMZ6RqJ4gL35=8112ES1y4jW9k+AaDNRmCcL-rbUPXtRMnZb8g@mail.gmail.com>
+        <afff3b9a-8d84-49c9-4fc0-a07a792d4177@limntech.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230616182744.17632-3-tony.luck@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:lctFTcezc3Gwt+5v+Lvm3/vxorTaIexZEPHKcvWkJSQlSnECG7+
+ 0DfIWPTql+KBk1paTLniNZN2fRrFNoitNGsH51vJX1pUNsrO5cMCkW7QIu4PZpJqZYpRcaz
+ EjmJwAnJHF/5P1wrCeADuKLL4CmUfeYDjWxExmapYFs4D8ypnn3ILX6gvcLoTVJqgrqw8Jj
+ Xh9/d1qSFzwZdWDL9Jp6g==
+UI-OutboundReport: notjunk:1;M01:P0:46CM9mln4lk=;AWYBlOGGaEnjdyEsGcZLB6x+0ey
+ 4OqwSF3dhMXL7cINVM+iFOQjB3ku4Ib+pMS2NyBkF4ZD7S2t6k66ME/L1gjR1aoP1pUojmER7
+ mz6ldLD3gSBJHUvz355xISHZ0RswXdfln1rLLzuroKJvIvuYxe6GnKuqRcovtrQkJNgOo2A2R
+ xjJ3Xg26lGp6pcB7UA/V8tO+iT8jfqcCaJ/VbPjAYxVG32XCPdVkhGGvsmxyWoP05r7FyJlWx
+ oQ2I2LDRKgpzXQW0ZESfe8QCtLlxFmkVIaN4klFyF+q/KtSsVVRJehPvKidA8gn7PWKxMEMNr
+ mym4W8F1iUxAdXw57cBl6CvA7ZVkrvPBOTjIjoHDaGwUb76GjgtseFpG7uLDfamW4yxLeIDNR
+ HrOXMi9fInsWixaFdSALJ6Qf23hS0oad+ofv1FvweoJZ6E0uTl/VVTUhprqBDjQ7Fr1k3+D9N
+ 5t9rybEzUtFbH1SQshPppxOKsrTGDDKb+U7C9XtQgbyMyDe3KxHtDU6P7V5yGZFeQnAfrN5p6
+ xCmBqY8vTb52JWf3ggtypjK+CW5P9QclYpymdopM8+QNp1PatGYDg3herMWeBs2c8ya8O470e
+ b5IgWBl900Ncj03tnayIo9+/NAiicv1XZygWGIO0Tk2QEY4DKSFbuUOAjny8lX4qjN8CCwqKk
+ F7hM3KrK/4oChDHysL+Dktx11XBM21JqW0nZP8cV1kLS/zaqhBqUapSnhSbavbA5p8XBcLuEL
+ g0ihixEubdVyB8g5pyf5czeFJlBkaIHBet0ZT050dM1UgTf4urNdsdzu4tfmAnIQMycVWxRha
+ DqbhIerUOVTowXQDGrfemc1Q0I8Tb9kHATWQHBpVvFRHZ7r5dkQM4RkRnf/0g9O8921K9J7Nr
+ MZjtaZYNwtiF0epEcgSgcyzuMZhbuI+LFxpMPxgRkE2OYodRj6MF087umGh+sC4fAm/JaAh82
+ MIbvVkFj8BDZKHBKQcEYqmv4F8E=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,154 +75,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 16, 2023 at 11:27:42AM -0700, Tony Luck wrote:
-> -void mce_timer_kick(unsigned long interval);
-> +void mce_timer_kick(bool storm);
-> +void mce_handle_storm(int bank, bool on);
-> +void cmci_storm_begin(int bank);
-> +void cmci_storm_end(int bank);
-> +
-> +/**
+Hello Eric,
 
-Yeah, let's not add kernel-doc comments about structs in internal.h
-which are no one's business outside of MCA.
+On Mon, 19 Jun 2023 10:25:27 -0400, Eric Stahl <ericstahl@limntech.com> wro=
+te:
 
-> + * struct mca_storm_desc - CMCI storm tracking data
-> + * @stormy_bank_count: count of MC banks in storm state
-> + * @bank_history: bitmask tracking of corrected errors seen in each bank
-> + * @bank_storm: determines whether the bank is in storm mode
-> + * @bank_time_stamp: last time (in jiffies) that each bank was polled
-> + */
-> +struct mca_storm_desc {
-> +	int		stormy_bank_count;
-> +	u64		bank_history[MAX_NR_BANKS];
-> +	bool		bank_storm[MAX_NR_BANKS];
-> +	unsigned long	bank_time_stamp[MAX_NR_BANKS];
-> +};
-> +DECLARE_PER_CPU(struct mca_storm_desc, storm_desc);
+> Hi all,
+>=20
+> The socketcan@hms-networks.de is bouncing for me. I removed both Florian=
+=20
+> Ferg's email (flfe@hms-networks.de) and sockectcan@hms-networks.de. I=20
+> saw Markus from hms commenting on the last thread (PATCH v8) resolving=20
+> those issues, so I've added him to this chain. I'm not sure if they are=20
+> still a problem.
+>=20
+> I've backported Peter's PATCH v9 and it works well for me. It seems that=
+=20
 
-Would that make the members organization even better:
+Thanks for testing effort ;-)
 
-struct storm_bank {
-	u64 history;
-	u64 timestamp;
-	bool storm;
-};
+> hms is distributing a driver that does not incorporate the proposed=20
+> changes from the past reviews=20
+> (https://forum.hms-networks.com/t/socketcan-driver-for-linux-20-04/70299/=
+30).=20
+> Their driver has not worked for me with higher level CANopen libraries,=20
 
-struct mca_storm_desc {
-	struct storm_bank banks[MAX_NR_BANKS];
-	unsigned int	  bank_count;
-};
+=46rom a quick look at the provided sources they seem to (at least) lack the
+following fix 'can: ixxat_usb: do not free skb before last usage'
+(which was needed for my CAN FD use case to work with the HMS provided
+sources):
 
-?
+	https://codeberg.org/psreport/socketcan-linux-ix-usb-can/commit/51b3021
 
-From the previous mail:
+> but Peter's v8/v9 and Florian's past contributions work well. I would=20
+> like to get ixxat's active pci socketcan drivers pulled into the mainline.
+>=20
 
-> storm_poll_mode is a regular per-cpu variable that indicates a CPU is in
-> poll mode because one or more of the banks it owns has gone over the
-> storm threshold.
+Not on my agenda (as I have only access to USB-to-CAN FD hardware at the
+moment)...
 
-It is still a per-CPU var which can be part of the storm descriptor, no?
+> I don't mean to hijack this thread, but I was wondering if it's=20
+> appropriate to add those pci drivers to this patch to get reviewed, or=20
+> if it's more appropriate to open a separate patch.
 
-> bank_storm - is a per-cpu per-bank indicator that a particular bank
-> on a particular CPU is in storm mode.
+I think best is to provide it as a separate patch as a starting point...
 
-Ok, so the above can be extended to:
+Regards,
+Peter
+=20
+>=20
+> Thanks,
+>=20
+> Eric
 
-struct mca_storm_desc {
-        struct storm_bank banks[MAX_NR_BANKS];
-        unsigned int      bank_count;
-	bool		  poll_mode;
-};
 
-?
 
-> +/*
-> + * How many polls of machine check bank without an error before declaring
-> + * the storm is over
-> + */
-> +#define STORM_END_POLL_THRESHOLD	30
 
-So what's stopping you from doing
 
-/*
- * How many polls of machine check bank without an error before declaring
- * the storm is over. Since it is tracked in the struct
- * storm_bank.history member as a bitmask, the mask is 30 bits [0 ... 29]
- */
-#define STORM_END_POLL_THRESHOLD	29
-
-?
-
-And you've also explained it in text too so that it is perfectly clear
-what the intent is.
-
->  #ifdef CONFIG_ACPI_APEI
->  int apei_write_mce(struct mce *m);
-> diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-> index e7936be84204..cd9d9ea5bb0a 100644
-> --- a/arch/x86/kernel/cpu/mce/core.c
-> +++ b/arch/x86/kernel/cpu/mce/core.c
-> @@ -607,6 +607,83 @@ static struct notifier_block mce_default_nb = {
->  	.priority	= MCE_PRIO_LOWEST,
->  };
->  
-> +DEFINE_PER_CPU(struct mca_storm_desc, storm_desc);
-> +
-> +void cmci_storm_begin(int bank)
-> +{
-> +	struct mca_storm_desc *storm = this_cpu_ptr(&storm_desc);
-> +
-> +	__set_bit(bank, this_cpu_ptr(mce_poll_banks));
-> +	storm->bank_storm[bank] = true;
-> +
-> +	/*
-> +	 * If this is the first bank on this CPU to enter storm mode
-> +	 * start polling
-> +	 */
-> +	if (++storm->stormy_bank_count == 1)
-
-	if (++storm->stormy_bank_count)
-
-> +		mce_timer_kick(true);
-> +}
-> +
-> +void cmci_storm_end(int bank)
-> +{
-> +	struct mca_storm_desc *storm = this_cpu_ptr(&storm_desc);
-> +
-> +	__clear_bit(bank, this_cpu_ptr(mce_poll_banks));
-> +	storm->bank_history[bank] = 0ull;
-> +	storm->bank_storm[bank] = false;
-> +
-> +	/* If no banks left in storm mode, stop polling */
-> +	if (!this_cpu_dec_return(storm_desc.stormy_bank_count))
-> +		mce_timer_kick(false);
-> +}
-> +
-> +void track_cmci_storm(int bank, u64 status)
-
-This is still not called cmci_track_storm() ;-\
-
-And looking at the AMD side of things, there's a track_cmci_storm() in
-amd_threshold_interrupt() which doesn't make any sense whatsoever.
-
-Or at least this was my initial reaction because why would the AMD side
-call a "CMCI" specific function. So they're prefixed with "cmci_" but
-they don't really have anything to do with the Intel CMCI feature - it
-is a storm handling code.
-
-Which means, since those are used by both, the confusing "cmci" should
-not be in the names.
-
-And which also means, those should be static and private to mce/core.c.
-But I'll see what functionality the rest of the patches need and how it
-all should be split/exported properly.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
