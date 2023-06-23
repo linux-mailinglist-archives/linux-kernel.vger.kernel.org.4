@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4635573B8F8
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 15:45:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0294373B8F7
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 15:44:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231824AbjFWNoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 09:44:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58562 "EHLO
+        id S230180AbjFWNog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 09:44:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231758AbjFWNoT (ORCPT
+        with ESMTP id S231757AbjFWNoT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 23 Jun 2023 09:44:19 -0400
 Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADC882697;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A7862696;
         Fri, 23 Jun 2023 06:44:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1687527855; bh=IRnQjd+50zNSbl5gfok3N2S0Jg+9Z4fkKrrLulCYgAU=;
+        t=1687527855; bh=gdMT1VPu7/T52oiYEqx+LXNHcCWHe7wIMOjlRAhlRp4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jBYwNFvAZtvh5weJO87WvoPnD0vpgGxNBYxenSAK4gnQ9KmrG3BnzhhnkWqMKoKgb
-         vb0Yqr0llRUyT+De4OoHeaQTyWD4tdaWBYRB+S3XVp7H/rgy17Rt2BnBhce+lGAiJv
-         ksfdcKBmIXr/whec8cjaLK0fSsArdAEyhi0wdRzw=
+        b=LbZUAwOBMJDqn53dBYM6vkJk0QzMOlZIpO4XkyKJcp3LLA9UYdeAm4QO5NmZ7Hg3B
+         Vt+LbbPcmhvdXLiI0FkO/5nhUEIBUWVSEtSRRIdYOwWk112ZSFfz99lXjB22Kxq1Fl
+         /y4el0HPuzUO6cB2bR4t3fQdnRceT87sRecquOAw=
 Received: from ld50.lan (unknown [101.88.25.181])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id BEC90605EB;
-        Fri, 23 Jun 2023 21:44:14 +0800 (CST)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id AC758605F4;
+        Fri, 23 Jun 2023 21:44:15 +0800 (CST)
 From:   WANG Xuerui <kernel@xen0n.name>
 To:     Huacai Chen <chenhuacai@kernel.org>
 Cc:     WANG Rui <wangrui@loongson.cn>, Xi Ruoyao <xry111@xry111.site>,
         loongarch@lists.linux.dev, linux-kbuild@vger.kernel.org,
         llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
         WANG Xuerui <git@xen0n.name>
-Subject: [PATCH 6/9] LoongArch: Simplify the invtlb wrappers
-Date:   Fri, 23 Jun 2023 21:43:48 +0800
-Message-Id: <20230623134351.1898379-7-kernel@xen0n.name>
+Subject: [PATCH 7/9] LoongArch: Tweak CFLAGS for Clang compatibility
+Date:   Fri, 23 Jun 2023 21:43:49 +0800
+Message-Id: <20230623134351.1898379-8-kernel@xen0n.name>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230623134351.1898379-1-kernel@xen0n.name>
 References: <20230623134351.1898379-1-kernel@xen0n.name>
@@ -53,138 +53,79 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: WANG Xuerui <git@xen0n.name>
 
-Of the 3 existing invtlb wrappers, invtlb_info is not used at all,
-so it is removed; invtlb_all and invtlb_addr have their unused
-argument(s) removed from their signatures.
+Now the arch code is mostly ready for LLVM/Clang consumption, it is time
+to re-organize the CFLAGS a little to actually enable the LLVM build.
 
-Also, the invtlb instruction has been supported by upstream LoongArch
-toolchains from day one, so ditch the raw opcode trickery and just use
-plain inline asm for it.
+A build with !RELOCATABLE && !MODULE is confirmed working within a QEMU
+environment; support for the two features are currently blocked by
+LLVM/Clang, and will come later.
 
 Signed-off-by: WANG Xuerui <git@xen0n.name>
 ---
- arch/loongarch/include/asm/tlb.h | 45 ++++++++++++--------------------
- arch/loongarch/mm/tlb.c          | 10 +++----
- 2 files changed, 21 insertions(+), 34 deletions(-)
+ arch/loongarch/Makefile      | 14 +++++++++++---
+ arch/loongarch/vdso/Makefile |  6 +++++-
+ 2 files changed, 16 insertions(+), 4 deletions(-)
 
-diff --git a/arch/loongarch/include/asm/tlb.h b/arch/loongarch/include/asm/tlb.h
-index 0dc9ee2b05d2..5e6ee9a15f0f 100644
---- a/arch/loongarch/include/asm/tlb.h
-+++ b/arch/loongarch/include/asm/tlb.h
-@@ -88,52 +88,39 @@ enum invtlb_ops {
- 	INVTLB_GID_ADDR = 0x16,
- };
+diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
+index a27e264bdaa5..efe9b50bd829 100644
+--- a/arch/loongarch/Makefile
++++ b/arch/loongarch/Makefile
+@@ -46,12 +46,18 @@ ld-emul			= $(64bit-emul)
+ cflags-y		+= -mabi=lp64s
+ endif
  
--/*
-- * invtlb op info addr
-- * (0x1 << 26) | (0x24 << 20) | (0x13 << 15) |
-- * (addr << 10) | (info << 5) | op
-- */
- static inline void invtlb(u32 op, u32 info, u64 addr)
- {
- 	__asm__ __volatile__(
--		"parse_r addr,%0\n\t"
--		"parse_r info,%1\n\t"
--		".word ((0x6498000) | (addr << 10) | (info << 5) | %2)\n\t"
--		:
--		: "r"(addr), "r"(info), "i"(op)
--		:
--		);
--}
--
--static inline void invtlb_addr(u32 op, u32 info, u64 addr)
--{
--	__asm__ __volatile__(
--		"parse_r addr,%0\n\t"
--		".word ((0x6498000) | (addr << 10) | (0 << 5) | %1)\n\t"
--		:
--		: "r"(addr), "i"(op)
-+		"invtlb %0, %1, %2\n\t"
- 		:
-+		: "i"(op), "r"(info), "r"(addr)
-+		: "memory"
- 		);
- }
+-cflags-y			+= -G0 -pipe -msoft-float
+-LDFLAGS_vmlinux			+= -G0 -static -n -nostdlib
++ifndef CONFIG_CC_IS_CLANG
++cflags-y			+= -G0
++LDFLAGS_vmlinux			+= -G0
++endif
++cflags-y			+= -pipe
++LDFLAGS_vmlinux			+= -static -n -nostdlib
  
--static inline void invtlb_info(u32 op, u32 info, u64 addr)
-+static inline void invtlb_addr(u32 op, u64 addr)
- {
-+	/*
-+	 * The ISA manual says $zero shall be used in case a particular op
-+	 * does not take the respective argument, hence the invtlb helper is
-+	 * not re-used to make sure this is the case.
-+	 */
- 	__asm__ __volatile__(
--		"parse_r info,%0\n\t"
--		".word ((0x6498000) | (0 << 10) | (info << 5) | %1)\n\t"
--		:
--		: "r"(info), "i"(op)
-+		"invtlb %0, $zero, %1\n\t"
- 		:
-+		: "i"(op), "r"(addr)
-+		: "memory"
- 		);
- }
+ # When the assembler supports explicit relocation hint, we must use it.
+ # GCC may have -mexplicit-relocs off by default if it was built with an old
+-# assembler, so we force it via an option.
++# assembler, so we force it via an option. For LLVM/Clang the desired behavior
++# is the default, and the flag is not supported, so don't pass it if Clang is
++# being used.
+ #
+ # When the assembler does not supports explicit relocation hint, we can't use
+ # it.  Disable it if the compiler supports it.
+@@ -61,8 +67,10 @@ LDFLAGS_vmlinux			+= -G0 -static -n -nostdlib
+ # combination of a "new" assembler and "old" compiler is not supported.  Either
+ # upgrade the compiler or downgrade the assembler.
+ ifdef CONFIG_AS_HAS_EXPLICIT_RELOCS
++ifndef CONFIG_CC_IS_CLANG
+ cflags-y			+= -mexplicit-relocs
+ KBUILD_CFLAGS_KERNEL		+= -mdirect-extern-access
++endif
+ else
+ cflags-y			+= $(call cc-option,-mno-explicit-relocs)
+ KBUILD_AFLAGS_KERNEL		+= -Wa,-mla-global-with-pcrel
+diff --git a/arch/loongarch/vdso/Makefile b/arch/loongarch/vdso/Makefile
+index 4c859a0e4754..19f6c75a1106 100644
+--- a/arch/loongarch/vdso/Makefile
++++ b/arch/loongarch/vdso/Makefile
+@@ -25,13 +25,17 @@ endif
+ cflags-vdso := $(ccflags-vdso) \
+ 	-isystem $(shell $(CC) -print-file-name=include) \
+ 	$(filter -W%,$(filter-out -Wa$(comma)%,$(KBUILD_CFLAGS))) \
+-	-O2 -g -fno-strict-aliasing -fno-common -fno-builtin -G0 \
++	-O2 -g -fno-strict-aliasing -fno-common -fno-builtin \
+ 	-fno-stack-protector -fno-jump-tables -DDISABLE_BRANCH_PROFILING \
+ 	$(call cc-option, -fno-asynchronous-unwind-tables) \
+ 	$(call cc-option, -fno-stack-protector)
+ aflags-vdso := $(ccflags-vdso) \
+ 	-D__ASSEMBLY__ -Wa,-gdwarf-2
  
--static inline void invtlb_all(u32 op, u32 info, u64 addr)
-+static inline void invtlb_all(u32 op)
- {
-+	/* Similar to invtlb_addr, ensure the operands are actually $zero. */
- 	__asm__ __volatile__(
--		".word ((0x6498000) | (0 << 10) | (0 << 5) | %0)\n\t"
-+		"invtlb %0, $zero, $zero\n\t"
- 		:
- 		: "i"(op)
--		:
-+		: "memory"
- 		);
- }
- 
-diff --git a/arch/loongarch/mm/tlb.c b/arch/loongarch/mm/tlb.c
-index 00bb563e3c89..de04d2624ef4 100644
---- a/arch/loongarch/mm/tlb.c
-+++ b/arch/loongarch/mm/tlb.c
-@@ -17,19 +17,19 @@
- 
- void local_flush_tlb_all(void)
- {
--	invtlb_all(INVTLB_CURRENT_ALL, 0, 0);
-+	invtlb_all(INVTLB_CURRENT_ALL);
- }
- EXPORT_SYMBOL(local_flush_tlb_all);
- 
- void local_flush_tlb_user(void)
- {
--	invtlb_all(INVTLB_CURRENT_GFALSE, 0, 0);
-+	invtlb_all(INVTLB_CURRENT_GFALSE);
- }
- EXPORT_SYMBOL(local_flush_tlb_user);
- 
- void local_flush_tlb_kernel(void)
- {
--	invtlb_all(INVTLB_CURRENT_GTRUE, 0, 0);
-+	invtlb_all(INVTLB_CURRENT_GTRUE);
- }
- EXPORT_SYMBOL(local_flush_tlb_kernel);
- 
-@@ -100,7 +100,7 @@ void local_flush_tlb_kernel_range(unsigned long start, unsigned long end)
- 		end &= (PAGE_MASK << 1);
- 
- 		while (start < end) {
--			invtlb_addr(INVTLB_ADDR_GTRUE_OR_ASID, 0, start);
-+			invtlb_addr(INVTLB_ADDR_GTRUE_OR_ASID, start);
- 			start += (PAGE_SIZE << 1);
- 		}
- 	} else {
-@@ -131,7 +131,7 @@ void local_flush_tlb_page(struct vm_area_struct *vma, unsigned long page)
- void local_flush_tlb_one(unsigned long page)
- {
- 	page &= (PAGE_MASK << 1);
--	invtlb_addr(INVTLB_ADDR_GTRUE_OR_ASID, 0, page);
-+	invtlb_addr(INVTLB_ADDR_GTRUE_OR_ASID, page);
- }
- 
- static void __update_hugetlb(struct vm_area_struct *vma, unsigned long address, pte_t *ptep)
++ifndef CONFIG_CC_IS_CLANG
++cflags-vdso += -G0
++endif
++
+ ifneq ($(c-gettimeofday-y),)
+   CFLAGS_vgettimeofday.o += -include $(c-gettimeofday-y)
+ endif
 -- 
 2.40.0
 
