@@ -2,104 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CEE773BBDC
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 17:40:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E13D73BBE2
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 17:41:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232621AbjFWPky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 11:40:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50540 "EHLO
+        id S232655AbjFWPle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 11:41:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231249AbjFWPkv (ORCPT
+        with ESMTP id S232648AbjFWPla (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 11:40:51 -0400
-Received: from us-smtp-delivery-44.mimecast.com (unknown [207.211.30.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C3A7211E
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 08:40:50 -0700 (PDT)
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-53-ZtD1Nw-gMPGXOzq52WaBHQ-1; Fri, 23 Jun 2023 11:40:32 -0400
-X-MC-Unique: ZtD1Nw-gMPGXOzq52WaBHQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 026E028040A3;
-        Fri, 23 Jun 2023 15:40:32 +0000 (UTC)
-Received: from hog (unknown [10.39.195.41])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 0741715230A2;
-        Fri, 23 Jun 2023 15:40:30 +0000 (UTC)
-Date:   Fri, 23 Jun 2023 17:40:29 +0200
-From:   Sabrina Dubroca <sd@queasysnail.net>
-To:     carlos.fernandez@technica-engineering.de
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] net: macsec SCI assignment for ES = 0
-Message-ID: <ZJW87b0ijjBytbqB@hog>
-References: <ZJSnDZL-0hLxbDje@hog>
- <20230623101355.26790-1-carlos.fernandez@technica-engineering.de>
+        Fri, 23 Jun 2023 11:41:30 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 963B02120
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 08:41:26 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1qCiuF-0005nd-N4; Fri, 23 Jun 2023 17:41:03 +0200
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1qCiuE-0007FL-Eg; Fri, 23 Jun 2023 17:41:02 +0200
+Date:   Fri, 23 Jun 2023 17:41:02 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Gerald Loacker <gerald.loacker@wolfvision.net>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Mikhail Rudenko <mike.rudenko@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Vincent Shih <vincent.sunplus@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org
+Subject: Re: [PATCH] media: tc358746: select CONFIG_GENERIC_PHY
+Message-ID: <20230623154102.gjyorfxpzvbnfa4y@pengutronix.de>
+References: <20230623152318.2276816-1-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230623101355.26790-1-carlos.fernandez@technica-engineering.de>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_VALIDITY_RPBL,RDNS_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230623152318.2276816-1-arnd@kernel.org>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2023-06-23, 12:13:55 +0200, carlos.fernandez@technica-engineering.de wrote:
-> Regarding ES, it is only set if the first 6 octets of the SCI are equal to the MAC, 
-> in which case SC=0 as well (IEEE802.1AE 9.5 TAG Control information). 
-> However, if ES=0, it is incorrect to use source MAC as SCI (current implementation)
+Hi Arnd,
 
-But the spec doesn't really say what else we should be using.
+thanks for the patch.
 
-Also, if it's incorrect to use the source MAC to build the SCI, we
-shouldn't have the fallback that you added in v2/v3 in response to
-Simon's comments (we'll probably end up dropping the packet when we
-look for the rxsc/secy anyway).
+On 23-06-23, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The tc358746 driver selects CONFIG_GENERIC_PHY_MIPI_DPHY and links to
+> that, but this fails when CONFIG_GENERIC_PHY is disabled, because Kbuild
+> then never enters the drivers/phy directory for building object files:
+> 
+> ERROR: modpost: "phy_mipi_dphy_get_default_config_for_hsclk" [drivers/media/i2c/tc358746.ko] undefined!
+> 
+> Add an explicit 'select GENERIC_PHY' here to ensure that the directory
+> is entered, and add another dependency on that symbol so make it
+> more obvious what is going on if another driver has the same problem,
+> as this will produce a Kconfig warning.
+> 
+> Fixes: 80a21da360516 ("media: tc358746: add Toshiba TC358746 Parallel to CSI-2 bridge driver")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-> Regarding SC, as said in IEEE 802.1AE 9.9:
+Reviewed-by: Marco Felsch <m.felsch@pengutronix.de>
+
+> ---
+>  drivers/media/i2c/Kconfig | 1 +
+>  drivers/phy/Kconfig       | 1 +
+>  2 files changed, 2 insertions(+)
+> 
+> diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
+> index cf675ac4b1326..226454b6a90dd 100644
+> --- a/drivers/media/i2c/Kconfig
+> +++ b/drivers/media/i2c/Kconfig
+> @@ -1305,6 +1305,7 @@ config VIDEO_TC358746
+>  	select VIDEO_V4L2_SUBDEV_API
+>  	select MEDIA_CONTROLLER
+>  	select V4L2_FWNODE
+> +	select GENERIC_PHY
+>  	select GENERIC_PHY_MIPI_DPHY
+>  	select REGMAP_I2C
+>  	help
+> diff --git a/drivers/phy/Kconfig b/drivers/phy/Kconfig
+> index f46e3148d286d..8dba9596408f2 100644
+> --- a/drivers/phy/Kconfig
+> +++ b/drivers/phy/Kconfig
+> @@ -18,6 +18,7 @@ config GENERIC_PHY
+>  
+>  config GENERIC_PHY_MIPI_DPHY
+>  	bool
+> +	depends on GENERIC_PHY
+>  	help
+>  	  Generic MIPI D-PHY support.
+>  
+> -- 
+> 2.39.2
 > 
 > 
-> "An explicitly encoded SCI field in the SecTAG is not required on point-to-point links, 
-> which are identified by (...), if the transmitting SecY uses only one transmit SC. 
-> In that case, the secure association created by the SecY for the peer SecYs, together with
-> the direction of transmission of the secured MPDU, can be used to identify the transmitting SecY."
-
-Thanks for the reference. This should be quoted in the commit message
-to explain the reason for the change, as well as this sentence from 9.5:
-
-    The ES bit is clear if the Source Address is not used to determine
-    the SCI.
-
-> Therefore the case SC=0 is reserved for cases where both conditions apply: point-to-point links, 
-> and only one transmit SC. This requirement makes the size of the reception lookup 1.
-
-That's the intention of the spec. We can't know that we'll only
-receive such packets in situations where we have a single RXSC for the
-entire real device.
-
-I'm not too worried about the loop being slow (because it's a bit
-unlikely that we'll go through lots of iterations on either loop
-before we hit an active RXSC), but I'm not convinced that we should be
-dumping those packets in the first RXSC we can find.
-
-So I wonder if we should instead (only for ES=0 SC=0):
- - if we have exactly one RXSC for the lower device (ie across the 2
-   loops), use it
- - otherwise (0 or > 1), drop the packet and increment InPktsNoSCI
-
-and we can use MACSEC_UNDEF_SCI as return value to indicate a bogus
-packet that needs to be dropped.
-
-Would that take care of your use case?
-
--- 
-Sabrina
-
