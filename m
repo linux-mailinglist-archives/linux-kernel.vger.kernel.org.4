@@ -2,97 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EDB973B00A
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 07:27:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49D7673B01A
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 07:35:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231484AbjFWF1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 01:27:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55786 "EHLO
+        id S230125AbjFWFfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 01:35:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230050AbjFWF1S (ORCPT
+        with ESMTP id S229607AbjFWFfF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 01:27:18 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8089A1FF7;
-        Thu, 22 Jun 2023 22:27:16 -0700 (PDT)
-Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4QnQj372FRz1GF2P;
-        Fri, 23 Jun 2023 13:27:03 +0800 (CST)
-Received: from [10.67.111.205] (10.67.111.205) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Fri, 23 Jun 2023 13:27:12 +0800
-Subject: Re: [PATCH RESEND v4 1/4] perf trace-event-info: Add
- tracepoint_id_to_name() helper
-To:     Namhyung Kim <namhyung@kernel.org>
-CC:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
-        <jolsa@kernel.org>, <irogers@google.com>,
-        <adrian.hunter@intel.com>, <anshuman.khandual@arm.com>,
-        <jesussanp@google.com>, <linux-perf-users@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230613033946.103515-1-yangjihong1@huawei.com>
- <20230613033946.103515-2-yangjihong1@huawei.com>
- <CAM9d7cjyVgJiVT4Lf+qGd+d2es6NcoN3H42onpN_t4Ed0JHgig@mail.gmail.com>
-From:   Yang Jihong <yangjihong1@huawei.com>
-Message-ID: <f1a428a5-add2-1c1e-df32-78ee4a1cbe7c@huawei.com>
-Date:   Fri, 23 Jun 2023 13:27:12 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        Fri, 23 Jun 2023 01:35:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2F5E212E;
+        Thu, 22 Jun 2023 22:35:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5527661986;
+        Fri, 23 Jun 2023 05:35:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3756EC433C8;
+        Fri, 23 Jun 2023 05:34:57 +0000 (UTC)
+Date:   Fri, 23 Jun 2023 11:04:48 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Krishna chaitanya chundru <quic_krichai@quicinc.com>
+Cc:     quic_vbadigan@quicinc.com, quic_ramkri@quicinc.com,
+        linux-arm-msm@vger.kernel.org, konrad.dybcio@linaro.org,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "open list:PCIE ENDPOINT DRIVER FOR QUALCOMM" 
+        <linux-pci@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 3/3] PCI: qcom-ep: Add ICC bandwidth voting support
+Message-ID: <20230623053448.GA5611@thinkpad>
+References: <1686752666-13426-1-git-send-email-quic_krichai@quicinc.com>
+ <1686752666-13426-4-git-send-email-quic_krichai@quicinc.com>
 MIME-Version: 1.0
-In-Reply-To: <CAM9d7cjyVgJiVT4Lf+qGd+d2es6NcoN3H42onpN_t4Ed0JHgig@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.111.205]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1686752666-13426-4-git-send-email-quic_krichai@quicinc.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-On 2023/6/21 6:35, Namhyung Kim wrote:
-> Hello,
+On Wed, Jun 14, 2023 at 07:54:26PM +0530, Krishna chaitanya chundru wrote:
+> Add support to vote for ICC bandwidth based on the link
+> speed and width.
 > 
-> On Mon, Jun 12, 2023 at 8:41 PM Yang Jihong <yangjihong1@huawei.com> wrote:
->>
->> Add tracepoint_id_to_name() helper to search for the trace events directory
->> by given event id and return the corresponding tracepoint.
->>
->> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
->> Acked-by: Adrian Hunter <adrian.hunter@intel.com>
->> ---
->>   tools/perf/util/trace-event-info.c | 11 +++++++++++
->>   tools/perf/util/trace-event.h      |  6 ++++++
->>   2 files changed, 17 insertions(+)
->>
->> diff --git a/tools/perf/util/trace-event-info.c b/tools/perf/util/trace-event-info.c
->> index c24b3a15e319..a7901f4a6654 100644
->> --- a/tools/perf/util/trace-event-info.c
->> +++ b/tools/perf/util/trace-event-info.c
->> @@ -466,6 +466,17 @@ static struct tracepoint_path *tracepoint_id_to_path(u64 config)
->>          return NULL;
->>   }
->>
->> +char *tracepoint_id_to_name(u64 config)
->> +{
->> +       struct tracepoint_path *path = tracepoint_id_to_path(config);
->> +       char *buf = NULL;
->> +
->> +       if (path && asprintf(&buf, "%s:%s", path->system, path->name) > 0)
->> +               return buf;
+> This patch is inspired from pcie-qcom driver to add basic
+> interconnect support.
 > 
-> I think we need to call put_tracepoints_path() before return.
+> Reference: commit c4860af88d0c ("PCI: qcom: Add basic interconnect
+> support").
+> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+> ---
+>  drivers/pci/controller/dwc/pcie-qcom-ep.c | 73 +++++++++++++++++++++++++++++++
+>  1 file changed, 73 insertions(+)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-qcom-ep.c b/drivers/pci/controller/dwc/pcie-qcom-ep.c
+> index 19b3283..5d146ec 100644
+> --- a/drivers/pci/controller/dwc/pcie-qcom-ep.c
+> +++ b/drivers/pci/controller/dwc/pcie-qcom-ep.c
+> @@ -13,6 +13,7 @@
+>  #include <linux/debugfs.h>
+>  #include <linux/delay.h>
+>  #include <linux/gpio/consumer.h>
+> +#include <linux/interconnect.h>
+>  #include <linux/mfd/syscon.h>
+>  #include <linux/phy/pcie.h>
+>  #include <linux/phy/phy.h>
+> @@ -28,6 +29,7 @@
+>  #define PARF_SYS_CTRL				0x00
+>  #define PARF_DB_CTRL				0x10
+>  #define PARF_PM_CTRL				0x20
+> +#define PARF_PM_STTS				0x24
+>  #define PARF_MHI_CLOCK_RESET_CTRL		0x174
+>  #define PARF_MHI_BASE_ADDR_LOWER		0x178
+>  #define PARF_MHI_BASE_ADDR_UPPER		0x17c
+> @@ -128,11 +130,19 @@
+>  /* DBI register fields */
+>  #define DBI_CON_STATUS_POWER_STATE_MASK		GENMASK(1, 0)
+>  
+> +#define DBI_LINKCTRLSTATUS			0x80
+> +#define DBI_LINKCTRLSTATUS_SHIFT		16
+> +
+>  #define XMLH_LINK_UP				0x400
+>  #define CORE_RESET_TIME_US_MIN			1000
+>  #define CORE_RESET_TIME_US_MAX			1005
+>  #define WAKE_DELAY_US				2000 /* 2 ms */
+>  
+> +#define PCIE_GEN1_BW_MBPS			250
+> +#define PCIE_GEN2_BW_MBPS			500
+> +#define PCIE_GEN3_BW_MBPS			985
+> +#define PCIE_GEN4_BW_MBPS			1969
+> +
+>  #define to_pcie_ep(x)				dev_get_drvdata((x)->dev)
+>  
+>  enum qcom_pcie_ep_link_status {
+> @@ -178,6 +188,8 @@ struct qcom_pcie_ep {
+>  	struct phy *phy;
+>  	struct dentry *debugfs;
+>  
+> +	struct icc_path *icc_mem;
+> +
+>  	struct clk_bulk_data *clks;
+>  	int num_clks;
+>  
+> @@ -253,9 +265,51 @@ static void qcom_pcie_dw_stop_link(struct dw_pcie *pci)
+>  	disable_irq(pcie_ep->perst_irq);
+>  }
+>  
+> +static void qcom_pcie_ep_icc_update(struct qcom_pcie_ep *pcie_ep)
+> +{
+> +	struct dw_pcie *pci = &pcie_ep->pci;
+> +	u32 offset, status, bw;
+> +	int speed, width;
+> +	int ret;
+> +
+> +	if (!pcie_ep->icc_mem)
+> +		return;
+> +
+> +	offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
+> +	status = readw(pci->dbi_base + offset + PCI_EXP_LNKSTA);
+> +
+> +	speed = FIELD_GET(PCI_EXP_LNKSTA_CLS, status);
+> +	width = FIELD_GET(PCI_EXP_LNKSTA_NLW, status);
+> +
+> +	switch (speed) {
+> +	case 1:
+> +		bw = MBps_to_icc(PCIE_GEN1_BW_MBPS);
+> +		break;
+> +	case 2:
+> +		bw = MBps_to_icc(PCIE_GEN2_BW_MBPS);
+> +		break;
+> +	case 3:
+> +		bw = MBps_to_icc(PCIE_GEN3_BW_MBPS);
+> +		break;
+> +	default:
+> +		WARN_ON_ONCE(1);
 
-Yes, here need to free tracepoints path, will fix in next version.
+We can drop WARN_ON_ONCE and print a warning saying that default GEN4 bandwidth
+is being used.
 
-Thanks,
-Yang
+> +		fallthrough;
+> +	case 4:
+> +		bw = MBps_to_icc(PCIE_GEN4_BW_MBPS);
+> +		break;
+> +	}
+> +
+> +	ret = icc_set_bw(pcie_ep->icc_mem, 0, width * bw);
+> +	if (ret) {
+> +		dev_err(pci->dev, "failed to set interconnect bandwidth: %d\n",
+> +			ret);
+> +	}
+> +}
+> +
+>  static int qcom_pcie_enable_resources(struct qcom_pcie_ep *pcie_ep)
+>  {
+>  	int ret;
+> +	struct dw_pcie *pci = &pcie_ep->pci;
+>  
+>  	ret = clk_bulk_prepare_enable(pcie_ep->num_clks, pcie_ep->clks);
+>  	if (ret)
+> @@ -277,6 +331,20 @@ static int qcom_pcie_enable_resources(struct qcom_pcie_ep *pcie_ep)
+>  	if (ret)
+>  		goto err_phy_exit;
+>  
+> +	/*
+> +	 * Some Qualcomm platforms require interconnect bandwidth constraints
+> +	 * to be set before enabling interconnect clocks.
+> +	 *
+> +	 * Set an initial average bandwidth corresponding to GEN1x1
+
+Keep the comment same as the other driver.
+
+> +	 * for the pcie to mem path.
+> +	 */
+> +	ret = icc_set_bw(pcie_ep->icc_mem, 0, MBps_to_icc(PCIE_GEN1_BW_MBPS));
+> +	if (ret) {
+> +		dev_err(pci->dev, "failed to set interconnect bandwidth: %d\n",
+> +			ret);
+> +		goto err_phy_exit;
+
+PHY should be powered off in the case of error.
+
+Rest looks good.
+
+- Mani
+
+> +	}
+> +
+>  	return 0;
+>  
+>  err_phy_exit:
+> @@ -550,6 +618,10 @@ static int qcom_pcie_ep_get_resources(struct platform_device *pdev,
+>  	if (IS_ERR(pcie_ep->phy))
+>  		ret = PTR_ERR(pcie_ep->phy);
+>  
+> +	pcie_ep->icc_mem = devm_of_icc_get(dev, "pcie-mem");
+> +	if (IS_ERR(pcie_ep->icc_mem))
+> +		ret = PTR_ERR(pcie_ep->icc_mem);
+> +
+>  	return ret;
+>  }
+>  
+> @@ -572,6 +644,7 @@ static irqreturn_t qcom_pcie_ep_global_irq_thread(int irq, void *data)
+>  	} else if (FIELD_GET(PARF_INT_ALL_BME, status)) {
+>  		dev_dbg(dev, "Received BME event. Link is enabled!\n");
+>  		pcie_ep->link_status = QCOM_PCIE_EP_LINK_ENABLED;
+> +		qcom_pcie_ep_icc_update(pcie_ep);
+>  	} else if (FIELD_GET(PARF_INT_ALL_PM_TURNOFF, status)) {
+>  		dev_dbg(dev, "Received PM Turn-off event! Entering L23\n");
+>  		val = readl_relaxed(pcie_ep->parf + PARF_PM_CTRL);
+> -- 
+> 2.7.4
+> 
+
+-- 
+மணிவண்ணன் சதாசிவம்
