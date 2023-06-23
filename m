@@ -2,132 +2,284 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C082973B657
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 13:33:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC84273B66F
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 13:40:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231271AbjFWLdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 07:33:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34940 "EHLO
+        id S230203AbjFWLkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 07:40:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231421AbjFWLdj (ORCPT
+        with ESMTP id S229448AbjFWLkg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 07:33:39 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E4CF19B
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 04:33:38 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2b4636bb22eso9133041fa.2
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 04:33:38 -0700 (PDT)
+        Fri, 23 Jun 2023 07:40:36 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF48E65;
+        Fri, 23 Jun 2023 04:40:31 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-311153ec442so529993f8f.1;
+        Fri, 23 Jun 2023 04:40:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google; t=1687520016; x=1690112016;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EANxw9UBUzWA7WzQeG9K7sXYK8CnMSeZWX1OlZIav4U=;
-        b=Ix2dqtFrBO5aUTzp+iN7g0CGvt+EuKluKaj3KRVutb8wks84LIrJDwiXxfqZlgNbMk
-         YguVNrMfj90prDQWzbBkDEzAdDHGDvP0DgG0seT0YrCqxWz70Fy30LrPxHAhH9rrPTfr
-         V4svsdUztNIRRO9MNIm+LeTlcGxbjRq4nX/mw=
+        d=gmail.com; s=20221208; t=1687520430; x=1690112430;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=J/u0R3l9zBf01BjxNH8vuW4kixZhC6G1lWgIfS9JJbg=;
+        b=VXsbLpkseTtrpPd4T7qF6FRW4cQlJgmBd2UNomC0GfcTT8wzO9fme3BhauIQmkbEaW
+         Eenl7lfXVplVmXJqtbDHGidGt31tvVUIKX022yNwnIynto43faf6KSczDFyP4jHuMzrp
+         juVGJhNsZ45lGf13d0Sd27gMajOQELyAoq/PrsgzorvdnsCAhrq9oev1gu8xAbvL8gM1
+         JWRiQy2ARKUMxpqUM47EeS8yQr6qpeI5fYMpR5yGkZtMHqg2QkeQKoYyMm1kpDwSU9B1
+         PeX4pEpGlL/2y3jaavMwBP/FU66A+sGixOAh1Mu8avjAsPDo0ivtVEyAiMpy5yv4W5gJ
+         IYWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687520016; x=1690112016;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EANxw9UBUzWA7WzQeG9K7sXYK8CnMSeZWX1OlZIav4U=;
-        b=EeG/vOl30nI1EZrycZbQzyDcsR/OJpN1lVr4DGsCVuwdWYqRYSOmNoddGUfhnscm2V
-         GML4M5KnijsIa9YfGMySKtGh6H/0he3rb0xQvyEylloIkBguJ4ecnAc3u85MF2SSs+2E
-         ASDGYQJZw5JV3MG2vWDtgyi/oW+jnzK6HuVzVh6jCAhKkzzhSZA9uZ2a2PCC9G0Rei41
-         gvFqp7zlaYzg8bIkQJlwvSJW1xb12s+E84FlPSjAPsYxCkuy7sjQSxKKeQkrxCAH3WdR
-         M77MWVanfqAhb9A0MFK6Z5z/Soh83l4gSZX9RdxtMV43Znku9+I+wJs8lrCCOHkcAtUl
-         mbrQ==
-X-Gm-Message-State: AC+VfDzeOioxwLogh6hmoqvFXAKK306YaJIMkpgovSIu0t/pSLrI4WV+
-        K/sH8TTFNJN4fHjRFLvIi1oyIQ==
-X-Google-Smtp-Source: ACHHUZ5qLRdl1/GZ8d6A85W9DZGBD6/3iSjmvHvCKmLac3QS4zT/ikOtVVLSZqYIVfruHpVOybcfYQ==
-X-Received: by 2002:a2e:7d0f:0:b0:2b5:81bc:43a8 with SMTP id y15-20020a2e7d0f000000b002b581bc43a8mr5965742ljc.0.1687520016335;
-        Fri, 23 Jun 2023 04:33:36 -0700 (PDT)
-Received: from prevas-ravi.prevas.se ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id n10-20020a2e720a000000b002b471efb253sm1711605ljc.46.2023.06.23.04.33.35
+        d=1e100.net; s=20221208; t=1687520430; x=1690112430;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=J/u0R3l9zBf01BjxNH8vuW4kixZhC6G1lWgIfS9JJbg=;
+        b=X7+nrxu2ErZsUtoAXvzWOd0B3BfKA5pAiF6gqtdhVfcDgaHH3UWuuSk+iiEu/kzO5/
+         qIJT7LcTeohJ51bPQZzuIlB5fHXKPyC+OHKfZUSx0D8ZuuECTB9/wCOL6682bZNwQPXo
+         lhs2wqh0DDO4zc/+/3sD08ETdkZTgYUxanDD54475bcP4mHTp94GYPrPnKP1GksLBTdG
+         d6S2SVl8BlfTklsSeXdstnlYXONAzMds0SLGO7DF8DrfkQwi29GUqhUnBm/eE0VIZlTV
+         TwIIrRgpHjN46bSJxZ0rZaUkzwHg+l8O3WtnZJTxFjugeooZZkr/UsN3lNzDtYg/j/z+
+         LURA==
+X-Gm-Message-State: AC+VfDzzB3D7glOWpNx/DXmYooUtec4k+qu+Smo3nV0m6Q4VW7BzK6b8
+        1ktPNtRHcLGTJIxs+cSYKQE=
+X-Google-Smtp-Source: ACHHUZ57ynlFQos8HrnDPX9BQ5G5TQxYOMuoG6agYBqEx7AQa1LgSwQUYhHC6AAv3Ix8OvhXhHMQmw==
+X-Received: by 2002:a5d:40c5:0:b0:311:133c:2903 with SMTP id b5-20020a5d40c5000000b00311133c2903mr17879799wrq.15.1687520429713;
+        Fri, 23 Jun 2023 04:40:29 -0700 (PDT)
+Received: from localhost.localdomain (93-34-93-173.ip49.fastwebnet.it. [93.34.93.173])
+        by smtp.googlemail.com with ESMTPSA id k3-20020a5d4283000000b00312780bedc3sm9297384wrq.56.2023.06.23.04.40.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Jun 2023 04:33:36 -0700 (PDT)
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-To:     Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Cosmin Tanislav <cosmin.tanislav@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>
-Cc:     devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] iio: addac: ad74413r: wire up digital-input-threshold-microvolt DT property
-Date:   Fri, 23 Jun 2023 13:33:26 +0200
-Message-Id: <20230623113327.1062170-3-linux@rasmusvillemoes.dk>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230623113327.1062170-1-linux@rasmusvillemoes.dk>
-References: <20230623113327.1062170-1-linux@rasmusvillemoes.dk>
+        Fri, 23 Jun 2023 04:40:29 -0700 (PDT)
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Atin Bainada <hi@atinb.me>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [net-next PATCH RFC] net: dsa: qca8k: make learning configurable and keep off if standalone
+Date:   Fri, 23 Jun 2023 13:40:05 +0200
+Message-Id: <20230623114005.9680-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The threshold is common to all channels configured as digital
-input.
+Address learning should initially be turned off by the driver for port
+operation in standalone mode, then the DSA core handles changes to it
+via ds->ops->port_bridge_flags().
 
-So far, we have not seen the settings in the DIN_THRESH affecting
-functions other than digital input, but with a4cba07e64e6 ("iio:
-addac: ad74413: don't set DIN_SINK for functions other than digital
-input") in mind, do not read and apply the
-digital-input-threshold-microvolt setting unless at least one channel
-has been configured as one of the digital input variants.
+Currently this is not the case for qca8k where learning is enabled
+unconditionally in qca8k_setup for every user port.
 
-Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Handle ports configured in standalone mode by making the learning
+configurable and not enabling it by default.
+
+Implement .port_pre_bridge_flags and .port_bridge_flags dsa ops to
+enable learning for bridge that request it and tweak
+.port_stp_state_set to correctly disable learning when port is
+configured in standalone mode.
+
+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 ---
- drivers/iio/addac/ad74413r.c | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
 
-diff --git a/drivers/iio/addac/ad74413r.c b/drivers/iio/addac/ad74413r.c
-index e3366cf5eb31..efdd7fdd7ab9 100644
---- a/drivers/iio/addac/ad74413r.c
-+++ b/drivers/iio/addac/ad74413r.c
-@@ -129,6 +129,12 @@ struct ad74413r_state {
- #define AD74413R_GPO_CONFIG_COMPARATOR		0b011
- #define AD74413R_GPO_CONFIG_HIGH_IMPEDANCE	0b100
+Posting as RFC as I would love some comments from Vladimir for correct
+implementation of this. This was suggested to be on par with offload
+bridge API and I used as example [1] (commit that does the same thing
+with a microchip switch)
+
+I didn't want to bloat the priv struct with additional info with the
+port state and from what I can see it seems using dp->learning is enough
+to understand if learning is currently enabled for the port or not but I
+would love to have some confirmation about this. (from what I notice
+when port is set in standalone mode, flags are cleared so it should be
+correct)
+
+I also verified this working by dumping the fdb in a bridge
+configuration and in a standalone configuration. Traffic works in both
+configuration.
+
+Dump WITH BRIDGE CONFIGURATION:
+01:00:5e:00:00:01 dev eth0 self permanent
+33:33:00:00:00:02 dev eth0 self permanent
+33:33:00:00:00:01 dev eth0 self permanent
+33:33:ff:f2:5d:50 dev eth0 self permanent
+33:33:ff:00:00:00 dev eth0 self permanent
+dc:ef:09:f2:5d:4f dev eth1 self permanent
+33:33:00:00:00:01 dev eth1 self permanent
+33:33:00:00:00:02 dev eth1 self permanent
+01:00:5e:00:00:01 dev eth1 self permanent
+33:33:ff:f2:5d:4f dev eth1 self permanent
+33:33:ff:00:00:00 dev eth1 self permanent
+c0:3e:ba:c1:d7:47 dev lan1 master br-lan
+dc:ef:09:f2:5d:4f dev lan1 vlan 1 master br-lan permanent
+dc:ef:09:f2:5d:4f dev lan1 master br-lan permanent
+c0:3e:ba:c1:d7:47 dev lan1 vlan 1 self
+33:33:00:00:00:01 dev wlan0 self permanent
+33:33:00:00:00:02 dev wlan0 self permanent
+33:33:00:00:00:01 dev wlan1 self permanent
+33:33:00:00:00:02 dev wlan1 self permanent
+33:33:00:00:00:01 dev br-lan self permanent
+33:33:00:00:00:02 dev br-lan self permanent
+01:00:5e:00:00:01 dev br-lan self permanent
+33:33:ff:00:00:01 dev br-lan self permanent
+33:33:ff:f2:5d:4f dev br-lan self permanent
+33:33:00:01:00:02 dev br-lan self permanent
+33:33:00:01:00:03 dev br-lan self permanent
+33:33:ff:00:00:00 dev br-lan self permanent
+
+Dump WITH STANDALONE CONFIGURATION:
+01:00:5e:00:00:01 dev eth0 self permanent
+33:33:00:00:00:02 dev eth0 self permanent
+33:33:00:00:00:01 dev eth0 self permanent
+33:33:ff:f2:5d:50 dev eth0 self permanent
+33:33:ff:00:00:00 dev eth0 self permanent
+33:33:00:00:00:01 dev eth1 self permanent
+33:33:00:00:00:02 dev eth1 self permanent
+01:00:5e:00:00:01 dev eth1 self permanent
+33:33:ff:f2:5d:4f dev eth1 self permanent
+33:33:ff:00:00:01 dev eth1 self permanent
+33:33:ff:00:00:00 dev eth1 self permanent
+33:33:00:01:00:02 dev eth1 self permanent
+33:33:00:01:00:03 dev eth1 self permanent
+33:33:00:00:00:01 dev wlan0 self permanent
+33:33:00:00:00:02 dev wlan0 self permanent
+33:33:00:00:00:01 dev wlan1 self permanent
+33:33:00:00:00:02 dev wlan1 self permanent
+
+From what I can see there isn't any self entry with the MAC address of
+the connected device and this should confirm that learning is actually
+disabled.
+
+Hope this is enough to test this feature and I would ask what would be
+the next step to reach a point where port_change_master can be
+implemented.
+(would also love to see what are the criteria to enable offload_fwd_mask
+on the targget for rcv and eventually for xmit)
+
+Thanks for any response and sorry for the long comments.
+
+
+[1] https://github.com/torvalds/linux/commit/15f7cfae912e
+
+ drivers/net/dsa/qca/qca8k-8xxx.c   |  8 ++----
+ drivers/net/dsa/qca/qca8k-common.c | 40 ++++++++++++++++++++++++++++++
+ drivers/net/dsa/qca/qca8k.h        |  6 +++++
+ 3 files changed, 48 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/net/dsa/qca/qca8k-8xxx.c b/drivers/net/dsa/qca/qca8k-8xxx.c
+index f08086ac2261..a9af270a03ce 100644
+--- a/drivers/net/dsa/qca/qca8k-8xxx.c
++++ b/drivers/net/dsa/qca/qca8k-8xxx.c
+@@ -1963,12 +1963,6 @@ qca8k_setup(struct dsa_switch *ds)
+ 			if (ret)
+ 				return ret;
  
-+#define AD74413R_REG_DIN_THRESH		0x22
-+#define AD74413R_DIN_COMP_THRESH_MASK	GENMASK(5, 1)
-+#define AD74413R_DIN_THRESH_MODE	BIT(0)
-+#define AD74413R_DIN_THRESH_MODE_16V	BIT(0)
-+#define AD74413R_DIN_THRESH_MODE_AVDD	0
-+
- #define AD74413R_REG_ADC_CONV_CTRL	0x23
- #define AD74413R_CONV_SEQ_MASK		GENMASK(9, 8)
- #define AD74413R_CONV_SEQ_ON		0b00
-@@ -1446,6 +1452,20 @@ static int ad74413r_probe(struct spi_device *spi)
- 	}
+-			/* Enable ARP Auto-learning by default */
+-			ret = regmap_set_bits(priv->regmap, QCA8K_PORT_LOOKUP_CTRL(i),
+-					      QCA8K_PORT_LOOKUP_LEARN);
+-			if (ret)
+-				return ret;
+-
+ 			/* For port based vlans to work we need to set the
+ 			 * default egress vid
+ 			 */
+@@ -2071,6 +2065,8 @@ static const struct dsa_switch_ops qca8k_switch_ops = {
+ 	.port_change_mtu	= qca8k_port_change_mtu,
+ 	.port_max_mtu		= qca8k_port_max_mtu,
+ 	.port_stp_state_set	= qca8k_port_stp_state_set,
++	.port_pre_bridge_flags	= qca8k_port_pre_bridge_flags,
++	.port_bridge_flags	= qca8k_port_bridge_flags,
+ 	.port_bridge_join	= qca8k_port_bridge_join,
+ 	.port_bridge_leave	= qca8k_port_bridge_leave,
+ 	.port_fast_age		= qca8k_port_fast_age,
+diff --git a/drivers/net/dsa/qca/qca8k-common.c b/drivers/net/dsa/qca/qca8k-common.c
+index 8c2dc0e48ff4..f93defbd8b66 100644
+--- a/drivers/net/dsa/qca/qca8k-common.c
++++ b/drivers/net/dsa/qca/qca8k-common.c
+@@ -559,8 +559,24 @@ int qca8k_get_mac_eee(struct dsa_switch *ds, int port,
+ 	return 0;
+ }
  
- 	if (st->num_comparator_gpios) {
-+		u32 thresh, val, mask;
++static int qca8k_port_configure_learning(struct dsa_switch *ds, int port,
++					 bool learning)
++{
++	struct qca8k_priv *priv = ds->priv;
 +
-+		if (!device_property_read_u32(st->dev, "digital-input-threshold-microvolt",
-+					      &thresh)) {
-+			val = thresh/500000 - 1;
-+			val = FIELD_PREP(AD74413R_DIN_COMP_THRESH_MASK, val);
-+			val |= AD74413R_DIN_THRESH_MODE_16V;
-+			mask = AD74413R_DIN_COMP_THRESH_MASK | AD74413R_DIN_THRESH_MODE;
-+			ret = regmap_update_bits(st->regmap, AD74413R_REG_DIN_THRESH,
-+						 mask, val);
-+			if (ret)
-+				return ret;
-+		}
++	if (learning)
++		return regmap_set_bits(priv->regmap,
++				       QCA8K_PORT_LOOKUP_CTRL(port),
++				       QCA8K_PORT_LOOKUP_LEARN);
++	else
++		return regmap_clear_bits(priv->regmap,
++					 QCA8K_PORT_LOOKUP_CTRL(port),
++					 QCA8K_PORT_LOOKUP_LEARN);
++}
 +
- 		st->comp_gpiochip.owner = THIS_MODULE;
- 		st->comp_gpiochip.label = st->chip_info->name;
- 		st->comp_gpiochip.base = -1;
+ void qca8k_port_stp_state_set(struct dsa_switch *ds, int port, u8 state)
+ {
++	struct dsa_port *dp = dsa_to_port(ds, port);
+ 	struct qca8k_priv *priv = ds->priv;
+ 	u32 stp_state;
+ 
+@@ -585,6 +601,30 @@ void qca8k_port_stp_state_set(struct dsa_switch *ds, int port, u8 state)
+ 
+ 	qca8k_rmw(priv, QCA8K_PORT_LOOKUP_CTRL(port),
+ 		  QCA8K_PORT_LOOKUP_STATE_MASK, stp_state);
++
++	qca8k_port_configure_learning(ds, port, dp->learning);
++}
++
++int qca8k_port_pre_bridge_flags(struct dsa_switch *ds, int port,
++				struct switchdev_brport_flags flags,
++				struct netlink_ext_ack *extack)
++{
++	if (flags.mask & ~BR_LEARNING)
++		return -EINVAL;
++
++	return 0;
++}
++
++int qca8k_port_bridge_flags(struct dsa_switch *ds, int port,
++			    struct switchdev_brport_flags flags,
++			    struct netlink_ext_ack *extack)
++{
++	int ret;
++
++	ret = qca8k_port_configure_learning(ds, port,
++					    flags.mask & ~BR_LEARNING);
++
++	return ret;
+ }
+ 
+ int qca8k_port_bridge_join(struct dsa_switch *ds, int port,
+diff --git a/drivers/net/dsa/qca/qca8k.h b/drivers/net/dsa/qca/qca8k.h
+index c5cc8a172d65..8f88b7db384d 100644
+--- a/drivers/net/dsa/qca/qca8k.h
++++ b/drivers/net/dsa/qca/qca8k.h
+@@ -522,6 +522,12 @@ int qca8k_get_mac_eee(struct dsa_switch *ds, int port, struct ethtool_eee *e);
+ 
+ /* Common bridge function */
+ void qca8k_port_stp_state_set(struct dsa_switch *ds, int port, u8 state);
++int qca8k_port_pre_bridge_flags(struct dsa_switch *ds, int port,
++				struct switchdev_brport_flags flags,
++				struct netlink_ext_ack *extack);
++int qca8k_port_bridge_flags(struct dsa_switch *ds, int port,
++			    struct switchdev_brport_flags flags,
++			    struct netlink_ext_ack *extack);
+ int qca8k_port_bridge_join(struct dsa_switch *ds, int port,
+ 			   struct dsa_bridge bridge,
+ 			   bool *tx_fwd_offload,
 -- 
-2.37.2
+2.40.1
 
