@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C71573C25F
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 23:16:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F40373C260
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 23:16:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232856AbjFWVQU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 17:16:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50356 "EHLO
+        id S232694AbjFWVQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 17:16:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232866AbjFWVPd (ORCPT
+        with ESMTP id S232870AbjFWVPd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 23 Jun 2023 17:15:33 -0400
 Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1F8626BD;
-        Fri, 23 Jun 2023 14:15:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 379B2270A;
+        Fri, 23 Jun 2023 14:15:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=inria.fr; s=dc;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=8RgN37sI7dQZ+yBNJgvV+FVERbz2KA6A4JGbVoPo1D8=;
-  b=ZLSOgmbfYoFK1LfswZnkAko5w1qaeuRTBPVtfsuJhYufYAShfc08lrY5
-   GfmwSRRDmk+b4IYZGmpWxgs4LgkYSVKQuaZq7LE+mHoJVN5ZQicrxpb1d
-   qwR/n8FqYT1ATKyZe3Ay1Bz27c81Fou59W2Zj2TESMWOmR77CEA5urk0P
-   s=;
+  bh=jammjAxbCgbnRHLqhi6UIftAryvqKnOHjwdJrbKzjag=;
+  b=Z47OQtnPiaEB5oaBB+oz82Qsg6BtHw8YihUVIhQDCMR+I0tQpbbrpJXq
+   nj5C0YQSxjWsFlY9SUmJShUU8xGXEqdHAlNbU+0vzr8txprHO2a1l78O0
+   vJXXUrP7E3H3oTBJf1CDCM1QC0nZjMpj3m7aYP6mcSPVWR15IxWF2hFkG
+   o=;
 Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
 X-IronPort-AV: E=Sophos;i="6.01,153,1684792800"; 
-   d="scan'208";a="59686177"
+   d="scan'208";a="59686178"
 Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
   by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2023 23:15:13 +0200
 From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     Selvin Xavier <selvin.xavier@broadcom.com>
+To:     Zack Rusin <zackr@vmware.com>
 Cc:     keescook@chromium.org, kernel-janitors@vger.kernel.org,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 19/26] RDMA/bnxt_re: use array_size
-Date:   Fri, 23 Jun 2023 23:14:50 +0200
-Message-Id: <20230623211457.102544-20-Julia.Lawall@inria.fr>
+        VMware Graphics Reviewers 
+        <linux-graphics-maintainer@vmware.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 20/26] drm/vmwgfx: use array_size
+Date:   Fri, 23 Jun 2023 23:14:51 +0200
+Message-Id: <20230623211457.102544-21-Julia.Lawall@inria.fr>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20230623211457.102544-1-Julia.Lawall@inria.fr>
 References: <20230623211457.102544-1-Julia.Lawall@inria.fr>
@@ -59,17 +61,20 @@ The changes were done using the following Coccinelle semantic patch:
 
 // <smpl>
 @@
-    expression E1, E2;
-    constant C1, C2;
-    identifier alloc = {vmalloc,vzalloc};
+    size_t e1,e2;
+    expression COUNT;
+    identifier alloc = {vmalloc,vzalloc,kvmalloc,kvzalloc};
 @@
-    
+
 (
-      alloc(C1 * C2,...)
+      alloc(
+-           (e1) * (e2)
++           array_size(e1, e2)
+      ,...)
 |
       alloc(
--           (E1) * (E2)
-+           array_size(E1, E2)
+-           (e1) * (COUNT)
++           array_size(COUNT, e1)
       ,...)
 )
 // </smpl>
@@ -77,25 +82,20 @@ The changes were done using the following Coccinelle semantic patch:
 Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
 ---
- drivers/infiniband/hw/bnxt_re/qplib_res.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/vmwgfx/vmwgfx_devcaps.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/infiniband/hw/bnxt_re/qplib_res.c b/drivers/infiniband/hw/bnxt_re/qplib_res.c
-index 81b0c5e879f9..f049b627e734 100644
---- a/drivers/infiniband/hw/bnxt_re/qplib_res.c
-+++ b/drivers/infiniband/hw/bnxt_re/qplib_res.c
-@@ -118,11 +118,11 @@ static int __alloc_pbl(struct bnxt_qplib_res *res,
- 	else
- 		pages = sginfo->npages;
- 	/* page ptr arrays */
--	pbl->pg_arr = vmalloc(pages * sizeof(void *));
-+	pbl->pg_arr = vmalloc(array_size(pages, sizeof(void *)));
- 	if (!pbl->pg_arr)
- 		return -ENOMEM;
+diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_devcaps.c b/drivers/gpu/drm/vmwgfx/vmwgfx_devcaps.c
+index 829df395c2ed..c72fc8111a11 100644
+--- a/drivers/gpu/drm/vmwgfx/vmwgfx_devcaps.c
++++ b/drivers/gpu/drm/vmwgfx/vmwgfx_devcaps.c
+@@ -88,7 +88,7 @@ int vmw_devcaps_create(struct vmw_private *vmw)
+ 	uint32_t i;
  
--	pbl->pg_map_arr = vmalloc(pages * sizeof(dma_addr_t));
-+	pbl->pg_map_arr = vmalloc(array_size(pages, sizeof(dma_addr_t)));
- 	if (!pbl->pg_map_arr) {
- 		vfree(pbl->pg_arr);
- 		pbl->pg_arr = NULL;
+ 	if (gb_objects) {
+-		vmw->devcaps = vzalloc(sizeof(uint32_t) * SVGA3D_DEVCAP_MAX);
++		vmw->devcaps = vzalloc(array_size(SVGA3D_DEVCAP_MAX, sizeof(uint32_t)));
+ 		if (!vmw->devcaps)
+ 			return -ENOMEM;
+ 		for (i = 0; i < SVGA3D_DEVCAP_MAX; ++i) {
 
