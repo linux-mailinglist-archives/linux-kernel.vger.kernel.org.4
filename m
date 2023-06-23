@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C080F73B694
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 13:46:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A7F073B6A4
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 13:47:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231622AbjFWLq2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 07:46:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37592 "EHLO
+        id S231680AbjFWLqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 07:46:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230387AbjFWLqH (ORCPT
+        with ESMTP id S231181AbjFWLqI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 07:46:07 -0400
+        Fri, 23 Jun 2023 07:46:08 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A84FE26A5
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 04:45:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECE7119AB
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 04:45:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687520718;
+        s=mimecast20190719; t=1687520723;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ZDy9qTqAXsZiyNyw/4xfrjcFbGXml691uHuF37I4PZg=;
-        b=Ik6AFcb0x0VdlCQ/jSWOJJLyC/pKRyswrjtOKk2P13057yuU5lI9nQCjX5G29GURFbi0px
-        9WvGY76FZ83jrV+ZgI7mNEve8/uoNruOJ/lZXo5xA0kDrhuUrA7Ct7nguNsr1LqZzr7z2r
-        Q5P8iUpseumkdSLwxzV9MwUxk85f99o=
+        bh=6qW7QONKdXKQCe18ckz4PBDuqjad2A9AyVw+035R3zM=;
+        b=hV3IjCC6kQSZX0A+RbaSNHXKaoiaaaEbGvWFym0bhnEb8gMcqD9dDgzx9a2gIbgF26C6i8
+        qp7BxS9bOpxnnIrPiE3CQR4pVhi1NC7APVgj+dyIQhMI+MdvQqBrF4kr6ijLG0pzMdOWQj
+        yfvZGrs6R23NLRFjcE9+2k5UntE2lO4=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-107-y_gjQWLAObqQcPZDkV39dQ-1; Fri, 23 Jun 2023 07:45:15 -0400
-X-MC-Unique: y_gjQWLAObqQcPZDkV39dQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+ us-mta-155-woVC1FXnMaeEutQKCYvqpQ-1; Fri, 23 Jun 2023 07:45:19 -0400
+X-MC-Unique: woVC1FXnMaeEutQKCYvqpQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D14C63804A43;
-        Fri, 23 Jun 2023 11:45:13 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 57BA529AB40B;
+        Fri, 23 Jun 2023 11:45:16 +0000 (UTC)
 Received: from warthog.procyon.org.com (unknown [10.42.28.4])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id ED36015230A0;
-        Fri, 23 Jun 2023 11:45:11 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7E6FC4087C6F;
+        Fri, 23 Jun 2023 11:45:14 +0000 (UTC)
 From:   David Howells <dhowells@redhat.com>
 To:     netdev@vger.kernel.org
 Cc:     David Howells <dhowells@redhat.com>,
@@ -54,14 +54,14 @@ Cc:     David Howells <dhowells@redhat.com>,
         Joel Becker <jlbec@evilplan.org>,
         Joseph Qi <joseph.qi@linux.alibaba.com>,
         ocfs2-devel@oss.oracle.com
-Subject: [PATCH net-next v4 12/15] ocfs2: Fix use of slab data with sendpage
-Date:   Fri, 23 Jun 2023 12:44:22 +0100
-Message-ID: <20230623114425.2150536-13-dhowells@redhat.com>
+Subject: [PATCH net-next v4 13/15] ocfs2: Use sendmsg(MSG_SPLICE_PAGES) rather than sendpage()
+Date:   Fri, 23 Jun 2023 12:44:23 +0100
+Message-ID: <20230623114425.2150536-14-dhowells@redhat.com>
 In-Reply-To: <20230623114425.2150536-1-dhowells@redhat.com>
 References: <20230623114425.2150536-1-dhowells@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
@@ -73,17 +73,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ocfs2 uses kzalloc() to allocate buffers for for o2net_hand, o2net_keep_req
-and o2net_keep_resp and then passes these to sendpage.  This isn't really
-allowed as the lifetime of slab objects is not controlled by page ref -
-though in this case it will probably work.  sendmsg() with MSG_SPLICE_PAGES
-will, however, print a warning and give an error.
+Switch ocfs2 from using sendpage() to using sendmsg() + MSG_SPLICE_PAGES so
+that sendpage can be phased out.
 
-Fix it to use folio_alloc() instead to allocate a buffer for the handshake
-message, keepalive request and reply messages.
-
-Fixes: 98211489d414 ("[PATCH] OCFS2: The Second Oracle Cluster Filesystem")
 Signed-off-by: David Howells <dhowells@redhat.com>
+
 cc: Mark Fasheh <mark@fasheh.com>
 cc: Joel Becker <jlbec@evilplan.org>
 cc: Joseph Qi <joseph.qi@linux.alibaba.com>
@@ -94,61 +88,48 @@ cc: Paolo Abeni <pabeni@redhat.com>
 cc: ocfs2-devel@oss.oracle.com
 cc: netdev@vger.kernel.org
 ---
- fs/ocfs2/cluster/tcp.c | 23 ++++++++++++-----------
- 1 file changed, 12 insertions(+), 11 deletions(-)
+
+Notes:
+    ver #4)
+     - Use folio_alloc() for o2net_hand, o2net_keep_req and o2net_keep_resp.
+    
+    ver #2)
+     - Wrap lines at 80.
+
+ fs/ocfs2/cluster/tcp.c | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
 
 diff --git a/fs/ocfs2/cluster/tcp.c b/fs/ocfs2/cluster/tcp.c
-index aecbd712a00c..929a1133bc18 100644
+index 929a1133bc18..960080753d3b 100644
 --- a/fs/ocfs2/cluster/tcp.c
 +++ b/fs/ocfs2/cluster/tcp.c
-@@ -2087,18 +2087,24 @@ void o2net_stop_listening(struct o2nm_node *node)
- 
- int o2net_init(void)
- {
-+	struct folio *folio;
-+	void *p;
- 	unsigned long i;
- 
- 	o2quo_init();
--
- 	o2net_debugfs_init();
- 
--	o2net_hand = kzalloc(sizeof(struct o2net_handshake), GFP_KERNEL);
--	o2net_keep_req = kzalloc(sizeof(struct o2net_msg), GFP_KERNEL);
--	o2net_keep_resp = kzalloc(sizeof(struct o2net_msg), GFP_KERNEL);
--	if (!o2net_hand || !o2net_keep_req || !o2net_keep_resp)
-+	folio = folio_alloc(GFP_KERNEL | __GFP_ZERO, 0);
-+	if (!folio)
- 		goto out;
- 
-+	p = folio_address(folio);
-+	o2net_hand = p;
-+	p += sizeof(struct o2net_handshake);
-+	o2net_keep_req = p;
-+	p += sizeof(struct o2net_msg);
-+	o2net_keep_resp = p;
-+
- 	o2net_hand->protocol_version = cpu_to_be64(O2NET_PROTOCOL_VERSION);
- 	o2net_hand->connector_id = cpu_to_be64(1);
- 
-@@ -2124,9 +2130,6 @@ int o2net_init(void)
- 	return 0;
- 
- out:
--	kfree(o2net_hand);
--	kfree(o2net_keep_req);
--	kfree(o2net_keep_resp);
- 	o2net_debugfs_exit();
- 	o2quo_exit();
- 	return -ENOMEM;
-@@ -2135,8 +2138,6 @@ int o2net_init(void)
- void o2net_exit(void)
- {
- 	o2quo_exit();
--	kfree(o2net_hand);
--	kfree(o2net_keep_req);
--	kfree(o2net_keep_resp);
- 	o2net_debugfs_exit();
-+	folio_put(virt_to_folio(o2net_hand));
+@@ -930,19 +930,22 @@ static int o2net_send_tcp_msg(struct socket *sock, struct kvec *vec,
  }
+ 
+ static void o2net_sendpage(struct o2net_sock_container *sc,
+-			   void *kmalloced_virt,
+-			   size_t size)
++			   void *virt, size_t size)
+ {
+ 	struct o2net_node *nn = o2net_nn_from_num(sc->sc_node->nd_num);
++	struct msghdr msg = {};
++	struct bio_vec bv;
+ 	ssize_t ret;
+ 
++	bvec_set_virt(&bv, virt, size);
++	iov_iter_bvec(&msg.msg_iter, ITER_SOURCE, &bv, 1, size);
++
+ 	while (1) {
++		msg.msg_flags = MSG_DONTWAIT | MSG_SPLICE_PAGES;
+ 		mutex_lock(&sc->sc_send_lock);
+-		ret = sc->sc_sock->ops->sendpage(sc->sc_sock,
+-						 virt_to_page(kmalloced_virt),
+-						 offset_in_page(kmalloced_virt),
+-						 size, MSG_DONTWAIT);
++		ret = sock_sendmsg(sc->sc_sock, &msg);
+ 		mutex_unlock(&sc->sc_send_lock);
++
+ 		if (ret == size)
+ 			break;
+ 		if (ret == (ssize_t)-EAGAIN) {
 
