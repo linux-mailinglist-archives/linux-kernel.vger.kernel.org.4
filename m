@@ -2,94 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C87673AF74
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 06:35:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ABE573AF79
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 06:36:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230042AbjFWEfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 00:35:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45208 "EHLO
+        id S230423AbjFWEg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 00:36:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbjFWEf1 (ORCPT
+        with ESMTP id S229673AbjFWEg1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 00:35:27 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6E082126;
-        Thu, 22 Jun 2023 21:35:25 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        Fri, 23 Jun 2023 00:36:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 524AC2126;
+        Thu, 22 Jun 2023 21:36:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QnPYM3440z4x0G;
-        Fri, 23 Jun 2023 14:35:18 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1687494920;
-        bh=ZskOC+cCF8/1ColPMPP+LaROpkzweQ/aPkgpe9itvU0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Sm77AadHjqVYzBHQVDlPJO35LZRalzclBH2RJHH8eieibmqBFnskdfVYS6MYz/2Ib
-         Lgw+HldZecGczvvPjaIOW5MmOGbe5nl6yXLPnuw8AYKzslbE/RYLju52KxSB+4L6e4
-         4C2KnxMYB1gANuBtdta5zOIcd1B3fwr1u0zsC9mGl6CHEpVcwzHzc82oR4GfuAXuwB
-         ZDTMIEzUhHjjiGP8+oBp9BxcPW+fBM0oFZ5ziJPL/ZbPqsfZgvabtDV0cO3CPnnHa5
-         0k+Mys7hpkLr9aG6xliW/67t2DAfWhZ2XD7xVAp9AG7lVSv1iQe7rGjftjgU1ppW6n
-         HCnzrZy4QHBjw==
-Date:   Fri, 23 Jun 2023 14:35:17 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Donglin Peng <pengdonglin@sangfor.com.cn>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the ftrace tree
-Message-ID: <20230623143517.19ffc6c0@canb.auug.org.au>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CBE9A617E6;
+        Fri, 23 Jun 2023 04:36:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D33BDC433C0;
+        Fri, 23 Jun 2023 04:36:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687494985;
+        bh=wIIxQfC5WSJRvYJdfbpQqGmitcfaxB6kixNhBzHA9Bk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VHeDGp1qleQVq4JHlalZAEakskropekrk1RmNrSgOoiBsSu3R5mitQs8qoi3Q+lkZ
+         xXJ5Q2LvhPeal1GRY/3BhiEeTahi2y6Peqrvlj1UCBWtdivPXfd1v1staEENvZoz20
+         EDuG5+3oo/GioGXZysxI6Ov/4dGvX/ZiuPDK3cFeo4ZMGAGsPKVL/PgbL0GJLFBs1D
+         +INEDpQ6F/DQ4icsBAzXFGzk+igqwUJDtiNmTatnPo8iJtFog1Es8D4w5LqT5WPY02
+         Ynzw2JpAE11PN+mPfd+BpXBvcZQ+kSV8d0W+VkBOlm7QiNJm5SOTh3jPKqS4xx1cG2
+         uL5NbVbqpyZjg==
+Date:   Thu, 22 Jun 2023 21:36:23 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Eric Sandeen <sandeen@sandeen.net>
+Cc:     Dave Chinner <david@fromorbit.com>,
+        syzbot <syzbot+9d0b0d54a8bd799f6ae4@syzkaller.appspotmail.com>,
+        dchinner@redhat.com, djwong@kernel.org, hch@lst.de,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [xfs?] WARNING: Reset corrupted AGFL on AG NUM. NUM
+ blocks leaked. Please unmount and run xfs_repair.
+Message-ID: <20230623043623.GA851@sol.localdomain>
+References: <000000000000ffcb2e05fe9a445c@google.com>
+ <ZJKhoxnkNF3VspbP@dread.disaster.area>
+ <20230621075421.GA56560@sol.localdomain>
+ <ZJQNjFJhLh0C84u/@dread.disaster.area>
+ <20230623005617.GA1949@sol.localdomain>
+ <328c6e2c-e055-3391-3499-4963e351b0be@sandeen.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/RcO5jDrgAuSQehikJZ6A93s";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <328c6e2c-e055-3391-3499-4963e351b0be@sandeen.net>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/RcO5jDrgAuSQehikJZ6A93s
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, Jun 22, 2023 at 10:09:55PM -0500, Eric Sandeen wrote:
+> > Grepping for "WARNING:" is how other kernel testing systems find WARN_ON's in
+> > the log too.  For example, see _check_dmesg() in common/rc in xfstests.
+> > xfstests fails tests if "WARNING:" is logged.  You might be aware of this, as
+> > you reviewed and applied xfstests commit 47e5d7d2bb17 which added the code.
+> > 
+> > I understand it's frustrating that Dmitry's attempt to do something about this
+> > problem was incomplete.  I don't think it is helpful to then send a reflexive,
+> > adversarial response that shifts the blame for this longstanding problem with
+> > the kernel logs entirely onto syzbot and even Dmitry personally.  That just
+> > causes confusion about the problem that needs to be solved.
+> > 
+> > Anyway, either everything that parses the kernel logs needs to be smarter about
+> > identifying real WARN_ON's, or all instances of "WARNING:" need to be eliminated
+> > from the log (with existing code, coding style guidelines, and checkpatch
+> > updated as you mentioned).  I think I'm leaning towards the position that fake
+> > "WARNING:"s should be eliminated.  It does seem like a hack, but it makes the
+> > "obvious" log pattern matching that everyone tends to write work as expected...
+> > 
+> > If you don't want to help, fine, but at least please try not to be obstructive.
+> 
+> I didn't read Dave's reply as "obstructive." There's been a trend lately of
+> ever-growing hoards of people (with machines behind them) generating
+> ever-more work for a very small and fixed number of developers who are
+> burning out. It's not sustainable. The work-generators need to help make
+> things better, or the whole system is going to break.
+> 
+> Dave being frustrated that he has to deal with "bug reports" about a printk
+> phrase is valid, IMHO. There are many straws breaking the camel's back these
+> days.
+> 
+> You had asked for a constructive suggestion.
+> 
+> My specific suggestion is that the people who decided that printk("WARNING")
+> merits must-fix syzbot reports should submit patches to any subsystem they
+> plan to test, to replace printk("WARNING") with something that will not
+> trigger syzbot reports. Don't spread that pain onto every subsystem
+> developer who already has to deal with legitimate and pressing work. Or,
+> work out some other reliable way to discern WARN_ON from WARNING.
+> 
+> And add it to checkpatch etc, as Dave suggested.
+> 
+> This falls into the "help us help you" category. Early on, syszbot
+> filesystem reports presented filesystems only as a giant array of hex in a C
+> file, leaving it to the poor developer to work out how to use standard
+> filesystem tools to analyze the input. Now we get standard images. That's an
+> improvement, with some effort on the syzbot side that saves time and effort
+> for every filesystem developer forever more. Find more ways to make these
+> reports more relevant, more accurate, and more efficient to triage.
+> 
+> That's my constructive suggestion.
+> 
 
-Hi all,
+I went ahead and filed an issue against syzkaller for this:
+https://github.com/google/syzkaller/issues/3980
 
-After merging the ftrace tree, today's linux-next build (htmldocs)
-produced this warning:
+I still would like to emphasize that other testing systems such as xfstests do
+the same "dmesg | grep WARNING:" thing and therefore have the same problem, at
+least in principle.  (Whether a test actually finds anything depends on the code
+covered, of course.)  Again, I'm mentioning this not to try to absolve syzkaller
+of responsibility, but rather because it's important that everyone agrees on the
+problem here, and ideally its solution too.  If people continue operating under
+the mistaken belief that this is a syzkaller specific issue, it might be hard to
+get kernel patches merged to fix it, especially if those patches involve changes
+to checkpatch.pl, CodingStyle, and several dozen different kernel subsystems.
+Or, the syzkaller people might go off on their own and find and implement some
+way to parse the log reliably, without other the testing systems being fixed...
 
-Documentation/trace/ftrace.rst:2797: WARNING: Literal block expected; none =
-found.
-Documentation/trace/ftrace.rst:2816: WARNING: Literal block expected; none =
-found.
-
-Introduced by commit
-
-  21c094d3f8a6 ("tracing: Add documentation for funcgraph-retval and funcgr=
-aph-retval-hex")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/RcO5jDrgAuSQehikJZ6A93s
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSVIQUACgkQAVBC80lX
-0GybuAf8CDtX6KSAi5pgpOAC6gFAwF9rA47O7xsAGAu3XI71H5mToCQKROiRHVCB
-JR0ImZRxv38qSF3/cPrZ4MSAqjXPOCvtZPMG+sFttgn25pl/yjueFI5u2ck4pW8a
-RAzJoVsCPoHUB2LHtZpvKoG9kr4ulTbxOblTdMutQen3wBTsClc4qkWfTRcI6AVq
-rD6Gq52eVT6l7w5yQ17L2Nj63RhsfeSSD0uLDFe+tU6TtNG9GNidfTdJk9Dus8Si
-yjMf9git/iMOIZmnebCxa0SQdqKj22qTS64sq7FfWuiLITMUlCcnoAkhvzorBqRt
-MO4LFwnOhPEO5tEl4aGeRoLL59AOYQ==
-=KSE3
------END PGP SIGNATURE-----
-
---Sig_/RcO5jDrgAuSQehikJZ6A93s--
+- Eric
