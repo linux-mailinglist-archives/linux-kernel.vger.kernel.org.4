@@ -2,189 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5114F73BCF8
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 18:47:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C7AB73BD29
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 18:50:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232329AbjFWQr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 12:47:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54748 "EHLO
+        id S232049AbjFWQuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 12:50:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232158AbjFWQrX (ORCPT
+        with ESMTP id S232589AbjFWQtX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 12:47:23 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9B2C2139
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 09:47:21 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4f640e48bc3so1096495e87.2
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 09:47:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687538840; x=1690130840;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OBUMS6+Ixu1UXqr8YNawSIcwQonUlT827pYdb6QYXzM=;
-        b=Eq2l7Fk3m2lCefTcxvs3+qQRjgFuhPqfZXhyz91WenXW4qaDYW7tL3o4sqmvx9/h9j
-         LogKawFNSl8qmE2Hp9FS+L9O/1GgBEo4JVyOpq3EKMcdeaWTG4uCKlac7Bn3QrDpm948
-         DKGLo8OFoRAEn+dxZUeyzTNaVFZAq6hgkaXEcvzuRcj+Ko4n1I/3R85b1h6U5XBH0kG4
-         OG5XPKRxqTSdkMjATUKVBw5mn8z9gKEj7Svy62GCTLJno5ItYalw+YgijGwaGjKP7Ji/
-         ilV5ajz2eBLuT06wt+aqdJTX4kcI8NTfuQYEUs1h+0PBk/aUWrEV1IGibRteyY3l9WBz
-         SjRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687538840; x=1690130840;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OBUMS6+Ixu1UXqr8YNawSIcwQonUlT827pYdb6QYXzM=;
-        b=BcxX4e/XV6n/0f48eX+vrSlZ25QyQ+L5F4mFw0Y8j5QoAyLLm7G9x11XPW+xRzsALf
-         hwVu89S+ScfLFKyg1hmjZ9kypnZybkBoczKWlHl1PdvBqhzGU3Fx5oNLyol8YYhKHM1q
-         ZhJCDx72ZpRBs2lWHE0VrwNWaD1/lbsTM2xJlYhH/K6cKWa1pyDKufO79znV7GS+GPst
-         vq8wilEe+EYSw0lsZIbzWfgMcsKuGYtSCWmr+zoUkxy4MB2Dh47e05yFTMLfPe8/Pymd
-         SXDEU4pYLbq/VXjUnPnypKuFVPpgHOL+0aIv6B+i1hzErOaqZItYzqTKkYdOhZYVjl0T
-         fMwA==
-X-Gm-Message-State: AC+VfDw04kjB9ACwwIBhIkM52hZjBLO4J+NPun0PXeNbkmeCJP9a8W+J
-        U0/pbpebZSQVwytkOrcg5xOUxi3daSn+7wvgisk=
-X-Google-Smtp-Source: ACHHUZ4mTr8TfarXPNlaSuduTiF2uA8iz5vlWI4LEQ7eCH/nJ1M2G9BvOXl8zA6zlbqA6FLWYDfDmA==
-X-Received: by 2002:a19:670f:0:b0:4f8:7513:8cac with SMTP id b15-20020a19670f000000b004f875138cacmr9096198lfc.48.1687538839814;
-        Fri, 23 Jun 2023 09:47:19 -0700 (PDT)
-Received: from [192.168.1.101] (abyk30.neoplus.adsl.tpnet.pl. [83.9.30.30])
-        by smtp.gmail.com with ESMTPSA id l30-20020ac24a9e000000b004f86c43d615sm1481013lfp.295.2023.06.23.09.47.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Jun 2023 09:47:19 -0700 (PDT)
-Message-ID: <d0c08de9-0506-d430-4928-4a441d8102a4@linaro.org>
-Date:   Fri, 23 Jun 2023 18:47:17 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH V4 4/4] arm64: dts: qcom: sm8550: Add camera clock
- controller
+        Fri, 23 Jun 2023 12:49:23 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2054.outbound.protection.outlook.com [40.107.244.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F37A30CF;
+        Fri, 23 Jun 2023 09:48:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Gyxz6psqXfKGtt2NghUKwJ6aeWdU/Knn0ljih5q1FQuKWWX8NNuf8tnUtIBAnP+L5VOWOCyO7iaRdNopujvccNMHlazlqot5uyS4LJoEdMQF1DxQAlc4KPSBsxEmRDi9x+xaBzruBvLh8DLwJujCaJgCuW6EIcn9UDVZyS/ecZp3fLVhvHhxVHDMJkn/z4Lfoyi9gciGbjtmCIB29xLYYYe0KYHFT4ml7S8htwvzOFLlxbKuiP1tR7zbyRc9nf+pn90TXPlW3wXdmR9Y5Fi4GbAr6Wn5e40TmxBzQe4orSHer+IMpG5OS+noPQSceg6rME3517DJbnFkXl77Gn6KYw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=l6XQ0U8iZdBfMciciO92IvQbgCD98QPwchDhmike6s0=;
+ b=T2QAQP6L4hv0cUJZdmev2yDvmvzl3Aq2/gkZWrFvWEDUDIX6JBk0Ydh009BIrpydvURLkceKC5RGIbCcOKzbx/csN/XHgmChTc3OUWZ/vCxCmTwyqhuVmroOsTf+LPmBbIFLn+i0NlIO1WR8ILdPNiQ0oJwEBT50HvAjvi9dG6ZCDPeblq/UXxk5TGrOMOfpen21xu+bUipgA7gaibXk6onF1E/a6r/0rGvvf0NNeKWaGm3GDxDdsrfW0b8YnDz9ps3JbdGCx0htL+wEPiB5ouGUmoewcaoRHa62Vll5avBo3q8LmHklYPd4wnGtwq/Ecl6MqFbSs9u5aVk7le4VlQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=l6XQ0U8iZdBfMciciO92IvQbgCD98QPwchDhmike6s0=;
+ b=uau83O7Yt0cqxYgooEfyj5u+WBvq9EFz2e+CMayIO0TR7DRy+u8kOCO+RKa3Am8CQCvNGkcRjd3+Bt5hAOi6Xrn6SuYJR5bV+4LuOIVztqPDcrIwljXivH+WbK1SUL//l8SBVHJmkgBHZzqA/Smf0ByScHRjUtf0qcPH3jvM5/c=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by SA0PR12MB4496.namprd12.prod.outlook.com (2603:10b6:806:9b::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24; Fri, 23 Jun
+ 2023 16:48:33 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::dfcf:f53c:c778:6f70]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::dfcf:f53c:c778:6f70%5]) with mapi id 15.20.6521.026; Fri, 23 Jun 2023
+ 16:48:33 +0000
+Message-ID: <5d6f6a89-1c7f-3763-8616-b80fdc301603@amd.com>
+Date:   Fri, 23 Jun 2023 11:48:29 -0500
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH V4 1/8] drivers/acpi: Add support for Wifi band RF
+ mitigations
 Content-Language: en-US
-To:     Jagadeesh Kona <quic_jkona@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Taniya Das <quic_tdas@quicinc.com>,
-        Satya Priya Kakitapalli <quic_skakitap@quicinc.com>,
-        Imran Shaik <quic_imrashai@quicinc.com>,
-        Ajit Pandey <quic_ajipan@quicinc.com>
-References: <20230609115058.9059-1-quic_jkona@quicinc.com>
- <20230609115058.9059-5-quic_jkona@quicinc.com>
- <8d1ead23-8361-7943-baba-baf20d16cbe5@linaro.org>
- <a3652f67-3e48-db33-1dd2-c17abdbdae41@quicinc.com>
- <CAA8EJpqjAkdnU+WXoPJs2m4OSZQe10D=Y8nUAofEoEfV139VjA@mail.gmail.com>
- <bb149870-ed5a-3587-f85a-1080fd6ca03e@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <bb149870-ed5a-3587-f85a-1080fd6ca03e@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Evan Quan <evan.quan@amd.com>, lenb@kernel.org,
+        alexander.deucher@amd.com, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
+        johannes@sipsolutions.net, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        mdaenzer@redhat.com, maarten.lankhorst@linux.intel.com,
+        tzimmermann@suse.de, hdegoede@redhat.com, jingyuwang_vip@163.com,
+        lijo.lazar@amd.com, jim.cromie@gmail.com, bellosilicio@gmail.com,
+        andrealmeid@igalia.com, trix@redhat.com, jsg@jsg.id.au,
+        arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org
+References: <20230621054603.1262299-1-evan.quan@amd.com>
+ <20230621054603.1262299-2-evan.quan@amd.com>
+ <CAJZ5v0iqy0yMJP5H7ub67R8R6i42=TcS_6+VF-+fWrM-9tYFQA@mail.gmail.com>
+ <c518da2a-5ba5-af7e-e26d-1973db7b4c9e@amd.com>
+ <CAJZ5v0gnTt0pV4nF+jcYCyZuZXDNuRn3mS0bDoAv-ZDpetyxVg@mail.gmail.com>
+From:   "Limonciello, Mario" <mario.limonciello@amd.com>
+In-Reply-To: <CAJZ5v0gnTt0pV4nF+jcYCyZuZXDNuRn3mS0bDoAv-ZDpetyxVg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: DS7PR03CA0174.namprd03.prod.outlook.com
+ (2603:10b6:5:3b2::29) To MN0PR12MB6101.namprd12.prod.outlook.com
+ (2603:10b6:208:3cb::10)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|SA0PR12MB4496:EE_
+X-MS-Office365-Filtering-Correlation-Id: 38db0673-7828-4fee-8d21-08db7409ae70
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: iZEJTaOLhQbjHTdZyoF0Y9mTVwZGX/UU78VbsnB2AnCWS16O9pEdR9uZiUzCLVikkawtABG4Bq7l3h8Wky64r5me+XnhZ0QsSQ1x4czHoWrrIedD/PA6sbp5PZrg+ZGK9TWOAp7reRD6/NeEzYvp0aHkrY4x5S8AL3FQzCzZaseglBY92GMadW3HWDD+6bIuU8FzRaeJuJtUQRuyafhFVij4waGdTKcaJnVIyNwVuqcIYecwZEKIXHXtXdr3gwW1l6pNL624G3vB1P6BE/97TPPizc59sBojONX0crM+3EVr49VkZiO94dCQtLd6UfEqw4+g25OhbmKNqKdrvYm8QL/naVeO+rs80T+aNAM18KGfRw3qJxFxERKv5UJATuqYz91jfD6TTSORxKkyb7fQryDMsRQQJMcErwsIWFhs9IgANAPS7WZ3C4ODemxpuZxSX5qAxKi3wkgB7siZRycKPYq9pvWaENRZknaolZkeWJy2KyclLUxIW1R31n0uEsphN/1teV4J6qxZ8FbDfsGkqr0ldqG5i7esNZnq3OQ4E4Cer3QhQ582FYn9jWlOU41KnU3WPCuStCqcRcD9vutlH5qEngXfU4HFd1BxoNVMpIdhVQfZ4EURIzbfuFHucwtXBvlYFX6sP+ObkBEovEQFwQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(366004)(346002)(39860400002)(396003)(376002)(451199021)(8936002)(186003)(8676002)(41300700001)(53546011)(6506007)(2906002)(26005)(6512007)(36756003)(66946007)(66476007)(86362001)(66556008)(6916009)(4326008)(316002)(31696002)(6486002)(6666004)(478600001)(38100700002)(83380400001)(2616005)(31686004)(5660300002)(7416002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VVlNMm5GemdWczZ4SHVuMU0yUkNIdUtmTU5FMktoNmpKUXFvZ3UrZ01DQU5w?=
+ =?utf-8?B?bTJiUlFBeGtEZFYzT1NOMWVXUVhKZjB5K29sbnNwQ2k2UXhod29BZmRMcStO?=
+ =?utf-8?B?V0hQRms4ZG1vVmQwck01RHlyeHhSYkRUR2JrbXVjWXJZVlFrclRFZElUeUt5?=
+ =?utf-8?B?eXZ5OGpnSVRkeDR6TWQ1VXQ1TzJMcFNLY1AwWjlOcUdTQkl1NURaT1p5VGdl?=
+ =?utf-8?B?Z2JVY2dUZktMNXo0ZEJtU1NqdHg1TjBxQ25NMWgzL0cveWZ6RGd3bWNTdkdD?=
+ =?utf-8?B?L0xXcUtpemxRUERUUU5YTFl5aXZ0aHZaUm80cVkxUndCRG4xalU0TkYxdjBw?=
+ =?utf-8?B?dVpaaEJubWY2U0hTTUg2eWk0SGRPVHpibUltWnRaeUwxV1NWY2RzZ1NvUERL?=
+ =?utf-8?B?R2luZG5yZmtGSzBXdTgwSzNMV1NiV3Z3UTNQL3NxUW80NjdQU2tJcnBsUkVU?=
+ =?utf-8?B?LzMxb2prWkYyMnRqbmgwQWJSWWJJR09Yb082cjA0T1JCQXkyMkM2S0RqNFda?=
+ =?utf-8?B?bTh4d29MNTAzZnYzSzVSNXJsZnQ4NkZiM2M3NmhRV01mdXExUjh0YnFyL1FU?=
+ =?utf-8?B?ZVFzSGFGWndoYkxYcTRaaGRmRXhyTnJxQWcxWkJNeWRjUEk1a1IydkVrdTUr?=
+ =?utf-8?B?S3dvby9EVWVKdUxtZ1h5MTNTM1F6bm9hemxZTS9IK3BUVWVkR01pdHBkQUlS?=
+ =?utf-8?B?SUZRd090S0JOUFV2S084cmtlbmFKazlpdkM0NWdKSUJuQ0RDWnFtRGJUZXRn?=
+ =?utf-8?B?MlRreTZ6WEl3anh1ODB3RWlTeXVJaTRSQ0d5ZE96QUZReFJPMGZXYWNYZ0h4?=
+ =?utf-8?B?SjQ0L3R1NEtxeUg0dGZqMUJiblBKMEFRUVh0YktoYzhnRXlUa2Q3UDQ3Sm1E?=
+ =?utf-8?B?cFdqUjJCK2Y3UmVVYkx6L0l2K3BJNExUR25lS25HRERVaGJpdHB1aGdVbzc1?=
+ =?utf-8?B?V3F6aUdabG53clpFcXBZRGMvZTc5cnkyN2I5cHEzT2IrQkxFaVhBNTdqVnRI?=
+ =?utf-8?B?TTVBUWlrelU4UHZPM1JkNVVhRjJ4a0xEblFCU01FV0lpUk93bkFWODZHU3dH?=
+ =?utf-8?B?ZVp4a1hZbzErVHoyQW8za3h2Z3hodzIxd3htY0JlQ1crdEV5V21BY2FDT2sz?=
+ =?utf-8?B?aFFsZHY4M0NaaEpKRXFiTEdVZURadzYrTGIxallkM21iVFpXSFU5czBMVHIx?=
+ =?utf-8?B?b2dzVGVMQUJldk1YTGsyUVdzME5jeTU3TWQ1Tkc5ZTk0eG5TZUNweXFHOG1Z?=
+ =?utf-8?B?RWYwWXMzcTVpV21kdXNGZ292VUlHc2laN2RNSDFHVmRSR1dOZ1hXWHZqV25L?=
+ =?utf-8?B?eUpkSlJNNG1LODUzc3NET1BUVmRKdVpOait4SFJTQ0VVYVlNQVNZQlhPOFVE?=
+ =?utf-8?B?dk5MZ0hKZ0RHV2w3SGZCTEJYTWFoZ2tuTnRZUmh0eWxTNWNjS0F2YTdjSzRp?=
+ =?utf-8?B?MUhLUkI0blZkelk1VWJIMjdZWEJhVEMzWkllWEpFYnplUmVIYnhNYzdoVFhr?=
+ =?utf-8?B?Vld6NmJHZFR1SmJwYnc2RFd2SnZYSTdRdWJ0UWVtYjM5c3A0MnJJblZQWG5r?=
+ =?utf-8?B?WFZDSU9jdGxuNk15QXNYOW55SXB3ZzB0aDJ1NmJCUFR6allySEE5QVRVZDlH?=
+ =?utf-8?B?S1d1OS9KZGZvaisrRS9ZdUJlaHZNSWNKaGZUZytNTTNMTmdZWUlRUTZxOHBh?=
+ =?utf-8?B?c3IyNkRGWnBETFRjdFg0bk16R2wvRWlqb2I5Tllxam5tY0NmcVdZRlpwcmJW?=
+ =?utf-8?B?TDBPeVNhMUhXVGtKalFvbXN5QXJBOXdqQzRFeHpQaVNQckFnbFFiRFdiRUVN?=
+ =?utf-8?B?U253VFN5QXU2NThtRTJrS2ZaaTJWWWtYbXFHekRqRVhDYjNUM2VGdFMzQXI3?=
+ =?utf-8?B?MjlrSENhU2w0RU5iTHg4dUJkeFY5R1FLMWp1SzZWdEVNNldTb0VSN29ZZmUr?=
+ =?utf-8?B?ZjRrZ2I3ZjN4aWw1OW5DZFg1Y1Nuclc3NTh1aHUvRHlCWnMvZFBqUEZjekFG?=
+ =?utf-8?B?eVh2YjlSQVdPRzJRUjBsUkw5d3JDVE4vRjV3NnlYQmNoM3o4TForaGhZcTU0?=
+ =?utf-8?B?RWxVUHlxZGlsQVlrK0VYL1k3QUxDbjRwNUN5d1dXU05MVjVmWmU3TFRjZXNu?=
+ =?utf-8?Q?jP8XmM2Yqd041TV+5R8L9UUXl?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 38db0673-7828-4fee-8d21-08db7409ae70
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jun 2023 16:48:33.4817
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: MnayWXdH6U2haJb4WfGjJyU0/BA6jYA1ut19O4opyq8goW8ybxa6MLjT/ueesgY04dStfMmkkMhRrUNld9vmLw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4496
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23.06.2023 18:45, Jagadeesh Kona wrote:
-> 
-> 
-> On 6/14/2023 5:45 PM, Dmitry Baryshkov wrote:
->> On Wed, 14 Jun 2023 at 14:56, Jagadeesh Kona <quic_jkona@quicinc.com> wrote:
->>>
->>>
->>>
->>> On 6/9/2023 6:22 PM, Konrad Dybcio wrote:
->>>>
->>>>
->>>> On 9.06.2023 13:50, Jagadeesh Kona wrote:
->>>>> Add device node for camera clock controller on Qualcomm
->>>>> SM8550 platform.
->>>>>
->>>>> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
->>>>> Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
->>>>> ---
->>>>> Changes since V3:
->>>>>    - No changes
->>>>> Changes since V2:
->>>>>    - No changes
->>>>> Changes since V1:
->>>>>    - Padded non-zero address part to 8 hex digits
->>>>>
->>>>>    arch/arm64/boot/dts/qcom/sm8550.dtsi | 15 +++++++++++++++
->>>>>    1 file changed, 15 insertions(+)
->>>>>
->>>>> diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
->>>>> index 75cd374943eb..4d2d610fc66a 100644
->>>>> --- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
->>>>> +++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
->>>>> @@ -5,6 +5,7 @@
->>>>>
->>>>>    #include <dt-bindings/clock/qcom,rpmh.h>
->>>>>    #include <dt-bindings/clock/qcom,sm8450-videocc.h>
->>>>> +#include <dt-bindings/clock/qcom,sm8550-camcc.h>
->>>>>    #include <dt-bindings/clock/qcom,sm8550-gcc.h>
->>>>>    #include <dt-bindings/clock/qcom,sm8550-gpucc.h>
->>>>>    #include <dt-bindings/clock/qcom,sm8550-tcsr.h>
->>>>> @@ -2419,6 +2420,20 @@ videocc: clock-controller@aaf0000 {
->>>>>                       #power-domain-cells = <1>;
->>>>>               };
->>>>>
->>>>> +            camcc: clock-controller@ade0000 {
->>>>> +                    compatible = "qcom,sm8550-camcc";
->>>>> +                    reg = <0 0x0ade0000 0 0x20000>;
->>>>> +                    clocks = <&gcc GCC_CAMERA_AHB_CLK>,
->>>>> +                             <&bi_tcxo_div2>,
->>>>> +                             <&bi_tcxo_ao_div2>,
->>>>> +                             <&sleep_clk>;
->>>>> +                    power-domains = <&rpmhpd SM8550_MMCX>;
->>>> I see that both MMCX ("mmcx.lvl") and MXC ("mxc.lvl") (and MX, FWIW)
->>>> are consumed on msm-5.15, with the latter one powering camcc PLLs..
->>>>
->>>> How are they related? Is that resolved internally or does it need
->>>> manual intervention?
->>>>
->>>> Konrad
->>>
->>> These are just different voltage rails, camcc clocks are powered by MMCX
->>> rail and camcc pll's are powered by MXC rail. Consumer drivers need to
->>> take care of voting on these rails properly based on the frequency of
->>> clocks requested.
->>
->> Which rail powers registers of the camcc? Which rail is required to
->> read PLL registers?
->>
-> MMCX rail is required to access camcc registers, both MMCX and MXC are required to read PLL registers. MXC rail should be left ON from bootloaders during bootup and hence does not require explicit voting.
-That's a bad approach. We have a sync_state callback in rpmhpd that kills
-unused-from-linux-POV power rails, so Linux should be made aware of any
-and all requirements there.
 
-Konrad
-> 
-> Thanks,
-> Jagadeesh
-> 
->>>
->>> Thanks,
->>> Jagadeesh
->>>
->>>>> +                    required-opps = <&rpmhpd_opp_low_svs>;
->>>>> +                    #clock-cells = <1>;
->>>>> +                    #reset-cells = <1>;
->>>>> +                    #power-domain-cells = <1>;
->>>>> +            };
->>>>> +
->>>>>               mdss: display-subsystem@ae00000 {
->>>>>                       compatible = "qcom,sm8550-mdss";
->>>>>                       reg = <0 0x0ae00000 0 0x1000>;
+On 6/23/2023 11:28 AM, Rafael J. Wysocki wrote:
+> On Fri, Jun 23, 2023 at 5:57 PM Limonciello, Mario
+> <mario.limonciello@amd.com> wrote:
 >>
+>> On 6/23/2023 9:52 AM, Rafael J. Wysocki wrote:
+>>> On Wed, Jun 21, 2023 at 7:47 AM Evan Quan <evan.quan@amd.com> wrote:
+>>>> From: Mario Limonciello <mario.limonciello@amd.com>
+>>>>
+>>>> Due to electrical and mechanical constraints in certain platform designs
+>>>> there may be likely interference of relatively high-powered harmonics of
+>>>> the (G-)DDR memory clocks with local radio module frequency bands used
+>>>> by Wifi 6/6e/7.
+>>>>
+>>>> To mitigate this, AMD has introduced an ACPI based mechanism that
+>>>> devices can use to notify active use of particular frequencies so
+>>>> that devices can make relative internal adjustments as necessary
+>>>> to avoid this resonance.
+>>>>
+>>>> In order for a device to support this, the expected flow for device
+>>>> driver or subsystems:
+>>>>
+>>>> Drivers/subsystems contributing frequencies:
+>>>>
+>>>> 1) During probe, check `wbrf_supported_producer` to see if WBRF supported
+>>> The prefix should be acpi_wbrf_ or acpi_amd_wbrf_ even, so it is clear
+>>> that this uses ACPI and is AMD-specific.
+>> I guess if we end up with an intermediary library approach
+>> wbrf_supported_producer makes sense and that could call acpi_wbrf_*.
 >>
+>> But with no intermediate library your suggestion makes sense.
 >>
+>> I would prefer not to make it acpi_amd as there is no reason that
+>> this exact same problem couldn't happen on an
+>> Wifi 6e + Intel SOC + AMD dGPU design too and OEMs could use the
+>> same mitigation mechanism as Wifi6e + AMD SOC + AMD dGPU too.
+> The mitigation mechanism might be the same, but the AML interface very
+> well may be different.
+
+
+Right.  I suppose right now we should keep it prefixed as "amd",
+and if it later is promoted as a standard it can be renamed.
+
+
+>
+> My point is that this particular interface is AMD-specific ATM and I'm
+> not aware of any plans to make it "standard" in some way.
+
+
+Yeah; this implementation is currently AMD specific AML, but I
+expect the exact same AML would be delivered to OEMs using the
+dGPUs.
+
+
+>
+> Also if the given interface is specified somewhere, it would be good
+> to have a pointer to that place.
+
+
+It's a code first implementation.  I'm discussing with the
+owners when they will release it.
+
+
+>
+>>> Whether or not there needs to be an intermediate library wrapped
+>>> around this is a different matter.
+> IMO individual drivers should not be expected to use this interface
+> directly, as that would add to boilerplate code and overall bloat.
+
+The thing is the ACPI method is not a platform method.  It's
+a function of the device (_DSM).
+
+The reason for having acpi_wbrf.c in the first place is to
+avoid the boilerplate of the _DSM implementation across multiple
+drivers.
+
+>
+> Also whoever uses it, would first need to check if the device in
+> question has an ACPI companion.
+
+
+Which comes back to Andrew's point.
+Either we:
+
+Have a generic wbrf_ helper that takes struct *device and
+internally checks if there is an ACPI companion and support.
+
+or
+
+Do the check for support in mac80211 + applicable drivers
+and only call the AMD WBRF ACPI method in those drivers in
+those cases.
+
+
