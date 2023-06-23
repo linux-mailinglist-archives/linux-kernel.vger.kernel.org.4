@@ -2,87 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3211C73B5C0
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 12:53:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E338773B5C4
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 12:58:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231415AbjFWKxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 06:53:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49468 "EHLO
+        id S231389AbjFWK6X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 06:58:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbjFWKxE (ORCPT
+        with ESMTP id S229647AbjFWK6V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 06:53:04 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6039170B
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 03:53:02 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-71-tBdxpI3cNWqapSN6ZcwC3A-1; Fri, 23 Jun 2023 11:52:59 +0100
-X-MC-Unique: tBdxpI3cNWqapSN6ZcwC3A-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Fri, 23 Jun
- 2023 11:52:58 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Fri, 23 Jun 2023 11:52:58 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Edward Cree' <ecree.xilinx@gmail.com>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Martin Habets <habetsm.xilinx@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-CC:     Arnd Bergmann <arnd@arndb.de>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-net-drivers@amd.com" <linux-net-drivers@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 3/3] sfc: selftest: fix struct packing
-Thread-Topic: [PATCH 3/3] sfc: selftest: fix struct packing
-Thread-Index: AQHZophqKcvkZ7aqX0qxFV2c9Cl8D6+YOv4A
-Date:   Fri, 23 Jun 2023 10:52:58 +0000
-Message-ID: <ee0cf01638074abfbddda7edd3074d2c@AcuMS.aculab.com>
-References: <20230619091215.2731541-1-arnd@kernel.org>
- <20230619091215.2731541-3-arnd@kernel.org>
- <7c448f02-4031-0a90-97e2-0cc663b0cff9@gmail.com>
-In-Reply-To: <7c448f02-4031-0a90-97e2-0cc663b0cff9@gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 23 Jun 2023 06:58:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D2681BCA;
+        Fri, 23 Jun 2023 03:58:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A2C4461A1D;
+        Fri, 23 Jun 2023 10:58:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6D3DC433C8;
+        Fri, 23 Jun 2023 10:58:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687517900;
+        bh=25fIr3PopiCHtulS02FXujGMe2mNjiZ0I+FrvBTiG5U=;
+        h=From:To:Cc:Subject:Date:From;
+        b=VUquvolySvSCjvCTBAqsxqaF3AKCTrHkal3EIQBuJXifzEAW3UGRq1RkYMoUh23AD
+         M+MfVY43exAibELouvE2KbCFA/+msGYt7IxBo9+iTRW7RSFeATD8EcsNYwSlp/yZYz
+         dwFZqSns1r+BTZEuLDcyA7q85Q8BdhvinDkVes+ve7qABjYwcKbCVPaGR1CjOQlNrU
+         uTJ3g/d0VlVsAwCymg/D7+JkkUdpf1Vaye8pVTHnh/J2Qr5pzjFN65Eoy51Of6MHWq
+         ezrbciKzI0ZKw82bBgrTC6idxRI46i8VNJmhlhblBVLL2My6YVr9Xa0mXIMYTyPH/y
+         +5zndUgv4EAog==
+From:   Christian Brauner <brauner@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] fs: ntfs
+Date:   Fri, 23 Jun 2023 12:58:08 +0200
+Message-Id: <20230623-pflug-reibt-3435a40349d3@brauner>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1724; i=brauner@kernel.org; h=from:subject:message-id; bh=25fIr3PopiCHtulS02FXujGMe2mNjiZ0I+FrvBTiG5U=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaRMrdpzx/aqSfjsrvJ5hb1qbxe1S3Io7vj6IPyJxR9PP7mU NW8VOkpZGMS4GGTFFFkc2k3C5ZbzVGw2ytSAmcPKBDKEgYtTACai0Mvwm6X288O5K3bsfhus/OXuk/ g7ky95xEurmwfqHZM4aHPMoY2R4ZubtJu04IeldrP5tU7nKVbJ6ekqNE8+aOS+INV90xVfBgA=
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Li4uDQo+IER1cGxpY2F0aW5nIHRoZSBkZWZpbml0aW9uIGlzbid0IHRoZSBwcmV0dGllc3QgdGhp
-bmcgaW4gdGhlIHdvcmxkOyBpdCdkDQo+ICBkbyBmb3IgYSBxdWljayBmaXggaWYgbmVlZGVkIGJ1
-dCBJIGFzc3VtZSBXPTEgd2FybmluZ3MgYXJlbid0IGJsb2NraW5nDQo+ICBhbnlvbmUsIHNvIG1h
-eWJlIGRlZmVyIHRoaXMgb25lIGZvciBub3cgYW5kIEknbGwgZm9sbG93IHVwIHNvb24gd2l0aCBh
-DQo+ICByZXdyaXRlIHRoYXQgZml4ZXMgdGhpcyBtb3JlIGNsZWFubHk/ICBNeSBpZGVhIGlzIHRv
-IGRyb3AgdGhlIF9fcGFja2VkDQo+ICBmcm9tIHRoZSBjb250YWluaW5nIHN0cnVjdCwgbWFrZSBl
-ZnhfYmVnaW5fbG9vcGJhY2soKSBjb3B5IHRoZSBsYXllcnMNCj4gIHNlcGFyYXRlbHksIGFuZCBl
-ZnhfbG9vcGJhY2tfcnhfcGFja2V0KCkgc2ltaWxhcmx5IGRvIHNvbWV0aGluZyBsZXNzDQo+ICBk
-aXJlY3QgdGhhbiBjYXN0aW5nIHRoZSBwYWNrZXQgZGF0YSB0byB0aGUgc3RydWN0Lg0KDQpNYXli
-ZSB5b3UgY2FuIGdldCBhd2F5IHdpdGggYWRkaW5nIGEgMTZiaXQgcGFkIGJlZm9yZSB0aGUgZXRo
-ZXJuZXQNCmhlYWRlciBzbyB0aGF0IHRoZSBJUCBoZWFkZXIgaXMgYWN0dWFsbHkgYWxpZ25lZC4N
-Cg0KKFRoZW4gZmlnaHQgYWxsIHRoZSBzdHVmZiB0aGF0IHN0b3BzIHlvdSBkb2luZyBhIG1lbWNw
-eSgpDQp0aGF0IHJ1bnMgaW50byBhIHNlY29uZCBmaWVsZCBvZiBhIHN0cnVjdHVyZS4pDQoNCkZh
-aWxpbmcgdGhhdCBtYXliZSBhIHNpbmdsZSBzaGFyZWQgY29weSBvZiB0aGUgbWlzYWxpZ25lZA0K
-SVAgaGVhZGVyLg0KDQpJIGFsc28gc3VzcGVjdCB5b3UgY291bGQganVzdCBhZGQgX19wYWNrZWQg
-dG8gdGhlIHR3byAzMmJpdA0KYWRkcmVzcyBmaWVsZHMuDQpUaGF0IHdvdWxkIGdlbmVyYXRlIGJl
-dHRlciBjb2RlIG9uIHN5c3RlbXMgdGhhdCBjYXJlLg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJl
-ZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXlu
-ZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
+Hey Linus,
 
+/* Summary */
+This contains a pile of various smaller fixes for ntfs. There's really
+not a lot to say about them. I'm just the messenger, so this is an
+unusually short pull request.
+
+/* Testing */
+clang: Ubuntu clang version 15.0.7
+gcc: (Ubuntu 12.2.0-3ubuntu1) 12.2.0
+
+All patches are based on v6.4-rc2 and have been sitting in linux-next.
+No build failures or warnings were observed.
+
+/* Conflicts */
+At the time of creating this PR no merge conflicts were reported from
+linux-next and no merge conflicts showed up doing a test-merge with
+current mainline.
+
+The following changes since commit f1fcbaa18b28dec10281551dfe6ed3a3ed80e3d6:
+
+  Linux 6.4-rc2 (2023-05-14 12:51:40 -0700)
+
+are available in the Git repository at:
+
+  git@gitolite.kernel.org:pub/scm/linux/kernel/git/vfs/vfs tags/v6.5/fs.ntfs
+
+for you to fetch changes up to aa4b92c5234878d55da96d387ea4d3695ca5e4ab:
+
+  ntfs: do not dereference a null ctx on error (2023-05-24 11:10:14 +0200)
+
+Please consider pulling these changes from the signed v6.5/fs.ntfs tag.
+
+Thanks!
+Christian
+
+----------------------------------------------------------------
+v6.5/fs.ntfs
+
+----------------------------------------------------------------
+Colin Ian King (1):
+      ntfs: remove redundant initialization to pointer cb_sb_start
+
+Danila Chernetsov (1):
+      ntfs: do not dereference a null ctx on error
+
+Deming Wang (1):
+      ntfs: Correct spelling
+
+Shaomin Deng (1):
+      ntfs: Remove unneeded semicolon
+
+ fs/ntfs/attrib.c   |  2 +-
+ fs/ntfs/compress.c |  2 +-
+ fs/ntfs/mft.c      | 36 +++++++++++++++++++-----------------
+ fs/ntfs/super.c    |  4 ++--
+ 4 files changed, 23 insertions(+), 21 deletions(-)
