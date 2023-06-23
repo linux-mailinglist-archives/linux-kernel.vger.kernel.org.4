@@ -2,108 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4892373BE39
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 20:00:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EB8073BE3B
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 20:00:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231944AbjFWSAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 14:00:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35928 "EHLO
+        id S232330AbjFWSAz convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 23 Jun 2023 14:00:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232394AbjFWSAm (ORCPT
+        with ESMTP id S231888AbjFWSAw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 14:00:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F42012972;
-        Fri, 23 Jun 2023 11:00:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 235CF61AD2;
-        Fri, 23 Jun 2023 18:00:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4349BC433C8;
-        Fri, 23 Jun 2023 18:00:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687543228;
-        bh=Cn2sUYiOjjyWWuJD4BwJSjEx2Ctq4fd78+3P6xW8XM8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=nHYn/PC9TtZ9C7lSJhUamJOXWttB3RwSqhh8z4Mh+sgFx+UXTjhPidBPtn0MVtvXQ
-         UNpn0e1DQdPQFdWJv49LMmSE11QE9qpxzdvNIu+/GNIVoHe/H/dB8utvL37cBKqrqI
-         ctB4drTLKFnbDckzayC6rtSBGQVtmWhYp2NthkC4Ig7Nx1UjNbjXEDtogHRHw+YWXq
-         YseIfF7WFYQn1obODSl0BWVqvjBOAB0xGrj4BnBan/jdhdErW4zDM93J9/uXD9WGwn
-         4eSNZy9nbpnHe8IZECHNz//2Udhw9231AJDd/zVavEpOK+D3SuB2hIOvEzJUKk/1fA
-         7lPK8pvyYVCSA==
-Date:   Fri, 23 Jun 2023 13:00:26 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Sricharan Ramabadhran <quic_srichara@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, sboyd@kernel.org, mturquette@baylibre.com,
-        mani@kernel.org, lpieralisi@kernel.org, bhelgaas@google.com,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH 1/4] pcie: qcom: Fix the macro
- PARF_SLV_ADDR_SPACE_SIZE_2_3_3
-Message-ID: <20230623180026.GA181743@bhelgaas>
+        Fri, 23 Jun 2023 14:00:52 -0400
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5621D2710;
+        Fri, 23 Jun 2023 11:00:42 -0700 (PDT)
+Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-bfe97b3752bso790063276.1;
+        Fri, 23 Jun 2023 11:00:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687543241; x=1690135241;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wZbee8Wrt4IHu56BKlWH9qLpUr7swFliaPouDguQe8A=;
+        b=Ac4rAUn1KBRPZG+KGv5vJjnU98oyScav49dhu59mNDw8Q/zri41NmTys521IgBIte+
+         9gopcy5m3lAY1XA1NyPNkLfidWRdkRdHRsL9zjFx0bV/XZeU1dpMyB4/Ck8ZYiQ0ydsV
+         RTLHi+6YyErv7rhGtlScw3Z/cELVhxFM+veqDX79Juk4xyb1tIpjeVXuKGh2UjkhAJPl
+         7Zc52VpzdOsJ5yXGqe+jd3EZLzOqCCVB7z3QTy6HHAqI7iwNFo3dC17dvtokyDjda3/u
+         VaY2xweVRh0wx/8HSJxTET2pyhVesFQgrR5R7ZntlIfro9heMxZsUoThGUcy2tEL/NvR
+         6NpQ==
+X-Gm-Message-State: AC+VfDweVz4zq/YKQwmKLJSxmdfnpNhEcoVcMU9Kl3fY9ExjDDdLwTxI
+        h1wXEEwPVfTwMETFpm3NWsP2na34iRqPJA9X5ls=
+X-Google-Smtp-Source: ACHHUZ41z34vizvwiSSfkU+v+p7VGIx6uqBh25Dli5GXlHanAkugPcDGZHJ3hDPKtDzbEpU9+CllDsLjAFqnYRebGF8=
+X-Received: by 2002:a25:fc28:0:b0:bac:ff9d:dc63 with SMTP id
+ v40-20020a25fc28000000b00bacff9ddc63mr18167897ybd.9.1687543241330; Fri, 23
+ Jun 2023 11:00:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230623093445.3977772-2-quic_srichara@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230622101809.2431897-1-james.clark@arm.com> <2b1cec46-52a9-21f1-bfcd-fbb4298f072a@web.de>
+In-Reply-To: <2b1cec46-52a9-21f1-bfcd-fbb4298f072a@web.de>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Fri, 23 Jun 2023 11:00:30 -0700
+Message-ID: <CAM9d7ciTZGuoT=D2i+uYG8mcNdFVnYi-Rvue5sbDZAyb24eRrA@mail.gmail.com>
+Subject: Re: [PATCH] perf tests: Fix test_arm_callgraph_fp variable expansion
+To:     Markus Elfring <Markus.Elfring@web.de>
+Cc:     James Clark <james.clark@arm.com>,
+        linux-perf-users@vger.kernel.org, spoorts2@in.ibm.com,
+        kernel-janitors@vger.kernel.org,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Ian Rogers <irogers@google.com>,
+        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>, cocci@inria.fr
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 23, 2023 at 03:04:42PM +0530, Sricharan Ramabadhran wrote:
-> PARF_SLV_ADDR_SPACE_SIZE_2_3_3 macro used for IPQ8074
-> pcie slave addr size was initially set to 0x358, but
-> was wrongly changed to 0x168 as a part of
-> 'PCI: qcom: Sort and group registers and bitfield definitions'
-> Fixing it back to right value here.
+On Fri, Jun 23, 2023 at 9:56 AM Markus Elfring <Markus.Elfring@web.de> wrote:
+>
+> …
+> > At the same time silence the shellcheck warning for that line and fix
+> > two more shellcheck errors at the end of the script.
+>
+> Does such a wording really fit to the known requirement “Solve only one problem per patch.”?
 
-1) Make your subject line match the history.  For example, you're
-fixing 769e49d87b15 ("PCI: qcom: Sort and group registers ..."), so
-your subject line should start with "PCI: qcom: ...".
+Maybe not, but I think it still falls into the shellcheck category.
+I don't mind having those trivial fixes together.
 
-2) It doesn't look like 769e49d87b15 changed
-PARF_SLV_ADDR_SPACE_SIZE_2_3_3:
+Applied to perf-tools-next, thanks!
 
-  $ git show 769e49d87b15 | grep PARF_SLV_ADDR_SPACE_SIZE_2_3_3
-  +#define PARF_SLV_ADDR_SPACE_SIZE_2_3_3		0x16C /* Register offset specific to IP ver 2.3.3 */
-  -#define PARF_SLV_ADDR_SPACE_SIZE_2_3_3		0x16C /* Register offset specific to IP rev 2.3.3 */
-
-What am I missing here?  Do you have another out-of-tree patch that
-broke this?
-
-Bjorn
-
-> Without this pcie bring up on IPQ8074 is broken now.
-> 
-> Fixes: 769e49d87b15 ("PCI: qcom: Sort and group registers and bitfield definitions")
-> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
-> ---
->  drivers/pci/controller/dwc/pcie-qcom.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-> index 4ab30892f6ef..59823beed13f 100644
-> --- a/drivers/pci/controller/dwc/pcie-qcom.c
-> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
-> @@ -43,7 +43,7 @@
->  #define PARF_PHY_REFCLK				0x4c
->  #define PARF_CONFIG_BITS			0x50
->  #define PARF_DBI_BASE_ADDR			0x168
-> -#define PARF_SLV_ADDR_SPACE_SIZE_2_3_3		0x16c /* Register offset specific to IP ver 2.3.3 */
-> +#define PARF_SLV_ADDR_SPACE_SIZE_2_3_3		0x358 /* Register offset specific to IP ver 2.3.3 */
->  #define PARF_MHI_CLOCK_RESET_CTRL		0x174
->  #define PARF_AXI_MSTR_WR_ADDR_HALT		0x178
->  #define PARF_AXI_MSTR_WR_ADDR_HALT_V2		0x1a8
-> -- 
-> 2.34.1
-> 
+>
+> See also:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/submitting-patches.rst?h=v6.4-rc7#n81
