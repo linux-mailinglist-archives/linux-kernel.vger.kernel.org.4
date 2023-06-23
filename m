@@ -2,59 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0156773BA2C
+	by mail.lfdr.de (Postfix) with ESMTP id 778F373BA2D
 	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 16:30:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232171AbjFWOa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 10:30:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58930 "EHLO
+        id S231978AbjFWOaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 10:30:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232164AbjFWOaW (ORCPT
+        with ESMTP id S232166AbjFWOaW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 23 Jun 2023 10:30:22 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AA072129
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 07:29:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5617D2136
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 07:29:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687530582;
+        s=mimecast20190719; t=1687530583;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=k1Z0+FcpBLSfoRatQPF2CylpoPyQCv2lrvtlx7M/beM=;
-        b=R9BL+6dpc/8tK+QXA2hCODYCl+H+mBwc67JlAPfbhDWLsL+v7dUxhKASP+gCaXHDoQD4If
-        RgpCMwoP9YnAQjK7XUqA89qo2rptiQsbaP+w1DHSoWnMp95OtZhwbEcPoCwgefsvQxBj4K
-        MgZlLr4IYumAYIgr3gMw+txb1rMxW4M=
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KBG5VmVtD6hD7uqVIm/KwEJm6kTIhRuBKiuOHix9n+4=;
+        b=fygFZNrililEdWBDJA6sF2jN8hxy06g13wVD3fzPu5mvqZZYGRBteo87dLSKOyKiBLwZOa
+        9EvUAcsGErERplrpqQRwwEO2G+N0MvF2s8FxWan4AEGdR+U/kHFosmJ5qpJ1EzPc2JxeMi
+        56BMkQAdJpfT28JJVwZCurp2EEKkILo=
 Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
  [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-88-SDlm48l5PzCA1mi88HNGKA-1; Fri, 23 Jun 2023 10:29:40 -0400
-X-MC-Unique: SDlm48l5PzCA1mi88HNGKA-1
-Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-4007918c09aso2064001cf.1
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 07:29:40 -0700 (PDT)
+ us-mta-316-MM_UJJgaNiqU1U509BK5PA-1; Fri, 23 Jun 2023 10:29:42 -0400
+X-MC-Unique: MM_UJJgaNiqU1U509BK5PA-1
+Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-3f8283a3a7aso1821981cf.1
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 07:29:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687530580; x=1690122580;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=k1Z0+FcpBLSfoRatQPF2CylpoPyQCv2lrvtlx7M/beM=;
-        b=h8i3syJcmtczIAudlrHG5BTFagIUXsE+SAzIdcjduFHRBoIvofpa0PerB7ecyUoNOa
-         y05m/VZTqHtbFCVox2evpIUIe+JqdiwXRoX/sIjVY83ln761sZr3E/3h0+Q+PL2n5AHF
-         Yx8ae8Ur5PNFQKPUS4qp/YS/Ys2/9DfGxrDtIBJTL7cpt/+WhSp93b/VMbP51mld2nkZ
-         vCNpnvnYMDhjh43cN3pbLxdM1Z6hEt6ub8yVQWy5YeEZLu9G4v9ysyn3nCD9HwVCw+yd
-         VUPJBcuC9Rvqmz70GV2w3NBctPML7TLUvT1QOVuhVMRtcSIPQmWGiX7h2DB8alZw3BMp
-         bRyA==
-X-Gm-Message-State: AC+VfDxjLNc8Z1oqRCBC65cncRgXLSXzaoKTSxKUiizRwR7kxcwMYpbY
-        C9JfeyBM0Seu6sHcwD77JAFeILOqVXAfNlUBmvsZYpnQAs2Zro1+QkPbutkm8OwnWklORq4JA/m
-        GUq1WyDQf1hv13/0aiONYkREyWgnAIqdM
-X-Received: by 2002:a05:6214:5186:b0:62d:eceb:f7ce with SMTP id kl6-20020a056214518600b0062decebf7cemr8898197qvb.1.1687530579895;
-        Fri, 23 Jun 2023 07:29:39 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ61iOgKq4TGE1+eFXklI8JtA4+EKdWL0nSblu+aHPTTyXIqpedJA43pT3tKCW+xiQEjFC+xqA==
-X-Received: by 2002:a05:6214:5186:b0:62d:eceb:f7ce with SMTP id kl6-20020a056214518600b0062decebf7cemr8898182qvb.1.1687530579566;
-        Fri, 23 Jun 2023 07:29:39 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687530581; x=1690122581;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KBG5VmVtD6hD7uqVIm/KwEJm6kTIhRuBKiuOHix9n+4=;
+        b=YD/LtA+luB60LcgwXUAvFTbjZywJqyxipKPxvVda7r8zp7DWJZm2K328t413Wr76Na
+         Uksg3N6RrJRwsH6azIcXDXKRX9MhHjVz8Q0BwQYLKHCgFwQOTyCtLMOhLdM49c+EDq9Z
+         37MHVK0sTwrCPE8viPBTxKXDPYMmcR4KX8O+syxirXR16vGxVwuaSlr0EgNMf3CnrCLj
+         N2N7unKK7nDwcsBGC1E1VlS8h6mwrScnkOCHDmVp+uPk6OupT4i+CmhPgMrMeTApsgsB
+         zEGaGaQCYa9uD8kCjDfE7Mlh6Uhzwr5OYsPNj68D5dQbV/jhTpo53J3zCkIBpjvyYuC0
+         rxWw==
+X-Gm-Message-State: AC+VfDyym+xTSvBCdirU3UY4sh8/MlzbdzyKDA1b1BodEBQnzB1RujGF
+        tuint276deTt6+jn3a+3heo+GNp7qTLeUo6Tnartwqt65W7BccWDhJtOdcQAqQHs+ibsYqgM/ve
+        OhO4D6uNfSdJErf788igNKySppOVvC2Cz
+X-Received: by 2002:ad4:5b8a:0:b0:62f:e4de:5bed with SMTP id 10-20020ad45b8a000000b0062fe4de5bedmr25208868qvp.5.1687530581206;
+        Fri, 23 Jun 2023 07:29:41 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ77EhCcf/GM+yw2Xot5giAOKEx2zhLBubqKJqeheIkq+W5o91Ui2eWJpfYc4H7mEvuNOB2yeQ==
+X-Received: by 2002:ad4:5b8a:0:b0:62f:e4de:5bed with SMTP id 10-20020ad45b8a000000b0062fe4de5bedmr25208839qvp.5.1687530580951;
+        Fri, 23 Jun 2023 07:29:40 -0700 (PDT)
 Received: from x1n.. (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
-        by smtp.gmail.com with ESMTPSA id b9-20020a0cc989000000b0062821057ac7sm5104827qvk.39.2023.06.23.07.29.37
+        by smtp.gmail.com with ESMTPSA id b9-20020a0cc989000000b0062821057ac7sm5104827qvk.39.2023.06.23.07.29.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Jun 2023 07:29:39 -0700 (PDT)
+        Fri, 23 Jun 2023 07:29:40 -0700 (PDT)
 From:   Peter Xu <peterx@redhat.com>
 To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
 Cc:     Lorenzo Stoakes <lstoakes@gmail.com>,
@@ -71,11 +72,12 @@ Cc:     Lorenzo Stoakes <lstoakes@gmail.com>,
         Mike Kravetz <mike.kravetz@oracle.com>,
         Hugh Dickins <hughd@google.com>,
         Jason Gunthorpe <jgg@nvidia.com>
-Subject: [PATCH v3 0/8] mm/gup: Unify hugetlb, speed up thp
-Date:   Fri, 23 Jun 2023 10:29:28 -0400
-Message-Id: <20230623142936.268456-1-peterx@redhat.com>
+Subject: [PATCH v3 1/8] mm/hugetlb: Handle FOLL_DUMP well in follow_page_mask()
+Date:   Fri, 23 Jun 2023 10:29:29 -0400
+Message-Id: <20230623142936.268456-2-peterx@redhat.com>
 X-Mailer: git-send-email 2.40.1
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <20230623142936.268456-1-peterx@redhat.com>
+References: <20230623142936.268456-1-peterx@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -88,68 +90,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-v1: https://lore.kernel.org/r/20230613215346.1022773-1-peterx@redhat.com
-v2: https://lore.kernel.org/r/20230619231044.112894-1-peterx@redhat.com
+Firstly, the no_page_table() is meaningless for hugetlb which is a no-op
+there, because a hugetlb page always satisfies:
 
-v3:
-- Added R-bs and A-bs
-- Patch 2:
-  - s/huge_pte_write/pte_write/ [David]
-  - Add back the WARN_ON_ONCE I used to have in v1; change retval to
-    the real errno from try_grab_page(), rather than NULL
-- Patch 3: make the page_mask calculation slightly prettier [David]
-- Other small cosmetic changes
+  - vma_is_anonymous() == false
+  - vma->vm_ops->fault != NULL
 
-Hugetlb has a special path for slow gup that follow_page_mask() is actually
-skipped completely along with faultin_page().  It's not only confusing, but
-also duplicating a lot of logics that generic gup already has, making
-hugetlb slightly special.
+So we can already safely remove it in hugetlb_follow_page_mask(), alongside
+with the page* variable.
 
-This patchset tries to dedup the logic, by first touching up the slow gup
-code to be able to handle hugetlb pages correctly with the current follow
-page and faultin routines (where we're mostly there.. due to 10 years ago
-we did try to optimize thp, but half way done; more below), then at the
-last patch drop the special path, then the hugetlb gup will always go the
-generic routine too via faultin_page().
+Meanwhile, what we do in follow_hugetlb_page() actually makes sense for a
+dump: we try to fault in the page only if the page cache is already
+allocated.  Let's do the same here for follow_page_mask() on hugetlb.
 
-Note that hugetlb is still special for gup, mostly due to the pgtable
-walking (hugetlb_walk()) that we rely on which is currently per-arch.  But
-this is still one small step forward, and the diffstat might be a proof
-too that this might be worthwhile.
+It should so far has zero effect on real dumps, because that still goes
+into follow_hugetlb_page().  But this may start to influence a bit on
+follow_page() users who mimics a "dump page" scenario, but hopefully in a
+good way.  This also paves way for unifying the hugetlb gup-slow.
 
-Then for the "speed up thp" side: as a side effect, when I'm looking at the
-chunk of code, I found that thp support is actually partially done.  It
-doesn't mean that thp won't work for gup, but as long as **pages pointer
-passed over, the optimization will be skipped too.  Patch 6 should address
-that, so for thp we now get full speed gup.
+Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
+Reviewed-by: David Hildenbrand <david@redhat.com>
+Signed-off-by: Peter Xu <peterx@redhat.com>
+---
+ mm/gup.c     | 9 ++-------
+ mm/hugetlb.c | 9 +++++++++
+ 2 files changed, 11 insertions(+), 7 deletions(-)
 
-For a quick number, "chrt -f 1 ./gup_test -m 512 -t -L -n 1024 -r 10" gives
-me 13992.50us -> 378.50us.  Gup_test is an extreme case, but just to show
-how it affects thp gups.
-
-Patch 1-5:   prepares for the switch
-Patch 6:     switchover to the new code and remove the old
-Patch 7-8:   added some gup test matrix into run_vmtests.sh
-
-Please review, thanks.
-
-Peter Xu (8):
-  mm/hugetlb: Handle FOLL_DUMP well in follow_page_mask()
-  mm/hugetlb: Prepare hugetlb_follow_page_mask() for FOLL_PIN
-  mm/hugetlb: Add page_mask for hugetlb_follow_page_mask()
-  mm/gup: Cleanup next_page handling
-  mm/gup: Accelerate thp gup even for "pages != NULL"
-  mm/gup: Retire follow_hugetlb_page()
-  selftests/mm: Add -a to run_vmtests.sh
-  selftests/mm: Add gup test matrix in run_vmtests.sh
-
- fs/userfaultfd.c                          |   2 +-
- include/linux/hugetlb.h                   |  20 +-
- mm/gup.c                                  |  83 ++++---
- mm/hugetlb.c                              | 263 +++-------------------
- tools/testing/selftests/mm/run_vmtests.sh |  48 +++-
- 5 files changed, 124 insertions(+), 292 deletions(-)
-
+diff --git a/mm/gup.c b/mm/gup.c
+index ce14d4d28503..abcd841d94b7 100644
+--- a/mm/gup.c
++++ b/mm/gup.c
+@@ -767,7 +767,6 @@ static struct page *follow_page_mask(struct vm_area_struct *vma,
+ 			      struct follow_page_context *ctx)
+ {
+ 	pgd_t *pgd;
+-	struct page *page;
+ 	struct mm_struct *mm = vma->vm_mm;
+ 
+ 	ctx->page_mask = 0;
+@@ -780,12 +779,8 @@ static struct page *follow_page_mask(struct vm_area_struct *vma,
+ 	 * hugetlb_follow_page_mask is only for follow_page() handling here.
+ 	 * Ordinary GUP uses follow_hugetlb_page for hugetlb processing.
+ 	 */
+-	if (is_vm_hugetlb_page(vma)) {
+-		page = hugetlb_follow_page_mask(vma, address, flags);
+-		if (!page)
+-			page = no_page_table(vma, flags);
+-		return page;
+-	}
++	if (is_vm_hugetlb_page(vma))
++		return hugetlb_follow_page_mask(vma, address, flags);
+ 
+ 	pgd = pgd_offset(mm, address);
+ 
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index d76574425da3..f75f5e78ff0b 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -6498,6 +6498,15 @@ struct page *hugetlb_follow_page_mask(struct vm_area_struct *vma,
+ 	spin_unlock(ptl);
+ out_unlock:
+ 	hugetlb_vma_unlock_read(vma);
++
++	/*
++	 * Fixup retval for dump requests: if pagecache doesn't exist,
++	 * don't try to allocate a new page but just skip it.
++	 */
++	if (!page && (flags & FOLL_DUMP) &&
++	    !hugetlbfs_pagecache_present(h, vma, address))
++		page = ERR_PTR(-EFAULT);
++
+ 	return page;
+ }
+ 
 -- 
 2.40.1
 
