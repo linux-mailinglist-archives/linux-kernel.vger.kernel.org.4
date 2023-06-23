@@ -2,189 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A65E573BD56
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 19:05:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DED8173BD5A
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 19:06:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231267AbjFWRFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 13:05:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36306 "EHLO
+        id S231168AbjFWRGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 13:06:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229801AbjFWRFa (ORCPT
+        with ESMTP id S231911AbjFWRGG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 13:05:30 -0400
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9421526AF;
-        Fri, 23 Jun 2023 10:05:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1687539924; bh=CwaupLNxCaQfdyqirb5X7+xJvkBuOUpQ0ThhbWfP/hk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ukUcNbU2eLFRCrRZNr7wSbGcmF3VKpW5hY2lA7txYZxFGvuN9BJe4lCuFDKFLtlUB
-         vEIv7jrSQE2aARCFPjHXT4iuMkOJWOF3OUJLYuWKey33ub2gKTlbSNXS1Xwb9QMToc
-         Ee0as+6Bm1F+uhQdtwslcWQsN7Dd5V5zbFK9I9hc=
-Received: from [192.168.9.172] (unknown [101.88.25.181])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 74662600A9;
-        Sat, 24 Jun 2023 01:05:24 +0800 (CST)
-Message-ID: <267d223d-5215-f53d-ffb8-c74a209326e4@xen0n.name>
-Date:   Sat, 24 Jun 2023 01:05:23 +0800
+        Fri, 23 Jun 2023 13:06:06 -0400
+Received: from pegase1.c-s.fr (pegase1.c-s.fr [93.17.236.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6417C272C
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 10:06:02 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [192.168.12.233])
+        by localhost (Postfix) with ESMTP id 4QnkCR4X8Nz9sgd;
+        Fri, 23 Jun 2023 19:05:55 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id tD0z1NsvVFmv; Fri, 23 Jun 2023 19:05:55 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 4QnkCR3mH4z9sgV;
+        Fri, 23 Jun 2023 19:05:55 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 7BA358B78D;
+        Fri, 23 Jun 2023 19:05:55 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id yT0OOiZFPGwN; Fri, 23 Jun 2023 19:05:55 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.232.71])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 777218B780;
+        Fri, 23 Jun 2023 19:05:54 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 35NH5m9Y2645803
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Fri, 23 Jun 2023 19:05:48 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 35NH5mB82645802;
+        Fri, 23 Jun 2023 19:05:48 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Sathvika Vasireddy <sv@linux.ibm.com>,
+        Naveen N Rao <naveen@kernel.org>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH v3 13/15] objtool: Prepare noreturns.h for more architectures
+Date:   Fri, 23 Jun 2023 19:05:24 +0200
+Message-Id: <4929283b879a2343e92e6121443e737af0b06cd6.1687539638.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <cover.1687539638.git.christophe.leroy@csgroup.eu>
+References: <cover.1687539638.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 7/9] LoongArch: Tweak CFLAGS for Clang compatibility
-Content-Language: en-US
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Rui <wangrui@loongson.cn>, Xi Ruoyao <xry111@xry111.site>,
-        loongarch@lists.linux.dev, linux-kbuild@vger.kernel.org,
-        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        WANG Xuerui <git@xen0n.name>
-References: <20230623134351.1898379-1-kernel@xen0n.name>
- <20230623134351.1898379-8-kernel@xen0n.name>
- <CAKwvOdn5e+BzhGzDPnZYEjCuanABJmu5ZZo5x2uwHj4L44m5nA@mail.gmail.com>
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <CAKwvOdn5e+BzhGzDPnZYEjCuanABJmu5ZZo5x2uwHj4L44m5nA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1687539922; l=2884; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=7WePi73pf2EfW9nl1J8Z4+G4wAbQIQr9uJ9OnVTf/pE=; b=CZu0Zh1luNhb+1QZ0Dt+UIv6cFJvvy51vA7c/k4jFV5QlpwN5TtNm9WXtBwU5BZYsMRTw5zgP Q6mGfbpjJh9AzZDbQM/kk/RsbprwlZ4tCy2/ygF4S7TniezdFIJaGHt
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+noreturns.h is a mix of x86 specific functions and more generic
+core functions.
 
-On 6/24/23 00:39, Nick Desaulniers wrote:
-> On Fri, Jun 23, 2023 at 6:44 AM WANG Xuerui <kernel@xen0n.name> wrote:
->> From: WANG Xuerui <git@xen0n.name>
->>
->> Now the arch code is mostly ready for LLVM/Clang consumption, it is time
->> to re-organize the CFLAGS a little to actually enable the LLVM build.
->>
->> A build with !RELOCATABLE && !MODULE is confirmed working within a QEMU
->> environment; support for the two features are currently blocked by
->> LLVM/Clang, and will come later.
->>
->> Signed-off-by: WANG Xuerui <git@xen0n.name>
->> ---
->>   arch/loongarch/Makefile      | 14 +++++++++++---
->>   arch/loongarch/vdso/Makefile |  6 +++++-
->>   2 files changed, 16 insertions(+), 4 deletions(-)
->>
->> diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
->> index a27e264bdaa5..efe9b50bd829 100644
->> --- a/arch/loongarch/Makefile
->> +++ b/arch/loongarch/Makefile
->> @@ -46,12 +46,18 @@ ld-emul                     = $(64bit-emul)
->>   cflags-y               += -mabi=lp64s
->>   endif
->>
->> -cflags-y                       += -G0 -pipe -msoft-float
-> This seems to drop -msoft-float for GCC. Intentional?
+In preparation of inclusion of powerpc, split x86 functions out of
+noreturns.h into arch/noreturns.h
 
-Kind-of; according to the LoongArch Toolchain Conventions [1], 
--msoft-float basically selects the soft-float ABI, but *also prevents 
-use of any FP instructions*. This is where things get hairy, because it 
-means e.g. any translation unit can't manipulate the FP context at all 
-without special-casing its CFLAGS to have the -msoft-float flag removed. 
-I've tried and stopped when I noticed >3 files needed such treatment 
-even in arch/loongarch/kernel alone; -mabi=lp64s is always present right 
-now and that's enough.
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ .../objtool/arch/x86/include/arch/noreturns.h | 20 +++++++++++++++++++
+ tools/objtool/noreturns.h                     | 14 ++-----------
+ 2 files changed, 22 insertions(+), 12 deletions(-)
+ create mode 100644 tools/objtool/arch/x86/include/arch/noreturns.h
 
-[1]: 
-https://loongson.github.io/LoongArch-Documentation/LoongArch-toolchain-conventions-EN.html#_compiler_options
-
->
->> -LDFLAGS_vmlinux                        += -G0 -static -n -nostdlib
->> +ifndef CONFIG_CC_IS_CLANG
->> +cflags-y                       += -G0
->> +LDFLAGS_vmlinux                        += -G0
-> Thanks for the patch!
->
-> I can understand not passing -G0 to clang if clang doesn't understand
-> it, but should you be using CONFIG_LD_IS_LLD for LDFLAGS?
->
-> What does -G0 do?
-Just as Ruoyao explained earlier, it's the "small data threshold". It's 
-not implemented on LoongArch yet, and we don't have ABI provisions for 
-that either, so IMO it's even okay to just drop it unconditionally. (I 
-haven't double-checked the GCC behavior though.)
->
-> Is there a plan to support it in clang and lld?
->
-> If so, please file a bug in LLVM's issue tracker
-> https://github.com/llvm/llvm-project/issues
-> then link to it in a comment in this Makefile above the relevant condition.
-As explained above, proper support for "small data optimization" 
-probably means some cooperation from ABI side (e.g. reserving a GP 
-register for being able to reference +/-4KiB from it with a single 
-insn), so I don't expect this to happen anytime soon.
->
->> +endif
->> +cflags-y                       += -pipe
->> +LDFLAGS_vmlinux                        += -static -n -nostdlib
->>
->>   # When the assembler supports explicit relocation hint, we must use it.
->>   # GCC may have -mexplicit-relocs off by default if it was built with an old
->> -# assembler, so we force it via an option.
->> +# assembler, so we force it via an option. For LLVM/Clang the desired behavior
->> +# is the default, and the flag is not supported, so don't pass it if Clang is
->> +# being used.
->>   #
->>   # When the assembler does not supports explicit relocation hint, we can't use
->>   # it.  Disable it if the compiler supports it.
->> @@ -61,8 +67,10 @@ LDFLAGS_vmlinux                      += -G0 -static -n -nostdlib
->>   # combination of a "new" assembler and "old" compiler is not supported.  Either
->>   # upgrade the compiler or downgrade the assembler.
->>   ifdef CONFIG_AS_HAS_EXPLICIT_RELOCS
->> +ifndef CONFIG_CC_IS_CLANG
->>   cflags-y                       += -mexplicit-relocs
->>   KBUILD_CFLAGS_KERNEL           += -mdirect-extern-access
->> +endif
-> Why would AS_HAS_EXPLICIT_RELOCS be set if -mexplicit-relocs isn't
-> supported? Is the kconfig for that broken?
->
-> Does AS_HAS_EXPLICIT_RELOCS also need to test for the support for
-> -mdirect-extern-access or should there be a new config for that?
-> CC_SUPPORTS_DIRECT_EXTERN_ACCESS
->
->>   else
->>   cflags-y                       += $(call cc-option,-mno-explicit-relocs)
->>   KBUILD_AFLAGS_KERNEL           += -Wa,-mla-global-with-pcrel
->> diff --git a/arch/loongarch/vdso/Makefile b/arch/loongarch/vdso/Makefile
->> index 4c859a0e4754..19f6c75a1106 100644
->> --- a/arch/loongarch/vdso/Makefile
->> +++ b/arch/loongarch/vdso/Makefile
->> @@ -25,13 +25,17 @@ endif
->>   cflags-vdso := $(ccflags-vdso) \
->>          -isystem $(shell $(CC) -print-file-name=include) \
->>          $(filter -W%,$(filter-out -Wa$(comma)%,$(KBUILD_CFLAGS))) \
->> -       -O2 -g -fno-strict-aliasing -fno-common -fno-builtin -G0 \
->> +       -O2 -g -fno-strict-aliasing -fno-common -fno-builtin \
->>          -fno-stack-protector -fno-jump-tables -DDISABLE_BRANCH_PROFILING \
->>          $(call cc-option, -fno-asynchronous-unwind-tables) \
->>          $(call cc-option, -fno-stack-protector)
->>   aflags-vdso := $(ccflags-vdso) \
->>          -D__ASSEMBLY__ -Wa,-gdwarf-2
->>
->> +ifndef CONFIG_CC_IS_CLANG
->> +cflags-vdso += -G0
->> +endif
->> +
->>   ifneq ($(c-gettimeofday-y),)
->>     CFLAGS_vgettimeofday.o += -include $(c-gettimeofday-y)
->>   endif
->> --
->> 2.40.0
->>
->>
->
+diff --git a/tools/objtool/arch/x86/include/arch/noreturns.h b/tools/objtool/arch/x86/include/arch/noreturns.h
+new file mode 100644
+index 000000000000..a4262aff3917
+--- /dev/null
++++ b/tools/objtool/arch/x86/include/arch/noreturns.h
+@@ -0,0 +1,20 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++/*
++ * This is a (sorted!) list of all known __noreturn functions in arch/x86.
++ * It's needed for objtool to properly reverse-engineer the control flow graph.
++ *
++ * Yes, this is unfortunate.  A better solution is in the works.
++ */
++NORETURN(cpu_bringup_and_idle)
++NORETURN(ex_handler_msr_mce)
++NORETURN(hlt_play_dead)
++NORETURN(hv_ghcb_terminate)
++NORETURN(machine_real_restart)
++NORETURN(rewind_stack_and_make_dead)
++NORETURN(sev_es_terminate)
++NORETURN(snp_abort)
++NORETURN(x86_64_start_kernel)
++NORETURN(x86_64_start_reservations)
++NORETURN(xen_cpu_bringup_again)
++NORETURN(xen_start_kernel)
+diff --git a/tools/objtool/noreturns.h b/tools/objtool/noreturns.h
+index 1514e84d5cc4..2df20addd746 100644
+--- a/tools/objtool/noreturns.h
++++ b/tools/objtool/noreturns.h
+@@ -1,5 +1,7 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+ 
++#include <arch/noreturns.h>
++
+ /*
+  * This is a (sorted!) list of all known __noreturn functions in the kernel.
+  * It's needed for objtool to properly reverse-engineer the control flow graph.
+@@ -15,32 +17,20 @@ NORETURN(__ubsan_handle_builtin_unreachable)
+ NORETURN(arch_call_rest_init)
+ NORETURN(arch_cpu_idle_dead)
+ NORETURN(btrfs_assertfail)
+-NORETURN(cpu_bringup_and_idle)
+ NORETURN(cpu_startup_entry)
+ NORETURN(do_exit)
+ NORETURN(do_group_exit)
+ NORETURN(do_task_dead)
+-NORETURN(ex_handler_msr_mce)
+ NORETURN(fortify_panic)
+-NORETURN(hlt_play_dead)
+-NORETURN(hv_ghcb_terminate)
+ NORETURN(kthread_complete_and_exit)
+ NORETURN(kthread_exit)
+ NORETURN(kunit_try_catch_throw)
+-NORETURN(machine_real_restart)
+ NORETURN(make_task_dead)
+ NORETURN(mpt_halt_firmware)
+ NORETURN(nmi_panic_self_stop)
+ NORETURN(panic)
+ NORETURN(panic_smp_self_stop)
+ NORETURN(rest_init)
+-NORETURN(rewind_stack_and_make_dead)
+-NORETURN(sev_es_terminate)
+-NORETURN(snp_abort)
+ NORETURN(start_kernel)
+ NORETURN(stop_this_cpu)
+ NORETURN(usercopy_abort)
+-NORETURN(x86_64_start_kernel)
+-NORETURN(x86_64_start_reservations)
+-NORETURN(xen_cpu_bringup_again)
+-NORETURN(xen_start_kernel)
 -- 
-WANG "xen0n" Xuerui
-
-Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
+2.40.1
 
