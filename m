@@ -2,110 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADF4673B1D7
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 09:41:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A9B673B214
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 09:49:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231451AbjFWHlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 03:41:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36586 "EHLO
+        id S231665AbjFWHtX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 03:49:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231290AbjFWHli (ORCPT
+        with ESMTP id S231721AbjFWHtO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 03:41:38 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D0A81BF7
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 00:41:37 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-988b75d8b28so31906366b.3
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 00:41:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687506096; x=1690098096;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=t85IrXe5Gy1UtuYRgufXU6wb2wKm+nFKsdS4DPhPVgQ=;
-        b=RrNp3eAmEYHDnaS+qaGXeUSRDgZ6ochaH6qth2Ja2jmqqB3zX08crrrvAswX44Qkgf
-         3SUR+1Pc1obhjfbWjsEeUcjLcxUEvUZ9aibS0721fa/mNadEYSE/cwpERvUSv1jtOLyf
-         FuCWUG8wek1fLfS0umoBT60W7cU4PYCqRQ0B2Wh83AgUK2HiZ+1QHv0bHkCzOk1EfMDV
-         i+/S4dSLP5vp9O3HgxLNogBbvEeh8M+ibtIjCkVU5Qy8blujmDCOOucCdnxgvJcbCPuf
-         qorE3GWuIChtjboDAGcwbWA5FvpbE5MIDgLTVLRpnc7e/WF2Xu7mdUiTFGFIiDlzpI5X
-         kGRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687506096; x=1690098096;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=t85IrXe5Gy1UtuYRgufXU6wb2wKm+nFKsdS4DPhPVgQ=;
-        b=K5TzzWubY84mSUYTIfgvOOMSkdnJ5jKO61MVqp8g287FnqZ50bpgt7srf31ywHJutu
-         +h1xg3Li5OC47cEOCQL5Y0KzxLafULXBsicFjetM6WLy+sXSmhpv9XvphPhv6MlB+Bbl
-         ukmEnXE9pLg/NhWsz8tfTjdy1dIlwvEoakzaRPp3NM3++AYuqDm8PDNugWGK0vAYO9z3
-         XuiR+yOIvmNf1w+1ybYIwfx0Cgj9J3Oxdxrp8WPhVFb8culU0k4suLl11aWFq3IKUSAM
-         8QN7CL1BdskfgqGp9VHDeKhYDSU/fGOLFtaLvOyudWbWqjgOVWgBd7ZUxf+TsxAgCDlJ
-         pSFA==
-X-Gm-Message-State: AC+VfDzWd5q59GI7AVWLCJ1PhkOIVHwFAQCxXX6FQEnMAkcBTi5mOAL1
-        rS5G0zDuoyL9PUVxNVTspMD3nw==
-X-Google-Smtp-Source: ACHHUZ7qmEzE5D18lr5WtPTSeFpa7/HaK75FX9sQiuH3eg93b2tgRs9jBlqBpuHolbtweB+TLOmIVg==
-X-Received: by 2002:a17:907:7ea6:b0:988:dfdc:5a29 with SMTP id qb38-20020a1709077ea600b00988dfdc5a29mr10368758ejc.5.1687506095911;
-        Fri, 23 Jun 2023 00:41:35 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id a26-20020a1709063a5a00b00988c93c85a5sm5620290ejf.183.2023.06.23.00.41.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Jun 2023 00:41:34 -0700 (PDT)
-Message-ID: <cdc19e56-54eb-5476-4e79-28b9dd7372a1@linaro.org>
-Date:   Fri, 23 Jun 2023 09:41:32 +0200
+        Fri, 23 Jun 2023 03:49:14 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 51E812729;
+        Fri, 23 Jun 2023 00:48:58 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AD0E6C14;
+        Fri, 23 Jun 2023 00:43:43 -0700 (PDT)
+Received: from [10.57.27.57] (unknown [10.57.27.57])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DE22B3F64C;
+        Fri, 23 Jun 2023 00:42:57 -0700 (PDT)
+Message-ID: <2884a54e-4db0-bf47-3b8a-0deb337208d8@arm.com>
+Date:   Fri, 23 Jun 2023 08:43:14 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v7 0/3] usb: misc: onboard_usb_hub: add support for
- Cypress HX3 USB 3.0 family
+ Thunderbird/102.11.0
+Subject: Re: [PATCH V4] thermal/core/power_allocator: reset thermal governor
+ when trip point is changed
 Content-Language: en-US
-To:     Benjamin Bara <bbara93@gmail.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Benjamin Bara <benjamin.bara@skidata.com>
-Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>
-References: <20230620-hx3-v7-0-f79b4b22a1bf@skidata.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230620-hx3-v7-0-f79b4b22a1bf@skidata.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     daniel.lezcano@linaro.org, rui.zhang@intel.com,
+        Di Shen <di.shen@unisoc.com>, amitk@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xuewen.yan@unisoc.com, jeson.gao@unisoc.com, zhanglyra@gmail.com,
+        orsonzhai@gmail.com
+References: <6aad180f-410c-5b11-b30b-c7bc02cbe054@linaro.org>
+ <20230619063534.12831-1-di.shen@unisoc.com>
+ <CAJZ5v0i9fyfNYyhAMqr0iYPbUNwrcvL7mxK1rMo+00mNRWKV6w@mail.gmail.com>
+ <CAJZ5v0gHBxbU7Q0KYKsSVk+9nzSxot_JxUkcaAXrDxQx5_a7_Q@mail.gmail.com>
+ <dbfe2b14-794a-e4d9-caf4-15d69ef86091@arm.com>
+ <CAJZ5v0iOSWDBU0d4QPpsKwAW9N2u1mf-BLdKCtJ_49e8P0ZD7g@mail.gmail.com>
+ <62c35d1c-7dcd-7bf2-253e-65cdfd6e92cc@arm.com>
+ <CAJZ5v0iX2WYVjXWecJHVB_w1HAAOLDJvFLTMALGQF3pfv-rKSw@mail.gmail.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <CAJZ5v0iX2WYVjXWecJHVB_w1HAAOLDJvFLTMALGQF3pfv-rKSw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/06/2023 09:28, Benjamin Bara wrote:
-> Hi!
-> 
-> This series adds support for the Cypress HX3 USB 3.0 family (2/3). For
-> now, it just contains the USB-related aspects and ignores the option to
-> connect it via i2c (3/3).
-> 
-> As the HX3 family operates with two power supplies, multiple power
-> supply support is implemented (1/3).
-> 
-> Thanks & best regards,
-> Benjamin
-> 
-> ---
-> Changes in v7:
-> - 1/3: %ld -> %zu (thanks to lkp)
-> - Link to v6: https://lore.kernel.org/r/20230620-hx3-v6-0-6a1d6f8ce689@skidata.com
 
-Please give some time before resending bigger (non-trivial) patches. One
-per day is usually enough. I still see some kbuild robot reports - from
-this or previous patchset, so are you sure you compile tested it on few
-different platforms?
 
-Best regards,
-Krzysztof
+On 6/22/23 19:27, Rafael J. Wysocki wrote:
+> On Tue, Jun 20, 2023 at 1:56 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>
+>>
+>>
+>> On 6/20/23 11:39, Rafael J. Wysocki wrote:
+>>> On Tue, Jun 20, 2023 at 12:19 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>>>
+>>>> Hi Rafael,
+>>>>
+>>>>
+>>>> On 6/20/23 11:07, Rafael J. Wysocki wrote:
+>>>>> On Tue, Jun 20, 2023 at 11:46 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
 
+[snip]
+
+> 
+> Because this is up to the governor, the core has no clue what to do
+> with the return value from ->reset() and so there should be none.
+> 
+> As I said, governors can print whatever diagnostic messages they like
+> in that callback, but returning anything from it to the core is just
+> not useful IMV.
+> 
+>> For the rest of the governors - it's up to them what they
+>> report in case non-passive trip is updated...
+> 
+> Sure.
+> 
+>>>
+>>>> What Di is facing is in the issue under the bucket of
+>>>> 'handle_non_critical_trips()' when the governor just tries to
+>>>> work on stale data - old trip temp.
+>>>
+>>> Well, fair enough, but what about the other governors?  Is this
+>>> problem limited to power_allocator?
+>>
+>> IIUC the core fwk code - non of the governors would be needed
+>> to handle the critical/hot trips. For the rest of the trip types
+>> I would say it's up to the governor. In our IPA case this stale
+>> data is used for power budget estimation - quite fundamental
+>> step. Therefore, the reset and start from scratch would make more
+>> sense.
+>>
+>> I think other governors don't try to 'estimate' such
+>> abstract power headroom based on temperature - so probably
+>> they don't have to even implement the 'reset()' callback
+>> (I don't know their logic that well).
+> 
+> So there seems to be a claim that IPA is the only governor needing the
+> ->reset() callback, but I have not seen any solid analysis confirming
+> that.  It very well may be the case, but then the changelog should
+> clearly explain why this is the case IMO.
+
+I agree, the patch header doesn't explain that properly. Here is the
+explanation for this Intelligent Power Allocator (IPA):
+
+The IPA controls temperature using PID mechanism. It's a closed
+feedback loop. That algorithm can 'learn' from the 'observed'
+in the past reaction for it's control decisions and accumulates that
+information in the part called 'error integral'. Those accumulated
+'error' gaps are the differences between the set target value and the
+actually achieved value. In our case the target value is the target
+temperature which is coming from the trip point. That part is then used
+with the 'I' (of PID) component, so we can compensate for those
+'learned' mistakes.
+Now, when you change the target temperature value - all your previous
+learned errors won't help you. That's why Intelligent Power Allocator
+should reset previously accumulated history.
+
+> 
+>>>
+>>>> For the 2nd case IIUC the code, we pass the 'trip.temperature'
+>>>> and should be ready for what you said (modification of that value).
+>>>
+>>> Generally speaking, it needs to be prepared for a simultaneous change
+>>> of multiple trip points (including active), in which case it may not
+>>> be useful to invoke the ->reset() callback for each of them
+>>> individually.
+>>
+>> Although, that looks more cleaner IMO. Resetting one by one in
+>> a temperature order would be easily maintainable, won't be?
+> 
+> I wouldn't call it maintainable really.
+> 
+> First of all, the trips may not be ordered.  There are no guarantees
+> whatsoever that they will be ordered, so the caller may have to
+> determine the temperature order in the first place.  This would be an
+> extra requirement that currently is not there.
+> 
+> Apart from this, I don't see any fundamental difference between the
+> case when trip points are updated via sysfs and when they are updated
+> by the driver.  The governor should reset itself in any of those cases
+> and even if one trip point changes, the temperature order of all of
+> them may change, so the governor reset mechanism should be able to
+> handle the case when multiple trip points are updated at the same
+> time.  While you may argue that this is theoretical, the ACPI spec
+> clearly states that this is allowed to happen, for example.
+> 
+> If you want a generic reset callback for governors, that's fine, but
+> make it generic and not specific to a particular use case.
+
+I think we agree here, but probably having slightly different
+implementation in mind. Based on you explanation I think you
+want simply this API:
+void (*reset)(struct thermal_zone_device *tz);
+
+1. no return value
+2. no specific trip ID as argument
+
+Do you agree?
+IMO such implementation and API would also work for this IPA
+purpose. Would that work for the ACPI use case as well?
