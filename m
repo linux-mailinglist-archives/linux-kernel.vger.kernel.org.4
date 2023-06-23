@@ -2,112 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F73173BB8D
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 17:23:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 001FF73BB90
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 17:24:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232171AbjFWPXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 11:23:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40856 "EHLO
+        id S232364AbjFWPX7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 11:23:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232211AbjFWPX2 (ORCPT
+        with ESMTP id S232211AbjFWPX5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 11:23:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2444319B;
-        Fri, 23 Jun 2023 08:23:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A775761A87;
-        Fri, 23 Jun 2023 15:23:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CD60C433C0;
-        Fri, 23 Jun 2023 15:23:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687533806;
-        bh=6tFbzhaBjmMoKkG1CNrCXK+CWNwGbleX71IfZSZAiRQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=mDEZWbDgdq4hMs2Z9jt15TcgjRbUQiak6kDW7/sDpz1hUykHwK4yFRVHb8XXp6T2U
-         ce3AcuUDeo4JGbomgkEqmbOvufUqNXyZxgNQNbTdQI5cpffJae8QEhZ7Hzx0m+w4uj
-         eunRKNh3i1N+O/ugxP03zzduODf/mgqaf2/jbpakUccSSKzbEtaECmCdKmI1rYNKOq
-         3ZctNYWyNmGJj3Xb4+5ZvTvknnYPl8OG4O0yQ9q284fsyMio13ObzjE5InpVP0uyFQ
-         QR4zMlZpyRjNvTocgOiyBcGvw1YZ84AOnn7cm5RkbGbbJVdWzok9eEPN4xhmWOVxO8
-         C15PaBm99di3Q==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Gerald Loacker <gerald.loacker@wolfvision.net>,
-        Bingbu Cao <bingbu.cao@intel.com>,
-        Mikhail Rudenko <mike.rudenko@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Vincent Shih <vincent.sunplus@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org
-Subject: [PATCH] media: tc358746: select CONFIG_GENERIC_PHY
-Date:   Fri, 23 Jun 2023 17:23:09 +0200
-Message-Id: <20230623152318.2276816-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Fri, 23 Jun 2023 11:23:57 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id DD5D719B
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 08:23:54 -0700 (PDT)
+Received: (qmail 753372 invoked by uid 1000); 23 Jun 2023 11:23:53 -0400
+Date:   Fri, 23 Jun 2023 11:23:53 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     syzbot <syzbot+63ee658b9a100ffadbe2@syzkaller.appspotmail.com>
+Cc:     andreyknvl@google.com, davem@davemloft.net, dvyukov@google.com,
+        edumazet@google.com, gregkh@linuxfoundation.org,
+        kbuild-all@lists.01.org, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        lkp@intel.com, netdev@vger.kernel.org, nogikh@google.com,
+        oneukum@suse.com, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com, troels@connectedcars.dk
+Subject: Re: [syzbot] [usb?] WARNING in usbnet_start_xmit/usb_submit_urb
+Message-ID: <0f685f2f-06df-4cf2-9387-34f5e3c8b7b7@rowland.harvard.edu>
+References: <000000000000a56e9105d0cec021@google.com>
+ <000000000000e298cd05fecc07d4@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <000000000000e298cd05fecc07d4@google.com>
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SORTED_RECIPS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Fri, Jun 23, 2023 at 06:32:22AM -0700, syzbot wrote:
+> syzbot has bisected this issue to:
+> 
+> commit 45bf39f8df7f05efb83b302c65ae3b9bc92b7065
+> Author: Alan Stern <stern@rowland.harvard.edu>
+> Date:   Tue Jan 31 20:49:04 2023 +0000
+> 
+>     USB: core: Don't hold device lock while reading the "descriptors" sysfs file
+> 
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=124b5877280000
+> start commit:   692b7dc87ca6 Merge tag 'hyperv-fixes-signed-20230619' of g..
+> git tree:       upstream
+> final oops:     https://syzkaller.appspot.com/x/report.txt?x=114b5877280000
+> console output: https://syzkaller.appspot.com/x/log.txt?x=164b5877280000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=2cbd298d0aff1140
+> dashboard link: https://syzkaller.appspot.com/bug?extid=63ee658b9a100ffadbe2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1760094b280000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1359cdf3280000
+> 
+> Reported-by: syzbot+63ee658b9a100ffadbe2@syzkaller.appspotmail.com
+> Fixes: 45bf39f8df7f ("USB: core: Don't hold device lock while reading the "descriptors" sysfs file")
+> 
+> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
-The tc358746 driver selects CONFIG_GENERIC_PHY_MIPI_DPHY and links to
-that, but this fails when CONFIG_GENERIC_PHY is disabled, because Kbuild
-then never enters the drivers/phy directory for building object files:
+The bisection result is wrong, but the issue still needs to be fixed.
 
-ERROR: modpost: "phy_mipi_dphy_get_default_config_for_hsclk" [drivers/media/i2c/tc358746.ko] undefined!
+Alan Stern
 
-Add an explicit 'select GENERIC_PHY' here to ensure that the directory
-is entered, and add another dependency on that symbol so make it
-more obvious what is going on if another driver has the same problem,
-as this will produce a Kconfig warning.
+#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ v6.4-rc7
 
-Fixes: 80a21da360516 ("media: tc358746: add Toshiba TC358746 Parallel to CSI-2 bridge driver")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/media/i2c/Kconfig | 1 +
- drivers/phy/Kconfig       | 1 +
- 2 files changed, 2 insertions(+)
-
-diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
-index cf675ac4b1326..226454b6a90dd 100644
---- a/drivers/media/i2c/Kconfig
-+++ b/drivers/media/i2c/Kconfig
-@@ -1305,6 +1305,7 @@ config VIDEO_TC358746
- 	select VIDEO_V4L2_SUBDEV_API
- 	select MEDIA_CONTROLLER
- 	select V4L2_FWNODE
-+	select GENERIC_PHY
- 	select GENERIC_PHY_MIPI_DPHY
- 	select REGMAP_I2C
- 	help
-diff --git a/drivers/phy/Kconfig b/drivers/phy/Kconfig
-index f46e3148d286d..8dba9596408f2 100644
---- a/drivers/phy/Kconfig
-+++ b/drivers/phy/Kconfig
-@@ -18,6 +18,7 @@ config GENERIC_PHY
+Index: usb-devel/drivers/net/usb/usbnet.c
+===================================================================
+--- usb-devel.orig/drivers/net/usb/usbnet.c
++++ usb-devel/drivers/net/usb/usbnet.c
+@@ -1775,6 +1775,9 @@ usbnet_probe (struct usb_interface *udev
+ 	} else if (!info->in || !info->out)
+ 		status = usbnet_get_endpoints (dev, udev);
+ 	else {
++		u8		ep_addrs[3] = {
++			info->in + USB_DIR_IN, info->out + USB_DIR_OUT, 0};
++
+ 		dev->in = usb_rcvbulkpipe (xdev, info->in);
+ 		dev->out = usb_sndbulkpipe (xdev, info->out);
+ 		if (!(info->flags & FLAG_NO_SETINT))
+@@ -1784,6 +1787,8 @@ usbnet_probe (struct usb_interface *udev
+ 		else
+ 			status = 0;
  
- config GENERIC_PHY_MIPI_DPHY
- 	bool
-+	depends on GENERIC_PHY
- 	help
- 	  Generic MIPI D-PHY support.
- 
--- 
-2.39.2
-
++		if (status == 0 && !usb_check_bulk_endpoints(udev, ep_addrs))
++			status = -EINVAL;
+ 	}
+ 	if (status >= 0 && dev->status)
+ 		status = init_status (dev, udev);
