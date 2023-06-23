@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B214C73B54C
+	by mail.lfdr.de (Postfix) with ESMTP id 697F673B54B
 	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 12:30:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231209AbjFWKaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 06:30:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35990 "EHLO
+        id S232269AbjFWKaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 06:30:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232228AbjFWK3s (ORCPT
+        with ESMTP id S232276AbjFWK34 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 06:29:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE541724
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 03:29:39 -0700 (PDT)
+        Fri, 23 Jun 2023 06:29:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E7BF1BCA
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 03:29:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BF1761A09
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 10:29:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99EE3C43391;
-        Fri, 23 Jun 2023 10:29:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1351F61A18
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 10:29:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46DF5C433CC;
+        Fri, 23 Jun 2023 10:29:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687516178;
-        bh=UYZUmCUG6Xzc7GFPwcyPMr7KaNM/T/mzCRnwUpgMqIo=;
+        s=k20201202; t=1687516182;
+        bh=1muRLOb59+kQ7ZeXLBMZWXmkOisk9F6Bf+D/rqGDwuY=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=vM0BLBkK1qYdn9gOMmCqu8TmveJYxYF8Qz5PL9sng1jk+gB3zqFZMhLffjYkprNrd
-         nn0Nxikr78IjN0CsNZGEi9URT/at1SPUj0Ya5P9AAXzPBw6YLtrAQYmMHbQ/YQNhR/
-         VL7Ih4nfg+OaqCVGNl49FR6cUfC/HkLnLqckeR5oNSSoVxeVSmYzAdt37Tb/CFFTNA
-         Si2ys2zP54jJdcXPu04yVIC4oclxO/bJp2MzlFXzGeWhzibe81S4ZjMBrbcgmbL1/J
-         KVGNxDyvCQBD8vDfSb8ylHgntcr8dipyAvwmVAFmQ98+Zx0Xwpt24x62FTBbUDZqVs
-         ICFsWoQ+P6cdw==
+        b=Fg6wduN550kCKQZAgcUK+qaSxIyBJvy3NpfG7LFBjHOeAxveVY2qfyTrz2SYTMYok
+         V9yn8w0v64hHHiyJx+/fThXbsPsHutp/n8hsSi5SMYEIjOGK7w/qZFfzbMtzBX1iTE
+         29nL8rlcN2obNqdLHbi5OzZRLRIie1wjFJqC7qN6U6kVIaOy/hCRiEk6wu2b0fePP7
+         D/kwRdTlPoDZ+t4LzMymI/5K5LWgCcR0jpt/8U5pI7RJI2Y89s57LurgxGWmq0bYYx
+         G/weE/QDJSfjzcCEDCxb815JI2ABvpdqcRO+qIXgrxyLIBUbxw8rXN2aqyO4nBjcnF
+         WHOJX1er4qZUg==
 From:   Michael Walle <mwalle@kernel.org>
-Date:   Fri, 23 Jun 2023 12:29:14 +0200
-Subject: [PATCH net-next v2 05/10] net: phy: make the "prevent_c45_scan" a
- property of the MII bus
+Date:   Fri, 23 Jun 2023 12:29:15 +0200
+Subject: [PATCH net-next v2 06/10] net: phy: print an info if a broken C45
+ bus is found
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230620-feature-c45-over-c22-v2-5-def0ab9ccee2@kernel.org>
+Message-Id: <20230620-feature-c45-over-c22-v2-6-def0ab9ccee2@kernel.org>
 References: <20230620-feature-c45-over-c22-v2-0-def0ab9ccee2@kernel.org>
 In-Reply-To: <20230620-feature-c45-over-c22-v2-0-def0ab9ccee2@kernel.org>
 To:     Andrew Lunn <andrew@lunn.ch>,
@@ -60,8 +60,8 @@ To:     Andrew Lunn <andrew@lunn.ch>,
 Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         Michael Walle <mwalle@kernel.org>
 X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,89 +70,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The blacklist will also be used elsewhere in the kernel, e.g. in the
-DT scanning code. Make it a property of mii_bus and export the function.
+If there is an PHY which gets confused by C45 transactions on the MDIO
+bus, print an info together with the PHY identifier of the offending
+one.
 
 Signed-off-by: Michael Walle <mwalle@kernel.org>
+
 ---
- drivers/net/phy/mdio_bus.c | 17 ++++++++---------
- include/linux/phy.h        |  5 +++++
- 2 files changed, 13 insertions(+), 9 deletions(-)
+I wasn't sure if this should be phydev_dbg() or phydev_info(). I mainly
+see this as an info to a user why some PHYs might not be probed (or
+c45-over-c22 is used later).
+---
+ drivers/net/phy/mdio_bus.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/net/phy/mdio_bus.c b/drivers/net/phy/mdio_bus.c
-index a31eb1204f63..00b25f6803bc 100644
+index 00b25f6803bc..38529add6420 100644
 --- a/drivers/net/phy/mdio_bus.c
 +++ b/drivers/net/phy/mdio_bus.c
-@@ -613,9 +613,9 @@ static int mdiobus_scan_bus_c45(struct mii_bus *bus)
-  * stomping over the true devices reply, to performing a write to
-  * themselves which was intended for another device. Now that C22
-  * devices have been found, see if any of them are bad for C45, and if we
-- * should skip the C45 scan.
-+ * should prohibit any C45 transactions.
+@@ -617,10 +617,10 @@ static int mdiobus_scan_bus_c45(struct mii_bus *bus)
   */
--static bool mdiobus_prevent_c45_scan(struct mii_bus *bus)
-+void mdiobus_scan_for_broken_c45_access(struct mii_bus *bus)
+ void mdiobus_scan_for_broken_c45_access(struct mii_bus *bus)
  {
++	struct phy_device *phydev;
  	int i;
  
-@@ -628,10 +628,11 @@ static bool mdiobus_prevent_c45_scan(struct mii_bus *bus)
- 			continue;
- 		oui = phydev->phy_id >> 10;
+ 	for (i = 0; i < PHY_MAX_ADDR; i++) {
+-		struct phy_device *phydev;
+ 		u32 oui;
  
--		if (oui == MICREL_OUI)
--			return true;
-+		if (oui == MICREL_OUI) {
-+			bus->prevent_c45_access = true;
-+			break;
-+		}
+ 		phydev = mdiobus_get_phy(bus, i);
+@@ -633,6 +633,11 @@ void mdiobus_scan_for_broken_c45_access(struct mii_bus *bus)
+ 			break;
+ 		}
  	}
--	return false;
++
++	if (bus->prevent_c45_access)
++		dev_info(&bus->dev,
++			 "Detected broken PHY (ID %08lx). Disabling C45 bus transactions.\n",
++			 (unsigned long)phydev->phy_id);
  }
  
  /**
-@@ -652,7 +653,6 @@ int __mdiobus_register(struct mii_bus *bus, struct module *owner)
- {
- 	struct mdio_device *mdiodev;
- 	struct gpio_desc *gpiod;
--	bool prevent_c45_scan;
- 	int i, err;
- 
- 	if (!bus || !bus->name)
-@@ -724,9 +724,8 @@ int __mdiobus_register(struct mii_bus *bus, struct module *owner)
- 			goto error;
- 	}
- 
--	prevent_c45_scan = mdiobus_prevent_c45_scan(bus);
--
--	if (!prevent_c45_scan && bus->read_c45) {
-+	mdiobus_scan_for_broken_c45_access(bus);
-+	if (!bus->prevent_c45_access && bus->read_c45) {
- 		err = mdiobus_scan_bus_c45(bus);
- 		if (err)
- 			goto error;
-diff --git a/include/linux/phy.h b/include/linux/phy.h
-index 12679bbd4b91..a7aff91f4eb0 100644
---- a/include/linux/phy.h
-+++ b/include/linux/phy.h
-@@ -410,6 +410,9 @@ struct mii_bus {
- 	/** @phy_ignore_ta_mask: PHY addresses to ignore the TA/read failure */
- 	u32 phy_ignore_ta_mask;
- 
-+	/** @prevent_c45_access: Don't do any C45 transactions on the bus */
-+	unsigned prevent_c45_access:1;
-+
- 	/**
- 	 * @irq: An array of interrupts, each PHY's interrupt at the index
- 	 * matching its address
-@@ -462,6 +465,8 @@ static inline struct mii_bus *devm_mdiobus_alloc(struct device *dev)
- struct mii_bus *mdio_find_bus(const char *mdio_name);
- struct phy_device *mdiobus_scan_c22(struct mii_bus *bus, int addr);
- 
-+void mdiobus_scan_for_broken_c45_access(struct mii_bus *bus);
-+
- #define PHY_INTERRUPT_DISABLED	false
- #define PHY_INTERRUPT_ENABLED	true
- 
 
 -- 
 2.39.2
