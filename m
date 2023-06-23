@@ -2,110 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6090273B90C
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 15:48:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19BC173B912
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 15:48:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231944AbjFWNr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 09:47:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34126 "EHLO
+        id S231975AbjFWNsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 09:48:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231887AbjFWNrk (ORCPT
+        with ESMTP id S231970AbjFWNsC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 09:47:40 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62F4A26B7
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 06:47:32 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2b4636bb22eso11481961fa.2
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 06:47:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687528050; x=1690120050;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QY1sqDuScItGhrxobk0V3aEmwItBRyzCUAYzD0brN34=;
-        b=PtxV1iGr/52iLFbquJEyzvbZxPyLl9cPPgX4VZN4/pBZ4INmcglsjp3KHL/sz+fPV7
-         9u34CXpg19+iMeyzNlVInDEhSwcgB5i3I91ThucjUZjXalZ5bsojDWpsEjAsfFGYPOo0
-         qThQg21+LbYCwkZzUQTiYsu9TAM28Zv+XBS+KidryZOWov/FUtcLXhJODlFF0BezRhgD
-         l6852nGDMfW/3A/FT8vgO+dm9IuWaiMSu/8u6LpCac7OY0uO3XIcNqdiB4abOieVHO79
-         9gHW1Wnp7sOh0Ck8ZrpWp97VyxW5Ty9sXnxXSq4pAzJNdSxQDWXAJoCaIizlbp7rVPrk
-         CHJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687528050; x=1690120050;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QY1sqDuScItGhrxobk0V3aEmwItBRyzCUAYzD0brN34=;
-        b=DnEp4RGDksxS8j54MIBNvE/NTktRMDfLBp2jSvsFYJZbe+UwiTxdNO8KhvNSzHsIDx
-         Mu3DrO4TDLBesb+3G22nz2X58LZ81XKyXIo3ifsIGYzqwCDO2w2SZPzPAxlTjnp7HB/X
-         plhztzGdunVB3g9lzl/tlVfD2uoaBsPiHn99NWv9lj58TntkZfDHeF4DuobsWpl1BVmJ
-         knNI+Ggl717CJVZuMyoppLoUOYSbPKHwmk8ZDnK/7hFbBFEuGp1oSzU7x7Cd4Ct8YxtY
-         zAjBB2AHxMP+AXQpKzVpYWazVAbXVsiydoJFIMX0qILs8M/aK3NzA/7ivoHytZiHlON5
-         PYDg==
-X-Gm-Message-State: AC+VfDxcFmFEyH/TWNXn21pgy7syyXi2zOofzWS/zbrjjCKSjtI8YOJJ
-        j9fXDClIYCIjDXTj9dY4lEuTAA==
-X-Google-Smtp-Source: ACHHUZ4jvuVLXR/WSF+2ZielFRURH+zzPhs0avDrijKKnk1xO0Lg6lSb6+gw9E2WHU8AvwpvytzLkQ==
-X-Received: by 2002:a2e:9c86:0:b0:2b4:68a3:90e7 with SMTP id x6-20020a2e9c86000000b002b468a390e7mr13005953lji.22.1687528050736;
-        Fri, 23 Jun 2023 06:47:30 -0700 (PDT)
-Received: from [192.168.1.101] (abyk30.neoplus.adsl.tpnet.pl. [83.9.30.30])
-        by smtp.gmail.com with ESMTPSA id z20-20020a05651c023400b002b2207627c0sm1753626ljn.71.2023.06.23.06.47.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Jun 2023 06:47:30 -0700 (PDT)
-Message-ID: <bd99681e-c495-d9a2-5eca-0d741867e794@linaro.org>
-Date:   Fri, 23 Jun 2023 15:47:29 +0200
+        Fri, 23 Jun 2023 09:48:02 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 859692683;
+        Fri, 23 Jun 2023 06:47:52 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35NDIhOP001859;
+        Fri, 23 Jun 2023 13:47:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=qeZOd6t88l7R9L6KRwGZHuEZ1hfUgStlMJpZgNgrpLA=;
+ b=LL40cHiyJAVw7MR3seUwPrCaIgMToHRHpD1yutLOwG52vR7+zOo9YnO/VuH2H+2jW3DW
+ NwQbr7tQHUrFWrQDvZ9N/G0EuHSHzO3ReDj7zEMLTtno84dO49c4+bWnrC8NtlLVlAdB
+ bRjG04EYyWUftioZtZdhltFLIAZCJZHOiRTSvfgugeX5Ys7r44ZJMadD1yi0BzvyaiW7
+ X6fplLz4KpijuGNDrjWqV14MDGUt+7KuyCBav7O2FYQFdZ1goYY+LxfINwnlK/jNg+We
+ P+sIH0tRL9s9XUU2NktP1lh5NjtFz3b01zTmadfT9U2wl/Xatx0kV5BnB0OmD9PSE50G bw== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rcju83hh9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 23 Jun 2023 13:47:47 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35NDlaYT010380
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 23 Jun 2023 13:47:36 GMT
+Received: from [10.204.67.150] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 23 Jun
+ 2023 06:47:33 -0700
+Message-ID: <b8265a1d-926c-f8c4-7b60-de5f55bd1b0a@quicinc.com>
+Date:   Fri, 23 Jun 2023 19:17:30 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2 4/4] interconnect: qcom: sa8775p: add enable_mask for
- bcm nodes
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v1] misc: fastrpc: Fix remote heap allocation request
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>
+CC:     <ekangupt@qti.qualcomm.com>, <gregkh@linuxfoundation.org>,
+        <linux-kernel@vger.kernel.org>, <bkumar@qti.qualcomm.com>,
+        <fastrpc.upstream@qti.qualcomm.com>, stable <stable@kernel.org>
+References: <1685974276-23435-1-git-send-email-quic_ekangupt@quicinc.com>
+ <81343778-6d5c-db85-29e3-8fcba0ec2e8a@linaro.org>
 Content-Language: en-US
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230619-topic-sm8550-upstream-interconnect-mask-vote-v2-0-709474b151cc@linaro.org>
- <20230619-topic-sm8550-upstream-interconnect-mask-vote-v2-4-709474b151cc@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230619-topic-sm8550-upstream-interconnect-mask-vote-v2-4-709474b151cc@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+From:   Ekansh Gupta <quic_ekangupt@quicinc.com>
+In-Reply-To: <81343778-6d5c-db85-29e3-8fcba0ec2e8a@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 6uSgvIoDs_HITDroV5kJCVMihI41OFWB
+X-Proofpoint-GUID: 6uSgvIoDs_HITDroV5kJCVMihI41OFWB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-23_07,2023-06-22_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
+ clxscore=1011 phishscore=0 suspectscore=0 mlxlogscore=999
+ priorityscore=1501 lowpriorityscore=0 bulkscore=0 malwarescore=0
+ impostorscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2305260000 definitions=main-2306230125
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23.06.2023 14:50, Neil Armstrong wrote:
-> Set the proper enable_mask the ACV node requiring such value
-> to be used instead of a bandwidth when voting.
-> 
-> The masks was copied from the downstream implementation at [1].
-> 
-> [1] https://git.codelinaro.org/clo/la/kernel/msm-5.15/-/blob/kernel.lnx.5.15.r32-rel/drivers/interconnect/qcom/lemans.c
-> 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Konrad
->  drivers/interconnect/qcom/sa8775p.c | 1 +
->  1 file changed, 1 insertion(+)
+
+On 6/12/2023 5:34 PM, Srinivas Kandagatla wrote:
 > 
-> diff --git a/drivers/interconnect/qcom/sa8775p.c b/drivers/interconnect/qcom/sa8775p.c
-> index da21cc31a580..f56538669de0 100644
-> --- a/drivers/interconnect/qcom/sa8775p.c
-> +++ b/drivers/interconnect/qcom/sa8775p.c
-> @@ -1873,6 +1873,7 @@ static struct qcom_icc_node srvc_snoc = {
->  
->  static struct qcom_icc_bcm bcm_acv = {
->  	.name = "ACV",
-> +	.enable_mask = 0x8,
->  	.num_nodes = 1,
->  	.nodes = { &ebi },
->  };
 > 
+> On 05/06/2023 15:11, Ekansh Gupta wrote:
+>> Remote heap is used by DSP audioPD on need basis. This memory is
+>> allocated from reserved CMA memory region and is then shared with
+>> audioPD to use it for it's functionality.
+>>
+>> Current implementation of remote heap is not allocating the memory
+>> from CMA region, instead it is allocating the memory from SMMU
+>> context bank. The arguments passed to scm call for the reassignment
+>> of ownership is also not correct. Added changes to allocate CMA
+>> memory and have a proper ownership reassignment.
+>>
+>> Fixes: 532ad70c6d44 ("misc: fastrpc: Add mmap request assigning for 
+>> static PD pool")
+>> Cc: stable <stable@kernel.org>
+>> Tested-by: Ekansh Gupta <quic_ekangupt@quicinc.com>
+>> Signed-off-by: Ekansh Gupta <quic_ekangupt@quicinc.com>
+>> ---
+>>   drivers/misc/fastrpc.c | 26 ++++++++++++++++++++------
+>>   1 file changed, 20 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
+>> index 30d4d04..f5fc2de 100644
+>> --- a/drivers/misc/fastrpc.c
+>> +++ b/drivers/misc/fastrpc.c
+>> @@ -1866,7 +1866,11 @@ static int fastrpc_req_mmap(struct fastrpc_user 
+>> *fl, char __user *argp)
+>>           return -EINVAL;
+>>       }
+>> -    err = fastrpc_buf_alloc(fl, fl->sctx->dev, req.size, &buf);
+>> +    if (req.flags == ADSP_MMAP_REMOTE_HEAP_ADDR)
+>> +        err = fastrpc_remote_heap_alloc(fl, dev, req.size, &buf);
+>> +    else
+>> +        err = fastrpc_buf_alloc(fl, dev, req.size, &buf);
+>> +
+>>       if (err) {
+>>           dev_err(dev, "failed to allocate buffer\n");
+>>           return err;
+>> @@ -1905,12 +1909,22 @@ static int fastrpc_req_mmap(struct 
+>> fastrpc_user *fl, char __user *argp)
+>>       /* Add memory to static PD pool, protection thru hypervisor */
+>>       if (req.flags == ADSP_MMAP_REMOTE_HEAP_ADDR && fl->cctx->vmcount) {
+>> -        struct qcom_scm_vmperm perm;
+>> +        u64 src_perms = BIT(QCOM_SCM_VMID_HLOS);
+>> +        struct qcom_scm_vmperm *dst_perms;
+>> +        u32 i;
+>> -        perm.vmid = QCOM_SCM_VMID_HLOS;
+>> -        perm.perm = QCOM_SCM_PERM_RWX;
+>> -        err = qcom_scm_assign_mem(buf->phys, buf->size,
+>> -            &fl->cctx->perms, &perm, 1);
+>> +        dst_perms = kcalloc(fl->cctx->vmcount,
+>> +            sizeof(struct qcom_scm_vmperm), GFP_KERNEL);
+>> +        if (!dst_perms)
+>> +            return -ENOMEM;
+>> +        for (i = 0; i < fl->cctx->vmcount; i++) {
+>> +            dst_perms[i].vmid = fl->cctx->vmperms[i].vmid;
+>> +            dst_perms[i].perm = fl->cctx->vmperms[i].perm;
+>> +        }
+>> +
+> Why not use fl->cctx->vmperms instead of allocating a new dst_perms?
+> 
+> --srini
+> 
+Thanks Srini for your comments. I'll address them in next patch.
+>> +        err = qcom_scm_assign_mem(buf->phys,(u64)buf->size,
+>> +            &src_perms, dst_perms, fl->cctx->vmcount);
+>> +        kfree(dst_perms);
+>>           if (err) {
+>>               dev_err(fl->sctx->dev, "Failed to assign memory phys 
+>> 0x%llx size 0x%llx err %d",
+>>                       buf->phys, buf->size, err);
