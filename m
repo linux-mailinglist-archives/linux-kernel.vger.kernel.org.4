@@ -2,66 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9308D73B918
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 15:49:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6090273B90C
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 15:48:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231976AbjFWNtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 09:49:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34672 "EHLO
+        id S231944AbjFWNr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 09:47:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232054AbjFWNsl (ORCPT
+        with ESMTP id S231887AbjFWNrk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 09:48:41 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA5726BD
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 06:48:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687528110; x=1719064110;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fTE3/RwlDADn/1fdTPrzBhWxZmKbGCIKmzOMK9NG++c=;
-  b=U9hQ7DH37D7FK4vlG65Rkd5vMB9fgOZksD1tULqefczN2HtaeJDPevnK
-   +ALiPfBoQ9GKeybSuHqiXUbXch0Xi7Fme9Qc1+w4k6P8Lt470gCpQ5SZ6
-   K82Skwqq0EUYdAwAZFJuDAqpVHB2QojN3rr7N3zDoLo5rnnZPPI0PbmuV
-   nodhIW5iSx3Oa3nRdVHG7eYukn30MhMFVRHH5lAO1XnVOsmeJbGXq3p2t
-   cDedX3b/5OlUxEUkL+nzFlNsDPSmW+e8LxyzRVp+UQPYNFF3E9vGomx4I
-   EuNPcbxzbkll8wT4yzgMAxN7h6FQ5+M4C5YgmTlKMqqjY+yFigaQ42GVh
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10750"; a="364212132"
-X-IronPort-AV: E=Sophos;i="6.01,152,1684825200"; 
-   d="scan'208";a="364212132"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2023 06:48:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10750"; a="805209568"
-X-IronPort-AV: E=Sophos;i="6.01,152,1684825200"; 
-   d="scan'208";a="805209568"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 23 Jun 2023 06:48:09 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qCh8y-0008Ib-1n;
-        Fri, 23 Jun 2023 13:48:08 +0000
-Date:   Fri, 23 Jun 2023 21:47:13 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Heiko Stuebner <heiko@sntech.de>, palmer@dabbelt.com,
-        paul.walmsley@sifive.com
-Cc:     oe-kbuild-all@lists.linux.dev, linux-riscv@lists.infradead.org,
-        samuel@sholland.org, guoren@kernel.org,
-        christoph.muellner@vrull.eu, heiko@sntech.de,
-        conor.dooley@microchip.com, linux-kernel@vger.kernel.org,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>
-Subject: Re: [PATCH v2 3/3] RISC-V: add T-Head vector errata handling
-Message-ID: <202306232111.5WpYab2n-lkp@intel.com>
-References: <20230622231305.631331-4-heiko@sntech.de>
+        Fri, 23 Jun 2023 09:47:40 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62F4A26B7
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 06:47:32 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2b4636bb22eso11481961fa.2
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 06:47:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687528050; x=1690120050;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QY1sqDuScItGhrxobk0V3aEmwItBRyzCUAYzD0brN34=;
+        b=PtxV1iGr/52iLFbquJEyzvbZxPyLl9cPPgX4VZN4/pBZ4INmcglsjp3KHL/sz+fPV7
+         9u34CXpg19+iMeyzNlVInDEhSwcgB5i3I91ThucjUZjXalZ5bsojDWpsEjAsfFGYPOo0
+         qThQg21+LbYCwkZzUQTiYsu9TAM28Zv+XBS+KidryZOWov/FUtcLXhJODlFF0BezRhgD
+         l6852nGDMfW/3A/FT8vgO+dm9IuWaiMSu/8u6LpCac7OY0uO3XIcNqdiB4abOieVHO79
+         9gHW1Wnp7sOh0Ck8ZrpWp97VyxW5Ty9sXnxXSq4pAzJNdSxQDWXAJoCaIizlbp7rVPrk
+         CHJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687528050; x=1690120050;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QY1sqDuScItGhrxobk0V3aEmwItBRyzCUAYzD0brN34=;
+        b=DnEp4RGDksxS8j54MIBNvE/NTktRMDfLBp2jSvsFYJZbe+UwiTxdNO8KhvNSzHsIDx
+         Mu3DrO4TDLBesb+3G22nz2X58LZ81XKyXIo3ifsIGYzqwCDO2w2SZPzPAxlTjnp7HB/X
+         plhztzGdunVB3g9lzl/tlVfD2uoaBsPiHn99NWv9lj58TntkZfDHeF4DuobsWpl1BVmJ
+         knNI+Ggl717CJVZuMyoppLoUOYSbPKHwmk8ZDnK/7hFbBFEuGp1oSzU7x7Cd4Ct8YxtY
+         zAjBB2AHxMP+AXQpKzVpYWazVAbXVsiydoJFIMX0qILs8M/aK3NzA/7ivoHytZiHlON5
+         PYDg==
+X-Gm-Message-State: AC+VfDxcFmFEyH/TWNXn21pgy7syyXi2zOofzWS/zbrjjCKSjtI8YOJJ
+        j9fXDClIYCIjDXTj9dY4lEuTAA==
+X-Google-Smtp-Source: ACHHUZ4jvuVLXR/WSF+2ZielFRURH+zzPhs0avDrijKKnk1xO0Lg6lSb6+gw9E2WHU8AvwpvytzLkQ==
+X-Received: by 2002:a2e:9c86:0:b0:2b4:68a3:90e7 with SMTP id x6-20020a2e9c86000000b002b468a390e7mr13005953lji.22.1687528050736;
+        Fri, 23 Jun 2023 06:47:30 -0700 (PDT)
+Received: from [192.168.1.101] (abyk30.neoplus.adsl.tpnet.pl. [83.9.30.30])
+        by smtp.gmail.com with ESMTPSA id z20-20020a05651c023400b002b2207627c0sm1753626ljn.71.2023.06.23.06.47.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Jun 2023 06:47:30 -0700 (PDT)
+Message-ID: <bd99681e-c495-d9a2-5eca-0d741867e794@linaro.org>
+Date:   Fri, 23 Jun 2023 15:47:29 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230622231305.631331-4-heiko@sntech.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2 4/4] interconnect: qcom: sa8775p: add enable_mask for
+ bcm nodes
+Content-Language: en-US
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230619-topic-sm8550-upstream-interconnect-mask-vote-v2-0-709474b151cc@linaro.org>
+ <20230619-topic-sm8550-upstream-interconnect-mask-vote-v2-4-709474b151cc@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230619-topic-sm8550-upstream-interconnect-mask-vote-v2-4-709474b151cc@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,120 +80,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Heiko,
+On 23.06.2023 14:50, Neil Armstrong wrote:
+> Set the proper enable_mask the ACV node requiring such value
+> to be used instead of a bandwidth when voting.
+> 
+> The masks was copied from the downstream implementation at [1].
+> 
+> [1] https://git.codelinaro.org/clo/la/kernel/msm-5.15/-/blob/kernel.lnx.5.15.r32-rel/drivers/interconnect/qcom/lemans.c
+> 
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on next-20230622]
-[cannot apply to linus/master v6.4-rc7 v6.4-rc6 v6.4-rc5 v6.4-rc7]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Heiko-Stuebner/RISC-V-move-vector-available-status-into-a-dedicated-variable/20230623-081314
-base:   next-20230622
-patch link:    https://lore.kernel.org/r/20230622231305.631331-4-heiko%40sntech.de
-patch subject: [PATCH v2 3/3] RISC-V: add T-Head vector errata handling
-config: riscv-rv32_defconfig (https://download.01.org/0day-ci/archive/20230623/202306232111.5WpYab2n-lkp@intel.com/config)
-compiler: riscv32-linux-gcc (GCC) 12.3.0
-reproduce: (https://download.01.org/0day-ci/archive/20230623/202306232111.5WpYab2n-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306232111.5WpYab2n-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   arch/riscv/include/asm/vector.h: Assembler messages:
->> arch/riscv/include/asm/vector.h:162: Error: unrecognized opcode `slliw a4,a4,1'
->> arch/riscv/include/asm/vector.h:194: Error: unrecognized opcode `srliw t4,a1,1'
->> arch/riscv/include/asm/vector.h:169: Error: attempt to move .org backwards
-   arch/riscv/include/asm/vector.h:203: Error: attempt to move .org backwards
---
-   arch/riscv/include/asm/vector.h: Assembler messages:
->> arch/riscv/include/asm/vector.h:162: Error: unrecognized opcode `slliw a4,a4,1'
->> arch/riscv/include/asm/vector.h:169: Error: attempt to move .org backwards
---
-   arch/riscv/include/asm/vector.h: Assembler messages:
->> arch/riscv/include/asm/vector.h:194: Error: unrecognized opcode `srliw t4,a1,1'
->> arch/riscv/include/asm/vector.h:162: Error: unrecognized opcode `slliw a4,a4,1'
-   arch/riscv/include/asm/vector.h:203: Error: attempt to move .org backwards
->> arch/riscv/include/asm/vector.h:169: Error: attempt to move .org backwards
-
-
-vim +162 arch/riscv/include/asm/vector.h
-
-03c3fcd9941a17 Greentime Hu   2023-06-05  150  
-03c3fcd9941a17 Greentime Hu   2023-06-05  151  static __always_inline void __vstate_csr_restore(struct __riscv_v_ext_state *src)
-03c3fcd9941a17 Greentime Hu   2023-06-05  152  {
-5255e253b722bb Heiko Stuebner 2023-06-23  153  	register u32 t1 asm("t1") = (SR_FS);
-5255e253b722bb Heiko Stuebner 2023-06-23  154  
-5255e253b722bb Heiko Stuebner 2023-06-23  155  	/*
-5255e253b722bb Heiko Stuebner 2023-06-23  156  	 * Similar to __vstate_csr_save above, restore values for the
-5255e253b722bb Heiko Stuebner 2023-06-23  157  	 * separate VXRM and VXSAT CSRs from the vcsr variable.
-5255e253b722bb Heiko Stuebner 2023-06-23  158  	 */
-5255e253b722bb Heiko Stuebner 2023-06-23  159  	asm volatile (ALTERNATIVE(
-03c3fcd9941a17 Greentime Hu   2023-06-05  160  		".option push\n\t"
-03c3fcd9941a17 Greentime Hu   2023-06-05  161  		".option arch, +v\n\t"
-03c3fcd9941a17 Greentime Hu   2023-06-05 @162  		"vsetvl	 x0, %2, %1\n\t"
-03c3fcd9941a17 Greentime Hu   2023-06-05  163  		".option pop\n\t"
-03c3fcd9941a17 Greentime Hu   2023-06-05  164  		"csrw	" __stringify(CSR_VSTART) ", %0\n\t"
-03c3fcd9941a17 Greentime Hu   2023-06-05  165  		"csrw	" __stringify(CSR_VCSR) ", %3\n\t"
-5255e253b722bb Heiko Stuebner 2023-06-23  166  		__nops(6),
-5255e253b722bb Heiko Stuebner 2023-06-23  167  		"csrs	sstatus, t1\n\t"
-5255e253b722bb Heiko Stuebner 2023-06-23  168  		".option push\n\t"
-5255e253b722bb Heiko Stuebner 2023-06-23 @169  		".option arch, +v\n\t"
-5255e253b722bb Heiko Stuebner 2023-06-23  170  		"vsetvl	 x0, %2, %1\n\t"
-5255e253b722bb Heiko Stuebner 2023-06-23  171  		".option pop\n\t"
-5255e253b722bb Heiko Stuebner 2023-06-23  172  		"csrw	" __stringify(CSR_VSTART) ", %0\n\t"
-5255e253b722bb Heiko Stuebner 2023-06-23  173  		"srliw	t4, %3, " __stringify(VCSR_VXRM_SHIFT) "\n\t"
-5255e253b722bb Heiko Stuebner 2023-06-23  174  		"andi	t4, t4, " __stringify(VCSR_VXRM_MASK) "\n\t"
-5255e253b722bb Heiko Stuebner 2023-06-23  175  		"csrw	" __stringify(THEAD_C9XX_CSR_VXRM) ", t4\n\t"
-5255e253b722bb Heiko Stuebner 2023-06-23  176  		"andi	%3, %3, " __stringify(VCSR_VXSAT_MASK) "\n\t"
-5255e253b722bb Heiko Stuebner 2023-06-23  177  		"csrw	" __stringify(THEAD_C9XX_CSR_VXSAT) ", %3\n\t"
-5255e253b722bb Heiko Stuebner 2023-06-23  178  		"csrc	sstatus, t1\n\t",
-5255e253b722bb Heiko Stuebner 2023-06-23  179  		THEAD_VENDOR_ID,
-5255e253b722bb Heiko Stuebner 2023-06-23  180  		ERRATA_THEAD_VECTOR, CONFIG_ERRATA_THEAD_VECTOR)
-03c3fcd9941a17 Greentime Hu   2023-06-05  181  		: : "r" (src->vstart), "r" (src->vtype), "r" (src->vl),
-5255e253b722bb Heiko Stuebner 2023-06-23  182  		    "r" (src->vcsr), "r"(t1) : "t4");
-03c3fcd9941a17 Greentime Hu   2023-06-05  183  }
-03c3fcd9941a17 Greentime Hu   2023-06-05  184  
-03c3fcd9941a17 Greentime Hu   2023-06-05  185  static inline void __riscv_v_vstate_save(struct __riscv_v_ext_state *save_to,
-03c3fcd9941a17 Greentime Hu   2023-06-05  186  					 void *datap)
-03c3fcd9941a17 Greentime Hu   2023-06-05  187  {
-03c3fcd9941a17 Greentime Hu   2023-06-05  188  	unsigned long vl;
-03c3fcd9941a17 Greentime Hu   2023-06-05  189  
-03c3fcd9941a17 Greentime Hu   2023-06-05  190  	riscv_v_enable();
-03c3fcd9941a17 Greentime Hu   2023-06-05  191  	__vstate_csr_save(save_to);
-5255e253b722bb Heiko Stuebner 2023-06-23  192  	asm volatile (ALTERNATIVE(
-5255e253b722bb Heiko Stuebner 2023-06-23  193  		"nop\n\t"
-03c3fcd9941a17 Greentime Hu   2023-06-05 @194  		".option push\n\t"
-03c3fcd9941a17 Greentime Hu   2023-06-05  195  		".option arch, +v\n\t"
-03c3fcd9941a17 Greentime Hu   2023-06-05  196  		"vsetvli	%0, x0, e8, m8, ta, ma\n\t"
-03c3fcd9941a17 Greentime Hu   2023-06-05  197  		"vse8.v		v0, (%1)\n\t"
-03c3fcd9941a17 Greentime Hu   2023-06-05  198  		"add		%1, %1, %0\n\t"
-03c3fcd9941a17 Greentime Hu   2023-06-05  199  		"vse8.v		v8, (%1)\n\t"
-03c3fcd9941a17 Greentime Hu   2023-06-05  200  		"add		%1, %1, %0\n\t"
-03c3fcd9941a17 Greentime Hu   2023-06-05  201  		"vse8.v		v16, (%1)\n\t"
-03c3fcd9941a17 Greentime Hu   2023-06-05  202  		"add		%1, %1, %0\n\t"
-03c3fcd9941a17 Greentime Hu   2023-06-05  203  		"vse8.v		v24, (%1)\n\t"
-5255e253b722bb Heiko Stuebner 2023-06-23  204  		".option pop\n\t",
-5255e253b722bb Heiko Stuebner 2023-06-23  205  		"mv		t0, %1\n\t"
-5255e253b722bb Heiko Stuebner 2023-06-23  206  		THEAD_VSETVLI_T4X0E8M8D1
-5255e253b722bb Heiko Stuebner 2023-06-23  207  		THEAD_VSB_V_V0T0
-5255e253b722bb Heiko Stuebner 2023-06-23  208  		"addi		t0, t0, 128\n\t"
-5255e253b722bb Heiko Stuebner 2023-06-23  209  		THEAD_VSB_V_V8T0
-5255e253b722bb Heiko Stuebner 2023-06-23  210  		"addi		t0, t0, 128\n\t"
-5255e253b722bb Heiko Stuebner 2023-06-23  211  		THEAD_VSB_V_V16T0
-5255e253b722bb Heiko Stuebner 2023-06-23  212  		"addi		t0, t0, 128\n\t"
-5255e253b722bb Heiko Stuebner 2023-06-23  213  		THEAD_VSB_V_V24T0, THEAD_VENDOR_ID,
-5255e253b722bb Heiko Stuebner 2023-06-23  214  		ERRATA_THEAD_VECTOR, CONFIG_ERRATA_THEAD_VECTOR)
-5255e253b722bb Heiko Stuebner 2023-06-23  215  		: "=&r" (vl) : "r" (datap) : "t0", "t4", "memory");
-03c3fcd9941a17 Greentime Hu   2023-06-05  216  	riscv_v_disable();
-03c3fcd9941a17 Greentime Hu   2023-06-05  217  }
-03c3fcd9941a17 Greentime Hu   2023-06-05  218  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Konrad
+>  drivers/interconnect/qcom/sa8775p.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/interconnect/qcom/sa8775p.c b/drivers/interconnect/qcom/sa8775p.c
+> index da21cc31a580..f56538669de0 100644
+> --- a/drivers/interconnect/qcom/sa8775p.c
+> +++ b/drivers/interconnect/qcom/sa8775p.c
+> @@ -1873,6 +1873,7 @@ static struct qcom_icc_node srvc_snoc = {
+>  
+>  static struct qcom_icc_bcm bcm_acv = {
+>  	.name = "ACV",
+> +	.enable_mask = 0x8,
+>  	.num_nodes = 1,
+>  	.nodes = { &ebi },
+>  };
+> 
