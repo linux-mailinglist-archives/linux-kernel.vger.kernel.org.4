@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFBE973C452
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 00:56:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8D3A73C457
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 00:56:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231806AbjFWW4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 18:56:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37434 "EHLO
+        id S232489AbjFWW41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 18:56:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229905AbjFWW4M (ORCPT
+        with ESMTP id S231834AbjFWW4O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 18:56:12 -0400
+        Fri, 23 Jun 2023 18:56:14 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA5FC2707
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 15:55:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F5202709
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 15:55:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687560927;
+        s=mimecast20190719; t=1687560928;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=+rBMqYSyv/4ZPCkVQAGQaA6Fc9mkJmC9WKrulhUVyYg=;
-        b=ew1BfP6IDH0kmYetIID2zo+6rn0jpLftBdj8KbQvnyuwnPWrBlZT9wqnOV99Y12s4k1BF/
-        7P9HxGThUVqgRphznMaWI2USbYY6/r+5zd/o+obgQ0HB/xaW6vHQhCbMHKn5XPXzQYonm6
-        V+w74uESDBn1WamtzgYf9FdDSkQQlKU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=96le6Nv7f7Jm2em1nCUehde2Ld5Ng9GbgAM0NyDY2H8=;
+        b=irqyeMHGueA41WpjvkmmFLE373NjfuT8TSLHIg8Heb7miYm/ivTRYr+h7c3zDBwQ1XCrej
+        yNOyqHClanlJidBB1XaFcwPSFF7yvrnj0Qnt5BtrprPP/QvT8wos3RPkfmU2QASGB+WHLS
+        17feecjMBkMlnbzXkKzupeFNwqdQT58=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-132-XZyhTNHGPUuH2-31Her6VQ-1; Fri, 23 Jun 2023 18:55:24 -0400
-X-MC-Unique: XZyhTNHGPUuH2-31Her6VQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+ us-mta-470-JAj_tgg_MAmagZcoZ9ODJA-1; Fri, 23 Jun 2023 18:55:25 -0400
+X-MC-Unique: JAj_tgg_MAmagZcoZ9ODJA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AA74E185A78F;
-        Fri, 23 Jun 2023 22:55:22 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C11F21C05ED2;
+        Fri, 23 Jun 2023 22:55:24 +0000 (UTC)
 Received: from warthog.procyon.org.com (unknown [10.42.28.4])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 518A01121314;
-        Fri, 23 Jun 2023 22:55:19 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 594DEF5ADA;
+        Fri, 23 Jun 2023 22:55:23 +0000 (UTC)
 From:   David Howells <dhowells@redhat.com>
 To:     netdev@vger.kernel.org
 Cc:     David Howells <dhowells@redhat.com>,
@@ -50,212 +50,154 @@ Cc:     David Howells <dhowells@redhat.com>,
         David Ahern <dsahern@kernel.org>,
         Matthew Wilcox <willy@infradead.org>,
         Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Bernard Metzler <bmt@zurich.ibm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        Karsten Graul <kgraul@linux.ibm.com>,
-        Wenjia Zhang <wenjia@linux.ibm.com>,
-        Jan Karcher <jaka@linux.ibm.com>,
-        "D. Wythe" <alibuda@linux.alibaba.com>,
-        Tony Lu <tonylu@linux.alibaba.com>,
-        Wen Gu <guwen@linux.alibaba.com>,
-        Boris Pismenny <borisp@nvidia.com>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>, bpf@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-rdma@vger.kernel.org
-Subject: [PATCH net-next v5 01/16] tcp_bpf, smc, tls, espintcp, siw: Reduce MSG_SENDPAGE_NOTLAST usage
-Date:   Fri, 23 Jun 2023 23:54:58 +0100
-Message-ID: <20230623225513.2732256-2-dhowells@redhat.com>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v5 02/16] net: Use sendmsg(MSG_SPLICE_PAGES) not sendpage in skb_send_sock()
+Date:   Fri, 23 Jun 2023 23:54:59 +0100
+Message-ID: <20230623225513.2732256-3-dhowells@redhat.com>
 In-Reply-To: <20230623225513.2732256-1-dhowells@redhat.com>
 References: <20230623225513.2732256-1-dhowells@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As MSG_SENDPAGE_NOTLAST is being phased out along with sendpage(), don't
-use it further in than the sendpage methods, but rather translate it to
-MSG_MORE and use that instead.
+Use sendmsg() with MSG_SPLICE_PAGES rather than sendpage in
+skb_send_sock().  This causes pages to be spliced from the source iterator
+if possible.
+
+This allows ->sendpage() to be replaced by something that can handle
+multiple multipage folios in a single transaction.
+
+Note that this could perhaps be improved to fill out a bvec array with all
+the frags and then make a single sendmsg call, possibly sticking the header
+on the front also.
 
 Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-cc: Bernard Metzler <bmt@zurich.ibm.com>
-cc: Jason Gunthorpe <jgg@ziepe.ca>
-cc: Leon Romanovsky <leon@kernel.org>
-cc: John Fastabend <john.fastabend@gmail.com>
-cc: Jakub Sitnicki <jakub@cloudflare.com>
-cc: Eric Dumazet <edumazet@google.com>
 cc: "David S. Miller" <davem@davemloft.net>
-cc: David Ahern <dsahern@kernel.org>
+cc: Eric Dumazet <edumazet@google.com>
 cc: Jakub Kicinski <kuba@kernel.org>
 cc: Paolo Abeni <pabeni@redhat.com>
-cc: Karsten Graul <kgraul@linux.ibm.com>
-cc: Wenjia Zhang <wenjia@linux.ibm.com>
-cc: Jan Karcher <jaka@linux.ibm.com>
-cc: "D. Wythe" <alibuda@linux.alibaba.com>
-cc: Tony Lu <tonylu@linux.alibaba.com>
-cc: Wen Gu <guwen@linux.alibaba.com>
-cc: Boris Pismenny <borisp@nvidia.com>
-cc: Steffen Klassert <steffen.klassert@secunet.com>
-cc: Herbert Xu <herbert@gondor.apana.org.au>
+cc: Jens Axboe <axboe@kernel.dk>
+cc: Matthew Wilcox <willy@infradead.org>
 cc: netdev@vger.kernel.org
-cc: bpf@vger.kernel.org
-cc: linux-s390@vger.kernel.org
-cc: linux-rdma@vger.kernel.org
 ---
 
 Notes:
-    ver #3)
-     - In tcp_bpf, reset msg_flags on each iteration to clear MSG_MORE.
-     - In tcp_bpf, set MSG_MORE if there's more data in the sk_msg.
+    ver #2)
+     - Wrap lines at 80.
 
- drivers/infiniband/sw/siw/siw_qp_tx.c |  5 ++---
- net/ipv4/tcp_bpf.c                    |  5 +++--
- net/smc/smc_tx.c                      |  6 ++++--
- net/tls/tls_device.c                  |  4 ++--
- net/xfrm/espintcp.c                   | 10 ++++++----
- 5 files changed, 17 insertions(+), 13 deletions(-)
+ net/core/skbuff.c | 50 ++++++++++++++++++++++++++---------------------
+ 1 file changed, 28 insertions(+), 22 deletions(-)
 
-diff --git a/drivers/infiniband/sw/siw/siw_qp_tx.c b/drivers/infiniband/sw/siw/siw_qp_tx.c
-index ffb16beb6c30..7c7a51d36d0c 100644
---- a/drivers/infiniband/sw/siw/siw_qp_tx.c
-+++ b/drivers/infiniband/sw/siw/siw_qp_tx.c
-@@ -325,8 +325,7 @@ static int siw_tcp_sendpages(struct socket *s, struct page **page, int offset,
+diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+index fee2b1c105fe..6c5915efbc17 100644
+--- a/net/core/skbuff.c
++++ b/net/core/skbuff.c
+@@ -2989,32 +2989,32 @@ int skb_splice_bits(struct sk_buff *skb, struct sock *sk, unsigned int offset,
+ }
+ EXPORT_SYMBOL_GPL(skb_splice_bits);
+ 
+-static int sendmsg_unlocked(struct sock *sk, struct msghdr *msg,
+-			    struct kvec *vec, size_t num, size_t size)
++static int sendmsg_locked(struct sock *sk, struct msghdr *msg)
  {
- 	struct bio_vec bvec;
- 	struct msghdr msg = {
--		.msg_flags = (MSG_MORE | MSG_DONTWAIT | MSG_SENDPAGE_NOTLAST |
--			      MSG_SPLICE_PAGES),
-+		.msg_flags = (MSG_MORE | MSG_DONTWAIT | MSG_SPLICE_PAGES),
- 	};
- 	struct sock *sk = s->sk;
- 	int i = 0, rv = 0, sent = 0;
-@@ -335,7 +334,7 @@ static int siw_tcp_sendpages(struct socket *s, struct page **page, int offset,
- 		size_t bytes = min_t(size_t, PAGE_SIZE - offset, size);
+ 	struct socket *sock = sk->sk_socket;
++	size_t size = msg_data_left(msg);
  
- 		if (size + offset <= PAGE_SIZE)
--			msg.msg_flags &= ~MSG_SENDPAGE_NOTLAST;
-+			msg.msg_flags &= ~MSG_MORE;
- 
- 		tcp_rate_check_app_limited(sk);
- 		bvec_set_page(&bvec, page[i], bytes, offset);
-diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-index 5a84053ac62b..31d6005cea9b 100644
---- a/net/ipv4/tcp_bpf.c
-+++ b/net/ipv4/tcp_bpf.c
-@@ -88,9 +88,9 @@ static int bpf_tcp_ingress(struct sock *sk, struct sk_psock *psock,
- static int tcp_bpf_push(struct sock *sk, struct sk_msg *msg, u32 apply_bytes,
- 			int flags, bool uncharge)
- {
-+	struct msghdr msghdr = {};
- 	bool apply = apply_bytes;
- 	struct scatterlist *sge;
--	struct msghdr msghdr = { .msg_flags = flags | MSG_SPLICE_PAGES, };
- 	struct page *page;
- 	int size, ret = 0;
- 	u32 off;
-@@ -107,11 +107,12 @@ static int tcp_bpf_push(struct sock *sk, struct sk_msg *msg, u32 apply_bytes,
- 
- 		tcp_rate_check_app_limited(sk);
- retry:
-+		msghdr.msg_flags = flags | MSG_SPLICE_PAGES;
- 		has_tx_ulp = tls_sw_has_ctx_tx(sk);
- 		if (has_tx_ulp)
- 			msghdr.msg_flags |= MSG_SENDPAGE_NOPOLICY;
- 
--		if (flags & MSG_SENDPAGE_NOTLAST)
-+		if (size < sge->length && msg->sg.start != msg->sg.end)
- 			msghdr.msg_flags |= MSG_MORE;
- 
- 		bvec_set_page(&bvec, page, size, off);
-diff --git a/net/smc/smc_tx.c b/net/smc/smc_tx.c
-index 45128443f1f1..9b9e0a190734 100644
---- a/net/smc/smc_tx.c
-+++ b/net/smc/smc_tx.c
-@@ -168,8 +168,7 @@ static bool smc_tx_should_cork(struct smc_sock *smc, struct msghdr *msg)
- 	 * should known how/when to uncork it.
- 	 */
- 	if ((msg->msg_flags & MSG_MORE ||
--	     smc_tx_is_corked(smc) ||
--	     msg->msg_flags & MSG_SENDPAGE_NOTLAST) &&
-+	     smc_tx_is_corked(smc)) &&
- 	    atomic_read(&conn->sndbuf_space))
- 		return true;
- 
-@@ -306,6 +305,9 @@ int smc_tx_sendpage(struct smc_sock *smc, struct page *page, int offset,
- 	struct kvec iov;
- 	int rc;
- 
-+	if (flags & MSG_SENDPAGE_NOTLAST)
-+		msg.msg_flags |= MSG_MORE;
+ 	if (!sock)
+ 		return -EINVAL;
+-	return kernel_sendmsg(sock, msg, vec, num, size);
 +
- 	iov.iov_base = kaddr + offset;
- 	iov.iov_len = size;
- 	iov_iter_kvec(&msg.msg_iter, ITER_SOURCE, &iov, 1, size);
-diff --git a/net/tls/tls_device.c b/net/tls/tls_device.c
-index b82770f68807..975299d7213b 100644
---- a/net/tls/tls_device.c
-+++ b/net/tls/tls_device.c
-@@ -449,7 +449,7 @@ static int tls_push_data(struct sock *sk,
- 		return -sk->sk_err;
++	if (!sock->ops->sendmsg_locked)
++		return sock_no_sendmsg_locked(sk, msg, size);
++
++	return sock->ops->sendmsg_locked(sk, msg, size);
+ }
  
- 	flags |= MSG_SENDPAGE_DECRYPTED;
--	tls_push_record_flags = flags | MSG_SENDPAGE_NOTLAST;
-+	tls_push_record_flags = flags | MSG_MORE;
- 
- 	timeo = sock_sndtimeo(sk, flags & MSG_DONTWAIT);
- 	if (tls_is_partially_sent_record(tls_ctx)) {
-@@ -532,7 +532,7 @@ static int tls_push_data(struct sock *sk,
- 		if (!size) {
- last_record:
- 			tls_push_record_flags = flags;
--			if (flags & (MSG_SENDPAGE_NOTLAST | MSG_MORE)) {
-+			if (flags & MSG_MORE) {
- 				more = true;
- 				break;
- 			}
-diff --git a/net/xfrm/espintcp.c b/net/xfrm/espintcp.c
-index 3504925babdb..d3b3f9e720b3 100644
---- a/net/xfrm/espintcp.c
-+++ b/net/xfrm/espintcp.c
-@@ -205,13 +205,15 @@ static int espintcp_sendskb_locked(struct sock *sk, struct espintcp_msg *emsg,
- static int espintcp_sendskmsg_locked(struct sock *sk,
- 				     struct espintcp_msg *emsg, int flags)
+-static int sendpage_unlocked(struct sock *sk, struct page *page, int offset,
+-			     size_t size, int flags)
++static int sendmsg_unlocked(struct sock *sk, struct msghdr *msg)
  {
--	struct msghdr msghdr = { .msg_flags = flags | MSG_SPLICE_PAGES, };
-+	struct msghdr msghdr = {
-+		.msg_flags = flags | MSG_SPLICE_PAGES | MSG_MORE,
-+	};
- 	struct sk_msg *skmsg = &emsg->skmsg;
-+	bool more = flags & MSG_MORE;
- 	struct scatterlist *sg;
- 	int done = 0;
- 	int ret;
+ 	struct socket *sock = sk->sk_socket;
  
--	msghdr.msg_flags |= MSG_SENDPAGE_NOTLAST;
- 	sg = &skmsg->sg.data[skmsg->sg.start];
- 	do {
- 		struct bio_vec bvec;
-@@ -221,8 +223,8 @@ static int espintcp_sendskmsg_locked(struct sock *sk,
+ 	if (!sock)
+ 		return -EINVAL;
+-	return kernel_sendpage(sock, page, offset, size, flags);
++	return sock_sendmsg(sock, msg);
+ }
  
- 		emsg->offset = 0;
+-typedef int (*sendmsg_func)(struct sock *sk, struct msghdr *msg,
+-			    struct kvec *vec, size_t num, size_t size);
+-typedef int (*sendpage_func)(struct sock *sk, struct page *page, int offset,
+-			     size_t size, int flags);
++typedef int (*sendmsg_func)(struct sock *sk, struct msghdr *msg);
+ static int __skb_send_sock(struct sock *sk, struct sk_buff *skb, int offset,
+-			   int len, sendmsg_func sendmsg, sendpage_func sendpage)
++			   int len, sendmsg_func sendmsg)
+ {
+ 	unsigned int orig_len = len;
+ 	struct sk_buff *head = skb;
+@@ -3034,8 +3034,9 @@ static int __skb_send_sock(struct sock *sk, struct sk_buff *skb, int offset,
+ 		memset(&msg, 0, sizeof(msg));
+ 		msg.msg_flags = MSG_DONTWAIT;
  
--		if (sg_is_last(sg))
--			msghdr.msg_flags &= ~MSG_SENDPAGE_NOTLAST;
-+		if (sg_is_last(sg) && !more)
-+			msghdr.msg_flags &= ~MSG_MORE;
+-		ret = INDIRECT_CALL_2(sendmsg, kernel_sendmsg_locked,
+-				      sendmsg_unlocked, sk, &msg, &kv, 1, slen);
++		iov_iter_kvec(&msg.msg_iter, ITER_SOURCE, &kv, 1, slen);
++		ret = INDIRECT_CALL_2(sendmsg, sendmsg_locked,
++				      sendmsg_unlocked, sk, &msg);
+ 		if (ret <= 0)
+ 			goto error;
  
- 		p = sg_page(sg);
- retry:
+@@ -3066,11 +3067,18 @@ static int __skb_send_sock(struct sock *sk, struct sk_buff *skb, int offset,
+ 		slen = min_t(size_t, len, skb_frag_size(frag) - offset);
+ 
+ 		while (slen) {
+-			ret = INDIRECT_CALL_2(sendpage, kernel_sendpage_locked,
+-					      sendpage_unlocked, sk,
+-					      skb_frag_page(frag),
+-					      skb_frag_off(frag) + offset,
+-					      slen, MSG_DONTWAIT);
++			struct bio_vec bvec;
++			struct msghdr msg = {
++				.msg_flags = MSG_SPLICE_PAGES | MSG_DONTWAIT,
++			};
++
++			bvec_set_page(&bvec, skb_frag_page(frag), slen,
++				      skb_frag_off(frag) + offset);
++			iov_iter_bvec(&msg.msg_iter, ITER_SOURCE, &bvec, 1,
++				      slen);
++
++			ret = INDIRECT_CALL_2(sendmsg, sendmsg_locked,
++					      sendmsg_unlocked, sk, &msg);
+ 			if (ret <= 0)
+ 				goto error;
+ 
+@@ -3107,16 +3115,14 @@ static int __skb_send_sock(struct sock *sk, struct sk_buff *skb, int offset,
+ int skb_send_sock_locked(struct sock *sk, struct sk_buff *skb, int offset,
+ 			 int len)
+ {
+-	return __skb_send_sock(sk, skb, offset, len, kernel_sendmsg_locked,
+-			       kernel_sendpage_locked);
++	return __skb_send_sock(sk, skb, offset, len, sendmsg_locked);
+ }
+ EXPORT_SYMBOL_GPL(skb_send_sock_locked);
+ 
+ /* Send skb data on a socket. Socket must be unlocked. */
+ int skb_send_sock(struct sock *sk, struct sk_buff *skb, int offset, int len)
+ {
+-	return __skb_send_sock(sk, skb, offset, len, sendmsg_unlocked,
+-			       sendpage_unlocked);
++	return __skb_send_sock(sk, skb, offset, len, sendmsg_unlocked);
+ }
+ 
+ /**
 
