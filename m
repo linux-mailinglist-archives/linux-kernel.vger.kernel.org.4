@@ -2,185 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31A6973AF30
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 05:54:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 127B973AF34
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 05:57:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230338AbjFWDyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 23:54:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37028 "EHLO
+        id S230260AbjFWD5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 23:57:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229958AbjFWDyO (ORCPT
+        with ESMTP id S230062AbjFWD5i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 23:54:14 -0400
-Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B144B1BFE;
-        Thu, 22 Jun 2023 20:54:13 -0700 (PDT)
-Received: by mail-oo1-xc2d.google.com with SMTP id 006d021491bc7-55e0706af99so162901eaf.1;
-        Thu, 22 Jun 2023 20:54:13 -0700 (PDT)
+        Thu, 22 Jun 2023 23:57:38 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 527FF1FE9
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 20:57:33 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-51beee8843eso105238a12.2
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 20:57:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687492453; x=1690084453;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nMQ4I0DPbaoK5gg0ZwtWWWfM9jrJt6TfeYfzew3l+nQ=;
-        b=chdBjQySJOLoZMasxb1tp0Vb3PyB+N1K6v+NFabCtndQKntAicSSc1YkvWTUyt6UWG
-         kNnu+qTmxU7xhTJpjNWayDvDrTZ0h3J2MUwUz02VCmUG7KKQd+DfiSzuaWAYmgSp5TVu
-         fcNbM5h2BnR/ggPUbzc41nI4Ch9V/xtjmED9RMV/fIoTLktdTQ76fOqV56Jdu8Y1gRT9
-         y/qbO+SnwXTl1moxeyqZWdcHFr301hIn/ElpmZzs1IdDiDo8/f6giqC+UwPOMV5UNElH
-         mjhAMsOQg9rajD2f9BIwMYeq9ErNDRY0S6KMjD7xd9HgkHdTr/hIdT+mMCNdPWeSr2wl
-         ztJA==
+        d=gmail.com; s=20221208; t=1687492651; x=1690084651;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=TY0mjbjbbS57MnRjgQ9450/9TZ/oHz6bQ+SREUOCB9Q=;
+        b=rfKGFbyEuaJFuHEcmCkHIpPiXwU8VA2v03oLHMwLdjXu3zmXYbY0I4r0KVPCsYqVRd
+         x8NGNAPQ/d3XUK5e2wJguWYVNPOJpN9nRO+c86mHhEAmIuHTuNo2bGcQJMcu1Fw/YY1G
+         LCMJcD08m5fR2qTqdpBp5SH19uNEvM0z2qQTiYrYpvUFyRXm4mmKU0XP/yBRv2gq9thw
+         H2AqJfbNKBu7uyxJkel749D0jJMyAFbWT/b+haziWqae22loGbzHxLBw/y/4xzBNLKhc
+         W9S2tDmGEt90jg36UhzHIe7AGirkfeD0/3TSyQL+9yAFQIzZ/S22a+lEC3W6qkyNvOpC
+         taew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687492453; x=1690084453;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nMQ4I0DPbaoK5gg0ZwtWWWfM9jrJt6TfeYfzew3l+nQ=;
-        b=ekjEZPBWy/rvsQeXAmmOjigDrAE1TfvcAZ+Ds3hHKCJVdvyNZLNhdDbpLbPJroktC0
-         yJYfwMRsL6YCMUnxPq2LujzOwghl5ZH7lnt5a3KC3Q3aa6F4EnZUG7xrWTbJ5qMl3+cz
-         ZBYXy5zgoSlyJbIWz2QbfFy4W7O8t9pe1yg5MqwnnG/hvcSnuDaOEFtquUyexfigGt/f
-         FxtFzhAeiEdXedLrUOS8eP6GkWneT8aNQHeWXG1qSQZwCFRl3lTGOTx9Eu3rQRsaSyTW
-         Zr8imlRlJwx0B9OQjGA43t8YwD77EyY3Q/yU1FmOUUVe2xtbEsJvQFk2xhOdC8KrPow2
-         umQg==
-X-Gm-Message-State: AC+VfDzUKUIszv3pgKbV9sn/sBJe89AhQ0/Q5XywyoNrQEAsVLHm2aX4
-        euVITmNlsrjN6C0gxUbYNdQklZBx4EdtCBTP6CBcYfVuiZY=
-X-Google-Smtp-Source: ACHHUZ5cWw+zEuG0xkJuOiWtlkfgOgI0PylnGDwgJm0fhEbj1WdlqdtFnG1hkX3DvpZ9MlaV9EQTfNCVZCEfCc6Ynzs=
-X-Received: by 2002:a4a:d8d7:0:b0:558:b4b6:7f8c with SMTP id
- c23-20020a4ad8d7000000b00558b4b67f8cmr8620834oov.6.1687492452657; Thu, 22 Jun
- 2023 20:54:12 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687492651; x=1690084651;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TY0mjbjbbS57MnRjgQ9450/9TZ/oHz6bQ+SREUOCB9Q=;
+        b=R9GBFZ6K++Tjb1p3AjGWdmeMt2qahIUrssZz7QfzUbI8nB2yswi2oq74vjEw0fy+g0
+         s0j8o5j9D1jTzLVt3ElmkWP0pjmeHfhfVyE+NxlaKqEqcHWBJ8vmTjfw3a+aAoHITJvX
+         sSXUAzIIOg003YMZ+LKk39OmxycWO0gfSMf3wLFy8awlvo61+XNJbD1oA09T/q6inZus
+         9wHdd9FtHDaec8aS/ezocch+Z5jCRtobfeZ2TZT8fs4m+BcrX1VY6csMKD6ak5bGXT5D
+         6QJiROUkdObw/0StfwMrcy/p43JkRtnBFfJZ64w7kmR/R9I1j+2KkDfou0GLkB4JlU82
+         8a7g==
+X-Gm-Message-State: AC+VfDzCwRd9NTa8h/mptkVAcQqPvOLtfo/b1h3QF8wcDYEkFG8ZFOD/
+        Vjn/SzzLUzaBLZ/CImxaf6P6me/aKJuI7BHM1/o=
+X-Google-Smtp-Source: ACHHUZ4mebsJZpjcEgNJKNtEs2qtTeYEi5pJ4miClKHrHqj/tGKMh8USDcw+kCyQTLDtIBVknIphzfAyEpGuwx7pYy4=
+X-Received: by 2002:a17:907:c25:b0:988:aa45:827 with SMTP id
+ ga37-20020a1709070c2500b00988aa450827mr12730950ejc.11.1687492651207; Thu, 22
+ Jun 2023 20:57:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230622110451.1504823-1-sergio.paracuellos@gmail.com> <20230622-algebra-superglue-40955b223774@spud>
-In-Reply-To: <20230622-algebra-superglue-40955b223774@spud>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Fri, 23 Jun 2023 05:54:02 +0200
-Message-ID: <CAMhs-H87rhn=8AdLgPFFbSq+=ngQW8n6NRcWKpqjXZ0wyaNiPg@mail.gmail.com>
-Subject: Re: [PATCH v2] dt-bindings: interrupt-controller: add Ralink SoCs
- interrupt controller
-To:     Conor Dooley <conor@kernel.org>
-Cc:     devicetree@vger.kernel.org, tglx@linutronix.de, maz@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, linux-kernel@vger.kernel.org
+From:   Dave Airlie <airlied@gmail.com>
+Date:   Fri, 23 Jun 2023 13:57:19 +1000
+Message-ID: <CAPM=9twNnV4zMCvrPkw3H-ajZOH-01JVh_kDrxdPYQErz8ZTdA@mail.gmail.com>
+Subject: arm32 build warnings in workqueue.c
+To:     Arnd Bergmann <arnd@arndb.de>, Tejun Heo <tj@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Conor,
+Not sure what changed (maybe I ended up with -Werror on recently), but
+my 32-bit arm build started to fail. 6.4.0-rc7.
 
-On Thu, Jun 22, 2023 at 9:14=E2=80=AFPM Conor Dooley <conor@kernel.org> wro=
-te:
->
-> On Thu, Jun 22, 2023 at 01:04:51PM +0200, Sergio Paracuellos wrote:
-> > Add YAML doc for the interrupt controller which is present on Ralink So=
-Cs.
-> >
-> > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> > ---
-> > Changes in v2:
-> >  - Drop label from the example.
-> >
-> >  .../ralink,rt2880-intc.yaml                   | 54 +++++++++++++++++++
-> >  1 file changed, 54 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/interrupt-control=
-ler/ralink,rt2880-intc.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/interrupt-controller/ral=
-ink,rt2880-intc.yaml b/Documentation/devicetree/bindings/interrupt-controll=
-er/ralink,rt2880-intc.yaml
-> > new file mode 100644
-> > index 000000000000..533d6d03aa75
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/interrupt-controller/ralink,rt2=
-880-intc.yaml
-> > @@ -0,0 +1,54 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/interrupt-controller/ralink,rt2880-=
-intc.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Ralink SoCs Interrupt Controller
-> > +
-> > +maintainers:
-> > +  - Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> > +
-> > +allOf:
-> > +  - $ref: /schemas/interrupt-controller.yaml#
-> > +
-> > +description: |
->
-> FWIW, you don't need a | unless you have some formatting to preserve.
+gcc version 13.1.1 20230519 (Red Hat Cross 13.1.1-2) (GCC)
 
-True. Will drop, then.
+/home/airlied/devel/kernel/dim/drm-fixes/kernel/workqueue.c: In
+function =E2=80=98get_work_pwq=E2=80=99:
+/home/airlied/devel/kernel/dim/drm-fixes/kernel/workqueue.c:713:24:
+error: cast to pointer from integer of different size
+[-Werror=3Dint-to-pointer-cast]
+  713 |                 return (void *)(data & WORK_STRUCT_WQ_DATA_MASK);
+      |                        ^
+/home/airlied/devel/kernel/dim/drm-fixes/kernel/workqueue.c: In
+function =E2=80=98get_work_pool=E2=80=99:
+/home/airlied/devel/kernel/dim/drm-fixes/kernel/workqueue.c:741:25:
+error: cast to pointer from integer of different size
+[-Werror=3Dint-to-pointer-cast]
+  741 |                 return ((struct pool_workqueue *)
+      |                         ^
+/home/airlied/devel/kernel/dim/drm-fixes/kernel/workqueue.c: In
+function =E2=80=98get_work_pool_id=E2=80=99:
+/home/airlied/devel/kernel/dim/drm-fixes/kernel/workqueue.c:763:25:
+error: cast to pointer from integer of different size
+[-Werror=3Dint-to-pointer-cast]
+  763 |                 return ((struct pool_workqueue *)
+      |                         ^
 
->
-> > +  This interrupt controller support a central point for interrupt aggr=
-egation
-> > +  for platform related blocks.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: ralink,rt2880-intc
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
-> > +
-> > +  interrupt-controller: true
-> > +
-> > +  '#interrupt-cells':
-> > +    const: 1
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - interrupts
-> > +  - interrupt-controller
-> > +  - '#interrupt-cells'
-> > +
-> > +unevaluatedProperties: false
->
-> You explicitly allow two properties from interrupt-controller.yaml, so
-> it seems like this should actually be additionalProperties: false to
-> block things like interrupt-map etc?
+Just a drive-by, I'll disable Werror on my 32-bit arm build for now.
 
-Yes, this should be additionalProperties.
->
-> If your intention was only to allow interrupt-controller, with
-> s/unevaluated/additional/ you can add
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-
-I will fix these two minor things and send v3 with your Reviewed-by
-added, thanks.
-
-Best regards,
-    Sergio Paracuellos
->
-> Cheers,
-> Conor.
->
-> > +
-> > +examples:
-> > +  - |
-> > +    interrupt-controller@200 {
-> > +      compatible =3D "ralink,rt2880-intc";
-> > +      reg =3D <0x200 0x100>;
-> > +      interrupt-controller;
-> > +      #interrupt-cells =3D <1>;
-> > +
-> > +      interrupt-parent =3D <&cpuintc>;
-> > +      interrupts =3D <2>;
-> > +    };
-> > +...
-> > --
-> > 2.25.1
-> >
+Dave.
