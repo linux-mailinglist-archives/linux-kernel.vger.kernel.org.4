@@ -2,42 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FC7273C240
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 23:15:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DC1E73C243
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 23:15:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232532AbjFWVPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 17:15:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50142 "EHLO
+        id S232792AbjFWVPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 17:15:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231802AbjFWVPO (ORCPT
+        with ESMTP id S231978AbjFWVPP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 17:15:14 -0400
+        Fri, 23 Jun 2023 17:15:15 -0400
 Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54677E65;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B46A0189;
         Fri, 23 Jun 2023 14:15:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=inria.fr; s=dc;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=P1v6BJpujkRR/XkZZ2TcSC10Ee0xBDh3V/U/H44vDYA=;
-  b=bZVjS8wAqRR6iyNa9gnoxPEfrIs2w7LvzRNlQSyygW9EHkgELuwGdiCI
-   Y4w81WWcTQErSQ9Y2Mw6GBxoIfzicPKsH4u6eQxEzmdmBcgWgeGnZciAb
-   ArLbVrFlB+O8EJ8HQdjVyipEMZiXaQ6itAc4jEyAgyCT/aRqz/x7K2K5a
-   E=;
+  bh=q8fH1XyQxmARYocJhPPGMcs4NWJZYuZGeywIVulmPQY=;
+  b=XKE/KhM+KKZI5szWCteFS3slNnUiCyWgU1iD3fRNxS81/HolDJ7JHSnu
+   ee7gU71NB+eagWOB21InP0QJvpVyyckPjHtFnS7moz3Ok8Ov4u84nz1ze
+   VICUC1wGomN3ti0kodaswdijsh6e/o9njQ1p+PCQLi1gZTrhcknLfNiPT
+   k=;
 Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
 X-IronPort-AV: E=Sophos;i="6.01,153,1684792800"; 
-   d="scan'208";a="59686161"
+   d="scan'208";a="59686162"
 Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
   by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2023 23:15:10 +0200
 From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>
+To:     Jeroen de Borst <jeroendb@google.com>
 Cc:     keescook@chromium.org, kernel-janitors@vger.kernel.org,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 03/26] drm/gud: use array_size
-Date:   Fri, 23 Jun 2023 23:14:34 +0200
-Message-Id: <20230623211457.102544-4-Julia.Lawall@inria.fr>
+        Praveen Kaligineedi <pkaligineedi@google.com>,
+        Shailend Chand <shailend@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 04/26] gve: use array_size
+Date:   Fri, 23 Jun 2023 23:14:35 +0200
+Message-Id: <20230623211457.102544-5-Julia.Lawall@inria.fr>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20230623211457.102544-1-Julia.Lawall@inria.fr>
 References: <20230623211457.102544-1-Julia.Lawall@inria.fr>
@@ -59,17 +63,20 @@ The changes were done using the following Coccinelle semantic patch:
 
 // <smpl>
 @@
-    expression E1, E2;
-    constant C1, C2;
-    identifier alloc = {vmalloc,vzalloc};
+    size_t e1,e2;
+    expression COUNT;
+    identifier alloc = {vmalloc,vzalloc,kvmalloc,kvzalloc};
 @@
-    
+
 (
-      alloc(C1 * C2,...)
+      alloc(
+-           (e1) * (e2)
++           array_size(e1, e2)
+      ,...)
 |
       alloc(
--           (E1) * (E2)
-+           array_size(E1, E2)
+-           (e1) * (COUNT)
++           array_size(COUNT, e1)
       ,...)
 )
 // </smpl>
@@ -77,20 +84,20 @@ The changes were done using the following Coccinelle semantic patch:
 Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
 ---
- drivers/gpu/drm/gud/gud_pipe.c |    2 +-
+ drivers/net/ethernet/google/gve/gve_tx.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/gud/gud_pipe.c b/drivers/gpu/drm/gud/gud_pipe.c
-index dc16a92625d4..34df847bd829 100644
---- a/drivers/gpu/drm/gud/gud_pipe.c
-+++ b/drivers/gpu/drm/gud/gud_pipe.c
-@@ -390,7 +390,7 @@ static int gud_fb_queue_damage(struct gud_device *gdrm, struct drm_framebuffer *
- 	mutex_lock(&gdrm->damage_lock);
+diff --git a/drivers/net/ethernet/google/gve/gve_tx.c b/drivers/net/ethernet/google/gve/gve_tx.c
+index 813da572abca..d77ebbb24936 100644
+--- a/drivers/net/ethernet/google/gve/gve_tx.c
++++ b/drivers/net/ethernet/google/gve/gve_tx.c
+@@ -248,7 +248,7 @@ static int gve_tx_alloc_ring(struct gve_priv *priv, int idx)
+ 	tx->mask = slots - 1;
  
- 	if (!gdrm->shadow_buf) {
--		gdrm->shadow_buf = vzalloc(fb->pitches[0] * fb->height);
-+		gdrm->shadow_buf = vzalloc(array_size(fb->pitches[0], fb->height));
- 		if (!gdrm->shadow_buf) {
- 			mutex_unlock(&gdrm->damage_lock);
- 			return -ENOMEM;
+ 	/* alloc metadata */
+-	tx->info = vzalloc(sizeof(*tx->info) * slots);
++	tx->info = vzalloc(array_size(slots, sizeof(*tx->info)));
+ 	if (!tx->info)
+ 		return -ENOMEM;
+ 
 
