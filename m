@@ -2,153 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1498273BD8A
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 19:12:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D59073BD8B
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 19:13:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231848AbjFWRMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 13:12:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42628 "EHLO
+        id S232000AbjFWRM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 13:12:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230501AbjFWRMq (ORCPT
+        with ESMTP id S229734AbjFWRMr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 13:12:46 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08BD01993
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 10:12:43 -0700 (PDT)
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1687540361;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BMld1PknhyoTTWqIQWTi/haDnPaStkrULY18977v1W8=;
-        b=UooxLz/zkoWhq+XAmNcit5ZQDI4n/Y+KVronARo5RtTZ+Tn6qjAbf+SOx/FC241sDV8f4t
-        t8HJpjsAu06tlvLNMcBnutuGtTbknm/McJdfqacY7/9mKIMPXaChuyDfV91Lysn8JRgd04
-        FEajI9b521OGBvRhaLW4XirU9DI8WhB8c6njc7IoxIwm2p33Jxy1cOxv66rkXxgB5Chru+
-        A/FRmn+Hy1gok2d3NWwOZ5rM/Dtjk9URSGAuXs6LWjFMo+DbMSueXkd5UnHH+D8fM0FIeG
-        T9YGtSeiToHljMH9F6NvMNkhsbUtBC+W2HnzhVsbBO2nnoCWRzHlsR620hmdWQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1687540361;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BMld1PknhyoTTWqIQWTi/haDnPaStkrULY18977v1W8=;
-        b=8kTgNXsUUa80s7tfPsheHF9UbSnMTZUFyjFjS52xpo0dV5r9dRvc1KbatV5CicN60n6keS
-        OX2i42K9YrjV0vBg==
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Cc:     "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Michal Hocko <mhocko@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Waiman Long <longman@redhat.co>, Will Deacon <will@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: [PATCH v2 2/2] mm/page_alloc: Use write_seqlock_irqsave() instead write_seqlock() + local_irq_save().
-Date:   Fri, 23 Jun 2023 19:12:32 +0200
-Message-Id: <20230623171232.892937-3-bigeasy@linutronix.de>
-In-Reply-To: <20230623171232.892937-1-bigeasy@linutronix.de>
-References: <20230623171232.892937-1-bigeasy@linutronix.de>
+        Fri, 23 Jun 2023 13:12:47 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D1D61BFA;
+        Fri, 23 Jun 2023 10:12:46 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B136E838;
+        Fri, 23 Jun 2023 19:12:07 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1687540327;
+        bh=Q2Cw1ygD0gWexI2pL2Jb6NsRmnG74wmibJoVnNEtGqA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RcwFBWaG+x5aska6fzT3PEjfRqJK8px1iFW4jcdr3q/9DrRZ6G5DdXBMmYrCGdjd6
+         r3aavajnfTodKNNqpqQix2RkKMx5kLp1nO2VCWr1LqKjmuUkha3Dps11i8Caykieff
+         Wb5FVvEamAlYwsqVLvsOdXqlyUhuQToJxJqkxnmY=
+Date:   Fri, 23 Jun 2023 20:12:43 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 33/39] drm: renesas: shmobile: Cleanup encoder
+Message-ID: <20230623171243.GK2112@pendragon.ideasonboard.com>
+References: <cover.1687423204.git.geert+renesas@glider.be>
+ <736a0b26a9393f82769b185e2daa30eb128ff240.1687423204.git.geert+renesas@glider.be>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <736a0b26a9393f82769b185e2daa30eb128ff240.1687423204.git.geert+renesas@glider.be>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-__build_all_zonelists() acquires zonelist_update_seq by first disabling
-interrupts via local_irq_save() and then acquiring the seqlock with
-write_seqlock(). This is troublesome and leads to problems on
-PREEMPT_RT. The problem is that the inner spinlock_t becomes a sleeping
-lock on PREEMPT_RT and must not be acquired with disabled interrupts.
+Hi Geert,
 
-The API provides write_seqlock_irqsave() which does the right thing in
-one step.
-printk_deferred_enter() has to be invoked in non-migrate-able context to
-ensure that deferred printing is enabled and disabled on the same CPU.
-This is the case after zonelist_update_seq has been acquired.
+Thank you for the patch.
 
-There was discussion on the first submission that the order should be:
-	local_irq_disable();
-	printk_deferred_enter();
-	write_seqlock();
+On Thu, Jun 22, 2023 at 11:21:45AM +0200, Geert Uytterhoeven wrote:
+> Most unused callbacks can be NULL pointers these days.
+> Drop a bunch of empty encoder callbacks.
+> 
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-to avoid pitfalls like having an unaccounted printk() coming from
-write_seqlock_irqsave() before printk_deferred_enter() is invoked. The
-only origin of such a printk() can be a lockdep splat because the
-lockdep annotation happens after the sequence count is incremented.
-This is exceptional and subject to change.
+Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 
-It was also pointed that PREEMPT_RT can be affected by the printk
-problem since its write_seqlock_irqsave() does not really disable
-interrupts. This isn't the case because PREEMPT_RT's printk
-implementation differs from the mainline implementation in two important
-aspects:
-- Printing happens in a dedicated threads and not at during the
-  invocation of printk().
-- In emergency cases where synchronous printing is used, a different
-  driver is used which does not use tty_port::lock.
+> ---
+>  .../gpu/drm/renesas/shmobile/shmob_drm_crtc.c | 26 -------------------
+>  1 file changed, 26 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c b/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c
+> index b184019d8b1ed89c..ef327da39bca415a 100644
+> --- a/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c
+> +++ b/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c
+> @@ -586,11 +586,6 @@ int shmob_drm_crtc_create(struct shmob_drm_device *sdev)
+>   * Encoder
+>   */
+>  
+> -static void shmob_drm_encoder_dpms(struct drm_encoder *encoder, int mode)
+> -{
+> -	/* No-op, everything is handled in the CRTC code. */
+> -}
+> -
+>  static bool shmob_drm_encoder_mode_fixup(struct drm_encoder *encoder,
+>  					 const struct drm_display_mode *mode,
+>  					 struct drm_display_mode *adjusted_mode)
+> @@ -613,29 +608,8 @@ static bool shmob_drm_encoder_mode_fixup(struct drm_encoder *encoder,
+>  	return true;
+>  }
+>  
+> -static void shmob_drm_encoder_mode_prepare(struct drm_encoder *encoder)
+> -{
+> -	/* No-op, everything is handled in the CRTC code. */
+> -}
+> -
+> -static void shmob_drm_encoder_mode_set(struct drm_encoder *encoder,
+> -				       struct drm_display_mode *mode,
+> -				       struct drm_display_mode *adjusted_mode)
+> -{
+> -	/* No-op, everything is handled in the CRTC code. */
+> -}
+> -
+> -static void shmob_drm_encoder_mode_commit(struct drm_encoder *encoder)
+> -{
+> -	/* No-op, everything is handled in the CRTC code. */
+> -}
+> -
+>  static const struct drm_encoder_helper_funcs encoder_helper_funcs = {
+> -	.dpms = shmob_drm_encoder_dpms,
+>  	.mode_fixup = shmob_drm_encoder_mode_fixup,
+> -	.prepare = shmob_drm_encoder_mode_prepare,
+> -	.commit = shmob_drm_encoder_mode_commit,
+> -	.mode_set = shmob_drm_encoder_mode_set,
+>  };
+>  
+>  int shmob_drm_encoder_create(struct shmob_drm_device *sdev)
 
-Acquire zonelist_update_seq with write_seqlock_irqsave() and then defer
-printk output.
+-- 
+Regards,
 
-Fixes: 1007843a91909 ("mm/page_alloc: fix potential deadlock on zonelist_up=
-date_seq seqlock")
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
----
- mm/page_alloc.c | 11 ++++-------
- 1 file changed, 4 insertions(+), 7 deletions(-)
-
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 47421bedc12b7..99b7e7d09c5c0 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -5808,11 +5808,10 @@ static void __build_all_zonelists(void *data)
- 	unsigned long flags;
-=20
- 	/*
--	 * Explicitly disable this CPU's interrupts before taking seqlock
--	 * to prevent any IRQ handler from calling into the page allocator
--	 * (e.g. GFP_ATOMIC) that could hit zonelist_iter_begin and livelock.
-+	 * The zonelist_update_seq must be acquired with irqsave because the
-+	 * reader can be invoked from IRQ with GFP_ATOMIC.
- 	 */
--	local_irq_save(flags);
-+	write_seqlock_irqsave(&zonelist_update_seq, flags);
- 	/*
- 	 * Explicitly disable this CPU's synchronous printk() before taking
- 	 * seqlock to prevent any printk() from trying to hold port->lock, for
-@@ -5820,7 +5819,6 @@ static void __build_all_zonelists(void *data)
- 	 * calling kmalloc(GFP_ATOMIC | __GFP_NOWARN) with port->lock held.
- 	 */
- 	printk_deferred_enter();
--	write_seqlock(&zonelist_update_seq);
-=20
- #ifdef CONFIG_NUMA
- 	memset(node_load, 0, sizeof(node_load));
-@@ -5857,9 +5855,8 @@ static void __build_all_zonelists(void *data)
- #endif
- 	}
-=20
--	write_sequnlock(&zonelist_update_seq);
- 	printk_deferred_exit();
--	local_irq_restore(flags);
-+	write_sequnlock_irqrestore(&zonelist_update_seq, flags);
- }
-=20
- static noinline void __init
---=20
-2.40.1
-
+Laurent Pinchart
