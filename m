@@ -2,55 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAA6A73BDD8
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 19:34:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2F3C73BDE4
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 19:35:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231983AbjFWReY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 13:34:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53162 "EHLO
+        id S230501AbjFWRfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 13:35:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231806AbjFWReT (ORCPT
+        with ESMTP id S232263AbjFWRfV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 13:34:19 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 36553212B;
-        Fri, 23 Jun 2023 10:34:17 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D05881042;
-        Fri, 23 Jun 2023 10:35:00 -0700 (PDT)
-Received: from [10.57.27.57] (unknown [10.57.27.57])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0471B3F64C;
-        Fri, 23 Jun 2023 10:34:14 -0700 (PDT)
-Message-ID: <86da9945-04d5-047a-cb2d-5fb63737839f@arm.com>
-Date:   Fri, 23 Jun 2023 18:34:31 +0100
+        Fri, 23 Jun 2023 13:35:21 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A46162964;
+        Fri, 23 Jun 2023 10:35:12 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-9883123260fso96793566b.0;
+        Fri, 23 Jun 2023 10:35:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687541711; x=1690133711;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :feedback-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=l2mdnTcfARxptEAZsYOiOXtYWpRMgFe68mLKP2pFSjc=;
+        b=mB3M5RPGWfTuJdIz06XHp7ifKX3tjs/cpyyPxmrxWst5xGq7jO6gWTLjkaU6M3Qr5c
+         b5WrPx9V1t6S8loihdoY5drv+OYNCMexCwAxWENNi58SoEJcUOzPIegwoBF+FXRhZtj5
+         MPxypkwy1OgTIa9wh1Lxt/xJg+Pwtugf1eiayh68iqZswSOwkJIb+vewB5zKQaFJ3Wjn
+         bYteTZPBqh7CdHjsJH+9WNFeja6jWzosoEopJSuk/8Vmyyee+qL//TMeJd8moI5I6btF
+         jEoaFIQKX81D0Mu3ZcaUIJdf2mqyjf2r3Fa4KaO7NLrXxK8QtzuKoXgBq4mm7WZlnd30
+         HcnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687541711; x=1690133711;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :feedback-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=l2mdnTcfARxptEAZsYOiOXtYWpRMgFe68mLKP2pFSjc=;
+        b=IwM2Xq2qwslLdsF1OmHnoIxEsJWG/ZCXedbvDZD/YdKezww+MeFSHBSr8zFVT2m7cd
+         +K0+tZj/g4F7RfVdPHGMzmyK9bTIE06s2hsGYlMB7OFgYF68JQSMRrSAgAcIeOg66pvQ
+         XPQjKbF0X9H6Oz/qvvvlokyoW9YxB+mtRz/fl+ZMii7J4YVCCENk3Lxc6/4WkoblkhR9
+         iFD8IrjjP4czRkWA28YGL1d35hveyuMSfLEQf2E2JLkj5kTTuM/Rz6gg6vdiYRYj/+QV
+         z9jtHuzyytIFW2HtdqjEPG7K+CaEzt3AftA+794NLXgR8/QN1SKYcB59wr/o039fj18A
+         P7YA==
+X-Gm-Message-State: AC+VfDxHBuRipSNtSfbDACNve8PtFaCPKeAyh8SWSMuCOgodzhoQosKp
+        I7Hs0Lr5ZQT8oyIp4py43nE=
+X-Google-Smtp-Source: ACHHUZ4tpHOmjcnG78ldUVZZUaR0kFIiLvlHDIdbH8fFU6ZI3JEILmRXghFVQmevSDB3yxiR3tsOxQ==
+X-Received: by 2002:a17:906:ef0b:b0:967:21:5887 with SMTP id f11-20020a170906ef0b00b0096700215887mr18000721ejs.40.1687541710659;
+        Fri, 23 Jun 2023 10:35:10 -0700 (PDT)
+Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
+        by smtp.gmail.com with ESMTPSA id f12-20020a17090624cc00b0098d2261d189sm2654529ejb.19.2023.06.23.10.35.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Jun 2023 10:35:10 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 50DD827C0054;
+        Fri, 23 Jun 2023 13:35:07 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Fri, 23 Jun 2023 13:35:08 -0400
+X-ME-Sender: <xms:y9eVZP-9HW4SlYeEnUMmZCtfC2uR3LdlS-YUX0JIpgW1vPFXmvn3fg>
+    <xme:y9eVZLsbZyz0knGYLft7pap9fhtY-r1opcQrSVcQ65M0BlJtaQrN-sdyWUl0QEDW7
+    jUOkt-zY5H3i33CLg>
+X-ME-Received: <xmr:y9eVZNAolTyEBby62KJMbpMbEm8SPsYv70hOYRa7EmdMEaq_paX4knNC9FA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeeggedguddufecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtugfgjgesthekredttddtudenucfhrhhomhepueho
+    qhhunhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtf
+    frrghtthgvrhhnpeetueegiefhieeftdfhgeffteejvdejheefueegtdehheduledvueei
+    veefveevtdenucffohhmrghinhepghhithhhuhgsrdgtohhmpdhkvghrnhgvlhdrohhrgh
+    enucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhq
+    uhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedqud
+    ejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmhgv
+    rdhnrghmvg
+X-ME-Proxy: <xmx:y9eVZLes0BJuV4Lyd8GrVbQ_awhoX0PD-HwVFmHebZ4m2hEpXtKzaQ>
+    <xmx:y9eVZEO4_aTVY6uhb6IpWHTwUxYHUa3sXgpjBKyfvu9V3lccLTRKiA>
+    <xmx:y9eVZNlCPqzo0X9T1HVnacfqdlGRVMQpemUp__05vKJCrc6mMr9dCw>
+    <xmx:y9eVZLcKi7feDYjL4XPvjobB8eaRH7YNh72hVZUQT_AwuKEmFwFbXw>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 23 Jun 2023 13:35:07 -0400 (EDT)
+Date:   Fri, 23 Jun 2023 10:35:00 -0700
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     bjorn3_gh@protonmail.com
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Gary Guo <gary@garyguo.net>,
+        Benno Lossin <benno.lossin@proton.me>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rust: alloc: Add realloc and alloc_zeroed to the
+ GlobalAlloc impl
+Message-ID: <ZJXXxEfzVza5Jzxj@boqun-archlinux>
+References: <20230622-global_alloc_methods-v1-1-3d3561593e23@protonmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH V4] thermal/core/power_allocator: reset thermal governor
- when trip point is changed
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Di Shen <di.shen@unisoc.com>
-Cc:     daniel.lezcano@linaro.org, rui.zhang@intel.com, amitk@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xuewen.yan@unisoc.com, jeson.gao@unisoc.com, zhanglyra@gmail.com,
-        orsonzhai@gmail.com
-References: <6aad180f-410c-5b11-b30b-c7bc02cbe054@linaro.org>
- <20230619063534.12831-1-di.shen@unisoc.com>
- <CAJZ5v0i9fyfNYyhAMqr0iYPbUNwrcvL7mxK1rMo+00mNRWKV6w@mail.gmail.com>
- <CAJZ5v0gHBxbU7Q0KYKsSVk+9nzSxot_JxUkcaAXrDxQx5_a7_Q@mail.gmail.com>
- <dbfe2b14-794a-e4d9-caf4-15d69ef86091@arm.com>
- <CAJZ5v0iOSWDBU0d4QPpsKwAW9N2u1mf-BLdKCtJ_49e8P0ZD7g@mail.gmail.com>
- <62c35d1c-7dcd-7bf2-253e-65cdfd6e92cc@arm.com>
- <CAJZ5v0iX2WYVjXWecJHVB_w1HAAOLDJvFLTMALGQF3pfv-rKSw@mail.gmail.com>
- <2884a54e-4db0-bf47-3b8a-0deb337208d8@arm.com>
- <CAJZ5v0i5V8kpaaCsH4wuU83=zXpdJgR2CdCX-Wj=PmJx3OJ2Lg@mail.gmail.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <CAJZ5v0i5V8kpaaCsH4wuU83=zXpdJgR2CdCX-Wj=PmJx3OJ2Lg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+In-Reply-To: <20230622-global_alloc_methods-v1-1-3d3561593e23@protonmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,111 +106,165 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/23/23 17:55, Rafael J. Wysocki wrote:
-> On Fri, Jun 23, 2023 at 9:43â€¯AM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>
->>
->>
-
-[snip]
-
->>
->> I agree, the patch header doesn't explain that properly. Here is the
->> explanation for this Intelligent Power Allocator (IPA):
->>
->> The IPA controls temperature using PID mechanism. It's a closed
->> feedback loop. That algorithm can 'learn' from the 'observed'
->> in the past reaction for it's control decisions and accumulates that
->> information in the part called 'error integral'. Those accumulated
->> 'error' gaps are the differences between the set target value and the
->> actually achieved value. In our case the target value is the target
->> temperature which is coming from the trip point. That part is then used
->> with the 'I' (of PID) component, so we can compensate for those
->> 'learned' mistakes.
->> Now, when you change the target temperature value - all your previous
->> learned errors won't help you. That's why Intelligent Power Allocator
->> should reset previously accumulated history.
+On Thu, Jun 22, 2023 at 09:24:40PM +0200, Björn Roy Baron via B4 Relay wrote:
+> From: Björn Roy Baron <bjorn3_gh@protonmail.com>
 > 
-> Right.
+> While there are default impls for these methods, using the respective C
+> api's is faster. Currently neither the existing nor these new
+> GlobalAlloc method implementations are actually called. Instead the
+> __rust_* function defined below the GlobalAlloc impl are used. With
+> rustc 1.71 these functions will be gone and all allocation calls will go
+> through the GlobalAlloc implementation.
 > 
-> And every other governor using information from the past for control
-> will have an analogous problem, won't it?
+> Link: https://github.com/Rust-for-Linux/linux/issues/68
 
-Not necessarily, but to play safe I would go case-by-case and make
-sure other governors are aligned to this new feature.
+Nice! Although I think we need to do the simialr size adjustment as:
 
-E.g. the bang-bang governor operates only on current temperature and
-current trip value + trip hysteresis. The flow graph describes it [1].
-The control (state of the fan: ON or OFF) of that governor could be
-simply adjusted to the new reality -> new trip point temp. That would
-just mean 'toggling' the fan if needed. There are only 2 'target'
-states: 0 or 1 for the fan. You can images a situation when the
-temperature doesn't change, but we manipulate the trip value for that
-governor. The governor would react correctly always in such situation
-w/o a need of a reset IMO.
+	https://lore.kernel.org/rust-for-linux/20230613164258.3831917-1-boqun.feng@gmail.com/
 
-> 
->>>
->>>>>
->>>>>> For the 2nd case IIUC the code, we pass the 'trip.temperature'
->>>>>> and should be ready for what you said (modification of that value).
->>>>>
->>>>> Generally speaking, it needs to be prepared for a simultaneous change
->>>>> of multiple trip points (including active), in which case it may not
->>>>> be useful to invoke the ->reset() callback for each of them
->>>>> individually.
->>>>
->>>> Although, that looks more cleaner IMO. Resetting one by one in
->>>> a temperature order would be easily maintainable, won't be?
->>>
->>> I wouldn't call it maintainable really.
->>>
->>> First of all, the trips may not be ordered.  There are no guarantees
->>> whatsoever that they will be ordered, so the caller may have to
->>> determine the temperature order in the first place.  This would be an
->>> extra requirement that currently is not there.
->>>
->>> Apart from this, I don't see any fundamental difference between the
->>> case when trip points are updated via sysfs and when they are updated
->>> by the driver.  The governor should reset itself in any of those cases
->>> and even if one trip point changes, the temperature order of all of
->>> them may change, so the governor reset mechanism should be able to
->>> handle the case when multiple trip points are updated at the same
->>> time.  While you may argue that this is theoretical, the ACPI spec
->>> clearly states that this is allowed to happen, for example.
->>>
->>> If you want a generic reset callback for governors, that's fine, but
->>> make it generic and not specific to a particular use case.
->>
->> I think we agree here, but probably having slightly different
->> implementation in mind. Based on you explanation I think you
->> want simply this API:
->> void (*reset)(struct thermal_zone_device *tz);
->>
->> 1. no return value
->> 2. no specific trip ID as argument
->>
->> Do you agree?
-> 
-> Yes, I do.
+so I applied your patch onto my patch and came up with the following:
 
-OK, thanks.
+--------------------------------->8
+diff --git a/rust/kernel/allocator.rs b/rust/kernel/allocator.rs
+index ce7a06bf7589..af723c2924dc 100644
+--- a/rust/kernel/allocator.rs
++++ b/rust/kernel/allocator.rs
+@@ -9,8 +9,17 @@
+ 
+ struct KernelAllocator;
+ 
+-unsafe impl GlobalAlloc for KernelAllocator {
+-    unsafe fn alloc(&self, layout: Layout) -> *mut u8 {
++impl KernelAllocator {
++    /// # Safety
++    ///
++    /// * `ptr` can be either null or a pointer which has been allocated by this allocator.
++    /// * `layout` must have a non-zero size.
++    unsafe fn krealloc_with_flags(
++        &self,
++        ptr: *mut u8,
++        layout: Layout,
++        flags: bindings::gfp_t,
++    ) -> *mut u8 {
+         // Customized layouts from `Layout::from_size_align()` can have size < align, so pads first.
+         let layout = layout.pad_to_align();
+ 
+@@ -26,9 +35,22 @@ unsafe fn alloc(&self, layout: Layout) -> *mut u8 {
+             size = size.next_power_of_two();
+         }
+ 
+-        // `krealloc()` is used instead of `kmalloc()` because the latter is
+-        // an inline function and cannot be bound to as a result.
+-        unsafe { bindings::krealloc(ptr::null(), size, bindings::GFP_KERNEL) as *mut u8 }
++        // SAFETY:
++        //
++        // * `ptr` is either null or a pointer returned from a previous k{re}alloc() by the function
++        //   safety requirement.
++        //
++        // * `size` is greater than 0 since it's either a `layout.size()` (which cannot be zero
++        //    according to the function safety requirement) or a result from `next_power_of_two()`.
++        unsafe { bindings::krealloc(ptr as *const core::ffi::c_void, size, flags) as *mut u8 }
++    }
++}
++
++unsafe impl GlobalAlloc for KernelAllocator {
++    unsafe fn alloc(&self, layout: Layout) -> *mut u8 {
++        // SAFETY: `ptr::null_mut()` is null and `layout` has a non-zero size by the function safety
++        // requirement.
++        unsafe { self.krealloc_with_flags(ptr::null_mut(), layout, bindings::GFP_KERNEL) }
+     }
+ 
+     unsafe fn dealloc(&self, ptr: *mut u8, _layout: Layout) {
+@@ -37,23 +59,30 @@ unsafe fn dealloc(&self, ptr: *mut u8, _layout: Layout) {
+         }
+     }
+ 
+-    unsafe fn realloc(&self, ptr: *mut u8, _layout: Layout, new_size: usize) -> *mut u8 {
+-        unsafe {
+-            bindings::krealloc(
+-                ptr as *const core::ffi::c_void,
+-                new_size,
+-                bindings::GFP_KERNEL,
+-            ) as *mut u8
+-        }
++    unsafe fn realloc(&self, ptr: *mut u8, layout: Layout, new_size: usize) -> *mut u8 {
++        // SAFETY:
++        // * `new_size` when rounded up to the nearest multiple of `layout.align()`, will not
++        //   overflow `isize` by the function safety requirement.
++        // * `layout.align()` is a proper alignment (i.e. not zero and must be a power of two).
++        let layout = unsafe { Layout::from_size_align_unchecked(new_size, layout.align()) };
++
++        // SAFETY:
++        // * `ptr` is either null or a pointer allocated by this allocator by function safety
++        //   requirement.
++        // * the size of `layout` is not zero because `new_size` is not zero by function safety
++        //   requirement.
++        unsafe { self.krealloc_with_flags(ptr, layout, bindings::GFP_KERNEL) }
+     }
+ 
+     unsafe fn alloc_zeroed(&self, layout: Layout) -> *mut u8 {
++        // SAFETY: `ptr::null_mut()` is null and `layout` has a non-zero size by the function safety
++        // requirement.
+         unsafe {
+-            bindings::krealloc(
+-                core::ptr::null(),
+-                layout.size(),
++            self.krealloc_with_flags(
++                ptr::null_mut(),
++                layout,
+                 bindings::GFP_KERNEL | bindings::__GFP_ZERO,
+-            ) as *mut u8
++            )
+         }
+     }
+ }
 
-Di could you implement that 'reset()' API according to this description,
-please?
-
-> 
->> IMO such implementation and API would also work for this IPA
->> purpose. Would that work for the ACPI use case as well?
-> 
-> It would AFAICS.
-
-Thanks Rafael for the comments and the progress that we made :)
 
 Regards,
-Lukasz
+Boqun
 
-[1] 
-https://elixir.bootlin.com/linux/v6.3/source/drivers/thermal/gov_bang_bang.c#L80
+> Signed-off-by: Björn Roy Baron <bjorn3_gh@protonmail.com>
+> ---
+>  rust/kernel/allocator.rs | 20 ++++++++++++++++++++
+>  1 file changed, 20 insertions(+)
+> 
+> diff --git a/rust/kernel/allocator.rs b/rust/kernel/allocator.rs
+> index 397a3dd57a9b..e0a27b1326b5 100644
+> --- a/rust/kernel/allocator.rs
+> +++ b/rust/kernel/allocator.rs
+> @@ -21,6 +21,26 @@ unsafe fn dealloc(&self, ptr: *mut u8, _layout: Layout) {
+>              bindings::kfree(ptr as *const core::ffi::c_void);
+>          }
+>      }
+> +
+> +    unsafe fn realloc(&self, ptr: *mut u8, _layout: Layout, new_size: usize) -> *mut u8 {
+> +        unsafe {
+> +            bindings::krealloc(
+> +                ptr as *const core::ffi::c_void,
+> +                new_size,
+> +                bindings::GFP_KERNEL,
+> +            ) as *mut u8
+> +        }
+> +    }
+> +
+> +    unsafe fn alloc_zeroed(&self, layout: Layout) -> *mut u8 {
+> +        unsafe {
+> +            bindings::krealloc(
+> +                core::ptr::null(),
+> +                layout.size(),
+> +                bindings::GFP_KERNEL | bindings::__GFP_ZERO,
+> +            ) as *mut u8
+> +        }
+> +    }
+>  }
+>  
+>  #[global_allocator]
+> 
+> ---
+> base-commit: d2e3115d717197cb2bc020dd1f06b06538474ac3
+> change-id: 20230622-global_alloc_methods-abf5b5e38dba
+> 
+> Best regards,
+> -- 
+> Björn Roy Baron <bjorn3_gh@protonmail.com>
+> 
