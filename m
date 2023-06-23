@@ -2,180 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 236E773BD66
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 19:07:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A65E573BD56
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 19:05:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232382AbjFWRHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 13:07:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38058 "EHLO
+        id S231267AbjFWRFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 13:05:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232112AbjFWRH1 (ORCPT
+        with ESMTP id S229801AbjFWRFa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 13:07:27 -0400
-Received: from pegase1.c-s.fr (pegase1.c-s.fr [93.17.236.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6F81297A
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 10:07:19 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [192.168.12.233])
-        by localhost (Postfix) with ESMTP id 4QnkCY6wlMz9sgc;
-        Fri, 23 Jun 2023 19:06:01 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 5ID3vXgvo2Bj; Fri, 23 Jun 2023 19:06:01 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 4QnkCR5Qghz9sgk;
-        Fri, 23 Jun 2023 19:05:55 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id B28A38B76C;
-        Fri, 23 Jun 2023 19:05:55 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id 3imXXGwvFpjn; Fri, 23 Jun 2023 19:05:55 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.232.71])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 816058B783;
-        Fri, 23 Jun 2023 19:05:54 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 35NH5mOC2645799
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Fri, 23 Jun 2023 19:05:48 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 35NH5m4e2645798;
-        Fri, 23 Jun 2023 19:05:48 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sathvika Vasireddy <sv@linux.ibm.com>,
-        Naveen N Rao <naveen@kernel.org>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH v3 12/15] objtool: Add support for more complex UACCESS control
-Date:   Fri, 23 Jun 2023 19:05:23 +0200
-Message-Id: <dd4eb89f0552ed7158e2ede507e17080b1ff018b.1687539638.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <cover.1687539638.git.christophe.leroy@csgroup.eu>
-References: <cover.1687539638.git.christophe.leroy@csgroup.eu>
+        Fri, 23 Jun 2023 13:05:30 -0400
+Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9421526AF;
+        Fri, 23 Jun 2023 10:05:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
+        t=1687539924; bh=CwaupLNxCaQfdyqirb5X7+xJvkBuOUpQ0ThhbWfP/hk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ukUcNbU2eLFRCrRZNr7wSbGcmF3VKpW5hY2lA7txYZxFGvuN9BJe4lCuFDKFLtlUB
+         vEIv7jrSQE2aARCFPjHXT4iuMkOJWOF3OUJLYuWKey33ub2gKTlbSNXS1Xwb9QMToc
+         Ee0as+6Bm1F+uhQdtwslcWQsN7Dd5V5zbFK9I9hc=
+Received: from [192.168.9.172] (unknown [101.88.25.181])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 74662600A9;
+        Sat, 24 Jun 2023 01:05:24 +0800 (CST)
+Message-ID: <267d223d-5215-f53d-ffb8-c74a209326e4@xen0n.name>
+Date:   Sat, 24 Jun 2023 01:05:23 +0800
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1687539922; l=3403; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=5icr4qDm55JVXLipfdlWi7QJjGF+/WQQ5f/8m8iRZcI=; b=QyAI5UTYo88t+R/yWDtqByz9kzj7weOH54p+gQm7yqtPnFQBIExUpzxkuP6ld5aybl4I3XK9r ptmQ8Pk1S4CAIJxgd20LkLKdi7hBxWGu6s87m6uo7NMER45/i8R9XkF
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 7/9] LoongArch: Tweak CFLAGS for Clang compatibility
+Content-Language: en-US
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Rui <wangrui@loongson.cn>, Xi Ruoyao <xry111@xry111.site>,
+        loongarch@lists.linux.dev, linux-kbuild@vger.kernel.org,
+        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        WANG Xuerui <git@xen0n.name>
+References: <20230623134351.1898379-1-kernel@xen0n.name>
+ <20230623134351.1898379-8-kernel@xen0n.name>
+ <CAKwvOdn5e+BzhGzDPnZYEjCuanABJmu5ZZo5x2uwHj4L44m5nA@mail.gmail.com>
+From:   WANG Xuerui <kernel@xen0n.name>
+In-Reply-To: <CAKwvOdn5e+BzhGzDPnZYEjCuanABJmu5ZZo5x2uwHj4L44m5nA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On x86, UACCESS is controlled by two instructions: STAC and CLAC.
-STAC instruction enables UACCESS while CLAC disables UACCESS.
-This is simple enough for objtool to locate UACCESS enable and
-disable.
 
-But on powerpc it is a bit more complex, the same instruction is
-used for enabling and disabling UACCESS, and the same instruction
-can be used for many other things. It would be too complex to use
-exclusively instruction decoding.
+On 6/24/23 00:39, Nick Desaulniers wrote:
+> On Fri, Jun 23, 2023 at 6:44 AM WANG Xuerui <kernel@xen0n.name> wrote:
+>> From: WANG Xuerui <git@xen0n.name>
+>>
+>> Now the arch code is mostly ready for LLVM/Clang consumption, it is time
+>> to re-organize the CFLAGS a little to actually enable the LLVM build.
+>>
+>> A build with !RELOCATABLE && !MODULE is confirmed working within a QEMU
+>> environment; support for the two features are currently blocked by
+>> LLVM/Clang, and will come later.
+>>
+>> Signed-off-by: WANG Xuerui <git@xen0n.name>
+>> ---
+>>   arch/loongarch/Makefile      | 14 +++++++++++---
+>>   arch/loongarch/vdso/Makefile |  6 +++++-
+>>   2 files changed, 16 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
+>> index a27e264bdaa5..efe9b50bd829 100644
+>> --- a/arch/loongarch/Makefile
+>> +++ b/arch/loongarch/Makefile
+>> @@ -46,12 +46,18 @@ ld-emul                     = $(64bit-emul)
+>>   cflags-y               += -mabi=lp64s
+>>   endif
+>>
+>> -cflags-y                       += -G0 -pipe -msoft-float
+> This seems to drop -msoft-float for GCC. Intentional?
 
-To help objtool, mark such instruction into .discard.uaccess_begin
-and .discard.uaccess_end sections, on the same principle as for
-reachable/unreachable instructions. And add ASM_UACCESS_BEGIN
-and ASM_UACCESS_END macros to be used in inline assembly code to
-annotate UACCESS enable and UACCESS disable instructions.
+Kind-of; according to the LoongArch Toolchain Conventions [1], 
+-msoft-float basically selects the soft-float ABI, but *also prevents 
+use of any FP instructions*. This is where things get hairy, because it 
+means e.g. any translation unit can't manipulate the FP context at all 
+without special-casing its CFLAGS to have the -msoft-float flag removed. 
+I've tried and stopped when I noticed >3 files needed such treatment 
+even in arch/loongarch/kernel alone; -mabi=lp64s is always present right 
+now and that's enough.
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- include/linux/objtool.h | 14 ++++++++++++++
- tools/objtool/check.c   | 33 +++++++++++++++++++++++++++++++++
- 2 files changed, 47 insertions(+)
+[1]: 
+https://loongson.github.io/LoongArch-Documentation/LoongArch-toolchain-conventions-EN.html#_compiler_options
 
-diff --git a/include/linux/objtool.h b/include/linux/objtool.h
-index 03f82c2c2ebf..d8fde4158a40 100644
---- a/include/linux/objtool.h
-+++ b/include/linux/objtool.h
-@@ -57,6 +57,18 @@
- 	".long 998b - .\n\t"						\
- 	".popsection\n\t"
- 
-+#define ASM_UACCESS_BEGIN						\
-+	"998:\n\t"							\
-+	".pushsection .discard.uaccess_begin\n\t"			\
-+	".long 998b - .\n\t"						\
-+	".popsection\n\t"
-+
-+#define ASM_UACCESS_END							\
-+	"998:\n\t"							\
-+	".pushsection .discard.uaccess_end\n\t"				\
-+	".long 998b - .\n\t"						\
-+	".popsection\n\t"
-+
- #else /* __ASSEMBLY__ */
- 
- /*
-@@ -156,6 +168,8 @@
- #define STACK_FRAME_NON_STANDARD_FP(func)
- #define ANNOTATE_NOENDBR
- #define ASM_REACHABLE
-+#define ASM_UACCESS_BEGIN
-+#define ASM_UACCESS_END
- #else
- #define ANNOTATE_INTRA_FUNCTION_CALL
- .macro UNWIND_HINT type:req sp_reg=0 sp_offset=0 signal=0
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index c9f0fd31d146..6daa13c25183 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -1052,6 +1052,38 @@ static void add_ignores(struct objtool_file *file)
- 	}
- }
- 
-+static void __add_uaccess(struct objtool_file *file, const char *name,
-+			  int type, const char *action)
-+{
-+	struct section *rsec;
-+	struct reloc *reloc;
-+	struct instruction *insn;
-+
-+	rsec = find_section_by_name(file->elf, name);
-+	if (!rsec)
-+		return;
-+
-+	for_each_reloc(rsec, reloc) {
-+		if (reloc->sym->type != STT_SECTION) {
-+			WARN("unexpected relocation symbol type in %s: ", rsec->name);
-+			continue;
-+		}
-+		insn = find_insn(file, reloc->sym->sec, reloc_addend(reloc));
-+		if (!insn) {
-+			WARN("can't find UACCESS %s insn at %s+0x%" PRIx64,
-+			     action, reloc->sym->sec->name, reloc_addend(reloc));
-+			continue;
-+		}
-+		insn->type = type;
-+	}
-+}
-+
-+static void add_uaccess(struct objtool_file *file)
-+{
-+	__add_uaccess(file, ".rela.discard.uaccess_begin", INSN_STAC, "enable");
-+	__add_uaccess(file, ".rela.discard.uaccess_end", INSN_CLAC, "disable");
-+}
-+
- /*
-  * This is a whitelist of functions that is allowed to be called with AC set.
-  * The list is meant to be minimal and only contains compiler instrumentation
-@@ -2558,6 +2590,7 @@ static int decode_sections(struct objtool_file *file)
- 		return ret;
- 
- 	add_ignores(file);
-+	add_uaccess(file);
- 	add_uaccess_safe(file);
- 
- 	ret = add_ignore_alternatives(file);
+>
+>> -LDFLAGS_vmlinux                        += -G0 -static -n -nostdlib
+>> +ifndef CONFIG_CC_IS_CLANG
+>> +cflags-y                       += -G0
+>> +LDFLAGS_vmlinux                        += -G0
+> Thanks for the patch!
+>
+> I can understand not passing -G0 to clang if clang doesn't understand
+> it, but should you be using CONFIG_LD_IS_LLD for LDFLAGS?
+>
+> What does -G0 do?
+Just as Ruoyao explained earlier, it's the "small data threshold". It's 
+not implemented on LoongArch yet, and we don't have ABI provisions for 
+that either, so IMO it's even okay to just drop it unconditionally. (I 
+haven't double-checked the GCC behavior though.)
+>
+> Is there a plan to support it in clang and lld?
+>
+> If so, please file a bug in LLVM's issue tracker
+> https://github.com/llvm/llvm-project/issues
+> then link to it in a comment in this Makefile above the relevant condition.
+As explained above, proper support for "small data optimization" 
+probably means some cooperation from ABI side (e.g. reserving a GP 
+register for being able to reference +/-4KiB from it with a single 
+insn), so I don't expect this to happen anytime soon.
+>
+>> +endif
+>> +cflags-y                       += -pipe
+>> +LDFLAGS_vmlinux                        += -static -n -nostdlib
+>>
+>>   # When the assembler supports explicit relocation hint, we must use it.
+>>   # GCC may have -mexplicit-relocs off by default if it was built with an old
+>> -# assembler, so we force it via an option.
+>> +# assembler, so we force it via an option. For LLVM/Clang the desired behavior
+>> +# is the default, and the flag is not supported, so don't pass it if Clang is
+>> +# being used.
+>>   #
+>>   # When the assembler does not supports explicit relocation hint, we can't use
+>>   # it.  Disable it if the compiler supports it.
+>> @@ -61,8 +67,10 @@ LDFLAGS_vmlinux                      += -G0 -static -n -nostdlib
+>>   # combination of a "new" assembler and "old" compiler is not supported.  Either
+>>   # upgrade the compiler or downgrade the assembler.
+>>   ifdef CONFIG_AS_HAS_EXPLICIT_RELOCS
+>> +ifndef CONFIG_CC_IS_CLANG
+>>   cflags-y                       += -mexplicit-relocs
+>>   KBUILD_CFLAGS_KERNEL           += -mdirect-extern-access
+>> +endif
+> Why would AS_HAS_EXPLICIT_RELOCS be set if -mexplicit-relocs isn't
+> supported? Is the kconfig for that broken?
+>
+> Does AS_HAS_EXPLICIT_RELOCS also need to test for the support for
+> -mdirect-extern-access or should there be a new config for that?
+> CC_SUPPORTS_DIRECT_EXTERN_ACCESS
+>
+>>   else
+>>   cflags-y                       += $(call cc-option,-mno-explicit-relocs)
+>>   KBUILD_AFLAGS_KERNEL           += -Wa,-mla-global-with-pcrel
+>> diff --git a/arch/loongarch/vdso/Makefile b/arch/loongarch/vdso/Makefile
+>> index 4c859a0e4754..19f6c75a1106 100644
+>> --- a/arch/loongarch/vdso/Makefile
+>> +++ b/arch/loongarch/vdso/Makefile
+>> @@ -25,13 +25,17 @@ endif
+>>   cflags-vdso := $(ccflags-vdso) \
+>>          -isystem $(shell $(CC) -print-file-name=include) \
+>>          $(filter -W%,$(filter-out -Wa$(comma)%,$(KBUILD_CFLAGS))) \
+>> -       -O2 -g -fno-strict-aliasing -fno-common -fno-builtin -G0 \
+>> +       -O2 -g -fno-strict-aliasing -fno-common -fno-builtin \
+>>          -fno-stack-protector -fno-jump-tables -DDISABLE_BRANCH_PROFILING \
+>>          $(call cc-option, -fno-asynchronous-unwind-tables) \
+>>          $(call cc-option, -fno-stack-protector)
+>>   aflags-vdso := $(ccflags-vdso) \
+>>          -D__ASSEMBLY__ -Wa,-gdwarf-2
+>>
+>> +ifndef CONFIG_CC_IS_CLANG
+>> +cflags-vdso += -G0
+>> +endif
+>> +
+>>   ifneq ($(c-gettimeofday-y),)
+>>     CFLAGS_vgettimeofday.o += -include $(c-gettimeofday-y)
+>>   endif
+>> --
+>> 2.40.0
+>>
+>>
+>
 -- 
-2.40.1
+WANG "xen0n" Xuerui
+
+Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
 
