@@ -2,104 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0262D73BCE1
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 18:43:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EAF673BCE6
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 18:45:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231715AbjFWQnI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 12:43:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52378 "EHLO
+        id S229834AbjFWQpP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 12:45:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229972AbjFWQnF (ORCPT
+        with ESMTP id S232037AbjFWQo5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 12:43:05 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AB622975;
-        Fri, 23 Jun 2023 09:42:44 -0700 (PDT)
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 0A18C1EC04F0;
-        Fri, 23 Jun 2023 18:42:35 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1687538555;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=xwLJ/+tqlCE0W6lt0hXv8M7a8OEvWqrcIhG8golX4e4=;
-        b=f4npGOluADDWo1NIFPspTK4GKkH0WSgYdFWWYZSJh/HaeTRIEJpsODp9++orxsAGGzfXvW
-        a3A2Hw4sbxewtdK+voYdga4YW88MrAJd7a52ubjQHce1Cx9kkRxQZXzz9BIMsGmRNmlwdL
-        xQBmE3vuu9OYVE8MGws8Z4fxLezliMg=
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-        header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id oTw--Hh1b-ou; Fri, 23 Jun 2023 16:42:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-        t=1687538552; bh=xwLJ/+tqlCE0W6lt0hXv8M7a8OEvWqrcIhG8golX4e4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Cz4/2nZVJniVDGCSRawIV7g2cuvSJfPCjVcFgevVgmqcoYcMy3Y3Z6juKge3ZdxIr
-         WZlQAcEpGrSBvbw0eBR72u9VfBApOzxjR1MxzR0rCCwzMWOaMrKEYDkFDvaiz8Eeyd
-         s10y6rkZSHCsjwmNpFCW81yOPKR5k4jm5EX1UIz3M8pJejdDubyPTiYr0TKP1237kP
-         V/PvoYoE5PSGe2unUcjlLqWbeR2aO9f4xrsTf4ae2dzYb7C/psiDhYgLFFfDnZbZ1o
-         PLqfk6fUFjG+iCjkPSELNBcObRbE92rwhDPHAn3dejZlgarRyvv5hiFPoOO8fg4nKc
-         JlWPZlnu1fBZVMGkc3GxFJWR77+vbMn9MIHjlxmbvfciSW87W6Wom7nTyv6JUUU+2T
-         z+oLwN9oyMF5QI+uHNX5sifFpwYttKooQEH3WQKVFQpbhM5gLNBs6PDp7Osxf58jVt
-         JWhMCpfj1rqaPpGOO40HJVoRqo9a6rrnC/RrkKws1SUqRuL7cqCAWJ1sJXjpL9Yyn1
-         y35QwI7Q31/4LdCJJzAoBJ6idpYkrbSWfsLy55wwKj6AAMlqyg5UP19DScYZAWCd85
-         e9RRGUOUNM5FbI3vrh5I2GFb+8m2Yu2WZUhPO3ONzLeQuxOtT4T5LT2NxZOmZ55oK6
-         +s1kBk4EPzPPvs0yHsIrkLw4=
-Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
+        Fri, 23 Jun 2023 12:44:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 998C81A1;
+        Fri, 23 Jun 2023 09:44:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 0DB1A40E0035;
-        Fri, 23 Jun 2023 16:42:26 +0000 (UTC)
-Date:   Fri, 23 Jun 2023 18:42:21 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Yazen Ghannam <yazen.ghannam@amd.com>
-Cc:     "Luck, Tony" <tony.luck@intel.com>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>
-Subject: Re: [PATCH 1/2] x86/mce: Disable preemption for CPER decoding
-Message-ID: <20230623164221.GCZJXLbSYQebMrVa4y@fat_crate.local>
-References: <20230622131841.3153672-2-yazen.ghannam@amd.com>
- <SJ1PR11MB6083664BCFC8047A5FE8F6A9FC22A@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <f03b6c61-1669-c03e-310c-cc1364cf30a8@amd.com>
- <SJ1PR11MB6083961DFCA3D90922824189FC22A@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <77d51e2f-cd1c-9c30-5bd5-42b1d583db53@amd.com>
- <SJ1PR11MB60831A6E82329E1C53257F3EFC22A@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <e6b1af5a-774a-c3ef-223e-4595b7ec532a@amd.com>
- <SJ1PR11MB6083662CBA9A2F40512034D0FC23A@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <20230623160138.GBZJXB4hlFM/ahvROH@fat_crate.local>
- <5f40b5f0-3e19-5cf3-5bd3-eafa4d036119@amd.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 367F561AC0;
+        Fri, 23 Jun 2023 16:44:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49CD6C433C0;
+        Fri, 23 Jun 2023 16:44:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687538695;
+        bh=Amvsfe/559uEztT+E7JaJVCDluFASv8Wnk4KeVuoYOA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qBA/J4aaiuH7MRAynpfBa/oShtjtfhURH/q8bGelfGo588EUJj5VcLsyGpnR7+IxP
+         6h/8yO2Ooz+ee+lc6yOVlTHBBICc2YeSebY6PPWsHi2+re3JAFM0JcTgwkFfAwHlZJ
+         Wa25F6R3O1kRz36gGhgvNDKQzeRIfeCB1l+4xyVF3Ye+24I4nCD36EdpLcDgdUMl/C
+         UMzqxqI/X2DrnyMFGLIgwKuGvEAxjLnhJoa6KGXL0AHSqj4YaMSeBrV1BoNOwmrpmZ
+         Walos4Z8e9Yr6iv6ND4SFQeSKwYy9lB2/8mg+UTbyD5Xl8weAOcXaPoo511CoGPhBN
+         IWXKO5012+syA==
+Date:   Fri, 23 Jun 2023 17:44:50 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     Cosmin Tanislav <cosmin.tanislav@analog.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: iio: ad74413r: add binding for digital
+ input threshold
+Message-ID: <20230623-casket-outer-2c9d2a0c4795@spud>
+References: <20230623113327.1062170-1-linux@rasmusvillemoes.dk>
+ <20230623113327.1062170-2-linux@rasmusvillemoes.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="HMChvs1GfdUbVjeL"
 Content-Disposition: inline
-In-Reply-To: <5f40b5f0-3e19-5cf3-5bd3-eafa4d036119@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230623113327.1062170-2-linux@rasmusvillemoes.dk>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 23, 2023 at 12:14:00PM -0400, Yazen Ghannam wrote:
-> Or do you mean that we can support mixed microcode systems?
 
-We can and always have. I can chase down hw guys at some point and have
-them make a definitive statement about mixed silicon steppings but we
-have bigger fish to fry right now.
+--HMChvs1GfdUbVjeL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-:-)
+On Fri, Jun 23, 2023 at 01:33:25PM +0200, Rasmus Villemoes wrote:
+> Allow specifying the threshold for which the channels configured as
+> digital input change state.
+>=20
+> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> ---
+>=20
+> Running dt_binding_check on this with a too small or large value in
+> the example does give me an error, but the multipleOf does not seem to
+> be enforced; the value 1234567 is not flagged. I don't know if that's
+> expected (maybe I have too old versions of something).
 
--- 
-Regards/Gruss,
-    Boris.
+That's one for Rob. I checked a few others and behaviour was the same
+there.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+>  .../devicetree/bindings/iio/addac/adi,ad74413r.yaml    | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/iio/addac/adi,ad74413r.yam=
+l b/Documentation/devicetree/bindings/iio/addac/adi,ad74413r.yaml
+> index 590ea7936ad7..1f90ce3c7932 100644
+> --- a/Documentation/devicetree/bindings/iio/addac/adi,ad74413r.yaml
+> +++ b/Documentation/devicetree/bindings/iio/addac/adi,ad74413r.yaml
+> @@ -51,6 +51,14 @@ properties:
+>        Shunt (sense) resistor value in micro-Ohms.
+>      default: 100000000
+> =20
+> +  digital-input-threshold-microvolt:
+
+Should this not have an adi vendor prefix, similar to
+"adi,digital-input-threshold-mode-fixed"?
+
+Cheers,
+Conor.
+
+> +    description:
+> +      Comparator threshold used by the channels configured to use the
+> +      digital input function.
+> +    minimum: 500000
+> +    maximum: 16000000
+> +    multipleOf: 500000
+> +
+>    reset-gpios:
+>      maxItems: 1
+> =20
+> @@ -143,6 +151,8 @@ examples:
+>          refin-supply =3D <&ad74413r_refin>;
+>          reset-gpios =3D <&gpio2 6 GPIO_ACTIVE_LOW>;
+> =20
+> +        digital-input-threshold-microvolt =3D <4000000>;
+> +
+>          channel@0 {
+>            reg =3D <0>;
+> =20
+> --=20
+> 2.37.2
+>=20
+
+--HMChvs1GfdUbVjeL
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJXMAgAKCRB4tDGHoIJi
+0qOJAP9/cR+G2TQ18Npzna+cyS0FcsBgUR81lujLjJW/rkSOVAD+Ng5ctMFycHPe
+dh+goo7uc2QV6wrMyd1/3QAPz1VTOQo=
+=hAHv
+-----END PGP SIGNATURE-----
+
+--HMChvs1GfdUbVjeL--
