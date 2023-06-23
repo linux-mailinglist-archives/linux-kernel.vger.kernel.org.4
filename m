@@ -2,191 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E80F573C00E
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 22:36:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B3DB73C052
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 22:39:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232182AbjFWUg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 16:36:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53336 "EHLO
+        id S232356AbjFWUjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 16:39:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232159AbjFWUgT (ORCPT
+        with ESMTP id S232285AbjFWUix (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 16:36:19 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2137.outbound.protection.outlook.com [40.107.220.137])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B72492728;
-        Fri, 23 Jun 2023 13:35:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bj5INSm+hVQFY2BXP1OEtvI4DGWU5c33Wa+tbhMI1QBJAgRqesCO1h9W1YqHTbMJtGffKvELLPaNCHJJZzd2prmQSWkEVA7gA6tMU+43UireIV4ymQbpEr3IajvsLnuJIwGvo4hR5I2cAsCgP0hemWlSk5OQVL3G6YxbBwThFZit9o5EKTL4T/qNgDLqmYXPBkZ4f+1IYZ79pIo06KibtmWkCsZaPI1pIz9WzKNjQY7V6/Mr3rw2tjSZu/mmqrcAn2RO/TgDO4en4DF5mnOGdwN2pSf9NKv6R51PQecTVv6nMtZeWV59uBRhMbIKwEBL3oC05If6HnAy/iARVmGtbA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2MWAnSCtg2nZ+ZiOCxtfm+6oQoUOHmnAw7aohQcR9cc=;
- b=AN26NWxeTkG9+5j9zuoLYfYjDXtSrEQi3ydKeYJqyzLbwvH8ZOL1TfbmCGmEIEB1d9rXDiiXzyIcS5h8qmZNxE689E2a3I9eZDsfg59NJeNVC10JTnudaDA5RfneLNXBRnq8O/Gh5FIFoThDfsiRCGx53Ad93e/FFoPy1NtuvdDE/S6+nBEDdMQveBKVzlGkPCJORCQn2wFrfq6NZmrNUQXMMRdK7+A5Z/L0A190w7F7nILq22chdewbDUcVavF0FKvI/Xuam//9Af6DLjupfSGLVoumYxT3HRKE62WB9ovgT/qRte9qEk0FPFbiKUJFCoKJUprpN+/LwnCulu+hSg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Fri, 23 Jun 2023 16:38:53 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF872E45
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 13:38:21 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-bcef239a9fbso5115529276.1
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 13:38:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2MWAnSCtg2nZ+ZiOCxtfm+6oQoUOHmnAw7aohQcR9cc=;
- b=YiB/lQ1C78DPE6iFA+uJ4WnfUO4J6yGcmsYJFgPm2o/kmXKg1nQbCV3zIoB9xLNgTLyOW/5Inv/6nfDXLIA0Af82OO9IbIclUnrhwhVs5FRZ6TZNpKuALPZaqAIt20F8IwgcS7jiblAQZY5IOq0gllIN/86/nX3QGdBkYUvcEms=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by BY3PR13MB5028.namprd13.prod.outlook.com (2603:10b6:a03:360::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.26; Fri, 23 Jun
- 2023 20:35:24 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb8f:e482:76e0:fe6e]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb8f:e482:76e0:fe6e%5]) with mapi id 15.20.6521.023; Fri, 23 Jun 2023
- 20:35:24 +0000
-Date:   Fri, 23 Jun 2023 22:35:17 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Michael Walle <mwalle@kernel.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Yisen Zhuang <yisen.zhuang@huawei.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        Xu Liang <lxu@maxlinear.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v2 06/10] net: phy: print an info if a broken
- C45 bus is found
-Message-ID: <ZJYCBeKdXBot/9Xd@corigine.com>
-References: <20230620-feature-c45-over-c22-v2-0-def0ab9ccee2@kernel.org>
- <20230620-feature-c45-over-c22-v2-6-def0ab9ccee2@kernel.org>
- <af166ce6-b9b2-44e0-9f45-2b2aa001fd6b@lunn.ch>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <af166ce6-b9b2-44e0-9f45-2b2aa001fd6b@lunn.ch>
-X-ClientProxiedBy: AS4PR10CA0020.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:20b:5d8::10) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|BY3PR13MB5028:EE_
-X-MS-Office365-Filtering-Correlation-Id: 59a92630-3c9c-4219-fdbb-08db74295f4d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 1KRxLjhpUupTlXGrWyxbqYozHzRjgRlTn+USPPQ49Og/nppSnkeO6EzJDwr4gWEDoYMG7sJNhmSH7705GFtx6cNVSzGvMQCvYK2IAgQMRIh2Z/Y/UPyLGgptrjEHX8TPWXeb4gmqwea/vM+8L3COUP/gzEwvWjhgtgBeUr3zZEXRvGRvC6PKRsa2hIo72k2S4dlrI3CjQPRmQQ4LYm7sbnfqG8y7Hp/KVVkgOahFkOMlQJs+0tKrC7eYCcb40JBNplz9ipymN+lg8nkbf5kWEl0FftaoWun6v2QSzrx9pVTz/O8pM4434dByYsjGpWAaxAe2+P5Fq4Pdj65Wvxhiyi/mifOYR7utXKHMQ9hAI2GU7FtmJRg7Szsa16SnzSLnHv/q1lFnURiw2iHY07/WrrU+t84XZjL0YzKkPldZByIk6KHXD9PAEZXvlZjdFwJJOXU2cQeNKwILNfNIQOXGqmJnPTviMSs2jPM9YX+g2vcOStvU2mhvhWvP8R5ZYl6V9rLuXoK5BuJUdUhOGXjOwPBkHSZaeAGnmgCqOCNXHVKyfhW8nriq290MoaJwKODxYpuTJ/1x53mF48mTbgb8QSwEWXeRCD3Dc9OhPngH5nE=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(346002)(376002)(39840400004)(366004)(451199021)(2906002)(6486002)(83380400001)(6666004)(38100700002)(2616005)(6506007)(6512007)(186003)(41300700001)(86362001)(54906003)(316002)(478600001)(66946007)(66556008)(66476007)(36756003)(6916009)(4326008)(5660300002)(7416002)(8936002)(8676002)(44832011);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?dnYU5Q2GRDSkkCaJkxjSYErkZFsN0PEWaAfaTuj5cD+dvzJPcFKkDTC+TSRO?=
- =?us-ascii?Q?1SR+cTqaXrGLgMtfr93f5GHZ/L2tSP1jQCz89hrkD+4YXAwbn6nbJVkeMiU9?=
- =?us-ascii?Q?E+BXT1xD5HUtQCiPIWdXnTycyqxEqJGOMX4lIulzFuLaozKDJ1GahrxJqdn1?=
- =?us-ascii?Q?ssoia8AjfBanqkWdBQcYLCHOtanf3qIZtlGxdY3KdHt1xxsf1lGoXVswNWcg?=
- =?us-ascii?Q?ymdLcpuNuBtzb3YcJyHUHogYe6DkZYWyVre5hZj7TqOD1r4loFDFobupqM5A?=
- =?us-ascii?Q?PmHkeaiR/DqlaIZlRH5i2NNrqPSsYdizGT15Nf3SPThnms/YfoJyLdoe5idD?=
- =?us-ascii?Q?8BGvyagBhxALgwxkMlgn3PIV/W5XUmCf8TwjpzPE/ZvdAO3m1cpEb3R+Laxr?=
- =?us-ascii?Q?/zLL6ldZS4t4gFznnv0hL1aFTJKXI8uu9h3L/m7HCAfLPTUswaKccBccShI4?=
- =?us-ascii?Q?VKRt3XcOKY1jIjAbHSZrna1TmPwI5L4/zr0iD5/GEt4Mdw7Pqt2XqTpEKeSO?=
- =?us-ascii?Q?/eu5MdBtpE0z2qa6krOqVWzMpReGXp7IE9NC5x6yNPl2wArQoERNQH4tLAp5?=
- =?us-ascii?Q?plYdxAngT1UXyJfU16idvDmQO4FohHLFMUKUVLRD3PVbgVJ6+iUSPFV91bl9?=
- =?us-ascii?Q?tA0tddDLyOsA+OGc1nCyTmzKGFmtHZFkuW34B61sPTP/KXGhPCOgIeJbt6gB?=
- =?us-ascii?Q?J96OnFs5fnZFcTTsEeSghpOtQsmoKFarBELzzARdsd/mTwH4DHW9LhEC5/4t?=
- =?us-ascii?Q?eryxqYKeoG01QzHvsdCq8epmnH9kmrIUrGvzFv95oh1Tkdf7+yKM0AAWBhDw?=
- =?us-ascii?Q?RnCK5Lwyg4ud8pUS2ParLsxy2OJ+X9L+l0PHFXqVd+snCiXGIOrIqJVicsjn?=
- =?us-ascii?Q?xiZ7WcII1BykLrixqerrtReJiJXoDtKA3vA9gBj2xaJYrKOKpWH1qwG2Ez84?=
- =?us-ascii?Q?VdoMYKVeXbhB7ojtcW2fD9BEIclxGh0dmEhXQquCBJwI3Cc27rq8w70jm6sI?=
- =?us-ascii?Q?5RVNZimAymVP7Zy36+2mzcboYonhjnbxkRCefZ1YLXEB2jS6eeVSzJg6LjFc?=
- =?us-ascii?Q?+SiqhwkYFBntOyBGGAzAZHXQm0OEa5qUuvWjwU8kKIUSiyyWdSMfbpzMyuLY?=
- =?us-ascii?Q?si37eMPSoy7ixd/PXxEFdE5E1O/Ha6n2SWe8QInOvgRlPY5th7MY661hEKa5?=
- =?us-ascii?Q?Gt+mxHAWZC/eEC/5VSovYZUXN1pSLhsW0Glp7Xgi1vmy8RO262Pi/0B1PwHz?=
- =?us-ascii?Q?btK1N3APH8+5yuNiQHJflxwVTybIC5V5xfx0+zXX9D/yzGrhZ9xSELXT0hyM?=
- =?us-ascii?Q?mBwQd2tENdhSqVDED3cewrhRDDf4gVMn8sFPhAaaWYd2h46GsEoTnLXdR4Iz?=
- =?us-ascii?Q?izyFACpIiOAUf1NPhkwlcfyScd8E25/LNMKsKOWpIpMk+V2zmhOKb0zJftDp?=
- =?us-ascii?Q?bzBwU4ljnpTVU9whodIFDs3L5P3st5JuhDiRgJFdKV1pr5ZnmlPdti/yUgay?=
- =?us-ascii?Q?dT2Wd+YEhLNAhtcAZH8vPAgy/pqKMT2Qq6jYQfN22G5IFLd1NFhmIb7Y7exL?=
- =?us-ascii?Q?8FqCa/rjRfAM+3bJ7MHfb8GyGWgMCJzQlntxhyI3nYwTVgkFJLuNWe9eYb5x?=
- =?us-ascii?Q?i8iChoKh+yKAsWb0xAAICcw3GrUYtQ13emRrq9Auo/F3GjelI6xR7BZ97sIk?=
- =?us-ascii?Q?xxgWzQ=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 59a92630-3c9c-4219-fdbb-08db74295f4d
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jun 2023 20:35:24.5922
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: cue6vw3SReiGC/sPLFYz1wIdc/XQTd5QmgDEz4GCrCFgPJR1V90ss8Umo9skkocYA/rnQG7ppINWpvcqDhnGkLXd03ivGIZknZOveV5r4TU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY3PR13MB5028
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        d=google.com; s=20221208; t=1687552694; x=1690144694;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=QwNPgwiBQZGJeDnguHE5i5QhIkh5nKMqMyEPaR/bIi0=;
+        b=S+gS2IQYLrYxQ/9+oRMG1ahOtYGEn4Hx1tnys8TxBtT5IefCIFC0J1mYt2T2h0EOd8
+         Yhvyu9Epl+xfAOfKqWuXEOKQfKH1y790+4wYskDZ0Awt0AST/Kwvi3m4NVlsMeOsaAl2
+         HFduxVFkrks7NWvWafWc2IB48aAaJNaQzPaiMSpC5gNB8Kb15lJD5rnFWS9F1IACFvFO
+         TxhphQw8dS+VtPpXo/I2jouDnp01zylDHZfitq/+NpO+r/WfSv2akxEwxVEcjIgfYlxh
+         PDXMXqHGRSuegFHhwoHEF1o0CUiq7bc78FJzS3bXOQvJMNzZ2EewecUcbGxLjn1tiIlQ
+         DxkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687552694; x=1690144694;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QwNPgwiBQZGJeDnguHE5i5QhIkh5nKMqMyEPaR/bIi0=;
+        b=Yp/zwJp6KsqdQy3O7s0KHLRHFgBDU9jpZwS7T0wZ5ba1DpgubOsV8aoKBQ+bYr0Qnp
+         AKcjfUtmsVJIsB2aTsB67NOU8BA11iVEFySTC/Ot9Ga1qNfUKa2N0heOZACEUjiThzve
+         5KD6Ghrf3qp58AsvD1zUsQihLxOzhy1KpXGb0Piv4KxVDZ937n6AnGrZSt3WU/A36YXV
+         5XnhIhBV7E3VPRw8FQhOyOuuKyNoA7ObMMgxwLz6mUabD5KNVlgOkum93jIArB8mgl5m
+         WvdV5dRye58A/7DaV8T64/spvcnWtR5ebM1JTr1YhMd2wu595idzvN7OiVe+GQzCXZhl
+         NI1w==
+X-Gm-Message-State: AC+VfDxMq0U2dgvS4tVhbFFG3YU+3QQ2TgQiozA1tmAucvkHhgNnY743
+        kdRA6VDR+20hbRK2VO8N3aN6sz3jVHU=
+X-Google-Smtp-Source: ACHHUZ6bgde2JCXrNsJtz06MCTZDowjFJv1N0BDCPuMZvZmiiAsrXclVeOU/48XYNaZZon8hj8RtdhjkyGk=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:2691:0:b0:ba8:1646:c15d with SMTP id
+ m139-20020a252691000000b00ba81646c15dmr9694281ybm.1.1687552694461; Fri, 23
+ Jun 2023 13:38:14 -0700 (PDT)
+Date:   Fri, 23 Jun 2023 13:38:12 -0700
+In-Reply-To: <20230616113353.45202-4-xiong.y.zhang@intel.com>
+Mime-Version: 1.0
+References: <20230616113353.45202-1-xiong.y.zhang@intel.com> <20230616113353.45202-4-xiong.y.zhang@intel.com>
+Message-ID: <ZJYCtDN+ITmrgCUs@google.com>
+Subject: Re: [PATCH 3/4] KVM: VMX/pmu: Enable inactive vLBR event in guest LBR
+ MSR emulation
+From:   Sean Christopherson <seanjc@google.com>
+To:     Xiong Zhang <xiong.y.zhang@intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pbonzini@redhat.com, peterz@infradead.org, like.xu.linux@gmail.com,
+        kan.liang@linux.intel.com, zhenyuw@linux.intel.com,
+        zhiyuan.lv@intel.com
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 23, 2023 at 07:42:08PM +0200, Andrew Lunn wrote:
-> On Fri, Jun 23, 2023 at 12:29:15PM +0200, Michael Walle wrote:
-> > If there is an PHY which gets confused by C45 transactions on the MDIO
-> > bus, print an info together with the PHY identifier of the offending
-> > one.
-> > 
-> > Signed-off-by: Michael Walle <mwalle@kernel.org>
-> > 
-> > ---
-> > I wasn't sure if this should be phydev_dbg() or phydev_info(). I mainly
-> > see this as an info to a user why some PHYs might not be probed (or
-> > c45-over-c22 is used later).
+On Fri, Jun 16, 2023, Xiong Zhang wrote:
+> vLBR event could be inactive in two case:
+> a. host per cpu pinned LBR event occupy LBR when vLBR event is created
+> b. vLBR event is preempted by host per cpu pinned LBR event during vm
+> exit handler.
+> When vLBR event is inactive, guest couldn't access LBR msr, and it is
+> forced into error state and is excluded from schedule by perf scheduler.
+> So vLBR event couldn't be active through perf scheduler even if host per
+> cpu pinned LBR event has released LBR, kvm could enable vLBR event
+> proactively, then vLBR event may be active and LBR msr could be passthrough
+> into guest.
 > 
-> The information is useful to the DT writer, not the 'user'. I would
-> assume the DT writer has a bit more kernel knowledge and can debug
-> prints on. So i would suggest phydev_dbg().
+> Signed-off-by: Xiong Zhang <xiong.y.zhang@intel.com>
+> ---
+>  arch/x86/kvm/vmx/pmu_intel.c | 11 ++++++++++-
+>  1 file changed, 10 insertions(+), 1 deletion(-)
 > 
-> > @@ -617,10 +617,10 @@ static int mdiobus_scan_bus_c45(struct mii_bus *bus)
-> >   */
-> >  void mdiobus_scan_for_broken_c45_access(struct mii_bus *bus)
-> >  {
-> > +	struct phy_device *phydev;
-> >  	int i;
-> >  
-> >  	for (i = 0; i < PHY_MAX_ADDR; i++) {
-> > -		struct phy_device *phydev;
-> >  		u32 oui;
-> 
-> It is not clear why you changed the scope of phydev. I guess another
-> version used phydev_info(), where as now you have dev_info()?
+> diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
+> index 741efe2c497b..5a3ab8c8711b 100644
+> --- a/arch/x86/kvm/vmx/pmu_intel.c
+> +++ b/arch/x86/kvm/vmx/pmu_intel.c
+> @@ -314,7 +314,16 @@ static bool intel_pmu_handle_lbr_msrs_access(struct kvm_vcpu *vcpu,
+>  	if (!intel_pmu_is_valid_lbr_msr(vcpu, index))
+>  		return false;
+>  
+> -	if (!lbr_desc->event && intel_pmu_create_guest_lbr_event(vcpu) < 0)
+> +	/* vLBR event may be inactive, but physical LBR may be free now.
 
-I think it is so it can be used in the dev_info() call below.
-However Smatch has it's doubts that it is always initialised there.
+	/*
+	 * This is the preferred block comment style.
+	 */
 
-  .../mdio_bus.c:638 mdiobus_scan_for_broken_c45_access() error: we previously assumed 'phydev' could be null (see line 627)
+> +	 * but vLBR event is pinned event, once it is inactive state, perf
+> +	 * will force it to error state in merge_sched_in() and exclude it from
+> +	 * perf schedule, so even if LBR is free now, vLBR event couldn't be active
+> +	 * through perf scheduler and vLBR event could be active through
+> +	 * perf_event_enable().
+> +	 */
 
-> >  		phydev = mdiobus_get_phy(bus, i);
+Trimming that down, is this what you mean?
 
-Line 627 immediately follows the line above, like this:
+	/*
+	 * Attempt to re-enable the vLBR event if it was disabled due to
+	 * contention with host LBR usage, i.e. was put into an error state.
+	 * Perf doesn't notify KVM if the host stops using LBRs, i.e. KVM needs
+	 * to manually re-enable the event.
+	 */
 
-		if (!phydev)
-			continue;
+Which begs the question, why can't there be a notification of some form that the
+LBRs are once again available?
 
-> > @@ -633,6 +633,11 @@ void mdiobus_scan_for_broken_c45_access(struct mii_bus *bus)
-> >  			break;
-> >  		}
-> >  	}
-> > +
-> > +	if (bus->prevent_c45_access)
-> > +		dev_info(&bus->dev,
-> > +			 "Detected broken PHY (ID %08lx). Disabling C45 bus transactions.\n",
-> > +			 (unsigned long)phydev->phy_id);
-> >  }
-> >  
-> >  /**
-> > 
-> > -- 
-> > 2.39.2
-> > 
+Assuming that's too difficult for whatever reason, why wait until the guest tries
+to read LBRs?  E.g. why not be more aggressive and try to re-enable vLBRs on every
+VM-Exit.
+
+And if we do wait until the guest touches relevant MSRs, shouldn't writes to
+DEBUG_CTL that set DEBUGCTLMSR_LBR also try to re-enable the event?
+
+Lastly, what guarantees that the MSRs hold guest data?  I assume perf purges the
+MSRs at some point, but it would be helpful to call that out in the changelog.
+
+> +	if (lbr_desc->event && (lbr_desc->event->state == PERF_EVENT_STATE_ERROR))
+> +		perf_event_enable(lbr_desc->event);
+> +	else if (!lbr_desc->event && intel_pmu_create_guest_lbr_event(vcpu) < 0)
+>  		goto dummy;
+>  
+>  	/*
+> -- 
+> 2.25.1
 > 
