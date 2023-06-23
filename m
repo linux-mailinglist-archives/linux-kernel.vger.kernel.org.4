@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B086973B303
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 10:59:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E40A73B308
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 10:59:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231630AbjFWI6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 04:58:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41880 "EHLO
+        id S231502AbjFWI6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 04:58:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230260AbjFWI6o (ORCPT
+        with ESMTP id S231165AbjFWI6q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 04:58:44 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C2942136;
-        Fri, 23 Jun 2023 01:58:41 -0700 (PDT)
+        Fri, 23 Jun 2023 04:58:46 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 859E710C1;
+        Fri, 23 Jun 2023 01:58:44 -0700 (PDT)
 X-GND-Sasl: herve.codina@bootlin.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1687510720;
+        t=1687510723;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=EEEy793cjGF4C1unCyddxor7imGVvD+ZiP6bKckvbw4=;
-        b=UotQHbaAJeNXasLN9mk7ePmGKLlGqSP5Pk+4e4/5oGOhcBkWTqdISJTeO8zYXONumIYwR3
-        Od7Qd/WgRSMRq1o45te8iI48HzGRLT3mSf6jYm6zPkG4p27aPt4paAiWNd0i5xUJq42pb0
-        5Ig4LySjXqz/dZF2avcsX4oFRD/8Fp5XbV/S+GP1Mi86Jvo96Vd3Ler343LhhDOcUGyCes
-        Mbyd0W6rRpuFVbLHZrkiUtHfrSl7TL/0jBeIvKdf0a5SuEzFhYXwvXKyQZ3sKQviNgVvm5
-        c5lHEslDQAjzYHT95A7JsL+v/jRe40vpqTWvd/r2I9ADxZAWcfhF6xFCtWwP7A==
+        bh=bOjUEUa+0v4gjRsjixC0ZUKxZ+b4tghUzi1tXKl/N6c=;
+        b=poXQb6l0cEHC73knVIo0+10AHqgF/mUekvirOylTeNnSx+PaqoPQVZlRF+dyI2+0/lI9cl
+        UzFiXUl+Zg9ygv6MARKwCWo9tctVTVbubnks2+aRy9bXLlV7KZZSpQWBUmxs73pQBb9NPJ
+        aSAJ/gD8Y9jkg552ubQj4k38KHLEf1mqY0GOixpcnUF7ELGlDLl7ezenwSEby0s0hJl9Ig
+        f/Fa3cp3110QCbyLbAP+wunwNpfrKsui/ijn5hA+a8XzvOpYaSsYaHTxGyZjYgqTkux4B4
+        aP2W1AG1QrjUHW7kgtCz/HEwBFe2Xsx96lajdmYtJf5/XTsufUJ6Umx+C+PFyg==
 X-GND-Sasl: herve.codina@bootlin.com
 X-GND-Sasl: herve.codina@bootlin.com
 X-GND-Sasl: herve.codina@bootlin.com
@@ -47,9 +47,8 @@ X-GND-Sasl: herve.codina@bootlin.com
 X-GND-Sasl: herve.codina@bootlin.com
 X-GND-Sasl: herve.codina@bootlin.com
 X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPA id A0B9CE000C;
-        Fri, 23 Jun 2023 08:58:38 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id D3C40E0002;
+        Fri, 23 Jun 2023 08:58:40 +0000 (UTC)
 From:   Herve Codina <herve.codina@bootlin.com>
 To:     Herve Codina <herve.codina@bootlin.com>,
         Liam Girdwood <lgirdwood@gmail.com>,
@@ -68,111 +67,118 @@ Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
         Wojciech Ziemba <wojciech.ziemba@intel.com>,
         Christophe Leroy <christophe.leroy@csgroup.eu>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v6 01/13] ASoC: dt-bindings: Add audio-iio-aux
-Date:   Fri, 23 Jun 2023 10:58:18 +0200
-Message-Id: <20230623085830.749991-2-herve.codina@bootlin.com>
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH v6 02/13] ASoC: dt-bindings: simple-card: Add additional-devs subnode
+Date:   Fri, 23 Jun 2023 10:58:19 +0200
+Message-Id: <20230623085830.749991-3-herve.codina@bootlin.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230623085830.749991-1-herve.codina@bootlin.com>
 References: <20230623085830.749991-1-herve.codina@bootlin.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Industrial I/O devices can be present in the audio path.
-These devices needs to be viewed as audio components in order to be
-fully integrated in the audio path.
+The additional-devs subnode allows to declared some virtual devices
+as sound card children.
+These virtual devices can then be used by the sound card and so be
+present in the audio path.
 
-audio-iio-aux allows to consider these Industrial I/O devices as
-auxliary audio devices.
+The first virtual device supported is the audio IIO auxiliary device
+in order to support an IIO device as an audio auxiliary device.
 
 Signed-off-by: Herve Codina <herve.codina@bootlin.com>
 Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
 ---
- .../bindings/sound/audio-iio-aux.yaml         | 64 +++++++++++++++++++
- 1 file changed, 64 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/sound/audio-iio-aux.yaml
+ .../bindings/sound/simple-card.yaml           | 53 +++++++++++++++++++
+ 1 file changed, 53 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/sound/audio-iio-aux.yaml b/Documentation/devicetree/bindings/sound/audio-iio-aux.yaml
-new file mode 100644
-index 000000000000..d3cc1ea4a175
---- /dev/null
-+++ b/Documentation/devicetree/bindings/sound/audio-iio-aux.yaml
-@@ -0,0 +1,64 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/sound/audio-iio-aux.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Audio IIO auxiliary
-+
-+maintainers:
-+  - Herve Codina <herve.codina@bootlin.com>
-+
-+description:
-+  Auxiliary device based on Industrial I/O device channels
-+
-+allOf:
-+  - $ref: dai-common.yaml#
-+
-+properties:
-+  compatible:
-+    const: audio-iio-aux
-+
-+  io-channels:
+diff --git a/Documentation/devicetree/bindings/sound/simple-card.yaml b/Documentation/devicetree/bindings/sound/simple-card.yaml
+index b05e05c81cc4..59ac2d1d1ccf 100644
+--- a/Documentation/devicetree/bindings/sound/simple-card.yaml
++++ b/Documentation/devicetree/bindings/sound/simple-card.yaml
+@@ -148,6 +148,15 @@ definitions:
+     required:
+       - sound-dai
+ 
++  additional-devs:
++    type: object
 +    description:
-+      Industrial I/O device channels used
++      Additional devices used by the simple audio card.
++    patternProperties:
++      '^iio-aux(-.+)?$':
++        type: object
++        $ref: audio-iio-aux.yaml#
 +
-+  io-channel-names:
-+    description:
-+      Industrial I/O channel names related to io-channels.
-+      These names are used to provides sound controls, widgets and routes names.
-+
-+  snd-control-invert-range:
-+    $ref: /schemas/types.yaml#/definitions/uint32-array
-+    description: |
-+      A list of 0/1 flags defining whether or not the related channel is
-+      inverted
-+    items:
-+      enum: [0, 1]
-+      default: 0
-+      description: |
-+        Invert the sound control value compared to the IIO channel raw value.
-+          - 1: The related sound control value is inverted meaning that the
-+               minimum sound control value correspond to the maximum IIO channel
-+               raw value and the maximum sound control value correspond to the
-+               minimum IIO channel raw value.
-+          - 0: The related sound control value is not inverted meaning that the
-+               minimum (resp maximum) sound control value correspond to the
-+               minimum (resp maximum) IIO channel raw value.
-+
-+required:
-+  - compatible
-+  - io-channels
-+  - io-channel-names
-+
-+unevaluatedProperties: false
-+
-+examples:
+ properties:
+   compatible:
+     contains:
+@@ -187,6 +196,8 @@ properties:
+     $ref: "#/definitions/mclk-fs"
+   simple-audio-card,aux-devs:
+     $ref: "#/definitions/aux-devs"
++  simple-audio-card,additional-devs:
++    $ref: "#/definitions/additional-devs"
+   simple-audio-card,convert-rate:
+     $ref: "#/definitions/convert-rate"
+   simple-audio-card,convert-channels:
+@@ -359,6 +370,48 @@ examples:
+         };
+     };
+ 
++# --------------------
++# route audio to/from a codec through an amplifier
++# designed with a potentiometer driven by IIO:
++# --------------------
 +  - |
-+    iio-aux {
-+        compatible = "audio-iio-aux";
-+        io-channels = <&iio 0>, <&iio 1>, <&iio 2>, <&iio 3>;
-+        io-channel-names = "CH0", "CH1", "CH2", "CH3";
-+        /* Invert CH1 and CH2 */
-+        snd-control-invert-range = <0 1 1 0>;
++    sound {
++        compatible = "simple-audio-card";
++
++        simple-audio-card,aux-devs = <&amp_in>, <&amp_out>;
++        simple-audio-card,routing =
++            "CODEC LEFTIN", "AMP_IN LEFT OUT",
++            "CODEC RIGHTIN", "AMP_IN RIGHT OUT",
++            "AMP_OUT LEFT IN", "CODEC LEFTOUT",
++            "AMP_OUT RIGHT IN", "CODEC RIGHTOUT";
++
++        simple-audio-card,additional-devs {
++            amp_out: iio-aux-out {
++                compatible = "audio-iio-aux";
++                io-channels = <&pot_out 0>, <&pot_out 1>;
++                io-channel-names = "LEFT", "RIGHT";
++                snd-control-invert-range = <1 1>;
++                sound-name-prefix = "AMP_OUT";
++            };
++
++            amp_in: iio_aux-in {
++                compatible = "audio-iio-aux";
++                io-channels = <&pot_in 0>, <&pot_in 1>;
++                io-channel-names = "LEFT", "RIGHT";
++                sound-name-prefix = "AMP_IN";
++            };
++        };
++
++        simple-audio-card,cpu {
++            sound-dai = <&cpu>;
++        };
++
++        simple-audio-card,codec {
++            sound-dai = <&codec>;
++            clocks = <&clocks>;
++        };
 +    };
++
+ # --------------------
+ # Sampling Rate Conversion
+ # --------------------
 -- 
 2.40.1
 
