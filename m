@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8A5D73BB4B
+	by mail.lfdr.de (Postfix) with ESMTP id 8565173BB4A
 	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 17:13:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231960AbjFWPM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 11:12:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58034 "EHLO
+        id S232389AbjFWPNK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 11:13:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232585AbjFWPLl (ORCPT
+        with ESMTP id S232588AbjFWPLn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 11:11:41 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E63E23592
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 08:11:06 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-56942442eb0so10485227b3.1
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 08:11:06 -0700 (PDT)
+        Fri, 23 Jun 2023 11:11:43 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C2622721
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 08:11:09 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-bfee66a6398so1034868276.3
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 08:11:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687533059; x=1690125059;
+        d=google.com; s=20221208; t=1687533062; x=1690125062;
         h=content-transfer-encoding:to:from:subject:references:mime-version
          :message-id:in-reply-to:date:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=jhkdSyMhMNyUWrs1ZBCpoFwWPpdU98HpFzjjfUuXr6w=;
-        b=5k8KmnYkv37E2sQ+CDcAJEYxMggzjSfSxn/qF7Tdy0tuRh8Z/fYdUWeuymvDqQTAxh
-         nwxkip8SOxicfWhcJOM6OFAK/qn4WfREzLPjliq8BZErwUW07s7oor6x5JaCDwJMAPto
-         O1SDBiJK46hr7Kn6+LJIN6fb6M49SO3ARuGjEiw+WDYjfukKUbysqhEY+0Z8+PhzFtYM
-         WqZDeDOfntcEXGflkp451NcvwvqJt4NgPoFiVPFPxzoU6MmH5s/lFK+RTiMrn3W0XGAJ
-         XEvFCgJWYqxNoRr+LJA0xO7dUoiXf6rZQ03mEwiSUfiCmyePLxICfZa+JNgQhNKS+7M1
-         iDgQ==
+        bh=XWdLHEd/YivuvSTeVJWgp5BCZMhtIbKvRifpfShVHCI=;
+        b=0HkCnco+eQv6EKoV2v0iNHoYUKIx/SUQ4lhEdy988EjtQ6B1J5yySKvHsTjkPe/rEp
+         9ngj0NxRBb4IVO4wz1jJeuTbCYIBiaQv0fsySUv+bmz0x1LlwtCI3dqKjejO8pGQPUA7
+         SeFwRfHxyyUF8W1w3AMrDFXYeJsXOc8Ruk43laslG67pnuVscg8qboNeGrRqhihBdGOq
+         w2Kvd+/iR7otvpc8jugIgBvf6RlFEQFXZuaJAqMC7jPlz7HhuzcI3Lfwg99YaJ6LHfUn
+         Jmn2lxXHOcCF7zlxKiVXr/i/jSM/FpGV40+XjgPjXL34ctGtWw6Jx3vhSQ0hdahxrMLp
+         h2ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687533059; x=1690125059;
+        d=1e100.net; s=20221208; t=1687533062; x=1690125062;
         h=content-transfer-encoding:to:from:subject:references:mime-version
          :message-id:in-reply-to:date:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=jhkdSyMhMNyUWrs1ZBCpoFwWPpdU98HpFzjjfUuXr6w=;
-        b=A3Dt8iNJEyiVD8rhXKW0rtH6R0F8U9kzJhFz5KoOGm61gNFnAO+2BN9pmuN0tUbSNP
-         ey66B008S4cVIRZUFyHPmDZWmW45aFcCLZM90QyWjdam6e4bIiyxliH24v12xmBhlwZo
-         VDXLD/7ij1c9WHpOA0pL6v1W5dU3qtcb/Kn3p/neBHb0MBCgVHIm6wP8Q0JBaBMDZJpL
-         7AVS37q5ZASEboGw1zys4J3aYEJTR2CXnu4faZ5VZPpMgzQFPPtddN62CDQ6vRfkF6FJ
-         B1LO6i6QTBD5l21wZ3ubAS9mocFTJGS8/pnQxC8RLCcuqj7jZUp3nwH2nqe7Cr/0/NL/
-         s63Q==
-X-Gm-Message-State: AC+VfDxCXjSbqD7jzkMpJN/Kl0LOwAmsqIVnzYOPB3yLMDHtslcNdBO7
-        8ZqynGgTN7DMMpVqVvWJjQAnr8Zn0Cpk
-X-Google-Smtp-Source: ACHHUZ7xs4izjdtsD2KbdhcXVHURYkBVoNoMVyXL+1fVhzFm6+yzeTXxYnifvTeXt9pBErB+ddtpuE4Jtett
+        bh=XWdLHEd/YivuvSTeVJWgp5BCZMhtIbKvRifpfShVHCI=;
+        b=Ld0o6PC406R2CxkAOuzyI7EhPbPB/3MP/S5lW6FLdsCdH/212XB3FDe/58m86YS/ws
+         KUavDTcUWvEYYlJSbpfWtMzEYCQyj2cxIGMHKhs2Jiqkq+tw+FjZbOvZIPZrPeWTfAwL
+         zzqH8jk7wN8App857TjmYdKhb6Fv2vtSEAee04bajxrpsqPyfdcJaqQqaAR0FFGjY/8E
+         fp1jsXcLbrzz6TIIYlStIq+zcAzFwwF1H0pFZ40Q3Lp+cQgZWva/cbWcCDUGVh6A690W
+         nRpIwnps2/exES4Pf7HojEqH2xW40013Ho7txDHarUJ1hPHgwZSTd0X2HkSKktnudhVF
+         OgqA==
+X-Gm-Message-State: AC+VfDzfASMq/G0QxUo+PHDoYZq4bGpfPTHWWtHtoiTh+8Cl8+FiB4X0
+        cZY8NyaZyW3yURPjLrztTO4pzMpCVIXw
+X-Google-Smtp-Source: ACHHUZ7VdNJP6YE93AASamdLXLN+VozOfQ1fRFJUJki+zsbAnONa7WGsMXJ2LXErAv35mrEF9YDLZTVi4S26
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:6559:8968:cdfe:35b6])
- (user=irogers job=sendgmr) by 2002:a81:af59:0:b0:573:3897:c925 with SMTP id
- x25-20020a81af59000000b005733897c925mr6372531ywj.6.1687533059320; Fri, 23 Jun
- 2023 08:10:59 -0700 (PDT)
-Date:   Fri, 23 Jun 2023 08:10:14 -0700
+ (user=irogers job=sendgmr) by 2002:a25:aa4b:0:b0:bec:9efe:1027 with SMTP id
+ s69-20020a25aa4b000000b00bec9efe1027mr8803907ybi.8.1687533061798; Fri, 23 Jun
+ 2023 08:11:01 -0700 (PDT)
+Date:   Fri, 23 Jun 2023 08:10:15 -0700
 In-Reply-To: <20230623151016.4193660-1-irogers@google.com>
-Message-Id: <20230623151016.4193660-11-irogers@google.com>
+Message-Id: <20230623151016.4193660-12-irogers@google.com>
 Mime-Version: 1.0
 References: <20230623151016.4193660-1-irogers@google.com>
 X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-Subject: [PATCH v2 10/12] perf vendor events intel: Update skylake to 57
+Subject: [PATCH v2 11/12] perf vendor events intel: Update skylakex to 1.31
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -84,7 +84,7 @@ Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -92,8 +92,8 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Updates were released in:
-https://github.com/intel/perfmon/commit/1c3042c13bbfea05abe1ebb6910ae58b217=
-2e9ef
+https://github.com/intel/perfmon/commit/cdaa69afe7a48a217b1d89320a27efc6e65=
+0cec3
 Adds the events IDQ.DSB_CYCLES_OK, IDQ.DSB_CYCLES_ANY,
 ICACHE_TAG.STALLS, DECODE.LCP, LSD.CYCLES_OK. Descriptions are also
 updated.
@@ -101,29 +101,31 @@ updated.
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
  tools/perf/pmu-events/arch/x86/mapfile.csv    |  2 +-
- .../pmu-events/arch/x86/skylake/frontend.json | 43 ++++++++++++++++---
- .../pmu-events/arch/x86/skylake/pipeline.json | 17 ++++++--
- 3 files changed, 52 insertions(+), 10 deletions(-)
+ .../arch/x86/skylakex/frontend.json           | 43 ++++++++++++++++---
+ .../arch/x86/skylakex/pipeline.json           | 17 ++++++--
+ .../x86/skylakex/uncore-interconnect.json     |  2 +-
+ .../arch/x86/skylakex/uncore-memory.json      |  2 +-
+ 5 files changed, 54 insertions(+), 12 deletions(-)
 
 diff --git a/tools/perf/pmu-events/arch/x86/mapfile.csv b/tools/perf/pmu-ev=
 ents/arch/x86/mapfile.csv
-index f321b2cd83da..5104b93d57ab 100644
+index 5104b93d57ab..7c6598a9b240 100644
 --- a/tools/perf/pmu-events/arch/x86/mapfile.csv
 +++ b/tools/perf/pmu-events/arch/x86/mapfile.csv
-@@ -27,7 +27,7 @@ GenuineIntel-6-2A,v19,sandybridge,core
- GenuineIntel-6-(8F|CF),v1.14,sapphirerapids,core
+@@ -28,7 +28,7 @@ GenuineIntel-6-(8F|CF),v1.14,sapphirerapids,core
  GenuineIntel-6-AF,v1.00,sierraforest,core
  GenuineIntel-6-(37|4A|4C|4D|5A),v15,silvermont,core
--GenuineIntel-6-(4E|5E|8E|9E|A5|A6),v56,skylake,core
-+GenuineIntel-6-(4E|5E|8E|9E|A5|A6),v57,skylake,core
- GenuineIntel-6-55-[01234],v1.30,skylakex,core
+ GenuineIntel-6-(4E|5E|8E|9E|A5|A6),v57,skylake,core
+-GenuineIntel-6-55-[01234],v1.30,skylakex,core
++GenuineIntel-6-55-[01234],v1.31,skylakex,core
  GenuineIntel-6-86,v1.21,snowridgex,core
  GenuineIntel-6-8[CD],v1.12,tigerlake,core
-diff --git a/tools/perf/pmu-events/arch/x86/skylake/frontend.json b/tools/p=
-erf/pmu-events/arch/x86/skylake/frontend.json
+ GenuineIntel-6-2C,v4,westmereep-dp,core
+diff --git a/tools/perf/pmu-events/arch/x86/skylakex/frontend.json b/tools/=
+perf/pmu-events/arch/x86/skylakex/frontend.json
 index 04f08e4d2402..095904c77001 100644
---- a/tools/perf/pmu-events/arch/x86/skylake/frontend.json
-+++ b/tools/perf/pmu-events/arch/x86/skylake/frontend.json
+--- a/tools/perf/pmu-events/arch/x86/skylakex/frontend.json
++++ b/tools/perf/pmu-events/arch/x86/skylakex/frontend.json
 @@ -7,6 +7,14 @@
          "SampleAfterValue": "100003",
          "UMask": "0x1"
@@ -238,12 +240,12 @@ to IDQ.ALL_DSB_CYCLES_4_UOPS]",
          "BriefDescription": "Uops delivered to Instruction Decode Queue (I=
 DQ) from the Decode Stream Buffer (DSB) path",
          "EventCode": "0x79",
-diff --git a/tools/perf/pmu-events/arch/x86/skylake/pipeline.json b/tools/p=
-erf/pmu-events/arch/x86/skylake/pipeline.json
-index cc800fb8180a..cd3e737bf4a1 100644
---- a/tools/perf/pmu-events/arch/x86/skylake/pipeline.json
-+++ b/tools/perf/pmu-events/arch/x86/skylake/pipeline.json
-@@ -352,10 +352,10 @@
+diff --git a/tools/perf/pmu-events/arch/x86/skylakex/pipeline.json b/tools/=
+perf/pmu-events/arch/x86/skylakex/pipeline.json
+index 31a1663d57f8..66d686cc933e 100644
+--- a/tools/perf/pmu-events/arch/x86/skylakex/pipeline.json
++++ b/tools/perf/pmu-events/arch/x86/skylakex/pipeline.json
+@@ -361,10 +361,10 @@
          "UMask": "0x1"
      },
      {
@@ -269,7 +271,7 @@ ty for each LCP (Length changing prefix) in a 16-byte chunk. [This event is=
          "SampleAfterValue": "2000003",
          "UMask": "0x1"
      },
-@@ -479,11 +479,11 @@
+@@ -488,11 +488,11 @@
          "UMask": "0x1"
      },
      {
@@ -287,7 +289,7 @@ by the LSD (Loop-stream detector). [This event is alias to LSD.CYCLES_OK]",
          "SampleAfterValue": "2000003",
          "UMask": "0x1"
      },
-@@ -496,6 +496,15 @@
+@@ -505,6 +505,15 @@
          "SampleAfterValue": "2000003",
          "UMask": "0x1"
      },
@@ -306,6 +308,73 @@ S]",
      {
          "BriefDescription": "Number of Uops delivered by the LSD.",
          "EventCode": "0xA8",
+diff --git a/tools/perf/pmu-events/arch/x86/skylakex/uncore-interconnect.js=
+on b/tools/perf/pmu-events/arch/x86/skylakex/uncore-interconnect.json
+index 26a5a20bf37a..3eece8a728b5 100644
+--- a/tools/perf/pmu-events/arch/x86/skylakex/uncore-interconnect.json
++++ b/tools/perf/pmu-events/arch/x86/skylakex/uncore-interconnect.json
+@@ -6504,7 +6504,7 @@
+         "EventCode": "0x52",
+         "EventName": "UNC_M3UPI_RxC_HELD.PARALLEL_SUCCESS",
+         "PerPkg": "1",
+-        "PublicDescription": "ad and bl messages were actually slotted int=
+o the same flit in paralle",
++        "PublicDescription": "ad and bl messages were actually slotted int=
+o the same flit in parallel",
+         "UMask": "0x8",
+         "Unit": "M3UPI"
+     },
+diff --git a/tools/perf/pmu-events/arch/x86/skylakex/uncore-memory.json b/t=
+ools/perf/pmu-events/arch/x86/skylakex/uncore-memory.json
+index 6f8ff2262ce7..7a40aa0f1018 100644
+--- a/tools/perf/pmu-events/arch/x86/skylakex/uncore-memory.json
++++ b/tools/perf/pmu-events/arch/x86/skylakex/uncore-memory.json
+@@ -1952,7 +1952,7 @@
+         "EventCode": "0x81",
+         "EventName": "UNC_M_WPQ_OCCUPANCY",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of entries in the Write Pe=
+nding Queue (WPQ) at each cycle.  This can then be used to calculate both t=
+he average queue occupancy (in conjunction with the number of cycles not em=
+pty) and the average latency (in conjunction with the number of allocations=
+).  The WPQ is used to schedule writes out to the memory controller and to =
+track the requests.  Requests allocate into the WPQ soon after they enter t=
+he memory controller, and need credits for an entry in this buffer before b=
+eing sent from the CHA to the iMC (memory controller).  They deallocate aft=
+er being issued to DRAM.  Write requests themselves are able to complete (f=
+rom the perspective of the rest of the system) as soon they have 'posted' t=
+o the iMC.  This is not to be confused with actually performing the write t=
+o DRAM.  Therefore, the average latency for this queue is actually not usef=
+ul for deconstruction intermediate write latencies.  So, we provide filteri=
+ng based on if the request has posted or not.  By using the 'not posted' fi=
+lter, we can track how long writes spent in the iMC before completions were=
+ sent to the HA.  The 'posted' filter, on the other hand, provides informat=
+ion about how much queueing is actually happening in the iMC for writes bef=
+ore they are actually issued to memory.  High average occupancies will gene=
+rally coincide with high write major mode counts. Is there a filter of sort=
+s?",
++        "PublicDescription": "Counts the number of entries in the Write Pe=
+nding Queue (WPQ) at each cycle.  This can then be used to calculate both t=
+he average queue occupancy (in conjunction with the number of cycles not em=
+pty) and the average latency (in conjunction with the number of allocations=
+).  The WPQ is used to schedule writes out to the memory controller and to =
+track the requests.  Requests allocate into the WPQ soon after they enter t=
+he memory controller, and need credits for an entry in this buffer before b=
+eing sent from the CHA to the iMC (memory controller).  They deallocate aft=
+er being issued to DRAM.  Write requests themselves are able to complete (f=
+rom the perspective of the rest of the system) as soon they have 'posted' t=
+o the iMC.  This is not to be confused with actually performing the write t=
+o DRAM.  Therefore, the average latency for this queue is actually not usef=
+ul for deconstruction intermediate write latencies.  So, we provide filteri=
+ng based on if the request has posted or not.  By using the 'not posted' fi=
+lter, we can track how long writes spent in the iMC before completions were=
+ sent to the HA.  The 'posted' filter, on the other hand, provides informat=
+ion about how much queueing is actually happening in the iMC for writes bef=
+ore they are actually issued to memory.  High average occupancies will gene=
+rally coincide with high write major mode counts.",
+         "Unit": "iMC"
+     },
+     {
 --=20
 2.41.0.162.gfafddb0af9-goog
 
