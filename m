@@ -2,193 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF08073ADAF
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 02:15:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 829FF73ADB1
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 02:16:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230186AbjFWAPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 20:15:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41564 "EHLO
+        id S231329AbjFWAQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 20:16:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbjFWAPu (ORCPT
+        with ESMTP id S229853AbjFWAQp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 20:15:50 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAF411FDF;
-        Thu, 22 Jun 2023 17:15:49 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35N0AAs9006051;
-        Fri, 23 Jun 2023 00:15:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=nMfZvSzRH2TbV9TJZ+CkTmJiIbNVMbcnwxPKyzp9vLc=;
- b=mxWV480hV7wR1oBnCFfKmR8FG1I+EZtu1325ABZTCWy2lJB73cIXu1rVzWQFbwnNcOwy
- UQ+VCpVWp4YKCdOzBXRibfa1NwPjuBqQ6o5aqUOUf+5Yyym461xFwYlpkJiI3Cn8TuU0
- mlYsIwHrge7OxOWHKQchzmSpvlSUlLoYPYHMBOskQl3oBWk34yiECv7XusHYpzmnjCKT
- zuRPQCkropJzlbwdDzdhh195XKVHOM3d6IIifTO+SnMHUjxfMkqMysbvhCllPRUdf3Ia
- jH1LCm9xCdENRPRyYRvD+JOOjtGehpUL2uNTNhDVFpTIHP8a7D+5d2HgqX9dE6WUY/Fg HQ== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rcju8291u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 23 Jun 2023 00:15:28 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35N0FRna025305
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 23 Jun 2023 00:15:27 GMT
-Received: from [10.110.109.161] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 22 Jun
- 2023 17:15:26 -0700
-Message-ID: <82734575-4dc4-b65b-533b-6a7d7eebacc9@quicinc.com>
-Date:   Thu, 22 Jun 2023 17:15:20 -0700
+        Thu, 22 Jun 2023 20:16:45 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29720C6
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 17:16:44 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id d75a77b69052e-3fde9bfb3c8so106181cf.0
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 17:16:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687479403; x=1690071403;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uInZG3QLCuNSLqjwt2yJFumF8gcsP5JuPhFH6XK6y3g=;
+        b=dbF7LtuKF+tcSdVQuyXVOqQD1DNwyYnCH7h2BoirQv4OzScfDs8hW2cXwlrXJim0sT
+         wK/5rVm5U2xSZszL616B0pLp+dUb3zj2Iny35k5saYJfA8NBQMwco/bDPoSn4wOWx/LJ
+         PViraUwexCqGdACZlm6GkDtx8vl2bSsVWziHk408KY4Cf3+HAL0ecpiDa4JJFZIDPgMt
+         nKp9zaU8TjDYod0QDJsAjdqC6dtpeRC9f6yhnE7DBHqQyzyRJ0DX+n9l2jnEmykcQDcs
+         CPDD496kCeqyL/MvMUw0u2I3143GhYXM0pmdq+En/eAx0UNxk0+TmV2/jznix7biyQsU
+         V8HQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687479403; x=1690071403;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uInZG3QLCuNSLqjwt2yJFumF8gcsP5JuPhFH6XK6y3g=;
+        b=XZNNhzGIFRwpARjYrBLgfPbDV8Dvaz23O/Du/VN7FHlt8n8uq7WNDB+M8lC43DN+d8
+         kEir6FcWguhwm460h/6B2VAwwMgcCWl8U8/Z2de982FhHKzvkcHjv4V+GbpGC2L9zjkd
+         3I9h2qYK6upkeXP9tDbMyVLhj/y3mVvEiX+oKwsqxK99pFlVaMcahvgkFAO78gtrP+//
+         MEjdxKaPKZ9a8VgUUbmpapxIoreDGYU94ZnrdVD0XuErvKUwIFeEw2uah8s14DDVePS0
+         oA6OmptkVqe05ugCrATf79cxSrreEkNHl+iIs9gfmlvk0MDY4MQRdxm1dK48eJLHHhRp
+         QrCg==
+X-Gm-Message-State: AC+VfDw9KECoH7GTFKkj9Z0Q1kWPb6VeuEgb9UAWZfTUEAIr+5gBzqc4
+        ayO8Etv6N/E9Vdq/dy+D9vDVjf65eMoR+YaIS9CO+Q==
+X-Google-Smtp-Source: ACHHUZ6JH5TsP8kj9v+stNMOdxEtKF9MDjfa8HP4JoD4pnttpooKyfe9Sb9MJ2E0zsraxbmY1ynCh/wnt/FXNSYstyc=
+X-Received: by 2002:ac8:5749:0:b0:3f8:5b2:aeee with SMTP id
+ 9-20020ac85749000000b003f805b2aeeemr10130qtx.22.1687479403173; Thu, 22 Jun
+ 2023 17:16:43 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v3 20/28] ASoC: dt-bindings: Add Q6USB backend bindings
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
-        <perex@perex.cz>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
-        <krzysztof.kozlowski+dt@linaro.org>, <agross@kernel.org>,
-        <Thinh.Nguyen@synopsys.com>, <bgoswami@quicinc.com>,
-        <andersson@kernel.org>, <robh+dt@kernel.org>,
-        <gregkh@linuxfoundation.org>, <tiwai@suse.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <quic_jackp@quicinc.com>,
-        <quic_plai@quicinc.com>
-References: <20230308235751.495-1-quic_wcheng@quicinc.com>
- <20230308235751.495-21-quic_wcheng@quicinc.com>
- <499ee440-0c52-bb21-d04d-086aebc0cf4e@linaro.org>
-From:   Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <499ee440-0c52-bb21-d04d-086aebc0cf4e@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: fcLlSCXP6j2eCOPTqGENQFjIFwAq7SJO
-X-Proofpoint-GUID: fcLlSCXP6j2eCOPTqGENQFjIFwAq7SJO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-22_18,2023-06-22_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
- clxscore=1011 phishscore=0 suspectscore=0 mlxlogscore=999
- priorityscore=1501 lowpriorityscore=0 bulkscore=0 malwarescore=0
- impostorscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2305260000 definitions=main-2306220207
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230622235357.225190-1-namhyung@kernel.org>
+In-Reply-To: <20230622235357.225190-1-namhyung@kernel.org>
+From:   Ian Rogers <irogers@google.com>
+Date:   Thu, 22 Jun 2023 17:16:31 -0700
+Message-ID: <CAP-5=fVxz--VxTrHwgyY4VudhpqPqUUp=gdMA+t15EnrmTpsGg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] perf script: Initialize buffer for regs_map()
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org,
+        Aditya Gupta <adityag@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+On Thu, Jun 22, 2023 at 4:54=E2=80=AFPM Namhyung Kim <namhyung@kernel.org> =
+wrote:
+>
+> The buffer is used to save register mapping in a sample.  Normally
+> perf samples don't have any register so the string should be empty.
+> But it missed to initialize the buffer when the size is 0.  And it's
+> passed to PyUnicode_FromString() with a garbage data.
+>
+> So it returns NULL due to invalid input (instead of an empty unicode
+> string object) which causes a segfault like below:
+>
+>   Thread 2.1 "perf" received signal SIGSEGV, Segmentation fault.
+>   [Switching to Thread 0x7ffff7c83780 (LWP 193775)]
+>   0x00007ffff6dbca2e in PyDict_SetItem () from /lib/x86_64-linux-gnu/libp=
+ython3.11.so.1.0
+>   (gdb) bt
+>   #0  0x00007ffff6dbca2e in PyDict_SetItem () from /lib/x86_64-linux-gnu/=
+libpython3.11.so.1.0
+>   #1  0x00007ffff6dbf848 in PyDict_SetItemString () from /lib/x86_64-linu=
+x-gnu/libpython3.11.so.1.0
+>   #2  0x000055555575824d in pydict_set_item_string_decref (val=3D0x0, key=
+=3D0x5555557f96e3 "iregs", dict=3D0x7ffff5f7f780)
+>       at util/scripting-engines/trace-event-python.c:145
+>   #3  set_regs_in_dict (evsel=3D0x555555efc370, sample=3D0x7fffffffb870, =
+dict=3D0x7ffff5f7f780)
+>       at util/scripting-engines/trace-event-python.c:776
+>   #4  get_perf_sample_dict (sample=3Dsample@entry=3D0x7fffffffb870, evsel=
+=3Devsel@entry=3D0x555555efc370, al=3Dal@entry=3D0x7fffffffb2e0,
+>       addr_al=3Daddr_al@entry=3D0x0, callchain=3Dcallchain@entry=3D0x7fff=
+f63ef440) at util/scripting-engines/trace-event-python.c:923
+>   #5  0x0000555555758ec1 in python_process_tracepoint (sample=3D0x7ffffff=
+fb870, evsel=3D0x555555efc370, al=3D0x7fffffffb2e0, addr_al=3D0x0)
+>       at util/scripting-engines/trace-event-python.c:1044
+>   #6  0x00005555555c5db8 in process_sample_event (tool=3D<optimized out>,=
+ event=3D<optimized out>, sample=3D<optimized out>,
+>       evsel=3D0x555555efc370, machine=3D0x555555ef4d68) at builtin-script=
+.c:2421
+>   #7  0x00005555556b7793 in perf_session__deliver_event (session=3D0x5555=
+55ef4b60, event=3D0x7ffff62ff7d0, tool=3D0x7fffffffc150,
+>       file_offset=3D30672, file_path=3D0x555555efb8a0 "perf.data") at uti=
+l/session.c:1639
+>   #8  0x00005555556bc864 in do_flush (show_progress=3Dtrue, oe=3D0x555555=
+efb700) at util/ordered-events.c:245
+>   #9  __ordered_events__flush (oe=3Doe@entry=3D0x555555efb700, how=3Dhow@=
+entry=3DOE_FLUSH__FINAL, timestamp=3Dtimestamp@entry=3D0)
+>       at util/ordered-events.c:324
+>   #10 0x00005555556bd06e in ordered_events__flush (oe=3Doe@entry=3D0x5555=
+55efb700, how=3Dhow@entry=3DOE_FLUSH__FINAL)
+>       at util/ordered-events.c:342
+>   #11 0x00005555556b9d63 in __perf_session__process_events (session=3D0x5=
+55555ef4b60) at util/session.c:2465
+>   #12 perf_session__process_events (session=3D0x555555ef4b60) at util/ses=
+sion.c:2627
+>   #13 0x00005555555cb1d0 in __cmd_script (script=3D0x7fffffffc150) at bui=
+ltin-script.c:2839
+>   #14 cmd_script (argc=3D<optimized out>, argv=3D<optimized out>) at buil=
+tin-script.c:4365
+>   #15 0x0000555555650811 in run_builtin (p=3Dp@entry=3D0x555555ed8948 <co=
+mmands+456>, argc=3Dargc@entry=3D4, argv=3Dargv@entry=3D0x7fffffffe240)
+>       at perf.c:323
+>   #16 0x0000555555597eb3 in handle_internal_command (argv=3D0x7fffffffe24=
+0, argc=3D4) at perf.c:377
+>   #17 run_argv (argv=3D<synthetic pointer>, argcp=3D<synthetic pointer>) =
+at perf.c:421
+>   #18 main (argc=3D4, argv=3D0x7fffffffe240) at perf.c:537
+>
+> Fixes: 51cfe7a3e87e ("perf python: Avoid 2 leak sanitizer issues")
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 
-On 3/10/2023 12:54 AM, Krzysztof Kozlowski wrote:
-> On 09/03/2023 00:57, Wesley Cheng wrote:
->> Add a dt-binding to describe the definition of enabling the Q6 USB backend
->> device for audio offloading.  The node carries information, which is passed
->> along to the QC USB SND class driver counterpart.  These parameters will be
->> utilized during QMI stream enable requests.
->>
->> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
->> ---
->>   .../bindings/sound/qcom,q6usb-dais.yaml       | 49 +++++++++++++++++++
->>   1 file changed, 49 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/sound/qcom,q6usb-dais.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/sound/qcom,q6usb-dais.yaml b/Documentation/devicetree/bindings/sound/qcom,q6usb-dais.yaml
->> new file mode 100644
->> index 000000000000..8477abc511dd
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/sound/qcom,q6usb-dais.yaml
->> @@ -0,0 +1,49 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/sound/qcom,q6usb-dais.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Qualcomm ASoC USB backend DAI
->> +
->> +maintainers:
->> +  - Wesley Cheng <quic_wcheng@quicinc.com>
->> +
->> +description:
->> +  The Q6USB backend is a supported AFE port on the Q6DSP. This backend
->> +  driver will communicate the required settings to the QC USB SND class
-> 
-> What does the "driver" mean? Linux driver? Then drop and focus on
-> hardware/Q6DSP.
-> 
+Acked-by: Ian Rogers <irogers@google.com>
 
-Sorry for the late reply, was side tracked on some other priorities, and 
-reviving this series again.
+Thanks,
+Ian
 
-The driver here is a Linux ASoC based DPCM backend driver, which will 
-interface with the CPU dai (q6afe).
-
->> +  driver for properly enabling the audio stream.  Parameters defined
->> +  under this node will carry settings, which will be passed along during
->> +  the QMI stream enable request.
->> +
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - qcom,q6usb-dais
-> 
-> Can q6usb mean anything else? Why "-dais" suffix?
-> 
-
-As of now, no...will remove the dai suffix.
-
->> +
->> +  iommus:
->> +    maxItems: 1
->> +
->> +  "#sound-dai-cells":
->> +    const: 1
->> +
->> +  qcom,usb-audio-intr-num:
->> +    description:
->> +      Desired XHCI interrupter number to use.
->> +    $ref: /schemas/types.yaml#/definitions/uint32
-> 
-> Why this should be configurable per board or SoC? It's the first use in
-> DT and in the same time sounds generic...
-> 
-
-Would depend on which interrupter we want to use.  This should be 
-configurable per platform in case the audio DSP decides to work off a 
-specific interrupter.
-
-Thanks
-Wesley Cheng
-
->> +
->> +required:
->> +  - compatible
->> +  - "#sound-dai-cells"
->> +  - qcom,usb-audio-intr-num
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    dais {
->> +      compatible = "qcom,q6usb-dais";
->> +      #sound-dai-cells = <1>;
->> +      iommus = <&apps_smmu 0x180f 0x0>;
->> +      qcom,usb-audio-intr-num = <2>;
->> +    };
-> 
-> Best regards,
-> Krzysztof
-> 
+> ---
+>  tools/perf/util/scripting-engines/trace-event-python.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/perf/util/scripting-engines/trace-event-python.c b/too=
+ls/perf/util/scripting-engines/trace-event-python.c
+> index 25fcd6630a4d..94312741443a 100644
+> --- a/tools/perf/util/scripting-engines/trace-event-python.c
+> +++ b/tools/perf/util/scripting-engines/trace-event-python.c
+> @@ -737,11 +737,11 @@ static void regs_map(struct regs_dump *regs, uint64=
+_t mask, const char *arch, ch
+>         unsigned int i =3D 0, r;
+>         int printed =3D 0;
+>
+> +       bf[0] =3D 0;
+> +
+>         if (size <=3D 0)
+>                 return;
+>
+> -       bf[0] =3D 0;
+> -
+>         if (!regs || !regs->regs)
+>                 return;
+>
+> --
+> 2.41.0.162.gfafddb0af9-goog
+>
