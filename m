@@ -2,53 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A9B673B214
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 09:49:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8550B73B1F6
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 09:46:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231665AbjFWHtX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 03:49:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43470 "EHLO
+        id S231515AbjFWHp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 03:45:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231721AbjFWHtO (ORCPT
+        with ESMTP id S230348AbjFWHpz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 03:49:14 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 51E812729;
-        Fri, 23 Jun 2023 00:48:58 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AD0E6C14;
-        Fri, 23 Jun 2023 00:43:43 -0700 (PDT)
-Received: from [10.57.27.57] (unknown [10.57.27.57])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DE22B3F64C;
-        Fri, 23 Jun 2023 00:42:57 -0700 (PDT)
-Message-ID: <2884a54e-4db0-bf47-3b8a-0deb337208d8@arm.com>
-Date:   Fri, 23 Jun 2023 08:43:14 +0100
+        Fri, 23 Jun 2023 03:45:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71D892696;
+        Fri, 23 Jun 2023 00:45:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 368A560F4D;
+        Fri, 23 Jun 2023 07:44:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 380E5C433C0;
+        Fri, 23 Jun 2023 07:44:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1687506252;
+        bh=qyYekPHKiEnI+XlepwYmUPZZkdkhLbIGRGb3mFtde7c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iz5yD5KiY//gOCLRoo/c77z0Hos6ue+qkIpSTM6f+bfkgh4cWsaZPr0AzImaj0tHU
+         K7uAh0xqbHD9WJvxg966zxaRW2Y59Ej48i3vsP7SBaPG45+e9j7Kmhck4fSFykbsD+
+         xepKX0rnsxcHb01EgXclHUWEXxQfCDzeiIsDczJo=
+Date:   Fri, 23 Jun 2023 09:44:01 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL] USB-serial updates for 6.5-rc1
+Message-ID: <2023062354-uncounted-automatic-5dd4@gregkh>
+References: <ZJVF-Gq2HCkv49sH@hovoldconsulting.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH V4] thermal/core/power_allocator: reset thermal governor
- when trip point is changed
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     daniel.lezcano@linaro.org, rui.zhang@intel.com,
-        Di Shen <di.shen@unisoc.com>, amitk@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xuewen.yan@unisoc.com, jeson.gao@unisoc.com, zhanglyra@gmail.com,
-        orsonzhai@gmail.com
-References: <6aad180f-410c-5b11-b30b-c7bc02cbe054@linaro.org>
- <20230619063534.12831-1-di.shen@unisoc.com>
- <CAJZ5v0i9fyfNYyhAMqr0iYPbUNwrcvL7mxK1rMo+00mNRWKV6w@mail.gmail.com>
- <CAJZ5v0gHBxbU7Q0KYKsSVk+9nzSxot_JxUkcaAXrDxQx5_a7_Q@mail.gmail.com>
- <dbfe2b14-794a-e4d9-caf4-15d69ef86091@arm.com>
- <CAJZ5v0iOSWDBU0d4QPpsKwAW9N2u1mf-BLdKCtJ_49e8P0ZD7g@mail.gmail.com>
- <62c35d1c-7dcd-7bf2-253e-65cdfd6e92cc@arm.com>
- <CAJZ5v0iX2WYVjXWecJHVB_w1HAAOLDJvFLTMALGQF3pfv-rKSw@mail.gmail.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <CAJZ5v0iX2WYVjXWecJHVB_w1HAAOLDJvFLTMALGQF3pfv-rKSw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZJVF-Gq2HCkv49sH@hovoldconsulting.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,118 +51,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jun 23, 2023 at 09:12:56AM +0200, Johan Hovold wrote:
+> The following changes since commit 9561de3a55bed6bdd44a12820ba81ec416e705a7:
+> 
+>   Linux 6.4-rc5 (2023-06-04 14:04:27 -0400)
+> 
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-6.5-rc1
 
+Pulled and pushed out, thanks.
 
-On 6/22/23 19:27, Rafael J. Wysocki wrote:
-> On Tue, Jun 20, 2023 at 1:56 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>
->>
->>
->> On 6/20/23 11:39, Rafael J. Wysocki wrote:
->>> On Tue, Jun 20, 2023 at 12:19 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>>>
->>>> Hi Rafael,
->>>>
->>>>
->>>> On 6/20/23 11:07, Rafael J. Wysocki wrote:
->>>>> On Tue, Jun 20, 2023 at 11:46 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
-
-[snip]
-
-> 
-> Because this is up to the governor, the core has no clue what to do
-> with the return value from ->reset() and so there should be none.
-> 
-> As I said, governors can print whatever diagnostic messages they like
-> in that callback, but returning anything from it to the core is just
-> not useful IMV.
-> 
->> For the rest of the governors - it's up to them what they
->> report in case non-passive trip is updated...
-> 
-> Sure.
-> 
->>>
->>>> What Di is facing is in the issue under the bucket of
->>>> 'handle_non_critical_trips()' when the governor just tries to
->>>> work on stale data - old trip temp.
->>>
->>> Well, fair enough, but what about the other governors?  Is this
->>> problem limited to power_allocator?
->>
->> IIUC the core fwk code - non of the governors would be needed
->> to handle the critical/hot trips. For the rest of the trip types
->> I would say it's up to the governor. In our IPA case this stale
->> data is used for power budget estimation - quite fundamental
->> step. Therefore, the reset and start from scratch would make more
->> sense.
->>
->> I think other governors don't try to 'estimate' such
->> abstract power headroom based on temperature - so probably
->> they don't have to even implement the 'reset()' callback
->> (I don't know their logic that well).
-> 
-> So there seems to be a claim that IPA is the only governor needing the
-> ->reset() callback, but I have not seen any solid analysis confirming
-> that.  It very well may be the case, but then the changelog should
-> clearly explain why this is the case IMO.
-
-I agree, the patch header doesn't explain that properly. Here is the
-explanation for this Intelligent Power Allocator (IPA):
-
-The IPA controls temperature using PID mechanism. It's a closed
-feedback loop. That algorithm can 'learn' from the 'observed'
-in the past reaction for it's control decisions and accumulates that
-information in the part called 'error integral'. Those accumulated
-'error' gaps are the differences between the set target value and the
-actually achieved value. In our case the target value is the target
-temperature which is coming from the trip point. That part is then used
-with the 'I' (of PID) component, so we can compensate for those
-'learned' mistakes.
-Now, when you change the target temperature value - all your previous
-learned errors won't help you. That's why Intelligent Power Allocator
-should reset previously accumulated history.
-
-> 
->>>
->>>> For the 2nd case IIUC the code, we pass the 'trip.temperature'
->>>> and should be ready for what you said (modification of that value).
->>>
->>> Generally speaking, it needs to be prepared for a simultaneous change
->>> of multiple trip points (including active), in which case it may not
->>> be useful to invoke the ->reset() callback for each of them
->>> individually.
->>
->> Although, that looks more cleaner IMO. Resetting one by one in
->> a temperature order would be easily maintainable, won't be?
-> 
-> I wouldn't call it maintainable really.
-> 
-> First of all, the trips may not be ordered.  There are no guarantees
-> whatsoever that they will be ordered, so the caller may have to
-> determine the temperature order in the first place.  This would be an
-> extra requirement that currently is not there.
-> 
-> Apart from this, I don't see any fundamental difference between the
-> case when trip points are updated via sysfs and when they are updated
-> by the driver.  The governor should reset itself in any of those cases
-> and even if one trip point changes, the temperature order of all of
-> them may change, so the governor reset mechanism should be able to
-> handle the case when multiple trip points are updated at the same
-> time.  While you may argue that this is theoretical, the ACPI spec
-> clearly states that this is allowed to happen, for example.
-> 
-> If you want a generic reset callback for governors, that's fine, but
-> make it generic and not specific to a particular use case.
-
-I think we agree here, but probably having slightly different
-implementation in mind. Based on you explanation I think you
-want simply this API:
-void (*reset)(struct thermal_zone_device *tz);
-
-1. no return value
-2. no specific trip ID as argument
-
-Do you agree?
-IMO such implementation and API would also work for this IPA
-purpose. Would that work for the ACPI use case as well?
+greg k-h
