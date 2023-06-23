@@ -2,81 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63C7173B606
+	by mail.lfdr.de (Postfix) with ESMTP id ABCC973B607
 	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 13:24:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230459AbjFWLXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 07:23:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57912 "EHLO
+        id S231282AbjFWLX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 07:23:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjFWLXv (ORCPT
+        with ESMTP id S229501AbjFWLXx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 07:23:51 -0400
-Received: from mx0.infotecs.ru (mx0.infotecs.ru [91.244.183.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1323D1739;
-        Fri, 23 Jun 2023 04:23:49 -0700 (PDT)
-Received: from mx0.infotecs-nt (localhost [127.0.0.1])
-        by mx0.infotecs.ru (Postfix) with ESMTP id 1178A110A562;
-        Fri, 23 Jun 2023 14:23:47 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mx0.infotecs.ru 1178A110A562
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=infotecs.ru; s=mx;
-        t=1687519427; bh=kIEjeLlwMyGE/F2FO5BfREgq/lnS99K0Zaa4Lod/2nY=;
-        h=From:To:CC:Subject:Date:From;
-        b=qpxoJe2b/id7wbMIsRr4KeQdxLDYmXrDXbGiC6yBrxGnm4uuRjXR4Lmpyt28kt9nZ
-         mbCwcL1afIAw0A9gmsOie/Ou4K/W8EtbyEiGWbPrC4Ctoc9UhJIul4PWjWLhREMl6K
-         oh49fI2zqizyqTFnATQj5e4YRJ/No4UV/jY0pg+0=
-Received: from msk-exch-01.infotecs-nt (msk-exch-01.infotecs-nt [10.0.7.191])
-        by mx0.infotecs-nt (Postfix) with ESMTP id 0DFC430CDD64;
-        Fri, 23 Jun 2023 14:23:47 +0300 (MSK)
-From:   Gavrilov Ilia <Ilia.Gavrilov@infotecs.ru>
-To:     Pablo Neira Ayuso <pablo@netfilter.org>
-CC:     Gavrilov Ilia <Ilia.Gavrilov@infotecs.ru>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Patrick McHardy <kaber@trash.net>,
-        "netfilter-devel@vger.kernel.org" <netfilter-devel@vger.kernel.org>,
-        "coreteam@netfilter.org" <coreteam@netfilter.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "lvc-project@linuxtesting.org" <lvc-project@linuxtesting.org>,
-        Simon Horman <simon.horman@corigine.com>
-Subject: [PATCH net] netfilter: nf_conntrack_sip: fix the
- ct_sip_parse_numerical_param() return value.
-Thread-Topic: [PATCH net] netfilter: nf_conntrack_sip: fix the
- ct_sip_parse_numerical_param() return value.
-Thread-Index: AQHZpcUtMQS/azgYmUuZ/5v6pmZwlQ==
-Date:   Fri, 23 Jun 2023 11:23:46 +0000
-Message-ID: <20230623112247.1468836-1-Ilia.Gavrilov@infotecs.ru>
-Accept-Language: ru-RU, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.17.0.10]
-x-exclaimer-md-config: 208ac3cd-1ed4-4982-a353-bdefac89ac0a
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 23 Jun 2023 07:23:53 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 262641739;
+        Fri, 23 Jun 2023 04:23:52 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 033445FDBC;
+        Fri, 23 Jun 2023 14:23:50 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1687519430;
+        bh=40WKuG5jN7u47rR1N8bQt7QB0nFmgHe9lhfPp15dYpQ=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=grZYGVHuEo09bhs0QV2CoZlhgAcNo1pykB++zdadokLwQ7AwngjQ9RFJF2JzN5vpJ
+         EhVb10NH41aE0B2sKDKn6gRacu3jqTLmtWAQqrO9n2pP6AmUtzHP8es2tWy7zU8VGQ
+         DE7jvKw19sQ99fz9D6u/enc9YqI3tIHYU9BzlET32ojVhE5XWKsZ0ncPLJW8vD+4sK
+         5VZ9hDFQOc16K+J4qjN9hsCdWrUZOhRU68U8QXsvSWNQbLBzG8TJGWB6UyoHwhwlsB
+         ixIuscjLDVSZ5HDTpnpBHEKndULQfOncjImDvjDGY2tKmjf+3h60lmHmj29FV+8BQq
+         vOlG80yaV1Qww==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Fri, 23 Jun 2023 14:23:49 +0300 (MSK)
+Date:   Fri, 23 Jun 2023 14:23:49 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     <neil.armstrong@linaro.org>, <jbrunet@baylibre.com>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <khilman@baylibre.com>, <martin.blumenstingl@googlemail.com>,
+        <conor+dt@kernel.org>, <kernel@sberdevices.ru>,
+        <sdfw_system_team@sberdevices.ru>, <rockosov@gmail.com>,
+        <linux-amlogic@lists.infradead.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v1 0/6] arm64: dts: meson: a1: introduce several
+ peripheral IPs
+Message-ID: <20230623112349.reyls6um3dccrkl3@CAB-WSD-L081021>
+References: <20230607201641.20982-1-ddrokosov@sberdevices.ru>
+ <20230623082201.7tfnpjvwi22omleq@CAB-WSD-L081021>
+ <dd5d7bc8-5ded-ebfe-48a2-55e330cd7544@linaro.org>
 MIME-Version: 1.0
-X-KLMS-Rule-ID: 1
-X-KLMS-Message-Action: clean
-X-KLMS-AntiSpam-Lua-Profiles: 178208 [Jun 23 2023]
-X-KLMS-AntiSpam-Version: 5.9.59.0
-X-KLMS-AntiSpam-Envelope-From: Ilia.Gavrilov@infotecs.ru
-X-KLMS-AntiSpam-Rate: 0
-X-KLMS-AntiSpam-Status: not_detected
-X-KLMS-AntiSpam-Method: none
-X-KLMS-AntiSpam-Auth: dkim=none
-X-KLMS-AntiSpam-Info: LuaCore: 517 517 b0056c19d8e10afbb16cb7aad7258dedb0179a79, {Tracking_uf_ne_domains}, {Tracking_from_domain_doesnt_match_to}, lore.kernel.org:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2;infotecs.ru:7.1.1, FromAlignment: s
-X-MS-Exchange-Organization-SCL: -1
-X-KLMS-AntiSpam-Interceptor-Info: scan successful
-X-KLMS-AntiPhishing: Clean, bases: 2023/06/23 08:19:00
-X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, bases: 2023/06/23 08:45:00 #21561595
-X-KLMS-AntiVirus-Status: Clean, skipped
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <dd5d7bc8-5ded-ebfe-48a2-55e330cd7544@linaro.org>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [100.64.160.123]
+X-ClientProxiedBy: p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/06/23 08:45:00 #21561595
+X-KSMG-AntiVirus-Status: Clean, skipped
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -85,50 +74,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Ilia.Gavrilov" <Ilia.Gavrilov@infotecs.ru>
+Krzysztof,
 
-ct_sip_parse_numerical_param() returns only 0 or 1 now.
-But process_register_request() and process_register_response() imply
-checking for a negative value if parsing of a numerical header parameter
-failed.
-The invocation in nf_nat_sip() looks correct:
- 	if (ct_sip_parse_numerical_param(...) > 0 &&
- 	    ...) { ... }
+On Fri, Jun 23, 2023 at 10:49:19AM +0200, Krzysztof Kozlowski wrote:
+> On 23/06/2023 10:22, Dmitry Rokosov wrote:
+> > Hello Neil, Krzysztof, Jerome, Martin, Rob and Conor,
+> > 
+> > Would you please review this patch? The latest modifications enable CLK,
+> > EFUSE, USB, SDIO (WiFi), and UART (BT) functionality on A1 boards.
+> > 
+> 
+> It's not a binding...
+> 
+> Best regards,
+> Krzysztof
+> 
 
-Make the return value of the function ct_sip_parse_numerical_param()
-a tristate to fix all the cases
-a) return 1 if value is found; *val is set
-b) return 0 if value is not found; *val is unchanged
-c) return -1 on error; *val is undefined
+Ah, I was thinking that you could also review the changes made to the
+device tree board files. I apologize for any inconvenience caused by
+additional notifications.
 
-Found by InfoTeCS on behalf of Linux Verification Center
-(linuxtesting.org) with SVACE.
-
-Fixes: 0f32a40fc91a ("[NETFILTER]: nf_conntrack_sip: create signalling expe=
-ctations")
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
-Signed-off-by: Ilia.Gavrilov <Ilia.Gavrilov@infotecs.ru>
----
-- Fix description
-- Repost according
-    https://lore.kernel.org/all/20230622144325.GC29784@breakpoint.cc/
- net/netfilter/nf_conntrack_sip.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/net/netfilter/nf_conntrack_sip.c b/net/netfilter/nf_conntrack_=
-sip.c
-index 77f5e82d8e3f..d0eac27f6ba0 100644
---- a/net/netfilter/nf_conntrack_sip.c
-+++ b/net/netfilter/nf_conntrack_sip.c
-@@ -611,7 +611,7 @@ int ct_sip_parse_numerical_param(const struct nf_conn *=
-ct, const char *dptr,
- 	start +=3D strlen(name);
- 	*val =3D simple_strtoul(start, &end, 0);
- 	if (start =3D=3D end)
--		return 0;
-+		return -1;
- 	if (matchoff && matchlen) {
- 		*matchoff =3D start - dptr;
- 		*matchlen =3D end - start;
---=20
-2.39.2
+-- 
+Thank you,
+Dmitry
