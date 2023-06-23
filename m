@@ -2,50 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8839273BA4F
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 16:37:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4B4473BA4B
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 16:36:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232218AbjFWOgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 10:36:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35432 "EHLO
+        id S232025AbjFWOgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 10:36:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230280AbjFWOgq (ORCPT
+        with ESMTP id S229657AbjFWOgq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 23 Jun 2023 10:36:46 -0400
-Received: from mail-il1-f208.google.com (mail-il1-f208.google.com [209.85.166.208])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2227E1724
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 07:36:45 -0700 (PDT)
-Received: by mail-il1-f208.google.com with SMTP id e9e14a558f8ab-342345934a8so4500175ab.1
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 07:36:45 -0700 (PDT)
+Received: from mail-io1-f77.google.com (mail-io1-f77.google.com [209.85.166.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7DBF122
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 07:36:44 -0700 (PDT)
+Received: by mail-io1-f77.google.com with SMTP id ca18e2360f4ac-76998d984b0so45302539f.2
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 07:36:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20221208; t=1687531004; x=1690123004;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=GZBDt3VSlZMCbOtP38Q983YuZEFJ3hM8P/mKOfrYCJQ=;
-        b=B4fXemzTsBQX1vMQiYH/YcdDtcmLSKRBv904UPJrSaS4hiZjPu5p28BOl3MuKBoUkB
-         i0Jumey+12jJ2FjbUTEeo7kCOfDPjPPgrfO+BrN/W83qX1swyxtiC67gxv0bXVazfCtu
-         wUnPu13IOZqogLduihvZNSwCxiYV+1L4OPWm506/lZMcpCTBVZafeMu9zp2O/IhWstkA
-         UKNQArjxUthkZkH5CTHo2BPPYnu7K4QM3zRjcMHUNu3eW6r1oTotlEYIbx1ST7W+pnfC
-         BF90LR61BF2w0sIEWT609rz8K6nmZkRoFAIk8aH9Jg7V7S0FErFxJVgPd6NT4Ss1P6zf
-         iVPQ==
-X-Gm-Message-State: AC+VfDyEPcLGw0L32gACn7AYMPhlFob5Y1cbX6fYlWK0X4wkDBuhMcel
-        7/XDwsOanHbcyb+cHsJccimuFZB8z8PKctpuGazHaxzkZogl
-X-Google-Smtp-Source: ACHHUZ6GklxOJotBu/I9XgXKouxBmNr5XKHhpiiyUqdj5d+Oca3tSFdoNTo6XTtaZWv52Xj0JFqOxlKXfXS54jOBaNoWfEGOZHc+
+        bh=6BPJBUiwFpdoZ7Bry7AP+alEey2lFLJLHxoPG3eAFiE=;
+        b=OommXc4B8tf10vJ+csuDy3UeICPAMWzMM9W9LEXrqevSYwDWdEhRsBz3XkrB3N1YIB
+         geDNczhYJBL2+zINCcFLi2rSgctMxF2TaVpvcNNcEDx7EXhzrjEWAzjqrQtSVxUpMtEK
+         Cb5D2nmBpU/2k5989Bf2MGsZ3NaUMAGq3BYaBhxto59DYJLc/HkS21V8JX1k34HIQuKR
+         r/br+oL2F74Focp5qsQmW+T0NgUe3cUOrVSr+qNZ5q08tuIwsZQbThLSsG2XTuUuwv9g
+         IaRb6Imoc0yLF7kNKzYAfjK03AUPqn4o0fOhPU3HhIEhoc8E+xjli1arLio16XVOh21A
+         aOjQ==
+X-Gm-Message-State: AC+VfDy8FPDpiii1sas4kFXvAX85qvfm7Bv4Un1OPEBIADboMmnub/mD
+        uPv0gLQSvY10+D6h8zDWbi2rHC3Pm5j4C0L0V3E3ywCA8iTr
+X-Google-Smtp-Source: ACHHUZ5kuj5oj7s883gyENP1mt5AJ/EftciZqZO/wM2/USxBBGsSZ+s697iT0su7hivUNU99FdXtmTJcv4mtRc3moWx1pwzGivIB
 MIME-Version: 1.0
-X-Received: by 2002:a92:c0c8:0:b0:33e:6d38:8f7b with SMTP id
- t8-20020a92c0c8000000b0033e6d388f7bmr8359179ilf.1.1687531004374; Fri, 23 Jun
+X-Received: by 2002:a02:95c8:0:b0:40f:d35a:56e4 with SMTP id
+ b66-20020a0295c8000000b0040fd35a56e4mr7691173jai.4.1687531004159; Fri, 23 Jun
  2023 07:36:44 -0700 (PDT)
 Date:   Fri, 23 Jun 2023 07:36:44 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000010353a05fecceea0@google.com>
-Subject: [syzbot] [net?] WARNING in inet_sock_destruct (4)
-From:   syzbot <syzbot+de6565462ab540f50e47@syzkaller.appspotmail.com>
-To:     bpf@vger.kernel.org, davem@davemloft.net, dsahern@kernel.org,
-        edumazet@google.com, jacob.e.keller@intel.com, jiri@nvidia.com,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com
+Message-ID: <0000000000000ced8905fecceeba@google.com>
+Subject: [syzbot] [crypto?] general protection fault in shash_async_update
+From:   syzbot <syzbot+0bc501b7bf9e1bc09958@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, dhowells@redhat.com,
+        herbert@gondor.apana.org.au, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -61,116 +60,113 @@ Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    45a3e24f65e9 Linux 6.4-rc7
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=160cc82f280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=2cbd298d0aff1140
-dashboard link: https://syzkaller.appspot.com/bug?extid=de6565462ab540f50e47
+HEAD commit:    26a4dd839eeb selftests: net: vxlan: Fix selftest regressio..
+git tree:       net-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=169f932d280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=526f919910d4a671
+dashboard link: https://syzkaller.appspot.com/bug?extid=0bc501b7bf9e1bc09958
 compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=160aacb7280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17c115d3280000
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13f71275280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11081055280000
 
 Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/c09bcd4ec365/disk-45a3e24f.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/03549b639718/vmlinux-45a3e24f.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/91f203e5f63e/bzImage-45a3e24f.xz
+disk image: https://storage.googleapis.com/syzbot-assets/8b8b1725013b/disk-26a4dd83.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/b9906d975821/vmlinux-26a4dd83.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/b968b241eeb1/bzImage-26a4dd83.xz
 
 The issue was bisected to:
 
-commit 565b4824c39fa335cba2028a09d7beb7112f3c9a
-Author: Jiri Pirko <jiri@nvidia.com>
-Date:   Mon Feb 6 09:41:51 2023 +0000
+commit c662b043cdca89bf0f03fc37251000ac69a3a548
+Author: David Howells <dhowells@redhat.com>
+Date:   Tue Jun 6 13:08:56 2023 +0000
 
-    devlink: change port event netdev notifier from per-net to global
+    crypto: af_alg/hash: Support MSG_SPLICE_PAGES
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=110a1a5b280000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=130a1a5b280000
-console output: https://syzkaller.appspot.com/x/log.txt?x=150a1a5b280000
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1023cfdf280000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=1223cfdf280000
+console output: https://syzkaller.appspot.com/x/log.txt?x=1423cfdf280000
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+de6565462ab540f50e47@syzkaller.appspotmail.com
-Fixes: 565b4824c39f ("devlink: change port event netdev notifier from per-net to global")
+Reported-by: syzbot+0bc501b7bf9e1bc09958@syzkaller.appspotmail.com
+Fixes: c662b043cdca ("crypto: af_alg/hash: Support MSG_SPLICE_PAGES")
 
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 5025 at net/ipv4/af_inet.c:154 inet_sock_destruct+0x6df/0x8a0 net/ipv4/af_inet.c:154
-Modules linked in:
-CPU: 0 PID: 5025 Comm: syz-executor250 Not tainted 6.4.0-rc7-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
-RIP: 0010:inet_sock_destruct+0x6df/0x8a0 net/ipv4/af_inet.c:154
-Code: ff e8 c5 9f e0 f8 0f 0b e9 07 fe ff ff e8 b9 9f e0 f8 0f 0b e9 3f fe ff ff e8 ad 9f e0 f8 0f 0b e9 95 fd ff ff e8 a1 9f e0 f8 <0f> 0b e9 9f fe ff ff e8 d5 6a 33 f9 e9 7a fc ff ff 4c 89 e7 e8 08
-RSP: 0018:ffffc90000007de8 EFLAGS: 00010246
-RAX: 0000000000000000 RBX: 00000000fffff000 RCX: 0000000000000100
-RDX: ffff8880792f8000 RSI: ffffffff88a3a73f RDI: 0000000000000005
-RBP: ffff88814aa99980 R08: 0000000000000005 R09: 0000000000000000
-R10: 00000000fffff000 R11: 0000000000094001 R12: ffff88814aa999a8
-R13: ffff88814aa99bf4 R14: ffffc90000007ed8 R15: 0000000000000004
-FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+general protection fault, probably for non-canonical address 0xdffffc0000000004: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000020-0x0000000000000027]
+CPU: 0 PID: 5005 Comm: syz-executor418 Not tainted 6.4.0-rc5-syzkaller-01111-g26a4dd839eeb #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
+RIP: 0010:crypto_shash_alg include/crypto/hash.h:827 [inline]
+RIP: 0010:crypto_shash_update crypto/shash.c:124 [inline]
+RIP: 0010:shash_ahash_update crypto/shash.c:306 [inline]
+RIP: 0010:shash_async_update+0x130/0x210 crypto/shash.c:314
+Code: 36 0c a5 fd 48 8b 44 24 08 48 8b 6c 24 48 80 38 00 0f 85 c3 00 00 00 48 8b 04 24 4c 8b 68 50 49 8d 7d 20 48 89 fa 48 c1 ea 03 <80> 3c 1a 00 0f 85 bd 00 00 00 4d 8b 75 20 49 8d 7e 2c 48 89 fa 48
+RSP: 0018:ffffc90003a1f968 EFLAGS: 00010202
+RAX: ffff8880206b02a8 RBX: dffffc0000000000 RCX: 0000000000000000
+RDX: 0000000000000004 RSI: ffffffff83df3a1a RDI: 0000000000000020
+RBP: ffff888072b43240 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000dc0 R11: 0000000000000009 R12: 0000000000000dc0
+R13: 0000000000000000 R14: 1ffff110040d605f R15: ffff8880206b02f8
+FS:  0000555557028300(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
 CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f579b4f6ec8 CR3: 000000000c571000 CR4: 00000000003506f0
+CR2: 00007f4ef51f2304 CR3: 000000001328b000 CR4: 00000000003506f0
 DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
 DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 Call Trace:
- <IRQ>
- __sk_destruct+0x4d/0x770 net/core/sock.c:2130
- rcu_do_batch kernel/rcu/tree.c:2115 [inline]
- rcu_core+0x806/0x1ad0 kernel/rcu/tree.c:2377
- __do_softirq+0x1d4/0x905 kernel/softirq.c:571
- invoke_softirq kernel/softirq.c:445 [inline]
- __irq_exit_rcu+0x114/0x190 kernel/softirq.c:650
- irq_exit_rcu+0x9/0x20 kernel/softirq.c:662
- sysvec_apic_timer_interrupt+0x97/0xc0 arch/x86/kernel/apic/apic.c:1106
- </IRQ>
  <TASK>
- asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:645
-RIP: 0010:write_comp_data+0x3c/0x90 kernel/kcov.c:236
-Code: 01 00 00 49 89 f8 65 48 8b 14 25 c0 bb 03 00 a9 00 01 ff 00 74 0e 85 f6 74 59 8b 82 0c 16 00 00 85 c0 74 4f 8b 82 e8 15 00 00 <83> f8 03 75 44 48 8b 82 f0 15 00 00 8b 92 ec 15 00 00 48 8b 38 48
-RSP: 0018:ffffc90003a7fbf8 EFLAGS: 00000246
-RAX: 0000000000000000 RBX: ffffc90003a7b020 RCX: ffffffff814d76d1
-RDX: ffff8880792f8000 RSI: 0000000000000000 RDI: 0000000000000007
-RBP: ffff8880792f8000 R08: 0000000000000007 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000094001 R12: 0000000000000000
-R13: ffffc90003a78000 R14: dffffc0000000000 R15: ffff8880792f85f8
- stack_not_used include/linux/sched/task_stack.h:107 [inline]
- check_stack_usage kernel/exit.c:776 [inline]
- do_exit+0x17f1/0x29b0 kernel/exit.c:918
- do_group_exit+0xd4/0x2a0 kernel/exit.c:1024
- get_signal+0x2318/0x25b0 kernel/signal.c:2876
- arch_do_signal_or_restart+0x79/0x5c0 arch/x86/kernel/signal.c:306
- exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
- exit_to_user_mode_prepare+0x11f/0x240 kernel/entry/common.c:204
- __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
- syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:297
- do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
+ crypto_ahash_update include/crypto/hash.h:608 [inline]
+ hash_sendmsg+0x434/0xde0 crypto/algif_hash.c:139
+ sock_sendmsg_nosec net/socket.c:724 [inline]
+ sock_sendmsg+0xde/0x190 net/socket.c:747
+ ____sys_sendmsg+0x733/0x920 net/socket.c:2493
+ ___sys_sendmsg+0x110/0x1b0 net/socket.c:2547
+ __sys_sendmsg+0xf7/0x1c0 net/socket.c:2576
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f579b4a1d39
-Code: Unable to access opcode bytes at 0x7f579b4a1d0f.
-RSP: 002b:00007f579b431308 EFLAGS: 00000246 ORIG_RAX: 00000000000000ca
-RAX: fffffffffffffe00 RBX: 00007f579b52a4d8 RCX: 00007f579b4a1d39
-RDX: 0000000000000000 RSI: 0000000000000080 RDI: 00007f579b52a4d8
-RBP: 00007f579b52a4d0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f579b4f72c0
-R13: 00007f579b52a4dc R14: 00007f579b431400 R15: 0000000000022000
+RIP: 0033:0x7f71e8ca1c89
+Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffebca0c5d8 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f71e8ca1c89
+RDX: 0000000000000000 RSI: 0000000020000300 RDI: 0000000000000004
+RBP: 00007f71e8c65e30 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007f71e8c65ec0
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
  </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:crypto_shash_alg include/crypto/hash.h:827 [inline]
+RIP: 0010:crypto_shash_update crypto/shash.c:124 [inline]
+RIP: 0010:shash_ahash_update crypto/shash.c:306 [inline]
+RIP: 0010:shash_async_update+0x130/0x210 crypto/shash.c:314
+Code: 36 0c a5 fd 48 8b 44 24 08 48 8b 6c 24 48 80 38 00 0f 85 c3 00 00 00 48 8b 04 24 4c 8b 68 50 49 8d 7d 20 48 89 fa 48 c1 ea 03 <80> 3c 1a 00 0f 85 bd 00 00 00 4d 8b 75 20 49 8d 7e 2c 48 89 fa 48
+RSP: 0018:ffffc90003a1f968 EFLAGS: 00010202
+RAX: ffff8880206b02a8 RBX: dffffc0000000000 RCX: 0000000000000000
+RDX: 0000000000000004 RSI: ffffffff83df3a1a RDI: 0000000000000020
+RBP: ffff888072b43240 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000dc0 R11: 0000000000000009 R12: 0000000000000dc0
+R13: 0000000000000000 R14: 1ffff110040d605f R15: ffff8880206b02f8
+FS:  0000555557028300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ffebcaca020 CR3: 000000001328b000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 ----------------
 Code disassembly (best guess):
-   0:	01 00                	add    %eax,(%rax)
-   2:	00 49 89             	add    %cl,-0x77(%rcx)
-   5:	f8                   	clc
-   6:	65 48 8b 14 25 c0 bb 	mov    %gs:0x3bbc0,%rdx
-   d:	03 00
-   f:	a9 00 01 ff 00       	test   $0xff0100,%eax
-  14:	74 0e                	je     0x24
-  16:	85 f6                	test   %esi,%esi
-  18:	74 59                	je     0x73
-  1a:	8b 82 0c 16 00 00    	mov    0x160c(%rdx),%eax
-  20:	85 c0                	test   %eax,%eax
-  22:	74 4f                	je     0x73
-  24:	8b 82 e8 15 00 00    	mov    0x15e8(%rdx),%eax
-* 2a:	83 f8 03             	cmp    $0x3,%eax <-- trapping instruction
-  2d:	75 44                	jne    0x73
-  2f:	48 8b 82 f0 15 00 00 	mov    0x15f0(%rdx),%rax
-  36:	8b 92 ec 15 00 00    	mov    0x15ec(%rdx),%edx
-  3c:	48 8b 38             	mov    (%rax),%rdi
+   0:	36 0c a5             	ss or  $0xa5,%al
+   3:	fd                   	std
+   4:	48 8b 44 24 08       	mov    0x8(%rsp),%rax
+   9:	48 8b 6c 24 48       	mov    0x48(%rsp),%rbp
+   e:	80 38 00             	cmpb   $0x0,(%rax)
+  11:	0f 85 c3 00 00 00    	jne    0xda
+  17:	48 8b 04 24          	mov    (%rsp),%rax
+  1b:	4c 8b 68 50          	mov    0x50(%rax),%r13
+  1f:	49 8d 7d 20          	lea    0x20(%r13),%rdi
+  23:	48 89 fa             	mov    %rdi,%rdx
+  26:	48 c1 ea 03          	shr    $0x3,%rdx
+* 2a:	80 3c 1a 00          	cmpb   $0x0,(%rdx,%rbx,1) <-- trapping instruction
+  2e:	0f 85 bd 00 00 00    	jne    0xf1
+  34:	4d 8b 75 20          	mov    0x20(%r13),%r14
+  38:	49 8d 7e 2c          	lea    0x2c(%r14),%rdi
+  3c:	48 89 fa             	mov    %rdi,%rdx
   3f:	48                   	rex.W
 
 
