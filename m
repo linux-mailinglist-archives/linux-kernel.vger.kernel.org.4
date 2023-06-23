@@ -2,68 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B4AC73ADBB
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 02:21:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB8FE73ADBE
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 02:26:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231460AbjFWAVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 20:21:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43460 "EHLO
+        id S229956AbjFWA0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 20:26:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbjFWAVA (ORCPT
+        with ESMTP id S229450AbjFWAZ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 20:21:00 -0400
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D48642126
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 17:20:59 -0700 (PDT)
-Received: by mail-qv1-xf2c.google.com with SMTP id 6a1803df08f44-62ffc10180aso803686d6.3
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 17:20:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687479659; x=1690071659;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EeFZnrzPna49UZE25vJYisvtAwJL7R4Sr/A3b/wqS1c=;
-        b=zCghMTvXKiKDWfVC5a6q5td9dywJhHw10iuOzrpr0HrRrHzD216//pgB1/FQNp896s
-         EJYjlBcWzdkImusHUoSpaylmWWQM46JM+cFE3pYgPrtCVdDCpcQB3OfEPeY2Zjn4/jU9
-         IzD33wgXutStPkjNRukGUGpuECCIjfv6nHITeJ1dCBAd1DsD5S0iA9HKmAmy271nqXGN
-         xCx1Y72wRbK0kFmcst/EbYmgSEcT9LrtWCm2g7z0CGqZUfq15N3m/H/fARqNQJPtrnfT
-         KXbVmtOEVNLtgRQoiQ/VCgpSeNGtZ1uh+dtKyYxURyHrc1msiPdwWH8stVr88LeKXmyj
-         FuXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687479659; x=1690071659;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EeFZnrzPna49UZE25vJYisvtAwJL7R4Sr/A3b/wqS1c=;
-        b=DFkGXK+zjrLWIRCXh2iyoHk0lZSjw4rkXQqY9hUwmp4xD5sk9NBsOTlWXvnTr9qkvs
-         uNWprt33ox2MgdNHjuKX0OcfB0Kni1a1QiZx6icy5+VEmuE3OawlBfLNFG8Kka6nUIc1
-         pB0qSccAJTERF6IfAUf+AZf/bX+i1ygxumFeTTa2JH0rXEDq3ikbqwPfBztMD9rTfLf5
-         M2RRzb1O0lYjRgGhUKudy8eBQlxdP9/QVIg2C2MZJ6E9IgSMZBcWkUUvSaYfi+Jzm+Mg
-         0Yp0+D7rF1vqgjUcueGp80Fk7PXT2sg6ES3l7ur7K05y129s2kcFkvL3SO75VJXL7v8G
-         tX7Q==
-X-Gm-Message-State: AC+VfDwejG+VoRoeuzXUac6Rkpd1lKa6LKHVCZYKUs+9IcvDZ89W/z/K
-        8b7i4KFYB7pGk060yVnkJiX/ufSdcychg3rF1H3TqewEcoJZQHb88GQ=
-X-Google-Smtp-Source: ACHHUZ5J1uc/izzHKJQWqtx12FHwFpiP2xSWijmlkp59F4+9t+Fe9YmwpniQhbPWONk4J6YghjqYVYj6V+7+AjUTG5I=
-X-Received: by 2002:a05:6214:b61:b0:630:22f7:37be with SMTP id
- ey1-20020a0562140b6100b0063022f737bemr15323809qvb.37.1687479658869; Thu, 22
- Jun 2023 17:20:58 -0700 (PDT)
+        Thu, 22 Jun 2023 20:25:57 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A23CE2126;
+        Thu, 22 Jun 2023 17:25:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687479955; x=1719015955;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xWb6G7Cg4aCmo6Vqc7o2CYZbvqZ1NqGkHb/WQ0tI0zo=;
+  b=iXJDOyDbjRh5cEvA6iwh2lzLaeWVMiMxH3BOn1j7s1B6kcnEcJGgdgaP
+   2SQFBmYUng9WQ5AvfLHDXwrIKITyMrn//6ucJoSbasOXJRlHLAFruf2qm
+   iB3vX+PYXIscwqdjWg2atAa4LbnGQ0yJr7frM7+E3BM1bT6Udqp0K9Nle
+   q/+ubEHpTgr0FAI+goJaO76yEezi0etO5U8kpAcfUIMPQ32NusDWc49W3
+   YmH3+nYZllUHW8ap+MeEitF7B9vfffZvaTwCMHg1xtAy7y4+rr5vyxMxE
+   qLB8bYqkb/do8tkuveqF22nDo3TpzjJKesRsyVpttm4AX6SxX2XK/2IEM
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="426630063"
+X-IronPort-AV: E=Sophos;i="6.01,150,1684825200"; 
+   d="scan'208";a="426630063"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 17:25:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="839254554"
+X-IronPort-AV: E=Sophos;i="6.01,150,1684825200"; 
+   d="scan'208";a="839254554"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 22 Jun 2023 17:25:50 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qCUcX-0007qN-2K;
+        Fri, 23 Jun 2023 00:25:49 +0000
+Date:   Fri, 23 Jun 2023 08:25:37 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
+        ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
+        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+        hverkuil-cisco@xs4all.nl, nicolas.dufresne@collabora.com
+Cc:     oe-kbuild-all@lists.linux.dev, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        kernel@collabora.com,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: Re: [PATCH v3 10/11] media: v4l2: Add DELETE_BUF ioctl
+Message-ID: <202306230822.0CCLmVt5-lkp@intel.com>
+References: <20230622131349.144160-11-benjamin.gaignard@collabora.com>
 MIME-Version: 1.0
-References: <20230622144218.860926475@infradead.org>
-In-Reply-To: <20230622144218.860926475@infradead.org>
-From:   Sami Tolvanen <samitolvanen@google.com>
-Date:   Thu, 22 Jun 2023 17:20:21 -0700
-Message-ID: <CABCJKuc5MT9Zzc+ejeNJPgs2M33cZgJzy=OSzgXtU6w1KODOTA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/6] x86/cfi: Fix FineIBT
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, alyssa.milburn@linux.intel.com,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
-        jpoimboe@kernel.org, joao@overdrivepizza.com, brgerst@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230622131349.144160-11-benjamin.gaignard@collabora.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,21 +73,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 22, 2023 at 7:50=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
-g> wrote:
->
-> Hi!
->
-> Alyssa reported a FineIBT issue (patch 6) which led to the discovery of
-> a kCFI issue (patch 5) and a bunch of cleanups and enhancements (the
-> rest).
->
-> Backports can probably suffice with just the last two.
->
-> Much thanks to Brian for the better ret_from_fork() cleanup.
+Hi Benjamin,
 
-This version looks even better, thanks!
+kernel test robot noticed the following build errors:
 
-Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
+[auto build test ERROR on media-tree/master]
+[also build test ERROR on linus/master v6.4-rc7]
+[cannot apply to next-20230622]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Sami
+url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Gaignard/media-videobuf2-Access-vb2_queue-bufs-array-through-helper-functions/20230622-214122
+base:   git://linuxtv.org/media_tree.git master
+patch link:    https://lore.kernel.org/r/20230622131349.144160-11-benjamin.gaignard%40collabora.com
+patch subject: [PATCH v3 10/11] media: v4l2: Add DELETE_BUF ioctl
+config: i386-randconfig-i012-20230622 (https://download.01.org/0day-ci/archive/20230623/202306230822.0CCLmVt5-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce: (https://download.01.org/0day-ci/archive/20230623/202306230822.0CCLmVt5-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306230822.0CCLmVt5-lkp@intel.com/
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "vb2_core_delete_buf" [drivers/media/common/videobuf2/videobuf2-v4l2.ko] undefined!
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
