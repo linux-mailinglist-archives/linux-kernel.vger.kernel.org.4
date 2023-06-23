@@ -2,94 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D2ED73B894
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 15:16:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60F8E73B871
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 15:10:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231758AbjFWNQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 09:16:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48742 "EHLO
+        id S231547AbjFWNKf convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 23 Jun 2023 09:10:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231271AbjFWNQm (ORCPT
+        with ESMTP id S231522AbjFWNKd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 09:16:42 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 42AC5BA;
-        Fri, 23 Jun 2023 06:16:40 -0700 (PDT)
-Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-        id 1qCgeU-0002sn-00; Fri, 23 Jun 2023 15:16:38 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 72D90C0375; Fri, 23 Jun 2023 15:10:19 +0200 (CEST)
-Date:   Fri, 23 Jun 2023 15:10:19 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH][next] MIPS: dec: prom: Address -Warray-bounds warning
-Message-ID: <20230623131019.GD11636@alpha.franken.de>
-References: <ZJTcvfpvhvF+OLjc@work>
+        Fri, 23 Jun 2023 09:10:33 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA0D92133
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 06:10:30 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-308-LL79zkSiMMOLClOvKXuMbQ-1; Fri, 23 Jun 2023 14:10:27 +0100
+X-MC-Unique: LL79zkSiMMOLClOvKXuMbQ-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Fri, 23 Jun
+ 2023 14:10:26 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Fri, 23 Jun 2023 14:10:26 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Matthew Wilcox' <willy@infradead.org>, stsp <stsp2@yandex.ru>
+CC:     Jeff Layton <jlayton@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>
+Subject: RE: [PATCH 2/3] fd/locks: allow get the lock owner by F_OFD_GETLK
+Thread-Topic: [PATCH 2/3] fd/locks: allow get the lock owner by F_OFD_GETLK
+Thread-Index: AQHZo32TC5N9nkgT8E+AvQ/6iJ//gK+YXybw
+Date:   Fri, 23 Jun 2023 13:10:26 +0000
+Message-ID: <f712a5551ebd4626acd17ac80fe51879@AcuMS.aculab.com>
+References: <20230620095507.2677463-1-stsp2@yandex.ru>
+ <20230620095507.2677463-3-stsp2@yandex.ru>
+ <5728ebda22a723b0eb209ae078e8f132d7b4ac7b.camel@kernel.org>
+ <a1e7f5c1-76ef-19e5-91db-a62f7615b28a@yandex.ru>
+ <eaccc14ddc6b546e5913eb557fec55f77cb5424d.camel@kernel.org>
+ <5f644a24-90b5-a02f-b593-49336e8e0f5a@yandex.ru>
+ <2eb8566726e95a01536b61a3b8d0343379092b94.camel@kernel.org>
+ <d70b6831-3443-51d0-f64c-6f6996367a85@yandex.ru>
+ <d0c18369245db91a3b78017fabdc81417418af67.camel@kernel.org>
+ <ddb48e05-ab26-ae5d-86d5-01e47f0f0cd2@yandex.ru>
+ <ZJGtmrej8LraEsjj@casper.infradead.org>
+In-Reply-To: <ZJGtmrej8LraEsjj@casper.infradead.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZJTcvfpvhvF+OLjc@work>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 22, 2023 at 05:43:57PM -0600, Gustavo A. R. Silva wrote:
-> Zero-length arrays are deprecated, and we are replacing them with flexible
-> array members instead. So, replace zero-length array with flexible-array
-> member in struct memmap.
+From: Matthew Wilcox
+> Sent: 20 June 2023 14:46
 > 
-> Address the following warning found after building (with GCC-13) mips64
-> with decstation_64_defconfig:
-> In function 'rex_setup_memory_region',
->     inlined from 'prom_meminit' at arch/mips/dec/prom/memory.c:91:3:
-> arch/mips/dec/prom/memory.c:72:31: error: array subscript i is outside array bounds of 'unsigned char[0]' [-Werror=array-bounds=]
->    72 |                 if (bm->bitmap[i] == 0xff)
->       |                     ~~~~~~~~~~^~~
-> In file included from arch/mips/dec/prom/memory.c:16:
-> ./arch/mips/include/asm/dec/prom.h: In function 'prom_meminit':
-> ./arch/mips/include/asm/dec/prom.h:73:23: note: while referencing 'bitmap'
->    73 |         unsigned char bitmap[0];
+> On Tue, Jun 20, 2023 at 06:39:07PM +0500, stsp wrote:
+> > Though it will, for sure, represent the
+> > task that _owns_ the lock.
 > 
-> This helps with the ongoing efforts to globally enable -Warray-bounds.
-> 
-> This results in no differences in binary output.
-> 
-> Link: https://github.com/KSPP/linux/issues/79
-> Link: https://github.com/KSPP/linux/issues/323
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-> ---
->  arch/mips/include/asm/dec/prom.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/mips/include/asm/dec/prom.h b/arch/mips/include/asm/dec/prom.h
-> index 1e1247add1cf..908e96e3a311 100644
-> --- a/arch/mips/include/asm/dec/prom.h
-> +++ b/arch/mips/include/asm/dec/prom.h
-> @@ -70,7 +70,7 @@ static inline bool prom_is_rex(u32 magic)
->   */
->  typedef struct {
->  	int pagesize;
-> -	unsigned char bitmap[0];
-> +	unsigned char bitmap[];
->  } memmap;
->  
->  
-> -- 
-> 2.34.1
+> No, it *DOESN'T*.  I can open a file, SCM_RIGHTS pass it to another task
+> and then exit.  Now the only owner of that lock is the recipient ...
+> who may not even have received the fd yet.
 
-applied to mips-next.
+Do these locks persist across fork+exec?
 
-Thomas.
+What happens is a completely unrelated process opens /proc/<pid>/fd
+while a lock is held and then the (nominally) lock-holding
+process closes the fd (or exits).
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+While it might be a useful diagnostic to know the pid of the
+process that acquired the lock it clearly has no relationship
+with any process that currently has an fd[] table entry that
+references the file.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
