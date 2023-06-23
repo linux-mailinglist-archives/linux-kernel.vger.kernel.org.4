@@ -2,183 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3601B73C434
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 00:41:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4014473C437
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 00:42:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230506AbjFWWlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 18:41:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33182 "EHLO
+        id S232361AbjFWWmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 18:42:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229786AbjFWWlE (ORCPT
+        with ESMTP id S232574AbjFWWmH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 18:41:04 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47DB4DC
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 15:41:03 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4f122ff663eso1587187e87.2
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 15:41:03 -0700 (PDT)
+        Fri, 23 Jun 2023 18:42:07 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EB54DC
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 15:42:06 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-98377c5d53eso125048766b.0
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 15:42:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687560061; x=1690152061;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mkttFFjYoip7fglkU4JNZWNPOXtKhIEuxp+1+hKdO/U=;
-        b=iS6ldgnt6553c/cJCr5bKGXW7rMTxxcV5Kr5atVUyPytncBWdL5Ty3ZlnV2Yavg9H4
-         gFfEDFUiwSAw2dFwmd4YdkPe7nD8yr9bo54Jo1ZW9b74tnhQh38WlVSGzWrzFMbWPoSn
-         ixqljIjRqm0M4xGEaQzqaxCRgIRQlsow10U4THrspYBV/vTtVyquJcSjM4npo7DQGPYn
-         CVzqD+zNJBHazq1lCozePDGm841IHZ/jhRoiMUyBrrFkKzu/TODp1fzQjHvw0gDA+zpi
-         njuWw+1cPlcx72nDbL2fYAhmzAfh93ACsdabCuHQIHfUD6ly6Mbk7s2M/ENvbDlfuI6u
-         Bfgg==
+        d=linux-foundation.org; s=google; t=1687560124; x=1690152124;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+QcHhK4jpwXJft/HBulx5tPasW6Ux53Kat5uK7dahPQ=;
+        b=DMF0LQqLHOJr+4VsKkSs9BiO4DKyllZx1uoH+khfK/52BM+al+f/ORDqL4m0714RBR
+         IzmYd0V/Q2OMdpzxq12HN/XvYl4HSPAeeSW91iUkZly2N9Yhf/ZGo4s/f0uYB5fHDQ5Y
+         KFgTEO4JPPagFbA1ehi/izyQWedtxf9pLN1h4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687560061; x=1690152061;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mkttFFjYoip7fglkU4JNZWNPOXtKhIEuxp+1+hKdO/U=;
-        b=GLFbqbOikMN03lieLgdBZc2XU2mYq/Yef8hPzDrm52NeD9f9ee6nv6gNghVUmNgCSl
-         UXgpIRbnEUqv6acIVmpEif8IKpixfsdHYZYCO4LiTvysNiYesUKea6oPFnQ8d0DKlMbw
-         mRT2r3xRDdXb6+9MQteDM+yIu8jk6v/UM8HRVnPJNM+k+IuweMyn3crIEH6Xczaf89GP
-         OzO/RhlvwfjOlE+Q/bBa8WKkL+UUddnwKKVxmq5OoqmkFfKuEPJKmD25hQ08P74eTly2
-         w9ahh58WB2aOYagBzhWGb2RanX6a+ff/FNBBksENcgjhi6gxbWplp3pdyLeBckeDI/ql
-         cotw==
-X-Gm-Message-State: AC+VfDwdI81KBWj/jWbVPmdHO/ZJbIuiQ7KSNn+tbn5DzMZJJ6hgHN/l
-        bxRBZ5S9GoGXznLGq3+o9T+xZQ==
-X-Google-Smtp-Source: ACHHUZ4iIruCEsrbUwp+7MIaJtuZNGQ/fhxMxNvF7x/sZJvelAU4d/cVOKo8rvwx+Ru4gyMStOAgdg==
-X-Received: by 2002:a05:6512:32a8:b0:4f8:6d38:b091 with SMTP id q8-20020a05651232a800b004f86d38b091mr11700111lfe.25.1687560061514;
-        Fri, 23 Jun 2023 15:41:01 -0700 (PDT)
-Received: from [192.168.1.101] (abyk30.neoplus.adsl.tpnet.pl. [83.9.30.30])
-        by smtp.gmail.com with ESMTPSA id eq21-20020a056512489500b004e9bf853c27sm57284lfb.70.2023.06.23.15.40.59
+        d=1e100.net; s=20221208; t=1687560124; x=1690152124;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+QcHhK4jpwXJft/HBulx5tPasW6Ux53Kat5uK7dahPQ=;
+        b=YLdOexKvTqKCpf8HGpq+XpQbqTUIxAT1f95E8zkdzMXSYPNTT7SQAkcy7tAvmtGaB7
+         fZXvh79sKKtY2THKyaHFmiWzl2ChRJgRYsXY9zuI2/TDG8Q1slAOY6CDIf5MWcXkraGj
+         J+bGDd0/933ZD1jLu2X/3hFwOf1whT32BxXu8erjp2L3W0/y0J+5YlpS6i+MlnWPBpHB
+         hXjQ74hMThNNiepEqI5ZDHtTu1kIDCIYwRmaC865VTfsj1GhI18XE/tCC7ee1s4/qsww
+         cfdgp6ibbKT1kMTgtqXAgJMqbi6ho7sk/J9T4ZAReURO6heLFrRAjbeAuhY9A3sc/2Oq
+         3QsA==
+X-Gm-Message-State: AC+VfDynIVGn1VVapCusYnkXY2Vula1Kwnpri2Of92rSQPSa3Gs1jJMq
+        46DiUsSw3supPMpWsKk5nd5Np4U2yN5W2E5osmf41l/o
+X-Google-Smtp-Source: ACHHUZ6DpamATC7S/r4HNqS6hWQ5+I8qIAWj0sl2/GyP+EoiOFWORCDl7Md0pKsGOO1pZVBo0dR6ig==
+X-Received: by 2002:a17:907:7faa:b0:987:fe18:1c51 with SMTP id qk42-20020a1709077faa00b00987fe181c51mr18254210ejc.58.1687560124522;
+        Fri, 23 Jun 2023 15:42:04 -0700 (PDT)
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com. [209.85.208.43])
+        by smtp.gmail.com with ESMTPSA id g25-20020a1709064e5900b0098696189722sm145010ejw.192.2023.06.23.15.42.03
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Jun 2023 15:41:01 -0700 (PDT)
-Message-ID: <115ad8f2-72ff-90fe-c27e-c298b7b00993@linaro.org>
-Date:   Sat, 24 Jun 2023 00:40:59 +0200
+        Fri, 23 Jun 2023 15:42:04 -0700 (PDT)
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-51d7d0dbec8so171108a12.2
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 15:42:03 -0700 (PDT)
+X-Received: by 2002:aa7:d597:0:b0:51b:ecb7:23d2 with SMTP id
+ r23-20020aa7d597000000b0051becb723d2mr3683631edq.18.1687560123663; Fri, 23
+ Jun 2023 15:42:03 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v9 09/10] arm64: dts: qcom: sa8295p: Enable tertiary
- controller and its 4 USB ports
-Content-Language: en-US
-To:     Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com,
-        quic_jackp@quicinc.com, quic_harshq@quicinc.com,
-        ahalaney@redhat.com, quic_shazhuss@quicinc.com
-References: <20230621043628.21485-1-quic_kriskura@quicinc.com>
- <20230621043628.21485-10-quic_kriskura@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230621043628.21485-10-quic_kriskura@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <2730511.1687559668@warthog.procyon.org.uk>
+In-Reply-To: <2730511.1687559668@warthog.procyon.org.uk>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 23 Jun 2023 15:41:46 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiXr2WTDFZi6y8c4TjZXfTnw28BkLF9Fpe=SyvmSCvP2Q@mail.gmail.com>
+Message-ID: <CAHk-=wiXr2WTDFZi6y8c4TjZXfTnw28BkLF9Fpe=SyvmSCvP2Q@mail.gmail.com>
+Subject: Re: [PATCH] pipe: Make a partially-satisfied blocking read wait for more
+To:     David Howells <dhowells@redhat.com>
+Cc:     Franck Grosjean <fgrosjea@redhat.com>,
+        Phil Auld <pauld@redhat.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21.06.2023 06:36, Krishna Kurapati wrote:
-> Enable tertiary controller for SA8295P (based on SC8280XP).
-> Add pinctrl support for usb ports to provide VBUS to connected peripherals.
-> 
-> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> ---
->  arch/arm64/boot/dts/qcom/sa8295p-adp.dts | 53 ++++++++++++++++++++++++
->  1 file changed, 53 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sa8295p-adp.dts b/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
-> index fd253942e5e5..8b24b3c55769 100644
-> --- a/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
-> +++ b/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
-> @@ -9,6 +9,7 @@
->  #include <dt-bindings/gpio/gpio.h>
->  #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
->  #include <dt-bindings/spmi/spmi.h>
-> +#include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
->  
->  #include "sa8540p.dtsi"
->  #include "sa8540p-pmics.dtsi"
-> @@ -584,6 +585,20 @@ &usb_1_qmpphy {
->  	status = "okay";
->  };
->  
-> +&usb_2 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&usb2_en_state>,
-> +		    <&usb3_en_state>,
-> +		    <&usb4_en_state>,
-> +		    <&usb5_en_state>;
-Please put property-names after property
-> +
-> +	status = "okay";
-> +};
-> +
-> +&usb_2_dwc3 {
-> +	dr_mode = "host";
-> +};
-If I understood correctly, the MP controller is host-only. In that case,
-I'd say that putting this property in the SoC-dtsi node with an appropriate
-comment would be beneficial.
+On Fri, 23 Jun 2023 at 15:34, David Howells <dhowells@redhat.com> wrote:
+>
+> Can you consider merging something like the attached patch?  Unfortunately,
+> there are applications out there that depend on a read from pipe() waiting
+> until the buffer is full under some circumstances.  Patch a28c8b9db8a1
+> removed the conditionality on there being an attached writer.
 
-lgtm otherwise
+This patch seems actively wrong, in that now it's possibly waiting for
+data that won't come, even if it's nonblocking.
 
-Konrad
-> +
->  &usb_2_hsphy0 {
->  	vdda-pll-supply = <&vreg_l5a>;
->  	vdda18-supply = <&vreg_l7g>;
-> @@ -729,3 +744,41 @@ wake-n-pins {
->  		};
->  	};
->  };
-> +
-> +&pmm8540c_gpios {
-> +	usb2_en_state: usb2-en-state {
-> +		pins = "gpio9";
-> +		function = "normal";
-> +		qcom,drive-strength = <PMIC_GPIO_STRENGTH_HIGH>;
-> +		output-high;
-> +		power-source = <0>;
-> +	};
-> +};
-> +
-> +&pmm8540e_gpios {
-> +	usb3_en_state: usb3-en-state {
-> +		pins = "gpio5";
-> +		function = "normal";
-> +		qcom,drive-strength = <PMIC_GPIO_STRENGTH_HIGH>;
-> +		output-high;
-> +		power-source = <0>;
-> +	};
-> +};
-> +
-> +&pmm8540g_gpios {
-> +	usb4_en_state: usb4-en-state {
-> +		pins = "gpio5";
-> +		function = "normal";
-> +		qcom,drive-strength = <PMIC_GPIO_STRENGTH_HIGH>;
-> +		output-high;
-> +		power-source = <0>;
-> +	};
-> +
-> +	usb5_en_state: usb5-en-state {
-> +		pins = "gpio9";
-> +		function = "normal";
-> +		qcom,drive-strength = <PMIC_GPIO_STRENGTH_HIGH>;
-> +		output-high;
-> +		power-source = <0>;
-> +	};
-> +};
+What are these alleged broken apps? That commit a28c8b9db8a1 ("pipe:
+remove 'waiting_writers' merging logic") is 3+ years old, and we
+haven't heard people complain about it.
+
+POSIX guarantees PIPE_BUF data, but that's 4kB. Your made-up test-case
+is not valid, and never has been.
+
+Yes, we used to do that write merging for performance reasons to avoid
+extra system calls. And yes, we'll maintain semantics if people
+actually end up having broken apps that depend on them, but I want to
+know *what* broken app depends on this before I re-instate the write
+merging.
+
+And if we do re-instate it, I'm afraid we will have to do so with that
+whole "waiting_writers" logic, so that we don't have the "reader waits
+for data that might not come".
+
+Because that patch of yours seems really broken. Nobody has *ever*
+said "a read() on a pipe will always satisfy the whole buffer". That's
+just completely bogus.
+
+So let's name and shame the code that actually depended on it. And
+maybe we'll have to revert commit a28c8b9db8a1, but after three+ years
+of nobody reporting it I'm not really super-convinced.
+
+               Linus
