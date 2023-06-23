@@ -2,135 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80F1673BE18
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 19:52:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 841A473BE1A
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 19:53:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231742AbjFWRwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 13:52:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60080 "EHLO
+        id S232003AbjFWRxs convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 23 Jun 2023 13:53:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231356AbjFWRwb (ORCPT
+        with ESMTP id S231342AbjFWRxq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 13:52:31 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDD2526AF;
-        Fri, 23 Jun 2023 10:52:30 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0E53D838;
-        Fri, 23 Jun 2023 19:51:51 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1687542712;
-        bh=6rT+n6mijf4+BiTWtjg5ainxi9bp14qGHZoBtspMrmA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OPb5chPnpf4jYQBzGlpPUlVg8zmUuRTOqy7IqqaVgYGXk6H2vkvu8AROWnGE7zvim
-         dABdk2AhBa6Y7SSL3O2GwIZTvyRLerqVGBVYqUgr+5DPXY0HMRPTWBZUW2mMVDQKxZ
-         SNXQTYNOtAGP/wfDxBfmWdRXjvkyQGGT9e37Hh+8=
-Date:   Fri, 23 Jun 2023 20:52:27 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 06/39] drm: renesas: shmobile: Add support for Runtime PM
-Message-ID: <20230623175227.GP2112@pendragon.ideasonboard.com>
-References: <cover.1687423204.git.geert+renesas@glider.be>
- <742b3351c1aed1f546ac2dcc1de15e0d04cc24d4.1687423204.git.geert+renesas@glider.be>
- <20230623150742.GK2112@pendragon.ideasonboard.com>
- <20230623151109.GL2112@pendragon.ideasonboard.com>
- <CAMuHMdWn-V5b61t7SDDEW_fUt09Y=EVPdXCmAiht0c4uD67siA@mail.gmail.com>
- <20230623153425.GQ2112@pendragon.ideasonboard.com>
- <CAMuHMdU-2kfL1ysgriVg_2_y85YXr0v49mHuYxLJJGyLGr7V=w@mail.gmail.com>
+        Fri, 23 Jun 2023 13:53:46 -0400
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF45E2136;
+        Fri, 23 Jun 2023 10:53:45 -0700 (PDT)
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-5728df0a7d9so8371437b3.1;
+        Fri, 23 Jun 2023 10:53:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687542825; x=1690134825;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mvsLdT639PCbMIODrmN1JmfHHDk3gCbxCBi4kyaJ9fk=;
+        b=cPC8oMX/iNTjnqqtlRw8ZkssLewcdWmf4d19+JCNwWXuKm3HoYGFkJat0YB0KS4oMF
+         FAf60dASGavmxdumXNW/cAmWQIEIHsmPiuz6BWDlZ0zPVSSoFa1Hlx1OacfT47zh0THN
+         bpJj8kinB/krZ5aTII8RWuFSwmrWhR5T7KtXUyJNI6JjbQDQn8SKXZe5cBL3eXZ1zaO8
+         I14iDxohnKDOQPbWzIilrJCw5qHk7PIoEbUBloJjYNWxx3lu4tmFtbE+l0shbbz4szbS
+         sKGwWWiIkWgU0Ri+ZWOS9kuoMMx4A6Ov4+FCaT5Jl/f5iadj0+7oj8uv9RrhTCBGpBRJ
+         ZcsQ==
+X-Gm-Message-State: AC+VfDwnecGhMYvq+8QVD7rQwzBNGwcfq4Gryrz0b3Y40Nu4KFSqQAgv
+        x72hkBLDWjdo9PxyqYgGsTVJROPPTJlYgdPm
+X-Google-Smtp-Source: ACHHUZ7HZpOiRR30jhKaLUjJRu/yiBEdFbrmQ9OVVmIviloPYphYHFGW1nqdqos7Tpgl+tmRUwgvYw==
+X-Received: by 2002:a0d:dd88:0:b0:561:9d66:e1a with SMTP id g130-20020a0ddd88000000b005619d660e1amr25139437ywe.34.1687542824639;
+        Fri, 23 Jun 2023 10:53:44 -0700 (PDT)
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
+        by smtp.gmail.com with ESMTPSA id t62-20020a815f41000000b0057682d3f95fsm196889ywb.136.2023.06.23.10.53.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Jun 2023 10:53:44 -0700 (PDT)
+Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-bb2ffa1e235so752794276.0;
+        Fri, 23 Jun 2023 10:53:43 -0700 (PDT)
+X-Received: by 2002:a81:60d6:0:b0:570:7fcb:9506 with SMTP id
+ u205-20020a8160d6000000b005707fcb9506mr21842972ywb.37.1687542823789; Fri, 23
+ Jun 2023 10:53:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMuHMdU-2kfL1ysgriVg_2_y85YXr0v49mHuYxLJJGyLGr7V=w@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230623081242.109131-1-tanure@linux.com> <20230623081242.109131-3-tanure@linux.com>
+ <a885b97e-aaf0-cb72-f25b-71054d6d3fe2@linaro.org>
+In-Reply-To: <a885b97e-aaf0-cb72-f25b-71054d6d3fe2@linaro.org>
+Reply-To: tanure@linux.com
+From:   Lucas Tanure <tanure@linux.com>
+Date:   Fri, 23 Jun 2023 18:53:32 +0100
+X-Gmail-Original-Message-ID: <CAJX_Q+2qZg+RuwxmnM3rzs_akt_UMJRx+=aMxf72P-sGNjm9uw@mail.gmail.com>
+Message-ID: <CAJX_Q+2qZg+RuwxmnM3rzs_akt_UMJRx+=aMxf72P-sGNjm9uw@mail.gmail.com>
+Subject: Re: [PATCH v5 2/4] dt-bindings: serial: amlogic,meson-uart: Add
+ compatible string for T7
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>, Nick <nick@khadas.com>,
+        Artem <art@khadas.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
-
-On Fri, Jun 23, 2023 at 07:41:36PM +0200, Geert Uytterhoeven wrote:
-> On Fri, Jun 23, 2023 at 5:34 PM Laurent Pinchart wrote:
-> > On Fri, Jun 23, 2023 at 05:22:45PM +0200, Geert Uytterhoeven wrote:
-> > > On Fri, Jun 23, 2023 at 5:11 PM Laurent Pinchart wrote:
-> > > > On Fri, Jun 23, 2023 at 06:07:44PM +0300, Laurent Pinchart wrote:
-> > > > > On Thu, Jun 22, 2023 at 11:21:18AM +0200, Geert Uytterhoeven wrote:
-> > > > > > The SH-Mobile LCD Controller is part of a PM Domain on all relevant SoCs
-> > > > > > (clock domain on all, power domain on some).  Hence it may not be
-> > > > > > sufficient to manage the LCDC module clock explicitly (e.g. if the
-> > > > > > selected clock source differs from SHMOB_DRM_CLK_BUS).
-> > > > > >
-> > > > > > Fix this by using Runtime PM instead.
-> > > > > >
-> > > > > > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > > > > > ---
-> > > > > >  drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c | 11 ++++++++++-
-> > > > > >  drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c  |  5 +++++
-> > > > > >  2 files changed, 15 insertions(+), 1 deletion(-)
-> > > > > >
-> > > > > > diff --git a/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c b/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c
-> > > > > > index fbfd906844da490c..84dbf35025d7be63 100644
-> > > > > > --- a/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c
-> > > > > > +++ b/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c
-> > > > > > @@ -9,6 +9,7 @@
-> > > > > >
-> > > > > >  #include <linux/backlight.h>
-> > > > > >  #include <linux/clk.h>
-> > > > > > +#include <linux/pm_runtime.h>
-> > > > > >
-> > > > > >  #include <drm/drm_crtc.h>
-> > > > > >  #include <drm/drm_crtc_helper.h>
-> > > > > > @@ -170,10 +171,16 @@ static void shmob_drm_crtc_start(struct shmob_drm_crtc *scrtc)
-> > > > > >     if (WARN_ON(format == NULL))
-> > > > > >             return;
-> > > > > >
-> > > > > > +   ret = pm_runtime_resume_and_get(sdev->dev);
-> > > > > > +   if (ret)
-> > > > > > +           return;
-> > > > > > +
-> > > > > >     /* Enable clocks before accessing the hardware. */
-> > > > > >     ret = shmob_drm_clk_on(sdev);
-> > > > >
-> > > > > This would be best located in the runtime PM resume handler. Same for
-> > > > > disabling clocks in the runtime PM suspend handler.
-> > > >
-> > > > The driver should then depend on CONFIG_PM. There's no indirect
-> > > > dependency through CONFIG_DRM as far as I can tell, but there's one
-> > > > through ARCH_SHMOBILE. This then got me puzzled, as ARCH_SHMOBILE is
-> > > > defined in arch/sh/Kconfig, and this driver depends on ARM. Am I missing
-> > > > something ?
-> > >
-> > > Vommit 4bd65789ba847f39 ("drm: shmobile: Make DRM_SHMOBILE visible on
-> > > Renesas SoC platforms") in drm-next:
-> > >
-> > > -       depends on DRM && ARM
-> > > -       depends on ARCH_SHMOBILE || COMPILE_TEST
-> > > +       depends on DRM
-> > > +       depends on ARCH_RENESAS || ARCH_SHMOBILE || COMPILE_TEST
+On Fri, Jun 23, 2023 at 9:51 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 23/06/2023 10:12, Lucas Tanure wrote:
+> > Amlogic T7 SoCs uses the same UART controller as S4 SoCs and G12A.
+> > There is no need for an extra compatible line in the driver, but
+> > add T7 compatible line for documentation.
 > >
-> > That's better indeed :-)
+> > Signed-off-by: Lucas Tanure <tanure@linux.com>
+> > ---
+> >  .../devicetree/bindings/serial/amlogic,meson-uart.yaml        | 4 ++++
+> >  1 file changed, 4 insertions(+)
 > >
-> > A dependency on CONFIG_PM is still needed as ARCH_RENESAS doesn't depend
-> > on it.
-> 
-> ARCH_RMOBILE selects PM, so PM will be enabled on affected platforms.
+> > diff --git a/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml b/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
+> > index 01ec45b3b406..ad970c9ed1c7 100644
+> > --- a/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
+> > +++ b/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
+> > @@ -50,6 +50,10 @@ properties:
+> >          items:
+> >            - const: amlogic,meson-g12a-uart
+> >            - const: amlogic,meson-gx-uart
+> > +      - description: UART controller on T7 compatible SoCs
+>
+> Your description is rather incorrect. This is UART on SoCs compatible
+> with S4, not with T7. Otherwise what do you expect to grow later when
+> adding more compatible devices? Just drop the description, it's kind of
+> obvious when done correctly (but can be misleading if done wrong).
+>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>
+Sorry, but S4 is already added in another way, which accepts just an
+S4 compatible string.
+But for T7 we need a fallback.
+Could you let me know what you're asking here? Redo S4 and add T7? Or
+do T7 in another different way that I didn't get?
+Do you want a v6 patch series? If yes, could you be more clear about
+how you want it?
 
-Which also means that you will never test compilation without CONFIG_PM,
-while bots will. There's a risk of introducing compilation warnings.
-
--- 
-Regards,
-
-Laurent Pinchart
+>
+> Best regards,
+> Krzysztof
+>
