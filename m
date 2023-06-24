@@ -2,264 +2,428 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEE0B73CA4B
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 11:50:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C72CA73CA52
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 11:55:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232545AbjFXJtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 05:49:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59794 "EHLO
+        id S233007AbjFXJzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 05:55:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230525AbjFXJta (ORCPT
+        with ESMTP id S230525AbjFXJzP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 05:49:30 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3CC791999;
-        Sat, 24 Jun 2023 02:49:27 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8BxlfAmvJZkZSwBAA--.1903S3;
-        Sat, 24 Jun 2023 17:49:26 +0800 (CST)
-Received: from [10.20.42.43] (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxvM4lvJZkqwYFAA--.25584S3;
-        Sat, 24 Jun 2023 17:49:25 +0800 (CST)
-Message-ID: <1a85a81b-36d4-02c9-50c2-8a1988a4ef37@loongson.cn>
-Date:   Sat, 24 Jun 2023 17:49:25 +0800
+        Sat, 24 Jun 2023 05:55:15 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D042A1FFD
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 02:55:12 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-98377c5d53eso167488266b.0
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 02:55:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687600511; x=1690192511;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/ggSn0p3HLo2+unzYGYN7WsdbAce0K2IgCOxTMxE64k=;
+        b=BOsZzwLL4CV9Rq/0kY5hQMjmZpBy2HSSYn1/AYZDevXeurEb/EKut7HOg2GqcOlT/f
+         FC7O6wFHdARTaSaU4K0kE2z6EJYbKXHmu/+N/H9peF6U5UBL4VIhusM7McbtxA2PT0dF
+         uRUmDRSUSedd5Hn8cxxxUsN5jufrzknqJh781rF7aR+VX25puPbbIKQbeJ63BQlpSrQR
+         +cbiwlN7XldKE7u+WJawjUO8nGkqqpP+OCF0r8oItERsz1oZRG+iO/r1uVkA35lkwJfH
+         hb++YyV3kA7OH3qw+jjEi4EqVjyHyPFQvx7ZuRBSrhPYjJmlBZLkDY6mwvS1dFRl7+pL
+         ey1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687600511; x=1690192511;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/ggSn0p3HLo2+unzYGYN7WsdbAce0K2IgCOxTMxE64k=;
+        b=l/p4Vg+5N5IWmsgwR7qB86fjgqGlt5j7OqKVclRoRTJV7hZDPJEN4IrfP4EfHg5Koj
+         gVI+2nmgM2GRgV1pLqHuLnAnhW54+OWCQBJTU3Fx+rrrDn+hGeVR6Bn2VzOyqQ6T+F1T
+         qcN3xOSwzRpE8HZ9kKPyiPlkX2Exc/94fLPAdvoLn0JHpiX/r6v4bSDAx8WWtc4QC9jz
+         V15PjJojuAulaN83r8ueK0sz3eh7mEgioqridaXWLES4lSwBkjSWbfPcqKMLiGKmw0c+
+         uXjvfJcuevNmNQ51NMF2tKoPaj6u77RDwf+/yMFQIdFHDkL3iJEMWFAmQq0kR5sIO4VM
+         SIXw==
+X-Gm-Message-State: AC+VfDwN23hcOMuYWJaq76nJr1BHhxsB/SqURtpM09eAeMvv9hiI46qb
+        mrG6BUz42ahn/52zO2FMdKoUwg==
+X-Google-Smtp-Source: ACHHUZ5zjRbOThh8j3nf0OBEOpbhjF5ZuZKd06Q6eyvg35DgyG1nnbu1SRSk4HgVy3Pgt3+CbGrmyA==
+X-Received: by 2002:a17:907:16a3:b0:98c:e3a1:dbd0 with SMTP id hc35-20020a17090716a300b0098ce3a1dbd0mr7156275ejc.6.1687600511131;
+        Sat, 24 Jun 2023 02:55:11 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id p14-20020a1709061b4e00b009888b71c368sm696448ejg.152.2023.06.24.02.55.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 24 Jun 2023 02:55:10 -0700 (PDT)
+Message-ID: <42126265-75b6-83be-c3aa-ee2a16cb26dd@linaro.org>
+Date:   Sat, 24 Jun 2023 11:55:08 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [20/39] drm: renesas: shmobile: Replace .dev_private with
- container_of()
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Magnus Damm <magnus.damm@gmail.com>
-Cc:     linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-References: <48a0d1dcdf18ca07b97e2813ba26f9e52198a716.1687423204.git.geert+renesas@glider.be>
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 3/7] soc: qcom: add QCOM PBS driver
 Content-Language: en-US
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-Organization: Loongson
-In-Reply-To: <48a0d1dcdf18ca07b97e2813ba26f9e52198a716.1687423204.git.geert+renesas@glider.be>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Anjelique Melendez <quic_amelende@quicinc.com>, pavel@ucw.cz,
+        lee@kernel.org, thierry.reding@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        agross@kernel.org, andersson@kernel.org
+Cc:     konrad.dybcio@linaro.org, u.kleine-koenig@pengutronix.de,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pwm@vger.kernel.org
+References: <20230621185949.2068-1-quic_amelende@quicinc.com>
+ <20230621185949.2068-4-quic_amelende@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230621185949.2068-4-quic_amelende@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8CxvM4lvJZkqwYFAA--.25584S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj93XoWxtw45Xw43JF18Aw45XrW5urX_yoWfGF1xpF
-        48AayYyFW0qrZ0gryUAFsruFnI9r13ta4fuFyUG3y3Kr4vq347J3WrJFnxCFWDJry7Ca13
-        XrnIgF4rZr109rXCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUB0b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-        Gr0_Gr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
-        kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWU
-        AwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMx
-        k0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_
-        Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67
-        AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8I
-        cVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI
-        8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v2
-        6r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU4oGQDUUUU
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 2023/6/22 17:21, Geert Uytterhoeven wrote:
-> Now that drm_device is embedded in shmob_drm_device, we can use
-> a container_of()-based helper to get the shmob_drm_device pointer from
-> the drm_device, instead of using the deprecated drm_device.dev_private
-> field.
->
-> While at it, restore reverse Xmas tree ordering of local variable
-> declarations.
->
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-
-Reviewed-by: Sui Jingfeng <suijingfeng@loongson.cn>
-
+On 21/06/2023 20:59, Anjelique Melendez wrote:
+> Add the Qualcomm PBS (Programmable Boot Sequencer) driver. The QCOM PBS
+> driver supports configuring software PBS trigger events through PBS RAM
+> on Qualcomm Technologies, Inc (QTI) PMICs.
+> 
+> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
 > ---
->   .../gpu/drm/renesas/shmobile/shmob_drm_crtc.c | 20 +++++++++----------
->   .../gpu/drm/renesas/shmobile/shmob_drm_drv.c  |  4 +---
->   .../gpu/drm/renesas/shmobile/shmob_drm_drv.h  |  5 +++++
->   .../drm/renesas/shmobile/shmob_drm_plane.c    |  6 +++---
->   4 files changed, 19 insertions(+), 16 deletions(-)
->
-> diff --git a/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c b/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c
-> index 40948b56017ff2df..291b3a5014c24f08 100644
-> --- a/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c
-> +++ b/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c
-> @@ -63,7 +63,7 @@ static void shmob_drm_clk_off(struct shmob_drm_device *sdev)
->   static void shmob_drm_crtc_setup_geometry(struct shmob_drm_crtc *scrtc)
->   {
->   	struct drm_crtc *crtc = &scrtc->crtc;
-> -	struct shmob_drm_device *sdev = crtc->dev->dev_private;
-> +	struct shmob_drm_device *sdev = to_shmob_device(crtc->dev);
->   	const struct shmob_drm_interface_data *idata = &sdev->pdata->iface;
->   	const struct drm_display_mode *mode = &crtc->mode;
->   	u32 value;
-> @@ -102,7 +102,7 @@ static void shmob_drm_crtc_setup_geometry(struct shmob_drm_crtc *scrtc)
->   
->   static void shmob_drm_crtc_start_stop(struct shmob_drm_crtc *scrtc, bool start)
->   {
-> -	struct shmob_drm_device *sdev = scrtc->crtc.dev->dev_private;
-> +	struct shmob_drm_device *sdev = to_shmob_device(scrtc->crtc.dev);
->   	u32 value;
->   
->   	value = lcdc_read(sdev, LDCNT2R);
-> @@ -136,7 +136,7 @@ static void shmob_drm_crtc_start_stop(struct shmob_drm_crtc *scrtc, bool start)
->   static void shmob_drm_crtc_start(struct shmob_drm_crtc *scrtc)
->   {
->   	struct drm_crtc *crtc = &scrtc->crtc;
-> -	struct shmob_drm_device *sdev = crtc->dev->dev_private;
-> +	struct shmob_drm_device *sdev = to_shmob_device(crtc->dev);
->   	const struct shmob_drm_interface_data *idata = &sdev->pdata->iface;
->   	const struct shmob_drm_format_info *format;
->   	struct drm_device *dev = &sdev->ddev;
-> @@ -223,7 +223,7 @@ static void shmob_drm_crtc_start(struct shmob_drm_crtc *scrtc)
->   static void shmob_drm_crtc_stop(struct shmob_drm_crtc *scrtc)
->   {
->   	struct drm_crtc *crtc = &scrtc->crtc;
-> -	struct shmob_drm_device *sdev = crtc->dev->dev_private;
-> +	struct shmob_drm_device *sdev = to_shmob_device(crtc->dev);
->   
->   	if (!scrtc->started)
->   		return;
-> @@ -280,7 +280,7 @@ static void shmob_drm_crtc_compute_base(struct shmob_drm_crtc *scrtc,
->   static void shmob_drm_crtc_update_base(struct shmob_drm_crtc *scrtc)
->   {
->   	struct drm_crtc *crtc = &scrtc->crtc;
-> -	struct shmob_drm_device *sdev = crtc->dev->dev_private;
-> +	struct shmob_drm_device *sdev = to_shmob_device(crtc->dev);
->   
->   	shmob_drm_crtc_compute_base(scrtc, crtc->x, crtc->y);
->   
-> @@ -322,8 +322,8 @@ static int shmob_drm_crtc_mode_set(struct drm_crtc *crtc,
->   				   int x, int y,
->   				   struct drm_framebuffer *old_fb)
->   {
-> +	struct shmob_drm_device *sdev = to_shmob_device(crtc->dev);
->   	struct shmob_drm_crtc *scrtc = to_shmob_crtc(crtc);
-> -	struct shmob_drm_device *sdev = crtc->dev->dev_private;
->   	const struct shmob_drm_format_info *format;
->   
->   	format = shmob_drm_format_info(crtc->primary->fb->format->format);
-> @@ -428,7 +428,7 @@ static void shmob_drm_crtc_enable_vblank(struct shmob_drm_device *sdev,
->   
->   static int shmob_drm_enable_vblank(struct drm_crtc *crtc)
->   {
-> -	struct shmob_drm_device *sdev = crtc->dev->dev_private;
-> +	struct shmob_drm_device *sdev = to_shmob_device(crtc->dev);
->   
->   	shmob_drm_crtc_enable_vblank(sdev, true);
->   
-> @@ -437,7 +437,7 @@ static int shmob_drm_enable_vblank(struct drm_crtc *crtc)
->   
->   static void shmob_drm_disable_vblank(struct drm_crtc *crtc)
->   {
-> -	struct shmob_drm_device *sdev = crtc->dev->dev_private;
-> +	struct shmob_drm_device *sdev = to_shmob_device(crtc->dev);
->   
->   	shmob_drm_crtc_enable_vblank(sdev, false);
->   }
-> @@ -511,7 +511,7 @@ static bool shmob_drm_encoder_mode_fixup(struct drm_encoder *encoder,
->   					 struct drm_display_mode *adjusted_mode)
->   {
->   	struct drm_device *dev = encoder->dev;
-> -	struct shmob_drm_device *sdev = dev->dev_private;
-> +	struct shmob_drm_device *sdev = to_shmob_device(dev);
->   	struct drm_connector *connector = &sdev->connector.connector;
->   	const struct drm_display_mode *panel_mode;
->   
-> @@ -581,7 +581,7 @@ static inline struct shmob_drm_connector *to_shmob_connector(struct drm_connecto
->   
->   static int shmob_drm_connector_get_modes(struct drm_connector *connector)
->   {
-> -	struct shmob_drm_device *sdev = connector->dev->dev_private;
-> +	struct shmob_drm_device *sdev = to_shmob_device(connector->dev);
->   	struct drm_display_mode *mode;
->   
->   	mode = drm_mode_create(connector->dev);
-> diff --git a/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c b/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c
-> index 2b77af3a8c97ef8c..1a1d66c6e817e227 100644
-> --- a/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c
-> +++ b/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c
-> @@ -95,7 +95,7 @@ static int shmob_drm_setup_clocks(struct shmob_drm_device *sdev,
->   static irqreturn_t shmob_drm_irq(int irq, void *arg)
->   {
->   	struct drm_device *dev = arg;
-> -	struct shmob_drm_device *sdev = dev->dev_private;
-> +	struct shmob_drm_device *sdev = to_shmob_device(dev);
->   	unsigned long flags;
->   	u32 status;
->   
-> @@ -217,8 +217,6 @@ static int shmob_drm_probe(struct platform_device *pdev)
->   	if (ret < 0)
->   		return ret;
->   
-> -	ddev->dev_private = sdev;
-> -
->   	ret = shmob_drm_modeset_init(sdev);
->   	if (ret < 0)
->   		return dev_err_probe(&pdev->dev, ret,
-> diff --git a/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.h b/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.h
-> index 77bb0da48f37ace8..5e55ba7a207865bd 100644
-> --- a/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.h
-> +++ b/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.h
-> @@ -39,4 +39,9 @@ struct shmob_drm_device {
->   	struct shmob_drm_connector connector;
->   };
->   
-> +static inline struct shmob_drm_device *to_shmob_device(struct drm_device *dev)
+>  drivers/soc/qcom/Kconfig          |   9 +
+>  drivers/soc/qcom/Makefile         |   1 +
+>  drivers/soc/qcom/qcom-pbs.c       | 343 ++++++++++++++++++++++++++++++
+>  include/linux/soc/qcom/qcom-pbs.h |  36 ++++
+>  4 files changed, 389 insertions(+)
+>  create mode 100644 drivers/soc/qcom/qcom-pbs.c
+>  create mode 100644 include/linux/soc/qcom/qcom-pbs.h
+> 
+> diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
+> index a491718f8064..226b668f4690 100644
+> --- a/drivers/soc/qcom/Kconfig
+> +++ b/drivers/soc/qcom/Kconfig
+> @@ -260,6 +260,15 @@ config QCOM_APR
+>  	  used by audio driver to configure QDSP6
+>  	  ASM, ADM and AFE modules.
+>  
+> +config QCOM_PBS
+> +	tristate "PBS trigger support for Qualcomm PMIC"
+> +	depends on SPMI
+> +	help
+> +	  This driver supports configuring software programmable boot sequencer (PBS)
+> +	  trigger event through PBS RAM on Qualcomm Technologies, Inc. PMICs.
+> +	  This module provides the APIs to the client drivers that wants to send the
+> +	  PBS trigger event to the PBS RAM.
+> +
+>  config QCOM_ICC_BWMON
+>  	tristate "QCOM Interconnect Bandwidth Monitor driver"
+>  	depends on ARCH_QCOM || COMPILE_TEST
+> diff --git a/drivers/soc/qcom/Makefile b/drivers/soc/qcom/Makefile
+> index 0f43a88b4894..4e154af3877a 100644
+> --- a/drivers/soc/qcom/Makefile
+> +++ b/drivers/soc/qcom/Makefile
+> @@ -31,5 +31,6 @@ obj-$(CONFIG_QCOM_LLCC) += llcc-qcom.o
+>  obj-$(CONFIG_QCOM_RPMHPD) += rpmhpd.o
+>  obj-$(CONFIG_QCOM_RPMPD) += rpmpd.o
+>  obj-$(CONFIG_QCOM_KRYO_L2_ACCESSORS) +=	kryo-l2-accessors.o
+> +obj-$(CONFIG_QCOM_PBS) += qcom-pbs.o
+>  obj-$(CONFIG_QCOM_ICC_BWMON)	+= icc-bwmon.o
+>  obj-$(CONFIG_QCOM_INLINE_CRYPTO_ENGINE)	+= ice.o
+> diff --git a/drivers/soc/qcom/qcom-pbs.c b/drivers/soc/qcom/qcom-pbs.c
+> new file mode 100644
+> index 000000000000..4a2bb7ff8031
+> --- /dev/null
+> +++ b/drivers/soc/qcom/qcom-pbs.c
+> @@ -0,0 +1,343 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
+> +
+> +#define pr_fmt(fmt)	"PBS: %s: " fmt, __func__
+> +
+> +#include <linux/delay.h>
+> +#include <linux/err.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/regmap.h>
+> +#include <linux/spmi.h>
+> +#include <linux/soc/qcom/qcom-pbs.h>
+> +
+> +#define PBS_CLIENT_TRIG_CTL		0x42
+> +#define PBS_CLIENT_SW_TRIG_BIT		BIT(7)
+> +#define PBS_CLIENT_SCRATCH1		0x50
+> +#define PBS_CLIENT_SCRATCH2		0x51
+> +
+> +static LIST_HEAD(pbs_dev_list);
+> +static DEFINE_MUTEX(pbs_list_lock);
+
+No file-scope variables. Drop both. You don't even need it.
+
+> +
+> +struct pbs_dev {
+> +	struct device		*dev;
+> +	struct device_node	*dev_node;
+> +	struct regmap		*regmap;
+> +	struct mutex		lock;
+> +	struct list_head	link;
+> +
+> +	u32			base;
+> +};
+> +
+> +static int qcom_pbs_read(struct pbs_dev *pbs, u32 address, u8 *val)
 > +{
-> +	return container_of(dev, struct shmob_drm_device, ddev);
+> +	int ret;
+> +
+> +	address += pbs->base;
+> +	ret = regmap_bulk_read(pbs->regmap, address, val, 1);
+> +	if (ret)
+> +		pr_err("Failed to read address=%#x sid=%#x ret=%d\n",
+
+dev_err
+
+> +			address, to_spmi_device(pbs->dev->parent)->usid, ret);
+> +
+> +	return ret;
 > +}
 > +
->   #endif /* __SHMOB_DRM_DRV_H__ */
-> diff --git a/drivers/gpu/drm/renesas/shmobile/shmob_drm_plane.c b/drivers/gpu/drm/renesas/shmobile/shmob_drm_plane.c
-> index 258288c80756bf16..c58b9dca34736342 100644
-> --- a/drivers/gpu/drm/renesas/shmobile/shmob_drm_plane.c
-> +++ b/drivers/gpu/drm/renesas/shmobile/shmob_drm_plane.c
-> @@ -63,7 +63,7 @@ static void shmob_drm_plane_compute_base(struct shmob_drm_plane *splane,
->   static void __shmob_drm_plane_setup(struct shmob_drm_plane *splane,
->   				    struct drm_framebuffer *fb)
->   {
-> -	struct shmob_drm_device *sdev = splane->plane.dev->dev_private;
-> +	struct shmob_drm_device *sdev = to_shmob_device(splane->plane.dev);
->   	u32 format;
->   
->   	/* TODO: Support ROP3 mode */
-> @@ -135,8 +135,8 @@ shmob_drm_plane_update(struct drm_plane *plane, struct drm_crtc *crtc,
->   		       uint32_t src_w, uint32_t src_h,
->   		       struct drm_modeset_acquire_ctx *ctx)
->   {
-> +	struct shmob_drm_device *sdev = to_shmob_device(plane->dev);
->   	struct shmob_drm_plane *splane = to_shmob_plane(plane);
-> -	struct shmob_drm_device *sdev = plane->dev->dev_private;
->   	const struct shmob_drm_format_info *format;
->   
->   	format = shmob_drm_format_info(fb->format->format);
-> @@ -167,8 +167,8 @@ shmob_drm_plane_update(struct drm_plane *plane, struct drm_crtc *crtc,
->   static int shmob_drm_plane_disable(struct drm_plane *plane,
->   				   struct drm_modeset_acquire_ctx *ctx)
->   {
-> +	struct shmob_drm_device *sdev = to_shmob_device(plane->dev);
->   	struct shmob_drm_plane *splane = to_shmob_plane(plane);
-> -	struct shmob_drm_device *sdev = plane->dev->dev_private;
->   
->   	splane->format = NULL;
->   
+> +static int qcom_pbs_write(struct pbs_dev *pbs, u16 address, u8 val)
+> +{
+> +	int ret;
+> +
+> +	address += pbs->base;
+> +	ret = regmap_bulk_write(pbs->regmap, address, &val, 1);
+> +	if (ret < 0)
+> +		pr_err("Failed to write address=%#x sid=%#x ret=%d\n",
+> +			  address, to_spmi_device(pbs->dev->parent)->usid, ret);
+> +	else
+> +		pr_debug("Wrote %#x to addr %#x\n", val, address);
 
--- 
-Jingfeng
+No, there is regmap debug for this. Drop such debug statements from the
+driver.
+
+Actually the error print is also wrong, IMO.
+
+> +
+> +	return ret;
+> +}
+> +
+> +static int qcom_pbs_masked_write(struct pbs_dev *pbs, u16 address, u8 mask, u8 val)
+> +{
+> +	int ret;
+> +
+> +	address += pbs->base;
+> +	ret = regmap_update_bits(pbs->regmap, address, mask, val);
+> +	if (ret < 0)
+> +		pr_err("Failed to write address=%#x ret=%d\n", address, ret);
+> +	else
+> +		pr_debug("Wrote %#x to addr %#x\n", val, address);
+
+Drop
+
+> +
+> +	return ret;
+> +}
+> +
+> +static int qcom_pbs_wait_for_ack(struct pbs_dev *pbs, u8 bit_pos)
+> +{
+> +	u16 retries = 2000, delay = 1000;
+> +	int ret;
+> +	u8 val;
+> +
+> +	while (retries--) {
+> +		ret = qcom_pbs_read(pbs, PBS_CLIENT_SCRATCH2, &val);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		if (val == 0xFF) {
+> +			/* PBS error - clear SCRATCH2 register */
+> +			ret = qcom_pbs_write(pbs, PBS_CLIENT_SCRATCH2, 0);
+> +			if (ret < 0)
+> +				return ret;
+> +
+> +			pr_err("NACK from PBS for bit %u\n", bit_pos);
+> +			return -EINVAL;
+> +		}
+> +
+> +		if (val & BIT(bit_pos)) {
+> +			pr_debug("PBS sequence for bit %u executed!\n", bit_pos);
+
+dev_dbg
+
+> +			break;
+> +		}
+> +
+> +		usleep_range(delay, delay + 100);
+> +	}
+> +
+> +	if (!retries) {
+> +		pr_err("Timeout for PBS ACK/NACK for bit %u\n", bit_pos);
+
+dev_err
+> +		return -ETIMEDOUT;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +/**
+> + * qcom_pbs_trigger_single_event() - Trigger PBS sequence without using bitmap.
+> + * @pbs: Pointer to PBS device
+> + *
+> + * This function is used to trigger the PBS that is hooked on the
+> + * SW_TRIGGER directly in PBS client.
+> + *
+> + * Return: 0 on success, < 0 on failure
+> + */
+> +int qcom_pbs_trigger_single_event(struct pbs_dev *pbs)
+> +{
+> +	int ret = 0;
+> +
+> +	if (IS_ERR_OR_NULL(pbs))
+> +		return -EINVAL;
+> +
+> +	mutex_lock(&pbs->lock);
+> +	ret = qcom_pbs_masked_write(pbs, PBS_CLIENT_TRIG_CTL, PBS_CLIENT_SW_TRIG_BIT,
+> +				PBS_CLIENT_SW_TRIG_BIT);
+> +	if (ret < 0)
+> +		pr_err("Failed to write register %x ret=%d\n", PBS_CLIENT_TRIG_CTL, ret);
+
+dev_* everywhere
+
+> +	mutex_unlock(&pbs->lock);
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL(qcom_pbs_trigger_single_event);
+> +
+
+...
+
+> +/**
+> + * get_pbs_client_device() - Get the PBS device used by client
+> + * @dev: Client device
+> + *
+> + * This function is used to get the PBS device that is being
+> + * used by the client.
+> + *
+> + * Returns: pbs_dev on success, ERR_PTR on failure
+> + */
+> +struct pbs_dev *get_pbs_client_device(struct device *dev)
+> +{
+> +	struct device_node *pbs_dev_node;
+> +	struct pbs_dev *pbs;
+> +
+> +	pbs_dev_node = of_parse_phandle(dev->of_node, "qcom,pbs-client", 0);
+> +	if (!pbs_dev_node) {
+> +		pr_err("Missing qcom,pbs-client property\n");
+> +		return ERR_PTR(-ENODEV);
+> +	}
+> +
+> +	mutex_lock(&pbs_list_lock);
+> +	list_for_each_entry(pbs, &pbs_dev_list, link) {
+
+It does not make sense. You have the reference to the device, so you
+have the pbs (via container_of). Don't add some
+global-list-lookup-functions.
+
+Look for example at Abel Vesa's ICE patchset.
+
+> +		if (pbs_dev_node == pbs->dev_node) {
+> +			of_node_put(pbs_dev_node);
+> +			mutex_unlock(&pbs_list_lock);
+> +			return pbs;
+> +		}
+> +	}
+> +	mutex_unlock(&pbs_list_lock);
+
+Where is device_link handling?
+
+> +
+> +	pr_debug("Unable to find PBS dev_node\n");
+> +	of_node_put(pbs_dev_node);
+> +	return ERR_PTR(-EPROBE_DEFER);
+> +}
+> +EXPORT_SYMBOL(get_pbs_client_device);
+> +
+> +static int qcom_pbs_probe(struct platform_device *pdev)
+> +{
+> +	struct pbs_dev *pbs;
+> +	u32 val;
+> +	int ret;
+> +
+> +	pbs = devm_kzalloc(&pdev->dev, sizeof(*pbs), GFP_KERNEL);
+> +	if (!pbs)
+> +		return -ENOMEM;
+> +
+> +	pbs->dev = &pdev->dev;
+> +	pbs->dev_node = pdev->dev.of_node;
+
+Why do you need to store it?
+
+> +	pbs->regmap = dev_get_regmap(pbs->dev->parent, NULL);
+> +	if (!pbs->regmap) {
+> +		dev_err(pbs->dev, "Couldn't get parent's regmap\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	ret = device_property_read_u32(pbs->dev, "reg", &val);
+> +	if (ret < 0) {
+> +		dev_err(pbs->dev, "Couldn't find reg, ret = %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	pbs->base = val;
+> +	mutex_init(&pbs->lock);
+> +
+> +	platform_set_drvdata(pdev, pbs);
+> +
+> +	mutex_lock(&pbs_list_lock);
+> +	list_add(&pbs->link, &pbs_dev_list);
+> +	mutex_unlock(&pbs_list_lock);
+> +
+> +	return 0;
+> +}
+> +
+> +static int qcom_pbs_remove(struct platform_device *pdev)
+> +{
+> +	struct pbs_dev *pbs = platform_get_drvdata(pdev);
+> +
+> +	mutex_lock(&pbs_list_lock);
+> +	list_del(&pbs->link);
+> +	mutex_unlock(&pbs_list_lock);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id qcom_pbs_match_table[] = {
+> +	{ .compatible = "qcom,pbs" },
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(of, qcom_pbs_match_table);
+> +
+> +static struct platform_driver qcom_pbs_driver = {
+> +	.driver = {
+> +		.name		= "qcom-pbs",
+> +		.of_match_table	= qcom_pbs_match_table,
+> +	},
+> +	.probe = qcom_pbs_probe,
+> +	.remove = qcom_pbs_remove,
+> +};
+> +module_platform_driver(qcom_pbs_driver)
+> +
+> +MODULE_DESCRIPTION("QCOM PBS DRIVER");
+> +MODULE_LICENSE("GPL");
+> +MODULE_ALIAS("platform:qcom-pbs");
+
+Drop alias. Not needed. If you need it, you have missing ID table.
+
+> diff --git a/include/linux/soc/qcom/qcom-pbs.h b/include/linux/soc/qcom/qcom-pbs.h
+> new file mode 100644
+> index 000000000000..4b065951686a
+> --- /dev/null
+
+
+
+Best regards,
+Krzysztof
 
