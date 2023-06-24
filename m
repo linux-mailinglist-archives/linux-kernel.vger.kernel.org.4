@@ -2,136 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E38A73CA24
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 11:28:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3712473CA1E
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 11:28:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233074AbjFXJ2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 05:28:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53528 "EHLO
+        id S233029AbjFXJ2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 05:28:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233086AbjFXJ2Q (ORCPT
+        with ESMTP id S233056AbjFXJ2O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 05:28:16 -0400
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 895CE26B0;
-        Sat, 24 Jun 2023 02:28:09 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 3DD9B5842D1;
-        Sat, 24 Jun 2023 05:28:05 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Sat, 24 Jun 2023 05:28:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1687598885; x=1687606085; bh=qY
-        ntvL1gKhXrmWH0tTXfCuX8ddCTc/3rP2W4LxyKhm0=; b=2fzrhKF90cpXdCJJhX
-        LNQ5t74+BoUFAWu2Z9oVvwfRP+G2j+kHetfXDo7jXuv6MZjlVNDYMOe5uMBuCdrY
-        tfPOeSOrdnMHi5ExY6XX7AWMG7KA6nVtCTrwrLskcwomUPvEud6GLH7At6wunV8T
-        1xjw8VbSHv+R4fEe2U3K0VAbm+xpbPHip2N4n+Wjl5qhwQ5ZCL9UOgj1O/Ev3fUz
-        wFoNMcX1DQqOGh3VF3wDQoCuthyjHY5xOlhizC1sa5RpiNIFDzQpiYdpxDZoyaus
-        Jb8lK1gCGSw8zq5XV56wA5i2aAdBsF5Nj6taOY18hsohd5+dcepsDuWV8vsh6/Bp
-        FnCg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1687598885; x=1687606085; bh=qYntvL1gKhXrm
-        WH0tTXfCuX8ddCTc/3rP2W4LxyKhm0=; b=Ss12EnHU4AcwmUdUHarRTM5S6SQng
-        s1jzkZTwt45UxEwaoXOe27PqNaIoImQzAcGstwg5plJ41roH3XuppaxR7+klgqAT
-        t2qTaZahs2nvwu7r3H1VhEDI35lYik3jAGEsIHR2BPHNrkn6lrob8XsuLvH5a0nS
-        3PctpKkR+/0CA0SYvMYr+Yi8zJioA3pDKC07QmhNdD7FSzOplFMmbgKTCxZsf7qJ
-        UiCtm5Hf06e/mrw5KEp0RhzySvecvFKrkEIZ3jIqTxjSlYxkPmMjRGDkZYisUHdp
-        Ltzzz1MP7nRj6pHsmgact/qcePRWHX8qnnokQvpv2K8E68y0F1jWwV5xw==
-X-ME-Sender: <xms:JLeWZFOBFglxl1i5bI3l1p0oN8XlQzdcdm1l_G7s8_E-sM0HZytL4g>
-    <xme:JLeWZH--P5FdBTJ_umdmBwIQ3BaF9UxuoF5B2lSO_XD_aJ1GsWYULUTZ9P4U_i4Wt
-    0CGKV6DR5IBfrDLmGM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeegjedgudeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:JLeWZESOvtN3WRtL4qcbs1TxlvwwnmscUJ664LO5SZIsEeCM99_NTw>
-    <xmx:JLeWZBsXh796y04w6P0GVP04uwY_zKhNkC-ozsUZCaW2YmXR9CpM-Q>
-    <xmx:JLeWZNfcbt5O64mkJb1sR3C8x8YFQCpWT18ij9tkQXIoWlLXKJHfnQ>
-    <xmx:JbeWZOBhhQ4yvPgqPpUS3E42vsWe4WTrrcu1uDU2wkIyXn5yBFMoWw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 03220B60086; Sat, 24 Jun 2023 05:28:03 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
-Mime-Version: 1.0
-Message-Id: <55130a50-d129-4336-99ce-3be4229b1c7d@app.fastmail.com>
-In-Reply-To: <c525adc9-6623-4660-8718-e0c9311563b8@roeck-us.net>
-References: <20230417125651.25126-18-tzimmermann@suse.de>
- <c525adc9-6623-4660-8718-e0c9311563b8@roeck-us.net>
-Date:   Sat, 24 Jun 2023 11:27:42 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Guenter Roeck" <linux@roeck-us.net>,
-        "Thomas Zimmermann" <tzimmermann@suse.de>
-Cc:     "Daniel Vetter" <daniel.vetter@ffwll.ch>,
-        "Helge Deller" <deller@gmx.de>,
-        "Javier Martinez Canillas" <javierm@redhat.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-fbdev@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-sh@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-mips@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, loongarch@lists.linux.dev,
-        sparclinux@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org,
-        "David S . Miller" <davem@davemloft.net>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [v3,17/19] arch/sparc: Implement fb_is_primary_device() in source file
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sat, 24 Jun 2023 05:28:14 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C213C26A8
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 02:28:08 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-3094910b150so1707433f8f.0
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 02:28:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent.com; s=google; t=1687598887; x=1690190887;
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=yALLPmOE7+hISGtYfMqKGpt/k5yG5q3Ed3XuC87leZ8=;
+        b=Qv1Ua19tBkqyWfEwzA5JBVMzDRypzLj5juPHXL9MXlsxlPXF+KUNdGNDgktJlSrrTY
+         0uUhXsfhl7DT+xVr7gb5ezCgaLruQC8cSfGL0mSvEzc+qr7S+JFU40WMbb2bl9TRwARX
+         1ilpKnmsf105pKf+wJr3h9nsLH6kiCqFkud69H0mDwaB0ua0WTRnEnpGDZeb7War868m
+         YprPYPiWM5MPAulDrmbxAOJcdh/SzuU4jL6hiTIE+hdqHOJmHR6DFGzz5FaP/44hcPM8
+         jLnr6pYgF0jSh5Bdla2vC727/GtxmPoV0YvDpU9iuyQPkS/y2szdsUA1sgV+jnU+CXH0
+         QQHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687598887; x=1690190887;
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yALLPmOE7+hISGtYfMqKGpt/k5yG5q3Ed3XuC87leZ8=;
+        b=gcAr4xyKPyL5LM33RzZEq4qe4sxl6iZ/sHsNyCXmzeLyBMqbJ7ADzfF+PjrNkbMiMG
+         R85gtgO5oYbDcR3Z/sX6Tbm49r7jo6GYkhdmueN8XcLPkr2x0AQIfGqsqMqd8xdyjXSu
+         ZRbuRedlHg3gGTt6AfQ2LoLpClzDSdYEWnnrnA14am5yimW33Hv+XvIq5P+ZKRDx6TyF
+         AP4DizGS3sQxujvdDah4vSrRCIwY539XnDdc+nSR53X196+049Id1REgfieeYGdFSaYp
+         cIdIlf5nff+TsCmCg8Xh/ZfeHiWp4wsJy5TulDgFnvhrgXSajAX5iZHmymmKC7Fl4yMV
+         FqfA==
+X-Gm-Message-State: AC+VfDx1Guu8d4rxgNrbSUlmWo+yaudWYst7eh0IRfInQT3Hw3kuKtY2
+        G80INkjQp84gBuEjZ5HF17Y1iQ==
+X-Google-Smtp-Source: ACHHUZ7UZ43FKF6Jax69cdaAZdJa6U/q1U7TusiAstVCGhkk0TjGj6cLc/jLumslzqFBTp16WULcow==
+X-Received: by 2002:a5d:6ad1:0:b0:2f5:d3d7:7af4 with SMTP id u17-20020a5d6ad1000000b002f5d3d77af4mr18514644wrw.63.1687598887140;
+        Sat, 24 Jun 2023 02:28:07 -0700 (PDT)
+Received: from ?IPv6:::1? ([2a02:8011:e80c:0:9f:41d5:6eae:4002])
+        by smtp.gmail.com with ESMTPSA id f13-20020a5d50cd000000b0030647d1f34bsm1652247wrt.1.2023.06.24.02.28.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 24 Jun 2023 02:28:06 -0700 (PDT)
+Date:   Sat, 24 Jun 2023 10:28:05 +0100
+From:   Quentin Monnet <quentin@isovalent.com>
+To:     Fangrui Song <maskray@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>, bpf@vger.kernel.org
+CC:     linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Yonghong Song <yhs@fb.com>
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v2=5D_bpf=3A_Replace_depreca?= =?US-ASCII?Q?ted_-target_with_--target=3D_for_Clang?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20230624001856.1903733-1-maskray@google.com>
+References: <20230624001856.1903733-1-maskray@google.com>
+Message-ID: <A886FC2C-35BE-4215-B9FD-61B62EC56ACC@isovalent.com>
+MIME-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 24, 2023, at 03:55, Guenter Roeck wrote:
+
+
+On 24 June 2023 01:18:56 BST, Fangrui Song <maskray@google=2Ecom> wrote:
+>-target has been deprecated since Clang 3=2E4 in 2013=2E Use the preferre=
+d
+>--target=3Dbpf form instead=2E This matches how we use --target=3D in
+>scripts/Makefile=2Eclang=2E
 >
-> On Mon, Apr 17, 2023 at 02:56:49PM +0200, Thomas Zimmermann wrote:
->> Other architectures implment fb_is_primary_device() in a source
->> file. Do the same on sparc. No functional changes, but allows to
->> remove several include statement from <asm/fb.h>.
->> 
->> v2:
->> 	* don't include <asm/prom.h> in header file
->> 
->> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
->> Cc: "David S. Miller" <davem@davemloft.net>
->
-> This patch results (or appears to result) in the following build error
-> when trying to build sparc64:allmodconfig.
->
-> Error log:
-> <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-> WARNING: modpost: drivers/cpufreq/sparc-us2e-cpufreq: section mismatch 
-> in reference: cpufreq_us2e_driver+0x20 (section: .data) -> 
-> us2e_freq_cpu_init (section: .init.text)
-> WARNING: modpost: drivers/cpufreq/sparc-us3-cpufreq: section mismatch 
-> in reference: cpufreq_us3_driver+0x20 (section: .data) -> 
-> us3_freq_cpu_init (section: .init.text)
-> ERROR: modpost: "__xchg_called_with_bad_pointer" [lib/atomic64_test.ko] 
-> undefined!
+>Link: https://github=2Ecom/llvm/llvm-project/commit/274b6f0c87a6a1798de0a=
+68135afc7f95def6277
+>Signed-off-by: Fangrui Song <maskray@google=2Ecom>
+>Acked-by: Yonghong Song <yhs@fb=2Ecom>
 
-These all look like old bugs that would be trivially fixed if
-anyone cared about sparc.
-
-> ERROR: modpost: missing MODULE_LICENSE() in arch/sparc/video/fbdev.o
-
-I checked that there are no callers of fb_is_primary_device()
-in built-in code when CONFIG_FB is =m, so adding the MODULE_LICENSE()
-and MODULE_DESCRIPTION() tags to the file is the correct fix.
-
-    Arnd
+Acked-by: Quentin Monnet <quentin@isovalent=2Ecom>
