@@ -2,117 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D018E73CBD4
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 18:06:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6712F73CBD6
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 18:11:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231964AbjFXQGU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 12:06:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56988 "EHLO
+        id S231883AbjFXQLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 12:11:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjFXQGT (ORCPT
+        with ESMTP id S229485AbjFXQLi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 12:06:19 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 858F4E5E;
-        Sat, 24 Jun 2023 09:06:17 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35OFwvSD003729;
-        Sat, 24 Jun 2023 16:06:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=AHeKVxN60rAVGoJtIK+ThHIv61dgUGDzkTmgkYmzxzg=;
- b=fjgH+Q42vxty8HRmoAIjsGPTcq5OagzOo/eCsSFEDX/LlGaPftUTaq5hoB+UKiyOMspk
- CTa009BojN/HvMitavybhCyzkwWq1YfL6yJ8W2bfkznHCmgTrxdrmt7Llx4LM//b/pai
- S6LgwOS0bE3wjGRVo8YGK1V7nrVizqbgIQvcdDL0YOYU6ei4/Yww4CIbRMwBuSht1IT3
- +clhVC0uWuDBenUDEW2dKMZMwHL3RsthNDFQ74J3n9AkXQOxAqAIsZ86FRBsBxWb9j3G
- LwlEZzEJThBdFO9njaU3r8L7MgD/UHfrhqvwehJnbrOkS+hpfQNfEH7qvkz1zdZONvIt qA== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rdssdgpcy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 24 Jun 2023 16:06:09 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35OG68rA025297
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 24 Jun 2023 16:06:08 GMT
-Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Sat, 24 Jun
- 2023 09:06:08 -0700
-Message-ID: <2f1d4e18-f377-74c1-59fc-da422d4e99ee@quicinc.com>
-Date:   Sat, 24 Jun 2023 10:06:07 -0600
+        Sat, 24 Jun 2023 12:11:38 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9A21D1BC1
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 09:10:54 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.43])
+        by gateway (Coremail) with SMTP id _____8AxQ8SDFZdkNUMBAA--.1968S3;
+        Sun, 25 Jun 2023 00:10:43 +0800 (CST)
+Received: from [10.20.42.43] (unknown [10.20.42.43])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Ax3c6CFZdkc28FAA--.27217S3;
+        Sun, 25 Jun 2023 00:10:42 +0800 (CST)
+Message-ID: <be525b88-4af2-eb5f-48ec-64b8d3198516@loongson.cn>
+Date:   Sun, 25 Jun 2023 00:10:42 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH 10/26] bus: mhi: host: use array_size
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v10 07/11] drm/etnaviv: Add support for the dma coherent
+ device
 Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>
-CC:     Julia Lawall <julia.lawall@inria.fr>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        <kernel-janitors@vger.kernel.org>, <mhi@lists.linux.dev>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230623211457.102544-1-Julia.Lawall@inria.fr>
- <20230623211457.102544-11-Julia.Lawall@inria.fr>
- <3b4ff79b-93b4-cf56-1488-113905b3981d@quicinc.com>
- <alpine.DEB.2.22.394.2306232340510.3129@hadrien>
- <58cb3bf6-5ffd-194b-1455-4e5bb045fc34@quicinc.com>
- <202306231639.68955384A@keescook>
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-In-Reply-To: <202306231639.68955384A@keescook>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Lucas Stach <l.stach@pengutronix.de>,
+        Sui Jingfeng <18949883232@163.com>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        etnaviv@lists.freedesktop.org,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Bjorn Helgaas <bhelgaas@google.com>
+References: <20230620094716.2231414-1-18949883232@163.com>
+ <20230620094716.2231414-8-18949883232@163.com>
+ <8f74f0962c8bab6c832919a5340667c54e1a7ddc.camel@pengutronix.de>
+ <66fc74ae-299c-a5de-9cfb-07ae24fb3f07@loongson.cn>
+ <8212078bd56c54ce508205eae0ed0b69e78d4c38.camel@pengutronix.de>
+ <fd5dd250-b01e-fd00-1419-88398cb13347@loongson.cn>
+ <62bf84f19318c54c50f154e1eb64a179fb2389ce.camel@pengutronix.de>
+From:   Sui Jingfeng <suijingfeng@loongson.cn>
+Organization: Loongson
+In-Reply-To: <62bf84f19318c54c50f154e1eb64a179fb2389ce.camel@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: FVd_FYpvNMuEqE3Jw1BkvypnTVJkbW7m
-X-Proofpoint-ORIG-GUID: FVd_FYpvNMuEqE3Jw1BkvypnTVJkbW7m
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-24_11,2023-06-22_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
- phishscore=0 suspectscore=0 clxscore=1015 malwarescore=0 bulkscore=0
- priorityscore=1501 lowpriorityscore=0 impostorscore=0 spamscore=0
- mlxlogscore=749 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306240152
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8Ax3c6CFZdkc28FAA--.27217S3
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBj9xXoWrtr4kXr1xWr1fCrWxJw4fWFX_yoWDWrc_ur
+        yI9a9Fkr45Xw4ktF4fK34ftrsIg3y3ZFy5JFy8tr17G34ruFn3AFn5JrnrJ3Z3W3Z7Grs8
+        WFZ8Ca97t34I9osvyTuYvTs0mTUanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvT
+        s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+        cSsGvfJTRUUUbDxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
+        vaj40_Wr0E3s1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+        w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+        WUJVW8JwA2z4x0Y4vEx4A2jsIE14v26r1j6r4UM28EF7xvwVC2z280aVCY1x0267AKxVWU
+        JVW8JwAaw2AFwI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa02
+        0Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1l
+        Yx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI
+        0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC2
+        0s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr
+        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0E
+        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
+        W8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
+        cVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUcveHDUUUU
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/23/2023 5:45 PM, Kees Cook wrote:
-> On Fri, Jun 23, 2023 at 04:09:46PM -0600, Jeffrey Hugo wrote:
->> Kees, would you please chime in and educate me here?  I feel like I'm
->> missing something important here.
-> 
-> The array_size() family will saturate at SIZE_MAX (rather than potentially
-> wrapping around). No allocator can fulfil a 18446744073709551615 byte
-> (18 exabyte) allocation. :) So the NULL return value will (hopefully)
-> trigger an error path.
-> 
+Hi,
 
-Fair enough, that handles the 64-bit usecase.  I'm guessing the 
-assumption is that on a 32-bit usecase where size_t is ~4GB, there won't 
-actually be 4GB to allocate and things will also fail.  So far, so good.
+On 2023/6/22 01:45, Lucas Stach wrote:
+>> Again,
+>>
+>> this is user-space things!
+>>
+>> this is user-space things!
+>>
+>> this is user-space things!
+>>
+>> I have explained several times.
+>>
+>> made the decision for the user-space program is wrong.
+>>
+> This mode of communication isn't helpful. Please stop it.
+>
+> As I tried to explain to you multiple times: if userspace can break
+> coherency by selecting the wrong mapping type then this is something
+> the kernel should prevent.
+>
+This is still a user-space things.
 
-What about a 32-bit system with something like ARM's LPAE (Large 
-Physical Address Extension) where the host is 32-bit, and so size_t 
-would be ~4GB (as far as I can tell) but phys_addr_t is larger than 
-that, and so we can have/access more than 4GB of resources?  Lets see, 
-ignoring that its a 13 year old feature and probably not in circulation 
-anymore, probably still can't satisfy a 4GB allocation since you'd need 
-to map all of it to address it, and part of the address space is surely 
-reserved for other things.
+While my point is that we want to prevent it at userspace.
 
-Ok, I think I'm convinced.  I'm going to sleep on it, but I suspect all 
-will still be good early next week.
+Please don't forget that sometime a user or a programmer want a wrong thing.
+  
+Either because of the need of debugging itself or due to the curiosity of
 
-Thank you for the explanation.
+what it would happen if we doing something wrong.
 
--Jeff
+Sometimes, the wrong rendering may more interesting.
+
+
+The most important thing is that my patch is trying to increase the 
+flexibility,
+
+and to increase the possibility. While you idea is to doing the reverse.
+
+
+-- 
+Jingfeng
+
