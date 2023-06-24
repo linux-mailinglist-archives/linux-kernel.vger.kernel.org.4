@@ -2,183 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 689D173CA99
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 13:18:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 494C073CAA0
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 13:32:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233015AbjFXLR7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 07:17:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42220 "EHLO
+        id S233016AbjFXLat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 07:30:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232852AbjFXLR4 (ORCPT
+        with ESMTP id S231854AbjFXLas (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 07:17:56 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A9571FF3
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 04:17:29 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1b5585e84b4so2535775ad.0
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 04:17:29 -0700 (PDT)
+        Sat, 24 Jun 2023 07:30:48 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D6D11990
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 04:30:46 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f9189228bcso15437995e9.3
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 04:30:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1687605449; x=1690197449;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=T15O6xQIwkBwwHtvfiEExn4sWPaOJ+WY8Ww0WTBtsp8=;
-        b=CYbPeV4zw+1THiloHL2+ypjCEv/Id/OqdEvK4Gbzyx+byuca+5y6cAMB03scGpNQnd
-         SSB/7Anoxb0IyXh7PuVlGbhgdQdF/LJkm6iAy37RUchzkDnhJHkx6mrv3F5vKgoyQyPy
-         OIasGq/04a4yIeBx66N81aJ+oDLEzr/c57Z4snA4iQkl0+r7Z1fxQw1D3B6O1TLBBXtU
-         +6bRquokuMgWUCPSNTKWaKx0RTO9dV5TrEkx6qXy9qwlyog+mmdaA1jG00RymxjmBaI/
-         eUJ0hTbMfoOPJPyWkTS38C3ZPCIA3M/x6cjkzBrGwhlDHNcmA3/i0KhFITfJt8SeOUy8
-         iVYw==
+        d=gmail.com; s=20221208; t=1687606245; x=1690198245;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HRYaJVMtI2+V2Yy5LWABEK4iahmUg3ox3qudaa1bywQ=;
+        b=Ot3PiZHGIRsBOazVE8UAaJ3/Yk5C5vC+D9CgOwenc9LpBe9HHXQq6flBjrE3hNYNgY
+         +RN74+AK7hmcTdVZJENVCxA9Hi2f+YQNDyzLWEPygw+1B6DjMYofgQhPx1WbYY8TZJuv
+         cEJaPO2QyUxqEuHw0c3hG1EFNjWgvAoazVAyPt8fA9VB5HdobiFxsep+dA7K469uOlrG
+         Sg1o0MgH9i+PeNE4bZSynn9EEIqzVPvRgVlyrsgJSBq+TVOY6cLXZ3rOoHc4G4fYRVK7
+         ZPoIo4/9kMmYGl7c/p5B09SbhUtP0Y+dfjI+/QaMS+Djba4ue7Q9X+Bfb1QIam8Z/h8o
+         IinQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687605449; x=1690197449;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=T15O6xQIwkBwwHtvfiEExn4sWPaOJ+WY8Ww0WTBtsp8=;
-        b=N3DSAkXUg6n3Betywma7zc+SJfijiDmq21B+4kpwiFoyBhDoZFkHfPKgjq+s/DXQnf
-         t9W/GhyMwJbl5TmkEQKEU7jlR37aRCxW+992s6VmTn31SoN5B60wy95R8tsXC3ntpkGe
-         svJcrdkVKXMDXydzCl4o5toXZho2MSA2IijFa8tUCq6VvgA99bvRFRAePrrV63WjDMSB
-         OQ1sfkzwkwUiobzedN4+014R5ssOwmppFaMSOHt5QKfXBZoJMANRhtdkZR2aKnzlWopZ
-         ZfN6u8N7pG2ajmKa9M9IjPEpmw7cf2SbhBjHfW5b+1A6SO6eBhYtsPurQfp/COzZw6yX
-         jH5g==
-X-Gm-Message-State: AC+VfDwlmAdShfXPEtejlhv1R3yDZqSNN1EGVBn+fQ0FOXL4Ni0S7lhL
-        V7eFydGGKoLnxUAxOmj4zdVn3w==
-X-Google-Smtp-Source: ACHHUZ6FdOiaHAk7I6ISkFgljzCcZyK3aCzvXyKEVanrKS23oGi4259EOvC6Ypj8Kzv6/iuF/wHf7Q==
-X-Received: by 2002:a17:902:ecc6:b0:1ae:1364:6086 with SMTP id a6-20020a170902ecc600b001ae13646086mr29288550plh.2.1687605448727;
-        Sat, 24 Jun 2023 04:17:28 -0700 (PDT)
-Received: from [10.4.162.153] ([139.177.225.251])
-        by smtp.gmail.com with ESMTPSA id c13-20020a170902d48d00b001ab0a30c895sm1034090plg.202.2023.06.24.04.17.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 24 Jun 2023 04:17:28 -0700 (PDT)
-Message-ID: <8107f6d1-2f86-46f1-2b31-263928499ab6@bytedance.com>
-Date:   Sat, 24 Jun 2023 19:17:17 +0800
+        d=1e100.net; s=20221208; t=1687606245; x=1690198245;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HRYaJVMtI2+V2Yy5LWABEK4iahmUg3ox3qudaa1bywQ=;
+        b=D4hvJhUD6QNGepFcCLlclZLqmu5orroosQTswnIOneG0V/L/kQn4KZIixmmHNLfizt
+         tBhZBn0VAuVidBLvpd6L7W3/P7xgI3W2PPSJHosxp6S2pkdp5ZkdTXyYQa8lms8zjWvt
+         0NVUbdZbGNVIaHhjoXv9DZokpN6W4PiqojrENYDVasISnrBY217UL4O4YNqUxUY5NiWV
+         Yy3bx+zXTPW2Z82GLzaRrgjiPX0yJJph74BojI5QCj/y692TrZ+znywtKzEZlr7gn6+p
+         GO+BFvcgjEKWdW+RfZf9pVFn5h+atG6X+um36sqoS/HlrA+OXfBfkMaO3R6xlknwbyt1
+         uSAQ==
+X-Gm-Message-State: AC+VfDyIZIwGFOQvhqXFB0UkArhBZ8OLiqsq0yjFncKKzV/mYgl2gkXN
+        J2UQwdP39wkkvFkr55NsDn3fvqBPLVFRxQ==
+X-Google-Smtp-Source: ACHHUZ5IU4dS6xvQKCWsBtDRjGB+ZmX9m5sNYJJxzfXFpbyFViNQ7m+fT7Ws2tgc050NYUIPlwpqnA==
+X-Received: by 2002:a7b:c40e:0:b0:3fa:8714:86bd with SMTP id k14-20020a7bc40e000000b003fa871486bdmr410519wmi.29.1687606244738;
+        Sat, 24 Jun 2023 04:30:44 -0700 (PDT)
+Received: from localhost (dslb-094-220-187-252.094.220.pools.vodafone-ip.de. [94.220.187.252])
+        by smtp.gmail.com with ESMTPSA id l25-20020a1c7919000000b003f9b29ba838sm1925790wme.35.2023.06.24.04.30.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 24 Jun 2023 04:30:44 -0700 (PDT)
+From:   Jonas Gorski <jonas.gorski@gmail.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Imre Kaloz <kaloz@dune.hu>, Krzysztof Halasa <khalasa@piap.pl>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] bus: ixp4xx: fix IXP4XX_EXP_T1_MASK
+Date:   Sat, 24 Jun 2023 13:29:58 +0200
+Message-Id: <20230624112958.27727-1-jonas.gorski@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [PATCH 15/29] NFSD: dynamically allocate the nfsd-client shrinker
-Content-Language: en-US
-To:     Chuck Lever <cel@kernel.org>
-Cc:     akpm@linux-foundation.org, david@fromorbit.com, tkhai@ya.ru,
-        vbabka@suse.cz, roman.gushchin@linux.dev, djwong@kernel.org,
-        brauner@kernel.org, paulmck@kernel.org, tytso@mit.edu,
-        linux-bcache@vger.kernel.org, linux-xfs@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org,
-        linux-raid@vger.kernel.org, linux-mm@kvack.org,
-        dm-devel@redhat.com, linux-fsdevel@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-btrfs@vger.kernel.org
-References: <20230622085335.77010-1-zhengqi.arch@bytedance.com>
- <20230622085335.77010-16-zhengqi.arch@bytedance.com>
- <ZJYTbnmRKF7j3CHW@manet.1015granger.net>
-From:   Qi Zheng <zhengqi.arch@bytedance.com>
-In-Reply-To: <ZJYTbnmRKF7j3CHW@manet.1015granger.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Chuck,
+The IXP4XX_EXP_T1_MASK was shifted one bit to the right, overlapping
+IXP4XX_EXP_T2_MASK and leaving bit 29 unused. The offset being wrong is
+also confirmed at least by the datasheet of IXP45X/46X [1].
 
-On 2023/6/24 05:49, Chuck Lever wrote:
-> On Thu, Jun 22, 2023 at 04:53:21PM +0800, Qi Zheng wrote:
->> In preparation for implementing lockless slab shrink,
->> we need to dynamically allocate the nfsd-client shrinker,
->> so that it can be freed asynchronously using kfree_rcu().
->> Then it doesn't need to wait for RCU read-side critical
->> section when releasing the struct nfsd_net.
->>
->> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
-> 
-> For 15/29 and 16/29 of this series:
-> 
-> Acked-by: Chuck Lever <chuck.lever@oracle.com>
+Fix this by aligning it to IXP4XX_EXP_T1_SHIFT.
 
-Thanks for your review! :)
+[1] https://www.intel.com/content/dam/www/public/us/en/documents/manuals/ixp45x-ixp46x-developers-manual.pdf
 
-And I will implement the APIs suggested by Dave in 02/29 in
-the v2, so there will be some changes here, but it should
-not be much. So I will keep your Acked-bys in the v2.
+Fixes: 1c953bda90ca ("bus: ixp4xx: Add a driver for IXP4xx expansion bus")
+Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
+---
+Based on 4.6-rc7-ish, since I didn't know which tree I should use,
+though for this driver it probably doesn't matter anyway.
 
-Thanks,
-Qi
+Build tested, but not run tested.
 
-> 
-> 
->> ---
->>   fs/nfsd/netns.h     |  2 +-
->>   fs/nfsd/nfs4state.c | 20 ++++++++++++--------
->>   2 files changed, 13 insertions(+), 9 deletions(-)
->>
->> diff --git a/fs/nfsd/netns.h b/fs/nfsd/netns.h
->> index ec49b200b797..f669444d5336 100644
->> --- a/fs/nfsd/netns.h
->> +++ b/fs/nfsd/netns.h
->> @@ -195,7 +195,7 @@ struct nfsd_net {
->>   	int			nfs4_max_clients;
->>   
->>   	atomic_t		nfsd_courtesy_clients;
->> -	struct shrinker		nfsd_client_shrinker;
->> +	struct shrinker		*nfsd_client_shrinker;
->>   	struct work_struct	nfsd_shrinker_work;
->>   };
->>   
->> diff --git a/fs/nfsd/nfs4state.c b/fs/nfsd/nfs4state.c
->> index 6e61fa3acaf1..a06184270548 100644
->> --- a/fs/nfsd/nfs4state.c
->> +++ b/fs/nfsd/nfs4state.c
->> @@ -4388,8 +4388,7 @@ static unsigned long
->>   nfsd4_state_shrinker_count(struct shrinker *shrink, struct shrink_control *sc)
->>   {
->>   	int count;
->> -	struct nfsd_net *nn = container_of(shrink,
->> -			struct nfsd_net, nfsd_client_shrinker);
->> +	struct nfsd_net *nn = shrink->private_data;
->>   
->>   	count = atomic_read(&nn->nfsd_courtesy_clients);
->>   	if (!count)
->> @@ -8094,14 +8093,19 @@ static int nfs4_state_create_net(struct net *net)
->>   	INIT_WORK(&nn->nfsd_shrinker_work, nfsd4_state_shrinker_worker);
->>   	get_net(net);
->>   
->> -	nn->nfsd_client_shrinker.scan_objects = nfsd4_state_shrinker_scan;
->> -	nn->nfsd_client_shrinker.count_objects = nfsd4_state_shrinker_count;
->> -	nn->nfsd_client_shrinker.seeks = DEFAULT_SEEKS;
->> -
->> -	if (register_shrinker(&nn->nfsd_client_shrinker, "nfsd-client"))
->> +	nn->nfsd_client_shrinker = shrinker_alloc_and_init(nfsd4_state_shrinker_count,
->> +							   nfsd4_state_shrinker_scan,
->> +							   0, DEFAULT_SEEKS, 0,
->> +							   nn);
->> +	if (!nn->nfsd_client_shrinker)
->>   		goto err_shrinker;
->> +
->> +	if (register_shrinker(nn->nfsd_client_shrinker, "nfsd-client"))
->> +		goto err_register;
->>   	return 0;
->>   
->> +err_register:
->> +	shrinker_free(nn->nfsd_client_shrinker);
->>   err_shrinker:
->>   	put_net(net);
->>   	kfree(nn->sessionid_hashtbl);
->> @@ -8197,7 +8201,7 @@ nfs4_state_shutdown_net(struct net *net)
->>   	struct list_head *pos, *next, reaplist;
->>   	struct nfsd_net *nn = net_generic(net, nfsd_net_id);
->>   
->> -	unregister_shrinker(&nn->nfsd_client_shrinker);
->> +	unregister_and_free_shrinker(nn->nfsd_client_shrinker);
->>   	cancel_work(&nn->nfsd_shrinker_work);
->>   	cancel_delayed_work_sync(&nn->laundromat_work);
->>   	locks_end_grace(&nn->nfsd4_manager);
->> -- 
->> 2.30.2
->>
+@Linus
+
+I found this purely by accident when I was looking for examples of
+GENMASK(). Your recent push to resurrect ixp4xx in OpenWrt convinced me
+to submit it in a timely manner ;D
+
+Also the "ARM/INTEL IXP4XX ARM ARCHITECTURE" entry in MAINTAINERS still
+lists your kernel.org email address, you might want to update that.
+
+@Imre
+
+Likewise, it still has your openwrt.org address.
+
+ drivers/bus/intel-ixp4xx-eb.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/bus/intel-ixp4xx-eb.c b/drivers/bus/intel-ixp4xx-eb.c
+index f5ba6bee6fd8..320cf307db05 100644
+--- a/drivers/bus/intel-ixp4xx-eb.c
++++ b/drivers/bus/intel-ixp4xx-eb.c
+@@ -33,7 +33,7 @@
+ #define IXP4XX_EXP_TIMING_STRIDE	0x04
+ #define IXP4XX_EXP_CS_EN		BIT(31)
+ #define IXP456_EXP_PAR_EN		BIT(30) /* Only on IXP45x and IXP46x */
+-#define IXP4XX_EXP_T1_MASK		GENMASK(28, 27)
++#define IXP4XX_EXP_T1_MASK		GENMASK(29, 28)
+ #define IXP4XX_EXP_T1_SHIFT		28
+ #define IXP4XX_EXP_T2_MASK		GENMASK(27, 26)
+ #define IXP4XX_EXP_T2_SHIFT		26
+-- 
+2.34.1
+
