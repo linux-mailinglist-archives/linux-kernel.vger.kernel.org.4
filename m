@@ -2,84 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 100F273CBF4
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 19:04:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14FFC73CBF6
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 19:08:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233184AbjFXREl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 13:04:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35232 "EHLO
+        id S231841AbjFXRIf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 13:08:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231651AbjFXREj (ORCPT
+        with ESMTP id S229448AbjFXRId (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 13:04:39 -0400
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1CB913E;
-        Sat, 24 Jun 2023 10:04:37 -0700 (PDT)
-Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-6b7279544edso1319852a34.0;
-        Sat, 24 Jun 2023 10:04:37 -0700 (PDT)
+        Sat, 24 Jun 2023 13:08:33 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4975F1A4;
+        Sat, 24 Jun 2023 10:08:32 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-5705386cfa3so1082667b3.1;
+        Sat, 24 Jun 2023 10:08:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687626511; x=1690218511;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=L67IGZMeFq5syFvEsERJ4iNX2S9oc5dwGEC3VfRdfUA=;
+        b=mrIHvbvRgw28TdwdnedIVAvp0PRHSEWCItaBIAHwRPWtGb44akoAMpDBDzcsqN1Vy4
+         eNIE+UgJoTaVImXcnnHjbci5d/4pfjJJm+mNug6BqmX+WePPHmDQ2j5AFMSOSo5d99iQ
+         J5t55nGC3akSvaSS0t5cvd5nNWv5ZYFVZP7R82/WEvzSZZU2nUTU8sZPpm/SKOD/Bw30
+         +GTzii0JROvF3xYJ9Cu/L4Nd29VkYWsV+YmVfuSySKalWEU1Vis1NMJqrUUfQsArM2IZ
+         ZJ1SXTEWhne/yNojsRxOKp/cXHs/aDvhv3hPK10LviAjfBMJIp0JQFKb99SN+e2rrv66
+         zpPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687626277; x=1690218277;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wWUPx4B2kJGgvXIs8RsYy9lugFh6tACB+WFQIYwQ1k4=;
-        b=IO8uYQgLLhwW529S/Xu5lQpFu5rzYXNDJS0MgCqlO5j1NZ84hxw6G8V4PfzUWJqW0I
-         RnfwCRN6z/dvToGw2NtQGQdQ1LhP8ug8PbnhY6Iw7aBr5IzbaL2MC6gUoi0sV8X5/3rQ
-         oJgRFailHKBEL6xNg6EGpZDqd2iz3Ko59jePxZfO3zzvxKZy3+wKFgWOuZVcLilr3I22
-         pm8xiuLLDh7MbQ+L6p3Qp/8yzDIhSo/FsCyEsSdiLCbfcoN0fZSnMZc4QExojnhluFgg
-         V2OKfALkydHJ266E4Iw0QFO3HQrF0XP6f3bIprMxH2RxmO0JWTxXuC4bXTC39EYjaJcA
-         xiMQ==
-X-Gm-Message-State: AC+VfDwMOVDwBIrb+ssVemhA+6ngss8qmYvcBGe0y5yuv2ZZM1DapU5i
-        obFEgZ5Utn4LH5OyItAdxFA=
-X-Google-Smtp-Source: ACHHUZ5PzhhFFcHozjXeG4hw1Mj/ZmNTVeYk4Nr3y2QM5U89zI6IZpJ6mD2EcsgWm+8oxfZeytffWg==
-X-Received: by 2002:a05:6808:3096:b0:396:12cb:1349 with SMTP id bl22-20020a056808309600b0039612cb1349mr28031552oib.38.1687626276865;
-        Sat, 24 Jun 2023 10:04:36 -0700 (PDT)
-Received: from localhost (fpd11144dd.ap.nuro.jp. [209.17.68.221])
-        by smtp.gmail.com with ESMTPSA id v29-20020a63481d000000b00553d27ab0e0sm1447457pga.69.2023.06.24.10.04.35
+        d=1e100.net; s=20221208; t=1687626511; x=1690218511;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=L67IGZMeFq5syFvEsERJ4iNX2S9oc5dwGEC3VfRdfUA=;
+        b=MLeYybazocIgr+chGoHTmpNZi+6jQwDeWHQU46lZ/zrwjCv/IlWCh7f9VhqnCcozNr
+         lGKWJD4sskjlC1CfbbWCC2budGu70eB7EuIzrojhXzhSVgGL9KUHSwXv2F0C4lPAGxE7
+         UIaxO/F02Pd2Ic/2EV4mnJ9HawPbBzuLz5yfpyYr2lowkgTLEC2EJdTDSNj1fqZZMzMh
+         F6hbNP6tCzwA0WwkrMbXRLP7xVuXP7t3Kwj+j+4LeoAj/A9XQxfzHpfL314JHjb5Ki/z
+         XsWRHXNzsE9e1Abwa4CM471sFyM0PDiICyFDnWHquf87JOTJ8zDLQkFWD3fgLCruJzpU
+         rKXA==
+X-Gm-Message-State: AC+VfDzstQ8mw6t5v6SZC5n+aFu8aM4HxQh7tQtW5CcghBToImCwUAhI
+        3BThN6cg5N1m/Od4vcKK2Qo=
+X-Google-Smtp-Source: ACHHUZ7BV+fWrIAgQhDxV9DPUEAaSr3Eao2EvYsYEk1Hrw3c07VuB7rF4BaNNOboIfJe8mxLyWDpSA==
+X-Received: by 2002:a81:9a17:0:b0:569:322b:d067 with SMTP id r23-20020a819a17000000b00569322bd067mr13854203ywg.4.1687626511329;
+        Sat, 24 Jun 2023 10:08:31 -0700 (PDT)
+Received: from localhost.localdomain ([173.23.87.62])
+        by smtp.gmail.com with ESMTPSA id l67-20020a819446000000b0057031fa8c08sm423110ywg.14.2023.06.24.10.08.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Jun 2023 10:04:35 -0700 (PDT)
-Date:   Sun, 25 Jun 2023 02:04:33 +0900
-From:   Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
-To:     Sven Peter <sven@svenpeter.dev>
-Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Marc Zyngier <maz@kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        asahi@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PCI: apple: Initialize pcie->nvecs before using it
-Message-ID: <20230624170433.GE2636347@rocinante>
-References: <20230311133453.63246-1-sven@svenpeter.dev>
+        Sat, 24 Jun 2023 10:08:30 -0700 (PDT)
+From:   Matthew Anderson <ruinairas1992@gmail.com>
+To:     marcel@holtmann.org
+Cc:     johan.hedberg@gmail.com, luiz.dentz@gmail.com,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Matthew Anderson <ruinairas1992@gmail.com>
+Subject: [PATCH] Bluetooth: btusb: Add MT7922 bluetooth ID for the Asus Ally
+Date:   Sat, 24 Jun 2023 12:08:10 -0500
+Message-ID: <20230624170810.298776-1-ruinairas1992@gmail.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230311133453.63246-1-sven@svenpeter.dev>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Adding the device ID from the Asus Ally gets the bluetooth working
+on the device.
 
-> apple_pcie_setup_port computes ilog2(pcie->nvecs) to setup the number of
-> MSIs available for each port. It is however called before apple_msi_init
-> which actually initializes pcie->nvecs.
-> Luckily, pcie->nvecs is part of kzalloc-ed structure and thus
-> initialized as zero. ilog2(0) happens to be 0xffffffff which then just
-> configures more MSIs in hardware than we actually have. This doesn't
-> break anything because we never hand out those vectors.
-> Let's swap the order of the two calls so that we use the correctly
-> initialized value.
+Signed-off-by: Matthew Anderson <ruinairas1992@gmail.com>
+---
+ drivers/bluetooth/btusb.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Applied to controller/apple, thank you!
+diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
+index 2a8e2bb038f5..7427da184fe0 100644
+--- a/drivers/bluetooth/btusb.c
++++ b/drivers/bluetooth/btusb.c
+@@ -613,6 +613,9 @@ static const struct usb_device_id blacklist_table[] = {
+ 	{ USB_DEVICE(0x0489, 0xe0d9), .driver_info = BTUSB_MEDIATEK |
+ 						     BTUSB_WIDEBAND_SPEECH |
+ 						     BTUSB_VALID_LE_STATES },
++	{ USB_DEVICE(0x0489, 0xe0f5), .driver_info = BTUSB_MEDIATEK |
++						     BTUSB_WIDEBAND_SPEECH |
++						     BTUSB_VALID_LE_STATES },
+ 	{ USB_DEVICE(0x13d3, 0x3568), .driver_info = BTUSB_MEDIATEK |
+ 						     BTUSB_WIDEBAND_SPEECH |
+ 						     BTUSB_VALID_LE_STATES },
+-- 
+2.41.0
 
-[1/1] PCI: apple: Initialize pcie->nvecs before use
-      https://git.kernel.org/pci/pci/c/328a16477027
-
-	Krzysztof
