@@ -2,61 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CCC773C6C8
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 06:35:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B43B73C6CD
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 06:42:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229631AbjFXEfT convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 24 Jun 2023 00:35:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50368 "EHLO
+        id S229495AbjFXEmk convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 24 Jun 2023 00:42:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjFXEfP (ORCPT
+        with ESMTP id S229451AbjFXEme (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 00:35:15 -0400
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5947136;
-        Fri, 23 Jun 2023 21:35:14 -0700 (PDT)
-Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-bff89873d34so1030687276.2;
-        Fri, 23 Jun 2023 21:35:14 -0700 (PDT)
+        Sat, 24 Jun 2023 00:42:34 -0400
+Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BA3B272A;
+        Fri, 23 Jun 2023 21:42:33 -0700 (PDT)
+Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-bfee679b7efso1236366276.0;
+        Fri, 23 Jun 2023 21:42:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687581314; x=1690173314;
+        d=1e100.net; s=20221208; t=1687581752; x=1690173752;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rWcltbx43ICJ2omQWXgRLpaOtwzfz2d8GhcvQRYoRw4=;
-        b=ZLm3kFuvos5KFLwy0y83LjOP+55KK+RhvsgeWOYCn/QnDkYy1dOLWQ9XEmGjQ4pmsN
-         5epwV+WwDVjA3bXL3GOsW325LDpYYzDs0MetKdZkhZFWard2jWqAREC9j+zO2S5vl/YJ
-         o0NxJtp2yBAqsC2jUE+c+Brt5jcxOsuG5rZONFG4knKU8wy77Z9mVoKGnvQ1YlXiVvYt
-         rFdTA/jSR2HnHubRhetO4+b4RIWNzukF6sPGnln+r/zoBQoGgoNBOpzid2IRDHDULUaO
-         3TJ0pXaqVYGTsaOjOlWr6WZzO+l3nxooCDfG9rOMDK7rKSj0gr07sfdmEWVOBHhAYiux
-         6IOA==
-X-Gm-Message-State: AC+VfDx3wap5sHET/vMvCEPe5DRbM69EmLk6yJrx5Fnddbv5pJwd77gz
-        U6pA4FOlouNfpOgx221BusLF5DZUhGDEzREqcQQ=
-X-Google-Smtp-Source: ACHHUZ6aH2HiFvjmsQFESquZw2UsfjeA55T4h3ZnLxQNGGjoqwnVBOQjqtjxRLsSzXFiYBwkvd4755iGIU0zeNYEbvk=
-X-Received: by 2002:a25:e70b:0:b0:bc7:f963:eb48 with SMTP id
- e11-20020a25e70b000000b00bc7f963eb48mr17036891ybh.32.1687581314012; Fri, 23
- Jun 2023 21:35:14 -0700 (PDT)
+        bh=7Tv5ByRnQQhhggbvCJr723rJIzg87T8KQ+iXR0Dgcjo=;
+        b=hU2Jj1rnmW5pvtHnzwU509/kwKPaX7NG0dpp7J9IZFuCdkf7wMH+iNV1ibVzqaDmrD
+         b0u63vjEg+gKajyuTD3/4RmpPNZES6DLZKsrsBQzp44I+KG47yPm5x+9VJtee33LkJTU
+         PlS9y+t7+P4AYwAdbCoY/mFy7lxghvlVg7ydd8QjV2dQ/zNFccqMS1PcCXNw57h68UsU
+         NDLnn4WFkmkaSeZbiAcHLNcJ7gGdr+RuA6e/BQ6/Ug+NGcZzFLH2DnQh5olTSOTsXufk
+         kwQAAHUuLrh9uH21clUIdUVaJ2UaLn23dfZGtSTkN/dOK10T9+9RvK7n+xcfV/W4v+D1
+         sHyQ==
+X-Gm-Message-State: AC+VfDxrw4mWssc0yOIDyAXuP7vRJuh5fm2RBPYVaVQnGoUpCcZyp+RE
+        6Ti+ZyxB0YubU8a83RJwB9ISJDmPAynSxo1Pj3M=
+X-Google-Smtp-Source: ACHHUZ6qxoESbPdBUUNaOdqSRaNdYzQRZlGQYnFcJUvH14u+6U1ACmqw4PR8SlDinMukdcSHykpS7iUX5DdKB250YXo=
+X-Received: by 2002:a25:ac43:0:b0:bc4:41ce:c633 with SMTP id
+ r3-20020a25ac43000000b00bc441cec633mr18437278ybd.31.1687581752560; Fri, 23
+ Jun 2023 21:42:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAM9d7cjtisDVPijfU=iEGxc0YF=RnAt+r18Jg+8Av-+RAO=jeg@mail.gmail.com>
- <IA1PR20MB49536C0DA47122E9E3CB7CBBBB20A@IA1PR20MB4953.namprd20.prod.outlook.com>
-In-Reply-To: <IA1PR20MB49536C0DA47122E9E3CB7CBBBB20A@IA1PR20MB4953.namprd20.prod.outlook.com>
+References: <20230623054520.4118442-1-irogers@google.com>
+In-Reply-To: <20230623054520.4118442-1-irogers@google.com>
 From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Fri, 23 Jun 2023 21:35:01 -0700
-Message-ID: <CAM9d7cis-rb0fozK+T6R8MCEcT0ZF=RRNpv1qAWsLkMfsG6KxA@mail.gmail.com>
-Subject: Re: [PATCH V3] perf vendor events riscv: add T-HEAD C9xx JSON file
-To:     Inochi Amaoto <inochiama@outlook.com>
+Date:   Fri, 23 Jun 2023 21:42:20 -0700
+Message-ID: <CAM9d7ciLAUc+0pxeLU91RCxi-oWmV5q=Nb0BQ_tP_4U=PGCtmA@mail.gmail.com>
+Subject: Re: [PATCH v3 0/3] Remove symbol_name_rb_node
+To:     Ian Rogers <irogers@google.com>
 Cc:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+        Jiri Olsa <jolsa@kernel.org>,
         Adrian Hunter <adrian.hunter@intel.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Nikita Shubin <n.shubin@yadro.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-riscv@lists.infradead.org
+        Kan Liang <kan.liang@linux.intel.com>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        Carsten Haitzler <carsten.haitzler@arm.com>,
+        Changbin Du <changbin.du@huawei.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Jason Wang <wangborong@cdjrlc.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -69,85 +70,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thu, Jun 22, 2023 at 10:45 PM Ian Rogers <irogers@google.com> wrote:
+>
+> Use a sorted array of symbol pointers to avoid the potentially
+> unnecessary 3 pointers (rb_node) for the name sorted symbols. Saves
+> been 24 and 16 bytes per symbol.
+>
+> v3. Move sort by name dso lock into its own patch.
+> v2. map__find_symbol_by_name_idx so that map__find_symbol_by_name
+>     doesn't need an optional parameter. Separate out
+>     symbol_conf.sort_by_name removal.
+>
+> Ian Rogers (3):
+>   perf dso: Sort symbols under lock
+>   perf symbol: Remove symbol_name_rb_node
+>   perf symbol_conf: Remove now unused sort_by_name
 
-On Fri, Jun 23, 2023 at 6:33 PM Inochi Amaoto <inochiama@outlook.com> wrote:
->
-> Hi, Namhyung
->
-> Since there is a fault in T-HEAD documentation, I am not sure whether
-> the perf events are correct. As a result, I suggest temporarily suppressing
-> this patch until I extract the correct events from its vendor perf driver.
-> I will prepare a new V4 patch once it is finished.
-
-Sure, thanks for letting me know.
-
->
-> As for c9xx wildcard, the T-HEAD provides a `MCPUID` vendor CSR to allow
-> its CKLINK to get the detail CPU info. The format of this CSR are:
->
-> ------------------------------------------------
-> |31   28|27  26|25    22|21   18|17    8|7    0|
-> | index | WLRL | family | class | model | WLRL |
-> ------------------------------------------------
->
-> And for C9xx series (only index 0000 is vaild for us, as `MCPUID` also
-> provides other index).
->
-> | 0000 | xx | 0100 | class | xxxxxxxxxx | xxxxxxxx |
->
-> The class codes are:
->
-> C910: 0011
-> c906: 0100
->
-> The CSR is a M-mode only CSR, so now I'm exploring a clean way to
-> integrate this CSR into the kernel. Any advice?
-
-I don't know about the details.  Is this CSR available from user space?
-If not, you could add it somewhere in the sysfs.
+Acked-by: Namhyung Kim <namhyung@kernel.org>
 
 Thanks,
 Namhyung
 
 
-> > Hello,
-> >
-> > On Thu, May 18, 2023 at 2:50 AM Inochi Amaoto <inochiama@outlook.com> wrote:
-> > >
-> > >> licheerv # perf record
-> > >> [  432.015618] watchdog: BUG: soft lockup - CPU#0 stuck for 26s!
-> > >> [perf:117]
-> > >> [  460.015617] watchdog: BUG: soft lockup - CPU#0 stuck for 52s!
-> > >> [perf:117]
-> > >> [  488.015616] watchdog: BUG: soft lockup - CPU#0 stuck for 78s!
-> > >> [perf:117]
-> > >> [  516.015617] watchdog: BUG: soft lockup - CPU#0 stuck for 104s!
-> > >> [perf:117]
-> > >>
-> > >> But that's not related to your patch anyway.
-> > >
-> > > Same issue on c920, but it did not always occur.
-> > > Like a sbi issue for T-HEAD cpus.
-> > >
-> > >> I am strongly against using "c9xx" wildcard, i would prefer declaring
-> > >> them separate (especially taking in mind that c920 is c910 with vector
-> > >> - AFAIK), but that's up to Arnaldo to decide.
-> > >
-> > > AFAIK, there is no reliable way to distinguish c906 and c910 cores. And
-> > > the events of c910 and c920 are the same (according to the draft document
-> > > of the c920).
-> > >
-> > > Anyway, I agree to let Arnaldo decide.
-> > >
-> > >> Tested-by: Nikita Shubin <n.shubin@yadro.com>
-> >
-> > I'm collecting patches on behalf of Arnaldo this time.
-> > It seems this patch was not picked up for a long time.
-> >
-> > I think we can make changes for the c9xx wildcard later
-> > if needed.  I'll process it in the current form.
-> >
-> > Thanks,
-> > Namhyung
-> >
+>
+>  tools/perf/builtin-kallsyms.c    |   1 -
+>  tools/perf/builtin-lock.c        |   2 -
+>  tools/perf/builtin-report.c      |   1 -
+>  tools/perf/tests/builtin-test.c  |   1 -
+>  tools/perf/util/dso.c            |   7 +-
+>  tools/perf/util/dso.h            |   3 +-
+>  tools/perf/util/map.c            |  14 +++-
+>  tools/perf/util/map.h            |  12 +--
+>  tools/perf/util/probe-event.c    |  16 ++--
+>  tools/perf/util/symbol.c         | 131 ++++++++++++++++---------------
+>  tools/perf/util/symbol.h         |  12 +--
+>  tools/perf/util/symbol_conf.h    |   1 -
+>  tools/perf/util/symbol_fprintf.c |  10 +--
+>  13 files changed, 106 insertions(+), 105 deletions(-)
+>
+> --
+> 2.41.0.162.gfafddb0af9-goog
+>
