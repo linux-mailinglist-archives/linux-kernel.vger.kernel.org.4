@@ -2,276 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14F0F73CABC
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 14:14:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7611B73CABE
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 14:16:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232981AbjFXMOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 08:14:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46662 "EHLO
+        id S232999AbjFXMQG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 08:16:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232845AbjFXMOJ (ORCPT
+        with ESMTP id S231707AbjFXMQF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 08:14:09 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A87E92117
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 05:14:07 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2b4790ff688so24308871fa.1
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 05:14:07 -0700 (PDT)
+        Sat, 24 Jun 2023 08:16:05 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74FB81BFC;
+        Sat, 24 Jun 2023 05:16:04 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-666ecf9a081so1395399b3a.2;
+        Sat, 24 Jun 2023 05:16:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687608846; x=1690200846;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=gmail.com; s=20221208; t=1687608964; x=1690200964;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=VI1Fg38Q9a+dz/3NduqJOgR+d4n2fTGjm3DQyw8QkHw=;
-        b=DWeC9Bmu0p9wGMkH1oOLHkFihXoteV3H891n+mPVXXXPMsc4mnqupiB0lvii8FwD51
-         Ve+bsJRhcxcsLqzKAsCN4iYHpPCccPKIUFCanhvNa4e2Tbr+1OK1Gq+SrhkwqU+J0WEy
-         EQ0xH+/b6zbrQw6LVEbo7vR5ldg0dJWxmpTDaMGudRiJPALZeN3YGzsxi9RzNdduzlho
-         QxyT6o5SghGJjrT5QpjyybcBRCL52g12ZgYLkr5cCVVq0z/IHXMIpb1Q2Jw3NdPGwBdy
-         sIGMwclfNwCFJZ16F7uwtgNRh41bVzEw0E3h4W88J14N6735wraAuXFGi+ZK97UI2+0l
-         Qbow==
+        bh=Q5gqXPV4PTFmPbh9Zh+d+AFfgDSYPHvyuQvmSWXaCHM=;
+        b=GSlyV/6jSVuH94sgYqU5l2hZ/vFLVm17jC73az92Vrcd2d/BFlXXxFFxzf6Vp30FCx
+         tVRrSaAozJxD7ShYaUpUlNDY7siYc3h8j9GhCsVR6eCxllgrTEWB0U7uzwfTTYVI6W7x
+         AZbfqlbw9T8QYbUXWyw6VwUByWJZcodGY9vyeASiKn2e9Di8ypFNy1fgw4BBjstTdrzn
+         xCeqoyS/osXPg4iWIkkCAtppNK12CFynje23SverEgCXnwis39rppObDTejJyCXqTh1s
+         CmVAglsURQcjwkjzADdbhyt1JRDe0FI6ASOdtcXJ0akfAeNh/nzjQx8y2KlFhcvajhb+
+         TpYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687608846; x=1690200846;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1687608964; x=1690200964;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VI1Fg38Q9a+dz/3NduqJOgR+d4n2fTGjm3DQyw8QkHw=;
-        b=ZAVm4YDoFX6QlbNt2WQHbimR3YHDo22vxyNN2EW+NfRo3EcLM2Eoir716ibi9jmZxw
-         ilw2IJvJwyzm7ifvoQF6iEd3C4FLPWMB43EpGIOSx0YemrWeYIs0D7r8ceHTEPJ2IzMZ
-         9xn+OfiXdnLBE0Y+0RzC9HWOw0OjQUZOTe/p5nGZ7HmCGuC4kdNi9N4OViauhvZ8zC2F
-         rcp1x17m0vLVVxZOjWYDbG9RNxOz2bdDnY/xvhPPaRkXhoQMfSoIpt2EouONbipXn5KE
-         X9hFU6Ai+fwmmtL+bU07zBwP5M7UgLp22XZyVlv8BZmiMqC4fol/V2XX/rOcEEu/pwGf
-         hsiw==
-X-Gm-Message-State: AC+VfDy90k+wwIOtJ7N6DeRUSvzMqpBtisgqtjze32Txqi2/4mPmvL71
-        uYfjycLGZbuuShLZmihwBv627w==
-X-Google-Smtp-Source: ACHHUZ4eUR3poyWqHpOWkotS3B48cq/ydqeuP9Mftes3bEXnaihEgo17n54sCgQTf/FPEqz7pcNxsA==
-X-Received: by 2002:a2e:9085:0:b0:2b5:bc27:d6eb with SMTP id l5-20020a2e9085000000b002b5bc27d6ebmr586877ljg.8.1687608845818;
-        Sat, 24 Jun 2023 05:14:05 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id d19-20020a2e3313000000b002b1e6a78d3esm260246ljc.82.2023.06.24.05.14.04
+        bh=Q5gqXPV4PTFmPbh9Zh+d+AFfgDSYPHvyuQvmSWXaCHM=;
+        b=Awi2QLudna7leKo3WY9dMUSZZ41cSL8de/RzArkMDrfypfpNuX/Mb8vqZswVnlJzmB
+         NEURqPr5mEgoX/gL2KZ8v9VuVhVeoSGgofnkE/CuJrkUZWyLoCFZTZ4V7f6a6CspfwyX
+         /QX3xvFLZrLr13i7Kr9ljkn6H7FjKnGsqlYIi2m7UViCd25muqWCt1iPtuqOIxw7gAJ8
+         6izPSEIXNg2fQg7s4wMni9umLOu2uJP2IM9z2eo2ZLEVYmG7DarXwqq2duEdCdlpQ+fc
+         KVi8vgMbXYT8Sec/iCbSt/86sz7OsbaXsx4dRrJ6PDUdLu9j2h1ifzTg2aBtp0nyO4G2
+         RfSg==
+X-Gm-Message-State: AC+VfDx355Ju6dJvirTvZRckvefSwiGDyYUD3Hxz+Y3qMcAXkjsWSx9i
+        dL7jhQMgOBa+hd3Nj+7JVp07SCIy9JSiig==
+X-Google-Smtp-Source: ACHHUZ5EpQ65SR/LaXzT/XybSAMzramJefXD9F0LO3L1KAkTP0j347Sr+AXCX1XFPm90SaCzHiVC4A==
+X-Received: by 2002:a05:6a00:1a53:b0:66a:6339:e8f6 with SMTP id h19-20020a056a001a5300b0066a6339e8f6mr8131229pfv.10.1687608963801;
+        Sat, 24 Jun 2023 05:16:03 -0700 (PDT)
+Received: from [192.168.0.103] ([103.131.18.64])
+        by smtp.gmail.com with ESMTPSA id p25-20020aa78619000000b0065418efa5ebsm991442pfn.155.2023.06.24.05.15.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 24 Jun 2023 05:14:05 -0700 (PDT)
-Message-ID: <4db7ea27-4e87-b02b-aac8-9e1c1242dc59@linaro.org>
-Date:   Sat, 24 Jun 2023 15:14:04 +0300
+        Sat, 24 Jun 2023 05:16:03 -0700 (PDT)
+Message-ID: <c125ec63-f7ba-3fd6-c286-05854fa1a07a@gmail.com>
+Date:   Sat, 24 Jun 2023 19:15:36 +0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 6/6] drm/msm/dpu: Update dev core dump to dump registers
- of sub blocks
-Content-Language: en-GB
-To:     Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Ryan McCann <quic_rmccann@quicinc.com>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Rob Clark <robdclark@chromium.org>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20230622-devcoredump_patch-v1-0-3b2cdcc6a576@quicinc.com>
- <20230622-devcoredump_patch-v1-6-3b2cdcc6a576@quicinc.com>
- <114f34dd-e5ce-f878-5b23-4c14dc800547@linaro.org>
- <1e41b909-4886-8392-edbc-78684e52bbf9@quicinc.com>
- <55d783d5-ef47-8c2e-d3ac-598e686e53fe@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <55d783d5-ef47-8c2e-d3ac-598e686e53fe@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+ Thunderbird/102.12.0
+Subject: Re: Fwd: kernel fault on hibernation: get_zeroed_page/swsusp_write
+To:     Elmar Stellnberger <estellnb@elstel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux Memory Management <linux-mm@kvack.org>,
+        Linux Stable <stable@vger.kernel.org>
+References: <5d4959b7-61da-8ab0-6bc6-21305d37c7aa@gmail.com>
+ <ZJXFgfldS6W_LCiI@mail.dotplex.com> <ZJZGE4ZxJzrhRznA@debian.me>
+ <ZJbDqStCNfdpwObE@mail.dotplex.com>
+Content-Language: en-US
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <ZJbDqStCNfdpwObE@mail.dotplex.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/06/2023 04:23, Jessica Zhang wrote:
+On 6/24/23 17:21, Elmar Stellnberger wrote:
+> Hi Bagas S., Hi all
 > 
+> concerns: Bug 217544 - kernel fault on hibernation: get_zeroed_page/swsusp_write 
+> https://bugzilla.kernel.org/show_bug.cgi?id=217544
 > 
-> On 6/23/2023 5:09 PM, Abhinav Kumar wrote:
->>
->>
->> On 6/22/2023 5:13 PM, Dmitry Baryshkov wrote:
->>> On 23/06/2023 02:48, Ryan McCann wrote:
->>>> Currently, the device core dump mechanism does not dump registers of 
->>>> sub
->>>> blocks within the DSPP, SSPP, DSC, and PINGPONG blocks. Add wrapper
->>>> function to dump hardware blocks that contain sub blocks.
->>>>
->>>> Signed-off-by: Ryan McCann <quic_rmccann@quicinc.com>
->>>> ---
->>>>   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c | 194 
->>>> +++++++++++++++++++++++++++-----
->>>>   1 file changed, 168 insertions(+), 26 deletions(-)
->>>>
->>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c 
->>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
->>>> index aa8499de1b9f..9b1b1c382269 100644
->>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
->>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
->>>> @@ -885,6 +885,154 @@ static int dpu_irq_postinstall(struct msm_kms 
->>>> *kms)
->>>>       return 0;
->>>>   }
->>>> +static void dpu_kms_mdp_snapshot_add_block(struct msm_disp_state 
->>>> *disp_state,
->>>> +                       void __iomem *mmio, void *blk,
->>>> +                       enum dpu_hw_blk_type blk_type)
->>>
->>> No. Such multiplexers add no value to the code. Please inline it.
->>>
->>> Not to mention that this patch is hard to review. You both move 
->>> existing code and add new features. If it were to go, it should have 
->>> been split into two patches: one introducing the multiplexer and 
->>> another one adding subblocks.
->>>
->>
->> Ok. we can split this into:
->>
->> 1) adding the multiplexer
->> 2) adding sub-blk parsing support inside the multiplexer
->>
->>>> +{
->>>> +    u32 base;
->>>> +
->>>> +    switch (blk_type) {
->>>> +    case DPU_HW_BLK_TOP:
->>>> +    {
->>>> +        struct dpu_mdp_cfg *top = (struct dpu_mdp_cfg *)blk;
->>>> +
->>>> +        if (top->features & BIT(DPU_MDP_PERIPH_0_REMOVED)) {
->>>> +            msm_disp_snapshot_add_block(disp_state, MDP_PERIPH_TOP0,
->>>> +                            mmio + top->base, "top");
->>>> +            msm_disp_snapshot_add_block(disp_state, top->len - 
->>>> MDP_PERIPH_TOP0_END,
->>>> +                            mmio + top->base + MDP_PERIPH_TOP0_END,
->>>> +                            "top_2");
->>>> +        } else {
->>>> +            msm_disp_snapshot_add_block(disp_state, top->len, mmio 
->>>> + top->base, "top");
->>>> +        }
->>>> +        break;
->>>> +    }
->>>> +    case DPU_HW_BLK_LM:
->>>> +    {
->>>> +        struct dpu_lm_cfg *mixer = (struct dpu_lm_cfg *)blk;
->>>> +
->>>> +        msm_disp_snapshot_add_block(disp_state, mixer->len, mmio + 
->>>> mixer->base, "%s",
->>>> +                        mixer->name);
->>>> +        break;
->>>> +    }
->>>> +    case DPU_HW_BLK_CTL:
->>>> +    {
->>>> +        struct dpu_ctl_cfg *ctl = (struct dpu_ctl_cfg *)blk;
->>>> +
->>>> +        msm_disp_snapshot_add_block(disp_state, ctl->len, mmio + 
->>>> ctl->base, "%s",
->>>> +                        ctl->name);
->>>> +        break;
->>>> +    }
->>>> +    case DPU_HW_BLK_INTF:
->>>> +    {
->>>> +        struct dpu_intf_cfg *intf = (struct dpu_intf_cfg *)blk;
->>>> +
->>>> +        msm_disp_snapshot_add_block(disp_state, intf->len, mmio + 
->>>> intf->base, "%s",
->>>> +                        intf->name);
->>>> +        break;
->>>> +    }
->>>> +    case DPU_HW_BLK_WB:
->>>> +    {
->>>> +        struct dpu_wb_cfg *wb = (struct dpu_wb_cfg *)blk;
->>>> +
->>>> +        msm_disp_snapshot_add_block(disp_state, wb->len, mmio + 
->>>> wb->base, "%s",
->>>> +                        wb->name);
->>>> +        break;
->>>> +    }
->>>> +    case DPU_HW_BLK_SSPP:
->>>> +    {
->>>> +        struct dpu_sspp_cfg *sspp_block = (struct dpu_sspp_cfg *)blk;
->>>> +        const struct dpu_sspp_sub_blks *sblk = sspp_block->sblk;
->>>> +
->>>> +        base = sspp_block->base;
->>>> +
->>>> +        msm_disp_snapshot_add_block(disp_state, sspp_block->len, 
->>>> mmio + base, "%s",
->>>> +                        sspp_block->name);
->>>> +
->>>> +        if (sspp_block->features & BIT(DPU_SSPP_SCALER_QSEED3) ||
->>>> +            sspp_block->features & BIT(DPU_SSPP_SCALER_QSEED3LITE) ||
->>>> +            sspp_block->features & BIT(DPU_SSPP_SCALER_QSEED4))
->>>> +            msm_disp_snapshot_add_block(disp_state, 
->>>> sblk->scaler_blk.len,
->>>> +                            mmio + base + sblk->scaler_blk.base, 
->>>> "%s_%s",
->>>> +                            sspp_block->name, sblk->scaler_blk.name);
->>>
->>> Actually, it would be better to:
->>> - drop name from all sblk instances (and use known string instead of 
->>> the sblk name here)
-> 
-> Hey Dmitry,
-> 
-> FWIW, I second Abhinav's points about the sblk names. For example, if in 
-> the future we want to add a "_rot" suffix specifically to the 
-> VIG_SBLK_ROT.scaler name, it would be easier to just make that change in 
-> the HW catalog.
+>   Bisection does not make sense here, since I can not reproduce the
+> issue. Packing the kernel binaries and symbol files was meant to invoke
+> gdb directly on the kcore:
+>  
 
-But why? The scaler is the same qseed3 scaler. We do not dump features, 
-they are constant for the platform in question.
+Thorsten: Should this be marked as invalid/inconclusive?
 
+> Am Sat, Jun 24, 2023 at 08:25:39AM +0700 schrieb Bagas Sanjaya:
+>> On Fri, Jun 23, 2023 at 06:17:05PM +0200, Elmar Stellnberger wrote:
+>> Can you attach [1] to your Bugzilla report? Also, any report on bisection?
 > 
->>> - Use sblk->foo_blk.len to check if it should be printed or not.
->  From my understanding, your suggestion is to replace the feature flag 
-> checks with a sblk.len > 0 check.
+> Pardon, what is [1]?
 > 
-> I don't think that would be good because it wouldn't be correct to 
-> assume that the sblk will always be present. For example, for 
-> DPU_HW_BLK_DSC, the sblks will only be present for DSC_BLK_1_2.
 
-I don't consider sub-block as being always present. But if it present, 
-it has non-zero length. If its length is zero, we have nothing to dump 
-for it.
-
-> In addition, it is possible for sblks, like pp_sblk_te.te2, to have a 
-> len of 0. While the register space of that specific sblk will not be 
-> printed, I'd prefer the devcore dump to reflect what is present within 
-> the HW catalog so that the user knows which pingpong blks have the TE2 
-> sblk.
-
-I'd consider this as dumping the feature instead of dumping the 
-registers. If you think it is necessary to ease decoding of the dump, 
-consider adding block.features to the dump instead.
-
-> 
-> Thanks,
-> 
-> Jessica Zhang
-> 
->>>
->>
->> No, I dont agree. If we drop the names from the sub_blk in the 
->> catalog, we will end up using "sub_blk_name" string here in the code 
->> to indicate which blk that is in the dump.
->>
->> If we add more sub_blks in the catalog in the future we need to keep 
->> changing the code over here. Thats not how it should be.
->>
->> Leaving the names in the catalog ensures that this code wont change 
->> and only catalog changes when we add a new sub_blk either for an 
->> existing or new chipset.
->>
->> catalog is indicating the new blk, and dumping code just prints it.
->>
->> with your approach, dumping code will or can keep changing with 
->> chipsets or sub_blks. Thats not how it should be.
->>
+Your kcore dump.
 
 -- 
-With best wishes
-Dmitry
+An old man doll... just what I always wanted! - Clara
 
