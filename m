@@ -2,64 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBA9473CC0C
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 19:25:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B3FF73CC15
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 19:40:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232078AbjFXRZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 13:25:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36944 "EHLO
+        id S232994AbjFXRkz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 13:40:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjFXRZd (ORCPT
+        with ESMTP id S229448AbjFXRkx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 13:25:33 -0400
-Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A593610D2;
-        Sat, 24 Jun 2023 10:25:32 -0700 (PDT)
-Received: by mail-io1-f49.google.com with SMTP id ca18e2360f4ac-780d9f1bf85so83070339f.0;
-        Sat, 24 Jun 2023 10:25:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687627532; x=1690219532;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Rbq4vJktFS9BBGT+vfHjQB0z6sUAkBFuaWTct5wa/a8=;
-        b=JYO9IfXAWC2EMu3kQ2lCr6Qbe5MT9BRz6lEwAJx2SsbyfSks/MU2XJsoAEcBzCYdBK
-         OD7Klv9Wd5M+NiNMwEym0tvCBNjkqaVzAAS5Yla2jBsm3cFWy4M2mCQuNa39wjYCKtmw
-         5vpR6RMcUwHI4MJQe4vf3e8x124qJxV1ddIyWn+pVF1WoayQV0x6KAAN11Yu5Cdz8DYq
-         nJ80N6EofyxjFCR4rLytID5zXNztpCwweirpUl6d2+MqD6Vaa/kIOjQkSJBzEcmPhn0a
-         IPv3lqDdyp6TE8bW8CPkb+iGKOopuUb55wOUvwsckL6BIs5S9Rz3sftwcOf2dbgJlfdo
-         uzfg==
-X-Gm-Message-State: AC+VfDx0nv1SXCleBVX8aVsTSBf7gAeB8q7vL0n80CGGFkgM6RPPbAiT
-        9ym1sZEOumCUJ/zMgXRoJg==
-X-Google-Smtp-Source: ACHHUZ5jTICnMb0WuM2/jvI6dSsywUGWCmKkiiNUEfOJU40TNRrz3QzG/8eEqqSJ0MQhmBnQQvj5TQ==
-X-Received: by 2002:a5d:9941:0:b0:780:bf50:32c9 with SMTP id v1-20020a5d9941000000b00780bf5032c9mr11347401ios.15.1687627531742;
-        Sat, 24 Jun 2023 10:25:31 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id z6-20020a5ec906000000b0077e25471a7fsm723230iol.48.2023.06.24.10.25.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Jun 2023 10:25:30 -0700 (PDT)
-Received: (nullmailer pid 3243734 invoked by uid 1000);
-        Sat, 24 Jun 2023 17:25:29 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        Sat, 24 Jun 2023 13:40:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E95011BC2;
+        Sat, 24 Jun 2023 10:40:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 455126092A;
+        Sat, 24 Jun 2023 17:40:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35BB2C433C0;
+        Sat, 24 Jun 2023 17:40:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687628450;
+        bh=5uw4ioxmxRm5FpJGvseBufZ9FdZrud/jDgdUzD+9qik=;
+        h=From:To:In-Reply-To:References:Subject:Date:From;
+        b=Ovfqjm6GzxlA1TkFD9ouzjwq5Imvzuk1oQSKZi/+QyZdLMLz+OvyJHt9Yk4PQMQmP
+         UtRnFwbTm2BjTUTxb1TVz63aRvJa+wZti0VFYPoRE77+HaEXNsKZ4v2tlcrhY3hCuc
+         oA5AdDb9TB9wBxSKLI8mUEwShELHxK1P6xr0+KYzMc3q8eiMpALeb2T5BaUNl4HhEC
+         c/TMxexsR0lj4tSFmTmDBvsJDXjpXrcHlRqYW6KbobLcrgRAH/Qn//S4Tmgmed0uqY
+         rCzsBooavxI6iS21lBOLh6dvtUnbaFzrusO9V6NY9secxq7uxdVgF4i3WITgYsgG7V
+         z0gYmFNGviS2w==
+From:   Mark Brown <broonie@kernel.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Tudor Ambarus <tudor.ambarus@linaro.org>,
+        Varshini Rajendran <varshini.rajendran@microchip.com>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230624082054.37697-1-krzysztof.kozlowski@linaro.org>
+References: <20230624082054.37697-1-krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH] spi: dt-bindings: atmel,at91rm9200-spi: fix broken
+ sam9x7 compatible
+Message-Id: <168762843922.1328079.8328118275834289222.b4-ty@kernel.org>
+Date:   Sat, 24 Jun 2023 18:40:39 +0100
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     JuenKit_Yip@hotmail.com
-Cc:     vincent@vtremblay.dev, linux-kernel@vger.kernel.org,
-        krzysztof.kozlowki+dt@linaro.org, geert+renesas@glider.be,
-        linux@roeck-us.net, michal.simek@amd.com,
-        linux-hwmon@vger.kernel.org, jdelvare@suse.com, broonie@kernel.org,
-        conor+dt@kernel.org, devicetree@vger.kernel.org
-In-Reply-To: <DB4PR10MB626179DE1C511B10ECA74D209220A@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
-References: <20230624160148.218786-1-JuenKit_Yip@hotmail.com>
- <DB4PR10MB626179DE1C511B10ECA74D209220A@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
-Message-Id: <168762752922.3243704.2220547927763336288.robh@kernel.org>
-Subject: Re: [PATCH 3/3] dt-bindings: <hwmon>: add sht3x devicetree binding
-Date:   Sat, 24 Jun 2023 11:25:29 -0600
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-c6835
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,49 +65,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Sun, 25 Jun 2023 00:01:48 +0800, JuenKit_Yip@hotmail.com wrote:
-> From: JuenKit Yip <JuenKit_Yip@hotmail.com>
+On Sat, 24 Jun 2023 10:20:54 +0200, Krzysztof Kozlowski wrote:
+> Commit a3eb95484f27 ("spi: dt-bindings: atmel,at91rm9200-spi: add sam9x7
+> compatible") adding sam9x7 compatible did not make any sense as it added
+> new compatible into middle of existing compatible list.  The intention
+> was probably to add new set of compatibles with sam9x7 as first one.
 > 
-> add sht3x devicetree binding files
-> 
-> Signed-off-by: JuenKit Yip <JuenKit_Yip@hotmail.com>
-> ---
->  .../devicetree/bindings/hwmon/sht3x.yaml      | 31 +++++++++++++++++++
->  .../devicetree/bindings/trivial-devices.yaml  |  4 +++
->  2 files changed, 35 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/sht3x.yaml
 > 
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Applied to
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/hwmon/sht3x.yaml:2:2: [error] syntax error: expected alphabetic or numeric character, but found ' ' (syntax)
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-dtschema/dtc warnings/errors:
-make[1]: *** Deleting file 'Documentation/devicetree/bindings/hwmon/sht3x.example.dts'
-Documentation/devicetree/bindings/hwmon/sht3x.yaml:2:2: could not find expected directive name
-make[1]: *** [Documentation/devicetree/bindings/Makefile:26: Documentation/devicetree/bindings/hwmon/sht3x.example.dts] Error 1
-make[1]: *** Waiting for unfinished jobs....
-./Documentation/devicetree/bindings/hwmon/sht3x.yaml:2:2: could not find expected directive name
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/hwmon/sht3x.yaml: ignoring, error parsing file
-make: *** [Makefile:1512: dt_binding_check] Error 2
+Thanks!
 
-doc reference errors (make refcheckdocs):
+[1/1] spi: dt-bindings: atmel,at91rm9200-spi: fix broken sam9x7 compatible
+      commit: e884a133340a470070b2c59833c9ff87aa6517ba
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/DB4PR10MB626179DE1C511B10ECA74D209220A@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-pip3 install dtschema --upgrade
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+Thanks,
+Mark
 
