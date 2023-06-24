@@ -2,115 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E515C73CCD7
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 23:57:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85D9073CD33
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 00:10:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229566AbjFXV5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 17:57:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40488 "EHLO
+        id S229484AbjFXWKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 18:10:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjFXV5G (ORCPT
+        with ESMTP id S229481AbjFXWK2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 17:57:06 -0400
-Received: from pb-smtp21.pobox.com (pb-smtp21.pobox.com [173.228.157.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F4115E6B
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 14:57:04 -0700 (PDT)
-Received: from pb-smtp21.pobox.com (unknown [127.0.0.1])
-        by pb-smtp21.pobox.com (Postfix) with ESMTP id 5B11E2B553;
-        Sat, 24 Jun 2023 17:57:04 -0400 (EDT)
-        (envelope-from tdavies@darkphysics.net)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=pobox.com; h=date:from
-        :to:cc:subject:message-id:mime-version:content-type; s=sasl; bh=
-        HtyGkaX63IukexMf6HGIeT2EEzI9A0nt1AneQdVQiwc=; b=NA4KTVy//ONfjzN+
-        JuZWdtGJOthF5SXSRoLu9LgJaqbKxClXwDPB2sAtw+qT8Auq7vbO3EerMi4IlDA2
-        lav2zmeHJ32Fu/u/h5PHmhcJDRGhQw4/T19cDndDbdzZalVzMqoC691B479CXlxn
-        puwXzhcesfrw2Qk0kSM0uVWseNg=
-Received: from pb-smtp21.sea.icgroup.com (unknown [127.0.0.1])
-        by pb-smtp21.pobox.com (Postfix) with ESMTP id 531812B551;
-        Sat, 24 Jun 2023 17:57:04 -0400 (EDT)
-        (envelope-from tdavies@darkphysics.net)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=darkphysics.net;
- h=date:from:to:cc:subject:message-id:mime-version:content-type;
- s=2019-09.pbsmtp; bh=HtyGkaX63IukexMf6HGIeT2EEzI9A0nt1AneQdVQiwc=;
- b=Y/QtsQNeKNmiq9DYVa+KGwFN7aHD7dF9j7MRHhfGONUNWBHdS4rh82NbJMWl0U6OUbGeyDSMb16Fjd0uWlADpTiABGuLbDQ14CtkYuKzPXpWWTDYVTpsAi7RphT32Q1Gkj200iRej1Om9lEwyHzQFx3QtfOxBsPUcwRqdvZ8ef8=
-Received: from tacos.darkphysics (unknown [76.146.178.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sat, 24 Jun 2023 18:10:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D922EE6B
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 15:10:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by pb-smtp21.pobox.com (Postfix) with ESMTPSA id 6C32F2B54F;
-        Sat, 24 Jun 2023 17:57:01 -0400 (EDT)
-        (envelope-from tdavies@darkphysics.net)
-Date:   Sat, 24 Jun 2023 14:56:55 -0700
-From:   Tree Davies <tdavies@darkphysics.net>
-To:     gregkh@linuxfoundation.org, philipp.g.hortmann@gmail.com,
-        dan.carpenter@linaro.org
-Cc:     tdavies@darkphysics.net, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev
-Subject: [PATCH] staging: rtl8192e: Rename function HTUpdateDefaultSetting to
- ht_update_default_setting
-Message-ID: <ZJdmp3PAOAIqC3Zo@tacos.darkphysics>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6149560ACC
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 22:10:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BFA51C433C8;
+        Sat, 24 Jun 2023 22:10:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687644626;
+        bh=Af1wluoPesxzfC6tKSmwNEv1detWSwXXYbav1TrsDwA=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=mh/fzCZcwqpyIeqjker9f2jPAVerk0DNhYcqeTejx//Fd3adpYJZPYA3REXj4jw2Z
+         e8Chl6qu+5m9z9wym14l6m3te9WoAQkPi/8qAl8jpKO3QpBfnu229OV9rrVxxCq1TG
+         2Ns2hK/IGLSIGRigP95uS9CtJXERnm+xRIgDOMb30Alot5Xc1hYzmjdl1FFD6Kon1N
+         bflR1fXCpkHCgsGzyc/C1KHHF5mt2Q2uJHHdjoT130t2fk+zj0TZ+5t+7YWUT5hrND
+         dl8i1AAmylMO/ud2zhYABP0TKTEjU5lui0WrV/pAYHQRyrRLOFVaKYj+XQyphZXQMN
+         UIt4OA4yBg3fA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A4544C395F1;
+        Sat, 24 Jun 2023 22:10:26 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Pobox-Relay-ID: 0C6574E2-12DA-11EE-8AE5-B31D44D1D7AA-45285927!pb-smtp21.pobox.com
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NO_DNS_FOR_FROM,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v2] net: phy: broadcom: drop brcm_phy_setbits() and
+ use phy_set_bits() instead
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168764462666.18414.17822935967545944021.git-patchwork-notify@kernel.org>
+Date:   Sat, 24 Jun 2023 22:10:26 +0000
+References: <20230622184721.24368-1-giulio.benetti@benettiengineering.com>
+In-Reply-To: <20230622184721.24368-1-giulio.benetti@benettiengineering.com>
+To:     Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc:     f.fainelli@gmail.com, bcm-kernel-feedback-list@broadcom.com,
+        andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, simon.horman@corigine.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rename HTUpdateDefaultSetting to ht_update_default_setting in order to
-Fix checkpatch warning: Avoid CamelCase
+Hello:
 
-Signed-off-by: Tree Davies <tdavies@darkphysics.net>
----
- drivers/staging/rtl8192e/rtl819x_HTProc.c | 2 +-
- drivers/staging/rtl8192e/rtllib.h         | 2 +-
- drivers/staging/rtl8192e/rtllib_module.c  | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+This patch was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-diff --git a/drivers/staging/rtl8192e/rtl819x_HTProc.c b/drivers/staging/rtl8192e/rtl819x_HTProc.c
-index f9fa3f2bb728..f526d04839bf 100644
---- a/drivers/staging/rtl8192e/rtl819x_HTProc.c
-+++ b/drivers/staging/rtl8192e/rtl819x_HTProc.c
-@@ -67,7 +67,7 @@ static u8 CISCO_BROADCOM[3] = {0x00, 0x17, 0x94};
- 
- static u8 LINKSYS_MARVELL_4400N[3] = {0x00, 0x14, 0xa4};
- 
--void HTUpdateDefaultSetting(struct rtllib_device *ieee)
-+void ht_update_default_setting(struct rtllib_device *ieee)
- {
- 	struct rt_hi_throughput *ht_info = ieee->ht_info;
- 
-diff --git a/drivers/staging/rtl8192e/rtllib.h b/drivers/staging/rtl8192e/rtllib.h
-index e3ce4431d460..405033c7ed77 100644
---- a/drivers/staging/rtl8192e/rtllib.h
-+++ b/drivers/staging/rtl8192e/rtllib.h
-@@ -1982,7 +1982,7 @@ int rtllib_wx_get_rts(struct rtllib_device *ieee, struct iw_request_info *info,
- void HTSetConnectBwMode(struct rtllib_device *ieee,
- 			enum ht_channel_width bandwidth,
- 			enum ht_extchnl_offset Offset);
--void HTUpdateDefaultSetting(struct rtllib_device *ieee);
-+void ht_update_default_setting(struct rtllib_device *ieee);
- void HTConstructCapabilityElement(struct rtllib_device *ieee,
- 				  u8 *posHTCap, u8 *len,
- 				  u8 isEncrypt, bool bAssoc);
-diff --git a/drivers/staging/rtl8192e/rtllib_module.c b/drivers/staging/rtl8192e/rtllib_module.c
-index d6a4d6b4ec57..841300e3a8bc 100644
---- a/drivers/staging/rtl8192e/rtllib_module.c
-+++ b/drivers/staging/rtl8192e/rtllib_module.c
-@@ -129,7 +129,7 @@ struct net_device *alloc_rtllib(int sizeof_priv)
- 	if (!ieee->ht_info)
- 		goto free_softmac;
- 
--	HTUpdateDefaultSetting(ieee);
-+	ht_update_default_setting(ieee);
- 	HTInitializeHTInfo(ieee);
- 	TSInitialize(ieee);
- 	for (i = 0; i < IEEE_IBSS_MAC_HASH_SIZE; i++)
+On Thu, 22 Jun 2023 20:47:21 +0200 you wrote:
+> Linux provides phy_set_bits() helper so let's drop brcm_phy_setbits() and
+> use phy_set_bits() in its place.
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ---
+> V1->V2:
+> * fix code style and add branch net-next to subject as suggested by Simon
+>   Horman
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next,v2] net: phy: broadcom: drop brcm_phy_setbits() and use phy_set_bits() instead
+    https://git.kernel.org/netdev/net-next/c/28e219aea0b9
+
+You are awesome, thank you!
 -- 
-2.39.2
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
