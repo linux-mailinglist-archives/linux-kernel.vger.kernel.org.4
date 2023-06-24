@@ -2,139 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F48D73C5C0
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 03:13:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A69A073C5C7
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 03:15:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230185AbjFXBNv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 21:13:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52994 "EHLO
+        id S231175AbjFXBPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 21:15:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjFXBNt (ORCPT
+        with ESMTP id S230506AbjFXBOw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 21:13:49 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2592126BD;
-        Fri, 23 Jun 2023 18:13:48 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-666fb8b1bc8so1066188b3a.1;
-        Fri, 23 Jun 2023 18:13:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687569227; x=1690161227;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=XPifuwGr7qotS1J4egDcigsPGqIRoWlg/6w0xflvqXc=;
-        b=os0PUm6FrKL+A1DoENP/u20TiGluWujR7+ihWm5WpvDPntOiaFqI+zagF77EPxUeFd
-         gr58N43P9mAq2znfThw1PfGQKEPSYSXsYzcEoKK9A5Du4HKGvzQScblJDy/iGqZAKuWT
-         a4wWxbqnCDJ7t06JAr5Z8X0hOH//fnXZWeq9NqYVRLpKrC6kx5piOAgW//ZY9LTxMEnL
-         jqOhCNst0AIt7XcCt8LzYtm++QMHG2HaCRrv86PEx6ef3m7DMWmPFU5054WCk+Mv5os1
-         kXSEIEH24AbdO3seGYjPXpcaT5TcOUwYnekVdahikCV0h8quKcRXl8JnajWrTwBJOX4a
-         9cMw==
+        Fri, 23 Jun 2023 21:14:52 -0400
+Received: from mail-oi1-f206.google.com (mail-oi1-f206.google.com [209.85.167.206])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C61A92736
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 18:14:50 -0700 (PDT)
+Received: by mail-oi1-f206.google.com with SMTP id 5614622812f47-39ecef7a101so1064118b6e.2
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 18:14:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687569227; x=1690161227;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XPifuwGr7qotS1J4egDcigsPGqIRoWlg/6w0xflvqXc=;
-        b=PBV1HigZeZkxB88zXxbYyiW2UCu4s/R/TLBwUif7/sSDF1hLnIYNOkhioT3Eu1eq9O
-         WJVEMkmUyaCqJNkZS5KmECIuzjhtxMA786mgfdvujZk4OG7zJZr5edOH3IJiYzvKYLxF
-         vPPqf/nbV+bLyJ4pR0ubvpBu52LNsp2/7xtYa/CDbw6u6Yq8GTPboC7BjjER1+g93XXF
-         efFwJCQaEAMigK/uhC89Bsj3/JVIIgTA74Pr9aimJb6Dm/ujDs1xjUV18EhwKJn+IllP
-         tdAKeHqo7CAvYWtpLnPN3FNgmaKxXiXtgSq2EonHNLs4SrHLoqr+Z2jtJvN8xaDfeXiO
-         8Vdw==
-X-Gm-Message-State: AC+VfDw5OYWez6HoUN96BV26uAoJwCbcsKXidG8DKEAMU8ksBgQKCWun
-        vZSQ/jjR/j4J+io0hjPXPb8=
-X-Google-Smtp-Source: ACHHUZ606czjila05woldXKyuDA7Rq8dbV1i+0k6tpmn1h59UzY57EaMRyDQG9n05OaV37lSyFMttw==
-X-Received: by 2002:a05:6a20:12d1:b0:121:b440:2820 with SMTP id v17-20020a056a2012d100b00121b4402820mr19195240pzg.19.1687569227466;
-        Fri, 23 Jun 2023 18:13:47 -0700 (PDT)
-Received: from [192.168.0.103] ([103.131.18.64])
-        by smtp.gmail.com with ESMTPSA id j6-20020a655586000000b0054fe7736ac1sm195469pgs.76.2023.06.23.18.13.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Jun 2023 18:13:47 -0700 (PDT)
-Message-ID: <0e85ca99-d1d6-097b-2e04-4cd6492098a1@gmail.com>
-Date:   Sat, 24 Jun 2023 08:13:26 +0700
+        d=1e100.net; s=20221208; t=1687569290; x=1690161290;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7PyQKurHCJE/uC1oMG5etBoAcnflEGjb/6C6sV4i/OA=;
+        b=DsQjM7Bwz0OLH8wN1TceMm3HyUfsM4llh2V09x/GGCRWFv+hHmY+cIRuuPkQ/YObl8
+         TTdkFnzUpMpo3eVsUdqCAXSf3gcoAOk2cETfbzEOOAuJyQJoMtewxwQGoWKahh79rKJM
+         pYISCZmMm3FM1cnJ8HfGj6K6/TKZPIbIK4OeggXuPUI8eRLzb53ilGYo/BainBZs7Ffa
+         fXVUYb0rBvlPOk9WT866bKolvCfTC7j/tW6KpbMiW/bmQUbEBB1siJGQt1vmimp2sC4F
+         OeDgFhn0lIIfg17n6CNLl3TPNYxfBHBkO/dD9ilJMVCM82eq36gBAFwp8oNdCsQIc6l4
+         4LSg==
+X-Gm-Message-State: AC+VfDyxIP2RDD/JPRYPYSpLn5NHtHhV6iK+O6X3m9V8d9SLD0NWicGu
+        j1rTaCH9bhWXEFMGcQj3wvu7lnO9jK0ZbFXEXY0OFmqFCLje
+X-Google-Smtp-Source: ACHHUZ7V23mNNHKiZk8IiUsr2ju2MM6HnB6VLbLyv7p2C6H+uRyfPwJlAOLJhxR63bAXEVdd22CelXroF3bkA1IY/LsJvaYJRlfI
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: Fwd: Dell XPS 13 ath10k_pci firmware crashed!
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Kalle Valo <kvalo@kernel.org>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        Garry Williams <gtwilliams@gmail.com>
-Cc:     Linux Atheros 10K <ath10k@lists.infradead.org>,
-        Linux Wireless <linux-wireless@vger.kernel.org>,
-        Linux Kernel Network Developers <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>
-References: <2db51694-aa57-cbfd-096e-4925b76232b0@gmail.com>
-Content-Language: en-US
-In-Reply-To: <2db51694-aa57-cbfd-096e-4925b76232b0@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:aca:e184:0:b0:39c:edc0:202b with SMTP id
+ y126-20020acae184000000b0039cedc0202bmr3942828oig.11.1687569289997; Fri, 23
+ Jun 2023 18:14:49 -0700 (PDT)
+Date:   Fri, 23 Jun 2023 18:14:49 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000010719b05fed5d82f@google.com>
+Subject: [syzbot] [reiserfs?] [fat?] BUG: corrupted list in __mark_inode_dirty
+From:   syzbot <syzbot+4a16683f5520de8e47c4@syzkaller.appspotmail.com>
+To:     brauner@kernel.org, linkinjeon@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org, sj1557.seo@samsung.com,
+        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/14/23 08:15, Bagas Sanjaya wrote:
-> Hi,
-> 
-> I notice a regression report on Bugzilla [1]. Quoting from it:
-> 
->> Beginning with kernel 6.2.15-300.fc38.x86_64 and continuing through 6.3.7-200.fc38.x86_64, the wifi connection fails periodically with these log messages:
->>
->> ath10k_pci 0000:02:00.0: firmware crashed! (guid 6c545da0-593c-4a0e-b5ad-3ef2b91cdebf)
->> ath10k_pci 0000:02:00.0: qca6174 hw3.2 target 0x05030000 chip_id 0x00340aff sub 1a56:143a
->> ath10k_pci 0000:02:00.0: kconfig debug 0 debugfs 1 tracing 0 dfs 0 testmode 0
->> ath10k_pci 0000:02:00.0: firmware ver WLAN.RM.4.4.1-00288- api 6 features wowlan,ignore-otp,mfp crc32 bf907c7c
->> ath10k_pci 0000:02:00.0: board_file api 2 bmi_id N/A crc32 d2863f91
->> ath10k_pci 0000:02:00.0: htt-ver 3.87 wmi-op 4 htt-op 3 cal otp max-sta 32 raw 0 hwcrypto 1
->> ath10k_pci 0000:02:00.0: failed to get memcpy hi address for firmware address 4: -16
->> ath10k_pci 0000:02:00.0: failed to read firmware dump area: -16
->> ath10k_pci 0000:02:00.0: Copy Engine register dump:
->> ath10k_pci 0000:02:00.0: [00]: 0x00034400  12  12   3   3
->> ath10k_pci 0000:02:00.0: [01]: 0x00034800  14  14 347 348
->> ath10k_pci 0000:02:00.0: [02]: 0x00034c00   8   2   0   1
->> ath10k_pci 0000:02:00.0: [03]: 0x00035000  16  15  16  14
->> ath10k_pci 0000:02:00.0: [04]: 0x00035400 2995 2987  22 214
->> ath10k_pci 0000:02:00.0: [05]: 0x00035800   0   0  64   0
->> ath10k_pci 0000:02:00.0: [06]: 0x00035c00   0   0  18  18
->> ath10k_pci 0000:02:00.0: [07]: 0x00036000   1   1   1   0
->> ath10k_pci 0000:02:00.0: could not request stats (-108)
->> ath10k_pci 0000:02:00.0: could not request peer stats info: -108
->> ath10k_pci 0000:02:00.0: failed to read hi_board_data address: -28
->> ieee80211 phy0: Hardware restart was requested
->> ath10k_pci 0000:02:00.0: could not request stats (-108)
->> ath10k_pci 0000:02:00.0: device successfully recovered
->>
->>
->> If I disconnect and reconnect using network manager, the connection is restored.  But this same failure recurs over and over after some few minutes to a few hours.
->>
->> This is a regression.  The error was not reported with any previous kernel since 6.2.14-300.fc38.x86_64
-> 
-> See Bugzilla for the full thread.
-> 
-> Unfortunately, the reporter can't bisect this regression (he only tries
-> distribution kernels instead).
-> 
-> Anyway, I'm adding it to regzbot (as mainline regression because v6.2.x
-> has already EOL):
-> 
-> #regzbot introduced: v6.2..v6.3 https://bugzilla.kernel.org/show_bug.cgi?id=217549
-> #regzbot title: ath10k_pci firmware crashed on Dell XPS 13
-> 
+Hello,
 
-It comes out that the regression is due to Fedora patches (see Bugzilla thread),
-thus:
+syzbot found the following issue on:
 
-#regzbot invalid: regression caused by downstream patch
+HEAD commit:    45a3e24f65e9 Linux 6.4-rc7
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=12848413280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=24ce1b2abaee24cc
+dashboard link: https://syzkaller.appspot.com/bug?extid=4a16683f5520de8e47c4
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16bd1013280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=101d4adf280000
 
-Thanks.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/90ee4ebebbf0/disk-45a3e24f.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/01569690e4bb/vmlinux-45a3e24f.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/19f38d7ce866/bzImage-45a3e24f.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/245a7035bcde/mount_1.gz
 
--- 
-An old man doll... just what I always wanted! - Clara
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+4a16683f5520de8e47c4@syzkaller.appspotmail.com
 
+list_add corruption. next->prev should be prev (ffffffff91dfe878), but was 0000060100040048. (next=ffff888070e8fc38).
+------------[ cut here ]------------
+kernel BUG at lib/list_debug.c:27!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 4986 Comm: udevd Not tainted 6.4.0-rc7-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
+RIP: 0010:__list_add_valid+0xa5/0x100 lib/list_debug.c:27
+Code: c7 c7 00 f8 a6 8a e8 8a df 50 fd 0f 0b 48 c7 c7 a0 f8 a6 8a e8 7c df 50 fd 0f 0b 4c 89 e1 48 c7 c7 00 f9 a6 8a e8 6b df 50 fd <0f> 0b 48 89 f1 48 c7 c7 80 f9 a6 8a 4c 89 e6 e8 57 df 50 fd 0f 0b
+RSP: 0018:ffffc900033cfa20 EFLAGS: 00010286
+RAX: 0000000000000075 RBX: ffff88802068ee08 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff8167dd6c RDI: 0000000000000005
+RBP: ffff88802068efa0 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000002 R11: 0000000000000001 R12: ffff888070e8fc38
+R13: ffff88802068efa0 R14: ffff88802068efa0 R15: ffff888070e8fc38
+FS:  00007fc75aad2c80(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000060100040048 CR3: 0000000028d93000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __list_add include/linux/list.h:69 [inline]
+ list_add include/linux/list.h:88 [inline]
+ list_move include/linux/list.h:218 [inline]
+ inode_io_list_move_locked+0x1fa/0x3f0 fs/fs-writeback.c:126
+ __mark_inode_dirty+0x522/0xd60 fs/fs-writeback.c:2505
+ generic_update_time fs/inode.c:1859 [inline]
+ inode_update_time fs/inode.c:1872 [inline]
+ touch_atime+0x687/0x740 fs/inode.c:1944
+ file_accessed include/linux/fs.h:2198 [inline]
+ filemap_read+0xa5a/0xc70 mm/filemap.c:2765
+ blkdev_read_iter+0x3eb/0x760 block/fops.c:606
+ call_read_iter include/linux/fs.h:1862 [inline]
+ new_sync_read fs/read_write.c:389 [inline]
+ vfs_read+0x4b1/0x8a0 fs/read_write.c:470
+ ksys_read+0x12b/0x250 fs/read_write.c:613
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fc75a716b6a
+Code: 00 3d 00 00 41 00 75 0d 50 48 8d 3d 2d 08 0a 00 e8 ea 7d 01 00 31 c0 e9 07 ff ff ff 64 8b 04 25 18 00 00 00 85 c0 75 1b 0f 05 <48> 3d 00 f0 ff ff 76 6c 48 8b 15 8f a2 0d 00 f7 d8 64 89 02 48 83
+RSP: 002b:00007ffdb3cd93f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+RAX: ffffffffffffffda RBX: 00000000003f0000 RCX: 00007fc75a716b6a
+RDX: 0000000000000040 RSI: 000055c536a3f038 RDI: 0000000000000009
+RBP: 0000000000000040 R08: 000055c536a3f010 R09: 0000000000002000
+R10: 0000000000000015 R11: 0000000000000246 R12: 000055c536a3f010
+R13: 000055c536a3f028 R14: 000055c536a58bc8 R15: 000055c536a58b70
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:__list_add_valid+0xa5/0x100 lib/list_debug.c:27
+Code: c7 c7 00 f8 a6 8a e8 8a df 50 fd 0f 0b 48 c7 c7 a0 f8 a6 8a e8 7c df 50 fd 0f 0b 4c 89 e1 48 c7 c7 00 f9 a6 8a e8 6b df 50 fd <0f> 0b 48 89 f1 48 c7 c7 80 f9 a6 8a 4c 89 e6 e8 57 df 50 fd 0f 0b
+RSP: 0018:ffffc900033cfa20 EFLAGS: 00010286
+
+RAX: 0000000000000075 RBX: ffff88802068ee08 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff8167dd6c RDI: 0000000000000005
+RBP: ffff88802068efa0 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000002 R11: 0000000000000001 R12: ffff888070e8fc38
+R13: ffff88802068efa0 R14: ffff88802068efa0 R15: ffff888070e8fc38
+FS:  00007fc75aad2c80(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000060100040048 CR3: 0000000028d93000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
