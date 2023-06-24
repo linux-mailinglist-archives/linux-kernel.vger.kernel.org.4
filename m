@@ -2,273 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F4BB73C679
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 05:17:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57A6B73C689
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 05:24:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229591AbjFXDRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 23:17:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44178 "EHLO
+        id S229727AbjFXDYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 23:24:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjFXDQ7 (ORCPT
+        with ESMTP id S229451AbjFXDYP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 23:16:59 -0400
-Received: from mail-io1-f79.google.com (mail-io1-f79.google.com [209.85.166.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52940E47
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 20:16:57 -0700 (PDT)
-Received: by mail-io1-f79.google.com with SMTP id ca18e2360f4ac-7775a282e25so77144339f.0
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 20:16:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687576616; x=1690168616;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=k65zINyUz9GkzIfZNmLbjtYyNeo+GXwEgSmlVobXADY=;
-        b=gLgx0mZFQ+SXO69jxNCG4hA0GVkbdynyxNjiMXfbAsuwsZ5FFRINXhGljPpvUZez9j
-         pW/2IibNhwQ5+ef1kEPy9qqNf/Q+bbD5II7p7PSiRo8NhpEm50zaMrue+KEctQZ6RVoc
-         91JJPm3Z6NYNAqjGPH7dJpGD5MzzxlLmGK3VoJPAuDkM8QbBm5IwwPgtWx/UXZI/K8pa
-         kYFpaOH5do7pIM3qHl22cRwhLk/9P2GsGToncKPB5DlraN1Zp4Fzcpt/t0RCzrhnkekT
-         EK/ZHebQbB+s5jUpKHxwGQ8+dij8FpNLg9IF7u1XQ48tLx2tWcoJcn3io1vOE2iRXDm+
-         Cgjg==
-X-Gm-Message-State: AC+VfDz21QGGPGgyZnrF9ejV23VUEI6Qp5415uGGGwpsm0u2uk1Y5YYT
-        42Nq/JD7IKx2Io4S36oixWHUpS7ePIkHQ9dOCUZs3aMAJl6F
-X-Google-Smtp-Source: ACHHUZ5Oe1gRuTSgev790sJM1V7hB6XmjlxQQOe+yIH0qUyb4vV4L4B+BBQMEukZH8XNqm04rhFEsyu1P0hQx+vF4AqD6Pd03sLE
-MIME-Version: 1.0
-X-Received: by 2002:a6b:db17:0:b0:763:5f92:afc3 with SMTP id
- t23-20020a6bdb17000000b007635f92afc3mr8066870ioc.0.1687576616574; Fri, 23 Jun
- 2023 20:16:56 -0700 (PDT)
-Date:   Fri, 23 Jun 2023 20:16:56 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c329d505fed78c74@google.com>
-Subject: [syzbot] [input?] INFO: task hung in uhid_char_release
-From:   syzbot <syzbot+8fe2d362af0e1cba8735@syzkaller.appspotmail.com>
-To:     benjamin.tissoires@redhat.com, david.rheinsberg@gmail.com,
-        jikos@kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+        Fri, 23 Jun 2023 23:24:15 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C854B1B9
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 20:24:13 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id 6E5165C011D;
+        Fri, 23 Jun 2023 23:24:10 -0400 (EDT)
+Received: from imap50 ([10.202.2.100])
+  by compute1.internal (MEProxy); Fri, 23 Jun 2023 23:24:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.com; h=
+        cc:cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1687577050; x=1687663450; bh=NbdyWgrnQuAJrNoZdsryau1ERtyp1m+gXJN
+        ykYa1YxA=; b=aclqciry9m5HbcG/HJc5sV3Muf2uzQZuIE8Kf0t7MWfOFUMm9ZG
+        44XKnZa1ch/yAHYgc4GanR9MG4Qf3ITHUToHKGiOxhKOyRcqc0U221PvtVdZUCnm
+        Tgmf3aZjwRZVl3KsM0VarOYPOjSbDU+PwYdly7cKyRfkFt6KuDgqJr2ikmYKa2QL
+        OTifyVr99i/3/l98CCpb+FuZbgSSbqo4zboRHTqh2//aXiFlc1EwIRSY6LsB+v4i
+        qhkaGe/7mG95ZJpFHAlycqJldw+YV3rA4NLCSmWzokU7YRIg7UCtzdwwR7v06XtR
+        JJ8dhRVihS4GbO0N5r17hDFdjstWjuebezQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1687577050; x=1687663450; bh=NbdyWgrnQuAJrNoZdsryau1ERtyp1m+gXJN
+        ykYa1YxA=; b=d4PIRb+zNvInMZXg7uV18TR7u8P2aT5tk84+XExhpTh5ljIz2OZ
+        m35wFQL92rhGx0fVwweFIxT6qXgsia+XGffYd6rAPTbBa3JiCdUIBKYsU2gGuw/A
+        yY00txf7DV/BSJABn8ovoBPsuiGLN4OT+hv/ewJYy7cLo7QCZgWeJ31X9Iou0eaZ
+        rIjBmEsundTHi4yW5HivwET0gmanqQo1Db2VhGqK0ueYXPsp1dgNA62EogH8dyeO
+        vzja91pYhtXr5K1OinJ1IUlMeT47m0kmTpCb1Gm2bDrduJPS+DnLZD0953Xd6Y0f
+        VPr4F7lVKPAnJlAmIePo66NWylam+qe4QRw==
+X-ME-Sender: <xms:2WGWZDZ-zlWm-wRZUpQNB2tWCLs_8mYA2pYeaLdWVJattHGYvoIxBg>
+    <xme:2WGWZCZdDoRMR_t-pOKuvs_UclNzmTLC85E_5d6-RdAMigffQuQ-mtl4VRMCNi5r4
+    wJirSwvemXk_-YUPA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeegiedgvdelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdfu
+    thgvfhgrnhcuqfdktfgvrghrfdcuoehsohhrvggrrhesfhgrshhtmhgrihhlrdgtohhmqe
+    enucggtffrrghtthgvrhhnpeeffeelhfeivdeujeevudehgfduffevhedvkeefudetvdet
+    teegveettdektdffheenucffohhmrghinhepshhsthgrthhushdrvhhsrdhithenucevlh
+    hushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsohhrvggrrhes
+    fhgrshhtmhgrihhlrdgtohhm
+X-ME-Proxy: <xmx:2WGWZF8lNuyf7OX8HJOQm7ELhJ6nrpqww5girSNtpd9-Slp_8rK_yQ>
+    <xmx:2WGWZJqvGFMMCGdNmFRxX47aYza3SQL8-7LiqVBfMdXByFGDTTR11w>
+    <xmx:2WGWZOrkgjkJZ8uOi3F8zbOrhfJlk8iHKl05vB72hB6jqICvQl7HwA>
+    <xmx:2mGWZLAtrgneWuEZDP1trMqnSjWhhyGe3i8cchhtgGLUaAWIWrWs_A>
+Feedback-ID: i84414492:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 9FAB61700096; Fri, 23 Jun 2023 23:24:09 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
+Mime-Version: 1.0
+Message-Id: <8f1ba16d-42e3-4e45-9fac-a91b3b0556a8@app.fastmail.com>
+In-Reply-To: <1788842.TLkxdtWsSY@diego>
+References: <20230228215435.3366914-1-heiko@sntech.de>
+ <c01ee919-9abb-4796-9ed4-9bb4565dc863@app.fastmail.com>
+ <1961474.usQuhbGJ8B@diego> <1788842.TLkxdtWsSY@diego>
+Date:   Fri, 23 Jun 2023 23:23:11 -0400
+From:   "Stefan O'Rear" <sorear@fastmail.com>
+To:     "Heiko Stuebner" <heiko@sntech.de>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>
+Cc:     linux-riscv@lists.infradead.org, samuel@sholland.org,
+        guoren@kernel.org, christoph.muellner@vrull.eu,
+        conor.dooley@microchip.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC 2/2] RISC-V: add T-Head vector errata handling
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, Jun 23, 2023, at 7:26 PM, Heiko St=C3=BCbner wrote:
+> Am Freitag, 23. Juni 2023, 12:22:35 CEST schrieb Heiko St=C3=BCbner:
+>> Am Freitag, 23. Juni 2023, 05:06:44 CEST schrieb Stefan O'Rear:
+>> > On Thu, Jun 22, 2023, at 4:35 PM, Heiko St=C3=BCbner wrote:
+>> > > Am Donnerstag, 22. Juni 2023, 20:58:37 CEST schrieb Stefan O'Rear:
+>> > >> Are you aware of "3.7. Vector Fixed-Point Fields in fcsr" in
+>> > >> riscv-v-spec-0.7.1.pdf?
+>> > >
+>> > > oh wow, thanks a lot for that pointer, now I understand your conc=
+ern.
+>> > >
+>> > > So in vector-0.7.1 fcsr[10:9] mirrors vxrm and fcsr[8] mirrors vx=
+sat.
+>> > >
+>> > >
+>> > > On a positive note, the T-Head cores seem to not implement the fu=
+ll
+>> > > vector 0.7.1 specification after all, in the documentation I have=
+ [0]
+>> > > fcsr[31:8] are declared as "0" and uppermost bits are [7:5] for t=
+he "frm"
+>> > > field.
+>> >=20
+>> > Given that the pdf you linked does not mention any vector CSRs, I a=
+m not
+>> > confident that it provides a complete and accurate description of v=
+ector
+>> > functionality in other registers for the C906 with vector extension.
+>> >=20
+>> > Assuming that you have access to such a chip, I would be much happi=
+er with
+>> > the proposed "just a comment" approach if our understanding of the =
+behavior
+>> > were confirmed on hardware (specifically: csr_write(CSR_FCSR, 0x700=
+) should
+>> > not affect csr_read(CSR_VXRM) or csr_read(CSR_VXSAT)).
+>>=20
+>> For one, you're right that I should definitly try to confirm this on =
+hardware :-) .
+>
+> ok, so now I know the documentation is wrong.
+>
+> 	before, vxrm 0x0, vxsat 0x0
+> writing the 0x700 to fcsr
+> 	after, vxrm 0x3, vxsat 0x1
+>
+> Essentially the link between the CSRs really is there - oh fun.
+> So we're back at your original concern - sadly.
+>
+> I guess I need to figure out how to not have this stuff break
+> because relying on the fpu parts to handle feels not correct
+> at first glance.
 
-syzbot found the following issue on:
+I don't see a conceptual problem here.
 
-HEAD commit:    f7efed9f38f8 Add linux-next specific files for 20230616
-git tree:       linux-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=11ec12f3280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=60b1a32485a77c16
-dashboard link: https://syzkaller.appspot.com/bug?extid=8fe2d362af0e1cba8735
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=152875ef280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1629f75b280000
+There are a large number of vector instructions that access the floating=
+ point
+state (frm, fflags, f{0..31}).  These instructions require a valid float=
+ing
+point context, sstatus.FS>0, trap if sstatus.FS=3D0, and set sstatus.FS=3D=
+3 if they
+change anything.  vfadd, vfsub, vfmul, vfdiv, vfmv, etc, etc in both 0.7=
+.1 and 1.0.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/95bcbee03439/disk-f7efed9f.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/6fd295caa4de/vmlinux-f7efed9f.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/69c038a34b5f/bzImage-f7efed9f.xz
+0.7.1 extends the floating point state to include vxrm and vxsat and add=
+s vaaddu,
+vnclip, vsmul, etc to the list of instructions which access both floatin=
+g point and
+vector state.  This breaks floating-point emulation (if a core provides =
+integer
+vectors in hardware, it provides a fcsr register with three writeable bi=
+ts, which
+means that accesses to fcsr won't trap and can't be emulated to provide =
+access to
+the software frm and fflags), which is probably why the behavior was cha=
+nged in 1.0,
+but is otherwise internally consistent.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+8fe2d362af0e1cba8735@syzkaller.appspotmail.com
+You can continue to treat "fpu parts" and "vector parts" as independent =
+as long as
+you recognize vxrm and vxsat as _exclusively_ owned by the "fpu parts".
 
-INFO: task syz-executor188:5032 blocked for more than 143 seconds.
-      Not tainted 6.4.0-rc6-next-20230616-syzkaller #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor188 state:D
- stack:27424 pid:5032  ppid:5028   flags:0x00004002
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5380 [inline]
- __schedule+0x1d15/0x5790 kernel/sched/core.c:6709
- schedule+0xde/0x1a0 kernel/sched/core.c:6785
- schedule_timeout+0x276/0x2b0 kernel/time/timer.c:2143
- do_wait_for_common kernel/sched/completion.c:85 [inline]
- __wait_for_common+0x1ce/0x5c0 kernel/sched/completion.c:106
- __flush_work+0x595/0xb60 kernel/workqueue.c:3383
- __cancel_work_timer+0x3f9/0x570 kernel/workqueue.c:3470
- uhid_dev_destroy drivers/hid/uhid.c:585 [inline]
- uhid_char_release+0xca/0x210 drivers/hid/uhid.c:663
- __fput+0x289/0xac0 fs/file_table.c:378
- task_work_run+0x16f/0x270 kernel/task_work.c:179
- exit_task_work include/linux/task_work.h:38 [inline]
- do_exit+0xadc/0x2a30 kernel/exit.c:874
- do_group_exit+0xd4/0x2a0 kernel/exit.c:1024
- __do_sys_exit_group kernel/exit.c:1035 [inline]
- __se_sys_exit_group kernel/exit.c:1033 [inline]
- __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1033
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fa196a81b19
-RSP: 002b:00007ffc33991898 EFLAGS: 00000246
- ORIG_RAX: 00000000000000e7
-RAX: ffffffffffffffda RBX: 00007fa196af5330 RCX: 00007fa196a81b19
-RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000000
-RBP: 0000000000000000 R08: ffffffffffffffc0 R09: 0000000000000001
-R10: 00007ffc33991360 R11: 0000000000000246 R12: 00007fa196af5330
-R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000001
- </TASK>
-INFO: task syz-executor188:5038 blocked for more than 145 seconds.
-      Not tainted 6.4.0-rc6-next-20230616-syzkaller #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor188 state:D
- stack:28176 pid:5038  ppid:5036   flags:0x00004002
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5380 [inline]
- __schedule+0x1d15/0x5790 kernel/sched/core.c:6709
- schedule+0xde/0x1a0 kernel/sched/core.c:6785
- schedule_timeout+0x276/0x2b0 kernel/time/timer.c:2143
- do_wait_for_common kernel/sched/completion.c:85 [inline]
- __wait_for_common+0x1ce/0x5c0 kernel/sched/completion.c:106
- __flush_work+0x595/0xb60 kernel/workqueue.c:3383
- __cancel_work_timer+0x3f9/0x570 kernel/workqueue.c:3470
- uhid_dev_destroy drivers/hid/uhid.c:585 [inline]
- uhid_char_release+0xca/0x210 drivers/hid/uhid.c:663
- __fput+0x289/0xac0 fs/file_table.c:378
- task_work_run+0x16f/0x270 kernel/task_work.c:179
- exit_task_work include/linux/task_work.h:38 [inline]
- do_exit+0xadc/0x2a30 kernel/exit.c:874
- do_group_exit+0xd4/0x2a0 kernel/exit.c:1024
- __do_sys_exit_group kernel/exit.c:1035 [inline]
- __se_sys_exit_group kernel/exit.c:1033 [inline]
- __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1033
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fa196a81b19
-RSP: 002b:00007ffc33991898 EFLAGS: 00000246
- ORIG_RAX: 00000000000000e7
-RAX: ffffffffffffffda RBX: 00007fa196af5330 RCX: 00007fa196a81b19
-RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000000
-RBP: 0000000000000000 R08: ffffffffffffffc0 R09: 0000000000000001
-R10: 00007ffc33991360 R11: 0000000000000246 R12: 00007fa196af5330
-R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000001
- </TASK>
-INFO: task syz-executor188:5042 blocked for more than 147 seconds.
-      Not tainted 6.4.0-rc6-next-20230616-syzkaller #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor188 state:D stack:27136 pid:5042  ppid:5037   flags:0x00004002
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5380 [inline]
- __schedule+0x1d15/0x5790 kernel/sched/core.c:6709
- schedule+0xde/0x1a0 kernel/sched/core.c:6785
- schedule_timeout+0x276/0x2b0 kernel/time/timer.c:2143
- do_wait_for_common kernel/sched/completion.c:85 [inline]
- __wait_for_common+0x1ce/0x5c0 kernel/sched/completion.c:106
- __flush_work+0x595/0xb60 kernel/workqueue.c:3383
- __cancel_work_timer+0x3f9/0x570 kernel/workqueue.c:3470
- uhid_dev_destroy drivers/hid/uhid.c:585 [inline]
- uhid_char_release+0xca/0x210 drivers/hid/uhid.c:663
- __fput+0x289/0xac0 fs/file_table.c:378
- task_work_run+0x16f/0x270 kernel/task_work.c:179
- exit_task_work include/linux/task_work.h:38 [inline]
- do_exit+0xadc/0x2a30 kernel/exit.c:874
- do_group_exit+0xd4/0x2a0 kernel/exit.c:1024
- __do_sys_exit_group kernel/exit.c:1035 [inline]
- __se_sys_exit_group kernel/exit.c:1033 [inline]
- __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1033
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fa196a81b19
-RSP: 002b:00007ffc33991898 EFLAGS: 00000246
- ORIG_RAX: 00000000000000e7
-RAX: ffffffffffffffda RBX: 00007fa196af5330 RCX: 00007fa196a81b19
-RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000000
-RBP: 0000000000000000 R08: ffffffffffffffc0 R09: 0000000000000001
-R10: 00007ffc33991360 R11: 0000000000000246 R12: 00007fa196af5330
-R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000001
- </TASK>
-INFO: task syz-executor188:5046 blocked for more than 150 seconds.
-      Not tainted 6.4.0-rc6-next-20230616-syzkaller #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor188 state:D stack:28048 pid:5046  ppid:5029   flags:0x00004002
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5380 [inline]
- __schedule+0x1d15/0x5790 kernel/sched/core.c:6709
- schedule+0xde/0x1a0 kernel/sched/core.c:6785
- schedule_timeout+0x276/0x2b0 kernel/time/timer.c:2143
- do_wait_for_common kernel/sched/completion.c:85 [inline]
- __wait_for_common+0x1ce/0x5c0 kernel/sched/completion.c:106
- __flush_work+0x595/0xb60 kernel/workqueue.c:3383
- __cancel_work_timer+0x3f9/0x570 kernel/workqueue.c:3470
- uhid_dev_destroy drivers/hid/uhid.c:585 [inline]
- uhid_char_release+0xca/0x210 drivers/hid/uhid.c:663
- __fput+0x289/0xac0 fs/file_table.c:378
- task_work_run+0x16f/0x270 kernel/task_work.c:179
- exit_task_work include/linux/task_work.h:38 [inline]
- do_exit+0xadc/0x2a30 kernel/exit.c:874
- do_group_exit+0xd4/0x2a0 kernel/exit.c:1024
- __do_sys_exit_group kernel/exit.c:1035 [inline]
- __se_sys_exit_group kernel/exit.c:1033 [inline]
- __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1033
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fa196a81b19
-RSP: 002b:00007ffc33991898 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
-RAX: ffffffffffffffda RBX: 00007fa196af5330 RCX: 00007fa196a81b19
-RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000000
-RBP: 0000000000000000 R08: ffffffffffffffc0 R09: 0000000000000001
-R10: 00007ffc33991360 R11: 0000000000000246 R12: 00007fa196af5330
-R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000001
- </TASK>
+Access to vxrm and vxsat should be exclusively controlled by sstatus.FS =
+since they
+are aliases for fields in fcsr, while access to vstart/vtype/vlen should=
+ be
+exclusively controlled by sstatus.VS.  It would be good to test this, si=
+nce it's not
+actually in the spec (risc-v has a rather systematic underspecification =
+problem),
+and T-Head's idea of obviously correct behavior may differ from mine.
 
-Showing all locks held in the system:
-3 locks held by kworker/0:0/7:
-1 lock held by rcu_tasks_kthre/13:
- #0: 
-ffffffff8c9a1ab0
- (
-rcu_tasks.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x31/0xe60 kernel/rcu/tasks.h:568
-1 lock held by rcu_tasks_trace/14:
- #0: 
-ffffffff8c9a1770
- (
-rcu_tasks_trace.tasks_gp_mutex){+.+.}-{3:3}
-, at: rcu_tasks_one_gp+0x31/0xe60 kernel/rcu/tasks.h:568
-3 locks held by kworker/1:0/22:
-1 lock held by khungtaskd/28:
- #0: ffffffff8c9a26c0 (rcu_read_lock
-){....}-{1:2}
-, at: debug_show_all_locks+0x51/0x390 kernel/locking/lockdep.c:6615
-3 locks held by kworker/1:2/776:
-3 locks held by kworker/0:2/919:
-3 locks held by kworker/0:3/3948:
-2 locks held by getty/4779:
- #0: 
-ffff88814a6b7098
+1.0 puts vxrm and vxsat into the vector state, controlled by sstatus.VS;=
+ vsmul now
+works on the vector state only, so as far as state management is concern=
+ed it now
+acts like vadd and not like vfadd.  This is also internally consistent, =
+but vxcsr
+must be owned by whoever manages sstatus.VS.
 
+It's a little bit weird to say "vxrm and vxsat live in different parts o=
+f the kernel
+state depending on V extension version" but it might be less weird to sa=
+y "fcsr and
+all its parts lives somewhere, vxcsr and all its parts lives somewhere e=
+lse,
+vxcsr doesn't exist in 0.7.1".  Is this adequate?
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+-s
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+>
+> Heiko
