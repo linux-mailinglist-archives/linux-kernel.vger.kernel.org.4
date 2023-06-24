@@ -2,222 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E233573C5C6
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 03:15:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68BF073C4FE
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 02:03:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231292AbjFXBO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 21:14:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53574 "EHLO
+        id S229539AbjFXADK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 20:03:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231247AbjFXBOx (ORCPT
+        with ESMTP id S229542AbjFXADI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 21:14:53 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 965CA273E;
-        Fri, 23 Jun 2023 18:14:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1687569291; x=1719105291;
-  h=from:to:subject:date:message-id:in-reply-to:references:
-   mime-version:content-transfer-encoding;
-  bh=2cDG6IN9xIZEpAOLUb24m7v8B/2dcfWa2ttLu90qgTM=;
-  b=uG6YyCZcsNt7MJBUO2WFto7ucIysKuErBpmG6BGtLKTNRiKkNrqsllrJ
-   jKUSa396Ju5MtFPpxSJLjgxdQ0/CXHbTvr0q6yX1H5OMPQ9Li7ZFq2WDl
-   MWJETnY+M0JbQHOnSMcW8Y5sM5gdI/2GIu1pEzEodTmozHy06ByKcNLxe
-   ynVpd10SFbmaXaGhgPd4PaDoYWrnbqPMuaIOwMq+J0Gg439ze/TtMCVpn
-   zEpOz3+9pa5ie4UijMnRFlaU/dn1rdlcDQd1Qmn3HxLq/92Xc4FsJBKdt
-   Q1MRfbSIO1StepIWdT0x9N6kttOoDtskgeJhw3wJFCqfv9kziFZTuZgRv
-   A==;
-X-IronPort-AV: E=Sophos;i="6.01,153,1684825200"; 
-   d="scan'208";a="158380521"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Jun 2023 18:14:50 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 23 Jun 2023 18:14:41 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
- Transport; Fri, 23 Jun 2023 18:14:41 -0700
-From:   <kelvin.cao@microchip.com>
-To:     <kurt.schwemmer@microsemi.com>, <logang@deltatee.com>,
-        <bhelgaas@google.com>, <linux-pci@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH 2/2] PCI: switchtec: Add support for PCIe Gen5 devices
-Date:   Fri, 23 Jun 2023 17:00:03 -0700
-Message-ID: <20230624000003.2315364-3-kelvin.cao@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230624000003.2315364-1-kelvin.cao@microchip.com>
-References: <20230624000003.2315364-1-kelvin.cao@microchip.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 23 Jun 2023 20:03:08 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E17D2122
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 17:03:07 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-bfee66a6398so1483556276.3
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 17:03:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687564986; x=1690156986;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=hJRpHpBRxhEBpqUMpgxdt7ZEA9jhxO3EbeVO5RWIH/c=;
+        b=wrPLcjdZEuLvKlQejy6mmm6vFqEuR71DdT1dtLc1jLOd96Bz4UEcdH15ET6SpelId9
+         GQtAHju4xgNlTFW74th8oeE1bYUqywu0LwnQ1ptjE5jNzFmdE63NDA+LIqQVedxd0l3f
+         FXr77QNIMStzKabpqQbRSq4Lxrq/uNAdixck+gQj+FGaz0wav0B4H1ZPMuCoV06B1wo+
+         vUSVwUvDrpjlxN877vGOdS/X/YE4lBqiHFT/0BjLQju/CaTKarHx+aWL7W3dcYEUWID7
+         S5iexCybml0UbrC5hXuRtmxOb9x31rELawxczMOz0iZkg4hFGXBq79unBJzlHFiJlOq7
+         u3fw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687564986; x=1690156986;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hJRpHpBRxhEBpqUMpgxdt7ZEA9jhxO3EbeVO5RWIH/c=;
+        b=IBwgQG7J3jfzTIjmYrqCqBtr6bD43WgkoTVRps6Dj/si8t564IXgjUTEuIS7neR0nM
+         KJHP+urehw3wWdX9YMcMMnrd5m7bqgf6BO5mJJkcbkoecmWHevHTag3MPPxjtUjz3PB0
+         VgnlFMF1Inkg1WeBBVDM1gQd0glpIVma3ReT33Vf2ljYd77vw2kD+GHDPNFie1iUe5jr
+         qm6VEs7MuIu/tQwxgJK3AUoJnjHhMFmjRMNIgD1gCr9I0x1d3+I/J3sr2sanDIeYaQku
+         Z4VKda7eI4HYo/tFzE2wcTj9kEEOEKpT++u8wS+8HOJJ0rEmLuDLSNsHF/kXyrZS3MGK
+         jt4A==
+X-Gm-Message-State: AC+VfDwoyya/jVocgqCA+3CnCeyiN7KaaLVuwNZSsa/OxfEhdKjz8jii
+        ffXCitIFEP8hGzI7I1NKlQwMmIQdAsU=
+X-Google-Smtp-Source: ACHHUZ4zNI64Z0H8UOQGjEcoKGXm99o1pbXCunalbcWnloXvRzMk3erOepCrX8q9Cv8erigb8TI4jydNpdI=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:ce8e:0:b0:ba8:4ff5:4671 with SMTP id
+ x136-20020a25ce8e000000b00ba84ff54671mr9864348ybe.9.1687564986407; Fri, 23
+ Jun 2023 17:03:06 -0700 (PDT)
+Date:   Fri, 23 Jun 2023 17:03:04 -0700
+In-Reply-To: <20230511040857.6094-21-weijiang.yang@intel.com>
+Mime-Version: 1.0
+References: <20230511040857.6094-1-weijiang.yang@intel.com> <20230511040857.6094-21-weijiang.yang@intel.com>
+Message-ID: <ZJYyuBdh8Ob+zzT2@google.com>
+Subject: Re: [PATCH v3 20/21] KVM:x86: Enable kernel IBT support for guest
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yang Weijiang <weijiang.yang@intel.com>
+Cc:     pbonzini@redhat.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, peterz@infradead.org,
+        rppt@kernel.org, binbin.wu@linux.intel.com,
+        rick.p.edgecombe@intel.com, john.allen@amd.com
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kelvin Cao <kelvin.cao@microchip.com>
+On Thu, May 11, 2023, Yang Weijiang wrote:
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index a2494156902d..1d0151f9e575 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -711,6 +711,7 @@ static bool is_valid_passthrough_msr(u32 msr)
+>  		return true;
+>  	case MSR_IA32_U_CET:
+>  	case MSR_IA32_PL3_SSP:
+> +	case MSR_IA32_S_CET:
+>  		return true;
+>  	}
+>  
+> @@ -2097,14 +2098,18 @@ static int vmx_get_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>  			msr_info->data = vmx->pt_desc.guest.addr_a[index / 2];
+>  		break;
+>  	case MSR_IA32_U_CET:
+> +	case MSR_IA32_S_CET:
+>  	case MSR_IA32_PL3_SSP:
+>  	case MSR_KVM_GUEST_SSP:
+>  		if (!kvm_cet_is_msr_accessible(vcpu, msr_info))
+>  			return 1;
+> -		if (msr_info->index == MSR_KVM_GUEST_SSP)
+> +		if (msr_info->index == MSR_KVM_GUEST_SSP) {
 
-Advertise support of Gen5 devices in the driver's device ID table and
-add the same IDs for the switchtec quirks. Also update driver code to
-accommodate them.
+Unnecessary curly braces.
 
-Signed-off-by: Kelvin Cao <kelvin.cao@microchip.com>
----
- drivers/pci/quirks.c           | 36 ++++++++++++++++++++++++++++
- drivers/pci/switch/switchtec.c | 44 ++++++++++++++++++++++++++++++----
- include/linux/switchtec.h      |  1 +
- 3 files changed, 77 insertions(+), 4 deletions(-)
+>  			msr_info->data = vmcs_readl(GUEST_SSP);
+> -		else
+> +		} else if (msr_info->index == MSR_IA32_S_CET) {
+> +			msr_info->data = vmcs_readl(GUEST_S_CET);
+> +		} else {
+>  			kvm_get_xsave_msr(msr_info);
+> +		}
+>  		break;
+>  	case MSR_IA32_DEBUGCTLMSR:
+>  		msr_info->data = vmcs_read64(GUEST_IA32_DEBUGCTL);
+> @@ -2419,6 +2424,7 @@ static int vmx_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>  			vmx->pt_desc.guest.addr_a[index / 2] = data;
+>  		break;
+>  	case MSR_IA32_U_CET:
+> +	case MSR_IA32_S_CET:
+>  	case MSR_IA32_PL3_SSP:
+>  	case MSR_KVM_GUEST_SSP:
+>  		if (!kvm_cet_is_msr_accessible(vcpu, msr_info))
+> @@ -2430,10 +2436,13 @@ static int vmx_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>  		if ((msr_index == MSR_IA32_PL3_SSP ||
+>  		     msr_index == MSR_KVM_GUEST_SSP) && (data & GENMASK(2, 0)))
+>  			return 1;
+> -		if (msr_index == MSR_KVM_GUEST_SSP)
+> +		if (msr_index == MSR_KVM_GUEST_SSP) {
+>  			vmcs_writel(GUEST_SSP, data);
+> -		else
+> +		} else if (msr_index == MSR_IA32_S_CET) {
+> +			vmcs_writel(GUEST_S_CET, data);
+> +		} else {
 
-diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-index c525867760bf..3ec5db5861c6 100644
---- a/drivers/pci/quirks.c
-+++ b/drivers/pci/quirks.c
-@@ -5770,6 +5770,42 @@ SWITCHTEC_QUIRK(0x4428);  /* PSXA 28XG4 */
- SWITCHTEC_QUIRK(0x4552);  /* PAXA 52XG4 */
- SWITCHTEC_QUIRK(0x4536);  /* PAXA 36XG4 */
- SWITCHTEC_QUIRK(0x4528);  /* PAXA 28XG4 */
-+SWITCHTEC_QUIRK(0x5000);  /* PFX 100XG5 */
-+SWITCHTEC_QUIRK(0x5084);  /* PFX 84XG5 */
-+SWITCHTEC_QUIRK(0x5068);  /* PFX 68XG5 */
-+SWITCHTEC_QUIRK(0x5052);  /* PFX 52XG5 */
-+SWITCHTEC_QUIRK(0x5036);  /* PFX 36XG5 */
-+SWITCHTEC_QUIRK(0x5028);  /* PFX 28XG5 */
-+SWITCHTEC_QUIRK(0x5100);  /* PSX 100XG5 */
-+SWITCHTEC_QUIRK(0x5184);  /* PSX 84XG5 */
-+SWITCHTEC_QUIRK(0x5168);  /* PSX 68XG5 */
-+SWITCHTEC_QUIRK(0x5152);  /* PSX 52XG5 */
-+SWITCHTEC_QUIRK(0x5136);  /* PSX 36XG5 */
-+SWITCHTEC_QUIRK(0x5128);  /* PSX 28XG5 */
-+SWITCHTEC_QUIRK(0x5200);  /* PAX 100XG5 */
-+SWITCHTEC_QUIRK(0x5284);  /* PAX 84XG5 */
-+SWITCHTEC_QUIRK(0x5268);  /* PAX 68XG5 */
-+SWITCHTEC_QUIRK(0x5252);  /* PAX 52XG5 */
-+SWITCHTEC_QUIRK(0x5236);  /* PAX 36XG5 */
-+SWITCHTEC_QUIRK(0x5228);  /* PAX 28XG5 */
-+SWITCHTEC_QUIRK(0x5300);  /* PFXA 100XG5 */
-+SWITCHTEC_QUIRK(0x5384);  /* PFXA 84XG5 */
-+SWITCHTEC_QUIRK(0x5368);  /* PFXA 68XG5 */
-+SWITCHTEC_QUIRK(0x5352);  /* PFXA 52XG5 */
-+SWITCHTEC_QUIRK(0x5336);  /* PFXA 36XG5 */
-+SWITCHTEC_QUIRK(0x5328);  /* PFXA 28XG5 */
-+SWITCHTEC_QUIRK(0x5400);  /* PSXA 100XG5 */
-+SWITCHTEC_QUIRK(0x5484);  /* PSXA 84XG5 */
-+SWITCHTEC_QUIRK(0x5468);  /* PSXA 68XG5 */
-+SWITCHTEC_QUIRK(0x5452);  /* PSXA 52XG5 */
-+SWITCHTEC_QUIRK(0x5436);  /* PSXA 36XG5 */
-+SWITCHTEC_QUIRK(0x5428);  /* PSXA 28XG5 */
-+SWITCHTEC_QUIRK(0x5500);  /* PAXA 100XG5 */
-+SWITCHTEC_QUIRK(0x5584);  /* PAXA 84XG5 */
-+SWITCHTEC_QUIRK(0x5568);  /* PAXA 68XG5 */
-+SWITCHTEC_QUIRK(0x5552);  /* PAXA 52XG5 */
-+SWITCHTEC_QUIRK(0x5536);  /* PAXA 36XG5 */
-+SWITCHTEC_QUIRK(0x5528);  /* PAXA 28XG5 */
- 
- /*
-  * The PLX NTB uses devfn proxy IDs to move TLPs between NT endpoints.
-diff --git a/drivers/pci/switch/switchtec.c b/drivers/pci/switch/switchtec.c
-index 941e8e9cff96..5b921387eca6 100644
---- a/drivers/pci/switch/switchtec.c
-+++ b/drivers/pci/switch/switchtec.c
-@@ -372,7 +372,7 @@ static ssize_t field ## _show(struct device *dev, \
- 	if (stdev->gen == SWITCHTEC_GEN3) \
- 		return io_string_show(buf, &si->gen3.field, \
- 				      sizeof(si->gen3.field)); \
--	else if (stdev->gen == SWITCHTEC_GEN4) \
-+	else if (stdev->gen >= SWITCHTEC_GEN4) \
- 		return io_string_show(buf, &si->gen4.field, \
- 				      sizeof(si->gen4.field)); \
- 	else \
-@@ -663,7 +663,7 @@ static int ioctl_flash_info(struct switchtec_dev *stdev,
- 	if (stdev->gen == SWITCHTEC_GEN3) {
- 		info.flash_length = ioread32(&fi->gen3.flash_length);
- 		info.num_partitions = SWITCHTEC_NUM_PARTITIONS_GEN3;
--	} else if (stdev->gen == SWITCHTEC_GEN4) {
-+	} else if (stdev->gen >= SWITCHTEC_GEN4) {
- 		info.flash_length = ioread32(&fi->gen4.flash_length);
- 		info.num_partitions = SWITCHTEC_NUM_PARTITIONS_GEN4;
- 	} else {
-@@ -870,7 +870,7 @@ static int ioctl_flash_part_info(struct switchtec_dev *stdev,
- 		ret = flash_part_info_gen3(stdev, &info);
- 		if (ret)
- 			return ret;
--	} else if (stdev->gen == SWITCHTEC_GEN4) {
-+	} else if (stdev->gen >= SWITCHTEC_GEN4) {
- 		ret = flash_part_info_gen4(stdev, &info);
- 		if (ret)
- 			return ret;
-@@ -1610,7 +1610,7 @@ static int switchtec_init_pci(struct switchtec_dev *stdev,
- 
- 	if (stdev->gen == SWITCHTEC_GEN3)
- 		part_id = &stdev->mmio_sys_info->gen3.partition_id;
--	else if (stdev->gen == SWITCHTEC_GEN4)
-+	else if (stdev->gen >= SWITCHTEC_GEN4)
- 		part_id = &stdev->mmio_sys_info->gen4.partition_id;
- 	else
- 		return -EOPNOTSUPP;
-@@ -1784,6 +1784,42 @@ static const struct pci_device_id switchtec_pci_tbl[] = {
- 	SWITCHTEC_PCI_DEVICE(0x4552, SWITCHTEC_GEN4),  /* PAXA 52XG4 */
- 	SWITCHTEC_PCI_DEVICE(0x4536, SWITCHTEC_GEN4),  /* PAXA 36XG4 */
- 	SWITCHTEC_PCI_DEVICE(0x4528, SWITCHTEC_GEN4),  /* PAXA 28XG4 */
-+	SWITCHTEC_PCI_DEVICE(0x5000, SWITCHTEC_GEN5),  /* PFX 100XG5 */
-+	SWITCHTEC_PCI_DEVICE(0x5084, SWITCHTEC_GEN5),  /* PFX 84XG5 */
-+	SWITCHTEC_PCI_DEVICE(0x5068, SWITCHTEC_GEN5),  /* PFX 68XG5 */
-+	SWITCHTEC_PCI_DEVICE(0x5052, SWITCHTEC_GEN5),  /* PFX 52XG5 */
-+	SWITCHTEC_PCI_DEVICE(0x5036, SWITCHTEC_GEN5),  /* PFX 36XG5 */
-+	SWITCHTEC_PCI_DEVICE(0x5028, SWITCHTEC_GEN5),  /* PFX 28XG5 */
-+	SWITCHTEC_PCI_DEVICE(0x5100, SWITCHTEC_GEN5),  /* PSX 100XG5 */
-+	SWITCHTEC_PCI_DEVICE(0x5184, SWITCHTEC_GEN5),  /* PSX 84XG5 */
-+	SWITCHTEC_PCI_DEVICE(0x5168, SWITCHTEC_GEN5),  /* PSX 68XG5 */
-+	SWITCHTEC_PCI_DEVICE(0x5152, SWITCHTEC_GEN5),  /* PSX 52XG5 */
-+	SWITCHTEC_PCI_DEVICE(0x5136, SWITCHTEC_GEN5),  /* PSX 36XG5 */
-+	SWITCHTEC_PCI_DEVICE(0x5128, SWITCHTEC_GEN5),  /* PSX 28XG5 */
-+	SWITCHTEC_PCI_DEVICE(0x5200, SWITCHTEC_GEN5),  /* PAX 100XG5 */
-+	SWITCHTEC_PCI_DEVICE(0x5284, SWITCHTEC_GEN5),  /* PAX 84XG5 */
-+	SWITCHTEC_PCI_DEVICE(0x5268, SWITCHTEC_GEN5),  /* PAX 68XG5 */
-+	SWITCHTEC_PCI_DEVICE(0x5252, SWITCHTEC_GEN5),  /* PAX 52XG5 */
-+	SWITCHTEC_PCI_DEVICE(0x5236, SWITCHTEC_GEN5),  /* PAX 36XG5 */
-+	SWITCHTEC_PCI_DEVICE(0x5228, SWITCHTEC_GEN5),  /* PAX 28XG5 */
-+	SWITCHTEC_PCI_DEVICE(0x5300, SWITCHTEC_GEN5),  /* PFXA 100XG5 */
-+	SWITCHTEC_PCI_DEVICE(0x5384, SWITCHTEC_GEN5),  /* PFXA 84XG5 */
-+	SWITCHTEC_PCI_DEVICE(0x5368, SWITCHTEC_GEN5),  /* PFXA 68XG5 */
-+	SWITCHTEC_PCI_DEVICE(0x5352, SWITCHTEC_GEN5),  /* PFXA 52XG5 */
-+	SWITCHTEC_PCI_DEVICE(0x5336, SWITCHTEC_GEN5),  /* PFXA 36XG5 */
-+	SWITCHTEC_PCI_DEVICE(0x5328, SWITCHTEC_GEN5),  /* PFXA 28XG5 */
-+	SWITCHTEC_PCI_DEVICE(0x5400, SWITCHTEC_GEN5),  /* PSXA 100XG5 */
-+	SWITCHTEC_PCI_DEVICE(0x5484, SWITCHTEC_GEN5),  /* PSXA 84XG5 */
-+	SWITCHTEC_PCI_DEVICE(0x5468, SWITCHTEC_GEN5),  /* PSXA 68XG5 */
-+	SWITCHTEC_PCI_DEVICE(0x5452, SWITCHTEC_GEN5),  /* PSXA 52XG5 */
-+	SWITCHTEC_PCI_DEVICE(0x5436, SWITCHTEC_GEN5),  /* PSXA 36XG5 */
-+	SWITCHTEC_PCI_DEVICE(0x5428, SWITCHTEC_GEN5),  /* PSXA 28XG5 */
-+	SWITCHTEC_PCI_DEVICE(0x5500, SWITCHTEC_GEN5),  /* PAXA 100XG5 */
-+	SWITCHTEC_PCI_DEVICE(0x5584, SWITCHTEC_GEN5),  /* PAXA 84XG5 */
-+	SWITCHTEC_PCI_DEVICE(0x5568, SWITCHTEC_GEN5),  /* PAXA 68XG5 */
-+	SWITCHTEC_PCI_DEVICE(0x5552, SWITCHTEC_GEN5),  /* PAXA 52XG5 */
-+	SWITCHTEC_PCI_DEVICE(0x5536, SWITCHTEC_GEN5),  /* PAXA 36XG5 */
-+	SWITCHTEC_PCI_DEVICE(0x5528, SWITCHTEC_GEN5),  /* PAXA 28XG5 */
- 	{0}
- };
- MODULE_DEVICE_TABLE(pci, switchtec_pci_tbl);
-diff --git a/include/linux/switchtec.h b/include/linux/switchtec.h
-index 48fabe36509e..8d8fac1626bd 100644
---- a/include/linux/switchtec.h
-+++ b/include/linux/switchtec.h
-@@ -41,6 +41,7 @@ enum {
- enum switchtec_gen {
- 	SWITCHTEC_GEN3,
- 	SWITCHTEC_GEN4,
-+	SWITCHTEC_GEN5,
- };
- 
- struct mrpc_regs {
--- 
-2.25.1
+Same here.
 
+>  			kvm_set_xsave_msr(msr_info);
+> +		}
+>  		break;
+>  	case MSR_IA32_PERF_CAPABILITIES:
+>  		if (data && !vcpu_to_pmu(vcpu)->version)
+> @@ -7322,6 +7331,19 @@ static fastpath_t vmx_vcpu_run(struct kvm_vcpu *vcpu)
+>  
+>  	kvm_wait_lapic_expire(vcpu);
+>  
+> +	/*
+> +	 * Save host MSR_IA32_S_CET so that it can be reloaded at vm_exit.
+> +	 * No need to save the other two vmcs fields as supervisor SHSTK
+> +	 * are not enabled on Intel platform now.
+> +	 */
+> +	if (IS_ENABLED(CONFIG_X86_KERNEL_IBT) &&
+> +	    (vm_exit_controls_get(vmx) & VM_EXIT_LOAD_CET_STATE)) {
+> +		u64 msr;
+> +
+> +		rdmsrl(MSR_IA32_S_CET, msr);
+
+Reading the MSR on every VM-Enter can't possibly be necessary.  At the absolute
+minimum, this could be moved outside of the fastpath; if the kernel modifies S_CET
+from NMI context, KVM is hosed.  And *if* S_CET isn't static post-boot, this can
+be done in .prepare_switch_to_guest() so long as S_CET isn't modified from IRQ
+context.
+
+But unless mine eyes deceive me, S_CET is only truly modified during setup_cet(),
+i.e. is static post boot, which means it can be read once at KVM load time, e.g.
+just like host_efer.
+
+The kernel does save/restore IBT when making BIOS calls, but if KVM is running a
+vCPU across a BIOS call then we've got bigger issues.
+
+> +		vmcs_writel(HOST_S_CET, msr);
+> +	}
+> +
+>  	/* The actual VMENTER/EXIT is in the .noinstr.text section. */
+>  	vmx_vcpu_enter_exit(vcpu, __vmx_vcpu_run_flags(vmx));
+>  
+> @@ -7735,6 +7757,13 @@ static void vmx_update_intercept_for_cet_msr(struct kvm_vcpu *vcpu)
+>  
+>  	incpt |= !guest_cpuid_has(vcpu, X86_FEATURE_SHSTK);
+>  	vmx_set_intercept_for_msr(vcpu, MSR_IA32_PL3_SSP, MSR_TYPE_RW, incpt);
+> +
+> +	/*
+> +	 * If IBT is available to guest, then passthrough S_CET MSR too since
+> +	 * kernel IBT is already in mainline kernel tree.
+> +	 */
+> +	incpt = !guest_cpuid_has(vcpu, X86_FEATURE_IBT);
+> +	vmx_set_intercept_for_msr(vcpu, MSR_IA32_S_CET, MSR_TYPE_RW, incpt);
+>  }
+>  
+>  static void vmx_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
+> @@ -7805,7 +7834,7 @@ static void vmx_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
+>  	/* Refresh #PF interception to account for MAXPHYADDR changes. */
+>  	vmx_update_exception_bitmap(vcpu);
+>  
+> -	if (kvm_cet_user_supported())
+> +	if (kvm_cet_user_supported() || kvm_cpu_cap_has(X86_FEATURE_IBT))
+
+Yeah, kvm_cet_user_supported() simply looks wrong.
