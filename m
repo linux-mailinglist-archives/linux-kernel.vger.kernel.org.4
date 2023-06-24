@@ -2,363 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4A8C73CAB0
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 14:08:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9029D73CAB6
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 14:13:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231250AbjFXMIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 08:08:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45314 "EHLO
+        id S232848AbjFXMMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 08:12:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjFXMH6 (ORCPT
+        with ESMTP id S230001AbjFXMMx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 08:07:58 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20F621BFC
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 05:07:55 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2b698937f85so1568371fa.2
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 05:07:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687608474; x=1690200474;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AhB7gO41s6RkTIX9B+mUm/3DyCsWmE8KY3H2vl6K7Yo=;
-        b=czAJe/3Oa1kuRQTtvewFIdfyYHou1G0kNyuYoDxXVlQvBJToB68u6OsyOa56X4iM+a
-         RnmzaxB/Iv/SW5+U62RETn1N5FArQT8y2ia13WQCblIgbej/Hfh3vVX0qD7RxA6aduJr
-         W/TMuSXeS6eEXhw48mXZVnzO5elr0JGjUljWt/BU1o4VigIZ2iTS3Os3jVGClWBSKlcy
-         7hSo3uym7nkpJm2IZMp6h1OyFJuUFR3VeqwF3b49D8KSTVT8upjIw03u+Cv+Cu78xNQk
-         crpqmMK/TAf5q4/S5W4FtP1fVxp6BlqgvXvNcNHiFWkY+gleHzFbkCJQVAc/MVOB99s7
-         xh+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687608474; x=1690200474;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AhB7gO41s6RkTIX9B+mUm/3DyCsWmE8KY3H2vl6K7Yo=;
-        b=APuBvb/8J5PsjF6/iOZguLWbdZMQbT+LqNU2WAwKb6CnQLw9AbUUz4RRA70zSLCA87
-         WIA45jGAtq05XFxw/jtWX+SoF0RrAORajhBJGDi94zbwj3tmxbo0oKQaY2EIYp2dOeBh
-         N272KX5hHeJZrAwk3hNegWcaHr1vf+cUT6SiMEVLAlMFbU3MRWLPBouVCDEoiTS9zKu5
-         c+oXdijRy2W+gmLg6bpeLhJYfN+e3XNzkLw58KUbLvR1QozGptjXNOL7iAGkIMRD0K7U
-         xYfM5NdGGW5mwSTzvhBS4wSOZM7VYa9dDCuP2Pho9lfWUOrPL5uKuMdD1aJ6wdxTW+UB
-         Vrww==
-X-Gm-Message-State: AC+VfDxSnkv0C8wuRDuK3tn+bj7gRdgQZ60qS0brvvWp14n7jHn3K8fJ
-        5VHQlauGV09Rh0cnSuRaVI1KxQ==
-X-Google-Smtp-Source: ACHHUZ5EUcWz4Bkd9KV9wW+T+pNBBh8PesWiqS6TbSRjDaH5t3TeGZPvWwypTx9M7lxdoDj1lX0zqw==
-X-Received: by 2002:a2e:95d5:0:b0:2b4:852d:8747 with SMTP id y21-20020a2e95d5000000b002b4852d8747mr10406353ljh.30.1687608473517;
-        Sat, 24 Jun 2023 05:07:53 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id g7-20020a2e9e47000000b002b1b92910c8sm258409ljk.86.2023.06.24.05.07.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 24 Jun 2023 05:07:52 -0700 (PDT)
-Message-ID: <412f68a3-e3cc-f26e-2e3d-59727e5c48d8@linaro.org>
-Date:   Sat, 24 Jun 2023 15:07:51 +0300
+        Sat, 24 Jun 2023 08:12:53 -0400
+Received: from unicorn.mansr.com (unicorn.mansr.com [81.2.72.234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAAB11BFC
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 05:12:50 -0700 (PDT)
+Received: from raven.mansr.com (raven.mansr.com [IPv6:2001:8b0:ca0d:1::3])
+        by unicorn.mansr.com (Postfix) with ESMTPS id A640A15360;
+        Sat, 24 Jun 2023 13:12:48 +0100 (BST)
+Received: by raven.mansr.com (Postfix, from userid 51770)
+        id 99CBA219FD1; Sat, 24 Jun 2023 13:12:48 +0100 (BST)
+From:   Mans Rullgard <mans@mansr.com>
+To:     Grygorii Strashko <grygorii.strashko@ti.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-omap@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Jeroen Hofstee <jhofstee@victronenergy.com>,
+        Tony Lindgren <tony@atomide.com>
+Subject: [RESEND][PATCH] net: cpsw: fix obtaining mac address for am3517
+Date:   Sat, 24 Jun 2023 13:10:59 +0100
+Message-ID: <20230624121211.19711-1-mans@mansr.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 6/6] drm/msm/dpu: Update dev core dump to dump registers
- of sub blocks
-Content-Language: en-GB
-To:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Ryan McCann <quic_rmccann@quicinc.com>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Rob Clark <robdclark@chromium.org>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, quic_jesszhan@quicinc.com
-References: <20230622-devcoredump_patch-v1-0-3b2cdcc6a576@quicinc.com>
- <20230622-devcoredump_patch-v1-6-3b2cdcc6a576@quicinc.com>
- <114f34dd-e5ce-f878-5b23-4c14dc800547@linaro.org>
- <1e41b909-4886-8392-edbc-78684e52bbf9@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <1e41b909-4886-8392-edbc-78684e52bbf9@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/06/2023 03:09, Abhinav Kumar wrote:
-> 
-> 
-> On 6/22/2023 5:13 PM, Dmitry Baryshkov wrote:
->> On 23/06/2023 02:48, Ryan McCann wrote:
->>> Currently, the device core dump mechanism does not dump registers of sub
->>> blocks within the DSPP, SSPP, DSC, and PINGPONG blocks. Add wrapper
->>> function to dump hardware blocks that contain sub blocks.
->>>
->>> Signed-off-by: Ryan McCann <quic_rmccann@quicinc.com>
->>> ---
->>>   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c | 194 
->>> +++++++++++++++++++++++++++-----
->>>   1 file changed, 168 insertions(+), 26 deletions(-)
->>>
->>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c 
->>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
->>> index aa8499de1b9f..9b1b1c382269 100644
->>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
->>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
->>> @@ -885,6 +885,154 @@ static int dpu_irq_postinstall(struct msm_kms 
->>> *kms)
->>>       return 0;
->>>   }
->>> +static void dpu_kms_mdp_snapshot_add_block(struct msm_disp_state 
->>> *disp_state,
->>> +                       void __iomem *mmio, void *blk,
->>> +                       enum dpu_hw_blk_type blk_type)
->>
->> No. Such multiplexers add no value to the code. Please inline it.
->>
->> Not to mention that this patch is hard to review. You both move 
->> existing code and add new features. If it were to go, it should have 
->> been split into two patches: one introducing the multiplexer and 
->> another one adding subblocks.
->>
-> 
-> Ok. we can split this into:
-> 
-> 1) adding the multiplexer
-> 2) adding sub-blk parsing support inside the multiplexer
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
 
-I'd say, drop the multiplexer completely. It adds no value here. It is 
-only used from dpu_kms_mdp_snapshot(). If the code there was complex 
-enough, it would have made sense to _split_ the function. But even in 
-such case there would be no point in having multiplexer. We do not 
-enumerate block by type.
+Commit b6745f6e4e63 ("drivers: net: cpsw: davinci_emac: move reading mac
+id to common file") did not only move the code for an am3517, it also
+added the slave parameter, resulting in an invalid (all zero) mac address
+being returned for an am3517, since it only has a single emac and the slave
+parameter is pointing to the second. So simply always read the first and
+valid mac-address.
 
-> 
->>> +{
->>> +    u32 base;
->>> +
->>> +    switch (blk_type) {
->>> +    case DPU_HW_BLK_TOP:
->>> +    {
->>> +        struct dpu_mdp_cfg *top = (struct dpu_mdp_cfg *)blk;
->>> +
->>> +        if (top->features & BIT(DPU_MDP_PERIPH_0_REMOVED)) {
->>> +            msm_disp_snapshot_add_block(disp_state, MDP_PERIPH_TOP0,
->>> +                            mmio + top->base, "top");
->>> +            msm_disp_snapshot_add_block(disp_state, top->len - 
->>> MDP_PERIPH_TOP0_END,
->>> +                            mmio + top->base + MDP_PERIPH_TOP0_END,
->>> +                            "top_2");
->>> +        } else {
->>> +            msm_disp_snapshot_add_block(disp_state, top->len, mmio + 
->>> top->base, "top");
->>> +        }
->>> +        break;
->>> +    }
->>> +    case DPU_HW_BLK_LM:
->>> +    {
->>> +        struct dpu_lm_cfg *mixer = (struct dpu_lm_cfg *)blk;
->>> +
->>> +        msm_disp_snapshot_add_block(disp_state, mixer->len, mmio + 
->>> mixer->base, "%s",
->>> +                        mixer->name);
->>> +        break;
->>> +    }
->>> +    case DPU_HW_BLK_CTL:
->>> +    {
->>> +        struct dpu_ctl_cfg *ctl = (struct dpu_ctl_cfg *)blk;
->>> +
->>> +        msm_disp_snapshot_add_block(disp_state, ctl->len, mmio + 
->>> ctl->base, "%s",
->>> +                        ctl->name);
->>> +        break;
->>> +    }
->>> +    case DPU_HW_BLK_INTF:
->>> +    {
->>> +        struct dpu_intf_cfg *intf = (struct dpu_intf_cfg *)blk;
->>> +
->>> +        msm_disp_snapshot_add_block(disp_state, intf->len, mmio + 
->>> intf->base, "%s",
->>> +                        intf->name);
->>> +        break;
->>> +    }
->>> +    case DPU_HW_BLK_WB:
->>> +    {
->>> +        struct dpu_wb_cfg *wb = (struct dpu_wb_cfg *)blk;
->>> +
->>> +        msm_disp_snapshot_add_block(disp_state, wb->len, mmio + 
->>> wb->base, "%s",
->>> +                        wb->name);
->>> +        break;
->>> +    }
->>> +    case DPU_HW_BLK_SSPP:
->>> +    {
->>> +        struct dpu_sspp_cfg *sspp_block = (struct dpu_sspp_cfg *)blk;
->>> +        const struct dpu_sspp_sub_blks *sblk = sspp_block->sblk;
->>> +
->>> +        base = sspp_block->base;
->>> +
->>> +        msm_disp_snapshot_add_block(disp_state, sspp_block->len, 
->>> mmio + base, "%s",
->>> +                        sspp_block->name);
->>> +
->>> +        if (sspp_block->features & BIT(DPU_SSPP_SCALER_QSEED3) ||
->>> +            sspp_block->features & BIT(DPU_SSPP_SCALER_QSEED3LITE) ||
->>> +            sspp_block->features & BIT(DPU_SSPP_SCALER_QSEED4))
->>> +            msm_disp_snapshot_add_block(disp_state, 
->>> sblk->scaler_blk.len,
->>> +                            mmio + base + sblk->scaler_blk.base, 
->>> "%s_%s",
->>> +                            sspp_block->name, sblk->scaler_blk.name);
->>
->> Actually, it would be better to:
->> - drop name from all sblk instances (and use known string instead of 
->> the sblk name here)
->> - Use sblk->foo_blk.len to check if it should be printed or not.
->>
-> 
-> No, I dont agree. If we drop the names from the sub_blk in the catalog, 
-> we will end up using "sub_blk_name" string here in the code to indicate 
-> which blk that is in the dump.
-> 
-> If we add more sub_blks in the catalog in the future we need to keep 
-> changing the code over here. Thats not how it should be.
-> 
-> Leaving the names in the catalog ensures that this code wont change and 
-> only catalog changes when we add a new sub_blk either for an existing or 
-> new chipset.
-> 
-> catalog is indicating the new blk, and dumping code just prints it.
-> 
-> with your approach, dumping code will or can keep changing with chipsets 
-> or sub_blks. Thats not how it should be.
+Signed-off-by: Jeroen Hofstee <jhofstee@victronenergy.com>
+Acked-by: Tony Lindgren <tony@atomide.com>
+---
+ drivers/net/ethernet/ti/cpsw-common.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-Well, we do not enumerate sub-blocks in any way, they are not indexed. 
-So even with sblk->blk.name in place, adding new sub-block would require 
-adding new code here. That's why I wrote that the calling code knows 
-which sub-block it refers to.
-
-Let me extract the relevant code (skipping all the conditions for now):
-
-msm_disp_snapshot_add_block(disp_state, sspp_block->len, mmio + base, "%s",
-			    sspp_block->name);
-
-if (have_scaler)
-	msm_disp_snapshot_add_block(disp_state, sblk->scaler_blk.len,
-				    mmio + base + sblk->scaler_blk.base, "%s_%s",
-				    sspp_block->name, sblk->scaler_blk.name);
-
-if (have_csc)
-	msm_disp_snapshot_add_block(disp_state, sblk->csc_blk.len,
-				    mmio + base + sblk->csc_blk.base, "%s_%s",
-				    sspp_block->name, sblk->csc_blk.name);
-
-Consider adding new sub-block, "baz". We would still require manual 
-addition of the following code:
-
-	msm_disp_snapshot_add_block(disp_state, sblk->baz_blk.len,
-				    mmio + base + sblk->baz_blk.base, "%s_%s",
-				    sspp_block->name, sblk->baz_blk.name);
-
-
-Compare this with:
-
-	msm_disp_snapshot_add_block(disp_state, sblk->baz_blk.len,
-				    mmio + base + sblk->baz_blk.base, "%s_baz",
-				    sspp_block->name);
-
-Moreover, if we follow the style of dpu_kms_mdp_snapshot() (which 
-doesn't use name), it should be:
-
-	msm_disp_snapshot_add_block(disp_state, sblk->baz_blk.len,
-				    mmio + base + sblk->baz_blk.base, "sspp%d_baz", idx);
-
-
-
-> 
->>> +
->>> +        if (sspp_block->features & BIT(DPU_SSPP_CSC) || 
->>> sspp_block->features
->>> +                    & BIT(DPU_SSPP_CSC_10BIT))
->>
->> A very bad use of indentation. In future please split logically rather 
->> than just filling the line up to the line width.
->>
->>> +            msm_disp_snapshot_add_block(disp_state, sblk->csc_blk.len,
->>> +                            mmio + base + sblk->csc_blk.base, "%s_%s",
->>> +                            sspp_block->name, sblk->csc_blk.name);
->>> +        break;
->>> +    }
->>> +    case DPU_HW_BLK_DSPP:
->>> +    {
->>> +        struct dpu_dspp_cfg *dspp_block = (struct dpu_dspp_cfg *)blk;
->>> +
->>> +        base = dspp_block->base;
->>> +
->>> +        msm_disp_snapshot_add_block(disp_state, dspp_block->len, 
->>> mmio + base, "%s",
->>> +                        dspp_block->name);
->>> +
->>> +        if (dspp_block->features & BIT(DPU_DSPP_PCC))
->>> +            msm_disp_snapshot_add_block(disp_state, 
->>> dspp_block->sblk->pcc.len,
->>> +                            mmio + base + dspp_block->sblk->pcc.base,
->>> +                            "%s_%s", dspp_block->name,
->>> +                            dspp_block->sblk->pcc.name);
->>> +        break;
->>> +    }
->>> +    case DPU_HW_BLK_PINGPONG:
->>> +    {
->>> +        struct dpu_pingpong_cfg *pingpong_block = (struct 
->>> dpu_pingpong_cfg *)blk;
->>> +        const struct dpu_pingpong_sub_blks *sblk = 
->>> pingpong_block->sblk;
->>> +
->>> +        base = pingpong_block->base;
->>> +
->>> +        msm_disp_snapshot_add_block(disp_state, pingpong_block->len, 
->>> mmio + base, "%s",
->>> +                        pingpong_block->name);
->>> +
->>> +        if (pingpong_block->features & BIT(DPU_PINGPONG_TE2))
->>> +            msm_disp_snapshot_add_block(disp_state, sblk->te2.len,
->>> +                            mmio + base + sblk->te2.base, "%s_%s",
->>> +                            pingpong_block->name, sblk->te2.name);
->>> +
->>> +        if (pingpong_block->features & BIT(DPU_PINGPONG_DITHER))
->>> +            msm_disp_snapshot_add_block(disp_state, sblk->dither.len,
->>> +                            mmio + base + sblk->dither.base, "%s_%s",
->>> +                            pingpong_block->name, sblk->dither.name);
->>> +        break;
->>> +    }
->>> +    case DPU_HW_BLK_DSC:
->>> +    {
->>> +        struct dpu_dsc_cfg *dsc_block = (struct dpu_dsc_cfg *)blk;
->>> +
->>> +        base = dsc_block->base;
->>> +
->>> +        if (dsc_block->features & BIT(DPU_DSC_HW_REV_1_2)) {
->>> +            struct dpu_dsc_blk enc = dsc_block->sblk->enc;
->>> +            struct dpu_dsc_blk ctl = dsc_block->sblk->ctl;
->>> +
->>> +            /* For now, pass in a length of 0 because the DSC_BLK 
->>> register space
->>> +             * overlaps with the sblks' register space.
->>> +             *
->>> +             * TODO: Pass in a length of 0 t0 DSC_BLK_1_2 in the HW 
->>> catalog where
->>> +             * applicable.
->>
->> Nice catch, thank you. We should fix that.
->>
-> 
-> Yes and we would have fixed that ourself if you wanted that with this 
-> series as another patch.
-
-This is not relevant to this series, so it should be fixed in a separate 
-series.
-
+diff --git a/drivers/net/ethernet/ti/cpsw-common.c b/drivers/net/ethernet/ti/cpsw-common.c
+index bfa81bbfce3f..465dc15f059d 100644
+--- a/drivers/net/ethernet/ti/cpsw-common.c
++++ b/drivers/net/ethernet/ti/cpsw-common.c
+@@ -74,8 +74,12 @@ int ti_cm_get_macid(struct device *dev, int slave, u8 *mac_addr)
+ 	if (of_machine_is_compatible("ti,am33xx"))
+ 		return cpsw_am33xx_cm_get_macid(dev, 0x630, slave, mac_addr);
+ 
++	/*
++	 * There is only one emac / mac address on an am3517 so ignore the
++	 * slave = 1 and always get the macid from slave 0.
++	 */
+ 	if (of_device_is_compatible(dev->of_node, "ti,am3517-emac"))
+-		return davinci_emac_3517_get_macid(dev, 0x110, slave, mac_addr);
++		return davinci_emac_3517_get_macid(dev, 0x110, 0, mac_addr);
+ 
+ 	if (of_device_is_compatible(dev->of_node, "ti,dm816-emac"))
+ 		return cpsw_am33xx_cm_get_macid(dev, 0x30, slave, mac_addr);
 -- 
-With best wishes
-Dmitry
+2.41.0
 
