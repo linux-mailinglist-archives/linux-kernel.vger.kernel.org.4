@@ -2,133 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C9F473C57C
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 02:42:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D4EA73C586
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 02:42:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232527AbjFXAl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 20:41:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42826 "EHLO
+        id S232457AbjFXAm1 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 23 Jun 2023 20:42:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232212AbjFXAlX (ORCPT
+        with ESMTP id S232380AbjFXAlf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 20:41:23 -0400
-Received: from relay07.th.seeweb.it (relay07.th.seeweb.it [IPv6:2001:4b7a:2000:18::168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2000297E
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 17:41:16 -0700 (PDT)
-Received: from Marijn-Arch-PC.localdomain (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 45C823F84F;
-        Sat, 24 Jun 2023 02:41:14 +0200 (CEST)
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-Date:   Sat, 24 Jun 2023 02:41:09 +0200
-Subject: [PATCH 11/15] drm/msm/dsi: Add 14nm phy configuration for SM6125
+        Fri, 23 Jun 2023 20:41:35 -0400
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA2D82D5D;
+        Fri, 23 Jun 2023 17:41:21 -0700 (PDT)
+Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-bc43a73ab22so1994727276.0;
+        Fri, 23 Jun 2023 17:41:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687567280; x=1690159280;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=r/FuRD6bejRQah/PpTEFj6gbgQmoOAaWot6r6iD99aY=;
+        b=hQq7aeF5Bney3E8au7auP5e0GtRHzkuIYwPY95XndGoyDz5yIECSkFTELRG5Lzd5w2
+         tFpYDyIg1V5AwMmIQwg1tgEJ28AnIuyzNM9K2P4FUCQkCxXXdSiXJZWbQUkVwDpBHvVW
+         2Yfh04By453RagiLzRaj7QyUt7TyzSL8z9rYxh2A3Ytz0kk63EN7JCZGZkMPN7PAC8pc
+         eFqn1iCTAdEcb9Ub+Z+rBdR2nAoQ5R/L9uRCbsZBMB87WaZKW8oe+kfOEd034epc1mki
+         3St53nIoEbsjBZ63JWXw1bK5PKckFWkzUQR8dtdcdSzK5IfCvgiD1KxGVK6nAcU9hPJt
+         //ew==
+X-Gm-Message-State: AC+VfDyR/a0KFKXdhuujMPOv5FlE3EyurmGKp8fq3l+dLR1Nutui7Qbt
+        o9c3KBM/AW3SAKMEnwmZzR37J5eD8MAg44hk41YE2JSeA6Q=
+X-Google-Smtp-Source: ACHHUZ5v2gjWGDGfcaukxYQKOY1iZOInR8MeFqHIgmHe//PaN8SFd/JN9VvhS5X5qdOwvPXcEhFAuVB2cVwiNdDdDps=
+X-Received: by 2002:a25:e751:0:b0:bac:fc30:3913 with SMTP id
+ e78-20020a25e751000000b00bacfc303913mr21471004ybh.21.1687567280546; Fri, 23
+ Jun 2023 17:41:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230624-sm6125-dpu-v1-11-1d5a638cebf2@somainline.org>
-References: <20230624-sm6125-dpu-v1-0-1d5a638cebf2@somainline.org>
-In-Reply-To: <20230624-sm6125-dpu-v1-0-1d5a638cebf2@somainline.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, Lux Aliaga <they@mint.lgbt>,
-        Marijn Suijten <marijn.suijten@somainline.org>
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230623041405.4039475-1-irogers@google.com>
+In-Reply-To: <20230623041405.4039475-1-irogers@google.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Fri, 23 Jun 2023 17:41:09 -0700
+Message-ID: <CAM9d7ch9MfCS02+-4FRDvrDVDK+f8qtqYr5m0abegg9PXJncHQ@mail.gmail.com>
+Subject: Re: [PATCH v4 0/4] Bring back vmlinux.h generation
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        James Clark <james.clark@arm.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SM6125 features only a single PHY (despite a secondary PHY PLL source
-being available to the disp_cc_mdss_pclk0_clk_src clock), and downstream
-sources for this "trinket" SoC do not define the typical "vcca"
-regulator to be available nor used.
+On Thu, Jun 22, 2023 at 9:14 PM Ian Rogers <irogers@google.com> wrote:
+>
+> Commit 760ebc45746b ("perf lock contention: Add empty 'struct rq' to
+> satisfy libbpf 'runqueue' type verification") inadvertently created a
+> declaration of 'struct rq' that conflicted with a generated
+> vmlinux.h's:
+>
+> ```
+> util/bpf_skel/lock_contention.bpf.c:419:8: error: redefinition of 'rq'
+> struct rq {};
+>        ^
+> /tmp/perf/util/bpf_skel/.tmp/../vmlinux.h:45630:8: note: previous definition is here
+> struct rq {
+>        ^
+> 1 error generated.
+> ```
+>
+> Fix the issue by moving the declaration to vmlinux.h. So this can't
+> happen again, bring back build support for generating vmlinux.h then
+> add build tests.
+>
+> v4. Rebase and add Namhyung and Jiri's acked-by.
+> v3. Address Namhyung's comments on filtering ELF files with readelf.
+> v2. Rebase on perf-tools-next. Add Andrii's acked-by. Add patch to
+>     filter out kernels that lack a .BTF section and cause the build to
+>     break.
+>
+> Ian Rogers (4):
+>   perf build: Add ability to build with a generated vmlinux.h
+>   perf bpf: Move the declaration of struct rq
+>   perf test: Add build tests for BUILD_BPF_SKEL
+>   perf build: Filter out BTF sources without a .BTF section
 
-Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+Thanks,  I'll take them with the following change.
+
+Namhyung
+
+
 ---
- drivers/gpu/drm/msm/dsi/phy/dsi_phy.c      |  2 ++
- drivers/gpu/drm/msm/dsi/phy/dsi_phy.h      |  1 +
- drivers/gpu/drm/msm/dsi/phy/dsi_phy_14nm.c | 15 +++++++++++++++
- 3 files changed, 18 insertions(+)
+diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+index b1e62a621f92..90f0eaf179fd 100644
+--- a/tools/perf/Makefile.perf
++++ b/tools/perf/Makefile.perf
+@@ -132,6 +132,8 @@ include ../scripts/utilities.mak
+ # Define EXTRA_TESTS to enable building extra tests useful mainly to perf
+ # developers, such as:
+ #      x86 instruction decoder - new instructions test
++#
++# Define GEN_VMLINUX_H to generate vmlinux.h from the BTF.
 
-diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
-index 9d5795c58a98..8688ed502dcf 100644
---- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
-+++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
-@@ -559,6 +559,8 @@ static const struct of_device_id dsi_phy_dt_match[] = {
- 	  .data = &dsi_phy_14nm_2290_cfgs },
- 	{ .compatible = "qcom,dsi-phy-14nm-660",
- 	  .data = &dsi_phy_14nm_660_cfgs },
-+	{ .compatible = "qcom,dsi-phy-14nm-6125",
-+	  .data = &dsi_phy_14nm_6125_cfgs },
- 	{ .compatible = "qcom,dsi-phy-14nm-8953",
- 	  .data = &dsi_phy_14nm_8953_cfgs },
- #endif
-diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.h b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.h
-index 8b640d174785..ebf915f5e6c6 100644
---- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.h
-+++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.h
-@@ -52,6 +52,7 @@ extern const struct msm_dsi_phy_cfg dsi_phy_20nm_cfgs;
- extern const struct msm_dsi_phy_cfg dsi_phy_14nm_cfgs;
- extern const struct msm_dsi_phy_cfg dsi_phy_14nm_660_cfgs;
- extern const struct msm_dsi_phy_cfg dsi_phy_14nm_2290_cfgs;
-+extern const struct msm_dsi_phy_cfg dsi_phy_14nm_6125_cfgs;
- extern const struct msm_dsi_phy_cfg dsi_phy_14nm_8953_cfgs;
- extern const struct msm_dsi_phy_cfg dsi_phy_10nm_cfgs;
- extern const struct msm_dsi_phy_cfg dsi_phy_10nm_8998_cfgs;
-diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_14nm.c b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_14nm.c
-index 3ce45b023e63..5d43c9ec69ae 100644
---- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_14nm.c
-+++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_14nm.c
-@@ -1068,6 +1068,21 @@ const struct msm_dsi_phy_cfg dsi_phy_14nm_660_cfgs = {
- 	.num_dsi_phy = 2,
- };
- 
-+const struct msm_dsi_phy_cfg dsi_phy_14nm_6125_cfgs = {
-+	.has_phy_lane = true,
-+	.ops = {
-+		.enable = dsi_14nm_phy_enable,
-+		.disable = dsi_14nm_phy_disable,
-+		.pll_init = dsi_pll_14nm_init,
-+		.save_pll_state = dsi_14nm_pll_save_state,
-+		.restore_pll_state = dsi_14nm_pll_restore_state,
-+	},
-+	.min_pll_rate = VCO_MIN_RATE,
-+	.max_pll_rate = VCO_MAX_RATE,
-+	.io_start = { 0x5e94400 },
-+	.num_dsi_phy = 1,
-+};
-+
- const struct msm_dsi_phy_cfg dsi_phy_14nm_8953_cfgs = {
- 	.has_phy_lane = true,
- 	.regulator_data = dsi_phy_14nm_17mA_regulators,
-
--- 
-2.41.0
-
+ # As per kernel Makefile, avoid funny character set dependencies
+ unexport LC_ALL
