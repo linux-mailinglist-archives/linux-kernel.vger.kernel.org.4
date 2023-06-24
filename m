@@ -2,210 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8C7573CD63
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 01:10:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B13A73CD6E
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 01:17:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230217AbjFXXKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 19:10:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47916 "EHLO
+        id S229905AbjFXXRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 19:17:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229905AbjFXXKI (ORCPT
+        with ESMTP id S229537AbjFXXRe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 19:10:08 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D6571728
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 16:10:07 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 84A5A320030E;
-        Sat, 24 Jun 2023 19:10:06 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Sat, 24 Jun 2023 19:10:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        invisiblethingslab.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1687648206; x=1687734606; bh=X8tYiCb8sz
-        g3+Xxn3rsxiUTgoJEwnGxILvg2gFNhDDg=; b=ByhHz5032gM2WomxFDBMNHa+mV
-        elp7zMhYBf+7iyxuaCUNkmGg92Pm98hAhh/f9LmOJXC+eeOj9VRgC7tsaXW/XLhg
-        7VE6tk674ZSc4OodBFx74DIgZzSVSzkXdG+9Ke0ktuParoJZISBNcY12gDdKYAzm
-        1J8crS4W8irzW4cW1qHOYZMjQQR+L9EZcYnoblBpJ/MdgcuziKEFCMpg9x77hsCp
-        wPfpkGvfdlrfIoD28gOycFguZwWmfhA0zDi7StGRpNRc4weA1ccmocnVcEv0OijY
-        bH6/vcA9PhR0xQZ33FXVbV7zcmFqoChKnlrfByw5azUklpUS5xnvEbytHt0A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1687648206; x=
-        1687734606; bh=X8tYiCb8szg3+Xxn3rsxiUTgoJEwnGxILvg2gFNhDDg=; b=f
-        hAeaXS/hBayxg5AyWpb96boL/j9XvDnhiJgL0pCRd4BTvzYnxh4phBwrWGCp0gJ2
-        fh0TtdT/bVPfNDHvrGKyNc074+uWeIhF9rkgU1nQqTtzRU893WxacF7P6Q3Ezo2q
-        XsDkFvuEPstPsb6KK6FcDQ2Sz/Hd3aXG6ZMFkScTtUEnFmYkT5vIJsW14DAPt+Cq
-        J+z6ntNCzXjRKtNt5lPyZvxmQPSv6ByNk9Ao6o6wKAxFZXmENdGF2VFWyj/lR8OB
-        UWvixP97kfOlgat2Bm6Bfc1M6JkA4tiI1ZbVc0jfAZb9Jfs0V//yPAzCchKVIcuW
-        tzSeqYHNbmK6G67jw2KgQ==
-X-ME-Sender: <xms:zneXZMgjvPO9N1C3GG9O5RBN7PE_LXoGfhgPihNyuS9_83-v0VkUow>
-    <xme:zneXZFAIl4Mr7GTqwNFAXO5QqzA1lGw6piATQtXWuVD2L_pbr1OeF6AgvausJelIU
-    g5Np40RYBcEjRo>
-X-ME-Received: <xmr:zneXZEHC5rlPsNiLyNNCQhRF5M3ZyrHi6jFcMkJQejHYuIK2KfoNT7ydRthazFGo6d8xT6CMKnM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeegkedgudekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepffgvmhhi
-    ucforghrihgvucfqsggvnhhouhhruceouggvmhhisehinhhvihhsihgslhgvthhhihhngh
-    hslhgrsgdrtghomheqnecuggftrfgrthhtvghrnhepjeffjefggfeugeduvedvjeekgfeh
-    gffhhfffjeetkeelueefffetfffhtdduheetnecuvehluhhsthgvrhfuihiivgepudenuc
-    frrghrrghmpehmrghilhhfrhhomhepuggvmhhisehinhhvihhsihgslhgvthhhihhnghhs
-    lhgrsgdrtghomh
-X-ME-Proxy: <xmx:zneXZNSHljC4vZs-FTCYagGITIoFIchc5m_Gjq4VwAMgPZMUN6-CsQ>
-    <xmx:zneXZJwR1DldrekA5ZxilQVcjZjJ1FqcnCxjSz2vLmzYpSPwyrlajw>
-    <xmx:zneXZL5D1CtcrvVdqsTxmZd63larBrRLukyKPLEsLVsUcM_je-tQvA>
-    <xmx:zneXZE82nVdiYLHrvFM4grcyVcYJsc51JkbEFjbMCTSujJgBr3siwg>
-Feedback-ID: iac594737:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 24 Jun 2023 19:10:05 -0400 (EDT)
-From:   Demi Marie Obenour <demi@invisiblethingslab.com>
-To:     Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com
-Cc:     Demi Marie Obenour <demi@invisiblethingslab.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 4/4] dm ioctl: inform caller about already-existing device
-Date:   Sat, 24 Jun 2023 19:09:47 -0400
-Message-ID: <20230624230950.2272-5-demi@invisiblethingslab.com>
+        Sat, 24 Jun 2023 19:17:34 -0400
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C701A1;
+        Sat, 24 Jun 2023 16:17:33 -0700 (PDT)
+Received: by mail-ot1-x32d.google.com with SMTP id 46e09a7af769-6b5915d0816so1679562a34.1;
+        Sat, 24 Jun 2023 16:17:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687648652; x=1690240652;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4WdDt11MYZioKMB3gqCGdUJFk6irWr34L7VPfhui5X0=;
+        b=QF2t+42ZS3kkfqWiy5x68D9/icqbQeVXG7007BWDQvOdK8xdc0E811AzokmBtAg1dM
+         4qDoC1sl12bC0wyeeIl1ZdXwWJHaDmwTgQw66+snmRa0+RrDSYHKnoBdRPH23Aaoi18r
+         ZdyFG2LCoh8fYMfRhM8K+b22Xp+/uK+YAyn0MIGAPJA7yKx40+T8gy2q5j+KQH/qeV4S
+         gQee7pB6JeqBKrYLfftanC81JRVHDpjBYpg+3BHo0230YkdyH1yqOEogQXup1B7Jv6xU
+         6g6B05P871MzJQicDhVIe3Vj1kTA3ItZ3yM0s+QudcSCCsmnlzKt0Ad16zDBUQjiV3LU
+         Pcvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687648652; x=1690240652;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4WdDt11MYZioKMB3gqCGdUJFk6irWr34L7VPfhui5X0=;
+        b=eGucHQAUQxYHRLxEATE7ZH68QKAa2rkAVt4gMGAY8fu9MQIj4dU76806ARtBu2OtGm
+         AmVNBtOCDD1XGtTzO4c2gJO8Rn3GHIVrRxRU64VmjNCzlk9NVfrcggDKpIE9w6K27XGP
+         5q1JhCyjlIGB8cCXztsYIt9qmfYkoZQkr9ecxvWyUEnSCb6muqbvH+iIxkaFO1jfakmV
+         u0De9ZAr8iR95bO44dJ+4UjHefypqQER2PA8AHX1DZecL9h2HGzxkE5rpi3QEertsV3d
+         kqiobLWr3unyTr7VoX7S20mXh7StnYwKb3b0Bg6Xi62ecWoPBuQQipHZr1Mi+MvR1uFu
+         lPeQ==
+X-Gm-Message-State: AC+VfDxCwrDuPr8rbK/UAIclZsqzyCCvVLOq1JcLfIIFTx8GcWQqj8i3
+        XiJ9pREiK0r37ames+RA3aFrbStm6vE=
+X-Google-Smtp-Source: ACHHUZ7vVQSxbHx2xn9+X8KL47TXb/MKqY3Q4envHApbfY3f5paoMuiF/bR7e3Lfcke87zfacr8u2w==
+X-Received: by 2002:a9d:61d0:0:b0:6b7:3fda:20d5 with SMTP id h16-20020a9d61d0000000b006b73fda20d5mr276236otk.32.1687648652223;
+        Sat, 24 Jun 2023 16:17:32 -0700 (PDT)
+Received: from smeagol.fibertel.com.ar ([201.235.4.68])
+        by smtp.gmail.com with ESMTPSA id h17-20020a9d6411000000b006b720475c38sm1189811otl.45.2023.06.24.16.17.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 24 Jun 2023 16:17:30 -0700 (PDT)
+From:   =?UTF-8?q?Joaqu=C3=ADn=20Ignacio=20Aramend=C3=ADa?= 
+        <samsagax@gmail.com>
+To:     linux@roeck-us.net
+Cc:     Jerrod Frost <jcfrosty@proton.me>, derekjohn.clark@gmail.com,
+        jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Joaqu=C3=ADn=20Ignacio=20Aramend=C3=ADa?= 
+        <samsagax@gmail.com>
+Subject: [PATCH] hwmon: (oxp-sensors) Add support for AOKZOE A1 PRO
+Date:   Sat, 24 Jun 2023 20:16:33 -0300
+Message-ID: <20230624231637.14941-2-samsagax@gmail.com>
 X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230624230950.2272-1-demi@invisiblethingslab.com>
-References: <20230624230950.2272-1-demi@invisiblethingslab.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Not only is this helpful for debugging, it also saves the caller an
-ioctl in the case where a device should be used if it exists or created
-otherwise.  To ensure existing userspace is not broken, this feature is
-only enabled in strict mode.
+From: Jerrod Frost <jcfrosty@proton.me>
 
-Signed-off-by: Demi Marie Obenour <demi@invisiblethingslab.com>
+This device is an iteration over the AOKZOE A1 with the same EC mapping
+and features. It also has support for tt_toggle.
+
+Thanks to Jerrod for authoring and testing.
+
+Signed-off-by: Joaquín Ignacio Aramendía <samsagax@gmail.com>
 ---
- drivers/md/dm-ioctl.c         | 31 +++++++++++++++++++++++++------
- include/uapi/linux/dm-ioctl.h |  4 ++--
- 2 files changed, 27 insertions(+), 8 deletions(-)
+ Documentation/hwmon/oxp-sensors.rst | 2 ++
+ drivers/hwmon/oxp-sensors.c         | 7 +++++++
+ 2 files changed, 9 insertions(+)
 
-diff --git a/drivers/md/dm-ioctl.c b/drivers/md/dm-ioctl.c
-index 7eab9a8c77ff3286346a1c44581d3b6370a731eb..4eb3eda2fe169f64259458dd678833f444d76ce0 100644
---- a/drivers/md/dm-ioctl.c
-+++ b/drivers/md/dm-ioctl.c
-@@ -259,11 +259,14 @@ static void free_cell(struct hash_cell *hc)
- 	}
- }
+diff --git a/Documentation/hwmon/oxp-sensors.rst b/Documentation/hwmon/oxp-sensors.rst
+index 0ca1f7728c34..3adeb7406243 100644
+--- a/Documentation/hwmon/oxp-sensors.rst
++++ b/Documentation/hwmon/oxp-sensors.rst
+@@ -30,6 +30,7 @@ Supported devices
+ Currently the driver supports the following handhelds:
  
-+static void __dev_status(struct mapped_device *md, struct dm_ioctl *param);
-+
- /*
-  * The kdev_t and uuid of a device can never change once it is
-  * initially inserted.
-  */
--static int dm_hash_insert(const char *name, const char *uuid, struct mapped_device *md)
-+static int dm_hash_insert(const char *name, const char *uuid, struct mapped_device *md,
-+			  struct dm_ioctl *param)
- {
- 	struct hash_cell *cell, *hc;
+  - AOK ZOE A1
++ - AOK ZOE A1 PRO
+  - Aya Neo 2
+  - Aya Neo AIR
+  - Aya Neo AIR Pro
+@@ -40,6 +41,7 @@ Currently the driver supports the following handhelds:
  
-@@ -280,6 +283,8 @@ static int dm_hash_insert(const char *name, const char *uuid, struct mapped_devi
- 	down_write(&_hash_lock);
- 	hc = __get_name_cell(name);
- 	if (hc) {
-+		if (param)
-+			__dev_status(hc->md, param);
- 		dm_put(hc->md);
- 		goto bad;
- 	}
-@@ -290,6 +295,8 @@ static int dm_hash_insert(const char *name, const char *uuid, struct mapped_devi
- 		hc = __get_uuid_cell(uuid);
- 		if (hc) {
- 			__unlink_name(cell);
-+			if (param)
-+				__dev_status(hc->md, param);
- 			dm_put(hc->md);
- 			goto bad;
- 		}
-@@ -901,10 +908,12 @@ static int dev_create(struct file *filp, struct dm_ioctl *param, size_t param_si
- 		m = MINOR(huge_decode_dev(param->dev));
+ "Turbo/Silent" button behaviour toggle is only supported on:
+  - AOK ZOE A1
++ - AOK ZOE A1 PRO
+  - OneXPlayer mini AMD (only with updated alpha BIOS)
+  - OneXPlayer mini AMD PRO
  
- 	r = dm_create(m, &md, param->flags & DM_DISABLE_UEVENTS_FLAG);
--	if (r)
-+	if (r) {
-+		DMERR("Could not create device-mapper device");
- 		return r;
-+	}
- 
--	r = dm_hash_insert(param->name, *param->uuid ? param->uuid : NULL, md);
-+	r = dm_hash_insert(param->name, *param->uuid ? param->uuid : NULL, md, param);
- 	if (r) {
- 		dm_put(md);
- 		dm_destroy(md);
-@@ -2234,6 +2243,7 @@ static int ctl_ioctl(struct file *file, uint command, struct dm_ioctl __user *us
- 	int ioctl_flags;
- 	int param_flags;
- 	unsigned int cmd;
-+	bool do_copy;
- 	struct dm_ioctl *param;
- 	ioctl_fn fn = NULL;
- 	size_t input_param_size;
-@@ -2307,9 +2317,18 @@ static int ctl_ioctl(struct file *file, uint command, struct dm_ioctl __user *us
- 	param->flags |= old_flags;
- 
- 	/*
--	 * Copy the results back to userland.
-+	 * Copy the results back to userland if either:
-+	 *
-+	 * - The ioctl succeeded.
-+	 * - The ioctl is DM_DEV_CREATE, the return value is -EBUSY,
-+	 *   and strict parameter checking is enabled.
- 	 */
--	if (!r && copy_to_user(user, param, param->data_size))
-+	do_copy = r == 0;
-+	if (r == -EBUSY && !sloppy_checks(param) && cmd == DM_DEV_CREATE_CMD) {
-+		param->flags |= DM_EXISTS_FLAG;
-+		do_copy = true;
-+	}
-+	if (do_copy && copy_to_user(user, param, param->data_size))
- 		r = -EFAULT;
- 
- out:
-@@ -2488,7 +2507,7 @@ int __init dm_early_create(struct dm_ioctl *dmi,
- 		return r;
- 
- 	/* hash insert */
--	r = dm_hash_insert(dmi->name, *dmi->uuid ? dmi->uuid : NULL, md);
-+	r = dm_hash_insert(dmi->name, *dmi->uuid ? dmi->uuid : NULL, md, NULL);
- 	if (r)
- 		goto err_destroy_dm;
- 
-diff --git a/include/uapi/linux/dm-ioctl.h b/include/uapi/linux/dm-ioctl.h
-index b338a4f9a299acda9430995d63fbb490e70c8cd8..195d60be4aba4f20b7220b900c87d6d3a86014a2 100644
---- a/include/uapi/linux/dm-ioctl.h
-+++ b/include/uapi/linux/dm-ioctl.h
-@@ -344,8 +344,8 @@ enum {
- /* Status bits */
- #define DM_READONLY_FLAG	(1 << 0) /* In/Out */
- #define DM_SUSPEND_FLAG		(1 << 1) /* In/Out */
--#define DM_EXISTS_FLAG		(1 << 2) /* Not used by kernel, reserved for
--					  * libdevmapper in userland
-+#define DM_EXISTS_FLAG		(1 << 2) /* Set when trying to create a
-+					  * device that already exists
- 					  */
- #define DM_PERSISTENT_DEV_FLAG	(1 << 3) /* In */
- 
+diff --git a/drivers/hwmon/oxp-sensors.c b/drivers/hwmon/oxp-sensors.c
+index 1e59d97219c4..e1a907cae820 100644
+--- a/drivers/hwmon/oxp-sensors.c
++++ b/drivers/hwmon/oxp-sensors.c
+@@ -77,6 +77,13 @@ static const struct dmi_system_id dmi_table[] = {
+ 		},
+ 		.driver_data = (void *)aok_zoe_a1,
+ 	},
++	{
++		.matches = {
++			DMI_MATCH(DMI_BOARD_VENDOR, "AOKZOE"),
++			DMI_EXACT_MATCH(DMI_BOARD_NAME, "AOKZOE A1 Pro"),
++		},
++		.driver_data = (void *)aok_zoe_a1,
++	},
+ 	{
+ 		.matches = {
+ 			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
 -- 
-Sincerely,
-Demi Marie Obenour (she/her/hers)
-Invisible Things Lab
+2.41.0
 
