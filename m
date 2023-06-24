@@ -2,88 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8B1B73C5D2
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 03:24:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B64F73C5DC
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 03:34:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231210AbjFXBYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 21:24:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56020 "EHLO
+        id S231713AbjFXBeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 21:34:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjFXBYJ (ORCPT
+        with ESMTP id S229543AbjFXBer (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 21:24:09 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F7B5272C;
-        Fri, 23 Jun 2023 18:24:06 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35O1NwIU011477;
-        Sat, 24 Jun 2023 01:23:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=WRb+69Y5nT4WDGULWD86EsKzBS27WLfqvII40UpcWf4=;
- b=hXQVU8FeTfxvJN0fP2/TSeP9UagoWqu2DPWtVC7fnIrtKC0UvBN50LlsdBt6tgkUrpee
- azQ6B6p1kj68WVsX06iM9G1KtQ0AGXSbDoRDcJZIdM4qxOq9weAgZ/e0JpjCD54XapOM
- Da0VCirViyjJCC1/TlogvewWJ1A21q83ZOvRLjYelFnyClwZS0iSIYiYJcbz8B6V9un6
- c5MdID5/eHWKTB4Mjcni0EQ/jXgmERypgv7vpU3l7PiYTJqMueKQYN5C1MHe9doW7+A7
- 3fI2HmOzvAeU/RqNFiUc1bOK7tUzmHasaBy1ClqnGRwR1iZowLtEEbzQxQv3Ah8rJaPL pg== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rdnutr24q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 24 Jun 2023 01:23:58 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35O1NvnS015877
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 24 Jun 2023 01:23:57 GMT
-Received: from [10.71.110.193] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 23 Jun
- 2023 18:23:56 -0700
-Message-ID: <55d783d5-ef47-8c2e-d3ac-598e686e53fe@quicinc.com>
-Date:   Fri, 23 Jun 2023 18:23:56 -0700
+        Fri, 23 Jun 2023 21:34:47 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5644213A;
+        Fri, 23 Jun 2023 18:34:45 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-6686c74183cso1050759b3a.1;
+        Fri, 23 Jun 2023 18:34:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687570485; x=1690162485;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=NweAbjy52dJmvgrS5Se3FN0lnSLavmsB+nKxFGPGvW0=;
+        b=VSGfQTWVWsbp9D+RhlgroWtsItjwsd+PAsju+hPuWGHSmM2/N6JW/0cyml04B5fnDA
+         S6Oja8X71oM1CVdjhclXpm3mU3WwX/vzDHeHPqLfz5PFyuGHNzknB3hAjH89MEMfszI0
+         D7qh7o4mervwSD6aRKthAHFjjCLVmOG90BqJ9r4jfR91KjFoFLHUN4FPNi4/od9UnaAP
+         Fu5sq0g8N68zOOIGbpCp+pGjSvzyN7kt9GY5h52bNLOGoaAOZk2lbrB25Lzve2A9CmcD
+         lTosl3lLEdYxYlsRATwecnEOk19Eeu5zot2eFK45XTNHzPSdVRyu1GAszlfdQ2LQMVbM
+         O8Ng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687570485; x=1690162485;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NweAbjy52dJmvgrS5Se3FN0lnSLavmsB+nKxFGPGvW0=;
+        b=f3J7dNBQlGrxy3qJc5an1Oa/Gt7mU+76Dr/w2RN/AAQzxHclgqPDG5aBIZdKv4alNu
+         cDtR0hfn0sx0I+1DvUSZ19aOcXPQN0qFLUL+oSVi1zfEIKqzFtEYDYDQIXc20W1w4AF2
+         38ZaaMWfdNIt5IWJKHqLW2HMCJtgzbfBkFW5KGtvlEPkevC8v5uLf1nuhgNYiZpK3B4F
+         oDw2FfY1hJ9ePmw4pGF5awf2WEN0JLUivNOdq3hk6tDfeCdNvWZoF8HZDTLI8wHdgV2e
+         vZKjtcbMTZnGe568WlFjHwGz2LZKOHY9E7gtxXVoInd0SWpgv7WagBVLXVInq7+Q2NyW
+         YZpQ==
+X-Gm-Message-State: AC+VfDyGde3DaAS4cbbmDMlYHgUhXwVjxPW+gcGeDjD9JWHRgStyrIsO
+        N+d1XuQ7HTwhXU/9mmTzBcgVYSs0DAFYow==
+X-Google-Smtp-Source: ACHHUZ4EaqFt6nWD83dMOJjUmyNBRz7LaE9yDDNtm67kqPMvxGc6jCP04lmsfP6QNI8sfJL/8U7eVw==
+X-Received: by 2002:a05:6a20:2588:b0:11d:2764:d9c1 with SMTP id k8-20020a056a20258800b0011d2764d9c1mr27851326pzd.51.1687570485339;
+        Fri, 23 Jun 2023 18:34:45 -0700 (PDT)
+Received: from debian.me ([103.131.18.64])
+        by smtp.gmail.com with ESMTPSA id 24-20020a631258000000b0054fe07d2f3dsm240316pgs.11.2023.06.23.18.34.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Jun 2023 18:34:44 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 467208BFA791; Sat, 24 Jun 2023 08:25:40 +0700 (WIB)
+Date:   Sat, 24 Jun 2023 08:25:39 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Elmar Stellnberger <estellnb@elstel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux Memory Management <linux-mm@kvack.org>,
+        Linux Stable <stable@vger.kernel.org>
+Subject: Re: Fwd: kernel fault on hibernation: get_zeroed_page/swsusp_write
+Message-ID: <ZJZGE4ZxJzrhRznA@debian.me>
+References: <5d4959b7-61da-8ab0-6bc6-21305d37c7aa@gmail.com>
+ <ZJXFgfldS6W_LCiI@mail.dotplex.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 6/6] drm/msm/dpu: Update dev core dump to dump registers
- of sub blocks
-Content-Language: en-US
-To:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Ryan McCann <quic_rmccann@quicinc.com>,
-        "Rob Clark" <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        David Airlie <airlied@gmail.com>,
-        "Daniel Vetter" <daniel@ffwll.ch>
-CC:     Rob Clark <robdclark@chromium.org>,
-        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-References: <20230622-devcoredump_patch-v1-0-3b2cdcc6a576@quicinc.com>
- <20230622-devcoredump_patch-v1-6-3b2cdcc6a576@quicinc.com>
- <114f34dd-e5ce-f878-5b23-4c14dc800547@linaro.org>
- <1e41b909-4886-8392-edbc-78684e52bbf9@quicinc.com>
-From:   Jessica Zhang <quic_jesszhan@quicinc.com>
-In-Reply-To: <1e41b909-4886-8392-edbc-78684e52bbf9@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 8NVxNNcTQuvU0Av0hx13JYmqyZe97CJ6
-X-Proofpoint-ORIG-GUID: 8NVxNNcTQuvU0Av0hx13JYmqyZe97CJ6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-23_14,2023-06-22_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 mlxscore=0 suspectscore=0 impostorscore=0 spamscore=0
- mlxlogscore=999 priorityscore=1501 clxscore=1011 bulkscore=0 phishscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306240011
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="r2ki5HdcOTzEK4x7"
+Content-Disposition: inline
+In-Reply-To: <ZJXFgfldS6W_LCiI@mail.dotplex.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -91,248 +80,62 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--r2ki5HdcOTzEK4x7
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 6/23/2023 5:09 PM, Abhinav Kumar wrote:
-> 
-> 
-> On 6/22/2023 5:13 PM, Dmitry Baryshkov wrote:
->> On 23/06/2023 02:48, Ryan McCann wrote:
->>> Currently, the device core dump mechanism does not dump registers of sub
->>> blocks within the DSPP, SSPP, DSC, and PINGPONG blocks. Add wrapper
->>> function to dump hardware blocks that contain sub blocks.
->>>
->>> Signed-off-by: Ryan McCann <quic_rmccann@quicinc.com>
->>> ---
->>>   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c | 194 
->>> +++++++++++++++++++++++++++-----
->>>   1 file changed, 168 insertions(+), 26 deletions(-)
->>>
->>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c 
->>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
->>> index aa8499de1b9f..9b1b1c382269 100644
->>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
->>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
->>> @@ -885,6 +885,154 @@ static int dpu_irq_postinstall(struct msm_kms 
->>> *kms)
->>>       return 0;
->>>   }
->>> +static void dpu_kms_mdp_snapshot_add_block(struct msm_disp_state 
->>> *disp_state,
->>> +                       void __iomem *mmio, void *blk,
->>> +                       enum dpu_hw_blk_type blk_type)
->>
->> No. Such multiplexers add no value to the code. Please inline it.
->>
->> Not to mention that this patch is hard to review. You both move 
->> existing code and add new features. If it were to go, it should have 
->> been split into two patches: one introducing the multiplexer and 
->> another one adding subblocks.
->>
-> 
-> Ok. we can split this into:
-> 
-> 1) adding the multiplexer
-> 2) adding sub-blk parsing support inside the multiplexer
-> 
->>> +{
->>> +    u32 base;
->>> +
->>> +    switch (blk_type) {
->>> +    case DPU_HW_BLK_TOP:
->>> +    {
->>> +        struct dpu_mdp_cfg *top = (struct dpu_mdp_cfg *)blk;
->>> +
->>> +        if (top->features & BIT(DPU_MDP_PERIPH_0_REMOVED)) {
->>> +            msm_disp_snapshot_add_block(disp_state, MDP_PERIPH_TOP0,
->>> +                            mmio + top->base, "top");
->>> +            msm_disp_snapshot_add_block(disp_state, top->len - 
->>> MDP_PERIPH_TOP0_END,
->>> +                            mmio + top->base + MDP_PERIPH_TOP0_END,
->>> +                            "top_2");
->>> +        } else {
->>> +            msm_disp_snapshot_add_block(disp_state, top->len, mmio + 
->>> top->base, "top");
->>> +        }
->>> +        break;
->>> +    }
->>> +    case DPU_HW_BLK_LM:
->>> +    {
->>> +        struct dpu_lm_cfg *mixer = (struct dpu_lm_cfg *)blk;
->>> +
->>> +        msm_disp_snapshot_add_block(disp_state, mixer->len, mmio + 
->>> mixer->base, "%s",
->>> +                        mixer->name);
->>> +        break;
->>> +    }
->>> +    case DPU_HW_BLK_CTL:
->>> +    {
->>> +        struct dpu_ctl_cfg *ctl = (struct dpu_ctl_cfg *)blk;
->>> +
->>> +        msm_disp_snapshot_add_block(disp_state, ctl->len, mmio + 
->>> ctl->base, "%s",
->>> +                        ctl->name);
->>> +        break;
->>> +    }
->>> +    case DPU_HW_BLK_INTF:
->>> +    {
->>> +        struct dpu_intf_cfg *intf = (struct dpu_intf_cfg *)blk;
->>> +
->>> +        msm_disp_snapshot_add_block(disp_state, intf->len, mmio + 
->>> intf->base, "%s",
->>> +                        intf->name);
->>> +        break;
->>> +    }
->>> +    case DPU_HW_BLK_WB:
->>> +    {
->>> +        struct dpu_wb_cfg *wb = (struct dpu_wb_cfg *)blk;
->>> +
->>> +        msm_disp_snapshot_add_block(disp_state, wb->len, mmio + 
->>> wb->base, "%s",
->>> +                        wb->name);
->>> +        break;
->>> +    }
->>> +    case DPU_HW_BLK_SSPP:
->>> +    {
->>> +        struct dpu_sspp_cfg *sspp_block = (struct dpu_sspp_cfg *)blk;
->>> +        const struct dpu_sspp_sub_blks *sblk = sspp_block->sblk;
->>> +
->>> +        base = sspp_block->base;
->>> +
->>> +        msm_disp_snapshot_add_block(disp_state, sspp_block->len, 
->>> mmio + base, "%s",
->>> +                        sspp_block->name);
->>> +
->>> +        if (sspp_block->features & BIT(DPU_SSPP_SCALER_QSEED3) ||
->>> +            sspp_block->features & BIT(DPU_SSPP_SCALER_QSEED3LITE) ||
->>> +            sspp_block->features & BIT(DPU_SSPP_SCALER_QSEED4))
->>> +            msm_disp_snapshot_add_block(disp_state, 
->>> sblk->scaler_blk.len,
->>> +                            mmio + base + sblk->scaler_blk.base, 
->>> "%s_%s",
->>> +                            sspp_block->name, sblk->scaler_blk.name);
->>
->> Actually, it would be better to:
->> - drop name from all sblk instances (and use known string instead of 
->> the sblk name here)
+On Fri, Jun 23, 2023 at 06:17:05PM +0200, Elmar Stellnberger wrote:
+> Hi all, Hi Bagas S.
+>=20
+> As the issue didn't reproduce the way I would have liked (did not
+> reproduce at all here, not even with the same kernel version; no
+> further comment) I have now uploaded the /proc/kcore and the kernel
+> binaries and symbol files I still had on disk at
+> https://upload.elstel.info (This may move to something like
+> upload.elstel.info/bugs/kernpagealloc in the future)
+>=20
 
-Hey Dmitry,
+First, tl;dr:
 
-FWIW, I second Abhinav's points about the sblk names. For example, if in 
-the future we want to add a "_rot" suffix specifically to the 
-VIG_SBLK_ROT.scaler name, it would be easier to just make that change in 
-the HW catalog.
+> A: http://en.wikipedia.org/wiki/Top_post
+> Q: Were do I find info about this thing called top-posting?
+> A: Because it messes up the order in which people normally read text.
+> Q: Why is top-posting such a bad thing?
+> A: Top-posting.
+> Q: What is the most annoying thing in e-mail?
+>=20
+> A: No.
+> Q: Should I include quotations after my reply?
+>=20
+> http://daringfireball.net/2007/07/on_top
 
->> - Use sblk->foo_blk.len to check if it should be printed or not.
- From my understanding, your suggestion is to replace the feature flag 
-checks with a sblk.len > 0 check.
+Can you attach [1] to your Bugzilla report? Also, any report on bisection?
 
-I don't think that would be good because it wouldn't be correct to 
-assume that the sblk will always be present. For example, for 
-DPU_HW_BLK_DSC, the sblks will only be present for DSC_BLK_1_2.
+Also, you don't need to upload full kernel images instead; people can
+grab /proc/config.gz you uploaded on Bugzilla and then `make olddefconfig`
+=66rom it.
 
-In addition, it is possible for sblks, like pp_sblk_te.te2, to have a 
-len of 0. While the register space of that specific sblk will not be 
-printed, I'd prefer the devcore dump to reflect what is present within 
-the HW catalog so that the user knows which pingpong blks have the TE2 sblk.
+Anyway, telling regzbot:
 
-Thanks,
+#regzbot link: https://upload.elstel.info/kcore.xz
 
-Jessica Zhang
+Thanks.
 
->>
-> 
-> No, I dont agree. If we drop the names from the sub_blk in the catalog, 
-> we will end up using "sub_blk_name" string here in the code to indicate 
-> which blk that is in the dump.
-> 
-> If we add more sub_blks in the catalog in the future we need to keep 
-> changing the code over here. Thats not how it should be.
-> 
-> Leaving the names in the catalog ensures that this code wont change and 
-> only catalog changes when we add a new sub_blk either for an existing or 
-> new chipset.
-> 
-> catalog is indicating the new blk, and dumping code just prints it.
-> 
-> with your approach, dumping code will or can keep changing with chipsets 
-> or sub_blks. Thats not how it should be.
-> 
->>> +
->>> +        if (sspp_block->features & BIT(DPU_SSPP_CSC) || 
->>> sspp_block->features
->>> +                    & BIT(DPU_SSPP_CSC_10BIT))
->>
->> A very bad use of indentation. In future please split logically rather 
->> than just filling the line up to the line width.
->>
->>> +            msm_disp_snapshot_add_block(disp_state, sblk->csc_blk.len,
->>> +                            mmio + base + sblk->csc_blk.base, "%s_%s",
->>> +                            sspp_block->name, sblk->csc_blk.name);
->>> +        break;
->>> +    }
->>> +    case DPU_HW_BLK_DSPP:
->>> +    {
->>> +        struct dpu_dspp_cfg *dspp_block = (struct dpu_dspp_cfg *)blk;
->>> +
->>> +        base = dspp_block->base;
->>> +
->>> +        msm_disp_snapshot_add_block(disp_state, dspp_block->len, 
->>> mmio + base, "%s",
->>> +                        dspp_block->name);
->>> +
->>> +        if (dspp_block->features & BIT(DPU_DSPP_PCC))
->>> +            msm_disp_snapshot_add_block(disp_state, 
->>> dspp_block->sblk->pcc.len,
->>> +                            mmio + base + dspp_block->sblk->pcc.base,
->>> +                            "%s_%s", dspp_block->name,
->>> +                            dspp_block->sblk->pcc.name);
->>> +        break;
->>> +    }
->>> +    case DPU_HW_BLK_PINGPONG:
->>> +    {
->>> +        struct dpu_pingpong_cfg *pingpong_block = (struct 
->>> dpu_pingpong_cfg *)blk;
->>> +        const struct dpu_pingpong_sub_blks *sblk = 
->>> pingpong_block->sblk;
->>> +
->>> +        base = pingpong_block->base;
->>> +
->>> +        msm_disp_snapshot_add_block(disp_state, pingpong_block->len, 
->>> mmio + base, "%s",
->>> +                        pingpong_block->name);
->>> +
->>> +        if (pingpong_block->features & BIT(DPU_PINGPONG_TE2))
->>> +            msm_disp_snapshot_add_block(disp_state, sblk->te2.len,
->>> +                            mmio + base + sblk->te2.base, "%s_%s",
->>> +                            pingpong_block->name, sblk->te2.name);
->>> +
->>> +        if (pingpong_block->features & BIT(DPU_PINGPONG_DITHER))
->>> +            msm_disp_snapshot_add_block(disp_state, sblk->dither.len,
->>> +                            mmio + base + sblk->dither.base, "%s_%s",
->>> +                            pingpong_block->name, sblk->dither.name);
->>> +        break;
->>> +    }
->>> +    case DPU_HW_BLK_DSC:
->>> +    {
->>> +        struct dpu_dsc_cfg *dsc_block = (struct dpu_dsc_cfg *)blk;
->>> +
->>> +        base = dsc_block->base;
->>> +
->>> +        if (dsc_block->features & BIT(DPU_DSC_HW_REV_1_2)) {
->>> +            struct dpu_dsc_blk enc = dsc_block->sblk->enc;
->>> +            struct dpu_dsc_blk ctl = dsc_block->sblk->ctl;
->>> +
->>> +            /* For now, pass in a length of 0 because the DSC_BLK 
->>> register space
->>> +             * overlaps with the sblks' register space.
->>> +             *
->>> +             * TODO: Pass in a length of 0 t0 DSC_BLK_1_2 in the HW 
->>> catalog where
->>> +             * applicable.
->>
->> Nice catch, thank you. We should fix that.
->>
-> 
-> Yes and we would have fixed that ourself if you wanted that with this 
-> series as another patch.
-> 
+[1]: https://upload.elstel.info/kcore.xz
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--r2ki5HdcOTzEK4x7
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZJZGCwAKCRD2uYlJVVFO
+o8DMAQC6zR1yWAa7UjG6IkGQnqbipk2vCuN918vTrru6uzJIMQEA3roDgr7VTrHm
+nimvRUDgB4IcrFpNlJFzdVpaRrSpDws=
+=DDa0
+-----END PGP SIGNATURE-----
+
+--r2ki5HdcOTzEK4x7--
