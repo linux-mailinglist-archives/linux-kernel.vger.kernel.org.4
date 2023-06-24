@@ -2,139 +2,363 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 777E073CAA5
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 13:45:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4A8C73CAB0
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 14:08:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232525AbjFXLpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 07:45:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44182 "EHLO
+        id S231250AbjFXMIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 08:08:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbjFXLpw (ORCPT
+        with ESMTP id S229456AbjFXMH6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 07:45:52 -0400
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BD3D1FD7;
-        Sat, 24 Jun 2023 04:45:49 -0700 (PDT)
-Received: by mail-qk1-x72a.google.com with SMTP id af79cd13be357-763ddc4259dso141548185a.3;
-        Sat, 24 Jun 2023 04:45:49 -0700 (PDT)
+        Sat, 24 Jun 2023 08:07:58 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20F621BFC
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 05:07:55 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2b698937f85so1568371fa.2
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 05:07:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687607148; x=1690199148;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zP3mUhmYFxJcONcmqARo3rbXN0HiQgVUbkY1nlHKpiE=;
-        b=PQTR28s2V9NwNSHTiFgMA/4gp/BNDeredmuKpPYE/IJcPnQYIn6HzOw/VcSlkvnVlq
-         JF4qgEYsbhTkSP8gfxaLQFLcco+2LWWhurgdiMSwR72tASXyVcaWVCOfjGmhpuGXsXf4
-         OkVvRlezkY6aNvW/ojZfBmvCw/nBb0aryxy6mq3+slpE76i6FAO2zFpqPJ+FGLu+m7jk
-         ud9GrDy9D2vSuhptsiEcaKuOt+ENoC0823u3mtlBg8b7sh8Z5+InDtkk/LH51K/y+cgs
-         8NZyT3Pq5AVus7GldHPXihb4hPjTPIDiNxzNbyy/nS9c405pEUjxQNwMMekEaXkrhTLm
-         zzFQ==
+        d=linaro.org; s=google; t=1687608474; x=1690200474;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AhB7gO41s6RkTIX9B+mUm/3DyCsWmE8KY3H2vl6K7Yo=;
+        b=czAJe/3Oa1kuRQTtvewFIdfyYHou1G0kNyuYoDxXVlQvBJToB68u6OsyOa56X4iM+a
+         RnmzaxB/Iv/SW5+U62RETn1N5FArQT8y2ia13WQCblIgbej/Hfh3vVX0qD7RxA6aduJr
+         W/TMuSXeS6eEXhw48mXZVnzO5elr0JGjUljWt/BU1o4VigIZ2iTS3Os3jVGClWBSKlcy
+         7hSo3uym7nkpJm2IZMp6h1OyFJuUFR3VeqwF3b49D8KSTVT8upjIw03u+Cv+Cu78xNQk
+         crpqmMK/TAf5q4/S5W4FtP1fVxp6BlqgvXvNcNHiFWkY+gleHzFbkCJQVAc/MVOB99s7
+         xh+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687607148; x=1690199148;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zP3mUhmYFxJcONcmqARo3rbXN0HiQgVUbkY1nlHKpiE=;
-        b=OPbEEn/gmi6fyA8zkdM5UOTtNJytoE/8XtPjTX/fmIdxARLrxKq/mAaEFVlW6PuIVX
-         t/L6P7bP7Tz1ONErO0YAv86NqXfHm7gzI4XZ8uIFn1Vi5wxqjo4mTBUXlMzrHmgu50Gq
-         ac+pUIOo7Mnfghdlh3VtN8j67fZdFEToSFmnC/MIdcp7sGkAlH+ydhOYh+2xwtOPqpLg
-         iz0W6mbS8CTuHjRvWA28a1gS6vDvGz/GUFNwD6yvVzdqov/w2GovgzoaMWSNQ1A9Rqz6
-         seZhrlpC5bmZX1WDoAbQnmzNSZpk4WemDnOAYbLa/CJd63JfEFAGXMCXbAsSl15S78Gg
-         No4g==
-X-Gm-Message-State: AC+VfDzMoaTREnvyDCQ6ozuyJoMC4KBYCx5np4mKIEQgynrsaBJxR5L+
-        Azx6R9D7mRTHbZbi1/MgcFiTiQIHkJPdx12ec00=
-X-Google-Smtp-Source: ACHHUZ6bf6KUSVdzdiaMFp337uOJ561gzdBdvqL0oPQm/uUN2weYcc0ipWTtYFaAeekf3yWRxtNp1NKp2DwnZEzEi3w=
-X-Received: by 2002:a05:620a:6847:b0:763:a7e9:6cfc with SMTP id
- ru7-20020a05620a684700b00763a7e96cfcmr16109209qkn.11.1687607148658; Sat, 24
- Jun 2023 04:45:48 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687608474; x=1690200474;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AhB7gO41s6RkTIX9B+mUm/3DyCsWmE8KY3H2vl6K7Yo=;
+        b=APuBvb/8J5PsjF6/iOZguLWbdZMQbT+LqNU2WAwKb6CnQLw9AbUUz4RRA70zSLCA87
+         WIA45jGAtq05XFxw/jtWX+SoF0RrAORajhBJGDi94zbwj3tmxbo0oKQaY2EIYp2dOeBh
+         N272KX5hHeJZrAwk3hNegWcaHr1vf+cUT6SiMEVLAlMFbU3MRWLPBouVCDEoiTS9zKu5
+         c+oXdijRy2W+gmLg6bpeLhJYfN+e3XNzkLw58KUbLvR1QozGptjXNOL7iAGkIMRD0K7U
+         xYfM5NdGGW5mwSTzvhBS4wSOZM7VYa9dDCuP2Pho9lfWUOrPL5uKuMdD1aJ6wdxTW+UB
+         Vrww==
+X-Gm-Message-State: AC+VfDxSnkv0C8wuRDuK3tn+bj7gRdgQZ60qS0brvvWp14n7jHn3K8fJ
+        5VHQlauGV09Rh0cnSuRaVI1KxQ==
+X-Google-Smtp-Source: ACHHUZ5EUcWz4Bkd9KV9wW+T+pNBBh8PesWiqS6TbSRjDaH5t3TeGZPvWwypTx9M7lxdoDj1lX0zqw==
+X-Received: by 2002:a2e:95d5:0:b0:2b4:852d:8747 with SMTP id y21-20020a2e95d5000000b002b4852d8747mr10406353ljh.30.1687608473517;
+        Sat, 24 Jun 2023 05:07:53 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id g7-20020a2e9e47000000b002b1b92910c8sm258409ljk.86.2023.06.24.05.07.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 24 Jun 2023 05:07:52 -0700 (PDT)
+Message-ID: <412f68a3-e3cc-f26e-2e3d-59727e5c48d8@linaro.org>
+Date:   Sat, 24 Jun 2023 15:07:51 +0300
 MIME-Version: 1.0
-References: <20230606051217.2064-1-iecedge@gmail.com> <6ad5fba3-926a-7a23-b21b-abffd33708be@acm.org>
- <CAFA-uR_Zn4MdFKs6U6dqPjuVS60yN4RcYU4jJzjknqy7-RWyEQ@mail.gmail.com>
- <e9b8b9c5-f400-9152-0f4b-537b05203dd2@acm.org> <CAFA-uR83jHJsDXnn-3LWcrw251S4MizHC_JPJssYrgoD6kLoAg@mail.gmail.com>
- <5b898dde-2f76-51af-5d2e-c4572719a5be@acm.org>
-In-Reply-To: <5b898dde-2f76-51af-5d2e-c4572719a5be@acm.org>
-From:   Jianlin Lv <iecedge@gmail.com>
-Date:   Sat, 24 Jun 2023 19:45:36 +0800
-Message-ID: <CAFA-uR_jk6jCmf9DTebSVBRwtoLuXuyvf1Biq+OObqRVAOZbBw@mail.gmail.com>
-Subject: Re: [PATCH] scsi: sd: support specify probe type of build-in driver
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com, paulmck@kernel.org,
-        bp@suse.de, peterz@infradead.org, will@kernel.org,
-        rdunlap@infradead.org, kim.phillips@amd.com, rostedt@goodmis.org,
-        wyes.karny@amd.com, jianlv@ebay.com, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-scsi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 6/6] drm/msm/dpu: Update dev core dump to dump registers
+ of sub blocks
+Content-Language: en-GB
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Ryan McCann <quic_rmccann@quicinc.com>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Rob Clark <robdclark@chromium.org>, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, quic_jesszhan@quicinc.com
+References: <20230622-devcoredump_patch-v1-0-3b2cdcc6a576@quicinc.com>
+ <20230622-devcoredump_patch-v1-6-3b2cdcc6a576@quicinc.com>
+ <114f34dd-e5ce-f878-5b23-4c14dc800547@linaro.org>
+ <1e41b909-4886-8392-edbc-78684e52bbf9@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <1e41b909-4886-8392-edbc-78684e52bbf9@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 9, 2023 at 12:23=E2=80=AFAM Bart Van Assche <bvanassche@acm.org=
-> wrote:
->
-> On 6/7/23 19:51, Jianlin Lv wrote:
-> > On Thu, Jun 8, 2023 at 1:07=E2=80=AFAM Bart Van Assche <bvanassche@acm.=
-org> wrote:
-> >> On 6/7/23 08:55, Jianlin Lv wrote:
-> >> I see two possible solutions:
-> >> - Change the volume provisioner such that it uses disk references that=
- do
-> >>     not depend on the probing order, e.g. /dev/disk/by-id/...
-> >
-> > Yes, The "/dev/disk/by-id/" can uniquely identify SCSI devices. However=
-,
-> > I don't think it is suitable for the volume provisioner workflow.
-> > For nodes of the same SKU , a unified YAML file will be defined to inst=
-ruct
-> > the volume provisioner on how to manage the local disks.
-> > If use WWID, it would mean that a unique YAML file needs to be defined
-> > for each node. This approach becomes impractical when dealing with a la=
-rge
-> > number of work nodes.
-> Please consider using the paths available in /dev/disk/by-path.
+On 24/06/2023 03:09, Abhinav Kumar wrote:
+> 
+> 
+> On 6/22/2023 5:13 PM, Dmitry Baryshkov wrote:
+>> On 23/06/2023 02:48, Ryan McCann wrote:
+>>> Currently, the device core dump mechanism does not dump registers of sub
+>>> blocks within the DSPP, SSPP, DSC, and PINGPONG blocks. Add wrapper
+>>> function to dump hardware blocks that contain sub blocks.
+>>>
+>>> Signed-off-by: Ryan McCann <quic_rmccann@quicinc.com>
+>>> ---
+>>>   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c | 194 
+>>> +++++++++++++++++++++++++++-----
+>>>   1 file changed, 168 insertions(+), 26 deletions(-)
+>>>
+>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c 
+>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+>>> index aa8499de1b9f..9b1b1c382269 100644
+>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+>>> @@ -885,6 +885,154 @@ static int dpu_irq_postinstall(struct msm_kms 
+>>> *kms)
+>>>       return 0;
+>>>   }
+>>> +static void dpu_kms_mdp_snapshot_add_block(struct msm_disp_state 
+>>> *disp_state,
+>>> +                       void __iomem *mmio, void *blk,
+>>> +                       enum dpu_hw_blk_type blk_type)
+>>
+>> No. Such multiplexers add no value to the code. Please inline it.
+>>
+>> Not to mention that this patch is hard to review. You both move 
+>> existing code and add new features. If it were to go, it should have 
+>> been split into two patches: one introducing the multiplexer and 
+>> another one adding subblocks.
+>>
+> 
+> Ok. we can split this into:
+> 
+> 1) adding the multiplexer
+> 2) adding sub-blk parsing support inside the multiplexer
 
-Sorry for the late reply.
-I carefully checked the server in the production environment and found
-some corner cases where there are differences in the dev/disk/by-path/ of
-nodes with the same SKU. These differences are caused by inconsistent
-target_numbers.
+I'd say, drop the multiplexer completely. It adds no value here. It is 
+only used from dpu_kms_mdp_snapshot(). If the code there was complex 
+enough, it would have made sense to _split_ the function. But even in 
+such case there would be no point in having multiplexer. We do not 
+enumerate block by type.
 
-For example:
+> 
+>>> +{
+>>> +    u32 base;
+>>> +
+>>> +    switch (blk_type) {
+>>> +    case DPU_HW_BLK_TOP:
+>>> +    {
+>>> +        struct dpu_mdp_cfg *top = (struct dpu_mdp_cfg *)blk;
+>>> +
+>>> +        if (top->features & BIT(DPU_MDP_PERIPH_0_REMOVED)) {
+>>> +            msm_disp_snapshot_add_block(disp_state, MDP_PERIPH_TOP0,
+>>> +                            mmio + top->base, "top");
+>>> +            msm_disp_snapshot_add_block(disp_state, top->len - 
+>>> MDP_PERIPH_TOP0_END,
+>>> +                            mmio + top->base + MDP_PERIPH_TOP0_END,
+>>> +                            "top_2");
+>>> +        } else {
+>>> +            msm_disp_snapshot_add_block(disp_state, top->len, mmio + 
+>>> top->base, "top");
+>>> +        }
+>>> +        break;
+>>> +    }
+>>> +    case DPU_HW_BLK_LM:
+>>> +    {
+>>> +        struct dpu_lm_cfg *mixer = (struct dpu_lm_cfg *)blk;
+>>> +
+>>> +        msm_disp_snapshot_add_block(disp_state, mixer->len, mmio + 
+>>> mixer->base, "%s",
+>>> +                        mixer->name);
+>>> +        break;
+>>> +    }
+>>> +    case DPU_HW_BLK_CTL:
+>>> +    {
+>>> +        struct dpu_ctl_cfg *ctl = (struct dpu_ctl_cfg *)blk;
+>>> +
+>>> +        msm_disp_snapshot_add_block(disp_state, ctl->len, mmio + 
+>>> ctl->base, "%s",
+>>> +                        ctl->name);
+>>> +        break;
+>>> +    }
+>>> +    case DPU_HW_BLK_INTF:
+>>> +    {
+>>> +        struct dpu_intf_cfg *intf = (struct dpu_intf_cfg *)blk;
+>>> +
+>>> +        msm_disp_snapshot_add_block(disp_state, intf->len, mmio + 
+>>> intf->base, "%s",
+>>> +                        intf->name);
+>>> +        break;
+>>> +    }
+>>> +    case DPU_HW_BLK_WB:
+>>> +    {
+>>> +        struct dpu_wb_cfg *wb = (struct dpu_wb_cfg *)blk;
+>>> +
+>>> +        msm_disp_snapshot_add_block(disp_state, wb->len, mmio + 
+>>> wb->base, "%s",
+>>> +                        wb->name);
+>>> +        break;
+>>> +    }
+>>> +    case DPU_HW_BLK_SSPP:
+>>> +    {
+>>> +        struct dpu_sspp_cfg *sspp_block = (struct dpu_sspp_cfg *)blk;
+>>> +        const struct dpu_sspp_sub_blks *sblk = sspp_block->sblk;
+>>> +
+>>> +        base = sspp_block->base;
+>>> +
+>>> +        msm_disp_snapshot_add_block(disp_state, sspp_block->len, 
+>>> mmio + base, "%s",
+>>> +                        sspp_block->name);
+>>> +
+>>> +        if (sspp_block->features & BIT(DPU_SSPP_SCALER_QSEED3) ||
+>>> +            sspp_block->features & BIT(DPU_SSPP_SCALER_QSEED3LITE) ||
+>>> +            sspp_block->features & BIT(DPU_SSPP_SCALER_QSEED4))
+>>> +            msm_disp_snapshot_add_block(disp_state, 
+>>> sblk->scaler_blk.len,
+>>> +                            mmio + base + sblk->scaler_blk.base, 
+>>> "%s_%s",
+>>> +                            sspp_block->name, sblk->scaler_blk.name);
+>>
+>> Actually, it would be better to:
+>> - drop name from all sblk instances (and use known string instead of 
+>> the sblk name here)
+>> - Use sblk->foo_blk.len to check if it should be printed or not.
+>>
+> 
+> No, I dont agree. If we drop the names from the sub_blk in the catalog, 
+> we will end up using "sub_blk_name" string here in the code to indicate 
+> which blk that is in the dump.
+> 
+> If we add more sub_blks in the catalog in the future we need to keep 
+> changing the code over here. Thats not how it should be.
+> 
+> Leaving the names in the catalog ensures that this code wont change and 
+> only catalog changes when we add a new sub_blk either for an existing or 
+> new chipset.
+> 
+> catalog is indicating the new blk, and dumping code just prints it.
+> 
+> with your approach, dumping code will or can keep changing with chipsets 
+> or sub_blks. Thats not how it should be.
 
-diff -y aa-by-path bb-by-path
-pci-0000:86:00.0-scsi-0:3:86:0 -> ../../sda |
-pci-0000:86:00.0-scsi-0:3:88:0 -> ../../sda
-pci-0000:86:00.0-scsi-0:3:87:0 -> ../../sdb |
-pci-0000:86:00.0-scsi-0:3:89:0 -> ../../sdb
-pci-0000:86:00.0-scsi-0:3:88:0 -> ../../sdc |
-pci-0000:86:00.0-scsi-0:3:90:0 -> ../../sdc
-pci-0000:86:00.0-scsi-0:3:89:0 -> ../../sdd |
-pci-0000:86:00.0-scsi-0:3:91:0 -> ../../sdd
-pci-0000:86:00.0-scsi-0:3:90:0 -> ../../sde |
-pci-0000:86:00.0-scsi-0:3:92:0 -> ../../sde
-pci-0000:86:00.0-scsi-0:3:92:0 -> ../../sdf |
-pci-0000:86:00.0-scsi-0:3:93:0 -> ../../sdf
-pci-0000:86:00.0-scsi-0:3:93:0 -> ../../sdg |
-pci-0000:86:00.0-scsi-0:3:94:0 -> ../../sdg
-pci-0000:86:00.0-scsi-0:3:94:0 -> ../../sdh |
-pci-0000:86:00.0-scsi-0:3:95:0 -> ../../sdh
+Well, we do not enumerate sub-blocks in any way, they are not indexed. 
+So even with sblk->blk.name in place, adding new sub-block would require 
+adding new code here. That's why I wrote that the calling code knows 
+which sub-block it refers to.
 
-I'm still not sure what causes the target_numbers to be different.
-However, the existence of such corner cases makes /dev/disk/by-path
-unusable for the volume provisioner, similar to /dev/disk/by-id/.
+Let me extract the relevant code (skipping all the conditions for now):
 
-So, If it's not possible to configure disk serialization detection, then
-it seems that implementing predictable disk names is the only option.
+msm_disp_snapshot_add_block(disp_state, sspp_block->len, mmio + base, "%s",
+			    sspp_block->name);
 
-Jianlin
+if (have_scaler)
+	msm_disp_snapshot_add_block(disp_state, sblk->scaler_blk.len,
+				    mmio + base + sblk->scaler_blk.base, "%s_%s",
+				    sspp_block->name, sblk->scaler_blk.name);
 
->
-> Thanks,
->
-> Bart.
+if (have_csc)
+	msm_disp_snapshot_add_block(disp_state, sblk->csc_blk.len,
+				    mmio + base + sblk->csc_blk.base, "%s_%s",
+				    sspp_block->name, sblk->csc_blk.name);
+
+Consider adding new sub-block, "baz". We would still require manual 
+addition of the following code:
+
+	msm_disp_snapshot_add_block(disp_state, sblk->baz_blk.len,
+				    mmio + base + sblk->baz_blk.base, "%s_%s",
+				    sspp_block->name, sblk->baz_blk.name);
+
+
+Compare this with:
+
+	msm_disp_snapshot_add_block(disp_state, sblk->baz_blk.len,
+				    mmio + base + sblk->baz_blk.base, "%s_baz",
+				    sspp_block->name);
+
+Moreover, if we follow the style of dpu_kms_mdp_snapshot() (which 
+doesn't use name), it should be:
+
+	msm_disp_snapshot_add_block(disp_state, sblk->baz_blk.len,
+				    mmio + base + sblk->baz_blk.base, "sspp%d_baz", idx);
+
+
+
+> 
+>>> +
+>>> +        if (sspp_block->features & BIT(DPU_SSPP_CSC) || 
+>>> sspp_block->features
+>>> +                    & BIT(DPU_SSPP_CSC_10BIT))
+>>
+>> A very bad use of indentation. In future please split logically rather 
+>> than just filling the line up to the line width.
+>>
+>>> +            msm_disp_snapshot_add_block(disp_state, sblk->csc_blk.len,
+>>> +                            mmio + base + sblk->csc_blk.base, "%s_%s",
+>>> +                            sspp_block->name, sblk->csc_blk.name);
+>>> +        break;
+>>> +    }
+>>> +    case DPU_HW_BLK_DSPP:
+>>> +    {
+>>> +        struct dpu_dspp_cfg *dspp_block = (struct dpu_dspp_cfg *)blk;
+>>> +
+>>> +        base = dspp_block->base;
+>>> +
+>>> +        msm_disp_snapshot_add_block(disp_state, dspp_block->len, 
+>>> mmio + base, "%s",
+>>> +                        dspp_block->name);
+>>> +
+>>> +        if (dspp_block->features & BIT(DPU_DSPP_PCC))
+>>> +            msm_disp_snapshot_add_block(disp_state, 
+>>> dspp_block->sblk->pcc.len,
+>>> +                            mmio + base + dspp_block->sblk->pcc.base,
+>>> +                            "%s_%s", dspp_block->name,
+>>> +                            dspp_block->sblk->pcc.name);
+>>> +        break;
+>>> +    }
+>>> +    case DPU_HW_BLK_PINGPONG:
+>>> +    {
+>>> +        struct dpu_pingpong_cfg *pingpong_block = (struct 
+>>> dpu_pingpong_cfg *)blk;
+>>> +        const struct dpu_pingpong_sub_blks *sblk = 
+>>> pingpong_block->sblk;
+>>> +
+>>> +        base = pingpong_block->base;
+>>> +
+>>> +        msm_disp_snapshot_add_block(disp_state, pingpong_block->len, 
+>>> mmio + base, "%s",
+>>> +                        pingpong_block->name);
+>>> +
+>>> +        if (pingpong_block->features & BIT(DPU_PINGPONG_TE2))
+>>> +            msm_disp_snapshot_add_block(disp_state, sblk->te2.len,
+>>> +                            mmio + base + sblk->te2.base, "%s_%s",
+>>> +                            pingpong_block->name, sblk->te2.name);
+>>> +
+>>> +        if (pingpong_block->features & BIT(DPU_PINGPONG_DITHER))
+>>> +            msm_disp_snapshot_add_block(disp_state, sblk->dither.len,
+>>> +                            mmio + base + sblk->dither.base, "%s_%s",
+>>> +                            pingpong_block->name, sblk->dither.name);
+>>> +        break;
+>>> +    }
+>>> +    case DPU_HW_BLK_DSC:
+>>> +    {
+>>> +        struct dpu_dsc_cfg *dsc_block = (struct dpu_dsc_cfg *)blk;
+>>> +
+>>> +        base = dsc_block->base;
+>>> +
+>>> +        if (dsc_block->features & BIT(DPU_DSC_HW_REV_1_2)) {
+>>> +            struct dpu_dsc_blk enc = dsc_block->sblk->enc;
+>>> +            struct dpu_dsc_blk ctl = dsc_block->sblk->ctl;
+>>> +
+>>> +            /* For now, pass in a length of 0 because the DSC_BLK 
+>>> register space
+>>> +             * overlaps with the sblks' register space.
+>>> +             *
+>>> +             * TODO: Pass in a length of 0 t0 DSC_BLK_1_2 in the HW 
+>>> catalog where
+>>> +             * applicable.
+>>
+>> Nice catch, thank you. We should fix that.
+>>
+> 
+> Yes and we would have fixed that ourself if you wanted that with this 
+> series as another patch.
+
+This is not relevant to this series, so it should be fixed in a separate 
+series.
+
+-- 
+With best wishes
+Dmitry
+
