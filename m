@@ -2,77 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B64F73C5DC
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 03:34:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 144E973C5D7
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 03:33:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231713AbjFXBeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 21:34:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57914 "EHLO
+        id S231561AbjFXBcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 21:32:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbjFXBer (ORCPT
+        with ESMTP id S229630AbjFXBcE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 21:34:47 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5644213A;
-        Fri, 23 Jun 2023 18:34:45 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-6686c74183cso1050759b3a.1;
-        Fri, 23 Jun 2023 18:34:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687570485; x=1690162485;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NweAbjy52dJmvgrS5Se3FN0lnSLavmsB+nKxFGPGvW0=;
-        b=VSGfQTWVWsbp9D+RhlgroWtsItjwsd+PAsju+hPuWGHSmM2/N6JW/0cyml04B5fnDA
-         S6Oja8X71oM1CVdjhclXpm3mU3WwX/vzDHeHPqLfz5PFyuGHNzknB3hAjH89MEMfszI0
-         D7qh7o4mervwSD6aRKthAHFjjCLVmOG90BqJ9r4jfR91KjFoFLHUN4FPNi4/od9UnaAP
-         Fu5sq0g8N68zOOIGbpCp+pGjSvzyN7kt9GY5h52bNLOGoaAOZk2lbrB25Lzve2A9CmcD
-         lTosl3lLEdYxYlsRATwecnEOk19Eeu5zot2eFK45XTNHzPSdVRyu1GAszlfdQ2LQMVbM
-         O8Ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687570485; x=1690162485;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NweAbjy52dJmvgrS5Se3FN0lnSLavmsB+nKxFGPGvW0=;
-        b=f3J7dNBQlGrxy3qJc5an1Oa/Gt7mU+76Dr/w2RN/AAQzxHclgqPDG5aBIZdKv4alNu
-         cDtR0hfn0sx0I+1DvUSZ19aOcXPQN0qFLUL+oSVi1zfEIKqzFtEYDYDQIXc20W1w4AF2
-         38ZaaMWfdNIt5IWJKHqLW2HMCJtgzbfBkFW5KGtvlEPkevC8v5uLf1nuhgNYiZpK3B4F
-         oDw2FfY1hJ9ePmw4pGF5awf2WEN0JLUivNOdq3hk6tDfeCdNvWZoF8HZDTLI8wHdgV2e
-         vZKjtcbMTZnGe568WlFjHwGz2LZKOHY9E7gtxXVoInd0SWpgv7WagBVLXVInq7+Q2NyW
-         YZpQ==
-X-Gm-Message-State: AC+VfDyGde3DaAS4cbbmDMlYHgUhXwVjxPW+gcGeDjD9JWHRgStyrIsO
-        N+d1XuQ7HTwhXU/9mmTzBcgVYSs0DAFYow==
-X-Google-Smtp-Source: ACHHUZ4EaqFt6nWD83dMOJjUmyNBRz7LaE9yDDNtm67kqPMvxGc6jCP04lmsfP6QNI8sfJL/8U7eVw==
-X-Received: by 2002:a05:6a20:2588:b0:11d:2764:d9c1 with SMTP id k8-20020a056a20258800b0011d2764d9c1mr27851326pzd.51.1687570485339;
-        Fri, 23 Jun 2023 18:34:45 -0700 (PDT)
-Received: from debian.me ([103.131.18.64])
-        by smtp.gmail.com with ESMTPSA id 24-20020a631258000000b0054fe07d2f3dsm240316pgs.11.2023.06.23.18.34.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Jun 2023 18:34:44 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 467208BFA791; Sat, 24 Jun 2023 08:25:40 +0700 (WIB)
-Date:   Sat, 24 Jun 2023 08:25:39 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Elmar Stellnberger <estellnb@elstel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux Memory Management <linux-mm@kvack.org>,
-        Linux Stable <stable@vger.kernel.org>
-Subject: Re: Fwd: kernel fault on hibernation: get_zeroed_page/swsusp_write
-Message-ID: <ZJZGE4ZxJzrhRznA@debian.me>
-References: <5d4959b7-61da-8ab0-6bc6-21305d37c7aa@gmail.com>
- <ZJXFgfldS6W_LCiI@mail.dotplex.com>
+        Fri, 23 Jun 2023 21:32:04 -0400
+Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C5A7213A
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 18:32:02 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VlnYVQs_1687570316;
+Received: from 172.20.10.2(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VlnYVQs_1687570316)
+          by smtp.aliyun-inc.com;
+          Sat, 24 Jun 2023 09:31:58 +0800
+Message-ID: <8573c838-bb88-83c1-4680-3cc500586e02@linux.alibaba.com>
+Date:   Sat, 24 Jun 2023 09:31:51 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="r2ki5HdcOTzEK4x7"
-Content-Disposition: inline
-In-Reply-To: <ZJXFgfldS6W_LCiI@mail.dotplex.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.12.0
+Subject: Re: [RFC 0/2] erofs: introduce bloom filter for xattr
+To:     Alexander Larsson <alexl@redhat.com>
+Cc:     hsiangkao@linux.alibaba.com, chao@kernel.org, huyue2@coolpad.com,
+        linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org
+References: <20230621083209.116024-1-jefflexu@linux.alibaba.com>
+ <CAL7ro1EmCcienVMY7Pi_mEFbUiLZq24EGOyFovexmpJMGbfjcA@mail.gmail.com>
+ <3730215c-d59d-8b8e-fe36-7754f7782d15@linux.alibaba.com>
+ <CAL7ro1HhYUDrOX7A-13p7rLBZSWHTQWGOdOzVcYkddkU_LArUw@mail.gmail.com>
+Content-Language: en-US
+From:   Jingbo Xu <jefflexu@linux.alibaba.com>
+In-Reply-To: <CAL7ro1HhYUDrOX7A-13p7rLBZSWHTQWGOdOzVcYkddkU_LArUw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -80,62 +48,140 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---r2ki5HdcOTzEK4x7
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jun 23, 2023 at 06:17:05PM +0200, Elmar Stellnberger wrote:
-> Hi all, Hi Bagas S.
->=20
-> As the issue didn't reproduce the way I would have liked (did not
-> reproduce at all here, not even with the same kernel version; no
-> further comment) I have now uploaded the /proc/kcore and the kernel
-> binaries and symbol files I still had on disk at
-> https://upload.elstel.info (This may move to something like
-> upload.elstel.info/bugs/kernpagealloc in the future)
->=20
+On 6/22/23 3:56 PM, Alexander Larsson wrote:
+> On Thu, Jun 22, 2023 at 8:37 AM Jingbo Xu <jefflexu@linux.alibaba.com> wrote:
+>>
+>>
+>>
+>> On 6/21/23 7:50 PM, Alexander Larsson wrote:
+>>> On Wed, Jun 21, 2023 at 10:32 AM Jingbo Xu <jefflexu@linux.alibaba.com> wrote:
+>>>>
+>>>> Background
+>>>> ==========
+>>>> Filesystems with ACL enabled generally need to read
+>>>> "system.posix_acl_access"/"system.posix_acl_default" xattr to get the
+>>>> access and default ACL.  When filesystem is mounted with ACL enabled
+>>>> while files in the system have not set access/default ACL, the getattr()
+>>>> will run in vain while the round trip can decrease the performance in
+>>>> workload like "ls -lR".
+>>>>
+>>>> For example, there's a 12% performance boost if erofs is mounted with
+>>>> "noacl" when running "ls -lR" workload on dataset [1] (given in [2]).
+>>>>
+>>>> We'd better offer a fastpath to boost the above workload, as well as
+>>>> other negative xattr lookup.
+>>>>
+>>>>
+>>>> Proposal
+>>>> ========
+>>>> Introduce a per-inode bloom filter for xattrs to boost the negative
+>>>> xattr queries.
+>>>>
+>>>> As following shows, a 32-bit bloom filter is introduced for each inode,
+>>>> describing if a xattr with specific name exists on this inode.
+>>>>
+>>>> ```
+>>>>  struct erofs_xattr_ibody_header {
+>>>> -       __le32 h_reserved;
+>>>> +       __le32 h_map; /* bloom filter */
+>>>>         ...
+>>>> }
+>>>> ```
+>>>>
+>>>> Following are some implementation details for bloom filter.
+>>>>
+>>>> 1. Reverse bit value
+>>>> --------------------
+>>>> The bloom filter structure describes if a given data is inside the set.
+>>>> It will map the given data into several bits of the bloom filter map.
+>>>> The data must not exist inside the set if any mapped bit is 0, while the
+>>>> data may be not inside the set even if all mapped bits is 1.
+>>>>
+>>>> While in our use case, as erofs_xattr_ibody_header.h_map is previously a
+>>>> (all zero) reserved field, the bit value for the bloom filter has a
+>>>> reverse semantics in consideration for compatibility.  That is, for a
+>>>> given data, the mapped bits will be cleared to 0.  Thus for a previously
+>>>> built image without support for bloom filter, the bloom filter is all
+>>>> zero and when it's mounted by the new kernel with support for bloom
+>>>> filter, it can not determine if the queried xattr exists on the inode and
+>>>> thus will fallback to the original routine of iterating all on-disk
+>>>> xattrs to determine if the queried xattr exists.
+>>>>
+>>>>
+>>>> 2. The number of hash functions
+>>>> -------------------------------
+>>>> The optimal value for the number of the hash functions (k) is (ln2 *
+>>>> m/n), where m stands the number of bits of the bloom filter map, while n
+>>>> stands the number of all candidates may be inside the set.
+>>>>
+>>>> In our use case, the number of common used xattr (n) is approximately 8,
+>>>> including system.[posix_acl_access|posix_acl_default],
+>>>> security.[capability|selinux] and
+>>>> security.[SMACK64|SMACK64TRANSMUTE|SMACK64EXEC|SMACK64MMAP].
+>>>>
+>>>> Given the number of bits of the bloom filter (m) is 32, the optimal value
+>>>> for the number of the hash functions (k) is 2 (ln2 * m/n = 2.7).
+>>>
+>>> This is indeed the optimal value in a traditional use of bloom
+>>> filters. However, I think it is based on a much larger set of values.
+>>> For this usecase it may be better to choose a different value.
+>>>
+>>> I did some research a while ago on this, and I thought about the
+>>> counts too. Having more than one hash function is useful because it
+>>> allows you to avoid problems if two values happen to hash to the same
+>>> bucket, but this happens at the cost of there being less "unique
+>>> buckets".  I spent some time looking for common xattr values
+>>> (including some from userspace) and ended up with a list of about 30.
+>>
+>> Yeah, if the number of common used xattr (n) is 30, then the optimal
+>> value for the number of the hash functions (k) is 1 (ln2 * m/n = 0.74).
+>> The optimal value in theory also matches our intuition.
+>>
+>>
+>>> If we can choose a single hash function that maps all (or most) of
+>>> these to a unique bucket (mod 32),
+>>
+>> Excellent research!  Would you mind sharing the list of these
+>> approximately 30 commonly used xattrs, so that I could check if they are
+>> mapped to unique bucket with the single hash function we proposed?
+> 
+> This is the list I came up with:
+> 
+> trusted.overlay.opaque
+> trusted.overlay.redirect
+> trusted.overlay.origin
+> trusted.overlay.impure
+> trusted.overlay.nlink
+> trusted.overlay.upper
+> trusted.overlay.metacopy
+> trusted.overlay.protattr
+> user.overlay.opaque
+> user.overlay.redirect
+> user.overlay.origin
+> user.overlay.impure
+> user.overlay.nlink
+> user.overlay.upper
+> user.overlay.metacopy
+> user.overlay.protattr
+> security.evm
+> security.ima
+> security.selinux
+> security.SMACK64
+> security.SMACK64IPIN
+> security.SMACK64IPOUT
+> security.SMACK64EXEC
+> security.SMACK64TRANSMUTE
+> security.SMACK64MMAP
+> security.apparmor
+> security.capability
+> system.posix_acl_access
+> system.posix_acl_default
+> user.mime_type
+> 
 
-First, tl;dr:
+Got it.  Thanks a lot!
 
-> A: http://en.wikipedia.org/wiki/Top_post
-> Q: Were do I find info about this thing called top-posting?
-> A: Because it messes up the order in which people normally read text.
-> Q: Why is top-posting such a bad thing?
-> A: Top-posting.
-> Q: What is the most annoying thing in e-mail?
->=20
-> A: No.
-> Q: Should I include quotations after my reply?
->=20
-> http://daringfireball.net/2007/07/on_top
-
-Can you attach [1] to your Bugzilla report? Also, any report on bisection?
-
-Also, you don't need to upload full kernel images instead; people can
-grab /proc/config.gz you uploaded on Bugzilla and then `make olddefconfig`
-=66rom it.
-
-Anyway, telling regzbot:
-
-#regzbot link: https://upload.elstel.info/kcore.xz
-
-Thanks.
-
-[1]: https://upload.elstel.info/kcore.xz
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---r2ki5HdcOTzEK4x7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZJZGCwAKCRD2uYlJVVFO
-o8DMAQC6zR1yWAa7UjG6IkGQnqbipk2vCuN918vTrru6uzJIMQEA3roDgr7VTrHm
-nimvRUDgB4IcrFpNlJFzdVpaRrSpDws=
-=DDa0
------END PGP SIGNATURE-----
-
---r2ki5HdcOTzEK4x7--
+-- 
+Thanks,
+Jingbo
