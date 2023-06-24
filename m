@@ -2,115 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A704173CB33
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 15:57:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 249E273CB39
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 16:00:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233120AbjFXN5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 09:57:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35386 "EHLO
+        id S233139AbjFXOAh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 10:00:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233045AbjFXN5M (ORCPT
+        with ESMTP id S230461AbjFXOAf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 09:57:12 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3881FBB
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 06:57:11 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f76a0a19d4so2205655e87.2
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 06:57:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687615029; x=1690207029;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9aKXFcPZYN71lVrD41n3tvciEk57GS1gmN4aKHDSr8k=;
-        b=nh7egyfbs9EQjNOJlyeC3lUbpEBELjaN9kojbnICztH1ZvUQrGYmxTNpJlbcMfTKhE
-         LeGMR3dTTFhyZSh5iRSA+56JNd+mJbwnugBeUxCJ+Re0JiC9wWxvz8NqUT5XugumCsa8
-         jW3KNXeuwCtcVAnUUCDv6GChuj2NPivSSNnEHUBgqS4D+viapIpsUAyHHe0qFEwz2MUE
-         yX0lZbuyJsa+HAc9/KiEvGjA2mOtoabDyz3fJy5Yq+Ynv5kwM4qucf6qNmMrBTo2JB+l
-         MvbIfmzsp5NaV4bg/USumfm2z/kDfyKUYH2P3ccB+PAZjSjjxMQLzpYwg0Yy7UjG9ZbL
-         GkNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687615029; x=1690207029;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9aKXFcPZYN71lVrD41n3tvciEk57GS1gmN4aKHDSr8k=;
-        b=fhkqQY5rAcMhrbVsNvrVRSSVnf6HWPRXOouA5m1kILh/JoZf0413IirK3Sht3N+LkV
-         3rFdH789t2PGUviJv1sudqxggPDmU75vnQJB+4T6hFD8SOxrVGJ5YZWIRyCB/IY/0LTR
-         KmGQ6WcarJJxJY2ihO5MEzUL7IbPn1yi+TdCgrQkZ5oeC2nrGoWK+6YRbgGqh1XgY2HY
-         wOg23QkAJoFnKremWyk3Z68j5EW+X9gOOT1JAcEJS/gv4wZ3yRHAbgOtoTkEKezMHLNz
-         SSwHVPlbN2mxpF//AOYGd6wcLZvkYJ9t79VN+A+uHB+eNjyZ0x8Ce7n4Y30Sa0C1UbLk
-         5GYA==
-X-Gm-Message-State: AC+VfDwciaguiP5Iaf8RUOdoCWbUEj2Ep3ziqG8bqgfziiFE4SyQSFMY
-        UxsGf5Pr6sGoUNtuWBkcLEbONQ==
-X-Google-Smtp-Source: ACHHUZ6k1LKKBFNt/EX0E7NN433j+xnsZspguI8URc9lAQkFAD13Q5b2hqPG6AkXMdmpgD7FDiPWcQ==
-X-Received: by 2002:a19:da02:0:b0:4f8:70d8:28f8 with SMTP id r2-20020a19da02000000b004f870d828f8mr11500375lfg.55.1687615029558;
-        Sat, 24 Jun 2023 06:57:09 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id x23-20020ac24897000000b004f643664882sm287279lfc.147.2023.06.24.06.57.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 24 Jun 2023 06:57:08 -0700 (PDT)
-Message-ID: <5bdb02d7-74c3-2d54-28c5-eb5d33ddbdba@linaro.org>
-Date:   Sat, 24 Jun 2023 16:57:08 +0300
+        Sat, 24 Jun 2023 10:00:35 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8339011F;
+        Sat, 24 Jun 2023 07:00:34 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1qD3oU-0002F4-Q1; Sat, 24 Jun 2023 16:00:30 +0200
+Message-ID: <08ea34c8-7194-eafb-98f4-1e0b52ca7e81@leemhuis.info>
+Date:   Sat, 24 Jun 2023 16:00:30 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH V5 5/5] arm64: dts: qcom: sm8550: Add camera clock
- controller
-Content-Language: en-GB
-To:     Jagadeesh Kona <quic_jkona@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Taniya Das <quic_tdas@quicinc.com>,
-        Satya Priya Kakitapalli <quic_skakitap@quicinc.com>,
-        Imran Shaik <quic_imrashai@quicinc.com>,
-        Ajit Pandey <quic_ajipan@quicinc.com>
-References: <20230623164619.11464-1-quic_jkona@quicinc.com>
- <20230623164619.11464-6-quic_jkona@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230623164619.11464-6-quic_jkona@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+ Thunderbird/102.12.0
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+Subject: Re: After kernel 6.3.7 or 6.3.8 b43 driver fails
+Content-Language: en-US, de-DE
+To:     Arnd Bergmann <arnd@arndb.de>,
+        =?UTF-8?Q?Michael_B=c3=bcsch?= <m@bues.ch>,
+        Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux Wireless <linux-wireless@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        Kalle Valo <kvalo@kernel.org>, sardonimous@hotmail.com
+References: <27829c69-515c-36a6-4beb-3210225f8936@gmail.com>
+ <20230624105023.146d99e0@barney>
+ <d33a248c-c7ac-43d3-b602-3c801d697922@app.fastmail.com>
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+In-Reply-To: <d33a248c-c7ac-43d3-b602-3c801d697922@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1687615234;ca01182a;
+X-HE-SMSGID: 1qD3oU-0002F4-Q1
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/06/2023 19:46, Jagadeesh Kona wrote:
-> Add device node for camera clock controller on Qualcomm
-> SM8550 platform.
+On 24.06.23 11:29, Arnd Bergmann wrote:
+> On Sat, Jun 24, 2023, at 10:50, Michael Büsch wrote:
+>> On Sat, 24 Jun 2023 08:44:15 +0700
+>> Bagas Sanjaya <bagasdotme@gmail.com> wrote:
+>>>> I suspect change introduced when addressing a compiler warning
+>>>> cased the error.
+>>>>
+>>>> https://patchwork.kernel.org/project/linux-wireless/patch/20230516183442.536589-1-arnd%40kernel.org/
+>>
+>> I doubt it.
+>> This patch affects the device initialization code. But the crash is in
+>> the transmit path.
+>> Can you please double check by manually reverting the patch?
 > 
-> Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
-> ---
-> Changes since v4:
->   - No changes
-> Changes since v3:
->   - No changes
-> Changes since v2:
->   - No changes
-> Changes since v1:
->   - Padded non-zero address part to 8 hex digits
-> 
->   arch/arm64/boot/dts/qcom/sm8550.dtsi | 15 +++++++++++++++
->   1 file changed, 15 insertions(+)
+> I'm travelling at the moment and can't easily check it, but I would
+> expect that my patch has no effect on the generated object code [...]
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Michael, Arnd, thx for the replies. To you and everyone else that looked
+into this: sorry for the trouble this caused.
 
--- 
-With best wishes
-Dmitry
+The reporter's guess was wrong, as the reporter meanwhile confirmed in
+the bugzilla ticket that the problem started to happen earlier.
+
+Bagas, please be a bit more careful and don't blame a specific commit
+unless it's was found by bisection, a revert through a lucky guess, a
+statement from a developer, or something like that. In cases like this
+it would have been better to sent the developers of said commit a quick
+mail along the lines of "could you imagine that this change could lead
+to the problem the reporter described". But even that might be too much
+in a case like this, as too many of such false alarms and inquiries will
+make developers start hating or ignoring regression tracking in general
+or mails from you or me – and that is something that must be avoided, as
+without help from developers regression tracking becomes a lot harder or
+impossible.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
+
+P.S.: Updating regzbot status, while at it:
+
+#regzbot introduced: v6.1..v6.2
+
+
+
+
 
