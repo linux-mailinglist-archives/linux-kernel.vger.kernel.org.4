@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0EB073CC75
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 20:43:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48EED73CC78
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 20:43:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233272AbjFXSnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 14:43:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48428 "EHLO
+        id S233269AbjFXSnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 14:43:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233263AbjFXSmw (ORCPT
+        with ESMTP id S233279AbjFXSm4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 14:42:52 -0400
+        Sat, 24 Jun 2023 14:42:56 -0400
 Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FFC51BFC;
-        Sat, 24 Jun 2023 11:42:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC22826B9;
+        Sat, 24 Jun 2023 11:42:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1687632144; bh=f9UodCze65MUHVrQj48fTjyEJzJh37WtI+PaqIa5H+k=;
+        t=1687632157; bh=kdNQ2yRcFr3QXcyAJBTxhivt3gO0Oi9ZzFCGa8V1v6A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mLA1oLCkI9h4Jq9YMA+9CG3mDdmdq7a46L7WIZHxgJXuoymtG8dH5DH0h/jg5IPRo
-         j5VIDnrzDGdie8ylPLOraxE0gpp1sF5lbn8/N9v7XisY4uDX4w2W7l3Jsjn0mIIgdQ
-         oZ8bqTFCGFacslqv2DR8M5DAiWVKBMuvkaCZzbkE=
+        b=LgMY6Ylu1pRlcNNel0Jy0i1lUMQFOXsGwwyT0jGdFr2ySeO3O5tTBG57kruUb4ZTQ
+         RwvaMqXkAJtGy3vrMfV1zV3gC8gLpEo/AX38NrpT5/5C4EqkxBDPUpTyyks6bw8yYu
+         aSh76a9q4XcsHeMpbYDabNEWwK29h4CZ6PFFHniU=
 Received: from ld50.lan (unknown [101.88.25.181])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 3595D605E5;
-        Sun, 25 Jun 2023 02:42:24 +0800 (CST)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 5D5D9600B5;
+        Sun, 25 Jun 2023 02:42:37 +0800 (CST)
 From:   WANG Xuerui <kernel@xen0n.name>
 To:     Huacai Chen <chenhuacai@kernel.org>
 Cc:     WANG Rui <wangrui@loongson.cn>, Xi Ruoyao <xry111@xry111.site>,
@@ -34,9 +34,9 @@ Cc:     WANG Rui <wangrui@loongson.cn>, Xi Ruoyao <xry111@xry111.site>,
         llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
         WANG Xuerui <git@xen0n.name>,
         Nick Desaulniers <ndesaulniers@google.com>
-Subject: [PATCH v2 8/9] LoongArch: Mark Clang LTO as working
-Date:   Sun, 25 Jun 2023 02:40:54 +0800
-Message-Id: <20230624184055.3000636-9-kernel@xen0n.name>
+Subject: [PATCH v2 9/9] Makefile: Add loongarch target flag for Clang compilation
+Date:   Sun, 25 Jun 2023 02:40:55 +0800
+Message-Id: <20230624184055.3000636-10-kernel@xen0n.name>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230624184055.3000636-1-kernel@xen0n.name>
 References: <20230624184055.3000636-1-kernel@xen0n.name>
@@ -54,27 +54,28 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: WANG Xuerui <git@xen0n.name>
 
-Confirmed working with QEMU system emulation.
+The LoongArch kernel is 64-bit and built with the soft-float ABI,
+hence the loongarch64-linux-gnusf target. (The "libc" part doesn't
+matter.)
 
 Signed-off-by: WANG Xuerui <git@xen0n.name>
-Acked-by: Nick Desaulniers <ndesaulniers@google.com>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 ---
- arch/loongarch/Kconfig | 2 ++
- 1 file changed, 2 insertions(+)
+ scripts/Makefile.clang | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index ac3564935281..ed9a148cdcde 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -51,6 +51,8 @@ config LOONGARCH
- 	select ARCH_SUPPORTS_ACPI
- 	select ARCH_SUPPORTS_ATOMIC_RMW
- 	select ARCH_SUPPORTS_HUGETLBFS
-+	select ARCH_SUPPORTS_LTO_CLANG
-+	select ARCH_SUPPORTS_LTO_CLANG_THIN
- 	select ARCH_SUPPORTS_NUMA_BALANCING
- 	select ARCH_USE_BUILTIN_BSWAP
- 	select ARCH_USE_CMPXCHG_LOCKREF
+diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
+index 058a4c0f864e..6c23c6af797f 100644
+--- a/scripts/Makefile.clang
++++ b/scripts/Makefile.clang
+@@ -4,6 +4,7 @@
+ CLANG_TARGET_FLAGS_arm		:= arm-linux-gnueabi
+ CLANG_TARGET_FLAGS_arm64	:= aarch64-linux-gnu
+ CLANG_TARGET_FLAGS_hexagon	:= hexagon-linux-musl
++CLANG_TARGET_FLAGS_loongarch	:= loongarch64-linux-gnusf
+ CLANG_TARGET_FLAGS_m68k		:= m68k-linux-gnu
+ CLANG_TARGET_FLAGS_mips		:= mipsel-linux-gnu
+ CLANG_TARGET_FLAGS_powerpc	:= powerpc64le-linux-gnu
 -- 
 2.40.0
 
