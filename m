@@ -2,147 +2,427 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 411FD73C629
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 03:55:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36F8A73C62E
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 03:59:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232184AbjFXBzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 21:55:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36284 "EHLO
+        id S230516AbjFXB65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 21:58:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232108AbjFXBzd (ORCPT
+        with ESMTP id S229591AbjFXB64 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 21:55:33 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BBDB273E;
-        Fri, 23 Jun 2023 18:55:32 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1b52bf6e669so9913995ad.2;
-        Fri, 23 Jun 2023 18:55:32 -0700 (PDT)
+        Fri, 23 Jun 2023 21:58:56 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C856F273E
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 18:58:53 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id 3f1490d57ef6-bff0beb2d82so1109438276.2
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 18:58:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687571732; x=1690163732;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QARueVM5NgEI8ly6kngoX66nkjJ1HIAQ25yUVJM/M7k=;
-        b=jnZC2ybL2QP1QYE4yr+wvqkrseWiA9e6NoqP59ZFdonp0a0kyhkp+nxwBRo6v1Y6Z/
-         YBydA7V4cijiWmqQJyW4qnDfnVFc68PWFrCyQW3WfyV83ZcXiNsnDb36P/IPvxrgawFQ
-         PdsKZv5Qeij8R+FWyRTJSBaFp39sDmm1TEDZXejL81ABXEvWRWyW8842SfLapBaR16sF
-         vD+ELtc/pHAw+pFteF4AqHPumHwOHQ8Xukac1UTuqCAW8wrP8Mwv7RW0ehQhkTSuQINb
-         3rHDLxwqMxX1Ty8DNYaLL6kO4Y4zAIst7+KWnQ3JQ6oIvuvnGT2NsAhP5/RdOvdpuSiy
-         65Eg==
+        d=google.com; s=20221208; t=1687571933; x=1690163933;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=I1FbghDCXPdnalfOCUOUdP/9R5wF4RgIXd2HPjWZgLg=;
+        b=S5REaxXbnGZmZWUQ0uPlHyssDp73WmsNLlZMGRo/eX+Szbx2fcyjFLiKbtbzA7vo0J
+         e7P7y8BHQKivA4PXIG2/ACK8ak2QITJhAQh4EFKCMK83Q7SaXHQmBYB61rYjANc9xWQv
+         xdVPYJ8GUzTge2F0q2kV8GKOq9OkklJ9mhHah/G5yMQAp/yc5554WVHe4OpITR7OC5D1
+         cMiEvZj77N1XVpxwNLwV4N1gZpISLA0/dH823+ChKrnHZbZpJG7ZTUhfw9MupPlXGVqD
+         m4Tugf0aaOAMmO2TtL6xO7snDCM3bmPGaj5R+VKbC37vHomgHXnLGkUDsPeXvibmkIjP
+         Yxyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687571732; x=1690163732;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1687571933; x=1690163933;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=QARueVM5NgEI8ly6kngoX66nkjJ1HIAQ25yUVJM/M7k=;
-        b=SGFDTHtNBzrFI1rAqzLPj4AxcZnjGEWr9Ly5TOrMTfIk6Mz/+kLUHQA6nuIIYo1hGc
-         JY/e5CFVlKngxo459jOPqzho64957EUGAJeXfLGEem8A4DAVvhnImpy84HYkElvJ0huQ
-         KyB7qSVzf/oHrCLlIhh/tSXsC6WlLdR2QBrxiH7rQsZTuJvdMR1MVjZZDuWj4M8buYgR
-         IBLmLwRynO0uc4xA4hgiJkqc+CKjuezuZR5MpVtHjGRy3Flu+rHajWrAc7iFmKwy3xME
-         L0fUaJr5fvUK9BsSUCVC3BdkUETI8ujVfWwK6Vc3QX6UT9NMSewr9JO5GyJKquIyIIFe
-         QRjQ==
-X-Gm-Message-State: AC+VfDw2bUm5UUsTZ4uih77FefgKRjy/7u3t3DJ0cjJd5t3W8+Ikv42a
-        Bb9IA88yMAhCIwqt8DrYgfOPC3+2QiM=
-X-Google-Smtp-Source: ACHHUZ7EKMVxU8TWRgRU9+XwK7LYVXWH3v+gEDo5Epfh8lUR0ifndnY3uj+0AVLI0zG/i3TrUbosxA==
-X-Received: by 2002:a17:902:d50c:b0:1b0:4a37:9ccc with SMTP id b12-20020a170902d50c00b001b04a379cccmr736136plg.62.1687571731937;
-        Fri, 23 Jun 2023 18:55:31 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id jn16-20020a170903051000b001b53472353csm172067plb.211.2023.06.23.18.55.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Jun 2023 18:55:31 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 23 Jun 2023 18:55:29 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     arnd@arndb.de, daniel.vetter@ffwll.ch, deller@gmx.de,
-        javierm@redhat.com, gregkh@linuxfoundation.org,
-        linux-arch@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-sh@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-mips@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        loongarch@lists.linux.dev, sparclinux@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [v3,17/19] arch/sparc: Implement fb_is_primary_device() in
- source file
-Message-ID: <c525adc9-6623-4660-8718-e0c9311563b8@roeck-us.net>
-References: <20230417125651.25126-18-tzimmermann@suse.de>
+        bh=I1FbghDCXPdnalfOCUOUdP/9R5wF4RgIXd2HPjWZgLg=;
+        b=f2Ob3TzcoEhTAL2FHcv/ouZgZoKfq8WRMA4ZG2Ff46Gsf9yx4H+un5mfa9gdQo8/OK
+         o6QIkSTLqiy3MD2T6PgxN32XnD+ozfNBZeRTfEUN7ihgjEt+9vrFa7k/1yMXoEVxU4pK
+         fWzARaMcWdA0irm3lJQnf41TQaatgTzdDvbNDad7rFRALjh1sg8uzfQACZBHfl112X4G
+         SzztUoPHUVeC/HlO6E+NLaPZxPCCu3zNNl8Ob9r06ce3ZkKyW1+TDuzRZDVOk7g5b9lB
+         lL8EEvGnN7n+SHPvO4ppnK/qlm4v7qJXJv3T945tvnTF0d1Rc0g2qKj+hOUdlQEdBNje
+         HQ3A==
+X-Gm-Message-State: AC+VfDw3ZeUNvYHW6VMPmzmu1+Ql5aDMERARM5pYKOtnSe5LeTk2KnFG
+        2ZM9zLOu7jvYjkgobWwIt+HP/udd+hQPsTEeorc5Nw==
+X-Google-Smtp-Source: ACHHUZ4a8t2qrsAMmtUJg++BH6LFJ0NJh0+cbmEpGLGu3azcskARvHfIJOVqtpXU7FsrkZdeX7bT/McLNiXFstO0NQs=
+X-Received: by 2002:a25:abca:0:b0:be6:f52a:1145 with SMTP id
+ v68-20020a25abca000000b00be6f52a1145mr18265936ybi.9.1687571932601; Fri, 23
+ Jun 2023 18:58:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230417125651.25126-18-tzimmermann@suse.de>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+References: <20230614070733.113068-1-lujialin4@huawei.com> <20230614174004.GC1146@sol.localdomain>
+ <CAJuCfpFROxDn-Yv48zKw5PuiLd_LQ5+b1Nt4+jEw8wHMWcRDWw@mail.gmail.com>
+ <CAJuCfpGA4Zy-NAsoFrs7R6MJDO0rW1R2gXCzoVkkcsUzfeXbzA@mail.gmail.com>
+ <c83f2076-8dfa-7650-f3c6-bb6884a6729a@huawei.com> <CAJuCfpE2w5e8eCC1exQFDQa_t2F5bzkD1_J8QoJddTrL8nMT6A@mail.gmail.com>
+In-Reply-To: <CAJuCfpE2w5e8eCC1exQFDQa_t2F5bzkD1_J8QoJddTrL8nMT6A@mail.gmail.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Fri, 23 Jun 2023 18:58:41 -0700
+Message-ID: <CAJuCfpFmvMU9K3JkHsR6RrUYaGFsQ9BVapt2mK=_d7O-tcNa2g@mail.gmail.com>
+Subject: Re: [PATCH v2] poll: Fix use-after-free in poll_freewait()
+To:     "lujialin (A)" <lujialin4@huawei.com>
+Cc:     Eric Biggers <ebiggers@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        Oleg Nesterov <oleg@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, Jun 20, 2023 at 5:09=E2=80=AFPM Suren Baghdasaryan <surenb@google.c=
+om> wrote:
+>
+> On Sun, Jun 18, 2023 at 6:28=E2=80=AFAM lujialin (A) <lujialin4@huawei.co=
+m> wrote:
+> >
+> > Hi Suren:
+> >
+> > kernel config:
+> > x86_64_defconfig
+> > CONFIG_PSI=3Dy
+> > CONFIG_SLUB_DEBUG=3Dy
+> > CONFIG_SLUB_DEBUG_ON=3Dy
+> > CONFIG_KASAN=3Dy
+> > CONFIG_KASAN_INLINE=3Dy
+> >
+> > I make some change in code, in order to increase the recurrence probabi=
+lity.
+> > diff --git a/fs/select.c b/fs/select.c
+> > index 5edffee1162c..5ee5b74a8386 100644
+> > --- a/fs/select.c
+> > +++ b/fs/select.c
+> > @@ -139,6 +139,7 @@ void poll_freewait(struct poll_wqueues *pwq)
+> >   {
+> >          struct poll_table_page * p =3D pwq->table;
+> >          int i;
+> > +       mdelay(50);
+> >          for (i =3D 0; i < pwq->inline_index; i++)
+> >                  free_poll_entry(pwq->inline_entries + i);
+> >          while (p) {
+> >
+> > Here is the simple repo test.sh:
+> > #!/bin/bash
+> >
+> > RESOURCE_TYPES=3D("cpu" "memory" "io" "irq")
+> > #RESOURCE_TYPES=3D("cpu")
+> > cgroup_num=3D50
+> > test_dir=3D/sys/fs/cgroup/test
+> >
+> > function restart_cgroup() {
+> >          num=3D$(expr $RANDOM % $cgroup_num + 1)
+> >          rmdir $test_dir/test_$num
+> >          mkdir $test_dir/test_$num
+> > }
+> >
+> > function create_triggers() {
+> >          num=3D$(expr $RANDOM % $cgroup_num + 1)
+> >          random=3D$(expr $RANDOM % "${#RESOURCE_TYPES[@]}")
+> >          psi_type=3D"${RESOURCE_TYPES[${random}]}"
+> >          ./psi_monitor $test_dir/test_$num $psi_type &
+> > }
+> >
+> > mkdir $test_dir
+> > for i in $(seq 1 $cgroup_num)
+> > do
+> >          mkdir $test_dir/test_$i
+> > done
+> > for j in $(seq 1 100)
+> > do
+> >          restart_cgroup &
+> >          create_triggers &
+> > done
+> >
+> > psi_monitor.c:
+> > #include <errno.h>
+> > #include <fcntl.h>
+> > #include <stdio.h>
+> > #include <poll.h>
+> > #include <string.h>
+> > #include <unistd.h>
+> >
+> > int main(int argc, char *argv[]) {
+> >          const char trig[] =3D "full 1000000 1000000";
+> >          struct pollfd fds;
+> >          char filename[100];
+> >
+> >          sprintf(filename, "%s/%s.pressure", argv[1], argv[2]);
+> >
+> >          fds.fd =3D open(filename, O_RDWR | O_NONBLOCK);
+> >          if (fds.fd < 0) {
+> >                  printf("%s open error: %s\n", filename,strerror(errno)=
+);
+> >                  return 1;
+> >          }
+> >          fds.events =3D POLLPRI;
+> >          if (write(fds.fd, trig, strlen(trig) + 1) < 0) {
+> >                  printf("%s write error: %s\n",filename,strerror(errno)=
+);
+> >                  return 1;
+> >          }
+> >          while (1) {
+> >                  poll(&fds, 1, -1);
+> >          }
+> >          close(fds.fd);
+> >          return 0;
+> > }
+>
+> Thanks a lot!
+> I'll try to get this reproduced and fixed by the end of this week.
 
-On Mon, Apr 17, 2023 at 02:56:49PM +0200, Thomas Zimmermann wrote:
-> Other architectures implment fb_is_primary_device() in a source
-> file. Do the same on sparc. No functional changes, but allows to
-> remove several include statement from <asm/fb.h>.
-> 
-> v2:
-> 	* don't include <asm/prom.h> in header file
-> 
-> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-> Cc: "David S. Miller" <davem@davemloft.net>
+Ok, I was able to reproduce the issue and I think the ultimate problem
+here is that kernfs_release_file() can be called from both
+kernfs_fop_release() and kernfs_drain_open_files(). While
+kernfs_fop_release() is called when the FD's refcount is 0 and there
+are no users, kernfs_drain_open_files() can be called while there are
+still other users. In our scenario, kn->attr.ops->release points to
+cgroup_pressure_release() which destroys the psi trigger thinking that
+(since the file is "released") there could be no other users. So,
+shell process which issues the rmdir command will destroy the trigger
+once cgroup_pressure_release() is called and the reproducer will step
+on the freed wait_queue_head. The way kernfs_release_file() is
+implemented, it ensures that kn->attr.ops->release(of) is called only
+once (the first time), therefore cgroup_pressure_release() is never
+called in reproducer's context. That prevents me from implementing
+some kind of refcounting schema for psi triggers because we are never
+notified when the last user is gone.
+I think to fix this I would need to modify kernfs_release_file() and
+maybe add another operation in kernfs_ops to indicate that the last
+user is gone (smth like final_release()). It's not pretty but so far I
+did not find a better way. I'll think some more over the weekend and
+will try to post a patch implementing the fix on Monday.
+Thanks,
+Suren.
 
-This patch results (or appears to result) in the following build error
-when trying to build sparc64:allmodconfig.
 
-Error log:
-<stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-WARNING: modpost: drivers/cpufreq/sparc-us2e-cpufreq: section mismatch in reference: cpufreq_us2e_driver+0x20 (section: .data) -> us2e_freq_cpu_init (section: .init.text)
-WARNING: modpost: drivers/cpufreq/sparc-us3-cpufreq: section mismatch in reference: cpufreq_us3_driver+0x20 (section: .data) -> us3_freq_cpu_init (section: .init.text)
-ERROR: modpost: missing MODULE_LICENSE() in arch/sparc/video/fbdev.o
-ERROR: modpost: "__xchg_called_with_bad_pointer" [lib/atomic64_test.ko] undefined!
-
-Bisect log attached. Note that I suspect that there are several problems,
-but that is difficult to determine since this patch can not easily
-be reverted.
-
-Guenter
-
----
-# bad: [8d2be868b42c08290509c60515865f4de24ea704] Add linux-next specific files for 20230623
-# good: [45a3e24f65e90a047bef86f927ebdc4c710edaa1] Linux 6.4-rc7
-git bisect start 'HEAD' 'v6.4-rc7'
-# good: [a5838c78db6a3a02e8d221e588c948f792e7f256] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git
-git bisect good a5838c78db6a3a02e8d221e588c948f792e7f256
-# bad: [cca41cc0b5485a0ec20707316c1a00082c01a2af] Merge branch 'for-next' of git://git.kernel.dk/linux-block.git
-git bisect bad cca41cc0b5485a0ec20707316c1a00082c01a2af
-# bad: [901bdf5ea1a836400ee69aa32b04e9c209271ec7] Merge tag 'amd-drm-next-6.5-2023-06-09' of https://gitlab.freedesktop.org/agd5f/linux into drm-next
-git bisect bad 901bdf5ea1a836400ee69aa32b04e9c209271ec7
-# good: [c2d2588c702364ff53916ddd97e2b26fd4f4a317] drm/amdkfd: add send exception operation
-git bisect good c2d2588c702364ff53916ddd97e2b26fd4f4a317
-# bad: [1b842f73edbb1f8513ef4a89389176c628dc014a] drm/i915/guc: Remove some obsolete definitions
-git bisect bad 1b842f73edbb1f8513ef4a89389176c628dc014a
-# bad: [b8887e796e06b1de4db899f49d531d220f94f393] Merge tag 'drm-misc-next-2023-05-24' of git://anongit.freedesktop.org/drm/drm-misc into drm-next
-git bisect bad b8887e796e06b1de4db899f49d531d220f94f393
-# bad: [bfdede3a58ea970333d77a05144a7bcec13cf515] drm/rockchip: cdn-dp: call drm_connector_update_edid_property() unconditionally
-git bisect bad bfdede3a58ea970333d77a05144a7bcec13cf515
-# good: [b50f6d465ac1fb37cab7bfb39ac6c9fb9d8e3716] arch/powerpc: Implement <asm/fb.h> with generic helpers
-git bisect good b50f6d465ac1fb37cab7bfb39ac6c9fb9d8e3716
-# bad: [322d716a3e8a74fb75cd0f657647be4df253fd2f] drm/vkms: isolate pixel conversion functionality
-git bisect bad 322d716a3e8a74fb75cd0f657647be4df253fd2f
-# bad: [55b24786b74863b8f10e4d262e642749911cb3bb] drm/display: Add missing OLED Vesa brightnesses definitions
-git bisect bad 55b24786b74863b8f10e4d262e642749911cb3bb
-# bad: [1c9da7db8899fa0e891997118d75b46d38102497] drm/armada: Include <linux/of.h>
-git bisect bad 1c9da7db8899fa0e891997118d75b46d38102497
-# bad: [db76f19a607d6cf4a9d5868d05675c355e99809c] arch/sparc: Implement <asm/fb.h> with generic helpers
-git bisect bad db76f19a607d6cf4a9d5868d05675c355e99809c
-# bad: [4eec0b3048fcd74b504c2a6828a07f133a8ab508] arch/sparc: Implement fb_is_primary_device() in source file
-git bisect bad 4eec0b3048fcd74b504c2a6828a07f133a8ab508
-# good: [b6cf29637be638a6846d2d297d80cf7c6fb74faf] arch/sh: Implement <asm/fb.h> with generic helpers
-git bisect good b6cf29637be638a6846d2d297d80cf7c6fb74faf
-# first bad commit: [4eec0b3048fcd74b504c2a6828a07f133a8ab508] arch/sparc: Implement fb_is_primary_device() in source file
+> Suren.
+>
+> > Thanks,
+> > Lu
+> > =E5=9C=A8 2023/6/16 7:13, Suren Baghdasaryan =E5=86=99=E9=81=93:
+> > > On Wed, Jun 14, 2023 at 11:19=E2=80=AFAM Suren Baghdasaryan <surenb@g=
+oogle.com> wrote:
+> > >>
+> > >> On Wed, Jun 14, 2023 at 10:40=E2=80=AFAM Eric Biggers <ebiggers@kern=
+el.org> wrote:
+> > >>>
+> > >>> On Wed, Jun 14, 2023 at 03:07:33PM +0800, Lu Jialin wrote:
+> > >>>> We found a UAF bug in remove_wait_queue as follows:
+> > >>>>
+> > >>>> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > >>>> BUG: KASAN: use-after-free in _raw_spin_lock_irqsave+0x71/0xe0
+> > >>>> Write of size 4 at addr ffff8881150d7b28 by task psi_trigger/15306
+> > >>>> Call Trace:
+> > >>>>   dump_stack+0x9c/0xd3
+> > >>>>   print_address_description.constprop.0+0x19/0x170
+> > >>>>   __kasan_report.cold+0x6c/0x84
+> > >>>>   kasan_report+0x3a/0x50
+> > >>>>   check_memory_region+0xfd/0x1f0
+> > >>>>   _raw_spin_lock_irqsave+0x71/0xe0
+> > >>>>   remove_wait_queue+0x26/0xc0
+> > >>>>   poll_freewait+0x6b/0x120
+> > >>>>   do_sys_poll+0x305/0x400
+> > >>>>   do_syscall_64+0x33/0x40
+> > >>>>   entry_SYSCALL_64_after_hwframe+0x61/0xc6
+> > >>>>
+> > >>>> Allocated by task 15306:
+> > >>>>   kasan_save_stack+0x1b/0x40
+> > >>>>   __kasan_kmalloc.constprop.0+0xb5/0xe0
+> > >>>>   psi_trigger_create.part.0+0xfc/0x450
+> > >>>>   cgroup_pressure_write+0xfc/0x3b0
+> > >>>>   cgroup_file_write+0x1b3/0x390
+> > >>>>   kernfs_fop_write_iter+0x224/0x2e0
+> > >>>>   new_sync_write+0x2ac/0x3a0
+> > >>>>   vfs_write+0x365/0x430
+> > >>>>   ksys_write+0xd5/0x1b0
+> > >>>>   do_syscall_64+0x33/0x40
+> > >>>>   entry_SYSCALL_64_after_hwframe+0x61/0xc6
+> > >>>>
+> > >>>> Freed by task 15850:
+> > >>>>   kasan_save_stack+0x1b/0x40
+> > >>>>   kasan_set_track+0x1c/0x30
+> > >>>>   kasan_set_free_info+0x20/0x40
+> > >>>>   __kasan_slab_free+0x151/0x180
+> > >>>>   kfree+0xba/0x680
+> > >>>>   cgroup_file_release+0x5c/0xe0
+> > >>>>   kernfs_drain_open_files+0x122/0x1e0
+> > >>>>   kernfs_drain+0xff/0x1e0
+> > >>>>   __kernfs_remove.part.0+0x1d1/0x3b0
+> > >>>>   kernfs_remove_by_name_ns+0x89/0xf0
+> > >>>>   cgroup_addrm_files+0x393/0x3d0
+> > >>>>   css_clear_dir+0x8f/0x120
+> > >>>>   kill_css+0x41/0xd0
+> > >>>>   cgroup_destroy_locked+0x166/0x300
+> > >>>>   cgroup_rmdir+0x37/0x140
+> > >>>>   kernfs_iop_rmdir+0xbb/0xf0
+> > >>>>   vfs_rmdir.part.0+0xa5/0x230
+> > >>>>   do_rmdir+0x2e0/0x320
+> > >>>>   __x64_sys_unlinkat+0x99/0xc0
+> > >>>>   do_syscall_64+0x33/0x40
+> > >>>>   entry_SYSCALL_64_after_hwframe+0x61/0xc6
+> > >>>> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > >>>>
+> > >>>> If using epoll(), wake_up_pollfree will empty waitqueue and set
+> > >>>> wait_queue_head is NULL before free waitqueue of psi trigger. But =
+is
+> > >>>> doesn't work when using poll(), which will lead a UAF problem in
+> > >>>> poll_freewait coms as following:
+> > >>>>
+> > >>>> (cgroup_rmdir)                      |
+> > >>>> psi_trigger_destroy                 |
+> > >>>>    wake_up_pollfree(&t->event_wait)  |
+> > >>>>     synchronize_rcu();               |
+> > >>>>      kfree(t)                        |
+> > >>>>                                    |   (poll_freewait)
+> > >>>>                                    |     free_poll_entry(pwq->inli=
+ne_entries + i)
+> > >>>>                                    |       remove_wait_queue(entry=
+->wait_address)
+> > >>>>                                    |         spin_lock_irqsave(&wq=
+_head->lock)
+> > >>>>
+> > >>>> entry->wait_address in poll_freewait() is t->event_wait in cgroup_=
+rmdir().
+> > >>>> t->event_wait is free in psi_trigger_destroy before call poll_free=
+wait(),
+> > >>>> therefore wq_head in poll_freewait() has been already freed, which=
+ would
+> > >>>> lead to a UAF.
+> > >
+> > > Hi Lu,
+> > > Could you please share your reproducer along with the kernel config
+> > > you used? I'm trying to reproduce this UAF but every time I delete th=
+e
+> > > cgroup being polled, poll() simply returns POLLERR.
+> > > Thanks,
+> > > Suren.
+> > >
+> > >>>>
+> > >>>> similar problem for epoll() has been fixed commit c2dbe32d5db5
+> > >>>> ("sched/psi: Fix use-after-free in ep_remove_wait_queue()").
+> > >>>> epoll wakeup function ep_poll_callback() will empty waitqueue and =
+set
+> > >>>> wait_queue_head is NULL when pollflags is POLLFREE and judge pwq->=
+whead
+> > >>>> is NULL or not before remove_wait_queue in ep_remove_wait_queue(),
+> > >>>> which will fix the UAF bug in ep_remove_wait_queue.
+> > >>>>
+> > >>>> But poll wakeup function pollwake() doesn't do that. To fix the
+> > >>>> problem, we empty waitqueue and set wait_address is NULL in pollwa=
+ke() when
+> > >>>> key is POLLFREE. otherwise in remove_wait_queue, which is similar =
+to
+> > >>>> epoll().
+> > >>>>
+> > >>>> Fixes: 0e94682b73bf ("psi: introduce psi monitor")
+> > >>>> Suggested-by: Suren Baghdasaryan <surenb@google.com>
+> > >>>> Link: https://lore.kernel.org/all/CAJuCfpEoCRHkJF-=3D1Go9E94wchB4B=
+zwQ1E3vHGWxNe+tEmSJoA@mail.gmail.com/#t
+> > >>>> Signed-off-by: Lu Jialin <lujialin4@huawei.com>
+> > >>>> ---
+> > >>>> v2: correct commit msg and title suggested by Suren Baghdasaryan
+> > >>>> ---
+> > >>>>   fs/select.c | 20 +++++++++++++++++++-
+> > >>>>   1 file changed, 19 insertions(+), 1 deletion(-)
+> > >>>>
+> > >>>> diff --git a/fs/select.c b/fs/select.c
+> > >>>> index 0ee55af1a55c..e64c7b4e9959 100644
+> > >>>> --- a/fs/select.c
+> > >>>> +++ b/fs/select.c
+> > >>>> @@ -132,7 +132,17 @@ EXPORT_SYMBOL(poll_initwait);
+> > >>>>
+> > >>>>   static void free_poll_entry(struct poll_table_entry *entry)
+> > >>>>   {
+> > >>>> -     remove_wait_queue(entry->wait_address, &entry->wait);
+> > >>>> +     wait_queue_head_t *whead;
+> > >>>> +
+> > >>>> +     rcu_read_lock();
+> > >>>> +     /* If it is cleared by POLLFREE, it should be rcu-safe.
+> > >>>> +      * If we read NULL we need a barrier paired with smp_store_r=
+elease()
+> > >>>> +      * in pollwake().
+> > >>>> +      */
+> > >>>> +     whead =3D smp_load_acquire(&entry->wait_address);
+> > >>>> +     if (whead)
+> > >>>> +             remove_wait_queue(whead, &entry->wait);
+> > >>>> +     rcu_read_unlock();
+> > >>>>        fput(entry->filp);
+> > >>>>   }
+> > >>>>
+> > >>>> @@ -215,6 +225,14 @@ static int pollwake(wait_queue_entry_t *wait,=
+ unsigned mode, int sync, void *key
+> > >>>>        entry =3D container_of(wait, struct poll_table_entry, wait)=
+;
+> > >>>>        if (key && !(key_to_poll(key) & entry->key))
+> > >>>>                return 0;
+> > >>>> +     if (key_to_poll(key) & POLLFREE) {
+> > >>>> +             list_del_init(&wait->entry);
+> > >>>> +             /* wait_address !=3DNULL protects us from the race w=
+ith
+> > >>>> +              * poll_freewait().
+> > >>>> +              */
+> > >>>> +             smp_store_release(&entry->wait_address, NULL);
+> > >>>> +             return 0;
+> > >>>> +     }
+> > >>>>        return __pollwake(wait, mode, sync, key);
+> > >>>
+> > >>> I don't understand why this patch is needed.
+> > >>>
+> > >>> The last time I looked at POLLFREE, it is only needed because of as=
+ynchronous
+> > >>> polls.  See my explanation in the commit message of commit 50252e4b=
+5e989ce6.
+> > >>
+> > >> Ah, I missed that. Thanks for the correction.
+> > >>
+> > >>>
+> > >>> In summary, POLLFREE solves the problem of polled waitqueues whose =
+lifetime is
+> > >>> tied to the current task rather than to the file being polled.  Als=
+o refer to
+> > >>> the comment above wake_up_pollfree(), which mentions this.
+> > >>>
+> > >>> fs/select.c is synchronous polling, not asynchronous.  Therefore, i=
+t should not
+> > >>> need to handle POLLFREE.
+> > >>>
+> > >>> If there's actually a bug here, most likely it's a bug in psi_trigg=
+er_poll()
+> > >>> where it is using a waitqueue whose lifetime is tied to neither the=
+ current task
+> > >>> nor the file being polled.  That needs to be fixed.
+> > >>
+> > >> Yeah. We discussed this issue in
+> > >> https://lore.kernel.org/all/CAJuCfpFb0J5ZwO6kncjRG0_4jQLXUy-_dicpH5u=
+GiWP8aKYEJQ@mail.gmail.com
+> > >> and the root cause is that cgroup_file_release() where
+> > >> psi_trigger_destroy() is called is not tied to the cgroup file's rea=
+l
+> > >> lifetime (see my analysis here:
+> > >> https://lore.kernel.org/all/CAJuCfpFZ3B4530TgsSHqp5F_gwfrDujwRYewKRe=
+Jru=3D=3DMdEHQg@mail.gmail.com/#t).
+> > >> I guess it's time to do a deeper surgery and figure out a way to cal=
+l
+> > >> psi_trigger_destroy() when the polled cgroup file is actually being
+> > >> destroyed. I'll take a closer look into this later today.
+> > >> A fix will likely require some cgroup or kernfs code changes, so
+> > >> CC'ing Tejun for visibility.
+> > >> Thanks,
+> > >> Suren.
+> > >>
+> > >>>
+> > >>> - Eric
+> > > .
+> > >
