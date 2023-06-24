@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C38F73CAD2
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 14:21:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8BB173CAD1
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 14:21:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233146AbjFXMVT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 08:21:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49202 "EHLO
+        id S233182AbjFXMVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 08:21:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233086AbjFXMVK (ORCPT
+        with ESMTP id S233110AbjFXMVM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 08:21:10 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D8922133
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 05:21:02 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3f3284dff6cso4414145e9.0
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 05:21:02 -0700 (PDT)
+        Sat, 24 Jun 2023 08:21:12 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 692E0213A
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 05:21:04 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f80b192aecso4273505e9.1
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 05:21:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1687609261; x=1690201261;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1687609263; x=1690201263;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=eFR35YNaQcGqljtTqigZb96yicyQhSfPK+W1MwtG1Qc=;
-        b=fQ0Jj0/g8hraC+//ujaUdGnISdJuhZSqzlYtTNJFkbqaAQn94ZS1MRbEZ/6hlB+iZi
-         +LrsgtrLieSflMBQqSa4DikDXR/EFQ3cOO5RmtXSIGDAGfRWturi1KhTux4m0ZmeAVGi
-         YiS2wOrizlJJO9TwgSjc884uuBSQ5vSJsopmCYPSllwDhRKrQ+YT/vjRxFLdOXzB1K8R
-         P1+1SIalQbR0Js89SZGXDMNcCR/sGBy1Q0DZiQ9FBNJnasfgUAj1UXcjYNE6KpwyUOs7
-         y2+eoAsfUuoSbjIx1AsXyRBkwHAf4zuUab8EjVYOtvwFyZTlIgvGT1S+mG1yfWeCy1Gy
-         kqcQ==
+        bh=EN/Bpcd3g2BBD8IENaIvpqjenPqBgjOGqqvyeNWy6hM=;
+        b=S7Qug/L8+jW8rcAlVoty9CtIsTLlm7GoXtnsOASUOfExV8W14+nl81+uKtroNm1s07
+         ioZUFXzxJ0BtUU4MvAuFR6D504wL5FcuBd5hiXnYgMjsGgVplXR0GsSKfG9K7psiptXp
+         W+17RG3pSPSeeV46yBxeEUW62zoQZHRBxvcQaXqYN3lzAssysvZo5TKxpcNuxYdwyqhY
+         FOfscDUcMo/1U+vvgocX47LDEnT0c1MhbXMqYYC30sF9/8XSLKfm9RTQfdX6kJKAJM6b
+         Mzdvrof+ebl5xvWFGwb/njJC5xUgWaTdhgC+fFF5Qc9q5gagn9LPkooMcaJwEQxpuBuY
+         /Dgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687609261; x=1690201261;
+        d=1e100.net; s=20221208; t=1687609263; x=1690201263;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=eFR35YNaQcGqljtTqigZb96yicyQhSfPK+W1MwtG1Qc=;
-        b=ktl9qy7h6pzV0Ezn7IDBcH4x2wrz5Cik5+q/Sfj3KtfaChZ4KmCXW3FrdZLxN1Iy+I
-         ZmspLGaf8c7pa8AFREdaWQwLbmZOXU0kwwVVpnO5AjjMESKfZRA4I8oGDL00L3IdaFB3
-         4KkLtttkZyBliHBSBYLv4eh3nVd4JxXLD6U1arwAyTb2h8vZhGmB4JUPcahuBbX6YxPW
-         DMQ/E0fObcdNoYsNO0cIi2am/Gu79cZskL5jqts+Od8fdGX98wfxNDWc892+S5sI5AMR
-         y1kQHy8Zb644VrRwr/jRIIzfv4eOJcxu6j7pbm1/9/7pFpPe20M1FqgVkJ3rIspRtVQj
-         0Dkg==
-X-Gm-Message-State: AC+VfDwmCa/6Ry42fUElU/dM+314Hu+Si4FJ1WyAfUAMln0m9HF2K5JQ
-        +nkYtqcc1J6UkIbOkvtvIPju5w==
-X-Google-Smtp-Source: ACHHUZ7Y/lLiiw2Du4ptFpQIG4DBcgnXX9ZY5s4tkti3QpKLzjg9BTlNfa3GoOtgo9F54jtJgwXTTg==
-X-Received: by 2002:a1c:ed05:0:b0:3f5:927:2b35 with SMTP id l5-20020a1ced05000000b003f509272b35mr20797437wmh.1.1687609260981;
-        Sat, 24 Jun 2023 05:21:00 -0700 (PDT)
+        bh=EN/Bpcd3g2BBD8IENaIvpqjenPqBgjOGqqvyeNWy6hM=;
+        b=I7dK5HdxM2yUX8jOn9kLlPPe4bWfSezk9qw0hM5JD/ZKXQ96f2vfUeyA+6IrX6LfPq
+         jPRVwpfjpJI75frK0xZcv3mUqrm77Ky+70E59ncv4JEHvf0EXpupNCl1pUmUjboFS0Ia
+         ffuu75Jc//QS7lJcQfRb/M9jM5BSYK8PWy/3WBwjaa3ehCM8Z9W4ojqEhEW4Eo9Q80/l
+         GJWp7SgJe/A5cjl2QGP/bhNe4D4K+cwEDxiocIRnJYYZBBbGAP6xkbG0EISREO+T+s3J
+         iOpChCd8z7v7+3LTtAiy+DVg/MIH1AZbvbc6qlFeCudYmG4q2vKj1KR7Fcs2bfsjqZRe
+         +MHQ==
+X-Gm-Message-State: AC+VfDzqg2KPQXxkKnA0hIe0MJvGMROOZKNE/2wxm83oMr7FTgOXvsDF
+        jJiOByb3lH3fCt4z+3di0ft5+Q==
+X-Google-Smtp-Source: ACHHUZ4N+s9JDq+KJBGUVTphvOM9RzUpUcJe7aoOxsQriy0LYzQji5fTNu3KxQojc980fZEbPL/iQQ==
+X-Received: by 2002:a05:600c:19d2:b0:3f7:fb5d:6e7a with SMTP id u18-20020a05600c19d200b003f7fb5d6e7amr22343211wmq.0.1687609262634;
+        Sat, 24 Jun 2023 05:21:02 -0700 (PDT)
 Received: from carbon-x1.home ([2a01:cb15:81c2:f100:94c1:d2b1:7300:5620])
-        by smtp.gmail.com with ESMTPSA id y15-20020a7bcd8f000000b003f8f9ab6f30sm2058823wmj.20.2023.06.24.05.20.59
+        by smtp.gmail.com with ESMTPSA id y15-20020a7bcd8f000000b003f8f9ab6f30sm2058823wmj.20.2023.06.24.05.21.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Jun 2023 05:21:00 -0700 (PDT)
+        Sat, 24 Jun 2023 05:21:02 -0700 (PDT)
 From:   =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@rivosinc.com>
 To:     Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
@@ -79,9 +79,9 @@ To:     Paul Walmsley <paul.walmsley@sifive.com>,
         =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 4/6] riscv: add support for SBI misalignment trap delegation
-Date:   Sat, 24 Jun 2023 14:20:47 +0200
-Message-Id: <20230624122049.7886-5-cleger@rivosinc.com>
+Subject: [RFC PATCH 5/6] riscv: add support for PR_SET_UNALIGN and PR_GET_UNALIGN
+Date:   Sat, 24 Jun 2023 14:20:48 +0200
+Message-Id: <20230624122049.7886-6-cleger@rivosinc.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230624122049.7886-1-cleger@rivosinc.com>
 References: <20230624122049.7886-1-cleger@rivosinc.com>
@@ -97,118 +97,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for misalignment trap delegation by setting it with
-SBI_EXT_FW_FEATURE SBI extension. This extension allows to control SBI
-behavior by requesting to set them to specific value. In order to
-implement prctl(PR_SET_UNALIGN, PR_UNALIGN_SIGBUS) behavior properly, we
-need to let the kernel handle the misalignment error by itself. This
-commit adds the sbi_delegate_misaligned() function to check if the SBI
-delegated us the misalignement handling. The value returned by this
-function is initialize at init time from sbi_init().
+Now that trap support is ready to handle misalignment errors in S-mode,
+allow the user to control the behavior of misalignment accesses using
+prctl(). Add an align_ctl flag in thread_struct which will be used to
+determine if we should SIGBUS the process or not on such fault.
 
 Signed-off-by: Clément Léger <cleger@rivosinc.com>
 ---
- arch/riscv/include/asm/sbi.h | 12 ++++++++++++
- arch/riscv/kernel/sbi.c      | 28 ++++++++++++++++++++++++++++
- 2 files changed, 40 insertions(+)
+ arch/riscv/include/asm/processor.h   |  9 +++++++++
+ arch/riscv/kernel/process.c          | 20 ++++++++++++++++++++
+ arch/riscv/kernel/traps_misaligned.c |  7 +++++++
+ 3 files changed, 36 insertions(+)
 
-diff --git a/arch/riscv/include/asm/sbi.h b/arch/riscv/include/asm/sbi.h
-index 5b4a1bf5f439..97c2b5d6abff 100644
---- a/arch/riscv/include/asm/sbi.h
-+++ b/arch/riscv/include/asm/sbi.h
-@@ -30,6 +30,7 @@ enum sbi_ext_id {
- 	SBI_EXT_HSM = 0x48534D,
- 	SBI_EXT_SRST = 0x53525354,
- 	SBI_EXT_PMU = 0x504D55,
-+	SBI_EXT_FW_FEATURE = 0x46574654,
+diff --git a/arch/riscv/include/asm/processor.h b/arch/riscv/include/asm/processor.h
+index 94a0590c6971..4e6667d5ca68 100644
+--- a/arch/riscv/include/asm/processor.h
++++ b/arch/riscv/include/asm/processor.h
+@@ -7,6 +7,7 @@
+ #define _ASM_RISCV_PROCESSOR_H
  
- 	/* Experimentals extensions must lie within this range */
- 	SBI_EXT_EXPERIMENTAL_START = 0x08000000,
-@@ -236,6 +237,16 @@ enum sbi_pmu_ctr_type {
- /* Flags defined for counter stop function */
- #define SBI_PMU_STOP_FLAG_RESET (1 << 0)
+ #include <linux/const.h>
++#include <linux/prctl.h>
  
-+/* SBI function IDs for FW feature extension */
-+#define SBI_EXT_FW_FEATURE_SET		0x0
-+#define SBI_EXT_FW_FEATURE_GET		0x1
-+
-+enum sbi_fw_features_t {
-+	SBI_FW_FEATURE_MISALIGNED_DELEG	= 0,
-+
-+	SBI_FW_FEATURE_MAX,
-+};
-+
- #define SBI_SPEC_VERSION_DEFAULT	0x1
- #define SBI_SPEC_VERSION_MAJOR_SHIFT	24
- #define SBI_SPEC_VERSION_MAJOR_MASK	0x7f
-@@ -269,6 +280,7 @@ int sbi_console_getchar(void);
- long sbi_get_mvendorid(void);
- long sbi_get_marchid(void);
- long sbi_get_mimpid(void);
-+bool sbi_delegate_misaligned(void);
- void sbi_set_timer(uint64_t stime_value);
- void sbi_shutdown(void);
- void sbi_send_ipi(unsigned int cpu);
-diff --git a/arch/riscv/kernel/sbi.c b/arch/riscv/kernel/sbi.c
-index c672c8ba9a2a..18effd9e6ea9 100644
---- a/arch/riscv/kernel/sbi.c
-+++ b/arch/riscv/kernel/sbi.c
-@@ -22,6 +22,8 @@ static int (*__sbi_rfence)(int fid, const struct cpumask *cpu_mask,
- 			   unsigned long start, unsigned long size,
- 			   unsigned long arg4, unsigned long arg5) __ro_after_init;
+ #include <vdso/processor.h>
  
-+static bool __sbi_misaligned_deleg __ro_after_init;
-+
- struct sbiret sbi_ecall(int ext, int fid, unsigned long arg0,
- 			unsigned long arg1, unsigned long arg2,
- 			unsigned long arg3, unsigned long arg4,
-@@ -342,6 +344,11 @@ static int __sbi_rfence_v02(int fid, const struct cpumask *cpu_mask,
- 	return 0;
+@@ -39,6 +40,7 @@ struct thread_struct {
+ 	unsigned long s[12];	/* s[0]: frame pointer */
+ 	struct __riscv_d_ext_state fstate;
+ 	unsigned long bad_cause;
++	unsigned long align_ctl;
+ };
+ 
+ /* Whitelist the fstate from the task_struct for hardened usercopy */
+@@ -51,6 +53,7 @@ static inline void arch_thread_struct_whitelist(unsigned long *offset,
+ 
+ #define INIT_THREAD {					\
+ 	.sp = sizeof(init_stack) + (long)&init_stack,	\
++	.align_ctl = PR_UNALIGN_NOPRINT,		\
  }
  
-+bool sbi_delegate_misaligned(void)
-+{
-+	return __sbi_misaligned_deleg;
-+}
-+
- /**
-  * sbi_set_timer() - Program the timer for next timer event.
-  * @stime_value: The value after which next timer event should fire.
-@@ -494,6 +501,16 @@ int sbi_remote_hfence_vvma_asid(const struct cpumask *cpu_mask,
- }
- EXPORT_SYMBOL(sbi_remote_hfence_vvma_asid);
+ #define task_pt_regs(tsk)						\
+@@ -80,6 +83,12 @@ int riscv_of_parent_hartid(struct device_node *node, unsigned long *hartid);
+ extern void riscv_fill_hwcap(void);
+ extern int arch_dup_task_struct(struct task_struct *dst, struct task_struct *src);
  
-+static int sbi_fw_feature_set(enum sbi_fw_features_t feature, bool set)
++extern int get_unalign_ctl(struct task_struct *, unsigned long addr);
++extern int set_unalign_ctl(struct task_struct *, unsigned int val);
++
++#define GET_UNALIGN_CTL(tsk, addr)	get_unalign_ctl((tsk), (addr))
++#define SET_UNALIGN_CTL(tsk, val)	set_unalign_ctl((tsk), (val))
++
+ #endif /* __ASSEMBLY__ */
+ 
+ #endif /* _ASM_RISCV_PROCESSOR_H */
+diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
+index e2a060066730..b8a41e3c1333 100644
+--- a/arch/riscv/kernel/process.c
++++ b/arch/riscv/kernel/process.c
+@@ -19,6 +19,7 @@
+ #include <asm/unistd.h>
+ #include <asm/processor.h>
+ #include <asm/csr.h>
++#include <asm/sbi.h>
+ #include <asm/stacktrace.h>
+ #include <asm/string.h>
+ #include <asm/switch_to.h>
+@@ -40,6 +41,25 @@ void arch_cpu_idle(void)
+ 	cpu_do_idle();
+ }
+ 
++int set_unalign_ctl(struct task_struct *tsk, unsigned int val)
 +{
-+	struct sbiret ret;
-+
-+	ret = sbi_ecall(SBI_EXT_FW_FEATURE, SBI_EXT_FW_FEATURE_SET, feature,
-+			set, 0, 0, 0, 0);
-+
-+	return sbi_err_map_linux_errno(ret.error);
++#if IS_ENABLED(CONFIG_RISCV_SBI)
++	if (!sbi_delegate_misaligned())
++		return -EINVAL;
++#endif
++	tsk->thread.align_ctl = val;
++	return 0;
 +}
 +
- static void sbi_srst_reset(unsigned long type, unsigned long reason)
++int get_unalign_ctl(struct task_struct *tsk, unsigned long adr)
++{
++#if IS_ENABLED(CONFIG_RISCV_SBI)
++	if (!sbi_delegate_misaligned())
++		return -EINVAL;
++#endif
++	return put_user(tsk->thread.align_ctl, (unsigned long __user *)adr);
++}
++
+ void __show_regs(struct pt_regs *regs)
  {
- 	sbi_ecall(SBI_EXT_SRST, SBI_EXT_SRST_RESET, type, reason,
-@@ -624,6 +641,17 @@ void __init sbi_init(void)
- 			sbi_srst_reboot_nb.priority = 192;
- 			register_restart_handler(&sbi_srst_reboot_nb);
- 		}
-+		/*
-+		 * TODO: this will likely need to be updated when SBI extension
-+		 * is ratified
-+		 */
-+		if ((sbi_spec_version >= sbi_mk_version(1, 0)) &&
-+		    (sbi_probe_extension(SBI_EXT_FW_FEATURE) > 0)) {
-+			pr_info("SBI FW_FEATURE extension detected\n");
-+			if (!sbi_fw_feature_set(SBI_FW_FEATURE_MISALIGNED_DELEG,
-+						true))
-+				__sbi_misaligned_deleg = true;
-+		}
- 	} else {
- 		__sbi_set_timer = __sbi_set_timer_v01;
- 		__sbi_send_ipi	= __sbi_send_ipi_v01;
+ 	show_regs_print_info(KERN_DEFAULT);
+diff --git a/arch/riscv/kernel/traps_misaligned.c b/arch/riscv/kernel/traps_misaligned.c
+index e4a273ab77c9..b828a0f3d4f7 100644
+--- a/arch/riscv/kernel/traps_misaligned.c
++++ b/arch/riscv/kernel/traps_misaligned.c
+@@ -8,6 +8,7 @@
+ #include <linux/module.h>
+ #include <linux/irq.h>
+ #include <linux/stringify.h>
++#include <linux/prctl.h>
+ 
+ #include <asm/processor.h>
+ #include <asm/ptrace.h>
+@@ -277,6 +278,9 @@ int handle_misaligned_load(struct pt_regs *regs)
+ 	if (!IS_ENABLED(CONFIG_RISCV_M_MODE) && !user_mode(regs))
+ 		return -1;
+ 
++	if ((current->thread.align_ctl & PR_UNALIGN_SIGBUS))
++		return -1;
++
+ 	if (get_insn(epc, &insn))
+ 		return -1;
+ 
+@@ -373,6 +377,9 @@ int handle_misaligned_store(struct pt_regs *regs)
+ 	if (!IS_ENABLED(CONFIG_RISCV_M_MODE) && !user_mode(regs))
+ 		return -1;
+ 
++	if ((current->thread.align_ctl & PR_UNALIGN_SIGBUS))
++		return -1;
++
+ 	if (get_insn(epc, &insn))
+ 		return -1;
+ 
 -- 
 2.40.1
 
