@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48EED73CC78
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 20:43:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64E1473CC7A
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 20:45:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233269AbjFXSnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 14:43:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48494 "EHLO
+        id S233244AbjFXSpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 14:45:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233279AbjFXSm4 (ORCPT
+        with ESMTP id S231379AbjFXSpE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 14:42:56 -0400
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC22826B9;
-        Sat, 24 Jun 2023 11:42:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1687632157; bh=kdNQ2yRcFr3QXcyAJBTxhivt3gO0Oi9ZzFCGa8V1v6A=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LgMY6Ylu1pRlcNNel0Jy0i1lUMQFOXsGwwyT0jGdFr2ySeO3O5tTBG57kruUb4ZTQ
-         RwvaMqXkAJtGy3vrMfV1zV3gC8gLpEo/AX38NrpT5/5C4EqkxBDPUpTyyks6bw8yYu
-         aSh76a9q4XcsHeMpbYDabNEWwK29h4CZ6PFFHniU=
-Received: from ld50.lan (unknown [101.88.25.181])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 5D5D9600B5;
-        Sun, 25 Jun 2023 02:42:37 +0800 (CST)
-From:   WANG Xuerui <kernel@xen0n.name>
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     WANG Rui <wangrui@loongson.cn>, Xi Ruoyao <xry111@xry111.site>,
-        loongarch@lists.linux.dev, linux-kbuild@vger.kernel.org,
-        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        WANG Xuerui <git@xen0n.name>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: [PATCH v2 9/9] Makefile: Add loongarch target flag for Clang compilation
-Date:   Sun, 25 Jun 2023 02:40:55 +0800
-Message-Id: <20230624184055.3000636-10-kernel@xen0n.name>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230624184055.3000636-1-kernel@xen0n.name>
-References: <20230624184055.3000636-1-kernel@xen0n.name>
+        Sat, 24 Jun 2023 14:45:04 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8934091;
+        Sat, 24 Jun 2023 11:45:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=zdBU64N0WcwazASgQZ1XjPkmJnlLHZ6pkcwd5Bxld10=; b=QC4KpWmMkxKUgj9ZCL+a2zT7eC
+        JbECDg+dtPxpbSvOuUUmNXhjhAL8q81g71kjBxu6hxp25qoQ+X/OWvfGTXFu9KYuwCGBKGkMd8pNP
+        nItnLaxr6Necbo45nT8eV8YmLp4rxdRlnxNflah2ngfsOKugsZPRUaENsMhvk2VZSZ2U=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1qD8FH-00HRV2-7r; Sat, 24 Jun 2023 20:44:27 +0200
+Date:   Sat, 24 Jun 2023 20:44:27 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     "Radu Pirea (NXP OSS)" <radu-nicolae.pirea@oss.nxp.com>
+Cc:     hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        richardcochran@gmail.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sebastian.tobuschat@nxp.com
+Subject: Re: [PATCH v2 05/13] net: phy: c45: detect 100BaseT1 and 1000BaseT1
+ PMA abilites
+Message-ID: <0ec2d9a7-8f38-4fa5-9609-c3fbc31f14c3@lunn.ch>
+References: <20230623074123.152931-1-radu-nicolae.pirea@oss.nxp.com>
+ <20230623074123.152931-6-radu-nicolae.pirea@oss.nxp.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230623074123.152931-6-radu-nicolae.pirea@oss.nxp.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -52,30 +52,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: WANG Xuerui <git@xen0n.name>
+On Fri, Jun 23, 2023 at 10:41:15AM +0300, Radu Pirea (NXP OSS) wrote:
+> Detect 100BaseT1 and 1000BaseT1 PMA abilites using dedicated bits.
+> 
+> Signed-off-by: Radu Pirea (NXP OSS) <radu-nicolae.pirea@oss.nxp.com>
 
-The LoongArch kernel is 64-bit and built with the soft-float ABI,
-hence the loongarch64-linux-gnusf target. (The "libc" part doesn't
-matter.)
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 
-Signed-off-by: WANG Xuerui <git@xen0n.name>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
----
- scripts/Makefile.clang | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
-index 058a4c0f864e..6c23c6af797f 100644
---- a/scripts/Makefile.clang
-+++ b/scripts/Makefile.clang
-@@ -4,6 +4,7 @@
- CLANG_TARGET_FLAGS_arm		:= arm-linux-gnueabi
- CLANG_TARGET_FLAGS_arm64	:= aarch64-linux-gnu
- CLANG_TARGET_FLAGS_hexagon	:= hexagon-linux-musl
-+CLANG_TARGET_FLAGS_loongarch	:= loongarch64-linux-gnusf
- CLANG_TARGET_FLAGS_m68k		:= m68k-linux-gnu
- CLANG_TARGET_FLAGS_mips		:= mipsel-linux-gnu
- CLANG_TARGET_FLAGS_powerpc	:= powerpc64le-linux-gnu
--- 
-2.40.0
-
+    Andrew
