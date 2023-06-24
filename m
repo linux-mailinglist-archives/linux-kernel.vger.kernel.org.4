@@ -2,102 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FF0A73CB75
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 16:52:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D826D73CB78
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 16:55:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233129AbjFXOwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 10:52:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42840 "EHLO
+        id S233175AbjFXOzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 10:55:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjFXOwp (ORCPT
+        with ESMTP id S229445AbjFXOzX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 10:52:45 -0400
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AFA47E56;
-        Sat, 24 Jun 2023 07:52:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=1ZSFg
-        IwAdkqH7N1HARcWbHynu04UbnWZF0dHrxv5TFE=; b=clZDSTXXOe1roNMml2F4c
-        0lkMYMEJANi7FzkxBOjJtyLTExgu4Zo+3xPnFGT+pOjbkTpwS+arNAYvie8AXHJA
-        G3Djnzn2U0G33Pr8Id02IdMsSg+BOT8M6s0HvcOkpcilannIeFetr9y+/7acENZW
-        VH0VHZsVBsEeFeDQ/seBoo=
-Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
-        by zwqz-smtp-mta-g1-2 (Coremail) with SMTP id _____wBXizjPApdkbk0WAw--.46043S2;
-        Sat, 24 Jun 2023 22:50:55 +0800 (CST)
-From:   Zheng Wang <zyytlz.wz@163.com>
-To:     Kyrie.Wu@mediatek.com
-Cc:     bin.liu@mediatek.com, mchehab@kernel.org, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, Irui.Wang@mediatek.com,
-        security@kernel.org, hackerzheng666@gmail.com,
-        1395428693sheep@gmail.com, alex000young@gmail.com,
-        Zheng Wang <zyytlz.wz@163.com>
-Subject: [PATCH v2] media: mtk-jpeg: Fix use after free bug due to uncanceled work
-Date:   Sat, 24 Jun 2023 22:50:50 +0800
-Message-Id: <20230624145050.2471885-1-zyytlz.wz@163.com>
-X-Mailer: git-send-email 2.25.1
+        Sat, 24 Jun 2023 10:55:23 -0400
+Received: from mail-4318.protonmail.ch (mail-4318.protonmail.ch [185.70.43.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D99AE7D;
+        Sat, 24 Jun 2023 07:55:21 -0700 (PDT)
+Date:   Sat, 24 Jun 2023 14:55:03 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1687618519; x=1687877719;
+        bh=YV5/XlO7DY5i9iDZ5ZmMmTj4xvcJ6rJdDPORDOCsGYI=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=fXB8WBmtq1Lk+tnc5sME0w+8jCgQvFVvXDv5UDr8/Z1mvV0iZ0VUstye85cMmqTlO
+         WY7u7vQ+VhRzTYIMfCgFbps4OBvwN5zZID0QplZhrVIiNIx70bJXzRIVJYMDuC+9Eo
+         P0gRZw+WR+xnWC2lqk4jnYbnPs/0tQMqgSt7xdu8jSdUBP4HQ7yzHOiPhFvU/W6f7t
+         jN4Fnof4uCKdplTknTpIFcdHNy11u//TmVyn6E1qCkak/48Es8ukMOGiWG94w5P2gF
+         gy2zuD9qDpZ5HIMp3dCup/XF/RAuBH36dQF1fBE9fRTDefRx5cDBVxxtbrVDfoee73
+         C0xp0FrZ8VClg==
+To:     Benno Lossin <benno.lossin@proton.me>
+From:   =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        Alice Ryhl <aliceryhl@google.com>,
+        Andreas Hindborg <nmi@metaspace.dk>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Asahi Lina <lina@asahilina.net>
+Subject: Re: [PATCH 2/7] rust: add derive macro for `Zeroable`
+Message-ID: <QDJDJxiCJaB6_91GlTTIJmyfDegTJpRXwrcPRPubdau5diJRPA96rLxC1oILb0zKKDCQ9703xQn4diE7TCtRpknvg-9yAXoigoKoXwxj9fQ=@protonmail.com>
+In-Reply-To: <20230624092330.157338-2-benno.lossin@proton.me>
+References: <20230624092330.157338-1-benno.lossin@proton.me> <20230624092330.157338-2-benno.lossin@proton.me>
+Feedback-ID: 27884398:user:proton
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wBXizjPApdkbk0WAw--.46043S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7uF17uw15Jr4xtw4xCFy7trb_yoW8Wr43pr
-        W3K3yUCrWUGFs0qr1UJ3W7ZFyrCwnxKa1xWr17uw4Iv393Jrs7JryFya48tFWIyF92kayf
-        Jr18X34xGr4qvFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziaZXrUUUUU=
-X-Originating-IP: [111.206.145.21]
-X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiXRKYU1WBqAoK0wAAsr
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_L4,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In mtk_jpeg_probe, &jpeg->job_timeout_work is bound with
-mtk_jpeg_job_timeout_work. Then mtk_jpeg_dec_device_run
-and mtk_jpeg_enc_device_run may be called to start the
-work.
-If we remove the module which will call mtk_jpeg_remove
-to make cleanup, there may be a unfinished work. The
-possible sequence is as follows, which will cause a
-typical UAF bug.
+On Saturday, June 24th, 2023 at 11:25, Benno Lossin <benno.lossin@proton.me=
+> wrote:
 
-Fix it by canceling the work before cleanup in the mtk_jpeg_remove
+> Add a derive proc-macro for the `Zeroable` trait. The macro supports
+> structs where every field implements the `Zeroable` trait. This way
+> `unsafe` implementations can be avoided.
+>=20
+> The macro is split into two parts:
+> - a proc-macro to parse generics into impl and ty generics,
+> - a declarative macro that expands to the impl block.
+>=20
+> Suggested-by: Asahi Lina <lina@asahilina.net>
+> Signed-off-by: Benno Lossin <benno.lossin@proton.me>
 
-CPU0                  CPU1
+Reviewed-by: Bj=C3=B6rn Roy Baron <bjorn3_gh@protonmail.com>
 
-                    |mtk_jpeg_job_timeout_work
-mtk_jpeg_remove     |
-  v4l2_m2m_release  |
-    kfree(m2m_dev); |
-                    |
-                    | v4l2_m2m_get_curr_priv
-                    |   m2m_dev->curr_ctx //use
-Fixes: b2f0d2724ba4 ("[media] vcodec: mediatek: Add Mediatek JPEG Decoder Driver")
-Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
----
-- v2: use cancel_delayed_work_sync instead of cancel_delayed_work suggested by Kyrie.
----
- drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-index 0051f372a66c..6069ecf420b0 100644
---- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-+++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-@@ -1816,6 +1816,7 @@ static void mtk_jpeg_remove(struct platform_device *pdev)
+> ---
+>  rust/kernel/init/macros.rs | 28 ++++++++++++++++++++++++++++
+>  rust/kernel/prelude.rs     |  2 +-
+>  rust/macros/lib.rs         | 20 ++++++++++++++++++++
+>  rust/macros/quote.rs       |  6 ++++++
+>  rust/macros/zeroable.rs    | 25 +++++++++++++++++++++++++
+>  5 files changed, 80 insertions(+), 1 deletion(-)
+>  create mode 100644 rust/macros/zeroable.rs
+>=20
+> diff --git a/rust/kernel/init/macros.rs b/rust/kernel/init/macros.rs
+> index fbaebd34f218..e8165ff53a94 100644
+> --- a/rust/kernel/init/macros.rs
+> +++ b/rust/kernel/init/macros.rs
+> @@ -1213,3 +1213,31 @@ macro_rules! __init_internal {
+>          );
+>      };
+>  }
+> +
+> +#[doc(hidden)]
+> +#[macro_export]
+> +macro_rules! __derive_zeroable {
+> +    (parse_input:
+> +        @sig(
+> +            $(#[$($struct_attr:tt)*])*
+> +            $vis:vis struct $name:ident
+> +            $(where $($whr:tt)*)?
+> +        ),
+> +        @impl_generics($($impl_generics:tt)*),
+> +        @ty_generics($($ty_generics:tt)*),
+> +        @body({
+> +            $(
+> +                $(#[$($field_attr:tt)*])*
+> +                $field:ident : $field_ty:ty
+> +            ),* $(,)?
+> +        }),
+> +    ) =3D> {
+> +        // SAFETY: every field type implements `Zeroable` and padding by=
+tes may be zero.
+> +        #[automatically_derived]
+> +        unsafe impl<$($impl_generics)*> $crate::Zeroable for $name<$($ty=
+_generics)*>
+> +        where
+> +            $($field_ty: $crate::Zeroable,)*
+> +            $($($whr)*)?
+> +        {}
+> +    };
+> +}
+> diff --git a/rust/kernel/prelude.rs b/rust/kernel/prelude.rs
+> index c28587d68ebc..ae21600970b3 100644
+> --- a/rust/kernel/prelude.rs
+> +++ b/rust/kernel/prelude.rs
+> @@ -18,7 +18,7 @@
+>  pub use alloc::{boxed::Box, vec::Vec};
+>=20
+>  #[doc(no_inline)]
+> -pub use macros::{module, pin_data, pinned_drop, vtable};
+> +pub use macros::{module, pin_data, pinned_drop, vtable, Zeroable};
+>=20
+>  pub use super::build_assert;
+>=20
+> diff --git a/rust/macros/lib.rs b/rust/macros/lib.rs
+> index 3fc74cb4ea19..9f056a5c780a 100644
+> --- a/rust/macros/lib.rs
+> +++ b/rust/macros/lib.rs
+> @@ -10,6 +10,7 @@
+>  mod pin_data;
+>  mod pinned_drop;
+>  mod vtable;
+> +mod zeroable;
+>=20
+>  use proc_macro::TokenStream;
+>=20
+> @@ -246,3 +247,22 @@ pub fn pin_data(inner: TokenStream, item: TokenStrea=
+m) -> TokenStream {
+>  pub fn pinned_drop(args: TokenStream, input: TokenStream) -> TokenStream=
  {
- 	struct mtk_jpeg_dev *jpeg = platform_get_drvdata(pdev);
- 
-+	cancel_delayed_work_sync(&jpeg->job_timeout_work);
- 	pm_runtime_disable(&pdev->dev);
- 	video_unregister_device(jpeg->vdev);
- 	v4l2_m2m_release(jpeg->m2m_dev);
--- 
-2.25.1
-
+>      pinned_drop::pinned_drop(args, input)
+>  }
+> +
+> +/// Derives the [`Zeroable`] trait for the given struct.
+> +///
+> +/// This can only be used for structs where every field implements the [=
+`Zeroable`] trait.
+> +///
+> +/// # Examples
+> +///
+> +/// ```rust
+> +/// #[derive(Zeroable)]
+> +/// pub struct DriverData {
+> +///     id: i64,
+> +///     buf_ptr: *mut u8,
+> +///     len: usize,
+> +/// }
+> +/// ```
+> +#[proc_macro_derive(Zeroable)]
+> +pub fn derive_zeroable(input: TokenStream) -> TokenStream {
+> +    zeroable::derive(input)
+> +}
+> diff --git a/rust/macros/quote.rs b/rust/macros/quote.rs
+> index dddbb4e6f4cb..b76c198a4ed5 100644
+> --- a/rust/macros/quote.rs
+> +++ b/rust/macros/quote.rs
+> @@ -124,6 +124,12 @@ macro_rules! quote_spanned {
+>          ));
+>          quote_spanned!(@proc $v $span $($tt)*);
+>      };
+> +    (@proc $v:ident $span:ident ; $($tt:tt)*) =3D> {
+> +        $v.push(::proc_macro::TokenTree::Punct(
+> +                ::proc_macro::Punct::new(';', ::proc_macro::Spacing::Alo=
+ne)
+> +        ));
+> +        quote_spanned!(@proc $v $span $($tt)*);
+> +    };
+>      (@proc $v:ident $span:ident $id:ident $($tt:tt)*) =3D> {
+>          $v.push(::proc_macro::TokenTree::Ident(::proc_macro::Ident::new(=
+stringify!($id), $span)));
+>          quote_spanned!(@proc $v $span $($tt)*);
+> diff --git a/rust/macros/zeroable.rs b/rust/macros/zeroable.rs
+> new file mode 100644
+> index 000000000000..cddb866c44ef
+> --- /dev/null
+> +++ b/rust/macros/zeroable.rs
+> @@ -0,0 +1,25 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +use crate::helpers::{parse_generics, Generics};
+> +use proc_macro::TokenStream;
+> +
+> +pub(crate) fn derive(input: TokenStream) -> TokenStream {
+> +    let (
+> +        Generics {
+> +            impl_generics,
+> +            ty_generics,
+> +        },
+> +        mut rest,
+> +    ) =3D parse_generics(input);
+> +    // This should be the body of the struct `{...}`.
+> +    let last =3D rest.pop();
+> +    quote! {
+> +        ::kernel::__derive_zeroable!(
+> +            parse_input:
+> +                @sig(#(#rest)*),
+> +                @impl_generics(#(#impl_generics)*),
+> +                @ty_generics(#(#ty_generics)*),
+> +                @body(#last),
+> +        );
+> +    }
+> +}
+> --
+> 2.41.0
