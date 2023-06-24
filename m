@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CEEA73C4FF
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 02:03:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CBC673C500
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 02:05:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232095AbjFXADe convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 23 Jun 2023 20:03:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33440 "EHLO
+        id S231856AbjFXAFL convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 23 Jun 2023 20:05:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231506AbjFXADc (ORCPT
+        with ESMTP id S230516AbjFXAFK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 20:03:32 -0400
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 896FC2707;
-        Fri, 23 Jun 2023 17:03:24 -0700 (PDT)
-Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-bf3934ee767so3628346276.0;
-        Fri, 23 Jun 2023 17:03:24 -0700 (PDT)
+        Fri, 23 Jun 2023 20:05:10 -0400
+Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F7AE1715;
+        Fri, 23 Jun 2023 17:05:09 -0700 (PDT)
+Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-62ffb5f6aafso10539956d6.1;
+        Fri, 23 Jun 2023 17:05:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687565004; x=1690157004;
+        d=1e100.net; s=20221208; t=1687565108; x=1690157108;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=pGxsOBbKB22bf0B3O3FFaShm0eqOgqt5FgbcjeTORJ4=;
-        b=P6ZsZ+A2FGZ3iKm/RpnXpE0aVSgZ8w1jGpZZpPmzUEnUvHj1BZNA5mTL/3GmG1cVYW
-         1tqgf/ViH4FKPIoPT3H4nw3z8HO0fykTvXyPeW+NYlvlqfzxbey2QRpbOfJHPsZ7jtho
-         XgdmijS6wzf9R20WQcxLYf6HLT6HMcd2gPlx7+g4+FWhSXzVuG3JaRVS6s8xsqRyCrPo
-         0sKeUUISDOei/PKW5fqbrBapBmjK9CibIlWGkOky2oOb8wzX+cIfyYdHepHM77rYhto6
-         5anm2YFjhfwd/IGXCJw1rtswWAdt+3pAqgHW6agr5mdbxgAXD5xrb2jSrePSY6tbfl3k
-         91TQ==
-X-Gm-Message-State: AC+VfDxQyjcUYeMLW4Sq6pKdxhknnOIrHJHzQ30p8ZM4nmjwXeLguHRe
-        6k9iEMLtqMU6cmlsPtpSHYez/HTORsFzc3QgXOA=
-X-Google-Smtp-Source: ACHHUZ74md1d7MCVgnQak7P7DSFy1RGjbsvcL2UzCK/lxvaIV7Dt+oqX0IdVhBd9GO7+OI5JrMPtT6AuBl1cxPlAC4o=
-X-Received: by 2002:a25:4007:0:b0:b94:bbf2:19a3 with SMTP id
- n7-20020a254007000000b00b94bbf219a3mr24508831yba.18.1687565003693; Fri, 23
- Jun 2023 17:03:23 -0700 (PDT)
+        bh=aL5w2m8V/KDDXwMddYTWzt+5srKNCPxK8P/RiM5TeBE=;
+        b=AjiUGplicGIsRNBjRHHIlNquYfZBsdnC/fkE4F6rur5zkb+w0pqqLyicoxmOqQwpK/
+         pHlOBZn0i22bEEiAZN5ZPXlWsbgvcvYR4FxQSeByjVRhWz9HA93X6KPzdLkI1NoPrK5m
+         iZuqn5hUl7a+CoAtDk1z7A+zFzMHi6l2vC6lSkAdTj+zaDmd+9bWh6KXx1qkXR2Si6Jt
+         BhpsvRG45Lq5IsoH25HJg/u2KNcQk7xqYRDO4whHDBHvnB6qo0dM/F+oRaSBRiWI+HZj
+         q8/r9BUYUWkeA34JyhKyOvO5UdmColWfrK6yrV0d3Whbv9KASSNpWFMV2eqEo1CfqvcU
+         XMIA==
+X-Gm-Message-State: AC+VfDyz0uZZ0wH4R6uUaJU4SiVmGFmmrgBgbXoklhwjY40QMnqK1NWr
+        Z2OciBhxA1Uyf/1HtrzrAtAPrAVIFb/cEf9h5r8=
+X-Google-Smtp-Source: ACHHUZ6NE6ujRGM98HY3j9uxeIkYXkzK9S/TYzrlW9uwGmhfNN/kn1bdgiyUxQC8DXwTmVtPO6yX1tzNZfWXAYUE4oY=
+X-Received: by 2002:a05:6214:5193:b0:630:1bc8:9c7 with SMTP id
+ kl19-20020a056214519300b006301bc809c7mr17681678qvb.2.1687565108078; Fri, 23
+ Jun 2023 17:05:08 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1687375189.git.anupnewsmail@gmail.com> <3772bce9068962f2a4c57672e919ebdf30edbc5c.1687375189.git.anupnewsmail@gmail.com>
-In-Reply-To: <3772bce9068962f2a4c57672e919ebdf30edbc5c.1687375189.git.anupnewsmail@gmail.com>
+References: <cover.1687375189.git.anupnewsmail@gmail.com> <4d0ac80521ebd44322a360ac331ce2443a1f0f26.1687375189.git.anupnewsmail@gmail.com>
+In-Reply-To: <4d0ac80521ebd44322a360ac331ce2443a1f0f26.1687375189.git.anupnewsmail@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Fri, 23 Jun 2023 17:03:12 -0700
-Message-ID: <CAM9d7cj1bWWM7j5LCTpDQqLXmn5UH1mkCvZ-k3VEXJb7S2+wxg@mail.gmail.com>
-Subject: Re: [PATCH 4/9] scripts: python: Implement parsing of input data in convertPerfScriptProfile
+Date:   Fri, 23 Jun 2023 17:04:56 -0700
+Message-ID: <CAM9d7cgAfvzrGiU0QiEigTAYKMe+OEP0b3o3Xd-0VhXX5Wkx1g@mail.gmail.com>
+Subject: Re: [PATCH 7/9] scripts: python: implement get or create frame function
 To:     Anup Sharma <anupnewsmail@gmail.com>
 Cc:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -64,126 +64,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Anup,
-
-On Wed, Jun 21, 2023 at 12:41 PM Anup Sharma <anupnewsmail@gmail.com> wrote:
+On Wed, Jun 21, 2023 at 12:45 PM Anup Sharma <anupnewsmail@gmail.com> wrote:
 >
-> The lines variable is created by splitting the profile string into individual
-> lines. It allows for iterating over each line for processing.
+> The CATEGORIES list and the USER_CATEGORY_INDEX and
+> KERNEL_CATEGORY_INDEX constants has been introduced.
 >
-> The line is considered the start of a sample. It is matched against a regular
-> expression pattern to extract relevant information such as before_time_stamp,
-> time_stamp, threadNamePidAndTidMatch, threadName, pid, and tid.
+> The get_or_create_frame function is responsible for retrieving or
+> creating a frame based on the provided frameString. If the frame
+> corresponding to the frameString is found in the frameMap, it is
+> returned. Otherwise, a new frame is created by appending relevant
+> information to the frameTable's 'data' array and adding the
+> frameString to the stringTable.
 >
-> The stack frames of the current sample are then parsed in a nested loop.
-> Each stackFrameLine is matched against a regular expression pattern to
-> extract rawFunc and mod information.
->
-> Also fixed few checkpatch warnings.
+> The index of the newly created frame is added to the frameMap.
 >
 > Signed-off-by: Anup Sharma <anupnewsmail@gmail.com>
 > ---
->  .../scripts/python/firefox-gecko-converter.py | 62 ++++++++++++++++++-
->  1 file changed, 60 insertions(+), 2 deletions(-)
+>  .../scripts/python/firefox-gecko-converter.py | 38 +++++++++++++++++++
+>  1 file changed, 38 insertions(+)
 >
 > diff --git a/tools/perf/scripts/python/firefox-gecko-converter.py b/tools/perf/scripts/python/firefox-gecko-converter.py
-> index 0ff70c0349c8..e5bc7a11c3e6 100644
+> index 30fc542cfdeb..866751e5d1ce 100644
 > --- a/tools/perf/scripts/python/firefox-gecko-converter.py
 > +++ b/tools/perf/scripts/python/firefox-gecko-converter.py
-> @@ -1,4 +1,5 @@
->  #!/usr/bin/env python3
-> +# SPDX-License-Identifier: GPL-2.0
-
-Please put this line in the first commit.
-
->  import re
->  import sys
->  import json
-> @@ -14,13 +15,13 @@ def isPerfScriptFormat(profile):
+> @@ -15,6 +15,13 @@ def isPerfScriptFormat(profile):
 >      firstLine = profile[:profile.index('\n')]
 >      return bool(re.match(r'^\S.*?\s+(?:\d+/)?\d+\s+(?:\d+\d+\s+)?[\d.]+:', firstLine))
 >
-> -def convertPerfScriptProfile(profile):
-> +def convertPerfScriptProfile(profile):
+> +CATEGORIES = [
+> +{'name': 'User', 'color': 'yellow', 'subcategories': ['Other']},
+> +{'name': 'Kernel', 'color': 'orange', 'subcategories': ['Other']}
+> +]
+> +USER_CATEGORY_INDEX = 0
+> +KERNEL_CATEGORY_INDEX = 1
+> +
+>  def convertPerfScriptProfile(profile):
+>      def _createtread(name, pid, tid):
+>          markers = {
+> @@ -70,6 +77,37 @@ def convertPerfScriptProfile(profile):
+>                  stackMap[key] = stack
+>              return stack
+>
+> +        frameMap = dict()
+> +        def get_or_create_frame(frameString):
+> +            frame = frameMap.get(frameString)
+> +            if frame is None:
+> +                frame = len(frameTable['data'])
+> +                location = len(stringTable)
+> +                stringTable.append(frameString)
+> +
+> +                category = KERNEL_CATEGORY_INDEX if frameString.find('kallsyms') != -1 or frameString.find('/vmlinux') != -1 or frameString.endswith('.ko)') else USER_CATEGORY_INDEX
 
-You'd better configure your editor to warn or even fix
-the trailing whitespace automatically.
+This line is too long, we usually don't allow long lines
+over 100 characters.
 
 Thanks,
 Namhyung
 
 
->
+> +                implementation = None
+> +                optimizations = None
+> +                line = None
+> +                relevantForJS = False
+> +                subcategory = None
+> +                innerWindowID = 0
+> +                column = None
+> +
+> +                frameTable['data'].append([
+> +                    location,
+> +                    relevantForJS,
+> +                    innerWindowID,
+> +                    implementation,
+> +                    optimizations,
+> +                    line,
+> +                    column,
+> +                    category,
+> +                    subcategory,
+> +                ])
+> +                frameMap[frameString] = frame
+> +            return frame
+> +
 >          def addSample(threadName, stackArray, time):
 >              nonlocal name
 >              if name != threadName:
->                  name = threadName
-> -            # TODO:
-> +            # TODO:
->              # get_or_create_stack will create a new stack if it doesn't exist, or return the existing stack if it does.
->              # get_or_create_frame will create a new frame if it doesn't exist, or return the existing frame if it does.
->              stack = reduce(lambda prefix, stackFrame: get_or_create_stack(get_or_create_frame(stackFrame), prefix), stackArray, None)
-> @@ -54,3 +55,60 @@ def convertPerfScriptProfile(profile):
->              thread = _createtread(threadName, pid, tid)
->              threadMap[tid] = thread
->          thread['addSample'](threadName, stack, time_stamp)
-> +
-> +    lines = profile.split('\n')
-> +
-> +    line_index = 0
-> +    startTime = 0
-> +    while line_index < len(lines):
-> +        line = lines[line_index]
-> +        line_index += 1
-> +    # perf script --header outputs header lines beginning with #
-> +        if line == '' or line.startswith('#'):
-> +            continue
-> +
-> +        sample_start_line = line
-> +
-> +        sample_start_match = re.match(r'^(.*)\s+([\d.]+):', sample_start_line)
-> +        if not sample_start_match:
-> +            print(f'Could not parse line as the start of a sample in the "perf script" profile format: "{sample_start_line}"')
-> +            continue
-> +
-> +        before_time_stamp = sample_start_match[1]
-> +        time_stamp = float(sample_start_match[2]) * 1000
-> +        threadNamePidAndTidMatch = re.match(r'^(.*)\s+(?:(\d+)\/)?(\d+)\b', before_time_stamp)
-> +
-> +        if not threadNamePidAndTidMatch:
-> +            print('Could not parse line as the start of a sample in the "perf script" profile format: "%s"' % sampleStartLine)
-> +            continue
-> +        threadName = threadNamePidAndTidMatch[1].strip()
-> +        pid = int(threadNamePidAndTidMatch[2] or 0)
-> +        tid = int(threadNamePidAndTidMatch[3] or 0)
-> +        if startTime == 0:
-> +            startTime = time_stamp
-> +        # Parse the stack frames of the current sample in a nested loop.
-> +        stack = []
-> +        while line_index < len(lines):
-> +            stackFrameLine = lines[line_index]
-> +            line_index += 1
-> +            if stackFrameLine.strip() == '':
-> +                # Sample ends.
-> +                break
-> +            stackFrameMatch = re.match(r'^\s*(\w+)\s*(.+) \(([^)]*)\)', stackFrameLine)
-> +            if stackFrameMatch:
-> +                rawFunc = stackFrameMatch[2]
-> +                mod = stackFrameMatch[3]
-> +                rawFunc = re.sub(r'\+0x[\da-f]+$', '', rawFunc)
-> +
-> +            if rawFunc.startswith('('):
-> +                continue # skip process names
-> +
-> +            if mod:
-> +                # If we have a module name, provide it.
-> +                # The code processing the profile will search for
-> +                # "functionName (in libraryName)" using a regexp,
-> +                # and automatically create the library information.
-> +                rawFunc += f' (in {mod})'
-> +
-> +            stack.append(rawFunc)
-> +
 > --
 > 2.34.1
 >
