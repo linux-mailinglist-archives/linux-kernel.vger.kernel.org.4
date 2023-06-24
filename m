@@ -2,104 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEAE173C656
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 04:29:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 353D873C65E
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 04:46:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231249AbjFXC3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 22:29:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41448 "EHLO
+        id S229786AbjFXCqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 22:46:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjFXC3X (ORCPT
+        with ESMTP id S229494AbjFXCql (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 22:29:23 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40468126
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 19:29:22 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1b7d4b99a21so3538195ad.0
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 19:29:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1687573761; x=1690165761;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=11YyvRRAb5IUX+NMds870r+K11ScAeUGmh7sZi++E+8=;
-        b=cPnU1I2S7CS0GBUJSTTWf2V3U4gplDBnYXRmSxMs0isGKgs+cZSVgES/5dxAbzmguc
-         AeoYHPTjHl9KMLC2xtKpfnDBkRy/qpub3z9s2inBFV4d4k5+g+cwsGRqSL7ViflLC7sH
-         eJ98cEFVhYI22uNfeGYFyYVnfrOwjmahdDUiM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687573761; x=1690165761;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=11YyvRRAb5IUX+NMds870r+K11ScAeUGmh7sZi++E+8=;
-        b=dxcr23cjIsUumHHRCmXQ5j4CJP0hzji5pTS7D0Gld/Mf3qO9sJO4U+wyuyrLn+91/t
-         jqnpUeqfFP2bV6TOgJWy8IjIiFYemfqIlJEYAvg/zWpphgupEIAC+gWwrY8V6YkS/qRN
-         CCQoyd/+VJV8AfXdZOAswAhhk+Ho5pi84G0+6HXePQ1KbO95fgjFhMEGQwdPBkTdnCnG
-         G7lYz8RS2h8QQ42TBFCq+d2a6AlKE3gftMzQkeb0pt1irteWHC3qhiXYJ55YEgYuQUza
-         GKa0GFC4a5/CX1dY67Mu2HH2Ig5PPjdsNFxdck8z/YYt3m8VsLFXpvflEYfkTC1F1NOb
-         BkfQ==
-X-Gm-Message-State: AC+VfDxJDBQYfFjvAyAeesufRJde9X1OBDOb80RjesUe6DFCkV5tkxMJ
-        mNF1yajy3/tovQ3otQstu7qZqreCH0gFXCDrUFU=
-X-Google-Smtp-Source: ACHHUZ6G7LKAO1qkjb9+GVt71O+HN8+8TN8PHJ8SXjS/nRGjq2BrtxZTp9fukBdBJ0fuwRK7FsA+fw==
-X-Received: by 2002:a17:902:c944:b0:1b2:1a79:147d with SMTP id i4-20020a170902c94400b001b21a79147dmr1247425pla.2.1687573761547;
-        Fri, 23 Jun 2023 19:29:21 -0700 (PDT)
-Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
-        by smtp.gmail.com with ESMTPSA id i9-20020a17090332c900b00192aa53a7d5sm226294plr.8.2023.06.23.19.29.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Jun 2023 19:29:21 -0700 (PDT)
-Date:   Sat, 24 Jun 2023 11:29:17 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Alexey Romanov <AVRomanov@sberdevices.ru>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Minchan Kim <minchan@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/2] zsmalloc: do not scan for allocated objects in empty
- zspage
-Message-ID: <20230624022917.GF2934656@google.com>
-References: <20230623044016.366793-1-senozhatsky@chromium.org>
- <20230623044016.366793-2-senozhatsky@chromium.org>
- <20230623104917.2n6vcxvhvlwmjm2m@cab-wsm-0029881>
+        Fri, 23 Jun 2023 22:46:41 -0400
+Received: from out-62.mta0.migadu.com (out-62.mta0.migadu.com [91.218.175.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62328E1
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 19:46:39 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1687574797;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=N99W1PdAr0OWUT49Ca/cf/ovMzOhIoXmt9jkyLCr7jE=;
+        b=lqUpTigKQWW+JM3OWisaO4ZycziI/PYiu2SZKvQXrXnlrDSgLjvdEo3KwjuH5AcLXGJHWv
+        BkY3n32PECh8mZToUHXKjqT68SXKlX/cQWVBjZWsZu44JKcq2CHMJxp/qaKQ8nmpKIsVRg
+        hxHYwyeCsNcBYyaY+xwHnWyKeSNqTnw=
+From:   Yajun Deng <yajun.deng@linux.dev>
+To:     rppt@kernel.org, akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Yajun Deng <yajun.deng@linux.dev>
+Subject: [PATCH] memblock: Introduce memblock_reserve_node()
+Date:   Sat, 24 Jun 2023 10:46:22 +0800
+Message-Id: <20230624024622.2959376-1-yajun.deng@linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230623104917.2n6vcxvhvlwmjm2m@cab-wsm-0029881>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (23/06/23 10:49), Alexey Romanov wrote:
-> > +static bool zspage_empty(struct zspage *zspage)
-> > +{
-> > +	return get_zspage_inuse(zspage) == 0;
-> > +}
-> > +
-> >  /**
-> >   * zs_lookup_class_index() - Returns index of the zsmalloc &size_class
-> >   * that hold objects of the provided size.
-> > @@ -1625,6 +1630,10 @@ static void migrate_zspage(struct zs_pool *pool, struct size_class *class,
-> >  		obj_idx++;
-> >  		record_obj(handle, free_obj);
-> >  		obj_free(class->size, used_obj);
-> > +
-> > +		/* Stop if there are no more objects to migrate */
-> > +		if (zspage_empty(get_zspage(s_page)))
-> > +			break;
-> >  	}
-> >  
-> >  	/* Remember last position in this iteration */
-> > -- 
-> > 2.41.0.162.gfafddb0af9-goog
-> > 
-> 
-> I think we can add similar check in zs_reclaim_page() function.
-> There we also scan zspage to find the allocated object.
+It only returns address now in memblock_find_in_range_node(), we can add a
+parameter pointing to integer for node id of the range, which can be used
+to pass the node id to the new reserve region.
 
-LRU was moved to zswap, so zs_reclaim_page() doesn't exist any longer
-(in linux-next).
+Introduce memblock_reserve_node() so that the node id can be passed to
+the reserve region in memblock_alloc_range_nid().
+
+Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
+---
+ mm/memblock.c | 39 +++++++++++++++++++++++++++------------
+ 1 file changed, 27 insertions(+), 12 deletions(-)
+
+diff --git a/mm/memblock.c b/mm/memblock.c
+index f9e61e565a53..6b5f6c246458 100644
+--- a/mm/memblock.c
++++ b/mm/memblock.c
+@@ -204,6 +204,7 @@ bool __init_memblock memblock_overlaps_region(struct memblock_type *type,
+  * @align: alignment of free area to find
+  * @nid: nid of the free area to find, %NUMA_NO_NODE for any node
+  * @flags: pick from blocks based on memory attributes
++ * @p_nid: ptr to int for nid of the range, can be %NULL
+  *
+  * Utility called from memblock_find_in_range_node(), find free area bottom-up.
+  *
+@@ -213,12 +214,12 @@ bool __init_memblock memblock_overlaps_region(struct memblock_type *type,
+ static phys_addr_t __init_memblock
+ __memblock_find_range_bottom_up(phys_addr_t start, phys_addr_t end,
+ 				phys_addr_t size, phys_addr_t align, int nid,
+-				enum memblock_flags flags)
++				enum memblock_flags flags, int *p_nid)
+ {
+ 	phys_addr_t this_start, this_end, cand;
+ 	u64 i;
+ 
+-	for_each_free_mem_range(i, nid, flags, &this_start, &this_end, NULL) {
++	for_each_free_mem_range(i, nid, flags, &this_start, &this_end, p_nid) {
+ 		this_start = clamp(this_start, start, end);
+ 		this_end = clamp(this_end, start, end);
+ 
+@@ -239,6 +240,7 @@ __memblock_find_range_bottom_up(phys_addr_t start, phys_addr_t end,
+  * @align: alignment of free area to find
+  * @nid: nid of the free area to find, %NUMA_NO_NODE for any node
+  * @flags: pick from blocks based on memory attributes
++ * @p_nid: ptr to int for nid of the range, can be %NULL
+  *
+  * Utility called from memblock_find_in_range_node(), find free area top-down.
+  *
+@@ -248,13 +250,13 @@ __memblock_find_range_bottom_up(phys_addr_t start, phys_addr_t end,
+ static phys_addr_t __init_memblock
+ __memblock_find_range_top_down(phys_addr_t start, phys_addr_t end,
+ 			       phys_addr_t size, phys_addr_t align, int nid,
+-			       enum memblock_flags flags)
++			       enum memblock_flags flags, int *p_nid)
+ {
+ 	phys_addr_t this_start, this_end, cand;
+ 	u64 i;
+ 
+ 	for_each_free_mem_range_reverse(i, nid, flags, &this_start, &this_end,
+-					NULL) {
++					p_nid) {
+ 		this_start = clamp(this_start, start, end);
+ 		this_end = clamp(this_end, start, end);
+ 
+@@ -278,6 +280,7 @@ __memblock_find_range_top_down(phys_addr_t start, phys_addr_t end,
+  *       %MEMBLOCK_ALLOC_ACCESSIBLE
+  * @nid: nid of the free area to find, %NUMA_NO_NODE for any node
+  * @flags: pick from blocks based on memory attributes
++ * @p_nid: ptr to int for nid of the range, can be %NULL
+  *
+  * Find @size free area aligned to @align in the specified range and node.
+  *
+@@ -287,7 +290,7 @@ __memblock_find_range_top_down(phys_addr_t start, phys_addr_t end,
+ static phys_addr_t __init_memblock memblock_find_in_range_node(phys_addr_t size,
+ 					phys_addr_t align, phys_addr_t start,
+ 					phys_addr_t end, int nid,
+-					enum memblock_flags flags)
++					enum memblock_flags flags, int *p_nid)
+ {
+ 	/* pump up @end */
+ 	if (end == MEMBLOCK_ALLOC_ACCESSIBLE ||
+@@ -300,10 +303,10 @@ static phys_addr_t __init_memblock memblock_find_in_range_node(phys_addr_t size,
+ 
+ 	if (memblock_bottom_up())
+ 		return __memblock_find_range_bottom_up(start, end, size, align,
+-						       nid, flags);
++						       nid, flags, p_nid);
+ 	else
+ 		return __memblock_find_range_top_down(start, end, size, align,
+-						      nid, flags);
++						      nid, flags, p_nid);
+ }
+ 
+ /**
+@@ -328,7 +331,7 @@ static phys_addr_t __init_memblock memblock_find_in_range(phys_addr_t start,
+ 
+ again:
+ 	ret = memblock_find_in_range_node(size, align, start, end,
+-					    NUMA_NO_NODE, flags);
++					    NUMA_NO_NODE, flags, NULL);
+ 
+ 	if (!ret && (flags & MEMBLOCK_MIRROR)) {
+ 		pr_warn_ratelimited("Could not allocate %pap bytes of mirrored memory\n",
+@@ -863,6 +866,17 @@ int __init_memblock memblock_phys_free(phys_addr_t base, phys_addr_t size)
+ 	return memblock_remove_range(&memblock.reserved, base, size);
+ }
+ 
++static int __init_memblock memblock_reserve_node(phys_addr_t base, phys_addr_t size,
++						 int nid, enum memblock_flags flags)
++{
++	phys_addr_t end = base + size - 1;
++
++	memblock_dbg("%s: [%pa-%pa] nid=%d flags=%x %pS\n", __func__,
++		     &base, &end, nid, flags, (void *)_RET_IP_);
++
++	return memblock_add_range(&memblock.reserved, base, size, nid, flags);
++}
++
+ int __init_memblock memblock_reserve(phys_addr_t base, phys_addr_t size)
+ {
+ 	phys_addr_t end = base + size - 1;
+@@ -1389,6 +1403,7 @@ phys_addr_t __init memblock_alloc_range_nid(phys_addr_t size,
+ {
+ 	enum memblock_flags flags = choose_memblock_flags();
+ 	phys_addr_t found;
++	int p_nid;
+ 
+ 	if (WARN_ONCE(nid == MAX_NUMNODES, "Usage of MAX_NUMNODES is deprecated. Use NUMA_NO_NODE instead\n"))
+ 		nid = NUMA_NO_NODE;
+@@ -1401,15 +1416,15 @@ phys_addr_t __init memblock_alloc_range_nid(phys_addr_t size,
+ 
+ again:
+ 	found = memblock_find_in_range_node(size, align, start, end, nid,
+-					    flags);
+-	if (found && !memblock_reserve(found, size))
++					    flags, &p_nid);
++	if (found && !memblock_reserve_node(found, size, p_nid, flags))
+ 		goto done;
+ 
+ 	if (nid != NUMA_NO_NODE && !exact_nid) {
+ 		found = memblock_find_in_range_node(size, align, start,
+ 						    end, NUMA_NO_NODE,
+-						    flags);
+-		if (found && !memblock_reserve(found, size))
++						    flags, &p_nid);
++		if (found && !memblock_reserve_node(found, size, p_nid, flags))
+ 			goto done;
+ 	}
+ 
+-- 
+2.25.1
+
