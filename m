@@ -2,120 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D4EA73C586
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 02:42:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A7AE73C57E
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 02:42:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232457AbjFXAm1 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 23 Jun 2023 20:42:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42582 "EHLO
+        id S232345AbjFXAmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 20:42:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232380AbjFXAlf (ORCPT
+        with ESMTP id S232076AbjFXAla (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 20:41:35 -0400
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA2D82D5D;
-        Fri, 23 Jun 2023 17:41:21 -0700 (PDT)
-Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-bc43a73ab22so1994727276.0;
-        Fri, 23 Jun 2023 17:41:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687567280; x=1690159280;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=r/FuRD6bejRQah/PpTEFj6gbgQmoOAaWot6r6iD99aY=;
-        b=hQq7aeF5Bney3E8au7auP5e0GtRHzkuIYwPY95XndGoyDz5yIECSkFTELRG5Lzd5w2
-         tFpYDyIg1V5AwMmIQwg1tgEJ28AnIuyzNM9K2P4FUCQkCxXXdSiXJZWbQUkVwDpBHvVW
-         2Yfh04By453RagiLzRaj7QyUt7TyzSL8z9rYxh2A3Ytz0kk63EN7JCZGZkMPN7PAC8pc
-         eFqn1iCTAdEcb9Ub+Z+rBdR2nAoQ5R/L9uRCbsZBMB87WaZKW8oe+kfOEd034epc1mki
-         3St53nIoEbsjBZ63JWXw1bK5PKckFWkzUQR8dtdcdSzK5IfCvgiD1KxGVK6nAcU9hPJt
-         //ew==
-X-Gm-Message-State: AC+VfDyR/a0KFKXdhuujMPOv5FlE3EyurmGKp8fq3l+dLR1Nutui7Qbt
-        o9c3KBM/AW3SAKMEnwmZzR37J5eD8MAg44hk41YE2JSeA6Q=
-X-Google-Smtp-Source: ACHHUZ5v2gjWGDGfcaukxYQKOY1iZOInR8MeFqHIgmHe//PaN8SFd/JN9VvhS5X5qdOwvPXcEhFAuVB2cVwiNdDdDps=
-X-Received: by 2002:a25:e751:0:b0:bac:fc30:3913 with SMTP id
- e78-20020a25e751000000b00bacfc303913mr21471004ybh.21.1687567280546; Fri, 23
- Jun 2023 17:41:20 -0700 (PDT)
+        Fri, 23 Jun 2023 20:41:30 -0400
+Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [IPv6:2001:4b7a:2000:18::171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4269B2D45
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 17:41:17 -0700 (PDT)
+Received: from Marijn-Arch-PC.localdomain (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 78D663F853;
+        Sat, 24 Jun 2023 02:41:15 +0200 (CEST)
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+Date:   Sat, 24 Jun 2023 02:41:10 +0200
+Subject: [PATCH 12/15] arm64: dts: qcom: sm6125: Switch fixed xo_board
+ clock to RPM XO clock
 MIME-Version: 1.0
-References: <20230623041405.4039475-1-irogers@google.com>
-In-Reply-To: <20230623041405.4039475-1-irogers@google.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Fri, 23 Jun 2023 17:41:09 -0700
-Message-ID: <CAM9d7ch9MfCS02+-4FRDvrDVDK+f8qtqYr5m0abegg9PXJncHQ@mail.gmail.com>
-Subject: Re: [PATCH v4 0/4] Bring back vmlinux.h generation
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        James Clark <james.clark@arm.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230624-sm6125-dpu-v1-12-1d5a638cebf2@somainline.org>
+References: <20230624-sm6125-dpu-v1-0-1d5a638cebf2@somainline.org>
+In-Reply-To: <20230624-sm6125-dpu-v1-0-1d5a638cebf2@somainline.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, Lux Aliaga <they@mint.lgbt>,
+        Marijn Suijten <marijn.suijten@somainline.org>
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 22, 2023 at 9:14 PM Ian Rogers <irogers@google.com> wrote:
->
-> Commit 760ebc45746b ("perf lock contention: Add empty 'struct rq' to
-> satisfy libbpf 'runqueue' type verification") inadvertently created a
-> declaration of 'struct rq' that conflicted with a generated
-> vmlinux.h's:
->
-> ```
-> util/bpf_skel/lock_contention.bpf.c:419:8: error: redefinition of 'rq'
-> struct rq {};
->        ^
-> /tmp/perf/util/bpf_skel/.tmp/../vmlinux.h:45630:8: note: previous definition is here
-> struct rq {
->        ^
-> 1 error generated.
-> ```
->
-> Fix the issue by moving the declaration to vmlinux.h. So this can't
-> happen again, bring back build support for generating vmlinux.h then
-> add build tests.
->
-> v4. Rebase and add Namhyung and Jiri's acked-by.
-> v3. Address Namhyung's comments on filtering ELF files with readelf.
-> v2. Rebase on perf-tools-next. Add Andrii's acked-by. Add patch to
->     filter out kernels that lack a .BTF section and cause the build to
->     break.
->
-> Ian Rogers (4):
->   perf build: Add ability to build with a generated vmlinux.h
->   perf bpf: Move the declaration of struct rq
->   perf test: Add build tests for BUILD_BPF_SKEL
->   perf build: Filter out BTF sources without a .BTF section
+We have a working RPM XO clock; no other driver except rpmcc should be
+parenting directly to the fixed-factor xo_board clock nor should it be
+reachable by that global name.  Remove the name to that effect, so that
+every clock relation is explicitly defined in DTS.
 
-Thanks,  I'll take them with the following change.
-
-Namhyung
-
-
+Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
 ---
-diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-index b1e62a621f92..90f0eaf179fd 100644
---- a/tools/perf/Makefile.perf
-+++ b/tools/perf/Makefile.perf
-@@ -132,6 +132,8 @@ include ../scripts/utilities.mak
- # Define EXTRA_TESTS to enable building extra tests useful mainly to perf
- # developers, such as:
- #      x86 instruction decoder - new instructions test
-+#
-+# Define GEN_VMLINUX_H to generate vmlinux.h from the BTF.
+ arch/arm64/boot/dts/qcom/sm6125.dtsi | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
- # As per kernel Makefile, avoid funny character set dependencies
- unexport LC_ALL
+diff --git a/arch/arm64/boot/dts/qcom/sm6125.dtsi b/arch/arm64/boot/dts/qcom/sm6125.dtsi
+index 722dde560bec..edb03508dba3 100644
+--- a/arch/arm64/boot/dts/qcom/sm6125.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm6125.dtsi
+@@ -22,7 +22,6 @@ xo_board: xo-board {
+ 			compatible = "fixed-clock";
+ 			#clock-cells = <0>;
+ 			clock-frequency = <19200000>;
+-			clock-output-names = "xo_board";
+ 		};
+ 
+ 		sleep_clk: sleep-clk {
+@@ -306,6 +305,8 @@ rpm_requests: rpm-requests {
+ 			rpmcc: clock-controller {
+ 				compatible = "qcom,rpmcc-sm6125", "qcom,rpmcc";
+ 				#clock-cells = <1>;
++				clocks = <&xo_board>;
++				clock-names = "xo";
+ 			};
+ 
+ 			rpmpd: power-controller {
+@@ -713,7 +714,7 @@ sdhc_1: mmc@4744000 {
+ 
+ 			clocks = <&gcc GCC_SDCC1_AHB_CLK>,
+ 				 <&gcc GCC_SDCC1_APPS_CLK>,
+-				 <&xo_board>;
++				 <&rpmcc RPM_SMD_XO_CLK_SRC>;
+ 			clock-names = "iface", "core", "xo";
+ 			iommus = <&apps_smmu 0x160 0x0>;
+ 
+@@ -740,7 +741,7 @@ sdhc_2: mmc@4784000 {
+ 
+ 			clocks = <&gcc GCC_SDCC2_AHB_CLK>,
+ 				 <&gcc GCC_SDCC2_APPS_CLK>,
+-				 <&xo_board>;
++				 <&rpmcc RPM_SMD_XO_CLK_SRC>;
+ 			clock-names = "iface", "core", "xo";
+ 			iommus = <&apps_smmu 0x180 0x0>;
+ 
+
+-- 
+2.41.0
+
