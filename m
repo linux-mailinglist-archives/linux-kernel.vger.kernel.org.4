@@ -2,209 +2,275 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A2D973C4F8
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 01:53:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACF4673C4FA
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 01:58:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232079AbjFWXxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 19:53:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58070 "EHLO
+        id S229786AbjFWX6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 19:58:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232244AbjFWXxs (ORCPT
+        with ESMTP id S229451AbjFWX6h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 19:53:48 -0400
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B3032723
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 16:53:41 -0700 (PDT)
-Received: by mail-pf1-x449.google.com with SMTP id d2e1a72fcca58-66871648c25so819067b3a.1
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 16:53:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687564421; x=1690156421;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GZ8//a8k4/ppq4ZcuNZo7A71GBV4B2OsjfDuokwVTXo=;
-        b=c59RSbCEPyj90/KW+D5tTFxn2TL2cCfZzqUIIO431a4lQcfvn5qFbiF49tPT18UBmb
-         PDW7tk4967hU4Er+q1dXV0VaWLMoVQnqoEx1IQO40kw4MtE8oec3Tmt5kmImoHYLU7Cb
-         04Jc6gaDVCeyU3idKtZYtKXNxbXtToPtgm3pMvLmQzJ8iBWoK18s0O9cbpNZ/2pbaXFH
-         XKIxaHjkXpv943nX85eBLV2MG69zG58RA235+DrPnQf2ezqeEFPNKeX8y7ewa090jyMY
-         aezw1gUrVAMYS4EnSy49lJOtClzvF1aveP4IBxfA1QRVvUk+4fif17u8zUGFSjsgdtB2
-         BPqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687564421; x=1690156421;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GZ8//a8k4/ppq4ZcuNZo7A71GBV4B2OsjfDuokwVTXo=;
-        b=UugKDOezoD+J952F0Wnt33jSqorRzNYEPCwDzoqh3wI//26/gH7s4e/WUyCdjFCaWk
-         1+dIMloUatCgeKOP1xKu2mRQ8p9aLqsSyAVGNjG9iPyExN3kT6nJTDzYLMt45qLTMs9t
-         QVznoj6qlDwXKHJvo2/eRMY9YGtmhPlncVgDltnmAviPMoJtSTwQO7pLuYiHUajEsHis
-         oXl1obKM/gXzw491T1XbC9F9/NCwEfkOuJzrVynPFXp8xOguSM4vRGxzhX3+tY22GsqW
-         AiRyD7XKv12Tblucnz1QVJrav4wn+ey0VQTLVY05Emw8lEoCqLWu3INiRyYC/iLoE+i7
-         N+hw==
-X-Gm-Message-State: AC+VfDzjJU/mrZxaFZfg3vPQ5RvVVzmxiLGGA2jSicbeXffjKmIF5JL9
-        OphxU7gvWS/mGAeFXgeU+TMJFQN4DcU=
-X-Google-Smtp-Source: ACHHUZ6vCcOm23GPYV5TypZFd7kfdJrzsMwKTZimKPcF/b8IZraa0vcbNSbC6Lk2YWT0GE65RMm7dxGpTKg=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:234a:b0:668:9181:8e20 with SMTP id
- j10-20020a056a00234a00b0066891818e20mr3352690pfj.1.1687564421125; Fri, 23 Jun
- 2023 16:53:41 -0700 (PDT)
-Date:   Fri, 23 Jun 2023 16:53:39 -0700
-In-Reply-To: <20230511040857.6094-14-weijiang.yang@intel.com>
-Mime-Version: 1.0
-References: <20230511040857.6094-1-weijiang.yang@intel.com> <20230511040857.6094-14-weijiang.yang@intel.com>
-Message-ID: <ZJYwg3Lnq3nJZgQf@google.com>
-Subject: Re: [PATCH v3 13/21] KVM:VMX: Emulate reads and writes to CET MSRs
-From:   Sean Christopherson <seanjc@google.com>
-To:     Yang Weijiang <weijiang.yang@intel.com>
-Cc:     pbonzini@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, peterz@infradead.org,
-        rppt@kernel.org, binbin.wu@linux.intel.com,
-        rick.p.edgecombe@intel.com, john.allen@amd.com,
-        Sean Christopherson <sean.j.christopherson@intel.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 23 Jun 2023 19:58:37 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD4962693;
+        Fri, 23 Jun 2023 16:58:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687564715; x=1719100715;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZCsiRNeHR6k4zhE+8+E+Geaf2iCs4rkKevkjniNjVEc=;
+  b=JnkgoL7Mmi6LUgeyTKSj3UEWKNmVfNW78MD45VBApcNHl5jlMFU6vqW4
+   tRTbgfJ8xixcnIUADoxTvXJ1JUo7ANwmcubvSLPR3rm6hzHqLwPs/JHZq
+   SEWiC54vraoZ5oQqe4z9uWJKPUITdpEaDY8taFFSZL8B217YTAeF8FYi0
+   FOiPQr5p9Tkbmpa7U/Bmk0e/1VmsUaYXot6QFpRZohpBSY3AcqVL3Qx8R
+   3+7y+gmR0JSeJQAOMnHR4HzIcIe+XLIql9G+6xAkCrNbW9zc2mDXbpuv1
+   OV9tI2eb9ZoJ1jmiOgflflALGX8ZTT5yD0t/BWjJc4QPW660fhzAppgI7
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10750"; a="360923334"
+X-IronPort-AV: E=Sophos;i="6.01,153,1684825200"; 
+   d="scan'208";a="360923334"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2023 16:58:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10750"; a="718697989"
+X-IronPort-AV: E=Sophos;i="6.01,153,1684825200"; 
+   d="scan'208";a="718697989"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by fmsmga007.fm.intel.com with ESMTP; 23 Jun 2023 16:58:34 -0700
+Date:   Fri, 23 Jun 2023 17:01:21 -0700
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     Ionela Voinescu <ionela.voinescu@arm.com>
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Zhao Liu <zhao1.liu@intel.com>,
+        "Yuan, Perry" <Perry.Yuan@amd.com>, x86@kernel.org,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        "Tim C . Chen" <tim.c.chen@intel.com>,
+        Zhao Liu <zhao1.liu@linux.intel.com>
+Subject: Re: [PATCH v4 06/24] sched/fair: Collect load-balancing stats for
+ IPC classes
+Message-ID: <20230624000121.GA32639@ranerica-svr.sc.intel.com>
+References: <20230613042422.5344-1-ricardo.neri-calderon@linux.intel.com>
+ <20230613042422.5344-7-ricardo.neri-calderon@linux.intel.com>
+ <ZJQN/KIwCUmzYoiN@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZJQN/KIwCUmzYoiN@arm.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023, Yang Weijiang wrote:
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index c872a5aafa50..0ccaa467d7d3 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -2093,6 +2093,12 @@ static int vmx_get_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->  		else
->  			msr_info->data = vmx->pt_desc.guest.addr_a[index / 2];
->  		break;
-> +	case MSR_IA32_U_CET:
-> +	case MSR_IA32_PL3_SSP:
-> +		if (!kvm_cet_is_msr_accessible(vcpu, msr_info))
-> +			return 1;
-> +		kvm_get_xsave_msr(msr_info);
-> +		break;
+On Thu, Jun 22, 2023 at 10:01:48AM +0100, Ionela Voinescu wrote:
+> Hi Ricardo,
 
-Please put as much MSR handling in x86.c as possible.  We quite obviously know
-that AMD support is coming along, there's no reason to duplicate all of this code.
-And unless I'm missing something, John's series misses several #GP checks, e.g.
-for MSR_IA32_S_CET reserved bits, which means that providing a common implementation
-would actually fix bugs.
+Hi Ionela,
 
-For MSRs that require vendor input and/or handling, please follow what was
-recently done for MSR_IA32_CR_PAT, where the common bits are handled in common
-code, and vendor code does its updates.
+Thank you very much for reviewing the patches!
 
-The divergent alignment between AMD and Intel could get annoying, but I'm sure
-we can figure out a solution. 
+> 
+> On Monday 12 Jun 2023 at 21:24:04 (-0700), Ricardo Neri wrote:
+> > When selecting the busiest scheduling group between two otherwise identical
+> > groups of types asym_packing or fully_busy, IPC classes can be used to
+> > break the tie.
+> > 
+> > Compute the IPC class performance score for a scheduling group. It is
+> > defined as the sum of the IPC scores of the tasks at the back of each
+> > runqueue in the group. Load balancing starts by pulling tasks from the back
+> > of the runqueue first, making this tiebreaker more useful.
+> > 
+> > Also, track the IPC class with the lowest score in the scheduling group. A
+> > task of this class will be pulled when the destination CPU has lower
+> > priority than the fully_busy busiest group.
+> > 
+> > These two metrics will be used during idle load balancing to compute the
+> > current and the potential IPC class score of a scheduling group in a
+> > subsequent changeset.
+> > 
+> > Cc: Ben Segall <bsegall@google.com>
+> > Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+> > Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> > Cc: Ionela Voinescu <ionela.voinescu@arm.com>
+> > Cc: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > Cc: Len Brown <len.brown@intel.com>
+> > Cc: Lukasz Luba <lukasz.luba@arm.com>
+> > Cc: Mel Gorman <mgorman@suse.de>
+> > Cc: Perry Yuan <Perry.Yuan@amd.com>
+> > Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> > Cc: Steven Rostedt <rostedt@goodmis.org>
+> > Cc: Tim C. Chen <tim.c.chen@intel.com>
+> > Cc: Valentin Schneider <vschneid@redhat.com>
+> > Cc: Zhao Liu <zhao1.liu@linux.intel.com>
+> > Cc: x86@kernel.org
+> > Cc: linux-pm@vger.kernel.org
+> > Cc: linux-kernel@vger.kernel.org
+> > Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+> > ---
+> > Changes since v3:
+> >  * Do not compute the IPCC stats using the current tasks of runqueues.
+> >    Instead, use the tasks at the back of the queue. These are the tasks
+> >    that will be pulled first during load balance. (Vincent)
+> > 
+> > Changes since v2:
+> >  * Also excluded deadline and realtime tasks from IPCC stats. (Dietmar)
+> >  * Also excluded tasks that cannot run on the destination CPU from the
+> >    IPCC stats.
+> >  * Folded struct sg_lb_ipcc_stats into struct sg_lb_stats. (Dietmar)
+> >  * Reworded description sg_lb_stats::min_ipcc. (Ionela)
+> >  * Handle errors of arch_get_ipcc_score(). (Ionela)
+> > 
+> > Changes since v1:
+> >  * Implemented cleanups and reworks from PeterZ. Thanks!
+> >  * Used the new interface names.
+> > ---
+> >  kernel/sched/fair.c | 79 +++++++++++++++++++++++++++++++++++++++++++++
+> >  1 file changed, 79 insertions(+)
+> > 
+> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> > index 6189d1a45635..c0cab5e501b6 100644
+> > --- a/kernel/sched/fair.c
+> > +++ b/kernel/sched/fair.c
+> > @@ -9110,6 +9110,11 @@ struct sg_lb_stats {
+> >  	unsigned int nr_numa_running;
+> >  	unsigned int nr_preferred_running;
+> >  #endif
+> > +#ifdef CONFIG_IPC_CLASSES
+> > +	unsigned long min_score; /* Min(score(rq->curr->ipcc)) */
+>                                               ^^^^^^^^^^^^^^
+> > +	unsigned short min_ipcc; /* Class of the task with the minimum IPCC score in the rq */
+> > +	unsigned long sum_score; /* Sum(score(rq->curr->ipcc)) */
+>                                               ^^^^^^^^^^^^^^
+> These no longer apply.
 
->  	case MSR_IA32_DEBUGCTLMSR:
->  		msr_info->data = vmcs_read64(GUEST_IA32_DEBUGCTL);
->  		break;
-> @@ -2405,6 +2411,18 @@ static int vmx_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->  		else
->  			vmx->pt_desc.guest.addr_a[index / 2] = data;
->  		break;
-> +	case MSR_IA32_U_CET:
-> +	case MSR_IA32_PL3_SSP:
-> +		if (!kvm_cet_is_msr_accessible(vcpu, msr_info))
-> +			return 1;
-> +		if (is_noncanonical_address(data, vcpu))
-> +			return 1;
-> +		if (msr_index == MSR_IA32_U_CET && (data & GENMASK(9, 6)))
-> +			return 1;
-> +		if (msr_index == MSR_IA32_PL3_SSP && (data & GENMASK(2, 0)))
+Indeed, I missed this. I will update them in the next version.
 
-Please #define reserved bits, ideally using the inverse of the valid masks.  And
-for SSP, it might be better to do IS_ALIGNED(data, 8) (or 4, pending my question
-about the SDM's wording).
+> It might be easier to describe them all in a
+> comment just above their declaration. Something like:
+> 
+> "The sum, min and its class of the IPC scores of the tasks at the back of each
+> runqueue in the group."
 
-Side topic, what on earth does the SDM mean by this?!?
+I am hesitant to describe the three members in a single comment as it
+would not comply with what Documentation/doc-guide/kernel-doc.rst
+specifies.
 
-  The linear address written must be aligned to 8 bytes and bits 2:0 must be 0
-  (hardware requires bits 1:0 to be 0).
+Admittedly, the current format does not comply either. :) I would opt to
+be consistent with the existing format.
 
-I know Intel retroactively changed the alignment requirements, but the above
-is nonsensical.  If ucode prevents writing bits 2:0, who cares what hardware
-requires?
+> 
+> > +#endif
+> >  };
+> >  
+> >  /*
+> > @@ -9387,6 +9392,77 @@ group_type group_classify(unsigned int imbalance_pct,
+> >  	return group_has_spare;
+> >  }
+> >  
+> > +#ifdef CONFIG_IPC_CLASSES
+> > +static void init_rq_ipcc_stats(struct sg_lb_stats *sgs)
+> > +{
+> > +	/* All IPCC stats have been set to zero in update_sg_lb_stats(). */
+> > +	sgs->min_score = ULONG_MAX;
+> > +}
+> > +
+> > +static int rq_last_task_ipcc(int dst_cpu, struct rq *rq, unsigned short *ipcc)
+> > +{
+> > +	struct list_head *tasks = &rq->cfs_tasks;
+> > +	struct task_struct *p;
+> > +	struct rq_flags rf;
+> > +	int ret = -EINVAL;
+> > +
+> 
+> It's more typical of ret to be initialised to 0 and changed to an error
+> value when there's an error case.
 
-> +			return 1;
-> +		kvm_set_xsave_msr(msr_info);
-> +		break;
->  	case MSR_IA32_PERF_CAPABILITIES:
->  		if (data && !vcpu_to_pmu(vcpu)->version)
->  			return 1;
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index b6eec9143129..2e3a39c9297c 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -13630,6 +13630,26 @@ int kvm_sev_es_string_io(struct kvm_vcpu *vcpu, unsigned int size,
->  }
->  EXPORT_SYMBOL_GPL(kvm_sev_es_string_io);
->  
-> +bool kvm_cet_is_msr_accessible(struct kvm_vcpu *vcpu, struct msr_data *msr)
-> +{
-> +	if (!kvm_cet_user_supported())
+My intention was to save lines of code. I would need to set the error
+value and then goto out. I am ok with your suggestion if it improves
+readability.
 
-This feels wrong.  KVM should differentiate between SHSTK and IBT in the host.
-E.g. if running in a VM with SHSTK but not IBT, or vice versa, KVM should allow
-writes to non-existent MSRs.  I.e. this looks wrong:
+> 
+> > +	rq_lock_irqsave(rq, &rf);
+> > +	if (list_empty(tasks))
+> > +		goto out;
+> > +
+> > +	p = list_last_entry(tasks, struct task_struct, se.group_node);
+> > +	if (p->flags & PF_EXITING || is_idle_task(p) ||
+> > +	    !cpumask_test_cpu(dst_cpu, p->cpus_ptr))
+> > +		goto out;
+> > +
+> > +	ret = 0;
+> > +	*ipcc = p->ipcc;
+> > +out:
+> > +	rq_unlock(rq, &rf);
+> > +	return ret;
+> > +}
+> > +
+> > +/* Called only if cpu_of(@rq) is not idle and has tasks running. */
+> > +static void update_sg_lb_ipcc_stats(int dst_cpu, struct sg_lb_stats *sgs,
+> > +				    struct rq *rq)
+> > +{
+> > +	unsigned short ipcc;
+> > +	unsigned long score;
+> > +
+> > +	if (!sched_ipcc_enabled())
+> > +		return;
+> > +
+> > +	if (rq_last_task_ipcc(dst_cpu, rq, &ipcc))
+> > +		return;
+> > +
+> > +	score = arch_get_ipcc_score(ipcc, cpu_of(rq));
+> > +
+> > +	/*
+> > +	 * Ignore tasks with invalid scores. When finding the busiest group, we
+> > +	 * prefer those with higher sum_score. This group will not be selected.
+> > +	 */
+> 
+> nit: the comment is unnecessary, and a bit misleading, IMO.
+> 
+> The comment says "This group will not be selected." but the only way to
+> guarantee that here is to reset the sum_score to 0 when you find an
+> invalid score, which I don't believe is your intention.
 
-	/*
-	 * If SHSTK and IBT are available in KVM, clear CET user bit in
-	 * kvm_caps.supported_xss so that kvm_cet_user_supported() returns
-	 * false when called.
-	 */
-	if (!kvm_cpu_cap_has(X86_FEATURE_SHSTK) &&
-	    !kvm_cpu_cap_has(X86_FEATURE_IBT))
-		kvm_caps.supported_xss &= ~XFEATURE_MASK_CET_USER;
+You raise an interesting point. We will call this function for each rq
+in the sched group. Thus, if we encounter an error, the scores would be
+incomplete. Therefore, I think that the scores should be discarded and
+reset to 0 so that they are not used, IMO.
 
-and by extension, all dependent code is also wrong.  IIRC, there's a virtualization
-hole, but I don't see any reason why KVM has to make the hole even bigger.
+> 
+> Also the use of sum_score is captured in later functions, so I don't
+> believe there's a need for additional comments here.
 
-> +		return false;
-> +
-> +	if (msr->host_initiated)
-> +		return true;
-> +
-> +	if (!guest_cpuid_has(vcpu, X86_FEATURE_SHSTK) &&
-> +	    !guest_cpuid_has(vcpu, X86_FEATURE_IBT))
-> +		return false;
-> +
-> +	if (msr->index == MSR_IA32_PL3_SSP &&
-> +	    !guest_cpuid_has(vcpu, X86_FEATURE_SHSTK))
+Sure, I can remove the comment. Or maybe rephrase it as per my previous
+comment?
 
-I probably asked this long ago, but if I did I since forgot.  Is it really just
-PL3_SSP that depends on SHSTK?  I would expect all shadow stack MSRs to depend
-on SHSTK.
+> 
+> Hope it helps,
 
-> @@ -546,5 +557,25 @@ int kvm_sev_es_mmio_read(struct kvm_vcpu *vcpu, gpa_t src, unsigned int bytes,
->  int kvm_sev_es_string_io(struct kvm_vcpu *vcpu, unsigned int size,
->  			 unsigned int port, void *data,  unsigned int count,
->  			 int in);
-> +bool kvm_cet_is_msr_accessible(struct kvm_vcpu *vcpu, struct msr_data *msr);
-> +
-> +/*
-> + * We've already loaded guest MSRs in __msr_io() after check the MSR index.
+It does! Thanks again for taking the time.
 
-Please avoid pronouns
-
-> + * In case vcpu has been preempted, we need to disable preemption, check
-
-vCPU.  And this doesn't make any sense.  The "vCPU" being preempted doesn't matter,
-it's KVM, i.e. the task that's accessing vCPU state that cares about preemption.
-I *think* what you're trying to say is that preemption needs to be disabled to
-ensure that the guest values are resident.
-
-> + * and reload the guest fpu states before read/write xsaves-managed MSRs.
-> + */
-> +static inline void kvm_get_xsave_msr(struct msr_data *msr_info)
-> +{
-> +	fpregs_lock_and_load();
-
-KVM already has helpers that do exactly this, and they have far better names for
-KVM: kvm_fpu_get() and kvm_fpu_put().  Can you convert kvm_fpu_get() to
-fpregs_lock_and_load() and use those isntead?  And if the extra consistency checks
-in fpregs_lock_and_load() fire, we definitely want to know, as it means we probably
-have bugs in KVM.
+BR,
+Ricardo
