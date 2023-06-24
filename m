@@ -2,146 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95E3D73CA65
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 12:08:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2F2E73CA6B
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 12:14:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232866AbjFXKIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 06:08:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34018 "EHLO
+        id S233071AbjFXKOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 06:14:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230525AbjFXKIO (ORCPT
+        with ESMTP id S233060AbjFXKON (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 06:08:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 060DB1736;
-        Sat, 24 Jun 2023 03:08:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3752160C79;
-        Sat, 24 Jun 2023 10:08:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30DBFC433C8;
-        Sat, 24 Jun 2023 10:08:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687601291;
-        bh=GdUhQ/g4lPVcmdlC7sNHfy+iEXwSg6y5+1Nd/kQQHps=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tWV3l3lqlD3rVQfTQrPUCyVfmA4U9rtFYdjB90hPr0H6Fdo9KOjJgf4UxXoNNn7ma
-         Q+GG50HuUlj+M70iF1Zy8TpfFvmS0TSssLPLnI4Kk0FgJ6kAFO6Mr2mLNrO9MK0Opu
-         L5d0ua6si1tf2ST3kll2MK5rT57vD/wf1J0WmBm+IHeXNpd67uxo6Vm8jpfTOnFWYK
-         +oSprWci/L6oWZb+Z5rHo3hPzfRgvTgGei06bxDf8ESyA0lE/V6t40YwYeyuisnWJX
-         6EIrXvw7zZbagvLDb8U1RQd6acpUvZ+dDhYu4LPq9qMlONHov1DTgxJgcKOk0jR0xO
-         0VWKlAbW23PpQ==
-Date:   Sat, 24 Jun 2023 11:08:03 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Evan Green <evan@rivosinc.com>
-Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
-        Simon Hosie <shosie@rivosinc.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Andy Chiu <andy.chiu@sifive.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Guo Ren <guoren@kernel.org>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ley Foon Tan <leyfoon.tan@starfivetech.com>,
-        Li Zhengyu <lizhengyu3@huawei.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Sia Jee Heng <jeeheng.sia@starfivetech.com>,
-        Sunil V L <sunilvl@ventanamicro.com>,
-        Xianting Tian <xianting.tian@linux.alibaba.com>,
-        Yangyu Chen <cyy@cyyself.name>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 0/2] RISC-V: Probe for misaligned access speed
-Message-ID: <20230624-tycoon-pliable-325806e73a11@spud>
-References: <20230623222016.3742145-1-evan@rivosinc.com>
+        Sat, 24 Jun 2023 06:14:13 -0400
+Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DDDC1BF2
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 03:14:11 -0700 (PDT)
+Received: from submission (posteo.de [185.67.36.169]) 
+        by mout02.posteo.de (Postfix) with ESMTPS id C64B8240103
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 12:14:09 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+        t=1687601649; bh=iaUVSnuKkwJ5a4hvz5q/EtjfvAaUpU9k26WNESxBnHk=;
+        h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:
+         Content-Disposition:From;
+        b=FkwnP9SG0IAJ1xf2B2Ao385/XAu2sz4Zi+knE//LcNf+GyMt6qAzLwGDx5gBMAQTc
+         l64GcuNCJQ7Qo/LT8y1QQcMA4GPusrqW3SuUoTaDabKCUXGbdD1P9mDt7S8NKUlonf
+         NuFloxpxHo9GIYB0HAh1EO3HHRxDN0a0bn6h1TNcGxR5u4RikJtxVzZBMoo7OrHyIj
+         n3v5OMagFISTVak5mF+nkaociI10RNQ1QyPSzY3buIKuT7t3t8yU/LQjmkvX7avevS
+         tjSR0h6z02ONspL33X+pOtALudwn52hdGn1G9CsH/vgY4k6An9Kt55Jz5UKhhK5Pb0
+         UVAAgJsRJbgoA==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4Qp91r6Ppfz6tvJ;
+        Sat, 24 Jun 2023 12:14:08 +0200 (CEST)
+Date:   Sat, 24 Jun 2023 10:14:07 +0000
+From:   Wilken Gottwalt <wilken.gottwalt@posteo.net>
+To:     linux-kernel@vger.kernel.org
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org
+Subject: [PATCH] hwmon: corsair-psu: update Series 2022 and 2023 support
+Message-ID: <ZJbB72CAPmLflhHG@monster.localdomain>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="03eh9c7zzQjeRTOG"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230623222016.3742145-1-evan@rivosinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The series 2022/2023 reports slightly longer vendor/product strings
+and shares USB ids. Technically the reply size is the USB HID packet
+size (64 bytes) but all the supported commands do not use more than 8
+bytes and replies reporting back strings do not use more then 24 bytes
+(vendor and product are in one string in the newer devices now). The
+rest of the reply is always filled with '\0'. Also update comments
+and documentation accordingly.
 
---03eh9c7zzQjeRTOG
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
+---
+ Documentation/hwmon/corsair-psu.rst | 13 ++++++++-----
+ drivers/hwmon/corsair-psu.c         |  9 ++++++---
+ 2 files changed, 14 insertions(+), 8 deletions(-)
 
-On Fri, Jun 23, 2023 at 03:20:14PM -0700, Evan Green wrote:
->=20
-> The current setting for the hwprobe bit indicating misaligned access
-> speed is controlled by a vendor-specific feature probe function. This is
-> essentially a per-SoC table we have to maintain on behalf of each vendor
-> going forward. Let's convert that instead to something we detect at
-> runtime.
->=20
-> We have two assembly routines at the heart of our probe: one that
-> does a bunch of word-sized accesses (without aligning its input buffer),
-> and the other that does byte accesses. If we can move a larger number of
-> bytes using misaligned word accesses than we can with the same amount of
-> time doing byte accesses, then we can declare misaligned accesses as
-> "fast".
->=20
-> The tradeoff of reducing this maintenance burden is boot time. We spend
-> 4-6 jiffies per core doing this measurement (0-2 on jiffie edge
-> alignment, and 4 on measurement). The timing loop was based on
-> raid6_choose_gen(), which uses (16+1)*N jiffies (where N is the number
-> of algorithms). On my THead C906, I found measurements to be stable
-> across several reboots, and looked like this:
->=20
-> [    0.047582] cpu0: Unaligned word copy 1728 MB/s, byte copy 402 MB/s, m=
-isaligned accesses are fast
->=20
-> I don't have a machine where misaligned accesses are slow, but I'd be
-> interested to see the results of booting this series if someone did.
+diff --git a/Documentation/hwmon/corsair-psu.rst b/Documentation/hwmon/corsair-psu.rst
+index 47f8ff632267..16db34d464dd 100644
+--- a/Documentation/hwmon/corsair-psu.rst
++++ b/Documentation/hwmon/corsair-psu.rst
+@@ -15,11 +15,11 @@ Supported devices:
+ 
+   Corsair HX850i
+ 
+-  Corsair HX1000i (Series 2022 and Series 2023)
++  Corsair HX1000i (Series 2022 and 2023)
+ 
+   Corsair HX1200i
+ 
+-  Corsair HX1500i (Series 2022)
++  Corsair HX1500i (Series 2022 and 2023)
+ 
+   Corsair RM550i
+ 
+@@ -80,11 +80,14 @@ temp2_crit		Temperature max critical value of psu case
+ Usage Notes
+ -----------
+ 
+-It is an USB HID device, so it is auto-detected and supports hot-swapping.
++It is an USB HID device, so it is auto-detected, supports hot-swapping and
++several devices at once.
+ 
+ Flickering values in the rail voltage levels can be an indicator for a failing
+-PSU. The driver also provides some additional useful values via debugfs, which
+-do not fit into the hwmon class.
++PSU. Accordingly to the default automatic fan speed plan the fan starts at about
++30% of the wattage rating. If this does not happen, a fan failure is likely. The
++driver also provides some additional useful values via debugfs, which do not fit
++into the hwmon class.
+ 
+ Debugfs entries
+ ---------------
+diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
+index 9e3e3c0a3bdd..904890598c11 100644
+--- a/drivers/hwmon/corsair-psu.c
++++ b/drivers/hwmon/corsair-psu.c
+@@ -42,12 +42,15 @@
+  *	- the driver supports debugfs for values not fitting into the hwmon class
+  *	- not every device class (HXi or RMi) supports all commands
+  *	- if configured wrong the PSU resets or shuts down, often before actually hitting the
+- *	- reported critical temperature
++ *	  reported critical temperature
++ *	- new models like HX1500i Series 2023 have changes in the reported vendor and product
++ *	  strings, both are slightly longer now, report vendor and product in one string and are
++ *	  the same now
+  */
+ 
+ #define DRIVER_NAME		"corsair-psu"
+ 
+-#define REPLY_SIZE		16 /* max length of a reply to a single command */
++#define REPLY_SIZE		24 /* max length of a reply to a single command */
+ #define CMD_BUFFER_SIZE		64
+ #define CMD_TIMEOUT_MS		250
+ #define SECONDS_PER_HOUR	(60 * 60)
+@@ -880,7 +883,7 @@ static const struct hid_device_id corsairpsu_idtable[] = {
+ 	{ HID_USB_DEVICE(0x1b1c, 0x1c0c) }, /* Corsair RM850i */
+ 	{ HID_USB_DEVICE(0x1b1c, 0x1c0d) }, /* Corsair RM1000i */
+ 	{ HID_USB_DEVICE(0x1b1c, 0x1c1e) }, /* Corsair HX1000i Series 2023 */
+-	{ HID_USB_DEVICE(0x1b1c, 0x1c1f) }, /* Corsair HX1500i Series 2022 */
++	{ HID_USB_DEVICE(0x1b1c, 0x1c1f) }, /* Corsair HX1500i Series 2022 and 2023 */
+ 	{ },
+ };
+ MODULE_DEVICE_TABLE(hid, corsairpsu_idtable);
+-- 
+2.41.0
 
-Can you elaborate on "results" please? Otherwise,
-
-[    0.333110] smp: Bringing up secondary CPUs ...
-[    0.370794] cpu1: Unaligned word copy 2 MB/s, byte copy 231 MB/s, misali=
-gned accesses are slow
-[    0.411368] cpu2: Unaligned word copy 2 MB/s, byte copy 231 MB/s, misali=
-gned accesses are slow
-[    0.451947] cpu3: Unaligned word copy 2 MB/s, byte copy 231 MB/s, misali=
-gned accesses are slow
-[    0.462628] smp: Brought up 1 node, 4 CPUs
-
-[    0.631464] cpu0: Unaligned word copy 2 MB/s, byte copy 229 MB/s, misali=
-gned accesses are slow
-
-btw, why the mixed usage of "unaligned" and misaligned"?
-
-Cheers,
-Conor.
-
---03eh9c7zzQjeRTOG
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJbAgwAKCRB4tDGHoIJi
-0pUuAP9Oi0aUUS8IeaeAx0/UgKLo9vsBt3gvCL2XYFVBWKvb+AEAw7x52zBY7Urs
-R8n/7yymgPKxI6BEor3Iirixfy983w0=
-=VE2p
------END PGP SIGNATURE-----
-
---03eh9c7zzQjeRTOG--
