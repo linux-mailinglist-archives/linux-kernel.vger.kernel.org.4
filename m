@@ -2,96 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7AD173CB8D
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 17:20:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 792C673CB8E
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 17:20:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231289AbjFXPTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 11:19:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48210 "EHLO
+        id S233150AbjFXPUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 11:20:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231883AbjFXPTw (ORCPT
+        with ESMTP id S233036AbjFXPUs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 11:19:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53E651987
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 08:19:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A046609FB
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 15:19:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DDF4C433C9;
-        Sat, 24 Jun 2023 15:19:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687619986;
-        bh=2NqCQaBRiYu07umaA1vjuK56Y6YrWpIX5Q20gxZ9Q9I=;
-        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
-        b=QBqIkrTMKVkiA5tDFcd4Gy3M8U4SxhGk1L+JhqXVlzM+wu+kHEXZuhF2moV1DwEwZ
-         Zw6Z+WVHZVJiMaHGUNdlMJwOaQdxDnaZGCN8cUyMA3xaBgbi7rxbKSHJ3sdx7tuVmD
-         mQmeW3ZTGbrDJM5fwPo0+9FEZBShNu3MBB+LDg92mH6QWm+9scdsNQeaDu8Jj4E1GZ
-         1p4nO8d3g4RdZhbJ9nX01gk4WBDrWuEYx2LDxHhfLeXhNsBrQ7ZkN0CAYrvMtYbMv5
-         LC2W9bPSVCb3KRTbh1jshMmbxCv5bWrol7TpRgpqLJH0SByOeqbxVpKocCWJGN6LVG
-         ZWK/Nv4N53ReA==
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 1E6CC27C0054;
-        Sat, 24 Jun 2023 11:19:45 -0400 (EDT)
-Received: from imap48 ([10.202.2.98])
-  by compute3.internal (MEProxy); Sat, 24 Jun 2023 11:19:45 -0400
-X-ME-Sender: <xms:jwmXZGPMWUGrKFs2_RuSGVZhgeWevlHpWpgCUANBQPHRgccNuGnfjA>
-    <xme:jwmXZE8UFw5xwAwo1nRfExn-iH3x1uEsdhFTwc1T0ZPhSbz_5moesN_KqHSrzsIO-
-    rd-MaTiqx096sgMUFg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeegjedgkeeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehn
-    ugihucfnuhhtohhmihhrshhkihdfuceolhhuthhosehkvghrnhgvlhdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepvdfhuedvtdfhudffhfekkefftefghfeltdelgeffteehueegjeff
-    udehgfetiefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homheprghnugihodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduudeiudek
-    heeifedvqddvieefudeiiedtkedqlhhuthhopeepkhgvrhhnvghlrdhorhhgsehlihhnuh
-    igrdhluhhtohdruhhs
-X-ME-Proxy: <xmx:jwmXZNT3Ru7zPP7CniFO4KzMfGDKogviTYJan-8vEEpucz4NOgmCdg>
-    <xmx:jwmXZGtpM8thJxgVuzpae6_CxZiPBAOuWcm6SdvQfTqUdhcdrhWzrw>
-    <xmx:jwmXZOfIgeoExx9LQWJT7Q5JD3WVhmITkEBPfrddYjuBTi01hsW0LA>
-    <xmx:kQmXZPVimMczhxhHKNjfHzUWniJoobk9fVQfmjuti9FE1l84BFCKkg>
-Feedback-ID: ieff94742:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 6343231A0063; Sat, 24 Jun 2023 11:19:43 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
-Mime-Version: 1.0
-Message-Id: <8306ce41-e551-4983-9c63-2e804f22ec61@app.fastmail.com>
-In-Reply-To: <7c56f418-e0f3-7c16-a3f7-0ae8bd12bbf0@suse.com>
-References: <20230621151442.2152425-1-per.bilse@citrix.com>
- <20230621164038.GM2053369@hirez.programming.kicks-ass.net>
- <6523f3e2-8dfc-c2dd-6d14-9e0c3ac93cc8@citrix.com>
- <20230621200409.GC4253@hirez.programming.kicks-ass.net>
- <a8cd2788-a695-964a-3311-dbecb669bb72@suse.com>
- <20230622082607.GD4253@hirez.programming.kicks-ass.net>
- <4d29bfe0-975a-c97f-3e79-5b77d95d3494@suse.com>
- <8a5b8e4a-d238-4f35-b4c7-fb9e34650a14@app.fastmail.com>
- <7c56f418-e0f3-7c16-a3f7-0ae8bd12bbf0@suse.com>
-Date:   Sat, 24 Jun 2023 08:19:23 -0700
-From:   "Andy Lutomirski" <luto@kernel.org>
-To:     "Juergen Gross" <jgross@suse.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Cc:     "Per Bilse" <Per.Bilse@citrix.com>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Stefano Stabellini" <sstabellini@kernel.org>,
-        "Oleksandr Tyshchenko" <oleksandr_tyshchenko@epam.com>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        "moderated list:XEN HYPERVISOR INTERFACE" 
-        <xen-devel@lists.xenproject.org>
-Subject: Re: [PATCH] Updates to Xen hypercall preemption
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Sat, 24 Jun 2023 11:20:48 -0400
+Received: from mail-40141.protonmail.ch (mail-40141.protonmail.ch [185.70.40.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1D69BE
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 08:20:46 -0700 (PDT)
+Date:   Sat, 24 Jun 2023 15:20:36 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1687620044; x=1687879244;
+        bh=UJJ+xg0BEjeX07rbDKXrDZQrXSRpl2S3/JvIkzR6HHY=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=bi2r/0LH420keA+7CxhIvE6aswX5462BYjSlArWFC6ao3ArHSWAkDMQGx3P64tqJZ
+         Qg1pA2NCfpKZtb8Fc4neqlw4YPe0B3n7SdMtVWKK7XYJSxOMtRfi0aoy3nvnYhYnws
+         yFZY3bbkUTjVwifNubXh8TWcKhMCXVIM7xMMaq2ZaL6l2ibXr9npmF4RcSLGV0wJoR
+         XUiYjJjGi9aJFneHgDP/ZF872U8b3VFUdzD2/P6/EwRIUKnJPjigqpudM/ldpiONmK
+         hfJ2TVZKWF9Wxb9dNWiTcWlQPa6zzZk0LhQbScRSXcjYUbglj3+8iFnyjenxehmqjO
+         nG67p7xfZdjCA==
+To:     Benno Lossin <benno.lossin@proton.me>
+From:   =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        Alice Ryhl <aliceryhl@google.com>,
+        Andreas Hindborg <nmi@metaspace.dk>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Asahi Lina <lina@asahilina.net>
+Subject: Re: [PATCH 7/7] rust: init: add support for arbitrary paths in init macros
+Message-ID: <NG5bXau04NtegfM6w7YC15zWwZoV_aoQq3j767IV1thbyyueLU5cekNnMkmc4w-geoSbz2VyA7ZGab_Z3x9xm1DZSmLIsdWA0ykoHaWpZCc=@protonmail.com>
+In-Reply-To: <20230624092330.157338-7-benno.lossin@proton.me>
+References: <20230624092330.157338-1-benno.lossin@proton.me> <20230624092330.157338-7-benno.lossin@proton.me>
+Feedback-ID: 27884398:user:proton
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,112 +56,227 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 22, 2023, at 10:20 AM, Juergen Gross wrote:
-> On 22.06.23 18:39, Andy Lutomirski wrote:
->> On Thu, Jun 22, 2023, at 3:33 AM, Juergen Gross wrote:
->>> On 22.06.23 10:26, Peter Zijlstra wrote:
->>>> On Thu, Jun 22, 2023 at 07:22:53AM +0200, Juergen Gross wrote:
->>>>
->>>>> The hypercalls we are talking of are synchronous ones. They are running
->>>>> in the context of the vcpu doing the call (like a syscall from userland is
->>>>> running in the process context).
->>>>
->>>> (so time actually passes from the guest's pov?)
->>>
->>> Correct.
->>>
->>>>
->>>>> The hypervisor will return to guest context from time to time by modifying
->>>>> the registers such that the guest will do the hypercall again with different
->>>>> input values for the hypervisor, resulting in a proper continuation of the
->>>>> hypercall processing.
->>>>
->>>> Eeeuw.. that's pretty terrible. And changing this isn't in the cards,
->>>> like at all?
->>>
->>> In the long run this should be possible, but not for already existing Xen
->>> versions.
->>>
->>>>
->>>> That is, why isn't this whole thing written like:
->>>>
->>>> 	for (;;) {
->>>> 		ret = hypercall(foo);
->>>> 		if (ret == -EAGAIN) {
->>>> 			cond_resched();
->>>> 			continue;
->>>> 		}
->>>> 		break;
->>>> 	}
->>>
->>> The hypervisor doesn't return -EAGAIN for hysterical reasons.
->>>
->>> This would be one of the options to change the interface. OTOH there are cases
->>> where already existing hypercalls need to be modified in the hypervisor to do
->>> preemption in the middle due to e.g. security reasons (avoiding cpu hogging in
->>> special cases).
->>>
->>> Additionally some of the hypercalls being subject to preemption are allowed in
->>> unprivileged guests, too. Those are mostly hypercalls allowed for PV guests
->>> only, but some are usable by all guests.
->>>
->>>>
->>>>> It is an awful interface and I agree that switching to full preemption in
->>>>> dom0 seems to be the route which we should try to take.
->>>>
->>>> Well, I would very strongly suggest the route to take is to scrap the
->>>> whole thing and invest in doing something saner so we don't have to jump
->>>> through hoops like this.
->>>>
->>>> This is quite possibly the worst possible interface for this Xen could
->>>> have come up with -- awards material for sure.
->>>
->>> Yes.
->>>
->>>>
->>>>> The downside would be that some workloads might see worse performance
->>>>> due to backend I/O handling might get preempted.
->>>>
->>>> Is that an actual concern? Mark this a legaxy inteface and anybody who
->>>> wants to get away from it updates.
->>>
->>> It isn't that easy. See above.
->>>
->>>>
->>>>> Just thinking - can full preemption be enabled per process?
->>>>
->>>> Nope, that's a system wide thing. Preemption is something that's driven
->>>> by the requirements of the tasks that preempt, not something by the
->>>> tasks that get preempted.
->>>
->>> Depends. If a task in a non-preempt system could switch itself to be
->>> preemptable, we could do so around hypercalls without compromising the
->>> general preemption setting. Disabling preemption in a preemptable system
->>> should continue to be possible for short code paths only, of course.
->>>
->>>> Andy's idea of having that thing intercepted as an exception (EXTABLE
->>>> like) and relocating the IP to a place that does cond_resched() before
->>>> going back is an option.. gross, but possibly better, dunno.
->>>>
->>>> Quite the mess indeed :/
->>>
->>> Yeah.
->> 
->> Having one implementation of interrupt handlers that schedule when they interrupt kernel code (the normal full preempt path) is one thing.  Having two of them (full preempt and super-special-Xen) is IMO quite a bit worse.  Especially since no one tests the latter very well.
->> 
->> Having a horrible Xen-specific extable-like thingy seems honestly rather less bad.  It could even have a little self-contained test that runs at boot, I bet.
->> 
->> But I'll bite on the performance impact issue.  What, exactly, is wrong with full preemption?  Full preemption has two sources of overhead, I think.  One is a bit of bookkeeping.  The other is the overhead inherent in actually rescheduling -- context switch cost, losing things from cache, etc.
->> 
->> The bookkeeping part should have quite low overhead.  The scheduling part sounds like it might just need some scheduler tuning if it's really a problem.
->> 
->> In any case, for backend IO, full preemption sounds like it should be a win, not a loss.  If I'm asking dom0 to do backend IO for me, I don't want it delayed because dom0 was busy doing something else boring.  IO is faster when the latency between requesting it and actually submitting it to hardware is lower.
->
-> Maybe. I was assuming that full preemption would result in more context
-> switches, especially in case many guests are hammering dom0 with I/Os.
-> This means that more time is spent with switching instead of doing real
-> work, resulting in dom0 being at 100% cpu faster with doing less work.
+On Saturday, June 24th, 2023 at 11:25, Benno Lossin <benno.lossin@proton.me=
+> wrote:
 
-It ought to just result in context switches happening a bit earlier when the scheduler decides it wants one.  When a non-fully-preemptible kernel gets an interrupt and need_resched gets set, it will still schedule as soon as it hits a cond_resched() or a return to usermode or anything else that explicitly allows scheduling.
+> Previously only `ident` and generic types were supported in the
+> `{try_}{pin_}init!` macros. This patch allows arbitrary path fragments,
+> so for example `Foo::Bar` but also very complex paths such as
+> `<Foo as Baz>::Bar::<0, i32>`.
+>=20
+> Internally this is accomplished by using `path` fragments. Due to some
+> peculiar declarative macro limitations, we have to "forget" certain
+> additional parsing information in the token trees. This is achieved by
+> the new `retokenize` proc macro. It does not modify the input, but just
+> strips this information. For example, if a declarative macro takes
+> `$t:path` as its input, it cannot sensibly propagate this to a macro that
+> takes `$($p:tt)*` as its input, since the `$t` token will only be
+> considered one `tt` token for the second macro. If we first pipe the
+> tokens through `retokenize`, then it parses as expected.
+>=20
+> Suggested-by: Asahi Lina <lina@asahilina.net>
+> Signed-off-by: Benno Lossin <benno.lossin@proton.me>
 
-If you're hammering dom0 with IO and it's getting swamped by context switches, the problem is the code handling the IO (too many threads or something), not the preemption.
+Reviewed-by: Bj=C3=B6rn Roy Baron <bjorn3_gh@protonmail.com>
+
+> ---
+>  rust/kernel/init/__internal.rs |  2 ++
+>  rust/kernel/init/macros.rs     | 42 +++++++++++++++++++---------------
+>  rust/macros/lib.rs             | 17 +++++++++++++-
+>  3 files changed, 41 insertions(+), 20 deletions(-)
+>=20
+> diff --git a/rust/kernel/init/__internal.rs b/rust/kernel/init/__internal=
+.rs
+> index 7abd1fb65e41..e36a706a4a1b 100644
+> --- a/rust/kernel/init/__internal.rs
+> +++ b/rust/kernel/init/__internal.rs
+> @@ -9,6 +9,8 @@
+>=20
+>  use super::*;
+>=20
+> +pub use ::macros::retokenize;
+> +
+>  /// See the [nomicon] for what subtyping is. See also [this table].
+>  ///
+>  /// [nomicon]: https://doc.rust-lang.org/nomicon/subtyping.html
+> diff --git a/rust/kernel/init/macros.rs b/rust/kernel/init/macros.rs
+> index 5dcb2e513f26..6a82be675808 100644
+> --- a/rust/kernel/init/macros.rs
+> +++ b/rust/kernel/init/macros.rs
+> @@ -998,7 +998,7 @@ impl<$($impl_generics)*> $pin_data<$($ty_generics)*>
+>  macro_rules! __init_internal {
+>      (
+>          @this($($this:ident)?),
+> -        @typ($t:ident $(::<$($generics:ty),*>)?),
+> +        @typ($t:path),
+>          @fields($($fields:tt)*),
+>          @error($err:ty),
+>          // Either `PinData` or `InitData`, `$use_data` should only be pr=
+esent in the `PinData`
+> @@ -1012,7 +1012,7 @@ macro_rules! __init_internal {
+>      ) =3D> {
+>          $crate::__init_internal!(with_update_parsed:
+>              @this($($this)?),
+> -            @typ($t $(::<$($generics),*>)? ),
+> +            @typ($t),
+>              @fields($($fields)*),
+>              @error($err),
+>              @data($data, $($use_data)?),
+> @@ -1023,7 +1023,7 @@ macro_rules! __init_internal {
+>      };
+>      (
+>          @this($($this:ident)?),
+> -        @typ($t:ident $(::<$($generics:ty),*>)?),
+> +        @typ($t:path),
+>          @fields($($fields:tt)*),
+>          @error($err:ty),
+>          // Either `PinData` or `InitData`, `$use_data` should only be pr=
+esent in the `PinData`
+> @@ -1037,7 +1037,7 @@ macro_rules! __init_internal {
+>      ) =3D> {
+>          $crate::__init_internal!(with_update_parsed:
+>              @this($($this)?),
+> -            @typ($t $(::<$($generics),*>)? ),
+> +            @typ($t),
+>              @fields($($fields)*),
+>              @error($err),
+>              @data($data, $($use_data)?),
+> @@ -1048,7 +1048,7 @@ macro_rules! __init_internal {
+>      };
+>      (
+>          @this($($this:ident)?),
+> -        @typ($t:ident $(::<$($generics:ty),*>)?),
+> +        @typ($t:path),
+>          @fields($($fields:tt)*),
+>          @error($err:ty),
+>          // Either `PinData` or `InitData`, `$use_data` should only be pr=
+esent in the `PinData`
+> @@ -1062,7 +1062,7 @@ macro_rules! __init_internal {
+>      ) =3D> {
+>          $crate::__init_internal!(
+>              @this($($this)?),
+> -            @typ($t $(::<$($generics),*>)? ),
+> +            @typ($t),
+>              @fields($($fields)*),
+>              @error($err),
+>              @data($data, $($use_data)?),
+> @@ -1073,7 +1073,7 @@ macro_rules! __init_internal {
+>      };
+>      (with_update_parsed:
+>          @this($($this:ident)?),
+> -        @typ($t:ident $(::<$($generics:ty),*>)?),
+> +        @typ($t:path),
+>          @fields($($fields:tt)*),
+>          @error($err:ty),
+>          // Either `PinData` or `InitData`, `$use_data` should only be pr=
+esent in the `PinData`
+> @@ -1092,7 +1092,7 @@ macro_rules! __init_internal {
+>          // Get the data about fields from the supplied type.
+>          let data =3D unsafe {
+>              use $crate::init::__internal::$has_data;
+> -            $t$(::<$($generics),*>)?::$get_data()
+> +            $crate::init::__internal::retokenize!($t::$get_data())
+>          };
+>          // Ensure that `data` really is of type `$data` and help with ty=
+pe inference:
+>          let init =3D $crate::init::__internal::$data::make_closure::<_, =
+__InitOk, $err>(
+> @@ -1247,7 +1247,7 @@ fn is_zeroable<T: Zeroable>(ptr: *mut T) {}
+>      };
+>      (make_initializer:
+>          @slot($slot:ident),
+> -        @type_name($t:ident),
+> +        @type_name($t:path),
+>          @munch_fields(..Zeroable::zeroed() $(,)?),
+>          @acc($($acc:tt)*),
+>      ) =3D> {
+> @@ -1263,15 +1263,17 @@ fn is_zeroable<T: Zeroable>(ptr: *mut T) {}
+>              // not get executed, so it has no effect.
+>              ::core::ptr::write($slot, zeroed);
+>              zeroed =3D ::core::mem::zeroed();
+> -            ::core::ptr::write($slot, $t {
+> -                $($acc)*
+> -                ..zeroed
+> -            });
+> +            $crate::init::__internal::retokenize!(
+> +                ::core::ptr::write($slot, $t {
+> +                    $($acc)*
+> +                    ..zeroed
+> +                });
+> +            );
+>          }
+>      };
+>      (make_initializer:
+>          @slot($slot:ident),
+> -        @type_name($t:ident),
+> +        @type_name($t:path),
+>          @munch_fields($(,)?),
+>          @acc($($acc:tt)*),
+>      ) =3D> {
+> @@ -1279,14 +1281,16 @@ fn is_zeroable<T: Zeroable>(ptr: *mut T) {}
+>          // Since we are in the `if false` branch, this will never get ex=
+ecuted. We abuse `slot` to
+>          // get the correct type inference here:
+>          unsafe {
+> -            ::core::ptr::write($slot, $t {
+> -                $($acc)*
+> -            });
+> +            $crate::init::__internal::retokenize!(
+> +                ::core::ptr::write($slot, $t {
+> +                    $($acc)*
+> +                });
+> +            );
+>          }
+>      };
+>      (make_initializer:
+>          @slot($slot:ident),
+> -        @type_name($t:ident),
+> +        @type_name($t:path),
+>          @munch_fields($field:ident <- $val:expr, $($rest:tt)*),
+>          @acc($($acc:tt)*),
+>      ) =3D> {
+> @@ -1299,7 +1303,7 @@ fn is_zeroable<T: Zeroable>(ptr: *mut T) {}
+>      };
+>      (make_initializer:
+>          @slot($slot:ident),
+> -        @type_name($t:ident),
+> +        @type_name($t:path),
+>          @munch_fields($field:ident $(: $val:expr)?, $($rest:tt)*),
+>          @acc($($acc:tt)*),
+>      ) =3D> {
+> diff --git a/rust/macros/lib.rs b/rust/macros/lib.rs
+> index 9f056a5c780a..d329ab622fd4 100644
+> --- a/rust/macros/lib.rs
+> +++ b/rust/macros/lib.rs
+> @@ -12,7 +12,7 @@
+>  mod vtable;
+>  mod zeroable;
+>=20
+> -use proc_macro::TokenStream;
+> +use proc_macro::{Group, TokenStream, TokenTree};
+>=20
+>  /// Declares a kernel module.
+>  ///
+> @@ -266,3 +266,18 @@ pub fn pinned_drop(args: TokenStream, input: TokenSt=
+ream) -> TokenStream {
+>  pub fn derive_zeroable(input: TokenStream) -> TokenStream {
+>      zeroable::derive(input)
+>  }
+> +
+> +/// Does not modify the given TokenStream, but removes any declarative m=
+acro information.
+> +#[proc_macro]
+> +pub fn retokenize(input: TokenStream) -> TokenStream {
+> +    fn id(tt: TokenTree) -> TokenTree {
+> +        match tt {
+> +            TokenTree::Group(g) =3D> TokenTree::Group(Group::new(
+> +                g.delimiter(),
+> +                g.stream().into_iter().map(id).collect(),
+> +            )),
+> +            x =3D> x,
+> +        }
+> +    }
+> +    input.into_iter().map(id).collect()
+> +}
+> --
+> 2.41.0
