@@ -2,164 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1304B73CBC4
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 17:59:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EB6673CBC7
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 17:59:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233194AbjFXP7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 11:59:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54758 "EHLO
+        id S233204AbjFXP7x convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 24 Jun 2023 11:59:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230092AbjFXP7f (ORCPT
+        with ESMTP id S233231AbjFXP7v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 11:59:35 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9219B1AC;
-        Sat, 24 Jun 2023 08:59:34 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4f8689fbf59so3480559e87.0;
-        Sat, 24 Jun 2023 08:59:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687622373; x=1690214373;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nxD3mnsyxsM9A/pK/r4bmilX/vIQZZ/iBExyMlW0hWI=;
-        b=CdxPGMxddVeIEqvQbb6zVuOBbZtFYaa46/5i1pb94WXHhCEK8ugsf1ZTdByvsXJ9of
-         dBth1XXjCG2yJj5u+9HOPMcVNny4WjJUpJgz0CobZcjC57wmrTKxEEuHYVy04+piY0my
-         0p3mWYKl94I53iWEvqGMeEL8nIXLm0EE9+75vrzyC6zTHek0kGWZufe35BAdQ4eChRqU
-         qHRBezqnI7fzTqgEEboO8aNRTdgc+DTRyAyov2bQ4f2T2EeHOPixlNqOufs6J7eDbIPC
-         IG2TQn8AXJNmpRter5Aqx1JRrxJnLdBscufmaqzPjzt750Hj1vkRRiKAhho2hC76ShVe
-         R+Dw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687622373; x=1690214373;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nxD3mnsyxsM9A/pK/r4bmilX/vIQZZ/iBExyMlW0hWI=;
-        b=JMBmNVPNSAvtfcsbcmsL6eT0FeNF11Dp57lSRzNGlCUGieE4NQT7drsM8hQ2/DyfmJ
-         6Buvdbxwx+QDrpO8QnlJQz6vCP2C1iypWhNSEjynAsH/FZZYnvbpPd/fVf/kifvq8K4Q
-         TzSTjXK5kqNyKgXTWfZ1lAAxvrPWSeTAX9ddTke0so1QwdnfmByN1MLgOgvMlazFFRq4
-         TldKctk83tfiRhksg2NUwLkA23+0OI2hzC8UTuoYKOV9xX4sMUoXC1LmHD4wWV1qbcqE
-         mIJNvsqKyTCGxoitNirZvS0Nrhm4mgZdQanGo6by7q1ToslLszqR1U/1Se/5l7PAWSc2
-         XTXA==
-X-Gm-Message-State: AC+VfDwOiA798UaV8ERujRARLOm7T/VFKBwCmUMf4Weo3syEUpVFKWNT
-        hHSJN8QzVPpmKO1D+WBdY54=
-X-Google-Smtp-Source: ACHHUZ7WNyxGMyfLzLSOkyJb4r3sDazr+QBWvq4tE/boVMXXeJq4RitMkVuWZUYRRMXR8/WZubyoMA==
-X-Received: by 2002:a05:6512:3c89:b0:4f8:78a8:bfea with SMTP id h9-20020a0565123c8900b004f878a8bfeamr5774392lfv.16.1687622372625;
-        Sat, 24 Jun 2023 08:59:32 -0700 (PDT)
-Received: from [192.168.1.100] ([185.8.126.245])
-        by smtp.gmail.com with ESMTPSA id m25-20020ac24ad9000000b004fad16596fasm31748lfp.21.2023.06.24.08.59.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 24 Jun 2023 08:59:32 -0700 (PDT)
-Message-ID: <a0d74f3f-4208-d7e3-7eed-481a06b13308@gmail.com>
-Date:   Sat, 24 Jun 2023 18:59:31 +0300
+        Sat, 24 Jun 2023 11:59:51 -0400
+Received: from unicorn.mansr.com (unicorn.mansr.com [81.2.72.234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 317BD1BD2;
+        Sat, 24 Jun 2023 08:59:49 -0700 (PDT)
+Received: from raven.mansr.com (raven.mansr.com [IPv6:2001:8b0:ca0d:1::3])
+        by unicorn.mansr.com (Postfix) with ESMTPS id 1C3CE15360;
+        Sat, 24 Jun 2023 16:59:47 +0100 (BST)
+Received: by raven.mansr.com (Postfix, from userid 51770)
+        id 0FE5B219FD1; Sat, 24 Jun 2023 16:59:47 +0100 (BST)
+From:   =?iso-8859-1?Q?M=E5ns_Rullg=E5rd?= <mans@mansr.com>
+To:     Simon Horman <simon.horman@corigine.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Jeroen Hofstee <jhofstee@victronenergy.com>,
+        Tony Lindgren <tony@atomide.com>, netdev@vger.kernel.org,
+        Mugunthan V N <mugunthanvnm@ti.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        "open list:TI ETHERNET SWITCH DRIVER (CPSW)" 
+        <linux-omap@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] net: cpsw: fix obtaining mac address for am3517
+References: <1477668756-2651-1-git-send-email-jhofstee@victronenergy.com>
+        <20161028155213.2t3nwwe3lqaynaer@atomide.com>
+        <d8ad5cab-5183-cddf-fa9a-4e7b9b8c9377@victronenergy.com>
+        <20161028181914.mskebckucukzhxhz@atomide.com>
+        <yw1x7cru445g.fsf@mansr.com> <ZJX9FBBvOTv10IO4@corigine.com>
+        <de546232-0638-318a-535f-169184933a20@victronenergy.com>
+        <675a346b-faed-4e86-87e7-b332da540055@lunn.ch>
+        <ZJcD4sqqzZCq7Fww@corigine.com> <yw1xttuw3nv4.fsf@mansr.com>
+        <ZJcRgHo5skMBLWge@corigine.com>
+Date:   Sat, 24 Jun 2023 16:59:47 +0100
+In-Reply-To: <ZJcRgHo5skMBLWge@corigine.com> (Simon Horman's message of "Sat,
+        24 Jun 2023 17:53:36 +0200")
+Message-ID: <yw1xpm5k3l70.fsf@mansr.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2 6/6] meson saradc: support reading from channel7 mux
- inputs
-Content-Language: en-US
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        George Stark <gnstark@sberdevices.ru>
-Cc:     jic23@kernel.org, lars@metafoo.de, neil.armstrong@linaro.org,
-        khilman@baylibre.com, jbrunet@baylibre.com,
-        andriy.shevchenko@linux.intel.com, nuno.sa@analog.com,
-        linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        kernel@sberdevices.ru
-References: <20230623022334.791026-1-gnstark@sberdevices.ru>
- <20230623022334.791026-7-gnstark@sberdevices.ru>
- <CAFBinCBv993Xv_wk9fE-U0Tw2mzTB1z22Tj6x8Uy1rRw_dztng@mail.gmail.com>
-From:   George Stark <stark.georgy@gmail.com>
-In-Reply-To: <CAFBinCBv993Xv_wk9fE-U0Tw2mzTB1z22Tj6x8Uy1rRw_dztng@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Martin
+Simon Horman <simon.horman@corigine.com> writes:
 
-Thanks for review
+> On Sat, Jun 24, 2023 at 04:02:07PM +0100, Måns Rullgård wrote:
+>> Simon Horman <simon.horman@corigine.com> writes:
+>> 
+>> > On Fri, Jun 23, 2023 at 11:41:10PM +0200, Andrew Lunn wrote:
+>> >> > > I feel like I am missing something here.
+>> >> > 
+>> >> > That is a weird response, you feel like something is missing
+>> >> 
+>> >> There is. The patch.
+>> >> 
+>> >> Maintainers have a slightly better memory than a goldfish, but given
+>> >> the high volume of patches, we don't remember threads from 2016. Also,
+>> >> all our infrastructure has limited memory, this patch is not in lore,
+>> >> and it is not in patchworks. So in terms of getting merged, it does
+>> >> not exist.
+>> >> 
+>> >> We do however recommend that if a patch has not been merged within 2
+>> >> weeks, it is rebased, any Acked-by: etc tags are added and the patch
+>> >> reposted.
+>> >
+>> > Thanks Andrew, that is also my position.
+>> >
+>> > A ping for a multi-year old patch is unusual (for me).
+>> > I was wondering if there was a back story. I guess not.
+>> 
+>> The only story here is that I was reviewing the set of patches we apply
+>> to our kernels, and I noticed that this one, judging by the discussion,
+>> should have been applied to some tree or other ages ago.
+>> 
+>> Now if it takes 6 years to get a one-line patch (a fix for a regression,
+>> no less) accepted, I have better things to spend my time on.
+>
+> A long time to be sure. As Andrew explained, the patch is now stale.
+> It will need to be rebased and reposted in ordered to be considered for
+> upstream.
 
-On 6/23/23 09:16, Martin Blumenstingl wrote:
-> Hi George,
->
-> On Fri, Jun 23, 2023 at 4:23â€¯AM George Stark <gnstark@sberdevices.ru> wrote:
-> [...]
->> Meson saradc channel 7 is connected to muxer that can switch channel
-> I think that this should read: ... is connected to a mux that ...
->
-> [...]
->>   static const struct iio_chan_spec meson_sar_adc_iio_channels[] = {
->> @@ -245,6 +280,11 @@ static const struct iio_chan_spec meson_sar_adc_iio_channels[] = {
->>          MESON_SAR_ADC_CHAN(INDEX_CHAN_6),
->>          MESON_SAR_ADC_CHAN(INDEX_CHAN_7),
->>          IIO_CHAN_SOFT_TIMESTAMP(INDEX_CHAN_SOFT_TIMESTAMP),
->> +       MESON_SAR_ADC_MUX(INDEX_MUX_0_VSS, 0),
->> +       MESON_SAR_ADC_MUX(INDEX_MUX_1_VDD_DIV4, 1),
->> +       MESON_SAR_ADC_MUX(INDEX_MUX_2_VDD_DIV2, 2),
->> +       MESON_SAR_ADC_MUX(INDEX_MUX_3_VDD_MUL3_DIV4, 3),
->> +       MESON_SAR_ADC_MUX(INDEX_MUX_4_VDD, 4),
->>          MESON_SAR_ADC_TEMP_CHAN(), /* must be the last item */
-> I haven't had the chance to run these patches yet but: I think they
-> are breaking the temperature sensor readings on Meson8/8b/8m2 boards.
-> See arch/arm/boot/dts/meson.dtsi where the temperature channel is
-> being referenced:
->    io-channels = <&saradc 8>
->
-> With this series (this patch and I think also patch 3/6 "meson saradc:
-> unite iio channel array definitions") the numbering of the temperature
-> sensor channel changes.
->
-> To make things worse: in theory we can use meson_saradc to read the
-> SoC temperature sensor on GXBB, GXL and GXM boards (possibly on AXG as
-> well but I can't recall from the top of my head) instead of going
-> through SCPI.
-> I have experimented with this in the past but never got it to work.
-> Doing so in the future could lead to another channel index change,
-> depending on how we decide to go forward now.
->
-> There's two that I can think of:
-> - update meson.dtsi to use the new channel numbering (I don't expect
-> many 32-bit SoC users out there using new kernel + old .dtbs, but it's
-> impossible to say for sure)
-> - or keep the driver backwards compatible (that involves re-adding the
-> channel tables)
->
-> What do you think?
-Actually we'd have to make 2 patches to meson.dtsi, the first change 
-8->9, than 9 ->14.
-And if that index exposed externally (ABI like) I'd not change it 
-without good reason at all.
-So I think to return to double definition of meson_sar_adc_iio_channels 
-and keep the driver backwards compatible.
+I already did that, only to get more snark in return.
 
-I've just realized another moment with channels defined after 
-MESON_SAR_ADC_TEMP_CHAN in channel array.
-In dts by default channels are referenced by channel array index not 
-even by channel number.
-So channel e.g MUX_0_VSS will have the same number (due to enum patch) 
-but different index on meson8 and gxbb.
-As alternative we can implement fwnode_xlate method in meson adc driver 
-and use channel numbers in dts
-(probably not in the current patchset).
-
-Best regards,
-George
-
->
-> Best regards,
-> Martin
->
-> _______________________________________________
-> linux-amlogic mailing list
-> linux-amlogic@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-amlogic
-
-
+-- 
+Måns Rullgård
