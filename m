@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12CC173CC6B
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 20:42:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62EF673CC6E
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 20:42:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233252AbjFXSlg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 14:41:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46864 "EHLO
+        id S233180AbjFXSmc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 14:42:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233221AbjFXSlY (ORCPT
+        with ESMTP id S231250AbjFXSma (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 14:41:24 -0400
+        Sat, 24 Jun 2023 14:42:30 -0400
 Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 075321BE2;
-        Sat, 24 Jun 2023 11:41:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1CE626BE;
+        Sat, 24 Jun 2023 11:42:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1687632081; bh=NOCcPZczdsomiPtC0nBfEgK1XfX0lPqE5Cxg6R5R4g4=;
+        t=1687632108; bh=fXisZBwaDd2KyZj8+4ewJTib/pvIS6ysYz50mkioaW4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OQeSqC3sECHenzvybqjfuRyAjSaCo0e490rGBUFKJVUIsvUJgJ75ENipcEAK37XG7
-         kcHtY9xJSkKDWLvQDn/iikcGaEl6hlYDVEBG4TMnbVAPKcaU6hPfOQcQOig9hEDxzE
-         FmZ2X11ZoGX3vWCwC3vDT09u2giwPbj47Yl9d6IM=
+        b=Hmg9eA/y3u+U/s0cFsgyWs6GnywAtj+7aSGM+dFolb6pUs044ZDrerXQPyW3D9Bus
+         ZRFQ/F6FaG+X50XXd5tOeuiPswKyOc5whnVi06SZTsoLPZCMkb6a9M76ybyV/77mll
+         rBgPVd3cYro7lPXVgrJNlxjsivSlV8orra5DE74Y=
 Received: from ld50.lan (unknown [101.88.25.181])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 89CD9600B5;
-        Sun, 25 Jun 2023 02:41:21 +0800 (CST)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 0F069600B5;
+        Sun, 25 Jun 2023 02:41:48 +0800 (CST)
 From:   WANG Xuerui <kernel@xen0n.name>
 To:     Huacai Chen <chenhuacai@kernel.org>
 Cc:     WANG Rui <wangrui@loongson.cn>, Xi Ruoyao <xry111@xry111.site>,
         loongarch@lists.linux.dev, linux-kbuild@vger.kernel.org,
         llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
         WANG Xuerui <git@xen0n.name>
-Subject: [PATCH v2 3/9] LoongArch: Prepare for assemblers with proper FCSR class support
-Date:   Sun, 25 Jun 2023 02:40:49 +0800
-Message-Id: <20230624184055.3000636-4-kernel@xen0n.name>
+Subject: [PATCH v2 4/9] LoongArch: Make the CPUCFG and CSR ops simple aliases of compiler built-ins
+Date:   Sun, 25 Jun 2023 02:40:50 +0800
+Message-Id: <20230624184055.3000636-5-kernel@xen0n.name>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230624184055.3000636-1-kernel@xen0n.name>
 References: <20230624184055.3000636-1-kernel@xen0n.name>
@@ -53,79 +53,136 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: WANG Xuerui <git@xen0n.name>
 
-The GNU assembler (as of 2.40) mis-treats FCSR operands as GPRs, but
-the LLVM IAS does not. Probe for this and refer to FCSRs as "$fcsrNN"
-if support is present.
+In addition to less visual clutter, this also makes Clang happy
+regarding the const-ness of arguments. In the original approach, all
+Clang gets to see is the incoming arguments whose const-ness cannot be
+proven without first being inlined; so Clang errors out here while GCC
+is fine.
+
+While at it, tweak several printk format strings because the return type
+of csr_read64 becomes effectively unsigned long, instead of unsigned
+long long,
 
 Signed-off-by: WANG Xuerui <git@xen0n.name>
 ---
- arch/loongarch/Kconfig                 | 3 +++
- arch/loongarch/include/asm/fpregdef.h  | 7 +++++++
- arch/loongarch/include/asm/loongarch.h | 9 ++++++++-
- 3 files changed, 18 insertions(+), 1 deletion(-)
+ arch/loongarch/include/asm/loongarch.h | 63 +++++---------------------
+ arch/loongarch/kernel/traps.c          |  2 +-
+ arch/loongarch/lib/dump_tlb.c          |  6 +--
+ 3 files changed, 15 insertions(+), 56 deletions(-)
 
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index 743d87655742..ac3564935281 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -242,6 +242,9 @@ config SCHED_OMIT_FRAME_POINTER
- config AS_HAS_EXPLICIT_RELOCS
- 	def_bool $(as-instr,x:pcalau12i \$t0$(comma)%pc_hi20(x))
- 
-+config AS_HAS_FCSR_CLASS
-+	def_bool $(as-instr,x:movfcsr2gr \$t0$(comma)\$fcsr0)
-+
- config CC_HAS_LSX_EXTENSION
- 	def_bool $(cc-option,-mlsx)
- 
-diff --git a/arch/loongarch/include/asm/fpregdef.h b/arch/loongarch/include/asm/fpregdef.h
-index b6be527831dd..3eb7ff9e1d8e 100644
---- a/arch/loongarch/include/asm/fpregdef.h
-+++ b/arch/loongarch/include/asm/fpregdef.h
-@@ -40,6 +40,12 @@
- #define fs6	$f30
- #define fs7	$f31
- 
-+#ifdef CONFIG_AS_HAS_FCSR_CLASS
-+#define fcsr0	$fcsr0
-+#define fcsr1	$fcsr1
-+#define fcsr2	$fcsr2
-+#define fcsr3	$fcsr3
-+#else
- /*
-  * Current binutils expects *GPRs* at FCSR position for the FCSR
-  * operation instructions, so define aliases for those used.
-@@ -48,5 +54,6 @@
- #define fcsr1	$r1
- #define fcsr2	$r2
- #define fcsr3	$r3
-+#endif
- 
- #endif /* _ASM_FPREGDEF_H */
 diff --git a/arch/loongarch/include/asm/loongarch.h b/arch/loongarch/include/asm/loongarch.h
-index ac83e60c60d1..ff4482fd8ad7 100644
+index ff4482fd8ad7..ea8d1e82369d 100644
 --- a/arch/loongarch/include/asm/loongarch.h
 +++ b/arch/loongarch/include/asm/loongarch.h
-@@ -1445,11 +1445,18 @@ __BUILD_CSR_OP(tlbidx)
- #define EXCCODE_INT_START	64
- #define EXCCODE_INT_END		(EXCCODE_INT_START + EXCCODE_INT_NUM - 1)
+@@ -56,10 +56,7 @@ __asm__(".macro	parse_r var r\n\t"
+ #undef _IFC_REG
  
--/* FPU register names */
-+/* FPU Status Register Names */
-+#ifdef CONFIG_AS_HAS_FCSR_CLASS
-+#define LOONGARCH_FCSR0	$fcsr0
-+#define LOONGARCH_FCSR1	$fcsr1
-+#define LOONGARCH_FCSR2	$fcsr2
-+#define LOONGARCH_FCSR3	$fcsr3
-+#else
- #define LOONGARCH_FCSR0	$r0
- #define LOONGARCH_FCSR1	$r1
- #define LOONGARCH_FCSR2	$r2
- #define LOONGARCH_FCSR3	$r3
-+#endif
+ /* CPUCFG */
+-static inline u32 read_cpucfg(u32 reg)
+-{
+-	return __cpucfg(reg);
+-}
++#define read_cpucfg(reg) __cpucfg(reg)
  
- /* FPU Status Register Values */
- #define FPU_CSR_RSVD	0xe0e0fce0
+ #endif /* !__ASSEMBLY__ */
+ 
+@@ -207,56 +204,18 @@ static inline u32 read_cpucfg(u32 reg)
+ #ifndef __ASSEMBLY__
+ 
+ /* CSR */
+-static __always_inline u32 csr_read32(u32 reg)
+-{
+-	return __csrrd_w(reg);
+-}
+-
+-static __always_inline u64 csr_read64(u32 reg)
+-{
+-	return __csrrd_d(reg);
+-}
+-
+-static __always_inline void csr_write32(u32 val, u32 reg)
+-{
+-	__csrwr_w(val, reg);
+-}
+-
+-static __always_inline void csr_write64(u64 val, u32 reg)
+-{
+-	__csrwr_d(val, reg);
+-}
+-
+-static __always_inline u32 csr_xchg32(u32 val, u32 mask, u32 reg)
+-{
+-	return __csrxchg_w(val, mask, reg);
+-}
+-
+-static __always_inline u64 csr_xchg64(u64 val, u64 mask, u32 reg)
+-{
+-	return __csrxchg_d(val, mask, reg);
+-}
++#define csr_read32(reg) __csrrd_w(reg)
++#define csr_read64(reg) __csrrd_d(reg)
++#define csr_write32(val, reg) __csrwr_w(val, reg)
++#define csr_write64(val, reg) __csrwr_d(val, reg)
++#define csr_xchg32(val, mask, reg) __csrxchg_w(val, mask, reg)
++#define csr_xchg64(val, mask, reg) __csrxchg_d(val, mask, reg)
+ 
+ /* IOCSR */
+-static __always_inline u32 iocsr_read32(u32 reg)
+-{
+-	return __iocsrrd_w(reg);
+-}
+-
+-static __always_inline u64 iocsr_read64(u32 reg)
+-{
+-	return __iocsrrd_d(reg);
+-}
+-
+-static __always_inline void iocsr_write32(u32 val, u32 reg)
+-{
+-	__iocsrwr_w(val, reg);
+-}
+-
+-static __always_inline void iocsr_write64(u64 val, u32 reg)
+-{
+-	__iocsrwr_d(val, reg);
+-}
++#define iocsr_read32(reg) __iocsrrd_w(reg)
++#define iocsr_read64(reg) __iocsrrd_d(reg)
++#define iocsr_write32(val, reg) __iocsrwr_w(val, reg)
++#define iocsr_write64(val, reg) __iocsrwr_d(val, reg)
+ 
+ #endif /* !__ASSEMBLY__ */
+ 
+diff --git a/arch/loongarch/kernel/traps.c b/arch/loongarch/kernel/traps.c
+index 22179cf6f33c..8fb5e7a77145 100644
+--- a/arch/loongarch/kernel/traps.c
++++ b/arch/loongarch/kernel/traps.c
+@@ -999,7 +999,7 @@ asmlinkage void cache_parity_error(void)
+ 	/* For the moment, report the problem and hang. */
+ 	pr_err("Cache error exception:\n");
+ 	pr_err("csr_merrctl == %08x\n", csr_read32(LOONGARCH_CSR_MERRCTL));
+-	pr_err("csr_merrera == %016llx\n", csr_read64(LOONGARCH_CSR_MERRERA));
++	pr_err("csr_merrera == %016lx\n", csr_read64(LOONGARCH_CSR_MERRERA));
+ 	panic("Can't handle the cache error!");
+ }
+ 
+diff --git a/arch/loongarch/lib/dump_tlb.c b/arch/loongarch/lib/dump_tlb.c
+index c2cc7ce343c9..0b886a6e260f 100644
+--- a/arch/loongarch/lib/dump_tlb.c
++++ b/arch/loongarch/lib/dump_tlb.c
+@@ -20,9 +20,9 @@ void dump_tlb_regs(void)
+ 
+ 	pr_info("Index    : 0x%0x\n", read_csr_tlbidx());
+ 	pr_info("PageSize : 0x%0x\n", read_csr_pagesize());
+-	pr_info("EntryHi  : 0x%0*llx\n", field, read_csr_entryhi());
+-	pr_info("EntryLo0 : 0x%0*llx\n", field, read_csr_entrylo0());
+-	pr_info("EntryLo1 : 0x%0*llx\n", field, read_csr_entrylo1());
++	pr_info("EntryHi  : 0x%0*lx\n", field, read_csr_entryhi());
++	pr_info("EntryLo0 : 0x%0*lx\n", field, read_csr_entrylo0());
++	pr_info("EntryLo1 : 0x%0*lx\n", field, read_csr_entrylo1());
+ }
+ 
+ static void dump_tlb(int first, int last)
 -- 
 2.40.0
 
