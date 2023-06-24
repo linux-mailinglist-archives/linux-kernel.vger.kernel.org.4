@@ -2,384 +2,354 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 932D173CB87
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 17:03:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5E2D73CB8A
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 17:13:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233193AbjFXPDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 11:03:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45982 "EHLO
+        id S230455AbjFXPLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 11:11:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233192AbjFXPDi (ORCPT
+        with ESMTP id S229695AbjFXPLq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 11:03:38 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7544D1BFC
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 08:03:36 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2b5c2433134so5106971fa.0
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 08:03:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687619014; x=1690211014;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qrT+GYGGau7b/Cl8N72Zc45Ylx7WRX09Tiirn5fp1ac=;
-        b=Q0+IH0NfIr4sItc+gGTvYbOXJdSVw+TX6RaDX5Lr64ZIdOOQsv7zYWftvOWtpM84uE
-         4EzXQvALyo2j+UN94LzMDB7jeusq9Z+6WquHm5dzOKLHlnIOJ3puf4MaTNDGQlNv/GB1
-         CNo0LBZrrUYLdgFZ59VpnuDDABpqzd+A7AyqKYJjO0HiyydEmQtN3gvXn/z9373Snrli
-         X/tMusuIR9TD+XrguqWTVHntRzErivRbvq80BLyIJ65tc6fGEHynHFfKiMub//PZkx48
-         /2wewqnYT1cua+QNpCG8OI+RO97lwduozQDbzYKJp4MDsz+dMpAk8jQEejy2t/JxnrwH
-         DEoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687619014; x=1690211014;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qrT+GYGGau7b/Cl8N72Zc45Ylx7WRX09Tiirn5fp1ac=;
-        b=YgAs0ixR3+nqQJHLjFhZiSmX1gutQ+Szqb/hZXYmkX8Ix+m7XuwWUUilC4ERw+mt9m
-         f2Lt9WNEdQz8FRsX07UHpT7fOfF/bAg4ZG4g4gh100U2+zCH8dA2VwPcMcScNgi7YRzF
-         nuPwx3505teFqum/AVDiOmVDBoTO/0R/cxDhsNIwGPL4tpism7OLiJIDsQPPh6sKkQl1
-         ZoJ/uesLldcug86kn04M4YI6Q5J5yTgVd+gsey2/0I33qxGgOtXrkW1BfV6nf1NTJE/4
-         eW12TEcIs4WQxWwFiZoGz+JKQsva4nTPHuI+IdvB4NhwKC/orWWrz/PrSmRkzetMxPN+
-         zfFg==
-X-Gm-Message-State: AC+VfDzCs408X0o2VBPmolk03U0oKYAxq98Ql+RksfndYZKocJSl00Ge
-        +ZxdljSqelexOcsgVNyClMkgdw==
-X-Google-Smtp-Source: ACHHUZ6X6AUpG414pgFkU4Ct6EFKFG3kMG0ZPFLkwv8Y37FUGg8Jk87ZR0fIVX8/SBf9aHeG7ZkiCQ==
-X-Received: by 2002:a05:651c:169c:b0:2b4:6ea0:90eb with SMTP id bd28-20020a05651c169c00b002b46ea090ebmr6871688ljb.14.1687619014523;
-        Sat, 24 Jun 2023 08:03:34 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id w19-20020a2e9593000000b002b3e5794516sm311146ljh.26.2023.06.24.08.03.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 24 Jun 2023 08:03:32 -0700 (PDT)
-Message-ID: <dffa5b4c-3273-3b8a-a170-acb146063f43@linaro.org>
-Date:   Sat, 24 Jun 2023 18:03:32 +0300
+        Sat, 24 Jun 2023 11:11:46 -0400
+Received: from mail-40141.protonmail.ch (mail-40141.protonmail.ch [185.70.40.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E9E5E65
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 08:11:45 -0700 (PDT)
+Date:   Sat, 24 Jun 2023 15:11:35 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1687619502; x=1687878702;
+        bh=MdFWtYKMpw1Yt9/wUAen7hc5lbu94rryAiOm/kTIhnY=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=jhV0ZdKF0dRCRyuZtR2EHTP4QDQCo5ZH4WzCbjR2HldoFqGzdplNolS1m151okGsv
+         6PQCSfwn+Mf+Kyh7iCj0yvuSBGl+kBlBH+YmowrvYRODJz+eRPKBK0jEjRNpVuNh2C
+         OqwJrJ5WqZ+PUzMnIKJH5IOCGkQKSieXDf+xacarTO1++eCWFXTV8KAv1T/vcFc3hF
+         OaRGWFBk1umMHjEcLkmbgxVXE0kdQeufFcJynvpdwbhN8AzE9kpbGJnPwAwW5g3tsT
+         //DWTJ8fKh9mkdL60+lSwh1SZXUwSlUJQmWwsi+LeBu0CbVE8Q0SUA2sRk//OFBbNq
+         3X9roO9Yg5zLw==
+To:     Benno Lossin <benno.lossin@proton.me>
+From:   =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        Alice Ryhl <aliceryhl@google.com>,
+        Andreas Hindborg <nmi@metaspace.dk>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Asahi Lina <lina@asahilina.net>
+Subject: Re: [PATCH 5/7] rust: init: add `..Zeroable::zeroed()` syntax for zeroing all missing fields
+Message-ID: <W1fY0aa_v9j7lJNWXk_WNaxY2qruJo1R6k7u0g-X5L5Rxuod-VMBMmByICDwjF_fFGvNJTV41QapW0WeVduNYqxgo9S243gnNGXbexq6P3Q=@protonmail.com>
+In-Reply-To: <20230624092330.157338-5-benno.lossin@proton.me>
+References: <20230624092330.157338-1-benno.lossin@proton.me> <20230624092330.157338-5-benno.lossin@proton.me>
+Feedback-ID: 27884398:user:proton
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 6/6] drm/msm/dpu: Update dev core dump to dump registers
- of sub blocks
-Content-Language: en-GB
-To:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Ryan McCann <quic_rmccann@quicinc.com>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Rob Clark <robdclark@chromium.org>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, quic_jesszhan@quicinc.com
-References: <20230622-devcoredump_patch-v1-0-3b2cdcc6a576@quicinc.com>
- <20230622-devcoredump_patch-v1-6-3b2cdcc6a576@quicinc.com>
- <114f34dd-e5ce-f878-5b23-4c14dc800547@linaro.org>
- <1e41b909-4886-8392-edbc-78684e52bbf9@quicinc.com>
- <412f68a3-e3cc-f26e-2e3d-59727e5c48d8@linaro.org>
- <37c4bde0-0798-7506-ffd3-c8689ab78ba0@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <37c4bde0-0798-7506-ffd3-c8689ab78ba0@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/06/2023 17:17, Abhinav Kumar wrote:
-> 
-> 
-> On 6/24/2023 5:07 AM, Dmitry Baryshkov wrote:
->> On 24/06/2023 03:09, Abhinav Kumar wrote:
->>>
->>>
->>> On 6/22/2023 5:13 PM, Dmitry Baryshkov wrote:
->>>> On 23/06/2023 02:48, Ryan McCann wrote:
->>>>> Currently, the device core dump mechanism does not dump registers 
->>>>> of sub
->>>>> blocks within the DSPP, SSPP, DSC, and PINGPONG blocks. Add wrapper
->>>>> function to dump hardware blocks that contain sub blocks.
->>>>>
->>>>> Signed-off-by: Ryan McCann <quic_rmccann@quicinc.com>
->>>>> ---
->>>>>   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c | 194 
->>>>> +++++++++++++++++++++++++++-----
->>>>>   1 file changed, 168 insertions(+), 26 deletions(-)
->>>>>
->>>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c 
->>>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
->>>>> index aa8499de1b9f..9b1b1c382269 100644
->>>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
->>>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
->>>>> @@ -885,6 +885,154 @@ static int dpu_irq_postinstall(struct msm_kms 
->>>>> *kms)
->>>>>       return 0;
->>>>>   }
->>>>> +static void dpu_kms_mdp_snapshot_add_block(struct msm_disp_state 
->>>>> *disp_state,
->>>>> +                       void __iomem *mmio, void *blk,
->>>>> +                       enum dpu_hw_blk_type blk_type)
->>>>
->>>> No. Such multiplexers add no value to the code. Please inline it.
->>>>
->>>> Not to mention that this patch is hard to review. You both move 
->>>> existing code and add new features. If it were to go, it should have 
->>>> been split into two patches: one introducing the multiplexer and 
->>>> another one adding subblocks.
->>>>
->>>
->>> Ok. we can split this into:
->>>
->>> 1) adding the multiplexer
->>> 2) adding sub-blk parsing support inside the multiplexer
->>
->> I'd say, drop the multiplexer completely. It adds no value here. It is 
->> only used from dpu_kms_mdp_snapshot(). If the code there was complex 
->> enough, it would have made sense to _split_ the function. But even in 
->> such case there would be no point in having multiplexer. We do not 
->> enumerate block by type.
->>
-> 
-> Can you pls elaborate what you mean by enumerate blk by type?
-> 
-> We do have DPU_HW_BLK_***
-> 
-> Did you mean sub-blk?
-> 
->>>
->>>>> +{
->>>>> +    u32 base;
->>>>> +
->>>>> +    switch (blk_type) {
->>>>> +    case DPU_HW_BLK_TOP:
->>>>> +    {
->>>>> +        struct dpu_mdp_cfg *top = (struct dpu_mdp_cfg *)blk;
->>>>> +
->>>>> +        if (top->features & BIT(DPU_MDP_PERIPH_0_REMOVED)) {
->>>>> +            msm_disp_snapshot_add_block(disp_state, MDP_PERIPH_TOP0,
->>>>> +                            mmio + top->base, "top");
->>>>> +            msm_disp_snapshot_add_block(disp_state, top->len - 
->>>>> MDP_PERIPH_TOP0_END,
->>>>> +                            mmio + top->base + MDP_PERIPH_TOP0_END,
->>>>> +                            "top_2");
->>>>> +        } else {
->>>>> +            msm_disp_snapshot_add_block(disp_state, top->len, mmio 
->>>>> + top->base, "top");
->>>>> +        }
->>>>> +        break;
->>>>> +    }
->>>>> +    case DPU_HW_BLK_LM:
->>>>> +    {
->>>>> +        struct dpu_lm_cfg *mixer = (struct dpu_lm_cfg *)blk;
->>>>> +
->>>>> +        msm_disp_snapshot_add_block(disp_state, mixer->len, mmio + 
->>>>> mixer->base, "%s",
->>>>> +                        mixer->name);
->>>>> +        break;
->>>>> +    }
->>>>> +    case DPU_HW_BLK_CTL:
->>>>> +    {
->>>>> +        struct dpu_ctl_cfg *ctl = (struct dpu_ctl_cfg *)blk;
->>>>> +
->>>>> +        msm_disp_snapshot_add_block(disp_state, ctl->len, mmio + 
->>>>> ctl->base, "%s",
->>>>> +                        ctl->name);
->>>>> +        break;
->>>>> +    }
->>>>> +    case DPU_HW_BLK_INTF:
->>>>> +    {
->>>>> +        struct dpu_intf_cfg *intf = (struct dpu_intf_cfg *)blk;
->>>>> +
->>>>> +        msm_disp_snapshot_add_block(disp_state, intf->len, mmio + 
->>>>> intf->base, "%s",
->>>>> +                        intf->name);
->>>>> +        break;
->>>>> +    }
->>>>> +    case DPU_HW_BLK_WB:
->>>>> +    {
->>>>> +        struct dpu_wb_cfg *wb = (struct dpu_wb_cfg *)blk;
->>>>> +
->>>>> +        msm_disp_snapshot_add_block(disp_state, wb->len, mmio + 
->>>>> wb->base, "%s",
->>>>> +                        wb->name);
->>>>> +        break;
->>>>> +    }
->>>>> +    case DPU_HW_BLK_SSPP:
->>>>> +    {
->>>>> +        struct dpu_sspp_cfg *sspp_block = (struct dpu_sspp_cfg *)blk;
->>>>> +        const struct dpu_sspp_sub_blks *sblk = sspp_block->sblk;
->>>>> +
->>>>> +        base = sspp_block->base;
->>>>> +
->>>>> +        msm_disp_snapshot_add_block(disp_state, sspp_block->len, 
->>>>> mmio + base, "%s",
->>>>> +                        sspp_block->name);
->>>>> +
->>>>> +        if (sspp_block->features & BIT(DPU_SSPP_SCALER_QSEED3) ||
->>>>> +            sspp_block->features & BIT(DPU_SSPP_SCALER_QSEED3LITE) ||
->>>>> +            sspp_block->features & BIT(DPU_SSPP_SCALER_QSEED4))
->>>>> +            msm_disp_snapshot_add_block(disp_state, 
->>>>> sblk->scaler_blk.len,
->>>>> +                            mmio + base + sblk->scaler_blk.base, 
->>>>> "%s_%s",
->>>>> +                            sspp_block->name, sblk->scaler_blk.name);
->>>>
->>>> Actually, it would be better to:
->>>> - drop name from all sblk instances (and use known string instead of 
->>>> the sblk name here)
->>>> - Use sblk->foo_blk.len to check if it should be printed or not.
->>>>
->>>
->>> No, I dont agree. If we drop the names from the sub_blk in the 
->>> catalog, we will end up using "sub_blk_name" string here in the code 
->>> to indicate which blk that is in the dump.
->>>
->>> If we add more sub_blks in the catalog in the future we need to keep 
->>> changing the code over here. Thats not how it should be.
->>>
->>> Leaving the names in the catalog ensures that this code wont change 
->>> and only catalog changes when we add a new sub_blk either for an 
->>> existing or new chipset.
->>>
->>> catalog is indicating the new blk, and dumping code just prints it.
->>>
->>> with your approach, dumping code will or can keep changing with 
->>> chipsets or sub_blks. Thats not how it should be.
->>
->> Well, we do not enumerate sub-blocks in any way, they are not indexed. 
->> So even with sblk->blk.name in place, adding new sub-block would 
->> require adding new code here. That's why I wrote that the calling code 
->> knows which sub-block it refers to.
->>
-> 
-> Today, unfortunately each sub_blk type is different so we have to do 
-> this case by case.
-> 
-> Ideally, this should have just been
-> 
-> -> print main blk
-> -> print all sub-blks of the main blk
-> 
-> Without having to handle each main blk's sub-blks separately.
-> 
-> That way the dumping code would have remained generic without having to 
-> do even the multiplexer in the first place.
-> 
-> Need to explore if somehow we can come up with a generic sub-blk struct 
-> and make this possible. Then this code will become much easier and what 
-> I am saying will make total sense.
+On Saturday, June 24th, 2023 at 11:25, Benno Lossin <benno.lossin@proton.me=
+> wrote:
 
-In such case, yes. However I'd warn about having a generic array of 
-subblocks. Having named subblock entries might complicate snapshotting, 
-but it makes the rest of the DPU driver smaller.
+> Add the struct update syntax to the init macros, but only for
+> `..Zeroable::zeroed()`. Adding this at the end of the struct initializer
+> allows one to omit fields from the initializer, these fields will be
+> initialized with 0x00 set to every byte. Only types that implement the
+> `Zeroable` trait can utilize this.
+>=20
+> Suggested-by: Asahi Lina <lina@asahilina.net>
+> Signed-off-by: Benno Lossin <benno.lossin@proton.me>
+> ---
+>  rust/kernel/init.rs        |  16 +++++-
+>  rust/kernel/init/macros.rs | 114 ++++++++++++++++++++++++++++++++++++-
+>  2 files changed, 128 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/rust/kernel/init.rs b/rust/kernel/init.rs
+> index ecf6a4bd0ce4..44bc3e77419a 100644
+> --- a/rust/kernel/init.rs
+> +++ b/rust/kernel/init.rs
+> @@ -508,14 +508,18 @@ macro_rules! stack_try_pin_init {
+>  /// - Fields that you want to initialize in-place have to use `<-` inste=
+ad of `:`.
+>  /// - In front of the initializer you can write `&this in` to have acces=
+s to a [`NonNull<Self>`]
+>  ///   pointer named `this` inside of the initializer.
+> +/// - Using struct update syntax one can place `..Zeroable::zeroed()` at=
+ the very end of the
+> +///   struct, this initializes every field with 0 and then runs all init=
+ializers specified in the
+> +///   body. This can only be done if [`Zeroable`] is implemented for the=
+ struct.
+>  ///
+>  /// For instance:
+>  ///
+>  /// ```rust
+>  /// # use kernel::pin_init;
+> -/// # use macros::pin_data;
+> +/// # use macros::{pin_data, Zeroable};
+>  /// # use core::{ptr::addr_of_mut, marker::PhantomPinned};
+>  /// #[pin_data]
+> +/// #[derive(Zeroable)]
+>  /// struct Buf {
+>  ///     // `ptr` points into `buf`.
+>  ///     ptr: *mut u8,
+> @@ -528,6 +532,10 @@ macro_rules! stack_try_pin_init {
+>  ///     ptr: unsafe { addr_of_mut!((*this.as_ptr()).buf).cast() },
+>  ///     pin: PhantomPinned,
+>  /// });
+> +/// pin_init!(Buf {
+> +///     buf: [1; 64],
+> +///     ..Zeroable::zeroed(),
+> +/// });
+>  /// ```
+>  ///
+>  /// [`try_pin_init!`]: kernel::try_pin_init
+> @@ -547,6 +555,7 @@ macro_rules! pin_init {
+>              @data(PinData, use_data),
+>              @has_data(HasPinData, __pin_data),
+>              @construct_closure(pin_init_from_closure),
+> +            @munch_fields($($fields)*),
+>          )
+>      };
+>  }
+> @@ -603,6 +612,7 @@ macro_rules! try_pin_init {
+>              @data(PinData, use_data),
+>              @has_data(HasPinData, __pin_data),
+>              @construct_closure(pin_init_from_closure),
+> +            @munch_fields($($fields)*),
+>          )
+>      };
+>      ($(&$this:ident in)? $t:ident $(::<$($generics:ty),* $(,)?>)? {
+> @@ -616,6 +626,7 @@ macro_rules! try_pin_init {
+>              @data(PinData, use_data),
+>              @has_data(HasPinData, __pin_data),
+>              @construct_closure(pin_init_from_closure),
+> +            @munch_fields($($fields)*),
+>          )
+>      };
+>  }
+> @@ -650,6 +661,7 @@ macro_rules! init {
+>              @data(InitData, /*no use_data*/),
+>              @has_data(HasInitData, __init_data),
+>              @construct_closure(init_from_closure),
+> +            @munch_fields($($fields)*),
+>          )
+>      }
+>  }
+> @@ -700,6 +712,7 @@ macro_rules! try_init {
+>              @data(InitData, /*no use_data*/),
+>              @has_data(HasInitData, __init_data),
+>              @construct_closure(init_from_closure),
+> +            @munch_fields($($fields)*),
+>          )
+>      };
+>      ($(&$this:ident in)? $t:ident $(::<$($generics:ty),* $(,)?>)? {
+> @@ -713,6 +726,7 @@ macro_rules! try_init {
+>              @data(InitData, /*no use_data*/),
+>              @has_data(HasInitData, __init_data),
+>              @construct_closure(init_from_closure),
+> +            @munch_fields($($fields)*),
+>          )
+>      };
+>  }
+> diff --git a/rust/kernel/init/macros.rs b/rust/kernel/init/macros.rs
+> index 1e0c4aca055a..5dcb2e513f26 100644
+> --- a/rust/kernel/init/macros.rs
+> +++ b/rust/kernel/init/macros.rs
+> @@ -989,6 +989,7 @@ impl<$($impl_generics)*> $pin_data<$($ty_generics)*>
+>  ///
+>  /// This macro has multiple internal call configurations, these are alwa=
+ys the very first ident:
+>  /// - nothing: this is the base case and called by the `{try_}{pin_}init=
+!` macros.
+> +/// - `with_update_parsed`: when the `..Zeroable::zeroed()` syntax has b=
+een handled.
+>  /// - `init_slot`: recursively creates the code that initializes all fie=
+lds in `slot`.
+>  /// - `make_initializer`: recursively create the struct initializer that=
+ guarantees that every
+>  ///   field has been initialized exactly once.
+> @@ -1007,6 +1008,82 @@ macro_rules! __init_internal {
+>          @has_data($has_data:ident, $get_data:ident),
+>          // `pin_init_from_closure` or `init_from_closure`.
+>          @construct_closure($construct_closure:ident),
+> +        @munch_fields(),
+> +    ) =3D> {
+> +        $crate::__init_internal!(with_update_parsed:
+> +            @this($($this)?),
+> +            @typ($t $(::<$($generics),*>)? ),
+> +            @fields($($fields)*),
+> +            @error($err),
+> +            @data($data, $($use_data)?),
+> +            @has_data($has_data, $get_data),
+> +            @construct_closure($construct_closure),
+> +            @zeroed(), // nothing means default behavior.
+> +        )
+> +    };
+> +    (
+> +        @this($($this:ident)?),
+> +        @typ($t:ident $(::<$($generics:ty),*>)?),
+> +        @fields($($fields:tt)*),
+> +        @error($err:ty),
+> +        // Either `PinData` or `InitData`, `$use_data` should only be pr=
+esent in the `PinData`
+> +        // case.
+> +        @data($data:ident, $($use_data:ident)?),
+> +        // `HasPinData` or `HasInitData`.
+> +        @has_data($has_data:ident, $get_data:ident),
+> +        // `pin_init_from_closure` or `init_from_closure`.
+> +        @construct_closure($construct_closure:ident),
+> +        @munch_fields(..Zeroable::zeroed()),
+> +    ) =3D> {
+> +        $crate::__init_internal!(with_update_parsed:
+> +            @this($($this)?),
+> +            @typ($t $(::<$($generics),*>)? ),
+> +            @fields($($fields)*),
+> +            @error($err),
+> +            @data($data, $($use_data)?),
+> +            @has_data($has_data, $get_data),
+> +            @construct_closure($construct_closure),
+> +            @zeroed(()), // `()` means zero all fields not mentioned.
+> +        )
+> +    };
+> +    (
+> +        @this($($this:ident)?),
+> +        @typ($t:ident $(::<$($generics:ty),*>)?),
+> +        @fields($($fields:tt)*),
+> +        @error($err:ty),
+> +        // Either `PinData` or `InitData`, `$use_data` should only be pr=
+esent in the `PinData`
+> +        // case.
+> +        @data($data:ident, $($use_data:ident)?),
+> +        // `HasPinData` or `HasInitData`.
+> +        @has_data($has_data:ident, $get_data:ident),
+> +        // `pin_init_from_closure` or `init_from_closure`.
+> +        @construct_closure($construct_closure:ident),
+> +        @munch_fields($ignore:tt $($rest:tt)*),
+> +    ) =3D> {
+> +        $crate::__init_internal!(
+> +            @this($($this)?),
+> +            @typ($t $(::<$($generics),*>)? ),
+> +            @fields($($fields)*),
+> +            @error($err),
+> +            @data($data, $($use_data)?),
+> +            @has_data($has_data, $get_data),
+> +            @construct_closure($construct_closure),
+> +            @munch_fields($($rest)*),
+> +        )
+> +    };
+> +    (with_update_parsed:
+> +        @this($($this:ident)?),
+> +        @typ($t:ident $(::<$($generics:ty),*>)?),
+> +        @fields($($fields:tt)*),
+> +        @error($err:ty),
+> +        // Either `PinData` or `InitData`, `$use_data` should only be pr=
+esent in the `PinData`
+> +        // case.
+> +        @data($data:ident, $($use_data:ident)?),
+> +        // `HasPinData` or `HasInitData`.
+> +        @has_data($has_data:ident, $get_data:ident),
+> +        // `pin_init_from_closure` or `init_from_closure`.
+> +        @construct_closure($construct_closure:ident),
+> +        @zeroed($($init_zeroed:expr)?),
+>      ) =3D> {{
+>          // We do not want to allow arbitrary returns, so we declare this=
+ type as the `Ok` return
+>          // type and shadow it later when we insert the arbitrary user co=
+de. That way there will be
+> @@ -1024,6 +1101,17 @@ macro_rules! __init_internal {
+>                  {
+>                      // Shadow the structure so it cannot be used to retu=
+rn early.
+>                      struct __InitOk;
+> +                    // If `$init_zeroed` is present we should zero the s=
+lot now and not emit an
+> +                    // error when fields are missing (since they will be=
+ zeroed). We also have to
+> +                    // check that the type actually implements `Zeroable=
+`.
+> +                    $(
+> +                        fn is_zeroable<T: Zeroable>(ptr: *mut T) {}
 
-> 
-> Even without that, conceptually these sub-blk names are reflecting whats 
-> in our software document. So its not a random name but reflects the 
-> actual sub-blk name from the hardware.
+Maybe call this assert_zeroable?
 
-Yes
+> +                        // Ensure that the struct is indeed `Zeroable`.
+> +                        is_zeroable(slot);
+> +                        // SAFETY:  The type implements `Zeroable` by th=
+e check above.
+> +                        unsafe { ::core::ptr::write_bytes(slot, 0, 1) };
+> +                        $init_zeroed // this will be `()` if set.
 
-> So this belongs in the catalog.
+How does this work? Shouldn't there be a ; after $init_zeroed to consume th=
+e () value?
 
-But the sub-block field already has a correct name: scaler_blk, csc_blk, 
-etc. Having both sub-block field name and the .name inside results in 
-kind of duplication, which seems unnecessary to me.
+> +                    )?
+>                      // Create the `this` so it can be referenced by the =
+user inside of the
+>                      // expressions creating the individual fields.
+>                      $(let $this =3D unsafe { ::core::ptr::NonNull::new_u=
+nchecked(slot) };)?
+> @@ -1064,7 +1152,7 @@ macro_rules! __init_internal {
+>          @data($data:ident),
+>          @slot($slot:ident),
+>          @guards($($guards:ident,)*),
+> -        @munch_fields($(,)?),
+> +        @munch_fields($(..Zeroable::zeroed())? $(,)?),
+>      ) =3D> {
+>          // Endpoint of munching, no fields are left. If execution reache=
+s this point, all fields
+>          // have been initialized. Therefore we can now dismiss the guard=
+s by forgetting them.
+> @@ -1157,6 +1245,30 @@ macro_rules! __init_internal {
+>              @munch_fields($($rest)*),
+>          );
+>      };
+> +    (make_initializer:
+> +        @slot($slot:ident),
+> +        @type_name($t:ident),
+> +        @munch_fields(..Zeroable::zeroed() $(,)?),
+> +        @acc($($acc:tt)*),
+> +    ) =3D> {
+> +        // Endpoint, nothing more to munch, create the initializer. Sinc=
+e the users specified
+> +        // `..Zeroable::zeroed()`, the slot will already have been zeroe=
+d and all field that have
+> +        // not been overwritten are thus zero and initialized. We still =
+check that all fields are
+> +        // actually accessible by using the struct update syntax ourselv=
+es.
+> +        // Since we are in the `if false` branch, this will never get ex=
+ecuted. We abuse `slot` to
+> +        // get the correct type inference here:
+> +        unsafe {
+> +            let mut zeroed =3D ::core::mem::zeroed();
+> +            // We have to use type inference her to make zeroed have the=
+ correct type. This does
 
-> Dumping code should not change or know whats the name of each block. It 
-> should just use whats in the catalog. thats why even conceptually I am 
-> not okay with your idea.
+*here
 
-Dumping code itself (msm_disp_snapshot_*) doesn't. But the caller code 
-knows what is the subblock.
+> +            // not get executed, so it has no effect.
+> +            ::core::ptr::write($slot, zeroed);
+> +            zeroed =3D ::core::mem::zeroed();
+> +            ::core::ptr::write($slot, $t {
+> +                $($acc)*
+> +                ..zeroed
+> +            });
+> +        }
+> +    };
+>      (make_initializer:
+>          @slot($slot:ident),
+>          @type_name($t:ident),
+> --
+> 2.41.0
 
-Let me pick a definition from the patch:
-
-static const struct dpu_dspp_sub_blks msm8998_dspp_sblk = {
-	.pcc = {.name = "pcc", .id = DPU_DSPP_PCC, .base = 0x1700,
-		.len = 0x90, .version = 0x10007},
-};
-
-the "pcc" is repeated three times. When the code looks at this block, it 
-already knows that it is a PCC block.
-
-Compare this with:
-
-static const struct dpu_dspp_sub_blks msm8998_dspp_sblk = {
-	.pcc = {
-		.base = 0x1700,
-		.len = 0x90,
-		.version = 0x10007,
-	},
-};
-
-Nothing is repeated, but we still know that this is the DSPPn_PCC 
-sub-block description.
-
-Calling code does:
-
-u32 base;
-base = ctx->cap->sblk->pcc.base;
-
-
-> 
->> Let me extract the relevant code (skipping all the conditions for now):
->>
->> msm_disp_snapshot_add_block(disp_state, sspp_block->len, mmio + base, 
->> "%s",
->>                  sspp_block->name);
->>
->> if (have_scaler)
->>      msm_disp_snapshot_add_block(disp_state, sblk->scaler_blk.len,
->>                      mmio + base + sblk->scaler_blk.base, "%s_%s",
->>                      sspp_block->name, sblk->scaler_blk.name);
->>
->> if (have_csc)
->>      msm_disp_snapshot_add_block(disp_state, sblk->csc_blk.len,
->>                      mmio + base + sblk->csc_blk.base, "%s_%s",
->>                      sspp_block->name, sblk->csc_blk.name);
->>
->> Consider adding new sub-block, "baz". We would still require manual 
->> addition of the following code:
->>
->>      msm_disp_snapshot_add_block(disp_state, sblk->baz_blk.len,
->>                      mmio + base + sblk->baz_blk.base, "%s_%s",
->>                      sspp_block->name, sblk->baz_blk.name);
->>
->>
->> Compare this with:
->>
->>      msm_disp_snapshot_add_block(disp_state, sblk->baz_blk.len,
->>                      mmio + base + sblk->baz_blk.base, "%s_baz",
->>                      sspp_block->name);
->>
-> 
-> Basically you are saying why not make the one line change here instead 
-> of using the name from the catalog.
-> 
-> I think it will be better to use from the catalog for the reason I wrote 
-> above that dumping code should just "use" the catalog's information and 
-> not become a catalog itself.
-> 
-> You are not saving much by dropping the sub-blk name from catalog anyway.
-> 
->> Moreover, if we follow the style of dpu_kms_mdp_snapshot() (which 
->> doesn't use name), it should be:
->>
->>      msm_disp_snapshot_add_block(disp_state, sblk->baz_blk.len,
->>                      mmio + base + sblk->baz_blk.base, "sspp%d_baz", 
->> idx);
->>
->>
-> tbh, after looking at this series, it made me think why I didnt use the 
-> name from the catalog even for the dpu_kms_mdp_snapshot()
->>
->>>
-> 
-> <snipped>
-
--- 
-With best wishes
-Dmitry
-
+Cheers,
+Bj=C3=B6rn
