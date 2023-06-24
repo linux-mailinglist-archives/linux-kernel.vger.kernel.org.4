@@ -2,147 +2,337 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EDDA73C5D0
+	by mail.lfdr.de (Postfix) with ESMTP id D8B1B73C5D2
 	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 03:24:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230369AbjFXBXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 21:23:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55640 "EHLO
+        id S231210AbjFXBYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 21:24:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjFXBX2 (ORCPT
+        with ESMTP id S229487AbjFXBYJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 21:23:28 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E06ED272D
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 18:23:26 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id ca18e2360f4ac-780bd47ef93so42240939f.2
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 18:23:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687569806; x=1690161806;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CZsvr5JwV+gVT9wANlk5FqC0I5kNocAXRzdPnCa/F3o=;
-        b=jEKBwT1wRaTJs6VimsVN3vNnFfohxicSDRFnTcL7XxI92YzWiVYuVhaSZoHYAuXQ+n
-         Xj6XtgbMsMPUGi7kBpbEEGaUbFOtdoPVwTTnbpdne67M0H86bt6eVSuaRUIkLL04fRoM
-         PJXAUvMm25nc+IXBkQHaYGzBy5/1ULOsXZKa/kJKaVfeLoDM8SPjTM2qZx6yZ3A3/bXS
-         ErtwXs31MtgJAN1naO052apryU87i10sQfjIXli90Y6Mkik9oLjbtMzTLP4z2PTuP8kC
-         bTvMUZAFYGZFW8GZFmtnsMmdaJlmjkc7c4KchLDzLlYrfCxL4Ah96JAC8lacE6obZIwi
-         ATIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687569806; x=1690161806;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CZsvr5JwV+gVT9wANlk5FqC0I5kNocAXRzdPnCa/F3o=;
-        b=ZJjUID1z2GmKySr1q/E5Y2V//Rh8hTwcSNg9eVMKzQFgtjdRiLQT8LGnvm/HcULFeQ
-         RpIk8YARaNFLJvozb9RsnXgHgoohaWNvrUvmwYhFJYYDW1pywHV8lkxLoqwcKDq7rIqG
-         ujFxR3kad6HVBNQd1CSSQq0K66bu1NDTbCAGv3gDpCyBDXq0bPhsyuGg7tmWOvAuKYsG
-         O1oGqKAK+uIBSJTD2NMbAzKGXmXClNkkU0kHqMQ70aEYbEQPzIh4YRAH8JvDNWsZobs3
-         YBZvX6dxchhI5AmZDZ78PoX80b0J2LshKz9u5Z0XTb85UY+8/WmgM3RTOTdKIO9GNGpw
-         V/4g==
-X-Gm-Message-State: AC+VfDz+R2+0sR/VG5NVQU4OZJe2uD4lYSK8TSGfAhzU+84vDTD5QkR4
-        PyuXu+Hqljq5PXsWOtm6tIpZUTv//SEtbQ==
-X-Google-Smtp-Source: ACHHUZ55eO65eU0kw6j73LnGtUMTnt6ixrmSUGswB1tjZV2Q0QN2T8Z5HARLf9Rs833+kcACdyn2Zg==
-X-Received: by 2002:a6b:6b0e:0:b0:76c:56fb:3c59 with SMTP id g14-20020a6b6b0e000000b0076c56fb3c59mr17390982ioc.10.1687569805933;
-        Fri, 23 Jun 2023 18:23:25 -0700 (PDT)
-Received: from localhost (dhcp-72-235-13-41.hawaiiantel.net. [72.235.13.41])
-        by smtp.gmail.com with ESMTPSA id z22-20020a6be216000000b0076c5926b381sm201308ioc.31.2023.06.23.18.23.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Jun 2023 18:23:25 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Fri, 23 Jun 2023 15:23:22 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Dave Airlie <airlied@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: arm32 build warnings in workqueue.c
-Message-ID: <ZJZFiupBPBrl9mL_@slm.duckdns.org>
-References: <CAPM=9twNnV4zMCvrPkw3H-ajZOH-01JVh_kDrxdPYQErz8ZTdA@mail.gmail.com>
- <CAHk-=wi=eDN4Ub0qSN27ztBAvHSXCyiY2stu3_XbTpYpQX4x7w@mail.gmail.com>
- <ZJX27JDyrgvdeCe4@slm.duckdns.org>
- <CAHk-=wiKoRSXMkwcMN=70nG8aOAJxuF3PUqHSBRJ7dTfnZ1n=g@mail.gmail.com>
+        Fri, 23 Jun 2023 21:24:09 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F7B5272C;
+        Fri, 23 Jun 2023 18:24:06 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35O1NwIU011477;
+        Sat, 24 Jun 2023 01:23:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=WRb+69Y5nT4WDGULWD86EsKzBS27WLfqvII40UpcWf4=;
+ b=hXQVU8FeTfxvJN0fP2/TSeP9UagoWqu2DPWtVC7fnIrtKC0UvBN50LlsdBt6tgkUrpee
+ azQ6B6p1kj68WVsX06iM9G1KtQ0AGXSbDoRDcJZIdM4qxOq9weAgZ/e0JpjCD54XapOM
+ Da0VCirViyjJCC1/TlogvewWJ1A21q83ZOvRLjYelFnyClwZS0iSIYiYJcbz8B6V9un6
+ c5MdID5/eHWKTB4Mjcni0EQ/jXgmERypgv7vpU3l7PiYTJqMueKQYN5C1MHe9doW7+A7
+ 3fI2HmOzvAeU/RqNFiUc1bOK7tUzmHasaBy1ClqnGRwR1iZowLtEEbzQxQv3Ah8rJaPL pg== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rdnutr24q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 24 Jun 2023 01:23:58 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35O1NvnS015877
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 24 Jun 2023 01:23:57 GMT
+Received: from [10.71.110.193] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 23 Jun
+ 2023 18:23:56 -0700
+Message-ID: <55d783d5-ef47-8c2e-d3ac-598e686e53fe@quicinc.com>
+Date:   Fri, 23 Jun 2023 18:23:56 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wiKoRSXMkwcMN=70nG8aOAJxuF3PUqHSBRJ7dTfnZ1n=g@mail.gmail.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 6/6] drm/msm/dpu: Update dev core dump to dump registers
+ of sub blocks
+Content-Language: en-US
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Ryan McCann <quic_rmccann@quicinc.com>,
+        "Rob Clark" <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        David Airlie <airlied@gmail.com>,
+        "Daniel Vetter" <daniel@ffwll.ch>
+CC:     Rob Clark <robdclark@chromium.org>,
+        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+References: <20230622-devcoredump_patch-v1-0-3b2cdcc6a576@quicinc.com>
+ <20230622-devcoredump_patch-v1-6-3b2cdcc6a576@quicinc.com>
+ <114f34dd-e5ce-f878-5b23-4c14dc800547@linaro.org>
+ <1e41b909-4886-8392-edbc-78684e52bbf9@quicinc.com>
+From:   Jessica Zhang <quic_jesszhan@quicinc.com>
+In-Reply-To: <1e41b909-4886-8392-edbc-78684e52bbf9@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 8NVxNNcTQuvU0Av0hx13JYmqyZe97CJ6
+X-Proofpoint-ORIG-GUID: 8NVxNNcTQuvU0Av0hx13JYmqyZe97CJ6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-23_14,2023-06-22_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 mlxscore=0 suspectscore=0 impostorscore=0 spamscore=0
+ mlxlogscore=999 priorityscore=1501 clxscore=1011 bulkscore=0 phishscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306240011
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, Linus.
 
-On Fri, Jun 23, 2023 at 03:15:51PM -0700, Linus Torvalds wrote:
-> On Fri, 23 Jun 2023 at 12:48, Tejun Heo <tj@kernel.org> wrote:
-> > The behavior change in gcc-13 is fine on its own but it's frustrating
-> > because there's no way to obtain previous behavior
+
+On 6/23/2023 5:09 PM, Abhinav Kumar wrote:
 > 
-> No, the previous gcc behavior was just buggy and wrong.
 > 
-> I'm actually surprised at what gcc did. It means that each enum, has a
-> different type. That's just completely wrong, and means that there is
-> no such thing as a proper enum type.
-
-I agree that the previous behavior is out there. It's just that it's been
-like that forever and that's been the only way to make constants externally
-visible.
-
-> And the types are entirely random. They are *not* the types of the
-> initializers. Try this:
+> On 6/22/2023 5:13 PM, Dmitry Baryshkov wrote:
+>> On 23/06/2023 02:48, Ryan McCann wrote:
+>>> Currently, the device core dump mechanism does not dump registers of sub
+>>> blocks within the DSPP, SSPP, DSC, and PINGPONG blocks. Add wrapper
+>>> function to dump hardware blocks that contain sub blocks.
+>>>
+>>> Signed-off-by: Ryan McCann <quic_rmccann@quicinc.com>
+>>> ---
+>>>   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c | 194 
+>>> +++++++++++++++++++++++++++-----
+>>>   1 file changed, 168 insertions(+), 26 deletions(-)
+>>>
+>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c 
+>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+>>> index aa8499de1b9f..9b1b1c382269 100644
+>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+>>> @@ -885,6 +885,154 @@ static int dpu_irq_postinstall(struct msm_kms 
+>>> *kms)
+>>>       return 0;
+>>>   }
+>>> +static void dpu_kms_mdp_snapshot_add_block(struct msm_disp_state 
+>>> *disp_state,
+>>> +                       void __iomem *mmio, void *blk,
+>>> +                       enum dpu_hw_blk_type blk_type)
+>>
+>> No. Such multiplexers add no value to the code. Please inline it.
+>>
+>> Not to mention that this patch is hard to review. You both move 
+>> existing code and add new features. If it were to go, it should have 
+>> been split into two patches: one introducing the multiplexer and 
+>> another one adding subblocks.
+>>
 > 
->     enum {
->         A = (char) 1,
->         B = (unsigned long) 2,
->         C = (long long) 3,
->         D = (unsigned long) 0x123456789,
->     };
+> Ok. we can split this into:
 > 
->     int tA(void) { return sizeof(A); }
->     int tB(void) { return sizeof(B); }
->     int tC(void) { return sizeof(C); }
->     int tD(void) { return sizeof(D); }
->     int T(void)  { return sizeof(enum bad); }
->     int crazy(void)  { return sizeof(typeof(A)); }
+> 1) adding the multiplexer
+> 2) adding sub-blk parsing support inside the multiplexer
 > 
-> and look at the insanity when you compile it with "gcc -S".
+>>> +{
+>>> +    u32 base;
+>>> +
+>>> +    switch (blk_type) {
+>>> +    case DPU_HW_BLK_TOP:
+>>> +    {
+>>> +        struct dpu_mdp_cfg *top = (struct dpu_mdp_cfg *)blk;
+>>> +
+>>> +        if (top->features & BIT(DPU_MDP_PERIPH_0_REMOVED)) {
+>>> +            msm_disp_snapshot_add_block(disp_state, MDP_PERIPH_TOP0,
+>>> +                            mmio + top->base, "top");
+>>> +            msm_disp_snapshot_add_block(disp_state, top->len - 
+>>> MDP_PERIPH_TOP0_END,
+>>> +                            mmio + top->base + MDP_PERIPH_TOP0_END,
+>>> +                            "top_2");
+>>> +        } else {
+>>> +            msm_disp_snapshot_add_block(disp_state, top->len, mmio + 
+>>> top->base, "top");
+>>> +        }
+>>> +        break;
+>>> +    }
+>>> +    case DPU_HW_BLK_LM:
+>>> +    {
+>>> +        struct dpu_lm_cfg *mixer = (struct dpu_lm_cfg *)blk;
+>>> +
+>>> +        msm_disp_snapshot_add_block(disp_state, mixer->len, mmio + 
+>>> mixer->base, "%s",
+>>> +                        mixer->name);
+>>> +        break;
+>>> +    }
+>>> +    case DPU_HW_BLK_CTL:
+>>> +    {
+>>> +        struct dpu_ctl_cfg *ctl = (struct dpu_ctl_cfg *)blk;
+>>> +
+>>> +        msm_disp_snapshot_add_block(disp_state, ctl->len, mmio + 
+>>> ctl->base, "%s",
+>>> +                        ctl->name);
+>>> +        break;
+>>> +    }
+>>> +    case DPU_HW_BLK_INTF:
+>>> +    {
+>>> +        struct dpu_intf_cfg *intf = (struct dpu_intf_cfg *)blk;
+>>> +
+>>> +        msm_disp_snapshot_add_block(disp_state, intf->len, mmio + 
+>>> intf->base, "%s",
+>>> +                        intf->name);
+>>> +        break;
+>>> +    }
+>>> +    case DPU_HW_BLK_WB:
+>>> +    {
+>>> +        struct dpu_wb_cfg *wb = (struct dpu_wb_cfg *)blk;
+>>> +
+>>> +        msm_disp_snapshot_add_block(disp_state, wb->len, mmio + 
+>>> wb->base, "%s",
+>>> +                        wb->name);
+>>> +        break;
+>>> +    }
+>>> +    case DPU_HW_BLK_SSPP:
+>>> +    {
+>>> +        struct dpu_sspp_cfg *sspp_block = (struct dpu_sspp_cfg *)blk;
+>>> +        const struct dpu_sspp_sub_blks *sblk = sspp_block->sblk;
+>>> +
+>>> +        base = sspp_block->base;
+>>> +
+>>> +        msm_disp_snapshot_add_block(disp_state, sspp_block->len, 
+>>> mmio + base, "%s",
+>>> +                        sspp_block->name);
+>>> +
+>>> +        if (sspp_block->features & BIT(DPU_SSPP_SCALER_QSEED3) ||
+>>> +            sspp_block->features & BIT(DPU_SSPP_SCALER_QSEED3LITE) ||
+>>> +            sspp_block->features & BIT(DPU_SSPP_SCALER_QSEED4))
+>>> +            msm_disp_snapshot_add_block(disp_state, 
+>>> sblk->scaler_blk.len,
+>>> +                            mmio + base + sblk->scaler_blk.base, 
+>>> "%s_%s",
+>>> +                            sspp_block->name, sblk->scaler_blk.name);
+>>
+>> Actually, it would be better to:
+>> - drop name from all sblk instances (and use known string instead of 
+>> the sblk name here)
 
-Oh yeah, the sizes make no senes.
+Hey Dmitry,
 
-> So no. There is NO WAY we want to ever "obtain previous behavior".
-> That is just garbage. Any code that depends on that behavior is just
-> actively wrong.
+FWIW, I second Abhinav's points about the sblk names. For example, if in 
+the future we want to add a "_rot" suffix specifically to the 
+VIG_SBLK_ROT.scaler name, it would be easier to just make that change in 
+the HW catalog.
 
-Nothing is willingly depending on the crazy type behavior. However, enums
-are the only thing we've got if we want to make the constant values visible
-externally, so we have to make do with them somehow. It has always been iffy
-but also mostly bearable. Recent round of problems stem from the fact that
-gcc-13 changed the behavior and it sometimes gets nasty to satisfy both
-interpretations with the same code. Hypothetically, if we were to declare
-that we no longer supported old craziness, cleaning things up would be
-straight-forward.
+>> - Use sblk->foo_blk.len to check if it should be printed or not.
+ From my understanding, your suggestion is to replace the feature flag 
+checks with a sblk.len > 0 check.
 
-That day will come in the future but, in the meantime, we have to deal with
-enums whose sizes are going to be different depending on the complier
-version. It's pretty unpleasant but likely manageable in practice. The only
-way I can think of to keep the before and after behaviors the same is
-defining every enum in its own enum block. ie. Explicitly force each to be
-its own type. With a macro helper, code would probably look okay and we'd be
-explicitly telling the compiler to pick the type that can contain the value
-while maintaining signedness. That would give us consistent behaviors across
-the gcc-12/13 boundary. It sure doesn't feel great tho.
+I don't think that would be good because it wouldn't be correct to 
+assume that the sblk will always be present. For example, for 
+DPU_HW_BLK_DSC, the sblks will only be present for DSC_BLK_1_2.
 
-Unless we declare that we don't care about external visibility and are done
-with enums, none of the available options aren't great, which isn't too
-surprising given the sad state enums have been in.
+In addition, it is possible for sblks, like pp_sblk_te.te2, to have a 
+len of 0. While the register space of that specific sblk will not be 
+printed, I'd prefer the devcore dump to reflect what is present within 
+the HW catalog so that the user knows which pingpong blks have the TE2 sblk.
 
-Thanks.
+Thanks,
 
--- 
-tejun
+Jessica Zhang
+
+>>
+> 
+> No, I dont agree. If we drop the names from the sub_blk in the catalog, 
+> we will end up using "sub_blk_name" string here in the code to indicate 
+> which blk that is in the dump.
+> 
+> If we add more sub_blks in the catalog in the future we need to keep 
+> changing the code over here. Thats not how it should be.
+> 
+> Leaving the names in the catalog ensures that this code wont change and 
+> only catalog changes when we add a new sub_blk either for an existing or 
+> new chipset.
+> 
+> catalog is indicating the new blk, and dumping code just prints it.
+> 
+> with your approach, dumping code will or can keep changing with chipsets 
+> or sub_blks. Thats not how it should be.
+> 
+>>> +
+>>> +        if (sspp_block->features & BIT(DPU_SSPP_CSC) || 
+>>> sspp_block->features
+>>> +                    & BIT(DPU_SSPP_CSC_10BIT))
+>>
+>> A very bad use of indentation. In future please split logically rather 
+>> than just filling the line up to the line width.
+>>
+>>> +            msm_disp_snapshot_add_block(disp_state, sblk->csc_blk.len,
+>>> +                            mmio + base + sblk->csc_blk.base, "%s_%s",
+>>> +                            sspp_block->name, sblk->csc_blk.name);
+>>> +        break;
+>>> +    }
+>>> +    case DPU_HW_BLK_DSPP:
+>>> +    {
+>>> +        struct dpu_dspp_cfg *dspp_block = (struct dpu_dspp_cfg *)blk;
+>>> +
+>>> +        base = dspp_block->base;
+>>> +
+>>> +        msm_disp_snapshot_add_block(disp_state, dspp_block->len, 
+>>> mmio + base, "%s",
+>>> +                        dspp_block->name);
+>>> +
+>>> +        if (dspp_block->features & BIT(DPU_DSPP_PCC))
+>>> +            msm_disp_snapshot_add_block(disp_state, 
+>>> dspp_block->sblk->pcc.len,
+>>> +                            mmio + base + dspp_block->sblk->pcc.base,
+>>> +                            "%s_%s", dspp_block->name,
+>>> +                            dspp_block->sblk->pcc.name);
+>>> +        break;
+>>> +    }
+>>> +    case DPU_HW_BLK_PINGPONG:
+>>> +    {
+>>> +        struct dpu_pingpong_cfg *pingpong_block = (struct 
+>>> dpu_pingpong_cfg *)blk;
+>>> +        const struct dpu_pingpong_sub_blks *sblk = 
+>>> pingpong_block->sblk;
+>>> +
+>>> +        base = pingpong_block->base;
+>>> +
+>>> +        msm_disp_snapshot_add_block(disp_state, pingpong_block->len, 
+>>> mmio + base, "%s",
+>>> +                        pingpong_block->name);
+>>> +
+>>> +        if (pingpong_block->features & BIT(DPU_PINGPONG_TE2))
+>>> +            msm_disp_snapshot_add_block(disp_state, sblk->te2.len,
+>>> +                            mmio + base + sblk->te2.base, "%s_%s",
+>>> +                            pingpong_block->name, sblk->te2.name);
+>>> +
+>>> +        if (pingpong_block->features & BIT(DPU_PINGPONG_DITHER))
+>>> +            msm_disp_snapshot_add_block(disp_state, sblk->dither.len,
+>>> +                            mmio + base + sblk->dither.base, "%s_%s",
+>>> +                            pingpong_block->name, sblk->dither.name);
+>>> +        break;
+>>> +    }
+>>> +    case DPU_HW_BLK_DSC:
+>>> +    {
+>>> +        struct dpu_dsc_cfg *dsc_block = (struct dpu_dsc_cfg *)blk;
+>>> +
+>>> +        base = dsc_block->base;
+>>> +
+>>> +        if (dsc_block->features & BIT(DPU_DSC_HW_REV_1_2)) {
+>>> +            struct dpu_dsc_blk enc = dsc_block->sblk->enc;
+>>> +            struct dpu_dsc_blk ctl = dsc_block->sblk->ctl;
+>>> +
+>>> +            /* For now, pass in a length of 0 because the DSC_BLK 
+>>> register space
+>>> +             * overlaps with the sblks' register space.
+>>> +             *
+>>> +             * TODO: Pass in a length of 0 t0 DSC_BLK_1_2 in the HW 
+>>> catalog where
+>>> +             * applicable.
+>>
+>> Nice catch, thank you. We should fix that.
+>>
+> 
+> Yes and we would have fixed that ourself if you wanted that with this 
+> series as another patch.
+> 
