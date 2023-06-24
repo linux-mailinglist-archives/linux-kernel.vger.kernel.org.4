@@ -2,73 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E59373C50B
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 02:09:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EC3A73C50F
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 02:11:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231258AbjFXAJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 20:09:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35724 "EHLO
+        id S230010AbjFXALF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 20:11:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231247AbjFXAJc (ORCPT
+        with ESMTP id S229709AbjFXALC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 20:09:32 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0D94272C
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 17:09:27 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id 41be03b00d2f7-53445255181so736014a12.0
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 17:09:27 -0700 (PDT)
+        Fri, 23 Jun 2023 20:11:02 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04AC82726
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 17:11:01 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-3113da5260dso1219373f8f.2
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 17:11:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687565367; x=1690157367;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6LvkJneBy3/YMbwKk609UgSQMNaHvxDfIWkehlJrEmg=;
-        b=znEFkvugMo4sImCFfgS2qwCOLArcMdjXNcjLgHOhMC9xIU3DvkzpkMCW6uGVJRd6Ju
-         g76vDmwk2C3WSAvIWBDrFYrqVe7JL5hI1Mf333G2jyuGDEvWJ3vhYX8pH1syinbdfDFh
-         hbRo4fkBW9WO0wrevYIRn8bU13AZJFHNrhgm9cz26iwq/UtFXuP7fBHX/Uq1dgsTslxR
-         9vLiVWcHcP/15wxXU65k3wQ7ne+ORwPRg2o4zVmdcaNjAcndf6ggLs+lIUvj84zgWTyR
-         3YTZOyatvBcMtxPQpri0htvOeEZ0rsKid9MVUg672KjGfmiUq1Y501qF79MyFBZ4gbxp
-         QEAQ==
+        d=gmail.com; s=20221208; t=1687565459; x=1690157459;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=juyXTwoXsD5mc3/9HxZ2a7x6dEyqzG8iNP0iF/NU/Ww=;
+        b=MmN/SfQTVSwstgn9DyjaDtUGPN9gGSs1fKgJhKyBKThnqBlzJRMvrsZXPQhG7IZe6l
+         Iol5bu6RICV3a7Kqq6nWPWp79EDI0fSs17/LPya2OphEWx0/r9XarsggkZW+1Uk+abec
+         0EgxJvWiL3xLH5ZW89jXCzFzF9gaY0Q8rTnblSu5fBESLpe3k1XgFH9ijWHl3DAv69Rf
+         uE9zuWu4Isj/VgmfQzMy0sh0KPHMbR2QzZMzAyM6n32bIAf8xcUPAr/nxTixnHPoCiJa
+         TVoabV46gMriN1+rwOxHV3Kn7Mviu0ySlzK0u+mp4cHVFeJwhpsMdoOtPYSBEYe3zoix
+         pwQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687565367; x=1690157367;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6LvkJneBy3/YMbwKk609UgSQMNaHvxDfIWkehlJrEmg=;
-        b=KPTHVUopx3xzlKuZNY+mCCw4QE222KaTa4dYnLhFgQPBw0ZOya2RUmIVWvQYkV4gcB
-         dVoiM2I4T+Ty3Y2hOTj+AxsLy40eZwylVxVV5x7qh+X3KpMKHFHMZ8ufCGCyaNJi3pF/
-         6Xu0rD5blpHRPPgsQCOMq+MSBAbzG0VswXfS6SWL3b1p2gDJANuaZEYH0P1YziI2Hn78
-         tbh1z6vl1OmYWyRUrzGrxuGwZvfCRQ5rVghGHNoxxuCFe8JGsleLGfzc+a9BuIg9n2ib
-         rA+uHpDsYbzrM5ymt43eYjUX0TLHcHLZCRsb5YcNBQhNIxPdBZBAkaSrmoexMM2WR8d0
-         OR/Q==
-X-Gm-Message-State: AC+VfDwUSMeLz3++TGdUx7H3p7LnLQlBwUsvO5DoFceUh2LXN0bJlvTL
-        hXr7ge+8SQ2u0CxFwQ7+JSx/VjyXGj8=
-X-Google-Smtp-Source: ACHHUZ7GYqhOn7bHUyi6+FrThgCMRPif8Rtwe80QIDWA0IpGY9LZNVqsPFDUF3IV6HL7i3Z8DDrWsIB9vyo=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a63:2f42:0:b0:53f:7713:5e0e with SMTP id
- v63-20020a632f42000000b0053f77135e0emr2662006pgv.5.1687565367474; Fri, 23 Jun
- 2023 17:09:27 -0700 (PDT)
-Date:   Fri, 23 Jun 2023 17:09:26 -0700
-In-Reply-To: <cover.1686858861.git.isaku.yamahata@intel.com>
-Mime-Version: 1.0
-References: <cover.1686858861.git.isaku.yamahata@intel.com>
-Message-ID: <ZJY0Nudy8ym2kKNg@google.com>
-Subject: Re: [RFC PATCH 0/6] KVM: guest memory: Misc enhacnement
-From:   Sean Christopherson <seanjc@google.com>
-To:     isaku.yamahata@intel.com
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
-        erdemaktas@google.com, Sagi Shahar <sagis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Zhi Wang <zhi.wang.linux@gmail.com>, chen.bo@intel.com,
-        linux-coco@lists.linux.dev,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Michael Roth <michael.roth@amd.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        d=1e100.net; s=20221208; t=1687565459; x=1690157459;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=juyXTwoXsD5mc3/9HxZ2a7x6dEyqzG8iNP0iF/NU/Ww=;
+        b=YHngaD4DLHxAQka09qLjZuMUxXLxxtXfHwVCKODauGld9Gwfrb1k5bUNaoflrOqVVj
+         5qAZpAwX47r1WMxXfQ/EArXM0XFpkGxS8bO9EkcYrXyNa4GCUXbkaH1/RD2fktFEMnau
+         tz9iNAq+m45z/H/5Q/HFvPNhk4njK01Gkw+9OLjCu0U96uCozUx2i9MQTyzFm+clJ8jg
+         b6E+iJtowiw4LJ9SnlKX0sMr0xbrS9KFtp6rfi6DS+fJ7hG1XqYbC+wkOKm2Ff2S92Xk
+         4qoJMMBIvU6qJZvIodG7Tcxospih72yvA8Rg9E6YaBotv6sW0poxnk1+0GoJmk43NVey
+         V87Q==
+X-Gm-Message-State: AC+VfDyqzPzreRU7fuiinrt7A533FDPLBJnzY/WYcZMXsFOZXyyqjpI1
+        CkGg67cWni2My5nK3Q4KU0YJcxjUG2E=
+X-Google-Smtp-Source: ACHHUZ6D9PWnBQdf3d3SThJ9JLZtU4v+kNtjDQQ2li9rSnIWX6+2xdfWvLrW/AnkbHXPW810+7mpQA==
+X-Received: by 2002:adf:f847:0:b0:309:3af4:8c8c with SMTP id d7-20020adff847000000b003093af48c8cmr14124282wrq.54.1687565459046;
+        Fri, 23 Jun 2023 17:10:59 -0700 (PDT)
+Received: from suse.localnet (host-79-23-105-164.retail.telecomitalia.it. [79.23.105.164])
+        by smtp.gmail.com with ESMTPSA id j9-20020a5d4649000000b0030aefa3a957sm653882wrs.28.2023.06.23.17.10.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Jun 2023 17:10:58 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Sumitra Sharma <sumitraartsy@gmail.com>,
+        Thomas =?ISO-8859-1?Q?Hellstr=F6m_=28Intel=29?= 
+        <thomas_os@shipmail.org>
+Cc:     Ira Weiny <ira.weiny@intel.com>, Deepak R Varma <drv@mailo.com>,
+        Sumitra Sharma <sumitraartsy@gmail.com>
+Subject: Re: [PATCH v2] drm/i915: Replace kmap() with kmap_local_page()
+Date:   Sat, 24 Jun 2023 02:10:56 +0200
+Message-ID: <3747290.kQq0lBPeGt@suse>
+In-Reply-To: <20230617180420.GA410966@sumitra.com>
+References: <20230617180420.GA410966@sumitra.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,13 +82,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023, isaku.yamahata@intel.com wrote:
-> * VM type: Now we have KVM_X86_PROTECTED_VM. How do we proceed?
->   - Keep KVM_X86_PROTECTED_VM for its use. Introduce KVM_X86_TDX_VM
->   - Use KVM_X86_PROTECTED_VM for TDX. (If necessary, introduce another type in
->     the future)
+On sabato 17 giugno 2023 20:04:20 CEST Sumitra Sharma wrote:
+> kmap() has been deprecated in favor of the kmap_local_page()
+> due to high cost, restricted mapping space, the overhead of a
+> global lock for synchronization, and making the process sleep
+> in the absence of free slots.
+>=20
+> kmap_local_page() is faster than kmap() and offers thread-local
+> and CPU-local mappings, take pagefaults in a local kmap region
 
-How would KVM differentiate between software-protected VMs and TDX VMs if we go
-with this option?
+NIT: _can_ take pagefaults in a local kmap region
 
->   - any other way?
+> and preserves preemption by saving the mappings of outgoing tasks
+> and restoring those of the incoming one during a context switch.
+>=20
+> The mapping is kept thread local in the function
+> =E2=80=9Ci915_vma_coredump_create=E2=80=9D in i915_gpu_error.c
+>=20
+> Therefore, replace kmap() with kmap_local_page().
+>=20
+> Suggested-by: Ira Weiny <ira.weiny@intel.com>
+>=20
+> Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
+> ---
+>=20
+> Changes in v2:
+> 	- Replace kmap() with kmap_local_page().
+> 	- Change commit subject and message.
+
+With the changes that Ira suggested and the minor fix I'm proposing to the=
+=20
+commit message, it looks good to me too, so this patch is...=20
+
+Reviewed-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+
+However, as far as I'm concerned, our nits don't necessarily require any ne=
+wer=20
+version, especially because Tvrtko has already sent this patch for their CI.
+
+Thanks,
+
+=46abio
+
+P.S.: As Sumitra says both kmap() and kmap_local_page() allows preemption i=
+n=20
+non atomic context.=20
+
+=46urthermore, Tvrtko confirmed that the pages can come from HIGHMEM, there=
+fore=20
+kmap_local_page for local temporary mapping is unavoidable.
+
+Last thing... Thomas thinks he wants to make it run atomically (if I=20
+understood one of his messages correctly). As I already responded, nothing=
+=20
+prevents someone does another patch just to disable preemption (or to enter=
+=20
+atomic context by other means) around the code marked by kmap_local_page() =
+/=20
+kunmap_local() because these functions work perfectly _also_ in atomic cont=
+ext=20
+(including interrupts). But this is not something that Sumitra should be=20
+worried about.
+
+>=20
+>  drivers/gpu/drm/i915/i915_gpu_error.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/gpu/drm/i915/i915_gpu_error.c
+> b/drivers/gpu/drm/i915/i915_gpu_error.c index f020c0086fbc..bc41500eedf5
+> 100644
+> --- a/drivers/gpu/drm/i915/i915_gpu_error.c
+> +++ b/drivers/gpu/drm/i915/i915_gpu_error.c
+> @@ -1164,9 +1164,9 @@ i915_vma_coredump_create(const struct intel_gt *gt,
+>=20
+>  			drm_clflush_pages(&page, 1);
+>=20
+> -			s =3D kmap(page);
+> +			s =3D kmap_local_page(page);
+>  			ret =3D compress_page(compress, s, dst, false);
+> -			kunmap(page);
+> +			kunmap_local(s);
+>=20
+>  			drm_clflush_pages(&page, 1);
+>=20
+> --
+> 2.25.1
+
+
+
+
