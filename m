@@ -2,114 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6825073CA71
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 12:23:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AA8E73CA76
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 12:31:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232620AbjFXKWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 06:22:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36460 "EHLO
+        id S233018AbjFXKbI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 06:31:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230145AbjFXKWi (ORCPT
+        with ESMTP id S232655AbjFXKbG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 06:22:38 -0400
-Received: from out162-62-58-211.mail.qq.com (out162-62-58-211.mail.qq.com [162.62.58.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6437193;
-        Sat, 24 Jun 2023 03:22:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-        t=1687602147; bh=ZPqsBRiD2qdKFt2nVlMfoA1SbLdu/T9qJmjOqN2CHAU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=JUArZ8ozT/rg2RDioIv2B1MhrjG1VXLBsgdHjvcOx+8AvHsqOUUS7CGmjkDzF4ALm
-         vObAPSRGGRViTAOw6ayaQCRVA9W/6ts8+MN8zZpjUKyWzPbVDiSk/HUgP4HSieR0TL
-         397Amj9J1D6evWKTrfJ92CclNM9oQ1rSzqcgsyhE=
-Received: from localhost.localdomain ([240a:42d8:2400:8e2:3982:c8ab:f689:6a24])
-        by newxmesmtplogicsvrszc5-0.qq.com (NewEsmtp) with SMTP
-        id 5932A218; Sat, 24 Jun 2023 18:22:19 +0800
-X-QQ-mid: xmsmtpt1687602139tyiycog4l
-Message-ID: <tencent_817CE182DEDA938E03B848314821098D4408@qq.com>
-X-QQ-XMAILINFO: OEUhVsHQax4MuZAT+PUI+KMeFIffDAhIbn+ONyhtlPxiFnj+0X0WnygNB/pViY
-         kyrMZZ4DxzsDvNpI7jzo7iSw1LWSaUR1k2k6MEEhdkKM/7dPOJKqB17AAnR8nPyRSCSiDq8GiCEe
-         OkyS3oGCmwHGaiJdW3yPtT8EacU0GXoaXFmvXet7d0sPiTLNnelvZvXwxbECj1m5EXaulFOW9UYo
-         +0UB+AaicFX4ZWf6qK8bDseSI0ipJURoi+kQl4xEQHT2QNpNS9vTOxWyg94e/bioZVGrF60T4kt/
-         L7gbGJTN9CL+BauLT8MNDZvfHsunPxjUbeeF7sSALwE8vN6Oqe8gxhjNk1Cg5Zsv4Plany4JsYsf
-         VN6BegI8k2/98eZ/qP3l/w2Ieq3MPVfYPkcBD/oGvj4CZtfi443W0v23y6oLJ0i5qWsBi1qzvOZS
-         aAL8uw/TcmCboe7qDezeVsknQbE7AhJuW0OeplrCCWYmjZO548Y95lOA003uLyM981FzYOnUPWXJ
-         JAAb6r0CGATCZ8NkQxJlWbpECWzPNfKszs5hhrzHIgiyxdvY4pPero+Uyybwf1ybWKOGkuuKus9t
-         8u/6KFvDd9zOB3UEpFVU4MiMwUHJcyllspeX8RA2yHHjecqYmjvea9ArgjIlSc38R3dv87l1Be2u
-         DOwpH0d9RbSo5XuoRWMqiPplz/F0o95bEn7EE5TWmxyFWsag8JoxDI2BaHTxUMNQ9X89qRfyo6A6
-         pY7TdGGlYSjWRZFCYjETAqsAqI8dJfboMrtcIB6Vs/IQHALRmqUitn7PCAlWukm+GcDJJ3bSLgki
-         fFSn1URidlLVVDLHoIA9/IRLC1T5lypbGYiwIvtaem706XZ+ucbbGjlYK2A7SLc/cwDfYA4+3wUx
-         GyccTKi0O1uuYKwNy3eZULCw6RKNjO8g4hXPqmLC9tmQXBmji5GkFiAU63DNTEmeEc/MHidSc+A7
-         88iESTzoZSBg7nn/tG3cwjWocoAQSDIP8Y40H/PgWTmYc5tKGnTusPWS1fAPb8Jwmp3aKhR0U=
-X-QQ-XMRINFO: Mu10XATLq/IERfXGovp1cJndKWH8Kl+aSQ==
-From:   Yangyu Chen <cyy@cyyself.name>
-To:     evan@rivosinc.com
-Cc:     ajones@ventanamicro.com, alexghiti@rivosinc.com,
-        andy.chiu@sifive.com, aou@eecs.berkeley.edu,
-        apatel@ventanamicro.com, conor.dooley@microchip.com,
-        corbet@lwn.net, cyy@cyyself.name, greentime.hu@sifive.com,
-        guoren@kernel.org, heiko.stuebner@vrull.eu, heiko@sntech.de,
-        jeeheng.sia@starfivetech.com, jszhang@kernel.org,
-        leyfoon.tan@starfivetech.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        lizhengyu3@huawei.com, masahiroy@kernel.org, palmer@dabbelt.com,
-        palmer@rivosinc.com, paul.walmsley@sifive.com,
-        rdunlap@infradead.org, samuel@sholland.org, shosie@rivosinc.com,
-        sunilvl@ventanamicro.com, xianting.tian@linux.alibaba.com
-Subject: Re: [PATCH 0/2] RISC-V: Probe for misaligned access speed
-Date:   Sat, 24 Jun 2023 18:22:19 +0800
-X-OQ-MSGID: <20230624102219.3049-1-cyy@cyyself.name>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
-In-Reply-To: <20230623222016.3742145-1-evan@rivosinc.com>
-References: <20230623222016.3742145-1-evan@rivosinc.com>
+        Sat, 24 Jun 2023 06:31:06 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C4D10F7;
+        Sat, 24 Jun 2023 03:31:05 -0700 (PDT)
+From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+        s=mail; t=1687602663;
+        bh=WAQxIZy8y/wxN8eDcQ6zJJABtAxVwhMmcahqLn9v8OM=;
+        h=From:Subject:Date:To:Cc:From;
+        b=FKEt8muf/8qMIDO4vrjsWnxx2qqbDzBd6VMsGMYRJ9ESvOTKoOs5oS9kLva2GR1wq
+         bXCK014zVe8yVpqTRGpHj71Xs9wnCWCMNqIH3XNBIr4aSefRmwVG+Tzc8WJgrqzOvP
+         dFyAdHZjGDRZ0bQey0nXAzseBcjYIt65GqbWGU0w=
+Subject: [PATCH 0/2] proc: proc_setattr for /proc/$PID/net
+Date:   Sat, 24 Jun 2023 12:30:45 +0200
+Message-Id: <20230624-proc-net-setattr-v1-0-73176812adee@weissschuh.net>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+X-B4-Tracking: v=1; b=H4sIANXFlmQC/x2N0QqDMAwAf0XyvEDXbSL7lbGHtKYzIFHSOgbiv
+ y/4eAfH7VDZhCs8ux2Mv1JlUYfrpYM8kX4YZXSGGOIt9PGOqy0ZlRtWbtSa4VAC9WngFMsDPEt
+ UGZOR5slD3ebZ5Wpc5Hd+Xu/j+APEn6XrdwAAAA==
+To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, Zhangjin Wu <falcon@tinylab.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1687602663; l=1198;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=WAQxIZy8y/wxN8eDcQ6zJJABtAxVwhMmcahqLn9v8OM=;
+ b=UbMcSrK5SnNWXGQAzqQMKF99lxxGYIZv3CqZ9Nf0TkWhbguoT1+BXcBrY4mcu2+RbBptDeM2a
+ ervAB0i4iHBBdMQmh9ujn6K87D+8dzgD1kgmdDWOs2lDLsenDBBBz41
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
-X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+/proc/$PID/net currently allows the setting of file attributes,
+in contrast to other /proc/$PID/ files and directories.
 
-Thanks for doing this. 
+This would break the nolibc testsuite so the first patch in the series
+removes the offending testcase.
+The "fix" for nolibc-test is intentionally kept trivial as the series
+will most likely go through the filesystem tree and if conflicts arise,
+it is obvious on how to resolve them.
 
-On 6/24/23 6:20 AM, Evan Green wrote:
-> I don't have a machine where misaligned accesses are slow, but I'd be
-> interested to see the results of booting this series if someone did.
+Technically this can lead to breakage of nolibc-test if an old
+nolibc-test is used with a newer kernel containing the fix.
 
-I have tested your patches on a 100MHz BigCore rocket-chip with opensbi running on FPGA with 72bit(64bit+ECC) DDR3 1600MHz memory. As the rocket-chip did not support misaligned memory access, every misaligned memory access will trap and emulated by SBI.
+Note:
 
-Here is the result:
+Except for /proc itself this is the only "struct inode_operations" in
+fs/proc/ that is missing an implementation of setattr().
 
-~ # cat /proc/cpuinfo
-processor       : 0
-hart            : 0
-isa             : rv64imafdc
-mmu             : sv39
-uarch           : sifive,rocket0
-mvendorid       : 0x0
-marchid         : 0x1
-mimpid          : 0x20181004
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+Thomas Weißschuh (2):
+      selftests/nolibc: drop test chmod_net
+      proc: use generic setattr() for /proc/$PID/net
 
-processor       : 1
-hart            : 1
-isa             : rv64imafdc
-mmu             : sv39
-uarch           : sifive,rocket0
-mvendorid       : 0x0
-marchid         : 0x1
-mimpid          : 0x20181004
+ fs/proc/proc_net.c                           | 1 +
+ tools/testing/selftests/nolibc/nolibc-test.c | 1 -
+ 2 files changed, 1 insertion(+), 1 deletion(-)
+---
+base-commit: a92b7d26c743b9dc06d520f863d624e94978a1d9
+change-id: 20230624-proc-net-setattr-8f0a6b8eb2f5
 
-~ # dmesg | grep Unaligned
-[    0.210140] cpu1: Unaligned word copy 0 MB/s, byte copy 38 MB/s, misaligned accesses are slow
-[    0.410715] cpu0: Unaligned word copy 0 MB/s, byte copy 35 MB/s, misaligned accesses are slow
-
-Thanks,
-Yangyu Chen
+Best regards,
+-- 
+Thomas Weißschuh <linux@weissschuh.net>
 
