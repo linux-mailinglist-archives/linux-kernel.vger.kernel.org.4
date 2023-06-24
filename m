@@ -2,190 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68BF073C4FE
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 02:03:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CEEA73C4FF
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 02:03:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229539AbjFXADK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 20:03:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33060 "EHLO
+        id S232095AbjFXADe convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 23 Jun 2023 20:03:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjFXADI (ORCPT
+        with ESMTP id S231506AbjFXADc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 20:03:08 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E17D2122
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 17:03:07 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-bfee66a6398so1483556276.3
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 17:03:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687564986; x=1690156986;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hJRpHpBRxhEBpqUMpgxdt7ZEA9jhxO3EbeVO5RWIH/c=;
-        b=wrPLcjdZEuLvKlQejy6mmm6vFqEuR71DdT1dtLc1jLOd96Bz4UEcdH15ET6SpelId9
-         GQtAHju4xgNlTFW74th8oeE1bYUqywu0LwnQ1ptjE5jNzFmdE63NDA+LIqQVedxd0l3f
-         FXr77QNIMStzKabpqQbRSq4Lxrq/uNAdixck+gQj+FGaz0wav0B4H1ZPMuCoV06B1wo+
-         vUSVwUvDrpjlxN877vGOdS/X/YE4lBqiHFT/0BjLQju/CaTKarHx+aWL7W3dcYEUWID7
-         S5iexCybml0UbrC5hXuRtmxOb9x31rELawxczMOz0iZkg4hFGXBq79unBJzlHFiJlOq7
-         u3fw==
+        Fri, 23 Jun 2023 20:03:32 -0400
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 896FC2707;
+        Fri, 23 Jun 2023 17:03:24 -0700 (PDT)
+Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-bf3934ee767so3628346276.0;
+        Fri, 23 Jun 2023 17:03:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687564986; x=1690156986;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hJRpHpBRxhEBpqUMpgxdt7ZEA9jhxO3EbeVO5RWIH/c=;
-        b=IBwgQG7J3jfzTIjmYrqCqBtr6bD43WgkoTVRps6Dj/si8t564IXgjUTEuIS7neR0nM
-         KJHP+urehw3wWdX9YMcMMnrd5m7bqgf6BO5mJJkcbkoecmWHevHTag3MPPxjtUjz3PB0
-         VgnlFMF1Inkg1WeBBVDM1gQd0glpIVma3ReT33Vf2ljYd77vw2kD+GHDPNFie1iUe5jr
-         qm6VEs7MuIu/tQwxgJK3AUoJnjHhMFmjRMNIgD1gCr9I0x1d3+I/J3sr2sanDIeYaQku
-         Z4VKda7eI4HYo/tFzE2wcTj9kEEOEKpT++u8wS+8HOJJ0rEmLuDLSNsHF/kXyrZS3MGK
-         jt4A==
-X-Gm-Message-State: AC+VfDwoyya/jVocgqCA+3CnCeyiN7KaaLVuwNZSsa/OxfEhdKjz8jii
-        ffXCitIFEP8hGzI7I1NKlQwMmIQdAsU=
-X-Google-Smtp-Source: ACHHUZ4zNI64Z0H8UOQGjEcoKGXm99o1pbXCunalbcWnloXvRzMk3erOepCrX8q9Cv8erigb8TI4jydNpdI=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:ce8e:0:b0:ba8:4ff5:4671 with SMTP id
- x136-20020a25ce8e000000b00ba84ff54671mr9864348ybe.9.1687564986407; Fri, 23
- Jun 2023 17:03:06 -0700 (PDT)
-Date:   Fri, 23 Jun 2023 17:03:04 -0700
-In-Reply-To: <20230511040857.6094-21-weijiang.yang@intel.com>
-Mime-Version: 1.0
-References: <20230511040857.6094-1-weijiang.yang@intel.com> <20230511040857.6094-21-weijiang.yang@intel.com>
-Message-ID: <ZJYyuBdh8Ob+zzT2@google.com>
-Subject: Re: [PATCH v3 20/21] KVM:x86: Enable kernel IBT support for guest
-From:   Sean Christopherson <seanjc@google.com>
-To:     Yang Weijiang <weijiang.yang@intel.com>
-Cc:     pbonzini@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, peterz@infradead.org,
-        rppt@kernel.org, binbin.wu@linux.intel.com,
-        rick.p.edgecombe@intel.com, john.allen@amd.com
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1687565004; x=1690157004;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pGxsOBbKB22bf0B3O3FFaShm0eqOgqt5FgbcjeTORJ4=;
+        b=P6ZsZ+A2FGZ3iKm/RpnXpE0aVSgZ8w1jGpZZpPmzUEnUvHj1BZNA5mTL/3GmG1cVYW
+         1tqgf/ViH4FKPIoPT3H4nw3z8HO0fykTvXyPeW+NYlvlqfzxbey2QRpbOfJHPsZ7jtho
+         XgdmijS6wzf9R20WQcxLYf6HLT6HMcd2gPlx7+g4+FWhSXzVuG3JaRVS6s8xsqRyCrPo
+         0sKeUUISDOei/PKW5fqbrBapBmjK9CibIlWGkOky2oOb8wzX+cIfyYdHepHM77rYhto6
+         5anm2YFjhfwd/IGXCJw1rtswWAdt+3pAqgHW6agr5mdbxgAXD5xrb2jSrePSY6tbfl3k
+         91TQ==
+X-Gm-Message-State: AC+VfDxQyjcUYeMLW4Sq6pKdxhknnOIrHJHzQ30p8ZM4nmjwXeLguHRe
+        6k9iEMLtqMU6cmlsPtpSHYez/HTORsFzc3QgXOA=
+X-Google-Smtp-Source: ACHHUZ74md1d7MCVgnQak7P7DSFy1RGjbsvcL2UzCK/lxvaIV7Dt+oqX0IdVhBd9GO7+OI5JrMPtT6AuBl1cxPlAC4o=
+X-Received: by 2002:a25:4007:0:b0:b94:bbf2:19a3 with SMTP id
+ n7-20020a254007000000b00b94bbf219a3mr24508831yba.18.1687565003693; Fri, 23
+ Jun 2023 17:03:23 -0700 (PDT)
+MIME-Version: 1.0
+References: <cover.1687375189.git.anupnewsmail@gmail.com> <3772bce9068962f2a4c57672e919ebdf30edbc5c.1687375189.git.anupnewsmail@gmail.com>
+In-Reply-To: <3772bce9068962f2a4c57672e919ebdf30edbc5c.1687375189.git.anupnewsmail@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Fri, 23 Jun 2023 17:03:12 -0700
+Message-ID: <CAM9d7cj1bWWM7j5LCTpDQqLXmn5UH1mkCvZ-k3VEXJb7S2+wxg@mail.gmail.com>
+Subject: Re: [PATCH 4/9] scripts: python: Implement parsing of input data in convertPerfScriptProfile
+To:     Anup Sharma <anupnewsmail@gmail.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023, Yang Weijiang wrote:
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index a2494156902d..1d0151f9e575 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -711,6 +711,7 @@ static bool is_valid_passthrough_msr(u32 msr)
->  		return true;
->  	case MSR_IA32_U_CET:
->  	case MSR_IA32_PL3_SSP:
-> +	case MSR_IA32_S_CET:
->  		return true;
->  	}
->  
-> @@ -2097,14 +2098,18 @@ static int vmx_get_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->  			msr_info->data = vmx->pt_desc.guest.addr_a[index / 2];
->  		break;
->  	case MSR_IA32_U_CET:
-> +	case MSR_IA32_S_CET:
->  	case MSR_IA32_PL3_SSP:
->  	case MSR_KVM_GUEST_SSP:
->  		if (!kvm_cet_is_msr_accessible(vcpu, msr_info))
->  			return 1;
-> -		if (msr_info->index == MSR_KVM_GUEST_SSP)
-> +		if (msr_info->index == MSR_KVM_GUEST_SSP) {
+Hi Anup,
 
-Unnecessary curly braces.
+On Wed, Jun 21, 2023 at 12:41 PM Anup Sharma <anupnewsmail@gmail.com> wrote:
+>
+> The lines variable is created by splitting the profile string into individual
+> lines. It allows for iterating over each line for processing.
+>
+> The line is considered the start of a sample. It is matched against a regular
+> expression pattern to extract relevant information such as before_time_stamp,
+> time_stamp, threadNamePidAndTidMatch, threadName, pid, and tid.
+>
+> The stack frames of the current sample are then parsed in a nested loop.
+> Each stackFrameLine is matched against a regular expression pattern to
+> extract rawFunc and mod information.
+>
+> Also fixed few checkpatch warnings.
+>
+> Signed-off-by: Anup Sharma <anupnewsmail@gmail.com>
+> ---
+>  .../scripts/python/firefox-gecko-converter.py | 62 ++++++++++++++++++-
+>  1 file changed, 60 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/perf/scripts/python/firefox-gecko-converter.py b/tools/perf/scripts/python/firefox-gecko-converter.py
+> index 0ff70c0349c8..e5bc7a11c3e6 100644
+> --- a/tools/perf/scripts/python/firefox-gecko-converter.py
+> +++ b/tools/perf/scripts/python/firefox-gecko-converter.py
+> @@ -1,4 +1,5 @@
+>  #!/usr/bin/env python3
+> +# SPDX-License-Identifier: GPL-2.0
 
->  			msr_info->data = vmcs_readl(GUEST_SSP);
-> -		else
-> +		} else if (msr_info->index == MSR_IA32_S_CET) {
-> +			msr_info->data = vmcs_readl(GUEST_S_CET);
-> +		} else {
->  			kvm_get_xsave_msr(msr_info);
-> +		}
->  		break;
->  	case MSR_IA32_DEBUGCTLMSR:
->  		msr_info->data = vmcs_read64(GUEST_IA32_DEBUGCTL);
-> @@ -2419,6 +2424,7 @@ static int vmx_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->  			vmx->pt_desc.guest.addr_a[index / 2] = data;
->  		break;
->  	case MSR_IA32_U_CET:
-> +	case MSR_IA32_S_CET:
->  	case MSR_IA32_PL3_SSP:
->  	case MSR_KVM_GUEST_SSP:
->  		if (!kvm_cet_is_msr_accessible(vcpu, msr_info))
-> @@ -2430,10 +2436,13 @@ static int vmx_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->  		if ((msr_index == MSR_IA32_PL3_SSP ||
->  		     msr_index == MSR_KVM_GUEST_SSP) && (data & GENMASK(2, 0)))
->  			return 1;
-> -		if (msr_index == MSR_KVM_GUEST_SSP)
-> +		if (msr_index == MSR_KVM_GUEST_SSP) {
->  			vmcs_writel(GUEST_SSP, data);
-> -		else
-> +		} else if (msr_index == MSR_IA32_S_CET) {
-> +			vmcs_writel(GUEST_S_CET, data);
-> +		} else {
+Please put this line in the first commit.
 
-Same here.
+>  import re
+>  import sys
+>  import json
+> @@ -14,13 +15,13 @@ def isPerfScriptFormat(profile):
+>      firstLine = profile[:profile.index('\n')]
+>      return bool(re.match(r'^\S.*?\s+(?:\d+/)?\d+\s+(?:\d+\d+\s+)?[\d.]+:', firstLine))
+>
+> -def convertPerfScriptProfile(profile):
+> +def convertPerfScriptProfile(profile):
 
->  			kvm_set_xsave_msr(msr_info);
-> +		}
->  		break;
->  	case MSR_IA32_PERF_CAPABILITIES:
->  		if (data && !vcpu_to_pmu(vcpu)->version)
-> @@ -7322,6 +7331,19 @@ static fastpath_t vmx_vcpu_run(struct kvm_vcpu *vcpu)
->  
->  	kvm_wait_lapic_expire(vcpu);
->  
-> +	/*
-> +	 * Save host MSR_IA32_S_CET so that it can be reloaded at vm_exit.
-> +	 * No need to save the other two vmcs fields as supervisor SHSTK
-> +	 * are not enabled on Intel platform now.
-> +	 */
-> +	if (IS_ENABLED(CONFIG_X86_KERNEL_IBT) &&
-> +	    (vm_exit_controls_get(vmx) & VM_EXIT_LOAD_CET_STATE)) {
-> +		u64 msr;
+You'd better configure your editor to warn or even fix
+the trailing whitespace automatically.
+
+Thanks,
+Namhyung
+
+
+>
+>          def addSample(threadName, stackArray, time):
+>              nonlocal name
+>              if name != threadName:
+>                  name = threadName
+> -            # TODO:
+> +            # TODO:
+>              # get_or_create_stack will create a new stack if it doesn't exist, or return the existing stack if it does.
+>              # get_or_create_frame will create a new frame if it doesn't exist, or return the existing frame if it does.
+>              stack = reduce(lambda prefix, stackFrame: get_or_create_stack(get_or_create_frame(stackFrame), prefix), stackArray, None)
+> @@ -54,3 +55,60 @@ def convertPerfScriptProfile(profile):
+>              thread = _createtread(threadName, pid, tid)
+>              threadMap[tid] = thread
+>          thread['addSample'](threadName, stack, time_stamp)
 > +
-> +		rdmsrl(MSR_IA32_S_CET, msr);
-
-Reading the MSR on every VM-Enter can't possibly be necessary.  At the absolute
-minimum, this could be moved outside of the fastpath; if the kernel modifies S_CET
-from NMI context, KVM is hosed.  And *if* S_CET isn't static post-boot, this can
-be done in .prepare_switch_to_guest() so long as S_CET isn't modified from IRQ
-context.
-
-But unless mine eyes deceive me, S_CET is only truly modified during setup_cet(),
-i.e. is static post boot, which means it can be read once at KVM load time, e.g.
-just like host_efer.
-
-The kernel does save/restore IBT when making BIOS calls, but if KVM is running a
-vCPU across a BIOS call then we've got bigger issues.
-
-> +		vmcs_writel(HOST_S_CET, msr);
-> +	}
+> +    lines = profile.split('\n')
 > +
->  	/* The actual VMENTER/EXIT is in the .noinstr.text section. */
->  	vmx_vcpu_enter_exit(vcpu, __vmx_vcpu_run_flags(vmx));
->  
-> @@ -7735,6 +7757,13 @@ static void vmx_update_intercept_for_cet_msr(struct kvm_vcpu *vcpu)
->  
->  	incpt |= !guest_cpuid_has(vcpu, X86_FEATURE_SHSTK);
->  	vmx_set_intercept_for_msr(vcpu, MSR_IA32_PL3_SSP, MSR_TYPE_RW, incpt);
+> +    line_index = 0
+> +    startTime = 0
+> +    while line_index < len(lines):
+> +        line = lines[line_index]
+> +        line_index += 1
+> +    # perf script --header outputs header lines beginning with #
+> +        if line == '' or line.startswith('#'):
+> +            continue
 > +
-> +	/*
-> +	 * If IBT is available to guest, then passthrough S_CET MSR too since
-> +	 * kernel IBT is already in mainline kernel tree.
-> +	 */
-> +	incpt = !guest_cpuid_has(vcpu, X86_FEATURE_IBT);
-> +	vmx_set_intercept_for_msr(vcpu, MSR_IA32_S_CET, MSR_TYPE_RW, incpt);
->  }
->  
->  static void vmx_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
-> @@ -7805,7 +7834,7 @@ static void vmx_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
->  	/* Refresh #PF interception to account for MAXPHYADDR changes. */
->  	vmx_update_exception_bitmap(vcpu);
->  
-> -	if (kvm_cet_user_supported())
-> +	if (kvm_cet_user_supported() || kvm_cpu_cap_has(X86_FEATURE_IBT))
-
-Yeah, kvm_cet_user_supported() simply looks wrong.
+> +        sample_start_line = line
+> +
+> +        sample_start_match = re.match(r'^(.*)\s+([\d.]+):', sample_start_line)
+> +        if not sample_start_match:
+> +            print(f'Could not parse line as the start of a sample in the "perf script" profile format: "{sample_start_line}"')
+> +            continue
+> +
+> +        before_time_stamp = sample_start_match[1]
+> +        time_stamp = float(sample_start_match[2]) * 1000
+> +        threadNamePidAndTidMatch = re.match(r'^(.*)\s+(?:(\d+)\/)?(\d+)\b', before_time_stamp)
+> +
+> +        if not threadNamePidAndTidMatch:
+> +            print('Could not parse line as the start of a sample in the "perf script" profile format: "%s"' % sampleStartLine)
+> +            continue
+> +        threadName = threadNamePidAndTidMatch[1].strip()
+> +        pid = int(threadNamePidAndTidMatch[2] or 0)
+> +        tid = int(threadNamePidAndTidMatch[3] or 0)
+> +        if startTime == 0:
+> +            startTime = time_stamp
+> +        # Parse the stack frames of the current sample in a nested loop.
+> +        stack = []
+> +        while line_index < len(lines):
+> +            stackFrameLine = lines[line_index]
+> +            line_index += 1
+> +            if stackFrameLine.strip() == '':
+> +                # Sample ends.
+> +                break
+> +            stackFrameMatch = re.match(r'^\s*(\w+)\s*(.+) \(([^)]*)\)', stackFrameLine)
+> +            if stackFrameMatch:
+> +                rawFunc = stackFrameMatch[2]
+> +                mod = stackFrameMatch[3]
+> +                rawFunc = re.sub(r'\+0x[\da-f]+$', '', rawFunc)
+> +
+> +            if rawFunc.startswith('('):
+> +                continue # skip process names
+> +
+> +            if mod:
+> +                # If we have a module name, provide it.
+> +                # The code processing the profile will search for
+> +                # "functionName (in libraryName)" using a regexp,
+> +                # and automatically create the library information.
+> +                rawFunc += f' (in {mod})'
+> +
+> +            stack.append(rawFunc)
+> +
+> --
+> 2.34.1
+>
