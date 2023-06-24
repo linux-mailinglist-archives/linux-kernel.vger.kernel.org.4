@@ -2,278 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B58E373CA16
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 11:26:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E38A73CA24
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 11:28:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233060AbjFXJ0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 05:26:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52932 "EHLO
+        id S233074AbjFXJ2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 05:28:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233056AbjFXJ0S (ORCPT
+        with ESMTP id S233086AbjFXJ2Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 05:26:18 -0400
-Received: from mail-40131.protonmail.ch (mail-40131.protonmail.ch [185.70.40.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07939211E;
-        Sat, 24 Jun 2023 02:25:47 -0700 (PDT)
-Date:   Sat, 24 Jun 2023 09:25:39 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-        s=protonmail; t=1687598744; x=1687857944;
-        bh=4u3eXFuoov+G4R/MtGOXrWncucnn87dIfxR6A2h1gls=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=cKuF3PVseiBIPHVbekskRtA5tfj9oT8WATPSFesjshLVN3uHAqe8yeQWu5+REZVbq
-         2VmxbaYsYxdSXMnT1divFecszBbKOM8cL7STDOfT6J6xrZEu4rmlnNqRRx9sayKMdM
-         GaK1SWGq8KHyufHHrVisp9NsfQmBouc3Svanwd7pfCeGNgmcVrRHBP3uS5bBP7R/US
-         WX3JK9BY910N5z290B1ItfCwfmlFA1Eud+tCvOJdsiRucDSado5DQNXJ0DK4qXBeTt
-         t7wv0M5Bt8ofR77pwJpLAUPNVJyxSNtze6fWfSixZLKWRemVfXKDRKifHWQYBwAzDR
-         EHkoN7Sry55tg==
-To:     Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>
-From:   Benno Lossin <benno.lossin@proton.me>
-Cc:     Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        Alice Ryhl <aliceryhl@google.com>,
-        Andreas Hindborg <nmi@metaspace.dk>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Asahi Lina <lina@asahilina.net>
-Subject: [PATCH 7/7] rust: init: add support for arbitrary paths in init macros
-Message-ID: <20230624092330.157338-7-benno.lossin@proton.me>
-In-Reply-To: <20230624092330.157338-1-benno.lossin@proton.me>
-References: <20230624092330.157338-1-benno.lossin@proton.me>
-Feedback-ID: 71780778:user:proton
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+        Sat, 24 Jun 2023 05:28:16 -0400
+Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 895CE26B0;
+        Sat, 24 Jun 2023 02:28:09 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 3DD9B5842D1;
+        Sat, 24 Jun 2023 05:28:05 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Sat, 24 Jun 2023 05:28:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1687598885; x=1687606085; bh=qY
+        ntvL1gKhXrmWH0tTXfCuX8ddCTc/3rP2W4LxyKhm0=; b=2fzrhKF90cpXdCJJhX
+        LNQ5t74+BoUFAWu2Z9oVvwfRP+G2j+kHetfXDo7jXuv6MZjlVNDYMOe5uMBuCdrY
+        tfPOeSOrdnMHi5ExY6XX7AWMG7KA6nVtCTrwrLskcwomUPvEud6GLH7At6wunV8T
+        1xjw8VbSHv+R4fEe2U3K0VAbm+xpbPHip2N4n+Wjl5qhwQ5ZCL9UOgj1O/Ev3fUz
+        wFoNMcX1DQqOGh3VF3wDQoCuthyjHY5xOlhizC1sa5RpiNIFDzQpiYdpxDZoyaus
+        Jb8lK1gCGSw8zq5XV56wA5i2aAdBsF5Nj6taOY18hsohd5+dcepsDuWV8vsh6/Bp
+        FnCg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1687598885; x=1687606085; bh=qYntvL1gKhXrm
+        WH0tTXfCuX8ddCTc/3rP2W4LxyKhm0=; b=Ss12EnHU4AcwmUdUHarRTM5S6SQng
+        s1jzkZTwt45UxEwaoXOe27PqNaIoImQzAcGstwg5plJ41roH3XuppaxR7+klgqAT
+        t2qTaZahs2nvwu7r3H1VhEDI35lYik3jAGEsIHR2BPHNrkn6lrob8XsuLvH5a0nS
+        3PctpKkR+/0CA0SYvMYr+Yi8zJioA3pDKC07QmhNdD7FSzOplFMmbgKTCxZsf7qJ
+        UiCtm5Hf06e/mrw5KEp0RhzySvecvFKrkEIZ3jIqTxjSlYxkPmMjRGDkZYisUHdp
+        Ltzzz1MP7nRj6pHsmgact/qcePRWHX8qnnokQvpv2K8E68y0F1jWwV5xw==
+X-ME-Sender: <xms:JLeWZFOBFglxl1i5bI3l1p0oN8XlQzdcdm1l_G7s8_E-sM0HZytL4g>
+    <xme:JLeWZH--P5FdBTJ_umdmBwIQ3BaF9UxuoF5B2lSO_XD_aJ1GsWYULUTZ9P4U_i4Wt
+    0CGKV6DR5IBfrDLmGM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeegjedgudeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:JLeWZESOvtN3WRtL4qcbs1TxlvwwnmscUJ664LO5SZIsEeCM99_NTw>
+    <xmx:JLeWZBsXh796y04w6P0GVP04uwY_zKhNkC-ozsUZCaW2YmXR9CpM-Q>
+    <xmx:JLeWZNfcbt5O64mkJb1sR3C8x8YFQCpWT18ij9tkQXIoWlLXKJHfnQ>
+    <xmx:JbeWZOBhhQ4yvPgqPpUS3E42vsWe4WTrrcu1uDU2wkIyXn5yBFMoWw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 03220B60086; Sat, 24 Jun 2023 05:28:03 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
+Mime-Version: 1.0
+Message-Id: <55130a50-d129-4336-99ce-3be4229b1c7d@app.fastmail.com>
+In-Reply-To: <c525adc9-6623-4660-8718-e0c9311563b8@roeck-us.net>
+References: <20230417125651.25126-18-tzimmermann@suse.de>
+ <c525adc9-6623-4660-8718-e0c9311563b8@roeck-us.net>
+Date:   Sat, 24 Jun 2023 11:27:42 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Guenter Roeck" <linux@roeck-us.net>,
+        "Thomas Zimmermann" <tzimmermann@suse.de>
+Cc:     "Daniel Vetter" <daniel.vetter@ffwll.ch>,
+        "Helge Deller" <deller@gmx.de>,
+        "Javier Martinez Canillas" <javierm@redhat.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-fbdev@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-sh@vger.kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-mips@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, loongarch@lists.linux.dev,
+        sparclinux@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org,
+        "David S . Miller" <davem@davemloft.net>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [v3,17/19] arch/sparc: Implement fb_is_primary_device() in source file
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Previously only `ident` and generic types were supported in the
-`{try_}{pin_}init!` macros. This patch allows arbitrary path fragments,
-so for example `Foo::Bar` but also very complex paths such as
-`<Foo as Baz>::Bar::<0, i32>`.
+On Sat, Jun 24, 2023, at 03:55, Guenter Roeck wrote:
+>
+> On Mon, Apr 17, 2023 at 02:56:49PM +0200, Thomas Zimmermann wrote:
+>> Other architectures implment fb_is_primary_device() in a source
+>> file. Do the same on sparc. No functional changes, but allows to
+>> remove several include statement from <asm/fb.h>.
+>> 
+>> v2:
+>> 	* don't include <asm/prom.h> in header file
+>> 
+>> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+>> Cc: "David S. Miller" <davem@davemloft.net>
+>
+> This patch results (or appears to result) in the following build error
+> when trying to build sparc64:allmodconfig.
+>
+> Error log:
+> <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+> WARNING: modpost: drivers/cpufreq/sparc-us2e-cpufreq: section mismatch 
+> in reference: cpufreq_us2e_driver+0x20 (section: .data) -> 
+> us2e_freq_cpu_init (section: .init.text)
+> WARNING: modpost: drivers/cpufreq/sparc-us3-cpufreq: section mismatch 
+> in reference: cpufreq_us3_driver+0x20 (section: .data) -> 
+> us3_freq_cpu_init (section: .init.text)
+> ERROR: modpost: "__xchg_called_with_bad_pointer" [lib/atomic64_test.ko] 
+> undefined!
 
-Internally this is accomplished by using `path` fragments. Due to some
-peculiar declarative macro limitations, we have to "forget" certain
-additional parsing information in the token trees. This is achieved by
-the new `retokenize` proc macro. It does not modify the input, but just
-strips this information. For example, if a declarative macro takes
-`$t:path` as its input, it cannot sensibly propagate this to a macro that
-takes `$($p:tt)*` as its input, since the `$t` token will only be
-considered one `tt` token for the second macro. If we first pipe the
-tokens through `retokenize`, then it parses as expected.
+These all look like old bugs that would be trivially fixed if
+anyone cared about sparc.
 
-Suggested-by: Asahi Lina <lina@asahilina.net>
-Signed-off-by: Benno Lossin <benno.lossin@proton.me>
----
- rust/kernel/init/__internal.rs |  2 ++
- rust/kernel/init/macros.rs     | 42 +++++++++++++++++++---------------
- rust/macros/lib.rs             | 17 +++++++++++++-
- 3 files changed, 41 insertions(+), 20 deletions(-)
+> ERROR: modpost: missing MODULE_LICENSE() in arch/sparc/video/fbdev.o
 
-diff --git a/rust/kernel/init/__internal.rs b/rust/kernel/init/__internal.r=
-s
-index 7abd1fb65e41..e36a706a4a1b 100644
---- a/rust/kernel/init/__internal.rs
-+++ b/rust/kernel/init/__internal.rs
-@@ -9,6 +9,8 @@
+I checked that there are no callers of fb_is_primary_device()
+in built-in code when CONFIG_FB is =m, so adding the MODULE_LICENSE()
+and MODULE_DESCRIPTION() tags to the file is the correct fix.
 
- use super::*;
-
-+pub use ::macros::retokenize;
-+
- /// See the [nomicon] for what subtyping is. See also [this table].
- ///
- /// [nomicon]: https://doc.rust-lang.org/nomicon/subtyping.html
-diff --git a/rust/kernel/init/macros.rs b/rust/kernel/init/macros.rs
-index 5dcb2e513f26..6a82be675808 100644
---- a/rust/kernel/init/macros.rs
-+++ b/rust/kernel/init/macros.rs
-@@ -998,7 +998,7 @@ impl<$($impl_generics)*> $pin_data<$($ty_generics)*>
- macro_rules! __init_internal {
-     (
-         @this($($this:ident)?),
--        @typ($t:ident $(::<$($generics:ty),*>)?),
-+        @typ($t:path),
-         @fields($($fields:tt)*),
-         @error($err:ty),
-         // Either `PinData` or `InitData`, `$use_data` should only be pres=
-ent in the `PinData`
-@@ -1012,7 +1012,7 @@ macro_rules! __init_internal {
-     ) =3D> {
-         $crate::__init_internal!(with_update_parsed:
-             @this($($this)?),
--            @typ($t $(::<$($generics),*>)? ),
-+            @typ($t),
-             @fields($($fields)*),
-             @error($err),
-             @data($data, $($use_data)?),
-@@ -1023,7 +1023,7 @@ macro_rules! __init_internal {
-     };
-     (
-         @this($($this:ident)?),
--        @typ($t:ident $(::<$($generics:ty),*>)?),
-+        @typ($t:path),
-         @fields($($fields:tt)*),
-         @error($err:ty),
-         // Either `PinData` or `InitData`, `$use_data` should only be pres=
-ent in the `PinData`
-@@ -1037,7 +1037,7 @@ macro_rules! __init_internal {
-     ) =3D> {
-         $crate::__init_internal!(with_update_parsed:
-             @this($($this)?),
--            @typ($t $(::<$($generics),*>)? ),
-+            @typ($t),
-             @fields($($fields)*),
-             @error($err),
-             @data($data, $($use_data)?),
-@@ -1048,7 +1048,7 @@ macro_rules! __init_internal {
-     };
-     (
-         @this($($this:ident)?),
--        @typ($t:ident $(::<$($generics:ty),*>)?),
-+        @typ($t:path),
-         @fields($($fields:tt)*),
-         @error($err:ty),
-         // Either `PinData` or `InitData`, `$use_data` should only be pres=
-ent in the `PinData`
-@@ -1062,7 +1062,7 @@ macro_rules! __init_internal {
-     ) =3D> {
-         $crate::__init_internal!(
-             @this($($this)?),
--            @typ($t $(::<$($generics),*>)? ),
-+            @typ($t),
-             @fields($($fields)*),
-             @error($err),
-             @data($data, $($use_data)?),
-@@ -1073,7 +1073,7 @@ macro_rules! __init_internal {
-     };
-     (with_update_parsed:
-         @this($($this:ident)?),
--        @typ($t:ident $(::<$($generics:ty),*>)?),
-+        @typ($t:path),
-         @fields($($fields:tt)*),
-         @error($err:ty),
-         // Either `PinData` or `InitData`, `$use_data` should only be pres=
-ent in the `PinData`
-@@ -1092,7 +1092,7 @@ macro_rules! __init_internal {
-         // Get the data about fields from the supplied type.
-         let data =3D unsafe {
-             use $crate::init::__internal::$has_data;
--            $t$(::<$($generics),*>)?::$get_data()
-+            $crate::init::__internal::retokenize!($t::$get_data())
-         };
-         // Ensure that `data` really is of type `$data` and help with type=
- inference:
-         let init =3D $crate::init::__internal::$data::make_closure::<_, __=
-InitOk, $err>(
-@@ -1247,7 +1247,7 @@ fn is_zeroable<T: Zeroable>(ptr: *mut T) {}
-     };
-     (make_initializer:
-         @slot($slot:ident),
--        @type_name($t:ident),
-+        @type_name($t:path),
-         @munch_fields(..Zeroable::zeroed() $(,)?),
-         @acc($($acc:tt)*),
-     ) =3D> {
-@@ -1263,15 +1263,17 @@ fn is_zeroable<T: Zeroable>(ptr: *mut T) {}
-             // not get executed, so it has no effect.
-             ::core::ptr::write($slot, zeroed);
-             zeroed =3D ::core::mem::zeroed();
--            ::core::ptr::write($slot, $t {
--                $($acc)*
--                ..zeroed
--            });
-+            $crate::init::__internal::retokenize!(
-+                ::core::ptr::write($slot, $t {
-+                    $($acc)*
-+                    ..zeroed
-+                });
-+            );
-         }
-     };
-     (make_initializer:
-         @slot($slot:ident),
--        @type_name($t:ident),
-+        @type_name($t:path),
-         @munch_fields($(,)?),
-         @acc($($acc:tt)*),
-     ) =3D> {
-@@ -1279,14 +1281,16 @@ fn is_zeroable<T: Zeroable>(ptr: *mut T) {}
-         // Since we are in the `if false` branch, this will never get exec=
-uted. We abuse `slot` to
-         // get the correct type inference here:
-         unsafe {
--            ::core::ptr::write($slot, $t {
--                $($acc)*
--            });
-+            $crate::init::__internal::retokenize!(
-+                ::core::ptr::write($slot, $t {
-+                    $($acc)*
-+                });
-+            );
-         }
-     };
-     (make_initializer:
-         @slot($slot:ident),
--        @type_name($t:ident),
-+        @type_name($t:path),
-         @munch_fields($field:ident <- $val:expr, $($rest:tt)*),
-         @acc($($acc:tt)*),
-     ) =3D> {
-@@ -1299,7 +1303,7 @@ fn is_zeroable<T: Zeroable>(ptr: *mut T) {}
-     };
-     (make_initializer:
-         @slot($slot:ident),
--        @type_name($t:ident),
-+        @type_name($t:path),
-         @munch_fields($field:ident $(: $val:expr)?, $($rest:tt)*),
-         @acc($($acc:tt)*),
-     ) =3D> {
-diff --git a/rust/macros/lib.rs b/rust/macros/lib.rs
-index 9f056a5c780a..d329ab622fd4 100644
---- a/rust/macros/lib.rs
-+++ b/rust/macros/lib.rs
-@@ -12,7 +12,7 @@
- mod vtable;
- mod zeroable;
-
--use proc_macro::TokenStream;
-+use proc_macro::{Group, TokenStream, TokenTree};
-
- /// Declares a kernel module.
- ///
-@@ -266,3 +266,18 @@ pub fn pinned_drop(args: TokenStream, input: TokenStre=
-am) -> TokenStream {
- pub fn derive_zeroable(input: TokenStream) -> TokenStream {
-     zeroable::derive(input)
- }
-+
-+/// Does not modify the given TokenStream, but removes any declarative mac=
-ro information.
-+#[proc_macro]
-+pub fn retokenize(input: TokenStream) -> TokenStream {
-+    fn id(tt: TokenTree) -> TokenTree {
-+        match tt {
-+            TokenTree::Group(g) =3D> TokenTree::Group(Group::new(
-+                g.delimiter(),
-+                g.stream().into_iter().map(id).collect(),
-+            )),
-+            x =3D> x,
-+        }
-+    }
-+    input.into_iter().map(id).collect()
-+}
---
-2.41.0
-
-
+    Arnd
