@@ -2,59 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9396273CD5E
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 01:00:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7C9873CD60
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 01:10:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbjFXXA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 19:00:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47078 "EHLO
+        id S229868AbjFXXKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 19:10:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjFXXA0 (ORCPT
+        with ESMTP id S229496AbjFXXJ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 19:00:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3BFB1710
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 16:00:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 488BE60AED
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 23:00:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A1619C433C0;
-        Sat, 24 Jun 2023 23:00:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687647624;
-        bh=dQD/jtNrCKh03xlBcCxO0XWHtNNaS94uKUl2d/V7rHo=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=rKnfuy6lzK3STWwFO3ufs2WqQjTkxCVFiw2bfiqW7EuvO+SBbtH1WerXaeoSeVZb9
-         0PfVd6B1oTlTg4M7PrAzSW/TGTdKqeOv3xvo8iVf9szUwrw3O3IAAICYL0BnlKK8/S
-         M0Q7V7f1s7VSPJwmCqeQrymnZ5JsEj0JO3k26fz7/Px91vDE6vstbNi3ZsRfk9Io1a
-         6k7Pc83uouWFzrn74zPAr4D5TCn01SWz0TKgrU56ZkebYVWU/eQi3tTctjIlYrLCut
-         821+HY4UzDLhMSYOeGvXAQBCZBrCjBbBNyM/gSH45KL0jR4sHetCRlrojOJlS0P2Wr
-         H3RzZCkDuYZTA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 787B7C43157;
-        Sat, 24 Jun 2023 23:00:24 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Sat, 24 Jun 2023 19:09:58 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDF261710
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 16:09:55 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id BCE7C3200065;
+        Sat, 24 Jun 2023 19:09:54 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Sat, 24 Jun 2023 19:09:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        invisiblethingslab.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1687648194; x=1687734594; bh=LsDkS9pGWUmtwQ/it8iQoRg4trvNKXyKWbw
+        xvK6Qf4Y=; b=Z311eWtdfZZdzMVJY+cCZ4lLbj3VY+FRSq2D2T0UIYzSufoOb9p
+        k3+6s1l4CdzztiC0Gwlxw00CTb7nhlby9pdXzU5sWF06hi2A7WRUXu1jC7RTqniZ
+        Y06oxQcRl5qvBoZois5eF5O9rlaZP/5zDps3kJsuDJQJ2BLOKdve6VJWv1fcNDGh
+        vP1HfwuEIQUCsEFy7ZzuBQIfWKWW473SxPyxEXLIcKh0w2OQ7Fk7ZI+34YCxfV71
+        CXRHHVZWDxXRamyH3MWhAe4m3dR17+aHxdKk9a6gG6MMcmhrn3vhz+ITPls2Mk72
+        qdpRdnwL1kopuAgGJcjL/CL4nugRriUeK0Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1687648194; x=1687734594; bh=LsDkS9pGWUmtw
+        Q/it8iQoRg4trvNKXyKWbwxvK6Qf4Y=; b=BeuHP9JePZWfv1KjmffHIRYH+8JE0
+        v7HZyAmM0LZj3IswHZc2R1rVlldK02aRQ3RTI5UPXadIG23OS4df7kg35HFB3M2l
+        kv9Elk+8dtLR7yZ1UH7Fv8+gzyjYGDIYJXrWcpe9ZXpNjt5kvyzLKPdITL9M8yHN
+        3SSJt9wuoyWo2UUB9s/9EzDcB1ZwmTnpkTkI/sL/fF6rura8j4fGCwZzRgIsjNsw
+        wrIqBB3SjR4dG9wohZns/1gVofR/hNdyKsqX/o5hoaeNXZdTlyFuEXvh76gsJf75
+        FievnyafQ/NipfFKo4vUVSGxCWIxr78IS0E6rpl6/+4uiep/jYgnEJc9w==
+X-ME-Sender: <xms:wneXZOzpDMXyHB5nNGihQDlwEvm80EBrOvlC7u8oELUKq-ClfMJzsw>
+    <xme:wneXZKS9LxYIa9-xfvtRxMt6OM-kuGBdL8LsQFY_EmJqoyji-fY9IxSbm0TiZhfHL
+    Tv0d-eq0TN7a14>
+X-ME-Received: <xmr:wneXZAVvRVlejMu023IVEBvLIgwq7HKeE6-hP_ws8zk4QswXOjZP5OiFHLzRNOeZg191CheYFpA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeegkedgudekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepffgvmhhiucfo
+    rghrihgvucfqsggvnhhouhhruceouggvmhhisehinhhvihhsihgslhgvthhhihhnghhslh
+    grsgdrtghomheqnecuggftrfgrthhtvghrnhepvdefgeekvdekgfffgeekhfeijedtffek
+    hefhleehfeejueetgfelgefgtdevieelnecuvehluhhsthgvrhfuihiivgeptdenucfrrg
+    hrrghmpehmrghilhhfrhhomhepuggvmhhisehinhhvihhsihgslhgvthhhihhnghhslhgr
+    sgdrtghomh
+X-ME-Proxy: <xmx:wneXZEgvzlc8nVYPOhk5f79G5koevQvdF9XTFkPt7YtRffBoAVRdaQ>
+    <xmx:wneXZACW6ONEW_NBXszyPtQivp26sWwGhzAyC2mvLaeoRmEytclsTA>
+    <xmx:wneXZFJ6sskoNJVl1UxJa9EJPJGHvT0uE5dBj_PfNP1HaAx1Z0v7qQ>
+    <xmx:wneXZDNj8EA4ceoM3u9pdPZMiVmQ9XlubqorahAvGwxnbj62_01Utw>
+Feedback-ID: iac594737:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 24 Jun 2023 19:09:53 -0400 (EDT)
+From:   Demi Marie Obenour <demi@invisiblethingslab.com>
+To:     Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com
+Cc:     Demi Marie Obenour <demi@invisiblethingslab.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/4] Diskseq support in device-mapper
+Date:   Sat, 24 Jun 2023 19:09:43 -0400
+Message-ID: <20230624230950.2272-1-demi@invisiblethingslab.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v5 00/16] splice,
- net: Switch over users of sendpage() and remove it
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168764762447.8907.9031841274323827119.git-patchwork-notify@kernel.org>
-Date:   Sat, 24 Jun 2023 23:00:24 +0000
-References: <20230623225513.2732256-1-dhowells@redhat.com>
-In-Reply-To: <20230623225513.2732256-1-dhowells@redhat.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     netdev@vger.kernel.org, alexander.duyck@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, willemdebruijn.kernel@gmail.com,
-        dsahern@kernel.org, willy@infradead.org, axboe@kernel.dk,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,61 +84,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+This work aims to allow userspace to create and destroy device-mapper
+devices in a race-free way.
 
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+Changes since v1:
 
-On Fri, 23 Jun 2023 23:54:57 +0100 you wrote:
-> Here's the final set of patches towards the removal of sendpage.  All the
-> drivers that use sendpage() get switched over to using sendmsg() with
-> MSG_SPLICE_PAGES.
-> 
-> The following changes are made:
-> 
->  (1) Make the protocol drivers behave according to MSG_MORE, not
->      MSG_SENDPAGE_NOTLAST.  The latter is restricted to turning on MSG_MORE
->      in the sendpage() wrappers.
-> 
-> [...]
+- Potentially backwards-incompatible changes to device-mapper now
+  require userspace opt-in.
+- The code has been tested: I have a block script written in C that uses
+  these changes to successfully boot a Xen VM.
+- The core block layer is completely untouched.  Instead of exposing a
+  block device inode directly to userspace, device-mapper ioctls that
+  create a block device now return that device's diskseq.  Userspace can
+  then use that diskseq to safely open the device.  Furthermore, ioctls
+  that operate on an existing device-mapper device now accept a diskseq
+  parameter, which can be used to prevent races.
 
-Here is the summary with links:
-  - [net-next,v5,01/16] tcp_bpf, smc, tls, espintcp, siw: Reduce MSG_SENDPAGE_NOTLAST usage
-    https://git.kernel.org/netdev/net-next/c/f8dd95b29d7e
-  - [net-next,v5,02/16] net: Use sendmsg(MSG_SPLICE_PAGES) not sendpage in skb_send_sock()
-    https://git.kernel.org/netdev/net-next/c/c729ed6f5be5
-  - [net-next,v5,03/16] ceph: Use sendmsg(MSG_SPLICE_PAGES) rather than sendpage
-    https://git.kernel.org/netdev/net-next/c/40a8c17aa770
-  - [net-next,v5,04/16] ceph: Use sendmsg(MSG_SPLICE_PAGES) rather than sendpage()
-    https://git.kernel.org/netdev/net-next/c/fa094ccae1e7
-  - [net-next,v5,05/16] rds: Use sendmsg(MSG_SPLICE_PAGES) rather than sendpage
-    https://git.kernel.org/netdev/net-next/c/572efade27c5
-  - [net-next,v5,06/16] dlm: Use sendmsg(MSG_SPLICE_PAGES) rather than sendpage
-    https://git.kernel.org/netdev/net-next/c/a1a5e8752786
-  - [net-next,v5,07/16] nvme-tcp: Use sendmsg(MSG_SPLICE_PAGES) rather then sendpage
-    https://git.kernel.org/netdev/net-next/c/7769887817c3
-  - [net-next,v5,08/16] nvmet-tcp: Use sendmsg(MSG_SPLICE_PAGES) rather then sendpage
-    https://git.kernel.org/netdev/net-next/c/c336a79983c7
-  - [net-next,v5,09/16] smc: Drop smc_sendpage() in favour of smc_sendmsg() + MSG_SPLICE_PAGES
-    https://git.kernel.org/netdev/net-next/c/2f8bc2bbb0fa
-  - [net-next,v5,10/16] drbd: Use sendmsg(MSG_SPLICE_PAGES) rather than sendpage()
-    https://git.kernel.org/netdev/net-next/c/eeac7405c735
-  - [net-next,v5,11/16] scsi: iscsi_tcp: Use sendmsg(MSG_SPLICE_PAGES) rather than sendpage
-    https://git.kernel.org/netdev/net-next/c/fa8df3435727
-  - [net-next,v5,12/16] scsi: target: iscsi: Use sendmsg(MSG_SPLICE_PAGES) rather than sendpage
-    https://git.kernel.org/netdev/net-next/c/d2fe21077d6d
-  - [net-next,v5,13/16] ocfs2: Fix use of slab data with sendpage
-    https://git.kernel.org/netdev/net-next/c/86d7bd6e66e9
-  - [net-next,v5,14/16] ocfs2: Use sendmsg(MSG_SPLICE_PAGES) rather than sendpage()
-    https://git.kernel.org/netdev/net-next/c/e52828cc0109
-  - [net-next,v5,15/16] sock: Remove ->sendpage*() in favour of sendmsg(MSG_SPLICE_PAGES)
-    https://git.kernel.org/netdev/net-next/c/dc97391e6610
-  - [net-next,v5,16/16] net: Kill MSG_SENDPAGE_NOTLAST
-    https://git.kernel.org/netdev/net-next/c/b848b26c6672
+Demi Marie Obenour (4):
+  dm ioctl: Allow userspace to opt-in to strict parameter checks
+  dm ioctl: Allow userspace to provide expected diskseq
+  dm ioctl: Allow userspace to suppress uevent generation
+  dm ioctl: inform caller about already-existing device
 
-You are awesome, thank you!
+ drivers/md/dm-core.h          |   2 +
+ drivers/md/dm-ioctl.c         | 351 ++++++++++++++++++++++++++++------
+ drivers/md/dm.c               |   5 +-
+ include/linux/device-mapper.h |   2 +-
+ include/uapi/linux/dm-ioctl.h |  90 ++++++++-
+ 5 files changed, 382 insertions(+), 68 deletions(-)
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Sincerely,
+Demi Marie Obenour (she/her/hers)
+Invisible Things Lab
 
