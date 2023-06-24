@@ -2,93 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7A0273CB6B
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 16:36:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2EC573CB6D
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 16:40:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232981AbjFXOga convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 24 Jun 2023 10:36:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40278 "EHLO
+        id S233070AbjFXOkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 10:40:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjFXOg1 (ORCPT
+        with ESMTP id S229445AbjFXOkj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 10:36:27 -0400
-X-Greylist: delayed 83600 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 24 Jun 2023 07:36:26 PDT
-Received: from unicorn.mansr.com (unicorn.mansr.com [81.2.72.234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0945E1BE7;
-        Sat, 24 Jun 2023 07:36:25 -0700 (PDT)
-Received: from raven.mansr.com (raven.mansr.com [81.2.72.235])
-        by unicorn.mansr.com (Postfix) with ESMTPS id 319A815360;
-        Sat, 24 Jun 2023 15:36:24 +0100 (BST)
-Received: by raven.mansr.com (Postfix, from userid 51770)
-        id 1CA76219FD1; Sat, 24 Jun 2023 15:36:24 +0100 (BST)
-From:   =?iso-8859-1?Q?M=E5ns_Rullg=E5rd?= <mans@mansr.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Grygorii Strashko <grygorii.strashko@ti.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-omap@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jeroen Hofstee <jhofstee@victronenergy.com>,
-        Tony Lindgren <tony@atomide.com>
-Subject: Re: [RESEND][PATCH] net: cpsw: fix obtaining mac address for am3517
-References: <20230624121211.19711-1-mans@mansr.com>
-        <ad0ec6ac-2760-4a03-8cee-0d933aea98eb@lunn.ch>
-        <yw1x352h3plc.fsf@mansr.com>
-        <457ae95b-8838-4c10-821c-379ed622ef41@lunn.ch>
-Date:   Sat, 24 Jun 2023 15:36:24 +0100
-In-Reply-To: <457ae95b-8838-4c10-821c-379ed622ef41@lunn.ch> (Andrew Lunn's
-        message of "Sat, 24 Jun 2023 16:33:59 +0200")
-Message-ID: <yw1xy1k92ahj.fsf@mansr.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+        Sat, 24 Jun 2023 10:40:39 -0400
+Received: from mail-40135.protonmail.ch (mail-40135.protonmail.ch [185.70.40.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE7A1BF8;
+        Sat, 24 Jun 2023 07:40:36 -0700 (PDT)
+Date:   Sat, 24 Jun 2023 14:40:23 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1687617634; x=1687876834;
+        bh=KXzwJWjam5pejAKUAARKT/aBF+7atZ+NTYFZhNmBVB4=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=dcxktkmHMQlLIVVJYFFDmjRWti0jFTyBQ6AtqFgM08bnP9bAzDe0c62LD/Q/cD3jf
+         ZDnFxORwnn1jILORBCjEVNA/Cc/8Q5gzb1sOFNfQbFItY2WLQEFstZY6BpCDkQoQA3
+         97BrSANDY2xiRcj95xb/nQ1TdnKJ12B5dVus0segjA9e7+jYabcY4W9dsVFqLIDGD8
+         TiBnn/XBDJpxpZIMXMqlWLfMVIQYQONGlf4uliLsLOQIk4PFBKnvX/lOiUeFPPIBe5
+         IS/Gdo/md2/x5x3UGSyC8CGAXFPLi2QHBxCtgfdOOrkz3LQChQ0EefXmA1gCTRnYUZ
+         pEFufdnq7fQ8w==
+To:     Boqun Feng <boqun.feng@gmail.com>
+From:   =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Gary Guo <gary@garyguo.net>,
+        Benno Lossin <benno.lossin@proton.me>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rust: alloc: Add realloc and alloc_zeroed to the GlobalAlloc impl
+Message-ID: <R7bIOWHPBelVxutK-V8lFrSCh_diCIJtJxP-HbOJDV0i2VaKriARSwBRv8TaTevuT06lySKkBALLFJ8S_7q2Qzzr2fH4eceYXYO1_kp1jnI=@protonmail.com>
+In-Reply-To: <ZJXXxEfzVza5Jzxj@boqun-archlinux>
+References: <20230622-global_alloc_methods-v1-1-3d3561593e23@protonmail.com> <ZJXXxEfzVza5Jzxj@boqun-archlinux>
+Feedback-ID: 27884398:user:proton
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Andrew Lunn <andrew@lunn.ch> writes:
+On Friday, June 23rd, 2023 at 19:35, Boqun Feng <boqun.feng@gmail.com> wrot=
+e:
 
-> On Sat, Jun 24, 2023 at 03:24:47PM +0100, Måns Rullgård wrote:
->> Andrew Lunn <andrew@lunn.ch> writes:
->> 
->> > On Sat, Jun 24, 2023 at 01:10:59PM +0100, Mans Rullgard wrote:
->> >> From: Jeroen Hofstee <jhofstee@victronenergy.com>
->> >> 
->> >> Commit b6745f6e4e63 ("drivers: net: cpsw: davinci_emac: move reading mac
->> >> id to common file") did not only move the code for an am3517, it also
->> >> added the slave parameter, resulting in an invalid (all zero) mac address
->> >> being returned for an am3517, since it only has a single emac
->> >
->> > Hi Mans
->> >
->> > If there is only a single emac, why is the function being called with
->> > slave=1? Given the description, it seems like you are fixing the wrong
->> > problem.
->> 
->> See previous discussion:
->> https://lore.kernel.org/lkml/d8ad5cab-5183-cddf-fa9a-4e7b9b8c9377@victronenergy.com/
->
-> Hi Måns
->
-> O.K. did i mention memory of a goldfish?
->
-> This is the sort of detail that should be in the commit
-> message. Otherwise reviewers are going to ask for an explanation, even
-> if it has been explained once, 6 years ago.
->
-> I assume you also want this back ported to stable? Please add a Fixed:
-> tag, and a Cc: stable@vger.kernel.org tag. And set the patch subject
-> to [PATCH net v3] to indicate this is for the net tree, not net-next.
+> On Thu, Jun 22, 2023 at 09:24:40PM +0200, Bj=C3=B6rn Roy Baron via B4 Rel=
+ay wrote:
+>=20
+> > From: Bj=C3=B6rn Roy Baron bjorn3_gh@protonmail.com
+> >=20
+> > While there are default impls for these methods, using the respective C
+> > api's is faster. Currently neither the existing nor these new
+> > GlobalAlloc method implementations are actually called. Instead the
+> > _rust* function defined below the GlobalAlloc impl are used. With
+> > rustc 1.71 these functions will be gone and all allocation calls will g=
+o
+> > through the GlobalAlloc implementation.
+> >=20
+> > Link: https://github.com/Rust-for-Linux/linux/issues/68
+>=20
+>=20
+> Nice! Although I think we need to do the simialr size adjustment as:
+>=20
+> =09https://lore.kernel.org/rust-for-linux/20230613164258.3831917-1-boqun.=
+feng@gmail.com/
+>=20
+> so I applied your patch onto my patch and came up with the following:
 
-I give up.  It's not worth my time.  This is why people hoard patches
-rather than sending them upstream.
+Right. That patch LGTM.
 
--- 
-Måns Rullgård
+Cheers,
+Bj=C3=B6rn
