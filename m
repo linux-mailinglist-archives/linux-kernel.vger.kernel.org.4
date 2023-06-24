@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D336573CACF
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 14:21:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3279173CAD0
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 14:21:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233129AbjFXMVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 08:21:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49074 "EHLO
+        id S233152AbjFXMVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 08:21:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233086AbjFXMVB (ORCPT
+        with ESMTP id S233102AbjFXMVC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 08:21:01 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD212120
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 05:20:59 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-3127e67842aso423854f8f.1
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 05:20:59 -0700 (PDT)
+        Sat, 24 Jun 2023 08:21:02 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C87E2112
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 05:21:01 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3fa86011753so602375e9.0
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 05:21:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1687609258; x=1690201258;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1687609259; x=1690201259;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=C0yKSEPQ2uBWE2LY+saIm//xFx7HrBCHNyL34cp2oHM=;
-        b=QeZjgJfhQJvqZvx1t1IeWYsbwQNI5QY0nY+n+6iuKprKzqPPDhqAlCK/X8MXw9lllM
-         MF7MJUd3AyF6NLExmFN2tqOyKJxGXQ5A620LqDfFp1F1MgWOF2XqUr8EUczC4R2MWmPT
-         FPV9ONEJm4zSLcf0xZlhrZVG+xsG//PTKyBEZCr7/8dLR1hNjsmbGDUqGsh9vM21Svm7
-         dAy7RyMU7SrYkSqPju5iD/CqEc/7iiUHvgjZoAQEvI82vuQl+FYI2+3r31+PjQUdTX5Y
-         sjL2IQB9LnUMnP7pvvD/q1oELJQNwk2RV0RkSmIPwXN9cWyi2KhZGSAxqRLH8HJDsVlQ
-         TIBg==
+        bh=ep2XsA9j2LD9YyooNd5WW+/YowFL7q+DOAVN9RNvwtM=;
+        b=HqVG27IW75eotRBvjQJoz9xZyhDt145raK7ooTKnqu1gvdfvCTqjpUDRkjfALOWDC0
+         mD4PWhAlcqJI/GE4WBdRaig1Nz8ol5rOsAd1cbvTM2oyWEp7MKJVmPD5p3RVYsNRacUG
+         sSx6dGcqzbcvueBBPiznmCyGLZPSjkqnwnArEjLJjlVEsOUNt0jqnQMYHN1cbCbjreWN
+         9Dv/hx7mxiAdn1EYlTNvcONsABk7uWEp4Illmj3F/P02ehGh4ZDXsTIenjMWEoDbCzVv
+         zi2pv57FNYPvzvif4UrJc9KZEoR4YszV5m2YdtNmQuKZc3J4J9ZgfMyzfWnjkuUIqH81
+         SX2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687609258; x=1690201258;
+        d=1e100.net; s=20221208; t=1687609259; x=1690201259;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=C0yKSEPQ2uBWE2LY+saIm//xFx7HrBCHNyL34cp2oHM=;
-        b=azzY2eHCbZ5KyIxz64ltg/XusQKUbwYAQL+/iw8Br/paVCyFVSEthXk3LODkY0UrI0
-         8fFPim986niFeLVJrsCRodZ6AN28Z5WHzAU2+W7O9jL4cGm2Bf2mI/5BWcwk1nIrtJMW
-         rt9fGqJiPVvXKtx6w9oKVuGxS1FVz3Q3LOtwPrJejwivcdPziAmzBYbdgWJMulv9s38K
-         mEIVw9jxm7MOnayhQRKOF2BE2znlDJiqgA38kFVJtDf6Kr1vuADmziDWNfizTCOSRBdb
-         P5aQzE6OmHxupJQe3LovbJP0d5yEJGWMcn/ZL3d12W3X+ZR3+7JiUAc0VUJ36v+9pS37
-         wIow==
-X-Gm-Message-State: AC+VfDzxyDbwYLwhnkqBjZRhzBdS6WvGtIXDZCmk0OvxOFPrmbbZPe8d
-        ZT0RwPzXMQmjnN3AbvHItmo/Nw==
-X-Google-Smtp-Source: ACHHUZ4ou5+mAhAZf0neB/pEp/lFSTloYGI60h/0wpB1djUbSRRuQtMMLGSiDbhu49FUgBf4zF50Sg==
-X-Received: by 2002:adf:fdc8:0:b0:313:e3a8:b477 with SMTP id i8-20020adffdc8000000b00313e3a8b477mr1055898wrs.2.1687609258116;
-        Sat, 24 Jun 2023 05:20:58 -0700 (PDT)
+        bh=ep2XsA9j2LD9YyooNd5WW+/YowFL7q+DOAVN9RNvwtM=;
+        b=KnoHxWd7Rkq1EiST7EHlfgzjZME1850M/jOhQSbdLZbyQozmbKeTwO4A/4vijR5H4C
+         GZUsGf14IuMjx3WfG5tsGipBEBaOEF4DAdAunCoFIE05sxi3gWJEOYHbEW3gMKI3iOm/
+         CEO9EtfXPBgxrpLDaJgwcExEwYnta2/w4u384LNT3lfePqovk6z+tIa4BEZopuCnKGnY
+         HR8YMdQh1H/T5x7x+DW4txLpFT6kcjeSg1NPGk8coKAYxFoLaeGk0a4bEO5XFiI5i20u
+         4tfqYX8rI95CXqsfnC8A9bq2OYTaOkxI+672mfJe7hqel3iEBFOXoK996vHLy7ptDBO4
+         N5Ow==
+X-Gm-Message-State: AC+VfDwS1zfRhD3j6Vx1CgYGAacFxa2zAZ8VWSgXR83ki/37SX+b/qv0
+        NW0akjK2o1ii0PjMuPlG0pvREg==
+X-Google-Smtp-Source: ACHHUZ7YN3i+JPKbbojGoxNDyVgRp5DPwz5gJYk2TtRpMCkPHy0uZUm4weZNeKjABF/uBJNYciMH5g==
+X-Received: by 2002:a05:600c:3d93:b0:3f9:7c2:175c with SMTP id bi19-20020a05600c3d9300b003f907c2175cmr20595520wmb.2.1687609259522;
+        Sat, 24 Jun 2023 05:20:59 -0700 (PDT)
 Received: from carbon-x1.home ([2a01:cb15:81c2:f100:94c1:d2b1:7300:5620])
-        by smtp.gmail.com with ESMTPSA id y15-20020a7bcd8f000000b003f8f9ab6f30sm2058823wmj.20.2023.06.24.05.20.56
+        by smtp.gmail.com with ESMTPSA id y15-20020a7bcd8f000000b003f8f9ab6f30sm2058823wmj.20.2023.06.24.05.20.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Jun 2023 05:20:57 -0700 (PDT)
+        Sat, 24 Jun 2023 05:20:59 -0700 (PDT)
 From:   =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@rivosinc.com>
 To:     Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
@@ -79,9 +79,9 @@ To:     Paul Walmsley <paul.walmsley@sifive.com>,
         =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 2/6] riscv: add support for misaligned handling in S-mode
-Date:   Sat, 24 Jun 2023 14:20:45 +0200
-Message-Id: <20230624122049.7886-3-cleger@rivosinc.com>
+Subject: [RFC PATCH 3/6] riscv: allow S-mode to handle misaligned traps
+Date:   Sat, 24 Jun 2023 14:20:46 +0200
+Message-Id: <20230624122049.7886-4-cleger@rivosinc.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230624122049.7886-1-cleger@rivosinc.com>
 References: <20230624122049.7886-1-cleger@rivosinc.com>
@@ -97,216 +97,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Misalignment handling is only supported for M-mode and uses direct
-accesses to user memory. in S-mode, this requires to use the
-get_user()/put_user() accessors. Implement load_u8(), store_u8() and
-get_insn() using these accessors. Also, use CSR_TVAL instead of
-hardcoded mtval in csr_read() call which will work for both S-mode and
-M-mode. When used in S-mode, we do not handle misaligned accesses that
-are triggered from kernel mode.
+Now that we will be able to configure the SBI to let us handle the
+traps, let this misalignment handling be available for S-mode.
 
 Signed-off-by: Clément Léger <cleger@rivosinc.com>
 ---
- arch/riscv/kernel/Makefile           |   2 +-
- arch/riscv/kernel/traps_misaligned.c | 111 +++++++++++++++++++++++----
- 2 files changed, 99 insertions(+), 14 deletions(-)
+ arch/riscv/kernel/traps.c | 7 -------
+ 1 file changed, 7 deletions(-)
 
-diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-index 153864e4f399..61bad09280a6 100644
---- a/arch/riscv/kernel/Makefile
-+++ b/arch/riscv/kernel/Makefile
-@@ -56,9 +56,9 @@ obj-y	+= stacktrace.o
- obj-y	+= cacheinfo.o
- obj-y	+= patch.o
- obj-y	+= probes/
-+obj-y	+= traps_misaligned.o
- obj-$(CONFIG_MMU) += vdso.o vdso/
+diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
+index 8c258b78c925..b544cdd52dd2 100644
+--- a/arch/riscv/kernel/traps.c
++++ b/arch/riscv/kernel/traps.c
+@@ -149,12 +149,6 @@ DO_ERROR_INFO(do_trap_insn_illegal,
+ 	SIGILL, ILL_ILLOPC, "illegal instruction");
+ DO_ERROR_INFO(do_trap_load_fault,
+ 	SIGSEGV, SEGV_ACCERR, "load access fault");
+-#ifndef CONFIG_RISCV_M_MODE
+-DO_ERROR_INFO(do_trap_load_misaligned,
+-	SIGBUS, BUS_ADRALN, "Oops - load address misaligned");
+-DO_ERROR_INFO(do_trap_store_misaligned,
+-	SIGBUS, BUS_ADRALN, "Oops - store (or AMO) address misaligned");
+-#else
+ int handle_misaligned_load(struct pt_regs *regs);
+ int handle_misaligned_store(struct pt_regs *regs);
  
--obj-$(CONFIG_RISCV_M_MODE)	+= traps_misaligned.o
- obj-$(CONFIG_FPU)		+= fpu.o
- obj-$(CONFIG_SMP)		+= smpboot.o
- obj-$(CONFIG_SMP)		+= smp.o
-diff --git a/arch/riscv/kernel/traps_misaligned.c b/arch/riscv/kernel/traps_misaligned.c
-index e7bfb33089c1..e4a273ab77c9 100644
---- a/arch/riscv/kernel/traps_misaligned.c
-+++ b/arch/riscv/kernel/traps_misaligned.c
-@@ -12,6 +12,7 @@
- #include <asm/processor.h>
- #include <asm/ptrace.h>
- #include <asm/csr.h>
-+#include <asm/bug.h>
- 
- #define INSN_MATCH_LB			0x3
- #define INSN_MASK_LB			0x707f
-@@ -151,21 +152,25 @@
- #define PRECISION_S 0
- #define PRECISION_D 1
- 
--static inline u8 load_u8(const u8 *addr)
-+#ifdef CONFIG_RISCV_M_MODE
-+static inline int load_u8(const u8 *addr, u8 *r_val)
- {
- 	u8 val;
- 
- 	asm volatile("lbu %0, %1" : "=&r" (val) : "m" (*addr));
-+	*r_val = val;
- 
--	return val;
-+	return 0;
- }
- 
--static inline void store_u8(u8 *addr, u8 val)
-+static inline int store_u8(u8 *addr, u8 val)
- {
- 	asm volatile ("sb %0, %1\n" : : "r" (val), "m" (*addr));
-+
-+	return 0;
- }
- 
--static inline ulong get_insn(ulong mepc)
-+static inline int get_insn(ulong mepc, ulong *r_insn)
- {
- 	register ulong __mepc asm ("a2") = mepc;
- 	ulong val, rvc_mask = 3, tmp;
-@@ -194,9 +199,63 @@ static inline ulong get_insn(ulong mepc)
- 	: [addr] "r" (__mepc), [rvc_mask] "r" (rvc_mask),
- 	  [xlen_minus_16] "i" (XLEN_MINUS_16));
- 
--	return val;
-+	*r_insn = val;
-+
-+	return 0;
-+}
-+#else
-+static inline int load_u8(const u8 *addr, u8 *r_val)
-+{
-+	return __get_user(*r_val, addr);
-+}
-+
-+static inline int store_u8(u8 *addr, u8 val)
-+{
-+	return __put_user(val, addr);
- }
- 
-+static inline int get_insn(ulong mepc, ulong *r_insn)
-+{
-+	ulong insn = 0;
-+
-+	if (mepc & 0x2) {
-+		ulong tmp = 0;
-+		u16 __user *insn_addr = (u16 __user *)mepc;
-+
-+		if (__get_user(insn, insn_addr))
-+			return -EFAULT;
-+		/* __get_user() uses regular "lw" which sign extend the loaded
-+		 * value make sure to clear higher order bits in case we "or" it
-+		 * below with the upper 16 bits half.
-+		 */
-+		insn &= GENMASK(15, 0);
-+		if ((insn & __INSN_LENGTH_MASK) != __INSN_LENGTH_32) {
-+			*r_insn = insn;
-+			return 0;
-+		}
-+		insn_addr++;
-+		if (__get_user(tmp, insn_addr))
-+			return -EFAULT;
-+		*r_insn = (tmp << 16) | insn;
-+
-+		return 0;
-+	} else {
-+		u32 __user *insn_addr = (u32 __user *)mepc;
-+
-+		if (__get_user(insn, insn_addr))
-+			return -EFAULT;
-+		if ((insn & __INSN_LENGTH_MASK) == __INSN_LENGTH_32) {
-+			*r_insn = insn;
-+			return 0;
-+		}
-+		insn &= GENMASK(15, 0);
-+		*r_insn = insn;
-+
-+		return 0;
-+	}
-+}
-+#endif
-+
- union reg_data {
- 	u8 data_bytes[8];
- 	ulong data_ulong;
-@@ -207,10 +266,21 @@ int handle_misaligned_load(struct pt_regs *regs)
- {
- 	union reg_data val;
- 	unsigned long epc = regs->epc;
--	unsigned long insn = get_insn(epc);
--	unsigned long addr = csr_read(mtval);
-+	unsigned long insn;
-+	unsigned long addr;
- 	int i, fp = 0, shift = 0, len = 0;
- 
-+	/*
-+	 * When running in supervisor mode, we only handle misaligned accesses
-+	 * triggered from user mode.
-+	 */
-+	if (!IS_ENABLED(CONFIG_RISCV_M_MODE) && !user_mode(regs))
-+		return -1;
-+
-+	if (get_insn(epc, &insn))
-+		return -1;
-+
-+	addr = csr_read(CSR_TVAL);
- 	regs->epc = 0;
- 
- 	if ((insn & INSN_MASK_LW) == INSN_MATCH_LW) {
-@@ -274,8 +344,10 @@ int handle_misaligned_load(struct pt_regs *regs)
+@@ -199,7 +193,6 @@ asmlinkage __visible __trap_section void do_trap_store_misaligned(struct pt_regs
+ 		irqentry_nmi_exit(regs, state);
  	}
- 
- 	val.data_u64 = 0;
--	for (i = 0; i < len; i++)
--		val.data_bytes[i] = load_u8((void *)(addr + i));
-+	for (i = 0; i < len; i++) {
-+		if (load_u8((void *)(addr + i), &val.data_bytes[i]))
-+			return -1;
-+	}
- 
- 	if (fp)
- 		return -1;
-@@ -290,10 +362,21 @@ int handle_misaligned_store(struct pt_regs *regs)
- {
- 	union reg_data val;
- 	unsigned long epc = regs->epc;
--	unsigned long insn = get_insn(epc);
--	unsigned long addr = csr_read(mtval);
-+	unsigned long insn;
-+	unsigned long addr;
- 	int i, len = 0;
- 
-+	/*
-+	 * When running in supervisor mode, we only handle misaligned accesses
-+	 * triggered from user mode.
-+	 */
-+	if (!IS_ENABLED(CONFIG_RISCV_M_MODE) && !user_mode(regs))
-+		return -1;
-+
-+	if (get_insn(epc, &insn))
-+		return -1;
-+
-+	addr = csr_read(CSR_TVAL);
- 	regs->epc = 0;
- 
- 	val.data_ulong = GET_RS2(insn, regs);
-@@ -327,8 +410,10 @@ int handle_misaligned_store(struct pt_regs *regs)
- 		return -1;
- 	}
- 
--	for (i = 0; i < len; i++)
--		store_u8((void *)(addr + i), val.data_bytes[i]);
-+	for (i = 0; i < len; i++) {
-+		if (store_u8((void *)(addr + i), val.data_bytes[i]))
-+			return -1;
-+	}
- 
- 	regs->epc = epc + INSN_LEN(insn);
- 
+ }
+-#endif
+ DO_ERROR_INFO(do_trap_store_fault,
+ 	SIGSEGV, SEGV_ACCERR, "store (or AMO) access fault");
+ DO_ERROR_INFO(do_trap_ecall_s,
 -- 
 2.40.1
 
