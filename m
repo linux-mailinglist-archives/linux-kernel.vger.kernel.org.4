@@ -2,91 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B17073C9F2
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 11:13:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7F7B73C9FC
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 11:20:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232949AbjFXJNC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 05:13:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49488 "EHLO
+        id S233004AbjFXJUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 05:20:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232845AbjFXJM7 (ORCPT
+        with ESMTP id S232845AbjFXJUA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 05:12:59 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA91118
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 02:12:58 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-514ab6cb529so4598048a12.1
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 02:12:58 -0700 (PDT)
+        Sat, 24 Jun 2023 05:20:00 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5501C1BFA
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 02:19:58 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-51d7e8dd118so596320a12.1
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 02:19:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687597976; x=1690189976;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=linaro.org; s=google; t=1687598396; x=1690190396;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=vchTo0Ol++OLJmq7HkKHErizaURF3xHVTmmMX3ficGE=;
-        b=lbMMOlNVSXG7UBvaMUImfSKH7/n6r6Ndl26O12IO6VUdAMh57hAh7TKLUcTQEmzW4z
-         8qiviylmAklg5Zgk6kOOVYxUQCvuwmfjxlWR6KoxtUAX+Knh/p/GPT1DhyXmednt/n/b
-         XFGWInS0/evgU+4t6VgZJMb5EWyrhwzut3lhcxOnLtNPn6tWeOOijFaxiKqfCoeuO/ph
-         r6uzYWtZfjHw6J3donHZpDZT2yNsyrY8auaWHd+eelL363XvSEcKaUJBRm+3FCJFZKaL
-         y5nTgBhsjWwFCZ7FCLvn/39YP3rvOVIGdLD+RuJCPk9TREWL+Izhl6x7Q8gWxH2/SJ29
-         a1fw==
+        bh=KfAcGT4J8pUoMJBGxBaLszgHGiS6c9l8JOpUoHeAAOA=;
+        b=yQVzjTKSXVmVV9dLLVhjlfW4hSkCHaHSkFp8XKDuppCzQpGHvyVttjnWT3sZWadL6G
+         Aptg8K8aHU9euO2VsKWw8w5GNb7iZUmQN6s980dsKNw8bDt/Gg0mjyG+1qbTOWHueIrY
+         /Q6bxSUkrx10KI9Bk3ImA6gPyy5RwRLI1IVUQjGo73WdFwY+k9WU2qYNImsGMRH4LVBY
+         NGoLGDAz09o/yosqduTlRt/bCpwDw40AnKJvyTtb5EsV6kYLtwXhkQO6myiWdEiHilCp
+         eezk0kHCVcUBB/e4mc1VfkMXxJnPCuve2SWX/BdtYwhjQIOCgvko85iNcFXLb/8ecU/N
+         rm6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687597976; x=1690189976;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=1e100.net; s=20221208; t=1687598396; x=1690190396;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vchTo0Ol++OLJmq7HkKHErizaURF3xHVTmmMX3ficGE=;
-        b=ZD2NfjW5atgWOp05uKsGnyCPZ30wvq4weIxK3ZuXwTZk8bhNbghJy99FvMqxKrBNid
-         6412YTcsN8OU7URnQBwMRrg8nnWxoxeD4Fqc0krSN+X9FF0g/xxFYV23OJiKGMgzXjhn
-         3jCu4WdI1q6IzGqu6enxd/249woG2DU4SGCK0FsG+syZJbnsJ09Z91DP1CTy7ira11mf
-         f1raoAe/TuA0BV4DBTfqqWyKhIiyAd6F1uRwGs6iVE4wTbiBZAY++CKDDlkphgcI8dT4
-         A/oPdsqerdX34Vqn9daqkAU/FCXC+s1bIWEOCO3ccGr8yWsNnEXWlHeM992Ze67yAt3P
-         KnTQ==
-X-Gm-Message-State: AC+VfDxw1ICV29VIEcwDS0OK7xHhT2z5qLaOOdpFHWnkflzEI6SNcwkn
-        STfT+svpIWutSqV9SWF6ob5wLA==
-X-Google-Smtp-Source: ACHHUZ6HroITc5YdkUcavz4MKFxBB8L412c78SNrFWbnl1gdMQWQ0zgOQinmNiUzqMWS9McYR20j2w==
-X-Received: by 2002:a05:6402:35c5:b0:51b:fd09:9ec1 with SMTP id z5-20020a05640235c500b0051bfd099ec1mr2819074edc.0.1687597976653;
-        Sat, 24 Jun 2023 02:12:56 -0700 (PDT)
+        bh=KfAcGT4J8pUoMJBGxBaLszgHGiS6c9l8JOpUoHeAAOA=;
+        b=YoUbLP7eghkCyD1UEcd2SZy7pSSAmn8NElurRDOeCm1i6qk5OLSMboPi/ZcVnf3acW
+         F1Fke/X5Mx/zfgbMUTnftrBeM6svbTha8dSJwACszurEyBxOI7Cy1FMLiRCuzIs1ZipX
+         l+YvrXjlyj42b4V16VCv/YQdhTp2ap7ieNWX+ogiYQl4Ym4DCryd9Py7M4Xg3f3FdPKm
+         0eJSmVmFkjK1g67FTrM5jOVGAhaxla4p+2eXJSAPxF15yhtN7QryPcC0kdIKRhTtqfz7
+         RYNDY+BayEC5v8svthW44dou7wSblg4OhWwII7x/nDFt906uOt0u8rbA2KsxL+ey8nYi
+         zsSQ==
+X-Gm-Message-State: AC+VfDx6mEdeAG8UEjRZXUjNbBU4HSy+Z0MmpZ0tSbO4iPxBKDonoNBe
+        wtV52B6tAel49tvAehX+9WIqVQ==
+X-Google-Smtp-Source: ACHHUZ5fG8f481PX14S7vktzFZQMA1l6HoKP1yysFPHfBvGgcLJOb2TMBp2polua7/w5jYwHHssrXQ==
+X-Received: by 2002:a17:907:987:b0:987:6372:c31f with SMTP id bf7-20020a170907098700b009876372c31fmr16230436ejc.37.1687598396633;
+        Sat, 24 Jun 2023 02:19:56 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id i4-20020a056402054400b0051a318c0120sm461301edx.28.2023.06.24.02.12.53
+        by smtp.gmail.com with ESMTPSA id p13-20020a1709060e8d00b00989065149d0sm663324ejf.86.2023.06.24.02.19.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 24 Jun 2023 02:12:56 -0700 (PDT)
-Message-ID: <6bbf239f-d530-2f1e-ff52-361f7c9cc951@linaro.org>
-Date:   Sat, 24 Jun 2023 11:12:52 +0200
+        Sat, 24 Jun 2023 02:19:55 -0700 (PDT)
+Message-ID: <ca3b6a75-2811-6013-28cc-9f6a7854b469@linaro.org>
+Date:   Sat, 24 Jun 2023 11:19:49 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH 06/15] dt-bindings: display/msm: sc7180-dpu: Describe
- SM6125
+Subject: Re: [PATCH v2 01/45] dt-bindings: microchip: atmel,at91rm9200-tcb:
+ add sam9x60, sam9x7 compatible
 Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, Lux Aliaga <they@mint.lgbt>
-References: <20230624-sm6125-dpu-v1-0-1d5a638cebf2@somainline.org>
- <20230624-sm6125-dpu-v1-6-1d5a638cebf2@somainline.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230624-sm6125-dpu-v1-6-1d5a638cebf2@somainline.org>
+To:     Varshini Rajendran <varshini.rajendran@microchip.com>,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        herbert@gondor.apana.org.au, davem@davemloft.net, vkoul@kernel.org,
+        tglx@linutronix.de, maz@kernel.org, lee@kernel.org,
+        ulf.hansson@linaro.org, tudor.ambarus@linaro.org,
+        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linus.walleij@linaro.org, p.zabel@pengutronix.de,
+        olivia@selenic.com, a.zummo@towertech.it,
+        radu_nicolae.pirea@upb.ro, richard.genoud@gmail.com,
+        gregkh@linuxfoundation.org, lgirdwood@gmail.com,
+        broonie@kernel.org, wim@linux-watchdog.org, linux@roeck-us.net,
+        arnd@arndb.de, olof@lixom.net, soc@kernel.org,
+        linux@armlinux.org.uk, sre@kernel.org, jerry.ray@microchip.com,
+        horatiu.vultur@microchip.com, durai.manickamkr@microchip.com,
+        andrew@lunn.ch, alain.volmat@foss.st.com,
+        neil.armstrong@linaro.org, mihai.sain@microchip.com,
+        eugen.hristev@collabora.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Cc:     Hari.PrasathGE@microchip.com, cristian.birsan@microchip.com,
+        balamanikandan.gunasundar@microchip.com,
+        manikandan.m@microchip.com, dharma.b@microchip.com,
+        nayabbasha.sayed@microchip.com, balakrishnan.s@microchip.com
+References: <20230623203056.689705-1-varshini.rajendran@microchip.com>
+ <20230623203056.689705-2-varshini.rajendran@microchip.com>
+ <074048a2-5153-e013-3562-b5cad2ba0954@linaro.org>
+In-Reply-To: <074048a2-5153-e013-3562-b5cad2ba0954@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -99,14 +109,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/06/2023 02:41, Marijn Suijten wrote:
-> SM6125 is identical to SM6375 except that while downstream also defines
-> a throttle clock, its presence results in timeouts whereas SM6375
-> requires it to not observe any timeouts.
+On 24/06/2023 09:53, Krzysztof Kozlowski wrote:
+> On 23/06/2023 22:30, Varshini Rajendran wrote:
+>> Add sam9x60, sam9x7 compatible string support in the schema file.
+>>
+>> Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
+>> ---
+>>  .../devicetree/bindings/soc/microchip/atmel,at91rm9200-tcb.yaml | 
+> 
+> 
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Then it should not be allowed, so you need either "else:" block or
-another "if: properties: compatible:" to disallow it. Because in current
-patch it would be allowed.
+Un-acked. Actually NAK.
+
+This does not match your DTS. Please test your patches before sending.
 
 Best regards,
 Krzysztof
