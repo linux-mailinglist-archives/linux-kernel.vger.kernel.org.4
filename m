@@ -2,161 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 171D873C764
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 09:39:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3961173C775
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 09:48:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231834AbjFXHjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 03:39:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45620 "EHLO
+        id S231667AbjFXHr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 03:47:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjFXHjJ (ORCPT
+        with ESMTP id S229532AbjFXHr4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 03:39:09 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76E6BE7D
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 00:39:08 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-51d885b0256so148171a12.2
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 00:39:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687592347; x=1690184347;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XVdAZfHRZ6u7osPMfY1qK+xI94SNWiX6MJMl3Svpx34=;
-        b=AzlNBzAV19R9cgDJFcLQljjYVhJ/XvCe2JIZN1//+0MtkcJdBz7KpnpLco+q2jt33H
-         6zjAgqYBLdCnP6loYtt3cP/qF6jVxOqReXdnP+LzWQQtYQR/7BOjnSRMWL5BkoRONk34
-         i4ij3h6YDWhJIOpa1M0tPVY2zOu/iLE76cVfhuwN8+0TA4fMzDiOJIHv7ReRw8awdqrf
-         Rz/SXJPISnwUr0t2IpOuX7XynFepgqMNrv5qvQ7B+z9fU9W6c2x/towRwkBN0iJfbdaL
-         Luaxi9k30z9TnexneyQFansJlLTSGDzepPju7Flf51dPjiW07LKrkIZWW8+l5j7ym5Nk
-         6Ezg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687592347; x=1690184347;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XVdAZfHRZ6u7osPMfY1qK+xI94SNWiX6MJMl3Svpx34=;
-        b=Yn3hERb8z+SPnqX6qXB/vsEJxsck0Kfh3MnosHcoOIK8zzVQMfnOeLXO0cnX2pYwq7
-         18p63lw4gRNSdQrfK/SuT16gKivBgyq+b6Oh0I1fzoW/mamOV9XzCHrEelSqCNnD/0qy
-         8HeigKCNZN5zJYLM0JsWeEgT7YN6rzPr+6smBj6gvCQwANKTTcuZsM/P4dVC9KDKhhrs
-         ytdXcMW8mxD2x1oMjsDfglOaW2D3zLkZfGiAVGpjDb7U5FtDkgJY1f9NiMsvcQaIgAWC
-         7AoszF1vqDOTy5/FkrfotJY6hcwBDeSdHf45xJOqH9lLxpvxVs3qD94F5YssyFEF6RL0
-         VjfA==
-X-Gm-Message-State: AC+VfDxjUSMRdrVtRWSuLOLlqyU1xNOmMyBHoTdauPmmSJWHTeQ/9fcl
-        81knAksQcUHdKKM0uR+l1997Mg==
-X-Google-Smtp-Source: ACHHUZ7tKT/4JTpFEGf6HPPRHWpY3Wpj7qBTPZ5d9erU7Y4QOGAHnB07BZ2jcM0YimyIpPzQjzaehQ==
-X-Received: by 2002:a05:6402:1212:b0:51a:3e67:3514 with SMTP id c18-20020a056402121200b0051a3e673514mr18616484edw.24.1687592346828;
-        Sat, 24 Jun 2023 00:39:06 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id w15-20020a50fa8f000000b0051bfa07af4asm383979edr.93.2023.06.24.00.39.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 24 Jun 2023 00:39:06 -0700 (PDT)
-Message-ID: <a3ece9a5-7718-020d-66b1-be6885fb1da2@linaro.org>
-Date:   Sat, 24 Jun 2023 09:39:04 +0200
+        Sat, 24 Jun 2023 03:47:56 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD28019B7;
+        Sat, 24 Jun 2023 00:47:52 -0700 (PDT)
+X-QQ-mid: bizesmtp69t1687592856t8jmq2cy
+Received: from linux-lab-host.localdomain ( [116.30.129.193])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sat, 24 Jun 2023 15:47:35 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: /rrU+puPB7TMQuMP1erzBvP+Z8py1YsIU1LjWUtYGWooMsi5DJqGYdfGam6AA
+        dR7PHHd5oj9w4p9f+9Z6v1asuOroiuC9ym61+SNCA9XQ1BOHGCDN9uphY8Xnx5GWe/r09Fc
+        b+82BAl6E8YFWyYdSlT1RJHiHeVYXXHyGeYRuT9C6d1LTjpNc1I50iT8l4mLYXLhNFoyI/d
+        PG2xqY3pkwrvumV609NDGMgMuLmI0RjM6s5aVq62InxaAXst15Od3RLk0j6TX7+qY804VoL
+        +4ZNNNtqpmykOmcRKd1NU4eSt/1gZ47UYDms3sJG7mPWHXZRXlcxR9TGYkAUm3V+lFGVxYY
+        FF+AQaN4LzOh0xgRT5oJAI+wD4YfHJ3GMLdvbgh
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 3816886055142245368
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     thomas@t-8ch.de
+Cc:     arnd@arndb.de, david.laight@aculab.com, falcon@tinylab.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-riscv@lists.infradead.org, w@1wt.eu
+Subject: Re: [PATCH v4 10/10] selftests/nolibc: add mmap and munmap test cases
+Date:   Sat, 24 Jun 2023 15:47:21 +0800
+Message-Id: <20230624074721.587306-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <97fbbe17-b261-475c-8959-71cccaa5a2f5@t-8ch.de>
+References: <97fbbe17-b261-475c-8959-71cccaa5a2f5@t-8ch.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 09/15] arm64: dts: qcom: sc7280-crd: add dummy Bluetooth
- VDDIO supply
-Content-Language: en-US
-To:     Doug Anderson <dianders@chromium.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        cros-qcom-dts-watchers@chromium.org,
-        Nikita Travkin <nikita@trvn.ru>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230617171541.286957-1-krzysztof.kozlowski@linaro.org>
- <20230617171541.286957-9-krzysztof.kozlowski@linaro.org>
- <29f6fb78-c122-2b71-61b8-2dc9aa27ad1d@linaro.org>
- <CAD=FV=UMqrAU9cLy3Ew5o1MJyNDAAG2TY1mvMkY2-8kiw6qpjg@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAD=FV=UMqrAU9cLy3Ew5o1MJyNDAAG2TY1mvMkY2-8kiw6qpjg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/06/2023 20:34, Doug Anderson wrote:
-> Hi,
-> 
-> On Mon, Jun 19, 2023 at 6:14 AM Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->>
->> On 17.06.2023 19:15, Krzysztof Kozlowski wrote:
->>> Bluetooth requires VDDIO supply.  Due to lack of schematics provide
->>> something dummy to satisfy `dtbs_check`:
->>>
->>>   sc7280-crd-r3.dtb: bluetooth: 'vddio-supply' is a required property
->>>
->>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>> ---
->> For this:
->>
->> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->>
->> +CC Doug to perhaps fix this properly (though I think we should have got
->> it through the cros list anyway)
->>
->> Konrad
->>>  arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts | 11 +++++++++++
->>>  1 file changed, 11 insertions(+)
->>>
->>> diff --git a/arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts b/arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts
->>> index afae7f46b050..b1aa5b0ee95c 100644
->>> --- a/arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts
->>> +++ b/arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts
->>> @@ -24,6 +24,13 @@ aliases {
->>>       chosen {
->>>               stdout-path = "serial0:115200n8";
->>>       };
->>> +
->>> +     bt_vddio: regulator-bt-vddio {
->>> +             compatible = "regulator-fixed";
->>> +             regulator-name = "bt-vddio";
->>> +             regulator-min-microvolt = <1800000>;
->>> +             regulator-max-microvolt = <1800000>;
->>> +     };
->>>  };
->>>
->>>  &apps_rsc {
->>> @@ -38,6 +45,10 @@ vreg_s1k_1p0: smps1 {
->>>       };
->>>  };
->>>
->>> +&bluetooth {
->>> +     vddio-supply = <&bt_vddio>;
->>> +};
->>> +
-> 
-> I would have a hard time believing that the more correct fix wouldn't be:
-> 
-> vddio-supply = <&vreg_l18b_1p8>;
-> 
-> Specifically L18B is what we have on the newer CRD (the one that is
-> considered a "herobrine" and includes Qcard) and also IDP2. In terms
-> of timeline / similarities, CRD-rev3 falls in between IDP2 and newer
-> CRD. These both agree on L18B. The only board that uses something
-> different (L19B) is the very old IDP1.
-> 
-> That being said, Qualcomm has never provided (at least to me)
-> schematics for any given reference board. Whenever asked, I was always
-> pointed at schematics that were said to be "close enough". Thus, I
-> can't really give a definitive answer here. Even so, pointing at L18B
-> seems to me to be 99% likely to be correct.
+Hi, Thomas
 
-99% is good enough for me. Thanks, I will send a v2 after the merge window.
+> Hi Zhangjin,
+> 
+> On 2023-06-23 03:32:49+0800, Zhangjin Wu wrote:
+> > > On 2023-06-19 23:55:41+0800, Zhangjin Wu wrote:
+> > > > Three mmap/munmap related test cases are added:
+> > > > 
+(snipped)
+> > > >  
+> > > > +int test_mmap_munmap(int size)
+> > > > +{
+> > > > +	char init_files[5][20] = {"/init", "/sbin/init", "/etc/init", "/bin/init", "/bin/sh"};
+> > > 
+> > > Why not /proc/1/exe or even /proc/self/exe?
+> > > 
+> > > I know your other series tries to remove the procfs dependency, but
+> > > we're not there yet :-).
+> > > 
+> > 
+> > Yeah, '/proc/self/exe' is a choice, if so, the 'has_proc' should be added ;-)
+> 
+> Currently procfs is a hard requirement. So I would leave 'has_proc' to
+> the other series that may change this.
+>
 
-Best regards,
-Krzysztof
+Yeah, but to be consistent with the already existing 'proc' condition
+check, 'proc' will be used at first ;-)
+
+    $ grep '(proc,' -ur tools/testing/selftests/nolibc/nolibc-test.c 
+		CASE_TEST(chmod_net);         EXPECT_SYSZR(proc, chmod("/proc/self/net", 0555)); break;
+		CASE_TEST(chmod_self);        EXPECT_SYSER(proc, chmod("/proc/self", 0555), -1, EPERM); break;
+		CASE_TEST(chown_self);        EXPECT_SYSER(proc, chown("/proc/self", 0, 0), -1, EPERM); break;
+		CASE_TEST(chroot_exe);        EXPECT_SYSER(proc, chroot("/proc/self/exe"), -1, ENOTDIR); break;
+		CASE_TEST(link_cross);        EXPECT_SYSER(proc, link("/proc/self/net", "/blah"), -1, EXDEV); break;
+
+Btw, for the /proc/self used in test_stat_timestamps, in the revision of the
+'minimal' config support series, instead of using '/', a 'proc' should be added
+like above test cases.
+
+> > > Also does it make sense to pass a size parameter?
+> > > Why not use either PAGE_SIZE or the real size of the binary from
+> > > fstat().
+> > > 
+> > 
+> > Ok, as the manpage of mmap shows:
+> > 
+> >        For mmap(), offset must be a multiple of the underlying huge page
+> >        size.  The system automatically aligns length to be a multiple of
+> >        the underlying huge page size.
+> > 
+> >        For munmap(), addr, and length must both be a multiple of the
+> >        underlying huge page size.
+> > 
+> > perhaps we should do further tests:
+> > 
+> > * the real size/length
+> > * even > the real size
+> > * the PAGE_SIZE
+> > * not aligned with PAGE_SIZE
+> > 
+> > If such tests are required, the 'size' and even 'offset' arguments could be
+> > provided to cover different combination or we do such tests internally, then,
+> > the arguments are not required.
+> 
+> I think task of nolibc-test is to test the code in nolibc itself.
+> The custom mmap implementation is trivial and directly calls the
+> syscall. These additionally proposed tests would effectively test the
+> core kernels implementation of mmap() and not the code of nolibc.
+> 
+> Therefore I don't think they are necessary in nolibc-test and the
+> functionality is hopefully already be tested in another testsuite.
+>
+
+Ok, it is reasonable.
+ 
+> 
+> Note:
+> 
+> Testing mmap is indeed useful to test the implementation of
+> my_syscall6() by providing a bogus value in the 'offset' parameter.
+> I think we do have such a testcase.
+>
+
+Ok, we can pass a valid offset (n*PAGE_SIZE) to mmap() in test_mmap_munmap() or
+add a whole new mmap_offset test case with a PAGE_SIZE not aligned offset (such
+as 1).
+
+Thanks,
+Zhangjin
+
+> <snip>
+> 
+> Thomas
 
