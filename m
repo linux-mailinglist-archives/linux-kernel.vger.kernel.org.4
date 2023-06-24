@@ -2,82 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8F1F73C75E
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 09:30:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 052A073C760
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 09:34:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231667AbjFXHaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 03:30:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44554 "EHLO
+        id S229939AbjFXHd7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 03:33:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjFXHaS (ORCPT
+        with ESMTP id S229379AbjFXHd6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 03:30:18 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BE791FE9
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 00:30:17 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-9887ebe16d0so162133566b.2
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 00:30:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687591815; x=1690183815;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KcS41/ldoa741kSrifEhXhMe0V/B2ibfblqUGgLow7k=;
-        b=d0r8OSWoSXlEkeryQ/AkskYT20ZpLf7hUZ+hlgf1/20qCEFWFVgqe+01e9JUBchZ9z
-         5aZhuGwpf0jsrc1NLsaZfMBDcl39pmLmV1OtIQBS8hff8q3JMw4azXlHttGVeQ/fmRBb
-         DUGBBye5qmWdUShY55Q8B3Qqu1Wlm0RuNhtPrm+jBu7l0kgn4sBGWBGRoCM8hVMEeV/7
-         W9QTS8QO2TlVm8YM8zcgf3JtlhSabbDX74G1d+53/J0PAdiWq3cmG1JV5WAFVv6v5tVs
-         wjnv1hVh0P87ChOAqMaP+5zaKRxKO8r4lgBm46eT9WvOw0tfPtR4t73b2TXx9u8Cjimo
-         4jJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687591815; x=1690183815;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KcS41/ldoa741kSrifEhXhMe0V/B2ibfblqUGgLow7k=;
-        b=GVUtUnbLR1rKrTUglKTGi/eO0IlbD02lMpm/ZVyMrzYtPKPzfKthGpNwzKwXMRCt/B
-         L12IPpVTU8p8jLigifhxHzOLqfX4T++H52zxJakw2zaaQ9kTSHlSk/u65I7IokLg1zt6
-         KLsK9A3zPtpeNLKF3uTgfUU7JlGx6aHJ94UVFeJxHXBdzaLCko0er/zmdnO92Gdv48d8
-         Q98Vi4fsvGLBq1EppkdF1xppz+uTm/m6en9L0OzTO5k+UWqi0fch/BHTqDytKplhyX0U
-         pgek0tMNdJ4vGJIytkGlZ8PJKIj2+gY0qL3F9s9tNvbWmY5L+F4Jaddjf0wQLo2jSru4
-         bk3Q==
-X-Gm-Message-State: AC+VfDyyko44s9U0SnX0Hn73DpkVzEdSXRJaP4mnhxhFIfQFF1ELQHkI
-        MbxY6JCv89RP7/X8PS7uV1k+gA==
-X-Google-Smtp-Source: ACHHUZ6jc6iLzoLGrEpEGClSLNBRrLCZoAE38t0g3Caz8YfgYjX/uxIvlDqX0NJYqzBtqTB2+gtdHw==
-X-Received: by 2002:a17:907:31c1:b0:961:a67:28d with SMTP id xf1-20020a17090731c100b009610a67028dmr19545969ejb.22.1687591815393;
-        Sat, 24 Jun 2023 00:30:15 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id kt19-20020a170906aad300b00989828a42e8sm565288ejb.154.2023.06.24.00.30.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 24 Jun 2023 00:30:14 -0700 (PDT)
-Message-ID: <0599fc9c-0057-7aa5-3332-40922753ad97@linaro.org>
-Date:   Sat, 24 Jun 2023 09:30:13 +0200
+        Sat, 24 Jun 2023 03:33:58 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7556E2139
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 00:33:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687592037; x=1719128037;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zFVPAa5jxAa93f2E989DShr2WFyMI5PyK24YCe/VRLI=;
+  b=dAb6p5Xfp+vKgEPCH4/irikDfAYn2s/w5iHiAYVmzmERF5jSotAqhSOB
+   t7b6WHrvEVp1hSB97qfp4o8hPPTwqa6Oq3oiXJ5EdbW51EBiRrzp2KHGK
+   A6OkeRaUoYH7pQ9NmQtNryZ258Rdg20aCIpJz/lsMmvpbTLFBCf38/FNn
+   MQMz/iE+OCDrFjGRnuni4tEUIvxIYmVSUrNAkVXFyO+V1BVhWrxvesyZl
+   YvNEnJE/DuPUmlb3ALi98f2Q4KeTKmv39vqK8NI1FQ7mYv9QC4fjFbMuq
+   SjAI1Gv2n2K9YZ1fXDpkM+hTAPNz8N20j4+sqsmIPuCEySgpZK5Y5OBNu
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10750"; a="364370832"
+X-IronPort-AV: E=Sophos;i="6.01,154,1684825200"; 
+   d="scan'208";a="364370832"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2023 00:33:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10750"; a="718764291"
+X-IronPort-AV: E=Sophos;i="6.01,154,1684825200"; 
+   d="scan'208";a="718764291"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 24 Jun 2023 00:33:54 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qCxmL-0008q5-2K;
+        Sat, 24 Jun 2023 07:33:53 +0000
+Date:   Sat, 24 Jun 2023 15:33:22 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     oe-kbuild-all@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] objtool: Make 'sec-address' always on
+Message-ID: <202306241520.4jIgEhK4-lkp@intel.com>
+References: <e7e1de1d01194df3ff4053cb0815fc2ddba33213.1687360711.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 2/2] arch: arm64: configs: Enable UBI and UBIFS
-Content-Language: en-US
-To:     "Lee, Kah Jing" <kah.jing.lee@intel.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <0d1b3c55-4b11-9e63-e388-191d39d88df1@linaro.org>
- <20230622122114.592791-1-kah.jing.lee@intel.com>
- <25439c1e-c9ef-0dc6-8d91-883d7734d0fd@linaro.org>
- <PH0PR11MB5673A862187810E9986E3C8BCB23A@PH0PR11MB5673.namprd11.prod.outlook.com>
- <125c849f-3746-864f-8b8f-6e0a33aca439@linaro.org>
- <PH0PR11MB567334A09B2D4A1D3DDC09F2CB20A@PH0PR11MB5673.namprd11.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <PH0PR11MB567334A09B2D4A1D3DDC09F2CB20A@PH0PR11MB5673.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e7e1de1d01194df3ff4053cb0815fc2ddba33213.1687360711.git.christophe.leroy@csgroup.eu>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,24 +67,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/06/2023 05:42, Lee, Kah Jing wrote:
->>>> So you miss init ramdisk.
->>> Currently we are using the bootargs to mount the rootfs from QSPI NOR
->> flash:
->>> [    0.000000] Kernel command line: earlycon panic=-1 ubi.mtd=1
->> root=ubi0:rootfs rootfstype=ubifs rw rootwait
->>> Is it possible to mount the ubifs rootfs with the ubifs=m config during boot?
->>
->> I think yes. rootfs devices are for example modules, so filesystem can be as
->> well.
-> Was going through mtd ubifs page - http://www.linux-mtd.infradead.org/faq/ubifs.html
-> Quoted: 'In order to mount UBIFS as the root file system, you have to compile 
-> UBIFS into the kernel (instead of compiling it as a kernel module) and specify 
-> proper kernel boot arguments and make the kernel mount UBIFS on boot.'
+Hi Christophe,
 
-Why? Module loaded by initramfs would also understand cmdline arguments,
-right?
+kernel test robot noticed the following build warnings:
 
-Best regards,
-Krzysztof
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.4-rc7 next-20230623]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Christophe-Leroy/objtool-Make-sec-address-always-on/20230621-232305
+base:   linus/master
+patch link:    https://lore.kernel.org/r/e7e1de1d01194df3ff4053cb0815fc2ddba33213.1687360711.git.christophe.leroy%40csgroup.eu
+patch subject: [PATCH] objtool: Make 'sec-address' always on
+config: x86_64-randconfig-c002-20230622 (https://download.01.org/0day-ci/archive/20230624/202306241520.4jIgEhK4-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce: (https://download.01.org/0day-ci/archive/20230624/202306241520.4jIgEhK4-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306241520.4jIgEhK4-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> vmlinux.o: warning: objtool: ibt_selftest+0x14 (.text+0x92b54): sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x19a4: redundant UACCESS disable
+   vmlinux.o: warning: objtool: iovec_from_user.part.0+0xb1 (.text+0x1c47761): call to copy_iovec_from_user.part.0() with UACCESS enabled
+   vmlinux.o: warning: objtool: ibt_selftest+0x1e (.text+0x92b5e): return with modified stack frame
+
+
+objdump-func vmlinux.o ibt_selftest:
+0000 0000000000092b40 <ibt_selftest>:
+0000    92b40:	f3 0f 1e fa          	endbr64
+0004    92b44:	e8 00 00 00 00       	call   92b49 <ibt_selftest+0x9>	92b45: R_X86_64_PLT32	__fentry__-0x4
+0009    92b49:	55                   	push   %rbp
+000a    92b4a:	48 89 e5             	mov    %rsp,%rbp
+000d    92b4d:	48 8d 05 02 00 00 00 	lea    0x2(%rip),%rax        # 92b56 <ibt_selftest_ip>
+0014    92b54:	ff e0                	jmp    *%rax
+0000 0000000000092b56 <ibt_selftest_ip>:
+0000    92b56:	90                   	nop
+0001    92b57:	48 85 c0             	test   %rax,%rax
+0004    92b5a:	5d                   	pop    %rbp
+0005    92b5b:	0f 94 c0             	sete   %al
+0008    92b5e:	e9 00 00 00 00       	jmp    92b63 <ibt_selftest_ip+0xd>	92b5f: R_X86_64_PLT32	__x86_return_thunk-0x4
+000d    92b63:	66 2e 0f 1f 84 00 00 00 00 00 	cs nopw 0x0(%rax,%rax,1)
+0017    92b6d:	0f 1f 00             	nopl   (%rax)
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
