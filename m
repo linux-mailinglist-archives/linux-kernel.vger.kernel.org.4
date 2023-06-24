@@ -2,127 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FE5173CC5F
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 20:30:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4D8B73CC6A
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 20:42:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232994AbjFXSaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 14:30:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45756 "EHLO
+        id S233241AbjFXSle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 14:41:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbjFXSaT (ORCPT
+        with ESMTP id S233219AbjFXSlW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 14:30:19 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15A831BC1
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 11:30:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687631418; x=1719167418;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=335Eso4n/kaqrLq9eASRQ6LXjTYDoqNxbDIwBw02Z/g=;
-  b=KezW8NRm42em1jcpuuscv8HIShfe9WNXgh9becsKJwKLiAp/YRWobQgv
-   fpDB3cvyewKduXFfpXQRLARWiItchoNprXvu+HGGLNvgoNluS4XtCfZkd
-   Ndac163eFVu3FRsuPTONNObxjHVgxb+Hjb1o/tmPBXovgp4y3o2JrItIP
-   vOEtoF+qdkO4pu6PbcgoQ+doDGSeiw4/aoHqYkG9NkGw00W8Fia4+85fc
-   mlWDndTnASfmWmic1alsinn1W1/Yaoxggovx0qnWzqqooqiBHy2ufo3oG
-   Sga+X6Oi3zMfrzY7+IowicPw/cLyoMWd4O/kX+4zzB8LjiV2X+UbZh0GH
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10751"; a="359840983"
-X-IronPort-AV: E=Sophos;i="6.01,155,1684825200"; 
-   d="scan'208";a="359840983"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2023 11:30:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10751"; a="839790677"
-X-IronPort-AV: E=Sophos;i="6.01,155,1684825200"; 
-   d="scan'208";a="839790677"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 24 Jun 2023 11:30:14 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qD81V-0009Kf-34;
-        Sat, 24 Jun 2023 18:30:13 +0000
-Date:   Sun, 25 Jun 2023 02:30:11 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Alison Wang <alison.wang@nxp.com>, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     oe-kbuild-all@lists.linux.dev, leoyang.li@nxp.com,
-        xuelin.shi@nxp.com, xiaofeng.ren@nxp.com, feng.guo@nxp.com,
-        Alison Wang <alison.wang@nxp.com>
-Subject: Re: [PATCH 1/8] ethosu: Add Arm Ethos-U driver
-Message-ID: <202306250204.6o8RGyDl-lkp@intel.com>
-References: <20230616055913.2360-2-alison.wang@nxp.com>
+        Sat, 24 Jun 2023 14:41:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32CAFE6E
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 11:41:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BE61060A37
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 18:41:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C65CDC433CA;
+        Sat, 24 Jun 2023 18:41:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687632080;
+        bh=TIrTAbQw5qVoi7yCqWLabUyB2cPq3CNQClG9OoonF70=;
+        h=From:To:Cc:Subject:Date:From;
+        b=FVSoaXo6YXAIXzpuS2AZeaOu2GwEWF3wUea4EP2IUdkuc03affQmNt9y8x9WOl3OV
+         DcuAL3Ctl0DJt9Kyk8lrdjd9PeImhwkTHXIght14dgbuoAcgGDm5juSqubqqUsHOEG
+         qUAu7kJxu6dXcRxrwpoBLSZiBpOb9VZDwTE7WAWYvKv8+2IadBqADSqkx5EGD7VMid
+         MK/UPGABL+2dP4UtOC3a4MvY1EbfGzffJTuI+9zTasP5OJTcyUwite0JwHyUmWVMJv
+         udQfHCXpnw9BXmSUXoZAWfyKRXPJrP01a9xHIFhYRqQW1CK0vDbXYMa5pT87/ZeUM+
+         +pIex/t3JyjwA==
+From:   Roger Quadros <rogerq@kernel.org>
+To:     miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com
+Cc:     krzk@kernel.org, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Roger Quadros <rogerq@kernel.org>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] mtd: rawnand: omap_elm: Fix incorrect type in assignment
+Date:   Sun, 25 Jun 2023 00:10:21 +0530
+Message-Id: <20230624184021.7740-1-rogerq@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230616055913.2360-2-alison.wang@nxp.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alison,
+Once the ECC word endianness is converted to BE32, we force cast it
+to u32 so we can use elm_write_reg() which in turn uses writel().
 
-kernel test robot noticed the following build warnings:
+Fixes below sparse warnings:
 
-[auto build test WARNING on soc/for-next]
-[also build test WARNING on linus/master v6.4-rc7 next-20230623]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+   drivers/mtd/nand/raw/omap_elm.c:180:37: sparse:     expected unsigned int [usertype] val
+   drivers/mtd/nand/raw/omap_elm.c:180:37: sparse:     got restricted __be32 [usertype]
+   drivers/mtd/nand/raw/omap_elm.c:185:37: sparse:     expected unsigned int [usertype] val
+   drivers/mtd/nand/raw/omap_elm.c:185:37: sparse:     got restricted __be32 [usertype]
+   drivers/mtd/nand/raw/omap_elm.c:190:37: sparse:     expected unsigned int [usertype] val
+   drivers/mtd/nand/raw/omap_elm.c:190:37: sparse:     got restricted __be32 [usertype]
+>> drivers/mtd/nand/raw/omap_elm.c:200:40: sparse: sparse: restricted __be32 degrades to integer
+   drivers/mtd/nand/raw/omap_elm.c:206:39: sparse: sparse: restricted __be32 degrades to integer
+   drivers/mtd/nand/raw/omap_elm.c:210:37: sparse:     expected unsigned int [assigned] [usertype] val
+   drivers/mtd/nand/raw/omap_elm.c:210:37: sparse:     got restricted __be32 [usertype]
+   drivers/mtd/nand/raw/omap_elm.c:213:37: sparse:     expected unsigned int [assigned] [usertype] val
+   drivers/mtd/nand/raw/omap_elm.c:213:37: sparse:     got restricted __be32 [usertype]
+   drivers/mtd/nand/raw/omap_elm.c:216:37: sparse:     expected unsigned int [assigned] [usertype] val
+   drivers/mtd/nand/raw/omap_elm.c:216:37: sparse:     got restricted __be32 [usertype]
+   drivers/mtd/nand/raw/omap_elm.c:219:37: sparse:     expected unsigned int [assigned] [usertype] val
+   drivers/mtd/nand/raw/omap_elm.c:219:37: sparse:     got restricted __be32 [usertype]
+   drivers/mtd/nand/raw/omap_elm.c:222:37: sparse:     expected unsigned int [assigned] [usertype] val
+   drivers/mtd/nand/raw/omap_elm.c:222:37: sparse:     got restricted __be32 [usertype]
+   drivers/mtd/nand/raw/omap_elm.c:225:37: sparse:     expected unsigned int [assigned] [usertype] val
+   drivers/mtd/nand/raw/omap_elm.c:225:37: sparse:     got restricted __be32 [usertype]
+   drivers/mtd/nand/raw/omap_elm.c:228:39: sparse: sparse: restricted __be32 degrades to integer
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alison-Wang/ethosu-Add-Arm-Ethos-U-driver/20230616-141036
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
-patch link:    https://lore.kernel.org/r/20230616055913.2360-2-alison.wang%40nxp.com
-patch subject: [PATCH 1/8] ethosu: Add Arm Ethos-U driver
-config: mips-randconfig-s032-20230625 (https://download.01.org/0day-ci/archive/20230625/202306250204.6o8RGyDl-lkp@intel.com/config)
-compiler: mipsel-linux-gcc (GCC) 12.3.0
-reproduce: (https://download.01.org/0day-ci/archive/20230625/202306250204.6o8RGyDl-lkp@intel.com/reproduce)
+Fixes: bf22433575ef ("mtd: devices: elm: Add support for ELM error correction")
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202306212211.WDXokuWh-lkp@intel.com/
+Signed-off-by: Roger Quadros <rogerq@kernel.org>
+---
+ drivers/mtd/nand/raw/omap_elm.c | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306250204.6o8RGyDl-lkp@intel.com/
-
-sparse warnings: (new ones prefixed by >>)
->> drivers/firmware/ethosu/ethosu_inference.c:54:28: sparse: sparse: incorrect type in initializer (different base types) @@     expected restricted __poll_t ( *poll )( ... ) @@     got unsigned int ( * )( ... ) @@
-   drivers/firmware/ethosu/ethosu_inference.c:54:28: sparse:     expected restricted __poll_t ( *poll )( ... )
-   drivers/firmware/ethosu/ethosu_inference.c:54:28: sparse:     got unsigned int ( * )( ... )
-   drivers/firmware/ethosu/ethosu_inference.c:361:44: sparse: sparse: non size-preserving integer to pointer cast
-
-vim +54 drivers/firmware/ethosu/ethosu_inference.c
-
-    37	
-    38	/****************************************************************************
-    39	 * Variables
-    40	 ****************************************************************************/
-    41	
-    42	static int ethosu_inference_release(struct inode *inode,
-    43					    struct file *file);
-    44	
-    45	static unsigned int ethosu_inference_poll(struct file *file,
-    46						  poll_table *wait);
-    47	
-    48	static long ethosu_inference_ioctl(struct file *file,
-    49					   unsigned int cmd,
-    50					   unsigned long arg);
-    51	
-    52	static const struct file_operations ethosu_inference_fops = {
-    53		.release        = &ethosu_inference_release,
-  > 54		.poll           = &ethosu_inference_poll,
-    55		.unlocked_ioctl = &ethosu_inference_ioctl,
-    56	#ifdef CONFIG_COMPAT
-    57		.compat_ioctl   = &ethosu_inference_ioctl,
-    58	#endif
-    59	};
-    60	
-
+diff --git a/drivers/mtd/nand/raw/omap_elm.c b/drivers/mtd/nand/raw/omap_elm.c
+index 6e1eac6644a6..4a97d4a76454 100644
+--- a/drivers/mtd/nand/raw/omap_elm.c
++++ b/drivers/mtd/nand/raw/omap_elm.c
+@@ -177,17 +177,17 @@ static void elm_load_syndrome(struct elm_info *info,
+ 			switch (info->bch_type) {
+ 			case BCH8_ECC:
+ 				/* syndrome fragment 0 = ecc[9-12B] */
+-				val = cpu_to_be32(*(u32 *) &ecc[9]);
++				val = (__force u32)cpu_to_be32(*(u32 *)&ecc[9]);
+ 				elm_write_reg(info, offset, val);
+ 
+ 				/* syndrome fragment 1 = ecc[5-8B] */
+ 				offset += 4;
+-				val = cpu_to_be32(*(u32 *) &ecc[5]);
++				val = (__force u32)cpu_to_be32(*(u32 *)&ecc[5]);
+ 				elm_write_reg(info, offset, val);
+ 
+ 				/* syndrome fragment 2 = ecc[1-4B] */
+ 				offset += 4;
+-				val = cpu_to_be32(*(u32 *) &ecc[1]);
++				val = (__force u32)cpu_to_be32(*(u32 *)&ecc[1]);
+ 				elm_write_reg(info, offset, val);
+ 
+ 				/* syndrome fragment 3 = ecc[0B] */
+@@ -197,35 +197,35 @@ static void elm_load_syndrome(struct elm_info *info,
+ 				break;
+ 			case BCH4_ECC:
+ 				/* syndrome fragment 0 = ecc[20-52b] bits */
+-				val = (cpu_to_be32(*(u32 *) &ecc[3]) >> 4) |
++				val = ((__force u32)cpu_to_be32(*(u32 *)&ecc[3]) >> 4) |
+ 					((ecc[2] & 0xf) << 28);
+ 				elm_write_reg(info, offset, val);
+ 
+ 				/* syndrome fragment 1 = ecc[0-20b] bits */
+ 				offset += 4;
+-				val = cpu_to_be32(*(u32 *) &ecc[0]) >> 12;
++				val = (__force u32)cpu_to_be32(*(u32 *)&ecc[0]) >> 12;
+ 				elm_write_reg(info, offset, val);
+ 				break;
+ 			case BCH16_ECC:
+-				val = cpu_to_be32(*(u32 *) &ecc[22]);
++				val = (__force u32)cpu_to_be32(*(u32 *)&ecc[22]);
+ 				elm_write_reg(info, offset, val);
+ 				offset += 4;
+-				val = cpu_to_be32(*(u32 *) &ecc[18]);
++				val = (__force u32)cpu_to_be32(*(u32 *)&ecc[18]);
+ 				elm_write_reg(info, offset, val);
+ 				offset += 4;
+-				val = cpu_to_be32(*(u32 *) &ecc[14]);
++				val = (__force u32)cpu_to_be32(*(u32 *)&ecc[14]);
+ 				elm_write_reg(info, offset, val);
+ 				offset += 4;
+-				val = cpu_to_be32(*(u32 *) &ecc[10]);
++				val = (__force u32)cpu_to_be32(*(u32 *)&ecc[10]);
+ 				elm_write_reg(info, offset, val);
+ 				offset += 4;
+-				val = cpu_to_be32(*(u32 *) &ecc[6]);
++				val = (__force u32)cpu_to_be32(*(u32 *)&ecc[6]);
+ 				elm_write_reg(info, offset, val);
+ 				offset += 4;
+-				val = cpu_to_be32(*(u32 *) &ecc[2]);
++				val = (__force u32)cpu_to_be32(*(u32 *)&ecc[2]);
+ 				elm_write_reg(info, offset, val);
+ 				offset += 4;
+-				val = cpu_to_be32(*(u32 *) &ecc[0]) >> 16;
++				val = (__force u32)cpu_to_be32(*(u32 *)&ecc[0]) >> 16;
+ 				elm_write_reg(info, offset, val);
+ 				break;
+ 			default:
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.34.1
+
