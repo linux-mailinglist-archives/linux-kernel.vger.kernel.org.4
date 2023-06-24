@@ -2,123 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EFE573C5B4
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 03:07:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34DBF73C5BC
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 03:10:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229883AbjFXBH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 21:07:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51488 "EHLO
+        id S230041AbjFXBKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 21:10:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjFXBH0 (ORCPT
+        with ESMTP id S229798AbjFXBKP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 21:07:26 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC2AE26B9;
-        Fri, 23 Jun 2023 18:07:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687568845; x=1719104845;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=P6wZk7MF4SlFUpTpCcuRbEr7K9Mso347QOjbT+IxNlc=;
-  b=Kd0VUo7hbiJ8OVl82u9dZb3AK1qryJFtMQc8uqtxuTH+zCu/FLrrFA9O
-   8XOWk2QcIfzIH8BjapH72SenE4XyB1CxrzERrvQKiY7ZwGgYobs1pNwJZ
-   y+Y38dREuhgj8PA1nu8t1B7qtQIuJ8v7mDRKW9xFlH/w5vB96DlxV4gWv
-   CdFfY8ExIkk8L9pFNDZjLf5YknWR1tYKDcgizl1iglvLGmaxTzximYSUh
-   fqiIWO9wnqRDySzOvYdsPvjUm+RMzWVypeW2tMC8vfR7AOCXEsp9HHY2J
-   YmZWfZ02F4uoF3hQHTqvsbaCCyFXkjCCmrYircEYYURUzGvaRQWP5c+qV
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10750"; a="390970069"
-X-IronPort-AV: E=Sophos;i="6.01,153,1684825200"; 
-   d="scan'208";a="390970069"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2023 18:07:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10750"; a="805378537"
-X-IronPort-AV: E=Sophos;i="6.01,153,1684825200"; 
-   d="scan'208";a="805378537"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 23 Jun 2023 18:07:22 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qCrkH-0008cn-2g;
-        Sat, 24 Jun 2023 01:07:21 +0000
-Date:   Sat, 24 Jun 2023 09:06:30 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Komal Bajaj <quic_kbajaj@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Komal Bajaj <quic_kbajaj@quicinc.com>
-Subject: Re: [PATCH v4 3/6] nvmem: sec-qfprom: Add Qualcomm secure QFPROM
- support.
-Message-ID: <202306240837.Keyvmt2I-lkp@intel.com>
-References: <20230623141806.13388-4-quic_kbajaj@quicinc.com>
+        Fri, 23 Jun 2023 21:10:15 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CACA26BC;
+        Fri, 23 Jun 2023 18:10:14 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-666e6541c98so1065993b3a.2;
+        Fri, 23 Jun 2023 18:10:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687569013; x=1690161013;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nzyMiHrVAPBmQmrLCrjFYbL8kgy1uuE1C1QD2djiUo4=;
+        b=mAhDEYwVkMSgkhJilQDlttOId2SRvWirNMLipjApHZ9EXmYnibY5nbkgA/qs9fafJX
+         JPvKNwU1V51BKGHKoJnYD65/qOEcC0AxS0rEk83CKgviDC0pnOP1Q2PbYxpbD2tBu9g5
+         Jj39S3twz7mCjaq5kJpt1H4bDMYSN9sM5uibmm5FZwyoBAVRZfhNY/gf8pSpCy5Ew2Ih
+         SqULySkscf+/wJLPZpk1I1N63avh5lpR4ZQDBBi/7Pwkmg6mTogwDGeVnaTLi01pRXC0
+         9xPtzPEtgu3LiX0pCrSt9oX+mbjkpEgGlv7lW5YtWMhsZI81fQwp5BljSAAMaPLtDOkg
+         uNBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687569013; x=1690161013;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nzyMiHrVAPBmQmrLCrjFYbL8kgy1uuE1C1QD2djiUo4=;
+        b=R9QCfFXqTBCxjTJiyS8i/fj/CQt1Ud6NeTtQELGk3VYhqkVLTSOnnUgb4AzR4XqyRH
+         9+C/pK36lkZC/+mJhpLofs9R3fmrticfIEXr4n23mKDPmg8mU9HOuld6Wr2RP20093Is
+         zudlS4KraLy6o/cpfUbbXZx5LVpvMWRVQfbNUOSR/la3uCLHkQRMr7GJ2iFWwqHH1QGi
+         6fwnMMo1udiWMyfncpappUS2ZRmapH4yoaUIRej0nnj5YVC/Ru5HN6wk2S1EjhZYYo+s
+         M424fvIMGr9G04qjEuVoHlkFOJtFfoHTI/u345mt9wlHdMgoj0xiJUMjfLhNluXeidKL
+         /kng==
+X-Gm-Message-State: AC+VfDx89b0jNvIdu+iZB6GonC6wGyMPa1mQrgBtECmnXLG+5ZcCq0th
+        bDOx8XEKDQaTtjJrgMfYRME=
+X-Google-Smtp-Source: ACHHUZ6+SYzuSpOORIgwR1SDIJQkdoJoD5dBI7AUowA6ZQpr97qTzPxadexn1DrIHwtU/oNF0w1Pog==
+X-Received: by 2002:a05:6a20:8f29:b0:122:c6c4:36b1 with SMTP id b41-20020a056a208f2900b00122c6c436b1mr12902482pzk.4.1687569013535;
+        Fri, 23 Jun 2023 18:10:13 -0700 (PDT)
+Received: from [192.168.1.180] ([50.46.170.246])
+        by smtp.gmail.com with ESMTPSA id m7-20020aa78a07000000b0063f1a1e3003sm111723pfa.166.2023.06.23.18.10.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Jun 2023 18:10:13 -0700 (PDT)
+Message-ID: <403108b1-5600-bb5e-a0ad-6f802b4b296f@gmail.com>
+Date:   Fri, 23 Jun 2023 18:10:11 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230623141806.13388-4-quic_kbajaj@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.12.0
+Subject: Re: [PATCH v11 00/11] LSM: Three basic syscalls
+To:     Casey Schaufler <casey@schaufler-ca.com>, paul@paul-moore.com,
+        linux-security-module@vger.kernel.org
+Cc:     jmorris@namei.org, serge@hallyn.com, keescook@chromium.org,
+        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
+        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org, mic@digikod.net
+References: <20230616165055.4705-1-casey.ref@schaufler-ca.com>
+ <20230616165055.4705-1-casey@schaufler-ca.com>
+Content-Language: en-US
+From:   Jay Freyensee <why2jjj.linux@gmail.com>
+In-Reply-To: <20230616165055.4705-1-casey@schaufler-ca.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Komal,
 
-kernel test robot noticed the following build warnings:
+On 6/16/23 9:50 AM, Casey Schaufler wrote:
+> Add three system calls for the Linux Security Module ABI.
+>
+> lsm_get_self_attr() provides the security module specific attributes
+> that have previously been visible in the /proc/self/attr directory.
+> For each security module that uses the specified attribute on the
+> current process the system call will return an LSM identifier and
+> the value of the attribute. The LSM and attribute identifier values
+> are defined in include/uapi/linux/lsm.h
+>
+> LSM identifiers are simple integers and reflect the order in which
+> the LSM was added to the mainline kernel. This is a convention, not
+> a promise of the API. LSM identifiers below the value of 100 are
+> reserved for unspecified future uses. That could include information
+> about the security infrastructure itself, or about how multiple LSMs
+> might interact with each other.
+>
+> A new LSM hook security_getselfattr() is introduced to get the
+> required information from the security modules. This is similar
+> to the existing security_getprocattr() hook, but specifies the
+> format in which string data is returned and requires the module
+> to put the information into a userspace destination.
+>
+> lsm_set_self_attr() changes the specified LSM attribute. Only one
+> attribute can be changed at a time, and then only if the specified
+> security module allows the change.
+>
+> A new LSM hook security_setselfattr() is introduced to set the
+> required information in the security modules. This is similar
+> to the existing security_setprocattr() hook, but specifies the
+> format in which string data is presented and requires the module
+> to get the information from a userspace destination.
+>
+> lsm_list_modules() provides the LSM identifiers, in order, of the
+> security modules that are active on the system. This has been
+> available in the securityfs file /sys/kernel/security/lsm.
+Active or available?
 
-[auto build test WARNING on robh/for-next]
-[also build test WARNING on linus/master v6.4-rc7 next-20230623]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+If I use landlock's documentation example:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Komal-Bajaj/dt-bindings-nvmem-sec-qfprom-Add-bindings-for-secure-qfprom/20230623-222054
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20230623141806.13388-4-quic_kbajaj%40quicinc.com
-patch subject: [PATCH v4 3/6] nvmem: sec-qfprom: Add Qualcomm secure QFPROM support.
-config: arm-allmodconfig (https://download.01.org/0day-ci/archive/20230624/202306240837.Keyvmt2I-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.3.0
-reproduce: (https://download.01.org/0day-ci/archive/20230624/202306240837.Keyvmt2I-lkp@intel.com/reproduce)
+Jun 07 10:37:11 fedora kernel: LSM: initializing 
+lsm=lockdown,capability,yama,integrity,selinux,bpf>
+Jun 07 10:37:11 fedora kernel: landlock: Up and running.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306240837.Keyvmt2I-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/nvmem/sec-qfprom.c:31: warning: expecting prototype for struct sec_sec_qfprom_priv. Prototype was for struct sec_qfprom_priv instead
+My interpretation of the two log lines is the first line tells me 
+landlock is available on the distro (fedora this case), but the second 
+line tells me landlock is now active. Thus the lsm available list may be 
+different than the lsm active list.
 
 
-vim +31 drivers/nvmem/sec-qfprom.c
+So is lsm_list_modules() going to tell me just what lsm's are available 
+in a distro for use, or is it going to tell me what lsm's are available 
+_and_ active?
 
-    20	
-    21	
-    22	/**
-    23	 * struct sec_sec_qfprom_priv - structure holding secure qfprom attributes
-    24	 *
-    25	 * @qfpseccorrected: iomapped memory space for secure qfprom corrected address space.
-    26	 * @dev: qfprom device structure.
-    27	 */
-    28	struct sec_qfprom_priv {
-    29		phys_addr_t qfpseccorrected;
-    30		struct device *dev;
-  > 31	};
-    32	
+Thanks,
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Jay
+
