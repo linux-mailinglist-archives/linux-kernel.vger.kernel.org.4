@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14A0273C709
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 08:04:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92D1D73C70A
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 08:04:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232086AbjFXGEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 02:04:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59238 "EHLO
+        id S231949AbjFXGEp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 02:04:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231840AbjFXGEY (ORCPT
+        with ESMTP id S229495AbjFXGE3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 02:04:24 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07DDF273E
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 23:04:11 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-98502b12fd4so30977466b.1
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 23:04:10 -0700 (PDT)
+        Sat, 24 Jun 2023 02:04:29 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB5BC26B3
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 23:04:19 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-98dfd15aae1so892566b.0
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 23:04:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687586649; x=1690178649;
+        d=gmail.com; s=20221208; t=1687586658; x=1690178658;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=g5G3FVlCyqn63CYhl0DzmSuIziSgLL1eeoVVmuGLO64=;
-        b=JFTgUaF0Iyqv+0trbfpYbYGVikT6eeHoKAhZtKqeseNVl9T4VSML3k/8pEOFWj3fKh
-         VxaJtDipH9I+57zVWPG+/PwielTptyDOdsS4Itmgw6kOUG6RXItX2j/vEpfJBxPZPDdo
-         hu43ISwB6SbfxoCvNS/yXTcscWUR6LYM5XLqpuqETwpHk8eE5YYSUJcJhGNvLml8bd+i
-         mOE3JQGVUgfbL/yfHo9uqnQljyMLbifAVBDE2RwnTlAzlKvwWwaxzLnbwrDysyDuLbHi
-         Fj2U1F5Qfk/7TbtQ3V9RhmzAVzHt4Qxf1WrtQzncyQYGTlD/m6Mr5E1DM84JUR6/RoUI
-         eMmA==
+        bh=aIAm9Vi41k3qXg99Kf1VsByjAUO1zMDP7x9TBCdCf+c=;
+        b=Xubiln78018RL+OjfjLgdzhyHqSoYf7eGj8W8zr/cHkUvLydejy95UyNGe3GGDQ0RD
+         TyvHTVDPZc6A0ysmjDNq5Sx5/u3YWgBs5e0OBprkMJC+PKuWqJv4EZnwc99BFfDkdePK
+         jT1basG19dwQ2/blAH5n2ycQ9kNk+We3wuM6KAY3PmztS+YQ4Cg8r7oGdKuhbhvGg93M
+         DJ/1+LgcKD5zuwYSfSz/m8FKPzMQuQC4JgDyYaAxTSfx3mLfajVQqNX39G/cgV0uNiHs
+         lfNwcqS/rStRwVGpRBIH9LwewVuyEugTu4w3y18w1ow2XoTwJFLyEpPkyTHn0ZIOczHQ
+         VpeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687586649; x=1690178649;
+        d=1e100.net; s=20221208; t=1687586658; x=1690178658;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=g5G3FVlCyqn63CYhl0DzmSuIziSgLL1eeoVVmuGLO64=;
-        b=SSdGCHEUbwaQNMwTScAHPed7tugbLR0UuUKVSs3w3nvPMA+oo69hJrrnUQXTCLSavL
-         CF2cwZ1J3n3SOeEkhAiIr9LexxZDMn7ofT2ymNrNiqXE4g3AoH2h0ynVvaaaogMhyo2Q
-         NF60yZdNDw6e10YdvMAbeTzWlGDMa2oPfpv6AnG5moy77xih/SHQA/KgBqXhoJqlM4sV
-         Mo+BLXnBh8BPSvQmjhLhbhZpvRRhJGEevIsX0qS7EyMGgBKCaciZPnu9kgms0HPVBmv0
-         eJalYeB5f/jAHw7cZ8AjCV8E48j939B923G9nsjOVPMXRhPn+vo1+VY6JLSpYSOEYAdK
-         ugfw==
-X-Gm-Message-State: AC+VfDwg846hHarOzs/hmX2a3AxNlPEpctTAoq343I49oPfZ91TOMqNH
-        9bV9VXdgOmbN0a9G0WS1VSM=
-X-Google-Smtp-Source: ACHHUZ6QolQYsLgTtmwGbQQDdtdhMMzk4sp85rd9nFBWiuD41+Qe/TDRy5Vye9p5XMLG0xsmesR5+w==
-X-Received: by 2002:a17:906:7a5e:b0:987:6960:36c6 with SMTP id i30-20020a1709067a5e00b00987696036c6mr15024649ejo.5.1687586649126;
-        Fri, 23 Jun 2023 23:04:09 -0700 (PDT)
+        bh=aIAm9Vi41k3qXg99Kf1VsByjAUO1zMDP7x9TBCdCf+c=;
+        b=iomoyxEzCL00+RDke+ARQNjmJaStemoM1VRCAhkls2LO4Lkqa6EW2/cSUdIRxAYBtM
+         xi+Xn7ByIUuwpkHKtsO8E9aOkhCQB7sCW0/n/HwJyq1umBnIHGWskpxUnZz+afkPKC6v
+         EiVUFS1N0W37ECt4CV1G8CYleJc50G8uO4I3tK2OhPJSKTPplQK/1T9m9zs3QKFhSAzP
+         emycPimcVCLN6VuN/8VkuPBcjmLqPQuscjwtrfIljkzujdwRVN9tj1vCUdUd8TzBDV6f
+         6Ux/tELExv4iYJLqAyAr0yRxIBtci+JefxQmjlvkBVKKa29865EJIu+zQYnUC+g0VpZf
+         HeHQ==
+X-Gm-Message-State: AC+VfDxA4rnd50xgqqVHEYShEnT2Oi4w+bO0/GXeaO0oVVwgLC6+c3sk
+        lpaJRElqkdn2Eer0XsKU9IIpvsFF9c8=
+X-Google-Smtp-Source: ACHHUZ44qCh9A2V2JtqXe7HfgWSDenuqjDpqkkKsb8M/mZkYBS7yj21nnhII0Pen3aSTsUDPfi9JTw==
+X-Received: by 2002:a17:906:779c:b0:988:815c:b9fa with SMTP id s28-20020a170906779c00b00988815cb9famr13169971ejm.3.1687586658031;
+        Fri, 23 Jun 2023 23:04:18 -0700 (PDT)
 Received: from matrix-ESPRIMO-P710 (p57ba2e0b.dip0.t-ipconnect.de. [87.186.46.11])
-        by smtp.gmail.com with ESMTPSA id qq28-20020a17090720dc00b009891da61b1asm501984ejb.44.2023.06.23.23.04.06
+        by smtp.gmail.com with ESMTPSA id rs17-20020a170907037100b00988e699d07fsm496826ejb.112.2023.06.23.23.04.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Jun 2023 23:04:07 -0700 (PDT)
-Date:   Sat, 24 Jun 2023 08:04:05 +0200
+        Fri, 23 Jun 2023 23:04:16 -0700 (PDT)
+Date:   Sat, 24 Jun 2023 08:04:14 +0200
 From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 05/11] staging: rtl8192e: Remove variable modulation as it is
- constant
-Message-ID: <ebd543d097a65f105078c71faceaed2a4d5e7b55.1687583718.git.philipp.g.hortmann@gmail.com>
+Subject: [PATCH 06/11] staging: rtl8192e: Remove variable host_encrypt as it
+ is constant
+Message-ID: <bc4ea0492306f708f0e5cac6bf0239deb3cd9a80.1687583718.git.philipp.g.hortmann@gmail.com>
 References: <cover.1687583718.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -71,226 +71,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ieee->modulation is initialized to 3 and then unchanged. All evaluations
-will result accordingly. Remove resulting dead code.
+ieee->host_encrypt also named priv->rtllib->host_encrypt is initialized
+to 1 and then unchanged. All evaluations will result accordingly. Remove
+resulting dead code.
 
 Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
 ---
- drivers/staging/rtl8192e/rtl8192e/rtl_core.c |   2 -
- drivers/staging/rtl8192e/rtllib.h            |   1 -
- drivers/staging/rtl8192e/rtllib_softmac.c    | 121 ++++++++-----------
- drivers/staging/rtl8192e/rtllib_softmac_wx.c |   4 +-
- 4 files changed, 50 insertions(+), 78 deletions(-)
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.c |  1 -
+ drivers/staging/rtl8192e/rtllib.h            |  1 -
+ drivers/staging/rtl8192e/rtllib_module.c     |  1 -
+ drivers/staging/rtl8192e/rtllib_softmac.c    | 12 ++++--------
+ drivers/staging/rtl8192e/rtllib_tx.c         |  3 +--
+ 5 files changed, 5 insertions(+), 13 deletions(-)
 
 diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-index 4447489a16ea..cb0753f6fb18 100644
+index cb0753f6fb18..838b9c8b0df7 100644
 --- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
 +++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-@@ -804,8 +804,6 @@ static void _rtl92e_init_priv_variable(struct net_device *dev)
+@@ -804,7 +804,6 @@ static void _rtl92e_init_priv_variable(struct net_device *dev)
  	priv->rtllib->iw_mode = IW_MODE_INFRA;
  	priv->rtllib->active_scan = 1;
  	priv->rtllib->be_scan_inprogress = false;
--	priv->rtllib->modulation = RTLLIB_CCK_MODULATION |
--				   RTLLIB_OFDM_MODULATION;
- 	priv->rtllib->host_encrypt = 1;
+-	priv->rtllib->host_encrypt = 1;
  	priv->rtllib->host_decrypt = 1;
  
+ 	priv->rtllib->fts = DEFAULT_FRAG_THRESHOLD;
 diff --git a/drivers/staging/rtl8192e/rtllib.h b/drivers/staging/rtl8192e/rtllib.h
-index e3ce4431d460..fdb7990130b5 100644
+index fdb7990130b5..80090f8a38e7 100644
 --- a/drivers/staging/rtl8192e/rtllib.h
 +++ b/drivers/staging/rtl8192e/rtllib.h
-@@ -1492,7 +1492,6 @@ struct rtllib_device {
+@@ -1441,7 +1441,6 @@ struct rtllib_device {
+ 				 */
  
- 	int short_slot;
- 	int mode;       /* A, B, G */
--	int modulation; /* CCK, OFDM */
+ 	/* If the host performs {en,de}cryption, then set to 1 */
+-	int host_encrypt;
+ 	int host_decrypt;
  
- 	/* used for forcing the ibss workqueue to terminate
- 	 * without wait for the syncro scan to terminate
+ 	int ieee802_1x; /* is IEEE 802.1X used */
+diff --git a/drivers/staging/rtl8192e/rtllib_module.c b/drivers/staging/rtl8192e/rtllib_module.c
+index d6a4d6b4ec57..2ad2e3671ec4 100644
+--- a/drivers/staging/rtl8192e/rtllib_module.c
++++ b/drivers/staging/rtl8192e/rtllib_module.c
+@@ -98,7 +98,6 @@ struct net_device *alloc_rtllib(int sizeof_priv)
+ 	ieee->open_wep = 1;
+ 
+ 	/* Default to enabling full open WEP with host based encrypt/decrypt */
+-	ieee->host_encrypt = 1;
+ 	ieee->host_decrypt = 1;
+ 	ieee->ieee802_1x = 1; /* Default to supporting 802.1x */
+ 
 diff --git a/drivers/staging/rtl8192e/rtllib_softmac.c b/drivers/staging/rtl8192e/rtllib_softmac.c
-index 425d4acbcdf0..c1e5127f5251 100644
+index c1e5127f5251..23b33a239703 100644
 --- a/drivers/staging/rtl8192e/rtllib_softmac.c
 +++ b/drivers/staging/rtl8192e/rtllib_softmac.c
-@@ -35,12 +35,8 @@ static unsigned int rtllib_MFIE_rate_len(struct rtllib_device *ieee)
- {
- 	unsigned int rate_len = 0;
+@@ -807,7 +807,7 @@ static struct sk_buff *rtllib_probe_resp(struct rtllib_device *ieee,
+ 	}
  
--	if (ieee->modulation & RTLLIB_CCK_MODULATION)
--		rate_len = RTLLIB_CCK_RATE_LEN + 2;
--
--	if (ieee->modulation & RTLLIB_OFDM_MODULATION)
--
--		rate_len += RTLLIB_OFDM_RATE_LEN + 2;
-+	rate_len = RTLLIB_CCK_RATE_LEN + 2;
-+	rate_len += RTLLIB_OFDM_RATE_LEN + 2;
+ 	crypt = ieee->crypt_info.crypt[ieee->crypt_info.tx_keyidx];
+-	encrypt = ieee->host_encrypt && crypt && crypt->ops &&
++	encrypt = crypt && crypt->ops &&
+ 		((strcmp(crypt->ops->name, "R-WEP") == 0 || wpa_ie_len));
+ 	if (ieee->ht_info->bCurrentHTSupport) {
+ 		tmp_ht_cap_buf = (u8 *)&(ieee->ht_info->SelfHTCap);
+@@ -943,10 +943,7 @@ static struct sk_buff *rtllib_assoc_resp(struct rtllib_device *ieee, u8 *dest)
+ 		assoc->capability |=
+ 				 cpu_to_le16(WLAN_CAPABILITY_SHORT_SLOT_TIME);
  
- 	return rate_len;
- }
-@@ -53,14 +49,12 @@ static void rtllib_MFIE_Brate(struct rtllib_device *ieee, u8 **tag_p)
- {
- 	u8 *tag = *tag_p;
+-	if (ieee->host_encrypt)
+-		crypt = ieee->crypt_info.crypt[ieee->crypt_info.tx_keyidx];
+-	else
+-		crypt = NULL;
++	crypt = ieee->crypt_info.crypt[ieee->crypt_info.tx_keyidx];
  
--	if (ieee->modulation & RTLLIB_CCK_MODULATION) {
--		*tag++ = MFIE_TYPE_RATES;
--		*tag++ = 4;
--		*tag++ = RTLLIB_BASIC_RATE_MASK | RTLLIB_CCK_RATE_1MB;
--		*tag++ = RTLLIB_BASIC_RATE_MASK | RTLLIB_CCK_RATE_2MB;
--		*tag++ = RTLLIB_BASIC_RATE_MASK | RTLLIB_CCK_RATE_5MB;
--		*tag++ = RTLLIB_BASIC_RATE_MASK | RTLLIB_CCK_RATE_11MB;
--	}
-+	*tag++ = MFIE_TYPE_RATES;
-+	*tag++ = 4;
-+	*tag++ = RTLLIB_BASIC_RATE_MASK | RTLLIB_CCK_RATE_1MB;
-+	*tag++ = RTLLIB_BASIC_RATE_MASK | RTLLIB_CCK_RATE_2MB;
-+	*tag++ = RTLLIB_BASIC_RATE_MASK | RTLLIB_CCK_RATE_5MB;
-+	*tag++ = RTLLIB_BASIC_RATE_MASK | RTLLIB_CCK_RATE_11MB;
+ 	encrypt = (crypt && crypt->ops);
  
- 	/* We may add an option for custom rates that specific HW
- 	 * might support
-@@ -72,18 +66,17 @@ static void rtllib_MFIE_Grate(struct rtllib_device *ieee, u8 **tag_p)
- {
- 	u8 *tag = *tag_p;
+@@ -1115,7 +1112,7 @@ rtllib_association_req(struct rtllib_network *beacon,
  
--	if (ieee->modulation & RTLLIB_OFDM_MODULATION) {
--		*tag++ = MFIE_TYPE_RATES_EX;
--		*tag++ = 8;
--		*tag++ = RTLLIB_BASIC_RATE_MASK | RTLLIB_OFDM_RATE_6MB;
--		*tag++ = RTLLIB_BASIC_RATE_MASK | RTLLIB_OFDM_RATE_9MB;
--		*tag++ = RTLLIB_BASIC_RATE_MASK | RTLLIB_OFDM_RATE_12MB;
--		*tag++ = RTLLIB_BASIC_RATE_MASK | RTLLIB_OFDM_RATE_18MB;
--		*tag++ = RTLLIB_BASIC_RATE_MASK | RTLLIB_OFDM_RATE_24MB;
--		*tag++ = RTLLIB_BASIC_RATE_MASK | RTLLIB_OFDM_RATE_36MB;
--		*tag++ = RTLLIB_BASIC_RATE_MASK | RTLLIB_OFDM_RATE_48MB;
--		*tag++ = RTLLIB_BASIC_RATE_MASK | RTLLIB_OFDM_RATE_54MB;
--	}
-+	*tag++ = MFIE_TYPE_RATES_EX;
-+	*tag++ = 8;
-+	*tag++ = RTLLIB_BASIC_RATE_MASK | RTLLIB_OFDM_RATE_6MB;
-+	*tag++ = RTLLIB_BASIC_RATE_MASK | RTLLIB_OFDM_RATE_9MB;
-+	*tag++ = RTLLIB_BASIC_RATE_MASK | RTLLIB_OFDM_RATE_12MB;
-+	*tag++ = RTLLIB_BASIC_RATE_MASK | RTLLIB_OFDM_RATE_18MB;
-+	*tag++ = RTLLIB_BASIC_RATE_MASK | RTLLIB_OFDM_RATE_24MB;
-+	*tag++ = RTLLIB_BASIC_RATE_MASK | RTLLIB_OFDM_RATE_36MB;
-+	*tag++ = RTLLIB_BASIC_RATE_MASK | RTLLIB_OFDM_RATE_48MB;
-+	*tag++ = RTLLIB_BASIC_RATE_MASK | RTLLIB_OFDM_RATE_54MB;
-+
- 	/* We may add an option for custom rates that specific HW might
- 	 * support
- 	 */
-@@ -1465,8 +1458,7 @@ static void rtllib_associate_complete_wq(void *data)
+ 	crypt = ieee->crypt_info.crypt[ieee->crypt_info.tx_keyidx];
+ 	if (crypt != NULL)
+-		encrypt = ieee->host_encrypt && crypt && crypt->ops &&
++		encrypt = crypt && crypt->ops &&
+ 			  ((strcmp(crypt->ops->name, "R-WEP") == 0 ||
+ 			  wpa_ie_len));
+ 	else
+@@ -2995,8 +2992,7 @@ u8 rtllib_ap_sec_type(struct rtllib_device *ieee)
  
- 	netif_carrier_on(ieee->dev);
- 	ieee->is_roaming = false;
--	if (rtllib_is_54g(&ieee->current_network) &&
--	   (ieee->modulation & RTLLIB_OFDM_MODULATION)) {
-+	if (rtllib_is_54g(&ieee->current_network)) {
- 		ieee->rate = 108;
- 		netdev_info(ieee->dev, "Using G rates:%d\n", ieee->rate);
- 	} else {
-@@ -1652,9 +1644,7 @@ inline void rtllib_softmac_new_net(struct rtllib_device *ieee,
- 				schedule_delayed_work(
- 					   &ieee->associate_procedure_wq, 0);
- 			} else {
--				if (rtllib_is_54g(&ieee->current_network) &&
--				    (ieee->modulation &
--				     RTLLIB_OFDM_MODULATION)) {
-+				if (rtllib_is_54g(&ieee->current_network)) {
- 					ieee->rate = 108;
- 					ieee->set_wireless_mode(ieee->dev, WIRELESS_MODE_G);
- 					netdev_info(ieee->dev,
-@@ -2526,47 +2516,34 @@ static void rtllib_start_ibss_wq(void *data)
- 		if (!ieee->wap_set)
- 			eth_random_addr(ieee->current_network.bssid);
+ 	crypt = ieee->crypt_info.crypt[ieee->crypt_info.tx_keyidx];
+ 	encrypt = (ieee->current_network.capability & WLAN_CAPABILITY_PRIVACY)
+-		  || (ieee->host_encrypt && crypt && crypt->ops &&
+-		  (strcmp(crypt->ops->name, "R-WEP") == 0));
++		  || (crypt && crypt->ops && (strcmp(crypt->ops->name, "R-WEP") == 0));
  
--		if (ieee->modulation & RTLLIB_CCK_MODULATION) {
--			ieee->current_network.rates_len = 4;
--
--			ieee->current_network.rates[0] =
--				 RTLLIB_BASIC_RATE_MASK | RTLLIB_CCK_RATE_1MB;
--			ieee->current_network.rates[1] =
--				 RTLLIB_BASIC_RATE_MASK | RTLLIB_CCK_RATE_2MB;
--			ieee->current_network.rates[2] =
--				 RTLLIB_BASIC_RATE_MASK | RTLLIB_CCK_RATE_5MB;
--			ieee->current_network.rates[3] =
--				 RTLLIB_BASIC_RATE_MASK | RTLLIB_CCK_RATE_11MB;
--
--		} else {
--			ieee->current_network.rates_len = 0;
--		}
--
--		if (ieee->modulation & RTLLIB_OFDM_MODULATION) {
--			ieee->current_network.rates_ex_len = 8;
--
--			ieee->current_network.rates_ex[0] =
--						 RTLLIB_OFDM_RATE_6MB;
--			ieee->current_network.rates_ex[1] =
--						 RTLLIB_OFDM_RATE_9MB;
--			ieee->current_network.rates_ex[2] =
--						 RTLLIB_OFDM_RATE_12MB;
--			ieee->current_network.rates_ex[3] =
--						 RTLLIB_OFDM_RATE_18MB;
--			ieee->current_network.rates_ex[4] =
--						 RTLLIB_OFDM_RATE_24MB;
--			ieee->current_network.rates_ex[5] =
--						 RTLLIB_OFDM_RATE_36MB;
--			ieee->current_network.rates_ex[6] =
--						 RTLLIB_OFDM_RATE_48MB;
--			ieee->current_network.rates_ex[7] =
--						 RTLLIB_OFDM_RATE_54MB;
--
--			ieee->rate = 108;
--		} else {
--			ieee->current_network.rates_ex_len = 0;
--			ieee->rate = 22;
--		}
-+		ieee->current_network.rates_len = 4;
-+		ieee->current_network.rates[0] =
-+			RTLLIB_BASIC_RATE_MASK | RTLLIB_CCK_RATE_1MB;
-+		ieee->current_network.rates[1] =
-+			RTLLIB_BASIC_RATE_MASK | RTLLIB_CCK_RATE_2MB;
-+		ieee->current_network.rates[2] =
-+			RTLLIB_BASIC_RATE_MASK | RTLLIB_CCK_RATE_5MB;
-+		ieee->current_network.rates[3] =
-+			RTLLIB_BASIC_RATE_MASK | RTLLIB_CCK_RATE_11MB;
-+
-+		ieee->current_network.rates_ex_len = 8;
-+		ieee->current_network.rates_ex[0] =
-+			RTLLIB_OFDM_RATE_6MB;
-+		ieee->current_network.rates_ex[1] =
-+			RTLLIB_OFDM_RATE_9MB;
-+		ieee->current_network.rates_ex[2] =
-+			RTLLIB_OFDM_RATE_12MB;
-+		ieee->current_network.rates_ex[3] =
-+			RTLLIB_OFDM_RATE_18MB;
-+		ieee->current_network.rates_ex[4] =
-+			RTLLIB_OFDM_RATE_24MB;
-+		ieee->current_network.rates_ex[5] =
-+			RTLLIB_OFDM_RATE_36MB;
-+		ieee->current_network.rates_ex[6] =
-+			RTLLIB_OFDM_RATE_48MB;
-+		ieee->current_network.rates_ex[7] =
-+			RTLLIB_OFDM_RATE_54MB;
-+		ieee->rate = 108;
+ 	/* simply judge  */
+ 	if (encrypt && (wpa_ie_len == 0)) {
+diff --git a/drivers/staging/rtl8192e/rtllib_tx.c b/drivers/staging/rtl8192e/rtllib_tx.c
+index ec038ef806c3..24fd40284420 100644
+--- a/drivers/staging/rtl8192e/rtllib_tx.c
++++ b/drivers/staging/rtl8192e/rtllib_tx.c
+@@ -635,8 +635,7 @@ static int rtllib_xmit_inter(struct sk_buff *skb, struct net_device *dev)
  
- 		ieee->current_network.qos_data.supported = 0;
- 		ieee->set_wireless_mode(ieee->dev, WIRELESS_MODE_G);
-diff --git a/drivers/staging/rtl8192e/rtllib_softmac_wx.c b/drivers/staging/rtl8192e/rtllib_softmac_wx.c
-index 2de63d1f2009..1a7575ab9d6d 100644
---- a/drivers/staging/rtl8192e/rtllib_softmac_wx.c
-+++ b/drivers/staging/rtl8192e/rtllib_softmac_wx.c
-@@ -487,11 +487,9 @@ EXPORT_SYMBOL(rtllib_wx_set_rawtx);
- int rtllib_wx_get_name(struct rtllib_device *ieee, struct iw_request_info *info,
- 		       union iwreq_data *wrqu, char *extra)
- {
--	const char *b = ieee->modulation & RTLLIB_CCK_MODULATION ? "b" : "";
--	const char *g = ieee->modulation & RTLLIB_OFDM_MODULATION ? "g" : "";
- 	const char *n = ieee->mode & (WIRELESS_MODE_N_24G) ? "n" : "";
- 
--	scnprintf(wrqu->name, sizeof(wrqu->name), "802.11%s%s%s", b, g, n);
-+	scnprintf(wrqu->name, sizeof(wrqu->name), "802.11bg%s", n);
- 	return 0;
- }
- EXPORT_SYMBOL(rtllib_wx_get_name);
+ 		skb->priority = rtllib_classify(skb, IsAmsdu);
+ 		crypt = ieee->crypt_info.crypt[ieee->crypt_info.tx_keyidx];
+-		encrypt = !(ether_type == ETH_P_PAE && ieee->ieee802_1x) &&
+-			ieee->host_encrypt && crypt && crypt->ops;
++		encrypt = !(ether_type == ETH_P_PAE && ieee->ieee802_1x) && crypt && crypt->ops;
+ 		if (!encrypt && ieee->ieee802_1x &&
+ 		    ieee->drop_unencrypted && ether_type != ETH_P_PAE) {
+ 			stats->tx_dropped++;
 -- 
 2.41.0
 
