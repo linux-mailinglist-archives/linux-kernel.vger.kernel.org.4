@@ -2,250 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3022C73CBBA
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 17:53:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1304B73CBC4
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 17:59:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233016AbjFXPxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 11:53:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53734 "EHLO
+        id S233194AbjFXP7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 11:59:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230110AbjFXPxq (ORCPT
+        with ESMTP id S230092AbjFXP7f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 11:53:46 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CD7B91A4
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 08:53:42 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8CxZPCFEZdkhUIBAA--.1927S3;
-        Sat, 24 Jun 2023 23:53:41 +0800 (CST)
-Received: from [10.20.42.43] (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxxsyCEZdkZGsFAA--.4872S3;
-        Sat, 24 Jun 2023 23:53:38 +0800 (CST)
-Message-ID: <c1bac8c0-062a-72ed-e120-802965472191@loongson.cn>
-Date:   Sat, 24 Jun 2023 23:53:38 +0800
+        Sat, 24 Jun 2023 11:59:35 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9219B1AC;
+        Sat, 24 Jun 2023 08:59:34 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4f8689fbf59so3480559e87.0;
+        Sat, 24 Jun 2023 08:59:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687622373; x=1690214373;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nxD3mnsyxsM9A/pK/r4bmilX/vIQZZ/iBExyMlW0hWI=;
+        b=CdxPGMxddVeIEqvQbb6zVuOBbZtFYaa46/5i1pb94WXHhCEK8ugsf1ZTdByvsXJ9of
+         dBth1XXjCG2yJj5u+9HOPMcVNny4WjJUpJgz0CobZcjC57wmrTKxEEuHYVy04+piY0my
+         0p3mWYKl94I53iWEvqGMeEL8nIXLm0EE9+75vrzyC6zTHek0kGWZufe35BAdQ4eChRqU
+         qHRBezqnI7fzTqgEEboO8aNRTdgc+DTRyAyov2bQ4f2T2EeHOPixlNqOufs6J7eDbIPC
+         IG2TQn8AXJNmpRter5Aqx1JRrxJnLdBscufmaqzPjzt750Hj1vkRRiKAhho2hC76ShVe
+         R+Dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687622373; x=1690214373;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nxD3mnsyxsM9A/pK/r4bmilX/vIQZZ/iBExyMlW0hWI=;
+        b=JMBmNVPNSAvtfcsbcmsL6eT0FeNF11Dp57lSRzNGlCUGieE4NQT7drsM8hQ2/DyfmJ
+         6Buvdbxwx+QDrpO8QnlJQz6vCP2C1iypWhNSEjynAsH/FZZYnvbpPd/fVf/kifvq8K4Q
+         TzSTjXK5kqNyKgXTWfZ1lAAxvrPWSeTAX9ddTke0so1QwdnfmByN1MLgOgvMlazFFRq4
+         TldKctk83tfiRhksg2NUwLkA23+0OI2hzC8UTuoYKOV9xX4sMUoXC1LmHD4wWV1qbcqE
+         mIJNvsqKyTCGxoitNirZvS0Nrhm4mgZdQanGo6by7q1ToslLszqR1U/1Se/5l7PAWSc2
+         XTXA==
+X-Gm-Message-State: AC+VfDwOiA798UaV8ERujRARLOm7T/VFKBwCmUMf4Weo3syEUpVFKWNT
+        hHSJN8QzVPpmKO1D+WBdY54=
+X-Google-Smtp-Source: ACHHUZ7WNyxGMyfLzLSOkyJb4r3sDazr+QBWvq4tE/boVMXXeJq4RitMkVuWZUYRRMXR8/WZubyoMA==
+X-Received: by 2002:a05:6512:3c89:b0:4f8:78a8:bfea with SMTP id h9-20020a0565123c8900b004f878a8bfeamr5774392lfv.16.1687622372625;
+        Sat, 24 Jun 2023 08:59:32 -0700 (PDT)
+Received: from [192.168.1.100] ([185.8.126.245])
+        by smtp.gmail.com with ESMTPSA id m25-20020ac24ad9000000b004fad16596fasm31748lfp.21.2023.06.24.08.59.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 24 Jun 2023 08:59:32 -0700 (PDT)
+Message-ID: <a0d74f3f-4208-d7e3-7eed-481a06b13308@gmail.com>
+Date:   Sat, 24 Jun 2023 18:59:31 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v10 01/11] drm/etnaviv: Add a dedicated function to
- register an irq handler
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2 6/6] meson saradc: support reading from channel7 mux
+ inputs
 Content-Language: en-US
-To:     Lucas Stach <l.stach@pengutronix.de>,
-        Sui Jingfeng <18949883232@163.com>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        etnaviv@lists.freedesktop.org
-References: <20230620094716.2231414-1-18949883232@163.com>
- <20230620094716.2231414-2-18949883232@163.com>
- <77f62814f98dd2728a1e4747f0db6b2a3cfa2c11.camel@pengutronix.de>
- <52751b55-ce34-f3a8-b3c0-4858ad984622@loongson.cn>
- <21f781a548cef63312df56cb2265de9a7c9a0901.camel@pengutronix.de>
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-Organization: Loongson
-In-Reply-To: <21f781a548cef63312df56cb2265de9a7c9a0901.camel@pengutronix.de>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        George Stark <gnstark@sberdevices.ru>
+Cc:     jic23@kernel.org, lars@metafoo.de, neil.armstrong@linaro.org,
+        khilman@baylibre.com, jbrunet@baylibre.com,
+        andriy.shevchenko@linux.intel.com, nuno.sa@analog.com,
+        linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        kernel@sberdevices.ru
+References: <20230623022334.791026-1-gnstark@sberdevices.ru>
+ <20230623022334.791026-7-gnstark@sberdevices.ru>
+ <CAFBinCBv993Xv_wk9fE-U0Tw2mzTB1z22Tj6x8Uy1rRw_dztng@mail.gmail.com>
+From:   George Stark <stark.georgy@gmail.com>
+In-Reply-To: <CAFBinCBv993Xv_wk9fE-U0Tw2mzTB1z22Tj6x8Uy1rRw_dztng@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxxsyCEZdkZGsFAA--.4872S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj93XoWxuFyktFyfGrWktw18tw4UWrX_yoW7CF4rpa
-        yxGFyayr4kCryUK342qwn8ZFna9w4xX3yrZr1DK3sF93s0qF1DtryrtF4Uua4fAryrGw4j
-        qr4Utr4xuF15ZrXCm3ZEXasCq-sJn29KB7ZKAUJUUUU3529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUPFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-        Gr0_Gr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
-        kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWU
-        twAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMx
-        k0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l
-        4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxV
-        WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI
-        7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
-        1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI
-        42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU4SoGDUUUU
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hello Martin
 
-On 2023/6/21 18:16, Lucas Stach wrote:
-> Am Mittwoch, dem 21.06.2023 um 17:20 +0800 schrieb Sui Jingfeng:
->> Hi,
->>
->> On 2023/6/21 17:07, Lucas Stach wrote:
->>> Am Dienstag, dem 20.06.2023 um 17:47 +0800 schrieb Sui Jingfeng:
->>>> From: Sui Jingfeng <suijingfeng@loongson.cn>
->>>>
->>>> Because getting IRQ from a device is platform-dependent, PCI devices have
->>>> different methods for getting an IRQ. This patch is a preparation to extend
->>>> this driver for supporting the PCI devices.
->>>>
->>>> Cc: Lucas Stach <l.stach@pengutronix.de>
->>>> Cc: Christian Gmeiner <christian.gmeiner@gmail.com>
->>>> Cc: Philipp Zabel <p.zabel@pengutronix.de>
->>>> Cc: Bjorn Helgaas <bhelgaas@google.com>
->>>> Cc: Daniel Vetter <daniel@ffwll.ch>
->>>> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
->>>> ---
->>>>    drivers/gpu/drm/etnaviv/etnaviv_gpu.c | 32 +++++++++++++++++++--------
->>>>    1 file changed, 23 insertions(+), 9 deletions(-)
->>>>
->>>> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gpu.c b/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
->>>> index de8c9894967c..a03e81337d8f 100644
->>>> --- a/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
->>>> +++ b/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
->>>> @@ -1817,6 +1817,27 @@ static const struct of_device_id etnaviv_gpu_match[] = {
->>>>    };
->>>>    MODULE_DEVICE_TABLE(of, etnaviv_gpu_match);
->>>>    
->>>> +static int etnaviv_gpu_register_irq(struct etnaviv_gpu *gpu, int irq)
->>>> +{
->>>> +	struct device *dev = gpu->dev;
->>>> +	int err;
->>>> +
->>>> +	if (irq < 0)
->>>> +		return irq;
->>>> +
->>>> +	err = devm_request_irq(dev, irq, irq_handler, 0, dev_name(dev), gpu);
->>>> +	if (err) {
->>>> +		dev_err(dev, "failed to request irq %u: %d\n", irq, err);
->>>> +		return err;
->>>> +	}
->>>> +
->>>> +	gpu->irq = irq;
->>>> +
->>>> +	dev_info(dev, "irq(%d) handler registered\n", irq);
->>> There is no reason to put this into the kernel log.
->> I want to see the IRQ of the device when debugging,
->>
->> etnaviv actually print very less.
->>
->> This serve as a minimal signal  to us the etnaviv_gpu_register_irq()
->> function is successful at driver load time.
->>
-> And debugging is a very different use-case than normal operation. If
-> it's needed at all, downgrade this to dev_dbg. This isn't interesting
-> information for a ordinary user of a system.
+Thanks for review
+
+On 6/23/23 09:16, Martin Blumenstingl wrote:
+> Hi George,
 >
->>>    It's no different
->>> than other resources to the driver and we don't log each one of those
->>> either.
->>>
->>> In fact I don't see any reason for this change in the first place.
->>> Effectively you are moving a single function call into a new function,
->>> which doesn't seem like an improvement.
->> This is to make the patch easy to review, each patch is only introduce a
->> small function,
->>
-> What I'm saying is that I don't see the need to introduce this function
-> at all. All you need to do is move platform_get_irq out into the
-> platform device code path. The devm_request_irq can stay where it is,
-> as the only difference between platform and PCI device is how the irq
-> number is retrieved from the platform.
-
-Yes, you are right. I understand what are asking, but my point is:
-
-
-This patch is paving the way for us to introduce the PCI device driver.
-
-All of the patches before the patch 
-v10-0006-drm-etnaviv-Add-driver-support-for-the-PCI-devic.patch
-
-are actually doing the preparation.
-
-
-Look at the patch 0006, I achieve the goal by 128 insertions and 7 
-deletions.
-
-while the only 7 deletions are actually for code shading(convert the 
-static function to global function).
-
-There is No large area diff and NO distortion.
-
-The goal is adding a PCI device driver on the top of what we already have.
-
-
-Before the cleanup, the etnaviv_gpu_platform_probe() function is just 
-like is a *glue*.
-
-Originally,  it integrate a lot of irrelevant part together.
-
-
-1.  Mapping MMIO registers make it platform-dependent;
-
-2.  Calling platform_get_irq(pdev, 0) make it platform-dependent;
-
-3.  Getting Clocks by calling devm_clk_get() make it platform-dependent;
-
-4.  Calling component_add() make it subsytem and framework-dependent;
-
-
-All of above list item is deny us to introduce the PCI device driver 
-wrapper.
-
-It(sub-functional code) is not relevant to each other.
-
-Hence the first five patch is actually do the clean,
-
-for the clarify(and tidy and good looking) of the patch 6.
-
-
-I will drop the printing, but keep the cleanup function there,
-
-Is this acceptable?
-
-
-> Regards,
-> Lucas
+> On Fri, Jun 23, 2023 at 4:23 AM George Stark <gnstark@sberdevices.ru> wrote:
+> [...]
+>> Meson saradc channel 7 is connected to muxer that can switch channel
+> I think that this should read: ... is connected to a mux that ...
 >
->> which is paving the way for we introducing the PCI device driver.
->>
->> Otherwise when we introducing the PCI device driver, the patch is looks
->> ugly,
->>
->> It is difficult to review.
->>
->>> Regards,
->>> Lucas
->>>
->>>> +
->>>> +	return 0;
->>>> +}
->>>> +
->>>>    static int etnaviv_gpu_platform_probe(struct platform_device *pdev)
->>>>    {
->>>>    	struct device *dev = &pdev->dev;
->>>> @@ -1837,16 +1858,9 @@ static int etnaviv_gpu_platform_probe(struct platform_device *pdev)
->>>>    		return PTR_ERR(gpu->mmio);
->>>>    
->>>>    	/* Get Interrupt: */
->>>> -	gpu->irq = platform_get_irq(pdev, 0);
->>>> -	if (gpu->irq < 0)
->>>> -		return gpu->irq;
->>>> -
->>>> -	err = devm_request_irq(&pdev->dev, gpu->irq, irq_handler, 0,
->>>> -			       dev_name(gpu->dev), gpu);
->>>> -	if (err) {
->>>> -		dev_err(dev, "failed to request IRQ%u: %d\n", gpu->irq, err);
->>>> +	err = etnaviv_gpu_register_irq(gpu, platform_get_irq(pdev, 0));
->>>> +	if (err)
->>>>    		return err;
->>>> -	}
->>>>    
->>>>    	/* Get Clocks: */
->>>>    	gpu->clk_reg = devm_clk_get_optional(&pdev->dev, "reg");
+> [...]
+>>   static const struct iio_chan_spec meson_sar_adc_iio_channels[] = {
+>> @@ -245,6 +280,11 @@ static const struct iio_chan_spec meson_sar_adc_iio_channels[] = {
+>>          MESON_SAR_ADC_CHAN(INDEX_CHAN_6),
+>>          MESON_SAR_ADC_CHAN(INDEX_CHAN_7),
+>>          IIO_CHAN_SOFT_TIMESTAMP(INDEX_CHAN_SOFT_TIMESTAMP),
+>> +       MESON_SAR_ADC_MUX(INDEX_MUX_0_VSS, 0),
+>> +       MESON_SAR_ADC_MUX(INDEX_MUX_1_VDD_DIV4, 1),
+>> +       MESON_SAR_ADC_MUX(INDEX_MUX_2_VDD_DIV2, 2),
+>> +       MESON_SAR_ADC_MUX(INDEX_MUX_3_VDD_MUL3_DIV4, 3),
+>> +       MESON_SAR_ADC_MUX(INDEX_MUX_4_VDD, 4),
+>>          MESON_SAR_ADC_TEMP_CHAN(), /* must be the last item */
+> I haven't had the chance to run these patches yet but: I think they
+> are breaking the temperature sensor readings on Meson8/8b/8m2 boards.
+> See arch/arm/boot/dts/meson.dtsi where the temperature channel is
+> being referenced:
+>    io-channels = <&saradc 8>
+>
+> With this series (this patch and I think also patch 3/6 "meson saradc:
+> unite iio channel array definitions") the numbering of the temperature
+> sensor channel changes.
+>
+> To make things worse: in theory we can use meson_saradc to read the
+> SoC temperature sensor on GXBB, GXL and GXM boards (possibly on AXG as
+> well but I can't recall from the top of my head) instead of going
+> through SCPI.
+> I have experimented with this in the past but never got it to work.
+> Doing so in the future could lead to another channel index change,
+> depending on how we decide to go forward now.
+>
+> There's two that I can think of:
+> - update meson.dtsi to use the new channel numbering (I don't expect
+> many 32-bit SoC users out there using new kernel + old .dtbs, but it's
+> impossible to say for sure)
+> - or keep the driver backwards compatible (that involves re-adding the
+> channel tables)
+>
+> What do you think?
+Actually we'd have to make 2 patches to meson.dtsi, the first change 
+8->9, than 9 ->14.
+And if that index exposed externally (ABI like) I'd not change it 
+without good reason at all.
+So I think to return to double definition of meson_sar_adc_iio_channels 
+and keep the driver backwards compatible.
 
--- 
-Jingfeng
+I've just realized another moment with channels defined after 
+MESON_SAR_ADC_TEMP_CHAN in channel array.
+In dts by default channels are referenced by channel array index not 
+even by channel number.
+So channel e.g MUX_0_VSS will have the same number (due to enum patch) 
+but different index on meson8 and gxbb.
+As alternative we can implement fwnode_xlate method in meson adc driver 
+and use channel numbers in dts
+(probably not in the current patchset).
+
+Best regards,
+George
+
+>
+> Best regards,
+> Martin
+>
+> _______________________________________________
+> linux-amlogic mailing list
+> linux-amlogic@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-amlogic
+
 
