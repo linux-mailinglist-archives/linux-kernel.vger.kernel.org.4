@@ -2,68 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FC5573C703
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 08:03:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCF0B73C704
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 08:03:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231445AbjFXGD2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 02:03:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58340 "EHLO
+        id S231610AbjFXGDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 02:03:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjFXGDZ (ORCPT
+        with ESMTP id S229493AbjFXGDc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 02:03:25 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 083A126B3
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 23:03:25 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1b7e66ff65fso142795ad.0
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 23:03:25 -0700 (PDT)
+        Sat, 24 Jun 2023 02:03:32 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D797F271F
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 23:03:30 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-98502b12fd4so30970566b.1
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 23:03:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1687586604; x=1690178604;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=hBPPH4/uw0ABWvVPTs2OWTzo1oNRx61u6JuJ/5dY43c=;
-        b=I0vRFb+kCb71Z0VAHVn+jYVYu4Xd2HLgqO4gYa8zyJmzJVQgFpUYnMQ8H5ZenOEacF
-         HHFZ5+OP/TQq06FRNQrPH4QN66dq4PM3XLOc517r3+6xj9Q+CIEShSzFXBt34sbmoTpI
-         MdfWZGmHEWVKJ3v7yuyrwzoxNEBDFmvzXg5+gtXoIDBIp85spmcNBjUjJTg5PQ249ev4
-         fPju/XdxvcA4LErbMgJtyQF9Vg11QPcTEKZHHhK0s+Xq0PbfDshFFA4+yTOH9ChWv1hk
-         DHY+KCUEAUxXLle4/wJQXvrtVJGN+iRNpyOhd5N8PdrPtBF+8SnHy0HZfmT64kURnZTL
-         9CzQ==
+        d=gmail.com; s=20221208; t=1687586609; x=1690178609;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mL9869uxyI9VJka/GpEbEqxA2gTl4XYgCP6XmikgbWg=;
+        b=KrT3nlmFrRckgej3EWQdrMhhwVwBjzrvCeKbYSm4GryxSBGSfZJqopI8ggLhHATxlF
+         X3KeiJSxAxHcRIn0Q/B78O+W+ycO7BW5/oCyM1ttUUFo+CEIUqCbufzVFvNIX9F/I2S8
+         Sttbp+affykocKqcCf1PYXgtR8K/3j9uN3xx/KrPt8PYWlkTtAiDa3IZWhPIR8PqUma7
+         XGi1Inc36tP9z8ig+3GGyzTCrsxPVXQ5pELQtSzpzUPMOF6CUUx1BeMN0Kki8ZC7vYos
+         389zdgxNvOPW/TOInfp+0ZG2q4daTAy+BJLvOdCw3jjpvHvbE8ajA7ZFNcqJd6esXV9A
+         R9WQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687586604; x=1690178604;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hBPPH4/uw0ABWvVPTs2OWTzo1oNRx61u6JuJ/5dY43c=;
-        b=AQt9tCEdbaCW1i4D2b2d3qam8aLapoTxb198DATamjnqa875vfaviS9qPW4kJeEtK7
-         oFb31Oqua3TkEnMvfy2JI9MM5TBfH5zF2YLvQu3jNBpFIUPAhhtep5cqjM1WZMCkXhkJ
-         jZbv2mr8b/FBEIItDuceKBtpRITj3pMKiqB30TfdWQTGXtsZ+SKeW8Dzt1eKQjYOAYm6
-         fO9HYHpFQ2106sCLkrvqqJvQvAP5zXNHFDvRngO7pIbReIox6KWTC5bZXZxMAF/6DWFq
-         QzmvoLJyZv648+k30TWQfLsrQfZ3pdMhe0KGa7R3/8fioR7dYSkFvh2bjnGOqC++dYqh
-         3QXA==
-X-Gm-Message-State: AC+VfDxgrYHZRQSldOyGKuXzIeYX6jaTZZtB+WJY3qWRwsENwZrkpAgK
-        QiL6c1sUMWhId/0FxlmXQ/6SiQ==
-X-Google-Smtp-Source: ACHHUZ4V9zO6Xv3qreahhHVgK9sxCO7H5Govxp5RPtg6T+PU20Khx2zOATbEIt9AW0daKtDaQEHVWQ==
-X-Received: by 2002:a17:903:41c7:b0:1b5:5ad6:ce9d with SMTP id u7-20020a17090341c700b001b55ad6ce9dmr1527206ple.50.1687586604471;
-        Fri, 23 Jun 2023 23:03:24 -0700 (PDT)
-Received: from sw06.internal.sifive.com ([64.62.193.194])
-        by smtp.gmail.com with ESMTPSA id u15-20020a17090341cf00b001b539640aa3sm465802ple.283.2023.06.23.23.03.23
+        d=1e100.net; s=20221208; t=1687586609; x=1690178609;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mL9869uxyI9VJka/GpEbEqxA2gTl4XYgCP6XmikgbWg=;
+        b=I6xF/KHTokzwWKuNrqbaPe7lrsAYKYo6+w963nRqKjzma9B3yIvBiqMLFJOVctgP4C
+         Hd19o3GBFctUin60oLV64JpqzoCOAIxfHMlRTaHB9VG5nfsyzDN+nUtiO2C2mIJBBAZv
+         PKtWdSpENyjZah3mfi3zyliDU2ry3OjruufARv9qTDBKmQNA5SOUUZ5KLbnuPVdqijCe
+         H+2V55jD2QE0rgxEJXd8T/UYNbBh+TbiyjGEVxww04h2cBj1+PCa8eQEtkACwtDw/x7w
+         JPZkG2qgax8ZVUYl1aCDOS/0mbS7W4cOJVFAxWYtsYsrOQIiLwBkL/Nd546clDh80/PL
+         Cd6A==
+X-Gm-Message-State: AC+VfDxUxBBszm5I+ww8eK/HHQkGetjadQt1zEP+S1iIxVVVvOPJaCqP
+        hMv6qBrwHq0fE83fFqeXx7Q=
+X-Google-Smtp-Source: ACHHUZ71JsXJxmduI4bxXw8okqNOiCMMO3kl0Ul5sr3juEPBHKJD0o+3qiywaXc2weRWWgA5B/lPAA==
+X-Received: by 2002:a17:906:64d5:b0:988:8e7a:d953 with SMTP id p21-20020a17090664d500b009888e7ad953mr12886879ejn.1.1687586609039;
+        Fri, 23 Jun 2023 23:03:29 -0700 (PDT)
+Received: from matrix-ESPRIMO-P710 (p57ba2e0b.dip0.t-ipconnect.de. [87.186.46.11])
+        by smtp.gmail.com with ESMTPSA id k19-20020a1709061c1300b0098dd3981be9sm491456ejg.224.2023.06.23.23.03.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Jun 2023 23:03:24 -0700 (PDT)
-From:   Samuel Holland <samuel.holland@sifive.com>
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     Samuel Holland <samuel.holland@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: [PATCH] riscv: Select HAVE_ARCH_USERFAULTFD_MINOR
-Date:   Fri, 23 Jun 2023 23:03:20 -0700
-Message-Id: <20230624060321.3401504-1-samuel.holland@sifive.com>
-X-Mailer: git-send-email 2.40.1
+        Fri, 23 Jun 2023 23:03:26 -0700 (PDT)
+Date:   Sat, 24 Jun 2023 08:03:22 +0200
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH 00/11] staging: rtl8192e: Remove timer function TsSetupTimeOut
+Message-ID: <cover.1687583718.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,29 +67,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This allocates the VM flag needed to support the userfaultfd minor fault
-functionality. Because the flag bit is >= bit 32, it can only be enabled
-for 64-bit kernels. See commit 7677f7fd8be7 ("userfaultfd: add minor
-fault registration mode") for more information.
+Remove unchanged or unused variables and code.
 
-Signed-off-by: Samuel Holland <samuel.holland@sifive.com>
----
+Tested with rtl8192e (WLL6130-D99) in Modes b, g, n (12.5 MB/s)
+Transferred this patch over wlan connection of rtl8192e.
 
- arch/riscv/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+Philipp Hortmann (11):
+  staging: rtl8192e: Remove unused timer SetupTimer
+  staging: rtl8192e: Remove equation of local variable InactTime of
+    AdmitTS
+  staging: rtl8192e: Remove unused timer InactTimer
+  staging: rtl8192e: Remove empty function AdmitTS
+  staging: rtl8192e: Remove variable modulation as it is constant
+  staging: rtl8192e: Remove variable host_encrypt as it is constant
+  staging: rtl8192e: Remove variable host_decrypt as it is constant
+  staging: rtl8192e: Remove variable card_type
+  staging: rtl8192e: Remove variable bdisable_nic
+  staging: rtl8192e: Remove variable priv->reg_chnl_plan
+  staging: rtl8192e: Remove variable ieee->short_slot
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 5966ad97c30c..21e864fa93db 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -97,6 +97,7 @@ config RISCV
- 	select HAVE_ARCH_THREAD_STRUCT_WHITELIST
- 	select HAVE_ARCH_TRACEHOOK
- 	select HAVE_ARCH_TRANSPARENT_HUGEPAGE if 64BIT && MMU
-+	select HAVE_ARCH_USERFAULTFD_MINOR if 64BIT && USERFAULTFD
- 	select HAVE_ARCH_VMAP_STACK if MMU && 64BIT
- 	select HAVE_ASM_MODVERSIONS
- 	select HAVE_CONTEXT_TRACKING_USER
+ .../staging/rtl8192e/rtl8192e/r8192E_dev.c    |   5 +-
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.c  |  20 ---
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.h  |   8 -
+ drivers/staging/rtl8192e/rtl819x_TS.h         |   2 -
+ drivers/staging/rtl8192e/rtl819x_TSProc.c     |  35 -----
+ drivers/staging/rtl8192e/rtllib.h             |   6 -
+ drivers/staging/rtl8192e/rtllib_module.c      |   3 -
+ drivers/staging/rtl8192e/rtllib_rx.c          |  44 +++---
+ drivers/staging/rtl8192e/rtllib_softmac.c     | 143 +++++++-----------
+ drivers/staging/rtl8192e/rtllib_softmac_wx.c  |   4 +-
+ drivers/staging/rtl8192e/rtllib_tx.c          |   3 +-
+ 11 files changed, 80 insertions(+), 193 deletions(-)
+
 -- 
-2.40.1
+2.41.0
 
