@@ -2,91 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0543473C533
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 02:40:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA91F73C539
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 02:41:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230256AbjFXAkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 20:40:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42228 "EHLO
+        id S231175AbjFXAlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 20:41:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjFXAkt (ORCPT
+        with ESMTP id S229496AbjFXAlG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 20:40:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D2FA1AC;
-        Fri, 23 Jun 2023 17:40:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Fri, 23 Jun 2023 20:41:06 -0400
+Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [IPv6:2001:4b7a:2000:18::169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80CFA294B;
+        Fri, 23 Jun 2023 17:41:03 -0700 (PDT)
+Received: from Marijn-Arch-PC.localdomain (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CAE6D6146A;
-        Sat, 24 Jun 2023 00:40:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47185C433C8;
-        Sat, 24 Jun 2023 00:40:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1687567248;
-        bh=tVg5s9VJqtFDSCB4yf/yVZmsm6c9AOFNIJmymZLmQXc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=2qp1uOot+UAgUcb76qH1ad157/Hycte5aC0DoRw2TJHQYoKtbkg8eXZUTAZHsJUj7
-         AuxEbij+raRz67arMMpNbuOOf59d30MNdX2GBpsASw1bVgEDP0sawF2CB12dn6miqR
-         heDOOOryHpBmd8PqehNqIjKVWuY/v7Q74uo+VaZU=
-Date:   Fri, 23 Jun 2023 17:40:46 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
-Cc:     "Yajun Deng" <yajun.deng@linux.dev>,
-        "Christoph Hellwig" <hch@lst.de>, corbet@lwn.net,
-        catalin.marinas@arm.com, will@kernel.org, m.szyprowski@samsung.com,
-        robin.murphy@arm.com, paulmck@kernel.org, bp@suse.de,
-        peterz@infradead.org, rdunlap@infradead.org, kim.phillips@amd.com,
-        rostedt@goodmis.org, thunder.leizhen@huawei.com, ardb@kernel.org,
-        bhe@redhat.com, anshuman.khandual@arm.com,
-        song.bao.hua@hisilicon.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux.dev, Barry Song <baohua@kernel.org>
-Subject: Re: [PATCH] dma-contiguous: support per-numa CMA for all
- architectures
-Message-Id: <20230623174046.66ce934bcf5c1303003a5afc@linux-foundation.org>
-In-Reply-To: <20230515133821.769158bb@meshulam.tesarici.cz>
-References: <20230515094955.GB23880@lst.de>
-        <20230512094210.141540-1-yajun.deng@linux.dev>
-        <055f964384a2bb4ba51c64a0be6072c9@linux.dev>
-        <20230515133821.769158bb@meshulam.tesarici.cz>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id D454E3F78B;
+        Sat, 24 Jun 2023 02:41:00 +0200 (CEST)
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+Subject: [PATCH 00/15] drm/msm: Add SM6125 MDSS/DPU hardware and enable
+ Sony Xperia 10 II panel
+Date:   Sat, 24 Jun 2023 02:40:58 +0200
+Message-Id: <20230624-sm6125-dpu-v1-0-1d5a638cebf2@somainline.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJs7lmQC/x2NSwqDQBAFryK9ToOOZiS5SnAxn5fYYCYyjSEg3
+ t0myyooaidFFSjdm50qvqLyKQbdpaE0h/ICSzYm17q+9W5gffvOXTmvGwfkdPP9CIyRLIhBwbG
+ GkmZLyrYsJteKp/z+h8d0HCeH6zvdcQAAAA==
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, Lux Aliaga <they@mint.lgbt>,
+        Marijn Suijten <marijn.suijten@somainline.org>
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 15 May 2023 13:38:21 +0200 Petr Tesařík <petr@tesarici.cz> wrote:
+Bring up the SM6125 DPU now that all preliminary series (such as INTF
+TE) have been merged (for me to test the hardware properly), and most
+other conflicting work (barring ongoing catalog *improvements*) has made
+its way in as well or is still being discussed.
 
-> On Mon, 15 May 2023 11:23:27 +0000
-> "Yajun Deng" <yajun.deng@linux.dev> wrote:
-> 
-> > May 15, 2023 5:49 PM, "Christoph Hellwig" <hch@lst.de> wrote:
-> > 
-> > > This looks fine to me. Can you please work with Barry to make sure
-> > > the slight different place of the initcall doesn't break anything
-> > > for his setup? I doubt it would, but I'd rather have a Tested-by:
-> > > tag.  
-> > 
-> > Barry's email is no longer in use. I can't reach him.
-> 
-> Which one? I would hope that his Gmail account is still valid:
-> 
->   Barry Song <21cnbao@gmail.com>
-> 
+The second part of the series complements that by immediately utilizing
+this hardware in DT, and even enabling the MDSS/DSI nodes complete with
+a 6.0" 1080x2520 panel for Sony's Seine PDX201 (Xperia 10 II).
 
-Maybe his kernel.org address works...
+The last patch ("sm6125-seine: Configure MDSS, DSI and panel") depends
+on (an impending v2 of) my Sony panel collection series [1].
 
-I have this patch stuck in limbo for 6.4.  I guess I'll carry it over
-into the next -rc cycle, see what happens.
+[1]: https://lore.kernel.org/linux-arm-msm/20230521-drm-panels-sony-v1-0-541c341d6bee@somainline.org/
 
-fwiw, it has been in -next for six weeks, no known issues.
+---
+Marijn Suijten (15):
+      arm64: dts: qcom: sm6125: Sort spmi_bus node numerically by reg
+      dt-bindings: clock: qcom,dispcc-sm6125: Remove unused GCC_DISP_AHB_CLK
+      dt-bindings: clock: qcom,dispcc-sm6125: Require GCC PLL0 DIV clock
+      dt-bindings: clock: qcom,dispcc-sm6125: Allow power-domains property
+      dt-bindings: display/msm: dsi-controller-main: Document SM6125
+      dt-bindings: display/msm: sc7180-dpu: Describe SM6125
+      dt-bindings: display/msm: Add SM6125 MDSS
+      drm/msm/dpu: Add SM6125 support
+      drm/msm/mdss: Add SM6125 support
+      dt-bindings: msm: dsi-phy-14nm: Document SM6125 variant
+      drm/msm/dsi: Add 14nm phy configuration for SM6125
+      arm64: dts: qcom: sm6125: Switch fixed xo_board clock to RPM XO clock
+      arm64: dts: qcom: sm6125: Add dispcc node
+      arm64: dts: qcom: sm6125: Add display hardware nodes
+      arm64: dts: qcom: sm6125-seine: Configure MDSS, DSI and panel
+
+ .../bindings/clock/qcom,dispcc-sm6125.yaml         |  17 +-
+ .../bindings/display/msm/dsi-controller-main.yaml  |   2 +
+ .../bindings/display/msm/dsi-phy-14nm.yaml         |   1 +
+ .../bindings/display/msm/qcom,sc7180-dpu.yaml      |   1 +
+ .../bindings/display/msm/qcom,sm6125-mdss.yaml     | 206 +++++++++++++++++
+ .../dts/qcom/sm6125-sony-xperia-seine-pdx201.dts   |  59 +++++
+ arch/arm64/boot/dts/qcom/sm6125.dtsi               | 244 +++++++++++++++++++--
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_5_4_sm6125.h | 173 +++++++++++++++
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c     |   6 +
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h     |   1 +
+ drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c            |   1 +
+ drivers/gpu/drm/msm/dsi/phy/dsi_phy.c              |   2 +
+ drivers/gpu/drm/msm/dsi/phy/dsi_phy.h              |   1 +
+ drivers/gpu/drm/msm/dsi/phy/dsi_phy_14nm.c         |  15 ++
+ drivers/gpu/drm/msm/msm_mdss.c                     |   8 +
+ 15 files changed, 712 insertions(+), 25 deletions(-)
+---
+base-commit: 8d2be868b42c08290509c60515865f4de24ea704
+change-id: 20230624-sm6125-dpu-aedc9637ee7b
+
+Best regards,
+-- 
+Marijn Suijten <marijn.suijten@somainline.org>
+
