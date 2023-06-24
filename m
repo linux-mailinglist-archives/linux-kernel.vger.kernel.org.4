@@ -2,160 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38F3673CA3A
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 11:33:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D39273CA42
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 11:38:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233071AbjFXJdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 05:33:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57406 "EHLO
+        id S232769AbjFXJiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 05:38:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231911AbjFXJdl (ORCPT
+        with ESMTP id S231911AbjFXJiW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 05:33:41 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 299071A3;
-        Sat, 24 Jun 2023 02:33:37 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8BxFsVwuJZkgyoBAA--.1921S3;
-        Sat, 24 Jun 2023 17:33:36 +0800 (CST)
-Received: from [10.20.42.43] (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxrM5vuJZkHQEFAA--.25269S3;
-        Sat, 24 Jun 2023 17:33:35 +0800 (CST)
-Message-ID: <97bc4380-1a2a-aec7-168e-04536fc74e37@loongson.cn>
-Date:   Sat, 24 Jun 2023 17:33:35 +0800
+        Sat, 24 Jun 2023 05:38:22 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5ABE1BF8
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 02:38:20 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-51a3e6a952aso1569778a12.3
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 02:38:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687599499; x=1690191499;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zXBFCivXYU4jqrNenN0qqCdwRcocFvfR8QjuhlC/BNA=;
+        b=R68zl3EL0G2cCxmLykHsoLVBaFLnVsVmuPYJGvZiSFCkHgoVSkrCVf+n9i4Q0yOWDg
+         +s3so7MPt6yCrcnH39+6/mDLpjDbQlfumyCDRYM5HqCSpU9oTSBp+QQf2zvVy7sT5rAD
+         2ykkyJqbMz5FGn0oRZxWJqtn5SDEWmV05NL2H7P+GTJcYpMBAe2nmTcWDWq0phXF2Vy1
+         V35CVaORp5+zHfJsaY6+dDEXzyY8zC53AGNPotbheHGgrCeaEZc/QW00F8XsLkmTsR8o
+         D8y22pr6oO09jUpK6NSkr1fXkD/x7wTyaXTr+xcvIe5OsPJ8dmTwsBZ1tW8HKDYaQt/u
+         cq0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687599499; x=1690191499;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zXBFCivXYU4jqrNenN0qqCdwRcocFvfR8QjuhlC/BNA=;
+        b=WZ+F3PWIRWJlLoYXYR5z2iFkXWla4cWhR4qUAZBazf7iU3EB1USx2aOIw76utxPfEH
+         Csn9/Up9Q/s9e+4Nm7NiXdLk1yZ6slzuJxbnleGTAdOYcN8v7SRud+Mrek36nOSI/DzW
+         4q8RnG3+gL0Tu2Ml7BYYwb4nRmTg5orl6g4Ub9T+c0dvIjnZXW6SYGKhSaHxAjYC3Z2T
+         Ea6GblCtgeI0oVEhY7OxxbUWIXwBLbUA0djPd+DQVGPRuNc8sr+3bYl899qiFJWXl3li
+         y52hY13Os1jzt3Wm0X+jZ/LYQr+tX/dncpHvboE1LoLR313j0oJansxokPZ2dQp5Srjc
+         Kn8A==
+X-Gm-Message-State: AC+VfDxJAIKVxblaj7qSdXgS5t8zyeSDGUDgKYE3sACLcaZ8a2BSCqpq
+        VhjffBvKeATaZeTpmvPLBHD/mQ==
+X-Google-Smtp-Source: ACHHUZ7PVLABuL30C6bX/NntvPW8rghUXjMj6NCmfnVnVEa70oQE8lUdlRmnW05GgXT5nQ/s5wXJbw==
+X-Received: by 2002:aa7:c14a:0:b0:51b:deaf:a489 with SMTP id r10-20020aa7c14a000000b0051bdeafa489mr5936677edp.12.1687599499110;
+        Sat, 24 Jun 2023 02:38:19 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id v9-20020aa7cd49000000b005187a42b44fsm474958edw.58.2023.06.24.02.38.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 24 Jun 2023 02:38:18 -0700 (PDT)
+Message-ID: <e61aa4a6-ca7d-3e33-1971-92b97f8d876e@linaro.org>
+Date:   Sat, 24 Jun 2023 11:38:16 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [28/39] drm: renesas: shmobile: Use drm_crtc_handle_vblank()
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Magnus Damm <magnus.damm@gmail.com>
-Cc:     linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-References: <7b6ffa43307522833103fe29ec6a084b7d621a16.1687423204.git.geert+renesas@glider.be>
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 1/7] dt-bindings: soc: qcom: Add qcom-pbs bindings
 Content-Language: en-US
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-Organization: Loongson
-In-Reply-To: <7b6ffa43307522833103fe29ec6a084b7d621a16.1687423204.git.geert+renesas@glider.be>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxrM5vuJZkHQEFAA--.25269S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj93XoWxAFyfGw4kZFWfuw1fWr4Dtrc_yoW5XF4Up3
-        y7JryayFyjqFWFqwnrGFn7ur13u345Ga4fCrW8t345Aw4vqw1fJF1rAw13Kr45JF97ua1j
-        qr43K3yrZF1UuFXCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUBjb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-        Gr0_Gr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
-        kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWU
-        AwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMx
-        k0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_
-        Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67
-        AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8I
-        cVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI
-        8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v2
-        6r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07je0PfUUUUU=
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Anjelique Melendez <quic_amelende@quicinc.com>, pavel@ucw.cz,
+        lee@kernel.org, thierry.reding@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        agross@kernel.org, andersson@kernel.org
+Cc:     konrad.dybcio@linaro.org, u.kleine-koenig@pengutronix.de,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pwm@vger.kernel.org
+References: <20230621185949.2068-1-quic_amelende@quicinc.com>
+ <20230621185949.2068-2-quic_amelende@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230621185949.2068-2-quic_amelende@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-
-I'm fine with this patch but I I don't see the benefit.
-
-This reply is more about my personal question.
-
-
-On 2023/6/22 17:21, Geert Uytterhoeven wrote:
-> Replace the call to the legacy drm_handle_vblank() function with a call
-> to the new drm_crtc_handle_vblank() helper.
->
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Reviewed-by: Sui Jingfeng <suijingfeng@loongson.cn>
+On 21/06/2023 20:59, Anjelique Melendez wrote:
+> Add binding for the Qualcomm Programmable Boot Sequencer device.
+> 
+> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
 > ---
->   drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c b/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c
-> index c98e2bdd888c3274..6eaf2c5a104f451a 100644
-> --- a/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c
-> +++ b/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c
-> @@ -86,7 +86,7 @@ static irqreturn_t shmob_drm_irq(int irq, void *arg)
->   	spin_unlock_irqrestore(&sdev->irq_lock, flags);
->   
->   	if (status & LDINTR_VES) {
-> -		drm_handle_vblank(dev, 0);
-> +		drm_crtc_handle_vblank(&sdev->crtc.base);
+>  .../bindings/soc/qcom/qcom-pbs.yaml           | 41 +++++++++++++++++++
+>  1 file changed, 41 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom-pbs.yaml
+
+Except missing testing... few more comments:
 
 
-After switching to drm_crtc_handle_vblank(),
+> 
+> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom-pbs.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom-pbs.yaml
+> new file mode 100644
+> index 000000000000..0a89c334f95c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom-pbs.yaml
 
-your driver need another deference to the pointer of 'struct drm_crtc' 
-to get the pointer of 'struct drm_device';
+Filename matching compatibles, so qcom,pbs
 
-Plus another call to get the index(display pipe) of the CRTC by calling 
-drm_crtc_index(crtc).
+> @@ -0,0 +1,41 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/soc/qcom/qcom-pbs.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm Technologies, Inc. PBS
 
+Qualcomm PBS foo bar a bit more than just one word.
 
-Consider that shmob-drm support only one display pipe,
+E.g. expand PBS acronym
 
-is it that the switching is less straight forward than the original 
-implement ?
+> +
+> +maintainers:
+> +  - Anjelique Melendez <quic_amelende@quicinc.com>
+> +
+> +description: |
+> +  Qualcomm PBS (programmable boot sequencer) supports triggering sequences
+> +  for clients upon request.
 
+I don't understand what's this. What is "triggering sequences"? What
+sequences?
 
-```
+> +
+> +properties:
+> +  compatible:
+> +    const: qcom,pbs
 
-/**
-  * drm_crtc_handle_vblank - handle a vblank event
-  * @crtc: where this event occurred
-  *
-  * Drivers should call this routine in their vblank interrupt handlers to
-  * update the vblank counter and send any signals that may be pending.
-  *
-  * This is the native KMS version of drm_handle_vblank().
-  *
-  * Note that for a given vblank counter value drm_crtc_handle_vblank()
-  * and drm_crtc_vblank_count() or drm_crtc_vblank_count_and_time()
-  * provide a barrier: Any writes done before calling
-  * drm_crtc_handle_vblank() will be visible to callers of the later
-  * functions, if the vblank count is the same or a later one.
-  *
-  * See also &drm_vblank_crtc.count.
-  *
-  * Returns:
-  * True if the event was successfully handled, false on failure.
-  */
-bool drm_crtc_handle_vblank(struct drm_crtc *crtc)
-{
-     return drm_handle_vblank(crtc->dev, drm_crtc_index(crtc));
-}
-
-```
-
-Is it that drm_crtc_handle_vblank() function is preferred over 
-drm_handle_vblank() in the future?
-
-I'm fine with this question answered.
+Missing SoC specific comaptibles.
 
 
->   		shmob_drm_crtc_finish_page_flip(&sdev->crtc);
->   	}
->   
+> +
+> +  reg:
+> +    description: |
+> +      Base address of the PBS peripheral.
 
--- 
-Jingfeng
+Drop description, it's obvious.
+
+> +    maxItems: 1
+> +
+
+Binding looks very incomplete...
+
+> +required:
+> + - compatible
+> + - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    pmic {
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +
+> +      qcom,pbs@7400 {
+
+That's not a proper node name. Do you see anywhere such node? Please, do
+not work on downstream code, but on mainline.
+
+> +        compatible = "qcom,pbs";
+> +        reg = <0x7400>;
+> +      };
+> +    };
+
+Best regards,
+Krzysztof
 
