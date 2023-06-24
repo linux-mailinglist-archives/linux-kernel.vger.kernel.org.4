@@ -2,120 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 913D773C89A
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 10:05:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 898FF73C8A5
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 10:08:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232750AbjFXIF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 04:05:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55682 "EHLO
+        id S232276AbjFXIIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 04:08:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233005AbjFXIEs (ORCPT
+        with ESMTP id S231834AbjFXIIX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 04:04:48 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11D0F2D7B
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 01:04:17 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-51a2de3385fso1739370a12.0
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 01:04:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687593835; x=1690185835;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2jxU1m/bl74A0iGu9LghKPO8HvECi5G5jZ9eqVP2K3E=;
-        b=SQ0F0qO5g/dUpqxHfRkqAYysEzXvOCArdnrhQsHQTlUpG7NayIMU6j1M2rIyjBDVya
-         x5px8eudLBvKa84lRJJJox+1RP1u6RG7I1xJ9FenVAaTLFcvXxgX7X5ih71vApTZLSbv
-         jPst2ohqwiY8Dhs65PTypQT3PU1VOdXW3gc/LGGAmf2aKmiwxKxPmvg/XQ3LmeShtkHn
-         TVnw0tPg8J0iFuIZ2T8pexQvID1xGMf6y37Y2M+HtoGRe+TKcwVt3TXz2RyCw4u5aGsC
-         ExNyGnCkujtDC5OUwFx3xqyNXKIGBCRZBf8fZD4pMy0kbJDPIdlgOlzISH7nDoHMFTw1
-         MrAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687593835; x=1690185835;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2jxU1m/bl74A0iGu9LghKPO8HvECi5G5jZ9eqVP2K3E=;
-        b=IGCLNyirqYzMma6oj9K9Q/AuUo+cIxhZ5+La48NLE1CLwFLTHHH8/i12N+12l+moHM
-         FK2cqACCwNgnDb5Q8rxUv5K7LlcCWu5TYEjf6C/SSAA/O5rNHOnK1pBYJVv5KWTYZRp5
-         yQWUzF6xIIH+2JIpwCcKoIqytaIhessLJYDUyj86nzASmw33lFWcuqL/7/fTvVFY4bAw
-         WgkPgxLHcV92RAl1aXQgvsUzrwj/GexxzACkzf+9zbDEtkR112L6cpm1VVTZhdI/Gafd
-         HQ91445NrIqM+fLNeGcWXD+U0mqCWhBTMxrpMQIrqJUp921KVOL0ZGreJeGfqGZnu119
-         yPhQ==
-X-Gm-Message-State: AC+VfDyCFBiqYqipFY1kmwTfN52qNQ+C9m40VAM799KDcwuBzLkxmfpa
-        vbzh8PSkg+GDVKrJsi1pj2aFjA==
-X-Google-Smtp-Source: ACHHUZ7SxDDSVPtNN64oZsP8HBukovPFIpinv/C1GfUthOVpQroM4LCwYJgVu5igdC2NaJUOIO0FXQ==
-X-Received: by 2002:aa7:dbd9:0:b0:518:7ad9:64bb with SMTP id v25-20020aa7dbd9000000b005187ad964bbmr15293063edt.19.1687593835490;
-        Sat, 24 Jun 2023 01:03:55 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id c4-20020aa7d604000000b0051a4a1abdbbsm411437edr.49.2023.06.24.01.03.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 24 Jun 2023 01:03:54 -0700 (PDT)
-Message-ID: <7ad81b90-0463-c660-d290-34ccfc1c2e5e@linaro.org>
-Date:   Sat, 24 Jun 2023 10:03:49 +0200
+        Sat, 24 Jun 2023 04:08:23 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56DBBDC;
+        Sat, 24 Jun 2023 01:08:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de;
+ s=s31663417; t=1687594095; x=1688198895; i=deller@gmx.de;
+ bh=nV3CTyxNKPTPooCvqcC4CRaJBTriP3iL6heU9HaLMsk=;
+ h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+ b=WEND6irihw3+hXVTVzVRCtDU6tDJ9hPbciyqs75FgtbyRqGH3K2kBeb0ngWAak/YLiCruqG
+ 3chkD/b1oSHz1pnxe0UhMIdnhtU32g+Zsjiuo05hJ4h3X2jkZKWd4pMm6pr5m7Yju+tQtAeYq
+ EH1WW8dp7uCijj7T2gHUwb029m15dhuoDgoInJ+3SzQswAOaqvpNqbUjlb2gyuzmpGVAqS755
+ dz0jXPu5CkW1S1Hi0DKU8gbpHWIhLZM84ATshOTLpLqqT5h6FB1RgMI5aZUKosGMHkgzVBBdb
+ 8N1f1ola9udpPt+hSoAleFGxHSah31B6qQezb8NF1HvsYdRB2YTA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.20.60] ([94.134.156.152]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MRTRH-1qPQd93pht-00NNmj; Sat, 24
+ Jun 2023 10:08:15 +0200
+Message-ID: <4570ff59-8f31-b218-7c21-0a69eb9130f3@gmx.de>
+Date:   Sat, 24 Jun 2023 10:08:14 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2 44/45] dt-bindings: arm: add sam9x75 curiosity board
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] MAINTAINERS: adjust entry in VIA UNICHROME(PRO)/CHROME9
+ FRAMEBUFFER DRIVER
 Content-Language: en-US
-To:     Varshini Rajendran <varshini.rajendran@microchip.com>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        herbert@gondor.apana.org.au, davem@davemloft.net, vkoul@kernel.org,
-        tglx@linutronix.de, maz@kernel.org, lee@kernel.org,
-        ulf.hansson@linaro.org, tudor.ambarus@linaro.org,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linus.walleij@linaro.org, p.zabel@pengutronix.de,
-        olivia@selenic.com, a.zummo@towertech.it,
-        radu_nicolae.pirea@upb.ro, richard.genoud@gmail.com,
-        gregkh@linuxfoundation.org, lgirdwood@gmail.com,
-        broonie@kernel.org, wim@linux-watchdog.org, linux@roeck-us.net,
-        arnd@arndb.de, olof@lixom.net, soc@kernel.org,
-        linux@armlinux.org.uk, sre@kernel.org, jerry.ray@microchip.com,
-        horatiu.vultur@microchip.com, durai.manickamkr@microchip.com,
-        andrew@lunn.ch, alain.volmat@foss.st.com,
-        neil.armstrong@linaro.org, mihai.sain@microchip.com,
-        eugen.hristev@collabora.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Cc:     Hari.PrasathGE@microchip.com, cristian.birsan@microchip.com,
-        balamanikandan.gunasundar@microchip.com,
-        manikandan.m@microchip.com, dharma.b@microchip.com,
-        nayabbasha.sayed@microchip.com, balakrishnan.s@microchip.com
-References: <20230623203056.689705-1-varshini.rajendran@microchip.com>
- <20230623203056.689705-45-varshini.rajendran@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230623203056.689705-45-varshini.rajendran@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Florian Tobias Schandinat <FlorianSchandinat@gmx.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230623040736.9026-1-lukas.bulwahn@gmail.com>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <20230623040736.9026-1-lukas.bulwahn@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:sdgtWdVp7ip4/4ayIBB1vUFupzXQG/VWEONZNgCv661G2u7SWyo
+ 2fHSGlayiRWr/Pz7IZnIpC94+PobtToPkpGjUSj2YFJmi5kJB1tqS8Cf4oVDdi72MC5Rv67
+ dsWrfcCdDqO8V5gyoZWqNPKgAlQnOrc/wnwKyMMcCtDRMJWrLPYrdFaqMXdsHL750B9ArS1
+ YWGP1tsJqwXKxJJOTSwkQ==
+UI-OutboundReport: notjunk:1;M01:P0:PYeCmMABKKI=;z6O1tiq+JqUujWJ+qFqTF8l+vsN
+ M2rVfKqx94bc4Mpq4LGO37g3bCi2ZctqOl5cs+uIJZOoeawuCulUxGWCnAVyC5gxx9u4i5Yme
+ XaomuDRTwvM46beTVb5NCbnkpNQ+mv4uZKJLxGxx2mh7V+RU/DCjT2DLu8612JjtWk4fOvaXW
+ eRLdfl56WmNiMrjLVbekqV9qvOuIAr0uEeRBYbOsovSBMYcc33TFmt8D/bewFeDbo3raEFzfc
+ Ndr+1r82vHSJpBZLALAsKQpErerQrLJYEbDVk3q5BDYPdRKxKo3CV1J1aglbHj5BoqJKk2Lbb
+ lye1tCsdimB3hnkrpqMBrsZFl2anzH8XKECNxOqTtcnvVyBkNL2L+O46HfKjO90tLHK8Xq4NB
+ 6SRea2Y+NfQvRlN7Xq4ZT3lXZ9jOi2FifkgI44nJ0DwdURwf4i8U7CG2lrJl2cpmIWk8fqSlR
+ fIQ5GvmPX/tlGaKK404qkQrlpRkXrpS2ez4IyP/n6Q/9MnKXHt4fGCSqzbMLKqUX+hvnz1xKR
+ Tp50v6EeW7fdApM0hsUGAIvDGJ9XIqZ51crchbhDG5d886L102q6bj563zk/90z5jiqGAlJYu
+ 5pkjO3ltq3V2u7Ff0r/4AplrETTzRF7koBC0FMZm23spgjJcXI9aoxaauBy1iSZCW/YOsmfLm
+ m969E7UR0AwfdoRJhw/q4OorflltI/YgmEYedOdc+uPsz8oaTlkCJY4OzqQ6pELAKGqn68/9h
+ u4iDbGejirxAk3WkopHgUI3Ox7ZCr4pesIDisMxKtLRqI3ROBGDcbNIaKpJDoZvqbBLSDYgZ4
+ jWguu9MRZPMpDOroSmKFwB0/yc23s81jBqIqw05Y4o8XEGgZAJhytxWpxNwZrjhLXYeuuX9iI
+ BmYg6eLCUdG0zlgtcqesbibcW14SOr4YeTH6t50C4s0Il50XcnS3qHcxjD4dzXEHHTNhyYRw1
+ fIw9y+HH/Dl6yiEAcO1Z+N8FvY8=
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/06/2023 22:30, Varshini Rajendran wrote:
-> Add documentation for SAM9X75 Curiosity board.
-> 
-> Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
+On 6/23/23 06:07, Lukas Bulwahn wrote:
+> Commit d4313a68ec91 ("fbdev/media: Use GPIO descriptors for VIA GPIO")
+> moves via-gpio.h from include/linux to drivers/video/fbdev/via, but miss=
+es
+> to adjust the file entry for the VIA UNICHROME(PRO)/CHROME9 FRAMEBUFFER
+> DRIVER section.
+>
+> Hence, ./scripts/get_maintainer.pl --self-test=3Dpatterns complains abou=
+t a
+> broken reference.
+>
+> Remove the file entry in VIA UNICHROME(PRO)/CHROME9 FRAMEBUFFER DRIVER, =
+as
+> the new location of the header is already covered by the file entry
+> drivers/video/fbdev/via/.
+>
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+
+Added the Fixes tag and applied.
+
+Thanks!
+Helge
+
 > ---
->  Documentation/devicetree/bindings/arm/atmel-at91.yaml | 6 ++++++
-
-Did you receive here tags?
-
-Best regards,
-Krzysztof
+>   MAINTAINERS | 1 -
+>   1 file changed, 1 deletion(-)
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 88954a1c0017..e12ac544aa9d 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -22415,7 +22415,6 @@ L:	linux-fbdev@vger.kernel.org
+>   S:	Maintained
+>   F:	drivers/video/fbdev/via/
+>   F:	include/linux/via-core.h
+> -F:	include/linux/via-gpio.h
+>   F:	include/linux/via_i2c.h
+>
+>   VIA VELOCITY NETWORK DRIVER
 
