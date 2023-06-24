@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2F3D73CC71
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 20:42:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30C0073CC72
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 20:42:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233236AbjFXSmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 14:42:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48278 "EHLO
+        id S233248AbjFXSmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 14:42:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233219AbjFXSmq (ORCPT
+        with ESMTP id S233233AbjFXSmr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 14:42:46 -0400
+        Sat, 24 Jun 2023 14:42:47 -0400
 Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DB922736;
-        Sat, 24 Jun 2023 11:42:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB4C273D;
+        Sat, 24 Jun 2023 11:42:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1687632117; bh=cx5Lu/G2tw/bbfykj8m6/Hs/WOmB+fLUfJpSp6qrCjQ=;
+        t=1687632119; bh=eN0XWTl7RfDHYLHR5QCiltkIlDC96O/391olzbyd6qc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nLHaBtIPDZ8YeXtguxGys+9gJj+vFo/X2qM6lCoKw4/Tb9d56uBxlJOczJ+kgXyFL
-         SQJw86wQ890A3xRmMKOgaa6XMfp4zssdBDLTDlTVL/ErToe9N467kG6W7UH7VRttsy
-         8eAWG//3w3Gjy+LnrZjFrVL4CdmdkQLPSC0Rkc/o=
+        b=da6JduTUoxoszKkVxVXY+j4YYyoyjONHX5J/Laxd8qNa2RFLtGZEfC2GT6w0QlICf
+         yZVG8PK1uBbfu0MXyy2qAWhfL8HAlg/K17Dsz7WE8FdYI7mnZ6UgW3jOra5B39mO5v
+         bX7c6IleGWinbf3KjQmZqLbdJxYs4UCpZRIgo4dY=
 Received: from ld50.lan (unknown [101.88.25.181])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id DB27E6015B;
-        Sun, 25 Jun 2023 02:41:56 +0800 (CST)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id EC3256015C;
+        Sun, 25 Jun 2023 02:41:58 +0800 (CST)
 From:   WANG Xuerui <kernel@xen0n.name>
 To:     Huacai Chen <chenhuacai@kernel.org>
 Cc:     WANG Rui <wangrui@loongson.cn>, Xi Ruoyao <xry111@xry111.site>,
         loongarch@lists.linux.dev, linux-kbuild@vger.kernel.org,
         llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
         WANG Xuerui <git@xen0n.name>
-Subject: [PATCH v2 5/9] LoongArch: Simplify the invtlb wrappers
-Date:   Sun, 25 Jun 2023 02:40:51 +0800
-Message-Id: <20230624184055.3000636-6-kernel@xen0n.name>
+Subject: [PATCH v2 6/9] LoongArch: Remove all -G0 switches from CFLAGS
+Date:   Sun, 25 Jun 2023 02:40:52 +0800
+Message-Id: <20230624184055.3000636-7-kernel@xen0n.name>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230624184055.3000636-1-kernel@xen0n.name>
 References: <20230624184055.3000636-1-kernel@xen0n.name>
@@ -53,103 +53,51 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: WANG Xuerui <git@xen0n.name>
 
-The invtlb instruction has been supported by upstream LoongArch
-toolchains from day one, so ditch the raw opcode trickery and just use
-plain inline asm for it.
+In GCC, -G stands for "small data threshold", that instructs the
+compiler to put data smaller than the specified threshold in a dedicated
+"small data" section (called .sdata on LoongArch and several other
+arches).
 
-While at it, also make the invtlb asm statements barriers, for proper
-modeling of the side effects.
-
-The signature of the other more specific invtlb wrappers contain unused
-arguments right now, but these are not removed right away in order for
-the patch to be focused. In the meantime, assertions are added to ensure
-no accidental misuse happens before the refactor. (The more specific
-wrappers cannot re-use the generic invtlb wrapper, because the ISA
-manual says $zero shall be used in case a particular op does not take
-the respective argument: re-using the generic wrapper would mean losing
-control over the register usage.)
+However, benefiting from this would require ABI cooperation, which is
+not the case for LoongArch; and current GCC behave the same whether -G0
+(equal to disabling this optimization) is given or not. So, remove -G0
+from CFLAGS altogether for one less thing to care about. This also
+benefits LLVM/Clang compatibility where the -G switch is not supported.
 
 Signed-off-by: WANG Xuerui <git@xen0n.name>
 ---
- arch/loongarch/include/asm/tlb.h | 39 ++++++++++++++++----------------
- 1 file changed, 19 insertions(+), 20 deletions(-)
+ arch/loongarch/Makefile      | 4 ++--
+ arch/loongarch/vdso/Makefile | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/loongarch/include/asm/tlb.h b/arch/loongarch/include/asm/tlb.h
-index 0dc9ee2b05d2..15750900540c 100644
---- a/arch/loongarch/include/asm/tlb.h
-+++ b/arch/loongarch/include/asm/tlb.h
-@@ -88,52 +88,51 @@ enum invtlb_ops {
- 	INVTLB_GID_ADDR = 0x16,
- };
+diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
+index a27e264bdaa5..366771016b99 100644
+--- a/arch/loongarch/Makefile
++++ b/arch/loongarch/Makefile
+@@ -46,8 +46,8 @@ ld-emul			= $(64bit-emul)
+ cflags-y		+= -mabi=lp64s
+ endif
  
--/*
-- * invtlb op info addr
-- * (0x1 << 26) | (0x24 << 20) | (0x13 << 15) |
-- * (addr << 10) | (info << 5) | op
-- */
- static inline void invtlb(u32 op, u32 info, u64 addr)
- {
-+	BUILD_BUG_ON(!__builtin_constant_p(op));
- 	__asm__ __volatile__(
--		"parse_r addr,%0\n\t"
--		"parse_r info,%1\n\t"
--		".word ((0x6498000) | (addr << 10) | (info << 5) | %2)\n\t"
--		:
--		: "r"(addr), "r"(info), "i"(op)
-+		"invtlb %0, %1, %2\n\t"
- 		:
-+		: "i"(op), "r"(info), "r"(addr)
-+		: "memory"
- 		);
- }
+-cflags-y			+= -G0 -pipe -msoft-float
+-LDFLAGS_vmlinux			+= -G0 -static -n -nostdlib
++cflags-y			+= -pipe -msoft-float
++LDFLAGS_vmlinux			+= -static -n -nostdlib
  
- static inline void invtlb_addr(u32 op, u32 info, u64 addr)
- {
-+	BUILD_BUG_ON(!__builtin_constant_p(op));
-+	BUILD_BUG_ON(!__builtin_constant_p(info) || info != 0);
- 	__asm__ __volatile__(
--		"parse_r addr,%0\n\t"
--		".word ((0x6498000) | (addr << 10) | (0 << 5) | %1)\n\t"
--		:
--		: "r"(addr), "i"(op)
-+		"invtlb %0, $zero, %1\n\t"
- 		:
-+		: "i"(op), "r"(addr)
-+		: "memory"
- 		);
- }
- 
- static inline void invtlb_info(u32 op, u32 info, u64 addr)
- {
-+	BUILD_BUG_ON(!__builtin_constant_p(op));
-+	BUILD_BUG_ON(!__builtin_constant_p(addr) || addr != 0);
- 	__asm__ __volatile__(
--		"parse_r info,%0\n\t"
--		".word ((0x6498000) | (0 << 10) | (info << 5) | %1)\n\t"
--		:
--		: "r"(info), "i"(op)
-+		"invtlb %0, %1, $zero\n\t"
- 		:
-+		: "i"(op), "r"(info)
-+		: "memory"
- 		);
- }
- 
- static inline void invtlb_all(u32 op, u32 info, u64 addr)
- {
-+	BUILD_BUG_ON(!__builtin_constant_p(op));
-+	BUILD_BUG_ON(!__builtin_constant_p(info) || info != 0);
-+	BUILD_BUG_ON(!__builtin_constant_p(addr) || addr != 0);
- 	__asm__ __volatile__(
--		".word ((0x6498000) | (0 << 10) | (0 << 5) | %0)\n\t"
-+		"invtlb %0, $zero, $zero\n\t"
- 		:
- 		: "i"(op)
--		:
-+		: "memory"
- 		);
- }
- 
+ # When the assembler supports explicit relocation hint, we must use it.
+ # GCC may have -mexplicit-relocs off by default if it was built with an old
+diff --git a/arch/loongarch/vdso/Makefile b/arch/loongarch/vdso/Makefile
+index 4c859a0e4754..ee4abcf5642e 100644
+--- a/arch/loongarch/vdso/Makefile
++++ b/arch/loongarch/vdso/Makefile
+@@ -25,7 +25,7 @@ endif
+ cflags-vdso := $(ccflags-vdso) \
+ 	-isystem $(shell $(CC) -print-file-name=include) \
+ 	$(filter -W%,$(filter-out -Wa$(comma)%,$(KBUILD_CFLAGS))) \
+-	-O2 -g -fno-strict-aliasing -fno-common -fno-builtin -G0 \
++	-O2 -g -fno-strict-aliasing -fno-common -fno-builtin \
+ 	-fno-stack-protector -fno-jump-tables -DDISABLE_BRANCH_PROFILING \
+ 	$(call cc-option, -fno-asynchronous-unwind-tables) \
+ 	$(call cc-option, -fno-stack-protector)
 -- 
 2.40.0
 
