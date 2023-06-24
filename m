@@ -2,56 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85D9073CD33
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 00:10:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73A9873CD36
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 00:10:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229484AbjFXWKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 18:10:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41452 "EHLO
+        id S229766AbjFXWKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 18:10:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjFXWK2 (ORCPT
+        with ESMTP id S229481AbjFXWKl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 18:10:28 -0400
+        Sat, 24 Jun 2023 18:10:41 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D922EE6B
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 15:10:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AE411728;
+        Sat, 24 Jun 2023 15:10:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6149560ACC
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 22:10:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BFA51C433C8;
-        Sat, 24 Jun 2023 22:10:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C5F3E60A72;
+        Sat, 24 Jun 2023 22:10:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42D18C433C8;
+        Sat, 24 Jun 2023 22:10:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687644626;
-        bh=Af1wluoPesxzfC6tKSmwNEv1detWSwXXYbav1TrsDwA=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=mh/fzCZcwqpyIeqjker9f2jPAVerk0DNhYcqeTejx//Fd3adpYJZPYA3REXj4jw2Z
-         e8Chl6qu+5m9z9wym14l6m3te9WoAQkPi/8qAl8jpKO3QpBfnu229OV9rrVxxCq1TG
-         2Ns2hK/IGLSIGRigP95uS9CtJXERnm+xRIgDOMb30Alot5Xc1hYzmjdl1FFD6Kon1N
-         bflR1fXCpkHCgsGzyc/C1KHHF5mt2Q2uJHHdjoT130t2fk+zj0TZ+5t+7YWUT5hrND
-         dl8i1AAmylMO/ud2zhYABP0TKTEjU5lui0WrV/pAYHQRyrRLOFVaKYj+XQyphZXQMN
-         UIt4OA4yBg3fA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A4544C395F1;
-        Sat, 24 Jun 2023 22:10:26 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1687644639;
+        bh=HWt8oRnYu87Ln4J37mjVUiNFUEhjYUmsz1tsbbm/9FQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=AP5cpRleJJxVIBPpCJ76uLDgVgCP/AGaJnlKcIitMzQ/jqV7ODH2Xa3+rHcTjgiWw
+         i7kR+s9dHvWl5t9FnQlg8YoOlYgalhCQaufFlEi/dVFFBhGV7rtw/VXQ3LXMU+LE9m
+         X/eDmmmiMVQUYrqA52A7wo8hn3Me8u8m356GcndmGixUbgCf+QpEO2DArhhJrFt6cB
+         WtvWXmc01AUUSEkpIz5g8t68XhbFA4gSu04WfCAx/1JsvR60WS6aTb+oBHamvj7gBN
+         TfNJN+Y4WDxyPp95aHQfb0TAAYlbhIzIzwKZ4hc1ZUlNIZTgsC9vCj7OMaimFZzaxi
+         e36XYhHUKSl6w==
+Date:   Sat, 24 Jun 2023 15:10:37 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     longli@linuxonhyperv.com
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
+        Ajay Sharma <sharmaajay@microsoft.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-rdma@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Long Li <longli@microsoft.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v2] net: mana: Batch ringing RX queue doorbell on
+ receiving packets
+Message-ID: <20230624151037.699c50c6@kernel.org>
+In-Reply-To: <1687450956-6407-1-git-send-email-longli@linuxonhyperv.com>
+References: <1687450956-6407-1-git-send-email-longli@linuxonhyperv.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v2] net: phy: broadcom: drop brcm_phy_setbits() and
- use phy_set_bits() instead
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168764462666.18414.17822935967545944021.git-patchwork-notify@kernel.org>
-Date:   Sat, 24 Jun 2023 22:10:26 +0000
-References: <20230622184721.24368-1-giulio.benetti@benettiengineering.com>
-In-Reply-To: <20230622184721.24368-1-giulio.benetti@benettiengineering.com>
-To:     Giulio Benetti <giulio.benetti@benettiengineering.com>
-Cc:     f.fainelli@gmail.com, bcm-kernel-feedback-list@broadcom.com,
-        andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, simon.horman@corigine.com
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -62,30 +66,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Thu, 22 Jun 2023 20:47:21 +0200 you wrote:
-> Linux provides phy_set_bits() helper so let's drop brcm_phy_setbits() and
-> use phy_set_bits() in its place.
+On Thu, 22 Jun 2023 09:22:36 -0700 longli@linuxonhyperv.com wrote:
+> It's inefficient to ring the doorbell page every time a WQE is posted to
+> the received queue.
 > 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
-> V1->V2:
-> * fix code style and add branch net-next to subject as suggested by Simon
->   Horman
+> Move the code for ringing doorbell page to where after we have posted all
+> WQEs to the receive queue during a callback from napi_poll().
 > 
-> [...]
+> Tests showed no regression in network latency benchmarks.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: ca9c54d2d6a5 ("net: mana: Add a driver for Microsoft Azure Network Adapter (MANA)")
 
-Here is the summary with links:
-  - [net-next,v2] net: phy: broadcom: drop brcm_phy_setbits() and use phy_set_bits() instead
-    https://git.kernel.org/netdev/net-next/c/28e219aea0b9
+If this is supposed to be a fix, you need to clearly explain what the
+performance loss was, so that backporters can make an informed decision.
 
-You are awesome, thank you!
+>  drivers/net/ethernet/microsoft/mana/gdma_main.c |  5 ++++-
+>  drivers/net/ethernet/microsoft/mana/mana_en.c   | 10 ++++++++--
+>  2 files changed, 12 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/microsoft/mana/gdma_main.c b/drivers/net/ethernet/microsoft/mana/gdma_main.c
+> index 8f3f78b68592..ef11d09a3655 100644
+> --- a/drivers/net/ethernet/microsoft/mana/gdma_main.c
+> +++ b/drivers/net/ethernet/microsoft/mana/gdma_main.c
+> @@ -300,8 +300,11 @@ static void mana_gd_ring_doorbell(struct gdma_context *gc, u32 db_index,
+>  
+>  void mana_gd_wq_ring_doorbell(struct gdma_context *gc, struct gdma_queue *queue)
+>  {
+> +	/* BNIC Spec specifies that client should set 0 for rq.wqe_cnt
+> +	 * This value is not used in sq
+> +	 */
+>  	mana_gd_ring_doorbell(gc, queue->gdma_dev->doorbell, queue->type,
+> -			      queue->id, queue->head * GDMA_WQE_BU_SIZE, 1);
+> +			      queue->id, queue->head * GDMA_WQE_BU_SIZE, 0);
+>  }
+
+This change needs to be explained in the commit message, or should be 
+a separate patch.
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+pw-bot: cr
