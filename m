@@ -2,186 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 144E973C5D7
+	by mail.lfdr.de (Postfix) with ESMTP id 5D9A173C5D8
 	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 03:33:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231561AbjFXBcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 21:32:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57048 "EHLO
+        id S231637AbjFXBdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 21:33:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbjFXBcE (ORCPT
+        with ESMTP id S229630AbjFXBc7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 21:32:04 -0400
-Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C5A7213A
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 18:32:02 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VlnYVQs_1687570316;
-Received: from 172.20.10.2(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VlnYVQs_1687570316)
-          by smtp.aliyun-inc.com;
-          Sat, 24 Jun 2023 09:31:58 +0800
-Message-ID: <8573c838-bb88-83c1-4680-3cc500586e02@linux.alibaba.com>
-Date:   Sat, 24 Jun 2023 09:31:51 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [RFC 0/2] erofs: introduce bloom filter for xattr
-To:     Alexander Larsson <alexl@redhat.com>
-Cc:     hsiangkao@linux.alibaba.com, chao@kernel.org, huyue2@coolpad.com,
-        linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org
-References: <20230621083209.116024-1-jefflexu@linux.alibaba.com>
- <CAL7ro1EmCcienVMY7Pi_mEFbUiLZq24EGOyFovexmpJMGbfjcA@mail.gmail.com>
- <3730215c-d59d-8b8e-fe36-7754f7782d15@linux.alibaba.com>
- <CAL7ro1HhYUDrOX7A-13p7rLBZSWHTQWGOdOzVcYkddkU_LArUw@mail.gmail.com>
-Content-Language: en-US
-From:   Jingbo Xu <jefflexu@linux.alibaba.com>
-In-Reply-To: <CAL7ro1HhYUDrOX7A-13p7rLBZSWHTQWGOdOzVcYkddkU_LArUw@mail.gmail.com>
+        Fri, 23 Jun 2023 21:32:59 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12olkn2074.outbound.protection.outlook.com [40.92.22.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 207A7213A;
+        Fri, 23 Jun 2023 18:32:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Keiz1DeIdmfqLgq9VJX9wSB7CQd0GHi943+X2Y5rzbgL5Uojgl+YxmAI/fpvueWlNHbUEoGKRw1mwunKtnp/RRTF9x8zCOw5VRjzc+GmaUvptbXZWTF+YaLrgSyq+ZWPacqNNt42fb/8+yI6Ccw8xUpiHS+nI16K0bI5Xa75U6B4+mMyjeDx+HXy1XSI71JG+XcP8dH+ZJ+K07kQLASEVKHhTIeGpn4Sn6BxFrJqUzQLb9MecXKBbfB7aUsZZplWWIHyh3Wx+VbtGTTbPk9uLYR7nsDp1aChD4D8yX1TMhPZvrmST0UsirzZkrr3WrtzFHv035bSfCeGOCORNVV7CQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=epj5RkMTe1qH451XeDGCIcNXYLWU2TjaWr8Ff7Q9Cn0=;
+ b=etdMCMjsU+7AzHtils77jG2Zj4dwMq7/HA7WconPvaNomfST3L6iyODj3SJByRV7Fo69Q2vHSOKEFuQPGZOK52Nhws0Ux5x16OmiMRMMKN/7xegCLMuilEWxYK2G936pO1Sd7lp99QV5sSwn3Hl/BBk8VisMdvb8z7AwyUpOPraWXOv2KqKoWT9TRe79MeRZskh5uCKwgcoQufPgOG0TWxbFUOMGAJuAYFs2CXrNdjqOGCMg67XxLwXmL3B8xs+vS8JcPqUdnoNhXa83WO5G0plfmVuBnBp8CJmEB248TrlAmiUlij70+xbWvSzho07WiNN92I/CDHIHhVJhMxCs9w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=epj5RkMTe1qH451XeDGCIcNXYLWU2TjaWr8Ff7Q9Cn0=;
+ b=jz+5Wgc2UrE5uDXGiLFyYJ/MaCR31NEPUn5qn/FLivx76ibcFwTiqpQoQFvO7PNpfcA3AzadSRce9kYldL33xFxIfhJG7ukKxIn0htcZ28+iT/g+QoZ8y+tlnm/jfa8S+QbPVPn6iOOgjDmxUEu4zIUz0O2PORpzshmPuSO9/ioOBmrrLC+Xg9oHivOBPED7QId44VrcqP5/ly5yfyaU3Wd5Xc1QSQuVVXC6P+7M63nLlDK2YmCOvssxJx49M51Shx0WAK00cctdpaGDuz6R5e8SZVpjS0Smrp7rhMZFWWbvO2EFCBemsAAwqHpdhjM4zv95Wzp7YJ5GeZry7WbC+g==
+Received: from IA1PR20MB4953.namprd20.prod.outlook.com (2603:10b6:208:3af::19)
+ by BL3PR20MB4921.namprd20.prod.outlook.com (2603:10b6:208:3b0::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.23; Sat, 24 Jun
+ 2023 01:32:53 +0000
+Received: from IA1PR20MB4953.namprd20.prod.outlook.com
+ ([fe80::1818:77d9:407b:dcd6]) by IA1PR20MB4953.namprd20.prod.outlook.com
+ ([fe80::1818:77d9:407b:dcd6%3]) with mapi id 15.20.6521.024; Sat, 24 Jun 2023
+ 01:32:53 +0000
+From:   Inochi Amaoto <inochiama@outlook.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Nikita Shubin <n.shubin@yadro.com>,
+        Inochi Amaoto <inochiama@outlook.com>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH V3] perf vendor events riscv: add T-HEAD C9xx JSON file
+Date:   Sat, 24 Jun 2023 09:32:47 +0800
+Message-ID: <IA1PR20MB49536C0DA47122E9E3CB7CBBBB20A@IA1PR20MB4953.namprd20.prod.outlook.com>
+X-Mailer: git-send-email 2.41.0
+In-Reply-To: <CAM9d7cjtisDVPijfU=iEGxc0YF=RnAt+r18Jg+8Av-+RAO=jeg@mail.gmail.com>
+References: <CAM9d7cjtisDVPijfU=iEGxc0YF=RnAt+r18Jg+8Av-+RAO=jeg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-TMN:  [7u+aWMwo2m9INaTxe+Eho1G0RkY10PFGTMFvocVS5TpesSz0DVl6sJq3H/9uzvKB]
+X-ClientProxiedBy: TYCPR01CA0048.jpnprd01.prod.outlook.com
+ (2603:1096:405:1::36) To IA1PR20MB4953.namprd20.prod.outlook.com
+ (2603:10b6:208:3af::19)
+X-Microsoft-Original-Message-ID: <20230624013248.637913-1-inochiama@outlook.com>
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: IA1PR20MB4953:EE_|BL3PR20MB4921:EE_
+X-MS-Office365-Filtering-Correlation-Id: ad13cc2a-1e40-4faa-5ab9-08db7452edde
+X-MS-Exchange-SLBlob-MailProps: ZILSnhm0P3nDUp8bIAwOWCqxT2NJSXd59YvOqHkdZDz7oZGh5TQfLlKLXKvcdMKEnuCmNZT935VLDxAli34rrEx6P2ku1YLyULx/hLbCkhjYnHlT6KWNYJRPuyFv9mJPg3dO0tJOHUaMyRC3FPOm6XoFJIns6Lv9opn/dMd7pqT+91iwRv6bAsKJoU1L8flBWtcforBXjdf2j10Gs6cheu7xr3U2h7pzj+wyirmOhEyGasS1g+6Up2jTKvnCeffcXBbQNcdNdt/iDdWRJ1rAdpyuGHEyFFv0IsbZGgJd8aa8m/04rrQlIdeKdOchIRJ3a4iqWEEIbQtYijUhO1qUAUWMSBZsdgoNrZKKBLrhsbpd/RPiDm0nHnkp0tXmhUGATQuQwSetvPQ19o+glHa1LNsnGX4ojcug5MUIhLTUvgj91peOVv1b5NGsl9lpZgos9F45WHOZCe9ZrAl/na+BvaRKkSsbqWZNclm+OKLoT4QBmnOZbKJ7UawO3rrOdqOxf9yDS9q3itjKjL9U3218Zs3pyzYDcOmrRXZO3DphTX1TZ94guWMoTVkuEimkhjHhjKAU/fZ/CyagKPI2NS+BLKnnygb67tH0PNGmGWvrJiEvwEzRE+AyoD46be4eOEIj9IvnxQF1R7rmUu39zUM51F8bCyyRds/bMBAnXeX40w1bU/XuvDVwx/u/1tg7Gc8pj1IJ5VJDRNurnzTqsMlMc1CLqU19QYUW52VcE3ROyqV2HA8qNE61q1pb4uiDOIjrRw3vDENybtHHtD1UaKcErqdVUi5NxY2L
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: wycFMgHQNObQ/p46Ti2bShRarHjKxFJLxVaqVNGHtoRL2nuv4CXdSGQqJDPE0asLFxZHgZulBVnXAsRIHfAzU+ibt8wgXJPT+dHCj4OJFbV/ZX2Da9ulpUO3eIdJc8/tW+5nb/BdxQrE0QetPpaFfLw+kcv/VoGAWjNHKMTsq1krW5CdJ1BU6Rg9DXe5IMr3NVuLNibqnnvkfZqbn4uY/ZZWKTFZ/Z2xlu2R8dKuZpZex+E8T+UQAn1CkIqEjzEa+SWFIi5zK8+Qpk4GjVukO+jtqJkqG/kOAkjtKbjdnyNZRwh/qLVUmf3cfdEZayNfAnxfae0+JFIMYP8FZME9pWYYfOiJlRj3LjTJXhCVc1VLDyJwRK5ZqZYteowKa+3yligmGn2CpH3p85vm0DauPtrF4aaujc7PCPnM1kkkraC/TpaPhrG494FNlmjYz/2ey7vs7n2Qy8nB36c6WmPci2tj7WqNgulT2W5Nral6UwyCiMmRoLFJOKNqPSPGJrJ8ORW0Xgajkx6L4Ss4ga28eRLOABwsOdS3uG2+7J3l+vD4LXcFW3fuyhwXEsB0z2NuAXErR7Hz+y1LOmtPTQAOxvIx7x5rfrM6K545EPZauQtqJ4CQkTo06IQcQw0U887f
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QldHbDZmbnN0cm51a1E1NTJpanovQzZMTjdLbDltN21XZUNkaHMwTG1xaXEv?=
+ =?utf-8?B?NFRaTU1GSTFHZXk3SjI4WjUxY0d3S1YvTmJJN1VqM3I1dk9SUXpuejNGYysr?=
+ =?utf-8?B?ZWM3ck8wQnhZcHBDejRLOFdtcmdiaUFiSTNva3IvVDFQR2tCQTdTNHN0SDlr?=
+ =?utf-8?B?bmJQanhJS2o3aUhMcTZnY1FUcGxYUzFkUUhhbzl2S0krYXpkbnpEekZtdFRM?=
+ =?utf-8?B?RVhYZFRuM3R0UG9aM0FYSlkzY1ZWZnNadGxJWCt4c3lZcUxOWG5xWHYydGlp?=
+ =?utf-8?B?L3FIQ0hCTzVpb29PU2JLTjhFYmdSM0hpa3VqOTJuVEFHK2VWempiUnRTZXV6?=
+ =?utf-8?B?YWpoald5a2NUY2ljVy9yU2ZPREc3UUlycjlQYmFqR3BBRkZlb0RWbmJtMVhv?=
+ =?utf-8?B?Z3VUMGZ0ZWl5N1Yvd2tpYmFubTZWODVtYm1NY1lsVm5vcVhGMUtxNWQ5cTV6?=
+ =?utf-8?B?a0l2WmZNZDVpNGlUeWtscjM5T1FWeG9CVjRLK0VBbEcvckxSSUpyNWZZOGh4?=
+ =?utf-8?B?aG5ySVJ1aWZTN1BHY3V3OUNFd084ZGYvaElrQTJvWDVvY1pncWdJNzg1NVhK?=
+ =?utf-8?B?NC9SOWw4Ni9RWStLdE5aVmo4cHFVaFBqcXJaVFVsK2F2MlZNc0VON3RwbitG?=
+ =?utf-8?B?MWFBQUZUS2RYdmxBNHZMN0N4U0IyeTgwZ3IwbzJiMjg5RXBSVk1WR1hGSm5E?=
+ =?utf-8?B?UUVDMkVzOUNKVXVndTBEbEs4N1hrQStiaU55Q1p0RE1HbHZhZnlFeUhsOGZH?=
+ =?utf-8?B?YVZOYWJVV0dTNTY1QnBsZ2w2aG9ud3p4YzBQeVBQbWxUOVF3Mk5UV3htTGlk?=
+ =?utf-8?B?N0ZveGFrc1NNVnFXVG5UVGxscFBranAvQVdlSk0vMFFMU1JQNUFhc3Q2VU5D?=
+ =?utf-8?B?TjNpMjVlbTB3Q2tHYXlGdXBxekdnTW52SndYQUFmVkEzS1RTeEdLUFVESTdj?=
+ =?utf-8?B?TC9xaldTTEY0WW5IclA5dEJFSVA4Y2hmZzc4cGdyTjhpZ3FWWmp1YnBkUWNV?=
+ =?utf-8?B?L3JGclBGcUNKZjUxOGc0WUxFU3hTaDljOVpoWDF5QjVobm5aVUdKSjhGc2di?=
+ =?utf-8?B?bThTRjJoQUpJMzQ4aVl3NGNEUjdSRzE2bUM5OEFqMlFJdHo3YjZMZlNIbk8y?=
+ =?utf-8?B?cStZSFI3K2VkbWFwRFBKQTNENUtTbWpic2hTbTI3TlUvM1FvWXZsektxYWVu?=
+ =?utf-8?B?VjRJWjRReHJIQlFEVEpCVFJSSVhiWkhBWmhUUDhXWmdwd1hndytTWG1uUnBD?=
+ =?utf-8?B?RG1oUHEwQ05nMlRCd1BRTi9FbkVxTUtzZC9IYXVyZDRzSG9YZlBCSXEyMXlJ?=
+ =?utf-8?B?UzY2TXZuaTAvemJKYUhuM0xlRXFkODl4SS9GREZwdThUUUorb3pQYkExZHJv?=
+ =?utf-8?B?bmp1dVd1dmZiclo4VEd4SXhGcnl1YWpHKytMMDJIT05kLzdUdVBpWXE2R0c3?=
+ =?utf-8?B?NlBFTytEOFFDYklPaHJTdEthaE5paGJpYTlKMnh3Q2lMdDk4QlJLR0RYYlRk?=
+ =?utf-8?B?VWZRakR0eEtCY1RISHdraWRON2sxOEkzL2x6ZW9CcHREcWJucDFsckJhTUFJ?=
+ =?utf-8?B?T2RJZFQzbXpKR1loZC9kWlZDRTFhZ2NTbUhaWjVNZi9nM0dwU21USGJyN0Za?=
+ =?utf-8?B?YVJIUGJqOWt1MkRMbkVVOGlzdFNlZTNjQ2ZVYmEwOUJxemNTM1pqTWRUYzA4?=
+ =?utf-8?B?cWxvSWtnS0IwTTJiTHdWUDF2SWcyL0JBSkRXcEhQMnl5dCtXa0NDWVdRPT0=?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ad13cc2a-1e40-4faa-5ab9-08db7452edde
+X-MS-Exchange-CrossTenant-AuthSource: IA1PR20MB4953.namprd20.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jun 2023 01:32:53.3424
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR20MB4921
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi, Namhyung
 
+Since there is a fault in T-HEAD documentation, I am not sure whether
+the perf events are correct. As a result, I suggest temporarily suppressing
+this patch until I extract the correct events from its vendor perf driver.
+I will prepare a new V4 patch once it is finished.
 
-On 6/22/23 3:56 PM, Alexander Larsson wrote:
-> On Thu, Jun 22, 2023 at 8:37 AM Jingbo Xu <jefflexu@linux.alibaba.com> wrote:
->>
->>
->>
->> On 6/21/23 7:50 PM, Alexander Larsson wrote:
->>> On Wed, Jun 21, 2023 at 10:32 AM Jingbo Xu <jefflexu@linux.alibaba.com> wrote:
->>>>
->>>> Background
->>>> ==========
->>>> Filesystems with ACL enabled generally need to read
->>>> "system.posix_acl_access"/"system.posix_acl_default" xattr to get the
->>>> access and default ACL.  When filesystem is mounted with ACL enabled
->>>> while files in the system have not set access/default ACL, the getattr()
->>>> will run in vain while the round trip can decrease the performance in
->>>> workload like "ls -lR".
->>>>
->>>> For example, there's a 12% performance boost if erofs is mounted with
->>>> "noacl" when running "ls -lR" workload on dataset [1] (given in [2]).
->>>>
->>>> We'd better offer a fastpath to boost the above workload, as well as
->>>> other negative xattr lookup.
->>>>
->>>>
->>>> Proposal
->>>> ========
->>>> Introduce a per-inode bloom filter for xattrs to boost the negative
->>>> xattr queries.
->>>>
->>>> As following shows, a 32-bit bloom filter is introduced for each inode,
->>>> describing if a xattr with specific name exists on this inode.
->>>>
->>>> ```
->>>>  struct erofs_xattr_ibody_header {
->>>> -       __le32 h_reserved;
->>>> +       __le32 h_map; /* bloom filter */
->>>>         ...
->>>> }
->>>> ```
->>>>
->>>> Following are some implementation details for bloom filter.
->>>>
->>>> 1. Reverse bit value
->>>> --------------------
->>>> The bloom filter structure describes if a given data is inside the set.
->>>> It will map the given data into several bits of the bloom filter map.
->>>> The data must not exist inside the set if any mapped bit is 0, while the
->>>> data may be not inside the set even if all mapped bits is 1.
->>>>
->>>> While in our use case, as erofs_xattr_ibody_header.h_map is previously a
->>>> (all zero) reserved field, the bit value for the bloom filter has a
->>>> reverse semantics in consideration for compatibility.  That is, for a
->>>> given data, the mapped bits will be cleared to 0.  Thus for a previously
->>>> built image without support for bloom filter, the bloom filter is all
->>>> zero and when it's mounted by the new kernel with support for bloom
->>>> filter, it can not determine if the queried xattr exists on the inode and
->>>> thus will fallback to the original routine of iterating all on-disk
->>>> xattrs to determine if the queried xattr exists.
->>>>
->>>>
->>>> 2. The number of hash functions
->>>> -------------------------------
->>>> The optimal value for the number of the hash functions (k) is (ln2 *
->>>> m/n), where m stands the number of bits of the bloom filter map, while n
->>>> stands the number of all candidates may be inside the set.
->>>>
->>>> In our use case, the number of common used xattr (n) is approximately 8,
->>>> including system.[posix_acl_access|posix_acl_default],
->>>> security.[capability|selinux] and
->>>> security.[SMACK64|SMACK64TRANSMUTE|SMACK64EXEC|SMACK64MMAP].
->>>>
->>>> Given the number of bits of the bloom filter (m) is 32, the optimal value
->>>> for the number of the hash functions (k) is 2 (ln2 * m/n = 2.7).
->>>
->>> This is indeed the optimal value in a traditional use of bloom
->>> filters. However, I think it is based on a much larger set of values.
->>> For this usecase it may be better to choose a different value.
->>>
->>> I did some research a while ago on this, and I thought about the
->>> counts too. Having more than one hash function is useful because it
->>> allows you to avoid problems if two values happen to hash to the same
->>> bucket, but this happens at the cost of there being less "unique
->>> buckets".  I spent some time looking for common xattr values
->>> (including some from userspace) and ended up with a list of about 30.
->>
->> Yeah, if the number of common used xattr (n) is 30, then the optimal
->> value for the number of the hash functions (k) is 1 (ln2 * m/n = 0.74).
->> The optimal value in theory also matches our intuition.
->>
->>
->>> If we can choose a single hash function that maps all (or most) of
->>> these to a unique bucket (mod 32),
->>
->> Excellent research!  Would you mind sharing the list of these
->> approximately 30 commonly used xattrs, so that I could check if they are
->> mapped to unique bucket with the single hash function we proposed?
-> 
-> This is the list I came up with:
-> 
-> trusted.overlay.opaque
-> trusted.overlay.redirect
-> trusted.overlay.origin
-> trusted.overlay.impure
-> trusted.overlay.nlink
-> trusted.overlay.upper
-> trusted.overlay.metacopy
-> trusted.overlay.protattr
-> user.overlay.opaque
-> user.overlay.redirect
-> user.overlay.origin
-> user.overlay.impure
-> user.overlay.nlink
-> user.overlay.upper
-> user.overlay.metacopy
-> user.overlay.protattr
-> security.evm
-> security.ima
-> security.selinux
-> security.SMACK64
-> security.SMACK64IPIN
-> security.SMACK64IPOUT
-> security.SMACK64EXEC
-> security.SMACK64TRANSMUTE
-> security.SMACK64MMAP
-> security.apparmor
-> security.capability
-> system.posix_acl_access
-> system.posix_acl_default
-> user.mime_type
-> 
+As for c9xx wildcard, the T-HEAD provides a `MCPUID` vendor CSR to allow
+its CKLINK to get the detail CPU info. The format of this CSR are:
 
-Got it.  Thanks a lot!
+------------------------------------------------
+|31   28|27  26|25    22|21   18|17    8|7    0|
+| index | WLRL | family | class | model | WLRL |
+------------------------------------------------
 
--- 
+And for C9xx series (only index 0000 is vaild for us, as `MCPUID` also
+provides other index).
+
+| 0000 | xx | 0100 | class | xxxxxxxxxx | xxxxxxxx |
+
+The class codes are:
+
+C910: 0011
+c906: 0100
+
+The CSR is a M-mode only CSR, so now I'm exploring a clean way to
+integrate this CSR into the kernel. Any advice?
+
 Thanks,
-Jingbo
+Inochi
+
+> Hello,
+>
+> On Thu, May 18, 2023 at 2:50 AM Inochi Amaoto <inochiama@outlook.com> wrote:
+> >
+> >> licheerv # perf record
+> >> [  432.015618] watchdog: BUG: soft lockup - CPU#0 stuck for 26s!
+> >> [perf:117]
+> >> [  460.015617] watchdog: BUG: soft lockup - CPU#0 stuck for 52s!
+> >> [perf:117]
+> >> [  488.015616] watchdog: BUG: soft lockup - CPU#0 stuck for 78s!
+> >> [perf:117]
+> >> [  516.015617] watchdog: BUG: soft lockup - CPU#0 stuck for 104s!
+> >> [perf:117]
+> >>
+> >> But that's not related to your patch anyway.
+> >
+> > Same issue on c920, but it did not always occur.
+> > Like a sbi issue for T-HEAD cpus.
+> >
+> >> I am strongly against using "c9xx" wildcard, i would prefer declaring
+> >> them separate (especially taking in mind that c920 is c910 with vector
+> >> - AFAIK), but that's up to Arnaldo to decide.
+> >
+> > AFAIK, there is no reliable way to distinguish c906 and c910 cores. And
+> > the events of c910 and c920 are the same (according to the draft document
+> > of the c920).
+> >
+> > Anyway, I agree to let Arnaldo decide.
+> >
+> >> Tested-by: Nikita Shubin <n.shubin@yadro.com>
+>
+> I'm collecting patches on behalf of Arnaldo this time.
+> It seems this patch was not picked up for a long time.
+>
+> I think we can make changes for the c9xx wildcard later
+> if needed.  I'll process it in the current form.
+>
+> Thanks,
+> Namhyung
+>
