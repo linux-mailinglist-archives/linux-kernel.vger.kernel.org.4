@@ -2,129 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A80573C9C4
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 10:54:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63C5473C9C5
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 10:55:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232576AbjFXIyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 04:54:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44882 "EHLO
+        id S232839AbjFXIzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 04:55:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231202AbjFXIyS (ORCPT
+        with ESMTP id S231202AbjFXIy6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 04:54:18 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC0818B;
-        Sat, 24 Jun 2023 01:54:15 -0700 (PDT)
-X-QQ-mid: bizesmtp89t1687596845tar8umko
-Received: from linux-lab-host.localdomain ( [116.30.129.193])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 24 Jun 2023 16:54:04 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: QityeSR92A3DMBxJR9qE2xYZ5ave9QLjBojiQa4mwxhBHO55ur6tAsScc5GCz
-        /sYlo5cbbA2bvcRE2x29yNFvwxcojlQVdPsJUh7v9Ix+RFnoHHhKswfSw4X1w6aODESy98Q
-        E/FoWAyJxhDiOH4lD5Ths6g5UZ03+bsfa0IYebrpD+dLn9vkkA5ZX9GjKLJ18bkweKzyRj+
-        xuE8/IkVspvx94u0CLXPjPGUW13O7vbyEVjjveob6Djl8aARQXuU1EgAtQuVHpMD/s/rfZq
-        Bim1WGGvW9RTNlieqOGfojgH9vAZGZxHtyHAv2dPbUDSENwn2O/sDwRSpdekFg17+GNF/uP
-        Sjs6vzEURCGQTc/Opz+89wMrg3reyPiLXxaIjJOBSS1jO3QHbo=
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 2644677313220337364
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     thomas@t-8ch.de
-Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, w@1wt.eu
-Subject: Re: [PATCH v1 00/17] selftests/nolibc: allow run with minimal kernel config
-Date:   Sat, 24 Jun 2023 16:54:03 +0800
-Message-Id: <20230624085403.603469-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230622184559.1188894-1-falcon@tinylab.org>
-References: <20230622184559.1188894-1-falcon@tinylab.org>
+        Sat, 24 Jun 2023 04:54:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C83A118B;
+        Sat, 24 Jun 2023 01:54:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E35E60C3E;
+        Sat, 24 Jun 2023 08:54:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B133C433C0;
+        Sat, 24 Jun 2023 08:54:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687596896;
+        bh=P0AKloJHoPY0vVaH7+W9a/W3b8lwXqRDYLtUxhBSYL0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aFtMAM8bi0y4Bp+oBX1Eb/QknPMGyQ3S+5T7xUgNwj4tYfwYe5vCVTyUEMg+veaas
+         SO+FVI9TEGpyzY/A5QXci5lheHBKhVjymfJbCLtClUT9Wd7hPGoeaOVaQm3DfBUXvc
+         u5pn/SWwBluNh+ufE8oPF0684cVzqilo/VRmLQ/t+we3xnTH0GlRQK8gM32Hg//vEu
+         +9tX+A3aBrGAALKbmynTNxfPTuX/v/eO5nsHo9YnQaoAIZzH9Lkaf4Kq47GdF9UyFn
+         pqY5ihSbXhsgNIdQIRRP+pG6eB0XfoHw8IxjMqPTQiagm63Dy6XAQNzXvTKatVJrBi
+         AO9wI8Jkb8sAA==
+Date:   Sat, 24 Jun 2023 09:54:50 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Inochi Amaoto <inochiama@outlook.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Nikita Shubin <n.shubin@yadro.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH V3] perf vendor events riscv: add T-HEAD C9xx JSON file
+Message-ID: <20230624-supermom-disparity-37546ffed0a4@spud>
+References: <CAM9d7cjtisDVPijfU=iEGxc0YF=RnAt+r18Jg+8Av-+RAO=jeg@mail.gmail.com>
+ <IA1PR20MB49536C0DA47122E9E3CB7CBBBB20A@IA1PR20MB4953.namprd20.prod.outlook.com>
+ <CAM9d7cis-rb0fozK+T6R8MCEcT0ZF=RRNpv1qAWsLkMfsG6KxA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="dzXjnwP3OWEoTm01"
+Content-Disposition: inline
+In-Reply-To: <CAM9d7cis-rb0fozK+T6R8MCEcT0ZF=RRNpv1qAWsLkMfsG6KxA@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Thomas
 
-> > Hi Zhangjin,
-> > 
-> > some general comments for the whole series.
-> > 
-> > On 2023-06-21 20:52:30+0800, Zhangjin Wu wrote:
-> > > Hi, Willy
-> > > 
-> > > This patchset mainly allows speed up the nolibc test with a minimal
-> > > kernel config.
-> > > 
-> (snip)
-> > > 
-> > > * selftests/nolibc: fix up kernel parameters support
-> > > 
-> > >   kernel cmdline allows pass two types of parameters, one is without
-> > >   '=', another is with '=', the first one is passed as init arguments,
-> > >   the sencond one is passed as init environment variables.
-> > > 
-> > >   Our nolibc-test prefer arguments to environment variables, this not
-> > >   work when users add such parameters in the kernel cmdline:
-> > > 
-> > >     noapic NOLIBC_TEST=syscall
-> > > 
-> > >   So, this patch will verify the setting from arguments at first, if it
-> > >   is no valid, will try the environment variables instead.
-> > 
-> > This would be much simpler as:
-> > 
-> > test = getenv("NOLIBC_TEST");
-> > if (!test)
-> >         test = argv[1];
+--dzXjnwP3OWEoTm01
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, Jun 23, 2023 at 09:35:01PM -0700, Namhyung Kim wrote:
+> On Fri, Jun 23, 2023 at 6:33=E2=80=AFPM Inochi Amaoto <inochiama@outlook.=
+com> wrote:
+
 > >
-> > It changes the semantics a bit, but it doesn't seem to be an issue.
-> > (Maybe gated behind getpid() == 1).
-> 
-> Cool suggestion, it looks really better:
-> 
-> 	if (getpid() == 1) {
-> 		prepare();
-> 		
-> 		/* kernel cmdline may pass: "noapic NOLIBC_TEST=syscall",
->                  * to init program:
-> 		 *
-> 		 *   "noapic" as arguments,
-> 		 *   "NOLIBC_TEST=syscall" as environment variables,
->                  *
-> 		 * to avoid getting null test in this case, parsing
-> 		 * environment variables at first.
-> 		 */
-> 		test = getenv("NOLIBC_TEST");
-> 		if (!test)
-> 			test = argv[1];
-> 	} else {
-> 		/* for normal nolibc-test program, prefer arguments */
-> 		test = argv[1];
-> 		if (!test)
-> 			test = getenv("NOLIBC_TEST");
-> 	}
-> 
+> > As for c9xx wildcard, the T-HEAD provides a `MCPUID` vendor CSR to allow
+> > its CKLINK to get the detail CPU info. The format of this CSR are:
+> >
+> > ------------------------------------------------
+> > |31   28|27  26|25    22|21   18|17    8|7    0|
+> > | index | WLRL | family | class | model | WLRL |
+> > ------------------------------------------------
+> >
+> > And for C9xx series (only index 0000 is vaild for us, as `MCPUID` also
+> > provides other index).
+> >
+> > | 0000 | xx | 0100 | class | xxxxxxxxxx | xxxxxxxx |
+> >
+> > The class codes are:
+> >
+> > C910: 0011
+> > c906: 0100
+> >
+> > The CSR is a M-mode only CSR, so now I'm exploring a clean way to
+> > integrate this CSR into the kernel. Any advice?
 
-Test shows, when no NOLIBC_TEST environment variable passed to kernel cmdline,
-it will still branch to this code:
+See for example how riscv_cpuinfo_starting() reads mvendorid & Co.
 
-    test = argv[1]; /* nopaic ... */
+> I don't know about the details.  Is this CSR available from user space?
+> If not, you could add it somewhere in the sysfs.
 
-And therefore report the whole test is ignored and no test will be run:
+Machine mode is the highest privilege level, Supervisor mode is next &
+User mode is the lowest. Typically the kernel runs in Supervisor mode.
 
-    Ignoring unknown test name 'noapic'
+--dzXjnwP3OWEoTm01
+Content-Type: application/pgp-signature; name="signature.asc"
 
-So, we may still need to verify it like my originally proposed method, but
-let's further verify the one from NOLIBC_TEST=, we should tune the code a
-litle.
+-----BEGIN PGP SIGNATURE-----
 
-Thanks,
-Zhangjin
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJavWgAKCRB4tDGHoIJi
+0nfzAPwN3X0swkvrSVf8ck8JWpqyr9/NjbbeDsSElciyJFoqDQD9E/lEdIn9KVve
+N9l4vjuyVseuxyUV74TZmag+74774gE=
+=ndGS
+-----END PGP SIGNATURE-----
+
+--dzXjnwP3OWEoTm01--
