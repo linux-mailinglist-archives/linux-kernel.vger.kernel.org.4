@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C900473CB13
+	by mail.lfdr.de (Postfix) with ESMTP id 80FA073CB12
 	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 15:42:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230319AbjFXNiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 09:38:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60126 "EHLO
+        id S229445AbjFXNiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 09:38:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjFXNiC (ORCPT
+        with ESMTP id S231816AbjFXNiP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 09:38:02 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D96D11C
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 06:38:01 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id 98e67ed59e1d1-25edb50c3acso1176569a91.1
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 06:38:01 -0700 (PDT)
+        Sat, 24 Jun 2023 09:38:15 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E321FCE
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 06:38:14 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id 41be03b00d2f7-54f73f09765so910491a12.1
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 06:38:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687613880; x=1690205880;
+        d=gmail.com; s=20221208; t=1687613894; x=1690205894;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=3NpgYDLt7ykmx7/GBz8c/ahah0KCZNV3w9qSaAm6EvU=;
-        b=BoamLgKZc8FKQJW6rMvsb2KYHhrA1XhGZ0BgG/1UYCH3rjAJp2sZqOCRJGxwbessc5
-         WXzO40/bewmhaPiprHlD0BHpdWmc29eV4+Be/dAWrPuy//9fwtdhCc+jjda1TtXfYCk0
-         wXmYq2U0Hf0pHukx9weObbpIXFtqj/8L63p39smEyKxm62niJXxvnmc3+c62uWyszrvD
-         h9HIqzHgpPzWg6cYjlGE8hRZiBr4YvsrlFJND/HGK5prX2VFOoVjJZ6d4FFjukki8uIU
-         1ctLEpgQZFmeCKlNVrEQ8TD/zWalS32gWi8BH5grp5rVON74z6iHM61xGrVPh4kmLcj6
-         R5fA==
+        bh=MBNJeoxuxKW0ngxLaIhEfBBILdjbuZVFIvRZIaQ+D1o=;
+        b=MscyhnW3MCMF6oT7zsV8MjsOV3Exbbxo82on4ewasF67ViEwZKRzzhunGT4ApAeoVC
+         fu1rFctvDo8RTDHPiu0q1tiwMahRLV2Gp/0d7O+IvuzWPFOY9BWFGyX4XQ7bCDtIY1R+
+         4hph2eUFR5Z+unOGzFmTRPWv7QPpEzHT9/DevOYseNTOdLMBsYf/+drI2xb4cPfviMqx
+         MCMu3McW623IAC4mEmazp7Rh/YDITIzt9jzfFYlB4yOzar43ADLWuyDxmCvXsur4H1RY
+         nPon4pfbGUdWtvoAkz0eoMsUs0pHA/E3ZGwkmP0MctbiwB960fQ+ejrU2htBf4fUqvtA
+         w00w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687613880; x=1690205880;
+        d=1e100.net; s=20221208; t=1687613894; x=1690205894;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=3NpgYDLt7ykmx7/GBz8c/ahah0KCZNV3w9qSaAm6EvU=;
-        b=XZFeW2Lm6MWdXSHweM0LSTN4qR+PxsXrdzxaR7jnyywHRFDWipOrcHvEXtC/J3VuWz
-         CaMUasC30wmTfLm95oN00Z7Yis/VHRVHUWSWPm+vv8R4GDe+qVxDDSqYRvhYTvk60nWv
-         Lgq3d8D+EUEct4+Tgu7yyk4bVsuXNpy+qHCZaKKIjpC3Avj27A20OZjOawncai3mhhVE
-         k1+g50IO2ljK3C1sILDYltXXgEQCWgWeTuP72u9/XGJAuGf30vvXR3VbrGgo0PYcSaZj
-         WIRRHUpbO5kYJADxZ+aOGVqoGkxpzvDdYMTWV2Wmaaxwuy/bWb2YqaYZ2WGjtzvIOCJm
-         KMIQ==
-X-Gm-Message-State: AC+VfDycB+V8fmLNyEMtF3xhPxZNj44NJnlXePysCY54Dc3eEQ0aweiC
-        wtVgs7l+zb4mGIael4tTWPP41+A09HY=
-X-Google-Smtp-Source: ACHHUZ6V44Tndn5ml2kjocIFPsFTxXO8qKdLIwVxeQsbsd+EIpx/Kp3v6/zQcvm96N+sDFeKXF+fdA==
-X-Received: by 2002:a17:90b:4b4c:b0:25b:eeb3:adc4 with SMTP id mi12-20020a17090b4b4c00b0025beeb3adc4mr23645752pjb.15.1687613880146;
-        Sat, 24 Jun 2023 06:38:00 -0700 (PDT)
+        bh=MBNJeoxuxKW0ngxLaIhEfBBILdjbuZVFIvRZIaQ+D1o=;
+        b=kLCWulNwQE+43tLSyu+q9Zw5qBSQBU1Fh0auTwK9g9TScAH28F3XeH10/ytEVSOPxN
+         f42jh1isKhkGmD9roE0o1rZFAvRUbpkD6PxkN09vqYScYmvhJUdz+2S7H/9MqVvv7UsJ
+         rfISg+xh3kW5CGaP1zuEK/l9LTXuX/zUryUjxY/kshQbFSqkgtIix+kFaUwf8XWe9rPz
+         N9ddEKTfCCiRs+25vOH9ZRQxZRCJeIuRy3zCf+kUqKsPVCC2NY0brGpdmuREaSjv3AkM
+         YAB5UfXk7q8tvXLkTua+9wCS9MWF0t8MCvjfi5NaS6dbgATBR9uLt4q1dthH1lQaw4p1
+         HOWA==
+X-Gm-Message-State: AC+VfDx8UBYyZACYfJgPvLzRIOuwjn8Y8n/FOfL3yHH+M8Y5VYzbEY7x
+        RwEq2B+/dCcdRXI+8MP8LWKcOdMtHdA=
+X-Google-Smtp-Source: ACHHUZ6DTPP5LYhoCbUjMLO0Mt7Ur3q/4ntF8WfS9LaCnTj7skV9sunuJIuSRyepDxPqugEX03DBPw==
+X-Received: by 2002:a17:90a:35d:b0:25c:2260:9f5c with SMTP id 29-20020a17090a035d00b0025c22609f5cmr16477389pjf.34.1687613893609;
+        Sat, 24 Jun 2023 06:38:13 -0700 (PDT)
 Received: from octofox.hsd1.ca.comcast.net ([2601:641:401:1d20:6f5f:ba7d:3496:54ff])
-        by smtp.gmail.com with ESMTPSA id w29-20020a63161d000000b0052871962579sm1248150pgl.63.2023.06.24.06.37.59
+        by smtp.gmail.com with ESMTPSA id h23-20020a17090aea9700b0025dc5749b4csm578942pjz.21.2023.06.24.06.38.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Jun 2023 06:37:59 -0700 (PDT)
+        Sat, 24 Jun 2023 06:38:13 -0700 (PDT)
 From:   Max Filippov <jcmvbkbc@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>
-Subject: [PATCH] xtensa: rearrange show_stack output
-Date:   Sat, 24 Jun 2023 06:37:55 -0700
-Message-Id: <20230624133755.621724-1-jcmvbkbc@gmail.com>
+Subject: [PATCH] xtensa: dump userspace code around the exception PC
+Date:   Sat, 24 Jun 2023 06:38:08 -0700
+Message-Id: <20230624133808.621805-1-jcmvbkbc@gmail.com>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -69,93 +69,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Minimal stack alignment on xtensa is 16 bytes, having stack dump in
-32-byte lines may be visually misleading as the stack frame border may
-be in the middle of the line.
-Arrange stack dump in 16-byte lines. Mark lines at stack frame borders
-with arrows.
+In the absence of other debug facilities dumping user code around the
+unhandled exception address may help debugging the issue.
 
 Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 ---
- arch/xtensa/kernel/traps.c | 57 ++++++++++++++++++++++++++++----------
- 1 file changed, 42 insertions(+), 15 deletions(-)
+ arch/xtensa/Kconfig.debug  |  8 ++++++++
+ arch/xtensa/kernel/traps.c | 18 ++++++++++++++++++
+ 2 files changed, 26 insertions(+)
 
+diff --git a/arch/xtensa/Kconfig.debug b/arch/xtensa/Kconfig.debug
+index 83cc8d12fa0e..e84172a7763c 100644
+--- a/arch/xtensa/Kconfig.debug
++++ b/arch/xtensa/Kconfig.debug
+@@ -38,3 +38,11 @@ config PRINT_STACK_DEPTH
+ 	help
+ 	  This option allows you to set the stack depth that the kernel
+ 	  prints in stack traces.
++
++config PRINT_USER_CODE_ON_UNHANDLED_EXCEPTION
++	bool "Dump user code around unhandled exception address"
++	help
++	  Enable this option to display user code around PC of the unhandled
++	  exception (starting at address aligned on 16 byte boundary).
++	  This may simplify finding faulting code in the absence of other
++	  debug facilities.
 diff --git a/arch/xtensa/kernel/traps.c b/arch/xtensa/kernel/traps.c
-index 71588bf55632..a2a9a460ec9e 100644
+index a2a9a460ec9e..17eb180eff7c 100644
 --- a/arch/xtensa/kernel/traps.c
 +++ b/arch/xtensa/kernel/traps.c
-@@ -549,31 +549,58 @@ static void show_trace(struct task_struct *task, unsigned long *sp,
+@@ -175,6 +175,23 @@ __die_if_kernel(const char *str, struct pt_regs *regs, long err)
+ 		die(str, regs, err);
  }
  
- #define STACK_DUMP_ENTRY_SIZE 4
--#define STACK_DUMP_LINE_SIZE 32
-+#define STACK_DUMP_LINE_SIZE 16
- static size_t kstack_depth_to_print = CONFIG_PRINT_STACK_DEPTH;
- 
--void show_stack(struct task_struct *task, unsigned long *sp, const char *loglvl)
-+struct stack_fragment
- {
--	size_t len, off = 0;
--
--	if (!sp)
--		sp = stack_pointer(task);
-+	size_t len;
-+	size_t off;
-+	u8 *sp;
-+	const char *loglvl;
-+};
- 
--	len = min((-(size_t)sp) & (THREAD_SIZE - STACK_DUMP_ENTRY_SIZE),
--		  kstack_depth_to_print * STACK_DUMP_ENTRY_SIZE);
-+static int show_stack_fragment_cb(struct stackframe *frame, void *data)
++#ifdef CONFIG_PRINT_USER_CODE_ON_UNHANDLED_EXCEPTION
++static inline void dump_user_code(struct pt_regs *regs)
 +{
-+	struct stack_fragment *sf = data;
- 
--	printk("%sStack:\n", loglvl);
--	while (off < len) {
-+	while (sf->off < sf->len) {
- 		u8 line[STACK_DUMP_LINE_SIZE];
--		size_t line_len = len - off > STACK_DUMP_LINE_SIZE ?
--			STACK_DUMP_LINE_SIZE : len - off;
-+		size_t line_len = sf->len - sf->off > STACK_DUMP_LINE_SIZE ?
-+			STACK_DUMP_LINE_SIZE : sf->len - sf->off;
-+		bool arrow = sf->off == 0;
- 
--		__memcpy(line, (u8 *)sp + off, line_len);
--		print_hex_dump(loglvl, " ", DUMP_PREFIX_NONE,
-+		if (frame && frame->sp == (unsigned long)(sf->sp + sf->off))
-+			arrow = true;
++	char buf[32];
 +
-+		__memcpy(line, sf->sp + sf->off, line_len);
-+		print_hex_dump(sf->loglvl, arrow ? "> " : "  ", DUMP_PREFIX_NONE,
- 			       STACK_DUMP_LINE_SIZE, STACK_DUMP_ENTRY_SIZE,
- 			       line, line_len, false);
--		off += STACK_DUMP_LINE_SIZE;
-+		sf->off += STACK_DUMP_LINE_SIZE;
-+		if (arrow)
-+			return 0;
- 	}
-+	return 1;
++	if (copy_from_user(buf, (void __user *)(regs->pc & -16), sizeof(buf)) == 0) {
++		print_hex_dump(KERN_INFO, " ", DUMP_PREFIX_NONE,
++			       32, 1, buf, sizeof(buf), false);
++
++	}
 +}
-+
-+void show_stack(struct task_struct *task, unsigned long *sp, const char *loglvl)
++#else
++static inline void dump_user_code(struct pt_regs *regs)
 +{
-+	struct stack_fragment sf;
++}
++#endif
 +
-+	if (!sp)
-+		sp = stack_pointer(task);
-+
-+	sf.len = min((-(size_t)sp) & (THREAD_SIZE - STACK_DUMP_ENTRY_SIZE),
-+		     kstack_depth_to_print * STACK_DUMP_ENTRY_SIZE);
-+	sf.off = 0;
-+	sf.sp = (u8 *)sp;
-+	sf.loglvl = loglvl;
-+
-+	printk("%sStack:\n", loglvl);
-+	walk_stackframe(sp, show_stack_fragment_cb, &sf);
-+	while (sf.off < sf.len)
-+		show_stack_fragment_cb(NULL, &sf);
- 	show_trace(task, sp, loglvl);
+ /*
+  * Unhandled Exceptions. Kill user task or panic if in kernel space.
+  */
+@@ -190,6 +207,7 @@ void do_unhandled(struct pt_regs *regs)
+ 			    "\tEXCCAUSE is %ld\n",
+ 			    current->comm, task_pid_nr(current), regs->pc,
+ 			    regs->exccause);
++	dump_user_code(regs);
+ 	force_sig(SIGILL);
  }
  
 -- 
