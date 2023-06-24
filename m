@@ -2,148 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3961173C775
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 09:48:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C62B73C77A
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 09:49:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231667AbjFXHr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 03:47:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47184 "EHLO
+        id S231808AbjFXHtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 03:49:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbjFXHr4 (ORCPT
+        with ESMTP id S230041AbjFXHtS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 03:47:56 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD28019B7;
-        Sat, 24 Jun 2023 00:47:52 -0700 (PDT)
-X-QQ-mid: bizesmtp69t1687592856t8jmq2cy
-Received: from linux-lab-host.localdomain ( [116.30.129.193])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 24 Jun 2023 15:47:35 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: /rrU+puPB7TMQuMP1erzBvP+Z8py1YsIU1LjWUtYGWooMsi5DJqGYdfGam6AA
-        dR7PHHd5oj9w4p9f+9Z6v1asuOroiuC9ym61+SNCA9XQ1BOHGCDN9uphY8Xnx5GWe/r09Fc
-        b+82BAl6E8YFWyYdSlT1RJHiHeVYXXHyGeYRuT9C6d1LTjpNc1I50iT8l4mLYXLhNFoyI/d
-        PG2xqY3pkwrvumV609NDGMgMuLmI0RjM6s5aVq62InxaAXst15Od3RLk0j6TX7+qY804VoL
-        +4ZNNNtqpmykOmcRKd1NU4eSt/1gZ47UYDms3sJG7mPWHXZRXlcxR9TGYkAUm3V+lFGVxYY
-        FF+AQaN4LzOh0xgRT5oJAI+wD4YfHJ3GMLdvbgh
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 3816886055142245368
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     thomas@t-8ch.de
-Cc:     arnd@arndb.de, david.laight@aculab.com, falcon@tinylab.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-riscv@lists.infradead.org, w@1wt.eu
-Subject: Re: [PATCH v4 10/10] selftests/nolibc: add mmap and munmap test cases
-Date:   Sat, 24 Jun 2023 15:47:21 +0800
-Message-Id: <20230624074721.587306-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <97fbbe17-b261-475c-8959-71cccaa5a2f5@t-8ch.de>
-References: <97fbbe17-b261-475c-8959-71cccaa5a2f5@t-8ch.de>
+        Sat, 24 Jun 2023 03:49:18 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF95D2697
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 00:49:16 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-988f066f665so161455466b.2
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 00:49:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687592955; x=1690184955;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fobpxe2Vh3rTegR8aAILQO/aor/jN2XTUZh+y2BjRx8=;
+        b=p0vcB9NOqpDYcOFBUgjJtMCwF6u2j2jVYTScX1y2/6gMwv22HEnMNzigrsNRNvZbMY
+         fbmdwyutBRnJqkmZXJaWUm1xJ0c/uPYJslawKx77u4kN4PQwydalmy8slyP7J2De9dfl
+         N3t9pLZ7Nj7nARI6GTPETalZ3gx8ySvxsgSdz6o50H9bsdG4lI1I6pBTgtzbbqOK7VvP
+         c1KAp4StwpRAwDGi5bzdc3oiPOHaP5EQxwQMjq0vp7m2xUYcgzME0pa1Mig2T5tX30+d
+         fa4Eu8f6v8k9+JYXYw8Tt0Iqmsl3cFAZ5v4tQxHwqeQ/Czw4iXsHyL7Z8iAPcBsnJfsH
+         laIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687592955; x=1690184955;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fobpxe2Vh3rTegR8aAILQO/aor/jN2XTUZh+y2BjRx8=;
+        b=SXaDrSS+gYF2KVPqauz0psTWo+T1KoXmgZTW545BQF3jsPyIYc1FSKgaxRXIhc4C2u
+         0+iF2YSwYDfDAEXM+KrVudJWQfIcroAV+TjFloxQwfpAF9Srkwnk5Q83WMaE62Wn/2Fz
+         nHQzpyUPSnJVAGvPE+ZzArMtBfjHaNANpuZ1LQcj3yKE+3Q764GBz5fT6UfJ4sEt14Zf
+         dBnBiUvctKTTHzaASML8JXPshoByOJ0d3M22H02EhzoVGKMXkf58Gt5/srPRq483Vs8o
+         4nmJ93gO1UVMda/PGP1UsF2Daa7gHfgIU8WiZAWEyZyiQyOa3VglK9uL8YyEyR9NYWUf
+         aMNw==
+X-Gm-Message-State: AC+VfDzhIhOJuJ0j4bPFCDYZqXRwywH4esaZY0zxKbZ2h4QvpmU46/hC
+        swZFCAeVE5uIBYJPnlnurQTOKA==
+X-Google-Smtp-Source: ACHHUZ5zxQNQmvecCWEX+T8SpICSGCyG7Q95vSIHvgEfe3ifIVl00Aelqo52kll7A4K7AbgmyvUGYg==
+X-Received: by 2002:a17:907:805:b0:989:450:e57d with SMTP id wv5-20020a170907080500b009890450e57dmr11352975ejb.73.1687592955055;
+        Sat, 24 Jun 2023 00:49:15 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id bm4-20020a170906c04400b00973ca837a68sm574507ejb.217.2023.06.24.00.49.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 24 Jun 2023 00:49:14 -0700 (PDT)
+Message-ID: <f1ff2c32-df2a-e349-1227-e5a93fe37c92@linaro.org>
+Date:   Sat, 24 Jun 2023 09:49:12 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 5/5] scsi: dt-bindings: ufs: qcom: Fix warning for sdm845
+ by adding reg-names
+To:     Rob Herring <robh@kernel.org>,
+        Luca Weiss <luca.weiss@fairphone.com>
+Cc:     Abel Vesa <abel.vesa@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20230623113009.2512206-1-abel.vesa@linaro.org>
+ <20230623113009.2512206-6-abel.vesa@linaro.org>
+ <cd84b8c6-fac7-ecef-26be-792a1b04a102@linaro.org>
+ <CTK1AI4TVYRZ.F77OZB62YYC0@otso> <20230623211746.GA1128583-robh@kernel.org>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230623211746.GA1128583-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Thomas
-
-> Hi Zhangjin,
+On 23/06/2023 23:17, Rob Herring wrote:
+>> With my private mailbox I just have a different folder for patches that
+>> have been sent which I archive once they're applied, but with work GMail
+>> I don't see how I can easily replicate this since it's also not grouping
+>> threads properly.
 > 
-> On 2023-06-23 03:32:49+0800, Zhangjin Wu wrote:
-> > > On 2023-06-19 23:55:41+0800, Zhangjin Wu wrote:
-> > > > Three mmap/munmap related test cases are added:
-> > > > 
-(snipped)
-> > > >  
-> > > > +int test_mmap_munmap(int size)
-> > > > +{
-> > > > +	char init_files[5][20] = {"/init", "/sbin/init", "/etc/init", "/bin/init", "/bin/sh"};
-> > > 
-> > > Why not /proc/1/exe or even /proc/self/exe?
-> > > 
-> > > I know your other series tries to remove the procfs dependency, but
-> > > we're not there yet :-).
-> > > 
-> > 
-> > Yeah, '/proc/self/exe' is a choice, if so, the 'has_proc' should be added ;-)
-> 
-> Currently procfs is a hard requirement. So I would leave 'has_proc' to
-> the other series that may change this.
->
+> Yeah, GMail sucks for that. I use 'lei' to get all my patches and 
+> replies to them (though its caching will miss replies). Then I delete 
+> them from the mbox when they are applied or otherwise finished. lei 
+> updates won't re-add them to the mbox.
 
-Yeah, but to be consistent with the already existing 'proc' condition
-check, 'proc' will be used at first ;-)
+That's interesting approach. What's your lei search query for getting
+your patches? "f:rob" would get all your threads you participated in.
 
-    $ grep '(proc,' -ur tools/testing/selftests/nolibc/nolibc-test.c 
-		CASE_TEST(chmod_net);         EXPECT_SYSZR(proc, chmod("/proc/self/net", 0555)); break;
-		CASE_TEST(chmod_self);        EXPECT_SYSER(proc, chmod("/proc/self", 0555), -1, EPERM); break;
-		CASE_TEST(chown_self);        EXPECT_SYSER(proc, chown("/proc/self", 0, 0), -1, EPERM); break;
-		CASE_TEST(chroot_exe);        EXPECT_SYSER(proc, chroot("/proc/self/exe"), -1, ENOTDIR); break;
-		CASE_TEST(link_cross);        EXPECT_SYSER(proc, link("/proc/self/net", "/blah"), -1, EXDEV); break;
-
-Btw, for the /proc/self used in test_stat_timestamps, in the revision of the
-'minimal' config support series, instead of using '/', a 'proc' should be added
-like above test cases.
-
-> > > Also does it make sense to pass a size parameter?
-> > > Why not use either PAGE_SIZE or the real size of the binary from
-> > > fstat().
-> > > 
-> > 
-> > Ok, as the manpage of mmap shows:
-> > 
-> >        For mmap(), offset must be a multiple of the underlying huge page
-> >        size.  The system automatically aligns length to be a multiple of
-> >        the underlying huge page size.
-> > 
-> >        For munmap(), addr, and length must both be a multiple of the
-> >        underlying huge page size.
-> > 
-> > perhaps we should do further tests:
-> > 
-> > * the real size/length
-> > * even > the real size
-> > * the PAGE_SIZE
-> > * not aligned with PAGE_SIZE
-> > 
-> > If such tests are required, the 'size' and even 'offset' arguments could be
-> > provided to cover different combination or we do such tests internally, then,
-> > the arguments are not required.
-> 
-> I think task of nolibc-test is to test the code in nolibc itself.
-> The custom mmap implementation is trivial and directly calls the
-> syscall. These additionally proposed tests would effectively test the
-> core kernels implementation of mmap() and not the code of nolibc.
-> 
-> Therefore I don't think they are necessary in nolibc-test and the
-> functionality is hopefully already be tested in another testsuite.
->
-
-Ok, it is reasonable.
- 
-> 
-> Note:
-> 
-> Testing mmap is indeed useful to test the implementation of
-> my_syscall6() by providing a bogus value in the 'offset' parameter.
-> I think we do have such a testcase.
->
-
-Ok, we can pass a valid offset (n*PAGE_SIZE) to mmap() in test_mmap_munmap() or
-add a whole new mmap_offset test case with a PAGE_SIZE not aligned offset (such
-as 1).
-
-Thanks,
-Zhangjin
-
-> <snip>
-> 
-> Thomas
+Best regards,
+Krzysztof
 
