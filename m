@@ -2,127 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82F9173C5E0
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 03:37:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88CF473C5E5
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 03:42:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229512AbjFXBh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Jun 2023 21:37:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58446 "EHLO
+        id S231817AbjFXBml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Jun 2023 21:42:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbjFXBhz (ORCPT
+        with ESMTP id S229678AbjFXBmj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Jun 2023 21:37:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9077BE41
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 18:37:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687570630;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SWrf17db78ezE6/aH1TL74NU60boy/nUbrBlOEfT/sU=;
-        b=hMclPX1M8U+zpt+kUJc30oAJaKRydBzPfTNyaZQ32GCqNSON1J5iSfRPSJlAnFW6qkY2la
-        87VYSk5gIRhtRj6Z4VxvTcTFj2CTi8I76mjutifaKDaDxTDQ+bXowQJo3aXo9zcuoFRu5/
-        ryW/qDFqsoiL6EiHrhGN/v4Ml+TiDLA=
-Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com
- [209.85.214.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-10-zYplhiXuO-ePdvlryXopZA-1; Fri, 23 Jun 2023 21:37:09 -0400
-X-MC-Unique: zYplhiXuO-ePdvlryXopZA-1
-Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-1b5381523bcso8872855ad.0
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 18:37:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687570628; x=1690162628;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SWrf17db78ezE6/aH1TL74NU60boy/nUbrBlOEfT/sU=;
-        b=OZzepKEhdDnliifRA2GQ1Uy+9RS+jeiQnVT6E/577XFvUV+X8HY8LFf9CrksMplXWK
-         q/A8JGB5DNhjvVICJIF475f4E4vjhYdIQUBkWBqHI887khIxaoO5REwqqPCh8NzfOgi7
-         QYDntGy0B12JyJDnhEHp9nxQcbsgsZsu6JrxRjuVb1EBmYqwHvs6o5crT/TMqtwi0fw3
-         P14PORPF/HAk0754V6cnaxUj+Ps9prRjb/9s9BQTiqeoY1XzrO58A0EACWMSgiJnDOFJ
-         VS7u+/rEiR58VUvRYu5jCVHv/LAunfAKHziDiI8Nrc+bccAK209WC01OFpFzOKY3mGDN
-         nZHw==
-X-Gm-Message-State: AC+VfDyxSm2XSxbn7Z81IoRq+AnYGU7VJI4ajzBeLlEYDLuotPVKimMm
-        +OqfVonw4TQDMDouJyWqNqqZZMZb14QgrCxyuyqenVSmnfizaCFiZzaN941Bdb0+qHD/70dN6vw
-        Zg9bLmQApxgldUk5Zzy5AtkVH
-X-Received: by 2002:a17:903:24d:b0:1ae:8595:153 with SMTP id j13-20020a170903024d00b001ae85950153mr1087403plh.20.1687570628103;
-        Fri, 23 Jun 2023 18:37:08 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ70F87Rbv/R9XMaSzZcQtw3TRpiFahOhZs33X4KSJY20FL+t3G4c1wHrNU4qH+U5MgkwpyEHA==
-X-Received: by 2002:a17:903:24d:b0:1ae:8595:153 with SMTP id j13-20020a170903024d00b001ae85950153mr1087385plh.20.1687570627829;
-        Fri, 23 Jun 2023 18:37:07 -0700 (PDT)
-Received: from [10.72.12.106] ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id gf4-20020a17090ac7c400b00256dff5f8e3sm259169pjb.49.2023.06.23.18.37.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Jun 2023 18:37:07 -0700 (PDT)
-Message-ID: <64241ff0-9af3-6817-478f-c24a0b9de9b3@redhat.com>
-Date:   Sat, 24 Jun 2023 09:36:54 +0800
+        Fri, 23 Jun 2023 21:42:39 -0400
+Received: from sonic303-28.consmr.mail.ne1.yahoo.com (sonic303-28.consmr.mail.ne1.yahoo.com [66.163.188.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06742727
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 18:42:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1687570957; bh=HkrT9Fdmy+qWou3tHhwSEBWddayVUBpp9wbKnyKY8fU=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=USWWTjdV3jh4b9pQettCYE2n5Og2UfFDStah6fb9LnKMZNqF2H+dXlbfMqR3bm1dBPl2ebvs6Hh2UKsLdwHp1GjPq63fGwFBmobZveEDfJcxZJAZAtMgYBsUtn2N5t8b2YWXDXtP6OTvIaP1ZYIz2lzKG4C07IErYvhW7ZMt7W1Hp6QInWAI5pRrzurrXDFMPAnVgzCgkIUE2WqmjGp7chB2Q0/SXJGOThgmKjnDHz90ixv3zgHubGn8TCcBa+yHFxl7vNr+47rORbUqpY7ksSpZtNu3kwTl0yZ79BnaTcMSEWZDPiGRXLya3gl27tAyagf6gaDSRj4LnKMvcqJmQQ==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1687570957; bh=CeLCKH16mMqssmyEmAog7k2MNIax60ZTu+WhbtYdBAL=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=HPI+poAHRUtanOx3K6HQUh5qvewgPXOa4HpACZlRhXj18p+wXoeu3ps8E1yINXx0/yseEjsPTrrm7tl2BNdeggiM9d3pYvsztGNGLGS2BQL8eyqbbn9YXzh0WQNfN1Zzzls8MMmKoDujzVc1Tk3mReKpfcOc7F6rfTMxd7YePNxFZdXPbZEbjBzjmYPcD7+kdc1eaQ000V+KPi4NK0Hog/u5m4dcQGA6HLUhGXSCiJKDFjODvBqCFmLn53SkjHmTuzrM6UT43bImewMKMdScVDjDpZY4LGOukhr/u2YCKdxSe3aE1AYRuRjuo+Tqj/XrfWLy/k7OEbrxMO/wTQXVMQ==
+X-YMail-OSG: qW7rQtQVM1n7hsYNKm5Z_VF3GZbIFgBZE5U7QSf.1zruWqhSYFfT8ml5Q0d3fNb
+ qJmO0YnXaC5tYNQkyj5..Uaj4hnWk8EEHKIWKYNeq7DwmwWNzMQMmh53jfuoKjozKqRKuSSdgebn
+ uMaWeQl_x84e_4jLp93UJJcEkCR60SUz6iiZTo9wlJRZO5KtJe.bEAprtC2UPmG_zo1qZogamjYm
+ I5_Mcp5CI3qcOKU3eBrFV9h7W5n46i_SoQRe6Ik5bY2HanPiT35pOKf0PEuXin2IsA5wHTPZUOdP
+ f4Td13vBVL73frDYzJ17uQy1GwUP.YEkM6K0ovFMc8.gCwMi9ON5zCjO.vjorb7.8stSWwIQyWJg
+ 9HIaI2SCvlEEtBE6_s4KVPWA863pRglQzuwSE.yF1t4EBBp1BeOcHpr6Zcex5Ff_GftGcWq71w56
+ rsBE020d7H60fSFEW4GDtrCtluEqzg94oVfIFFhTOS5bAOR6yJL1RC6mLImYzicDAOXYVopeYZVn
+ CH64OnXrzE_QejkanhICKRiAH7daJY2Upk1X2fcwKxgOxjsCHLEZXuWwn.G6mbTnh.5QARCThNG7
+ mQ_zxA.E_Vqwa6e8NFIGZX7urfLkZ8gkklEKCaL1vQVZpxANxzHBD2nn2R1dk3TEyPc0kHIq_elB
+ 82G0eoOQtbiO3jKLaXcWwnNAiDMMg_eLz_K73EPWfdlDpEoZFuENKz_OimAUoz997MUDEUbS8K.Q
+ mtzvfQFbT4hYb9UL_pQ8hPpf6vvqz53WU.50aF2eCcUwOwlc7iJ9L9Ht0TUaLLzm_eOFdKPaKBdV
+ _FnwaEGJbgkLkEfKv29P0KTIz1nb9mrOQKyO0xqmaGAVzNQEjWEi9sFTRvmL09cqK_kTrJ9nLi1U
+ ZonTnCP5LGRsHzLp1.RLwt3d8VZbwYrfx_VI5x5Apxxz.qwDU7fmZC675mrMVPUkyFZ.YJgIEJUZ
+ 7f2L05U0l2AtO5mkxVMs_5MzbroyHdl8LEa7RNoyQRvCn8i5nqTRmOFYzTrIBsLaol7Yy_xES4Wn
+ ULJITu8_X_VQvX7OzfaWNwb4i1EEJm7Vdq2OHBexBRtJqeO6eXNWfj4RxNT_16DFiCEFN_NXolgT
+ Ia5KBcHM8GYowcFjE4277KMOBf1Oyb8zvBJuZzES4QMcrN8LqjAGzWXj2JZqOquD1bsgDcBEcL5k
+ trH1GR2GiEKL6.ZAahsOPxUdWqah2j5FygyUKOuSMuLbAzp..PpUANUWD_dxCBsxVyynLKIFoqeq
+ 1V9taISaAQN9KwzfWaKypF.mjEZKfDI8voSNN3W5dXTE.6jw7DDzhdBks0.bPNTrjK_ECwdHGHt1
+ .T_3zn_6TYjWBjn7p8FltV00icX7_ixda8oLX3VMuf3DwCs9IpUa7nnTrSQiThU_hTlDVeePCAqR
+ POe.TEUK2t2AvJNUEl9XyXdbNu77CL6eXuVyEqr576n.TF9tdopNfOmr_YbGp7H8Db4m406EV7O4
+ VhwkQd.pJ.1KeW28rRQvnk85QyMoNmAdxbscPf5Rmr.mjqqDatzUEKB.PkOTqQwstVSgbOUtdriR
+ 9VhInXUW3GTecIjYOh_FikwokytW4AB7mbX8swjSIMhDHjilPrs6FZNTOFCZB6hPHC_.2opFAjSs
+ 8g4k8ApZWGPvwL5KdQaXjOBmHLzTP1eG6RKcozwsumWAMWdmV55Zi5RGu0_JjefyN9HzdYaArHj1
+ UzIa6XF1qJlrP_7xZtxrLZA_.CRKdA64JnT7GCLxPpyRjGnB6gsT5595iLW1BmY6H.aJ2BBhg56S
+ 976wwazaHHN2ZTM9AxvXadzSEL7..PCbaLqWyLh9QY5x0KyMd5WajJ1qOf1xgb3ALfP1HkPEQDkI
+ .paif7kf7NNKeueZEwTCNx1W423V1JH9GIu67IhzjSO9TmrvlJpW3pQT.dhWP9QZduOLEJiM6Ok_
+ IS2TXHp94_RhM4F6xYMf7Pmg6FVmgNS9kH0FJIdaZlGOYiBAAG7umC_nVqJ.eE2ZJr6QWWSzljIy
+ Sw_t.DXXx9xVjAPaczrWIQ_CF16gtEh9gDwHtYE0oGY53EYeO1.O3S8WJCao1v5jEU1hfsGUj5bG
+ GsWYotvzJ6WL5.oC0qTvbj24m5ZPIznSnIH.h5729oHSbATzV7KtOXSO_lolCwtA_oOvbUKTZ4WX
+ yXPaIEABfl1KZh8mizgqqzQkGNMm1ieOxcfF3i12Fb4g6zPIG06niCHdFCSGCUCr2auow5msDFE3
+ MfbZfbmJnTTQUCVCgfVLpCqOgk3EgXbaIBJFBnKhH8g7ajJt4L8b9ErT2mnkY.f6TZSL_V3weE.O
+ vINmoIkDZZ.bn.N2Rrg--
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: b1e5ffb0-6d22-4ed8-9be6-2d92a064b5c5
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic303.consmr.mail.ne1.yahoo.com with HTTP; Sat, 24 Jun 2023 01:42:37 +0000
+Received: by hermes--production-bf1-54475bbfff-wwb88 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID c7030251031f4739a0ee64d6090003c6;
+          Sat, 24 Jun 2023 01:42:32 +0000 (UTC)
+Message-ID: <55ffce53-077c-1766-af83-594b788dbd99@schaufler-ca.com>
+Date:   Fri, 23 Jun 2023 18:42:28 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-From:   Xiubo Li <xiubli@redhat.com>
-Subject: Re: [PATCH v5 00/14] ceph: support idmapped mounts
-To:     Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Cc:     Gregory Farnum <gfarnum@redhat.com>,
-        Christian Brauner <brauner@kernel.org>, stgraber@ubuntu.com,
-        linux-fsdevel@vger.kernel.org, Ilya Dryomov <idryomov@gmail.com>,
-        Jeff Layton <jlayton@kernel.org>, ceph-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230608154256.562906-1-aleksandr.mikhalitsyn@canonical.com>
- <f3864ed6-8c97-8a7a-f268-dab29eb2fb21@redhat.com>
- <CAEivzxcRsHveuW3nrPnSBK6_2-eT4XPvza3kN2oogvnbVXBKvQ@mail.gmail.com>
- <20230609-alufolie-gezaubert-f18ef17cda12@brauner>
- <CAEivzxc_LW6mTKjk46WivrisnnmVQs0UnRrh6p0KxhqyXrErBQ@mail.gmail.com>
- <ac1c6817-9838-fcf3-edc8-224ff85691e0@redhat.com>
- <CAJ4mKGby71qfb3gd696XH3AazeR0Qc_VGYupMznRH3Piky+VGA@mail.gmail.com>
- <977d8133-a55f-0667-dc12-aa6fd7d8c3e4@redhat.com>
- <CAEivzxcr99sERxZX17rZ5jW9YSzAWYvAjOOhBH+FqRoso2=yng@mail.gmail.com>
- <626175e2-ee91-0f1a-9e5d-e506aea366fa@redhat.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v11 00/11] LSM: Three basic syscalls
 Content-Language: en-US
-In-Reply-To: <626175e2-ee91-0f1a-9e5d-e506aea366fa@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Jay Freyensee <why2jjj.linux@gmail.com>, paul@paul-moore.com,
+        linux-security-module@vger.kernel.org
+Cc:     jmorris@namei.org, serge@hallyn.com, keescook@chromium.org,
+        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
+        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org, mic@digikod.net,
+        Casey Schaufler <casey@schaufler-ca.com>
+References: <20230616165055.4705-1-casey.ref@schaufler-ca.com>
+ <20230616165055.4705-1-casey@schaufler-ca.com>
+ <403108b1-5600-bb5e-a0ad-6f802b4b296f@gmail.com>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <403108b1-5600-bb5e-a0ad-6f802b4b296f@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Mailer: WebService/1.1.21557 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[...]
+On 6/23/2023 6:10 PM, Jay Freyensee wrote:
+>
+> On 6/16/23 9:50 AM, Casey Schaufler wrote:
+>> Add three system calls for the Linux Security Module ABI.
+>>
+>> lsm_get_self_attr() provides the security module specific attributes
+>> that have previously been visible in the /proc/self/attr directory.
+>> For each security module that uses the specified attribute on the
+>> current process the system call will return an LSM identifier and
+>> the value of the attribute. The LSM and attribute identifier values
+>> are defined in include/uapi/linux/lsm.h
+>>
+>> LSM identifiers are simple integers and reflect the order in which
+>> the LSM was added to the mainline kernel. This is a convention, not
+>> a promise of the API. LSM identifiers below the value of 100 are
+>> reserved for unspecified future uses. That could include information
+>> about the security infrastructure itself, or about how multiple LSMs
+>> might interact with each other.
+>>
+>> A new LSM hook security_getselfattr() is introduced to get the
+>> required information from the security modules. This is similar
+>> to the existing security_getprocattr() hook, but specifies the
+>> format in which string data is returned and requires the module
+>> to put the information into a userspace destination.
+>>
+>> lsm_set_self_attr() changes the specified LSM attribute. Only one
+>> attribute can be changed at a time, and then only if the specified
+>> security module allows the change.
+>>
+>> A new LSM hook security_setselfattr() is introduced to set the
+>> required information in the security modules. This is similar
+>> to the existing security_setprocattr() hook, but specifies the
+>> format in which string data is presented and requires the module
+>> to get the information from a userspace destination.
+>>
+>> lsm_list_modules() provides the LSM identifiers, in order, of the
+>> security modules that are active on the system. This has been
+>> available in the securityfs file /sys/kernel/security/lsm.
+> Active or available?
 
- > > >
- > > > I thought about this too and came to the same conclusion, that 
-UID/GID
- > > > based
- > > > restriction can be applied dynamically, so detecting it on mount-time
- > > > helps not so much.
- > > >
- > > For this you please raise one PR to ceph first to support this, and in
- > > the PR we can discuss more for the MDS auth caps. And after the PR
- > > getting merged then in this patch series you need to check the
- > > corresponding option or flag to determine whether could the idmap
- > > mounting succeed.
- >
- > I'm sorry but I don't understand what we want to support here. Do we 
-want to
- > add some new ceph request that allows to check if UID/GID-based
- > permissions are applied for
- > a particular ceph client user?
+Active. Security modules are registered during init time.
+There isn't really a notion of "available" since you can't
+enable or disable them dynamically.
 
-IMO we should prevent user to set UID/GID-based permisions caps from 
-ceph side.
+>
+> If I use landlock's documentation example:
+>
+> Jun 07 10:37:11 fedora kernel: LSM: initializing
+> lsm=lockdown,capability,yama,integrity,selinux,bpf>
+> Jun 07 10:37:11 fedora kernel: landlock: Up and running.
+>
+> My interpretation of the two log lines is the first line tells me
+> landlock is available on the distro (fedora this case), but the second
+> line tells me landlock is now active. Thus the lsm available list may
+> be different than the lsm active list.
 
-As I know currently there is no way to prevent users to set MDS auth 
-caps, IMO in ceph side at least we need one flag or option to disable 
-this once users want this fs cluster sever for idmap mounts use case.
+Your "available" list would depend on which modules are compiled in.
+There is no explicit mechanism provided to get that list. There isn't
+anything interesting you could do with it on a running system.
 
-Thanks
+>
+> So is lsm_list_modules() going to tell me just what lsm's are
+> available in a distro for use, or is it going to tell me what lsm's
+> are available _and_ active?
 
-- Xiubo
+As documented, its going to tell you which are active.
+You can infer that a module is available if it is active.
+You cannot infer that a module isn't "available", that is,
+isn't compiled in, if it isn't active.
 
+>
+> Thanks,
+>
+> Jay
+>
