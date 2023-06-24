@@ -2,53 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DFBA73CB8C
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 17:18:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7AD173CB8D
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 17:20:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233188AbjFXPRR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 11:17:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47728 "EHLO
+        id S231289AbjFXPTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 11:19:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbjFXPRP (ORCPT
+        with ESMTP id S231883AbjFXPTw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 11:17:15 -0400
-Received: from mail-40137.protonmail.ch (mail-40137.protonmail.ch [185.70.40.137])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECF35BE;
-        Sat, 24 Jun 2023 08:17:13 -0700 (PDT)
-Date:   Sat, 24 Jun 2023 15:17:10 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1687619832; x=1687879032;
-        bh=oqNbMDMVqYSYS7DA8muXpGFWCTY0wKl33meUenkWvVY=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=tMLyvDngxwla/lu4eDw9gravTc+BGEbrRqE/XpZYW5kujgvQjkRQKUFHrysr71HIy
-         u8ZMAJZw9e0d1v6W39SorECRwcZnI1OPxp8SZe3jTp3l0YPljoa4Qzy4LK9KB073HQ
-         wkk+QLnfWTcvDwpFFjCJT1A1JNV/sPJG4I9mzNMC4Fq/glDya/kyg3xyX9nN3vbvKA
-         YfFfxnqodrEnItJdxqG7GocAPuCYVr1UCkyVrBxA1b7ZA+DrHjL6UgytVg1Wi72hOf
-         Pf7buSqTekXRvZK3GjA7kKhyIHf3Dwcl5oZ8aq+++b20T1apXT7SN2hbaWMLtAZMxJ
-         TMjcnlzpJiF+Q==
-To:     Benno Lossin <benno.lossin@proton.me>
-From:   =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        Alice Ryhl <aliceryhl@google.com>,
-        Andreas Hindborg <nmi@metaspace.dk>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Asahi Lina <lina@asahilina.net>
-Subject: Re: [PATCH 6/7] rust: init: Add functions to create array initializers
-Message-ID: <xHy4uUhB5UOmzgGDBs3Oh8O8YwC7l6KgvUP_s-D897heQhUIKGBxig6rIpr5EmupMXCXYI4LmuwhO5uB8CAWTtIY7buLMcuk_2ZS8UL2akA=@protonmail.com>
-In-Reply-To: <20230624092330.157338-6-benno.lossin@proton.me>
-References: <20230624092330.157338-1-benno.lossin@proton.me> <20230624092330.157338-6-benno.lossin@proton.me>
-Feedback-ID: 27884398:user:proton
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        Sat, 24 Jun 2023 11:19:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53E651987
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 08:19:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A046609FB
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 15:19:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DDF4C433C9;
+        Sat, 24 Jun 2023 15:19:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687619986;
+        bh=2NqCQaBRiYu07umaA1vjuK56Y6YrWpIX5Q20gxZ9Q9I=;
+        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
+        b=QBqIkrTMKVkiA5tDFcd4Gy3M8U4SxhGk1L+JhqXVlzM+wu+kHEXZuhF2moV1DwEwZ
+         Zw6Z+WVHZVJiMaHGUNdlMJwOaQdxDnaZGCN8cUyMA3xaBgbi7rxbKSHJ3sdx7tuVmD
+         mQmeW3ZTGbrDJM5fwPo0+9FEZBShNu3MBB+LDg92mH6QWm+9scdsNQeaDu8Jj4E1GZ
+         1p4nO8d3g4RdZhbJ9nX01gk4WBDrWuEYx2LDxHhfLeXhNsBrQ7ZkN0CAYrvMtYbMv5
+         LC2W9bPSVCb3KRTbh1jshMmbxCv5bWrol7TpRgpqLJH0SByOeqbxVpKocCWJGN6LVG
+         ZWK/Nv4N53ReA==
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 1E6CC27C0054;
+        Sat, 24 Jun 2023 11:19:45 -0400 (EDT)
+Received: from imap48 ([10.202.2.98])
+  by compute3.internal (MEProxy); Sat, 24 Jun 2023 11:19:45 -0400
+X-ME-Sender: <xms:jwmXZGPMWUGrKFs2_RuSGVZhgeWevlHpWpgCUANBQPHRgccNuGnfjA>
+    <xme:jwmXZE8UFw5xwAwo1nRfExn-iH3x1uEsdhFTwc1T0ZPhSbz_5moesN_KqHSrzsIO-
+    rd-MaTiqx096sgMUFg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeegjedgkeeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehn
+    ugihucfnuhhtohhmihhrshhkihdfuceolhhuthhosehkvghrnhgvlhdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepvdfhuedvtdfhudffhfekkefftefghfeltdelgeffteehueegjeff
+    udehgfetiefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homheprghnugihodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduudeiudek
+    heeifedvqddvieefudeiiedtkedqlhhuthhopeepkhgvrhhnvghlrdhorhhgsehlihhnuh
+    igrdhluhhtohdruhhs
+X-ME-Proxy: <xmx:jwmXZNT3Ru7zPP7CniFO4KzMfGDKogviTYJan-8vEEpucz4NOgmCdg>
+    <xmx:jwmXZGtpM8thJxgVuzpae6_CxZiPBAOuWcm6SdvQfTqUdhcdrhWzrw>
+    <xmx:jwmXZOfIgeoExx9LQWJT7Q5JD3WVhmITkEBPfrddYjuBTi01hsW0LA>
+    <xmx:kQmXZPVimMczhxhHKNjfHzUWniJoobk9fVQfmjuti9FE1l84BFCKkg>
+Feedback-ID: ieff94742:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 6343231A0063; Sat, 24 Jun 2023 11:19:43 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
+Mime-Version: 1.0
+Message-Id: <8306ce41-e551-4983-9c63-2e804f22ec61@app.fastmail.com>
+In-Reply-To: <7c56f418-e0f3-7c16-a3f7-0ae8bd12bbf0@suse.com>
+References: <20230621151442.2152425-1-per.bilse@citrix.com>
+ <20230621164038.GM2053369@hirez.programming.kicks-ass.net>
+ <6523f3e2-8dfc-c2dd-6d14-9e0c3ac93cc8@citrix.com>
+ <20230621200409.GC4253@hirez.programming.kicks-ass.net>
+ <a8cd2788-a695-964a-3311-dbecb669bb72@suse.com>
+ <20230622082607.GD4253@hirez.programming.kicks-ass.net>
+ <4d29bfe0-975a-c97f-3e79-5b77d95d3494@suse.com>
+ <8a5b8e4a-d238-4f35-b4c7-fb9e34650a14@app.fastmail.com>
+ <7c56f418-e0f3-7c16-a3f7-0ae8bd12bbf0@suse.com>
+Date:   Sat, 24 Jun 2023 08:19:23 -0700
+From:   "Andy Lutomirski" <luto@kernel.org>
+To:     "Juergen Gross" <jgross@suse.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>
+Cc:     "Per Bilse" <Per.Bilse@citrix.com>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Stefano Stabellini" <sstabellini@kernel.org>,
+        "Oleksandr Tyshchenko" <oleksandr_tyshchenko@epam.com>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        "moderated list:XEN HYPERVISOR INTERFACE" 
+        <xen-devel@lists.xenproject.org>
+Subject: Re: [PATCH] Updates to Xen hypercall preemption
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,139 +99,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Saturday, June 24th, 2023 at 11:25, Benno Lossin <benno.lossin@proton.me=
-> wrote:
+On Thu, Jun 22, 2023, at 10:20 AM, Juergen Gross wrote:
+> On 22.06.23 18:39, Andy Lutomirski wrote:
+>> On Thu, Jun 22, 2023, at 3:33 AM, Juergen Gross wrote:
+>>> On 22.06.23 10:26, Peter Zijlstra wrote:
+>>>> On Thu, Jun 22, 2023 at 07:22:53AM +0200, Juergen Gross wrote:
+>>>>
+>>>>> The hypercalls we are talking of are synchronous ones. They are running
+>>>>> in the context of the vcpu doing the call (like a syscall from userland is
+>>>>> running in the process context).
+>>>>
+>>>> (so time actually passes from the guest's pov?)
+>>>
+>>> Correct.
+>>>
+>>>>
+>>>>> The hypervisor will return to guest context from time to time by modifying
+>>>>> the registers such that the guest will do the hypercall again with different
+>>>>> input values for the hypervisor, resulting in a proper continuation of the
+>>>>> hypercall processing.
+>>>>
+>>>> Eeeuw.. that's pretty terrible. And changing this isn't in the cards,
+>>>> like at all?
+>>>
+>>> In the long run this should be possible, but not for already existing Xen
+>>> versions.
+>>>
+>>>>
+>>>> That is, why isn't this whole thing written like:
+>>>>
+>>>> 	for (;;) {
+>>>> 		ret = hypercall(foo);
+>>>> 		if (ret == -EAGAIN) {
+>>>> 			cond_resched();
+>>>> 			continue;
+>>>> 		}
+>>>> 		break;
+>>>> 	}
+>>>
+>>> The hypervisor doesn't return -EAGAIN for hysterical reasons.
+>>>
+>>> This would be one of the options to change the interface. OTOH there are cases
+>>> where already existing hypercalls need to be modified in the hypervisor to do
+>>> preemption in the middle due to e.g. security reasons (avoiding cpu hogging in
+>>> special cases).
+>>>
+>>> Additionally some of the hypercalls being subject to preemption are allowed in
+>>> unprivileged guests, too. Those are mostly hypercalls allowed for PV guests
+>>> only, but some are usable by all guests.
+>>>
+>>>>
+>>>>> It is an awful interface and I agree that switching to full preemption in
+>>>>> dom0 seems to be the route which we should try to take.
+>>>>
+>>>> Well, I would very strongly suggest the route to take is to scrap the
+>>>> whole thing and invest in doing something saner so we don't have to jump
+>>>> through hoops like this.
+>>>>
+>>>> This is quite possibly the worst possible interface for this Xen could
+>>>> have come up with -- awards material for sure.
+>>>
+>>> Yes.
+>>>
+>>>>
+>>>>> The downside would be that some workloads might see worse performance
+>>>>> due to backend I/O handling might get preempted.
+>>>>
+>>>> Is that an actual concern? Mark this a legaxy inteface and anybody who
+>>>> wants to get away from it updates.
+>>>
+>>> It isn't that easy. See above.
+>>>
+>>>>
+>>>>> Just thinking - can full preemption be enabled per process?
+>>>>
+>>>> Nope, that's a system wide thing. Preemption is something that's driven
+>>>> by the requirements of the tasks that preempt, not something by the
+>>>> tasks that get preempted.
+>>>
+>>> Depends. If a task in a non-preempt system could switch itself to be
+>>> preemptable, we could do so around hypercalls without compromising the
+>>> general preemption setting. Disabling preemption in a preemptable system
+>>> should continue to be possible for short code paths only, of course.
+>>>
+>>>> Andy's idea of having that thing intercepted as an exception (EXTABLE
+>>>> like) and relocating the IP to a place that does cond_resched() before
+>>>> going back is an option.. gross, but possibly better, dunno.
+>>>>
+>>>> Quite the mess indeed :/
+>>>
+>>> Yeah.
+>> 
+>> Having one implementation of interrupt handlers that schedule when they interrupt kernel code (the normal full preempt path) is one thing.  Having two of them (full preempt and super-special-Xen) is IMO quite a bit worse.  Especially since no one tests the latter very well.
+>> 
+>> Having a horrible Xen-specific extable-like thingy seems honestly rather less bad.  It could even have a little self-contained test that runs at boot, I bet.
+>> 
+>> But I'll bite on the performance impact issue.  What, exactly, is wrong with full preemption?  Full preemption has two sources of overhead, I think.  One is a bit of bookkeeping.  The other is the overhead inherent in actually rescheduling -- context switch cost, losing things from cache, etc.
+>> 
+>> The bookkeeping part should have quite low overhead.  The scheduling part sounds like it might just need some scheduler tuning if it's really a problem.
+>> 
+>> In any case, for backend IO, full preemption sounds like it should be a win, not a loss.  If I'm asking dom0 to do backend IO for me, I don't want it delayed because dom0 was busy doing something else boring.  IO is faster when the latency between requesting it and actually submitting it to hardware is lower.
+>
+> Maybe. I was assuming that full preemption would result in more context
+> switches, especially in case many guests are hammering dom0 with I/Os.
+> This means that more time is spent with switching instead of doing real
+> work, resulting in dom0 being at 100% cpu faster with doing less work.
 
-> Add two functions `pin_init_array_from_fn` and `init_array_from_fn` that
-> take a function that generates initializers for `T` from usize, the added
-> functions then return an initializer for `[T; N]` where every element is
-> initialized by an element returned from the generator function.
->=20
-> Suggested-by: Asahi Lina <lina@asahilina.net>
-> Signed-off-by: Benno Lossin <benno.lossin@proton.me>
+It ought to just result in context switches happening a bit earlier when the scheduler decides it wants one.  When a non-fully-preemptible kernel gets an interrupt and need_resched gets set, it will still schedule as soon as it hits a cond_resched() or a return to usermode or anything else that explicitly allows scheduling.
 
-Reviewed-by: Bj=C3=B6rn Roy Baron <bjorn3_gh@protonmail.com>
-
-> ---
->  rust/kernel/init.rs | 90 +++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 90 insertions(+)
->=20
-> diff --git a/rust/kernel/init.rs b/rust/kernel/init.rs
-> index 44bc3e77419a..c9ea4bf71987 100644
-> --- a/rust/kernel/init.rs
-> +++ b/rust/kernel/init.rs
-> @@ -867,6 +867,96 @@ pub fn uninit<T, E>() -> impl Init<MaybeUninit<T>, E=
-> {
->      unsafe { init_from_closure(|_| Ok(())) }
->  }
->=20
-> +/// Initializes an array by initializing each element via the provided i=
-nitializer.
-> +///
-> +/// # Examples
-> +///
-> +/// ```rust
-> +/// let array: Box<[usize; 1000_000_000]>=3D Box::init(init_array_from_f=
-n(|i| i)).unwrap();
-> +/// println!("{array:?}");
-> +/// ```
-> +pub fn init_array_from_fn<I, const N: usize, T, E>(
-> +    mut make_init: impl FnMut(usize) -> I,
-> +) -> impl Init<[T; N], E>
-> +where
-> +    I: Init<T, E>,
-> +{
-> +    let init =3D move |slot: *mut [T; N]| {
-> +        let slot =3D slot.cast::<T>();
-> +        for i in 0..N {
-> +            let init =3D make_init(i);
-> +            // SAFETY: since 0 <=3D `i` < N, it is still in bounds of `[=
-T; N]`.
-> +            let ptr =3D unsafe { slot.add(i) };
-> +            // SAFETY: The pointer is derived from `slot` and thus satis=
-fies the `__init`
-> +            // requirements.
-> +            match unsafe { init.__init(ptr) } {
-> +                Ok(()) =3D> {}
-> +                Err(e) =3D> {
-> +                    // We now free every element that has been initializ=
-ed before:
-> +                    for j in 0..i {
-> +                        let ptr =3D unsafe { slot.add(j) };
-> +                        // SAFETY: The value was initialized in a previo=
-us iteration of the loop
-> +                        // and since we return `Err` below, the caller w=
-ill consider the memory at
-> +                        // `slot` as uninitialized.
-> +                        unsafe { ptr::drop_in_place(ptr) };
-> +                    }
-> +                    return Err(e);
-> +                }
-> +            }
-> +        }
-> +        Ok(())
-> +    };
-> +    // SAFETY: The initializer above initializes every element of the ar=
-ray. On failure it drops
-> +    // any initialized elements and returns `Err`.
-> +    unsafe { init_from_closure(init) }
-> +}
-> +
-> +/// Initializes an array by initializing each element via the provided i=
-nitializer.
-> +///
-> +/// # Examples
-> +///
-> +/// ```rust
-> +/// let array: Arc<[Mutex<usize>; 1000_000_000]>=3D
-> +///     Arc::pin_init(init_array_from_fn(|i| new_mutex!(i))).unwrap();
-> +/// println!("{array:?}");
-> +/// ```
-> +pub fn pin_init_array_from_fn<I, const N: usize, T, E>(
-> +    mut make_init: impl FnMut(usize) -> I,
-> +) -> impl PinInit<[T; N], E>
-> +where
-> +    I: PinInit<T, E>,
-> +{
-> +    let init =3D move |slot: *mut [T; N]| {
-> +        let slot =3D slot.cast::<T>();
-> +        for i in 0..N {
-> +            let init =3D make_init(i);
-> +            // SAFETY: since 0 <=3D `i` < N, it is still in bounds of `[=
-T; N]`.
-> +            let ptr =3D unsafe { slot.add(i) };
-> +            // SAFETY: The pointer is derived from `slot` and thus satis=
-fies the `__pinned_init`
-> +            // requirements.
-> +            match unsafe { init.__pinned_init(ptr) } {
-> +                Ok(()) =3D> {}
-> +                Err(e) =3D> {
-> +                    // We now have to free every element that has been i=
-nitialized before, since we
-> +                    // have to abide by the drop guarantee.
-> +                    for j in 0..i {
-> +                        let ptr =3D unsafe { slot.add(j) };
-> +                        // SAFETY: The value was initialized in a previo=
-us iteration of the loop
-> +                        // and since we return `Err` below, the caller w=
-ill consider the memory at
-> +                        // `slot` as uninitialized.
-> +                        unsafe { ptr::drop_in_place(ptr) };
-> +                    }
-> +                    return Err(e);
-> +                }
-> +            }
-> +        }
-> +        Ok(())
-> +    };
-> +    // SAFETY: The initializer above initializes every element of the ar=
-ray. On failure it drops
-> +    // any initialized elements and returns `Err`.
-> +    unsafe { pin_init_from_closure(init) }
-> +}
-> +
->  // SAFETY: Every type can be initialized by-value.
->  unsafe impl<T, E> Init<T, E> for T {
->      unsafe fn __init(self, slot: *mut T) -> Result<(), E> {
-> --
-> 2.41.0
+If you're hammering dom0 with IO and it's getting swamped by context switches, the problem is the code handling the IO (too many threads or something), not the preemption.
