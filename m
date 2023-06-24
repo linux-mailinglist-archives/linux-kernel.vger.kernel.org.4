@@ -2,141 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B783773CBDE
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 18:22:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DD8573CBE0
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 18:33:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233083AbjFXQWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 12:22:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58778 "EHLO
+        id S230333AbjFXQdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 12:33:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbjFXQWo (ORCPT
+        with ESMTP id S229565AbjFXQdS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 12:22:44 -0400
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F29FC1BCA;
-        Sat, 24 Jun 2023 09:22:42 -0700 (PDT)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-1b012c3ce43so529861fac.3;
-        Sat, 24 Jun 2023 09:22:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687623762; x=1690215762;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=FjHHI1yyw4klDYWSKFxXJcGrhONifvdrICJXqeUvzdw=;
-        b=bP/VGAbkC17gDmTxtsnJAko2y/yhEvMlQVN5eoz7QMfxc362wPWeadqBp2hcD7lO9L
-         xifRNjsE/TEgoYQMSMXvQlo+ivbIMaODIr5nWuGCS6XU1ufPBX7/YPJ5nIXErYYNCMF/
-         l8LrAAPY7CXfWNQLAOH0ooDdpAWCMgUBcoto91nPxwibj1zNKEsbvxQyNjHI5+wIFHfn
-         Oxcxk+K4uFVBXxroWkfFigwdTuvnC0/zTjlqnnhXnt1Fb2v1x148T4/XfBrwoYDeEHAw
-         rzt2BbePEDNojBa7uWwQ91wqTAIheOv7pt9Q4lROTs62FYBlt9bmZgBePoxVJRQetrUk
-         6r6g==
+        Sat, 24 Jun 2023 12:33:18 -0400
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A7111BC1;
+        Sat, 24 Jun 2023 09:33:17 -0700 (PDT)
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-262d505f336so98555a91.2;
+        Sat, 24 Jun 2023 09:33:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687623762; x=1690215762;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FjHHI1yyw4klDYWSKFxXJcGrhONifvdrICJXqeUvzdw=;
-        b=LFaKRx/UX+RbJvduW/ZaxO3fZNPeA2pjPEl3zm6FZUJI0fMwanPO94B/cDCSNOt03F
-         sp2xe35orrbxmgup4RicZgPsHqO59VUWQXIz/iyybZTGRENwwTvM700i5705jn+EDTpB
-         0N45dt5fqvHzjsSg+/KHPCXweIeTq2ztkktzUhkB3wlxXW3Ck9Ac4Q7Mhbe2dTMxiQla
-         jDNYf29jvtQaY3WjEAXdBirF3MncEfeX9MSHKRQau/OxBNJj+kVH0eDCn6ZVLASnWkWJ
-         iN8t7uqiJCP497P2RlP5OE+DoJCqLlCeMXva5nPd9Tz1PU8UkbX5Bztsc/s6JL9pDFfn
-         rmIA==
-X-Gm-Message-State: AC+VfDxczeyFwcT4gGK3xu5d52rV/TPGm5xL5ghvC0CzexvfvCv2+XSf
-        xVnAT4By3yRoU+oFVfY/bDfLhLLs3Cb/nw==
-X-Google-Smtp-Source: ACHHUZ4FedgPHxWTt/Zi2yB72fXZBNoDybnymIynQCusCaHJNo1mIZ9Pu7DLsHt3Rp1527oPOlN89Q==
-X-Received: by 2002:a05:6870:4415:b0:1a9:fe25:2e80 with SMTP id u21-20020a056870441500b001a9fe252e80mr20212466oah.18.1687623761790;
-        Sat, 24 Jun 2023 09:22:41 -0700 (PDT)
-Received: from [192.168.1.128] ([216.130.59.33])
-        by smtp.gmail.com with ESMTPSA id q17-20020a05687101d100b001a6ad211bf3sm1346883oad.1.2023.06.24.09.22.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 24 Jun 2023 09:22:41 -0700 (PDT)
-Sender: Larry Finger <larry.finger@gmail.com>
-Message-ID: <18f4cb13-9b7d-e202-333e-43c76d8c7290@lwfinger.net>
-Date:   Sat, 24 Jun 2023 11:22:40 -0500
+        d=1e100.net; s=20221208; t=1687624397; x=1690216397;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PYOlqLww+yl7DKURHVLVUqrkFu6eHQZNsApfZOW1vno=;
+        b=HU4FEm5aq8dZLfq+m+rU+bjH4aq5A9opL58/ASrj0bphv+6DHMmqKAlfItg9kG5+3n
+         HKyrJJlv3GsxhC2Y7Kg1OlrA2PSeg3TxgxTpaCSf/8ILFIWnChStRzlGJO0r+YfJoJtl
+         9r84wrVZybngkccIoonxz6HZ17aEoemdKFYmQhdz4uUhOgVpd08gvFeEaY11+IeCwbtO
+         RwaamLWr47ufrcE7xQ4bD4iInqrf4UPBmBF1qnksxakC13ajkcNiDxOE5FmTJylWp1ld
+         SEh0eSWQwhAd0cgk3rYu7n48HipsZ+K4WSr7SmBljvElkGgURRFlWl0o8efDMe+Zt54Z
+         cGIQ==
+X-Gm-Message-State: AC+VfDydCkqeulH4iPmVq/hOwEvnx1I55oJLXBJ4ydvUZ8rdFlkcFrzn
+        Yw/Y8qGik3iemwrMt4a0vzKfLuecCpEfgaba
+X-Google-Smtp-Source: ACHHUZ6PLKmUaWBfgPdN9TIwnb5e5SFTOW/J6dmpHur1MtP72GXKEEjcSkryeY2CMEuqYytIwI6oqg==
+X-Received: by 2002:a17:90a:1f82:b0:250:6c76:fd9b with SMTP id x2-20020a17090a1f8200b002506c76fd9bmr16084274pja.38.1687624396685;
+        Sat, 24 Jun 2023 09:33:16 -0700 (PDT)
+Received: from localhost (fpd11144dd.ap.nuro.jp. [209.17.68.221])
+        by smtp.gmail.com with ESMTPSA id w2-20020a17090a380200b00256353eb8f2sm3628811pjb.5.2023.06.24.09.33.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 24 Jun 2023 09:33:15 -0700 (PDT)
+Date:   Sun, 25 Jun 2023 01:33:14 +0900
+From:   Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
+To:     korantwork@gmail.com
+Cc:     dlemoal@kernel.org, helgaas@kernel.org,
+        nirmal.patel@linux.intel.com, kbusch@kernel.org,
+        jonathan.derrick@linux.dev, lpieralisi@kernel.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xinghui Li <korantli@tencent.com>,
+        Christoph Hellwig <hch@infradead.org>
+Subject: Re: [PATCH v2 0/2] PCI: vmd: Fix two issues in VMD reported by Smatch
+Message-ID: <20230624163314.GD2636347@rocinante>
+References: <20230420094332.1507900-1-korantwork@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: After kernel 6.3.7 or 6.3.8 b43 driver fails
-To:     Linux regressions mailing list <regressions@lists.linux.dev>,
-        Arnd Bergmann <arnd@arndb.de>,
-        =?UTF-8?Q?Michael_B=c3=bcsch?= <m@bues.ch>,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Wireless <linux-wireless@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        Kalle Valo <kvalo@kernel.org>, sardonimous@hotmail.com
-References: <27829c69-515c-36a6-4beb-3210225f8936@gmail.com>
- <20230624105023.146d99e0@barney>
- <d33a248c-c7ac-43d3-b602-3c801d697922@app.fastmail.com>
- <08ea34c8-7194-eafb-98f4-1e0b52ca7e81@leemhuis.info>
-Content-Language: en-US
-From:   Larry Finger <Larry.Finger@lwfinger.net>
-In-Reply-To: <08ea34c8-7194-eafb-98f4-1e0b52ca7e81@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230420094332.1507900-1-korantwork@gmail.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/24/23 09:00, Linux regression tracking (Thorsten Leemhuis) wrote:
-> On 24.06.23 11:29, Arnd Bergmann wrote:
->> On Sat, Jun 24, 2023, at 10:50, Michael Büsch wrote:
->>> On Sat, 24 Jun 2023 08:44:15 +0700
->>> Bagas Sanjaya <bagasdotme@gmail.com> wrote:
->>>>> I suspect change introduced when addressing a compiler warning
->>>>> cased the error.
->>>>>
->>>>> https://patchwork.kernel.org/project/linux-wireless/patch/20230516183442.536589-1-arnd%40kernel.org/
->>>
->>> I doubt it.
->>> This patch affects the device initialization code. But the crash is in
->>> the transmit path.
->>> Can you please double check by manually reverting the patch?
->>
->> I'm travelling at the moment and can't easily check it, but I would
->> expect that my patch has no effect on the generated object code [...]
-> 
-> Michael, Arnd, thx for the replies. To you and everyone else that looked
-> into this: sorry for the trouble this caused.
-> 
-> The reporter's guess was wrong, as the reporter meanwhile confirmed in
-> the bugzilla ticket that the problem started to happen earlier.
-> 
-> Bagas, please be a bit more careful and don't blame a specific commit
-> unless it's was found by bisection, a revert through a lucky guess, a
-> statement from a developer, or something like that. In cases like this
-> it would have been better to sent the developers of said commit a quick
-> mail along the lines of "could you imagine that this change could lead
-> to the problem the reporter described". But even that might be too much
-> in a case like this, as too many of such false alarms and inquiries will
-> make developers start hating or ignoring regression tracking in general
-> or mails from you or me – and that is something that must be avoided, as
-> without help from developers regression tracking becomes a lot harder or
-> impossible.
-> 
-> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-> --
-> Everything you wanna know about Linux kernel regression tracking:
-> https://linux-regtracking.leemhuis.info/about/#tldr
-> If I did something stupid, please tell me, as explained on that page.
-> 
-> P.S.: Updating regzbot status, while at it:
+[+CC Christoph]
 
-The OP definitely needs to bisect this problem. The only system that I have that 
-runs b43 is a PowerBook G4 with a ppc32 CPU. That box has successfully run b43 
-for every release up to 6.4.0-rc7. I have seen no problems in recent kernels.
+Hello,
 
-Larry
+> Fix two issues when building kernel with Smatch check.
+> 
+> v1->v2:
+> According to Damien's suggestion, I split it from 1 patch to 2 different
+> patches. Change 'inconsistent indenting' patch's title from 'fix' to
+> 'clean up'.
+> 
+> Xinghui Li (2):
+>   PCI: vmd: Fix one uninitialized symbol error reported by Smatch
 
+Applied to controller/vmd, thank you!
 
+[1/1] PCI: vmd: Fix uninitialized variable usage in vmd_enable_domain()
+      https://git.kernel.org/pci/pci/c/0c0206dc4f5b
 
+>   PCI: vmd: Clean up one inconsistent indenting warn reported by Smatch
+
+Even though this is a very nice clean-up, I did not take this patch at this
+time, as there has been a similar patch posted in the past, and Christoph
+Hellwig suggested, as part of his review, an alternative approach worth
+considering.
+
+Have a look at the following and let me know what you think:
+
+  https://patchwork.kernel.org/project/linux-pci/patch/20221115054847.77829-1-jiapeng.chong@linux.alibaba.com/
+
+	Krzysztof
