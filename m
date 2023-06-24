@@ -2,115 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC37073C6F5
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 07:35:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06F0173C6FC
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 07:56:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229495AbjFXFfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 01:35:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56146 "EHLO
+        id S230256AbjFXF4L convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 24 Jun 2023 01:56:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjFXFfJ (ORCPT
+        with ESMTP id S229493AbjFXF4J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 01:35:09 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 824021BF
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 22:35:07 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4f14865fcc0so1514e87.0
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 22:35:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687584906; x=1690176906;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=unxnCCJRCGrLNc6DK9W9SYp6CzMnpymgA+tJ26E5z4c=;
-        b=zoPKyonEhRanEEwlo+h8+8Z8VRfqp1l6ONyly/Jeg40dr4nnrFRY0rCyCuX8t+B/6I
-         OV/oMJ7VBNL1xEANXaDAm/XgPA7U/DCxttNq13cr3tIy78k9Dm1UmAtXUY0f+ib3OF1/
-         zUw5knm1BQr3x5/PP+gFeYXjNTCapZhVJz33Sn6Ux+EbifEnlp9BclirjVvHertYZoSN
-         PMU+M3ydOHl9qk4ZKQsmJ04nIrOWjZ1Aa8tU+/NdHMkpT9XBJChYmgWzR91z9YODjqEZ
-         vxE+9cEeVlUgXxmD+iUcFBzwV80cyQs7/UJqyLRPBf4YN03MDRAkACIRIgAJbSOVjP8x
-         L5ow==
+        Sat, 24 Jun 2023 01:56:09 -0400
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FE0C26B3;
+        Fri, 23 Jun 2023 22:56:07 -0700 (PDT)
+Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-762092e1fb7so128752085a.1;
+        Fri, 23 Jun 2023 22:56:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687584906; x=1690176906;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=unxnCCJRCGrLNc6DK9W9SYp6CzMnpymgA+tJ26E5z4c=;
-        b=l3a2Sqh5cZHphUNKl/mSjJ2cwPDSDvWV/RgQKM6cyJ4ZTPpzpZpuEvnj7R0liJAtPS
-         o840RON2DYQ0oZSbGrE/WDT3SwXYntud1fNyD6P2K8IsK/R6e+xazOrWkXPIscInQkXL
-         1dQnazAoMsYVii8in8p15wSWgfRG6IdO00HohKUPfH6NLzROph6iNqGb10YhQa/+FiRe
-         pKc/cDXWP/mvK01QAWIPpsbI4iOVsuJ+7nq4Gps/oG3NnH7M67BGuLYNvex+cKgejiXU
-         Szaf4hDr+8I3NT1zkUot2Jg5YRuNdfyyz0qRrjqoN35XtsPV6RdNX8zT8cMgr5af7UHe
-         YGyw==
-X-Gm-Message-State: AC+VfDwSE6r48Dm1ajdY8dkKu7HSpYMFe1bb8zSNYnKeWC3tMuh1MG7z
-        N9/NCii2nvCrDR2tDqAGairDyJOVkKrwyNh2d02YlQ==
-X-Google-Smtp-Source: ACHHUZ4ojDUlNlceCFt6jQy142S4bZfLuwkTRRSpILzz1gubQeWsasHU6g2lTN35oFzz28Lu0C/XMPqy4fQcg/S4zIo=
-X-Received: by 2002:ac2:43d5:0:b0:4f7:5f7d:2f9b with SMTP id
- u21-20020ac243d5000000b004f75f7d2f9bmr12852lfl.1.1687584905392; Fri, 23 Jun
- 2023 22:35:05 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687586166; x=1690178166;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4H08seAO8eFj/VvXuhKcSxDBYOLPlbx5aVZjE1hX6VQ=;
+        b=TiNM7ZNcf5/MDtAD7cPRVLb3RWJEUWk0z/0SoEsSupnMx2S1v4jfsV+Li2dOGl+V2A
+         SywXOlxtC+mUWR+wpOIG/UnUnkmWo1Yvjrmh72w4qWStzEYvpfq5LwFF9BLOR7nRoUsu
+         EfPoSldKn/tST3DEFKsXOLMVNhE46tn0TBc/TPTJW6KrL9DPkYs0VcwlGBVHuQVui8f3
+         8JuRNzI4d2MrF68JXsxr5CmX59C+mc5cGF32X0hc06t/GnVbzKmLjYXNEcBsHTotqBz2
+         Ee/MpfcuJYjxii/sg0Jw+dmj5vke9ZzlSfm0QuSmgUO610CTGZ7yZrE0vh2d1/JOh5Tp
+         Lzsg==
+X-Gm-Message-State: AC+VfDyTj6TCxWajfdQiuFokD6VPR1AVOq7DdPy3ua5C2xxQbhwKljAp
+        kaCQM4nRNCcUCHoOPRH8AAHtOJjvuIap6ZT7Fs0=
+X-Google-Smtp-Source: ACHHUZ6zGCFm282oWne0oEPwkLmNdxGbU5Iqe+gcDVhOJ1rPvB63xsMJeAYe5EN+DtGk297dWDmbX7cS77GUhc0siNA=
+X-Received: by 2002:a05:620a:1a87:b0:763:b8f6:33dc with SMTP id
+ bl7-20020a05620a1a8700b00763b8f633dcmr15049300qkb.37.1687586166466; Fri, 23
+ Jun 2023 22:56:06 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230623211457.102544-1-Julia.Lawall@inria.fr> <20230623211457.102544-18-Julia.Lawall@inria.fr>
-In-Reply-To: <20230623211457.102544-18-Julia.Lawall@inria.fr>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Sat, 24 Jun 2023 07:34:52 +0200
-Message-ID: <CACT4Y+ayUeSpdmkec3pCna1kVSd1QTgBYLAb3zNJJ-7wcDHGdQ@mail.gmail.com>
-Subject: Re: [PATCH 17/26] kcov: use array_size
-To:     Julia.Lawall@inria.fr
-Cc:     keescook@chromium.org, kernel-janitors@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org
+References: <20230623082031.1402-1-ravi.bangoria@amd.com>
+In-Reply-To: <20230623082031.1402-1-ravi.bangoria@amd.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Fri, 23 Jun 2023 22:55:55 -0700
+Message-ID: <CAM9d7ciP7hj+u70qxMLE67Hm0uUJfC1rjnW-jDXSLmVYpef_eg@mail.gmail.com>
+Subject: Re: [RFC] perf record: Use PERF_RECORD_LOST for synthesizing samples
+ from read_format->lost
+To:     Ravi Bangoria <ravi.bangoria@amd.com>
+Cc:     acme@kernel.org, jolsa@kernel.org, irogers@google.com,
+        peterz@infradead.org, adrian.hunter@intel.com, kan.liang@intel.com,
+        eranian@google.com, ak@linux.intel.com,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sandipan.das@amd.com, ananth.narayan@amd.com,
+        santosh.shukla@amd.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 23 Jun 2023 at 23:15, Julia Lawall <Julia.Lawall@inria.fr> wrote:
->
-> Use array_size to protect against multiplication overflows.
->
-> The changes were done using the following Coccinelle semantic patch:
->
-> // <smpl>
-> @@
->     expression E1, E2;
->     constant C1, C2;
->     identifier alloc = {vmalloc,vzalloc};
-> @@
->
-> (
->       alloc(C1 * C2,...)
-> |
->       alloc(
-> -           (E1) * (E2)
-> +           array_size(E1, E2)
->       ,...)
-> )
-> // </smpl>
->
-> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
+Hi Ravi,
 
-Reviewed-by: Dmitry Vyukov <dvyukov@google.com>
+On Fri, Jun 23, 2023 at 1:21 AM Ravi Bangoria <ravi.bangoria@amd.com> wrote:
+>
+> Currently perf synthesizes PERF_RECORD_LOST_SAMPLES samples for values
+> returned by read_format->lost. IIUC, PERF_RECORD_LOST_SAMPLES is used
+> only when hw provides corrupted samples and thus kernel has to drop
+> those. OTOH, PERF_RECORD_LOST is used when kernel has valid samples but
+> it fails to push them to ring-buffer because ring-buffer is already full.
+>
+> So I feel PERF_RECORD_LOST is more appropriate for synthesizing samples
+> from read_format->lost.
 
+The problem of PERF_RECORD_LOST is that it counts non-sample
+records too.  It just counts every lost records and put the number
+when it can find a space in the ring buffer later.  We don't know
+which one is lost and how many of it.
+
+Some users want to get the accurate number of samples even if it's
+not recorded in the ring buffer.  Using PERF_RECORD_LOST can be
+confusing since the kernel will return inaccurate data in terms of the
+number of lost samples.  So I chose PERF_RECORD_LOST_SAMPLES
+to return the accurate number for each event.
+
+Thanks,
+Namhyung
+
+
+>
+> Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
 > ---
->  kernel/kcov.c |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Notes:
+>  - Posting this as RFC to get feedback. I haven't tested it well.
+>  - There is one more minor issue: Aggregated Stats shows count of LOST/
+>    LOST_SAMPLES records instead of actual number of lost events/samples:
+>      ```
+>      $ sudo ./perf report -D | tail -20
+>      Warning:
+>      Processed 78923 events and lost 1153 chunks!
+>      Warning:
+>      Processed 47427 samples and lost 28.30%!
+>      ...
+>      Aggregated stats:
+>                LOST events:       1153  ( 1.5%)
+>        LOST_SAMPLES events:        132  ( 0.2%)
+>      ```
+>    Not sure if this is intentional.
 >
-> diff --git a/kernel/kcov.c b/kernel/kcov.c
-> index 84c717337df0..631444760644 100644
-> --- a/kernel/kcov.c
-> +++ b/kernel/kcov.c
-> @@ -900,7 +900,7 @@ void kcov_remote_start(u64 handle)
->         /* Can only happen when in_task(). */
->         if (!area) {
->                 local_unlock_irqrestore(&kcov_percpu_data.lock, flags);
-> -               area = vmalloc(size * sizeof(unsigned long));
-> +               area = vmalloc(array_size(size, sizeof(unsigned long)));
->                 if (!area) {
->                         kcov_put(kcov);
->                         return;
+>  tools/perf/builtin-record.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+>
+> diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+> index efa03e4ac2c9..5baed42437b2 100644
+> --- a/tools/perf/builtin-record.c
+> +++ b/tools/perf/builtin-record.c
+> @@ -1858,7 +1858,7 @@ record__switch_output(struct record *rec, bool at_exit)
+>  }
+>
+>  static void __record__save_lost_samples(struct record *rec, struct evsel *evsel,
+> -                                       struct perf_record_lost_samples *lost,
+> +                                       struct perf_record_lost *lost,
+>                                         int cpu_idx, int thread_idx, u64 lost_count,
+>                                         u16 misc_flag)
+>  {
+> @@ -1871,6 +1871,7 @@ static void __record__save_lost_samples(struct record *rec, struct evsel *evsel,
+>                 sid = xyarray__entry(evsel->core.sample_id, cpu_idx, thread_idx);
+>                 sample.id = sid->id;
+>         }
+> +       lost->id = sid->id;
+>
+>         id_hdr_size = perf_event__synthesize_id_sample((void *)(lost + 1),
+>                                                        evsel->core.attr.sample_type, &sample);
+> @@ -1882,7 +1883,7 @@ static void __record__save_lost_samples(struct record *rec, struct evsel *evsel,
+>  static void record__read_lost_samples(struct record *rec)
+>  {
+>         struct perf_session *session = rec->session;
+> -       struct perf_record_lost_samples *lost;
+> +       struct perf_record_lost *lost;
+>         struct evsel *evsel;
+>
+>         /* there was an error during record__open */
+> @@ -1895,7 +1896,7 @@ static void record__read_lost_samples(struct record *rec)
+>                 return;
+>         }
+>
+> -       lost->header.type = PERF_RECORD_LOST_SAMPLES;
+> +       lost->header.type = PERF_RECORD_LOST;
+>
+>         evlist__for_each_entry(session->evlist, evsel) {
+>                 struct xyarray *xy = evsel->core.sample_id;
+> --
+> 2.41.0
 >
