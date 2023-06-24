@@ -2,206 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 777F773CA46
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 11:43:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEE0B73CA4B
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 11:50:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233102AbjFXJmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 05:42:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58872 "EHLO
+        id S232545AbjFXJtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 05:49:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231911AbjFXJms (ORCPT
+        with ESMTP id S230525AbjFXJta (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 05:42:48 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D75DE1BFC
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 02:42:46 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-987accb4349so201750766b.0
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 02:42:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687599765; x=1690191765;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uBlwLAaVch1INC96eKn5eKUTFSyd9FeySsDuSnKFv5g=;
-        b=xFrz6uKlO6J1hCJXiYfgjAvCcMA16i7mnGogxnAB1JMtPjuqSHgLhZnvwcl/FhmJxf
-         iSuW6Ok1eqbzbx+ktyzA/zRSljNZg1uzyQtlKSjb+CCyjAQ6xj1SbUu1FCeAs+ZtgT4q
-         yU9QA2ksqdMKdf6F3tZ1IV7WoE+y33ZOKZWi7xiZrIpExZydPxusSkBalepmTdJ4J9JB
-         TtUQkaNcAp51QZlefijkUamJS0V9qLjSKS7zy4MgzEoWrEv31OGWoVPZJo1yWnzwJQcS
-         AKvDHCumGYmgssX3n/G2lOc5uiVqW/TZ4c3NWbM3vvLAs+Rckkgeu5svdAxT2BQdqUm2
-         Athw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687599765; x=1690191765;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uBlwLAaVch1INC96eKn5eKUTFSyd9FeySsDuSnKFv5g=;
-        b=FnePhEp39LhBnP0ymHrx0gp7J3D41zqZgT6c1O9jNpNDrnH7P3mUGln2qO8qRW5L91
-         5a3xstjrtO/qO1mrADPeiuN7vjuypEUooUsdKpFWr+SFTWFiETjzDjmU4H8jtp/DBwrJ
-         9o/c7Bv1fspRWBZ+sf9rwuQAZLY0+mUazDE5GKXkBOk4IqnitVtJWYUArTfeKw3fbeGr
-         Bm4RNrXFmnj9Jk7CmPzLZpo68bt/uJtW3/SlpeKeUWZx8IwUkxYwuyL0rz00G5osLmdK
-         RbmwyhyyNc05hgr+S1db3dl7Of2KBaj0PRjYL72i1Yokr0ldMWap8WCL0Wrfbz6RoR7N
-         OCEA==
-X-Gm-Message-State: AC+VfDwPa3w0ZhbeKhFd7DmRys/LZBXJXx61+G64H+kMpzXe5QXNrGDP
-        LqYLFin683ZOctKOFiAnXyZIBA==
-X-Google-Smtp-Source: ACHHUZ7FviPXKBiOCLdCKWjxQJylLJitMT/nJmOLackYgoV7v3uRdZOFqv3PNDQ2J4TZVCzNKYFjqw==
-X-Received: by 2002:a17:907:7b96:b0:984:5c67:e73f with SMTP id ne22-20020a1709077b9600b009845c67e73fmr22933243ejc.54.1687599765183;
-        Sat, 24 Jun 2023 02:42:45 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id z18-20020a1709067e5200b00985bdb7dd5fsm665323ejr.201.2023.06.24.02.42.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 24 Jun 2023 02:42:44 -0700 (PDT)
-Message-ID: <4ee5f3fc-3376-7421-23cd-8fc905704493@linaro.org>
-Date:   Sat, 24 Jun 2023 11:42:42 +0200
+        Sat, 24 Jun 2023 05:49:30 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3CC791999;
+        Sat, 24 Jun 2023 02:49:27 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.43])
+        by gateway (Coremail) with SMTP id _____8BxlfAmvJZkZSwBAA--.1903S3;
+        Sat, 24 Jun 2023 17:49:26 +0800 (CST)
+Received: from [10.20.42.43] (unknown [10.20.42.43])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxvM4lvJZkqwYFAA--.25584S3;
+        Sat, 24 Jun 2023 17:49:25 +0800 (CST)
+Message-ID: <1a85a81b-36d4-02c9-50c2-8a1988a4ef37@loongson.cn>
+Date:   Sat, 24 Jun 2023 17:49:25 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 2/7] dt-bindings: leds: leds-qcom-lpg: Add support for LUT
- through NVMEM devices
+ Thunderbird/102.11.0
+Subject: Re: [20/39] drm: renesas: shmobile: Replace .dev_private with
+ container_of()
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Magnus Damm <magnus.damm@gmail.com>
+Cc:     linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+References: <48a0d1dcdf18ca07b97e2813ba26f9e52198a716.1687423204.git.geert+renesas@glider.be>
 Content-Language: en-US
-To:     Anjelique Melendez <quic_amelende@quicinc.com>, pavel@ucw.cz,
-        lee@kernel.org, thierry.reding@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        agross@kernel.org, andersson@kernel.org
-Cc:     konrad.dybcio@linaro.org, u.kleine-koenig@pengutronix.de,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-pwm@vger.kernel.org
-References: <20230621185949.2068-1-quic_amelende@quicinc.com>
- <20230621185949.2068-3-quic_amelende@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230621185949.2068-3-quic_amelende@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+From:   Sui Jingfeng <suijingfeng@loongson.cn>
+Organization: Loongson
+In-Reply-To: <48a0d1dcdf18ca07b97e2813ba26f9e52198a716.1687423204.git.geert+renesas@glider.be>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8CxvM4lvJZkqwYFAA--.25584S3
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBj93XoWxtw45Xw43JF18Aw45XrW5urX_yoWfGF1xpF
+        48AayYyFW0qrZ0gryUAFsruFnI9r13ta4fuFyUG3y3Kr4vq347J3WrJFnxCFWDJry7Ca13
+        XrnIgF4rZr109rXCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUB0b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+        Gr0_Gr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
+        kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWU
+        AwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMx
+        k0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_
+        Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67
+        AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8I
+        cVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI
+        8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v2
+        6r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU4oGQDUUUU
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/06/2023 20:59, Anjelique Melendez wrote:
-> Update leds-qcom-lpg bindings to support LUT patterns through NVMEM
-> devices.
-> 
-> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
+Hi,
+
+On 2023/6/22 17:21, Geert Uytterhoeven wrote:
+> Now that drm_device is embedded in shmob_drm_device, we can use
+> a container_of()-based helper to get the shmob_drm_device pointer from
+> the drm_device, instead of using the deprecated drm_device.dev_private
+> field.
+>
+> While at it, restore reverse Xmas tree ordering of local variable
+> declarations.
+>
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+
+Reviewed-by: Sui Jingfeng <suijingfeng@loongson.cn>
+
 > ---
->  .../bindings/leds/leds-qcom-lpg.yaml          | 85 +++++++++++++++++++
->  1 file changed, 85 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml b/Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml
-> index e6f1999cb22f..c9d53820bf83 100644
-> --- a/Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml
-> +++ b/Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml
-> @@ -63,6 +63,31 @@ properties:
->          - description: dtest line to attach
->          - description: flags for the attachment
->  
-> +  nvmem:
-> +    description: >
-> +      Phandle(s) of the nvmem device(s) to access the LUT stored in the SDAM module(s).
-
-It's the first time in this binding the "LUT" appears. Drop redundant
-parts like "Phandle(s) of ...." and describe what do you expect there
-and why the hardware needs it.
-
-> +      This property is required only when LUT mode is supported and the LUT pattern is
-> +      stored in SDAM modules instead of a LUT module.
-> +    minItems: 1
-> +    maxItems: 2
+>   .../gpu/drm/renesas/shmobile/shmob_drm_crtc.c | 20 +++++++++----------
+>   .../gpu/drm/renesas/shmobile/shmob_drm_drv.c  |  4 +---
+>   .../gpu/drm/renesas/shmobile/shmob_drm_drv.h  |  5 +++++
+>   .../drm/renesas/shmobile/shmob_drm_plane.c    |  6 +++---
+>   4 files changed, 19 insertions(+), 16 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c b/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c
+> index 40948b56017ff2df..291b3a5014c24f08 100644
+> --- a/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c
+> +++ b/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c
+> @@ -63,7 +63,7 @@ static void shmob_drm_clk_off(struct shmob_drm_device *sdev)
+>   static void shmob_drm_crtc_setup_geometry(struct shmob_drm_crtc *scrtc)
+>   {
+>   	struct drm_crtc *crtc = &scrtc->crtc;
+> -	struct shmob_drm_device *sdev = crtc->dev->dev_private;
+> +	struct shmob_drm_device *sdev = to_shmob_device(crtc->dev);
+>   	const struct shmob_drm_interface_data *idata = &sdev->pdata->iface;
+>   	const struct drm_display_mode *mode = &crtc->mode;
+>   	u32 value;
+> @@ -102,7 +102,7 @@ static void shmob_drm_crtc_setup_geometry(struct shmob_drm_crtc *scrtc)
+>   
+>   static void shmob_drm_crtc_start_stop(struct shmob_drm_crtc *scrtc, bool start)
+>   {
+> -	struct shmob_drm_device *sdev = scrtc->crtc.dev->dev_private;
+> +	struct shmob_drm_device *sdev = to_shmob_device(scrtc->crtc.dev);
+>   	u32 value;
+>   
+>   	value = lcdc_read(sdev, LDCNT2R);
+> @@ -136,7 +136,7 @@ static void shmob_drm_crtc_start_stop(struct shmob_drm_crtc *scrtc, bool start)
+>   static void shmob_drm_crtc_start(struct shmob_drm_crtc *scrtc)
+>   {
+>   	struct drm_crtc *crtc = &scrtc->crtc;
+> -	struct shmob_drm_device *sdev = crtc->dev->dev_private;
+> +	struct shmob_drm_device *sdev = to_shmob_device(crtc->dev);
+>   	const struct shmob_drm_interface_data *idata = &sdev->pdata->iface;
+>   	const struct shmob_drm_format_info *format;
+>   	struct drm_device *dev = &sdev->ddev;
+> @@ -223,7 +223,7 @@ static void shmob_drm_crtc_start(struct shmob_drm_crtc *scrtc)
+>   static void shmob_drm_crtc_stop(struct shmob_drm_crtc *scrtc)
+>   {
+>   	struct drm_crtc *crtc = &scrtc->crtc;
+> -	struct shmob_drm_device *sdev = crtc->dev->dev_private;
+> +	struct shmob_drm_device *sdev = to_shmob_device(crtc->dev);
+>   
+>   	if (!scrtc->started)
+>   		return;
+> @@ -280,7 +280,7 @@ static void shmob_drm_crtc_compute_base(struct shmob_drm_crtc *scrtc,
+>   static void shmob_drm_crtc_update_base(struct shmob_drm_crtc *scrtc)
+>   {
+>   	struct drm_crtc *crtc = &scrtc->crtc;
+> -	struct shmob_drm_device *sdev = crtc->dev->dev_private;
+> +	struct shmob_drm_device *sdev = to_shmob_device(crtc->dev);
+>   
+>   	shmob_drm_crtc_compute_base(scrtc, crtc->x, crtc->y);
+>   
+> @@ -322,8 +322,8 @@ static int shmob_drm_crtc_mode_set(struct drm_crtc *crtc,
+>   				   int x, int y,
+>   				   struct drm_framebuffer *old_fb)
+>   {
+> +	struct shmob_drm_device *sdev = to_shmob_device(crtc->dev);
+>   	struct shmob_drm_crtc *scrtc = to_shmob_crtc(crtc);
+> -	struct shmob_drm_device *sdev = crtc->dev->dev_private;
+>   	const struct shmob_drm_format_info *format;
+>   
+>   	format = shmob_drm_format_info(crtc->primary->fb->format->format);
+> @@ -428,7 +428,7 @@ static void shmob_drm_crtc_enable_vblank(struct shmob_drm_device *sdev,
+>   
+>   static int shmob_drm_enable_vblank(struct drm_crtc *crtc)
+>   {
+> -	struct shmob_drm_device *sdev = crtc->dev->dev_private;
+> +	struct shmob_drm_device *sdev = to_shmob_device(crtc->dev);
+>   
+>   	shmob_drm_crtc_enable_vblank(sdev, true);
+>   
+> @@ -437,7 +437,7 @@ static int shmob_drm_enable_vblank(struct drm_crtc *crtc)
+>   
+>   static void shmob_drm_disable_vblank(struct drm_crtc *crtc)
+>   {
+> -	struct shmob_drm_device *sdev = crtc->dev->dev_private;
+> +	struct shmob_drm_device *sdev = to_shmob_device(crtc->dev);
+>   
+>   	shmob_drm_crtc_enable_vblank(sdev, false);
+>   }
+> @@ -511,7 +511,7 @@ static bool shmob_drm_encoder_mode_fixup(struct drm_encoder *encoder,
+>   					 struct drm_display_mode *adjusted_mode)
+>   {
+>   	struct drm_device *dev = encoder->dev;
+> -	struct shmob_drm_device *sdev = dev->dev_private;
+> +	struct shmob_drm_device *sdev = to_shmob_device(dev);
+>   	struct drm_connector *connector = &sdev->connector.connector;
+>   	const struct drm_display_mode *panel_mode;
+>   
+> @@ -581,7 +581,7 @@ static inline struct shmob_drm_connector *to_shmob_connector(struct drm_connecto
+>   
+>   static int shmob_drm_connector_get_modes(struct drm_connector *connector)
+>   {
+> -	struct shmob_drm_device *sdev = connector->dev->dev_private;
+> +	struct shmob_drm_device *sdev = to_shmob_device(connector->dev);
+>   	struct drm_display_mode *mode;
+>   
+>   	mode = drm_mode_create(connector->dev);
+> diff --git a/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c b/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c
+> index 2b77af3a8c97ef8c..1a1d66c6e817e227 100644
+> --- a/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c
+> +++ b/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c
+> @@ -95,7 +95,7 @@ static int shmob_drm_setup_clocks(struct shmob_drm_device *sdev,
+>   static irqreturn_t shmob_drm_irq(int irq, void *arg)
+>   {
+>   	struct drm_device *dev = arg;
+> -	struct shmob_drm_device *sdev = dev->dev_private;
+> +	struct shmob_drm_device *sdev = to_shmob_device(dev);
+>   	unsigned long flags;
+>   	u32 status;
+>   
+> @@ -217,8 +217,6 @@ static int shmob_drm_probe(struct platform_device *pdev)
+>   	if (ret < 0)
+>   		return ret;
+>   
+> -	ddev->dev_private = sdev;
+> -
+>   	ret = shmob_drm_modeset_init(sdev);
+>   	if (ret < 0)
+>   		return dev_err_probe(&pdev->dev, ret,
+> diff --git a/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.h b/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.h
+> index 77bb0da48f37ace8..5e55ba7a207865bd 100644
+> --- a/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.h
+> +++ b/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.h
+> @@ -39,4 +39,9 @@ struct shmob_drm_device {
+>   	struct shmob_drm_connector connector;
+>   };
+>   
+> +static inline struct shmob_drm_device *to_shmob_device(struct drm_device *dev)
+> +{
+> +	return container_of(dev, struct shmob_drm_device, ddev);
+> +}
 > +
-> +  nvmem-names:
-> +    description: >
-> +      The nvmem device name(s) for the SDAM module(s) where the LUT pattern data is stored.
-> +      This property is required only when LUT mode is supported with SDAM module instead of
-> +      LUT module.
-> +    minItems: 1
-> +    items:
-> +      - const: lpg_chan_sdam
-> +      - const: lut_sdam
-> +
-> +  qcom,pbs-client:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: >
-> +      Phandle of the PBS client used for sending the PBS trigger. This property is
+>   #endif /* __SHMOB_DRM_DRV_H__ */
+> diff --git a/drivers/gpu/drm/renesas/shmobile/shmob_drm_plane.c b/drivers/gpu/drm/renesas/shmobile/shmob_drm_plane.c
+> index 258288c80756bf16..c58b9dca34736342 100644
+> --- a/drivers/gpu/drm/renesas/shmobile/shmob_drm_plane.c
+> +++ b/drivers/gpu/drm/renesas/shmobile/shmob_drm_plane.c
+> @@ -63,7 +63,7 @@ static void shmob_drm_plane_compute_base(struct shmob_drm_plane *splane,
+>   static void __shmob_drm_plane_setup(struct shmob_drm_plane *splane,
+>   				    struct drm_framebuffer *fb)
+>   {
+> -	struct shmob_drm_device *sdev = splane->plane.dev->dev_private;
+> +	struct shmob_drm_device *sdev = to_shmob_device(splane->plane.dev);
+>   	u32 format;
+>   
+>   	/* TODO: Support ROP3 mode */
+> @@ -135,8 +135,8 @@ shmob_drm_plane_update(struct drm_plane *plane, struct drm_crtc *crtc,
+>   		       uint32_t src_w, uint32_t src_h,
+>   		       struct drm_modeset_acquire_ctx *ctx)
+>   {
+> +	struct shmob_drm_device *sdev = to_shmob_device(plane->dev);
+>   	struct shmob_drm_plane *splane = to_shmob_plane(plane);
+> -	struct shmob_drm_device *sdev = plane->dev->dev_private;
+>   	const struct shmob_drm_format_info *format;
+>   
+>   	format = shmob_drm_format_info(fb->format->format);
+> @@ -167,8 +167,8 @@ shmob_drm_plane_update(struct drm_plane *plane, struct drm_crtc *crtc,
+>   static int shmob_drm_plane_disable(struct drm_plane *plane,
+>   				   struct drm_modeset_acquire_ctx *ctx)
+>   {
+> +	struct shmob_drm_device *sdev = to_shmob_device(plane->dev);
+>   	struct shmob_drm_plane *splane = to_shmob_plane(plane);
+> -	struct shmob_drm_device *sdev = plane->dev->dev_private;
+>   
+>   	splane->format = NULL;
+>   
 
-
-You need to explain what is PBS and what this property is doing.
-
-Phandle of PBS client? This is the PBS client! It does not make sense.
-
-
-
-> +      required when LUT mode is supported and the LUT pattern is stored in a single
-> +      SDAM module instead of a LUT module.
-
-Which devices support LUT? Why this is not constrained per variant?
-
-> +
->    multi-led:
->      type: object
->      $ref: leds-class-multicolor.yaml#
-> @@ -191,4 +216,64 @@ examples:
->        compatible = "qcom,pm8916-pwm";
->        #pwm-cells = <2>;
->      };
-> +  - |
-> +    #include <dt-bindings/leds/common.h>
-> +
-> +    led-controller {
-> +      compatible = "qcom,pm8350c-pwm";
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +      #pwm-cells = <2>;
-> +      nvmem-names = "lpg_chan_sdam" , "lut_sdam";
-
-Fix your whitespaces.
-
-> +      nvmem = <&pmk8550_sdam_21 &pmk8550_sdam_22>;
-
-Two entries, not one.
-
-Anyway, adding one property does not justify new example. Integrate it
-into existing one.
-
-> +
-> +      led@1 {
-> +        reg = <1>;
-> +        color = <LED_COLOR_ID_RED>;
-> +        label = "red";
-> +      };
-> +
-> +      led@2 {
-> +        reg = <2>;
-> +        color = <LED_COLOR_ID_GREEN>;
-> +        label = "green";
-> +      };
-> +
-> +      led@3 {
-> +        reg = <3>;
-> +        color = <LED_COLOR_ID_BLUE>;
-> +        label = "blue";
-> +      };
-> +    };
-> +  - |
-> +    #include <dt-bindings/leds/common.h>
-> +
-> +    led-controller {
-> +      compatible = "qcom,pmi632-lpg";
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +      #pwm-cells = <2>;
-> +      nvmem-names = "lpg_chan_sdam";
-> +      nvmem = <&pmi632_sdam7>;
-> +      qcom,pbs-client = <&pmi632_pbs_client3>;
-
-One more example? Why?
-
-Why do you have here only one NVMEM cell? Aren't you missing constraints
-in the binding?
-
-Best regards,
-Krzysztof
+-- 
+Jingfeng
 
