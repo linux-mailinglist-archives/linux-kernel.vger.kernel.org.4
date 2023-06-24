@@ -2,106 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1BE873CD76
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 01:40:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4506173CD7A
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 01:42:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230235AbjFXXkd convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 24 Jun 2023 19:40:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53616 "EHLO
+        id S230363AbjFXXmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 19:42:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbjFXXkb (ORCPT
+        with ESMTP id S229552AbjFXXm2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 19:40:31 -0400
-Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ED0B10F4;
-        Sat, 24 Jun 2023 16:40:30 -0700 (PDT)
-Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-780d6e6b037so67617439f.3;
-        Sat, 24 Jun 2023 16:40:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687650029; x=1690242029;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6RhwsWDmvx6SzMByyuYvUpq+XDWKDalDEbcfDL0veNQ=;
-        b=ENupoQPqr3m07xkznz4oJ3hpHziwo9C8jD1rEVK/dMMMVM+D1xlsf4aLHhD1OHAKFe
-         6f0Whu7FAqGHVzOr9jZDdoTI3H3n+0BLj3v5lyMvc39SJzwxXAHB5PrOD6/u7ntbEULm
-         3KEpS4+fx+exiZniF8eFZ+oXJz/Q0vfVva7WpShKLts4Zd7P3IaeIOZzNeZ3kdrcRwep
-         KJ1TGSDOKa0IpM4CH/oAUBn1QAYfuwSUJq+RdbrFR4/28cB0IydCr2gz8QLdFS3hnsKs
-         4AGYpmEy3hNer+kK47sxGuftQ+m22SVjU42z0mAkkhU8OlL5eyudaUvT3SyAS6hhpF2h
-         aEug==
-X-Gm-Message-State: AC+VfDzUnzbuFk8Ox3gTETN5EsQx1tV2LTrFzh4HoiURpVWy9NQj+kMD
-        RybNm8fK78gl+eBxyqAyNHNSLU9uj9KgX/sirxchjQqgQGoB+g==
-X-Google-Smtp-Source: ACHHUZ5g3TBiclFkLRFubwe+D8GBodkdKxix4YwOEXXorv8NsalMFxvjUL4InD1CunZSQwXnAn8eptqwVP2v88mhDZ4=
-X-Received: by 2002:a6b:fe0a:0:b0:774:8f64:82a8 with SMTP id
- x10-20020a6bfe0a000000b007748f6482a8mr17203376ioh.18.1687650028244; Sat, 24
- Jun 2023 16:40:28 -0700 (PDT)
+        Sat, 24 Jun 2023 19:42:28 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B3AB10F4;
+        Sat, 24 Jun 2023 16:42:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687650148; x=1719186148;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=XulpVuQfuTZ4FuPcJLyEvjWsEHT8K+qOYMn61+EN9cc=;
+  b=KfGbiS3Y8OodnGFfBN/Io0q/Ki2oCbNi51Fe0YFf3AI2VNUHZFL2IkcK
+   GB/MDq8oznXisH75PZf1EsZ0ECHHKDqhwFLtxwF8U2gQiuQlOMNMQYQ/v
+   2n8cXDz4Z92eiZx8+eXc54GLU4+pMA9GCQoOzXczEcHEU/fV4KuiaOqH9
+   LIOi7j7RZOwBR4llbkBSBgxRLRUZqntJFuxwsU3ybdFx+GdcDFspJ32+m
+   oLmckU+JdjLXY0/CkpAI1zhNU6i2a0s3GvfQXtQSaVgAmcMIxpMMFpQ6Y
+   htFFIxcJf8b9Iohaqx7zJb78hSi9VoHFZ6F+d2icr2TDSiGw2koqHlzK1
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10751"; a="391123085"
+X-IronPort-AV: E=Sophos;i="6.01,156,1684825200"; 
+   d="scan'208";a="391123085"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2023 16:42:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10751"; a="839839580"
+X-IronPort-AV: E=Sophos;i="6.01,156,1684825200"; 
+   d="scan'208";a="839839580"
+Received: from aschofie-mobl2.amr.corp.intel.com (HELO localhost) ([10.209.113.117])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2023 16:42:26 -0700
+From:   alison.schofield@intel.com
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Mike Rapoport <rppt@kernel.org>
+Cc:     Alison Schofield <alison.schofield@intel.com>, x86@kernel.org,
+        linux-cxl@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/2] CXL: Apply SRAT defined PXM to entire CFMWS window
+Date:   Sat, 24 Jun 2023 16:42:22 -0700
+Message-Id: <cover.1687645837.git.alison.schofield@intel.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230623041405.4039475-1-irogers@google.com> <CAM9d7ch9MfCS02+-4FRDvrDVDK+f8qtqYr5m0abegg9PXJncHQ@mail.gmail.com>
-In-Reply-To: <CAM9d7ch9MfCS02+-4FRDvrDVDK+f8qtqYr5m0abegg9PXJncHQ@mail.gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Sat, 24 Jun 2023 16:40:15 -0700
-Message-ID: <CAM9d7cj6WO-PVpis5361RBc6HXPExq+mCdPKo1Y2m8wtSsLN8w@mail.gmail.com>
-Subject: Re: [PATCH v4 0/4] Bring back vmlinux.h generation
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        James Clark <james.clark@arm.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 23, 2023 at 5:41 PM Namhyung Kim <namhyung@kernel.org> wrote:
->
-> On Thu, Jun 22, 2023 at 9:14 PM Ian Rogers <irogers@google.com> wrote:
-> >
-> > Commit 760ebc45746b ("perf lock contention: Add empty 'struct rq' to
-> > satisfy libbpf 'runqueue' type verification") inadvertently created a
-> > declaration of 'struct rq' that conflicted with a generated
-> > vmlinux.h's:
-> >
-> > ```
-> > util/bpf_skel/lock_contention.bpf.c:419:8: error: redefinition of 'rq'
-> > struct rq {};
-> >        ^
-> > /tmp/perf/util/bpf_skel/.tmp/../vmlinux.h:45630:8: note: previous definition is here
-> > struct rq {
-> >        ^
-> > 1 error generated.
-> > ```
-> >
-> > Fix the issue by moving the declaration to vmlinux.h. So this can't
-> > happen again, bring back build support for generating vmlinux.h then
-> > add build tests.
-> >
-> > v4. Rebase and add Namhyung and Jiri's acked-by.
-> > v3. Address Namhyung's comments on filtering ELF files with readelf.
-> > v2. Rebase on perf-tools-next. Add Andrii's acked-by. Add patch to
-> >     filter out kernels that lack a .BTF section and cause the build to
-> >     break.
-> >
-> > Ian Rogers (4):
-> >   perf build: Add ability to build with a generated vmlinux.h
-> >   perf bpf: Move the declaration of struct rq
-> >   perf test: Add build tests for BUILD_BPF_SKEL
-> >   perf build: Filter out BTF sources without a .BTF section
->
-> Thanks,  I'll take them with the following change.
+From: Alison Schofield <alison.schofield@intel.com>
 
-Applied to perf-tools-next with it, thanks!
+Changes in v3:
+- Define CFMWS and add CXL Spec link in cover letter (Peter, Jonathan)
+- s/HPA/physical address in Patch 1 (Peter)
+- Remove overkill comment in Patch 1 (Dan)
+- Simplify cmp_memblk() in Patch 1 (Dan)
+
+v2: https://lore.kernel.org/linux-cxl/cover.1686712819.git.alison.schofield@intel.com/
+
+----
+Cover Letter:
+
+The CXL subsystem requires the creation of NUMA nodes for CFMWS
+Windows[1] not described in the SRAT. The existing implementation
+only addresses windows that the SRAT describes completely or not
+at all. This work addresses the case of partially described CFMWS
+Windows by extending proximity domains in a portion of a CFMWS
+window to the entire window.
+
+Introduce a NUMA helper, numa_fill_memblks(), to fill gaps in a
+numa_meminfo memblk address range. Update the CFMWS parsing in the
+ACPI driver to use numa_fill_memblks() to extend SRAT defined
+proximity domains to entire CXL windows.
+
+An RFC of this patchset was previously posted for CXL folks review
+here[2]. The RFC feedback led to the implementation here, extending
+existing memblks (Dan). Also, both Jonathan and Dan influenced the
+changelog comments in the ACPI patch, with regards to setting
+expectations on this evolving heuristic.
+
+Repeating here to set reviewer expectations:
+*Note that this heuristic will evolve when CFMWS Windows present a
+wider range of characteristics. The extension of the proximity domain,
+implemented here, is likely a step in developing a more sophisticated
+performance profile in the future.
+
+[1] CFMWS is defined in CXL Spec 3.0 Section 9.17.1.3 :
+https://www.computeexpresslink.org/spec-landing
+
+A CXL Fixed Memory Window is a region of Host Physical Address (HPA)
+Space which routes accesses to CXL Host bridges. The 'S', of CFMWS,
+stand for the structure that describes the window, hence it's common
+name, CFMWS.
+
+[2] https://lore.kernel.org/linux-cxl/cover.1683742429.git.alison.schofield@intel.com/
+
+Alison Schofield (2):
+  x86/numa: Introduce numa_fill_memblks()
+  ACPI: NUMA: Apply SRAT proximity domain to entire CFMWS window
+
+ arch/x86/include/asm/sparsemem.h |  2 +
+ arch/x86/mm/numa.c               | 81 ++++++++++++++++++++++++++++++++
+ drivers/acpi/numa/srat.c         | 11 +++--
+ include/linux/numa.h             |  7 +++
+ 4 files changed, 98 insertions(+), 3 deletions(-)
+
+
+base-commit: 214a71b53bc7cb30f6b8d43089037e9fe7f3ae1f
+-- 
+2.37.3
+
