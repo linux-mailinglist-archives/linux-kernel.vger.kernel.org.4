@@ -2,281 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 792C673CB8E
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 17:20:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B43DE73CB91
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 17:24:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233150AbjFXPUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 11:20:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48702 "EHLO
+        id S233158AbjFXPYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 11:24:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233036AbjFXPUs (ORCPT
+        with ESMTP id S229991AbjFXPYe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 11:20:48 -0400
-Received: from mail-40141.protonmail.ch (mail-40141.protonmail.ch [185.70.40.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1D69BE
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 08:20:46 -0700 (PDT)
-Date:   Sat, 24 Jun 2023 15:20:36 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1687620044; x=1687879244;
-        bh=UJJ+xg0BEjeX07rbDKXrDZQrXSRpl2S3/JvIkzR6HHY=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=bi2r/0LH420keA+7CxhIvE6aswX5462BYjSlArWFC6ao3ArHSWAkDMQGx3P64tqJZ
-         Qg1pA2NCfpKZtb8Fc4neqlw4YPe0B3n7SdMtVWKK7XYJSxOMtRfi0aoy3nvnYhYnws
-         yFZY3bbkUTjVwifNubXh8TWcKhMCXVIM7xMMaq2ZaL6l2ibXr9npmF4RcSLGV0wJoR
-         XUiYjJjGi9aJFneHgDP/ZF872U8b3VFUdzD2/P6/EwRIUKnJPjigqpudM/ldpiONmK
-         hfJ2TVZKWF9Wxb9dNWiTcWlQPa6zzZk0LhQbScRSXcjYUbglj3+8iFnyjenxehmqjO
-         nG67p7xfZdjCA==
-To:     Benno Lossin <benno.lossin@proton.me>
-From:   =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        Alice Ryhl <aliceryhl@google.com>,
-        Andreas Hindborg <nmi@metaspace.dk>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Asahi Lina <lina@asahilina.net>
-Subject: Re: [PATCH 7/7] rust: init: add support for arbitrary paths in init macros
-Message-ID: <NG5bXau04NtegfM6w7YC15zWwZoV_aoQq3j767IV1thbyyueLU5cekNnMkmc4w-geoSbz2VyA7ZGab_Z3x9xm1DZSmLIsdWA0ykoHaWpZCc=@protonmail.com>
-In-Reply-To: <20230624092330.157338-7-benno.lossin@proton.me>
-References: <20230624092330.157338-1-benno.lossin@proton.me> <20230624092330.157338-7-benno.lossin@proton.me>
-Feedback-ID: 27884398:user:proton
+        Sat, 24 Jun 2023 11:24:34 -0400
+Received: from out-4.mta1.migadu.com (out-4.mta1.migadu.com [IPv6:2001:41d0:203:375::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33FB81987
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 08:24:33 -0700 (PDT)
+Message-ID: <70ade937-1f94-52a3-7add-b43d3b79e471@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1687620269;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=L847Z/bfhdpzZCa7enwUjky+WHNRgKn/tnqWKrdAgwg=;
+        b=ZBtcsnr7Gxhz9QxbSy4XAeGU/NKIsReDYjrRoLYMn/1nb+CmQYH/V/j0GK6kLMBb+ZeGka
+        b+TVV6plYkNj6pmz3X3uG8GErqiU2WSVALvNU/SIUE7/+cd2u72uZ5U293j2tQ8Ko6d6vE
+        apoxccqIOZK337h0cjTV6F0LlA3CbzE=
+Date:   Sat, 24 Jun 2023 23:24:04 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH] blk-mq: fix incorrect rq start_time_ns and alloc_time_ns
+ after throttled
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>
+Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Chengming Zhou <zhouchengming@bytedance.com>
+References: <20230601053919.3639954-1-chengming.zhou@linux.dev>
+ <ZH4p8tqFc57_OYoH@slm.duckdns.org>
+ <c82d6bab-36d0-0403-9304-4415f6ffd972@linux.dev>
+ <ZIJco7_jaVaxpxSR@slm.duckdns.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Chengming Zhou <chengming.zhou@linux.dev>
+In-Reply-To: <ZIJco7_jaVaxpxSR@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Saturday, June 24th, 2023 at 11:25, Benno Lossin <benno.lossin@proton.me=
-> wrote:
+Hello,
 
-> Previously only `ident` and generic types were supported in the
-> `{try_}{pin_}init!` macros. This patch allows arbitrary path fragments,
-> so for example `Foo::Bar` but also very complex paths such as
-> `<Foo as Baz>::Bar::<0, i32>`.
->=20
-> Internally this is accomplished by using `path` fragments. Due to some
-> peculiar declarative macro limitations, we have to "forget" certain
-> additional parsing information in the token trees. This is achieved by
-> the new `retokenize` proc macro. It does not modify the input, but just
-> strips this information. For example, if a declarative macro takes
-> `$t:path` as its input, it cannot sensibly propagate this to a macro that
-> takes `$($p:tt)*` as its input, since the `$t` token will only be
-> considered one `tt` token for the second macro. If we first pipe the
-> tokens through `retokenize`, then it parses as expected.
->=20
-> Suggested-by: Asahi Lina <lina@asahilina.net>
-> Signed-off-by: Benno Lossin <benno.lossin@proton.me>
+On 2023/6/9 06:56, Tejun Heo wrote:
+> Hello,
+> 
+> On Tue, Jun 06, 2023 at 06:22:28PM +0800, Chengming Zhou wrote:
+> ...
+>> But for plug batched allocation introduced by the commit 47c122e35d7e
+>> ("block: pre-allocate requests if plug is started and is a batch"), we can
+>> rq_qos_throttle() after the allocation of the request. This is what the
+>> blk_mq_get_cached_request() does.
+>>
+>> In this case, the cached request alloc_time_ns or start_time_ns is much ahead
+>> if block in any qos ->throttle().
+> 
+> Ah, okay, that's problematic.
+> 
 
-Reviewed-by: Bj=C3=B6rn Roy Baron <bjorn3_gh@protonmail.com>
+Thanks for your review!
 
-> ---
->  rust/kernel/init/__internal.rs |  2 ++
->  rust/kernel/init/macros.rs     | 42 +++++++++++++++++++---------------
->  rust/macros/lib.rs             | 17 +++++++++++++-
->  3 files changed, 41 insertions(+), 20 deletions(-)
->=20
-> diff --git a/rust/kernel/init/__internal.rs b/rust/kernel/init/__internal=
-.rs
-> index 7abd1fb65e41..e36a706a4a1b 100644
-> --- a/rust/kernel/init/__internal.rs
-> +++ b/rust/kernel/init/__internal.rs
-> @@ -9,6 +9,8 @@
->=20
->  use super::*;
->=20
-> +pub use ::macros::retokenize;
-> +
->  /// See the [nomicon] for what subtyping is. See also [this table].
->  ///
->  /// [nomicon]: https://doc.rust-lang.org/nomicon/subtyping.html
-> diff --git a/rust/kernel/init/macros.rs b/rust/kernel/init/macros.rs
-> index 5dcb2e513f26..6a82be675808 100644
-> --- a/rust/kernel/init/macros.rs
-> +++ b/rust/kernel/init/macros.rs
-> @@ -998,7 +998,7 @@ impl<$($impl_generics)*> $pin_data<$($ty_generics)*>
->  macro_rules! __init_internal {
->      (
->          @this($($this:ident)?),
-> -        @typ($t:ident $(::<$($generics:ty),*>)?),
-> +        @typ($t:path),
->          @fields($($fields:tt)*),
->          @error($err:ty),
->          // Either `PinData` or `InitData`, `$use_data` should only be pr=
-esent in the `PinData`
-> @@ -1012,7 +1012,7 @@ macro_rules! __init_internal {
->      ) =3D> {
->          $crate::__init_internal!(with_update_parsed:
->              @this($($this)?),
-> -            @typ($t $(::<$($generics),*>)? ),
-> +            @typ($t),
->              @fields($($fields)*),
->              @error($err),
->              @data($data, $($use_data)?),
-> @@ -1023,7 +1023,7 @@ macro_rules! __init_internal {
->      };
->      (
->          @this($($this:ident)?),
-> -        @typ($t:ident $(::<$($generics:ty),*>)?),
-> +        @typ($t:path),
->          @fields($($fields:tt)*),
->          @error($err:ty),
->          // Either `PinData` or `InitData`, `$use_data` should only be pr=
-esent in the `PinData`
-> @@ -1037,7 +1037,7 @@ macro_rules! __init_internal {
->      ) =3D> {
->          $crate::__init_internal!(with_update_parsed:
->              @this($($this)?),
-> -            @typ($t $(::<$($generics),*>)? ),
-> +            @typ($t),
->              @fields($($fields)*),
->              @error($err),
->              @data($data, $($use_data)?),
-> @@ -1048,7 +1048,7 @@ macro_rules! __init_internal {
->      };
->      (
->          @this($($this:ident)?),
-> -        @typ($t:ident $(::<$($generics:ty),*>)?),
-> +        @typ($t:path),
->          @fields($($fields:tt)*),
->          @error($err:ty),
->          // Either `PinData` or `InitData`, `$use_data` should only be pr=
-esent in the `PinData`
-> @@ -1062,7 +1062,7 @@ macro_rules! __init_internal {
->      ) =3D> {
->          $crate::__init_internal!(
->              @this($($this)?),
-> -            @typ($t $(::<$($generics),*>)? ),
-> +            @typ($t),
->              @fields($($fields)*),
->              @error($err),
->              @data($data, $($use_data)?),
-> @@ -1073,7 +1073,7 @@ macro_rules! __init_internal {
->      };
->      (with_update_parsed:
->          @this($($this:ident)?),
-> -        @typ($t:ident $(::<$($generics:ty),*>)?),
-> +        @typ($t:path),
->          @fields($($fields:tt)*),
->          @error($err:ty),
->          // Either `PinData` or `InitData`, `$use_data` should only be pr=
-esent in the `PinData`
-> @@ -1092,7 +1092,7 @@ macro_rules! __init_internal {
->          // Get the data about fields from the supplied type.
->          let data =3D unsafe {
->              use $crate::init::__internal::$has_data;
-> -            $t$(::<$($generics),*>)?::$get_data()
-> +            $crate::init::__internal::retokenize!($t::$get_data())
->          };
->          // Ensure that `data` really is of type `$data` and help with ty=
-pe inference:
->          let init =3D $crate::init::__internal::$data::make_closure::<_, =
-__InitOk, $err>(
-> @@ -1247,7 +1247,7 @@ fn is_zeroable<T: Zeroable>(ptr: *mut T) {}
->      };
->      (make_initializer:
->          @slot($slot:ident),
-> -        @type_name($t:ident),
-> +        @type_name($t:path),
->          @munch_fields(..Zeroable::zeroed() $(,)?),
->          @acc($($acc:tt)*),
->      ) =3D> {
-> @@ -1263,15 +1263,17 @@ fn is_zeroable<T: Zeroable>(ptr: *mut T) {}
->              // not get executed, so it has no effect.
->              ::core::ptr::write($slot, zeroed);
->              zeroed =3D ::core::mem::zeroed();
-> -            ::core::ptr::write($slot, $t {
-> -                $($acc)*
-> -                ..zeroed
-> -            });
-> +            $crate::init::__internal::retokenize!(
-> +                ::core::ptr::write($slot, $t {
-> +                    $($acc)*
-> +                    ..zeroed
-> +                });
-> +            );
->          }
->      };
->      (make_initializer:
->          @slot($slot:ident),
-> -        @type_name($t:ident),
-> +        @type_name($t:path),
->          @munch_fields($(,)?),
->          @acc($($acc:tt)*),
->      ) =3D> {
-> @@ -1279,14 +1281,16 @@ fn is_zeroable<T: Zeroable>(ptr: *mut T) {}
->          // Since we are in the `if false` branch, this will never get ex=
-ecuted. We abuse `slot` to
->          // get the correct type inference here:
->          unsafe {
-> -            ::core::ptr::write($slot, $t {
-> -                $($acc)*
-> -            });
-> +            $crate::init::__internal::retokenize!(
-> +                ::core::ptr::write($slot, $t {
-> +                    $($acc)*
-> +                });
-> +            );
->          }
->      };
->      (make_initializer:
->          @slot($slot:ident),
-> -        @type_name($t:ident),
-> +        @type_name($t:path),
->          @munch_fields($field:ident <- $val:expr, $($rest:tt)*),
->          @acc($($acc:tt)*),
->      ) =3D> {
-> @@ -1299,7 +1303,7 @@ fn is_zeroable<T: Zeroable>(ptr: *mut T) {}
->      };
->      (make_initializer:
->          @slot($slot:ident),
-> -        @type_name($t:ident),
-> +        @type_name($t:path),
->          @munch_fields($field:ident $(: $val:expr)?, $($rest:tt)*),
->          @acc($($acc:tt)*),
->      ) =3D> {
-> diff --git a/rust/macros/lib.rs b/rust/macros/lib.rs
-> index 9f056a5c780a..d329ab622fd4 100644
-> --- a/rust/macros/lib.rs
-> +++ b/rust/macros/lib.rs
-> @@ -12,7 +12,7 @@
->  mod vtable;
->  mod zeroable;
->=20
-> -use proc_macro::TokenStream;
-> +use proc_macro::{Group, TokenStream, TokenTree};
->=20
->  /// Declares a kernel module.
->  ///
-> @@ -266,3 +266,18 @@ pub fn pinned_drop(args: TokenStream, input: TokenSt=
-ream) -> TokenStream {
->  pub fn derive_zeroable(input: TokenStream) -> TokenStream {
->      zeroable::derive(input)
->  }
-> +
-> +/// Does not modify the given TokenStream, but removes any declarative m=
-acro information.
-> +#[proc_macro]
-> +pub fn retokenize(input: TokenStream) -> TokenStream {
-> +    fn id(tt: TokenTree) -> TokenTree {
-> +        match tt {
-> +            TokenTree::Group(g) =3D> TokenTree::Group(Group::new(
-> +                g.delimiter(),
-> +                g.stream().into_iter().map(id).collect(),
-> +            )),
-> +            x =3D> x,
-> +        }
-> +    }
-> +    input.into_iter().map(id).collect()
-> +}
-> --
-> 2.41.0
+Sorry for my delay, I was out of the office.
+
+>>>> This patch add nr_flush counter in blk_plug, so we can tell if the task
+>>>> has throttled in any qos ->throttle(), in which case we need to correct
+>>>> the rq start_time_ns and alloc_time_ns.
+>>>>
+>>>> Another solution may be make rq_qos_throttle() return bool to indicate
+>>>> if it has throttled in any qos ->throttle(). But this need more changes.
+>>>>
+>>>> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+>>>
+>>> Depending on the flush behavior and adjusting alloc_time_ns seems fragile to
+>>> me and will likely confuse other users of alloc_time_ns too.
+>>
+>> I agree with you, this code is not good. My basic idea is to adjust the cached
+>> request alloc_time_ns and start_time_ns when throttled.
+> 
+> Would it make sense to skip setting the alloc_time_ns during pre-allocation
+> and set it later when the pre-allocated rq is actually used? That should
+> jive better.
+> 
+
+Ok, I think it's much clearer that we set the alloc_time_ns and start_time_ns
+to "now" when the pre-allocated rq is actually used.
+
+I will send an updated version later.
+
+Thanks.
