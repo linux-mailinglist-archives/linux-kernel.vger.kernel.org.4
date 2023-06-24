@@ -2,49 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2F2E73CA6B
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 12:14:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A834D73CA6F
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 12:21:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233071AbjFXKOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 06:14:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34952 "EHLO
+        id S232834AbjFXKVn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 06:21:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233060AbjFXKON (ORCPT
+        with ESMTP id S231966AbjFXKVl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 06:14:13 -0400
-Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DDDC1BF2
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 03:14:11 -0700 (PDT)
-Received: from submission (posteo.de [185.67.36.169]) 
-        by mout02.posteo.de (Postfix) with ESMTPS id C64B8240103
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 12:14:09 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
-        t=1687601649; bh=iaUVSnuKkwJ5a4hvz5q/EtjfvAaUpU9k26WNESxBnHk=;
-        h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:
-         Content-Disposition:From;
-        b=FkwnP9SG0IAJ1xf2B2Ao385/XAu2sz4Zi+knE//LcNf+GyMt6qAzLwGDx5gBMAQTc
-         l64GcuNCJQ7Qo/LT8y1QQcMA4GPusrqW3SuUoTaDabKCUXGbdD1P9mDt7S8NKUlonf
-         NuFloxpxHo9GIYB0HAh1EO3HHRxDN0a0bn6h1TNcGxR5u4RikJtxVzZBMoo7OrHyIj
-         n3v5OMagFISTVak5mF+nkaociI10RNQ1QyPSzY3buIKuT7t3t8yU/LQjmkvX7avevS
-         tjSR0h6z02ONspL33X+pOtALudwn52hdGn1G9CsH/vgY4k6An9Kt55Jz5UKhhK5Pb0
-         UVAAgJsRJbgoA==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4Qp91r6Ppfz6tvJ;
-        Sat, 24 Jun 2023 12:14:08 +0200 (CEST)
-Date:   Sat, 24 Jun 2023 10:14:07 +0000
-From:   Wilken Gottwalt <wilken.gottwalt@posteo.net>
-To:     linux-kernel@vger.kernel.org
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org
-Subject: [PATCH] hwmon: corsair-psu: update Series 2022 and 2023 support
-Message-ID: <ZJbB72CAPmLflhHG@monster.localdomain>
+        Sat, 24 Jun 2023 06:21:41 -0400
+Received: from mailout2.dotplex.com (mailout2.dotplex.com [185.231.124.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37C981BF2;
+        Sat, 24 Jun 2023 03:21:39 -0700 (PDT)
+Received: from remote.ip.hidden (remote.ip.hidden [127.0.0.1])
+        (Authenticated sender: estellnb@elstel.org)
+        by mailout.dotplex.com (Postfix) with ESMTPSA id E3AAA1FFD9;
+        Sat, 24 Jun 2023 12:21:35 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=elstel.org;
+        s=dotplex2; t=1687602096;
+        bh=YayD2xsPG/u9QipwKVgv8sYGJIMNSUBWm5Mlh00T62A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=K+ghvmpeu2tNtq9w2E+GyUDHW3zQJoYl/HWE6kz1nYSna89Wu+M4DxHbZjc1+VVdr
+         HUE5IPSNZde2pATWK58pg5GZ6O9xMNP+eb9Ito+laVJtJ+RoZ8X7+PSkpOaBK6gMTs
+         I1QKObULsU81vG6GG+Jw6loaxdZLsdPbZbsFc8Yi5j6YP/8dKMvDXZ81hTT9EHnV/5
+         Wo7TiIqE8fB7niVNsGCn5nZgVtLTPV62I7gKpw0rRj3I1rQ34GMunIwhX/DozU7yNT
+         pvz6Abxnhpfxk8S26Y9OaZiuiMupzKBYrL9FkqWswCMW02hrJFqZdO4uuzIbJthLbl
+         b8ysBJBdAedww==
+Date:   Sat, 24 Jun 2023 12:21:29 +0200
+From:   Elmar Stellnberger <estellnb@elstel.org>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux Memory Management <linux-mm@kvack.org>,
+        Linux Stable <stable@vger.kernel.org>
+Subject: Re: Fwd: kernel fault on hibernation: get_zeroed_page/swsusp_write
+Message-ID: <ZJbDqStCNfdpwObE@mail.dotplex.com>
+References: <5d4959b7-61da-8ab0-6bc6-21305d37c7aa@gmail.com>
+ <ZJXFgfldS6W_LCiI@mail.dotplex.com>
+ <ZJZGE4ZxJzrhRznA@debian.me>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZJZGE4ZxJzrhRznA@debian.me>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -53,87 +58,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The series 2022/2023 reports slightly longer vendor/product strings
-and shares USB ids. Technically the reply size is the USB HID packet
-size (64 bytes) but all the supported commands do not use more than 8
-bytes and replies reporting back strings do not use more then 24 bytes
-(vendor and product are in one string in the newer devices now). The
-rest of the reply is always filled with '\0'. Also update comments
-and documentation accordingly.
+Hi Bagas S., Hi all
 
-Signed-off-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
----
- Documentation/hwmon/corsair-psu.rst | 13 ++++++++-----
- drivers/hwmon/corsair-psu.c         |  9 ++++++---
- 2 files changed, 14 insertions(+), 8 deletions(-)
+concerns: Bug 217544 - kernel fault on hibernation: get_zeroed_page/swsusp_write 
+https://bugzilla.kernel.org/show_bug.cgi?id=217544
 
-diff --git a/Documentation/hwmon/corsair-psu.rst b/Documentation/hwmon/corsair-psu.rst
-index 47f8ff632267..16db34d464dd 100644
---- a/Documentation/hwmon/corsair-psu.rst
-+++ b/Documentation/hwmon/corsair-psu.rst
-@@ -15,11 +15,11 @@ Supported devices:
+  Bisection does not make sense here, since I can not reproduce the
+issue. Packing the kernel binaries and symbol files was meant to invoke
+gdb directly on the kcore:
  
-   Corsair HX850i
- 
--  Corsair HX1000i (Series 2022 and Series 2023)
-+  Corsair HX1000i (Series 2022 and 2023)
- 
-   Corsair HX1200i
- 
--  Corsair HX1500i (Series 2022)
-+  Corsair HX1500i (Series 2022 and 2023)
- 
-   Corsair RM550i
- 
-@@ -80,11 +80,14 @@ temp2_crit		Temperature max critical value of psu case
- Usage Notes
- -----------
- 
--It is an USB HID device, so it is auto-detected and supports hot-swapping.
-+It is an USB HID device, so it is auto-detected, supports hot-swapping and
-+several devices at once.
- 
- Flickering values in the rail voltage levels can be an indicator for a failing
--PSU. The driver also provides some additional useful values via debugfs, which
--do not fit into the hwmon class.
-+PSU. Accordingly to the default automatic fan speed plan the fan starts at about
-+30% of the wattage rating. If this does not happen, a fan failure is likely. The
-+driver also provides some additional useful values via debugfs, which do not fit
-+into the hwmon class.
- 
- Debugfs entries
- ---------------
-diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
-index 9e3e3c0a3bdd..904890598c11 100644
---- a/drivers/hwmon/corsair-psu.c
-+++ b/drivers/hwmon/corsair-psu.c
-@@ -42,12 +42,15 @@
-  *	- the driver supports debugfs for values not fitting into the hwmon class
-  *	- not every device class (HXi or RMi) supports all commands
-  *	- if configured wrong the PSU resets or shuts down, often before actually hitting the
-- *	- reported critical temperature
-+ *	  reported critical temperature
-+ *	- new models like HX1500i Series 2023 have changes in the reported vendor and product
-+ *	  strings, both are slightly longer now, report vendor and product in one string and are
-+ *	  the same now
-  */
- 
- #define DRIVER_NAME		"corsair-psu"
- 
--#define REPLY_SIZE		16 /* max length of a reply to a single command */
-+#define REPLY_SIZE		24 /* max length of a reply to a single command */
- #define CMD_BUFFER_SIZE		64
- #define CMD_TIMEOUT_MS		250
- #define SECONDS_PER_HOUR	(60 * 60)
-@@ -880,7 +883,7 @@ static const struct hid_device_id corsairpsu_idtable[] = {
- 	{ HID_USB_DEVICE(0x1b1c, 0x1c0c) }, /* Corsair RM850i */
- 	{ HID_USB_DEVICE(0x1b1c, 0x1c0d) }, /* Corsair RM1000i */
- 	{ HID_USB_DEVICE(0x1b1c, 0x1c1e) }, /* Corsair HX1000i Series 2023 */
--	{ HID_USB_DEVICE(0x1b1c, 0x1c1f) }, /* Corsair HX1500i Series 2022 */
-+	{ HID_USB_DEVICE(0x1b1c, 0x1c1f) }, /* Corsair HX1500i Series 2022 and 2023 */
- 	{ },
- };
- MODULE_DEVICE_TABLE(hid, corsairpsu_idtable);
--- 
-2.41.0
+> /usr/src/kernel-6.3.7-desktop586-1.mga9/scripts/extract-vmlinux vmlinuz-6.3.7-desktop-1.mga9 >vmlinux
+> file vmlinuz-6.3.7-desktop-1.mga9 
+vmlinuz-6.3.7-desktop-1.mga9: Linux kernel x86 boot executable bzImage, version 6.3.7-desktop-1.mga9 (iurt@ecosse.mageia.org) #1 SMP PREEMPT_DYNAMIC Fri Jun  9 17:47:53 UTC 2023, RO-rootFS, swap_dev 0X6, Normal VGA
+> file vmlinux
+vmlinux: ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV), statically linked, BuildID[sha1]=942674511321671b33c739cceddb1e3a48a17895, stripped
+> grep __alloc_pages /boot/System.map...
+0xc03758... T __alloc_pages
+> gdb vmlinux kcore
+# x/5i 0xc03758..
+
+Am Sat, Jun 24, 2023 at 08:25:39AM +0700 schrieb Bagas Sanjaya:
+> Also, you don't need to upload full kernel images instead; people can
+> grab /proc/config.gz you uploaded on Bugzilla and then `make olddefconfig`
+> from it.
+> 
+  I would heavily doubt that the same symbols would get to be located at
+the same address if you started to compile from source, even if you
+applied all Mageia specific patches. We would need reproducible builds
+for that. Nonetheless you are free to check whether the symbols will
+reside at the same place in your System.map afterwards.
+  I wonder whether there is a way to convert the System.map text file
+(which looks to me like the output of 'nm -S') back into an elf section
+to be added to the stripped vmlinux with objcopy. Shouldn´t there be a
+script/ for this?
+
+:: Sometimes you have only one chance to catch a bug.
+
+Cheers,
+Elmar
+
+Am Sat, Jun 24, 2023 at 08:25:39AM +0700 schrieb Bagas Sanjaya:
+> On Fri, Jun 23, 2023 at 06:17:05PM +0200, Elmar Stellnberger wrote:
+> Can you attach [1] to your Bugzilla report? Also, any report on bisection?
+
+Pardon, what is [1]?
 
