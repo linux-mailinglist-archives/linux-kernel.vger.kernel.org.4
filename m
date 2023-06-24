@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E602773C707
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 08:04:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EBAB73C708
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 08:04:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231848AbjFXGEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 02:04:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58632 "EHLO
+        id S231834AbjFXGEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 02:04:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231770AbjFXGED (ORCPT
+        with ESMTP id S229964AbjFXGER (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 02:04:03 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 250CA297C
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 23:03:53 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-98dfd15aae1so888566b.0
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 23:03:53 -0700 (PDT)
+        Sat, 24 Jun 2023 02:04:17 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 855F92957
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 23:04:01 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-510f866ce78so307452a12.1
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 23:04:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687586631; x=1690178631;
+        d=gmail.com; s=20221208; t=1687586640; x=1690178640;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=VPxvnhxhJrxYQ+szNx981vwj+0UhmdrYLXnjA4eHd9w=;
-        b=NW/V7+dkAZWNsRIB5v+CzAsjlEk+bOu5bPPqEvT75+wck6D67qrPfscAv9UsQLpMZX
-         6dWnww48IaiSx2UBs9+0LxPbxyR28p3cXH70YyNpX7ow+iirF0FFubICIvdP0GiYAmbs
-         yQYd55OVYJPsptiaFA3RUv97WqEBe9jMnsNaBlaioFc+sJEnJcuzmQ2ww1e0xLko5FR4
-         aiNfQPVYu/I6ZZbB1Z36RlXDsYJb7F3cbRazmaC0QyWUkAesRHrSu9zTG2G8Djjh8Iuv
-         O/n1gBXPEYvbVrJ7QW73wT1dTbk5T6zROpU9HxmD1+D5EQqRbpIEihcmY9bME0mruYAD
-         ohLg==
+        bh=pA2jkr79HAQgO3Z0go7Vrb5Aqnnlcr4ywSCkzPMV9Eo=;
+        b=letFtaa02giljSKBhUJXMSlsE80/XLx8rhYD8T02crEkd3ClKKcgnQ7VTO1H3XV7FI
+         vzdkL3uAp79g9np/8906vQSACE8gNhpUc3Vf7doCvP5dTUtxWyJKydQ91H17czf/Qoar
+         b7AbzUWWecKwopabvEarp1Ojix80ioau8nPnmqvD9h4viuAYyZvjC6+TGsF4WbiMOkpp
+         6n9l954XhpDxt9a24vkWoxH4hVfiIi+a+L968ie3S5L/TZou4jqAabyYLceLa1rpA9AB
+         1D3/m9OVbvslFsMH9wNPcPGyHXk90Aj05DucbgM5q12NEvmSNUKXyiGsJ8FzsNNlHTJZ
+         M4VA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687586631; x=1690178631;
+        d=1e100.net; s=20221208; t=1687586640; x=1690178640;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VPxvnhxhJrxYQ+szNx981vwj+0UhmdrYLXnjA4eHd9w=;
-        b=j1rNRW3dDvIZaSbVhkTUb8BBTSQT5Gfxzeadz6nSAY0m+js57ak6i0HI3h0HJKbeYS
-         DnIx1DaUrTjqev9nt0YcGTr3GA20FCac9OI8yDk8dRnE8SdbQfQ0F0LT4fYmBOW3QMsp
-         oYUIaGm2v1AgoyLR/CoYVsHq6Rr/dmwHswYdOGw3mNuPQbKX8bfaqapkTcdy+9jGZqTK
-         n4TF/XbBKc6+BBX0p+UjVDKV4eNSHr30dDZPGE8fsd99hFo/sjKX1sIIKopI4fY7TjZB
-         nq2Ra1E6K4t0z6/Dp5z0R2FefyirhnrANf5V8UD4WXFhMzfMmD3EAhJtn8/LUQ5fJBSt
-         8yiw==
-X-Gm-Message-State: AC+VfDz2BBqqygaJqa89h+Cv07A/NAQBGiHts01kuvEyYneUKa/L3hSe
-        q/EjbJh6wKOQKDn560twuFE=
-X-Google-Smtp-Source: ACHHUZ5sI1TORPiu+bHb7Aa76JMJi1rjhMXe+VH3We2PdUY44KfBNsm99TOERTfZLeqbmMPZSLW1hA==
-X-Received: by 2002:a17:906:779c:b0:988:815c:b9fa with SMTP id s28-20020a170906779c00b00988815cb9famr13169095ejm.3.1687586630810;
-        Fri, 23 Jun 2023 23:03:50 -0700 (PDT)
+        bh=pA2jkr79HAQgO3Z0go7Vrb5Aqnnlcr4ywSCkzPMV9Eo=;
+        b=cs3QSzq3RC/YimS1QmUe+AitWvwAX/dNdfbDLUq6yOIuHad72/aWPjGDupiOg74IRU
+         lrc0j3tdEBmvGRFB3UlmAs8grSuVKGjy/con3AHCAoD0/nmwqSNXU1FciS1KXx2aerOf
+         f8r1t2NFm7nwHrzIJIPKDoGAtIwStSTbki0KEBuSvHjTxUAWOKKL9JGselWEt9BPRRFB
+         inMMKi21+r615UcJ7w9CxEDCAFlh20/ndlAIvgSr3U/zxmVFNfXbCLuBlZO3bjF/RAkt
+         81QHK8xNaXh3PWH1zbi6a/e4a8PZgA9a3hvJkVLKgRe7gq4y1L85uNCXPzafukn7qmQJ
+         CAGA==
+X-Gm-Message-State: AC+VfDwVLlRRA5J9yNloSTCYUioOasaIgfzEjB9XW2gUPlEzS9ITN0As
+        zftk1mVC22U+RBHbyCqvmbVtUXtXZ9U=
+X-Google-Smtp-Source: ACHHUZ4bHhttEzXSc2wdcua+iq74NCIJmLE8qVn9FEHU0Rt6VBg0JjUIL52nTOHw7T9sF84wGOdZLA==
+X-Received: by 2002:a05:6402:5112:b0:514:a59d:93c5 with SMTP id m18-20020a056402511200b00514a59d93c5mr17018620edd.2.1687586639895;
+        Fri, 23 Jun 2023 23:03:59 -0700 (PDT)
 Received: from matrix-ESPRIMO-P710 (p57ba2e0b.dip0.t-ipconnect.de. [87.186.46.11])
-        by smtp.gmail.com with ESMTPSA id n19-20020a170906841300b00988d0ad4477sm503594ejx.29.2023.06.23.23.03.47
+        by smtp.gmail.com with ESMTPSA id u22-20020aa7d996000000b0051a26ce312dsm309144eds.71.2023.06.23.23.03.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Jun 2023 23:03:49 -0700 (PDT)
-Date:   Sat, 24 Jun 2023 08:03:45 +0200
+        Fri, 23 Jun 2023 23:03:56 -0700 (PDT)
+Date:   Sat, 24 Jun 2023 08:03:54 +0200
 From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 03/11] staging: rtl8192e: Remove unused timer InactTimer
-Message-ID: <1a7acdd76037327602858a8634d502b46cdc8786.1687583718.git.philipp.g.hortmann@gmail.com>
+Subject: [PATCH 04/11] staging: rtl8192e: Remove empty function AdmitTS
+Message-ID: <572feb55932b59c7fc652183877698f8b1123d8d.1687583718.git.philipp.g.hortmann@gmail.com>
 References: <cover.1687583718.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -70,78 +70,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove unused timer InactTimer and all the resulting unused code.
+Remove call of function and empty function AdmitTS.
 
 Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
 ---
- drivers/staging/rtl8192e/rtl819x_TS.h     |  1 -
- drivers/staging/rtl8192e/rtl819x_TSProc.c | 13 -------------
- 2 files changed, 14 deletions(-)
+ drivers/staging/rtl8192e/rtl819x_TSProc.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/drivers/staging/rtl8192e/rtl819x_TS.h b/drivers/staging/rtl8192e/rtl819x_TS.h
-index 75ee2056d361..0e851d4221a7 100644
---- a/drivers/staging/rtl8192e/rtl819x_TS.h
-+++ b/drivers/staging/rtl8192e/rtl819x_TS.h
-@@ -19,7 +19,6 @@ enum tr_select {
- 
- struct ts_common_info {
- 	struct list_head		List;
--	struct timer_list		InactTimer;
- 	u8				Addr[ETH_ALEN];
- 	union tspec_body TSpec;
- 	union qos_tclas TClass[TCLAS_NUM];
 diff --git a/drivers/staging/rtl8192e/rtl819x_TSProc.c b/drivers/staging/rtl8192e/rtl819x_TSProc.c
-index ed124f85c2b1..7fff20b185f0 100644
+index 7fff20b185f0..474171edb2f9 100644
 --- a/drivers/staging/rtl8192e/rtl819x_TSProc.c
 +++ b/drivers/staging/rtl8192e/rtl819x_TSProc.c
-@@ -8,10 +8,6 @@
- #include <linux/etherdevice.h>
- #include "rtl819x_TS.h"
+@@ -173,11 +173,6 @@ void TSInitialize(struct rtllib_device *ieee)
+ 	}
+ }
  
--static void TsInactTimeout(struct timer_list *unused)
+-static void AdmitTS(struct rtllib_device *ieee,
+-		    struct ts_common_info *pTsCommonInfo, u32 InactTime)
 -{
 -}
 -
- static void RxPktPendingTimeout(struct timer_list *t)
- {
- 	struct rx_ts_record *pRxTs = from_timer(pRxTs, t,
-@@ -138,9 +134,6 @@ void TSInitialize(struct rtllib_device *ieee)
- 
- 	for (count = 0; count < TOTAL_TS_NUM; count++) {
- 		pTxTS->num = count;
--		timer_setup(&pTxTS->TsCommonInfo.InactTimer, TsInactTimeout,
--			    0);
--
- 		timer_setup(&pTxTS->TsAddBaTimer, TsAddBaProcess, 0);
- 
- 		timer_setup(&pTxTS->TxPendingBARecord.timer, BaSetupTimeOut,
-@@ -160,10 +153,6 @@ void TSInitialize(struct rtllib_device *ieee)
- 	for (count = 0; count < TOTAL_TS_NUM; count++) {
- 		pRxTS->num = count;
- 		INIT_LIST_HEAD(&pRxTS->rx_pending_pkt_list);
--
--		timer_setup(&pRxTS->ts_common_info.InactTimer, TsInactTimeout,
--			    0);
--
- 		timer_setup(&pRxTS->rx_admitted_ba_record.timer,
- 			    RxBaInactTimeout, 0);
- 
-@@ -187,7 +176,6 @@ void TSInitialize(struct rtllib_device *ieee)
- static void AdmitTS(struct rtllib_device *ieee,
- 		    struct ts_common_info *pTsCommonInfo, u32 InactTime)
- {
--	del_timer_sync(&pTsCommonInfo->InactTimer);
- }
- 
  static struct ts_common_info *SearchAdmitTRStream(struct rtllib_device *ieee,
-@@ -379,7 +367,6 @@ bool GetTs(struct rtllib_device *ieee, struct ts_common_info **ppTS,
- static void RemoveTsEntry(struct rtllib_device *ieee,
- 			  struct ts_common_info *pTs, enum tr_select TxRxSelect)
- {
--	del_timer_sync(&pTs->InactTimer);
- 	TsInitDelBA(ieee, pTs, TxRxSelect);
+ 						  u8 *Addr, u8 TID,
+ 						  enum tr_select TxRxSelect)
+@@ -352,7 +347,6 @@ bool GetTs(struct rtllib_device *ieee, struct ts_common_info **ppTS,
+ 		pTSInfo->field.ucSchedule = 0;
  
- 	if (TxRxSelect == RX_DIR) {
+ 		MakeTSEntry(*ppTS, Addr, &TSpec, NULL, 0, 0);
+-		AdmitTS(ieee, *ppTS, 0);
+ 		list_add_tail(&((*ppTS)->List), pAddmitList);
+ 
+ 		return true;
 -- 
 2.41.0
 
