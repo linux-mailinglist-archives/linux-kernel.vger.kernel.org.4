@@ -2,144 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D12FA73C70F
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 08:06:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B92173C71A
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Jun 2023 08:24:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232109AbjFXGF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 02:05:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60288 "EHLO
+        id S229631AbjFXGYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 02:24:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232191AbjFXGFb (ORCPT
+        with ESMTP id S229475AbjFXGYA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 02:05:31 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54CD92D59
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 23:04:59 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-98de322d11fso10899566b.1
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Jun 2023 23:04:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687586696; x=1690178696;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2BWbcO1nwvpd6S1p5aHK6YNqJsjh6u2uTKVKHyBrc6U=;
-        b=gyaBU3hGEcyfDQFaVIoIY85LxuTTosEfx7uk3Z1KH5gcty1zpE+PlK0OX6wNvY5nfa
-         h3rllOG9uoSGkj+5OWoYL01CCqYIJshQ+NBJgD/S6zSUsadEaq2lnwtF7Cir0LUIw4GP
-         ldkRQKotJegsLHJP7UoRvpXJ0b+FV7o1VGswEURyK+jHVoXJCosavKnvdExIRm7R1Y6b
-         CIXKOdUV0dOVeAdK7dd9Xd8QxPupqVUrnO62TMmON4CzYNchuUq96J4t282qDgQqqPKQ
-         jNkF60rbsTy2bP1KUzb7PXNKLStMZ0r/wjk3K7r9zRPbSeeXeiDCejSek0aLhmSCo8Vm
-         0Y0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687586696; x=1690178696;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2BWbcO1nwvpd6S1p5aHK6YNqJsjh6u2uTKVKHyBrc6U=;
-        b=Pk+UgZ7rzY8B1GXPpyXaILEYsLVsCj0eRgxGsrDm/RI1GaQcJSe2Q6c6gtmOfnePep
-         inho86jeRQpJw9y6BAxy0asuPC0WaSyM/vBoW2aYu/COmRItO4d+tZCxcH5qhmfPOxla
-         fA52RbqzBTWpr2ElIdlo6eArEmuhdLQIyI9QFOmJKtIxYeXTs8flbF3MRrf9RM4tNYJs
-         m3x2C0E9DiKJkZI9BDKGEu1EGv/KNRKXAaEJpDpxg3WlHooq+6ObiD0b3IpLrTiJbI99
-         42x8UhTFNcliXUBz3qYtJBJF7bzWn94+ZAC76hUk9yyxjUvAd4lsQ1kjH23zlQrBL55t
-         FW0g==
-X-Gm-Message-State: AC+VfDz6jzRpV1RqhhzMin9wyPSDx4YGSSFDOjM7qBwtHDDy3+8tjiA7
-        3g2KEs1isRUNl8UnSFeVEuZhyaDrkl0=
-X-Google-Smtp-Source: ACHHUZ7be3ZRgN7ScfoKn8GtZlHQKSPn4jcQARRkgRHFYt1lBd1H8O8ZdujY0N/htmY1NI/zWgY0gQ==
-X-Received: by 2002:a17:906:64cc:b0:987:115d:ba05 with SMTP id p12-20020a17090664cc00b00987115dba05mr18950034ejn.3.1687586695801;
-        Fri, 23 Jun 2023 23:04:55 -0700 (PDT)
-Received: from matrix-ESPRIMO-P710 (p57ba2e0b.dip0.t-ipconnect.de. [87.186.46.11])
-        by smtp.gmail.com with ESMTPSA id a2-20020a1709065f8200b009827b97c89csm501286eju.102.2023.06.23.23.04.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Jun 2023 23:04:54 -0700 (PDT)
-Date:   Sat, 24 Jun 2023 08:04:52 +0200
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 11/11] staging: rtl8192e: Remove variable ieee->short_slot
-Message-ID: <74fe53ccfafe2e0e18319b5502ed83544cc3ffd8.1687583718.git.philipp.g.hortmann@gmail.com>
-References: <cover.1687583718.git.philipp.g.hortmann@gmail.com>
+        Sat, 24 Jun 2023 02:24:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E63A0170E;
+        Fri, 23 Jun 2023 23:23:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5364260A0C;
+        Sat, 24 Jun 2023 06:23:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B52F7C433C8;
+        Sat, 24 Jun 2023 06:23:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687587837;
+        bh=Vvc6aaM/nDD725+H8QjXiJcNnQHAEI+iO8wwxMNbNnQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GTKvzTXBu2v/UDMvwm+nA3R75N5kHouOXl72VkZYpnEinFYe6+yOKxbtZgrqjq/x6
+         xM84xdKqi2O9qATrMFmu+bteLW9a0t5TLa6lJgad4gPkTwsd/iod/rtF9GkHOY2Jl5
+         cY8Vui30GZOc1c3KT9k+9Xxw11D/JBRrnVDvukiM6x9Qqm2z5Weij18VnhSTyNjOO5
+         ex9mF7R9MwyBNPtDptoH0WBM3xl2pfMsixl39aF1wP6OQ/IIOqkiyZGWIdka5uFmSc
+         C4PyOaSepQCta1d0RWHB4vVZ5X9vxH1zEp4M8XA1cbmkmQjogC3hAkvtgQHz1kKC5O
+         iPsfPz+vB3hjA==
+Date:   Sat, 24 Jun 2023 11:53:44 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Devi Priya <quic_devipriy@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        lpieralisi@kernel.org, kw@linux.com, robh@kernel.org,
+        bhelgaas@google.com, linux-arm-msm@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_srichara@quicinc.com, quic_sjaganat@quicinc.com,
+        quic_kathirav@quicinc.com, quic_anusha@quicinc.com,
+        quic_ipkumar@quicinc.com
+Subject: Re: [PATCH] PCI: qcom: configure the parf halt window size to 1GB
+Message-ID: <20230624062344.GE5611@thinkpad>
+References: <20230623045731.29397-1-quic_devipriy@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <cover.1687583718.git.philipp.g.hortmann@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230623045731.29397-1-quic_devipriy@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ieee->short_slot also named priv->rtllib->short_slot is initialized to 1
-and then unchanged. All evaluations will result accordingly. Remove
-resulting dead code.
+On Fri, Jun 23, 2023 at 10:27:31AM +0530, Devi Priya wrote:
+> Configure the ADDR_BIT_INDEX of PARF_AXI_MSTR_WR_ADDR_HALT_V2 register with
+> 0x1E to increase the halt window size to 1GB so that, when new inbound
+> posted write transactions whose address crosses 1G address range, the
+> controller would halt all the incoming writes until all the previous AXI
+> responses are received.
+> 
 
-Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
----
- drivers/staging/rtl8192e/rtl8192e/rtl_core.c |  1 -
- drivers/staging/rtl8192e/rtllib.h            |  1 -
- drivers/staging/rtl8192e/rtllib_softmac.c    | 10 +++-------
- 3 files changed, 3 insertions(+), 9 deletions(-)
+Can you explain how the value of 0x1e corresponds to 1GB window size?
 
-diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-index a24527585166..aaff8d739efe 100644
---- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-@@ -774,7 +774,6 @@ static void _rtl92e_init_priv_variable(struct net_device *dev)
- 	priv->retry_data = DEFAULT_RETRY_DATA;
- 	priv->rtllib->rts = DEFAULT_RTS_THRESHOLD;
- 	priv->rtllib->rate = 110;
--	priv->rtllib->short_slot = 1;
- 	priv->promisc = (dev->flags & IFF_PROMISC) ? 1 : 0;
- 	priv->bcck_in_ch14 = false;
- 	priv->cck_present_attn = 0;
-diff --git a/drivers/staging/rtl8192e/rtllib.h b/drivers/staging/rtl8192e/rtllib.h
-index c7f800a0c48c..aa8abec390ca 100644
---- a/drivers/staging/rtl8192e/rtllib.h
-+++ b/drivers/staging/rtl8192e/rtllib.h
-@@ -1486,7 +1486,6 @@ struct rtllib_device {
- 
- 	enum rtl_link_state link_state;
- 
--	int short_slot;
- 	int mode;       /* A, B, G */
- 
- 	/* used for forcing the ibss workqueue to terminate
-diff --git a/drivers/staging/rtl8192e/rtllib_softmac.c b/drivers/staging/rtl8192e/rtllib_softmac.c
-index 23b33a239703..584371f0ce57 100644
---- a/drivers/staging/rtl8192e/rtllib_softmac.c
-+++ b/drivers/staging/rtl8192e/rtllib_softmac.c
-@@ -852,8 +852,7 @@ static struct sk_buff *rtllib_probe_resp(struct rtllib_device *ieee,
- 		cpu_to_le16(ieee->current_network.capability &
- 		WLAN_CAPABILITY_SHORT_PREAMBLE);
- 
--	if (ieee->short_slot && (ieee->current_network.capability &
--	    WLAN_CAPABILITY_SHORT_SLOT_TIME))
-+	if (ieee->current_network.capability & WLAN_CAPABILITY_SHORT_SLOT_TIME)
- 		beacon_buf->capability |=
- 			cpu_to_le16(WLAN_CAPABILITY_SHORT_SLOT_TIME);
- 
-@@ -939,9 +938,7 @@ static struct sk_buff *rtllib_assoc_resp(struct rtllib_device *ieee, u8 *dest)
- 	assoc->capability = cpu_to_le16(ieee->iw_mode == IW_MODE_MASTER ?
- 		WLAN_CAPABILITY_ESS : WLAN_CAPABILITY_IBSS);
- 
--	if (ieee->short_slot)
--		assoc->capability |=
--				 cpu_to_le16(WLAN_CAPABILITY_SHORT_SLOT_TIME);
-+	assoc->capability |= cpu_to_le16(WLAN_CAPABILITY_SHORT_SLOT_TIME);
- 
- 	crypt = ieee->crypt_info.crypt[ieee->crypt_info.tx_keyidx];
- 
-@@ -1190,8 +1187,7 @@ rtllib_association_req(struct rtllib_network *beacon,
- 	if (beacon->capability & WLAN_CAPABILITY_SHORT_PREAMBLE)
- 		hdr->capability |= cpu_to_le16(WLAN_CAPABILITY_SHORT_PREAMBLE);
- 
--	if (ieee->short_slot &&
--	   (beacon->capability & WLAN_CAPABILITY_SHORT_SLOT_TIME))
-+	if (beacon->capability & WLAN_CAPABILITY_SHORT_SLOT_TIME)
- 		hdr->capability |= cpu_to_le16(WLAN_CAPABILITY_SHORT_SLOT_TIME);
- 
- 	hdr->listen_interval = cpu_to_le16(beacon->listen_interval);
+> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
+> ---
+>  This patch depends on the below series which adds support for PCIe 
+>  controllers in IPQ9574
+>  https://lore.kernel.org/linux-arm-msm/20230519090219.15925-1-quic_devipriy@quicinc.com/
+> 
+>  drivers/pci/controller/dwc/pcie-qcom.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> index c7579dfa5b1c..26c40e006120 100644
+> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> @@ -116,6 +116,8 @@
+>  
+>  /* PARF_AXI_MSTR_WR_ADDR_HALT register fields */
+>  #define EN					BIT(31)
+> +#define ADDR_BIT_INDEX				(BIT(0) | BIT(1) | BIT(2) | \
+> +						BIT(3) | BIT(4) | BIT(5))
+
+GENMASK(5, 0)
+
+>  
+>  /* PARF_LTSSM register fields */
+>  #define LTSSM_EN				BIT(8)
+> @@ -154,6 +156,8 @@
+>  
+>  #define QCOM_PCIE_CRC8_POLYNOMIAL		(BIT(2) | BIT(1) | BIT(0))
+>  
+> +#define PARF_AXI_MSTR_WR_ADDR_HALT_WINDOW_SIZE	0x1e
+
+GENMASK(4, 1) as these are address bits. 
+
+- Mani
+
+> +
+>  #define QCOM_PCIE_1_0_0_MAX_CLOCKS		4
+>  struct qcom_pcie_resources_1_0_0 {
+>  	struct clk_bulk_data clks[QCOM_PCIE_1_0_0_MAX_CLOCKS];
+> @@ -1126,6 +1130,11 @@ static int qcom_pcie_post_init(struct qcom_pcie *pcie)
+>  
+>  	writel(0, pcie->parf + PARF_Q2A_FLUSH);
+>  
+> +	val = readl(pcie->parf + PARF_AXI_MSTR_WR_ADDR_HALT_V2);
+> +	val &= ~ADDR_BIT_INDEX;
+> +	writel(val | PARF_AXI_MSTR_WR_ADDR_HALT_WINDOW_SIZE, pcie->parf +
+> +			PARF_AXI_MSTR_WR_ADDR_HALT_V2);
+> +
+>  	dw_pcie_dbi_ro_wr_en(pci);
+>  	writel(PCIE_CAP_SLOT_VAL, pci->dbi_base + offset + PCI_EXP_SLTCAP);
+>  
+> -- 
+> 2.17.1
+> 
+
 -- 
-2.41.0
-
+மணிவண்ணன் சதாசிவம்
