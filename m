@@ -2,73 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B340F73D53C
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 01:19:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B39373D53E
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 01:19:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229851AbjFYXTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 19:19:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34478 "EHLO
+        id S229728AbjFYXS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 19:18:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbjFYXSv (ORCPT
+        with ESMTP id S229555AbjFYXSu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 19:18:51 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2192CE44
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 16:18:51 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id 41be03b00d2f7-55adfa61199so320596a12.2
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 16:18:51 -0700 (PDT)
+        Sun, 25 Jun 2023 19:18:50 -0400
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 533D4E47
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 16:18:49 -0700 (PDT)
+Received: by mail-ot1-x329.google.com with SMTP id 46e09a7af769-6b74791c948so550694a34.3
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 16:18:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1687735130; x=1690327130;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1687735128; x=1690327128;
         h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
          :subject:references:in-reply-to:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=PMyidyx6c8j5MqA0hxypdhWidgaRdQYvwuhrsrEdDAU=;
-        b=r1Kkob3K7eMRLpiJCBwt7BrIxDGHwLTSuYUVmbjdbsOi8X9tHT0HbkkGfxV3slmG8l
-         EzwED/43arOsSoKB9nj4ESxua/Hbje/cjt5LMkLfWp46F53MUwdwbUJdyOWoDddl5478
-         e727q3+cEBjKr0bUQ6/6hGDj4i9Prr3xElgEnq7TIGwWdwG6bQxv5uIecVqw9X9eBzzg
-         7Zn56LTIEJ4brd+tSYnMn0r3au4gw+mPdgZVMN84x0b0bmmzd2MfN8sJNTn0SScdytLc
-         LzfofWl5kLWv/pC18bq3c1nnfmK3aJp94VGDjlAYcKH8euJ6CAhdzjTICMV53FZ9OVfh
-         KoLw==
+        bh=GDL2PKiCA+/rhTNU/RAXiTe/8UXzMDcm38qWTk5tJaQ=;
+        b=tu7dW0UyTp0mbURYV03AZvvKUB4EVAEcPqmwPKifx/K6gEigd69ommTY9v5e4nGdRx
+         /0otvCAopXVymmCSoHypSyDlf9xa1cF4Kmctg6BScYq6FYWD3JBeImtg6vw3uF1qmWPr
+         ReafK4WQwDw0MvGYascISNXIOH3YJzftIe5cHHdtQSYmeu+RO97F22cpndpVWDwvL3hx
+         HTQg7aaiwXj5ZcRhLWvILn0XjjqgAkdkibWIlxI5mVQZtEVNWDFKv7tl3qKIltrGD5ja
+         8+CvrypKjlJYVZA48SrlVUr31ndK+p9YAsamy6n1kZGIXiCOZh0jFUzwSBBHpbM92Ji0
+         cneA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687735130; x=1690327130;
+        d=1e100.net; s=20221208; t=1687735128; x=1690327128;
         h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
          :subject:references:in-reply-to:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=PMyidyx6c8j5MqA0hxypdhWidgaRdQYvwuhrsrEdDAU=;
-        b=XaZmI+fuq5L1ebdQi/m20jpY1fVY1RB2KuQw7U+gT/DNNWt4EZHjvUwt3/UpJsVvpk
-         VDcmnVq/IovY3poq9hK/24de22eVOqHrmUiDnpcNoSIn0APZP8sfPAeCUvZ6Z0rNO0TK
-         1mTKmL3zspl7G70DeZzVHANj0OrdsQLX0KpVbQ84AeCXGEPgm788uEYLJKwil4MRBJ58
-         BXoxS7R1J39LhMKm8Qr9/VLfFyoB7/AmmZ72Kx4kUAmhp49bqLZj6YC2i04HFZ6HDa1c
-         p3jc2qhOYUfsxV/nYPMMdyk1wJfXO1AEUmmWvAJM8ogo57lPdur64JI3GCBN7nvazAyl
-         ioyg==
-X-Gm-Message-State: AC+VfDy02Pp7aOpjYlfI4u8Wm76NQUQGFzXh1sTGQYKIMVbIA4cy97o6
-        CfVQztCNanvlVM6Tqee+szotjP/Yc1jDB1WL/Wo=
-X-Google-Smtp-Source: ACHHUZ7chlK+14uMjyxEuWPh5cyB+olLpZYJstcYOjERPpCE49wWN2rz8PEjV9wVJ6+bT43Q5ElOog==
-X-Received: by 2002:a17:902:da8c:b0:1af:981b:eeff with SMTP id j12-20020a170902da8c00b001af981beeffmr6581208plx.64.1687735130591;
-        Sun, 25 Jun 2023 16:18:50 -0700 (PDT)
+        bh=GDL2PKiCA+/rhTNU/RAXiTe/8UXzMDcm38qWTk5tJaQ=;
+        b=ZhSipsftENs0iLKHPKfIRZ9vjnWzcoPTGyLriIqfHNj3xkiA+hVhyFEWWi6OErMVfR
+         w5v604PY3WNTUANJwHCuZvnTamdmpncMtgBIaRP3B7Gt8PcplzrIW6f3TTtxdmMEGnJL
+         hIlntpQbUA9WEOOUB3zNfZpBzyBcYIxanFw7M/F7V57ey90P9PwXHT0yhTOtMV8lDjFC
+         /Hk7pEcSUHfXkJYp0dwZds+1wSu0c3fNTF6VpwcmNdYiLO0e7tl7AYZYyqiddXeMeTm3
+         jJ9VoFtwmC7cYsbFaJSPer0leHIVtPySd4d/5bbeRnoYBc3KXPg8OGbwpWpucIXcXOyx
+         4Rkw==
+X-Gm-Message-State: AC+VfDw9ytmP+iAODFK7dwDpCpXBVBIP6OJeU62FHmO2oSgeVrhMuEi8
+        7XknbpOMyVOutFirikYCH614ew==
+X-Google-Smtp-Source: ACHHUZ4/jIK86E2AaG1hAy2VpPXCHPHwDhZQtOvqja6+oaQ8pw774vDwDuHysXGDTibRWjqAJFzsWg==
+X-Received: by 2002:a05:6830:14d4:b0:6b4:7292:5a1a with SMTP id t20-20020a05683014d400b006b472925a1amr21628341otq.28.1687735128612;
+        Sun, 25 Jun 2023 16:18:48 -0700 (PDT)
 Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id y6-20020a1709029b8600b001b682336f66sm2873895plp.55.2023.06.25.16.18.50
+        by smtp.gmail.com with ESMTPSA id p19-20020a62ab13000000b00678afd48250sm188041pff.218.2023.06.25.16.18.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Jun 2023 16:18:50 -0700 (PDT)
-In-Reply-To: <20230615-creamer-emu-ade0fa0bdb68@spud>
-References: <20230615-creamer-emu-ade0fa0bdb68@spud>
-Subject: Re: [PATCH v2 0/2] dt-bindings: riscv: cpus: switch to
- unevaluatedProperties: false
-Message-Id: <168773507362.1389.2217273473354305328.b4-ty@rivosinc.com>
+        Sun, 25 Jun 2023 16:18:48 -0700 (PDT)
+In-Reply-To: <20230614013018.2168426-1-guoren@kernel.org>
+References: <20230614013018.2168426-1-guoren@kernel.org>
+Subject: Re: [PATCH -next V13 0/3] riscv: Add independent irq/softirq
+ stacks support
+Message-Id: <168773507359.1389.408207279075698188.b4-ty@rivosinc.com>
 Date:   Sun, 25 Jun 2023 16:17:53 -0700
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.13-dev-901c5
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@kernel.org>
 From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Conor Dooley <conor@kernel.org>
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Conor Dooley <conor.dooley@microchip.com>, heiko@sntech.de,
+        jszhang@kernel.org, bjorn@kernel.org, cleger@rivosinc.com,
+        guoren@kernel.org
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -79,24 +77,26 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Thu, 15 Jun 2023 23:50:13 +0100, Conor Dooley wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
+On Tue, 13 Jun 2023 21:30:15 -0400, guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
 > 
-> Do the various bits needed to drop the additionalProperties: true that
-> we currently have in riscv/cpu.yaml, to permit actually enforcing what
-> people put in cpus nodes.
+> This patch series adds independent irq/softirq stacks to decrease the
+> press of the thread stack. Also, add a thread STACK_SIZE config for
+> users to adjust the proper size during compile time.
 > 
-> Changes in v2:
-> - drop patches 2 -> 5, they're now standard in dt-schema
+> This patch series belonged to the generic entry, which has been merged
+> to for-next now.
 > 
 > [...]
 
 Applied, thanks!
 
-[1/2] dt-bindings: riscv: cpus: add a ref the common cpu schema
-      https://git.kernel.org/palmer/c/3c1b4758a954
-[2/2] dt-bindings: riscv: cpus: switch to unevaluatedProperties: false
-      https://git.kernel.org/palmer/c/1ffe6ddc5c64
+[1/3] riscv: stack: Support HAVE_IRQ_EXIT_ON_IRQ_STACK
+      https://git.kernel.org/palmer/c/163e76cc6ef4
+[2/3] riscv: stack: Support HAVE_SOFTIRQ_ON_OWN_STACK
+      https://git.kernel.org/palmer/c/dd69d07a5a6c
+[3/3] riscv: stack: Add config of thread stack size
+      https://git.kernel.org/palmer/c/a7555f6b62e7
 
 Best regards,
 -- 
