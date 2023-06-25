@@ -2,298 +2,518 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2089073D54F
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 01:41:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A657A73D550
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 01:41:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbjFYXlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 19:41:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40142 "EHLO
+        id S229942AbjFYXlP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 19:41:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbjFYXk6 (ORCPT
+        with ESMTP id S229500AbjFYXlJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 19:40:58 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2107.outbound.protection.outlook.com [40.107.93.107])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EEBF1B1
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 16:40:54 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gIJWvll/DomLS7r9JEfT3keO4lha+VHC0G21L2wBuQ/ek+8Q6yk6NbKh0+WWbctCFa9A0hFtKgbV3QGRC0eisfHlVMlrZhKeCd5o8HR+fOaZUKSIA0pRhBatyrT3PgvLuu03qnGI/H2ZAqFbLEEewwYVV3ZjHcSfXwno0+iuSh3lYbPPZBIjDSAclYGrjQPi8aqCyXbFLwl/I2qGb8D4IVxwWtsbNRPYpJP0uZ+Z4RB92LPGDSZ/6gsuY8c+UKn0UZYInf00zPMGk7opzfNo6f0YKs3SiBzlth+TMh2CJO4t3s6LprlaRDVblxM1M1dEBqf+71edgyFf0Gnq5cjynQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3MinWA4lEzpDdipSaXfDcy0ZuglmxxMzXr7PoGOILy0=;
- b=UwjMXXCigMHujRAzud03MjDfyyVcj884G1yAdRXhPP3zzeEJInWm58USe8y7Bk74iR9R3/BJMaQn7tAWjfFSEORIdB3oxkFgMH8Xg0L3NRjoVgE0TOj62975S8/GGxvhjNbPaAKIynQKmCs3Ag6V+HES9OeoOMtcQgWo1NQaFGQC8K5QsicI2mFSG1kLCGrmBCepocabC7CzknD78ZVZ4wztReQBDy5sEk8ixCdLZ2FNQ1jZHYE+bpQXeRhJK7YDRwultqprhcmb9iD+MFXLPH1o9R4mYW0HHjlSqNPuIRuBRgpyZ+I4ymwMwBOgzfVLDen7WFfL77qHPofg03nBsA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
+        Sun, 25 Jun 2023 19:41:09 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD22E43
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 16:41:07 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-51d9865b7bdso369069a12.1
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 16:41:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3MinWA4lEzpDdipSaXfDcy0ZuglmxxMzXr7PoGOILy0=;
- b=hVQp7Nq3h5B8+2AY2IAIoV1RLpsSwSWuSoDrfo2LZ6uI29iUsrfpWWlkdZVcqWS+x4Nj9gyAtnl5wN4+PsC4T+tRVkYMv++MQVJ6ZpooWuBf2HzEunReBY87wT87Zx7d9Hyhh36WMT2ptgS+hf2jsvHL7TwpePWY51bWE7cPsWE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
-Received: from MWHPR0101MB2893.prod.exchangelabs.com (2603:10b6:301:33::25) by
- BL3PR01MB7194.prod.exchangelabs.com (2603:10b6:208:345::14) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6521.26; Sun, 25 Jun 2023 23:40:49 +0000
-Received: from MWHPR0101MB2893.prod.exchangelabs.com
- ([fe80::c3b4:c7ab:46e:476]) by MWHPR0101MB2893.prod.exchangelabs.com
- ([fe80::c3b4:c7ab:46e:476%2]) with mapi id 15.20.6521.026; Sun, 25 Jun 2023
- 23:40:49 +0000
-From:   D Scott Phillips <scott@os.amperecomputing.com>
-To:     linux-arm-kernel@lists.infradead.org,
-        James Morse <james.morse@arm.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        Darren Hart <darren@os.amperecomputing.com>
-Subject: [PATCH v4] arm64: sdei: abort running SDEI handlers during crash
-Date:   Sun, 25 Jun 2023 16:40:33 -0700
-Message-ID: <20230625234033.672594-1-scott@os.amperecomputing.com>
-X-Mailer: git-send-email 2.41.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: CH0PR04CA0093.namprd04.prod.outlook.com
- (2603:10b6:610:75::8) To MWHPR0101MB2893.prod.exchangelabs.com
- (2603:10b6:301:33::25)
+        d=linux-foundation.org; s=google; t=1687736466; x=1690328466;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=B1Z4MLgboiG/of20MP0gMf0iG4HDE96sneM+dPOyrdg=;
+        b=B2OCdebHK25158MBRBeJwthjl/wgGQNpZyu33eBV5zPJuc3P4Z09SQU3246gPNlUZk
+         eYpG7u3kzfxKNaqD3PYxYJfx3RKI4LTrma2PmK8GjCl1DYnqLDh0qqO8cg2xDO4wJVLJ
+         ZlqDT5FVp6vOepgoD/KEtl+GP43FVJcZkpPFA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687736466; x=1690328466;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=B1Z4MLgboiG/of20MP0gMf0iG4HDE96sneM+dPOyrdg=;
+        b=ap5ObzzyddorHl4yEnVOMl/RxF6qTvnj9cs8DKDx5LzvcyVvoxv5RsXs78fsRdSF/3
+         LTyy+y+RWZpidRJAwwtgDX64RCMfZzW9kvsT8R9QtNO4X5vz2Kim/s6JXJbyFaR0/lIR
+         e+CVzohcmgNlNfKmp0havc933pLqTG9u1hhmzetk7KirW6+u9aM4/LbsReRrdBaoSnq+
+         gqKUmoV3IhgM5vmkGkfC2mX3JazDOtP5OqbI3SycVPL1AKnGnSmCEk+WRwUS7sYNsey9
+         2lkrdmmcWQXEW5mO3VqPJoZEggytzpsTPRx2lTeVou7JQTVoEYiyJZOLer1xTFvBg/0P
+         QWAA==
+X-Gm-Message-State: AC+VfDzuj03jouliBW4wpsQGqcvbdbhnESjyQIcv3g3Nib6lSTeLSfV7
+        fDr6RgmnWdp7p6klo8iwPgKTdi5FwPwVdYFQq1fNKaU8
+X-Google-Smtp-Source: ACHHUZ4Wu8p4sNd2YCLlusmH2lcwzjKHn7hor/BjBoQNAM4vXf/A7laaDptprFQmVDNQaKM2HMUcOA==
+X-Received: by 2002:a17:907:746:b0:962:46d7:c8fc with SMTP id xc6-20020a170907074600b0096246d7c8fcmr25081322ejb.21.1687736465777;
+        Sun, 25 Jun 2023 16:41:05 -0700 (PDT)
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com. [209.85.208.48])
+        by smtp.gmail.com with ESMTPSA id kg1-20020a17090776e100b0098e2eaec395sm1501300ejc.130.2023.06.25.16.41.05
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 25 Jun 2023 16:41:05 -0700 (PDT)
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-51d9128494cso711857a12.0
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 16:41:05 -0700 (PDT)
+X-Received: by 2002:a05:6402:4c9:b0:51a:327d:f065 with SMTP id
+ n9-20020a05640204c900b0051a327df065mr18852149edw.13.1687736464697; Sun, 25
+ Jun 2023 16:41:04 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWHPR0101MB2893:EE_|BL3PR01MB7194:EE_
-X-MS-Office365-Filtering-Correlation-Id: a62308da-baab-4e8e-4110-08db75d59aaa
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Zi6u75lra+JSFKLX8Bs471sfuo3aQe5WIjch2puWT7yzszK9yAbyON7uOMuENYvrwOwY+4Eh8nOdDmTm5ShwazzjKYrPMPQeCNzQkpDIXBThHnV5jd7GYD/G4XkIK+x0gNdWnDm0/t4phJfZPBFTTtfn2UNyMl0TnhcFy2rn1RGkrwem2dUl7wcLc/mgpxEzrJrgsH40TjDLORyNImo7ymZLFZmVY4EYW59oOaDCD8iewQRI7UlqOVNcmTMYxy9mGFn8IODTNbrRknAXSgasLQ7xKhak4yKuK1E16K5X3bsE5VNr4uMIRVToiE9ljWFZmrBC+44TcfY8P0OFz1YMNzp/zWUq//CGL4sujNdHNFdk2x6kuu7b816V3dAOGOo3yvrbFmUc8zbjIew+HEFW7puC1qZY//HtD5PINRQDORFBIFtOflTsRWrAxKCMPmJ6LeuN8SH2oJhYwJjGd9wObza8FW0+61yZ5TSlulnTmfjA+iNoj2EVdCsCT2rGbrm9D3snoVXOvzJFCRifJGdVdmuHoO/Dyi2T2jcgGgM3GJKvOvyhhv8BSbj5KXhfRxnlYrCI+OzloFHbCQivDuKWb0nxX1Nz5l8nQmz9QCGyXOCH0g4Hryy47/RQ+rq3N7BGwvxf6AhSsWOU61X4Ax1qFw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR0101MB2893.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(366004)(376002)(39840400004)(136003)(451199021)(5660300002)(41300700001)(316002)(86362001)(66476007)(6916009)(8936002)(8676002)(66556008)(4326008)(38350700002)(38100700002)(66946007)(107886003)(6486002)(966005)(6512007)(1076003)(26005)(6506007)(2906002)(186003)(52116002)(478600001)(54906003)(6666004)(83380400001)(2616005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?3WleRgpmR34Kr9dGaShiiYb0cc3tapzflsoAV26V81emrIo5198r/gdLviu0?=
- =?us-ascii?Q?+Su3YD5KP84ut87P4e5SCEQYV82kH8h46if0oHUqFwY5trigE9tD2TPQQqvi?=
- =?us-ascii?Q?6RpCZDhY9cU/2zNepcvRTW/xy7TwBN3MvE4vYDRUMs0nAXLYUqE1wyNNR9oh?=
- =?us-ascii?Q?3iqgC4aBkRNo5VLBpjmVZw8tU4dgncLgG58UExUYgLoifrAhkOO+wXRIlY+t?=
- =?us-ascii?Q?oeSH6OupT3ZIedyq07M1DQIL+DxKSwot6htnPEtHyk67uylvziPByHOOYaNE?=
- =?us-ascii?Q?aVvQ9DjYMij6PaO4H5GtSNsGFpCeoCO5ZgdCWNyosGdWdTOOu939auI2e73i?=
- =?us-ascii?Q?e738JSmOu2tIMmyGjLQlV5aBwpYTJ4yFcWPorfyKtw9SWAcppNpwejzVZxAg?=
- =?us-ascii?Q?/ZiXrwrWNBt5ke4QCSXAStEqYrlgB9StyG/sRUIB0zWvCRXqKlO0KxULL1Pk?=
- =?us-ascii?Q?/4LknpklkCqwboaM5Q+Mw2L0IWrtvN76UBM9eV4cKVm8Jd17qdQGr8OYBUCk?=
- =?us-ascii?Q?i7zDrrYbaoDNB6r3TNAbaDtFqblf/ryWcQ5jgG7SHAZswgNOlNObDhYeA5nm?=
- =?us-ascii?Q?b2xtkdi+G5A+eeDKsr46pF+70s3f1MnbavY0ucdnjTefwNma1MRqafwLc2Vh?=
- =?us-ascii?Q?aPOQ+piffWJqPBu/Yq5jD6L7CA9QalK3L7FIbH9JU52USTFW3NbK2WoV5NFN?=
- =?us-ascii?Q?Bf6BQeMi+Tv/J7U2wDkPjagsqcuYIZwGcsTnROqqpF48/Ca10vAVblAbo+l2?=
- =?us-ascii?Q?ZxbVuDyPBjPHEsyn7e89V9c3Tg+sJ6SReouQEgxD/g94c3K3epfJ1uFDovhc?=
- =?us-ascii?Q?wVQs3U1zcWXMdGRo4A+zU2e7XpyvPeynDiiH1e1Ya6PFgYOKDYWw604e0UBm?=
- =?us-ascii?Q?gAfAKTEzg5cYccqYQ64KASH5ey6T8ZFc4NWZ0pFa43QvfwYTY2C9uw2rNBua?=
- =?us-ascii?Q?M/ypjqNW+wVGm+e8HU/Mo+K89aI1g8xgOIeOYmNkz4GFdgukCmbZ2/e/tflN?=
- =?us-ascii?Q?jj/DinXuVqrh7XHxrUfjPXGo/mZUg1N1V4PXj4/lTSbki7DfLvix2rHLZXdb?=
- =?us-ascii?Q?pRtbEak0OwXcozIdxZSUF3tXjzVHBk2bd/4efWqBWRle8lqJbe7rdjKRR6Bq?=
- =?us-ascii?Q?a4O1JyYaevsItaoLb7d+dMhPH+cQXMJ+HofZAeL8sgWj2WZ9hAdbljykirfZ?=
- =?us-ascii?Q?mEy2yzJRGKVeonFwTt0Kn4Cbt5CeOV3PFrEcryMeP4cZG/FTW0Ud5dbY0I73?=
- =?us-ascii?Q?AJVjEPR6FYa6PBPwUs0imDl2njHfoqIwLToWvWirzZ708ACMpHwTDa8UwdnP?=
- =?us-ascii?Q?jSdkEFR21+WYjqaNgF8FjfmFR/ToqFVzN5P++ZuIw2bovsygHgrvOudhCH3p?=
- =?us-ascii?Q?R6lnpDi9g+4lTs6F6XpoM77DQ/txfshWlMuOd0a0HLsC9DVNU4TclMYSJa7h?=
- =?us-ascii?Q?NkBmt1auBWx2fosn512BQb9y+0jWY9gpYwksUvjbs9FhmVv9C+fI6mkryv5R?=
- =?us-ascii?Q?mdVbzkoFPUqHqgfkYMksMFkTyTh9EC1+g+EQcSUnw4jIJ9BUyymghDkIeGmq?=
- =?us-ascii?Q?7WrhCPQ4bYmfZTghaZ2yUfVL9SCKiBnsAoloRbLjNRml/iQSnsP2uBZysPOs?=
- =?us-ascii?Q?aQ=3D=3D?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a62308da-baab-4e8e-4110-08db75d59aaa
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR0101MB2893.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jun 2023 23:40:48.8359
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: RH9JzZS41VqiaMY56m+x7LC3Gw0KfkUfnfMV4NPCxIo+cuYOUscyAX4hG9/MdqGdCYnZehDjD5wHaaP2XiR/WEtjUmjb2jxTMMcbldg+Sdmtnk93/gXIDpiejRQ+dRWe
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR01MB7194
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 25 Jun 2023 16:40:48 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wi7fwNWfqj-QQqEfZTUOB4bbKT8QiEUDHoPk0ecuYA7cA@mail.gmail.com>
+Message-ID: <CAHk-=wi7fwNWfqj-QQqEfZTUOB4bbKT8QiEUDHoPk0ecuYA7cA@mail.gmail.com>
+Subject: Linux 6.4
+To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Interrupts are blocked in SDEI context, per the SDEI spec: "The client
-interrupts cannot preempt the event handler." If we crashed in the SDEI
-handler-running context (as with ACPI's AGDI) then we need to clean up the
-SDEI state before proceeding to the crash kernel so that the crash kernel
-can have working interrupts.
+Hmm. Final week of 6.4 is done, and we've mainly got some netfilter
+fixes, some mm reverts, and a few tracing updates.
 
-Track the active SDEI handler per-cpu so that we can COMPLETE_AND_RESUME
-the handler, discarding the interrupted context.
+There's random small changes elsewhere: the usual architecture noise,
+a number of selftest updates, some filesystem fixes (btrfs, ksmb),
+etc.
 
-Fixes: f5df26961853 ("arm64: kernel: Add arch-specific SDEI entry code and CPU masking")
-Signed-off-by: D Scott Phillips <scott@os.amperecomputing.com>
-Reviewed-by: James Morse <james.morse@arm.com>
-Cc: stable@vger.kernel.org
+Most of the stuff in my mailbox the last week has been about upcoming
+things for 6.5, and I already have 15 pull requests pending. I
+appreciate all you proactive people.
+
+But that's for tomorrow. Today we're all busy build-testing the newest
+kernel release, and checking that it's all good. Right?
+
+                 Linus
+
 ---
- Changes since v3:
- - Fixed messed up #ifdef logic in entry.S
- - Moved sdei_handler_abort() logic from smp.c to sdei.c
- v3 Link: https://lore.kernel.org/linux-arm-kernel/20230607195546.2896-1-scott@os.amperecomputing.com/
 
- Changes since v2:
- - Dropped the patch fiddling with the sdei conduit.
- v2 Link: https://lore.kernel.org/linux-arm-kernel/20230329202519.6110-1-scott@os.amperecomputing.com/
- 
- Changes since v1:
- - Store the active SDEI event being handled per-cpu, use the per-cpu active
-   handler information to know when to abort.
- - Add prints before attempting to abort sdei handlers.
- v1 Link: https://lore.kernel.org/linux-arm-kernel/20230204000851.3871-1-scott@os.amperecomputing.com/
+Andrew Lunn (1):
+      net: phy: Manual remove LEDs to ensure correct ordering
 
- arch/arm64/include/asm/sdei.h | 11 +++++++++++
- arch/arm64/kernel/entry.S     | 27 +++++++++++++++++++++++++--
- arch/arm64/kernel/sdei.c      | 22 ++++++++++++++++++++++
- arch/arm64/kernel/smp.c       |  8 ++++----
- 4 files changed, 62 insertions(+), 6 deletions(-)
+Andrew Powers-Holmes (1):
+      arm64: dts: rockchip: Fix rk356x PCIe register and range mappings
 
-diff --git a/arch/arm64/include/asm/sdei.h b/arch/arm64/include/asm/sdei.h
-index 4292d9bafb9d..98786108c493 100644
---- a/arch/arm64/include/asm/sdei.h
-+++ b/arch/arm64/include/asm/sdei.h
-@@ -17,6 +17,9 @@
- 
- #include <asm/virt.h>
- 
-+DECLARE_PER_CPU(struct sdei_registered_event *, sdei_active_normal_event);
-+DECLARE_PER_CPU(struct sdei_registered_event *, sdei_active_critical_event);
-+
- extern unsigned long sdei_exit_mode;
- 
- /* Software Delegated Exception entry point from firmware*/
-@@ -29,6 +32,14 @@ asmlinkage void __sdei_asm_entry_trampoline(unsigned long event_num,
- 						   unsigned long pc,
- 						   unsigned long pstate);
- 
-+#ifdef CONFIG_ARM_SDE_INTERFACE
-+/* Abort a running handler. Context is discarded. */
-+void sdei_handler_abort(void);
-+void __sdei_handler_abort(void);
-+#else
-+static inline void sdei_handler_abort(void) { }
-+#endif
-+
- /*
-  * The above entry point does the minimum to call C code. This function does
-  * anything else, before calling the driver.
-diff --git a/arch/arm64/kernel/entry.S b/arch/arm64/kernel/entry.S
-index ab2a6e33c052..1b4a65a33186 100644
---- a/arch/arm64/kernel/entry.S
-+++ b/arch/arm64/kernel/entry.S
-@@ -1003,9 +1003,13 @@ SYM_CODE_START(__sdei_asm_handler)
- 
- 	mov	x19, x1
- 
--#if defined(CONFIG_VMAP_STACK) || defined(CONFIG_SHADOW_CALL_STACK)
-+	/* Store the registered-event for crash_smp_send_stop() */
- 	ldrb	w4, [x19, #SDEI_EVENT_PRIORITY]
--#endif
-+	cbnz	w4, 1f
-+	adr_this_cpu dst=x5, sym=sdei_active_normal_event, tmp=x6
-+	b	2f
-+1:	adr_this_cpu dst=x5, sym=sdei_active_critical_event, tmp=x6
-+2:	str	x19, [x5]
- 
- #ifdef CONFIG_VMAP_STACK
- 	/*
-@@ -1072,6 +1076,14 @@ SYM_CODE_START(__sdei_asm_handler)
- 
- 	ldr_l	x2, sdei_exit_mode
- 
-+	/* Clear the registered-event seen by crash_smp_send_stop() */
-+	ldrb	w3, [x4, #SDEI_EVENT_PRIORITY]
-+	cbnz	w3, 1f
-+	adr_this_cpu dst=x5, sym=sdei_active_normal_event, tmp=x6
-+	b	2f
-+1:	adr_this_cpu dst=x5, sym=sdei_active_critical_event, tmp=x6
-+2:	str	xzr, [x5]
-+
- alternative_if_not ARM64_UNMAP_KERNEL_AT_EL0
- 	sdei_handler_exit exit_mode=x2
- alternative_else_nop_endif
-@@ -1082,4 +1094,15 @@ alternative_else_nop_endif
- #endif
- SYM_CODE_END(__sdei_asm_handler)
- NOKPROBE(__sdei_asm_handler)
-+
-+SYM_CODE_START(__sdei_handler_abort)
-+	mov_q	x0, SDEI_1_0_FN_SDEI_EVENT_COMPLETE_AND_RESUME
-+	adr	x1, 1f
-+	ldr_l	x2, sdei_exit_mode
-+	sdei_handler_exit exit_mode=x2
-+	// exit the handler and jump to the next instruction.
-+	// Exit will stomp x0-x17, PSTATE, ELR_ELx, and SPSR_ELx.
-+1:	ret
-+SYM_CODE_END(__sdei_handler_abort)
-+NOKPROBE(__sdei_handler_abort)
- #endif /* CONFIG_ARM_SDE_INTERFACE */
-diff --git a/arch/arm64/kernel/sdei.c b/arch/arm64/kernel/sdei.c
-index 830be01af32d..fcd418af386e 100644
---- a/arch/arm64/kernel/sdei.c
-+++ b/arch/arm64/kernel/sdei.c
-@@ -47,6 +47,9 @@ DEFINE_PER_CPU(unsigned long *, sdei_shadow_call_stack_normal_ptr);
- DEFINE_PER_CPU(unsigned long *, sdei_shadow_call_stack_critical_ptr);
- #endif
- 
-+DEFINE_PER_CPU(struct sdei_registered_event *, sdei_active_normal_event);
-+DEFINE_PER_CPU(struct sdei_registered_event *, sdei_active_critical_event);
-+
- static void _free_sdei_stack(unsigned long * __percpu *ptr, int cpu)
- {
- 	unsigned long *p;
-@@ -262,3 +265,22 @@ unsigned long __kprobes do_sdei_event(struct pt_regs *regs,
- 
- 	return vbar + 0x480;
- }
-+
-+void sdei_handler_abort(void)
-+{
-+	/*
-+	 * If the crash happened in an SDEI event handler then we need to
-+	 * finish the handler with the firmware so that we can have working
-+	 * interrupts in the crash kernel.
-+	 */
-+	if (__this_cpu_read(sdei_active_critical_event)) {
-+		pr_warn("SDEI: still in SDEI critical event context, attempting to finish handler.\n");
-+		__sdei_handler_abort();
-+		__this_cpu_write(sdei_active_critical_event, NULL);
-+	}
-+	if (__this_cpu_read(sdei_active_normal_event)) {
-+		pr_warn("SDEI: still in SDEI normal event context, attempting to finish handler.\n");
-+		__sdei_handler_abort();
-+		__this_cpu_write(sdei_active_normal_event, NULL);
-+	}
-+}
-diff --git a/arch/arm64/kernel/smp.c b/arch/arm64/kernel/smp.c
-index d00d4cbb31b1..c6b882e589e6 100644
---- a/arch/arm64/kernel/smp.c
-+++ b/arch/arm64/kernel/smp.c
-@@ -1048,10 +1048,8 @@ void crash_smp_send_stop(void)
- 	 * If this cpu is the only one alive at this point in time, online or
- 	 * not, there are no stop messages to be sent around, so just back out.
- 	 */
--	if (num_other_online_cpus() == 0) {
--		sdei_mask_local_cpu();
--		return;
--	}
-+	if (num_other_online_cpus() == 0)
-+		goto skip_ipi;
- 
- 	cpumask_copy(&mask, cpu_online_mask);
- 	cpumask_clear_cpu(smp_processor_id(), &mask);
-@@ -1070,7 +1068,9 @@ void crash_smp_send_stop(void)
- 		pr_warn("SMP: failed to stop secondary CPUs %*pbl\n",
- 			cpumask_pr_args(&mask));
- 
-+skip_ipi:
- 	sdei_mask_local_cpu();
-+	sdei_handler_abort();
- }
- 
- bool smp_crash_stop_failed(void)
--- 
-2.41.0
+Ar=C4=B1n=C3=A7 =C3=9CNAL (5):
+      net: dsa: mt7530: set all CPU ports in MT7531_CPU_PMAP
+      net: dsa: mt7530: fix trapping frames on non-MT7621 SoC MT7530 switch
+      net: dsa: mt7530: fix handling of BPDUs on MT7530 switch
+      net: dsa: mt7530: fix handling of LLDP frames
+      MAINTAINERS: add me as maintainer of MEDIATEK SWITCH DRIVER
 
+Azeem Shaikh (1):
+      ieee802154: Replace strlcpy with strscpy
+
+Beau Belgrave (7):
+      tracing/user_events: Remove user_ns walk for groups
+      tracing/user_events: Store register flags on events
+      tracing/user_events: Track refcount consistently via put/get
+      tracing/user_events: Add auto cleanup and future persist flag
+      selftests/user_events: Ensure auto cleanup works as expected
+      selftests/user_events: Adapt dyn_test to non-persist events
+      tracing/user_events: Document auto-cleanup and remove dyn_event refs
+
+Ben Dooks (1):
+      mailmap: add entries for Ben Dooks
+
+Benedict Wong (2):
+      xfrm: Treat already-verified secpath entries as optional
+      xfrm: Ensure policies always checked on XFRM-I input path
+
+Benjamin Berg (1):
+      wifi: mac80211: report all unusable beacon frames
+
+Charles Keepax (1):
+      ASoC: intel: sof_sdw: Fixup typo in device link checking
+
+Chen Aotian (1):
+      ieee802154: hwsim: Fix possible memory leaks
+
+Chris Mi (2):
+      net/mlx5e: TC, Add null pointer check for hardware miss support
+      net/mlx5e: TC, Cleanup ct resources for nic flow
+
+Christophe Kerello (1):
+      mmc: mmci: stm32: fix max busy timeout calculation
+
+Clark Wang (1):
+      i2c: imx-lpi2c: fix type char overflow issue when calculating
+the clock cycle
+
+Danielle Ratson (1):
+      selftests: forwarding: Fix race condition in mirror installation
+
+David Stevens (1):
+      mm/khugepaged: fix iteration in collapse_file
+
+Dexuan Cui (6):
+      Drivers: hv: vmbus: Call hv_synic_free() if hv_synic_alloc() fails
+      PCI: hv: Fix a race condition bug in hv_pci_query_relations()
+      PCI: hv: Fix a race condition in hv_irq_unmask() that can cause panic
+      PCI: hv: Remove the useless hv_pcichild_state from struct hv_pci_dev
+      Revert "PCI: hv: Fix a timing issue which causes kdump to fail
+occasionally"
+      PCI: hv: Add a per-bus mutex state_lock
+
+Dheeraj Kumar Srivastava (1):
+      x86/apic: Fix kernel panic when booting with intremap=3Doff and x2api=
+c_phys
+
+Douglas Anderson (4):
+      dt-bindings: firmware: qcom,scm: Document that SCM can be dma-coheren=
+t
+      arm64: dts: qcom: sc7180: Mark SCM as dma-coherent for IDP
+      arm64: dts: qcom: sc7180: Mark SCM as dma-coherent for trogdor
+      arm64: dts: qcom: sc7280: Mark SCM as dma-coherent for chrome devices
+
+Eli Cohen (1):
+      net/mlx5: Fix driver load with single msix vector
+
+Eric Dumazet (1):
+      sch_netem: acquire qdisc lock in netem_change()
+
+Florent Revest (1):
+      bpf/btf: Accept function names that contain dots
+
+Florian Fainelli (1):
+      scripts/gdb: fix SB_* constants parsing
+
+Francesco Dolcini (1):
+      Revert "net: phy: dp83867: perform soft reset and retain established =
+link"
+
+Gavin Shan (1):
+      KVM: Avoid illegal stage2 mapping on invalid memory slot
+
+Hans de Goede (1):
+      thermal/intel/intel_soc_dts_iosf: Fix reporting wrong temperatures
+
+Herbert Xu (1):
+      xfrm: Use xfrm_state selector for BEET input
+
+Jeff Layton (1):
+      drm: use mgr->dev in drm_dbg_kms in drm_dp_add_payload_part2
+
+Jens Axboe (4):
+      io_uring/poll: serialize poll linked timer start with poll removal
+      io_uring/net: clear msg_controllen on partial sendmsg retry
+      io_uring/net: disable partial retries for recvmsg with cmsg
+      io_uring/net: use the correct msghdr union member in io_sendmsg_copy_=
+hdr
+
+Jiasheng Jiang (1):
+      gpio: sifive: add missing check for platform_get_irq
+
+Jiawen Wu (2):
+      gpiolib: Fix GPIO chip IRQ initialization restriction
+      net: mdio: fix the wrong parameters
+
+Jiri Olsa (1):
+      bpf: Force kprobe multi expected_attach_type for kprobe_multi link
+
+Jisheng Zhang (1):
+      mmc: litex_mmc: set PROBE_PREFER_ASYNCHRONOUS
+
+Josua Mayer (1):
+      net: dpaa2-mac: add 25gbase-r support
+
+Juerg Haefliger (2):
+      ieee802154/adf7242: Add MODULE_FIRMWARE macro
+      nfc: fdp: Add MODULE_FIRMWARE macros
+
+Kan Liang (1):
+      perf/x86/intel: Fix the FRONTEND encoding on GNR and MTL
+
+Kees Cook (1):
+      net: wwan: iosm: Convert single instance struct member to flexible ar=
+ray
+
+Krister Johansen (2):
+      bpf: ensure main program has an extable
+      selftests/bpf: add a test for subprogram extables
+
+Krzysztof Kozlowski (1):
+      arm64: dts: rockchip: add missing cache properties
+
+Lee Jones (1):
+      x86/mm: Avoid using set_pgd() outside of real PGD pages
+
+Leon Romanovsky (4):
+      xfrm: add missed call to delete offloaded policies
+      net/mlx5e: Don't delay release of hardware objects
+      net/mlx5e: Drop XFRM state lock when modifying flow steering
+      net/mlx5e: Fix scheduling of IPsec ASO query while in atomic
+
+Liam R. Howlett (1):
+      mm/mprotect: fix do_mprotect_pkey() limit check
+
+Linus Torvalds (3):
+      Revert "efi: random: refresh non-volatile random seed when RNG
+is initialized"
+      workqueue: clean up WORK_* constant types, clarify masking
+      Linux 6.4
+
+Lorenz Brun (1):
+      arm64: dts: rockchip: fix USB regulator on ROCK64
+
+Lorenzo Stoakes (1):
+      mm/vmalloc: do not output a spurious warning when huge vmalloc() fail=
+s
+
+Luke D. Jones (2):
+      ALSA: hda/realtek: Add quirk for ASUS ROG G634Z
+      ALSA: hda/realtek: Add quirk for ASUS ROG GV601V
+
+Maciej =C5=BBenczykowski (2):
+      xfrm: fix inbound ipv4/udp/esp packets to UDPv6 dualstack sockets
+      revert "net: align SO_RCVMARK required privileges with SO_MARK"
+
+Magali Lemes (4):
+      selftests/harness: allow tests to be skipped during setup
+      selftests: net: tls: check if FIPS mode is enabled
+      selftests: net: vrf-xfrm-tests: change authentication and encryption =
+algos
+      selftests: net: fcnal-test: check if FIPS mode is enabled
+
+Marc Zyngier (2):
+      KVM: arm64: Restore GICv2-on-GICv3 functionality
+      perf/core: Drop __weak attribute from
+arch_perf_update_userpage() prototype
+
+Mark Brown (1):
+      selftests/mm: fix cross compilation with LLVM
+
+Martin Hundeb=C3=B8ll (1):
+      mmc: meson-gx: remove redundant mmc_request_done() call from irq cont=
+ext
+
+Maxim Mikityanskiy (4):
+      bpf: Fix verifier id tracking of scalars on spill
+      selftests/bpf: Add test cases to assert proper ID tracking on spill
+      net/mlx5e: XDP, Allow growing tail for XDP multi buffer
+      net/mlx5e: xsk: Set napi_id to support busy polling on XSK RQ
+
+Michael Kelley (3):
+      Drivers: hv: vmbus: Fix vmbus_wait_for_unload() to scan present CPUs
+      x86/hyperv: Fix hyperv_pcpu_input_arg handling when CPUs go online/of=
+fline
+      arm64/hyperv: Use CPUHP_AP_HYPERV_ONLINE state to fix CPU online
+sequencing
+
+Michael S. Tsirkin (1):
+      Revert "virtio-blk: support completion batching for the IRQ path"
+
+Michael Walle (1):
+      gpiolib: Fix irq_domain resource tracking for
+gpiochip_irqchip_add_domain()
+
+Mike Kravetz (1):
+      udmabuf: revert 'Add support for mapping hugepages (v4)'
+
+Ming Lei (1):
+      block: make sure local irq is disabled when calling __blkcg_rstat_flu=
+sh
+
+Miquel Raynal (2):
+      MAINTAINERS: Update wpan tree
+      MAINTAINERS: Add wpan patchwork
+
+Mukesh Sisodiya (1):
+      wifi: iwlwifi: pcie: Handle SO-F device for PCI id 0x7AF0
+
+Namjae Jeon (4):
+      ksmbd: validate command payload size
+      ksmbd: add mnt_want_write to ksmbd vfs functions
+      ksmbd: fix out-of-bound read in smb2_write
+      ksmbd: validate session id and tree id in the compound request
+
+Neil Armstrong (1):
+      spi: spi-geni-qcom: correctly handle -EPROBE_DEFER from dma_request_c=
+han()
+
+Nicholas Piggin (1):
+      powerpc/64s/radix: Fix exit lazy tlb mm switch with irqs enabled
+
+Nicolas Frattaroli (1):
+      arm64: dts: rockchip: fix nEXTRST on SOQuartz
+
+Oliver Upton (1):
+      KVM: arm64: Use raw_smp_processor_id() in kvm_pmu_probe_armpmu()
+
+Omar Sandoval (1):
+      x86/unwind/orc: Add ELF section with ORC version identifier
+
+Pablo Neira Ayuso (12):
+      netfilter: nf_tables: fix chain binding transaction logic
+      netfilter: nf_tables: add NFT_TRANS_PREPARE_ERROR to deal with
+bound set/chain
+      netfilter: nf_tables: drop map element references from preparation ph=
+ase
+      netfilter: nft_set_pipapo: .walk does not deal with generations
+      netfilter: nf_tables: fix underflow in object reference counter
+      netfilter: nf_tables: disallow element updates of bound anonymous set=
+s
+      netfilter: nf_tables: reject unbound anonymous set before commit phas=
+e
+      netfilter: nf_tables: reject unbound chain set before commit phase
+      netfilter: nf_tables: disallow updates of anonymous sets
+      netfilter: nf_tables: disallow timeout for anonymous sets
+      netfilter: nf_tables: drop module reference after updating chain
+      netfilter: nfnetlink_osf: fix module autoload
+
+Paolo Abeni (6):
+      mptcp: handle correctly disconnect() failures
+      mptcp: fix possible divide by zero in recvmsg()
+      mptcp: fix possible list corruption on passive MPJ
+      mptcp: consolidate fallback and non fallback state machine
+      mptcp: drop legacy code around RX EOF
+      mptcp: ensure listener is unhashed before updating the sk status
+
+Patrisious Haddad (1):
+      net/mlx5e: Fix ESN update kernel panic
+
+Phil Sutter (1):
+      netfilter: nf_tables: Fix for deleting base chains with payload
+
+Pranjal Ramajor Asha Kanojiya (1):
+      accel/qaic: Call DRM helper function to destroy prime GEM
+
+Prathu Baronia (1):
+      scripts: fix the gfp flags header path in gfp-translate
+
+Qi Zheng (7):
+      Revert "mm: shrinkers: convert shrinker_rwsem to mutex"
+      Revert "mm: vmscan: remove shrinker_rwsem from synchronize_shrinkers(=
+)"
+      Revert "mm: vmscan: hold write lock to reparent shrinker nr_deferred"
+      Revert "mm: shrinkers: make count and scan in shrinker debugfs lockle=
+ss"
+      Revert "mm: vmscan: add shrinker_srcu_generation"
+      Revert "mm: vmscan: make memcg slab shrink lockless"
+      Revert "mm: vmscan: make global slab shrink lockless"
+
+Qu Wenruo (2):
+      btrfs: fix u32 overflows when left shifting stripe_nr
+      btrfs: fix remaining u32 overflows when left shifting stripe_nr
+
+Rafael Aquini (1):
+      writeback: fix dereferencing NULL mapping->host on writeback_page_tem=
+plate
+
+Rafael J. Wysocki (1):
+      ACPI: sleep: Avoid breaking S3 wakeup due to might_sleep()
+
+Reiji Watanabe (2):
+      KVM: arm64: PMU: Restore the host's PMUSERENR_EL0
+      KVM: arm64: PMU: Don't overwrite PMUSERENR with vcpu loaded
+
+Rob Herring (1):
+      dt-bindings: i2c: opencores: Add missing type for "regstep"
+
+Roberto Sassu (1):
+      memfd: check for non-NULL file_seals in memfd_create() syscall
+
+Ross Lagerwall (1):
+      be2net: Extend xmit workaround to BE3 chip
+
+Russ Weight (1):
+      regmap: spi-avmm: Fix regmap_bus max_raw_write
+
+Ryusuke Konishi (2):
+      nilfs2: fix buffer corruption due to concurrent device reads
+      nilfs2: prevent general protection fault in nilfs_clear_dirty_page()
+
+Saeed Mahameed (1):
+      net/mlx5: Free IRQ rmap and notifier on kernel shutdown
+
+Saurabh Sengar (1):
+      x86/hyperv/vtl: Add noop for realmode pointers
+
+Sebastian Andrzej Siewior (1):
+      xfrm: Linearize the skb after offloading if needed.
+
+Sergey Shtylyov (12):
+      mmc: bcm2835: fix deferred probing
+      mmc: meson-gx: fix deferred probing
+      mmc: mtk-sd: fix deferred probing
+      mmc: mvsdio: fix deferred probing
+      mmc: omap: fix deferred probing
+      mmc: omap_hsmmc: fix deferred probing
+      mmc: owl: fix deferred probing
+      mmc: sdhci-acpi: fix deferred probing
+      mmc: sdhci-spear: fix deferred probing
+      mmc: sh_mmcif: fix deferred probing
+      mmc: sunxi: fix deferred probing
+      mmc: usdhi60rol0: fix deferred probing
+
+Shuai Jiang (1):
+      i2c: qup: Add missing unwind goto in qup_i2c_probe()
+
+Shyam Sundar S K (1):
+      platform/x86/amd/pmf: Register notify handler only if SPS is enabled
+
+Stefan Wahren (1):
+      net: qca_spi: Avoid high load if QCA7000 is not available
+
+Stephan Gerhold (1):
+      mmc: sdhci-msm: Disable broken 64-bit DMA on MSM8916
+
+Steven Rostedt (Google) (1):
+      tracing/rv/rtla: Update MAINTAINERS file to point to proper mailing l=
+ist
+
+Su Hui (1):
+      iommu/amd: Fix possible memory leak of 'domain'
+
+Teresa Remmet (1):
+      regulator: pca9450: Fix LDO3OUT and LDO4OUT MASK
+
+Terin Stock (1):
+      ipvs: align inner_mac_header for encapsulation
+
+Tetsuo Handa (1):
+      cgroup,freezer: hold cpu_hotplug_lock before freezer_mutex in
+freezer_css_{online,offline}()
+
+Thomas Gleixner (1):
+      tick/common: Align tick period during sched_timer setup
+
+Tianling Shen (1):
+      arm64: dts: rockchip: fix button reset pin for nanopi r5c
+
+Vishal Moola (Oracle) (2):
+      afs: Fix dangling folio ref counts in writeback
+      afs: Fix waiting for writeback then skipping folio
+
+Vladimir Oltean (1):
+      net: dsa: introduce preferred_default_local_cpu_port and use on MT753=
+0
+
+Xiu Jianfeng (1):
+      cgroup: Do not corrupt task iteration when rebinding subsystem
+
+Yevgeny Kliteynik (2):
+      net/mlx5: DR, Support SW created encap actions for FW table
+      net/mlx5: DR, Fix wrong action data allocation in decap action
+
+Yonghong Song (1):
+      bpf: Fix a bpf_jit_dump issue for x86_64 with sysctl bpf_jit_enable.
+
+Zhu YiXin (1):
+      MAINTAINERS: Add Chuanhua Lei as Intel LGM GW PCIe maintainer
+
+sunliming (7):
+      tracing/user_events: Prevent same name but different args event
+      tracing/user_events: Handle matching arguments that is null from
+dyn_events
+      tracing: Modify print_fields() for fields output order
+      tracing/user_events: Fix the incorrect trace record for empty
+arguments events
+      selftests/user_events: Add ftrace self-test for empty arguments event=
+s
+      selftests/user_events: Clear the events after perf self-test
+      selftests/user_events: Add perf self-test for empty arguments events
+
+=C3=8D=C3=B1igo Huguet (1):
+      sfc: use budget for TX completions
