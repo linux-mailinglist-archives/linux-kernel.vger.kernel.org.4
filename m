@@ -2,70 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F8DC73CFAD
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 11:20:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D085D73CFB0
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 11:22:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231821AbjFYJUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 05:20:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41052 "EHLO
+        id S231855AbjFYJWR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 05:22:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230029AbjFYJUG (ORCPT
+        with ESMTP id S230029AbjFYJWP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 05:20:06 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9511D2
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 02:19:55 -0700 (PDT)
-Received: from mail.alien8.de (mail.alien8.de [IPv6:2a01:4f9:3051:3f93::2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 70F1D1EC01B7;
-        Sun, 25 Jun 2023 11:19:54 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1687684794;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:references;
-        bh=QHx6fRrR9gNOxey22bj5Kxfr6macSeoiXGbMCf5HrUM=;
-        b=S1gpDjA4zbXmWcIZxhuKp18Vk8zhOacRG3Wy3Mxucb3RlX2AY1fdH5Ylyt/Fk7pjs7DzcR
-        XdbJQK/28BRZOq5fxxQ2PubhiDeIKIZhOK9M2JDtIz9gmAzkWevenRSTkEewQlC/TGTPYT
-        8F9gscjnaNa3f9HY8t0tD9wMiozCE1M=
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-        header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id Bci21QXx0_q7; Sun, 25 Jun 2023 09:19:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-        t=1687684791; bh=QHx6fRrR9gNOxey22bj5Kxfr6macSeoiXGbMCf5HrUM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Ql5FUkJ/wX22VzvIGipHrWx5WnWmDG3nBg5tDZFSYUbb/ehzCaCBDpSI0y/t49DTB
-         1f7RsfTBUvqgxtEia4F/9CzlZLqHebb1CuM8/R4Ze4+vNA3shptxXVdKEdtiFeonjF
-         OXu0D0A9JxFu7ANEcH8YP2UWIPA4LaBH8g8RJp1ZNeRXUOsJjBb3IlDMxR75bqCERj
-         Z9793vXn9sS8D4ps6klhdNfRyyr6uEHPQ/eKk9NW+vKcPN7jLDFPPpoLMgKnK8UB9V
-         rpmgobl7STzm6EqyhFUFnG7DhnTwNjrzKMdAJu/MIW/3qp8tY+JgqYs6UwXinLhMde
-         fKtHCz+CBHloaavWYvHIkr0ou1AgjSXR5RzZ0tVu6b8yNCoeLen8LVwmJdST36vIm2
-         Pbt2tjOcUaoQQkr/WCGLwxEuhhL/6w3a60EO8G2SaTKw1I3S78cO64v0ZBEgNzqd1p
-         jQFGMTgjcT0OKRYLvMso5GhKX3PCRoL+tJwR1obg41N8xwuDCXbKM/eoW6S8kwwpDo
-         Ut1ijL9YJjIhuUQYSHwvB/LEGnp7QnIPw7OntXYKOyXG3rDEhdBwRs5KPXUm6iiheB
-         8pecrj2DdPejkhRS7NONwb1b8MCWsO7AfYP4xqsh7HNHY4gqQqPnNBiHshgkj7yfiD
-         l7g/nZncxBxoKnvymnoU8oJU=
-Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-        (No client certificate requested)
-        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A435140E0034;
-        Sun, 25 Jun 2023 09:19:48 +0000 (UTC)
-Date:   Sun, 25 Jun 2023 11:19:43 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] x86/urgent for v6.4
-Message-ID: <20230625091943.GAZJgGr8IH10VrwHU6@fat_crate.local>
+        Sun, 25 Jun 2023 05:22:15 -0400
+Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA516D2;
+        Sun, 25 Jun 2023 02:22:13 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4QplqN4zBSz4f3kp9;
+        Sun, 25 Jun 2023 17:22:08 +0800 (CST)
+Received: from [10.174.179.247] (unknown [10.174.179.247])
+        by APP4 (Coremail) with SMTP id gCh0CgCXaK9AB5hkSAb7MQ--.48063S3;
+        Sun, 25 Jun 2023 17:22:10 +0800 (CST)
+Message-ID: <907bbe2d-9cbf-480c-be57-3289d113c42a@huaweicloud.com>
+Date:   Sun, 25 Jun 2023 17:22:08 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3 4/4] block/badblocks: fix the bug of reverse order
+To:     Ashok Raj <ashok_raj@linux.intel.com>, linan666@huaweicloud.com
+Cc:     axboe@kernel.dk, dan.j.williams@intel.com,
+        vishal.l.verma@intel.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
+        yi.zhang@huawei.com, houtao1@huawei.com, yangerkun@huawei.com,
+        Ashok Raj <ashok.raj@intel.com>, linan122@huawei.com
+References: <20230621172052.1499919-1-linan666@huaweicloud.com>
+ <20230621172052.1499919-5-linan666@huaweicloud.com>
+ <ZJMGDLkRbaVD9VA8@araj-dh-work>
+From:   Li Nan <linan666@huaweicloud.com>
+In-Reply-To: <ZJMGDLkRbaVD9VA8@araj-dh-work>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgCXaK9AB5hkSAb7MQ--.48063S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7uFWDWryxuw13Aw1UXF1xuFg_yoW8GFy8pr
+        n8J3Zakr1jgr1jg3WDX3WUKryIg34ftF4UGa1UXF1UCF9xGwn7KF1v9w4YgFy2qrsxGrnY
+        v3W3uryYva4rCa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBa14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
+        F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r
+        4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v
+        4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x
+        0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E
+        7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcV
+        C0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF
+        04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2js
+        IEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUlQ6LUUUUU=
+X-CM-SenderInfo: polqt0awwwqx5xdzvxpfor3voofrz/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        MAY_BE_FORGED,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,47 +68,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
 
-please pull two final urgent x86 fixes for 6.4.
 
-Thx.
+在 2023/6/21 22:15, Ashok Raj 写道:
+> On Thu, Jun 22, 2023 at 01:20:52AM +0800, linan666@huaweicloud.com wrote:
+>> From: Li Nan <linan122@huawei.com>
+>>
+>> Order of badblocks will be reversed if we set a large area at once. 'hi'
+>> remains unchanged while adding continuous badblocks is wrong, the next
+>> setting is greater than 'hi', it should be added to the next position.
+>> Let 'hi' +1 each cycle.
+> 
+> The commitlog needs more work.
 
----
+OK, I will improve this.
 
-The following changes since commit a37f2699c36a7f6606ba3300f243227856c5ad6b:
+>>
+>>    # echo 0 2048 > bad_blocks
+>>    # cat bad_blocks
+>>      1536 512
+>>      1024 512
+>>      512 512
+>>      0 512
+> 
+> Is the above before or after this patch is applied?
 
-  x86/head/64: Switch to KERNEL_CS as soon as new GDT is installed (2023-06-02 16:59:57 -0700)
+All badblocks are arranged from small to large. after patch:
 
-are available in the Git repository at:
+# cat bad_blocks
+   0 512
+   512 512
+   1024 512
+   1536 512
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_urgent_for_v6.4
+I will show it in next version. Thanks for your suggestion.
 
-for you to fetch changes up to 85d38d5810e285d5aec7fb5283107d1da70c12a9:
-
-  x86/apic: Fix kernel panic when booting with intremap=off and x2apic_phys (2023-06-19 20:59:40 +0200)
-
-----------------------------------------------------------------
-- Do not use set_pgd() when updating the KASLR trampoline pgd entry
-  because that updates the user PGD too on KPTI builds, resulting in
-  memory corruption
-
-- Prevent a panic in the IO-APIC setup code due to conflicting command
-  line parameters
-
-----------------------------------------------------------------
-Dheeraj Kumar Srivastava (1):
-      x86/apic: Fix kernel panic when booting with intremap=off and x2apic_phys
-
-Lee Jones (1):
-      x86/mm: Avoid using set_pgd() outside of real PGD pages
-
- arch/x86/kernel/apic/x2apic_phys.c | 5 ++++-
- arch/x86/mm/kaslr.c                | 8 ++++----
- 2 files changed, 8 insertions(+), 5 deletions(-)
+> 
+>>
+>> Fixes: 9e0e252a048b ("badblocks: Add core badblock management code")
+>> Signed-off-by: Li Nan <linan122@huawei.com>
+>> ---
+>>   block/badblocks.c | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/block/badblocks.c b/block/badblocks.c
+>> index 2c2ef8284a3f..3b816690b940 100644
+>> --- a/block/badblocks.c
+>> +++ b/block/badblocks.c
+>> @@ -301,6 +301,7 @@ int badblocks_set(struct badblocks *bb, sector_t s, int sectors,
+>>   			p[hi] = BB_MAKE(s, this_sectors, acknowledged);
+>>   			sectors -= this_sectors;
+>>   			s += this_sectors;
+>> +			hi++;
+>>   			changed = true;
+>>   		}
+>>   	}
+>> -- 
+>> 2.39.2
+>>
+> 
+> .
 
 -- 
-Regards/Gruss,
-    Boris.
+Thanks,
+Nan
 
-https://people.kernel.org/tglx/notes-about-netiquette
