@@ -2,70 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B70AD73D0A4
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 13:48:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A35673D0A9
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 13:54:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231626AbjFYLrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 07:47:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41930 "EHLO
+        id S231591AbjFYLyx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 07:54:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230058AbjFYLro (ORCPT
+        with ESMTP id S231356AbjFYLyw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 07:47:44 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E019D10F;
-        Sun, 25 Jun 2023 04:47:41 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id af79cd13be357-7653bd3ff2fso282572485a.3;
-        Sun, 25 Jun 2023 04:47:41 -0700 (PDT)
+        Sun, 25 Jun 2023 07:54:52 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C717E74;
+        Sun, 25 Jun 2023 04:54:49 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2b466744368so33275421fa.0;
+        Sun, 25 Jun 2023 04:54:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687693661; x=1690285661;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=c/zIdMgibt6Rs/eVUkJc6EtzUxpltNjY8BEXzWVE6r4=;
-        b=Pq/yaM/NHHf3k+B+mLMoL/LQC1Ch+2DExIKcJBYd8G1nHb4CW1mznz1zswjTc+j+HW
-         G8NdO0odECgFPE8iMUBL1b337E2x/2a3LPtfI7YK8USEHK7CsOhBmIysZKYPpQYt1LRe
-         VDvc3BFG8SjnmdJlj54+UaKHl6WSOnD9t1GotYFCPjDcrnoTtqnZCqjkIHYV9vEphUS7
-         +0ntv2afgzibegTaas4BH6hIE9dqVEm4s+ZfN/q1i/X2tarhRzbQqnhAFH/K5b303o8G
-         kmxrY2lKLEfnS0uYfl58QIMWuK3QZzoQ0NucnveeVaiiE5w3xXCqgexzzrrkX4zfUanS
-         FQDQ==
+        d=gmail.com; s=20221208; t=1687694087; x=1690286087;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=D6QUBDRqa2Wrr4CQ5qPtzCdJP57iv7TLCuj/rtuOYPQ=;
+        b=dk2KLS6Js8BYTMjIFK6RLM6Jxr02D5lf1hgbdwTvfH7L6x3QMcNi8bwZVJkIwFMogc
+         kpcEkkLyqOOJ0UZMQPbz/kot0ibOC7h8tfuP3ynrJLm8tTRuLhQvwai6WEYeBQEW1sSn
+         kzyBv0zKjM9aQdtn9W7E8mq/gftSHBCWvpw8UTCOo2xfilWLfhPJGyx0sl6lyjDjBito
+         K8tc6Y+MDztbmwJhIiyHaPUs/GwycnYWMYzkBHFpxHlqA1fcxUUoGfLPV2VUTUvr2mvO
+         0QIs9jEtLCBlronpOkQzghKBrpL7vYQmd7v2e4DQsDQaELecUu2u+NfQ5cYkhN5LL0mG
+         nQOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687693661; x=1690285661;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=c/zIdMgibt6Rs/eVUkJc6EtzUxpltNjY8BEXzWVE6r4=;
-        b=jdPohGGvjhFs9JGcfIOCPV09ryVhSOuU4kVbMp426eoDmCq/6ZBab4Uan2W5onvGvj
-         EAME45+ty1l820e55rlw4OAUK3+I7Gg2waeOg8RmqY0D72+LxDldlR1OYHonNVk8lvEn
-         q9LCyo7WDCLcDqLbShcBbnYinR6MKHA2A9qkf86yNdpGkY6Z4xwGdP/Swv5OwVOgZZkh
-         Poih+ZoRX/WzwLz8Fgv2KZ0YQ/i47dAi7yjVf2HJUicT/bV9wbarIsdAsypc2WCphsbB
-         G56GSz8WPD2CzmiCUYEqYQYtjQr6v7f2pX8uhKmAOwLREpOR7E6JscjX7WJCUSPHqCUq
-         tEcA==
-X-Gm-Message-State: AC+VfDy/xz0Dhq9rzjUlbxrG8EWjGdwP3TBED6At6BY6i4rsQU/5frWW
-        CM4tUnkXVypE94UZDwn4bhFpC3LPW/huK5wq8WBIRfEs5+ksmg==
-X-Google-Smtp-Source: ACHHUZ63XVM76rbQHOhItSLn94Sc5AW2syMsyYALHyPzgwEwhHZBAk/FRHb4liV6UqwcnLc6rmCVj4dOYevFAiRIsNw=
-X-Received: by 2002:a05:620a:880f:b0:75b:23a1:363d with SMTP id
- qj15-20020a05620a880f00b0075b23a1363dmr17571873qkn.78.1687693660920; Sun, 25
- Jun 2023 04:47:40 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230621191302.1405623-1-paweldembicki@gmail.com>
- <20230621191302.1405623-2-paweldembicki@gmail.com> <27e0f7c9-71a8-4882-ab65-6c42d969ea4f@lunn.ch>
- <CACRpkdZ514z3Y0LP0iqN0zyc5Tgo7n8O3XHTNVWC0BrnPPjM2w@mail.gmail.com> <20230625112128.3vyvcuvypbkxuz3q@skbuf>
-In-Reply-To: <20230625112128.3vyvcuvypbkxuz3q@skbuf>
-From:   =?UTF-8?Q?Pawe=C5=82_Dembicki?= <paweldembicki@gmail.com>
-Date:   Sun, 25 Jun 2023 13:47:31 +0200
-Message-ID: <CAJN1KkxahD-Rh+77NRJnkUwvZY547f06ZoThmoqSp8SBs3mnnA@mail.gmail.com>
-Subject: Re: [PATCH net-next 2/6] net: dsa: vsc73xx: add port_stp_state_set function
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
+        d=1e100.net; s=20221208; t=1687694087; x=1690286087;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=D6QUBDRqa2Wrr4CQ5qPtzCdJP57iv7TLCuj/rtuOYPQ=;
+        b=Kt6Brzihjmlg9nlRN2kLmIh8xX0LezXidxnNZpQBY4GdxSv1i1hgCUsnVO6LoYYC2o
+         Njab4pyyuoIdJFPfOsviROhqM6R9CgZi0BA9Wi+5ahWyw+Sb3wTQZ1YnBmno3iplu9jc
+         JvGlUjjJi0MPCgjgmMGc+rMdeZQ8reVtNGaiayYobm9uWN3VmwV9Gr+e4gOxysOTnyAc
+         vJoukf/Zhm09zl2ddNOuTAMMi1I9tosk9OSP/ZOZmPBq7byTa2T8oToSZrJJYgqkziXu
+         d/qT2kZmwDWn5v/MXyFq7BS/LKPOpfQHG5b/9HsDxKz/5LrqxxjODAA73X36jGf62cOG
+         XUIw==
+X-Gm-Message-State: AC+VfDz2xuR5aj0jeviHXrEbEyWwtRuzXRyPxLe7O8t1f669qewIyKWb
+        euJfeNTRHk0Pt15Bjes+aCdQaH98oA6G9Q==
+X-Google-Smtp-Source: ACHHUZ7+M8ECB7lsgkgBNWrO5HgnfjjxTOyiGJRySCO0rV4Hoc+QnZVXcDpOQIbRB4CIpYAJ4Odjuw==
+X-Received: by 2002:a2e:9c82:0:b0:2b4:6678:da57 with SMTP id x2-20020a2e9c82000000b002b46678da57mr14500983lji.6.1687694087138;
+        Sun, 25 Jun 2023 04:54:47 -0700 (PDT)
+Received: from WBEC325.dom.local ([185.188.71.122])
+        by smtp.gmail.com with ESMTPSA id w21-20020a2e9595000000b002b6993b9665sm416043ljh.65.2023.06.25.04.54.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 25 Jun 2023 04:54:46 -0700 (PDT)
+From:   Pawel Dembicki <paweldembicki@gmail.com>
+To:     netdev@vger.kernel.org
+Cc:     Pawel Dembicki <paweldembicki@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Andrew Lunn <andrew@lunn.ch>,
         Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: [PATCH net-next v2 1/7] net: dsa: vsc73xx: use read_poll_timeout instead delay loop
+Date:   Sun, 25 Jun 2023 13:53:36 +0200
+Message-Id: <20230625115343.1603330-1-paweldembicki@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -76,54 +76,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-niedz., 25 cze 2023 o 13:21 Vladimir Oltean <olteanv@gmail.com> napisa=C5=
-=82(a):
->
-> On Wed, Jun 21, 2023 at 11:27:14PM +0200, Linus Walleij wrote:
-> > On Wed, Jun 21, 2023 at 9:33=E2=80=AFPM Andrew Lunn <andrew@lunn.ch> wr=
-ote:
-> >
-> > > > +     struct vsc73xx *vsc =3D ds->priv;
-> > > > +     /* FIXME: STP frames isn't forwarded at this moment. BPDU fra=
-mes are
-> > > > +      * forwarded only from to PI/SI interface. For more info see =
-chapter
-> > > > +      * 2.7.1 (CPU Forwarding) in datasheet.
-> > >
-> > > Do you mean the CPU never gets to see the BPDU frames?
-> > >
-> > > Does the hardware have any sort of packet matching to trap frames to
-> > > the CPU? Can you match on the destination MAC address
-> > > 01:80:C2:00:00:00 ?
-> >
-> > The hardware contains an embedded Intel 8054 CPU that can
-> > execute programs to do pretty much anything.
-> >
-> > The bad news: it requires a custom SDK thingy that we do not
-> > have access to.
-> >
-> > So far we used the chips in a bit of vanilla mode, which is all I
-> > have ever seen in the systems we have and it can't do much,
-> > not even add a helpful frame tag, but as can be seen from the
-> > patches it can do VLAN...
-> >
-> > Yours,
-> > Linus Walleij
->
-> But even without involving the iCPU, it should be possible to inject/extr=
-act
-> control packets over the SI interface, using the CPU_CAPT and CPUTXDAT bl=
-ock
-> registers, correct?
+This commit switches delay loop to read_poll_timeout macro durring
+Arbiter empty check in adjust link function.
 
-Yes , It should work with CPU_CAPT and CPUTXDAT.
+As Russel King suggested:
 
->
-> IIUC, ocelot with tag_8021q does just that for STP and PTP, see
-> ocelot_port_inject_frame() and ocelot_xtr_poll_frame().
+"This [change] avoids the issue that on the last iteration, the code reads
+the register, test it, find the condition that's being waiting for is
+false, _then_ waits and end up printing the error message - that last
+wait is rather useless, and as the arbiter state isn't checked after
+waiting, it could be that we had success during the last wait."
 
-I was planning to do it in the next step after making this driver
-however usable.
+It also remove one short msleep delay.
 
---
-Pawel Dembicki
+Suggested-by: Russell King <linux@armlinux.org.uk>
+Signed-off-by: Pawel Dembicki <paweldembicki@gmail.com>
+---
+v2:
+  - introduced patch
+
+ drivers/net/dsa/vitesse-vsc73xx-core.c | 25 +++++++++++--------------
+ 1 file changed, 11 insertions(+), 14 deletions(-)
+
+diff --git a/drivers/net/dsa/vitesse-vsc73xx-core.c b/drivers/net/dsa/vitesse-vsc73xx-core.c
+index ae55167ce0a6..bea5ec7a89fd 100644
+--- a/drivers/net/dsa/vitesse-vsc73xx-core.c
++++ b/drivers/net/dsa/vitesse-vsc73xx-core.c
+@@ -780,7 +780,7 @@ static void vsc73xx_adjust_link(struct dsa_switch *ds, int port,
+ 	 * after a PHY or the CPU port comes up or down.
+ 	 */
+ 	if (!phydev->link) {
+-		int maxloop = 10;
++		int ret, err;
+ 
+ 		dev_dbg(vsc->dev, "port %d: went down\n",
+ 			port);
+@@ -795,19 +795,16 @@ static void vsc73xx_adjust_link(struct dsa_switch *ds, int port,
+ 				    VSC73XX_ARBDISC, BIT(port), BIT(port));
+ 
+ 		/* Wait until queue is empty */
+-		vsc73xx_read(vsc, VSC73XX_BLOCK_ARBITER, 0,
+-			     VSC73XX_ARBEMPTY, &val);
+-		while (!(val & BIT(port))) {
+-			msleep(1);
+-			vsc73xx_read(vsc, VSC73XX_BLOCK_ARBITER, 0,
+-				     VSC73XX_ARBEMPTY, &val);
+-			if (--maxloop == 0) {
+-				dev_err(vsc->dev,
+-					"timeout waiting for block arbiter\n");
+-				/* Continue anyway */
+-				break;
+-			}
+-		}
++		ret = read_poll_timeout(vsc73xx_read, err,
++					err < 0 || (val & BIT(port)),
++					1000, 10000, false,
++					vsc, VSC73XX_BLOCK_ARBITER, 0,
++					VSC73XX_ARBEMPTY, &val);
++		if (ret)
++			dev_err(vsc->dev,
++				"timeout waiting for block arbiter\n");
++		else if (err < 0)
++			dev_err(vsc->dev, "error reading arbiter\n");
+ 
+ 		/* Put this port into reset */
+ 		vsc73xx_write(vsc, VSC73XX_BLOCK_MAC, port, VSC73XX_MAC_CFG,
+-- 
+2.34.1
+
