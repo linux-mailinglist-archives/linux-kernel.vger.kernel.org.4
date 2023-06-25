@@ -2,145 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09F5173CF09
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 09:48:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E51E773CF0C
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 09:52:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231429AbjFYHsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 03:48:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49662 "EHLO
+        id S231678AbjFYHwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 03:52:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230154AbjFYHsb (ORCPT
+        with ESMTP id S230154AbjFYHwb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 03:48:31 -0400
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DAADE45;
-        Sun, 25 Jun 2023 00:48:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1687679307; bh=/68NbnTcIZWpyWND2Cdx843Vk2DveQW8gFt7NZyrO34=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=o0KxdgRNG0cej/WO7lsfELLSK3Rxc26j7w6nHBLcQjPBdhpywqTs7/Wn1s9aYr5F+
-         0vw5WFpS+6OEf+EHIEWkl2ua+9GixRn2OckwNfI/vuZDosScaLVRsVUvbeI7n5OjB2
-         TKTOXhO7QEko1W3vN+CPXm1fG+4dR0ZTv3IYAvSw=
-Received: from [100.100.34.13] (unknown [220.248.53.61])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 2436B600B5;
-        Sun, 25 Jun 2023 15:48:27 +0800 (CST)
-Message-ID: <12e9a417-e655-b85b-1213-231fd68b0977@xen0n.name>
-Date:   Sun, 25 Jun 2023 15:48:26 +0800
+        Sun, 25 Jun 2023 03:52:31 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EB5CDF
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 00:52:27 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qDKXm-0001ks-US; Sun, 25 Jun 2023 09:52:22 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qDKXk-009uRf-LQ; Sun, 25 Jun 2023 09:52:20 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qDKXj-00HC8v-KC; Sun, 25 Jun 2023 09:52:19 +0200
+Date:   Sun, 25 Jun 2023 09:52:19 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Peng Fan <peng.fan@nxp.com>, Arnd Bergmann <arnd@arndb.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Linux Kernel Functional Testing <lkft@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Abel Vesa <abelvesa@kernel.org>
+Subject: Re: [PATCH] clk: imx: Drop inclusion of unused header
+ <soc/imx/timer.h>
+Message-ID: <20230625075219.diqv7x5xfybm4gdx@pengutronix.de>
+References: <20230623071948.3254789-1-arnd@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [PATCH v2 7/9] LoongArch: Tweak CFLAGS for Clang compatibility
-Content-Language: en-US
-To:     Xi Ruoyao <xry111@xry111.site>, Huacai Chen <chenhuacai@kernel.org>
-Cc:     WANG Rui <wangrui@loongson.cn>, loongarch@lists.linux.dev,
-        linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, WANG Xuerui <git@xen0n.name>
-References: <20230624184055.3000636-1-kernel@xen0n.name>
- <20230624184055.3000636-8-kernel@xen0n.name>
- <CAAhV-H54bZ5_OSXtcq3B3d4bZj4GBTOf7Z8aA6Jm7uGdKTj_ug@mail.gmail.com>
- <cc8c2f2d-b242-7488-3b5a-33828ee38b36@xen0n.name>
- <5154e8141e2b022b477f2d2658279e94f6b02149.camel@xry111.site>
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <5154e8141e2b022b477f2d2658279e94f6b02149.camel@xry111.site>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="jm3pyctboqwgb3qh"
+Content-Disposition: inline
+In-Reply-To: <20230623071948.3254789-1-arnd@kernel.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/6/25 15:36, Xi Ruoyao wrote:
-> On Sun, 2023-06-25 at 15:16 +0800, WANG Xuerui wrote:
->> On 2023/6/25 10:13, Huacai Chen wrote:
->>> Hi, Ruoyao,
->>>
->>> On Sun, Jun 25, 2023 at 2:42 AM WANG Xuerui <kernel@xen0n.name> wrote:
->>>>
->>>> From: WANG Xuerui <git@xen0n.name>
->>>>
->>>> Now the arch code is mostly ready for LLVM/Clang consumption, it is time
->>>> to re-organize the CFLAGS a little to actually enable the LLVM build.
->>>>
->>>> In particular, -mexplicit-relocs and -mdirect-extern-access are not
->>>> necessary nor supported on Clang; feature detection via cc-option would
->>>> not work, because that way the broken combo of "new GNU as + old GCC"
->>>> would seem to get "fixed", but actually produce broken kernels.
->>>> Explicitly depending on CONFIG_CC_IS_CLANG is thus necessary to not
->>>> regress UX for those building their own kernels.
->>>>
->>>> A build with !RELOCATABLE && !MODULE is confirmed working within a QEMU
->>>> environment; support for the two features are currently blocked on
->>>> LLVM/Clang, and will come later.
->>>>
->>>> Signed-off-by: WANG Xuerui <git@xen0n.name>
->>>> ---
->>>>    arch/loongarch/Makefile | 6 +++++-
->>>>    1 file changed, 5 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
->>>> index 366771016b99..82c619791a63 100644
->>>> --- a/arch/loongarch/Makefile
->>>> +++ b/arch/loongarch/Makefile
->>>> @@ -51,7 +51,9 @@ LDFLAGS_vmlinux                       += -static -n -nostdlib
->>>>
->>>>    # When the assembler supports explicit relocation hint, we must use it.
->>>>    # GCC may have -mexplicit-relocs off by default if it was built with an old
->>>> -# assembler, so we force it via an option.
->>>> +# assembler, so we force it via an option. For LLVM/Clang the desired behavior
->>>> +# is the default, and the flag is not supported, so don't pass it if Clang is
->>>> +# being used.
->>>>    #
->>>>    # When the assembler does not supports explicit relocation hint, we can't use
->>>>    # it.  Disable it if the compiler supports it.
->>>> @@ -61,8 +63,10 @@ LDFLAGS_vmlinux                      += -static -n -nostdlib
->>>>    # combination of a "new" assembler and "old" compiler is not supported.  Either
->>>>    # upgrade the compiler or downgrade the assembler.
->>>>    ifdef CONFIG_AS_HAS_EXPLICIT_RELOCS
->>>> +ifndef CONFIG_CC_IS_CLANG
->>>>    cflags-y                       += -mexplicit-relocs
->>>>    KBUILD_CFLAGS_KERNEL           += -mdirect-extern-access
->>>> +endif
->>> I prefer to drop CONFIG_CC_IS_CLANG and use
->>> cflags-y                       += $(call cc-option,-mexplicit-relocs)
->>> KBUILD_CFLAGS_KERNEL           += $(call cc-option,-mdirect-extern-access)
->>>
->>> Then Patch-6 can be merged in this.
->>>
->>> What's your opinion?
->>
->> FYI: with this approach the build no longer instantly dies with binutils
->> 2.40 + gcc 12.3, but there are also tons of warnings that say the model
->> attribute is being ignored. I checked earlier discussions and this means
->> modules are silently broken at runtime, which is not particularly good UX.
-> 
-> We can add
-> 
-> #if defined(MODULE) && !__has_attribute(model)
-> #  error some fancy error message
-> #endif
-> 
-> into percpu.h to error out in this case.  It had been in my earlier
-> drafts of explicit relocs patches, but we dropped it because there was
-> no such configuration (unless a snapshot of development GCC is used, and
-> using such a snapshot is never supported IIUC).
 
-Ah I've seen that. So in this case we simply wrap -mexplicit-relocs with 
-cc-option and error out in case of CONFIG_MODULE but no model attribute, 
-which nicely prevents broken configurations (MODULE && ((old_gcc && 
-new_binutils) || clang)) with feature detection alone.
+--jm3pyctboqwgb3qh
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This seems elegant and better to me; Huacai, WDYT?
+On Fri, Jun 23, 2023 at 09:19:19AM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+>=20
+> After removing this header in the clocksource tree, the clk drivers no
+> longer build:
+>=20
+> drivers/clk/imx/clk-imx1.c:13:10: fatal error: 'soc/imx/timer.h' file not=
+ found
+> drivers/clk/imx/clk-imx27.c:11:10: fatal error: 'soc/imx/timer.h' file no=
+t found
+>=20
+> This patch was originally posted as part of a three-patch series, but only
+> patches 1 and 3 got applied.
+>=20
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> Fixes: 9e9d7570485d7 ("clocksource/drivers/imx-gpt: Fold <soc/imx/timer.h=
+> into its only user")
+> Link: https://lore.kernel.org/all/20230328100531.879485-2-u.kleine-koenig=
+@pengutronix.de/
+> Signed-off-by: "Uwe Kleine-K=F6nig" <u.kleine-koenig@pengutronix.de>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
--- 
-WANG "xen0n" Xuerui
+A bit strange that this patch has author=3DArnd but still my S-o-b. Either
+it's "my" patch (then I'd like to have author=3DUwe), or it's Arnd's then
+I'm not in the submission path and my S-o-b is misleading.
 
-Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
+The commit log of this patch is better as it mentions the fact that only
+a part of my series was applied and that the 0day bot was in the loop.
+So I suggest to make my Signed-off-by line a Co-developed-by one (and
+drop the quotes around my name).
 
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--jm3pyctboqwgb3qh
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmSX8jIACgkQj4D7WH0S
+/k6dewf/cyT48mYpfnPadV+O7veMhjKxQG0hBvDHGhrN3bG9Jqzg9IQAhCNRyjAT
+vPVpMrzejYb334Kx9dYwXW3qDirgUkbTZeQ/gPSjlFaUMkqYUvHVaBQhTOC6+uw6
+2yL4RgWUrCdX2kRmeyhJrLusVRzbc8h4wFtk20pALZqi7TydL1Gpulu93ANWcyYH
+j1FYeTbWZ9vU36LZ9Lz1Q2dSgPDxYYxTOdMVcQ8KfiCuw5rkpopPXITWqR5iR6vV
+povyr5Bf907pQDPQNYDisxll5NQkt2dru0HJEKYw7Z6P11bsP+v2zBtVapKHjf+E
+QzKmpNGZwo+PGdcGsrNi11dWnKbC9A==
+=bqIj
+-----END PGP SIGNATURE-----
+
+--jm3pyctboqwgb3qh--
