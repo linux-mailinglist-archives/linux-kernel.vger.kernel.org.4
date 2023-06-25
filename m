@@ -2,199 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C928573CF5B
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 10:30:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C05173CF5E
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 10:30:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231690AbjFYIaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 04:30:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58918 "EHLO
+        id S231782AbjFYIaJ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 25 Jun 2023 04:30:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230465AbjFYIaB (ORCPT
+        with ESMTP id S230465AbjFYIaF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 04:30:01 -0400
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EB81E78;
-        Sun, 25 Jun 2023 01:29:58 -0700 (PDT)
+        Sun, 25 Jun 2023 04:30:05 -0400
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF91D3;
+        Sun, 25 Jun 2023 01:30:03 -0700 (PDT)
 X-GND-Sasl: hadess@hadess.net
 X-GND-Sasl: hadess@hadess.net
 X-GND-Sasl: hadess@hadess.net
 X-GND-Sasl: hadess@hadess.net
 X-GND-Sasl: hadess@hadess.net
 X-GND-Sasl: hadess@hadess.net
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5060140006;
-        Sun, 25 Jun 2023 08:29:55 +0000 (UTC)
-Message-ID: <df4cc4a907c6d617036aea6da6f06de6bba30ca1.camel@hadess.net>
+X-GND-Sasl: hadess@hadess.net
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 544BA20002;
+        Sun, 25 Jun 2023 08:30:00 +0000 (UTC)
+Message-ID: <31ce32e018a9fa410e9e1f3e5900621b16a56091.camel@hadess.net>
 Subject: Re: [PATCH] HID: logitech-hidpp: rework one more time the retries
  attempts
 From:   Bastien Nocera <hadess@hadess.net>
 To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Filipe =?ISO-8859-1?Q?La=EDns?= <lains@riseup.net>,
-        Jiri Kosina <jikos@kernel.org>
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Date:   Sun, 25 Jun 2023 10:29:54 +0200
-In-Reply-To: <20230621-logitech-fixes-v1-1-32e70933c0b0@redhat.com>
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     Filipe =?ISO-8859-1?Q?La=EDns?= <lains@riseup.net>,
+        Jiri Kosina <jikos@kernel.org>, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Date:   Sun, 25 Jun 2023 10:29:59 +0200
+In-Reply-To: <qbvmv3eexohswyagmllfh3xsxoftwa3wbmsdafmwak2bxlnlft@jz74dijlfxlz>
 References: <20230621-logitech-fixes-v1-1-32e70933c0b0@redhat.com>
+         <2023062156-trespass-pandemic-7f4f@gregkh>
+         <qbvmv3eexohswyagmllfh3xsxoftwa3wbmsdafmwak2bxlnlft@jz74dijlfxlz>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 8BIT
 User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
 MIME-Version: 1.0
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gV2VkLCAyMDIzLTA2LTIxIGF0IDExOjQyICswMjAwLCBCZW5qYW1pbiBUaXNzb2lyZXMgd3Jv
-dGU6Cj4gTWFrZSB0aGUgY29kZSBsb29rcyBsZXNzIGxpa2UgUGFzY2FsLgoKSG9uZXN0bHksIHdo
-aWxlIHRoaXMgd2FzIHdyaXR0ZW4gaW4gamVzdCBpbiBhbiBlbWFpbCBpcyBmaW5lLCBwdXR0aW5n
-CnRoaXMgaW4gdGhlIGNvbW1pdCBtZXNzYWdlIGlzIHF1aXRlIGluc3VsdGluZy4KClRoZSAicmV0
-cnkiIHBhdGNoIHRyaWVkIHRvIGZpeCByZWFsIHdvcmxkIHByb2JsZW1zIGJ5IG1ha2luZyBtaW5p
-bWFsCmNvZGUgY2hhbmdlcywgZWcuIGF2b2lkaW5nIHRoZSByZXZpZXcgcHJvYmxlbSB0aGF0IHRo
-ZSBwcmVzZW50IHBhdGNoCmhhcywgYW5kIGV2ZW4gdGhlbiwgYWxsIG9mIHVzIG1pc3NlZCB0aGUg
-bG9naWMgYnVnLgoKSSBhbHNvIGhhdmVuJ3Qgd3JpdHRlbiBhbnkgUGFzY2FsIGNvZGUgc2luY2Ug
-MTk5Ni4KCj4gRXh0cmFjdCB0aGUgaW50ZXJuYWwgY29kZSBpbnNpZGUgYSBoZWxwZXIgZnVuY3Rp
-b24sIGZpeCB0aGUKPiBpbml0aWFsaXphdGlvbiBvZiB0aGUgcGFyYW1ldGVycyB1c2VkIGluIHRo
-ZSBoZWxwZXIgZnVuY3Rpb24KPiAoYGhpZHBwLT5hbnN3ZXJfYXZhaWxhYmxlYCB3YXMgbm90IHJl
-c2V0IGFuZCBgKnJlc3BvbnNlYCB3YXNuJ3QgdG9vKSwKCiJ3YXNuJ3QgZWl0aGVyIi4KCj4gYW5k
-IHVzZSBhIGBkbyB7Li4ufSB3aGlsZSgpO2AgbG9vcC4KPiAKPiBGaXhlczogNTg2ZThmZWRlNzk1
-ICgiSElEOiBsb2dpdGVjaC1oaWRwcDogUmV0cnkgY29tbWFuZHMgd2hlbiBkZXZpY2UKPiBpcyBi
-dXN5IikKPiBDYzogc3RhYmxlQHZnZXIua2VybmVsLm9yZwo+IFNpZ25lZC1vZmYtYnk6IEJlbmph
-bWluIFRpc3NvaXJlcyA8YmVuamFtaW4udGlzc29pcmVzQHJlZGhhdC5jb20+Cj4gLS0tCj4gYXMg
-cmVxdWVzdGVkIGJ5Cj4gaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvYWxsL0NBSGstPXdpTWJGMzhL
-Q05oUEZpYXJnZW5wU0JvZWNTWFRMUUFDS1MyVU15b19WdTJ3d0BtYWlsLmdtYWlsLmNvbS8KPiBU
-aGlzIGlzIGEgcmV3cml0ZSBvZiB0aGF0IHBhcnRpY3VsYXIgcGllY2Ugb2YgY29kZS4KPiAtLS0K
-PiDCoGRyaXZlcnMvaGlkL2hpZC1sb2dpdGVjaC1oaWRwcC5jIHwgMTAyICsrKysrKysrKysrKysr
-KysrKysrKysrLS0tLS0tCj4gLS0tLS0tLS0tLQo+IMKgMSBmaWxlIGNoYW5nZWQsIDYxIGluc2Vy
-dGlvbnMoKyksIDQxIGRlbGV0aW9ucygtKQo+IAo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2hpZC9o
-aWQtbG9naXRlY2gtaGlkcHAuYyBiL2RyaXZlcnMvaGlkL2hpZC0KPiBsb2dpdGVjaC1oaWRwcC5j
-Cj4gaW5kZXggZGZlOGUwOWExOGRlLi4zZDFmZmUxOTlmMDggMTAwNjQ0Cj4gLS0tIGEvZHJpdmVy
-cy9oaWQvaGlkLWxvZ2l0ZWNoLWhpZHBwLmMKPiArKysgYi9kcml2ZXJzL2hpZC9oaWQtbG9naXRl
-Y2gtaGlkcHAuYwo+IEBAIC0yNzUsMjEgKzI3NSwyMCBAQCBzdGF0aWMgaW50IF9faGlkcHBfc2Vu
-ZF9yZXBvcnQoc3RydWN0Cj4gaGlkX2RldmljZSAqaGRldiwKPiDCoH0KPiDCoAo+IMKgLyoKPiAt
-ICogaGlkcHBfc2VuZF9tZXNzYWdlX3N5bmMoKSByZXR1cm5zIDAgaW4gY2FzZSBvZiBzdWNjZXNz
-LCBhbmQKPiBzb21ldGhpbmcgZWxzZQo+IC0gKiBpbiBjYXNlIG9mIGEgZmFpbHVyZS4KPiAtICog
-LSBJZiAnIHNvbWV0aGluZyBlbHNlJyBpcyBwb3NpdGl2ZSwgdGhhdCBtZWFucyB0aGF0IGFuIGVy
-cm9yIGhhcwo+IGJlZW4gcmFpc2VkCj4gLSAqwqDCoCBieSB0aGUgcHJvdG9jb2wgaXRzZWxmLgo+
-IC0gKiAtIElmICcgc29tZXRoaW5nIGVsc2UnIGlzIG5lZ2F0aXZlLCB0aGF0IG1lYW5zIHRoYXQg
-d2UgaGFkIGEKPiBjbGFzc2ljIGVycm9yCj4gLSAqwqDCoCAoLUVOT01FTSwgLUVQSVBFLCBldGMu
-Li4pCj4gKyAqIEVmZmVjdGl2ZWx5IHNlbmQgdGhlIG1lc3NhZ2UgdG8gdGhlIGRldmljZSwgd2Fp
-dGluZyBmb3IgaXRzCj4gYW5zd2VyLgo+ICsgKgo+ICsgKiBNdXN0IGJlIGNhbGxlZCB3aXRoIGhp
-ZHBwLT5zZW5kX211dGV4IGxvY2tlZAo+ICsgKgo+ICsgKiBTYW1lIHJldHVybiBwcm90b2NvbCB0
-aGFuIGhpZHBwX3NlbmRfbWVzc2FnZV9zeW5jKCk6Cj4gKyAqIC0gc3VjY2VzcyBvbiAwCj4gKyAq
-IC0gbmVnYXRpdmUgZXJyb3IgbWVhbnMgdHJhbnNwb3J0IGVycm9yCj4gKyAqIC0gcG9zaXRpdmUg
-dmFsdWUgbWVhbnMgcHJvdG9jb2wgZXJyb3IKPiDCoCAqLwo+IC1zdGF0aWMgaW50IGhpZHBwX3Nl
-bmRfbWVzc2FnZV9zeW5jKHN0cnVjdCBoaWRwcF9kZXZpY2UgKmhpZHBwLAo+ICtzdGF0aWMgaW50
-IF9fZG9faGlkcHBfc2VuZF9tZXNzYWdlX3N5bmMoc3RydWN0IGhpZHBwX2RldmljZSAqaGlkcHAs
-Cj4gwqDCoMKgwqDCoMKgwqDCoHN0cnVjdCBoaWRwcF9yZXBvcnQgKm1lc3NhZ2UsCj4gwqDCoMKg
-wqDCoMKgwqDCoHN0cnVjdCBoaWRwcF9yZXBvcnQgKnJlc3BvbnNlKQo+IMKgewo+IC3CoMKgwqDC
-oMKgwqDCoGludCByZXQgPSAtMTsKPiAtwqDCoMKgwqDCoMKgwqBpbnQgbWF4X3JldHJpZXMgPSAz
-Owo+IC0KPiAtwqDCoMKgwqDCoMKgwqBtdXRleF9sb2NrKCZoaWRwcC0+c2VuZF9tdXRleCk7Cj4g
-K8KgwqDCoMKgwqDCoMKgaW50IHJldDsKPiDCoAo+IMKgwqDCoMKgwqDCoMKgwqBoaWRwcC0+c2Vu
-ZF9yZWNlaXZlX2J1ZiA9IHJlc3BvbnNlOwo+IMKgwqDCoMKgwqDCoMKgwqBoaWRwcC0+YW5zd2Vy
-X2F2YWlsYWJsZSA9IGZhbHNlOwo+IEBAIC0zMDAsNDEgKzI5OSw2MiBAQCBzdGF0aWMgaW50IGhp
-ZHBwX3NlbmRfbWVzc2FnZV9zeW5jKHN0cnVjdAo+IGhpZHBwX2RldmljZSAqaGlkcHAsCj4gwqDC
-oMKgwqDCoMKgwqDCoCAqLwo+IMKgwqDCoMKgwqDCoMKgwqAqcmVzcG9uc2UgPSAqbWVzc2FnZTsK
-PiDCoAo+IC3CoMKgwqDCoMKgwqDCoGZvciAoOyBtYXhfcmV0cmllcyAhPSAwICYmIHJldDsgbWF4
-X3JldHJpZXMtLSkgewo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXQgPSBfX2hp
-ZHBwX3NlbmRfcmVwb3J0KGhpZHBwLT5oaWRfZGV2LCBtZXNzYWdlKTsKPiArwqDCoMKgwqDCoMKg
-wqByZXQgPSBfX2hpZHBwX3NlbmRfcmVwb3J0KGhpZHBwLT5oaWRfZGV2LCBtZXNzYWdlKTsKPiAr
-wqDCoMKgwqDCoMKgwqBpZiAocmV0KSB7Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oGRiZ19oaWQoIl9faGlkcHBfc2VuZF9yZXBvcnQgcmV0dXJuZWQgZXJyOiAlZFxuIiwKPiByZXQp
-Owo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBtZW1zZXQocmVzcG9uc2UsIDAsIHNp
-emVvZihzdHJ1Y3QgaGlkcHBfcmVwb3J0KSk7Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoHJldHVybiByZXQ7Cj4gK8KgwqDCoMKgwqDCoMKgfQo+IMKgCj4gLcKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoGlmIChyZXQpIHsKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoGRiZ19oaWQoIl9faGlkcHBfc2VuZF9yZXBvcnQgcmV0dXJuZWQg
-ZXJyOgo+ICVkXG4iLCByZXQpOwo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgbWVtc2V0KHJlc3BvbnNlLCAwLCBzaXplb2Yoc3RydWN0Cj4gaGlkcHBfcmVw
-b3J0KSk7Cj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBi
-cmVhazsKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgfQo+ICvCoMKgwqDCoMKgwqDC
-oGlmICghd2FpdF9ldmVudF90aW1lb3V0KGhpZHBwLT53YWl0LCBoaWRwcC0+YW5zd2VyX2F2YWls
-YWJsZSwKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqA1KkhaKSkgewo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBk
-YmdfaGlkKCIlczp0aW1lb3V0IHdhaXRpbmcgZm9yIHJlc3BvbnNlXG4iLAo+IF9fZnVuY19fKTsK
-PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgbWVtc2V0KHJlc3BvbnNlLCAwLCBzaXpl
-b2Yoc3RydWN0IGhpZHBwX3JlcG9ydCkpOwo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqByZXR1cm4gLUVUSU1FRE9VVDsKPiArwqDCoMKgwqDCoMKgwqB9Cj4gwqAKPiAtwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgaWYgKCF3YWl0X2V2ZW50X3RpbWVvdXQoaGlkcHAtPndhaXQs
-IGhpZHBwLQo+ID5hbnN3ZXJfYXZhaWxhYmxlLAo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqA1Kkha
-KSkgewo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZGJn
-X2hpZCgiJXM6dGltZW91dCB3YWl0aW5nIGZvciByZXNwb25zZVxuIiwKPiBfX2Z1bmNfXyk7Cj4g
-LcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBtZW1zZXQocmVz
-cG9uc2UsIDAsIHNpemVvZihzdHJ1Y3QKPiBoaWRwcF9yZXBvcnQpKTsKPiAtwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJldCA9IC1FVElNRURPVVQ7Cj4gLcKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBicmVhazsKPiAtwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgfQo+ICvCoMKgwqDCoMKgwqDCoGlmIChyZXNwb25z
-ZS0+cmVwb3J0X2lkID09IFJFUE9SVF9JRF9ISURQUF9TSE9SVCAmJgo+ICvCoMKgwqDCoMKgwqDC
-oMKgwqDCoCByZXNwb25zZS0+cmFwLnN1Yl9pZCA9PSBISURQUF9FUlJPUikgewo+ICvCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXQgPSByZXNwb25zZS0+cmFwLnBhcmFtc1sxXTsKPiAr
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZGJnX2hpZCgiJXM6Z290IGhpZHBwIGVycm9y
-ICUwMlhcbiIsIF9fZnVuY19fLCByZXQpOwo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqByZXR1cm4gcmV0Owo+ICvCoMKgwqDCoMKgwqDCoH0KPiDCoAo+IC3CoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqBpZiAocmVzcG9uc2UtPnJlcG9ydF9pZCA9PSBSRVBPUlRfSURfSElEUFBf
-U0hPUlQgJiYKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHJlc3BvbnNl
-LT5yYXAuc3ViX2lkID09IEhJRFBQX0VSUk9SKSB7Cj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXQgPSByZXNwb25zZS0+cmFwLnBhcmFtc1sxXTsKPiAt
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGRiZ19oaWQoIiVz
-OmdvdCBoaWRwcCBlcnJvciAlMDJYXG4iLAo+IF9fZnVuY19fLCByZXQpOwo+ICvCoMKgwqDCoMKg
-wqDCoGlmICgocmVzcG9uc2UtPnJlcG9ydF9pZCA9PSBSRVBPUlRfSURfSElEUFBfTE9ORyB8fAo+
-ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHJlc3BvbnNlLT5yZXBvcnRfaWQgPT0gUkVQT1JUX0lE
-X0hJRFBQX1ZFUllfTE9ORykgJiYKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqAgcmVzcG9uc2UtPmZh
-cC5mZWF0dXJlX2luZGV4ID09IEhJRFBQMjBfRVJST1IpIHsKPiArwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgcmV0ID0gcmVzcG9uc2UtPmZhcC5wYXJhbXNbMV07Cj4gK8KgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoGRiZ19oaWQoIiVzOmdvdCBoaWRwcCAyLjAgZXJyb3IgJTAyWFxu
-IiwgX19mdW5jX18sCj4gcmV0KTsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0
-dXJuIHJldDsKPiArwqDCoMKgwqDCoMKgwqB9Cj4gKwo+ICvCoMKgwqDCoMKgwqDCoHJldHVybiAw
-Owo+ICt9Cj4gKwo+ICsvKgo+ICsgKiBoaWRwcF9zZW5kX21lc3NhZ2Vfc3luYygpIHJldHVybnMg
-MCBpbiBjYXNlIG9mIHN1Y2Nlc3MsIGFuZAo+IHNvbWV0aGluZyBlbHNlCj4gKyAqIGluIGNhc2Ug
-b2YgYSBmYWlsdXJlLgo+ICsgKiAtIElmICcgc29tZXRoaW5nIGVsc2UnIGlzIHBvc2l0aXZlLCB0
-aGF0IG1lYW5zIHRoYXQgYW4gZXJyb3IgaGFzCj4gYmVlbiByYWlzZWQKPiArICrCoMKgIGJ5IHRo
-ZSBwcm90b2NvbCBpdHNlbGYuCj4gKyAqIC0gSWYgJyBzb21ldGhpbmcgZWxzZScgaXMgbmVnYXRp
-dmUsIHRoYXQgbWVhbnMgdGhhdCB3ZSBoYWQgYQo+IGNsYXNzaWMgZXJyb3IKPiArICrCoMKgICgt
-RU5PTUVNLCAtRVBJUEUsIGV0Yy4uLikKCkRvIHdlIHJlYWxseSBuZWVkIHRvIHJlLWV4cGxhaW4g
-dGhlIHBvc3NpYmxlIHJldHVybiB2YWx1ZXMgdGhhdCB3ZXJlCmFscmVhZHkgZXhwbGFpbmVkIGFi
-b3ZlIF9fZG9faGlkcHBfc2VuZF9tZXNzYWdlX3N5bmMoKT8KCklmIHdlIGRvLCB3aHkgZG9uJ3Qg
-YWxzbyBkbyBpdCBmb3IgaGlkcHBfc2VuZF9mYXBfY29tbWFuZF9zeW5jKCkgYW5kCmhpZHBwX3Nl
-bmRfcmFwX2NvbW1hbmRfc3luYygpLCBvciB0aGVpciBjYWxsZXJzPwoKSWYgaXQncyBhYnNvbHV0
-ZWx5IG5lY2Vzc2FyeSwgYSAic2VlIF9fZG9faGlkcHBfc2VuZF9tZXNzYWdlX3N5bmMoKSIKc2hv
-dWxkIGJlIGVub3VnaC4KCkkndmUgZG91YmxlLWNoZWNrZWQgdGhhdCBub25lIG9mIHRoZSBleGlz
-dGluZyBjYWxsZXJzIGV4cGVjdGVkIGEKcGFydGlhbGx5IGZpbGxlZCBpbiAicmVzcG9uc2UiIHN0
-cnVjdCBvbiBlcnJvci4KClJldmlld2VkLWJ5OiBCYXN0aWVuIE5vY2VyYSA8aGFkZXNzQGhhZGVz
-cy5uZXQ+Cgo+ICsgKi8KPiArc3RhdGljIGludCBoaWRwcF9zZW5kX21lc3NhZ2Vfc3luYyhzdHJ1
-Y3QgaGlkcHBfZGV2aWNlICpoaWRwcCwKPiArwqDCoMKgwqDCoMKgwqBzdHJ1Y3QgaGlkcHBfcmVw
-b3J0ICptZXNzYWdlLAo+ICvCoMKgwqDCoMKgwqDCoHN0cnVjdCBoaWRwcF9yZXBvcnQgKnJlc3Bv
-bnNlKQo+ICt7Cj4gK8KgwqDCoMKgwqDCoMKgaW50IHJldDsKPiArwqDCoMKgwqDCoMKgwqBpbnQg
-bWF4X3JldHJpZXMgPSAzOwo+ICsKPiArwqDCoMKgwqDCoMKgwqBtdXRleF9sb2NrKCZoaWRwcC0+
-c2VuZF9tdXRleCk7Cj4gKwo+ICvCoMKgwqDCoMKgwqDCoGRvIHsKPiArwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgcmV0ID0gX19kb19oaWRwcF9zZW5kX21lc3NhZ2Vfc3luYyhoaWRwcCwg
-bWVzc2FnZSwKPiByZXNwb25zZSk7Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGlm
-IChyZXQgIT0gSElEUFAyMF9FUlJPUl9CVVNZKQo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoGJyZWFrOwo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqB9Cj4gwqAKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaWYgKChyZXNwb25z
-ZS0+cmVwb3J0X2lkID09IFJFUE9SVF9JRF9ISURQUF9MT05HIHx8Cj4gLcKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHJlc3BvbnNlLT5yZXBvcnRfaWQgPT0KPiBSRVBPUlRf
-SURfSElEUFBfVkVSWV9MT05HKSAmJgo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqAgcmVzcG9uc2UtPmZhcC5mZWF0dXJlX2luZGV4ID09IEhJRFBQMjBfRVJST1IpIHsKPiAt
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJldCA9IHJlc3Bv
-bnNlLT5mYXAucGFyYW1zWzFdOwo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgaWYgKHJldCAhPSBISURQUDIwX0VSUk9SX0JVU1kpIHsKPiAtwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBkYmdf
-aGlkKCIlczpnb3QgaGlkcHAgMi4wIGVycm9yCj4gJTAyWFxuIiwgX19mdW5jX18sIHJldCk7Cj4g
-LcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgYnJlYWs7Cj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqB9Cj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBk
-YmdfaGlkKCIlczpnb3QgYnVzeSBoaWRwcCAyLjAgZXJyb3IgJTAyWCwKPiByZXRyeWluZ1xuIiwg
-X19mdW5jX18sIHJldCk7Cj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoH0KPiAtwqDC
-oMKgwqDCoMKgwqB9Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGRiZ19oaWQoIiVz
-OmdvdCBidXN5IGhpZHBwIDIuMCBlcnJvciAlMDJYLAo+IHJldHJ5aW5nXG4iLCBfX2Z1bmNfXywg
-cmV0KTsKPiArwqDCoMKgwqDCoMKgwqB9IHdoaWxlICgtLW1heF9yZXRyaWVzKTsKPiDCoAo+IMKg
-wqDCoMKgwqDCoMKgwqBtdXRleF91bmxvY2soJmhpZHBwLT5zZW5kX211dGV4KTsKPiDCoMKgwqDC
-oMKgwqDCoMKgcmV0dXJuIHJldDsKPiAKPiAtLS0KPiBiYXNlLWNvbW1pdDogYjk4ZWMyMTFhZjU1
-MDg0NTdlMmIxYzRjYzk5MzczNjMwYTgzZmE4MQo+IGNoYW5nZS1pZDogMjAyMzA2MjEtbG9naXRl
-Y2gtZml4ZXMtYTRjMGU2NmVhMmFkCj4gCj4gQmVzdCByZWdhcmRzLAoK
+On Fri, 2023-06-23 at 10:37 +0200, Benjamin Tissoires wrote:
+> 
+> On Jun 21 2023, Greg KH wrote:
+> > 
+> > On Wed, Jun 21, 2023 at 11:42:30AM +0200, Benjamin Tissoires wrote:
+> > > Make the code looks less like Pascal.
+> > > 
+> > > Extract the internal code inside a helper function, fix the
+> > > initialization of the parameters used in the helper function
+> > > (`hidpp->answer_available` was not reset and `*response` wasn't
+> > > too),
+> > > and use a `do {...} while();` loop.
+> > > 
+> > > Fixes: 586e8fede795 ("HID: logitech-hidpp: Retry commands when
+> > > device is busy")
+> > > Cc: stable@vger.kernel.org
+> > > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> > > ---
+> > > as requested by
+> > > https://lore.kernel.org/all/CAHk-=wiMbF38KCNhPFiargenpSBoecSXTLQACKS2UMyo_Vu2ww@mail.gmail.com/
+> > > This is a rewrite of that particular piece of code.
+> > > ---
+> > >  drivers/hid/hid-logitech-hidpp.c | 102 +++++++++++++++++++++++--
+> > > --------------
+> > >  1 file changed, 61 insertions(+), 41 deletions(-)
+> > > 
+> > > diff --git a/drivers/hid/hid-logitech-hidpp.c b/drivers/hid/hid-
+> > > logitech-hidpp.c
+> > > index dfe8e09a18de..3d1ffe199f08 100644
+> > > --- a/drivers/hid/hid-logitech-hidpp.c
+> > > +++ b/drivers/hid/hid-logitech-hidpp.c
+> > > @@ -275,21 +275,20 @@ static int __hidpp_send_report(struct
+> > > hid_device *hdev,
+> > >  }
+> > >  
+> > >  /*
+> > > - * hidpp_send_message_sync() returns 0 in case of success, and
+> > > something else
+> > > - * in case of a failure.
+> > > - * - If ' something else' is positive, that means that an error
+> > > has been raised
+> > > - *   by the protocol itself.
+> > > - * - If ' something else' is negative, that means that we had a
+> > > classic error
+> > > - *   (-ENOMEM, -EPIPE, etc...)
+> > > + * Effectively send the message to the device, waiting for its
+> > > answer.
+> > > + *
+> > > + * Must be called with hidpp->send_mutex locked
+> > > + *
+> > > + * Same return protocol than hidpp_send_message_sync():
+> > > + * - success on 0
+> > > + * - negative error means transport error
+> > > + * - positive value means protocol error
+> > >   */
+> > > -static int hidpp_send_message_sync(struct hidpp_device *hidpp,
+> > > +static int __do_hidpp_send_message_sync(struct hidpp_device
+> > > *hidpp,
+> > >         struct hidpp_report *message,
+> > >         struct hidpp_report *response)
+> > 
+> > __must_hold(&hidpp->send_mutex)  ?
+> > 
+> 
+> Good point. I'll add this in v2.
+> 
+> I'm still waiting for some feedback from the people who particpated
+> in
+> the original BZ, but the new bug is harder to reproduce. Anyway,
+> there
+> is no rush IMO.
 
+The problem is only ever going to show up in very limited circumstances
+after the logic fix was applied.
+
+You need a hardware problem (such as the controller being too busy to
+answer) to trigger the problems fixed by this patch. I don't see a way
+to reliably reproduce it unless you inject that hardware error.
