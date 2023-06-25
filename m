@@ -2,150 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DA5D73CFE1
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 11:55:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDBBE73CFD0
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 11:53:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230197AbjFYJzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 05:55:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46790 "EHLO
+        id S231761AbjFYJv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 05:51:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232048AbjFYJzX (ORCPT
+        with ESMTP id S230029AbjFYJvz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 05:55:23 -0400
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2051.outbound.protection.outlook.com [40.107.22.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A8E710C8;
-        Sun, 25 Jun 2023 02:55:06 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IvlavjtQzggXEUrxJM9CSYZRI1sCHBmb4jixUZnY/96nVWv+dgQTtjSrRn6eLxeJUu7fHonYs0qOYeeXt1+i1EQ9vQFcqCutsIz14KnfKxUKUhwZ3JcNpsiIo5OTkoUlq0ZQKbcPlOhujgUA8Fts113f688nYmEzmWoPlCueEYoosZ3M68y5TtDZe3nMVDc9uGxKc8q91FOY4iWISDW5oA7vmv+zPeiI16SilExSVJc1sOYvIeOb7FR4ctD8VTKeMo4Ne398m2MiOqzd0kkpyL+Hq0UCsocVORPYvLv14JGgeghE/GAz+09MJCSb5xvaGuanC4B/LuBeBn/DNzvE8g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=O6RjJEMGbO31IIcRVItQpnF1/zDX5vSfrAJfbPWL+Xw=;
- b=FGXz3D9Eindnc8GoBa4cxR5ecrQuvejkxxcAKRrch4Z+eLnRVi8j26NGupEiRVwBBFS4oUuinQXwtc2vduhL+9UmFP42fxZwUecN+rw+m9KboRukAw7MKAYStU71oaWnlULk+p5UK5unlH9H9CekVU9c4QsZw/gqTWbZvbJ83Vk+NAEB9f/ce//kb0NE4n1ynB96pu6Ql5dArYFaC/d3LqQlDKucSxesDcmyOSfQGhdBf02cTOlBZHVjF/1F7gLr9LmlbBSh0pd2WORYMJEo0bO7LZuyTJ2nC0c38Ja/SzAl02I1+qyC9GmT1fcO4TMTglZItDeLD8oTDxdbEthFZw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=O6RjJEMGbO31IIcRVItQpnF1/zDX5vSfrAJfbPWL+Xw=;
- b=pBV65s6wapRER3JYT1ZsuQWH3W4nRv43YHkUb05QrCia5sEUaMrPAtlX3AFQW9DzJqhoz67ZBya//ldnrWy7385TmmNorJsewVz+Hx5k5zh+BAiLX3sM0/Svj39QiRSk5OpZwhRO1QBMstRZC44Ks5A/cTJ2J61TrirLQv7Xm60=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AS8PR04MB8404.eurprd04.prod.outlook.com (2603:10a6:20b:3f8::7)
- by PAXPR04MB8816.eurprd04.prod.outlook.com (2603:10a6:102:20f::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.26; Sun, 25 Jun
- 2023 09:55:01 +0000
-Received: from AS8PR04MB8404.eurprd04.prod.outlook.com
- ([fe80::ef9f:1e01:e8a:6a4a]) by AS8PR04MB8404.eurprd04.prod.outlook.com
- ([fe80::ef9f:1e01:e8a:6a4a%3]) with mapi id 15.20.6521.026; Sun, 25 Jun 2023
- 09:55:01 +0000
-From:   Sherry Sun <sherry.sun@nxp.com>
-To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        festevam@gmail.com, shenwei.wang@nxp.com,
-        gregkh@linuxfoundation.org
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kernel@pengutronix.de, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-imx@nxp.com
-Subject: [PATCH 4/4] dt-bindings: serial: fsl-lpuart: add imx8ulp compatible string
-Date:   Sun, 25 Jun 2023 17:48:57 +0800
-Message-Id: <20230625094857.29644-5-sherry.sun@nxp.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230625094857.29644-1-sherry.sun@nxp.com>
-References: <20230625094857.29644-1-sherry.sun@nxp.com>
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR02CA0126.apcprd02.prod.outlook.com
- (2603:1096:4:188::11) To AS8PR04MB8404.eurprd04.prod.outlook.com
- (2603:10a6:20b:3f8::7)
+        Sun, 25 Jun 2023 05:51:55 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2398EBF
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 02:51:53 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-1ad4d784100so2322413fac.0
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 02:51:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687686712; x=1690278712;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=290Ekn0ODsVNn0aKIx+AgyiRc2lDIGBbbnI/1Hia+80=;
+        b=LOreZASmxemQLA5cOE5xrQ1dovPn/FIix2UBEWF9jFYKi3belc6ilTzLpmJhI9SLsh
+         4lPY92CeZD8/ddCleRKdbv+hAdGjPiZYeBd1aHP8z/NePyiMLTA+didZ1LaWP8Ec3TsB
+         1QgCEJafhN6tJLMCjsaZvGLmTVonosA+gsY25tvdSLd3jTYcYUreSb2JtLlmaDAhB0s+
+         UIAm3I1kXN4xJ6VVKO/z+GwkEp3FwzGOGqc4YKF4C3m6GcMwq0L/NmCAdfkHpuGrD9kb
+         Pmj/WJVf8N5HB+3G0ydouWyli9Qw5q9om6tfAiIxSgbZiHR7TcbXJk6Ssheme7frtu47
+         pjxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687686712; x=1690278712;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=290Ekn0ODsVNn0aKIx+AgyiRc2lDIGBbbnI/1Hia+80=;
+        b=Iod6BaWOsouKsyzWu/sRwTPcpXJHrqQ7lyHh80Om6/5ef7OgUKotwcpeC5/8msj8qO
+         iOox7GmSLb9xroVDU4U/e6bkEwekN46+Lq/gUgACPzhostAwRXXJARgLrL6n5342QtKg
+         95upDJf+txXXsNo4n5wgH3dtl9/W3P9+HJ8BZbsQuJ6NXy9JtMDbAqxacFB5kyU2JsXd
+         PV0pi0QXCny2aXMRX+TPM0KFcB8FAp9Re8wuaNk3Je6F6o0/roEpFyQNwJDS7/1iI3M3
+         YXwKIHJnNi1E2kZsK1AQYAbb6L99KQFJOs6fOTrO+kmxTb3JN0H5Jou4KABO9nNTbQeb
+         e+Ow==
+X-Gm-Message-State: AC+VfDy74Uq4IWmuPPa7t0z2kNtFDEKQIJvnrY7txuJy+ULnps1IoXgZ
+        KHE36zJOaViGYaGLOrgNWew=
+X-Google-Smtp-Source: ACHHUZ6NvZ6deZEkzNA7OTQrNaI6xMtMV5rHEjfwutqVjl7yhdM0DAartFUwXr6OCSM/LqQ2N/eoRw==
+X-Received: by 2002:a05:6870:7347:b0:1a3:74e:7863 with SMTP id r7-20020a056870734700b001a3074e7863mr20840637oal.4.1687686712188;
+        Sun, 25 Jun 2023 02:51:52 -0700 (PDT)
+Received: from sumitra.com ([59.89.167.84])
+        by smtp.gmail.com with ESMTPSA id 14-20020a630b0e000000b0054fb537ca5dsm2190850pgl.92.2023.06.25.02.51.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 25 Jun 2023 02:51:51 -0700 (PDT)
+Date:   Sun, 25 Jun 2023 02:51:43 -0700
+From:   Sumitra Sharma <sumitraartsy@gmail.com>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Ira Weiny <ira.weiny@intel.com>,
+        Deepak R Varma <drv@mailo.com>, zhao1.liu@intel.com,
+        Zhao Liu <zhao1.liu@linux.intel.com>,
+        Sumitra Sharma <sumitraartsy@gmail.com>
+Subject: Re: [PATCH] drm/gma500: Replace kmap{,_atomic}() with page_address()
+Message-ID: <20230625095143.GB436009@sumitra.com>
+References: <20230620180148.GA419134@sumitra.com>
+ <2565983.Lt9SDvczpP@suse>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS8PR04MB8404:EE_|PAXPR04MB8816:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6a8ebd61-6d64-4cbf-a791-08db75623dea
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ZRvkmBxDvASXuA0eWDih3vspR50rA+UcuQFrGzfu8F0fvY5oIVKjziPUeTRwkrxewi/LIY6wE4sZMi1LDacztKPm9r8jxGkiemUTW3SMy4PlAUbZOE3xVi86Q0k2fAS8YfCO/iQ79ClHvzdopHVcxKHdd5PpgiKCyEoGKCqP5qzpPXSZyCu/op5cZbbqbiCoey1bxSmYUIQDo7/NTu1wU7iYZ2xnDUClCamOOHGebA7Spl8uC1IIOY+s3OMJ1DYcr6cSyLGaZnGQv6Cz4y9HXJF/gX3VwF8X8cFULZzswtAdfXL27S2jrNtRobUjrL8KjVTh4JXLDu+IgeFwXZny9IRTBybbaJVuuJBS7Hjlo6ETLBjZU3QPpdq8UJT3/6w773o75pNwnrnXIwrMUTDvo6/dGEWOSNgOTEs77Z62Pr//Znvhkf8kja3lGvtv+oEG6xz3XKqGCktoiaa06xXjhqfF7194HenmGODk8Q6WiDZeK0eEphc2ThBgvf1xFSbYV7liBfhIGMd91mxOzU67sMVwOg2ACJyGB79e9rUTcliA+GQe3SotQQGCV/jA9uxW6S6e7lPYU9p1gXrjq48Q0MsDT+t5/8D3uSldpdqn/vx+a6WaNIEYhRmZ0OTw+uNuzuut4RELl1Nnt+tl0PWyLw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8404.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(366004)(136003)(396003)(376002)(451199021)(26005)(36756003)(5660300002)(7416002)(44832011)(66476007)(8936002)(8676002)(41300700001)(86362001)(316002)(66556008)(4326008)(38350700002)(38100700002)(66946007)(6506007)(1076003)(4744005)(6512007)(2906002)(6486002)(186003)(52116002)(6666004)(83380400001)(478600001)(2616005)(32563001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?B8Dpvua05TDrteIyUarBt0hi5OZjN9Q0J+FoBG9ADCLNRWe14Q3EnCy+D47/?=
- =?us-ascii?Q?uH1Jg6bh3jitooxcJpZrvyFmUO0wROgvtdb5AaAEbzL3snGbhxcJRmbptZ+l?=
- =?us-ascii?Q?MHvojkCW/XlL9XVmOv9imtPDDs/2N4MxvgomwN8ZemZnKQSdkcKIlDUN5FgC?=
- =?us-ascii?Q?pnY0dreKYVScZ17Dmh1FUsR3PLKSuxxOfWyX2HMPS7lL2WHTGeTgv5bIZJn5?=
- =?us-ascii?Q?EjMh6x/+lKp3BjH8n7EeY7PTUexrYsMujzPyXWlrK1X6HADSXJokpl5FWuXF?=
- =?us-ascii?Q?8aBb5EiSDa6wAQhD3N0d9oNHMjTD2aoZ4bRp0dmpZL92UrkwNs7BRs8arNgv?=
- =?us-ascii?Q?ooB06GGhSLbX0qPZkEa5PGPUQSNk7QDuKsNJQF7nniwRjnvJ/YmIIe3o4PSq?=
- =?us-ascii?Q?efcdVWzSCxc/XGyF/v9vVgN14PGN328byuSJxMw8GFAWerAGWkYKRGXj5qCm?=
- =?us-ascii?Q?61aoJznKh4vOA7wQvCb8s3IQm8AWtAOtm1k2QQ4l6MKdGzMigDlecdn5e8nL?=
- =?us-ascii?Q?hwDBlQqx+e6YF0F5T6ogy/q1xRFblIFsz0SI4DGp2BnqUPeLvIPJwVJ5a7+r?=
- =?us-ascii?Q?b4a9Ad++dx960vH3wHC0lhnsbddbrLTnPi8OV3GWmd5a6yhCKF1S+EtUQgqC?=
- =?us-ascii?Q?C8bjP5Jm3f6bIXfz/fe1A9CBNmnn1ybpLialVilAmB9myzPdmd5TJyf6Mryt?=
- =?us-ascii?Q?DynbSD5m5FMjKOYCRznzISp8UI81ANiV2I4W4xhZ8x++hO+SWnZBMR9w/Ac7?=
- =?us-ascii?Q?+YcLO+NL9yVRJoAE27rMuI16DVSj4gSCI22o7X0dW8Qijpbm/VoOT3nBr4DZ?=
- =?us-ascii?Q?68qSo3shEERXpgvxKknJlTB45CgKa0kyPun6YAYF6vGSSNMs38vMZdhS+XPO?=
- =?us-ascii?Q?+jdkn204fEPS+RoUuV4pHmpJrU0H0EyAPiRUK8oyUXPVjAS2oN2VOa3jSPey?=
- =?us-ascii?Q?5BCz35Q5pusjk4N/pqxX9Ubx0pNKQHUat2tj0RQA1MatdyebnOpeUaSSBQQx?=
- =?us-ascii?Q?K2zWUXwt/zvByLqAKeveu9Vz40VNEeqnqnKY9QYmfFbzTCF4408NAuSx7JHJ?=
- =?us-ascii?Q?3A76gVWAY4JG+yMflktsElCH7Y1PrAsATZeu7Ng//W6EVqTDecAQ1TOLWfwz?=
- =?us-ascii?Q?ZUwIswXs6E1J2j8Al73zd7cEXoXAvDWgJFDXpU5OMjzt4fObvGxMuXqUeOSv?=
- =?us-ascii?Q?v8pBxBrzJcTJ/uFPP3tcNY4gyLWUE+eOqh7MI9fiv0oWh+fxZODtWQXbGOxw?=
- =?us-ascii?Q?gkuQud2oJ5p6IJio0+wAapZPl03kr0GA3CwybwiPJtHX+QFQkSDVQ1LB4ISc?=
- =?us-ascii?Q?T+7sJXaLVV4hyPNma3cf1wPF31q8KTVZuT8gpMPKGqWCyJaS+YMPs8Ee8MHm?=
- =?us-ascii?Q?V28RFgHMjfd7UA73hwJDRMHIQn8FQ7/m8gRCjOsWV6l+OY+hsH0Wtg8SUbz7?=
- =?us-ascii?Q?EQZPaoZsuCWihK4XS+alwp+ymxovEGOFxvhKCN716WZUAXz/UiBzQxSeOtY/?=
- =?us-ascii?Q?LnJLLcIzys/ulrdiVEasCOnGC31rvwfiWyz/oRBvxik/P9gpMPTyXlJhoO2b?=
- =?us-ascii?Q?NtfcYx31vKxyb4ByMqCJKJMySiwVgwQ2ou5TtQTI?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6a8ebd61-6d64-4cbf-a791-08db75623dea
-X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8404.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jun 2023 09:55:01.1928
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: YSspO0mV34hy0KZht3FDfy+kMs5Zk6BDZ5JEl5ukDQDRusK1/HxwbJPvZxRKj49ZHL6cUgQ5E8FZRorQ91v6VQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8816
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2565983.Lt9SDvczpP@suse>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-LPUART driver adds a new compatible string for imx8ulp, and imx93 is
-much more compatible with imx8ulp than imx7ulp, so correct the
-dt-binding here.
+On Wed, Jun 21, 2023 at 12:31:40AM +0200, Fabio M. De Francesco wrote:
+> On martedì 20 giugno 2023 20:01:48 CEST Sumitra Sharma wrote:
+> > Remove unnecessary calls to kmap{,_atomic}() when acquiring
+> > pages using GFP_DMA32.
+> > 
+> > The GFP_DMA32 uses the DMA32 zone to satisfy the allocation
+> > requests. Therefore, pages allocated with GFP_DMA32 cannot
+> > come from Highmem.
+> > 
+> > Avoid using calls to kmap_local_page() / kunmap_local() and
+> > kmap() / kunmap() in the psb_mmu_alloc_pd function. Instead,
+> > utilize page_address().
+> > 
+> > Remove the usage of kmap_atomic() / kunmap_atomic() in the
+> > psb_mmu_alloc_pt function. Use page_address() instead.
+> > 
+> > Substitute kmap_atomic(pt->p) / kunmap_atomic(pt->v) calls
+> > in the psb_mmu_pt_alloc_map_lock() and psb_mmu_pt_unmap_unlock()
+> > functions with page_address(pt->p). This is possible as
+> > pt = psb_mmu_alloc_pt(pd) allocates a page using
+> > pt->p = alloc_page(GFP_DMA32).
+> 
+> Sumitra,
+> 
+> I'm sorry because this patch cannot acked with this commit message.
+> 
+> This commit message is missing two _really_ important information. Therefore, 
+> it is not acked. Please check again what I write below and either add the 
+> missing information or change the code accordingly...
+> 
+> You should assure everybody that the code between the old kmap_atomic() / 
+> kunmap_atomic() doesn't depend either on implicit pagefault_disable() or 
+> preempt_disable() calls or both. 
+> 
+> Please read again the section of the Highmem's documentation regarding 
+> kmap_atomic() at https://docs.kernel.org/mm/highmem.html
+> 
+> In particular take care to read and understand what "[] the code between calls 
+> to kmap_atomic() and kunmap_atomic() may implicitly depend on the side effects 
+> of atomic mappings, i.e. disabling page faults or preemption, or both. In that 
+> case, explicit calls to pagefault_disable() or preempt_disable() or both must 
+> be made in conjunction with the use of kmap_local_page().".
+> 
+> Please study carefully also the following patch from Zhao, suggested by Ira 
+> and reviewed by Ira and I: "[PATCH v2 3/9] drm/i915: Use kmap_local_page() in 
+> gem/i915_gem_shmem.c". It's not yet reached upstream so you need to find it in 
+> lore.kernel.org at https://lore.kernel.org/lkml/20230329073220.3982460-4-zhao1.liu@linux.intel.com/
+> 
+> Please note that, in turn, that patch also contains a link to a patch from Ira 
+> who too had to disable faults (https://lore.kernel.org/all/
+> 20220813220034.806698-1-ira.weiny@intel.com)
+> 
+> I haven't yet looked at your code. If any sections do depend on those implicit 
+> disables, you should act accordingly and add one or both of the above-
+> mentioned calls, even in cases where you get rid of local mappings.
+> 
+> Instead if the sections don't depend on the mentioned side effects, you should 
+> write something like what I wrote in "[PATCH] NFS: Convert kmap_atomic() to 
+> kmap_local_folio()" that you can find at https://lore.kernel.org/lkml/
+> 20230503172411.3356-1-fmdefrancesco@gmail.com/ or, by by using "git show 
+> 4b71e2416ec4".
+> 
+> Thanks for working on this,
+> 
+> Fabio 
+> 
 
-Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
----
- Documentation/devicetree/bindings/serial/fsl-lpuart.yaml | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml b/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
-index 93062403276b..5599be95400b 100644
---- a/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
-+++ b/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
-@@ -21,13 +21,12 @@ properties:
-           - fsl,ls1021a-lpuart
-           - fsl,ls1028a-lpuart
-           - fsl,imx7ulp-lpuart
-+          - fsl,imx8ulp-lpuart
-           - fsl,imx8qxp-lpuart
-           - fsl,imxrt1050-lpuart
-       - items:
--          - enum:
--              - fsl,imx93-lpuart
--              - fsl,imx8ulp-lpuart
--          - const: fsl,imx7ulp-lpuart
-+          - const: fsl,imx93-lpuart
-+          - const: fsl,imx8ulp-lpuart
-       - items:
-           - enum:
-               - fsl,imx8qm-lpuart
--- 
-2.17.1
+Hi Fabio,
 
+Thank you for notifying the mistakes I made in this patch. I am directly
+working on the changes.
+
+Regards
+Sumitra
+
+
+
+> > 
+> > Suggested-by: Ira Weiny <ira.weiny@intel.com>
+> > Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
+> > ---
+> >  drivers/gpu/drm/gma500/mmu.c | 17 +++++------------
+> >  1 file changed, 5 insertions(+), 12 deletions(-)
+> > 
+> > diff --git a/drivers/gpu/drm/gma500/mmu.c b/drivers/gpu/drm/gma500/mmu.c
+> > index a70b01ccdf70..59aa5661e56a 100644
+> > --- a/drivers/gpu/drm/gma500/mmu.c
+> > +++ b/drivers/gpu/drm/gma500/mmu.c
+> > @@ -184,20 +184,15 @@ struct psb_mmu_pd *psb_mmu_alloc_pd(struct
+> > psb_mmu_driver *driver, pd->invalid_pte = 0;
+> >  	}
+> > 
+> > -	v = kmap_local_page(pd->dummy_pt);
+> > +	v = page_address(pd->dummy_pt);
+> >  	for (i = 0; i < (PAGE_SIZE / sizeof(uint32_t)); ++i)
+> >  		v[i] = pd->invalid_pte;
+> > 
+> > -	kunmap_local(v);
+> > -
+> > -	v = kmap_local_page(pd->p);
+> > +	v = page_address(pd->p);
+> >  	for (i = 0; i < (PAGE_SIZE / sizeof(uint32_t)); ++i)
+> >  		v[i] = pd->invalid_pde;
+> > 
+> > -	kunmap_local(v);
+> > -
+> > -	clear_page(kmap(pd->dummy_page));
+> > -	kunmap(pd->dummy_page);
+> > +	clear_page(page_address(pd->dummy_page));
+> > 
+> >  	pd->tables = vmalloc_user(sizeof(struct psb_mmu_pt *) * 1024);
+> >  	if (!pd->tables)
+> > @@ -279,7 +274,7 @@ static struct psb_mmu_pt *psb_mmu_alloc_pt(struct
+> > psb_mmu_pd *pd)
+> > 
+> >  	spin_lock(lock);
+> > 
+> > -	v = kmap_atomic(pt->p);
+> > +	v = page_address(pt->p);
+> >  	clf = (uint8_t *) v;
+> >  	ptes = (uint32_t *) v;
+> >  	for (i = 0; i < (PAGE_SIZE / sizeof(uint32_t)); ++i)
+> > @@ -293,7 +288,6 @@ static struct psb_mmu_pt *psb_mmu_alloc_pt(struct
+> > psb_mmu_pd *pd) }
+> >  		mb();
+> >  	}
+> > -	kunmap_atomic(v);
+> >  	spin_unlock(lock);
+> > 
+> >  	pt->count = 0;
+> > @@ -339,7 +333,7 @@ static struct psb_mmu_pt 
+> *psb_mmu_pt_alloc_map_lock(struct
+> > psb_mmu_pd *pd, atomic_set(&pd->driver->needs_tlbflush, 1);
+> >  		}
+> >  	}
+> > -	pt->v = kmap_atomic(pt->p);
+> > +	pt->v = page_address(pt->p);
+> >  	return pt;
+> >  }
+> > 
+> > @@ -365,7 +359,6 @@ static void psb_mmu_pt_unmap_unlock(struct psb_mmu_pt 
+> *pt)
+> > struct psb_mmu_pd *pd = pt->pd;
+> >  	uint32_t *v;
+> > 
+> > -	kunmap_atomic(pt->v);
+> >  	if (pt->count == 0) {
+> >  		v = kmap_atomic(pd->p);
+> >  		v[pt->index] = pd->invalid_pde;
+> > --
+> > 2.25.1
+> 
+> 
+> 
+> 
