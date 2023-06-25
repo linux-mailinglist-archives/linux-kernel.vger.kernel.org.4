@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55CEA73D2E1
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 20:13:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDCA373D2E3
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 20:14:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbjFYSNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 14:13:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59150 "EHLO
+        id S229621AbjFYSO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 14:14:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjFYSNw (ORCPT
+        with ESMTP id S229454AbjFYSO0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 14:13:52 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5032B1BC
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 11:13:47 -0700 (PDT)
+        Sun, 25 Jun 2023 14:14:26 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C9C1B9
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 11:14:25 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id D016421887;
-        Sun, 25 Jun 2023 18:13:45 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C0E3121887;
+        Sun, 25 Jun 2023 18:14:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1687716825; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1687716863; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=mIGYuXeg3Z3crSQru1UTV8eTEHb5NndbE7Ik2w/PaYo=;
-        b=b7RKU4pPTLR0INoyzyhMF9lIQspZNJJvm2twY/ICPsJDHzIsMZfM5VBCJ/BkOMTSEL8Ma7
-        p476GHGVc8bSASsSlqQX+lVPE1wQS34MJSZ4MGqoevVottAU/cpWFMdycgTpUfBcXwk0hR
-        iwrv4h8JCLRxgqtI59sBM2W+y5+2iUA=
+        bh=IobH/r92kTGjvuGu4EK7R8QGIkmpjSClxSPjpJ3vAGg=;
+        b=eoIY6+Mz4ul52M+8iP1nUBmYJG6b9Ak0rsSAuYoK17jJDlJ+SNHTV+ju6fWU/OA63aDRYf
+        Zeav8NhPa5heF7NS3+f2EVyb8e8Mo7pR2pPWMa4fzVh+ARJ+EpH8ARPMcp/QBXVz5KHA74
+        yJAng0KAFQL8ZDRsHYfMnCBKdYlkcYw=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1687716825;
+        s=susede2_ed25519; t=1687716863;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=mIGYuXeg3Z3crSQru1UTV8eTEHb5NndbE7Ik2w/PaYo=;
-        b=kidsZl/NA/HZaCeRvnKNFz13WxMid2WGVay/w+59zHqmH4K2wxT0Nsbv5VgzM1kA40jxA+
-        A5j81ekjJIUtr8Bg==
+        bh=IobH/r92kTGjvuGu4EK7R8QGIkmpjSClxSPjpJ3vAGg=;
+        b=v+qMZkn9W7rHhZh2mL5Lv/8Q7wp3YT+/kSgE0qYMVKF6X8X4c293uMa7AiN7B6WFFY/7ic
+        BtBZ46kl3Ec+U6Dg==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 95C4913462;
-        Sun, 25 Jun 2023 18:13:45 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5B3DB13462;
+        Sun, 25 Jun 2023 18:14:23 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id MW/nItmDmGQcFQAAMHmgww
-        (envelope-from <tiwai@suse.de>); Sun, 25 Jun 2023 18:13:45 +0000
-Date:   Sun, 25 Jun 2023 20:13:45 +0200
-Message-ID: <87edlzwgti.wl-tiwai@suse.de>
+        id K6Y+Ff+DmGQ5FQAAMHmgww
+        (envelope-from <tiwai@suse.de>); Sun, 25 Jun 2023 18:14:23 +0000
+Date:   Sun, 25 Jun 2023 20:14:22 +0200
+Message-ID: <87cz1jwgsh.wl-tiwai@suse.de>
 From:   Takashi Iwai <tiwai@suse.de>
 To:     YE Chengfeng <cyeaa@connect.ust.hk>
 Cc:     "perex@perex.cz" <perex@perex.cz>,
         "tiwai@suse.com" <tiwai@suse.com>,
-        "yunjunlee@chromium.org" <yunjunlee@chromium.org>,
+        "pteerapong@chromium.org" <pteerapong@chromium.org>,
         "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] ALSA: dummy: Fix &dpcm->lock deadlock issues
-In-Reply-To: <TYCP286MB1188FEE149369A32D90DCE288A21A@TYCP286MB1188.JPNP286.PROD.OUTLOOK.COM>
-References: <TYCP286MB1188FEE149369A32D90DCE288A21A@TYCP286MB1188.JPNP286.PROD.OUTLOOK.COM>
+Subject: Re: [PATCH] ALSA: aloop: Fix &cable->lock deadlock issues
+In-Reply-To: <TYCP286MB11886E8193AD36C16451A0AC8A21A@TYCP286MB1188.JPNP286.PROD.OUTLOOK.COM>
+References: <TYCP286MB11886E8193AD36C16451A0AC8A21A@TYCP286MB1188.JPNP286.PROD.OUTLOOK.COM>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
@@ -72,31 +72,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 25 Jun 2023 17:35:48 +0200,
+On Sun, 25 Jun 2023 18:22:56 +0200,
 YE Chengfeng wrote:
 > 
-> The timer dummy_systimer_callback is executed under softirq
-> context, thus other process context code requiring the same lock
-> should disable interrupt. Otherwise there would be potential
-> deadlock issues when the code executing under process context
-> (i.e., dummy_systimer_pointer, dummy_systimer_start,
-> dummy_systimer_stop) is preempted by the timer while holding
-> the lock.
+> The timer loopback_jiffies_timer_function is executed under
+> bottom-half softirq context and require a spinlock, thus
+> other process context code requiring the same lock (i.e.,
+> loopback_trigger, loopback_pointer) can deadlock with the
+> timer if it is preempted while holding the lock.
 > 
 > Deadlock scenario:
-> dummy_systimer_pointer
->     -> spin_lock(&dpcm->lock);
+> loopback_trigger
+>     -> spin_lock(&cable->lock);
 >         <timer interrupt>
->         -> dummy_systimer_callback
->         -> spin_lock_irqsave(&dpcm->lock, flags);
+>         -> loopback_jiffies_timer_function
+>         -> spin_lock_irqsave(&dpcm->cable->lock, flags);
 > 
 > Fix the potential deadlock by using spin_lock_irqsave.
 
-Did you really trigger this deadlock, or is just your hypothesis?
-I'm asking it because basically the deadlock above shouldn't happen;
-those are called only via PCM trigger and pointer callbacks, and they
-are always called inside the PCM stream lock, and already
-irq-disabled.
+Similarly like the patch for snd-dummy, this change looks superfluous,
+too.
 
 
 thanks,
