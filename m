@@ -2,380 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9528973D2BB
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 19:41:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC9F973D2C1
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 19:44:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbjFYRlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 13:41:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53690 "EHLO
+        id S229844AbjFYRo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 13:44:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbjFYRlG (ORCPT
+        with ESMTP id S229484AbjFYRo0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 13:41:06 -0400
-Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24AAC18F;
-        Sun, 25 Jun 2023 10:41:05 -0700 (PDT)
-Received: from fews01-sea.riseup.net (fews01-sea-pn.riseup.net [10.0.1.109])
+        Sun, 25 Jun 2023 13:44:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA3FD18E;
+        Sun, 25 Jun 2023 10:44:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx0.riseup.net (Postfix) with ESMTPS id 4Qpyv42d48z9t4T;
-        Sun, 25 Jun 2023 17:41:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1687714864; bh=I3LYfA8e9h4ijq8ca5BSc6fS1LcfpWqRIw+0+LwgaJc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=jvFzyTJ9dOPitRr4qrOlNJxketyHMMmTENCD+4XMhLm/gCue02aAVeWdWeDH6FV7k
-         64pf2om0O4sVg+8lQt9xu7aCbtIU6VAHQQAr6v1PZR6zPS2s9c5xI7ets5+IDBr5fT
-         mZ4Hp4G16eY4TuYWNLRbzdWE5XvwWW2qb4cyRwRQ=
-X-Riseup-User-ID: 3D2C24FC61F3C2B35CCC3CC9BB812BA60A21E30E071FE3CF8BB3E6B7EB634D4D
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews01-sea.riseup.net (Postfix) with ESMTPSA id 4Qpyv02DcvzJp9N;
-        Sun, 25 Jun 2023 17:41:00 +0000 (UTC)
-Message-ID: <aadd1da1-8684-ca28-a3e9-9abeaf258aff@riseup.net>
-Date:   Sun, 25 Jun 2023 14:40:55 -0300
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 740DE60B42;
+        Sun, 25 Jun 2023 17:44:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AC02C433C8;
+        Sun, 25 Jun 2023 17:44:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687715063;
+        bh=WoUrmf0JEvFfQkljC61rPZoFHAXMId+ovOZ+fz1xXRM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YP5riMELjwGif5MetoqunCE/NEQNM05SODCHCM3NP274NT5kLDkCw+lYlFK9UhEOT
+         qDLdn9rWmrAiPScC30o8bBxNq06ndu4LyRdafclIFEHnyh1dl1m6lm8HKVRj0PW8Gd
+         bS1NGRYWfoyju/EEsTN0Hfg++5BGw6JBu3tNKZMoh+4lxQ/InBdA1cnWhewfz/DpH3
+         NQvBcro2ROnD4F+sChNda583y6v06vsiiNksZdiHaJOziCCpsjvIYI5dguVCw3W8jl
+         /7gz0Aq4l2D8Ub/ROd+l5Cg2ih7cqqiikyhGIYUqney6omj2WYc5s+RTv4euyPzP/E
+         NLShZkWcrywjw==
+Date:   Sun, 25 Jun 2023 20:42:57 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Kees Cook <keescook@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Helge Deller <deller@gmx.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Kent Overstreet <kent.overstreet@linux.dev>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Puranjay Mohan <puranjay12@gmail.com>,
+        Rick P Edgecombe <rick.p.edgecombe@intel.com>,
+        "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Song Liu <song@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+        netdev@vger.kernel.org, sparclinux@vger.kernel.org,
+        the arch/x86 maintainers <x86@kernel.org>
+Subject: Re: [PATCH v2 02/12] mm: introduce execmem_text_alloc() and
+ jit_text_alloc()
+Message-ID: <20230625174257.GL52412@kernel.org>
+References: <20230616085038.4121892-1-rppt@kernel.org>
+ <20230616085038.4121892-3-rppt@kernel.org>
+ <f9a7eebe-d36e-4587-b99d-35d4edefdd14@app.fastmail.com>
+ <20230618080027.GA52412@kernel.org>
+ <a17c65c6-863f-4026-9c6f-a04b659e9ab4@app.fastmail.com>
+ <20230625161417.GK52412@kernel.org>
+ <90161ac9-3ca0-4c72-b1c4-ab1293e55445@app.fastmail.com>
 MIME-Version: 1.0
-Subject: Re: [PATCH v2 1/6] drm/vkms: Back VKMS with DRM memory management
- instead of static objects
-To:     Jim Shargo <jshargo@chromium.org>, Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Haneen Mohammed <hamohammed.sa@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Melissa Wen <melissa.srw@gmail.com>,
-        Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230623222353.97283-1-jshargo@chromium.org>
- <20230623222353.97283-2-jshargo@chromium.org>
-Content-Language: en-US
-From:   Maira Canal <mairacanal@riseup.net>
-In-Reply-To: <20230623222353.97283-2-jshargo@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <90161ac9-3ca0-4c72-b1c4-ab1293e55445@app.fastmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jim,
-
-Thanks for working on this great feature for the VKMS!
-
-On 6/23/23 19:23, Jim Shargo wrote:
-> This is a small refactor to make ConfigFS support easier. Once we
-> support ConfigFS, there can be multiple devices instantiated by the
-> driver, and so moving everything into managed memory makes things much
-> easier.
+On Sun, Jun 25, 2023 at 09:59:34AM -0700, Andy Lutomirski wrote:
 > 
-> This should be a no-op refactor.
 > 
-> Signed-off-by: Jim Shargo <jshargo@chromium.org>
-> ---
->   drivers/gpu/drm/vkms/vkms_drv.c    | 130 +++++++++++++++--------------
->   drivers/gpu/drm/vkms/vkms_drv.h    |   4 +-
->   drivers/gpu/drm/vkms/vkms_output.c |   6 +-
->   3 files changed, 72 insertions(+), 68 deletions(-)
+> On Sun, Jun 25, 2023, at 9:14 AM, Mike Rapoport wrote:
+> > On Mon, Jun 19, 2023 at 10:09:02AM -0700, Andy Lutomirski wrote:
+> >> 
+> >> On Sun, Jun 18, 2023, at 1:00 AM, Mike Rapoport wrote:
+> >> > On Sat, Jun 17, 2023 at 01:38:29PM -0700, Andy Lutomirski wrote:
+> >> >> On Fri, Jun 16, 2023, at 1:50 AM, Mike Rapoport wrote:
+> >> >> > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+> >> >> >
+> >> >> > module_alloc() is used everywhere as a mean to allocate memory for code.
+> >> >> >
+> >> >> > Beside being semantically wrong, this unnecessarily ties all subsystems
+> >> >> > that need to allocate code, such as ftrace, kprobes and BPF to modules
+> >> >> > and puts the burden of code allocation to the modules code.
+> >> >> >
+> >> >> > Several architectures override module_alloc() because of various
+> >> >> > constraints where the executable memory can be located and this causes
+> >> >> > additional obstacles for improvements of code allocation.
+> >> >> >
+> >> >> > Start splitting code allocation from modules by introducing
+> >> >> > execmem_text_alloc(), execmem_free(), jit_text_alloc(), jit_free() APIs.
+> >> >> >
+> >> >> > Initially, execmem_text_alloc() and jit_text_alloc() are wrappers for
+> >> >> > module_alloc() and execmem_free() and jit_free() are replacements of
+> >> >> > module_memfree() to allow updating all call sites to use the new APIs.
+> >> >> >
+> >> >> > The intention semantics for new allocation APIs:
+> >> >> >
+> >> >> > * execmem_text_alloc() should be used to allocate memory that must reside
+> >> >> >   close to the kernel image, like loadable kernel modules and generated
+> >> >> >   code that is restricted by relative addressing.
+> >> >> >
+> >> >> > * jit_text_alloc() should be used to allocate memory for generated code
+> >> >> >   when there are no restrictions for the code placement. For
+> >> >> >   architectures that require that any code is within certain distance
+> >> >> >   from the kernel image, jit_text_alloc() will be essentially aliased to
+> >> >> >   execmem_text_alloc().
+> >> >> >
+> >> >> 
+> >> >> Is there anything in this series to help users do the appropriate
+> >> >> synchronization when the actually populate the allocated memory with
+> >> >> code?  See here, for example:
+> >> >
+> >> > This series only factors out the executable allocations from modules and
+> >> > puts them in a central place.
+> >> > Anything else would go on top after this lands.
+> >> 
+> >> Hmm.
+> >> 
+> >> On the one hand, there's nothing wrong with factoring out common code. On
+> >> the other hand, this is probably the right time to at least start
+> >> thinking about synchronization, at least to the extent that it might make
+> >> us want to change this API.  (I'm not at all saying that this series
+> >> should require changes -- I'm just saying that this is a good time to
+> >> think about how this should work.)
+> >> 
+> >> The current APIs, *and* the proposed jit_text_alloc() API, don't actually
+> >> look like the one think in the Linux ecosystem that actually
+> >> intelligently and efficiently maps new text into an address space:
+> >> mmap().
+> >> 
+> >> On x86, you can mmap() an existing file full of executable code PROT_EXEC
+> >> and jump to it with minimal synchronization (just the standard implicit
+> >> ordering in the kernel that populates the pages before setting up the
+> >> PTEs and whatever user synchronization is needed to avoid jumping into
+> >> the mapping before mmap() finishes).  It works across CPUs, and the only
+> >> possible way userspace can screw it up (for a read-only mapping of
+> >> read-only text, anyway) is to jump to the mapping too early, in which
+> >> case userspace gets a page fault.  Incoherence is impossible, and no one
+> >> needs to "serialize" (in the SDM sense).
+> >> 
+> >> I think the same sequence (from userspace's perspective) works on other
+> >> architectures, too, although I think more cache management is needed on
+> >> the kernel's end.  As far as I know, no Linux SMP architecture needs an
+> >> IPI to map executable text into usermode, but I could easily be wrong.
+> >> (IIRC RISC-V has very developer-unfriendly icache management, but I don't
+> >> remember the details.)
+> >> 
+> >> Of course, using ptrace or any other FOLL_FORCE to modify text on x86 is
+> >> rather fraught, and I bet many things do it wrong when userspace is
+> >> multithreaded.  But not in production because it's mostly not used in
+> >> production.)
+> >> 
+> >> But jit_text_alloc() can't do this, because the order of operations
+> >> doesn't match.  With jit_text_alloc(), the executable mapping shows up
+> >> before the text is populated, so there is no atomic change from not-there
+> >> to populated-and-executable.  Which means that there is an opportunity
+> >> for CPUs, speculatively or otherwise, to start filling various caches
+> >> with intermediate states of the text, which means that various
+> >> architectures (even x86!) may need serialization.
+> >> 
+> >> For eBPF- and module- like use cases, where JITting/code gen is quite
+> >> coarse-grained, perhaps something vaguely like:
+> >> 
+> >> jit_text_alloc() -> returns a handle and an executable virtual address,
+> >> but does *not* map it there
+> >> jit_text_write() -> write to that handle
+> >> jit_text_map() -> map it and synchronize if needed (no sync needed on
+> >> x86, I think)
+> >> 
+> >> could be more efficient and/or safer.
+> >> 
+> >> (Modules could use this too.  Getting alternatives right might take some
+> >> fiddling, because off the top of my head, this doesn't match how it works
+> >> now.)
+> >> 
+> >> To make alternatives easier, this could work, maybe (haven't fully
+> >> thought it through):
+> >> 
+> >> jit_text_alloc()
+> >> jit_text_map_rw_inplace() -> map at the target address, but RW, !X
+> >> 
+> >> write the text and apply alternatives
+> >> 
+> >> jit_text_finalize() -> change from RW to RX *and synchronize*
+> >> 
+> >> jit_text_finalize() would either need to wait for RCU (possibly extra
+> >> heavy weight RCU to get "serialization") or send an IPI.
+> >
+> > This essentially how modules work now. The memory is allocated RW, written
+> > and updated with alternatives and then made ROX in the end with set_memory
+> > APIs.
+> >
+> > The issue with not having the memory mapped X when it's written is that we
+> > cannot use large pages to map it. One of the goals is to have executable
+> > memory mapped with large pages and make code allocator able to divide that
+> > page among several callers.
+> >
+> > So the idea was that jit_text_alloc() will have a cache of large pages
+> > mapped ROX, will allocate memory from those caches and there will be
+> > jit_update() that uses text poking for writing to that memory.
+> >
+> > Upon allocation of a large page to increase the cache, that large page will
+> > be "invalidated" by filling it with breakpoint instructions (e.g int3 on
+> > x86)
 > 
-> diff --git a/drivers/gpu/drm/vkms/vkms_drv.c b/drivers/gpu/drm/vkms/vkms_drv.c
-> index e3c9c9571c8d..f07454fff046 100644
-> --- a/drivers/gpu/drm/vkms/vkms_drv.c
-> +++ b/drivers/gpu/drm/vkms/vkms_drv.c
-> @@ -9,10 +9,12 @@
->    * the GPU in DRM API tests.
->    */
->   
-> +#include <linux/device.h>
->   #include <linux/module.h>
->   #include <linux/platform_device.h>
->   #include <linux/dma-mapping.h>
->   
-> +#include <drm/drm_device.h>
->   #include <drm/drm_gem.h>
->   #include <drm/drm_atomic.h>
->   #include <drm/drm_atomic_helper.h>
-> @@ -37,8 +39,6 @@
->   #define DRIVER_MAJOR	1
->   #define DRIVER_MINOR	0
->   
-> -static struct vkms_config *default_config;
-> -
->   static bool enable_cursor = true;
->   module_param_named(enable_cursor, enable_cursor, bool, 0444);
->   MODULE_PARM_DESC(enable_cursor, "Enable/Disable cursor support");
-> @@ -92,13 +92,13 @@ static void vkms_atomic_commit_tail(struct drm_atomic_state *old_state)
->   
->   static int vkms_config_show(struct seq_file *m, void *data)
->   {
-> -	struct drm_debugfs_entry *entry = m->private;
-> -	struct drm_device *dev = entry->dev;
-> -	struct vkms_device *vkmsdev = drm_device_to_vkms_device(dev);
-> +	struct drm_info_node *drm_info = m->private;
+> Is this actually valid?  In between int3 and real code, there’s a
+> potential torn read of real code mixed up with 0xcc.
+ 
+You mean while doing text poking?
 
-The VKMS already moved to the new DRM debugfs interface, there is no
-need to move back to the old interface. I believe you should keep
-using struct drm_debugfs_entry.
+> > To improve the performance of this process, we can write to !X copy and
+> > then text_poke it to the actual address in one go. This will require some
+> > changes to get the alternatives right.
+> >
+> > -- 
+> > Sincerely yours,
+> > Mike.
 
-Also, that's probably the reason why the vkms_config file is not being
-properly updated:
-
-[root@fedora ~]# modprobe vkms enable_overlay=1 enable_cursor=1 
-enable_writeback=1
-[root@fedora ~]# cd /sys/kernel/debug/dri/0
-[root@fedora 0]# cat vkms_config
-writeback=0
-cursor=0
-overlay=0
-
-> +	struct vkms_device *vkms_device =
-> +		drm_device_to_vkms_device(drm_info->minor->dev);
->   
-> -	seq_printf(m, "writeback=%d\n", vkmsdev->config->writeback);
-> -	seq_printf(m, "cursor=%d\n", vkmsdev->config->cursor);
-> -	seq_printf(m, "overlay=%d\n", vkmsdev->config->overlay);
-> +	seq_printf(m, "writeback=%d\n", vkms_device->config.writeback);
-> +	seq_printf(m, "cursor=%d\n", vkms_device->config.cursor);
-> +	seq_printf(m, "overlay=%d\n", vkms_device->config.overlay);
->   
->   	return 0;
->   }
-> @@ -155,114 +155,120 @@ static int vkms_modeset_init(struct vkms_device *vkmsdev)
->   	return vkms_output_init(vkmsdev, 0);
->   }
->   
-> -static int vkms_create(struct vkms_config *config)
-> +static int vkms_platform_probe(struct platform_device *pdev)
->   {
->   	int ret;
-> -	struct platform_device *pdev;
->   	struct vkms_device *vkms_device;
-> +	void *grp;
->   
-> -	pdev = platform_device_register_simple(DRIVER_NAME, -1, NULL, 0);
-> -	if (IS_ERR(pdev))
-> -		return PTR_ERR(pdev);
-> -
-> -	if (!devres_open_group(&pdev->dev, NULL, GFP_KERNEL)) {
-> -		ret = -ENOMEM;
-> -		goto out_unregister;
-> +	grp = devres_open_group(&pdev->dev, NULL, GFP_KERNEL);
-> +	if (!grp) {
-> +		return -ENOMEM;
->   	}
->   
->   	vkms_device = devm_drm_dev_alloc(&pdev->dev, &vkms_driver,
->   					 struct vkms_device, drm);
->   	if (IS_ERR(vkms_device)) {
->   		ret = PTR_ERR(vkms_device);
-> -		goto out_devres;
-> +		goto out_release_group;
->   	}
-> +
->   	vkms_device->platform = pdev;
-> -	vkms_device->config = config;
-> -	config->dev = vkms_device;
-> +	vkms_device->config.cursor = enable_cursor;
-> +	vkms_device->config.writeback = enable_writeback;
-> +	vkms_device->config.overlay = enable_overlay;
->   
->   	ret = dma_coerce_mask_and_coherent(vkms_device->drm.dev,
->   					   DMA_BIT_MASK(64));
-> -
->   	if (ret) {
->   		DRM_ERROR("Could not initialize DMA support\n");
-> -		goto out_devres;
-> +		goto out_release_group;
->   	}
->   
->   	ret = drm_vblank_init(&vkms_device->drm, 1);
->   	if (ret) {
->   		DRM_ERROR("Failed to vblank\n");
-> -		goto out_devres;
-> +		goto out_release_group;
->   	}
->   
->   	ret = vkms_modeset_init(vkms_device);
-> -	if (ret)
-> -		goto out_devres;
-> +	if (ret) {
-> +		DRM_ERROR("Unable to initialize modesetting\n");
-> +		goto out_release_group;
-> +	}
->   
->   	drm_debugfs_add_files(&vkms_device->drm, vkms_config_debugfs_list,
->   			      ARRAY_SIZE(vkms_config_debugfs_list));
->   
->   	ret = drm_dev_register(&vkms_device->drm, 0);
-> -	if (ret)
-> -		goto out_devres;
-> +	if (ret) {
-> +		DRM_ERROR("Unable to register device\n");
-> +		return ret;
-
-Shouldn't you go to out_release_group inside of just returning?
-
-Best Regards,
-- Maíra
-
-> +	}
->   
->   	drm_fbdev_generic_setup(&vkms_device->drm, 0);
-> +	platform_set_drvdata(pdev, vkms_device);
-> +	devres_close_group(&pdev->dev, grp);
->   
->   	return 0;
->   
-> -out_devres:
-> -	devres_release_group(&pdev->dev, NULL);
-> -out_unregister:
-> -	platform_device_unregister(pdev);
-> +out_release_group:
-> +	devres_release_group(&pdev->dev, grp);
->   	return ret;
->   }
->   
-> -static int __init vkms_init(void)
-> +static int vkms_platform_remove(struct platform_device *pdev)
->   {
-> -	int ret;
-> -	struct vkms_config *config;
-> -
-> -	config = kmalloc(sizeof(*config), GFP_KERNEL);
-> -	if (!config)
-> -		return -ENOMEM;
-> -
-> -	default_config = config;
-> +	struct vkms_device *vkms_device;
->   
-> -	config->cursor = enable_cursor;
-> -	config->writeback = enable_writeback;
-> -	config->overlay = enable_overlay;
-> +	vkms_device = platform_get_drvdata(pdev);
-> +	if (!vkms_device)
-> +		return 0;
->   
-> -	ret = vkms_create(config);
-> -	if (ret)
-> -		kfree(config);
-> -
-> -	return ret;
-> +	drm_dev_unregister(&vkms_device->drm);
-> +	drm_atomic_helper_shutdown(&vkms_device->drm);
-> +	return 0;
->   }
->   
-> -static void vkms_destroy(struct vkms_config *config)
-> +static struct platform_driver vkms_platform_driver = {
-> +	.probe = vkms_platform_probe,
-> +	.remove = vkms_platform_remove,
-> +	.driver.name = DRIVER_NAME,
-> +};
-> +
-> +static int __init vkms_init(void)
->   {
-> +	int ret;
->   	struct platform_device *pdev;
->   
-> -	if (!config->dev) {
-> -		DRM_INFO("vkms_device is NULL.\n");
-> -		return;
-> +	ret = platform_driver_register(&vkms_platform_driver);
-> +	if (ret) {
-> +		DRM_ERROR("Unable to register platform driver\n");
-> +		return ret;
->   	}
->   
-> -	pdev = config->dev->platform;
-> -
-> -	drm_dev_unregister(&config->dev->drm);
-> -	drm_atomic_helper_shutdown(&config->dev->drm);
-> -	devres_release_group(&pdev->dev, NULL);
-> -	platform_device_unregister(pdev);
-> +	pdev = platform_device_register_simple(DRIVER_NAME, -1, NULL, 0);
-> +	if (IS_ERR(pdev)) {
-> +		platform_driver_unregister(&vkms_platform_driver);
-> +		return PTR_ERR(pdev);
-> +	}
->   
-> -	config->dev = NULL;
-> +	return 0;
->   }
->   
->   static void __exit vkms_exit(void)
->   {
-> -	if (default_config->dev)
-> -		vkms_destroy(default_config);
-> +	struct device *dev;
-> +
-> +	while ((dev = platform_find_device_by_driver(
-> +			NULL, &vkms_platform_driver.driver))) {
-> +		// platform_find_device_by_driver increments the refcount. Drop
-> +		// it so we don't leak memory.
-> +		put_device(dev);
-> +		platform_device_unregister(to_platform_device(dev));
-> +	}
->   
-> -	kfree(default_config);
-> +	platform_driver_unregister(&vkms_platform_driver);
->   }
->   
->   module_init(vkms_init);
-> diff --git a/drivers/gpu/drm/vkms/vkms_drv.h b/drivers/gpu/drm/vkms/vkms_drv.h
-> index 5f1a0a44a78c..e87c8aea6fb3 100644
-> --- a/drivers/gpu/drm/vkms/vkms_drv.h
-> +++ b/drivers/gpu/drm/vkms/vkms_drv.h
-> @@ -114,15 +114,13 @@ struct vkms_config {
->   	bool writeback;
->   	bool cursor;
->   	bool overlay;
-> -	/* only set when instantiated */
-> -	struct vkms_device *dev;
->   };
->   
->   struct vkms_device {
->   	struct drm_device drm;
->   	struct platform_device *platform;
->   	struct vkms_output output;
-> -	const struct vkms_config *config;
-> +	struct vkms_config config;
->   };
->   
->   #define drm_crtc_to_vkms_output(target) \
-> diff --git a/drivers/gpu/drm/vkms/vkms_output.c b/drivers/gpu/drm/vkms/vkms_output.c
-> index 5ce70dd946aa..963a64cf068b 100644
-> --- a/drivers/gpu/drm/vkms/vkms_output.c
-> +++ b/drivers/gpu/drm/vkms/vkms_output.c
-> @@ -62,7 +62,7 @@ int vkms_output_init(struct vkms_device *vkmsdev, int index)
->   	if (IS_ERR(primary))
->   		return PTR_ERR(primary);
->   
-> -	if (vkmsdev->config->overlay) {
-> +	if (vkmsdev->config.overlay) {
->   		for (n = 0; n < NUM_OVERLAY_PLANES; n++) {
->   			ret = vkms_add_overlay_plane(vkmsdev, index, crtc);
->   			if (ret)
-> @@ -70,7 +70,7 @@ int vkms_output_init(struct vkms_device *vkmsdev, int index)
->   		}
->   	}
->   
-> -	if (vkmsdev->config->cursor) {
-> +	if (vkmsdev->config.cursor) {
->   		cursor = vkms_plane_init(vkmsdev, DRM_PLANE_TYPE_CURSOR, index);
->   		if (IS_ERR(cursor))
->   			return PTR_ERR(cursor);
-> @@ -103,7 +103,7 @@ int vkms_output_init(struct vkms_device *vkmsdev, int index)
->   		goto err_attach;
->   	}
->   
-> -	if (vkmsdev->config->writeback) {
-> +	if (vkmsdev->config.writeback) {
->   		writeback = vkms_enable_writeback_connector(vkmsdev);
->   		if (writeback)
->   			DRM_ERROR("Failed to init writeback connector\n");
+-- 
+Sincerely yours,
+Mike.
