@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5421073D545
+	by mail.lfdr.de (Postfix) with ESMTP id 9BF3573D546
 	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 01:20:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229904AbjFYXUc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 19:20:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36044 "EHLO
+        id S229880AbjFYXU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 19:20:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbjFYXU1 (ORCPT
+        with ESMTP id S229597AbjFYXU1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 25 Jun 2023 19:20:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F1F8E4E
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 16:20:25 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF768E47;
+        Sun, 25 Jun 2023 16:20:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 88C9760C56
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 23:20:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E3217C433CD;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6FAA960C51;
+        Sun, 25 Jun 2023 23:20:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C3437C433C0;
         Sun, 25 Jun 2023 23:20:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687735224;
-        bh=i5xRLAe5dg791RInG06iVVdKNk+C04r6Q3jjBplkE7g=;
+        s=k20201202; t=1687735223;
+        bh=9T9wbf7SB0laUWaTFhRmYXAuMcUBhfaXs+Wo6X0IGHk=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=KqZV83V7MkY57HGYdKzKvFoB7+9DQ011FaJH5XFY6q/Xa9t69E5EUX//3vmNPnnbK
-         SywtzZnLthOoWD+rpUFLVi4vE1nqAOf6TMeZ9i0QD7XinCMeVHD38xv2dLQrb6W2zX
-         I0tAE8jdg6qH2iAh5+TQJw+MKVvf5r/oSSyLaJZueT+G3PiA5eVYS/Hw/1MbG7JjqS
-         UhqWnPv+pDjP8tD9WLrksPRaaCVUJvVMNs770xmGVDP2WN0m4bsHYbFBy1XfMycNka
-         Qr0n3SYJtq9tMrGnN+zz3nuhGRrRCBIBxqSeL0QJq7BE69PksXGphOkYTeEihneedT
-         4w0Qj3I7XgTfg==
+        b=rgGRKrggNqFKiwwh39BQt9eFyMXiDMmWBnl8PRdiLjd10/XIEhNGqK+xQfs+QRDB0
+         DWl4HXyg/jrhe/qHpnmIiSxMd6/gQBoD/do6ahDRsKx2nu2EDNbZhVUOGczllL5VS3
+         9IprX8JT2thDPbhrwsDO7g0/IP1pZFNvKn6uFZgfLyrjbRTrRQ6u/k7rEauEkBhCaY
+         vMJ2bOqAJdVqNzf0chE6ia+LG68sI+mv+QIArhZLp9+LysV95kwDDB0G/g8RdmsZWn
+         PitAgCmYme1QUcZhhdonFBsHDJB5ue9Cg2ttyBlO9U+7z3lD0IWW78xooMjPVaHfwM
+         00Mg/D/GkXOwA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CA37CC43157;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A5C9EE26D3F;
         Sun, 25 Jun 2023 23:20:23 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v3 1/1] perf: RISC-V: Limit the number of counters returned
- from SBI
+Subject: Re: [PATCH -next V13 0/3] riscv: Add independent irq/softirq stacks
+ support
 From:   patchwork-bot+linux-riscv@kernel.org
-Message-Id: <168773522382.24181.12828652442172753351.git-patchwork-notify@kernel.org>
+Message-Id: <168773522366.24181.11030375429651091401.git-patchwork-notify@kernel.org>
 Date:   Sun, 25 Jun 2023 23:20:23 +0000
-References: <20230505072058.1049732-1-v.v.mitrofanov@yadro.com>
-In-Reply-To: <20230505072058.1049732-1-v.v.mitrofanov@yadro.com>
-To:     Viacheslav Mitrofanov <v.v.mitrofanov@yadro.com>
-Cc:     linux-riscv@lists.infradead.org, linux@yadro.com,
-        ajones@ventanamicro.com, atishp@rivosinc.com,
-        atishp@atishpatra.org, anup@brainfault.org, will@kernel.org,
-        mark.rutland@arm.com, paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+References: <20230614013018.2168426-1-guoren@kernel.org>
+In-Reply-To: <20230614013018.2168426-1-guoren@kernel.org>
+To:     Guo Ren <guoren@kernel.org>
+Cc:     linux-riscv@lists.infradead.org, arnd@arndb.de,
+        palmer@rivosinc.com, conor.dooley@microchip.com, heiko@sntech.de,
+        jszhang@kernel.org, bjorn@kernel.org, cleger@rivosinc.com,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        guoren@linux.alibaba.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,24 +64,28 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hello:
 
-This patch was applied to riscv/linux.git (for-next)
+This series was applied to riscv/linux.git (for-next)
 by Palmer Dabbelt <palmer@rivosinc.com>:
 
-On Fri, 5 May 2023 07:20:57 +0000 you wrote:
-> Perf gets the number of supported counters from SBI. If it happens that
-> the number of returned counters more than RISCV_MAX_COUNTERS the code
-> trusts it. It does not lead to an immediate problem but can potentially
-> lead to it. Prevent getting more than RISCV_MAX_COUNTERS from SBI.
+On Tue, 13 Jun 2023 21:30:15 -0400 you wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
 > 
-> Signed-off-by: Viacheslav Mitrofanov <v.v.mitrofanov@yadro.com>
-> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-> Reviewed-by: Atish Patra <atishp@rivosinc.com>
+> This patch series adds independent irq/softirq stacks to decrease the
+> press of the thread stack. Also, add a thread STACK_SIZE config for
+> users to adjust the proper size during compile time.
+> 
+> This patch series belonged to the generic entry, which has been merged
+> to for-next now.
 > 
 > [...]
 
 Here is the summary with links:
-  - [v3,1/1] perf: RISC-V: Limit the number of counters returned from SBI
-    https://git.kernel.org/riscv/c/ee95b88d71b9
+  - [-next,V13,1/3] riscv: stack: Support HAVE_IRQ_EXIT_ON_IRQ_STACK
+    https://git.kernel.org/riscv/c/163e76cc6ef4
+  - [-next,V13,2/3] riscv: stack: Support HAVE_SOFTIRQ_ON_OWN_STACK
+    https://git.kernel.org/riscv/c/dd69d07a5a6c
+  - [-next,V13,3/3] riscv: stack: Add config of thread stack size
+    https://git.kernel.org/riscv/c/a7555f6b62e7
 
 You are awesome, thank you!
 -- 
