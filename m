@@ -2,122 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3001C73D442
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 22:57:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 584B173D446
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 23:00:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229731AbjFYU5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 16:57:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40070 "EHLO
+        id S229980AbjFYVAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 17:00:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjFYU5K (ORCPT
+        with ESMTP id S229510AbjFYVAU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 16:57:10 -0400
-Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6633126;
-        Sun, 25 Jun 2023 13:57:08 -0700 (PDT)
+        Sun, 25 Jun 2023 17:00:20 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF70126;
+        Sun, 25 Jun 2023 14:00:19 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-9786fc23505so200885466b.2;
+        Sun, 25 Jun 2023 14:00:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=PcY9A9k+lzgcjaXAaUSzbrsIGgZvXGyJoIo17mx849A=;
-  b=jE9z5MBV4RruP5dTjzHAhdBF5Mf/Wg7a5tyjr4DzuMOn9+6+VMrVd+YQ
-   IDcaY+NHhlCOc2Zn6jW7+Z6fV2Z3/DfLjcR1qD8EPGfo9WEpZ184cdGSB
-   B4vFj4o5XhFa0JFXZA8a1IYlk7IJ0GX6Y7Q+sqPZK4fUnImnftWcz8r1z
-   0=;
-Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="6.01,158,1684792800"; 
-   d="scan'208";a="114549485"
-Received: from 231.85.89.92.rev.sfr.net (HELO hadrien) ([92.89.85.231])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2023 22:57:06 +0200
-Date:   Sun, 25 Jun 2023 22:57:06 +0200 (CEST)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-cc:     Jakub Kicinski <kuba@kernel.org>,
-        Veerasenareddy Burru <vburru@marvell.com>,
-        keescook@chromium.org, kernel-janitors@vger.kernel.org,
-        Abhijit Ayarekar <aayarekar@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, corbet@lwn.net
-Subject: Re: [PATCH 02/26] octeon_ep: use array_size
-In-Reply-To: <36d9998f-e8b1-58cb-9b0a-97273b5eb91b@wanadoo.fr>
-Message-ID: <alpine.DEB.2.22.394.2306252256520.3022@hadrien>
-References: <20230623211457.102544-1-Julia.Lawall@inria.fr> <20230623211457.102544-3-Julia.Lawall@inria.fr> <20230624152826.10e3789b@kernel.org> <beb409e3-0c13-b817-dfa3-15792a341130@wanadoo.fr> <alpine.DEB.2.22.394.2306252221310.3022@hadrien>
- <36d9998f-e8b1-58cb-9b0a-97273b5eb91b@wanadoo.fr>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        d=googlemail.com; s=20221208; t=1687726817; x=1690318817;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4mJUkbQQcqyDE53aw5MOHAc9VhtcEJr6twJXYLB90jk=;
+        b=A7qCeuCgKbtFEgGis1t2x/ErDOE+chG5xjp1mHsbD8UxcMKWjdXBegYJqsorobez3i
+         A+P8dZby0eKzlFX25d47RbP/qssp4hyO+4oNOV/c4McI9RAgIvEe0hUWXba/q2dIhN5G
+         6yxnSANBsC8Qva4NZLVyvvnsk+Ks5/50zA6nQSYOJkr/++RHIUi7Tha0uWQ7kSar1xwG
+         hoqNMpYpQsH7rGKwcXtRqnxWTvTCdWYkM/y6r8WSVAjNMk4Q6pblTz9SrJ1RqwEJ7SWV
+         9iJp6Zu+ZvUGorur+Hxo1mDm190O7XE1bPza8P27zKW5NWUIaz6jkLgxJS4c1LuNR7fG
+         8vaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687726817; x=1690318817;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4mJUkbQQcqyDE53aw5MOHAc9VhtcEJr6twJXYLB90jk=;
+        b=TAb2DkGkEERQOaBCtcg6AcTQ6fQ1mDOaOK8I8EREqglCHHaG9LOxQummwCpYnIvaQF
+         3GMmBZsQ5Ny4ZoRRST2P7Zwnr6sceV7hVBAwZoLYnbLopd8JHGZwTMYC26nmgrqC8PCD
+         uzdMQ7dqaS9CUYd6u/PKqe3S5Nt9fwcrRBzG06Oo4nkEmVp5AMsRb2dKR4WcmMusJ6K8
+         iyEBs1RqaFg8mFXOqjNJOJBBqNEk7LNSAH+xkSsdCkux5WtiiSkVrfgVbBv1btNvElYf
+         UKg7r/hJtwobws46pODbTxrLzRp5UMmFTkKzyW+Z2p/Mxyykiojmj+KXAP9OIlxVCCiY
+         U1FQ==
+X-Gm-Message-State: AC+VfDzLB5Vy7FkEoeVeBS/qrq5vUrZGnOMTq7ge7Amu3p3R6PoqAbnR
+        69cle4fXahc0nRBlf44fK8/C1u4nQ6gDppFWh2Q=
+X-Google-Smtp-Source: ACHHUZ5yBmQinkSkuUlSQyLq8I7zzsqf8l+oBnyvl4CQafqwz9rPZS23Crq7w+vxpQEf+q2F4xwNtxGw+RdXfwGDVss=
+X-Received: by 2002:a17:907:a06f:b0:98f:5640:16a with SMTP id
+ ia15-20020a170907a06f00b0098f5640016amr1168601ejc.53.1687726817451; Sun, 25
+ Jun 2023 14:00:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1352714705-1687726626=:3022"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230607201641.20982-1-ddrokosov@sberdevices.ru> <20230607201641.20982-2-ddrokosov@sberdevices.ru>
+In-Reply-To: <20230607201641.20982-2-ddrokosov@sberdevices.ru>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Sun, 25 Jun 2023 23:00:06 +0200
+Message-ID: <CAFBinCAO14zcgY66UyJO9UxuCWf1N-Lsx=iYNTJL=cwXoJv__Q@mail.gmail.com>
+Subject: Re: [PATCH v1 1/6] arm64: dts: meson: a1: introduce PLL and
+ Peripherals clk controllers
+To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Cc:     neil.armstrong@linaro.org, jbrunet@baylibre.com,
+        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, khilman@baylibre.com,
+        conor+dt@kernel.org, kernel@sberdevices.ru,
+        sdfw_system_team@sberdevices.ru, rockosov@gmail.com,
+        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-1352714705-1687726626=:3022
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-
-
-
-On Sun, 25 Jun 2023, Christophe JAILLET wrote:
-
-> Le 25/06/2023 à 22:25, Julia Lawall a écrit :
-> >
-> >
-> > On Sun, 25 Jun 2023, Christophe JAILLET wrote:
-> >
-> > > Le 25/06/2023 à 00:28, Jakub Kicinski a écrit :
-> > > > On Fri, 23 Jun 2023 23:14:33 +0200 Julia Lawall wrote:
-> > > > > -	oq->buff_info = vzalloc(oq->max_count *
-> > > > > OCTEP_OQ_RECVBUF_SIZE);
-> > > > > +	oq->buff_info = vzalloc(array_size(oq->max_count,
-> > > > > OCTEP_OQ_RECVBUF_SIZE));
-> > > >
-> > > > vcalloc seems to exist, is there a reason array_size() is preferred?
-> > >
-> > > Hi,
-> > >
-> > > just for your information, I've just sent [1].
-> > >
-> > > CJ
-> > >
-> > > [1]:
-> > > https://lore.kernel.org/all/3484e46180dd2cf05d993ff1a78b481bc2ad1f71.1687723931.git.christophe.jaillet@wanadoo.fr/
-> >
-> > For some reason, I have only received Christophe's mail, not Jakub's...
-> >
-> > In any case, thanks for pointing out the existence of these functions.  I
-> > just redid what Kees did in 2018, when I guess these functions didn't
-> > exist.  I will look more carefully to see what functions are now available
-> > and resend the whole thing.
+On Wed, Jun 7, 2023 at 10:16=E2=80=AFPM Dmitry Rokosov <ddrokosov@sberdevic=
+es.ru> wrote:
 >
-> Hi,
+> This patch adds clkc and clkc_pll dts nodes to A1 SoC main dtsi.
+> The first one clk controller is responsible for all SoC peripherals
+> clocks excluding audio clocks. The second one clk controller is used by
+> A1 SoC PLLs. Actually, there are two different APB heads, so we have two
+> different drivers.
 >
-> should you want to go 1 step further and simplify some code:
+> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> ---
+>  arch/arm64/boot/dts/amlogic/meson-a1.dtsi | 26 +++++++++++++++++++++++
+>  1 file changed, 26 insertions(+)
 >
-> git grep v[mz]alloc.*array_size\( | wc -l
-> 174
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi b/arch/arm64/boot/=
+dts/amlogic/meson-a1.dtsi
+> index eed96f262844..a24228808c9c 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+> +++ b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+> @@ -6,6 +6,8 @@
+>  #include <dt-bindings/interrupt-controller/irq.h>
+>  #include <dt-bindings/interrupt-controller/arm-gic.h>
+>  #include <dt-bindings/gpio/meson-a1-gpio.h>
+> +#include <dt-bindings/clock/amlogic,a1-pll-clkc.h>
+> +#include <dt-bindings/clock/amlogic,a1-peripherals-clkc.h>
+>
+>  / {
+>         compatible =3D "amlogic,a1";
+> @@ -126,6 +128,30 @@ uart_AO_B: serial@2000 {
+>                                 status =3D "disabled";
+>                         };
+>
+> +                       clkc_periphs: clock-controller@800 {
+please keep the entries sorted - so &clkc_periphs should come after
+&periphs_pinctrl
 
-Yes, thanks for the suggestion.
+> +                               compatible =3D "amlogic,a1-peripherals-cl=
+kc";
+> +                               reg =3D <0 0x800 0 0x104>;
+> +                               #clock-cells =3D <1>;
+> +                               clocks =3D <&clkc_pll CLKID_FCLK_DIV2>,
+> +                                        <&clkc_pll CLKID_FCLK_DIV3>,
+> +                                        <&clkc_pll CLKID_FCLK_DIV5>,
+> +                                        <&clkc_pll CLKID_FCLK_DIV7>,
+> +                                        <&clkc_pll CLKID_HIFI_PLL>,
+> +                                        <&xtal>;
+> +                               clock-names =3D "fclk_div2", "fclk_div3",
+> +                                             "fclk_div5", "fclk_div7",
+> +                                             "hifi_pll", "xtal";
+> +                       };
+[...]
 
-julia
+>                         gpio_intc: interrupt-controller@0440 {
+note to self: at some point we'll have to re-order &gpio_intc, but
+that's out of scope for this patch
 
->
-> CJ
->
-> >
-> > Thanks!
-> >
-> > julia
->
->
---8323329-1352714705-1687726626=:3022--
+
+Best regards,
+Martin
