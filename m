@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2773673D472
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 23:25:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0440F73D47A
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 23:28:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230052AbjFYVZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 17:25:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46468 "EHLO
+        id S229724AbjFYV14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 17:27:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229698AbjFYVZw (ORCPT
+        with ESMTP id S229623AbjFYV1t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 17:25:52 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A8AC137
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 14:25:50 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f90a7325f6so33696795e9.3
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 14:25:50 -0700 (PDT)
+        Sun, 25 Jun 2023 17:27:49 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F31C193
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 14:27:48 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-3128fcd58f3so3194612f8f.1
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 14:27:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687728349; x=1690320349;
+        d=linaro.org; s=google; t=1687728466; x=1690320466;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=UdnZaaLPu+ki2Fnpi7gIMqnleR/1nTSrgsUBiU7raqs=;
-        b=AuZzlwnDYmnmOftfy2wrafOBFbb56vCejuD34y8KcPpleFcFuezxpyFWOSjhuZxkPS
-         zeSfG2w0XrIPV1KdHWQokPQ1jXghjl2vrhRRAbTkOmBPev2Y+nWRI/biFzHZ3hCMQ7tM
-         p/FzxBnXFDBpB8MHCj2WU/UolKd4/Vvmjvp6o4dVorfVmDfRaxfNR+qA9bNx0Pj9YdH1
-         aTtZEM3RJSnIyZi4R338cGts/EylYRAl+/bJngdYtZ+oY5xIw7Y0hDIrOVdqWfMpTeqN
-         /SK8Y+WrVYilXjqF3JrwO8FslIckA2qun1P1rq5RIx075Bn9K14LU4ka2oAd4GBp7mSP
-         lYow==
+        bh=75eDqtaV4HxjbOY0L3WJNiE0VV9dzyg9cgqtVXJznBY=;
+        b=P4OMFY0E+kb5eR0W9Y6kEgLPJuc6u7faK0X1O+XQGbwqlajdF/jfFWAcx8BRjDqGzO
+         mh6gHGoaEUDX+sh3nKQRSDJ7HA0jh2sHDYtRXrtRDSCN3zTIndInhtFLLYMRLTUVyOKS
+         YpCq/XTlPUo+K6NWRXFBXfXuAiMnnc5n0pIhRCxDVLvmATOI8nFzSZ2lOhnffLdUEmwd
+         VeArt9sQbwQphWxkK4kf1essGtLoTUS/ckhnahsuy5pt7r3o+oJjlr5xYi1q+x0YAcvy
+         jUeA3jWRJo1IshymxkGUWJrB/2Mitej5Iu/x3GJN9KZtlWpfpaIlbv4Lf+DJiRh45Kkw
+         WFWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687728349; x=1690320349;
+        d=1e100.net; s=20221208; t=1687728466; x=1690320466;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UdnZaaLPu+ki2Fnpi7gIMqnleR/1nTSrgsUBiU7raqs=;
-        b=eSH1Yo0HBcGQUKWIp3xbm5bU0szERZ9pAxk62qxnIyHr/JnxlsrWdFxh9Hy/k4+wkc
-         lSR6+MQjRaxum5G8NuqrXscocZubFRFHQwLI6mPeR7THjnV4R4aui/d7pI5h2/HXcZ2j
-         Sj1Kx/CkPmOT9OmRK5Ne5uEzB9jgAwly+4a1vh99Z3itnfzwu/IjB0wso/etJP+Jcj3Q
-         JXMDt6N6tNxRz9XE7c2LORFoUHkHKt7ejlV8fAOFTeMv6qfkliUSRh1n7mKDh9GiOmW/
-         P4rdxGxaMynn3ew0MKkEF391vToX8Ck0r5NlQn7iA5CnByaJu2WfoZqgVnMYx/lKOsa7
-         VsIw==
-X-Gm-Message-State: AC+VfDwJjMiA7to81Rrbxk/Kp+lNz2xOx073c61ZaSgIL76wPQ7/duCu
-        AY/K5nj0P7JGA929xA+DMPOtMQ==
-X-Google-Smtp-Source: ACHHUZ55uWsoV2hbUGeBFvfsxWLvpqQwxIsiqcLZylUM/E4cjFWcT0Stb/ufsPS5kTWtMBzw9AQ43Q==
-X-Received: by 2002:a1c:4b16:0:b0:3fa:8475:bce1 with SMTP id y22-20020a1c4b16000000b003fa8475bce1mr3968019wma.4.1687728349062;
-        Sun, 25 Jun 2023 14:25:49 -0700 (PDT)
+        bh=75eDqtaV4HxjbOY0L3WJNiE0VV9dzyg9cgqtVXJznBY=;
+        b=Zwb5ligc5/5j912pDieUv1uDshMhNiYkqe1FKAP+8x3qJQ5mOxDUTRo7B505SSuAGg
+         5DUmmYc4pB+yjJRK0IjIeU3r6qeHoxH6G+LY0OvMT1DkFN2BVdiAI2O93M5lJrHkEyGz
+         DLc/96Fhe0R3sPdb6SOLLrZbdxmQTtUCvxiwZDomMrnTePG26+NaLT1Kb8Bfsh77lNbY
+         jlaVc3rthMky/BZ85rB38XZ/1pvfaOpLXzB+BXODdBEkHHce4mglMgC0zHoPgBM5NuKp
+         kvF4IH/t3oagzGJ0MamAXLwG9VHYtuU0NzUZ+auUcgfzlsXZSmx3NXGTDLSltmMFF8/n
+         mwhQ==
+X-Gm-Message-State: AC+VfDyTppR3NELSygAu0SRjM3A5zZawCTF8EvgzerdRZKsNqnkx81YQ
+        sOf0Bt6Vx0erTbCqgqldKYbZkU7A6eUttWwOoB8=
+X-Google-Smtp-Source: ACHHUZ6Hjasu9Lrk/CatQAEzcCmcG0JhA1BO0YkpChmI4xEA5JcA/nNpFTMJqb3YFVfr7dLSsRzufQ==
+X-Received: by 2002:a5d:474f:0:b0:313:f07b:8027 with SMTP id o15-20020a5d474f000000b00313f07b8027mr1072096wrs.36.1687728466257;
+        Sun, 25 Jun 2023 14:27:46 -0700 (PDT)
 Received: from [192.168.69.115] ([176.187.212.184])
-        by smtp.gmail.com with ESMTPSA id c13-20020a7bc00d000000b003f735ba7736sm5718246wmb.46.2023.06.25.14.25.44
+        by smtp.gmail.com with ESMTPSA id r13-20020adfe68d000000b0030fb4b55c13sm5420254wrm.96.2023.06.25.14.27.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 25 Jun 2023 14:25:48 -0700 (PDT)
-Message-ID: <db27d890-9c2c-8ec8-0d88-62b9172893ae@linaro.org>
-Date:   Sun, 25 Jun 2023 23:25:44 +0200
+        Sun, 25 Jun 2023 14:27:45 -0700 (PDT)
+Message-ID: <9c362e4f-ba40-02a6-fb22-aed6598ec536@linaro.org>
+Date:   Sun, 25 Jun 2023 23:27:40 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
  Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [patch 07/17] mips/cpu: Switch to arch_cpu_finalize_init()
+Subject: Re: [patch 03/17] ARM: cpu: Switch to arch_cpu_finalize_init()
 Content-Language: en-US
 To:     Thomas Gleixner <tglx@linutronix.de>,
         LKML <linux-kernel@vger.kernel.org>
@@ -63,13 +63,14 @@ Cc:     x86@kernel.org, Linus Torvalds <torvalds@linux-foundation.org>,
         Nikolay Borisov <nik.borisov@suse.com>,
         "Ahmed S. Darwish" <darwi@linutronix.de>,
         Arnd Bergmann <arnd@arndb.de>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
+        Russell King <linux@armlinux.org.uk>,
         linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
         Huacai Chen <chenhuacai@kernel.org>,
         WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
         Geert Uytterhoeven <geert@linux-m68k.org>,
         linux-m68k@lists.linux-m68k.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
         Yoshinori Sato <ysato@users.sourceforge.jp>,
         Rich Felker <dalias@libc.org>,
         John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
@@ -84,9 +85,9 @@ Cc:     x86@kernel.org, Linus Torvalds <torvalds@linux-foundation.org>,
         Chris Zankel <chris@zankel.net>,
         Tom Lendacky <thomas.lendacky@amd.com>
 References: <20230613223827.532680283@linutronix.de>
- <20230613224545.312438573@linutronix.de>
+ <20230613224545.078124882@linutronix.de>
 From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20230613224545.312438573@linutronix.de>
+In-Reply-To: <20230613224545.078124882@linutronix.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -106,13 +107,14 @@ On 14/6/23 01:39, Thomas Gleixner wrote:
 > No functional change.
 > 
 > Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: linux-mips@vger.kernel.org
+> Cc: Russell King <linux@armlinux.org.uk>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: linux-arm-kernel@lists.infradead.org
 > ---
->   arch/mips/Kconfig            |    1 +
->   arch/mips/include/asm/bugs.h |   17 -----------------
->   arch/mips/kernel/setup.c     |   13 +++++++++++++
->   3 files changed, 14 insertions(+), 17 deletions(-)
+>   arch/arm/Kconfig            |    1 +
+>   arch/arm/include/asm/bugs.h |    4 ----
+>   arch/arm/kernel/bugs.c      |    3 ++-
+>   3 files changed, 3 insertions(+), 5 deletions(-)
 
 Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 
