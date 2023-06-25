@@ -2,60 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C67AF73CEBE
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 08:45:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C255073CEC2
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 08:47:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230235AbjFYGpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 02:45:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39372 "EHLO
+        id S230363AbjFYGqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 02:46:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbjFYGpL (ORCPT
+        with ESMTP id S229611AbjFYGqr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 02:45:11 -0400
+        Sun, 25 Jun 2023 02:46:47 -0400
 Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63433E4F;
-        Sat, 24 Jun 2023 23:45:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F1BFE50;
+        Sat, 24 Jun 2023 23:46:46 -0700 (PDT)
 Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QphL35JD5z4f3xbl;
-        Sun, 25 Jun 2023 14:44:59 +0800 (CST)
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QphN25P0zz4f3lDN;
+        Sun, 25 Jun 2023 14:46:42 +0800 (CST)
 Received: from [10.174.179.247] (unknown [10.174.179.247])
-        by APP4 (Coremail) with SMTP id gCh0CgCX_7Jq4pdkr3_yMQ--.45962S3;
-        Sun, 25 Jun 2023 14:45:00 +0800 (CST)
-Message-ID: <adbdea88-2da6-e3c7-cb86-e75995e550f3@huaweicloud.com>
-Date:   Sun, 25 Jun 2023 14:44:58 +0800
+        by APP4 (Coremail) with SMTP id gCh0CgA34qXS4pdkS5fyMQ--.41998S3;
+        Sun, 25 Jun 2023 14:46:43 +0800 (CST)
+Message-ID: <06f8c00f-d6a3-f93b-0db7-b89a3f49d91e@huaweicloud.com>
+Date:   Sun, 25 Jun 2023 14:46:42 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH 1/3] md/raid10: optimize fix_read_error
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     song@kernel.org, linux-raid@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linan122@huawei.com,
-        yukuai3@huawei.com, yi.zhang@huawei.com, houtao1@huawei.com,
-        yangerkun@huawei.com
-References: <20230623173236.2513554-1-linan666@huaweicloud.com>
- <20230623173236.2513554-2-linan666@huaweicloud.com>
- <d1778341-549e-6f88-0282-3096bfcd6614@molgen.mpg.de>
+Subject: Re: [PATCH] md/raid1: prioritize adding disk to 'removed' mirror
+To:     Yu Kuai <yukuai1@huaweicloud.com>, song@kernel.org
+Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linan122@huawei.com, yi.zhang@huawei.com, houtao1@huawei.com,
+        yangerkun@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
+References: <20230623172525.2513235-1-linan666@huaweicloud.com>
+ <d02d4a53-84ed-cb65-b0d8-2a199bc068cd@huaweicloud.com>
 From:   Li Nan <linan666@huaweicloud.com>
-In-Reply-To: <d1778341-549e-6f88-0282-3096bfcd6614@molgen.mpg.de>
+In-Reply-To: <d02d4a53-84ed-cb65-b0d8-2a199bc068cd@huaweicloud.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgCX_7Jq4pdkr3_yMQ--.45962S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7GF45XrWDWr4DGrWfCw15Jwb_yoW8Jr15p3
-        ykt3WYy34DGF13Cr1xArs8J34jq3s3KFW7CF10g3WDuw1DK34aqF4Igr15Wr92krn2g347
-        Xay5Zws7Zas5KaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvYb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487
-        Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aV
-        AFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xF
-        o4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
-        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-        0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v2
-        6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07
-        UCXd8UUUUU=
+X-CM-TRANSID: gCh0CgA34qXS4pdkS5fyMQ--.41998S3
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY67AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
+        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
+        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8I
+        cVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87
+        Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvE
+        ncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I
+        8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lF7I21c0E
+        jII2zVCS5cI20VAGYxC7Mxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I
+        8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AK
+        xVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcV
+        AFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8I
+        cIk0rVW3JVWrJr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxV
+        W8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VU1c4S5UUUUU==
 X-CM-SenderInfo: polqt0awwwqx5xdzvxpfor3voofrz/
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
@@ -69,43 +65,23 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-在 2023/6/23 18:03, Paul Menzel 写道:
-> Dear Li,
+在 2023/6/25 10:06, Yu Kuai 写道:
+> Hi,
 > 
-> 
-> Thank you for your patch.
-> 
-> Am 23.06.23 um 19:32 schrieb linan666@huaweicloud.com:
+> 在 2023/06/24 1:25, linan666@huaweicloud.com 写道:
 >> From: Li Nan <linan122@huawei.com>
 >>
->> We dereference r10_bio->read_slot too many times in fix_read_error().
->> Optimize it by using a variable to store read_slot.
+>> New disk should be added to "removed" position first instead of to be a
+>> replacement. Commit 6090368abcb4 ("md/raid10: prioritize adding disk to
+>> 'removed' mirror") has fixed this issue for raid10. This patch fixes 
+>> raid1.
 > 
-> I am always cautious reading about optimizations without any benchmarks 
-> or object code analysis. Although your explanation makes sense, did you 
-> check, that performance didn’t decrease in some way? (Maybe the compiler 
-> even generates the same code.)
+> This commit message "This patch ..." shound use imperative mood, other
+> than that, this patch LGTM.
 > 
-> 
-> Kind regards,
-> 
-> Paul
-> 
-> 
+> Reviewed-by: Yu Kuai <yukuai3@huawei.com>
 
-Compared assembly code before and after optimization:
-  - With gcc 8.3.0, both are consistent.
-  - With gcc 12.2.1, 'r10_bio->read_slot' mostly uses r10bio dirctly:
-      2853    while (sl != r10_bio->read_slot) {
-        0xffffffff8213f2a0 <+1328>:  cmp    %r14d,0x38(%rbp)
-
-    'slot' is mostly saved to a register individually:
-      2819    while (sl != slot) {
-        0xffffffff8213f08a <+794>:   cmp    %r14d,%ebx
-
-I have not tested the performance, and it won't bring significant 
-performance optimization, which can also be seen from the analysis of 
-the assembly code. In fact, I just want to make code more readable.
+OK, I will change it. Thanks for your review.
 
 -- 
 Thanks,
