@@ -2,87 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A55373D2A7
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 19:09:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56DFD73D2A9
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 19:12:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229591AbjFYRJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 13:09:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47996 "EHLO
+        id S229689AbjFYRM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 13:12:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjFYRJq (ORCPT
+        with ESMTP id S229446AbjFYRMZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 13:09:46 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C2F2100
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 10:09:45 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-98e1b1d1698so126628466b.2
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 10:09:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1687712983; x=1690304983;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=/Jw6qaPWuA27aPchL3/WJhyWv6Gf8Myv0Ya6jO1rjVM=;
-        b=N5LeUsXoSMuKK6cCsGwPTbLWZsO56nR2QqYv8oK7u695/YO/0O6S96wDhrW3+3ZRLi
-         +cfU/Kyha5YDGp+3GSaGKWIBiysVUozDey8DbSBOaiqpFXVcznoqazumrFaAv0vsKa0u
-         fIbNDgo4T0/5tfqo/Y58PrCnRqNAlP6mBNDrk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687712983; x=1690304983;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/Jw6qaPWuA27aPchL3/WJhyWv6Gf8Myv0Ya6jO1rjVM=;
-        b=It1W7ZUStVGd8lkgFTkV54+hVvUWlGa6EVyvNxH97SMmiWpWwZyaEn+WWPI5p1TvuL
-         jNMO8j82vBOKaIcfdVEyMMuJgcHvTdNwDppbdQqG1Olzm1qM91XEA8JuLjTFcyyx3/3/
-         i6LfhwmUctMXf5WX9MT1AtKBOZZJ8UJaF8zok6HIBHQnTyoLV6SPgWC0//32z8mYIeh+
-         GG0Fp+r9KJadXQaHNqxgM/ohWD7V7Wwi77bv2CEyx0/Wz/OasdQA+cV0sW9+pScjwxJv
-         WOrZVZW1dk1HljGPQXjpMV6BzbP3huvvLetdv/MOtBjfkTJfEAGU63sTVgDAINJZI9dI
-         xAUQ==
-X-Gm-Message-State: AC+VfDx+ZFVcnBZCXo+pFp5BVXJzHYCbhgs8Akh0vLsVx00IriOuviLI
-        EUwcNZRrl1LZv47C6x7eH67WqE7lF7KUvDpF3kNeQYKi
-X-Google-Smtp-Source: ACHHUZ573nk1nP3EdjayUOoif3GNH1XJdTFobIwFhKanenR1auN4UHyjdQI38vdC/+AYk7Ukb7lHXg==
-X-Received: by 2002:a17:906:fe47:b0:989:3690:63e2 with SMTP id wz7-20020a170906fe4700b00989369063e2mr12014986ejb.36.1687712983386;
-        Sun, 25 Jun 2023 10:09:43 -0700 (PDT)
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com. [209.85.218.53])
-        by smtp.gmail.com with ESMTPSA id ci8-20020a170906c34800b00988c0c175c6sm2256587ejb.189.2023.06.25.10.09.42
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 25 Jun 2023 10:09:42 -0700 (PDT)
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-991c786369cso6147966b.1
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 10:09:42 -0700 (PDT)
-X-Received: by 2002:a17:907:2da1:b0:988:7428:2c1a with SMTP id
- gt33-20020a1709072da100b0098874282c1amr21141968ejc.7.1687712982335; Sun, 25
- Jun 2023 10:09:42 -0700 (PDT)
+        Sun, 25 Jun 2023 13:12:25 -0400
+X-Greylist: delayed 1422 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 25 Jun 2023 10:12:23 PDT
+Received: from out203-205-221-155.mail.qq.com (out203-205-221-155.mail.qq.com [203.205.221.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7159D197;
+        Sun, 25 Jun 2023 10:12:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1687713140;
+        bh=tTjSzPD0ZS2M9E/b1QdCa1lslVGibpuk+ySp3PiCsPY=;
+        h=From:To:Cc:Subject:Date;
+        b=uXQuhdD1RXCyqIMRuAC6RNawiGWrScmqgmWjJno5ItAyE+Dnw7y1noRGvvG+MxpcL
+         abjSR6EqHuSDIbNOeTTMAU6om7JWft0pOFA1UhWcSvH2ieY8cjWoCrOkKcBe+s+NPf
+         aPeKZIfikzf44ooCLha8oqnyv6+nsm/bPA8P0/oY=
+Received: from localhost.localdomain ([122.14.229.236])
+        by newxmesmtplogicsvrsza10-0.qq.com (NewEsmtp) with SMTP
+        id 31025411; Mon, 26 Jun 2023 01:12:16 +0800
+X-QQ-mid: xmsmtpt1687713136torclcipj
+Message-ID: <tencent_D1B05B6060451EA10A64A88E122E37EDB508@qq.com>
+X-QQ-XMAILINFO: NMGzQWUSIfvTCXLSPHqXFkOFtDq5l5WMN7KQPSK3Qla6k4fZpvTjFwGb4uPpC5
+         L1Iy0qFC/oiONC0AmcaVWvRi2dYw7WMLJPmNgk+7Tk+5cKrn0aTrTNk3nN9Xr6Uynd/g1QXTt8WG
+         yU4/IDQr+rex9eoP6IJx2T/wJ0/yoSNDvXNEnjcQ3q4Fj3AEAjxEZRYQFz8kNN65GlxaUhH5AWoy
+         jnimiFAbQrB4JGW54GeeNyxyt4xrfi/zvr+AyPJ894sb/un+hCVKyD5cIZOGc22PxzTr3D+j/c6H
+         /Li57Ui0RNzASHuya+tAJhcSaT/dBXp6f+Nyz5lfa2X8qBZmc7AVSmE1DUl2ndzEAzUqGYtoKQRC
+         I7XiopOoXJ5apnoyVAyXiHtUEdXzfIiEh6nEPHWTmb8ezbPu/a4fGhz1hcyjO8mGcYHdH2iVl77S
+         Sp2gzSOJHQOxMYp8ble/U+aPdx8R1kDP4klTRxzyrR9LAWv/88J+03iazIWtHr+rBMFzqaik9kjh
+         tIcaIZ5CgrWChofpU404RTwGRsSyGTLkBU55G8TyKea4Nwn+ZrLFeU2v0swyY/UQwHk+2CWDCPsa
+         WvPSw5BuGlhAlpT8XK6C7DimzTUnsoBrg3rriLR3Tq9LvZtPjj9ZKpnp8vPaWhqYP7iNfvF52qdG
+         2LViA68tR/188qJfgUlPnlspSpFV9HpEWzK4CE9QoSdRrG/n0BjWA5pUidNYvpUa8k+acK+Bx3nH
+         zlUOPp2WGwUA8lrno3IWK+lNyAVQL7gKKxsXnpkr5vJHiVVdFJAcqkH+dtx40ecgISbbWYmlt+82
+         utcJ3JGeEMrEDRyJ7qEJeMBQsYx83wyR9qEboP4xq7dkuoK18hzXBZf1gox3yo2VBWGGKdlnM0Bf
+         aKjzyU97UN/h+bWU8tYs1Y91trgRsUr+HX1tav8CjAlrvjbsqi/h2+nnH61HYzFzrHxG8PLbluWI
+         4cvm0XCmQVkhnoLx2ItGOQ7BGjIQMS7J2WJ0wudmgFUeg/oxgIlYSI4wpvEB9w/5w1/m4GSGduIs
+         uCAiIXhR7zhqRCC5HlFerBZbvauxsj2y969HFFOxrdC3sdHcSZeuiZh27H+swoPveFWJ3xZQ==
+X-QQ-XMRINFO: M0RWTeBkoNRBR1Uh12iQNRvA1CSLhD8+1Q==
+From:   Zhang Shurong <zhang_shurong@foxmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     mark.tomlinson@alliedtelesis.co.nz, krzysztof.kozlowski@linaro.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zhang Shurong <zhang_shurong@foxmail.com>
+Subject: [PATCH] usb: max-3421: fix potential shift out-of-bounds in max3421_hub_control()
+Date:   Mon, 26 Jun 2023 01:12:13 +0800
+X-OQ-MSGID: <20230625171213.24014-1-zhang_shurong@foxmail.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-References: <20230625092842.GBZJgIyqJL/FtKW4nU@fat_crate.local>
-In-Reply-To: <20230625092842.GBZJgIyqJL/FtKW4nU@fat_crate.local>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 25 Jun 2023 10:09:25 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgQsAB-5_9vF3Ok26=Wf55ayNJ80eMVVYtgrLZ-if5BVg@mail.gmail.com>
-Message-ID: <CAHk-=wgQsAB-5_9vF3Ok26=Wf55ayNJ80eMVVYtgrLZ-if5BVg@mail.gmail.com>
-Subject: Re: [GIT PULL] objtool/urgent for v6.4
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 25 Jun 2023 at 02:28, Borislav Petkov <bp@alien8.de> wrote:
->
-> - Add a ORC format hash to vmlinux and modules in order for other tools
->   which use it, to detect changes to it and adapt accordingly
+Fix potential shift out-of-bounds in max3421_hub_control()
+ClearPortFeature handling and SetPortFeature handling.
 
-Hmm. That "hash" is pretty horrendous. If I read that awk script
-right, it will change for things like whitespace changes (or comment
-changes) as long as they are around those magic #defines or the
-'orc_entry' definition.
+wValue may be greater than 32 which can not be used for shifting.
 
-I've pulled this, but it all seems pretty random and hacky.
+similar patch:
+https://patchwork.kernel.org/patch/12162547
 
-              Linus
+Signed-off-by: Zhang Shurong <zhang_shurong@foxmail.com>
+---
+ drivers/usb/host/max3421-hcd.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/usb/host/max3421-hcd.c b/drivers/usb/host/max3421-hcd.c
+index d152d72de126..035cd6abc2f6 100644
+--- a/drivers/usb/host/max3421-hcd.c
++++ b/drivers/usb/host/max3421-hcd.c
+@@ -1688,6 +1688,8 @@ max3421_hub_control(struct usb_hcd *hcd, u16 type_req, u16 value, u16 index,
+ 						!pdata->vbus_active_level);
+ 			fallthrough;
+ 		default:
++			if (value >= 32)
++				goto error;
+ 			max3421_hcd->port_status &= ~(1 << value);
+ 		}
+ 		break;
+@@ -1741,6 +1743,8 @@ max3421_hub_control(struct usb_hcd *hcd, u16 type_req, u16 value, u16 index,
+ 			max3421_reset_port(hcd);
+ 			fallthrough;
+ 		default:
++			if (value >= 32)
++				goto error;
+ 			if ((max3421_hcd->port_status & USB_PORT_STAT_POWER)
+ 			    != 0)
+ 				max3421_hcd->port_status |= (1 << value);
+-- 
+2.41.0
+
