@@ -2,62 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2159573D18F
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 16:54:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25ABF73D191
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 16:54:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230088AbjFYOyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 10:54:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58354 "EHLO
+        id S230307AbjFYOyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 10:54:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjFYOyE (ORCPT
+        with ESMTP id S230309AbjFYOyu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 10:54:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B9D1A4;
-        Sun, 25 Jun 2023 07:54:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 614BA60B42;
-        Sun, 25 Jun 2023 14:54:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFEC3C433C0;
-        Sun, 25 Jun 2023 14:54:00 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="WmH9DycT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1687704835;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DXHrakrWANJGXtSmv2LXWfIVLyVyzM/MWJ9MJLB4jFA=;
-        b=WmH9DycTnbOnz5PFXFGNihIAxsJ9ufubvgMJ5GKS/0JS2uth5avKSoDYBqFhHvhMY0nEYe
-        va4Nw6EYatoyErsBgqxEMqR/54Vq9NiL+hSDoH3Balg/Ww8uprdkI0OisyAThbtb7kbXQS
-        HyxNOwlGIlGCo7NagSFvHGUDKjcKSFY=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 28262728 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Sun, 25 Jun 2023 14:53:55 +0000 (UTC)
-Date:   Sun, 25 Jun 2023 16:53:53 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     Mario Limonciello <mario.limonciello@amd.com>,
-        linux-integrity@vger.kernel.org,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
-Subject: Re: MSI B350M MORTAR: tpm tpm0: AMD fTPM version 0x3005700000004
- causes system stutter; hwrng disabled
-Message-ID: <ZJhVAX6b6bcZtguo@zx2c4.com>
-References: <8999a30b-e165-f39d-864a-ce1c559e725d@molgen.mpg.de>
+        Sun, 25 Jun 2023 10:54:50 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C5111AB;
+        Sun, 25 Jun 2023 07:54:49 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-98dfb3f9af6so214116366b.2;
+        Sun, 25 Jun 2023 07:54:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687704888; x=1690296888;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4Vwr9QncmErCcma1z5HXU+08eU15W5iGhG2cRYFjETk=;
+        b=HFnmHx8+NOyasx0GY6Wh/jRt31cddH/5jq0fb6UgjCrQ/myAieduWNi4/PCDnmMT0S
+         PzOhgnUYmnQPlOG1ex2hRtD2oOM+oz48+92b24zxKxU5Qbq6nnOa2QT+5BsXkTgWdJRd
+         ek90G+jilJfkZC21/5jPUvp4Wh15KEbH5AI1vpqybAj5OgOPUac1nBuzdUoWkVuxIiJ9
+         AHKM4OkvnDuVK2DFBw+tlpGXgsUK6tsZcfEPk1d1iXz0fP525Of75szQUDef3Gq8a76W
+         91WGcuAuGp1/lA/s89NwcLsKX6phXpUZVYeCkbiM9iqelxFPHXKwnIAHPTPsie2Xjmlg
+         hljQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687704888; x=1690296888;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4Vwr9QncmErCcma1z5HXU+08eU15W5iGhG2cRYFjETk=;
+        b=KuPFeWxyW6rbQYQS0iDeuBAdmSGNUIEEnMSC1R/xh4lEQnkSy0jNM1m15PcXKHezNJ
+         spFMr7epBSm9hyAcMnpf+SbFMEGwHOjBz3bPK+UNOXLEO3sw1eVdlXsRmLdAvlv5MioH
+         QI/rPKPtVqzkm4Lgy99n9HAhnuBnCOlcOSOau+v/WzbNIGaLy6Rk79zrq538rlwiqmIE
+         LnILLExgD05uwRlbRxnRsa8f9jPv89fBuguo5VfQ77Gocm8HFXVQ/EsRutCV28Nhc+DL
+         oSk89dWgcAO4ovIxl0P+atCzjPUolgfLD2f6qjP8hAQE9Y8+dkdIj6hExsctti9CcMl3
+         GEqg==
+X-Gm-Message-State: AC+VfDwhr7AWsYL2vzle3OTSIlucttQB+HJo+lCQoO/avx02GLFZ/XsT
+        oHuLRYbEv9LFzXUPXvcMFKY=
+X-Google-Smtp-Source: ACHHUZ5QeOl1Y+2F11h7Iznk7njDlljlGH9Qiv+eec+jw6vxf/GlNXRdkUzVZg7pI4NxjXj7b1tY9w==
+X-Received: by 2002:a17:907:928b:b0:973:71c3:8b21 with SMTP id bw11-20020a170907928b00b0097371c38b21mr24319497ejc.72.1687704887456;
+        Sun, 25 Jun 2023 07:54:47 -0700 (PDT)
+Received: from skbuf ([188.25.159.134])
+        by smtp.gmail.com with ESMTPSA id y3-20020aa7c243000000b0051bdf152295sm1814011edo.76.2023.06.25.07.54.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 25 Jun 2023 07:54:47 -0700 (PDT)
+Date:   Sun, 25 Jun 2023 17:54:45 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Pawel Dembicki <paweldembicki@gmail.com>
+Cc:     netdev@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v2 7/7] net: dsa: vsc73xx: fix MTU configuration
+Message-ID: <20230625145445.ialdexs2wxu6lu73@skbuf>
+References: <20230625115343.1603330-1-paweldembicki@gmail.com>
+ <20230625115343.1603330-1-paweldembicki@gmail.com>
+ <20230625115343.1603330-7-paweldembicki@gmail.com>
+ <20230625115343.1603330-7-paweldembicki@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <8999a30b-e165-f39d-864a-ce1c559e725d@molgen.mpg.de>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <20230625115343.1603330-7-paweldembicki@gmail.com>
+ <20230625115343.1603330-7-paweldembicki@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,47 +80,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 25, 2023 at 10:20:22AM +0200, Paul Menzel wrote:
-> Thank you for your great work on the Linux kernel.
+On Sun, Jun 25, 2023 at 01:53:42PM +0200, Pawel Dembicki wrote:
+> Switch in MAXLEN register store maximum size of data frame.
+> MTU size is 18 bytes smaller than frame size.
 > 
-> On an MSI MS-7A37/B350M MORTAR (MS-7A37) even updating to their latest 
-> system firmware 1.O7 released on their Web site on May, 23rd 2023 [1].
+> Current settings causes problems with packet forwarding.
+> This patch fix MTU settings to proper values.
 > 
-> > Beschreibung:
-> > -  AGESA ComboAm4v2PI 1.2.0.A. update.
-> > -  TPM Out of Bounds Access security patch.
-> 
-> But Linux 6.4.-rc7 still disables the hwrng from AMD fTPM.
-> 
->      Jun 24 21:32:09.978772 tokeiihto kernel: DMI: Micro-Star 
-> International Co., Ltd. MS-7A37/B350M MORTAR (MS-7A37), BIOS 1.O7 05/09/2023
->      […]
->      Jun 24 21:32:10.259986 tokeiihto kernel:  tpm tpm0: AMD fTPM 
-> version 0x3005700000004 causes system stutter; hwrng disabled
-> 
-> Unfortunately, the warning does not say, what firmware version is 
-> needed, and what the user can do about it.
-> 
-> The comment in the code, added in v6.3-rc2 with commit f1324bbc4011 
-> (tpm: disable hwrng for fTPM on some AMD designs) [2], says:
-> 
->      /*
->       * Some AMD fTPM versions may cause stutter
->       * https://www.amd.com/en/support/kb/faq/pa-410
->       *
->       * Fixes are available in two series of fTPM firmware:
->       * 6.x.y.z series: 6.0.18.6 +
->       * 3.x.y.z series: 3.57.y.5 +
->       */
-> 
-> Mapping 0x3005700000004 from the Linux warning to the comment, I assume 
-> the board’s firmware is 3.57.0.4?
-> 
-> What AGESA ComboAm4v2PI would MSI need to ship, so the issue is fixed? 
-> The previous system firmware version shipped 3.4e.0.4? (Is it decimal or 
-> hexadecimal?)
+> Fixes: fb77ffc6ec86 ("net: dsa: vsc73xx: make the MTU configurable")
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> Signed-off-by: Pawel Dembicki <paweldembicki@gmail.com>
+> ---
 
-Sounds like this is a question for MSI - why they haven't updated from
-3.57.y.4 to 3.57.y.5+. What can we possibly say about this from a
-Linux perspective? The Linux code apparently is working as designed by
-avoiding using the buggy firmware gracefully.
+Please split this patch from the rest of the series and re-target it
+towards net.git.
+
+> v2:
+>   - fix commit message style issue
+> 
+>  drivers/net/dsa/vitesse-vsc73xx-core.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/net/dsa/vitesse-vsc73xx-core.c b/drivers/net/dsa/vitesse-vsc73xx-core.c
+> index c946464489ab..59bb3dbe780a 100644
+> --- a/drivers/net/dsa/vitesse-vsc73xx-core.c
+> +++ b/drivers/net/dsa/vitesse-vsc73xx-core.c
+> @@ -979,17 +979,18 @@ static int vsc73xx_change_mtu(struct dsa_switch *ds, int port, int new_mtu)
+>  	struct vsc73xx *vsc = ds->priv;
+>  
+>  	return vsc73xx_write(vsc, VSC73XX_BLOCK_MAC, port,
+> -			     VSC73XX_MAXLEN, new_mtu);
+> +			     VSC73XX_MAXLEN, new_mtu + ETH_HLEN + ETH_FCS_LEN);
+>  }
+>  
+>  /* According to application not "VSC7398 Jumbo Frames" setting
+> - * up the MTU to 9.6 KB does not affect the performance on standard
+> + * up the frame size to 9.6 KB does not affect the performance on standard
+>   * frames. It is clear from the application note that
+>   * "9.6 kilobytes" == 9600 bytes.
+>   */
+>  static int vsc73xx_get_max_mtu(struct dsa_switch *ds, int port)
+>  {
+> -	return 9600;
+> +	/* max mtu = 9600 - ETH_HLEN - ETH_FCS_LEN */
+> +	return 9582;
+
+This can also be:
+
+	return 9600 - ETH_HLEN - ETH_FCS_LEN;
+
+since the arithmetic is on constants, it can be evaluated at compile
+time and it results in the same generated code, but the comment is no
+longer necessary.
+
+>  }
+>  
+>  static void vsc73xx_port_stp_state_set(struct dsa_switch *ds, int port,
+> -- 
+> 2.34.1
+> 
+
