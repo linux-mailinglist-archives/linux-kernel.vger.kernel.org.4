@@ -2,119 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 698AF73D1DA
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 17:48:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0008C73D1DB
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 17:50:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229817AbjFYPsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 11:48:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44722 "EHLO
+        id S229753AbjFYPuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 11:50:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjFYPsW (ORCPT
+        with ESMTP id S229452AbjFYPuO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 11:48:22 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 566CA10E
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 08:48:21 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-51d946d2634so683966a12.3
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 08:48:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687708100; x=1690300100;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6FHDF4JQDFMpiAmZ5U0BX7uerXMnjpIEAdOE5eTh2lk=;
-        b=XVy9W9Mnb1ZxcR/oXJXA71VriIHqlMWClr3UF6wVHCFWDJ6+GJfbuBGhQm0TSbRvVd
-         h3ji5fmc0B/ITHKfFG8tlFVJMgtM6Tt4QubZ4voOAhr1nUDLb8PDDtpltsN2ZaHULQ6P
-         KRozrgPs5asTDjdSbVsq7G5oxv6STdAtrHzT9CfsLOUQquVxIcBSCER8hQIHkQBdI+WB
-         ITUFPyPf9AO0VaOPz53HOGoswazzrF5DUczJkp3p4oRltlX2E4uC9ahoX/zBF5MYFDJM
-         NHJsZKMj0jCnTSr4fr4nMKdvnk4DXw9NhFYVB+tKqp5bLMxb9T8koVhSh9OgXz4XM951
-         eGPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687708100; x=1690300100;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6FHDF4JQDFMpiAmZ5U0BX7uerXMnjpIEAdOE5eTh2lk=;
-        b=Le0NJSPjfx28fg/IqzLoAb96pSN3Lkj3FDPSLPHHtpYDdxO7FaI1fgu8RyJ9IPS2Tf
-         9CgiPyUPFARBTZIfFT1hM79/TZRpq/I4o5/lp7BXxb7MkTi9rnl5mdJCUo9lbVFSqyn8
-         gSe7yWjDmipUg8RNqC5/7ArFgFzLyZvhRMRUJWxgwctBeD3yxRhv5R5ew1iBfIR/vKlb
-         rBK2vlyM5taS1jdDq0dZscX6giJGCWsljnChnK0pVUP4IHQW6ciWwe85zzuMMIK5brAz
-         lDM+lWIR5XIhtDhqf8izCugxdqg4mlxjeGIPSFTzVEdDLsQw169ManICHgJ43qQ40c7q
-         ECzA==
-X-Gm-Message-State: AC+VfDwas08zKlt6jZPYRF7qwbkig9GPfF31vyj2BB6nX6fb4LXvTFee
-        lAhDfDHhRxDkp759erkT5do0rw==
-X-Google-Smtp-Source: ACHHUZ5dc/5i/DnUe0Qkl576dckEiI0C7tQ2Yw3h0oT4Y8zmPyjT546jAOEXeRG8O6KYrv56RAHLfw==
-X-Received: by 2002:a05:6402:1b0e:b0:514:9df0:e3f3 with SMTP id by14-20020a0564021b0e00b005149df0e3f3mr20374649edb.0.1687708099754;
-        Sun, 25 Jun 2023 08:48:19 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id n3-20020a05640206c300b0051d9246f963sm1007326edy.9.2023.06.25.08.48.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 25 Jun 2023 08:48:19 -0700 (PDT)
-Message-ID: <43b5fd53-e67a-7d51-3f14-ecd7189ccd7e@linaro.org>
-Date:   Sun, 25 Jun 2023 17:48:17 +0200
+        Sun, 25 Jun 2023 11:50:14 -0400
+Received: from out-55.mta1.migadu.com (out-55.mta1.migadu.com [IPv6:2001:41d0:203:375::37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD0A91
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 08:50:11 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1687708209;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Q/q3dtLrCdlJ7WBbM40cZSb4jbe1BvLJqZ9PUXcu0LQ=;
+        b=ta3IybJOsQx57BtZ8tuN+hHqmjFjPxJptHp/LVOmYQvnA7KQQFfVzzxUU1cvlaaZHAAAb+
+        US1AJ7nxSln2f8RCUzAFbCAYw4Het9pZbPuyTYkIU9YUJWIEXpNn/8Tgqnl8XhpIO/Uo6G
+        7s41M4HfZqTs3R9Trkqt8FEXDiZ0Mm4=
+From:   Qi Zheng <qi.zheng@linux.dev>
+To:     gregkh@linuxfoundation.org, arve@android.com, tkjos@android.com,
+        maco@android.com, joel@joelfernandes.org, brauner@kernel.org,
+        cmllamas@google.com, surenb@google.com
+Cc:     linux-kernel@vger.kernel.org, Qi Zheng <zhengqi.arch@bytedance.com>
+Subject: [PATCH] binder: fix memory leak in binder_init()
+Date:   Sun, 25 Jun 2023 15:49:37 +0000
+Message-Id: <20230625154937.64316-1-qi.zheng@linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 4/5] dt-bindings: pps: pps-gpio: introduce pulse-width
- properties
-Content-Language: en-US
-To:     Eliav Farber <farbere@amazon.com>, giometti@enneenne.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     ronenk@amazon.com, talel@amazon.com, hhhawa@amazon.com,
-        jonnyc@amazon.com, itamark@amazon.com, shellykz@amazon.com,
-        amitlavi@amazon.com, almogbs@amazon.com
-References: <20230625142134.33690-1-farbere@amazon.com>
- <20230625142134.33690-5-farbere@amazon.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230625142134.33690-5-farbere@amazon.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/06/2023 16:21, Eliav Farber wrote:
-> Add two new optional properties to calculate PPS pulse-width in nano
-> seconds:
->  - assert-pulse-width
->  - clear-pulse-width
-> 
-> Signed-off-by: Eliav Farber <farbere@amazon.com>
-> ---
->  Documentation/devicetree/bindings/pps/pps-gpio.txt | 6 ++++++
+From: Qi Zheng <zhengqi.arch@bytedance.com>
 
-No, no, one new property could sneak in, but three are a no go. DT schema.
+In binder_init(), the destruction of binder_alloc_shrinker_init() is not
+performed in the wrong path, which will cause memory leaks. So this commit
+introduces binder_alloc_shrinker_exit() and calls it in the wrong path to
+fix that.
 
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/pps/pps-gpio.txt b/Documentation/devicetree/bindings/pps/pps-gpio.txt
-> index 8d588e38c44e..9ecfd5fb3b63 100644
-> --- a/Documentation/devicetree/bindings/pps/pps-gpio.txt
-> +++ b/Documentation/devicetree/bindings/pps/pps-gpio.txt
-> @@ -18,6 +18,12 @@ Optional properties:
->                   opposite of the assert edge (if assert is rising-edge then
->                   clear is falling-edge and if assert is falling-edge then
->                   clear is rising-edge).
-> +- assert-pulse-width: when present, assert pulse width will be calculated in
-> +                      nano seconds.
-> +                      It should be enabled only if 'capture-clear' is enabled.
-> +- clear-pulse-width: when present, clear pulse width will be calculated in
-> +                     nano seconds.
-> +                     It should be enabled only if 'capture-clear' is enabled.
+Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+---
+ drivers/android/binder.c       | 1 +
+ drivers/android/binder_alloc.c | 6 ++++++
+ drivers/android/binder_alloc.h | 1 +
+ 3 files changed, 8 insertions(+)
 
-
-I don't understand the description. Property name suggests there is some
-units (so you need to use common property unit suffix), but description
-suggests that you change the units to nanoseconds. That's very confusing.
-
-Best regards,
-Krzysztof
+diff --git a/drivers/android/binder.c b/drivers/android/binder.c
+index 486c8271cab7..d720f93d8b19 100644
+--- a/drivers/android/binder.c
++++ b/drivers/android/binder.c
+@@ -6617,6 +6617,7 @@ static int __init binder_init(void)
+ 
+ err_alloc_device_names_failed:
+ 	debugfs_remove_recursive(binder_debugfs_dir_entry_root);
++	binder_alloc_shrinker_exit();
+ 
+ 	return ret;
+ }
+diff --git a/drivers/android/binder_alloc.c b/drivers/android/binder_alloc.c
+index 662a2a2e2e84..e3db8297095a 100644
+--- a/drivers/android/binder_alloc.c
++++ b/drivers/android/binder_alloc.c
+@@ -1087,6 +1087,12 @@ int binder_alloc_shrinker_init(void)
+ 	return ret;
+ }
+ 
++void binder_alloc_shrinker_exit(void)
++{
++	unregister_shrinker(&binder_shrinker);
++	list_lru_destroy(&binder_alloc_lru);
++}
++
+ /**
+  * check_buffer() - verify that buffer/offset is safe to access
+  * @alloc: binder_alloc for this proc
+diff --git a/drivers/android/binder_alloc.h b/drivers/android/binder_alloc.h
+index 138d1d5af9ce..dc1e2b01dd64 100644
+--- a/drivers/android/binder_alloc.h
++++ b/drivers/android/binder_alloc.h
+@@ -129,6 +129,7 @@ extern struct binder_buffer *binder_alloc_new_buf(struct binder_alloc *alloc,
+ 						  int pid);
+ extern void binder_alloc_init(struct binder_alloc *alloc);
+ extern int binder_alloc_shrinker_init(void);
++extern void binder_alloc_shrinker_exit(void);
+ extern void binder_alloc_vma_close(struct binder_alloc *alloc);
+ extern struct binder_buffer *
+ binder_alloc_prepare_to_free(struct binder_alloc *alloc,
+-- 
+2.30.2
 
