@@ -2,54 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DCD373CF39
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 10:11:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB3CE73CF3B
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 10:13:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231680AbjFYIL3 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 25 Jun 2023 04:11:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54292 "EHLO
+        id S231834AbjFYINc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 04:13:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230459AbjFYIL1 (ORCPT
+        with ESMTP id S230459AbjFYIN2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 04:11:27 -0400
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 927C2E53;
-        Sun, 25 Jun 2023 01:11:25 -0700 (PDT)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1qDKq8-0012ki-HS; Sun, 25 Jun 2023 10:11:20 +0200
-Received: from tmo-087-130.customers.d1-online.com ([80.187.87.130] helo=smtpclient.apple)
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_128_GCM_SHA256
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1qDKq8-002gaQ-6u; Sun, 25 Jun 2023 10:11:20 +0200
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH 1/4] sh: fix -Wmissing-include-dirs warnings for various platforms
-Date:   Sun, 25 Jun 2023 10:11:09 +0200
-Message-Id: <D124BC54-1F49-478B-997C-87A3B89A58F8@physik.fu-berlin.de>
-References: <CAK7LNAQFc8pGD4y=pNePxWyiVRM+xHGFF_x6SkAuDcA01dB3cA@mail.gmail.com>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>,
-        Rich Felker <dalias@libc.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        linux-sh@vger.kernel.org
-In-Reply-To: <CAK7LNAQFc8pGD4y=pNePxWyiVRM+xHGFF_x6SkAuDcA01dB3cA@mail.gmail.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-X-Mailer: iPhone Mail (20F75)
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 80.187.87.130
-X-ZEDAT-Hint: PO
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 25 Jun 2023 04:13:28 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF799BB;
+        Sun, 25 Jun 2023 01:13:25 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QpkHz3Kgpz4f3rr5;
+        Sun, 25 Jun 2023 16:13:19 +0800 (CST)
+Received: from [10.174.179.247] (unknown [10.174.179.247])
+        by APP4 (Coremail) with SMTP id gCh0CgCH77Ic95dk7kn3MQ--.7333S3;
+        Sun, 25 Jun 2023 16:13:18 +0800 (CST)
+Message-ID: <b2004583-6e9c-9282-b59c-95cae9187378@huaweicloud.com>
+Date:   Sun, 25 Jun 2023 16:13:16 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3 0/4] block/badblocks: fix badblocks setting error
+To:     Ashok Raj <ashok_raj@linux.intel.com>, linan666@huaweicloud.com
+Cc:     axboe@kernel.dk, dan.j.williams@intel.com,
+        vishal.l.verma@intel.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
+        yi.zhang@huawei.com, houtao1@huawei.com, yangerkun@huawei.com,
+        Ashok Raj <ashok.raj@intel.com>
+References: <20230621172052.1499919-1-linan666@huaweicloud.com>
+ <ZJL73Zhyq4d/oaXd@araj-dh-work>
+From:   Li Nan <linan666@huaweicloud.com>
+In-Reply-To: <ZJL73Zhyq4d/oaXd@araj-dh-work>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgCH77Ic95dk7kn3MQ--.7333S3
+X-Coremail-Antispam: 1UD129KBjvdXoWruw48AF4DKw1UJrW8ZryDtrb_yoWxKrg_Ca
+        yvk3s8CryrJFnxJ3W3trWUXrsYyF1DGFWrG3y5GrykW3s8tay8GFs5Gr98Z3W3J3W8Ja98
+        Gwn3XrWYvw4jqjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbSxFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
+        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr
+        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIF
+        xwACI402YVCY1x02628vn2kIc2xKxwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7V
+        AKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCj
+        r7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6x
+        IIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAI
+        w20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6x
+        kF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUOlksUUUUU
+X-CM-SenderInfo: polqt0awwwqx5xdzvxpfor3voofrz/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        MAY_BE_FORGED,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -58,52 +69,26 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-> On Jun 25, 2023, at 9:57 AM, Masahiro Yamada <masahiroy@kernel.org> wrote:
+在 2023/6/21 21:32, Ashok Raj 写道:
+> On Thu, Jun 22, 2023 at 01:20:48AM +0800, linan666@huaweicloud.com wrote:
+>> From: Li Nan <linan122@huawei.com>
+>>
+>> This patch series fixes some simple bugs of setting badblocks and
+>> optimizing struct badblocks. Coly Li has been trying to refactor badblocks
+>> in patch series "badblocks improvement for multiple bad block ranges", but
+>> the workload is significant. Before that, I will fix some easily triggered
+>    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 > 
-> ﻿On Sun, Feb 19, 2023 at 11:40 PM John Paul Adrian Glaubitz
-> <glaubitz@physik.fu-berlin.de> wrote:
->> 
->> Hi Masahiro!
->> 
->>> On Sun, 2023-02-19 at 23:15 +0900, Masahiro Yamada wrote:
->>> The 0day bot reports a lot of warnings (or errors due to CONFIG_WERROR)
->>> like this:
->>> 
->>>  cc1: error: arch/sh/include/mach-hp6xx: No such file or directory [-Werror=missing-include-dirs]
->>> 
->>> Indeed, arch/sh/include/mach-hp6xx does not exist.
->>> 
->>> -Wmissing-include-dirs is W=1 warning, but it may be annoying
->>> when CONFIG_BTRFS_FS is enabled because fs/btrfs/Makefile
->>> unconditionally adds this warning option.
->>> 
->>> arch/sh/Makefile defines machdir-y for two purposes:
->>> 
->>> - Build platform code in arch/sh/boards/mach-*/
->>> - Add arch/sh/include/mach-*/ to the header search path
->>> 
->>> For the latter, some platforms use arch/sh/include/mach-common/ instead
->>> of having its own arch/sh/include/mach-*/.
->>> 
->>> Drop unneeded machdir-y to not include non-existing include directory.
->>> 
->>> To build arch/sh/boards/mach-*/, use the standard obj-y syntax in
->>> arch/sh/boards/Makefile.
->>> 
->>> Reported-by: kernel test robot <lkp@intel.com>
->>> Link: https://lore.kernel.org/oe-kbuild-all/202302190641.30VVXnPb-lkp@intel.com/
->>> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
->>> ---
->> 
->> Thanks for your patches! I'm still waiting for my kernel.org account to be created,
->> so I can set up my own linux-sh tree. I hope that happens next week. There are already
->> some patches piling up.
+> You mean the refactor is going to take longer to complete?
+
+Yes, refer to the link:
+https://lore.kernel.org/all/20220721121152.4180-1-colyli@suse.de
+
+> If so, maybe state it that way...
 > 
-> 
-> So, what has happened since then?
+> .
 
-Sorry, these somehow went off my radar.
+-- 
+Thanks,
+Nan
 
-I’ll have a look later today.
-
-Adrian
