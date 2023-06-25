@@ -2,309 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A2F873D554
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 01:52:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E85773D556
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 01:54:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229905AbjFYXwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 19:52:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41566 "EHLO
+        id S229635AbjFYXyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 19:54:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbjFYXwf (ORCPT
+        with ESMTP id S229529AbjFYXyg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 19:52:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3911DE44
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 16:52:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BF13560C5C
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 23:52:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22126C433B7
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 23:52:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687737151;
-        bh=MarIaZK1/h6d3gcEiuGdnJtH9oNLc/Ovu23/aiJiCSM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=hbqJNI1gUFnY6PFzJ9wzyiY63PNbBSWGH/MnkuKmSI7n3FiLgYwpY079Mf3Zt8+iF
-         vAgDP64cfvCIJtyf0cOklyayxAdgOgfmMtKIi9FxR4Di5bCz7VYMWIsScPUv0kxWke
-         c09JkzDwKY7C4TEIyUZxLJ0cWbfPUWWqH2UiSkrAwEtc8R01Kvlr4k6BezAbVgyHXX
-         OCG/+4SgCm+lZ5OuqJ8bk71yraz3gOFnvO+LWoExE2bZmBGzk3f6RCVpclnUaZbXg9
-         +du7KBS56umf6AIAD5xcbKIvwto0Zz4ZcgMr/526VEJ9jQPu17eS1u3FjGqfyEPyIA
-         JApO7bScUz7Gw==
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-51d885b0256so2276318a12.2
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 16:52:31 -0700 (PDT)
-X-Gm-Message-State: AC+VfDxVKc5hLT8hqweexaZNyrEnp4xkUZfGY6djdlzGluqiS/Hrf1sY
-        r4l60OWm6G4xgK5UobwcV0dTMJKxwGMTctq/eJGPiw==
-X-Google-Smtp-Source: ACHHUZ4SsLYGJn0dfSXxFKaC+b/PwcoJ8iANFo8WWh8nomaO+sSfLwffHOMAkFtQJoYhfIZGagMbWTVvbeBhHgGqx6c=
-X-Received: by 2002:a17:907:3ea3:b0:987:3f34:88ea with SMTP id
- hs35-20020a1709073ea300b009873f3488eamr23437525ejc.58.1687737148936; Sun, 25
- Jun 2023 16:52:28 -0700 (PDT)
+        Sun, 25 Jun 2023 19:54:36 -0400
+Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2111.outbound.protection.outlook.com [40.107.113.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E80E41B9
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 16:54:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gtw7ykokn1MBgAi/dPNFGeimpBIfvfS38fZvf9ngcWBbjBDdezFji9YI5ijRGLJkBvNdFeOuw+4bdzflmcxsfwlpSLJQkdSi9OjcTSGXW3tcQTpivfr9F3ufEWa1Wach6SHCQIOG8NwJtoN23kECfYk8jENpo1p8ND/LVahI5t+qFZTHrJuYprnKARJ82Nze7WRKvmz0Je+XIHMPGHftttaz3RhWS7JQGzWIJc4rvu8/250C44yIGsBAB/oC19CuFgdIu4y0dL/qG+LxF2qagUqAUFV9murvSJQh/kCtVTmSS0s7POIsTNaHtSOA3lpIk2lDOfT0eW9aIAKqAc02KA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+0o2pBUDCYLXiqD3EDINJvhtlxTXnxpB9cpIK8gV2FQ=;
+ b=dWjTbddNEzCR2gfpZACJWUOkZh/avGBlc7IZVD2mW/tGBNkaC7RBbrOAmr5cG4reKhCBYZxRcBn5dL9158rYCK/91nV4wkOKU3W72HUQUvfzbYhP1/9UhfMvQ/SpKsoF0X1HodkoXOmhsMwf0H9IGQQ18zKPK5wdrOHhYlX/wfu5CjvEGpdOjGVszggFPumKl2Gg1C3vsXhO0f10YlQ3ozaDtXHjeFsERQ5hBS6AudMsAtY5n/Pg13UpJQoeKCiNCAKyYEyEHeHlqtwcbrceOl5gDRy42mdFDE1XqG2kKKMUWfrwMJ6/X1kXU8Y96oH9ilADjIJGFq94SMU2Az0TAg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+0o2pBUDCYLXiqD3EDINJvhtlxTXnxpB9cpIK8gV2FQ=;
+ b=ekLslLbz6H2w88nubcdGXkyFKcZtEvUlMG8nYItLVbcVHSfcDNdgfQFGFTv5ZtxPSKhg/aQUmfeS/OPqTWW4MXjMluBMfa0x5TmNe31DuAJMVQGTbxdMsDSf+43/eeaAFtTd7h5WHEPO0js3fLzISjcD/PMwXsG3Cl5I42GIMpA=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=renesas.com;
+Received: from OS3PR01MB8426.jpnprd01.prod.outlook.com (2603:1096:604:194::10)
+ by OS3PR01MB7827.jpnprd01.prod.outlook.com (2603:1096:604:160::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.26; Sun, 25 Jun
+ 2023 23:54:30 +0000
+Received: from OS3PR01MB8426.jpnprd01.prod.outlook.com
+ ([fe80::3ac7:b366:51f:3e26]) by OS3PR01MB8426.jpnprd01.prod.outlook.com
+ ([fe80::3ac7:b366:51f:3e26%6]) with mapi id 15.20.6521.026; Sun, 25 Jun 2023
+ 23:54:30 +0000
+Message-ID: <87jzvrksi2.wl-kuninori.morimoto.gx@renesas.com>
+From:   Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ASoC: core: Always store of_node when getting DAI link component
+In-Reply-To: <20230623-asoc-fix-meson-probe-v1-1-82b2c2ec5ca4@kernel.org>
+References: <20230623-asoc-fix-meson-probe-v1-1-82b2c2ec5ca4@kernel.org>
+User-Agent: Wanderlust/2.15.9 Emacs/27.1 Mule/6.0
+Content-Type: text/plain; charset=US-ASCII
+Date:   Sun, 25 Jun 2023 23:54:29 +0000
+X-ClientProxiedBy: TYCPR01CA0042.jpnprd01.prod.outlook.com
+ (2603:1096:405:1::30) To OS3PR01MB8426.jpnprd01.prod.outlook.com
+ (2603:1096:604:194::10)
 MIME-Version: 1.0
-References: <ZImZ6eUxf5DdLYpe@arm.com> <64837d2af3ae39bafd025b3141a04f04f4323205.camel@intel.com>
- <ZJAWMSLfSaHOD1+X@arm.com> <5794e4024a01e9c25f0951a7386cac69310dbd0f.camel@intel.com>
- <ZJFukYxRbU1MZlQn@arm.com> <e676c4878c51ab4b6018c9426b5edacdb95f2168.camel@intel.com>
- <ZJLgp29mM3BLb3xa@arm.com> <c5ae83588a7e107beaf858ab04961e70d16fe32c.camel@intel.com>
- <ZJQR7slVHvjeCQG8@arm.com> <CALCETrW+30_a2QQE-yw9djVFPxSxm7-c2FZFwZ50dOEmnmkeDA@mail.gmail.com>
- <ZJR545en+dYx399c@arm.com>
-In-Reply-To: <ZJR545en+dYx399c@arm.com>
-From:   Andy Lutomirski <luto@kernel.org>
-Date:   Sun, 25 Jun 2023 16:52:16 -0700
-X-Gmail-Original-Message-ID: <CALCETrWGQ+xZggnjqV4zGrj8LJa4iWLqfF9-VnyfHeWg7agv9w@mail.gmail.com>
-Message-ID: <CALCETrWGQ+xZggnjqV4zGrj8LJa4iWLqfF9-VnyfHeWg7agv9w@mail.gmail.com>
-Subject: Re: [PATCH v9 23/42] Documentation/x86: Add CET shadow stack description
-To:     "szabolcs.nagy@arm.com" <szabolcs.nagy@arm.com>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "Xu, Pengfei" <pengfei.xu@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "kcc@google.com" <kcc@google.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "corbet@lwn.net" <corbet@lwn.net>, "nd@arm.com" <nd@arm.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "debug@rivosinc.com" <debug@rivosinc.com>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "bp@alien8.de" <bp@alien8.de>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "Torvalds, Linus" <torvalds@linux-foundation.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "Eranian, Stephane" <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: OS3PR01MB8426:EE_|OS3PR01MB7827:EE_
+X-MS-Office365-Filtering-Correlation-Id: 93067dc2-30d4-44b0-5696-08db75d7843c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: R1C/F3TCE/5CLn7gyTJ+B9tjmGF8EoPlYvDdTegr463iPxhh7fmv7JaxXNdGlCNxjR/oxHApOe9akl68NAh4u0VW0yvK/A5HOOEau7EJmLpdKhG0tDoyV5vkMTNTWMrfBfHs8SuHvsiTtVi7OXtFAbOIzxc/NB3m0zwL+wdBU4sC/YK+t0hb9doEq2/iKPdI4YtQgaN2hZbKu2O4m+7BI6KEx6yWNLe5o4ocxPdzZDHxJgsXjxwvkrHNcfTuCIEjgBLg1I9/GOv7Bb61/KPR+UTBHSpNipr+SeAvGJuknH626ecglZQXNvRvVYC6oHM/kh6MpS3Qupy9C+1NL7g84lbQZsyMeAy6ZGvM4XBk8CKz5vZNkCBme3ki4UzC1thLfPrHds1zsnEm2blgo0n1nRNpz6S19uy3wp14ePagvb2ZyH927a6PVjwPodRT+dCbZItVobAxaKOHf73801iMd+DsA9JHVswFWZEkTNlgf4+a8zhrBNFXWTpvJb+vS9CDwjDN8WUzFg+0DQYtTBDsll3F5vZ/DBG5Iie5bwf8XEvK87B1IZKnIHUCC0K8j6XfG8UBzcmxH2FwSkoYr3CKmRXYFkajXpBVCmE/GJXmX2PkDlXBOfWSMgVKhVwuuFGe
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS3PR01MB8426.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(366004)(136003)(346002)(39860400002)(376002)(451199021)(6512007)(36756003)(5660300002)(41300700001)(86362001)(6916009)(66556008)(8936002)(8676002)(66476007)(4326008)(38350700002)(38100700002)(316002)(66946007)(6506007)(26005)(186003)(2906002)(52116002)(6486002)(478600001)(83380400001)(2616005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?YbTJzvveshHUxx5u/Eu8HXrsoFXo283TTeYpXzYfwC/49HOoLTozRFTKF5Yt?=
+ =?us-ascii?Q?Zuln3bGU+v2G/NL0AEyhyDOrJ8fe7SAJUoEvGlPLGwZ7ruzzGmQaABt1dq1N?=
+ =?us-ascii?Q?j6dAIdVJ16whb9sQc+xzGEM3AH98XvN6rbA8nE+UbK6eSuVbeSy0xpGlaMzY?=
+ =?us-ascii?Q?ATP2D5APSiTCQZQTpmi1gUE74FsmdDW4p+kvwZC+qvUw8enzkCbQV8QYFhpF?=
+ =?us-ascii?Q?XjEsAJl/YWVwVd3somdEoUr1VDxhVYLEbCDdmCLksnVa4Q+T4IfCID88ogOX?=
+ =?us-ascii?Q?xGDitPwUWxVYK4Ov/zFHsFW6Ki8QLf6hJuKK727w0qqJ9jFpAKAzLO+plmah?=
+ =?us-ascii?Q?GlLko9XeD5GhbiAf2VzrO5C6RAlTHM/FxIRuUBL72aogpFSwyEcgIFvM4PCE?=
+ =?us-ascii?Q?tBl6INtaMHL3W7rOSYXZ7Kt28JhajbO1oVkiQeNt7Kb/f1sNQ7Tm25nF4hn8?=
+ =?us-ascii?Q?3YAlZvf1Zq5M2JuDi9CnIApItEPM/1bb6iOVIUnwpm1UBk96yGp1BJ7yuFKt?=
+ =?us-ascii?Q?8/ED9aZiDpiBwU+Z58UnJyxbSqQ0Wlc0I6vkk9icuhPDHH6oCKsYYazuGnnq?=
+ =?us-ascii?Q?WHG3TpaDxqBG6gmJf1MkFrf48LqRBbhWTFp3D1pzfy3WJokOxCtyCnesDegp?=
+ =?us-ascii?Q?KPniVucGmnuNXKE+xeAX8JzHE6NWroGgSz8Och1U0RIo3cTZdQf8gLrv/eI/?=
+ =?us-ascii?Q?0wFg3O9ub42tWDiWmag7MKGmJuhrGzyZp1dJM+7LgSxdfodC+zZVs9JX5XYW?=
+ =?us-ascii?Q?iA7sBlX2KkJqmZdpURC51x0tM965/Xoi3/iSFgHBuQ6q1w17LpF5i1uvKTJM?=
+ =?us-ascii?Q?5banw7kLMSJaS1+HvTZKDH/Sb0KQrIA+SwtdDRnMJHLs8F7W5LqXbomZWtqU?=
+ =?us-ascii?Q?pJjA1hn5LphmvZAZpxB3K0vLwbH30zj9To4mTwIeYBJA3oqRWE3n/9KeHyc+?=
+ =?us-ascii?Q?SUAn86ToMmcvBnrtGM3/a8UrRChrxH9lHcVw81quKrjHyXP8HzCFSDhfoWTn?=
+ =?us-ascii?Q?MRElLGXZu4ltkxms5Cx/SLdXfBMTWoulJB30n9MlWZcBuYgy8nFaFzvwMJBn?=
+ =?us-ascii?Q?aIN6cEknPepirdx4IuuuJykwS4ed5OxbcZpIQZoFe0DcbGUc1ky9Okqs9XUX?=
+ =?us-ascii?Q?MtsHvXq12K1LPqYPXZvZtha1h1D0/e1XPXloFd/PVLblA7AgDryGDxBFbuIg?=
+ =?us-ascii?Q?cqKgc2A3Rpsml7+ZJnYzJTLCERSW1IqfKF/T8u/MTM1tg2azN/G9ZjStjJZK?=
+ =?us-ascii?Q?GGqfgF9lC9h3jfwj5OCTz5NYUM0Q3ujYeD45fiiO++cw8HAn/s1UoDm952g2?=
+ =?us-ascii?Q?ZG6u5FoytPNORw/36ZQq0ctymaltiC5xx4N5vw/WwKv7cL2Gp5d5lODQ93fO?=
+ =?us-ascii?Q?+3fUeBNeezAP/ccRQFnxOiVwcVlpPk1aemm/KLTY0+4QONBQ4Ve5DVGevxfD?=
+ =?us-ascii?Q?yCfaqBPZRLWn0WcvQ0MknGpBv4KsYFrjxTesvL0BKLSHvuJzPZWlJuAdxLot?=
+ =?us-ascii?Q?/np/DI3+6EaYBBYJLa94azCJS7pd4EENYs9d19tuZ3Hh+stL2NuAFxPdCB+f?=
+ =?us-ascii?Q?V62ujc5/TzNvQGY3mU88SnJU01AV4GYnKJ/wAen3IRAbbZHcIjMR+0xnWU8r?=
+ =?us-ascii?Q?gAd3T9rzVZf+q7/chGMKFQg=3D?=
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 93067dc2-30d4-44b0-5696-08db75d7843c
+X-MS-Exchange-CrossTenant-AuthSource: OS3PR01MB8426.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jun 2023 23:54:30.1426
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: MATtBXATPm3aYHWlcrEJCCWto8gZQmllsQVZL/lxEFm8ojCFaVaeOBnJL3FdMubTMtOOgRMk/Cr50y9MOh7BM6VscaXd2ekHj1HSkMvYI87bz+L7/JVvlxeBfk60dpBk
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS3PR01MB7827
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 22, 2023 at 9:43=E2=80=AFAM szabolcs.nagy@arm.com
-<szabolcs.nagy@arm.com> wrote:
->
-> The 06/22/2023 08:26, Andy Lutomirski wrote:
-> > On Thu, Jun 22, 2023 at 2:28=E2=80=AFAM szabolcs.nagy@arm.com
-> > <szabolcs.nagy@arm.com> wrote:
-> > >
-> > > The 06/21/2023 18:54, Edgecombe, Rick P wrote:
-> > > > On Wed, 2023-06-21 at 12:36 +0100, szabolcs.nagy@arm.com wrote:
-> > > > > > The 06/20/2023 19:34, Edgecombe, Rick P wrote:
-> > > > > > > > I actually did a POC for this, but rejected it. The problem=
- is,
-> > > > > > > > if
-> > > > > > > > there is a shadow stack overflow at that point then the ker=
-nel
-> > > > > > > > > > can't
-> > > > > > > > push the shadow stack token to the old stack. And shadow st=
-ack
-> > > > > > > > > > overflow
-> > > > > > > > is exactly the alt shadow stack use case. So it doesn't rea=
-lly
-> > > > > > > > > > solve
-> > > > > > > > the problem.
-> > > > > >
-> > > > > > the restore token in the alt shstk case does not regress anythi=
-ng
-> > > > > > but
-> > > > > > makes some use-cases work.
-> > > > > >
-> > > > > > alt shadow stack is important if code tries to jump in and out =
-of
-> > > > > > signal handlers (dosemu does this with swapcontext) and for tha=
-t a
-> > > > > > restore token is needed.
-> > > > > >
-> > > > > > alt shadow stack is important if the original shstk did not
-> > > > > > overflow
-> > > > > > but the signal handler would overflow it (small thread stack, h=
-uge
-> > > > > > sigaltstack case).
-> > > > > >
-> > > > > > alt shadow stack is also important for crash reporting on shstk
-> > > > > > overflow even if longjmp does not work then. longjmp to a
-> > > > > > makecontext
-> > > > > > stack would still work and longjmp back to the original stack c=
-an
-> > > > > > be
-> > > > > > made to mostly work by an altshstk option to overwrite the top
-> > > > > > entry
-> > > > > > with a restore token on overflow (this can break unwinding thou=
-gh).
-> > > > > >
-> > > >
-> > > > There was previously a request to create an alt shadow stack for th=
-e
-> > > > purpose of handling shadow stack overflow. So you are now suggestin=
-g to
-> > > > to exclude that and instead target a different use case for alt sha=
-dow
-> > > > stack?
-> > >
-> > > that is not what i said.
-> > >
-> > > > But I'm not sure how much we should change the ABI at this point si=
-nce
-> > > > we are constrained by existing userspace. If you read the history, =
-we
-> > > > may end up needing to deprecate the whole elf bit for this and othe=
-r
-> > > > reasons.
-> > >
-> > > i'm not against deprecating the elf bit, but i think binary
-> > > marking will be difficult for this kind of feature no matter what
-> > > (code may be incompatible for complex runtime dependent reasons).
-> > >
-> > > > So should we struggle to find a way to grow the existing ABI withou=
-t
-> > > > disturbing the existing userspace? Or should we start with somethin=
-g,
-> > > > finally, and see where we need to grow and maybe get a chance at a
-> > > > fresh start to grow it?
-> > > >
-> > > > Like, maybe 3 people will show up saying "hey, I *really* need to u=
-se
-> > > > shadow stack and longjmp from a ucontext stack", and no one says
-> > > > anything about shadow stack overflow. Then we know what to do. And
-> > > > maybe dosemu decides it doesn't need to implement shadow stack (hig=
-hly
-> > > > likely I would think). Now that I think about it, AFAIU SS_AUTODISA=
-RM
-> > > > was created for dosemu, and the alt shadow stack patch adopted this
-> > > > behavior. So it's speculation that there is even a problem in that
-> > > > scenario.
-> > > >
-> > > > Or maybe people just enable WRSS for longjmp() and directly jump ba=
-ck
-> > > > to the setjmp() point. Do most people want fast setjmp/longjmp() at=
- the
-> > > > cost of a little security?
-> > > >
-> > > > Even if, with enough discussion, we could optimize for all
-> > > > hypotheticals without real user feedback, I don't see how it helps
-> > > > users to hold shadow stack. So I think we should move forward with =
-the
-> > > > current ABI.
-> > >
-> > > you may not get a second chance to fix a security feature.
-> > > it will be just disabled if it causes problems.
-> >
-> > *I* would use altshadowstack.
-> >
-> > I run a production system (that cares about correctness *and*
-> > performance, but that's not really relevant here -- SHSTK ought to be
-> > fast).  And, if it crashes, I want to know why.  So I handle SIGSEGV,
-> > etc so I have good logs if it crashes.  And I want those same logs if
-> > I overflow the stack.
-> >
-> > That being said, I have no need for longjmp or siglongjmp for this.  I
-> > use exit(2) to escape.
->
-> the same crash handler that prints a log on shstk overflow should
-> work when a different cause of SIGSEGV is recoverable via longjmp.
-> to me this means that alt shstk must work with longjmp at least in
-> the non-shstk overflow case (which can be declared non-recoverable).
 
-Sure, but how many SIGSEGV handlers would use altshadowstack and
-*also, in the same handler* ever resume?  Not mine.  Obviously I'm
-only one sample.
+Hi Mark
 
->
-> > For what it's worth, setjmp/longjmp is a bad API.  The actual pattern
-> > that ought to work well (and that could be supported well by fancy
-> > compilers and non-C languages, as I understand it) is more like a
-> > function call that has two ways out.  Like this (pseudo-C):
-> >
-> > void function(struct better_jmp_buf &buf, args...)
-> > {
-> >    ...
-> >        if (condition)
-> >           better_long_jump(buf);  // long jumps out!
-> >        // could also pass buf to another function
-> >    ...
-> >        // could also return normally
-> > }
-> >
-> > better_call_with_jmp_buf(function, args);
-> >
-> > *This* could support altshadowstack just fine.  And many users might
-> > be okay with the understanding that, if altshadowstack is on, you have
-> > to use a better long jump to get out (or a normal sigreturn or _exit).
->
-> i don't understand why this would work fine when longjmp does not.
-> how does the shstk switch happen?
+Thank you for the patch !
 
-Ugh, I think this may have some issues given how the ISA works.  Sigh.
+> The generic snd_soc_dai_get_dlc() contains a default translation function
+> for DAI names which has factored out common code in a number of card
+> drivers, resolving the dai_name and of_node either using a driver provided
+> translation function or with a generic implementation. Unfortunately the
+> of_node can't be set by the translation function since it currently doesn't
+> have an interface to do that but snd_soc_dai_get_dlc() only initialises the
+> of_node in the case where there is no translation function.
+> 
+> This breaks the Meson support after conversion to use the generic helpers
+> since the DPCM cards for it check which component of the SoC is connected
+> to each link by checking the compatible for the component and the Meson
+> components provide a custom operation so don't use the generic code.
+> 
+> Fix this and potentially other cards by unconditionally storing the node in
+> the dai_link_component, there shouldn't be a binding specific of_node
+> selected since that's how we determine the translation function.
+> 
+> Fixes: 2e1dbea1f8a3 ("ASoC: meson: use snd_soc_{of_}get_dlc()")
+> Fixes: 3c8b5861850c ("ASoC: soc-core.c: add index on snd_soc_of_get_dai_name()")
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
 
-I was imagining that better_call_with_jmp_buf would push a restore
-token on the shadow stack, then call the passed-in function, then, on
-a successful return, INCSSP over the token and continue on.
-better_long_jump() would RSTORSSP to the saved token.
+Yes, indeed.
+But I think we want to set it under lock and if ret was no error case ?
 
-But I'm not sure how to write the token without WRUSS.
+----------
+diff --git a/sound/soc/soc-core.c b/sound/soc/soc-core.c
+index ab1f302ee078..5cc3f4cc9d1b 100644
+--- a/sound/soc/soc-core.c
++++ b/sound/soc/soc-core.c
+@@ -3375,7 +3375,6 @@ int snd_soc_get_dlc(const struct of_phandle_args *args, struct snd_soc_dai_link_
+ 				id--;
+ 			}
+ 
+-			dlc->of_node	= args->np;
+ 			dlc->dai_name	= snd_soc_dai_name_get(dai);
+ 		} else if (ret) {
+ 			/*
+@@ -3389,6 +3388,10 @@ int snd_soc_get_dlc(const struct of_phandle_args *args, struct snd_soc_dai_link_
+ 
+ 		break;
+ 	}
++
++	if (ret == 0)
++		dlc->of_node = args->np;
++
+ 	mutex_unlock(&client_mutex);
+ 	return ret;
+ }
+-----------
 
-What *could* be done, which would be nasty and
-sigaltshadowstack-specific, is to have a jump out of a signal handler
-provide a pointer to the signal frame (siginfo_t or ucontext pointer),
-and the kernel would assist it in switching the shadow stack back.
-Eww.
+Thank you for your help !!
 
---Andy
-
->
-> > No one is getting an altshadowstack signal handler without code
-> > changes.
->
-> assuming the same component is doing the alt shstk setup as the
-> longjmp.
->
-> > siglongjmp() could support altshadowstack with help from the kernel,
-> > but we probably don't want to go there.
->
-> what kind of help? maybe we need that help..
->
-> e.g. if the signal frame token is detected by longjmp on
-> the shstk then doing an rt_sigreturn with the right signal
-> frame context allows longjmp to continue unwinding the shstk.
-> however kernel sigcontext layout can change so userspace may
-> not know it so longjmp needs a helper, but only in the jump
-> across signal frame case.
->
-> (this is a different design than what i proposed earlier,
-> it also makes longjmp from alt shstk work without wrss,
-> the downside is that longjmp across makecontext needs a
-> separate solution then which implies that all shstk needs
-> a detectable token at the end of the shstk.. so again
-> something that we have to get right now and cannot add
-> later.)
+Best regards
+---
+Kuninori Morimoto
