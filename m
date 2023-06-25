@@ -2,80 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D350F73CD95
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 02:53:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74B1173CD9D
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 02:57:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229793AbjFYAxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 20:53:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58830 "EHLO
+        id S229883AbjFYA5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 20:57:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjFYAxL (ORCPT
+        with ESMTP id S229449AbjFYA5t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 20:53:11 -0400
-X-Greylist: delayed 138 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 24 Jun 2023 17:53:09 PDT
-Received: from out203-205-221-240.mail.qq.com (out203-205-221-240.mail.qq.com [203.205.221.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99BFB10D8;
-        Sat, 24 Jun 2023 17:53:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1687654387;
-        bh=gQH4VaAwMjpN/17+66P6tp7c9VnLsslmB8qz1LllLJk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=zYlfl6mEXm2bGrHLswgty64ZXiywBYn0psiAYhkPVD3iKbtiYJ0mEtCS7xAjjvSFE
-         i4G/H+so735Ap19ytImuFErGlSMVCGYXznV9nz4SihkJ4zVMWooai4QcUhulBiVS6m
-         6N6qcjUzYLmjYve0l93qbEgDpoUZRpunfw2csV5M=
-Received: from localhost.localdomain ([39.156.73.12])
-        by newxmesmtplogicsvrsza12-0.qq.com (NewEsmtp) with SMTP
-        id D441B6B7; Sun, 25 Jun 2023 08:53:04 +0800
-X-QQ-mid: xmsmtpt1687654384tphqfewpw
-Message-ID: <tencent_DE0C5A84DAB2B62E1B543C5F4B4727118F09@qq.com>
-X-QQ-XMAILINFO: NMGzQWUSIfvTPAq7WF7g3gVA8xXBb7bkZIy6xeiCUzUlrR3syishj+Ur2X7kxZ
-         rdECZFBxwRu3ZMZgI+gN3I0jCGDY9rhfqcH+aNfsULkSB57pAsnpkNC2VVfOwNqxEtwQwyoqn1lX
-         HCdP9MOLb3SLeFezh97/bibNxfNw86EUXUAJYBBR3TS8GUjQeuZwc+3n62ZMD6x6q/p8b/7wFzWe
-         BghXoSde/DmyXvQSoyGTXTxdKq6+cSVTvU2jxTRTQ+uyKl3bCjjYFv2CZJFsz/pWNDBlh3OKPmkj
-         8vc0rZ+tRWikjCzuL5koghXfPU0vFo0QdPR72CmfLpbP0E8jI6UBDFLayS+f0VGq/3NSC3xF6IIs
-         1mdNDvj/N/PqlaP01ExYkL/+RsL1ZtZuvgwr8c2Jh1F8WFQpKa5lEDzkrOUu8xmfyPmNDAXiyXoN
-         llkIZQrIDABF0zfv/BEOg31qyqYELkmRpvE/3xiqU1mlYnUaJ9XDt8K6es2c0PlObrqfwgNmgQ5u
-         45N6vJpMclLLg/bU6ggarvEKAhv8I+FvsSbQgmYe4N3ke8tMLecF7jDjPeP2nhFgatFhV8/thOdz
-         fPvh1DlBJUuF+nAVMl30u7OYN0HOYzdquZuNBn04cyETPiNrS4G+LmvenPOm5/ShmE6ssmWf3g6r
-         xHxof6qzW2yThrFZtsd5/Bmes2FRMf4vXbgjbeOx+HP7HyjVkHxQiHMp6jM4I5+J+z9nKRv7PFej
-         o1hL4Da02/BZMZvoXHj1yVHFR7lHpO9Yqz7KG1HOUp2pn3pSziWK8LqEXYh7ZzRGZEbCtckCXN9T
-         xWBUJkvU5j+MuQ+puIEFPFjBNUNgEkr7u6XZD9bvocIkE+oONZECeqSWfO3FII1bJDhQnTXwxfYH
-         GjZlcB2g+R02V0LvoKHGOU9Ier/L3j1aB2SPi4+rCOR4Fe6i6EsQ3eWURSiMJVfkqYUfL5FXQ/J1
-         OJADEcZXH8Af0p2vzGOJIF7Q0hBHktGLzDCXG34hBm5YC26LeE4DeG3SS8N6l4
-X-QQ-XMRINFO: MMd9k4KOWfk4EI9u9DiMAPPHFKKkl9Wo5w==
-From:   Rong Tao <rtoax@foxmail.com>
-To:     bvanassche@acm.org
-Cc:     corbet@lwn.net, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        martin.petersen@oracle.com, michael.christie@oracle.com,
-        rongtao@cestc.cn, rtoax@foxmail.com, target-devel@vger.kernel.org
-Subject: Re: Re: [PATCH] docs: target: Convert tcm_mod_builder.py print syntax to python3
-Date:   Sun, 25 Jun 2023 08:53:03 +0800
-X-OQ-MSGID: <20230625005303.5464-1-rtoax@foxmail.com>
-X-Mailer: git-send-email 2.39.3
-In-Reply-To: <debdc47a-c377-e457-5643-415d93ced54a@acm.org>
-References: <debdc47a-c377-e457-5643-415d93ced54a@acm.org>
+        Sat, 24 Jun 2023 20:57:49 -0400
+Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E28A0E78;
+        Sat, 24 Jun 2023 17:57:47 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R251e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VlqN6ji_1687654664;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VlqN6ji_1687654664)
+          by smtp.aliyun-inc.com;
+          Sun, 25 Jun 2023 08:57:45 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     selvin.xavier@broadcom.com
+Cc:     jgg@ziepe.ca, leon@kernel.org, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next] RDMA/bnxt_re: Remove unneeded semicolon
+Date:   Sun, 25 Jun 2023 08:57:43 +0800
+Message-Id: <20230625005743.125952-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SORTED_RECIPS,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorry for the late reply, I just submit v2[0], remove tcm_mod_builder.py
-totally. Please review.
+./drivers/infiniband/hw/bnxt_re/main.c: ib_verbs.h is included more than once.
 
-Thanks,
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Closes: https://bugzilla.openanolis.cn/show_bug.cgi?id=5588
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+ drivers/infiniband/hw/bnxt_re/main.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-Rong Tao.
-
-
-[0] https://lore.kernel.org/lkml/tencent_E3643D5F0AA8CCBEF28C6A233A18B808CD0A@qq.com/
+diff --git a/drivers/infiniband/hw/bnxt_re/main.c b/drivers/infiniband/hw/bnxt_re/main.c
+index 1e5b60f9269e..b42166fe7454 100644
+--- a/drivers/infiniband/hw/bnxt_re/main.c
++++ b/drivers/infiniband/hw/bnxt_re/main.c
+@@ -66,7 +66,6 @@
+ #include <rdma/bnxt_re-abi.h>
+ #include "bnxt.h"
+ #include "hw_counters.h"
+-#include "ib_verbs.h"
+ 
+ static char version[] =
+ 		BNXT_RE_DESC "\n";
+-- 
+2.20.1.7.g153144c
 
