@@ -2,60 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C255073CEC2
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 08:47:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CA6373CEC7
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 08:55:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230363AbjFYGqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 02:46:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39782 "EHLO
+        id S231271AbjFYGzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 02:55:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbjFYGqr (ORCPT
+        with ESMTP id S231203AbjFYGzG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 02:46:47 -0400
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F1BFE50;
-        Sat, 24 Jun 2023 23:46:46 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QphN25P0zz4f3lDN;
-        Sun, 25 Jun 2023 14:46:42 +0800 (CST)
-Received: from [10.174.179.247] (unknown [10.174.179.247])
-        by APP4 (Coremail) with SMTP id gCh0CgA34qXS4pdkS5fyMQ--.41998S3;
-        Sun, 25 Jun 2023 14:46:43 +0800 (CST)
-Message-ID: <06f8c00f-d6a3-f93b-0db7-b89a3f49d91e@huaweicloud.com>
-Date:   Sun, 25 Jun 2023 14:46:42 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] md/raid1: prioritize adding disk to 'removed' mirror
-To:     Yu Kuai <yukuai1@huaweicloud.com>, song@kernel.org
-Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linan122@huawei.com, yi.zhang@huawei.com, houtao1@huawei.com,
-        yangerkun@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-References: <20230623172525.2513235-1-linan666@huaweicloud.com>
- <d02d4a53-84ed-cb65-b0d8-2a199bc068cd@huaweicloud.com>
-From:   Li Nan <linan666@huaweicloud.com>
-In-Reply-To: <d02d4a53-84ed-cb65-b0d8-2a199bc068cd@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Sun, 25 Jun 2023 02:55:06 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2065.outbound.protection.outlook.com [40.107.6.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44F20E65
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 23:54:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AL8z2XiS4Y41oj5yU4463NHH4dOuFNEY8l3pcv9dTnAX3qaV90To/IR5Y9/gMUcv7ps2+eMp/rKwk9QOii+f6r8m9Wfwg4BBp84M6B2sAYTB8klb/Kk1QDHovg7c/ZC7wWbSKV2Mi5PWw5nu/R6vYcWdhMwZoYDe7acEKoisGkkHizZARlOJlPJc3uIYRGSh4gR08ipXXs2i0DamEzsl1r34u22/mCUD1/tVgWprEOoD8411mjk2gEIv/DBazH/lDrNLsYOBcH/n/etkNn2cTjoc3OOShsV7KiavFFzJ8c4dVkbPHnM3yCwT1q4YruCg/5zcLIoOU5ct+wjivvbYeA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VfF5dXzltExNR893CrnqE0MoDFRyXPnWtG/seWW6G/0=;
+ b=gGRPrJdzpuqse0op1JDJjxbx0A6dDgNJq6GyCmcGiHCCd9a1+FoE6g18HDRwLghzkWizzibBm/MPospJvYxNeHKUhd6Us8+M4eSMLIgzmmS5DnSSW2gMnI98jgmauzAFZB3JFKWcYmlwiqX2c1Iez6Nr3kaZFR8D0b94jeYswNWKRQO3tojjTGPRnVuLyOZr9Ch80edDHuE7JhNtR6Tjfhw3uzRSXlX8UBOmpReAABMXaEUh5hLsLtz+mlXgYfSNFu/JyoOOJLOPYswwPbbg1XxVx64Izjxlp2o9Rd8Yu0xrUV/gxTmxvJHGMPqTS/TvtISlD/CF7C0GidO7UgKswg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VfF5dXzltExNR893CrnqE0MoDFRyXPnWtG/seWW6G/0=;
+ b=nhMDxYGRv7nXue3mdf5bnsdQ/HNwuZzjPzEeHnCvDyScHHMLqxphf+m+bwfM4+74trKh3MZN0sYnpUKJw3tBx9gl65qcJAZ/lea3QBHZzb8ZVPt65vWL/6KSboez1tuABbc1AZf5PPflXsbOp8UI0tsdwwFc4S2BJNdL2Bcu57g=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DB9PR04MB9498.eurprd04.prod.outlook.com (2603:10a6:10:360::21)
+ by DU2PR04MB9098.eurprd04.prod.outlook.com (2603:10a6:10:2f1::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24; Sun, 25 Jun
+ 2023 06:54:49 +0000
+Received: from DB9PR04MB9498.eurprd04.prod.outlook.com
+ ([fe80::7552:a10c:7f4b:96b7]) by DB9PR04MB9498.eurprd04.prod.outlook.com
+ ([fe80::7552:a10c:7f4b:96b7%6]) with mapi id 15.20.6521.026; Sun, 25 Jun 2023
+ 06:54:49 +0000
+From:   Chancel Liu <chancel.liu@nxp.com>
+To:     shengjiu.wang@gmail.com, Xiubo.Lee@gmail.com, festevam@gmail.com,
+        nicoleotsuka@gmail.com, lgirdwood@gmail.com, broonie@kernel.org,
+        perex@perex.cz, tiwai@suse.com, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+Cc:     Chancel Liu <chancel.liu@nxp.com>
+Subject: [PATCH] ASoC: imx-pcm-rpmsg: Set PCM hardware parameters separately
+Date:   Sun, 25 Jun 2023 14:54:12 +0800
+Message-Id: <20230625065412.651870-1-chancel.liu@nxp.com>
+X-Mailer: git-send-email 2.25.1
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgA34qXS4pdkS5fyMQ--.41998S3
-X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY67AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
-        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
-        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8I
-        cVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87
-        Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvE
-        ncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I
-        8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lF7I21c0E
-        jII2zVCS5cI20VAGYxC7Mxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I
-        8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AK
-        xVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcV
-        AFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8I
-        cIk0rVW3JVWrJr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxV
-        W8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VU1c4S5UUUUU==
-X-CM-SenderInfo: polqt0awwwqx5xdzvxpfor3voofrz/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain
+X-ClientProxiedBy: SG2P153CA0039.APCP153.PROD.OUTLOOK.COM (2603:1096:4:c6::8)
+ To DB9PR04MB9498.eurprd04.prod.outlook.com (2603:10a6:10:360::21)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB9PR04MB9498:EE_|DU2PR04MB9098:EE_
+X-MS-Office365-Filtering-Correlation-Id: c4a73961-b805-4c30-2417-08db754911a2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ztBmrqbJ3wxFoLNjh25yGR62vtOKfpm5A/wkcaJciAi7yr2PkCh3NeewIp49UjOCQ+Y/tDEQMPiiojAWp+GzExFLH1mpwTb9XJvluEXUtyi9b8Du2ZuoGITh5xNAyqOlgQdplQhaEJWeDFGXcYVaNaRBwKSvENp5915DDolKwXeR+Mtz4w5wVC6qO6kzDT6xxuvvUrRpnUhptDjelQdNkSCAWbpXFy2E5lFuIpXZZ7IBeJ+K6qg7lP6mJzyOhdLA6OYtKGEOEDNF46kDfCzOubBxp09l3b8HwWMfj9+1HANejadDXdy21i/oZoqwmnIIRRz/3ycS3ENliBXlEluFYO+WIzTbojGv6RbD6R5B5PosDPut6fj+MdxVVXbj3eAwMfSqKAj7xT8FEdE0YKSkTyYetpgVHLO0FtGpY14WmSybHDCI6QWRfaTjYgMNsGl+LR1SGUsQd8qBB4RqnYiJetHIK4nyXWJY8K3L/bPtEfj4RUUU4STFS6eMWsEg65dnbqkIZRmF/0RmyKdIStgwhUmXuzSduFmdCM3Ux3gvlFVrteLeAid8Pur72WvOQXCjTQ9gP3NymtycXKEaKNbNbM/GMeOq0A39k70Mh/fiFLTs86oy8CpxhQoTGkw9wcWF
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR04MB9498.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(39850400004)(376002)(366004)(346002)(451199021)(6486002)(478600001)(52116002)(6666004)(2616005)(83380400001)(26005)(6512007)(1076003)(6506007)(186003)(2906002)(5660300002)(44832011)(7416002)(36756003)(921005)(38350700002)(38100700002)(4326008)(66946007)(316002)(86362001)(8936002)(8676002)(41300700001)(66556008)(66476007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?knnntIx1XMkGv1C9C0wohaF4HbD03G/lpxChH/UrioW6Fmg4NkDA6jDIona8?=
+ =?us-ascii?Q?1c5gjWPS0A/MrNe54kclbbxIus1+2ZjfwEgM5JmefzyYXUnmEiBx8s2SiKKe?=
+ =?us-ascii?Q?cfhjzSvqJ3gURB5FT+S1gDTVlWSy+qMt4Lo8mMSniD49fRpdeSQq0Em847vy?=
+ =?us-ascii?Q?fZtPfnQziqelvSOcgdh4dvH6tWvT72T26sWUwNp0VqNNJPftPasBzAbFTmRZ?=
+ =?us-ascii?Q?kVzgMCOJzLZI5Dcn+LTNdbp0NWRCjxziWQJ6MUkZWG1uU5ASnJHlO/XHIk47?=
+ =?us-ascii?Q?kACKJ5FccCO00MP9tVXR4lACeBeFNWdb+kgitznaHK5eQT83sTto/YxR+UUi?=
+ =?us-ascii?Q?oIUokQ2SwC0NGmfRxcoeFfTN2s7H6QGLUdAnFn3K2cTh49k2JCuKU3o/MS05?=
+ =?us-ascii?Q?+RBC2hBnripM+2jMXl9jhUym6YuicjGYv3LBfVlVXmiM+wg5eyQnDIK6XeFB?=
+ =?us-ascii?Q?Sbh1gpn/9jaGHRyXwSi2ISoAtjcfffgOrSDYmXB+f6lLjLc+PVRlW/QWeLLF?=
+ =?us-ascii?Q?R9MzchPkWO29DvUwxyMMsODhem6VbKl0FOhZMePiP60uyFhBFoimR0jtKsHp?=
+ =?us-ascii?Q?8hWv+allyUzpZMA7b9ydwiv2pCCGxPDMXQyIPNwP5aTudlSgRS/03j6CEC2b?=
+ =?us-ascii?Q?QnzS/0L+UtxwLF4ax2gN7KLzI7Hd+D/gtYoVTb1Ilj7vqYsLztoKxpUGmuQw?=
+ =?us-ascii?Q?cjsiYtM8x+AoLqagGeWB5EK39a5Ss52nPm2JbDr1x7iuqmu0VkehDFWQlg7P?=
+ =?us-ascii?Q?n/pOM0FLNginGuX6ZvgasBQvXqseJBEoyOSEgxnhYPBWthQEAS/dbPk5KaOY?=
+ =?us-ascii?Q?xSRov7UhZXTlYNgPt/75ztaNRU6dLtylpuDhZhyf8C3dFQegq1nMpxYcLU/o?=
+ =?us-ascii?Q?+byReKrNKMW85wGwEcc8YHqwyZfU0UpRF0EJel4YKEw5DFfx+LTs9oFj3ltt?=
+ =?us-ascii?Q?rHZ5M61DT2iUpgZoe3yNk+TFUaPS5Wn4r5uR+n3/UxcaMPnJ6r4h1XRL+my/?=
+ =?us-ascii?Q?mYLbdz3I4tf1EU6Mbzyhps4q/YnftukVEeaAkjoN2XDa/cdRBLTKNKPUkwov?=
+ =?us-ascii?Q?bq3u8FS/OFOQ7lhpDhEE8sEZIRK2O/ILL5tjM17bqGT813RwT4BMJWBBk9Zl?=
+ =?us-ascii?Q?yK3plreNPwaTIGt44oD1lbBd1NRninmvwKo1iBVTPzCFzu1yKfjapfxmpt3Z?=
+ =?us-ascii?Q?3NxXmtWOnOjMDtf822Ro0p56W1zjIVYZ7LpKh9Z1UzH/SjmbatacEijuNC0d?=
+ =?us-ascii?Q?RfcqjT7/nQfmSPM4ahNPrW8Q6Yzqu28KVUooaTagYUBRuVpgcbBysPCvCiaj?=
+ =?us-ascii?Q?ZihO6/8Yhrvr5eHkYh5xFmw4iMinXctsrluHlx7GRiOyd1v1JLRjd8Uov4e7?=
+ =?us-ascii?Q?ETsq0Uv/5LfU4jET0+ZrJQ+HLAcRAIixtLa0hKyEfedY+zLVbmkYtAZpM/k6?=
+ =?us-ascii?Q?nrvpsCv0k4DMSKQzYvXtWT+Og15yd4q1pa390q1j0UdIu8RLfWNq+e2qIhbi?=
+ =?us-ascii?Q?yJzPpy9fGP7RZNzVpyYrmFBVjTge9ZcYfsyJ/2DRSiY/q3pW2Xrv+1OQ9Zbq?=
+ =?us-ascii?Q?jkSOb0G2addhKF+bcg9Sh8VWtzZkWpyF6ZpCYM5Z?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c4a73961-b805-4c30-2417-08db754911a2
+X-MS-Exchange-CrossTenant-AuthSource: DB9PR04MB9498.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jun 2023 06:54:49.3568
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: B9qZr2cqdubM7WJ1ptk5TBhRLarMg0E/ywh+jotgUPhyfpb8ibj7mvLSiKfbBEEIGJhH9PawJs1bN1RRnD3+Tw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB9098
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,27 +114,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Different PCM devices may have different PCM hardware parameters. It
+requires PCM hardware parameters set separately if there is more than
+one rpmsg sound card.
 
+Signed-off-by: Chancel Liu <chancel.liu@nxp.com>
+---
+ sound/soc/fsl/imx-pcm-rpmsg.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-在 2023/6/25 10:06, Yu Kuai 写道:
-> Hi,
-> 
-> 在 2023/06/24 1:25, linan666@huaweicloud.com 写道:
->> From: Li Nan <linan122@huawei.com>
->>
->> New disk should be added to "removed" position first instead of to be a
->> replacement. Commit 6090368abcb4 ("md/raid10: prioritize adding disk to
->> 'removed' mirror") has fixed this issue for raid10. This patch fixes 
->> raid1.
-> 
-> This commit message "This patch ..." shound use imperative mood, other
-> than that, this patch LGTM.
-> 
-> Reviewed-by: Yu Kuai <yukuai3@huawei.com>
-
-OK, I will change it. Thanks for your review.
-
+diff --git a/sound/soc/fsl/imx-pcm-rpmsg.c b/sound/soc/fsl/imx-pcm-rpmsg.c
+index 765dad607bf6..d63782b8bdef 100644
+--- a/sound/soc/fsl/imx-pcm-rpmsg.c
++++ b/sound/soc/fsl/imx-pcm-rpmsg.c
+@@ -228,6 +228,10 @@ static int imx_rpmsg_pcm_open(struct snd_soc_component *component,
+ 			      struct snd_pcm_substream *substream)
+ {
+ 	struct rpmsg_info *info = dev_get_drvdata(component->dev);
++	struct snd_soc_pcm_runtime *rtd = asoc_substream_to_rtd(substream);
++	struct snd_soc_dai *cpu_dai = asoc_rtd_to_cpu(rtd, 0);
++	struct fsl_rpmsg *rpmsg = dev_get_drvdata(cpu_dai->dev);
++	struct snd_pcm_hardware pcm_hardware;
+ 	struct rpmsg_msg *msg;
+ 	int ret = 0;
+ 	int cmd;
+@@ -255,10 +259,11 @@ static int imx_rpmsg_pcm_open(struct snd_soc_component *component,
+ 
+ 	info->send_message(msg, info);
+ 
+-	imx_rpmsg_pcm_hardware.period_bytes_max =
+-			imx_rpmsg_pcm_hardware.buffer_bytes_max / 2;
++	pcm_hardware = imx_rpmsg_pcm_hardware;
++	pcm_hardware.buffer_bytes_max = rpmsg->buffer_size;
++	pcm_hardware.period_bytes_max = pcm_hardware.buffer_bytes_max / 2;
+ 
+-	snd_soc_set_runtime_hwparams(substream, &imx_rpmsg_pcm_hardware);
++	snd_soc_set_runtime_hwparams(substream, &pcm_hardware);
+ 
+ 	ret = snd_pcm_hw_constraint_integer(substream->runtime,
+ 					    SNDRV_PCM_HW_PARAM_PERIODS);
+@@ -597,7 +602,6 @@ static int imx_rpmsg_pcm_new(struct snd_soc_component *component,
+ 	if (ret)
+ 		return ret;
+ 
+-	imx_rpmsg_pcm_hardware.buffer_bytes_max = rpmsg->buffer_size;
+ 	return snd_pcm_set_fixed_buffer_all(pcm, SNDRV_DMA_TYPE_DEV_WC,
+ 					    pcm->card->dev, rpmsg->buffer_size);
+ }
 -- 
-Thanks,
-Nan
+2.25.1
 
