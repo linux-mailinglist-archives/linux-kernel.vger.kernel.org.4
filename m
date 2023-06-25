@@ -2,53 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AECF73D1BA
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 17:35:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D63E73D1BB
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 17:35:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230029AbjFYPfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 11:35:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39734 "EHLO
+        id S230242AbjFYPfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 11:35:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbjFYPfn (ORCPT
+        with ESMTP id S230079AbjFYPfx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 11:35:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE40C4;
-        Sun, 25 Jun 2023 08:35:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 95F3B60BA8;
-        Sun, 25 Jun 2023 15:35:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04274C433C8;
-        Sun, 25 Jun 2023 15:35:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687707341;
-        bh=mmvd5X7DDRh2tjM27EjT3YqBdHmMVA5hXWhIzEfMWys=;
-        h=Date:From:To:Cc:Subject:Reply-To:From;
-        b=XZznjq/u64Yn7vp0X0tVte7In01zvReuR8GBL+jv02S+3U+nvjIMrmJybRwVqD95Y
-         QFllfewRHJNtZFHWSqg++JYMPmjP+pbiI9JpEYqdh82WqYrDZ3oIozbMQdbrSxKic5
-         UYAChygVDY7SwyJzpJrJmMRAQW21LD8LaMG+HXYXWuFjQd7AeMmqkQIU3/hfhNk0eP
-         QR6Z0DO6W5/8psswHcAH6mWATwIffX4UZNFVl6jHcdURpaa0SA6nwBulo6D3YxvAut
-         lo/Kqe1bjs5ilnnI/2duHi33S11gpvPBYYc4+YvTNIUCgnD/N+aBP1MgtRgp+XINqc
-         Heu6GqecdL9Aw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 98DBCCE39D8; Sun, 25 Jun 2023 08:35:40 -0700 (PDT)
-Date:   Sun, 25 Jun 2023 08:35:40 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     torvalds@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
-        mingo@kernel.org, tglx@linutronix.de, rcu@vger.kernel.org
-Subject: [GIT PULL] RCU changes for v6.5
-Message-ID: <963d6eb8-6520-4c33-bbe8-6c76205bfd3d@paulmck-laptop>
-Reply-To: paulmck@kernel.org
+        Sun, 25 Jun 2023 11:35:53 -0400
+Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2123.outbound.protection.outlook.com [40.107.114.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C09C3E50
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 08:35:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cLywr+2Q0qS7HfzPyNs9qVUn7AxedHLtFUY89iiuf4/Kptak/2eme3Elwkwfkxcnyjtgyy4RN8SH4zorgcxmnXqDJySGryYrO2bhFpvtv6uZfewcQi7+WVuPdggIZ35gg8Gr6fFQPS/F03JseSilZYWh+Op5hoz0bUzt7AFfu0m8vVQPpnjywjkdDyUE7eAaefo+3aOrgmoEbC+aPgmgix8XVlbSHkgUewJloQVZrGMAu1BiC3VfsLnSX7IjALx5KTlgVmwhzXIG+niAYEshhSczv8mQyQq1qY0DXfkE9TnHZXYe/IlZmOf/UmJTZqelC4WbQb72D8aY+KD22zLQRw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qKTR/ZKDVGmH9mfeh6XyTyOSwVssM/91blIQPOx1O8w=;
+ b=EOBmIxOFIvi14xHRibHH5HJL9phkVd7WX3qceY9fBoTeBtj5iZYZM/EEfNBALxCZjmsXzVi8KZxIRt1yUT1yH6Pqqh6Fj+/B838SYcq+IxjNga2Kx4d8BrhvNpF26d9ZeHUYxkzFC21sVIg6KV8aX6nKXyyiFW6sy/IeP0V8Uxww3ixQ0Oh+raeQ1/8timCDrK+wHEDUuzONKQxFF1ogixocx8Kb5tI8OZUtAq8rKg9pLHG/6lcAhQSYXTStayPGNZ0LMLqAXspTc2v/0OENMbx6v0zcqc77OiQ5ZAYf9WG2SzSZPyfmqwUXI9QWPbZ7a5dy2eEHXyUNGfmQDMQqzA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=connect.ust.hk; dmarc=pass action=none
+ header.from=connect.ust.hk; dkim=pass header.d=connect.ust.hk; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=connect.ust.hk;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qKTR/ZKDVGmH9mfeh6XyTyOSwVssM/91blIQPOx1O8w=;
+ b=i9mkEXbEhIw0AJxkCQIxWd36bQKNTY5AiZ7EWNyvMN+GadqktB8OyLh82/C9dWylslHVRv9S3Ycz+d0P4Z9AhwnSXrBybPrpHPSZekxY6An5DA2Xn2Y49nu5h7weomTDXtnHtuXOJ29iig5TQ/Aozn0GfIzw8FUhCrNArHSp/00=
+Received: from TYCP286MB1188.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:b7::8) by
+ TYWP286MB3192.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:2d4::11) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6521.24; Sun, 25 Jun 2023 15:35:48 +0000
+Received: from TYCP286MB1188.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::b429:5aa3:12f1:6b8]) by TYCP286MB1188.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::b429:5aa3:12f1:6b8%4]) with mapi id 15.20.6521.026; Sun, 25 Jun 2023
+ 15:35:48 +0000
+From:   YE Chengfeng <cyeaa@connect.ust.hk>
+To:     "perex@perex.cz" <perex@perex.cz>,
+        "tiwai@suse.com" <tiwai@suse.com>,
+        "yunjunlee@chromium.org" <yunjunlee@chromium.org>
+CC:     "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: [PATCH] ALSA: dummy: Fix &dpcm->lock deadlock issues
+Thread-Topic: [PATCH] ALSA: dummy: Fix &dpcm->lock deadlock issues
+Thread-Index: AQHZp3fywsqsa+nIJUORNCRxL38reA==
+Date:   Sun, 25 Jun 2023 15:35:48 +0000
+Message-ID: <TYCP286MB1188FEE149369A32D90DCE288A21A@TYCP286MB1188.JPNP286.PROD.OUTLOOK.COM>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=connect.ust.hk;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TYCP286MB1188:EE_|TYWP286MB3192:EE_
+x-ms-office365-filtering-correlation-id: a99eeb09-9268-46f2-673a-08db7591d9c4
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: L8t5qlKIErCyZCKvSHn8KJYo67P4AQmU4/C4/NTKgbDS0JgTlNjRdbsRVIVS5C9C9L0xj1vO3aoxJ5LoOGwyi0IusOdlnLsz3Z1Bi9Cf/6mrwNzT9FEQebIDj0A+XmK+MwXQXKiL2nKniSATrku9Yc+Oz35h0ICKJLh0PgTY2G1aObWsq41pekOJUjn0l8NZOFI0gMw+Y45pCWu9cRKYBHWShgUt3kUFgMJQ25HCRY50lW8M2D17ue3GzWmjbK4qkMfuve2hQpqgU7+U/yIce4K1mzVMDL3k5GFDHd3CVrJVWTbxZ1CGUBf0LM6aFo1klR4ng+ABPekgTTkpU8XYKURfbQoKasSN007cgzTkS583TAQiElwUqRbGhDB1XWFjiLNzjmFT/fVsR7x0/DkNjCzhxI/ckqjeVVlccDCN3SuSPi1h8vj0IR7mthaZ5RHxt0ZaCB8nX3MVIUL7sD7HR4xX6P7GK2QCyxkqg89CmzpPt2VKbYjuey2er3PZL3uMf8fiZIPRIVrHTvaMd5QSVkszPaY5kK8r6mIDy7JF/sdtUHfDRcwb1cOCXEIsH4a11YQb6dbuwuUuunuhw3zZx18GXmcS92YFYeoF8MZaVVR3mdtPqlR8QnICl3xTO++w
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYCP286MB1188.JPNP286.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(376002)(366004)(136003)(39860400002)(451199021)(122000001)(38100700002)(38070700005)(83380400001)(33656002)(86362001)(478600001)(54906003)(110136005)(7696005)(71200400001)(41300700001)(66946007)(66556008)(55016003)(66476007)(786003)(64756008)(66446008)(316002)(8676002)(76116006)(8936002)(26005)(4326008)(6506007)(186003)(9686003)(2906002)(91956017)(5660300002)(52536014);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?gb2312?B?YXpCZVBTSTNOM0pYQ2FwOWVReEtDTytJL25pWkd3UVVURGw3ei9UWEdaNGdu?=
+ =?gb2312?B?aVZ0WGJidmRKaDdXb2NXdzB3REtsUGhSeWJ5VnVEbGJ5bDJ2bHBKbE9Xb2Mr?=
+ =?gb2312?B?TkVpbUFxWW5JZ3R3Q3MrSDJIVUwxakl6YXhsY0NwSHdXNGlXVHJFU3BWTEFY?=
+ =?gb2312?B?YjdQNGVpbFliL3ZEZXRDTVhZZ1o4TTIrUWJtYU5MTGp0N09GTlF0eURLampn?=
+ =?gb2312?B?SFBHQkRqYllmV3VieFRmSUdzS1kxaTRhdUwvVWswZmYyT1pnQ2k4d0NacFYw?=
+ =?gb2312?B?MHhaRVJUTUdEcmZIVzI3V29QNnk1bG5CQ1ZJUEgvY1YxOCtZcmpZTmdKUVpl?=
+ =?gb2312?B?Qnk1dFVaQXYycjFxSDBlRnBJQzNTRW9ZMjBYcEpBblg1SEVTdVozWmxZMGRl?=
+ =?gb2312?B?SHVoVjhMaU5oNEdXTTlhdVpOOWsrY1llaUNYT3hZeEl1bkpnVDc5NndkdUVR?=
+ =?gb2312?B?d0NUTk1TdDErZEZHZnQxakZ4cE5qcXY2WWZaWXZPdldVbWJBL0xCMkZTYWEz?=
+ =?gb2312?B?TTc3SjhJWlIrcDNNNnpJaFVELzdxMHprdHpSTFVzNjNPTks1cVNNYkxGenJu?=
+ =?gb2312?B?dWdoWnE5Sk1CbytxYWQ3UlcvMHloVmlYelpqdzNuQ1I4MUo3dTZyT1d2cTNa?=
+ =?gb2312?B?WXdpVktOVkowRndUZVBwdTJJVlZ4VHJoQzduNVlzcUg5alB3S2dMV0ZBdVdK?=
+ =?gb2312?B?MlltUUR4QWhUVzJaeWpQbVF1dkswakcyZFhuZ25sbzF5dWVTQUFmSDB5NmNI?=
+ =?gb2312?B?MGNFRnVONitYdHpIS3FEV0lIODd4WHM2MHJhMWlMV1RqUHF0cS9HNkl6Wm1N?=
+ =?gb2312?B?K0dyakJhRktHY1plYTRvbHNzQTBIaTVmQU9rckN5TTBQVW40cVlsb0JXU0sw?=
+ =?gb2312?B?bVplR0hXT1Bxcy9Obk03MHpiWXNnbGtWRm1ZVnhnYUE2aUpGMHU4ZUhnaTg1?=
+ =?gb2312?B?LzRaVzFGeUxiWjZ4RW12ajJEbWt3MzZwV0lBOWZSNXFQV0lZRFZQb1k0SkpD?=
+ =?gb2312?B?LzRPZndrN09sa0FIVXVUdmt0c2d5TWtIZUlTN2hKM2R1bVdxcUkxQzBrVG1w?=
+ =?gb2312?B?dFVLOWV5SUJjMGEwVjNpbC9obXpxcTV0a0JjRWtzcHRYTWY5Vy9HaU5jTmFr?=
+ =?gb2312?B?bGdqYm54U05xUmlkL295N2gwbXp2cmZFQk1WbG9oMDlhaUY0WXFXUkVROUh3?=
+ =?gb2312?B?ZEoxSUw0a3ZqSGI5OHdWYTNiYjRib2ZGVjhYdUlaY2VqcHgxbHV6eUZncmhl?=
+ =?gb2312?B?T3I0bVozS04ra2ZrWk93U3Rrakp4bFJwV0FaM2Z5cnZzRE04Y2p2Zml6Y1lP?=
+ =?gb2312?B?Q2ZFM2V4UFlVNjVFMkRtVFpxL0dSWm9SS21oTDlWSGw4aGRoR0NFQWVnb1F5?=
+ =?gb2312?B?K1ZscHdKeS9ScUVMT1BPbWwyb3dvbk9vcldCbEF5ZGpxN09xRkVSOUUyVzFP?=
+ =?gb2312?B?a0VETXJ5am0wcTZUMS9DMFNSd3FIRTl6QnBBRWlFeTVyR3pGeVlnbCtVb3hm?=
+ =?gb2312?B?elpWOFM0ZktPM3NZY3RGdVZiSGJmWTdqR1EzSkI5MVNuVytzV0hrSlM3cStk?=
+ =?gb2312?B?SUFDT0RPLzg2RGU0Uk1qU29GM05DQkdnMnhBb0RqRGt0S1ZmUnVlenRtRmdH?=
+ =?gb2312?B?dEN2RWJ4QlkwUkpKNHlVdU51Q29JT2luT2lNM2NibmVNVHd1cEl6dXZFZHF6?=
+ =?gb2312?B?NS84MWRGNGV3VCtRem5TbnBlSER3VkkrUWNXWmdZU3lmWFZzRzBVVkZuSXFV?=
+ =?gb2312?B?TnlRSkxDdlpjTUlRSytVdWI4TTF2eUROamMxZ1M0VncySWVMa2xnSmJsbThH?=
+ =?gb2312?B?bWNxeldBS0tlZUZ2aFMwdHlQL2FHVVlCTnlJMjF0bmh4b0ZzVWxnaEkwazFa?=
+ =?gb2312?B?VFF0VGxEdTlyY25BOGNrMHgxWGFHdUE2N0ZaeHdweGhVaWgyUFk1dHR4dmRs?=
+ =?gb2312?B?T1l2ODVHbFFlejFKRmtmQnYxOCtaYVR6TmM2RDZSUkxtNmRueWZWZVF4YUZI?=
+ =?gb2312?B?MFJvRUhSMGtRbUlKL2U4amtZK1lnUGNuZU1sL2dNR01oVndlQ0dKa3dTbi85?=
+ =?gb2312?B?K3p3RFNvVWtlWGpla3Nmbzl2QTZ5VFdHdGtQQVBObXEzNVpjeVNORTcxTm8x?=
+ =?gb2312?Q?Xvsp9vFJiIRg1jy9JjpGKRWK4?=
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-OriginatorOrg: connect.ust.hk
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYCP286MB1188.JPNP286.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: a99eeb09-9268-46f2-673a-08db7591d9c4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Jun 2023 15:35:48.7207
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 6c1d4152-39d0-44ca-88d9-b8d6ddca0708
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: YGlIBYG3Tkubc/8wkAjvE1bQ0FZuTnmwMnovWr2XQkhEHnJuiV5UhwveL79hFD7qJncvKHod2laKfDhKOBWT8g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYWP286MB3192
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,126 +125,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, Linus,
-
-Once the merge window opens, please pull the latest RCU git tree from:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git tags/rcu.2023.06.22a
-  # HEAD: 2e31da752c6d0e892f2a9232e18da816d04ee691: Merge branches 'doc.2023.05.10a', 'fixes.2023.05.11a', 'kvfree.2023.05.10a', 'nocb.2023.05.11a', 'rcu-tasks.2023.05.10a', 'torture.2023.05.15a' and 'rcu-urgent.2023.06.06a' into HEAD (2023-06-07 13:44:06 -0700)
-
-----------------------------------------------------------------
-RCU pull request for v6.5
-
-This pull contains the following branches:
-
-doc.2023.05.10a: Documentation updates
-
-fixes.2023.05.11a: Miscellaneous fixes, perhaps most notably:
-
-o	Remove RCU_NONIDLE().  The new visibility of most of the idle
-	loop to RCU has obsoleted this API.
-
-o	Make the RCU_SOFTIRQ callback-invocation time limit also apply
-	to the rcuc kthreads that invoke callbacks for CONFIG_PREEMPT_RT.
-
-o	Add a jiffies-based callback-invocation time limit to handle
-	long-running callbacks.  (The local_clock() function is only
-	invoked once per 32 callbacks due to its high overhead.)
-
-o	Stop rcu_tasks_invoke_cbs() from using never-onlined CPUs,
-	which fixes a bug that can occur on systems with non-contiguous
-	CPU numbering.
-
-kvfree.2023.05.10a: kvfree_rcu updates
-
-o	Eliminate the single-argument variant of k[v]free_rcu() now
-	that all uses have been converted to k[v]free_rcu_mightsleep().
-
-o	Add WARN_ON_ONCE() checks for k[v]free_rcu*() freeing callbacks
-	too soon.  Yes, this is closing the barn door after the horse
-	has escaped, but Murphy says that there will be more horses.
-
-nocb.2023.05.11a: Callback-offloading updates
-
-o	Fix a number of bugs involving the shrinker and lazy callbacks.
-
-rcu-tasks.2023.05.10a: Tasks RCU updates
-
-torture.2023.05.15a: Torture-test updates
-
-rcu-urgent.2023.06.06a: Urgent SRCU fix (already pulled)
-
-----------------------------------------------------------------
-Chen-Yu Tsai (1):
-      notifier: Initialize new struct srcu_usage field
-
-Frederic Weisbecker (4):
-      rcu/nocb: Protect lazy shrinker against concurrent (de-)offloading
-      rcu/nocb: Fix shrinker race against callback enqueuer
-      rcu/nocb: Recheck lazy callbacks under the ->nocb_lock from shrinker
-      rcu/nocb: Make shrinker iterate only over NOCB CPUs
-
-Paul E. McKenney (14):
-      doc: Get rcutree module parameters back into alpha order
-      doc: Document the rcutree.rcu_resched_ns module parameter
-      srcu: Remove extraneous parentheses from srcu_read_lock() etc.
-      rcu/kvfree: Add debug to check grace periods
-      rcu: Add more RCU files to kernel-api.rst
-      rcu: Check callback-invocation time limit for rcuc kthreads
-      rcu: Employ jiffies-based backstop to callback time limit
-      rcu: Mark additional concurrent load from ->cpu_no_qs.b.exp
-      rcu: Mark rcu_cpu_kthread() accesses to ->rcu_cpu_has_work
-      rcu: Make rcu_cpu_starting() rely on interrupts being disabled
-      rcu-tasks: Stop rcu_tasks_invoke_cbs() from using never-onlined CPUs
-      locktorture: Add long_hold to adjust lock-hold delays
-      rcutorture: Correct name of use_softirq module parameter
-      Merge branches 'doc.2023.05.10a', 'fixes.2023.05.11a', 'kvfree.2023.05.10a', 'nocb.2023.05.11a', 'rcu-tasks.2023.05.10a', 'torture.2023.05.15a' and 'rcu-urgent.2023.06.06a' into HEAD
-
-Peter Zijlstra (1):
-      rcu: Remove RCU_NONIDLE()
-
-Qiuxu Zhuo (2):
-      rcu/rcuscale: Move rcu_scale_*() after kfree_scale_cleanup()
-      rcu/rcuscale: Stop kfree_scale_thread thread(s) after unloading rcuscale
-
-Shigeru Yoshida (1):
-      rcu-tasks: Avoid pr_info() with spin lock in cblist_init_generic()
-
-Uladzislau Rezki (Sony) (3):
-      rcu/kvfree: Eliminate k[v]free_rcu() single argument macro
-      rcu/kvfree: Add debug check for GP complete for kfree_rcu_cpu list
-      rcu/kvfree: Do not run a page work if a cache is disabled
-
-Zhouyi Zhou (1):
-      torture: Remove duplicated argument -enable-kvm for ppc64
-
-Zqiang (7):
-      MAINTAINERS: Update qiang1.zhang@intel.com to qiang.zhang1211@gmail.com
-      rcu/kvfree: Invoke debug_rcu_bhead_unqueue() after checking bnode->gp_snap
-      rcu/kvfree: Use consistent krcp when growing kfree_rcu() page cache
-      rcu/kvfree: Make fill page cache start from krcp->nr_bkv_objs
-      rcu/kvfree: Make drain_page_cache() take early return if cache is disabled
-      rcu-tasks: Clarify the cblist_init_generic() function's pr_info() output
-      doc/rcutorture: Add description of rcutorture.stall_cpu_block
-
- .../RCU/Design/Requirements/Requirements.rst       |  36 +---
- Documentation/RCU/whatisRCU.rst                    |   1 -
- Documentation/admin-guide/kernel-parameters.txt    | 140 ++++++++-------
- Documentation/core-api/kernel-api.rst              |  12 ++
- MAINTAINERS                                        |   2 +-
- include/linux/notifier.h                           |  10 ++
- include/linux/rcupdate.h                           |  54 +-----
- include/linux/srcu.h                               |   8 +-
- kernel/locking/locktorture.c                       |  51 +++---
- kernel/rcu/Kconfig                                 |  18 ++
- kernel/rcu/rcu.h                                   |   6 +
- kernel/rcu/rcuscale.c                              | 199 +++++++++++----------
- kernel/rcu/tasks.h                                 |  12 +-
- kernel/rcu/tree.c                                  | 131 +++++++++-----
- kernel/rcu/tree_exp.h                              |   2 +-
- kernel/rcu/tree_nocb.h                             |  52 +++++-
- kernel/rcu/tree_plugin.h                           |   4 +-
- .../testing/selftests/rcutorture/bin/functions.sh  |   2 +-
- .../rcutorture/configs/rcu/BUSTED-BOOST.boot       |   2 +-
- .../selftests/rcutorture/configs/rcu/TREE03.boot   |   2 +-
- 20 files changed, 412 insertions(+), 332 deletions(-)
+VGhlIHRpbWVyIGR1bW15X3N5c3RpbWVyX2NhbGxiYWNrIGlzIGV4ZWN1dGVkIHVuZGVyIHNvZnRp
+cnEKY29udGV4dCwgdGh1cyBvdGhlciBwcm9jZXNzIGNvbnRleHQgY29kZSByZXF1aXJpbmcgdGhl
+IHNhbWUgbG9jawpzaG91bGQgZGlzYWJsZSBpbnRlcnJ1cHQuIE90aGVyd2lzZSB0aGVyZSB3b3Vs
+ZCBiZSBwb3RlbnRpYWwKZGVhZGxvY2sgaXNzdWVzIHdoZW4gdGhlIGNvZGUgZXhlY3V0aW5nIHVu
+ZGVyIHByb2Nlc3MgY29udGV4dAooaS5lLiwgZHVtbXlfc3lzdGltZXJfcG9pbnRlciwgZHVtbXlf
+c3lzdGltZXJfc3RhcnQsCmR1bW15X3N5c3RpbWVyX3N0b3ApIGlzIHByZWVtcHRlZCBieSB0aGUg
+dGltZXIgd2hpbGUgaG9sZGluZwp0aGUgbG9jay4KCkRlYWRsb2NrIHNjZW5hcmlvOgpkdW1teV9z
+eXN0aW1lcl9wb2ludGVyCiAgICAtPiBzcGluX2xvY2soJmRwY20tPmxvY2spOwogICAgICAgIDx0
+aW1lciBpbnRlcnJ1cHQ+CiAgICAgICAgLT4gZHVtbXlfc3lzdGltZXJfY2FsbGJhY2sKICAgICAg
+ICAtPiBzcGluX2xvY2tfaXJxc2F2ZSgmZHBjbS0+bG9jaywgZmxhZ3MpOwoKRml4IHRoZSBwb3Rl
+bnRpYWwgZGVhZGxvY2sgYnkgdXNpbmcgc3Bpbl9sb2NrX2lycXNhdmUuCgpTaWduZWQtb2ZmLWJ5
+OiBDaGVuZ2ZlbmcgWWUgPGN5ZWFhQGNvbm5lY3QudXN0LmhrPgotLS0KIHNvdW5kL2RyaXZlcnMv
+ZHVtbXkuYyB8IDE3ICsrKysrKysrKysrLS0tLS0tCiAxIGZpbGUgY2hhbmdlZCwgMTEgaW5zZXJ0
+aW9ucygrKSwgNiBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9zb3VuZC9kcml2ZXJzL2R1bW15
+LmMgYi9zb3VuZC9kcml2ZXJzL2R1bW15LmMKaW5kZXggOWMxN2I0OWEyYWUxLi4wNGZiNGYxN2Uw
+NWMgMTAwNjQ0Ci0tLSBhL3NvdW5kL2RyaXZlcnMvZHVtbXkuYworKysgYi9zb3VuZC9kcml2ZXJz
+L2R1bW15LmMKQEAgLTI2OCwxOSArMjY4LDIzIEBAIHN0YXRpYyB2b2lkIGR1bW15X3N5c3RpbWVy
+X3VwZGF0ZShzdHJ1Y3QgZHVtbXlfc3lzdGltZXJfcGNtICpkcGNtKQogc3RhdGljIGludCBkdW1t
+eV9zeXN0aW1lcl9zdGFydChzdHJ1Y3Qgc25kX3BjbV9zdWJzdHJlYW0gKnN1YnN0cmVhbSkKIHsK
+IAlzdHJ1Y3QgZHVtbXlfc3lzdGltZXJfcGNtICpkcGNtID0gc3Vic3RyZWFtLT5ydW50aW1lLT5w
+cml2YXRlX2RhdGE7Ci0Jc3Bpbl9sb2NrKCZkcGNtLT5sb2NrKTsKKwl1bnNpZ25lZCBsb25nIGZs
+YWdzOworCisJc3Bpbl9sb2NrX2lycXNhdmUoJmRwY20tPmxvY2ssIGZsYWdzKTsKIAlkcGNtLT5i
+YXNlX3RpbWUgPSBqaWZmaWVzOwogCWR1bW15X3N5c3RpbWVyX3JlYXJtKGRwY20pOwotCXNwaW5f
+dW5sb2NrKCZkcGNtLT5sb2NrKTsKKwlzcGluX3VubG9ja19pcnFyZXN0b3JlKCZkcGNtLT5sb2Nr
+LCBmbGFncyk7CiAJcmV0dXJuIDA7CiB9CiAKIHN0YXRpYyBpbnQgZHVtbXlfc3lzdGltZXJfc3Rv
+cChzdHJ1Y3Qgc25kX3BjbV9zdWJzdHJlYW0gKnN1YnN0cmVhbSkKIHsKIAlzdHJ1Y3QgZHVtbXlf
+c3lzdGltZXJfcGNtICpkcGNtID0gc3Vic3RyZWFtLT5ydW50aW1lLT5wcml2YXRlX2RhdGE7Ci0J
+c3Bpbl9sb2NrKCZkcGNtLT5sb2NrKTsKKwl1bnNpZ25lZCBsb25nIGZsYWdzOworCisJc3Bpbl9s
+b2NrX2lycXNhdmUoJmRwY20tPmxvY2ssIGZsYWdzKTsKIAlkZWxfdGltZXIoJmRwY20tPnRpbWVy
+KTsKLQlzcGluX3VubG9jaygmZHBjbS0+bG9jayk7CisJc3Bpbl91bmxvY2tfaXJxcmVzdG9yZSgm
+ZHBjbS0+bG9jaywgZmxhZ3MpOwogCXJldHVybiAwOwogfQogCkBAIC0zMjAsMTEgKzMyNCwxMiBA
+QCBkdW1teV9zeXN0aW1lcl9wb2ludGVyKHN0cnVjdCBzbmRfcGNtX3N1YnN0cmVhbSAqc3Vic3Ry
+ZWFtKQogewogCXN0cnVjdCBkdW1teV9zeXN0aW1lcl9wY20gKmRwY20gPSBzdWJzdHJlYW0tPnJ1
+bnRpbWUtPnByaXZhdGVfZGF0YTsKIAlzbmRfcGNtX3VmcmFtZXNfdCBwb3M7CisJdW5zaWduZWQg
+bG9uZyBmbGFnczsKIAotCXNwaW5fbG9jaygmZHBjbS0+bG9jayk7CisJc3Bpbl9sb2NrX2lycXNh
+dmUoJmRwY20tPmxvY2ssIGZsYWdzKTsKIAlkdW1teV9zeXN0aW1lcl91cGRhdGUoZHBjbSk7CiAJ
+cG9zID0gZHBjbS0+ZnJhY19wb3MgLyBIWjsKLQlzcGluX3VubG9jaygmZHBjbS0+bG9jayk7CisJ
+c3Bpbl91bmxvY2tfaXJxcmVzdG9yZSgmZHBjbS0+bG9jaywgZmxhZ3MpOwogCXJldHVybiBwb3M7
+CiB9CiAKLS0gCjIuMTcuMQ==
