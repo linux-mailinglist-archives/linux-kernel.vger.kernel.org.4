@@ -2,119 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63E1073D160
+	by mail.lfdr.de (Postfix) with ESMTP id B5F9973D161
 	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 16:18:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230169AbjFYORx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 10:17:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49646 "EHLO
+        id S230116AbjFYOSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 10:18:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbjFYORp (ORCPT
+        with ESMTP id S230145AbjFYOSA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 10:17:45 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9385EE50
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 07:17:44 -0700 (PDT)
-Received: from sobremesa.fritz.box (unknown [IPv6:2a02:8010:65b5:0:bbb0:f8ec:7bc9:dbe4])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: alarumbe)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 37B576607143;
-        Sun, 25 Jun 2023 15:17:43 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1687702663;
-        bh=dFpupq7O24/dJi0HaCEYyiNgtin8JPm9F0yIqnWaVk0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P0+OzzxSGvVgVt8sVefh7H4+EXSXyTwwKrVbWw6zGU3Q28JXabTCiCl9Ly2PzBAxo
-         /gopWwltD2vCBojMYpWUdn5BxO6uxetDwmWJP+wWEbh3+K/zU304y9nJ8wrc1CppjY
-         EWhaqa3d6eWhrZdJVzl2wh34LhOPBNheTdlX96/R0AsxAnos/d4GyFkaCgtAIg378h
-         WtCgiX7Vpd2JtXjGALxIWrSPi2hJ20AkN33HurUiN2uXwib6B4tHKdR/eHfae+zsKN
-         TInsAdk+Xv3JE2gnLR/3nQYMQSpDq4GiRwwPHk+B9CHLLIiRrtoRh0N/R8fFq/oGuL
-         X7QGK7C869L4A==
-From:   =?UTF-8?q?Adri=C3=A1n=20Larumbe?= <adrian.larumbe@collabora.com>
-To:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     =?UTF-8?q?Adri=C3=A1n=20Larumbe?= <adrian.larumbe@collabora.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v3 3/3] drm/bridge: dw-hdmi: remove dead code and fix indentation
-Date:   Sun, 25 Jun 2023 15:17:17 +0100
-Message-Id: <ca42985814e9be33b7f8e3a33cea9e18505299e3.1687702042.git.adrian.larumbe@collabora.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <cover.1687702042.git.adrian.larumbe@collabora.com>
-References: <cover.1687702042.git.adrian.larumbe@collabora.com>
+        Sun, 25 Jun 2023 10:18:00 -0400
+Received: from mail-4319.protonmail.ch (mail-4319.protonmail.ch [185.70.43.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 047DCE54
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 07:17:56 -0700 (PDT)
+Date:   Sun, 25 Jun 2023 14:17:44 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1687702674; x=1687961874;
+        bh=inMyYrOTZsqu+PuRu8d57Qiq8p3tOvJbGALKqIAke6I=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=nWmcbiPcF+KrhUXh5wyp5V46TYfMXv6kItl9dia5OypB2Ps1ksl9NG2V/w8VOJfd5
+         JegCvE0pTbT2m1UFoUuXI78YSE9MwN3ULj8PZz7Aj9eK6pGhv5aZ/Zm+rEg2wgG8/V
+         RIZWhbLvl3B8ciuiMWSZ++2h8CNa9ubdJO2mFzvGaJ+B7wMlDoqn7AtfHRJpehN1jF
+         hvMd7TyY1f38DtdQKMmxoj4brQOfx8PWrxG6jU5lxlgXED45VcGuCaOWA8nh1kjtHW
+         T1qAxLWqJLUM+app+ftODyh97umBEQm81lfoqbdQtX0l8PwrwmiVbY6/VRJUMj58mo
+         863jN9exy7tjQ==
+To:     Benno Lossin <benno.lossin@proton.me>
+From:   =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        Alice Ryhl <aliceryhl@google.com>,
+        Andreas Hindborg <nmi@metaspace.dk>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Asahi Lina <lina@asahilina.net>
+Subject: Re: [PATCH 5/7] rust: init: add `..Zeroable::zeroed()` syntax for zeroing all missing fields
+Message-ID: <8lCE3SyChVVb2HphigkwKsxv7etgmS0N3AzcDyYtCEoqcFEKvY-5ILkOrWUr_vnWrvsWrAHXVfwcWARfsiMHC8Yc03sND-PuuK-2z9j4z6I=@protonmail.com>
+In-Reply-To: <6f4e1d68-f828-8990-4859-8ab24907fa46@proton.me>
+References: <20230624092330.157338-1-benno.lossin@proton.me> <20230624092330.157338-5-benno.lossin@proton.me> <W1fY0aa_v9j7lJNWXk_WNaxY2qruJo1R6k7u0g-X5L5Rxuod-VMBMmByICDwjF_fFGvNJTV41QapW0WeVduNYqxgo9S243gnNGXbexq6P3Q=@protonmail.com> <f4bcd952-1ad9-42b7-6e0b-72a115dcbe8e@proton.me> <we7PHkrpBV6kIgFZojiBFerqlXtSJB9HWkj129OGUWUVyVFwtuoirr3gVybgLzW2hmpUqqSAAQUPsdfL9QC2JyNKOLRNX0mSTfgD8llSJKE=@protonmail.com> <6f4e1d68-f828-8990-4859-8ab24907fa46@proton.me>
+Feedback-ID: 27884398:user:proton
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The hdmi_datamap enum is no longer in use. Also reindent enable_audio's
-call params.
+On Sunday, June 25th, 2023 at 15:07, Benno Lossin <benno.lossin@proton.me> =
+wrote:
+> On 25.06.23 14:56, Bj=C3=B6rn Roy Baron wrote:
+> > On Saturday, June 24th, 2023 at 23:14, Benno Lossin <benno.lossin@proto=
+n.me> wrote:
+>=20
+> >>>> +                        // Ensure that the struct is indeed `Zeroab=
+le`.
+> >>>> +                        is_zeroable(slot);
+> >>>> +                        // SAFETY:  The type implements `Zeroable` =
+by the check above.
+> >>>> +                        unsafe { ::core::ptr::write_bytes(slot, 0, =
+1) };
+> >>>> +                        $init_zeroed // this will be `()` if set.
+> >>>
+> >>> How does this work? Shouldn't there be a ; after $init_zeroed to cons=
+ume the () value?
+> >>
+> >> It is the last expression of a block and since it is `()` it is ok
+> >> (adding a ; would also be ok, but it is not necessary).
+> >
+> > I'm surprised it is considered the last expression of a block. Unlike w=
+ith {} using $()? will still
+> > allow variables defined inside this as if they were outside of it. Also=
+ I can't reproduce this
+> > behavior with:
+> >
+> >      macro_rules! foo {
+> >          ($($a:expr)?) =3D> {
+> >              $($a)?
+> >              bar();
+> >          }
+> >      }
+> >
+> >      fn main() {
+> >          foo!(());
+> >      }
+> >
+> > Is there something I'm missing?
+> >
+> > Cheers,
+> > Bj=C3=B6rn
+>=20
+> Not sure what you mean with "allow variables defined inside this
+> as if they were outside of it". But note that in the macro `$init_zeroed`
+> is the last expression of a block. Here is a small example:
 
-Signed-off-by: Adrián Larumbe <adrian.larumbe@collabora.com>
-Acked-by: Neil Armstrong <neil.armstrong@linaro.org>
----
- drivers/gpu/drm/bridge/synopsys/dw-hdmi.c | 22 ++++------------------
- 1 file changed, 4 insertions(+), 18 deletions(-)
+$(let $this =3D unsafe { ::core::ptr::NonNull::new_unchecked(slot) };)? com=
+es after
+this code in the same block that contains struct __InitOk;. And after that =
+another
+$crate::__init_internal!() invocation. That is why I don't get that this is=
+ allowed
+at all.
 
-diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-index 3a788316e2e5..69c0e80b8525 100644
---- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-+++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-@@ -49,20 +49,6 @@
- 
- #define HDMI14_MAX_TMDSCLK	340000000
- 
--enum hdmi_datamap {
--	RGB444_8B = 0x01,
--	RGB444_10B = 0x03,
--	RGB444_12B = 0x05,
--	RGB444_16B = 0x07,
--	YCbCr444_8B = 0x09,
--	YCbCr444_10B = 0x0B,
--	YCbCr444_12B = 0x0D,
--	YCbCr444_16B = 0x0F,
--	YCbCr422_8B = 0x16,
--	YCbCr422_10B = 0x14,
--	YCbCr422_12B = 0x12,
--};
--
- static const u16 csc_coeff_default[3][4] = {
- 	{ 0x2000, 0x0000, 0x0000, 0x0000 },
- 	{ 0x0000, 0x2000, 0x0000, 0x0000 },
-@@ -856,10 +842,10 @@ static void dw_hdmi_gp_audio_enable(struct dw_hdmi *hdmi)
- 
- 	if (pdata->enable_audio)
- 		pdata->enable_audio(hdmi,
--					    hdmi->channels,
--					    hdmi->sample_width,
--					    hdmi->sample_rate,
--					    hdmi->sample_non_pcm);
-+				    hdmi->channels,
-+				    hdmi->sample_width,
-+				    hdmi->sample_rate,
-+				    hdmi->sample_non_pcm);
- }
- 
- static void dw_hdmi_gp_audio_disable(struct dw_hdmi *hdmi)
--- 
-2.40.0
-
+>=20
+> ```
+> macro_rules! foo {
+>      ($($a:expr)?) =3D> {{
+>          $(
+>              bar();
+>              $a
+>          )?
+>      }};
+> }
+>=20
+> fn bar() {}
+>=20
+> fn main() {
+>      foo!(());
+>      foo!();
+> }
+> ```
+>=20
+> it expands to this:
+> ```
+> fn main() {
+>      {
+>          bar();
+>          ()
+>      };
+>      {};
+> }
+> ```
+>=20
+> --
+> Cheers,
+> Benno
+> 
