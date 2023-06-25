@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 907A773D46C
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 23:25:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2773673D472
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 23:25:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230019AbjFYVZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 17:25:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46064 "EHLO
+        id S230052AbjFYVZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 17:25:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230021AbjFYVZH (ORCPT
+        with ESMTP id S229698AbjFYVZw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 17:25:07 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6831D184
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 14:25:05 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-3113da5260dso2101667f8f.2
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 14:25:05 -0700 (PDT)
+        Sun, 25 Jun 2023 17:25:52 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A8AC137
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 14:25:50 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f90a7325f6so33696795e9.3
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 14:25:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687728304; x=1690320304;
+        d=linaro.org; s=google; t=1687728349; x=1690320349;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=vpEvNkmFhBPV/sgQmjmG/u9Az5tks6N1ix3FgBzMzh4=;
-        b=XPi3AIP3sHw/BiO9+D1QLKVd26npdK3hmROeMnfMD+84Rh7ecz07cFV1swOBqXg2Jp
-         0fYlEdumqqAmZnsD4c0N4E+xYKJGzbqinIAzjIRtEMYWWX8mGRqfd8h4ESKBkfPGFdq8
-         YNwatYm5vad4u0IcrGPsfChk+hpNKBJX76sCWZaJEc4+kJuWrzixgLlp5Svn3tE4QbpK
-         fXM+FXw1wkuFTFMHVyVo8pTDCh50D0x7kVjvYj6JmD68K8XJJPrAs39LDdbjhhokqL9d
-         Rc2iUKAA9C58yEN2oWVJHYJnyuzWkmGbL5KMMDSfIEll9802O22bE8Tz3ElK+l0KZcPI
-         247A==
+        bh=UdnZaaLPu+ki2Fnpi7gIMqnleR/1nTSrgsUBiU7raqs=;
+        b=AuZzlwnDYmnmOftfy2wrafOBFbb56vCejuD34y8KcPpleFcFuezxpyFWOSjhuZxkPS
+         zeSfG2w0XrIPV1KdHWQokPQ1jXghjl2vrhRRAbTkOmBPev2Y+nWRI/biFzHZ3hCMQ7tM
+         p/FzxBnXFDBpB8MHCj2WU/UolKd4/Vvmjvp6o4dVorfVmDfRaxfNR+qA9bNx0Pj9YdH1
+         aTtZEM3RJSnIyZi4R338cGts/EylYRAl+/bJngdYtZ+oY5xIw7Y0hDIrOVdqWfMpTeqN
+         /SK8Y+WrVYilXjqF3JrwO8FslIckA2qun1P1rq5RIx075Bn9K14LU4ka2oAd4GBp7mSP
+         lYow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687728304; x=1690320304;
+        d=1e100.net; s=20221208; t=1687728349; x=1690320349;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vpEvNkmFhBPV/sgQmjmG/u9Az5tks6N1ix3FgBzMzh4=;
-        b=dbQCyDW9D1YKb9lYOzPQvC1sW4CWKoE6E8J8ntq3EohfjMQ3Q44uwwLI5i4h0+282M
-         XEM8PwqNtWRV8WXDncHbyIwVlj5ReiVGjwltL1va9wmRV/T5nnzQNQR6oXuZnKuzwggV
-         UZIFF9+9US1bqazXvrcqah+gV+D+GvEeB/MmP0wbzz6jZz7Rr8oBbek5Hmp+mjKN2XrU
-         EQ8ibdaPsNt3DsFOzX1DcAWaSlAt7LgrjnAHDvPL2zILjo0mjRNUKgAcHejbeyBd5Imb
-         Do6xLJx7tRaiLOT75K8bXEYp3bFBeeFOh9TZg9Bua5C3p/4clEKN6Pr+eBHVS9HBHKnX
-         O+eA==
-X-Gm-Message-State: AC+VfDzQf83t2rhbPm1KuF4WITZo+pEF3Ia4zeDv53dNM3Dt3QzseAuC
-        O3gJLUhxTUr2kV5xb9CCNrmrxw==
-X-Google-Smtp-Source: ACHHUZ6w/KTem4en6DpoUOTRJpkCeba0iSA1Pbh0dhzDh23gdYN0n6DSJL7HItwPFWno5XUjveDcqg==
-X-Received: by 2002:a05:6000:1962:b0:311:9a5:2d63 with SMTP id da2-20020a056000196200b0031109a52d63mr7485836wrb.42.1687728303983;
-        Sun, 25 Jun 2023 14:25:03 -0700 (PDT)
+        bh=UdnZaaLPu+ki2Fnpi7gIMqnleR/1nTSrgsUBiU7raqs=;
+        b=eSH1Yo0HBcGQUKWIp3xbm5bU0szERZ9pAxk62qxnIyHr/JnxlsrWdFxh9Hy/k4+wkc
+         lSR6+MQjRaxum5G8NuqrXscocZubFRFHQwLI6mPeR7THjnV4R4aui/d7pI5h2/HXcZ2j
+         Sj1Kx/CkPmOT9OmRK5Ne5uEzB9jgAwly+4a1vh99Z3itnfzwu/IjB0wso/etJP+Jcj3Q
+         JXMDt6N6tNxRz9XE7c2LORFoUHkHKt7ejlV8fAOFTeMv6qfkliUSRh1n7mKDh9GiOmW/
+         P4rdxGxaMynn3ew0MKkEF391vToX8Ck0r5NlQn7iA5CnByaJu2WfoZqgVnMYx/lKOsa7
+         VsIw==
+X-Gm-Message-State: AC+VfDwJjMiA7to81Rrbxk/Kp+lNz2xOx073c61ZaSgIL76wPQ7/duCu
+        AY/K5nj0P7JGA929xA+DMPOtMQ==
+X-Google-Smtp-Source: ACHHUZ55uWsoV2hbUGeBFvfsxWLvpqQwxIsiqcLZylUM/E4cjFWcT0Stb/ufsPS5kTWtMBzw9AQ43Q==
+X-Received: by 2002:a1c:4b16:0:b0:3fa:8475:bce1 with SMTP id y22-20020a1c4b16000000b003fa8475bce1mr3968019wma.4.1687728349062;
+        Sun, 25 Jun 2023 14:25:49 -0700 (PDT)
 Received: from [192.168.69.115] ([176.187.212.184])
-        by smtp.gmail.com with ESMTPSA id s25-20020a7bc399000000b003fa96fe2bebsm788890wmj.41.2023.06.25.14.24.59
+        by smtp.gmail.com with ESMTPSA id c13-20020a7bc00d000000b003f735ba7736sm5718246wmb.46.2023.06.25.14.25.44
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 25 Jun 2023 14:25:03 -0700 (PDT)
-Message-ID: <e8d8ee2b-1faa-1d60-d230-cbef8aecacef@linaro.org>
-Date:   Sun, 25 Jun 2023 23:24:57 +0200
+        Sun, 25 Jun 2023 14:25:48 -0700 (PDT)
+Message-ID: <db27d890-9c2c-8ec8-0d88-62b9172893ae@linaro.org>
+Date:   Sun, 25 Jun 2023 23:25:44 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
  Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [patch 05/17] loongarch/cpu: Switch to arch_cpu_finalize_init()
+Subject: Re: [patch 07/17] mips/cpu: Switch to arch_cpu_finalize_init()
 Content-Language: en-US
 To:     Thomas Gleixner <tglx@linutronix.de>,
         LKML <linux-kernel@vger.kernel.org>
@@ -63,14 +63,13 @@ Cc:     x86@kernel.org, Linus Torvalds <torvalds@linux-foundation.org>,
         Nikolay Borisov <nik.borisov@suse.com>,
         "Ahmed S. Darwish" <darwi@linutronix.de>,
         Arnd Bergmann <arnd@arndb.de>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
         Huacai Chen <chenhuacai@kernel.org>,
         WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
         Geert Uytterhoeven <geert@linux-m68k.org>,
         linux-m68k@lists.linux-m68k.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
         Yoshinori Sato <ysato@users.sourceforge.jp>,
         Rich Felker <dalias@libc.org>,
         John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
@@ -85,9 +84,9 @@ Cc:     x86@kernel.org, Linus Torvalds <torvalds@linux-foundation.org>,
         Chris Zankel <chris@zankel.net>,
         Tom Lendacky <thomas.lendacky@amd.com>
 References: <20230613223827.532680283@linutronix.de>
- <20230613224545.195288218@linutronix.de>
+ <20230613224545.312438573@linutronix.de>
 From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20230613224545.195288218@linutronix.de>
+In-Reply-To: <20230613224545.312438573@linutronix.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -107,14 +106,13 @@ On 14/6/23 01:39, Thomas Gleixner wrote:
 > No functional change.
 > 
 > Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Huacai Chen <chenhuacai@kernel.org>
-> Cc: WANG Xuerui <kernel@xen0n.name>
-> Cc: loongarch@lists.linux.dev
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: linux-mips@vger.kernel.org
 > ---
->   arch/loongarch/Kconfig            |    1 +
->   arch/loongarch/include/asm/bugs.h |   15 ---------------
->   arch/loongarch/kernel/setup.c     |    4 ++--
->   3 files changed, 3 insertions(+), 17 deletions(-)
+>   arch/mips/Kconfig            |    1 +
+>   arch/mips/include/asm/bugs.h |   17 -----------------
+>   arch/mips/kernel/setup.c     |   13 +++++++++++++
+>   3 files changed, 14 insertions(+), 17 deletions(-)
 
 Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 
