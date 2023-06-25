@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 371A373D151
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 16:10:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E66D173D153
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 16:11:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbjFYOKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 10:10:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47682 "EHLO
+        id S229518AbjFYOLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 10:11:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbjFYOKw (ORCPT
+        with ESMTP id S229964AbjFYOKz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 10:10:52 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A68861B1
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 07:10:50 -0700 (PDT)
-X-QQ-mid: bizesmtp73t1687702201tfi94mxf
+        Sun, 25 Jun 2023 10:10:55 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AB7B1B1
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 07:10:53 -0700 (PDT)
+X-QQ-mid: bizesmtp73t1687702208t869bq9s
 Received: from localhost.localdomain ( [112.2.230.41])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Sun, 25 Jun 2023 22:09:56 +0800 (CST)
+        id ; Sun, 25 Jun 2023 22:10:04 +0800 (CST)
 X-QQ-SSF: 01200000000000B0B000000A0000000
-X-QQ-FEAT: 7QbCsSX/jDajboDIHjqXf60bGtIy5uaeLeazsMLa+7tUdkr3UGx10netYGscB
-        urao5noZ9e0frsU9G1KBZ9rFA+mY4cvgSB865YOu0EOCQ8l9rF2XEOdiTTkNnEFQbed40my
-        8eFOG2ZNIilDyadp3uJXT0MYK7YxgbWYDN5wzN9QVebgwF3leCB/t4axu/g/O4NXHOBTnRd
-        iriLXHVh1GlKHeBdaPzczRTETLTg0QYdVRfn/arFPO8w0OF2aJSUwKWfms3kSlC3tJB5LKz
-        4BoRRKhVkbH4zwvEQUU6h4053IIjk9G1cFJ9kIWgHo2ndiphh4Towdx++by0wIwTFIyYuZl
-        pCAysmh43140F197LcSw+J3ajAS3wD44tSP3Yg9VWU1+pV6Ggk=
+X-QQ-FEAT: TVZM0Uoyj00c0bZeOtQsMG0DaWKF8k5IP29sSaNKu2IqHl0SZUO1pXN9aQB5m
+        So+nB8VGz5FuKu2vXt+QJgjvfdapKB5QFP/nycPWDjuq5n+govmjlnnfC3eg5zAOuPs3RLJ
+        tidw5jfJcMk/f3odNds/Y35dsaNOgrDwb/1JqzDV+lozOChS18Qcsa48sKJp4BW5GTiQIy+
+        uENrBlNboO9pUCSceB6gdweAS2JHCzmhrhNjhlZNzbmvK9cEFaJe9JopuWLI/HG/hHN1hbp
+        YC5V/dL5eDx0XIYB3rpFxJsYuPt+2YzAPJHuZUvik2ApM8SgDnrqQS532EawfgLqH9EsUe7
+        JIjbNrfBR84Y/3K7AbHzIySaufKumCejpKOrEBPytWTAKTadhs=
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 8927406621294641602
+X-BIZMAIL-ID: 11597191393074232432
 From:   Song Shuai <songshuaishuai@tinylab.org>
 To:     paul.walmsley@sifive.com, palmer@dabbelt.com,
         aou@eecs.berkeley.edu, robh+dt@kernel.org, frowand.list@gmail.com,
@@ -39,87 +39,58 @@ To:     paul.walmsley@sifive.com, palmer@dabbelt.com,
         heiko@sntech.de
 Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org
-Subject: [PATCH V1 0/3] Revert huge-paged linear mapping and its related fixups
-Date:   Sun, 25 Jun 2023 22:09:28 +0800
-Message-Id: <20230625140931.1266216-1-songshuaishuai@tinylab.org>
+Subject: [PATCH V1 1/3] Revert "RISC-V: mark hibernation as nonportable"
+Date:   Sun, 25 Jun 2023 22:09:29 +0800
+Message-Id: <20230625140931.1266216-2-songshuaishuai@tinylab.org>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20230625140931.1266216-1-songshuaishuai@tinylab.org>
+References: <20230625140931.1266216-1-songshuaishuai@tinylab.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We have encountered these two issues about huge-paged linear mapping since v6.4-rc1: 
+This reverts commit ed309ce522185583b163bd0c74f0d9f299fe1826.
 
-1. Bug report: kernel paniced when system hibernates[1]
-  
-OpenSbi [v0.8,v1.3) set the PMP regions as !no-map, and the commit 3335068f8721 
-("riscv: Use PUD/P4D/PGD pages for the linear mapping") mapped them in linear mapping.
-The hibernation process attempted to save/restore these mapped regions resulting in access fault.
+With the commit 3335068f8721 ("riscv: Use PUD/P4D/PGD pages for the
+linear mapping") reverted, the MIN_MEMBLOCK_ADDR points the kernel
+load address which was placed at a PMD boundary. And firmware always
+correctly mark resident memory, or memory protected with PMP as
+per the devicetree specification and/or the UEFI specification.
 
-This issue was temporarily fixed by commit ed309ce52218 ("RISC-V: mark hibernation as nonportable").
-But as Alex's RFC and Rob's response stats in another thread [2] , 
-"Hibernation is only one case. Speculative accesses could also occur."
-So this fixing commit seems not the perfect answer to this issue. 
+So those regions will not be mapped in the linear mapping and they
+can be safely saved/restored by hibernation.
 
+Signed-off-by: Song Shuai <songshuaishuai@tinylab.org>
+---
+ arch/riscv/Kconfig | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-2. Bug report: kernel paniced while booting (with UEFI )[3]
-
-During the booting with UEFI, UEFI Memory Mapping overwrote the memblock.
-The phys_ram_base was set as the end address of mmoderes0 (like 0x80040000 for 256 KiB mmoderes0@80000000),
-which resulted the VA based on 2M-aligned PA was not 2M-aligned using va_pa_offset 
-(PAGE_OFFSET - phys_ram_base) to translate.
-
-The best_map_size() from commit 3335068f8721 didn't check the virtual alignment
-before choosing a map size. and then a "VA hole" was created where page faults always occurred.
-
-This issue was fixed by commit 49a0a3731596 ("riscv: Check the virtual alignment before choosing a map size"),
-But this fixing commit has a side-effect ("the possible third one" as Alex said in this thread). 
-There are numerous PTE allocations slowing down the boot time and consuming some system memory when UEFI booting
-(Note that it's not involved when booting directly with OpenSbi, where phys_ram_base is the 2M-aligned base of DRAM).
-
-In my test, compared with/out reverting both commit 49a0a3731596 and commit 3335068f8721,
-I must wait ~20s for the linear mapping creation and mem_init_print_info() reported ~8M extra reserved memory.
-
-To eliminate this side-effect, We should find a way to align VA and PA on a 2MB boundary. 
-The simplest way is reverting the commit 3335068f8721 ("riscv: Use PUD/P4D/PGD pages for the linear mapping").
-
-
-
-Using PUD/P4D/PGD pages for the linear mapping to improve the performance is marginal from a recent talk [4]
-from Mike Rapoport. OpenSbi had marked all the PMP-protected regions as "no-map" [5] to practice this talk.
-
-For all those reasons, let's revert these related commits:
-
-- commit 3335068f8721 ("riscv: Use PUD/P4D/PGD pages for the linear mapping")
-- commit 49a0a3731596 ("riscv: Check the virtual alignment before choosing a map size")
-- commit ed309ce52218 ("RISC-V: mark hibernation as nonportable")
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index 5966ad97c30c..17b5fc7f54d4 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -800,11 +800,8 @@ menu "Power management options"
  
-[1]: https://lore.kernel.org/linux-riscv/CAAYs2=gQvkhTeioMmqRDVGjdtNF_vhB+vm_1dHJxPNi75YDQ_Q@mail.gmail.com/
-[2]: https://lore.kernel.org/linux-kernel/20230530080425.18612-1-alexghiti@rivosinc.com/
-[3]: https://lore.kernel.org/linux-riscv/tencent_7C3B580B47C1B17C16488EC1@qq.com/
-[4]: https://lwn.net/Articles/931406/
-[5]: https://github.com/riscv-software-src/opensbi/commit/8153b2622b08802cc542f30a1fcba407a5667ab9
-
-Song Shuai (3):
-  Revert "RISC-V: mark hibernation as nonportable"
-  Revert "riscv: Check the virtual alignment before choosing a map size"
-  Revert "riscv: Use PUD/P4D/PGD pages for the linear mapping"
-
- arch/riscv/Kconfig            |  5 +---
- arch/riscv/include/asm/page.h | 16 -------------
- arch/riscv/mm/init.c          | 43 +++++++----------------------------
- arch/riscv/mm/physaddr.c      | 16 -------------
- drivers/of/fdt.c              | 11 ++++-----
- 5 files changed, 14 insertions(+), 77 deletions(-)
-
+ source "kernel/power/Kconfig"
+ 
+-# Hibernation is only possible on systems where the SBI implementation has
+-# marked its reserved memory as not accessible from, or does not run
+-# from the same memory as, Linux
+ config ARCH_HIBERNATION_POSSIBLE
+-	def_bool NONPORTABLE
++	def_bool y
+ 
+ config ARCH_HIBERNATION_HEADER
+ 	def_bool HIBERNATION
 -- 
 2.20.1
 
