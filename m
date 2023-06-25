@@ -2,216 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A20E73CE09
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 04:27:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A54073CE17
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 04:41:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231199AbjFYC1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 22:27:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41580 "EHLO
+        id S231389AbjFYClZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 22:41:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbjFYC1W (ORCPT
+        with ESMTP id S229550AbjFYClY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 22:27:22 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6031AD3
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 19:27:20 -0700 (PDT)
-Received: from fsav411.sakura.ne.jp (fsav411.sakura.ne.jp [133.242.250.110])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 35P2RIF6015937;
-        Sun, 25 Jun 2023 11:27:18 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav411.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav411.sakura.ne.jp);
- Sun, 25 Jun 2023 11:27:17 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav411.sakura.ne.jp)
-Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 35P2RHIb015934
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Sun, 25 Jun 2023 11:27:17 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <3120e8b4-a3e9-3612-f232-b89afe56532f@I-love.SAKURA.ne.jp>
-Date:   Sun, 25 Jun 2023 11:27:18 +0900
+        Sat, 24 Jun 2023 22:41:24 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 963D8EA
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 19:41:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687660883; x=1719196883;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=TAows7OAcmxGvx49AoU/i5mLwi1QDRE6TshwUYSLvtg=;
+  b=mFX4GO8s/RSOzEAwziFh3+ggnOMeERe5wlaB9jnr1DUnx8oCa73AVpmj
+   tYm5JK7sXULfsoBccDXmZm2Hn1GVxFnPonXFFglva+nQJ67IHNEHJu6rU
+   Azjw0IenWuPERmR3+J30oU1AMLvdqKaV9t5Q5DPrLXJv1AlnCDu14WAPv
+   9i1lpD6mFaJJ2jUOxVlRdIhNPdtLxn0uTyuXpjpdRex2m8/P3Pg5nkwP+
+   k/71hFOQmW6pa4rOUI9GOcG/mDUfp8B9KcCy8R1R7Vwl20AstTRknTLNl
+   eOPRJzKgR10TzoXKvJ8ADhkUNVoI1X1NflbHi9SvUTpnc+/adkpTNwjzV
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10751"; a="391148606"
+X-IronPort-AV: E=Sophos;i="6.01,156,1684825200"; 
+   d="scan'208";a="391148606"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2023 19:41:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10751"; a="860285839"
+X-IronPort-AV: E=Sophos;i="6.01,156,1684825200"; 
+   d="scan'208";a="860285839"
+Received: from cascade.sh.intel.com ([10.239.48.162])
+  by fmsmga001.fm.intel.com with ESMTP; 24 Jun 2023 19:41:20 -0700
+From:   Jingqi Liu <Jingqi.liu@intel.com>
+To:     iommu@lists.linux.dev, Lu Baolu <baolu.lu@linux.intel.com>,
+        Tian@vger.kernel.org, Kevin <kevin.tian@intel.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>
+Cc:     linux-kernel@vger.kernel.org, Jingqi Liu <Jingqi.liu@intel.com>
+Subject: [PATCH] iommu/vt-d: debugfs: Increment the reference count of page table page
+Date:   Sun, 25 Jun 2023 10:28:08 +0800
+Message-Id: <20230625022808.42942-1-Jingqi.liu@intel.com>
+X-Mailer: git-send-email 2.21.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2 0/2] seqlock,mm: lockdep annotation +
- write_seqlock_irqsave()
-Content-Language: en-US
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Cc:     "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Michal Hocko <mhocko@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>
-References: <20230623171232.892937-1-bigeasy@linutronix.de>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <20230623171232.892937-1-bigeasy@linutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/06/24 2:12, Sebastian Andrzej Siewior wrote:
-> Hi,
-> 
-> this has been a single patch (2/2) but then it was pointed out that the
-> lockdep annotation in seqlock needs to be adjusted to fully close the
-> printk window so that there is no printing after the seq-lock has been
-> acquired and before printk_deferred_enter() takes effect.
-> 
-> I'm sending both patches in this series so both sides (locking and mm)
-> are aware of the situation. 
-> I hope that both patches can be applied independently via their subsystem
-> tree (the lockdep splat + deadlock is low risk).
-> 
-> The original thread starts at
-> 	https://lore.kernel.org/20230621104034.HT6QnNkQ@linutronix.de
-> 
-> Sebastian
+There may be a race with iommu_unmap() interface when traversing a page
+table.
 
-The original thread is too long to read. Below is a full summary for locking
-maintainers to accept [PATCH 1/2].
+When debugfs traverses an IOMMU page table, iommu_unmap() may clear
+entries and free the page table pages pointed to by the entries.
+So debugfs may read invalid or freed pages.
 
+To avoid this, increment the refcount of a page table page before
+traversing the page, and decrement its refcount after traversing it.
 
+Signed-off-by: Jingqi Liu <Jingqi.liu@intel.com>
+---
+ drivers/iommu/intel/debugfs.c | 36 +++++++++++++++++++++++++++++++++--
+ 1 file changed, 34 insertions(+), 2 deletions(-)
 
-When commit 1ca7d67cf5d5 ("seqcount: Add lockdep functionality to
-seqcount/seqlock structures") added seqcount_acquire(&s->dep_map) check to
-write_seqcount_begin_nested() and seqcount_release(&s->dep_map) check to
-write_seqcount_end(), the ordering of updating s->sequence and doing lockdep
-annotation was not important.
-
-But since commit 3d36424b3b58 ("mm/page_alloc: fix race condition between
-build_all_zonelists and page allocation") started calling
-read_seqbegin(&zonelist_update_seq)/read_seqretry(&zonelist_update_seq) from
-kmalloc(GFP_ATOMIC) path, commit 1007843a9190 ("mm/page_alloc: fix potential
-deadlock on zonelist_update_seq seqlock") tried to close the race window using
-
- __build_all_zonelists() {
-+    local_irq_save(flags);
-+    printk_deferred_enter();
-     write_seqlock(&zonelist_update_seq);
-     (...snipped...)
-     write_sequnlock(&zonelist_update_seq);
-+    printk_deferred_exit();
-+    local_irq_restore(flags);
+diff --git a/drivers/iommu/intel/debugfs.c b/drivers/iommu/intel/debugfs.c
+index 1f925285104e..d228e1580aec 100644
+--- a/drivers/iommu/intel/debugfs.c
++++ b/drivers/iommu/intel/debugfs.c
+@@ -333,9 +333,41 @@ static void pgtable_walk_level(struct seq_file *m, struct dma_pte *pde,
+ 		path[level] = pde->val;
+ 		if (dma_pte_superpage(pde) || level == 1)
+ 			dump_page_info(m, start, path);
+-		else
+-			pgtable_walk_level(m, phys_to_virt(dma_pte_addr(pde)),
++		else {
++			struct page *pg;
++			u64 pte_addr;
++
++			/*
++			 * The entry references a Page-Directory Table
++			 * or a Page Table.
++			 */
++retry:
++			pte_addr = dma_pte_addr(pde);
++			pg = pfn_to_page(pte_addr >> PAGE_SHIFT);
++			if (!get_page_unless_zero(pg))
++				/*
++				 * If this page has a refcount of zero,
++				 * it has been freed, or will be freed.
++				 */
++				continue;
++
++			/* Check if the value of the entry is changed. */
++			if (pde->val != path[level]) {
++				put_page(pg);
++
++				if (!dma_pte_present(pde))
++					/* The entry is invalid. Skip it. */
++					continue;
++
++				/* The entry has been updated. */
++				path[level] = pde->val;
++				goto retry;
++			}
++
++			pgtable_walk_level(m, phys_to_virt(pte_addr),
+ 					   level - 1, start, path);
++			put_page(pg);
++		}
+ 		path[level] = 0;
+ 	}
  }
-
-pattern. The reason behind this ordering was to
-
-  satisfy "printk_deferred_enter() depends on local IRQs being disabled"
-
-and
-
-  make sure that "no synchronous printk() (for whatever reasons, not only
-  printk() from build_zonelists() from __build_all_zonelists(), but also
-  including printk() from lockdep, soft-lockup, KCSAN etc.) happens between
-  write_seqlock() and write_sequnlock()
-
-. However, Sebastian Andrzej Siewior mentioned that this ordering is
-problematic if CONFIG_PREEMPT_RT=y, for disabling local IRQs conflicts with
-"spin_lock(&zonelist_update_seq.lock) from write_seqlock(&zonelist_update_seq)
-needs to be able to sleep", and Sebastian is proposing
-
- __build_all_zonelists() {
--    local_irq_save(flags);
--    printk_deferred_enter();
--    write_seqlock(&zonelist_update_seq);
-+    write_seqlock_irqsave(&zonelist_update_seq, flags);
-+    printk_deferred_enter();
-     (...snipped...)
-+    printk_deferred_exit();
-+    write_sequnlock_irqrestore(&zonelist_update_seq, flags);
--    write_sequnlock(&zonelist_update_seq);
--    printk_deferred_exit();
--    local_irq_restore(flags);
- }
-
-change as [PATCH 2/2]. Since write_seqlock_irqsave() becomes write_seqlock()
-if CONFIG_PREEMPT_RT=y, this change can solve the conflict.
-
-In order to accept this proposal, we need to make sure that
-
-  no synchronous printk() happens between
-
-    write_seqlock_irqsave(&zonelist_update_seq, flags) made
-    zonelist_update_seq.seqcount odd
-
-  and
-
-    printk_deferred_enter() takes effect
-
-and
-
-  no synchronous printk() happens between
-
-    printk_deferred_exit() took effect
-
-  and
-
-    write_sequnlock_irqrestore(&zonelist_update_seq, flags) makes
-    zonelist_update_seq.seqcount even
-
-, and Sebastian is proposing
-
- static inline void do_write_seqcount_begin_nested(seqcount_t *s, int subclass)
- {
--    do_raw_write_seqcount_begin(s);
-     seqcount_acquire(&s->dep_map, subclass, 0, _RET_IP_);
-+    do_raw_write_seqcount_begin(s);
- }
-
- static inline void do_write_seqcount_end(seqcount_t *s)
- {
--    seqcount_release(&s->dep_map, _RET_IP_);
-     do_raw_write_seqcount_end(s);
-+    seqcount_release(&s->dep_map, _RET_IP_);
- }
-
-as [PATCH 1/2].
-
-With [PATCH 1/2] and [PATCH 2/2], possibility of synchronous printk() changes like below.
-
-__build_all_zonelists() {
-  write_seqlock_irqsave(&zonelist_update_seq, flags) {
-    __write_seqlock_irqsave(&zonelist_update_seq) {
-      spin_lock_irqsave(&zonelist_update_seq.lock, flags); // local IRQs disabled = synchronous printk() from IRQs is disabled here
-      do_write_seqcount_begin(&zonelist_update_seq.seqcount.seqcount) {
-        do_write_seqcount_begin_nested(&zonelist_update_seq.seqcount.seqcount, 0) {
-          seqcount_acquire(&zonelist_update_seq.seqcount.seqcount.dep_map, 0, 0, _RET_IP_); // synchronous printk() from lockdep might happen here
-          do_raw_write_seqcount_begin(&zonelist_update_seq.seqcount.seqcount) {
-            seqcount_acquire(&zonelist_update_seq.seqcount.seqcount.dep_map, 0, 0, _RET_IP_); // zonelist_update_seq.seqcount.seqcount.sequence is guaranteed to be even = kmalloc(GFP_ATOMIC) with port lock held is safe = synchronous printk() is safe
-            kcsan_nestable_atomic_begin(); // KCSAN is diabled = synchronous printk() from KCSAN is disabled here
-            zonelist_update_seq.seqcount.seqcount.sequence++; // zonelist_update_seq.seqcount.seqcount.sequence is now odd = kmalloc(GFP_ATOMIC) with port lock held is not safe = synchronous printk() is not safe
-          }
-        }
-      }
-    }
-  }
-  printk_deferred_enter(); // synchronous printk() from whatever reason is disabled here
-  (...snipped...)
-  printk_deferred_exit(); // synchronous printk() from whatever reason is enabled here
-  write_sequnlock_irqrestore(&zonelist_update_seq, flags) {
-    do_write_seqcount_end(&zonelist_update_seq.seqcount.seqcount) {
-      do_raw_write_seqcount_end(&zonelist_update_seq.seqcount.seqcount) {
-        zonelist_update_seq.seqcount.seqcount.sequence++; // zonelist_update_seq.seqcount.seqcount.sequence is now even = kmalloc(GFP_ATOMIC) with port lock held is safe = synchronous printk() is safe
-        kcsan_nestable_atomic_end(); // KCSAN is enabled = synchronous printk() from KCSAN is enabled here
-      }
-      seqcount_release(&zonelist_update_seq.seqcount.seqcount.dep_map, _RET_IP_); // synchronous printk() from lockdep might happen here
-    }
-    spin_unlock_irqrestore(&zonelist_update_seq.lock, flags); // local IRQs enabled = synchronous printk() from IRQs is enabled here
-  }
-}
+-- 
+2.21.3
 
