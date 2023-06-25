@@ -2,71 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03EED73CDCE
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 03:24:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1385A73CDCB
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 03:24:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230141AbjFYBYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 21:24:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34556 "EHLO
+        id S229781AbjFYBX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 21:23:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbjFYBYU (ORCPT
+        with ESMTP id S229537AbjFYBX4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 21:24:20 -0400
-Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1E71E54;
-        Sat, 24 Jun 2023 18:24:18 -0700 (PDT)
-Received: by mail-oo1-xc35.google.com with SMTP id 006d021491bc7-560c617c820so1565054eaf.3;
-        Sat, 24 Jun 2023 18:24:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687656258; x=1690248258;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=e1efT16ug32Wj/IcB7velfMS/W9dxeMLEvWoz2Xvc88=;
-        b=Mv3zAvYL9k98W91B4UuI7FxsAoZliNAy632c2cWyoOmOzXgTT5OHGdIHThCF5PrkYT
-         nkUHvFJ8sR8tO03nWpJIvitEHXV5Ii6WdcnIXOVfDsl/sOpU0e3OuN4S/YSQzQxzV0M+
-         95XWGgPeTanvjrqN50yJQH/+7YYAKvwHOFHvoEcbOeFzqPvuOFkoQlUQ+bxswGmGy8eK
-         TmTUjxhPh3S7sW9xQVnuAgXAkpPKhquLGjL3qv9h8Jq8yb6uJrdhPisy1iYOt+lfUl9F
-         czMzxgfBMdItcsJe3mFCst5rJ/oxZKoHfpRDnyRdVg3176dvgX0fB5qABeFmOpvz2bTZ
-         gA3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687656258; x=1690248258;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=e1efT16ug32Wj/IcB7velfMS/W9dxeMLEvWoz2Xvc88=;
-        b=CCc7EPVObUhQIap7AZHrmGJ0R/ZxJxLx4g09Guri90NTTLhCXH166CW4kmzNZRC4ND
-         VS7guXq8CxIzMrM5C+kp9FpLXIN6IHYMYLMYLYKidWCUy77ApkSMs6VblsqB8SHY8BdO
-         1S5wxrt/g1TYIyAOcoJ3qxjCmIOGBaLreqMmDpuX7wRfI8ojEJOXJtGxVlEmjomkZ+VS
-         4bauxkcv/7v6WL2vPbVJuACKmVo9/tplX4Q3H014QQekQXfKZosSohIrU/m7GKzVWdGB
-         5Rypk5Oot6z+rYcCSiz+FCU6o9mCyco+iVx4BpbijfAQA8GH5ILi/N93OQJe8DEdbkgy
-         YurQ==
-X-Gm-Message-State: AC+VfDxomX/4aICjYM6e8Xtrcp0qlnlVDzBaF4cuBzQ9MiU2Zdm+YtBO
-        4dLlQS//pbi4t1RxkgzUJ64=
-X-Google-Smtp-Source: ACHHUZ65xB8Vy3g58wdMURysw6wuJ8fZ2aqYEiZNVh0Ct7QT/nR9J1wfzXbUWegZ4hkucXqtQdEycg==
-X-Received: by 2002:a4a:de82:0:b0:55c:6812:27c5 with SMTP id v2-20020a4ade82000000b0055c681227c5mr20253372oou.9.1687656257855;
-        Sat, 24 Jun 2023 18:24:17 -0700 (PDT)
-Received: from smeagol.fibertel.com.ar ([201.235.4.68])
-        by smtp.gmail.com with ESMTPSA id i17-20020a4ad391000000b0054fba751207sm1090022oos.47.2023.06.24.18.24.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Jun 2023 18:24:17 -0700 (PDT)
-From:   =?UTF-8?q?Joaqu=C3=ADn=20Ignacio=20Aramend=C3=ADa?= 
-        <samsagax@gmail.com>
-To:     linux@roeck-us.net
-Cc:     Jerrod Frost <jcfrosty@proton.me>, derekjohn.clark@gmail.com,
-        jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Joaqu=C3=ADn=20Ignacio=20Aramend=C3=ADa?= 
-        <samsagax@gmail.com>
-Subject: [PATCH v2] hwmon: (oxp-sensors) Add support for AOKZOE A1 PRO
-Date:   Sat, 24 Jun 2023 22:23:44 -0300
-Message-ID: <20230625012347.121352-2-samsagax@gmail.com>
-X-Mailer: git-send-email 2.41.0
+        Sat, 24 Jun 2023 21:23:56 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BACAE9C;
+        Sat, 24 Jun 2023 18:23:54 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QpYCV3DFbz4f3mWD;
+        Sun, 25 Jun 2023 09:23:50 +0800 (CST)
+Received: from [10.174.179.247] (unknown [10.174.179.247])
+        by APP4 (Coremail) with SMTP id gCh0CgAHoZQll5dkElXhMQ--.24766S3;
+        Sun, 25 Jun 2023 09:23:51 +0800 (CST)
+Message-ID: <3f57cd5a-5d7d-a975-f22f-ab5abd4288f0@huaweicloud.com>
+Date:   Sun, 25 Jun 2023 09:23:49 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 0/3] md/raid10: optimize and fix read error
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     song@kernel.org, linux-raid@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linan122@huawei.com,
+        yukuai3@huawei.com, yi.zhang@huawei.com, houtao1@huawei.com,
+        yangerkun@huawei.com
+References: <20230623173236.2513554-1-linan666@huaweicloud.com>
+ <2cfb7dd4-ef6e-c460-8132-5c1c49cf6877@molgen.mpg.de>
+From:   Li Nan <linan666@huaweicloud.com>
+In-Reply-To: <2cfb7dd4-ef6e-c460-8132-5c1c49cf6877@molgen.mpg.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-CM-TRANSID: gCh0CgAHoZQll5dkElXhMQ--.24766S3
+X-Coremail-Antispam: 1UD129KBjvdXoW7XFy7Wr47tFWrWry3tr1fJFb_yoW3Arg_G3
+        9rtr9Fgr1xXr48Jr43WF1jgF13XF4Yyw15Jw17uwn0yF1rXFn5Grs3Grn5Zrn5Ga95Wr1q
+        9rn8Xw43tw4SkjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbxxYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
+        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x02
+        67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l
+        5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67
+        AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07Al
+        zVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
+        0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFyl
+        IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
+        AFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_
+        Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUFf
+        HjUUUUU
+X-CM-SenderInfo: polqt0awwwqx5xdzvxpfor3voofrz/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        MAY_BE_FORGED,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,60 +66,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jerrod Frost <jcfrosty@proton.me>
 
-This device is an iteration over the AOKZOE A1 with the same EC mapping
-and features.
 
-It also has support for tt_toggle.
+在 2023/6/23 17:52, Paul Menzel 写道:
+> Dear Li,
+> 
+> 
+> Thank you for your patches.
+> 
+> Am 23.06.23 um 19:32 schrieb linan666@huaweicloud.com:
+>> From: Li Nan <linan122@huawei.com>
+> 
+> Just a note, that the date/timestamps of your patches are from the 
+> future. (Yu’s patches had the same problem.) Could you please make sure 
+> to set up the system time correctly.
 
-Signed-off-by: Jerrod Frost <jcfrosty@proton.me>
-Signed-off-by: Joaquín Ignacio Aramendía <samsagax@gmail.com>
----
-v2: added Jerrod signoff
----
- Documentation/hwmon/oxp-sensors.rst | 2 ++
- drivers/hwmon/oxp-sensors.c         | 7 +++++++
- 2 files changed, 9 insertions(+)
+System time is correct now. Thanks for your reminding :)
 
-diff --git a/Documentation/hwmon/oxp-sensors.rst b/Documentation/hwmon/oxp-sensors.rst
-index 0ca1f7728c34..3adeb7406243 100644
---- a/Documentation/hwmon/oxp-sensors.rst
-+++ b/Documentation/hwmon/oxp-sensors.rst
-@@ -30,6 +30,7 @@ Supported devices
- Currently the driver supports the following handhelds:
- 
-  - AOK ZOE A1
-+ - AOK ZOE A1 PRO
-  - Aya Neo 2
-  - Aya Neo AIR
-  - Aya Neo AIR Pro
-@@ -40,6 +41,7 @@ Currently the driver supports the following handhelds:
- 
- "Turbo/Silent" button behaviour toggle is only supported on:
-  - AOK ZOE A1
-+ - AOK ZOE A1 PRO
-  - OneXPlayer mini AMD (only with updated alpha BIOS)
-  - OneXPlayer mini AMD PRO
- 
-diff --git a/drivers/hwmon/oxp-sensors.c b/drivers/hwmon/oxp-sensors.c
-index 1e59d97219c4..e1a907cae820 100644
---- a/drivers/hwmon/oxp-sensors.c
-+++ b/drivers/hwmon/oxp-sensors.c
-@@ -77,6 +77,13 @@ static const struct dmi_system_id dmi_table[] = {
- 		},
- 		.driver_data = (void *)aok_zoe_a1,
- 	},
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_BOARD_VENDOR, "AOKZOE"),
-+			DMI_EXACT_MATCH(DMI_BOARD_NAME, "AOKZOE A1 Pro"),
-+		},
-+		.driver_data = (void *)aok_zoe_a1,
-+	},
- 	{
- 		.matches = {
- 			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
+> 
+>      Received: from huaweicloud.com (unknown [10.175.104.67])
+>              by APP4 (Coremail) with SMTP id 
+> gCh0CgCXaK8TZ5VkaZ1hMQ--.14505S4;
+>              Fri, 23 Jun 2023 17:34:11 +0800 (CST)
+>      […]
+>      Date:   Sat, 24 Jun 2023 01:32:33 +0800
+> 
+> […]
+> 
+> 
+> Kind regards,
+> 
+> Paul
+
 -- 
-2.41.0
+Thanks,
+Nan
 
