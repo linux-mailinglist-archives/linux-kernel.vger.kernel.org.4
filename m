@@ -2,112 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CF8473D507
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 00:18:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9B2773D505
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 00:15:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229532AbjFYWSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 18:18:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53540 "EHLO
+        id S229529AbjFYWPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 18:15:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjFYWSL (ORCPT
+        with ESMTP id S229481AbjFYWPX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 18:18:11 -0400
-X-Greylist: delayed 534 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 25 Jun 2023 15:18:08 PDT
-Received: from hera.aquilenet.fr (hera.aquilenet.fr [IPv6:2a0c:e300::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2FC3187
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 15:18:08 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by hera.aquilenet.fr (Postfix) with ESMTP id 489BE1D38
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 00:09:05 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at hera.aquilenet.fr
-Received: from hera.aquilenet.fr ([127.0.0.1])
-        by localhost (hera.aquilenet.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id bNXRzKPZ_Z3I for <linux-kernel@vger.kernel.org>;
-        Mon, 26 Jun 2023 00:09:04 +0200 (CEST)
-Received: from begin (reverse-177-225.fdn.fr [80.67.177.225])
-        by hera.aquilenet.fr (Postfix) with ESMTPSA id BC213178E
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 00:09:04 +0200 (CEST)
-Received: from samy by begin with local (Exim 4.96)
-        (envelope-from <samuel.thibault@aquilenet.fr>)
-        id 1qDXuq-008GQB-1N
-        for linux-kernel@vger.kernel.org;
-        Mon, 26 Jun 2023 00:09:04 +0200
-Date:   Sun, 25 Jun 2023 17:56:25 +0200
-From:   Samuel Thibault <samuel.thibault@aquilenet.fr>
-To:     Kees Cook <kees@kernel.org>, Kees Cook <keescook@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Simon Brand <simon.brand@postadigitale.de>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        Dave@mielke.cc
-Subject: Re: [PATCH v3 2/2] tty: Allow TIOCSTI to be disabled
-Message-ID: <20230625155625.s4kvy7m2vw74ow4i@begin>
-Mail-Followup-To: Samuel Thibault <samuel.thibault@aquilenet.fr>,
-        Kees Cook <kees@kernel.org>, Kees Cook <keescook@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Simon Brand <simon.brand@postadigitale.de>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        Dave@mielke.cc
-References: <20221022182828.give.717-kees@kernel.org>
- <20221022182949.2684794-2-keescook@chromium.org>
- <20221227234000.jgosvixx7eahqb3z@begin>
- <C95AF535-7A95-48BA-8921-1932C15A1931@kernel.org>
- <20221228205726.rfevry7ud6gmttg5@begin>
+        Sun, 25 Jun 2023 18:15:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD5B1A5;
+        Sun, 25 Jun 2023 15:15:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E425A60C36;
+        Sun, 25 Jun 2023 22:15:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FB72C433C8;
+        Sun, 25 Jun 2023 22:15:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687731321;
+        bh=zFVqf7YtgUM3F6YoG2jfwFRTpf8aCuPZPnbOJyql7oI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bQWu/HyKwTHQmtgf357NogYhBahDyKX/1Jq6bAgM+m5Zo0iIokkBH1XRXky1qGyTg
+         uhh/B3cij7HKHv6wOBpA1EIG7B7lJOwbtcF9DL+wB1dGlsyY0Y4KH2k3FMhDsD0Zdp
+         Pn8HmbNqw7tdCXJwlcpp8V93ig8iSQeuR+sLgGmvggdJin3HEI7nGX87enlMtneFYB
+         y/G6dMiGUgR+ur1R/E3W2GNtynrPGKnRxw2vgUCI3Wd2hQEH4nr9MThyP3fkw7MTL3
+         JSDxPlPcZr0FbpqthgqTPF0Scgq6omh6MWCAAVAQHMXae1H0A3BM9QG37PlVjR9k8p
+         KNqe3j4L3WizQ==
+Date:   Sun, 25 Jun 2023 23:15:14 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Song Shuai <suagrfillet@gmail.com>
+Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, robh+dt@kernel.org, frowand.list@gmail.com,
+        ajones@ventanamicro.com, alexghiti@rivosinc.com,
+        mpe@ellerman.id.au, arnd@arndb.de, rppt@kernel.org,
+        samuel@sholland.org, panqinglin2020@iscas.ac.cn,
+        conor.dooley@microchip.com, anup@brainfault.org,
+        xianting.tian@linux.alibaba.com, anshuman.khandual@arm.com,
+        heiko@sntech.de, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH V1 1/3] Revert "RISC-V: mark hibernation as nonportable"
+Message-ID: <20230625-obstinate-grimy-b765a1d3d741@spud>
+References: <20230625140931.1266216-1-songshuaishuai@tinylab.org>
+ <20230625140931.1266216-2-songshuaishuai@tinylab.org>
+ <20230625-multiple-diaper-1db88a75314e@spud>
+ <20281f01-2cc9-892e-beea-eb2bb91e3ca5@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="6ZfynoZLMeCQs+ZJ"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221228205726.rfevry7ud6gmttg5@begin>
-Organization: I am not organized
-User-Agent: NeoMutt/20170609 (1.8.3)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20281f01-2cc9-892e-beea-eb2bb91e3ca5@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-Samuel Thibault, le mer. 28 déc. 2022 21:57:26 +0100, a ecrit:
-> Kees Cook, le mar. 27 déc. 2022 19:32:55 -0800, a ecrit:
-> > On December 27, 2022 3:40:00 PM PST, Samuel Thibault <samuel.thibault@aquilenet.fr> wrote:
-> > >Kees Cook, le sam. 22 oct. 2022 11:29:49 -0700, a ecrit:
-> > >> TIOCSTI continues its long history of being used in privilege escalation
-> > >> attacks[1]. Prior attempts to provide a mechanism to disable this have
-> > >> devolved into discussions around creating full-blown LSMs to provide
-> > >> arbitrary ioctl filtering, which is hugely over-engineered -- only
-> > >> TIOCSTI is being used this way. 3 years ago OpenBSD entirely removed
-> > >> TIOCSTI[2], Android has had it filtered for longer[3], and the tools that
-> > >> had historically used TIOCSTI either do not need it, are not commonly
-> > >> built with it, or have had its use removed.
-> > >
-> > >No. The Brltty screen reader entirely relies on TIOCSTI to be able to
-> > >support input from various Braille devices. Please make sure to keep
-> > >TIOCSTI enabled by default, otherwise some people would just completely
-> > >lose their usual way of simply typing on Linux.
-> > 
-> > Yup, it remains default enabled:
-> 
-> Yes, but thining of it, very soon people in various security-sensitive
-> distributions will disable it, as they should indeed. And people who
-> need to use their Braille device on such distributions will get stuck.
+--6ZfynoZLMeCQs+ZJ
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-And as expected, it did get disabled in Debian for instance, very much
-to the dismay of blind users, whose keyboard suddenly stopped working at
-all after rebooting with a Linux 6.3 kernel!...
+Hey,
 
-> Can we perhaps just introduce a CAP_TIOCSTI that the brltty daemon would
-> be able to use? We could even make it only allow TIOCSTI on the linux
-> console (tty->ops == con_ops).
+On Sun, Jun 25, 2023 at 11:09:21PM +0800, Song Shuai wrote:
 
-*Please* comment on this so we can progress. ATM people are
-advising each other to set dev.tty.legacy_tiocsti=1, which is just
-counter-productive in terms of security...
+> Sorry for the delayed reply,
 
-Really, this a serious regression for the people affected by this.
+It wasn't really delayed at all actually, you replied within an hour or
+so, AFAICT.
 
-Samuel
+> My tinylab email went something wrong, I'll use gmail in this thread.
+>=20
+> =E5=9C=A8 2023/6/25 22:18, Conor Dooley =E5=86=99=E9=81=93:
+> > On Sun, Jun 25, 2023 at 10:09:29PM +0800, Song Shuai wrote:
+> > > This reverts commit ed309ce522185583b163bd0c74f0d9f299fe1826.
+> > >=20
+> > > With the commit 3335068f8721 ("riscv: Use PUD/P4D/PGD pages for the
+> > > linear mapping") reverted, the MIN_MEMBLOCK_ADDR points the kernel
+> > > load address which was placed at a PMD boundary.
+> >=20
+> > > And firmware always
+> > > correctly mark resident memory, or memory protected with PMP as
+> > > per the devicetree specification and/or the UEFI specification.
+> >=20
+> > But this is not true? The versions of OpenSBI that you mention in your
+> > cover letter do not do this.
+> > Please explain.
+> >=20
+>=20
+> At this time, OpenSbi [v0.8,v1.3) and edk2(RiscVVirt) indeed don't obey t=
+he
+> DT/UEFI spec. This statement is excerpted from "Reserved memory for resid=
+ent
+> firmware" part from the upcoming riscv/boot.rst. It isn't accurate for no=
+w.
+> How about deleting this one?
+
+It is incorrect, so it will need to be removed, yes.
+Unfortunately writing a doc does not fix the existing implementations :(
+
+> Actually with 3335068f8721 reverted, the change of MIN_MEMBLOCK_ADDR can
+> avoid the mapping of firmware memory, I will make it clear in the next
+> version.
+
+To be honest, I'd like to see this revert as the final commit in a
+series that deals with the problem by actually reserving the regions,
+rather than a set of reverts that go back to how we were.
+I was hoping that someone who cares about hibernation support would be
+interested in working on that - *cough* starfive *cough*, although maybe
+they just fixed their OpenSBI and moved on.
+If there were no volunteers, my intention was to add a firmware erratum
+that would probe the SBI implementation & version IDs, and add a firmware
+erratum that'd parse the DT for the offending regions and reserve them.
+
+Cheers,
+Conor.
+
+> > > So those regions will not be mapped in the linear mapping and they
+> > > can be safely saved/restored by hibernation.
+> > >=20
+> > > Signed-off-by: Song Shuai <songshuaishuai@tinylab.org>
+> > > ---
+> > >   arch/riscv/Kconfig | 5 +----
+> > >   1 file changed, 1 insertion(+), 4 deletions(-)
+> > >=20
+> > > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> > > index 5966ad97c30c..17b5fc7f54d4 100644
+> > > --- a/arch/riscv/Kconfig
+> > > +++ b/arch/riscv/Kconfig
+> > > @@ -800,11 +800,8 @@ menu "Power management options"
+> > >   source "kernel/power/Kconfig"
+> > > -# Hibernation is only possible on systems where the SBI implementati=
+on has
+> > > -# marked its reserved memory as not accessible from, or does not run
+> > > -# from the same memory as, Linux
+> > >   config ARCH_HIBERNATION_POSSIBLE
+> > > -	def_bool NONPORTABLE
+> > > +	def_bool y
+> > >   config ARCH_HIBERNATION_HEADER
+> > >   	def_bool HIBERNATION
+> > > --=20
+> > > 2.20.1
+>
+
+--6ZfynoZLMeCQs+ZJ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJi8cgAKCRB4tDGHoIJi
+0gQGAP4zFRf+mJ/qW1QVdbXhgxrDoXAjwnQiAGH8Qr85iJdixAEAoUq/DIivnRJ8
+mJWf9t+LoW93pFfGCZD7UXny7Skemgg=
+=Ztmn
+-----END PGP SIGNATURE-----
+
+--6ZfynoZLMeCQs+ZJ--
