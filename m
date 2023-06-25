@@ -2,103 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2DD173CEFA
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 09:34:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0DC973CEFC
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 09:35:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231213AbjFYHem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 03:34:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46352 "EHLO
+        id S231472AbjFYHfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 03:35:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbjFYHej (ORCPT
+        with ESMTP id S231249AbjFYHfJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 03:34:39 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D91A11B5;
-        Sun, 25 Jun 2023 00:34:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687678478; x=1719214478;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MPQi2c2fpXlw+ZthqxGOQmVWtzdUzfcjBa7myYXUx6I=;
-  b=Or2aif5AXuBLAgAHslkbvQ2ZBG50DzI21LNMFtXRE5dWptF8p689Asrq
-   DE90otBXatAPlV3pxYD4IbRSY8dzgV2n23dV/3lQA3e64hz2DoT+YS5nl
-   1mGucjPq9MDMFJ//8TzCTbYFJX+l1T7beo5kPrX9JNKRaNRgXx4E66Y9C
-   iSQJ+6DUGoQSiRPUmrW6eLJk/7atcUnCjCH3FB/+NAnnp0zlEsZuYfJFI
-   jd+Idd72JHTRiIlQHEVTLIPXhOV3ObuDPsU3Dl3EuCN4k/qaZip/sZ6AJ
-   bAwaq0qpfJcCrHMj70pJbjRLNMKctuFGRFj6HS8bPRNT0akVkACkK+iIk
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10751"; a="340628223"
-X-IronPort-AV: E=Sophos;i="6.01,156,1684825200"; 
-   d="scan'208";a="340628223"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2023 00:34:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10751"; a="745427810"
-X-IronPort-AV: E=Sophos;i="6.01,156,1684825200"; 
-   d="scan'208";a="745427810"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orsmga008.jf.intel.com with ESMTP; 25 Jun 2023 00:34:36 -0700
-Date:   Sun, 25 Jun 2023 15:33:29 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Marco Pagani <marpagan@redhat.com>
-Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-fpga@vger.kernel.org
-Subject: Re: [PATCH v7 2/4] fpga: add an initial KUnit suite for the FPGA
- Bridge
-Message-ID: <ZJftyXGY5TbEqPqk@yilunxu-OptiPlex-7050>
-References: <20230616154405.220502-1-marpagan@redhat.com>
- <20230616154405.220502-3-marpagan@redhat.com>
+        Sun, 25 Jun 2023 03:35:09 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC021BD;
+        Sun, 25 Jun 2023 00:35:08 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1b6824141b4so21860385ad.1;
+        Sun, 25 Jun 2023 00:35:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687678508; x=1690270508;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=C5Qhgf3eHEY34s30IwtCK+m3Ylt1vHBadRJK6BRuhis=;
+        b=ZBZhfQtKpa9sP/cu0swfriz88rJJuacx/MgOrI3Hk7CcjCDGIBhYPOH9ohNnb+MJq2
+         r6D5kMAt/8ISinrZBl28Okz1XWN6flhrAugDuqkDWEZKsNnOMb8WPhu6zYY2lQqPBUWv
+         3IDTRLWxVeBjMC6CcnLQXWZvRGcFzmL5qAVUeCGWaL+4YA4SSa5alTYbQxJiG20ceAWE
+         pls+YYzuj5Vprxy4AYuxK3GxAFnyhk5dx5hx5z+nP/Pbd6tVX1LKPS2R+SpllQkBoBsz
+         D3Oi+byUQAyGpMi7SFNP4ajIzF2NKOTVyZLnggFnyXQ0vfN8FqocRBvdzADPE9E4cqbC
+         gb/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687678508; x=1690270508;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=C5Qhgf3eHEY34s30IwtCK+m3Ylt1vHBadRJK6BRuhis=;
+        b=H1+aVRBCVpMRKMa9xLp1uUOYrmMNAlEIOFoTbn3gqwErbb4RVmd4Kbm/+VdmC81eUo
+         ZCiKNmQs5KJP2P41fFFeOYmN3L/dMF4FzF1udJRs4pIDgJSZmRuAPIg2XRdLgl9nDaRK
+         RTgo9TM3hEmDE2ExdqyUfq2ztZM/+CKad8TsIF6YPEINsKjuuyP3E8lG/LeGIihFMx32
+         rELeLAYjP5T3IhQPAz5ve8NJOzxoKPHWH6WDVEjuvkIUAnu7hy1sl3suzIWOqTK3S4au
+         K5gs7F5KkEbdTHVE6Q7XPvCnsfS18GHxtgxVR3QdmvvpOutsx8kJSsWY6QgX+zR0SGDq
+         rKDA==
+X-Gm-Message-State: AC+VfDwwYofioHNx/JgXxqcoh1kYm4Qcc6wUTaNyN+/n44d5588AQr91
+        jo5l/WTUja61Hbtf60G48HshaFmUoG+0Xej9alY=
+X-Google-Smtp-Source: ACHHUZ5VVoTgzIu6h8u9TpUOLWfD4Qv5ugSGXO/LjifTp+Fni23RQCOAoaadEZGK1VVTg0Gpj04vkw==
+X-Received: by 2002:a17:902:c94e:b0:1b7:e061:af16 with SMTP id i14-20020a170902c94e00b001b7e061af16mr3983401pla.23.1687678508015;
+        Sun, 25 Jun 2023 00:35:08 -0700 (PDT)
+Received: from localhost.localdomain ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id g11-20020a170902740b00b001b66e3a77easm2106859pll.50.2023.06.25.00.35.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 25 Jun 2023 00:35:07 -0700 (PDT)
+From:   Like Xu <like.xu.linux@gmail.com>
+X-Google-Original-From: Like Xu <likexu@tencent.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] KVM: x86: Use sysfs_emit() instead of sprintf()
+Date:   Sun, 25 Jun 2023 15:34:38 +0800
+Message-ID: <20230625073438.57427-1-likexu@tencent.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230616154405.220502-3-marpagan@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-06-16 at 17:44:03 +0200, Marco Pagani wrote:
-> The suite tests the basic behaviors of the FPGA Bridge including
-> the functions that operate on a list of Bridges.
-                                          ^
-why uppercase?
+From: Like Xu <likexu@tencent.com>
 
-> 
-> Signed-off-by: Marco Pagani <marpagan@redhat.com>
-> ---
->  drivers/fpga/tests/fpga-bridge-test.c | 175 ++++++++++++++++++++++++++
->  1 file changed, 175 insertions(+)
->  create mode 100644 drivers/fpga/tests/fpga-bridge-test.c
-> 
-> diff --git a/drivers/fpga/tests/fpga-bridge-test.c b/drivers/fpga/tests/fpga-bridge-test.c
-> new file mode 100644
-> index 000000000000..fce67ac59a7c
-> --- /dev/null
-> +++ b/drivers/fpga/tests/fpga-bridge-test.c
-> @@ -0,0 +1,175 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * KUnit test for the FPGA Bridge
-> + *
-> + * Copyright (C) 2023 Red Hat, Inc.
-> + *
-> + * Author: Marco Pagani <marpagan@redhat.com>
-> + */
-> +
-> +#include <linux/types.h>
-> +#include <linux/module.h>
-> +#include <linux/device.h>
-> +#include <kunit/test.h>
-> +#include <linux/fpga/fpga-bridge.h>
+Use sysfs_emit() instead of the sprintf() for sysfs entries. sysfs_emit()
+knows the maximum of the temporary buffer used for outputting sysfs
+content and avoids overrunning the buffer length.
 
-alphabetical order please.
+Signed-off-by: Like Xu <likexu@tencent.com>
+---
+ arch/x86/kvm/mmu/mmu.c | 2 +-
+ arch/x86/kvm/vmx/vmx.c | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Others LGTM.
-Acked-by: Xu Yilun <yilun.xu@intel.com>
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index 60397a1beda3..78f6f816c7d1 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -6862,7 +6862,7 @@ static void mmu_destroy_caches(void)
+ static int get_nx_huge_pages(char *buffer, const struct kernel_param *kp)
+ {
+ 	if (nx_hugepage_mitigation_hard_disabled)
+-		return sprintf(buffer, "never\n");
++		return sysfs_emit(buffer, "never\n");
+ 
+ 	return param_get_bool(buffer, kp);
+ }
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index 0ecf4be2c6af..254f2296e549 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -366,9 +366,9 @@ static int vmentry_l1d_flush_set(const char *s, const struct kernel_param *kp)
+ static int vmentry_l1d_flush_get(char *s, const struct kernel_param *kp)
+ {
+ 	if (WARN_ON_ONCE(l1tf_vmx_mitigation >= ARRAY_SIZE(vmentry_l1d_param)))
+-		return sprintf(s, "???\n");
++		return sysfs_emit(s, "???\n");
+ 
+-	return sprintf(s, "%s\n", vmentry_l1d_param[l1tf_vmx_mitigation].option);
++	return sysfs_emit(s, "%s\n", vmentry_l1d_param[l1tf_vmx_mitigation].option);
+ }
+ 
+ static void vmx_setup_fb_clear_ctrl(void)
+-- 
+2.41.0
+
