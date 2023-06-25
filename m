@@ -2,164 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDE5673D520
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 01:05:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30CB473D523
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 01:05:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbjFYXEz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 19:04:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58228 "EHLO
+        id S229691AbjFYXFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 19:05:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjFYXEx (ORCPT
+        with ESMTP id S229447AbjFYXFf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 19:04:53 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D801A3
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 16:04:52 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2b69e6d324aso7533711fa.0
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 16:04:52 -0700 (PDT)
+        Sun, 25 Jun 2023 19:05:35 -0400
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D78991A3;
+        Sun, 25 Jun 2023 16:05:32 -0700 (PDT)
+Received: by mail-ot1-x330.google.com with SMTP id 46e09a7af769-6b7206f106cso2091231a34.1;
+        Sun, 25 Jun 2023 16:05:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1687734290; x=1690326290;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rMSRVSKvdMX0dea+B6+Hs/HDDXnMxvCzvCL3UJTsBTg=;
-        b=eS9u/bq1l3sG+ndTIlBSp/rjKrVlUhGF0tXq1bR7Mo/A9ALfWw47pkkF/8krym8Glo
-         rk3FOIwctxHg7R96nGyFYg4kOkcougICh6lyToi9YPOEHEeePRREOU1RL0sTpq8swTMA
-         2oed0S1O1OPmAUZrB1BGEwy15w1eWpuf5XlyA=
+        d=gmail.com; s=20221208; t=1687734332; x=1690326332;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=/NcnRc4T0o1t4O2y9WdosBv1HmRGzHO7rljVZKS/vtw=;
+        b=DWGXcKWA8mJpSlfe7rytQ9jD3o/OLn7RkOiLBBnByUY/5r0y1CALU8GTLHhcaYzOQ3
+         Xyv4rTbzJ+XJvEtj8j64lz4TYmA4WDcy96TiTbeuGQh/dNK97JqSwxXwFCdczK/ZVZsF
+         +HHDKoQlwyQ94ARC5PmVtE+fsoIvYmoaWFZ/8deSnhfXwvpw1pzMPJd3Xt2z+CfKdzMR
+         oxB3ACWLbow0x9KvCe0u85nob7cjMGrQk2YvWTSsp8yHJxKJ1XLi8/hdwGQ2zX0nZP82
+         4aB1FQaeCL04m+rc8XAyvZz+oyt+14fjZFcojKIGQ/vCOFp66xegHdHcGCeHCl+Iopvs
+         C8vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687734290; x=1690326290;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1687734332; x=1690326332;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=rMSRVSKvdMX0dea+B6+Hs/HDDXnMxvCzvCL3UJTsBTg=;
-        b=Gna0shA6cu0KQNBb4NyG+TeDpL9oeVgfkXjpXaLvBfOvIiajPamIDceUV0g4iNklMF
-         K+oYjc2eqC9D1TJJOaxUK5QDq/FPTaWspouGaqKpxkLjpMMEXbTgp6VRrafVk0/OfPUp
-         HWvw9wJgeUKjRuyXCwQ25igGMlOOy1OAZ8NZY6dpUuDYZz87+jQ6jq4K+Y2vpHkxCx3d
-         a28puvZ9J6BUFxqxuRkZWseDX4pHlVC8aVGf4ODyZJ01qt3tpkfbrvr9N2Z2x3rejtiq
-         8y2KHQxSEJeP6VTf3LOzvtxMJVMhOFEiuFktkMAldpIlB5LwElgKoZRen+DXOXy8knZT
-         1Qsw==
-X-Gm-Message-State: AC+VfDzPs5kf34xmHLjDd+2T2ABCqL52Ewa/hai6hNDQ1uoRBlaIFNnz
-        NZlJSY7RumKRQU6/xn17oZjToqiXmG3iWB//W4y9m6AO
-X-Google-Smtp-Source: ACHHUZ73PXftJbveDVAEGkI3GxSx08G3eLMAu2nNEWOjrRm4W2HRMGIqgxdvu/s3APXaCBXK3eg+PA==
-X-Received: by 2002:ac2:4f0a:0:b0:4fb:7404:538b with SMTP id k10-20020ac24f0a000000b004fb7404538bmr596272lfr.66.1687734290119;
-        Sun, 25 Jun 2023 16:04:50 -0700 (PDT)
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com. [209.85.208.41])
-        by smtp.gmail.com with ESMTPSA id a15-20020aa7d90f000000b0051bc5adc942sm2191633edr.47.2023.06.25.16.04.49
-        for <linux-kernel@vger.kernel.org>
+        bh=/NcnRc4T0o1t4O2y9WdosBv1HmRGzHO7rljVZKS/vtw=;
+        b=ViiT4wmcGHeCGd2FGZoXF8xdgXOt4sdxvXTlno2YGWb/ZXEoLJOoubo6hIybqfN3TZ
+         WVixLMoOLlyTEPEEHlalpJ/Ktwnr8mRCP2Og0/Sw5makgoSNu+sJkO53feQOzBN9o43U
+         wrdZi09a58Ho1MKK+sZv8yWXUKIDIgYC0dGav7shWTD5EsN1yxjf67HE4EWFKNrtw8eF
+         yfyd5iWap1sbWWqI2DGlWKYXu/ZOZ+WK88SMSUS8V3vHuaoIvwSUQ0jltc6JyeFSTeKg
+         PEZifuoS8WwQC2x1+0RLhzpxA0HZ5avJ7JtmGfaS6Qx68wtYeDVgOYez8c+GxHz2w4BD
+         gyIQ==
+X-Gm-Message-State: AC+VfDw1RAbxDQZzrSYSzsyvaW0QmL+zZlJ68oL4w6pDDmUA/VB5FRCl
+        EOmFkyeo+PW4U1RP9iKIX9s=
+X-Google-Smtp-Source: ACHHUZ6F/t+CjYz3dH4q0+WC+LUKE4SgfRB50r+VZeqbojjjx8nQ40wfPh+s9QWadsUpAdtgglV8oQ==
+X-Received: by 2002:a05:6830:e13:b0:6b7:30d6:f4ed with SMTP id do19-20020a0568300e1300b006b730d6f4edmr3595867otb.5.1687734332029;
+        Sun, 25 Jun 2023 16:05:32 -0700 (PDT)
+Received: from [192.168.1.119] ([216.130.59.33])
+        by smtp.gmail.com with ESMTPSA id di7-20020a0568303a0700b006b4281cf424sm2036723otb.4.2023.06.25.16.05.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 25 Jun 2023 16:04:49 -0700 (PDT)
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-51d88f1c476so1716747a12.0
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 16:04:49 -0700 (PDT)
-X-Received: by 2002:aa7:d34b:0:b0:51a:4963:e00d with SMTP id
- m11-20020aa7d34b000000b0051a4963e00dmr15123627edr.15.1687734288864; Sun, 25
- Jun 2023 16:04:48 -0700 (PDT)
+        Sun, 25 Jun 2023 16:05:31 -0700 (PDT)
+Sender: Larry Finger <larry.finger@gmail.com>
+Message-ID: <67faf4f4-f36c-3ff7-03b8-cd259e4a5548@lwfinger.net>
+Date:   Sun, 25 Jun 2023 18:05:30 -0500
 MIME-Version: 1.0
-References: <20230623152926.128aa568@gandalf.local.home> <CAHk-=whmnhEY6s1USY+hHX5+31orf7U_TxXvx+Y89xhL-Ydvzg@mail.gmail.com>
- <20230623220959.6461cc02@rorschach.local.home> <20230624135056.263e0ba9@rorschach.local.home>
-In-Reply-To: <20230624135056.263e0ba9@rorschach.local.home>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 25 Jun 2023 16:04:32 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wirKv866nP=v3uBf0TTvaPxfSvAQUJfL2KB-NZboBVUaQ@mail.gmail.com>
-Message-ID: <CAHk-=wirKv866nP=v3uBf0TTvaPxfSvAQUJfL2KB-NZboBVUaQ@mail.gmail.com>
-Subject: Re: [GIT PULL] tracing: user_event fix for 6.4
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Beau Belgrave <beaub@linux.microsoft.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        sunliming <sunliming@kylinos.cn>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: Fwd: After kernel 6.3.7 or 6.3.8 b43 driver fails
+To:     Sardonimous <sardonimous@hotmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux Wireless <linux-wireless@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>
+Cc:     =?UTF-8?Q?Michael_B=c3=bcsch?= <m@bues.ch>,
+        kernel test robot <lkp@intel.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        Kalle Valo <kvalo@kernel.org>
+References: <27829c69-515c-36a6-4beb-3210225f8936@gmail.com>
+ <b9428e48-f0f9-46f6-892c-4c8834c930c4@app.fastmail.com>
+ <RO2P215MB193850DDADD38492BEC8CC2FA720A@RO2P215MB1938.LAMP215.PROD.OUTLOOK.COM>
+ <a3bc5eb5-9639-8016-36ab-105abc8c0ca3@gmail.com>
+ <69b98eb4-2c4e-fe75-90b4-4b08505a595a@lwfinger.net>
+ <RO2P215MB193879B2D99DD0BAF59EFA92A721A@RO2P215MB1938.LAMP215.PROD.OUTLOOK.COM>
+ <e0a08449-554a-4a28-ac50-7051866eb95e@app.fastmail.com>
+ <da80b806-de3f-c7ea-0352-cd23e0f6dd65@lwfinger.net>
+ <RO2P215MB1938BD13105900F3525E0FE7A721A@RO2P215MB1938.LAMP215.PROD.OUTLOOK.COM>
+Content-Language: en-US
+From:   Larry Finger <Larry.Finger@lwfinger.net>
+In-Reply-To: <RO2P215MB1938BD13105900F3525E0FE7A721A@RO2P215MB1938.LAMP215.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 24 Jun 2023 at 10:51, Steven Rostedt <rostedt@goodmis.org> wrote:
->
-> On Fri, 23 Jun 2023 22:09:59 -0400
-> Steven Rostedt <rostedt@goodmis.org> wrote:
->
-> > The code that does the write is basically something being monitored by
-> > something else that will tell it to start writing. But that something
-> > else could have the buffer disabled for writes. The use case for this
-> > is to disable the buffer, enable all the trace events you care about,
-> > and then enabled the buffer which is the same as enabling all events at
-> > the same time to get a more coherent trace.
->
-> Are you fine with the above explanation?
+On 6/25/23 16:11, Sardonimous wrote:
+> On 6/25/23 13:17, Larry Finger wrote:
+> 
+>> On 6/25/23 13:12, Arnd Bergmann wrote:
+>>> On Sun, Jun 25, 2023, at 18:58, Sardonimous wrote:
+>>>> I have been unable to get DMA to work in the past.  So I have been
+>>>> configuring it with PIO=1 (/etc/modprobe,d/b43.conf):
+>>>>
+>>>>       options b43 pio=1 qos=0
+>>>>
+>>>
+>>> I think the qos=0 parameter is what causes the WARN_ON(), as that
+>>> causes the use of only one queue, while the warning happens when
+>>> tx function iterates over all the queues and warns that they don't
+>>> exist.
+>>
+>> I agree and suggest running with no options. If we need debug, we can turn it 
+>> on later.
+>>
+>> Larry
+> 
+> Sure. Of course, this is what I started out with years ago (2017?) when I was 
+> trying to get this to work.
+> 
+> Now:
+> Linux version 6.3.9-arch1-1 (linux@archlinux) (gcc (GCC) 13.1.1 20230429, GNU ld 
+> (GNU Binutils) 2.40.0) #1 SMP PREEMPT_DYNAMIC Wed, 21 Jun 2023 20:46:20 +0000
+> 
+> This is the sort of loop I get (dmesg | grep b43):
+> 
+> [   31.979539] b43-pci-bridge 0000:02:00.0: Sonics Silicon Backplane found on 
+> PCI device 0000:02:00.0
+> [   35.239389] b43-phy0: Broadcom 4322 WLAN found (core revision 16)
+> [   35.275018] b43-phy0: Found PHY: Analog 8, Type 4 (N), Revision 4
+> [   35.275046] b43-phy0: Found Radio: Manuf 0x17F, ID 0x2056, Revision 3, Version 0
+> [   66.890631] b43-phy0: Loading firmware version 784.2 (2012-08-15 21:35:19)
+> [   67.437162] b43-phy0 ERROR: DMA RX reset timed out
+> [   67.498976] b43 ssb0:0: Timeout waiting for bitmask 01800000 on register 0F90 
+> to clear
+> [   67.707177] b43-phy0: Loading firmware version 784.2 (2012-08-15 21:35:19)
+> [  391.127300] b43-phy0 ERROR: DMA RX reset timed out
+> [  391.360514] b43-phy0 ERROR: DMA TX reset timed out
+> [  391.382127] b43 ssb0:0: Timeout waiting for bitmask 01800000 on register 0F90 
+> to clear
+> [  391.590659] b43-phy0: Loading firmware version 784.2 (2012-08-15 21:35:19)
+> [  709.123840] b43-phy0 ERROR: DMA RX reset timed out
+> [  709.357235] b43-phy0 ERROR: DMA TX reset timed out
+> [  709.378623] b43 ssb0:0: Timeout waiting for bitmask 01800000 on register 0F90 
+> to clear
+> [  709.573851] b43-phy0: Loading firmware version 784.2 (2012-08-15 21:35:19)
 
-Honestly, I still think that returning zero is completely crazy.
+Sardonimous,
 
-It's exactly the wrong thing to do.
+Did it ever work with DMA. or was PIO the only way to get it to work?
 
-"write()" returning 0 is only normal if the passed-in length was zero
-to begin with, and then it can actually have special meaning (ie
-zero-sized writes have historically been used for STREAMS etc to do
-EOF signalling to the other side, and/or are used to detect pending
-errors).
+If you add in only the pio=1 option without qos, will it work?
 
-There is one "return zero" case I know about, and it's the "disk full"
-signalling (kind of EOF) for block devices.
+If I were to send you some test patches, could you create a kernel with them 
+applied?
 
-If you are reading the man-pages, and your eyes found this:
+Larry
 
-   "In the absence of errors, or if error detection is not performed,
-    the write() function shall return zero and have no other results"
-
-I'd like to point out that that is exactly the "pass in a zero length
-to write" case. That verbiage is all about "write(fd, buf, 0)"
-possibly returning zero _or_ an error if an error was pending (and was
-detected).
-
-So returning zero from a write is basically insanity. It's not a valid
-error case.
-
-And it's a *dangerous* return value, because if you have some write
-wrapper that is trying to deal with partial writes (think pipes etc),
-I would not be surprised if there are cases of that just looping
-forever on a zero return.
-
-In fact, I went to Debian code search, and looked for "= write(" as a pattern.
-
-The VERY FIRST hit on Debian Code search was this from LibreOffice:
-
-    bool safeWrite(int fd, void* data, std::size_t dataSize)
-    {
-        auto nToWrite = dataSize;
-        unsigned char* dataToWrite = static_cast<unsigned char *>(data);
-
-        while ( nToWrite ) {
-            auto nWritten = write(fd, dataToWrite, cap_ssize_t(nToWrite));
-            if ( nWritten < 0 ) {
-                if ( errno == EINTR )
-                    continue;
-
-                return false;
-
-            }
-
-            assert(nWritten > 0);
-            nToWrite -= nWritten;
-            dataToWrite += nWritten;
-        }
-
-        return true;
-    }
-
-which loops forever if NDEBUG is set, otherwise it will print an error
-message and abort.
-
-See why I think returning zero is such a bad bad idea?
-
-There is NO EXPLANATION that makes it ok. Really. It's a huge bug, and
-wrong on all possible levels.
-
-The fact that your explanation is "we have that bug in other places"
-does *not* make me any happier.
-
-              Linus
