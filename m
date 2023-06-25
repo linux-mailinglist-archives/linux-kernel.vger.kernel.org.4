@@ -2,109 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C46F273D173
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 16:25:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3735573D177
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 16:29:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230389AbjFYOZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 10:25:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54426 "EHLO
+        id S230375AbjFYO3W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 10:29:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjFYOZr (ORCPT
+        with ESMTP id S229509AbjFYO3U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 10:25:47 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F06C9E;
-        Sun, 25 Jun 2023 07:25:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687703145; x=1719239145;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tEXa7+daJWFICujQmk+hUpt7ny1BGIDcYKYZnvLrbks=;
-  b=P8aVHsa9tup3jKFKDe/1Xg3Ws207HHfiCVXkz6kZxiRKD7xcf1CSLKWL
-   0zMK+PHnSliyP0JYGjOq39YpdD6MNpTD5SPoTae2zYc6NYsE2nnXhTdbv
-   /iY2CMTAXOR2Db3MdQbO5YzjbwaEdWSnjQe6IufWc7GBZPBRXX/zVXGYc
-   BDcgJqXfGH12TUOdMhdznKkkau98f+Y6b9iO0JyDt8JdZwe2Qezg964+6
-   4EOx95t0113NVqg3JIRnbUKiQVm8I9Zgbx3QpNAfZlBDM1VGqrIVb9l7a
-   8+UioTl8NmUR9f7e0EYpIU+y65DYi6TqD9LLFVddoWnqVLa702DVWTcqE
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="363621796"
-X-IronPort-AV: E=Sophos;i="6.01,157,1684825200"; 
-   d="scan'208";a="363621796"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2023 07:25:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="962498173"
-X-IronPort-AV: E=Sophos;i="6.01,157,1684825200"; 
-   d="scan'208";a="962498173"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 25 Jun 2023 07:25:43 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qDQgQ-000A4T-1B;
-        Sun, 25 Jun 2023 14:25:42 +0000
-Date:   Sun, 25 Jun 2023 22:25:02 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
-        brauner@kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-        Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        Seth Forshee <sforshee@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] docs: filesystems: idmappings: clarify from where
- idmappings are taken
-Message-ID: <202306252253.qxHG1txo-lkp@intel.com>
-References: <20230621095905.31346-1-aleksandr.mikhalitsyn@canonical.com>
+        Sun, 25 Jun 2023 10:29:20 -0400
+Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C573C9
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 07:29:19 -0700 (PDT)
+Received: by mail-oo1-xc2b.google.com with SMTP id 006d021491bc7-5630ff2b900so1336883eaf.3
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 07:29:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1687703359; x=1690295359;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=TGKSvilmZgPJXmejRM2lBTN0K9/2tgMZGylX16m+j6g=;
+        b=eG2+tYqWkPkRCKS2RqWlEWAPeVeLRLXmJgJx4B9MSOk2J+FsmkJeEiMFUA6KvpbbCr
+         89LyphI33da0F/giPdABa5kExZR8OYAsgy2vh6TTPohdM7/mDDY59lwOBYhzfAZGp30D
+         05pvyoXfP1v6weRD8GBJFn77jPCHxgvEBe4tRKrmVB99zADfpEQj9rgiQSB4nWZARxBJ
+         iugI3imnns3+ApJ9CMskLtS5DWhnJubAU58LcP/z9QP9bpnq/Uer7js5m5TVx2r4pZLD
+         9dBPFp5TTAK7U6Hbyi7hFev30VCCcg47CUJ0RupDMTD90mAWngVaaxqxkRgiGVjgjUqd
+         gIpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687703359; x=1690295359;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TGKSvilmZgPJXmejRM2lBTN0K9/2tgMZGylX16m+j6g=;
+        b=elI1TShCEI9m6pfNBbOVeW0vA1OVXBGR9MM7leX5K09xVO+xdLOfOA7V/z6VqawJJo
+         O+Bq1XqOzekTcW9vFenZ1fg1TQ3+pNL7Y+8/kp50OND5oSTE1jSyBM1pQJhgM8yQ/EAB
+         7j12mW9mDzduZg/WNpi7FwuVYCFiao1teMF9llSVsJJU2viiNVB/HUpIJN3b1weZkl+I
+         2KzCB4UQjaxiHQ51sHZnQLvkR8ibfj34yysBfWLrFBY/jCjpAsA3Bf/y3UD+xn0ceClt
+         1Mt1Z1dRvbtdUbw52IDfayFscbglR5QlyJf2yzIlXwUlOqV3xQazcdUgy9wQ+5fUB/uH
+         G2DQ==
+X-Gm-Message-State: AC+VfDzWjFV05l018rpGw6Tuc8j1GCHvZawqrSJNbpR2zRvCGsWSFb0J
+        O2Q1FsCF+co0UPo15mJsTfuI+v66NGUFgnQQE8U=
+X-Google-Smtp-Source: ACHHUZ5ORDdc7sTEUz6Kzs7YToDfn6ptrUe/hYZt5RefjV2u7D3+JoGbfaDk2v3JXbuijopR6K45tQ==
+X-Received: by 2002:a05:6808:3098:b0:398:55ff:1fb8 with SMTP id bl24-20020a056808309800b0039855ff1fb8mr33372212oib.37.1687703358696;
+        Sun, 25 Jun 2023 07:29:18 -0700 (PDT)
+Received: from C02DV8HUMD6R.bytedance.net ([203.208.167.146])
+        by smtp.gmail.com with ESMTPSA id 29-20020a17090a195d00b0025ef39c0f87sm2980744pjh.0.2023.06.25.07.29.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 25 Jun 2023 07:29:18 -0700 (PDT)
+From:   Abel Wu <wuyun.abel@bytedance.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Ahern <dsahern@kernel.org>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Yu Zhao <yuzhao@google.com>,
+        Abel Wu <wuyun.abel@bytedance.com>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Martin KaFai Lau <martin.lau@kernel.org>,
+        Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+        Breno Leitao <leitao@debian.org>,
+        David Howells <dhowells@redhat.com>,
+        Jason Xing <kernelxing@tencent.com>,
+        Xin Long <lucien.xin@gmail.com>
+Cc:     Michal Hocko <mhocko@suse.com>,
+        linux-kernel@vger.kernel.org (open list),
+        netdev@vger.kernel.org (open list:NETWORKING [GENERAL]),
+        cgroups@vger.kernel.org (open list:CONTROL GROUP - MEMORY RESOURCE
+        CONTROLLER (MEMCG)),
+        linux-mm@kvack.org (open list:CONTROL GROUP - MEMORY RESOURCE
+        CONTROLLER (MEMCG))
+Subject: [PATCH net-next 1/2] net-memcg: Scopify the indicators of sockmem pressure
+Date:   Sun, 25 Jun 2023 22:28:10 +0800
+Message-Id: <20230625142820.47185-1-wuyun.abel@bytedance.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230621095905.31346-1-aleksandr.mikhalitsyn@canonical.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alexander,
+Now there are two indicators of socket memory pressure sit inside
+struct mem_cgroup, socket_pressure and tcpmem_pressure.
 
-kernel test robot noticed the following build warnings:
+When in legacy mode aka. cgroupv1, the socket memory is charged
+into a separate counter memcg->tcpmem rather than ->memory, so
+the reclaim pressure of the memcg has nothing to do with socket's
+pressure at all. While for default mode, the ->tcpmem is simply
+not used.
 
-[auto build test WARNING on vfs-idmapping/for-next]
-[also build test WARNING on linus/master v6.4-rc7 next-20230623]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+So {socket,tcpmem}_pressure are only used in default/legacy mode
+respectively. This patch fixes the pieces of code that make mixed
+use of both.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alexander-Mikhalitsyn/docs-filesystems-idmappings-clarify-from-where-idmappings-are-taken/20230621-180345
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/idmapping.git for-next
-patch link:    https://lore.kernel.org/r/20230621095905.31346-1-aleksandr.mikhalitsyn%40canonical.com
-patch subject: [PATCH] docs: filesystems: idmappings: clarify from where idmappings are taken
-reproduce: (https://download.01.org/0day-ci/archive/20230625/202306252253.qxHG1txo-lkp@intel.com/reproduce)
+Signed-off-by: Abel Wu <wuyun.abel@bytedance.com>
+---
+ include/linux/memcontrol.h | 4 ++--
+ mm/vmpressure.c            | 8 ++++++++
+ 2 files changed, 10 insertions(+), 2 deletions(-)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306252253.qxHG1txo-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> Documentation/filesystems/idmappings.rst:378: WARNING: Unexpected indentation.
-
-vim +378 Documentation/filesystems/idmappings.rst
-
-   375	
-   376	From the implementation point it's worth mentioning how idmappings are represented.
-   377	All idmappings are taken from the corresponding user namespace.
- > 378	    - caller's idmapping (usually taken from ``current_user_ns()``)
-   379	    - filesystem's idmapping (``sb->s_user_ns``)
-   380	    - mount's idmapping (``mnt_idmap(vfsmnt)``)
-   381	
-
+diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+index 222d7370134c..9b1b536b4ec9 100644
+--- a/include/linux/memcontrol.h
++++ b/include/linux/memcontrol.h
+@@ -1743,8 +1743,8 @@ void mem_cgroup_sk_alloc(struct sock *sk);
+ void mem_cgroup_sk_free(struct sock *sk);
+ static inline bool mem_cgroup_under_socket_pressure(struct mem_cgroup *memcg)
+ {
+-	if (!cgroup_subsys_on_dfl(memory_cgrp_subsys) && memcg->tcpmem_pressure)
+-		return true;
++	if (!cgroup_subsys_on_dfl(memory_cgrp_subsys))
++		return !!memcg->tcpmem_pressure;
+ 	do {
+ 		if (time_before(jiffies, READ_ONCE(memcg->socket_pressure)))
+ 			return true;
+diff --git a/mm/vmpressure.c b/mm/vmpressure.c
+index b52644771cc4..22c6689d9302 100644
+--- a/mm/vmpressure.c
++++ b/mm/vmpressure.c
+@@ -244,6 +244,14 @@ void vmpressure(gfp_t gfp, struct mem_cgroup *memcg, bool tree,
+ 	if (mem_cgroup_disabled())
+ 		return;
+ 
++	/*
++	 * The in-kernel users only care about the reclaim efficiency
++	 * for this @memcg rather than the whole subtree, and there
++	 * isn't and won't be any in-kernel user in a legacy cgroup.
++	 */
++	if (!cgroup_subsys_on_dfl(memory_cgrp_subsys) && !tree)
++		return;
++
+ 	vmpr = memcg_to_vmpressure(memcg);
+ 
+ 	/*
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.37.3
+
