@@ -2,112 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24CB573D05C
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 13:20:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EB2F73D060
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 13:21:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231709AbjFYLUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 07:20:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36368 "EHLO
+        id S231743AbjFYLVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 07:21:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230058AbjFYLUP (ORCPT
+        with ESMTP id S230058AbjFYLVd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 07:20:15 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26994189
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 04:20:12 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-986d8332f50so277067566b.0
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 04:20:12 -0700 (PDT)
+        Sun, 25 Jun 2023 07:21:33 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5725A18E;
+        Sun, 25 Jun 2023 04:21:32 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-986d8332f50so277160566b.0;
+        Sun, 25 Jun 2023 04:21:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687692010; x=1690284010;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ogxgi78me0C8+k51K80WUPebZTg0rwpJPZ+pAHZVLqM=;
-        b=Ban6/yViO34/JySLYXej4IHXRFs6TU2pXVPJdVdDZEZYRPoNhR3/40Ej51nQVPsEog
-         eZ99qwY8PpuefkZE7AUfi7i4sv6AfjyB7Dg8fZXWHNjPJW2FUAa4bYOP1M3yWQknxuid
-         oZGL3eA/VspMRO/p0qIkeEsoATOVUX8D5MlBKO0YI9XjJYKtL4Jtb4tnA9114EVmhOYa
-         xyZm7pBJvkVFIY3EavD9qLC8TsB90SOw6XUZgvoAW9H/SrtdiG2ipk40eZQSYAvgu1cE
-         mp4ONoR632qZFQ4U7WBTI8Ng9N/B4wjKxaOeBJQqbidAFMrNqwiK934fdwrMQ1p2fK1d
-         az4g==
+        d=gmail.com; s=20221208; t=1687692091; x=1690284091;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=RShrmp5d5YjbnMCRTIoskOVV/4dcQN9QlhOXYh59kII=;
+        b=jOypruXWz0mk/akL08lCy4oC5TYSV9uVNfx0p557JHXdD/qM0HTf8tbDH5D/yyoSA6
+         tu6vi5kFIVHP58H1xaZZLIwveCGm3wwRlTOumSGObwtCXZzc+3ub55YGn/EhzavS+8A8
+         RrJjLAa8m4ut0m6ftR5YqFUh9QEhZEALtozurgVP/5SI78futbLJcqSMzXrLaccjtaas
+         9L+EXSEcGiYrg14wrHPLQHF/seAVd3TvbpTmzgEmZGmj4rfYFPKezRJk4Po6JFfPERom
+         OvL2bZ8tRqXSZtxoRH4adxfITRxsq48dgebi9ZHTbBd8PLrFPZmzgLY4dvlRFjb83yhp
+         IJIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687692010; x=1690284010;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1687692091; x=1690284091;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ogxgi78me0C8+k51K80WUPebZTg0rwpJPZ+pAHZVLqM=;
-        b=gC/epT8l/YF5Z8ONl91LPZGPneuQM8FpK4guSaVxtVwIxK+4y0hJf5XnougEfsZQ6B
-         XvnoYmhW0xqoigRtmlAdr4ZIeehxP9HNPoLl5G9ulIP2Y2dYKnjWYBBrlxhGkPuU8CVb
-         4KwipYVOskYjbmhFs5ZDW+uX6wqsnEMwLvkPMqgITFEdEgTXlkHD/Jbtg/CYFTd9Pdyp
-         b8tufmfxlRIzwIP48kxCtVdrnoov5mtkt0VUlagQCYTpE+bUW6Z9mJc/GE6Q+vDhMYlx
-         Ldv0lAf8dGGQDfkHi7yz7A4vrP9RHRHWPx+ZMlP5Vw4Y9CxEhJ2wPT55bz8iXlCVJfyH
-         YXxA==
-X-Gm-Message-State: AC+VfDwlk9wuhDkhMbr5e+bi5g8hWj0DlaA0b4g31LYWAAyCuXGWTj8W
-        5vSMqdVP/e8x7BtkSU6VJd9alQ==
-X-Google-Smtp-Source: ACHHUZ53jzo83mqUM7179gawevad5ZOQygopwowZ8Sw5ynAMmSpEhud2BW+vZacufCM+zIFWiiGE0A==
-X-Received: by 2002:a17:906:e87:b0:98d:8c5b:2156 with SMTP id p7-20020a1709060e8700b0098d8c5b2156mr4585417ejf.19.1687692010645;
-        Sun, 25 Jun 2023 04:20:10 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id k19-20020a1709061c1300b00988b32160dfsm1936345ejg.222.2023.06.25.04.20.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 25 Jun 2023 04:20:10 -0700 (PDT)
-Message-ID: <60efe832-b982-7ea7-abd3-5e9bfd41d064@linaro.org>
-Date:   Sun, 25 Jun 2023 13:20:08 +0200
+        bh=RShrmp5d5YjbnMCRTIoskOVV/4dcQN9QlhOXYh59kII=;
+        b=gmKi0nyvjtcmSNBIwKLYno4LSYhaWuYaLTSxLMHk3Gv4VQcfST6qdaKEmXSCNc+aNC
+         t3APh+nZHyW+/5f4xMmJzoDX8cwinVZaA83oI4QNAAvnMhxSFgHc3u87oI/8tZd4WycK
+         LSNkdKfkSvZ36pRJ+7T+QQyt0W/XRy8tYiqZO+lhKP1EBqmYuXhEznjakD4hbELAumDn
+         mjcsWza0kvhIBZiW2XozmVAIIKbzH0pELPTOEZVz2ctJcLguvZ+uDRAX937zcvK8+O61
+         zz5ZtdMJRamPtV3j54l2sSu9I3snLgDNrOPhP7OFccrFyKsgisb47xi3koKPJ+0w8pkn
+         uEeA==
+X-Gm-Message-State: AC+VfDznN5QxStoGYlVPpt3aLXEVMtnaEZ7uALxJv4hR1AfjNqf4dbF+
+        jKvBilWX+XT/WJW4YIqHfPu7XwQLjnQ=
+X-Google-Smtp-Source: ACHHUZ7/so+IU0ZbTtSAVgalKgZjhXZp4K2pZ7pCF8kqFz3aUn59spSUfFgjIsTyajE6S7Nqee6+fA==
+X-Received: by 2002:a17:906:8a56:b0:98e:4b2:2e83 with SMTP id gx22-20020a1709068a5600b0098e04b22e83mr2176154ejc.50.1687692090488;
+        Sun, 25 Jun 2023 04:21:30 -0700 (PDT)
+Received: from skbuf ([188.25.159.134])
+        by smtp.gmail.com with ESMTPSA id lc6-20020a170906f90600b0096fbc516a93sm1950857ejb.211.2023.06.25.04.21.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 25 Jun 2023 04:21:30 -0700 (PDT)
+Date:   Sun, 25 Jun 2023 14:21:28 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Pawel Dembicki <paweldembicki@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 2/6] net: dsa: vsc73xx: add port_stp_state_set
+ function
+Message-ID: <20230625112128.3vyvcuvypbkxuz3q@skbuf>
+References: <20230621191302.1405623-1-paweldembicki@gmail.com>
+ <20230621191302.1405623-2-paweldembicki@gmail.com>
+ <27e0f7c9-71a8-4882-ab65-6c42d969ea4f@lunn.ch>
+ <CACRpkdZ514z3Y0LP0iqN0zyc5Tgo7n8O3XHTNVWC0BrnPPjM2w@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 4/4] arm64: dts: imx93: enable CM33 for 11x11 EVK
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de
-Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
-References: <20230625105528.4057850-1-peng.fan@oss.nxp.com>
- <20230625105528.4057850-5-peng.fan@oss.nxp.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230625105528.4057850-5-peng.fan@oss.nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CACRpkdZ514z3Y0LP0iqN0zyc5Tgo7n8O3XHTNVWC0BrnPPjM2w@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/06/2023 12:55, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
+On Wed, Jun 21, 2023 at 11:27:14PM +0200, Linus Walleij wrote:
+> On Wed, Jun 21, 2023 at 9:33 PM Andrew Lunn <andrew@lunn.ch> wrote:
 > 
-> Add reserved memory node for rpmsg
-> Enable CM33 node with mailbox property included for doorbell.
+> > > +     struct vsc73xx *vsc = ds->priv;
+> > > +     /* FIXME: STP frames isn't forwarded at this moment. BPDU frames are
+> > > +      * forwarded only from to PI/SI interface. For more info see chapter
+> > > +      * 2.7.1 (CPU Forwarding) in datasheet.
+> >
+> > Do you mean the CPU never gets to see the BPDU frames?
+> >
+> > Does the hardware have any sort of packet matching to trap frames to
+> > the CPU? Can you match on the destination MAC address
+> > 01:80:C2:00:00:00 ?
 > 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> The hardware contains an embedded Intel 8054 CPU that can
+> execute programs to do pretty much anything.
+> 
+> The bad news: it requires a custom SDK thingy that we do not
+> have access to.
+> 
+> So far we used the chips in a bit of vanilla mode, which is all I
+> have ever seen in the systems we have and it can't do much,
+> not even add a helpful frame tag, but as can be seen from the
+> patches it can do VLAN...
+> 
+> Yours,
+> Linus Walleij
 
-...
+But even without involving the iCPU, it should be possible to inject/extract
+control packets over the SI interface, using the CPU_CAPT and CPUTXDAT block
+registers, correct?
 
->  	};
->  
->  	reg_vref_1v8: regulator-adc-vref {
-> @@ -107,6 +139,16 @@ &lpuart1 { /* console */
->  	status = "okay";
->  };
->  
-> +&{/remoteproc-cm33} {
-
-That's not proper reference by label.
-
-> +	mbox-names = "tx", "rx", "rxdb";
-> +	mboxes = <&mu1 0 1
-> +		  &mu1 1 1
-> +		  &mu1 3 1>;
-
-Three entries, not one. Anyway, why mboxes depend on the board? This is
-quite surprising.
-
-Best regards,
-Krzysztof
-
+IIUC, ocelot with tag_8021q does just that for STP and PTP, see
+ocelot_port_inject_frame() and ocelot_xtr_poll_frame().
