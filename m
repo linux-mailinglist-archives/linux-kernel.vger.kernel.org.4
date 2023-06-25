@@ -2,97 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA00C73CED9
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 09:14:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DFE573CEDE
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 09:16:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231467AbjFYHOp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 03:14:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43096 "EHLO
+        id S231199AbjFYHQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 03:16:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230000AbjFYHOn (ORCPT
+        with ESMTP id S230000AbjFYHQc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 03:14:43 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1511DE75;
-        Sun, 25 Jun 2023 00:14:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687677283; x=1719213283;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=OUIC591VVcLn4DPWqvzRPzY9Na+W05nEu4Lz3WGnOzM=;
-  b=SCfdyn4Cop9vPYfA+2D6/YIdQIYid9pQGzEWuyW2A0r7+2uzJx9x3nh8
-   6aJNJWWohBTNk5kw8isuVTyXzcmXnOntNwPt//M0bYwKo5aMrThwjaaH3
-   Txw8OXfckyBAVQ0TYyKpb9yzT0CNTRJOxbIRQInWypV4u8MqqWbVij7+E
-   UFT7GeXR6MrX17G0p8z3UiG6tKySfibj919LeTrWd30ASRJfmQGJ8fsmd
-   qIiSTqyYoKKIBuLwdPOl2IDhLQca5na33Wd40cZuqravB2EleVimL/J1P
-   ByZIVhUV0uOJ+hEGPwXhOZra3L2/qkijhmhIGr1PQJdRJPpIQcB0+S2FG
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10751"; a="363586776"
-X-IronPort-AV: E=Sophos;i="6.01,156,1684825200"; 
-   d="scan'208";a="363586776"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2023 00:14:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10751"; a="860328562"
-X-IronPort-AV: E=Sophos;i="6.01,156,1684825200"; 
-   d="scan'208";a="860328562"
-Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.254.211.169]) ([10.254.211.169])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2023 00:14:40 -0700
-Message-ID: <45be3429-f352-920a-d1af-7f3a07930f5d@intel.com>
-Date:   Sun, 25 Jun 2023 15:14:37 +0800
+        Sun, 25 Jun 2023 03:16:32 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BB4AE78
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 00:16:28 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-51d9124e1baso1001719a12.2
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 00:16:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687677386; x=1690269386;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uIrahwiJfRblkW3SQe71HLoNxiAeifXwVotzPF1COO8=;
+        b=SLN/+lBuA+L4hOibaG99ROPhT2q+4Zk1BkcUiRXl4SmMBXbIW7ZDZeuRWDY1cBg38Z
+         ds8IN6Tf2v7H77bI5N82BPsA6p+sb1Lj+PSR0P8pInIDV1RTT6vqMpSWO9KEJ0hHzfC9
+         PstfvAk+/fjKU2B0e7eYYEH2W3iBHla9soKb01tYlDCjDXbBy2hscxufKR4AS0Pqb0fw
+         xW/pU4+OdDUQISR5H5kuYf4bnneam72K/FNMC6qv8UwrAGSJsMpE/MizlpDV4DdZLRUJ
+         CLXPt0bN46dNwZB1ey2SqK6RPM+T8D3l2FMCfWMHk6CSE+YuPcm2jgpBH2tceoFZhhEK
+         CXig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687677386; x=1690269386;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uIrahwiJfRblkW3SQe71HLoNxiAeifXwVotzPF1COO8=;
+        b=i8Pbe7quPD05okwcrNUcGUTmdL99oRCNMZBq4uI9gND0ymFPQmJbIHeJqS6jnZjS7b
+         ADkMfrI4ofCrp355qMXzlozyVywWgIN8JKL3jwYNtJ6r0YjKUAcB7u0J21lAZwK4TCJH
+         lwCV5RS4HCPhVaQVkQbasc2zeRMKPXl/G5vn8ggNUD2PwPB4v3oMkCyRYTv7xqVgKZgV
+         6Fzu4rXHOaZySC/N0L5kvo7qifbUgegh9yeZSXgirPsZEv0wKsJIGVN+4oZ6tm3q335+
+         KAmMtTo9Cfj9T85AS/Ue3HtPlWud2kROMeDIet/TaidqgOzprsAVvn4FfVYJ6FFrm1/e
+         kWLg==
+X-Gm-Message-State: AC+VfDw2Htnl37pkFNg1lUNEERu2YfcRtdo9n4Aa/eHiRR6Apju34kLX
+        IC+PLqwSN/Uc24BnQhiRXlhbCw==
+X-Google-Smtp-Source: ACHHUZ7yWmteCJ2ASXP6XlOddI/EKOWOLbTyVMMVtsIAE32VSvu1Ve67QKpbz2Drqglycme6vQHnYQ==
+X-Received: by 2002:a05:6402:517:b0:51a:53e0:843f with SMTP id m23-20020a056402051700b0051a53e0843fmr15138396edv.37.1687677386589;
+        Sun, 25 Jun 2023 00:16:26 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id k21-20020aa7d8d5000000b0051bf6318fd7sm1440765eds.97.2023.06.25.00.16.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 25 Jun 2023 00:16:25 -0700 (PDT)
+Message-ID: <6be00ec7-2fab-7da0-ab47-fcaf3a1ce042@linaro.org>
+Date:   Sun, 25 Jun 2023 09:16:22 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.12.0
-Subject: Re: [PATCH v3 07/11] KVM: VMX: drop IPAT in memtype when CD=1 for
- KVM_X86_QUIRK_CD_NW_CLEARED
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 10/15] dt-bindings: msm: dsi-phy-14nm: Document SM6125
+ variant
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, Lux Aliaga <they@mint.lgbt>
+References: <20230624-sm6125-dpu-v1-0-1d5a638cebf2@somainline.org>
+ <20230624-sm6125-dpu-v1-10-1d5a638cebf2@somainline.org>
+ <1b40b16e-025a-c10b-e99b-404246de73fe@linaro.org>
 Content-Language: en-US
-To:     Yan Zhao <yan.y.zhao@intel.com>, Chao Gao <chao.gao@intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pbonzini@redhat.com, seanjc@google.com, kai.huang@intel.com,
-        robert.hoo.linux@gmail.com
-References: <20230616023101.7019-1-yan.y.zhao@intel.com>
- <20230616023815.7439-1-yan.y.zhao@intel.com> <ZJESMaG5Thb5LWtt@chao-email>
- <ZJEQNTvfwOSsSzrf@yzhao56-desk.sh.intel.com>
-From:   Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <ZJEQNTvfwOSsSzrf@yzhao56-desk.sh.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1b40b16e-025a-c10b-e99b-404246de73fe@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/20/2023 10:34 AM, Yan Zhao wrote:
-> On Tue, Jun 20, 2023 at 10:42:57AM +0800, Chao Gao wrote:
->> On Fri, Jun 16, 2023 at 10:38:15AM +0800, Yan Zhao wrote:
->>> For KVM_X86_QUIRK_CD_NW_CLEARED, remove the ignore PAT bit in EPT memory
->>> types when cache is disabled and non-coherent DMA are present.
->>>
->>> With the quirk KVM_X86_QUIRK_CD_NW_CLEARED, WB + IPAT are returned as the
->>> EPT memory type when guest cache is disabled before this patch.
->>> Removing the IPAT bit in this patch will allow effective memory type to
->>> honor PAT values as well, which will make the effective memory type
->> Given guest sets CR0.CD, what's the point of honoring (guest) PAT? e.g.,
->> which guests can benefit from this change?
-> This patch is actually a preparation for later patch 10 to implement
-> fine-grained zap.
-> If when CR0.CD=1 the EPT type is WB + IPAT, and
-> when CR0.CD=0 + mtrr enabled, EPT type is WB or UC or ..., which are
-> without IPAT, then we have to always zap all EPT entries.
+On 24/06/2023 15:48, Dmitry Baryshkov wrote:
+> On 24/06/2023 03:41, Marijn Suijten wrote:
+>> Document availability of the 14nm DSI PHY on SM6125.
+>>
+>> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+>> ---
+>>   Documentation/devicetree/bindings/display/msm/dsi-phy-14nm.yaml | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/display/msm/dsi-phy-14nm.yaml b/Documentation/devicetree/bindings/display/msm/dsi-phy-14nm.yaml
+>> index a43e11d3b00d..60b590f21138 100644
+>> --- a/Documentation/devicetree/bindings/display/msm/dsi-phy-14nm.yaml
+>> +++ b/Documentation/devicetree/bindings/display/msm/dsi-phy-14nm.yaml
+>> @@ -18,6 +18,7 @@ properties:
+>>         - qcom,dsi-phy-14nm
+>>         - qcom,dsi-phy-14nm-2290
+>>         - qcom,dsi-phy-14nm-660
+>> +      - qcom,dsi-phy-14nm-6125
 > 
-> Given removing the IPAT bit when CR0.CD=1 only makes the quirk
-> KVM_X86_QUIRK_CD_NW_CLEARED more strict (meaning it could be WC/UC... if
-> the guest PAT overwrites it), it's still acceptable.
+> Should we start using standard scheme, so "qcom,sm6125-dsi-phy-14nm" ?
 
-Per my understanding, the reason why KVM had KVM_X86_QUIRK_CD_NW_CLEARED 
-is to ensure the memory type is WB to achieve better boot performance 
-for old OVMF.
+I guess the earlier the better.
 
-you need to justify the original purpose is not broken by this patch.
+Best regards,
+Krzysztof
+
