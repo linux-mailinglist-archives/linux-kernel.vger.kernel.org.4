@@ -2,130 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB2B973D14D
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 16:08:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 371A373D151
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 16:10:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbjFYOIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 10:08:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46826 "EHLO
+        id S229941AbjFYOKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 10:10:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbjFYOIT (ORCPT
+        with ESMTP id S229634AbjFYOKw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 10:08:19 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ED57E54
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 07:08:18 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-51669dd574aso601750a12.0
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 07:08:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687702097; x=1690294097;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qb5uaG1ukttpAvFf/VsYxgKDzrt6PGIJhyXlt0S+974=;
-        b=oTFbyGblJZQYnCfEHksOhrJu+0t1MjoglVO2m22ZpEHcITylvHiAP0E9dThUfU9bTr
-         odWWydWnBURTXM+uBDY1UsLzKheuhtd7QHZjYi8843+GKikSm26HvlrDXtZGgocdbh5I
-         +VsyvtJmCRWfsvPMzQjzryvOkNm7utbtCA3NYbw1sb8IsRTzgrYSqSAceXgMTZIxWVSC
-         lvxcRGUEzU3jF1djmhnNHkHDqsLReKrWtlSpTKdrjgETFncVjJF+RX8gVqBvIGsggYaE
-         uTyq7i0XygbECR2ENoRw+xB+oJPjGQ33geneXrHdvosH8Mppn/0sbMPsiIpBs1CfTFrK
-         +mgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687702097; x=1690294097;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qb5uaG1ukttpAvFf/VsYxgKDzrt6PGIJhyXlt0S+974=;
-        b=JFSgR3NQuPSeS1iJ0wLkvtb9nns0y+eQ+Jswpis0VcVMijpVGPjAA0Ii+lTweqBPVq
-         bf2zPisObUy4Alq0QHBjf1u1cqVs1xWSic4aE6y7IIKIs79xP/DTc5gCNI1Pp0diThS/
-         VWTGUJ3+MlUbFZbvUBDHj95+1dLS9kzaxqMjmIurA9ajzsZBV/45RNUQaiAxYZQXcgtz
-         X9OnnO+yNGB36RZe09nfsO5r019XRZ3lLqTKr4p83PcdN4Md1A0GI1/Qld3KPzpyiXAZ
-         yMhxAZxcg7WadSbqhJJfzBXBSNeBfTSYefMJeGbXKAg6Yiwr+4fO5vcW8PtnBU36xdXJ
-         V1Fg==
-X-Gm-Message-State: AC+VfDwiwglQGi1fYS/lAfD52bV1HYU53Eq6JGUJu1Ee7zR+USqbxjWb
-        CtEZx9vzROeD+LkvCWv3YIM=
-X-Google-Smtp-Source: ACHHUZ57Y/CLa/g0I4iVLHJPBt4Z7Yne+UFoeaNZya7MdsPH4IzdVE1XB9LzR6GCXRYxRWcjcr7/Ag==
-X-Received: by 2002:a05:6402:1e8e:b0:50d:fd8e:e224 with SMTP id f14-20020a0564021e8e00b0050dfd8ee224mr19569949edf.1.1687702096644;
-        Sun, 25 Jun 2023 07:08:16 -0700 (PDT)
-Received: from [192.168.0.101] (p57ba2e0b.dip0.t-ipconnect.de. [87.186.46.11])
-        by smtp.gmail.com with ESMTPSA id x2-20020aa7d6c2000000b0051a3f9770dasm1793222edr.8.2023.06.25.07.08.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 25 Jun 2023 07:08:16 -0700 (PDT)
-Message-ID: <b76b810e-7489-9f36-ae57-f6674a1b734f@gmail.com>
-Date:   Sun, 25 Jun 2023 16:08:15 +0200
+        Sun, 25 Jun 2023 10:10:52 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A68861B1
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 07:10:50 -0700 (PDT)
+X-QQ-mid: bizesmtp73t1687702201tfi94mxf
+Received: from localhost.localdomain ( [112.2.230.41])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sun, 25 Jun 2023 22:09:56 +0800 (CST)
+X-QQ-SSF: 01200000000000B0B000000A0000000
+X-QQ-FEAT: 7QbCsSX/jDajboDIHjqXf60bGtIy5uaeLeazsMLa+7tUdkr3UGx10netYGscB
+        urao5noZ9e0frsU9G1KBZ9rFA+mY4cvgSB865YOu0EOCQ8l9rF2XEOdiTTkNnEFQbed40my
+        8eFOG2ZNIilDyadp3uJXT0MYK7YxgbWYDN5wzN9QVebgwF3leCB/t4axu/g/O4NXHOBTnRd
+        iriLXHVh1GlKHeBdaPzczRTETLTg0QYdVRfn/arFPO8w0OF2aJSUwKWfms3kSlC3tJB5LKz
+        4BoRRKhVkbH4zwvEQUU6h4053IIjk9G1cFJ9kIWgHo2ndiphh4Towdx++by0wIwTFIyYuZl
+        pCAysmh43140F197LcSw+J3ajAS3wD44tSP3Yg9VWU1+pV6Ggk=
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 8927406621294641602
+From:   Song Shuai <songshuaishuai@tinylab.org>
+To:     paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, robh+dt@kernel.org, frowand.list@gmail.com,
+        ajones@ventanamicro.com, alexghiti@rivosinc.com,
+        mpe@ellerman.id.au, arnd@arndb.de, songshuaishuai@tinylab.org,
+        rppt@kernel.org, samuel@sholland.org, panqinglin2020@iscas.ac.cn,
+        conor.dooley@microchip.com, anup@brainfault.org,
+        xianting.tian@linux.alibaba.com, anshuman.khandual@arm.com,
+        heiko@sntech.de
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: [PATCH V1 0/3] Revert huge-paged linear mapping and its related fixups
+Date:   Sun, 25 Jun 2023 22:09:28 +0800
+Message-Id: <20230625140931.1266216-1-songshuaishuai@tinylab.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] staging: rtl8192e: Rename function HTUpdateDefaultSetting
- to ht_update_default_setting
-Content-Language: en-US
-To:     Tree Davies <tdavies@darkphysics.net>, gregkh@linuxfoundation.org,
-        dan.carpenter@linaro.org
-Cc:     linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-References: <ZJdmp3PAOAIqC3Zo@tacos.darkphysics>
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-In-Reply-To: <ZJdmp3PAOAIqC3Zo@tacos.darkphysics>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/24/23 23:56, Tree Davies wrote:
-> Rename HTUpdateDefaultSetting to ht_update_default_setting in order to
-> Fix checkpatch warning: Avoid CamelCase
-> 
-> Signed-off-by: Tree Davies <tdavies@darkphysics.net>
-> ---
->   drivers/staging/rtl8192e/rtl819x_HTProc.c | 2 +-
->   drivers/staging/rtl8192e/rtllib.h         | 2 +-
->   drivers/staging/rtl8192e/rtllib_module.c  | 2 +-
->   3 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/staging/rtl8192e/rtl819x_HTProc.c b/drivers/staging/rtl8192e/rtl819x_HTProc.c
-> index f9fa3f2bb728..f526d04839bf 100644
-> --- a/drivers/staging/rtl8192e/rtl819x_HTProc.c
-> +++ b/drivers/staging/rtl8192e/rtl819x_HTProc.c
-> @@ -67,7 +67,7 @@ static u8 CISCO_BROADCOM[3] = {0x00, 0x17, 0x94};
->   
->   static u8 LINKSYS_MARVELL_4400N[3] = {0x00, 0x14, 0xa4};
->   
-> -void HTUpdateDefaultSetting(struct rtllib_device *ieee)
-> +void ht_update_default_setting(struct rtllib_device *ieee)
->   {
->   	struct rt_hi_throughput *ht_info = ieee->ht_info;
->   
-> diff --git a/drivers/staging/rtl8192e/rtllib.h b/drivers/staging/rtl8192e/rtllib.h
-> index e3ce4431d460..405033c7ed77 100644
-> --- a/drivers/staging/rtl8192e/rtllib.h
-> +++ b/drivers/staging/rtl8192e/rtllib.h
-> @@ -1982,7 +1982,7 @@ int rtllib_wx_get_rts(struct rtllib_device *ieee, struct iw_request_info *info,
->   void HTSetConnectBwMode(struct rtllib_device *ieee,
->   			enum ht_channel_width bandwidth,
->   			enum ht_extchnl_offset Offset);
-> -void HTUpdateDefaultSetting(struct rtllib_device *ieee);
-> +void ht_update_default_setting(struct rtllib_device *ieee);
->   void HTConstructCapabilityElement(struct rtllib_device *ieee,
->   				  u8 *posHTCap, u8 *len,
->   				  u8 isEncrypt, bool bAssoc);
-> diff --git a/drivers/staging/rtl8192e/rtllib_module.c b/drivers/staging/rtl8192e/rtllib_module.c
-> index d6a4d6b4ec57..841300e3a8bc 100644
-> --- a/drivers/staging/rtl8192e/rtllib_module.c
-> +++ b/drivers/staging/rtl8192e/rtllib_module.c
-> @@ -129,7 +129,7 @@ struct net_device *alloc_rtllib(int sizeof_priv)
->   	if (!ieee->ht_info)
->   		goto free_softmac;
->   
-> -	HTUpdateDefaultSetting(ieee);
-> +	ht_update_default_setting(ieee);
->   	HTInitializeHTInfo(ieee);
->   	TSInitialize(ieee);
->   	for (i = 0; i < IEEE_IBSS_MAC_HASH_SIZE; i++)
+We have encountered these two issues about huge-paged linear mapping since v6.4-rc1: 
+
+1. Bug report: kernel paniced when system hibernates[1]
+  
+OpenSbi [v0.8,v1.3) set the PMP regions as !no-map, and the commit 3335068f8721 
+("riscv: Use PUD/P4D/PGD pages for the linear mapping") mapped them in linear mapping.
+The hibernation process attempted to save/restore these mapped regions resulting in access fault.
+
+This issue was temporarily fixed by commit ed309ce52218 ("RISC-V: mark hibernation as nonportable").
+But as Alex's RFC and Rob's response stats in another thread [2] , 
+"Hibernation is only one case. Speculative accesses could also occur."
+So this fixing commit seems not the perfect answer to this issue. 
 
 
-Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
+2. Bug report: kernel paniced while booting (with UEFI )[3]
+
+During the booting with UEFI, UEFI Memory Mapping overwrote the memblock.
+The phys_ram_base was set as the end address of mmoderes0 (like 0x80040000 for 256 KiB mmoderes0@80000000),
+which resulted the VA based on 2M-aligned PA was not 2M-aligned using va_pa_offset 
+(PAGE_OFFSET - phys_ram_base) to translate.
+
+The best_map_size() from commit 3335068f8721 didn't check the virtual alignment
+before choosing a map size. and then a "VA hole" was created where page faults always occurred.
+
+This issue was fixed by commit 49a0a3731596 ("riscv: Check the virtual alignment before choosing a map size"),
+But this fixing commit has a side-effect ("the possible third one" as Alex said in this thread). 
+There are numerous PTE allocations slowing down the boot time and consuming some system memory when UEFI booting
+(Note that it's not involved when booting directly with OpenSbi, where phys_ram_base is the 2M-aligned base of DRAM).
+
+In my test, compared with/out reverting both commit 49a0a3731596 and commit 3335068f8721,
+I must wait ~20s for the linear mapping creation and mem_init_print_info() reported ~8M extra reserved memory.
+
+To eliminate this side-effect, We should find a way to align VA and PA on a 2MB boundary. 
+The simplest way is reverting the commit 3335068f8721 ("riscv: Use PUD/P4D/PGD pages for the linear mapping").
+
+
+
+Using PUD/P4D/PGD pages for the linear mapping to improve the performance is marginal from a recent talk [4]
+from Mike Rapoport. OpenSbi had marked all the PMP-protected regions as "no-map" [5] to practice this talk.
+
+For all those reasons, let's revert these related commits:
+
+- commit 3335068f8721 ("riscv: Use PUD/P4D/PGD pages for the linear mapping")
+- commit 49a0a3731596 ("riscv: Check the virtual alignment before choosing a map size")
+- commit ed309ce52218 ("RISC-V: mark hibernation as nonportable")
+ 
+[1]: https://lore.kernel.org/linux-riscv/CAAYs2=gQvkhTeioMmqRDVGjdtNF_vhB+vm_1dHJxPNi75YDQ_Q@mail.gmail.com/
+[2]: https://lore.kernel.org/linux-kernel/20230530080425.18612-1-alexghiti@rivosinc.com/
+[3]: https://lore.kernel.org/linux-riscv/tencent_7C3B580B47C1B17C16488EC1@qq.com/
+[4]: https://lwn.net/Articles/931406/
+[5]: https://github.com/riscv-software-src/opensbi/commit/8153b2622b08802cc542f30a1fcba407a5667ab9
+
+Song Shuai (3):
+  Revert "RISC-V: mark hibernation as nonportable"
+  Revert "riscv: Check the virtual alignment before choosing a map size"
+  Revert "riscv: Use PUD/P4D/PGD pages for the linear mapping"
+
+ arch/riscv/Kconfig            |  5 +---
+ arch/riscv/include/asm/page.h | 16 -------------
+ arch/riscv/mm/init.c          | 43 +++++++----------------------------
+ arch/riscv/mm/physaddr.c      | 16 -------------
+ drivers/of/fdt.c              | 11 ++++-----
+ 5 files changed, 14 insertions(+), 77 deletions(-)
+
+-- 
+2.20.1
+
