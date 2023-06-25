@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01B5373D224
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 18:28:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26E8473D226
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 18:28:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbjFYQ21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 12:28:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57150 "EHLO
+        id S230041AbjFYQ2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 12:28:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjFYQ2Z (ORCPT
+        with ESMTP id S229820AbjFYQ21 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 12:28:25 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C662F7
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 09:28:24 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-51be61663c8so2145416a12.2
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 09:28:23 -0700 (PDT)
+        Sun, 25 Jun 2023 12:28:27 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC59194
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 09:28:25 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-98e1d3be004so115156066b.1
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 09:28:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687710502; x=1690302502;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=AhMc+nxOeeYfPI6LH+23GF4WjZTIppk4w21bXTn1i6k=;
-        b=uqVIEWk9mXUl3tPmf96YMRhOYSC6ezjzeSdSBuHds+lRnYs/EGaceTAXVxQy+bZu9y
-         QNjSbNeUU+Ho/3KsZrBX4XT0Vk1Wkv/VqrFzgGmLHQk1BBUt7k+7MpFs0F55GR6nFK98
-         9uSZx75DA8hKpGgkY8Dar3mQNc+HfulYzJhkoxBNfVsgqdmTaI6VQNl7Y9Txpbn7z8ys
-         GUGk+WuBC1JKYuUgw9v+sKGBeygcneRy1zCXElLnnq1w70PeR4nhZ+UJnjIC5NwjIj95
-         zafkdznKqBB28vTQAne2h7+Z7TayS6MZZNXShL8IhBMjlCSjdBqRzLh9elzulwZ+cMPa
-         OMUA==
+        d=linaro.org; s=google; t=1687710504; x=1690302504;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8ZvbC3ZPt55NmPj9EWoBgNDeYcxlZ+9WZ1c1ZpUtvDs=;
+        b=V3MOXov53g3ZDu8LrcB6yeY3mCKfLjTgv8aERjwD6ZwjRyP74+miUwM/OWlxgCKtyN
+         y5wq3vW9LNqZVFmyctn9GDTylK7ShRLmGWcdy+i+YlPhORyLkho48YWmPhhCleBCCCOk
+         lwwtwGBnoej1wmCBzbqv7hFR+DTmWUo3VXJUSeq1HsyCcGTx70//ycUCBodR3Pj0qrWG
+         ym3Q1M+U8QonDF9G5KdwgsFkRYl4/qvsnZLaKo2u00CCq7gRiYZCc5Co46UzgreV43Q8
+         J3NwB5fTLMaoAlsrWzVbnhIYn6kQHgU6/s1zvgFnLSXw15nBxsibJAo+WA3HqzDn3IIk
+         HTPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687710502; x=1690302502;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AhMc+nxOeeYfPI6LH+23GF4WjZTIppk4w21bXTn1i6k=;
-        b=RFVmcJOhNh9I+TpVEnReGZODwwztsey5GyRnPzQLydVRN0mGnQHvT4Pkm50JhJ6X7U
-         vZuKHxMkbnQJYuXMOFKqyuvCpQhHsJOhpzQ3NA4R2zpiULH2h+PWTjZkNZYRI3u9x5+y
-         RkMxOFhefm05MOTnAdKqf1zCgJ9mlytH2b7iyOaEtV1J8RHzMXHPlhhfK/wZjXCPPs5u
-         ahime5SSjiUo+F1jVJv8S4+pAvGvsjQHokgnJlcUwGfytEgpvtAFZzNx304QkbO9K+ra
-         iDKRYImfnTlyCzO2nj9ZESSOmjz+NMDjrJlq10ylqrEuslTv/T37SJrYVmK/kEaRfgYk
-         FWAA==
-X-Gm-Message-State: AC+VfDzAIK590NK/vkWYDog44JNZKcJ6ucClrVc/wcgFrTcAEsJQG3Rj
-        i9xCJ0WipW3YA2CkszKQDX3ucA==
-X-Google-Smtp-Source: ACHHUZ58ULOzDOJCexuPb2LZkzug6PxFwG0fGJFHGbNRaGPX6JktTn/Hnhut++sDtTqn1YFIlgUk1Q==
-X-Received: by 2002:a17:907:2682:b0:977:4b64:f5e8 with SMTP id bn2-20020a170907268200b009774b64f5e8mr23641312ejc.57.1687710502339;
-        Sun, 25 Jun 2023 09:28:22 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687710504; x=1690302504;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8ZvbC3ZPt55NmPj9EWoBgNDeYcxlZ+9WZ1c1ZpUtvDs=;
+        b=FTliZXt4QCjxlQjtPwmb/2t4cRgwNhkLgiSIGbjDGjmLhpyiTmCufwf7D7Vg+eal99
+         vYpprLkcnxfdGw6qMi35bGGQZ5j+Z6jqV2jo0CMJwjKGnP5YotG2Bo8LjFtI3N7VLzoY
+         qcZSi19b0uaVS1x7WYRt2ee/2ksYBNtTfDc6oRHdslDx1v9lLm5MNd+6HeZ6fONn2hM0
+         7jqbndjUKtVr+kqrCNKf8OVvsspGP8g//HORTEzU4i7bzdksuHKvfuptGf5efICrVF9/
+         qJTis7LJLVyUWOfi8Yr6rKKWWKWR3o6HkjU0l8innz9VHqBQYRmuSutxQN8mPVpNnLFX
+         f24w==
+X-Gm-Message-State: AC+VfDxpu7M/tdG3CVNbPQkAoOna5KBJYLfxq1GQgnct5KDgATRDESuY
+        0SrUrdq+4ylB7IJ5AGmO/L81Hw==
+X-Google-Smtp-Source: ACHHUZ7LwF/EkwHPQat94JubUk3MHUNZkHDbypKquqibnFIEfO4pVx/UQakxKBC+rYD5qsC2uKy9nw==
+X-Received: by 2002:a17:907:8688:b0:973:e349:43c8 with SMTP id qa8-20020a170907868800b00973e34943c8mr23825334ejc.69.1687710504335;
+        Sun, 25 Jun 2023 09:28:24 -0700 (PDT)
 Received: from krzk-bin.. ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id ec10-20020a170906b6ca00b00982be08a9besm2277731ejb.172.2023.06.25.09.28.20
+        by smtp.gmail.com with ESMTPSA id ec10-20020a170906b6ca00b00982be08a9besm2277731ejb.172.2023.06.25.09.28.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Jun 2023 09:28:21 -0700 (PDT)
+        Sun, 25 Jun 2023 09:28:23 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Hans de Goede <hdegoede@redhat.com>,
@@ -61,16 +62,19 @@ To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         platform-driver-x86@vger.kernel.org
 Cc:     Andi Shyti <andi.shyti@kernel.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v4 00/24] Input: Simplify with dev_err_probe()
-Date:   Sun, 25 Jun 2023 18:27:53 +0200
-Message-Id: <20230625162817.100397-1-krzysztof.kozlowski@linaro.org>
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: [PATCH v4 01/24] Input: gpio_keys_polled - Simplify with dev_err_probe()
+Date:   Sun, 25 Jun 2023 18:27:54 +0200
+Message-Id: <20230625162817.100397-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230625162817.100397-1-krzysztof.kozlowski@linaro.org>
+References: <20230625162817.100397-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,77 +82,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Common pattern of handling deferred probe can be simplified with
+dev_err_probe().  Less code and also it prints the error value.
 
-Three years ago I sent v3 of this series. There was never an anwser from Dmitry
-- no comment at all. Maybe after three years this can go in? It makes
-the code nicely smaller.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+---
+ drivers/input/keyboard/gpio_keys_polled.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-Changes since v3:
-1. Rebase
-2. Drop gpio-keys patch as it depends on GPIO helpers and I am too bored to
-   rebase it.
-v3: https://lore.kernel.org/all/20200827185829.30096-1-krzk@kernel.org/
-
-Changes since v2:
-1. Add review tags,
-2. Fixes after review (see individual patches).
-3. Two new patches - 26 and 27.
-
-Best regards,
-Krzysztof
-
-Krzysztof Kozlowski (24):
-  Input: gpio_keys_polled - Simplify with dev_err_probe()
-  Input: gpio-vibra - Simplify with dev_err_probe()
-  Input: pwm-vibra - Simplify with dev_err_probe()
-  Input: rotary_encoder - Simplify with dev_err_probe()
-  Input: elan_i2c - Simplify with dev_err_probe()
-  Input: bu21013_ts - Simplify with dev_err_probe()
-  Input: bu21029_ts - Simplify with dev_err_probe()
-  Input: chipone_icn8318 - Simplify with dev_err_probe()
-  Input: cy8ctma140 - Simplify with dev_err_probe()
-  Input: edf-ft5x06 - Simplify with dev_err_probe()
-  Input: ektf2127 - Simplify with dev_err_probe()
-  Input: elants_i2c - Simplify with dev_err_probe()
-  Input: goodix - Simplify with dev_err_probe()
-  Input: melfas_mip4 - Simplify with dev_err_probe()
-  Input: pixcir_i2c_ts - Simplify with dev_err_probe()
-  Input: raydium_i2c_ts - Simplify with dev_err_probe()
-  Input: resistive-adc-touch - Simplify with dev_err_probe()
-  Input: silead - Simplify with dev_err_probe()
-  Input: sis_i2c - Simplify with dev_err_probe()
-  Input: surface3_spi - Simplify with dev_err_probe()
-  Input: sx8643 - Simplify with dev_err_probe()
-  Input: bcm-keypad - Simplify with dev_err_probe()
-  Input: bu21013_ts - Use local 'client->dev' variable in probe()
-  Input: bu21029_ts - Use local 'client->dev' variable in probe()
-
- drivers/input/keyboard/bcm-keypad.c           | 14 ++--
- drivers/input/keyboard/gpio_keys_polled.c     |  8 +--
- drivers/input/misc/gpio-vibra.c               | 20 ++----
- drivers/input/misc/pwm-beeper.c               | 19 ++---
- drivers/input/misc/pwm-vibra.c                | 30 +++-----
- drivers/input/misc/rotary_encoder.c           |  8 +--
- drivers/input/mouse/elan_i2c_core.c           |  9 +--
- drivers/input/touchscreen/bu21013_ts.c        | 72 ++++++++-----------
- drivers/input/touchscreen/bu21029_ts.c        | 51 +++++--------
- drivers/input/touchscreen/chipone_icn8318.c   |  8 +--
- drivers/input/touchscreen/cy8ctma140.c        |  8 +--
- drivers/input/touchscreen/edt-ft5x06.c        | 10 +--
- drivers/input/touchscreen/ektf2127.c          |  8 +--
- drivers/input/touchscreen/elants_i2c.c        | 22 ++----
- drivers/input/touchscreen/goodix.c            | 40 +++--------
- drivers/input/touchscreen/melfas_mip4.c       |  9 +--
- drivers/input/touchscreen/pixcir_i2c_ts.c     | 38 ++++------
- drivers/input/touchscreen/raydium_i2c_ts.c    | 30 +++-----
- .../input/touchscreen/resistive-adc-touch.c   |  8 +--
- drivers/input/touchscreen/silead.c            |  8 +--
- drivers/input/touchscreen/sis_i2c.c           | 20 ++----
- drivers/input/touchscreen/surface3_spi.c      | 13 +---
- drivers/input/touchscreen/sx8654.c            | 10 +--
- 23 files changed, 146 insertions(+), 317 deletions(-)
-
+diff --git a/drivers/input/keyboard/gpio_keys_polled.c b/drivers/input/keyboard/gpio_keys_polled.c
+index c3937d2fc744..ba00ecfbd343 100644
+--- a/drivers/input/keyboard/gpio_keys_polled.c
++++ b/drivers/input/keyboard/gpio_keys_polled.c
+@@ -299,13 +299,9 @@ static int gpio_keys_polled_probe(struct platform_device *pdev)
+ 							     NULL, GPIOD_IN,
+ 							     button->desc);
+ 			if (IS_ERR(bdata->gpiod)) {
+-				error = PTR_ERR(bdata->gpiod);
+-				if (error != -EPROBE_DEFER)
+-					dev_err(dev,
+-						"failed to get gpio: %d\n",
+-						error);
+ 				fwnode_handle_put(child);
+-				return error;
++				return dev_err_probe(dev, PTR_ERR(bdata->gpiod),
++						     "failed to get gpio\n");
+ 			}
+ 		} else if (gpio_is_valid(button->gpio)) {
+ 			/*
 -- 
 2.34.1
 
