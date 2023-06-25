@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BDC173D15F
+	by mail.lfdr.de (Postfix) with ESMTP id 63E1073D160
 	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 16:18:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230110AbjFYORu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 10:17:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49644 "EHLO
+        id S230169AbjFYORx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 10:17:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230029AbjFYORp (ORCPT
+        with ESMTP id S230043AbjFYORp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 25 Jun 2023 10:17:45 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 319DAE4E
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9385EE50
         for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 07:17:44 -0700 (PDT)
 Received: from sobremesa.fritz.box (unknown [IPv6:2a02:8010:65b5:0:bbb0:f8ec:7bc9:dbe4])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: alarumbe)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 99EA76607134;
-        Sun, 25 Jun 2023 15:17:42 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 37B576607143;
+        Sun, 25 Jun 2023 15:17:43 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1687702662;
-        bh=hy/yPAn2uSB4ki0Kb6pM9nocxr+HExnkKdS5jKFuPcs=;
+        s=mail; t=1687702663;
+        bh=dFpupq7O24/dJi0HaCEYyiNgtin8JPm9F0yIqnWaVk0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FGZrClUaLXMLHLNUlXTRCZS7MdYYm5CKkv4TIIOa/WeEtz8nwbRNvxDJwQcnkpmUr
-         1yQ+gEvrHl6IkZLAgAII0u3MVIzTnE6HWQmD+QV5hmcw/Lw/VR08ihjAhwl1dL4Cvj
-         MeEXNDx6D+hyur1/ehh+B5tgHkX/0dXYZFZo3h0I92dMKAc905CZCS8EOJFdRbgtza
-         ZqpsYyuXUzEjP/gRABmGT7LsmpI0oQSfdfHqRDLi1P8vl27z6Yc49SBerwgiEj96ys
-         48FhO6kzXj7ng2eGYDTifOg+y92+lW5JM/vKZe4VKXpn5VIJfU5ybsp334N28DbBzp
-         i1/K2EGTjvyNA==
+        b=P0+OzzxSGvVgVt8sVefh7H4+EXSXyTwwKrVbWw6zGU3Q28JXabTCiCl9Ly2PzBAxo
+         /gopWwltD2vCBojMYpWUdn5BxO6uxetDwmWJP+wWEbh3+K/zU304y9nJ8wrc1CppjY
+         EWhaqa3d6eWhrZdJVzl2wh34LhOPBNheTdlX96/R0AsxAnos/d4GyFkaCgtAIg378h
+         WtCgiX7Vpd2JtXjGALxIWrSPi2hJ20AkN33HurUiN2uXwib6B4tHKdR/eHfae+zsKN
+         TInsAdk+Xv3JE2gnLR/3nQYMQSpDq4GiRwwPHk+B9CHLLIiRrtoRh0N/R8fFq/oGuL
+         X7QGK7C869L4A==
 From:   =?UTF-8?q?Adri=C3=A1n=20Larumbe?= <adrian.larumbe@collabora.com>
 To:     Andrzej Hajda <andrzej.hajda@intel.com>,
         Neil Armstrong <neil.armstrong@linaro.org>,
@@ -48,9 +48,9 @@ Cc:     =?UTF-8?q?Adri=C3=A1n=20Larumbe?= <adrian.larumbe@collabora.com>,
         dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         linux-amlogic@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v3 2/3] drm/bridge: dw-hdmi: truly enforce 420-only formats when drm mode demands it
-Date:   Sun, 25 Jun 2023 15:17:16 +0100
-Message-Id: <6e6a217c180584a67ed7992c785764ba54af9151.1687702042.git.adrian.larumbe@collabora.com>
+Subject: [PATCH v3 3/3] drm/bridge: dw-hdmi: remove dead code and fix indentation
+Date:   Sun, 25 Jun 2023 15:17:17 +0100
+Message-Id: <ca42985814e9be33b7f8e3a33cea9e18505299e3.1687702042.git.adrian.larumbe@collabora.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <cover.1687702042.git.adrian.larumbe@collabora.com>
 References: <cover.1687702042.git.adrian.larumbe@collabora.com>
@@ -66,34 +66,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current output bus format selection logic is enforcing YUV420 even
-when the drm mode allows for other bus formats as well.
-Fix it by adding check for 420-only drm modes.
+The hdmi_datamap enum is no longer in use. Also reindent enable_audio's
+call params.
 
 Signed-off-by: Adrián Larumbe <adrian.larumbe@collabora.com>
 Acked-by: Neil Armstrong <neil.armstrong@linaro.org>
 ---
- drivers/gpu/drm/bridge/synopsys/dw-hdmi.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/gpu/drm/bridge/synopsys/dw-hdmi.c | 22 ++++------------------
+ 1 file changed, 4 insertions(+), 18 deletions(-)
 
 diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-index e6a456b72610..3a788316e2e5 100644
+index 3a788316e2e5..69c0e80b8525 100644
 --- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
 +++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-@@ -2710,9 +2710,10 @@ static u32 *dw_hdmi_bridge_atomic_get_output_bus_fmts(struct drm_bridge *bridge,
- 		/* Default 8bit fallback */
- 		output_fmts[i++] = MEDIA_BUS_FMT_UYYVYY8_0_5X24;
+@@ -49,20 +49,6 @@
  
--		*num_output_fmts = i;
+ #define HDMI14_MAX_TMDSCLK	340000000
+ 
+-enum hdmi_datamap {
+-	RGB444_8B = 0x01,
+-	RGB444_10B = 0x03,
+-	RGB444_12B = 0x05,
+-	RGB444_16B = 0x07,
+-	YCbCr444_8B = 0x09,
+-	YCbCr444_10B = 0x0B,
+-	YCbCr444_12B = 0x0D,
+-	YCbCr444_16B = 0x0F,
+-	YCbCr422_8B = 0x16,
+-	YCbCr422_10B = 0x14,
+-	YCbCr422_12B = 0x12,
+-};
 -
--		return output_fmts;
-+		if (drm_mode_is_420_only(info, mode)) {
-+			*num_output_fmts = i;
-+			return output_fmts;
-+		}
- 	}
+ static const u16 csc_coeff_default[3][4] = {
+ 	{ 0x2000, 0x0000, 0x0000, 0x0000 },
+ 	{ 0x0000, 0x2000, 0x0000, 0x0000 },
+@@ -856,10 +842,10 @@ static void dw_hdmi_gp_audio_enable(struct dw_hdmi *hdmi)
  
- 	/*
+ 	if (pdata->enable_audio)
+ 		pdata->enable_audio(hdmi,
+-					    hdmi->channels,
+-					    hdmi->sample_width,
+-					    hdmi->sample_rate,
+-					    hdmi->sample_non_pcm);
++				    hdmi->channels,
++				    hdmi->sample_width,
++				    hdmi->sample_rate,
++				    hdmi->sample_non_pcm);
+ }
+ 
+ static void dw_hdmi_gp_audio_disable(struct dw_hdmi *hdmi)
 -- 
 2.40.0
 
