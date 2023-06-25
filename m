@@ -2,237 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDBBE73CFD0
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 11:53:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2634A73CFE5
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 11:57:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231761AbjFYJv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 05:51:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45868 "EHLO
+        id S231820AbjFYJ5C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 05:57:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230029AbjFYJvz (ORCPT
+        with ESMTP id S230254AbjFYJ46 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 05:51:55 -0400
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2398EBF
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 02:51:53 -0700 (PDT)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-1ad4d784100so2322413fac.0
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 02:51:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687686712; x=1690278712;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=290Ekn0ODsVNn0aKIx+AgyiRc2lDIGBbbnI/1Hia+80=;
-        b=LOreZASmxemQLA5cOE5xrQ1dovPn/FIix2UBEWF9jFYKi3belc6ilTzLpmJhI9SLsh
-         4lPY92CeZD8/ddCleRKdbv+hAdGjPiZYeBd1aHP8z/NePyiMLTA+didZ1LaWP8Ec3TsB
-         1QgCEJafhN6tJLMCjsaZvGLmTVonosA+gsY25tvdSLd3jTYcYUreSb2JtLlmaDAhB0s+
-         UIAm3I1kXN4xJ6VVKO/z+GwkEp3FwzGOGqc4YKF4C3m6GcMwq0L/NmCAdfkHpuGrD9kb
-         Pmj/WJVf8N5HB+3G0ydouWyli9Qw5q9om6tfAiIxSgbZiHR7TcbXJk6Ssheme7frtu47
-         pjxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687686712; x=1690278712;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=290Ekn0ODsVNn0aKIx+AgyiRc2lDIGBbbnI/1Hia+80=;
-        b=Iod6BaWOsouKsyzWu/sRwTPcpXJHrqQ7lyHh80Om6/5ef7OgUKotwcpeC5/8msj8qO
-         iOox7GmSLb9xroVDU4U/e6bkEwekN46+Lq/gUgACPzhostAwRXXJARgLrL6n5342QtKg
-         95upDJf+txXXsNo4n5wgH3dtl9/W3P9+HJ8BZbsQuJ6NXy9JtMDbAqxacFB5kyU2JsXd
-         PV0pi0QXCny2aXMRX+TPM0KFcB8FAp9Re8wuaNk3Je6F6o0/roEpFyQNwJDS7/1iI3M3
-         YXwKIHJnNi1E2kZsK1AQYAbb6L99KQFJOs6fOTrO+kmxTb3JN0H5Jou4KABO9nNTbQeb
-         e+Ow==
-X-Gm-Message-State: AC+VfDy74Uq4IWmuPPa7t0z2kNtFDEKQIJvnrY7txuJy+ULnps1IoXgZ
-        KHE36zJOaViGYaGLOrgNWew=
-X-Google-Smtp-Source: ACHHUZ6NvZ6deZEkzNA7OTQrNaI6xMtMV5rHEjfwutqVjl7yhdM0DAartFUwXr6OCSM/LqQ2N/eoRw==
-X-Received: by 2002:a05:6870:7347:b0:1a3:74e:7863 with SMTP id r7-20020a056870734700b001a3074e7863mr20840637oal.4.1687686712188;
-        Sun, 25 Jun 2023 02:51:52 -0700 (PDT)
-Received: from sumitra.com ([59.89.167.84])
-        by smtp.gmail.com with ESMTPSA id 14-20020a630b0e000000b0054fb537ca5dsm2190850pgl.92.2023.06.25.02.51.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Jun 2023 02:51:51 -0700 (PDT)
-Date:   Sun, 25 Jun 2023 02:51:43 -0700
-From:   Sumitra Sharma <sumitraartsy@gmail.com>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Ira Weiny <ira.weiny@intel.com>,
-        Deepak R Varma <drv@mailo.com>, zhao1.liu@intel.com,
-        Zhao Liu <zhao1.liu@linux.intel.com>,
-        Sumitra Sharma <sumitraartsy@gmail.com>
-Subject: Re: [PATCH] drm/gma500: Replace kmap{,_atomic}() with page_address()
-Message-ID: <20230625095143.GB436009@sumitra.com>
-References: <20230620180148.GA419134@sumitra.com>
- <2565983.Lt9SDvczpP@suse>
+        Sun, 25 Jun 2023 05:56:58 -0400
+Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D39D122;
+        Sun, 25 Jun 2023 02:56:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
+        t=1687687011; bh=JmY7+0q0b02U7ojD4bGBn1BjJD3l/ocHesTOn1m7IrI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=lHIcLxRV31EO3XLmjR57RObdIkhRhuqSV2daXGxGFdzr8Iq414L25wr36nILZt/A4
+         du8ASRcbnj7gwij3zaksxQ6syzFfBkKbh8MlbUPcWi/gTPsCkF4weuH1pBVs2AZ8qY
+         G3xuhbtKwTsTGOY5lRByH+6EIf/nYiv/WcQbrNpk=
+Received: from ld50.lan (unknown [101.88.25.181])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 127CD600B5;
+        Sun, 25 Jun 2023 17:56:50 +0800 (CST)
+From:   WANG Xuerui <kernel@xen0n.name>
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     WANG Rui <wangrui@loongson.cn>, Xi Ruoyao <xry111@xry111.site>,
+        loongarch@lists.linux.dev, linux-kbuild@vger.kernel.org,
+        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        WANG Xuerui <git@xen0n.name>
+Subject: [PATCH v3 0/8] LoongArch: Preliminary ClangBuiltLinux enablement
+Date:   Sun, 25 Jun 2023 17:56:36 +0800
+Message-Id: <20230625095644.3156349-1-kernel@xen0n.name>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <2565983.Lt9SDvczpP@suse>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 12:31:40AM +0200, Fabio M. De Francesco wrote:
-> On martedì 20 giugno 2023 20:01:48 CEST Sumitra Sharma wrote:
-> > Remove unnecessary calls to kmap{,_atomic}() when acquiring
-> > pages using GFP_DMA32.
-> > 
-> > The GFP_DMA32 uses the DMA32 zone to satisfy the allocation
-> > requests. Therefore, pages allocated with GFP_DMA32 cannot
-> > come from Highmem.
-> > 
-> > Avoid using calls to kmap_local_page() / kunmap_local() and
-> > kmap() / kunmap() in the psb_mmu_alloc_pd function. Instead,
-> > utilize page_address().
-> > 
-> > Remove the usage of kmap_atomic() / kunmap_atomic() in the
-> > psb_mmu_alloc_pt function. Use page_address() instead.
-> > 
-> > Substitute kmap_atomic(pt->p) / kunmap_atomic(pt->v) calls
-> > in the psb_mmu_pt_alloc_map_lock() and psb_mmu_pt_unmap_unlock()
-> > functions with page_address(pt->p). This is possible as
-> > pt = psb_mmu_alloc_pt(pd) allocates a page using
-> > pt->p = alloc_page(GFP_DMA32).
-> 
-> Sumitra,
-> 
-> I'm sorry because this patch cannot acked with this commit message.
-> 
-> This commit message is missing two _really_ important information. Therefore, 
-> it is not acked. Please check again what I write below and either add the 
-> missing information or change the code accordingly...
-> 
-> You should assure everybody that the code between the old kmap_atomic() / 
-> kunmap_atomic() doesn't depend either on implicit pagefault_disable() or 
-> preempt_disable() calls or both. 
-> 
-> Please read again the section of the Highmem's documentation regarding 
-> kmap_atomic() at https://docs.kernel.org/mm/highmem.html
-> 
-> In particular take care to read and understand what "[] the code between calls 
-> to kmap_atomic() and kunmap_atomic() may implicitly depend on the side effects 
-> of atomic mappings, i.e. disabling page faults or preemption, or both. In that 
-> case, explicit calls to pagefault_disable() or preempt_disable() or both must 
-> be made in conjunction with the use of kmap_local_page().".
-> 
-> Please study carefully also the following patch from Zhao, suggested by Ira 
-> and reviewed by Ira and I: "[PATCH v2 3/9] drm/i915: Use kmap_local_page() in 
-> gem/i915_gem_shmem.c". It's not yet reached upstream so you need to find it in 
-> lore.kernel.org at https://lore.kernel.org/lkml/20230329073220.3982460-4-zhao1.liu@linux.intel.com/
-> 
-> Please note that, in turn, that patch also contains a link to a patch from Ira 
-> who too had to disable faults (https://lore.kernel.org/all/
-> 20220813220034.806698-1-ira.weiny@intel.com)
-> 
-> I haven't yet looked at your code. If any sections do depend on those implicit 
-> disables, you should act accordingly and add one or both of the above-
-> mentioned calls, even in cases where you get rid of local mappings.
-> 
-> Instead if the sections don't depend on the mentioned side effects, you should 
-> write something like what I wrote in "[PATCH] NFS: Convert kmap_atomic() to 
-> kmap_local_folio()" that you can find at https://lore.kernel.org/lkml/
-> 20230503172411.3356-1-fmdefrancesco@gmail.com/ or, by by using "git show 
-> 4b71e2416ec4".
-> 
-> Thanks for working on this,
-> 
-> Fabio 
-> 
+From: WANG Xuerui <git@xen0n.name>
 
+Hi,
 
-Hi Fabio,
+It's been a long time since the LoongArch port was upstreamed to LLVM,
+and there seems to be evidence that Linux was successfully built with
+Clang inside Loongson roughly around that time; however, a lot has
+changed since then, and the Linux/LoongArch codebase now makes use of
+more novel features that necessitate further work. (The enablement work
+is tracked at [1].)
 
-Thank you for notifying the mistakes I made in this patch. I am directly
-working on the changes.
+With this patch series and a patched LLVM/Clang/LLD ([2][3][4][5]), a
+working kernel can be built with `make LLVM=1`. Although currently
+support for CONFIG_RELOCATABLE and CONFIG_MODULE is still TODO, we've
+decided to post the series early to hopefully reduce the rebase
+burden. The series contains several useful cleanups anyway.
 
-Regards
-Sumitra
+Regarding how to merge this: because only Patch 8 is outside
+arch/loongarch, I'd prefer the series to get merged through Huacai's
+tree. The series applies cleanly on top of next-20230622.
 
+Thanks go to the ClangBuiltLinux team, and LoongArch toolchain
+maintainers from Loongson and the community alike; without your help
+this would come much later, if at all (my free time has been steadily
+dwindling this year already).
 
+Your comments are welcome!
 
-> > 
-> > Suggested-by: Ira Weiny <ira.weiny@intel.com>
-> > Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
-> > ---
-> >  drivers/gpu/drm/gma500/mmu.c | 17 +++++------------
-> >  1 file changed, 5 insertions(+), 12 deletions(-)
-> > 
-> > diff --git a/drivers/gpu/drm/gma500/mmu.c b/drivers/gpu/drm/gma500/mmu.c
-> > index a70b01ccdf70..59aa5661e56a 100644
-> > --- a/drivers/gpu/drm/gma500/mmu.c
-> > +++ b/drivers/gpu/drm/gma500/mmu.c
-> > @@ -184,20 +184,15 @@ struct psb_mmu_pd *psb_mmu_alloc_pd(struct
-> > psb_mmu_driver *driver, pd->invalid_pte = 0;
-> >  	}
-> > 
-> > -	v = kmap_local_page(pd->dummy_pt);
-> > +	v = page_address(pd->dummy_pt);
-> >  	for (i = 0; i < (PAGE_SIZE / sizeof(uint32_t)); ++i)
-> >  		v[i] = pd->invalid_pte;
-> > 
-> > -	kunmap_local(v);
-> > -
-> > -	v = kmap_local_page(pd->p);
-> > +	v = page_address(pd->p);
-> >  	for (i = 0; i < (PAGE_SIZE / sizeof(uint32_t)); ++i)
-> >  		v[i] = pd->invalid_pde;
-> > 
-> > -	kunmap_local(v);
-> > -
-> > -	clear_page(kmap(pd->dummy_page));
-> > -	kunmap(pd->dummy_page);
-> > +	clear_page(page_address(pd->dummy_page));
-> > 
-> >  	pd->tables = vmalloc_user(sizeof(struct psb_mmu_pt *) * 1024);
-> >  	if (!pd->tables)
-> > @@ -279,7 +274,7 @@ static struct psb_mmu_pt *psb_mmu_alloc_pt(struct
-> > psb_mmu_pd *pd)
-> > 
-> >  	spin_lock(lock);
-> > 
-> > -	v = kmap_atomic(pt->p);
-> > +	v = page_address(pt->p);
-> >  	clf = (uint8_t *) v;
-> >  	ptes = (uint32_t *) v;
-> >  	for (i = 0; i < (PAGE_SIZE / sizeof(uint32_t)); ++i)
-> > @@ -293,7 +288,6 @@ static struct psb_mmu_pt *psb_mmu_alloc_pt(struct
-> > psb_mmu_pd *pd) }
-> >  		mb();
-> >  	}
-> > -	kunmap_atomic(v);
-> >  	spin_unlock(lock);
-> > 
-> >  	pt->count = 0;
-> > @@ -339,7 +333,7 @@ static struct psb_mmu_pt 
-> *psb_mmu_pt_alloc_map_lock(struct
-> > psb_mmu_pd *pd, atomic_set(&pd->driver->needs_tlbflush, 1);
-> >  		}
-> >  	}
-> > -	pt->v = kmap_atomic(pt->p);
-> > +	pt->v = page_address(pt->p);
-> >  	return pt;
-> >  }
-> > 
-> > @@ -365,7 +359,6 @@ static void psb_mmu_pt_unmap_unlock(struct psb_mmu_pt 
-> *pt)
-> > struct psb_mmu_pd *pd = pt->pd;
-> >  	uint32_t *v;
-> > 
-> > -	kunmap_atomic(pt->v);
-> >  	if (pt->count == 0) {
-> >  		v = kmap_atomic(pd->p);
-> >  		v[pt->index] = pd->invalid_pde;
-> > --
-> > 2.25.1
-> 
-> 
-> 
-> 
+[1]: https://github.com/ClangBuiltLinux/linux/issues/1787
+[2]: https://reviews.llvm.org/D153609
+[3]: https://reviews.llvm.org/D138135
+[4]: https://reviews.llvm.org/D150196
+[5]: https://reviews.llvm.org/D153707
+
+Changes in v3:
+
+- Squashed the two CFLAGS patches into one, and removed the CC_IS_CLANG
+  check in favor of a feature detection approach (Huacai and Ruoyao)
+- Removed unnecessary BUILD_BUG_ONs in the invtlb wrappers, and made
+  them __always_inline (Ruoyao and Bibo)
+- Linked to the explanation regarding the Clang triple's "libc" part
+  (Nick)
+- Fixed a wrong punctuation in commit message of Patch 4
+
+Changes in v2:
+
+- Merged the two FCSR-related patches, now using the same approach for
+  assembly and C (given that the inline asm codepath cannot be removed
+  right away), also change terminology: register "class" instead of
+  "bank"
+- Restored signatures of invtlb wrappers for ease of rebase (potentially
+  downstream product kernels?)
+- Removed -G0 switches altogether (turned out it's useless upon closer
+  look)
+- Fix -mabi and -msoft-float handling in the CFLAGS patch; two more LLVM
+  patches are now necessary (the [4] and [5] links above) but the
+  original and correct CFLAGS arrangement now works
+
+WANG Rui (2):
+  LoongArch: Calculate various sizes in the linker script
+  LoongArch: extable: Also recognize ABI names of registers
+
+WANG Xuerui (6):
+  LoongArch: Prepare for assemblers with proper FCSR class support
+  LoongArch: Make the CPUCFG and CSR ops simple aliases of compiler
+    built-ins
+  LoongArch: Simplify the invtlb wrappers
+  LoongArch: Tweak CFLAGS for Clang compatibility
+  LoongArch: Mark Clang LTO as working
+  Makefile: Add loongarch target flag for Clang compilation
+
+ arch/loongarch/Kconfig                 |  5 ++
+ arch/loongarch/Makefile                | 21 +++++---
+ arch/loongarch/include/asm/fpregdef.h  |  7 +++
+ arch/loongarch/include/asm/gpr-num.h   | 30 +++++++++++
+ arch/loongarch/include/asm/loongarch.h | 72 +++++++-------------------
+ arch/loongarch/include/asm/percpu.h    |  6 ++-
+ arch/loongarch/include/asm/tlb.h       | 43 +++++++--------
+ arch/loongarch/kernel/efi-header.S     |  6 +--
+ arch/loongarch/kernel/head.S           |  8 +--
+ arch/loongarch/kernel/traps.c          |  2 +-
+ arch/loongarch/kernel/vmlinux.lds.S    |  7 +++
+ arch/loongarch/lib/dump_tlb.c          |  6 +--
+ arch/loongarch/vdso/Makefile           |  2 +-
+ scripts/Makefile.clang                 |  1 +
+ 14 files changed, 118 insertions(+), 98 deletions(-)
+
+-- 
+2.40.0
+
