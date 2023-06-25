@@ -2,121 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF55973D28D
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 18:46:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB9B573D28E
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 18:46:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230498AbjFYQqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 12:46:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42250 "EHLO
+        id S229511AbjFYQqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 12:46:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230406AbjFYQqP (ORCPT
+        with ESMTP id S229558AbjFYQq3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 12:46:15 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D827B9;
-        Sun, 25 Jun 2023 09:46:13 -0700 (PDT)
-X-QQ-mid: bizesmtp73t1687711564t4chllr1
-Received: from linux-lab-host.localdomain ( [116.30.129.193])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 26 Jun 2023 00:46:03 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: ao4JQgu0M3+P2mO/XdPQo3WMzS7AkUKvL5kFRZNSONL5c40x0ZX0LVB9bEsvW
-        DlsKdmb+/rhmOhIqe+gdnrJxqGLJMYQee9Pen0KN20fqgNIo5wNfahNXi3Wyq6OSvfMW1ld
-        GiQjMHOd4Qnp++RZ+a/NFg+/IPYfyUf8g/GLkjpUmQzoExt8XBn+S3ZM4xTx5GARdZhsLoi
-        Zy1LNrxN2OfgSjd/3GsGsebmo8WcGJburzcOPtE1wgRAR1lGsi0xzZs5l7vv36loWeF4DDY
-        Uuhu6PZwpjzVCvLj0KT+/iJ2sWr5XQ+0fhcj+fl91ChGrgJCBry4aiA/GThHOEWV+uKsJQN
-        JDYHBPrtXQ4KagFeWiwMXI/mbvLrjUMN3+eY+swcaIT7jW5XhCXVtsKoZ/GBg==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 3366391044335302866
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     thomas@t-8ch.de, w@1wt.eu
-Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH v1 22/22] selftests/nolibc: detect bios existing to avoid hang
-Date:   Mon, 26 Jun 2023 00:45:12 +0800
-Message-Id: <ae3dabb001d41b3874c1a3ae9a2d76298806f167.1687706332.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1687706332.git.falcon@tinylab.org>
-References: <cover.1687706332.git.falcon@tinylab.org>
+        Sun, 25 Jun 2023 12:46:29 -0400
+Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C92E7194
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 09:46:24 -0700 (PDT)
+Date:   Sun, 25 Jun 2023 16:46:19 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+        s=protonmail; t=1687711582; x=1687970782;
+        bh=UiwcovPu5D6YP531Fs0Dmh7sLnagRakiziEoNif0OK0=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=GfpbcRsSZQ7svs4/PAthoEJAPODQtFPWvBA/VHFU+AmCuQnZndEAtEzddlpKmj2cn
+         /DK6pw2KjJDqrIvjy94GyslatfJP7AxKXCJeyReJ9k+iaVCsrUPS4Gx1JEeTtdoZVY
+         agnrNQ2R+4ENodKJp641s9srz/zEnt27LvzYGfitSz6ziI5TFmBFAUXPZi4bBajRPB
+         Ass6krGGpP685vfHvH2UyTgnLN5bMi+IR6OjieDxgbljJL/xAmBl5Z/pM8cWoBIqKU
+         aOrrr5jsZY1PMznSp2rqTo9y6/Rnv/2y+ELnbuwD1MAbsAoF7W63qD6ouK8EmU2Pcu
+         dKz5x7xXZxrgg==
+To:     =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
+From:   Benno Lossin <benno.lossin@proton.me>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        Alice Ryhl <aliceryhl@google.com>,
+        Andreas Hindborg <nmi@metaspace.dk>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Asahi Lina <lina@asahilina.net>
+Subject: Re: [PATCH 5/7] rust: init: add `..Zeroable::zeroed()` syntax for zeroing all missing fields
+Message-ID: <0f99bc49-5280-c300-719f-86c138f48eaf@proton.me>
+In-Reply-To: <8lCE3SyChVVb2HphigkwKsxv7etgmS0N3AzcDyYtCEoqcFEKvY-5ILkOrWUr_vnWrvsWrAHXVfwcWARfsiMHC8Yc03sND-PuuK-2z9j4z6I=@protonmail.com>
+References: <20230624092330.157338-1-benno.lossin@proton.me> <20230624092330.157338-5-benno.lossin@proton.me> <W1fY0aa_v9j7lJNWXk_WNaxY2qruJo1R6k7u0g-X5L5Rxuod-VMBMmByICDwjF_fFGvNJTV41QapW0WeVduNYqxgo9S243gnNGXbexq6P3Q=@protonmail.com> <f4bcd952-1ad9-42b7-6e0b-72a115dcbe8e@proton.me> <we7PHkrpBV6kIgFZojiBFerqlXtSJB9HWkj129OGUWUVyVFwtuoirr3gVybgLzW2hmpUqqSAAQUPsdfL9QC2JyNKOLRNX0mSTfgD8llSJKE=@protonmail.com> <6f4e1d68-f828-8990-4859-8ab24907fa46@proton.me> <8lCE3SyChVVb2HphigkwKsxv7etgmS0N3AzcDyYtCEoqcFEKvY-5ILkOrWUr_vnWrvsWrAHXVfwcWARfsiMHC8Yc03sND-PuuK-2z9j4z6I=@protonmail.com>
+Feedback-ID: 71780778:user:proton
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Without a right -bios option, riscv32 and loongarch will hang during
-boot and therefore block the whole testing, this adds necessary
-detection.
+On 6/25/23 16:17, Bj=C3=B6rn Roy Baron wrote:
+> On Sunday, June 25th, 2023 at 15:07, Benno Lossin <benno.lossin@proton.me=
+> wrote:
+>> On 25.06.23 14:56, Bj=C3=B6rn Roy Baron wrote:
+>>> On Saturday, June 24th, 2023 at 23:14, Benno Lossin <benno.lossin@proto=
+n.me> wrote:
+>>
+>>>>>> +                        // Ensure that the struct is indeed `Zeroab=
+le`.
+>>>>>> +                        is_zeroable(slot);
+>>>>>> +                        // SAFETY:  The type implements `Zeroable` =
+by the check above.
+>>>>>> +                        unsafe { ::core::ptr::write_bytes(slot, 0, =
+1) };
+>>>>>> +                        $init_zeroed // this will be `()` if set.
+>>>>>
+>>>>> How does this work? Shouldn't there be a ; after $init_zeroed to cons=
+ume the () value?
+>>>>
+>>>> It is the last expression of a block and since it is `()` it is ok
+>>>> (adding a ; would also be ok, but it is not necessary).
+>>>
+>>> I'm surprised it is considered the last expression of a block. Unlike w=
+ith {} using $()? will still
+>>> allow variables defined inside this as if they were outside of it. Also=
+ I can't reproduce this
+>>> behavior with:
+>>>
+>>>       macro_rules! foo {
+>>>           ($($a:expr)?) =3D> {
+>>>               $($a)?
+>>>               bar();
+>>>           }
+>>>       }
+>>>
+>>>       fn main() {
+>>>           foo!(());
+>>>       }
+>>>
+>>> Is there something I'm missing?
+>>>
+>>> Cheers,
+>>> Bj=C3=B6rn
+>>
+>> Not sure what you mean with "allow variables defined inside this
+>> as if they were outside of it". But note that in the macro `$init_zeroed=
+`
+>> is the last expression of a block. Here is a small example:
+>=20
+> $(let $this =3D unsafe { ::core::ptr::NonNull::new_unchecked(slot) };)? c=
+omes after
+> this code in the same block that contains struct __InitOk;. And after tha=
+t another
+> $crate::__init_internal!() invocation. That is why I don't get that this =
+is allowed
+> at all.
+>=20
 
-Before testing, the required bios should be downloaded at first, for a
-future working qemu (without a manual -bios), we can simply clear the
-QEMU_BIOS_<ARCH> to stop the detection.
+Oh I see the issue now, I thought I wrote
+```
+$({
+     fn assert_zeroable<T: Zeroable>(ptr: *mut T) {}
+     // Ensure that the struct is indeed `Zeroable`.
+     assert_zeroable(slot);
+     // SAFETY:  The type implements `Zeroable` by the check above.
+     unsafe { ::core::ptr::write_bytes(slot, 0, 1) };
+     $init_zeroed // this will be `()` if set.
+})?
+```
 
-By default, the bios should be downloaded and put into
-tools/testing/selftests/nolibc/, otherwise, users should specify the
-path via QEMU_BIOS_<ARCH>.
+But I forgot the inner `{}`. Good catch!
 
-Without this patch, it is not possible to directly run tests for all
-architectures, otherwise, we should pass our own 'ARCHS' and remove the
-unsupported ones explicitly, which is not convenient.
+--
+Cheers,
+Benno
 
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
----
- tools/testing/selftests/nolibc/Makefile | 18 ++++++++++++++++--
- 1 file changed, 16 insertions(+), 2 deletions(-)
+>>
+>> ```
+>> macro_rules! foo {
+>>       ($($a:expr)?) =3D> {{
+>>           $(
+>>               bar();
+>>               $a
+>>           )?
+>>       }};
+>> }
+>>
+>> fn bar() {}
+>>
+>> fn main() {
+>>       foo!(());
+>>       foo!();
+>> }
+>> ```
+>>
+>> it expands to this:
+>> ```
+>> fn main() {
+>>       {
+>>           bar();
+>>           ()
+>>       };
+>>       {};
+>> }
+>> ```
+>>
+>> --
+>> Cheers,
+>> Benno
+>>
 
-diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-index 470923dc10e1..b529bb40444a 100644
---- a/tools/testing/selftests/nolibc/Makefile
-+++ b/tools/testing/selftests/nolibc/Makefile
-@@ -110,6 +110,14 @@ QEMU_ARCH_s390       = s390x
- QEMU_ARCH_loongarch  = loongarch64
- QEMU_ARCH            = $(QEMU_ARCH_$(ARCH))
- 
-+# QEMU_BIOS: bios used by qemu
-+# https://github.com/loongson/Firmware/raw/main/LoongArchVirtMachine/edk2-loongarch64-code.fd
-+QEMU_BIOS_loongarch ?= edk2-loongarch64-code.fd
-+# https://gitlab.com/qemu-project/qemu/-/blob/master/pc-bios/opensbi-riscv32-generic-fw_dynamic.bin
-+QEMU_BIOS_riscv32   ?= opensbi-riscv32-generic-fw_dynamic.bin
-+QEMU_BIOS            = $(QEMU_BIOS_$(ARCH))
-+QEMU_ARGS_BIOS       = $(if $(QEMU_BIOS),-bios $(QEMU_BIOS))
-+
- # QEMU_ARGS : some arch-specific args to pass to qemu
- QEMU_ARGS_i386       = -M pc -append "console=ttyS0,9600 i8042.noaux panic=-1 $(TEST:%=NOLIBC_TEST=%)"
- QEMU_ARGS_x86_64     = -M pc -append "console=ttyS0,9600 i8042.noaux panic=-1 $(TEST:%=NOLIBC_TEST=%)"
-@@ -122,7 +130,7 @@ QEMU_ARGS_riscv64    = -M virt -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_T
- QEMU_ARGS_riscv      = -M virt -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
- QEMU_ARGS_s390       = -M s390-ccw-virtio -m 1G -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
- QEMU_ARGS_loongarch  = -M virt -append "console=ttyS0,115200 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
--QEMU_ARGS            = $(QEMU_ARGS_$(ARCH)) $(QEMU_ARGS_EXTRA)
-+QEMU_ARGS            = $(QEMU_ARGS_$(ARCH)) $(QEMU_ARGS_BIOS) $(QEMU_ARGS_EXTRA)
- 
- # OUTPUT is only set when run from the main makefile, otherwise
- # it defaults to this nolibc directory.
-@@ -167,9 +175,15 @@ endif
- # allow run tests on all architectures: run-user-all, run-all (=run-default-all), run-tiny-all
- ARCHS   ?= $(shell sed -ne 's/^DEFCONFIG_\([^ ]*\) .*/\1/p' $(CURDIR)/Makefile)
- GOALS   ?= run-user run-tiny run-default
-+export $(foreach a, $(ARCHS), QEMU_BIOS_$a)
- RUN_ALL ?= _t=$@; t=$${_t%-all}; [ "$$t" = "run" ] && t=run-default; \
- 	   if echo $(GOALS) | grep -wq "$$t"; then \
--		for a in $(ARCHS); do echo "Testing $$t for $${a}:"; make $$t ARCH=$$a; cp $(CURDIR)/run.out $(CURDIR)/run-$$a.out; done; \
-+		for a in $(ARCHS); do \
-+			echo "Testing $$t for $${a}:"; \
-+			eval bios=\$${QEMU_BIOS_$$a}; \
-+			if [ -n "$${bios}" -a ! -f "$${bios}" ]; then echo "\nIgnoring $$a test, no bios: $${bios} found."; exit 0; fi; \
-+			make $$t ARCH=$$a; cp $(CURDIR)/run.out $(CURDIR)/run-$$a.out; \
-+		done; \
- 		echo "\n\nTesting summary of $$t:\n"; \
- 		for a in $(ARCHS); do echo $${a}:; echo; $(REPORT) $(CURDIR)/run-$$a.out; echo; done; \
- 	   else \
--- 
-2.25.1
 
