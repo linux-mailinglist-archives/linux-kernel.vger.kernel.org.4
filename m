@@ -2,241 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A389F73CFBF
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 11:29:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5317773CFC2
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 11:34:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231905AbjFYJ3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 05:29:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43100 "EHLO
+        id S231860AbjFYJeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 05:34:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230029AbjFYJ33 (ORCPT
+        with ESMTP id S230029AbjFYJeI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 05:29:29 -0400
-Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5A6DEE7C;
-        Sun, 25 Jun 2023 02:29:24 -0700 (PDT)
-Received: from localhost.localdomain (unknown [122.231.255.207])
-        by mail-app3 (Coremail) with SMTP id cC_KCgD3oQDhCJhkmFWzCA--.56491S4;
-        Sun, 25 Jun 2023 17:29:05 +0800 (CST)
-From:   Lin Ma <linma@zju.edu.cn>
-To:     steffen.klassert@secunet.com, herbert@gondor.apana.org.au,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Lin Ma <linma@zju.edu.cn>
-Subject: [PATCH v1] net: xfrm: Fix xfrm_address_filter OOB read
-Date:   Sun, 25 Jun 2023 17:28:55 +0800
-Message-Id: <20230625092855.207918-1-linma@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: cC_KCgD3oQDhCJhkmFWzCA--.56491S4
-X-Coremail-Antispam: 1UD129KBjvJXoW3GrWUtw1Dur1UCrW3Kr1rZwb_yoWfGr17pF
-        s5KFyIkr4xJ3s8Xr4jyr1Iq3WrGFZrZF1DJrZ7Gr1UAFW7Gr17JrWDAFWDJwsrCrW8AFy7
-        GFnrJF4jgr18J3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUka14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26rxl
-        6s0DM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
-        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8uwCF
-        04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
-        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vI
-        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
-        1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
-        x4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUhNVgUUUUU=
-X-CM-SenderInfo: qtrwiiyqvtljo62m3hxhgxhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 25 Jun 2023 05:34:08 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96D53E5F
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 02:34:07 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id 529F05C0071;
+        Sun, 25 Jun 2023 05:34:04 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Sun, 25 Jun 2023 05:34:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1687685644; x=1687772044; bh=RjM4GlJucU1Ls0/IxjRJeTQsDlFI04X+oR2
+        L/HWLcOU=; b=N3y6oVXIfLxMNjXEj2CdDjv6SnrrazLKLzVOXwB/Zxc0FUHhpH5
+        9N22s/YV0SQNvbSUls1emOSWggGoX8221j9dqUrP3AWiNlk9a0MX3uFaJfLnjrBK
+        84OHttyK7NrtLvajk1AkWo/S9hH0tHHmNQnUAnDv53CDxnKDlI+Dm10SfAvzlJXo
+        DNo1jG893OrYDTLzEinjV0+FFcDkbFsQjuD7j0Wap5YImVLTEkhTdsZuohGhECPm
+        HvNVsIyVZob54JB7DWCEI/DeU45RhAy1OJDmoA31Y0l+JcAwQTTYuKDidmS0zoHo
+        oT7wJzZORndrWKHVa/R4BJy/Bi5c/izg3Lw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1687685644; x=1687772044; bh=RjM4GlJucU1Ls0/IxjRJeTQsDlFI04X+oR2
+        L/HWLcOU=; b=Mra/gTVVzBBlh2KZH+VStSusrtvPlFL8EvWIJkcdSC5CM1lnwoC
+        bj0p4+Ex1LXkZxXC+i5B1Mz32zuZmWBh2+4Vvas+7Wa3E3ea7XU44sANJP4iXSBd
+        yMFfpcITNUe7/bdi1bpnhUxhmiczSIuZEcM4u/lDvfRFcsx2cn2w7zX+UtTipUBe
+        C0AEJW3KMvWNuZ1OyDBGlmQlV02GZp5RlL+IETX3o8XTKkzRpaZbP24/irzAUYBB
+        gcvesxp9ZAJnI5840uh4Suetv8aFchXCmfKTBQ4iGw94zahHJHFbzEPumzsdfV/o
+        a3H4DKJslWajKwPQiOmiTL0zz+eH64v/vjA==
+X-ME-Sender: <xms:DAqYZHVrv8KyQ-Uw9oIpjKXInOZtjmGlx5DGrcan9G-4vgGpmV_FQA>
+    <xme:DAqYZPn63bN184CHn3L7u3eS99Rro3K_dV-wmciBGI0DxIShb6um5vP94hpoNYfZz
+    5jfNspuzgOKBA>
+X-ME-Received: <xmr:DAqYZDbq60eZjAlpxoESTWnl56Tn306rEAyPTWntsumprTklofRoYis7qUtVG2mCePwWf4eQNb3ZPOQ9junaj5OFB92ZwcxPLhnrlg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeehtddgudeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggugfgjsehtkeertddttdejnecuhfhrohhmpefirhgv
+    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpefgke
+    ffieefieevkeelteejvdetvddtledugfdvhfetjeejieduledtfefffedvieenucevlhhu
+    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhroh
+    grhhdrtghomh
+X-ME-Proxy: <xmx:DAqYZCWpipaVvzoPFHAZwM7YosPCAag3kLrEnNI_vT5b-cI1jKvCDw>
+    <xmx:DAqYZBkHYe2ysyJcGVe-8GKQWt85vjqxPXAGXEv6yNSWmAqHWcgqjA>
+    <xmx:DAqYZPcXo_j0sJ8q11wGgDPKCUrZ47Y8aVtqbh3_tURRNKlsJRNbcA>
+    <xmx:DAqYZD1AkrXv2qqMdN35ic4A29uhZ2YS3jjKlSZatgoI4cnITLACTg>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 25 Jun 2023 05:34:03 -0400 (EDT)
+Date:   Sun, 25 Jun 2023 11:34:00 +0200
+From:   Greg KH <greg@kroah.com>
+To:     =?utf-8?B?5p2O5Z+56ZSLKHdpbmsp?= <lipeifeng@oppo.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "surenb@google.com" <surenb@google.com>,
+        "gregkh@google.com" <gregkh@google.com>,
+        "zhangshiming@opp.com" <zhangshiming@opp.com>,
+        =?utf-8?B?6YOt5YGl?= <guojian@oppo.com>
+Subject: Re: =?utf-8?B?5Zue5aSN?= =?utf-8?Q?=3A?= [PATCH] mm: vmscan: export
+ func:shrink_slab
+Message-ID: <2023062554-gecko-cyclist-0c78@gregkh>
+References: <20230616092112.387-1-lipeifeng@oppo.com>
+ <33eabee3-f6f4-ee0c-d74b-98815a9567c4@redhat.com>
+ <TYZPR02MB5595CE108D89A51973CF551AC65CA@TYZPR02MB5595.apcprd02.prod.outlook.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <TYZPR02MB5595CE108D89A51973CF551AC65CA@TYZPR02MB5595.apcprd02.prod.outlook.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We found below OOB crash:
+On Tue, Jun 20, 2023 at 03:05:27AM +0000, 李培锋(wink) wrote:
+> On 16.06.23 11:21, lipeifeng@oppo.com wrote:
+> >> From: lipeifeng <lipeifeng@oppo.com>
+> >> 
+> >> Some of shrinkers during shrink_slab would enter synchronous-wait due 
+> >> to lock or other reasons, which would causes kswapd or direct_reclaim 
+> >> to be blocked.
+> >> 
+> >> This patch export shrink_slab so that it can be called in drivers 
+> >> which can shrink memory independently.
+> >> 
+> >> Signed-off-by: lipeifeng <lipeifeng@oppo.com>
+> >> ---
+> >>   mm/vmscan.c | 3 ++-
+> >>   1 file changed, 2 insertions(+), 1 deletion(-)
+> >> 
+> >> diff --git a/mm/vmscan.c b/mm/vmscan.c index 
+> >> 6d0cd2840cf0..2e54fa52e7ec 100644
+> >> --- a/mm/vmscan.c
+> >> +++ b/mm/vmscan.c
+> >> @@ -1043,7 +1043,7 @@ static unsigned long shrink_slab_memcg(gfp_t gfp_mask, int nid,
+> >>    *
+> >>    * Returns the number of reclaimed slab objects.
+> >>    */
+> >> -static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
+> >> +unsigned long shrink_slab(gfp_t gfp_mask, int nid,
+> >>   				 struct mem_cgroup *memcg,
+> >>   				 int priority)
+> >>   {
+> >> @@ -1087,6 +1087,7 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
+> >>   	cond_resched();
+> >>   	return freed;
+> >>   }
+> >> +EXPORT_SYMBOL_GPL(shrink_slab);
+> >>   
+> >>   static unsigned long drop_slab_node(int nid)
+> >>   {
+> >
+> >It feels like something we don't want arbitrary drivers to call.
+> >
+> >Unrelated to that, this better be sent along with actual driver usage.
+> 
+> Hi Sir：
+> 
+> Virtually, we have implemented async shrink_slabd isolated from kswapd and direct_reclaim.
+> The goal above it is to avoid the sync-wait in kswapd or direct_reclaim due to some shrinkers.
+> 
+> But the async shrink_slabd was only applied to mobile products so that I didn't make sure any
+> risk in other products. For the above reasons, I wanna merge the patch to export shrink_slab
+> and the patch of drivers would be considered to be pushed if I check all the risks.
+> 
+> Some informal code files of driver are attached for your reference.
 
-[   44.211730] ==================================================================
-[   44.212045] BUG: KASAN: slab-out-of-bounds in memcmp+0x8b/0xb0
-[   44.212045] Read of size 8 at addr ffff88800870f320 by task poc.xfrm/97
-[   44.212045]
-[   44.212045] CPU: 0 PID: 97 Comm: poc.xfrm Not tainted 6.4.0-rc7-00072-gdad9774deaf1-dirty #4
-[   44.212045] Call Trace:
-[   44.212045]  <TASK>
-[   44.212045]  dump_stack_lvl+0x37/0x50
-[   44.212045]  print_report+0xcc/0x620
-[   44.212045]  ? __virt_addr_valid+0xf3/0x170
-[   44.212045]  ? memcmp+0x8b/0xb0
-[   44.212045]  kasan_report+0xb2/0xe0
-[   44.212045]  ? memcmp+0x8b/0xb0
-[   44.212045]  kasan_check_range+0x39/0x1c0
-[   44.212045]  memcmp+0x8b/0xb0
-[   44.212045]  xfrm_state_walk+0x21c/0x420
-[   44.212045]  ? __pfx_dump_one_state+0x10/0x10
-[   44.212045]  xfrm_dump_sa+0x1e2/0x290
-[   44.212045]  ? __pfx_xfrm_dump_sa+0x10/0x10
-[   44.212045]  ? __kernel_text_address+0xd/0x40
-[   44.212045]  ? kasan_unpoison+0x27/0x60
-[   44.212045]  ? mutex_lock+0x60/0xe0
-[   44.212045]  ? __pfx_mutex_lock+0x10/0x10
-[   44.212045]  ? kasan_save_stack+0x22/0x50
-[   44.212045]  netlink_dump+0x322/0x6c0
-[   44.212045]  ? __pfx_netlink_dump+0x10/0x10
-[   44.212045]  ? mutex_unlock+0x7f/0xd0
-[   44.212045]  ? __pfx_mutex_unlock+0x10/0x10
-[   44.212045]  __netlink_dump_start+0x353/0x430
-[   44.212045]  xfrm_user_rcv_msg+0x3a4/0x410
-[   44.212045]  ? __pfx__raw_spin_lock_irqsave+0x10/0x10
-[   44.212045]  ? __pfx_xfrm_user_rcv_msg+0x10/0x10
-[   44.212045]  ? __pfx_xfrm_dump_sa+0x10/0x10
-[   44.212045]  ? __pfx_xfrm_dump_sa_done+0x10/0x10
-[   44.212045]  ? __stack_depot_save+0x382/0x4e0
-[   44.212045]  ? filter_irq_stacks+0x1c/0x70
-[   44.212045]  ? kasan_save_stack+0x32/0x50
-[   44.212045]  ? kasan_save_stack+0x22/0x50
-[   44.212045]  ? kasan_set_track+0x25/0x30
-[   44.212045]  ? __kasan_slab_alloc+0x59/0x70
-[   44.212045]  ? kmem_cache_alloc_node+0xf7/0x260
-[   44.212045]  ? kmalloc_reserve+0xab/0x120
-[   44.212045]  ? __alloc_skb+0xcf/0x210
-[   44.212045]  ? netlink_sendmsg+0x509/0x700
-[   44.212045]  ? sock_sendmsg+0xde/0xe0
-[   44.212045]  ? __sys_sendto+0x18d/0x230
-[   44.212045]  ? __x64_sys_sendto+0x71/0x90
-[   44.212045]  ? do_syscall_64+0x3f/0x90
-[   44.212045]  ? entry_SYSCALL_64_after_hwframe+0x72/0xdc
-[   44.212045]  ? netlink_sendmsg+0x509/0x700
-[   44.212045]  ? sock_sendmsg+0xde/0xe0
-[   44.212045]  ? __sys_sendto+0x18d/0x230
-[   44.212045]  ? __x64_sys_sendto+0x71/0x90
-[   44.212045]  ? do_syscall_64+0x3f/0x90
-[   44.212045]  ? entry_SYSCALL_64_after_hwframe+0x72/0xdc
-[   44.212045]  ? kasan_save_stack+0x22/0x50
-[   44.212045]  ? kasan_set_track+0x25/0x30
-[   44.212045]  ? kasan_save_free_info+0x2e/0x50
-[   44.212045]  ? __kasan_slab_free+0x10a/0x190
-[   44.212045]  ? kmem_cache_free+0x9c/0x340
-[   44.212045]  ? netlink_recvmsg+0x23c/0x660
-[   44.212045]  ? sock_recvmsg+0xeb/0xf0
-[   44.212045]  ? __sys_recvfrom+0x13c/0x1f0
-[   44.212045]  ? __x64_sys_recvfrom+0x71/0x90
-[   44.212045]  ? do_syscall_64+0x3f/0x90
-[   44.212045]  ? entry_SYSCALL_64_after_hwframe+0x72/0xdc
-[   44.212045]  ? copyout+0x3e/0x50
-[   44.212045]  netlink_rcv_skb+0xd6/0x210
-[   44.212045]  ? __pfx_xfrm_user_rcv_msg+0x10/0x10
-[   44.212045]  ? __pfx_netlink_rcv_skb+0x10/0x10
-[   44.212045]  ? __pfx_sock_has_perm+0x10/0x10
-[   44.212045]  ? mutex_lock+0x8d/0xe0
-[   44.212045]  ? __pfx_mutex_lock+0x10/0x10
-[   44.212045]  xfrm_netlink_rcv+0x44/0x50
-[   44.212045]  netlink_unicast+0x36f/0x4c0
-[   44.212045]  ? __pfx_netlink_unicast+0x10/0x10
-[   44.212045]  ? netlink_recvmsg+0x500/0x660
-[   44.212045]  netlink_sendmsg+0x3b7/0x700
-[   44.212045]  ? __pfx_netlink_sendmsg+0x10/0x10
-[   44.212045]  ? __pfx_netlink_sendmsg+0x10/0x10
-[   44.212045]  sock_sendmsg+0xde/0xe0
-[   44.212045]  __sys_sendto+0x18d/0x230
-[   44.212045]  ? __pfx___sys_sendto+0x10/0x10
-[   44.212045]  ? rcu_core+0x44a/0xe10
-[   44.212045]  ? __rseq_handle_notify_resume+0x45b/0x740
-[   44.212045]  ? _raw_spin_lock_irq+0x81/0xe0
-[   44.212045]  ? __pfx___rseq_handle_notify_resume+0x10/0x10
-[   44.212045]  ? __pfx_restore_fpregs_from_fpstate+0x10/0x10
-[   44.212045]  ? __pfx_blkcg_maybe_throttle_current+0x10/0x10
-[   44.212045]  ? __pfx_task_work_run+0x10/0x10
-[   44.212045]  __x64_sys_sendto+0x71/0x90
-[   44.212045]  do_syscall_64+0x3f/0x90
-[   44.212045]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
-[   44.212045] RIP: 0033:0x44b7da
-[   44.212045] RSP: 002b:00007ffdc8838548 EFLAGS: 00000246 ORIG_RAX: 000000000000002c
-[   44.212045] RAX: ffffffffffffffda RBX: 00007ffdc8839978 RCX: 000000000044b7da
-[   44.212045] RDX: 0000000000000038 RSI: 00007ffdc8838770 RDI: 0000000000000003
-[   44.212045] RBP: 00007ffdc88385b0 R08: 00007ffdc883858c R09: 000000000000000c
-[   44.212045] R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000001
-[   44.212045] R13: 00007ffdc8839968 R14: 00000000004c37d0 R15: 0000000000000001
-[   44.212045]  </TASK>
-[   44.212045]
-[   44.212045] Allocated by task 97:
-[   44.212045]  kasan_save_stack+0x22/0x50
-[   44.212045]  kasan_set_track+0x25/0x30
-[   44.212045]  __kasan_kmalloc+0x7f/0x90
-[   44.212045]  __kmalloc_node_track_caller+0x5b/0x140
-[   44.212045]  kmemdup+0x21/0x50
-[   44.212045]  xfrm_dump_sa+0x17d/0x290
-[   44.212045]  netlink_dump+0x322/0x6c0
-[   44.212045]  __netlink_dump_start+0x353/0x430
-[   44.212045]  xfrm_user_rcv_msg+0x3a4/0x410
-[   44.212045]  netlink_rcv_skb+0xd6/0x210
-[   44.212045]  xfrm_netlink_rcv+0x44/0x50
-[   44.212045]  netlink_unicast+0x36f/0x4c0
-[   44.212045]  netlink_sendmsg+0x3b7/0x700
-[   44.212045]  sock_sendmsg+0xde/0xe0
-[   44.212045]  __sys_sendto+0x18d/0x230
-[   44.212045]  __x64_sys_sendto+0x71/0x90
-[   44.212045]  do_syscall_64+0x3f/0x90
-[   44.212045]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
-[   44.212045]
-[   44.212045] The buggy address belongs to the object at ffff88800870f300
-[   44.212045]  which belongs to the cache kmalloc-64 of size 64
-[   44.212045] The buggy address is located 32 bytes inside of
-[   44.212045]  allocated 36-byte region [ffff88800870f300, ffff88800870f324)
-[   44.212045]
-[   44.212045] The buggy address belongs to the physical page:
-[   44.212045] page:00000000e4de16ee refcount:1 mapcount:0 mapping:000000000 ...
-[   44.212045] flags: 0x100000000000200(slab|node=0|zone=1)
-[   44.212045] page_type: 0xffffffff()
-[   44.212045] raw: 0100000000000200 ffff888004c41640 dead000000000122 0000000000000000
-[   44.212045] raw: 0000000000000000 0000000080200020 00000001ffffffff 0000000000000000
-[   44.212045] page dumped because: kasan: bad access detected
-[   44.212045]
-[   44.212045] Memory state around the buggy address:
-[   44.212045]  ffff88800870f200: fa fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
-[   44.212045]  ffff88800870f280: 00 00 00 00 00 fc fc fc fc fc fc fc fc fc fc fc
-[   44.212045] >ffff88800870f300: 00 00 00 00 04 fc fc fc fc fc fc fc fc fc fc fc
-[   44.212045]                                ^
-[   44.212045]  ffff88800870f380: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-[   44.212045]  ffff88800870f400: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-[   44.212045] ==================================================================
+You have to submit this as a real series, we can not accept exports for
+no in-kernel users (nor would you want us to, as that ends up being an
+unmaintainable mess.)
 
-By investigating the code, we find the root cause of this OOB is the lack
-of checks in xfrm_dump_sa(). The buggy code allows a malicious user to pass
-arbitrary value of filter->splen/dplen. Hence, with crafted xfrm states,
-the attacker can achieve 8 bytes heap OOB read, which causes info leak.
+So please resubmit this as a proper patch series, with the user of this
+function, and then it can be properly evaluated.  As-is, this can not be
+accepted at all.
 
-  if (attrs[XFRMA_ADDRESS_FILTER]) {
-    filter = kmemdup(nla_data(attrs[XFRMA_ADDRESS_FILTER]),
-        sizeof(*filter), GFP_KERNEL);
-    if (filter == NULL)
-      return -ENOMEM;
-    // NO MORE CHECKS HERE !!!
-  }
+thanks,
 
-This patch fixes the OOB by adding necessary boundary checks, just like
-the code in pfkey_dump() function.
-
-Fixes: d3623099d350 ("ipsec: add support of limited SA dump")
-Signed-off-by: Lin Ma <linma@zju.edu.cn>
----
- net/xfrm/xfrm_user.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/net/xfrm/xfrm_user.c b/net/xfrm/xfrm_user.c
-index c34a2a06ca94..a73ae4ad8096 100644
---- a/net/xfrm/xfrm_user.c
-+++ b/net/xfrm/xfrm_user.c
-@@ -1267,6 +1267,10 @@ static int xfrm_dump_sa(struct sk_buff *skb, struct netlink_callback *cb)
- 					 sizeof(*filter), GFP_KERNEL);
- 			if (filter == NULL)
- 				return -ENOMEM;
-+
-+			if (filter->splen >= (sizeof(xfrm_address_t) << 3) ||
-+			    filter->dplen >= (sizeof(xfrm_address_t) << 3))
-+				return -EINVAL;
- 		}
- 
- 		if (attrs[XFRMA_PROTO])
--- 
-2.17.1
-
+greg k-h
