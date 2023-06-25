@@ -2,104 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F356F73D2AA
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 19:13:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17D9073D2AD
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 19:23:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229679AbjFYRNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 13:13:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49028 "EHLO
+        id S230029AbjFYRXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 13:23:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjFYRNT (ORCPT
+        with ESMTP id S229868AbjFYRXb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 13:13:19 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECF31197
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 10:13:18 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-98df6bc0048so158059066b.1
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 10:13:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687713197; x=1690305197;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6DtUGF5Qpp5liEBW4Fkja7ol+KO9225qbllTSnW6B/Y=;
-        b=DxScvo/F5NopWxQwqzDJ+mLPN3REjdDbdAtNZ7ZdG8fZXNUX5DDiAecEZzr+P0fImh
-         qR2UyQ8J/0DUe+d20DtecOt25bLMRnjTuj/cEs5CZkazzdUoaMc9VVv+Z2dSAh5TbqQ9
-         9D9yiJPLr/1reab4fk3C/n3PCyk9HzwmgM1RKOzasD6PjBUXQO0adoACYbNdJaBv0QQy
-         V5viM7S0Vkal0fi0dwslCezBSl1TWOKUjjOydDpuy8YkSt5nbfiMCgBWnfG7h8eXgZbh
-         fqkorkMf2eVpECpIPMVGHvPmchH34iOgELRcXREAqj35X2PkcIXMxprhTjrSH/p5zWQZ
-         E4kg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687713197; x=1690305197;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6DtUGF5Qpp5liEBW4Fkja7ol+KO9225qbllTSnW6B/Y=;
-        b=azzKd14Kzv/tKY/iM3rZ86NgSRR4CSCz9JSkkCLr/NHIEruw1wlAKz6SKQieiF+pP6
-         ef9jmnwQJRh2fYh7wJ0om6iVBnPo0P2lN+RLYyH2bf6iDJj/2wSwkANFYVwBXfriFjQE
-         hHDV2ZjISpGR0KG5TzJn2Mm/9vmy0Tlmc95zf/p0upG2LVJmRRQxwhrO36cBHeVHd/hK
-         vnsHgKJMCsjc+LBgtARJYBKrL/uvHaKQvOTrcos5S1iGyYOq3x7RRxlzcd5s+WrmhCRK
-         wyEHdXGFzTQVKLykUGTKjm9r0lohWPbfaDCDasp7nPBAuMmhw221A2bRmaxoaFU5zMUM
-         w5GA==
-X-Gm-Message-State: AC+VfDx1pwyGP/JLk2/gN1zaikbmC3GFzPCMzek7UCwwgcq/jP1YXXQC
-        B9F/VegYnqGEe/P5HaF7Ub0=
-X-Google-Smtp-Source: ACHHUZ7MqiTR1ZIv4/lR3yo9zuXR8WjrHRh2UkkFL6VVLnMuyAw2c8g5nFjyq3Ytz8IdrobUnf643w==
-X-Received: by 2002:a17:906:fe4e:b0:96f:c46f:d8fe with SMTP id wz14-20020a170906fe4e00b0096fc46fd8femr22094622ejb.27.1687713197211;
-        Sun, 25 Jun 2023 10:13:17 -0700 (PDT)
-Received: from [192.168.2.30] (85-70-151-113.rcd.o2.cz. [85.70.151.113])
-        by smtp.gmail.com with ESMTPSA id ci8-20020a170906c34800b009888aa1da11sm2238306ejb.188.2023.06.25.10.13.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 25 Jun 2023 10:13:16 -0700 (PDT)
-Message-ID: <364d626b-c3cf-8492-6c85-38417f2432b4@gmail.com>
-Date:   Sun, 25 Jun 2023 19:13:15 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.12.0
-Subject: Re: [dm-devel] [PATCH v2 3/4] dm ioctl: Allow userspace to suppress
- uevent generation
-Content-Language: en-US
-To:     Demi Marie Obenour <demi@invisiblethingslab.com>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com
-Cc:     linux-kernel@vger.kernel.org
-References: <20230624230950.2272-1-demi@invisiblethingslab.com>
- <20230624230950.2272-4-demi@invisiblethingslab.com>
- <0b22e328-40e1-54d7-367c-96059a3fef7c@gmail.com> <ZJhlGCP0gTz7T3gG@itl-email>
- <81c94a1e-b316-c195-402c-01776f3200dc@gmail.com> <ZJhuw3MaFjW5Bocw@itl-email>
-From:   Milan Broz <gmazyland@gmail.com>
-In-Reply-To: <ZJhuw3MaFjW5Bocw@itl-email>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 25 Jun 2023 13:23:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2212D197
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 10:23:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 94CC860C05
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 17:23:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EF44BC433C9;
+        Sun, 25 Jun 2023 17:23:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687713810;
+        bh=7AFTxOakYHkjSdLko16JMgdE9pZ2zO+XnC5bID5eyyg=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=OOZVQksCPc/JnU42nCsWc8hVYQ2JVURxg5a3FqApe+almPPwcrciJD3XlVGkB9WYl
+         9bvf7RGx+0iZ2YHIZD1xPBc60js8A/qZ7AAFWGpe4diTgQsPLNjeCbeCsB9fyBQlQS
+         1HfTnnIOqB7XQtm2IIJMC71GIBay9hSX/tFE36L3qqFrt9cxNCNB6lBOWC6FOV0fND
+         K3xo6cCInP5iAXQEp7GiNJI+kWO6k7EjV+d9aHlFl1jc5/2KI5bmE4/YzHW3wcaJy6
+         V3b2Ta0NsOHTYJHrqQjTHPMqKFd5ljanXqMEvnkI6mc2Zg5nUOr0Gitk6Rcyh9EUdz
+         dKZP7IoK+Wmpg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D767FC43157;
+        Sun, 25 Jun 2023 17:23:29 +0000 (UTC)
+Subject: Re: [GIT PULL] perf/urgent for v6.4
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20230625094033.GCZJgLkSWnRJfxNXCQ@fat_crate.local>
+References: <20230625094033.GCZJgLkSWnRJfxNXCQ@fat_crate.local>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20230625094033.GCZJgLkSWnRJfxNXCQ@fat_crate.local>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/perf_urgent_for_v6.4
+X-PR-Tracked-Commit-Id: a6742cb90b567f952a95efa27dee345748d09fc7
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 547cc9be86f4c51c51fd429ace6c2e1ef9050d15
+Message-Id: <168771380987.13789.7103120769984778149.pr-tracker-bot@kernel.org>
+Date:   Sun, 25 Jun 2023 17:23:29 +0000
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/25/23 18:43, Demi Marie Obenour wrote:
-> On Sun, Jun 25, 2023 at 06:33:33PM +0200, Milan Broz wrote:
+The pull request you sent on Sun, 25 Jun 2023 11:40:33 +0200:
 
-...
+> git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/perf_urgent_for_v6.4
 
->> BTW we use exactly this scenario in cryptsetup for years with existing flags
->> (DM_UDEV_DISABLE_SUBSYSTEM_RULES_FLAG | DM_UDEV_DISABLE_DISK_RULES_FLAG
->> DM_UDEV_DISABLE_OTHER_RULES_FLAG) - just rules are ignored while uevent is still
->> sent.
->> Anyway, not sure we need another way to disable it; I just asked do you need it.
-> 
-> How can one set these flags using the raw kernel ioctls?  The code I am
-> working on does not use libdevmapper at all and just uses the kernel API
-> directly.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/547cc9be86f4c51c51fd429ace6c2e1ef9050d15
 
-IIRC you need to set cookie (kernel DM_COOKIE env), then default udev dm.rules decode
-the flags from it.
+Thank you!
 
-(It is libdevmapper internal magic for me, the design is kind of complicated, but works.)
-
-Better ask on LVM list (but the udev DM rules are pretty well inline documented).
-
-Milan
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
