@@ -2,56 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9EF573D148
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 16:06:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B00373D14B
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 16:07:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229904AbjFYOGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 10:06:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45314 "EHLO
+        id S229901AbjFYOHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 10:07:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229824AbjFYOGp (ORCPT
+        with ESMTP id S229824AbjFYOHc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 10:06:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96E541B1;
-        Sun, 25 Jun 2023 07:06:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2695A60B61;
-        Sun, 25 Jun 2023 14:06:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AB47C433CC;
-        Sun, 25 Jun 2023 14:06:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687702003;
-        bh=LAnePInFTnRhKb87x/CaVMcrQiTLwmFbhtHKuP+EhFo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=B6IXNYoElnIJB+nxpDA/twO8hNvg7k6sT0wmM1EO+vASYCLDnEGfc5VDhGZcH28Wr
-         Ia4/J4+cLvC/Y2FfAbf+p5MCCAFPcH7j4/Xcdzc/JkZBWogGRIncrI9tNnauIPF3DV
-         wwD4nhfGieTlPAZV+QDPHfTo7G7ijrNh3gobtW+7gHMCe7nnf0iKYdP20KJeo21NqW
-         +IYvquwwjLc+qdx8+srH8ABNyy7vjP5T5tirzC+wtTNWhuD+wDmcu5Z4km/CupeqD3
-         cE1SQEKns/NrPY/Cn2GuQ0SbIzID4l+bC/y8n6+cNy8hR/kPy3589r/YsWuYM4M2VN
-         J4xY2gZ60Lo+g==
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nicolas Schier <n.schier@avm.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>
-Subject: [PATCH v3 3/3] kbuild: respect GNU Make -w flag
-Date:   Sun, 25 Jun 2023 23:06:30 +0900
-Message-Id: <20230625140630.2134298-3-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230625140630.2134298-1-masahiroy@kernel.org>
-References: <20230625140630.2134298-1-masahiroy@kernel.org>
+        Sun, 25 Jun 2023 10:07:32 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0813810D1;
+        Sun, 25 Jun 2023 07:07:16 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-51d9124e1baso1340898a12.2;
+        Sun, 25 Jun 2023 07:07:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687702034; x=1690294034;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZuAG9jAdxVasKdX2usI2xLW6Z40/NeC0yYSwBQqZYDc=;
+        b=HowsnPGWbWKV8NnSpGwN385ujM0UcLFoA+AF/IgiJeJHXVmqLvEz4tyWpfe34UD0TU
+         WskYE082R+k7JWgnV0tJ4VfvCKWQcVwkMPZrQUKwCgUEcRxVJXqEcwv4IFwYRUkTEgNn
+         gXL1LPq0oeY9BBOAN8pCPm/XGNXvAvbSrMUADsvHzwD+mVjMe3zhNoGJYMoBzr0A9OXt
+         cXIUgLFRH0n1Fh09i6+BtWIgBamHSvw7xxsYWCxCHGUQxm6AgxdOhXqoh/A+OmE2TRav
+         CVVTZN+mNAe8rsBGtG/hyFCQ54NPSyJciEnK7r/4Oq5f4wetnXT35YcMMOuxsCyWFmDI
+         ClGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687702034; x=1690294034;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZuAG9jAdxVasKdX2usI2xLW6Z40/NeC0yYSwBQqZYDc=;
+        b=GkoEmzislPgC0Sah3p47MWoQEQi2lHcuAPOzomBufXoBS8z+FDhPf2lfUDAL4NqVON
+         fQuvOICMRidpHzUC7mwI0i//L08czJBhgcHvPEV5s/mXI7BPD95yjX7AZYwIGiSa4a0h
+         mRAi3RsGJ0+PqObH0ATbZpOh67J5/sV1y+v8vTNUoBBK2JJ4J1P9p2qbva4RFaMG6I1a
+         mhd1DyfXVBLdAMWkKBKcJTzAPslOiRIxf4nw+0HF4DLtHz67bwbm2BmFjr5cJliKHn1N
+         lVVYUnqo0eweHCdK06WujnafDcYrIHE9UwpwRGIo/86m+cBzgsw8WKgGMosvWxdKS1th
+         lv6w==
+X-Gm-Message-State: AC+VfDw2nPcSp5Gp1dNzbOWZM7rGunGPe+Kc2CXpqIpIbxMy+RjbK1hj
+        pv5ehPq92Dw1luedBXBEg0XnkZbyCA==
+X-Google-Smtp-Source: ACHHUZ7DpGTC1ashgSHrCs6UX7S7+s0At33zJANHmWxBXQW/fkthA7fWtDxhuluOY/Ldj5S6PguNeQ==
+X-Received: by 2002:aa7:ca4f:0:b0:51d:96de:af6f with SMTP id j15-20020aa7ca4f000000b0051d96deaf6fmr980161edt.0.1687702034115;
+        Sun, 25 Jun 2023 07:07:14 -0700 (PDT)
+Received: from p183 ([46.53.249.169])
+        by smtp.gmail.com with ESMTPSA id x26-20020aa7dada000000b0051be4cb7f54sm1793067eds.84.2023.06.25.07.07.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 25 Jun 2023 07:07:13 -0700 (PDT)
+Date:   Sun, 25 Jun 2023 17:07:11 +0300
+From:   Alexey Dobriyan <adobriyan@gmail.com>
+To:     Lin Ma <linma@zju.edu.cn>
+Cc:     steffen.klassert@secunet.com, herbert@gondor.apana.org.au,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, simon.horman@corigine.com
+Subject: Re: [PATCH v2] net: xfrm: Fix xfrm_address_filter OOB read
+Message-ID: <8a80ec0b-154a-4e6c-8fb8-916f506cd26d@p183>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,78 +70,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, -w (--print-directory) option is ignored, but it is better
-to respect the user's choice.
+> + if (filter->splen >= (sizeof(xfrm_address_t) << 3) ||
+> + 	filter->dplen >= (sizeof(xfrm_address_t) << 3)) {
 
-This commit changes the behavior of "Entering directory ..." logging.
+Please multiply by 8 if you want to multiply by 8.
 
-If -w (or --print-directory) is given via the command line or the
-MAKEFLAGS environment variable, print "Entering directory ..." for every
-sub make.
-
-If --no-print-directory is given via the command line or the MAKEFLAGS
-environment variable, suppress "Entering directory ..." completely.
-
-If none of them is given, print "Entering directory ..." when Kbuild
-changes the working directory at the start of building. (default)
-
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Tested-by: Nicolas Schier <n.schier@avm.de>
----
-
-Changes in v3:
-  - new patch
-
- Makefile | 16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
-
-diff --git a/Makefile b/Makefile
-index 0663c99e050b..aab8e149feec 100644
---- a/Makefile
-+++ b/Makefile
-@@ -38,6 +38,12 @@ __all:
- # descending is started. They are now explicitly listed as the
- # prepare rule.
- 
-+ifeq ($(filter 3.%,$(MAKE_VERSION)),)
-+short-opts := $(firstword -$(MAKEFLAGS))
-+else
-+short-opts := $(filter-out --%,$(MAKEFLAGS))
-+endif
-+
- this-makefile := $(lastword $(MAKEFILE_LIST))
- abs_srctree := $(realpath $(dir $(this-makefile)))
- abs_objtree := $(CURDIR)
-@@ -95,12 +101,6 @@ endif
- # commands
- # make-4.0 (and later) keep single letter options in the 1st word of MAKEFLAGS.
- 
--ifeq ($(filter 3.%,$(MAKE_VERSION)),)
--short-opts := $(firstword -$(MAKEFLAGS))
--else
--short-opts := $(filter-out --%,$(MAKEFLAGS))
--endif
--
- ifneq ($(findstring s,$(short-opts)),)
- quiet=silent_
- override KBUILD_VERBOSE :=
-@@ -215,12 +215,16 @@ else
- need-sub-make := 1
- endif
- 
-+ifeq ($(findstring w, $(short-opts)),)
- ifeq ($(filter --no-print-directory, $(MAKEFLAGS)),)
- # If --no-print-directory is unset, recurse once again to set it.
- # You may end up recursing into __sub-make twice. This is needed due to the
- # behavior change in GNU Make 4.4.1.
- need-sub-make := 1
- endif
-+else
-+no-print-directory :=
-+endif
- 
- ifeq ($(need-sub-make),1)
- 
--- 
-2.39.2
-
+Should it be "splen > 8 * sizeof()" ?
