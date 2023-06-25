@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E2BE73CFEF
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 11:58:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20CDB73CFF2
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 11:58:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232019AbjFYJ6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 05:58:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49288 "EHLO
+        id S232043AbjFYJ6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 05:58:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231894AbjFYJ6F (ORCPT
+        with ESMTP id S231669AbjFYJ6H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 05:58:05 -0400
+        Sun, 25 Jun 2023 05:58:07 -0400
 Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F047E7E;
-        Sun, 25 Jun 2023 02:57:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32A0210F2;
+        Sun, 25 Jun 2023 02:57:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1687687051; bh=BXNnPllwj84a104F1iNvGfssoVE+iM2IRJn2CMbkaXg=;
+        t=1687687057; bh=Wpug7va/Sehn1qLVf771ez1BHcOrsgYtBJSQBEXO3Ik=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZXCCQDPCUkyZw0zfaC+Oj1SyUTXSUmFwcJhKCYxzLrf2U1K90lD9UxleMK+e3ZHg3
-         1iZkN25nC0cSbrzaEP9n6apHRmCGrXT2u9oAKsr5RKPg9evazoTyyf5fJrmMoc26bZ
-         yBB8Gd3afnDj3Lkho2wOXD34QSCqhxTodxgelxZM=
+        b=mAbA173VM6FsH8b5N0w1Op2tmRffDFtS5hCc0prq+aUfP9SDHAHE1jrBpI2Qn1mBA
+         Gt5ktfjdYkmAj64mk9W1lTcFZz0win/LyFVNfwrXeh/KtVu1EuzPmK+UTwNX3CUg8/
+         2zVhSw+hfBAaMaCSf2v0FV0LD4VlNm1CL0PzXywg=
 Received: from ld50.lan (unknown [101.88.25.181])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 8D65E600B5;
-        Sun, 25 Jun 2023 17:57:31 +0800 (CST)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 533B06015B;
+        Sun, 25 Jun 2023 17:57:37 +0800 (CST)
 From:   WANG Xuerui <kernel@xen0n.name>
 To:     Huacai Chen <chenhuacai@kernel.org>
 Cc:     WANG Rui <wangrui@loongson.cn>, Xi Ruoyao <xry111@xry111.site>,
         loongarch@lists.linux.dev, linux-kbuild@vger.kernel.org,
         llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
         WANG Xuerui <git@xen0n.name>
-Subject: [PATCH v3 4/8] LoongArch: Make the CPUCFG and CSR ops simple aliases of compiler built-ins
-Date:   Sun, 25 Jun 2023 17:56:40 +0800
-Message-Id: <20230625095644.3156349-5-kernel@xen0n.name>
+Subject: [PATCH v3 5/8] LoongArch: Simplify the invtlb wrappers
+Date:   Sun, 25 Jun 2023 17:56:41 +0800
+Message-Id: <20230625095644.3156349-6-kernel@xen0n.name>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230625095644.3156349-1-kernel@xen0n.name>
 References: <20230625095644.3156349-1-kernel@xen0n.name>
@@ -52,136 +52,106 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: WANG Xuerui <git@xen0n.name>
 
-In addition to less visual clutter, this also makes Clang happy
-regarding the const-ness of arguments. In the original approach, all
-Clang gets to see is the incoming arguments whose const-ness cannot be
-proven without first being inlined; so Clang errors out here while GCC
-is fine.
+The invtlb instruction has been supported by upstream LoongArch
+toolchains from day one, so ditch the raw opcode trickery and just use
+plain inline asm for it.
 
-While at it, tweak several printk format strings because the return type
-of csr_read64 becomes effectively unsigned long, instead of unsigned
-long long.
+While at it, also make the invtlb asm statements barriers, for proper
+modeling of the side effects. The functions are also marked as
+__always_inline instead of just "inline", because they cannot work at
+all if not inlined: the op argument will not be compile-time const in
+that case, thus failing to satisfy the "i" constraint.
+
+The signature of the other more specific invtlb wrappers contain unused
+arguments right now, but these are not removed right away in order for
+the patch to be focused. In the meantime, assertions are added to ensure
+no accidental misuse happens before the refactor. (The more specific
+wrappers cannot re-use the generic invtlb wrapper, because the ISA
+manual says $zero shall be used in case a particular op does not take
+the respective argument: re-using the generic wrapper would mean losing
+control over the register usage.)
 
 Signed-off-by: WANG Xuerui <git@xen0n.name>
 ---
- arch/loongarch/include/asm/loongarch.h | 63 +++++---------------------
- arch/loongarch/kernel/traps.c          |  2 +-
- arch/loongarch/lib/dump_tlb.c          |  6 +--
- 3 files changed, 15 insertions(+), 56 deletions(-)
+ arch/loongarch/include/asm/tlb.h | 43 ++++++++++++++------------------
+ 1 file changed, 19 insertions(+), 24 deletions(-)
 
-diff --git a/arch/loongarch/include/asm/loongarch.h b/arch/loongarch/include/asm/loongarch.h
-index ff4482fd8ad7..ea8d1e82369d 100644
---- a/arch/loongarch/include/asm/loongarch.h
-+++ b/arch/loongarch/include/asm/loongarch.h
-@@ -56,10 +56,7 @@ __asm__(".macro	parse_r var r\n\t"
- #undef _IFC_REG
+diff --git a/arch/loongarch/include/asm/tlb.h b/arch/loongarch/include/asm/tlb.h
+index 0dc9ee2b05d2..da7a3b5b9374 100644
+--- a/arch/loongarch/include/asm/tlb.h
++++ b/arch/loongarch/include/asm/tlb.h
+@@ -88,52 +88,47 @@ enum invtlb_ops {
+ 	INVTLB_GID_ADDR = 0x16,
+ };
  
- /* CPUCFG */
--static inline u32 read_cpucfg(u32 reg)
--{
--	return __cpucfg(reg);
--}
-+#define read_cpucfg(reg) __cpucfg(reg)
- 
- #endif /* !__ASSEMBLY__ */
- 
-@@ -207,56 +204,18 @@ static inline u32 read_cpucfg(u32 reg)
- #ifndef __ASSEMBLY__
- 
- /* CSR */
--static __always_inline u32 csr_read32(u32 reg)
--{
--	return __csrrd_w(reg);
--}
--
--static __always_inline u64 csr_read64(u32 reg)
--{
--	return __csrrd_d(reg);
--}
--
--static __always_inline void csr_write32(u32 val, u32 reg)
--{
--	__csrwr_w(val, reg);
--}
--
--static __always_inline void csr_write64(u64 val, u32 reg)
--{
--	__csrwr_d(val, reg);
--}
--
--static __always_inline u32 csr_xchg32(u32 val, u32 mask, u32 reg)
--{
--	return __csrxchg_w(val, mask, reg);
--}
--
--static __always_inline u64 csr_xchg64(u64 val, u64 mask, u32 reg)
--{
--	return __csrxchg_d(val, mask, reg);
--}
-+#define csr_read32(reg) __csrrd_w(reg)
-+#define csr_read64(reg) __csrrd_d(reg)
-+#define csr_write32(val, reg) __csrwr_w(val, reg)
-+#define csr_write64(val, reg) __csrwr_d(val, reg)
-+#define csr_xchg32(val, mask, reg) __csrxchg_w(val, mask, reg)
-+#define csr_xchg64(val, mask, reg) __csrxchg_d(val, mask, reg)
- 
- /* IOCSR */
--static __always_inline u32 iocsr_read32(u32 reg)
--{
--	return __iocsrrd_w(reg);
--}
--
--static __always_inline u64 iocsr_read64(u32 reg)
--{
--	return __iocsrrd_d(reg);
--}
--
--static __always_inline void iocsr_write32(u32 val, u32 reg)
--{
--	__iocsrwr_w(val, reg);
--}
--
--static __always_inline void iocsr_write64(u64 val, u32 reg)
--{
--	__iocsrwr_d(val, reg);
--}
-+#define iocsr_read32(reg) __iocsrrd_w(reg)
-+#define iocsr_read64(reg) __iocsrrd_d(reg)
-+#define iocsr_write32(val, reg) __iocsrwr_w(val, reg)
-+#define iocsr_write64(val, reg) __iocsrwr_d(val, reg)
- 
- #endif /* !__ASSEMBLY__ */
- 
-diff --git a/arch/loongarch/kernel/traps.c b/arch/loongarch/kernel/traps.c
-index 22179cf6f33c..8fb5e7a77145 100644
---- a/arch/loongarch/kernel/traps.c
-+++ b/arch/loongarch/kernel/traps.c
-@@ -999,7 +999,7 @@ asmlinkage void cache_parity_error(void)
- 	/* For the moment, report the problem and hang. */
- 	pr_err("Cache error exception:\n");
- 	pr_err("csr_merrctl == %08x\n", csr_read32(LOONGARCH_CSR_MERRCTL));
--	pr_err("csr_merrera == %016llx\n", csr_read64(LOONGARCH_CSR_MERRERA));
-+	pr_err("csr_merrera == %016lx\n", csr_read64(LOONGARCH_CSR_MERRERA));
- 	panic("Can't handle the cache error!");
+-/*
+- * invtlb op info addr
+- * (0x1 << 26) | (0x24 << 20) | (0x13 << 15) |
+- * (addr << 10) | (info << 5) | op
+- */
+-static inline void invtlb(u32 op, u32 info, u64 addr)
++static __always_inline void invtlb(u32 op, u32 info, u64 addr)
+ {
+ 	__asm__ __volatile__(
+-		"parse_r addr,%0\n\t"
+-		"parse_r info,%1\n\t"
+-		".word ((0x6498000) | (addr << 10) | (info << 5) | %2)\n\t"
+-		:
+-		: "r"(addr), "r"(info), "i"(op)
++		"invtlb %0, %1, %2\n\t"
+ 		:
++		: "i"(op), "r"(info), "r"(addr)
++		: "memory"
+ 		);
  }
  
-diff --git a/arch/loongarch/lib/dump_tlb.c b/arch/loongarch/lib/dump_tlb.c
-index c2cc7ce343c9..0b886a6e260f 100644
---- a/arch/loongarch/lib/dump_tlb.c
-+++ b/arch/loongarch/lib/dump_tlb.c
-@@ -20,9 +20,9 @@ void dump_tlb_regs(void)
- 
- 	pr_info("Index    : 0x%0x\n", read_csr_tlbidx());
- 	pr_info("PageSize : 0x%0x\n", read_csr_pagesize());
--	pr_info("EntryHi  : 0x%0*llx\n", field, read_csr_entryhi());
--	pr_info("EntryLo0 : 0x%0*llx\n", field, read_csr_entrylo0());
--	pr_info("EntryLo1 : 0x%0*llx\n", field, read_csr_entrylo1());
-+	pr_info("EntryHi  : 0x%0*lx\n", field, read_csr_entryhi());
-+	pr_info("EntryLo0 : 0x%0*lx\n", field, read_csr_entrylo0());
-+	pr_info("EntryLo1 : 0x%0*lx\n", field, read_csr_entrylo1());
+-static inline void invtlb_addr(u32 op, u32 info, u64 addr)
++static __always_inline void invtlb_addr(u32 op, u32 info, u64 addr)
+ {
++	BUILD_BUG_ON(!__builtin_constant_p(info) || info != 0);
+ 	__asm__ __volatile__(
+-		"parse_r addr,%0\n\t"
+-		".word ((0x6498000) | (addr << 10) | (0 << 5) | %1)\n\t"
+-		:
+-		: "r"(addr), "i"(op)
++		"invtlb %0, $zero, %1\n\t"
+ 		:
++		: "i"(op), "r"(addr)
++		: "memory"
+ 		);
  }
  
- static void dump_tlb(int first, int last)
+-static inline void invtlb_info(u32 op, u32 info, u64 addr)
++static __always_inline void invtlb_info(u32 op, u32 info, u64 addr)
+ {
++	BUILD_BUG_ON(!__builtin_constant_p(addr) || addr != 0);
+ 	__asm__ __volatile__(
+-		"parse_r info,%0\n\t"
+-		".word ((0x6498000) | (0 << 10) | (info << 5) | %1)\n\t"
+-		:
+-		: "r"(info), "i"(op)
++		"invtlb %0, %1, $zero\n\t"
+ 		:
++		: "i"(op), "r"(info)
++		: "memory"
+ 		);
+ }
+ 
+-static inline void invtlb_all(u32 op, u32 info, u64 addr)
++static __always_inline void invtlb_all(u32 op, u32 info, u64 addr)
+ {
++	BUILD_BUG_ON(!__builtin_constant_p(info) || info != 0);
++	BUILD_BUG_ON(!__builtin_constant_p(addr) || addr != 0);
+ 	__asm__ __volatile__(
+-		".word ((0x6498000) | (0 << 10) | (0 << 5) | %0)\n\t"
++		"invtlb %0, $zero, $zero\n\t"
+ 		:
+ 		: "i"(op)
+-		:
++		: "memory"
+ 		);
+ }
+ 
 -- 
 2.40.0
 
