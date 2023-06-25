@@ -2,189 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C85FA73D421
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 22:36:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D247F73D423
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 22:37:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229558AbjFYUg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 16:36:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35566 "EHLO
+        id S229683AbjFYUhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 16:37:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjFYUg0 (ORCPT
+        with ESMTP id S229510AbjFYUhO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 16:36:26 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55F849B
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 13:36:24 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-313e742a787so830460f8f.1
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 13:36:24 -0700 (PDT)
+        Sun, 25 Jun 2023 16:37:14 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CD4EEB;
+        Sun, 25 Jun 2023 13:37:13 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-988a076a7d3so398845866b.3;
+        Sun, 25 Jun 2023 13:37:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1687725383; x=1690317383;
+        d=googlemail.com; s=20221208; t=1687725431; x=1690317431;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=e1QCxq2dS3A9zFHU0ctTjyuMeOoqHJBwt33K34S6GLs=;
-        b=qDpWQG7/8gfvwva5nS8MBjW5kZT5z5d5g30QsNzoeLw3jdpHpmI7FldH+fNSwEUT11
-         e/tp2C+Gnry2QtaoObwowWMRQoLd+K0kBk/2IuFav45hYSctyKKDkz/79qIUPk53XO7f
-         41+3vtDJik1QXiWjNPlBCtUWI+f3ByK/KkKHdonPOioAQjEu058EUo7Cbobkh74j+rtE
-         2+sVlRrM4yramIiq5HL20gjd2hWfAdT9Evb4+mEgxer9cMKeB2qa2y9wnwNylE1p24hr
-         IsdsipkiR+vlTKXxf6kfpybXr7jhjs59tg76vxFbAHh25ibiHmk/m/jDT1dOCd1XSoFu
-         KQew==
+        bh=JPEEXOayrC5kIElDx6mVXihAHFqvW3pl2AK2GXH8Dz4=;
+        b=XFkr/2ryDfP/kOgJUJjAhpDf4wBta7e01Hc9IRRavETIlHFtcyFKkMKrICgZxWSTCg
+         wAJ2PSu99A6Q9qlsMumwpHvQoztVdQD79miZAi6j8jM1e+z/70OaWA5Xz5UFiRk+iUwX
+         rfIgJ5vhUwMQdh14EjzPY9VsZuLuR3/inz1yJslvQeiu7krwFytZo6fcYgrmy3IxTgcs
+         d3kMxXQfamVYcOx3WEcDB+Ft56pud1zDysYg//p5uNmt2X7eXssmvDlnoSrl9YyA5ygH
+         9o60y8C93iJOQ0E3VX7N5dKB7h93dvR2cFWwf4rVDWka2R1tfaIZrGlwx46+fUZa549F
+         r8yQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687725383; x=1690317383;
+        d=1e100.net; s=20221208; t=1687725431; x=1690317431;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=e1QCxq2dS3A9zFHU0ctTjyuMeOoqHJBwt33K34S6GLs=;
-        b=FiZYs0Onh3Hm8DiFdEB5VjSpQDcHKFaDpnJ6lE2H3YyS1SlpX+oA/wHF2bHd7xUoi8
-         prTWdB66sGmdzhxmd+wk6zAZyGjYzH0DXoJUXa+KawpBT3M5f9iWhexhw/J1YoXtnQ8i
-         dU3LnnA3DRf+YaBfpXbwVO7swLgBK+c4VqbTx1UhuFykui6gHExarBas/wPvycHDRqui
-         rMyiUzAbiy8sqIdM+PMkA0JcuSbMSDVg1utH7heZcGW2sWNiKUXAaWU0wco2rZIeT+Dq
-         97iOO7vW5lS1/3X4ovgfgidI76/7ZvlkSMPRR0KAGcvI7HOHpPHEI9o0gbZ7l04Lb4Xg
-         r9iQ==
-X-Gm-Message-State: AC+VfDzAwv1hvIzIKcYmErrgFPfpVNd8q/MZLeEiayIfZG3pFZkXtzWb
-        XkkULCpo0wQ/CF+XjC7EBCrQDBT447cEatHxRCzZ0A==
-X-Google-Smtp-Source: ACHHUZ64p9n/gQ4cEcP/GRL/TzccMkjLQQFYw4orjcfuoDJUzO0/9AprWI0Ofwdd4UQdovW4AvDwmtQwv5jpqsruS14=
-X-Received: by 2002:adf:e5c7:0:b0:30a:e3bb:ba8b with SMTP id
- a7-20020adfe5c7000000b0030ae3bbba8bmr29849132wrn.29.1687725382689; Sun, 25
- Jun 2023 13:36:22 -0700 (PDT)
+        bh=JPEEXOayrC5kIElDx6mVXihAHFqvW3pl2AK2GXH8Dz4=;
+        b=H275/g4UA9H/YVqXopzKMTDomUkvkFnl7rlXrDFkuKe2nQ1aPE8uU5WR9fQBHgY0Xg
+         NZTudh7d/eQt6NI1jsGcwtgelXlN7Cocs5ZjrUcKUkzlvV3QhD/boUrJlcqD5c97LmOA
+         03sVbrdFuHVpvYZcsnfNIqG3uvchI1WQO1sl+Gy3QJrBlV4Jbs/vlXinn7MqjCX1mCGO
+         dT+FzDpSzgmJAH9CGMdWAbM2uR71KWsK6bzeJjENyfct4zJhS35PLXmQnMfcZFXhMGej
+         whtcpEVc7STPx22x8boxlFVVd7Sbq+bra0lVKJTnb8KJ4sFlFBdMip9r5xGUOoHcbPip
+         OxUQ==
+X-Gm-Message-State: AC+VfDypH1Q9rqdBbyw0dWBOLwKQ07SF7xGi3bKQ6+GdbVpyF3NfcD5I
+        vI1ypf9c+H2ruJhLj1zx8wAMP7V5ImZmYUJXIaNKvEjp
+X-Google-Smtp-Source: ACHHUZ4JXpMZ9XyyEpdax0IaCH+S8eNV76nhvfHU4BK6OWDEYqE7Bi4HV7SBpmZkWKitYD5YU3xkHDKGs5bBac1p3H8=
+X-Received: by 2002:a17:907:a0c:b0:978:8e8c:1bcb with SMTP id
+ bb12-20020a1709070a0c00b009788e8c1bcbmr25059662ejc.43.1687725431246; Sun, 25
+ Jun 2023 13:37:11 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230625140931.1266216-1-songshuaishuai@tinylab.org>
-In-Reply-To: <20230625140931.1266216-1-songshuaishuai@tinylab.org>
-From:   Alexandre Ghiti <alexghiti@rivosinc.com>
-Date:   Sun, 25 Jun 2023 22:36:11 +0200
-Message-ID: <CAHVXubgJcGPq_uC6iJCLTys5J6Ooa1EYcfOhBjEQwYfd+baWxw@mail.gmail.com>
-Subject: Re: [PATCH V1 0/3] Revert huge-paged linear mapping and its related fixups
-To:     Song Shuai <songshuaishuai@tinylab.org>
-Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, robh+dt@kernel.org, frowand.list@gmail.com,
-        ajones@ventanamicro.com, mpe@ellerman.id.au, arnd@arndb.de,
-        rppt@kernel.org, samuel@sholland.org, panqinglin2020@iscas.ac.cn,
-        conor.dooley@microchip.com, anup@brainfault.org,
-        xianting.tian@linux.alibaba.com, anshuman.khandual@arm.com,
-        heiko@sntech.de, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20230623022334.791026-1-gnstark@sberdevices.ru>
+ <20230623022334.791026-7-gnstark@sberdevices.ru> <CAFBinCBv993Xv_wk9fE-U0Tw2mzTB1z22Tj6x8Uy1rRw_dztng@mail.gmail.com>
+ <67d2a9b7-ac7b-57f7-d053-cff4bf0f9d2e@sberdevices.ru>
+In-Reply-To: <67d2a9b7-ac7b-57f7-d053-cff4bf0f9d2e@sberdevices.ru>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Sun, 25 Jun 2023 22:37:00 +0200
+Message-ID: <CAFBinCCzx2e92S-cQp2CVup4hr6Ge12uCJ3Qh0+sqNVFRWkv7A@mail.gmail.com>
+Subject: Re: [PATCH v2 6/6] meson saradc: support reading from channel7 mux inputs
+To:     George Stark <gnstark@sberdevices.ru>
+Cc:     jic23@kernel.org, lars@metafoo.de, neil.armstrong@linaro.org,
+        khilman@baylibre.com, jbrunet@baylibre.com,
+        andriy.shevchenko@linux.intel.com, nuno.sa@analog.com,
+        linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        kernel@sberdevices.ru
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Song,
+Hi George,
 
-On Sun, Jun 25, 2023 at 4:10=E2=80=AFPM Song Shuai <songshuaishuai@tinylab.=
-org> wrote:
->
-> We have encountered these two issues about huge-paged linear mapping sinc=
-e v6.4-rc1:
->
-> 1. Bug report: kernel paniced when system hibernates[1]
->
-> OpenSbi [v0.8,v1.3) set the PMP regions as !no-map, and the commit 333506=
-8f8721
-> ("riscv: Use PUD/P4D/PGD pages for the linear mapping") mapped them in li=
-near mapping.
-> The hibernation process attempted to save/restore these mapped regions re=
-sulting in access fault.
->
-> This issue was temporarily fixed by commit ed309ce52218 ("RISC-V: mark hi=
-bernation as nonportable").
-> But as Alex's RFC and Rob's response stats in another thread [2] ,
-> "Hibernation is only one case. Speculative accesses could also occur."
-> So this fixing commit seems not the perfect answer to this issue.
->
->
-> 2. Bug report: kernel paniced while booting (with UEFI )[3]
->
-> During the booting with UEFI, UEFI Memory Mapping overwrote the memblock.
-> The phys_ram_base was set as the end address of mmoderes0 (like 0x8004000=
-0 for 256 KiB mmoderes0@80000000),
-> which resulted the VA based on 2M-aligned PA was not 2M-aligned using va_=
-pa_offset
-> (PAGE_OFFSET - phys_ram_base) to translate.
->
-> The best_map_size() from commit 3335068f8721 didn't check the virtual ali=
-gnment
-> before choosing a map size. and then a "VA hole" was created where page f=
-aults always occurred.
->
-> This issue was fixed by commit 49a0a3731596 ("riscv: Check the virtual al=
-ignment before choosing a map size"),
-> But this fixing commit has a side-effect ("the possible third one" as Ale=
-x said in this thread).
-> There are numerous PTE allocations slowing down the boot time and consumi=
-ng some system memory when UEFI booting
-> (Note that it's not involved when booting directly with OpenSbi, where ph=
-ys_ram_base is the 2M-aligned base of DRAM).
->
-> In my test, compared with/out reverting both commit 49a0a3731596 and comm=
-it 3335068f8721,
-> I must wait ~20s for the linear mapping creation and mem_init_print_info(=
-) reported ~8M extra reserved memory.
+On Fri, Jun 23, 2023 at 6:38=E2=80=AFPM George Stark <gnstark@sberdevices.r=
+u> wrote:
+[...]
+> So I think to return to double definition of meson_sar_adc_iio_channels a=
+nd keep the driver backwards compatible.
+Ack!
 
-Indeed, phys_ram_base is not aligned on a 2MB boundary when booting
-with EDK2, IIRC that's because the first chunk of memory at
-0x8000_0000 is marked as UC and is then completely evicted.
+> I've just realized another moment with channels defined after MESON_SAR_A=
+DC_TEMP_CHAN in channel array.
+Good catch
 
->
-> To eliminate this side-effect, We should find a way to align VA and PA on=
- a 2MB boundary.
-> The simplest way is reverting the commit 3335068f8721 ("riscv: Use PUD/P4=
-D/PGD pages for the linear mapping").
->
+> In dts by default channels are referenced by channel array index not even=
+ by channel number.
+> So channel e.g MUX_0_VSS will have the same number (due to enum patch) bu=
+t different index on meson8 and gxbb.
+> As alternative we can implement fwnode_xlate method in meson adc driver a=
+nd use channel numbers in dts (probably not in the current patchset)
+That is actually an interesting third approach. But as you said: let's
+start simple and add the tables back for now.
 
-I disagree, the simplest way is to align phys_ram_base on a 2MB
-boundary, either by aligning to the upper boundary (and then wastes
-memory, like we used to) or by aligning to the lower boundary (but I
-want to make sure it works).
 
-I'll come up with something tomorrow.
-
-Thanks,
-
-Alex
-
->
->
-> Using PUD/P4D/PGD pages for the linear mapping to improve the performance=
- is marginal from a recent talk [4]
-> from Mike Rapoport. OpenSbi had marked all the PMP-protected regions as "=
-no-map" [5] to practice this talk.
->
-> For all those reasons, let's revert these related commits:
->
-> - commit 3335068f8721 ("riscv: Use PUD/P4D/PGD pages for the linear mappi=
-ng")
-> - commit 49a0a3731596 ("riscv: Check the virtual alignment before choosin=
-g a map size")
-> - commit ed309ce52218 ("RISC-V: mark hibernation as nonportable")
->
-> [1]: https://lore.kernel.org/linux-riscv/CAAYs2=3DgQvkhTeioMmqRDVGjdtNF_v=
-hB+vm_1dHJxPNi75YDQ_Q@mail.gmail.com/
-> [2]: https://lore.kernel.org/linux-kernel/20230530080425.18612-1-alexghit=
-i@rivosinc.com/
-> [3]: https://lore.kernel.org/linux-riscv/tencent_7C3B580B47C1B17C16488EC1=
-@qq.com/
-> [4]: https://lwn.net/Articles/931406/
-> [5]: https://github.com/riscv-software-src/opensbi/commit/8153b2622b08802=
-cc542f30a1fcba407a5667ab9
->
-> Song Shuai (3):
->   Revert "RISC-V: mark hibernation as nonportable"
->   Revert "riscv: Check the virtual alignment before choosing a map size"
->   Revert "riscv: Use PUD/P4D/PGD pages for the linear mapping"
->
->  arch/riscv/Kconfig            |  5 +---
->  arch/riscv/include/asm/page.h | 16 -------------
->  arch/riscv/mm/init.c          | 43 +++++++----------------------------
->  arch/riscv/mm/physaddr.c      | 16 -------------
->  drivers/of/fdt.c              | 11 ++++-----
->  5 files changed, 14 insertions(+), 77 deletions(-)
->
-> --
-> 2.20.1
->
+Best regards,
+Martin
