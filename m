@@ -2,105 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56DFD73D2A9
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 19:12:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F356F73D2AA
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 19:13:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbjFYRM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 13:12:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48584 "EHLO
+        id S229679AbjFYRNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 13:13:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjFYRMZ (ORCPT
+        with ESMTP id S229446AbjFYRNT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 13:12:25 -0400
-X-Greylist: delayed 1422 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 25 Jun 2023 10:12:23 PDT
-Received: from out203-205-221-155.mail.qq.com (out203-205-221-155.mail.qq.com [203.205.221.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7159D197;
-        Sun, 25 Jun 2023 10:12:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1687713140;
-        bh=tTjSzPD0ZS2M9E/b1QdCa1lslVGibpuk+ySp3PiCsPY=;
-        h=From:To:Cc:Subject:Date;
-        b=uXQuhdD1RXCyqIMRuAC6RNawiGWrScmqgmWjJno5ItAyE+Dnw7y1noRGvvG+MxpcL
-         abjSR6EqHuSDIbNOeTTMAU6om7JWft0pOFA1UhWcSvH2ieY8cjWoCrOkKcBe+s+NPf
-         aPeKZIfikzf44ooCLha8oqnyv6+nsm/bPA8P0/oY=
-Received: from localhost.localdomain ([122.14.229.236])
-        by newxmesmtplogicsvrsza10-0.qq.com (NewEsmtp) with SMTP
-        id 31025411; Mon, 26 Jun 2023 01:12:16 +0800
-X-QQ-mid: xmsmtpt1687713136torclcipj
-Message-ID: <tencent_D1B05B6060451EA10A64A88E122E37EDB508@qq.com>
-X-QQ-XMAILINFO: NMGzQWUSIfvTCXLSPHqXFkOFtDq5l5WMN7KQPSK3Qla6k4fZpvTjFwGb4uPpC5
-         L1Iy0qFC/oiONC0AmcaVWvRi2dYw7WMLJPmNgk+7Tk+5cKrn0aTrTNk3nN9Xr6Uynd/g1QXTt8WG
-         yU4/IDQr+rex9eoP6IJx2T/wJ0/yoSNDvXNEnjcQ3q4Fj3AEAjxEZRYQFz8kNN65GlxaUhH5AWoy
-         jnimiFAbQrB4JGW54GeeNyxyt4xrfi/zvr+AyPJ894sb/un+hCVKyD5cIZOGc22PxzTr3D+j/c6H
-         /Li57Ui0RNzASHuya+tAJhcSaT/dBXp6f+Nyz5lfa2X8qBZmc7AVSmE1DUl2ndzEAzUqGYtoKQRC
-         I7XiopOoXJ5apnoyVAyXiHtUEdXzfIiEh6nEPHWTmb8ezbPu/a4fGhz1hcyjO8mGcYHdH2iVl77S
-         Sp2gzSOJHQOxMYp8ble/U+aPdx8R1kDP4klTRxzyrR9LAWv/88J+03iazIWtHr+rBMFzqaik9kjh
-         tIcaIZ5CgrWChofpU404RTwGRsSyGTLkBU55G8TyKea4Nwn+ZrLFeU2v0swyY/UQwHk+2CWDCPsa
-         WvPSw5BuGlhAlpT8XK6C7DimzTUnsoBrg3rriLR3Tq9LvZtPjj9ZKpnp8vPaWhqYP7iNfvF52qdG
-         2LViA68tR/188qJfgUlPnlspSpFV9HpEWzK4CE9QoSdRrG/n0BjWA5pUidNYvpUa8k+acK+Bx3nH
-         zlUOPp2WGwUA8lrno3IWK+lNyAVQL7gKKxsXnpkr5vJHiVVdFJAcqkH+dtx40ecgISbbWYmlt+82
-         utcJ3JGeEMrEDRyJ7qEJeMBQsYx83wyR9qEboP4xq7dkuoK18hzXBZf1gox3yo2VBWGGKdlnM0Bf
-         aKjzyU97UN/h+bWU8tYs1Y91trgRsUr+HX1tav8CjAlrvjbsqi/h2+nnH61HYzFzrHxG8PLbluWI
-         4cvm0XCmQVkhnoLx2ItGOQ7BGjIQMS7J2WJ0wudmgFUeg/oxgIlYSI4wpvEB9w/5w1/m4GSGduIs
-         uCAiIXhR7zhqRCC5HlFerBZbvauxsj2y969HFFOxrdC3sdHcSZeuiZh27H+swoPveFWJ3xZQ==
-X-QQ-XMRINFO: M0RWTeBkoNRBR1Uh12iQNRvA1CSLhD8+1Q==
-From:   Zhang Shurong <zhang_shurong@foxmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     mark.tomlinson@alliedtelesis.co.nz, krzysztof.kozlowski@linaro.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zhang Shurong <zhang_shurong@foxmail.com>
-Subject: [PATCH] usb: max-3421: fix potential shift out-of-bounds in max3421_hub_control()
-Date:   Mon, 26 Jun 2023 01:12:13 +0800
-X-OQ-MSGID: <20230625171213.24014-1-zhang_shurong@foxmail.com>
-X-Mailer: git-send-email 2.41.0
+        Sun, 25 Jun 2023 13:13:19 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECF31197
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 10:13:18 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-98df6bc0048so158059066b.1
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 10:13:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687713197; x=1690305197;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6DtUGF5Qpp5liEBW4Fkja7ol+KO9225qbllTSnW6B/Y=;
+        b=DxScvo/F5NopWxQwqzDJ+mLPN3REjdDbdAtNZ7ZdG8fZXNUX5DDiAecEZzr+P0fImh
+         qR2UyQ8J/0DUe+d20DtecOt25bLMRnjTuj/cEs5CZkazzdUoaMc9VVv+Z2dSAh5TbqQ9
+         9D9yiJPLr/1reab4fk3C/n3PCyk9HzwmgM1RKOzasD6PjBUXQO0adoACYbNdJaBv0QQy
+         V5viM7S0Vkal0fi0dwslCezBSl1TWOKUjjOydDpuy8YkSt5nbfiMCgBWnfG7h8eXgZbh
+         fqkorkMf2eVpECpIPMVGHvPmchH34iOgELRcXREAqj35X2PkcIXMxprhTjrSH/p5zWQZ
+         E4kg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687713197; x=1690305197;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6DtUGF5Qpp5liEBW4Fkja7ol+KO9225qbllTSnW6B/Y=;
+        b=azzKd14Kzv/tKY/iM3rZ86NgSRR4CSCz9JSkkCLr/NHIEruw1wlAKz6SKQieiF+pP6
+         ef9jmnwQJRh2fYh7wJ0om6iVBnPo0P2lN+RLYyH2bf6iDJj/2wSwkANFYVwBXfriFjQE
+         hHDV2ZjISpGR0KG5TzJn2Mm/9vmy0Tlmc95zf/p0upG2LVJmRRQxwhrO36cBHeVHd/hK
+         vnsHgKJMCsjc+LBgtARJYBKrL/uvHaKQvOTrcos5S1iGyYOq3x7RRxlzcd5s+WrmhCRK
+         wyEHdXGFzTQVKLykUGTKjm9r0lohWPbfaDCDasp7nPBAuMmhw221A2bRmaxoaFU5zMUM
+         w5GA==
+X-Gm-Message-State: AC+VfDx1pwyGP/JLk2/gN1zaikbmC3GFzPCMzek7UCwwgcq/jP1YXXQC
+        B9F/VegYnqGEe/P5HaF7Ub0=
+X-Google-Smtp-Source: ACHHUZ7MqiTR1ZIv4/lR3yo9zuXR8WjrHRh2UkkFL6VVLnMuyAw2c8g5nFjyq3Ytz8IdrobUnf643w==
+X-Received: by 2002:a17:906:fe4e:b0:96f:c46f:d8fe with SMTP id wz14-20020a170906fe4e00b0096fc46fd8femr22094622ejb.27.1687713197211;
+        Sun, 25 Jun 2023 10:13:17 -0700 (PDT)
+Received: from [192.168.2.30] (85-70-151-113.rcd.o2.cz. [85.70.151.113])
+        by smtp.gmail.com with ESMTPSA id ci8-20020a170906c34800b009888aa1da11sm2238306ejb.188.2023.06.25.10.13.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 25 Jun 2023 10:13:16 -0700 (PDT)
+Message-ID: <364d626b-c3cf-8492-6c85-38417f2432b4@gmail.com>
+Date:   Sun, 25 Jun 2023 19:13:15 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.12.0
+Subject: Re: [dm-devel] [PATCH v2 3/4] dm ioctl: Allow userspace to suppress
+ uevent generation
+Content-Language: en-US
+To:     Demi Marie Obenour <demi@invisiblethingslab.com>,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com
+Cc:     linux-kernel@vger.kernel.org
+References: <20230624230950.2272-1-demi@invisiblethingslab.com>
+ <20230624230950.2272-4-demi@invisiblethingslab.com>
+ <0b22e328-40e1-54d7-367c-96059a3fef7c@gmail.com> <ZJhlGCP0gTz7T3gG@itl-email>
+ <81c94a1e-b316-c195-402c-01776f3200dc@gmail.com> <ZJhuw3MaFjW5Bocw@itl-email>
+From:   Milan Broz <gmazyland@gmail.com>
+In-Reply-To: <ZJhuw3MaFjW5Bocw@itl-email>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix potential shift out-of-bounds in max3421_hub_control()
-ClearPortFeature handling and SetPortFeature handling.
+On 6/25/23 18:43, Demi Marie Obenour wrote:
+> On Sun, Jun 25, 2023 at 06:33:33PM +0200, Milan Broz wrote:
 
-wValue may be greater than 32 which can not be used for shifting.
+...
 
-similar patch:
-https://patchwork.kernel.org/patch/12162547
+>> BTW we use exactly this scenario in cryptsetup for years with existing flags
+>> (DM_UDEV_DISABLE_SUBSYSTEM_RULES_FLAG | DM_UDEV_DISABLE_DISK_RULES_FLAG
+>> DM_UDEV_DISABLE_OTHER_RULES_FLAG) - just rules are ignored while uevent is still
+>> sent.
+>> Anyway, not sure we need another way to disable it; I just asked do you need it.
+> 
+> How can one set these flags using the raw kernel ioctls?  The code I am
+> working on does not use libdevmapper at all and just uses the kernel API
+> directly.
 
-Signed-off-by: Zhang Shurong <zhang_shurong@foxmail.com>
----
- drivers/usb/host/max3421-hcd.c | 4 ++++
- 1 file changed, 4 insertions(+)
+IIRC you need to set cookie (kernel DM_COOKIE env), then default udev dm.rules decode
+the flags from it.
 
-diff --git a/drivers/usb/host/max3421-hcd.c b/drivers/usb/host/max3421-hcd.c
-index d152d72de126..035cd6abc2f6 100644
---- a/drivers/usb/host/max3421-hcd.c
-+++ b/drivers/usb/host/max3421-hcd.c
-@@ -1688,6 +1688,8 @@ max3421_hub_control(struct usb_hcd *hcd, u16 type_req, u16 value, u16 index,
- 						!pdata->vbus_active_level);
- 			fallthrough;
- 		default:
-+			if (value >= 32)
-+				goto error;
- 			max3421_hcd->port_status &= ~(1 << value);
- 		}
- 		break;
-@@ -1741,6 +1743,8 @@ max3421_hub_control(struct usb_hcd *hcd, u16 type_req, u16 value, u16 index,
- 			max3421_reset_port(hcd);
- 			fallthrough;
- 		default:
-+			if (value >= 32)
-+				goto error;
- 			if ((max3421_hcd->port_status & USB_PORT_STAT_POWER)
- 			    != 0)
- 				max3421_hcd->port_status |= (1 << value);
--- 
-2.41.0
+(It is libdevmapper internal magic for me, the design is kind of complicated, but works.)
 
+Better ask on LVM list (but the udev DM rules are pretty well inline documented).
+
+Milan
