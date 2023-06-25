@@ -2,159 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 782CC73CF06
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 09:44:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09F5173CF09
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 09:48:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231675AbjFYHof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 03:44:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48934 "EHLO
+        id S231429AbjFYHsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 03:48:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230254AbjFYHod (ORCPT
+        with ESMTP id S230154AbjFYHsb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 03:44:33 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AE9EE41;
-        Sun, 25 Jun 2023 00:44:32 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-66c729f5618so866002b3a.1;
-        Sun, 25 Jun 2023 00:44:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687679072; x=1690271072;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=neXY6jFf5rj9eQqLL93VzLNnPS2lbHcmyz9yh8r+rt8=;
-        b=bnjx7r5qxdwXBqbQZwiVNQBpMixVG+rERy/3rkFI/f/FYxvZUFcDkTZpBhxbp3t4cw
-         ZzLBLhJ01nxGWp/P6ELflDd9xcUxtPo5ordUHsqYVM7ocwxOopMLJ3XId4dRYJelyGrb
-         XlJX20GcTgjtSLbMxcrTk2RR6jesbt+6lHdqLyVdPPuYBeMZMhpuZuDPsE9FfHKC/R2N
-         WYIa1RqOKocxrBg/Gjfu57bwIRZ7w6I6X8B9wV4d5MgQgp5HPUeaKiTP2/rYp+JcEMhF
-         6oKR8t65qyJGuCjueND6Lt/ZLJoICJcJ9XiZkyCGfJvH7oJ0CO7ELWWTa7TOi5n+HlR2
-         ZMyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687679072; x=1690271072;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=neXY6jFf5rj9eQqLL93VzLNnPS2lbHcmyz9yh8r+rt8=;
-        b=SqxVd0Uo4AUS8/5PjN2pBaN2bSD0LRefdY2BdxC3wnkSmsIsWtJ0glwMJPDX+bqgNO
-         V35CPxFTsop+qq/lhhdmPZi+Yg6ieovcghojc4vGiJtLzQBXyS16awCGYvVvBk2qy60B
-         IoYfW7TFYInGb+rArOmZrxur1uhStFTDyoPs9VHGxTxcubY0fX4gz5EWZs5dx+jy7cut
-         cYMjbscqT7jeLLDOoTKmg5VMdje+lZLlkP7cPq7MGvPy15nlp2T8q54nZRBE4zVoNsRy
-         en2GJWBDhb9bc23ImiLBdtrZx7AO05PAU4nqSdSOk5c4mgVxFRGugCxddVZ9wG/BKz7b
-         z9bA==
-X-Gm-Message-State: AC+VfDyPADnufnTD/+7+BDAelnqXjy2SKSkmV5i3Gw8psDt+/A7UAxtA
-        rO7/7vX2hmyqlxCVGB3fhcY=
-X-Google-Smtp-Source: ACHHUZ5CtLgdbmzpBs7x4v3vyTriQY7cmHDMyauQBQHe2dlAdEy6raDKswrsJGO4fXRCcEKR7cmtCg==
-X-Received: by 2002:a05:6a00:2309:b0:668:7744:10ea with SMTP id h9-20020a056a00230900b00668774410eamr24033021pfh.18.1687679071861;
-        Sun, 25 Jun 2023 00:44:31 -0700 (PDT)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id c19-20020aa78813000000b00671aa6b4962sm684118pfo.114.2023.06.25.00.44.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 25 Jun 2023 00:44:31 -0700 (PDT)
-Message-ID: <a5398e4b-bb9f-9913-c436-7528479be2ee@gmail.com>
-Date:   Sun, 25 Jun 2023 15:44:23 +0800
+        Sun, 25 Jun 2023 03:48:31 -0400
+Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DAADE45;
+        Sun, 25 Jun 2023 00:48:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
+        t=1687679307; bh=/68NbnTcIZWpyWND2Cdx843Vk2DveQW8gFt7NZyrO34=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=o0KxdgRNG0cej/WO7lsfELLSK3Rxc26j7w6nHBLcQjPBdhpywqTs7/Wn1s9aYr5F+
+         0vw5WFpS+6OEf+EHIEWkl2ua+9GixRn2OckwNfI/vuZDosScaLVRsVUvbeI7n5OjB2
+         TKTOXhO7QEko1W3vN+CPXm1fG+4dR0ZTv3IYAvSw=
+Received: from [100.100.34.13] (unknown [220.248.53.61])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 2436B600B5;
+        Sun, 25 Jun 2023 15:48:27 +0800 (CST)
+Message-ID: <12e9a417-e655-b85b-1213-231fd68b0977@xen0n.name>
+Date:   Sun, 25 Jun 2023 15:48:26 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
  Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [PATCH v4 06/13] KVM: x86/mmu: Bypass __handle_changed_spte()
- when clearing TDP MMU dirty bits
-To:     Sean Christopherson <seanjc@google.com>,
-        Vipin Sharma <vipinsh@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-References: <20230321220021.2119033-1-seanjc@google.com>
- <20230321220021.2119033-7-seanjc@google.com>
+Subject: Re: [PATCH v2 7/9] LoongArch: Tweak CFLAGS for Clang compatibility
 Content-Language: en-US
-From:   Like Xu <like.xu.linux@gmail.com>
-In-Reply-To: <20230321220021.2119033-7-seanjc@google.com>
+To:     Xi Ruoyao <xry111@xry111.site>, Huacai Chen <chenhuacai@kernel.org>
+Cc:     WANG Rui <wangrui@loongson.cn>, loongarch@lists.linux.dev,
+        linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, WANG Xuerui <git@xen0n.name>
+References: <20230624184055.3000636-1-kernel@xen0n.name>
+ <20230624184055.3000636-8-kernel@xen0n.name>
+ <CAAhV-H54bZ5_OSXtcq3B3d4bZj4GBTOf7Z8aA6Jm7uGdKTj_ug@mail.gmail.com>
+ <cc8c2f2d-b242-7488-3b5a-33828ee38b36@xen0n.name>
+ <5154e8141e2b022b477f2d2658279e94f6b02149.camel@xry111.site>
+From:   WANG Xuerui <kernel@xen0n.name>
+In-Reply-To: <5154e8141e2b022b477f2d2658279e94f6b02149.camel@xry111.site>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/3/2023 6:00 am, Sean Christopherson wrote:
-> From: Vipin Sharma <vipinsh@google.com>
+On 2023/6/25 15:36, Xi Ruoyao wrote:
+> On Sun, 2023-06-25 at 15:16 +0800, WANG Xuerui wrote:
+>> On 2023/6/25 10:13, Huacai Chen wrote:
+>>> Hi, Ruoyao,
+>>>
+>>> On Sun, Jun 25, 2023 at 2:42 AM WANG Xuerui <kernel@xen0n.name> wrote:
+>>>>
+>>>> From: WANG Xuerui <git@xen0n.name>
+>>>>
+>>>> Now the arch code is mostly ready for LLVM/Clang consumption, it is time
+>>>> to re-organize the CFLAGS a little to actually enable the LLVM build.
+>>>>
+>>>> In particular, -mexplicit-relocs and -mdirect-extern-access are not
+>>>> necessary nor supported on Clang; feature detection via cc-option would
+>>>> not work, because that way the broken combo of "new GNU as + old GCC"
+>>>> would seem to get "fixed", but actually produce broken kernels.
+>>>> Explicitly depending on CONFIG_CC_IS_CLANG is thus necessary to not
+>>>> regress UX for those building their own kernels.
+>>>>
+>>>> A build with !RELOCATABLE && !MODULE is confirmed working within a QEMU
+>>>> environment; support for the two features are currently blocked on
+>>>> LLVM/Clang, and will come later.
+>>>>
+>>>> Signed-off-by: WANG Xuerui <git@xen0n.name>
+>>>> ---
+>>>>    arch/loongarch/Makefile | 6 +++++-
+>>>>    1 file changed, 5 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
+>>>> index 366771016b99..82c619791a63 100644
+>>>> --- a/arch/loongarch/Makefile
+>>>> +++ b/arch/loongarch/Makefile
+>>>> @@ -51,7 +51,9 @@ LDFLAGS_vmlinux                       += -static -n -nostdlib
+>>>>
+>>>>    # When the assembler supports explicit relocation hint, we must use it.
+>>>>    # GCC may have -mexplicit-relocs off by default if it was built with an old
+>>>> -# assembler, so we force it via an option.
+>>>> +# assembler, so we force it via an option. For LLVM/Clang the desired behavior
+>>>> +# is the default, and the flag is not supported, so don't pass it if Clang is
+>>>> +# being used.
+>>>>    #
+>>>>    # When the assembler does not supports explicit relocation hint, we can't use
+>>>>    # it.  Disable it if the compiler supports it.
+>>>> @@ -61,8 +63,10 @@ LDFLAGS_vmlinux                      += -static -n -nostdlib
+>>>>    # combination of a "new" assembler and "old" compiler is not supported.  Either
+>>>>    # upgrade the compiler or downgrade the assembler.
+>>>>    ifdef CONFIG_AS_HAS_EXPLICIT_RELOCS
+>>>> +ifndef CONFIG_CC_IS_CLANG
+>>>>    cflags-y                       += -mexplicit-relocs
+>>>>    KBUILD_CFLAGS_KERNEL           += -mdirect-extern-access
+>>>> +endif
+>>> I prefer to drop CONFIG_CC_IS_CLANG and use
+>>> cflags-y                       += $(call cc-option,-mexplicit-relocs)
+>>> KBUILD_CFLAGS_KERNEL           += $(call cc-option,-mdirect-extern-access)
+>>>
+>>> Then Patch-6 can be merged in this.
+>>>
+>>> What's your opinion?
+>>
+>> FYI: with this approach the build no longer instantly dies with binutils
+>> 2.40 + gcc 12.3, but there are also tons of warnings that say the model
+>> attribute is being ignored. I checked earlier discussions and this means
+>> modules are silently broken at runtime, which is not particularly good UX.
 > 
-> Drop everything except marking the PFN dirty and the relevant tracepoint
-> parts of __handle_changed_spte() when clearing the dirty status of gfns in
-> the TDP MMU.  Clearing only the Dirty (or Writable) bit doesn't affect
-> the SPTEs shadow-present status, whether or not the SPTE is a leaf, or
-> change the SPTE's PFN.  I.e. other than marking the PFN dirty, none of the
-> functional updates handled by __handle_changed_spte() are relevant.
+> We can add
 > 
-> Losing __handle_changed_spte()'s sanity checks does mean that a bug could
-> theoretical go unnoticed, but that scenario is extremely unlikely, e.g.
-> would effectively require a misconfigured or a locking bug elsewhere.
+> #if defined(MODULE) && !__has_attribute(model)
+> #  error some fancy error message
+> #endif
 > 
-> Opportunistically remove a comment blurb from __handle_changed_spte()
-> about all modifications to TDP MMU SPTEs needing to invoke said function,
-> that "rule" hasn't been true since fast page fault support was added for
-> the TDP MMU (and perhaps even before).
-> 
-> Tested on a VM (160 vCPUs, 160 GB memory) and found that performance of
-> clear dirty log stage improved by ~40% in dirty_log_perf_test (with the
-> full optimization applied).
-> 
-> Before optimization:
-> --------------------
-> Iteration 1 clear dirty log time: 3.638543593s
-> Iteration 2 clear dirty log time: 3.145032742s
-> Iteration 3 clear dirty log time: 3.142340358s
-> Clear dirty log over 3 iterations took 9.925916693s. (Avg 3.308638897s/iteration)
-> 
-> After optimization:
-> -------------------
-> Iteration 1 clear dirty log time: 2.318988110s
-> Iteration 2 clear dirty log time: 1.794470164s
-> Iteration 3 clear dirty log time: 1.791668628s
-> Clear dirty log over 3 iterations took 5.905126902s. (Avg 1.968375634s/iteration)
-> 
-> Link: https://lore.kernel.org/all/Y9hXmz%2FnDOr1hQal@google.com
-> Signed-off-by: Vipin Sharma <vipinsh@google.com>
-> Reviewed-by: David Matlack <dmatlack@google.com>
-> [sean: split the switch to atomic-AND to a separate patch]
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->   arch/x86/kvm/mmu/tdp_mmu.c | 7 ++++---
->   1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> index 950c5d23ecee..467931c43968 100644
-> --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> @@ -517,7 +517,6 @@ static void handle_removed_pt(struct kvm *kvm, tdp_ptep_t pt, bool shared)
->    *	    threads that might be modifying SPTEs.
->    *
->    * Handle bookkeeping that might result from the modification of a SPTE.
-> - * This function must be called for all TDP SPTE modifications.
->    */
->   static void __handle_changed_spte(struct kvm *kvm, int as_id, gfn_t gfn,
->   				  u64 old_spte, u64 new_spte, int level,
-> @@ -1689,8 +1688,10 @@ static void clear_dirty_pt_masked(struct kvm *kvm, struct kvm_mmu_page *root,
->   							iter.old_spte, dbit,
->   							iter.level);
->   
-> -		__handle_changed_spte(kvm, iter.as_id, iter.gfn, iter.old_spte,
-> -				      iter.old_spte & ~dbit, iter.level, false);
-> +		trace_kvm_tdp_mmu_spte_changed(iter.as_id, iter.gfn, iter.level,
+> into percpu.h to error out in this case.  It had been in my earlier
+> drafts of explicit relocs patches, but we dropped it because there was
+> no such configuration (unless a snapshot of development GCC is used, and
+> using such a snapshot is never supported IIUC).
 
-Here the first parameter "kvm" is no longer used in this context.
+Ah I've seen that. So in this case we simply wrap -mexplicit-relocs with 
+cc-option and error out in case of CONFIG_MODULE but no model attribute, 
+which nicely prevents broken configurations (MODULE && ((old_gcc && 
+new_binutils) || clang)) with feature detection alone.
 
-Please help confirm that for clear_dirty_pt_masked(), should the "struct kvm 
-*kvm" parameter
-be cleared from the list of incoming parameters ?
+This seems elegant and better to me; Huacai, WDYT?
 
-> +					       iter.old_spte,
-> +					       iter.old_spte & ~dbit);
-> +		kvm_set_pfn_dirty(spte_to_pfn(iter.old_spte));
->   	}
->   
->   	rcu_read_unlock();
+-- 
+WANG "xen0n" Xuerui
+
+Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
+
