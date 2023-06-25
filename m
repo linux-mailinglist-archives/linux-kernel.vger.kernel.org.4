@@ -2,82 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3915773D38F
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 22:15:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADDE073D398
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 22:19:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbjFYUO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 16:14:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56680 "EHLO
+        id S229761AbjFYUTz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 16:19:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjFYUO4 (ORCPT
+        with ESMTP id S229654AbjFYUTx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 16:14:56 -0400
-Received: from smtp.smtpout.orange.fr (smtp-27.smtpout.orange.fr [80.12.242.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79E8F12A
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 13:14:54 -0700 (PDT)
-Received: from [192.168.1.18] ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id DW8Hql8IdYSjeDW8Hq54KJ; Sun, 25 Jun 2023 22:14:52 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1687724092;
-        bh=99Zy3Wa/tHoUx/okcXBe0djEuGdAxqRHAp5/pcQcgbo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=ahA6Jg46mNlm/+eOaIE9unvhul6T3L5VFkMdRe5rS4cSJcS9ViXR0/zBB6icUDT8Z
-         bnEIAEGfz3VM6yCSNk5++YjQkVSikNbppFRqdIPaTKJMnOQJEXmwe+/u8YOf9q77oX
-         DQFcysCT9RrzsMdyLElAL7FBifDdFyNUW6qtGTJkjZfdkzb3nmSlGZRA/W6+ANl8Tk
-         JI2zCHBJexBlikkTwL3aMdu/z1DnkFosVv7yw56UtUDttQ7DAgusUVLET8PHqBinEn
-         7jzdgAqRysNCCIUJhUlvOim9Biv2RoLk4bq/lsbpNHPSZyh1J97aBriOQq00ONPf0x
-         HSbwl7ZDPb3KQ==
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 25 Jun 2023 22:14:52 +0200
-X-ME-IP: 86.243.2.178
-Message-ID: <beb409e3-0c13-b817-dfa3-15792a341130@wanadoo.fr>
-Date:   Sun, 25 Jun 2023 22:14:49 +0200
+        Sun, 25 Jun 2023 16:19:53 -0400
+Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [IPv6:2001:4b7a:2000:18::163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BB9419A;
+        Sun, 25 Jun 2023 13:19:51 -0700 (PDT)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id EC8BD1F65D;
+        Sun, 25 Jun 2023 22:19:48 +0200 (CEST)
+Date:   Sun, 25 Jun 2023 22:19:47 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, Lux Aliaga <they@mint.lgbt>
+Subject: Re: [PATCH 08/15] drm/msm/dpu: Add SM6125 support
+Message-ID: <eeyexowcbjmqpmw6xps6ewczamehhyopjkvd2tg72soirpla2r@ydtuxti4r6xk>
+References: <20230624-sm6125-dpu-v1-0-1d5a638cebf2@somainline.org>
+ <20230624-sm6125-dpu-v1-8-1d5a638cebf2@somainline.org>
+ <d836cdaa-7d67-82b1-baa6-6d2f8c761b1a@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 02/26] octeon_ep: use array_size
-To:     Jakub Kicinski <kuba@kernel.org>,
-        Julia Lawall <Julia.Lawall@inria.fr>
-Cc:     Veerasenareddy Burru <vburru@marvell.com>, keescook@chromium.org,
-        kernel-janitors@vger.kernel.org,
-        Abhijit Ayarekar <aayarekar@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, corbet@lwn.net
-References: <20230623211457.102544-1-Julia.Lawall@inria.fr>
- <20230623211457.102544-3-Julia.Lawall@inria.fr>
- <20230624152826.10e3789b@kernel.org>
-Content-Language: fr
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20230624152826.10e3789b@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d836cdaa-7d67-82b1-baa6-6d2f8c761b1a@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 25/06/2023 à 00:28, Jakub Kicinski a écrit :
-> On Fri, 23 Jun 2023 23:14:33 +0200 Julia Lawall wrote:
->> -	oq->buff_info = vzalloc(oq->max_count * OCTEP_OQ_RECVBUF_SIZE);
->> +	oq->buff_info = vzalloc(array_size(oq->max_count, OCTEP_OQ_RECVBUF_SIZE));
+On 2023-06-24 03:47:27, Konrad Dybcio wrote:
+> On 24.06.2023 02:41, Marijn Suijten wrote:
+> > Add definitions for the display hardware used on the Qualcomm SM6125
+> > platform.
+> > 
+> > Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> > ---
+> [...]
 > 
-> vcalloc seems to exist, is there a reason array_size() is preferred?
+> > +static const struct dpu_perf_cfg sm6125_perf_data = {
+> > +	.max_bw_low = 4100000,
+> > +	.max_bw_high = 4100000,
+> > +	.min_core_ib = 2400000,
+> > +	.min_llcc_ib = 800000,
+> While Dmitry will likely validate other values
 
-Hi,
+Lovely.
 
-just for your information, I've just sent [1].
+> I can tell you already that this SoC has no LLCC.
 
-CJ
+Copy-paste error on downstream?
 
-[1]: 
-https://lore.kernel.org/all/3484e46180dd2cf05d993ff1a78b481bc2ad1f71.1687723931.git.christophe.jaillet@wanadoo.fr/
+https://git.codelinaro.org/clo/la/kernel/msm-4.14/-/blob/LA.UM.9.11.c25/arch/arm64/boot/dts/qcom/trinket-sde.dtsi#L146
 
+- Marijn
+
+> 
+> Konrad
+> > +	.min_dram_ib = 800000,
+> > +	.min_prefill_lines = 24,
+> > +	.danger_lut_tbl = {0xf, 0xffff, 0x0},
+> > +	.safe_lut_tbl = {0xfff8, 0xf000, 0xffff},
+> > +	.qos_lut_tbl = {
+> > +		{.nentry = ARRAY_SIZE(sm8150_qos_linear),
+> > +		.entries = sm8150_qos_linear
+> > +		},
+> > +		{.nentry = ARRAY_SIZE(sc7180_qos_macrotile),
+> > +		.entries = sc7180_qos_macrotile
+> > +		},
+> > +		{.nentry = ARRAY_SIZE(sc7180_qos_nrt),
+> > +		.entries = sc7180_qos_nrt
+> > +		},
+> > +		/* TODO: macrotile-qseed is different from macrotile */
+> > +	},
+> > +	.cdp_cfg = {
+> > +		{.rd_enable = 1, .wr_enable = 1},
+> > +		{.rd_enable = 1, .wr_enable = 0}
+> > +	},
+> > +	.clk_inefficiency_factor = 105,
+> > +	.bw_inefficiency_factor = 120,
+> > +};
+> > +
+> > +const struct dpu_mdss_cfg dpu_sm6125_cfg = {
+> > +	.caps = &sm6125_dpu_caps,
+> > +	.ubwc = &sm6125_ubwc_cfg,
+> > +	.mdp_count = ARRAY_SIZE(sm6125_mdp),
+> > +	.mdp = sm6125_mdp,
+> > +	.ctl_count = ARRAY_SIZE(sm6125_ctl),
+> > +	.ctl = sm6125_ctl,
+> > +	.sspp_count = ARRAY_SIZE(sm6125_sspp),
+> > +	.sspp = sm6125_sspp,
+> > +	.mixer_count = ARRAY_SIZE(sm6125_lm),
+> > +	.mixer = sm6125_lm,
+> > +	.dspp_count = ARRAY_SIZE(sm6125_dspp),
+> > +	.dspp = sm6125_dspp,
+> > +	.pingpong_count = ARRAY_SIZE(sm6125_pp),
+> > +	.pingpong = sm6125_pp,
+> > +	.intf_count = ARRAY_SIZE(sm6125_intf),
+> > +	.intf = sm6125_intf,
+> > +	.vbif_count = ARRAY_SIZE(sdm845_vbif),
+> > +	.vbif = sdm845_vbif,
+> > +	.perf = &sm6125_perf_data,
+> > +	.mdss_irqs = BIT(MDP_SSPP_TOP0_INTR) | \
+> > +		     BIT(MDP_SSPP_TOP0_INTR2) | \
+> > +		     BIT(MDP_SSPP_TOP0_HIST_INTR) | \
+> > +		     BIT(MDP_INTF0_INTR) | \
+> > +		     BIT(MDP_INTF1_INTR) | \
+> > +		     BIT(MDP_INTF1_TEAR_INTR),
+> > +};
+> > +
+> > +#endif
+> > diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> > index 0de507d4d7b7..8a02bbdaae8a 100644
+> > --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> > +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> > @@ -33,6 +33,9 @@
+> >  #define VIG_SC7180_MASK \
+> >  	(VIG_MASK | BIT(DPU_SSPP_QOS_8LVL) | BIT(DPU_SSPP_SCALER_QSEED4))
+> >  
+> > +#define VIG_SM6125_MASK \
+> > +	(VIG_MASK | BIT(DPU_SSPP_QOS_8LVL) | BIT(DPU_SSPP_SCALER_QSEED3LITE))
+> > +
+> >  #define VIG_SC7180_MASK_SDMA \
+> >  	(VIG_SC7180_MASK | BIT(DPU_SSPP_SMART_DMA_V2))
+> >  
+> > @@ -348,6 +351,8 @@ static const struct dpu_sspp_sub_blks sc7280_vig_sblk_0 =
+> >  
+> >  static const struct dpu_sspp_sub_blks sm6115_vig_sblk_0 =
+> >  				_VIG_SBLK("0", 2, DPU_SSPP_SCALER_QSEED4);
+> > +static const struct dpu_sspp_sub_blks sm6125_vig_sblk_0 =
+> > +				_VIG_SBLK("0", 3, DPU_SSPP_SCALER_QSEED3LITE);
+> >  
+> >  static const struct dpu_sspp_sub_blks sm8250_vig_sblk_0 =
+> >  				_VIG_SBLK("0", 5, DPU_SSPP_SCALER_QSEED4);
+> > @@ -762,6 +767,7 @@ static const struct dpu_qos_lut_entry sc7180_qos_nrt[] = {
+> >  
+> >  #include "catalog/dpu_5_0_sm8150.h"
+> >  #include "catalog/dpu_5_1_sc8180x.h"
+> > +#include "catalog/dpu_5_4_sm6125.h"
+> >  
+> >  #include "catalog/dpu_6_0_sm8250.h"
+> >  #include "catalog/dpu_6_2_sc7180.h"
+> > diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> > index b860784ade72..4314235cb2b8 100644
+> > --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> > +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> > @@ -861,6 +861,7 @@ extern const struct dpu_mdss_cfg dpu_sc8180x_cfg;
+> >  extern const struct dpu_mdss_cfg dpu_sm8250_cfg;
+> >  extern const struct dpu_mdss_cfg dpu_sc7180_cfg;
+> >  extern const struct dpu_mdss_cfg dpu_sm6115_cfg;
+> > +extern const struct dpu_mdss_cfg dpu_sm6125_cfg;
+> >  extern const struct dpu_mdss_cfg dpu_sm6350_cfg;
+> >  extern const struct dpu_mdss_cfg dpu_qcm2290_cfg;
+> >  extern const struct dpu_mdss_cfg dpu_sm6375_cfg;
+> > diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> > index aa8499de1b9f..a1c7ffb6dffb 100644
+> > --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> > +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> > @@ -1305,6 +1305,7 @@ static const struct of_device_id dpu_dt_match[] = {
+> >  	{ .compatible = "qcom,sc8180x-dpu", .data = &dpu_sc8180x_cfg, },
+> >  	{ .compatible = "qcom,sc8280xp-dpu", .data = &dpu_sc8280xp_cfg, },
+> >  	{ .compatible = "qcom,sm6115-dpu", .data = &dpu_sm6115_cfg, },
+> > +	{ .compatible = "qcom,sm6125-dpu", .data = &dpu_sm6125_cfg, },
+> >  	{ .compatible = "qcom,sm6350-dpu", .data = &dpu_sm6350_cfg, },
+> >  	{ .compatible = "qcom,sm6375-dpu", .data = &dpu_sm6375_cfg, },
+> >  	{ .compatible = "qcom,sm8150-dpu", .data = &dpu_sm8150_cfg, },
+> > 
