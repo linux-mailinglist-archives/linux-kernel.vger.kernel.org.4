@@ -2,68 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7BA773D14C
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 16:08:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB2B973D14D
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 16:08:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229892AbjFYOH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 10:07:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46456 "EHLO
+        id S229917AbjFYOIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 10:08:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229848AbjFYOHz (ORCPT
+        with ESMTP id S229907AbjFYOIT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 10:07:55 -0400
+        Sun, 25 Jun 2023 10:08:19 -0400
 Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0346BE5A
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 07:07:52 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-51a52fff2f0so598862a12.1
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 07:07:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ED57E54
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 07:08:18 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-51669dd574aso601750a12.0
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 07:08:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687702070; x=1690294070;
+        d=gmail.com; s=20221208; t=1687702097; x=1690294097;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=6KAgxZ0e/Mp+Alk75/mq17h2w55B+c/Iz4lU0v72Yh4=;
-        b=PFp3EHAt2PBxlImJsgnh+F8Xx+hMxzHe9RhLPTiZP0MHwIu5RsP+NjKY1O/2cvatUD
-         AjYe6pdQaMUEEr8Mg3sTpAn7Y8LJalbxGSK6rgX9CAXRzeJhOPPUuHmkUtplO9I7wmsl
-         +cC+cnRVSXRHrA+MQUdOWPlIRU7SNMiUA8Sj5Q6+MRb0xiZowHcA4KsZw4yqgk20gG4H
-         hrcc/IpzfUUYSfvgEiRSWkSY8sLuEdaNLuJZY8jlPLX7al3SRSbyoFz/PKxvhhwbEU9v
-         lYUyDHTpZgsfLsWRHa6bT8tXJZSS2riJbKFAwJ+fmVgimrtNf8uI0ibF2ApwyirYSReZ
-         kXzg==
+        bh=qb5uaG1ukttpAvFf/VsYxgKDzrt6PGIJhyXlt0S+974=;
+        b=oTFbyGblJZQYnCfEHksOhrJu+0t1MjoglVO2m22ZpEHcITylvHiAP0E9dThUfU9bTr
+         odWWydWnBURTXM+uBDY1UsLzKheuhtd7QHZjYi8843+GKikSm26HvlrDXtZGgocdbh5I
+         +VsyvtJmCRWfsvPMzQjzryvOkNm7utbtCA3NYbw1sb8IsRTzgrYSqSAceXgMTZIxWVSC
+         lvxcRGUEzU3jF1djmhnNHkHDqsLReKrWtlSpTKdrjgETFncVjJF+RX8gVqBvIGsggYaE
+         uTyq7i0XygbECR2ENoRw+xB+oJPjGQ33geneXrHdvosH8Mppn/0sbMPsiIpBs1CfTFrK
+         +mgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687702070; x=1690294070;
+        d=1e100.net; s=20221208; t=1687702097; x=1690294097;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6KAgxZ0e/Mp+Alk75/mq17h2w55B+c/Iz4lU0v72Yh4=;
-        b=Ddn6GH65y2TVPWgU48w3drJykc/wv2NxSzcwh9EJt7vUT5FvKKxV2PoN8rmHLJNgx3
-         G8uXVqILqYqIWEplasDTsIovMaFIhhwWx2yvJYH3jgyGXmc7eCHf2UwfSagkhNIWNZzX
-         Cnc4byPD8ZNFHWmyodYiyHO5JTdmFA6wle/W3hvnnoGeGyR6xSp5M2Nw0HWTczzGcQYj
-         XmmoG17STEG4Cag4bpFk6D+SHI1jgYaz9T9lNe/GpWvRx2Zj6MTlPXqF1lvpBFRan0qU
-         aKjYT/gYNdZipnj7uldI08PibL/3S1yHCFistKfMev7vOw6DnwNhb9Hm3wfjs29E/QR+
-         RUoA==
-X-Gm-Message-State: AC+VfDzQMK0htQM+buily1DeN6drO0H54RZ8fqWvk1vkGzLRBSvzJ/cO
-        fCSf8k4CKkRhNeBOw4vXp3Q=
-X-Google-Smtp-Source: ACHHUZ6PHGAqmN3NnuYXAL4lX7muOsXomV/604xi3w5sRHNlXFpa+ue5yDJP1FuYYRrWx7rtjrCy/A==
-X-Received: by 2002:a05:6402:27c8:b0:51d:9611:db3d with SMTP id c8-20020a05640227c800b0051d9611db3dmr1093359ede.2.1687702070294;
-        Sun, 25 Jun 2023 07:07:50 -0700 (PDT)
+        bh=qb5uaG1ukttpAvFf/VsYxgKDzrt6PGIJhyXlt0S+974=;
+        b=JFSgR3NQuPSeS1iJ0wLkvtb9nns0y+eQ+Jswpis0VcVMijpVGPjAA0Ii+lTweqBPVq
+         bf2zPisObUy4Alq0QHBjf1u1cqVs1xWSic4aE6y7IIKIs79xP/DTc5gCNI1Pp0diThS/
+         VWTGUJ3+MlUbFZbvUBDHj95+1dLS9kzaxqMjmIurA9ajzsZBV/45RNUQaiAxYZQXcgtz
+         X9OnnO+yNGB36RZe09nfsO5r019XRZ3lLqTKr4p83PcdN4Md1A0GI1/Qld3KPzpyiXAZ
+         yMhxAZxcg7WadSbqhJJfzBXBSNeBfTSYefMJeGbXKAg6Yiwr+4fO5vcW8PtnBU36xdXJ
+         V1Fg==
+X-Gm-Message-State: AC+VfDwiwglQGi1fYS/lAfD52bV1HYU53Eq6JGUJu1Ee7zR+USqbxjWb
+        CtEZx9vzROeD+LkvCWv3YIM=
+X-Google-Smtp-Source: ACHHUZ57Y/CLa/g0I4iVLHJPBt4Z7Yne+UFoeaNZya7MdsPH4IzdVE1XB9LzR6GCXRYxRWcjcr7/Ag==
+X-Received: by 2002:a05:6402:1e8e:b0:50d:fd8e:e224 with SMTP id f14-20020a0564021e8e00b0050dfd8ee224mr19569949edf.1.1687702096644;
+        Sun, 25 Jun 2023 07:08:16 -0700 (PDT)
 Received: from [192.168.0.101] (p57ba2e0b.dip0.t-ipconnect.de. [87.186.46.11])
-        by smtp.gmail.com with ESMTPSA id w3-20020aa7d283000000b0051a2edb49b0sm1783713edq.63.2023.06.25.07.07.48
+        by smtp.gmail.com with ESMTPSA id x2-20020aa7d6c2000000b0051a3f9770dasm1793222edr.8.2023.06.25.07.08.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 25 Jun 2023 07:07:49 -0700 (PDT)
-Message-ID: <ec2fcc62-90b8-f106-958a-7e1eb27009e3@gmail.com>
-Date:   Sun, 25 Jun 2023 16:07:47 +0200
+        Sun, 25 Jun 2023 07:08:16 -0700 (PDT)
+Message-ID: <b76b810e-7489-9f36-ae57-f6674a1b734f@gmail.com>
+Date:   Sun, 25 Jun 2023 16:08:15 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH] staging: rtl8192e: Rename function HTIOTPeerDetermine to
- ht_iot_peer_determine
+Subject: Re: [PATCH] staging: rtl8192e: Rename function HTUpdateDefaultSetting
+ to ht_update_default_setting
 Content-Language: en-US
 To:     Tree Davies <tdavies@darkphysics.net>, gregkh@linuxfoundation.org,
         dan.carpenter@linaro.org
 Cc:     linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-References: <ZJdagUiGPqzb5lp+@tacos.darkphysics>
+References: <ZJdmp3PAOAIqC3Zo@tacos.darkphysics>
 From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-In-Reply-To: <ZJdagUiGPqzb5lp+@tacos.darkphysics>
+In-Reply-To: <ZJdmp3PAOAIqC3Zo@tacos.darkphysics>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -76,37 +76,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/24/23 23:05, Tree Davies wrote:
-> Rename function HTIOTPeerDetermine to ht_iot_peer_determine in order to
-> fix checkpatch warning: Avoid CamelCase
+On 6/24/23 23:56, Tree Davies wrote:
+> Rename HTUpdateDefaultSetting to ht_update_default_setting in order to
+> Fix checkpatch warning: Avoid CamelCase
 > 
 > Signed-off-by: Tree Davies <tdavies@darkphysics.net>
 > ---
->   drivers/staging/rtl8192e/rtl819x_HTProc.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
+>   drivers/staging/rtl8192e/rtl819x_HTProc.c | 2 +-
+>   drivers/staging/rtl8192e/rtllib.h         | 2 +-
+>   drivers/staging/rtl8192e/rtllib_module.c  | 2 +-
+>   3 files changed, 3 insertions(+), 3 deletions(-)
 > 
 > diff --git a/drivers/staging/rtl8192e/rtl819x_HTProc.c b/drivers/staging/rtl8192e/rtl819x_HTProc.c
-> index f9fa3f2bb728..33fac7d9ada8 100644
+> index f9fa3f2bb728..f526d04839bf 100644
 > --- a/drivers/staging/rtl8192e/rtl819x_HTProc.c
 > +++ b/drivers/staging/rtl8192e/rtl819x_HTProc.c
-> @@ -164,7 +164,7 @@ bool IsHTHalfNmodeAPs(struct rtllib_device *ieee)
->   	return retValue;
->   }
+> @@ -67,7 +67,7 @@ static u8 CISCO_BROADCOM[3] = {0x00, 0x17, 0x94};
 >   
-> -static void HTIOTPeerDetermine(struct rtllib_device *ieee)
-> +static void ht_iot_peer_determine(struct rtllib_device *ieee)
+>   static u8 LINKSYS_MARVELL_4400N[3] = {0x00, 0x14, 0xa4};
+>   
+> -void HTUpdateDefaultSetting(struct rtllib_device *ieee)
+> +void ht_update_default_setting(struct rtllib_device *ieee)
 >   {
 >   	struct rt_hi_throughput *ht_info = ieee->ht_info;
->   	struct rtllib_network *net = &ieee->current_network;
-> @@ -720,7 +720,7 @@ void HTResetSelfAndSavePeerSetting(struct rtllib_device *ieee,
->   			ht_info->RT2RT_HT_Mode = (enum rt_ht_capability)0;
->   		}
 >   
-> -		HTIOTPeerDetermine(ieee);
-> +		ht_iot_peer_determine(ieee);
+> diff --git a/drivers/staging/rtl8192e/rtllib.h b/drivers/staging/rtl8192e/rtllib.h
+> index e3ce4431d460..405033c7ed77 100644
+> --- a/drivers/staging/rtl8192e/rtllib.h
+> +++ b/drivers/staging/rtl8192e/rtllib.h
+> @@ -1982,7 +1982,7 @@ int rtllib_wx_get_rts(struct rtllib_device *ieee, struct iw_request_info *info,
+>   void HTSetConnectBwMode(struct rtllib_device *ieee,
+>   			enum ht_channel_width bandwidth,
+>   			enum ht_extchnl_offset Offset);
+> -void HTUpdateDefaultSetting(struct rtllib_device *ieee);
+> +void ht_update_default_setting(struct rtllib_device *ieee);
+>   void HTConstructCapabilityElement(struct rtllib_device *ieee,
+>   				  u8 *posHTCap, u8 *len,
+>   				  u8 isEncrypt, bool bAssoc);
+> diff --git a/drivers/staging/rtl8192e/rtllib_module.c b/drivers/staging/rtl8192e/rtllib_module.c
+> index d6a4d6b4ec57..841300e3a8bc 100644
+> --- a/drivers/staging/rtl8192e/rtllib_module.c
+> +++ b/drivers/staging/rtl8192e/rtllib_module.c
+> @@ -129,7 +129,7 @@ struct net_device *alloc_rtllib(int sizeof_priv)
+>   	if (!ieee->ht_info)
+>   		goto free_softmac;
 >   
->   		ht_info->iot_action = 0;
->   		bIOTAction = HTIOTActIsDisableMCS14(ieee, pNetwork->bssid);
+> -	HTUpdateDefaultSetting(ieee);
+> +	ht_update_default_setting(ieee);
+>   	HTInitializeHTInfo(ieee);
+>   	TSInitialize(ieee);
+>   	for (i = 0; i < IEEE_IBSS_MAC_HASH_SIZE; i++)
 
 
 Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
