@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E953173D23E
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 18:29:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0814173D241
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 18:29:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231250AbjFYQ3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 12:29:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57582 "EHLO
+        id S231320AbjFYQ3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 12:29:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231247AbjFYQ26 (ORCPT
+        with ESMTP id S230362AbjFYQ3B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 12:28:58 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D9A1723
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 09:28:41 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-98934f000a5so290909166b.2
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 09:28:41 -0700 (PDT)
+        Sun, 25 Jun 2023 12:29:01 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A714E54
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 09:28:43 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-98e25fa6f5bso160110966b.3
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 09:28:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687710519; x=1690302519;
+        d=linaro.org; s=google; t=1687710521; x=1690302521;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=PO1VEj8PCt+SP2FLdSp8jHVPdvdkdeiUc+/c+qgri9c=;
-        b=wTzGEi828CVHhBinoiCuumo6mbuHwRBUt3VOGODKfCCVqZB0A4RejQPQFvJ/ypE65T
-         dqsBOXIt9ozbLcZKz07P/ptiWeAr0yJGJ6Ggpghs2ef7Ccx6Y7V6TJpBkO0KqblTi0Tz
-         gz2Lw3N1pDR8HW+tfohVXT3mMvs378/2sqbD7CYcMPALwctsmXgwRqhBUuQxcFXRL7nO
-         /AJeFDR9ifwca54oC3MtU+y82lq4v5S6o7vjDqL2RnZkB0/nb42InuxsD06gE4ltJoCH
-         yqNkKgNWKhl0PBnFCupHRzwpqIohIOPtZW7dcN2Uk9GVxx/smiuqjm3cengh/2ilY9Sp
-         a7YA==
+        bh=o5+luIM4oVY6m4zwxYa0g/reTrWlxSPcpRwy11iCAXI=;
+        b=IQ2yWkgTiwDkHCY0+Tqkm2zbfLKoJml0PgbbWrjnchB8GS1SAX3Y+H7ulDlOPz1B3N
+         EPQ8m31vpqjV0EHG0hR3oPHA0c0EspOE5kT8TLcObZc2EkDq0kqH+hoSluV4YbjSo5aE
+         PKxB0TTagHMQk5X8R1qRINRPA3BdHBZls693D3yFg28xyBDHYBTrL5hlz7uONvZ1Pkuz
+         pZFNQ20pJAtACzMnczzwIQ4JCxoNb7fg2JDQMcq6zaDyI9dafAigsTedjlD2wMaaY9Qr
+         ntBr6Qq9E+b9mWdS+I/13PNrkrh80t2CayU27HjI3NgzW6BFt4eX5KOU9UzROrBJlDNo
+         qpeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687710519; x=1690302519;
+        d=1e100.net; s=20221208; t=1687710521; x=1690302521;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=PO1VEj8PCt+SP2FLdSp8jHVPdvdkdeiUc+/c+qgri9c=;
-        b=VhNxpWO0/vQHuix+UuX+uzFhr9ExSbHGQA9T3RIQsR0th1wqLSgcBH5xTC3voJ915J
-         9m1Ho4l4NefihujyF/F8DnxQbnhMNm5ciM3PE0gp2c7mwmVfw/8R+mHbhLTPBa/6v/pn
-         qga+35roH33QGIWoQNVvGZZDa65pBh5uJZCC5TzP7U9DYkPtmivW5rP6aCsfWhXTM62s
-         TjXsMordFa7jpmoQGZwOjyBSR7PpsYANRcba3UTF4zoC9X50P63hsTsT2QjBAP2p4vI+
-         pEcaUSnfXmagwWPID9NJqVU6BSX4w6ej0BPHeAopzEvuwP82foZHZn73/CzPOsjkt5xl
-         fXhw==
-X-Gm-Message-State: AC+VfDySQs/3JnzdOj/MWpvvkYfDzEN/1h9pfFF5/Qcb+lbeDMtCqcV5
-        TmbsyXXqQqsFnWxEYinxe8lLZQ==
-X-Google-Smtp-Source: ACHHUZ4iqqQUzVvzYmtu0qmmlNPXRiqg2V2F0qTiryu8/wdF9zfXuyHk/MPn9KA8iV6K20V3z/6PmA==
-X-Received: by 2002:a17:907:5c2:b0:974:55a2:cb0b with SMTP id wg2-20020a17090705c200b0097455a2cb0bmr23869630ejb.55.1687710519450;
-        Sun, 25 Jun 2023 09:28:39 -0700 (PDT)
+        bh=o5+luIM4oVY6m4zwxYa0g/reTrWlxSPcpRwy11iCAXI=;
+        b=HakT0CQelLShtb+fOQF0WhYLPZtBy7nV68yhTqxH9BipeqY8tpZACsh+hzLK3nFAES
+         oL/3kLqTqyujlTlQPBAoCBDKVI6RVwyS5FxvlbvnMiq13PrZVVR4GntyjHzko+ty6ZJ4
+         EZH+HfuRVVVw3LsOInTH+5mmsjkxhl1qTxnZ+WFY68FczDW/zGxP9wwTDFJmoi1q+Otd
+         O7NFmwYPEgDjibBftIU3gFWCLnymeuT7GmEHl/VDVLhUmZfGS+lboEhOXmMvxxDspyGq
+         X34lXplf3zVMrtZyiL7N3/z6Z5N1Kh6sWfaektDiiXcsrOSHiHrFQ3vCiyDxh3bHQsmM
+         GmRw==
+X-Gm-Message-State: AC+VfDyfpN472z6GHJGjRTy6ufSmR5KTWlV5nbJBJQNlYQIASWGUL0ur
+        PaRqfpJqPruq5MloO4fSoZwwLQ==
+X-Google-Smtp-Source: ACHHUZ6vsiA9/DSLRqNIlnxoU4ovUfE9V6n7VWjRWzRhGHUCuO6OrEWd4hhBWENte2ulXVTrOwwrBA==
+X-Received: by 2002:a17:907:847:b0:977:d53e:4055 with SMTP id ww7-20020a170907084700b00977d53e4055mr23345868ejb.58.1687710521262;
+        Sun, 25 Jun 2023 09:28:41 -0700 (PDT)
 Received: from krzk-bin.. ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id ec10-20020a170906b6ca00b00982be08a9besm2277731ejb.172.2023.06.25.09.28.37
+        by smtp.gmail.com with ESMTPSA id ec10-20020a170906b6ca00b00982be08a9besm2277731ejb.172.2023.06.25.09.28.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Jun 2023 09:28:39 -0700 (PDT)
+        Sun, 25 Jun 2023 09:28:40 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Hans de Goede <hdegoede@redhat.com>,
@@ -64,9 +64,9 @@ Cc:     Andi Shyti <andi.shyti@kernel.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: [PATCH v4 09/24] Input: cy8ctma140 - Simplify with dev_err_probe()
-Date:   Sun, 25 Jun 2023 18:28:02 +0200
-Message-Id: <20230625162817.100397-10-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v4 10/24] Input: edf-ft5x06 - Simplify with dev_err_probe()
+Date:   Sun, 25 Jun 2023 18:28:03 +0200
+Message-Id: <20230625162817.100397-11-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230625162817.100397-1-krzysztof.kozlowski@linaro.org>
 References: <20230625162817.100397-1-krzysztof.kozlowski@linaro.org>
@@ -88,30 +88,31 @@ dev_err_probe().  Less code and also it prints the error value.
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- drivers/input/touchscreen/cy8ctma140.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+ drivers/input/touchscreen/edt-ft5x06.c | 10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/input/touchscreen/cy8ctma140.c b/drivers/input/touchscreen/cy8ctma140.c
-index 967ecde23e83..ea3895167b82 100644
---- a/drivers/input/touchscreen/cy8ctma140.c
-+++ b/drivers/input/touchscreen/cy8ctma140.c
-@@ -258,12 +258,8 @@ static int cy8ctma140_probe(struct i2c_client *client)
- 	ts->regulators[1].supply = "vdd";
- 	error = devm_regulator_bulk_get(dev, ARRAY_SIZE(ts->regulators),
- 				      ts->regulators);
--	if (error) {
+diff --git a/drivers/input/touchscreen/edt-ft5x06.c b/drivers/input/touchscreen/edt-ft5x06.c
+index 795c7dad22bf..457d53337fbb 100644
+--- a/drivers/input/touchscreen/edt-ft5x06.c
++++ b/drivers/input/touchscreen/edt-ft5x06.c
+@@ -1168,13 +1168,9 @@ static int edt_ft5x06_ts_probe(struct i2c_client *client)
+ 	tsdata->max_support_points = chip_data->max_support_points;
+ 
+ 	tsdata->vcc = devm_regulator_get(&client->dev, "vcc");
+-	if (IS_ERR(tsdata->vcc)) {
+-		error = PTR_ERR(tsdata->vcc);
 -		if (error != -EPROBE_DEFER)
--			dev_err(dev, "Failed to get regulators %d\n",
--				error);
+-			dev_err(&client->dev,
+-				"failed to request regulator: %d\n", error);
 -		return error;
 -	}
-+	if (error)
-+		return dev_err_probe(dev, error, "Failed to get regulators\n");
++	if (IS_ERR(tsdata->vcc))
++		return dev_err_probe(&client->dev, PTR_ERR(tsdata->vcc),
++				     "failed to request regulator\n");
  
- 	error = cy8ctma140_power_up(ts);
- 	if (error)
+ 	tsdata->iovcc = devm_regulator_get(&client->dev, "iovcc");
+ 	if (IS_ERR(tsdata->iovcc)) {
 -- 
 2.34.1
 
