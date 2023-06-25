@@ -2,52 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B4D873CE7D
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 06:59:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70C5E73CE80
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 07:01:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231203AbjFYE7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 00:59:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59316 "EHLO
+        id S231332AbjFYFBi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 01:01:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbjFYE7A (ORCPT
+        with ESMTP id S230363AbjFYFBe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 00:59:00 -0400
-Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62B91E5D
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 21:58:59 -0700 (PDT)
-Received: by mail-il1-f205.google.com with SMTP id e9e14a558f8ab-3420c84e530so13173075ab.1
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 21:58:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687669138; x=1690261138;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zh5fpvwsPKvfH2zfGfL3uL4oFqLx29Dszvhlc1s4o3Q=;
-        b=kb0THBaJSKr1/0EoUl1syuIMLvcvMCq4ysS6uKANbqRPQwhezh+w6/N95VVMWxtWe2
-         gZfKOUj49VSPJPA6/W5TVqp6Frs9Nfw+Vlaxczr1bgd0kigmHaed2Sy9Un+XQpbXMt4g
-         /BlsOa5ieDxdlWGx8mrJUADUZ93/khg2kEWNH9qQjecY/xiv6e4c+ReArzPC1lZj0JCE
-         YIczVatNHH1ACgUI1gxO0lJ+fxc7wMCNmiOHDmk7jBkhzBDj+Tt8cUHBGYsFzFpr2vSH
-         pNVxgkdpC9Oagb18dZmtAJBbvC6yLRcslUa1cq5IiZfWYvm91HCtQ4l75+pfl2KG0kNu
-         fhrw==
-X-Gm-Message-State: AC+VfDxvmzIOuDqKC0bOU1M8oOv0voKtqI9DQQhYV0mDVHEQmj8fbuE3
-        0en6cHR+UzxL63kLwd1I5t6c84Xm8QiI6HHNbstJUhv/gt9h
-X-Google-Smtp-Source: ACHHUZ6QNHFQpVsYAW1OyDtioJuiu09y0HwMpWW6cIqKQYhzjCiiy74uJDi7On7ItlpKdnWzYqMDf5v2q56qCfsr+3EZGWS/zYFN
+        Sun, 25 Jun 2023 01:01:34 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21FA7E65;
+        Sat, 24 Jun 2023 22:01:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687669292; x=1719205292;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=KdNqYETF+XtrRZPtYEeWQrXvPosc/lvpXCnD1OhovGE=;
+  b=bjMCC3WHIr+FKqpfH9nmBK773oj0q8pXmBQk2+iCQFu/+n2AHPXrrGRt
+   NR6f35aIhM+8vcdkgWVHn4LV02BiLk9dBflaCRF+mM3MsrjTypwcV5SWO
+   vj96Aqsq/XXdOkSthwV+pCudyV/a692XogUI+cfcCTW0YFUrK+viUVgfM
+   x/ZscTeGA7iqXCXBFjDsPrXPMrXJgnvj5Eluf8067ie5MCmBvfyvS0GjY
+   uzSXH20spzR8PjOlfCksGluUZZCfVR107q5ARL2z5V4+4N3v2jMqR2gL0
+   fjw8r05TruBnzU7Qu9fUtFPYrCK7pWj6W/5w/aePaoxAgiM8g3IiCNtoP
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10751"; a="427015420"
+X-IronPort-AV: E=Sophos;i="6.01,156,1684825200"; 
+   d="scan'208";a="427015420"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2023 22:01:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10751"; a="693087965"
+X-IronPort-AV: E=Sophos;i="6.01,156,1684825200"; 
+   d="scan'208";a="693087965"
+Received: from ipu5-build.bj.intel.com (HELO [10.238.232.139]) ([10.238.232.139])
+  by orsmga006.jf.intel.com with ESMTP; 24 Jun 2023 22:01:24 -0700
+Subject: Re: [PATCH 23/26] media: staging: imgu: use array_size
+To:     Julia Lawall <Julia.Lawall@inria.fr>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     keescook@chromium.org, kernel-janitors@vger.kernel.org,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Tianshu Qiu <tian.shu.qiu@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <20230623211457.102544-1-Julia.Lawall@inria.fr>
+ <20230623211457.102544-24-Julia.Lawall@inria.fr>
+From:   Bingbu Cao <bingbu.cao@linux.intel.com>
+Message-ID: <778fdf52-9e87-cacd-94a3-cd42554587c5@linux.intel.com>
+Date:   Sun, 25 Jun 2023 12:59:14 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-Received: by 2002:a92:603:0:b0:340:c135:a371 with SMTP id
- x3-20020a920603000000b00340c135a371mr9287824ilg.1.1687669138699; Sat, 24 Jun
- 2023 21:58:58 -0700 (PDT)
-Date:   Sat, 24 Jun 2023 21:58:58 -0700
-In-Reply-To: <000000000000152bee05f8adb94c@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000082beb905feed17cf@google.com>
-Subject: Re: [syzbot] [block?] WARNING in wait_til_done (2)
-From:   syzbot <syzbot+9bc4da690ee5334f5d15@syzkaller.appspotmail.com>
-To:     axboe@kernel.dk, efremov@linux.com, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <20230623211457.102544-24-Julia.Lawall@inria.fr>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,80 +71,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+Julia,
 
-HEAD commit:    a92b7d26c743 Merge tag 'drm-fixes-2023-06-23' of git://ano..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=13426150a80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=24ce1b2abaee24cc
-dashboard link: https://syzkaller.appspot.com/bug?extid=9bc4da690ee5334f5d15
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17e0603b280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=137e080b280000
+Thanks for your patch.
 
-Downloadable assets:
-disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/7bc7510fe41f/non_bootable_disk-a92b7d26.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/86f5fbd54cd3/vmlinux-a92b7d26.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/72b4c75c41dd/bzImage-a92b7d26.xz
+On 6/24/23 5:14 AM, Julia Lawall wrote:
+> Use array_size to protect against multiplication overflows.
+> 
+> The changes were done using the following Coccinelle semantic patch:
+> 
+> // <smpl>
+> @@
+>     expression E1, E2;
+>     constant C1, C2;
+>     identifier alloc = {vmalloc,vzalloc};
+> @@
+>     
+> (
+>       alloc(C1 * C2,...)
+> |
+>       alloc(
+> -           (E1) * (E2)
+> +           array_size(E1, E2)
+>       ,...)
+> )
+> // </smpl>
+> 
+> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
+> 
+> ---
+>  drivers/staging/media/ipu3/ipu3-mmu.c |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/staging/media/ipu3/ipu3-mmu.c b/drivers/staging/media/ipu3/ipu3-mmu.c
+> index cb9bf5fb29a5..9c4adb815c94 100644
+> --- a/drivers/staging/media/ipu3/ipu3-mmu.c
+> +++ b/drivers/staging/media/ipu3/ipu3-mmu.c
+> @@ -464,7 +464,7 @@ struct imgu_mmu_info *imgu_mmu_init(struct device *parent, void __iomem *base)
+>  	 * Allocate the array of L2PT CPU pointers, initialized to zero,
+>  	 * which means the dummy L2PT allocated above.
+>  	 */
+> -	mmu->l2pts = vzalloc(IPU3_PT_PTES * sizeof(*mmu->l2pts));
+> +	mmu->l2pts = vzalloc(array_size(IPU3_PT_PTES, sizeof(*mmu->l2pts)));
+>  	if (!mmu->l2pts)
+>  		goto fail_l2pt;
+>  
+>
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+9bc4da690ee5334f5d15@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 5531 at drivers/block/floppy.c:999 schedule_bh drivers/block/floppy.c:999 [inline]
-WARNING: CPU: 0 PID: 5531 at drivers/block/floppy.c:999 wait_til_done+0x350/0x3c0 drivers/block/floppy.c:2018
-Modules linked in:
-CPU: 0 PID: 5531 Comm: syz-executor276 Not tainted 6.4.0-rc7-syzkaller-00226-ga92b7d26c743 #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-RIP: 0010:schedule_bh drivers/block/floppy.c:999 [inline]
-RIP: 0010:wait_til_done+0x350/0x3c0 drivers/block/floppy.c:2018
-Code: fc 41 83 fd 01 7e ac e8 3e 49 60 fc 4c 89 e6 48 c7 c7 60 42 46 8d e8 df 0a 3e fc e8 2a 49 60 fc e9 c3 fd ff ff e8 20 49 60 fc <0f> 0b e9 4b fd ff ff e8 64 1f b2 fc e9 0f fe ff ff e8 0a 49 60 fc
-RSP: 0018:ffffc900042ef738 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 1ffff9200085dee7 RCX: 0000000000000000
-RDX: ffff888023961500 RSI: ffffffff85232220 RDI: 0000000000000001
-RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000001
-R13: ffffffff8522dea0 R14: 0000000000000006 R15: 0000000000000003
-FS:  00007fbbf86fe700(0000) GS:ffff88806b600000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000000000000 CR3: 000000001ceb0000 CR4: 0000000000350ef0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- floppy_check_events+0x35e/0x680 drivers/block/floppy.c:4098
- disk_check_events+0xc2/0x420 block/disk-events.c:193
- disk_clear_events block/disk-events.c:248 [inline]
- bdev_check_media_change+0x12a/0x350 block/disk-events.c:279
- floppy_open+0x873/0xe90 drivers/block/floppy.c:4057
- blkdev_get_whole+0x93/0x2c0 block/bdev.c:606
- blkdev_get_by_dev.part.0+0x5e2/0xb80 block/bdev.c:756
- blkdev_get_by_dev+0x6f/0x90 block/bdev.c:790
- blkdev_open+0x140/0x2d0 block/fops.c:493
- do_dentry_open+0x6cc/0x13f0 fs/open.c:920
- do_open fs/namei.c:3636 [inline]
- path_openat+0x1baa/0x2750 fs/namei.c:3791
- do_filp_open+0x1ba/0x410 fs/namei.c:3818
- do_sys_openat2+0x16d/0x4c0 fs/open.c:1356
- do_sys_open fs/open.c:1372 [inline]
- __do_sys_openat fs/open.c:1388 [inline]
- __se_sys_openat fs/open.c:1383 [inline]
- __x64_sys_openat+0x143/0x1f0 fs/open.c:1383
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fbbf8f12444
-Code: 84 00 00 00 00 00 44 89 54 24 0c e8 c6 f9 ff ff 44 8b 54 24 0c 44 89 e2 48 89 ee 41 89 c0 bf 9c ff ff ff b8 01 01 00 00 0f 05 <48> 3d 00 f0 ff ff 77 34 44 89 c7 89 44 24 0c e8 f8 f9 ff ff 8b 44
-RSP: 002b:00007fbbf86fdd60 EFLAGS: 00000293 ORIG_RAX: 0000000000000101
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fbbf8f12444
-RDX: 0000000000000000 RSI: 00007fbbf86fdde0 RDI: 00000000ffffff9c
-RBP: 00007fbbf86fdde0 R08: 0000000000000000 R09: 00007fbbf86fe700
-R10: 0000000000000000 R11: 0000000000000293 R12: 0000000000000000
-R13: 00007ffdc0de869f R14: 00007fbbf86fe300 R15: 0000000000022000
- </TASK>
+Reviewed-by: Bingbu Cao <bingbu.cao@intel.com>
 
 
----
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+-- 
+Best regards,
+Bingbu Cao
