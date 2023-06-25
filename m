@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FC0073CDF4
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 04:12:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29A4673CDF6
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 04:13:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230397AbjFYCMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 22:12:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39528 "EHLO
+        id S231138AbjFYCNk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 22:13:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbjFYCMB (ORCPT
+        with ESMTP id S229560AbjFYCNi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 22:12:01 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8125510A;
-        Sat, 24 Jun 2023 19:11:59 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id C77AB24DCFA;
-        Sun, 25 Jun 2023 10:11:45 +0800 (CST)
-Received: from EXMBX062.cuchost.com (172.16.6.62) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sun, 25 Jun
- 2023 10:11:45 +0800
-Received: from [192.168.125.107] (113.72.146.167) by EXMBX062.cuchost.com
- (172.16.6.62) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sun, 25 Jun
- 2023 10:11:44 +0800
-Message-ID: <6573a50b-e414-9eba-5a70-f1993c7924c2@starfivetech.com>
-Date:   Sun, 25 Jun 2023 10:11:44 +0800
+        Sat, 24 Jun 2023 22:13:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F7B10A;
+        Sat, 24 Jun 2023 19:13:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D3BF606DC;
+        Sun, 25 Jun 2023 02:13:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09A31C433C8;
+        Sun, 25 Jun 2023 02:13:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687659216;
+        bh=tO8ygIBNQgDG09IQJY8tRBeB8/twzooSyi/a2iRZmPU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=DJSJvVSnJxdBSrlwsxs04gMyVeUDOC7H0y9BM7ozxTP8SmX5s6EYRpQjgtqA9EkPT
+         x8B6f7hZPd8zd0PU7/P80D2Fjg7///2oJp7TKxhDR3997mz/Oy+p2OK7pbjEiWGCC1
+         tcvBKjCWATgBYtwdSdpQe8q41uJhIU8n6WhCvFyhfInooMZH7Pq0Mxm1nf1816+HCR
+         9Zf7DOgKIW5/KERl3dxloK87us+Lq7e2+IrjsF1sJnOcH28rHK8SbtGmk6sTKhoyv9
+         XkGA3PpXqkKIiTP6H4vruwDzWuBaTT24lzf6u8Dek3AgyEiHjyC0oPvgH44WvjJ19Z
+         1Zih4s+D970jA==
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-98de21518fbso130365466b.0;
+        Sat, 24 Jun 2023 19:13:35 -0700 (PDT)
+X-Gm-Message-State: AC+VfDwaA4dXUxRhCVoKNyUYuwfNbIaopSyiRRVPzr38s/QgRa+7nxyX
+        b9vUtacu+gRt9J1RHMFXreRPQ+oh243hBDOSEN0=
+X-Google-Smtp-Source: ACHHUZ7e7ZGxx17j1nJTkWVwVj2OgSY6k/JVOZOyZm7hb2/sSdTOvJSRHjCeW++9haXDHPqDDAMFjsqdjN7hU/an2lk=
+X-Received: by 2002:a17:906:30c1:b0:98d:63c5:d132 with SMTP id
+ b1-20020a17090630c100b0098d63c5d132mr4946746ejb.72.1687659214276; Sat, 24 Jun
+ 2023 19:13:34 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v5 2/3] phy: starfive: Add mipi dphy rx support
-To:     Vinod Koul <vkoul@kernel.org>
-CC:     Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jack Zhu <jack.zhu@starfivetech.com>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
-References: <20230529121503.3544-1-changhuang.liang@starfivetech.com>
- <20230529121503.3544-3-changhuang.liang@starfivetech.com>
- <ZJLtVoi2qpKOR1l6@matsya>
-Content-Language: en-US
-From:   Changhuang Liang <changhuang.liang@starfivetech.com>
-In-Reply-To: <ZJLtVoi2qpKOR1l6@matsya>
+References: <20230624184055.3000636-1-kernel@xen0n.name> <20230624184055.3000636-8-kernel@xen0n.name>
+In-Reply-To: <20230624184055.3000636-8-kernel@xen0n.name>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Sun, 25 Jun 2023 10:13:21 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H54bZ5_OSXtcq3B3d4bZj4GBTOf7Z8aA6Jm7uGdKTj_ug@mail.gmail.com>
+Message-ID: <CAAhV-H54bZ5_OSXtcq3B3d4bZj4GBTOf7Z8aA6Jm7uGdKTj_ug@mail.gmail.com>
+Subject: Re: [PATCH v2 7/9] LoongArch: Tweak CFLAGS for Clang compatibility
+To:     WANG Xuerui <kernel@xen0n.name>
+Cc:     WANG Rui <wangrui@loongson.cn>, Xi Ruoyao <xry111@xry111.site>,
+        loongarch@lists.linux.dev, linux-kbuild@vger.kernel.org,
+        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        WANG Xuerui <git@xen0n.name>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [113.72.146.167]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX062.cuchost.com
- (172.16.6.62)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,86 +66,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi, Ruoyao,
 
+On Sun, Jun 25, 2023 at 2:42=E2=80=AFAM WANG Xuerui <kernel@xen0n.name> wro=
+te:
+>
+> From: WANG Xuerui <git@xen0n.name>
+>
+> Now the arch code is mostly ready for LLVM/Clang consumption, it is time
+> to re-organize the CFLAGS a little to actually enable the LLVM build.
+>
+> In particular, -mexplicit-relocs and -mdirect-extern-access are not
+> necessary nor supported on Clang; feature detection via cc-option would
+> not work, because that way the broken combo of "new GNU as + old GCC"
+> would seem to get "fixed", but actually produce broken kernels.
+> Explicitly depending on CONFIG_CC_IS_CLANG is thus necessary to not
+> regress UX for those building their own kernels.
+>
+> A build with !RELOCATABLE && !MODULE is confirmed working within a QEMU
+> environment; support for the two features are currently blocked on
+> LLVM/Clang, and will come later.
+>
+> Signed-off-by: WANG Xuerui <git@xen0n.name>
+> ---
+>  arch/loongarch/Makefile | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
+> index 366771016b99..82c619791a63 100644
+> --- a/arch/loongarch/Makefile
+> +++ b/arch/loongarch/Makefile
+> @@ -51,7 +51,9 @@ LDFLAGS_vmlinux                       +=3D -static -n -=
+nostdlib
+>
+>  # When the assembler supports explicit relocation hint, we must use it.
+>  # GCC may have -mexplicit-relocs off by default if it was built with an =
+old
+> -# assembler, so we force it via an option.
+> +# assembler, so we force it via an option. For LLVM/Clang the desired be=
+havior
+> +# is the default, and the flag is not supported, so don't pass it if Cla=
+ng is
+> +# being used.
+>  #
+>  # When the assembler does not supports explicit relocation hint, we can'=
+t use
+>  # it.  Disable it if the compiler supports it.
+> @@ -61,8 +63,10 @@ LDFLAGS_vmlinux                      +=3D -static -n -=
+nostdlib
+>  # combination of a "new" assembler and "old" compiler is not supported. =
+ Either
+>  # upgrade the compiler or downgrade the assembler.
+>  ifdef CONFIG_AS_HAS_EXPLICIT_RELOCS
+> +ifndef CONFIG_CC_IS_CLANG
+>  cflags-y                       +=3D -mexplicit-relocs
+>  KBUILD_CFLAGS_KERNEL           +=3D -mdirect-extern-access
+> +endif
+I prefer to drop CONFIG_CC_IS_CLANG and use
+cflags-y                       +=3D $(call cc-option,-mexplicit-relocs)
+KBUILD_CFLAGS_KERNEL           +=3D $(call cc-option,-mdirect-extern-access=
+)
 
-On 2023/6/21 20:30, Vinod Koul wrote:
-> On 29-05-23, 05:15, Changhuang Liang wrote:
->> +static int stf_dphy_configure(struct phy *phy, union phy_configure_opts *opts)
->> +{
->> +	struct stf_dphy *dphy = phy_get_drvdata(phy);
->> +	const struct stf_dphy_info *info = dphy->info;
->> +	int i;
->> +
->> +	for (i = 0; i < ARRAY_SIZE(stf_dphy_init_list); i++)
->> +		writel(stf_dphy_init_list[i].val,
->> +		       dphy->regs + stf_dphy_init_list[i].addr);
->> +
->> +	writel(FIELD_PREP(STF_DPHY_DA_CDPHY_R100_CTRL0_2D1C_EFUSE_EN, 1) |
->> +	       FIELD_PREP(STF_DPHY_DA_CDPHY_R100_CTRL0_2D1C_EFUSE_IN, 0x1b) |
->> +	       FIELD_PREP(STF_DPHY_DA_CDPHY_R100_CTRL1_2D1C_EFUSE_EN, 1) |
->> +	       FIELD_PREP(STF_DPHY_DA_CDPHY_R100_CTRL1_2D1C_EFUSE_IN, 0x1b),
->> +	       dphy->regs + STF_DPHY_APBCFGSAIF_SYSCFG(0));
->> +
->> +	writel(FIELD_PREP(STF_DPHY_DATA_BUS16_8, 0) |
->> +	       FIELD_PREP(STF_DPHY_DEBUG_MODE_SEL, 0x5a),
->> +	       dphy->regs + STF_DPHY_APBCFGSAIF_SYSCFG(184));
-> 
-> bunch of magic numbers here and previous one..?
-> 
+Then Patch-6 can be merged in this.
 
-magic numbers is "1" "0x1b" "0" "0x5a"? 
-If so,  I will move this two registers into stf_dphy_init_list[].
-And maybe also have some magic numbers below, I will replace them will macro.
+What's your opinion?
 
->> +
->> +	writel(FIELD_PREP(STF_DPHY_ENABLE_CLK, 1) |
->> +	       FIELD_PREP(STF_DPHY_ENABLE_CLK1, 1) |
->> +	       FIELD_PREP(STF_DPHY_ENABLE_LAN0, 1) |
->> +	       FIELD_PREP(STF_DPHY_ENABLE_LAN1, 1) |
->> +	       FIELD_PREP(STF_DPHY_ENABLE_LAN2, 1) |
->> +	       FIELD_PREP(STF_DPHY_ENABLE_LAN3, 1) |
->> +	       FIELD_PREP(STF_DPHY_GPI_EN, 0) |
->> +	       FIELD_PREP(STF_DPHY_HS_FREQ_CHANGE_CLK, 0) |
->> +	       FIELD_PREP(STF_DPHY_HS_FREQ_CHANGE_CLK1, 0) |
->> +	       FIELD_PREP(STF_DPHY_LANE_SWAP_CLK, info->maps[0]) |
->> +	       FIELD_PREP(STF_DPHY_LANE_SWAP_CLK1, info->maps[5]) |
->> +	       FIELD_PREP(STF_DPHY_LANE_SWAP_LAN0, info->maps[1]) |
->> +	       FIELD_PREP(STF_DPHY_LANE_SWAP_LAN1, info->maps[2]),
->> +	       dphy->regs + STF_DPHY_APBCFGSAIF_SYSCFG(188));
-[...]
->> +
->> +	writel(FIELD_PREP(STF_DPHY_PRECOUNTER_IN_LAN3, 7) |
->> +	       FIELD_PREP(STF_DPHY_RX_1C2C_SEL, 0),
->> +	       dphy->regs + STF_DPHY_APBCFGSAIF_SYSCFG(200));
->> +
->> +	return 0;
->> +}
->> +
->> +static int stf_dphy_power_on(struct phy *phy)
->> +{
->> +	struct stf_dphy *dphy = phy_get_drvdata(phy);
->> +	int ret;
->> +
->> +	pm_runtime_get_sync(dphy->dev);
-> 
-> no error check?
-> 
-
-I will replace pm_runtime_get_sync with pm_runtime_resume_and_get to handle error:
-
-	ret = pm_runtime_resume_and_get(dphy->dev);
-	if (ret < 0)
-		return ret;
-
->> +
->> +	ret = regulator_enable(dphy->mipi_0p9);
->> +	if (ret)
->> +		return ret;
-> 
-> should you not drop the pm reference on error here?
-> 
-
-I will add pm_runtime_put in this error handle.
-
-Thanks for your comments.
-
+Huacai
+>  else
+>  cflags-y                       +=3D $(call cc-option,-mno-explicit-reloc=
+s)
+>  KBUILD_AFLAGS_KERNEL           +=3D -Wa,-mla-global-with-pcrel
+> --
+> 2.40.0
+>
