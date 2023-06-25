@@ -2,122 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B10473D42B
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 22:39:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D091173D42E
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 22:47:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbjFYUjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 16:39:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37288 "EHLO
+        id S229763AbjFYUqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 16:46:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbjFYUjg (ORCPT
+        with ESMTP id S229623AbjFYUqs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 16:39:36 -0400
-Received: from GBR01-CWL-obe.outbound.protection.outlook.com (mail-cwlgbr01on2108.outbound.protection.outlook.com [40.107.11.108])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE6FF9B;
-        Sun, 25 Jun 2023 13:39:34 -0700 (PDT)
+        Sun, 25 Jun 2023 16:46:48 -0400
+Received: from GBR01-CWL-obe.outbound.protection.outlook.com (mail-cwlgbr01on2118.outbound.protection.outlook.com [40.107.11.118])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9797113;
+        Sun, 25 Jun 2023 13:46:41 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lH7zI0JRNXPJTnKWdVtlRmMeW1Tc33aUQz6xiBM05NmACsUmSCl6AXO/3tf3820qhn2gulnsCzwDNSj2vEHVaEfo7vCsVFzL0VV1QHFB9H9hAT5EauAkQMKlf0+wu1UzO1QcSS3tMen1tQrT5b4LXG7hgCeCvRvf8BoWQ1s7NiGXuEmUv1Xac5iJtgG2Te6Qq5XA1uiJ2/zeAj2cU/fQ6sibzxmOil8MaXDiXQaCzafezun/wPy/3VID40oEdOlXNbNtE+zowboMNp3fIvG5IJK+LZ6LZWCPh9OrtcwKbHjk2zPQN+toxjkZUUSaLOMtwj5f/5QDujNxWOhNn6ya1w==
+ b=cqbAZ755DNzGVItyl3A9a5WVuO+HXBQd4FVZE5aZ2YxG3n0W7/t7gkSYGrD2beRKSBwwEjWhlO17Twftf0HSVW6HZ3GHg3Ww6ozzJx7ne6mDNfcVnHg+XkUHbPx6+/BkqBXMNhuVLOXWigePKJ/P5RuOZoKHKk6aM8cJb45rJTHOWD+5d47ObN0On2NKCw5u+ZgIByKvXsOhST5qIIRZuuiryc9/EKVxl1Fg7Ek94qFN7yhjk3xJXWXq/gHAYSP1PBuXyXTQNqZOnX5ihT5e7S96LNZore9dw2Mn1/G0vigkzRWEOZDWIC/QLs8RcsMxFwR7Ma5ySIN02BxbQvpsQw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uPrnreqVJ5+8iDTPXkeMsK0qhACFvbnRxA5lMz4/QM4=;
- b=Iv4yo5401xaW7VfTiP8awvwQPHb4pRgypdW+j0g16vsyIR6zt4qBRW/LoGkPtmGNPYEOTjni5MdIhrDTolTCouFDoULNahA5rnZGf2oOMTo033eet6BJbmd2uLpd/WS/Wgpp38riL1tbyvi3et8hTKJmiHGddnWLr7divH1ezwQT1ab/lMxJrlb6OTewDEGeUu6cNfitCpp/qHXz/KrSMkfHPy+y0NUn6B8lDw2iJG6pDXYxY7C3JMI22+UYwyIkHOUSg1Hsv1ACQikImMo2h+Wv0i66NkdqdDmq2ItM77l5vq/Li7texvzNYSHTVNO9CjxOXOv5tTSJgwaGoqDVuA==
+ bh=RYSjce05f6pUFb+SXkbuw7/LOb8HcLqI/h6nePF5C3U=;
+ b=QTWZf41V2BKKWyMUjicEjs5lM1IY9UQXGAWNReF7cfx+Wu0VYBQV1n63XJFMWvxMkpwrly4Q0rRt8O9ARywNnyGGmW/OnUjNyRNBrGuwHgnCbYXl+eTvHVhVjp67lzTTtK15D/VEJVrevaL4YWZa5Wl9xXKLLaow/ScIfX9ZsRgDb+bRx3X+9iE9nu5mv/Yq0A7r9XSZ0umBoRAJ9zPhKzs97dME81KQzat8/+h/V/Rzt7OYa8/6qrNNX7Hs75U+Ke6PUY/MptJEzp41zWDnbXxeGOlNvxIhqVNciTdTGVBwAd+9C/MmLTCxaMmL2sUzUO08/fcw58t9TUSlU+PFyA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
  dkim=pass header.d=garyguo.net; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uPrnreqVJ5+8iDTPXkeMsK0qhACFvbnRxA5lMz4/QM4=;
- b=P51KrsdOlB4JdNGdSM2kmC1DxmClx9xB3utr9jG8Xl0n7iT7hcbn63+hcjoB9l3Geo+4Kr1Cl77jzOE5Lbe7boz96C7+fzQmkzJwG4fuQTw8en9Cpw4F2wfqcv2O1wijiuLXZv8QtUWL/HP+61/i6L152d4IWVvelEj6nnDFrr8=
+ bh=RYSjce05f6pUFb+SXkbuw7/LOb8HcLqI/h6nePF5C3U=;
+ b=GTsUkbylcHCknlhvkhc87kmq8Zo6K75HhflD8q6hAmVe4dWWW8xPNyx3ImLCeC7J1oxDX7bED+EG75p7JCHLF4Gy1KlSdEGZRKpepG0M9jG7oe+rfUTNUTFTB4CdmWTDRvOyuBKsAv7q8oMgVjY/oTdYkxhIFdqedlDk/+7cMbU=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=garyguo.net;
 Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
- by CWLP265MB5498.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:1ba::11) with
+ by CWXP265MB1815.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:30::10) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.26; Sun, 25 Jun
- 2023 20:39:32 +0000
+ 2023 20:46:39 +0000
 Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
  ([fe80::25e2:a08b:cd9c:c3c9]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
  ([fe80::25e2:a08b:cd9c:c3c9%3]) with mapi id 15.20.6521.026; Sun, 25 Jun 2023
- 20:39:32 +0000
-Date:   Sun, 25 Jun 2023 21:39:27 +0100
+ 20:46:39 +0000
+Date:   Sun, 25 Jun 2023 21:46:28 +0100
 From:   Gary Guo <gary@garyguo.net>
-To:     Boqun Feng <boqun.feng@gmail.com>
-Cc:     bjorn3_gh@protonmail.com, Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
+To:     Benno Lossin <benno.lossin@proton.me>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
         Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rust: alloc: Add realloc and alloc_zeroed to the
- GlobalAlloc impl
-Message-ID: <20230625213927.2e656905.gary@garyguo.net>
-In-Reply-To: <ZJXXxEfzVza5Jzxj@boqun-archlinux>
-References: <20230622-global_alloc_methods-v1-1-3d3561593e23@protonmail.com>
-        <ZJXXxEfzVza5Jzxj@boqun-archlinux>
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        =?UTF-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Alice Ryhl <aliceryhl@google.com>,
+        Andreas Hindborg <nmi@metaspace.dk>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Asahi Lina <lina@asahilina.net>
+Subject: Re: [PATCH 2/7] rust: add derive macro for `Zeroable`
+Message-ID: <20230625214628.32d55a54.gary@garyguo.net>
+In-Reply-To: <20230624092330.157338-2-benno.lossin@proton.me>
+References: <20230624092330.157338-1-benno.lossin@proton.me>
+        <20230624092330.157338-2-benno.lossin@proton.me>
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: LO4P265CA0145.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:2c4::7) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO4P123CA0650.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:296::20) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
  (2603:10a6:600:253::10)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|CWLP265MB5498:EE_
-X-MS-Office365-Filtering-Correlation-Id: fbabf298-78da-46ff-32c2-08db75bc47d3
+X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|CWXP265MB1815:EE_
+X-MS-Office365-Filtering-Correlation-Id: 32391ceb-6f87-4265-c98c-08db75bd4634
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nBQytzPKz/+rdubERAUge1a8NvjiIlRIGBG/EmRExg7PN0QxZy3oxD9FOhaw9d2kAWXcuRjVNxbWHZmdtymBXpyVBGE6Gx0nVbG2XBUJLAFdqCXgQnU91i5taetlBXABxAof1IkxdojvXQA6D2XVlPuolBOPN3jj2gyVuB+5juJU3xsBD7gDfXKSw58dYeWsQa2JBDgXdH7FyLMbPq+4F8G1No/NEVVHpOe+LVYiCPHtrQF8YrOCzFwjrstK6ofhO+gf8Sie3JkXNYs/3NwsbskljmCfw/2ONsv1ael33v6z8Owsx2l1sN+hcHgWmSjd13yAPHd1bpQREb/iflFYIV+/CnCN7My4HLkj+1Jq88tDBnXzft+VyKVC3z+r0Vg6Z4HzgtMUxqR3818UgNs0Z4CApQhGhlA7KX6eBZkxL1kBtkXyqho24qdd6XZ3p3nZkHPz8CwKoso0dviblHqNo5avdL6a4xtWY3vMsUOsspoYkj6xXRzfgRSYR8SoMFFcfniiiBliui+vYruLAA4pYUhNtpMqjQnOVs9dUvtaP/U=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(136003)(396003)(39830400003)(376002)(366004)(346002)(451199021)(36756003)(316002)(66946007)(66556008)(66476007)(6916009)(4326008)(478600001)(5660300002)(8936002)(8676002)(66899021)(966005)(86362001)(54906003)(41300700001)(6486002)(2906002)(26005)(186003)(6512007)(6506007)(1076003)(38100700002)(6666004)(2616005);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: E1Vs+xo1lxFm2hZLrh1YkuKohwowf/wZlseqwf4f6FQBZBNQ04dAGh7qV1K6pZ7Z7VeuGXdoXGUrzaF1sA/dzjcF2te42COhwu3ImCcqibzOLj5hevUBubxhMImrYch0uZTY2uoG2zD2l5y7BOjRD5MLFYxyFBkylXwzUdOsrcuy1CwoaCgvukRZm8HujOo3syoIBdIhRZUYKGNZ5n5YInp8HaVOjB9aPD1hGRY6pqqekgG45Ugy6I/pV2PvtB+sRZoIGqXnL9nM4tTXWLOPan01qeMD4pWp1FGWGf8DXTYMtXlEcSk4g15omwkg26DQj/4AkD3neZppZz4V58n7ITwP/UFl89LpBStl0S0pqbT5qiaUOFVKu4WG/R1U+pKU5q0KsNsDvrhFznGyL2+Pb6+bvVMNtGCiXi4RTpTc1k5TbWy0ayakiI4Ol55ALIcuBH+wCNj8K0r2VHINMd4Ng+ZpJvOTSioB0Z31B34XVaVxFhZcbaAI/y9W43ppU7jrSg1CvXJN4bH8cNEts5iVIr5KkFzeoM2l4gJb/bAmwWbJANGoail3bBCbVx/RdbCTngDQ7JPuTfJcuD6og3CmtpTg4Ahc49qoJCjoSRcUt8U=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(366004)(376002)(136003)(346002)(39830400003)(396003)(451199021)(36756003)(5660300002)(7416002)(6916009)(8936002)(8676002)(41300700001)(86362001)(66556008)(66476007)(38100700002)(4326008)(316002)(66946007)(1076003)(6506007)(26005)(6512007)(2906002)(186003)(2616005)(478600001)(6666004)(83380400001)(54906003)(6486002)(81973001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aW9Pdldtak5QVU5uZHdHTmQyNE9mTVV1SWkrdTJmbVZ2ZmdoRzg5T1R2SnZL?=
- =?utf-8?B?eDRiZ2g4L0NOb3VKeWJBelBFMjNOdEQyK09ERjhaSHhGNlorMy8xaFdKbjl6?=
- =?utf-8?B?ckJHcldsbTNaMFJoei8xZE1RbEZ1Y1JnL0ZjUVQ1bUN5OTQ5NTBJWEkzbExJ?=
- =?utf-8?B?TjBNbkJab1EyNDRiQ3Nad3g3c2YwUXZzY2QxVWtOTDc3T2hEeWhXVkwrcWJl?=
- =?utf-8?B?bGtkL0VEVjR2VjFLNG01SjRFMUpBbDhOM1BQa1QzS3ljcjF0OUVEazR1ZzQr?=
- =?utf-8?B?QnZ0MEszM1dSNzZteWZWNEg2SlBBdFFSYTByeWVLWjM2bjhnM3lwVmE4NGJo?=
- =?utf-8?B?eFBvc0ZJOTBYL1NkWU5yb3c2dk1STVpMc2pGclZpb2xZSktINFlNd3h6UGJS?=
- =?utf-8?B?Q1JteGtWaW5PaFdBS3hIOG9CUFhnYUp2WlJrNndrOUc3MXdqK25rSysxMFUz?=
- =?utf-8?B?TCtMbWJJcFl5bk9hN0NuQklHMTBWcHpDZjBhL3VMdS9INUxqdFpmNlhrS2dR?=
- =?utf-8?B?Z2EvbmIvR09vblU1UDZheEVjdy92Q3VqbkowK0g3cFlBSGVNcVFTcHJvQTg3?=
- =?utf-8?B?aUNqRkhjTkJyRnFwcXpPR3R6NS9MTHE1WmVoNVh3TWxYcDJTVm1PdWRZVzFY?=
- =?utf-8?B?eXd5VEVSZllKcU1HcGdSRjE1MTY5ZTExRzBjVHNtZkFYNGJENUJyS3p4dU1k?=
- =?utf-8?B?Y2g5cVNNSkIxTmpQSHl5d3BWUnZ2dXE3SG1hWTQwclpoNlNRZU9ydUV1R1VR?=
- =?utf-8?B?aC9sOTBuL2RHaUt3MDdmdVBaRDBkeUZYZU9NczB2T2luSjFPYlZlUjVSYzN1?=
- =?utf-8?B?WjNMRjBLdkRwV3RPdjlUYTNJdk5id21QUDlKRTAranpvb1NuREtJSFltMnk1?=
- =?utf-8?B?MlBJT1ZpeWlQWnRSaHVBWWVhTmlJMjhDVmZPb3k4SlJIMkhraDl6NWRHRjNw?=
- =?utf-8?B?V0hlTWxmSUFKL1BuVVgrOFg1dDdSMGdzdUlUUk9TR2pEK3gxRFZzWWJnVGgy?=
- =?utf-8?B?Yis0R0JVSE9pZEdmR0FvSVRWSG1rZHYwSEZjR0kvTEkzcUhNbm9tK0JYMllX?=
- =?utf-8?B?QmV4VDVZQlB4YlpPaWtGWFRsVHFmajlDZFQzQWdGUjNTOVFRQmRCMDBlT1Jr?=
- =?utf-8?B?dEsybkQ2enVoY1FBdm9OQndicXpaRHprV2VMRzRtVHA1YnNPdU5vODYvcGxV?=
- =?utf-8?B?WnVNZjJ4K0gwYUdyMnREdCs0SmpEN3JrWG5GUEtjQ3h5K3hSczczbWJjbFEz?=
- =?utf-8?B?NUQzVjRxZGNtdThZK1FFQVFCVTdnZkhUNkdzNkkrekpIUURkYUZldG1vWmFC?=
- =?utf-8?B?Rm9yQVlDUCt5cUtmNUwrNGdBenV1VFQ3cHJob2duYlZtVHdkK0pWSG1Xdnh4?=
- =?utf-8?B?ZHFJaUFYT1Z0UEFnM050QTRPMkFOU2UvRCtQcjFBVVRSMUhMelExNzlyWnl4?=
- =?utf-8?B?WnJtUEwrbVBpOGJjbjU2WTB2OEZwZE9mSlFTTi9Nd3NXN0xOR2hJMVViRjE0?=
- =?utf-8?B?eGFwMWVNVlUxUDFubjRDM3dJNlZwajUwR0VlclNmWmhjaGFSZDRyZEhWTVpI?=
- =?utf-8?B?eVp2eUdOREVSTDg4KzNQNzJoWk9wcC9uU3EyeDRtcFJ3Uk9JNHVhL2VkY1Q1?=
- =?utf-8?B?VThsaEYzTkxLQnEzcHpiTC9hMjFmNXliYmcyeTk5WC9sdEtZRFF3WTdwSEhl?=
- =?utf-8?B?UVlCR2Q5enVLajU0RzJuL21Ydk13WG4walVxSnp2d0docnFiRUVhUU1iejRT?=
- =?utf-8?B?SFA3TkY2Z2hhUDQ2ZkFNS2ZKaEYyWE9OWURlbkFaaEQwZkFPNXZKdmMzTThT?=
- =?utf-8?B?bG5wK05aL3QrbFlRN1dnUnJkem92bmJuN3hNTmUyQ0NmU1FBLzlzZ2cwZUov?=
- =?utf-8?B?VFFpaE92NlB3bVNEVnExS2xVNmR6NEJFY1NqWi81Q2pzQ1U2aTRtZ3phRWgv?=
- =?utf-8?B?czVSK3Q0UC9kdTdnaXI3aDQ3dlRPTEJJbmc4aFV3OFJ0T0YxNExxUHQxa1Uz?=
- =?utf-8?B?NjJTNnNNTklMaTBqQk92WFNmM1NGK2hnd0JnNFJaOENlM3NXYVpObXg1Nk5Y?=
- =?utf-8?B?bTZCVDgxRzljN3kxTUtyb2ZMeUlNT3R4TUJhSFZkNjV6eGZ6WU0yM3hwSUhm?=
- =?utf-8?Q?k3nDp3imaZXxnIR9/N7q997lz?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Hx3FyO0cVsl2h8uWPmAi4ruwPKJr5eaLIbvDOLH655qv4rHTEAgtW0VAqEBn?=
+ =?us-ascii?Q?tv/pIBu/jAHiZDka/kgPMuQy0RzhwQYBPO0Q3gZH0jzkakRS5c41YjsHGYEQ?=
+ =?us-ascii?Q?Ub8iRM0M4vAfr4owqLSryuIxQ3v7HkIYoKVrp3n019jeZ9L5loI/hOSmuIpO?=
+ =?us-ascii?Q?liLWj72tEg3zOrhSmEfclSri3bplhF+e0H7eEKxNbZ3F+iDy+VHIA5FpixM2?=
+ =?us-ascii?Q?HXO6afOhO7MfvOxtYMT9rdyLcYzlKDWGR7iZsfEPfKDiBNU23mkH6TMNIoAi?=
+ =?us-ascii?Q?+5XjF3lOE2GRbII0lryUWTSqH/gPO+VE4nwGggxqHpYyHjsjcl9g6LWD1n/X?=
+ =?us-ascii?Q?xlcyFzhBLTkMjNKXPGerZEJRBe1KSnU8OuRD9j+KjFf8QAsoX6IXh/uGGsR1?=
+ =?us-ascii?Q?ln2E/CIEjz6UnHeyC9GizRJ6ZsD3w929YmMF2OBpT+SnSZQEdSgFGhzPnilU?=
+ =?us-ascii?Q?LTpdg6dKq/zUpmk/rbIPDIzYz/eCdgVlT7+LCxaoF+K3TALSzmC2/kkbFPTl?=
+ =?us-ascii?Q?1CJKvoNH3Wxu65eLfv1xi6X9BBzLh01udNTRxY6sFQjSQMVgHzFFkDOdzCtn?=
+ =?us-ascii?Q?X6LazXZhf7scDsaZfp3oFIdOt6Jf0nPEoicFbQX5sb6eRRPTwWeb+qMAPVJa?=
+ =?us-ascii?Q?6UCjdWrGPQb05shWoq/gac8JdTgI6dLNgWbPXAmfS/WLoreME3mFP1ZuION0?=
+ =?us-ascii?Q?cFCpJhfUZiSH9MjuQB7BkIeLvxXUkD1ll1BzMqX+GU7eidR+CeNqlwwsuklz?=
+ =?us-ascii?Q?dYUnQ2o7On4eAYVZV2sxdst6jX45tLcnfL2TigV92XCp7G6cGv0124B5ie3C?=
+ =?us-ascii?Q?F40Fj+C0sXyHDGHpInX31EkntpkLH8DUaZbbO2QqkAgx943qsvUzGYZ73D16?=
+ =?us-ascii?Q?qM/oi2YpXu3kdWx/3txvkNBI7xoN15ixaJBSzzPl02c/N8rgph4z1KNYO7A5?=
+ =?us-ascii?Q?Z4QQBdKHTIQe61WexAdzOrQ6shzgH8TFK/plmflO+VtF/wfA+B5Zy9K/y9NH?=
+ =?us-ascii?Q?ogLys1wOPPZ/IAjyxL/RQMFFO4BvUgMKSPDmDLrDZVFHvYwh/7HQH/SwD1w1?=
+ =?us-ascii?Q?1yt+hG3QMEZkqYKZNPM6RhrvkwEtWWedVmfWinrQbVxvTnc3/k5/Y5R3Dnzl?=
+ =?us-ascii?Q?1YaKaU72JtWF5EPGPlkKtKU+kS1lIDfUyZMD3YOoMQyvLV3N/VpejiZg+bXa?=
+ =?us-ascii?Q?erJne2aBgfUxcPvLC5fRXgPcCSEVm6/+KqKZneUx+bLm25wPpK89fZKeKK67?=
+ =?us-ascii?Q?X6Lseja24cvdvpU9se+uXyZEhnOSU2RS9FYJyS70EfgTn8Vi/ErIsmjJRFdb?=
+ =?us-ascii?Q?JPVIPMHubL7ezgUfb9wesop4MZ1j94lGQQd/O0EqW0WonUd0YHB+RqIBnZVi?=
+ =?us-ascii?Q?6irAIppNGgnEN28q3EaMAB1w8J5H80bm5Ya6Jq7V4lxKGHH+wcOPEUq688Qk?=
+ =?us-ascii?Q?8wFxjlvwjElJyxRZJe+J/kYilxI1iuFl19HV/tzjL9DXwoVi+kenxKAn09K2?=
+ =?us-ascii?Q?itFkQsG0t2uDCLIVvjLAU/R8xLqHd/GUdRIFfUCrpCgQ76JnWwY3WvXKCv7s?=
+ =?us-ascii?Q?G6l2NZNqhOajy5uQhquommiCy9x4sZt/QAAGj3F/?=
 X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: fbabf298-78da-46ff-32c2-08db75bc47d3
+X-MS-Exchange-CrossTenant-Network-Message-Id: 32391ceb-6f87-4265-c98c-08db75bd4634
 X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jun 2023 20:39:32.4116
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jun 2023 20:46:39.1279
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: PECENeP3MY0O4ZyauKZ00ONFh2IuuqVr7NFYZmsbSTR59iHfOkwThjBxTTj6eqSaAQI2F+v2BQNXgsPGIftVuA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CWLP265MB5498
+X-MS-Exchange-CrossTenant-UserPrincipalName: 0jiUFFx+PbTGUWdHy0DaEhwUQvdC9iJ6+7NDbmjaO/3kMvxlZfDjkpT11dZB4o1Eg5XvIOTWrAcn8oK5q8/DUQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CWXP265MB1815
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -128,197 +122,165 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 23 Jun 2023 10:35:00 -0700
-Boqun Feng <boqun.feng@gmail.com> wrote:
+On Sat, 24 Jun 2023 09:25:03 +0000
+Benno Lossin <benno.lossin@proton.me> wrote:
 
-> On Thu, Jun 22, 2023 at 09:24:40PM +0200, Bj=C3=B6rn Roy Baron via B4 Rel=
-ay wrote:
-> > From: Bj=C3=B6rn Roy Baron <bjorn3_gh@protonmail.com>
-> >=20
-> > While there are default impls for these methods, using the respective C
-> > api's is faster. Currently neither the existing nor these new
-> > GlobalAlloc method implementations are actually called. Instead the
-> > __rust_* function defined below the GlobalAlloc impl are used. With
-> > rustc 1.71 these functions will be gone and all allocation calls will g=
-o
-> > through the GlobalAlloc implementation.
-> >=20
-> > Link: https://github.com/Rust-for-Linux/linux/issues/68 =20
->=20
-> Nice! Although I think we need to do the simialr size adjustment as:
->=20
-> 	https://lore.kernel.org/rust-for-linux/20230613164258.3831917-1-boqun.fe=
-ng@gmail.com/
->=20
-> so I applied your patch onto my patch and came up with the following:
+> Add a derive proc-macro for the `Zeroable` trait. The macro supports
+> structs where every field implements the `Zeroable` trait. This way
+> `unsafe` implementations can be avoided.
+> 
+> The macro is split into two parts:
+> - a proc-macro to parse generics into impl and ty generics,
+> - a declarative macro that expands to the impl block.
+> 
+> Suggested-by: Asahi Lina <lina@asahilina.net>
+> Signed-off-by: Benno Lossin <benno.lossin@proton.me>
 
-The diff LGTM.
+Reviewed-by: Gary Guo <gary@garyguo.net>
 
->=20
-> --------------------------------->8 =20
-> diff --git a/rust/kernel/allocator.rs b/rust/kernel/allocator.rs
-> index ce7a06bf7589..af723c2924dc 100644
-> --- a/rust/kernel/allocator.rs
-> +++ b/rust/kernel/allocator.rs
-> @@ -9,8 +9,17 @@
-> =20
->  struct KernelAllocator;
-> =20
-> -unsafe impl GlobalAlloc for KernelAllocator {
-> -    unsafe fn alloc(&self, layout: Layout) -> *mut u8 {
-> +impl KernelAllocator {
-> +    /// # Safety
-> +    ///
-> +    /// * `ptr` can be either null or a pointer which has been allocated=
- by this allocator.
-> +    /// * `layout` must have a non-zero size.
-> +    unsafe fn krealloc_with_flags(
-> +        &self,
-> +        ptr: *mut u8,
-> +        layout: Layout,
-> +        flags: bindings::gfp_t,
-> +    ) -> *mut u8 {
->          // Customized layouts from `Layout::from_size_align()` can have =
-size < align, so pads first.
->          let layout =3D layout.pad_to_align();
-> =20
-> @@ -26,9 +35,22 @@ unsafe fn alloc(&self, layout: Layout) -> *mut u8 {
->              size =3D size.next_power_of_two();
->          }
-> =20
-> -        // `krealloc()` is used instead of `kmalloc()` because the latte=
-r is
-> -        // an inline function and cannot be bound to as a result.
-> -        unsafe { bindings::krealloc(ptr::null(), size, bindings::GFP_KER=
-NEL) as *mut u8 }
-> +        // SAFETY:
-> +        //
-> +        // * `ptr` is either null or a pointer returned from a previous =
-k{re}alloc() by the function
-> +        //   safety requirement.
-> +        //
-> +        // * `size` is greater than 0 since it's either a `layout.size()=
-` (which cannot be zero
-> +        //    according to the function safety requirement) or a result =
-from `next_power_of_two()`.
-> +        unsafe { bindings::krealloc(ptr as *const core::ffi::c_void, siz=
-e, flags) as *mut u8 }
+> ---
+>  rust/kernel/init/macros.rs | 28 ++++++++++++++++++++++++++++
+>  rust/kernel/prelude.rs     |  2 +-
+>  rust/macros/lib.rs         | 20 ++++++++++++++++++++
+>  rust/macros/quote.rs       |  6 ++++++
+>  rust/macros/zeroable.rs    | 25 +++++++++++++++++++++++++
+>  5 files changed, 80 insertions(+), 1 deletion(-)
+>  create mode 100644 rust/macros/zeroable.rs
+> 
+> diff --git a/rust/kernel/init/macros.rs b/rust/kernel/init/macros.rs
+> index fbaebd34f218..e8165ff53a94 100644
+> --- a/rust/kernel/init/macros.rs
+> +++ b/rust/kernel/init/macros.rs
+> @@ -1213,3 +1213,31 @@ macro_rules! __init_internal {
+>          );
+>      };
+>  }
+> +
+> +#[doc(hidden)]
+> +#[macro_export]
+> +macro_rules! __derive_zeroable {
+> +    (parse_input:
+> +        @sig(
+> +            $(#[$($struct_attr:tt)*])*
+> +            $vis:vis struct $name:ident
+> +            $(where $($whr:tt)*)?
+> +        ),
+> +        @impl_generics($($impl_generics:tt)*),
+> +        @ty_generics($($ty_generics:tt)*),
+> +        @body({
+> +            $(
+> +                $(#[$($field_attr:tt)*])*
+> +                $field:ident : $field_ty:ty
+> +            ),* $(,)?
+> +        }),
+> +    ) => {
+> +        // SAFETY: every field type implements `Zeroable` and padding bytes may be zero.
+> +        #[automatically_derived]
+> +        unsafe impl<$($impl_generics)*> $crate::Zeroable for $name<$($ty_generics)*>
+> +        where
+> +            $($field_ty: $crate::Zeroable,)*
+> +            $($($whr)*)?
+> +        {}
+> +    };
+> +}
+> diff --git a/rust/kernel/prelude.rs b/rust/kernel/prelude.rs
+> index c28587d68ebc..ae21600970b3 100644
+> --- a/rust/kernel/prelude.rs
+> +++ b/rust/kernel/prelude.rs
+> @@ -18,7 +18,7 @@
+>  pub use alloc::{boxed::Box, vec::Vec};
+> 
+>  #[doc(no_inline)]
+> -pub use macros::{module, pin_data, pinned_drop, vtable};
+> +pub use macros::{module, pin_data, pinned_drop, vtable, Zeroable};
+> 
+>  pub use super::build_assert;
+> 
+> diff --git a/rust/macros/lib.rs b/rust/macros/lib.rs
+> index 3fc74cb4ea19..9f056a5c780a 100644
+> --- a/rust/macros/lib.rs
+> +++ b/rust/macros/lib.rs
+> @@ -10,6 +10,7 @@
+>  mod pin_data;
+>  mod pinned_drop;
+>  mod vtable;
+> +mod zeroable;
+> 
+>  use proc_macro::TokenStream;
+> 
+> @@ -246,3 +247,22 @@ pub fn pin_data(inner: TokenStream, item: TokenStream) -> TokenStream {
+>  pub fn pinned_drop(args: TokenStream, input: TokenStream) -> TokenStream {
+>      pinned_drop::pinned_drop(args, input)
+>  }
+> +
+> +/// Derives the [`Zeroable`] trait for the given struct.
+> +///
+> +/// This can only be used for structs where every field implements the [`Zeroable`] trait.
+> +///
+> +/// # Examples
+> +///
+> +/// ```rust
+> +/// #[derive(Zeroable)]
+> +/// pub struct DriverData {
+> +///     id: i64,
+> +///     buf_ptr: *mut u8,
+> +///     len: usize,
+> +/// }
+> +/// ```
+> +#[proc_macro_derive(Zeroable)]
+> +pub fn derive_zeroable(input: TokenStream) -> TokenStream {
+> +    zeroable::derive(input)
+> +}
+> diff --git a/rust/macros/quote.rs b/rust/macros/quote.rs
+> index dddbb4e6f4cb..b76c198a4ed5 100644
+> --- a/rust/macros/quote.rs
+> +++ b/rust/macros/quote.rs
+> @@ -124,6 +124,12 @@ macro_rules! quote_spanned {
+>          ));
+>          quote_spanned!(@proc $v $span $($tt)*);
+>      };
+> +    (@proc $v:ident $span:ident ; $($tt:tt)*) => {
+> +        $v.push(::proc_macro::TokenTree::Punct(
+> +                ::proc_macro::Punct::new(';', ::proc_macro::Spacing::Alone)
+> +        ));
+> +        quote_spanned!(@proc $v $span $($tt)*);
+> +    };
+>      (@proc $v:ident $span:ident $id:ident $($tt:tt)*) => {
+>          $v.push(::proc_macro::TokenTree::Ident(::proc_macro::Ident::new(stringify!($id), $span)));
+>          quote_spanned!(@proc $v $span $($tt)*);
+> diff --git a/rust/macros/zeroable.rs b/rust/macros/zeroable.rs
+> new file mode 100644
+> index 000000000000..cddb866c44ef
+> --- /dev/null
+> +++ b/rust/macros/zeroable.rs
+> @@ -0,0 +1,25 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +use crate::helpers::{parse_generics, Generics};
+> +use proc_macro::TokenStream;
+> +
+> +pub(crate) fn derive(input: TokenStream) -> TokenStream {
+> +    let (
+> +        Generics {
+> +            impl_generics,
+> +            ty_generics,
+> +        },
+> +        mut rest,
+> +    ) = parse_generics(input);
+> +    // This should be the body of the struct `{...}`.
+> +    let last = rest.pop();
+> +    quote! {
+> +        ::kernel::__derive_zeroable!(
+> +            parse_input:
+> +                @sig(#(#rest)*),
+> +                @impl_generics(#(#impl_generics)*),
+> +                @ty_generics(#(#ty_generics)*),
+> +                @body(#last),
+> +        );
 > +    }
 > +}
-> +
-> +unsafe impl GlobalAlloc for KernelAllocator {
-> +    unsafe fn alloc(&self, layout: Layout) -> *mut u8 {
-> +        // SAFETY: `ptr::null_mut()` is null and `layout` has a non-zero=
- size by the function safety
-> +        // requirement.
-> +        unsafe { self.krealloc_with_flags(ptr::null_mut(), layout, bindi=
-ngs::GFP_KERNEL) }
->      }
-> =20
->      unsafe fn dealloc(&self, ptr: *mut u8, _layout: Layout) {
-> @@ -37,23 +59,30 @@ unsafe fn dealloc(&self, ptr: *mut u8, _layout: Layou=
-t) {
->          }
->      }
-> =20
-> -    unsafe fn realloc(&self, ptr: *mut u8, _layout: Layout, new_size: us=
-ize) -> *mut u8 {
-> -        unsafe {
-> -            bindings::krealloc(
-> -                ptr as *const core::ffi::c_void,
-> -                new_size,
-> -                bindings::GFP_KERNEL,
-> -            ) as *mut u8
-> -        }
-> +    unsafe fn realloc(&self, ptr: *mut u8, layout: Layout, new_size: usi=
-ze) -> *mut u8 {
-> +        // SAFETY:
-> +        // * `new_size` when rounded up to the nearest multiple of `layo=
-ut.align()`, will not
-> +        //   overflow `isize` by the function safety requirement.
-> +        // * `layout.align()` is a proper alignment (i.e. not zero and m=
-ust be a power of two).
-> +        let layout =3D unsafe { Layout::from_size_align_unchecked(new_si=
-ze, layout.align()) };
-> +
-> +        // SAFETY:
-> +        // * `ptr` is either null or a pointer allocated by this allocat=
-or by function safety
-> +        //   requirement.
-> +        // * the size of `layout` is not zero because `new_size` is not =
-zero by function safety
-> +        //   requirement.
-> +        unsafe { self.krealloc_with_flags(ptr, layout, bindings::GFP_KER=
-NEL) }
->      }
-> =20
->      unsafe fn alloc_zeroed(&self, layout: Layout) -> *mut u8 {
-> +        // SAFETY: `ptr::null_mut()` is null and `layout` has a non-zero=
- size by the function safety
-> +        // requirement.
->          unsafe {
-> -            bindings::krealloc(
-> -                core::ptr::null(),
-> -                layout.size(),
-> +            self.krealloc_with_flags(
-> +                ptr::null_mut(),
-> +                layout,
->                  bindings::GFP_KERNEL | bindings::__GFP_ZERO,
-> -            ) as *mut u8
-> +            )
->          }
->      }
->  }
->=20
->=20
-> Regards,
-> Boqun
->=20
-> > Signed-off-by: Bj=C3=B6rn Roy Baron <bjorn3_gh@protonmail.com>
-> > ---
-> >  rust/kernel/allocator.rs | 20 ++++++++++++++++++++
-> >  1 file changed, 20 insertions(+)
-> >=20
-> > diff --git a/rust/kernel/allocator.rs b/rust/kernel/allocator.rs
-> > index 397a3dd57a9b..e0a27b1326b5 100644
-> > --- a/rust/kernel/allocator.rs
-> > +++ b/rust/kernel/allocator.rs
-> > @@ -21,6 +21,26 @@ unsafe fn dealloc(&self, ptr: *mut u8, _layout: Layo=
-ut) {
-> >              bindings::kfree(ptr as *const core::ffi::c_void);
-> >          }
-> >      }
-> > +
-> > +    unsafe fn realloc(&self, ptr: *mut u8, _layout: Layout, new_size: =
-usize) -> *mut u8 {
-> > +        unsafe {
-> > +            bindings::krealloc(
-> > +                ptr as *const core::ffi::c_void,
-> > +                new_size,
-> > +                bindings::GFP_KERNEL,
-> > +            ) as *mut u8
-> > +        }
-> > +    }
-> > +
-> > +    unsafe fn alloc_zeroed(&self, layout: Layout) -> *mut u8 {
-> > +        unsafe {
-> > +            bindings::krealloc(
-> > +                core::ptr::null(),
-> > +                layout.size(),
-> > +                bindings::GFP_KERNEL | bindings::__GFP_ZERO,
-> > +            ) as *mut u8
-> > +        }
-> > +    }
-> >  }
-> > =20
-> >  #[global_allocator]
-> >=20
-> > ---
-> > base-commit: d2e3115d717197cb2bc020dd1f06b06538474ac3
-> > change-id: 20230622-global_alloc_methods-abf5b5e38dba
-> >=20
-> > Best regards,
-> > --=20
-> > Bj=C3=B6rn Roy Baron <bjorn3_gh@protonmail.com>
-> >  =20
+> --
+> 2.41.0
+> 
+> 
 
