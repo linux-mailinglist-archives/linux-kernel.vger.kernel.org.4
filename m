@@ -2,99 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5821B73D3AB
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 22:25:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C4F273D41B
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 22:30:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbjFYUZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 16:25:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59700 "EHLO
+        id S229998AbjFYUaM convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 25 Jun 2023 16:30:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230023AbjFYUZT (ORCPT
+        with ESMTP id S229447AbjFYUaK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 16:25:19 -0400
-Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6BEE9E;
-        Sun, 25 Jun 2023 13:25:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=4paSFHeIlmi01eelJjcHibWu0numZnAAbkmYQwsVvVw=;
-  b=uTuUd+lYkqHEhC/7BYEgrQLODKlleWH78OO7eRNLvWWsdlxUHM5yQBYw
-   xRE3XSszHkl6bHc1aHvBcIAto3CrGBfPhNk5l3nVLWEY6hW5S9ACjsQsM
-   7A95HWKENPTaXZGy4u+aI+Dsn1QImuOWTVzsQfDfeIGMLVGYx/9XNA9MI
-   U=;
-Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="6.01,158,1684792800"; 
-   d="scan'208";a="59758804"
-Received: from 231.85.89.92.rev.sfr.net (HELO hadrien) ([92.89.85.231])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2023 22:25:12 +0200
-Date:   Sun, 25 Jun 2023 22:25:11 +0200 (CEST)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-cc:     Jakub Kicinski <kuba@kernel.org>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        Veerasenareddy Burru <vburru@marvell.com>,
-        keescook@chromium.org, kernel-janitors@vger.kernel.org,
-        Abhijit Ayarekar <aayarekar@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, corbet@lwn.net
-Subject: Re: [PATCH 02/26] octeon_ep: use array_size
-In-Reply-To: <beb409e3-0c13-b817-dfa3-15792a341130@wanadoo.fr>
-Message-ID: <alpine.DEB.2.22.394.2306252221310.3022@hadrien>
-References: <20230623211457.102544-1-Julia.Lawall@inria.fr> <20230623211457.102544-3-Julia.Lawall@inria.fr> <20230624152826.10e3789b@kernel.org> <beb409e3-0c13-b817-dfa3-15792a341130@wanadoo.fr>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Sun, 25 Jun 2023 16:30:10 -0400
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57B159B;
+        Sun, 25 Jun 2023 13:30:09 -0700 (PDT)
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-97ea801b0d0so53788466b.1;
+        Sun, 25 Jun 2023 13:30:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687725008; x=1690317008;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3vDu07I6hDycUTSXbH6KDnP5ibSoUgPCPXzsR/4W9Tw=;
+        b=CoMi31rEPHxxgUIh8eaWxQhiiGokndMzwkFb9dJd6ZGw5rCZmuAX+bkS/dVwFTuLSA
+         9U79ZdOZnj6QD8jHhahQDDT/UhbZhj8xfrIWsAJIHiT+6nLF87QDGVceBz8jjwqE34Nx
+         uTJDQ53UKn+LA2AZ48vQLXWMN+kcYZw7sWgpQIRPAEicjdqOiU4suBKvkq8+sRflutxP
+         aeS13dzxw1D0s4MXrDmYh2wVf2+qgtSpCN67if87wBJlDUEWi3Q1v3m4s5Mlf6dBkAKW
+         O7b7/6e2y2vCwiLTSLXfSBwf18HA+0q+4rtuEjtLOrh0Sq9I6Q8M/sDauto41CPt5dhu
+         +fjw==
+X-Gm-Message-State: AC+VfDyVZlDCFVUPgHr7UdqzYlx91BxGUl1GBHMm7j/JpoZtPWzffS5+
+        0lPF4J6awCdbrFQy6cpWxTYeuutqqRLxEivS9G4=
+X-Google-Smtp-Source: ACHHUZ42MV8w/9YwIqsO7JhQJuwGZkIMmENHXY/WQQRvRl4+X+8um2cekZrv/MMkqna+Y9p5g89e+5esQKwTY3uDVYM=
+X-Received: by 2002:a17:906:73dd:b0:989:1ed3:d00b with SMTP id
+ n29-20020a17090673dd00b009891ed3d00bmr13002150ejl.4.1687725007494; Sun, 25
+ Jun 2023 13:30:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1326197144-1687724711=:3022"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230525140135.3589917-1-daniel.lezcano@linaro.org> <20230525140135.3589917-5-daniel.lezcano@linaro.org>
+In-Reply-To: <20230525140135.3589917-5-daniel.lezcano@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Sun, 25 Jun 2023 22:29:55 +0200
+Message-ID: <CAJZ5v0ivyJydE_Six4baLLZzJABOhH5eS2QFCaM-nG3Rt0s1Ww@mail.gmail.com>
+Subject: Re: [PATCH 4/8] thermal/core: Update the generic trip points
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        thierry.reding@gmail.com, Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-1326197144-1687724711=:3022
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-
-
-
-On Sun, 25 Jun 2023, Christophe JAILLET wrote:
-
-> Le 25/06/2023 à 00:28, Jakub Kicinski a écrit :
-> > On Fri, 23 Jun 2023 23:14:33 +0200 Julia Lawall wrote:
-> > > -	oq->buff_info = vzalloc(oq->max_count * OCTEP_OQ_RECVBUF_SIZE);
-> > > +	oq->buff_info = vzalloc(array_size(oq->max_count,
-> > > OCTEP_OQ_RECVBUF_SIZE));
-> >
-> > vcalloc seems to exist, is there a reason array_size() is preferred?
+On Thu, May 25, 2023 at 4:02 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
 >
-> Hi,
+> At this point, the generic trip points rework allows to create a
+> thermal zone with a fixed number of trip points. This usage satisfy
+> almost all of the existing drivers.
 >
-> just for your information, I've just sent [1].
+> A few remaining drivers have a mechanism where the firmware updates
+> the trip points. But there is no such update mechanism for the generic
+> trip points, thus those drivers can not be converted to the generic
+> approach.
 >
-> CJ
+> This patch provides a function 'thermal_zone_trips_update()' allowing
+> to change the trip points of a thermal zone.
 >
-> [1]:
-> https://lore.kernel.org/all/3484e46180dd2cf05d993ff1a78b481bc2ad1f71.1687723931.git.christophe.jaillet@wanadoo.fr/
+> At the same time, with the logic the trip points array is passed as a
+> parameter to the thermal zone at creation time, we make our own
+> private trip points array by copying the one passed as parameter.
+>
+> Note, no code has been found where the trip points update leads to a
+> refresh of the trip points in sysfs, so it is very unlikey the number
+> of trip points changes. However, for the sake of consistency it would
+> be nicer to have the trip points being refreshed in sysfs also, but
+> that could be done in a separate set of changes.
+>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+>  drivers/thermal/thermal_core.c | 40 ++++++++---------
+>  drivers/thermal/thermal_core.h |  3 ++
+>  drivers/thermal/thermal_trip.c | 78 ++++++++++++++++++++++++++++++++++
+>  include/linux/thermal.h        |  4 ++
+>  4 files changed, 102 insertions(+), 23 deletions(-)
+>
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> index afcd4197babd..3688b06401c8 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -1224,32 +1224,11 @@ thermal_zone_device_register_with_trips(const char *type, struct thermal_trip *t
+>                 return ERR_PTR(-EINVAL);
+>         }
+>
+> -       /*
+> -        * Max trip count can't exceed 31 as the "mask >> num_trips" condition.
+> -        * For example, shifting by 32 will result in compiler warning:
+> -        * warning: right shift count >= width of type [-Wshift-count- overflow]
+> -        *
+> -        * Also "mask >> num_trips" will always be true with 32 bit shift.
+> -        * E.g. mask = 0x80000000 for trip id 31 to be RW. Then
+> -        * mask >> 32 = 0x80000000
+> -        * This will result in failure for the below condition.
+> -        *
+> -        * Check will be true when the bit 31 of the mask is set.
+> -        * 32 bit shift will cause overflow of 4 byte integer.
+> -        */
+> -       if (num_trips > (BITS_PER_TYPE(int) - 1) || num_trips < 0 || mask >> num_trips) {
+> -               pr_err("Incorrect number of thermal trips\n");
+> -               return ERR_PTR(-EINVAL);
+> -       }
+> -
+>         if (!ops) {
+>                 pr_err("Thermal zone device ops not defined\n");
+>                 return ERR_PTR(-EINVAL);
+>         }
+>
+> -       if (num_trips > 0 && (!ops->get_trip_type || !ops->get_trip_temp) && !trips)
+> -               return ERR_PTR(-EINVAL);
+> -
+>         if (!thermal_class)
+>                 return ERR_PTR(-ENODEV);
+>
+> @@ -1283,8 +1262,22 @@ thermal_zone_device_register_with_trips(const char *type, struct thermal_trip *t
+>         tz->ops = ops;
+>         tz->device.class = thermal_class;
+>         tz->devdata = devdata;
+> -       tz->trips = trips;
+> -       tz->num_trips = num_trips;
+> +
+> +       if (trips) {
+> +               result = __thermal_zone_trips_update(tz, trips, num_trips, mask);
+> +               if (result)
+> +                       goto remove_id;
+> +       } else {
+> +               /*
+> +                * Legacy trip point handling
+> +                */
+> +               if ((!tz->ops->get_trip_type || !tz->ops->get_trip_temp) && num_trips) {
+> +                       result = -EINVAL;
+> +                       goto remove_id;
+> +               }
+> +
+> +               tz->num_trips = num_trips;
+> +       }
 
-For some reason, I have only received Christophe's mail, not Jakub's...
+Lest I forget, if I'm not mistaken, the above change would break the
+int3403 driver that uses int340x_thermal_update_trips() to update trip
+points in int3403_notify(), which handles notifications from the
+platform firmware, and it updates them through the driver's private
+pointer to the trips array used by the core with the assumption that
+the core will notice the changes.
 
-In any case, thanks for pointing out the existence of these functions.  I
-just redid what Kees did in 2018, when I guess these functions didn't
-exist.  I will look more carefully to see what functions are now available
-and resend the whole thing.
+So it looks like at least this particular driver would need to be
+updated before the $subject patch can be applied.
 
-Thanks!
-
-julia
---8323329-1326197144-1687724711=:3022--
+That said, I think that the ACPI thermal driver won't really need to
+access the trips array after passing it to
+thermal_zone_device_register_with_trips() and it may create a new
+trips table every time the trip points are updated by the platform
+firmware, but I'm not convinced about this design.
