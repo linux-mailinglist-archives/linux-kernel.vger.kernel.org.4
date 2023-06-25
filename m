@@ -2,145 +2,270 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A18373CEE2
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 09:16:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AF2873CEE9
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 09:26:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231484AbjFYHQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 03:16:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43958 "EHLO
+        id S231403AbjFYH0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 03:26:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230000AbjFYHQy (ORCPT
+        with ESMTP id S230000AbjFYH0q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 03:16:54 -0400
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B62E7C;
-        Sun, 25 Jun 2023 00:16:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1687677405; bh=s86u3FxxqOj9jqqDyk4XDMJdxRAhbxsW93ytgVVTk6Q=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=kkSkazquMo2UJqB606RQIJzNaC/velDxHM3mb15iZQH5WoROoYSnFGiHNeycwbm2R
-         x1sTWECYuF5vW3Va5M9qJvVefIwbm+JzelH3WAtEyf53OgsKDEXRBPXv4Wr+Mf/FbT
-         E+Dafz3MkW4s5pdx1ikv/8rudlEp+W/hZrL8Z8QQ=
-Received: from [100.100.34.13] (unknown [220.248.53.61])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Sun, 25 Jun 2023 03:26:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69831184;
+        Sun, 25 Jun 2023 00:26:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 353B2600A6;
-        Sun, 25 Jun 2023 15:16:45 +0800 (CST)
-Message-ID: <cc8c2f2d-b242-7488-3b5a-33828ee38b36@xen0n.name>
-Date:   Sun, 25 Jun 2023 15:16:44 +0800
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F0A2660AC3;
+        Sun, 25 Jun 2023 07:26:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7499AC433C0;
+        Sun, 25 Jun 2023 07:26:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687678003;
+        bh=n8NJrHW6O64INrNVioHV6r1iMPZT7RdhdOdSbYch9jI=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=agH9X662vWufI4ggY1kdPZubOHqMvSfpdKqkjFf/pAKcgkK5f3Ffa9njfQLtzuEJ9
+         MZdzkBMZcteZrDs6eJglF0DiP9BQj2yD5kApVjDZOLYM9VdpAPybfvvTbHIzYcjmYK
+         VUZXb6aEQTxoPsiGneLISxPh6DejVRU+G215qMOxEHiWMI9LZnPTIkIgqubNI0njoX
+         sM2gW5rsmaW6b57QmrlBhqCrb5wjIIOzk/6rln+ZE3r8gfD+uWnFdUsarHy6agMCFb
+         dpkJ/Ab9kGmcv3voxbe7QSFroqMKAn6L+5e4qen8u3GZG2zOwRgp2uCMaFOuzyFJLA
+         m6mj2Ipz2urmQ==
+Message-ID: <e5788348-b547-8e10-21af-90544f3aa75c@kernel.org>
+Date:   Sun, 25 Jun 2023 15:26:38 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [PATCH v2 7/9] LoongArch: Tweak CFLAGS for Clang compatibility
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
 Content-Language: en-US
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     WANG Rui <wangrui@loongson.cn>, Xi Ruoyao <xry111@xry111.site>,
-        loongarch@lists.linux.dev, linux-kbuild@vger.kernel.org,
-        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        WANG Xuerui <git@xen0n.name>
-References: <20230624184055.3000636-1-kernel@xen0n.name>
- <20230624184055.3000636-8-kernel@xen0n.name>
- <CAAhV-H54bZ5_OSXtcq3B3d4bZj4GBTOf7Z8aA6Jm7uGdKTj_ug@mail.gmail.com>
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <CAAhV-H54bZ5_OSXtcq3B3d4bZj4GBTOf7Z8aA6Jm7uGdKTj_ug@mail.gmail.com>
+To:     Jaegeuk Kim <jaegeuk@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Cc:     stable@vger.kernel.org
+References: <20230613233940.3643362-1-jaegeuk@kernel.org>
+From:   Chao Yu <chao@kernel.org>
+Subject: Re: [f2fs-dev] [PATCH] f2fs: remove i_xattr_sem to avoid deadlock and
+ fix the original issue
+In-Reply-To: <20230613233940.3643362-1-jaegeuk@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/6/25 10:13, Huacai Chen wrote:
-> Hi, Ruoyao,
+On 2023/6/14 7:39, Jaegeuk Kim wrote:
+> This reverts commit 27161f13e3c3 "f2fs: avoid race in between read xattr & write xattr".
 > 
-> On Sun, Jun 25, 2023 at 2:42 AM WANG Xuerui <kernel@xen0n.name> wrote:
->>
->> From: WANG Xuerui <git@xen0n.name>
->>
->> Now the arch code is mostly ready for LLVM/Clang consumption, it is time
->> to re-organize the CFLAGS a little to actually enable the LLVM build.
->>
->> In particular, -mexplicit-relocs and -mdirect-extern-access are not
->> necessary nor supported on Clang; feature detection via cc-option would
->> not work, because that way the broken combo of "new GNU as + old GCC"
->> would seem to get "fixed", but actually produce broken kernels.
->> Explicitly depending on CONFIG_CC_IS_CLANG is thus necessary to not
->> regress UX for those building their own kernels.
->>
->> A build with !RELOCATABLE && !MODULE is confirmed working within a QEMU
->> environment; support for the two features are currently blocked on
->> LLVM/Clang, and will come later.
->>
->> Signed-off-by: WANG Xuerui <git@xen0n.name>
->> ---
->>   arch/loongarch/Makefile | 6 +++++-
->>   1 file changed, 5 insertions(+), 1 deletion(-)
->>
->> diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
->> index 366771016b99..82c619791a63 100644
->> --- a/arch/loongarch/Makefile
->> +++ b/arch/loongarch/Makefile
->> @@ -51,7 +51,9 @@ LDFLAGS_vmlinux                       += -static -n -nostdlib
->>
->>   # When the assembler supports explicit relocation hint, we must use it.
->>   # GCC may have -mexplicit-relocs off by default if it was built with an old
->> -# assembler, so we force it via an option.
->> +# assembler, so we force it via an option. For LLVM/Clang the desired behavior
->> +# is the default, and the flag is not supported, so don't pass it if Clang is
->> +# being used.
->>   #
->>   # When the assembler does not supports explicit relocation hint, we can't use
->>   # it.  Disable it if the compiler supports it.
->> @@ -61,8 +63,10 @@ LDFLAGS_vmlinux                      += -static -n -nostdlib
->>   # combination of a "new" assembler and "old" compiler is not supported.  Either
->>   # upgrade the compiler or downgrade the assembler.
->>   ifdef CONFIG_AS_HAS_EXPLICIT_RELOCS
->> +ifndef CONFIG_CC_IS_CLANG
->>   cflags-y                       += -mexplicit-relocs
->>   KBUILD_CFLAGS_KERNEL           += -mdirect-extern-access
->> +endif
-> I prefer to drop CONFIG_CC_IS_CLANG and use
-> cflags-y                       += $(call cc-option,-mexplicit-relocs)
-> KBUILD_CFLAGS_KERNEL           += $(call cc-option,-mdirect-extern-access)
+> That introduced a deadlock case:
 > 
-> Then Patch-6 can be merged in this.
+> Thread #1:
 > 
-> What's your opinion?
+> [122554.641906][   T92]  f2fs_getxattr+0xd4/0x5fc
+>      -> waiting for f2fs_down_read(&F2FS_I(inode)->i_xattr_sem);
+> 
+> [122554.641927][   T92]  __f2fs_get_acl+0x50/0x284
+> [122554.641948][   T92]  f2fs_init_acl+0x84/0x54c
+> [122554.641969][   T92]  f2fs_init_inode_metadata+0x460/0x5f0
+> [122554.641990][   T92]  f2fs_add_inline_entry+0x11c/0x350
+>      -> Locked dir->inode_page by f2fs_get_node_page()
+> 
+> [122554.642009][   T92]  f2fs_do_add_link+0x100/0x1e4
+> [122554.642025][   T92]  f2fs_create+0xf4/0x22c
+> [122554.642047][   T92]  vfs_create+0x130/0x1f4
+> 
+> Thread #2:
+> 
+> [123996.386358][   T92]  __get_node_page+0x8c/0x504
+>      -> waiting for dir->inode_page lock
+> 
+> [123996.386383][   T92]  read_all_xattrs+0x11c/0x1f4
+> [123996.386405][   T92]  __f2fs_setxattr+0xcc/0x528
+> [123996.386424][   T92]  f2fs_setxattr+0x158/0x1f4
+>      -> f2fs_down_write(&F2FS_I(inode)->i_xattr_sem);
+> 
+> [123996.386443][   T92]  __f2fs_set_acl+0x328/0x430
+> [123996.386618][   T92]  f2fs_set_acl+0x38/0x50
+> [123996.386642][   T92]  posix_acl_chmod+0xc8/0x1c8
+> [123996.386669][   T92]  f2fs_setattr+0x5e0/0x6bc
+> [123996.386689][   T92]  notify_change+0x4d8/0x580
+> [123996.386717][   T92]  chmod_common+0xd8/0x184
+> [123996.386748][   T92]  do_fchmodat+0x60/0x124
+> [123996.386766][   T92]  __arm64_sys_fchmodat+0x28/0x3c
+> 
+> Let's take a look at the original issue back.
+> 
+> Thread A:                                       Thread B:
+> -f2fs_getxattr
+>     -lookup_all_xattrs
+>        -xnid = F2FS_I(inode)->i_xattr_nid;
+>                                                  -f2fs_setxattr
+>                                                      -__f2fs_setxattr
+>                                                          -write_all_xattrs
+>                                                              -truncate_xattr_node
+>                                                                    ...  ...
+>                                                  -write_checkpoint
+>                                                                    ...  ...
+>                                                  -alloc_nid   <- nid reuse
+>            -get_node_page
+>                -f2fs_bug_on  <- nid != node_footer->nid
 
-FYI: with this approach the build no longer instantly dies with binutils 
-2.40 + gcc 12.3, but there are also tons of warnings that say the model 
-attribute is being ignored. I checked earlier discussions and this means 
-modules are silently broken at runtime, which is not particularly good UX.
+One concern below:
 
-But after more thought, I find it possible to not regress UX nor 
-explicitly check for Clang: the special point about Clang is that it 
-emits explicit relocs *without* support for the CLI -mexplicit-relocs 
-flag. So assuming:
+Thread A:					Thread B:
+- f2fs_getxattr
+  - lookup_all_xattrs
+   - read_inline_xattr
+    - f2fs_get_node_page(ino)
+    - memcpy inline xattr
+    - f2fs_put_page
+						- f2fs_setxattr
+						 - __f2fs_setxattr
+						  - __f2fs_setxattr
+						   - write_all_xattrs
+						    - write xnode and inode
+   ---> inline xattr may out of update here.
+   - read_xattr_block
+    - f2fs_get_node_page(xnid)
+    - memcpy xnode xattr
+    - f2fs_put_page
 
-* CC_HAS_EXPLICIT_RELOCS means "-mexplicit-relocs" is supported by $CC,
-* CC_EMITS_EXPLICIT_RELOCS means explicit relocs are emitted by $CC, 
-with -mexplicit-relocs in CFLAGS if supported,
+Do we need to keep xattr_{get,set} being atomical operation?
 
-We then have:
+Thanks,
 
-* gcc 12.x: !CC_HAS_EXPLICIT_RELOCS && !CC_EMITS_EXPLICIT_RELOCS
-* gcc 13.x: CC_HAS_EXPLICIT_RELOCS && CC_EMITS_EXPLICIT_RELOCS
-* clang: !CC_HAS_EXPLICIT_RELOCS && CC_EMITS_EXPLICIT_RELOCS
-
-So in this case (inside the AS_HAS_EXPLICIT_RELOCS=y block), as long as 
-CC_EMITS_EXPLICIT_RELOCS we are okay. We can $(error) out in the first 
-case and provide helpful diagnostics too.
-
-What do you people think about this alternative approach?
-
--- 
-WANG "xen0n" Xuerui
-
-Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
-
+> 
+> I think we don't need to truncate xattr pages eagerly which introduces lots of
+> data races without big benefits.
+> 
+> Cc: <stable@vger.kernel.org>
+> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+> ---
+>   fs/f2fs/f2fs.h  |  1 -
+>   fs/f2fs/super.c |  1 -
+>   fs/f2fs/xattr.c | 31 ++++++++-----------------------
+>   3 files changed, 8 insertions(+), 25 deletions(-)
+> 
+> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+> index 3f5b161dd743..7b9af2d51656 100644
+> --- a/fs/f2fs/f2fs.h
+> +++ b/fs/f2fs/f2fs.h
+> @@ -838,7 +838,6 @@ struct f2fs_inode_info {
+>   
+>   	/* avoid racing between foreground op and gc */
+>   	struct f2fs_rwsem i_gc_rwsem[2];
+> -	struct f2fs_rwsem i_xattr_sem; /* avoid racing between reading and changing EAs */
+>   
+>   	int i_extra_isize;		/* size of extra space located in i_addr */
+>   	kprojid_t i_projid;		/* id for project quota */
+> diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
+> index 1b2c788ed80d..c917fa771f0e 100644
+> --- a/fs/f2fs/super.c
+> +++ b/fs/f2fs/super.c
+> @@ -1418,7 +1418,6 @@ static struct inode *f2fs_alloc_inode(struct super_block *sb)
+>   	INIT_LIST_HEAD(&fi->gdirty_list);
+>   	init_f2fs_rwsem(&fi->i_gc_rwsem[READ]);
+>   	init_f2fs_rwsem(&fi->i_gc_rwsem[WRITE]);
+> -	init_f2fs_rwsem(&fi->i_xattr_sem);
+>   
+>   	/* Will be used by directory only */
+>   	fi->i_dir_level = F2FS_SB(sb)->dir_level;
+> diff --git a/fs/f2fs/xattr.c b/fs/f2fs/xattr.c
+> index 213805d3592c..bdc8a55085a2 100644
+> --- a/fs/f2fs/xattr.c
+> +++ b/fs/f2fs/xattr.c
+> @@ -433,7 +433,7 @@ static inline int write_all_xattrs(struct inode *inode, __u32 hsize,
+>   {
+>   	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
+>   	size_t inline_size = inline_xattr_size(inode);
+> -	struct page *in_page = NULL;
+> +	struct page *in_page = ipage;
+>   	void *xattr_addr;
+>   	void *inline_addr = NULL;
+>   	struct page *xpage;
+> @@ -446,29 +446,19 @@ static inline int write_all_xattrs(struct inode *inode, __u32 hsize,
+>   
+>   	/* write to inline xattr */
+>   	if (inline_size) {
+> -		if (ipage) {
+> -			inline_addr = inline_xattr_addr(inode, ipage);
+> -		} else {
+> +		if (!in_page) {
+>   			in_page = f2fs_get_node_page(sbi, inode->i_ino);
+>   			if (IS_ERR(in_page)) {
+>   				f2fs_alloc_nid_failed(sbi, new_nid);
+>   				return PTR_ERR(in_page);
+>   			}
+> -			inline_addr = inline_xattr_addr(inode, in_page);
+>   		}
+> +		inline_addr = inline_xattr_addr(inode, in_page);
+>   
+> -		f2fs_wait_on_page_writeback(ipage ? ipage : in_page,
+> -							NODE, true, true);
+> -		/* no need to use xattr node block */
+> +		f2fs_wait_on_page_writeback(in_page, NODE, true, true);
+>   		if (hsize <= inline_size) {
+> -			err = f2fs_truncate_xattr_node(inode);
+> -			f2fs_alloc_nid_failed(sbi, new_nid);
+> -			if (err) {
+> -				f2fs_put_page(in_page, 1);
+> -				return err;
+> -			}
+>   			memcpy(inline_addr, txattr_addr, inline_size);
+> -			set_page_dirty(ipage ? ipage : in_page);
+> +			set_page_dirty(in_page);
+>   			goto in_page_out;
+>   		}
+>   	}
+> @@ -502,12 +492,13 @@ static inline int write_all_xattrs(struct inode *inode, __u32 hsize,
+>   	memcpy(xattr_addr, txattr_addr + inline_size, VALID_XATTR_BLOCK_SIZE);
+>   
+>   	if (inline_size)
+> -		set_page_dirty(ipage ? ipage : in_page);
+> +		set_page_dirty(in_page);
+>   	set_page_dirty(xpage);
+>   
+>   	f2fs_put_page(xpage, 1);
+>   in_page_out:
+> -	f2fs_put_page(in_page, 1);
+> +	if (in_page != ipage)
+> +		f2fs_put_page(in_page, 1);
+>   	return err;
+>   }
+>   
+> @@ -528,10 +519,8 @@ int f2fs_getxattr(struct inode *inode, int index, const char *name,
+>   	if (len > F2FS_NAME_LEN)
+>   		return -ERANGE;
+>   
+> -	f2fs_down_read(&F2FS_I(inode)->i_xattr_sem);
+>   	error = lookup_all_xattrs(inode, ipage, index, len, name,
+>   				&entry, &base_addr, &base_size, &is_inline);
+> -	f2fs_up_read(&F2FS_I(inode)->i_xattr_sem);
+>   	if (error)
+>   		return error;
+>   
+> @@ -565,9 +554,7 @@ ssize_t f2fs_listxattr(struct dentry *dentry, char *buffer, size_t buffer_size)
+>   	int error;
+>   	size_t rest = buffer_size;
+>   
+> -	f2fs_down_read(&F2FS_I(inode)->i_xattr_sem);
+>   	error = read_all_xattrs(inode, NULL, &base_addr);
+> -	f2fs_up_read(&F2FS_I(inode)->i_xattr_sem);
+>   	if (error)
+>   		return error;
+>   
+> @@ -794,9 +781,7 @@ int f2fs_setxattr(struct inode *inode, int index, const char *name,
+>   	f2fs_balance_fs(sbi, true);
+>   
+>   	f2fs_lock_op(sbi);
+> -	f2fs_down_write(&F2FS_I(inode)->i_xattr_sem);
+>   	err = __f2fs_setxattr(inode, index, name, value, size, ipage, flags);
+> -	f2fs_up_write(&F2FS_I(inode)->i_xattr_sem);
+>   	f2fs_unlock_op(sbi);
+>   
+>   	f2fs_update_time(sbi, REQ_TIME);
