@@ -2,146 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C264C73CF49
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 10:23:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D638C73CF4C
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 10:24:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231356AbjFYIXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 04:23:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57314 "EHLO
+        id S231834AbjFYIYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 04:24:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229868AbjFYIXa (ORCPT
+        with ESMTP id S231734AbjFYIYq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 04:23:30 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BCC3E6F
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 01:23:29 -0700 (PDT)
+        Sun, 25 Jun 2023 04:24:46 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E109510D7;
+        Sun, 25 Jun 2023 01:24:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687681409; x=1719217409;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=x8wOLMsJ+xY5lhzECQoNzvy9TUBhudomKGSjdZb+5Q8=;
-  b=KgACDJf46rm364+1iuN5HWKUDJRCFXoi0hKxVZanTExsIyJ/2La6mW7y
-   pu2kBmICvxVtl9U4CG/dmYZZXS7D9hcXkX6Lve/8K93Twmb2rsXwx2YP/
-   +eJ6E/4qIieWbDM1cgFIGh4EyG6vaayV10qv9QTholkq6VD5rnwHC+S16
-   08vVU2FWshspzP4GObSQz8ZiMITG6HD447BrdVHNltpwYkFmXrVHmm1Sr
-   H8bHCXWEJTvAZNyQepNBLhqKJJO1mO//EL7QXBhVgwyWjM5hXcu2iJmPQ
-   ATMIuJXHmlXrkgES8vevDHh8rV2UYWL4V8thlneh+VnTIz9WGifPJWTij
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10751"; a="345793094"
+  t=1687681483; x=1719217483;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=O2m0q02Mtu457nNDRC77XsltlPuNb7XtG8yo5Z+9cUk=;
+  b=BYmuUGT/e1tyKvC1OHH5+42qRQl8hnzegiA9V48E0BMjCDfmJF7QLvWY
+   kBz3HIy4mIPOw3S2b03yRq7SvRp0FlZc22+4f4wLfarCagUcwGGCEcYVj
+   aJBGwKPcR9l5XVz3yHtNjEEUqfbgscFG+sQATAEWvp1cfLg9J2eB/OxO9
+   ulp692swVoct/zQnEGz7fcRq8vsHSIA1i2ILO9Vj8X9hLDd5KQQwBwfXm
+   0+MFkXsBWS+EWD9WPIeDXSKalwqBYxG8u1IhTkhuYqp59LvNkEKemCPCh
+   3RGaXLt9hNmYIb9iXL+DMMZyMHe6+FDtJiOQhfBf/OHKOvytmXKjgIBFP
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10751"; a="424716440"
 X-IronPort-AV: E=Sophos;i="6.01,156,1684825200"; 
-   d="scan'208";a="345793094"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2023 01:23:29 -0700
+   d="scan'208";a="424716440"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2023 01:24:42 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10751"; a="805666831"
+X-IronPort-AV: E=McAfee;i="6600,9927,10751"; a="718986577"
 X-IronPort-AV: E=Sophos;i="6.01,156,1684825200"; 
-   d="scan'208";a="805666831"
-Received: from tower.bj.intel.com ([10.238.157.62])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2023 01:23:26 -0700
-From:   Yanfei Xu <yanfei.xu@intel.com>
-To:     dwmw2@infradead.org, baolu.lu@linux.intel.com, joro@8bytes.org,
-        will@kernel.org, robin.murphy@arm.com
-Cc:     iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
-        yanfei.xu@intel.com
-Subject: [PATCH] iommu/vt-d: Fix to convert mm pfn to dma pfn
-Date:   Sun, 25 Jun 2023 16:20:46 +0800
-Message-Id: <20230625082046.979742-1-yanfei.xu@intel.com>
-X-Mailer: git-send-email 2.34.1
+   d="scan'208";a="718986577"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmsmga007.fm.intel.com with ESMTP; 25 Jun 2023 01:24:39 -0700
+Date:   Sun, 25 Jun 2023 16:23:33 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Marco Pagani <marpagan@redhat.com>
+Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-fpga@vger.kernel.org
+Subject: Re: [PATCH v7 4/4] fpga: add configuration for the FPGA KUnit test
+ suites.
+Message-ID: <ZJf5hUkGYCg1YCPx@yilunxu-OptiPlex-7050>
+References: <20230616154405.220502-1-marpagan@redhat.com>
+ <20230616154405.220502-5-marpagan@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230616154405.220502-5-marpagan@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For the case that VT-d page is smaller than mm page, converting dma
-pfn should be handled in two cases which are for start pfn and for
-end pfn. Currently the calculation of end dma pfn is incorrect and
-the result is less than real page frame number which is causing the
-mapping of iova always misses some page frames.
+On 2023-06-16 at 17:44:05 +0200, Marco Pagani wrote:
+> Add configuration for the KUnit test suites for the core components
+> of the FPGA subsystem.
+> 
+> Signed-off-by: Marco Pagani <marpagan@redhat.com>
+> ---
+>  drivers/fpga/Kconfig            |  2 ++
+>  drivers/fpga/Makefile           |  3 +++
+>  drivers/fpga/tests/.kunitconfig |  5 +++++
+>  drivers/fpga/tests/Kconfig      | 11 +++++++++++
+>  drivers/fpga/tests/Makefile     |  5 +++++
+>  5 files changed, 26 insertions(+)
+>  create mode 100644 drivers/fpga/tests/.kunitconfig
+>  create mode 100644 drivers/fpga/tests/Kconfig
+>  create mode 100644 drivers/fpga/tests/Makefile
+> 
+> diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
+> index 0a00763b9f28..2f689ac4ba3a 100644
+> --- a/drivers/fpga/Kconfig
+> +++ b/drivers/fpga/Kconfig
+> @@ -276,4 +276,6 @@ config FPGA_MGR_LATTICE_SYSCONFIG_SPI
+>  	  FPGA manager driver support for Lattice FPGAs programming over slave
+>  	  SPI sysCONFIG interface.
+>  
+> +source "drivers/fpga/tests/Kconfig"
+> +
+>  endif # FPGA
+> diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
+> index 72e554b4d2f7..352a2612623e 100644
+> --- a/drivers/fpga/Makefile
+> +++ b/drivers/fpga/Makefile
+> @@ -55,3 +55,6 @@ obj-$(CONFIG_FPGA_DFL_NIOS_INTEL_PAC_N3000)	+= dfl-n3000-nios.o
+>  
+>  # Drivers for FPGAs which implement DFL
+>  obj-$(CONFIG_FPGA_DFL_PCI)		+= dfl-pci.o
+> +
+> +# KUnit tests
+> +obj-$(CONFIG_FPGA_KUNIT_TESTS)		+= tests/
+> diff --git a/drivers/fpga/tests/.kunitconfig b/drivers/fpga/tests/.kunitconfig
+> new file mode 100644
+> index 000000000000..a1c2a2974c39
+> --- /dev/null
+> +++ b/drivers/fpga/tests/.kunitconfig
+> @@ -0,0 +1,5 @@
+> +CONFIG_KUNIT=y
+> +CONFIG_FPGA=y
+> +CONFIG_FPGA_REGION=y
+> +CONFIG_FPGA_BRIDGE=y
+> +CONFIG_FPGA_KUNIT_TESTS=y
+> diff --git a/drivers/fpga/tests/Kconfig b/drivers/fpga/tests/Kconfig
+> new file mode 100644
+> index 000000000000..e4a64815f16d
+> --- /dev/null
+> +++ b/drivers/fpga/tests/Kconfig
+> @@ -0,0 +1,11 @@
+> +config FPGA_KUNIT_TESTS
+> +	tristate "KUnit test for the FPGA subsystem" if !KUNIT_ALL_TESTS
+> +	depends on FPGA && FPGA_REGION && FPGA_BRIDGE && KUNIT=y
 
-Hence rename the mm_to_dma_pfn() to mm_to_dma_pfn_start() and add
-a new helper for converting end dma pfn named mm_to_dma_pfn_end()
+Why KUNIT shouldn't be 'm'
 
-Signed-off-by: Yanfei Xu <yanfei.xu@intel.com>
----
-Found from reading VT-D codes.
+> +	default KUNIT_ALL_TESTS
+> +        help
+> +          This builds unit tests for the FPGA subsystem
+> +
+> +          For more information on KUnit and unit tests in general,
+> +          please refer to the KUnit documentation in Documentation/dev-tools/kunit/.
+> +
+> +          If unsure, say N.
+> diff --git a/drivers/fpga/tests/Makefile b/drivers/fpga/tests/Makefile
+> new file mode 100644
+> index 000000000000..faa5fa230ab0
+> --- /dev/null
+> +++ b/drivers/fpga/tests/Makefile
+> @@ -0,0 +1,5 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +obj-$(CONFIG_FPGA_KUNIT_TESTS) += fpga-mgr-test.o
+> +obj-$(CONFIG_FPGA_KUNIT_TESTS) += fpga-bridge-test.o
+> +obj-$(CONFIG_FPGA_KUNIT_TESTS) += fpga-region-test.o
 
- drivers/iommu/intel/iommu.c | 22 +++++++++++++---------
- 1 file changed, 13 insertions(+), 9 deletions(-)
+Could be integrated in one line?
 
-diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index 8096273b034c..5ceb12b90c1b 100644
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -113,13 +113,17 @@ static inline unsigned long lvl_to_nr_pages(unsigned int lvl)
- 
- /* VT-d pages must always be _smaller_ than MM pages. Otherwise things
-    are never going to work. */
--static inline unsigned long mm_to_dma_pfn(unsigned long mm_pfn)
-+static inline unsigned long mm_to_dma_pfn_start(unsigned long mm_pfn)
- {
- 	return mm_pfn << (PAGE_SHIFT - VTD_PAGE_SHIFT);
- }
-+static inline unsigned long mm_to_dma_pfn_end(unsigned long mm_pfn)
-+{
-+	return ((mm_pfn + 1) << (PAGE_SHIFT - VTD_PAGE_SHIFT)) - 1;
-+}
- static inline unsigned long page_to_dma_pfn(struct page *pg)
- {
--	return mm_to_dma_pfn(page_to_pfn(pg));
-+	return mm_to_dma_pfn_start(page_to_pfn(pg));
- }
- static inline unsigned long virt_to_dma_pfn(void *p)
- {
-@@ -2374,8 +2378,8 @@ static int __init si_domain_init(int hw)
- 
- 		for_each_mem_pfn_range(i, nid, &start_pfn, &end_pfn, NULL) {
- 			ret = iommu_domain_identity_map(si_domain,
--					mm_to_dma_pfn(start_pfn),
--					mm_to_dma_pfn(end_pfn));
-+					mm_to_dma_pfn_start(start_pfn),
-+					mm_to_dma_pfn_end(end_pfn));
- 			if (ret)
- 				return ret;
- 		}
-@@ -2396,8 +2400,8 @@ static int __init si_domain_init(int hw)
- 				continue;
- 
- 			ret = iommu_domain_identity_map(si_domain,
--					mm_to_dma_pfn(start >> PAGE_SHIFT),
--					mm_to_dma_pfn(end >> PAGE_SHIFT));
-+					mm_to_dma_pfn_start(start >> PAGE_SHIFT),
-+					mm_to_dma_pfn_end(end >> PAGE_SHIFT));
- 			if (ret)
- 				return ret;
- 		}
-@@ -3567,8 +3571,8 @@ static int intel_iommu_memory_notifier(struct notifier_block *nb,
- 				       unsigned long val, void *v)
- {
- 	struct memory_notify *mhp = v;
--	unsigned long start_vpfn = mm_to_dma_pfn(mhp->start_pfn);
--	unsigned long last_vpfn = mm_to_dma_pfn(mhp->start_pfn +
-+	unsigned long start_vpfn = mm_to_dma_pfn_start(mhp->start_pfn);
-+	unsigned long last_vpfn = mm_to_dma_pfn_end(mhp->start_pfn +
- 			mhp->nr_pages - 1);
- 
- 	switch (val) {
-@@ -4278,7 +4282,7 @@ static void intel_iommu_tlb_sync(struct iommu_domain *domain,
- 	unsigned long i;
- 
- 	nrpages = aligned_nrpages(gather->start, size);
--	start_pfn = mm_to_dma_pfn(iova_pfn);
-+	start_pfn = mm_to_dma_pfn_start(iova_pfn);
- 
- 	xa_for_each(&dmar_domain->iommu_array, i, info)
- 		iommu_flush_iotlb_psi(info->iommu, dmar_domain,
--- 
-2.34.1
+Thanks,
+Yilun
 
+> -- 
+> 2.40.1
+> 
