@@ -2,146 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5F9973D161
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 16:18:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DF4473D163
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 16:19:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230116AbjFYOSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 10:18:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49794 "EHLO
+        id S230203AbjFYOTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 10:19:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230145AbjFYOSA (ORCPT
+        with ESMTP id S229823AbjFYOTK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 10:18:00 -0400
-Received: from mail-4319.protonmail.ch (mail-4319.protonmail.ch [185.70.43.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 047DCE54
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 07:17:56 -0700 (PDT)
-Date:   Sun, 25 Jun 2023 14:17:44 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1687702674; x=1687961874;
-        bh=inMyYrOTZsqu+PuRu8d57Qiq8p3tOvJbGALKqIAke6I=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=nWmcbiPcF+KrhUXh5wyp5V46TYfMXv6kItl9dia5OypB2Ps1ksl9NG2V/w8VOJfd5
-         JegCvE0pTbT2m1UFoUuXI78YSE9MwN3ULj8PZz7Aj9eK6pGhv5aZ/Zm+rEg2wgG8/V
-         RIZWhbLvl3B8ciuiMWSZ++2h8CNa9ubdJO2mFzvGaJ+B7wMlDoqn7AtfHRJpehN1jF
-         hvMd7TyY1f38DtdQKMmxoj4brQOfx8PWrxG6jU5lxlgXED45VcGuCaOWA8nh1kjtHW
-         T1qAxLWqJLUM+app+ftODyh97umBEQm81lfoqbdQtX0l8PwrwmiVbY6/VRJUMj58mo
-         863jN9exy7tjQ==
-To:     Benno Lossin <benno.lossin@proton.me>
-From:   =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        Alice Ryhl <aliceryhl@google.com>,
-        Andreas Hindborg <nmi@metaspace.dk>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Asahi Lina <lina@asahilina.net>
-Subject: Re: [PATCH 5/7] rust: init: add `..Zeroable::zeroed()` syntax for zeroing all missing fields
-Message-ID: <8lCE3SyChVVb2HphigkwKsxv7etgmS0N3AzcDyYtCEoqcFEKvY-5ILkOrWUr_vnWrvsWrAHXVfwcWARfsiMHC8Yc03sND-PuuK-2z9j4z6I=@protonmail.com>
-In-Reply-To: <6f4e1d68-f828-8990-4859-8ab24907fa46@proton.me>
-References: <20230624092330.157338-1-benno.lossin@proton.me> <20230624092330.157338-5-benno.lossin@proton.me> <W1fY0aa_v9j7lJNWXk_WNaxY2qruJo1R6k7u0g-X5L5Rxuod-VMBMmByICDwjF_fFGvNJTV41QapW0WeVduNYqxgo9S243gnNGXbexq6P3Q=@protonmail.com> <f4bcd952-1ad9-42b7-6e0b-72a115dcbe8e@proton.me> <we7PHkrpBV6kIgFZojiBFerqlXtSJB9HWkj129OGUWUVyVFwtuoirr3gVybgLzW2hmpUqqSAAQUPsdfL9QC2JyNKOLRNX0mSTfgD8llSJKE=@protonmail.com> <6f4e1d68-f828-8990-4859-8ab24907fa46@proton.me>
-Feedback-ID: 27884398:user:proton
+        Sun, 25 Jun 2023 10:19:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98977E43;
+        Sun, 25 Jun 2023 07:18:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CBF66098A;
+        Sun, 25 Jun 2023 14:18:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83E25C433C0;
+        Sun, 25 Jun 2023 14:18:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687702735;
+        bh=eELfk8BQQe7CSBA1iViJovL7FyC1t3NJ0tuD7vTmyyQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gNXdu/oCbHxoBS+wFq3/5UImorTTdWG2vHm2+aiAyQ3F+c4thmF5h7y1s0Z/sqCEL
+         r6oCgQWbH9xBIWkZyMUfsKMGV6+7qW7BF6rj4BmUV8bc6IGe0BEqjRMVHPtwz5MGsK
+         4jwICroWdLTP2blCrg9TFA3u4BxmHa/uUlITI7BtPgdFd+N0peZuqpoaJZtz1H2seE
+         CJrBc4t/6mozEt46hA1+veLpWtwABU1dZU2T1WPupvcwvxyq8pae+31n0w1aRs0T5j
+         8MUR0o/yRahFEVBF2ixv+l75TsRm2C3Vy5JBU4b7K46jDmUtC8K9wEVDxnJXEuoWb9
+         TxSZ6WirPDFfw==
+Date:   Sun, 25 Jun 2023 15:18:49 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Song Shuai <songshuaishuai@tinylab.org>
+Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, robh+dt@kernel.org, frowand.list@gmail.com,
+        ajones@ventanamicro.com, alexghiti@rivosinc.com,
+        mpe@ellerman.id.au, arnd@arndb.de, rppt@kernel.org,
+        samuel@sholland.org, panqinglin2020@iscas.ac.cn,
+        conor.dooley@microchip.com, anup@brainfault.org,
+        xianting.tian@linux.alibaba.com, anshuman.khandual@arm.com,
+        heiko@sntech.de, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH V1 1/3] Revert "RISC-V: mark hibernation as nonportable"
+Message-ID: <20230625-multiple-diaper-1db88a75314e@spud>
+References: <20230625140931.1266216-1-songshuaishuai@tinylab.org>
+ <20230625140931.1266216-2-songshuaishuai@tinylab.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="5rU6R4tPsIYzsO+l"
+Content-Disposition: inline
+In-Reply-To: <20230625140931.1266216-2-songshuaishuai@tinylab.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sunday, June 25th, 2023 at 15:07, Benno Lossin <benno.lossin@proton.me> =
-wrote:
-> On 25.06.23 14:56, Bj=C3=B6rn Roy Baron wrote:
-> > On Saturday, June 24th, 2023 at 23:14, Benno Lossin <benno.lossin@proto=
-n.me> wrote:
->=20
-> >>>> +                        // Ensure that the struct is indeed `Zeroab=
-le`.
-> >>>> +                        is_zeroable(slot);
-> >>>> +                        // SAFETY:  The type implements `Zeroable` =
-by the check above.
-> >>>> +                        unsafe { ::core::ptr::write_bytes(slot, 0, =
-1) };
-> >>>> +                        $init_zeroed // this will be `()` if set.
-> >>>
-> >>> How does this work? Shouldn't there be a ; after $init_zeroed to cons=
-ume the () value?
-> >>
-> >> It is the last expression of a block and since it is `()` it is ok
-> >> (adding a ; would also be ok, but it is not necessary).
-> >
-> > I'm surprised it is considered the last expression of a block. Unlike w=
-ith {} using $()? will still
-> > allow variables defined inside this as if they were outside of it. Also=
- I can't reproduce this
-> > behavior with:
-> >
-> >      macro_rules! foo {
-> >          ($($a:expr)?) =3D> {
-> >              $($a)?
-> >              bar();
-> >          }
-> >      }
-> >
-> >      fn main() {
-> >          foo!(());
-> >      }
-> >
-> > Is there something I'm missing?
-> >
-> > Cheers,
-> > Bj=C3=B6rn
->=20
-> Not sure what you mean with "allow variables defined inside this
-> as if they were outside of it". But note that in the macro `$init_zeroed`
-> is the last expression of a block. Here is a small example:
 
-$(let $this =3D unsafe { ::core::ptr::NonNull::new_unchecked(slot) };)? com=
-es after
-this code in the same block that contains struct __InitOk;. And after that =
-another
-$crate::__init_internal!() invocation. That is why I don't get that this is=
- allowed
-at all.
+--5rU6R4tPsIYzsO+l
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Sun, Jun 25, 2023 at 10:09:29PM +0800, Song Shuai wrote:
+> This reverts commit ed309ce522185583b163bd0c74f0d9f299fe1826.
 >=20
-> ```
-> macro_rules! foo {
->      ($($a:expr)?) =3D> {{
->          $(
->              bar();
->              $a
->          )?
->      }};
-> }
+> With the commit 3335068f8721 ("riscv: Use PUD/P4D/PGD pages for the
+> linear mapping") reverted, the MIN_MEMBLOCK_ADDR points the kernel
+> load address which was placed at a PMD boundary.
+
+> And firmware always
+> correctly mark resident memory, or memory protected with PMP as
+> per the devicetree specification and/or the UEFI specification.
+
+But this is not true? The versions of OpenSBI that you mention in your
+cover letter do not do this.
+Please explain.
+
+> So those regions will not be mapped in the linear mapping and they
+> can be safely saved/restored by hibernation.
 >=20
-> fn bar() {}
+> Signed-off-by: Song Shuai <songshuaishuai@tinylab.org>
+> ---
+>  arch/riscv/Kconfig | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
 >=20
-> fn main() {
->      foo!(());
->      foo!();
-> }
-> ```
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index 5966ad97c30c..17b5fc7f54d4 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -800,11 +800,8 @@ menu "Power management options"
+> =20
+>  source "kernel/power/Kconfig"
+> =20
+> -# Hibernation is only possible on systems where the SBI implementation h=
+as
+> -# marked its reserved memory as not accessible from, or does not run
+> -# from the same memory as, Linux
+>  config ARCH_HIBERNATION_POSSIBLE
+> -	def_bool NONPORTABLE
+> +	def_bool y
+> =20
+>  config ARCH_HIBERNATION_HEADER
+>  	def_bool HIBERNATION
+> --=20
+> 2.20.1
 >=20
-> it expands to this:
-> ```
-> fn main() {
->      {
->          bar();
->          ()
->      };
->      {};
-> }
-> ```
->=20
-> --
-> Cheers,
-> Benno
-> 
+
+--5rU6R4tPsIYzsO+l
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJhMyQAKCRB4tDGHoIJi
+0ilaAP4rih3tvcajCwDW0SHvhQ9DqWJq0Zn2Vm8HAQG/CfO9vgEAmBEyl28RPpUW
+ZzBaowc8mzQh7JPK2GtFXOBJBQKwxwE=
+=/uWn
+-----END PGP SIGNATURE-----
+
+--5rU6R4tPsIYzsO+l--
