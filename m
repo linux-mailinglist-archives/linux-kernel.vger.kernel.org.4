@@ -2,150 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A275373CE47
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 05:35:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ACED73CE4F
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 05:51:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231199AbjFYDfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 23:35:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50558 "EHLO
+        id S231267AbjFYDuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 23:50:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbjFYDfF (ORCPT
+        with ESMTP id S230389AbjFYDuB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 23:35:05 -0400
-Received: from mx6.didiglobal.com (mx6.didiglobal.com [111.202.70.123])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 7120DB5
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 20:35:03 -0700 (PDT)
-Received: from mail.didiglobal.com (unknown [10.79.65.12])
-        by mx6.didiglobal.com (Maildata Gateway V2.8) with ESMTPS id 0F18A11002112F;
-        Sun, 25 Jun 2023 11:35:01 +0800 (CST)
-Received: from didi-ThinkCentre-M930t-N000 (10.79.64.101) by
- ZJY02-ACTMBX-02.didichuxing.com (10.79.65.12) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Sun, 25 Jun 2023 11:35:00 +0800
-Date:   Sun, 25 Jun 2023 11:34:52 +0800
-X-MD-Sfrom: tiozhang@didiglobal.com
-X-MD-SrcIP: 10.79.65.12
-From:   tiozhang <tiozhang@didiglobal.com>
-To:     <joe@perches.com>
-CC:     <akpm@linux-foundation.org>, <gregkh@linuxfoundation.org>,
-        <keescook@chromium.org>, <mcgrof@kernel.org>,
-        <senozhatsky@chromium.org>, <pc@cjr.nz>,
-        <linux-kernel@vger.kernel.org>, <zyhtheonly@gmail.com>,
-        <zyhtheonly@yeah.net>, <zwp10758@gmail.com>,
-        <tiozhang@didiglobal.com>
-Subject: [PATCH] cred: convert printks to pr_<level>
-Message-ID: <20230625033452.GA22858@didi-ThinkCentre-M930t-N000>
-Mail-Followup-To: joe@perches.com, akpm@linux-foundation.org,
-        gregkh@linuxfoundation.org, keescook@chromium.org,
-        mcgrof@kernel.org, senozhatsky@chromium.org, pc@cjr.nz,
-        linux-kernel@vger.kernel.org, zyhtheonly@gmail.com,
-        zyhtheonly@yeah.net, zwp10758@gmail.com
+        Sat, 24 Jun 2023 23:50:01 -0400
+Received: from mail.tkos.co.il (golan.tkos.co.il [84.110.109.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B5C218E
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 20:49:59 -0700 (PDT)
+Received: from tarshish (unknown [10.0.8.3])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.tkos.co.il (Postfix) with ESMTPS id 1EA2F440049;
+        Sun, 25 Jun 2023 06:49:50 +0300 (IDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tkos.co.il;
+        s=default; t=1687664990;
+        bh=9n0Q8B2bEkqPmvBoKm8p6RZbm9Lb0VPlfmrfd1XcakY=;
+        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
+        b=eTanaV6sAwFznE5Tlp+umS8US1TZyqDRhGmPmTRzlF9FSuyjiUWo/9uJHWjWiJcMT
+         NceXjpQs89+fpxxFk6IMQJt5GTW3Y1PAbA4DvJLLGZBZHaCBf7IiDo/VnwdsrV6oUh
+         eJxrpqbdiyierqq2fch3VL0iEpL3e9x0VD3jekllDD+SwEndW3Qdn+LOqZfh9WycTW
+         Cd2ySrpWRJ9hqCZVvrD0JxHJI6KymQnMn5kQ2J2Mov4iog+rVdHeAZWeaQdFXBtdCa
+         re8qmZ57iXmpFwA599gDREhBQOUWMCihUm6k16NtI40+3ULdFQudRljwoNLdkyX77k
+         Olv3D3vii/o6A==
+References: <455b22b986de4d3bc6d9bfd522378e442943de5f.1687499411.git.baruch@tkos.co.il>
+ <202306230934.C235D5751@keescook>
+User-agent: mu4e 1.9.21; emacs 28.2
+From:   Baruch Siach <baruch@tkos.co.il>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Eric Biederman <ebiederm@xmission.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] elf: correct note name comment
+Date:   Sun, 25 Jun 2023 06:44:09 +0300
+In-reply-to: <202306230934.C235D5751@keescook>
+Message-ID: <875y7c5hgd.fsf@tarshish>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Originating-IP: [10.79.64.101]
-X-ClientProxiedBy: ZJY01-PUBMBX-01.didichuxing.com (10.79.64.32) To
- ZJY02-ACTMBX-02.didichuxing.com (10.79.65.12)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use current logging style.
+Hi Kees,
 
-Signed-off-by: tiozhang <tiozhang@didiglobal.com>
----
- kernel/cred.c | 27 +++++++++++++++------------
- 1 file changed, 15 insertions(+), 12 deletions(-)
+On Fri, Jun 23 2023, Kees Cook wrote:
+> On Fri, Jun 23, 2023 at 08:50:11AM +0300, Baruch Siach wrote:
+>> NT_PRFPREG note is named "CORE". Correct the comment accordingly.
+>> 
+>> Fixes: 00e19ceec80b ("ELF: Add ELF program property parsing support")
+>> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+>> ---
+>> 
+>> v2: Swap "CORE" and "LINUX" as noted by Kees
+>> ---
+>>  include/uapi/linux/elf.h | 3 ++-
+>>  1 file changed, 2 insertions(+), 1 deletion(-)
+>> 
+>> diff --git include/uapi/linux/elf.h include/uapi/linux/elf.h
+>> index ac3da855fb19..4d1c8d46e7f0 100644
+>> --- include/uapi/linux/elf.h
+>> +++ include/uapi/linux/elf.h
+>
+> Hi, I took this patch, but it seems something is misconfigured on your
+> end for patch generation -- normally I'd expect to need "-p1", not "-p0"
+> to apply patches. Are you using "git format-patch" to produce these
+> patches?
 
-diff --git a/kernel/cred.c b/kernel/cred.c
-index e10c15f51c1f..918409af008b 100644
---- a/kernel/cred.c
-+++ b/kernel/cred.c
-@@ -4,6 +4,9 @@
-  * Copyright (C) 2008 Red Hat, Inc. All Rights Reserved.
-  * Written by David Howells (dhowells@redhat.com)
-  */
-+
-+#define pr_fmt(fmt) "CRED: " fmt
-+
- #include <linux/export.h>
- #include <linux/cred.h>
- #include <linux/slab.h>
-@@ -836,32 +839,32 @@ EXPORT_SYMBOL(creds_are_invalid);
- static void dump_invalid_creds(const struct cred *cred, const char *label,
- 			       const struct task_struct *tsk)
- {
--	printk(KERN_ERR "CRED: %s credentials: %p %s%s%s\n",
-+	pr_err("%s credentials: %p %s%s%s\n",
- 	       label, cred,
- 	       cred == &init_cred ? "[init]" : "",
- 	       cred == tsk->real_cred ? "[real]" : "",
- 	       cred == tsk->cred ? "[eff]" : "");
--	printk(KERN_ERR "CRED: ->magic=%x, put_addr=%p\n",
-+	pr_err("->magic=%x, put_addr=%p\n",
- 	       cred->magic, cred->put_addr);
--	printk(KERN_ERR "CRED: ->usage=%d, subscr=%d\n",
-+	pr_err("->usage=%d, subscr=%d\n",
- 	       atomic_read(&cred->usage),
- 	       read_cred_subscribers(cred));
--	printk(KERN_ERR "CRED: ->*uid = { %d,%d,%d,%d }\n",
-+	pr_err("->*uid = { %d,%d,%d,%d }\n",
- 		from_kuid_munged(&init_user_ns, cred->uid),
- 		from_kuid_munged(&init_user_ns, cred->euid),
- 		from_kuid_munged(&init_user_ns, cred->suid),
- 		from_kuid_munged(&init_user_ns, cred->fsuid));
--	printk(KERN_ERR "CRED: ->*gid = { %d,%d,%d,%d }\n",
-+	pr_err("->*gid = { %d,%d,%d,%d }\n",
- 		from_kgid_munged(&init_user_ns, cred->gid),
- 		from_kgid_munged(&init_user_ns, cred->egid),
- 		from_kgid_munged(&init_user_ns, cred->sgid),
- 		from_kgid_munged(&init_user_ns, cred->fsgid));
- #ifdef CONFIG_SECURITY
--	printk(KERN_ERR "CRED: ->security is %p\n", cred->security);
-+	pr_err("->security is %p\n", cred->security);
- 	if ((unsigned long) cred->security >= PAGE_SIZE &&
- 	    (((unsigned long) cred->security & 0xffffff00) !=
- 	     (POISON_FREE << 24 | POISON_FREE << 16 | POISON_FREE << 8)))
--		printk(KERN_ERR "CRED: ->security {%x, %x}\n",
-+		pr_err("->security {%x, %x}\n",
- 		       ((u32*)cred->security)[0],
- 		       ((u32*)cred->security)[1]);
- #endif
-@@ -872,8 +875,8 @@ static void dump_invalid_creds(const struct cred *cred, const char *label,
-  */
- void __noreturn __invalid_creds(const struct cred *cred, const char *file, unsigned line)
- {
--	printk(KERN_ERR "CRED: Invalid credentials\n");
--	printk(KERN_ERR "CRED: At %s:%u\n", file, line);
-+	pr_err("Invalid credentials\n");
-+	pr_err("At %s:%u\n", file, line);
- 	dump_invalid_creds(cred, "Specified", current);
- 	BUG();
- }
-@@ -899,14 +902,14 @@ void __validate_process_creds(struct task_struct *tsk,
- 	return;
- 
- invalid_creds:
--	printk(KERN_ERR "CRED: Invalid process credentials\n");
--	printk(KERN_ERR "CRED: At %s:%u\n", file, line);
-+	pr_err("Invalid process credentials\n");
-+	pr_err("At %s:%u\n", file, line);
- 
- 	dump_invalid_creds(tsk->real_cred, "Real", tsk);
- 	if (tsk->cred != tsk->real_cred)
- 		dump_invalid_creds(tsk->cred, "Effective", tsk);
- 	else
--		printk(KERN_ERR "CRED: Effective creds == Real creds\n");
-+		pr_err("Effective creds == Real creds\n");
- 	BUG();
- }
- EXPORT_SYMBOL(__validate_process_creds);
+I recently enabled diff.noprefix for easier copying of file names from
+git-diff output. I have now noticed the git-format-patch is also
+affected, and that it breaks the default git-am -p1. So I have reverted
+diff.noprefix to its default.
+
+Sorry for the inconvenience, and thanks for letting me know.
+
+baruch
+
 -- 
-2.17.1
-
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
