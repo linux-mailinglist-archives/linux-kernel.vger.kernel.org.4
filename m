@@ -2,87 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BC8773D373
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 21:48:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90C5673D374
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 21:50:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230053AbjFYTsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 15:48:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51442 "EHLO
+        id S230058AbjFYTuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 15:50:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229996AbjFYTsy (ORCPT
+        with ESMTP id S229528AbjFYTud (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 15:48:54 -0400
-Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [5.144.164.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 449E81AD
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 12:48:53 -0700 (PDT)
-Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 72E1F1F4D0;
-        Sun, 25 Jun 2023 21:48:50 +0200 (CEST)
-Date:   Sun, 25 Jun 2023 21:48:49 +0200
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, Lux Aliaga <they@mint.lgbt>
-Subject: Re: [PATCH 03/15] dt-bindings: clock: qcom,dispcc-sm6125: Require
- GCC PLL0 DIV clock
-Message-ID: <vnp263d43flny2ibt3n7fbloyi26enqrejnobogplfu5fcj6l3@s7zkxrsi2rde>
-References: <20230624-sm6125-dpu-v1-0-1d5a638cebf2@somainline.org>
- <20230624-sm6125-dpu-v1-3-1d5a638cebf2@somainline.org>
- <c9681bce-efa8-9b79-4bf6-837dd6a2dc12@linaro.org>
- <55b0ca89-8f2e-5383-59d4-6809e813abf8@linaro.org>
+        Sun, 25 Jun 2023 15:50:33 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C481B9
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 12:50:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=9+HzIBQVGlFL8xfvIAScJgtvtZfx8ZXXDTZw1yHSK9M=; b=AGHDvpUN7zqMYZix6hbEiMUtWu
+        /eINrp0No4beHCF+ZzOOM4MjwYRYpD9UTEKPGlQB5m0BKiXs1lPSrj/4TvA1e5l21z+oNs7Hh3ETK
+        F+DwAWIVPJVLw/b3CyHF30bSdzHSQrQxnPKt2v4EqUSWRF4XMAs4eZt9gBcb1sfMU7CdvVo/fSunQ
+        ddAR61Ug5JOXgYWeo4WiVW1AEqQ2FThiab64Gwi6GbcTSLiayt4rxzEQkbq7j4i4IZKi0EphOlWog
+        zIF9Ws3ILuSyVGWXN2qQ9bD++8+KWMKWImWPZDAzaxAeSnbzMFPJmsEntdQcbRgb36Nypcbiz1uI+
+        7A7KK0dw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qDVkP-0010Ph-W0; Sun, 25 Jun 2023 19:50:10 +0000
+Date:   Sun, 25 Jun 2023 20:50:09 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     akpm@linux-foundation.org, naoya.horiguchi@nec.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm: memory-failure: remove unneeded page state check in
+ shake_page()
+Message-ID: <ZJiacZIkvIv1P3AK@casper.infradead.org>
+References: <20230625113430.2310385-1-linmiaohe@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <55b0ca89-8f2e-5383-59d4-6809e813abf8@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230625113430.2310385-1-linmiaohe@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-06-24 11:08:54, Krzysztof Kozlowski wrote:
-> On 24/06/2023 03:45, Konrad Dybcio wrote:
-> > On 24.06.2023 02:41, Marijn Suijten wrote:
-> >> The "gcc_disp_gpll0_div_clk_src" clock is consumed by the driver, will
-> >> be passed from DT, and should be required by the bindings.
-> >>
-> >> Fixes: 8397c9c0c26b ("dt-bindings: clock: add QCOM SM6125 display clock bindings")
-> >> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> >> ---
-> > Ideally, you'd stick it at the bottom of the list, as the items: order
-> > is part of the ABI
+On Sun, Jun 25, 2023 at 07:34:30PM +0800, Miaohe Lin wrote:
+> Remove unneeded PageLRU(p) and is_free_buddy_page(p) check as slab caches
+> are not shrunk now. This check can be added back when a lightweight range
+> based shrinker is available.
+
+On further review, I think you've misunderstood the entire situation
+here and no patch should be applied.
+
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> ---
+>  mm/memory-failure.c | 9 ++++-----
+>  1 file changed, 4 insertions(+), 5 deletions(-)
 > 
-> Yes, please add them to the end. Order is fixed.
-
-Disagreed for bindings that declare clock-names and when the driver
-adheres to it, see my reply to Konrad's message.
-
-- Marijn
+> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+> index 5b663eca1f29..92f951df3e87 100644
+> --- a/mm/memory-failure.c
+> +++ b/mm/memory-failure.c
+> @@ -373,11 +373,10 @@ void shake_page(struct page *p)
+>  	if (PageHuge(p))
+>  		return;
+>  
+> -	if (!PageSlab(p)) {
+> -		lru_add_drain_all();
+> -		if (PageLRU(p) || is_free_buddy_page(p))
+> -			return;
+> -	}
+> +	if (PageSlab(p))
+> +		return;
+> +
+> +	lru_add_drain_all();
+>  
+>  	/*
+>  	 * TODO: Could shrink slab caches here if a lightweight range-based
+> -- 
+> 2.27.0
+> 
+> 
