@@ -2,188 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E774F73CF8B
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 10:56:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDC0A73CF8F
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 10:56:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231472AbjFYIzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 04:55:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36802 "EHLO
+        id S231830AbjFYI4V convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 25 Jun 2023 04:56:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbjFYIzu (ORCPT
+        with ESMTP id S231734AbjFYI4P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 04:55:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FE5E127
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 01:55:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EE2B960B6E
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 08:55:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 501E7C433C9
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 08:55:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687683348;
-        bh=7+eC0aDwuKf5vEOSJD3dDWwPcpDgJ9eNDlolNBZud0s=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ZqYxRokqcPdbl4OEHzhz0oIvp5jmu6PeoiQYaAFAP52iEHc14zGU1z361AAMqLQ3o
-         OmV0Bp9AIs0QjOW+XVAAQNo/4Cr3eAVeucbe0gGBCGJOor4La518v+9nbPSGGjTcww
-         n80RD4Eaclhy/ZSUeky5AaY4gmC+K3Ool0VICpnheR+NVv2gT/mrT982XkJyc8tS/R
-         csKdq5Uo8ExxwikHUSa0oe+P33NDKDuI0L+bQzYG68+p9wvmQ+D6jaVqTkWXOAu/JX
-         C/TklPc6A98nO8aN9JQg6bYsH0FkSKRKx/8guO/PIBLFeRwRa9Nczm9jyBGa8+EoUy
-         hwnK/t665U2Wg==
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-51d7d0dbec8so1429776a12.2
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 01:55:48 -0700 (PDT)
-X-Gm-Message-State: AC+VfDz80Fy3Haa2TVTZB1nidXchPFZDS4tOXUD8wlhNhPltNLE69kyx
-        pAk0Fy7Xtq1C+H8nMFHEx+qZulk5omIBfy8bmg4=
-X-Google-Smtp-Source: ACHHUZ4vNnea3bswnH820+GwW88RfKD4sBM3CnwZoBp8A6sQ6g4Gt1aYDc6+SNTnLt4kJY9CZxYa/P+881LBFDMVoJ0=
-X-Received: by 2002:aa7:d851:0:b0:51d:8a53:d1f with SMTP id
- f17-20020aa7d851000000b0051d8a530d1fmr1330030eds.8.1687683346457; Sun, 25 Jun
- 2023 01:55:46 -0700 (PDT)
+        Sun, 25 Jun 2023 04:56:15 -0400
+Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64649E7B;
+        Sun, 25 Jun 2023 01:56:09 -0700 (PDT)
+Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-6300afaa43bso17788366d6.3;
+        Sun, 25 Jun 2023 01:56:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687683368; x=1690275368;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1aLOG1SDXkQ1qzZvF4569LDgLL4VVaMYgtjO2JV4SiE=;
+        b=MTTwTWawGf3iwhTsDIUO+KNTRNuS6DmS0yz0EtjnQqe9+Se2XhhGsoJGDmPqTLIoiU
+         4C7Q07ftWfGxvb++8RYlYEietCH8KsbbQcF3DWrWNhs0YFQqifyBdQNgzdr3nnbT6/Ux
+         QA8PcJ8wVG6pBAxt0RQh5p6SuTqixsDexk0ut14tOMksddwmERd4Xpb6p0O0x6KCnio/
+         fCUCmTi+kjvTdR7P9z3xRWDw4Fjn5/rKNS1ygh1wzF3Dz8PNHyxxyDToXXKla25Gbi+R
+         KLNvWkOOpx+tElROlXGZNi3AIl38Z5ztmBplWRoay7eqv0Mb7S8LU4Frc1O+S5F45yOg
+         V+rw==
+X-Gm-Message-State: AC+VfDyt8rvdmSEqZWgFQclwxa+l7sPNuejWEyXNfTEul9MH+NN8CU5x
+        IeGwm91aW5EPwPftUMr6Z8wgZzj+gVykcQ==
+X-Google-Smtp-Source: ACHHUZ4OW7RBWzmM6GJ4y0g71dKWkjXKLEo6D9koa4mtmiVEAj3TldrDY2jzPriGS1nNwCAbMltSeQ==
+X-Received: by 2002:a05:6214:2302:b0:626:3375:6fea with SMTP id gc2-20020a056214230200b0062633756feamr30750905qvb.22.1687683368373;
+        Sun, 25 Jun 2023 01:56:08 -0700 (PDT)
+Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com. [209.85.160.181])
+        by smtp.gmail.com with ESMTPSA id j1-20020ad453a1000000b00631fc149a19sm1830498qvv.110.2023.06.25.01.56.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 25 Jun 2023 01:56:07 -0700 (PDT)
+Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-40092be7bd5so10905111cf.3;
+        Sun, 25 Jun 2023 01:56:07 -0700 (PDT)
+X-Received: by 2002:a05:622a:1208:b0:400:8f95:8910 with SMTP id
+ y8-20020a05622a120800b004008f958910mr6833378qtx.46.1687683367622; Sun, 25 Jun
+ 2023 01:56:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230615121016.3731983-1-chenhuacai@loongson.cn>
-In-Reply-To: <20230615121016.3731983-1-chenhuacai@loongson.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Sun, 25 Jun 2023 16:55:33 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H49AyrG-sH2SXLNg_cX-Wv8vS4Qno_2N4v6ccGGciv-+A@mail.gmail.com>
-Message-ID: <CAAhV-H49AyrG-sH2SXLNg_cX-Wv8vS4Qno_2N4v6ccGGciv-+A@mail.gmail.com>
-Subject: Re: [PATCH] kthread: Rename user_mode_thread() to kmuser_thread()
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
+References: <7b6ffa43307522833103fe29ec6a084b7d621a16.1687423204.git.geert+renesas@glider.be>
+ <97bc4380-1a2a-aec7-168e-04536fc74e37@loongson.cn>
+In-Reply-To: <97bc4380-1a2a-aec7-168e-04536fc74e37@loongson.cn>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Sun, 25 Jun 2023 10:55:56 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdX8=16pRQr=2CouUWBUhD16Mkh3_WaNZmRTd7Wjwq_pnw@mail.gmail.com>
+Message-ID: <CAMuHMdX8=16pRQr=2CouUWBUhD16Mkh3_WaNZmRTd7Wjwq_pnw@mail.gmail.com>
+Subject: Re: [28/39] drm: renesas: shmobile: Use drm_crtc_handle_vblank()
+To:     Sui Jingfeng <suijingfeng@loongson.cn>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Friendly ping?
+Hi Sui,
 
-Huacai
+On Sat, Jun 24, 2023 at 11:33 AM Sui Jingfeng <suijingfeng@loongson.cn> wrote:
+> I'm fine with this patch but I I don't see the benefit.
+>
+> This reply is more about my personal question.
+>
+> On 2023/6/22 17:21, Geert Uytterhoeven wrote:
+> > Replace the call to the legacy drm_handle_vblank() function with a call
+> > to the new drm_crtc_handle_vblank() helper.
+> >
+> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> > Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+> Reviewed-by: Sui Jingfeng <suijingfeng@loongson.cn>
+> > ---
+> >   drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c b/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c
+> > index c98e2bdd888c3274..6eaf2c5a104f451a 100644
+> > --- a/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c
+> > +++ b/drivers/gpu/drm/renesas/shmobile/shmob_drm_drv.c
+> > @@ -86,7 +86,7 @@ static irqreturn_t shmob_drm_irq(int irq, void *arg)
+> >       spin_unlock_irqrestore(&sdev->irq_lock, flags);
+> >
+> >       if (status & LDINTR_VES) {
+> > -             drm_handle_vblank(dev, 0);
+> > +             drm_crtc_handle_vblank(&sdev->crtc.base);
+>
+>
+> After switching to drm_crtc_handle_vblank(),
+>
+> your driver need another deference to the pointer of 'struct drm_crtc'
+> to get the pointer of 'struct drm_device';
+>
+> Plus another call to get the index(display pipe) of the CRTC by calling
+> drm_crtc_index(crtc).
 
-On Thu, Jun 15, 2023 at 8:10=E2=80=AFPM Huacai Chen <chenhuacai@loongson.cn=
-> wrote:
+That is correct.
+
+> Consider that shmob-drm support only one display pipe,
 >
-> Commit 343f4c49f2438d8 ("kthread: Don't allocate kthread_struct for init
-> and umh") introduces a new function user_mode_thread() for init and umh.
+> is it that the switching is less straight forward than the original
+> implement ?
 >
-> init and umh are different from typical kernel threads since the don't
-> need a "kthread" struct and they will finally become user processes by
-> calling kernel_execve(), but on the other hand, they are also different
-> from typical user mode threads (they have no "mm" structs at creation
-> time, which is traditionally used to distinguish a user thread and a
-> kernel thread).
 >
-> In a former patch I treat init and umh as "special kernel threads" and
-> unify kernel_thread() and user_mode_thread() to kernel_thread() again.
-> However, the patch has been nacked because init and umh are essentially
-> "special user threads".
+> ```
 >
-> Nevertheless, I still agree with Andrews' comment "But the naming isn't
-> very good anyway. They should have been usermode_thread/kernel_thread or
-> user_thread/kernel_thread.".
->
-> Since Eric describes init and umh as "user threads run in kernel mode",
-> in this patch I rename user_mode_thread() as kmuser_thread(), which is
-> a little better than just user_thread().
->
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> ---
->  include/linux/sched/task.h | 2 +-
->  init/main.c                | 2 +-
->  kernel/fork.c              | 4 ++--
->  kernel/umh.c               | 4 ++--
->  4 files changed, 6 insertions(+), 6 deletions(-)
->
-> diff --git a/include/linux/sched/task.h b/include/linux/sched/task.h
-> index e0f5ac90a228..c774d604b0a3 100644
-> --- a/include/linux/sched/task.h
-> +++ b/include/linux/sched/task.h
-> @@ -98,7 +98,7 @@ struct task_struct *create_io_thread(int (*fn)(void *),=
- void *arg, int node);
->  struct task_struct *fork_idle(int);
->  extern pid_t kernel_thread(int (*fn)(void *), void *arg, const char *nam=
-e,
->                             unsigned long flags);
-> -extern pid_t user_mode_thread(int (*fn)(void *), void *arg, unsigned lon=
-g flags);
-> +extern pid_t kmuser_thread(int (*fn)(void *), void *arg, unsigned long f=
-lags);
->  extern long kernel_wait4(pid_t, int __user *, int, struct rusage *);
->  int kernel_wait(pid_t pid, int *stat);
->
-> diff --git a/init/main.c b/init/main.c
-> index af50044deed5..362ba90d6f73 100644
-> --- a/init/main.c
-> +++ b/init/main.c
-> @@ -697,7 +697,7 @@ noinline void __ref __noreturn rest_init(void)
->          * the init task will end up wanting to create kthreads, which, i=
-f
->          * we schedule it before we create kthreadd, will OOPS.
->          */
-> -       pid =3D user_mode_thread(kernel_init, NULL, CLONE_FS);
-> +       pid =3D kmuser_thread(kernel_init, NULL, CLONE_FS);
->         /*
->          * Pin init on the boot CPU. Task migration is not properly worki=
-ng
->          * until sched_init_smp() has been run. It will set the allowed
-> diff --git a/kernel/fork.c b/kernel/fork.c
-> index 41c964104b58..57d5c8c1766e 100644
-> --- a/kernel/fork.c
-> +++ b/kernel/fork.c
-> @@ -2978,9 +2978,9 @@ pid_t kernel_thread(int (*fn)(void *), void *arg, c=
-onst char *name,
->  }
->
->  /*
-> - * Create a user mode thread.
-> + * Create a kernel mode user thread.
+> /**
+>   * drm_crtc_handle_vblank - handle a vblank event
+>   * @crtc: where this event occurred
+>   *
+>   * Drivers should call this routine in their vblank interrupt handlers to
+>   * update the vblank counter and send any signals that may be pending.
+>   *
+>   * This is the native KMS version of drm_handle_vblank().
+>   *
+>   * Note that for a given vblank counter value drm_crtc_handle_vblank()
+>   * and drm_crtc_vblank_count() or drm_crtc_vblank_count_and_time()
+>   * provide a barrier: Any writes done before calling
+>   * drm_crtc_handle_vblank() will be visible to callers of the later
+>   * functions, if the vblank count is the same or a later one.
+>   *
+>   * See also &drm_vblank_crtc.count.
+>   *
+>   * Returns:
+>   * True if the event was successfully handled, false on failure.
 >   */
-> -pid_t user_mode_thread(int (*fn)(void *), void *arg, unsigned long flags=
-)
-> +pid_t kmuser_thread(int (*fn)(void *), void *arg, unsigned long flags)
->  {
->         struct kernel_clone_args args =3D {
->                 .flags          =3D ((lower_32_bits(flags) | CLONE_VM |
-> diff --git a/kernel/umh.c b/kernel/umh.c
-> index 60aa9e764a38..28c0cf0da7be 100644
-> --- a/kernel/umh.c
-> +++ b/kernel/umh.c
-> @@ -130,7 +130,7 @@ static void call_usermodehelper_exec_sync(struct subp=
-rocess_info *sub_info)
+> bool drm_crtc_handle_vblank(struct drm_crtc *crtc)
+> {
+>      return drm_handle_vblank(crtc->dev, drm_crtc_index(crtc));
+> }
 >
->         /* If SIGCLD is ignored do_wait won't populate the status. */
->         kernel_sigaction(SIGCHLD, SIG_DFL);
-> -       pid =3D user_mode_thread(call_usermodehelper_exec_async, sub_info=
-, SIGCHLD);
-> +       pid =3D kmuser_thread(call_usermodehelper_exec_async, sub_info, S=
-IGCHLD);
->         if (pid < 0)
->                 sub_info->retval =3D pid;
->         else
-> @@ -169,7 +169,7 @@ static void call_usermodehelper_exec_work(struct work=
-_struct *work)
->                  * want to pollute current->children, and we need a paren=
-t
->                  * that always ignores SIGCHLD to ensure auto-reaping.
->                  */
-> -               pid =3D user_mode_thread(call_usermodehelper_exec_async, =
-sub_info,
-> +               pid =3D kmuser_thread(call_usermodehelper_exec_async, sub=
-_info,
->                                        CLONE_PARENT | SIGCHLD);
->                 if (pid < 0) {
->                         sub_info->retval =3D pid;
-> --
-> 2.39.3
+> ```
 >
+> Is it that drm_crtc_handle_vblank() function is preferred over
+> drm_handle_vblank() in the future?
+>
+> I'm fine with this question answered.
+
+I think the native KMS version is preferred over the legacy version, cfr.
+
+    /**
+     * drm_handle_vblank - handle a vblank event
+    [...]
+     * This is the legacy version of drm_crtc_handle_vblank().
+     */
+    bool drm_handle_vblank(struct drm_device *dev, unsigned int pipe)
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
