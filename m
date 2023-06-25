@@ -2,90 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC9F973D2C1
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 19:44:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92EEF73D2C6
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 19:45:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbjFYRo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 13:44:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54300 "EHLO
+        id S229848AbjFYRpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 13:45:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjFYRo0 (ORCPT
+        with ESMTP id S229484AbjFYRpt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 13:44:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA3FD18E;
-        Sun, 25 Jun 2023 10:44:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 740DE60B42;
-        Sun, 25 Jun 2023 17:44:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AC02C433C8;
-        Sun, 25 Jun 2023 17:44:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687715063;
-        bh=WoUrmf0JEvFfQkljC61rPZoFHAXMId+ovOZ+fz1xXRM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YP5riMELjwGif5MetoqunCE/NEQNM05SODCHCM3NP274NT5kLDkCw+lYlFK9UhEOT
-         qDLdn9rWmrAiPScC30o8bBxNq06ndu4LyRdafclIFEHnyh1dl1m6lm8HKVRj0PW8Gd
-         bS1NGRYWfoyju/EEsTN0Hfg++5BGw6JBu3tNKZMoh+4lxQ/InBdA1cnWhewfz/DpH3
-         NQvBcro2ROnD4F+sChNda583y6v06vsiiNksZdiHaJOziCCpsjvIYI5dguVCw3W8jl
-         /7gz0Aq4l2D8Ub/ROd+l5Cg2ih7cqqiikyhGIYUqney6omj2WYc5s+RTv4euyPzP/E
-         NLShZkWcrywjw==
-Date:   Sun, 25 Jun 2023 20:42:57 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Kees Cook <keescook@chromium.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Kent Overstreet <kent.overstreet@linux.dev>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Puranjay Mohan <puranjay12@gmail.com>,
-        Rick P Edgecombe <rick.p.edgecombe@intel.com>,
-        "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Song Liu <song@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-        netdev@vger.kernel.org, sparclinux@vger.kernel.org,
-        the arch/x86 maintainers <x86@kernel.org>
-Subject: Re: [PATCH v2 02/12] mm: introduce execmem_text_alloc() and
- jit_text_alloc()
-Message-ID: <20230625174257.GL52412@kernel.org>
-References: <20230616085038.4121892-1-rppt@kernel.org>
- <20230616085038.4121892-3-rppt@kernel.org>
- <f9a7eebe-d36e-4587-b99d-35d4edefdd14@app.fastmail.com>
- <20230618080027.GA52412@kernel.org>
- <a17c65c6-863f-4026-9c6f-a04b659e9ab4@app.fastmail.com>
- <20230625161417.GK52412@kernel.org>
- <90161ac9-3ca0-4c72-b1c4-ab1293e55445@app.fastmail.com>
+        Sun, 25 Jun 2023 13:45:49 -0400
+Received: from mail-il1-f207.google.com (mail-il1-f207.google.com [209.85.166.207])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CF3D19A
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 10:45:48 -0700 (PDT)
+Received: by mail-il1-f207.google.com with SMTP id e9e14a558f8ab-345a58fb51bso2755515ab.0
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 10:45:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687715148; x=1690307148;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nMnS8yteeq908fCMk+lnJPrDlGNebwY4YZGBzDeFebs=;
+        b=fEp8k3bJUhQ2tq3+jOUKCBYykKwBshVd5ic+dKTCE/GSH8hFNqlsLVHIaaF9e7yuZE
+         74HrpkLSseOQIeQl3kaJu2sbic8RccjezMI24Ahj0Qb7zq6wiSymiogKSVybFtIEkTjh
+         zWdVpdzQmkwAit4LZy6d4GJMNJ/j79jFVAUSNdrbE0bBSY0qcagsrNWQ8SjknAfZzSNb
+         ftE0dUwJK75NYdr8ZoA0IfEhFLjFD5DU3Se7iIKlv9AMaA1dFXKnXLbHD0OuXx9PY9Y/
+         xFAmtGl9IEqO4t5iTTpuAO2rtUnNHx0aLvI8o88xfFZ6dGoF/eSmsOxMsP4nsmCUn3pa
+         QzMw==
+X-Gm-Message-State: AC+VfDwqI5immaU2OFFwcYLI80af8oogc6tS3CaCmuw1qifb3IEecCoM
+        LlFIRed1TTFcYHkpDfzMHo2yEGZe2V4FcCEX0nP5T+5XxeTU
+X-Google-Smtp-Source: ACHHUZ7meTc6+Z+5poB65do2Ielys1kCaWw4bc2j1x7NcxiHnCpOClMs2a8om3mzT5+pT5aWWSWVhdcq3n7MnESuzK/B67HFQxgl
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <90161ac9-3ca0-4c72-b1c4-ab1293e55445@app.fastmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a92:d350:0:b0:345:a49a:32d7 with SMTP id
+ a16-20020a92d350000000b00345a49a32d7mr608409ilh.5.1687715147862; Sun, 25 Jun
+ 2023 10:45:47 -0700 (PDT)
+Date:   Sun, 25 Jun 2023 10:45:47 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ded70105fef7cd35@google.com>
+Subject: [syzbot] [f2fs?] possible deadlock in f2fs_fiemap
+From:   syzbot <syzbot+dd6352699b8027673b35@syzkaller.appspotmail.com>
+To:     chao@kernel.org, jaegeuk@kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,157 +56,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 25, 2023 at 09:59:34AM -0700, Andy Lutomirski wrote:
-> 
-> 
-> On Sun, Jun 25, 2023, at 9:14 AM, Mike Rapoport wrote:
-> > On Mon, Jun 19, 2023 at 10:09:02AM -0700, Andy Lutomirski wrote:
-> >> 
-> >> On Sun, Jun 18, 2023, at 1:00 AM, Mike Rapoport wrote:
-> >> > On Sat, Jun 17, 2023 at 01:38:29PM -0700, Andy Lutomirski wrote:
-> >> >> On Fri, Jun 16, 2023, at 1:50 AM, Mike Rapoport wrote:
-> >> >> > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
-> >> >> >
-> >> >> > module_alloc() is used everywhere as a mean to allocate memory for code.
-> >> >> >
-> >> >> > Beside being semantically wrong, this unnecessarily ties all subsystems
-> >> >> > that need to allocate code, such as ftrace, kprobes and BPF to modules
-> >> >> > and puts the burden of code allocation to the modules code.
-> >> >> >
-> >> >> > Several architectures override module_alloc() because of various
-> >> >> > constraints where the executable memory can be located and this causes
-> >> >> > additional obstacles for improvements of code allocation.
-> >> >> >
-> >> >> > Start splitting code allocation from modules by introducing
-> >> >> > execmem_text_alloc(), execmem_free(), jit_text_alloc(), jit_free() APIs.
-> >> >> >
-> >> >> > Initially, execmem_text_alloc() and jit_text_alloc() are wrappers for
-> >> >> > module_alloc() and execmem_free() and jit_free() are replacements of
-> >> >> > module_memfree() to allow updating all call sites to use the new APIs.
-> >> >> >
-> >> >> > The intention semantics for new allocation APIs:
-> >> >> >
-> >> >> > * execmem_text_alloc() should be used to allocate memory that must reside
-> >> >> >   close to the kernel image, like loadable kernel modules and generated
-> >> >> >   code that is restricted by relative addressing.
-> >> >> >
-> >> >> > * jit_text_alloc() should be used to allocate memory for generated code
-> >> >> >   when there are no restrictions for the code placement. For
-> >> >> >   architectures that require that any code is within certain distance
-> >> >> >   from the kernel image, jit_text_alloc() will be essentially aliased to
-> >> >> >   execmem_text_alloc().
-> >> >> >
-> >> >> 
-> >> >> Is there anything in this series to help users do the appropriate
-> >> >> synchronization when the actually populate the allocated memory with
-> >> >> code?  See here, for example:
-> >> >
-> >> > This series only factors out the executable allocations from modules and
-> >> > puts them in a central place.
-> >> > Anything else would go on top after this lands.
-> >> 
-> >> Hmm.
-> >> 
-> >> On the one hand, there's nothing wrong with factoring out common code. On
-> >> the other hand, this is probably the right time to at least start
-> >> thinking about synchronization, at least to the extent that it might make
-> >> us want to change this API.  (I'm not at all saying that this series
-> >> should require changes -- I'm just saying that this is a good time to
-> >> think about how this should work.)
-> >> 
-> >> The current APIs, *and* the proposed jit_text_alloc() API, don't actually
-> >> look like the one think in the Linux ecosystem that actually
-> >> intelligently and efficiently maps new text into an address space:
-> >> mmap().
-> >> 
-> >> On x86, you can mmap() an existing file full of executable code PROT_EXEC
-> >> and jump to it with minimal synchronization (just the standard implicit
-> >> ordering in the kernel that populates the pages before setting up the
-> >> PTEs and whatever user synchronization is needed to avoid jumping into
-> >> the mapping before mmap() finishes).  It works across CPUs, and the only
-> >> possible way userspace can screw it up (for a read-only mapping of
-> >> read-only text, anyway) is to jump to the mapping too early, in which
-> >> case userspace gets a page fault.  Incoherence is impossible, and no one
-> >> needs to "serialize" (in the SDM sense).
-> >> 
-> >> I think the same sequence (from userspace's perspective) works on other
-> >> architectures, too, although I think more cache management is needed on
-> >> the kernel's end.  As far as I know, no Linux SMP architecture needs an
-> >> IPI to map executable text into usermode, but I could easily be wrong.
-> >> (IIRC RISC-V has very developer-unfriendly icache management, but I don't
-> >> remember the details.)
-> >> 
-> >> Of course, using ptrace or any other FOLL_FORCE to modify text on x86 is
-> >> rather fraught, and I bet many things do it wrong when userspace is
-> >> multithreaded.  But not in production because it's mostly not used in
-> >> production.)
-> >> 
-> >> But jit_text_alloc() can't do this, because the order of operations
-> >> doesn't match.  With jit_text_alloc(), the executable mapping shows up
-> >> before the text is populated, so there is no atomic change from not-there
-> >> to populated-and-executable.  Which means that there is an opportunity
-> >> for CPUs, speculatively or otherwise, to start filling various caches
-> >> with intermediate states of the text, which means that various
-> >> architectures (even x86!) may need serialization.
-> >> 
-> >> For eBPF- and module- like use cases, where JITting/code gen is quite
-> >> coarse-grained, perhaps something vaguely like:
-> >> 
-> >> jit_text_alloc() -> returns a handle and an executable virtual address,
-> >> but does *not* map it there
-> >> jit_text_write() -> write to that handle
-> >> jit_text_map() -> map it and synchronize if needed (no sync needed on
-> >> x86, I think)
-> >> 
-> >> could be more efficient and/or safer.
-> >> 
-> >> (Modules could use this too.  Getting alternatives right might take some
-> >> fiddling, because off the top of my head, this doesn't match how it works
-> >> now.)
-> >> 
-> >> To make alternatives easier, this could work, maybe (haven't fully
-> >> thought it through):
-> >> 
-> >> jit_text_alloc()
-> >> jit_text_map_rw_inplace() -> map at the target address, but RW, !X
-> >> 
-> >> write the text and apply alternatives
-> >> 
-> >> jit_text_finalize() -> change from RW to RX *and synchronize*
-> >> 
-> >> jit_text_finalize() would either need to wait for RCU (possibly extra
-> >> heavy weight RCU to get "serialization") or send an IPI.
-> >
-> > This essentially how modules work now. The memory is allocated RW, written
-> > and updated with alternatives and then made ROX in the end with set_memory
-> > APIs.
-> >
-> > The issue with not having the memory mapped X when it's written is that we
-> > cannot use large pages to map it. One of the goals is to have executable
-> > memory mapped with large pages and make code allocator able to divide that
-> > page among several callers.
-> >
-> > So the idea was that jit_text_alloc() will have a cache of large pages
-> > mapped ROX, will allocate memory from those caches and there will be
-> > jit_update() that uses text poking for writing to that memory.
-> >
-> > Upon allocation of a large page to increase the cache, that large page will
-> > be "invalidated" by filling it with breakpoint instructions (e.g int3 on
-> > x86)
-> 
-> Is this actually valid?  In between int3 and real code, there’s a
-> potential torn read of real code mixed up with 0xcc.
- 
-You mean while doing text poking?
+Hello,
 
-> > To improve the performance of this process, we can write to !X copy and
-> > then text_poke it to the actual address in one go. This will require some
-> > changes to get the alternatives right.
-> >
-> > -- 
-> > Sincerely yours,
-> > Mike.
+syzbot found the following issue on:
 
--- 
-Sincerely yours,
-Mike.
+HEAD commit:    15e71592dbae Add linux-next specific files for 20230621
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=101c827b280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b4e51841f618f374
+dashboard link: https://syzkaller.appspot.com/bug?extid=dd6352699b8027673b35
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/6b6464ef4887/disk-15e71592.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/81eba5775318/vmlinux-15e71592.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/bc7983587629/bzImage-15e71592.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+dd6352699b8027673b35@syzkaller.appspotmail.com
+
+loop4: detected capacity change from 0 to 40427
+F2FS-fs (loop4): Found nat_bits in checkpoint
+F2FS-fs (loop4): Mounted with checkpoint version = 48b305e5
+======================================================
+WARNING: possible circular locking dependency detected
+6.4.0-rc7-next-20230621-syzkaller #0 Not tainted
+------------------------------------------------------
+syz-executor.4/7658 is trying to acquire lock:
+ffff888012869e20 (&mm->mmap_lock){++++}-{3:3}, at: __might_fault+0xb2/0x190 mm/memory.c:5716
+
+but task is already holding lock:
+ffff8880865b1a10 (&sb->s_type->i_mutex_key#23){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:771 [inline]
+ffff8880865b1a10 (&sb->s_type->i_mutex_key#23){+.+.}-{3:3}, at: f2fs_fiemap+0x1e3/0x1670 fs/f2fs/data.c:1998
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #1 (&sb->s_type->i_mutex_key#23){+.+.}-{3:3}:
+       down_write+0x92/0x200 kernel/locking/rwsem.c:1573
+       inode_lock include/linux/fs.h:771 [inline]
+       f2fs_file_mmap+0x154/0x290 fs/f2fs/file.c:527
+       call_mmap include/linux/fs.h:1876 [inline]
+       mmap_region+0x6cf/0x2570 mm/mmap.c:2669
+       do_mmap+0x850/0xee0 mm/mmap.c:1373
+       vm_mmap_pgoff+0x1a2/0x3b0 mm/util.c:543
+       ksys_mmap_pgoff+0x42b/0x5b0 mm/mmap.c:1419
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #0 (&mm->mmap_lock){++++}-{3:3}:
+       check_prev_add kernel/locking/lockdep.c:3142 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3261 [inline]
+       validate_chain kernel/locking/lockdep.c:3876 [inline]
+       __lock_acquire+0x2e9d/0x5e20 kernel/locking/lockdep.c:5144
+       lock_acquire.part.0+0x11c/0x370 kernel/locking/lockdep.c:5761
+       __might_fault mm/memory.c:5717 [inline]
+       __might_fault+0x115/0x190 mm/memory.c:5710
+       _copy_to_user+0x2b/0xc0 lib/usercopy.c:36
+       copy_to_user include/linux/uaccess.h:191 [inline]
+       fiemap_fill_next_extent+0x217/0x370 fs/ioctl.c:144
+       f2fs_fiemap+0x5a5/0x1670 fs/f2fs/data.c:2066
+       ioctl_fiemap fs/ioctl.c:219 [inline]
+       do_vfs_ioctl+0x478/0x16c0 fs/ioctl.c:810
+       __do_sys_ioctl fs/ioctl.c:868 [inline]
+       __se_sys_ioctl fs/ioctl.c:856 [inline]
+       __x64_sys_ioctl+0x10c/0x210 fs/ioctl.c:856
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+other info that might help us debug this:
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(&sb->s_type->i_mutex_key#23);
+                               lock(&mm->mmap_lock);
+                               lock(&sb->s_type->i_mutex_key#23);
+  rlock(&mm->mmap_lock);
+
+ *** DEADLOCK ***
+
+1 lock held by syz-executor.4/7658:
+ #0: ffff8880865b1a10 (&sb->s_type->i_mutex_key#23){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:771 [inline]
+ #0: ffff8880865b1a10 (&sb->s_type->i_mutex_key#23){+.+.}-{3:3}, at: f2fs_fiemap+0x1e3/0x1670 fs/f2fs/data.c:1998
+
+stack backtrace:
+CPU: 1 PID: 7658 Comm: syz-executor.4 Not tainted 6.4.0-rc7-next-20230621-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
+ check_noncircular+0x2df/0x3b0 kernel/locking/lockdep.c:2195
+ check_prev_add kernel/locking/lockdep.c:3142 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3261 [inline]
+ validate_chain kernel/locking/lockdep.c:3876 [inline]
+ __lock_acquire+0x2e9d/0x5e20 kernel/locking/lockdep.c:5144
+ lock_acquire.part.0+0x11c/0x370 kernel/locking/lockdep.c:5761
+ __might_fault mm/memory.c:5717 [inline]
+ __might_fault+0x115/0x190 mm/memory.c:5710
+ _copy_to_user+0x2b/0xc0 lib/usercopy.c:36
+ copy_to_user include/linux/uaccess.h:191 [inline]
+ fiemap_fill_next_extent+0x217/0x370 fs/ioctl.c:144
+ f2fs_fiemap+0x5a5/0x1670 fs/f2fs/data.c:2066
+ ioctl_fiemap fs/ioctl.c:219 [inline]
+ do_vfs_ioctl+0x478/0x16c0 fs/ioctl.c:810
+ __do_sys_ioctl fs/ioctl.c:868 [inline]
+ __se_sys_ioctl fs/ioctl.c:856 [inline]
+ __x64_sys_ioctl+0x10c/0x210 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f3f8028c389
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f3f81084168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00007f3f803abf80 RCX: 00007f3f8028c389
+RDX: 00000000200000c0 RSI: 00000000c020660b RDI: 0000000000000004
+RBP: 00007f3f802d7493 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffe04349abf R14: 00007f3f81084300 R15: 0000000000022000
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
