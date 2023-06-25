@@ -2,103 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B39373D53E
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 01:19:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DDAE73D548
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 01:20:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbjFYXS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 19:18:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34472 "EHLO
+        id S229942AbjFYXUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 19:20:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbjFYXSu (ORCPT
+        with ESMTP id S229639AbjFYXU1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 19:18:50 -0400
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 533D4E47
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 16:18:49 -0700 (PDT)
-Received: by mail-ot1-x329.google.com with SMTP id 46e09a7af769-6b74791c948so550694a34.3
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 16:18:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1687735128; x=1690327128;
-        h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
-         :subject:references:in-reply-to:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GDL2PKiCA+/rhTNU/RAXiTe/8UXzMDcm38qWTk5tJaQ=;
-        b=tu7dW0UyTp0mbURYV03AZvvKUB4EVAEcPqmwPKifx/K6gEigd69ommTY9v5e4nGdRx
-         /0otvCAopXVymmCSoHypSyDlf9xa1cF4Kmctg6BScYq6FYWD3JBeImtg6vw3uF1qmWPr
-         ReafK4WQwDw0MvGYascISNXIOH3YJzftIe5cHHdtQSYmeu+RO97F22cpndpVWDwvL3hx
-         HTQg7aaiwXj5ZcRhLWvILn0XjjqgAkdkibWIlxI5mVQZtEVNWDFKv7tl3qKIltrGD5ja
-         8+CvrypKjlJYVZA48SrlVUr31ndK+p9YAsamy6n1kZGIXiCOZh0jFUzwSBBHpbM92Ji0
-         cneA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687735128; x=1690327128;
-        h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
-         :subject:references:in-reply-to:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GDL2PKiCA+/rhTNU/RAXiTe/8UXzMDcm38qWTk5tJaQ=;
-        b=ZhSipsftENs0iLKHPKfIRZ9vjnWzcoPTGyLriIqfHNj3xkiA+hVhyFEWWi6OErMVfR
-         w5v604PY3WNTUANJwHCuZvnTamdmpncMtgBIaRP3B7Gt8PcplzrIW6f3TTtxdmMEGnJL
-         hIlntpQbUA9WEOOUB3zNfZpBzyBcYIxanFw7M/F7V57ey90P9PwXHT0yhTOtMV8lDjFC
-         /Hk7pEcSUHfXkJYp0dwZds+1wSu0c3fNTF6VpwcmNdYiLO0e7tl7AYZYyqiddXeMeTm3
-         jJ9VoFtwmC7cYsbFaJSPer0leHIVtPySd4d/5bbeRnoYBc3KXPg8OGbwpWpucIXcXOyx
-         4Rkw==
-X-Gm-Message-State: AC+VfDw9ytmP+iAODFK7dwDpCpXBVBIP6OJeU62FHmO2oSgeVrhMuEi8
-        7XknbpOMyVOutFirikYCH614ew==
-X-Google-Smtp-Source: ACHHUZ4/jIK86E2AaG1hAy2VpPXCHPHwDhZQtOvqja6+oaQ8pw774vDwDuHysXGDTibRWjqAJFzsWg==
-X-Received: by 2002:a05:6830:14d4:b0:6b4:7292:5a1a with SMTP id t20-20020a05683014d400b006b472925a1amr21628341otq.28.1687735128612;
-        Sun, 25 Jun 2023 16:18:48 -0700 (PDT)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id p19-20020a62ab13000000b00678afd48250sm188041pff.218.2023.06.25.16.18.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Jun 2023 16:18:48 -0700 (PDT)
-In-Reply-To: <20230614013018.2168426-1-guoren@kernel.org>
-References: <20230614013018.2168426-1-guoren@kernel.org>
-Subject: Re: [PATCH -next V13 0/3] riscv: Add independent irq/softirq
- stacks support
-Message-Id: <168773507359.1389.408207279075698188.b4-ty@rivosinc.com>
-Date:   Sun, 25 Jun 2023 16:17:53 -0700
-MIME-Version: 1.0
+        Sun, 25 Jun 2023 19:20:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12BAFE4C;
+        Sun, 25 Jun 2023 16:20:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7826F60C55;
+        Sun, 25 Jun 2023 23:20:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D49F7C433CC;
+        Sun, 25 Jun 2023 23:20:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687735223;
+        bh=gagWmDDmJDWh5KRnFaIWUefc8TSh7VfmTp4h0BJ3A3U=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=BsqL/Cr2+wxAhY2pBMHaTW9gn1+N0Zxr7bERHmmV53dwdavZiipk26DK4BfGZfIXr
+         cDarj/r0hkn8qzbxsxzv6N5jp7rZwAaVcL/cd/OYkBAydLmVP79EpU+qXwiiKY2yFE
+         Lp16tS7WheKIeE0lqOg47Rf2FWQKQOuVWIwTqH2xxE+sNFxfV4UlJ0qjRFJf0e6U3I
+         GBZk9a5O0KoWG3PA6I0fnRLdC2uMAeTtwz2ZrDRH5R3YtKrD6wmCyYESL+Z+CaKtPZ
+         rqeko1UBt4EAb7F4epr7nakTJCZ0Nn9BMhVR40EUFqDXs+5BNdPJb6C9Y8YsQyh15y
+         fVDdifylmyKyQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B3DE1C691EE;
+        Sun, 25 Jun 2023 23:20:23 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-901c5
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Guo Ren <guoren@kernel.org>
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Conor Dooley <conor.dooley@microchip.com>, heiko@sntech.de,
-        jszhang@kernel.org, bjorn@kernel.org, cleger@rivosinc.com,
-        guoren@kernel.org
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2 0/2] dt-bindings: riscv: cpus: switch to
+ unevaluatedProperties: false
+From:   patchwork-bot+linux-riscv@kernel.org
+Message-Id: <168773522373.24181.11034691970216052141.git-patchwork-notify@kernel.org>
+Date:   Sun, 25 Jun 2023 23:20:23 +0000
+References: <20230615-creamer-emu-ade0fa0bdb68@spud>
+In-Reply-To: <20230615-creamer-emu-ade0fa0bdb68@spud>
+To:     Conor Dooley <conor@kernel.org>
+Cc:     linux-riscv@lists.infradead.org, palmer@dabbelt.com,
+        conor.dooley@microchip.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, paul.walmsley@sifive.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello:
 
-On Tue, 13 Jun 2023 21:30:15 -0400, guoren@kernel.org wrote:
-> From: Guo Ren <guoren@linux.alibaba.com>
+This series was applied to riscv/linux.git (for-next)
+by Palmer Dabbelt <palmer@rivosinc.com>:
+
+On Thu, 15 Jun 2023 23:50:13 +0100 you wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
 > 
-> This patch series adds independent irq/softirq stacks to decrease the
-> press of the thread stack. Also, add a thread STACK_SIZE config for
-> users to adjust the proper size during compile time.
+> Do the various bits needed to drop the additionalProperties: true that
+> we currently have in riscv/cpu.yaml, to permit actually enforcing what
+> people put in cpus nodes.
 > 
-> This patch series belonged to the generic entry, which has been merged
-> to for-next now.
+> Changes in v2:
+> - drop patches 2 -> 5, they're now standard in dt-schema
 > 
 > [...]
 
-Applied, thanks!
+Here is the summary with links:
+  - [v2,1/2] dt-bindings: riscv: cpus: add a ref the common cpu schema
+    https://git.kernel.org/riscv/c/3c1b4758a954
+  - [v2,2/2] dt-bindings: riscv: cpus: switch to unevaluatedProperties: false
+    https://git.kernel.org/riscv/c/1ffe6ddc5c64
 
-[1/3] riscv: stack: Support HAVE_IRQ_EXIT_ON_IRQ_STACK
-      https://git.kernel.org/palmer/c/163e76cc6ef4
-[2/3] riscv: stack: Support HAVE_SOFTIRQ_ON_OWN_STACK
-      https://git.kernel.org/palmer/c/dd69d07a5a6c
-[3/3] riscv: stack: Add config of thread stack size
-      https://git.kernel.org/palmer/c/a7555f6b62e7
-
-Best regards,
+You are awesome, thank you!
 -- 
-Palmer Dabbelt <palmer@rivosinc.com>
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
