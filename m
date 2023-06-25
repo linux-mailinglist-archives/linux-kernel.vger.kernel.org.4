@@ -2,124 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88FB373D49C
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 23:31:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA57173D4A4
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 23:42:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229558AbjFYVbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 17:31:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49092 "EHLO
+        id S229635AbjFYVmS convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 25 Jun 2023 17:42:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229654AbjFYVbc (ORCPT
+        with ESMTP id S229510AbjFYVmP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 17:31:32 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1668184
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 14:31:30 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4fafe87c6fbso909114e87.3
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 14:31:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687728689; x=1690320689;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=I+vBar4+CLR6TDQyNZjkELXTZBE9ucLGNyisqXCBp0c=;
-        b=XnMKcu+DvVFFbNAPJoejCymxEHLsfGVjBJp8rhLjxmEH5gQg7SJJcO+T4kI0Y1n4Ly
-         DU29CCkOZ/qBV0orbhS7JzmbJXaqo7Kep/2Spa7d6DqMEFuDUS20nY9chPmUXmfx6ijH
-         bh4MfJ8MZYSx7pyFUNPBY0+iI64YBhhpgwD/ABzWgORbM9LN+uhFFyqfaiD1n34x9Ct3
-         2u5frIDAbQ+p9EBcGuQhbG6YAZsfEv2Ltf472clzoj6EWWRIM30CfCXqEheLJd3209C9
-         nE86N9MZS8o7KuH/5kcFzTTMO8SsyMKe732GFM2hHEok7qTCkimlzvoxg+LY/lDe0AxU
-         GNnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687728689; x=1690320689;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=I+vBar4+CLR6TDQyNZjkELXTZBE9ucLGNyisqXCBp0c=;
-        b=cvyWkXtDIwsiRiJT7Huu8JDnfntDrROB+01zhJeqvqnWGNlxzyYdCZliyjJeSRNFsH
-         O2RCRTVCxNlU/P04e0fqBjNt0+yU1sIkjsnD4w3Y7dZfnRjey5VoxSAkmDXkkvX5VjcV
-         tzhwoPFeOa7W5a2QANmCH8BxC1krgu7MACDR+n5Z9b3Ew7p/BJ6rRzFX37niH49Cc0E9
-         QDHTJNLjR0WGnq1IxWJ9wqh6lT+Hg3yLhhUJhOmO0IS6i70s1N4PFUu59QQS4ZDV+96b
-         Qzkd/7Ea6jZbjEt+d8id+Ia9kWwt3YjcjTgu1pJEm6xhbl+yPYfmNYXz5+IZQ+gtFtoz
-         +8hA==
-X-Gm-Message-State: AC+VfDy0eVDGp6WNjuqps9S8AMeTPYtXx+AE5K105yrlih0wui08rj0Y
-        RTHyUCKJGgzL1kr3K84VynLXkkXYpqN9r5ee5zY=
-X-Google-Smtp-Source: ACHHUZ4ueF7pB37Kjx3og+hVW79MU4Pnt3oR5acFEBC4M80kOtrhpKljcmf7bk4yPZDdm8+PgN44JQ==
-X-Received: by 2002:a05:6512:10ca:b0:4f9:6b64:9a36 with SMTP id k10-20020a05651210ca00b004f96b649a36mr6138182lfg.62.1687728689066;
-        Sun, 25 Jun 2023 14:31:29 -0700 (PDT)
-Received: from [192.168.69.115] ([176.187.212.184])
-        by smtp.gmail.com with ESMTPSA id y12-20020a05600c364c00b003f7f249e7dfsm8710877wmq.4.2023.06.25.14.31.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 25 Jun 2023 14:31:28 -0700 (PDT)
-Message-ID: <3849d2e3-43d7-4059-aead-fd78ded3b475@linaro.org>
-Date:   Sun, 25 Jun 2023 23:31:24 +0200
+        Sun, 25 Jun 2023 17:42:15 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2577BA
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 14:42:13 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-264-__5NTeNUOTOunLze3S7Sqw-1; Sun, 25 Jun 2023 22:42:09 +0100
+X-MC-Unique: __5NTeNUOTOunLze3S7Sqw-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Sun, 25 Jun
+ 2023 22:42:08 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Sun, 25 Jun 2023 22:42:08 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Evan Green' <evan@rivosinc.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>
+CC:     Simon Hosie <shosie@rivosinc.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Andy Chiu <andy.chiu@sifive.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Guo Ren <guoren@kernel.org>,
+        "Heiko Stuebner" <heiko.stuebner@vrull.eu>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ley Foon Tan <leyfoon.tan@starfivetech.com>,
+        Li Zhengyu <lizhengyu3@huawei.com>,
+        "Masahiro Yamada" <masahiroy@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        Sia Jee Heng <jeeheng.sia@starfivetech.com>,
+        Sunil V L <sunilvl@ventanamicro.com>,
+        Xianting Tian <xianting.tian@linux.alibaba.com>,
+        Yangyu Chen <cyy@cyyself.name>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
+Subject: RE: [PATCH 1/2] RISC-V: Probe for unaligned access speed
+Thread-Topic: [PATCH 1/2] RISC-V: Probe for unaligned access speed
+Thread-Index: AQHZpiD8K74IXZi1x0Sk5pxi8WFXO6+cDCdw
+Date:   Sun, 25 Jun 2023 21:42:07 +0000
+Message-ID: <88d0b61ca01d4c1a87a17d3c34baa2a6@AcuMS.aculab.com>
+References: <20230623222016.3742145-1-evan@rivosinc.com>
+ <20230623222016.3742145-2-evan@rivosinc.com>
+In-Reply-To: <20230623222016.3742145-2-evan@rivosinc.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [patch 11/17] init: Remove check_bugs() leftovers
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
 Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     x86@kernel.org, Linus Torvalds <torvalds@linux-foundation.org>,
-        Nikolay Borisov <nik.borisov@suse.com>,
-        "Ahmed S. Darwish" <darwi@linutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Chris Zankel <chris@zankel.net>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-m68k@lists.linux-m68k.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        linux-sh@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        sparclinux@vger.kernel.org, Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org,
-        Tom Lendacky <thomas.lendacky@amd.com>
-References: <20230613223827.532680283@linutronix.de>
- <20230613224545.553215951@linutronix.de>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20230613224545.553215951@linutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/6/23 01:39, Thomas Gleixner wrote:
-> Everything is converted over to arch_cpu_finalize_init(). Remove the
-> check_bugs() leftovers including the empty stubs in asm-generic, alpha,
-> parisc, powerpc and xtensa.
+From: Evan Green
+> Sent: 23 June 2023 23:20
 > 
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Richard Henderson <richard.henderson@linaro.org>
-> Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-> Cc: Michael Ellerman <mpe@ellerman.id.au>
-> Cc: Chris Zankel <chris@zankel.net>
+> Rather than deferring misaligned access speed determinations to a vendor
+> function, let's probe them and find out how fast they are. If we
+> determine that a misaligned word access is faster than N byte accesses,
+> mark the hardware's misaligned access as "fast".
+> 
+> Fix the documentation as well to reflect this bar. Previously the only
+> SoC that returned "fast" was the THead C906. The change to the
+> documentation is more a clarification, since the C906 is fast in the
+> sense of the corrected documentation.
+> 
+> Signed-off-by: Evan Green <evan@rivosinc.com>
 > ---
->   arch/alpha/include/asm/bugs.h   |   20 --------------------
->   arch/parisc/include/asm/bugs.h  |   20 --------------------
->   arch/powerpc/include/asm/bugs.h |   15 ---------------
->   arch/xtensa/include/asm/bugs.h  |   18 ------------------
->   include/asm-generic/bugs.h      |   11 -----------
->   init/main.c                     |    5 -----
->   6 files changed, 89 deletions(-)
+...
+> diff --git a/Documentation/riscv/hwprobe.rst b/Documentation/riscv/hwprobe.rst
+> index 19165ebd82ba..710325751766 100644
+> --- a/Documentation/riscv/hwprobe.rst
+> +++ b/Documentation/riscv/hwprobe.rst
+> @@ -88,12 +88,12 @@ The following keys are defined:
+>      always extremely slow.
+> 
+>    * :c:macro:`RISCV_HWPROBE_MISALIGNED_SLOW`: Misaligned accesses are supported
+> -    in hardware, but are slower than the cooresponding aligned accesses
+> -    sequences.
+> +    in hardware, but are slower than N byte accesses, where N is the native
+> +    word size.
+> 
+>    * :c:macro:`RISCV_HWPROBE_MISALIGNED_FAST`: Misaligned accesses are supported
+> -    in hardware and are faster than the cooresponding aligned accesses
+> -    sequences.
+> +    in hardware and are faster than N byte accesses, where N is the native
+> +    word size.
 
-Yay!
+I think I'd just say 'faster/slower than using byte accesses' (ie no N).
 
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+There are two obvious FAST cases:
+1) the misaligned access takes an extra clock - worth aligning copies.
+2) the misaligned access is pretty much as fast as an aligned one.
+
+Even if you find it hard to distinguish them you should probably
+allow for them both.
+
+x86 (on Intel (non-atom) cpu) is definitely in the latter camp.
+Misaligned copies are measurable slower - but not enough to
+ever worry about.
+I think that misaligned transfers get spilt into 8 byte accesses
+(pretty irrelevant in the kernel) and then accesses that cross
+cache line boundaries are split on the boundary.
+With pipelined writes and two reads/clock it doesn't often
+make a measurable difference.
+That is definitely what I see for uncached accesses to PCIe space.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
