@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5813073D1A4
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 17:18:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E23673D1A9
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 17:18:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230308AbjFYPSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 11:18:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35046 "EHLO
+        id S230110AbjFYPSZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 11:18:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230110AbjFYPSG (ORCPT
+        with ESMTP id S229613AbjFYPSJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 11:18:06 -0400
+        Sun, 25 Jun 2023 11:18:09 -0400
 Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F20441B7
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 08:18:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 784671B7
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 08:18:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687706285; x=1719242285;
+  t=1687706288; x=1719242288;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=GBzP0QOzSLMJvNAZUflo7PPRyVHgUMz92AyAiFJMx5k=;
-  b=P0eNZqAqEvl8Wejz0ZK7AS6ZMpMpaB4JoMHlyKeIfW1+kBpv7H9BjrlU
-   kbRggPqXdmQf1pVwmtNAwzC/gglsZi1AhjW47a6SJI5RTK9pnzRjBOzJ+
-   20RqNM5NZbWDR8BIkS8iJdA2piQ8csLlO9Gu+8yOrcIjvijcp2oGgSl5I
-   qiyXxGGtR9a8QUWFDFsz7u4yiKjWN8wCbfmCEXykwfFm7vmVLfeQHoOg3
-   Us9oSHD4R+JDyYmQHw8gSs9QpCqCC0MCHWzWe2mpdRsOTR2cL76NR7/Nt
-   Nv+mqWqWSaKp8kUXnWCVAA/yAdu6ky45vfNjSs/L3h7iTiA+59yv1jHB7
+  bh=dGog1IvJBB3RYoMtBN+mKPewp6Oixq643V5vrMTp7ao=;
+  b=frs0jY2kOoEDZsJT6mD43TcdgXbbGwopvrepz7WUpJR8Zdr4LPtNSjHq
+   D5r82I80V8UoX2/3B+ztj2W5s0EHHVnIdnlDNul+r/p3uY4CN0GirTQUM
+   LRhjjTxUt7ujZMdhDx98ZWIxIjJl7BT17jG0JTzETwRXV+4P6CEKsZ3bq
+   HlRVH9s2gxcutxa7w4CrCrh5N+7DFRAz4182itNgu5+7xIIyteRun5R3d
+   4+2cKgizKZuxnvxLDGtKox3W+rEDcaEkxbm6gTXSMf5r8oClPampq8m7Z
+   5knZREGt9Yng3rzYsw9wNrfIWRocvRKNXeCLSCexXrH3q//mwdNLJujZL
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="391255066"
+X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="391255078"
 X-IronPort-AV: E=Sophos;i="6.01,157,1684825200"; 
-   d="scan'208";a="391255066"
+   d="scan'208";a="391255078"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2023 08:18:05 -0700
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2023 08:18:08 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="840004527"
+X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="840004533"
 X-IronPort-AV: E=Sophos;i="6.01,157,1684825200"; 
-   d="scan'208";a="840004527"
+   d="scan'208";a="840004533"
 Received: from cascade.sh.intel.com ([10.239.48.162])
-  by orsmga004.jf.intel.com with ESMTP; 25 Jun 2023 08:18:03 -0700
+  by orsmga004.jf.intel.com with ESMTP; 25 Jun 2023 08:18:05 -0700
 From:   Jingqi Liu <Jingqi.liu@intel.com>
 To:     iommu@lists.linux.dev, Lu Baolu <baolu.lu@linux.intel.com>,
         Tian Kevin <kevin.tian@intel.com>,
         Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
         Robin Murphy <robin.murphy@arm.com>
 Cc:     linux-kernel@vger.kernel.org, Jingqi Liu <Jingqi.liu@intel.com>
-Subject: [PATCH 2/5] iommu/vt-d: debugfs: Support specifying source identifier and PASID
-Date:   Sun, 25 Jun 2023 23:04:39 +0800
-Message-Id: <20230625150442.42197-3-Jingqi.liu@intel.com>
+Subject: [PATCH 3/5] iommu/vt-d: debugfs: Dump the corresponding page table of a pasid
+Date:   Sun, 25 Jun 2023 23:04:40 +0800
+Message-Id: <20230625150442.42197-4-Jingqi.liu@intel.com>
 X-Mailer: git-send-email 2.21.3
 In-Reply-To: <20230625150442.42197-1-Jingqi.liu@intel.com>
 References: <20230625150442.42197-1-Jingqi.liu@intel.com>
@@ -63,155 +63,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The original debugfs only dumps IOMMU page tables of all domains.
-Usually developers want to dump the specified page table instead of all.
+Add a generic helper to dump the page table contained in a pasid table entry.
 
-This patch supports users to specify the source identifier and PASID to
-dump the specific page table.
+For implementations supporting Scalable Mode Translation, the PASID-table
+entries contain pointers to both first-stage and second-stage translation
+structures, along with the PASID Granular Translation Type (PGTT) field that
+specifies which translation process the request undergoes.
 
-For a device that only supports legacy mode, specify the source
-identifier to dump its page table. For a device that supports scalable
-mode, specify a {source identifier, PASID} pair to dump its page table.
-
-Switch to dump all page tables by specifying "auto".
-
-Examples are as follows:
-
-1) Specify device "00:1f.0" that only supports legacy mode.
-$ sudo echo 00:1f.0 >
-/sys/kernel/debug/iommu/intel/domain_translation_struct
-
-2) Specify device "00:0a.0" with PASID "1".
-$ sudo echo 00:0a.0,1 >
-/sys/kernel/debug/iommu/intel/domain_translation_struct
-
-3) Specify all page tables:
-$ sudo echo "auto" >
-/sys/kernel/debug/iommu/intel/domain_translation_struct
+The original debugfs only dumps the contents of pasid table entry when
+traversing the pasid table. Add a check to decide whether to dump the page
+table contained by a pasid table entry.
 
 Signed-off-by: Jingqi Liu <Jingqi.liu@intel.com>
 ---
- drivers/iommu/intel/debugfs.c | 86 ++++++++++++++++++++++++++++++++++-
- 1 file changed, 85 insertions(+), 1 deletion(-)
+ drivers/iommu/intel/debugfs.c | 59 ++++++++++++++++++++++++++++++++++-
+ 1 file changed, 58 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/iommu/intel/debugfs.c b/drivers/iommu/intel/debugfs.c
-index 072cfef19175..6d02cd91718a 100644
+index 6d02cd91718a..212d33598de9 100644
 --- a/drivers/iommu/intel/debugfs.c
 +++ b/drivers/iommu/intel/debugfs.c
-@@ -32,6 +32,13 @@ struct iommu_regset {
- 	const char *regs;
+@@ -19,9 +19,11 @@
+ #include "perf.h"
+ 
+ struct tbl_walk {
++	u16 segment;     /* PCI segment# */
+ 	u16 bus;
+ 	u16 devfn;
+ 	u32 pasid;
++	bool dump_page_table;
+ 	struct root_entry *rt_entry;
+ 	struct context_entry *ctx_entry;
+ 	struct pasid_entry *pasid_tbl_entry;
+@@ -118,6 +120,8 @@ static const struct iommu_regset iommu_regs_64[] = {
+ 	IOMMU_REGSET_ENTRY(VCRSP),
  };
  
-+#define BUF_SIZE               64
++static void dump_translation_page_table(struct seq_file *m);
 +
-+static struct show_domain_info {
-+	struct pci_dev *pdev;
-+	ioasid_t pasid;
-+} *show_domain_info;
+ static int iommu_regset_show(struct seq_file *m, void *unused)
+ {
+ 	struct dmar_drhd_unit *drhd;
+@@ -199,7 +203,11 @@ static void pasid_tbl_walk(struct seq_file *m, struct pasid_entry *tbl_entry,
+ 		if (pasid_pte_is_present(tbl_entry)) {
+ 			tbl_wlk->pasid_tbl_entry = tbl_entry;
+ 			tbl_wlk->pasid = (dir_idx << PASID_PDE_SHIFT) + tbl_idx;
+-			print_tbl_walk(m);
 +
- #define DEBUG_BUFFER_SIZE	1024
- static char debug_buf[DEBUG_BUFFER_SIZE];
++			if (tbl_wlk->dump_page_table)
++				dump_translation_page_table(m);
++			else
++				print_tbl_walk(m);
+ 		}
  
-@@ -392,6 +399,82 @@ static int domain_translation_struct_show(struct seq_file *m, void *unused)
- 				show_device_domain_translation);
+ 		tbl_entry++;
+@@ -347,6 +355,55 @@ static void pgtable_walk_level(struct seq_file *m, struct dma_pte *pde,
+ 	}
  }
  
-+static ssize_t domain_translation_struct_write(struct file *filp,
-+		                               const char __user *ubuf,
-+					       size_t cnt, loff_t *ppos)
++/*
++ * Dump the page table that contained in a pasid table entry.
++ * There're two consumers of this helper, as follows:
++ * 1) When traversing the pasid table, dump the page table
++ *    contained in the pasid table entry.
++ * 2) Find the pasid table entry with a specified pasid,
++ *    and dump the page table it contains.
++ */
++static void dump_translation_page_table(struct seq_file *m)
 +{
-+	char buf[BUF_SIZE], *srcid_ptr = NULL, *pasid_ptr = NULL;
-+	unsigned int seg, bus, slot, func;
-+	struct pci_dev *pdev = NULL;
-+	u32 pasid = INVALID_IOASID;
-+	char *key, *pbuf;
-+	int i = 0;
++	struct tbl_walk *tbl_wlk = m->private;
++	u64 pgd, path[6] = { 0 };
++	u16 pgtt;
++	u8 agaw;
 +
-+	if (cnt >= BUF_SIZE)
-+		return -EINVAL;
-+
-+	if (copy_from_user(buf, ubuf, cnt))
-+		return -EFAULT;
-+
-+	buf[cnt - 1] = 0;
-+	if (!strcmp(buf, "auto")) {
-+		if (show_domain_info)
-+			show_domain_info->pdev = NULL;
-+		*ppos += cnt;
-+		return cnt;
-+	}
-+
-+	pbuf = buf;
-+
-+	/* Seperate the input: one {source identifier, PASID} pair */
-+	while ((key = strsep(&pbuf, ", ")) != NULL) {
-+		if (!*key)
-+			continue;
-+		if (i >= 2) /* too many fields */
-+			return -EINVAL;
-+		if (i++ == 0)
-+			srcid_ptr = key;
-+		else
-+			pasid_ptr = key;
-+	}
-+
-+	if (!srcid_ptr) /* no source identifier */
-+		return -EINVAL;
++	if (!tbl_wlk->pasid_tbl_entry)
++		return;
 +
 +	/*
-+	 * The string of source identifier must be of the form:
-+	 * [<domain>:]<bus>:<device>.<func>
++	 * According to PASID Granular Translation Type(PGTT),
++	 * get the page table pointer.
 +	 */
-+	i = sscanf(srcid_ptr, "%x:%x:%x.%x", &seg, &bus, &slot, &func);
-+	if (i != 4) {
-+		seg = 0;
-+		i = sscanf(srcid_ptr, "%x:%x.%x", &bus, &slot, &func);
-+		if (i != 3)
-+			return -EINVAL;
++	pgtt = (u16)(tbl_wlk->pasid_tbl_entry->val[0] & GENMASK_ULL(8, 6)) >> 6;
++	agaw = (u8)(tbl_wlk->pasid_tbl_entry->val[0] & GENMASK_ULL(4, 2)) >> 2;
++
++	switch (pgtt) {
++	case PASID_ENTRY_PGTT_FL_ONLY:
++		pgd = tbl_wlk->pasid_tbl_entry->val[2];
++		break;
++	case PASID_ENTRY_PGTT_SL_ONLY:
++	case PASID_ENTRY_PGTT_NESTED:
++		pgd = tbl_wlk->pasid_tbl_entry->val[0];
++		break;
++	default:
++		return;
 +	}
 +
-+	pdev = pci_get_domain_bus_and_slot(seg, bus, PCI_DEVFN(slot, func));
-+	if (!pdev)
-+		return -EINVAL;
++	pgd &= VTD_PAGE_MASK;
++	seq_printf(m, "Device %04x:%02x:%02x.%x with pasid %x @0x%llx\n",
++		   tbl_wlk->segment, tbl_wlk->bus, PCI_SLOT(tbl_wlk->devfn),
++		   PCI_FUNC(tbl_wlk->devfn), tbl_wlk->pasid, pgd);
++	seq_printf(m, "%-17s\t%-18s\t%-18s\t%-18s\t%-18s\t%-s\n",
++		   "IOVA_PFN", "PML5E", "PML4E", "PDPE", "PDE", "PTE");
++	pgtable_walk_level(m, phys_to_virt(pgd), agaw + 2, 0, path);
++	seq_putc(m, '\n');
 +
-+	if (pasid_ptr &&
-+	    ((kstrtou32(pasid_ptr, 0, &pasid) < 0) || (pasid >= PASID_MAX)))
-+		return -EINVAL;
-+
-+	if (!show_domain_info) {
-+		show_domain_info = kzalloc(sizeof(*show_domain_info),
-+				           GFP_KERNEL);
-+		if (!show_domain_info)
-+			return -EINVAL;
-+	}
-+
-+	show_domain_info->pdev = pdev;
-+	show_domain_info->pasid = pasid;
-+
-+	*ppos += cnt;
-+	return cnt;
++	return;
 +}
 +
- static int domain_translation_struct_open(struct inode *inode,
- 					  struct file *filp)
+ static int __show_device_domain_translation(struct device *dev, void *data)
  {
-@@ -406,6 +489,7 @@ static int domain_translation_struct_open(struct inode *inode,
- 
- static const struct file_operations domain_translation_struct_fops = {
- 	.open		= domain_translation_struct_open,
-+	.write		= domain_translation_struct_write,
- 	.read		= seq_read,
- 	.llseek		= seq_lseek,
- 	.release	= single_release,
-@@ -691,7 +775,7 @@ void __init intel_iommu_debugfs_init(void)
- 			    &iommu_regset_fops);
- 	debugfs_create_file("dmar_translation_struct", 0444, intel_iommu_debug,
- 			    NULL, &dmar_translation_struct_fops);
--	debugfs_create_file("domain_translation_struct", 0444,
-+	debugfs_create_file("domain_translation_struct", 0644,
- 			    intel_iommu_debug, NULL,
- 			    &domain_translation_struct_fops);
- 	debugfs_create_file("invalidation_queue", 0444, intel_iommu_debug,
+ 	struct dmar_domain *domain;
 -- 
 2.21.3
 
