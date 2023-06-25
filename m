@@ -2,85 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1A9E73CE71
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 06:41:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDF2F73CE77
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 06:51:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230088AbjFYElT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 00:41:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57552 "EHLO
+        id S230224AbjFYEus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 00:50:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbjFYElQ (ORCPT
+        with ESMTP id S229611AbjFYEuq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 00:41:16 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8539137;
-        Sat, 24 Jun 2023 21:41:14 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-1b0138963ffso1016672fac.0;
-        Sat, 24 Jun 2023 21:41:14 -0700 (PDT)
+        Sun, 25 Jun 2023 00:50:46 -0400
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3837BE5F
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 21:50:42 -0700 (PDT)
+Received: by mail-ot1-x330.google.com with SMTP id 46e09a7af769-6b71cdb47e1so2034607a34.2
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 21:50:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687668074; x=1690260074;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1B4lH9WeYTv33HNkRVZObp7asR+HnhMg6dQl8HhZ2qY=;
-        b=MMnqhoSXSLWLJfn5GfJIKP92DaK/FakNRAVS4oHMhcdVp319bbfgC72mCQ56ugPmpT
-         DS4FqwEX03Db/bCNvyQ0fswZ3OKXXUvET442ZZ5Hk+boT61bVEVxXdSMtpA0/wKcMnL+
-         oN/FeLQsYqWWnIP4I+YhZ1VghbAPnGirJMdONVrr/Gyi9ErJEAaej1iYCvnXQ6hiToR4
-         RBeIvnD0q0eaJYcaBxqn6GVPnFmzh9Y4w1T5pl5a1YLmkbV5D8ldUTQGVhNAnhbjKBav
-         YhWthSSeqS0nevcQTPhp77J2Ltsn/ZXuBi7S+ItSMQf3W4nTdcqJh94kexOZtAQmqIA6
-         I0bQ==
+        d=bytedance.com; s=google; t=1687668641; x=1690260641;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WAXKmRxn/lGVEXnXeDsvJ+fu3YmCBSEAvX8M4/5L5VA=;
+        b=bMuj7cwDdoXKISTDkzptBDyzYxrmMPhttiVwFLmhishVLlAo/0wcnWwOOKc5KaDNXp
+         0k1HqVrE8Hx7iR7I7S4xdgjAcc5RhvCF5AELHTGX1kf+O9BpKUzHAOBQSa1iEErhttPG
+         3b8+RInnKIdo158WvXe5DmpQDrKtM/VZ8zy1c1yjNq1BiAywsa7z+uXaapI0WPiNEIN2
+         xYurTWq7Vuo8HrBQaeEzXCMEGA27/vW97vRYC2U9pTOkepUYpTbHjrTJjbKUb4nmrFuu
+         bKGTE90OMX8RqnCmlESML1SKSVkVZ1RzSxXEdsvuOjJYEyq854vI3FsIqHl2KEiBEsFI
+         y2sg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687668074; x=1690260074;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1B4lH9WeYTv33HNkRVZObp7asR+HnhMg6dQl8HhZ2qY=;
-        b=Pc/sHJ3oZy+J5TsS9JBotrkT7tN7grU7VwuDrmXnYrEGpmlkgFte9ZSjLpqas0vxC9
-         WnwaviX6ZFTs7iV4gavZfC+j50/tYhQ2ySg3ZDnqrCr3jYmUB74ofU0dXToBNNeJ0iLQ
-         9d/OhLR2Ntz5X9iGotH4+YGQWuUaVnhxQPWpaQBPdSk610pEgjtPoOv346EMgzKNSPLV
-         rixG8rcPAYGrc+9xdfs9xCH3WtSTHaZCtJ5WeTzut4i2c6QhudEzo5udF5ro8mlHimwC
-         iqyZ74FyrWjcBqFqnWsqa0PQXH9yrrAtBRNhsSySWRmg9aGb1QvPB954VFe5EMu9egHM
-         JvTg==
-X-Gm-Message-State: AC+VfDz7DEnr8RfmOij2+idMhBQT8qVhj0YMfapzzX093xDb49kNKzLu
-        ElAMkRpaLSC8F7C+1zdFOSYWkSatqx7wtg==
-X-Google-Smtp-Source: ACHHUZ72rJJVSWVBVO8GaJv7atxqNw1z/wt95NIVyxtaWXaXjGuxoQ1OGxMVqFnFFBqjXnHbioxRhA==
-X-Received: by 2002:a05:6870:6295:b0:18e:2b7e:a846 with SMTP id s21-20020a056870629500b0018e2b7ea846mr16655070oan.50.1687668074012;
-        Sat, 24 Jun 2023 21:41:14 -0700 (PDT)
-Received: from [192.168.1.128] ([216.130.59.33])
-        by smtp.gmail.com with ESMTPSA id bd6-20020a056870d78600b001ad21a705a8sm1925228oab.49.2023.06.24.21.41.12
+        d=1e100.net; s=20221208; t=1687668641; x=1690260641;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=WAXKmRxn/lGVEXnXeDsvJ+fu3YmCBSEAvX8M4/5L5VA=;
+        b=Lnuc7976fANKCCuEsS3tSJ1AdWmv9h33XvbxkV9CRwYJGH5Eubor2CUNQtel3dgisp
+         ENJGUbCcouYGgvZGCECjFUPRANvTrE99G4iHT/PCmS9ftEDPTlOQiRvxvwyp+35EkeDN
+         A/D95c1umrYY2wkIZ9TCLy9qR/7vMf3nl95PrF6udnB2yITe2cb4GwTaBKE+aaR9B50w
+         3PLCgyZoLf/RhCqFL79IbXDCehorDGFmhm0GqJn6Ju5ZOyQMLh/QdTklvkRJc+q94K2x
+         UVchlCZ0t89x3HCF01nLAS0WAVEyCbAkf9aftWG+I9aqMCtLfcIg3ZeyHBLdOdrD1AgU
+         Ikww==
+X-Gm-Message-State: AC+VfDwiKGozdhbrA1NmJhw4Z2WtQVC9TYTFTzcskZn0qkybq+mv3GJL
+        t4kUvhlEN7YPM3P9y+gVont3hqQ/jyhOl4MEF7U=
+X-Google-Smtp-Source: ACHHUZ5krj7H+JI/eDq82uf9J7X5Pm708dBg2kBu8l29Vrj5oetxbAmav2MRNxB9fkkFEETINthtPQ==
+X-Received: by 2002:a9d:7f89:0:b0:6b7:2420:7b52 with SMTP id t9-20020a9d7f89000000b006b724207b52mr7750977otp.24.1687668641460;
+        Sat, 24 Jun 2023 21:50:41 -0700 (PDT)
+Received: from ?IPV6:2409:8949:3a13:39f5:bd89:ebd9:ff00:5efd? ([2409:8949:3a13:39f5:bd89:ebd9:ff00:5efd])
+        by smtp.gmail.com with ESMTPSA id 21-20020aa79255000000b00665a76a8cfasm1707206pfp.194.2023.06.24.21.50.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 24 Jun 2023 21:41:13 -0700 (PDT)
-Sender: Larry Finger <larry.finger@gmail.com>
-Message-ID: <69b98eb4-2c4e-fe75-90b4-4b08505a595a@lwfinger.net>
-Date:   Sat, 24 Jun 2023 23:41:11 -0500
+        Sat, 24 Jun 2023 21:50:40 -0700 (PDT)
+Message-ID: <a82fd11d-d346-4cba-fdbb-982359fb9faa@bytedance.com>
+Date:   Sun, 25 Jun 2023 12:50:28 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-From:   Larry Finger <Larry.Finger@lwfinger.net>
-Subject: Re: Fwd: After kernel 6.3.7 or 6.3.8 b43 driver fails
-To:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        "Sardonimous ." <sardonimous@hotmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux Wireless <linux-wireless@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>
-Cc:     =?UTF-8?Q?Michael_B=c3=bcsch?= <m@bues.ch>,
-        kernel test robot <lkp@intel.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        Kalle Valo <kvalo@kernel.org>
-References: <27829c69-515c-36a6-4beb-3210225f8936@gmail.com>
- <b9428e48-f0f9-46f6-892c-4c8834c930c4@app.fastmail.com>
- <RO2P215MB193850DDADD38492BEC8CC2FA720A@RO2P215MB1938.LAMP215.PROD.OUTLOOK.COM>
- <a3bc5eb5-9639-8016-36ab-105abc8c0ca3@gmail.com>
-Content-Language: en-US
-In-Reply-To: <a3bc5eb5-9639-8016-36ab-105abc8c0ca3@gmail.com>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.0
+Subject: Re: [PATCH v3] blk-throttle: Fix io statistics for cgroup v1
+To:     tj@kernel.org, josef@toxicpanda.com, axboe@kernel.dk
+Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, songmuchun@bytedance.com,
+        andrea.righi@canonical.com
+References: <20230507170631.89607-1-hanjinke.666@bytedance.com>
+From:   hanjinke <hanjinke.666@bytedance.com>
+In-Reply-To: <20230507170631.89607-1-hanjinke.666@bytedance.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,91 +75,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/24/23 19:50, Bagas Sanjaya wrote:
-> On 6/25/23 04:47, Sardonimous . wrote:
->> A newer report with the missing top lines:
->>
+Hi,Jens
+
+Can you consider merging this patch？I think this is a fix. It also
+Acked-by Tejun, Muchun Song and Tested-by Andrea Righi.
+
+在 2023/5/8 上午1:06, Jinke Han 写道:
+> From: Jinke Han <hanjinke.666@bytedance.com>
 > 
-> tl;dr:
+> After commit f382fb0bcef4 ("block: remove legacy IO schedulers"),
+> blkio.throttle.io_serviced and blkio.throttle.io_service_bytes become
+> the only stable io stats interface of cgroup v1, and these statistics
+> are done in the blk-throttle code. But the current code only counts the
+> bios that are actually throttled. When the user does not add the throttle
+> limit, the io stats for cgroup v1 has nothing. I fix it according to the
+> statistical method of v2, and made it count all ios accurately.
 > 
->> A: http://en.wikipedia.org/wiki/Top_post
->> Q: Were do I find info about this thing called top-posting?
->> A: Because it messes up the order in which people normally read text.
->> Q: Why is top-posting such a bad thing?
->> A: Top-posting.
->> Q: What is the most annoying thing in e-mail?
->>
->> A: No.
->> Q: Should I include quotations after my reply?
->>
->> http://daringfireball.net/2007/07/on_top
+> Fixes: a7b36ee6ba29 ("block: move blk-throtl fast path inline")
+> Tested-by: Andrea Righi <andrea.righi@canonical.com>
+> Signed-off-by: Jinke Han <hanjinke.666@bytedance.com>
+> ---
+>   block/blk-cgroup.c   | 6 ++++--
+>   block/blk-throttle.c | 6 ------
+>   block/blk-throttle.h | 9 +++++++++
+>   3 files changed, 13 insertions(+), 8 deletions(-)
 > 
-> Also, please send plain-text email: I don't see your dmesg on
-> lore.kernel.org archive because you send HTML email instead.
-> 
-> But anyway, I'm pasting yours from Bugzilla thread instead
-> (as Arnd requested):
-> 
-> ```
-> Jun 20 18:20:11 askasleikir kernel: ------------[ cut here ]------------
-> Jun 20 18:20:11 askasleikir kernel: WARNING: CPU: 1 PID: 33 at net/mac80211/util.c:514 __ieee80211_stop_queue+0xcc/0xe0 [mac80211]
-> Jun 20 18:20:11 askasleikir kernel: Modules linked in: ccm tun qrtr rpcrdma rdma_cm iw_cm ib_cm ib_core nls_utf8 cifs cifs_arc4 cifs_md4 dns_resolver fscache net>
-> Jun 20 18:20:11 askasleikir kernel:  lockd grace crypto_user sunrpc fuse dm_mod loop bpf_preload ip_tables x_tables ext4 crc32c_generic crc16 mbcache jbd2 sr_mod>
-> Jun 20 18:20:11 askasleikir kernel: CPU: 1 PID: 33 Comm: kworker/u4:2 Tainted: G        W          6.3.6-arch1-1 #1 a07497485287c74e7a472f42ded4b2ddcf7a6fd7
-> Jun 20 18:20:11 askasleikir kernel: Hardware name: Apple Inc. MacBookPro7,1/Mac-F222BEC8, BIOS    MBP71.88Z.0039.B15.1702241313 02/24/17
-> Jun 20 18:20:11 askasleikir kernel: Workqueue: phy0 b43_tx_work [b43]
-> Jun 20 18:20:11 askasleikir kernel: RIP: 0010:__ieee80211_stop_queue+0xcc/0xe0 [mac80211]
-> Jun 20 18:20:11 askasleikir kernel: Code: 74 11 48 8b 78 08 0f b7 d6 89 e9 4c 89 e6 e8 fb ea 00 00 65 ff 0d 2c 2d ac 3e 0f 85 55 ff ff ff e8 d9 44 69 c3 e9 4b ff>
-> Jun 20 18:20:11 askasleikir kernel: RSP: 0018:ffffb3538013bdb8 EFLAGS: 00010097
-> Jun 20 18:20:11 askasleikir kernel: RAX: 0000000000000001 RBX: 0000000000000002 RCX: 0000000000000000
-> Jun 20 18:20:11 askasleikir kernel: RDX: 0000000000000000 RSI: 0000000000000002 RDI: ffff9e55cfa248e0
-> Jun 20 18:20:11 askasleikir kernel: RBP: 0000000000000000 R08: 0000000000000000 R09: 000000008010000f
-> Jun 20 18:20:11 askasleikir kernel: R10: 0000000000000005 R11: 0000000000000181 R12: ffff9e55cfa248e0
-> Jun 20 18:20:11 askasleikir kernel: R13: 0000000000000000 R14: ffff9e55cfa26238 R15: ffff9e55cfa26090
-> Jun 20 18:20:11 askasleikir kernel: FS:  0000000000000000(0000) GS:ffff9e55fbf00000(0000) knlGS:0000000000000000
-> Jun 20 18:20:11 askasleikir kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> Jun 20 18:20:11 askasleikir kernel: CR2: 00007f37cce5d180 CR3: 0000000057620000 CR4: 00000000000406e0
-> Jun 20 18:20:11 askasleikir kernel: Call Trace:
-> Jun 20 18:20:11 askasleikir kernel:  <TASK>
-> Jun 20 18:20:11 askasleikir kernel:  ? __ieee80211_stop_queue+0xcc/0xe0 [mac80211 01be121fb223b347160617528f5dda900e828bc2]
-> Jun 20 18:20:11 askasleikir kernel:  ? __warn+0x81/0x130
-> Jun 20 18:20:11 askasleikir kernel:  ? __ieee80211_stop_queue+0xcc/0xe0 [mac80211 01be121fb223b347160617528f5dda900e828bc2]
-> Jun 20 18:20:11 askasleikir kernel:  ? report_bug+0x171/0x1a0
-> Jun 20 18:20:11 askasleikir kernel:  ? handle_bug+0x3c/0x80
-> Jun 20 18:20:11 askasleikir kernel:  ? exc_invalid_op+0x17/0x70
-> Jun 20 18:20:11 askasleikir kernel:  ? asm_exc_invalid_op+0x1a/0x20
-> Jun 20 18:20:11 askasleikir kernel:  ? __ieee80211_stop_queue+0xcc/0xe0 [mac80211 01be121fb223b347160617528f5dda900e828bc2]
-> Jun 20 18:20:11 askasleikir kernel:  ? __slab_free+0xe0/0x310
-> Jun 20 18:20:11 askasleikir kernel:  ieee80211_stop_queue+0x36/0x50 [mac80211 01be121fb223b347160617528f5dda900e828bc2]
-> Jun 20 18:20:11 askasleikir kernel:  b43_pio_tx+0x373/0x390 [b43 3dc9b3f0fd98e2a659c64e057bd3b22d977e5228]
-> Jun 20 18:20:11 askasleikir kernel:  b43_tx_work+0x57/0x130 [b43 3dc9b3f0fd98e2a659c64e057bd3b22d977e5228]
-> Jun 20 18:20:11 askasleikir kernel:  process_one_work+0x1c7/0x3d0
-> Jun 20 18:20:11 askasleikir kernel:  worker_thread+0x51/0x390
-> Jun 20 18:20:11 askasleikir kernel:  ? __pfx_worker_thread+0x10/0x10
-> Jun 20 18:20:11 askasleikir kernel:  kthread+0xde/0x110
-> Jun 20 18:20:11 askasleikir kernel:  ? __pfx_kthread+0x10/0x10
-> Jun 20 18:20:11 askasleikir kernel:  ret_from_fork+0x2c/0x50
-> Jun 20 18:20:11 askasleikir kernel:  </TASK>
-> Jun 20 18:20:11 askasleikir kernel: ---[ end trace 0000000000000000 ]---
-> Jun 20 18:20:11 askasleikir kernel: ------------[ cut here ]------------
-
-Sardonimous,
-
-The critical line is:
-> Jun 20 18:20:11 askasleikir kernel:  b43_pio_tx+0x373/0x390
-
-I certainly have not used PIO for a long time. I expect that your MacBook Pro 
-should do DMA on the b43. Apple makes wierd hardware, but not likely that wierd.
-
-Does dmesg offer any clues as to what is happening?
-
-If there is nothing shown in the log, you definitely need to do a proper 
-bisection from the mainline git tree to isolate the change that led to this failure.
-
-
-
-ADDED WITH EDIT: I looked at the code and b43 will not be built for any hardware 
-without DMA, thus it appears that adding "b43.pio=1" is the only way to get PIO 
-mode. Please check the output of dmesg for PIO messages.
-
-Larry
+> diff --git a/block/blk-cgroup.c b/block/blk-cgroup.c
+> index 0ce64dd73cfe..5b29912a0ee2 100644
+> --- a/block/blk-cgroup.c
+> +++ b/block/blk-cgroup.c
+> @@ -2048,6 +2048,9 @@ void blk_cgroup_bio_start(struct bio *bio)
+>   	struct blkg_iostat_set *bis;
+>   	unsigned long flags;
+>   
+> +	if (!cgroup_subsys_on_dfl(io_cgrp_subsys))
+> +		return;
+> +
+>   	/* Root-level stats are sourced from system-wide IO stats */
+>   	if (!cgroup_parent(blkcg->css.cgroup))
+>   		return;
+> @@ -2079,8 +2082,7 @@ void blk_cgroup_bio_start(struct bio *bio)
+>   	}
+>   
+>   	u64_stats_update_end_irqrestore(&bis->sync, flags);
+> -	if (cgroup_subsys_on_dfl(io_cgrp_subsys))
+> -		cgroup_rstat_updated(blkcg->css.cgroup, cpu);
+> +	cgroup_rstat_updated(blkcg->css.cgroup, cpu);
+>   	put_cpu();
+>   }
+>   
+> diff --git a/block/blk-throttle.c b/block/blk-throttle.c
+> index 9d010d867fbf..7397ff199d66 100644
+> --- a/block/blk-throttle.c
+> +++ b/block/blk-throttle.c
+> @@ -2178,12 +2178,6 @@ bool __blk_throtl_bio(struct bio *bio)
+>   
+>   	rcu_read_lock();
+>   
+> -	if (!cgroup_subsys_on_dfl(io_cgrp_subsys)) {
+> -		blkg_rwstat_add(&tg->stat_bytes, bio->bi_opf,
+> -				bio->bi_iter.bi_size);
+> -		blkg_rwstat_add(&tg->stat_ios, bio->bi_opf, 1);
+> -	}
+> -
+>   	spin_lock_irq(&q->queue_lock);
+>   
+>   	throtl_update_latency_buckets(td);
+> diff --git a/block/blk-throttle.h b/block/blk-throttle.h
+> index ef4b7a4de987..d1ccbfe9f797 100644
+> --- a/block/blk-throttle.h
+> +++ b/block/blk-throttle.h
+> @@ -185,6 +185,15 @@ static inline bool blk_should_throtl(struct bio *bio)
+>   	struct throtl_grp *tg = blkg_to_tg(bio->bi_blkg);
+>   	int rw = bio_data_dir(bio);
+>   
+> +	if (!cgroup_subsys_on_dfl(io_cgrp_subsys)) {
+> +		if (!bio_flagged(bio, BIO_CGROUP_ACCT)) {
+> +			bio_set_flag(bio, BIO_CGROUP_ACCT);
+> +			blkg_rwstat_add(&tg->stat_bytes, bio->bi_opf,
+> +					bio->bi_iter.bi_size);
+> +		}
+> +		blkg_rwstat_add(&tg->stat_ios, bio->bi_opf, 1);
+> +	}
+> +
+>   	/* iops limit is always counted */
+>   	if (tg->has_rules_iops[rw])
+>   		return true;
