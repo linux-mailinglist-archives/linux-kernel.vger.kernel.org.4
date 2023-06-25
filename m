@@ -2,171 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ABF473CE69
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 06:28:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1A9E73CE71
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 06:41:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231168AbjFYE1y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 00:27:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56584 "EHLO
+        id S230088AbjFYElT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 00:41:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230363AbjFYE1o (ORCPT
+        with ESMTP id S229611AbjFYElQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 00:27:44 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B96E6E
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 21:27:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687667260; x=1719203260;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7itPG7Ie4RzGTaFE6LLnqG+xxyzZ6HWS/LZq0PagcE4=;
-  b=PbkJgf8m3uDkk+TpTxXzkzqYgj35idejYbhX5mW66NTBf0M7VagVW0cM
-   HsGhk9MHyM+ybp/iadpqI9ViX2fgz/XIbl9mn4poprZcPcFvi0AtHyT+Z
-   RaX04F+8sQ0ZdL5OgjqItzDuI+nMuKUC0YR8sPFThFh/606WnU3A8KRVp
-   66+b7F+Y+pgNGm+7sb+lHU/pGaLLJQZCfchJt3BR2qZkrFa5B255DtIQK
-   5gzbPlKRz6zWdScfY5PNYglbFs0zdqm/3VX/gQsE6OPDNimRykOTHkpA/
-   Uumfk/y2z5UiRO0CTFh3PB0wLa1fOjcv85l+NbjIDhZCwHTyhUO/zYUhI
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10751"; a="363572645"
-X-IronPort-AV: E=Sophos;i="6.01,156,1684825200"; 
-   d="scan'208";a="363572645"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2023 21:27:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10751"; a="889887109"
-X-IronPort-AV: E=Sophos;i="6.01,156,1684825200"; 
-   d="scan'208";a="889887109"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orsmga005.jf.intel.com with ESMTP; 24 Jun 2023 21:27:38 -0700
-Date:   Sun, 25 Jun 2023 12:26:31 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Russ Weight <russell.h.weight@intel.com>
-Cc:     broonie@kernel.org, gregkh@linuxfoundation.org, rafael@kernel.org,
-        linux-kernel@vger.kernel.org, matthew.gerlach@linux.intel.com
-Subject: Re: [PATCH 1/1] regmap: spi-avmm: Fix regmap_bus max_raw_write
-Message-ID: <ZJfB9zXhizbqmIrm@yilunxu-OptiPlex-7050>
-References: <20230620202824.380313-1-russell.h.weight@intel.com>
+        Sun, 25 Jun 2023 00:41:16 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8539137;
+        Sat, 24 Jun 2023 21:41:14 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-1b0138963ffso1016672fac.0;
+        Sat, 24 Jun 2023 21:41:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687668074; x=1690260074;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1B4lH9WeYTv33HNkRVZObp7asR+HnhMg6dQl8HhZ2qY=;
+        b=MMnqhoSXSLWLJfn5GfJIKP92DaK/FakNRAVS4oHMhcdVp319bbfgC72mCQ56ugPmpT
+         DS4FqwEX03Db/bCNvyQ0fswZ3OKXXUvET442ZZ5Hk+boT61bVEVxXdSMtpA0/wKcMnL+
+         oN/FeLQsYqWWnIP4I+YhZ1VghbAPnGirJMdONVrr/Gyi9ErJEAaej1iYCvnXQ6hiToR4
+         RBeIvnD0q0eaJYcaBxqn6GVPnFmzh9Y4w1T5pl5a1YLmkbV5D8ldUTQGVhNAnhbjKBav
+         YhWthSSeqS0nevcQTPhp77J2Ltsn/ZXuBi7S+ItSMQf3W4nTdcqJh94kexOZtAQmqIA6
+         I0bQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687668074; x=1690260074;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1B4lH9WeYTv33HNkRVZObp7asR+HnhMg6dQl8HhZ2qY=;
+        b=Pc/sHJ3oZy+J5TsS9JBotrkT7tN7grU7VwuDrmXnYrEGpmlkgFte9ZSjLpqas0vxC9
+         WnwaviX6ZFTs7iV4gavZfC+j50/tYhQ2ySg3ZDnqrCr3jYmUB74ofU0dXToBNNeJ0iLQ
+         9d/OhLR2Ntz5X9iGotH4+YGQWuUaVnhxQPWpaQBPdSk610pEgjtPoOv346EMgzKNSPLV
+         rixG8rcPAYGrc+9xdfs9xCH3WtSTHaZCtJ5WeTzut4i2c6QhudEzo5udF5ro8mlHimwC
+         iqyZ74FyrWjcBqFqnWsqa0PQXH9yrrAtBRNhsSySWRmg9aGb1QvPB954VFe5EMu9egHM
+         JvTg==
+X-Gm-Message-State: AC+VfDz7DEnr8RfmOij2+idMhBQT8qVhj0YMfapzzX093xDb49kNKzLu
+        ElAMkRpaLSC8F7C+1zdFOSYWkSatqx7wtg==
+X-Google-Smtp-Source: ACHHUZ72rJJVSWVBVO8GaJv7atxqNw1z/wt95NIVyxtaWXaXjGuxoQ1OGxMVqFnFFBqjXnHbioxRhA==
+X-Received: by 2002:a05:6870:6295:b0:18e:2b7e:a846 with SMTP id s21-20020a056870629500b0018e2b7ea846mr16655070oan.50.1687668074012;
+        Sat, 24 Jun 2023 21:41:14 -0700 (PDT)
+Received: from [192.168.1.128] ([216.130.59.33])
+        by smtp.gmail.com with ESMTPSA id bd6-20020a056870d78600b001ad21a705a8sm1925228oab.49.2023.06.24.21.41.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 24 Jun 2023 21:41:13 -0700 (PDT)
+Sender: Larry Finger <larry.finger@gmail.com>
+Message-ID: <69b98eb4-2c4e-fe75-90b4-4b08505a595a@lwfinger.net>
+Date:   Sat, 24 Jun 2023 23:41:11 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230620202824.380313-1-russell.h.weight@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+From:   Larry Finger <Larry.Finger@lwfinger.net>
+Subject: Re: Fwd: After kernel 6.3.7 or 6.3.8 b43 driver fails
+To:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        "Sardonimous ." <sardonimous@hotmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux Wireless <linux-wireless@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>
+Cc:     =?UTF-8?Q?Michael_B=c3=bcsch?= <m@bues.ch>,
+        kernel test robot <lkp@intel.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        Kalle Valo <kvalo@kernel.org>
+References: <27829c69-515c-36a6-4beb-3210225f8936@gmail.com>
+ <b9428e48-f0f9-46f6-892c-4c8834c930c4@app.fastmail.com>
+ <RO2P215MB193850DDADD38492BEC8CC2FA720A@RO2P215MB1938.LAMP215.PROD.OUTLOOK.COM>
+ <a3bc5eb5-9639-8016-36ab-105abc8c0ca3@gmail.com>
+Content-Language: en-US
+In-Reply-To: <a3bc5eb5-9639-8016-36ab-105abc8c0ca3@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-06-20 at 13:28:24 -0700, Russ Weight wrote:
-> The max_raw_write member of the regmap_spi_avmm_bus structure is defined
-> as:
-> 	.max_raw_write = SPI_AVMM_VAL_SIZE * MAX_WRITE_CNT
+On 6/24/23 19:50, Bagas Sanjaya wrote:
+> On 6/25/23 04:47, Sardonimous . wrote:
+>> A newer report with the missing top lines:
+>>
 > 
-> SPI_AVMM_VAL_SIZE == 4 and MAX_WRITE_CNT == 1 so this results in a
-> maximum write transfer size of 4 bytes which provides only enough space to
-> transfer the address of the target register. It provides no space for the
-> value to be transferred. This bug became an issue (divide-by-zero in
-> _regmap_raw_write()) after the following was accepted into mainline:
+> tl;dr:
 > 
-> commit 3981514180c9 ("regmap: Account for register length when chunking")
-
-Sorry for late reply.
-
-IIUC, max_raw_write/read is the max batch *DATA* size that could be
-handled by the receiver. reg addr bytes are not counted in. I'm not 100%
-sure this is obeyed by all drivers. But see several examples:
-
-static const struct regmap_config ar9331_mdio_regmap_config = {
-	.reg_bits = 32,
-	.val_bits = 32,
-	.reg_stride = 4,
-	[...]
-};
-
-static struct regmap_bus ar9331_sw_bus = {
-	[...]
-	.max_raw_read = 4,
-	.max_raw_write = 4,
-};
-
-Another one:
-
-static struct regmap_config qca8k_regmap_config = {
-	.reg_bits = 16,
-	.val_bits = 32,
-	.reg_stride = 4,
-	[...]
-	.max_raw_read = 32, /* mgmt eth can read/write up to 8 registers at time */
-	.max_raw_write = 32,
-}
-
-And regmap-spi.c:
-
-static const struct regmap_bus *regmap_get_spi_bus(struct spi_device *spi,
-						   const struct regmap_config *config)
-{
-	size_t max_size = spi_max_transfer_size(spi);
-	size_t max_msg_size, reg_reserve_size;
-	struct regmap_bus *bus;
-
-	if (max_size != SIZE_MAX) {
-		bus = kmemdup(&regmap_spi, sizeof(*bus), GFP_KERNEL);
-		if (!bus)
-			return ERR_PTR(-ENOMEM);
-
-		max_msg_size = spi_max_message_size(spi);
-		reg_reserve_size = config->reg_bits / BITS_PER_BYTE
-				 + config->pad_bits / BITS_PER_BYTE;
-		if (max_size + reg_reserve_size > max_msg_size)
-			max_size -= reg_reserve_size;
-
-		bus->free_on_exit = true;
-		bus->max_raw_read = max_size;
-		bus->max_raw_write = max_size;
-
-		return bus;
-	}
-
-	return &regmap_spi;
-}
-
-So I'm not sure if commit 3981514180c9 is actually necessary.
-
-Thanks,
-Yilun
-
+>> A: http://en.wikipedia.org/wiki/Top_post
+>> Q: Were do I find info about this thing called top-posting?
+>> A: Because it messes up the order in which people normally read text.
+>> Q: Why is top-posting such a bad thing?
+>> A: Top-posting.
+>> Q: What is the most annoying thing in e-mail?
+>>
+>> A: No.
+>> Q: Should I include quotations after my reply?
+>>
+>> http://daringfireball.net/2007/07/on_top
 > 
-> Change max_raw_write to include space (4 additional bytes) for both the
-> register address and value:
+> Also, please send plain-text email: I don't see your dmesg on
+> lore.kernel.org archive because you send HTML email instead.
 > 
-> 	.max_raw_write = SPI_AVMM_REG_SIZE + SPI_AVMM_VAL_SIZE * MAX_WRITE_CNT
+> But anyway, I'm pasting yours from Bugzilla thread instead
+> (as Arnd requested):
+> 
+> ```
+> Jun 20 18:20:11 askasleikir kernel: ------------[ cut here ]------------
+> Jun 20 18:20:11 askasleikir kernel: WARNING: CPU: 1 PID: 33 at net/mac80211/util.c:514 __ieee80211_stop_queue+0xcc/0xe0 [mac80211]
+> Jun 20 18:20:11 askasleikir kernel: Modules linked in: ccm tun qrtr rpcrdma rdma_cm iw_cm ib_cm ib_core nls_utf8 cifs cifs_arc4 cifs_md4 dns_resolver fscache net>
+> Jun 20 18:20:11 askasleikir kernel:  lockd grace crypto_user sunrpc fuse dm_mod loop bpf_preload ip_tables x_tables ext4 crc32c_generic crc16 mbcache jbd2 sr_mod>
+> Jun 20 18:20:11 askasleikir kernel: CPU: 1 PID: 33 Comm: kworker/u4:2 Tainted: G        W          6.3.6-arch1-1 #1 a07497485287c74e7a472f42ded4b2ddcf7a6fd7
+> Jun 20 18:20:11 askasleikir kernel: Hardware name: Apple Inc. MacBookPro7,1/Mac-F222BEC8, BIOS    MBP71.88Z.0039.B15.1702241313 02/24/17
+> Jun 20 18:20:11 askasleikir kernel: Workqueue: phy0 b43_tx_work [b43]
+> Jun 20 18:20:11 askasleikir kernel: RIP: 0010:__ieee80211_stop_queue+0xcc/0xe0 [mac80211]
+> Jun 20 18:20:11 askasleikir kernel: Code: 74 11 48 8b 78 08 0f b7 d6 89 e9 4c 89 e6 e8 fb ea 00 00 65 ff 0d 2c 2d ac 3e 0f 85 55 ff ff ff e8 d9 44 69 c3 e9 4b ff>
+> Jun 20 18:20:11 askasleikir kernel: RSP: 0018:ffffb3538013bdb8 EFLAGS: 00010097
+> Jun 20 18:20:11 askasleikir kernel: RAX: 0000000000000001 RBX: 0000000000000002 RCX: 0000000000000000
+> Jun 20 18:20:11 askasleikir kernel: RDX: 0000000000000000 RSI: 0000000000000002 RDI: ffff9e55cfa248e0
+> Jun 20 18:20:11 askasleikir kernel: RBP: 0000000000000000 R08: 0000000000000000 R09: 000000008010000f
+> Jun 20 18:20:11 askasleikir kernel: R10: 0000000000000005 R11: 0000000000000181 R12: ffff9e55cfa248e0
+> Jun 20 18:20:11 askasleikir kernel: R13: 0000000000000000 R14: ffff9e55cfa26238 R15: ffff9e55cfa26090
+> Jun 20 18:20:11 askasleikir kernel: FS:  0000000000000000(0000) GS:ffff9e55fbf00000(0000) knlGS:0000000000000000
+> Jun 20 18:20:11 askasleikir kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> Jun 20 18:20:11 askasleikir kernel: CR2: 00007f37cce5d180 CR3: 0000000057620000 CR4: 00000000000406e0
+> Jun 20 18:20:11 askasleikir kernel: Call Trace:
+> Jun 20 18:20:11 askasleikir kernel:  <TASK>
+> Jun 20 18:20:11 askasleikir kernel:  ? __ieee80211_stop_queue+0xcc/0xe0 [mac80211 01be121fb223b347160617528f5dda900e828bc2]
+> Jun 20 18:20:11 askasleikir kernel:  ? __warn+0x81/0x130
+> Jun 20 18:20:11 askasleikir kernel:  ? __ieee80211_stop_queue+0xcc/0xe0 [mac80211 01be121fb223b347160617528f5dda900e828bc2]
+> Jun 20 18:20:11 askasleikir kernel:  ? report_bug+0x171/0x1a0
+> Jun 20 18:20:11 askasleikir kernel:  ? handle_bug+0x3c/0x80
+> Jun 20 18:20:11 askasleikir kernel:  ? exc_invalid_op+0x17/0x70
+> Jun 20 18:20:11 askasleikir kernel:  ? asm_exc_invalid_op+0x1a/0x20
+> Jun 20 18:20:11 askasleikir kernel:  ? __ieee80211_stop_queue+0xcc/0xe0 [mac80211 01be121fb223b347160617528f5dda900e828bc2]
+> Jun 20 18:20:11 askasleikir kernel:  ? __slab_free+0xe0/0x310
+> Jun 20 18:20:11 askasleikir kernel:  ieee80211_stop_queue+0x36/0x50 [mac80211 01be121fb223b347160617528f5dda900e828bc2]
+> Jun 20 18:20:11 askasleikir kernel:  b43_pio_tx+0x373/0x390 [b43 3dc9b3f0fd98e2a659c64e057bd3b22d977e5228]
+> Jun 20 18:20:11 askasleikir kernel:  b43_tx_work+0x57/0x130 [b43 3dc9b3f0fd98e2a659c64e057bd3b22d977e5228]
+> Jun 20 18:20:11 askasleikir kernel:  process_one_work+0x1c7/0x3d0
+> Jun 20 18:20:11 askasleikir kernel:  worker_thread+0x51/0x390
+> Jun 20 18:20:11 askasleikir kernel:  ? __pfx_worker_thread+0x10/0x10
+> Jun 20 18:20:11 askasleikir kernel:  kthread+0xde/0x110
+> Jun 20 18:20:11 askasleikir kernel:  ? __pfx_kthread+0x10/0x10
+> Jun 20 18:20:11 askasleikir kernel:  ret_from_fork+0x2c/0x50
+> Jun 20 18:20:11 askasleikir kernel:  </TASK>
+> Jun 20 18:20:11 askasleikir kernel: ---[ end trace 0000000000000000 ]---
+> Jun 20 18:20:11 askasleikir kernel: ------------[ cut here ]------------
+
+Sardonimous,
+
+The critical line is:
+> Jun 20 18:20:11 askasleikir kernel:  b43_pio_tx+0x373/0x390
+
+I certainly have not used PIO for a long time. I expect that your MacBook Pro 
+should do DMA on the b43. Apple makes wierd hardware, but not likely that wierd.
+
+Does dmesg offer any clues as to what is happening?
+
+If there is nothing shown in the log, you definitely need to do a proper 
+bisection from the mainline git tree to isolate the change that led to this failure.
 
 
-> 
-> Fixes: 7f9fb67358a2 ("regmap: add Intel SPI Slave to AVMM Bus Bridge support")
-> Reviewed-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-> ---
->  drivers/base/regmap/regmap-spi-avmm.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/base/regmap/regmap-spi-avmm.c b/drivers/base/regmap/regmap-spi-avmm.c
-> index 4c2b94b3e30b..6af692844c19 100644
-> --- a/drivers/base/regmap/regmap-spi-avmm.c
-> +++ b/drivers/base/regmap/regmap-spi-avmm.c
-> @@ -660,7 +660,7 @@ static const struct regmap_bus regmap_spi_avmm_bus = {
->  	.reg_format_endian_default = REGMAP_ENDIAN_NATIVE,
->  	.val_format_endian_default = REGMAP_ENDIAN_NATIVE,
->  	.max_raw_read = SPI_AVMM_VAL_SIZE * MAX_READ_CNT,
-> -	.max_raw_write = SPI_AVMM_VAL_SIZE * MAX_WRITE_CNT,
-> +	.max_raw_write = SPI_AVMM_REG_SIZE + SPI_AVMM_VAL_SIZE * MAX_WRITE_CNT,
->  	.free_context = spi_avmm_bridge_ctx_free,
->  };
->  
-> -- 
-> 2.25.1
-> 
+
+ADDED WITH EDIT: I looked at the code and b43 will not be built for any hardware 
+without DMA, thus it appears that adding "b43.pio=1" is the only way to get PIO 
+mode. Please check the output of dmesg for PIO messages.
+
+Larry
