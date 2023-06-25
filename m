@@ -2,68 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A35673D0A9
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 13:54:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9505073D0AA
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 13:55:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231591AbjFYLyx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 07:54:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42914 "EHLO
+        id S231749AbjFYLzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 07:55:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231356AbjFYLyw (ORCPT
+        with ESMTP id S230457AbjFYLyx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 07:54:52 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C717E74;
-        Sun, 25 Jun 2023 04:54:49 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2b466744368so33275421fa.0;
-        Sun, 25 Jun 2023 04:54:49 -0700 (PDT)
+        Sun, 25 Jun 2023 07:54:53 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7805E47;
+        Sun, 25 Jun 2023 04:54:50 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2b699a2fe86so8302411fa.3;
+        Sun, 25 Jun 2023 04:54:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687694087; x=1690286087;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=D6QUBDRqa2Wrr4CQ5qPtzCdJP57iv7TLCuj/rtuOYPQ=;
-        b=dk2KLS6Js8BYTMjIFK6RLM6Jxr02D5lf1hgbdwTvfH7L6x3QMcNi8bwZVJkIwFMogc
-         kpcEkkLyqOOJ0UZMQPbz/kot0ibOC7h8tfuP3ynrJLm8tTRuLhQvwai6WEYeBQEW1sSn
-         kzyBv0zKjM9aQdtn9W7E8mq/gftSHBCWvpw8UTCOo2xfilWLfhPJGyx0sl6lyjDjBito
-         K8tc6Y+MDztbmwJhIiyHaPUs/GwycnYWMYzkBHFpxHlqA1fcxUUoGfLPV2VUTUvr2mvO
-         0QIs9jEtLCBlronpOkQzghKBrpL7vYQmd7v2e4DQsDQaELecUu2u+NfQ5cYkhN5LL0mG
-         nQOQ==
+        d=gmail.com; s=20221208; t=1687694088; x=1690286088;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TnIWcZ1ZlXJJvtOUIT1yhuwFRiZT1JlqjJYQsTmV7EI=;
+        b=Yf9tbRNAu6fmDIEcxL/uhWB4Oo/mXunh/50qHMDypNM63TBrJdXlhJEsBJ6hxxhW1a
+         icycLaN/sipV9pjZz17qS3GbvAGKkcUw2IZ7k7YuIvwHd6tJzlkyQhP7cMzFN+kARR5Y
+         aVw1aYQKIzWNwZ5tBWqFTyUb3Mh849Ql9WgQfKA0GiC3C9L9VdO6HCvu95jtZUCQQHxf
+         fgqZqbGtuTJD1EL48B0jQi3oWPY9S2kEBj9i02jOcvPPnBwnN/pC5bOA7VhYqFgtjxqv
+         UMtwIfk9MfpCgDMRZ7uqVfRkYmjDAsdujswCnIwTqfuvR0elQ89RBPgoeMa29ISyY7Un
+         ypCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687694087; x=1690286087;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=D6QUBDRqa2Wrr4CQ5qPtzCdJP57iv7TLCuj/rtuOYPQ=;
-        b=Kt6Brzihjmlg9nlRN2kLmIh8xX0LezXidxnNZpQBY4GdxSv1i1hgCUsnVO6LoYYC2o
-         Njab4pyyuoIdJFPfOsviROhqM6R9CgZi0BA9Wi+5ahWyw+Sb3wTQZ1YnBmno3iplu9jc
-         JvGlUjjJi0MPCgjgmMGc+rMdeZQ8reVtNGaiayYobm9uWN3VmwV9Gr+e4gOxysOTnyAc
-         vJoukf/Zhm09zl2ddNOuTAMMi1I9tosk9OSP/ZOZmPBq7byTa2T8oToSZrJJYgqkziXu
-         d/qT2kZmwDWn5v/MXyFq7BS/LKPOpfQHG5b/9HsDxKz/5LrqxxjODAA73X36jGf62cOG
-         XUIw==
-X-Gm-Message-State: AC+VfDz2xuR5aj0jeviHXrEbEyWwtRuzXRyPxLe7O8t1f669qewIyKWb
-        euJfeNTRHk0Pt15Bjes+aCdQaH98oA6G9Q==
-X-Google-Smtp-Source: ACHHUZ7+M8ECB7lsgkgBNWrO5HgnfjjxTOyiGJRySCO0rV4Hoc+QnZVXcDpOQIbRB4CIpYAJ4Odjuw==
-X-Received: by 2002:a2e:9c82:0:b0:2b4:6678:da57 with SMTP id x2-20020a2e9c82000000b002b46678da57mr14500983lji.6.1687694087138;
-        Sun, 25 Jun 2023 04:54:47 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687694088; x=1690286088;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TnIWcZ1ZlXJJvtOUIT1yhuwFRiZT1JlqjJYQsTmV7EI=;
+        b=P+RFl1Df+6/MVI5qIZkiN70NJ/E+6ceBTZfp5NZnCjYE8fJQyzzBBD2WJ5QUCgxWwt
+         H9NbHa+b4IRi0o4SZJP0/jAnZi1lqvT6WX5bqJ5di8Kne3RqHMqos6B12grNL68eaPlM
+         zeFJ2JZmIfLF1e0Y1Rh+hwpft3Qm09ZcbyNsYLsAe3FdWQCSyqVG5a4diK0ieNhzIZ9P
+         jA/XCMr8Is4JZouGc+VANmlS+TbyLqwSgEPLMiv9wyxQ0Ie8A65cyiLcqWVyuSD7EjbF
+         50PWmNVfgV+D/froIDdL06D3abVaDO46cguHKbadEkNfu9BgU3DfzjO9c838H2EPrf/f
+         8/3A==
+X-Gm-Message-State: AC+VfDxDMkaLZCCNxJs5dkce6/HfNOrtgjobJMUSNirbCvzJLY29apIF
+        FtvFx/JsLKskB/4iqzqDKH1Qm/FXV7Q3nA==
+X-Google-Smtp-Source: ACHHUZ5nEkPsDkAK9OV7mxLQ3qI5lY+O29jhpmMUw1HYuOPS169glK0MNBaei78auVGz3uYN00Hoew==
+X-Received: by 2002:a2e:94c1:0:b0:2b1:daca:676f with SMTP id r1-20020a2e94c1000000b002b1daca676fmr15874730ljh.36.1687694088562;
+        Sun, 25 Jun 2023 04:54:48 -0700 (PDT)
 Received: from WBEC325.dom.local ([185.188.71.122])
-        by smtp.gmail.com with ESMTPSA id w21-20020a2e9595000000b002b6993b9665sm416043ljh.65.2023.06.25.04.54.46
+        by smtp.gmail.com with ESMTPSA id w21-20020a2e9595000000b002b6993b9665sm416043ljh.65.2023.06.25.04.54.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Jun 2023 04:54:46 -0700 (PDT)
+        Sun, 25 Jun 2023 04:54:48 -0700 (PDT)
 From:   Pawel Dembicki <paweldembicki@gmail.com>
 To:     netdev@vger.kernel.org
 Cc:     Pawel Dembicki <paweldembicki@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
+        Linus Walleij <linus.walleij@linaro.org>,
         Andrew Lunn <andrew@lunn.ch>,
         Florian Fainelli <f.fainelli@gmail.com>,
         Vladimir Oltean <olteanv@gmail.com>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v2 1/7] net: dsa: vsc73xx: use read_poll_timeout instead delay loop
-Date:   Sun, 25 Jun 2023 13:53:36 +0200
-Message-Id: <20230625115343.1603330-1-paweldembicki@gmail.com>
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v2 2/7] net: dsa: vsc73xx: convert to PHYLINK
+Date:   Sun, 25 Jun 2023 13:53:37 +0200
+Message-Id: <20230625115343.1603330-2-paweldembicki@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230625115343.1603330-1-paweldembicki@gmail.com>
+References: <20230625115343.1603330-1-paweldembicki@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -76,71 +81,268 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit switches delay loop to read_poll_timeout macro durring
-Arbiter empty check in adjust link function.
+This patch replaces the adjust_link api with the phylink apis that provide
+equivalent functionality.
 
-As Russel King suggested:
+The remaining functionality from the adjust_link is now covered in the
+phylink_mac_link_* and phylink_mac_config.
 
-"This [change] avoids the issue that on the last iteration, the code reads
-the register, test it, find the condition that's being waiting for is
-false, _then_ waits and end up printing the error message - that last
-wait is rather useless, and as the arbiter state isn't checked after
-waiting, it could be that we had success during the last wait."
+Removes:
+.adjust_link
+Adds:
+.phylink_get_caps
+.phylink_mac_link_down
+.phylink_mac_link_up
+.phylink_mac_link_down
 
-It also remove one short msleep delay.
-
-Suggested-by: Russell King <linux@armlinux.org.uk>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Pawel Dembicki <paweldembicki@gmail.com>
 ---
 v2:
-  - introduced patch
+  - replace switch to if and get rid of macros in
+    vsc73xx_phylink_mac_link_up function
 
- drivers/net/dsa/vitesse-vsc73xx-core.c | 25 +++++++++++--------------
- 1 file changed, 11 insertions(+), 14 deletions(-)
+ drivers/net/dsa/vitesse-vsc73xx-core.c | 196 +++++++++++++------------
+ 1 file changed, 102 insertions(+), 94 deletions(-)
 
 diff --git a/drivers/net/dsa/vitesse-vsc73xx-core.c b/drivers/net/dsa/vitesse-vsc73xx-core.c
-index ae55167ce0a6..bea5ec7a89fd 100644
+index bea5ec7a89fd..221672b9e17f 100644
 --- a/drivers/net/dsa/vitesse-vsc73xx-core.c
 +++ b/drivers/net/dsa/vitesse-vsc73xx-core.c
-@@ -780,7 +780,7 @@ static void vsc73xx_adjust_link(struct dsa_switch *ds, int port,
- 	 * after a PHY or the CPU port comes up or down.
- 	 */
- 	if (!phydev->link) {
--		int maxloop = 10;
-+		int ret, err;
+@@ -715,8 +715,7 @@ static void vsc73xx_init_port(struct vsc73xx *vsc, int port)
+ }
  
- 		dev_dbg(vsc->dev, "port %d: went down\n",
- 			port);
-@@ -795,19 +795,16 @@ static void vsc73xx_adjust_link(struct dsa_switch *ds, int port,
- 				    VSC73XX_ARBDISC, BIT(port), BIT(port));
+ static void vsc73xx_adjust_enable_port(struct vsc73xx *vsc,
+-				       int port, struct phy_device *phydev,
+-				       u32 initval)
++				       int port, u32 initval)
+ {
+ 	u32 val = initval;
+ 	u8 seed;
+@@ -754,12 +753,40 @@ static void vsc73xx_adjust_enable_port(struct vsc73xx *vsc,
+ 			    VSC73XX_MAC_CFG_TX_EN | VSC73XX_MAC_CFG_RX_EN);
+ }
  
- 		/* Wait until queue is empty */
--		vsc73xx_read(vsc, VSC73XX_BLOCK_ARBITER, 0,
--			     VSC73XX_ARBEMPTY, &val);
--		while (!(val & BIT(port))) {
--			msleep(1);
--			vsc73xx_read(vsc, VSC73XX_BLOCK_ARBITER, 0,
--				     VSC73XX_ARBEMPTY, &val);
--			if (--maxloop == 0) {
--				dev_err(vsc->dev,
--					"timeout waiting for block arbiter\n");
--				/* Continue anyway */
--				break;
--			}
+-static void vsc73xx_adjust_link(struct dsa_switch *ds, int port,
+-				struct phy_device *phydev)
++static void vsc73xx_phylink_get_caps(struct dsa_switch *ds, int port,
++				     struct phylink_config *config)
+ {
+-	struct vsc73xx *vsc = ds->priv;
+-	u32 val;
++	/* This switch only supports full-duplex at 1Gbps */
++	config->mac_capabilities = MAC_10 | MAC_100 | MAC_1000FD |
++				   MAC_ASYM_PAUSE | MAC_SYM_PAUSE;
++
++	if (port == CPU_PORT) {
++		__set_bit(PHY_INTERFACE_MODE_RGMII,
++			  config->supported_interfaces);
++		__set_bit(PHY_INTERFACE_MODE_GMII,
++			  config->supported_interfaces);
++	} else {
++		__set_bit(PHY_INTERFACE_MODE_INTERNAL,
++			  config->supported_interfaces);
++		/* Compatibility for phylib's default interface type when the
++		 * phy-mode property is absent
++		 */
++		__set_bit(PHY_INTERFACE_MODE_GMII,
++			  config->supported_interfaces);
++	}
++
++	/* This driver does not make use of the speed, duplex, pause or the
++	 * advertisement in its mac_config, so it is safe to mark this driver
++	 * as non-legacy.
++	 */
++	config->legacy_pre_march2020 = false;
++}
+ 
++static void vsc73xx_phylink_mac_config(struct dsa_switch *ds, int port,
++				       unsigned int mode,
++				       const struct phylink_link_state *state)
++{
++	struct vsc73xx *vsc = ds->priv;
+ 	/* Special handling of the CPU-facing port */
+ 	if (port == CPU_PORT) {
+ 		/* Other ports are already initialized but not this one */
+@@ -775,101 +802,79 @@ static void vsc73xx_adjust_link(struct dsa_switch *ds, int port,
+ 			      VSC73XX_ADVPORTM_ENA_GTX |
+ 			      VSC73XX_ADVPORTM_DDR_MODE);
+ 	}
++}
+ 
+-	/* This is the MAC confiuration that always need to happen
+-	 * after a PHY or the CPU port comes up or down.
+-	 */
+-	if (!phydev->link) {
+-		int ret, err;
+-
+-		dev_dbg(vsc->dev, "port %d: went down\n",
+-			port);
+-
+-		/* Disable RX on this port */
+-		vsc73xx_update_bits(vsc, VSC73XX_BLOCK_MAC, port,
+-				    VSC73XX_MAC_CFG,
+-				    VSC73XX_MAC_CFG_RX_EN, 0);
+-
+-		/* Discard packets */
+-		vsc73xx_update_bits(vsc, VSC73XX_BLOCK_ARBITER, 0,
+-				    VSC73XX_ARBDISC, BIT(port), BIT(port));
+-
+-		/* Wait until queue is empty */
+-		ret = read_poll_timeout(vsc73xx_read, err,
+-					err < 0 || (val & BIT(port)),
+-					1000, 10000, false,
+-					vsc, VSC73XX_BLOCK_ARBITER, 0,
+-					VSC73XX_ARBEMPTY, &val);
+-		if (ret)
+-			dev_err(vsc->dev,
+-				"timeout waiting for block arbiter\n");
+-		else if (err < 0)
+-			dev_err(vsc->dev, "error reading arbiter\n");
+-
+-		/* Put this port into reset */
+-		vsc73xx_write(vsc, VSC73XX_BLOCK_MAC, port, VSC73XX_MAC_CFG,
+-			      VSC73XX_MAC_CFG_RESET);
+-
+-		/* Accept packets again */
+-		vsc73xx_update_bits(vsc, VSC73XX_BLOCK_ARBITER, 0,
+-				    VSC73XX_ARBDISC, BIT(port), 0);
+-
+-		/* Allow backward dropping of frames from this port */
+-		vsc73xx_update_bits(vsc, VSC73XX_BLOCK_ARBITER, 0,
+-				    VSC73XX_SBACKWDROP, BIT(port), BIT(port));
+-
+-		/* Receive mask (disable forwarding) */
+-		vsc73xx_update_bits(vsc, VSC73XX_BLOCK_ANALYZER, 0,
+-				    VSC73XX_RECVMASK, BIT(port), 0);
++static void vsc73xx_phylink_mac_link_down(struct dsa_switch *ds, int port,
++					  unsigned int mode,
++					  phy_interface_t interface)
++{
++	struct vsc73xx *vsc = ds->priv;
++	int ret, err;
++	u32 val;
+ 
+-		return;
+-	}
++	/* Disable RX on this port */
++	vsc73xx_update_bits(vsc, VSC73XX_BLOCK_MAC, port,
++			    VSC73XX_MAC_CFG,
++			    VSC73XX_MAC_CFG_RX_EN, 0);
+ 
+-	/* Figure out what speed was negotiated */
+-	if (phydev->speed == SPEED_1000) {
+-		dev_dbg(vsc->dev, "port %d: 1000 Mbit mode full duplex\n",
+-			port);
+-
+-		/* Set up default for internal port or external RGMII */
+-		if (phydev->interface == PHY_INTERFACE_MODE_RGMII)
+-			val = VSC73XX_MAC_CFG_1000M_F_RGMII;
+-		else
+-			val = VSC73XX_MAC_CFG_1000M_F_PHY;
+-		vsc73xx_adjust_enable_port(vsc, port, phydev, val);
+-	} else if (phydev->speed == SPEED_100) {
+-		if (phydev->duplex == DUPLEX_FULL) {
+-			val = VSC73XX_MAC_CFG_100_10M_F_PHY;
+-			dev_dbg(vsc->dev,
+-				"port %d: 100 Mbit full duplex mode\n",
+-				port);
+-		} else {
+-			val = VSC73XX_MAC_CFG_100_10M_H_PHY;
+-			dev_dbg(vsc->dev,
+-				"port %d: 100 Mbit half duplex mode\n",
+-				port);
 -		}
-+		ret = read_poll_timeout(vsc73xx_read, err,
-+					err < 0 || (val & BIT(port)),
-+					1000, 10000, false,
-+					vsc, VSC73XX_BLOCK_ARBITER, 0,
-+					VSC73XX_ARBEMPTY, &val);
-+		if (ret)
-+			dev_err(vsc->dev,
-+				"timeout waiting for block arbiter\n");
-+		else if (err < 0)
-+			dev_err(vsc->dev, "error reading arbiter\n");
+-		vsc73xx_adjust_enable_port(vsc, port, phydev, val);
+-	} else if (phydev->speed == SPEED_10) {
+-		if (phydev->duplex == DUPLEX_FULL) {
+-			val = VSC73XX_MAC_CFG_100_10M_F_PHY;
+-			dev_dbg(vsc->dev,
+-				"port %d: 10 Mbit full duplex mode\n",
+-				port);
+-		} else {
+-			val = VSC73XX_MAC_CFG_100_10M_H_PHY;
+-			dev_dbg(vsc->dev,
+-				"port %d: 10 Mbit half duplex mode\n",
+-				port);
+-		}
+-		vsc73xx_adjust_enable_port(vsc, port, phydev, val);
+-	} else {
++	/* Discard packets */
++	vsc73xx_update_bits(vsc, VSC73XX_BLOCK_ARBITER, 0,
++			    VSC73XX_ARBDISC, BIT(port), BIT(port));
++
++	/* Wait until queue is empty */
++	ret = read_poll_timeout(vsc73xx_read, err, err < 0 || (val & BIT(port)),
++				1000, 10000, false, vsc, VSC73XX_BLOCK_ARBITER,
++				0, VSC73XX_ARBEMPTY, &val);
++	if (ret)
+ 		dev_err(vsc->dev,
+-			"could not adjust link: unknown speed\n");
+-	}
++			"timeout waiting for block arbiter\n");
++	else if (err < 0)
++		dev_err(vsc->dev, "error reading arbiter\n");
++
++	/* Put this port into reset */
++	vsc73xx_write(vsc, VSC73XX_BLOCK_MAC, port, VSC73XX_MAC_CFG,
++		      VSC73XX_MAC_CFG_RESET);
++
++	/* Accept packets again */
++	vsc73xx_update_bits(vsc, VSC73XX_BLOCK_ARBITER, 0,
++			    VSC73XX_ARBDISC, BIT(port), 0);
++
++	/* Allow backward dropping of frames from this port */
++	vsc73xx_update_bits(vsc, VSC73XX_BLOCK_ARBITER, 0,
++			    VSC73XX_SBACKWDROP, BIT(port), BIT(port));
++
++	/* Receive mask (disable forwarding) */
++	vsc73xx_update_bits(vsc, VSC73XX_BLOCK_ANALYZER, 0,
++			    VSC73XX_RECVMASK, BIT(port), 0);
++}
++
++static void vsc73xx_phylink_mac_link_up(struct dsa_switch *ds, int port,
++					unsigned int mode,
++					phy_interface_t interface,
++					struct phy_device *phydev,
++					int speed, int duplex,
++					bool tx_pause, bool rx_pause)
++{
++	struct vsc73xx *vsc = ds->priv;
++	u32 val;
++
++	if (speed == SPEED_1000)
++		val = VSC73XX_MAC_CFG_GIGA_MODE | VSC73XX_MAC_CFG_TX_IPG_1000M;
++	else
++		val = VSC73XX_MAC_CFG_TX_IPG_100_10M;
++
++	if (interface == PHY_INTERFACE_MODE_RGMII)
++		val |= VSC73XX_MAC_CFG_CLK_SEL_1000M;
++	else
++		val |= VSC73XX_MAC_CFG_CLK_SEL_EXT;
++
++	if (duplex == DUPLEX_FULL)
++		val |= VSC73XX_MAC_CFG_FDX;
  
- 		/* Put this port into reset */
- 		vsc73xx_write(vsc, VSC73XX_BLOCK_MAC, port, VSC73XX_MAC_CFG,
+ 	/* Enable port (forwarding) in the receieve mask */
+ 	vsc73xx_update_bits(vsc, VSC73XX_BLOCK_ANALYZER, 0,
+ 			    VSC73XX_RECVMASK, BIT(port), BIT(port));
++	vsc73xx_adjust_enable_port(vsc, port, val);
+ }
+ 
+ static int vsc73xx_port_enable(struct dsa_switch *ds, int port,
+@@ -1040,7 +1045,10 @@ static const struct dsa_switch_ops vsc73xx_ds_ops = {
+ 	.setup = vsc73xx_setup,
+ 	.phy_read = vsc73xx_phy_read,
+ 	.phy_write = vsc73xx_phy_write,
+-	.adjust_link = vsc73xx_adjust_link,
++	.phylink_get_caps = vsc73xx_phylink_get_caps,
++	.phylink_mac_config = vsc73xx_phylink_mac_config,
++	.phylink_mac_link_down = vsc73xx_phylink_mac_link_down,
++	.phylink_mac_link_up = vsc73xx_phylink_mac_link_up,
+ 	.get_strings = vsc73xx_get_strings,
+ 	.get_ethtool_stats = vsc73xx_get_ethtool_stats,
+ 	.get_sset_count = vsc73xx_get_sset_count,
 -- 
 2.34.1
 
