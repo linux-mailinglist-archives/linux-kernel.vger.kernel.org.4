@@ -2,48 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB1C873D282
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 18:42:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA92A73D290
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 18:51:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230224AbjFYQm5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 12:42:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40562 "EHLO
+        id S229900AbjFYQvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 12:51:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjFYQmz (ORCPT
+        with ESMTP id S229558AbjFYQvA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 12:42:55 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7620B9;
-        Sun, 25 Jun 2023 09:42:53 -0700 (PDT)
-X-QQ-mid: bizesmtp68t1687711364tfahxxx2
-Received: from linux-lab-host.localdomain ( [116.30.129.193])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 26 Jun 2023 00:42:43 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: znfcQSa1hKZz5eb5VjrwTSUMnFub5FvDyyA4AG4JS/NVFi6m4xL1PtTDGgki7
-        SnsDQs5vU8T2xxkzc/oQqnSLaM+Eb1dLFNj38am5/Wsi7PonpRZPJLPoSX7a3tMDRZLk/pV
-        71pkSdtf97HRjCdyV3yJW9/Dydg25/CNLggbKiBiZmd5B/Dz6F8hkfadC1zK8vAdTd8jtBL
-        kxsqr/munTIt4/beyvN1G7SHWaLcUKzcqMcrvv+x6q7ntH0mgrZeMwEk6TTDdV7uicaBSbv
-        r65823BCKd6NGoenKBL68UpMVikNP1JDO2ZkWo4EtJ4O0FzjR5q80g9NjOSaS2qhIVjv7nH
-        J6GTuwkFT1S3q6lNOQeiOMy3m1bCOW7k52mr0noySIBSO43zao=
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 11765547641019653024
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     thomas@t-8ch.de, w@1wt.eu
-Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH v1 20/22] selftests/nolibc: add run-tiny and run-default
-Date:   Mon, 26 Jun 2023 00:41:23 +0800
-Message-Id: <c1142457987895ebc2e3f378c7b30494f45ca48e.1687706332.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1687706332.git.falcon@tinylab.org>
-References: <cover.1687706332.git.falcon@tinylab.org>
+        Sun, 25 Jun 2023 12:51:00 -0400
+Received: from out162-62-57-210.mail.qq.com (out162-62-57-210.mail.qq.com [162.62.57.210])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81C4AB7;
+        Sun, 25 Jun 2023 09:50:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1687711854;
+        bh=ULx3wX+XMVeigercXBoqPiB3jqlbn7oDvMIMzYZ5TSs=;
+        h=From:To:Cc:Subject:Date;
+        b=CfMvs3gT3j+jBSrb5D+jtbtPtE0EwU1kx3p/zd/OlN3Q4VGKNVTqbRo0QYtM8waIJ
+         QJigxzIlDOKS9bUFOJe8H1O7PHQ1kaoCvd4EVeIV4FRlb1ZMMUwcQm5UOJpbKnmyOw
+         TxUkmyDRUjtCcMa+DfJ+iMDdFCwtHpdKV0xi4GbE=
+Received: from localhost.localdomain ([122.14.229.236])
+        by newxmesmtplogicsvrsza10-0.qq.com (NewEsmtp) with SMTP
+        id A9A2A055; Mon, 26 Jun 2023 00:42:26 +0800
+X-QQ-mid: xmsmtpt1687711346tg34imyg9
+Message-ID: <tencent_15DD79B42AD8A0D64A7CDC24D4FE6C85800A@qq.com>
+X-QQ-XMAILINFO: NUoqT9CRNGLktLe03EA26suTrp/6WoKbh3uyq6gI6Laf3iYIlrsVt+j5hNNtSs
+         fLYRD/A6zL8h6i2kOPpD0flQHcJ3x4+RjEmPTOqeGMR4MF7djfr9nTzfyy16d5sITFmOouzOuVdT
+         m5BeNGvLZrTqLTl1rVfMjZQlIJ3YhzNLm/hDWbzLWirEJAIveTRSQy0tMVEDJV4hRdlT/KmZELnc
+         jUGvGqyEN4+q8UUX3pGzFn35Atc+U/I2rFqq1D7h3sPX22e/BXi2FYQCanbwor0ESnL1dDs3s2fU
+         ayeNk4h7cM2xEeeIC95x7cF+S7JX1+IF17gfEFDU+vBEvPi+IouiHT2jqI7rIhS5WNWohdVaqRzf
+         MpyzRW11ay4nC6JvrHAr8p8YlaeeZGr+GxU8RtR2IwwneFejF/EtjnkmTjHTw3Ha/zUge7JnEgWd
+         dPmrzqEBLjNti4CJsm0q2gxmupNN3jNSNJGzrok9k58vjttdeLLSZPkdeALLuvHauydujeeFI7Q6
+         QhIGoB/ZXKfkUBWLy9qfbbKelYm8DIVG/ZtS5iPZfMdbtXjEwIZZ744A9oC4nU2O9og2NxB97cqp
+         addINjibYwepbHwcBsJu/xT1yGXlxb1MEoOtxlLIxVa9MkROjFySkhD3TJSesjfkXdImPOFTWJEr
+         Fq4QJz5x3o11fsbccWPVBqijqjm15K3u7APd5YcvarTD+DMyTBkJ5k7J4qchCQW/OYr1XQinnMPQ
+         wmL/NBImn52FIkeFzE5jtoa43dOOqo80IGAsSAEqRqpyNW2jEADsdWGMvJXy2ORocIIir2Qs9HxE
+         GUeSacyIb7QdAgxh5DZHN18GsO9bId+GnsUEhQcARu5kinI8H7VsbAZlWuuOC3wi6njBJySUlnlM
+         SpN8QltQpHNAa6hHOexNgHacdalcJE2prZkyN0TqE1e58hB+yfbT8i/daQdtA91xsSpSElfpE83g
+         l9ZYvyMQ0swsLePKVdDDJpjZZeKG2o/NzG0mrGAD8nfy/HJsMUFx+lfwfomt+h8HgPQ4WT+I4=
+X-QQ-XMRINFO: M0RWTeBkoNRBR1Uh12iQNRvA1CSLhD8+1Q==
+From:   Zhang Shurong <zhang_shurong@foxmail.com>
+To:     jgross@suse.com
+Cc:     gregkh@linuxfoundation.org, xen-devel@lists.xenproject.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zhang Shurong <zhang_shurong@foxmail.com>
+Subject: [PATCH] xen: fix potential shift out-of-bounds in xenhcd_hub_control()
+Date:   Mon, 26 Jun 2023 00:42:18 +0800
+X-OQ-MSGID: <20230625164218.7134-1-zhang_shurong@foxmail.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,53 +64,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These two targets allow to do config and run together.
+Fix potential shift out-of-bounds in xenhcd_hub_control()
+ClearPortFeature handling and SetPortFeature handling.
 
-- run-tiny: do tinyconfig, extconfig and then run.
-- run-default: do defconfig, extconfig and then run.
+wValue may be greater than 32 which can not be used for shifting.
 
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+similar patch:
+https://patchwork.kernel.org/patch/12162547
+
+Signed-off-by: Zhang Shurong <zhang_shurong@foxmail.com>
 ---
- tools/testing/selftests/nolibc/Makefile | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ drivers/usb/host/xen-hcd.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-index a847a2264fed..3e7e51bd7082 100644
---- a/tools/testing/selftests/nolibc/Makefile
-+++ b/tools/testing/selftests/nolibc/Makefile
-@@ -156,6 +156,14 @@ REPORT  ?= awk '/\[OK\][\r]*$$/{p++} /\[FAIL\][\r]*$$/{f++;print} /\[SKIPPED\][\
- 		END{ printf("%d test(s) passed, %d skipped, %d failed.\n", p, s, f); \
- 		printf("See all results in %s\n", ARGV[1]); }'
- 
-+# allow run with a config target together: run-tiny = tinyconfig + run; run-default = defconfig + run
-+ifeq (run-tiny, $(MAKECMDGOALS))
-+AUTOCONFIG ?= tinyconfig
-+endif
-+ifeq (run-default, $(MAKECMDGOALS))
-+AUTOCONFIG ?= defconfig
-+endif
-+
- # allow switch nolibc headers include method: 1 for sysroot, 0 for nolibc.h
- SYSROOT ?= 1
- 
-@@ -228,7 +236,7 @@ tinyconfig:
- menuconfig:
- 	$(Q)$(MAKE) -C $(srctree) ARCH=$(KARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) menuconfig
- 
--extconfig:
-+extconfig: $(AUTOCONFIG)
- 	$(Q)$(srctree)/scripts/config --file $(srctree)/.config $(EXTCONFIG)
- 	$(Q)$(MAKE) -C $(srctree) ARCH=$(KARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) KCONFIG_ALLCONFIG=$(srctree)/.config allnoconfig
- 
-@@ -240,6 +248,8 @@ run: kernel
- 	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) $(LOG_OUTPUT)
- 	$(Q)$(REPORT) $(CURDIR)/run.out
- 
-+run-tiny run-default: run
-+
- # re-run the tests from an existing kernel
- rerun:
- 	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) $(LOG_OUTPUT)
+diff --git a/drivers/usb/host/xen-hcd.c b/drivers/usb/host/xen-hcd.c
+index 46fdab940092..c0e7207d3857 100644
+--- a/drivers/usb/host/xen-hcd.c
++++ b/drivers/usb/host/xen-hcd.c
+@@ -456,6 +456,8 @@ static int xenhcd_hub_control(struct usb_hcd *hcd, __u16 typeReq, __u16 wValue,
+ 			info->ports[wIndex - 1].c_connection = false;
+ 			fallthrough;
+ 		default:
++			if (wValue >= 32)
++				goto error;
+ 			info->ports[wIndex - 1].status &= ~(1 << wValue);
+ 			break;
+ 		}
+@@ -527,6 +529,8 @@ static int xenhcd_hub_control(struct usb_hcd *hcd, __u16 typeReq, __u16 wValue,
+ 			xenhcd_rhport_suspend(info, wIndex);
+ 			break;
+ 		default:
++			if (wValue >= 32)
++				goto error;
+ 			if (info->ports[wIndex-1].status & USB_PORT_STAT_POWER)
+ 				info->ports[wIndex-1].status |= (1 << wValue);
+ 		}
 -- 
-2.25.1
+2.41.0
 
