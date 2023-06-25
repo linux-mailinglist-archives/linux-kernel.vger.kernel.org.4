@@ -2,49 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9249273CE30
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 05:15:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A71673CE3C
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 05:17:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231403AbjFYDP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 23:15:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47064 "EHLO
+        id S229653AbjFYDRy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 23:17:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbjFYDPM (ORCPT
+        with ESMTP id S231894AbjFYDRO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 23:15:12 -0400
-Received: from mx6.didiglobal.com (mx6.didiglobal.com [111.202.70.123])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 9586DE70
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 20:15:10 -0700 (PDT)
-Received: from mail.didiglobal.com (unknown [10.79.65.12])
-        by mx6.didiglobal.com (Maildata Gateway V2.8) with ESMTPS id 70FE211002112F;
-        Sun, 25 Jun 2023 11:15:08 +0800 (CST)
-Received: from didi-ThinkCentre-M930t-N000 (10.79.64.101) by
- ZJY02-ACTMBX-02.didichuxing.com (10.79.65.12) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Sun, 25 Jun 2023 11:15:08 +0800
-Date:   Sun, 25 Jun 2023 11:15:02 +0800
-X-MD-Sfrom: tiozhang@didiglobal.com
-X-MD-SrcIP: 10.79.65.12
-From:   tiozhang <tiozhang@didiglobal.com>
-To:     <tj@kernel.org>, <rdunlap@infradead.org>
-CC:     <linux-kernel@vger.kernel.org>, <jiangshanlai@gmail.com>,
-        <zyhtheonly@gmail.com>, <zyhtheonly@yeah.net>,
-        <zwp10758@gmail.com>, <tiozhang@didiglobal.com>
-Subject: [PATCH v3] workqueue: add cmdline parameter `workqueue_unbound_cpus`
- to further constrain wq_unbound_cpumask at boot time
-Message-ID: <20230625031502.GA22708@didi-ThinkCentre-M930t-N000>
-Mail-Followup-To: tj@kernel.org, rdunlap@infradead.org,
-        linux-kernel@vger.kernel.org, jiangshanlai@gmail.com,
-        zyhtheonly@gmail.com, zyhtheonly@yeah.net, zwp10758@gmail.com
+        Sat, 24 Jun 2023 23:17:14 -0400
+Received: from chinatelecom.cn (prt-mail.chinatelecom.cn [42.123.76.226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 51E28E79
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 20:17:11 -0700 (PDT)
+HMM_SOURCE_IP: 172.18.0.188:58134.1536611199
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-36.111.64.85 (unknown [172.18.0.188])
+        by chinatelecom.cn (HERMES) with SMTP id B9DB32800C3;
+        Sun, 25 Jun 2023 11:17:05 +0800 (CST)
+X-189-SAVE-TO-SEND: +liuq131@chinatelecom.cn
+Received: from  ([36.111.64.85])
+        by app0023 with ESMTP id 5532cf49ba864d7eb912378703cac591 for ying.huang@intel.com;
+        Sun, 25 Jun 2023 11:17:09 CST
+X-Transaction-ID: 5532cf49ba864d7eb912378703cac591
+X-Real-From: liuq131@chinatelecom.cn
+X-Receive-IP: 36.111.64.85
+X-MEDUSA-Status: 0
+Sender: liuq131@chinatelecom.cn
+From:   liuq <liuq131@chinatelecom.cn>
+To:     ying.huang@intel.com
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, liuq <liuq131@chinatelecom.cn>
+Subject: [PATCH v5] mm/page_alloc: fix min_free_kbytes calculation regarding ZONE_MOVABLE
+Date:   Sun, 25 Jun 2023 11:16:56 +0800
+Message-Id: <20230625031656.23941-1-liuq131@chinatelecom.cn>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230623073033.GA6584@didi-ThinkCentre-M930t-N000>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Originating-IP: [10.79.64.101]
-X-ClientProxiedBy: ZJY01-PUBMBX-01.didichuxing.com (10.79.64.32) To
- ZJY02-ACTMBX-02.didichuxing.com (10.79.65.12)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -53,81 +49,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Motivation of doing this is to better improve boot times for devices when
-we want to prevent our workqueue works from running on some specific CPUs,
-e,g, some CPUs are busy with interrupts.
+The current calculation of min_free_kbytes only uses ZONE_DMA and
+ZONE_NORMAL pages,but the ZONE_MOVABLE zone->_watermark[WMARK_MIN]
+will also divide part of min_free_kbytes.This will cause the min
+watermark of ZONE_NORMAL to be too small in the presence of ZONE_MOVEABLE.
 
-Signed-off-by: tiozhang <tiozhang@didiglobal.com>
+__GFP_HIGH and PF_MEMALLOC allocations usually don't need movable
+zone pages, so just like ZONE_HIGHMEM, cap pages_min to a small
+value in __setup_per_zone_wmarks().
+
+On my testing machine with 16GB of memory (transparent hugepage is
+turned off by default, and movablecore=12G is configured)
+The following is a comparative test data of watermark_min
+
+		no patch	add patch
+ZONE_DMA	1		8
+ZONE_DMA32	151		709
+ZONE_NORMAL	233		1113
+ZONE_MOVABLE	1434		128
+min_free_kbytes	7288		7326
+
+Signed-off-by: liuq <liuq131@chinatelecom.cn>
 ---
- .../admin-guide/kernel-parameters.txt         |  8 +++++++
- kernel/workqueue.c                            | 24 +++++++++++++++++++
- 2 files changed, 32 insertions(+)
+ mm/page_alloc.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index a465d5242774..7f2fe8c60d5c 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -6780,6 +6780,14 @@
- 			disables both lockup detectors. Default is 10
- 			seconds.
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 47421bedc12b..590ed8725e09 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -6362,9 +6362,9 @@ static void __setup_per_zone_wmarks(void)
+ 	struct zone *zone;
+ 	unsigned long flags;
  
-+	workqueue_unbound_cpus=
-+			[KNL,SMP]
-+			Format: <cpu-list>
-+			Specify to constrain one or some CPUs to use in
-+			unbound workqueues.
-+			By default, all online CPUs are available for
-+			unbound workqueues.
-+
- 	workqueue.watchdog_thresh=
- 			If CONFIG_WQ_WATCHDOG is configured, workqueue can
- 			warn stall conditions and dump internal state to
-diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-index 7cd5f5e7e0a1..c247725b0873 100644
---- a/kernel/workqueue.c
-+++ b/kernel/workqueue.c
-@@ -329,6 +329,9 @@ static bool workqueue_freezing;		/* PL: have wqs started freezing? */
- /* PL: allowable cpus for unbound wqs and work items */
- static cpumask_var_t wq_unbound_cpumask;
+-	/* Calculate total number of !ZONE_HIGHMEM pages */
++	/* Calculate total number of !ZONE_HIGHMEM and !ZONE_MOVABLE pages */
+ 	for_each_zone(zone) {
+-		if (!is_highmem(zone))
++		if (!is_highmem(zone) && zone_idx(zone) != ZONE_MOVABLE)
+ 			lowmem_pages += zone_managed_pages(zone);
+ 	}
  
-+/* for further constrain wq_unbound_cpumask by cmdline parameter*/
-+static cpumask_var_t wq_cmdline_cpumask;
-+
- /* CPU where unbound work was last round robin scheduled from this CPU */
- static DEFINE_PER_CPU(int, wq_rr_cpu_last);
+@@ -6374,15 +6374,15 @@ static void __setup_per_zone_wmarks(void)
+ 		spin_lock_irqsave(&zone->lock, flags);
+ 		tmp = (u64)pages_min * zone_managed_pages(zone);
+ 		do_div(tmp, lowmem_pages);
+-		if (is_highmem(zone)) {
++		if (is_highmem(zone) || zone_idx(zone) == ZONE_MOVABLE) {
+ 			/*
+ 			 * __GFP_HIGH and PF_MEMALLOC allocations usually don't
+-			 * need highmem pages, so cap pages_min to a small
+-			 * value here.
++			 * need highmem and movable zones pages, so cap pages_min
++			 * to a small  value here.
+ 			 *
+ 			 * The WMARK_HIGH-WMARK_LOW and (WMARK_LOW-WMARK_MIN)
+ 			 * deltas control async page reclaim, and so should
+-			 * not be capped for highmem.
++			 * not be capped for highmem and movable zones.
+ 			 */
+ 			unsigned long min_pages;
  
-@@ -6006,6 +6009,10 @@ void __init workqueue_init_early(void)
- 	cpumask_copy(wq_unbound_cpumask, housekeeping_cpumask(HK_TYPE_WQ));
- 	cpumask_and(wq_unbound_cpumask, wq_unbound_cpumask, housekeeping_cpumask(HK_TYPE_DOMAIN));
- 
-+	if (!cpumask_empty(wq_cmdline_cpumask))
-+		cpumask_and(wq_unbound_cpumask, wq_unbound_cpumask, wq_cmdline_cpumask);
-+	free_bootmem_cpumask_var(wq_cmdline_cpumask);
-+
- 	pwq_cache = KMEM_CACHE(pool_workqueue, SLAB_PANIC);
- 
- 	/* initialize CPU pools */
-@@ -6129,3 +6136,20 @@ void __init workqueue_init(void)
-  */
- void __warn_flushing_systemwide_wq(void) { }
- EXPORT_SYMBOL(__warn_flushing_systemwide_wq);
-+
-+static int __init workqueue_unbound_cpus_setup(char *str)
-+{
-+	cpumask_var_t cpumask;
-+
-+	alloc_bootmem_cpumask_var(&wq_cmdline_cpumask);
-+	alloc_bootmem_cpumask_var(&cpumask);
-+	if (cpulist_parse(str, cpumask) < 0)
-+		pr_warn("workqueue_unbound_cpus: incorrect CPU range\n");
-+	else
-+		cpumask_copy(wq_cmdline_cpumask, cpumask);
-+
-+	free_bootmem_cpumask_var(cpumask);
-+
-+	return 0;
-+}
-+__setup("workqueue_unbound_cpus=", workqueue_unbound_cpus_setup);
 -- 
-2.17.1
+2.27.0
 
