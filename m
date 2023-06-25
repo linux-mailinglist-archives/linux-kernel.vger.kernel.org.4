@@ -2,103 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE65573D13C
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 15:57:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4061173D141
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 16:01:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229740AbjFYN5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 09:57:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43572 "EHLO
+        id S229774AbjFYOBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 10:01:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjFYN5r (ORCPT
+        with ESMTP id S229558AbjFYOB1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 09:57:47 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 45BD91B1
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 06:57:45 -0700 (PDT)
-Received: (qmail 804932 invoked by uid 1000); 25 Jun 2023 09:57:43 -0400
-Date:   Sun, 25 Jun 2023 09:57:43 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Guiting Shen <aarongt.shen@gmail.com>
-Cc:     gregkh@linuxfoundation.org, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: ohci-at91: Fix the unhandle interrupt when resume
-Message-ID: <e3d29c44-a471-4ca2-b996-1648ba8f3d77@rowland.harvard.edu>
-References: <20230622025739.13934-1-aarongt.shen@gmail.com>
- <4cf867a9-3c78-403a-aaeb-91f6cf099a3d@rowland.harvard.edu>
- <c2d0b37a-3ee1-e07e-e265-c71895474ba8@gmail.com>
- <9c702495-a839-43ea-85b7-1c0a0c54ec73@rowland.harvard.edu>
- <8569ced1-ed6d-18b3-5223-a8bd923f864b@gmail.com>
+        Sun, 25 Jun 2023 10:01:27 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FBCFE4C
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 07:01:25 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1b5585e84b4so3051575ad.0
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 07:01:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1687701684; x=1690293684;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=81hUfeigYJdMFcea0oHNmqYrI7BM6QQbtVqGrjtpVcw=;
+        b=omJ60U9Qa+EzsyrYGCEYVm7rpu9bSuvkuuFwvdy+o9XQXcz6Gn3wNKLQoPwPsKHU/T
+         LLEcea6iFpOYaYujaAt6zQv2cjHlvilSbazMzJSb2CPn2Pd+FS+Z/jkXf/aZGYkmCeVp
+         R4Ox3wKFBv73f8gYU1G+ATs/2DFRCnDjCGHvJ+fAhIh1JER2+kOFZTQILWhlWkjyhhMD
+         uqR+oPbHY+cTdQW0Oz3aeMuZGTHDjhCadDMaQEhQgKaCq/MyUyo0Jrh5cPAvN5a5uXJl
+         NorS5USW7yLstX0sh3xaEPnAso4GSPACcMW7/zF73tdc331xKHrHks1xVMLafI9kzziR
+         ykuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687701684; x=1690293684;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=81hUfeigYJdMFcea0oHNmqYrI7BM6QQbtVqGrjtpVcw=;
+        b=kutb8+cOgCsNE1Txb7Hk/EX002CWus+rOgGonC0PYQo3lG8tnT+VbzVzk6DpODZmGr
+         /KbuUSY9L1OXUDrz7HYMX0koII4RBaI9TyJ4Fu34RvHgunKgvI+E4YsfvatDkc0pooLd
+         9GVpIfgws4UOFP3r1UvorwH+p4tLWvGDxf1sQMr9PeahxoqIOdOaZGv0rlySztmhrl50
+         48YHQXqG6JOAEStFpg/jKWFXKr2f4+XzRO58yDeyrYmDxbsWbNrytJ/sN2lwOegVj/8q
+         iQhsbQz/osNgiEhu+uJzvO+vLjyh/3DuPQOcC89Xt5FaLIqRyBaAwTX7uzb/Cx6BDj5j
+         BgRg==
+X-Gm-Message-State: AC+VfDyY+ehLv+7Rzm4BdEmtGDDMhx4VAPAo7ik2fAfgLSRIfR3jZImk
+        k1LALILvs9liIwj5B1VbPNdhZA==
+X-Google-Smtp-Source: ACHHUZ4NtXmYjXC6gk6M/Zcmg980PXGb0bbhzuMJ95KyNK3lhIayA5GEmmuIejXzrzN9S6JbCAmIfg==
+X-Received: by 2002:a17:902:d489:b0:1b4:ddef:841e with SMTP id c9-20020a170902d48900b001b4ddef841emr32828094plg.4.1687701684393;
+        Sun, 25 Jun 2023 07:01:24 -0700 (PDT)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id w24-20020a170902d71800b001b7fa017498sm868215ply.124.2023.06.25.07.01.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 25 Jun 2023 07:01:23 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     tj@kernel.org, josef@toxicpanda.com,
+        Jinke Han <hanjinke.666@bytedance.com>
+Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, andrea.righi@canonical.com,
+        Muchun Song <muchun.song@linux.dev>
+In-Reply-To: <20230507170631.89607-1-hanjinke.666@bytedance.com>
+References: <20230507170631.89607-1-hanjinke.666@bytedance.com>
+Subject: Re: [PATCH v3] blk-throttle: Fix io statistics for cgroup v1
+Message-Id: <168770168286.14597.14477909506148885094.b4-ty@kernel.dk>
+Date:   Sun, 25 Jun 2023 08:01:22 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8569ced1-ed6d-18b3-5223-a8bd923f864b@gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-099c9
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 25, 2023 at 12:01:12PM +0800, Guiting Shen wrote:
-> On Fri, Jun 23, 2023 at 23:52:53PM GMT+8, Alan Stern wrote:
-> >> The comment which was added with commit-id 0365ee0a8f745 may be outdated
-> >> because ohci_suspend() and ohci_at91_port_suspend() is used to suspend
-> >> instead of setting ohci->rh_state to OHCI_RH_HALTED.
-> > 
-> > The comment says nothing about ohci->rh_state; it talks about the 
-> > integrated transceivers and the 48 MHz clock.  I don't see why you would 
-> > think the comment is outdated.
-> > 
-> 
-> The comment says the reason to discard connection state by reset, but I
-> don't see any reset operation at ohci-at91 suspend/resume routine in
-> source code.And ohci_suspend() disable irq emission and mark HW
-> unaccessible  maybe do the same effect as set ohci->rh_state to
-> OHCI_RH_HALTED to discard connection state which I think the comment is
-> outdated.
 
-No, it doesn't do the same.  An actual reset is needed.
-
-> >> What's more, I found that only ohci-at91 driver to set the ohci->rh_state
-> >> which may be unnessory because the ohci_suspend() disable irq emission and
-> >> mark HW unaccessible and ohci_at91_port_suspend() suspend the controller.
-> >>
-> >> Is it really need to set ohci->rh_state in ohci_hcd_at91_drv_suspend()?
-> >>
-> >> It maybe confused to set ohci->rh_state to OHCI_RH_SUSPEND in resume
-> >> routine.
-> > 
-> > I'm not really sure what that assignment was intended to accomplish, but 
-> > maybe it was meant to force a reset when the controller resumes.
-> > 
-> > You could get the same result by leaving ohci->rh_state set to 
-> > OHCI_RH_SUSPENDED but changing ohci_hcd_at91_drv_resume().  Instead of 
-> > calling ohci_resume(hcd, false), have it call:
-> > 
-> > 	ohci_resume(hcd, !ohci_at91->wakeup);
-> > 
-> > That way, if the wakeup flag is clear and the clock was stopped, 
-> > ohci_resume() will call ohci_usb_reset().  You should also add a comment 
-> > explaining the reason.
-> > 
-> > I can't test this because I don't have the AT91 hardware.
-> > 
+On Mon, 08 May 2023 01:06:31 +0800, Jinke Han wrote:
+> After commit f382fb0bcef4 ("block: remove legacy IO schedulers"),
+> blkio.throttle.io_serviced and blkio.throttle.io_service_bytes become
+> the only stable io stats interface of cgroup v1, and these statistics
+> are done in the blk-throttle code. But the current code only counts the
+> bios that are actually throttled. When the user does not add the throttle
+> limit, the io stats for cgroup v1 has nothing. I fix it according to the
+> statistical method of v2, and made it count all ios accurately.
 > 
-> It works by your methods to force a reset in my sama5d3 soc hardware.
-> And I found that the ohci->rh_state was already OHCI_RH_SUSPEND before
-> set it OHCI_RH_HALTED in suspend.So the question is whether to set it
-> OHCI_RH_HALETED in ohci-at91 suspend routine.
-> 
-> It also works by comment the ohci->rh_state = OHCI_RH_HALTED in suspend
-> routine.But I think it is safer to use your methods.
-> 
-> Do you have any suggestion on it before I send v2 patch latter.
+> [...]
 
-No suggestions now.  Submit your v2 patch and then maybe I'll have 
-something more to say.
+Applied, thanks!
 
-Alan Stern
+[1/1] blk-throttle: Fix io statistics for cgroup v1
+      commit: ad7c3b41e86b59943a903d23c7b037d820e6270c
+
+Best regards,
+-- 
+Jens Axboe
+
+
+
