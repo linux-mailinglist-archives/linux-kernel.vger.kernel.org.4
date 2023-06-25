@@ -2,165 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 714CB73D50F
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 00:36:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A49173D510
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 00:38:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229599AbjFYWgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 18:36:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54880 "EHLO
+        id S229636AbjFYWiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 18:38:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjFYWgJ (ORCPT
+        with ESMTP id S229448AbjFYWh6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 18:36:09 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B019F1BB
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 15:36:07 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id 98e67ed59e1d1-262e81f6154so227909a91.2
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 15:36:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1687732567; x=1690324567;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lsqNhkE5oWlMgtIBUOkdhdib6xZtYP/JVM/Zsc0j+ts=;
-        b=cihVByItGc+eVG4fy+EISc6Bqco0E+A7e5FqMT8JF5b0t783oDa2N6FS+yHNR8JIZH
-         Zb4RiTZgIp+m8w+DIbKDSNXBgGxFnJnlcD2xDghKMQn8huuoRW5ueQCZzR9ZYLQsg6Fz
-         QC5rQL3JGLuVLms9u+yh2gdmlPirR8det57xQlpb/OHS6hZshppUKdVamBLmFEQZg27k
-         Sdgw+xPpf+Yxl0skzejaeB86m/eizwSpjvG6VCyZxllPmExoCPMo1Z7H3WZYw9DHU2GO
-         8RrNOsr94j4k/Bnn9v0xZzNgPCka5OuAiVcNqUIdnHEqEyQz7NzktKyTzda2C//Cfzn5
-         Rvbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687732567; x=1690324567;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lsqNhkE5oWlMgtIBUOkdhdib6xZtYP/JVM/Zsc0j+ts=;
-        b=IP34kGWJ6zs8qGffRCHN+qo6e9n6H8a7BMRLKOgN3Fm8NX2UvF1K/0/86DG7qkdauM
-         1h98ZgnUwbRWKEVYvadcjKmI7poyEkOOhvIxF8PYSe17t5WDWkRWKEr5zpV8wZsBpruq
-         298VJsDmysFuUySfuOGWqu74DnGcdE7d0xsEvGSViGV5vQpgvvvsjyNrV6qsGPX3B1fH
-         9FCfvv22oPD8+DcG9wTI3Arl3pXjIRtU1wuq6CL88YcYnLRS2W8H/QOZEv3zBfKuu2Tz
-         RdQzcwXyHgaoPxXXCOEaV8F+jAGBIzweJ0CCOnz3lzEN6W4r1m9TY1GH0dCyE0TBU1tl
-         aZSA==
-X-Gm-Message-State: AC+VfDzMjarUqH0bgn2Gi8hmrn73RrznIv/yLDLOVyIayuwCO9aHHZSw
-        21lyuBmiwcRFcoFO9iP1mFWrFw==
-X-Google-Smtp-Source: ACHHUZ69BZVi1KJzS7hQaMLqlt1Sd5kzMCZwpAk6rFMb0eeKG+qy91PnYxOv+QVg7tosGmhPDxdWVw==
-X-Received: by 2002:a17:90a:1:b0:262:b3f8:6ae with SMTP id 1-20020a17090a000100b00262b3f806aemr3976171pja.46.1687732567008;
-        Sun, 25 Jun 2023 15:36:07 -0700 (PDT)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id ip4-20020a17090b314400b0025374fedab4sm4789374pjb.22.2023.06.25.15.36.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Jun 2023 15:36:06 -0700 (PDT)
-Date:   Sun, 25 Jun 2023 15:36:06 -0700 (PDT)
-X-Google-Original-Date: Sun, 25 Jun 2023 15:35:24 PDT (-0700)
-Subject:     Re: [PATCH V1 1/3] Revert "RISC-V: mark hibernation as nonportable"
-In-Reply-To: <20230625-obstinate-grimy-b765a1d3d741@spud>
-CC:     suagrfillet@gmail.com, Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, robh+dt@kernel.org, frowand.list@gmail.com,
-        ajones@ventanamicro.com, alexghiti@rivosinc.com,
-        mpe@ellerman.id.au, Arnd Bergmann <arnd@arndb.de>, rppt@kernel.org,
-        samuel@sholland.org, panqinglin2020@iscas.ac.cn,
-        Conor Dooley <conor.dooley@microchip.com>, anup@brainfault.org,
-        xianting.tian@linux.alibaba.com, anshuman.khandual@arm.com,
-        heiko@sntech.de, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     Conor Dooley <conor@kernel.org>
-Message-ID: <mhng-57d088de-b527-4f19-89f5-fec31a6df475@palmer-ri-x1c9a>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 25 Jun 2023 18:37:58 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E3521BB
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 15:37:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687732677; x=1719268677;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=1TGvSGW6gAmVqvWegpKnz2OsceukRvXs9Eiof0F8/6Q=;
+  b=evvZGNKY0I9vHI7/syW14Zs52aRlAtcwS/4vCwNgrfudH616TYhv2Ezi
+   7VIKWQ5g8ikeCYWrir4LTEt8qiyXWJEmbp3ptwetB0lQFVB1KRC5Lmzhq
+   Quz0zawKrJuMA7Q9FHfzwH/I+bLh3ACv0VJrkZ4LGUnrwMwLmzlVUecGG
+   RoUbhXiuw7XmTAsuJc+QIflyOvusEkpkeMEdRLVr9hTA4gvR+m+/1aT5Q
+   CmmLn/Y0cuffEe8Cp1iKa6IPOrMUlo5L6RmPFtzSebBW3Whm4J8BqlTJ1
+   ri3yclCG58Had7KadycXBAA6YSV9yGIlDZHBjOz7ioNTmibDCJN6Bh0gm
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="363675905"
+X-IronPort-AV: E=Sophos;i="6.01,158,1684825200"; 
+   d="scan'208";a="363675905"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2023 15:37:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="785938829"
+X-IronPort-AV: E=Sophos;i="6.01,158,1684825200"; 
+   d="scan'208";a="785938829"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 25 Jun 2023 15:37:54 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qDYMk-000AKf-0V;
+        Sun, 25 Jun 2023 22:37:54 +0000
+Date:   Mon, 26 Jun 2023 06:37:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: drivers/scsi/pm8001/pm80xx_hwi.h:639:2: warning: field  within
+ 'struct smp_req' is less aligned than 'union smp_req::(anonymous at
+ drivers/scsi/pm8001/pm80xx_hwi.h:639:2)' and is usually due to 'struct
+ smp_req' being packed, which can lead to unaligned ac...
+Message-ID: <202306260618.P3XlR5N7-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 25 Jun 2023 15:15:14 PDT (-0700), Conor Dooley wrote:
-> Hey,
->
-> On Sun, Jun 25, 2023 at 11:09:21PM +0800, Song Shuai wrote:
->
->> Sorry for the delayed reply,
->
-> It wasn't really delayed at all actually, you replied within an hour or
-> so, AFAICT.
->
->> My tinylab email went something wrong, I'll use gmail in this thread.
->> 
->> 在 2023/6/25 22:18, Conor Dooley 写道:
->> > On Sun, Jun 25, 2023 at 10:09:29PM +0800, Song Shuai wrote:
->> > > This reverts commit ed309ce522185583b163bd0c74f0d9f299fe1826.
->> > > 
->> > > With the commit 3335068f8721 ("riscv: Use PUD/P4D/PGD pages for the
->> > > linear mapping") reverted, the MIN_MEMBLOCK_ADDR points the kernel
->> > > load address which was placed at a PMD boundary.
->> > 
->> > > And firmware always
->> > > correctly mark resident memory, or memory protected with PMP as
->> > > per the devicetree specification and/or the UEFI specification.
->> > 
->> > But this is not true? The versions of OpenSBI that you mention in your
->> > cover letter do not do this.
->> > Please explain.
->> > 
->> 
->> At this time, OpenSbi [v0.8,v1.3) and edk2(RiscVVirt) indeed don't obey the
->> DT/UEFI spec. This statement is excerpted from "Reserved memory for resident
->> firmware" part from the upcoming riscv/boot.rst. It isn't accurate for now.
->> How about deleting this one?
->
-> It is incorrect, so it will need to be removed, yes.
-> Unfortunately writing a doc does not fix the existing implementations :(
->
->> Actually with 3335068f8721 reverted, the change of MIN_MEMBLOCK_ADDR can
->> avoid the mapping of firmware memory, I will make it clear in the next
->> version.
->
-> To be honest, I'd like to see this revert as the final commit in a
-> series that deals with the problem by actually reserving the regions,
-> rather than a set of reverts that go back to how we were.
-> I was hoping that someone who cares about hibernation support would be
-> interested in working on that - *cough* starfive *cough*, although maybe
-> they just fixed their OpenSBI and moved on.
-> If there were no volunteers, my intention was to add a firmware erratum
-> that would probe the SBI implementation & version IDs, and add a firmware
-> erratum that'd parse the DT for the offending regions and reserve them.
+Hi Arnd,
 
-Is there any actual use case for hibernation on these boards?  Maybe 
-it's simpler to just add a "reserved regions actually work" sort of 
-property and then have new firmware set it -- that way we can avoid 
-sorting through all the old stuff nobody cares about and just get on 
-with fixing the stuff people use.
+FYI, the error/warning still remains.
 
->
-> Cheers,
-> Conor.
->
->> > > So those regions will not be mapped in the linear mapping and they
->> > > can be safely saved/restored by hibernation.
->> > > 
->> > > Signed-off-by: Song Shuai <songshuaishuai@tinylab.org>
->> > > ---
->> > >   arch/riscv/Kconfig | 5 +----
->> > >   1 file changed, 1 insertion(+), 4 deletions(-)
->> > > 
->> > > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
->> > > index 5966ad97c30c..17b5fc7f54d4 100644
->> > > --- a/arch/riscv/Kconfig
->> > > +++ b/arch/riscv/Kconfig
->> > > @@ -800,11 +800,8 @@ menu "Power management options"
->> > >   source "kernel/power/Kconfig"
->> > > -# Hibernation is only possible on systems where the SBI implementation has
->> > > -# marked its reserved memory as not accessible from, or does not run
->> > > -# from the same memory as, Linux
->> > >   config ARCH_HIBERNATION_POSSIBLE
->> > > -	def_bool NONPORTABLE
->> > > +	def_bool y
->> > >   config ARCH_HIBERNATION_HEADER
->> > >   	def_bool HIBERNATION
->> > > -- 
->> > > 2.20.1
->>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   547cc9be86f4c51c51fd429ace6c2e1ef9050d15
+commit: 7036440eab3e2d47a775d4616909f8235488d714 ARM: omap1: enable multiplatform
+date:   1 year, 1 month ago
+config: arm-randconfig-r026-20230626 (https://download.01.org/0day-ci/archive/20230626/202306260618.P3XlR5N7-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230626/202306260618.P3XlR5N7-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306260618.P3XlR5N7-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/scsi/pm8001/pm80xx_hwi.c:42:
+>> drivers/scsi/pm8001/pm80xx_hwi.h:639:2: warning: field  within 'struct smp_req' is less aligned than 'union smp_req::(anonymous at drivers/scsi/pm8001/pm80xx_hwi.h:639:2)' and is usually due to 'struct smp_req' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+     639 |         union {
+         |         ^
+   1 warning generated.
+--
+   In file included from drivers/scsi/pm8001/pm8001_hwi.c:42:
+>> drivers/scsi/pm8001/pm8001_hwi.h:402:2: warning: field  within 'struct smp_req' is less aligned than 'union smp_req::(anonymous at drivers/scsi/pm8001/pm8001_hwi.h:402:2)' and is usually due to 'struct smp_req' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+     402 |         union {
+         |         ^
+   1 warning generated.
+--
+>> arch/arm/mm/copypage-feroceon.c:65:6: warning: no previous prototype for function 'feroceon_copy_user_highpage' [-Wmissing-prototypes]
+      65 | void feroceon_copy_user_highpage(struct page *to, struct page *from,
+         |      ^
+   arch/arm/mm/copypage-feroceon.c:65:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+      65 | void feroceon_copy_user_highpage(struct page *to, struct page *from,
+         | ^
+         | static 
+>> arch/arm/mm/copypage-feroceon.c:78:6: warning: no previous prototype for function 'feroceon_clear_user_highpage' [-Wmissing-prototypes]
+      78 | void feroceon_clear_user_highpage(struct page *page, unsigned long vaddr)
+         |      ^
+   arch/arm/mm/copypage-feroceon.c:78:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+      78 | void feroceon_clear_user_highpage(struct page *page, unsigned long vaddr)
+         | ^
+         | static 
+   2 warnings generated.
+
+
+vim +639 drivers/scsi/pm8001/pm80xx_hwi.h
+
+f5860992db55c9 Sakthivel K 2013-04-17  624  
+f5860992db55c9 Sakthivel K 2013-04-17  625  /*
+f5860992db55c9 Sakthivel K 2013-04-17  626   * brief the data structure of SMP Request Command
+f5860992db55c9 Sakthivel K 2013-04-17  627   * use to describe MPI SMP REQUEST Command (64 bytes)
+f5860992db55c9 Sakthivel K 2013-04-17  628   */
+f5860992db55c9 Sakthivel K 2013-04-17  629  struct smp_req {
+f5860992db55c9 Sakthivel K 2013-04-17  630  	__le32	tag;
+f5860992db55c9 Sakthivel K 2013-04-17  631  	__le32	device_id;
+f5860992db55c9 Sakthivel K 2013-04-17  632  	__le32	len_ip_ir;
+f5860992db55c9 Sakthivel K 2013-04-17  633  	/* Bits [0] - Indirect response */
+f5860992db55c9 Sakthivel K 2013-04-17  634  	/* Bits [1] - Indirect Payload */
+f5860992db55c9 Sakthivel K 2013-04-17  635  	/* Bits [15:2] - Reserved */
+f5860992db55c9 Sakthivel K 2013-04-17  636  	/* Bits [23:16] - direct payload Len */
+f5860992db55c9 Sakthivel K 2013-04-17  637  	/* Bits [31:24] - Reserved */
+f5860992db55c9 Sakthivel K 2013-04-17  638  	u8	smp_req16[16];
+f5860992db55c9 Sakthivel K 2013-04-17 @639  	union {
+f5860992db55c9 Sakthivel K 2013-04-17  640  		u8	smp_req[32];
+f5860992db55c9 Sakthivel K 2013-04-17  641  		struct {
+f5860992db55c9 Sakthivel K 2013-04-17  642  			__le64 long_req_addr;/* sg dma address, LE */
+f5860992db55c9 Sakthivel K 2013-04-17  643  			__le32 long_req_size;/* LE */
+f5860992db55c9 Sakthivel K 2013-04-17  644  			u32	_r_a;
+f5860992db55c9 Sakthivel K 2013-04-17  645  			__le64 long_resp_addr;/* sg dma address, LE */
+f5860992db55c9 Sakthivel K 2013-04-17  646  			__le32 long_resp_size;/* LE */
+f5860992db55c9 Sakthivel K 2013-04-17  647  			u32	_r_b;
+f5860992db55c9 Sakthivel K 2013-04-17  648  			} long_smp_req;/* sequencer extension */
+f5860992db55c9 Sakthivel K 2013-04-17  649  	};
+f5860992db55c9 Sakthivel K 2013-04-17  650  	__le32	rsvd[16];
+f5860992db55c9 Sakthivel K 2013-04-17  651  } __attribute__((packed, aligned(4)));
+f5860992db55c9 Sakthivel K 2013-04-17  652  /*
+f5860992db55c9 Sakthivel K 2013-04-17  653   * brief the data structure of SMP Completion Response
+f5860992db55c9 Sakthivel K 2013-04-17  654   * use to describe MPI SMP Completion Response (64 bytes)
+f5860992db55c9 Sakthivel K 2013-04-17  655   */
+f5860992db55c9 Sakthivel K 2013-04-17  656  struct smp_completion_resp {
+f5860992db55c9 Sakthivel K 2013-04-17  657  	__le32	tag;
+f5860992db55c9 Sakthivel K 2013-04-17  658  	__le32	status;
+f5860992db55c9 Sakthivel K 2013-04-17  659  	__le32	param;
+f5860992db55c9 Sakthivel K 2013-04-17  660  	u8	_r_a[252];
+f5860992db55c9 Sakthivel K 2013-04-17  661  } __attribute__((packed, aligned(4)));
+f5860992db55c9 Sakthivel K 2013-04-17  662  
+
+:::::: The code at line 639 was first introduced by commit
+:::::: f5860992db55c9e36b0f120dff73f0c34abe510d [SCSI] pm80xx: Added SPCv/ve specific hardware functionalities and relevant changes in common files
+
+:::::: TO: Sakthivel K <Sakthivel.SaravananKamalRaju@pmcs.com>
+:::::: CC: James Bottomley <JBottomley@Parallels.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
