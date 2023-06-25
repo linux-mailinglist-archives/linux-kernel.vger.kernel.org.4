@@ -2,104 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CED773CF46
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 10:21:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C264C73CF49
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 10:23:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231669AbjFYIVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 04:21:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56608 "EHLO
+        id S231356AbjFYIXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 04:23:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230000AbjFYIU7 (ORCPT
+        with ESMTP id S229868AbjFYIXa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 04:20:59 -0400
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3398DE5D;
-        Sun, 25 Jun 2023 01:20:57 -0700 (PDT)
-Received: from [192.168.0.2] (ip5f5aed7f.dynamic.kabel-deutschland.de [95.90.237.127])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 6C19861E5FE0A;
-        Sun, 25 Jun 2023 10:20:23 +0200 (CEST)
-Message-ID: <8999a30b-e165-f39d-864a-ce1c559e725d@molgen.mpg.de>
-Date:   Sun, 25 Jun 2023 10:20:22 +0200
+        Sun, 25 Jun 2023 04:23:30 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BCC3E6F
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 01:23:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687681409; x=1719217409;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=x8wOLMsJ+xY5lhzECQoNzvy9TUBhudomKGSjdZb+5Q8=;
+  b=KgACDJf46rm364+1iuN5HWKUDJRCFXoi0hKxVZanTExsIyJ/2La6mW7y
+   pu2kBmICvxVtl9U4CG/dmYZZXS7D9hcXkX6Lve/8K93Twmb2rsXwx2YP/
+   +eJ6E/4qIieWbDM1cgFIGh4EyG6vaayV10qv9QTholkq6VD5rnwHC+S16
+   08vVU2FWshspzP4GObSQz8ZiMITG6HD447BrdVHNltpwYkFmXrVHmm1Sr
+   H8bHCXWEJTvAZNyQepNBLhqKJJO1mO//EL7QXBhVgwyWjM5hXcu2iJmPQ
+   ATMIuJXHmlXrkgES8vevDHh8rV2UYWL4V8thlneh+VnTIz9WGifPJWTij
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10751"; a="345793094"
+X-IronPort-AV: E=Sophos;i="6.01,156,1684825200"; 
+   d="scan'208";a="345793094"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2023 01:23:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10751"; a="805666831"
+X-IronPort-AV: E=Sophos;i="6.01,156,1684825200"; 
+   d="scan'208";a="805666831"
+Received: from tower.bj.intel.com ([10.238.157.62])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2023 01:23:26 -0700
+From:   Yanfei Xu <yanfei.xu@intel.com>
+To:     dwmw2@infradead.org, baolu.lu@linux.intel.com, joro@8bytes.org,
+        will@kernel.org, robin.murphy@arm.com
+Cc:     iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
+        yanfei.xu@intel.com
+Subject: [PATCH] iommu/vt-d: Fix to convert mm pfn to dma pfn
+Date:   Sun, 25 Jun 2023 16:20:46 +0800
+Message-Id: <20230625082046.979742-1-yanfei.xu@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Content-Language: en-US
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-Subject: MSI B350M MORTAR: tpm tpm0: AMD fTPM version 0x3005700000004 causes
- system stutter; hwrng disabled
-Cc:     linux-integrity@vger.kernel.org,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
-To:     Mario Limonciello <mario.limonciello@amd.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Mario, dear Jason, dear Linux folks,
+For the case that VT-d page is smaller than mm page, converting dma
+pfn should be handled in two cases which are for start pfn and for
+end pfn. Currently the calculation of end dma pfn is incorrect and
+the result is less than real page frame number which is causing the
+mapping of iova always misses some page frames.
 
+Hence rename the mm_to_dma_pfn() to mm_to_dma_pfn_start() and add
+a new helper for converting end dma pfn named mm_to_dma_pfn_end()
 
-Thank you for your great work on the Linux kernel.
+Signed-off-by: Yanfei Xu <yanfei.xu@intel.com>
+---
+Found from reading VT-D codes.
 
-On an MSI MS-7A37/B350M MORTAR (MS-7A37) even updating to their latest 
-system firmware 1.O7 released on their Web site on May, 23rd 2023 [1].
+ drivers/iommu/intel/iommu.c | 22 +++++++++++++---------
+ 1 file changed, 13 insertions(+), 9 deletions(-)
 
-> Beschreibung:
-> -  AGESA ComboAm4v2PI 1.2.0.A. update.
-> -  TPM Out of Bounds Access security patch.
+diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+index 8096273b034c..5ceb12b90c1b 100644
+--- a/drivers/iommu/intel/iommu.c
++++ b/drivers/iommu/intel/iommu.c
+@@ -113,13 +113,17 @@ static inline unsigned long lvl_to_nr_pages(unsigned int lvl)
+ 
+ /* VT-d pages must always be _smaller_ than MM pages. Otherwise things
+    are never going to work. */
+-static inline unsigned long mm_to_dma_pfn(unsigned long mm_pfn)
++static inline unsigned long mm_to_dma_pfn_start(unsigned long mm_pfn)
+ {
+ 	return mm_pfn << (PAGE_SHIFT - VTD_PAGE_SHIFT);
+ }
++static inline unsigned long mm_to_dma_pfn_end(unsigned long mm_pfn)
++{
++	return ((mm_pfn + 1) << (PAGE_SHIFT - VTD_PAGE_SHIFT)) - 1;
++}
+ static inline unsigned long page_to_dma_pfn(struct page *pg)
+ {
+-	return mm_to_dma_pfn(page_to_pfn(pg));
++	return mm_to_dma_pfn_start(page_to_pfn(pg));
+ }
+ static inline unsigned long virt_to_dma_pfn(void *p)
+ {
+@@ -2374,8 +2378,8 @@ static int __init si_domain_init(int hw)
+ 
+ 		for_each_mem_pfn_range(i, nid, &start_pfn, &end_pfn, NULL) {
+ 			ret = iommu_domain_identity_map(si_domain,
+-					mm_to_dma_pfn(start_pfn),
+-					mm_to_dma_pfn(end_pfn));
++					mm_to_dma_pfn_start(start_pfn),
++					mm_to_dma_pfn_end(end_pfn));
+ 			if (ret)
+ 				return ret;
+ 		}
+@@ -2396,8 +2400,8 @@ static int __init si_domain_init(int hw)
+ 				continue;
+ 
+ 			ret = iommu_domain_identity_map(si_domain,
+-					mm_to_dma_pfn(start >> PAGE_SHIFT),
+-					mm_to_dma_pfn(end >> PAGE_SHIFT));
++					mm_to_dma_pfn_start(start >> PAGE_SHIFT),
++					mm_to_dma_pfn_end(end >> PAGE_SHIFT));
+ 			if (ret)
+ 				return ret;
+ 		}
+@@ -3567,8 +3571,8 @@ static int intel_iommu_memory_notifier(struct notifier_block *nb,
+ 				       unsigned long val, void *v)
+ {
+ 	struct memory_notify *mhp = v;
+-	unsigned long start_vpfn = mm_to_dma_pfn(mhp->start_pfn);
+-	unsigned long last_vpfn = mm_to_dma_pfn(mhp->start_pfn +
++	unsigned long start_vpfn = mm_to_dma_pfn_start(mhp->start_pfn);
++	unsigned long last_vpfn = mm_to_dma_pfn_end(mhp->start_pfn +
+ 			mhp->nr_pages - 1);
+ 
+ 	switch (val) {
+@@ -4278,7 +4282,7 @@ static void intel_iommu_tlb_sync(struct iommu_domain *domain,
+ 	unsigned long i;
+ 
+ 	nrpages = aligned_nrpages(gather->start, size);
+-	start_pfn = mm_to_dma_pfn(iova_pfn);
++	start_pfn = mm_to_dma_pfn_start(iova_pfn);
+ 
+ 	xa_for_each(&dmar_domain->iommu_array, i, info)
+ 		iommu_flush_iotlb_psi(info->iommu, dmar_domain,
+-- 
+2.34.1
 
-But Linux 6.4.-rc7 still disables the hwrng from AMD fTPM.
-
-     Jun 24 21:32:09.978772 tokeiihto kernel: DMI: Micro-Star 
-International Co., Ltd. MS-7A37/B350M MORTAR (MS-7A37), BIOS 1.O7 05/09/2023
-     […]
-     Jun 24 21:32:10.259986 tokeiihto kernel:  tpm tpm0: AMD fTPM 
-version 0x3005700000004 causes system stutter; hwrng disabled
-
-Unfortunately, the warning does not say, what firmware version is 
-needed, and what the user can do about it.
-
-The comment in the code, added in v6.3-rc2 with commit f1324bbc4011 
-(tpm: disable hwrng for fTPM on some AMD designs) [2], says:
-
-     /*
-      * Some AMD fTPM versions may cause stutter
-      * https://www.amd.com/en/support/kb/faq/pa-410
-      *
-      * Fixes are available in two series of fTPM firmware:
-      * 6.x.y.z series: 6.0.18.6 +
-      * 3.x.y.z series: 3.57.y.5 +
-      */
-
-Mapping 0x3005700000004 from the Linux warning to the comment, I assume 
-the board’s firmware is 3.57.0.4?
-
-What AGESA ComboAm4v2PI would MSI need to ship, so the issue is fixed? 
-The previous system firmware version shipped 3.4e.0.4? (Is it decimal or 
-hexadecimal?)
-
-     [  282.864564] tpm tpm0: AMD fTPM version 0x3004e00000004 causes 
-system stutter; hwrng disabled
-
-
-Kind regards,
-
-Paul
-
-
-[1]: https://de.msi.com/Motherboard/B350M-MORTAR/support#bios
-[2]: 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f1324bbc4011ed8aef3f4552210fc429bcd616da
