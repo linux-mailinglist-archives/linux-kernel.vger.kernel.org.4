@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D325873CFE4
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 11:57:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1372973CFE7
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 11:57:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231387AbjFYJ5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 05:57:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48150 "EHLO
+        id S231855AbjFYJ5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 05:57:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230203AbjFYJ46 (ORCPT
+        with ESMTP id S231532AbjFYJ5B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 05:56:58 -0400
+        Sun, 25 Jun 2023 05:57:01 -0400
 Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 950C9189;
-        Sun, 25 Jun 2023 02:56:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D835D189;
+        Sun, 25 Jun 2023 02:57:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1687687016; bh=UGMkiVgsD7TmU72TjAy44icKsVdzIhU52JRB8B10DPk=;
+        t=1687687019; bh=/Ae3yGesaN7INKQfcIHyYeenAVct9PlZ6PKdEfJO/pk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qtdTPfBenqcOclDJxFgwaklagBTEt6IfXBrI3jZtiM8hvv2cXxN8l+W71y2/tzae8
-         A/Vzc2Fs/8C/4iXefzfUsLc2TBFNey8K3jZt0EH09+Q2vjA6SyHBv1eLticTEjHg6e
-         Nn7tt+FN7On/I/nXjA7T4/1s0jlGxa/BRuQxdg+I=
+        b=b91wTEqGbu5j4mfF648hJJyZjWCNM9Kb0SVrz+kgPalEJ+cfyepf9W9Ww/fCnkDa4
+         fj4FR96hbNqBSzyhlwsCFrnH/Kh65zNJV5nhb6PRM2UHFPaJN7hHQqJ00pkzDsWjtM
+         HzBanSiVsTKH0px8SfmW50Ml6jZGoWqsZA3gSJR8=
 Received: from ld50.lan (unknown [101.88.25.181])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id BC5CD6015B;
-        Sun, 25 Jun 2023 17:56:55 +0800 (CST)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 1AD5A600B5;
+        Sun, 25 Jun 2023 17:56:59 +0800 (CST)
 From:   WANG Xuerui <kernel@xen0n.name>
 To:     Huacai Chen <chenhuacai@kernel.org>
 Cc:     WANG Rui <wangrui@loongson.cn>, Xi Ruoyao <xry111@xry111.site>,
         loongarch@lists.linux.dev, linux-kbuild@vger.kernel.org,
         llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
         WANG Xuerui <git@xen0n.name>
-Subject: [PATCH v3 1/8] LoongArch: Calculate various sizes in the linker script
-Date:   Sun, 25 Jun 2023 17:56:37 +0800
-Message-Id: <20230625095644.3156349-2-kernel@xen0n.name>
+Subject: [PATCH v3 2/8] LoongArch: extable: Also recognize ABI names of registers
+Date:   Sun, 25 Jun 2023 17:56:38 +0800
+Message-Id: <20230625095644.3156349-3-kernel@xen0n.name>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230625095644.3156349-1-kernel@xen0n.name>
 References: <20230625095644.3156349-1-kernel@xen0n.name>
@@ -52,87 +52,64 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: WANG Rui <wangrui@loongson.cn>
 
-Taking the address delta between symbols in different sections is not
-supported by the LLVM IAS. Instead, do this in the linker script, so
-the same data can be properly referenced in assembly.
+When the kernel is compiled with LLVM, the register names being handled
+during exception fixup building are ABI names instead of bare $rNN
+style. Add mapping for the ABI names for LLVM compatibility.
 
 Signed-off-by: WANG Rui <wangrui@loongson.cn>
 Signed-off-by: WANG Xuerui <git@xen0n.name>
 ---
- arch/loongarch/kernel/efi-header.S  | 6 +++---
- arch/loongarch/kernel/head.S        | 8 ++++----
- arch/loongarch/kernel/vmlinux.lds.S | 7 +++++++
- 3 files changed, 14 insertions(+), 7 deletions(-)
+ arch/loongarch/include/asm/gpr-num.h | 30 ++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-diff --git a/arch/loongarch/kernel/efi-header.S b/arch/loongarch/kernel/efi-header.S
-index 8c1d229a2afa..5f23b85d78ca 100644
---- a/arch/loongarch/kernel/efi-header.S
-+++ b/arch/loongarch/kernel/efi-header.S
-@@ -24,7 +24,7 @@
- 	.byte	0x02					/* MajorLinkerVersion */
- 	.byte	0x14					/* MinorLinkerVersion */
- 	.long	__inittext_end - .Lefi_header_end	/* SizeOfCode */
--	.long	_end - __initdata_begin			/* SizeOfInitializedData */
-+	.long	_kernel_vsize				/* SizeOfInitializedData */
- 	.long	0					/* SizeOfUninitializedData */
- 	.long	__efistub_efi_pe_entry - _head		/* AddressOfEntryPoint */
- 	.long	.Lefi_header_end - _head		/* BaseOfCode */
-@@ -79,9 +79,9 @@
- 		IMAGE_SCN_MEM_EXECUTE			/* Characteristics */
+diff --git a/arch/loongarch/include/asm/gpr-num.h b/arch/loongarch/include/asm/gpr-num.h
+index e0941af20c7e..996038da806d 100644
+--- a/arch/loongarch/include/asm/gpr-num.h
++++ b/arch/loongarch/include/asm/gpr-num.h
+@@ -9,6 +9,22 @@
+ 	.equ	.L__gpr_num_$r\num, \num
+ 	.endr
  
- 	.ascii	".data\0\0\0"
--	.long	_end - __initdata_begin			/* VirtualSize */
-+	.long	_kernel_vsize				/* VirtualSize */
- 	.long	__initdata_begin - _head		/* VirtualAddress */
--	.long	_edata - __initdata_begin		/* SizeOfRawData */
-+	.long	_kernel_rsize				/* SizeOfRawData */
- 	.long	__initdata_begin - _head		/* PointerToRawData */
- 
- 	.long	0					/* PointerToRelocations */
-diff --git a/arch/loongarch/kernel/head.S b/arch/loongarch/kernel/head.S
-index 0d8180153ec0..53b883db0786 100644
---- a/arch/loongarch/kernel/head.S
-+++ b/arch/loongarch/kernel/head.S
-@@ -23,7 +23,7 @@ _head:
- 	.word	MZ_MAGIC		/* "MZ", MS-DOS header */
- 	.org	0x8
- 	.dword	kernel_entry		/* Kernel entry point */
--	.dword	_end - _text		/* Kernel image effective size */
-+	.dword	_kernel_asize		/* Kernel image effective size */
- 	.quad	PHYS_LINK_KADDR		/* Kernel image load offset from start of RAM */
- 	.org	0x38			/* 0x20 ~ 0x37 reserved */
- 	.long	LINUX_PE_MAGIC
-@@ -32,9 +32,9 @@ _head:
- pe_header:
- 	__EFI_PE_HEADER
- 
--SYM_DATA(kernel_asize, .long _end - _text);
--SYM_DATA(kernel_fsize, .long _edata - _text);
--SYM_DATA(kernel_offset, .long kernel_offset - _text);
-+SYM_DATA(kernel_asize, .long _kernel_asize);
-+SYM_DATA(kernel_fsize, .long _kernel_fsize);
-+SYM_DATA(kernel_offset, .long _kernel_offset);
- 
- #endif
- 
-diff --git a/arch/loongarch/kernel/vmlinux.lds.S b/arch/loongarch/kernel/vmlinux.lds.S
-index 0c7b041be9d8..79f238df029e 100644
---- a/arch/loongarch/kernel/vmlinux.lds.S
-+++ b/arch/loongarch/kernel/vmlinux.lds.S
-@@ -136,6 +136,13 @@ SECTIONS
- 	DWARF_DEBUG
- 	ELF_DETAILS
- 
-+	/* header symbols */
-+	_kernel_asize = _end - _text;
-+	_kernel_fsize = _edata - _text;
-+	_kernel_offset = kernel_offset - _text;
-+	_kernel_vsize = _end - __initdata_begin;
-+	_kernel_rsize = _edata - __initdata_begin;
++	/* ABI names of registers */
++	.equ	.L__gpr_num_$ra, 1
++	.equ	.L__gpr_num_$tp, 2
++	.equ	.L__gpr_num_$sp, 3
++	.irp	num,0,1,2,3,4,5,6,7
++	.equ	.L__gpr_num_$a\num, 4 + \num
++	.endr
++	.irp	num,0,1,2,3,4,5,6,7,8
++	.equ	.L__gpr_num_$t\num, 12 + \num
++	.endr
++	.equ	.L__gpr_num_$s9, 22
++	.equ	.L__gpr_num_$fp, 22
++	.irp	num,0,1,2,3,4,5,6,7,8
++	.equ	.L__gpr_num_$s\num, 23 + \num
++	.endr
 +
- 	.gptab.sdata : {
- 		*(.gptab.data)
- 		*(.gptab.sdata)
+ #else /* __ASSEMBLY__ */
+ 
+ #define __DEFINE_ASM_GPR_NUMS					\
+@@ -16,6 +32,20 @@
+ "	.irp	num,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31\n" \
+ "	.equ	.L__gpr_num_$r\\num, \\num\n"			\
+ "	.endr\n"						\
++"	.equ	.L__gpr_num_$ra, 1\n"				\
++"	.equ	.L__gpr_num_$tp, 2\n"				\
++"	.equ	.L__gpr_num_$sp, 3\n"				\
++"	.irp	num,0,1,2,3,4,5,6,7\n"				\
++"	.equ	.L__gpr_num_$a\\num, 4 + \\num\n"		\
++"	.endr\n"						\
++"	.irp	num,0,1,2,3,4,5,6,7,8\n"			\
++"	.equ	.L__gpr_num_$t\\num, 12 + \\num\n"		\
++"	.endr\n"						\
++"	.equ	.L__gpr_num_$s9, 22\n"				\
++"	.equ	.L__gpr_num_$fp, 22\n"				\
++"	.irp	num,0,1,2,3,4,5,6,7,8\n"			\
++"	.equ	.L__gpr_num_$s\\num, 23 + \\num\n"		\
++"	.endr\n"						\
+ 
+ #endif /* __ASSEMBLY__ */
+ 
 -- 
 2.40.0
 
