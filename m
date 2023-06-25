@@ -2,48 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A84EA73CF7E
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 10:50:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E774F73CF8B
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 10:56:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231902AbjFYIt6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 04:49:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35914 "EHLO
+        id S231472AbjFYIzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 04:55:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231389AbjFYIt4 (ORCPT
+        with ESMTP id S229683AbjFYIzu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 04:49:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 669761A1
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 01:49:55 -0700 (PDT)
+        Sun, 25 Jun 2023 04:55:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FE5E127
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 01:55:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D4D8360B3E
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 08:49:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B75B3C433C0;
-        Sun, 25 Jun 2023 08:49:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1687682994;
-        bh=wax8i7JqXdLFKWScXULlLfEbHUlfq1nON8woNAJ8woc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Rh7pO5TCularHZ+aMnScchvNa37CQkEpu6yF/7VP2Ua2443YGIfxSzGIkYdhpxGP8
-         92/Vmluf8XDZbPgeGtRO5VHC2hPp4TrGb2Hpci7XBd36ZBZ8au07Kl855BYSVAKD/T
-         thM1v9VduHd24VTOY6Qnmu2aqRortVD0FNa61mwE=
-Date:   Sun, 25 Jun 2023 10:49:49 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Marcel Holtmann <marcel@holtmann.org>
-Cc:     linux-cachefs@redhat.com, linux-kernel@vger.kernel.org,
-        dhowells@redhat.com, arnd@arndb.de
-Subject: Re: [PATCH] cachefiles: allocate static minor for /dev/cachefiles
-Message-ID: <2023062536-wrongful-botch-a188@gregkh>
-References: <20230615160806.94000-1-marcel@holtmann.org>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EE2B960B6E
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 08:55:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 501E7C433C9
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 08:55:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687683348;
+        bh=7+eC0aDwuKf5vEOSJD3dDWwPcpDgJ9eNDlolNBZud0s=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ZqYxRokqcPdbl4OEHzhz0oIvp5jmu6PeoiQYaAFAP52iEHc14zGU1z361AAMqLQ3o
+         OmV0Bp9AIs0QjOW+XVAAQNo/4Cr3eAVeucbe0gGBCGJOor4La518v+9nbPSGGjTcww
+         n80RD4Eaclhy/ZSUeky5AaY4gmC+K3Ool0VICpnheR+NVv2gT/mrT982XkJyc8tS/R
+         csKdq5Uo8ExxwikHUSa0oe+P33NDKDuI0L+bQzYG68+p9wvmQ+D6jaVqTkWXOAu/JX
+         C/TklPc6A98nO8aN9JQg6bYsH0FkSKRKx/8guO/PIBLFeRwRa9Nczm9jyBGa8+EoUy
+         hwnK/t665U2Wg==
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-51d7d0dbec8so1429776a12.2
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 01:55:48 -0700 (PDT)
+X-Gm-Message-State: AC+VfDz80Fy3Haa2TVTZB1nidXchPFZDS4tOXUD8wlhNhPltNLE69kyx
+        pAk0Fy7Xtq1C+H8nMFHEx+qZulk5omIBfy8bmg4=
+X-Google-Smtp-Source: ACHHUZ4vNnea3bswnH820+GwW88RfKD4sBM3CnwZoBp8A6sQ6g4Gt1aYDc6+SNTnLt4kJY9CZxYa/P+881LBFDMVoJ0=
+X-Received: by 2002:aa7:d851:0:b0:51d:8a53:d1f with SMTP id
+ f17-20020aa7d851000000b0051d8a530d1fmr1330030eds.8.1687683346457; Sun, 25 Jun
+ 2023 01:55:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230615160806.94000-1-marcel@holtmann.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+References: <20230615121016.3731983-1-chenhuacai@loongson.cn>
+In-Reply-To: <20230615121016.3731983-1-chenhuacai@loongson.cn>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Sun, 25 Jun 2023 16:55:33 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H49AyrG-sH2SXLNg_cX-Wv8vS4Qno_2N4v6ccGGciv-+A@mail.gmail.com>
+Message-ID: <CAAhV-H49AyrG-sH2SXLNg_cX-Wv8vS4Qno_2N4v6ccGGciv-+A@mail.gmail.com>
+Subject: Re: [PATCH] kthread: Rename user_mode_thread() to kmuser_thread()
+To:     Huacai Chen <chenhuacai@loongson.cn>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -52,78 +67,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 06:08:06PM +0200, Marcel Holtmann wrote:
-> The cachefiles misc character device uses MISC_DYNAMIC_MINOR and thus
-> doesn't support module auto-loading. Assign a static minor number for it
-> and provide appropriate module aliases for it. This is enough for kmod to
-> create the /dev/cachefiles device node on startup and facility module
-> auto-loading.
-> 
-> Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+Friendly ping?
+
+Huacai
+
+On Thu, Jun 15, 2023 at 8:10=E2=80=AFPM Huacai Chen <chenhuacai@loongson.cn=
+> wrote:
+>
+> Commit 343f4c49f2438d8 ("kthread: Don't allocate kthread_struct for init
+> and umh") introduces a new function user_mode_thread() for init and umh.
+>
+> init and umh are different from typical kernel threads since the don't
+> need a "kthread" struct and they will finally become user processes by
+> calling kernel_execve(), but on the other hand, they are also different
+> from typical user mode threads (they have no "mm" structs at creation
+> time, which is traditionally used to distinguish a user thread and a
+> kernel thread).
+>
+> In a former patch I treat init and umh as "special kernel threads" and
+> unify kernel_thread() and user_mode_thread() to kernel_thread() again.
+> However, the patch has been nacked because init and umh are essentially
+> "special user threads".
+>
+> Nevertheless, I still agree with Andrews' comment "But the naming isn't
+> very good anyway. They should have been usermode_thread/kernel_thread or
+> user_thread/kernel_thread.".
+>
+> Since Eric describes init and umh as "user threads run in kernel mode",
+> in this patch I rename user_mode_thread() as kmuser_thread(), which is
+> a little better than just user_thread().
+>
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 > ---
->  Documentation/admin-guide/devices.txt | 3 ++-
->  fs/cachefiles/main.c                  | 4 +++-
->  include/linux/miscdevice.h            | 1 +
->  3 files changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/admin-guide/devices.txt b/Documentation/admin-guide/devices.txt
-> index 06c525e01ea5..21b2dda10006 100644
-> --- a/Documentation/admin-guide/devices.txt
-> +++ b/Documentation/admin-guide/devices.txt
-> @@ -376,8 +376,9 @@
->  		240 = /dev/userio	Serio driver testing device
->  		241 = /dev/vhost-vsock	Host kernel driver for virtio vsock
->  		242 = /dev/rfkill	Turning off radio transmissions (rfkill)
-> +		243 = /dev/cachefiles	Filesystem caching on files
->  
-> -		243-254			Reserved for local use
-> +		244-254			Reserved for local use
->  		255			Reserved for MISC_DYNAMIC_MINOR
->  
->    11 char	Raw keyboard device	(Linux/SPARC only)
-> diff --git a/fs/cachefiles/main.c b/fs/cachefiles/main.c
-> index 3f369c6f816d..eead7b5016a7 100644
-> --- a/fs/cachefiles/main.c
-> +++ b/fs/cachefiles/main.c
-> @@ -30,11 +30,13 @@ MODULE_PARM_DESC(cachefiles_debug, "CacheFiles debugging mask");
->  MODULE_DESCRIPTION("Mounted-filesystem based cache");
->  MODULE_AUTHOR("Red Hat, Inc.");
->  MODULE_LICENSE("GPL");
-> +MODULE_ALIAS("devname:cachefiles");
-> +MODULE_ALIAS_MISCDEV(CACHEFILES_MINOR);
->  
->  struct kmem_cache *cachefiles_object_jar;
->  
->  static struct miscdevice cachefiles_dev = {
-> -	.minor	= MISC_DYNAMIC_MINOR,
-> +	.minor	= CACHEFILES_MINOR,
->  	.name	= "cachefiles",
->  	.fops	= &cachefiles_daemon_fops,
->  };
-> diff --git a/include/linux/miscdevice.h b/include/linux/miscdevice.h
-> index c0fea6ca5076..d7f989f593b0 100644
-> --- a/include/linux/miscdevice.h
-> +++ b/include/linux/miscdevice.h
-> @@ -71,6 +71,7 @@
->  #define USERIO_MINOR		240
->  #define VHOST_VSOCK_MINOR	241
->  #define RFKILL_MINOR		242
-> +#define CACHEFILES_MINOR	243
->  #define MISC_DYNAMIC_MINOR	255
->  
->  struct device;
-> -- 
-> 2.40.1
-> 
-
-Ah, the original was in my spam filter as your email does not show up as
-being authenticated, you might want to fix your mail server :(
-
-Anyway, as Christoph said, no, this isn't a good idea, keep it dynamic
-and only load it if you need to load it please.  Or, please explain why
-it needs to be autoloaded, what dependancy or userspace program is not
-working properly because of this?
-
-thanks,
-
-greg k-h
+>  include/linux/sched/task.h | 2 +-
+>  init/main.c                | 2 +-
+>  kernel/fork.c              | 4 ++--
+>  kernel/umh.c               | 4 ++--
+>  4 files changed, 6 insertions(+), 6 deletions(-)
+>
+> diff --git a/include/linux/sched/task.h b/include/linux/sched/task.h
+> index e0f5ac90a228..c774d604b0a3 100644
+> --- a/include/linux/sched/task.h
+> +++ b/include/linux/sched/task.h
+> @@ -98,7 +98,7 @@ struct task_struct *create_io_thread(int (*fn)(void *),=
+ void *arg, int node);
+>  struct task_struct *fork_idle(int);
+>  extern pid_t kernel_thread(int (*fn)(void *), void *arg, const char *nam=
+e,
+>                             unsigned long flags);
+> -extern pid_t user_mode_thread(int (*fn)(void *), void *arg, unsigned lon=
+g flags);
+> +extern pid_t kmuser_thread(int (*fn)(void *), void *arg, unsigned long f=
+lags);
+>  extern long kernel_wait4(pid_t, int __user *, int, struct rusage *);
+>  int kernel_wait(pid_t pid, int *stat);
+>
+> diff --git a/init/main.c b/init/main.c
+> index af50044deed5..362ba90d6f73 100644
+> --- a/init/main.c
+> +++ b/init/main.c
+> @@ -697,7 +697,7 @@ noinline void __ref __noreturn rest_init(void)
+>          * the init task will end up wanting to create kthreads, which, i=
+f
+>          * we schedule it before we create kthreadd, will OOPS.
+>          */
+> -       pid =3D user_mode_thread(kernel_init, NULL, CLONE_FS);
+> +       pid =3D kmuser_thread(kernel_init, NULL, CLONE_FS);
+>         /*
+>          * Pin init on the boot CPU. Task migration is not properly worki=
+ng
+>          * until sched_init_smp() has been run. It will set the allowed
+> diff --git a/kernel/fork.c b/kernel/fork.c
+> index 41c964104b58..57d5c8c1766e 100644
+> --- a/kernel/fork.c
+> +++ b/kernel/fork.c
+> @@ -2978,9 +2978,9 @@ pid_t kernel_thread(int (*fn)(void *), void *arg, c=
+onst char *name,
+>  }
+>
+>  /*
+> - * Create a user mode thread.
+> + * Create a kernel mode user thread.
+>   */
+> -pid_t user_mode_thread(int (*fn)(void *), void *arg, unsigned long flags=
+)
+> +pid_t kmuser_thread(int (*fn)(void *), void *arg, unsigned long flags)
+>  {
+>         struct kernel_clone_args args =3D {
+>                 .flags          =3D ((lower_32_bits(flags) | CLONE_VM |
+> diff --git a/kernel/umh.c b/kernel/umh.c
+> index 60aa9e764a38..28c0cf0da7be 100644
+> --- a/kernel/umh.c
+> +++ b/kernel/umh.c
+> @@ -130,7 +130,7 @@ static void call_usermodehelper_exec_sync(struct subp=
+rocess_info *sub_info)
+>
+>         /* If SIGCLD is ignored do_wait won't populate the status. */
+>         kernel_sigaction(SIGCHLD, SIG_DFL);
+> -       pid =3D user_mode_thread(call_usermodehelper_exec_async, sub_info=
+, SIGCHLD);
+> +       pid =3D kmuser_thread(call_usermodehelper_exec_async, sub_info, S=
+IGCHLD);
+>         if (pid < 0)
+>                 sub_info->retval =3D pid;
+>         else
+> @@ -169,7 +169,7 @@ static void call_usermodehelper_exec_work(struct work=
+_struct *work)
+>                  * want to pollute current->children, and we need a paren=
+t
+>                  * that always ignores SIGCHLD to ensure auto-reaping.
+>                  */
+> -               pid =3D user_mode_thread(call_usermodehelper_exec_async, =
+sub_info,
+> +               pid =3D kmuser_thread(call_usermodehelper_exec_async, sub=
+_info,
+>                                        CLONE_PARENT | SIGCHLD);
+>                 if (pid < 0) {
+>                         sub_info->retval =3D pid;
+> --
+> 2.39.3
+>
