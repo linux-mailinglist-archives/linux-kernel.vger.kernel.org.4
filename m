@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6156A73D22B
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 18:28:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09C0373D22C
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 18:28:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230487AbjFYQ2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 12:28:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57194 "EHLO
+        id S230507AbjFYQ2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 12:28:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229669AbjFYQ23 (ORCPT
+        with ESMTP id S230307AbjFYQ2b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 12:28:29 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC8E4BD
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 09:28:27 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-977e0fbd742so292513366b.2
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 09:28:27 -0700 (PDT)
+        Sun, 25 Jun 2023 12:28:31 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C33319A
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 09:28:30 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-98e011f45ffso88978066b.3
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 09:28:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687710506; x=1690302506;
+        d=linaro.org; s=google; t=1687710508; x=1690302508;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=MhbTmWLYenjDvgCPdawCZ0z1wOdFokFdu4M42znMvBc=;
-        b=fXbr+vKHwGyxL19CpBIWWE1z4qe6yNjPqhO894jstqRJwAaJit3oJEQBw72WaSe086
-         sKnAxkQfwIjFDs56AcB3QEbJA/Tz2wAq207MUz3AhBpoxtL/ShkS5buWVYxEvgpCcLBj
-         zohiRxGNtl6t5cB/sR3u+wNm9xgfkoqH8cwx+6aD+qwNkSQp5UMzaHp8nNR1/DlqwyES
-         as0nzyTcnULNZ2vksaBwf8P26F29m9UCkfJ5iDHULHc2p/XqO/14j7n+HZS24Ia897Rv
-         9i9eUFpppp61bD1uVX9YLfyo3IInvthxasCvyEIOP+1PB4Jh5Sk8WlUvWdLbneoyLfV+
-         VRTw==
+        bh=5RFM7q0XUB/BPBex5dV6DFuQg1MifJuVODWi1OqzZMI=;
+        b=nhEOiQn20PfGaXL3/ExuEYiZ5HhwbowCQ8DuAbnO38IEqytDerd0mBUBIhC8vLJ4xD
+         4FmI7zaJFbIe3UhWB5oQ1phAfwybavGrzsdx2IqNshnHScdkcF6KvsG5oZQFsjac86jQ
+         J84haSDvvLvGrqs2BaKLXt9IUWEaiGP2HtXu5d3BfOFxv1yZ5529Qa+Fnl3CkzfbUGB6
+         mA5jK67V7fuNVYTfuE9qzDDHjswvbNqF9+sNs/S0addld1mtd4tKa8FQME5mXxp2VMSa
+         9IX+qCtyW07vnz/WmjR0rzvkGJhBoip8op02F/XziRguPwhkJ/Q8K5kTBXOy3MwiY3Wi
+         GdDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687710506; x=1690302506;
+        d=1e100.net; s=20221208; t=1687710508; x=1690302508;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=MhbTmWLYenjDvgCPdawCZ0z1wOdFokFdu4M42znMvBc=;
-        b=ktt4yLJ4vqxZY4fAf0/dfIjZ/RWxFOxV2QHYLtzStxJeZgHY0jj4ZXpgMDrySK7/VZ
-         KlxDipq2MK+uHbI6OXoWMBtezZE+UBzOMJuEB65OvR5TrKFHc735AO7ABKkNqk3tBPnT
-         OCh61lActsKVVAJZCM/LUy7jSJyRXtrwhrxF9qJZyqaa/ymp0M9zr9N74QVT8Jeho5DE
-         kkzhiYJH7QCfCN7OergRggK1TLRCZNmpIE4Z8EXV40yD8OoP6K8vXzBQ4Xdu2z/C+K8j
-         OcOkYztxfbr/UkUaZKnQOuzPRydL7RdXr4dAqKpS+BDldl8IdS7XTqQIlR4OMHlyYU8B
-         jABA==
-X-Gm-Message-State: AC+VfDx/K8GAjXJ4WYvbZvI9qvlMbIkqk5Z6Cu0hfJIoo8HRXq6VT2WE
-        r3bMBQ+PdtEsKwIkZ9W+aIGAng==
-X-Google-Smtp-Source: ACHHUZ4bjKBuuorOmHyMBtXoO/Z8+TXopFzyA1F87d9ec+rsje8E5zXmZBxUz9H/zu3qMvVjfzGwig==
-X-Received: by 2002:a17:906:4fc5:b0:96f:d556:b926 with SMTP id i5-20020a1709064fc500b0096fd556b926mr21570923ejw.77.1687710506301;
-        Sun, 25 Jun 2023 09:28:26 -0700 (PDT)
+        bh=5RFM7q0XUB/BPBex5dV6DFuQg1MifJuVODWi1OqzZMI=;
+        b=Ze01ApiLw4MZS1G28GnBWOAGrKC7cBYJxQkv/Q0rfpq68njbF3nBYpnXkG5Y4oZhJW
+         sN8NUhGxIlVXuAU2koX82Cl+CNHWTtLeYG/KqPGeVC92ZO4N8Zek1Sti43wnXl8oTXl9
+         RfDo3ScQlfbcgHYAen8RgG9xIHbK63SkEQymZDO7JgMjd2aZ/C39RowHlCE7stRPGUcv
+         OnMSyT1g0hB+qs4GExVQXZoIwGTaWM7fkfIWBt/kluKw0Xh1/cXuQJIwVxOEJCiv9dZk
+         aLaYhmwHuUtFbLtcEJ3XXjuRDIC3ISM+GcrwAagEOszgv9od1k326ovH1tt5Z0PZYWI0
+         eOsQ==
+X-Gm-Message-State: AC+VfDzPYdZ2NLQkEpgRlQ0mmLGP19eiO1I2Vz7IBgfRReHhwyf5GRbo
+        kFeKGBsy6zcHE4SG3QeGQYNkQg==
+X-Google-Smtp-Source: ACHHUZ4e6cef4EZ52A/Qs8HD/Na/zXaoD/gPZYa9z7iVoKgnBf1LIi/G8cnlxZAPXTJKHusQFJ8BKA==
+X-Received: by 2002:a17:906:9b8b:b0:98c:ef87:17ea with SMTP id dd11-20020a1709069b8b00b0098cef8717eamr9115555ejc.13.1687710508473;
+        Sun, 25 Jun 2023 09:28:28 -0700 (PDT)
 Received: from krzk-bin.. ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id ec10-20020a170906b6ca00b00982be08a9besm2277731ejb.172.2023.06.25.09.28.24
+        by smtp.gmail.com with ESMTPSA id ec10-20020a170906b6ca00b00982be08a9besm2277731ejb.172.2023.06.25.09.28.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Jun 2023 09:28:25 -0700 (PDT)
+        Sun, 25 Jun 2023 09:28:27 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Hans de Goede <hdegoede@redhat.com>,
@@ -64,9 +64,9 @@ Cc:     Andi Shyti <andi.shyti@kernel.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: [PATCH v4 02/24] Input: gpio-vibra - Simplify with dev_err_probe()
-Date:   Sun, 25 Jun 2023 18:27:55 +0200
-Message-Id: <20230625162817.100397-3-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v4 03/24] Input: pwm-vibra - Simplify with dev_err_probe()
+Date:   Sun, 25 Jun 2023 18:27:56 +0200
+Message-Id: <20230625162817.100397-4-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230625162817.100397-1-krzysztof.kozlowski@linaro.org>
 References: <20230625162817.100397-1-krzysztof.kozlowski@linaro.org>
@@ -90,18 +90,20 @@ Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 ---
 
+Changes since v3:
+1. Rebase, adjust to new driver changes.
+
 Changes since v1:
 1. Remove unneeded PTR_ERR_OR_ZERO, as pointed by Andy.
 ---
- drivers/input/misc/gpio-vibra.c | 20 ++++++--------------
- drivers/input/misc/pwm-beeper.c | 19 +++++--------------
- 2 files changed, 11 insertions(+), 28 deletions(-)
+ drivers/input/misc/pwm-vibra.c | 30 +++++++++---------------------
+ 1 file changed, 9 insertions(+), 21 deletions(-)
 
-diff --git a/drivers/input/misc/gpio-vibra.c b/drivers/input/misc/gpio-vibra.c
-index 134a1309ba92..c1c3ba5960dd 100644
---- a/drivers/input/misc/gpio-vibra.c
-+++ b/drivers/input/misc/gpio-vibra.c
-@@ -113,22 +113,14 @@ static int gpio_vibrator_probe(struct platform_device *pdev)
+diff --git a/drivers/input/misc/pwm-vibra.c b/drivers/input/misc/pwm-vibra.c
+index 2ba035299db8..a3cde30ee8d2 100644
+--- a/drivers/input/misc/pwm-vibra.c
++++ b/drivers/input/misc/pwm-vibra.c
+@@ -140,32 +140,20 @@ static int pwm_vibrator_probe(struct platform_device *pdev)
  		return -ENOMEM;
  
  	vibrator->vcc = devm_regulator_get(&pdev->dev, "vcc");
@@ -116,56 +118,32 @@ index 134a1309ba92..c1c3ba5960dd 100644
 +		return dev_err_probe(&pdev->dev, PTR_ERR(vibrator->vcc),
 +				     "Failed to request regulator\n");
  
- 	vibrator->gpio = devm_gpiod_get(&pdev->dev, "enable", GPIOD_OUT_LOW);
--	err = PTR_ERR_OR_ZERO(vibrator->gpio);
+ 	vibrator->enable_gpio = devm_gpiod_get_optional(&pdev->dev, "enable",
+ 							GPIOD_OUT_LOW);
+-	err = PTR_ERR_OR_ZERO(vibrator->enable_gpio);
 -	if (err) {
 -		if (err != -EPROBE_DEFER)
--			dev_err(&pdev->dev, "Failed to request main gpio: %d\n",
+-			dev_err(&pdev->dev, "Failed to request enable gpio: %d\n",
 -				err);
 -		return err;
 -	}
-+	if (IS_ERR(vibrator->gpio))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(vibrator->gpio),
-+				     "Failed to request main gpio\n");
++	if (IS_ERR(vibrator->enable_gpio))
++		return dev_err_probe(&pdev->dev, PTR_ERR(vibrator->enable_gpio),
++				     "Failed to request enable gpio\n");
  
- 	INIT_WORK(&vibrator->play_work, gpio_vibrator_play_work);
- 
-diff --git a/drivers/input/misc/pwm-beeper.c b/drivers/input/misc/pwm-beeper.c
-index 3cf1812384e6..1e731d8397c6 100644
---- a/drivers/input/misc/pwm-beeper.c
-+++ b/drivers/input/misc/pwm-beeper.c
-@@ -132,13 +132,8 @@ static int pwm_beeper_probe(struct platform_device *pdev)
- 		return -ENOMEM;
- 
- 	beeper->pwm = devm_pwm_get(dev, NULL);
--	if (IS_ERR(beeper->pwm)) {
--		error = PTR_ERR(beeper->pwm);
--		if (error != -EPROBE_DEFER)
--			dev_err(dev, "Failed to request PWM device: %d\n",
--				error);
--		return error;
+ 	vibrator->pwm = devm_pwm_get(&pdev->dev, "enable");
+-	err = PTR_ERR_OR_ZERO(vibrator->pwm);
+-	if (err) {
+-		if (err != -EPROBE_DEFER)
+-			dev_err(&pdev->dev, "Failed to request main pwm: %d\n",
+-				err);
+-		return err;
 -	}
-+	if (IS_ERR(beeper->pwm))
-+		return dev_err_probe(dev, PTR_ERR(beeper->pwm), "Failed to request PWM device\n");
++	if (IS_ERR(vibrator->pwm))
++		return dev_err_probe(&pdev->dev, PTR_ERR(vibrator->pwm),
++				     "Failed to request main pwm\n");
  
- 	/* Sync up PWM state and ensure it is off. */
- 	pwm_init_state(beeper->pwm, &state);
-@@ -151,13 +146,9 @@ static int pwm_beeper_probe(struct platform_device *pdev)
- 	}
- 
- 	beeper->amplifier = devm_regulator_get(dev, "amp");
--	if (IS_ERR(beeper->amplifier)) {
--		error = PTR_ERR(beeper->amplifier);
--		if (error != -EPROBE_DEFER)
--			dev_err(dev, "Failed to get 'amp' regulator: %d\n",
--				error);
--		return error;
--	}
-+	if (IS_ERR(beeper->amplifier))
-+		return dev_err_probe(dev, PTR_ERR(beeper->amplifier),
-+				     "Failed to get 'amp' regulator\n");
- 
- 	INIT_WORK(&beeper->work, pwm_beeper_work);
+ 	INIT_WORK(&vibrator->play_work, pwm_vibrator_play_work);
  
 -- 
 2.34.1
