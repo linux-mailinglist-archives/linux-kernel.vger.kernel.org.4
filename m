@@ -2,151 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5447073D31D
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 21:08:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2C0F73D324
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 21:11:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229817AbjFYTGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 15:06:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40312 "EHLO
+        id S229880AbjFYTLE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 15:11:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjFYTGh (ORCPT
+        with ESMTP id S229824AbjFYTLD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 15:06:37 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA79D1B3
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 12:06:36 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-5702116762fso27514147b3.3
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 12:06:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687719996; x=1690311996;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Imw9X6zO34JjN9/hKCePWCCRVn8bd8VU2k+bw1pFsBY=;
-        b=k0/k1JwK2I3rzmS6zsa8hs0DxsZ/c8e4V4QnWNy0m/Q1BWMWLzfje6V3jr8Bvt5p5Y
-         e9ifeimyb87A1h/0bK9pEamuzOZjkDSvDiKufwIHjesj45xp/aciV4VSvuT5DpIVa8Hl
-         MKD4NqEMtMHaUVzlcqzXR7gekm1N1WJ67wOMI5TFB6ibeGiKgyI1fRyQcLKQaOZuwJHX
-         429zmtl+ycmVsZ9C1qiyyLO6v2UwYEVMSMdyLjq0WcaA3rWg2DpwF65oznvKuD7Ikj1p
-         H1qC8nGdH2lAHFxs8hG1KCS8WrmCgLHQD4gkilLz1sB9sQLIq32EHSObFA4IyaDOFWGY
-         j5rQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687719996; x=1690311996;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Imw9X6zO34JjN9/hKCePWCCRVn8bd8VU2k+bw1pFsBY=;
-        b=a76lMdAomL2olBrxUWl/YW9Pcr0sErzCsDUZS+DBt/y5HX+L2/TdPAaTxKEdO6zx4P
-         2v474ZgkWCfvAaxH0SgYJRcF/4ws5MHvElm5+FdIVIqFUr8+t3BfFQmpQzD2+2XGQQC5
-         5UIdJmONGiKyeaZ5w8tbBX+TjfQbwSa+mR1sG3QseLfH0nSp4vB7e7Wh8GhkKq16Kzgd
-         TQAIN+jgXiwk1SkdfOKg5xWjaaYAvc6kLNlNEylvlDXN4ytcmHzwRmkJPTR+QEPdO/r0
-         RyQs+gMF4vpWo55SNVFM17MNe11I7dImFJYlmPTEc/bSQ1RSZEZyLjthGRnRm3LKpe2j
-         MR1A==
-X-Gm-Message-State: AC+VfDwZ+0r5Xo+nOZtBUThBtSBYW4uW87fvKJNgl4TOI9dBoS9LMzut
-        e9WDPMS53ZeyFxmRpBcdFVqJKA==
-X-Google-Smtp-Source: ACHHUZ6cMg1cmp1S9/7uKdhrCgUWhiY1OzAu6tDhk0Km5hJSweQoA7h/09Dzoy8xoEkANktpglIuEg==
-X-Received: by 2002:a81:a115:0:b0:570:6654:68c8 with SMTP id y21-20020a81a115000000b00570665468c8mr25968000ywg.1.1687719995799;
-        Sun, 25 Jun 2023 12:06:35 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id p79-20020a0de652000000b00573a2a0808esm930818ywe.77.2023.06.25.12.06.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Jun 2023 12:06:35 -0700 (PDT)
-Date:   Sun, 25 Jun 2023 12:06:15 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-cc:     David Stevens <stevensd@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Xu <peterx@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Yang Shi <shy828301@gmail.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jiaqi Yan <jiaqiyan@google.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: [PATCH] mm/khugepaged: fix regression in collapse_file()
-In-Reply-To: <8ef3ee-ba41-8e9e-4453-73736ff27783@google.com>
-Message-ID: <df5819aa-c79-6b10-4ce1-a45af118c0f3@google.com>
-References: <20230607053135.2087354-1-stevensd@google.com> <f18e4b64-3f88-a8ab-56cc-d1f5f9c58d4@google.com> <CAD=HUj4vVbyHiT7vPmRorS+v9t2+N46ak=Xrew2cFf5+utC=tQ@mail.gmail.com> <8ef3ee-ba41-8e9e-4453-73736ff27783@google.com>
+        Sun, 25 Jun 2023 15:11:03 -0400
+Received: from relay05.th.seeweb.it (relay05.th.seeweb.it [5.144.164.166])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E71C1AD
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 12:11:00 -0700 (PDT)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 1CF463EEB8;
+        Sun, 25 Jun 2023 21:10:56 +0200 (CEST)
+Date:   Sun, 25 Jun 2023 21:10:54 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, Lux Aliaga <they@mint.lgbt>
+Subject: Re: [PATCH 01/15] arm64: dts: qcom: sm6125: Sort spmi_bus node
+ numerically by reg
+Message-ID: <yjc63sxypg3zwju3vudyogexxnng6sgjxxf4fhibid6ifunexc@k2ieeqh23ncm>
+References: <20230624-sm6125-dpu-v1-0-1d5a638cebf2@somainline.org>
+ <20230624-sm6125-dpu-v1-1-1d5a638cebf2@somainline.org>
+ <a2a79b58-c7a9-9099-028c-5ca79cf8f711@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a2a79b58-c7a9-9099-028c-5ca79cf8f711@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no xas_pause(&xas) in collapse_file()'s main loop, at the points
-where it does xas_unlock_irq(&xas) and then continues.
+On 2023-06-24 03:43:21, Konrad Dybcio wrote:
+> On 24.06.2023 02:40, Marijn Suijten wrote:
+> > This node has always resided in the wrong spot, making it somewhat
+> > harder to contribute new node entries while maintaining proper sorting
+> > around it.  Move the node up to sit after hsusb_phy1 where it maintains
+> > proper numerial
+> numerical
 
-That would explain why, once two weeks ago and twice yesterday, I have
-hit the VM_BUG_ON_PAGE(page != xas_load(&xas), page) since "mm/khugepaged:
-fix iteration in collapse_file" removed the xas_set(&xas, index) just
-before it: xas.xa_node could be left pointing to a stale node, if there
-was concurrent activity on the file which transformed its xarray.
+Thanks.
 
-I tried inserting xas_pause()s, but then even bootup crashed on that
-VM_BUG_ON_PAGE(): there appears to be a subtle "nextness" implicit in
-xas_pause().
+> sorting on the (first of its many) reg address property.
 
-xas_next() and xas_pause() are good for use in simple loops, but not in
-this one: xas_set() worked well until now, so use xas_set(&xas, index)
-explicitly at the head of the loop; and change that VM_BUG_ON_PAGE() not
-to need its own xas_set(), and not to interfere with the xa_state (which
-would probably stop the crashes from xas_pause(), but I trust that less).
+Why was this continuation of the line not re-quoted?  Makes your reply
+super-hard to read.
 
-Link: https://lore.kernel.org/linux-mm/f18e4b64-3f88-a8ab-56cc-d1f5f9c58d4@google.com/
-Fixes: c8a8f3b4a95a ("mm/khugepaged: fix iteration in collapse_file")
-Signed-off-by: Hugh Dickins <hughd@google.com>
----
-Linus, I'm rushing this directly to you, but not really expecting you
-to put it in at this stage, unless you're very comfortable with it,
-or perhaps it catches Matthew's eye and gets a quick Ack from him.
+- Marijn
 
-The commit being fixed only got in after -rc7, after being held up by my
-initial report of this crash; but I had to rescind that when I couldn't
-reproduce it at all. Then yesterday morning it hit again on two machines,
-and reading XArray Doc reminded me of xas_pause() - seems obvious now.
-Patch ran for 14 hours overnight on those two machines without a problem.
-
- mm/khugepaged.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
-
-diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-index 2d0d58fb4e7f..47b59f2843f6 100644
---- a/mm/khugepaged.c
-+++ b/mm/khugepaged.c
-@@ -1918,9 +1918,9 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
- 		}
- 	} while (1);
- 
--	xas_set(&xas, start);
- 	for (index = start; index < end; index++) {
--		page = xas_next(&xas);
-+		xas_set(&xas, index);
-+		page = xas_load(&xas);
- 
- 		VM_BUG_ON(index != xas.xa_index);
- 		if (is_shmem) {
-@@ -1935,7 +1935,6 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
- 						result = SCAN_TRUNCATED;
- 						goto xa_locked;
- 					}
--					xas_set(&xas, index + 1);
- 				}
- 				if (!shmem_charge(mapping->host, 1)) {
- 					result = SCAN_FAIL;
-@@ -2071,7 +2070,7 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
- 
- 		xas_lock_irq(&xas);
- 
--		VM_BUG_ON_PAGE(page != xas_load(&xas), page);
-+		VM_BUG_ON_PAGE(page != xa_load(xas.xa, index), page);
- 
- 		/*
- 		 * We control three references to the page:
--- 
-2.35.3
-
+> > 
+> > Fixes: cff4bbaf2a2d ("arm64: dts: qcom: Add support for SM6125")
+> > Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> > ---
+> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> 
+> Konrad
+> >  arch/arm64/boot/dts/qcom/sm6125.dtsi | 38 ++++++++++++++++++------------------
+> >  1 file changed, 19 insertions(+), 19 deletions(-)
+> > 
+> > diff --git a/arch/arm64/boot/dts/qcom/sm6125.dtsi b/arch/arm64/boot/dts/qcom/sm6125.dtsi
+> > index a596baa6ce3e..722dde560bec 100644
+> > --- a/arch/arm64/boot/dts/qcom/sm6125.dtsi
+> > +++ b/arch/arm64/boot/dts/qcom/sm6125.dtsi
+> > @@ -679,6 +679,24 @@ hsusb_phy1: phy@1613000 {
+> >  			status = "disabled";
+> >  		};
+> >  
+> > +		spmi_bus: spmi@1c40000 {
+> > +			compatible = "qcom,spmi-pmic-arb";
+> > +			reg = <0x01c40000 0x1100>,
+> > +			      <0x01e00000 0x2000000>,
+> > +			      <0x03e00000 0x100000>,
+> > +			      <0x03f00000 0xa0000>,
+> > +			      <0x01c0a000 0x26000>;
+> > +			reg-names = "core", "chnls", "obsrvr", "intr", "cnfg";
+> > +			interrupt-names = "periph_irq";
+> > +			interrupts = <GIC_SPI 183 IRQ_TYPE_LEVEL_HIGH>;
+> > +			qcom,ee = <0>;
+> > +			qcom,channel = <0>;
+> > +			#address-cells = <2>;
+> > +			#size-cells = <0>;
+> > +			interrupt-controller;
+> > +			#interrupt-cells = <4>;
+> > +		};
+> > +
+> >  		rpm_msg_ram: sram@45f0000 {
+> >  			compatible = "qcom,rpm-msg-ram";
+> >  			reg = <0x045f0000 0x7000>;
+> > @@ -1184,27 +1202,9 @@ sram@4690000 {
+> >  			reg = <0x04690000 0x10000>;
+> >  		};
+> >  
+> > -		spmi_bus: spmi@1c40000 {
+> > -			compatible = "qcom,spmi-pmic-arb";
+> > -			reg = <0x01c40000 0x1100>,
+> > -			      <0x01e00000 0x2000000>,
+> > -			      <0x03e00000 0x100000>,
+> > -			      <0x03f00000 0xa0000>,
+> > -			      <0x01c0a000 0x26000>;
+> > -			reg-names = "core", "chnls", "obsrvr", "intr", "cnfg";
+> > -			interrupt-names = "periph_irq";
+> > -			interrupts = <GIC_SPI 183 IRQ_TYPE_LEVEL_HIGH>;
+> > -			qcom,ee = <0>;
+> > -			qcom,channel = <0>;
+> > -			#address-cells = <2>;
+> > -			#size-cells = <0>;
+> > -			interrupt-controller;
+> > -			#interrupt-cells = <4>;
+> > -		};
+> > -
+> >  		apps_smmu: iommu@c600000 {
+> >  			compatible = "qcom,sm6125-smmu-500", "qcom,smmu-500", "arm,mmu-500";
+> > -			reg = <0xc600000 0x80000>;
+> > +			reg = <0x0c600000 0x80000>;
+> >  			interrupts = <GIC_SPI 81 IRQ_TYPE_LEVEL_HIGH>,
+> >  				     <GIC_SPI 88 IRQ_TYPE_LEVEL_HIGH>,
+> >  				     <GIC_SPI 89 IRQ_TYPE_LEVEL_HIGH>,
+> > 
