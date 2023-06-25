@@ -2,110 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7373973CF8E
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 10:56:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEA0473CF99
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 10:58:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231706AbjFYI4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 04:56:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37036 "EHLO
+        id S231479AbjFYI6d convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 25 Jun 2023 04:58:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbjFYI4O (ORCPT
+        with ESMTP id S230362AbjFYI6b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 04:56:14 -0400
-Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50CC3E40;
-        Sun, 25 Jun 2023 01:56:09 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R451e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0VlrouNg_1687683362;
-Received: from 30.120.140.216(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VlrouNg_1687683362)
-          by smtp.aliyun-inc.com;
-          Sun, 25 Jun 2023 16:56:04 +0800
-Message-ID: <3ec4c1c7-11cf-6518-933d-cb9167ab3bd0@linux.alibaba.com>
-Date:   Sun, 25 Jun 2023 16:55:58 +0800
+        Sun, 25 Jun 2023 04:58:31 -0400
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D863C103;
+        Sun, 25 Jun 2023 01:58:30 -0700 (PDT)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-576918f4cf7so12713537b3.3;
+        Sun, 25 Jun 2023 01:58:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687683510; x=1690275510;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cHMiEoYUk1oN3PyFm+FVXDksw84RMCEjXqcP8Z1moHU=;
+        b=fMzo8HWPLTVrQob9IGlt/HMdoun1fYg7gQbvt6MQC0hs8ftwQOlGIWpztXzqx9mx51
+         fcZ9ddE48XuiHQMVGdt0N2b+fxY8tWyoB969GWxN7sxDPJi/hBLiw70kGaQftPzPfRHS
+         B7bn2BYFe5VVfrj22yfk/BBb5i+4xL+c6X7M9hw79KYcFKFOGuZdzUqWhaJanHYmafZv
+         gRATWVokLBVVuxptJ5loY54KCXJ6oYEai3h8EimupO0ncQCZwHBskjBHPsZmjHdOi2zb
+         fsOYXK9gQ9qdNF3SNmjrLXA7YA6zA+YdEsDAco9wPojMu8McxtnADcuj6SyJcB9lCbj+
+         HeRg==
+X-Gm-Message-State: AC+VfDwyRaBHxD+9qlFqoxyd5P0ffI1nBACC1eqFgHa56Yc1iWQ4bwd0
+        HwIgi8ZcvluUTCPqO+zfSZqyyTyq0Vwukw==
+X-Google-Smtp-Source: ACHHUZ7AKkgI/ys6WIMY9XSs97ATC0YY/LdTAQmI90rIhGr/ET83p33R8hjDny7iGL3BsgQxXSvadA==
+X-Received: by 2002:a0d:e293:0:b0:561:d25b:672a with SMTP id l141-20020a0de293000000b00561d25b672amr26546937ywe.21.1687683509887;
+        Sun, 25 Jun 2023 01:58:29 -0700 (PDT)
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
+        by smtp.gmail.com with ESMTPSA id e6-20020a0dc206000000b0056ffdec590csm735972ywd.41.2023.06.25.01.58.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 25 Jun 2023 01:58:29 -0700 (PDT)
+Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-bb3a77abd7bso2221068276.0;
+        Sun, 25 Jun 2023 01:58:29 -0700 (PDT)
+X-Received: by 2002:a25:1407:0:b0:b9e:e5b:14ab with SMTP id
+ 7-20020a251407000000b00b9e0e5b14abmr19307303ybu.55.1687683508805; Sun, 25 Jun
+ 2023 01:58:28 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.2
-Subject: Re: [PATCH v3 2/7] perf metric: Event "Compat" value supports
- matching multiple identifiers
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        John Garry <john.g.garry@oracle.com>,
-        Ian Rogers <irogers@google.com>, Will Deacon <will@kernel.org>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ilkka Koskinen <ilkka@os.amperecomputing.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org,
-        Zhuo Song <zhuo.song@linux.alibaba.com>
-References: <1685438374-33287-1-git-send-email-renyu.zj@linux.alibaba.com>
- <1685438374-33287-3-git-send-email-renyu.zj@linux.alibaba.com>
- <c1d8ee9b-4839-1011-4dad-c4777d8f8224@oracle.com>
- <452e724b-2a2c-52fd-274b-60db7a7f730e@linux.alibaba.com>
- <c4b2fca8-602d-9c76-90a7-3eafd92da8bc@oracle.com>
- <76fcb062-61a8-5f90-b39d-b5fb6da35652@linux.alibaba.com>
- <ZH452mAFn1uNo4NF@kernel.org>
- <c8494676-25f8-72de-3279-70d49b74a91c@linux.alibaba.com>
- <CAM9d7ci2fG0Z=y0E8YBPBY802u30n+ANn3tS16c1_08TjoObng@mail.gmail.com>
-From:   Jing Zhang <renyu.zj@linux.alibaba.com>
-In-Reply-To: <CAM9d7ci2fG0Z=y0E8YBPBY802u30n+ANn3tS16c1_08TjoObng@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1687423204.git.geert+renesas@glider.be> <95c2af42a89c65ca603126e56c0423407dfc873f.1687423204.git.geert+renesas@glider.be>
+ <20230623165038.GB2112@pendragon.ideasonboard.com> <CAMuHMdWsDHMn4P1g_EYKzXyisUOnhJ0Q1Nd5Wq9H_CwPvaSaWw@mail.gmail.com>
+ <20230623185052.GR2112@pendragon.ideasonboard.com>
+In-Reply-To: <20230623185052.GR2112@pendragon.ideasonboard.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Sun, 25 Jun 2023 10:58:17 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWdeRODcAa26EKuvR3yca0hVqSUR6WBHEtr9+RBKyk_Ow@mail.gmail.com>
+Message-ID: <CAMuHMdWdeRODcAa26EKuvR3yca0hVqSUR6WBHEtr9+RBKyk_Ow@mail.gmail.com>
+Subject: Re: [PATCH 24/39] drm: renesas: shmobile: Unify plane allocation
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Laurent,
 
+On Fri, Jun 23, 2023 at 8:50 PM Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
+> On Fri, Jun 23, 2023 at 07:55:22PM +0200, Geert Uytterhoeven wrote:
+> > On Fri, Jun 23, 2023 at 6:50 PM Laurent Pinchart wrote:
+> > > On Thu, Jun 22, 2023 at 11:21:36AM +0200, Geert Uytterhoeven wrote:
+> > > > Unify primary and overlay plane allocation:
+> > > >   - Enhance shmob_drm_plane_create() so it can be used to create the
+> > > >     primary plane, too,
+> > > >   - Move overlay plane creation next to primary plane creation.
+> > > >
+> > > > As overlay plane index zero now means the primary plane, this requires
+> > > > shifting all overlay plane indices by one.
+> > >
+> > > Do you use index zero to identify the primary plane just for
+> > > shmob_drm_plane_create(), or somewhere else too ? If it's just to create
+> > > the plane, you could instead pass the plane type to the function.
+> >
+> > Index zero is just used for the creation.
+> > I guess this sort of goes together with my question below...
+> >
+> > > > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> > > > ---
+> > > > Perhaps it would be better to not use dynamic allocation, but store
+> > > > "struct drm_plane primary" and "struct shmob_drm_plane planes[5]" in
+> > > > struct drm_shmob_device instead, like is done for the crtc and encoder?
+> >
+> > ... as embedding separate primary and planes[] would also get rid of
+> > the need to adjust the plane indices when converting from logical to physical
+> > overlay plane indices.
+>
+> Do they need to be embedded for that, or could you simple keep the index
+> as it is ?
 
-在 2023/6/24 上午7:52, Namhyung Kim 写道:
-> Hello,
-> 
-> On Wed, Jun 14, 2023 at 8:42 PM Jing Zhang <renyu.zj@linux.alibaba.com> wrote:
->>
->>
->>
->> 在 2023/6/6 上午3:39, Arnaldo Carvalho de Melo 写道:
->>> Em Mon, Jun 05, 2023 at 10:46:36AM +0800, Jing Zhang escreveu:
->>>> 在 2023/6/3 上午12:20, John Garry 写道:
->>>>> On 01/06/2023 09:58, Jing Zhang wrote:
->>>>>> It can match identifiers "arm_cmn600_{0,1,2..X}" or "arm_cmn650_{0,1,2..X}" or "arm_cmn700_{0,1,2..X}" or "arm_ci700_{ 0,1,2..X}".
->>>>>> In other words, it can match all identifiers prefixed with “arm_cmn600” or “arm_cmn650” or “arm_cmn700” or “arm_ci700”.
->>>>>>
->>>>>> If a new model arm_cmn driver with identifier "arm_cmn750_0", it will not be matched, but if a new revision arm_cmn driver with identifier
->>>>>> "arm_cmn700_4", it can be matched.
->>>>>
->>>>> OK, I see what you mean. My confusion came about though your commit message on this same patch, which did not mention cmn650. I assumed that the example event which you were describing was supported for arm_cmn650 and you intentionally omitted it.
->>>>>
->>>>
->>>> Yes, I didn't write cmn650 in the commit message, just because I omitted it. I will add it in a later version.
->>>
->>> Ok, will wait for v4 then.
->>>
->>> - Arnaldo
->>
->> Hi Arnaldo,
->>
->> Thank you for following up this patchset, maybe we can merge patch4 to patch7 into your branch first?
->> They have all been reviewed/acked and there is no dispute. And patch4-7 does not depend on patch1-3,
->> because patch4-7 is about the metric of ali_drw_pmu, and patch1-3 is about the metric of arm_cmn.
->> It may take some time for patch1-3 to reach a consensus.
-> 
-> IIUC patch 4 is for the kernel and patch 5-7 semantically depend on it.
-> So the patch 4 should be picked up by the kernel maintainers first.
-> 
+If the plane type would be passed explicitly, they would not need to be
+embedded for that.
 
-Yes, that's right, thanks.
+Then the question becomes: does it make sense to unify primary and
+overlay plane handling?
 
-> Thanks,
-> Namhyung
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
