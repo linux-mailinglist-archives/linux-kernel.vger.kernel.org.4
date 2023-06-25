@@ -2,129 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A54073CE17
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 04:41:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C15CB73CE0C
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 04:34:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231389AbjFYClZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Jun 2023 22:41:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43896 "EHLO
+        id S231271AbjFYCeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Jun 2023 22:34:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbjFYClY (ORCPT
+        with ESMTP id S229560AbjFYCef (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Jun 2023 22:41:24 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 963D8EA
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 19:41:23 -0700 (PDT)
+        Sat, 24 Jun 2023 22:34:35 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A07A13E
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Jun 2023 19:34:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687660883; x=1719196883;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=TAows7OAcmxGvx49AoU/i5mLwi1QDRE6TshwUYSLvtg=;
-  b=mFX4GO8s/RSOzEAwziFh3+ggnOMeERe5wlaB9jnr1DUnx8oCa73AVpmj
-   tYm5JK7sXULfsoBccDXmZm2Hn1GVxFnPonXFFglva+nQJ67IHNEHJu6rU
-   Azjw0IenWuPERmR3+J30oU1AMLvdqKaV9t5Q5DPrLXJv1AlnCDu14WAPv
-   9i1lpD6mFaJJ2jUOxVlRdIhNPdtLxn0uTyuXpjpdRex2m8/P3Pg5nkwP+
-   k/71hFOQmW6pa4rOUI9GOcG/mDUfp8B9KcCy8R1R7Vwl20AstTRknTLNl
-   eOPRJzKgR10TzoXKvJ8ADhkUNVoI1X1NflbHi9SvUTpnc+/adkpTNwjzV
+  t=1687660474; x=1719196474;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=FBCY4OxzLlEFK9Pjzk6FhGgxr9EDjNsRJK4vH72YXKQ=;
+  b=lbW0/3C+tW1jidEhWjJ+YsDjYrQ3mCzbMrknckM3NRX97bkavbmzVPOX
+   zDZHOiuvHqclErYwhoFXSx18TLNiRmeo9kqzECzKYl/51hQaSlbZdGV/t
+   JOCEnDm/e9+iR+mv37PWFW9aSyiuMd7jNhvqnipuaR8lKXLUbiAJamCMP
+   HIoH0y+rnvywi+0XGWElUILMSVwUFR1eVRYgdSH9FfI2ipG2ZMNbnVii0
+   L7Ia7xP3ycWLbMQwzdbGjZBcDO5cDcuiMUJGLNj/NXKQHBc4KQBSVmiVR
+   x5TOP6OyyiqZQ21dRFYPkd8fGB0/O0KgZD6uVU8dBSIPL84UhqYT5192c
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10751"; a="391148606"
+X-IronPort-AV: E=McAfee;i="6600,9927,10751"; a="364459421"
 X-IronPort-AV: E=Sophos;i="6.01,156,1684825200"; 
-   d="scan'208";a="391148606"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2023 19:41:23 -0700
+   d="scan'208";a="364459421"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2023 19:34:34 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10751"; a="860285839"
+X-IronPort-AV: E=McAfee;i="6600,9927,10751"; a="745386194"
 X-IronPort-AV: E=Sophos;i="6.01,156,1684825200"; 
-   d="scan'208";a="860285839"
-Received: from cascade.sh.intel.com ([10.239.48.162])
-  by fmsmga001.fm.intel.com with ESMTP; 24 Jun 2023 19:41:20 -0700
-From:   Jingqi Liu <Jingqi.liu@intel.com>
-To:     iommu@lists.linux.dev, Lu Baolu <baolu.lu@linux.intel.com>,
-        Tian@vger.kernel.org, Kevin <kevin.tian@intel.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>
-Cc:     linux-kernel@vger.kernel.org, Jingqi Liu <Jingqi.liu@intel.com>
-Subject: [PATCH] iommu/vt-d: debugfs: Increment the reference count of page table page
-Date:   Sun, 25 Jun 2023 10:28:08 +0800
-Message-Id: <20230625022808.42942-1-Jingqi.liu@intel.com>
-X-Mailer: git-send-email 2.21.3
+   d="scan'208";a="745386194"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2023 19:34:32 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     liuq <liuq131@chinatelecom.cn>
+Cc:     <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4] mm/page_alloc: fix min_free_kbytes calculation
+ regarding ZONE_MOVABLE
+References: <37d8c6c3-0dd1-94b1-19cd-4743968b0fce@chinatelecom.cn>
+Date:   Sun, 25 Jun 2023 10:33:02 +0800
+In-Reply-To: <37d8c6c3-0dd1-94b1-19cd-4743968b0fce@chinatelecom.cn> (liuq's
+        message of "Wed, 21 Jun 2023 21:48:01 +0800")
+Message-ID: <87leg86zkx.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=ascii
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There may be a race with iommu_unmap() interface when traversing a page
-table.
+liuq <liuq131@chinatelecom.cn> writes:
 
-When debugfs traverses an IOMMU page table, iommu_unmap() may clear
-entries and free the page table pages pointed to by the entries.
-So debugfs may read invalid or freed pages.
+> The current calculation of min_free_kbytes only uses ZONE_DMA and
+> ZONE_NORMAL pages,but the ZONE_MOVABLE zone->_watermark[WMARK_MIN]
+> will also divide part of min_free_kbytes.This will cause the min
+> watermark of ZONE_NORMAL to be too small in the presence of ZONE_MOVEABLE.
+>
+> __GFP_HIGH and PF_MEMALLOC allocations usually don't need movable
+> zone pages, so just like ZONE_HIGHMEM, cap pages_min to a small
+> value in __setup_per_zone_wmarks.
+           ~~~~~~~~~~~~~~~~~~~~~~~
 
-To avoid this, increment the refcount of a page table page before
-traversing the page, and decrement its refcount after traversing it.
+Better to add () in function name to make it easier to understand.  That
+is, "__setup_per_zone_wmarks()".
 
-Signed-off-by: Jingqi Liu <Jingqi.liu@intel.com>
----
- drivers/iommu/intel/debugfs.c | 36 +++++++++++++++++++++++++++++++++--
- 1 file changed, 34 insertions(+), 2 deletions(-)
+Otherwise looks good to me.
 
-diff --git a/drivers/iommu/intel/debugfs.c b/drivers/iommu/intel/debugfs.c
-index 1f925285104e..d228e1580aec 100644
---- a/drivers/iommu/intel/debugfs.c
-+++ b/drivers/iommu/intel/debugfs.c
-@@ -333,9 +333,41 @@ static void pgtable_walk_level(struct seq_file *m, struct dma_pte *pde,
- 		path[level] = pde->val;
- 		if (dma_pte_superpage(pde) || level == 1)
- 			dump_page_info(m, start, path);
--		else
--			pgtable_walk_level(m, phys_to_virt(dma_pte_addr(pde)),
-+		else {
-+			struct page *pg;
-+			u64 pte_addr;
-+
-+			/*
-+			 * The entry references a Page-Directory Table
-+			 * or a Page Table.
-+			 */
-+retry:
-+			pte_addr = dma_pte_addr(pde);
-+			pg = pfn_to_page(pte_addr >> PAGE_SHIFT);
-+			if (!get_page_unless_zero(pg))
-+				/*
-+				 * If this page has a refcount of zero,
-+				 * it has been freed, or will be freed.
-+				 */
-+				continue;
-+
-+			/* Check if the value of the entry is changed. */
-+			if (pde->val != path[level]) {
-+				put_page(pg);
-+
-+				if (!dma_pte_present(pde))
-+					/* The entry is invalid. Skip it. */
-+					continue;
-+
-+				/* The entry has been updated. */
-+				path[level] = pde->val;
-+				goto retry;
-+			}
-+
-+			pgtable_walk_level(m, phys_to_virt(pte_addr),
- 					   level - 1, start, path);
-+			put_page(pg);
-+		}
- 		path[level] = 0;
- 	}
- }
--- 
-2.21.3
+Reviewed-by: "Huang, Ying" <ying.huang@intel.com>
 
+>
+> On my testing machine with 16GB of memory (transparent hugepage is
+> turned off by default, and movablecore=12G is configured)
+> The following is a comparative test data of watermark_min
+>
+> 		no patch	add patch
+> ZONE_DMA	1		8
+> ZONE_DMA32	151		709
+> ZONE_NORMAL	233		1113
+> ZONE_MOVABLE	1434		128
+> min_free_kbytes	7288		7326
+>
+> Signed-off-by: liuq<liuq131@chinatelecom.cn>
+> ---
+>   mm/page_alloc.c | 12 ++++++------
+>   1 file changed, 6 insertions(+), 6 deletions(-)
+>
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 47421bedc12b..590ed8725e09 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -6362,9 +6362,9 @@ static void __setup_per_zone_wmarks(void)
+>   	struct zone *zone;
+>   	unsigned long flags;
+>   
+> -	/* Calculate total number of !ZONE_HIGHMEM pages */
+> +	/* Calculate total number of !ZONE_HIGHMEM and !ZONE_MOVABLE pages */
+>   	for_each_zone(zone) {
+> -		if (!is_highmem(zone))
+> +		if (!is_highmem(zone) && zone_idx(zone) != ZONE_MOVABLE)
+>   			lowmem_pages += zone_managed_pages(zone);
+>   	}
+>   
+> @@ -6374,15 +6374,15 @@ static void __setup_per_zone_wmarks(void)
+>   		spin_lock_irqsave(&zone->lock, flags);
+>   		tmp = (u64)pages_min * zone_managed_pages(zone);
+>   		do_div(tmp, lowmem_pages);
+> -		if (is_highmem(zone)) {
+> +		if (is_highmem(zone) || zone_idx(zone) == ZONE_MOVABLE) {
+>   			/*
+>   			 * __GFP_HIGH and PF_MEMALLOC allocations usually don't
+> -			 * need highmem pages, so cap pages_min to a small
+> -			 * value here.
+> +			 * need highmem and movable zones pages, so cap pages_min
+> +			 * to a small value here.
+>   			 *
+>   			 * The WMARK_HIGH-WMARK_LOW and (WMARK_LOW-WMARK_MIN)
+>   			 * deltas control async page reclaim, and so should
+> -			 * not be capped for highmem.
+> +			 * not be capped for highmem and movable zones.
+>   			 */
+>   			unsigned long min_pages;
+>   
+> -- 2.27.0
