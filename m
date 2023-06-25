@@ -2,111 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E76573D41D
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 22:32:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52DC973D41F
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Jun 2023 22:32:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229499AbjFYUce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 16:32:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34550 "EHLO
+        id S229550AbjFYUcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 16:32:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbjFYUcc (ORCPT
+        with ESMTP id S229492AbjFYUce (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 16:32:32 -0400
-Received: from smtp.smtpout.orange.fr (smtp-15.smtpout.orange.fr [80.12.242.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D9DB1B1
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 13:32:31 -0700 (PDT)
-Received: from [192.168.1.18] ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id DWPLqcf9VaSuRDWPLqwghG; Sun, 25 Jun 2023 22:32:29 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1687725149;
-        bh=nXME6OkhzX+Q4/pak1Ee9R+HRMC5lmyRGp4wFkA/euE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=K2ec7ji3GcYvg/KUnFVjxHN/jm84mzOYzLt9J//aQuo6uoAOhtGX5hht1eT+0EUKN
-         dzM4RD+e0+4JPCFPHvF/c1/JNdKgOx+VpkF5EmeSqEmryeMAkTsxsu4IOtA3dpljdE
-         hqrRDwA4FQhTDMENHMHRcPCM4UC3gperLZKXUyoYThwInX2E1lhWJSux3l5yYCB2CL
-         ArgD103J54cXgWADbDhOp2GdOfALHfG+Unhj/bh+d1ozdVlUV4Jvh0zUwJuKY+VVEW
-         f1lRtyvEZ2UXn3pzXjSxkOEyYk0Kg1Y2a58RAuDyxCrmY1S7FR2Q2MtzbhiLy++uGF
-         npg+Ir+solJ5w==
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 25 Jun 2023 22:32:29 +0200
-X-ME-IP: 86.243.2.178
-Message-ID: <36d9998f-e8b1-58cb-9b0a-97273b5eb91b@wanadoo.fr>
-Date:   Sun, 25 Jun 2023 22:32:27 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 02/26] octeon_ep: use array_size
-Content-Language: fr, en-GB
-To:     Julia Lawall <julia.lawall@inria.fr>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Veerasenareddy Burru <vburru@marvell.com>,
-        keescook@chromium.org, kernel-janitors@vger.kernel.org,
-        Abhijit Ayarekar <aayarekar@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, corbet@lwn.net
-References: <20230623211457.102544-1-Julia.Lawall@inria.fr>
- <20230623211457.102544-3-Julia.Lawall@inria.fr>
- <20230624152826.10e3789b@kernel.org>
- <beb409e3-0c13-b817-dfa3-15792a341130@wanadoo.fr>
- <alpine.DEB.2.22.394.2306252221310.3022@hadrien>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <alpine.DEB.2.22.394.2306252221310.3022@hadrien>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Sun, 25 Jun 2023 16:32:34 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC6809B
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 13:32:33 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1b8054180acso2333795ad.1
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 13:32:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1687725153; x=1690317153;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xBlgshKH4iHZ6ZOz7biqH9hQXuaMYrjJzSIAurqMODo=;
+        b=VgoYcJiDCA9DGjSnUwAzXIFvDLuky8NaN2eHCiI+14pkYfHQhIkbKIFbryfcUXDa+L
+         Z+bfDkfwoFxG4yexzX9URk15JpC/YPxlTGeekdSB1gPW+Fbyi3Dl2bj3Y1I3ZzSs2kat
+         /J0dW3iKdPSPIB4Spi5Yc+1clsviISldE/Ul/inCWn2ukasVlEg7rJHFLhO7SAOhDfNu
+         efMPQX+HXaE11g5YtDTEI/jar6fGqau+HXCw9Ixt9Bpf8vIQpvGdBP7oFAmf6cJqXvhc
+         Ct2ZlEqBV+kpRtSGM0wXYFQH6ljp3Gl3ubnO8TGwvzr0DVC6M2e+jjWK6GDbWufbb48I
+         DDSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687725153; x=1690317153;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xBlgshKH4iHZ6ZOz7biqH9hQXuaMYrjJzSIAurqMODo=;
+        b=PiY1nyK+uYh2S7ptyQC4nsSmrzKLt1G3fsWssvUsJzWNaNg7TwpPhKr6pFqOtDP/if
+         0NrMkjZ5iKD2IKMxC/9zkjsnuAfhKq5lePR4YsrbuiKNYkqYNIdst+FfIzzv2smV6Teb
+         nO+1x+vvO0FdH1ZSW6lJr69YGhdsn3e8keX1GtcYOP5PSpGAihW9R+rQTVk4KKaqUUPx
+         btqdKN906DD0GsCOGbe7LzIE62Vnew4LBLivOyVN3+cnB939O54x7iIaGI6E4CoYT7NZ
+         bu5xAp+sgNDNFGmcWorWccb1MfMoprEScY2tYFCt0VzJM0BhDpnmBt1LBoWUEMSY53l/
+         XFMg==
+X-Gm-Message-State: AC+VfDwVMP7rK52XszK2UIJ3LabWwKKl84cPMTTDN2jGztei2XkIp2Sm
+        DQlybNd4/z5feOdc0PRvetjfrg==
+X-Google-Smtp-Source: ACHHUZ6bcYS4/UaX8iSXpyadxQeExPfzsfqR9xq6pFt1YaUiqNjuA8+0Ohu9fS4bWAErBSH48Qjuiw==
+X-Received: by 2002:a17:903:2306:b0:1b0:7123:6ee8 with SMTP id d6-20020a170903230600b001b071236ee8mr6606809plh.61.1687725153095;
+        Sun, 25 Jun 2023 13:32:33 -0700 (PDT)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id jm23-20020a17090304d700b001b51b3e84cesm2808774plb.166.2023.06.25.13.32.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 25 Jun 2023 13:32:32 -0700 (PDT)
+Date:   Sun, 25 Jun 2023 13:32:32 -0700 (PDT)
+X-Google-Original-Date: Sun, 25 Jun 2023 13:31:47 PDT (-0700)
+Subject:     Re: [PATCH V10 4/4] samples: ftrace: Add riscv support for SAMPLE_FTRACE_DIRECT[_MULTI]
+In-Reply-To: <CAAYs2=hd1geHCTGrO=JohTYtgu+yj+D7EPono-ADOGfjYnLfrA@mail.gmail.com>
+CC:     rostedt@goodmis.org, Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, mhiramat@kernel.org,
+        Mark Rutland <mark.rutland@arm.com>, guoren@kernel.org,
+        jszhang@kernel.org, e.shatokhin@yadro.com,
+        Bjorn Topel <bjorn@rivosinc.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     suagrfillet@gmail.com
+Message-ID: <mhng-29a592bf-1b25-4c6c-8f37-0d05d39bc093@palmer-ri-x1c9a>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 25/06/2023 à 22:25, Julia Lawall a écrit :
-> 
-> 
-> On Sun, 25 Jun 2023, Christophe JAILLET wrote:
-> 
->> Le 25/06/2023 à 00:28, Jakub Kicinski a écrit :
->>> On Fri, 23 Jun 2023 23:14:33 +0200 Julia Lawall wrote:
->>>> -	oq->buff_info = vzalloc(oq->max_count * OCTEP_OQ_RECVBUF_SIZE);
->>>> +	oq->buff_info = vzalloc(array_size(oq->max_count,
->>>> OCTEP_OQ_RECVBUF_SIZE));
->>>
->>> vcalloc seems to exist, is there a reason array_size() is preferred?
+On Tue, 16 May 2023 02:37:53 PDT (-0700), suagrfillet@gmail.com wrote:
+> Steven Rostedt <rostedt@goodmis.org> 于2023年5月15日周一 18:37写道：
 >>
->> Hi,
+>> On Thu, 11 May 2023 17:32:34 +0800
+>> Song Shuai <suagrfillet@gmail.com> wrote:
 >>
->> just for your information, I've just sent [1].
+>> > select HAVE_SAMPLE_FTRACE_DIRECT and HAVE_SAMPLE_FTRACE_DIRECT_MULTI
+>> > for ARCH_RV64I in arch/riscv/Kconfig. And add riscv asm code for
+>> > the ftrace-direct*.c files in samples/ftrace/.
+>> >
+>> > Link: https://lore.kernel.org/linux-riscv/c68bac83-5c88-80b1-bac9-e1fd4ea8f07e@yadro.com/T/#ma13012560331c66b051b580b3ab4a04ba44455ec
+>> > Tested-by: Evgenii Shatokhin <e.shatokhin@yadro.com>
+>> > Signed-off-by: Song Shuai <suagrfillet@gmail.com>
+>> > Tested-by: Guo Ren <guoren@kernel.org>
+>> > Signed-off-by: Guo Ren <guoren@kernel.org>
+>> > Acked-by: Björn Töpel <bjorn@rivosinc.com>
+>> > ---
+>> >  arch/riscv/Kconfig                          |  2 ++
+>> >  samples/ftrace/ftrace-direct-modify.c       | 34 ++++++++++++++++++
+>> >  samples/ftrace/ftrace-direct-multi-modify.c | 40 +++++++++++++++++++++
+>> >  samples/ftrace/ftrace-direct-multi.c        | 24 +++++++++++++
+>> >  samples/ftrace/ftrace-direct-too.c          | 27 ++++++++++++++
+>> >  samples/ftrace/ftrace-direct.c              | 23 ++++++++++++
+>> >  6 files changed, 150 insertions(+)
 >>
->> CJ
+>> I acked v8 (which you will need my ack to get these in). Unless this patch
+>> changed since v8, you should include my ack in further versions.
 >>
->> [1]:
->> https://lore.kernel.org/all/3484e46180dd2cf05d993ff1a78b481bc2ad1f71.1687723931.git.christophe.jaillet@wanadoo.fr/
-> 
-> For some reason, I have only received Christophe's mail, not Jakub's...
-> 
-> In any case, thanks for pointing out the existence of these functions.  I
-> just redid what Kees did in 2018, when I guess these functions didn't
-> exist.  I will look more carefully to see what functions are now available
-> and resend the whole thing.
+> There were no changes in this patch, except for a few tab pretties since v8.
+> your Acked-by will still be included.
+>> Or you may be waiting longer for its acceptance.
+>>
+>> If the patch did change, please acknowledge that in the next version (or
+>> this one if it did change), asking me to ack it again.
 
-Hi,
+The samples fail to build on rv32, they're rv64-specific.  I think 
+something like this should do it
 
-should you want to go 1 step further and simplify some code:
+diff --git a/samples/ftrace/ftrace-direct-too.c b/samples/ftrace/ftrace-direct-too.c
+index 5c319db48af2..3707c447a42d 100644
+--- a/samples/ftrace/ftrace-direct-too.c
++++ b/samples/ftrace/ftrace-direct-too.c
+@@ -24,19 +24,19 @@ asm (
+ "       .type           my_tramp, @function\n"
+ "       .globl          my_tramp\n"
+ "   my_tramp:\n"
+-"       addi	sp,sp,-40\n"
+-"       sd	a0,0(sp)\n"
+-"       sd	a1,8(sp)\n"
+-"       sd	a2,16(sp)\n"
+-"       sd	t0,24(sp)\n"
+-"       sd	ra,32(sp)\n"
++"       addi	sp,sp,-8*SZREG\n"
++"       REG_S 	a0,0*SZREG(sp)\n"
++"       REG_S 	a1,1*SZREG(sp)\n"
++"       REG_S 	a2,2*SZREG(sp)\n"
++"       REG_S 	t0,3*SZREG(sp)\n"
++"       REG_S 	ra,4*SZREG(sp)\n"
+ "       call	my_direct_func\n"
+-"       ld	a0,0(sp)\n"
+-"       ld	a1,8(sp)\n"
+-"       ld	a2,16(sp)\n"
+-"       ld	t0,24(sp)\n"
+-"       ld	ra,32(sp)\n"
+-"       addi	sp,sp,40\n"
++"       REG_L 	a0,0*SZREG(sp)\n"
++"       REG_L 	a1,1*SZREG(sp)\n"
++"       REG_L 	a2,2*SZREG(sp)\n"
++"       REG_L 	t0,3*SZREG(sp)\n"
++"       REG_L 	ra,4*SZREG(sp)\n"
++"       addi	sp,sp,8*SZREG\n"
+ "       jr	t0\n"
+ "       .size           my_tramp, .-my_tramp\n"
+ "       .popsection\n"
 
-git grep v[mz]alloc.*array_size\( | wc -l
-174
+probably for all of them.  Do you mind sending a v11 with that fixed?  
 
-CJ
-
-> 
-> Thanks!
-> 
-> julia
-
+>>
+>> -- Steve
+>
+>
+>
+> -- 
+> Thanks,
+> Song
