@@ -2,62 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5503B73E0AD
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 15:32:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C61173E0AE
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 15:33:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229586AbjFZNcx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 09:32:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40144 "EHLO
+        id S229663AbjFZNdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 09:33:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjFZNcv (ORCPT
+        with ESMTP id S229479AbjFZNdL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 09:32:51 -0400
-Received: from mail1.perex.cz (mail1.perex.cz [77.48.224.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2EE01A2
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 06:32:49 -0700 (PDT)
-Received: from mail1.perex.cz (localhost [127.0.0.1])
-        by smtp1.perex.cz (Perex's E-mail Delivery System) with ESMTP id EB2841E18;
-        Mon, 26 Jun 2023 15:32:46 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.perex.cz EB2841E18
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=perex.cz; s=default;
-        t=1687786367; bh=P4b7pQGf/nmZaFg3tRkshnVDvy5ehhcr3/lNB4wKevk=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=INm+DvE15zSIDUunAUMNiMSC6/hpj0qh3QF2GvxufGkWEaPvEN9DjdE2RAZvM5/L2
-         w5l3jtSrcHcxm00BbLxBo7sj/8HP9D5alhZ1K4pooC04EUlWfrNuzDg1LN0atr0TcB
-         rdKJhvemxKr2z4c45NgTGaFfkY2kAIKm/vsy2wH0=
-Received: from [192.168.100.98] (unknown [192.168.100.98])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Mon, 26 Jun 2023 09:33:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67870E7B
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 06:33:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        (Authenticated sender: perex)
-        by mail1.perex.cz (Perex's E-mail Delivery System) with ESMTPSA;
-        Mon, 26 Jun 2023 15:32:40 +0200 (CEST)
-Message-ID: <fb9db138-82a3-678c-bb94-035f923b3e16@perex.cz>
-Date:   Mon, 26 Jun 2023 15:32:40 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Content-Language: en-US
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     Tuo Li <islituo@gmail.com>, tiwai@suse.com,
-        alsa-devel@alsa-project.org,
-        Linux Kernel <linux-kernel@vger.kernel.org>,
-        baijiaju1990@outlook.com
-References: <CADm8Tek6t0WedK+3Y6rbE5YEt19tML8BUL45N2ji4ZAz1KcN_A@mail.gmail.com>
- <877crqwvi1.wl-tiwai@suse.de>
- <CADm8Tenfy8joto5WLCqQWjfT8WimsbJgOss0hJe-ciyDRMrSXw@mail.gmail.com>
- <871qhywucj.wl-tiwai@suse.de> <4d0931bf-b356-6969-5aaf-b663d7f2b21a@perex.cz>
- <87wmzqv64o.wl-tiwai@suse.de> <45445f57-0a73-59e6-6f3d-3983ce93a324@perex.cz>
- <87ttuuv5m6.wl-tiwai@suse.de> <87jzvquzyr.wl-tiwai@suse.de>
-From:   Jaroslav Kysela <perex@perex.cz>
-Subject: Re: [BUG] ALSA: core: pcm_memory: a possible data race in
- do_alloc_pages()
-In-Reply-To: <87jzvquzyr.wl-tiwai@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E84E560EAE
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 13:33:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E761FC433C0;
+        Mon, 26 Jun 2023 13:33:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687786389;
+        bh=XzT/EwjQska4DR7hPVRY3Jw0O5roXyCdowtvSTtg+V4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=YE1r55M42LS4HXEhEA2pzeAkqUuEbS1GqaRw9aFzzx20RhGHoGCFEH020Gtt1l3Gv
+         wI/GqmDQNVSmG1jE5wI95vA9cggSC/5jZDT0rF2UlwID+zv4Xbh+nVQS71lwWNLX5k
+         W4hKgj+bW3BnVFISP+CdhxIUb5kVTwS7fWBs1i7RMjKx7DzcIdntjDe0R9S85Q71QH
+         tn8oVX8UKjz1qE6126cS5ZH9qhyxLXvyMkFr83LL21y/ZiTripT/co8FGRsB1clcfq
+         S8zkTvgRETgzUuxzY8S+IJIsLGcTnovSZytbw5/vdmgino/37LM0WuuD2m7yjoioFc
+         SI3QmDc32GzeA==
+From:   Mark Brown <broonie@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: [GIT PULL] regmap updates for v6.5
+Date:   Mon, 26 Jun 2023 14:32:56 +0100
+Message-Id: <20230626133308.E761FC433C0@smtp.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,77 +49,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26. 06. 23 15:15, Takashi Iwai wrote:
-> On Mon, 26 Jun 2023 13:13:21 +0200,
-> Takashi Iwai wrote:
->>
->> On Mon, 26 Jun 2023 13:09:00 +0200,
->> Jaroslav Kysela wrote:
->>>
->>> On 26. 06. 23 13:02, Takashi Iwai wrote:
->>>> On Mon, 26 Jun 2023 09:56:47 +0200,
->>>> Jaroslav Kysela wrote:
->>>>>
->>>>> On 26. 06. 23 9:33, Takashi Iwai wrote:
->>>>>> On Mon, 26 Jun 2023 09:31:18 +0200,
->>>>>> Tuo Li wrote:
->>>>>>>
->>>>>>>
->>>>>>> Hello,
->>>>>>>
->>>>>>> Thank you for your reply!
->>>>>>
->>>>>> FWIW, the simplest fix would be something like below, just extending
->>>>>> the mutex coverage.  But it'll serialize the all calls, so it might
->>>>>> influence on the performance, while it's the safest way.
->>>>>
->>>>> It may be better to update total_pcm_alloc_bytes before
->>>>> snd_dma_alloc_dir_pages() call and decrease this value when allocation
->>>>> fails to allow parallel allocations. Then the mutex can be held only
->>>>> for the total_pcm_alloc_bytes variable update.
->>>>
->>>> Yes, it'd work.  But a tricky part is that the actual allocation size
->>>> can be bigger, and we need to correct the total_pcm_alloc_bytes after
->>>> the allocation result.  So the end result would be a patch like below,
->>>> which is a bit more complex than the previous simpler approach.  But
->>>> it might be OK.
->>>
->>> The patch looks good, but it may be better to move the "post" variable
->>> updates to an inline function (mutex lock - update - mutex unlock) for
->>> a better readability.
->>
->> Sounds like a good idea.  Let me cook later.
-> 
-> ... and here it is.
-> 
-> If that looks OK, I'll submit a proper fix patch.
-> 
-> 
-> thanks,
-> 
-> Takashi
-> 
-> --- a/sound/core/pcm_memory.c
-> +++ b/sound/core/pcm_memory.c
-> @@ -31,15 +31,41 @@ static unsigned long max_alloc_per_card = 32UL * 1024UL * 1024UL;
->   module_param(max_alloc_per_card, ulong, 0644);
->   MODULE_PARM_DESC(max_alloc_per_card, "Max total allocation bytes per card.");
->   
-> +static void __update_allocated_size(struct snd_card *card, ssize_t bytes)
+The following changes since commit 858fd168a95c5b9669aac8db6c14a9aeab446375:
 
-Missing inline ? May be also used for
+  Linux 6.4-rc6 (2023-06-11 14:35:30 -0700)
 
-> +static void update_allocated_size(struct snd_card *card, ssize_t bytes)
-> +static void decrease_allocated_size(struct snd_card *card, size_t bytes)
+are available in the Git repository at:
 
-The rest is fine in my eyes.
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git tags/regmap-v6.5
 
-Reviewed-by: Jaroslav Kysela <perex@perex.cz>
+for you to fetch changes up to d0c99ffe212679b338d12fe283964e6e43ce1501:
 
-				Thanks,
-					Jaroslav
+  regmap: Allow reads from write only registers with the flat cache (2023-06-19 12:59:41 +0100)
 
--- 
-Jaroslav Kysela <perex@perex.cz>
-Linux Sound Maintainer; ALSA Project; Red Hat, Inc.
+----------------------------------------------------------------
+regmap: Updates for v6.5
 
+Another busy release for regmap with the second half fo the maple tree
+register cache implementation, there's some smaller optimisations that
+could be done but this should now be able to replace the rbtree cache
+for most devices.
+
+We also had a followup from Aidan MacDonald's refactoring of some of the
+regmap-irq interfaces, the conversion is complete so the old interfaces
+are removed.  This means that even with the new features for the maple
+tree cache we'd have a nice negative diffstat were it not for the
+addition of a bunch more KUnit coverage.
+
+There's one GPIO patch in here, it was a dependency for a cleanup of an
+API in the regmap-irq code for which the gpio-104-dio-48e driver was the
+only user.
+
+Highlights:
+
+ - The maple tree cache can now load in default values more efficiently,
+   and is capabale of syncing multiple registers in a single write
+   during cache sync.
+ - More KUnit coverage, including some coverage for raw I/O and a dummy
+   RAM backed cache to support it.
+ - Removal of several old interfaces in regmap-irq now all the users
+   have been modernised.
+
+----------------------------------------------------------------
+Aidan MacDonald (6):
+      regmap-irq: Fix typo in documentation for .get_irq_reg()
+      regmap-irq: Remove virtual registers
+      regmap-irq: Remove type registers
+      regmap-irq: Remove support for not_fixed_stride
+      regmap-irq: Minor adjustments to .handle_mask_sync()
+      regmap-irq: Drop backward compatibility for inverted mask/unmask
+
+Charles Keepax (2):
+      regmap: regmap-irq: Move handle_post_irq to before pm_runtime_put
+      regmap: Add missing cache_only checks
+
+Mark Brown (16):
+      regmap-irq: Cleanups and remove unused
+      regmap: Merge up v6.4-rc3
+      regmap: Load register defaults in blocks rather than register by register
+      regmap: Provide a ram backed regmap with raw support
+      regmap: Provide basic KUnit coverage for the raw register I/O
+      regmap: Merge up v6.4-rc6
+      regmap: maple: Implement block sync for the maple tree cache
+      regmap: Don't check for changes in regcache_set_val()
+      regmap: Provide basic test coverage for raw I/O
+      regmap: Add test that writes to write only registers are prevented
+      regmap: Add a test case for write only registers
+      regmap: Add test to make sure we don't sync to read only registers
+      regmap: Check for register readability before checking cache during read
+      regmap: Add KUnit tests for read/write checking
+      regmap: Drop early readability check
+      regmap: Allow reads from write only registers with the flat cache
+
+Maxime Chevallier (1):
+      regmap: mmio: Allow passing an empty config->reg_stride
+
+Waqar Hameed (1):
+      regmap: Add debugfs file for forcing field writes
+
+William Breathitt Gray (2):
+      gpio: 104-dio-48e: Implement struct dio48e_gpio
+      regmap-irq: Drop map from handle_mask_sync() parameters
+
+ drivers/base/regmap/Makefile         |   2 +-
+ drivers/base/regmap/internal.h       |  15 +-
+ drivers/base/regmap/regcache-maple.c | 140 ++++++++++-
+ drivers/base/regmap/regcache.c       |  12 +-
+ drivers/base/regmap/regmap-debugfs.c |  11 +
+ drivers/base/regmap/regmap-irq.c     | 273 ++++-----------------
+ drivers/base/regmap/regmap-kunit.c   | 451 +++++++++++++++++++++++++++++++++++
+ drivers/base/regmap/regmap-mmio.c    |   2 +-
+ drivers/base/regmap/regmap-raw-ram.c | 133 +++++++++++
+ drivers/base/regmap/regmap.c         |  28 ++-
+ drivers/gpio/gpio-104-dio-48e.c      |  37 ++-
+ include/linux/regmap.h               |  33 +--
+ 12 files changed, 835 insertions(+), 302 deletions(-)
+ create mode 100644 drivers/base/regmap/regmap-raw-ram.c
