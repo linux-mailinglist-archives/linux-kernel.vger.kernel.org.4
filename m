@@ -2,76 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31ABD73E6F4
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 19:53:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B683273E6FB
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 19:54:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229783AbjFZRxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 13:53:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48474 "EHLO
+        id S230336AbjFZRy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 13:54:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbjFZRx2 (ORCPT
+        with ESMTP id S229601AbjFZRyZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 13:53:28 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91818183
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 10:53:26 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id 5614622812f47-392116b8f31so2541324b6e.2
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 10:53:26 -0700 (PDT)
+        Mon, 26 Jun 2023 13:54:25 -0400
+Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 618DC186;
+        Mon, 26 Jun 2023 10:54:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1687802064; x=1719338064;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=3iMSSC5n26Zsr/mtHM0DTXZG8oQ7PNP4Y0/dp2yOKj8=;
+  b=qPQcuyFmFeULHU/RpMoXT0PlnhNGL4FnVCEv1Q8mRo4lG/pEPqgwqOlk
+   gTGNcnO8aQTeGLwYLM7kQSG2hPfZN2+b8d1iHEvU0L2EvK2qnB0BAXKZJ
+   f4DCBLZySczvFfpfL82620RWS0kvarqZ5UmnCEJPYNbtgObHamyclsYCM
+   XR3AW3q9NH+lw2om6k3UibpSfyDmE72/EZTR11U190CQA+SB8ibcyFTJ4
+   blhwsBnjAslY1ifsY1fkGQQkxBqM+fjI/lRzr5K5anmWAtqCGQZWNA/lp
+   s+eObbnGioi48wbRyaWRWlDLI8g95ATRjbYpu2cT++xvN9J73cfUOWLrs
+   A==;
+X-IronPort-AV: E=Sophos;i="6.01,160,1684771200"; 
+   d="scan'208";a="234955493"
+Received: from mail-mw2nam04lp2172.outbound.protection.outlook.com (HELO NAM04-MW2-obe.outbound.protection.outlook.com) ([104.47.73.172])
+  by ob1.hgst.iphmx.com with ESMTP; 27 Jun 2023 01:54:23 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UN8ITbIs4wsqwDrdYBYRWo81wdb9hYyZnU6IMhEZzMzWcWHG6vx0C/v5r01/CqCTMQVhcIvTPuCAbadL/wU/Ojh+JpMYlMxUTYj2iKggkIA0uXatVOdGX0+EP1XMoi1gVCLOtJnjVHXRrFsAGbfJuF7qFHWWmR7YQgt1a3lTIL8yFCAVzv9zKP/AXf9EU6Sbi9F75n6ZHbBXrFgIH+FonbYBaCwxg28GioecicX5f8ZTrhm1gF1GXUwTpO04AAAqdmen93Kjf1o3y6iseqaGblKf53ieImyI+olQhsAF7IG2gHGXzHQHFXozoXzM8XpCIHNY6ZDJduxannGk+VT46A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3iMSSC5n26Zsr/mtHM0DTXZG8oQ7PNP4Y0/dp2yOKj8=;
+ b=bB487E1MAnuTxhMD6bSQwiKZ2Sll5Ewngl+0e1K3MHoj0wimLH4pCcDKaECuqXKBF4W0AHuBz3oFCCvrOhLyIKY8VFTVa0oWfYXOriKQjsTgghAiTVobOE4laGnUcGoLS/lvtbBkB5sM1MaCk/7chwqUe2x83gUcB3rIBL34xxSdMAI90i/2+EyBTGLjj9CyoEh/fJ5BMkeDcjOOI0i3iXKfd767dr0CLmdJ/G1wK6MzVU89wKcKHDnbvG3MYAsdnfG+W6wrPzr+4Tci0eMbgQljYxz159zJiaMxivruA6AbvimUXbWl/oWbGkwJvKNrRQSOMrnes/ueChO7JaBjdw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
+ header.d=wdc.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687802006; x=1690394006;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pn6vnK3NKWIIx8bWW3pUBU0wxmRL6bY7AP5Q2VzG4LU=;
-        b=C7Kb4vfjPX0Yqwu9LdbOWEb2TQ/YoHmc5yYHKefUju3KJadAt2GJIBR7CBNt9Vsjwr
-         KUqC+qrLF1vkYWRYLNvfdZfabF2e5SJtZXKCLw5bfF0pJ0vixNj5TWFF1qx7ZQRs0Gum
-         RvwG4GtHz35leA1egsFL3GFBfgpqbrQRzKQ4UWS/e6iMsKoQeDHuCmxqZS+6iELmIfsZ
-         V5ZpYIx133t2xbY1ROfE8hGF7DlcV3BJEPOACYPGQMYNBO76TR7Nc0kjp8x+lYrZdbJX
-         /aGqCNxVslcqydAUcW+vaCXiETR9obcdnX/24M3m0Q8fvZ+rT8/Qqk8HFMRMDJIsks5e
-         gEMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687802006; x=1690394006;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pn6vnK3NKWIIx8bWW3pUBU0wxmRL6bY7AP5Q2VzG4LU=;
-        b=EP9HFJT8warC6RM63SC40rd3zF/vTwR6RbPioP13hrtFmGbJaH+KGGxu8KfxMa4whR
-         PfuMH70sIxeSUeQsfZktbbE6/5poAyS68hAV2FFck2ZhV0iLn+NhE275S03/YIjofFhV
-         fssdj1KzODNdh4fk186vKV9r9OTY2zYDZbaZPL6QN4tZ+LLsPBV/QXlXEzqOQPMXFOR7
-         WXG0DzIwCVkXRRHhijfRw0GdbqhnkLxKD/hYSAkulULKdggtujdIE0HEq6IXPCBZilA1
-         vsBxQX2DeAP7ITG2NiEWHx5C3wxhZYiUIXRAahduj72Xd2zXQSmvBTTFo1VsT7zHW8wo
-         jgyw==
-X-Gm-Message-State: AC+VfDw6Iv2RgdKK0nr4sDXjhtfEv2XWQJoXkVz8yakkPN19X29GokJC
-        jE4SxzsRd1xgvsjMbl+Dok1GUY5Q7LKRmpfaN2aLyA==
-X-Google-Smtp-Source: ACHHUZ7Swgs9121z+kuoRfiHB3OkW67hJZsKCgXapg8zVPdGaeR6+YSYh0xtyyAMKUOGr7rzXOWctORp5U5yyFztpH4=
-X-Received: by 2002:a05:6808:1992:b0:3a0:ff3a:72f3 with SMTP id
- bj18-20020a056808199200b003a0ff3a72f3mr15244189oib.2.1687802005866; Mon, 26
- Jun 2023 10:53:25 -0700 (PDT)
+ d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3iMSSC5n26Zsr/mtHM0DTXZG8oQ7PNP4Y0/dp2yOKj8=;
+ b=XOhJ2T6QIpgxTB4NTDs4EG1uir8PTkHir51lQ/835LbPGLQcus/N1AYEHRIkVoQDFrw2s4+JqMGoHA5TjsafSXHAb9SjBd21++XDVynl1yTm9bjGeUJW7P5+3nl5DWRM/gmxWYr54MNFRFIcnYRpOQr/o9GZiFxvRaRf+6jnwg0=
+Received: from PH0PR04MB7416.namprd04.prod.outlook.com (2603:10b6:510:12::17)
+ by BY5PR04MB6597.namprd04.prod.outlook.com (2603:10b6:a03:1c5::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24; Mon, 26 Jun
+ 2023 17:54:20 +0000
+Received: from PH0PR04MB7416.namprd04.prod.outlook.com
+ ([fe80::23cf:dbe4:375c:9936]) by PH0PR04MB7416.namprd04.prod.outlook.com
+ ([fe80::23cf:dbe4:375c:9936%6]) with mapi id 15.20.6521.026; Mon, 26 Jun 2023
+ 17:54:20 +0000
+From:   Johannes Thumshirn <Johannes.Thumshirn@wdc.com>
+To:     Andreas Hindborg <nmi@metaspace.dk>,
+        Damien Le Moal <dlemoal@kernel.org>
+CC:     "open list:ZONEFS FILESYSTEM" <linux-fsdevel@vger.kernel.org>,
+        "gost.dev@samsung.com" <gost.dev@samsung.com>,
+        Andreas Hindborg <a.hindborg@samsung.com>,
+        Naohiro Aota <Naohiro.Aota@wdc.com>,
+        Johannes Thumshirn <jth@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] zonefs: do not use append if device does not support it
+Thread-Topic: [PATCH] zonefs: do not use append if device does not support it
+Thread-Index: AQHZqFc77K4pcBTEXkyHScjw5nQ+Gg==
+Date:   Mon, 26 Jun 2023 17:54:20 +0000
+Message-ID: <02730282-88b0-572e-439c-719cfef379bb@wdc.com>
+References: <20230626164752.1098394-1-nmi@metaspace.dk>
+In-Reply-To: <20230626164752.1098394-1-nmi@metaspace.dk>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.12.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wdc.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH0PR04MB7416:EE_|BY5PR04MB6597:EE_
+x-ms-office365-filtering-correlation-id: bccc66e5-4e2b-4375-d90a-08db766e5e68
+wdcipoutbound: EOP-TRUE
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: bBt0ovAY9DopSYl9Vsj7fsm1DOR6NGVkX5d/wE2v1eyoJCOX7sFPx9v7rVlMBzHJM5n7kwKnrzf4NA1a+CUv0tMh4pazKKUV3D5rXKTMetSZuJ8sSDmHJtXrf+Iz7BW8I9T+x2hSKdhDKM3R+0G40qmTd9I8bzndoMU9A0fZvLsJo9fW/7bEu/ftSu0IigLJyPQVvpSMAg7n6Pou2y/iwVqd9wkw05C2jakpDQdByr0ibIyVWCcvBSptUUvuHVRrp4LN2kb9PgBr+foxnik6llN6dtBMxKSpWeA0Jd8VLlmcuIbthp3xzaU4SkumdzxWDQMLlik9sycL2Fc6MjyE3F++LClrzmbTq2kKByqfwWQiggMRKi/BEedDmCvctcU+pDH9F4jjNd5dVbGN2CCn3GJyLerucsuDZ4RbKdns7WzvVBzeJXQdlCDW/vAFe5jTgBRipdme3LPKD3s4fkpnQqLGTi7grHEooDpI9arF1Wc2FYv8ZeufQOL6m+m9GyoRnneq5QPpKBHDiGbbTKD7lG7T0reiQSOkjwOGPxRmXTnxBOop1U0fhpCaH21IGJzZpTGAvOp4YuJJovnCSNr29HpYl31etzkVJNqhHKBcMAYe3KaI7Un7R0b7zeOVFzkCk9BZ981g2WLBcrON0M4QlxGPnidDMNAZ3aMUqvgbCt1QOH7KCeZ/CXw7A+TNCqA/
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR04MB7416.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(39860400002)(396003)(376002)(366004)(451199021)(36756003)(6506007)(6486002)(2616005)(54906003)(478600001)(110136005)(83380400001)(186003)(66446008)(53546011)(71200400001)(2906002)(4744005)(5660300002)(38100700002)(122000001)(316002)(82960400001)(76116006)(91956017)(31696002)(66946007)(8936002)(8676002)(41300700001)(86362001)(4326008)(66556008)(66476007)(38070700005)(64756008)(31686004)(6512007)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?M1VpTnpadU5FSUgzNkg1cWdsS1Z2TkZpSnVHVHZjRFNqditSNGh3NEFBNXFm?=
+ =?utf-8?B?QUhEbDA1bXoyN01TVmdpVzJ3YmFvcTlocnZwVzN6WCtMRkhIaEV0NXlsaVY2?=
+ =?utf-8?B?Tzc4ZkcxQlM3aitha2sxT0JjZDhpbndvQjRLNiswb01xR2tOeGUxdXAxcE9F?=
+ =?utf-8?B?Rzc4OStETVlrUndiTGxrTkJtcjFZK01XNm1WRGtuMXRYZzBpQ3YrU3dLRTFu?=
+ =?utf-8?B?TUhSWkVEVUk5algybDBUa2tCT3RNUjZocVRSSlR4RURhWWR2YWlUMXUvZ2Fs?=
+ =?utf-8?B?dlVibW5wUnFjbVg1Wmg4bldJeG9DZE5YbGhTVUpIZ24yVkkzVkhOZ1dYckVM?=
+ =?utf-8?B?UER4d2hSbEU4bDRiS045Skl0T2pQSU10ZE9ZekF4QUxYQlVCZ2FMRWxKUytE?=
+ =?utf-8?B?aGZQWFZJOGpQb0RocjNEaFQyUmtXY1MrNEtWUnAzR1NVeWhJd01UNWUveDA2?=
+ =?utf-8?B?dTBXQVI3OGhvVEd6aDQwcUU2R3hDb1JkK25jV1I3Vzl5VXJGMWJyRExCbjVn?=
+ =?utf-8?B?WXV1ei82RUJBTWg1aFNWWTdsSTUrUDduaTVBYW9BSGFNSUllQzV3WTg4ZEs0?=
+ =?utf-8?B?R1Zka3k0TSszaWNtZUVsV1JFbEhSVGxJMHgzeUdSQnN0N0ZzTmNzY3h2SVhE?=
+ =?utf-8?B?UE14QzJIL1RUb2Zjcm4rblZPNzRSZUcySXE4NnYyaXBURlBqKzhCcm5xam9K?=
+ =?utf-8?B?Y05IUHJsNDBJSUJmK09XeEZFWklOZVE3MWlyOWg0YUhITmsrRkR1RWkwTTBN?=
+ =?utf-8?B?R1pPdi96eGZ1dC9neHJCRnNNKzBKR1VOdHcwRFFLdndGT2ppbVlJczJQbTNY?=
+ =?utf-8?B?NjZwenR2bWxiOG40cVpjZjJ0ejlUZzNkNVpDazFkTVIwZzgzb3lkdHhWK3FY?=
+ =?utf-8?B?YmFJb2RvK3R0TUtNMXZBT0gyaDB6bEJ3M05HcnhmbmFGMm5vQThwNHJmWSsy?=
+ =?utf-8?B?N2c1cVdacWJRZHF4VFppbjhPMnVzT3NCN0xwcHREL201QURMakJmNWQ0eXg5?=
+ =?utf-8?B?WS9uR3hvaExFZ0pydnB0SGh2UnVHQnp6VHdyZ2crdkJ5dzdDRXBIZStJOUR5?=
+ =?utf-8?B?SDBrN0UyaEJiU2xNVzF3Z0tPZUxDWVpSUnpGYVJCN09DVzZmZ0Q1Nmt3WDlm?=
+ =?utf-8?B?eEQrcmp1TFYxTlRBRlNDVHdobzk2enZPYndDTTZ6Z3Z2OTdnMzZGdExHWlFD?=
+ =?utf-8?B?K2pHMmlSRi9sS01tMFNNOEczM3FrRnZYRzduR3l0Vkk3QWxQcnc1eEhFeVR1?=
+ =?utf-8?B?ekpmT3FlQUgzbTZHelArc1huOXRTT3dIRy80M0RKOXcyYXJLSEdhZ2xwTUhZ?=
+ =?utf-8?B?bHBMUlZoSTlzNnNzUVBwT3NrM1BKVG9TZDNYUHNsUU4rUm1OV01BS1ROcmpT?=
+ =?utf-8?B?aWJYUSsvSFR1c0NlYWVBR0t6dGFYdEhNVFFod1NUcmR5UzFDV0VWNzIzdjVG?=
+ =?utf-8?B?VkZUQ3VWTGNOcHk4eVQvR0lCbUxDWnNJUFdKMjJLS21Ba0lpdTFIUlFNellE?=
+ =?utf-8?B?emFNOWZLTzVJR3R1TitGQVRUeEpsa0xxQUlkZS96blFpVG1jRnFkVlRUb2FU?=
+ =?utf-8?B?b29vYW94RXkzcjZtTEVrWS9SVExBM0ZjdUpGTVFST2prNnlTaGhzdzBvWlA1?=
+ =?utf-8?B?ZzhCc1ppaEIrMkV2c1VZT1Y5VGQ2MlNJQk0yYkVvZXlJa0N4YUlCdHZheTR2?=
+ =?utf-8?B?T0xqc283cjR3cUhJcTB6OWJRSm9Iay9zbTIzL05uT243NHcvUlNSaWd0Z1E2?=
+ =?utf-8?B?T3l3T1dQK2s2bXdYbVBSTjlpaVBOWXpiVG1XdEZycStaa3JXSlNEek9ia3hr?=
+ =?utf-8?B?TE43VlUxbklYcytyanRvL2xnTGJNOWJYVm9WSUFjbDhlRjlKRVhqWFR2MW5q?=
+ =?utf-8?B?MEo4aW1jcGNkSkFNTFRMaDlzeG4zK2lqYkVFalJCTXBrclNKTmNuMlZ0bXp0?=
+ =?utf-8?B?a29scFBGRGZwZ0ljRFVuei96ZFlxbENNS3VOZEwwTTYwQ0JYUkhkQXdQN3d0?=
+ =?utf-8?B?cFdGLzRhUG85RExDVkliVm9TbjI4OCt3WFdoMlAvZnZibGowYWkyMmNvcnY0?=
+ =?utf-8?B?UzRwWk9YTWVWbnowVm1zakhSRmlMcnQ0SzFGRFlqUHZBek9WeDJybEhwSnlj?=
+ =?utf-8?B?MFN6dEFrSzVFek5ESC9la2dnRlcrTlJyRUllSGpkOHJibjlrYXduVzR1eFJG?=
+ =?utf-8?B?M2Yza2JiRlVGR0hlUTU3b0R3MGN3TC9UbkhkbmlIZzhJaG9sWGpzd2dhRy90?=
+ =?utf-8?B?dmprcjA4aFpOelgvcWZqc1NVS1R3PT0=?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <67A2ABE654D5BA41A5218A1DCB7AB30C@namprd04.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <CA+G9fYtU7HsV0R0dp4XEH5xXHSJFw8KyDf5VQrLLfMxWfxQkag@mail.gmail.com>
- <b4bfd69f-2092-4d15-b7ce-b814f5f10ff2@sirena.org.uk> <CA+G9fYv=uyQaJs0JLMmZWLeLH0G5FF7WGcTa7y0bi0nCDfoi+A@mail.gmail.com>
- <20230626144157.GA20162@willie-the-truck>
-In-Reply-To: <20230626144157.GA20162@willie-the-truck>
-From:   =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>
-Date:   Mon, 26 Jun 2023 11:53:14 -0600
-Message-ID: <CAEUSe79CRNw1jFopDvQ+f_FOSwQb-VJ6oWw-rJQXr0Yr3_P=YQ@mail.gmail.com>
-Subject: Re: arm64: fp-stress: BUG: KFENCE: memory corruption in fpsimd_release_task
-To:     Will Deacon <will@kernel.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-stable <stable@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: +Yzsy8yHgs5RFUvXczljirsGvwtdMCZ5Yaw9SNWh8a8OokDXwuPYROzCcTT9qJeHHwHdpxijjYXr6kgP2gPGHy8/RzRKtlgSbJLa26ZAopg3a+J0lyuDLB43u8TPuK4PU63EEBrLQ0flEy5fpbS1sZLmjuBRIJ+lsoAk3pL575B+uzxarMKpIegKV8x96Oh9s6OfzKBjqqOznT0fnDmFY52eiETm0kcT9hHQ/3UtCkm316mwnKlXu9WSXuFr+MNMKFUGrknDojeV7vPWARSsjv9gsZK/QNAGVdsiNjFZxSrz/yCbxrtgfxC6pmc6C4IoWCD62Nvvy+Whrzz0fu0EIuqalYXbVj3C06YN2wPkX2cNReMPf6LCWzTJejPCx4W0JBfd9Gmqce9uCxx6gdJPXRirr4EEbXhlbX0V0QVdW18IdJpXKdvw7jUbbw0ggCP9CSs1hivvhw0Bz3VIzmLPJNpiIhJgyuV2So9mM6Z8FQP5LHxspnXxn7ns44D2/pAJerOGCiinmcawn9lkLL5JD/rkqXmDam7kajVCnWHTr6UvyQmIl6TrpN8I3uKsr9feYQUOpF9dkcpiO1/GugF7PhHH4KQT3omRRRT+f4kgwHu6aLF3rG67ECBPuomy4wfgNXfhAgIrUj30uKOomBVjYtVd5zksW1Adqo70HFEiYyhF4S1cbL4CAZdfF4P3vTASCyPMY78r32CfC9RsArNPTvV73aHVcoOsDNU16PQP4++ipmJu4g+MEmIKWbm+rBJLnkmUXZyl2+4zyYxbvaYXLndnMvAoK/eJpjgv+tEGyddxJIsqGwiDXui3+wfuGn/wMyBgl+2wWQ0fGc6PMrnSYvy/K54i8mgSmiLn5AAFD6eOjh2sU1mCU0TmGj6i0eqV
+X-OriginatorOrg: wdc.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR04MB7416.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bccc66e5-4e2b-4375-d90a-08db766e5e68
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Jun 2023 17:54:20.5208
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: bKjAnR7twbeGocleh4tA6a6f+R7ZN4FYMMjHcoZuDgFND3Q23kPEl7xwZpfOky4mQBMRKBfheMIHdYwukkxD9CsdwcU6PqYe5MKsV1ZVlHA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR04MB6597
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,66 +156,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
-
-On Mon, 26 Jun 2023 at 08:42, Will Deacon <will@kernel.org> wrote:
->
-> On Thu, May 25, 2023 at 07:21:24PM +0530, Naresh Kamboju wrote:
-> > On Tue, 23 May 2023 at 03:42, Mark Brown <broonie@kernel.org> wrote:
-> > > On Tue, May 16, 2023 at 11:58:40AM +0530, Naresh Kamboju wrote:
-> > > > Test log links:
-> > > > =3D=3D=3D=3D=3D=3D=3D=3D
-> > > >
-> > > >  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/b=
-uild/v6.1.28-240-gb82733c0ff99/testrun/17007082/suite/log-parser-test/test/=
-check-kernel-kfence/log
-> > > >  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/b=
-uild/v6.1.28-240-gb82733c0ff99/testrun/17007082/suite/log-parser-test/tests=
-/
-> > > >  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/b=
-uild/v6.1.28-240-gb82733c0ff99/testrun/17007268/suite/kselftest-arm64/tests=
-/
-> > > >
-> > > >  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.3.y/b=
-uild/v6.3.2-247-g5a952cfef67c/testrun/17015127/suite/log-parser-test/test/c=
-heck-kernel-bug/log
-> > > >  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.3.y/b=
-uild/v6.3.2-247-g5a952cfef67c/testrun/17015127/suite/log-parser-test/tests/
-> > > >  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.3.y/b=
-uild/v6.3.2-247-g5a952cfef67c/testrun/17015127/suite/kselftest-arm64/tests/
-> > >
-> > > None of these seem to provide me with information like what kernel
-> > > config was used but I did manage to find
-> > >
-> > >   https://storage.tuxsuite.com/public/linaro/lkft/builds/2Pq5NvLiBcWR=
-Muy6lXftDVQMvca/config
-> > >
-> > > which might be it?  Or one of them?  However even trying to use that =
-I'm
-> > > unable to reproduce issues with either the FVP or qemu.
-> >
-> > You got the right config file which we are using for testing
-> > FVP selftests.
->
-> Sadly, the config link above no longer works (404 file not found).
->
-> However, I notice that the failure still seems to occur with 6.4:
->
-> https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.4/testr=
-un/17767612/suite/log-parser-test/tests/
->
-> Please can you point me at the config file for that run? I can't figure
-> out which one I need from the web interface.
-
-Kernel artifacts for that test run can be found here:
-  https://storage.tuxsuite.com/public/linaro/lkft/builds/2Ricfkwzy9jwZnHXNO=
-etymU5t44/
-
-(The labyrinth can be traversed this way: I went from that testrun
-link, then test details [clicking on "check-kernel-kfence =E2=80=94 FAIL"],
-then "job_url", then "build", then "tuxbuild directory".)
-
-Greetings!
-
-Daniel D=C3=ADaz
-daniel.diaz@linaro.org
+T24gMjYuMDYuMjMgMTg6NDcsIEFuZHJlYXMgSGluZGJvcmcgd3JvdGU6DQo+IEZyb206ICJBbmRy
+ZWFzIEhpbmRib3JnIChTYW1zdW5nKSIgPG5taUBtZXRhc3BhY2UuZGs+DQo+IA0KPiBab25lZnMg
+d2lsbCB0cnkgdG8gdXNlIGB6b25lZnNfZmlsZV9kaW9fYXBwZW5kKClgIGZvciBkaXJlY3Qgc3lu
+YyB3cml0ZXMgZXZlbiBpZg0KPiBkZXZpY2UgYG1heF96b25lX2FwcGVuZF9zZWN0b3JzYCBpcyB6
+ZXJvLiBUaGlzIHdpbGwgY2F1c2UgdGhlIElPIHRvIGZhaWwgYXMgdGhlDQo+IGlvIHZlY3RvciBp
+cyB0cnVuY2F0ZWQgdG8gemVyby4gSXQgYWxzbyBjYXVzZXMgYSBjYWxsIHRvDQo+IGBpbnZhbGlk
+YXRlX2lub2RlX3BhZ2VzMl9yYW5nZSgpYCB3aXRoIGVuZCBzZXQgdG8gVUlOVF9NQVgsIHdoaWNo
+IGlzIHByb2JhYmx5DQo+IG5vdCBpbnRlbnRpb25hbC4gVGh1cywgZG8gbm90IHVzZSBhcHBlbmQg
+d2hlbiBkZXZpY2UgZG9lcyBub3Qgc3VwcG9ydCBpdC4NCj4gDQoNCkknbSBzb3JyeSBidXQgSSB0
+aGluayBpdCBoYXMgYmVlbiBzdGF0ZWQgb2Z0ZW4gZW5vdWdoIHRoYXQgZm9yIExpbnV4IFpvbmUg
+QXBwZW5kDQppcyBhIG1hbmRhdG9yeSBmZWF0dXJlIGZvciBhIFpvbmVkIEJsb2NrIERldmljZS4g
+VGhlcmVmb3JlIHRoaXMgcGF0aCBpcyBlc3NlbnRpYWxseQ0KZGVhZCBjb2RlIGFzIG1heF96b25l
+X2FwcGVuZF9zZWN0b3JzIHdpbGwgYWx3YXlzIGJlIGdyZWF0ZXIgdGhhbiB6ZXJvLg0KDQpTbyB0
+aGlzIGlzIGEgY2xlYXIgTkFLIGZyb20gbXkgc2lkZS4NCg0KDQo=
