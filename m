@@ -2,69 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B549D73DFA2
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 14:46:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FCA573DFB3
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 14:47:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230002AbjFZMqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 08:46:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40262 "EHLO
+        id S230101AbjFZMrk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 08:47:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbjFZMqC (ORCPT
+        with ESMTP id S229584AbjFZMrN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 08:46:02 -0400
+        Mon, 26 Jun 2023 08:47:13 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E49392942;
-        Mon, 26 Jun 2023 05:44:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BA0E1FF3;
+        Mon, 26 Jun 2023 05:46:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5292160E9B;
-        Mon, 26 Jun 2023 12:44:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E74D4C433C8;
-        Mon, 26 Jun 2023 12:44:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1DCD060E00;
+        Mon, 26 Jun 2023 12:45:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9F70C433C0;
+        Mon, 26 Jun 2023 12:45:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687783479;
-        bh=zybkaKmO2rq8ExZfzHUmP4+U7WBCst4SsJhXQatkp/o=;
+        s=k20201202; t=1687783544;
+        bh=ad7qXuxyTVm3Hup4TPrwUJSUzMHj6o5DDbnqUq5bBhE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OCaYeKgR7cpxf3FJj1ApaF+cDf3BQWX4+ctqU0OLRRBja2IVSkgwgUW18kLel4THd
-         JivMpVLL1+0o/vjgGN+qiZfvL0+SCTd6YUzcKnxFCyS64Xbey0jmw/qrMy7MDCUF4A
-         9wywLBAPZZKr2V77R9Dhv+VTTFRSEvugBf6kVzglEMZuv5GNi/0NW/YyIJ3Ydyps+i
-         honsMly0qBOAN/erO6dD+/Ku/qrEiW1X/6ITnlB6ANyhW03fij5GpxwmmbwbprPFYH
-         /lfDMZ9LabmUaAZKseb0sLWhWx1oKVJta2wHtXSOZ/f/i418+QiEScI2Dp0MJovzCf
-         gCOpnC8dcu37w==
-Date:   Mon, 26 Jun 2023 13:44:32 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Jing Zhang <renyu.zj@linux.alibaba.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        John Garry <john.g.garry@oracle.com>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Ian Rogers <irogers@google.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Ilkka Koskinen <ilkka@os.amperecomputing.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-doc@vger.kernel.org,
-        Zhuo Song <zhuo.song@linux.alibaba.com>
-Subject: Re: [PATCH v4 0/4] Add JSON metrics for Yitian710 DDR
-Message-ID: <20230626124431.GB20045@willie-the-truck>
-References: <1687245156-61215-1-git-send-email-renyu.zj@linux.alibaba.com>
- <CAM9d7cj3v58m8NcsEK4sYsk_dbQDAq71hYo7DV=xaQa_rZyPYg@mail.gmail.com>
- <a5486c58-32b6-2d5e-e623-d7844c51474c@linux.alibaba.com>
- <CAM9d7chxMpUUouHsVTEvVEy8RyZ6tNzYbVD=a0Toao=n6cau-w@mail.gmail.com>
+        b=Nr+VZhRu1S8TdcgB1G3LwUYdS5Mevc1gEG6wluGez0PuFw8p/4IWpVNl6aqJ1TIxN
+         F1/LkWsR08SV4KNW5tSrRuJZt7z34scYrn27JUm9WtSj8gMjLja7ZndbPeUkbFvBgK
+         1GE5ZE40gU4zjajLs9XFuMXc9QVj7iXibAFLI08/a+NWNxkLulw1CB6n+0vhgCsx9h
+         13jHCc35DHf0VHZ186ZcCP1u1zY318iTOjEr6LgU4EA6z0nrS3N6DIUqli3Ero4CYr
+         GguqwF7vUjUX8TmvlOgjhvtzHM0QK68M/Hs52b9FyPFG97Eq+mPCwcXXf5e09fH3gP
+         k7KSDnuO7JCHA==
+Date:   Mon, 26 Jun 2023 13:45:32 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "rppt@kernel.org" <rppt@kernel.org>,
+        "Xu, Pengfei" <pengfei.xu@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "bp@alien8.de" <bp@alien8.de>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "szabolcs.nagy@arm.com" <szabolcs.nagy@arm.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "debug@rivosinc.com" <debug@rivosinc.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "Torvalds, Linus" <torvalds@linux-foundation.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Eranian, Stephane" <eranian@google.com>
+Subject: Re: [PATCH v9 16/42] mm: Add guard pages around a shadow stack.
+Message-ID: <ad6df14b-1fbd-4136-abcd-314425c28306@sirena.org.uk>
+References: <20230613001108.3040476-1-rick.p.edgecombe@intel.com>
+ <20230613001108.3040476-17-rick.p.edgecombe@intel.com>
+ <ZJSRD1xZauOW3jFO@casper.infradead.org>
+ <ba77d21492e2631072f51328413d227f31dd78ae.camel@intel.com>
+ <20230623074000.GG52412@kernel.org>
+ <ZJWNWeqQ8ON9NNfs@finisterre.sirena.org.uk>
+ <10673dd87c27ea9def60ff841ebd261d31b46568.camel@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="FlQ2BtIHgZ0V+5nj"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAM9d7chxMpUUouHsVTEvVEy8RyZ6tNzYbVD=a0Toao=n6cau-w@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <10673dd87c27ea9def60ff841ebd261d31b46568.camel@intel.com>
+X-Cookie: Nihilism should commence with oneself.
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -75,34 +105,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 10:00:46PM -0700, Namhyung Kim wrote:
-> On Tue, Jun 20, 2023 at 8:08 PM Jing Zhang <renyu.zj@linux.alibaba.com> wrote:
-> > 在 2023/6/21 上午3:04, Namhyung Kim 写道:
-> > > I'm curious why the first patch is needed, presumably the PMU
-> > > should have 'ali_drw' in the name already.  Do we use substring
-> > > match for the compat name in the JSON metric?
-> > >
-> >
-> > The main purpose of patch 1 is to add an identifier so that the Compat
-> > field can match the corresponding event when defining aliases or metrics
-> > for events.
-> >
-> > For example, "Unit" can match "ali_drw" in the name and different SoCs may
-> > be able to match ali_drw, but they may have different events, and even if
-> > the events are the same, the meanings may be different. Therefore, the
-> > Compat field is needed to match the Identifier to confirm which type and
-> > revision of PMU the current SoC has. Therefore, both "Unit" and "Compat"
-> > need to be matched at the same time. Although it seems that ali_drw is
-> > redundantly matched currently, it is meaningful for future expansion.
-> 
-> I see, thanks for the explanation.
-> 
-> I think you need to route the kernel patch differently.  I can apply the tools
-> part once the kernel patch gets Acks from others.
 
-Sorry, I missed this initially as I didn't realise there were kernel changes
-hidden in this series (I saw "JSON" and ignored it...). Given that the 6.5
-merge window is now open, I'll pick the kernel change up for 6.6 when I
-start queueing patches in a few weeks.
+--FlQ2BtIHgZ0V+5nj
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Will
+On Sun, Jun 25, 2023 at 04:44:32PM +0000, Edgecombe, Rick P wrote:
+> On Fri, 2023-06-23 at 13:17 +0100, Mark Brown wrote:
+
+> > This isn't an x86 specific concept, arm64 has a very similar
+> > extension
+> > called Guarded Control Stack (which I should be publishing changes
+> > for
+> > in the not too distant future) and riscv also has something.=A0 For
+> > arm64
+> > I'm using the generic mm changes wholesale, we have a similar need
+> > for
+> > guard pages around the GCS and while the mechanics of accessing are
+> > different the requirement ends up being the same.=A0 Perhaps we could
+> > just
+> > rewrite the comment to say that guard pages prevent over/underflow of
+> > the stack by userspace and that a single page is sufficient for all
+> > current architectures, with the details of the working for x86 put in
+> > some x86 specific place?
+
+> Something sort of similar came up in regards to the riscv series, about
+> adding something like an is_shadow_stack_vma() helper. The plan was to
+> not make too many assumptions about the final details of the other
+> shadow stack features and leave that for refactoring. I think some kind
+> of generic comment like you suggest makes sense, but I don't want to
+> try to assert any arch specifics for features that are not upstream. It
+> should be very easy to tweak the comment when the time comes.
+
+> The points about x86 details not belonging in non-arch headers and
+> having some arch generic explanation in the file are well taken though.
+
+I think a statement to the effect that "this works for currently
+supported architectures" is fine, if something comes along with
+additional requirements then the comment can be adjusted as part of
+merging the new thing.
+
+--FlQ2BtIHgZ0V+5nj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSZiGsACgkQJNaLcl1U
+h9B3DAf+LWSA4bx8fTIOePWjXu2L6LeG9YG2PswlY0EfvmEvZtaSKmIszPhtMDUb
+06vPe7GHKtgxB2gXQ0wUveNXqXUQRVDsuHmg7hAMEXzTGl+Ael3P1MSzNFV94LIQ
+Z3BXNKJk0egBAthRbZmyGcpj1sfp082RpsdI1a6dViRJwjd+ODTNI089CvNemY6b
+MJvmuMEJdjaRlrTGdfIBTdCKDNCqQQxqhMXBOcY5Hr7d9JLNa5JaWwfgyO0PbipH
+L20yRdqFhM5cEJ70RuHtQuyAJB/cDQlQZKUGJhTXwys+xbYjkZ9Dad1CvN4N1+SS
+E1ZXpzd5bzwITEKsBrkm9meQGQuK9A==
+=kRl4
+-----END PGP SIGNATURE-----
+
+--FlQ2BtIHgZ0V+5nj--
