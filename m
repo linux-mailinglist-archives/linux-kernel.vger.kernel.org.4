@@ -2,86 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A51373E38A
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 17:38:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3922E73E38E
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 17:38:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231310AbjFZPiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 11:38:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53840 "EHLO
+        id S231314AbjFZPil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 11:38:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231304AbjFZPiB (ORCPT
+        with ESMTP id S231305AbjFZPij (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 11:38:01 -0400
-Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B980710E9
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 08:37:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:From:References:To:
-        MIME-Version:Date:Message-ID:cc:content-disposition;
-        bh=rs1VdpLvoww5s8ZfEwPD+th0v+6ysNz41twwOh5VYog=; b=ix3DoD+BAF36mSF1bbWTcUTb6/
-        dWrzM9dovHRuE2ru86vti7cx0IqWGLef0rBB5LnHZvwpVqw92+23ErEjAAHHJOQUBw+xSzQWO82S8
-        5sDmToR6zSxltwBhHsJN47u7snlxdSx0Vci5cL6taJXnL7dP4nPvEfv5qgkPT6Qhe8WYxlZgpUQbK
-        i3eovpRKjatD1z4wRfx9SBvhWzKJ3tTa17DSxiZYcYPYIxaItZfVSlduYM2lefIVMaqSDR0+tbYjS
-        k/EYmZbEJjmDZeLtw8SPm1nv1f07bWWUTEo8d6Nr7N0bjJnKj009yFoHsNo+Abby71sjmwWXFNJgD
-        y3n9FX3Q==;
-Received: from guinness.priv.deltatee.com ([172.16.1.162])
-        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <logang@deltatee.com>)
-        id 1qDoHk-002qwq-Po; Mon, 26 Jun 2023 09:37:49 -0600
-Message-ID: <cd5ed21c-04f3-2c9c-4b56-225d3f20e016@deltatee.com>
-Date:   Mon, 26 Jun 2023 09:37:46 -0600
+        Mon, 26 Jun 2023 11:38:39 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55BE110FA
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 08:38:30 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f9c88ac077so43998985e9.1
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 08:38:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687793909; x=1690385909;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Aowf3vYu+TzusHuYBS30zZpzrQhDchfRz0fvyLxDepg=;
+        b=Z/r1Wfd7CYtynhOebMVYp+4fsXcivyGaGsftCeD/zNgZCaKVFNC0i6AxAcgx1u32BH
+         Bo5pmsmabOniCJBWTixY2SykTl0V5ZCBb5XOzcpVEXtg1KYejeyhxQSbWik04Nw2LNFq
+         qRINqZEYDzSDNYxGVocv5HjRs8KPBK+Law1GRf6uiGdOqjY3JP26R9eDzSuXCZx6chF4
+         szThVO9VHv/Y2n7YBSaVjjeufKELJvK1y5kl8CP5v2HKkT/Bbs+6gRD658XBp46EhTPR
+         ilDRPQ8HFFBFHgQMJ2riWBLMXobCVamENebS1SKwCL9jdVfpKp+3ShmGbVcdO45n7Ob5
+         IHkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687793909; x=1690385909;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Aowf3vYu+TzusHuYBS30zZpzrQhDchfRz0fvyLxDepg=;
+        b=QxT7Ej1OnY51R2jWHRbfzqE78rdCLDzcn1L2P9Rn5Ql0nd9H3IzZqs6vk18JpB5ktS
+         wZ0kkOtvn7+l/GaUIfkOgHV9zrGood4oHVzu94Po9YFJHXKD0smt9O14oHlpg4+WWXEM
+         Oykt4eLUlwATCU7LUS7qBzIeDrDOhlcVVY+DfCPjQukqiiFZVyFfxRET/7Ol7R1kqtOE
+         xXCMqVDqSDPeCj1uJ7OhlQsvg0eDyEG6S9z7AJpPO1eua3z50AVrAnBoXyvLli4F6lhA
+         rLmjongeWUkvUR9Tqo1F8Bn/Q0EB1zrn9k9IA1q/KAI/aE3gfwnhH4/yMxowwQnLpoMK
+         /Ymg==
+X-Gm-Message-State: AC+VfDxJiurNWphUlmcbs/rq7030vZUVqUw8fMkFtF4GdW0teVZMMeWA
+        uefEMPBxy0kokGl3h5nrh0k92w==
+X-Google-Smtp-Source: ACHHUZ6hBxdWt0pk22ZtTSP8LLaFYHBix/uPdvH4jb1EhndRhUe4vv/qftln+OheZD+7CTDamEG8wA==
+X-Received: by 2002:a05:600c:250:b0:3fa:8987:3c0c with SMTP id 16-20020a05600c025000b003fa89873c0cmr3919959wmj.9.1687793908732;
+        Mon, 26 Jun 2023 08:38:28 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id p8-20020a7bcc88000000b003fb225d414fsm1710268wma.21.2023.06.26.08.38.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Jun 2023 08:38:28 -0700 (PDT)
+Message-ID: <cd9d82cc-d98c-f4d8-8dd5-01ce4130aa78@linaro.org>
+Date:   Mon, 26 Jun 2023 17:38:26 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Content-Language: en-CA
-To:     kelvin.cao@microchip.com, kurt.schwemmer@microsemi.com,
-        bhelgaas@google.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230624000003.2315364-1-kelvin.cao@microchip.com>
-From:   Logan Gunthorpe <logang@deltatee.com>
-In-Reply-To: <20230624000003.2315364-1-kelvin.cao@microchip.com>
+Subject: Re: [PATCH 1/2] dt-bindings: arm: amlogic: add T7 based AN400
+ bindings
+Content-Language: en-US
+To:     Xianwei Zhao <xianwei.zhao@amlogic.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-amlogic@lists.infradead.org, devicetree@vger.kernel.org
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+References: <20230626095223.721011-1-xianwei.zhao@amlogic.com>
+ <20230626095223.721011-2-xianwei.zhao@amlogic.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230626095223.721011-2-xianwei.zhao@amlogic.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 172.16.1.162
-X-SA-Exim-Rcpt-To: kelvin.cao@microchip.com, kurt.schwemmer@microsemi.com, bhelgaas@google.com, linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-X-SA-Exim-Mail-From: logang@deltatee.com
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
-Subject: Re: [PATCH 0/2] PCI: switchtec: Add support for PCIe Gen5 devices
-X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
-X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 26/06/2023 11:52, Xianwei Zhao wrote:
+> Document the new T7 SoC/board device tree bindings.
+> 
+> T7 is an advanced application processor designed for smart display.
+> It integrates a powerful CPU/GPU subsystem, a secured 8K video
+> CODEC engine with all major peripherals.
+> 
+> The main system CPU is based on Big.LITTLE architecture,
+> with quad core Cortex-A73 cluster and quad core Cortex-A53 cluster.
+> 
 
 
-On 2023-06-23 18:00, kelvin.cao@microchip.com wrote:
-> From: Kelvin Cao <kelvin.cao@microchip.com>
-> 
-> Hi,
-> 
-> This patchset adds support for Switchtec PCIe Gen5 devices by adding
-> device IDs to the driver and PCI quirks. There's also minor code change
-> to accommodate those devices.
-> 
-> The patchset is based off of v6.4-rc7.
-> 
-> Thanks,
-> Kelvin
-> 
-> Kelvin Cao (2):
->   PCI: switchtec: Use normal comment style
->   PCI: switchtec: Add support for PCIe Gen5 devices
+If there is going to be new version, subject: drop second/last,
+redundant "bindings". The "dt-bindings" prefix is already stating that
+these are bindings.
 
-Both patches look good to me, thanks.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
+Best regards,
+Krzysztof
 
-Logan
