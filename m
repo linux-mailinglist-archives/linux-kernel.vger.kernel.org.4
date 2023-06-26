@@ -2,222 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB3FF73DE1A
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 13:49:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1709973DE1F
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 13:50:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229973AbjFZLtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 07:49:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41574 "EHLO
+        id S229706AbjFZLuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 07:50:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbjFZLto (ORCPT
+        with ESMTP id S229703AbjFZLuL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 07:49:44 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42FAD1AB
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 04:49:42 -0700 (PDT)
-Received: from mail-yb1-f197.google.com (mail-yb1-f197.google.com [209.85.219.197])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 96DCC4139B
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 11:49:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1687780179;
-        bh=SkktNo4E/0s7QKbN6YpAzSM3/V8UkU4phNXLLQD/vlk=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=ohXsRUDRoxBckEsmyIdOPc/zMEfYV3TenjWNepHRWCrp3HBfwqeR3GUKWSSmmckhr
-         whhazEfe3zjMmUre/9qg1DfUK/tsC+DrRWv6J3cwp920vvcVX1xmBMdKsCV6AxxZ35
-         ehVwGFxtk7LziiRL/5BLQuVQ/Olbwg51gYyC648BtLJj7l6fWmuMlZewFxSrF7+c5k
-         CpsVDxWCI5pwVidsMGcHYjNURqhr907XW3L9YnfkGILhuZ3EeGc4txCsSHbl5WvWSB
-         xy+ec4R2m6yMWPTbDtO9UtCi4g4Dqsinf3qFcu3ZNq3n+gjOBpMxZjceqwlqFF2/Sy
-         5VDxC75NG6WXg==
-Received: by mail-yb1-f197.google.com with SMTP id 3f1490d57ef6-c0bf91d259fso4065600276.1
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 04:49:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687780178; x=1690372178;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SkktNo4E/0s7QKbN6YpAzSM3/V8UkU4phNXLLQD/vlk=;
-        b=knoDnIGRhkMRY5B2d1sI3vYNEQxm1PSW2FclWH6awO/xi2qpoQTTF5gByTwUJzZMQw
-         yTB3e1ITKj611pM3MAn6G3mEgb4r0F9GsKayS21XBPhsLV1Rre1iP/Gtb1vt1knh8zqM
-         xJLyjmhnhTV4zVPvQgV6ulXK7gHkl5twi0X188XOJg9UhH7zHjftN1giwrZuC8ikTZIJ
-         Xi6CWXDZKvPzaGzB5IFz6z4c0E0wL2oZBvBcTJMvVGCRpgXJoleN4GyuMOb0aOc6qgEn
-         mCB8lBINkaFP2lTFssy6oGHTtpPfzUSa2GoIj7c4jFaTnygCqE4N2E1QTG745mNzABRI
-         gEIA==
-X-Gm-Message-State: AC+VfDwSBAvsX2flii/R8HauS+ag7w5MvVbJUStNWcK2ZeoTKuVToQXC
-        ubnhzO8wpdN5MIzcrWKk1KVgRoh0/5UvxXRdHz+C2ByPuqCcVQQy102TxJABmapb8HkCso2s2K8
-        D0gpIBm3VElIxQH3rSsJOqR9r1Yl/gyuiKRu2ji+6z1AYHNWhzesCcdH4rA==
-X-Received: by 2002:a25:4fd4:0:b0:c00:514c:55f with SMTP id d203-20020a254fd4000000b00c00514c055fmr12566175ybb.47.1687780178629;
-        Mon, 26 Jun 2023 04:49:38 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4gOuF0Yoe62/3EKcneuR0gY+4P9xXY339dBnM45ZMCVrydc2zdkwiR0X0tFxSfR4Ye1SpnkWCaNSTYoUDTWo8=
-X-Received: by 2002:a25:4fd4:0:b0:c00:514c:55f with SMTP id
- d203-20020a254fd4000000b00c00514c055fmr12566171ybb.47.1687780178400; Mon, 26
- Jun 2023 04:49:38 -0700 (PDT)
+        Mon, 26 Jun 2023 07:50:11 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 331411AD;
+        Mon, 26 Jun 2023 04:50:06 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1qDkjJ-0007Jh-Nv; Mon, 26 Jun 2023 13:50:01 +0200
+Message-ID: <6bc3a7cb-4c3b-62e2-75f7-820f3a589029@leemhuis.info>
+Date:   Mon, 26 Jun 2023 13:50:01 +0200
 MIME-Version: 1.0
-References: <20230608154256.562906-1-aleksandr.mikhalitsyn@canonical.com>
- <f3864ed6-8c97-8a7a-f268-dab29eb2fb21@redhat.com> <CAEivzxcRsHveuW3nrPnSBK6_2-eT4XPvza3kN2oogvnbVXBKvQ@mail.gmail.com>
- <20230609-alufolie-gezaubert-f18ef17cda12@brauner> <CAEivzxc_LW6mTKjk46WivrisnnmVQs0UnRrh6p0KxhqyXrErBQ@mail.gmail.com>
- <ac1c6817-9838-fcf3-edc8-224ff85691e0@redhat.com> <CAJ4mKGby71qfb3gd696XH3AazeR0Qc_VGYupMznRH3Piky+VGA@mail.gmail.com>
- <977d8133-a55f-0667-dc12-aa6fd7d8c3e4@redhat.com> <CAEivzxcr99sERxZX17rZ5jW9YSzAWYvAjOOhBH+FqRoso2=yng@mail.gmail.com>
- <626175e2-ee91-0f1a-9e5d-e506aea366fa@redhat.com> <64241ff0-9af3-6817-478f-c24a0b9de9b3@redhat.com>
- <CAEivzxeF51ZEKhQ-0M35nooZ7_cZgk1-q75-YbkeWpZ9RuHG4A@mail.gmail.com>
- <4c4f73d8-8238-6ab8-ae50-d83c1441ac05@redhat.com> <CAEivzxeQGkemxVwJ148b_+OmntUAWkdL==yMiTMN+GPyaLkFPg@mail.gmail.com>
-In-Reply-To: <CAEivzxeQGkemxVwJ148b_+OmntUAWkdL==yMiTMN+GPyaLkFPg@mail.gmail.com>
-From:   Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Date:   Mon, 26 Jun 2023 13:49:27 +0200
-Message-ID: <CAEivzxeBNOeufOraU27Y+qVApVjAoLhzwPnw0HSkqSt6P3MV9w@mail.gmail.com>
-Subject: Re: [PATCH v5 00/14] ceph: support idmapped mounts
-To:     Xiubo Li <xiubli@redhat.com>
-Cc:     Gregory Farnum <gfarnum@redhat.com>,
-        Christian Brauner <brauner@kernel.org>, stgraber@ubuntu.com,
-        linux-fsdevel@vger.kernel.org, Ilya Dryomov <idryomov@gmail.com>,
-        Jeff Layton <jlayton@kernel.org>, ceph-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+Subject: Re: [PATCH] dmaengine: pl330: Return DMA_PAUSED when transaction is
+ paused
+Content-Language: en-US, de-DE
+To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        linux-serial@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
+        Robert Baldyga <r.baldyga@samsung.com>,
+        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Richard Tresidder <rtresidd@electromag.com.au>,
+        stable@vger.kernel.org
+References: <20230526105434.14959-1-ilpo.jarvinen@linux.intel.com>
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+In-Reply-To: <20230526105434.14959-1-ilpo.jarvinen@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1687780206;e6f7ebd4;
+X-HE-SMSGID: 1qDkjJ-0007Jh-Nv
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 26, 2023 at 1:23=E2=80=AFPM Aleksandr Mikhalitsyn
-<aleksandr.mikhalitsyn@canonical.com> wrote:
->
-> On Mon, Jun 26, 2023 at 4:12=E2=80=AFAM Xiubo Li <xiubli@redhat.com> wrot=
-e:
-> >
-> >
-> > On 6/24/23 15:11, Aleksandr Mikhalitsyn wrote:
-> > > On Sat, Jun 24, 2023 at 3:37=E2=80=AFAM Xiubo Li <xiubli@redhat.com> =
-wrote:
-> > >> [...]
-> > >>
-> > >>   > > >
-> > >>   > > > I thought about this too and came to the same conclusion, th=
-at
-> > >> UID/GID
-> > >>   > > > based
-> > >>   > > > restriction can be applied dynamically, so detecting it on m=
-ount-time
-> > >>   > > > helps not so much.
-> > >>   > > >
-> > >>   > > For this you please raise one PR to ceph first to support this=
-, and in
-> > >>   > > the PR we can discuss more for the MDS auth caps. And after th=
-e PR
-> > >>   > > getting merged then in this patch series you need to check the
-> > >>   > > corresponding option or flag to determine whether could the id=
-map
-> > >>   > > mounting succeed.
-> > >>   >
-> > >>   > I'm sorry but I don't understand what we want to support here. D=
-o we
-> > >> want to
-> > >>   > add some new ceph request that allows to check if UID/GID-based
-> > >>   > permissions are applied for
-> > >>   > a particular ceph client user?
-> > >>
-> > >> IMO we should prevent user to set UID/GID-based permisions caps from
-> > >> ceph side.
-> > >>
-> > >> As I know currently there is no way to prevent users to set MDS auth
-> > >> caps, IMO in ceph side at least we need one flag or option to disabl=
-e
-> > >> this once users want this fs cluster sever for idmap mounts use case=
-.
-> > > How this should be visible from the user side? We introducing a new
-> > > kernel client mount option,
-> > > like "nomdscaps", then pass flag to the MDS and MDS should check that
-> > > MDS auth permissions
-> > > are not applied (on the mount time) and prevent them from being
-> > > applied later while session is active. Like that?
-> > >
-> > > At the same time I'm thinking about protocol extension that adds 2
-> > > additional fields for UID/GID. This will allow to correctly
-> > > handle everything. I wanted to avoid any changes to the protocol or
-> > > server-side things. But if we want to change MDS side,
-> > > maybe it's better then to go this way?
->
-> Hi Xiubo,
->
-> >
-> > There is another way:
-> >
-> > For each client it will have a dedicated client auth caps, something li=
-ke:
-> >
-> > client.foo
-> >    key: *key*
-> >    caps: [mds] allow r, allow rw path=3D/bar
-> >    caps: [mon] allow r
-> >    caps: [osd] allow rw tag cephfs data=3Dcephfs_a
->
-> Do we have any infrastructure to get this caps list on the client side
-> right now?
-> (I've taken a quick look through the code and can't find anything
-> related to this.)
+On 26.05.23 12:54, Ilpo Järvinen wrote:
+> pl330_pause() does not set anything to indicate paused condition which
+> causes pl330_tx_status() to return DMA_IN_PROGRESS. This breaks 8250
+> DMA flush after the fix in commit 57e9af7831dc ("serial: 8250_dma: Fix
+> DMA Rx rearm race"). The function comment for pl330_pause() claims
+> pause is supported but resume is not which is enough for 8250 DMA flush
+> to work as long as DMA status reports DMA_PAUSED when appropriate.
+> 
+> Add PAUSED state for descriptor and mark BUSY descriptors with PAUSED
+> in pl330_pause(). Return DMA_PAUSED from pl330_tx_status() when the
+> descriptor is PAUSED.
+> 
+> Reported-by: Richard Tresidder <rtresidd@electromag.com.au>
+> Tested-by: Richard Tresidder <rtresidd@electromag.com.au>
+> Fixes: 88987d2c7534 ("dmaengine: pl330: add DMA_PAUSE feature")
+> Cc: stable@vger.kernel.org
+> Link: https://lore.kernel.org/linux-serial/f8a86ecd-64b1-573f-c2fa-59f541083f1a@electromag.com.au/
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-I've found your PR that looks related https://github.com/ceph/ceph/pull/480=
-27
+Ilpo, Vinod, Philipp: what happened to this? It seems this fix for a
+regression didn't make any progress since it was posted. Or am I missing
+something?
 
->
-> >
-> > When mounting this client with idmap enabled, then we can just check th=
-e
-> > above [mds] caps, if there has any UID/GID based permissions set, then
-> > fail the mounting.
->
-> understood
->
-> >
-> > That means this kind client couldn't be mounted with idmap enabled.
-> >
-> > Also we need to make sure that once there is a mount with idmap enabled=
-,
-> > the corresponding client caps couldn't be append the UID/GID based
-> > permissions. This need a patch in ceph anyway IMO.
->
-> So, yeah we will need to effectively block cephx permission changes if
-> there is a client mounted with
-> an active idmapped mount. Sounds as something that require massive
-> changes on the server side.
->
-> At the same time this will just block users from using idmapped mounts
-> along with UID/GID restrictions.
->
-> If you want me to change server-side anyways, isn't it better just to
-> extend cephfs protocol to properly
-> handle UID/GIDs with idmapped mounts? (It was originally proposed by Chri=
-stian.)
-> What we need to do here is to add a separate UID/GID fields for ceph
-> requests those are creating a new inodes
-> (like mknod, symlink, etc).
->
-> Kind regards,
-> Alex
->
-> >
-> > Thanks
-> >
-> > - Xiubo
-> >
-> >
-> >
-> >
-> >
-> > >
-> > > Thanks,
-> > > Alex
-> > >
-> > >> Thanks
-> > >>
-> > >> - Xiubo
-> > >>
-> >
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
+
+> ---
+> 
+> $ diff -u <(git grep -l -e '\.device_pause' -e '->device_pause') <(git grep -l DMA_PAUSED)
+> 
+> ...tells there might a few other drivers which do not properly return
+> DMA_PAUSED status despite having a pause function.
+> 
+>  drivers/dma/pl330.c | 18 ++++++++++++++++--
+>  1 file changed, 16 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/dma/pl330.c b/drivers/dma/pl330.c
+> index 0d9257fbdfb0..daad25f2c498 100644
+> --- a/drivers/dma/pl330.c
+> +++ b/drivers/dma/pl330.c
+> @@ -403,6 +403,12 @@ enum desc_status {
+>  	 * of a channel can be BUSY at any time.
+>  	 */
+>  	BUSY,
+> +	/*
+> +	 * Pause was called while descriptor was BUSY. Due to hardware
+> +	 * limitations, only termination is possible for descriptors
+> +	 * that have been paused.
+> +	 */
+> +	PAUSED,
+>  	/*
+>  	 * Sitting on the channel work_list but xfer done
+>  	 * by PL330 core
+> @@ -2041,7 +2047,7 @@ static inline void fill_queue(struct dma_pl330_chan *pch)
+>  	list_for_each_entry(desc, &pch->work_list, node) {
+>  
+>  		/* If already submitted */
+> -		if (desc->status == BUSY)
+> +		if (desc->status == BUSY || desc->status == PAUSED)
+>  			continue;
+>  
+>  		ret = pl330_submit_req(pch->thread, desc);
+> @@ -2326,6 +2332,7 @@ static int pl330_pause(struct dma_chan *chan)
+>  {
+>  	struct dma_pl330_chan *pch = to_pchan(chan);
+>  	struct pl330_dmac *pl330 = pch->dmac;
+> +	struct dma_pl330_desc *desc;
+>  	unsigned long flags;
+>  
+>  	pm_runtime_get_sync(pl330->ddma.dev);
+> @@ -2335,6 +2342,10 @@ static int pl330_pause(struct dma_chan *chan)
+>  	_stop(pch->thread);
+>  	spin_unlock(&pl330->lock);
+>  
+> +	list_for_each_entry(desc, &pch->work_list, node) {
+> +		if (desc->status == BUSY)
+> +			desc->status = PAUSED;
+> +	}
+>  	spin_unlock_irqrestore(&pch->lock, flags);
+>  	pm_runtime_mark_last_busy(pl330->ddma.dev);
+>  	pm_runtime_put_autosuspend(pl330->ddma.dev);
+> @@ -2425,7 +2436,7 @@ pl330_tx_status(struct dma_chan *chan, dma_cookie_t cookie,
+>  		else if (running && desc == running)
+>  			transferred =
+>  				pl330_get_current_xferred_count(pch, desc);
+> -		else if (desc->status == BUSY)
+> +		else if (desc->status == BUSY || desc->status == PAUSED)
+>  			/*
+>  			 * Busy but not running means either just enqueued,
+>  			 * or finished and not yet marked done
+> @@ -2442,6 +2453,9 @@ pl330_tx_status(struct dma_chan *chan, dma_cookie_t cookie,
+>  			case DONE:
+>  				ret = DMA_COMPLETE;
+>  				break;
+> +			case PAUSED:
+> +				ret = DMA_PAUSED;
+> +				break;
+>  			case PREP:
+>  			case BUSY:
+>  				ret = DMA_IN_PROGRESS;
