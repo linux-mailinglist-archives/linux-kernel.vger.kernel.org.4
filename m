@@ -2,63 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4407473E946
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 20:34:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E0C773E9F7
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 20:42:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232300AbjFZSeG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 14:34:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48008 "EHLO
+        id S232514AbjFZSl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 14:41:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232313AbjFZSeD (ORCPT
+        with ESMTP id S232513AbjFZSlx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 14:34:03 -0400
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A533E8
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 11:34:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:
-        In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=oSueTiYMF138dSTfNnMKrmstGKw/e3IK9bYy1ze85L0=; b=VQDVxuCFQBdNcjmnjAju2cUvxx
-        LdH3XwBHaGQt+dFtXZzyyu+W/1yGNAVjEAglYJbgQLXHkLJVlffMgBSq1vMLR2wF3dz42dSG8H7Ir
-        TlTRAmLlOGgPkXEUMJl8rOUrZbyp1xefiLRLsyHc2zPNT79DoXwsAsD+yhYPtuKnIL6B/DeSBOa0z
-        IRENLn6AMyTcHwfLAP3ArGvUvBZv2XLeN0YRVeHkd7DruLNqmwRQRguEnqcWCK/Mgph1JiXokoRmB
-        Kgf2wWEq2dYg8ABzgTCFfV11DkZGwflzlbR9a71YIbqeJ+T4EIok1lB/svr/UCWLuWaB4ZjHGYyUZ
-        ghykJ52g==;
-Received: from [179.113.218.86] (helo=steammachine.lan)
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1qDr2E-0047zl-Ju; Mon, 26 Jun 2023 20:33:59 +0200
-From:   =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>
-To:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Cc:     kernel-dev@igalia.com, alexander.deucher@amd.com,
-        christian.koenig@amd.com, pierre-eric.pelloux-prayer@amd.com,
-        Simon Ser <contact@emersion.fr>,
-        Rob Clark <robdclark@gmail.com>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Stone <daniel@fooishbar.org>,
-        =?UTF-8?q?=27Marek=20Ol=C5=A1=C3=A1k=27?= <maraeo@gmail.com>,
-        Dave Airlie <airlied@gmail.com>,
-        =?UTF-8?q?Michel=20D=C3=A4nzer?= <michel.daenzer@mailbox.org>,
-        Samuel Pitoiset <samuel.pitoiset@gmail.com>,
-        =?UTF-8?q?Timur=20Krist=C3=B3f?= <timur.kristof@gmail.com>,
-        Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
-        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>
-Subject: [PATCH v4 1/1] drm/doc: Document DRM device reset expectations
-Date:   Mon, 26 Jun 2023 15:33:47 -0300
-Message-ID: <20230626183347.55118-2-andrealmeid@igalia.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230626183347.55118-1-andrealmeid@igalia.com>
-References: <20230626183347.55118-1-andrealmeid@igalia.com>
+        Mon, 26 Jun 2023 14:41:53 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AB96CC
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 11:41:52 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1b8063aa2e1so7087865ad.1
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 11:41:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1687804912; x=1690396912;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Mc8gTI3W4RW6dHKji0wpJv9Z8xook1q3V9GncqmxBNs=;
+        b=iOnzyINlILniQP2HRPivDFLMjVUVk2QQghS1NdKbwT8rRo+aVuMr+sfhItnycltrNm
+         +n6dJOvm68rZFp2EiiEnVADw/GZuH7oKvqN5Sq39xJfzgSMC4/5mT/TAx3BStqepAQXQ
+         Sg4Dn+fhfxgYQwc18AdfeP92dYRiA++NH4Fi85nAY0RVNSlIGXaoGVPilka2ylzoQiOL
+         QFv51RKurWg4uRW70Xv1lzgmSMw2Ip/+GK4UUgD+U9SZlbfDzwzEPmEvWFZ81IT+N/0w
+         PNWNpwtVOFrYPj4+2nZkY4bDzIDrdYhdHQSuBH1u4hj92twmPTY8PNZWxTnXDJ34Xi9t
+         MkkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687804912; x=1690396912;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Mc8gTI3W4RW6dHKji0wpJv9Z8xook1q3V9GncqmxBNs=;
+        b=kJFUEg+BjMY6yFmmm6V4EfohtX8tyf9aaxuu+xbj2mDGh40wQGzVYF88y4b1n0KHiT
+         gy8nysyWywnPC8Cw4mKhk+2+JyMv0snKtnm4KEQ6DUUj/Lxq19k63CmvURXP3Q4otvOF
+         CXG4dWT663cbjAoejSYhoiBTcknlm7fVPkZSztnsKngkfVt74VROiBy4FMADqB2Enwet
+         WzmDf3nRW5le1MFX5kpRi+oZEEDajvG7I4O6jsZ1hWUlaGH4Q0cu/tD9v8Lxw61i2Cqg
+         I0Tm+DHQJsULA7ve5zDirvcBX2lB/H+PSNCGFEgyigFSddrVi5nKpm2yhGvCe54Zqyf6
+         p+bw==
+X-Gm-Message-State: AC+VfDzTWyD4yPLPWBf/iM0Y6b7wSTIbJVjZzaJ3/BQBZO0iIeO6jArb
+        gEvmJYZKRdLSBCeiHyp+/GbWvw==
+X-Google-Smtp-Source: ACHHUZ6kF7UCHGB/S7z47aVb3jHXMmBM7Gkc9O6kvyrBL6waC3X7eaZQjrosczNmx+jqkRnxb00mxg==
+X-Received: by 2002:a17:902:be09:b0:1b3:d6c8:7008 with SMTP id r9-20020a170902be0900b001b3d6c87008mr3314468pls.57.1687804912000;
+        Mon, 26 Jun 2023 11:41:52 -0700 (PDT)
+Received: from ghost.hq.rivosinc.com ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id y6-20020a1709029b8600b001b682336f66sm4499842plp.55.2023.06.26.11.41.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jun 2023 11:41:51 -0700 (PDT)
+From:   Charlie Jenkins <charlie@rivosinc.com>
+To:     charlie@rivosinc.com
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Zong Li <zong.li@sifive.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guo Ren <guoren@kernel.org>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Sergey Matyukevich <sergey.matyukevich@syntacore.com>,
+        David Hildenbrand <david@redhat.com>,
+        Mayuresh Chitale <mchitale@ventanamicro.com>,
+        Qinglin Pan <panqinglin2020@iscas.ac.cn>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Brian Cain <bcain@quicinc.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Anup Patel <anup@brainfault.org>,
+        Sunil V L <sunilvl@ventanamicro.com>,
+        Evan Green <evan@rivosinc.com>,
+        Guillaume Tucker <guillaume.tucker@collabora.com>,
+        Mark Brown <broonie@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-doc@vger.kernel.org (open list:DOCUMENTATION),
+        linux-riscv@lists.infradead.org (open list:RISC-V ARCHITECTURE),
+        linux-kernel@vger.kernel.org (open list),
+        linux-mm@kvack.org (open list:EXEC & BINFMT API),
+        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
+Subject: [PATCH 0/2] Restrict address space for sv39,sv48,sv57
+Date:   Mon, 26 Jun 2023 11:36:02 -0700
+Message-Id: <20230626183611.40479-1-charlie@rivosinc.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,93 +103,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Create a section that specifies how to deal with DRM device resets for
-kernel and userspace drivers.
+Make sv39 the default address space for mmap as some applications
+currently depend on this assumption. The RISC-V specification enforces
+that bits outside of the virtual address range are not used, so
+restricting the size of the default address space as such should be
+temporary. A hint address passed to mmap will cause the largest address
+space that fits entirely into the hint to be used. If the hint is less
+than or equal to 1<<38, a 39-bit address will be used. After an address
+space is completely full, the next smallest address space will be used.
 
-Signed-off-by: André Almeida <andrealmeid@igalia.com>
----
- Documentation/gpu/drm-uapi.rst | 68 ++++++++++++++++++++++++++++++++++
- 1 file changed, 68 insertions(+)
+Documentation is also added to the RISC-V virtual memory section to explain
+these changes.
 
-diff --git a/Documentation/gpu/drm-uapi.rst b/Documentation/gpu/drm-uapi.rst
-index 65fb3036a580..25a11b9b98fa 100644
---- a/Documentation/gpu/drm-uapi.rst
-+++ b/Documentation/gpu/drm-uapi.rst
-@@ -285,6 +285,74 @@ for GPU1 and GPU2 from different vendors, and a third handler for
- mmapped regular files. Threads cause additional pain with signal
- handling as well.
- 
-+Device reset
-+============
-+
-+The GPU stack is really complex and is prone to errors, from hardware bugs,
-+faulty applications and everything in between the many layers. Some errors
-+require resetting the device in order to make the device usable again. This
-+section describes what is the expectations for DRM and usermode drivers when a
-+device resets and how to propagate the reset status.
-+
-+Kernel Mode Driver
-+------------------
-+
-+The KMD is responsible for checking if the device needs a reset, and to perform
-+it as needed. Usually a hang is detected when a job gets stuck executing. KMD
-+should keep track of resets, because userspace can query any time about the
-+reset stats for an specific context. This is needed to propagate to the rest of
-+the stack that a reset has happened. Currently, this is implemented by each
-+driver separately, with no common DRM interface.
-+
-+User Mode Driver
-+----------------
-+
-+The UMD should check before submitting new commands to the KMD if the device has
-+been reset, and this can be checked more often if it requires to. After
-+detecting a reset, UMD will then proceed to report it to the application using
-+the appropriated API error code, as explained in the below section about
-+robustness.
-+
-+Robustness
-+----------
-+
-+The only way to try to keep an application working after a reset is if it
-+complies with the robustness aspects of the graphical API that it is using.
-+
-+Graphical APIs provide ways to application to deal with device resets. However,
-+there is no guarantee that the app will be correctly using such features, and
-+UMD can implement policies to close the app if it is a repeating offender,
-+likely in a broken loop. This is done to ensure that it does not keeps blocking
-+the user interface from being correctly displayed. This should be done even if
-+the app is correct but happens to trigger some bug in the hardware/driver.
-+
-+OpenGL
-+~~~~~~
-+
-+Apps using OpenGL should use the available robust interfaces, like the
-+extension ``GL_ARB_robustness`` (or ``GL_EXT_robustness`` for OpenGL ES). This
-+interface tells if a reset has happened, and if so, all the context state is
-+considered lost and the app proceeds by creating new ones. If is possible to
-+determine that robustness is not in use, UMD will terminate the app when a reset
-+is detected, giving that the contexts are lost and the app won't be able to
-+figure this out and recreate the contexts.
-+
-+Vulkan
-+~~~~~~
-+
-+Apps using Vulkan should check for ``VK_ERROR_DEVICE_LOST`` for submissions.
-+This error code means, among other things, that a device reset has happened and
-+it needs to recreate the contexts to keep going.
-+
-+Reporting resets causes
-+-----------------------
-+
-+Apart from propagating the reset through the stack so apps can recover, it's
-+really useful for driver developers to learn more about what caused the reset in
-+first place. DRM devices should make use of devcoredump to store relevant
-+information about the reset, so this information can be added to user bug
-+reports.
-+
- .. _drm_driver_ioctl:
- 
- IOCTL Support on Device Nodes
+Charlie Jenkins (2):
+  RISC-V: mm: Restrict address space for sv39,sv48,sv57
+  RISC-V: mm: Update documentation and include test
+
+ Documentation/riscv/vm-layout.rst             | 20 ++++++++
+ arch/riscv/include/asm/elf.h                  |  2 +-
+ arch/riscv/include/asm/pgtable.h              | 21 ++++++--
+ arch/riscv/include/asm/processor.h            | 41 +++++++++++++---
+ tools/testing/selftests/riscv/Makefile        |  2 +-
+ tools/testing/selftests/riscv/mm/Makefile     | 22 +++++++++
+ .../selftests/riscv/mm/testcases/mmap.c       | 49 +++++++++++++++++++
+ 7 files changed, 144 insertions(+), 13 deletions(-)
+ create mode 100644 tools/testing/selftests/riscv/mm/Makefile
+ create mode 100644 tools/testing/selftests/riscv/mm/testcases/mmap.c
+
+
+base-commit: eef509789cecdce895020682192d32e8bac790e8
 -- 
-2.41.0
+2.34.1
 
