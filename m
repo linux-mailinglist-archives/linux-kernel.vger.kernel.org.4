@@ -2,262 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E800073D9C0
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 10:30:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02F4C73D9C3
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 10:31:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230083AbjFZIar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 04:30:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34408 "EHLO
+        id S229648AbjFZIbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 04:31:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjFZIap (ORCPT
+        with ESMTP id S230164AbjFZIa7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 04:30:45 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32686DA;
-        Mon, 26 Jun 2023 01:30:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687768244; x=1719304244;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=x93XfnvLnKgassfdHp4RMwW0WBwmDsnuND8yittK6Wo=;
-  b=UFgObavuvw7kIEzkbQUAY8l2HI6AkCUVA0393IffMH2A6c3nL/DXBvos
-   fXmnGtM3WgIqRNywVplGLS9KKlMjHadSd142JS9kNefTd/65mysDCI6rz
-   6fyHpfGKbprIeU2wl14gFRyY9h2sdMsxLKzxV0rrDDwm8M3R1vBFZuwvy
-   4wYn1ca5CDNKuebv4aTPFxSoEvsqTCbSXn28qSY+vhR7iV9uFbXWG84ae
-   HC2p2fKRnRzLYJXkjeCwiRrSxiXe/vga129jFKctpw4xU95WKE/qVteDY
-   RMBD/02Nm2lSunSzJ/H0C8h+nU6I0lTlfLSwBfAVr7B1eYSR9PGtjVNyi
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="447594942"
-X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
-   d="scan'208";a="447594942"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 01:30:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="860604967"
-X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
-   d="scan'208";a="860604967"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 26 Jun 2023 01:30:40 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 26 Jun 2023 11:30:39 +0300
-Date:   Mon, 26 Jun 2023 11:30:39 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 2/3] usb: typec: fsa4480: rework mux & switch setup to
- handle more states
-Message-ID: <ZJlMr6vad6kPor1k@kuha.fi.intel.com>
-References: <20230614-topic-sm8550-upstream-type-c-audio-v1-0-15a92565146b@linaro.org>
- <20230614-topic-sm8550-upstream-type-c-audio-v1-2-15a92565146b@linaro.org>
+        Mon, 26 Jun 2023 04:30:59 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86F26E7B
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 01:30:56 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-991ef0b464cso13532366b.0
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 01:30:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687768255; x=1690360255;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Z6Q9XtGAe9pmT920uAOyU/UADbYVSu2ITB2+DxW4Lk8=;
+        b=SWpuU3MrBWg1VaE3Fr8Z0YRmYMhGlk9J9qdttbWilg6IB5RjkTOJY2u06kCQ+bfGe8
+         DJSrlakWQeo/fHUSy9zX1JzfROWovG39LUHZiipNakCc6n5StFwZ89CVCy7dco4J0A8h
+         3k3XoTfj1+97Mo9fZIufMJ7RUsLcT6SfWWGZVPNT6SuyAKuA2jZjScOcmZ6cXlJnguW3
+         oa7RFipoKK5qHVyYnpSgYjJe6wVuNVwHvDkBK3oGvlrH5462wxf9FDmphYzZhKTcSRvk
+         f7PoQpx3vPxp0DyWOVRaMGtM7SLmVuYOv7lDa7Ceb7/gkoXGCgxc97Q1/HoZMUztv9dI
+         mZhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687768255; x=1690360255;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Z6Q9XtGAe9pmT920uAOyU/UADbYVSu2ITB2+DxW4Lk8=;
+        b=FlpVdaPvPxnKpyOx0yJwOLaO73A7VGskdwIOU9GirIghxpwBJEw4Czg2HS7VhLFa4Y
+         zmkvCxpKoZOTzpkBsz2g7wZSaxhrMixqBwJ7Ij4vMeevn91qRxCI3iT5Kwl3KByymfuQ
+         +q6VH25yJd9Dy3IkGwS0844boo/Tobz/cOGeBLZs9T23sobpQOEza9GLqEqD0Wm2WTNL
+         cVk4Z8HR+2oWiHyxUXKPKuCbs7CeRPNKRWAqkFeZs5m358ttxxIMPEKmHhAuefrN+Nbx
+         vvUNoKYdVXd6bq+BtVbUfObLkb4ulMmXlGjuVeTX5nUs0IhUvzzRtastcPqW351jUw5j
+         FMKQ==
+X-Gm-Message-State: AC+VfDxLO45Xarao61OqxxjJ5YiI+A6ukVxGOseyuW5xe1HcqB87sqD6
+        xSSSiCnGNClpXG0ahUnocL8a5Q==
+X-Google-Smtp-Source: ACHHUZ7nn/1Fi/+3MWyVpG6zaAZrJEd0canSK2GOthmprJI4z4sBP6lCZi7wDvbASjZjDl/i30AO9Q==
+X-Received: by 2002:a17:907:7ba5:b0:982:4b35:c0b6 with SMTP id ne37-20020a1709077ba500b009824b35c0b6mr27532143ejc.1.1687768254853;
+        Mon, 26 Jun 2023 01:30:54 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id r1-20020a1709064d0100b0098e0d1c1096sm2397810eju.136.2023.06.26.01.30.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Jun 2023 01:30:54 -0700 (PDT)
+Message-ID: <d0b6f2c9-8e85-a38b-e2b1-14f197ca1ea0@linaro.org>
+Date:   Mon, 26 Jun 2023 10:30:52 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230614-topic-sm8550-upstream-type-c-audio-v1-2-15a92565146b@linaro.org>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v4 1/6] dt-bindings: nvmem: sec-qfprom: Add bindings for
+ secure qfprom
+Content-Language: en-US
+To:     Komal Bajaj <quic_kbajaj@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20230623141806.13388-1-quic_kbajaj@quicinc.com>
+ <20230623141806.13388-2-quic_kbajaj@quicinc.com>
+ <cea67754-6bc0-f8ee-3cba-8713b10b0c69@linaro.org>
+ <d9cde55b-fc96-b024-8048-1de1fa1bd89e@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <d9cde55b-fc96-b024-8048-1de1fa1bd89e@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 03:10:40PM +0200, Neil Armstrong wrote:
-> In order to handle the Audio Accessory mode, refactor the mux
-> and switch setup in a single function.
+On 26/06/2023 10:22, Komal Bajaj wrote:
+>>
+>>> +
+>>> +allOf:
+>>> +  - $ref: nvmem.yaml#
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    items:
+>>> +      - enum:
+>>> +          - qcom,qdu1000-sec-qfprom
+>>> +      - const: qcom,sec-qfprom
+>>> +
+>>> +  reg:
+>>> +    items:
+>>> +      - description: The secure qfprom corrected region.
+>>> +
+>>> +  # Needed if any child nodes are present.
+>>> +  "#address-cells":
+>>> +    const: 1
+>>> +  "#size-cells":
+>>> +    const: 1
+>> Drop both, they are not needed.
 > 
-> The refactor will help add new states and make the process
-> simpler to understand.
-> 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> I didn't get it. Can you please explain why these are not needed as this
+> node will have child nodes which will use single value for address and size.
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+I suspect they are already defined. Do other bindings (for cases with
+children) have them? If not, why here it would be different?
 
-> ---
->  drivers/usb/typec/mux/fsa4480.c | 111 +++++++++++++++++++++++++++-------------
->  1 file changed, 75 insertions(+), 36 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/mux/fsa4480.c b/drivers/usb/typec/mux/fsa4480.c
-> index d6495e533e58..b2913594a58f 100644
-> --- a/drivers/usb/typec/mux/fsa4480.c
-> +++ b/drivers/usb/typec/mux/fsa4480.c
-> @@ -46,8 +46,11 @@ struct fsa4480 {
->  
->  	struct regmap *regmap;
->  
-> +	enum typec_orientation orientation;
-> +	unsigned long mode;
-> +	unsigned int svid;
-> +
->  	u8 cur_enable;
-> -	u8 cur_select;
->  };
->  
->  static const struct regmap_config fsa4480_regmap_config = {
-> @@ -58,19 +61,42 @@ static const struct regmap_config fsa4480_regmap_config = {
->  	.disable_locking = true,
->  };
->  
-> -static int fsa4480_switch_set(struct typec_switch_dev *sw,
-> -			      enum typec_orientation orientation)
-> +static int fsa4480_set(struct fsa4480 *fsa)
->  {
-> -	struct fsa4480 *fsa = typec_switch_get_drvdata(sw);
-> -	u8 new_sel;
-> -
-> -	mutex_lock(&fsa->lock);
-> -	new_sel = FSA4480_SEL_USB;
-> -	if (orientation == TYPEC_ORIENTATION_REVERSE)
-> -		new_sel |= FSA4480_SEL_SBU_REVERSE;
-> -
-> -	if (new_sel == fsa->cur_select)
-> -		goto out_unlock;
-> +	bool reverse = (fsa->orientation == TYPEC_ORIENTATION_REVERSE);
-> +	u8 enable = FSA4480_ENABLE_DEVICE;
-> +	u8 sel = 0;
-> +
-> +	/* USB Mode */
-> +	if (fsa->mode < TYPEC_STATE_MODAL ||
-> +	    (!fsa->svid && (fsa->mode == TYPEC_MODE_USB2 ||
-> +			    fsa->mode == TYPEC_MODE_USB3))) {
-> +		enable |= FSA4480_ENABLE_USB;
-> +		sel = FSA4480_SEL_USB;
-> +	} else if (fsa->svid) {
-> +		switch (fsa->mode) {
-> +		/* DP Only */
-> +		case TYPEC_DP_STATE_C:
-> +		case TYPEC_DP_STATE_E:
-> +			enable |= FSA4480_ENABLE_SBU;
-> +			if (reverse)
-> +				sel = FSA4480_SEL_SBU_REVERSE;
-> +			break;
-> +
-> +		/* DP + USB */
-> +		case TYPEC_DP_STATE_D:
-> +		case TYPEC_DP_STATE_F:
-> +			enable |= FSA4480_ENABLE_USB | FSA4480_ENABLE_SBU;
-> +			sel = FSA4480_SEL_USB;
-> +			if (reverse)
-> +				sel |= FSA4480_SEL_SBU_REVERSE;
-> +			break;
-> +
-> +		default:
-> +			return -EOPNOTSUPP;
-> +		}
-> +	} else
-> +		return -EOPNOTSUPP;
->  
->  	if (fsa->cur_enable & FSA4480_ENABLE_SBU) {
->  		/* Disable SBU output while re-configuring the switch */
-> @@ -81,48 +107,59 @@ static int fsa4480_switch_set(struct typec_switch_dev *sw,
->  		usleep_range(35, 1000);
->  	}
->  
-> -	regmap_write(fsa->regmap, FSA4480_SWITCH_SELECT, new_sel);
-> -	fsa->cur_select = new_sel;
-> -
-> -	if (fsa->cur_enable & FSA4480_ENABLE_SBU) {
-> -		regmap_write(fsa->regmap, FSA4480_SWITCH_ENABLE, fsa->cur_enable);
-> +	regmap_write(fsa->regmap, FSA4480_SWITCH_SELECT, sel);
-> +	regmap_write(fsa->regmap, FSA4480_SWITCH_ENABLE, enable);
->  
-> +	if (enable & FSA4480_ENABLE_SBU) {
->  		/* 15us to allow the SBU switch to turn on again */
->  		usleep_range(15, 1000);
->  	}
->  
-> -out_unlock:
-> -	mutex_unlock(&fsa->lock);
-> +	fsa->cur_enable = enable;
->  
->  	return 0;
->  }
->  
-> +static int fsa4480_switch_set(struct typec_switch_dev *sw,
-> +			      enum typec_orientation orientation)
-> +{
-> +	struct fsa4480 *fsa = typec_switch_get_drvdata(sw);
-> +	int ret = 0;
-> +
-> +	mutex_lock(&fsa->lock);
-> +
-> +	if (fsa->orientation != orientation) {
-> +		fsa->orientation = orientation;
-> +
-> +		ret = fsa4480_set(fsa);
-> +	}
-> +
-> +	mutex_unlock(&fsa->lock);
-> +
-> +	return ret;
-> +}
-> +
->  static int fsa4480_mux_set(struct typec_mux_dev *mux, struct typec_mux_state *state)
->  {
->  	struct fsa4480 *fsa = typec_mux_get_drvdata(mux);
-> -	u8 new_enable;
-> +	int ret = 0;
->  
->  	mutex_lock(&fsa->lock);
->  
-> -	new_enable = FSA4480_ENABLE_DEVICE | FSA4480_ENABLE_USB;
-> -	if (state->mode >= TYPEC_DP_STATE_A)
-> -		new_enable |= FSA4480_ENABLE_SBU;
-> +	if (fsa->mode != state->mode) {
-> +		fsa->mode = state->mode;
->  
-> -	if (new_enable == fsa->cur_enable)
-> -		goto out_unlock;
-> +		if (state->alt)
-> +			fsa->svid = state->alt->svid;
-> +		else
-> +			fsa->svid = 0; // No SVID
->  
-> -	regmap_write(fsa->regmap, FSA4480_SWITCH_ENABLE, new_enable);
-> -	fsa->cur_enable = new_enable;
-> -
-> -	if (new_enable & FSA4480_ENABLE_SBU) {
-> -		/* 15us to allow the SBU switch to turn off */
-> -		usleep_range(15, 1000);
-> +		ret = fsa4480_set(fsa);
->  	}
->  
-> -out_unlock:
->  	mutex_unlock(&fsa->lock);
->  
-> -	return 0;
-> +	return ret;
->  }
->  
->  static int fsa4480_probe(struct i2c_client *client)
-> @@ -143,8 +180,10 @@ static int fsa4480_probe(struct i2c_client *client)
->  	if (IS_ERR(fsa->regmap))
->  		return dev_err_probe(dev, PTR_ERR(fsa->regmap), "failed to initialize regmap\n");
->  
-> +	/* Safe mode */
->  	fsa->cur_enable = FSA4480_ENABLE_DEVICE | FSA4480_ENABLE_USB;
-> -	fsa->cur_select = FSA4480_SEL_USB;
-> +	fsa->mode = TYPEC_STATE_SAFE;
-> +	fsa->orientation = TYPEC_ORIENTATION_NONE;
->  
->  	/* set default settings */
->  	regmap_write(fsa->regmap, FSA4480_SLOW_L, 0x00);
-> @@ -156,7 +195,7 @@ static int fsa4480_probe(struct i2c_client *client)
->  	regmap_write(fsa->regmap, FSA4480_DELAY_L_MIC, 0x00);
->  	regmap_write(fsa->regmap, FSA4480_DELAY_L_SENSE, 0x00);
->  	regmap_write(fsa->regmap, FSA4480_DELAY_L_AGND, 0x09);
-> -	regmap_write(fsa->regmap, FSA4480_SWITCH_SELECT, fsa->cur_select);
-> +	regmap_write(fsa->regmap, FSA4480_SWITCH_SELECT, FSA4480_SEL_USB);
->  	regmap_write(fsa->regmap, FSA4480_SWITCH_ENABLE, fsa->cur_enable);
->  
->  	sw_desc.drvdata = fsa;
-> 
-> -- 
-> 2.34.1
 
--- 
-heikki
+Best regards,
+Krzysztof
+
