@@ -2,128 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D9ED73DF7B
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 14:42:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 933A673DF85
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 14:44:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230503AbjFZMmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 08:42:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39468 "EHLO
+        id S229628AbjFZMoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 08:44:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229736AbjFZMmM (ORCPT
+        with ESMTP id S229871AbjFZMoI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 08:42:12 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2687E122
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 05:42:11 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-312863a983fso3740743f8f.2
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 05:42:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687783329; x=1690375329;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=1xYFUI/k6vE8xTpsdHwPYP/AxDoWz5CfcCmedbDcsCk=;
-        b=HulYCJn2XvaoDSsPKEw20CbMSvHHqVWwluwnv+5VYXvTK9JPgZ5nM3vQc35CmzxnVT
-         erSpLVKvkwcp9NcrYGD0XF6zV5/FE7ShtDTlaa7RRJ7lTJ0Rl+l2ql7V+xWoL7BQvspW
-         bUup2x/P3rogs01jgXA864coD/zr8aeVLsmxVpKFeUmYNif+lEEMcNwz+YQvJ90+V5/S
-         Sca/4xnf4cwZ0DktnLljqtStdu3CZ0hcXzeCEfW5nEmNFV6OPPRZQ53y7knjWUzVL219
-         qpuOQ/exS1vaqQXMVVL4IXxyw2LvSSZu8iPBjpgIMltUNPVUbagSRGficpDPylbcjgrn
-         /xvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687783329; x=1690375329;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1xYFUI/k6vE8xTpsdHwPYP/AxDoWz5CfcCmedbDcsCk=;
-        b=dXPw3G0qEvx7k5sQ43YUiyEi0BY1x7KyDDe2XwRq0eD11n8POnGwkI+Z3TmVqQvjEH
-         f0sUvkW4SeoUeBM2trg3G93m3zI3rr7QdSaUOlLFXCxCiyvSIkeBbv47IJi+Gb7HuvFl
-         HCGRJz3zMtNBWU9fRIEG0lx9hsLPIPRla3pnd7K3Qw4vt2krfvrFDNmSm7DSLqYA8l+N
-         Rgylp02GITG/s8B61NucU+s57NIOHCAgOkQkmJ9/GQ6zTC2AzExgWNOWs174laTvExWA
-         aW8Bc8UWG2RiyW2+IzFAjdKCV2c4+AkP8tfPlVSlhHmCJgbbYQuapt8COS/v2kiattI7
-         JFMg==
-X-Gm-Message-State: AC+VfDwVBcr77WxqENNk5mPJClHQVR/iyqDhA1k2l2VySpkCQRQhOMv3
-        ++ZINqdD1XfZmyySLcVOLxqSpg==
-X-Google-Smtp-Source: ACHHUZ4jV/fFHYVmJHIFWX5YYyvq2DO6Ztl2dE10nsLUPa3JM9Dl8QYQNK041AtNX4hZ2/9zrLf4Xg==
-X-Received: by 2002:adf:f203:0:b0:30f:ca58:39ca with SMTP id p3-20020adff203000000b0030fca5839camr23923068wro.31.1687783329608;
-        Mon, 26 Jun 2023 05:42:09 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id h10-20020a5d504a000000b00313e8dc7facsm5477055wrt.116.2023.06.26.05.42.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jun 2023 05:42:07 -0700 (PDT)
-Date:   Mon, 26 Jun 2023 15:42:03 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     Ian Rogers <irogers@google.com>, Sasha Levin <sashal@kernel.org>
-Cc:     Markus Elfring <Markus.Elfring@web.de>,
-        linux-perf-users@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Ivan Babrou <ivan@cloudflare.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>, cocci@inria.fr
-Subject: Re: [PATCH v2] perf unwind: Fix map reference counts
-Message-ID: <35569055-0873-4d5d-8c9c-78c818e9aa26@moroto.mountain>
-References: <20230623043107.4077510-1-irogers@google.com>
- <64741e8e-e81a-afb9-9ce3-9c2d6baab44a@web.de>
- <CAP-5=fVwhiGJEqTST2bfX8cUALpnTxELSHrvKtyJEPjqQjOacQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+        Mon, 26 Jun 2023 08:44:08 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2136.outbound.protection.outlook.com [40.107.117.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA56E5F;
+        Mon, 26 Jun 2023 05:43:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cWJo4uYkbN4CBjiRNVhEPSrkmN3wFJcLsvgnFiF78GFyAMiHitPlGZkgpDUfBJ22+2HiOAJilJ4uIgn14E6t+6IvNL+lie7NTVK4VTsfPAuOTQPwUOqRHINWsHv8vKhyb75+rqkQ8jJ81+lZwfh07RcLG4iLAR7kkOR8zSa+Nq4DmV+3KJFG2SOcXNMqsHaidA11qE7uYCXms2T6iBSgCQlGUz/C66u31scJ5CVZdWmDrYpba7wVvZZyRGJku+3FcYDZQteU5pQAbjufKzo/FG2FlAkcCGVVuuqExw8s6BK+l67TNutqGcPdZH78U+sRnxxIds57HFFnSW9CPTT4fw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VxGTsAwncuXzWJKAN7hRxKXYlt1L21kJGv1I+pqlCXM=;
+ b=SvKOjXPyggxPVynRt5ezl55p7P31tHfuIWraR0pmCTIqujXac2bGTZDjZOs5kZ/C2esIcl9QwbIQTeiyRA1gXRRqK6xSbOXALv9F74lZgljnsPsQ3iqB7F3SNXJUnp3vElGWm3/QjoKDcoGCCp3bT0q15dHXLm3b6gjHpVpsGM7i6gOjby3pho2Z0DxUxqj3q2LvvGYiG6+GcBs4yCCZ9u8+8OWGD9OiV7sK6IxEUMdCjLgbzXpfU76VYgsHEGq3AhmO4zjiK8fbVBfFNkx2a6taZL0ZdGo0MpvNHwt8OeS0SQ5lZJllZ8CimZlgx4omdxDibb0kR16+GhfYTEaPiQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VxGTsAwncuXzWJKAN7hRxKXYlt1L21kJGv1I+pqlCXM=;
+ b=WkYBm+21N097RJy0yrSUV6d0SwpF0uBFXMdd8w7u0qo29YiWa/1Lm5Q3yZxDLF9OnYAdbvXDtFMDhq8fm6DtBifx2+npd1m4eFgMdZTuVV62pGF2NxzIx38oC22uqdDoJgMeQkgTCylwbh7uXOW5XgU83Z5Cp+SAM7R/UI8dRLFafOfnMiyzeY/Ndgsy8E/AphxvjE3XShs59CJHOJSKI43v3q07+x0mczg2+/duejSYdPiqwdkLBnPVSfLQHleJWcdptZuu+4JEKOOfPacuNi07a0HbnnsrVKOajvd+oKiH+4KCZpYT+nJkYoqstXTWKF9mJf0bsz0EAXnoy2LB/A==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by SEZPR06MB5320.apcprd06.prod.outlook.com (2603:1096:101:7f::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.23; Mon, 26 Jun
+ 2023 12:43:52 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::fa0e:6c06:7474:285c]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::fa0e:6c06:7474:285c%5]) with mapi id 15.20.6521.023; Mon, 26 Jun 2023
+ 12:43:51 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     Yangtao Li <frank.li@vivo.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/6] drivers/thermal/k3: Convert to devm_platform_ioremap_resource()
+Date:   Mon, 26 Jun 2023 20:43:28 +0800
+Message-Id: <20230626124334.15100-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.39.0
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAP-5=fVwhiGJEqTST2bfX8cUALpnTxELSHrvKtyJEPjqQjOacQ@mail.gmail.com>
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR02CA0003.apcprd02.prod.outlook.com
+ (2603:1096:4:194::13) To SEZPR06MB5269.apcprd06.prod.outlook.com
+ (2603:1096:101:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|SEZPR06MB5320:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7c4d439f-6471-470b-aa4d-08db7642fe57
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ZpOregUXZooThNZJlvTgDQKDHZNWjSAIYKPAF90yOl0ehI+7jz8Qr145C4Uj1q/0hnMgceX3+QzCDqVTUq3TCfsyLPpstxraiKMK48svRRT/TP19tdgGzq7+wz0L99XJpFpwQ/eUtwQzSjJHitEQuF0tRYcj35F8Auz3+RHgiihnyaDLbZaatVmKHwTwjrOJJu1JkKyMebAzD7E9tLDuZd99bdLpRUQALIYrk68UEZSP+mmj766U8wDgtd34HuPjciS/mqb4zVkE/FrnNJiw/pK3j2flU9Rivxxv075mCFROB7xHjKC7h9xTs4hNP84yqW+4zclA8R88A4Lv3+xpSp6F7PJ8Wh5C3zet3kI2B0Iou1Ab8HnD5g7eKvuI1+4tUIvOF47ZQgMRpHbjm2aPTvVEIg0xo8XoQbny0BUKoULoEts20l6qlp+mCKOBz19wShT43/Y1ZoD/ptXEY2rPSvNRxbV+GMTT3bMFRN0JcZORN07EcF1St4ZxD8SyM1Y1JmVeXngJoJuPRJFqWxUnfSGaAgtn20q48k8HMd96d9/V4bE7o1Yw3iQyvw4FcswkfyEHf1Uw5b7p0je0Ie2rFzpVl2DTFNJK5z/LP3LTF4Kcxg0yVhA6cUu3EkoIaK38
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(39860400002)(136003)(346002)(396003)(376002)(451199021)(2906002)(4744005)(6486002)(52116002)(6666004)(38350700002)(38100700002)(83380400001)(2616005)(6512007)(26005)(186003)(41300700001)(110136005)(86362001)(478600001)(36756003)(66476007)(66556008)(4326008)(66946007)(316002)(6506007)(1076003)(5660300002)(8676002)(8936002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?MFYK302EK4pl+m0/9PfC8E6nrK/tLtzb+M6Ei6ng3KoXztFFeyNqt09o7FmZ?=
+ =?us-ascii?Q?xXrCRzN6FZ6RhXksoUjeWaQ15r+dbaRMU3q2omWdwNyidZ8sQ5zcKmrurQpe?=
+ =?us-ascii?Q?/4T+wNVCdV3gunwtqEKnxgM/xJIu8zoQhxTVKRdec3cIZa/UFmuT+rYQQa2r?=
+ =?us-ascii?Q?pfC7cUsPHUYjgPkj9D6vTSITHMNCZRdLC38bsoSylVQITNxIqenTQha14Yy8?=
+ =?us-ascii?Q?NsJ12cbeKT4Us0bhgoxRO3W3D9nyYzHHpMW4Y3f9i7N+AQCC5DmJjq9JwdWc?=
+ =?us-ascii?Q?fF2D2EWvh9XXS2rvCztFhLUyVypQIQlt0ENxaq4mUnZi/QhDpTjkzWpgv957?=
+ =?us-ascii?Q?J+MJBHX9HBZSacFYeyCWnFr8EdGPYBGa2WANR4NtpJxwW/tpt+Pmn74UT4Yd?=
+ =?us-ascii?Q?VuPqK6ASH+cEs2+8v5tKomjki5nCAGp65elkXAu79Oy9trIrjGNXqYpRo2kn?=
+ =?us-ascii?Q?8Q4JV2XYhIZx5R3BXCxFD8TqWez3xei1XCqySktNNlKF2Y4k3oiPs0zzSP1s?=
+ =?us-ascii?Q?HQ69L3v7Mui8WBb8BkRJG/ArIy7mbY67P8RyLG+uvu2pt/zqEOL3ej9SqcoG?=
+ =?us-ascii?Q?CnFIKhTqb89Ahq0/y9bJB47PiJzjTWjASz663ISezSjFUFGNqAcA8X8e0NN9?=
+ =?us-ascii?Q?eox9rJ2Bv6VSC447m3tyGWEa98rIwmcB6mQoPoMqfjEGbcptV8vxH4fDjS75?=
+ =?us-ascii?Q?s1BxrmpZLM0w4S48FL5JoLRlyq3/HVWPMoQAZuxXcLTycqdwFTpRuYtP/9jr?=
+ =?us-ascii?Q?Ga/vTFZR6RzClr5y+X/J5WAcTav3SjyYGXMJT2vkxCtgJY/oMgDMUD7g44V7?=
+ =?us-ascii?Q?Al7F5idsevnJ24H72flTNqQy4ejzdhOatdk1MvvDzi2v02cTyc3SiEiQBtmB?=
+ =?us-ascii?Q?2LZq7yhcbEIIYioloaLuJgNTQqAkEctDOU9s7llPjr1n02gt2GFkle+hSkLM?=
+ =?us-ascii?Q?OtXPHfdFn0i4BE/PvCE0/79Uz5ojDJbWJHbXCop03L4GIKX5dHe0nGqAbjx8?=
+ =?us-ascii?Q?1TK+fztBLOgjWRtpyAR1CrZhLIOBlJxWeO8KEZfPkvIo5uk8Z9vVEPONi7gU?=
+ =?us-ascii?Q?XREmbSvg7loLC6LHY6UCxzyVmJrY/jRTZKOrKOV0R/hoDPtKP+r4E4+bveFB?=
+ =?us-ascii?Q?jVHK4ocIiHDSAirxYZywFZ5iAsJm6tq288mw5+0F8UFIc9DLVQ7fhVFwtTDS?=
+ =?us-ascii?Q?phYi4WG74uZKpIvoOfiOBQ3BFxZ/RpmiUjOyreTwk02hvIEsuCd8TSakQM+1?=
+ =?us-ascii?Q?UqppEMhuo7h9Vh14Ad5fM5zAI46NktOn6DCs3Ly1CqlDQvPBUF/9WKJVJkVI?=
+ =?us-ascii?Q?ZF08Sb0KyuYqWcMdI7shg9z5rs1N5ouLoruj4/nrW12gX2aO9fFLAYZSAyu5?=
+ =?us-ascii?Q?kjexoEa6W+sHSwdvXcoZ8+YMhXd+czip3Fm5XE2RefYQVTHXxINsKl6ihGfq?=
+ =?us-ascii?Q?UyOynXKvDUFSkNP83NGMGfGdGotstYN07vNLTwUcckAeZ4nUZkVm2HxLGDUA?=
+ =?us-ascii?Q?W3r9Acx7AB7kWXi4oESfZQCAH6TH0IosxAzleuupVtLWyW0ZIkq32gOl5ZaX?=
+ =?us-ascii?Q?Vm2WsrKYzZDxlqq+NzSxYYwgwa7GGS4L4NMcxu9j?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7c4d439f-6471-470b-aa4d-08db7642fe57
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jun 2023 12:43:51.2602
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: AUuahRRtJ2z3IcGWGeCqDCRwtbdCtnyl7/b7HqFB9p9IeF9hgwbx4mXaow6KXF+Z/BZ0y3NrRtnVeNIXmmJ27w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR06MB5320
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 23, 2023 at 10:49:36AM -0700, Ian Rogers wrote:
-> >
-> > How do you think about to add the tag “Fixes”?
-> 
-> In general we've not been adding Fixes as there is a danger a backport
-> will introduce a use-after-free.
+Use devm_platform_ioremap_resource() to simplify code.
 
-I feel like we have been discussing issues around Perf backports
-recently.  Wasn't there some build breakage that wasn't detected?  Why
-not just ask Sasha to leave perf out of the -stable tree?
-
-Also Sasha has a tag to explain that patch AAA is included because
-patch BBB depends on it.  I feel like maybe those tags are backwards,
-it would be nicer to tag AAA as depending on BBB.  That way we could
-add the dependency tags here.
-
-I think at Linaro we have recently been testing taking the latest Perf
-tools and using them on older kernels.  I don't know the details around
-why we can't just use the perf that ships with the kernel...
-
-To tell the truth, I also don't really understand the problem for this
-patch specifically. From what I can see, the Fixes tag would have been:
-
-Fixes: 0dd5041c9a0e ("perf addr_location: Add init/exit/copy functions")
-
-1) Adding a Fixes tag would have automatically prevented any backports.
-2) I don't see any possible use after frees.  That probably means I have
-identified the wrong Fixes tag?
-
-I'm not going to dig further than that because I don't care.  I'm just
-looking at it because Markus added kernel-janitors to the CC list.  But
-for subsystems where I'm more involved then I always look at how a bug
-is introduced.  That information is essential to me as a reviewer.  So
-if I'm writing a patch and even if it's not a bug fix but let's say it
-deletes dead code then I often include include the information under the
---- cut off line.
-
+Signed-off-by: Yangtao Li <frank.li@vivo.com>
 ---
-This dead code was introduced by commit 23423423 ("blah blah blah").
+ drivers/thermal/k3_bandgap.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-regards,
-dan carpenter
+diff --git a/drivers/thermal/k3_bandgap.c b/drivers/thermal/k3_bandgap.c
+index 1c3e590157ec..dadb5d070455 100644
+--- a/drivers/thermal/k3_bandgap.c
++++ b/drivers/thermal/k3_bandgap.c
+@@ -160,7 +160,6 @@ static const struct of_device_id of_k3_bandgap_match[];
+ static int k3_bandgap_probe(struct platform_device *pdev)
+ {
+ 	int ret = 0, cnt, val, id;
+-	struct resource *res;
+ 	struct device *dev = &pdev->dev;
+ 	struct k3_bandgap *bgp;
+ 	struct k3_thermal_data *data;
+@@ -173,8 +172,7 @@ static int k3_bandgap_probe(struct platform_device *pdev)
+ 	if (!bgp)
+ 		return -ENOMEM;
+ 
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	bgp->base = devm_ioremap_resource(dev, res);
++	bgp->base = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(bgp->base))
+ 		return PTR_ERR(bgp->base);
+ 
+-- 
+2.39.0
+
