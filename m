@@ -2,128 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9E5F73E183
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 16:04:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C296573E189
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 16:04:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbjFZOEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 10:04:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56954 "EHLO
+        id S230506AbjFZOEp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 10:04:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230454AbjFZOD7 (ORCPT
+        with ESMTP id S230328AbjFZOEm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 10:03:59 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2040.outbound.protection.outlook.com [40.107.244.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D32210CF;
-        Mon, 26 Jun 2023 07:03:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nrIBj5jGmQc6XsXeQmYG6XEzPNayeJ7vIxxx+r+hR7/u3rBgo8C4uRqJ1YakojuYRblwfycySUUFd22NsrLRXSJM9QB4MJZPCMKFQ38sO8k9O63+fYXogGURwP4Xg/4GI7/YnCYP0dOwrC0v+edG18x04vIvOuaOS3HiI5VjhTegEtT4iiF8OGyq22cv2D3+LKERnzU4qRfkwSXQ+B3662lnKN7LrI179L7KJyQWftptz7C8yiYM3gfaOSfK5x/X0n0GOY3SGV1jaT7hlL4nrSncg/2TnAlVKbSTNkkXoUlEbqfPXr5BWi3drmlYEKly8ebfHQKC4yG/65qu4EN44w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=63QUoBMYMMbinQTTjhbAxFd7dFpTMI8zOiWiMElMeuc=;
- b=YMGmLn8mq7ucJINyejRNo9eQopE5GofdllNtm3S/svxsHkELmInYhu9bSRo/D1UxlhHG1pkPbC9dY9tnH1bLRLqeM+Vx7758PymMh3riNUOmC8r57dsqEx+kfyYtULkmTHERaRIBwIZd5EWFWt0wYMJYMWCgJwc4LNJYItElI67KgEXdEzyo1knjqm9SdR8zGs+JgLgxEnA76XXMdZwoR+C/KPbXCjq2jcHO7RYnEFd5L71dNsqsscZeQShwKemT/SYLabNMci4xCriySqLrZdFb7QsmreC9p0zze6WpH1wbRIB7H3nubYkN+kKAIxadrsacWOAoFEvm1UdHghWiZQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=63QUoBMYMMbinQTTjhbAxFd7dFpTMI8zOiWiMElMeuc=;
- b=fW8Nqz9ELr+wQoS2Jeicn5miP6qSMXWBJwCynIz76F1T6VTa8w0kiA5Cfbotif0ViugBVVH6bxKQuHClq0oMfFfWCdLAMVKI+YKlSy3LpLAmObMLBpKpWB0FL7rpaqGHKjtPzuqD9vwGcHCXbWtdW9D7CBpk8CUc5pxTN+ZiuijdhZDyndFSnYtWIeJOV8UQJlv7ogzEbGNiW95/6Yztj+7DgjbArM0wHcZ5x0hCAGSS/6o6hUZ4Bh4eBMdlK0IdDOR9Pys0zE6X5TSGq02d8CVEaESN5MgVnFDbsxm9R0/J6n8NyZ1DCr0i9WRosrRMKQHZjpVKLL5oF3rpliUdzg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by IA1PR12MB6089.namprd12.prod.outlook.com (2603:10b6:208:3ef::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.23; Mon, 26 Jun
- 2023 14:03:55 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab%7]) with mapi id 15.20.6521.024; Mon, 26 Jun 2023
- 14:03:55 +0000
-Date:   Mon, 26 Jun 2023 11:03:54 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Colin Ian King <colin.i.king@gmail.com>
-Cc:     Selvin Xavier <selvin.xavier@broadcom.com>,
-        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH][next] RDMA/bnxt_re: Fix spelling mistake "priviledged"
- -> "privileged"
-Message-ID: <ZJmaylUKX53Q03dH@nvidia.com>
-References: <20230626083535.53303-1-colin.i.king@gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230626083535.53303-1-colin.i.king@gmail.com>
-X-ClientProxiedBy: MN2PR02CA0016.namprd02.prod.outlook.com
- (2603:10b6:208:fc::29) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Mon, 26 Jun 2023 10:04:42 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1435E10EF
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 07:04:34 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2b69f71a7easo17666841fa.1
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 07:04:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687788272; x=1690380272;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wyIEHWHQ/LcvFyprRxFC+Na0w05IbCRKTBTbUS5cgdA=;
+        b=WrUvnmCzy00urIpPmpCzBuKn8wT0tNNC0Wvh8x2Hzr/jbBkLeZGDoUteOMHOBFsEEY
+         WoPRB0G/A6/yyXEiFRPlmcWraG49HRyjcV8/EBzHdiTYK56VLk7u1kEfLdxvH8qDXJSh
+         I8dbmVCYnd94fxo/J65iv6vyR2bH/EYT8qSC0DRPY4D5jLf6QLfkW59Cb7by6aaSuZxm
+         NhzdyHUz0tKyGRIwNit5zGQG6ZpIiQJ8jyTCnRzP1tFP5MVQzSoegV74zffZPfyQ24y1
+         nP5pt7iHRUmuMqk2td+hy+rZLyhFJ08iiX5HZ7WorozJbCVkmk0hcbbBY9t4rfbnYsVD
+         Fxnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687788272; x=1690380272;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wyIEHWHQ/LcvFyprRxFC+Na0w05IbCRKTBTbUS5cgdA=;
+        b=ce2725ezaVTV38jv7A1gvqyTUth7OrSbTIl28suFErlTyPkkDkTGKxOMa3zJtI7Dtn
+         uHo1u2Yrs3EtXouDFuLZ8sn1MwtHJFvqWU8xXjZxkR1BPY313sV1Ul32yzwGC2Wm6TPW
+         cd9GJUl5DJBmPag8nKpZjRQD7zKj2biZjt9xsb3N8oTcwZM9m7gHGhQDlhSqkfY2SeGr
+         9E/FdEi042OAsy99GYZGDIaNTr4mEtcBmTgqFmQhcWUzcdbss7XWZlpEdz9/QyPnW6+v
+         UyAZQ0Knii5H2wu4sQ9XqO54jMSMFqs1+yaCVLsIuRUOFMewdBGV8yaXFfTYMQqP1X+l
+         9XbQ==
+X-Gm-Message-State: AC+VfDzK5Z8TH4zsKRZXvy5hYuKaRebpl1V6yijEOaei02/ExvLyV14e
+        Bt8HDStoYyAGZ10f+0MgvOFlmQ==
+X-Google-Smtp-Source: ACHHUZ4cCys5jLmsTbxwl6vC2/4BuewVlsgk63nHZjzLyOKbLNIGAd+7i6deIkRRAZW5T+VP+CDn+Q==
+X-Received: by 2002:a2e:8855:0:b0:2b5:fef9:6ad6 with SMTP id z21-20020a2e8855000000b002b5fef96ad6mr3241115ljj.25.1687788272229;
+        Mon, 26 Jun 2023 07:04:32 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id a10-20020a2e88ca000000b002b6a4f35a0csm297726ljk.35.2023.06.26.07.04.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Jun 2023 07:04:30 -0700 (PDT)
+Message-ID: <631728c5-9e4f-fa5d-e954-d4ba35f6fd19@linaro.org>
+Date:   Mon, 26 Jun 2023 17:04:29 +0300
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|IA1PR12MB6089:EE_
-X-MS-Office365-Filtering-Correlation-Id: 57d21f7d-eaad-4782-4d65-08db764e2de0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: jmaxx/pRsCqiOfOxW3KBFhIJdTgTeWpXZsneO9CuA2VWfIMRb5xwEZHmrltJq2nSG0e0Kl+wD0UpMqnyFL6PrTzVAsH+0yj8kwajLXbUuXgiEniPT2gNJ0Kv4rQoRw/j6eGRQRorA2xA9BIkVR3I+LO1GjmxV0pppxbB9bUFB5OOUvEPZCKzUavkwgg+2UeyXZ9UdBDC0HtbwTBwun7GfwvqQTwDP74Q/XxheK3POY6k9WxeLrJMgV/rxBVnWTn4Ci0bkfSoxZlKD8EQmuqfysYXZ5ab0/1HTQufa/RMtmutyC2T01O0hnF5h1Or+JZY+3EhQyhmHv/UDbSbluIJ7Xxtzv4bM+AtcFFbU5zE0H2o+11LW4aPweFH+uh9nP3X6gREiwyPxSjjQLFzd01JYe6n+a7QXcqlUP22J5Z2Zcrqa87XKyjUBlfAy+mqmTXQbcLI3jrpDdswuOvro1zqTJ6DCs6G7HA2ZIpLDvsnG4HfgL9xQq3K8Q5Zcg1zuCOs+0sUrcmVQ4St9tXsDN3iroGqgEtUMDlQLmwgWr8cRJSR8XRx+qUXGZOUuUV35q8q
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(396003)(136003)(376002)(366004)(451199021)(36756003)(5660300002)(41300700001)(316002)(86362001)(66476007)(6916009)(8936002)(8676002)(66556008)(4326008)(38100700002)(66946007)(6486002)(6512007)(26005)(6506007)(2906002)(4744005)(186003)(478600001)(54906003)(83380400001)(2616005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?UBbUsJSIP6+ehVk18SaGkTO3MpGnjBXaE/q+PB7tkq55UYwNpbCp+WfcUeQ1?=
- =?us-ascii?Q?6aig1wNTKmL+FFFAHwZv8LtMcKNqKTIvf6PEN42lec68GDt1RllDxcN0LDdb?=
- =?us-ascii?Q?AoF0u21whjAA0X/vmxzU3LWZJM89x96xrBGDjY9dEqxVxYGrji52sj602hhU?=
- =?us-ascii?Q?7bTCIihlp552uZjJCzuS1Ed3tAMOIwZ3NQ+o/yXkMvQMylfnOyeGW+tNhfYF?=
- =?us-ascii?Q?2MNHIr6X/sRACsFqvbcKLOAMVfzhW6rTTprI/0dR1pQp827WFwUjpeyqnWHl?=
- =?us-ascii?Q?fGABCoWsWMOT77GsVE8DrmGxPsHoFM43v7jMmKj2a+2u7Bu02myyehYVc2Er?=
- =?us-ascii?Q?8McmlhZkqoLwOlnk4BGKw5VJ0JUyFv1T8daFWU7WYXgtT0U6bKI+54VDCXre?=
- =?us-ascii?Q?M4SAE7NbrEQJQhRHJOW8cI6O7qP9ANxkY3aA0MHhE69HNqiVUotBYqEbFAib?=
- =?us-ascii?Q?xrxhmFlxuyYINbMr8DHjsCVhJd4GExHluYCR647uYVylzBTF4PUywr3cucsx?=
- =?us-ascii?Q?A+ANfg1TbCXp1GDW9sWTHCStAtivef4IrdbcFqWoSSOEO43WzhAA8VlcKSUc?=
- =?us-ascii?Q?wybKWu0j8g/63YgcRvMBiJLE8Og0zKw+zJ+RcjYP/7SIrk6wgmEaipR8cX8P?=
- =?us-ascii?Q?LhkyjFkD1o0z51MCM7UnlClLHl9+8yhN2PYmhzbKv2TQ5CMGMD/g0EukCnG0?=
- =?us-ascii?Q?OsBbOZcFAmWosErBshB7dAcIVUYJMTIbfQXmCSOtLoeZOWxY5y0SJjEoJPYk?=
- =?us-ascii?Q?ibbsPh7FjQ+QXSkV6wk5gX+kSKd8Rrs180fl2YAQRCgXrZtbFCxvlv7vbN6b?=
- =?us-ascii?Q?k+jmdA5aVmZn5W5DRQ8C5EAiv6n6T08h+E0vsb+slVA3M4RiMlqa++ZAcvN/?=
- =?us-ascii?Q?Y2FxwKu1XWlRvYz9m5gzJcldQQpCuDu1WITwWwlY2nbOyVhsaWcGh93wvrXi?=
- =?us-ascii?Q?Ag2hdMoM9dLGd0kfjjoH3nH4AKxPTBRJGg5CV7JvuYlMxF8NdPBtKEdG2rvf?=
- =?us-ascii?Q?4rMgpUgB+CbkJB9zalqwP0G41VKbHBao68VysIIk1qRv7cghDnHr2IbGPGcc?=
- =?us-ascii?Q?dxsaDBAQQdnqPrNOjL8H9zWTadXOCQTM+V3b1LKw39k+4fIJZ7oLfixsXVOo?=
- =?us-ascii?Q?dDUN5kVPCINQTLFxIaPZCgQHxC+PraNvJ7ErW6OCHN9oCHVTzrEMOKgQ4tel?=
- =?us-ascii?Q?6hlxiVNCYfhR7MLB6V8tCWmv9m8/Gq8vmoI9XpArU0cZ3bZRDi/TmM8PLMK0?=
- =?us-ascii?Q?BdrSus1fUA1q2Fp8DNilA61vxgS1ZaZuy8el64pysmd2vC8zCL3K/oRkyRgi?=
- =?us-ascii?Q?n+31RqZs7A+lHc6L3A1JWfCOY+DTikAi3ZX+2UQo41KBNCTVhNKpJMD51Xmt?=
- =?us-ascii?Q?7BVY9C7af5nxLqVHWJgVDDvmGXs6eEJKwxZSeyQm2+EjPI/9s8aAr1Akfp7a?=
- =?us-ascii?Q?eI8SZYoUmvJyg/UUjyjD5jjNVQiHx6SKY5THhinQH08JTBC56/5TVCiy0jjt?=
- =?us-ascii?Q?fAYHzFjUkuLfnY+gzjwSer0h7wsAjbII7wyIieUBUkYOGZCmb1z/2Ged68g4?=
- =?us-ascii?Q?+YsJ7BHdlI9Vz34o1uhmZ6QZmp0PqSmAoYzXS7d7?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 57d21f7d-eaad-4782-4d65-08db764e2de0
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jun 2023 14:03:55.4932
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zZTGSPvfB1OxL2RidWR+aOJGpbTHPRSz5igicr/+2B88fWQ5Wh//+1/76JZZPmmm
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6089
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 06/15] dt-bindings: display/msm: sc7180-dpu: Describe
+ SM6125
+Content-Language: en-GB
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        Taniya Das <quic_tdas@quicinc.com>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, Lux Aliaga <they@mint.lgbt>
+References: <20230624-sm6125-dpu-v1-0-1d5a638cebf2@somainline.org>
+ <20230624-sm6125-dpu-v1-6-1d5a638cebf2@somainline.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230624-sm6125-dpu-v1-6-1d5a638cebf2@somainline.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 26, 2023 at 09:35:35AM +0100, Colin Ian King wrote:
-> There is a spelling mistake in a comment and in a dev_err error message.
-> Fix them.
+On 24/06/2023 03:41, Marijn Suijten wrote:
+> SM6125 is identical to SM6375 except that while downstream also defines
+> a throttle clock, its presence results in timeouts whereas SM6375
+> requires it to not observe any timeouts.
+
+I see that the vendor DTS still references this clock.
+
+Abhinav, Tanya, do possibly know what can be wrong here?
+
 > 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
 > ---
->  drivers/infiniband/hw/bnxt_re/qplib_res.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>   Documentation/devicetree/bindings/display/msm/qcom,sc7180-dpu.yaml | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/display/msm/qcom,sc7180-dpu.yaml b/Documentation/devicetree/bindings/display/msm/qcom,sc7180-dpu.yaml
+> index 630b11480496..6d2ba9a1cca1 100644
+> --- a/Documentation/devicetree/bindings/display/msm/qcom,sc7180-dpu.yaml
+> +++ b/Documentation/devicetree/bindings/display/msm/qcom,sc7180-dpu.yaml
+> @@ -15,6 +15,7 @@ properties:
+>     compatible:
+>       enum:
+>         - qcom,sc7180-dpu
+> +      - qcom,sm6125-dpu
+>         - qcom,sm6350-dpu
+>         - qcom,sm6375-dpu
+>   
+> 
 
-Applied to for-next, thanks
+-- 
+With best wishes
+Dmitry
 
-Jason
