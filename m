@@ -2,184 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B21B273ECC0
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 23:17:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EE0073ECC5
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 23:20:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230087AbjFZVRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 17:17:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56908 "EHLO
+        id S229666AbjFZVU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 17:20:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229808AbjFZVRe (ORCPT
+        with ESMTP id S229788AbjFZVUY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 17:17:34 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF7CA0;
-        Mon, 26 Jun 2023 14:17:33 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eWCmEqkLySVp6OgYEQwpepbd1ah/jQZttrTDoCMlDEW+KBPmXYQ4n1K/HH4yWfHistup1yivGUOGMHQbJDFI30rYaQs6PurBY9wUZwNKA0/AbGKRWAEDuBuUrC1PHriwe73PixYcrUCjLG4jopFVfFVMrcLCslx5DfsSFMP3N31aUQZsJZqFPjgGXOQqrhyCOlduU32w9QNiRiGAfEdkL97Z7OnnTrU5bDnYASfkuuXRidqp9r5f389PopqOUB36y1pWnuEU1F0m7oNcgTJjJEZH1D3B2kuXIhgxI7kt4CfPh8obBsob9Ic8Jzz9QF84wWOwMv4iROQ/tPwNJVOlqg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=R0JZCt41Q31bNOEwMoxjG3zo6wpEHess263s+hM3YAE=;
- b=YQMtTaM++n7nfu4EtHy4LS0Bvn0MOpSvCMQ3pZicmfRe5d1P+3EoADRLNVGNuPCbLAwepbkzjB4ugg0bW3IxnnP0rkPp760a6MP3Cp3//fiZEZhNXLVOeO4CjxR5Tp0vGlavVBf0mwSnw2aRUgqKxHNjpOeecCjIg7j3IATJSgXtlYodHyoSmXC8Me4Rd9k2CCEHfIgyo/g3fsU5nmRN+bFTVPaEjNn4uceIVpJvzJXBE14GSJ2qAijo40C/hE+zok+OB2YkYlL//Mc5ReSl7CKqJ5myvur8bMnXue7lQJUy6kpIcCJcF7tlMg0TrZeYkOulv9D39pFcTf/YTmXM9Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=labundy.com; dmarc=pass action=none header.from=labundy.com;
- dkim=pass header.d=labundy.com; arc=none
+        Mon, 26 Jun 2023 17:20:24 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48094A0
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 14:20:23 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id d9443c01a7336-1b8130aceefso4371135ad.2
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 14:20:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=NETORG5796793.onmicrosoft.com; s=selector1-NETORG5796793-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=R0JZCt41Q31bNOEwMoxjG3zo6wpEHess263s+hM3YAE=;
- b=bL1hX7Jzr0Kj4saP+bHTipIcG75N+BekzDgS6JmXwoPORPKsXfRTq56m82iCXLU9h7d4tzx8bYpB2I1HvCvYD6PVqHYQaHATUR8jL7SWpRqMs7E8VpNw8IKcExnKLsDZ22SYHZdu5u/950j9S7ScHRNJJBod0MRNJyKlmpaM16g=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=labundy.com;
-Received: from SN4PR0801MB3774.namprd08.prod.outlook.com
- (2603:10b6:803:43::21) by CO1PR08MB6546.namprd08.prod.outlook.com
- (2603:10b6:303:9f::6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.26; Mon, 26 Jun
- 2023 21:17:30 +0000
-Received: from SN4PR0801MB3774.namprd08.prod.outlook.com
- ([fe80::b94e:6032:56d4:35b2]) by SN4PR0801MB3774.namprd08.prod.outlook.com
- ([fe80::b94e:6032:56d4:35b2%6]) with mapi id 15.20.6521.024; Mon, 26 Jun 2023
- 21:17:30 +0000
-Date:   Mon, 26 Jun 2023 16:17:26 -0500
-From:   Jeff LaBundy <jeff@labundy.com>
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Henrik Rydberg <rydberg@bitmath.org>,
-        linux-input@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 4/4] input: touchscreen: add SPI support for Goodix
- Berlin Touchscreen IC
-Message-ID: <ZJoAZgn2b7RcofzY@nixie71>
-References: <20230606-topic-goodix-berlin-upstream-initial-v3-0-f0577cead709@linaro.org>
- <20230606-topic-goodix-berlin-upstream-initial-v3-4-f0577cead709@linaro.org>
- <ZJiXopmFr4dPbqll@nixie71>
- <e36a697f-a54d-7bdf-1e18-38f72ec2966c@linaro.org>
- <ZJmMJxXxLrC9Xevi@nixie71>
- <94e80a49-11ae-e5b0-7eea-6ed4ec6d2ac8@linaro.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <94e80a49-11ae-e5b0-7eea-6ed4ec6d2ac8@linaro.org>
-X-ClientProxiedBy: DM6PR13CA0003.namprd13.prod.outlook.com
- (2603:10b6:5:bc::16) To SN4PR0801MB3774.namprd08.prod.outlook.com
- (2603:10b6:803:43::21)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN4PR0801MB3774:EE_|CO1PR08MB6546:EE_
-X-MS-Office365-Filtering-Correlation-Id: 41f6b462-3ca6-4342-0722-08db768abfc5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: FZTcPmGdx8uZib4aZ1Y6uHjDM/tY5Qnqn262KaBqh3p2jkVRYU34DJcUj1B0NtzSkKx78L8ymvoZGIsr6dG+g82aAoXFoyjqAt5o4GOCbi2HT8B6eEDnZZ0UyjKmmdQOK6PjfxRDOyff1ibGdiMitH0BM59WbrhPR27v8gV9dEIiggJDzzQO+C04AuD9qseTRsJzwGsUvwAClkh4D5++seEl2dpG718PFyOu3MmQDUqtzIVaoRoT6jG0aiemKPykRuW0EDFwZkiEXqn2xjRcaXegTLHP0a8Nmfby6azdpJL1ypzHmDUZsEoA92sxXSR9ktvORf+ty8CsYhRehYKLQODFCtjDmVWKVmR+GAY3iOsh1mi6o7y/aedr4kz8471d2OKfzKWa0tlKZ52Swe2pcwERbFT2alrfqu/UTlWG+AUCP2aZkSTWL0EEKik7fZJ63++/aUGaoDj9OpMDmpnUcg/dHjQ5++LuBFBC11jw2uXn+Y+ef78eIgUyyXzgNKnyc4SqJgcNOtQSy0DJ/Tkxon4nESr+5NkrJJYkH/77b1fq/DhISXM7yHgRgVVxHYUl
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN4PR0801MB3774.namprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(39830400003)(396003)(346002)(136003)(366004)(376002)(451199021)(53546011)(6486002)(6666004)(54906003)(26005)(9686003)(6506007)(6512007)(478600001)(2906002)(186003)(5660300002)(33716001)(7416002)(6916009)(4326008)(316002)(38100700002)(66946007)(8676002)(41300700001)(66556008)(86362001)(8936002)(66476007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?gMKPqyr5t4JRuCfJctqsrwELDJ5TO5yd7j/UtSZ6APfdkGJctTHjhzFECPgC?=
- =?us-ascii?Q?5GKykYHy0T5aQzYgQsCpSo7iECGj5C5YrWQG4zNcWwtyJW7PyuzJrugBTspv?=
- =?us-ascii?Q?100PI5XQWl8rK0SurPQtvyRp1CQP+AciX8vigXmvwqga927ILk25rv49N+hj?=
- =?us-ascii?Q?/eOZuRHGorVt0X4MD6FTPtyuimxICuwsSHZDSMhOhMCamSxZ9RbHChCR81Lh?=
- =?us-ascii?Q?+8Epjf++Pz0QM4b3VJYfd2+qjilD/Ne4JUdagrJokoCHflSThjpoKsNNueto?=
- =?us-ascii?Q?u96mPkKmidnnBIexAYXFVjkAWL7f4AqOu7u4YgDXRiz9f2uGM7doW6cHO1kS?=
- =?us-ascii?Q?3ikDeLt0Te8DfFyxLXrdqovsLNpyn6vjXwUwkvyiUOa+L2+cw0YGIpkomlrP?=
- =?us-ascii?Q?oYUz379SVKFUtzJ6SKOaaDQrnLy/evoelGbgZCTdgyLhJea4hkt92SuRG/QX?=
- =?us-ascii?Q?m/ab+rNWwxj6EAihmw6lzdtAgSflWkuykPvTl2j+QnLSSCV54Vl7L86q6kGu?=
- =?us-ascii?Q?QcVEqsQkkdltvp7mzwCPBiKWJuLP59PT2fT7x37OxY16AqprAwaR9FgHkACU?=
- =?us-ascii?Q?KrJxyhKOssxiTFwI33QLFnzQbAD2YrG0qS5dSch/oWgETufUBfB2AMLfkdc0?=
- =?us-ascii?Q?I5SBneRHAkKz88I9kqgXDsoAkDgHQEZZfKs2ftEgdBDLuit8FYPmL6BvFvtR?=
- =?us-ascii?Q?O5JoWxCkLnsV677iBkVdvNpzI9XbOnnTW/TJowy3qb1nDrMXPEIjPKYsPeWV?=
- =?us-ascii?Q?m10b0A2gsG3tCnGjvHxkTCqRzu7ZgaA7xZCqveI/SW/UPugNd9bjfTLZnmF6?=
- =?us-ascii?Q?/t3QccZXNzazOJ3YZur0WKMXa0YXo+5yy1P24CnMkpUonF4CIn/HuTE+K9Ce?=
- =?us-ascii?Q?ZZA4BOXJY9oyR98/WSyq2mPoVId57OP7MNvIvYLjo+ND6Xib+KWcHekSMYCA?=
- =?us-ascii?Q?6EipH+UEKzKzDruDT+f/gXvN6n0GfuW6TSwcEIuUl3W5w9iqXqZccwq2D9c8?=
- =?us-ascii?Q?oJhaJ0/b6fmjlJocbIddEGksyeFzRspbkssIaD8hOoWyXeNaAyANxd57RPXM?=
- =?us-ascii?Q?Qhs0OvMlvHiE+9JXWX94mqh9tD9r1GPsFcOkYjNiCvVJshT2ERlcl4TMAt1E?=
- =?us-ascii?Q?Wx4efZav0atz7y3JZtMGAtRQMdrafvTgb5rz1cR0Axfy5gK8ZJk+NXxlbint?=
- =?us-ascii?Q?bIPZBkzV2+M2i/dMNtc6mZP1l4/Vyy68QMV9qmAoDvuAGvpAmCNJqgM0f5MP?=
- =?us-ascii?Q?63YxQ7TuShsulK9izdIPT9tz4rkjJXVHz832mieKPr7zf9INk6+x91ziGqxk?=
- =?us-ascii?Q?ti81YesfJmYOkxINvUhSoVMrT6gwzgfaYeAqRes4+zwHNuNnKShWDOPRvk9Q?=
- =?us-ascii?Q?EnRPCUraTAP8hhOcd6mf3g6HmI4cuekdiYje2NVCEBmCuno0Hp2Jacx6Te/I?=
- =?us-ascii?Q?XQr13u5asZA84V8hkpEf/LaODv/AX2C+KpYt8fmwzoH9+hXoneYpH9dMFNaQ?=
- =?us-ascii?Q?ttPhzHjrFdvqdk769EHF+Z0YTX+9iHX88tcgRJYQhOW+FZvJLEgsaQqDWktt?=
- =?us-ascii?Q?VCeY5sGgl179yfy1h7acUtgmJmJ9AiJFoShfvMOi?=
-X-OriginatorOrg: labundy.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 41f6b462-3ca6-4342-0722-08db768abfc5
-X-MS-Exchange-CrossTenant-AuthSource: SN4PR0801MB3774.namprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jun 2023 21:17:30.0424
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 00b69d09-acab-4585-aca7-8fb7c6323e6f
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Nq6NLQJViiPL4Mo6y/qaEVjCRHLzJnnnCHHCXdueIlUAX3Y9urwlUDXlfBalScSsX6h9aGdocCZB98/Ko1XXgg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR08MB6546
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        d=google.com; s=20221208; t=1687814423; x=1690406423;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=WE7FJwni0q3dlH1xu/laljIYP2fFDEmKjU7VF6N1oIQ=;
+        b=GBhmLB+FeUU4gzqe6fdMMOCbgDqJ5xyiSBALxkEKjKWi5PSAlRc8V0S9bpmMM6bk4x
+         y95gnd2fUGloSJuGwjfKUExqrGnwFhVtawF0bzEb3xbqtlbCKUH+T6DWFAedfeVPHFV3
+         QNW3yRK1rSjwIMhIghk5JS1kEQpLBFc65weV8mjOzha2bm/GyQUEUlQS406TTE+Yf1JX
+         1vM5drACJy4FZHTreqm3yKVnuuYgLOuvpbp2JkoKT8RUbNgh/daz/demN5NrEF3VAthn
+         tNDmOOcsVfgKYnRLqoBWRBjrFAtSxZ/vPyrHsxMbPLeDhTZW8lgAgvD7+/At8iBn93vb
+         XzuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687814423; x=1690406423;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WE7FJwni0q3dlH1xu/laljIYP2fFDEmKjU7VF6N1oIQ=;
+        b=AQ0gtlMpe5Kv3FUqaESGt9io8532rgWKD68kOwOypOWtjIuN+nIe5rTovcSZo0dPir
+         RDsOg8DMNAuCffu0A6U11WErtzxbnHwo/cwfSOT6r0I/6qIB9xZpqALtESAQYFwPiQOR
+         x+uu4ixyZxU3VxghVTEwsjvt6EWHDN3YH5CfAK5fDCR6GWgLzIjo7WlSREA9VnsLY9zu
+         C+1lHBoGjO96jgyoIq/nyLCIT6h8ClKdcBnjekvP39MmCQtMZlPBm1nFzrjhEDmYGtnk
+         RM+rsGhef2En8/mspRCNrEWWlAILR8altiDFMnSDDkWmQDn0z8EIzzJPQGbbCEGt9Bbi
+         860g==
+X-Gm-Message-State: AC+VfDy9Q4U9bg02jB12ftEb9Qyuw+EiCqa1rgKYjLFHi5RrHHFj8Ocx
+        /Knov4t/sNk70DHYsLy6ujdtolhqf1E=
+X-Google-Smtp-Source: ACHHUZ5pZrv8GDIJADvWZC6aS1aEDkOiinIGdcAK+z5D/sKB+GK664abeWxqO+a0/NsbBxZuVmWGoZvWcrk=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:902:eccb:b0:1b7:ea58:3163 with SMTP id
+ a11-20020a170902eccb00b001b7ea583163mr1324942plh.4.1687814422840; Mon, 26 Jun
+ 2023 14:20:22 -0700 (PDT)
+Date:   Mon, 26 Jun 2023 14:20:21 -0700
+In-Reply-To: <945384ea-8a15-02cb-66b6-4ba4f22df3db@intel.com>
+Mime-Version: 1.0
+References: <20230511040857.6094-1-weijiang.yang@intel.com>
+ <20230511040857.6094-17-weijiang.yang@intel.com> <ZJYc+4fN3K+h8VhM@google.com>
+ <945384ea-8a15-02cb-66b6-4ba4f22df3db@intel.com>
+Message-ID: <ZJoBFegpUDwCTVLS@google.com>
+Subject: Re: [PATCH v3 16/21] KVM:x86: Save/Restore GUEST_SSP to/from SMM
+ state save area
+From:   Sean Christopherson <seanjc@google.com>
+To:     Weijiang Yang <weijiang.yang@intel.com>
+Cc:     pbonzini@redhat.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, peterz@infradead.org,
+        rppt@kernel.org, binbin.wu@linux.intel.com,
+        rick.p.edgecombe@intel.com, john.allen@amd.com
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Neil,
-
-On Mon, Jun 26, 2023 at 03:20:35PM +0200, Neil Armstrong wrote:
-> Hi,
+On Mon, Jun 26, 2023, Weijiang Yang wrote:
 > 
-> On 26/06/2023 15:01, Jeff LaBundy wrote:
-> > Hi Neil,
-> > 
-> > On Mon, Jun 26, 2023 at 09:02:16AM +0200, Neil Armstrong wrote:
-> > 
-> > [...]
-> > 
-> > > > > +static int goodix_berlin_spi_probe(struct spi_device *spi)
-> > > > > +{
-> > > > > +	struct regmap_config *regmap_config;
-> > > > > +	struct regmap *regmap;
-> > > > > +	size_t max_size;
-> > > > > +	int error = 0;
-> > > > > +
-> > > > > +	regmap_config = devm_kmemdup(&spi->dev, &goodix_berlin_spi_regmap_conf,
-> > > > > +				     sizeof(*regmap_config), GFP_KERNEL);
-> > > > > +	if (!regmap_config)
-> > > > > +		return -ENOMEM;
-> > > > 
-> > > > Is there any reason we cannot simply pass goodix_berlin_spi_regmap_conf to
-> > > > devm_regmap_init() below? Why to duplicate and pass the copy?
-> > > > 
-> > > > For reference, BMP280 in IIO is a similar example of a device with regmap
-> > > > sitting atop a bespoke SPI protocol; it does not seem to take this extra
-> > > > step.
+> On 6/24/2023 6:30 AM, Sean Christopherson wrote:
+> > On Thu, May 11, 2023, Yang Weijiang wrote:
+> > > Save GUEST_SSP to SMM state save area when guest exits to SMM
+> > > due to SMI and restore it VMCS field when guest exits SMM.
+> > This fails to answer "Why does KVM need to do this?"
+> 
+> How about this:
+> 
+> Guest SMM mode execution is out of guest kernel, to avoid GUEST_SSP
+> corruption,
+> 
+> KVM needs to save current normal mode GUEST_SSP to SMRAM area so that it can
+> restore original GUEST_SSP at the end of SMM.
+
+The key point I am looking for is a call out that KVM is emulating architectural
+behavior, i.e. that smram->ssp is defined in the SDM and that the documented
+behavior of Intel CPUs is that the CPU's current SSP is saved on SMI and loaded
+on RSM.  And I specifically say "loaded" and not "restored", because the field
+is writable.
+
+> > > Signed-off-by: Yang Weijiang <weijiang.yang@intel.com>
+> > > ---
+> > >   arch/x86/kvm/smm.c | 20 ++++++++++++++++++++
+> > >   1 file changed, 20 insertions(+)
 > > > 
-> > > The goodix_berlin_spi_regmap_conf copy is modified after with the correct
-> > > max raw read/write size, and I'm not a fan of modifying a global structure
-> > > that could be use for multiple probes, I can make a copy in a stack variable
-> > > if it feels simpler.
-> > 
-> > Ah, that makes sense; in that case, the existing implementation seems fine
-> > to me. No changes necessary.
-> > 
-> > Correct me if I'm wrong, but the stack variable method wouldn't work since
-> > that memory is gone after goodix_berlin_spi_probe() returns.
+> > > diff --git a/arch/x86/kvm/smm.c b/arch/x86/kvm/smm.c
+> > > index b42111a24cc2..c54d3eb2b7e4 100644
+> > > --- a/arch/x86/kvm/smm.c
+> > > +++ b/arch/x86/kvm/smm.c
+> > > @@ -275,6 +275,16 @@ static void enter_smm_save_state_64(struct kvm_vcpu *vcpu,
+> > >   	enter_smm_save_seg_64(vcpu, &smram->gs, VCPU_SREG_GS);
+> > >   	smram->int_shadow = static_call(kvm_x86_get_interrupt_shadow)(vcpu);
+> > > +
+> > > +	if (kvm_cet_user_supported()) {
+> > This is wrong, KVM should not save/restore state that doesn't exist from the guest's
+> > perspective, i.e. this needs to check guest_cpuid_has().
 > 
-> The config is only needed for the devm_regmap_init() duration, so keeping
-> the memory allocated for the whole lifetime of the device seems useless.
-
-I revisted the regmap code, and you are indeed correct. I agree with your
-suggestion.
-
-> 
-> Neil
+> Yes, the check missed the case that user space disables SHSTK. Will change
+> it, thanks!
 > 
 > > 
-> > Kind regards,
-> > Jeff LaBundy
+> > On a related topic, I would love feedback on my series that adds a framework for
+> > features like this, where KVM needs to check guest CPUID as well as host support.
+> > 
+> > https://lore.kernel.org/all/20230217231022.816138-1-seanjc@google.com
 > 
+> The framework looks good, will it be merged in kvm_x86?
 
-Kind regards,
-Jeff LaBundy
+Yes, I would like to merge it at some point.
+
+> > > @@ -565,6 +575,16 @@ static int rsm_load_state_64(struct x86_emulate_ctxt *ctxt,
+> > >   	static_call(kvm_x86_set_interrupt_shadow)(vcpu, 0);
+> > >   	ctxt->interruptibility = (u8)smstate->int_shadow;
+> > > +	if (kvm_cet_user_supported()) {
+> > > +		struct msr_data msr;
+> > > +
+> > > +		msr.index = MSR_KVM_GUEST_SSP;
+> > > +		msr.host_initiated = true;
+> > > +		msr.data = smstate->ssp;
+> > > +		/* Mimic host_initiated access to bypass ssp access check. */
+> > No, masquerading as a host access is all kinds of wrong.  I have no idea what
+> > check you're trying to bypass, but whatever it is, it's wrong.  Per the SDM, the
+> > SSP field in SMRAM is writable, which means that KVM needs to correctly handle
+> > the scenario where SSP holds garbage, e.g. a non-canonical address.
+> 
+> MSR_KVM_GUEST_SSP is only accessible to user space, e.g., during LM, it's not
+> accessible to VM itself. So in kvm_cet_is_msr_accessible(), I added a check to
+> tell whether the access is initiated from user space or not, I tried to bypass
+> that check. Yes, I will add necessary checks here.
+> 
+> > 
+> > Why can't this use kvm_get_msr() and kvm_set_msr()?
+> 
+> If my above assumption is correct, these helpers are passed by
+> host_initiated=false and cannot meet the requirments.
+
+Sorry, I don't follow.  These writes are NOT initiated from the host, i.e.
+kvm_get_msr() and kvm_set_msr() do the right thing, unless I'm missing something.
