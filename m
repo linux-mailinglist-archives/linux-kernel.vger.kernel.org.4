@@ -2,138 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B62C73E2A6
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 17:03:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D375273E2B4
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 17:04:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230320AbjFZPDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 11:03:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33084 "EHLO
+        id S230000AbjFZPEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 11:04:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbjFZPDO (ORCPT
+        with ESMTP id S229767AbjFZPE2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 11:03:14 -0400
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2133.outbound.protection.outlook.com [40.107.114.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 173F5130;
-        Mon, 26 Jun 2023 08:03:13 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GIfQrZT2XDwYohZP+Aolbs1HbaMz0l2U83HIgtQAvSrFpcROoXvSZLwk1u3iCpCnnNkY2zs2V1/oUXubYAsk+xFK2pQjTQQq04hMczE38SQd+PYKoKGD/ZqQ5jIbHJDp58lKC7JATgVkCezEAzbdoUvPZH2YpRcjBOasxbqFty/8k0jLn+A0OjhOU6uwh6b16ewaP2Fr7bdTCE4V893HIKWadz/BXB6WC9OVARvAXvxrSbn+0ec5hayNXrzpizoHcSlFd60S17ObWVvb08GjA6yvqrclg8K9z533eQduPhaGRFr8pJlrmOTfkVitcRbnxw920DWMd4Wxuk79ZXaKUQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ssSiYbdaCpE/9c7aLkYBGXISPI3UKjZMGFrMqaVo5zo=;
- b=UcRqXpvtwFvEjPKIIDUJx+ikX01LUhGc0eANG++HyONpHUxn1gfNvOkMF+YJbC/uzfKo8ssHoxQS+wEDJkztUqlKZEm7SDIwnGJXhE4hCXiUvD0IFcbqO/gHstdEvwvmrOEsErWDZhEIa8NJwh5aEoctk8X97ZPoMCpXHa0RLwNEbylSWR4A3RE5HjVwTOgMQeyg8iJdrrSSG9jJ+ueBuVakOlB8iVOa+tqac9oR1GJ5IbLPqomauetCurgUxKDc6MGyNY+WAfWVPRypr61mSpLMsaW9D8MCIdgV4IeaKq4kMmPPGx5ksxJhPnIeuEqWlM0Wf2mygNFV/wIPm16vOw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=connect.ust.hk; dmarc=pass action=none
- header.from=connect.ust.hk; dkim=pass header.d=connect.ust.hk; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=connect.ust.hk;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ssSiYbdaCpE/9c7aLkYBGXISPI3UKjZMGFrMqaVo5zo=;
- b=Mg3DpsD5qObTMz90K9eLKu3SUV1c9/shJ2takw5VolF20QkIeWPg0rhx+E/7TPOLZvI58YFHy3t8N4yo1Ci+oeJEOeoRBbbGu9oC3MkcTCzneZzg0ZbrT5+abITOmc9N2k1qAAr59KEiEGU2YS9hOSLbZ0v4lHqFU9fXQFQcOFM=
-Received: from TYCP286MB1188.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:b7::8) by
- TYWP286MB3301.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:2d5::11) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6521.26; Mon, 26 Jun 2023 15:03:10 +0000
-Received: from TYCP286MB1188.JPNP286.PROD.OUTLOOK.COM
- ([fe80::b429:5aa3:12f1:6b8]) by TYCP286MB1188.JPNP286.PROD.OUTLOOK.COM
- ([fe80::b429:5aa3:12f1:6b8%4]) with mapi id 15.20.6521.026; Mon, 26 Jun 2023
- 15:03:10 +0000
-From:   YE Chengfeng <cyeaa@connect.ust.hk>
-To:     "andy@kernel.org" <andy@kernel.org>
-CC:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: =?gb2312?B?u9i4tDogu9i4tDogW1BBVENIIHYyIDEvMl0gZ3Bpb2xpYjogY2RldjogRml4?=
- =?gb2312?Q?_&lr->wait.lock_deadlock_issue?=
-Thread-Topic: =?gb2312?B?u9i4tDogW1BBVENIIHYyIDEvMl0gZ3Bpb2xpYjogY2RldjogRml4ICZsci0+?=
- =?gb2312?Q?wait.lock_deadlock_issue?=
-Thread-Index: AQHZqBNf7gwzAWjB50ahRCRRc44o16+c65UAgAAAWNWAAAK1gIAAPtnR
-Date:   Mon, 26 Jun 2023 15:03:10 +0000
-Message-ID: <TYCP286MB11883FA1925B0DE0030B216D8A26A@TYCP286MB1188.JPNP286.PROD.OUTLOOK.COM>
-References: <TYCP286MB1188A94580A60F47CAF892C88A26A@TYCP286MB1188.JPNP286.PROD.OUTLOOK.COM>
- <ZJlwjhQT2wfO3Ukn@smile.fi.intel.com>
- <TYCP286MB11884755575685089C1BBDC38A26A@TYCP286MB1188.JPNP286.PROD.OUTLOOK.COM>
- <ZJlzHc8eiHnPe+Ot@smile.fi.intel.com>
-In-Reply-To: <ZJlzHc8eiHnPe+Ot@smile.fi.intel.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=connect.ust.hk;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TYCP286MB1188:EE_|TYWP286MB3301:EE_
-x-ms-office365-filtering-correlation-id: 4ffe456a-3032-487b-db83-08db765674cb
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 0a+HfpotjTvJ35ib0f4+KiNkAjV2z+yQ9vwhqoLU8jMjsz8yIUOt5C6jkFoq4ma7yJ2cfvY/ojK0cutFq2gdy4zLSOb0us+OuEJgyncpDSe6MIphwhZMcyPjyBcd7x4kj1rPRsw1QKwDfv2QftIFt1UfOtd4T1EkWNdVnfoTIX7ujzA3DeH6aijPrAlkP1E1W7aDCNoMDXMy3VjwMPS7wYjbIcGdJxJTUHInxRa1qHBMjEZJp8PJF4+fpPCvDcpZYm93mqFbNR4OVNPWgfiYUXESMM1GUJ77PUOaTIZi6D1cZoVLErD+kxrHrpwFnd6auy/2bUgbFlLlSELOfQ8cFqa3jgi5jPHBAcsMEL7V+/zS2YBDUp/yCocTiKryhvZ3TZwdaWBJntLYmTYYQTDO5vvUVcrsWt5j1WE63+Qxy7gg5w+raEKTw0cMz2+mtbODWSr4Ay3AYDMRD3wPRYpg6F0423DLvjaKhiEOg6te8hU2dASHDU4uiLFzhKtQZHvL37lgZ7DzZBbEhK1ulaGMVb7OnOyQAVfKheFCDrU6JTwewOHNVTPBOinTIrs4T5YO/GaPWeUqN6WE5YizNqf8V8SVG4NGNNhroEtBJRk9GiHia50kmVyOSjMbdQTk1L0n
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYCP286MB1188.JPNP286.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(366004)(39860400002)(396003)(346002)(451199021)(6506007)(478600001)(71200400001)(54906003)(7696005)(26005)(9686003)(186003)(2906002)(5660300002)(224303003)(558084003)(33656002)(52536014)(38100700002)(122000001)(66946007)(76116006)(91956017)(786003)(8936002)(316002)(86362001)(66476007)(6916009)(66556008)(55016003)(4326008)(41300700001)(66446008)(38070700005)(64756008);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?gb2312?B?bFJ3Qk1aWGQ2dlY3RXZrMzZJaE9WaW94ckRCZlhvWWNtSkk4YkdYZ1R5M0RR?=
- =?gb2312?B?Q2NCKy84YjJCVkZUQ1Qyb1JnOWdwQmVET3NXc09uOS9SYjR3ZUVPeGUwenpX?=
- =?gb2312?B?WVkveEZnN2p0YmtMVS9XRy91ODJLTktQaS82RkQraUNva05QMGhmNE1JMXB1?=
- =?gb2312?B?dGVMLzQwcGV2c0k1YWtoMDdXcHhFNTdNQjkrWHhudU54YitYV2tGcDM0bzNB?=
- =?gb2312?B?d012RGNRbHlYMWRFMU5VQUZQLzVyNS84ZDJKemFSSlUydUxTd0FSa2NycnQ0?=
- =?gb2312?B?MXFhT2tSQUVSRjRWZEVaQlF3TlovR05EbUxWL0VyY0pnVXFYbkx5YUY4UWNJ?=
- =?gb2312?B?M3E4RE16dFFLL0UzTE9aUDU3WE04ekd5ODBacXc0eEs5amhvNWlNdDFaZ2lB?=
- =?gb2312?B?VEVQcmFkZ292SXFrYklETWt3RWhkWnBQTzJnQUxtbkFtTXdRdnloZ2dEeTRa?=
- =?gb2312?B?SG54SHc3UzZLcDlxZnYwN3dOMllHQUx1M2pYQWtVSVVCaHJnUlI4anpqWllz?=
- =?gb2312?B?RjNGQVZJY3o4UTBtMTVndnl4dTR4NmVYNHdrVEVUc1gvaHJoY2lld0o1L1d2?=
- =?gb2312?B?WVdBZjJqdVJFTU1vK2xPV3ZxU0dVU1Q2MzVqUk4wNXV0cUVQb3FBYmVlTjNX?=
- =?gb2312?B?QVcwcGJKdXRPSndJRHVCbWdoRmVWUEhEN2pweEJQa1o0RzFxeldLWkFGQmZT?=
- =?gb2312?B?Vk9xSWo4bWFXaHlZSHpJRVR4WDNTdTJRVy9VOW5zM08wV2k4QmxpL2RyWDZF?=
- =?gb2312?B?TWwra0wyVDZxWlptOGJIR2JiZWVJTXNMZ2FScVhXTzRSbGtvMHVMcE5MQ0sx?=
- =?gb2312?B?ZG9RektVUDYvc01peWlYWUk2TFdyaW13VTR2TklQTlpUYnlTMEpaM1Z2QjND?=
- =?gb2312?B?WkpYZEp5Ynpyb2tBeWltc3IvUWZmU2h1bUpyeWlFQjdHRjdqMS9aQjg0M2Qv?=
- =?gb2312?B?UVZNUGpoN0NTb1FQY3ZISXdxUnJ4aGgrMFkrOGFyZ2MwVFpudXBTckZHRitC?=
- =?gb2312?B?TjIwRStkZ0dOT3pQM21zMHZEbjhBdmhGZHBQSjFETUhiTTNib0Z3MGVlWFZ3?=
- =?gb2312?B?d2U3TFNIck13bitkSnIzakltOG5KOUlaazdxenUrby80b3BvREN6aURVQ0li?=
- =?gb2312?B?cWdQTEVhWnFMS2NOQ1RZQlJRMkl4OUlidDl2RUNyYkZTTWNTemRYU2pLRlZ3?=
- =?gb2312?B?U3NKenk5SzFRWllIdjJFN2dwemZ3Q2ZuK2tjZ3JUMVF6K2FLM25kT1ZNR3pl?=
- =?gb2312?B?d0hveTZoOVJ2bXZYaW9uMEIvK2VSNzNLdi8xWUFqNGV0YzdlZE4zNkplUldy?=
- =?gb2312?B?MUUzOThOazhNaWVIME9qWGsxaUhMVHB2eFNUZ3prVlJLTnNmUld5Szdpem1X?=
- =?gb2312?B?b0lYL1VvU1Qzcys3LzlWKzlSU3V4UlVWbnR1ZmtKSXBESk1FYzBBWXgrZ1g4?=
- =?gb2312?B?eUZ6YWhuVHZwc2ZvUTlkM0dIcmsrT1RrditHdEFONmpMeTVBT3gvTElmbyts?=
- =?gb2312?B?TCs4SXppRFNtVlZieWlkMzYzK3g3RnQ1Z2RVZ3FKYzMrMHVoTXZ3em9EeXNy?=
- =?gb2312?B?QytlVkF4OG5DMWNFTUNvN0F6aThUanJzUnRpMkFFeHlQZURMU1RpbEF5c3Rm?=
- =?gb2312?B?bVFFUHRldUwwTHIvOGhSTkdiTHlwaWtONjJJenA0V2JBS0h5YkR0ekpyaXlu?=
- =?gb2312?B?Y1pyTWVyNk12QWxaa0VaL1pPNjlGaGFlODZjYndOSWdLTStVYk5ZcVFXOHdU?=
- =?gb2312?B?S3pHMFRJTEpuTVUwQmtUT1pTdVJKaWEyVjdiNVZXeUUvZXpZaXBzZkpHU1gz?=
- =?gb2312?B?NHRBUnJIM3ZOZVlLSldvWG9ZNDhqUktYa1NiSmdJV0hzNFpIaHdjcEhkSE1t?=
- =?gb2312?B?blZnaGxxZWVLdzhvQUJQb3I5WnY3cEFBMWNJaU1wSW5EUFg4WEZ4RmdTNk5O?=
- =?gb2312?B?b3F4SWVzNmEyK0toL2h1MlFBMHh4d0ExRGF2Ly8xa3ZNY3k5MGpKSk9sNWZo?=
- =?gb2312?B?U1JDMVQyamhKMTIwLy9oSUFlU2IwODZBaTFvcFgrcjF5ZXdvckpjcDRLOHkr?=
- =?gb2312?B?K0c0eWU5cUlmSVlDZ243cmR1UjZwNi83dm9lM1d6Z0ZsNzNlaFlHaHU0aUZJ?=
- =?gb2312?Q?hipCNDwd/rtN1hqG/Anx/VaxO?=
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+        Mon, 26 Jun 2023 11:04:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FFDBE7B
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 08:03:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687791813;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ub/VWsuBNP1d/wVrp0FxrBklvO4kjHuqLjqpHpTQ37c=;
+        b=ehHxC5pNYC6/BrflycKhHJMPvZEhH70Kp7i/SqoptOwKgDZD58uMtA7FJcH1pa9mFEbyGe
+        RAFs5UTBXmKgOQB0IV1rWQXY2mS38o+pvua1/er1SWtTQQhOVB1JrPwrZ6h0B7JhDqxxxv
+        P4DgOgbQfx9wl4XeLBgTyJzmdJhC/6Y=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-528-RFIWLMLHPOe3gwpDusWz5Q-1; Mon, 26 Jun 2023 11:03:30 -0400
+X-MC-Unique: RFIWLMLHPOe3gwpDusWz5Q-1
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-76531f671c0so310782185a.1
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 08:03:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687791805; x=1690383805;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ub/VWsuBNP1d/wVrp0FxrBklvO4kjHuqLjqpHpTQ37c=;
+        b=kwyQwzIblth4r+KCOU85Q63gWF1q0ZNcCM2A1zZroIdkfgdsluNdrHyFjKm09xttgG
+         G/o61fW24pks1E+8hHsd707wLttjzciFeUIZN/IBSXZCBg8VkYb2oLyD7mzpqGlWdgc/
+         TgBbDfz3NIDdg1+RSUaau0eFriGhNHvcZ3QZedDNpnPrwI+x5s1XfXnKJw/p7wSeK3Kp
+         HruyEDKYBeOO6YbveXWM2hJfm3WgTqj5xCuyRJJk30AeCLwWi+ipUSiADL0u6amaPj8T
+         82hzOMBuJdyffU0GI7olUUEPGW0OpNP8+7TYVmhb0adS4ct7PRXTVsXjPdoR/MGH6AFj
+         CUkQ==
+X-Gm-Message-State: AC+VfDxjOk81kbm3aq3L2URLxy/KuyuLbDGTItayxtsxYcfVhtilj6QW
+        Khoje5VlRRLi64TM5GhoB/SlqhiYs5m3REwJLvfjD9nHzUBYoiOy/j2AnnUDlFi/DjsuBUJ4ieY
+        2yBIYhlM/jTVR1ZN8CrVSTRn1
+X-Received: by 2002:a05:620a:2448:b0:765:5ba6:a5d8 with SMTP id h8-20020a05620a244800b007655ba6a5d8mr7093243qkn.56.1687791805407;
+        Mon, 26 Jun 2023 08:03:25 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7kkeJTxwkOuRgwOYiRhgUk3L+mBLGI2Low73pEvZAsI+uLzLMyBVcad67r2Cc4Q8w+k8KCrA==
+X-Received: by 2002:a05:620a:2448:b0:765:5ba6:a5d8 with SMTP id h8-20020a05620a244800b007655ba6a5d8mr7093213qkn.56.1687791805149;
+        Mon, 26 Jun 2023 08:03:25 -0700 (PDT)
+Received: from sgarzare-redhat (host-87-11-6-160.retail.telecomitalia.it. [87.11.6.160])
+        by smtp.gmail.com with ESMTPSA id y26-20020a37e31a000000b00765a7843382sm1194049qki.74.2023.06.26.08.03.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jun 2023 08:03:24 -0700 (PDT)
+Date:   Mon, 26 Jun 2023 17:03:15 +0200
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Bobby Eshleman <bobbyeshleman@gmail.com>
+Cc:     Arseniy Krasnov <oxffffaa@gmail.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Vishnu Dasa <vdasa@vmware.com>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        Simon Horman <simon.horman@corigine.com>, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH RFC net-next v4 6/8] virtio/vsock: support dgrams
+Message-ID: <d53tgo4igvz34pycgs36xikjosrncejlzuvh47bszk55milq52@whcyextsxfka>
+References: <20230413-b4-vsock-dgram-v4-0-0cebbb2ae899@bytedance.com>
+ <20230413-b4-vsock-dgram-v4-6-0cebbb2ae899@bytedance.com>
+ <92b3a6df-ded3-6470-39d1-fe0939441abc@gmail.com>
+ <ppx75eomyyb354knfkwbwin3il2ot7hf5cefwrt6ztpcbc3pps@q736cq5v4bdh>
+ <ZJUho6NbpCgGatap@bullseye>
 MIME-Version: 1.0
-X-OriginatorOrg: connect.ust.hk
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYCP286MB1188.JPNP286.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4ffe456a-3032-487b-db83-08db765674cb
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Jun 2023 15:03:10.1820
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 6c1d4152-39d0-44ca-88d9-b8d6ddca0708
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ZPsiXxFhy+61GFl26jhGVgnINHeY74cg6WVs8/v5PWCfnDs35UaN7pgxkcJgPxLtRdpJH7XK9XMZTIcfor+PjA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYWP286MB3301
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <ZJUho6NbpCgGatap@bullseye>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-VGhhbmtzIG11Y2ggZm9yIHRoZSBzdWdnZXN0aW9uIGFuZCBndWlkYW5jZS4gSSB0aGluayB0aGUg
-bmV3IHBhdGNoIHNlcmllcyBzaG91bGQgYmUgY29ycmVjdCBub3cuIE5vdGUgdGhhdCBJIHVzZSBh
-bm90aGVyIGVtYWlsIHRvIHNlbmQgdGhlIHBhdGNoZXMgc2luY2UgSSBoYXZlIHNvbWUgcHJvYmxl
-bSB0byBzZXR1cCB0aGlzIG9uZSB3aXRoIGdpdCBzZW5kLW1haWwgZHVlIHRvIDJGQS4KCkJlc3Qg
-UmVnYXJkcywKQ2hlbmdmZW5n
+On Fri, Jun 23, 2023 at 04:37:55AM +0000, Bobby Eshleman wrote:
+>On Thu, Jun 22, 2023 at 06:09:12PM +0200, Stefano Garzarella wrote:
+>> On Sun, Jun 11, 2023 at 11:49:02PM +0300, Arseniy Krasnov wrote:
+>> > Hello Bobby!
+>> >
+>> > On 10.06.2023 03:58, Bobby Eshleman wrote:
+>> > > This commit adds support for datagrams over virtio/vsock.
+>> > >
+>> > > Message boundaries are preserved on a per-skb and per-vq entry basis.
+>> >
+>> > I'm a little bit confused about the following case: let vhost sends 4097 bytes
+>> > datagram to the guest. Guest uses 4096 RX buffers in it's virtio queue, each
+>> > buffer has attached empty skb to it. Vhost places first 4096 bytes to the first
+>> > buffer of guests RX queue, and 1 last byte to the second buffer. Now IIUC guest
+>> > has two skb in it rx queue, and user in guest wants to read data - does it read
+>> > 4097 bytes, while guest has two skb - 4096 bytes and 1 bytes? In seqpacket there is
+>> > special marker in header which shows where message ends, and how it works here?
+>>
+>> I think the main difference is that DGRAM is not connection-oriented, so
+>> we don't have a stream and we can't split the packet into 2 (maybe we
+>> could, but we have no guarantee that the second one for example will be
+>> not discarded because there is no space).
+>>
+>> So I think it is acceptable as a restriction to keep it simple.
+>>
+>> My only doubt is, should we make the RX buffer size configurable,
+>> instead of always using 4k?
+>>
+>I think that is a really good idea. What mechanism do you imagine?
+
+Some parameter in sysfs?
+
+>
+>For sendmsg() with buflen > VQ_BUF_SIZE, I think I'd like -ENOBUFS
+
+For the guest it should be easy since it allocates the buffers, but for
+the host?
+
+Maybe we should add a field in the configuration space that reports some
+sort of MTU.
+
+Something in addition to what Laura had proposed here:
+https://markmail.org/message/ymhz7wllutdxji3e
+
+>returned even though it is uncharacteristic of Linux sockets.
+>Alternatively, silently dropping is okay... but seems needlessly
+>unhelpful.
+
+UDP takes advantage of IP fragmentation, right?
+But what happens if a fragment is lost?
+
+We should try to behave in a similar way.
+
+>
+>FYI, this patch is broken for h2g because it requeues partially sent
+>skbs, so probably doesn't need much code review until we decided on the
+>policy.
+
+Got it.
+
+Thanks,
+Stefano
+
