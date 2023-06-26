@@ -2,134 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0316E73E5D4
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 18:52:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B0D073E5D7
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 18:52:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230020AbjFZQwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 12:52:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42800 "EHLO
+        id S230167AbjFZQw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 12:52:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229756AbjFZQwQ (ORCPT
+        with ESMTP id S229823AbjFZQw0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 12:52:16 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFAAF10FD
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 09:52:04 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3fb4146e8fcso4158795e9.0
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 09:52:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687798323; x=1690390323;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=RX0ATF4iG7zLA/0c1ahQHVsWmNJPp+QupJeJmJf7dDE=;
-        b=LRivViNYhyXQKvIXtY1RcKyaR98NQE7CCWmyFRcYeNmvYYMD4GYxeeseYaEjTG9CLg
-         uj1XD0+TsYWivhQJT/V72O1E4P7UrFL0nfLlGvlUPjZ0JKMnsJBOsNnfUW0FNIOiUK3k
-         h9qfpSDbaU5GULx1Bcb84gXYAryaMMK1LyZQG4KwTeFtgHPme3aNlvPUUV9EKzDZZz6I
-         9pLtOTAAbgfDL3DavCaY4OYKBhE9TIkz+pU2ssydLvI343Rd0p+kS/ENNAYNhzvdWJXl
-         smyJ1z7SeC9aokbLFvkl5CEkXedPIkorGZyDQOaicEMvtWQ6Ya8VSnkZ4HOWRI2TUE+L
-         aUVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687798323; x=1690390323;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RX0ATF4iG7zLA/0c1ahQHVsWmNJPp+QupJeJmJf7dDE=;
-        b=f1nvTfq/+s9J00vyn74vL9BFIyBrje5rnehdVcmnsxDn7MoFH6MIaG08jAeynn5DtG
-         1z/oSAfVmkphPiTs3cJMyrIL7Zv0BCsb4n1VlJ80sNAT9WMJ5eGzwMTP5B99E/yej4YD
-         bZOs27y8miqazxbZObHlQT9dW4vGt9XFToELxiZvi8YJAJYoaYLb3bhnIrUJElRiQacX
-         jfeXFKnHzMyjHWHl00PISTKXaMoKFI26ibIlNBCBKwthsI1hv7nOY3h+UHnKIF29zTZ0
-         XXp5LluvYzb8dl4/95VSQEGYwYJ9UdOVrHUZYsYfr3hh8eEuL4w2l7m+E+GKOejx/u4h
-         I35Q==
-X-Gm-Message-State: AC+VfDyUedPbSp5nqoNCjyRmQYF8qIFrtNH8Mx0meZqV05HHbS3ImSpn
-        HLunJnKga6qyxnxaBGUStLhvZQ==
-X-Google-Smtp-Source: ACHHUZ63zj3b+dVwT0JjioR3qHTymArG6YfHoXuoyldjQkwvgiZGKNrCMHPDNHIx3qfp+28vCe6Azg==
-X-Received: by 2002:a1c:4c0f:0:b0:3fa:8c8b:716 with SMTP id z15-20020a1c4c0f000000b003fa8c8b0716mr4135902wmf.1.1687798323252;
-        Mon, 26 Jun 2023 09:52:03 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id n23-20020a7bcbd7000000b003f9b19caabesm8205108wmi.37.2023.06.26.09.52.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jun 2023 09:52:02 -0700 (PDT)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Mon, 26 Jun 2023 18:52:00 +0200
-Subject: [PATCH] usb: typec: ucsi: move typec_set_mode(TYPEC_STATE_SAFE) to
- ucsi_unregister_partner()
+        Mon, 26 Jun 2023 12:52:26 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81BAD1B1;
+        Mon, 26 Jun 2023 09:52:22 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 066651F896;
+        Mon, 26 Jun 2023 16:52:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1687798341; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ix/uWItcnnwsKrXY7YkKCqWMvLxQFgNVJE2AJR1BvvM=;
+        b=3AdjnVjh+55mJOWVxSTPtswQuxxsNYoASuG3LhbZls0wQtg6HMooN6NhLAe4D4D67hPrIK
+        L5aPVXoomk3R8gAJNOkGwlJdJYmhnURezZH3WChSmdgmMoD5ud4l2AnOGx42U1E+jSAzR2
+        S4Arr/8lkUNgUJqoeLv5PT2PmU9H93g=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1687798341;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ix/uWItcnnwsKrXY7YkKCqWMvLxQFgNVJE2AJR1BvvM=;
+        b=GBDSwTaixfVefWGt/NTLHkhLaMhQ99c3l4DAY2EUmv+fY2mslsTHYAZTIwySkgvNg8p4qc
+        clD0OYP0XiYJx2CQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EA32013905;
+        Mon, 26 Jun 2023 16:52:20 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id kacnOUTCmWR3TAAAMHmgww
+        (envelope-from <jack@suse.cz>); Mon, 26 Jun 2023 16:52:20 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 74AE3A0754; Mon, 26 Jun 2023 18:52:20 +0200 (CEST)
+Date:   Mon, 26 Jun 2023 18:52:20 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= 
+        <nabijaczleweli@nabijaczleweli.xyz>
+Cc:     Jan Kara <jack@suse.cz>, Amir Goldstein <amir73il@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: splice(-> FIFO) never wakes up inotify IN_MODIFY?
+Message-ID: <20230626165220.elo4xwfqq6sjboh7@quack3>
+References: <jbyihkyk5dtaohdwjyivambb2gffyjs3dodpofafnkkunxq7bu@jngkdxx65pux>
+ <CAOQ4uxhut2NHc+MY-XOJay5B-OKXU2X5Fe0-6-RCMKt584ft5A@mail.gmail.com>
+ <ndm45oojyc5swspfxejfq4nd635xnx5m35otsireckxp6heduh@2opifgi3b3cw>
+ <vlzqpije6ltf2jga7btkccraxxnucxrcsqbskdnk6s2sarkitb@5huvtml62a5c>
+ <20230626135159.wzbtjgo6qryfet4e@quack3>
+ <bngangrplbxesizu5kbi442fw2et5dzh723nzxsqj2b2p5ikze@dtnajlktfc2g>
+ <20230626150001.rl7m7ngjsus4hzcs@quack3>
+ <sw26o55ax3cfaaqhlbd2qxkdroujnfxtbxrmt2rpjztmedz3mn@uauqn6hexwdq>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230626-topic-sm8550-usb-c-audio-fixup-v1-1-bc72fddf3f42@linaro.org>
-X-B4-Tracking: v=1; b=H4sIAC/CmWQC/x2N0QrCMAxFf2Xk2UDt6FB/RXxos8wFZlsaK8LYv
- xt8PIfLuTsoN2GF27BD44+olGxwPg1Aa8xPRpmNwTs/uslP+C5VCPV1CcFh14SEsc9ScJFvr3h
- lHilSYOcWsEiKyphazLRaJvdtM1kb2/r/en8cxw/7287hhQAAAA==
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1493;
- i=neil.armstrong@linaro.org; h=from:subject:message-id;
- bh=mr86JHI41H3kynpprp69RFpyVVHDbDm53qvzMVnH8b8=;
- b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBkmcIxFmDjqabxx+bKet4LRxvH27IFF3TP7o3XEshe
- 9+o9CSmJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZJnCMQAKCRB33NvayMhJ0WiXD/
- 9XzM2XmCirIqZXyAaRhb2OaAhJDfuIZo0Y6Q7vHlbTyXDHOaDfY4KHXjh0Zfc6Q28q4H8LaEhR6rkr
- NBQ2Vs2KYOx7f8OB5xCVLZ/gos0gBrETZU2U6Jy+gIUExf66QoMiHXC/uPdeeZrgrkJygbS9UaHGwo
- Te7F7QYMFCH3eKiCUE6kO2tpi1VdXl44dTjfSd7FzkW4yGZ3F3CVJMTY8Cp0kuPpU0+XQ14+RHLO4q
- KDEBV0q5eI6g+43xpGUoaVa4nrpp0Gmb64Xra/gHF8NNUJX8ONm4wwAxyDfJ1fljhLoGdLrD5UQtUm
- jDhsQHo+JscADIKRGDTnQu/qi2WSF4yq2KS2F9UlUN77I0QwLbvP1OWdCJ0VsHU0RrdfprHmIjzE91
- K3NiEwqtTCvBs9Ze+bwN8DEAfXvYpVwYbjM5Pkdaub3+9irJthJzgaJM/+QVh3bQ+9wVmjGb8vd/bV
- WIaziuIsXNuVzYh2gNbSSvGYrHA1Dt47cAaLEYV1B5uTuhHQPCfzRapT47MOoM56OzfXKG2lYcjYmv
- etMLG2uvbSehYfnkXEvLY1LsPDI90CmVLKr5/xNLVbg8feTxnVETJRKbckn39N+G0pg1p4hDvmaLdI
- wKkatn9Bd2s0+thGC4N85zl48tSEs+VN+9kjWIPwxiVRDXfTK00hTBlD5Teg==
-X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
- fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <sw26o55ax3cfaaqhlbd2qxkdroujnfxtbxrmt2rpjztmedz3mn@uauqn6hexwdq>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's better to set TYPEC_STATE_SAFE mode from ucsi_unregister_partner()
-instead of ucsi_partner_change(), ucsi_unregister_partner() is always
-when the partner disconnects.
+On Mon 26-06-23 17:15:23, Ahelenia Ziemiańska wrote:
+> On Mon, Jun 26, 2023 at 05:00:01PM +0200, Jan Kara wrote:
+> > On Mon 26-06-23 16:25:41, Ahelenia Ziemiańska wrote:
+> > > On Mon, Jun 26, 2023 at 03:51:59PM +0200, Jan Kara wrote:
+> > > > On Mon 26-06-23 14:57:55, Ahelenia Ziemiańska wrote:
+> > > > > On Mon, Jun 26, 2023 at 02:19:42PM +0200, Ahelenia Ziemiańska wrote:
+> > > > > > > splice(2) differentiates three different cases:
+> > > > > > >         if (ipipe && opipe) {
+> > > > > > > ...
+> > > > > > >         if (ipipe) {
+> > > > > > > ...
+> > > > > > >         if (opipe) {
+> > > > > > > ...
+> > > > > > > 
+> > > > > > > IN_ACCESS will only be generated for non-pipe input
+> > > > > > > IN_MODIFY will only be generated for non-pipe output
+> > > > > > >
+> > > > > > > Similarly FAN_ACCESS_PERM fanotify permission events
+> > > > > > > will only be generated for non-pipe input.
+> > > > > Sorry, I must've misunderstood this as "splicing to a pipe generates
+> > > > > *ACCESS". Testing reveals this is not the case. So is it really true
+> > > > > that the only way to poll a pipe is a sleep()/read(O_NONBLOCK) loop?
+> > > > So why doesn't poll(3) work? AFAIK it should...
+> > > poll returns instantly with revents=POLLHUP for pipes that were closed
+> > > by the last writer.
+> > > 
+> > > Thus, you're either in a hot loop or you have to explicitly detect this
+> > > and fall back to sleeping, which defeats the point of polling:
+> > I see. There are two ways around this:
+> > 
+> > a) open the file descriptor with O_RDWR (so there's always at least one
+> > writer).
+> Not allowed in the general case, since you need to be able to tail -f
+> files you can't write to.
 
-Fixes: 25a2bc21c863 ("usb: typec: ucsi: call typec_set_mode on non-altmode partner change")
-Suggested-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
----
- drivers/usb/typec/ucsi/ucsi.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Hum, fair point.
 
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index 9b6d6b14431f..f6901319639d 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -785,6 +785,8 @@ static void ucsi_unregister_partner(struct ucsi_connector *con)
- 	if (!con->partner)
- 		return;
- 
-+	typec_set_mode(con->port, TYPEC_STATE_SAFE);
-+
- 	ucsi_unregister_partner_pdos(con);
- 	ucsi_unregister_altmodes(con, UCSI_RECIPIENT_SOP);
- 	typec_unregister_partner(con->partner);
-@@ -825,8 +827,6 @@ static void ucsi_partner_change(struct ucsi_connector *con)
- 					UCSI_CONSTAT_PARTNER_FLAG_USB)
- 				typec_set_mode(con->port, TYPEC_STATE_USB);
- 		}
--	} else {
--		typec_set_mode(con->port, TYPEC_STATE_SAFE);
- 	}
- 
- 	/* Only notify USB controller if partner supports USB data */
+> > b) when you get POLLHUP, just close the fd and open it again.
+> Not allowed semantically, since tail -f follows the file, not the name.
 
----
-base-commit: 60e7c4a25da68cd826719b685babbd23e73b85b0
-change-id: 20230626-topic-sm8550-usb-c-audio-fixup-9ee3cac5e00f
+Well, you can workaround that by using /proc/<pid>/fd/ magic links for
+reopening.
 
-Best regards,
+> > In these cases poll(3) will behave as you need (tested)...
+> Alas, those are not applicable to the standard use-case.
+> If only linux exposed a way to see if a file was written to!
+
+I agree that having to jump through the hoops with poll for this relatively
+standard usage is annoying. Looking into the code, the kernel actually has
+extra code to generate these repeated POLLHUPs because apparently that was
+how the poll was behaving ages ago.
+
+Hum, researching some more about this, epoll(7) actually doesn't have this
+problem. I've tested using epoll(2) (in edge-triggered case) instead of
+poll(2) and that doesn't return repeated POLLHUP events.
+
+> For reference with other implementations,
+> this just works and is guaranteed to work under kqueue(2) EVFILT_READ
+> (admittedly, kqueue(2) is an epoll(7)-style system and not an
+>  inotify(7)-style one, but it solves the issue,
+>  and that's what NetBSD tail -f uses).
+> 
+> Maybe this is short-sighted but I don't actually really see why inotify
+> is... expected? To only generate file-was-written events only for some
+> writes?
+
+Well, inotify similarly as fanotify have been created as filesystem
+monitoring APIs. Not as general "file descriptor monitoring" APIs. So they
+work well with regular files and directories but for other objects such as
+sockets or pipes or even for these "looking like files" objects in virtual
+filesystems like /proc, the results are pretty much undefined.
+
+								Honza
 -- 
-Neil Armstrong <neil.armstrong@linaro.org>
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
