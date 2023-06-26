@@ -2,152 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2FA173EE57
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 00:07:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 964E673EE75
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 00:10:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230487AbjFZWHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 18:07:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57934 "EHLO
+        id S229693AbjFZWKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 18:10:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231523AbjFZWGz (ORCPT
+        with ESMTP id S232034AbjFZWJq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 18:06:55 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E15F01999
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 15:03:13 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-666edfc50deso2504967b3a.0
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 15:03:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687816992; x=1690408992;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=t29Nyoq0sCG+QQJT6RRc1wswLqkrP2lzDbM08iFudzY=;
-        b=pyK6FH23VOtakuzS8YTMmfpCyAvPH+c7tghVLT/GJ9BDiCXQs/iERVyXOlSgpEP1PW
-         PafsujvWzXUTOO1B/h6yD3HiDve7PxoyTVUhIWmjKqiCvqI6yXnVmsuraQaoIPMR0T9R
-         3mZp+ezemFNm708zBnWB48tcZ1uNZ0KQdqHxBe7YHgoWc//eo2UtyfDtQWdwy7CEO/f2
-         ZLk5jE9nQSDSeQhlM+0ZcD5HvayiC55HodrJFSdWOlTc0Fq8uF5DQpo6HfaOQN+8fL8P
-         B73F0s03Lg7PS3tfX8fv/g+QtEpwcM9KVAp818wm9va61IDxOqz5ncw8b8e3K+h76HwV
-         iUgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687816992; x=1690408992;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=t29Nyoq0sCG+QQJT6RRc1wswLqkrP2lzDbM08iFudzY=;
-        b=FaCcN1zmJbrZ4S0DfilSOgazxwsxCyxGoeyy4/ZeaozfriEZqSy/ZY7N5nZFF0/kD1
-         forJ/NSjFD5bMFwWABmGjxqYUyGkCvyLWu0L8EzhtugycbNeJ4Ltg7pxx6zewr5Xed3M
-         8Iz47QtGiFhUZvWKXh42MEG6JqwA9HU9qkE92HVChvhNK6+UF7pzubHJnc3ibdYExlzz
-         jD+CkAamAmVhGS8kEbYVhfNIt5Q7WcZid1Lh099+Ny07Fy/MpPqlTxUSUKLPhE+BKopC
-         VK3KKokR0eXjHH6YYf2xBzRjIfhhsy0X9KoiMq6YOtMAAAm6QAJaOTynSbJVzrk7xm2s
-         CoPQ==
-X-Gm-Message-State: AC+VfDy7TO/04JRjim9WBHH6EylFkH/K1IsnGSLl+5U0FM3lfATI3GAG
-        HeB3yVh4ZNUzvdsFk1K1Q9E=
-X-Google-Smtp-Source: ACHHUZ7Mta+s90GH4V8YPCTQBtCLKtcz2/L+0odFjNCDHvlt2ZlP9kNmr1FeiBuLVRTEbbHUNVL1nQ==
-X-Received: by 2002:a05:6a20:748c:b0:106:9266:4448 with SMTP id p12-20020a056a20748c00b0010692664448mr45207749pzd.16.1687816992042;
-        Mon, 26 Jun 2023 15:03:12 -0700 (PDT)
-Received: from localhost (dhcp-72-235-13-41.hawaiiantel.net. [72.235.13.41])
-        by smtp.gmail.com with ESMTPSA id m26-20020a056a00165a00b006675c242548sm4247468pfc.182.2023.06.26.15.03.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jun 2023 15:03:11 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 26 Jun 2023 12:03:11 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [GIT PULL] workqueue: Ordered workqueue creation cleanups for v6.5
-Message-ID: <ZJoLH3Mlw7b2ylpC@slm.duckdns.org>
+        Mon, 26 Jun 2023 18:09:46 -0400
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2068.outbound.protection.outlook.com [40.107.102.68])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D0C430E7;
+        Mon, 26 Jun 2023 15:06:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oO5bQoeQja6RQmSJOGv4K9mortSVrXj+TC8MZX7Xxt27Wgis94JC5RiBgDmT1fCEGMOsWRxUBp2PDAdRFggUQMMU8nDe9g52zYSxm7iJWaHB8HM9Tg5y+LW1VZmG8CzjtlPDLgpYQRwrWT4/AYrM2SajHj94MH7xES+d1nTDm0T186v/Qvw3rwHMelqY47pDeF+chFJM97C70kSYu5GPGDdDriEHnLSgudTb4Hkl9MAMmh205eUyRfNgvqM00OqjYq7gkabA7cJ9scl4rQRm5EY9w7/QSsnYDNDMf2P9Bqf49mkgyJcWrwvFmDSES8X3lRxcAOsorJOei/ASlfIxCw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=i6AWKgJErSzUvCvVsgpQC7nwntbSSNupISuzTh2hUAY=;
+ b=lITyVNwpx2zsws5R2xfVk+FGLJsE9NLOtoJ54Bm4MtMo93jzcl66wor06Jr1YXU035/DYZiULkksEq8imLxya+zbyjIPCOW5kxNNCWWGTSnI5nOKV5Gx2ZrwVgqg2Y34wxAu7Ugw0C1SxdNWF071nFsdkqbKPbfp7Z54u6mErN255EyUBQ6giTnX6G66IelYEjXCA1LmSpJ/GQuP8DlFUbqBtWrFsPs122XHWy6A3/0izanOCO+1LXz7HhInk1oPLwh2kQK1VW7DTPbuQrY88HLRTtzBosMocWbecnp6nTFdNX/XLgs5jb3wyeHBaDwZoxa2JwYeOlFmkID20ffyhA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=i6AWKgJErSzUvCvVsgpQC7nwntbSSNupISuzTh2hUAY=;
+ b=iStM06J20o0mYKopV+a6q3lDL5uRzpfDdsRZQrniFD6s+tV1qCCVgUrOAibF+4Qe5znEqNhzlmPxhB1ga6uOqiEsJxs04aEIFOb5PrcQfBVT3SoyswpxV0Fx+OtwL0OKTpwGVqEHlJCC3CcrsRHr49ocbm1nC6HyRa5Hqoye2A/rT87KxqJb80lUXUbYL2Qczg3lX+4Tt5tLeHQ/o1GGgjy6NGf45kKg+g/6NiCbWyw+imQ5UmfWug7rdoCBk5ljz/6Q3ri5MIxjfKscn4hPIrObtkOO8NAynD2eJeFhaaGdHnzm5OX5KFYrSReRLsFAih7u30DerG0kMQkM4wuxaw==
+Received: from BN9PR03CA0405.namprd03.prod.outlook.com (2603:10b6:408:111::20)
+ by DS0PR12MB8271.namprd12.prod.outlook.com (2603:10b6:8:fb::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6521.21; Mon, 26 Jun 2023 22:06:13 +0000
+Received: from BN8NAM11FT021.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:111:cafe::80) by BN9PR03CA0405.outlook.office365.com
+ (2603:10b6:408:111::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.33 via Frontend
+ Transport; Mon, 26 Jun 2023 22:06:12 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ BN8NAM11FT021.mail.protection.outlook.com (10.13.177.114) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6500.47 via Frontend Transport; Mon, 26 Jun 2023 22:06:12 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Mon, 26 Jun 2023
+ 15:05:59 -0700
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail202.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Mon, 26 Jun
+ 2023 15:05:59 -0700
+Received: from build-abmainkar-20230620T092408093.nvidia.com (10.127.8.11) by
+ mail.nvidia.com (10.129.68.7) with Microsoft SMTP Server id 15.2.986.37 via
+ Frontend Transport; Mon, 26 Jun 2023 15:05:59 -0700
+From:   Abhishek Mainkar <abmainkar@nvidia.com>
+To:     <robert.moore@intel.com>, <rafael.j.wysocki@intel.com>,
+        <lenb@kernel.org>
+CC:     <linux-acpi@vger.kernel.org>,
+        <acpica-devel@lists.linuxfoundation.org>,
+        <linux-kernel@vger.kernel.org>, <abmainkar@nvidia.com>
+Subject: [Patch] acpica: Add AML_NO_OPERAND_RESOLVE flag to Timer
+Date:   Mon, 26 Jun 2023 22:05:25 +0000
+Message-ID: <20230626220525.1654780-1-abmainkar@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+X-NVConfidentiality: public
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT021:EE_|DS0PR12MB8271:EE_
+X-MS-Office365-Filtering-Correlation-Id: ed561602-4811-48e4-f2f5-08db76918e0c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: /xyddirrkkYf/KEk/PizZ40lHTZuM0XNthljnOeXmhLPV0+Agc3UnBh/XwwMy+4Xx49EmF6PjbYC3q8ilY0hZmjzoMojGSYRyZnsac04aqv2uV5gLCHfmufus7jEHMbw2DeU/IJumGaan1VbX4iFkPFM+Z9tYK3l8AFuizqKv2imGf3cbtyC4DmYjboJ2EZonp7Kz1c8+v8xt9a3uQyZSypDP+yx74AhjGXpU4YWpBj12htOLXT3RwFSrqy4IiJBabWC5AGKSZSKGnA0LV1GwG+CGVUu7M0bTvUP4BSFMbG3d12bAqTjsMDIa03gX1BCsGm8Y8gQlXPyjmhzpSHXE3eOnVcJ26Wkyu1755Frq5S/Yse3OYN0vSkSxkz/y+Srb2/8LEggT4CWx51MsMCTr6iAwlml2v5WxLyytYRrhxiuxIHqj4MnTg2XTcnKrz85dTnkz4SD7ZaVWNiFlQi5InioAumlqGyz+FMxMv5GFlU7ibDIBGMqeM0TNiq/d8UyEdErmIeooDhUruA0DX4wmm0jMIEbiBRK2yjr7pfMFiuCUnv2GxkknnFMFOCqoVXDNBsHk1G7KlbOKpRkKAmEg4PnmAsFqJbu6vj/2Ygw38ok2kPf6U7HoxJHk4amEVQoDSCRL0mlsDejZgjuDalRW337IREbgHQ/NKaLEZPO1fHh9++7H/pqPtFoBMh/m7EvriL+/FfqyrNAad1rw4URRxc47RWbz+DlveuzulWXWAfFeMByMC+Pe2NINa9wdXA4
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(39860400002)(376002)(136003)(451199021)(40470700004)(36840700001)(46966006)(5660300002)(4326008)(478600001)(36756003)(316002)(70206006)(70586007)(8676002)(8936002)(2906002)(40460700003)(40480700001)(36860700001)(110136005)(54906003)(86362001)(41300700001)(7696005)(186003)(82310400005)(336012)(426003)(1076003)(26005)(47076005)(356005)(2616005)(107886003)(83380400001)(7636003)(6666004)(82740400003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jun 2023 22:06:12.6574
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ed561602-4811-48e4-f2f5-08db76918e0c
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT021.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8271
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit ba0ad6ed89fd5dada3b7b65ef2b08e95d449d4ab:
+According to the ACPI specification 19.6.134, no argument is
+required to be passed for ASL Timer instruction. For taking
+care of no argument, AML_NO_OPERAND_RESOLVE flag is added to
+ASL Timer instruction opcode.
 
-  media: nxp: imx8-isi: fix buiding on 32-bit (2023-05-08 09:10:07 -0700)
+When ASL timer instruction interpreted by ACPI interpreter,
+getting error. After adding AML_NO_OPERAND_RESOLVE flag to
+ASL Timer instruction opcode, issue is not observed.
 
-are available in the Git repository at:
+=============================================================
+UBSAN: array-index-out-of-bounds in acpica/dswexec.c:401:12
+index -1 is out of range for type 'acpi_operand_object *[9]'
+CPU: 37 PID: 1678 Comm: cat Not tainted
+6.0.0-dev-th500-6.0.y-1+bcf8c46459e407-generic-64k
+HW name: NVIDIA BIOS v1.1.1-d7acbfc-dirty 12/19/2022 Call trace:
+ dump_backtrace+0xe0/0x130
+ show_stack+0x20/0x60
+ dump_stack_lvl+0x68/0x84
+ dump_stack+0x18/0x34
+ ubsan_epilogue+0x10/0x50
+ __ubsan_handle_out_of_bounds+0x80/0x90
+ acpi_ds_exec_end_op+0x1bc/0x6d8
+ acpi_ps_parse_loop+0x57c/0x618
+ acpi_ps_parse_aml+0x1e0/0x4b4
+ acpi_ps_execute_method+0x24c/0x2b8
+ acpi_ns_evaluate+0x3a8/0x4bc
+ acpi_evaluate_object+0x15c/0x37c
+ acpi_evaluate_integer+0x54/0x15c
+ show_power+0x8c/0x12c [acpi_power_meter]
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tj/wq.git/ tags/wq-for-6.5-cleanup-ordered
+Signed-off-by: Abhishek Mainkar <abmainkar@nvidia.com>
+---
+ drivers/acpi/acpica/psopcode.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-for you to fetch changes up to 78ef970385ea4d02a44af2776e4f4c74d4fce3d4:
+diff --git a/drivers/acpi/acpica/psopcode.c b/drivers/acpi/acpica/psopcode.c
+index bef69e87a0a2..8c34c0ffb1d9 100644
+--- a/drivers/acpi/acpica/psopcode.c
++++ b/drivers/acpi/acpica/psopcode.c
+@@ -603,7 +603,7 @@ const struct acpi_opcode_info acpi_gbl_aml_op_info[AML_NUM_OPCODES] = {
+ 
+ /* 7E */ ACPI_OP("Timer", ARGP_TIMER_OP, ARGI_TIMER_OP, ACPI_TYPE_ANY,
+ 			 AML_CLASS_EXECUTE, AML_TYPE_EXEC_0A_0T_1R,
+-			 AML_FLAGS_EXEC_0A_0T_1R),
++			 AML_FLAGS_EXEC_0A_0T_1R | AML_NO_OPERAND_RESOLVE),
+ 
+ /* ACPI 5.0 opcodes */
+ 
+-- 
+2.17.1
 
-  rxrpc: Use alloc_ordered_workqueue() to create ordered workqueues (2023-05-25 12:15:36 -1000)
-
-----------------------------------------------------------------
-workqueue: Ordered workqueue creation cleanups
-
-For historical reasons, unbound workqueues with max concurrency limit of 1
-are considered ordered, even though the concurrency limit hasn't been
-system-wide for a long time. This creates ambiguity around whether ordered
-execution is actually required for correctness, which was actually confusing
-for e.g. btrfs (btrfs updates are being routed through the btrfs tree).
-
-There aren't that many users in the tree which use the combination and there
-are pending improvements to unbound workqueue affinity handling which will
-make inadvertent use of ordered workqueue a bigger loss. This pull request
-clarifies the situation for most of them by updating the ones which require
-ordered execution to use alloc_ordered_workqueue().
-
-There are some conversions being routed through subsystem-specific trees and
-likely a few stragglers. Once they're all converted, workqueue can trigger a
-warning on unbound + @max_active==1 usages and eventually drop the implicit
-ordered behavior.
-
-----------------------------------------------------------------
-Tejun Heo (17):
-      powerpc, workqueue: Use alloc_ordered_workqueue() to create ordered workqueues
-      greybus: Use alloc_ordered_workqueue() to create ordered workqueues
-      net: thunderx: Use alloc_ordered_workqueue() to create ordered workqueues
-      net: octeontx2: Use alloc_ordered_workqueue() to create ordered workqueues
-      virt: acrn: Use alloc_ordered_workqueue() to create ordered workqueues
-      xen/pvcalls: Use alloc_ordered_workqueue() to create ordered workqueues
-      wifi: iwlwifi: Use default @max_active for trans_pcie->rba.alloc_wq
-      wifi: mwifiex: Use default @max_active for workqueues
-      wifi: ath10/11/12k: Use alloc_ordered_workqueue() to create ordered workqueues
-      crypto: octeontx2: Use alloc_ordered_workqueue() to create ordered workqueues
-      media: coda: Use alloc_ordered_workqueue() to create ordered workqueues
-      scsi: NCR5380: Use default @max_active for hostdata->work_q
-      media: amphion: Use alloc_ordered_workqueue() to create ordered workqueues
-      dm integrity: Use alloc_ordered_workqueue() to create ordered workqueues
-      net: wwan: t7xx: Use alloc_ordered_workqueue() to create ordered workqueues
-      net: qrtr: Use alloc_ordered_workqueue() to create ordered workqueues
-      rxrpc: Use alloc_ordered_workqueue() to create ordered workqueues
-
- arch/powerpc/kernel/tau_6xx.c                        |  2 +-
- arch/powerpc/platforms/pseries/dlpar.c               |  3 +--
- drivers/crypto/marvell/octeontx2/otx2_cptpf_main.c   | 12 ++++++------
- drivers/crypto/marvell/octeontx2/otx2_cptvf_main.c   |  6 +++---
- drivers/greybus/connection.c                         |  4 ++--
- drivers/greybus/svc.c                                |  2 +-
- drivers/md/dm-integrity.c                            |  4 ++--
- drivers/md/dm.c                                      |  2 +-
- drivers/media/platform/amphion/vpu_core.c            |  2 +-
- drivers/media/platform/amphion/vpu_v4l2.c            |  2 +-
- drivers/media/platform/chips-media/coda-common.c     |  2 +-
- drivers/net/ethernet/cavium/thunder/thunder_bgx.c    |  3 +--
- drivers/net/ethernet/marvell/octeontx2/af/rvu.c      |  5 ++---
- drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c | 13 +++++--------
- drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c |  5 ++---
- drivers/net/wireless/ath/ath10k/qmi.c                |  3 +--
- drivers/net/wireless/ath/ath11k/qmi.c                |  3 +--
- drivers/net/wireless/ath/ath12k/qmi.c                |  3 +--
- drivers/net/wireless/intel/iwlwifi/pcie/trans.c      |  2 +-
- drivers/net/wireless/marvell/mwifiex/cfg80211.c      |  4 ++--
- drivers/net/wireless/marvell/mwifiex/main.c          |  8 ++++----
- drivers/net/wwan/t7xx/t7xx_hif_cldma.c               | 13 +++++++------
- drivers/net/wwan/t7xx/t7xx_hif_dpmaif_tx.c           |  5 +++--
- drivers/scsi/NCR5380.c                               |  2 +-
- drivers/virt/acrn/ioreq.c                            |  4 ++--
- drivers/xen/pvcalls-back.c                           |  4 ++--
- net/qrtr/ns.c                                        |  2 +-
- net/rxrpc/af_rxrpc.c                                 |  2 +-
- 28 files changed, 57 insertions(+), 65 deletions(-)
