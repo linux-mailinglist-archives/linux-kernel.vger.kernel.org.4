@@ -2,142 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C8F573DC03
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 12:07:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55CFA73DC08
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 12:09:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230011AbjFZKHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 06:07:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52358 "EHLO
+        id S230089AbjFZKJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 06:09:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjFZKHa (ORCPT
+        with ESMTP id S229501AbjFZKJI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 06:07:30 -0400
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2090.outbound.protection.outlook.com [40.107.117.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED04811C;
-        Mon, 26 Jun 2023 03:07:28 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=j15m1ALPUOeTzIw3KSRTGYge6X6jwEOvspvpAXvweOBfpm86TLpm2mbmGP959BfP7mUMEuKXdi7m3Ene/XXB1B92PU6xjopmTEQQiZxuI1D8Vjkg3GBGyiv/MRs0Wo1Gas7GY2PxPksX7M9B/We5W+B1zsHv2Xg2JqmfdX3vavdX0pk6Fno9wT4cLngUvRbdP4HgVWTlPSRWSzswNfJcEyByWoud7LAbgR/mYC14IwcOuo27/wF4sVZUsE+abML+xvP2PBRXJLlwGEvwqI55el418XgXupF9PjNa6c8NGPHk5bAA2DQj3tSouwO+5ty32b+DI6wQarnfmJCtTBZI+Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lqmnioJ3vzotlIxAdjHlpXNRzAHZFf9ikm1RY9ddu+c=;
- b=Md2IUVA0dgzYz3YVsOH9idxkFvKBwpOqMZXB9rVjSzjrDfRBBNcWiM8kzPn636/biCp7QwU6pdQqHv5BmYYe9ru4Z1jVU29gPIeOdcwmZYIyNcvry2GTdzyAhs9EFyap5EJjeROrWHvDNHmKsMztCimxOQE/OJIzn22dPve0bF3oYH5KOAjk4rcaX/JhrhWhshK83KrjUawWs0weX0zFLxPU+uk3+KWf3fmcrGZD9wJ3dRs8VN8uI3njGZB8ArwDVBNMuMjjFp+NBFUWO16GYvQHXXK4607nIaQSno/QCIxVRsAwbWYXk+SBlhmJ1Z7lvRFPkv1gId7VoNasH3m5sw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lqmnioJ3vzotlIxAdjHlpXNRzAHZFf9ikm1RY9ddu+c=;
- b=HEFZO+7KFAnraZ+30va0siIX/dgedMOhkUUuwmCc/wwiLJfBaBArZd2ptLGwsm87liucMH5A+6mF5wBtDRYky5a3JecB8A61Xwrv7MsCed6hx1OFGcDUn4jTpQ7Gax3E9fV4bnmSWYEOyJe2hCMZWsAUo9vmzAIu3ArjNVqUbCC2FjmcLncZA2OwbiRjHLGAIE9Bg16+LpKgdMt4Alyfw9Uv5lm39OePozV7x5ri4m681Rt2VP4QZfprLxkhcGh36ci9CbfPQnlEg1glS3/KiscmIOZGyBNvjGLkcjqOSAC39qbmZXRBwG8dwI0/e08IjbxMt6/paRkHXtka/14kNQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from TYZPR06MB6697.apcprd06.prod.outlook.com (2603:1096:400:451::6)
- by TY0PR06MB5755.apcprd06.prod.outlook.com (2603:1096:400:27d::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.23; Mon, 26 Jun
- 2023 10:07:26 +0000
-Received: from TYZPR06MB6697.apcprd06.prod.outlook.com
- ([fe80::f652:a96b:482:409e]) by TYZPR06MB6697.apcprd06.prod.outlook.com
- ([fe80::f652:a96b:482:409e%6]) with mapi id 15.20.6521.023; Mon, 26 Jun 2023
- 10:07:26 +0000
-From:   Lu Hongfei <luhongfei@vivo.com>
-To:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     opensource.kernel@vivo.com, luhongfei@vivo.com
-Subject: [PATCH] fs: btrfs: Optimize code execution process to save time
-Date:   Mon, 26 Jun 2023 18:07:16 +0800
-Message-Id: <20230626100716.18935-1-luhongfei@vivo.com>
-X-Mailer: git-send-email 2.39.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: TYCP286CA0046.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:2b5::6) To TYZPR06MB6697.apcprd06.prod.outlook.com
- (2603:1096:400:451::6)
+        Mon, 26 Jun 2023 06:09:08 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B10211C;
+        Mon, 26 Jun 2023 03:09:06 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35Q8KZVg002100;
+        Mon, 26 Jun 2023 10:09:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=eOpCYF6zAWuabH0/d/IYnQA8vhrFtttjs0v+cTd4l6Q=;
+ b=OqXxbCuCZkhW78nXztG6+xOR+hxlTM6vTXJSqZhTVvyI/cIBPTFX1nA6yIbR/plKTz8x
+ 7NKVvCO7o1aI57nx9lM2b9wZlfWLAhx3MKpSHqlMC0kloO5L9+jzjRmBZCOJ38hEp0Ib
+ DAS3ebQ29g81JfYDunI95zll9ZZlKATtvTRYSp4uGu/KKDKokqX6qajv3FG8BOMJecNV
+ 8EgN1OPBYMY8/dsgwhA7Ac2KtmfKO7yfhmClSIL43Zwa3zQT/QGsdaq/8QqLHX66nj6E
+ MOT8BpiWSgzr48f5LdMdj361DkIZL6MHRi52NqadGJTMtAzJ0pJwzEjN6e3cks2w6Lxm aw== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rdqgdbquk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 26 Jun 2023 10:09:02 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35QA8xQ9015589
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 26 Jun 2023 10:08:59 GMT
+Received: from [10.214.67.128] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 26 Jun
+ 2023 03:08:55 -0700
+Message-ID: <23a7f281-ccd3-a00e-0667-dd86673d2f9f@quicinc.com>
+Date:   Mon, 26 Jun 2023 15:38:51 +0530
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYZPR06MB6697:EE_|TY0PR06MB5755:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1624f149-b1c4-4d59-204b-08db762d2454
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Jhq01hPmk4Wim8qPwv5JTzaNnjybcGP7ttH7EiJUkqmE/D5DXOmV/klCAnxDfyXZh/V4QrYVSpaKTV/UvW0ZY3Xm5wzPjaQgrPlxIK8aD1jrcZWz5K+MN/Y8kkGM+cALnIIZ/L8jaDXaOwCPq83b6Wv6f4O2ijWm8S7Kpn4dpcTDXSrBO9y69dscFLiwUPP2NiAkWxUhnEsee5XhW28UZnmkjykzeLoeOtMFaSXMd1Y0aKeHgjhdJGSBtPKtduD48AOyQJf/n73GnujG5MvSSqOtgEKEavQNFdcdHPgHPdszCbHT+tkyc75JcVsI/MHRErZVHozMgEo9JGZeMsFX+g6GREvB36Wdax3Djv04UtGNYhNF3StqX2zPqF5hBPEOUEWi2TGIDQaUh9OenNNQeuVgNhDYyy/hlPh1l2MJItJxvgi4qT0TqDPYSzxBk9BUDuyq6SdoQYZD9bIHfb/CHKeNfpH3T5h23c1ed30aPIX233PfsJGO+4hdCsz9jR8aOU4ut4qDJoqdHI03z66L+IVfKfhIztfWFecAGWS4JqJMgF7M5GAqGnH3waAwiafaXc6Am811UAWUAlz+gxHphFcdWLHdhnyT9yOvsRrrMrQICBVJJ/2FscCpgSM3jbWj
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB6697.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(366004)(39860400002)(346002)(396003)(376002)(451199021)(6506007)(6512007)(66556008)(2616005)(66476007)(8676002)(1076003)(8936002)(186003)(5660300002)(26005)(107886003)(4744005)(2906002)(38350700002)(4326008)(41300700001)(6666004)(83380400001)(66946007)(36756003)(38100700002)(110136005)(478600001)(52116002)(316002)(6486002)(86362001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Cdb+iNZNV/3GXx/DCchui25yVXuDi50qVyQulEO2kysAg+zSyIzAMapoCTrz?=
- =?us-ascii?Q?hWVNyp4ETy+JChUxI7/t476rHVlteEDWFHK2HjHpO0+Zr0U+LWNchB94shQF?=
- =?us-ascii?Q?e5dJwOQOJvoVbS/zwNE9Al20wvDWAQEnQ7NUIRiFUDHokwMuOQGThFODH4WN?=
- =?us-ascii?Q?Tu3SODwOBdXgKDpytS1ELcZsn2Wf/781vAU8m8fetkFjUvuXAfMIQVP6RoZ1?=
- =?us-ascii?Q?LgxFd0AU5c2q3kwR6rPQ+ZPQO9XPgHx/9KTuwM4Ay+QSwyFmXZsdonFaB84Y?=
- =?us-ascii?Q?ZTSrIw6Vd9kLUsPq1rMHdM/IDEAY1RWkh/OzIS2IldbVD/8hWLd7U/zFnYft?=
- =?us-ascii?Q?2trod6ahHp9eQF9afDOT6Ze+rkR0cZbGifZclCTVR0VQSiYZGl9tarIOOWOQ?=
- =?us-ascii?Q?s71KT41ePxOcygFr39rj+u9GIpa9RGMYu3/WwNa4Dse0G/wUt6xtIQwMiQL+?=
- =?us-ascii?Q?Dilmbn+R37ZOlhCj2SQvZF9qt3xltuP96Qzo8D5bCTC1Qv33rUTuytWxKoe5?=
- =?us-ascii?Q?lKL2f1AE6YxmJSKVeBQG1rZtFp8O29cYw/o6mxwYgf3npYYvLo3Sh+/KpOIw?=
- =?us-ascii?Q?mWtURwNV3e3+3Roy45DDgpaJDzjI12OzbmMbFlPG1v1nE54+zGetcg2gvFyj?=
- =?us-ascii?Q?OeVoiOfSL+DOxTRuJCUbZCNkwRL+RmvoOcUxEAGqQlss+GYgwWZjkDi4KN2B?=
- =?us-ascii?Q?dwM7DiGkphVReZIuqUv0z2BHNEV1iyjAt1LcJHLp03W/0V1b1vexUG1enQ4x?=
- =?us-ascii?Q?USMwh98mfd7wiLAPxf9pzjfavmpYHqwmZO0x1XOfL1awnP9vI7TU2EnVdfUE?=
- =?us-ascii?Q?vVJAsEU0Ahj4r7OA7Tob4Z52ZCfTLW8gY59lKl52D4mi31QoZOYvCODCLvV0?=
- =?us-ascii?Q?A+7pMzxt/YItIGn8iPkn0Vr/09L0BlJpiHnvTTcyXjJzqFzyuowna50n5+qH?=
- =?us-ascii?Q?Pi8JyKUMAiqfs/ZQos6DdJyX2vWH21jU51cXkUaGiNTbv0sqmIeSpatZQcEr?=
- =?us-ascii?Q?faD+f9Ep/DMdTIJN5fOXrg+2TYb+deb1gTwHv+H5pkqA+n9x5t5zyRWE/PQC?=
- =?us-ascii?Q?EtgGb4axlX/FOcECzrjlJ72EIwfeBVRip7A3ishqmWb10UFlAsUp1s45F1AR?=
- =?us-ascii?Q?ROPKooxZ8o9E96kdZMSALCX/sqFk+wgHfUueKkdeWw8iSjtDC/PMtKUGAmHU?=
- =?us-ascii?Q?54jTBVVS/7eoreEKu/RnSTtQP73GxIaGaGr5SbKnfN32Js6ZHevO3YTg9Dn6?=
- =?us-ascii?Q?tx4AITbTrFKUkHbJgdpPn9WiUVPAbVv6ApYXVWrfhW2qmN3oEctKD9YnlbDD?=
- =?us-ascii?Q?NjDxuoUmftgqPO0LTipNdLSt0mUxus7KaTBS3uuXWrCydz+QFAqZwkEVxl9w?=
- =?us-ascii?Q?J0gFe5D1+IaTowWP+vHr2cX5hZb3bP3egZH9kWoqquKFUs+kpyJPHhGw1Z7L?=
- =?us-ascii?Q?vuV5VMdE+s7KURpjGcjzTadDBkNXIfvP+frwEFRwOL4ESlCXsPYv518jWae/?=
- =?us-ascii?Q?mklPMksjuVEbRyL+00/Jk6YaSZYl9kk5UrrfVXw8tzIssFCBvfdmTMqMo2Lx?=
- =?us-ascii?Q?odmVR3AIy1kGcdl2+3BOSFJP0HmqqNtLwRqXvR+q?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1624f149-b1c4-4d59-204b-08db762d2454
-X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB6697.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jun 2023 10:07:25.9905
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: beSyTg8sTd9dhFv/tMZCDIo4dkxtp8i43foGwSpkgb0dhrSCMVYsPv3tLezt/CvZfSbwwL/d6ajmGx8CwoqCNQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY0PR06MB5755
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v4 1/6] dt-bindings: nvmem: sec-qfprom: Add bindings for
+ secure qfprom
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+References: <20230623141806.13388-1-quic_kbajaj@quicinc.com>
+ <20230623141806.13388-2-quic_kbajaj@quicinc.com>
+ <cea67754-6bc0-f8ee-3cba-8713b10b0c69@linaro.org>
+ <d9cde55b-fc96-b024-8048-1de1fa1bd89e@quicinc.com>
+ <d0b6f2c9-8e85-a38b-e2b1-14f197ca1ea0@linaro.org>
+ <c8909dcb-143c-c2d7-513d-625e9ce00c0c@quicinc.com>
+ <9f9afa24-ecfc-2fb2-3d47-80c250fcb8fe@linaro.org>
+From:   Komal Bajaj <quic_kbajaj@quicinc.com>
+In-Reply-To: <9f9afa24-ecfc-2fb2-3d47-80c250fcb8fe@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: aBFTNpPV875pUutWXteeG-pEG8KJj_DS
+X-Proofpoint-GUID: aBFTNpPV875pUutWXteeG-pEG8KJj_DS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-26_06,2023-06-22_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1015
+ suspectscore=0 phishscore=0 priorityscore=1501 impostorscore=0
+ lowpriorityscore=0 adultscore=0 mlxscore=0 mlxlogscore=674 bulkscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306260090
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Originally, the btrfs_check_data_free_space used round_down twice when
-aligning the range, which to some extent increased the execution time of
-the code.
-After optimization, round_down only needs to be executed once, which can
-improve code efficiency and increase code readability.
 
-Signed-off-by: Lu Hongfei <luhongfei@vivo.com>
----
- fs/btrfs/delalloc-space.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/fs/btrfs/delalloc-space.c b/fs/btrfs/delalloc-space.c
-index 427abaf608b8..fd33b1cf1954 100644
---- a/fs/btrfs/delalloc-space.c
-+++ b/fs/btrfs/delalloc-space.c
-@@ -137,9 +137,8 @@ int btrfs_check_data_free_space(struct btrfs_inode *inode,
- 	int ret;
- 
- 	/* align the range */
--	len = round_up(start + len, fs_info->sectorsize) -
--	      round_down(start, fs_info->sectorsize);
- 	start = round_down(start, fs_info->sectorsize);
-+	len = round_up(start + len, fs_info->sectorsize) - start;
- 
- 	if (noflush)
- 		flush = BTRFS_RESERVE_NO_FLUSH;
--- 
-2.39.0
+On 6/26/2023 3:16 PM, Krzysztof Kozlowski wrote:
+> On 26/06/2023 11:02, Komal Bajaj wrote:
+>>
+>> On 6/26/2023 2:00 PM, Krzysztof Kozlowski wrote:
+>>> On 26/06/2023 10:22, Komal Bajaj wrote:
+>>>>>> +
+>>>>>> +allOf:
+>>>>>> +  - $ref: nvmem.yaml#
+>>>>>> +
+>>>>>> +properties:
+>>>>>> +  compatible:
+>>>>>> +    items:
+>>>>>> +      - enum:
+>>>>>> +          - qcom,qdu1000-sec-qfprom
+>>>>>> +      - const: qcom,sec-qfprom
+>>>>>> +
+>>>>>> +  reg:
+>>>>>> +    items:
+>>>>>> +      - description: The secure qfprom corrected region.
+>>>>>> +
+>>>>>> +  # Needed if any child nodes are present.
+>>>>>> +  "#address-cells":
+>>>>>> +    const: 1
+>>>>>> +  "#size-cells":
+>>>>>> +    const: 1
+>>>>> Drop both, they are not needed.
+>>>> I didn't get it. Can you please explain why these are not needed as this
+>>>> node will have child nodes which will use single value for address and size.
+>>> I suspect they are already defined. Do other bindings (for cases with
+>>> children) have them? If not, why here it would be different?
+>> Yes, I see there are bindings that has these properties, listed a few of
+>> them below -
+>>
+>> [1]
+>> https://github.com/torvalds/linux/blob/master/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml
+> Please work on current development. It's a bit of waste of time to
+> review old code...
+
+Okay sorry for that, will work on this.
+
+Thanks
+Komal
+>
+> https://lore.kernel.org/all/20230611140330.154222-16-srinivas.kandagatla@linaro.org/
+>
+>> [2]
+>> https://github.com/torvalds/linux/blob/master/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
+> That's not a nvmem provider.
+>
+>> [3]
+>> https://github.com/torvalds/linux/blob/master/Documentation/devicetree/bindings/timer/arm,arch_timer_mmio.yaml
+> That's not a nvmem provider.
+>
+>
+> Best regards,
+> Krzysztof
+>
 
