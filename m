@@ -2,189 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7293B73E666
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 19:26:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A930673E663
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 19:26:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230087AbjFZR0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 13:26:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59574 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229990AbjFZR0Q (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S229715AbjFZR0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Mon, 26 Jun 2023 13:26:16 -0400
-Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com [207.171.188.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79001AB;
-        Mon, 26 Jun 2023 10:26:15 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59556 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229487AbjFZR0O (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 26 Jun 2023 13:26:14 -0400
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12AB7AB
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 10:26:13 -0700 (PDT)
+Received: by mail-il1-x129.google.com with SMTP id e9e14a558f8ab-3457cba78f3so14844575ab.3
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 10:26:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1687800375; x=1719336375;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=6SLHs10iJGAAF5phF+GbeJBaS0WCv5SXVNHF8Rxr9/g=;
-  b=dDeVKmul3EglJqK3YkGqacc6JMIVo8rxFhMg4mPRe3iNyuZtsp6ILyx7
-   vCQxeXawFNuGjAimu/otfnOzEXNOKofHqzvX5DwP/Nt6RhNSHZA0anc5F
-   Vx+GTKLNysRIXw4VBu9U+d0CUWwRJ3Tcstqv1BDeOmiR9DVGXEi4DaOOE
-   I=;
-X-IronPort-AV: E=Sophos;i="6.01,160,1684800000"; 
-   d="scan'208";a="1139662461"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-a893d89c.us-west-2.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-9103.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 17:26:07 +0000
-Received: from EX19MTAUWB002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2b-m6i4x-a893d89c.us-west-2.amazon.com (Postfix) with ESMTPS id 7379640D52;
-        Mon, 26 Jun 2023 17:26:01 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Mon, 26 Jun 2023 17:25:52 +0000
-Received: from 88665a182662.ant.amazon.com (10.187.170.15) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Mon, 26 Jun 2023 17:25:47 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.com>
-To:     <lmb@isovalent.com>
-CC:     <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
-        <daniel@iogearbox.net>, <davem@davemloft.net>,
-        <dsahern@kernel.org>, <edumazet@google.com>, <haoluo@google.com>,
-        <hemanthmalla@gmail.com>, <joe@wand.net.nz>,
-        <john.fastabend@gmail.com>, <jolsa@kernel.org>,
-        <kpsingh@kernel.org>, <kuba@kernel.org>, <kuniyu@amazon.com>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <martin.lau@linux.dev>, <mykolal@fb.com>, <netdev@vger.kernel.org>,
-        <pabeni@redhat.com>, <sdf@google.com>, <shuah@kernel.org>,
-        <song@kernel.org>, <willemdebruijn.kernel@gmail.com>, <yhs@fb.com>
-Subject: Re: [PATCH bpf-next v3 1/7] udp: re-score reuseport groups when connected sockets are present
-Date:   Mon, 26 Jun 2023 10:25:37 -0700
-Message-ID: <20230626172537.57064-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230613-so-reuseport-v3-1-907b4cbb7b99@isovalent.com>
-References: <20230613-so-reuseport-v3-1-907b4cbb7b99@isovalent.com>
+        d=sifive.com; s=google; t=1687800372; x=1690392372;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jAa9/qyqoIOUnYhC99LNfoissbeamAdrpMuCz28sW8s=;
+        b=H7zijVZ9COkKnC8EPRrq0SG3bgmwwD4JD/ym7AGril6FAWmKwYPiTnmRm+uTCXiYrV
+         3Cnd/INrDqhDJQToc37RsQd2bw0lUmbz+L+2LIur1mo3m0/akE1hqdtuxAyNSTPgqyD6
+         Vyh/o6lP7U5Hh0EVqcqKGizcYaT9V4qIO6tg06VvRIMpBBaEYlQwLXZfbjOGfAteYyuG
+         imlXyaxx5bK9XHbXUYCPhZsaXZri/2yMPFRMyTbKAjTGKAY4H5H5Y15qjeILlxgzn4fD
+         3QpHy9j4aDe8fF+A+ja630+GEGHBJ7Svrc4nFrTZ3ZM+Fk8bmf+kVQjFHeNEtDpFG41H
+         ViFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687800372; x=1690392372;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jAa9/qyqoIOUnYhC99LNfoissbeamAdrpMuCz28sW8s=;
+        b=igByy/ZI/B5ENEYYVml4evCfy8xBprzWcHmWRJCEGqgobooj7B197GUmlud4PYuvgM
+         fXu19lOfvG4yLnlOX1BvhE0oolU63Ti5RN+KYWCBq0ZpNFgG+O2CzUgJz3NwvXyl+G3q
+         8jhJlNX//aJQRiBo/F8ET4yW4ViNfvfOXQjbyugNpQrkB5/mOk/F5WVC0OFTjgJpdkfU
+         z3+3VBLk/2Xley9bnR8AgaPIBSXtZ42CaL5RCDJQuSE0Ezlvt3jfsjrR9n5aUvNr9S7i
+         ixQbgOpQnJQfFbHBtzcBmcz3qxvm/62xc0m9TsF+ssCrQ5nECUotTjBxW0S3b7aotXmp
+         65Kw==
+X-Gm-Message-State: AC+VfDyyGnSZqgp1yBQRG6EvznFtwwf7fSQGLzFpBI3OiAq/ZAfQHVqZ
+        PXaGb7ah2G/swKROACsMaTzliw==
+X-Google-Smtp-Source: ACHHUZ6RhZwQfHzkxUhFwFFWIzRQlw5p95P6F2U2d7QYXTJkZAt/nhSYpUch6hK1aPN88nc7hZ+DmQ==
+X-Received: by 2002:a92:d30e:0:b0:340:72d1:69a with SMTP id x14-20020a92d30e000000b0034072d1069amr31425660ila.28.1687800372473;
+        Mon, 26 Jun 2023 10:26:12 -0700 (PDT)
+Received: from sw06.internal.sifive.com ([64.62.193.194])
+        by smtp.gmail.com with ESMTPSA id u15-20020aa7838f000000b0066a6059d399sm4026648pfm.116.2023.06.26.10.26.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jun 2023 10:26:11 -0700 (PDT)
+From:   Samuel Holland <samuel.holland@sifive.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andy Shevchenko <andy@kernel.org>
+Cc:     Samuel Holland <samuel.holland@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: [PATCH] gpio: sifive: Support IRQ wake
+Date:   Mon, 26 Jun 2023 10:26:08 -0700
+Message-Id: <20230626172608.2978505-1-samuel.holland@sifive.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.187.170.15]
-X-ClientProxiedBy: EX19D041UWA002.ant.amazon.com (10.13.139.121) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lorenz Bauer <lmb@isovalent.com>
-Date: Mon, 26 Jun 2023 16:08:58 +0100
-> Contrary to TCP, UDP reuseport groups can contain TCP_ESTABLISHED
-> sockets. To support these properly we remember whether a group has
-> a connected socket and skip the fast reuseport early-return. In
-> effect we continue scoring all reuseport sockets and then choose the
-> one with the highest score.
-> 
-> The current code fails to re-calculate the score for the result of
-> lookup_reuseport. According to Kuniyuki Iwashima:
-> 
->     1) SO_INCOMING_CPU is set
->        -> selected sk might have +1 score
-> 
->     2) BPF prog returns ESTABLISHED and/or SO_INCOMING_CPU sk
->        -> selected sk will have more than 8
-> 
->   Using the old score could trigger more lookups depending on the
->   order that sockets are created.
-> 
->     sk -> sk (SO_INCOMING_CPU) -> sk (ESTABLISHED)
->     |     |
->     `-> select the next SO_INCOMING_CPU sk
->           |
->           `-> select itself (We should save this lookup)
-> 
-> Fixes: efc6b6f6c311 ("udp: Improve load balancing for SO_REUSEPORT.")
-> Signed-off-by: Lorenz Bauer <lmb@isovalent.com>
+Each pin drives a separate interrupt in the parent IRQ domain, so there
+is no need to set IRQCHIP_MASK_ON_SUSPEND.
 
-Reviewed-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Signed-off-by: Samuel Holland <samuel.holland@sifive.com>
+---
 
-1 minor nit below.
+ drivers/gpio/gpio-sifive.c | 1 +
+ 1 file changed, 1 insertion(+)
 
+diff --git a/drivers/gpio/gpio-sifive.c b/drivers/gpio/gpio-sifive.c
+index 98939cd4a71e..c2653313f3a2 100644
+--- a/drivers/gpio/gpio-sifive.c
++++ b/drivers/gpio/gpio-sifive.c
+@@ -150,6 +150,7 @@ static const struct irq_chip sifive_gpio_irqchip = {
+ 	.irq_disable	= sifive_gpio_irq_disable,
+ 	.irq_eoi	= sifive_gpio_irq_eoi,
+ 	.irq_set_affinity = sifive_gpio_irq_set_affinity,
++	.irq_set_wake	= irq_chip_set_wake_parent,
+ 	.flags		= IRQCHIP_IMMUTABLE,
+ 	GPIOCHIP_IRQ_RESOURCE_HELPERS,
+ };
+-- 
+2.40.1
 
-> ---
->  net/ipv4/udp.c | 20 +++++++++++++++-----
->  net/ipv6/udp.c | 19 ++++++++++++++-----
->  2 files changed, 29 insertions(+), 10 deletions(-)
-> 
-> diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
-> index fd3dae081f3a..5ef478d2c408 100644
-> --- a/net/ipv4/udp.c
-> +++ b/net/ipv4/udp.c
-> @@ -450,14 +450,24 @@ static struct sock *udp4_lib_lookup2(struct net *net,
->  		score = compute_score(sk, net, saddr, sport,
->  				      daddr, hnum, dif, sdif);
->  		if (score > badness) {
-> -			result = lookup_reuseport(net, sk, skb,
-> -						  saddr, sport, daddr, hnum);
-> +			badness = score;
-> +			result = lookup_reuseport(net, sk, skb, saddr, sport, daddr, hnum);
-> +			if (!result) {
-> +				result = sk;
-> +				continue;
-> +			}
-> +
->  			/* Fall back to scoring if group has connections */
-> -			if (result && !reuseport_has_conns(sk))
-> +			if (!reuseport_has_conns(sk))
->  				return result;
->  
-> -			result = result ? : sk;
-> -			badness = score;
-> +			/* Reuseport logic returned an error, keep original score. */
-> +			if (IS_ERR(result))
-> +				continue;
-> +
-> +			badness = compute_score(result, net, saddr, sport,
-> +						daddr, hnum, dif, sdif);
-> +
-
-Unnecessary blank line here.
-
-
->  		}
->  	}
->  	return result;
-> diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
-> index e5a337e6b970..8b3cb1d7da7c 100644
-> --- a/net/ipv6/udp.c
-> +++ b/net/ipv6/udp.c
-> @@ -193,14 +193,23 @@ static struct sock *udp6_lib_lookup2(struct net *net,
->  		score = compute_score(sk, net, saddr, sport,
->  				      daddr, hnum, dif, sdif);
->  		if (score > badness) {
-> -			result = lookup_reuseport(net, sk, skb,
-> -						  saddr, sport, daddr, hnum);
-> +			badness = score;
-> +			result = lookup_reuseport(net, sk, skb, saddr, sport, daddr, hnum);
-> +			if (!result) {
-> +				result = sk;
-> +				continue;
-> +			}
-> +
->  			/* Fall back to scoring if group has connections */
-> -			if (result && !reuseport_has_conns(sk))
-> +			if (!reuseport_has_conns(sk))
->  				return result;
->  
-> -			result = result ? : sk;
-> -			badness = score;
-> +			/* Reuseport logic returned an error, keep original score. */
-> +			if (IS_ERR(result))
-> +				continue;
-> +
-> +			badness = compute_score(sk, net, saddr, sport,
-> +						daddr, hnum, dif, sdif);
->  		}
->  	}
->  	return result;
-> 
-> -- 
-> 2.40.1
