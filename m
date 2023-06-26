@@ -2,140 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DB7773E432
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 18:07:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3244373E437
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 18:09:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231646AbjFZQHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 12:07:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43176 "EHLO
+        id S231684AbjFZQI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 12:08:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbjFZQHd (ORCPT
+        with ESMTP id S231715AbjFZQIw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 12:07:33 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1DD4FA;
-        Mon, 26 Jun 2023 09:07:31 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2b69e6d324aso21827371fa.0;
-        Mon, 26 Jun 2023 09:07:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687795650; x=1690387650;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+4iSzTg8EChOOzM4BxDcM+RvFk02kmVmbliMB8mfUCk=;
-        b=RlnK3OZoaEKxJnom2X8CXl92pbWx7OOPW4z0jpKaCHbGXroW0iQAsSISlIaV4C8G8x
-         gK1MOooiRRWfenFnvdfXiSVEVcMWb8LVrk+kNPSJIiB4OthW+XopAMs0ohxXFBO6MZzx
-         xSS+fZp9IO2IqrTy2iaKTdrItk2cvv2xVSz2QF7kcl2N3PQsgFWom2cZkSD7OlepUhRh
-         QeyFDcM0MFp5+izZO5CpgbepvcNdsGpIMb9zj2O9x3o9Wz383Fh4CGG6pOxAOoVXe+26
-         Ud/6Sl6lcVCtQjx7rER0jxpx+HyFIEctGfvtCyVSt1QRfo4NaN7sZ6JzkmyeXZNdV+mw
-         6o5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687795650; x=1690387650;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+4iSzTg8EChOOzM4BxDcM+RvFk02kmVmbliMB8mfUCk=;
-        b=hVK5CsuX4NcJqQAbmE4tmF6kCGlqHVmQ0kNLhh/q0Hzs4sOKfw4oMOLQysFsnuFUKp
-         gtyFTSeIj6N4PRx1unjFeFJq+3jxpaGG80FAMyCRnFpCc2zU3nkKK/ofuRMdFDXekNJr
-         rLY9AGLSWGuQb4Y6Tf52nhGNNE83WnnrsTqDtq4o6SYhza4Iw6cUzbFX5aa28Us7EABC
-         6N7hVLtXcqjAo36bXyLXInC8YENRm70a9dqGVN/JfUqMA/6imh7zVIO4crgj4PVfYlPB
-         ZGdl141KeY5SHB9/aU6EHhSjNSNPlZl/o279NBu+DfvdxGpOm1lf6Kq9eV961a9A0+R+
-         e/Kw==
-X-Gm-Message-State: AC+VfDy9i2E//s7LCpdkIQayJ2h7LrWot5tIK1XzguiI3iufdCxXHAOI
-        alAdhVnnanYHb6x7tzsbCikI2m3cXaF+IH3GJDY=
-X-Google-Smtp-Source: ACHHUZ4lqZ0HZVO22tySvTRMn9GTWb4kquzbA2i7q+jgXEC8Llv50w26JmRWX6NR8AVm/Q3ttM2tntum2WpC3Qy2R/A=
-X-Received: by 2002:a2e:a401:0:b0:2b6:a186:52ac with SMTP id
- p1-20020a2ea401000000b002b6a18652acmr1820365ljn.47.1687795649926; Mon, 26 Jun
- 2023 09:07:29 -0700 (PDT)
+        Mon, 26 Jun 2023 12:08:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5194DE56;
+        Mon, 26 Jun 2023 09:08:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E15E760EE6;
+        Mon, 26 Jun 2023 16:08:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFD41C433C8;
+        Mon, 26 Jun 2023 16:08:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687795713;
+        bh=YtBxDgCSo52EnCezN1xP/GLTHgcQBQ/UTGIq1c7iU7s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=d0cu9j7LYBWo5mX66CE2FbV41OSFcVyDdRYJkFWjFGvX1J6J8QUyCspssz5N0nwf5
+         mslVgIguao52pzHAfLvCU0FkwJlMksclNp7nQcnSN+uoYw3WnslJOZjQ496MkISJrs
+         wy/xylfHyjouzqpPt0pOEMR4rsomvo2Z1sY49fZiAPa+3BCMS6sbtiUnKq2OWkYqo8
+         dXDZeeLXB1gPenQ5jECRySGGd0u/JdEWoZ3wzbtdu0k1PKDX0F87HG/cAByLK7z/mR
+         KcIFOI/5ej+B7rbdlliOhOTLAXlb9TZ4l3yKQhwe8QVSptwIkTzjuELeK+ylxb/bcX
+         +r5e2ulfWVpTg==
+Date:   Mon, 26 Jun 2023 17:08:28 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Andrew Jones <ajones@ventanamicro.com>
+Cc:     Conor Dooley <conor.dooley@microchip.com>, palmer@dabbelt.com,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>,
+        Evan Green <evan@rivosinc.com>,
+        Sunil V L <sunilvl@ventanamicro.com>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 2/9] RISC-V: drop a needless check in print_isa_ext()
+Message-ID: <20230626-jitters-spiral-68e941d0ad3f@spud>
+References: <20230626-provable-angrily-81760e8c3cc6@wendy>
+ <20230626-skydiver-frown-659b982a43ad@wendy>
+ <20230626-67e571e6d9f02c28a09dab33@orel>
 MIME-Version: 1.0
-References: <20230623225513.2732256-1-dhowells@redhat.com> <20230623225513.2732256-5-dhowells@redhat.com>
- <CAOi1vP_Bn918j24S94MuGyn+Gxk212btw7yWeDrRcW1U8pc_BA@mail.gmail.com> <3070989.1687793422@warthog.procyon.org.uk>
-In-Reply-To: <3070989.1687793422@warthog.procyon.org.uk>
-From:   Ilya Dryomov <idryomov@gmail.com>
-Date:   Mon, 26 Jun 2023 18:07:18 +0200
-Message-ID: <CAOi1vP9hOhaAWp6ext=6tH7XjKUFAkC0xhkB91QozWr0-fw0NA@mail.gmail.com>
-Subject: Re: [PATCH net-next v5 04/16] ceph: Use sendmsg(MSG_SPLICE_PAGES)
- rather than sendpage()
-To:     David Howells <dhowells@redhat.com>
-Cc:     netdev@vger.kernel.org,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Xiubo Li <xiubli@redhat.com>,
-        Jeff Layton <jlayton@kernel.org>, ceph-devel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="UAbBwUXwcEUwpL43"
+Content-Disposition: inline
+In-Reply-To: <20230626-67e571e6d9f02c28a09dab33@orel>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 26, 2023 at 5:30=E2=80=AFPM David Howells <dhowells@redhat.com>=
- wrote:
->
-> Ilya Dryomov <idryomov@gmail.com> wrote:
->
-> > write_partial_message_data() is net/ceph/messenger_v1.c specific, so it
-> > doesn't apply here.  I would suggest squashing the two net/ceph patches
-> > into one since even the titles are the same.
->
-> I would, but they're now applied to net-next, so we need to patch that.
 
-I don't see a problem with that given that the patches themselves have
-major issues (i.e. it's not just a commit message/title nit).
+--UAbBwUXwcEUwpL43
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->
-> > >   * Write as much as possible.  The socket is expected to be corked,
-> > > - * so we don't bother with MSG_MORE/MSG_SENDPAGE_NOTLAST here.
-> > > + * so we don't bother with MSG_MORE here.
-> > >   *
-> > >   * Return:
-> > > - *   1 - done, nothing (else) to write
-> > > + *  >0 - done, nothing (else) to write
-> >
-> > It would be nice to avoid making tweaks like this to the outer
-> > interface as part of switching to a new internal API.
->
-> Ok.  I'll change that and wrap the sendmsg in a loop.  Though, as I asked=
- in
-> an earlier reply, why is MSG_DONTWAIT used here?
+On Mon, Jun 26, 2023 at 05:19:08PM +0200, Andrew Jones wrote:
+> On Mon, Jun 26, 2023 at 12:19:40PM +0100, Conor Dooley wrote:
+> > isa_ext_arr cannot be empty, as some of the extensions within it are
+> > always built into the kernel.
+>=20
+> This is only true since commit 07edc32779e3 ("RISC-V: always report
+> presence of extensions formerly part of the base ISA"), right? If
+> so, it might be nice to call that commit out in this commit message.
 
-See my reply there.
+Per my last mail, where I commented on the origins of some of this code,
+there were no multi-letter extensions when this code was first added.
+When the first multi-letter ones did get added, it was Sscofpmf - that
+doesn't have a Kconfig symbol to disable it, so I think this has been
+redundant for a long time.
 
->
-> > > +       if (WARN_ON(!iov_iter_is_bvec(&con->v2.out_iter)))
-> > > +               return -EINVAL;
-> >
-> > Previously, this WARN_ON + error applied only to the "try sendpage"
-> > path.  There is a ton of kvec usage in net/ceph/messenger_v2.c, so I'm
-> > pretty sure that placing it here breaks everything.
->
-> This should have been removed as MSG_SPLICE_PAGES now accepts KVEC and XA=
-RRAY
-> iterators also.
->
-> Btw, is it feasible to use con->v2.out_iter_sendpage to apply MSG_SPLICE_=
-PAGES
-> to the iterator to be transmitted as a whole?  It seems to be set dependi=
-ng on
-> iterator type.
-
-I'm not sure I understand what you mean by "transmitted as a whole".
-con->v2.out_iter_sendpage is set only when zerocopy is desired.  If the
-underlying data is not guaranteed to remain stable, zerocopy behavior
-is not safe.
+Apart from the ones I recently added, there's a fair few others that
+are not gated & should always be present.
+It's probably not clear from the comment, but this check is for whether
+the kernel supports extensions, not whether the system it is running on
+does. I guess I should expand on that in my commit message.
 
 Thanks,
+Conor.
 
-                Ilya
+> > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> > ---
+> >  arch/riscv/kernel/cpu.c | 4 ----
+> >  1 file changed, 4 deletions(-)
+> >=20
+> > diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
+> > index 742bb42e7e86..01f7e5c62997 100644
+> > --- a/arch/riscv/kernel/cpu.c
+> > +++ b/arch/riscv/kernel/cpu.c
+> > @@ -233,10 +233,6 @@ static void print_isa_ext(struct seq_file *f)
+> > =20
+> >  	arr_sz =3D ARRAY_SIZE(isa_ext_arr) - 1;
+> > =20
+> > -	/* No extension support available */
+> > -	if (arr_sz <=3D 0)
+> > -		return;
+> > -
+> >  	for (i =3D 0; i <=3D arr_sz; i++) {
+> >  		edata =3D &isa_ext_arr[i];
+> >  		if (!__riscv_isa_extension_available(NULL, edata->isa_ext_id))
+> > --=20
+> > 2.40.1
+> >
+>=20
+> Otherwise,
+>=20
+> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+>=20
+> Thanks,
+> drew
+
+--UAbBwUXwcEUwpL43
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJm3/AAKCRB4tDGHoIJi
+0lvuAP9Wwmh7CDmYVwCrwm2QnFlvh2auna7EZPvP8MVubcvyMgD+JhXPQyKqs2g1
+Myse48aBIwDuIggV5cCfMWtC7cfUJgY=
+=KSGS
+-----END PGP SIGNATURE-----
+
+--UAbBwUXwcEUwpL43--
