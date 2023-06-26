@@ -2,157 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AD1273DC36
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 12:28:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 418C573DC3B
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 12:28:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbjFZK2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 06:28:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57560 "EHLO
+        id S230104AbjFZK2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 06:28:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjFZK2I (ORCPT
+        with ESMTP id S229884AbjFZK2w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 06:28:08 -0400
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2127.outbound.protection.outlook.com [40.107.117.127])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B283E56;
-        Mon, 26 Jun 2023 03:28:06 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GeBV23hsJ+9iVbVkPmp89SzpGWfsDYCCqaBvt9erMfeGF4ylGcx24bQ5wvyhfJagOi5Zh4tTypS+ef4tg+EadjjpL76SImjWX9pUpyTc5Su3YmUkQnP0/FCw6LJX2+Cf+VmM3RUNoaQ1ENwux2HkjU7h1S6FjVucPViDy7DVNpw5j4OydKITUqNiJtNYM8fPlK/2FvWbfHG3bfvlFBNrLhMUAo/Lu/yJ56kt/UOGUvDuterFIMCfQ0DS0ThkFVCc98I2/l0mvNcQCgITFmvFRkPn+rJDeTwjprrRIl/e3pMTvELhTVosqGaDNDknf03tKsthRPcewFaNtOtYRjGN8A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Qw2lv8tYuBJi9bF9fSEiHg/Pq4olWdiryrhg9bVL0kU=;
- b=OBo2uWEvHtdfYrWuGkLB2Jt6nr36jR6yPBoA13ToFsp54gC/67yRi57yj2hdNWq4mBz1h8t/yUTEu097Vf5u27XXaSb2dxk4euBiY3bYuCGZhHwG/Nc1wx02U/5ctZzyxTgLaPK6RGjpsJa7WfOCQQQj2lmY+UZKAC7UM29y74oq/HLsIKVAx5YhLZM0flqUdmy+0pIGL0Q5jXGS4o+ey34td48EfhuOjO21uxhYSHZE2dqyYTnBClTLIUQZy51V5RYd6VkndtpCphiPM79MkNhZVq6lhCHcxqY2QTyg0/ZDguYtTjinFmMQQBwW7ihx5iPLG5kANmMX95pjldFEoQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Qw2lv8tYuBJi9bF9fSEiHg/Pq4olWdiryrhg9bVL0kU=;
- b=a8ga5gGE0+00sgHCNL5jYEbKNCM3bNT6KA/5jky+w5AYt6H2qMvT9n5JaQRD0hX4x3FeO0C2JGkbHXQbaRMdRjWoxjSIb3VtLaeYRNbsLdfuRZiI8Q1gfmwUUrXjaiVxmoCNDpQSr1qSyBSE8SPJEMNjWUoDMdctdhgxy5FKjVxGh3mo47zDqKJF0AELjKr4R+KlT5uAs4T5aQbroAbNEXOCPY/tIrzZW+e342yNxM2eMA4ISUKkRauiFaxt95SIbywk/7+a+SxuRJavFHOriRmGUM8LRM9lRH34Lqcd6a1Q0s2HsIEYT8Zg36GbatHnRt4xU+uHRHzKKSvgek7k3w==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from PUZPR06MB5936.apcprd06.prod.outlook.com (2603:1096:301:11d::13)
- by TYZPR06MB3886.apcprd06.prod.outlook.com (2603:1096:400:2c::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24; Mon, 26 Jun
- 2023 10:28:02 +0000
-Received: from PUZPR06MB5936.apcprd06.prod.outlook.com
- ([fe80::adc0:c22:ffae:227b]) by PUZPR06MB5936.apcprd06.prod.outlook.com
- ([fe80::adc0:c22:ffae:227b%6]) with mapi id 15.20.6500.045; Mon, 26 Jun 2023
- 10:28:02 +0000
-From:   You Kangren <youkangren@vivo.com>
-To:     Kalle Valo <kvalo@kernel.org>, Dongliang Mu <dzm91@hust.edu.cn>,
-        You Kangren <youkangren@vivo.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-wireless@vger.kernel.org (open list:RAYLINK/WEBGEAR 802.11
-        WIRELESS LAN DRIVER), linux-kernel@vger.kernel.org (open list)
-Cc:     opensource.kernel@vivo.com
-Subject: [PATCH] wifi: ray_cs: Remove invalid conditional statements
-Date:   Mon, 26 Jun 2023 18:27:50 +0800
-Message-Id: <20230626102752.1583-1-youkangren@vivo.com>
-X-Mailer: git-send-email 2.39.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: TYCP286CA0274.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:3c9::10) To PUZPR06MB5936.apcprd06.prod.outlook.com
- (2603:1096:301:11d::13)
+        Mon, 26 Jun 2023 06:28:52 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6BFAE56
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 03:28:50 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2b69ea3b29fso14386371fa.3
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 03:28:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687775329; x=1690367329;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lz572HnALEln44pBSUu4MqGMZOi0QKj/j0OdazQnpuo=;
+        b=XaY/8jZMyZCvA+jUc+Ujzz/gcGiKtgbQ3XPQZ7u5VRDqniGVNMWSO4lNPPrKWVWUof
+         p/TugdgrmqH31AM7dztYUyfWfIq1+LOn2uLUFrOOjobwqDlnt+HlZJa9y/yGpfeQh87h
+         1tO2o7LGvBGX640Iwe7gvQmhQM5I9dYUWmyOzmvjb4+CUsu2k5qG+DHh1Nxz5U+roGkU
+         +fm+DVVaAcGUppB+99dDZ13z1MIHeKbhBlfO4zV18vWR8eaXl5bMWUkRhOafjVcT+4QX
+         bQ/hvx+wavAo5oiAnvXolhOVbTMpyxErq4l52Abj6mYtiIBTTzLASItFjMFXTHfIsOOM
+         8ZTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687775329; x=1690367329;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lz572HnALEln44pBSUu4MqGMZOi0QKj/j0OdazQnpuo=;
+        b=fVkBTJ7DX2Yg4S9RWCXS1n1r83fIOyu2vxk/K4+R+QlYzoBvHlI4A9aXK3+0BOdpFB
+         CYAyjlw8bSvoGnm3agTojF8MfJJC7Lq3+kQctCBX7zVU/SijELIVX3iqZ4FkBE9JD6zI
+         YHyLvsFfpupifhvUSLRibOTJM2cJhCvHXgKE9ahhyedFvYE3NZwyr6xp4OQfRWSMdGYH
+         fZX8vTGCiQTZK0AlyQQJlKndVmw1jG7vsuQyaRs6zFYiWh7VWGN7UjiOwIBNYMtt/yqd
+         LRQCVCe8GCscSrFsZfJvgBxCycEWJDF09+EgXsYKNzyl/ajoYIb85AP0H2hmpPhT8+Lw
+         +T5g==
+X-Gm-Message-State: AC+VfDwFnyUC0RwDRbTHnyDFnyVtxnndFVOE1MLpay/acgC4Zax7j4J0
+        7ILk2GktfJpdLD9WyO8g4a+YfZaBdjttGIFvEWk=
+X-Google-Smtp-Source: ACHHUZ41+/NuNyArXTiyJZD922WPa1lau7U9mJkUVsJTlvqE9gRJDNwvAnPeTA2ORBLB2ZNMSo55AQ==
+X-Received: by 2002:a2e:a0d7:0:b0:2b5:947f:50b with SMTP id f23-20020a2ea0d7000000b002b5947f050bmr6420899ljm.39.1687775328770;
+        Mon, 26 Jun 2023 03:28:48 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id i23-20020a50fc17000000b0051c7b5692easm2668322edr.7.2023.06.26.03.28.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Jun 2023 03:28:48 -0700 (PDT)
+Message-ID: <74b0dcc4-a061-715e-93c1-e010fbaa85fb@linaro.org>
+Date:   Mon, 26 Jun 2023 12:28:46 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PUZPR06MB5936:EE_|TYZPR06MB3886:EE_
-X-MS-Office365-Filtering-Correlation-Id: e397062d-b9c9-4468-2c2a-08db763004e2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2SLC8uKzAuwM9CVUeyV/ddZoRiYQXPt97W+0gNCyazHcj+zi1Du8ok56RauQEGG82RCkGgBTqCjeqf2Csx8708ADb7U0IwVim0Zha7w+PNiv+8rBINxnohGMi2FPTx/4Sv+XLk5LgciwidlDBAJl42pDvGOLXcuFUPhcVNCrZSY8CJlyKKgd4tEaGoDJ3NBaNXPzTrkS5L7zGi7Qt9wlRXqkDSA234v8nVYMtDcqFw+KCXCmUjYQPRCeYO3q55L6w2A/1MQmRgvJ+XcWBYDdiIKWH7P6hN4eewBewyhSejQXPQFw+uYy7IY0RYLCPaeZyy7wHglzCfv5ruzPdl7TNYT9rS8dlHM+YlAXOcea3kyWJJWUX9ZxKLeppzxrKfOWWqLZRtJu/B/Cq5fH/qV2TyLTFhs6h1c/36bj4JrFVLy5onOvR994sc+uUC9A9oIGhUaDCtTP69XjnV1xgmmkePbmcFnkpDoi9+Tma2sBSnSnpL/6KhfkUCTk1ZxoPJ3ffI1U3Ke2ndi/Huvn0UFqL7RdWmpwagsVTrVS+la9shn/ROmroxd2i0aRBMi8IidT2ukttXlIK32j0ddqMKPSlLK8VYGfj1hunkSnIwklLF84sZsVQEHE1vlPd2zzJToL
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PUZPR06MB5936.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(39850400004)(376002)(366004)(136003)(346002)(451199021)(8676002)(8936002)(66476007)(66556008)(66946007)(41300700001)(316002)(4326008)(6506007)(6512007)(1076003)(26005)(186003)(107886003)(2616005)(478600001)(110136005)(6666004)(52116002)(6486002)(2906002)(5660300002)(38350700002)(38100700002)(36756003)(86362001)(83380400001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?jUdCXE6QRqPtvM1F86VU5YML0HZQK+5Z/wr/ZOi5IGTsOuIjD3I0FUKDpPIl?=
- =?us-ascii?Q?4Jd6XMZOrlP7qX21QKOXjkkMBjawd6ovZJ+OF65FkAFODSxTJ2p8UDhICvgV?=
- =?us-ascii?Q?TQiF5zcGTTjQop8/ugL21USOE18s4tW56Ajqh/WNvSTQSNGx9DhkRJ7f3GZG?=
- =?us-ascii?Q?Q1KZBUrkwEJI/q8b3Kw0w4o3pMrCvSHW6qCu6DhLoupikMNF5ivUpQ2GzMz/?=
- =?us-ascii?Q?UGWVBE8hnKJBJ4mO9RTA9bu+njrmTTa7xisFZ8twN/y4M9DU5BwfSN2gnT0E?=
- =?us-ascii?Q?jBGYIH8zABqC9NeVTqeQS5pHBvQwg0AnBgITF0H6Zhy9qdfLh4U/zBKWIBmi?=
- =?us-ascii?Q?7tHcIfgsMuauhBSLHSUGqNB9ZMOqipfQDJJSvhrxi09z8H1ImQmwA0Q4DByH?=
- =?us-ascii?Q?QV8l+3zMYPQ/41Y+jPa7pBmJSJiJXMiQcCwkmiyZxnGF3fqnLhbPvrWJ22Nw?=
- =?us-ascii?Q?BWv0chsmLe+VqxWlaUu99rFg3YSvAlaKXC55a5egYQYnE+XyjdEGsZ5ihDsX?=
- =?us-ascii?Q?/lPBpzI5OrDcZ5A/vZG6OytT0lTR+63Kukt7LRcXsvuL571fW8TCMHKlw8dC?=
- =?us-ascii?Q?28TCUzY3gnHCvveVmQalO707stm1JBQcaY24AwrMidw2TDjOn+XncYdYOl+3?=
- =?us-ascii?Q?1S7cc4M32NkMOPKvbrP/xgYzwfHI9fag9PXcA1E5akLbINcWQzh5fTADOGen?=
- =?us-ascii?Q?vvkzw/Qjn/GBvIcdFJFyp89sfVExHECq2HaMvP/ixN7fpDvf5RZc+kNkKpxs?=
- =?us-ascii?Q?Rkzx8UJ+faomm076TTQcw1CBiTLcCos2ZiVNZEt2Ftup3BOtwgYNYLU/Ph25?=
- =?us-ascii?Q?x7KLrFpHv7gmHM6H2McNmosWnTtDdzMXA3TyR+lmaGqGyl6ZsX0TdmKtpo1s?=
- =?us-ascii?Q?QNBpgZWXiP0y0IdGJT8dVROjGrLh823WLejI8iNKgYnB1/qBnlTdSZKArW4M?=
- =?us-ascii?Q?z1kXdho5pDzRb9sLG70VQIo1NHm59PcB7XYkWIT359HOZsKYsUmrz8l6qwIs?=
- =?us-ascii?Q?uoiNTFpfdturFD71bNCpYEWo4YiuPK+tXffSjxDpSxaBBZdTcGk19+6kBugs?=
- =?us-ascii?Q?FX5sXmd1jE1RPTr8+nYLj2G0OWnPpVDpQP3C5HrcjceiaV4nQVn6oaasuSMr?=
- =?us-ascii?Q?nl2STplb55PUdD/xk0DMRnkjrHi+vXrsL5mSBLw8ofOrpcodXgguAvsr9L1a?=
- =?us-ascii?Q?R+OTpZZeZoRrddBDa3sGcN/JAv7dZjC9yLWiTH3pnUFRgVbiIUQgM6InYwcD?=
- =?us-ascii?Q?1ThxnTBagUdL81QgeYaYchLCRXxkoP/nXgRbiSyaSSJvS4S6nfyg6DXseArm?=
- =?us-ascii?Q?yGfvBaey3N0E8V+xPVxDSnBXgjelrryGbPfNtbQ5bAJuLGCEi1gHmVzn4Zew?=
- =?us-ascii?Q?t+y6qoLdnRMpTz0UNdMJen0cWhRDG40W6MBXSXtNO4mT/DlR7/sOpo9EARob?=
- =?us-ascii?Q?E1yV+sG3Ak7sHRiHyUYpXdu4bFi6A8+ZUTSxK3M0ZkwqeoDGkoi/ugm97cuM?=
- =?us-ascii?Q?sIsP5SkRZM9UlrUlbDsffXxTsj5useehrKEbmK9bdHQwxZSei/8+0/L+tnvW?=
- =?us-ascii?Q?uaDvqtofVq77bq7aQkIswcGtH8YBajCh50nRI0PR?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e397062d-b9c9-4468-2c2a-08db763004e2
-X-MS-Exchange-CrossTenant-AuthSource: PUZPR06MB5936.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jun 2023 10:28:01.9086
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1JhOy+OzWoet2erkuMwzkdHY7NPOHHlkUleyc+gLTpf02D379SoXaOG7fgocxul9plrSfWLbVpGWfUDY8shddQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB3886
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: Regression: NULL pointer dereference after NFS_V4_2_READ_PLUS
+ (commit 7fd461c47)
+Content-Language: en-US
+To:     Anna Schumaker <schumaker.anna@gmail.com>
+Cc:     Trond Myklebust <trondmy@hammerspace.com>,
+        Anna Schumaker <Anna.Schumaker@netapp.com>,
+        linux-nfs <linux-nfs@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+References: <f591b13c-4600-e2a4-8efa-aac6ad828dd1@linaro.org>
+ <CAFX2JfmdRMsHPTySiw4vm7BwJfRZj3s0V3_v7NJ+XwMxBBSo9A@mail.gmail.com>
+ <a3683dd3-3f30-bb4c-539d-d1519de6e5bf@linaro.org>
+ <CAFX2JfnS9GVc4NaxKhr9E4y10NNv6SPgcv1yoeHTfEw5NvZgMg@mail.gmail.com>
+ <86d8e252-975f-5d48-4567-0911d5ef9a44@linaro.org>
+ <CAFX2Jfn_DSs38WQYsRs2ifLi5w+T3BhZfSU2W80T6dK48_Bb5g@mail.gmail.com>
+ <e8d31e48-df6a-fde4-4c6b-c4ccf1664ded@linaro.org>
+ <c8d454b0-d355-f599-f720-b7e64374fb56@linaro.org>
+ <CAFX2JfmvMZ7DzD9znWeOHXywgPbUKDS1irMjUerEuborjRBpcg@mail.gmail.com>
+ <CAFX2JfnhOz+HiOd4vBwBK+5d19Kb8wfBNQhxRZHQoP8S2qiwFw@mail.gmail.com>
+ <CAFX2Jf=5WV=dY9J4-7tp5NB85fDOkwiv8rxQqHziqG+ED1cUJw@mail.gmail.com>
+ <CAFX2Jf=TxojviigtdQ=F_8FcHFFC4RNdfkoS=157jnXQCQSq5g@mail.gmail.com>
+ <85851031-cf43-07d2-8ec7-b40c8c00be91@linaro.org>
+ <CAFX2JfnH_rOFxn+uT4e1Eutea5En4_z26a-u_qCwOsnr5EowRw@mail.gmail.com>
+ <dfcc114f-56f1-e4ab-7b36-f9a4ce3e8c8c@linaro.org>
+ <CAFX2Jf=uaOC2oDceShnNNJdSeW-MNwh7N=Jh=S9zYjP_Ci-DuQ@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAFX2Jf=uaOC2oDceShnNNJdSeW-MNwh7N=Jh=S9zYjP_Ci-DuQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove invalid conditional statements to make the code clean
+On 23/06/2023 19:59, Anna Schumaker wrote:
+>>>>>>>
+>>>>>>> Can you swap out yesterday's patch with this patch? I've adjusted what
+>>>>>>> gets printed out, and added printk()s to xdr_copy_to_scratch().  I'm
+>>>>>>> starting to think that the xdr scratch buffer is fine, and that it's
+>>>>>>> the other pointer passed to memcpy() in that function that's the
+>>>>>>> problem, and the output from this patch will confirm for me.
+>>>>>>
+>>>>>> Oh, and can you add this one on top of the v2 patch as well?
+>>>>>
+>>>>> Sorry about the noise today. Can you use this patch instead of the two
+>>>>> I attached earlier? I cleaned up the output and cut down on extra
+>>>>> output..
+>>>>>
+>>>>
+>>>> Here you have - attached.
+>>>
+>>> This is good, thanks! I was finally able to figure out how to hit the
+>>> bug using a 32bit x86 VM, so hopefully the next thing you hear from me
+>>> is a patch fixing the bug!
+> 
+> I'm really hopeful that the attached patch finally fixes the issue.
+> Can you try it and let me know?
 
-Signed-off-by: You Kangren <youkangren@vivo.com>
----
- drivers/net/wireless/legacy/ray_cs.c | 13 -------------
- 1 file changed, 13 deletions(-)
+Just test it yourself on 32-bit system... There is absolutely nothing
+special in the system I reproduced it on. Nothing.
 
-diff --git a/drivers/net/wireless/legacy/ray_cs.c b/drivers/net/wireless/legacy/ray_cs.c
-index 96f34d90f601..0022038b0758 100644
---- a/drivers/net/wireless/legacy/ray_cs.c
-+++ b/drivers/net/wireless/legacy/ray_cs.c
-@@ -2116,7 +2116,6 @@ static void rx_data(struct net_device *dev, struct rcs __iomem *prcs,
- #endif
- 
- 	if (!sniffer) {
--		if (translate) {
- /* TBD length needs fixing for translated header */
- 			if (rx_len < (ETH_HLEN + RX_MAC_HEADER_LENGTH) ||
- 			    rx_len >
-@@ -2126,18 +2125,6 @@ static void rx_data(struct net_device *dev, struct rcs __iomem *prcs,
- 				      "ray_cs invalid packet length %d received\n",
- 				      rx_len);
- 				return;
--			}
--		} else { /* encapsulated ethernet */
--
--			if (rx_len < (ETH_HLEN + RX_MAC_HEADER_LENGTH) ||
--			    rx_len >
--			    (dev->mtu + RX_MAC_HEADER_LENGTH + ETH_HLEN +
--			     FCS_LEN)) {
--				pr_debug(
--				      "ray_cs invalid packet length %d received\n",
--				      rx_len);
--				return;
--			}
- 		}
- 	}
- 	pr_debug("ray_cs rx_data packet\n");
--- 
-2.39.0
+
+IP-Config: eth0 hardware address 00:1e:06:30:bf:ac mtu 1500
+IP-Config: eth0 guessed broadcast address 192.168.1.255
+IP-Config: eth0 complete (from 192.168.1.10):
+ address: 192.168.1.12     broadcast: 192.168.1.255    netmask:
+255.255.255.0
+ gateway: 192.168.1.1      dns0     : 0.0.0.0          dns1   : 0.0.0.0
+
+ rootserver: 192.168.1.10 rootpath:
+ filename  :
+NFS-Mount: 192.168.1.10:/srv/nfs/odroidhc1
+Waiting 10 seconds for device /dev/nfs ...
+ERROR: device '/dev/nfs' not found. Skipping fsck.
+Mount cmd:
+mount.nfs4 -o vers=4,nolock 192.168.1.10:/srv/nfs/odroidhc1 /new_root
+[   21.800626] ------------[ cut here ]------------
+[   21.803891] WARNING: CPU: 7 PID: 154 at mm/highmem.c:603
+xdr_stream_unmap_current_page+0x18/0x24
+[   21.812729] Modules linked in:
+[   21.815642] CPU: 7 PID: 154 Comm: mount.nfs4 Not tainted
+6.4.0-00001-gfbb103bb8df0 #8
+[   21.823444] Hardware name: Samsung Exynos (Flattened Device Tree)
+[   21.829525]  unwind_backtrace from show_stack+0x10/0x14
+[   21.834698]  show_stack from dump_stack_lvl+0x58/0x70
+[   21.839730]  dump_stack_lvl from __warn+0x7c/0x1bc
+[   21.844491]  __warn from warn_slowpath_fmt+0xbc/0x1b8
+[   21.849518]  warn_slowpath_fmt from
+xdr_stream_unmap_current_page+0x18/0x24
+[   21.856437]  xdr_stream_unmap_current_page from call_decode+0x210/0x2c8
+[   21.863020]  call_decode from __rpc_execute+0xf8/0x764
+[   21.868134]  __rpc_execute from rpc_execute+0xc0/0x1d0
+[   21.873243]  rpc_execute from rpc_run_task+0x148/0x190
+[   21.878348]  rpc_run_task from rpc_create_xprt+0x1a4/0x284
+[   21.883805]  rpc_create_xprt from rpc_create+0xf8/0x254
+[   21.889004]  rpc_create from nfs_create_rpc_client+0x150/0x17c
+[   21.894812]  nfs_create_rpc_client from nfs4_alloc_client+0x360/0x374
+[   21.901226]  nfs4_alloc_client from nfs_get_client+0x16c/0x3e8
+[   21.907030]  nfs_get_client from nfs4_set_client+0xfc/0x1a4
+[   21.912574]  nfs4_set_client from nfs4_create_server+0x11c/0x2fc
+[   21.918554]  nfs4_create_server from nfs4_try_get_tree+0x10/0x50
+[   21.924534]  nfs4_try_get_tree from vfs_get_tree+0x24/0xe4
+[   21.929993]  vfs_get_tree from path_mount+0x3e8/0xb04
+[   21.935019]  path_mount from sys_mount+0x20c/0x254
+[   21.939784]  sys_mount from ret_fast_syscall+0x0/0x1c
+[   21.944809] Exception stack(0xf0cf9fa8 to 0xf0cf9ff0)
+[   21.949837] 9fa0:                   0047ebe0 00479c64 0047e960
+0047e9b8 0047e9c8 00000000
+[   21.957986] 9fc0: 0047ebe0 00479c64 b6f058c8 00000015 00466c08
+00000010 00479c64 00466bfc
+[   21.966139] 9fe0: 00479e70 befb69b0 0045a708 b6dca610
+[   21.971245] irq event stamp: 0
+[   21.974188] hardirqs last  enabled at (0): [<00000000>] 0x0
+[   21.979736] hardirqs last disabled at (0): [<c012357c>]
+copy_process+0x810/0x1ffc
+[   21.987227] softirqs last  enabled at (0): [<c012357c>]
+copy_process+0x810/0x1ffc
+[   21.994679] softirqs last disabled at (0): [<00000000>] 0x0
+[   22.000264] ---[ end trace 0000000000000000 ]---
+[   22.004781] BUG: sleeping function called from invalid context at
+net/sunrpc/sched.c:953
+[   22.012876] in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid:
+154, name: mount.nfs4
+[   22.020936] preempt_count: 1, expected: 0
+[   22.024881] RCU nest depth: 0, expected: 0
+[   22.028955] INFO: lockdep is turned off.
+[   22.032889] CPU: 7 PID: 154 Comm: mount.nfs4 Tainted: G        W
+    6.4.0-00001-gfbb103bb8df0 #8
+[   22.042131] Hardware name: Samsung Exynos (Flattened Device Tree)
+[   22.048196]  unwind_backtrace from show_stack+0x10/0x14
+[   22.053393]  show_stack from dump_stack_lvl+0x58/0x70
+[   22.058417]  dump_stack_lvl from __might_resched+0x194/0x260
+[   22.064054]  __might_resched from __rpc_execute+0x118/0x764
+[   22.069596]  __rpc_execute from rpc_execute+0xc0/0x1d0
+[   22.074708]  rpc_execute from rpc_run_task+0x148/0x190
+[   22.079821]  rpc_run_task from rpc_create_xprt+0x1a4/0x284
+[   22.085281]  rpc_create_xprt from rpc_create+0xf8/0x254
+[   22.090483]  rpc_create from nfs_create_rpc_client+0x150/0x17c
+[   22.096286]  nfs_create_rpc_client from nfs4_alloc_client+0x360/0x374
+[   22.102700]  nfs4_alloc_client from nfs_get_client+0x16c/0x3e8
+[   22.108504]  nfs_get_client from nfs4_set_client+0xfc/0x1a4
+[   22.114050]  nfs4_set_client from nfs4_create_server+0x11c/0x2fc
+[   22.120029]  nfs4_create_server from nfs4_try_get_tree+0x10/0x50
+[   22.126009]  nfs4_try_get_tree from vfs_get_tree+0x24/0xe4
+[   22.131467]  vfs_get_tree from path_mount+0x3e8/0xb04
+[   22.136493]  path_mount from sys_mount+0x20c/0x254
+[   22.141258]  sys_mount from ret_fast_syscall+0x0/0x1c
+[   22.146284] Exception stack(0xf0cf9fa8 to 0xf0cf9ff0)
+[   22.151322] 9fa0:                   0047ebe0 00479c64 0047e960
+0047e9b8 0047e9c8 00000000
+[   22.159461] 9fc0: 0047ebe0 00479c64 b6f058c8 00000015 00466c08
+00000010 00479c64 00466bfc
+[   22.167606] 9fe0: 00479e70 befb69b0 0045a708 b6dca610
+[   22.172820] BUG: scheduling while atomic: mount.nfs4/154/0x00000002
+[   22.178871] INFO: lockdep is turned off.
+[   22.182803] Modules linked in:
+[   22.185798] CPU: 7 PID: 154 Comm: mount.nfs4 Tainted: G        W
+    6.4.0-00001-gfbb103bb8df0 #8
+[   22.195076] Hardware name: Samsung Exynos (Flattened Device Tree)
+[   22.201139]  unwind_backtrace from show_stack+0x10/0x14
+[   22.206337]  show_stack from dump_stack_lvl+0x58/0x70
+[   22.211365]  dump_stack_lvl from __schedule_bug+0x70/0x84
+[   22.216736]  __schedule_bug from __schedule+0x9c0/0xc80
+[   22.221936]  __schedule from schedule+0x58/0xf8
+[   22.226439]  schedule from schedule_timeout+0x134/0x200
+[   22.231641]  schedule_timeout from __wait_for_common+0xac/0x1f8
+[   22.237533]  __wait_for_common from
+wait_for_completion_killable+0x18/0x24
+[   22.244379]  wait_for_completion_killable from
+__kthread_create_on_node+0xe0/0x168
+[   22.251923]  __kthread_create_on_node from
+kthread_create_on_node+0x30/0x60
+[   22.258851]  kthread_create_on_node from svc_set_num_threads+0x1c8/0x420
+[   22.265525]  svc_set_num_threads from nfs_callback_up+0x150/0x3c0
+[   22.271597]  nfs_callback_up from nfs4_init_client+0x98/0x144
+[   22.277306]  nfs4_init_client from nfs4_set_client+0xfc/0x1a4
+[   22.283026]  nfs4_set_client from nfs4_create_server+0x11c/0x2fc
+[   22.289005]  nfs4_create_server from nfs4_try_get_tree+0x10/0x50
+[   22.294985]  nfs4_try_get_tree from vfs_get_tree+0x24/0xe4
+[   22.300444]  vfs_get_tree from path_mount+0x3e8/0xb04
+[   22.305468]  path_mount from sys_mount+0x20c/0x254
+[   22.310249]  sys_mount from ret_fast_syscall+0x0/0x1c
+[   22.315261] Exception stack(0xf0cf9fa8 to 0xf0cf9ff0)
+[   22.320300] 9fa0:                   0047ebe0 00479c64 0047e960
+0047e9b8 0047e9c8 00000000
+[   22.328438] 9fc0: 0047ebe0 00479c64 b6f058c8 00000015 00466c08
+00000010 00479c64 00466bfc
+[   22.336582] 9fe0: 00479e70 befb69b0 0045a708 b6dca610
+:: running cleanup hook [udev]
+[   26.235349] systemd[1]: System time before build time, advancing clock.
+[   26.435536] systemd[1]: systemd 253.4-1-arch running in system mode
+(+PAM +AUDIT -SELINUX -APPARMOR -IMA +SMACK +SECCOMP +GCRYPT +GNUTLS
++OPENSSL +ACL +BLKID +CURL +ELFUTILS +FIDO2 +IDN2 -IDN +IPTC +KMOD
++LIBCRYPTSETUP +LIBFDISK +PCRE2 -PWQUALITY +P11KIT -QRENCODE +TPM2
++BZIP2 +LZ4 +XZ +ZLIB +ZSTD +BPF_FRAMEWORK +XKBCOMMON +UTMP -SYSVINIT
+default-hierarchy=unified)
+[   26.466749] systemd[1]: Detected architecture arm.
+
+
+
+Best regards,
+Krzysztof
 
