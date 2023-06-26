@@ -2,183 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E71E173E858
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 20:24:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FF1C73E828
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 20:23:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232053AbjFZSY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 14:24:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38316 "EHLO
+        id S231940AbjFZSXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 14:23:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231846AbjFZSYM (ORCPT
+        with ESMTP id S231925AbjFZSXU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 14:24:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ED2226A4
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 11:23:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687803714;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7d5o216+gZzb7LjG6wT7FRl5pgwrzpiiCyEaun3wVWg=;
-        b=a6DLOOL9wBC24YLbS6y/hPmpO8nnr/BAcFhDiThZiNhRO/ELlB1Cz83R6gNqSBN4kcpj0O
-        OpNONGKAkK7hjF96U11v7Fg2EE91jrehDeAFtZCkbo7X3jwqCGcabq/Sv/5PLucvfS8vsr
-        01siXjeNaNU5W0JfRDavQ6LNjc1r4zc=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-371-04MHv5G2NnalS_Z2WVBLng-1; Mon, 26 Jun 2023 14:21:53 -0400
-X-MC-Unique: 04MHv5G2NnalS_Z2WVBLng-1
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-2f2981b8364so2035425f8f.1
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 11:21:52 -0700 (PDT)
+        Mon, 26 Jun 2023 14:23:20 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB8B3ED
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 11:22:53 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-ba81b37d9d2so4804544276.3
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 11:22:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687803740; x=1690395740;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=yPRyJF+wc441mX/igIYWUk1kWDdqXia6VMBE4smrHR8=;
+        b=t7Zs0fuZ9/iB4TLkmlKtKWliIF6FnDkaJ9kebLk5ZrFKDnWSQ/FKH4LRTN5vb9Y9Oy
+         IYdl0LlwSZeC5KiI+d40XxASJIVtCxYb+CrF0goeDBgSzNuxO5P37V7C/yd2W5duzXcT
+         vjsUvRuQAJiyNibCnla3SpwWu8P6v1Z8nBIk9RY0nISo5VJtum8WdG6hmUOYmDcRRqbQ
+         4zRza9MMei61+IHWpOyJQAWn2j6/ISkZ7QqSw9giq2SQTsTahlAqHzMTl44NLzLizfJY
+         cmgj/zAAxNir6eI79IRcRNqFV4j+W33FjN00/wRgIQj3yREYnPDuT8qAuNVp9xLp3r1W
+         oeKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687803711; x=1690395711;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7d5o216+gZzb7LjG6wT7FRl5pgwrzpiiCyEaun3wVWg=;
-        b=kbErjwRuDNdm7X5NuIVP6GUeLr1OoOIuwWjqbZMByQbLsKhcZv/v3/t4aDThgnj29R
-         L4F/m6sp7RlNBNbP4AfhiAOD41WG83wgmVg+RRGdTcEWvfxHUW3zToqyGT553e+8jFra
-         OSNr2S/1Yb7W4BfDq23rg1Hz6T4EXJ8FtV5sS45E61pKeaPDuZqv4CCbhpqxIlUiQogh
-         HtI35oTR4MqkJcbIBSFzxOpP0VYNbb7l3D0kPErcXw1omnrX2p61cYwt6PXH/BlPQNFk
-         gkl3gd6dqPLBwfDe5lidCdgz4x3fBe4Hz21aSCXIrPCotNXZ0ru7ITfLTpl07/DUIUn5
-         mkzQ==
-X-Gm-Message-State: AC+VfDyEdmlc+ulwBY8rJtKoVpEIHHqZLxh/epYBYoBxjl0HIL1fZk5L
-        rKB0sVh91zdHphJTWFcYhC9uownsPy8G9pQqsetrjjsNgXoldE/ybPUQcKsTE5y9K0fU6yg+zS0
-        1SOtWC90ooI44DUqrhRa8/19B
-X-Received: by 2002:adf:f887:0:b0:313:e08e:5599 with SMTP id u7-20020adff887000000b00313e08e5599mr6341889wrp.67.1687803711738;
-        Mon, 26 Jun 2023 11:21:51 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5n+Lk6EWcxrnDxX3B3uow6vJnKDCug7Zp3C4LwW+oyKCc4uz4GdaK6qErbD8yunrefffBgxg==
-X-Received: by 2002:adf:f887:0:b0:313:e08e:5599 with SMTP id u7-20020adff887000000b00313e08e5599mr6341876wrp.67.1687803711451;
-        Mon, 26 Jun 2023 11:21:51 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:4b3f:de9c:642:1aff:fe31:a15c? ([2a02:810d:4b3f:de9c:642:1aff:fe31:a15c])
-        by smtp.gmail.com with ESMTPSA id f14-20020a5d58ee000000b00313f1c5b56dsm3387316wrd.79.2023.06.26.11.21.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Jun 2023 11:21:51 -0700 (PDT)
-Message-ID: <362330be-1ff1-d2cb-de6a-6ad42cbb9d58@redhat.com>
-Date:   Mon, 26 Jun 2023 20:21:49 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 14/16] maple_tree: Refine mas_preallocate() node
- calculations
-Content-Language: en-US
-To:     Peng Zhang <zhangpeng.00@bytedance.com>
-Cc:     maple-tree@lists.infradead.org, linux-mm@kvack.org,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        linux-kernel@vger.kernel.org, David Airlie <airlied@redhat.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>
-References: <20230612203953.2093911-1-Liam.Howlett@oracle.com>
- <20230612203953.2093911-15-Liam.Howlett@oracle.com>
- <26d8fbcf-d34f-0a79-9d91-8c60e66f7341@redhat.com>
- <cdab5e74-7559-cb31-90ca-b99a5c3a6dd6@gmail.com>
- <43ce08db-210a-fec8-51b4-351625b3cdfb@redhat.com>
- <ZJmQVeiLtkFAGfW0@casper.infradead.org>
- <57527c36-57a1-6699-b6f0-373ba895014c@redhat.com>
- <ba821a60-06f9-7bc5-2362-b1b3c44b0088@bytedance.com>
-From:   Danilo Krummrich <dakr@redhat.com>
-Organization: RedHat
-In-Reply-To: <ba821a60-06f9-7bc5-2362-b1b3c44b0088@bytedance.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        d=1e100.net; s=20221208; t=1687803740; x=1690395740;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yPRyJF+wc441mX/igIYWUk1kWDdqXia6VMBE4smrHR8=;
+        b=FjaQL3YyRZ1ASYjW3p3eF9xkIf0k7VyxbV18G7AfS33YqwFbhu7Ig9JRli86/dR+Wh
+         pKePNbYBeCByJ5wWDJnEmWW1Co/uUPTPgeVo7VpzjgA33u+uUcbdU64qYLA0YzVRvpoc
+         WT/asEfsmpZ6+7sSslXjTJ4Ek03ZX8dop1OxafZ836F88dIGwd9GXjjes2xMIRUr7xNu
+         L0kBUnKdEI14+8WArNxzYhj3GjSPwpalFruJme+kRyHDyERiGXRkAcGdIqHtKpliG1pe
+         J2KfrgkP9Tc/wssJyToampIWHreTKvMenveTEmdPQipqXYSUeGQ1Q49o/toDxt9yASk8
+         65Cw==
+X-Gm-Message-State: AC+VfDwiId9HwgJCZ85G1PuUqw7yQ0QWuOPwcdUiKo074VVWYt6zxTB7
+        HMCA8qMmsso+efQYWduv2I5hUIIwlxQ=
+X-Google-Smtp-Source: ACHHUZ7aIvwvO0Y7VS/sEBG9ypLoolrISMkfZROmndUsY6CUjJdJQjHwZ7Mn0vjqevKmUbfI3B81QCliWVM=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:6dd5:0:b0:c1e:f91c:2691 with SMTP id
+ i204-20020a256dd5000000b00c1ef91c2691mr1619859ybc.10.1687803739903; Mon, 26
+ Jun 2023 11:22:19 -0700 (PDT)
+Date:   Mon, 26 Jun 2023 11:22:18 -0700
+In-Reply-To: <a8bae991-c9af-ef45-20de-b9369f4dbf09@amd.com>
+Mime-Version: 1.0
+References: <20230524155339.415820-1-john.allen@amd.com> <20230524155339.415820-7-john.allen@amd.com>
+ <161174d013dff42ddfd2950fe33a8054f45c223e.camel@intel.com>
+ <ZINGaJnNJ54+klsD@johallen-workstation.lan> <9ef2faeaa38e667bd4daa8ee338d4cade452c76c.camel@intel.com>
+ <ZJYaNSzup+yuYxNy@google.com> <52ea8386-8652-dd91-23de-9d35781cb131@amd.com>
+ <ZJm64a7IKuSDS9bz@google.com> <a8bae991-c9af-ef45-20de-b9369f4dbf09@amd.com>
+Message-ID: <ZJnXWmaN57fi7WbV@google.com>
+Subject: Re: [RFC PATCH v2 6/6] KVM: SVM: Add CET features to supported_xss
+From:   Sean Christopherson <seanjc@google.com>
+To:     Tom Lendacky <thomas.lendacky@amd.com>
+Cc:     Rick P Edgecombe <rick.p.edgecombe@intel.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "bp@alien8.de" <bp@alien8.de>, "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/26/23 16:49, Peng Zhang wrote:
+On Mon, Jun 26, 2023, Tom Lendacky wrote:
+> On 6/26/23 11:28, Sean Christopherson wrote:
+> > On Mon, Jun 26, 2023, Tom Lendacky wrote:
+> > > On 6/23/23 17:18, Sean Christopherson wrote:
+> > > > On Fri, Jun 09, 2023, Rick P Edgecombe wrote:
+> > > > > Also, since the host might have CR4.CET set for its own reasons, if the host
+> > > > > handled an exit with the the guests MSR_IA32_S_CET set it could suddenly be
+> > > > > subjected to CET enforcement that it doesn't expect. Waiting to restore it
+> > > > > until returning to the guest is too late.
+> > > > > 
+> > > > > At least that's the reasoning on the VMX side as I understand it
+> > > > 
+> > > > The APM doesn't come right out and say it, but I assume/hope that S_CET is saved
+> > > > on VMRUN and loaded on #VMEXIT, i.e. is the same as VMX for all intents and
+> > > > purposes.
+> > > > 
+> > > > The host save state definitely has a field for S_CET, and VMRUN documents that the
+> > > > guest values are loaded, I just can't find anything in the APM that explicitly states
+> > > > how host S_CET and friends are handled.  E.g. in theory, they could have been
+> > > > shoved into VMSAVE+VMLOAD, though I very much doubt that's the case.
+> > > 
+> > > Yes, the host value is saved/restored on VMRUN/#VMEXIT. Anything that is in
+> > > the VMCB Save Area (the non-SEV-ES save area) is fully virtualized (unless
+> > > noted otherwise) and doesn't require special processing to save/restore the
+> > > host values.
+> > 
+> > Would it makes sense to add a column in "Table B-2. VMCB Layout, State Save Area"
+> > to specify whether a field is handled by VMRUN+#VMEXIT vs. VMLOAD+VMSAVE?  I can't
+> > find anywhere in the APM where it explicitly states that VMRUN+#VMEXIT context
+> > switches everything in the Save Area except the fields listed in "15.5.2 VMSAVE
+> > and VMLOAD Instructions".
+> > 
+> > "15.5 VMRUN Instruction" kinda sorta covers that behavior, but the information is
+> > either incomplete or stale, e.g. for host state it says "at least the following"
+> > 
+> >    Saving Host State. To ensure that the host can resume operation after #VMEXIT,
+> >    VMRUN saves at least the following host state information:
+> > 
+> > but for guest state it says "the following"
+> > 
+> >    Loading Guest State. After saving host state, VMRUN loads the following guest
+> >    state from the VMCB:
+> > 
+> > and then both provide incomplete lists of state.  A pedantic reading of the guest
+> > case suggests that there's a large pile of state that *isn't* loaded, and the host
+> > case isn't all that helpful because it's way too handwavy.
 > 
-> 
-> 在 2023/6/26 22:27, Danilo Krummrich 写道:
->> On 6/26/23 15:19, Matthew Wilcox wrote:
->>> On Mon, Jun 26, 2023 at 02:38:06AM +0200, Danilo Krummrich wrote:
->>>> On the other hand, unless I miss something (and if so, please let me 
->>>> know),
->>>> something is bogus with the API then.
->>>>
->>>> While the documentation of the Advanced API of the maple tree 
->>>> explicitly
->>>> claims that the user of the API is responsible for locking, this 
->>>> should be
->>>> limited to the bounds set by the maple tree implementation. Which 
->>>> means, the
->>>> user must decide for either the internal (spin-) lock or an external 
->>>> lock
->>>> (which possibly goes away in the future) and acquire and release it
->>>> according to the rules maple tree enforces through lockdep checks.
->>>>
->>>> Let's say one picks the internal lock. How is one supposed to ensure 
->>>> the
->>>> tree isn't modified using the internal lock with mas_preallocate()?
->>>>
->>>> Besides that, I think the documentation should definitely mention this
->>>> limitation and give some guidance for the locking.
->>>>
->>>> Currently, from an API perspective, I can't see how anyone not 
->>>> familiar with
->>>> the implementation details would be able to recognize this limitation.
->>>>
->>>> In terms of the GPUVA manager, unfortunately, it seems like I need 
->>>> to drop
->>>> the maple tree and go back to using a rb-tree, since it seems there 
->>>> is no
->>>> sane way doing a worst-case pre-allocation that does not suffer from 
->>>> this
->>>> limitation.
->>>
->>> I haven't been paying much attention here (too many other things going
->>> on), but something's wrong.
->>>
->>> First, you shouldn't need to preallocate.  Preallocation is only there
->>
->> Unfortunately, I think we really have a case where we have to. 
->> Typically GPU mappings are created in a dma-fence signalling critical 
->> path and that is where such mappings need to be added to the maple 
->> tree. Hence, we can't do any sleeping allocations there.
->>
->>> for really gnarly cases.  The way this is *supposed* to work is that
->>> the store walks down to the leaf, attempts to insert into that leaf
->>> and tries to allocate new nodes with __GFP_NOWAIT.  If that fails,
->>> it drops the spinlock, allocates with the gfp flags you've specified,
->>> then rewalks the tree to retry the store, this time with allocated
->>> nodes in its back pocket so that the store will succeed.
->>
->> You are talking about mas_store_gfp() here, right? And I guess, if the 
->> tree has changed while the spinlock was dropped and even more nodes 
->> are needed it just retries until it succeeds?
->>
->> But what about mas_preallocate()? What happens if the tree changed in 
->> between mas_preallocate() and mas_store_prealloc()? Does the latter 
->> one fall back to __GFP_NOWAIT in such a case? I guess not, since 
->> mas_store_prealloc() has a void return type, and __GFP_NOWAIT could 
->> fail as well.
-> mas_store_prealloc() will fallback to __GFP_NOWAIT and issue a warning.
-> If __GFP_NOWAIT allocation fails, BUG_ON() in mas_store_prealloc() will
-> be triggered.
+> I'll communicate this feedback to the folks that update the APM volumes and
+> see what can be done.
 
-Ok, so this is an absolute last resort and surely should not be relied on.
-
-I think the maple tree should either strictly enforce (through locking 
-policy) that this can never happen or if API wise it is OK not to lock 
-these two is legit, return an error code rather then issue a warning and 
-even worse call BUG_ON() in case it can't fix things up.
-
-- Danilo
-
-> 
->>
->> So, how to use the internal spinlock for mas_preallocate() and 
->> mas_store_prealloc() to ensure the tree can't change?
->>
-> 
-
+Thanks, much appreciated!
