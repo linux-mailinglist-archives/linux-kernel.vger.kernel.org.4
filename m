@@ -2,300 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72ADD73E81C
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 20:23:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E71E173E858
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 20:24:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231790AbjFZSXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 14:23:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37512 "EHLO
+        id S232053AbjFZSY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 14:24:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231788AbjFZSWz (ORCPT
+        with ESMTP id S231846AbjFZSYM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 14:22:55 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A8A10FD
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 11:22:28 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5704970148dso50689987b3.3
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 11:22:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687803707; x=1690395707;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hupRzbzLCG/KIXYw3qGlEQa2tHfb7hjWdTMdzJJmdDM=;
-        b=ohSso1FC/DQeIHA+1eUJuSO1lOTpFRkGhOiR6VdJjcISbGPEIquZUTMbeyZVkgFAkQ
-         gqRGTWeNf8b1rvSgk4aQYTukf60xObTtwT4X+zDQZJ+F9/1MdV+vYhUlV+KlVB1sIZQl
-         YSUd45XUPOPlVoNH5vDpHfpn/OhZw5YQe0e+o/2cD+zYWrq4ct2jjzzZh99BFN+0jmis
-         YZXeaME2EtNMRWM1RqJLd+QRh4kVCKYPPe3un35mjJYLRHafNbhjy6+89BfS1H+cJi4g
-         yHoyVcUcTxVmYJx+NUDsDXob0MLjaynvK7SamfewI1YntDWnKpSFNLBudyt6JSGfk0aG
-         QD7g==
+        Mon, 26 Jun 2023 14:24:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ED2226A4
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 11:23:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687803714;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7d5o216+gZzb7LjG6wT7FRl5pgwrzpiiCyEaun3wVWg=;
+        b=a6DLOOL9wBC24YLbS6y/hPmpO8nnr/BAcFhDiThZiNhRO/ELlB1Cz83R6gNqSBN4kcpj0O
+        OpNONGKAkK7hjF96U11v7Fg2EE91jrehDeAFtZCkbo7X3jwqCGcabq/Sv/5PLucvfS8vsr
+        01siXjeNaNU5W0JfRDavQ6LNjc1r4zc=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-371-04MHv5G2NnalS_Z2WVBLng-1; Mon, 26 Jun 2023 14:21:53 -0400
+X-MC-Unique: 04MHv5G2NnalS_Z2WVBLng-1
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-2f2981b8364so2035425f8f.1
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 11:21:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687803707; x=1690395707;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=hupRzbzLCG/KIXYw3qGlEQa2tHfb7hjWdTMdzJJmdDM=;
-        b=j2GS4qDXf0/kvWQSyao++CmFn3rWk4qyr7OP0yylftH79ZdRskDehsiqWV20W/qg6Q
-         Ta9ClIqGsIIRfkIXvkIQDhzQ+BLdKZLftINl6xVOORdRlDPWkahy90yZcZdn+wasH7M9
-         JZ1WVwECyLCOavabI0NsWyufIq2ZXAKwRnGfcJlBZKroePk0GEWWFsWitAKrRLrEfiaz
-         E/DRiv64tjHm3omh3g5NSfHRJlY6OHfGk0OyKpfUIrmnGMSPQIqgyOrt1KdJsz/T87cK
-         SacJtyKj9i3MDYQoKrGGn8kpSylSLoOpmwOTZJSEtm2eCF/x+cjQIRN3sqfajPE7hlRY
-         7thA==
-X-Gm-Message-State: AC+VfDw/Ru/O0bi0jHFT3gylbgPfIa0wFi3tTAfgDDVMBcN/v3ieiPUh
-        P4+9kNBT6EQsX5JCSfjcm2KlrFJlQwQ=
-X-Google-Smtp-Source: ACHHUZ7RxEyzb6Y1552i3A91XNRZFOLdXv2HoYbR4FmMQlZGGkLJM8luga2UBQhkCA//Pht8ELhRkZL/yL4=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:4007:0:b0:bc4:8627:57c3 with SMTP id
- n7-20020a254007000000b00bc4862757c3mr12315046yba.9.1687803707139; Mon, 26 Jun
- 2023 11:21:47 -0700 (PDT)
-Date:   Mon, 26 Jun 2023 11:21:45 -0700
-In-Reply-To: <20230626010753.xru5ph3irmyokrgc@amd.com>
-Mime-Version: 1.0
-References: <cover.1687474039.git.isaku.yamahata@intel.com>
- <a3a19de92c7ac6e607ac3e663d84a4312876084b.1687474039.git.isaku.yamahata@intel.com>
- <ZJX6s2HxbHOUMXlj@google.com> <20230626010753.xru5ph3irmyokrgc@amd.com>
-Message-ID: <ZJnXObRHhn5Q1dX2@google.com>
-Subject: Re: [RFC PATCH v2 4/6] KVM: x86: Introduce fault type to indicate kvm
- page fault is private
-From:   Sean Christopherson <seanjc@google.com>
-To:     Michael Roth <michael.roth@amd.com>
-Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
-        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
-        Sagi Shahar <sagis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Zhi Wang <zhi.wang.linux@gmail.com>, chen.bo@intel.com,
-        linux-coco@lists.linux.dev,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Vishal Annapurve <vannapurve@google.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1687803711; x=1690395711;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7d5o216+gZzb7LjG6wT7FRl5pgwrzpiiCyEaun3wVWg=;
+        b=kbErjwRuDNdm7X5NuIVP6GUeLr1OoOIuwWjqbZMByQbLsKhcZv/v3/t4aDThgnj29R
+         L4F/m6sp7RlNBNbP4AfhiAOD41WG83wgmVg+RRGdTcEWvfxHUW3zToqyGT553e+8jFra
+         OSNr2S/1Yb7W4BfDq23rg1Hz6T4EXJ8FtV5sS45E61pKeaPDuZqv4CCbhpqxIlUiQogh
+         HtI35oTR4MqkJcbIBSFzxOpP0VYNbb7l3D0kPErcXw1omnrX2p61cYwt6PXH/BlPQNFk
+         gkl3gd6dqPLBwfDe5lidCdgz4x3fBe4Hz21aSCXIrPCotNXZ0ru7ITfLTpl07/DUIUn5
+         mkzQ==
+X-Gm-Message-State: AC+VfDyEdmlc+ulwBY8rJtKoVpEIHHqZLxh/epYBYoBxjl0HIL1fZk5L
+        rKB0sVh91zdHphJTWFcYhC9uownsPy8G9pQqsetrjjsNgXoldE/ybPUQcKsTE5y9K0fU6yg+zS0
+        1SOtWC90ooI44DUqrhRa8/19B
+X-Received: by 2002:adf:f887:0:b0:313:e08e:5599 with SMTP id u7-20020adff887000000b00313e08e5599mr6341889wrp.67.1687803711738;
+        Mon, 26 Jun 2023 11:21:51 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5n+Lk6EWcxrnDxX3B3uow6vJnKDCug7Zp3C4LwW+oyKCc4uz4GdaK6qErbD8yunrefffBgxg==
+X-Received: by 2002:adf:f887:0:b0:313:e08e:5599 with SMTP id u7-20020adff887000000b00313e08e5599mr6341876wrp.67.1687803711451;
+        Mon, 26 Jun 2023 11:21:51 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:4b3f:de9c:642:1aff:fe31:a15c? ([2a02:810d:4b3f:de9c:642:1aff:fe31:a15c])
+        by smtp.gmail.com with ESMTPSA id f14-20020a5d58ee000000b00313f1c5b56dsm3387316wrd.79.2023.06.26.11.21.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Jun 2023 11:21:51 -0700 (PDT)
+Message-ID: <362330be-1ff1-d2cb-de6a-6ad42cbb9d58@redhat.com>
+Date:   Mon, 26 Jun 2023 20:21:49 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 14/16] maple_tree: Refine mas_preallocate() node
+ calculations
+Content-Language: en-US
+To:     Peng Zhang <zhangpeng.00@bytedance.com>
+Cc:     maple-tree@lists.infradead.org, linux-mm@kvack.org,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        linux-kernel@vger.kernel.org, David Airlie <airlied@redhat.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>
+References: <20230612203953.2093911-1-Liam.Howlett@oracle.com>
+ <20230612203953.2093911-15-Liam.Howlett@oracle.com>
+ <26d8fbcf-d34f-0a79-9d91-8c60e66f7341@redhat.com>
+ <cdab5e74-7559-cb31-90ca-b99a5c3a6dd6@gmail.com>
+ <43ce08db-210a-fec8-51b4-351625b3cdfb@redhat.com>
+ <ZJmQVeiLtkFAGfW0@casper.infradead.org>
+ <57527c36-57a1-6699-b6f0-373ba895014c@redhat.com>
+ <ba821a60-06f9-7bc5-2362-b1b3c44b0088@bytedance.com>
+From:   Danilo Krummrich <dakr@redhat.com>
+Organization: RedHat
+In-Reply-To: <ba821a60-06f9-7bc5-2362-b1b3c44b0088@bytedance.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 25, 2023, Michael Roth wrote:
-> On Fri, Jun 23, 2023 at 01:04:03PM -0700, Sean Christopherson wrote:
-> > On Thu, Jun 22, 2023, isaku.yamahata@intel.com wrote:
-> > > diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_i=
-nternal.h
-> > > index 7f9ec1e5b136..0ec0b927a391 100644
-> > > --- a/arch/x86/kvm/mmu/mmu_internal.h
-> > > +++ b/arch/x86/kvm/mmu/mmu_internal.h
-> > > @@ -188,6 +188,13 @@ static inline bool is_nx_huge_page_enabled(struc=
-t kvm *kvm)
-> > >  	return READ_ONCE(nx_huge_pages) && !kvm->arch.disable_nx_huge_pages=
-;
-> > >  }
-> > > =20
-> > > +enum kvm_fault_type {
-> > > +	KVM_FAULT_MEM_ATTR,
-> > > +	KVM_FAULT_SHARED,
-> > > +	KVM_FAULT_SHARED_ALWAYS,
-> > > +	KVM_FAULT_PRIVATE,
-> >=20
-> > This is silly.  Just use AMD's error code bit, i.e. PFERR_GUEST_ENC_MAS=
-K as per
-> > the SNP series.
-> >=20
-> >   Bit 34 (ENC): Set to 1 if the guest=E2=80=99s effective C-bit was 1, =
-0 otherwise.
-> >=20
-> > Just because Intel's ucode is too crusty to support error codes larger =
-than 16
-> > bits doesn't mean KVM can't utilize the bits :-)  KVM already translate=
-s to AMD's
-> > error codes for other things, e.g.
-> >=20
-> > 	error_code |=3D (exit_qualification & EPT_VIOLATION_GVA_TRANSLATED) !=
-=3D 0 ?
-> > 	       PFERR_GUEST_FINAL_MASK : PFERR_GUEST_PAGE_MASK;
-> >=20
-> > For TDX, handle_ept_violation() can do something like:
-> >=20
-> > 	if (is_tdx(vcpu->kvm))
-> > 		error_code |=3D (gpa & shared) ? 0 : PFERR_GUEST_ENC_MASK;
-> > 	else if (kvm_mem_is_private(vcpu->kvm, gpa_to_gfn(gpa)))
-> > 		error_code |=3D PFERR_GUEST_ENC_MASK;
->=20
-> Maybe this is what you're getting at below, but seems awkward to have thi=
-s
-> being handling in TDX code since that would suggest that SVM module would
-> also need to duplicate that logic and synthesize this PFERR_GUEST_ENC_MAS=
-K
-> bit for non-SNP VMs (e.g. gmem self-tests).
+On 6/26/23 16:49, Peng Zhang wrote:
+> 
+> 
+> 在 2023/6/26 22:27, Danilo Krummrich 写道:
+>> On 6/26/23 15:19, Matthew Wilcox wrote:
+>>> On Mon, Jun 26, 2023 at 02:38:06AM +0200, Danilo Krummrich wrote:
+>>>> On the other hand, unless I miss something (and if so, please let me 
+>>>> know),
+>>>> something is bogus with the API then.
+>>>>
+>>>> While the documentation of the Advanced API of the maple tree 
+>>>> explicitly
+>>>> claims that the user of the API is responsible for locking, this 
+>>>> should be
+>>>> limited to the bounds set by the maple tree implementation. Which 
+>>>> means, the
+>>>> user must decide for either the internal (spin-) lock or an external 
+>>>> lock
+>>>> (which possibly goes away in the future) and acquire and release it
+>>>> according to the rules maple tree enforces through lockdep checks.
+>>>>
+>>>> Let's say one picks the internal lock. How is one supposed to ensure 
+>>>> the
+>>>> tree isn't modified using the internal lock with mas_preallocate()?
+>>>>
+>>>> Besides that, I think the documentation should definitely mention this
+>>>> limitation and give some guidance for the locking.
+>>>>
+>>>> Currently, from an API perspective, I can't see how anyone not 
+>>>> familiar with
+>>>> the implementation details would be able to recognize this limitation.
+>>>>
+>>>> In terms of the GPUVA manager, unfortunately, it seems like I need 
+>>>> to drop
+>>>> the maple tree and go back to using a rb-tree, since it seems there 
+>>>> is no
+>>>> sane way doing a worst-case pre-allocation that does not suffer from 
+>>>> this
+>>>> limitation.
+>>>
+>>> I haven't been paying much attention here (too many other things going
+>>> on), but something's wrong.
+>>>
+>>> First, you shouldn't need to preallocate.  Preallocation is only there
+>>
+>> Unfortunately, I think we really have a case where we have to. 
+>> Typically GPU mappings are created in a dma-fence signalling critical 
+>> path and that is where such mappings need to be added to the maple 
+>> tree. Hence, we can't do any sleeping allocations there.
+>>
+>>> for really gnarly cases.  The way this is *supposed* to work is that
+>>> the store walks down to the leaf, attempts to insert into that leaf
+>>> and tries to allocate new nodes with __GFP_NOWAIT.  If that fails,
+>>> it drops the spinlock, allocates with the gfp flags you've specified,
+>>> then rewalks the tree to retry the store, this time with allocated
+>>> nodes in its back pocket so that the store will succeed.
+>>
+>> You are talking about mas_store_gfp() here, right? And I guess, if the 
+>> tree has changed while the spinlock was dropped and even more nodes 
+>> are needed it just retries until it succeeds?
+>>
+>> But what about mas_preallocate()? What happens if the tree changed in 
+>> between mas_preallocate() and mas_store_prealloc()? Does the latter 
+>> one fall back to __GFP_NOWAIT in such a case? I guess not, since 
+>> mas_store_prealloc() has a void return type, and __GFP_NOWAIT could 
+>> fail as well.
+> mas_store_prealloc() will fallback to __GFP_NOWAIT and issue a warning.
+> If __GFP_NOWAIT allocation fails, BUG_ON() in mas_store_prealloc() will
+> be triggered.
 
-Ah, right, forgot about that angle.  The non-TDX synthesizing can be done i=
-n
-kvm_mmu_page_fault(), e.g.
+Ok, so this is an absolute last resort and surely should not be relied on.
 
-	if (vcpu->kvm->vm_type =3D=3D KVM_X86_PROTECTED_VM &&
-	    kvm_mem_is_private(...))
-		error_code |=3D PFERR_GUEST_ENC_MASK;
+I think the maple tree should either strictly enforce (through locking 
+policy) that this can never happen or if API wise it is OK not to lock 
+these two is legit, return an error code rather then issue a warning and 
+even worse call BUG_ON() in case it can't fix things up.
 
-> So maybe SNP/TDX can rely on passing this via error_code, and then some
-> common code, like kvm_mem_is_private(), can handle this for non-TDX/SNP
-> guest types. But the current gmem series does this via a new .is_private
-> in kvm_page_fault:
->=20
->   .is_private =3D kvm_mem_is_private(vcpu->kvm, cr2_or_gpa >> PAGE_SHIFT)=
-,
->=20
-> This seems at odds with the idea of storing this 'fault->is_private'
-> logic into the error_code. Isaku and I were discussing[1] that we
-> should do one or the other:
->=20
->   a) store everything in error_code
->   b) use the .is_private field that seems to have been introduced to
->      track exactly this information
->=20
-> So I think this series is attempting to do b). If you're suggesting we
-> should do a), then what purpose is fault->is_private field meant to
-> serve? Are you planning to get rid of it? Otherwise it seems redundant.
->=20
-> But I think approach b) is useful for another reason:
+- Danilo
 
-"is_private" would serve the same purpose as all the other bits that are de=
-rived
-from the error code, e.g. improve readability, reduce line lengths, etc.  T=
-hough
-looking at the name, just "private" is probably the right name.
+> 
+>>
+>> So, how to use the internal spinlock for mas_preallocate() and 
+>> mas_store_prealloc() to ensure the tree can't change?
+>>
+> 
 
-	/* Derived from error_code.  */
-	const bool exec;
-	const bool write;
-	const bool present;
-	const bool rsvd;
-	const bool user;
-
-> > And that's not even taking into account that TDX might have a separate =
-entry point,
-> > i.e. the "is_tdx()" check can probably be avoided.
-> >=20
-> > As for optimizing kvm_mem_is_private() to avoid unnecessary xarray look=
-ups, that
-> > can and should be done separately, e.g.
-> >=20
-> >   static inline bool kvm_mem_is_private(struct kvm *kvm, gfn_t gfn)
-> >   {
-> > 	return IS_ENABLED(CONFIG_KVM_PRIVATE_MEM) &&
-> > 	       kvm_guest_has_private_mem(kvm) &&
-> > 	       kvm_get_memory_attributes(kvm, gfn) & KVM_MEMORY_ATTRIBUTE_PRIV=
-ATE;
-> >   }
-> >=20
-> > where x86's implementation of kvm_guest_has_private_mem() can be
-> >=20
-> >   #define kvm_guest_has_private_mem(kvm) (!!(kvm)->vm_type)
->=20
-> It's just about not checking xarray for non-protected case. The
-> optimization here is that neither TDX nor SNP care about the xarray as
-> far as determining whether the *fault* was a private or not.
-
-Yes, and what I am suggesting doesn't use kvm_mem_is_private() to synthesiz=
-e that
-flag for TDX (or SNP).
-
-> We only care later, in part of the KVM MMU code that determines whether t=
-he
-> fault type is at odds with the xarray state and whether to generate a
-> KVM_EXIT_MEMORY_FAULT as a result.
->=20
-> In that code, both TDX/SNP, as well as gmem self-tests, will all end up
-> calling kvm_mem_is_private().
->=20
-> In the gmem self-test case, in current gmem base series, and I think with
-> what you've proposed here, we'd check the xarray via kvm_mem_is_privae(),
-> both in kvm_mmu_do_page_fault(), as well as later kvm_faultin_pfn() where
-> KVM_EXIT_MEMORY_FAULT case is handled. That seems off because:
->=20
->   1) Checking in kvm_mem_is_private() via kvm_mmu_do_page_fault() means
->      that we will grab the value prior to when the KVM MMU records the
->      mmu_invalidate_seq, which means there's a window between
->      kvm_mmu_do_page_fault() and kvm_faultin_pfn() where an updated
->      xarray won't be noticed, and the #NPF retry logic will not get
->      triggered.
-
-That's ok-ish, for some definitions of ok.  There's no fatal bug, but users=
-pace
-will see a spurious, arguably nonsensical exit.  If the race occurs before =
-mmu_seq
-is snapshot, this code will detect the change and exit to userspace.
-
-	if (fault->is_private !=3D kvm_mem_is_private(vcpu->kvm, fault->gfn))
-		return kvm_do_memory_fault_exit(vcpu, fault);
-
->   2) For gmem self-test, kvm_mem_is_private() is the authority on
->      whether the fault is private or not. There's no need to distinguish
->      between what was set via KVM_SET_MEMORY_ATTRIBUTES, vs. what was
->      indicated via fault flags/GPA like TDX/SNP do.
->=20
-> So it makes sense, in the gmem case (and TDX/SNP), to defer the
-> kvm_mem_is_private() till later in kvm_faultin_pfn(). It avoid a
-> duplicate lookup, and a race. But .is_private only conveys
-> encrypted/unencrypted fault in TDX/SNP case, it doesn't have a way to
-> cleanly convey this case "just use whatever kvm_mem_is_private() reports
-> later, because it will always be what the VMM set, and it's too early
-> to check kvm_mem_is_private() right now".
-
-Yeah, the duplicate lookup is unfortunate :-/  But I'd really like to be ab=
-le to
-make kvm_page_fault.private const, just like all the other booleans that ar=
-e
-derived from the error code.  My concern with making it *not* const is that
-there will be a discrepancy between "private" and "error_code", and we'll h=
-ave
-to be very careful to never touch "private" before kvm_faultin_pfn().
-
-And I don't want to special case "VMM defined", because the primary reason =
-the
-"VMM defined" case exists at this time is to allow testing KVM's implementa=
-tion
-without TDX or SNP.  E.g. I don't want to end up with code in fast_page_fau=
-lt()
-or so that does X for KVM_FAULT_VMM_DEFINED, but Y for KVM_FAULT_PRIVATE.
-
-So I'm leaning toward the above be
-
-	if (fault->is_private !=3D kvm_mem_is_private(vcpu->kvm, fault->gfn)) {
-		if (vcpu->kvm->vm_type =3D=3D KVM_X86_PROTECTED_VM)
-			return RET_PF_RETRY;
-		else
-			return kvm_do_memory_fault_exit(vcpu, fault);
-	}
-
-even though software-protected VMs would perform a technically-unnecessary
-attributes lookup.  *If* software-protected VMs ever get to the point where=
- folks
-care about the performance overhead of the extra lookup, then I'm all for
-revisiting the implementation, but that is a ginormous "if" at this point. =
- Though
-even then I'd still prefer to figure out a way to make the flag const, but =
-that's
-a future problem.
-
-> So that's where this enum type came from. Although in the discussion I
-> linked to above I suggested just:
->=20
->   enum kvm_fault_type {
->     KVM_FAULT_VMM_DEFINED,
->     KVM_FAULT_SHARED,
->     KVM_FAULT_PRIVATE,
->=20
-> Which I think would work just as well,
-
-I want to use vm_type for tracking "VMM_DEFINED".  KVM's ABI easily allows =
-for 64
-VM types, I see no reason to reuse KVM_X86_PROTECTED_VM for TDX and/or SNP,=
- though
-the type probably should be KVM_X86_SW_PROTECTED_VM.  With that out of the =
-way,
-there's no need for an enum to track shared vs. private.
