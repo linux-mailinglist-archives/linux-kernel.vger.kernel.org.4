@@ -2,140 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B17AA73E4C0
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 18:17:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A1F573E4C3
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 18:17:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231968AbjFZQRU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 12:17:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48268 "EHLO
+        id S231856AbjFZQR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 12:17:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232068AbjFZQPP (ORCPT
+        with ESMTP id S232016AbjFZQPK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 12:15:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C642E4C
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 09:14:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687796058;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lAvdeHjRiEhExMf/8PkhS/lqlgbR8Yp8qV2L+W5RPMM=;
-        b=b16c2Rv9kCAdt6Z4iEeBBpCohkilCNuwf9tj0W8B872mhpuZjd35NihhdbsbJURFxQd8Uy
-        lFeq0GeTFEupaUpGpDqh76CqVpk05H3lmZcCAWSThctN9leI9Af/cu00sA8inaphKpOX9O
-        AphRfmipxuKVA/3qqUgHfg5AHw8pjyA=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-640-EioXiyc4O4OkIUC6_fIefA-1; Mon, 26 Jun 2023 12:14:17 -0400
-X-MC-Unique: EioXiyc4O4OkIUC6_fIefA-1
-Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-635984f84a9so20752346d6.0
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 09:14:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687796054; x=1690388054;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lAvdeHjRiEhExMf/8PkhS/lqlgbR8Yp8qV2L+W5RPMM=;
-        b=Pe4S5NiiBIieDBzuRudSSWgQBTtnlXzCQmAYuRxDkKJ4hD+sLPmIxN4B0GNHSivChg
-         Y9rnwQY6+QhMI2JjF/NVjEVcr7Kd1ounvPSf/8167ShzB36m9oHQvtwBqMsiZ4FLX/Dw
-         hgGACW/maievG1aFVxzrdHcbToUPqf4XgFuPIHbqx6lrZq2GSYZvaa9FAyUY4JA/Sk0G
-         6/Ih/GIy/a+vpPS+csEpT936dWoikURvNkAA97Cy+RLpnpXsC35n6LpUpe3sim22so8J
-         Elu/OYQoNLPQbFJsomIwfIpfMzWi42+nOVmQOVHOd8iUMAEEonMT7CfbJQ44Y92sB+Nl
-         bnIw==
-X-Gm-Message-State: AC+VfDxiMcmhHaHMzQNYxR/RLR1WVr6IiQgh0nM2z9cmURIo2pa7mGWz
-        WDzuP5XP0oxnTZ9H+ar++F0UnUwPWbvKm5bzon2hUkhCMjL1C6KWUWtP4L8mIi3qMq8bUDN96vi
-        +vDgm7gypzG3kZl+Ll8dU9x64
-X-Received: by 2002:a05:6214:4015:b0:62d:d6e4:7ccf with SMTP id kd21-20020a056214401500b0062dd6e47ccfmr31955501qvb.40.1687796054279;
-        Mon, 26 Jun 2023 09:14:14 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6dcXj93WXuU6BFIJYyBOMHVPNnCeqXrPEQR3X/qVTsVAuQorwHM7WjdhifsJqsX7Lt2y/AjA==
-X-Received: by 2002:a05:6214:4015:b0:62d:d6e4:7ccf with SMTP id kd21-20020a056214401500b0062dd6e47ccfmr31955480qvb.40.1687796054044;
-        Mon, 26 Jun 2023 09:14:14 -0700 (PDT)
-Received: from sgarzare-redhat (host-87-11-6-160.retail.telecomitalia.it. [87.11.6.160])
-        by smtp.gmail.com with ESMTPSA id lw15-20020a05621457cf00b00626161ea7a3sm3349930qvb.2.2023.06.26.09.14.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jun 2023 09:14:13 -0700 (PDT)
-Date:   Mon, 26 Jun 2023 18:14:09 +0200
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@sberdevices.ru, oxffffaa@gmail.com
-Subject: Re: [RFC PATCH v4 12/17] vsock/loopback: support MSG_ZEROCOPY for
- transport
-Message-ID: <lex6l5suez7azhirt22lidndtjomkbagfbpvvi5p7c2t7klzas@4l2qly7at37c>
-References: <20230603204939.1598818-1-AVKrasnov@sberdevices.ru>
- <20230603204939.1598818-13-AVKrasnov@sberdevices.ru>
+        Mon, 26 Jun 2023 12:15:10 -0400
+Received: from tarta.nabijaczleweli.xyz (unknown [139.28.40.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3224F213F;
+        Mon, 26 Jun 2023 09:14:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
+        s=202305; t=1687796092;
+        bh=OIkRjszc/siuWMUIDxNvapcEayn+337GY3Qpd3+7L18=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GSEZKzZ8W8BY/c9VA/huUwf8P7oA3dABtsIZj55w5CEHOFkCz3lKsraJroah2g+MG
+         tRkOlfvl2w8EXFulPteFcgOBf3QpomaWsRCZRt3HN7wAp8U47DDuCRc7CxzyyOrEvV
+         l13/rUfx/wntBV8H/JxIw973v9szGtL9Dc5QcJdHLV+Lg1B74amvIg+j8i4CLknXMm
+         DcHM7oFriUtJsxowVnzsKD3lVPXcYqq/03WYK7VEijJxWxjciXNqiMfgJ9R29ZCmq3
+         7D4kEuABekLK8BZaSknKtiuNrCe2dIzxQkVfZUz9dYCGoY9rl9VDFl743YGuU5qPJ3
+         Bc8YACOpQiRxA==
+Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
+        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id DB9E9F70;
+        Mon, 26 Jun 2023 18:14:52 +0200 (CEST)
+Date:   Mon, 26 Jun 2023 18:14:51 +0200
+From:   Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= 
+        <nabijaczleweli@nabijaczleweli.xyz>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Jens Axboe <axboe@kernel.dk>, David Howells <dhowells@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: Pending splice(file -> FIFO) excludes all other FIFO operations
+ forever (was: ... always blocks read(FIFO), regardless of O_NONBLOCK on read
+ side?)
+Message-ID: <qyohloajo5pvnql3iadez4fzgiuztmx7hgokizp546lrqw3axt@ui5s6kfizj3j>
+References: <qk6hjuam54khlaikf2ssom6custxf5is2ekkaequf4hvode3ls@zgf7j5j4ubvw>
+ <20230626-vorverlegen-setzen-c7f96e10df34@brauner>
+ <4sdy3yn462gdvubecjp4u7wj7hl5aah4kgsxslxlyqfnv67i72@euauz57cr3ex>
+ <20230626-fazit-campen-d54e428aa4d6@brauner>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="fwzvmdzb5y4r76ms"
 Content-Disposition: inline
-In-Reply-To: <20230603204939.1598818-13-AVKrasnov@sberdevices.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230626-fazit-campen-d54e428aa4d6@brauner>
+User-Agent: NeoMutt/20230517
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_RDNS_DYNAMIC_FP,
+        RDNS_DYNAMIC,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 03, 2023 at 11:49:34PM +0300, Arseniy Krasnov wrote:
->Add 'msgzerocopy_allow()' callback for loopback transport.
->
->Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->---
-> net/vmw_vsock/vsock_loopback.c | 8 ++++++++
-> 1 file changed, 8 insertions(+)
->
->diff --git a/net/vmw_vsock/vsock_loopback.c b/net/vmw_vsock/vsock_loopback.c
->index 5c6360df1f31..a2e4aeda2d92 100644
->--- a/net/vmw_vsock/vsock_loopback.c
->+++ b/net/vmw_vsock/vsock_loopback.c
->@@ -47,6 +47,7 @@ static int vsock_loopback_cancel_pkt(struct vsock_sock *vsk)
-> }
->
-> static bool vsock_loopback_seqpacket_allow(u32 remote_cid);
->+static bool vsock_loopback_msgzerocopy_allow(void);
 
-I don't know why we did this for `vsock_loopback_seqpacket_allow`, but
-can we just put the implementation here?
+--fwzvmdzb5y4r76ms
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
->
-> static struct virtio_transport loopback_transport = {
-> 	.transport = {
->@@ -92,11 +93,18 @@ static struct virtio_transport loopback_transport = {
-> 		.notify_buffer_size       = virtio_transport_notify_buffer_size,
->
-> 		.read_skb = virtio_transport_read_skb,
->+
->+		.msgzerocopy_allow        = vsock_loopback_msgzerocopy_allow,
+On Mon, Jun 26, 2023 at 05:56:28PM +0200, Christian Brauner wrote:
+> I mean, one workaround would probably be poll() even with O_NONBLOCK but
+> I get why that's annoying and half of a solution.
+poll() doesn't really change anything since it turns into a hotloop of
+.revents=POLLHUP with a disconnected writer, cf.
+  https://lore.kernel.org/linux-fsdevel/jbyihkyk5dtaohdwjyivambb2gffyjs3dodpofafnkkunxq7bu@jngkdxx65pux/t/#m747e2bbd0c5cffb6baaf1955f6f8b0d97e216839
+The only apparently-supported way to poll pipes under linux is to
+sleep()/read(O_NONBLOCK) like in the bad old days.
 
-Ditto the moving.
+And even if that was a working work-around, the fundamental problem of
+./spl>fifo excluding all other access to fifo is quite unfortunate too.
 
-> 	},
->
-> 	.send_pkt = vsock_loopback_send_pkt,
-> };
->
->+static bool vsock_loopback_msgzerocopy_allow(void)
->+{
->+	return true;
->+}
->+
-> static bool vsock_loopback_seqpacket_allow(u32 remote_cid)
-> {
-> 	return true;
->-- 
->2.25.1
->
+> tl;dr it by splicing from a regular file to a pipe where the regular
+> file in splice isn't O_NONBLOCK
+(Most noticeable when the "regular file" is a tty and thus the I/O never
+ completes by design.)
 
+--fwzvmdzb5y4r76ms
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmSZuXkACgkQvP0LAY0m
+WPHx+Q//YSo///lAnPD1XvyEMH7UaLl3NN+xmawY2/rMIBL9nmQULjIx3x6/aWOg
+CGR9WmnsbmcQdPZsObbHjau0RE6+2tjgwFzTFDVu3dnl8X2jyXss2Qp316En25Jx
+XZ35/7PIH8LqP8PVmIZz2wnwG6sSwS8aNugx4De5ROC21+aBlJayQCvpKluuBRQv
+GxvZrUgGevY46JeOX1UkiiojDFyLbtznL8HxoV5bYz/E3/imEsQSEAKGKU+AhgPa
+y83Dsyha0k0b7yYdn0m5NnBUcZZgQx3QFuXpxYkxCT+YYp4wfFUoyIF/LQvgxycY
+0o/YqMVjyQ2I+xMhE0AjMBfB+q2kHspEDKExqQuKz0a71bFrSR3AuYdnKWsiEK45
+lvaApluTZvP8g/l7n6Qzgpobyhrt5yOW9F4dOky94V38C28cLGUYA7iXCmQPtYP6
+Ikvfj1l7AgPXO4ZOToKhrHd/HTSo0DX1jZ9nQJ7nzFoxuKWKJAfUcXbwQThRLG+W
+fHQKevvXaPwa5bnuUmCA4eqDabI5yBOUqOKLJE/amjxkIscO34FUgkacq127+ZuP
+EMo4CqR+AwLNrNE3MwycDTx+yrGcZpXCgNhIZZQepV3IkNd2aI2Us9LA4mf44eMj
+bQL1VNn1szC1BTJ0Iybhl9eoIDkOt7Wks+k4N9UqeUEoLWv/4C8=
+=CLWF
+-----END PGP SIGNATURE-----
+
+--fwzvmdzb5y4r76ms--
