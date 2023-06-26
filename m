@@ -2,185 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A275773ECD6
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 23:26:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C86E073ECDA
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 23:27:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230345AbjFZV03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 17:26:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59916 "EHLO
+        id S230362AbjFZV1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 17:27:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbjFZV01 (ORCPT
+        with ESMTP id S229562AbjFZV13 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 17:26:27 -0400
-Received: from rere.qmqm.pl (rere.qmqm.pl [91.227.64.183])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EEC5BD;
-        Mon, 26 Jun 2023 14:26:26 -0700 (PDT)
-Received: from remote.user (localhost [127.0.0.1])
-        by rere.qmqm.pl (Postfix) with ESMTPSA id 4Qqgrb2JXJz5P;
-        Mon, 26 Jun 2023 23:26:23 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
-        t=1687814783; bh=A1vX/Rui6Hw1vPtrHasKkX4UxOWQFsKVaGJ8Atwa9Bo=;
-        h=Date:Subject:From:To:Cc:From;
-        b=XQYQ8jJussbJBbRl7T8rXwOpF/PxTFBz2SqoTjdqAHaVKqWaQGAMZT25KKHUulPPT
-         ln/wYDLZ86ucnnvQh3IKygnDZJAduxMsrvc3XzD2qOoWMaDXn4T+aG4J95ZBefak0Y
-         BarfWt6Fz2lU5ob9d6qVq4X+rjsq+yOH9d3TmUL4oxcmHw2MZDM+f136U/0x5nVSnE
-         HmMhoHglrfEG6VD1YeXNF7c/ZeemyMtH7zHWTs8iqnOaFSeISJUcAbyyAFq26wxSkT
-         7mvH1RRFJpmqk8Ai3ptzkj8q1jEULcbpb5G7sBxWt4EBMPuRPakEmRVcmC6cKdJp/f
-         eD25C8KCH0kjQ==
-X-Virus-Status: Clean
-X-Virus-Scanned: clamav-milter 0.103.8 at mail
-Date:   Mon, 26 Jun 2023 23:26:22 +0200
-Message-Id: <6ac87dcbb660ae892bf8740c78d3eca7625d6db6.1687814664.git.mirq-linux@rere.qmqm.pl>
-Subject: [PATCH 1/1] i2c: at91: constify at91_twi_pdata
+        Mon, 26 Jun 2023 17:27:29 -0400
+Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 304B7B1;
+        Mon, 26 Jun 2023 14:27:29 -0700 (PDT)
+Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-345b231322fso3380655ab.2;
+        Mon, 26 Jun 2023 14:27:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687814848; x=1690406848;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=avBjJWfibsZdQeCWvAjApLqo6hXIYkVIdlb5U2XqZs0=;
+        b=ZOmn3yroLBzdZxb79yyXHPz65pbqJZXCMkVYVPSZjIOnKeLLjCgQtfldgcS54yGhli
+         r135gVTQT59jjvDxC0YLkjrnRADKDXATWfDj1G3QunSKYS8Sp9wfTDeHH/Ia19bDwiHB
+         +NLiQbpNXx83+wAsGUBa2DxoEXf6AXxLa7y1QfKPO90aWtVGJdDhuEwlDN5P5e7YSb9b
+         jIa5SxIkChnTgtFWeKEPwUw2QqMz2vdBdmUs2JTupfZNN84iZZKXoYUN33N+OZmJ5HpV
+         Az14/qRVv7UFy0jObawifFuZ4LJZIdLcykvN/XEOY1hM1bk32hr5tLQ+yQnk4EKxOjaP
+         EHmg==
+X-Gm-Message-State: AC+VfDyl/gC6qcRVPJzEarhqHPpY6xQee7Rn8TWOlq7mJ7ZEeWkxJc8d
+        bGMLsNUYdd0vDgs6r3eEnZLHiduEEw==
+X-Google-Smtp-Source: ACHHUZ6UkVZjSj1u1k9+RdwdmznVPLiWtyCjlufEfW5+WQVL9ireq9EnVIj4c+KH6q7zFQWZ0WYpVA==
+X-Received: by 2002:a92:d651:0:b0:345:66f5:3404 with SMTP id x17-20020a92d651000000b0034566f53404mr7248388ilp.0.1687814848321;
+        Mon, 26 Jun 2023 14:27:28 -0700 (PDT)
+Received: from robh_at_kernel.org ([199.114.228.113])
+        by smtp.gmail.com with ESMTPSA id f25-20020a056638023900b0042887e69e99sm1996354jaq.95.2023.06.26.14.27.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jun 2023 14:27:27 -0700 (PDT)
+Received: (nullmailer pid 3927531 invoked by uid 1000);
+        Mon, 26 Jun 2023 21:27:26 -0000
+Date:   Mon, 26 Jun 2023 15:27:26 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Luca Weiss <luca.weiss@fairphone.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        AngeloGioacchino Del Regno <kholk11@gmail.com>,
+        Luca Weiss <luca@z3ntu.xyz>, Vinod Koul <vkoul@kernel.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Subject: Re: [PATCH 1/7] dt-bindings: qcom: Allow SoC names ending in "pro"
+Message-ID: <20230626212726.GA3924052-robh@kernel.org>
+References: <20230626-topic-bindingsfixups-v1-0-254ae8642e69@linaro.org>
+ <20230626-topic-bindingsfixups-v1-1-254ae8642e69@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-From:   =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
-To:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        Andi Shyti <andi.shyti@kernel.org>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230626-topic-bindingsfixups-v1-1-254ae8642e69@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
----
- drivers/i2c/busses/i2c-at91-core.c   | 24 ++++++++++++------------
- drivers/i2c/busses/i2c-at91-master.c |  4 ++--
- drivers/i2c/busses/i2c-at91.h        |  2 +-
- 3 files changed, 15 insertions(+), 15 deletions(-)
+On Mon, Jun 26, 2023 at 10:00:23PM +0200, Konrad Dybcio wrote:
+> There are a couple of SoCs whose names end in "pro", with the currently-
+> upstream examples being msm8974pro and msm8996pro. Allow such suffix in
+> SoC-specific compatibles.
+> 
+> Fixes: 5aa332c5e7ca ("dt-bindings: qcom: document preferred compatible naming")
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/arm/qcom-soc.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/qcom-soc.yaml b/Documentation/devicetree/bindings/arm/qcom-soc.yaml
+> index e333ec4a9c5f..607a1cf1ef94 100644
+> --- a/Documentation/devicetree/bindings/arm/qcom-soc.yaml
+> +++ b/Documentation/devicetree/bindings/arm/qcom-soc.yaml
+> @@ -31,7 +31,7 @@ properties:
+>    compatible:
+>      oneOf:
+>        # Preferred naming style for compatibles of SoC components:
+> -      - pattern: "^qcom,(apq|ipq|mdm|msm|qcm|qcs|sa|sc|sdm|sdx|sm)[0-9]+-.*$"
+> +      - pattern: "^qcom,(apq|ipq|mdm|msm|qcm|qcs|sa|sc|sdm|sdx|sm)[0-9]+(pro|)-.*$"
 
-diff --git a/drivers/i2c/busses/i2c-at91-core.c b/drivers/i2c/busses/i2c-at91-core.c
-index 05ad3bc3578a..4d484e231371 100644
---- a/drivers/i2c/busses/i2c-at91-core.c
-+++ b/drivers/i2c/busses/i2c-at91-core.c
-@@ -62,28 +62,28 @@ void at91_init_twi_bus(struct at91_twi_dev *dev)
- 		at91_init_twi_bus_master(dev);
- }
- 
--static struct at91_twi_pdata at91rm9200_config = {
-+static const struct at91_twi_pdata at91rm9200_config = {
- 	.clk_max_div = 5,
- 	.clk_offset = 3,
- 	.has_unre_flag = true,
- };
- 
--static struct at91_twi_pdata at91sam9261_config = {
-+static const struct at91_twi_pdata at91sam9261_config = {
- 	.clk_max_div = 5,
- 	.clk_offset = 4,
- };
- 
--static struct at91_twi_pdata at91sam9260_config = {
-+static const struct at91_twi_pdata at91sam9260_config = {
- 	.clk_max_div = 7,
- 	.clk_offset = 4,
- };
- 
--static struct at91_twi_pdata at91sam9g20_config = {
-+static const struct at91_twi_pdata at91sam9g20_config = {
- 	.clk_max_div = 7,
- 	.clk_offset = 4,
- };
- 
--static struct at91_twi_pdata at91sam9g10_config = {
-+static const struct at91_twi_pdata at91sam9g10_config = {
- 	.clk_max_div = 7,
- 	.clk_offset = 4,
- };
-@@ -110,19 +110,19 @@ static const struct platform_device_id at91_twi_devtypes[] = {
- };
- 
- #if defined(CONFIG_OF)
--static struct at91_twi_pdata at91sam9x5_config = {
-+static const struct at91_twi_pdata at91sam9x5_config = {
- 	.clk_max_div = 7,
- 	.clk_offset = 4,
- };
- 
--static struct at91_twi_pdata sama5d4_config = {
-+static const struct at91_twi_pdata sama5d4_config = {
- 	.clk_max_div = 7,
- 	.clk_offset = 4,
- 	.has_hold_field = true,
- 	.has_dig_filtr = true,
- };
- 
--static struct at91_twi_pdata sama5d2_config = {
-+static const struct at91_twi_pdata sama5d2_config = {
- 	.clk_max_div = 7,
- 	.clk_offset = 3,
- 	.has_unre_flag = true,
-@@ -134,7 +134,7 @@ static struct at91_twi_pdata sama5d2_config = {
- 	.has_clear_cmd = false,	/* due to errata, CLEAR cmd is not working */
- };
- 
--static struct at91_twi_pdata sam9x60_config = {
-+static const struct at91_twi_pdata sam9x60_config = {
- 	.clk_max_div = 7,
- 	.clk_offset = 3,
- 	.has_unre_flag = true,
-@@ -181,7 +181,7 @@ static const struct of_device_id atmel_twi_dt_ids[] = {
- MODULE_DEVICE_TABLE(of, atmel_twi_dt_ids);
- #endif
- 
--static struct at91_twi_pdata *at91_twi_get_driver_data(
-+static const struct at91_twi_pdata *at91_twi_get_driver_data(
- 					struct platform_device *pdev)
- {
- 	if (pdev->dev.of_node) {
-@@ -189,9 +189,9 @@ static struct at91_twi_pdata *at91_twi_get_driver_data(
- 		match = of_match_node(atmel_twi_dt_ids, pdev->dev.of_node);
- 		if (!match)
- 			return NULL;
--		return (struct at91_twi_pdata *)match->data;
-+		return match->data;
- 	}
--	return (struct at91_twi_pdata *) platform_get_device_id(pdev)->driver_data;
-+	return (const void *) platform_get_device_id(pdev)->driver_data;
- }
- 
- static int at91_twi_probe(struct platform_device *pdev)
-diff --git a/drivers/i2c/busses/i2c-at91-master.c b/drivers/i2c/busses/i2c-at91-master.c
-index c0c35785a0dc..0434aabb66fe 100644
---- a/drivers/i2c/busses/i2c-at91-master.c
-+++ b/drivers/i2c/busses/i2c-at91-master.c
-@@ -32,7 +32,7 @@
- 
- void at91_init_twi_bus_master(struct at91_twi_dev *dev)
- {
--	struct at91_twi_pdata *pdata = dev->pdata;
-+	const struct at91_twi_pdata *pdata = dev->pdata;
- 	u32 filtr = 0;
- 
- 	/* FIFO should be enabled immediately after the software reset */
-@@ -67,7 +67,7 @@ void at91_init_twi_bus_master(struct at91_twi_dev *dev)
- static void at91_calc_twi_clock(struct at91_twi_dev *dev)
- {
- 	int ckdiv, cdiv, div, hold = 0, filter_width = 0;
--	struct at91_twi_pdata *pdata = dev->pdata;
-+	const struct at91_twi_pdata *pdata = dev->pdata;
- 	int offset = pdata->clk_offset;
- 	int max_ckdiv = pdata->clk_max_div;
- 	struct i2c_timings timings, *t = &timings;
-diff --git a/drivers/i2c/busses/i2c-at91.h b/drivers/i2c/busses/i2c-at91.h
-index 942e9c3973bb..f0c80b89e502 100644
---- a/drivers/i2c/busses/i2c-at91.h
-+++ b/drivers/i2c/busses/i2c-at91.h
-@@ -147,7 +147,7 @@ struct at91_twi_dev {
- 	unsigned transfer_status;
- 	struct i2c_adapter adapter;
- 	unsigned twi_cwgr_reg;
--	struct at91_twi_pdata *pdata;
-+	const struct at91_twi_pdata *pdata;
- 	bool use_dma;
- 	bool use_alt_cmd;
- 	bool recv_len_abort;
--- 
-2.39.2
+"(pro)?" would be slightly better than "(pro|)" IMO.
 
+Acked-by: Rob Herring <robh@kernel.org>
+
+>        - pattern: "^qcom,(sa|sc)8[0-9]+[a-z][a-z]?-.*$"
+>  
+>        # Legacy namings - variations of existing patterns/compatibles are OK,
+> 
+> -- 
+> 2.41.0
+> 
