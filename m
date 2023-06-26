@@ -2,78 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59E7273EB56
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 21:58:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1FEB73EB77
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 22:05:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbjFZT6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 15:58:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50592 "EHLO
+        id S229729AbjFZUAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 16:00:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjFZT6W (ORCPT
+        with ESMTP id S229516AbjFZUAl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 15:58:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D17DFE7B;
-        Mon, 26 Jun 2023 12:58:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6036C60F52;
-        Mon, 26 Jun 2023 19:58:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2CE4C433C8;
-        Mon, 26 Jun 2023 19:58:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687809500;
-        bh=ldB+MatWlVsNCLZ0mR+Yj//TS0gmW2dKp23REUfd6MU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=u697IQCtWc7mPfP5qNsMU2uWqPdgmV1hJ9wSJ61mq7qWHcO0fSuOP1QJw+GQeHeJH
-         yz3fVEY9D+3Y2y0raE7vu687ZMFBltGJd3Hbyz5/t59QlAG5BYc6OUe21J6p2bNMVf
-         OFGKjOGg70AKDzOnVr+EfgC/iuPcBNc0vy+l4Bv2s2efBnkJHfTS8DYof2UJupzYOc
-         FS4iuCYuKTQ+vdUlmXxHzPYvwMhsLdhSlxZx2f6bZWgp4nNp2LWcKxhCIuuJAQb1oC
-         e1bDUJvq8rLTipdMQC6SN1Xtd48ku1uo9jnnBTMDyzo9BLxP76wRPO06DnbgNaGR/F
-         w1PG4+jOG5OGw==
-Date:   Mon, 26 Jun 2023 12:58:18 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Abel Wu <wuyun.abel@bytedance.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Ahern <dsahern@kernel.org>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Yu Zhao <yuzhao@google.com>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Martin KaFai Lau <martin.lau@kernel.org>,
-        Alexander Mikhalitsyn <alexander@mihalicyn.com>,
-        Breno Leitao <leitao@debian.org>,
-        David Howells <dhowells@redhat.com>,
-        Jason Xing <kernelxing@tencent.com>,
-        Xin Long <lucien.xin@gmail.com>,
-        Michal Hocko <mhocko@suse.com>,
-        linux-kernel@vger.kernel.org (open list),
-        netdev@vger.kernel.org (open list:NETWORKING [GENERAL]),
-        cgroups@vger.kernel.org (open list:CONTROL GROUP - MEMORY RESOURCE
-        CONTROLLER (MEMCG)),
-        linux-mm@kvack.org (open list:CONTROL GROUP - MEMORY RESOURCE
-        CONTROLLER (MEMCG))
-Subject: Re: [PATCH net-next 1/2] net-memcg: Scopify the indicators of
- sockmem pressure
-Message-ID: <20230626125818.74193aea@kernel.org>
-In-Reply-To: <20230625142820.47185-1-wuyun.abel@bytedance.com>
-References: <20230625142820.47185-1-wuyun.abel@bytedance.com>
+        Mon, 26 Jun 2023 16:00:41 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B4DB170D
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 13:00:40 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4fb761efa7aso1946605e87.0
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 13:00:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687809638; x=1690401638;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MsirXe6F0XKcfpoI+mPFBbyk07gurBlFwHC8qBI/sU8=;
+        b=Q/WGo3McwEk59cszkwupzJcRO9xyOSy+utaXON8ApCzhym4ChsXJ+rT3OtJE6MFFgj
+         nUx9OD3TkzQ9SoiT2JtOIXza8B8ItW+jxeWsZkvxazdSyLI4FBg4zRkxxPe87QlYlCIE
+         KIN3Zu2EcQO7Vhs42Lzp1G7oqcwBY+JWidRD6hryz6WSpc3dvq6CYsRJ+sTfWTnjOAdh
+         6Wwl7NCMImN/vPA9CgUREEhiSKFSX64C0VfhOzc83GI/6g7akuzYIpRWz8m3rTlJuvrR
+         lJKV2CvCJeG8LXW9py4y3kmcyyfN11kAtUR3yOFwhz22u4USKIMTn3ukpIjju31TYt+E
+         fmLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687809638; x=1690401638;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MsirXe6F0XKcfpoI+mPFBbyk07gurBlFwHC8qBI/sU8=;
+        b=dtDbgGwTIrMVvOwoQNqAg6+wkxr5xB38TyFEhgT046XKq3OrG+bFDba9hegLagEySq
+         nVtXk+A16x6ESFWMK5Xl/omf8XEEGnIa963pO8FP4oJCIogEvdXXwve7wX8MLDGiX26u
+         awFN8gfqtckrztLcPz7lC0w7QsbOBmrkB7fF7TNpmE0G9nktDfR7LamwRINOlbGwBRMD
+         x8X6XjElAEGIiddmGRLkHw+QNU7UkzX++glrtNlpO7TlONJ7Tq201xROpTABjF/htxvS
+         t8z9w71J+260JzVIjUzRxqk2MqMeiI9abxCz1onOs4ixWP4/18xqolxm1zb/+aQ6rKUp
+         hmDw==
+X-Gm-Message-State: AC+VfDyu3H2eouziQt4a3R0ySh0eMwgNIAwv3cwYnIIJfelb5J50LJLq
+        pZTi4934+P9fh+nPIYZNM1kQZQ==
+X-Google-Smtp-Source: ACHHUZ4ATesustUL/xAV8LHcUVMG7FtETK7Yna7fm5Eluo+f67Ecu8epVQdSXXT6d2/XgnTgdEGgNQ==
+X-Received: by 2002:a05:6512:3483:b0:4fb:78a0:dd34 with SMTP id v3-20020a056512348300b004fb78a0dd34mr1564096lfr.42.1687809638646;
+        Mon, 26 Jun 2023 13:00:38 -0700 (PDT)
+Received: from [192.168.1.101] (abyk179.neoplus.adsl.tpnet.pl. [83.9.30.179])
+        by smtp.gmail.com with ESMTPSA id o11-20020ac2494b000000b004fb74cb9670sm628082lfi.125.2023.06.26.13.00.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jun 2023 13:00:38 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH 0/7] random msm bindings fixes
+Date:   Mon, 26 Jun 2023 22:00:22 +0200
+Message-Id: <20230626-topic-bindingsfixups-v1-0-254ae8642e69@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-B4-Tracking: v=1; b=H4sIAFbumWQC/x2NSwrDMAwFrxK0rsC124T2KqULf5REEBRjJaUQc
+ veKLmd4wztAqTEpPLsDGn1YeRWD66WDPEeZCLkYg3c+uN73uK2VMyaWwjLpyN+9Kj5CGcJQ0uj
+ uN7A0RSVMLUqeLZZ9WUzWRjb/f73e5/kDVNEqdHsAAAA=
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Luca Weiss <luca.weiss@fairphone.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        AngeloGioacchino Del Regno <kholk11@gmail.com>,
+        Luca Weiss <luca@z3ntu.xyz>, Vinod Koul <vkoul@kernel.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1687809636; l=1303;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=3wIlxdysNDx1S4zitAfCftwhXW5BSqJ8vJhHAM8IWMs=;
+ b=ITP1xvCp9uv79ZAHCNFGu/TF4jdTjkj3S4K0O8ZBP20yFazofvjfaai3MusmfJj4Mr68VbtW7
+ RDY+A2lYeZZB6zsQ/weoSrwbw3yNzIFFmu+C+3aXMr1tSu77O5Bjwtm
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,22 +98,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 25 Jun 2023 22:28:10 +0800 Abel Wu wrote:
-> Now there are two indicators of socket memory pressure sit inside
-> struct mem_cgroup, socket_pressure and tcpmem_pressure.
-> 
-> When in legacy mode aka. cgroupv1, the socket memory is charged
-> into a separate counter memcg->tcpmem rather than ->memory, so
-> the reclaim pressure of the memcg has nothing to do with socket's
-> pressure at all. While for default mode, the ->tcpmem is simply
-> not used.
-> 
-> So {socket,tcpmem}_pressure are only used in default/legacy mode
-> respectively. This patch fixes the pieces of code that make mixed
-> use of both.
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Konrad Dybcio (7):
+      dt-bindings: qcom: Allow SoC names ending in "pro"
+      dt-bindings: remoteproc: qcom,msm8996-mss-pil: Fix 8996 clocks
+      arm64: dts: qcom: pm6150l: Add missing short interrupt
+      arm64: dts: qcom: pm660l: Add missing short interrupt
+      arm64: dts: qcom: pmi8950: Add missing OVP interrupt
+      arm64: dts: qcom: pmi8994: Add missing OVP interrupt
+      arm64: dts: qcom: sc8180x: Add missing 'cache-unified' to L3
 
-The merge window for 6.5 has now started, let's defer this until 6.6.
+ Documentation/devicetree/bindings/arm/qcom-soc.yaml                | 2 +-
+ .../devicetree/bindings/remoteproc/qcom,msm8996-mss-pil.yaml       | 7 +++----
+ arch/arm64/boot/dts/qcom/pm6150l.dtsi                              | 5 +++--
+ arch/arm64/boot/dts/qcom/pm660l.dtsi                               | 5 +++--
+ arch/arm64/boot/dts/qcom/pmi8950.dtsi                              | 5 +++--
+ arch/arm64/boot/dts/qcom/pmi8994.dtsi                              | 5 +++--
+ arch/arm64/boot/dts/qcom/sc8180x.dtsi                              | 1 +
+ 7 files changed, 17 insertions(+), 13 deletions(-)
+---
+base-commit: 3eedd211ad93c322fb360b83a3d76a2c6cd622dc
+change-id: 20230626-topic-bindingsfixups-93d737dbf054
 
-Please repost in ~2 weeks.
+Best regards,
 -- 
-pw-bot: defer
+Konrad Dybcio <konrad.dybcio@linaro.org>
+
