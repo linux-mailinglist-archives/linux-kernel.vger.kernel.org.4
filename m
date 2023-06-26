@@ -2,685 +2,346 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D81D73DD7C
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 13:29:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA46073DD9B
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 13:33:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbjFZL3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 07:29:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33544 "EHLO
+        id S229847AbjFZLdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 07:33:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbjFZL33 (ORCPT
+        with ESMTP id S229629AbjFZLdA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 07:29:29 -0400
-Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF49310D
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 04:29:25 -0700 (PDT)
-X-ASG-Debug-ID: 1687778961-1eb14e179f04ec0001-xx1T2L
-Received: from ZXSHMBX1.zhaoxin.com (ZXSHMBX1.zhaoxin.com [10.28.252.163]) by mx2.zhaoxin.com with ESMTP id 1XUFVM3E7TCnD2CA (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Mon, 26 Jun 2023 19:29:21 +0800 (CST)
-X-Barracuda-Envelope-From: RunaGuo-oc@zhaoxin.com
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.163
-Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX1.zhaoxin.com
- (10.28.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Mon, 26 Jun
- 2023 19:29:21 +0800
-Received: from [10.29.8.9] (10.29.8.9) by zxbjmbx1.zhaoxin.com (10.29.252.163)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Mon, 26 Jun
- 2023 19:29:20 +0800
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.163
-From:   Runa Guo-oc <RunaGuo-oc@zhaoxin.com>
-X-Barracuda-RBL-Trusted-Forwarder: 10.29.8.9
-Subject: Re: [PATCH] Signed-off-by: Runa Guo-oc <RunaGuo-oc@zhaoxin.com>
-References: <1686901766-4928-1-git-send-email-RunaGuo-oc@zhaoxin.com>
- <ccabf88b-2e2c-876d-e47a-8d142e27d638@kernel.org>
-X-ASG-Orig-Subj: Re: [PATCH] Signed-off-by: Runa Guo-oc <RunaGuo-oc@zhaoxin.com>
-To:     Damien Le Moal <dlemoal@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-ide@vger.kernel.org>
-CC:     <CobeChen@zhaoxin.com>, <TimGuo@zhaoxin.com>,
-        <TonyWWang@zhaoxin.com>, <LeoLiu@zhaoxin.com>,
-        <RunaGuo@zhaoxin.com>
-Message-ID: <70853f13-f74e-d9bb-89f7-4c804f1fa8a4@zhaoxin.com>
-Date:   Mon, 26 Jun 2023 19:29:19 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        Mon, 26 Jun 2023 07:33:00 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E27610C;
+        Mon, 26 Jun 2023 04:32:58 -0700 (PDT)
+Received: from localhost.localdomain (unknown [182.179.162.32])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id A71D96607093;
+        Mon, 26 Jun 2023 12:32:45 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1687779176;
+        bh=Z4u0r3sq+rqbYCljYp+tCHxSPkTg1bF2AyNC01d4kYA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=AvGKgDFjGy8Kxbf4pOfa9oH/i0OHf7eMb/cWwC0MOy0ifVW9Dv5BR24k+Mh9uqO85
+         fBckCaKssm6UwQ3ghVbWt8gPSuhswmNMM6F2N79dZnTlPQRJ+YS8mN2DIMiGsgAa+p
+         mrvTRsqGH01FVsTdWiVhTTdFxgQGLDfVBRx8WqV3qtggqA4BuT/T209ZdGam48Skpa
+         F/oE4RKJlUEcKieYv6ZNr3uJVY2SSdCkA3hl3Pp+RM1thENC5YG6Q2gowawm8hHBnz
+         bTlEVjst7idNTxuYkni5tEPaWe4VHPOyKYoXvhInweOBl1WINH77HHa2UgdEDg/wEI
+         edp8TQKQD8o0Q==
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+To:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <emmir@google.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@Oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: [PATCH v21 0/5] Implement IOCTL to get and optionally clear info about PTEs
+Date:   Mon, 26 Jun 2023 16:31:51 +0500
+Message-Id: <20230626113156.1274521-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-In-Reply-To: <ccabf88b-2e2c-876d-e47a-8d142e27d638@kernel.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.29.8.9]
-X-ClientProxiedBy: ZXSHCAS1.zhaoxin.com (10.28.252.161) To
- zxbjmbx1.zhaoxin.com (10.29.252.163)
-X-Barracuda-Connect: ZXSHMBX1.zhaoxin.com[10.28.252.163]
-X-Barracuda-Start-Time: 1687778961
-X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
-X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at zhaoxin.com
-X-Barracuda-Scan-Msg-Size: 17197
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
-X-Barracuda-Spam-Score: -2.02
-X-Barracuda-Spam-Status: No, SCORE=-2.02 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.110558
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URI_TRY_3LD autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/6/16 16:34, Damien Le Moal wrote:
-> On 6/16/23 16:49, Runa Guo-oc wrote:
->> [PATCH] ata:sata_zhaoxin: Add support for ZhaoXin Serial ATA
-> 
-> Broken patch: the email subject is your SoB instead of the above line, which
-> should not be part of the message (it should be the subject). Please reformat
-> and resend.
-> 
+Changes in v21:
+- Abort walk instead of returning error if WP is to be performed on
+  partial hugetlb
 
-Okay.
+*Changes in v20*
+- Correct PAGE_IS_FILE and add PAGE_IS_PFNZERO
 
->>
->> Add ZhaoXin Serial ATA support for ZhaoXin CUPs.
-> 
-> What is "ZhaoXin" ?
+*Changes in v19*
+- Minor changes and interface updates
 
-Zhaoxin is a Chinese company that has mastered the core technology
-of independent general-purpose processors and its system platform chips,
-and is committed to providing users with efficient, compatible and secure
-independent general-purpose processors, chipsets and other products.
-for more information, you can visit here: https://www.zhaoxin.com/.
+*Changes in v18*
+- Rebase on top of next-20230613
+- Minor updates
 
-> And what is "CUPs" ? Please spell this out.
-> 
+*Changes in v17*
+- Rebase on top of next-20230606
+- Minor improvements in PAGEMAP_SCAN IOCTL patch
 
-Yes, this is  a spelling error.
+*Changes in v16*
+- Fix a corner case
+- Add exclusive PM_SCAN_OP_WP back
 
->>
->> Signed-off-by: Runa Guo-oc <RunaGuo-oc@zhaoxin.com>
->> ---
->>  drivers/ata/Kconfig        |   8 +
->>  drivers/ata/Makefile       |   1 +
->>  drivers/ata/sata_zhaoxin.c | 384 +++++++++++++++++++++++++++++++++++++++++++++
->>  3 files changed, 393 insertions(+)
->>  create mode 100644 drivers/ata/sata_zhaoxin.c
->>
->> diff --git a/drivers/ata/Kconfig b/drivers/ata/Kconfig
->> index 42b51c9..ae327f3 100644
->> --- a/drivers/ata/Kconfig
->> +++ b/drivers/ata/Kconfig
->> @@ -553,6 +553,14 @@ config SATA_VITESSE
->>  
->>  	  If unsure, say N.
->>  
->> +config SATA_ZHAOXIN
->> +	tristate "ZhaoXin SATA support"
->> +	depends on PCI
->> +	help
->> +	  This option enables support for ZhaoXin Serial ATA.
->> +
->> +	  If unsure, say N.
->> +
->>  comment "PATA SFF controllers with BMDMA"
->>  
->>  config PATA_ALI
->> diff --git a/drivers/ata/Makefile b/drivers/ata/Makefile
->> index 20e6645..4b84669 100644
->> --- a/drivers/ata/Makefile
->> +++ b/drivers/ata/Makefile
->> @@ -45,6 +45,7 @@ obj-$(CONFIG_SATA_SIL)		+= sata_sil.o
->>  obj-$(CONFIG_SATA_SIS)		+= sata_sis.o
->>  obj-$(CONFIG_SATA_SVW)		+= sata_svw.o
->>  obj-$(CONFIG_SATA_ULI)		+= sata_uli.o
->> +obj-$(CONFIG_SATA_ZHAOXIN)	+= sata_zhaoxin.o
-> 
-> Please sort this alphabetically.
-> 
+*Changes in v15*
+- Build fix (Add missed build fix in RESEND)
 
-Like this?
-obj-$(CONFIG_SATA_VITESSE)	        += sata_vsc.o
-obj-$(CONFIG_SATA_ZHAOXIN)	        += sata_zhaoxin.o
+*Changes in v14*
+- Fix build error caused by #ifdef added at last minute in some configs
 
->>  obj-$(CONFIG_SATA_VIA)		+= sata_via.o
->>  obj-$(CONFIG_SATA_VITESSE)	+= sata_vsc.o
->>  
->> diff --git a/drivers/ata/sata_zhaoxin.c b/drivers/ata/sata_zhaoxin.c
->> new file mode 100644
->> index 0000000..ef8c73a
->> --- /dev/null
->> +++ b/drivers/ata/sata_zhaoxin.c
->> @@ -0,0 +1,384 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + *  sata_zhaoxin.c - ZhaoXin Serial ATA controllers
->> + */
->> +
->> +#include <linux/kernel.h>
->> +#include <linux/module.h>
->> +#include <linux/pci.h>
->> +#include <linux/blkdev.h>
->> +#include <linux/delay.h>
->> +#include <linux/device.h>
->> +#include <scsi/scsi.h>
->> +#include <scsi/scsi_cmnd.h>
->> +#include <scsi/scsi_host.h>
->> +#include <linux/libata.h>
->> +
->> +#define DRV_NAME	"sata_zx"
->> +#define DRV_VERSION	"2.6.1"
-> 
-> Version is not needed. The driver comes with the kernel...
-> 
+*Changes in v13*
+- Rebase on top of next-20230414
+- Give-up on using uffd_wp_range() and write new helpers, flush tlb only
+  once
 
-Right, I'll remove it next time.
+*Changes in v12*
+- Update and other memory types to UFFD_FEATURE_WP_ASYNC
+- Rebaase on top of next-20230406
+- Review updates
 
->> +
->> +enum board_ids_enum {
->> +	zx100s,
->> +};
->> +
->> +enum {
->> +	SATA_CHAN_ENAB		= 0x40, /* SATA channel enable */
->> +	SATA_INT_GATE		= 0x41, /* SATA interrupt gating */
->> +	SATA_NATIVE_MODE	= 0x42, /* Native mode enable */
->> +	PATA_UDMA_TIMING	= 0xB3, /* PATA timing for DMA/ cable detect */
->> +	PATA_PIO_TIMING		= 0xAB, /* PATA timing register */
->> +
->> +	PORT0			= (1 << 1),
->> +	PORT1			= (1 << 0),
->> +	ALL_PORTS		= PORT0 | PORT1,
->> +
->> +	NATIVE_MODE_ALL		= (1 << 7) | (1 << 6) | (1 << 5) | (1 << 4),
->> +
->> +	SATA_EXT_PHY		= (1 << 6), /* 0==use PATA, 1==ext phy */
->> +};
->> +
->> +static int zx_init_one(struct pci_dev *pdev, const struct pci_device_id *ent);
->> +static int zx_scr_read(struct ata_link *link, unsigned int scr, u32 *val);
->> +static int zx_scr_write(struct ata_link *link, unsigned int scr, u32 val);
->> +static int zx_hardreset(struct ata_link *link, unsigned int *class,
->> +				unsigned long deadline);
->> +
->> +static void zx_tf_load(struct ata_port *ap, const struct ata_taskfile *tf);
->> +
->> +static const struct pci_device_id zx_pci_tbl[] = {
->> +	{ PCI_VDEVICE(ZHAOXIN, 0x9002), zx100s },
->> +	{ PCI_VDEVICE(ZHAOXIN, 0x9003), zx100s },
->> +
-> 
-> Blank line not needed.
->>> +	{ }	/* terminate list */
-> 
-> Comment not needed.
-> 
+*Changes in v11*
+- Rebase on top of next-20230307
+- Base patches on UFFD_FEATURE_WP_UNPOPULATED
+- Do a lot of cosmetic changes and review updates
+- Remove ENGAGE_WP + !GET operation as it can be performed with
+  UFFDIO_WRITEPROTECT
 
-The purpose of writing like this is convenient to add new device IDs in
-the future.
-Considering that this is not likely, remove it also fine.
+*Changes in v10*
+- Add specific condition to return error if hugetlb is used with wp
+  async
+- Move changes in tools/include/uapi/linux/fs.h to separate patch
+- Add documentation
 
->> +};
->> +
->> +static struct pci_driver zx_pci_driver = {
->> +	.name			= DRV_NAME,
->> +	.id_table		= zx_pci_tbl,
->> +	.probe			= zx_init_one,
->> +#ifdef CONFIG_PM_SLEEP
->> +	.suspend		= ata_pci_device_suspend,
->> +	.resume			= ata_pci_device_resume,
->> +#endif
->> +	.remove			= ata_pci_remove_one,
->> +};
->> +
->> +static struct scsi_host_template zx_sht = {
->> +	ATA_BMDMA_SHT(DRV_NAME),
->> +};
->> +
->> +static struct ata_port_operations zx_base_ops = {
->> +	.inherits		= &ata_bmdma_port_ops,
->> +	.sff_tf_load		= zx_tf_load,
->> +};
->> +
->> +static struct ata_port_operations zx_ops = {
->> +	.inherits		= &zx_base_ops,
->> +	.hardreset		= zx_hardreset,
->> +	.scr_read		= zx_scr_read,
->> +	.scr_write		= zx_scr_write,
->> +};
->> +
->> +static struct ata_port_info zx100s_port_info = {
->> +	.flags		= ATA_FLAG_SATA | ATA_FLAG_SLAVE_POSS,
->> +	.pio_mask	= ATA_PIO4,
->> +	.mwdma_mask	= ATA_MWDMA2,
->> +	.udma_mask	= ATA_UDMA6,
->> +	.port_ops	= &zx_ops,
->> +};
->> +
->> +
-> 
-> Extra blank line not needed.
-> 
+*Changes in v9:*
+- Correct fault resolution for userfaultfd wp async
+- Fix build warnings and errors which were happening on some configs
+- Simplify pagemap ioctl's code
 
-I see
+*Changes in v8:*
+- Update uffd async wp implementation
+- Improve PAGEMAP_IOCTL implementation
 
->> +static int zx_hardreset(struct ata_link *link, unsigned int *class,
->> +				unsigned long deadline)
-> 
-> Please align the arguments together.
-> 
+*Changes in v7:*
+- Add uffd wp async
+- Update the IOCTL to use uffd under the hood instead of soft-dirty
+  flags
 
-Okay.
+*Motivation*
+The real motivation for adding PAGEMAP_SCAN IOCTL is to emulate Windows
+GetWriteWatch() syscall [1]. The GetWriteWatch{} retrieves the addresses of
+the pages that are written to in a region of virtual memory.
 
->> +{
->> +	int rc;
->> +
->> +	rc = sata_std_hardreset(link, class, deadline);
->> +	if (!rc || rc == -EAGAIN) {
->> +		struct ata_port *ap = link->ap;
->> +		int pmp = link->pmp;
->> +		int tmprc;
->> +
->> +		if (pmp) {
->> +			ap->ops->sff_dev_select(ap, pmp);
->> +			tmprc = ata_sff_wait_ready(&ap->link, deadline);
->> +		} else {
->> +			tmprc = ata_sff_wait_ready(link, deadline);
->> +		}
->> +		if (tmprc)
->> +			ata_link_err(link, "COMRESET failed for wait (errno=%d)\n",
->> +					rc);
->> +		else
->> +			ata_link_err(link, "wait for bsy success\n");
-> 
-> Remove this. If it worked, be silent.
-> 
+This syscall is used in Windows applications and games etc. This syscall is
+being emulated in pretty slow manner in userspace. Our purpose is to
+enhance the kernel such that we translate it efficiently in a better way.
+Currently some out of tree hack patches are being used to efficiently
+emulate it in some kernels. We intend to replace those with these patches.
+So the whole gaming on Linux can effectively get benefit from this. It
+means there would be tons of users of this code.
 
-Okay.
+CRIU use case [2] was mentioned by Andrei and Danylo:
+> Use cases for migrating sparse VMAs are binaries sanitized with ASAN,
+> MSAN or TSAN [3]. All of these sanitizers produce sparse mappings of
+> shadow memory [4]. Being able to migrate such binaries allows to highly
+> reduce the amount of work needed to identify and fix post-migration
+> crashes, which happen constantly.
 
->> +
->> +		ata_link_err(link, "COMRESET success (errno=%d) ap=%d link %d\n",
->> +					rc, link->ap->port_no, link->pmp);
->> +	} else {
->> +		ata_link_err(link, "COMRESET failed (errno=%d) ap=%d link %d\n",
->> +					rc, link->ap->port_no, link->pmp);
-> 
-> Reverse the if condition and exit early for this case. That will make the
-> function code nicer. And you can drop the error message as well since
-> sata_std_hardreset() prints one.
-> 
+Andrei's defines the following uses of this code:
+* it is more granular and allows us to track changed pages more
+  effectively. The current interface can clear dirty bits for the entire
+  process only. In addition, reading info about pages is a separate
+  operation. It means we must freeze the process to read information
+  about all its pages, reset dirty bits, only then we can start dumping
+  pages. The information about pages becomes more and more outdated,
+  while we are processing pages. The new interface solves both these
+  downsides. First, it allows us to read pte bits and clear the
+  soft-dirty bit atomically. It means that CRIU will not need to freeze
+  processes to pre-dump their memory. Second, it clears soft-dirty bits
+  for a specified region of memory. It means CRIU will have actual info
+  about pages to the moment of dumping them.
+* The new interface has to be much faster because basic page filtering
+  is happening in the kernel. With the old interface, we have to read
+  pagemap for each page.
 
-Yes, I agree with your. I'll adjust the above codes like these?
+*Implementation Evolution (Short Summary)*
+From the definition of GetWriteWatch(), we feel like kernel's soft-dirty
+feature can be used under the hood with some additions like:
+* reset soft-dirty flag for only a specific region of memory instead of
+clearing the flag for the entire process
+* get and clear soft-dirty flag for a specific region atomically
 
-if(!rc || rc == -EAGAIN){
-                struct ata_port *ap = link->ap;
-                int pmp = link->pmp;
-                int tmprc;
-                if(pmp){
-                        ap->ops->sff_dev_select(ap,pmp);
-                        tmprc=ata_sff_wait_ready(&ap->link,deadline);
-                }else
-                        tmprc=ata_sff_wait_ready(link,deadline);
+So we decided to use ioctl on pagemap file to read or/and reset soft-dirty
+flag. But using soft-dirty flag, sometimes we get extra pages which weren't
+even written. They had become soft-dirty because of VMA merging and
+VM_SOFTDIRTY flag. This breaks the definition of GetWriteWatch(). We were
+able to by-pass this short coming by ignoring VM_SOFTDIRTY until David
+reported that mprotect etc messes up the soft-dirty flag while ignoring
+VM_SOFTDIRTY [5]. This wasn't happening until [6] got introduced. We
+discussed if we can revert these patches. But we could not reach to any
+conclusion. So at this point, I made couple of tries to solve this whole
+VM_SOFTDIRTY issue by correcting the soft-dirty implementation:
+* [7] Correct the bug fixed wrongly back in 2014. It had potential to cause
+regression. We left it behind.
+* [8] Keep a list of soft-dirty part of a VMA across splits and merges. I
+got the reply don't increase the size of the VMA by 8 bytes.
 
-                if(tmprc)
-                        ata_link_err(link,"COMRESET failed for
-wait(errno=%d)\n",rc);
+At this point, we left soft-dirty considering it is too much delicate and
+userfaultfd [9] seemed like the only way forward. From there onward, we
+have been basing soft-dirty emulation on userfaultfd wp feature where
+kernel resolves the faults itself when WP_ASYNC feature is used. It was
+straight forward to add WP_ASYNC feature in userfautlfd. Now we get only
+those pages dirty or written-to which are really written in reality. (PS
+There is another WP_UNPOPULATED userfautfd feature is required which is
+needed to avoid pre-faulting memory before write-protecting [9].)
 
-                ata_link_err(link,"COMRESET success (errno=%d) ap=%d
-link%d\n",
-                                  rc,link->ap->port_no,link->pmp);
+All the different masks were added on the request of CRIU devs to create
+interface more generic and better.
 
->> +	}
->> +	return rc;
->> +}
->> +
->> +static int zx_scr_read(struct ata_link *link, unsigned int scr, u32 *val)
->> +{
->> +	static const u8 ipm_tbl[] = { 1, 2, 6, 0 };
->> +	struct pci_dev *pdev = to_pci_dev(link->ap->host->dev);
->> +	int slot = 2 * link->ap->port_no + link->pmp;
->> +	u32 v = 0;
->> +	u8 raw;
->> +
->> +	switch (scr) {
->> +	case SCR_STATUS:
->> +		pci_read_config_byte(pdev, 0xA0 + slot, &raw);
->> +
->> +		/* read the DET field, bit0 and 1 of the config byte */
->> +		v |= raw & 0x03;
->> +
->> +		/* read the SPD field, bit4 of the configure byte */
->> +		v |= raw & 0x30;
->> +
->> +		/* read the IPM field, bit2 and 3 of the config byte */
->> +		v |= ((ipm_tbl[(raw >> 2) & 0x3])<<8);
->> +		break;
->> +
->> +	case SCR_ERROR:
->> +		/* devices other than 5287 uses 0xA8 as base */
->> +		WARN_ON(pdev->device != 0x9002 && pdev->device != 0x9003);
->> +		pci_write_config_byte(pdev, 0x42, slot);
->> +		pci_read_config_dword(pdev, 0xA8, &v);
->> +		break;
->> +
->> +	case SCR_CONTROL:
->> +		pci_read_config_byte(pdev, 0xA4 + slot, &raw);
->> +
->> +		/* read the DET field, bit0 and bit1 */
->> +		v |= ((raw & 0x02) << 1) | (raw & 0x01);
->> +
->> +		/* read the IPM field, bit2 and bit3 */
->> +		v |= ((raw >> 2) & 0x03) << 8;
->> +
-> 
-> remove this blank line.
-> 
+[1] https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-getwritewatch
+[2] https://lore.kernel.org/all/20221014134802.1361436-1-mdanylo@google.com
+[3] https://github.com/google/sanitizers
+[4] https://github.com/google/sanitizers/wiki/AddressSanitizerAlgorithm#64-bit
+[5] https://lore.kernel.org/all/bfcae708-db21-04b4-0bbe-712badd03071@redhat.com
+[6] https://lore.kernel.org/all/20220725142048.30450-1-peterx@redhat.com/
+[7] https://lore.kernel.org/all/20221122115007.2787017-1-usama.anjum@collabora.com
+[8] https://lore.kernel.org/all/20221220162606.1595355-1-usama.anjum@collabora.com
+[9] https://lore.kernel.org/all/20230306213925.617814-1-peterx@redhat.com
+[10] https://lore.kernel.org/all/20230125144529.1630917-1-mdanylo@google.com
 
-Okay.
+* Original Cover letter from v8*
+Hello,
 
->> +		break;
->> +
->> +	default:
->> +		return -EINVAL;
->> +	}
->> +
->> +	*val = v;
->> +	return 0;
->> +}
->> +
->> +static int zx_scr_write(struct ata_link *link, unsigned int scr, u32 val)
->> +{
->> +	struct pci_dev *pdev = to_pci_dev(link->ap->host->dev);
->> +	int slot = 2 * link->ap->port_no + link->pmp;
->> +	u32 v = 0;
->> +
->> +	WARN_ON(pdev == NULL);
-> 
-> Warning about a null pointer and still dereferenceing it below is useless. The
-> kernel will crash... This should not happen, right ? So remove this.
-> 
+Note:
+Soft-dirty pages and pages which have been written-to are synonyms. As
+kernel already has soft-dirty feature inside which we have given up to
+use, we are using written-to terminology while using UFFD async WP under
+the hood.
 
-Okay.
+This IOCTL, PAGEMAP_SCAN on pagemap file can be used to get and/or clear
+the info about page table entries. The following operations are
+supported in this ioctl:
+- Get the information if the pages have been written-to (PAGE_IS_WRITTEN),
+  file mapped (PAGE_IS_FILE), present (PAGE_IS_PRESENT) or swapped
+  (PAGE_IS_SWAPPED).
+- Write-protect the pages (PAGEMAP_WP_ENGAGE) to start finding which
+  pages have been written-to.
+- Find pages which have been written-to and write protect the pages
+  (atomic PAGE_IS_WRITTEN + PAGEMAP_WP_ENGAGE)
 
->> +
->> +	switch (scr) {
->> +	case SCR_ERROR:
->> +		/* devices 0x9002 uses 0xA8 as base */
->> +		WARN_ON(pdev->device != 0x9002 && pdev->device != 0x9003);
->> +		pci_write_config_byte(pdev, 0x42, slot);
->> +		pci_write_config_dword(pdev, 0xA8, val);
->> +		return 0;
->> +
->> +	case SCR_CONTROL:
->> +		/* set the DET field */
->> +		v |= ((val & 0x4) >> 1) | (val & 0x1);
->> +
->> +		/* set the IPM field */
->> +		v |= ((val >> 8) & 0x3) << 2;
->> +
->> +
->> +		pci_write_config_byte(pdev, 0xA4 + slot, v);
->> +
->> +
-> 
-> Way too many blank lines.
-> 
+It is possible to find and clear soft-dirty pages entirely in userspace.
+But it isn't efficient:
+- The mprotect and SIGSEGV handler for bookkeeping
+- The userfaultfd wp (synchronous) with the handler for bookkeeping
 
-I see
+Some benchmarks can be seen here[1]. This series adds features that weren't
+present earlier:
+- There is no atomic get soft-dirty/Written-to status and clear present in
+  the kernel.
+- The pages which have been written-to can not be found in accurate way.
+  (Kernel's soft-dirty PTE bit + sof_dirty VMA bit shows more soft-dirty
+  pages than there actually are.)
 
->> +		return 0;
->> +
->> +	default:
->> +		return -EINVAL;
->> +	}
->> +}
->> +
->> +
->> +/**
->> + *	zx_tf_load - send taskfile registers to host controller
->> + *	@ap: Port to which output is sent
->> + *	@tf: ATA taskfile register set
->> + *
->> + *	Outputs ATA taskfile to standard ATA host controller.
->> + *
->> + *	This is to fix the internal bug of zx chipsets, which will
->> + *	reset the device register after changing the IEN bit on ctl
->> + *	register.
->> + */
->> +static void zx_tf_load(struct ata_port *ap, const struct ata_taskfile *tf)
->> +{
->> +	struct ata_taskfile ttf;
->> +
->> +	if (tf->ctl != ap->last_ctl)  {
->> +		ttf = *tf;
->> +		ttf.flags |= ATA_TFLAG_DEVICE;
->> +		tf = &ttf;
-> 
-> This is very strange... Why the need for the extra local copy ? A comment would
-> be nice.
-> 
+Historically, soft-dirty PTE bit tracking has been used in the CRIU
+project. The procfs interface is enough for finding the soft-dirty bit
+status and clearing the soft-dirty bit of all the pages of a process.
+We have the use case where we need to track the soft-dirty PTE bit for
+only specific pages on-demand. We need this tracking and clear mechanism
+of a region of memory while the process is running to emulate the
+getWriteWatch() syscall of Windows.
 
-tf, pointer to const, the content it pointed to is constant and cannot
-be changed
-directly.
-ttf, it is a variable.
-Firstly, we change its content based on *tf;
-Then, make tf pointed to it;
-Lastly, *tf's content will be changed undirectly.
+*(Moved to using UFFD instead of soft-dirtyi feature to find pages which
+have been written-to from v7 patch series)*:
+Stop using the soft-dirty flags for finding which pages have been
+written to. It is too delicate and wrong as it shows more soft-dirty
+pages than the actual soft-dirty pages. There is no interest in
+correcting it [2][3] as this is how the feature was written years ago.
+It shouldn't be updated to changed behaviour. Peter Xu has suggested
+using the async version of the UFFD WP [4] as it is based inherently
+on the PTEs.
 
->> +	}
->> +	ata_sff_tf_load(ap, tf);
->> +}
->> +
->> +static const unsigned int zx_bar_sizes[] = {
->> +	8, 4, 8, 4, 16, 256
->> +};
->> +
->> +static const unsigned int zx100s_bar_sizes0[] = {
->> +	8, 4, 8, 4, 16, 0
->> +};
->> +
->> +static const unsigned int zx100s_bar_sizes1[] = {
->> +	8, 4, 0, 0, 16, 0
->> +};
->> +
->> +static int zx_prepare_host(struct pci_dev *pdev, struct ata_host **r_host)
->> +{
->> +	const struct ata_port_info *ppi0[] = {
->> +		&zx100s_port_info, NULL
->> +	};
->> +	const struct ata_port_info *ppi1[] = {
->> +		&zx100s_port_info, &ata_dummy_port_info
->> +	};
->> +	struct ata_host *host;
->> +	int i, rc;
->> +
->> +	if (pdev->device == 0x9002)
->> +		rc = ata_pci_bmdma_prepare_host(pdev, ppi0, &host);
->> +	else if (pdev->device == 0x9003)
->> +		rc = ata_pci_bmdma_prepare_host(pdev, ppi1, &host);
->> +	else
->> +		rc = -EINVAL;
->> +
-> 
-> Remove the blank line here.
-> 
+So in this patch series, I've added a new mode to the UFFD which is
+asynchronous version of the write protect. When this variant of the
+UFFD WP is used, the page faults are resolved automatically by the
+kernel. The pages which have been written-to can be found by reading
+pagemap file (!PM_UFFD_WP). This feature can be used successfully to
+find which pages have been written to from the time the pages were
+write protected. This works just like the soft-dirty flag without
+showing any extra pages which aren't soft-dirty in reality.
 
-Okay.
+The information related to pages if the page is file mapped, present and
+swapped is required for the CRIU project [5][6]. The addition of the
+required mask, any mask, excluded mask and return masks are also required
+for the CRIU project [5].
 
->> +	if (rc)
->> +		return rc;
->> +
->> +	*r_host = host;
->> +
->> +	/* 9002 hosts four sata ports as M/S of the two channels */
->> +	/* 9003 hosts two sata ports as M/S of the one channel */
-> 
-> Multi-line comment format:
-> 
-> 	/*
->  	 * ...
-> 	 * ...
-> 	 */
-> 
+The IOCTL returns the addresses of the pages which match the specific
+masks. The page addresses are returned in struct page_region in a compact
+form. The max_pages is needed to support a use case where user only wants
+to get a specific number of pages. So there is no need to find all the
+pages of interest in the range when max_pages is specified. The IOCTL
+returns when the maximum number of the pages are found. The max_pages is
+optional. If max_pages is specified, it must be equal or greater than the
+vec_size. This restriction is needed to handle worse case when one
+page_region only contains info of one page and it cannot be compacted.
+This is needed to emulate the Windows getWriteWatch() syscall.
 
-I got it.
+The patch series include the detailed selftest which can be used as an
+example for the uffd async wp test and PAGEMAP_IOCTL. It shows the
+interface usages as well.
 
->> +	for (i = 0; i < host->n_ports; i++)
->> +		ata_slave_link_init(host->ports[i]);
->> +
->> +	return 0;
->> +}
->> +
->> +static void zx_configure(struct pci_dev *pdev, int board_id)
->> +{
->> +	u8 tmp8;
->> +
->> +	pci_read_config_byte(pdev, PCI_INTERRUPT_LINE, &tmp8);
->> +	dev_info(&pdev->dev, "routed to hard irq line %d\n",
->> +		 (int) (tmp8 & 0xf0) == 0xf0 ? 0 : tmp8 & 0x0f);
->> +
->> +	/* make sure SATA channels are enabled */
->> +	pci_read_config_byte(pdev, SATA_CHAN_ENAB, &tmp8);
->> +	if ((tmp8 & ALL_PORTS) != ALL_PORTS) {
->> +		dev_dbg(&pdev->dev, "enabling SATA channels (0x%x)\n",
->> +			(int)tmp8);
->> +		tmp8 |= ALL_PORTS;
->> +		pci_write_config_byte(pdev, SATA_CHAN_ENAB, tmp8);
->> +	}
->> +
->> +	/* make sure interrupts for each channel sent to us */
->> +	pci_read_config_byte(pdev, SATA_INT_GATE, &tmp8);
->> +	if ((tmp8 & ALL_PORTS) != ALL_PORTS) {
->> +		dev_dbg(&pdev->dev, "enabling SATA channel interrupts (0x%x)\n",
->> +			(int) tmp8);
->> +		tmp8 |= ALL_PORTS;
->> +		pci_write_config_byte(pdev, SATA_INT_GATE, tmp8);
->> +	}
->> +
->> +	/* make sure native mode is enabled */
->> +	pci_read_config_byte(pdev, SATA_NATIVE_MODE, &tmp8);
->> +	if ((tmp8 & NATIVE_MODE_ALL) != NATIVE_MODE_ALL) {
->> +		dev_dbg(&pdev->dev,
->> +			"enabling SATA channel native mode (0x%x)\n",
->> +			(int) tmp8);
->> +		tmp8 |= NATIVE_MODE_ALL;
->> +		pci_write_config_byte(pdev, SATA_NATIVE_MODE, tmp8);
->> +	}
->> +}
->> +
->> +static int zx_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
->> +{
->> +	unsigned int i;
->> +	int rc;
->> +	struct ata_host *host = NULL;
->> +	int board_id = (int) ent->driver_data;
->> +	const unsigned int *bar_sizes;
->> +	int legacy_mode = 0;
->> +
->> +	ata_print_version_once(&pdev->dev, DRV_VERSION);
->> +
->> +	if (pdev->device == 0x9002 || pdev->device == 0x9003) {
->> +		if ((pdev->class >> 8) == PCI_CLASS_STORAGE_IDE) {
->> +			u8 tmp8, mask;
->> +
->> +			/* TODO: What if one channel is in native mode ... */
-> 
-> I do not know... What about it ? If this is not expected to work/not supported,
-> then return an error.
-> 
+[1] https://lore.kernel.org/lkml/54d4c322-cd6e-eefd-b161-2af2b56aae24@collabora.com/
+[2] https://lore.kernel.org/all/20221220162606.1595355-1-usama.anjum@collabora.com
+[3] https://lore.kernel.org/all/20221122115007.2787017-1-usama.anjum@collabora.com
+[4] https://lore.kernel.org/all/Y6Hc2d+7eTKs7AiH@x1n
+[5] https://lore.kernel.org/all/YyiDg79flhWoMDZB@gmail.com/
+[6] https://lore.kernel.org/all/20221014134802.1361436-1-mdanylo@google.com/
 
-Yes, you're right. Zhaoxin sata controllers do not support legacy mode.
-So we return an error here.
+Regards,
+Muhammad Usama Anjum
 
-Based on the latest kernel code, this part may be adjusted like these:
+Muhammad Usama Anjum (4):
+  fs/proc/task_mmu: Implement IOCTL to get and optionally clear info
+    about PTEs
+  tools headers UAPI: Update linux/fs.h with the kernel sources
+  mm/pagemap: add documentation of PAGEMAP_SCAN IOCTL
+  selftests: mm: add pagemap ioctl tests
 
-	u8 tmp8, mask = 0;
-     	pci_read_config_byte(pdev, PCI_CLASS_PROG, &tmp8);
-                if (!ata_port_is_dummy(host->ports[0]))
-                        mask |= (1 << 0);
-                if (!ata_port_is_dummy(host->ports[1]))
-                        mask |= (1 << 2);
-                if ((tmp8 & mask) != mask)
-                        legacy_mode = 1;
+Peter Xu (1):
+  userfaultfd: UFFD_FEATURE_WP_ASYNC
 
->> +			pci_read_config_byte(pdev, PCI_CLASS_PROG, &tmp8);
->> +			mask = (1 << 2) | (1 << 0);
->> +			if ((tmp8 & mask) != mask)
->> +				legacy_mode = 1;
->> +		}
->> +		if (legacy_mode)
->> +			return -EINVAL;
->> +	}
->> +
->> +	rc = pcim_enable_device(pdev);
->> +	if (rc)
->> +		return rc;
->> +
->> +	if (board_id == zx100s && pdev->device == 0x9002)
->> +		bar_sizes = &zx100s_bar_sizes0[0];
->> +	else if (board_id == zx100s && pdev->device == 0x9003)
->> +		bar_sizes = &zx100s_bar_sizes1[0];
->> +	else
->> +		bar_sizes = &zx_bar_sizes[0];
->> +
->> +	for (i = 0; i < ARRAY_SIZE(zx_bar_sizes); i++) {
->> +		if ((pci_resource_start(pdev, i) == 0) ||
->> +		    (pci_resource_len(pdev, i) < bar_sizes[i])) {
->> +			if (bar_sizes[i] == 0)
->> +				continue;
->> +
->> +			dev_err(&pdev->dev,
->> +				"invalid PCI BAR %u (sz 0x%llx, val 0x%llx)\n",
->> +				i,
->> +				(unsigned long long)pci_resource_start(pdev, i),
->> +				(unsigned long long)pci_resource_len(pdev, i));
->> +
->> +			return -ENODEV;
->> +		}
->> +	}
->> +
->> +	switch (board_id) {
->> +	case zx100s:
->> +		rc = zx_prepare_host(pdev, &host);
->> +		break;
->> +	default:
->> +		rc = -EINVAL;
->> +	}
->> +	if (rc)
->> +		return rc;
->> +
->> +	zx_configure(pdev, board_id);
->> +
->> +	pci_set_master(pdev);
->> +	return ata_host_activate(host, pdev->irq, ata_bmdma_interrupt,
->> +				 IRQF_SHARED, &zx_sht);
->> +}
->> +
->> +module_pci_driver(zx_pci_driver);
->> +
->> +MODULE_AUTHOR("Yanchen:YanchenSun@zhaoxin.com");
->> +MODULE_DESCRIPTION("SCSI low-level driver for ZX SATA controllers");
-> 
-> This is not a scsi driver...
-> 
+ Documentation/admin-guide/mm/pagemap.rst     |   58 +
+ Documentation/admin-guide/mm/userfaultfd.rst |   35 +
+ fs/proc/task_mmu.c                           |  560 +++++++
+ fs/userfaultfd.c                             |   26 +-
+ include/linux/hugetlb.h                      |    1 +
+ include/linux/userfaultfd_k.h                |   21 +-
+ include/uapi/linux/fs.h                      |   54 +
+ include/uapi/linux/userfaultfd.h             |    9 +-
+ mm/hugetlb.c                                 |   34 +-
+ mm/memory.c                                  |   27 +-
+ tools/include/uapi/linux/fs.h                |   54 +
+ tools/testing/selftests/mm/.gitignore        |    2 +
+ tools/testing/selftests/mm/Makefile          |    3 +-
+ tools/testing/selftests/mm/config            |    1 +
+ tools/testing/selftests/mm/pagemap_ioctl.c   | 1464 ++++++++++++++++++
+ tools/testing/selftests/mm/run_vmtests.sh    |    4 +
+ 16 files changed, 2329 insertions(+), 24 deletions(-)
+ create mode 100644 tools/testing/selftests/mm/pagemap_ioctl.c
+ mode change 100644 => 100755 tools/testing/selftests/mm/run_vmtests.sh
 
-I treat it as a scsi driver for the following reasons,  which may be not
-accurate.
-1, IO path: vfs->fs->block layer->scsi layer->this driver;
-2, Extracted from the following link:
-"SCSI Lower level drivers (LLDs) are variously called host bus adapter
-(HBA) drivers and host drivers (HD)."
-
-https://www.kernel.org/doc/html/latest/scsi/scsi_mid_low_api.html
-
-Maybe I shall delete it next time.
-
->> +MODULE_LICENSE("GPL");
->> +MODULE_DEVICE_TABLE(pci, zx_pci_tbl);
->> +MODULE_VERSION(DRV_VERSION);
-> 
+-- 
+2.39.2
 
