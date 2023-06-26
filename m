@@ -2,92 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4A5473E6E0
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 19:49:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF15473E6E6
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 19:49:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230021AbjFZRt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 13:49:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46116 "EHLO
+        id S230358AbjFZRtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 13:49:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230377AbjFZRtK (ORCPT
+        with ESMTP id S230318AbjFZRt3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 13:49:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 942EB26B3;
-        Mon, 26 Jun 2023 10:48:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Mon, 26 Jun 2023 13:49:29 -0400
+Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [IPv6:2001:4b7a:2000:18::169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B611134;
+        Mon, 26 Jun 2023 10:49:28 -0700 (PDT)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3025360F18;
-        Mon, 26 Jun 2023 17:48:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86401C43397;
-        Mon, 26 Jun 2023 17:48:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687801731;
-        bh=fFWuzhLLiGkinhaWeToFLkDX/dcx5OWER83aW8VgRow=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Qn7TSH5fBy879Kn45s8a/YCOEx1oTS+0VCd/Q+kNmCB7uRTTg7TK3CW2K5FgKL5SO
-         RoBVKuhnNkjoWxoU5K2xmCMLOL3TePePVRvun87gj3KrTnQpXgAMXLWOX/L2U+vGMb
-         wy6CqBDWmWhCmphC6Q8EiBNziTaMXriaczMp6DJiN1Ej/WUjTzJ6N+lvXogj4eiJcj
-         PJKRTqLP+Zecd+1KGIrC38/JsFePpZ84jlJVtuUPeUpe+0KdJssjei1KlWQsAb8xqI
-         wX+VWs0F7zWSqHLgR+NZLp09+VOq+k1qPrGR83NuByW+4SQgicdeCKOv73ZNgnYywR
-         IXCdgqJe6fP2Q==
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-4f8689fbf59so5765332e87.0;
-        Mon, 26 Jun 2023 10:48:51 -0700 (PDT)
-X-Gm-Message-State: AC+VfDwHOCXBDBdGd9b4lMdSKT8qVBasv78TzKVknxYGcI7OVT7Ygd8R
-        4MKUxER8LP9Ic52vOMgwJgoERu5KyoiNGxxH/7k=
-X-Google-Smtp-Source: ACHHUZ6w6e1OYy7QM9S+YTdK71Dx4cd9s642AcRaJSfPZb8UXF8n/hvi2zuHhdV8C7DcTgUpaxVtcUwpuH0YchvBFOg=
-X-Received: by 2002:a19:5f5d:0:b0:4f8:5e62:b94b with SMTP id
- a29-20020a195f5d000000b004f85e62b94bmr8655403lfj.9.1687801729333; Mon, 26 Jun
- 2023 10:48:49 -0700 (PDT)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 8A2613F4E6;
+        Mon, 26 Jun 2023 19:49:24 +0200 (CEST)
+Date:   Mon, 26 Jun 2023 19:49:23 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, Lux Aliaga <they@mint.lgbt>
+Subject: Re: [PATCH 03/15] dt-bindings: clock: qcom,dispcc-sm6125: Require
+ GCC PLL0 DIV clock
+Message-ID: <jmtjuya4c423rmdlo4ubvvqndbxvgapal5otjqnejdpdd25izp@kewbjmqdu2xs>
+References: <20230624-sm6125-dpu-v1-0-1d5a638cebf2@somainline.org>
+ <20230624-sm6125-dpu-v1-3-1d5a638cebf2@somainline.org>
+ <c9681bce-efa8-9b79-4bf6-837dd6a2dc12@linaro.org>
+ <55b0ca89-8f2e-5383-59d4-6809e813abf8@linaro.org>
+ <vnp263d43flny2ibt3n7fbloyi26enqrejnobogplfu5fcj6l3@s7zkxrsi2rde>
+ <52c57cab-10cf-2e7e-2c1d-fa6506786d45@linaro.org>
 MIME-Version: 1.0
-References: <20230616085038.4121892-1-rppt@kernel.org> <20230616085038.4121892-3-rppt@kernel.org>
- <f9a7eebe-d36e-4587-b99d-35d4edefdd14@app.fastmail.com> <20230618080027.GA52412@kernel.org>
- <a17c65c6-863f-4026-9c6f-a04b659e9ab4@app.fastmail.com> <20230625161417.GK52412@kernel.org>
- <ZJmFFmexl_1GUhIL@FVFF77S0Q05N>
-In-Reply-To: <ZJmFFmexl_1GUhIL@FVFF77S0Q05N>
-From:   Song Liu <song@kernel.org>
-Date:   Mon, 26 Jun 2023 10:48:37 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW4pDkd7rCWRM6938ve36rfhGxyu=8t1-GjcKnNajofpQA@mail.gmail.com>
-Message-ID: <CAPhsuW4pDkd7rCWRM6938ve36rfhGxyu=8t1-GjcKnNajofpQA@mail.gmail.com>
-Subject: Re: [PATCH v2 02/12] mm: introduce execmem_text_alloc() and jit_text_alloc()
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Mike Rapoport <rppt@kernel.org>, Andy Lutomirski <luto@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Kent Overstreet <kent.overstreet@linux.dev>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Puranjay Mohan <puranjay12@gmail.com>,
-        Rick P Edgecombe <rick.p.edgecombe@intel.com>,
-        "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-        netdev@vger.kernel.org, sparclinux@vger.kernel.org,
-        "the arch/x86 maintainers" <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <52c57cab-10cf-2e7e-2c1d-fa6506786d45@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -96,39 +70,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 26, 2023 at 5:31=E2=80=AFAM Mark Rutland <mark.rutland@arm.com>=
- wrote:
->
-[...]
-> >
-> > So the idea was that jit_text_alloc() will have a cache of large pages
-> > mapped ROX, will allocate memory from those caches and there will be
-> > jit_update() that uses text poking for writing to that memory.
-> >
-> > Upon allocation of a large page to increase the cache, that large page =
-will
-> > be "invalidated" by filling it with breakpoint instructions (e.g int3 o=
-n
-> > x86)
->
-> Does that work on x86?
->
-> That is in no way gauranteed for other architectures; on arm64 you need
-> explicit cache maintenance (with I-cache maintenance at the VA to be exec=
-uted
-> from) followed by context-synchronization-events (e.g. via ISB instructio=
-ns, or
-> IPIs).
+On 2023-06-26 18:10:44, Krzysztof Kozlowski wrote:
+> On 25/06/2023 21:48, Marijn Suijten wrote:
+> > On 2023-06-24 11:08:54, Krzysztof Kozlowski wrote:
+> >> On 24/06/2023 03:45, Konrad Dybcio wrote:
+> >>> On 24.06.2023 02:41, Marijn Suijten wrote:
+> >>>> The "gcc_disp_gpll0_div_clk_src" clock is consumed by the driver, will
+> >>>> be passed from DT, and should be required by the bindings.
+> >>>>
+> >>>> Fixes: 8397c9c0c26b ("dt-bindings: clock: add QCOM SM6125 display clock bindings")
+> >>>> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> >>>> ---
+> >>> Ideally, you'd stick it at the bottom of the list, as the items: order
+> >>> is part of the ABI
+> >>
+> >> Yes, please add them to the end. Order is fixed.
+> > 
+> > Disagreed for bindings that declare clock-names and when the driver
+> > adheres to it, see my reply to Konrad's message.
+> 
+> That's the generic rule, with some exceptions of course. Whether one
+> chosen driver (chosen system and chosen version of that system) adheres
+> or not, does not change it. Other driver behaves differently and ABI is
+> for everyone, not only for your specific version of Linux driver.
+> 
+> Follow the rule.
 
-I guess we need:
-1) Invalidate unused part of the huge ROX pages;
-2) Do not put two jit users (including module text, bpf, etc.) in the
-same cache line;
-3) Explicit cache maintenance;
-4) context-synchronization-events.
+This has no relation to the driver (just that our driver adheres to the
+bindings, as it is supposed to be).  The bindings define a mapping from
+a clock-names=<> entry to a clock on the same index in the clocks=<>
+array.  That relation remains the same with this change.
 
-Would these (or a subset of them) be sufficient to protect us from torn rea=
-d?
-
-Thanks,
-Song
+- Marijn
