@@ -2,91 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76B1873D572
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 02:58:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3DC273D56D
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 02:53:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230088AbjFZA6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 20:58:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48966 "EHLO
+        id S230041AbjFZAxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 20:53:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229917AbjFZA6L (ORCPT
+        with ESMTP id S229452AbjFZAxl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 20:58:11 -0400
-X-Greylist: delayed 331 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 25 Jun 2023 17:58:03 PDT
-Received: from out-21.mta0.migadu.com (out-21.mta0.migadu.com [IPv6:2001:41d0:1004:224b::15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B605E66
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 17:58:03 -0700 (PDT)
-Date:   Mon, 26 Jun 2023 09:52:21 +0900
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1687740749;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qoYCAJIdfBs09Y+PhvXcvipTrQRMfcPWXBW4aaEX1D4=;
-        b=tfsfO6MiSP9RvTHVaGudEvTI07o3baUhBqbh56J/KDWzBNu8X55HX4j6b6R2AKA75oSBP1
-        +Q8+F4nXxkhGnX2O3vUKT6LetaF3iHmrMV1MgbjjjBlPkIvYq+fRS324yHW97j5W79iVDr
-        3YrbLWuFJvT+GZV8vkAig0AtLEXGL/8=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Naoya Horiguchi <naoya.horiguchi@linux.dev>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     akpm@linux-foundation.org, naoya.horiguchi@nec.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Matthew Wilcox <willy@infradead.org>
-Subject: Re: [PATCH] mm: memory-failure: remove unneeded page state check in
- shake_page()
-Message-ID: <20230626005221.GA353339@ik1-406-35019.vs.sakura.ne.jp>
-References: <20230625113430.2310385-1-linmiaohe@huawei.com>
+        Sun, 25 Jun 2023 20:53:41 -0400
+Received: from out203-205-221-164.mail.qq.com (out203-205-221-164.mail.qq.com [203.205.221.164])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFDBF114;
+        Sun, 25 Jun 2023 17:53:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1687740817;
+        bh=uHss9sAi+BkodLXCCxVWpP2rO/AqcIvC63aHn5xoSDE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=fsrBonckOhtrOvxQqgG0G4Ww74ue+qgzTStBvp/4GI3irM+EBTPYGApzTW4bM2YLV
+         2fkQbOTZIXGc4JV9qj3H8cLmrcvquaV0/P+RKqq174tPkACG0RnU+jou5GH+Wdr54h
+         OVb/4tPJ+2HUc/eEsEs8r41KNbaFCLJhpxv83xUo=
+Received: from localhost.localdomain ([39.156.73.12])
+        by newxmesmtplogicsvrsza7-0.qq.com (NewEsmtp) with SMTP
+        id D620A411; Mon, 26 Jun 2023 08:53:34 +0800
+X-QQ-mid: xmsmtpt1687740814t3ck9jg1n
+Message-ID: <tencent_2E65037221902CF14B5F95DCD78E514FC407@qq.com>
+X-QQ-XMAILINFO: MGSlRwRrdVfIisT3TiXB4uZPk7W6In/1TvGVgklfmnUyf6+68w+k7zjcQTVeQd
+         0W4iIR+q1O+eReyH0RzazhC9cQsg0RqCZnQBy5nAfgPGp1gUmP20NwzkUOz3FnWq9SBp0GVIn0Eo
+         B4s75AGMo3jb+AwneIHXTNP/48afTscK52RK/SNqAATK7l1s3LdBy3V6pPROdginc6CRarYtKCjj
+         QTXnEer4hrxuZsbcQ7tL9qi41xWabzI+InRe+VmeuJsfQ7RMwuMw3jb7ybZC0KYA6avfe0wxY7p1
+         Yx+mH8Zt15+1Q7zWx3K39zOvWF0FrNhA16tDW8/vqdZe1rkGin539mBus87IOYQr4mVMSnvcOKkV
+         48jk8K2H6Mr2nmaWHKnmZ40O9y4l7wvB7DXzxmR4Vy+4onN/aNp0FHKlumvle/gXA5V5nI9LqsUO
+         8766Tc7naKSD4WiUy0byWXP/I0CZgwIiNdxNfELyIXoyfd77RlhP+9hWTvzH3pqkK1QWigvwnxXD
+         q/LbM1AU3Gtu+HbZydXp1EpcuZx0kl/yae59jUym6yO4Epq+UTO+1Qd4ZhnxwfBIOhaILiwFXjBV
+         V+Iegce9hMf0XUrQUP1vTsQJwWul3TSKg2q2YE3+58NbnL0Iy286EP1K6V1k4S+ndnJXiPKpkvYD
+         mcGz80CbSBVYN7lhNobvXDUDv/S2LSDMbuFPmOFBsblLjRd/fYUyg9mBJuzHJvzI6sGsZcK2Nt1m
+         dgoe6ElS39GFmuPxr7p4TqCoQieP/6F3H5M1valmKZpWaDUjNB/SA2H1iwviWmcPWElQP7BC0NYp
+         Iuhup1a0liAGX4QhvfmxkrQ7YPY4LSs728+SQZS/OQOKQWYAczb4VM1joCEdSZ07QgqWutuVqZma
+         t25SDkXnHohkPXnYvwhSUFQqDBwQpdqXWWG84/9pNxI2eZzfRUIFMUY9tmnmjbbb88wjspk/tFt7
+         Xy1MjQOA224OvgS0/TXVQA/yXAnrZTrFIgRar3V5okzrX0RrXTGQ==
+X-QQ-XMRINFO: NjIWXnpjOUTzjNa+72IgnqZv1lPwKoxBEg==
+From:   Rong Tao <rtoax@foxmail.com>
+To:     corbet@lwn.net
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, martin.petersen@oracle.com,
+        rongtao@cestc.cn, rtoax@foxmail.com, target-devel@vger.kernel.org
+Subject: Re: [PATCH v2] docs: target: Remove useless tcm_mod_builder.py
+Date:   Mon, 26 Jun 2023 08:53:33 +0800
+X-OQ-MSGID: <20230626005333.40560-1-rtoax@foxmail.com>
+X-Mailer: git-send-email 2.39.3
+In-Reply-To: <87bkh3l1mr.fsf@meer.lwn.net>
+References: <87bkh3l1mr.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230625113430.2310385-1-linmiaohe@huawei.com>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 25, 2023 at 07:34:30PM +0800, Miaohe Lin wrote:
-> Remove unneeded PageLRU(p) and is_free_buddy_page(p) check as slab caches
-> are not shrunk now. This check can be added back when a lightweight range
-> based shrinker is available.
-> 
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-
-This looks to me a good cleanup because the result of
-"if (PageLRU(p) || is_free_buddy_page(p))" check is not used, so the check
-itself is unneeded.
-
-> ---
->  mm/memory-failure.c | 9 ++++-----
->  1 file changed, 4 insertions(+), 5 deletions(-)
-> 
-> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-> index 5b663eca1f29..92f951df3e87 100644
-> --- a/mm/memory-failure.c
-> +++ b/mm/memory-failure.c
-> @@ -373,11 +373,10 @@ void shake_page(struct page *p)
->  	if (PageHuge(p))
->  		return;
->  
-> -	if (!PageSlab(p)) {
-> -		lru_add_drain_all();
-> -		if (PageLRU(p) || is_free_buddy_page(p))
-> -			return;
-> -	}
-> +	if (PageSlab(p))
-> +		return;
-> +
-> +	lru_add_drain_all();
->  
->  	/*
->  	 * TODO: Could shrink slab caches here if a lightweight range-based
-
-I think that this TODO comment can be put together with "if (PageSlab)" block.
+Thank you, jon. I just submit v3, remove the reference in
+Documentation/target/scripts.rst.
 
 Thanks,
-Naoya Horiguchi
+
+Rong Tao
+
