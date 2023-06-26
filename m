@@ -2,168 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ABB573DC27
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 12:21:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C370B73DC31
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 12:25:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229621AbjFZKVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 06:21:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55806 "EHLO
+        id S229933AbjFZKZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 06:25:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230176AbjFZKVm (ORCPT
+        with ESMTP id S229565AbjFZKZe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 06:21:42 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AA401AA;
-        Mon, 26 Jun 2023 03:21:41 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2b69f958ef3so14076721fa.1;
-        Mon, 26 Jun 2023 03:21:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687774899; x=1690366899;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HeacIq0iGBmlMTVQdsWhJFRPflCyuB9lhDlBAARX9pM=;
-        b=MU0bhlG+BLyjbACqov3lAaQ+x/BLQbwWuoLQXFBcrNlTaUiR/oJWoe7If8mNFbrM/a
-         KvMV6iQ3ndKT2Suyh/cxeNu4v3aqi07XLFg0oFMSxlyKzitdS4c7H/9KvIkBKskwaP++
-         ilkzuD9jrM8gIYUops8xBUT2pJSAYAxUNkIGqHiqMACIbaTvGUD7kzZgilU+NqtJr6qq
-         ka8nNQC5CnSkSDCOmFbAoCy0/PBwsreflYYQR35R/SB7KRmRgubkBQ+zAT8WjkkBQy3/
-         8fLLCI1ltpyhICG2SNJvoDhiXlp5Yl7PaGueJEIDk/DFKvKBJ9bPfkf/9Ju5D8fRqaXZ
-         1p5w==
+        Mon, 26 Jun 2023 06:25:34 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F20BA1A4
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 03:25:32 -0700 (PDT)
+Received: from mail-yw1-f198.google.com (mail-yw1-f198.google.com [209.85.128.198])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 270C13F117
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 10:25:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1687775130;
+        bh=Hvs49rJ424sSIPS43YdfiXb70PA/ZaU38W3lwfpEzfo=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=g4IWeqSZB+an8AkuTls/W3Rykd8eRSiGzEVNqz+J/DStqIAViA0u3w4i9DoGDIkrG
+         fr8zav61TnoOeCuRn2uIkzHx/FFa7jF3I6GncJxy4FCmq6oo4LxqQRMRMndCqKjB77
+         negt7iJl2O4H4wzWX0MZC949xdlKMNT96tW4pSHPx39r0r0UEK4cZm57dGNkOVJcvo
+         PxAQCqznRi2q35IWS5u22s0pTvpyjr3fU5129QXgwIRwTB6DSyL5F5LRlUpm+jhxkk
+         u5LK+/KhuKO/jI9aN0Uwhg4wikM23WdzBfvm6B6iKxWIUuFepdyJRq1WImalF0P60e
+         TueCXtNlE6zEQ==
+Received: by mail-yw1-f198.google.com with SMTP id 00721157ae682-5704970148dso44593187b3.3
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 03:25:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687774899; x=1690366899;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HeacIq0iGBmlMTVQdsWhJFRPflCyuB9lhDlBAARX9pM=;
-        b=IuucYF7KuWWNyd4vIOFfjYOy7/yZHITgLu2Uoe3rVWwNcfI+TqwiyYY4X7yum8ZBHt
-         4wto4h46Z5syH4nPKeuARjn9upOq76bfgYQTmETXvUq9tJ1WWwXb7SaxyC93sf1+mKEk
-         nsNt7P9zNFHbbHDLdzpMbELvyaeJpj52DLacMs7qRf6+bhwMXGQwNSyT0i2SpprsGc7d
-         Oagf5We4EfV8NYX8i798Cmhe0CHd6eSLjVxZrO9Sg7cM5bumcNQ+mn5ENApHx9vonI/e
-         JUpiSEg1Beh1+nyZYdCwhfhq99Nd6/k4bGgMahiPDrC5vqGHkTreD0XokhMuFDZ8worz
-         s8sg==
-X-Gm-Message-State: AC+VfDynXEk+H4kwcNcPEOELcFhMAGZz6b3kmJBZbi2a6/anMTAP/xtv
-        a4cX4WKF3M2m8dpvyakfEQc=
-X-Google-Smtp-Source: ACHHUZ4FJTWxVTLMoTaqDFVe37vxY6VWwgHI7xhOcZo5HF8sUgxfA4+6g6TYMz7Wt/q2BtpA2MneDw==
-X-Received: by 2002:a2e:8088:0:b0:2b4:7f66:8c85 with SMTP id i8-20020a2e8088000000b002b47f668c85mr13594865ljg.48.1687774898695;
-        Mon, 26 Jun 2023 03:21:38 -0700 (PDT)
-Received: from ?IPV6:2a00:e180:158d:7600:d62f:c4fb:6eee:7b87? ([2a00:e180:158d:7600:d62f:c4fb:6eee:7b87])
-        by smtp.gmail.com with ESMTPSA id m10-20020a50ef0a000000b0051d8f9ec3basm2024177eds.15.2023.06.26.03.21.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Jun 2023 03:21:38 -0700 (PDT)
-Message-ID: <dd54ed9e-b548-67a9-4998-b969b6d888a4@gmail.com>
-Date:   Mon, 26 Jun 2023 12:21:37 +0200
+        d=1e100.net; s=20221208; t=1687775129; x=1690367129;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Hvs49rJ424sSIPS43YdfiXb70PA/ZaU38W3lwfpEzfo=;
+        b=dtbT87eD7iUpWdGwfw1Oeg/HCBP/rpKIj/SY0F+gO+ITyi7mLOmF74DHqCSns1oH/I
+         dXg7LlsWj8/YdH6CA7NvTU3SQkEbZc9Edt9OJyFVjzxsCg03sWZsiD07gr+9KS4GhNfj
+         Br8zaMEHXIIOP0laNwIsT4KZfmuOS3qf8daqm9uGdS6NUvRGrZEZ/gRA8lMuQFlIwO51
+         6gLTNLMQqdLXdexIhQn72oRfy15a9pbnS5w75dSQ6n2NH7sNswJOFWT4XGRI5SGFj6sR
+         MRRqzeGBi9aaLRxuodxPKfbicDl/m9FoWuLsXoJAUv+Ba1v77cz8YSfRi7YuRTUfK/am
+         FgBQ==
+X-Gm-Message-State: AC+VfDx7FbT09RT1KVE0MtpGVOBa50cEryhDV0c9nttGqHJweOkqd/Uu
+        jVEmNz5wVlYPxQRiyzg/EEe1EqI4fify3pebi7qBlJ++l33Sldvss6BXdFwXwQszgBHoviSNM9Y
+        axOLAM+FVaL8ItCBagZatiwEF/4h1jqQf2/RyBDaLxTESNkUs6gOWsZTYhBXRcvIcfvCe
+X-Received: by 2002:a0d:ca56:0:b0:573:974a:d264 with SMTP id m83-20020a0dca56000000b00573974ad264mr17225333ywd.49.1687775129074;
+        Mon, 26 Jun 2023 03:25:29 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7HdqpY7hy58BmkwQ6n5jiRBdBrQBdN77K8pTReCJltg8Hf29YUojgyxwluZDUIHHmHhljLfJTz7W4R0V3CYfU=
+X-Received: by 2002:a0d:ca56:0:b0:573:974a:d264 with SMTP id
+ m83-20020a0dca56000000b00573974ad264mr17225321ywd.49.1687775128732; Mon, 26
+ Jun 2023 03:25:28 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 1/4] drm/ttm: Fix ttm_lru_bulk_move_pos_tail()
-Content-Language: en-US
-To:     =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
-        <thomas.hellstrom@linux.intel.com>, intel-xe@lists.freedesktop.org
-Cc:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, stable@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Andi Shyti <andi.shyti@linux.intel.com>
-References: <20230626091450.14757-1-thomas.hellstrom@linux.intel.com>
- <20230626091450.14757-2-thomas.hellstrom@linux.intel.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
-In-Reply-To: <20230626091450.14757-2-thomas.hellstrom@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230602020935.43367-1-chengen.du@canonical.com>
+In-Reply-To: <20230602020935.43367-1-chengen.du@canonical.com>
+From:   Chengen Du <chengen.du@canonical.com>
+Date:   Mon, 26 Jun 2023 18:25:17 +0800
+Message-ID: <CAPza5qdv7sS4d5f7nKKJgpEnxh41ZpuLwNp10=Zf2q_SMf23fw@mail.gmail.com>
+Subject: Re: [PATCH v2 RESEND] NFS: Add mount option 'fasc'
+To:     trond.myklebust@hammerspace.com, anna@kernel.org
+Cc:     linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I've already pushed the version from Teddy to drm-misc-fixes last week.
+Hi Trond, Anna,
 
-So no need for that one any more.
+I apologize for interrupting you, as I understand you may be engaged
+in other important tasks.
 
-Christian.
+In order to enhance the flexibility of deploying the NFS service,
+I believe it would be beneficial to introduce a mount option that
+enables file access stale checking for users.
 
-Am 26.06.23 um 11:14 schrieb Thomas Hellström:
-> The value of pos->first was not updated when the first resource of the
-> range was moved. This could lead to errors like the one below.
-> Fix this by updating pos->first when needed.
+There are certain users experiencing performance degradation in
+specific usage scenarios.
+It would be greatly appreciated if you could share some insights on
+how to address this issue.
+If you have the time, I would greatly appreciate the opportunity to
+discuss this matter further.
+
+Thank you in advance for your attention to this request.
+
+Best regards,
+Chengen Du
+
+On Fri, Jun 2, 2023 at 10:09=E2=80=AFAM Chengen Du <chengen.du@canonical.co=
+m> wrote:
 >
-> <3> [218.963342] BUG: KASAN: null-ptr-deref in ttm_lru_bulk_move_del+0xc5/0x180 [ttm]
-> <3> [218.963456] Read of size 8 at addr 0000000000000038 by task xe_evict/1529
-> <3> [218.963546]
-> <3> [218.963566] CPU: 0 PID: 1529 Comm: xe_evict Not tainted 6.3.0-xe #1
-> <3> [218.963664] Hardware name: Intel Corporation Tiger Lake Client Platform/TigerLake H DDR4 SODIMM RVP, BIOS TGLSFWI1.R00.4064.A00.2102041619 02/04/2021
-> <3> [218.963841] Call Trace:
-> <3> [218.963881]  <TASK>
-> <3> [218.963915]  dump_stack_lvl+0x64/0xb0
-> <3> [218.963976]  print_report+0x3e5/0x600
-> <3> [218.964036]  ? ttm_lru_bulk_move_del+0xc5/0x180 [ttm]
-> <3> [218.964127]  kasan_report+0x96/0xc0
-> <3> [218.964183]  ? ttm_lru_bulk_move_del+0xc5/0x180 [ttm]
-> <3> [218.964276]  ttm_lru_bulk_move_del+0xc5/0x180 [ttm]
-> <3> [218.964365]  ttm_bo_set_bulk_move+0x92/0x140 [ttm]
-> <3> [218.964454]  xe_gem_object_close+0xc8/0x120 [xe]
-> <3> [218.964675]  ? __pfx_xe_gem_object_close+0x10/0x10 [xe]
-> <3> [218.964908]  ? drm_gem_object_handle_put_unlocked+0xc7/0x170 [drm]
-> <3> [218.965071]  drm_gem_object_release_handle+0x45/0x80 [drm]
-> <3> [218.965220]  ? __pfx_drm_gem_object_release_handle+0x10/0x10 [drm]
-> <3> [218.965381]  idr_for_each+0xc9/0x180
-> <3> [218.965437]  ? __pfx_idr_for_each+0x10/0x10
-> <3> [218.965504]  drm_gem_release+0x20/0x30 [drm]
-> <3> [218.965637]  drm_file_free.part.0+0x4cb/0x4f0 [drm]
-> <3> [218.965778]  ? drm_close_helper.isra.0+0xb7/0xe0 [drm]
-> <3> [218.965921]  drm_release_noglobal+0x49/0x90 [drm]
-> <3> [218.966061]  __fput+0x122/0x450
-> <3> [218.966115]  task_work_run+0xfe/0x190
-> <3> [218.966175]  ? __pfx_task_work_run+0x10/0x10
-> <3> [218.966239]  ? do_raw_spin_unlock+0xa7/0x140
-> <3> [218.966308]  do_exit+0x55f/0x1430
-> <3> [218.966364]  ? __pfx_lock_release+0x10/0x10
-> <3> [218.966431]  ? do_raw_spin_lock+0x11d/0x1e0
-> <3> [218.966498]  ? __pfx_do_exit+0x10/0x10
-> <3> [218.966554]  ? __pfx_do_raw_spin_lock+0x10/0x10
-> <3> [218.966625]  ? mark_held_locks+0x24/0x90
-> <3> [218.966688]  ? lockdep_hardirqs_on_prepare+0x136/0x210
-> <3> [218.966768]  do_group_exit+0x68/0x110
-> <3> [218.966828]  __x64_sys_exit_group+0x2c/0x30
-> <3> [218.966896]  do_syscall_64+0x3c/0x90
-> <3> [218.966955]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
-> <3> [218.967035] RIP: 0033:0x7f77b194f146
-> <3> [218.967094] Code: Unable to access opcode bytes at 0x7f77b194f11c.
-> <3> [218.967174] RSP: 002b:00007ffc64791188 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
-> <3> [218.967271] RAX: ffffffffffffffda RBX: 00007f77b1a548a0 RCX: 00007f77b194f146
-> <3> [218.967364] RDX: 0000000000000062 RSI: 000000000000003c RDI: 0000000000000062
-> <3> [218.967458] RBP: 0000000000000062 R08: 00000000000000e7 R09: ffffffffffffff78
-> <3> [218.967553] R10: 0000000000000058 R11: 0000000000000246 R12: 00007f77b1a548a0
-> <3> [218.967648] R13: 0000000000000003 R14: 00007f77b1a5d2e8 R15: 0000000000000000
-> <3> [218.967745]  </TASK>
+> In certain instances, users or applications switch to other privileged
+> users by executing commands like 'su' to carry out operations on NFS-
+> mounted folders. However, when this happens, the login time for the
+> privileged user is reset, and any NFS ACCESS operations must be resent,
+> which can result in a decrease in performance. In specific production
+> environments where the access cache can be trusted due to stable group
+> membership, there's no need to verify the cache stall situation.
+> To maintain the initial behavior and performance, a new mount option
+> called 'fasc' has been introduced. This option triggers the mechanism
+> of clearing the file access cache upon login.
 >
-> Fixes: fee2ede15542 ("drm/ttm: rework bulk move handling v5")
-> Cc: "Christian König" <christian.koenig@amd.com>
-> Cc: "Christian König" <ckoenig.leichtzumerken@gmail.com>
-> Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: <stable@vger.kernel.org> # v5.19+
-> Link: https://gitlab.freedesktop.org/drm/xe/kernel/-/issues/411
-> Signed-off-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
+> Signed-off-by: Chengen Du <chengen.du@canonical.com>
 > ---
->   drivers/gpu/drm/ttm/ttm_resource.c | 2 ++
->   1 file changed, 2 insertions(+)
+>  fs/nfs/dir.c              | 21 ++++++++++++---------
+>  fs/nfs/fs_context.c       |  5 +++++
+>  fs/nfs/super.c            |  1 +
+>  include/linux/nfs_fs_sb.h |  1 +
+>  4 files changed, 19 insertions(+), 9 deletions(-)
 >
-> diff --git a/drivers/gpu/drm/ttm/ttm_resource.c b/drivers/gpu/drm/ttm/ttm_resource.c
-> index 7333f7a87a2f..cb05e0a36576 100644
-> --- a/drivers/gpu/drm/ttm/ttm_resource.c
-> +++ b/drivers/gpu/drm/ttm/ttm_resource.c
-> @@ -86,6 +86,8 @@ static void ttm_lru_bulk_move_pos_tail(struct ttm_lru_bulk_move_pos *pos,
->   				       struct ttm_resource *res)
->   {
->   	if (pos->last != res) {
-> +		if (pos->first == res)
-> +			pos->first = list_next_entry(res, lru);
->   		list_move(&res->lru, &pos->last->lru);
->   		pos->last = res;
->   	}
-
+> diff --git a/fs/nfs/dir.c b/fs/nfs/dir.c
+> index 8f3112e71a6a..cefdb23d4cd7 100644
+> --- a/fs/nfs/dir.c
+> +++ b/fs/nfs/dir.c
+> @@ -2951,12 +2951,14 @@ static struct nfs_access_entry *nfs_access_search=
+_rbtree(struct inode *inode, co
+>         return NULL;
+>  }
+>
+> -static u64 nfs_access_login_time(const struct task_struct *task,
+> -                                const struct cred *cred)
+> +static inline
+> +bool nfs_check_access_stale(const struct task_struct *task,
+> +                           const struct cred *cred,
+> +                           const struct nfs_access_entry *cache)
+>  {
+>         const struct task_struct *parent;
+>         const struct cred *pcred;
+> -       u64 ret;
+> +       u64 login_time;
+>
+>         rcu_read_lock();
+>         for (;;) {
+> @@ -2966,15 +2968,15 @@ static u64 nfs_access_login_time(const struct tas=
+k_struct *task,
+>                         break;
+>                 task =3D parent;
+>         }
+> -       ret =3D task->start_time;
+> +       login_time =3D task->start_time;
+>         rcu_read_unlock();
+> -       return ret;
+> +
+> +       return ((s64)(login_time - cache->timestamp) > 0);
+>  }
+>
+>  static int nfs_access_get_cached_locked(struct inode *inode, const struc=
+t cred *cred, u32 *mask, bool may_block)
+>  {
+>         struct nfs_inode *nfsi =3D NFS_I(inode);
+> -       u64 login_time =3D nfs_access_login_time(current, cred);
+>         struct nfs_access_entry *cache;
+>         bool retry =3D true;
+>         int err;
+> @@ -3003,7 +3005,8 @@ static int nfs_access_get_cached_locked(struct inod=
+e *inode, const struct cred *
+>                 retry =3D false;
+>         }
+>         err =3D -ENOENT;
+> -       if ((s64)(login_time - cache->timestamp) > 0)
+> +       if ((NFS_SERVER(inode)->flags & NFS_MOUNT_FASC) &&
+> +           nfs_check_access_stale(current, cred, cache))
+>                 goto out;
+>         *mask =3D cache->mask;
+>         list_move_tail(&cache->lru, &nfsi->access_cache_entry_lru);
+> @@ -3023,7 +3026,6 @@ static int nfs_access_get_cached_rcu(struct inode *=
+inode, const struct cred *cre
+>          * but do it without locking.
+>          */
+>         struct nfs_inode *nfsi =3D NFS_I(inode);
+> -       u64 login_time =3D nfs_access_login_time(current, cred);
+>         struct nfs_access_entry *cache;
+>         int err =3D -ECHILD;
+>         struct list_head *lh;
+> @@ -3038,7 +3040,8 @@ static int nfs_access_get_cached_rcu(struct inode *=
+inode, const struct cred *cre
+>                 cache =3D NULL;
+>         if (cache =3D=3D NULL)
+>                 goto out;
+> -       if ((s64)(login_time - cache->timestamp) > 0)
+> +       if ((NFS_SERVER(inode)->flags & NFS_MOUNT_FASC) &&
+> +           nfs_check_access_stale(current, cred, cache))
+>                 goto out;
+>         if (nfs_check_cache_invalid(inode, NFS_INO_INVALID_ACCESS))
+>                 goto out;
+> diff --git a/fs/nfs/fs_context.c b/fs/nfs/fs_context.c
+> index 9bcd53d5c7d4..0a14bd67efc1 100644
+> --- a/fs/nfs/fs_context.c
+> +++ b/fs/nfs/fs_context.c
+> @@ -88,6 +88,7 @@ enum nfs_param {
+>         Opt_vers,
+>         Opt_wsize,
+>         Opt_write,
+> +       Opt_fasc,
+>  };
+>
+>  enum {
+> @@ -194,6 +195,7 @@ static const struct fs_parameter_spec nfs_fs_paramete=
+rs[] =3D {
+>         fsparam_string("vers",          Opt_vers),
+>         fsparam_enum  ("write",         Opt_write, nfs_param_enums_write)=
+,
+>         fsparam_u32   ("wsize",         Opt_wsize),
+> +       fsparam_flag  ("fasc",          Opt_fasc),
+>         {}
+>  };
+>
+> @@ -861,6 +863,9 @@ static int nfs_fs_context_parse_param(struct fs_conte=
+xt *fc,
+>         case Opt_sloppy:
+>                 ctx->sloppy =3D true;
+>                 break;
+> +       case Opt_fasc:
+> +               ctx->flags |=3D NFS_MOUNT_FASC;
+> +               break;
+>         }
+>
+>         return 0;
+> diff --git a/fs/nfs/super.c b/fs/nfs/super.c
+> index 30e53e93049e..e8d0ffd04b16 100644
+> --- a/fs/nfs/super.c
+> +++ b/fs/nfs/super.c
+> @@ -444,6 +444,7 @@ static void nfs_show_mount_options(struct seq_file *m=
+, struct nfs_server *nfss,
+>                 { NFS_MOUNT_NORDIRPLUS, ",nordirplus", "" },
+>                 { NFS_MOUNT_UNSHARED, ",nosharecache", "" },
+>                 { NFS_MOUNT_NORESVPORT, ",noresvport", "" },
+> +               { NFS_MOUNT_FASC, ",fasc", "" },
+>                 { 0, NULL, NULL }
+>         };
+>         const struct proc_nfs_info *nfs_infop;
+> diff --git a/include/linux/nfs_fs_sb.h b/include/linux/nfs_fs_sb.h
+> index ea2f7e6b1b0b..332ceb11be6c 100644
+> --- a/include/linux/nfs_fs_sb.h
+> +++ b/include/linux/nfs_fs_sb.h
+> @@ -153,6 +153,7 @@ struct nfs_server {
+>  #define NFS_MOUNT_WRITE_EAGER          0x01000000
+>  #define NFS_MOUNT_WRITE_WAIT           0x02000000
+>  #define NFS_MOUNT_TRUNK_DISCOVERY      0x04000000
+> +#define NFS_MOUNT_FASC                 0x08000000
+>
+>         unsigned int            fattr_valid;    /* Valid attributes */
+>         unsigned int            caps;           /* server capabilities */
+> --
+> 2.39.2
+>
