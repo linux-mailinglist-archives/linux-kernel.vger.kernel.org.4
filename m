@@ -2,129 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 626A073D9B6
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 10:29:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E800073D9C0
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 10:30:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230008AbjFZI3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 04:29:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33702 "EHLO
+        id S230083AbjFZIar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 04:30:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230079AbjFZI32 (ORCPT
+        with ESMTP id S229482AbjFZIap (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 04:29:28 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60D4CE4C
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 01:29:26 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-98934f000a5so359030566b.2
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 01:29:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687768165; x=1690360165;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2tsOG+nFR2GTTBc7CbDQFVvL4dzoth9iqIWwzfRS+A8=;
-        b=xEYr+NKaL1PDtn/k+qrg/HeUDCVALR8yL0jCtp0RqWdlCGUAMBxuD2yBaGSzIE/PEr
-         XL2/Ur6iJZBpZU1J8i5l2H34+5zm/CAL+Pa+KUd+iPG6x/3UlljUOtSDiKuI0Zv9P862
-         KoyT9x4JX9T9jyMS/mecUHnGSPEWLaRNK0B/bAfcADvM3iNpkwtaQYRhvjjDFmg2milq
-         K9wLlU+ZKCbuybSmvoKGl3ukZxcMvlfu1OnCH/7JZN/rrSWCm+HyprG7qYYSTqZeu90A
-         n7mJFeJr7QJzFusN8Cyd9ecvYW7yM2EBb4jvJQHW9/FERq7Ts8eJmqIKJ1biZZByapA3
-         7OTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687768165; x=1690360165;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2tsOG+nFR2GTTBc7CbDQFVvL4dzoth9iqIWwzfRS+A8=;
-        b=Vz937kD9ZCMkIj6TpXdzxNu4aUpi4vmUZx6RK5iO5WXldx2lYg4BSsIhqEs85Cgbpt
-         LKgi+Hu5Yghh0n+PuQSrTLOULRl7/sKXrWs84KOt3ahoVqySlS7AkqKt7b83DVf497Xo
-         thx0vETbB69z2/Icxkj11sYOYleH97I4dlWHFXoYvt5f1dtrcXJIDG4seBba3jJsd6t0
-         z6wSFjHB+sIgC3xnDf7QHaHxEza6G7h7e5KynNQ1CWzGsas4rus+2Z90lvpiZevFk6Vw
-         c3z0PCqppyXFTZ3rl/yEa98nvJsB8ylXg/msRMVHBJm2WxlgREGDf6rcoQPsJBb8I08i
-         pg7A==
-X-Gm-Message-State: AC+VfDzdd0b7M8yvjZH7PXZEc0jB3uFn0XuPRvaqBYlsJnCFn92ne0qi
-        6QzPQ9HhbuY2QzVlwE+oimHTeQ==
-X-Google-Smtp-Source: ACHHUZ4f6Zrvi3qOoV7NxupQNc5bFb/EuzGTSv79Os8497nPLMdIEfuSC2wmzdkpoAR9pkd2zt+iJg==
-X-Received: by 2002:a17:907:da2:b0:988:e8e1:6360 with SMTP id go34-20020a1709070da200b00988e8e16360mr17223589ejc.8.1687768164783;
-        Mon, 26 Jun 2023 01:29:24 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id lr9-20020a170906fb8900b00969f44bbef3sm3044396ejb.11.2023.06.26.01.29.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Jun 2023 01:29:24 -0700 (PDT)
-Message-ID: <075c8d01-5788-a3c4-44e0-36cb9318fc6a@linaro.org>
-Date:   Mon, 26 Jun 2023 10:29:22 +0200
+        Mon, 26 Jun 2023 04:30:45 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32686DA;
+        Mon, 26 Jun 2023 01:30:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687768244; x=1719304244;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=x93XfnvLnKgassfdHp4RMwW0WBwmDsnuND8yittK6Wo=;
+  b=UFgObavuvw7kIEzkbQUAY8l2HI6AkCUVA0393IffMH2A6c3nL/DXBvos
+   fXmnGtM3WgIqRNywVplGLS9KKlMjHadSd142JS9kNefTd/65mysDCI6rz
+   6fyHpfGKbprIeU2wl14gFRyY9h2sdMsxLKzxV0rrDDwm8M3R1vBFZuwvy
+   4wYn1ca5CDNKuebv4aTPFxSoEvsqTCbSXn28qSY+vhR7iV9uFbXWG84ae
+   HC2p2fKRnRzLYJXkjeCwiRrSxiXe/vga129jFKctpw4xU95WKE/qVteDY
+   RMBD/02Nm2lSunSzJ/H0C8h+nU6I0lTlfLSwBfAVr7B1eYSR9PGtjVNyi
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="447594942"
+X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
+   d="scan'208";a="447594942"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 01:30:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="860604967"
+X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
+   d="scan'208";a="860604967"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 26 Jun 2023 01:30:40 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 26 Jun 2023 11:30:39 +0300
+Date:   Mon, 26 Jun 2023 11:30:39 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 2/3] usb: typec: fsa4480: rework mux & switch setup to
+ handle more states
+Message-ID: <ZJlMr6vad6kPor1k@kuha.fi.intel.com>
+References: <20230614-topic-sm8550-upstream-type-c-audio-v1-0-15a92565146b@linaro.org>
+ <20230614-topic-sm8550-upstream-type-c-audio-v1-2-15a92565146b@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 1/2] dt-bindings: iio: ad74413r: add binding for digital
- input threshold
-Content-Language: en-US
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Rob Herring <robh@kernel.org>, Conor Dooley <conor@kernel.org>
-Cc:     Cosmin Tanislav <cosmin.tanislav@analog.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230623113327.1062170-1-linux@rasmusvillemoes.dk>
- <20230623113327.1062170-2-linux@rasmusvillemoes.dk>
- <20230623-casket-outer-2c9d2a0c4795@spud>
- <20230623215731.GB1216324-robh@kernel.org>
- <8176d552-9829-5442-3ce9-805744b8389e@rasmusvillemoes.dk>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <8176d552-9829-5442-3ce9-805744b8389e@rasmusvillemoes.dk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230614-topic-sm8550-upstream-type-c-audio-v1-2-15a92565146b@linaro.org>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/06/2023 10:15, Rasmus Villemoes wrote:
-> On 23/06/2023 23.57, Rob Herring wrote:
->> On Fri, Jun 23, 2023 at 05:44:50PM +0100, Conor Dooley wrote:
->>> On Fri, Jun 23, 2023 at 01:33:25PM +0200, Rasmus Villemoes wrote:
->>>> diff --git a/Documentation/devicetree/bindings/iio/addac/adi,ad74413r.yaml b/Documentation/devicetree/bindings/iio/addac/adi,ad74413r.yaml
->>>> index 590ea7936ad7..1f90ce3c7932 100644
->>>> --- a/Documentation/devicetree/bindings/iio/addac/adi,ad74413r.yaml
->>>> +++ b/Documentation/devicetree/bindings/iio/addac/adi,ad74413r.yaml
->>>> @@ -51,6 +51,14 @@ properties:
->>>>        Shunt (sense) resistor value in micro-Ohms.
->>>>      default: 100000000
->>>>  
->>>> +  digital-input-threshold-microvolt:
->>>
->>> Should this not have an adi vendor prefix, similar to
->>> "adi,digital-input-threshold-mode-fixed"?
->>
->> Yes.
+On Wed, Jun 14, 2023 at 03:10:40PM +0200, Neil Armstrong wrote:
+> In order to handle the Audio Accessory mode, refactor the mux
+> and switch setup in a single function.
 > 
-> OK. But I'm not really sure what the rules are for when such a prefix
-> must be added, so some guidance would be appreciated. There's
+> The refactor will help add new states and make the process
+> simpler to understand.
 > 
-> - DO use a vendor prefix on device specific property names. Consider if
->   properties could be common among devices of the same class.
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
+> ---
+>  drivers/usb/typec/mux/fsa4480.c | 111 +++++++++++++++++++++++++++-------------
+>  1 file changed, 75 insertions(+), 36 deletions(-)
 > 
-> And my thinking was that a threshold for when a digital input should
-> count as high/low would be a rather generic thing, so not particularly
-> device specific.
-
-Then find some more users of it.
-
+> diff --git a/drivers/usb/typec/mux/fsa4480.c b/drivers/usb/typec/mux/fsa4480.c
+> index d6495e533e58..b2913594a58f 100644
+> --- a/drivers/usb/typec/mux/fsa4480.c
+> +++ b/drivers/usb/typec/mux/fsa4480.c
+> @@ -46,8 +46,11 @@ struct fsa4480 {
+>  
+>  	struct regmap *regmap;
+>  
+> +	enum typec_orientation orientation;
+> +	unsigned long mode;
+> +	unsigned int svid;
+> +
+>  	u8 cur_enable;
+> -	u8 cur_select;
+>  };
+>  
+>  static const struct regmap_config fsa4480_regmap_config = {
+> @@ -58,19 +61,42 @@ static const struct regmap_config fsa4480_regmap_config = {
+>  	.disable_locking = true,
+>  };
+>  
+> -static int fsa4480_switch_set(struct typec_switch_dev *sw,
+> -			      enum typec_orientation orientation)
+> +static int fsa4480_set(struct fsa4480 *fsa)
+>  {
+> -	struct fsa4480 *fsa = typec_switch_get_drvdata(sw);
+> -	u8 new_sel;
+> -
+> -	mutex_lock(&fsa->lock);
+> -	new_sel = FSA4480_SEL_USB;
+> -	if (orientation == TYPEC_ORIENTATION_REVERSE)
+> -		new_sel |= FSA4480_SEL_SBU_REVERSE;
+> -
+> -	if (new_sel == fsa->cur_select)
+> -		goto out_unlock;
+> +	bool reverse = (fsa->orientation == TYPEC_ORIENTATION_REVERSE);
+> +	u8 enable = FSA4480_ENABLE_DEVICE;
+> +	u8 sel = 0;
+> +
+> +	/* USB Mode */
+> +	if (fsa->mode < TYPEC_STATE_MODAL ||
+> +	    (!fsa->svid && (fsa->mode == TYPEC_MODE_USB2 ||
+> +			    fsa->mode == TYPEC_MODE_USB3))) {
+> +		enable |= FSA4480_ENABLE_USB;
+> +		sel = FSA4480_SEL_USB;
+> +	} else if (fsa->svid) {
+> +		switch (fsa->mode) {
+> +		/* DP Only */
+> +		case TYPEC_DP_STATE_C:
+> +		case TYPEC_DP_STATE_E:
+> +			enable |= FSA4480_ENABLE_SBU;
+> +			if (reverse)
+> +				sel = FSA4480_SEL_SBU_REVERSE;
+> +			break;
+> +
+> +		/* DP + USB */
+> +		case TYPEC_DP_STATE_D:
+> +		case TYPEC_DP_STATE_F:
+> +			enable |= FSA4480_ENABLE_USB | FSA4480_ENABLE_SBU;
+> +			sel = FSA4480_SEL_USB;
+> +			if (reverse)
+> +				sel |= FSA4480_SEL_SBU_REVERSE;
+> +			break;
+> +
+> +		default:
+> +			return -EOPNOTSUPP;
+> +		}
+> +	} else
+> +		return -EOPNOTSUPP;
+>  
+>  	if (fsa->cur_enable & FSA4480_ENABLE_SBU) {
+>  		/* Disable SBU output while re-configuring the switch */
+> @@ -81,48 +107,59 @@ static int fsa4480_switch_set(struct typec_switch_dev *sw,
+>  		usleep_range(35, 1000);
+>  	}
+>  
+> -	regmap_write(fsa->regmap, FSA4480_SWITCH_SELECT, new_sel);
+> -	fsa->cur_select = new_sel;
+> -
+> -	if (fsa->cur_enable & FSA4480_ENABLE_SBU) {
+> -		regmap_write(fsa->regmap, FSA4480_SWITCH_ENABLE, fsa->cur_enable);
+> +	regmap_write(fsa->regmap, FSA4480_SWITCH_SELECT, sel);
+> +	regmap_write(fsa->regmap, FSA4480_SWITCH_ENABLE, enable);
+>  
+> +	if (enable & FSA4480_ENABLE_SBU) {
+>  		/* 15us to allow the SBU switch to turn on again */
+>  		usleep_range(15, 1000);
+>  	}
+>  
+> -out_unlock:
+> -	mutex_unlock(&fsa->lock);
+> +	fsa->cur_enable = enable;
+>  
+>  	return 0;
+>  }
+>  
+> +static int fsa4480_switch_set(struct typec_switch_dev *sw,
+> +			      enum typec_orientation orientation)
+> +{
+> +	struct fsa4480 *fsa = typec_switch_get_drvdata(sw);
+> +	int ret = 0;
+> +
+> +	mutex_lock(&fsa->lock);
+> +
+> +	if (fsa->orientation != orientation) {
+> +		fsa->orientation = orientation;
+> +
+> +		ret = fsa4480_set(fsa);
+> +	}
+> +
+> +	mutex_unlock(&fsa->lock);
+> +
+> +	return ret;
+> +}
+> +
+>  static int fsa4480_mux_set(struct typec_mux_dev *mux, struct typec_mux_state *state)
+>  {
+>  	struct fsa4480 *fsa = typec_mux_get_drvdata(mux);
+> -	u8 new_enable;
+> +	int ret = 0;
+>  
+>  	mutex_lock(&fsa->lock);
+>  
+> -	new_enable = FSA4480_ENABLE_DEVICE | FSA4480_ENABLE_USB;
+> -	if (state->mode >= TYPEC_DP_STATE_A)
+> -		new_enable |= FSA4480_ENABLE_SBU;
+> +	if (fsa->mode != state->mode) {
+> +		fsa->mode = state->mode;
+>  
+> -	if (new_enable == fsa->cur_enable)
+> -		goto out_unlock;
+> +		if (state->alt)
+> +			fsa->svid = state->alt->svid;
+> +		else
+> +			fsa->svid = 0; // No SVID
+>  
+> -	regmap_write(fsa->regmap, FSA4480_SWITCH_ENABLE, new_enable);
+> -	fsa->cur_enable = new_enable;
+> -
+> -	if (new_enable & FSA4480_ENABLE_SBU) {
+> -		/* 15us to allow the SBU switch to turn off */
+> -		usleep_range(15, 1000);
+> +		ret = fsa4480_set(fsa);
+>  	}
+>  
+> -out_unlock:
+>  	mutex_unlock(&fsa->lock);
+>  
+> -	return 0;
+> +	return ret;
+>  }
+>  
+>  static int fsa4480_probe(struct i2c_client *client)
+> @@ -143,8 +180,10 @@ static int fsa4480_probe(struct i2c_client *client)
+>  	if (IS_ERR(fsa->regmap))
+>  		return dev_err_probe(dev, PTR_ERR(fsa->regmap), "failed to initialize regmap\n");
+>  
+> +	/* Safe mode */
+>  	fsa->cur_enable = FSA4480_ENABLE_DEVICE | FSA4480_ENABLE_USB;
+> -	fsa->cur_select = FSA4480_SEL_USB;
+> +	fsa->mode = TYPEC_STATE_SAFE;
+> +	fsa->orientation = TYPEC_ORIENTATION_NONE;
+>  
+>  	/* set default settings */
+>  	regmap_write(fsa->regmap, FSA4480_SLOW_L, 0x00);
+> @@ -156,7 +195,7 @@ static int fsa4480_probe(struct i2c_client *client)
+>  	regmap_write(fsa->regmap, FSA4480_DELAY_L_MIC, 0x00);
+>  	regmap_write(fsa->regmap, FSA4480_DELAY_L_SENSE, 0x00);
+>  	regmap_write(fsa->regmap, FSA4480_DELAY_L_AGND, 0x09);
+> -	regmap_write(fsa->regmap, FSA4480_SWITCH_SELECT, fsa->cur_select);
+> +	regmap_write(fsa->regmap, FSA4480_SWITCH_SELECT, FSA4480_SEL_USB);
+>  	regmap_write(fsa->regmap, FSA4480_SWITCH_ENABLE, fsa->cur_enable);
+>  
+>  	sw_desc.drvdata = fsa;
 > 
-> Also, this very binding has a shunt-resistor-micro-ohms, and the
-> individual channels have a drive-strength-microamp (granted, that latter
-> one is a recent one of mine and may have slipped through review?). I can
-> certainly understand that when a property specifies a raw value to put
-> into some register (or field), that's very specific to that chip (or
-> small family of chips) - the adi,ch-func properties fall into that category.
+> -- 
+> 2.34.1
 
-Best regards,
-Krzysztof
-
+-- 
+heikki
