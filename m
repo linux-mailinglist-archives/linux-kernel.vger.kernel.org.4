@@ -2,156 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57B6B73D794
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 08:09:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3CBF73D79C
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 08:12:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbjFZGJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 02:09:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37740 "EHLO
+        id S230053AbjFZGMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 02:12:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbjFZGJj (ORCPT
+        with ESMTP id S229648AbjFZGMH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 02:09:39 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E296EE;
-        Sun, 25 Jun 2023 23:09:38 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id CE3F15C00A2;
-        Mon, 26 Jun 2023 02:09:34 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Mon, 26 Jun 2023 02:09:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1687759774; x=1687846174; bh=qf
-        uwH513zFMWuo2i2IpH5QB5uYfjDBN+0K7CDVDIlgI=; b=sA/jjAP2G7/0DRMLy3
-        I2IYFTFFEPO1haQwABjNa8w26Nk6BL7viwDNN9YF2UTmckv1yZgYOCdriFdMDXZc
-        M15GL3Qt1UoqFA7yiRRynNYwHEJxyawMJZ6Z1vYGtZA5l142OSgyCmyqOpicoUBq
-        fSIfgW9sw7PEI0LFztHmfpTL+EAra/koMUkNm6jVTQmfLgyfVNEywOjzqiiknow/
-        LzGebNHbWk3ZCbgtMaboFvmQD3akNbbEo68bZ1LcNjvAfo8YkTKw4rCdKZLklbKV
-        eYDNH0PfJq473qMhbHzCELDPagYKBgHN9SRM7y4+E6KoPYRvotsdglBr4KzfPnEQ
-        MyBw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1687759774; x=1687846174; bh=qfuwH513zFMWu
-        o2i2IpH5QB5uYfjDBN+0K7CDVDIlgI=; b=DX+HRGeczHv1H5a8BuJYCffVvULKT
-        oyWrdd7XsZtPz4kY8EUFFvXSHlfSLtYKbffSeKEWP6MTLTYolH8HA7QxQwjURwu3
-        OTbwzdWc0+xVYzJCWVDxLksDr/zECy6wUaGubs2CQMS2pP2j2MFm+ILCg5bkc3RO
-        OleDipmOTi+mfUHz78YeM8TkmYDrPtbuk6FwtbXUjIuC3v/7aL2KemrEMHQyMt3e
-        o3x5f/P7T69/A8leY8xIlSOrATuFaOFwU9+Z/1X9aiaPDEDC/IT4wlMjNswS/3Hd
-        /uwpPVjiz+8DDjtsPd8QXFs6ZDY3bvtI/xHtKZqURKl3z7OF6eBj2Vszg==
-X-ME-Sender: <xms:niuZZJofb3VXTFYsx3wLUMCZYBGQygnzTEJLFEgQ9aaF1xHQEHsplA>
-    <xme:niuZZLrsosy97OWKpbH1l9apN7kK3rTlE9bnXuMZQ5OAkEPQ2yyIIPWhxWa40REkX
-    XIvv9_MDFRQEw>
-X-ME-Received: <xmr:niuZZGM_5gBbWdxzwEsIZ71asitefY0cm4R-VZf5Fuzk_FHPtmOiM-io3YGsNjIGDnzrxEj9Ycp4tTk8Tau28CczgO2U88DPjKnCuQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeehvddgiedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
-    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
-    hhrdgtohhm
-X-ME-Proxy: <xmx:niuZZE5bI80fFaGja607ZRQBL38CXsfyfpv4obSolcApF0RbGPr7jw>
-    <xmx:niuZZI64QSiaqbzofBZ25xDZYFM4n--kmmo1_XrysW9tYk2Spkb95w>
-    <xmx:niuZZMjEmfebJm7KA1UkrG3mHKyh0DMJXf5SXOWGcgpwS2RDXwTXsQ>
-    <xmx:niuZZFyK3ywN9DESjbkqUiUAAyP5cAEVxatqyOey_3urRVFG-CeuOw>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 26 Jun 2023 02:09:33 -0400 (EDT)
-Date:   Mon, 26 Jun 2023 08:09:31 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Uros Milojkovic <uroshm@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, marvin24@gmx.de,
-        p.zabel@pengutronix.de, linux-tegra@vger.kernel.org,
-        linux-staging@lists.linux.dev
-Subject: Re: [PATCH] staging: nvec: udelay to usleep_range
-Message-ID: <2023062653-banked-embroider-2026@gregkh>
-References: <CAP=xWk6GvVQxzTJ6jS2pQ9dKvgoFFHc=m4yMma101MGKgdcm5A@mail.gmail.com>
+        Mon, 26 Jun 2023 02:12:07 -0400
+Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44B8EEE;
+        Sun, 25 Jun 2023 23:12:05 -0700 (PDT)
+Received: by mail-ua1-x92b.google.com with SMTP id a1e0cc1a2514c-78a5384a5daso557659241.0;
+        Sun, 25 Jun 2023 23:12:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687759924; x=1690351924;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aWiNkr7svo+LwhrDq8mI2+KVwjyWuAbuHc8qcJJ40l4=;
+        b=NVg6UP3h1sfMl7waiNHRNbbIMeY6YlVJ7w6iJOS7AQkWO6A/RRe1Z8RbIBX6B7uiHm
+         5kumfhuY3QGWNkP687csxPo2nc3kN8+h9Uy6D0wqt8FanGeIWzAQoLsmr3RebM00psJ/
+         qyUCP3GVubSTfmD1G+wuxBXJEw5wNNXajnBsJYuCnLBjWE3rrwyrKeR7PMBGveVzN90g
+         zw6KcqCrQfdyWxDsKajhLY11SqX3q9tEdX3xhP5djybzrRxEdHDtk/BsCTYLm9T8PfMf
+         pHpgQGpJuCOB8Hi4sgPf7K79xwahtVeKfOn0L/lZaC7G5/wlbRawP7WrIK7OKj71QZ4n
+         B0xQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687759924; x=1690351924;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aWiNkr7svo+LwhrDq8mI2+KVwjyWuAbuHc8qcJJ40l4=;
+        b=P2P84rSnpQ7VOa9Z2dKz8lyR+d+DMwI7+x6TKtRiJ2JLn0qunr0BJzzR3PsURiQH8e
+         avMRtwe3G8S8yLjoU75Lr3kIlS4UBWUtEbUBm74mpTNVJ7rAQSRGfBWaGhnZSoG42ERL
+         wIiS28pwrpjPuLen4ipLOmw+4w02DFTgW09IxepgnZul+kaygxz1WZYOB+/Y/6zqEby6
+         zLKENA2QtK/PHxyrhksG1d5wKi1iedmiQhAkC9e4rkOR9cuMDd5ztExo88QYtl9PIRxl
+         CY42hggAF0t84MxnsIFamXGqJRMo0+KiH1u4Ho6+NIq9S0zyrx2CL+MULEE0xJReXRSI
+         EKAA==
+X-Gm-Message-State: AC+VfDwaB/GEn3hiPENxeEg2JaMKcn8JTvUt8KXjxPAF1H4CXttG6kjy
+        Nc89zk3f4tO5lfuZg6+krRlBvDwEkl6J2MmZex/xl+5ENRc=
+X-Google-Smtp-Source: ACHHUZ6Mt7T7WOGheqCz8eTtbl6Lv6c6WI57bKj4DOh871nBqkbJWws+6lSTfjxGhFnoy77ryhgUCD4nAaIM+KAI15w=
+X-Received: by 2002:a67:fc41:0:b0:443:682e:2088 with SMTP id
+ p1-20020a67fc41000000b00443682e2088mr127623vsq.12.1687759924180; Sun, 25 Jun
+ 2023 23:12:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAP=xWk6GvVQxzTJ6jS2pQ9dKvgoFFHc=m4yMma101MGKgdcm5A@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <jbyihkyk5dtaohdwjyivambb2gffyjs3dodpofafnkkunxq7bu@jngkdxx65pux>
+In-Reply-To: <jbyihkyk5dtaohdwjyivambb2gffyjs3dodpofafnkkunxq7bu@jngkdxx65pux>
+From:   Amir Goldstein <amir73il@gmail.com>
+Date:   Mon, 26 Jun 2023 09:11:53 +0300
+Message-ID: <CAOQ4uxhut2NHc+MY-XOJay5B-OKXU2X5Fe0-6-RCMKt584ft5A@mail.gmail.com>
+Subject: Re: splice(-> FIFO) never wakes up inotify IN_MODIFY?
+To:     =?UTF-8?Q?Ahelenia_Ziemia=C5=84ska?= 
+        <nabijaczleweli@nabijaczleweli.xyz>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jan Kara <jack@suse.cz>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 25, 2023 at 02:55:35PM -0400, Uros Milojkovic wrote:
-> Checkpatch pl alerts that usleep_range is preferred to udelay. The
-> change is made.
-> Signed-off-by: umilojkovic <uroshm@gmail.com>
-> ---
->  drivers/staging/nvec/nvec.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/staging/nvec/nvec.c b/drivers/staging/nvec/nvec.c
-> index 2823cacde130..8bb3b691d1f5 100644
-> --- a/drivers/staging/nvec/nvec.c
-> +++ b/drivers/staging/nvec/nvec.c
-> @@ -627,7 +627,7 @@ static irqreturn_t nvec_interrupt(int irq, void *dev)
->          break;
->      case 2:        /* first byte after command */
->          if (status == (I2C_SL_IRQ | RNW | RCVD)) {
-> -            udelay(33);
-> +            usleep_range(33, 200);
->              if (nvec->rx->data[0] != 0x01) {
->                  dev_err(nvec->dev,
->                      "Read without prior read command\n");
-> @@ -714,7 +714,7 @@ static irqreturn_t nvec_interrupt(int irq, void *dev)
->       * We experience less incomplete messages with this delay than without
->       * it, but we don't know why. Help is appreciated.
->       */
-> -    udelay(100);
-> +    usleep_range(100, 200);
-> 
->      return IRQ_HANDLED;
->  }
-> -- 
-> 2.34.1
-> 
+On Mon, Jun 26, 2023 at 6:54=E2=80=AFAM Ahelenia Ziemia=C5=84ska
+<nabijaczleweli@nabijaczleweli.xyz> wrote:
+>
+> Hi!
+>
+> Consider the following programs:
+> -- >8 --
+> =3D=3D> ino.c <=3D=3D
+> #define _GNU_SOURCE
+> #include <stdio.h>
+> #include <sys/inotify.h>
+> #include <unistd.h>
+> int main() {
+>   int ino =3D inotify_init1(IN_CLOEXEC);
+>   inotify_add_watch(ino, "/dev/fd/0", IN_MODIFY);
+>
+>   char buf[64 * 1024];
+>   struct inotify_event ev;
+>   while (read(ino, &ev, sizeof(ev)) > 0) {
+>     fprintf(stderr, "%d: mask=3D%x, cook=3D%x, len=3D%x, name=3D%.*s\n", =
+ev.wd, ev.mask,
+>             ev.cookie, ev.len, (int)ev.len, ev.name);
+>     fprintf(stderr, "rd=3D%zd\n", read(0, buf, sizeof(buf)));
+>   }
+> }
+>
 
-Hi,
+That's a very odd (and wrong) way to implement poll(2).
+This is not a documented way to use pipes, so it may
+happen to work with sendfile(2), but there is no guarantee.
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+> =3D=3D> se.c <=3D=3D
+> #define _GNU_SOURCE
+> #include <stdio.h>
+> #include <sys/sendfile.h>
+> int main() {
+>   ssize_t rd, acc =3D 0;
+>   while ((rd =3D sendfile(1, 0, 0, 128 * 1024 * 1024)) > 0)
+>     acc +=3D rd;
+>   fprintf(stderr, "se=3D%zd: %m\n", acc);
+> }
+>
+> =3D=3D> sp.c <=3D=3D
+> #define _GNU_SOURCE
+> #include <fcntl.h>
+> #include <stdio.h>
+> int main() {
+>   ssize_t rd, acc =3D 0;
+>   while ((rd =3D splice(0, 0, 1, 0, 128 * 1024 * 1024, 0)) > 0)
+>     acc +=3D rd;
+>   fprintf(stderr, "sp=3D%zd: %m\n", acc);
+> }
+> -- >8 --
+>
+> By all means, ./sp | ./ino and ./se | ./ino should be equivalent,
+> right?
+>
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+Maybe it should, but it's not.
 
-- Your patch is malformed (tabs converted to spaces, linewrapped, etc.)
-  and can not be applied.  Please read the file,
-  Documentation/process/email-clients.rst in order to fix this.
+> -- >8 --
+> $ make se sp ino
+> $ mkfifo fifo
+> $ ./ino < fifo &
+> [1] 230
+> $ echo a > fifo
+> $ echo a > fifo
+> 1: mask=3D2, cook=3D0, len=3D0, name=3D
+> rd=3D4
+> $ echo c > fifo
+> 1: mask=3D2, cook=3D0, len=3D0, name=3D
+> rd=3D2
+> $ ./se > fifo
+> abcdef
+> 1: mask=3D2, cook=3D0, len=3D0, name=3D
+> asd
+> ^D
+> se=3D11: Success
+> rd=3D11
+> 1: mask=3D2, cook=3D0, len=3D0, name=3D
+> rd=3D0
+> $ ./sp > fifo
+> abcdefg
+> asd
+> dsasdadadad
+> sp=3D24: Success
+> $ < sp ./sp > fifo
+> sp=3D25856: Success
+> $ < sp ./sp > fifo
+> ^C
+> $ echo sp > fifo
+> ^C
+> -- >8 --
+>
+> Note how in all ./sp > fifo cases, ./ino doesn't wake up!
+> Note also how, thus, we've managed to fill the pipe buffer with ./sp
+> (when it transferred 25856), and now we can't /ever/ write there again
+> (both splicing and normal writes block, since there's no space left in
+>  the pipe; ./ino hasn't seen this and will never wake up or service the
+>  pipe):
+> so we've effectively "denied service" by slickily using a different
+> syscall to do the write, right?
+>
 
-- It looks like you did not use your "real" name for the patch on either
-  the Signed-off-by: line, or the From: line (both of which have to
-  match).  Please read the kernel file,
-  Documentation/process/submitting-patches.rst for how to do this
-  correctly.
+Only applications that do not check for availability
+of input in the pipe correctly will get "denied service".
 
-- You sent a patch that has been sent multiple times in the past, and is
-  identical to ones that has been recently rejected.  Please always look
-  at the mailing list traffic to determine if you are duplicating other
-  people's work.
+> I consider this to be unexpected behaviour because (a) obviously and
+> (b) sendfile() sends the inotify event.
+>
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
+The fact is that relying on inotify IN_MODIFY and IN_ACCESS events
+for pipes is not a good idea.
 
-thanks,
+splice(2) differentiates three different cases:
+        if (ipipe && opipe) {
+...
+        if (ipipe) {
+...
+        if (opipe) {
+...
 
-greg k-h's patch email bot
+IN_ACCESS will only be generated for non-pipe input
+IN_MODIFY will only be generated for non-pipe output
+
+Similarly FAN_ACCESS_PERM fanotify permission events
+will only be generated for non-pipe input.
+
+sendfile(2) OTOH does not special cases the pipe input
+case at all and it generates IN_MODIFY for the pipe output
+case as well.
+
+If you would insist on fixing this inconsistency, I would be
+willing to consider a patch that matches sendfile(2) behavior
+to that of splice(2) and not the other way around.
+
+My general opinion about IN_ACCESS/IN_MODIFY
+(as well as FAN_ACCESS_PERM) is that they are not
+very practical, not well defined for pipes and anyway do
+not cover all the ways that a file can be modified/accessed
+(i.e. mmap). Therefore, IMO, there is no incentive to fix
+something that has been broken for decades unless
+you have a very real use case - not a made up one.
+
+Incidentally, I am working on a new set of fanotify
+permission events (FAN_PRE_ACCESS/MODIFY)
+that will have better defined semantics - those are not
+going to be applicable to pipes though.
+
+Thanks,
+Amir.
