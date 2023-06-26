@@ -2,93 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CAC973D589
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 03:28:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D3A173D58C
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 03:29:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229851AbjFZB2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 21:28:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54014 "EHLO
+        id S229781AbjFZB27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 21:28:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbjFZB2O (ORCPT
+        with ESMTP id S229538AbjFZB25 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 21:28:14 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2D47194;
-        Sun, 25 Jun 2023 18:28:11 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id 5614622812f47-3a1ba074dadso1076881b6e.1;
-        Sun, 25 Jun 2023 18:28:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687742891; x=1690334891;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3KZNMyDXB/fy5OKIT9JHt+RgpT4vpVpO98zJF2YAzk0=;
-        b=KBXKSMEvvc1sS0bTW7N9oqVp1u3NdVhbyxc+5nsvOVGQ1cvj+gMtXQukb1ZrvASdOd
-         neeDFwOHMGSTtvMe5hgB6h1lNMLZk2DtvF7mR71gxD5GJUUwUpI5iEXg595HWVZ+7F/0
-         s7Gwgzj0NmBUvbxsRGNnDJXbggxdI9aj0aGg10rbfgtU49ZRvtvSsWfcN+k/kryw7TF0
-         Vw8Zzf9s8hFBxxlvUv3E/XfuiQrekNr62n9fJoUJicTcBeaNSLRs+2STUQ+gGWVFM8f7
-         9GsM24SxZHXa7t+Eqh2MDy+zSDY7nXx1HGABBeuOBbemzLWn8eIL9hbId2aE5wDpnGxH
-         X6mQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687742891; x=1690334891;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3KZNMyDXB/fy5OKIT9JHt+RgpT4vpVpO98zJF2YAzk0=;
-        b=K+vUV22D1KLc7Djvkh8PaGg7EW9n2dWzcPa+fRyoWfN16bsZ4RRTOhPaDYBLZIBBsO
-         ERa69h2iiYfcJ4g61dHn6tOfSrnKs88bnrFnHJ8DF1Vi/MPBvJeDREtTjxGLDzpyNxRD
-         TXc2mHkBOG5m1SFe3Q+s1YIqcenycofXC2usqnJ9/B1thxd76poSYG1k+H0WPBh8ubCl
-         mnWloViFVDSDoSMJtUJFD84YxbzzqfTHLaqIFQMCvuCUcg+T8NmQslSxz161HZQOLXVk
-         DMRchPXrKggJB10ooDTyb8nyLMKF2XId/iCQ9MIgJAkdN/aN1qfL+8Ow71UQD25u8Qww
-         1nuQ==
-X-Gm-Message-State: AC+VfDw5Vb7R/qukJGn8WnqGDu/iTyPZteFlPC0TgmswN9kAvlAKc+kX
-        wE7cP6O0XZLn3ccLcL1DuVjS1Q3rXgwN9KApYirIuBqD
-X-Google-Smtp-Source: ACHHUZ7I1eYXh7yUSMkGZU/5hN3SoNfxGTarJARtmwKUb7YRrYzLwK2EKNtcr4Xzq0HJMxRDVZJ80V6v03BgamutDzQ=
-X-Received: by 2002:a05:6808:13c1:b0:3a0:58f9:e982 with SMTP id
- d1-20020a05680813c100b003a058f9e982mr12732237oiw.27.1687742891144; Sun, 25
- Jun 2023 18:28:11 -0700 (PDT)
+        Sun, 25 Jun 2023 21:28:57 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91F03C6;
+        Sun, 25 Jun 2023 18:28:55 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Qq9Gp0wbgz4wb1;
+        Mon, 26 Jun 2023 11:28:49 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1687742930;
+        bh=tHVai39HxgjGHNP/zksmmKbc9HmL2vXQATBH3nrtmIk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=qRz3LYRs0stJLsICMI4jvbq0Lx+qk4n4L9VDO3L2lMdcrnyQ4oW4EikpbkZxS65xu
+         rq+/IqZgIZTEfYOarRrpPsu9X1B8kTiNoeHQ+7vvipXJUACt0JzyCAbArG+x6CZz3h
+         hfq6SsNXR4Pa8MnvbK5xT47bZ0e/v3OpmT2ltFEv0VFiVADClHsePJZImdCXH25JzN
+         5YzsB5gPBPiEELo9UQt0JX2PpnG4wSMsqyqMnADd5y6lp6oweFdmeAu6lFS3+V7pTb
+         eaf4gM+cil75xkojJI5St7jwNCa39iNsUBaVon0oBEf6EMl6GXQhIeLfVpJSHu4DOp
+         1l6y60kjCu6gQ==
+Date:   Mon, 26 Jun 2023 11:28:47 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     David Howells <dhowells@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the net-next tree
+Message-ID: <20230626112847.2ef3d422@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20230624133808.621805-1-jcmvbkbc@gmail.com> <562ff26d-df78-c1cb-6a34-b9a97efdc43e@web.de>
-In-Reply-To: <562ff26d-df78-c1cb-6a34-b9a97efdc43e@web.de>
-From:   Max Filippov <jcmvbkbc@gmail.com>
-Date:   Sun, 25 Jun 2023 18:27:59 -0700
-Message-ID: <CAMo8Bf+KeW8Gx22ddHjco2vJh1zanRaiHDvi0Jk0-rUpMX0kkg@mail.gmail.com>
-Subject: Re: [PATCH] xtensa: dump userspace code around the exception PC
-To:     Markus Elfring <Markus.Elfring@web.de>
-Cc:     kernel-janitors@vger.kernel.org, Chris Zankel <chris@zankel.net>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/xdtucNmpqhA0UpIbgQavQMZ";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marcus,
+--Sig_/xdtucNmpqhA0UpIbgQavQMZ
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, Jun 25, 2023 at 9:36=E2=80=AFAM Markus Elfring <Markus.Elfring@web.=
-de> wrote:
->
-> > In the absence of other debug facilities dumping user code around the
-> > unhandled exception address may help debugging the issue.
->
-> Please choose an imperative change suggestion.
+Hi all,
 
-The change itself is so small that it's fully described in the
-subject, and I believe
-that that description is imperative. This part is the rationale. From
-my experience
-I cannot guarantee that dumping user code will help, but sometimes it
-does, hence
-the 'may help'.
-Please let me know if you have better wording.
+After merging the net-next tree, today's linux-next build (native perf)
+failed like this:
+
+In file included from builtin-trace.c:907:
+trace/beauty/msg_flags.c: In function 'syscall_arg__scnprintf_msg_flags':
+trace/beauty/msg_flags.c:28:21: error: 'MSG_SPLICE_PAGES' undeclared (first=
+ use in this function)
+   28 |         if (flags & MSG_##n) { \
+      |                     ^~~~
+trace/beauty/msg_flags.c:50:9: note: in expansion of macro 'P_MSG_FLAG'
+   50 |         P_MSG_FLAG(SPLICE_PAGES);
+      |         ^~~~~~~~~~
+trace/beauty/msg_flags.c:28:21: note: each undeclared identifier is reporte=
+d only once for each function it appears in
+   28 |         if (flags & MSG_##n) { \
+      |                     ^~~~
+trace/beauty/msg_flags.c:50:9: note: in expansion of macro 'P_MSG_FLAG'
+   50 |         P_MSG_FLAG(SPLICE_PAGES);
+      |         ^~~~~~~~~~
+
+Caused by commit
+
+  b848b26c6672 ("net: Kill MSG_SENDPAGE_NOTLAST")
+
+There is no MSG_SPLICE_PAGES in tools/perf/trace/beauty/include/linux/socke=
+t.h
+
+I have reverted that commit for today.
 
 --=20
-Thanks.
--- Max
+Cheers,
+Stephen Rothwell
+
+--Sig_/xdtucNmpqhA0UpIbgQavQMZ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSY6c8ACgkQAVBC80lX
+0Gzy9gf7BbnAhJ+PyhJzcE3tD3D2p8tk+Ycg5XNOGQOQNfsOALTWKBnd4mkJaToX
+eAg+moYZMw8mVHA56NuKPSiJT7+X2h3B5LTCt8Gf38nRVczvb57MWZKF4mBg2jZa
+EGwTpazMY1j5H/0uYHkmLenJO1xVRYAkLoYcHgbQcm7fsoQ5L33pC+H0gY9NNHEY
+fsb781ytiSdnS1HlZWc+JK2zO16DFLYtUKHXpW2AyIyzicpxrqHwleEwU/ezOplm
+u8hSBPA6Omsy3qSOpMtiG6Sgr3em1sx1X7thXP/RTqg/fc4k7PsbqgqYwMzvy+Qr
+KQvFsiTTPTyKqsZ7TgOTgQGrEuPMUg==
+=eZf6
+-----END PGP SIGNATURE-----
+
+--Sig_/xdtucNmpqhA0UpIbgQavQMZ--
