@@ -2,120 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0EAF73DB6E
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 11:30:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5C5673DB71
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 11:32:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229684AbjFZJaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 05:30:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38252 "EHLO
+        id S229780AbjFZJb7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 05:31:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230385AbjFZJaI (ORCPT
+        with ESMTP id S229601AbjFZJb5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 05:30:08 -0400
-Received: from mail-il1-f172.google.com (mail-il1-f172.google.com [209.85.166.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3453B9;
-        Mon, 26 Jun 2023 02:30:05 -0700 (PDT)
-Received: by mail-il1-f172.google.com with SMTP id e9e14a558f8ab-345a0cf5b3bso8682275ab.0;
-        Mon, 26 Jun 2023 02:30:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687771805; x=1690363805;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=+OtaETWb24m97Ds/UuSIviPp/udpUqkFteTCOvggmng=;
-        b=HjEhtpSZrlJBIXPBgyEwMzVVrssHF6MJZQ8i6vFqvk5jMqR40EyvKIrqyI33FTi9NZ
-         6bonRSu7Q0ATA8TVDeTsp7UOIRn/BtmQky8wNVACxRxacQdL6DW6tbU1QPmh7ZYF8bNT
-         49AWd+WiqLtWDsRB/aKQta6hfrlfpfmQscZZj1orPhMMjL2jJCQ/tfHHKmZZRaWXoysf
-         G3CfGop70rxEYw9bGr24bXyMXYvTqKcQXLOa4HYo8XlUnPvw1B0sQNQs7dh7uiCL3/bN
-         HuoXrJ6EmbehYPtA8sBDGm8i8LXVXsrWD2q1+g6f7+JeO/lQ59Fg/oA3mVNw+53JbOBp
-         1/qw==
-X-Gm-Message-State: AC+VfDx/2L2sbfkXFpOsWnFoTriIgnJtsIdH3YMK2MT8XOyXwGP1h6q9
-        SvKPoPsD0yet8vLQviJYog==
-X-Google-Smtp-Source: ACHHUZ7ma3u80z5g13zdtQF0PPsMHvxWrDwncZTbHWyQ5p5pXLKxhjX3k1XvOGgqqkWOSND7WCI3Qg==
-X-Received: by 2002:a92:d309:0:b0:33d:3b69:2d23 with SMTP id x9-20020a92d309000000b0033d3b692d23mr22947121ila.19.1687771804923;
-        Mon, 26 Jun 2023 02:30:04 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id p17-20020a056e0206d100b00341fa29aaf4sm1886925ils.39.2023.06.26.02.30.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jun 2023 02:30:04 -0700 (PDT)
-Received: (nullmailer pid 2436844 invoked by uid 1000);
-        Mon, 26 Jun 2023 09:30:02 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        Mon, 26 Jun 2023 05:31:57 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDB1183
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 02:31:55 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-257-KlAEpZ10PpWLOI4ALd46BQ-1; Mon, 26 Jun 2023 10:31:53 +0100
+X-MC-Unique: KlAEpZ10PpWLOI4ALd46BQ-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Mon, 26 Jun
+ 2023 10:31:52 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Mon, 26 Jun 2023 10:31:52 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Linus Torvalds' <torvalds@linux-foundation.org>,
+        David Howells <dhowells@redhat.com>
+CC:     Franck Grosjean <fgrosjea@redhat.com>,
+        Phil Auld <pauld@redhat.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] pipe: Make a partially-satisfied blocking read wait for
+ more
+Thread-Topic: [PATCH] pipe: Make a partially-satisfied blocking read wait for
+ more
+Thread-Index: AQHZpiQIVAgSMCrk8UeX4nEsAOQxPq+c1Vbw
+Date:   Mon, 26 Jun 2023 09:31:52 +0000
+Message-ID: <fa6de786ee1241c6ba54c3cce0b980aa@AcuMS.aculab.com>
+References: <2730511.1687559668@warthog.procyon.org.uk>
+ <CAHk-=wiXr2WTDFZi6y8c4TjZXfTnw28BkLF9Fpe=SyvmSCvP2Q@mail.gmail.com>
+In-Reply-To: <CAHk-=wiXr2WTDFZi6y8c4TjZXfTnw28BkLF9Fpe=SyvmSCvP2Q@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Luca Weiss <luca.weiss@fairphone.com>
-Cc:     phone-devel@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Iskren Chernev <me@iskren.info>,
-        Avri Altman <avri.altman@wdc.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Eric Biggers <ebiggers@google.com>,
-        linux-arm-msm@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        devicetree@vger.kernel.org,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-scsi@vger.kernel.org
-In-Reply-To: <20221209-dt-binding-ufs-v4-3-14ced60f3d1b@fairphone.com>
-References: <20221209-dt-binding-ufs-v4-0-14ced60f3d1b@fairphone.com>
- <20221209-dt-binding-ufs-v4-3-14ced60f3d1b@fairphone.com>
-Message-Id: <168777180225.2436813.12641828486385303318.robh@kernel.org>
-Subject: Re: [PATCH v4 3/3] dt-bindings: ufs: qcom: Fix sm8450 bindings
-Date:   Mon, 26 Jun 2023 03:30:02 -0600
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Mon, 26 Jun 2023 10:15:59 +0200, Luca Weiss wrote:
-> SM8450 actually supports ICE (Inline Crypto Engine) so adjust the
-> bindings and the example to match.
-> 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Reviewed-by: Eric Biggers <ebiggers@google.com>
-> Reviewed-by: Iskren Chernev <me@iskren.info>
-> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-> ---
->  Documentation/devicetree/bindings/ufs/qcom,ufs.yaml | 15 ++++++++++-----
->  1 file changed, 10 insertions(+), 5 deletions(-)
-> 
-
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
-
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/ufs/qcom,ufs.example.dtb: ufs@1d84000: Unevaluated properties are not allowed ('reg-names' was unexpected)
-	from schema $id: http://devicetree.org/schemas/ufs/qcom,ufs.yaml#
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221209-dt-binding-ufs-v4-3-14ced60f3d1b@fairphone.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+RnJvbTogTGludXMgVG9ydmFsZHMNCj4gU2VudDogMjMgSnVuZSAyMDIzIDIzOjQyDQo+IA0KPiBP
+biBGcmksIDIzIEp1biAyMDIzIGF0IDE1OjM0LCBEYXZpZCBIb3dlbGxzIDxkaG93ZWxsc0ByZWRo
+YXQuY29tPiB3cm90ZToNCj4gPg0KPiA+IENhbiB5b3UgY29uc2lkZXIgbWVyZ2luZyBzb21ldGhp
+bmcgbGlrZSB0aGUgYXR0YWNoZWQgcGF0Y2g/ICBVbmZvcnR1bmF0ZWx5LA0KPiA+IHRoZXJlIGFy
+ZSBhcHBsaWNhdGlvbnMgb3V0IHRoZXJlIHRoYXQgZGVwZW5kIG9uIGEgcmVhZCBmcm9tIHBpcGUo
+KSB3YWl0aW5nDQo+ID4gdW50aWwgdGhlIGJ1ZmZlciBpcyBmdWxsIHVuZGVyIHNvbWUgY2lyY3Vt
+c3RhbmNlcy4gIFBhdGNoIGEyOGM4YjlkYjhhMQ0KPiA+IHJlbW92ZWQgdGhlIGNvbmRpdGlvbmFs
+aXR5IG9uIHRoZXJlIGJlaW5nIGFuIGF0dGFjaGVkIHdyaXRlci4NCj4gDQo+IFRoaXMgcGF0Y2gg
+c2VlbXMgYWN0aXZlbHkgd3JvbmcsIGluIHRoYXQgbm93IGl0J3MgcG9zc2libHkgd2FpdGluZyBm
+b3INCj4gZGF0YSB0aGF0IHdvbid0IGNvbWUsIGV2ZW4gaWYgaXQncyBub25ibG9ja2luZy4NCg0K
+SSB0aGluayBpdCBwcmV0dHkgbXVjaCBicmVha3M6DQoJY29tbWFuZCB8IHRlZSBmaWxlDQp3aGVy
+ZSAnY29tbWFuZCcgaXMgY2FyZWZ1bCB0byBmZmx1c2goc3Rkb3V0KS4NCg0KCURhdmlkDQoNCi0N
+ClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBN
+aWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxl
+cykNCg==
 
