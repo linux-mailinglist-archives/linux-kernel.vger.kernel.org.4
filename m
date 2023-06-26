@@ -2,109 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C26E73EC5F
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 23:01:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AD8973EC63
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 23:02:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbjFZVBb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 17:01:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52772 "EHLO
+        id S230234AbjFZVBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 17:01:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229901AbjFZVB2 (ORCPT
+        with ESMTP id S230231AbjFZVBw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 17:01:28 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 205CA125;
-        Mon, 26 Jun 2023 14:01:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687813287; x=1719349287;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=LOc6tDobeRpUuyxloHqratDaLJtesBy6Kzgu4za2HvY=;
-  b=BP9MAkq8hhXmztbOjxFIiumcGL/Auph0U8fqdjku7xIz9/H64eIzpJLm
-   iP0YsAYxx49eRZ5VMcsj/AMmr2IUrAHUaT0jIP4VNxXr9TPOiagKyNzOp
-   rKKIUnICyvNRd8Yimf7K4K2traNhzlTiBFm9Moj729ktLQo/jz63MgwXh
-   pRZXnT1wpoV8RRVvED0MlWxkM3kz4wbTnLbcQzMQUrHVMroh8nzuNPR1q
-   Vti6FOlSH1HfTbBfsCybCgkGntLj2Hv19hwjpAi1vKDadQFn5VZWHvcaq
-   JpVQTg1Iv4TkuXNNbTrTwTEsUnqBwJ7apNQRroxT6Kb4Un/CAub44WznI
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="364836490"
-X-IronPort-AV: E=Sophos;i="6.01,160,1684825200"; 
-   d="scan'208";a="364836490"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 14:01:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="666435927"
-X-IronPort-AV: E=Sophos;i="6.01,160,1684825200"; 
-   d="scan'208";a="666435927"
-Received: from jingyan2-mobl.amr.corp.intel.com (HELO [10.209.115.106]) ([10.209.115.106])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 14:01:26 -0700
-Message-ID: <7ca035b73ebcce9fde270227a5b630b169ebdeaf.camel@linux.intel.com>
-Subject: Re: [PATCH v4 07/24] sched/fair: Compute IPC class scores for load
- balancing
-From:   Tim Chen <tim.c.chen@linux.intel.com>
-To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-        Ionela Voinescu <ionela.voinescu@arm.com>
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Zhao Liu <zhao1.liu@intel.com>,
-        "Yuan, Perry" <Perry.Yuan@amd.com>, x86@kernel.org,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        "Tim C . Chen" <tim.c.chen@intel.com>,
-        Zhao Liu <zhao1.liu@linux.intel.com>
-Date:   Mon, 26 Jun 2023 14:01:25 -0700
-In-Reply-To: <20230625201155.GA3902@ranerica-svr.sc.intel.com>
-References: <20230613042422.5344-1-ricardo.neri-calderon@linux.intel.com>
-         <20230613042422.5344-8-ricardo.neri-calderon@linux.intel.com>
-         <ZJQONIinvSengWa8@arm.com>
-         <20230625201155.GA3902@ranerica-svr.sc.intel.com>
+        Mon, 26 Jun 2023 17:01:52 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DEC0D9;
+        Mon, 26 Jun 2023 14:01:51 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2b69f958ef3so26601011fa.1;
+        Mon, 26 Jun 2023 14:01:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687813309; x=1690405309;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jEzlsaUmZXPnWU2Adei6SoQasb2UVBNAtJg+OJameMI=;
+        b=cTYOGQnpwPMCPf3IJICbOnspn9is3TyiDc38a9Hmvy5OCHC/oSXJXVz5Yppiv+bg6e
+         R8uX0qvBmRpj/Tln1Td5thtDGArJZnrUFIHqEA+FWXbBjYIyOom9P0hIIx69MB1gsAQ5
+         GgdNSK90BiYfX0JJf3NyxI9TInUzrzVT46b0f5fml2w5kTWyqBDL9uFCNIRAPxxOYBO6
+         ARseH4ugXCbu4LKdhtPEOtE/+WyOQvPItfO1l2vnIRKGMN97boUnKRzmsnAmmkNtBrAl
+         L/FvgouoyHFyhsWAvBXl5RYbqd31q84ZKNu1btwBYafj2bu5Eg0oNWZ9ideMdGxcq4O+
+         IxkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687813309; x=1690405309;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jEzlsaUmZXPnWU2Adei6SoQasb2UVBNAtJg+OJameMI=;
+        b=Uq89FFBtPjtPMff2nX2zyQ9M3EkQKTDOrjEj2lE5/r3bT/09zNHSGvPi92MVGLlYPk
+         tI72EZINwbMXZvF5yESOnUSlNmuGfN8/Cl0tiAIAmChBzgsq7xI+0XgkWgZcZ3MN6Nqc
+         jyY5hHpaTcb6+X91L3vqNVJwx+L05tzjLgc88tNouJaY97imw2jKJlwCf3PmFhBad2L1
+         feh927MIipEJsAtp74GrORMj3PFNNlo3mrHFO6NDYpIKS+qPVxq6KPezuWMTXpC+XFU2
+         c9tmhrxApJJQ9GklziwkDk0/ooFj79POM2wcttFpRAB1MhJ8m4lnmpoDTtDgUzmMWtlh
+         r7Vw==
+X-Gm-Message-State: AC+VfDytS/O+ey7QaqtbB5T3G7av7O4YvLlXUxBSehjWgq6LRX7K3bHZ
+        OQedixoVPy3JwEcQEGms+BY3+6xIHpB987gqSUk=
+X-Google-Smtp-Source: ACHHUZ7xKMNm6A1vIDbxhQP9GjPBJ+rANHnqBKz1mGtMsQWZx2HxYp/X48ttGDtA/xHvUTMceGFdUfUwG3KCuchNAeU=
+X-Received: by 2002:a2e:83d0:0:b0:2b4:792d:a4b5 with SMTP id
+ s16-20020a2e83d0000000b002b4792da4b5mr13512330ljh.33.1687813309269; Mon, 26
+ Jun 2023 14:01:49 -0700 (PDT)
+MIME-Version: 1.0
+References: <3101881.1687801973@warthog.procyon.org.uk> <CAOi1vP_g70kV_YFjHNoS1hHPpCiMxW1hTfm92Ud35ehYrmv=1Q@mail.gmail.com>
+ <3109248.1687812255@warthog.procyon.org.uk>
+In-Reply-To: <3109248.1687812255@warthog.procyon.org.uk>
+From:   Ilya Dryomov <idryomov@gmail.com>
+Date:   Mon, 26 Jun 2023 23:01:37 +0200
+Message-ID: <CAOi1vP8nbP93SyjhN4uJDaKEFKmsBcOKH6iGjpt3Qbj8n7CapQ@mail.gmail.com>
+Subject: Re: [PATCH net-next] libceph: Partially revert changes to support MSG_SPLICE_PAGES
+To:     David Howells <dhowells@redhat.com>
+Cc:     netdev@vger.kernel.org, Xiubo Li <xiubli@redhat.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Matthew Wilcox <willy@infradead.org>,
+        ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2023-06-25 at 13:11 -0700, Ricardo Neri wrote:
->=20
-> > > +
-> > > +	score_on_dst_cpu =3D arch_get_ipcc_score(sgs->min_ipcc, env->dst_cp=
-u);
-> > > +
-> > > +	/*
-> > > +	 * Do not use IPC scores. sgs::ipcc_score_{after, before} will be z=
-ero
-> > > +	 * and not used.
-> > > +	 */
+On Mon, Jun 26, 2023 at 10:44=E2=80=AFPM David Howells <dhowells@redhat.com=
+> wrote:
+>
+> Ilya Dryomov <idryomov@gmail.com> wrote:
+>
+> >   if (sendpage_ok(bv.bv_page))
+> >           msg.msg_flags |=3D MSG_SPLICE_PAGES;
+> >   else
+> >           msg.msg_flags &=3D ~MSG_SPLICE_PAGES;
+>
+> Hmmm...  I'm not sure there's any guarantee that msg, including msg_flags=
+,
+> won't get altered by ->sendmsg().
 
-The comment is not matching the check below.  If zero
-is not used, the check should also reflect the case.
+If this is indeed an issue, do_sendmsg() should be fixed too.  I would
+like to avoid having do_try_sendpage() do one thing and do_sendmsg() do
+something subtly different.
 
-> > > +	if (IS_ERR_VALUE(score_on_dst_cpu))
-> > > +		return;
-> > > +
-> > > +	before =3D sgs->sum_score;
-> > > +	after =3D before - sgs->min_score;
-> >=20
->=20
-Tim
+But then, even with the current patch, only msg_flags is reinitialized
+on the next loop iteration, not the entire message.  Should the entire
+message be reinitialized?
+
+Thanks,
+
+                Ilya
