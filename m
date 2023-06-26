@@ -2,96 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E180E73E33E
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 17:26:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B6A773E348
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 17:28:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229731AbjFZP0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 11:26:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46210 "EHLO
+        id S230061AbjFZP2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 11:28:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjFZP0x (ORCPT
+        with ESMTP id S229520AbjFZP2S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 11:26:53 -0400
-Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C80D93;
-        Mon, 26 Jun 2023 08:26:52 -0700 (PDT)
-Received: by mail-ua1-x92d.google.com with SMTP id a1e0cc1a2514c-793f262b6a9so802110241.1;
-        Mon, 26 Jun 2023 08:26:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687793211; x=1690385211;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+89gfXmJ9PSf+Pt2D4c4GX0Uof4aHZCLD/OrH79jSsg=;
-        b=AyjaD1eRoHDM50xgpG49ONEAd3ndFMRyHh0H5eO24TVgUJCPnnH4f6Awyv/KHFnBPJ
-         thZLmikNpLEsYfzXkKEYVXFFqODOVhj7tOHNuQGoKmCUV5VHKortEVd1UA9lVRz4SVl7
-         IZUQSyt3qgzmVnZPVC5S/fpIAABOxwJnEwn9FuURH2ratOjmKDIpYd7co/TPJlkFg+yy
-         KoDcjOVoExNJWg5H9vP0ADy4ONVjdJ5q6gOSSu7o+0eKf4IC9lNVzJQ+d1a9TfT2LvpJ
-         IGowrBkiM5MQKiFkQC8XTFacFVpF0luaGtl0ilvneRhDX/R7JP1msNJmZqx770MhW+Vx
-         dG2Q==
+        Mon, 26 Jun 2023 11:28:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3DAAC7
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 08:27:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687793257;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nhVNEcGfHP6r7iYI6uK5UQkeoNFVEouUiPU/UXitWVk=;
+        b=eD6npWnCEeJgpDrZY1RVtZk1Aee7zfY2D7zM49K2+HXysFYZKOGCcw86KJdtc4uUc8/w9q
+        /Bp2e6/QDY2njXn3papOZXWGDzx/0BM4b/ThzDbY/nrLZCN+jzAv0COcQM7ncMf7bm4SlH
+        AKv9fh5+1WsH106Trg/I88rzXxVQc0k=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-567-Hw8UCdwrOB6KKCGe5wQdYw-1; Mon, 26 Jun 2023 11:27:36 -0400
+X-MC-Unique: Hw8UCdwrOB6KKCGe5wQdYw-1
+Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-401e07ebf2dso5104941cf.3
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 08:27:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687793211; x=1690385211;
+        d=1e100.net; s=20221208; t=1687793256; x=1690385256;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+89gfXmJ9PSf+Pt2D4c4GX0Uof4aHZCLD/OrH79jSsg=;
-        b=SWJhHMsX6xuBtL4MubUfq5JyYOrzDfLh1kTugk7SSm7ZoiDFqLt2wp5qQi7a3/GJ7T
-         bOoogb+j0W7J+vP7HYsj5lHIzhGaJG5poiLYK3Tyc6eeLPtUz9EsToW+chgS4Oei3d8c
-         vjvexDipWBN12a289J5bOqh4ZxVftDeMMt1ZWmTlELY65l3lpB81x+Zrix5oOsqfHBa4
-         AS+h1CFOeA1EagQILV1Hc1kEPnPIsBJghOBQFcr+9XIw1jPSwiT7qgOeObM0cA4vLSy2
-         Z4mz9OOuqxLIvaMN1PWm2ENP6H2BKlyIz/s+1/cBy4RUHX8qLqR/VIKE3Yljl4Hwg5A6
-         JH9g==
-X-Gm-Message-State: AC+VfDy/k9LRbs2l1hW2BZgGv4azOMmpVhdKGvRYamCUIh/8HfGSzhay
-        HFHo/91tfs5JOReZfdbI+SCvRB0fjojByJQAayg=
-X-Google-Smtp-Source: ACHHUZ4RiG/DTgdfQPbpArWCdIJHV/cY2gZOEQovYMafvPkqF5riXU+HMYmna6zPL3NFxC2PSvt0riUqJEjniWElSfs=
-X-Received: by 2002:a67:f15a:0:b0:440:b593:36c7 with SMTP id
- t26-20020a67f15a000000b00440b59336c7mr10567808vsm.34.1687793211326; Mon, 26
- Jun 2023 08:26:51 -0700 (PDT)
+        bh=nhVNEcGfHP6r7iYI6uK5UQkeoNFVEouUiPU/UXitWVk=;
+        b=ZnpwWn+88p8v+fDJQVfzw5sQK6+phand2ZZg7Iuzo1C+1BQ+AKVvo3XpVqXZMOMo+p
+         UlzP72C9Hi/ZVxwQTvNf8nb8g4d3MdE+CuBN7qO8FaDGHUpM4dujTwub8+WVa4F5goRw
+         meEczz1XPaHZ+sd78tqV6A668T8Owpav+pE1wNnSb7c72mIBgNZK9s7y967baoUsy2+n
+         E4mqo5seOoyqf6f/kEk1aqXQTUWeNAASUxaNhC1x6erw4CVxDDL5iFGho0sCDiXBP02z
+         dYzTcoGrqkvN38addAZQIFPFlU12TWIE6FuXB/h3Ct56xvZpmKew2f7MUZ+BlyrCyX2e
+         /RXA==
+X-Gm-Message-State: AC+VfDwhYeKQrp6kffnrKJTFQwzOYPhpJ/pl/p4vgb+qjxy94Vb7MBfh
+        sk02Oo12glnTh1g6q90nd4vmrF2POpEhrR9WPzVHLiU/6xhkv1m167LcBfnnWn5lJhdrqLNOYmm
+        bzKLTWkQis1hMqvt35WOrgULVQeberAbOPXX8IkkX
+X-Received: by 2002:a05:622a:50f:b0:400:8fb3:8647 with SMTP id l15-20020a05622a050f00b004008fb38647mr8721391qtx.6.1687793255828;
+        Mon, 26 Jun 2023 08:27:35 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4TwvuXDKy9e+gI/3I+HhSR4c5+nrW+tY8HR6PT1g2FTGTp5mDJpijnD1fEtWSWZiFto+eJ4Zptasa++w84gzk=
+X-Received: by 2002:a05:622a:50f:b0:400:8fb3:8647 with SMTP id
+ l15-20020a05622a050f00b004008fb38647mr8721377qtx.6.1687793255624; Mon, 26 Jun
+ 2023 08:27:35 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230621144507.55591-1-jlayton@kernel.org> <20230621144735.55953-1-jlayton@kernel.org>
- <20230621144735.55953-46-jlayton@kernel.org>
-In-Reply-To: <20230621144735.55953-46-jlayton@kernel.org>
-From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
-Date:   Tue, 27 Jun 2023 00:26:34 +0900
-Message-ID: <CAKFNMomCU54JHKZxcUFLwci5ntzdD7gTv6JADhg--rLHXCcC+g@mail.gmail.com>
-Subject: Re: [PATCH 47/79] nilfs2: switch to new ctime accessors
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-        linux-nilfs@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230418171524.274386-1-npache@redhat.com> <881c1f7e-6740-478d-2512-11a5a99563ec@amd.com>
+In-Reply-To: <881c1f7e-6740-478d-2512-11a5a99563ec@amd.com>
+From:   Nico Pache <npache@redhat.com>
+Date:   Mon, 26 Jun 2023 11:27:09 -0400
+Message-ID: <CAA1CXcDMghE4xv7+QS8hVpC5gm34d=GUfDNhKL7iDx_ZPA4LKQ@mail.gmail.com>
+Subject: Re: [PATCH] kunit: drm: make DRM buddy test compatible with other
+ pages sizes
+To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        davidgow@google.com
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        ddutile@redhat.com, kunit-dev@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 11:48=E2=80=AFPM Jeff Layton wrote:
+Hi Christian,
+
+Thanks for the information! I am not very familiar with the inner
+workings of DRM, so I'm not really in a position to make any large or
+systematic changes to the test regarding the points you made. I am
+mainly trying to allow the tests to be run on more diverse hardware.
+From the looks of it this test has been adapted from an older test, so
+perhaps this rule was set in place in the past.
+
+Either way, I dont think my changes are going to break anything, so
+for the time being I think this small change is the best approach.
+Please let me know if you think otherwise.
+
+David, do you still have this on your radar? We've been carrying this
+as a RHEL-only since I originally posted it and have not noticed any
+issues due to it.
+
+Cheers,
+-- Nico
+
+On Wed, Apr 19, 2023 at 4:30=E2=80=AFAM Christian K=C3=B6nig
+<christian.koenig@amd.com> wrote:
 >
-> In later patches, we're going to change how the ctime.tv_nsec field is
-> utilized. Switch to using accessor functions instead of raw accesses of
-> inode->i_ctime.
+> Am 18.04.23 um 19:15 schrieb Nico Pache:
+> > The DRM buddy test uses a fixed 12 bit shift to covert from pages to
+> > bytes. This number is then used to confirm that (chunk_size < PAGE_SIZE=
+)
+> > which can lead to a failing drm_buddy_init on systems with PAGE_SIZE > =
+4k.
 >
-> Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> ---
->  fs/nilfs2/dir.c   |  6 +++---
->  fs/nilfs2/inode.c | 12 ++++++------
->  fs/nilfs2/ioctl.c |  2 +-
->  fs/nilfs2/namei.c |  8 ++++----
->  4 files changed, 14 insertions(+), 14 deletions(-)
+> Since the buddy allocator is used for resources which are independent of
+> the CPU PAGE size the later check is actually the broken one.
+>
+> E.g. neither in the buddy allocator nor in it's test cases we should
+> have any of PAGE_SHIFT or PAGE_SIZE.
+>
+> Otherwise the allocator wouldn't work correctly on systems with a
+> PAGE_SIZE different than 4k.
+>
+> Regards,
+> Christian.
+>
+> >
+> > Fixes: 92937f170d3f ("drm/selftests: add drm buddy alloc range testcase=
+")
+> > Signed-off-by: Nico Pache <npache@redhat.com>
+> > ---
+> >   drivers/gpu/drm/tests/drm_buddy_test.c | 4 ++--
+> >   1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/tests/drm_buddy_test.c b/drivers/gpu/drm/t=
+ests/drm_buddy_test.c
+> > index 09ee6f6af896..a62b2690d3c2 100644
+> > --- a/drivers/gpu/drm/tests/drm_buddy_test.c
+> > +++ b/drivers/gpu/drm/tests/drm_buddy_test.c
+> > @@ -318,8 +318,8 @@ static void mm_config(u64 *size, u64 *chunk_size)
+> >       s &=3D -ms;
+> >
+> >       /* Convert from pages to bytes */
+> > -     *chunk_size =3D (u64)ms << 12;
+> > -     *size =3D (u64)s << 12;
+> > +     *chunk_size =3D (u64)ms << PAGE_SHIFT;
+> > +     *size =3D (u64)s << PAGE_SHIFT;
+> >   }
+> >
+> >   static void drm_test_buddy_alloc_pathological(struct kunit *test)
+>
 
-Acked-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
-
-As already mentioned in the s390 patch comment, the implementation of
-inode_ctime_set_current() needs to be rewritten to use
-inode_ctime_set() instead of inode_set_ctime(), but I agree with this
-conversion patch for nilfs2 itself.
-
-Thank you for your efforts.
-
-Ryusuke Konishi
