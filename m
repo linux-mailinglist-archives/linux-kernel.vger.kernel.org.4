@@ -2,109 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DDBC73D9E2
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 10:35:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26A1D73D9E6
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 10:35:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230154AbjFZIfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 04:35:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36228 "EHLO
+        id S230158AbjFZIfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 04:35:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbjFZIfM (ORCPT
+        with ESMTP id S229731AbjFZIfk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 04:35:12 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEA2C1A1;
-        Mon, 26 Jun 2023 01:35:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687768511; x=1719304511;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8onuanaQNfRRRF00iDqDufDXkTnWdCag9mJHw4FNFiw=;
-  b=J8rFdf+nsOMlznX6iTvQnJpNwbnz4y9FoQXj7flldilRzUrtuZ5hlm41
-   KqybmkFXLbtO38X6mFipgSq6g1JNBxgf2kwtF9vsWyBlqjoh4UaZsqBOF
-   paFOdxaE1Xi9BIOJJPkSpv7njAXP1TTF1kOuoq5tOCnBbPo1CSm8r8EF5
-   mZ7dt8h4P6Lb2ajRrR9OBVR534zON0a89b+IGxnYxBToEW4AtPImRENnH
-   pnlWMw5V+mPkYQ5xDwKnukaEp+ABud1/x7cPf4QUGtvYoBBjFjeX+8+16
-   h5g8TEYlRjUEno0J8/k9W+hRFlRncU0r1V9tuMMnnrQ4DepJayMwryxmo
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="447595950"
-X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
-   d="scan'208";a="447595950"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 01:35:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="860606274"
-X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
-   d="scan'208";a="860606274"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 26 Jun 2023 01:35:07 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 26 Jun 2023 11:35:06 +0300
-Date:   Mon, 26 Jun 2023 11:35:06 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Frank Wang <frank.wang@rock-chips.com>
-Cc:     linux@roeck-us.net, gregkh@linuxfoundation.org,
-        sebastian.reichel@collabora.com, heiko@sntech.de,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, huangtao@rock-chips.com,
-        william.wu@rock-chips.com, jianwei.zheng@rock-chips.com,
-        yubing.zhang@rock-chips.com, wmc@rock-chips.com
-Subject: Re: [v4,1/2] usb: typec: tcpm: fix cc role at port reset
-Message-ID: <ZJlNupB/RUYOg74j@kuha.fi.intel.com>
-References: <20230616075241.27690-1-frank.wang@rock-chips.com>
+        Mon, 26 Jun 2023 04:35:40 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 196181A1;
+        Mon, 26 Jun 2023 01:35:39 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4f6283d0d84so3919092e87.1;
+        Mon, 26 Jun 2023 01:35:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687768537; x=1690360537;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9MrkiBWSdaWnAC9L6QYTchQNu8YBLbIyeAdR6NesYXo=;
+        b=A1D2/vWRDY0gMh6FvrQ/M1SacXwWHuWn5MtFitZFegdbFsD7Z05rQUNRB+Wf2F+rEO
+         chpNmQJrFda+TvtWyxrvyveWbrTzqZhqxA3a1S85tOdOFK+3A9okAvp9gJNr5KwV9P6g
+         nx4GpH/k+9sHrbqIyiXTkeTMAiqex/A+fqNo2v5F7VlPnERnHoiqgLI6VB3WRUs9OyJ1
+         /u+fQMqLcMTNAl1aaVqh67pBNEtS191lzZRSdWFlwkTRaYZ9TduEIKnRj7sP5wM5dBVn
+         WHWhcZFdB0vWykQYBMe62vezSjo4BCTMKiU6b4zUUJMIg48tkNjIXr9fakDk/35KD7Ts
+         Cgvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687768537; x=1690360537;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9MrkiBWSdaWnAC9L6QYTchQNu8YBLbIyeAdR6NesYXo=;
+        b=l596NYOErtI8PmO6XkDh5loRr+dxO0AoIbUj/4VG0tPN0C1PHTs//X2mDwg5LXWVoo
+         QtsdEor1u54VXbhf/hT4SxEkSD5Tadp2gGyYrtojirpYpQjKtIx2n8YZQO8BhpyC0EDU
+         E9S8uwROykxZ9Je/8Nc8cqizI5Q0oBFpO1yjDYMVlFMvkuPulVk30TSaZCft+X1j4B8m
+         Ai8YCA7nRlQH/4a0DhIDsDUur7QGHkFjMn0rkcKR6RzJ+989Fci0OGEqKzyromu4o1sE
+         UJXydTqchcEZ04pWJfUbUi55LOmPdicbVYMyRG2c8dCGSoSDDm/oPRCPcoLVGBq8ys1y
+         oJrg==
+X-Gm-Message-State: AC+VfDw02PclytRzOyG1lBRjbcVe+/JTBY0nSVrDnHptjsA8fkDDsYYC
+        05GAWCpLEHiT0dUqBzL0Xok=
+X-Google-Smtp-Source: ACHHUZ7otToh0hZinYK6A1vqz6otwhOcWbjMm0WVFh/Ap36znKkk8PbS+LM0n63exa5Agz6TvLTO6w==
+X-Received: by 2002:a05:6512:3414:b0:4f9:cd02:4af1 with SMTP id i20-20020a056512341400b004f9cd024af1mr2777347lfr.34.1687768536987;
+        Mon, 26 Jun 2023 01:35:36 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id f4-20020a0560001b0400b00307a86a4bcesm6667577wrz.35.2023.06.26.01.35.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jun 2023 01:35:36 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Selvin Xavier <selvin.xavier@broadcom.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] RDMA/bnxt_re: Fix spelling mistake "priviledged" -> "privileged"
+Date:   Mon, 26 Jun 2023 09:35:35 +0100
+Message-Id: <20230626083535.53303-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230616075241.27690-1-frank.wang@rock-chips.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 16, 2023 at 03:52:40PM +0800, Frank Wang wrote:
-> In the current implementation, the tcpm set CC1/CC2 role to open when
-> it do port reset would cause the VBUS removed by the Type-C partner.
-> 
-> This sets CC1/CC2 according to the default state of port to fix it.
-> 
-> Signed-off-by: Frank Wang <frank.wang@rock-chips.com>
+There is a spelling mistake in a comment and in a dev_err error message.
+Fix them.
 
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/infiniband/hw/bnxt_re/qplib_res.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> ---
-> Changelog:
-> (no changes since v3)
-> 
-> v2:
->  - Make some tweaking based on the default state of port, commented by Guenter Roeck.
-> 
-> v1:
->  - https://patchwork.kernel.org/project/linux-usb/patch/20230313025843.17162-2-frank.wang@rock-chips.com/
-> 
->  drivers/usb/typec/tcpm/tcpm.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 3c6b0c8e2d3ae..9f6aaa3e70ca8 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -4885,7 +4885,8 @@ static void run_state_machine(struct tcpm_port *port)
->  		break;
->  	case PORT_RESET:
->  		tcpm_reset_port(port);
-> -		tcpm_set_cc(port, TYPEC_CC_OPEN);
-> +		tcpm_set_cc(port, tcpm_default_state(port) == SNK_UNATTACHED ?
-> +			    TYPEC_CC_RD : tcpm_rp_cc(port));
->  		tcpm_set_state(port, PORT_RESET_WAIT_OFF,
->  			       PD_T_ERROR_RECOVERY);
->  		break;
-
-thanks,
-
+diff --git a/drivers/infiniband/hw/bnxt_re/qplib_res.c b/drivers/infiniband/hw/bnxt_re/qplib_res.c
+index 1c6c6c0bcf52..5fd8f7c90bb0 100644
+--- a/drivers/infiniband/hw/bnxt_re/qplib_res.c
++++ b/drivers/infiniband/hw/bnxt_re/qplib_res.c
+@@ -726,7 +726,7 @@ int bnxt_qplib_alloc_dpi(struct bnxt_qplib_res *res,
+ 
+ 	switch (type) {
+ 	case BNXT_QPLIB_DPI_TYPE_KERNEL:
+-		/* priviledged dbr was already mapped just initialize it. */
++		/* privileged dbr was already mapped just initialize it. */
+ 		dpi->umdbr = dpit->ucreg.bar_base +
+ 			     dpit->ucreg.offset + bit_num * PAGE_SIZE;
+ 		dpi->dbr = dpit->priv_db;
+@@ -932,7 +932,7 @@ int bnxt_qplib_map_db_bar(struct bnxt_qplib_res *res)
+ 	}
+ 	ucreg->bar_reg = ioremap(ucreg->bar_base, ucreg->len);
+ 	if (!ucreg->bar_reg) {
+-		dev_err(&res->pdev->dev, "priviledged dpi map failed!");
++		dev_err(&res->pdev->dev, "privileged dpi map failed!");
+ 		return -ENOMEM;
+ 	}
+ 
 -- 
-heikki
+2.39.2
+
