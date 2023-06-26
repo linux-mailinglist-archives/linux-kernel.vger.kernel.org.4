@@ -2,121 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AFD073D92E
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 10:09:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 869FB73D938
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 10:10:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbjFZIJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 04:09:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49668 "EHLO
+        id S230083AbjFZIKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 04:10:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230055AbjFZIJj (ORCPT
+        with ESMTP id S230085AbjFZIKK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 04:09:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CB371B6
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 01:08:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687766937;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KqoKmhBlTtHVnB8gm1nDpTAgK/1vm8kZHpYD3t91RRo=;
-        b=LhwkjHo9UilqMmjQbHQwGCRLEWaxs/Grh5nL3514jwVCG0ZT21PON6uYwxi60J2AfJuKIq
-        U1JLEK/mYO8bbuq3G1UzZlJjpsI85AtBC1+eyUzp1JKlPfc81AZAWUDXn7j6suMO32LDSt
-        bi5QWWbsAhveNpG+BdSwM2CdhE4ZEAc=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-132-geUHAD2JMWS4EaCL9rP_iQ-1; Mon, 26 Jun 2023 04:08:55 -0400
-X-MC-Unique: geUHAD2JMWS4EaCL9rP_iQ-1
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-313c930ee0eso961619f8f.0
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 01:08:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687766934; x=1690358934;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KqoKmhBlTtHVnB8gm1nDpTAgK/1vm8kZHpYD3t91RRo=;
-        b=BWUxQpnnf6DOMJhKGxJnllTcjkBeCXJs5u4l9TjNfPSmHx8SziDGcPCZGdivRqAtNC
-         TP1gtJCeo8Z+lxKFm4+Jeo6005Zv38n37S3eAakXcG8jYo48vKVGLO0DpUJ4HtGBfsRP
-         OLjG1U+qjiesDCoR0nuoEjYDaDkhdDxCCUy/bWMZbmWML9FUPZeOECifHLQ9LiyIZdB9
-         ywRDGJ+IlSuA8i//0PHWvwPx3ZXdU5xwtIolXvuqBCIftUOLT5EXuSfMjHk2IdACKxrf
-         100uPqQGar825XqD+fmaFD8vh7t0V4oc/044tFXDXMj1PPxFjxOfX4y/R0xhEBgaMa7H
-         t+2A==
-X-Gm-Message-State: AC+VfDxVgWeqFBJ+eD4FxGhEK2CSEd8imhXuj//9vjUK+lMLGEGPe39X
-        K84XnsH61BTjbovEqwy5VRHzTgt2lkkSeNLzFacCVT1yXnsT/2qMoWX9ewPALEDNMKsGFsOj7gR
-        Jp6UGr/1bHOITklYaHvUuwRHV
-X-Received: by 2002:a05:6000:184:b0:309:1532:8287 with SMTP id p4-20020a056000018400b0030915328287mr7714295wrx.19.1687766933841;
-        Mon, 26 Jun 2023 01:08:53 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6vrW3QD+fALJOHKAeyTZOgWHyoDD3cvdBTB698WGYKApvEdp0JvIQl5yjuAql2P8EKvsrXig==
-X-Received: by 2002:a05:6000:184:b0:309:1532:8287 with SMTP id p4-20020a056000018400b0030915328287mr7714271wrx.19.1687766933528;
-        Mon, 26 Jun 2023 01:08:53 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c74b:7300:2ef6:6cd6:703c:e498? (p200300cbc74b73002ef66cd6703ce498.dip0.t-ipconnect.de. [2003:cb:c74b:7300:2ef6:6cd6:703c:e498])
-        by smtp.gmail.com with ESMTPSA id v10-20020a5d590a000000b002fda1b12a0bsm6643196wrd.2.2023.06.26.01.08.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Jun 2023 01:08:52 -0700 (PDT)
-Message-ID: <f0bff8d9-db44-a1e8-8617-c72ac87d3678@redhat.com>
-Date:   Mon, 26 Jun 2023 10:08:51 +0200
+        Mon, 26 Jun 2023 04:10:10 -0400
+Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1CCA10D3;
+        Mon, 26 Jun 2023 01:10:05 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4QqL9g4shsz4f3lKL;
+        Mon, 26 Jun 2023 16:09:59 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.104.67])
+        by APP4 (Coremail) with SMTP id gCh0CgAHcLPWR5lkQbNDMg--.19922S4;
+        Mon, 26 Jun 2023 16:10:00 +0800 (CST)
+From:   linan666@huaweicloud.com
+To:     axboe@kernel.dk, linan122@huawei.com, vishal.l.verma@intel.com,
+        dan.j.williams@intel.com, ashok_raj@linux.intel.com
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yukuai3@huawei.com, yi.zhang@huawei.com, houtao1@huawei.com,
+        yangerkun@huawei.com
+Subject: [PATCH v4 0/4] block/badblocks: fix badblocks setting error
+Date:   Mon, 26 Jun 2023 16:09:09 +0800
+Message-Id: <20230626080913.3493135-1-linan666@huaweicloud.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v3 6/8] mm/gup: Retire follow_hugetlb_page()
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Cc:     Lorenzo Stoakes <lstoakes@gmail.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        James Houghton <jthoughton@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-References: <20230623142936.268456-1-peterx@redhat.com>
- <20230623142936.268456-7-peterx@redhat.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230623142936.268456-7-peterx@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgAHcLPWR5lkQbNDMg--.19922S4
+X-Coremail-Antispam: 1UD129KBjvdXoW7Jw1UAr15JFy3ur1fAw4kCrg_yoWDKrg_ua
+        y0yFyrGrs5XFW5Aay3tF15JrWIyF4UCr1rKFyUtrs3Xr17tF4Utan8JrZrXwnxWF4xGws8
+        Z3s5XrWfZr1IqjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb3AYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
+        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x02
+        67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l
+        5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67
+        AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7Cj
+        xVA2Y2ka0xkIwI1lw4CEc2x0rVAKj4xxMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
+        AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
+        17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
+        IF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq
+        3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
+        nIWIevJa73UjIFyTuYvjxUwc_TUUUUU
+X-CM-SenderInfo: polqt0awwwqx5xdzvxpfor3voofrz/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        MAY_BE_FORGED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23.06.23 16:29, Peter Xu wrote:
-> Now __get_user_pages() should be well prepared to handle thp completely,
-> as long as hugetlb gup requests even without the hugetlb's special path.
-> 
-> Time to retire follow_hugetlb_page().
-> 
-> Tweak misc comments to reflect reality of follow_hugetlb_page()'s removal.
-> 
-> Signed-off-by: Peter Xu <peterx@redhat.com>
-> ---
->   fs/userfaultfd.c        |   2 +-
->   include/linux/hugetlb.h |  12 ---
->   mm/gup.c                |  19 ----
->   mm/hugetlb.c            | 224 ----------------------------------------
->   4 files changed, 1 insertion(+), 256 deletions(-)
+From: Li Nan <linan122@huawei.com>
 
-Acked-by: David Hildenbrand <david@redhat.com>
+This patch series fixes some simple bugs of setting badblocks and
+optimizing struct badblocks. Coly Li has been trying to refactor badblocks
+in patch series "badblocks improvement for multiple bad block ranges"
+(https://lore.kernel.org/all/20220721121152.4180-1-colyli@suse.de). but the
+workload is significant. Before that, I will fix some easily triggered
+issues and optimize some code that does not conflict with Coly's changes.
+
+Changes in v4:
+ - patch 1, remove the part of reorder fields
+ - patch 3/4, improve commit log.
+
+Changes in v3:
+ - delete patchs with significant changes.
+
+Li Nan (4):
+  block/badblocks: change some members of badblocks to bool
+  block/badblocks: only set bb->changed/unacked_exist when badblocks
+    changes
+  block/badblocks: fix badblocks loss when badblocks combine
+  block/badblocks: fix the bug of reverse order
+
+ include/linux/badblocks.h |  9 +++++----
+ block/badblocks.c         | 38 ++++++++++++++++++++++----------------
+ 2 files changed, 27 insertions(+), 20 deletions(-)
 
 -- 
-Cheers,
-
-David / dhildenb
+2.39.2
 
