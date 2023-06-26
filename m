@@ -2,165 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA2FE73DADE
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 11:10:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6C2373DAE0
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 11:11:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230031AbjFZJKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 05:10:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55480 "EHLO
+        id S230152AbjFZJLC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 05:11:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230500AbjFZJKK (ORCPT
+        with ESMTP id S229524AbjFZJKY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 05:10:10 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67B3F1732;
-        Mon, 26 Jun 2023 02:08:27 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id AF2285C00DC;
-        Mon, 26 Jun 2023 05:08:24 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Mon, 26 Jun 2023 05:08:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1687770504; x=1687856904; bh=35
-        5YQJONktLCrEPHxI6uipTk6KD3tOthTHGVo8zIK+Y=; b=WBRzBfDbuGMrLDxbiU
-        /H2KesGvN1lBBt9CFBXDazpq+0lQkGjxliI0+SEXBH5w4bUoFs7RXRiJWRsFe1yZ
-        +Ej+mjiVzx+zTtj7GpnbTxENWQ5UqoumEdFFTi214NjSStW+22IOF4fVNcz9au+P
-        io3xzAdlnW+hIyEmzzh6GDGmwTTLHHUFszkT0Ve4UNkn6stXU8eTQcO2PY9yg8AB
-        xw12CSSgYojAqLmLo9K5IULtR9ADck7F++4gI3CrEwndUZOh+yUUZj8tcY+w4CwV
-        q18opacS0US5ej7nqkaaGmWOGJH1iiqhaTfuuXO+FzXMNyL3PDFvelhyuHvW6Uyg
-        v11g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1687770504; x=1687856904; bh=355YQJONktLCr
-        EPHxI6uipTk6KD3tOthTHGVo8zIK+Y=; b=XLQ+q71C3SVFkDtVqnshaBixICMhR
-        FI+dwA0tR999BmRP8U186t0KYt6ISBw1jeIsTNKRv9mmQ/O+VcV/FusIGBf8kGcR
-        IBcL1G5GNRwqYv5Dtr3rksW28DT63gR04iYLDow+sm+R3QFMvyCzBiefxzK4sFgX
-        1fPpVfw18BIe+jVBJKErpLliRnXzlnLopZvQpm/MMhOZWyQ1Ts+3yyK0C5Wltq5S
-        w+UvNqr5drEjImbpngyjnvO2lDEA6f3WPzky1mFidZRpcgRQRAwsBbl44mvpXZm2
-        t3yoqt+Ju6EdOQwbC8i0u8RQCUk+pOPo7R+rxJW8POCU7d9uPswzYLYDw==
-X-ME-Sender: <xms:iFWZZEA2JIanA2IDHPxxCz6Fi_XCUAgMhBHk1gTVvjmu-83nkTZwlg>
-    <xme:iFWZZGi1HnGroSD797SyQWDFo9O0z6Lu3dB27ZpeCT5VXZ0oIuRbbu8u1Qq3CNZZ7
-    d-HyVPVVTiJFg>
-X-ME-Received: <xmr:iFWZZHkFTyTQmBGXHFYYeXXizTVaEuoV_XlfikGwZoNLOoEut1WdUyPWfzorB0ZQKs037Ag0pvUDn6vZNq8l2kn_uyO1Bz_3aVQFtQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeehfedgtdelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepgeehue
-    ehgfdtledutdelkeefgeejteegieekheefudeiffdvudeffeelvedttddvnecuffhomhgr
-    ihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
-X-ME-Proxy: <xmx:iFWZZKx2_7IuDOGSOH-5vj75nYmHutKHP9lMfLotlOy_MsIeWJynuQ>
-    <xmx:iFWZZJTTN4YvBMf_SogjbB80806deYWyr0cdvvVfJgCUKIYzeypmIg>
-    <xmx:iFWZZFaqMjPN6yDIp9tOjPQmrfu-8T2zp5Y1_YpZlKZ1SroB0Xya3A>
-    <xmx:iFWZZOJySnMVHtsK_PuKh1jD3QqXXHwseKo6RxMfj9JJeu4a6UjMYQ>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 26 Jun 2023 05:08:24 -0400 (EDT)
-Date:   Mon, 26 Jun 2023 11:08:22 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Lee Jones <lee@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        linux-tip-commits@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Subject: Re: [tip: x86/urgent] x86/mm: Avoid using set_pgd() outside of real
- PGD pages
-Message-ID: <2023062651-random-enjoyment-8838@gregkh>
-References: <168694160067.404.13343792487331756749.tip-bot2@tip-bot2>
- <20230626085450.GA1344014@google.com>
+        Mon, 26 Jun 2023 05:10:24 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84DFA1987;
+        Mon, 26 Jun 2023 02:08:33 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id B5FC5218A9;
+        Mon, 26 Jun 2023 09:08:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1687770511; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5Z3BwE/rMDL9sl3DkNyM9QjJJyC1nTbjXqZGpksBHdg=;
+        b=fIxurrjVGHc9FD+2RG8txljxmBG0FCedwfMRjrWFQF0XuNa6PvTHpuqyMejsKh3Jua2X3T
+        1teV9cakJLPxVhN44pJPXqiHReBUvn1frqAJYgTQ7bIEmJi6B8H7/wXCr+8D9ZTcBnxPNb
+        cVq2OKK1WJJ50SDOojjWGvaeeKsuRag=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1687770511;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5Z3BwE/rMDL9sl3DkNyM9QjJJyC1nTbjXqZGpksBHdg=;
+        b=ARm8Qvwb/bPr8l1xrJHBZ03gy8VE98uMY4fCjbzU92aP5nupTlX2lMJYqVCJwjLfhUHkBy
+        WctuSYBphMJVZkCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6E1F513483;
+        Mon, 26 Jun 2023 09:08:31 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Qo0oGo9VmWTbZQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Mon, 26 Jun 2023 09:08:31 +0000
+Message-ID: <2126cc69-b779-565b-98c7-4fbb0bf9f557@suse.cz>
+Date:   Mon, 26 Jun 2023 11:08:31 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230626085450.GA1344014@google.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] mm/vmalloc: do not output a spurious warning when huge
+ vmalloc() fails
+To:     Lorenzo Stoakes <lstoakes@gmail.com>, Forza <forza@tnonline.net>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Baoquan He <bhe@redhat.com>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Linux btrfs <linux-btrfs@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>, a1bert@atlas.cz,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Song Liu <song@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>
+References: <20230605201107.83298-1-lstoakes@gmail.com>
+ <cd47d6ac-69ce-0315-dd45-2cb9dce57f36@suse.cz>
+ <f6b42d95-09f1-48d6-8274-e6145febb31d@lucifer.local>
+ <2a6fa9d6-53b8-93cd-16c8-309ce2b8e3ac@suse.cz>
+ <20230607093316.cdf60df195915fa9d38067ea@linux-foundation.org>
+ <11b893e.86425ef4.188f33688b8@tnonline.net>
+ <e3ce1745-0a3e-4c9d-955e-2a0ce20422cf@lucifer.local>
+Content-Language: en-US
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <e3ce1745-0a3e-4c9d-955e-2a0ce20422cf@lucifer.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 26, 2023 at 09:54:50AM +0100, Lee Jones wrote:
-> Dear Stable,
+On 6/25/23 17:59, Lorenzo Stoakes wrote:
+> On Sun, Jun 25, 2023 at 05:40:17PM +0200, Forza wrote:
+>>
+>>
+>> ---- From: Andrew Morton <akpm@linux-foundation.org> -- Sent: 2023-06-07 - 18:33 ----
+>>
+>> > On Wed, 7 Jun 2023 10:58:40 +0200 Vlastimil Babka <vbabka@suse.cz> wrote:
+>> >
+>> >> I would really suggest moving the fix to
+>> >> mm-hotfixes instead of mm-unstable, and
+>> >>
+>> >> Fixes: 80b1d8fdfad1 ("mm: vmalloc: correct use of __GFP_NOWARN mask in __vmalloc_area_node()")
+>> >> Cc: <stable@vger.kernel.org>
+>> >
+>> > I've made those changes.
+>>
+>> Did the chabge go into 6.3 stable? I saw these issues with kernels 6.3.0-6 3.7. I now updated to 6.3.9 and have had no more warnings since.
 > 
-> On Fri, 16 Jun 2023, tip-bot2 for Lee Jones wrote:
-> 
-> > The following commit has been merged into the x86/urgent branch of tip:
-> > 
-> > Commit-ID:     d082d48737c75d2b3cc1f972b8c8674c25131534
-> > Gitweb:        https://git.kernel.org/tip/d082d48737c75d2b3cc1f972b8c8674c25131534
-> > Author:        Lee Jones <lee@kernel.org>
-> > AuthorDate:    Wed, 14 Jun 2023 17:38:54 +01:00
-> > Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-> > CommitterDate: Fri, 16 Jun 2023 11:46:42 -07:00
-> > 
-> > x86/mm: Avoid using set_pgd() outside of real PGD pages
-> > 
-> > KPTI keeps around two PGDs: one for userspace and another for the
-> > kernel. Among other things, set_pgd() contains infrastructure to
-> > ensure that updates to the kernel PGD are reflected in the user PGD
-> > as well.
-> > 
-> > One side-effect of this is that set_pgd() expects to be passed whole
-> > pages.  Unfortunately, init_trampoline_kaslr() passes in a single entry:
-> > 'trampoline_pgd_entry'.
-> > 
-> > When KPTI is on, set_pgd() will update 'trampoline_pgd_entry' (an
-> > 8-Byte globally stored [.bss] variable) and will then proceed to
-> > replicate that value into the non-existent neighboring user page
-> > (located +4k away), leading to the corruption of other global [.bss]
-> > stored variables.
-> > 
-> > Fix it by directly assigning 'trampoline_pgd_entry' and avoiding
-> > set_pgd().
-> > 
-> > [ dhansen: tweak subject and changelog ]
-> > 
-> > Fixes: 0925dda5962e ("x86/mm/KASLR: Use only one PUD entry for real mode trampoline")
-> > Suggested-by: Dave Hansen <dave.hansen@linux.intel.com>
-> > Signed-off-by: Lee Jones <lee@kernel.org>
-> > Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-> > Cc: <stable@vger.kernel.org>
-> > Link: https://lore.kernel.org/all/20230614163859.924309-1-lee@kernel.org/g
-> > ---
-> >  arch/x86/mm/kaslr.c | 8 ++++----
-> >  1 file changed, 4 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/arch/x86/mm/kaslr.c b/arch/x86/mm/kaslr.c
-> > index 557f0fe..37db264 100644
-> > --- a/arch/x86/mm/kaslr.c
-> > +++ b/arch/x86/mm/kaslr.c
-> > @@ -172,10 +172,10 @@ void __meminit init_trampoline_kaslr(void)
-> >  		set_p4d(p4d_tramp,
-> >  			__p4d(_KERNPG_TABLE | __pa(pud_page_tramp)));
-> >  
-> > -		set_pgd(&trampoline_pgd_entry,
-> > -			__pgd(_KERNPG_TABLE | __pa(p4d_page_tramp)));
-> > +		trampoline_pgd_entry =
-> > +			__pgd(_KERNPG_TABLE | __pa(p4d_page_tramp));
-> >  	} else {
-> > -		set_pgd(&trampoline_pgd_entry,
-> > -			__pgd(_KERNPG_TABLE | __pa(pud_page_tramp)));
-> > +		trampoline_pgd_entry =
-> > +			__pgd(_KERNPG_TABLE | __pa(pud_page_tramp));
-> >  	}
-> >  }
-> 
-> Could we have this expedited please?  There are users waiting for it.
-> 
-> Upstream commit is:
-> 
->   d082d48737c75 ("x86/mm: Avoid using set_pgd() outside of real PGD pages")
+> Yeah, got the notification from Greg's script that it landed in 6.3 stable.
 
-Please look through your emails you got this weekend, it's already
-queued up in the following stable trees:
-	queue-5.4 queue-5.10 queue-5.15 queue-6.1 queue-6.3
+It did, but was not yet released. 6.3.9 from Wed Jun 21 doesn't have it yet,
+so it's interesting the warnings are gone already.
 
-greg k-h
+>>
+
