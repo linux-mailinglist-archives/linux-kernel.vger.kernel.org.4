@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EF2473D6CE
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 06:06:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5E3873D6CD
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 06:06:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229777AbjFZEGW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 00:06:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38032 "EHLO
+        id S229670AbjFZEGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 00:06:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbjFZEGQ (ORCPT
+        with ESMTP id S229500AbjFZEGP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 00:06:16 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2D671AA
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 21:06:14 -0700 (PDT)
+        Mon, 26 Jun 2023 00:06:15 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6972D11B
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 21:06:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1687752374; x=1719288374;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:content-transfer-encoding:in-reply-to;
-  bh=7kPsgpTpzjhTdpO/VDl2FDgRskFjsKreH2SS3Vbfgu8=;
-  b=SatjOmIp1eRfdv1Nw1TqBojsbvOI2sz1w1QHnu3oFcOFG+BN9PHrADdP
-   JF5ohHh+wxPFA8wS2d+x2gh0cAzJWPtEE6W5I6IslwZFsmqdw62Y1hgpj
-   triY0k4LxcknegyNNxHwolLLEJ7D7Rnt0sT8aafhRJP30lPYMQYzrKkbz
-   7M7IbURl9pQbQR5aLVndxcBfyhfQWjAnONLoEXvf8z5kmWy7f7qxQx0QC
-   QVUXZFFnRnzJaGWpiMr96xI3KtNF0YMYo9zcBPMEKUU9VCBBHK//cQmou
-   X+OsFnzIfEmbAU3PzcuHIf+pKaGlFKIwRtX1sDHGHVGxq0RKlmGSF/+/7
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="360035581"
+  bh=NXivVSXkHgMkEjie+k5Nfpvk7wUxPvO4QF7oBYqQcII=;
+  b=Bn1n+sMrvyB2rPUsWnQHyqMry0aMoksfex181QjYC1SqxtyJfq9TX0Qb
+   e16vmTl282HOfsZ/Sa4ssq/w2lN5i9a8JovYuDNS4YCt9Kz0vJyhwr8ho
+   rqdLo8MapP69YbKkfZsvwKGIbkJU6LJ9pMhNEmCvYsLYhq4O5H+rvPiZK
+   NvtLcOrDrwBYqpt0jRMle6dopzKEL4tHko2Y0JIBnsecEjSf8PzIsCX06
+   +tXaP8HlQ605kb6wFt4GozelhY4PQaJoy9DTvHSBkNbkiqd22njnP1+8C
+   WmpdRfymqToJZKCgZ0tDI8gR16FXFCPXUPnNrexl2K2JlyKx8Z7z19VFH
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="364616785"
 X-IronPort-AV: E=Sophos;i="6.01,158,1684825200"; 
-   d="scan'208";a="360035581"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2023 21:06:13 -0700
-X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="750894915"
+   d="scan'208";a="364616785"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2023 21:06:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="890150588"
 X-IronPort-AV: E=Sophos;i="6.01,158,1684825200"; 
-   d="scan'208";a="750894915"
+   d="scan'208";a="890150588"
 Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 25 Jun 2023 21:06:11 -0700
+  by orsmga005.jf.intel.com with ESMTP; 25 Jun 2023 21:06:10 -0700
 Received: from kbuild by 783282924a45 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1qDdUQ-000ATE-05;
-        Mon, 26 Jun 2023 04:06:10 +0000
-Date:   Mon, 26 Jun 2023 12:05:52 +0800
+        id 1qDdUP-000AT5-2x;
+        Mon, 26 Jun 2023 04:06:09 +0000
+Date:   Mon, 26 Jun 2023 12:05:53 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Li zeming <zeming@nfschina.com>, jstultz@google.com,
         tglx@linutronix.de, sboyd@kernel.org
@@ -50,7 +51,7 @@ Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
         linux-kernel@vger.kernel.org, Li zeming <zeming@nfschina.com>
 Subject: Re: [PATCH] time: ntp: Remove =?utf-8?Q?un?=
  =?utf-8?B?bmVjZXNzYXJ5IOKAmC1FTk9ERVbigJk=?= values from err
-Message-ID: <202306261146.21X5CDd9-lkp@intel.com>
+Message-ID: <202306261141.5MEtBJtk-lkp@intel.com>
 References: <20230627182540.5243-1-zeming@nfschina.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
@@ -81,75 +82,40 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Li-zeming/time-ntp-Remove
 base:   tip/timers/core
 patch link:    https://lore.kernel.org/r/20230627182540.5243-1-zeming%40nfschina.com
 patch subject: [PATCH] time: ntp: Remove unnecessary ‘-ENODEV’ values from err
-config: hexagon-randconfig-r045-20230626 (https://download.01.org/0day-ci/archive/20230626/202306261146.21X5CDd9-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230626/202306261146.21X5CDd9-lkp@intel.com/reproduce)
+config: i386-randconfig-i004-20230626 (https://download.01.org/0day-ci/archive/20230626/202306261141.5MEtBJtk-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230626/202306261141.5MEtBJtk-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306261146.21X5CDd9-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306261141.5MEtBJtk-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from kernel/time/ntp.c:10:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from kernel/time/ntp.c:10:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from kernel/time/ntp.c:10:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
 >> kernel/time/ntp.c:591:6: warning: variable 'err' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-     591 |         if (!rtc->ops || !rtc->ops->set_time)
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+           if (!rtc->ops || !rtc->ops->set_time)
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    kernel/time/ntp.c:605:9: note: uninitialized use occurs here
-     605 |         return err;
-         |                ^~~
+           return err;
+                  ^~~
    kernel/time/ntp.c:591:2: note: remove the 'if' if its condition is always false
-     591 |         if (!rtc->ops || !rtc->ops->set_time)
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     592 |                 goto out_close;
-         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+           if (!rtc->ops || !rtc->ops->set_time)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 >> kernel/time/ntp.c:591:6: warning: variable 'err' is used uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
-     591 |         if (!rtc->ops || !rtc->ops->set_time)
-         |             ^~~~~~~~~
+           if (!rtc->ops || !rtc->ops->set_time)
+               ^~~~~~~~~
    kernel/time/ntp.c:605:9: note: uninitialized use occurs here
-     605 |         return err;
-         |                ^~~
+           return err;
+                  ^~~
    kernel/time/ntp.c:591:6: note: remove the '||' if its condition is always false
-     591 |         if (!rtc->ops || !rtc->ops->set_time)
-         |             ^~~~~~~~~~~~
+           if (!rtc->ops || !rtc->ops->set_time)
+               ^~~~~~~~~~~~
    kernel/time/ntp.c:585:9: note: initialize the variable 'err' to silence this warning
-     585 |         int err;
-         |                ^
-         |                 = 0
-   8 warnings generated.
+           int err;
+                  ^
+                   = 0
+   2 warnings generated.
 
 
 vim +591 kernel/time/ntp.c
