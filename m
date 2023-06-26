@@ -2,96 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C28CA73EA74
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 20:49:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E724D73EA77
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 20:50:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232689AbjFZStg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 14:49:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60860 "EHLO
+        id S232695AbjFZSt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 14:49:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232683AbjFZSte (ORCPT
+        with ESMTP id S232759AbjFZSt5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 14:49:34 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42FB7E75
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 11:49:33 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4fa16c6a85cso3134955e87.3
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 11:49:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1687805371; x=1690397371;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Jv1/n2phfniMTR7fzfBDNm7NpHXtOa8amFqPDHD/r1s=;
-        b=FoJxOakd/eofxqoI3pWxCqqJ4g5VlQBVkCL9LatQL05sO4bDQv1/YzQvC2dPwj4uzm
-         lrZVp9DT4Roob5qxX0i2SjnVMPoD+y/vqDx/BfpAkKGZ1dCYb3ofb7Z/YbplHiILqZsn
-         zuPcIPYGj07kGF55QuaMsriLSR03kg212kzLM=
+        Mon, 26 Jun 2023 14:49:57 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39B1010E2
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 11:49:53 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-7836c6fb18dso28514139f.2
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 11:49:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687805371; x=1690397371;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Jv1/n2phfniMTR7fzfBDNm7NpHXtOa8amFqPDHD/r1s=;
-        b=M3tZFOLyvV43Fb66JYv+4qOWgyUJ/fP8ggHRgH4U+62iDQ7dJAWFq/7N9DVYkF2Yeq
-         P5fmrGt4oQJhBZQz7eA8q9/hHaRa3IPBERXkM/Zy1FMAGQoBQyjD/nQ6IyauPbGffCcQ
-         Vb9igl1IPisq1xOSady/pmY5ozQzzhllfLQH3E6MGIueDXR2ER68/JTSYrdBy83he1ii
-         eAWLrAxJw1iDhQG6vuVPiuJg1ttmeAa4eKdkPb03lRHqKXcS8wQkVzH6Ihmce8ixaM0O
-         RXKLuNL5hDVLfWSEjGd/6kQyrAkkC6BicFwnL8mQ65d6Z5icjLj0uxwCaphO0xzuwdI1
-         P85w==
-X-Gm-Message-State: AC+VfDwmLamTJFfwLHYmeRwb5j/dO4/qAk0CPm3Um1zh8DgIf3CY2vPo
-        JBR8KUIOcP8+fmw15qb++7ucwSxi5EfBLeMmmqW1c7EM
-X-Google-Smtp-Source: ACHHUZ6FtU4vS5i0mExRG2ivmwZU6dQf0yFtWseQByEMuTVUtjiobaPYCWrTbWy71jeBetM1INd0ow==
-X-Received: by 2002:a05:6512:6c7:b0:4f9:5c04:af07 with SMTP id u7-20020a05651206c700b004f95c04af07mr11329139lff.26.1687805371293;
-        Mon, 26 Jun 2023 11:49:31 -0700 (PDT)
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com. [209.85.208.171])
-        by smtp.gmail.com with ESMTPSA id l27-20020ac2555b000000b004fb75943ab3sm534583lfk.258.2023.06.26.11.49.30
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Jun 2023 11:49:31 -0700 (PDT)
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2b699a2fe86so30917811fa.3
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 11:49:30 -0700 (PDT)
-X-Received: by 2002:a2e:9898:0:b0:2b4:6456:4553 with SMTP id
- b24-20020a2e9898000000b002b464564553mr17200085ljj.47.1687805370152; Mon, 26
- Jun 2023 11:49:30 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687805392; x=1690397392;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IuXXxOMOQsKpH0IiTxt7W05d750a7OWAfC/BfXgyHFU=;
+        b=f1/Zpe6GVhpjKDQyxl4LZZ7OwJ8aF8kLSBra50Ja6E4FiqE01mGf8P6WUcEGXop8gW
+         r8LA8nHnTLaTxq/GsmQnhl6NJ/T5iu/8RSvNzUfu5ils0TIA3mtu1pjGI335nRBAEpup
+         svjqklXILUIQ0EI+KOu2ccC92ygyFUkF0vlyEPrmzoAQskBtjvuHixZkrRWA68/X+XWo
+         cxQmdWGiHZ73raozHdTuDMfQcYJTX7nn9EwP+/IX0Fu+rYtHtaXK6V/LEEcuOFWELpYL
+         SBnXK4R4JNjxRTnv5PxASfxZFUifR1zrloMC9o2q9F4qJeeJ5foIs5F1nXLxpbTHEJzD
+         YYpw==
+X-Gm-Message-State: AC+VfDxVDO0E3qLUGeHaGAFok09RWOI5+0a4plkZ7Sgb36Y1YgtDC+MW
+        +UC8+hl7/U5K0TpNdmvFsMfN+/LgVgdUZhjJqwt0QWFsfaqLCRw=
+X-Google-Smtp-Source: ACHHUZ4jNMF2H4NMBFXcMoi3KjwvDlE7FzKi0KvJYnVZN7j0pe3t0HHmF8KlJKQ+186eCZmTGXCCgL0fL+geiRaEYiIdq8lPswZ4
 MIME-Version: 1.0
-References: <cover.1687802358.git.dsterba@suse.com>
-In-Reply-To: <cover.1687802358.git.dsterba@suse.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 26 Jun 2023 11:49:13 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgAxb2PQiAp5eKQmZd1=7DLA60O=+=Y3xcsvDa-N6Y+NA@mail.gmail.com>
-Message-ID: <CAHk-=wgAxb2PQiAp5eKQmZd1=7DLA60O=+=Y3xcsvDa-N6Y+NA@mail.gmail.com>
-Subject: Re: [GIT PULL] Btrfs updates for 6.5
-To:     David Sterba <dsterba@suse.com>
-Cc:     linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Received: by 2002:a6b:7113:0:b0:780:d446:a209 with SMTP id
+ q19-20020a6b7113000000b00780d446a209mr4307414iog.2.1687805392498; Mon, 26 Jun
+ 2023 11:49:52 -0700 (PDT)
+Date:   Mon, 26 Jun 2023 11:49:52 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000deb56005ff0cd0cc@google.com>
+Subject: [syzbot] Monthly wireless report (Jun 2023)
+From:   syzbot <syzbot+list6f49fd7432bc9a1abef8@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 26 Jun 2023 at 11:21, David Sterba <dsterba@suse.com> wrote:
->
->   git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-6.5
+Hello wireless maintainers/developers,
 
-Ouch. I did this merge twice.
+This is a 31-day syzbot report for the wireless subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/wireless
 
-Your pull request only points to the branch. I didn't immediately
-notice - my scripting only complains about non-kernel.org addresses -
-but then after doing the merge I went "Hmm, I see no signature".
+During the period, 2 new issues were detected and 0 were fixed.
+In total, 33 issues are still open and 106 have been fixed so far.
 
-And then I noticed that you do have a for-6.5-tag that points to your
-branch, you just didn't mention it in the pull request.
+Some of the still happening issues:
 
-So then I re-did it all.
+Ref  Crashes Repro Title
+<1>  7542    Yes   KMSAN: uninit-value in hwsim_cloned_frame_received_nl
+                   https://syzkaller.appspot.com/bug?extid=b2645b5bf1512b81fa22
+<2>  5766    Yes   WARNING in ieee80211_bss_info_change_notify
+                   https://syzkaller.appspot.com/bug?extid=09d1cd2f71e6dd3bfd2c
+<3>  4308    Yes   WARNING in __ieee80211_beacon_get
+                   https://syzkaller.appspot.com/bug?extid=18c783c5cf6a781e3e2c
+<4>  4188    Yes   WARNING in __cfg80211_ibss_joined (2)
+                   https://syzkaller.appspot.com/bug?extid=7f064ba1704c2466e36d
+<5>  1163    Yes   WARNING in ieee80211_link_info_change_notify (2)
+                   https://syzkaller.appspot.com/bug?extid=de87c09cc7b964ea2e23
+<6>  1136    No    WARNING in ieee80211_ibss_csa_beacon (2)
+                   https://syzkaller.appspot.com/bug?extid=b10a54cb0355d83fd75c
+<7>  806     Yes   WARNING in ar5523_submit_rx_cmd/usb_submit_urb
+                   https://syzkaller.appspot.com/bug?extid=6101b0c732dea13ea55b
+<8>  669     Yes   WARNING in __rate_control_send_low
+                   https://syzkaller.appspot.com/bug?extid=fdc5123366fb9c3fdc6d
+<9>  640     Yes   WARNING in ieee80211_start_next_roc
+                   https://syzkaller.appspot.com/bug?extid=c3a167b5615df4ccd7fb
+<10> 416     Yes   INFO: task hung in rfkill_global_led_trigger_worker (2)
+                   https://syzkaller.appspot.com/bug?extid=2e39bc6569d281acbcfb
 
-Can I ask you to be more careful in your pull request flow, and point
-at the tag? I did notice eventually, and I'll go make my scripting
-actually complain even about kernel.org pulls without signed tags so
-that I'll notice earlier (and not just by mistake when I happen to
-check later)
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-                Linus
+To disable reminders for individual bugs, reply with the following command:
+#syz set <Ref> no-reminders
+
+To change bug's subsystems, reply with:
+#syz set <Ref> subsystems: new-subsystem
+
+You may send multiple commands in a single email message.
