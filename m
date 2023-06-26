@@ -2,142 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3A5173E50F
+	by mail.lfdr.de (Postfix) with ESMTP id 5B41773E50E
 	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 18:30:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbjFZQaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 12:30:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56080 "EHLO
+        id S231506AbjFZQ3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 12:29:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjFZQ31 (ORCPT
+        with ESMTP id S229901AbjFZQ3Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 12:29:27 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE96330D8
+        Mon, 26 Jun 2023 12:29:25 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF9F109
         for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 09:28:26 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2b69f958ef3so21850241fa.1
+Received: by mail-pg1-x549.google.com with SMTP id 41be03b00d2f7-53fa2d0c2ebso1421262a12.1
         for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 09:28:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20221208.gappssmtp.com; s=20221208; t=1687796905; x=1690388905;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=uFfAVdAi8YUvaWjVDsPOzE14XMF9lW4DI0A7m7Li71U=;
-        b=qJFo348MOOuwRVRBMkS6+ho84DgjprvcxeE03KnuT9zi80DPVw9EKLotDWxhslfUPi
-         xZVqD2ezObm6o5LxVEX0s5thCYHY+qv949Dp/+harlda2/0hZq2McuAbYgzAuHNRtybj
-         WszWCq7HWZ5Yezf0YHDjDnjonm78VN/TKITaYWZCKNKqUJGkrgbRrWxHRRaWGhlty97K
-         WtdxfhKp7y9HExCHpKUi+O67beJGD6kyBi3rY1otef1kXRjxHOTEcaoYM7UrbRzuq7ak
-         R+NdluDkJU0qKVzMdyWo720cvZtjaU5dBZMWDClSjuXtJ7DmjwGNieEV76ClKxPrRsEl
-         39jw==
+        d=google.com; s=20221208; t=1687796906; x=1690388906;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=LcHOcPJNQNsmb8p5lWxRB01eVrgr+kLMT1qIAAPh7K0=;
+        b=0C+CyWG0GM0drwvZ0vSkvRMtOSGBuPAKMRT9q9dRUNLgsTmg4HKMwjYpYcDTv57Tls
+         zSJGXTxI6enbEMjyacQKdeUQcj8wenqCDj2auDP4WOwTdqv2mkFXXqtCw4dMrc+GL4UZ
+         jMIwhWZ4zIFfAKfoAP3ki2pyE1yo3gcNAKNksNqGCMY5cPjA26nOLRCRSKzJhhet5mWN
+         Lj+T5CX9IyCLMiU4f1sJFb9xKm6JQ+02iH15WBZYqIissVx0r560CxYKbPw7/cXX53LO
+         9dXRlcIb47Yj3OJ4myuWHzraEWB281b77yaf5mLKXXkCsUj10GzQiqE/oeSurlo+Yjsv
+         Or9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687796905; x=1690388905;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uFfAVdAi8YUvaWjVDsPOzE14XMF9lW4DI0A7m7Li71U=;
-        b=e9sE2GMO7z48gjzzjWpSs97kcLsNyvYiopRgZP+mzrXOHhIPjoWLd2q7K9wTNcD0tS
-         LDRqwn2+U81Q+shV49DoJF8CYQU5S7HejSqGXIXHvnXRr/UzT/vsGbGb7QK0xaX64EqR
-         kpWX1YvLhmaMmG54BRna5dK2qAiHUZhlAoR6NctDyQuw2eG4MN2lbF720qT8tnpsPREH
-         jv6gT0cZyjTw9DjJ5NbH1hREJSgziSuIy7V/CB4Vv6goNIP841irJwBknRahdZOcDBdB
-         8ems7/Pb0LF/voydOtGNmtr2mu4Ce7Lm9yU6zMGNXStEfu5rS5ClvIPZ6cdFhJs/rjHD
-         5xDg==
-X-Gm-Message-State: AC+VfDy8DAU5zeDgw2+VEm1hAfZtdDOas/nwNPHQ/QlvldPdOiX7OEJi
-        2yCygNFkmrFQqNTfAbcW5tA83Q==
-X-Google-Smtp-Source: ACHHUZ5b+6SI5MIEkxDpWK1UintWB/QDRSb9Rm3ZlCSJducoy8VE8KrXaywdbDE1qdwvBcWvzYv+iA==
-X-Received: by 2002:a2e:9943:0:b0:2b6:9909:79bd with SMTP id r3-20020a2e9943000000b002b6990979bdmr2892280ljj.24.1687796904825;
-        Mon, 26 Jun 2023 09:28:24 -0700 (PDT)
-Received: from localhost (h-46-59-89-207.A463.priv.bahnhof.se. [46.59.89.207])
-        by smtp.gmail.com with ESMTPSA id r1-20020a2eb601000000b002b1bf326a88sm1299955ljn.127.2023.06.26.09.28.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jun 2023 09:28:23 -0700 (PDT)
-Date:   Mon, 26 Jun 2023 18:28:23 +0200
-From:   Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/6] drivers/thermal/rcar_gen3_thermal: Convert to
- devm_platform_ioremap_resource()
-Message-ID: <ZJm8p4GnTG-vtb0Q@oden.dyn.berto.se>
-References: <20230626124334.15100-1-frank.li@vivo.com>
- <20230626124334.15100-4-frank.li@vivo.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230626124334.15100-4-frank.li@vivo.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1687796906; x=1690388906;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LcHOcPJNQNsmb8p5lWxRB01eVrgr+kLMT1qIAAPh7K0=;
+        b=gHXRJ24qwjZ7DIyAOZ5WQwACPrCHAW+uaii0eCJsurFsWONHcuucuDzfoycHITPYHn
+         STlKxcIlc86y1iEuliLSWu6EYGvdfFodrt0GNQ7hgpBWmMXWJvaei8oh7/OuU9TN/AEV
+         8LajDI0zIlrHLwcqvo9LSDktFFWbYiG3lwFpo1qwAOJCfRfj+twYozEjcyT6Vbg6fHJJ
+         OOw2bMDPm8CzSr741na78cee5AAa7sVjx8ze9UzEiaDBIFiet8T7do7pkwswX2G/20us
+         nnpStttbfn9+ajR1G/lizDQqma1Nl6ZLtxTuiQW8tLi2C+1wTx9npS5Jd9+3v90sc40c
+         oTmg==
+X-Gm-Message-State: AC+VfDx6Y8lXNmNf6zFhSHb8Nkpl5UHCYbU9rQ5s+IF5rNO50hzqfWhr
+        58oio9jo89YNhP7FEfLivqVaHg60BN8=
+X-Google-Smtp-Source: ACHHUZ7Wk6snFRWIjCiJHNIBQLZ/Mb6v/fisOviOSg2CIlQCenmsh0/FaAZPBkXB3y1IHQ/hHD+ZHUSwhWE=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a63:d244:0:b0:540:ca81:4a1d with SMTP id
+ t4-20020a63d244000000b00540ca814a1dmr3818129pgi.11.1687796906100; Mon, 26 Jun
+ 2023 09:28:26 -0700 (PDT)
+Date:   Mon, 26 Jun 2023 09:28:24 -0700
+In-Reply-To: <52ea8386-8652-dd91-23de-9d35781cb131@amd.com>
+Mime-Version: 1.0
+References: <20230524155339.415820-1-john.allen@amd.com> <20230524155339.415820-7-john.allen@amd.com>
+ <161174d013dff42ddfd2950fe33a8054f45c223e.camel@intel.com>
+ <ZINGaJnNJ54+klsD@johallen-workstation.lan> <9ef2faeaa38e667bd4daa8ee338d4cade452c76c.camel@intel.com>
+ <ZJYaNSzup+yuYxNy@google.com> <52ea8386-8652-dd91-23de-9d35781cb131@amd.com>
+Message-ID: <ZJm64a7IKuSDS9bz@google.com>
+Subject: Re: [RFC PATCH v2 6/6] KVM: SVM: Add CET features to supported_xss
+From:   Sean Christopherson <seanjc@google.com>
+To:     Tom Lendacky <thomas.lendacky@amd.com>
+Cc:     Rick P Edgecombe <rick.p.edgecombe@intel.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "bp@alien8.de" <bp@alien8.de>, "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yangtao,
-
-Thanks for your work.
-
-On 2023-06-26 20:43:31 +0800, Yangtao Li wrote:
-> Use devm_platform_ioremap_resource() to simplify code.
+On Mon, Jun 26, 2023, Tom Lendacky wrote:
+> On 6/23/23 17:18, Sean Christopherson wrote:
+> > On Fri, Jun 09, 2023, Rick P Edgecombe wrote:
+> > > Also, since the host might have CR4.CET set for its own reasons, if the host
+> > > handled an exit with the the guests MSR_IA32_S_CET set it could suddenly be
+> > > subjected to CET enforcement that it doesn't expect. Waiting to restore it
+> > > until returning to the guest is too late.
+> > > 
+> > > At least that's the reasoning on the VMX side as I understand it
+> > 
+> > The APM doesn't come right out and say it, but I assume/hope that S_CET is saved
+> > on VMRUN and loaded on #VMEXIT, i.e. is the same as VMX for all intents and
+> > purposes.
+> > 
+> > The host save state definitely has a field for S_CET, and VMRUN documents that the
+> > guest values are loaded, I just can't find anything in the APM that explicitly states
+> > how host S_CET and friends are handled.  E.g. in theory, they could have been
+> > shoved into VMSAVE+VMLOAD, though I very much doubt that's the case.
 > 
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> Yes, the host value is saved/restored on VMRUN/#VMEXIT. Anything that is in
+> the VMCB Save Area (the non-SEV-ES save area) is fully virtualized (unless
+> noted otherwise) and doesn't require special processing to save/restore the
+> host values.
 
-This do indeed simplify the code, but it also breaks the driver :-)
+Would it makes sense to add a column in "Table B-2. VMCB Layout, State Save Area"
+to specify whether a field is handled by VMRUN+#VMEXIT vs. VMLOAD+VMSAVE?  I can't
+find anywhere in the APM where it explicitly states that VMRUN+#VMEXIT context
+switches everything in the Save Area except the fields listed in "15.5.2 VMSAVE
+and VMLOAD Instructions".
 
-Before the change, failing to find a resource at position "i", breaks 
-the probe loop, and probing continues and the number of resource 
-described are the number of TSC find are used.
+"15.5 VMRUN Instruction" kinda sorta covers that behavior, but the information is
+either incomplete or stale, e.g. for host state it says "at least the following"
 
-After the change failing to find all possible TCS will fail the whole 
-probe process, even if some TCS where described. And not describing max 
-number of TCS on each system is perfectly fine.
+  Saving Host State. To ensure that the host can resume operation after #VMEXIT,
+  VMRUN saves at least the following host state information:
 
-Nacked-by: Niklas Söderlund <niklas.soderlund@ragnatech.se>
+but for guest state it says "the following"
 
-> ---
->  drivers/thermal/rcar_gen3_thermal.c | 7 +------
->  1 file changed, 1 insertion(+), 6 deletions(-)
-> 
-> diff --git a/drivers/thermal/rcar_gen3_thermal.c b/drivers/thermal/rcar_gen3_thermal.c
-> index 9029d01e029b..5c623f13d9ec 100644
-> --- a/drivers/thermal/rcar_gen3_thermal.c
-> +++ b/drivers/thermal/rcar_gen3_thermal.c
-> @@ -481,7 +481,6 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
->  {
->  	struct rcar_gen3_thermal_priv *priv;
->  	struct device *dev = &pdev->dev;
-> -	struct resource *res;
->  	struct thermal_zone_device *zone;
->  	unsigned int i;
->  	int ret;
-> @@ -504,17 +503,13 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
->  	for (i = 0; i < TSC_MAX_NUM; i++) {
->  		struct rcar_gen3_thermal_tsc *tsc;
->  
-> -		res = platform_get_resource(pdev, IORESOURCE_MEM, i);
-> -		if (!res)
-> -			break;
-> -
->  		tsc = devm_kzalloc(dev, sizeof(*tsc), GFP_KERNEL);
->  		if (!tsc) {
->  			ret = -ENOMEM;
->  			goto error_unregister;
->  		}
->  
-> -		tsc->base = devm_ioremap_resource(dev, res);
-> +		tsc->base = devm_platform_ioremap_resource(pdev, i);
->  		if (IS_ERR(tsc->base)) {
->  			ret = PTR_ERR(tsc->base);
->  			goto error_unregister;
-> -- 
-> 2.39.0
-> 
+  Loading Guest State. After saving host state, VMRUN loads the following guest
+  state from the VMCB:
 
--- 
-Kind Regards,
-Niklas Söderlund
+and then both provide incomplete lists of state.  A pedantic reading of the guest
+case suggests that there's a large pile of state that *isn't* loaded, and the host
+case isn't all that helpful because it's way too handwavy.
