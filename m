@@ -2,70 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3999C73E006
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 15:02:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABE0273DFFD
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 15:01:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbjFZNCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 09:02:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52204 "EHLO
+        id S230501AbjFZNBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 09:01:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjFZNCE (ORCPT
+        with ESMTP id S230154AbjFZNBg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 09:02:04 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B0841B1
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 06:02:00 -0700 (PDT)
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 25CFE1EC0644;
-        Mon, 26 Jun 2023 15:01:59 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1687784519;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:references;
-        bh=uWephuvSJy+v5Wm4KFhe6gjjKrevmg6FvJwZKHDThn4=;
-        b=MufrYZF+9USiAGpfdxKaxjKXtxe17jhtliC2mikewcKc0/umuTizNEkW4wNX5BG5dh7HdZ
-        GUjQ8bIt62yxCGWGbrZOrlCk/PF3gq/AZtebkrFvmpRyO0EpYALC9dTzATCi4bxQWGU8nO
-        F+NGz7pcdtfGMgBhGSPxD2iPs6pSUo8=
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-        header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id cV6YFkJ_rlx6; Mon, 26 Jun 2023 13:01:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-        t=1687784492; bh=uWephuvSJy+v5Wm4KFhe6gjjKrevmg6FvJwZKHDThn4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=V+VTV0UNjBnqT44M0jiqjs4s7LTgq5b1lVAtzERmke28LUOVGY12PEAF4GCx2Zxii
-         d05F4U5G/8q2Efslxfpi7y972cpIEK6EIilVL/w0NGosFPPRnDf07CdFC5j+4nT+YP
-         oY9jAjRAzrR3t2t8ngD1SVs4FVFF+vIq08HvFcc92lWVn9HmnRkh8BOhDdsq0EU8EQ
-         F/6KBfa6RECSPU03zd0JjG56VfLWxvtrYJYeg5Aldx+spVJKRT12Vvb6jeVlIOzkXg
-         kKdsDP6elmdiEu2Ft2Vp14L+F2JGjvzturEe+oNnIyBrYIlN06Hnrf9mSiH0C+I5Pi
-         mOIpKgL2IdKIOKw3rIPpSWnu2YUNkpbP0n3BcVsZPAduoJKQ/xLjsZTHjFzRREaUuo
-         2k9L7yEYvTnZRPmjleSK0hEqIGxcajNLwxeT8L3hALaBdi9CyzERoX4vAEaIZEZUgK
-         0qCEpqjVSGNJZF6Pinda7vM0PFzeqlPat4ZKdscLG6A9bWjY1gUn+27xG6Y5Q6jxF4
-         pohM+xuYNIHtCsNXEFsVQH8akQua+GjRLWiAyCx+HX3UyAE6mrkZykaLnfyjqO5Uyc
-         q2yng8cXetJUPxhxw18Jjx+nPUpYZvevLjCq38WpZB0gw2AIbV9XaU28enLlICqzIK
-         xEIIPuUdlw/Uvs8h+YngY3yA=
-Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-        (No client certificate requested)
-        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4CAEA40E01EE;
-        Mon, 26 Jun 2023 13:01:29 +0000 (UTC)
-Date:   Mon, 26 Jun 2023 15:01:24 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] x86/alternatives for 6.5
-Message-ID: <20230626130124.GCZJmMJKLdnwrwkbzF@fat_crate.local>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+        Mon, 26 Jun 2023 09:01:36 -0400
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2061.outbound.protection.outlook.com [40.107.102.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C69210C;
+        Mon, 26 Jun 2023 06:01:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LpOVF+0gve0eaSz1OCvo+O7C+tIlCxskxdHQHVC32ti2h2XD+e3ejKnhVSs3pVIXBk9MFdy9XNl7foUj0o0+lv4eQJXZopTdL7+yhtyK15osYSwHZVqv67k1WysBorGPAhDzpnl7EgBeIxfJ5u02hWKkwW0vMOGnkp8jQHu1Oz2VV06cSBZXomsfJSvjkLiguaHftTQQ0mVzsFWO9KdygBy+/JtK588sWj3tth7wBMcwqCPGtG78dyogJMpc/6DkEb2f5kN4SOf9xbY68dPDD0xQr0XJPlcQOQQNpeDO7dYNGpJQyYMeNzmc+eYsYaFX55JV/+gGXpgREpjF+xJ7Zg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Rvv+Aje8S9KaBfZgkcTuxlqjLhOjQx2V9fpFkd41NkU=;
+ b=eYh2j1WA04aTlXdUyChPh7JFj5fUwtIVOkTX/B7MZe8LObrNFfwdq95Cn1VHkjhj3JtFP3UC3QLNTjrpsBnZFD3vzSfWA7FWZA0BVE3Lc1sfk2ry+NAAtjt3jTESHq3B9ymd7TCUdA3O6rV0GB0E1YJfYy8IHZDItNB6t2praUXSt+P4bXg2FEO9XSHz5GZqdIGib4tw3Gc6hWWTDWwwuiv8AB2RC5d1iR0VcBMSLUsPwPetyKfcJRHwX7cf9c4TN41GC4X/0rfeeA83vcW+URsNBdJnbw0fmTCr9b1FQmfu5DiFZdOlKO/dsDOD7D9YnLIDH6h5zBbrBXY9zoeJJA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=labundy.com; dmarc=pass action=none header.from=labundy.com;
+ dkim=pass header.d=labundy.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=NETORG5796793.onmicrosoft.com; s=selector1-NETORG5796793-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Rvv+Aje8S9KaBfZgkcTuxlqjLhOjQx2V9fpFkd41NkU=;
+ b=p/preC1WznjfcDRWz+YPYDVB3KkO+zMLBSsZNJwwk6SkcloqKN3toT8J5RhkLSq7mJXyukPE8fSvYUvrRS9ZT8k8T4IgKxXmxNMvKnuoeZu0t5JybSuEk+ZEDPiT2HdHqnzA50jSH3NAtu9KAlf3pxsjP4upPKJM3VajqGDmo9A=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=labundy.com;
+Received: from SN4PR0801MB3774.namprd08.prod.outlook.com
+ (2603:10b6:803:43::21) by PH0PR08MB8446.namprd08.prod.outlook.com
+ (2603:10b6:510:29c::5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.23; Mon, 26 Jun
+ 2023 13:01:30 +0000
+Received: from SN4PR0801MB3774.namprd08.prod.outlook.com
+ ([fe80::b94e:6032:56d4:35b2]) by SN4PR0801MB3774.namprd08.prod.outlook.com
+ ([fe80::b94e:6032:56d4:35b2%6]) with mapi id 15.20.6521.024; Mon, 26 Jun 2023
+ 13:01:30 +0000
+Date:   Mon, 26 Jun 2023 08:01:27 -0500
+From:   Jeff LaBundy <jeff@labundy.com>
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bastien Nocera <hadess@hadess.net>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Henrik Rydberg <rydberg@bitmath.org>,
+        linux-input@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 4/4] input: touchscreen: add SPI support for Goodix
+ Berlin Touchscreen IC
+Message-ID: <ZJmMJxXxLrC9Xevi@nixie71>
+References: <20230606-topic-goodix-berlin-upstream-initial-v3-0-f0577cead709@linaro.org>
+ <20230606-topic-goodix-berlin-upstream-initial-v3-4-f0577cead709@linaro.org>
+ <ZJiXopmFr4dPbqll@nixie71>
+ <e36a697f-a54d-7bdf-1e18-38f72ec2966c@linaro.org>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+In-Reply-To: <e36a697f-a54d-7bdf-1e18-38f72ec2966c@linaro.org>
+X-ClientProxiedBy: SN6PR16CA0059.namprd16.prod.outlook.com
+ (2603:10b6:805:ca::36) To SN4PR0801MB3774.namprd08.prod.outlook.com
+ (2603:10b6:803:43::21)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN4PR0801MB3774:EE_|PH0PR08MB8446:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9776e50e-020d-4199-640e-08db764575a5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fxnSZEXCHnRQVHAHMhbFJvVvF/NmyGrjifrhqAkCETUaAIbrHbKrXgROk3wdsQCMlaSYk5DN0De50klAJ8sCafaOZdN8Y6cjNzwIgCP3CkqGbkUaXlXZ9iSl+uUwzHpaCkIPw0fPCDYzwwR2bMzSxV0XyT6bTSePSb/pDsWuTTzbxdeyyMCjk0MWN4yKM2QdAfc8DySj8uqwNVxFIHROWCsaeiEapireaAA8Q5rEoz3qfBE2Cqa1ffBVZS8hhpC9Sovq2b8z0xF2Qhp/Sj65AAWWWeYSHeKyuEBuP7N9mnHt20IKmVcH5VLvM/TOuzxobV0yGZZEAEX4gPkmjRCB3FU2IGjhP+Jtj8ZB17yaXDROW2cEn2Ah8JcmQEF6HWbdNfiTQBQ7heNYas8k1NGcCnUVqk6N6dNSFn5cPe3m7Owr5Jfoi0WGmB5YHJI9ElGGkwharVDGXKMfvG2xF2T3o7gN9KEtNdAfNTfBEt3tfRsyJul33Eu7D50moitpcMxuS1Qtiv16cesRxqgXDkVzSIkLSafmjv8GC24KWKAt3PLUrsH0S6rtd8ReDwUNebkL
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN4PR0801MB3774.namprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(346002)(39830400003)(366004)(376002)(396003)(136003)(451199021)(2906002)(33716001)(6486002)(6666004)(38100700002)(6512007)(6506007)(26005)(9686003)(186003)(41300700001)(54906003)(86362001)(478600001)(316002)(66556008)(4326008)(66946007)(6916009)(66476007)(7416002)(5660300002)(8676002)(8936002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?3K1eXE+scBNEU0OV9uz0hk+XXeCzRyT4i6upxfL6a6lH0QwGZXBpVw6pU485?=
+ =?us-ascii?Q?t/4RvEdGk4fKrUnS9KyDLJTj2OXLdkCqrLbjuNTJSxufRoth81Shg1Dyk5V3?=
+ =?us-ascii?Q?HMD+39Vr2o3aj3pNbtcNyFkevVOKdA0ZTYTacUIj+sOdH12IexADw9Tbryu+?=
+ =?us-ascii?Q?dVugOVT98vCfh4GeWyVsDmaGyvbGbIj1v2Zuw/VmPKSZ5WKJ7s1J24TJY/E7?=
+ =?us-ascii?Q?+0sKCWimyu9gcPGmp+F9PYgQ0Ni8aejRGrtilPe9SvZaRKaKmXwi5vs8Fu1y?=
+ =?us-ascii?Q?6oXLK3n5tX3QXBC463d/GLu0Kj6ggdlGGN4tjONLv/iXII6neYnXzYjzynLD?=
+ =?us-ascii?Q?wnbAR0G2cygKOzFjcw3zSAV86CuNODO281aKKkZkyn1+lkCjYwFKqeNhBpFb?=
+ =?us-ascii?Q?ejrRaCnoaTfOdO6I7E4Yj7vEh/eDVBIZwPDpJztn8ui6qm1CNjRpO3ypGkPx?=
+ =?us-ascii?Q?y7D8PxYsdNvfcy37e9gLhX7U5EXSLZw6htjeV268UeFWyMdtg19Sv+1QuvgF?=
+ =?us-ascii?Q?nXgaDOTgIhejUuFD/RfXNUOX0ZNh6ESFsawMqBbYQphblBIuVeUscy5l6e+S?=
+ =?us-ascii?Q?kMWHDuLZdKs+PBoeZUq8bNiFpBkQzVdyEDzGll3ljifbMdznuZO3TT/712R2?=
+ =?us-ascii?Q?FgewpBr3e6yI7ORMtT3XJ5n/Fe9IEYQejLNdEkbQO8G74vkD8p+e6bib/LyW?=
+ =?us-ascii?Q?iB9tXPRd/XkMwKTO9+tuWHZrIwzjKw2ZWYYrwwGPCPDa/akb5xzUGp9FfivG?=
+ =?us-ascii?Q?D54aAqNh24JH401kik6HVe+9UgAdnMXFLCt3n7f8QLYff3KjFJQiXusRaaZV?=
+ =?us-ascii?Q?1YY7BIPrcSmDDaxD4Ck9j+Thsw7JVQQPJrL/2YeJH73eIhHsOoWJzux4nrSB?=
+ =?us-ascii?Q?lfvfurS/YsAnzrhuRtVOgRR0hfrdxrHG+xSxopSwLTPJuuHFwHSoD5vtGz17?=
+ =?us-ascii?Q?JKWepeYyW+gi9ZOchgHyG0OnBih++XHznmqN/1TeCJPYfXCJEr6soLPKk3d2?=
+ =?us-ascii?Q?CVaQue+XBOTZxkGzZWak0na8Jo1KslqflbC+VzHjTYJDxXZjc7T2puxdu69R?=
+ =?us-ascii?Q?N85GPfMVfJTmCupqiP7Z28OUZDiAED/IK6P83EwB1mH/8r2P3lHzykpRTXur?=
+ =?us-ascii?Q?OZt3O0TJiOSjl7PM3q0qyAbWZdV0MV7Nftyz2Wh2jaZnZv9ds5wtVhK6doyZ?=
+ =?us-ascii?Q?G89D+l7Z+WqDMTATd5deKdlXsDYlvLAar7TxZcYN4vzHaPfSsdUqr8IOODwA?=
+ =?us-ascii?Q?MlzD4O2BrthmFvUCH6qRdS5KLbRrxL4pYm3BAtZYVQ+AwyQXsd2YHZvCbs/U?=
+ =?us-ascii?Q?+XRtFCUZFDhGNkqNBpmdpXgYifPLt2m4FcF+U8Xv4xHt77IZHCSanozfWiWJ?=
+ =?us-ascii?Q?oC3P6wIzKvVtKvDb62vAy3gEKM3bWLA1uRPtIXoX5UcfzWpJ4zaXCCfy5jvo?=
+ =?us-ascii?Q?bZC37cThYwF52Gm2xuIbza7+jotAgeyTZe+ou3j4vJ0udOj+rPNuWkSWjp/g?=
+ =?us-ascii?Q?EbpcSXBQSqil/GlmCuknrsmiyUzOMLjMfTDZlHc42cu4CAas+VCNN4aPrywN?=
+ =?us-ascii?Q?4k/Fns/L74vAhD6AxDkz+yuf09F7s4NSPVPEOkg3?=
+X-OriginatorOrg: labundy.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9776e50e-020d-4199-640e-08db764575a5
+X-MS-Exchange-CrossTenant-AuthSource: SN4PR0801MB3774.namprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jun 2023 13:01:30.2951
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 00b69d09-acab-4585-aca7-8fb7c6323e6f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: FMo3J3K/5FTb9HJmSX+MXFePupUBF1UFyYyiMSutQAqSB5faB4XHyOjZ6SgrFJdIQSJWvch1Jh6bVxiCP/U0+A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR08MB8446
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,66 +123,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Hi Neil,
 
-please pull a bunch of x86 alternatives improvements for 6.5.
+On Mon, Jun 26, 2023 at 09:02:16AM +0200, Neil Armstrong wrote:
 
-Thx.
+[...]
 
----
+> > > +static int goodix_berlin_spi_probe(struct spi_device *spi)
+> > > +{
+> > > +	struct regmap_config *regmap_config;
+> > > +	struct regmap *regmap;
+> > > +	size_t max_size;
+> > > +	int error = 0;
+> > > +
+> > > +	regmap_config = devm_kmemdup(&spi->dev, &goodix_berlin_spi_regmap_conf,
+> > > +				     sizeof(*regmap_config), GFP_KERNEL);
+> > > +	if (!regmap_config)
+> > > +		return -ENOMEM;
+> > 
+> > Is there any reason we cannot simply pass goodix_berlin_spi_regmap_conf to
+> > devm_regmap_init() below? Why to duplicate and pass the copy?
+> > 
+> > For reference, BMP280 in IIO is a similar example of a device with regmap
+> > sitting atop a bespoke SPI protocol; it does not seem to take this extra
+> > step.
+> 
+> The goodix_berlin_spi_regmap_conf copy is modified after with the correct
+> max raw read/write size, and I'm not a fan of modifying a global structure
+> that could be use for multiple probes, I can make a copy in a stack variable
+> if it feels simpler.
 
-The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
+Ah, that makes sense; in that case, the existing implementation seems fine
+to me. No changes necessary.
 
-  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
+Correct me if I'm wrong, but the stack variable method wouldn't work since
+that memory is gone after goodix_berlin_spi_probe() returns.
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_alternatives_for_v6.5
-
-for you to fetch changes up to 2bd4aa9325821551648cf9738d6aa3a49317d7e5:
-
-  x86/alternative: PAUSE is not a NOP (2023-06-14 19:02:54 +0200)
-
-----------------------------------------------------------------
-- Up until now the Fast Short Rep Mov optimizations implied the presence
-  of the ERMS CPUID flag. AMD decoupled them with a BIOS setting so decouple
-  that dependency in the kernel code too
-
-- Teach the alternatives machinery to handle relocations
-
-- Make debug_alternative accept flags in order to see only that set of
-  patching done one is interested in
-
-- Other fixes, cleanups and optimizations to the patching code
-
-----------------------------------------------------------------
-Borislav Petkov (AMD) (3):
-      x86/lib/memmove: Decouple ERMS from FSRM
-      x86/alternative: Optimize returns patching
-      x86/alternatives: Fix section mismatch warnings
-
-Peter Zijlstra (7):
-      x86/alternative: Make debug-alternative selective
-      x86/alternative: Support relocations in alternatives
-      x86/alternative: Rewrite optimize_nops() some
-      x86/alternative: Complicate optimize_nops() some more
-      x86/alternatives: Add longer 64-bit NOPs
-      x86/nospec: Shorten RESET_CALL_DEPTH
-      x86/alternative: PAUSE is not a NOP
-
-Steven Rostedt (Google) (1):
-      x86/alternatives: Add cond_resched() to text_poke_bp_batch()
-
- arch/x86/include/asm/nops.h          |  16 +-
- arch/x86/include/asm/nospec-branch.h |   6 +-
- arch/x86/kernel/alternative.c        | 470 ++++++++++++++++++++++++-----------
- arch/x86/lib/memmove_64.S            |  13 +-
- tools/arch/x86/include/asm/nops.h    |  16 +-
- tools/objtool/arch/x86/special.c     |   8 +-
- 6 files changed, 361 insertions(+), 168 deletions(-)
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Kind regards,
+Jeff LaBundy
