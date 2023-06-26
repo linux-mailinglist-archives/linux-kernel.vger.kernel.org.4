@@ -2,116 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62D6F73DB39
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 11:21:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A06073DB42
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 11:22:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230240AbjFZJVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 05:21:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59836 "EHLO
+        id S230284AbjFZJWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 05:22:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229960AbjFZJUx (ORCPT
+        with ESMTP id S229788AbjFZJVt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 05:20:53 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8F58F119;
-        Mon, 26 Jun 2023 02:19:00 -0700 (PDT)
-Received: by linux.microsoft.com (Postfix, from userid 1099)
-        id 2481B21C3F2C; Mon, 26 Jun 2023 02:19:00 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 2481B21C3F2C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1687771140;
-        bh=w0RTwq6xnEh5PToktxOWxF1t6KZX1z6EpuCc02QAfJw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=koblSqD/2huTtJrCBeUEQy5eNoqXbPICww1juVE4bM7oCKFN9eFyD7AKtHBAxcYca
-         /vfnAMLBZaqKImty5tAGrIrQJMKatGmVIj85erlx6WQALHMJOb5i2brI+YsQwYmeQu
-         IA9wF6IVXuzpu5Bv8ch7eeQvOqO3cEdHXhcZqmsg=
-From:   souradeep chakrabarti <schakrabarti@linux.microsoft.com>
-To:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, longli@microsoft.com,
-        sharmaajay@microsoft.com, leon@kernel.org, cai.huoqing@linux.dev,
-        ssengar@linux.microsoft.com, vkuznets@redhat.com,
-        tglx@linutronix.de, linux-hyperv@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org
-Cc:     stable@vger.kernel.org, schakrabarti@microsoft.com,
-        Souradeep Chakrabarti <schakrabarti@linux.microsoft.com>
-Subject: [PATCH 1/2 V3 net] net: mana: Fix MANA VF unload when host is unresponsive
-Date:   Mon, 26 Jun 2023 02:18:57 -0700
-Message-Id: <1687771137-26911-1-git-send-email-schakrabarti@linux.microsoft.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1687771098-26775-1-git-send-email-schakrabarti@linux.microsoft.com>
-References: <1687771098-26775-1-git-send-email-schakrabarti@linux.microsoft.com>
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 26 Jun 2023 05:21:49 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3DE22951;
+        Mon, 26 Jun 2023 02:19:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687771190; x=1719307190;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4iirlHjDQFEOmwfWu25Zqlp+FjDKn3qrPL7a4DX2oxs=;
+  b=A+M/UZFQUjCFGzotGIOlX78dhQTyVY+i+g9bUJod9QSCk/SXAT349Eb/
+   BxPiBp7u64yhfgINjY9T+ZdmeKTB4BRd/SB+GCmdqJZa4zS4oj5AFrxGs
+   WA1IFVhpfD+wkUcKZACJ5nNq7s798pJgK34APhCgnEsA1XTZNrFyu/SkT
+   OxIytmIvMql3Bb/ztYetu+t1QvKM9pryDGygQKAsTkp7VsCm9Y6xkiAAK
+   2uCAKhQ8QBzUcKqLl82YL8sJZ4zaH7euvc0W7XbgkwJBl/8B+TlDRnriu
+   eJOMYYQFUsOd54K/PZi05qItPEPVtUHX9frtuyoYDKP8dorls1u7RQzxR
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="447605392"
+X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
+   d="scan'208";a="447605392"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 02:19:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="860618521"
+X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
+   d="scan'208";a="860618521"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 26 Jun 2023 02:19:31 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 26 Jun 2023 12:19:31 +0300
+Date:   Mon, 26 Jun 2023 12:19:31 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v3 4/8] qcom: pmic_glink_altmode: add retimer-switch
+ support
+Message-ID: <ZJlYI+Ked1gA8NOh@kuha.fi.intel.com>
+References: <20230601-topic-sm8550-upstream-type-c-v3-0-22c9973012b6@linaro.org>
+ <20230601-topic-sm8550-upstream-type-c-v3-4-22c9973012b6@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230601-topic-sm8550-upstream-type-c-v3-4-22c9973012b6@linaro.org>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Souradeep Chakrabarti <schakrabarti@linux.microsoft.com>
+On Tue, Jun 13, 2023 at 09:55:57AM +0200, Neil Armstrong wrote:
+> Some boards have a retimer/redriver between the SuperSpeed
+> PHY and the USB-C connector to compensates signal integrity
+> losses mainly due to PCB & transmission cables.
+> 
+> Add support for an optional retimer-switch in the USB-C
+> connector graph.
+> 
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 
-This patch addresses the VF unload issue, where mana_dealloc_queues()
-gets stuck in infinite while loop, because of host unresponsiveness.
-It adds a timeout in the while loop, to fix it.
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-Fixes: ca9c54d2d6a5ab2430c4eda364c77125d62e5e0f (net: mana: Add a driver for
-Microsoft Azure Network Adapter)
-Signed-off-by: Souradeep Chakrabarti <schakrabarti@linux.microsoft.com>
----
-V2 -> V3:
-* Splitted the patch in two parts.
-* Removed the unnecessary braces from mana_dealloc_queues().
----
- drivers/net/ethernet/microsoft/mana/mana_en.c | 19 +++++++++++++++++--
- 1 file changed, 17 insertions(+), 2 deletions(-)
+> ---
+>  drivers/soc/qcom/pmic_glink_altmode.c | 43 +++++++++++++++++++++++++++++++++++
+>  1 file changed, 43 insertions(+)
+> 
+> diff --git a/drivers/soc/qcom/pmic_glink_altmode.c b/drivers/soc/qcom/pmic_glink_altmode.c
+> index 007d308e2f15..41d732f5b647 100644
+> --- a/drivers/soc/qcom/pmic_glink_altmode.c
+> +++ b/drivers/soc/qcom/pmic_glink_altmode.c
+> @@ -15,6 +15,7 @@
+>  #include <linux/usb/typec_altmode.h>
+>  #include <linux/usb/typec_dp.h>
+>  #include <linux/usb/typec_mux.h>
+> +#include <linux/usb/typec_retimer.h>
+>  
+>  #include <linux/soc/qcom/pmic_glink.h>
+>  
+> @@ -68,6 +69,8 @@ struct pmic_glink_altmode_port {
+>  	struct typec_switch *typec_switch;
+>  	struct typec_mux *typec_mux;
+>  	struct typec_mux_state state;
+> +	struct typec_retimer *typec_retimer;
+> +	struct typec_retimer_state retimer_state;
+>  	struct typec_altmode dp_alt;
+>  
+>  	struct work_struct work;
+> @@ -157,6 +160,14 @@ static void pmic_glink_altmode_enable_dp(struct pmic_glink_altmode *altmode,
+>  	ret = typec_mux_set(port->typec_mux, &port->state);
+>  	if (ret)
+>  		dev_err(altmode->dev, "failed to switch mux to DP\n");
+> +
+> +	port->retimer_state.alt = &port->dp_alt;
+> +	port->retimer_state.data = &dp_data;
+> +	port->retimer_state.mode = TYPEC_MODAL_STATE(mode);
+> +
+> +	ret = typec_retimer_set(port->typec_retimer, &port->retimer_state);
+> +	if (ret)
+> +		dev_err(altmode->dev, "failed to setup retimer to DP\n");
+>  }
+>  
+>  static void pmic_glink_altmode_enable_usb(struct pmic_glink_altmode *altmode,
+> @@ -171,6 +182,14 @@ static void pmic_glink_altmode_enable_usb(struct pmic_glink_altmode *altmode,
+>  	ret = typec_mux_set(port->typec_mux, &port->state);
+>  	if (ret)
+>  		dev_err(altmode->dev, "failed to switch mux to USB\n");
+> +
+> +	port->retimer_state.alt = NULL;
+> +	port->retimer_state.data = NULL;
+> +	port->retimer_state.mode = TYPEC_STATE_USB;
+> +
+> +	ret = typec_retimer_set(port->typec_retimer, &port->retimer_state);
+> +	if (ret)
+> +		dev_err(altmode->dev, "failed to setup retimer to USB\n");
+>  }
+>  
+>  static void pmic_glink_altmode_safe(struct pmic_glink_altmode *altmode,
+> @@ -185,6 +204,14 @@ static void pmic_glink_altmode_safe(struct pmic_glink_altmode *altmode,
+>  	ret = typec_mux_set(port->typec_mux, &port->state);
+>  	if (ret)
+>  		dev_err(altmode->dev, "failed to switch mux to safe mode\n");
+> +
+> +	port->retimer_state.alt = NULL;
+> +	port->retimer_state.data = NULL;
+> +	port->retimer_state.mode = TYPEC_STATE_SAFE;
+> +
+> +	ret = typec_retimer_set(port->typec_retimer, &port->retimer_state);
+> +	if (ret)
+> +		dev_err(altmode->dev, "failed to setup retimer to USB\n");
+>  }
+>  
+>  static void pmic_glink_altmode_worker(struct work_struct *work)
+> @@ -347,6 +374,11 @@ static const struct drm_bridge_funcs pmic_glink_altmode_bridge_funcs = {
+>  	.attach = pmic_glink_altmode_attach,
+>  };
+>  
+> +static void pmic_glink_altmode_put_retimer(void *data)
+> +{
+> +	typec_retimer_put(data);
+> +}
+> +
+>  static void pmic_glink_altmode_put_mux(void *data)
+>  {
+>  	typec_mux_put(data);
+> @@ -453,6 +485,17 @@ static int pmic_glink_altmode_probe(struct auxiliary_device *adev,
+>  		if (ret)
+>  			return ret;
+>  
+> +		alt_port->typec_retimer = fwnode_typec_retimer_get(fwnode);
+> +		if (IS_ERR(alt_port->typec_retimer))
+> +			return dev_err_probe(dev, PTR_ERR(alt_port->typec_retimer),
+> +					     "failed to acquire retimer-switch for port: %d\n",
+> +					     port);
+> +
+> +		ret = devm_add_action_or_reset(dev, pmic_glink_altmode_put_retimer,
+> +					       alt_port->typec_retimer);
+> +		if (ret)
+> +			return ret;
+> +
+>  		alt_port->typec_switch = fwnode_typec_switch_get(fwnode);
+>  		if (IS_ERR(alt_port->typec_switch))
+>  			return dev_err_probe(dev, PTR_ERR(alt_port->typec_switch),
+> 
+> -- 
+> 2.34.1
 
-diff --git a/drivers/net/ethernet/microsoft/mana/mana_en.c b/drivers/net/ethernet/microsoft/mana/mana_en.c
-index d907727c7b7a..cb5c43c3c47e 100644
---- a/drivers/net/ethernet/microsoft/mana/mana_en.c
-+++ b/drivers/net/ethernet/microsoft/mana/mana_en.c
-@@ -2329,7 +2329,10 @@ static int mana_dealloc_queues(struct net_device *ndev)
- {
- 	struct mana_port_context *apc = netdev_priv(ndev);
- 	struct gdma_dev *gd = apc->ac->gdma_dev;
-+	unsigned long timeout;
- 	struct mana_txq *txq;
-+	struct sk_buff *skb;
-+	struct mana_cq *cq;
- 	int i, err;
- 
- 	if (apc->port_is_up)
-@@ -2348,13 +2351,25 @@ static int mana_dealloc_queues(struct net_device *ndev)
- 	 *
- 	 * Drain all the in-flight TX packets
- 	 */
-+
-+	timeout = jiffies + 120 * HZ;
- 	for (i = 0; i < apc->num_queues; i++) {
- 		txq = &apc->tx_qp[i].txq;
--
--		while (atomic_read(&txq->pending_sends) > 0)
-+		while (atomic_read(&txq->pending_sends) > 0 &&
-+		       time_before(jiffies, timeout))
- 			usleep_range(1000, 2000);
- 	}
- 
-+	for (i = 0; i < apc->num_queues; i++) {
-+		txq = &apc->tx_qp[i].txq;
-+		cq = &apc->tx_qp[i].tx_cq;
-+		while (atomic_read(&txq->pending_sends)) {
-+			skb = skb_dequeue(&txq->pending_skbs);
-+			mana_unmap_skb(skb, apc);
-+			napi_consume_skb(skb, cq->budget);
-+			atomic_sub(1, &txq->pending_sends);
-+		}
-+	}
- 	/* We're 100% sure the queues can no longer be woken up, because
- 	 * we're sure now mana_poll_tx_cq() can't be running.
- 	 */
 -- 
-2.34.1
-
+heikki
