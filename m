@@ -2,81 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CB7573D56F
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 02:56:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B62E173D570
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 02:57:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230054AbjFZA4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 20:56:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48246 "EHLO
+        id S230021AbjFZA5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 20:57:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjFZA4r (ORCPT
+        with ESMTP id S229452AbjFZA5k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 20:56:47 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 837B48E;
-        Sun, 25 Jun 2023 17:56:45 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Qq8Yj4GXsz4f4HYw;
-        Mon, 26 Jun 2023 08:56:41 +0800 (CST)
-Received: from [10.67.110.48] (unknown [10.67.110.48])
-        by APP3 (Coremail) with SMTP id _Ch0CgDHrQtI4phkuS+ALg--.18069S2;
-        Mon, 26 Jun 2023 08:56:42 +0800 (CST)
-Message-ID: <71bd6de4-2cde-54eb-5720-3665d421d8ea@huaweicloud.com>
-Date:   Mon, 26 Jun 2023 08:56:40 +0800
+        Sun, 25 Jun 2023 20:57:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48B8126
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 17:56:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687741016;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=L+GNj4TY3QwgXdJ5hTL9eDQCES/7GGtcAIghkSXdKKs=;
+        b=GRMGRzZ2hsgeGdj73XmcuC+NY+geMWXtHTLelJ8N9GBFN+fsivsnksi8Tsl5RUUKRv9B2Y
+        LjjbpHe7Rfje7A1Xap0m8vFQOu4pA2fOd7vk7JA4Z8sR8EF7K6MM+nqHCUlx5uVFcNHdpl
+        odNb6iHsT3MFVZTaZPnhZImQWeY/TEI=
+Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com
+ [209.85.167.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-491-SYa4wrF3MQeXXksAxLVFmQ-1; Sun, 25 Jun 2023 20:56:55 -0400
+X-MC-Unique: SYa4wrF3MQeXXksAxLVFmQ-1
+Received: by mail-oi1-f197.google.com with SMTP id 5614622812f47-3a034580aafso2782674b6e.0
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 17:56:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687741014; x=1690333014;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=L+GNj4TY3QwgXdJ5hTL9eDQCES/7GGtcAIghkSXdKKs=;
+        b=Sk4iS9NWjgvQg3YplSaBLfFLfa496bPHmtadahC7mhXzg28hPAElS/bEe/5t9LExq1
+         KYLtrPY42xHYzr5OG6DNKeDg6CYQ7CaD8GFhf8uFaJxuGNpquqAyjZhxRJ+5PtIMaues
+         nrrgoCk9xa3lhtGYzYTVweeYgHbPIyP/A1TwJteqRIyRUDQOewHrrJbVIeuLzuXcVM9s
+         AQrqTf1AjW0Xr3YaktxK2O1i7K6a9qurTXnnXP+ji3LthQIQDBUbFZHKxeWEZ2PNNdbH
+         c+ImAsNJKXQyDz9Z7Nd3kCiWKIrjjyiNxDh86K0iO1NqO5+dp+ekCRYvyTICF/x//VxX
+         db9Q==
+X-Gm-Message-State: AC+VfDwgqyOxWsGgPtgMoEdL7UZS0fCR1yNSy4pJMDz0omKbat+cuSKl
+        bS9coGoNQIBtCrfQKduAB32gs0frtsFTZKfopOAicec7eL/MYaTgS6q9wUS2egiaivhCyxVcb66
+        9Ka5pFS+PhzOKF1Nvmk0R5/st
+X-Received: by 2002:a05:6808:2225:b0:39e:e0f0:55ed with SMTP id bd37-20020a056808222500b0039ee0f055edmr24476166oib.53.1687741014410;
+        Sun, 25 Jun 2023 17:56:54 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4XDniU9mbkgJ37UJtuTdyxmQIbAWI8IOgZqvx0Xti7VIZL2IM75RJA5T57izCX7z8untYfCA==
+X-Received: by 2002:a05:6808:2225:b0:39e:e0f0:55ed with SMTP id bd37-20020a056808222500b0039ee0f055edmr24476144oib.53.1687741014173;
+        Sun, 25 Jun 2023 17:56:54 -0700 (PDT)
+Received: from [10.72.13.91] ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id t4-20020a1709028c8400b001b3c7e5ed8csm2927536plo.74.2023.06.25.17.56.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 25 Jun 2023 17:56:53 -0700 (PDT)
+Message-ID: <244c7527-2708-6a27-537b-a32cf9d37129@redhat.com>
+Date:   Mon, 26 Jun 2023 08:56:48 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH v3 0/1] Randomized slab caches for kmalloc()
+Subject: Re: [PATCH 17/79] ceph: switch to new ctime accessors
 Content-Language: en-US
-To:     Markus Elfring <Markus.Elfring@web.de>, linux-mm@kvack.org,
-        linux-hardening@vger.kernel.org, kernel-janitors@vger.kernel.org
-Cc:     LKML <linux-kernel@vger.kernel.org>, cocci@inria.fr,
-        Alexander Lobakin <aleksander.lobakin@intel.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dennis Zhou <dennis@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Pedro Falcato <pedro.falcato@gmail.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        "Serge E . Hallyn" <serge@hallyn.com>, Tejun Heo <tj@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Wang Weiyang <wangweiyang2@huawei.com>,
-        Xiu Jianfeng <xiujianfeng@huawei.com>
-References: <20230616111843.3677378-1-gongruiqi@huaweicloud.com>
- <570d788b-d7f3-64ab-97e1-4e847aef1321@web.de>
-From:   "GONG, Ruiqi" <gongruiqi@huaweicloud.com>
-In-Reply-To: <570d788b-d7f3-64ab-97e1-4e847aef1321@web.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgDHrQtI4phkuS+ALg--.18069S2
-X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYI7kC6x804xWl14x267AKxVWrJVCq3wAF
-        c2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII
-        0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xv
-        wVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4
-        x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG
-        64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r
-        1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kI
-        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
-        AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
-        17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
-        IF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq
-        3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
-        nIWIevJa73UjIFyTuYvjxUFYFCUUUUU
-X-CM-SenderInfo: pjrqw2pxltxq5kxd4v5lfo033gof0z/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Jeff Layton <jlayton@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Ilya Dryomov <idryomov@gmail.com>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+        ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230621144507.55591-1-jlayton@kernel.org>
+ <20230621144735.55953-1-jlayton@kernel.org>
+ <20230621144735.55953-16-jlayton@kernel.org>
+From:   Xiubo Li <xiubli@redhat.com>
+In-Reply-To: <20230621144735.55953-16-jlayton@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -84,18 +87,136 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 2023/06/23 16:30, Markus Elfring wrote:
->> I adapted the v2 patch to …
-> 
-> I suggest to omit the cover letter for a single patch.
-> 
-> Will any patch series evolve for your proposed changes?
-> 
+On 6/21/23 22:45, Jeff Layton wrote:
+> In later patches, we're going to change how the ctime.tv_nsec field is
+> utilized. Switch to using accessor functions instead of raw accesses of
+> inode->i_ctime.
+>
+> Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> ---
+>   fs/ceph/acl.c   |  2 +-
+>   fs/ceph/caps.c  |  2 +-
+>   fs/ceph/inode.c | 17 ++++++++++-------
+>   fs/ceph/snap.c  |  2 +-
+>   fs/ceph/xattr.c |  2 +-
+>   5 files changed, 14 insertions(+), 11 deletions(-)
+>
+> diff --git a/fs/ceph/acl.c b/fs/ceph/acl.c
+> index 6945a938d396..a3de2b9c3a68 100644
+> --- a/fs/ceph/acl.c
+> +++ b/fs/ceph/acl.c
+> @@ -93,7 +93,7 @@ int ceph_set_acl(struct mnt_idmap *idmap, struct dentry *dentry,
+>   	char *value = NULL;
+>   	struct iattr newattrs;
+>   	struct inode *inode = d_inode(dentry);
+> -	struct timespec64 old_ctime = inode->i_ctime;
+> +	struct timespec64 old_ctime = inode_ctime_peek(inode);
+>   	umode_t new_mode = inode->i_mode, old_mode = inode->i_mode;
+>   
+>   	if (ceph_snap(inode) != CEPH_NOSNAP) {
+> diff --git a/fs/ceph/caps.c b/fs/ceph/caps.c
+> index 2321e5ddb664..c144a07e334e 100644
+> --- a/fs/ceph/caps.c
+> +++ b/fs/ceph/caps.c
+> @@ -1400,7 +1400,7 @@ static void __prep_cap(struct cap_msg_args *arg, struct ceph_cap *cap,
+>   
+>   	arg->mtime = inode->i_mtime;
+>   	arg->atime = inode->i_atime;
+> -	arg->ctime = inode->i_ctime;
+> +	arg->ctime = inode_ctime_peek(inode);
+>   	arg->btime = ci->i_btime;
+>   	arg->change_attr = inode_peek_iversion_raw(inode);
+>   
+> diff --git a/fs/ceph/inode.c b/fs/ceph/inode.c
+> index 8e5f41d45283..f0b3b11d695e 100644
+> --- a/fs/ceph/inode.c
+> +++ b/fs/ceph/inode.c
+> @@ -100,7 +100,7 @@ struct inode *ceph_get_snapdir(struct inode *parent)
+>   	inode->i_uid = parent->i_uid;
+>   	inode->i_gid = parent->i_gid;
+>   	inode->i_mtime = parent->i_mtime;
+> -	inode->i_ctime = parent->i_ctime;
+> +	inode_ctime_set(inode, inode_ctime_peek(parent));
+>   	inode->i_atime = parent->i_atime;
+>   	ci->i_rbytes = 0;
+>   	ci->i_btime = ceph_inode(parent)->i_btime;
+> @@ -695,12 +695,14 @@ void ceph_fill_file_time(struct inode *inode, int issued,
+>   		      CEPH_CAP_FILE_BUFFER|
+>   		      CEPH_CAP_AUTH_EXCL|
+>   		      CEPH_CAP_XATTR_EXCL)) {
+> +		struct timespec64 ictime = inode_ctime_peek(inode);
+> +
+>   		if (ci->i_version == 0 ||
+> -		    timespec64_compare(ctime, &inode->i_ctime) > 0) {
+> +		    timespec64_compare(ctime, &ictime) > 0) {
+>   			dout("ctime %lld.%09ld -> %lld.%09ld inc w/ cap\n",
+> -			     inode->i_ctime.tv_sec, inode->i_ctime.tv_nsec,
+> +			     ictime.tv_sec, ictime.tv_nsec,
+>   			     ctime->tv_sec, ctime->tv_nsec);
+> -			inode->i_ctime = *ctime;
+> +			inode_ctime_set(inode, *ctime);
+>   		}
+>   		if (ci->i_version == 0 ||
+>   		    ceph_seq_cmp(time_warp_seq, ci->i_time_warp_seq) > 0) {
+> @@ -738,7 +740,7 @@ void ceph_fill_file_time(struct inode *inode, int issued,
+>   	} else {
+>   		/* we have no write|excl caps; whatever the MDS says is true */
+>   		if (ceph_seq_cmp(time_warp_seq, ci->i_time_warp_seq) >= 0) {
+> -			inode->i_ctime = *ctime;
+> +			inode_ctime_set(inode, *ctime);
+>   			inode->i_mtime = *mtime;
+>   			inode->i_atime = *atime;
+>   			ci->i_time_warp_seq = time_warp_seq;
+> @@ -2166,7 +2168,8 @@ int __ceph_setattr(struct inode *inode, struct iattr *attr)
+>   		bool only = (ia_valid & (ATTR_SIZE|ATTR_MTIME|ATTR_ATIME|
+>   					 ATTR_MODE|ATTR_UID|ATTR_GID)) == 0;
+>   		dout("setattr %p ctime %lld.%ld -> %lld.%ld (%s)\n", inode,
+> -		     inode->i_ctime.tv_sec, inode->i_ctime.tv_nsec,
+> +		     inode_ctime_peek(inode).tv_sec,
+> +		     inode_ctime_peek(inode).tv_nsec,
+>   		     attr->ia_ctime.tv_sec, attr->ia_ctime.tv_nsec,
+>   		     only ? "ctime only" : "ignored");
+>   		if (only) {
+> @@ -2191,7 +2194,7 @@ int __ceph_setattr(struct inode *inode, struct iattr *attr)
+>   	if (dirtied) {
+>   		inode_dirty_flags = __ceph_mark_dirty_caps(ci, dirtied,
+>   							   &prealloc_cf);
+> -		inode->i_ctime = attr->ia_ctime;
+> +		inode_ctime_set(inode, attr->ia_ctime);
+>   		inode_inc_iversion_raw(inode);
+>   	}
+>   
+> diff --git a/fs/ceph/snap.c b/fs/ceph/snap.c
+> index 2e73ba62bd7a..f02df070fa84 100644
+> --- a/fs/ceph/snap.c
+> +++ b/fs/ceph/snap.c
+> @@ -660,7 +660,7 @@ int __ceph_finish_cap_snap(struct ceph_inode_info *ci,
+>   	capsnap->size = i_size_read(inode);
+>   	capsnap->mtime = inode->i_mtime;
+>   	capsnap->atime = inode->i_atime;
+> -	capsnap->ctime = inode->i_ctime;
+> +	capsnap->ctime = inode_ctime_peek(inode);
+>   	capsnap->btime = ci->i_btime;
+>   	capsnap->change_attr = inode_peek_iversion_raw(inode);
+>   	capsnap->time_warp_seq = ci->i_time_warp_seq;
+> diff --git a/fs/ceph/xattr.c b/fs/ceph/xattr.c
+> index 806183959c47..8e217f7f58bd 100644
+> --- a/fs/ceph/xattr.c
+> +++ b/fs/ceph/xattr.c
+> @@ -1238,7 +1238,7 @@ int __ceph_setxattr(struct inode *inode, const char *name,
+>   		dirty = __ceph_mark_dirty_caps(ci, CEPH_CAP_XATTR_EXCL,
+>   					       &prealloc_cf);
+>   		ci->i_xattrs.dirty = true;
+> -		inode->i_ctime = current_time(inode);
+> +		inode_ctime_set_current(inode);
+>   	}
+>   
+>   	spin_unlock(&ci->i_ceph_lock);
 
-Usually I wouldn't made a cover letter for a single patch, while this
-case is an exception because I need a place to hold the additional
-explanation about its transformation from RFC patch to formal patch.
+Just back from PTO.
 
-> Regards,
-> Markus
+LGTM.
+
+Reviewed-by: Xiubo Li <xiubli@redhat.com>
+
 
