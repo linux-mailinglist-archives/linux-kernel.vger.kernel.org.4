@@ -2,54 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C051F73DFE7
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 14:58:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C01673DFEC
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 14:59:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230350AbjFZM6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 08:58:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49708 "EHLO
+        id S229978AbjFZM7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 08:59:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbjFZM6A (ORCPT
+        with ESMTP id S229502AbjFZM7e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 08:58:00 -0400
-Received: from tarta.nabijaczleweli.xyz (unknown [139.28.40.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 40E45125;
-        Mon, 26 Jun 2023 05:57:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
-        s=202305; t=1687784276;
-        bh=A/60Mehy2gEPdHOhKuvb29K5E/lHwYktVCiUO81YhVg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WTzf/tAqpNxj+m/LGdIioFeXMgVqZJt5PqcFowaip6qE56AjZmzNwx7fLtFHQvy9f
-         5Om84sinbt4mZPHgy6coGdlGgupO64W6VLgoQ1kaYcadRlfw8GJi7dZM1dNFTDGCVC
-         qBKLiB6hXx8+0tyNrIQLmtWR31mPFzLOeyTcXaUkFWumiDSXPOE0GbwhEHk0fjbbKI
-         TSNAK9Heaqf0rzBHjoCWTZC8VcmR6tXx9PjHwW5j+HsjjJK+1vRFFMgxfQk5FURUbd
-         cM1mciolye4Aam3k1WOipDJJe/kjD5BX/DvtfFApB+hmNebRsUsAjLuR8RVoEX72Jd
-         8Ufe9xI9r71JA==
-Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
-        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id 6C49D131C;
-        Mon, 26 Jun 2023 14:57:56 +0200 (CEST)
-Date:   Mon, 26 Jun 2023 14:57:55 +0200
-From:   Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= 
-        <nabijaczleweli@nabijaczleweli.xyz>
-To:     Amir Goldstein <amir73il@gmail.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jan Kara <jack@suse.cz>
-Subject: Re: splice(-> FIFO) never wakes up inotify IN_MODIFY?
-Message-ID: <vlzqpije6ltf2jga7btkccraxxnucxrcsqbskdnk6s2sarkitb@5huvtml62a5c>
-References: <jbyihkyk5dtaohdwjyivambb2gffyjs3dodpofafnkkunxq7bu@jngkdxx65pux>
- <CAOQ4uxhut2NHc+MY-XOJay5B-OKXU2X5Fe0-6-RCMKt584ft5A@mail.gmail.com>
- <ndm45oojyc5swspfxejfq4nd635xnx5m35otsireckxp6heduh@2opifgi3b3cw>
+        Mon, 26 Jun 2023 08:59:34 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECB5910A
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 05:59:31 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3fa99742be2so7767575e9.1
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 05:59:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687784370; x=1690376370;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=apk70vZy4KhYcnG84Q1wffo81Dl8DaLTVZRWL3wj6Xs=;
+        b=caap5YVaJxmKP2ba+RBHLW3aV7Xw/RxMUuOzSGrHC3hoeFYNisi3znUAm9NeP95/un
+         2p/He1Ved0EDYRQE7KVoMZEMTK6ptlZC3iWFQBrwBLAGEf9NqqqV8Q8hvDOr3rup8TJd
+         jpmW46Au0Vsoo+lP/AIlkg/Mj9kpzvgfVsJJ8IdDGDJyDzcrZo9aInKMreHWCF17/UqE
+         Pgm/pKnQJs8OtBpkx3mmYmto3MDF2SW0tuoAzgz8iju/WEjOyZ5C9XwMkUajztQfBSBG
+         j9N29fLIXxoRolJQx5wv5LbMT4x1ApRFBJvdc2IW4hpO72Vm4s9gvvN2mOKWkRypjne2
+         9EeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687784370; x=1690376370;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=apk70vZy4KhYcnG84Q1wffo81Dl8DaLTVZRWL3wj6Xs=;
+        b=RhZmag43LgQ/VBi+t8eM5O0z+Q/fNgVHaqQ+U/WCLFErff1hUWcGBdT/tRGyf7zVXU
+         qLCiO9j7ayh/o+uIiFO/28ceomVLaxfjFGlI/4FVJLI9KH+70ng/9a6m8XLn1LH57Wac
+         /5F7kv8g8dhTrgG8S8xtPyK/3gKnUSvUuXmE5aanlAfKOhfGfUliZgg1lbnZtOSLkC2F
+         Tx7CEbFyCXcrNXLZ0K8PBoIYQ2lf2cN+5zEinpQKhKgkScbZvMyqoOGtzNhLyUUHSnn4
+         GJU8LjVUTqv7zHozS97CvgJmuDTmIt5WM/Cur+GzBVsOtx4jKHhGCSjj9N7WWOoC0C8g
+         rJZA==
+X-Gm-Message-State: AC+VfDxt2CGUgZn052qrsTiHmAZjtmpXk2mJHuXj9WXjxtgwP2Vp/eOp
+        dpuvuowl7Vdl5DmArkTXZZR85w==
+X-Google-Smtp-Source: ACHHUZ6cBlNtxq75cN4Re6BcQmPh/298izmROOMzkk3aoy5z+JpobqagrTiu+DwsCmdHdbox+wHzaQ==
+X-Received: by 2002:a05:600c:2942:b0:3f8:efc5:3382 with SMTP id n2-20020a05600c294200b003f8efc53382mr24739064wmd.31.1687784370379;
+        Mon, 26 Jun 2023 05:59:30 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id k5-20020a5d6e85000000b003063a92bbf5sm7386241wrz.70.2023.06.26.05.59.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jun 2023 05:59:28 -0700 (PDT)
+Date:   Mon, 26 Jun 2023 15:59:25 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     Demi Marie Obenour <demi@invisiblethingslab.com>
+Cc:     Markus Elfring <Markus.Elfring@web.de>, dm-devel@redhat.com,
+        kernel-janitors@vger.kernel.org, Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 2/4] dm ioctl: Allow userspace to provide expected
+ diskseq
+Message-ID: <e42e8115-6f75-447e-9955-ca4ad43ed406@kadam.mountain>
+References: <20230624230950.2272-3-demi@invisiblethingslab.com>
+ <3241078c-2318-fe1b-33cc-7c33db71b1a6@web.de>
+ <ZJh73z2CsgHEJ4iv@itl-email>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ekt4xsobei4itlj7"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ndm45oojyc5swspfxejfq4nd635xnx5m35otsireckxp6heduh@2opifgi3b3cw>
-User-Agent: NeoMutt/20230517
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_RDNS_DYNAMIC_FP,
-        RDNS_DYNAMIC,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZJh73z2CsgHEJ4iv@itl-email>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,48 +78,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, Jun 25, 2023 at 01:39:40PM -0400, Demi Marie Obenour wrote:
+> On Sun, Jun 25, 2023 at 01:23:40PM +0200, Markus Elfring wrote:
+> > > This can be used to avoid race conditions in which a device is destroyed
+> > > and recreated with the same major/minor, name, or UUID. …
+> > 
+> > Please add an imperative change suggestion.
+> 
+> Will fix in v3.
 
---ekt4xsobei4itlj7
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+You don't have to listen to Markus.  Most of us can't see Markus's
+emails because he's banned from the vger mailing lists.
 
-On Mon, Jun 26, 2023 at 02:19:42PM +0200, Ahelenia Ziemia=C5=84ska wrote:
-> > splice(2) differentiates three different cases:
-> >         if (ipipe && opipe) {
-> > ...
-> >         if (ipipe) {
-> > ...
-> >         if (opipe) {
-> > ...
-> >=20
-> > IN_ACCESS will only be generated for non-pipe input
-> > IN_MODIFY will only be generated for non-pipe output
-> >
-> > Similarly FAN_ACCESS_PERM fanotify permission events
-> > will only be generated for non-pipe input.
-Sorry, I must've misunderstood this as "splicing to a pipe generates
-*ACCESS". Testing reveals this is not the case. So is it really true
-that the only way to poll a pipe is a sleep()/read(O_NONBLOCK) loop?
+Markus, stop bothering people about trivial nonsense.  I've said this
+to you before, that if you spot a bug in a patch that's welcome feedback
+but if you just have comments about grammar then no one wants that.
 
---ekt4xsobei4itlj7
-Content-Type: application/pgp-signature; name="signature.asc"
+regards,
+dan carpenter
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmSZi1AACgkQvP0LAY0m
-WPHojQ/8Dca03RA9GygaCJ8mDUbT+U/Gqnugp+zljoVBLoiichVLnHP+K80x4mpZ
-IYARMuM4jpDGmaxr/W806OQRi/Sx63PiqDG0FrLGafyrJzUZrvaoYRZ3A7m/tRaV
-hVpJeSOiaeJ4wJo9Z1J7RxCOS9JrrPF3gHdWPza9Hn80pJJDLKO1bPOgJC5vjwQO
-ECrzB1IHa+hqTqrxcM+ZDI72VVvlhPkZnzmwkeHduGVRBJNquaZxTZf+BIfA4NLO
-wFLFB+4VCP3ZLA2GePQMIEVbUyqI8ue7PG039Vs1UTl94aRE0liQcYqajEoeuliu
-YPB8WrzYyNYMKpTTQgETnW8/iBiEJhl3sqNHJD3EBeCih/N8eZs/WRDYtUtj8lqz
-cMiJTxmUDPxBUhnSpV+/pe7uz3A/QDNb+V/y13DIixxYy8YLjbdUzec4diGc1nmV
-Oo6+w4fFwZz6zICyTqwwTOr245iITKSTgBGxyCUlm+7XwApJKygiC4XjeXec9x4X
-QTnrUKBhfmD1eXXcm/FlpF7rLwUXmMjwHWAwWXZrpwozV4ghot6hCJsV8pSJ8ufE
-p9jViAjpUm+ogkQif51mbmqWqYoTpzRur7TL71XeoxVAk7tlba+rlkyCxMNCHMa6
-587F/RtRIvw1JzBxyRpF3vcWgGQpl9Pm8Udcd+Hjk9D76t4EQQY=
-=ZCkQ
------END PGP SIGNATURE-----
-
---ekt4xsobei4itlj7--
