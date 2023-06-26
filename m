@@ -2,331 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACE3B73E406
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 17:56:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE79273E408
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 17:57:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231196AbjFZP4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 11:56:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38722 "EHLO
+        id S231582AbjFZP5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 11:57:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbjFZP4g (ORCPT
+        with ESMTP id S229569AbjFZP5S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 11:56:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB6B294;
-        Mon, 26 Jun 2023 08:56:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F46A60EE0;
-        Mon, 26 Jun 2023 15:56:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F04E3C433C0;
-        Mon, 26 Jun 2023 15:56:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687794993;
-        bh=WarwMhCBqmpJZsSLoUnPJxtPhha9dRm5G2gDAXP2dZY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MDtc8rHb4Iox3X/oSbx5sqa4OZNK2ZUEd+24hnasMMqSLb80qYIq+2C1t1umhl0d2
-         SlEyWWk4yGO5C6ynvvYAfZBf6gKdkaeRB40ab/LEPJIqDJLLuRvtP5ip3Nb+yy5ivX
-         9jzGGNgWGuuo9ALUhqGfh/w2WrLDq3653HknpYSaO9z3rokv/aqreR5ZVQtBKK8lL4
-         eIF13RWe+Tan4scB/VF19Tfj0aVqAQwQbH/I7sDgaSJIRsXic1rNLWrVT+zz4PuiRh
-         BF7piDf2vKZhbr5LXKEk++dmr5Ae1QXc4OxVPWXyZ2WK2RWavvx4FSNrTInrO5rFaL
-         +W1fEztNf2L8g==
-Date:   Mon, 26 Jun 2023 17:56:28 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Jens Axboe <axboe@kernel.dk>, David Howells <dhowells@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= 
-        <nabijaczleweli@nabijaczleweli.xyz>
-Subject: Re: Pending splice(file -> FIFO) excludes all other FIFO operations
- forever (was: ... always blocks read(FIFO), regardless of O_NONBLOCK on read
- side?)
-Message-ID: <20230626-fazit-campen-d54e428aa4d6@brauner>
-References: <qk6hjuam54khlaikf2ssom6custxf5is2ekkaequf4hvode3ls@zgf7j5j4ubvw>
- <20230626-vorverlegen-setzen-c7f96e10df34@brauner>
- <4sdy3yn462gdvubecjp4u7wj7hl5aah4kgsxslxlyqfnv67i72@euauz57cr3ex>
+        Mon, 26 Jun 2023 11:57:18 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A08AF9;
+        Mon, 26 Jun 2023 08:57:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JAfxQ0raglTsw066JRcDOt1M8kuwzgVfYzuasMGDXlyyFGYrIMdR1eLN7OGlMh5EQFuhXOEKq5VtUBjESpsWtBMXSIiopVcXC73Oxd2Mzn877YMAf19lt6nkAmy94Td2gNLJvi/09hA4pOXTPyUQZuvKo/nZHPFmp8iTwo3AJsD0STPsWLRa25qiOVuV9UPVXwqiR0V734pr59ckenSbLgjiPpdRizd537ryJu42wyGFHUPqtBFI4onIZiDi0Wv1M6PyHTuQIiaI+zj5TPxh2b1yrewyXNnQ8IsC5p30fMyLCakji32dQ5vqkc8Ej8xuQB/o5r70y64jgb1zHkO7aQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xz8BRsDQ5lUaVGTuL1qMG+2EGIeb8Z5HZ+GF+HSiydo=;
+ b=amm7npArrJH2vVgezj34tBV41RUeOLI3xXnulzsKDJAHfG8AYqLrb17vfnq7l564Y0PPyXiMGw+Mc9D/UqEeuCKNmUxND3zjuywBFhEp6w1cYiuNkFRUXdFBrLNVojCf9xwaHNP6L4ml397dPd6WJ17BbRVMFi2VxAnVVYns0B79AMDrTKb5I89g5w20nLt9gXl7wCz5V5NDKIWyQLeM03Nplz9XpJc/ym+Mm7rR8WnZoms7pF2moM3P7O6xhCqe9K+d4ELiEx4HSTdnkV9wdbPFEhVDTg017IZOURouYe2haoo5QQ7GO3Mono0bmyGc4JuAsFc4B8aeObPlV8Dwfg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xz8BRsDQ5lUaVGTuL1qMG+2EGIeb8Z5HZ+GF+HSiydo=;
+ b=JIDAeOvPiiwxcQEUxhEIojO+RuoNQtQS4UO4P4HM0FjTmXoMRUjebFqiY5UQAXh5IRdXAxWUZ/ggJdioliHodkfzwiE6hvdCUW0XNI8xfSeYdAnqy7/8QsMW+I5enKo1cShlA6eoLIUuv1vpQYqYRlNN+IKZ9TurMpz0kZkKDhU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
+ by PH7PR12MB7938.namprd12.prod.outlook.com (2603:10b6:510:276::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24; Mon, 26 Jun
+ 2023 15:57:14 +0000
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::1629:622f:93d0:f72f]) by DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::1629:622f:93d0:f72f%7]) with mapi id 15.20.6521.023; Mon, 26 Jun 2023
+ 15:57:14 +0000
+Message-ID: <52ea8386-8652-dd91-23de-9d35781cb131@amd.com>
+Date:   Mon, 26 Jun 2023 10:57:12 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [RFC PATCH v2 6/6] KVM: SVM: Add CET features to supported_xss
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>,
+        Rick P Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     "john.allen@amd.com" <john.allen@amd.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "bp@alien8.de" <bp@alien8.de>, "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>
+References: <20230524155339.415820-1-john.allen@amd.com>
+ <20230524155339.415820-7-john.allen@amd.com>
+ <161174d013dff42ddfd2950fe33a8054f45c223e.camel@intel.com>
+ <ZINGaJnNJ54+klsD@johallen-workstation.lan>
+ <9ef2faeaa38e667bd4daa8ee338d4cade452c76c.camel@intel.com>
+ <ZJYaNSzup+yuYxNy@google.com>
+From:   Tom Lendacky <thomas.lendacky@amd.com>
+In-Reply-To: <ZJYaNSzup+yuYxNy@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: DS7PR03CA0067.namprd03.prod.outlook.com
+ (2603:10b6:5:3bb::12) To DM4PR12MB5229.namprd12.prod.outlook.com
+ (2603:10b6:5:398::12)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4sdy3yn462gdvubecjp4u7wj7hl5aah4kgsxslxlyqfnv67i72@euauz57cr3ex>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5229:EE_|PH7PR12MB7938:EE_
+X-MS-Office365-Filtering-Correlation-Id: c89fa4bb-9d86-41ed-b3a4-08db765e0257
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: LM9smBjHqwDSMYHfUoSEtnzMT+xafBdWwUvMon+AeePngw7kpTxm/hik7H+BaBnU0OwN8ZQzMzaVfSd3eomx9Pt7vBDDdms550vDrsOLes9CdLBrzdbYIPP1fSwCX89+RPK5o4B7QgLzNXX9Y+pPHB5XNtqxJ35M+a2yvLntixoRqFBzYkUktW0d3F2wa6G7oWW2X+kfLYEownZvSZjAESyO4wUm5NKe2H1dX3nHcS7zKDXl+pikj2Y953yPer2Vfim4182HsH2LBI3j5LlpPhTVaCctOOWeJPveMolFNgKrUvhFYGyvEX4VUR7YAdnuIzllBfZzivhdGcRGJDiX3r5VkyDex/c7zLA6viC1S9X6IiuT5kf31lXL76n2424003XVK1+pRlptmhnT2ppg+2RYOoGxnMi0kmIWGXDMLMsq7hXoVa7s9A1sG6jkIUSyP4JN4mlHcHb3nh3kMr8twNPCd8bldUYjA2LdmiE43zcoQFR/QY9PgpwYKOgE3J8dwJ7SSdJKAhSav/vUZAI1dzhX9DsVun28qUFg9BaaQaHJ5Yr/O5ZCGFK2nY0N3lmsKRn3qRoooTr6vDxXjBPGtTlOC2wlJ0TjRAobelNbE6OPsZNd0CREqjshj6kIIfLeq0RWLvQwgzXD1zsQnliD2g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(366004)(376002)(396003)(136003)(346002)(451199021)(31686004)(36756003)(5660300002)(41300700001)(316002)(86362001)(66476007)(8936002)(8676002)(66556008)(38100700002)(4326008)(31696002)(66946007)(6486002)(478600001)(26005)(6506007)(2906002)(53546011)(6512007)(186003)(110136005)(83380400001)(2616005)(54906003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?a2FCMHp6UjBQc2xKaUlBVDVjK3U4NjBYbFRaY0xRRVRKZWlrMGU1cDNTOGlS?=
+ =?utf-8?B?aDRQdmVVQnVKNVB0cFVwZWRldEVhZ1VZeU52TmJ1MVo5ZmdOQ05CQzI0YlAw?=
+ =?utf-8?B?S2pXMTZXRlhxckFPMnFxUzFmRFNuRkk5VzhHWmJlQllFalMzOWRhVFdHQnhC?=
+ =?utf-8?B?Y0hEOS95SmsxTHJUWEEyVWpsWjJXc2czZmEvUFdqM0xRWHZHSXhuUDJlQjZG?=
+ =?utf-8?B?aHBKT3lCWjJPTmJtMnVYM0RkMnRnL1c3dzBYRnQzaHhuME94eEFtc2R5cGJm?=
+ =?utf-8?B?bm9XZmI2N2k5a2hGSyt4NXVMcmJDQWVVRElucUtVSUgycUFWN3pQRE5FQzVQ?=
+ =?utf-8?B?SDZ4T3ZWM2FuaVBNRzNrdkJkVjlZVmZnUGVhUHBwN0lTN2k0NVBMRlZYeEdT?=
+ =?utf-8?B?RTVodi9yenp5bEpOaVFQUHoyZTVJT21neHdOZ1JLYzN1ekZaYWEwR0xqV2tn?=
+ =?utf-8?B?SnJwUEFHZk5LM3lvSVprYU92cDJHNWVqbFdQVEN1cFFKRXB1SXpzeHBpUlhR?=
+ =?utf-8?B?T3ZxTjBkaXpjUEMwcytCZm9Vb0lUQktQZkZqeWUzVDdDK3E0SFNnWjYxV1dP?=
+ =?utf-8?B?KzRPUDNwVFI3bjlCYUpqODFxVVM2MWRXd3NqdU1EZWlTWmZRekY5RzNsY0Zo?=
+ =?utf-8?B?VXUycFZnWnpKQzJKaFB4SDhRamRaZ2wyM3BqakludFd0UzgweDFCVGpkNDdt?=
+ =?utf-8?B?NzhMRUF2UG11b0JKamNsbVZONXNmbXlGcVVVNTRTMHFqdWkwMmhVbFVkRmRj?=
+ =?utf-8?B?TUVRaTRvWWc1SjFFRjcydWtVZVZHQkVjOFBKV0NSakcrbUFkMjkxWTFKNWlG?=
+ =?utf-8?B?TFJKK3RlV0RKQkdyRC9Wd3l5T2lOQUZISlJUSXRPaSt6VGlLdzllMm1aRURW?=
+ =?utf-8?B?bnB4V2pFNEhFbEFiMWZDaUpBRTUzN1V0Q0hzTVBiOHRuanJpek1rZ1p2RnVU?=
+ =?utf-8?B?cldjenV2akEzSjY1OVM1akIxK2JVNmhpUGRzL2JNaTFWL01Ta0RML29Jc3V6?=
+ =?utf-8?B?SUl5NnNsd0I1S0JVV2c1N3MzZ0lWQlZmT3hJdGxSN1NsdkNwN2hVWWtzUTBa?=
+ =?utf-8?B?N0MvOWlGZHIzeEpKY2srRzU5c0dJN0RSellQcHVxTmh5QzNRd2gzUFpBWUZi?=
+ =?utf-8?B?eG9rTUw1TmJjRFl4YWVmeG1jcGJOOHNPK2ZCK2pSa2luSEVnTDRMZFhjRWNK?=
+ =?utf-8?B?UEJuWU5ERDZhTFpJRDBMdlJjQkVPNVVObkUrWlBXSFdUUkpuSFN6cGF5UGpB?=
+ =?utf-8?B?TnQ3U1BQSmJCQlY5elIzZWhRN0xEazQxTUhWQXZXZ3QwUDRQYlNZVGJsUXc5?=
+ =?utf-8?B?ZTBiV0tNdURFMWdWSzhTaE12YjRMYWwvTm5wTmpZcDhkbVZmL0pNT2Y2U0Jy?=
+ =?utf-8?B?YWRaZXU5OVZTS0lSZnYzckVDWTJsWWFXWldwMGJxKzFoeGVtM25yWlZBdmRF?=
+ =?utf-8?B?bVlmclM1UDlmVnZZRGhmTFhpZ3lEeU9wNlkvZERJRFdaVUFjWk9USzJhU0RX?=
+ =?utf-8?B?blRCbmVrZ2pSU3JZMkcvWXJtZDNDTy9DenZNTDZMdkdHd1VMVFZTcVVNQjZM?=
+ =?utf-8?B?SWVUdHBQUFFrd3JjeHd2MElJVk03b0d0Q2ttUllWUlJRLzhFbStva2Q5THJE?=
+ =?utf-8?B?Ty9qL1FBZG4wa3JUbHNEQjkxSkoyWklNbTA2am9qaUVmZWZ2MzUvRWY0Mkto?=
+ =?utf-8?B?dE9wR1BFQWQ2VjlBbDRmb1FsMHVOU1lycEVGM1dnU1dkcWw5bTVIaVRwWjFh?=
+ =?utf-8?B?anN3b0NXWUFCS2VSQ0RBN0crTmRpTnpML0kzdDNHaEY4bGxYbjdMbklETlFu?=
+ =?utf-8?B?dy9TK3hhWUdMR1dpSnJscG9yQ0FqSFhCYklmVm1lUDRZUXlCY2tVb2toOTJX?=
+ =?utf-8?B?YkluSkY3VU90ZjliTUZscktiRjRKcWhzbzlmMXFUYUhldENVWWVTYUVHVjA0?=
+ =?utf-8?B?YTZLY0VXNGJ0ODVmZ0VoNVJNdmU3WXIyWVVTYXZIVEFLK3RXY3Q0dHRObC9U?=
+ =?utf-8?B?UDFYdXVGWi9xVStFbnhVNmh1aGNzTnZYOTA5SXFHQTVNQjlXdWR5WDZwcG82?=
+ =?utf-8?B?YmxPeElIK1Q0K0lmSEhrV0k5TGFHU3l5eStKNm5nMDdvV3ZPOEpuY3Rtd2Fr?=
+ =?utf-8?Q?x8GGJ0cSYemrV4XiwLQ8xQv07?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c89fa4bb-9d86-41ed-b3a4-08db765e0257
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jun 2023 15:57:14.2703
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: fhnmA4iuKNM02cZnGYrMfvskzdZxRRpeDAzkm6g2q7Rx6OAZutoUgpWijzopXlGp7FGwAGg6zaDHgx/Jm4V+QQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7938
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 26, 2023 at 01:59:07PM +0200, Ahelenia Ziemiańska wrote:
-> On Mon, Jun 26, 2023 at 11:32:16AM +0200, Christian Brauner wrote:
-> > On Mon, Jun 26, 2023 at 03:12:09AM +0200, Ahelenia Ziemiańska wrote:
-> > > Hi! (starting with get_maintainers.pl fs/splice.c,
-> > >      idk if that's right though)
-> > > 
-> > > Per fs/splice.c:
-> > >  * The traditional unix read/write is extended with a "splice()" operation
-> > >  * that transfers data buffers to or from a pipe buffer.
-> > > so I expect splice() to work just about the same as read()/write()
-> > > (and, to a large extent, it does so).
-> > > 
-> > > Thus, a refresher on pipe read() semantics
-> > > (quoting Issue 8 Draft 3; Linux when writing with write()):
-> > > 60746  When attempting to read from an empty pipe or FIFO:
-> > > 60747  • If no process has the pipe open for writing, read( ) shall return 0 to indicate end-of-file.
-> > > 60748  • If some process has the pipe open for writing and O_NONBLOCK is set, read( ) shall return
-> > > 60749    −1 and set errno to [EAGAIN].
-> > > 60750  • If some process has the pipe open for writing and O_NONBLOCK is clear, read( ) shall
-> > > 60751    block the calling thread until some data is written or the pipe is closed by all processes that
-> > > 60752    had the pipe open for writing.
-> > > 
-> > > However, I've observed that this is not the case when splicing from
-> > > something that sleeps on read to a pipe, and that in that case all
-> > > readers block, /including/ ones that are reading from fds with
-> > > O_NONBLOCK set!
-> > > 
-> > > As an example, consider these two programs:
-> > > -- >8 --
-> > > // wr.c
-> > > #define _GNU_SOURCE
-> > > #include <fcntl.h>
-> > > #include <stdio.h>
-> > > int main() {
-> > >   while (splice(0, 0, 1, 0, 128 * 1024 * 1024, 0) > 0)
-> > >     ;
-> > >   fprintf(stderr, "wr: %m\n");
-> > > }
-> > > -- >8 --
-> > > 
-> > > -- >8 --
-> > > // rd.c
-> > > #define _GNU_SOURCE
-> > > #include <errno.h>
-> > > #include <fcntl.h>
-> > > #include <stdio.h>
-> > > #include <unistd.h>
-> > > int main() {
-> > >   fcntl(0, F_SETFL, fcntl(0, F_GETFL) | O_NONBLOCK);
-> > > 
-> > >   char buf[64 * 1024] = {};
-> > >   for (ssize_t rd;;) {
-> > > #if 1
-> > >     while ((rd = read(0, buf, sizeof(buf))) == -1 && errno == EINTR)
-> > >       ;
-> > > #else
-> > >     while ((rd = splice(0, 0, 1, 0, 128 * 1024 * 1024, 0)) == -1 &&
-> > >            errno == EINTR)
-> > >       ;
-> > > #endif
-> > >     fprintf(stderr, "rd=%zd: %m\n", rd);
-> > >     write(1, buf, rd);
-> > > 
-> > >     errno = 0;
-> > >     sleep(1);
-> > >   }
-> > > }
-> > > -- >8 --
-> > > 
-> > > Thus:
-> > > -- >8 --
-> > > a$ make rd wr
-> > > a$ mkfifo fifo
-> > > a$ ./rd < fifo                           b$ echo qwe > fifo
-> > > rd=4: Success
-> > > qwe
-> > > rd=0: Success
-> > > rd=0: Success                            b$ sleep 2 > fifo
-> > > rd=-1: Resource temporarily unavailable
-> > > rd=-1: Resource temporarily unavailable
-> > > rd=0: Success
-> > > rd=0: Success                            
-> > > rd=-1: Resource temporarily unavailable  b$ /bin/cat > fifo
-> > > rd=-1: Resource temporarily unavailable
-> > > rd=4: Success                            abc
-> > > abc
-> > > rd=-1: Resource temporarily unavailable
-> > > rd=4: Success                            def
-> > > def
-> > > rd=0: Success                            ^D
-> > > rd=0: Success
-> > > rd=0: Success                            b$ ./wr > fifo
-> > > -- >8 --
-> > > and nothing. Until you actually type a line (or a few) into teletype b
-> > > so that the splice completes, at which point so does the read.
-> > > 
-> > > An even simpler case is 
-> > > -- >8 --
-> > > $ ./wr | ./rd
-> > > abc
-> > > def
-> > > rd=8: Success
-> > > abc
-> > > def
-> > > ghi
-> > > jkl
-> > > rd=8: Success
-> > > ghi
-> > > jkl
-> > > ^D
-> > > wr: Success
-> > > rd=-1: Resource temporarily unavailable
-> > > rd=0: Success
-> > > rd=0: Success
-> > > -- >8 --
-> > > 
-> > > splice flags don't do anything.
-> > > Tested on bookworm (6.1.27-1) and Linus' HEAD (v6.4-rc7-234-g547cc9be86f4).
-> > > 
-> > > You could say this is a "denial of service", since this is a valid
-> > > way of following pipes (and, sans SIGIO, the only portable one),
-> > splice() may block for any of the two file descriptors if they don't
-> > have O_NONBLOCK set even if SPLICE_F_NONBLOCK is raised.
-> > 
-> > SPLICE_F_NONBLOCK in splice_file_to_pipe() is only relevant if the pipe
-> > is full. If the pipe isn't full then the write is attempted. That of
-> > course involves reading the data to splice from the source file. If the
-> > source file isn't O_NONBLOCK that read may block holding pipe_lock().
-> > 
-> > If you raise O_NONBLOCK on the source fd in wr.c then your problems go
-> > away. This is pretty long-standing behavior.
-> I don't see how this is relevant here. Whether the writer splice blocks
-> ‒ or how it behaves at all ‒ doesn't matter.
+On 6/23/23 17:18, Sean Christopherson wrote:
+> On Fri, Jun 09, 2023, Rick P Edgecombe wrote:
+>> On Fri, 2023-06-09 at 10:34 -0500, John Allen wrote:
+>>>> Is setting XFEATURE_MASK_CET_KERNEL here ok? The host kernel will not
+>>>> support XFEATURE_MASK_CET_KERNEL. I guess after this there is a small
+>>>> window of time where host IA32_XSS could have non-host supported
+>>>> supervisor state.
+>>>>
+>>>> Sort of separately, how does SVM work with respect to saving and
+>>>> restoring guest supervisor CET state (I mean the CET_S stuff)?
+>>>
+>>> Apart from a minor exception involving SEV-ES, we are piggybacking on the
+>>> state saving/restoring in Yang Weijiang's x86/VMX series. So by inspection,
+>>> it looks like guest supervisor support is broken as the supervisor XSAVES
+>>> state and MSRs are not included in that series. I currently don't have a
+>>> way to test this case, but I think there are operating systems that support
+>>> it. I'll work on getting a guest set up that can actually test this and
+>>> hopefully have working guest supervisor support in the next version of the
+>>> series.
+>>
+>> Hmm, interesting. VMX has some separate non-xsaves thing to save and
+>> restore the guests supervisor CET state, so Weijiang's series doesn't
+>> use the xsaves supervisor CET support.
 > 
-> The /reader/ demands non-blocking reads. Just by running a splice()
-> we've managed to permanently hang the reader in a way that's fully
-> impervious to everything.
+> Heh, that and Weijiang's series is a wee bit incomplete.
 > 
-> Actually, hold that: in testing this on an actual program that relies on
-> this (nullmailer), I've found that trying to /open the FIFO/ also hangs
-> forever, in that same signal-impervious state.
+>> Also, since the host might have CR4.CET set for its own reasons, if the host
+>> handled an exit with the the guests MSR_IA32_S_CET set it could suddenly be
+>> subjected to CET enforcement that it doesn't expect. Waiting to restore it
+>> until returning to the guest is too late.
+>>
+>> At least that's the reasoning on the VMX side as I understand it
 > 
-> To wit:
->   $ ps 3766
->     PID TTY      STAT   TIME COMMAND
->    3766 ?        Ss     0:01 /usr/sbin/nullmailer-send
->   $ ls -l /proc/3766/fd
->   total 0
->   lr-x------ 1 mail mail 64 Jun 14 15:03 0 -> /dev/null
->   lrwx------ 1 mail mail 64 Jun 14 15:03 1 -> 'socket:[81721760]'
->   lrwx------ 1 mail mail 64 Jun 14 15:03 2 -> 'socket:[81721760]'
->   lr-x------ 1 mail mail 64 Apr 28 15:38 3 -> 'pipe:[81721763]'
->   l-wx------ 1 mail mail 64 Jun 14 15:03 4 -> 'pipe:[81721763]'
->   lr-x------ 1 mail mail 64 Jun 14 15:03 5 -> /var/spool/nullmailer/trigger
->   lrwx------ 1 mail mail 64 Jun 14 15:03 9 -> /dev/null
->   # cat /proc/3766/fdinfo/5
->   pos:    0
->   flags:  0104000
->   mnt_id: 64
->   ino:    393969
->   # < /proc/3766/fdinfo/5 fdinfo
->   O_RDONLY        O_NONBLOCK O_LARGEFILE
->   # strace -yp 3766 &
->   strace: Process 3766 attached
->   $ strace out/cmd/cat > /var/spool/nullmailer/trigger
->   [cat] (normal libc setup)
->   [cat] splice(0, NULL, 1, NULL, 134217728, SPLICE_F_MOVE|SPLICE_F_MOREa
->   [cat] ) = 2
->   [cat] splice(0, NULL, 1, NULL, 134217728, SPLICE_F_MOVE|SPLICE_F_MORE
->   [nullmailer] pselect6(6, [5</var/spool/nullmailer/trigger>], NULL, NULL, {tv_sec=86397, tv_nsec=624894145}, NULL) = 1 (in [5], left {tv_sec=86394, tv_nsec=841299215})
->   [nullmailer] write(1<socket:[81721760]>, "Trigger pulled.\n", 16) = 16
->   [nullmailer] read(5</var/spool/nullmailer/trigger>,
-> and
->   $ strace -y sh -c 'echo zupa > /var/spool/nullmailer/trigger'
->   (...whatever shell setup)
->   rt_sigaction(SIGTERM, {sa_handler=SIG_DFL, sa_mask=~[RTMIN RT_1], sa_flags=SA_RESTORER, sa_restorer=0xf7d21bb0}, NULL, 8) = 0
->   openat(AT_FDCWD, "/var/spool/nullmailer/trigger", O_WRONLY|O_CREAT|O_TRUNC, 0666
+> The APM doesn't come right out and say it, but I assume/hope that S_CET is saved
+> on VMRUN and loaded on #VMEXIT, i.e. is the same as VMX for all intents and
+> purposes.
 > 
-> This is a "you've lost" situation to me. This system will /never/
-> send mail now, and any mailer program will also hang forever
-> (again, to wit:
->    # echo zupa | strace -yfo /tmp/ss mail root
->  does hang forever and /tmp/ss ends in
->    16915 close(6</var/spool/nullmailer/queue>) = 0
->    16915 unlink("/var/spool/nullmailer/tmp/16915") = 0
->    16915 openat(AT_FDCWD, "/var/spool/nullmailer/trigger", O_WRONLY|O_NONBLOCK
->  )
-> which means that, on this system, I will never get events from smartd
-> or ZED, so fuck me if I wanted to get "scrub errored" or "disk
-> will die soon" notifications (in pre-2.0.0 ZED this would also have
->  broken autoreplace=on since it waited synchronously),
-> or from other monitoring, so again fuck me if I wanted to get
-> overheating/packet drops/whatever notifications,
-> or again fuck me if I wanted to get cron mail.
-> In many ways I've brought the system down (or will have done in like a
-> day once some mails go out) by sending a mail weird.
-> 
-> 
-> Naturally systemd stopping nullmailer failed after a few minutes with
->   × nullmailer.service - Nullmailer relay-only MTA
->        Loaded: loaded (/lib/systemd/system/nullmailer.service; enabled; preset: enabled)
->        Active: failed (Result: timeout) since Mon 2023-06-26 13:10:02 CEST; 6min ago
->      Duration: 1month 4w 10h 55min 29.666s
->          Docs: man:nullmailer(7)
->      Main PID: 3766
->         Tasks: 1 (limit: 4673)
->        Memory: 3.1M
->           CPU: 1min 26.893s
->        CGroup: /system.slice/nullmailer.service
->                └─3766 /usr/sbin/nullmailer-send
->   
->   Jun 26 13:05:32 szarotka systemd[1]: nullmailer.service: State 'stop-sigterm' timed out. Killing.
->   Jun 26 13:05:32 szarotka systemd[1]: nullmailer.service: Killing process 3766 (nullmailer-send) with signal SIGKILL.
->   Jun 26 13:07:02 szarotka systemd[1]: nullmailer.service: Processes still around after SIGKILL. Ignoring.
->   Jun 26 13:08:32 szarotka systemd[1]: nullmailer.service: State 'final-sigterm' timed out. Killing.
->   Jun 26 13:08:32 szarotka systemd[1]: nullmailer.service: Killing process 3766 (nullmailer-send) with signal SIGKILL.
->   Jun 26 13:10:02 szarotka systemd[1]: nullmailer.service: Processes still around after final SIGKILL. Entering failed mode.
->   Jun 26 13:10:02 szarotka systemd[1]: nullmailer.service: Failed with result 'timeout'.
->   Jun 26 13:10:02 szarotka systemd[1]: nullmailer.service: Unit process 3766 (nullmailer-send) remains running after unit s>
->   Jun 26 13:10:02 szarotka systemd[1]: Stopped nullmailer.service - Nullmailer relay-only MTA.
->   Jun 26 13:10:02 szarotka systemd[1]: nullmailer.service: Consumed 1min 26.893s CPU time.
-> 
-> But not to fret! Maybe we can still kill it with the cgroup! No:
->   # strace -y sh -c 'echo 1 > /sys/fs/cgroup/system.slice/nullmailer.service/cgroup.kill'
->   ...
->   dup2(3</sys/fs/cgroup/system.slice/nullmailer.service/cgroup.kill>, 1) = 1</sys/fs/cgroup/system.slice/nullmailer.service/cgroup.kill>
->   close(3</sys/fs/cgroup/system.slice/nullmailer.service/cgroup.kill>) = 0
->   write(1</sys/fs/cgroup/system.slice/nullmailer.service/cgroup.kill>, "1\n", 2) = 2
->   ...
-> This completes, sure, but doesn't do anything at all
-> (admittedly, I'm not a cgroup expert, but it did work on other,
->  non-poisoned, cgroups, so I'd expect it to work).
-> 
-> Opening the FIFO with O_NONBLOCK also hangs, obviously.
-> Killing the splicer restores order, as expected.
-> 
-> > Splice would have to be
-> > refactored to not rely on pipe_lock(). That's likely major work with a
-> > good portion of regressions if the past is any indication.
-> That's likely; however, it ‒ or an equivalent solution ‒ would
-> probably be a good idea to do, on balance of all my points above,
-> I think.
+> The host save state definitely has a field for S_CET, and VMRUN documents that the
+> guest values are loaded, I just can't find anything in the APM that explicitly states
+> how host S_CET and friends are handled.  E.g. in theory, they could have been
+> shoved into VMSAVE+VMLOAD, though I very much doubt that's the case.
 
-In-kernel consumers already have a way of detecting when the pipe isn't
-safe for non-blocking read anymore because splice has been called and
-cleared FMODE_NOWAIT.
+Yes, the host value is saved/restored on VMRUN/#VMEXIT. Anything that is 
+in the VMCB Save Area (the non-SEV-ES save area) is fully virtualized 
+(unless noted otherwise) and doesn't require special processing to 
+save/restore the host values.
 
-I mean, one workaround would probably be poll() even with O_NONBLOCK but
-I get why that's annoying and half of a solution.
+S_CET is list in the SVM/SEV VMCB save area. Similarly, for 
+SEV-ES/SEV-SNP, S_CET is swap type A and is saved/restored on VMRUN/#VMEXIT.
 
-So there are three options afaict:
+Thanks,
+Tom
 
-(1) rewrite splice.c to kill its reliance on pipe_lock()
-    Very involved and would need a splice + pipe expert.
-(2) Add pipe_lock_interruptible() to stop the bleeding and give
-    userspace the ability to at least kill a hanging reader.
-    Also a potentially sensitive change probably regression prone.
-(3) Somehow factor in FMODE_NOWAIT when acquiring pipe_lock().
-    If FMODE_NOWAIT is set, try to acquire the lock and if not report
-    EAGAIN otherwise proceed as before. I think Jens proposed a version
-    of this a while back.
-
-Adding Linus as well since he probably has thoughts on this.
-tl;dr it by splicing from a regular file to a pipe where the regular
-file in splice isn't O_NONBLOCK we can hold pipe_lock() as long as we
-want and hang pipe_read() even with O_NONBLOCK unkillable trying to
-acquire pipe_lock().
+> 
+> John?
