@@ -2,175 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50BC373ECE6
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 23:28:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71F1373ECEC
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 23:32:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230434AbjFZV2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 17:28:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33060 "EHLO
+        id S229788AbjFZVbz convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 26 Jun 2023 17:31:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbjFZV23 (ORCPT
+        with ESMTP id S229471AbjFZVby (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 17:28:29 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C56AC5
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 14:28:26 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id 3f1490d57ef6-bcb6dbc477eso2426713276.1
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 14:28:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1687814906; x=1690406906;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=7CQ4hwJhKjIW7SikA2WYgmCLn8qhE0eQEFFM44s3DEg=;
-        b=P1/AFGL4fwDDqWVyfiMDCTW9OrnM409YOha4aAGa5T3/plje1K9hsiYLKew+GyCKoV
-         WIYo+x9YoXM1j0A7CaRqgC1qTMLj7Ef3IeG/OAOKGN2EQvv7RHtSHEIRPYfFOKBFUg7V
-         TzEDVQmrkExxM8eCa33xtXUtSzQ8R76qwDl9OL6C6cG0m1ltQNG91CBTeIfnudi7WPlU
-         rPA0AZIa4tByoT0X+Edze4AhDE6g/Krso7Nean85RFzp3k70AUOKjiONHcUvSmBzz//x
-         gw3biuPP0HVXovg92jtKt41l/JZuWhkXqGej3UR65+OqJNeDej/il93teRH5p2a/6lRt
-         MUfg==
+        Mon, 26 Jun 2023 17:31:54 -0400
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49E1FC2;
+        Mon, 26 Jun 2023 14:31:52 -0700 (PDT)
+Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-be3e2d172cbso2381908276.3;
+        Mon, 26 Jun 2023 14:31:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687814906; x=1690406906;
+        d=1e100.net; s=20221208; t=1687815111; x=1690407111;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7CQ4hwJhKjIW7SikA2WYgmCLn8qhE0eQEFFM44s3DEg=;
-        b=B/AEIHL2eYC8dOW69RqRvBvsJSoL5bIux0YtitgdGAymXpVw4ntm87rdcdi8qBV0ej
-         D+4fSTGvFOmhGamTtzrnROoAqikuR1Z+dokUixuV12Xgd9daqs9s2tzNk98P11clJBcz
-         cB/v3au+c3IAY9VZkVTvPnuJUTi19bwjCTaFiyEK04fyu4Af0NBcxLv42jkR4h/nZ2b2
-         l4xJUYvGiu2E09ufequG9aAp81rYL19t0BxMB7scfr5Pqfge+KYTGgH/4JAuFttw13yR
-         Kz4S1HK+5psEYGPEln0W8zi3//UIPInT1wBDPBbDAYILZbPwAoiYXVKJtdnRipvkf/Jx
-         j+8w==
-X-Gm-Message-State: AC+VfDx4w+knI2PJYQ0a9qhwMGwi6LfH+gpXCt5n6EDyOjNkqLj9zlY5
-        tXDSK1+MhyncQDO2fnLkEX0pivL9SR6TExDpvVSq
-X-Google-Smtp-Source: ACHHUZ59NsGIZ72LMPz3WNouR7OuGKAeY+Y9Bdjq1aCqzuo2wZQkHLVBJhWx7cTs99zy2+JYhDEZYq7slZwLlWfYEzc=
-X-Received: by 2002:a0d:df4a:0:b0:570:7b4d:f694 with SMTP id
- i71-20020a0ddf4a000000b005707b4df694mr22567386ywe.3.1687814906155; Mon, 26
- Jun 2023 14:28:26 -0700 (PDT)
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6S40Y266AiNifvKcLR/GFxkOqHbXnpeu04o5P2LTCRk=;
+        b=A3GIGx7uWFJZNxuFfcg7x/A1+Gacucc3zBL7nI73PFMf94gvFHjJDN5WORY/DPxOKD
+         jnljaTxbddBtKXzt6f6GlG2+tZHODJn8tsDpebvlLAHE4mR/tGFaXOiHCIeVBDgFgfK4
+         vzAFEL210FWGNVZDNCLpQqU9c9TRpiOida/vttO8jlLvipu/DuRSngsHRygqfCpJAw+q
+         UfV8xqbf+GfvGAj9/WTwQNCFUQ9NBy8aPiJbMC2xqTbtry2cuuUt2DPhJnoSa2626caL
+         ml/fkZQpHfml0PD7rV7Bchlw2XRgMLG7rV0kPhUk8MLq4uHlDF+X7EqGvg8ORN3dvmP7
+         SUFw==
+X-Gm-Message-State: AC+VfDxeM+hcgsQ4OyCnNU81qa4oBBkGMXvZITC4v2FjBPYlMbtNed9h
+        7t2eBJPuNyeZkSeOwHPMyY7hUM5ALSQsx0QVW/4=
+X-Google-Smtp-Source: ACHHUZ44O5zRZn83lWSiAcf86BBHZ9JUkrCLaTbinBhIwiNQwI1gNJAX3DZDo7ZJJjM3mSSA8dYoRXUx/M/Tu6y7zcM=
+X-Received: by 2002:a25:ae4b:0:b0:bac:f8ae:384b with SMTP id
+ g11-20020a25ae4b000000b00bacf8ae384bmr17012487ybe.5.1687815111347; Mon, 26
+ Jun 2023 14:31:51 -0700 (PDT)
 MIME-Version: 1.0
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Mon, 26 Jun 2023 17:28:15 -0400
-Message-ID: <CAHC9VhTC6s-_Q+5+evrgHHdE=wHLP0VXACzfsWSTLQ1ipyFRaw@mail.gmail.com>
-Subject: [GIT PULL] SELinux patches for v6.5
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <5791ec06-7174-9ae5-4fe4-6969ed110165@tessares.net>
+ <3065880.1687785614@warthog.procyon.org.uk> <3067876.1687787456@warthog.procyon.org.uk>
+ <2cb3b411-9010-a44b-ebee-1914e7fd7b9c@tessares.net>
+In-Reply-To: <2cb3b411-9010-a44b-ebee-1914e7fd7b9c@tessares.net>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Mon, 26 Jun 2023 14:31:39 -0700
+Message-ID: <CAM9d7ch_mWUQGW8G221bZmCPn3wB2mjZm=ZdmhDkczhich9xZA@mail.gmail.com>
+Subject: Re: [PATCH net-next] tools: Fix MSG_SPLICE_PAGES build error in trace tools
+To:     Matthieu Baerts <matthieu.baerts@tessares.net>
+Cc:     David Howells <dhowells@redhat.com>, netdev@vger.kernel.org,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        David Miller <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
+        linux-next@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Hello,
 
-We've got a number of SELinux patches for v6.5, but nothing too scary.
-It is worth mentioning that there is a minor merge conflict in
-security/selinux/Makefile (due to the quick fix sent during the
-v6.4-rcX cycle); the proper way to resolve the conflict is to simply
-take the version in this pull request.
+Sorry I missed the conversation and the original change.
 
-Here is a quick summary of the changes:
+On Mon, Jun 26, 2023 at 6:56 AM Matthieu Baerts
+<matthieu.baerts@tessares.net> wrote:
+>
+> On 26/06/2023 15:50, David Howells wrote:
+> > Matthieu Baerts <matthieu.baerts@tessares.net> wrote:
+> >
+> >> So another issue. When checking the differences between the two files, I
+> >> see there are still also other modifications to import, e.g. it looks
+> >> like you also added MSG_INTERNAL_SENDMSG_FLAGS macro in socket.h. Do you
+> >> plan to fix that too?
+> >
+> > That's just a list of other flags that we need to prevent userspace passing
+> > in - it's not a flag in its own right.
+>
+> I agree. This file is not even used by C files, only by scripts parsing
+> it if I'm not mistaken.
+>
+> But if there are differences with include/linux/socket.h, the warning I
+> mentioned will be visible when compiling Perf.
 
-- Thanks to help from the MPTCP folks, it looks like we have finally
-sorted out a proper solution to the MPTCP socket labeling issue, see
-the new security_mptcp_add_subflow() LSM hook.
+Right, we want to keep the headers files in the tools in sync with
+the kernel ones.  And they are used to generate some tables.
+Full explanation from Arnaldo below.
 
-- Fix the labeled NFS handling such that a labeled NFS share mounted
-prior to the initial SELinux policy load is properly labeled once a
-policy is loaded; more information in the commit description.
+So I'm ok for the msg_flags.c changes, but please refrain from
+changing the header directly.  We will update it later.
 
-- Two patches to security/selinux/Makefile, the first took the
-cleanups in v6.4 a bit further and the second removed the grouped
-targets support as that functionality doesn't appear to be properly
-supported prior to make v4.3.
+With that,
+  Acked-by: Namhyung Kim <namhyung@kernel.org>
 
-- Deprecate the "fs" object context type in SELinux policies.  The fs
-object context type was an old vestige that was introduced back in
-v2.6.12-rc2 but never really used.
+Also I wonder if the tool needs to keep the original flag
+(SENDPAGE_NOTLAST) for the older kernels.
 
-- A number of small changes that remove dead code, clean up some
-awkward bits, and generally improve the quality of the code.  See the
-individual commit descriptions for more information.
 
-Thanks,
--Paul
+In Arnaldo's explanation:
 
---
-The following changes since commit ac9a78681b921877518763ba0e89202254349d1b=
-:
+There used to be no copies, with tools/ code using kernel headers
+directly. From time to time tools/perf/ broke due to legitimate kernel
+hacking. At some point Linus complained about such direct usage. Then we
+adopted the current model.
 
- Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
+The way these headers are used in perf are not restricted to just
+including them to compile something.
 
-are available in the Git repository at:
+They are sometimes used in scripts that convert defines into string
+tables, etc, so some change may break one of these scripts, or new MSRs
+may use some different #define pattern, etc.
 
- https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux.git
-   tags/selinux-pr-20230626
+E.g.:
 
-for you to fetch changes up to 447a5688005e5b789633bd080016517a08f9fd8d:
+  $ ls -1 tools/perf/trace/beauty/*.sh | head -5
+  tools/perf/trace/beauty/arch_errno_names.sh
+  tools/perf/trace/beauty/drm_ioctl.sh
+  tools/perf/trace/beauty/fadvise.sh
+  tools/perf/trace/beauty/fsconfig.sh
+  tools/perf/trace/beauty/fsmount.sh
+  $
+  $ tools/perf/trace/beauty/fadvise.sh
+  static const char *fadvise_advices[] = {
+        [0] = "NORMAL",
+        [1] = "RANDOM",
+        [2] = "SEQUENTIAL",
+        [3] = "WILLNEED",
+        [4] = "DONTNEED",
+        [5] = "NOREUSE",
+  };
+  $
 
- selinux: avoid bool as identifier name (2023-06-05 17:04:01 -0400)
+The tools/perf/check-headers.sh script, part of the tools/ build
+process, points out changes in the original files.
 
-----------------------------------------------------------------
-selinux/stable-6.5 PR 20230626
-
-----------------------------------------------------------------
-Christian G=C3=B6ttsche (10):
-     selinux: do not leave dangling pointer behind
-     selinux: adjust typos in comments
-     selinux: avc: drop unused function avc_disable()
-     selinux: drop return at end of void function avc_insert()
-     selinux: retain const qualifier on string literal in avtab_hash_eval()
-     selinux: declare read-only data arrays const
-     selinux: keep context struct members in sync
-     selinux: make header files self-including
-     selinux: deprecated fs ocon
-     selinux: avoid bool as identifier name
-
-Ondrej Mosnacek (1):
-     selinux: make labeled NFS work when mounted before policy load
-
-Paolo Abeni (2):
-     security, lsm: Introduce security_mptcp_add_subflow()
-     selinux: Implement mptcp_add_subflow hook
-
-Paul Moore (3):
-     selinux: more Makefile tweaks
-     selinux: small cleanups in selinux_audit_rule_init()
-     selinux: fix Makefile for versions of make < v4.3
-
-Xiu Jianfeng (1):
-     selinux: cleanup exit_sel_fs() declaration
-
-include/linux/lsm_hook_defs.h                    |  1 +
-include/linux/security.h                         |  6 ++
-net/mptcp/subflow.c                              |  6 ++
-security/security.c                              | 17 ++++++
-security/selinux/Makefile                        | 28 ++++++---
-security/selinux/avc.c                           | 20 ------
-security/selinux/hooks.c                         | 78 +++++++++++++++-----
-security/selinux/ima.c                           |  2 +-
-security/selinux/include/audit.h                 |  2 +-
-security/selinux/include/avc.h                   |  3 -
-security/selinux/include/ibpkey.h                |  1 +
-security/selinux/include/ima.h                   |  2 +-
-security/selinux/include/initial_sid_to_string.h |  3 +
-security/selinux/include/security.h              |  2 +-
-security/selinux/netlabel.c                      |  8 ++-
-security/selinux/selinuxfs.c                     |  4 +-
-security/selinux/ss/avtab.c                      |  2 +-
-security/selinux/ss/avtab.h                      |  2 +-
-security/selinux/ss/conditional.c                |  8 +--
-security/selinux/ss/conditional.h                |  2 +-
-security/selinux/ss/context.h                    |  2 +
-security/selinux/ss/policydb.c                   |  6 +-
-security/selinux/ss/policydb.h                   |  2 +-
-security/selinux/ss/services.c                   | 40 ++++++------
-24 files changed, 158 insertions(+), 89 deletions(-)
-
---=20
-paul-moore.com
+So its important not to touch the copies in tools/ when doing changes in
+the original kernel headers, that will be done later, when
+check-headers.sh inform about the change to the perf tools hackers.
