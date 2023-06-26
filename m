@@ -2,84 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5380A73EEAE
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 00:34:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97F6573EEB7
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 00:38:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229795AbjFZWeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 18:34:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42124 "EHLO
+        id S229792AbjFZWig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 18:38:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjFZWeH (ORCPT
+        with ESMTP id S229456AbjFZWie (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 18:34:07 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 982C2E53;
-        Mon, 26 Jun 2023 15:34:05 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-668711086f4so2503776b3a.1;
-        Mon, 26 Jun 2023 15:34:05 -0700 (PDT)
+        Mon, 26 Jun 2023 18:38:34 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33D9FE5A;
+        Mon, 26 Jun 2023 15:38:33 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2b698dd515dso33294421fa.3;
+        Mon, 26 Jun 2023 15:38:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687818845; x=1690410845;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=JEICAU15slllX+Lkh6ej3nIM4496nJAdw6QRd6tNHGo=;
-        b=l/RLDoqfu4S8Rt97BtNa3P1/8vd58dc0IlfXF/ilJ5s1SBukM/ChUGtUPnGSMg5fKk
-         q9/n2SjQ1h+aAQVfJlSsSlXDAM9W4k+qr7UXi306JWt+l+owTqZXSsLZfc+kaqX1WHow
-         3UNbDmmvai8HCIDNNWMuZJ+1+5xw6fj4+RKHD6GkRWR4TxQgrXe4bA00uVGpkvhvieEe
-         vNt9q6VHOvAhX/hIS94gYA0+e7KdNuV+5Aj+uu9SnkcwTA5od1lWBoaFGX2i9IObtPJW
-         9o242GxvGYn5zvuh735hrlYRzAfGSBjHCgIYJPHD7Qvv5OTfADziq4vgKH3GSslTRSdj
-         U2hQ==
+        d=gmail.com; s=20221208; t=1687819111; x=1690411111;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=/4BPPMHxIuX4VVUkfnAZKGZOTCGN6vqENFDffRdr5PA=;
+        b=jQFjf4X3mG+0YOiNUYcjsja7cQ+ItKtzN8+vj6u4YVgsB4JaIqtuhMT5UCVUxUJz4i
+         ZEDU69/ocAs3SvgoX+rDPvyDPOlHzbuQz/lyEAYF6L0LH+8LgctjGFNm4Vejo7MxVzDt
+         qiJjofMJtWSRxEVa10tAOWjc+h7fi/7Hv05huAdjtBimk8g1S+ueVSLTo7op4BLp7ON5
+         jvf5lj7DKxmOb5m6ju6QC6fnctbhz4mgT/io2QdujpKtpLMPYeNaco6tAscDk9Xkz5rQ
+         pWWh3HUFbUIbbkW+Cf/iIIqufSPZY+ydtcQZIpa8QIJJJ0JPVMXz72S6TAns18MhtEP2
+         apKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687818845; x=1690410845;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JEICAU15slllX+Lkh6ej3nIM4496nJAdw6QRd6tNHGo=;
-        b=gBskz29atYXHzC1f81dpc5u5i3ZNdozz4iamq6Cm1/Qa/ld5lTdFJsnlvjuhovGnkd
-         oEftIQ5y94qYnTVJ0t8w5/cy2zY+zCzjwtVf/lY0laflY6IPs/8lpcrKcHzl7R5o9ic/
-         n4PZRxn93KWy7oHHQF/nKup5fS3Q+Tt2vHSqPOprN8hO1dtzoH2Xwpt+pVcmJ5fXCWBe
-         nZZrrnm4KBWFrFJB8CpOGvlpbyA59FXqkmAwZlStIg19kQVoBwiVRoPVZ+fm+u+xhGb1
-         HD7bT5pIUzXwkomvOmFX8y2ObI+MuxZlaKkoJ8faqsyY+UY333Us9/aRCshidX49/GJe
-         Lw7A==
-X-Gm-Message-State: AC+VfDzYMo3SUhfwxguR+6ynIDZwVDwQ0q3Bky8BT4TgSCJ/QERLU1Uw
-        roTvBxhx+jbk9OnW4yjQrbYhm91myk5wmoZM
-X-Google-Smtp-Source: ACHHUZ5wTCBCt3YlwbiIZnNvzwAYCQGBX/Fj3D6gZWBjMfMyGlH9MxvgVI4ceYhSzkErIi0OCvTcKQ==
-X-Received: by 2002:a05:6a20:a121:b0:126:23d:cd10 with SMTP id q33-20020a056a20a12100b00126023dcd10mr13607964pzk.21.1687818844824;
-        Mon, 26 Jun 2023 15:34:04 -0700 (PDT)
-Received: from localhost ([2405:6581:d4e0:1600:59cc:f1fc:e0e2:7431])
-        by smtp.gmail.com with ESMTPSA id bm2-20020a056a00320200b0063b675f01a5sm4451607pfb.11.2023.06.26.15.34.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jun 2023 15:34:04 -0700 (PDT)
-Date:   Tue, 27 Jun 2023 07:34:01 +0900
-From:   Nick Hastings <nicholaschastings@gmail.com>
-To:     Linux regressions mailing list <regressions@lists.linux.dev>
-Cc:     Karol Herbst <kherbst@redhat.com>, Lyude Paul <lyude@redhat.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Salvatore Bonaccorso <carnil@debian.org>,
-        "1036530@bugs.debian.org" <1036530@bugs.debian.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>
-Subject: Re: Regression from "ACPI: OSI: Remove Linux-Dell-Video _OSI
- string"? (was: Re: Bug#1036530: linux-signed-amd64: Hard lock up of system)
-Message-ID: <ZJoSWftrHO65wmxz@xps>
-References: <ZHfa/wQlaVCeUC22@xps>
- <fe0ab1fa-6ed6-dc64-8165-8fc70669317b@amd.com>
- <CACO55tsuO1kQUFfPdPFUHm4WEQseCR2tQSDhFRzR+8wOECZCyA@mail.gmail.com>
- <MN0PR12MB61017541F5AC55485A490BCDE2499@MN0PR12MB6101.namprd12.prod.outlook.com>
- <CACO55tudULtvt_Hcdg+uqXeYkSAR_NZ1oD=R_KhuE_THSRe88g@mail.gmail.com>
- <MN0PR12MB6101DE067CF85E59AF187763E2499@MN0PR12MB6101.namprd12.prod.outlook.com>
- <CACO55tuqAH5Zt+X9pjLFZ-RcFgxpgjpqmrAHPvm4=fb_DMBHyw@mail.gmail.com>
- <ZHkxYo/a+/uInkLG@xps>
- <MN0PR12MB610181D29933EE4787DE9BC8E24EA@MN0PR12MB6101.namprd12.prod.outlook.com>
- <ed5f982e-c12c-b3a2-1108-62fba50bf9db@leemhuis.info>
+        d=1e100.net; s=20221208; t=1687819111; x=1690411111;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/4BPPMHxIuX4VVUkfnAZKGZOTCGN6vqENFDffRdr5PA=;
+        b=KdG6a8oX4NOaAkuTiwR08HNMfZ7cGM56n/Zr0ucn90jsMLoOKSDHLOlpxKR04sEyK/
+         rCQVRingfPSY1OW1ENCdL3xAnZpGyXaMTxuzVk3wf3ZS83CCswUW96ve1+3q+nn+Qx5k
+         QTmwHYda4KBsslZWuTzn0hAYR7s0A3RWof8chgu2R2AzYuyyNSj7C1ZBV/s+YONkRKfm
+         cAHhdQ89gRXviYF0vo3RJjKFLpdNpEh5/LQJdFvUfY8ApdVhaXWHDE9PDt7G3S0yUiRq
+         +XHNcrQYR52gnKLZdW8HmIrOVM7pdpfm+9E+3cqQLtVCbCFoUQ0GnltjwPiMp8h9A2q2
+         qNIw==
+X-Gm-Message-State: AC+VfDxlglwQSVfY/8os9E5S2wjghPXGEY2qAj6ozImSOWEfKlD3HlQw
+        vUlY9+iRIO70XU3tZkey+Di9o99AJqRraKN6h2A=
+X-Google-Smtp-Source: ACHHUZ6lR+r47SwmWrLOLwTX0weKHcxS2NtYt9q6sHoMoPzLK4Ljmu+yCVm3VJkQRyQVU7ShZUnwFUHfeto+xg4lEu4=
+X-Received: by 2002:a2e:2e10:0:b0:2b6:9b4a:2608 with SMTP id
+ u16-20020a2e2e10000000b002b69b4a2608mr2962412lju.37.1687819111001; Mon, 26
+ Jun 2023 15:38:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ed5f982e-c12c-b3a2-1108-62fba50bf9db@leemhuis.info>
+References: <20230620004217.4700-1-dakr@redhat.com> <20230620004217.4700-4-dakr@redhat.com>
+ <cf6846ea-5bd0-0b41-b7e6-901c70701751@amd.com> <a8edf75b-e0f7-a6c7-7d29-f0d39923549b@redhat.com>
+ <41aecd10-9956-0752-2838-34c97834f0c8@amd.com> <bcde7ea3-fbab-3a18-e810-64b6589ddb18@redhat.com>
+ <86ef9898-c4b6-f4c0-7ad3-3ffe5358365a@amd.com> <c1f05169-dec0-22ee-52fa-c8070678394e@redhat.com>
+ <2f502150-c1f8-615c-66d9-c3fb59b8c409@redhat.com> <4a52ac7c-19ba-8906-5902-fbf75673bf59@amd.com>
+ <d18a4ea5-4e8e-be69-84c3-ca658f5cfd24@redhat.com> <923e914f-d367-2f74-9774-f0024d946bdd@amd.com>
+In-Reply-To: <923e914f-d367-2f74-9774-f0024d946bdd@amd.com>
+From:   Dave Airlie <airlied@gmail.com>
+Date:   Tue, 27 Jun 2023 08:38:18 +1000
+Message-ID: <CAPM=9tzQ51LEc9if5HBCgbn7-HUOPw+qEvx7jEE2hk6gYBKvOA@mail.gmail.com>
+Subject: Re: [PATCH drm-next v5 03/14] drm: manager to keep track of GPUs VA mappings
+To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Cc:     Danilo Krummrich <dakr@redhat.com>, daniel@ffwll.ch,
+        tzimmermann@suse.de, mripard@kernel.org, corbet@lwn.net,
+        bskeggs@redhat.com, Liam.Howlett@oracle.com,
+        matthew.brost@intel.com, boris.brezillon@collabora.com,
+        alexdeucher@gmail.com, ogabbay@kernel.org, bagasdotme@gmail.com,
+        willy@infradead.org, jason@jlekstrand.net,
+        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Donald Robson <donald.robson@imgtec.com>,
+        Dave Airlie <airlied@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -90,185 +81,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thorsten,
+> > As pointed out by Christian, this would optimize the "get all mappings
+> > backed by a specific BO from a given VM" use case.
+> >
+> > The question for me is, do other drivers than amdgpu commonly need this?
+>
+> I have no idea.
+>
+> >
+> > And what does amdgpu need this for? Maybe amdgpu does something we're
+> > not doing (yet)?
+>
+> Basically when we do a CS we need to make sure that the VM used by this
+> CS is up to date. For this we walk over the relocation list of BOs and
+> check the status of each BO+VM structure.
+>
+> This is done because we don't want to update all VMs at the same time,
+> but rather just those who needs the update.
 
-* Linux regression tracking (Thorsten Leemhuis) <regressions@leemhuis.info> [230626 21:09]:
-> Hi, Thorsten here, the Linux kernel's regression tracker. Top-posting
-> for once, to make this easily accessible to everyone.
-> 
-> Nick, what's the status/was there any progress? Did you do what Mario
-> suggested and file a nouveau bug?
+This seems like a legacy from GL and possibly older vulkan, going
+forward vulkan can't rely on passing lists of objects into the kernel
+due to things like buffer_device_address, I'm not sure we should
+optimise for this situation, and moving the tracking list into the
+drivers is going to mean having a bunch of drivers all having the same
+boilerplate, to do the same thing just so amdgpu can't avoid doing it.
 
-It was not apparent that the suggestion to open "a Nouveau drm bug" was
-addressed to me.
+Now there might be some benchmark somewhere we can produce a benefit
+in this, and if there is then we should consider going this way for
+all drivers and not just allowing drivers to choose their own path
+here.
 
-> I ask, as I still have this on my list of regressions and it seems there
-> was no progress in three+ weeks now.
+> >
+> > Christian - I know you didn't ask for "do it the way amdgpu does",
+> > instead you voted for keeping it entirely driver specific. But I think
+> > everyone is pretty close and I'm still optimistic that we could just
+> > generalize this.
+>
+> Well, you should *not* necessarily do it like amdgpu does! Basically the
+> implementation in amdgpu was driven by requirements, e.g. we need that,
+> let's do it like this.
+>
+> It's perfectly possible that other requirements (e.g. focus on Vulkan)
+> lead to a completely different implementation.
+>
+> It's just that ideally I would like to have an implementation where I
+> can apply at least the basics to amdgpu as well.
+>
 
-I have not pursued this further since as far as I could tell I already
-provided all requested information and I don't actually use nouveau, so
-I blacklisted it.
+I think we can still do that just either have an option to disable
+using the list internally in the gpuva or have the driver keep it's
+own tracking alongside, there may still be use cases where it can use
+the gpuva tracking instead of it's own.
 
-Regards,
+I don't think we should forklift what is pretty likely to be common
+code across every driver that uses this going forward just to benefit
+an amdgpu design decision for older stacks.
 
-Nick.
-
-> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-> --
-> Everything you wanna know about Linux kernel regression tracking:
-> https://linux-regtracking.leemhuis.info/about/#tldr
-> If I did something stupid, please tell me, as explained on that page.
-> 
-> #regzbot backburner: slow progress, likely just affects one machine
-> #regzbot poke
-> 
-> 
-> On 02.06.23 02:57, Limonciello, Mario wrote:
-> > [AMD Official Use Only - General]
-> > 
-> >> -----Original Message-----
-> >> From: Nick Hastings <nicholaschastings@gmail.com>
-> >> Sent: Thursday, June 1, 2023 7:02 PM
-> >> To: Karol Herbst <kherbst@redhat.com>
-> >> Cc: Limonciello, Mario <Mario.Limonciello@amd.com>; Lyude Paul
-> >> <lyude@redhat.com>; Lukas Wunner <lukas@wunner.de>; Salvatore
-> >> Bonaccorso <carnil@debian.org>; 1036530@bugs.debian.org; Rafael J.
-> >> Wysocki <rafael@kernel.org>; Len Brown <lenb@kernel.org>; linux-
-> >> acpi@vger.kernel.org; linux-kernel@vger.kernel.org;
-> >> regressions@lists.linux.dev
-> >> Subject: Re: Regression from "ACPI: OSI: Remove Linux-Dell-Video _OSI
-> >> string"? (was: Re: Bug#1036530: linux-signed-amd64: Hard lock up of system)
-> >>
-> >> Hi,
-> >>
-> >> * Karol Herbst <kherbst@redhat.com> [230602 03:10]:
-> >>> On Thu, Jun 1, 2023 at 7:21 PM Limonciello, Mario
-> >>> <Mario.Limonciello@amd.com> wrote:
-> >>>>> -----Original Message-----
-> >>>>> From: Karol Herbst <kherbst@redhat.com>
-> >>>>> Sent: Thursday, June 1, 2023 12:19 PM
-> >>>>> To: Limonciello, Mario <Mario.Limonciello@amd.com>
-> >>>>> Cc: Nick Hastings <nicholaschastings@gmail.com>; Lyude Paul
-> >>>>> <lyude@redhat.com>; Lukas Wunner <lukas@wunner.de>; Salvatore
-> >>>>> Bonaccorso <carnil@debian.org>; 1036530@bugs.debian.org; Rafael J.
-> >>>>> Wysocki <rafael@kernel.org>; Len Brown <lenb@kernel.org>; linux-
-> >>>>> acpi@vger.kernel.org; linux-kernel@vger.kernel.org;
-> >>>>> regressions@lists.linux.dev
-> >>>>> Subject: Re: Regression from "ACPI: OSI: Remove Linux-Dell-Video _OSI
-> >>>>> string"? (was: Re: Bug#1036530: linux-signed-amd64: Hard lock up of
-> >> system)
-> >>>>>
-> >>>>> On Thu, Jun 1, 2023 at 6:54 PM Limonciello, Mario
-> >>>>> <Mario.Limonciello@amd.com> wrote:
-> >>>>>>
-> >>>>>> [AMD Official Use Only - General]
-> >>>>>>
-> >>>>>>> -----Original Message-----
-> >>>>>>> From: Karol Herbst <kherbst@redhat.com>
-> >>>>>>> Sent: Thursday, June 1, 2023 11:33 AM
-> >>>>>>> To: Limonciello, Mario <Mario.Limonciello@amd.com>
-> >>>>>>> Cc: Nick Hastings <nicholaschastings@gmail.com>; Lyude Paul
-> >>>>>>> <lyude@redhat.com>; Lukas Wunner <lukas@wunner.de>; Salvatore
-> >>>>>>> Bonaccorso <carnil@debian.org>; 1036530@bugs.debian.org; Rafael
-> >> J.
-> >>>>>>> Wysocki <rafael@kernel.org>; Len Brown <lenb@kernel.org>; linux-
-> >>>>>>> acpi@vger.kernel.org; linux-kernel@vger.kernel.org;
-> >>>>>>> regressions@lists.linux.dev
-> >>>>>>> Subject: Re: Regression from "ACPI: OSI: Remove Linux-Dell-Video
-> >> _OSI
-> >>>>>>> string"? (was: Re: Bug#1036530: linux-signed-amd64: Hard lock up of
-> >>>>> system)
-> >>>>>>>
-> >>>>>>> On Thu, Jun 1, 2023 at 6:18 PM Limonciello, Mario
-> >>>>>>>>
-> >>>>>>>> Lyude, Lukas, Karol
-> >>>>>>>>
-> >>>>>>>> This thread is in relation to this commit:
-> >>>>>>>>
-> >>>>>>>> 24867516f06d ("ACPI: OSI: Remove Linux-Dell-Video _OSI string")
-> >>>>>>>>
-> >>>>>>>> Nick has found that runtime PM is *not* working for nouveau.
-> >>>>>>>>
-> >>>>>>>
-> >>>>>>> keep in mind we have a list of PCIe controllers where we apply a
-> >>>>>>> workaround:
-> >>>>>>>
-> >>>>>
-> >> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers
-> >>>>>>> /gpu/drm/nouveau/nouveau_drm.c?h=v6.4-rc4#n682
-> >>>>>>>
-> >>>>>>> And I suspect there might be one or two more IDs we'll have to add
-> >>>>>>> there. Do we have any logs?
-> >>>>>>
-> >>>>>> There's some archived onto the distro bug.  Search this page for
-> >>>>> "journalctl.log.gz"
-> >>>>>> https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1036530
-> >>>>>>
-> >>>>>
-> >>>>> interesting.. It seems to be the same controller used here. I wonder
-> >>>>> if the pci topology is different or if the workaround is applied at
-> >>>>> all.
-> >>>>
-> >>>> I didn't see the message in the log about the workaround being applied
-> >>>> in that log, so I guess PCI topology difference is a likely suspect.
-> >>>>
-> >>>
-> >>> yeah, but I also couldn't see a log with the usual nouveau messages,
-> >>> so it's kinda weird.
-> >>>
-> >>> Anyway, the output of `lspci -tvnn` would help
-> >>
-> >> % lspci -tvnn
-> >> -[0000:00]-+-00.0  Intel Corporation Device [8086:3e20]
-> >>            +-01.0-[01]----00.0  NVIDIA Corporation TU117M [GeForce GTX 1650
-> >> Mobile / Max-Q] [10de:1f91]
-> > 
-> > So the bridge it's connected to is the same that the quirk *should have been* triggering.
-> > 
-> > May 29 15:02:42 xps kernel: pci 0000:00:01.0: [8086:1901] type 01 class 0x060400
-> > 
-> > Since the quirk isn't working and this is still a problem in 6.4-rc4 I suggest opening a
-> > Nouveau drm bug to figure out why.
-> > 
-> >>            +-02.0  Intel Corporation CoffeeLake-H GT2 [UHD Graphics 630]
-> >> [8086:3e9b]
-> >>            +-04.0  Intel Corporation Xeon E3-1200 v5/E3-1500 v5/6th Gen Core
-> >> Processor Thermal Subsystem [8086:1903]
-> >>            +-08.0  Intel Corporation Xeon E3-1200 v5/v6 / E3-1500 v5 /
-> >> 6th/7th/8th Gen Core Processor Gaussian Mixture Model [8086:1911]
-> >>            +-12.0  Intel Corporation Cannon Lake PCH Thermal Controller
-> >> [8086:a379]
-> >>            +-14.0  Intel Corporation Cannon Lake PCH USB 3.1 xHCI Host Controller
-> >> [8086:a36d]
-> >>            +-14.2  Intel Corporation Cannon Lake PCH Shared SRAM [8086:a36f]
-> >>            +-15.0  Intel Corporation Cannon Lake PCH Serial IO I2C Controller #0
-> >> [8086:a368]
-> >>            +-15.1  Intel Corporation Cannon Lake PCH Serial IO I2C Controller #1
-> >> [8086:a369]
-> >>            +-16.0  Intel Corporation Cannon Lake PCH HECI Controller [8086:a360]
-> >>            +-17.0  Intel Corporation Cannon Lake Mobile PCH SATA AHCI Controller
-> >> [8086:a353]
-> >>            +-1b.0-[02-3a]----00.0-[03-3a]--+-00.0-[04]----00.0  Intel Corporation
-> >> JHL6340 Thunderbolt 3 NHI (C step) [Alpine Ridge 2C 2016] [8086:15d9]
-> >>            |                               +-01.0-[05-39]--
-> >>            |                               \-02.0-[3a]----00.0  Intel Corporation JHL6340
-> >> Thunderbolt 3 USB 3.1 Controller (C step) [Alpine Ridge 2C 2016]
-> >> [8086:15db]
-> >>            +-1c.0-[3b]----00.0  Intel Corporation Wi-Fi 6 AX200 [8086:2723]
-> >>            +-1c.4-[3c]----00.0  Realtek Semiconductor Co., Ltd. RTS525A PCI
-> >> Express Card Reader [10ec:525a]
-> >>            +-1d.0-[3d]----00.0  Samsung Electronics Co Ltd NVMe SSD Controller
-> >> SM981/PM981/PM983 [144d:a808]
-> >>            +-1f.0  Intel Corporation Cannon Lake LPC Controller [8086:a30e]
-> >>            +-1f.3  Intel Corporation Cannon Lake PCH cAVS [8086:a348]
-> >>            +-1f.4  Intel Corporation Cannon Lake PCH SMBus Controller
-> >> [8086:a323]
-> >>            \-1f.5  Intel Corporation Cannon Lake PCH SPI Controller
-> >>            [8086:a324]
-> >>
-> >>
-> >> Regards,
-> >>
-> >> Nick.
-> > 
-
+Dave.
