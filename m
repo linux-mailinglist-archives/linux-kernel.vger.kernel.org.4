@@ -2,157 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3B1D73E2BB
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 17:05:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58C0373E2BF
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 17:05:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230329AbjFZPFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 11:05:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34196 "EHLO
+        id S230383AbjFZPFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 11:05:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230356AbjFZPFF (ORCPT
+        with ESMTP id S230377AbjFZPFU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 11:05:05 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75A8910CB
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 08:05:02 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: bbrezillon)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id EB7686607102;
-        Mon, 26 Jun 2023 16:04:59 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1687791900;
-        bh=T+GZ94CPOEJIWUlPYIfXorGvR/Sh0JZZkuAsk5WcZx4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=FTCio2cIYi9e+GDIRHOFlyZYHAdE2Ngr8Y5wnAX5yIrg+rUxf5t1lYnnjgX9qOxpR
-         8TgluAe3tRRZsXBXYpVqXbBIG38vOCMCUh3NFAo3JXo9cgwxUYMY3LzrlkjxP0nZRy
-         Ju0jDl4L0JfV8wIvcrRIWeeoAVIXfs6Sk0M3KOyxOzMeLPE7GXkWBh04QBh1vzWOTC
-         6daaRNGS15yokSHBBnUbUVCFmHO6dOnJbSxuJdUotFoEYk5FMyVifyk94+gWpLX+3M
-         FqgLekolCAyGpyJivHGO34yxDTEaKxHhTEbS+5KhG4H2+ZjPtz42F+9dkL6irYVFxU
-         NTWnBtOaL2ATg==
-Date:   Mon, 26 Jun 2023 17:04:57 +0200
-From:   Boris Brezillon <boris.brezillon@collabora.com>
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     David Airlie <airlied@gmail.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        Qiang Yu <yuq825@gmail.com>,
-        Steven Price <steven.price@arm.com>,
-        Rob Herring <robh@kernel.org>, intel-gfx@lists.freedesktop.org,
-        kernel@collabora.com, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH v13 03/10] drm/shmem-helper: Add pages_pin_count field
-Message-ID: <20230626170420.45826ac7@collabora.com>
-In-Reply-To: <20230314022659.1816246-4-dmitry.osipenko@collabora.com>
-References: <20230314022659.1816246-1-dmitry.osipenko@collabora.com>
-        <20230314022659.1816246-4-dmitry.osipenko@collabora.com>
-Organization: Collabora
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+        Mon, 26 Jun 2023 11:05:20 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A993E7E
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 08:05:19 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-3112f256941so3054606f8f.1
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 08:05:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687791917; x=1690383917;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=348adPXQRKrKNTWGAwb9z5LOcOD3S5LIRa6IrQyqmGc=;
+        b=BpdMkRqMxf6XEjAul5+0XQ4Uqv2kRvyAG7uM//NhkYVZS74eHBo+NlzGx6Km7k8dew
+         blQILAw7fwJy27T2x3DKaUlmEQcDJRSCj8uKQURAmWzo7FGHZNgXP+PTFSBy3ViEwxDK
+         bwUXavKKzBgmLv3XDq49ITl/dbsCckPuHheh1OyxNCa9H1yrYB1OubNaNBFQMYfXVyf9
+         4jZ/Dp+NUWclfn5YkfLFegJDrQ6plDOZ1zLMYwpsVnYWM2AtacotDLe1spyxM2z0yHPk
+         j0ZN67PMABHain93jKjzWnpDNib5oPHQXOXXsIpIXONZ9UFxlFj04vrTDLF/c98FZA07
+         LqIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687791917; x=1690383917;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=348adPXQRKrKNTWGAwb9z5LOcOD3S5LIRa6IrQyqmGc=;
+        b=MN2Jj9F6C5sAT2KuZXqCMhlonRgqXbcDRg4wVEu8YT4XoIgxPCGrworSFAwEnqkxIH
+         AgV1/LUC4e9qKlU5wnepmSQdaqQSndMfOv+WcAOETrUUPRmUlwbIHfrl+UkF9CYNUl1S
+         0NxsG4OI87NtGDdIBYp/ZS00T+gGDiQnHIDoqXEtUIQKc/snNJa2INasE2gZzt+ZRWKG
+         eghv7LBjMjh70ZL1lHPltV9Y0haAbgvHFXvAavR9LiXbyAvVq3dpO8PNEIbNZhuFp/zw
+         iJaaRRUx8teSLpUAqPz8cFJsCNtqqE4ASIT8N2jJdk0wqM9uVqXOjureP23pJSNIx+v8
+         AJLw==
+X-Gm-Message-State: AC+VfDzxCJAC1G3OR6U4jteMMb1Q74pDX0ggjI3nCamjCTiGWuz06NLS
+        J+djNXIcaHHO5CoY3rBSNajSOQ==
+X-Google-Smtp-Source: ACHHUZ5VYTqqVMy0dhtZ4hxs5N4mrJgTTvouyQr7HxLT3nJwXi1SuqaAezHLUswOmb65Bowi8io8Mg==
+X-Received: by 2002:a5d:5960:0:b0:30f:c56c:b5b3 with SMTP id e32-20020a5d5960000000b0030fc56cb5b3mr8897292wri.4.1687791917522;
+        Mon, 26 Jun 2023 08:05:17 -0700 (PDT)
+Received: from aspen.lan (aztw-34-b2-v4wan-166919-cust780.vm26.cable.virginm.net. [82.37.195.13])
+        by smtp.gmail.com with ESMTPSA id e15-20020adfe7cf000000b0030fae360f14sm7644766wrn.68.2023.06.26.08.05.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jun 2023 08:05:16 -0700 (PDT)
+Date:   Mon, 26 Jun 2023 16:05:14 +0100
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee@kernel.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Helge Deller <deller@gmx.de>, linux-pwm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] backlight: pwm_bl: Avoid backlight flicker applying
+ initial PWM state
+Message-ID: <20230626150514.GD95170@aspen.lan>
+References: <20230608-backlight-pwm-avoid-flicker-v1-1-afd380d50174@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230608-backlight-pwm-avoid-flicker-v1-1-afd380d50174@pengutronix.de>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dmitry,
+On Thu, Jun 08, 2023 at 04:11:14PM +0200, Philipp Zabel wrote:
+> The initial PWM state returned by pwm_init_state() has a duty cycle
+> of 0 ns. To avoid backlight flicker when taking over an enabled
+> display from the bootloader, skip the initial pwm_apply_state()
+> and leave the PWM be until backlight_update_state() will apply the
+> state with the desired brightness.
 
-Sorry for chiming in only now :-/.
+backlight_update_state() uses pwm_get_state() to update the PWM.
 
-On Tue, 14 Mar 2023 05:26:52 +0300
-Dmitry Osipenko <dmitry.osipenko@collabora.com> wrote:
+Without applying something that came from pwm_init_state() then
+we will never adopt the reference values from pwm->args.
 
-> And new pages_pin_count field to struct drm_gem_shmem_object that will
-> determine whether pages are evictable by memory shrinker. The pages will
-> be evictable only when pages_pin_count=0. This patch prepares code for
-> addition of the memory shrinker that will utilize the new field.
-> 
-> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-> ---
->  drivers/gpu/drm/drm_gem_shmem_helper.c | 7 +++++++
->  include/drm/drm_gem_shmem_helper.h     | 9 +++++++++
->  2 files changed, 16 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/drm_gem_shmem_helper.c b/drivers/gpu/drm/drm_gem_shmem_helper.c
-> index 4da9c9c39b9a..81d61791f874 100644
-> --- a/drivers/gpu/drm/drm_gem_shmem_helper.c
-> +++ b/drivers/gpu/drm/drm_gem_shmem_helper.c
-> @@ -277,6 +277,8 @@ static int drm_gem_shmem_pin_locked(struct drm_gem_shmem_object *shmem)
->  	drm_WARN_ON(obj->dev, obj->import_attach);
->  
->  	ret = drm_gem_shmem_get_pages(shmem);
-> +	if (!ret)
-> +		shmem->pages_pin_count++;
->  
->  	return ret;
->  }
-> @@ -289,7 +291,12 @@ static void drm_gem_shmem_unpin_locked(struct drm_gem_shmem_object *shmem)
->  
->  	drm_WARN_ON(obj->dev, obj->import_attach);
->  
-> +	if (drm_WARN_ON_ONCE(obj->dev, !shmem->pages_pin_count))
-> +		return;
-> +
->  	drm_gem_shmem_put_pages(shmem);
-> +
-> +	shmem->pages_pin_count--;
->  }
->  
->  /**
-> diff --git a/include/drm/drm_gem_shmem_helper.h b/include/drm/drm_gem_shmem_helper.h
-> index 20ddcd799df9..7d823c9fc480 100644
-> --- a/include/drm/drm_gem_shmem_helper.h
-> +++ b/include/drm/drm_gem_shmem_helper.h
-> @@ -39,6 +39,15 @@ struct drm_gem_shmem_object {
->  	 */
->  	unsigned int pages_use_count;
->  
-> +	/**
-> +	 * @pages_pin_count:
-> +	 *
-> +	 * Reference count on the pinned pages table.
-> +	 * The pages allowed to be evicted by memory shrinker
-> +	 * only when the count is zero.
-> +	 */
-> +	unsigned int pages_pin_count;
 
-s/pages_pin_count/pin_count/ ?
-
-And do we really need both pages_pin_count and pages_use_count. Looks
-like they both serve the same purpose, with one exception:
-pages_use_count is also incremented in the get_pages_sgt_locked() path,
-but you probably don't want it to prevent GEM eviction. Assuming
-your goal with this pin_count field is to check if a GEM object is
-evictable, it can be done with something like
-
-bool
-drm_gem_shmem_is_evictable_locked(struct drm_gem_shmem_object *shmem)
-{
-	dma_resv_assert_held(shmem->base.resv);
-
-	return shmem->pages_use_count == (shmem->sgt ? 1 : 0);
-}
-
-I mean, I'm not against renaming pages_use_count into pin_count, but,
-unless I'm missing something, I don't see a good reason to keep both.
-
-Regards,
-
-Boris
+Daniel.
