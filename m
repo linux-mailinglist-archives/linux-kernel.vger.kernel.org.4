@@ -2,272 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 459EB73E194
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 16:08:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDAB673E19A
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 16:09:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230290AbjFZOIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 10:08:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59428 "EHLO
+        id S230345AbjFZOJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 10:09:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229849AbjFZOIh (ORCPT
+        with ESMTP id S230409AbjFZOJU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 10:08:37 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 452F7E7A
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 07:08:10 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1b8054180acso8358285ad.1
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 07:08:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1687788490; x=1690380490;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lBN8blGYXvnxlXBIVOSTpTlppcCRsXOaHTKDN6AwyzQ=;
-        b=dzGKLkbvt/18pINM4BAdCzeMA7heFFExgGSN5O/dVJ4hZpl6Neb9d3mM1ZWu3kJCz9
-         6lALUwhHQy62gBR9gPNCQ2PcLVBDAIwE6Z7CSAtAoLIo/k8Ls5lbe8/Rg+60+Yb5jYpn
-         Ija4O7Ne1kh4yJltZD7Wjoj3FNQhA6PlnP5k1FtN9pSTf0aIiw7Jh4htjbWDeBLklCvf
-         Rp2UdeOuNq3QdtyfbEi0LJledSlFv18XIncFskMRyjm/ymT1T/zSFXUfQ5H9b0/qwbX5
-         IEsNWN5iGQvGS331KgkQCwUJgWU91bjwqo+Gr7yLxRgBCMTn00H2hk4pTAoxgke8hmNA
-         vNqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687788490; x=1690380490;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=lBN8blGYXvnxlXBIVOSTpTlppcCRsXOaHTKDN6AwyzQ=;
-        b=j6c0wpLQHPPPdAmg4Amo+cOhfCkYCZZlQy276yJctg5mld4JM3k3z5SDAYfSR4J2oi
-         EJoAtDwAKfdZF8N1/lCXFO6Z7gw9O+/suqbv78sa70rTP+bkup3OPM8Ds3i8epIuqYQo
-         4NWD5Akf81yAJuOHL3S5mPD50SAyZzi1CAls+DRpVwg1BKV3EJLoEVZLFMycewwwVoPn
-         FrxKHlnrPn3FHdXiXxXXTq4l567XKJdvOP4jaP8LhcYZO1ZwfMr+tor1xf/D+Y489Jf9
-         /R3B8Topsixe4m95l3+vYMU1ZgkELe4uaewWtdrmlTMzLvwH/USsAl4FL3uejdn5AN/T
-         2kQA==
-X-Gm-Message-State: AC+VfDxb35ThK0TH9L+/Ayl6t1NgO26Bpv8vSb+9Np+8XEhINjyxawk1
-        7Ikmq2bBevhF2PeaS66Kv5hgEw==
-X-Google-Smtp-Source: ACHHUZ6EWq0b7ssc5mx6VHgRCMYEBCOBoTqqG2cF8Q1iJSu7eIvWnLrwfscQt8+XTTuNf0iaVeF22A==
-X-Received: by 2002:a17:902:c10c:b0:1b5:4709:fa0e with SMTP id 12-20020a170902c10c00b001b54709fa0emr7199079pli.10.1687788489653;
-        Mon, 26 Jun 2023 07:08:09 -0700 (PDT)
-Received: from [10.255.209.141] ([139.177.225.255])
-        by smtp.gmail.com with ESMTPSA id e18-20020a17090301d200b001b682336f83sm4259302plh.42.2023.06.26.07.08.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Jun 2023 07:08:09 -0700 (PDT)
-Message-ID: <e3af3f2f-ec87-e8e8-c72b-dfce20b32193@bytedance.com>
-Date:   Mon, 26 Jun 2023 22:08:03 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.2
-Subject: Re: [PATCH v2 14/16] maple_tree: Refine mas_preallocate() node
- calculations
-To:     Danilo Krummrich <dakr@redhat.com>
-Cc:     maple-tree@lists.infradead.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        linux-kernel@vger.kernel.org,
-        Peng Zhang <zhangpeng.00@bytedance.com>,
-        David Airlie <airlied@redhat.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Matthew Wilcox <willy@infradead.org>
-References: <20230612203953.2093911-1-Liam.Howlett@oracle.com>
- <20230612203953.2093911-15-Liam.Howlett@oracle.com>
- <26d8fbcf-d34f-0a79-9d91-8c60e66f7341@redhat.com>
- <cdab5e74-7559-cb31-90ca-b99a5c3a6dd6@gmail.com>
- <43ce08db-210a-fec8-51b4-351625b3cdfb@redhat.com>
-From:   Peng Zhang <zhangpeng.00@bytedance.com>
-In-Reply-To: <43ce08db-210a-fec8-51b4-351625b3cdfb@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Mon, 26 Jun 2023 10:09:20 -0400
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2053.outbound.protection.outlook.com [40.107.22.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC30210DD;
+        Mon, 26 Jun 2023 07:09:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
+ s=selector2-armh-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NczVlE4rm1dmoAtNmI9sz0l5FsTEO2Q+XfOTXtAKj7E=;
+ b=eg+gpVVbqXH2McVF04EOdG0d+JUvbvVB1pOyZIoD5x4cPmsqKj0XzxoAPBF7Iuz7Foxm1GP/E0Dmc61ZN79hRqhOIyqsA9etXuwp2v1SreWSX0MGiiA5v0zJ+qCWH1wwXjH4EGU720vpYAYhRW7MV4uz8Jasdr5BXV250dDpNgs=
+Received: from AM0PR02CA0005.eurprd02.prod.outlook.com (2603:10a6:208:3e::18)
+ by AS8PR08MB7767.eurprd08.prod.outlook.com (2603:10a6:20b:527::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.26; Mon, 26 Jun
+ 2023 14:09:15 +0000
+Received: from AM7EUR03FT042.eop-EUR03.prod.protection.outlook.com
+ (2603:10a6:208:3e:cafe::b6) by AM0PR02CA0005.outlook.office365.com
+ (2603:10a6:208:3e::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.33 via Frontend
+ Transport; Mon, 26 Jun 2023 14:09:15 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
+ smtp.mailfrom=arm.com; dkim=pass (signature was verified)
+ header.d=armh.onmicrosoft.com;dmarc=pass action=none header.from=arm.com;
+Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
+ 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
+ client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
+ pr=C
+Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
+ AM7EUR03FT042.mail.protection.outlook.com (100.127.140.209) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6544.15 via Frontend Transport; Mon, 26 Jun 2023 14:09:14 +0000
+Received: ("Tessian outbound e2424c13b707:v142"); Mon, 26 Jun 2023 14:09:14 +0000
+X-CheckRecipientChecked: true
+X-CR-MTA-CID: e6fcde887157c6f0
+X-CR-MTA-TID: 64aa7808
+Received: from 6845ba131bef.1
+        by 64aa7808-outbound-1.mta.getcheckrecipient.com id 70DE98DF-F72B-430A-80F1-E35EA9219AAB.1;
+        Mon, 26 Jun 2023 14:09:07 +0000
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com
+    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id 6845ba131bef.1
+    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
+    Mon, 26 Jun 2023 14:09:07 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZTvAuttMm3RD3whg4fVCtLShyuIdmX9bsbor5Hukl5znEaGOhg6GDfZTV+nKlvVAtSYPukezIGtL2xlagvl1yK2Dy8C4eSJuky0gGGfjlZcHEyKJlIYJ2ctrwA21JzxLeXZHYa3t+tJfcbc/3PiF6aMJ3+hFycgUQ1Bl69nFsvuolgGfJnKw9uB+D7mYPypxJwTCYrfsIglmKqx57mXUbgI37o4kDV2XPzUwBkG0qpOC1dpNx+820wMA9nQ/lPjY0BsdTJzt4H2QfVyClKTkFLCwzDNM9ArRhZ3VXBceHjJVwqtXEwqlPKAFaFPEKWQA1pBkbdO7olTUHgNJlHjubA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NczVlE4rm1dmoAtNmI9sz0l5FsTEO2Q+XfOTXtAKj7E=;
+ b=fuH1umBFVufTjBZ66uuNI3SO7NipAEiNeQyJdLFu1iBOtIO2sUaqRiR45+T0zyGxb6lmuxO0kwB4OaGAZIg7GW847v3jSoW//6lJvg8dtLj9lkN5r02zx23yJSdDRWZFSqwqcz2k9xy8ZixyVMHmOFXGDr1AR7SjbuqYHx6BACXlqd17o7wbBb588r93whJ1QFNuz9Mb0fly/do/pYKDhiRmLrnBJ07tRw+xfHxWABe1BHgWbx7WNxReIWVuR3Qox6YCeET9ydf5z6ITvgJQISeRMcsQo0/9n2H3P+Cp969MW2bG/ETnRmF3oDzHGhKvygvzyBwPyubw3aHRnJpoRw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
+ header.d=arm.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
+ s=selector2-armh-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NczVlE4rm1dmoAtNmI9sz0l5FsTEO2Q+XfOTXtAKj7E=;
+ b=eg+gpVVbqXH2McVF04EOdG0d+JUvbvVB1pOyZIoD5x4cPmsqKj0XzxoAPBF7Iuz7Foxm1GP/E0Dmc61ZN79hRqhOIyqsA9etXuwp2v1SreWSX0MGiiA5v0zJ+qCWH1wwXjH4EGU720vpYAYhRW7MV4uz8Jasdr5BXV250dDpNgs=
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+Received: from DB9PR08MB7179.eurprd08.prod.outlook.com (2603:10a6:10:2cc::19)
+ by GV1PR08MB8353.eurprd08.prod.outlook.com (2603:10a6:150:a3::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.26; Mon, 26 Jun
+ 2023 14:09:01 +0000
+Received: from DB9PR08MB7179.eurprd08.prod.outlook.com
+ ([fe80::43b7:3a83:5cbe:4559]) by DB9PR08MB7179.eurprd08.prod.outlook.com
+ ([fe80::43b7:3a83:5cbe:4559%4]) with mapi id 15.20.6521.026; Mon, 26 Jun 2023
+ 14:09:01 +0000
+Date:   Mon, 26 Jun 2023 15:08:27 +0100
+From:   "szabolcs.nagy@arm.com" <szabolcs.nagy@arm.com>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>
+Cc:     "Xu, Pengfei" <pengfei.xu@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "kcc@google.com" <kcc@google.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "corbet@lwn.net" <corbet@lwn.net>, "nd@arm.com" <nd@arm.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "debug@rivosinc.com" <debug@rivosinc.com>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "Torvalds, Linus" <torvalds@linux-foundation.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "Eranian, Stephane" <eranian@google.com>
+Subject: Re: [PATCH v9 23/42] Documentation/x86: Add CET shadow stack
+ description
+Message-ID: <ZJmb24iHBQBXIpxB@arm.com>
+References: <64837d2af3ae39bafd025b3141a04f04f4323205.camel@intel.com>
+ <ZJAWMSLfSaHOD1+X@arm.com>
+ <5794e4024a01e9c25f0951a7386cac69310dbd0f.camel@intel.com>
+ <ZJFukYxRbU1MZlQn@arm.com>
+ <e676c4878c51ab4b6018c9426b5edacdb95f2168.camel@intel.com>
+ <ZJLgp29mM3BLb3xa@arm.com>
+ <c5ae83588a7e107beaf858ab04961e70d16fe32c.camel@intel.com>
+ <CAMe9rOrmgfmy-7QGhNtU+ApUJgG1rKAC-oUvmGMeEm0LHFM0hw@mail.gmail.com>
+ <ZJP664odSJC+tGzT@arm.com>
+ <39786e2e74013d3006cc6081e4f7faffadcab8f2.camel@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <39786e2e74013d3006cc6081e4f7faffadcab8f2.camel@intel.com>
+X-ClientProxiedBy: SA1P222CA0032.NAMP222.PROD.OUTLOOK.COM
+ (2603:10b6:806:2d0::13) To DB9PR08MB7179.eurprd08.prod.outlook.com
+ (2603:10a6:10:2cc::19)
+MIME-Version: 1.0
+X-MS-TrafficTypeDiagnostic: DB9PR08MB7179:EE_|GV1PR08MB8353:EE_|AM7EUR03FT042:EE_|AS8PR08MB7767:EE_
+X-MS-Office365-Filtering-Correlation-Id: a6f598ae-234c-4387-080c-08db764eec7f
+x-checkrecipientrouted: true
+NoDisclaimer: true
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original: QwLzSmwu4Lqid3z21MShMSD6aRQtrQqqyICfRcJ3RlIX1/3WiE+pf4SaM2B/A7eV7wm0t0wovCFpmHuDcnIGau3/rcLXcaAw5zrojQ+J2a/r+et2JkwIiyoDg6U4heZgYLEuoRB+yqI6hhmEt2VujjXv9+gRArpHt15ZySpxdqnDwD0lNV1Jigdt0J1vuW7+0aKN5E4ZaV3//bd26XanN/OaXviP3eDMy7TJK5QSjzh52po60QSM9zQKMSyNLzu/3VO3WuBuuvTDTwyvjT8EdJhmPuyK9a29VWCbBRKGuh8nExKMsE7W9x4Y/UrM3QtBv/YDrPpSv92odhpbYfcK7IxklWJnxJqsqQjgt7Zk45MWw9nSXG50wiU5w64gxMN0ipVi+VSHmOzVGbw1zlLHKUkGMg1OrPMA3GvjpXnmWZoxLbhMyjbSVj4/44ILmJKWe6w3+4Z06KHjdnaWcK+EQZC+69HjcPI5/bfCEAq4tWwp5+ibFtWOZB1TUfTQCxAyV5/G1lyY4U5ODEHUUWr2MRwz+KdARK/zMxC1D7DckLk5S6vJoKNCQWElMpR0bJJc
+X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR08MB7179.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(136003)(396003)(376002)(366004)(451199021)(38100700002)(36756003)(86362001)(478600001)(54906003)(110136005)(2616005)(6486002)(6666004)(41300700001)(66476007)(66556008)(66946007)(316002)(8676002)(8936002)(26005)(4326008)(6506007)(6512007)(186003)(2906002)(66899021)(7406005)(7416002)(5660300002);DIR:OUT;SFP:1101;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR08MB8353
+Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: AM7EUR03FT042.eop-EUR03.prod.protection.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs: 4366f2c8-ab62-48d5-4c2d-08db764ee3d6
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Zs0YZyghd9jIySM+iDC9wqI4oIp/IHNGZD+wJhmKP1NMDjlkLnqrmsPKXqxkmvJcz7Vn5X6KMK+hOuOb2B6OGH6u+lAg48TpbeG8cLu0+QgrYV0eEhcPOfvYwyb9aWwxtBzoKklzFFx4pBVoAWuz5rSb7Vo/2gAyfhPJ20QSLpBowC+KvtjTJD5OhX9OS5tGNpOuSgcEAm4mYRxcM4t8ZC/eCbFJmONHE0x0z5VC6YvCz4BFEyP3wcEdtIz62gLYf3ADRiqq99zk8herucKQ8rRA5u+mwB2jcNzeGtDjoV+ZSWx8uSrv8Dx13eZLUODUqNuZgWHDVREUF6ABSKUHz83OPa3TqUo6++cybdcS/iicBv81OF7LULG27XV2MAPMagpr/7Bh7IrtrX79LBe3XCPJVrfo/6iOekWGIpnWUE3O88Q+d3O2XXE2TgEzIwxPn3Hd0URKA02Z3oxKEUBfSL0p/00cXDgQAGIr1Od3eLsY05ZfcOlqbX2uPcCUR/yLJhtqK75ToWBo5muzUX4OaeK6M3X9j46c+9iT11IqFKk0N9+2id7DoWtNr2MaOIUxa9sh5Rm7lr+5u1kL3c3L7h4E+3p3T3a/VLJUlZg1sbTWr795l4i3zbccZmBsqWQBvrYQh5OO5iJf5VxsTRqgiiV+bbIQunmkK7YkZyVS9JnGATGuhvcr86Leg4v/mXCseaGPjlVrZULqU1hUoFQzjvraX4qZZStikCqXWAhuJ2Q=
+X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(39860400002)(376002)(346002)(451199021)(46966006)(36840700001)(40470700004)(5660300002)(70586007)(70206006)(4326008)(450100002)(478600001)(36756003)(316002)(66899021)(8676002)(8936002)(2906002)(40460700003)(40480700001)(36860700001)(110136005)(54906003)(86362001)(41300700001)(6486002)(82310400005)(336012)(6512007)(6506007)(26005)(47076005)(186003)(356005)(2616005)(6666004)(107886003)(82740400003)(81166007);DIR:OUT;SFP:1101;
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jun 2023 14:09:14.9238
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a6f598ae-234c-4387-080c-08db764eec7f
+X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
+X-MS-Exchange-CrossTenant-AuthSource: AM7EUR03FT042.eop-EUR03.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR08MB7767
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The 06/22/2023 16:46, Edgecombe, Rick P wrote:
+> You previously said:
+> 
+> On Wed, 2023-06-21 at 12:36 +0100, szabolcs.nagy@arm.com wrote:
+> > as far as i can tell the current unwinder handles shstk unwinding
+> > correctly across signal handlers (sync or async and
+> > cleanup/exceptions
+> > handlers too), i see no issue with "fixed shadow stack signal frame
+> > size of 8 bytes" other than future extensions and discontinous shstk.
+> 
+> I took that to mean that you didn't see how the the existing unwinder
+> prevented alt shadow stacks. Hopefully we're all on the same page now. 
 
+well alt shstk is discontinous.
 
-在 2023/6/26 08:38, Danilo Krummrich 写道:
-> Hi Peng,
-> 
-> On 6/25/23 05:28, Peng Zhang wrote:
->>
->>
->> 在 2023/6/23 00:41, Danilo Krummrich 写道:
->>> On 6/12/23 22:39, Liam R. Howlett wrote:
->>>> Calculate the number of nodes based on the pending write action instead
->>>> of assuming the worst case.
->>>
->>> Liam already gave me a heads-up on this patch, which I already 
->>> replied to [1].
->>>
->>> However, I think it might make sense to also reply to this patch 
->>> directly.
->>>
->>> For a mas_preallocate() calculating the actual required nodes to be 
->>> allocated instead of assuming the worst to work, it is required to 
->>> ensure that the tree does not change between calling 
->>> mas_preallocate() and mas_store_prealloc() if my understanding is 
->>> correct.
->>>
->>> In DRM however, more specifically the DRM GPUVA Manager [2], we do 
->>> have the case that we are not able to ensure this:
->>>
->>> Jobs to create GPU mappings can be submitted by userspace, are queued 
->>> up by the kernel and are processed asynchronously in dma-fence 
->>> signalling critical paths, e.g. by using the drm_gpu_scheduler. 
->>> Hence, we must be able to allocate the worst case amount of node, 
->>> since at the time a job is submitted we can't predict the state the 
->>> maple tree keeping track of mappings has once a mapping is inserted 
->>> in the (asynchronous) dma-fence signalling critical path.
->>>
->>> A more detailed explanation can be found in [1].
->>>
->>> Could we keep a separate function for allocating the worst case 
->>> amount of nodes additionally to this optimization? E.g. something 
->>> like mas_preallocate_worst_case() or mas_preallocate_unlocked() 
->>> (since I guess the new one requires the maple tree to be kept locked 
->>> in order not to change)?
->> Hi Danilo,
->>
->> Your understanding seems incorrect. Even with previously unoptimized
->> mas_preallocate(), the maple tree cannot be modified between calls to
->> mas_preallocate() and mas_store_prealloc(). The calculation of the
->> number of pre-allocated nodes depends on the structure of the maple
->> tree. In the unoptimized mas_preallocate(), it depends on the height of
->> the tree. If the maple tree is modified before mas_store_prealloc() and
->> the height of the tree changes, the number of pre-allocated nodes is
->> inaccurate.
-> 
-> Thanks for pointing this out!
-> 
-> First of all, it's probably fair to say "naive me", it totally makes 
-> sense the tree height is needed - it's a b-tree.
-> 
-> On the other hand, unless I miss something (and if so, please let me 
-> know), something is bogus with the API then.
-> 
-> While the documentation of the Advanced API of the maple tree explicitly 
-> claims that the user of the API is responsible for locking, this should 
-> be limited to the bounds set by the maple tree implementation. Which 
-> means, the user must decide for either the internal (spin-) lock or an 
-> external lock (which possibly goes away in the future) and acquire and 
-> release it according to the rules maple tree enforces through lockdep 
-> checks.
-> 
-> Let's say one picks the internal lock. How is one supposed to ensure the 
-> tree isn't modified using the internal lock with mas_preallocate()?
-> 
-> Besides that, I think the documentation should definitely mention this 
-> limitation and give some guidance for the locking.
-Yes, the documentation of maple tree is not detailed and complete.
-> 
-> Currently, from an API perspective, I can't see how anyone not familiar 
-> with the implementation details would be able to recognize this limitation.
-> 
-> In terms of the GPUVA manager, unfortunately, it seems like I need to 
-> drop the maple tree and go back to using a rb-tree, since it seems there 
-> is no sane way doing a worst-case pre-allocation that does not suffer 
-> from this limitation.
-I also think preallocation may not be necessary, and I agree with what
-Matthew said. Preallocation should be used in some cases where
-preallocation has to be used. If preallocation is used, but the number
-of preallocated nodes is insufficient because the tree is modified
-midway, GFP_NOWAIT will be used for memory allocation during the tree
-modification process, and the user may not notice that more nodes are
-not from preallocation.
+there were two separate confusions:
 
-> 
-> - Danilo
-> 
->>
->> Regards,
->> Peng
->>
->>>
->>> [1] 
->>> https://lore.kernel.org/nouveau/68cd25de-e767-725e-2e7b-703217230bb0@redhat.com/T/#ma326e200b1de1e3c9df4e9fcb3bf243061fee8b5
->>>
->>> [2] 
->>> https://lore.kernel.org/linux-mm/20230620004217.4700-8-dakr@redhat.com/T/#m47ab82310f87793d0f0cc1825a316eb30ad5b653
->>>
->>> - Danilo
->>>
->>>>
->>>> This addresses a performance regression introduced in platforms that
->>>> have longer allocation timing.
->>>>
->>>> Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
->>>> ---
->>>>   lib/maple_tree.c | 48 
->>>> +++++++++++++++++++++++++++++++++++++++++++++++-
->>>>   1 file changed, 47 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/lib/maple_tree.c b/lib/maple_tree.c
->>>> index 048d6413a114..7ac5b5457603 100644
->>>> --- a/lib/maple_tree.c
->>>> +++ b/lib/maple_tree.c
->>>> @@ -5541,9 +5541,55 @@ EXPORT_SYMBOL_GPL(mas_store_prealloc);
->>>>    */
->>>>   int mas_preallocate(struct ma_state *mas, void *entry, gfp_t gfp)
->>>>   {
->>>> +    MA_WR_STATE(wr_mas, mas, entry);
->>>> +    unsigned char node_size;
->>>> +    int request = 1;
->>>>       int ret;
->>>> -    mas_node_count_gfp(mas, 1 + mas_mt_height(mas) * 3, gfp);
->>>> +
->>>> +    if (unlikely(!mas->index && mas->last == ULONG_MAX))
->>>> +        goto ask_now;
->>>> +
->>>> +    mas_wr_store_setup(&wr_mas);
->>>> +    wr_mas.content = mas_start(mas);
->>>> +    /* Root expand */
->>>> +    if (unlikely(mas_is_none(mas) || mas_is_ptr(mas)))
->>>> +        goto ask_now;
->>>> +
->>>> +    if (unlikely(!mas_wr_walk(&wr_mas))) {
->>>> +        /* Spanning store, use worst case for now */
->>>> +        request = 1 + mas_mt_height(mas) * 3;
->>>> +        goto ask_now;
->>>> +    }
->>>> +
->>>> +    /* At this point, we are at the leaf node that needs to be 
->>>> altered. */
->>>> +    /* Exact fit, no nodes needed. */
->>>> +    if (wr_mas.r_min == mas->index && wr_mas.r_max == mas->last)
->>>> +        return 0;
->>>> +
->>>> +    mas_wr_end_piv(&wr_mas);
->>>> +    node_size = mas_wr_new_end(&wr_mas);
->>>> +    /* Slot store can avoid using any nodes */
->>>> +    if (node_size == wr_mas.node_end && wr_mas.offset_end - 
->>>> mas->offset == 1)
->>>> +        return 0;
->>>> +
->>>> +    if (node_size >= mt_slots[wr_mas.type]) {
->>>> +        /* Split, worst case for now. */
->>>> +        request = 1 + mas_mt_height(mas) * 2;
->>>> +        goto ask_now;
->>>> +    }
->>>> +
->>>> +    /* Appending does not need any nodes */
->>>> +    if (node_size == wr_mas.node_end + 1 && mas->offset == 
->>>> wr_mas.node_end)
->>>> +        return 0;
->>>> +
->>>> +    /* Potential spanning rebalance collapsing a node, use 
->>>> worst-case */
->>>> +    if (node_size  - 1 <= mt_min_slots[wr_mas.type])
->>>> +        request = mas_mt_height(mas) * 2 - 1;
->>>> +
->>>> +    /* node store needs one node */
->>>> +ask_now:
->>>> +    mas_node_count_gfp(mas, request, gfp);
->>>>       mas->mas_flags |= MA_STATE_PREALLOC;
->>>>       if (likely(!mas_is_err(mas)))
->>>>           return 0;
->>>
->>>
->>
-> 
+- your mention of fnon-call-exception threw me off since that is a
+very specific corner case.
+
+- i was talking about an unwind design that can deal with altshstk
+which requires ssp switch. (current uwinder does not support this,
+but i assumed we can add that now and ignore old broken unwinders).
+you are saying that alt shstk support needs additional shstk tokens
+in the signal frame to maintain alt shstk state for the kernel.
+
+i think now we are on the same page.
+
+> BTW, when alt shadow stack's were POCed, I hadn't encountered this GCC
+> behavior yet. So it was assumed it could be bolted on later without
+> disturbing anything. If Linus or someone wants to say we're ok with
+> breaking these old GCCs in this way, the first thing I would do would
+> be to pad the shadow stack signal frame with room for alt shadow stack
+> and more. I actually have a patch to do this, but alas we are already
+> pushing it regression wise.
+
+sounds like it will be hard to add alt shstk later.
+
+(i think maintaining alt shstk state on the stack instead of
+shstk should work too. but if that does not work, then alt
+shstk will require another abi opt-in.)
