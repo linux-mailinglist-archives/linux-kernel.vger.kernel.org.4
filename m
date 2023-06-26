@@ -2,74 +2,300 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E12FD73ECBA
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 23:16:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 219D873ECB7
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 23:15:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229454AbjFZVP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 17:15:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56036 "EHLO
+        id S229964AbjFZVPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 17:15:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229864AbjFZVPz (ORCPT
+        with ESMTP id S229454AbjFZVPS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 17:15:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD5CDE4D
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 14:15:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687814111;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=phZhUFy820bdckUny8npt4P9PZBQ+KMukLBIP/xsC+s=;
-        b=KdXlKQoapGVuV88CaSSSy9X9re/um+SgiXdFC6L/XlwvlZYZBqBbD/kZD/BqByU2ReYrFa
-        vnNRM2niKh8UTNBw5QiJAaWFpDatJeKzrtnQw4yk643FIhO74Vl8ek6vnU4ypWu1hxVGPz
-        mwRC6FERWbckupwyssbf1VcHTOOee40=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-235-cIdWQumrOyiAgAevxvWBiA-1; Mon, 26 Jun 2023 17:15:07 -0400
-X-MC-Unique: cIdWQumrOyiAgAevxvWBiA-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D97EF104458B;
-        Mon, 26 Jun 2023 21:14:42 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.4])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E402F492B01;
-        Mon, 26 Jun 2023 21:14:41 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-cc:     dhowells@redhat.com, Ilya Dryomov <idryomov@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, ceph-devel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Is ->sendmsg() allowed to change the msghdr struct it is given?
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3112096.1687814081.1@warthog.procyon.org.uk>
-Date:   Mon, 26 Jun 2023 22:14:41 +0100
-Message-ID: <3112097.1687814081@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        Mon, 26 Jun 2023 17:15:18 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43646E75
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 14:15:17 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5766e49b802so53359667b3.1
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 14:15:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687814116; x=1690406116;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4cwqySIl0zrvyJR1a97p66vr+UthjL+qON8WoF64SHI=;
+        b=4+4Iq23bk63JNu2KypmpQAiE0iUGVrJf3DB5XcBnilF67WEwId76dGVTpo5K+1wQBT
+         G6czgGE7OEy9bjKJLE1UaIIcaFH+3RWdmP/nPYszA3dfjUK/zePRfQvdfSBY0ERbpq44
+         cmpVMUBKiEeqER1B3XYKfRXUk4yFFcUg/mKUUl0aPZPUvzx0wTc3tWShFwf97mp1xc33
+         c7UetKUnfQ3gV3WvKHdFxQf9wkKtGPlcZgOsF74STGxkle8Jtsoh1/40ZmKW7rMCVukl
+         JwRfn/U4/mFYfdXLNz7rBq2/BewMAn56Go5PiFgOkVpkMGNQGc2xYHj8JhFaUtPqipoz
+         h+Gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687814116; x=1690406116;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=4cwqySIl0zrvyJR1a97p66vr+UthjL+qON8WoF64SHI=;
+        b=T+oaI88wfRJR9lfdm8uBFeU2VuC1uppDwAVabehqJkqgXg0d7V3uiPDbR6yMdEOZUq
+         VPm1RPBybzKpGhuH67/9vq+9gf4XgPmOqE6ue1hdl7xG8UnyjsxvqDggz7aitpeOsfkv
+         osBd076k9e6K1jkaOR79nfJIs3fJ7mtCvJgmAJaSQKqHkr9fIvndikpA5lCtri1Z27YS
+         zvD9PnJEvKXQD93HxiUGcPjmRLee99aVu/yvQ1fr92HJfyo8VmcPo2FRHrLXmZSY80N8
+         59vTmEw/0VYkBvOm0y4v9t0yeRYuWLSVFKOjueN9wkiRdKK5hjzYTgpRiZ/GRwZZZWn3
+         90wQ==
+X-Gm-Message-State: AC+VfDwwfqzP/vBq1C5jABiSlm+Ha2Tbra9Z6r/KxO2hET7/NFIORaTR
+        GcQgOQQT/Z0LOu59q/tTV3roIF8AIHw=
+X-Google-Smtp-Source: ACHHUZ7XOB1SIhYjOA6x33Zqyshy1ZiI4i5aWBJI1tfr58tOURcNdt8TR+SgEfwBNxaUPAHwVC7yJviIaNA=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:6906:0:b0:bc3:abea:b3f1 with SMTP id
+ e6-20020a256906000000b00bc3abeab3f1mr12552921ybc.8.1687814116482; Mon, 26 Jun
+ 2023 14:15:16 -0700 (PDT)
+Date:   Mon, 26 Jun 2023 14:15:14 -0700
+In-Reply-To: <9b12207f-7aec-7d46-9b7a-99355bc9d38d@intel.com>
+Mime-Version: 1.0
+References: <20230511040857.6094-1-weijiang.yang@intel.com>
+ <20230511040857.6094-14-weijiang.yang@intel.com> <ZJYwg3Lnq3nJZgQf@google.com>
+ <9b12207f-7aec-7d46-9b7a-99355bc9d38d@intel.com>
+Message-ID: <ZJn/4qC35eFjfqJv@google.com>
+Subject: Re: [PATCH v3 13/21] KVM:VMX: Emulate reads and writes to CET MSRs
+From:   Sean Christopherson <seanjc@google.com>
+To:     Weijiang Yang <weijiang.yang@intel.com>
+Cc:     pbonzini@redhat.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, peterz@infradead.org,
+        rppt@kernel.org, binbin.wu@linux.intel.com,
+        rick.p.edgecombe@intel.com, john.allen@amd.com,
+        Sean Christopherson <sean.j.christopherson@intel.com>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jakub,
+On Mon, Jun 26, 2023, Weijiang Yang wrote:
+>=20
+> On 6/24/2023 7:53 AM, Sean Christopherson wrote:
+> > On Thu, May 11, 2023, Yang Weijiang wrote:
+> > Side topic, what on earth does the SDM mean by this?!?
+> >=20
+> >    The linear address written must be aligned to 8 bytes and bits 2:0 m=
+ust be 0
+> >    (hardware requires bits 1:0 to be 0).
+> >=20
+> > I know Intel retroactively changed the alignment requirements, but the =
+above
+> > is nonsensical.  If ucode prevents writing bits 2:0, who cares what har=
+dware
+> > requires?
+>=20
+> So do I ;-/
 
-Do you know if ->sendmsg() might alter the msghdr struct it is passed as an
-argument?  Certainly it can alter msg_iter, but can it also modify, say,
-msg_flags?
+Can you follow-up with someone to get clarification?  If writing bit 2 with=
+ '1'
+does not #GP despite the statement that it "must be aligned", then KVM shou=
+ldn't
+injected a #GP on that case.
 
-Thanks,
-David
+> > > +			return 1;
+> > > +		kvm_set_xsave_msr(msr_info);
+> > > +		break;
+> > >   	case MSR_IA32_PERF_CAPABILITIES:
+> > >   		if (data && !vcpu_to_pmu(vcpu)->version)
+> > >   			return 1;
+> > > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> > > index b6eec9143129..2e3a39c9297c 100644
+> > > --- a/arch/x86/kvm/x86.c
+> > > +++ b/arch/x86/kvm/x86.c
+> > > @@ -13630,6 +13630,26 @@ int kvm_sev_es_string_io(struct kvm_vcpu *vc=
+pu, unsigned int size,
+> > >   }
+> > >   EXPORT_SYMBOL_GPL(kvm_sev_es_string_io);
+> > > +bool kvm_cet_is_msr_accessible(struct kvm_vcpu *vcpu, struct msr_dat=
+a *msr)
+> > > +{
+> > > +	if (!kvm_cet_user_supported())
+> > This feels wrong.  KVM should differentiate between SHSTK and IBT in th=
+e host.
+> > E.g. if running in a VM with SHSTK but not IBT, or vice versa, KVM shou=
+ld allow
+> > writes to non-existent MSRs.
+>=20
+> I don't follow you, in this case, which part KVM is on behalf of? guest o=
+r
+> user space?
 
+Sorry, typo.  KVM *shouldn't* allow writes to non-existent MSRs. =20
+
+> > I.e. this looks wrong:
+> >=20
+> > 	/*
+> > 	 * If SHSTK and IBT are available in KVM, clear CET user bit in
+> > 	 * kvm_caps.supported_xss so that kvm_cet_user_supported() returns
+> > 	 * false when called.
+> > 	 */
+> > 	if (!kvm_cpu_cap_has(X86_FEATURE_SHSTK) &&
+> > 	    !kvm_cpu_cap_has(X86_FEATURE_IBT))
+> > 		kvm_caps.supported_xss &=3D ~XFEATURE_MASK_CET_USER;
+>=20
+> The comment is wrong, it should be "are not available in KVM". My intent =
+is,=EF=BF=BD
+> if both features are not available in KVM, then clear the precondition bi=
+t so
+> that all dependent checks will fail quickly.
+
+Checking kvm_caps.supported_xss.CET_USER is worthless in 99% of the cases t=
+hough.
+Unless I'm missing something, the only time it's useful is for CR4.CET, whi=
+ch
+doesn't differentiate between SHSTK and IBT.  For everything else that KVM =
+cares
+about, at some point KVM needs to precisely check for SHSTK and IBT support
+anyways
+
+> > and by extension, all dependent code is also wrong.  IIRC, there's a vi=
+rtualization
+> > hole, but I don't see any reason why KVM has to make the hole even bigg=
+er.
+>=20
+> Do you mean the issue that both SHSTK and IBT share one control MSR? i.e.=
+,
+> U_CET/S_CET?
+
+I mean that passing through PLx_SSP if the host has IBT but *not* SHSTK is =
+wrong.
+
+> > > +		return false;
+> > > +
+> > > +	if (msr->host_initiated)
+> > > +		return true;
+> > > +
+> > > +	if (!guest_cpuid_has(vcpu, X86_FEATURE_SHSTK) &&
+> > > +	    !guest_cpuid_has(vcpu, X86_FEATURE_IBT))
+> > > +		return false;
+> > > +
+> > > +	if (msr->index =3D=3D MSR_IA32_PL3_SSP &&
+> > > +	    !guest_cpuid_has(vcpu, X86_FEATURE_SHSTK))
+> > I probably asked this long ago, but if I did I since forgot.  Is it rea=
+lly just
+> > PL3_SSP that depends on SHSTK?  I would expect all shadow stack MSRs to=
+ depend
+> > on SHSTK.
+>=20
+> All PL{0,1,2,3}_SSP plus INT_SSP_TAB msr depend on SHSTK. In patch 21, I
+> added more MSRs in this helper.
+
+Sure, except that patch 21 never adds handling for PL{0,1,2}_SSP.  I see:
+
+	if (!kvm_cet_user_supported() &&
+	    !(kvm_cpu_cap_has(X86_FEATURE_IBT) ||
+	      kvm_cpu_cap_has(X86_FEATURE_SHSTK)))
+		return false;
+
+	if (msr->host_initiated)
+		return true;
+
+	if (!guest_cpuid_has(vcpu, X86_FEATURE_SHSTK) &&
+	    !guest_cpuid_has(vcpu, X86_FEATURE_IBT))
+		return false;
+
+	/* The synthetic MSR is for userspace access only. */
+	if (msr->index =3D=3D MSR_KVM_GUEST_SSP)
+		return false;
+
+	if (msr->index =3D=3D MSR_IA32_U_CET)
+		return true;
+
+	if (msr->index =3D=3D MSR_IA32_S_CET)
+		return guest_cpuid_has(vcpu, X86_FEATURE_IBT) ||
+		       kvm_cet_kernel_shstk_supported();
+
+	if (msr->index =3D=3D MSR_IA32_INT_SSP_TAB)
+		return guest_cpuid_has(vcpu, X86_FEATURE_SHSTK) &&
+		       kvm_cet_kernel_shstk_supported();
+
+	if (msr->index =3D=3D MSR_IA32_PL3_SSP &&
+	    !guest_cpuid_has(vcpu, X86_FEATURE_SHSTK))
+		return false;
+
+	mask =3D (msr->index =3D=3D MSR_IA32_PL3_SSP) ? XFEATURE_MASK_CET_USER :
+						  XFEATURE_MASK_CET_KERNEL;
+	return !!(kvm_caps.supported_xss & mask);
+
+Which means that KVM will allow guest accesses to PL{0,1,2}_SSP regardless =
+of
+whether or not X86_FEATURE_SHSTK is enumerated to the guest.
+
+And the above is also wrong for host_initiated writes to SHSTK MSRs.  E.g. =
+if KVM
+is running on a CPU that has IBT but not SHSTK, then userspace can write to=
+ MSRs
+that do not exist.
+
+Maybe this confusion is just a symptom of the series not providing proper
+Supervisor Shadow Stack support, but that's still a poor excuse for posting
+broken code.
+
+I suspect you tried to get too fancy.  I don't see any reason to ever care =
+about
+kvm_caps.supported_xss beyond emulating writes to XSS itself.  Just require=
+ that
+both CET_USER and CET_KERNEL are supported in XSS to allow IBT or SHSTK, i.=
+e. let
+X86_FEATURE_IBT and X86_FEATURE_SHSTK speak for themselves.  That way, this=
+ can
+simply be:
+
+bool kvm_cet_is_msr_accessible(struct kvm_vcpu *vcpu, struct msr_data *msr)
+{
+	if (is_shadow_stack_msr(...))
+		if (!kvm_cpu_cap_has(X86_FEATURE_SHSTK))
+			return false;
+
+		return msr->host_initiated ||
+		       guest_cpuid_has(vcpu, X86_FEATURE_SHSTK);
+	}
+
+	if (!kvm_cpu_cap_has(X86_FEATURE_IBT) &&
+	    !kvm_cpu_cap_has(X86_FEATURE_SHSTK))
+		return false;
+
+	return msr->host_initiated ||
+	       guest_cpuid_has(vcpu, X86_FEATURE_IBT) ||
+	       guest_cpuid_has(vcpu, X86_FEATURE_SHSTK);
+}
+
+> > > + * and reload the guest fpu states before read/write xsaves-managed =
+MSRs.
+> > > + */
+> > > +static inline void kvm_get_xsave_msr(struct msr_data *msr_info)
+> > > +{
+> > > +	fpregs_lock_and_load();
+> > KVM already has helpers that do exactly this, and they have far better =
+names for
+> > KVM: kvm_fpu_get() and kvm_fpu_put().  Can you convert kvm_fpu_get() to
+> > fpregs_lock_and_load() and use those isntead? And if the extra consiste=
+ncy checks
+> > in fpregs_lock_and_load() fire, we definitely want to know, as it means=
+ we probably
+> > have bugs in KVM.
+>=20
+> Do you want me to do some experiments to make sure the WARN()=EF=BF=BD in
+> fpregs_lock_and load() would be triggered or not?
+
+Yes, though I shouldn't have to clarify that.  The well-documented (as of n=
+ow)
+expectation is that any code that someone posts is tested, unless explicitl=
+y
+stated otherwise.  I.e. you should not have to ask if you should verify the=
+ WARN
+doesn't trigger, because you should be doing that for all code you post.
+
+> If no WARN() trigger, then replace fpregs_lock_and_load()/fpregs_unlock()
+> with kvm_fpu_get()/
+>=20
+> kvm_fpu_put()?
+
+Yes.
