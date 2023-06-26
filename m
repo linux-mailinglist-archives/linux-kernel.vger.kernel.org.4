@@ -2,63 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A2C073E5C7
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 18:50:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FD0E73E5C9
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 18:50:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230177AbjFZQuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 12:50:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41038 "EHLO
+        id S229844AbjFZQuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 12:50:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229736AbjFZQtq (ORCPT
+        with ESMTP id S230174AbjFZQuN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 12:49:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAB321B1
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 09:49:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 50EE660EFB
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 16:49:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF5DDC433C0;
-        Mon, 26 Jun 2023 16:49:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687798184;
-        bh=paOKeyA2C+7w0aTvrydeWORhfmX3bTsvihkIatcTxbE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Vb/yUXRBnuFU0aX8A1csFH/aBCs0vyhRSbEaADfifwI9F/Or/V5Ie41uZJcAIPDSZ
-         nklHFHv/T6kUIVOOUTXHP/51WhU4I/jNmtWaleIfq1SlzfD1D3RRV8uEsX9ELvXA/j
-         ip/dC8pn5xZpNM29R+A+LTW3Iwy1PI6y5fgM6J2LtBhDiBr07gHPtLLriQXoVwhSgY
-         e50puBGBVFPcDglJnjrrIt4P/0xWah7CGkXjLkB/Ist4/g8cOsM1l6gOBrn5d6484K
-         19nKfHTOPRr4kYY7z/UCRvxw0hjDbdaMg4EnPEB3+EXKDuV0VYphJKveoFeOQzruzD
-         v0NTqanoMWWyw==
-Date:   Mon, 26 Jun 2023 17:49:39 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Benjamin Bara <bbara93@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        support.opensource@diasemi.com,
-        DLG-Adam.Ward.opensource@dm.renesas.com,
-        Martin Fuzzey <martin.fuzzey@flowbird.group>,
-        linux-kernel@vger.kernel.org,
-        Benjamin Bara <benjamin.bara@skidata.com>
-Subject: Re: [PATCH RFC v4 07/13] regulator: find active protections during
- initialization
-Message-ID: <08d6fc5d-30bc-4a55-a495-2a73b5800f79@sirena.org.uk>
-References: <20230419-dynamic-vmon-v4-0-4d3734e62ada@skidata.com>
- <20230419-dynamic-vmon-v4-7-4d3734e62ada@skidata.com>
- <030a99f7-98f3-a24d-612c-d460859fc276@gmail.com>
+        Mon, 26 Jun 2023 12:50:13 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9084E1B1;
+        Mon, 26 Jun 2023 09:50:12 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 4ED453200996;
+        Mon, 26 Jun 2023 12:50:11 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Mon, 26 Jun 2023 12:50:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1687798210; x=1687884610; bh=uc
+        Py9Z08T7ijcFZZufeshPLjrL+BVwngvheYN8Oakzw=; b=j/20MptmplyKB34SVX
+        tBO+SdHi4itCwDViM8PRk3dHwkW8JA21kelZfFa4ySd7DZ7lsv2eSZKpHb9yBcEp
+        sDAjk2JGHYZkX2e/yx4qdo0OR2grE2nMV1v0DoZ+0CgdjKDQGaEuAikOqVc3rOvo
+        4V96P9vwMz58CbjQg9KG533ojaEryTe8YG1w1oQHLOCDO1Hs21tzDoNdZVewMPhE
+        1hVdT5oQAJi9Z81vAXFZLkuUoLTzXaWntyOr3DzsP8aUUNMLrBFnRAgmzJZgnmGj
+        Qxp8zoPnPm3Ey5wFRCfOeQvhCucEZgZzEJH7pgVsVISdFz2xh49KMu7gKemOmeSa
+        eMkw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1687798210; x=1687884610; bh=ucPy9Z08T7ijc
+        FZZufeshPLjrL+BVwngvheYN8Oakzw=; b=ZgJRcCHRtbA7V3wVIHwQY4Q6cFsjk
+        WJA1FXLQyqu/GUQSg4iE9CAKfBFj/APedV20hlytPR+nhLC2GyCwR+wyR0f+qxsW
+        Cz0PdGdTEOs/UTwKMinbRlD0INDUrjXjtZ3h3bueGxqpAcYtY52Ts3UZrn3M6U8M
+        7Ys1VY/G4CGZTdkaJ+77PBqMClyaMmZHt4v+ptvfpY6LYgUQYmiAyL4TXisvo2KS
+        quotaEKEkYchNe3wTxBDhYXGyjNkD0uw7WssOHRZYGJHRFSJV17qCUSrJzBV0a0e
+        1myUVT1/djdZ0g78KXk97l3AT1ZlnjabvvLpBedztt1d5QgVaQtUiaf4A==
+X-ME-Sender: <xms:wcGZZGiaH_sYIpFHhad3zdvFPMgaqUenKTC3hkEkCYjdAs4Yvejm9A>
+    <xme:wcGZZHBKBCHlGLFOEcsijygBzA9migzvIR0Z1vAAJau5zY9Q0yJmmU5tY4GhmAdiV
+    r8sykaE11x6Uu4B2YQ>
+X-ME-Received: <xmr:wcGZZOGpVKD9G6eQyLfWfMZ3--U0oAn_P95Kn9NYWXaPtYOogLl2UcPX2xrUruaVALkA1lfk2M8NSAOda4XlZg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeehfedguddtvdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehgtdfsredttddvnecuhfhrohhmpeforgig
+    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
+    grthhtvghrnhepueevudehuedtkeevgfduveejueefvddvvefhjefglefgtdekveeugeet
+    kefgleefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epmhgrgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:wcGZZPTm-1IICZVMuQcstfeM8RBOzm86Fn6MEnMUeGVtC1cYpFTGnA>
+    <xmx:wcGZZDxS9GMKZT1lZY2ZcQKDMlJc4MUSh2xZEzMl6z9_16tg7X11gg>
+    <xmx:wcGZZN6HH2m4iec7IO1Jq4C442VXqLdF14FMcGG68xcLCjK_7QiweA>
+    <xmx:wsGZZIrrQ52uUPAptBCy3rKYHhQqXwQXyYn-SOK9fHYKb5AgVYnefQ>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 26 Jun 2023 12:50:09 -0400 (EDT)
+Date:   Mon, 26 Jun 2023 18:50:00 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Frank Oltmanns <frank@oltmanns.dev>
+Cc:     Andre Przywara <andre.przywara@arm.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Roman Beranek <me@crly.cz>,
+        Samuel Holland <samuel@sholland.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH v2 1/2] clk: sunxi-ng: nkm: consider alternative parent
+ rates when finding rate
+Message-ID: <lagot6cwcgdmdel7ce73tbmiyfalrlt56l4rx2fi3ibpso37zi@y7rkhou4tclm>
+References: <20230611090143.132257-1-frank@oltmanns.dev>
+ <20230611090143.132257-2-frank@oltmanns.dev>
+ <87edmh12s7.fsf@oltmanns.dev>
+ <sfni3vehkhotsqrrirklhzrxzkcxzkq6nbtqokeab5if3jgm53@frh7z3iowsfe>
+ <878rc7stuu.fsf@oltmanns.dev>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jBYkEf8Gah+7Cv60"
+        protocol="application/pgp-signature"; boundary="u5p73wr2fp7f5ue6"
 Content-Disposition: inline
-In-Reply-To: <030a99f7-98f3-a24d-612c-d460859fc276@gmail.com>
-X-Cookie: Nihilism should commence with oneself.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <878rc7stuu.fsf@oltmanns.dev>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -66,48 +98,80 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---jBYkEf8Gah+7Cv60
+--u5p73wr2fp7f5ue6
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jun 26, 2023 at 04:56:21PM +0300, Matti Vaittinen wrote:
-> On 6/20/23 23:03, Benjamin Bara wrote:
+On Sun, Jun 25, 2023 at 12:45:45PM +0200, Frank Oltmanns wrote:
+> Hi Maxime,
+>=20
+> On 2023-06-12 at 14:31:21 +0200, Maxime Ripard <maxime@cerno.tech> wrote:
+> > [[PGP Signed Part:Undecided]]
+> > On Mon, Jun 12, 2023 at 10:51:52AM +0200, Frank Oltmanns wrote:
+> >> > @@ -28,12 +68,17 @@ static unsigned long ccu_nkm_find_best(unsigned =
+long parent, unsigned long rate,
+> >> >  			for (_m =3D nkm->min_m; _m <=3D nkm->max_m; _m++) {
+> >>
+> >> According to the manual M/N has to be <=3D 3. Therefore we need a
+> >> different maximum value for the _m-for-loop:
+> >>
+> >>         unsigned long max_m =3D min(3 * _n, nkm->max_m);
+> >>         for (_m =3D nkm->min_m; _m <=3D max_m; _m++) {
+> >>
+> >> I suggest that I add an optional member max_mn_ratio to the structs
+> >> ccu_nkm and _ccu_nkm. Optional meaning: Ignore if 0.
+> >
+> > Which workload is affected by this restriction?
+> >
+>=20
+> Firstly, the restriction increases the minimum rate that pll-mipi of the
+> A64 SoC can use. The rate off pll-mipi is
+>         pll-video0 * K * N / M
+>=20
+> The Allwinner's user manual ([1], p.94) states that the maximum ratio of
+> M/N (note how numerator and denominator changed) is 3. So, looking back
+> to the original formula, the N / M part can be at most 1/3. That
+> effectively limits the minimum rate that pll-mipi can provide to
+>         min(pll-video0) * 2 * 1 / 3
+>=20
+> The minimum rate of pll-video0 is 192 MHz, i.e., the minimum rate for
+> pll-mipi becomes 128 MHz. Without the restriction, the minimum rate
+> currently is 24 MHz. It is my (albeit limited) understanding, that is no
+> real limitation because no panel would request such low rates. I should
+> also mention that Allwinner states in the user manual ([1], p. 94) that
+> the rate must be in the 500 MHz - 1.4 GHz range.
+>=20
+> Secondly, it decreases the number of options for M for all N <=3D 6.
+> Therefore it reduces the number of meaningful NKM combinations from 275
+> (without the restriction) to 238. (With meaningful combinations, I mean
+> the combinations that result in a different rate for pll-mipi, e.g.,
+> K=3D2, M=3D1, N=3D2 is the same as K=3D4, M=3D1, N=3D1). The consequence =
+is that the
+> precision of pll-mipi is slightly reduced. Note, however, that this loss
+> of precision is more than offset by the option that pll-mipi can now
+> "freely" choose its parent rate.
+>=20
+> In conclusion, I don't see any real world limitation that this
+> restriction introduces.
 
-> > Warning can be fixed by enabling (or disabling) monitoring in the DT,
-> > e.g.:
-> > regulator-uv-protection-microvolt =3D <1>;
-> > or
-> > regulator-ov-error-microvolt =3D <0>;
-> >=20
-> > Constraints regarding the monitoring of a regulator can usually be found
-> > in the docu.
+If we want to go that way, I'd rather use a function that validates
+whether or not the current set of parameter is valid.
 
-> I am not entirely sure if this is the right thing to do. Should we expect
-> the hardware state to be what is described in DT at Linux boot-up - or,
-> should we silently accept the fact that for example boot can alter things.
+That way, we can express pretty much any constraints without
+special-casing the main structure too much.
 
-> From the 'code pov' I have no complaints though. I just can't say if warn=
-ing
-> is the right idea. I'll leave this for bigger brains to decide :)
+Maxime
 
-Yes, this isn't really the idiom we normally adopt - the default thing
-is to just leave the hardware untouched, that should not usually be
-regarded as a problem.
-
---jBYkEf8Gah+7Cv60
+--u5p73wr2fp7f5ue6
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSZwaMACgkQJNaLcl1U
-h9A9AQf+JCwR05HQvAZptjbBH8ZJk0cx7I6V68t1BVndeViMr7PbqgW44nyiHQRb
-TvwrSlGTj34zGSXItM+srnOJBdPLxH1UrrBPA0UFcY5J6Zn0e7YJ+V3KKA9khhDT
-vqZTFhbzBbSImS8Kj32j7sL2FflJVX46Ob66LKsD8zi0FXpl+HHiuqBuKntQ7gss
-iz2+vtrYlJTNxlEKB/f09dvN42KyQz/NmT46gKKAGMNykdpZsJcmvfiYMcKhl35F
-mOlQCsqBCxMbwKe3xjNV1PTXCT6q3AjtuG4eG65kx1MKl/DTGqBSd9lJFaXzfFRB
-3hrCBBxLyBWzhZ6MTHmdSb4+ekTrnA==
-=923m
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZJnBuAAKCRDj7w1vZxhR
+xb80AQCpuUfjRsZDj4oX2zh/hfNYEzytGHWy4prrDYI0zK6udgD/eFjJYhGo55Cz
+pUxEKq7T3qrcxW6icqzfjmw8A+IR4gY=
+=ApE4
 -----END PGP SIGNATURE-----
 
---jBYkEf8Gah+7Cv60--
+--u5p73wr2fp7f5ue6--
