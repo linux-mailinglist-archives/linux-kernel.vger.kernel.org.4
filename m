@@ -2,110 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4C9773D5D0
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 04:31:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2048B73D5D4
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 04:34:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230160AbjFZCbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 22:31:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36846 "EHLO
+        id S230175AbjFZCeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 22:34:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230111AbjFZCbm (ORCPT
+        with ESMTP id S230043AbjFZCeg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 22:31:42 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2357E53;
-        Sun, 25 Jun 2023 19:31:37 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QqBgB1bqjz4f3vf5;
-        Mon, 26 Jun 2023 10:31:34 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgCX_7KG+JhkJ5cxMg--.20122S3;
-        Mon, 26 Jun 2023 10:31:35 +0800 (CST)
-Subject: Re: [PATCH 2/3] md: remove redundant check in fix_read_error()
-To:     linan666@huaweicloud.com, song@kernel.org
-Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linan122@huawei.com, yi.zhang@huawei.com, houtao1@huawei.com,
-        yangerkun@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-References: <20230623173236.2513554-1-linan666@huaweicloud.com>
- <20230623173236.2513554-3-linan666@huaweicloud.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <8f71afdb-f762-ac59-c71f-8241ad2e9144@huaweicloud.com>
-Date:   Mon, 26 Jun 2023 10:31:34 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Sun, 25 Jun 2023 22:34:36 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 804E7B1
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 19:34:35 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id d75a77b69052e-4007b5bafceso286861cf.1
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 19:34:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687746874; x=1690338874;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CVihiOZ7lPOY7hWnryBrA+/oD8EUpfcein9lW0Ydcsk=;
+        b=GhmUcgPljQdG2384d7n4zPhgPF1A8jlJj/FoVpS3RNM7mhOMGGIPZxppBsMavyMNWi
+         HRqepk1SgLdE5JPLTmheF5+H8SovFdX6IpPjbQEGc6us6sAChK+55yvCG14vmmkXoWPn
+         pPJ1ABIlsLv3Zgr8aAnRWCtZs0I2sk+yAKUxvYiy7KQLO5LHexdpm97nHa1jJOoAaVWN
+         poZl9GcVW6o6syEFLGKR6Bp+F1q7SV3NZB0xArX1BCRMvm9cwZaV1p25JLZYYUVhriqA
+         IPIK0SbR02E0xlDNoPoWCrODaTO8r9CDCxeABmG3/xLp0r174r1lRlqksMwtfsv7gUbB
+         ldUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687746874; x=1690338874;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CVihiOZ7lPOY7hWnryBrA+/oD8EUpfcein9lW0Ydcsk=;
+        b=Yei7pGWA9t1S5rT0LTmjSHyd/LLvLKfmWK9CL/K6Px9OqQco9AJfYtGrv09/RRt4Kv
+         cHnw8L4zYWkFSiKFK9NKhyCok8E8DP9zALFaqYYR1cQATxdkbPy/pq14YOsjhA6PpCAV
+         ZS3Xnqn6bIKI9cx2zjYLn3ZTJmRzE5DSRGvtNiejc2nev9LSSfVK5i+6qXCyftgktQZ3
+         +m8V63b08bnxehOgGJkDPcBLR/H9v6Y29zX3cj//q/hl5gRPhLCfmCDRK2rwquNHtUH/
+         JpVtPSJkGUbQ6ElKBCXKUknldcElFrJne7MPVWvNpKWo4KjNy+zMQrFQYISetqjs4D75
+         zveg==
+X-Gm-Message-State: AC+VfDwL1jAK2PEk/3CvBGvJ1YmnIl5Qz5qZS9j+nIm+gKKdnaD7vFWD
+        I22b+cH+ykdEn+cmAZKrBlDKphdUBxsVhvvwAZtpUQ==
+X-Google-Smtp-Source: ACHHUZ7KqHud5NmiMLt8ROhheSgT/+vI3VHyqtcHQSYmrTg3qxQ9b3kP3R6Lk5LWQ/Dwf1B2MxFkjILp3mELs2c9mGQ=
+X-Received: by 2002:a05:622a:8d:b0:3f9:6930:1308 with SMTP id
+ o13-20020a05622a008d00b003f969301308mr267696qtw.13.1687746874453; Sun, 25 Jun
+ 2023 19:34:34 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20230623173236.2513554-3-linan666@huaweicloud.com>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgCX_7KG+JhkJ5cxMg--.20122S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7tF13AF1rZr4rGr13uFWfZrb_yoW8Gry5pa
-        1q9a4Y934UCw1UAFyUAayUCa45Wa4agay8Crn5Aw1FvF9xZFy3tFWUKayDWrn7XF1Sya43
-        XFn0q39rJF48tFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkC14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
-        IcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
-        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
-        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv67AKxVWUJVW8
-        JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUF9a9DU
-        UUU
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230621063825.268890-1-mshavit@google.com> <20230621063825.268890-10-mshavit@google.com>
+ <ZJToAfeKg8FF1sZL@Asurada-Nvidia>
+In-Reply-To: <ZJToAfeKg8FF1sZL@Asurada-Nvidia>
+From:   Michael Shavit <mshavit@google.com>
+Date:   Mon, 26 Jun 2023 10:33:58 +0800
+Message-ID: <CAKHBV266J1S6EMMjNCRMPhSXCKnqU7-H=rhi5iMbV4D9rH7WgQ@mail.gmail.com>
+Subject: Re: [PATCH v4 09/13] iommu/arm-smmu-v3: Implement set_dev_pasid
+To:     Nicolin Chen <nicolinc@nvidia.com>
+Cc:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>, jean-philippe@linaro.org,
+        jgg@nvidia.com, baolu.lu@linux.intel.com,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ÔÚ 2023/06/24 1:32, linan666@huaweicloud.com Ð´µÀ:
-> From: Li Nan <linan122@huawei.com>
-> 
-> In fix_read_error(), 'success' will be checked immediately after assigning
-> it, if it is set to 1 then the loop will break. Checking it again in
-> condition of loop is redundant. Clean it up.
+> Would you please elaborate a bit more for the use case of
+allowing that?
 
-LGTM
-Reviewed-by: Yu Kuai <yukuai3@huawei.com>
-> 
-> Signed-off-by: Li Nan <linan122@huawei.com>
-> ---
->   drivers/md/raid1.c  | 2 +-
->   drivers/md/raid10.c | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
-> :
-> diff --git a/drivers/md/raid1.c b/drivers/md/raid1.c
-> index 3570da63969b..0391c2d0c109 100644
-> --- a/drivers/md/raid1.c
-> +++ b/drivers/md/raid1.c
-> @@ -2318,7 +2318,7 @@ static void fix_read_error(struct r1conf *conf, int read_disk,
->   			d++;
->   			if (d == conf->raid_disks * 2)
->   				d = 0;
-> -		} while (!success && d != read_disk);
-> +		} while (d != read_disk);
->   
->   		if (!success) {
->   			/* Cannot read from anywhere - mark it bad */
-> diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
-> index 94ae294c8a3c..a36e53fce21f 100644
-> --- a/drivers/md/raid10.c
-> +++ b/drivers/md/raid10.c
-> @@ -2790,7 +2790,7 @@ static void fix_read_error(struct r10conf *conf, struct mddev *mddev, struct r10
->   			sl++;
->   			if (sl == conf->copies)
->   				sl = 0;
-> -		} while (!success && sl != slot);
-> +		} while (sl != slot);
->   		rcu_read_unlock();
->   
->   		if (!success) {
-> 
+In short; to support devices that use SSID to isolate different
+(device) contexts. Those contexts (and the memory available to them)
+is partially managed by the device's Kernel driver.
 
+> And which test configuration do you cover
+using smmute? Would you mind sharing your test commands?
+
+I used the setup suggested by Jean in
+https://lore.kernel.org/all/20230511195928.GA288490@myrica/ , with the
+following commands:
+>>>
+# Basic test
+./smmute;
+./smmute -u mmap;
+
+# Test invalid access to not-mapped address
+./smmute -u mmap -f drv;
+
+# Test invalid access after unmap
+./smmute -u mmap -f write -d;
+
+# Check smmu_mn released when killed
+mount -t tracefs nodev /sys/kernel/tracing;
+echo 1 > /sys/kernel/tracing/events/iommu/enable;
+echo 1 > /sys/kernel/tracing/events/smmu/enable;
+./smmute -u mmap -k bind;
+cat /sys/kernel/tracing/trace;
+<<<
+
+This only covers existing SVA functionality. To test the functionality
+introduced by this patch, I used a device capable of generating DMA
+transactions w/ SSID and a test driver with following tests:
+1. Successful dma Read/Write to buffer mapped on domain attached with pasid
+2. Unsuccessful dma Read/Write to same buffer after domain detached
+from pasid, or after buffer unmapped from domain
+3. Variations of the above with a domain attached to multiple pasids
+
+I've been considering migrating those tests to the smmute driver if
+that would be valuable.
+
+
+
+On Fri, Jun 23, 2023 at 8:32=E2=80=AFAM Nicolin Chen <nicolinc@nvidia.com> =
+wrote:
+>
+> Hi Michael,
+>
+> On Wed, Jun 21, 2023 at 02:37:21PM +0800, Michael Shavit wrote:
+> >
+> > This change enables the use of the iommu_attach_dev_pasid API for
+> > UNMANAGED domains. The primary use-case is to allow in-kernel users of
+> > the iommu API to manage domains with PASID. This change also allows for
+> > future support of pasid in the DMA api.
+>
+> Would you please elaborate a bit more for the use case of
+> allowing that? And which test configuration do you cover
+> using smmute? Would you mind sharing your test commands?
+>
+> I have run a sanity with this series using an SVA domain
+> with a real master. It seems to be fine.
+>
+> Thanks
+> Nicolin
