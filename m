@@ -2,73 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A70B973E660
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 19:25:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0889173E661
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 19:25:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229849AbjFZRZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 13:25:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58774 "EHLO
+        id S229909AbjFZRZL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 13:25:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229808AbjFZRYq (ORCPT
+        with ESMTP id S229820AbjFZRZI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 13:24:46 -0400
-Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21789B5;
-        Mon, 26 Jun 2023 10:24:45 -0700 (PDT)
-Received: by mail-ua1-x92d.google.com with SMTP id a1e0cc1a2514c-7943105effbso605494241.1;
-        Mon, 26 Jun 2023 10:24:45 -0700 (PDT)
+        Mon, 26 Jun 2023 13:25:08 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2480E8F
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 10:25:07 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id d75a77b69052e-401e0ceb4e6so4233031cf.1
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 10:25:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687800284; x=1690392284;
+        d=google.com; s=20221208; t=1687800306; x=1690392306;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dujPk+6duNP2d1uQS/BC+afoRfdG4+lHXiKhSULvjm4=;
-        b=qULknWVGqlfHHFE6RKEofS3iqzTgUK1xS362rivCouyzRDp0EpzPCCTp5qra30NsHh
-         R2DfV0fErw+8uM8c0M4MvgGCHTcj4UP4gm5WgJPJSio442Gui8KSfpSwydB7oRK1Bvzo
-         ybH1gQjnamNO3685GnrDaDfds3R50w6y7sCAzj/+q/+yt5KyHhCW2If9hc91DKd4mfl/
-         TezrTiSKAJVGN+Th9660Qlin5VaYyNvOVyDxlakamCPiSealD0oSxgBkWJg2JltyzcvO
-         Ga0V4gAFh0MJuNahgW8IqmB+XuGvkqLEjtiMQOY1Wee1S314kWPFOaRFdlVRXrQGXbDp
-         I74g==
+        bh=Pb+RURvt6A+w8dCv8RL1qzl/KMJ6kd7FHQTDIWYf1EQ=;
+        b=rRzsrh1Tg4LulotQaD7JFdbsAHvoTRNFiEheI4LxAHrGVu0ptoLrfg4xkYIhzBYbvL
+         u/gPrHP9J88IBVImHfSpoxB3838Lr94LMdAbjVPOqOBrVhVg5gJ3lv41uixwqIvpZgmc
+         zjT9wVjzREkcHLusii/9hHDTARwVGOiZ3STfL1ikbVl8YGkoiH++7032DKciCnHZ3EoC
+         wHkvY82XpH1RxB03WAK6fAZTu9IZ/xVLKqvp19+ZHdGsRx9M0i9Q1PDwNcSC8Rp9oKNi
+         5j3FLW+ppcGEpfT9bYeKP18zpHmhQcS72qq5CQLDmgx/OPGJ3oFy7zb/Xla9zA72Md9c
+         72uQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687800284; x=1690392284;
+        d=1e100.net; s=20221208; t=1687800306; x=1690392306;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=dujPk+6duNP2d1uQS/BC+afoRfdG4+lHXiKhSULvjm4=;
-        b=jnkdTuGy83O1fSAU1G+YEx8LqYe9G687XMYGdaiqAC7PQSOkLb9QZU3jtcyaIp/XG/
-         nUfB8Q/2PV8z0KGX4sqkeU6UBlDhMqAQTBdJkDW853TlL2Qe2qMFJ7y6FpM9hhLJk6f+
-         +izclWNDsAcalf7lQ1tAFy12GdoZ5RexW5p+hoNwyMbHBEYghSs4LVyvG5ZDEZn4SNDZ
-         w1aOOMcm0BeKAQJ9Uv75JjIjQZcn0UxeZkHm/mnY4/kwszXKhFubqGg8g5hi/LP7xlxZ
-         bAC9poNWFbuUoFUyjaH+tBb6nrP5AHr5LdO0v2ewz5NM3pYa7/+lG1lwipWDYQkQln95
-         4BCA==
-X-Gm-Message-State: AC+VfDwrg/c+NXXCzuy5kkRwy7+/Zzs/2AlVxqLPRhwxHM5Poe3cdlNa
-        FEB2+OiYVYmSRn4/YgrlZkjJoCmlM2b+HOoBgOU=
-X-Google-Smtp-Source: ACHHUZ4CguV7XgsKSOUJIQqgdZwYCRCvfxWYx7/7i2VzgRfv4+5VoGDlRRxb8amVE4sJFFWZFXdjJHQGzOm9h5BErfY=
-X-Received: by 2002:a05:6102:458f:b0:440:a8a6:333e with SMTP id
- dx15-20020a056102458f00b00440a8a6333emr7201338vsb.9.1687800284081; Mon, 26
- Jun 2023 10:24:44 -0700 (PDT)
+        bh=Pb+RURvt6A+w8dCv8RL1qzl/KMJ6kd7FHQTDIWYf1EQ=;
+        b=iv7w5bmZxEC8kzA22CUWOIAgtjvCU0ZNcEUKjAVbLAGdcus1BbK9ZdRm0NEZ7B3KqV
+         onqgo3uiAjJHxWXt99SL+Xe+7yZ/wQoI/Q/ej8Vwqw3m4aiEh67OVbDAIot67IFJgugn
+         CqHkjh/XAMeNlIYyb9wWT1c/LEtba9rHobCQhk6/37ctYhShyRAMwgsf+4EvVsYrALEd
+         xj9v8jYInsFBUtQZ7g0HpXqiP59vD4XhORRyGQbdPK9wUk+E33ROlmfVqZtETck30kfA
+         Aej6/vq08WBz/ZBAjQ+8m0s/IB6CrZzLDLAOK4IWrJdzQrEERlHSQS34RsBwa4KDYuSq
+         Xd3g==
+X-Gm-Message-State: AC+VfDw2cJMVIxuH5BN272O3nkiu+vNGQlLDqcGS9Kc8uf5uTgaqiL4a
+        kwqG3vtZY9TChtdryYK3JPJIxcS7fbzjruafCLuqM050Cz+y9iPVf2I=
+X-Google-Smtp-Source: ACHHUZ77A1WX0MZUcXsPi4e417afV2ZHEIHW9mgY1e1RMVfek8RN/ob9XO9palzLMz74IYY8tNstk1kr4pHhPrpxFL8=
+X-Received: by 2002:a05:6214:f2b:b0:62d:f68a:ee2d with SMTP id
+ iw11-20020a0562140f2b00b0062df68aee2dmr5834042qvb.29.1687800306154; Mon, 26
+ Jun 2023 10:25:06 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAA85sZukiFq4A+b9+en_G85eVDNXMQsnGc4o-4NZ9SfWKqaULA@mail.gmail.com>
- <CAA85sZvm1dL3oGO85k4R+TaqBiJsggUTpZmGpH1+dqdC+U_s1w@mail.gmail.com>
- <e7e49ed5-09e2-da48-002d-c7eccc9f9451@intel.com> <CAA85sZtyM+X_oHcpOBNSgF=kmB6k32bpB8FCJN5cVE14YCba+A@mail.gmail.com>
- <22aad588-47d6-6441-45b2-0e685ed84c8d@intel.com>
-In-Reply-To: <22aad588-47d6-6441-45b2-0e685ed84c8d@intel.com>
-From:   Ian Kumlien <ian.kumlien@gmail.com>
-Date:   Mon, 26 Jun 2023 19:24:32 +0200
-Message-ID: <CAA85sZti1=ET=Tc3MoqCX0FqthHLf6MSxGNAhJUNiMms1TfoKA@mail.gmail.com>
-Subject: Re: [Intel-wired-lan] bug with rx-udp-gro-forwarding offloading?
-To:     Alexander Lobakin <aleksander.lobakin@intel.com>
-Cc:     intel-wired-lan <intel-wired-lan@lists.osuosl.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <CACT4Y+bif9Wek-g10F5y0aLbH=JbCcqryi2nOUAFxGFo0O2B9A@mail.gmail.com>
+In-Reply-To: <CACT4Y+bif9Wek-g10F5y0aLbH=JbCcqryi2nOUAFxGFo0O2B9A@mail.gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 26 Jun 2023 10:24:55 -0700
+Message-ID: <CAKwvOdnTzcG0DY9SScu1JuV4Q0Ka60qm9jdK2TjA1Cav8En-mQ@mail.gmail.com>
+Subject: Re: Thread-safety annotations for irq/rcu/atomic contexts
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Marco Elver <elver@google.com>,
+        clang-built-linux <llvm@lists.linux.dev>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,83 +72,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 26, 2023 at 7:15=E2=80=AFPM Alexander Lobakin
-<aleksander.lobakin@intel.com> wrote:
->
-> From: Ian Kumlien <ian.kumlien@gmail.com>
-> Date: Mon, 26 Jun 2023 16:25:24 +0200
->
-> > On Mon, Jun 26, 2023 at 4:18=E2=80=AFPM Alexander Lobakin
-> > <aleksander.lobakin@intel.com> wrote:
-> >>
-> >> From: Ian Kumlien <ian.kumlien@gmail.com>
-> >> Date: Sun, 25 Jun 2023 12:59:54 +0200
-> >>
-> >>> It could actually be that it's related to: rx-gro-list but
-> >>> rx-udp-gro-forwarding makes it trigger quicker...  I have yet to
-> >>> trigger it on igb
-> >>
-> >> Hi, the rx-udp-gro-forwarding author here.
-> >>
-> >> (good thing this appeared on IWL, which I read time to time, but pleas=
-e
-> >>  Cc netdev next time)
-> >> (thus +Cc Jakub, Eric, and netdev)
-> >
-> > Well, two things, it seems like rx-udp-gro-forwarding accelerates it
-> > but the issue is actually in: rx-gro-list
->
-> Do you enable them simultaneously? I remember, when I was adding
-> gro-fwd, it was working (and working good) as follows:
->
-> 1. gro-fwd on, gro-list off: gro-fwd
-> 2. gro-fwd off, gro-list on: gro-list
-> 3. gro-fwd on, gro-list on: gro-list
->
-> Note that their receive paths are independent[0]: skb_gro_receive_list()
-> vs skb_gro_receive(), thus I'm still not really sure how gro-fwd can
-> trigger gro-list's bug.
+(minus old ML, plus new ML)
 
-Neither am I... I have enabled sol via ipmitool now, will try to get a
-better capture
-
-> > And since i've only been able to trigger it in ixgbe i thought it
-> > might be a driver issue =3D)
+On Mon, Jun 26, 2023 at 10:21=E2=80=AFAM 'Dmitry Vyukov' via Clang Built Li=
+nux
+<clang-built-linux@googlegroups.com> wrote:
 >
-> Your screenshot says "__udp_gso_segment", which means that the
-> problematic UDP GRO packet hits the Tx path. Rx is in general
-> driver-independent. Tx has separate netdev feature ("tx-gso-list"), but
-> it's not supported by any driver, just software stack. It might be that
-> your traffic goes through a bridge or tunnel or anything else that
-> triggers GSO and software segmentation then booms for some reason.
-> BTW, __udp_gso_segment() is one-liner when the passed skb was
-> gro-listed[1], so having it in the bug splat could mean the skb didn't
-> take that route. But hard to say with no full stacktrace.
-
-I do have a UDP tunnel, in wireguard, will disable it.
-
-Beyond that some bridges and veth interfaces, but lets wait for a full trac=
-e
-
-> [...]
+> Hi,
 >
-> >>>> But correlating that with the source is beyond me, it could be gener=
-ic
-> >>>> but i thought i'd send it you first since it's part of the redhat
-> >>>> guide to speeding up udp traffic
-> >> [0]
-> >> https://lore.kernel.org/netdev/f83d79d6-f8d7-a229-941a-7d7427975160@nv=
-idia.com
-> >>
-> >> Thanks,
-> >> Olek
+> Previous Lukas' attempt to apply clang thread-safety annotations to the k=
+ernel:
+> https://clangbuiltlinux.github.io/CBL-meetup-2020-slides/lukas/tsa.pdf
 >
-> [0]
-> https://elixir.bootlin.com/linux/latest/source/net/ipv4/udp_offload.c#L51=
-8
-> [1]
-> https://elixir.bootlin.com/linux/latest/source/net/ipv4/udp_offload.c#L27=
-7
+> I am thinking if the annotations can be used to check for functions
+> that must/must not be called from irq/atomic/rcu_read/etc contexts.
+> Namely, we create global fake locks that denote these contexts, then
+> annotate spin_lock_irqsave/irqrestore/etc as taking releasing these
+> locks, and finally annotate functions are requiring/excluding these
+> contexts:
 >
-> Thanks,
-> Olek
+> void foo() require(irq_context);
+> void bar() exclude(irq_context);
+> void baz() require(rcu_read_context);
+>
+> This may help to catch "suspicious RCU usage", "scheduling while
+> atomic" and similar bug types statically. I suspect it may also be
+> simpler (?) to do rather than annotating all normal locks.
+>
+> Does it make any sense?
+>
+> --
+> You received this message because you are subscribed to the Google Groups=
+ "Clang Built Linux" group.
+> To unsubscribe from this group and stop receiving emails from it, send an=
+ email to clang-built-linux+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgi=
+d/clang-built-linux/CACT4Y%2Bbif9Wek-g10F5y0aLbH%3DJbCcqryi2nOUAFxGFo0O2B9A=
+%40mail.gmail.com.
+
+
+
+--=20
+Thanks,
+~Nick Desaulniers
