@@ -2,205 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C09973E5E8
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 18:59:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1CD673E5EA
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 19:00:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230185AbjFZQ7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 12:59:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45654 "EHLO
+        id S229631AbjFZRAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 13:00:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbjFZQ64 (ORCPT
+        with ESMTP id S230217AbjFZRAK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 12:58:56 -0400
-Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44E43E6E;
-        Mon, 26 Jun 2023 09:58:55 -0700 (PDT)
-Received: by mail-io1-f47.google.com with SMTP id ca18e2360f4ac-780c8df59caso174674439f.3;
-        Mon, 26 Jun 2023 09:58:55 -0700 (PDT)
+        Mon, 26 Jun 2023 13:00:10 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10DE3C4
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 10:00:08 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5707177ff8aso43691197b3.2
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 10:00:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687798807; x=1690390807;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=j9BxgDAhr/sOZwOi1b9Dq7JhH2qvW7rzz840YaChgo4=;
+        b=AK9aXX4+ipxOh2er/OM84dfQic/ovWnL2dU0rA3Dd9S3fuOvaw0iTkASO3r/wNcP2s
+         YPwJTn9fSRAxjnTRoD/uAabL0fRM9yI0QdjbsEuonAqshv23Wgb2k9aKjAmZsLp6xhGn
+         RxJLjx9G9Ivcdl5RSZACTEQTOxIZo9z2I0hlgzxphPZtArEzFKmvfR6Gggv1K+Pkaxyz
+         MEHrKk/XifJhU1qLg56Gu729bzI238/5dBRTb8k4FYplwM9FlKxIcIezNqPReFYDlk6K
+         /IyF6eF8m3BPb6RQw1TvpAza/y0rK5romvqKwNk3yYHJkSuxQ1f7BhceE2d1CRe8iGep
+         chfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687798734; x=1690390734;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=C68yqM+uQF5bxYAeEfhwAi+z+PT5sKlVa+KlpLAFqEs=;
-        b=domnIbquoD3pNJ2vhmmcQesAbWglDHmLcViXD2Bnr0Wbi6JpJ60a76who3SKMNGkRi
-         VDIcn/Czd5OkgWlPTQg3Y+US4K0RgnODdAn6pJncHaobQIcNQknmley2m+GYYI4v+DLY
-         TsNAFm3f8RgZ/XDDPtVftsYMMhTQuwiU/rdwyQ753t+/By04ybxX4CCv/WGGwM1tfCgJ
-         jyT+ddOjP//+hgAJ2/wTU3w1TRlGVVoOGniFp1KJIflBd7vuqO3+znLdR0RMl2XIMHAu
-         wJvO3O5HG0weOG86zVrcJPIOD6DWub9pWY8gP62H1WZaXyo27XjaUDtWAZWcKpz1bRfP
-         L13g==
-X-Gm-Message-State: AC+VfDynbynpDas5SY7k7Wmwt07cOe92ppdC9K9N8hqEjGOdVaJ1TFhh
-        1WEkmMlJ1VJZhGC4/9v43Q==
-X-Google-Smtp-Source: ACHHUZ5CEus2w7VnsWg2fQvqYZxwoYG1DHsqvjJsZhIQE0zdvVKxJF1eFuTYxc/ujTcghM0JMksElw==
-X-Received: by 2002:a05:6602:131e:b0:783:4c29:b978 with SMTP id h30-20020a056602131e00b007834c29b978mr6702809iov.12.1687798734371;
-        Mon, 26 Jun 2023 09:58:54 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id dq42-20020a0566384d2a00b00423230a3085sm1841238jab.99.2023.06.26.09.58.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jun 2023 09:58:53 -0700 (PDT)
-Received: (nullmailer pid 3390691 invoked by uid 1000);
-        Mon, 26 Jun 2023 16:58:51 -0000
-Date:   Mon, 26 Jun 2023 10:58:51 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        devicetree@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Subject: Re: [PATCH V2] dt-bindings: nvmem: fixed-cell: add compatible for
- MAC cells
-Message-ID: <20230626165851.GA3387880-robh@kernel.org>
-References: <20230626113716.17674-1-zajec5@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230626113716.17674-1-zajec5@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1687798807; x=1690390807;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=j9BxgDAhr/sOZwOi1b9Dq7JhH2qvW7rzz840YaChgo4=;
+        b=gqCDBsAMyvM0XkxtZyeszDZgi+7+nsQai+tbK4pTF4Bhjnu3B/BKaQnk/zvuvPC0x3
+         s4I0yqRsr/zs3mN0TNhRK/heu5X35v2qaLF9Af+2ITCzCfQRjXbFoisQeNSZ8X49OIj6
+         Pijs7fbNJi7N9F//R5j2fewSmdPJL1ZHQkHcVlDhDY53l20nWDuRvV3p2tnPxuq2dq9K
+         YZjJTfTqvWCkRLluLzYaR1ZieoXJmrsx2NkszqMUHtnzlIvJ587HWbkGC6m/gnjg47gT
+         KZaemYQ2pcHnqmm6RIBu5zNJv2tRJnzocP+hU1xAusgbpea0wcWJv0F8uI1b+40AmV8V
+         CBOA==
+X-Gm-Message-State: AC+VfDy2gxZBRxCEyFZ8OyuGzPZqr7G+02rrC7Gwt1Mf2Ol5JEo/HX0F
+        CurBAYPvAFcJ1Zf13PWC1nbY/1nsxe0=
+X-Google-Smtp-Source: ACHHUZ6M+CozMiJrv4S4c/YeinlsszSCh5l+mJX08TZUAgEYs4ymMBbZRpO6B+8EWjUwk4fa2ByGY2DmQTU=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:6dd5:0:b0:c1e:f91c:2691 with SMTP id
+ i204-20020a256dd5000000b00c1ef91c2691mr1598523ybc.10.1687798807292; Mon, 26
+ Jun 2023 10:00:07 -0700 (PDT)
+Date:   Mon, 26 Jun 2023 10:00:05 -0700
+In-Reply-To: <MW4PR11MB5824653862500CB4F9EE4519BB21A@MW4PR11MB5824.namprd11.prod.outlook.com>
+Mime-Version: 1.0
+References: <20230616113353.45202-1-xiong.y.zhang@intel.com>
+ <20230616113353.45202-4-xiong.y.zhang@intel.com> <ZJYCtDN+ITmrgCUs@google.com>
+ <MW4PR11MB5824653862500CB4F9EE4519BB21A@MW4PR11MB5824.namprd11.prod.outlook.com>
+Message-ID: <ZJnEFTXMpQkXdHRj@google.com>
+Subject: Re: [PATCH 3/4] KVM: VMX/pmu: Enable inactive vLBR event in guest LBR
+ MSR emulation
+From:   Sean Christopherson <seanjc@google.com>
+To:     Xiong Y Zhang <xiong.y.zhang@intel.com>
+Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "like.xu.linux@gmail.com" <like.xu.linux@gmail.com>,
+        "kan.liang@linux.intel.com" <kan.liang@linux.intel.com>,
+        "zhenyuw@linux.intel.com" <zhenyuw@linux.intel.com>,
+        Zhiyuan Lv <zhiyuan.lv@intel.com>,
+        Yang Weijiang <weijiang.yang@intel.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 26, 2023 at 01:37:16PM +0200, Rafał Miłecki wrote:
-> From: Rafał Miłecki <rafal@milecki.pl>
-> 
-> A lot of home routers have NVMEM fixed cells containing MAC address that
-> need some further processing. In ~99% cases MAC needs to be:
-> 1. Optionally parsed from ASCII format
-> 2. Increased by a vendor-picked value
-> 
-> There was already an attempt to design a binding for that at NVMEM
-> device level in the past. It wasn't accepted though as it didn't really
-> fit NVMEM device layer.
-> 
-> The introduction of NVMEM fixed-cells layout seems to be an opportunity
-> to provide a relevant binding in a clean way.
-> 
-> This commit adds a *generic* compatible string: "mac-base". As always it
-> needs to be carefully reviewed.
-> 
-> OpenWrt project currently supports ~300 home routers that have NVMEM
-> cell with binary-stored base MAC.T hose devices are manufactured by
-> multiple vendors. There are TP-Link devices (76 of them), Netgear (19),
-> D-Link (11), OpenMesh (9), EnGenius (8), GL.iNet (8), ZTE (7),
-> Xiaomi (5), Ubiquiti (6) and more. Those devices don't share an
-> architecture or SoC.
-> 
-> Another 200 devices have base MAC stored in an ASCII format (not all
-> those devices have been converted to DT though).
-> 
-> It would be impractical to provide unique "compatible" strings for NVMEM
-> layouts of all those devices. It seems like a valid case for allowing a
-> generic binding instead. Even if this binding will not be sufficient for
-> some further devices it seems to be useful enough as it is.
-> 
-> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
-> ---
-> V2: Drop "mac-ascii" as length can be checked instead
->     Fix "allOf" by adding required: [ compatible ]
-> ---
->  .../bindings/nvmem/layouts/fixed-cell.yaml    | 26 +++++++++++++++++++
->  .../bindings/nvmem/layouts/fixed-layout.yaml  | 12 +++++++++
->  .../devicetree/bindings/nvmem/nvmem.yaml      |  5 +++-
->  3 files changed, 42 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/nvmem/layouts/fixed-cell.yaml b/Documentation/devicetree/bindings/nvmem/layouts/fixed-cell.yaml
-> index e698098450e1..036a9ed88893 100644
-> --- a/Documentation/devicetree/bindings/nvmem/layouts/fixed-cell.yaml
-> +++ b/Documentation/devicetree/bindings/nvmem/layouts/fixed-cell.yaml
-> @@ -11,6 +11,15 @@ maintainers:
->    - Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
->  
->  properties:
-> +  compatible:
-> +    oneOf:
-> +      - const: mac-base
-> +        description: >
-> +          Cell with base MAC address to be used for calculating extra relative
-> +          addresses.
-> +          It can be stored in a plain binary format (cell length 12) or as an
++Weijiang
 
-Don't you mean a length of 6?
+On Sun, Jun 25, 2023, Xiong Y Zhang wrote:
+> > > On Fri, Jun 16, 2023, Xiong Zhang wrote:
+> > > vLBR event could be inactive in two case:
+> > > a. host per cpu pinned LBR event occupy LBR when vLBR event is created
+> > > b. vLBR event is preempted by host per cpu pinned LBR event during vm
+> > > exit handler.
+> > > When vLBR event is inactive, guest couldn't access LBR msr, and it is
+> > > forced into error state and is excluded from schedule by perf scheduler.
+> > > So vLBR event couldn't be active through perf scheduler even if host
+> > > per cpu pinned LBR event has released LBR, kvm could enable vLBR event
+> > > proactively, then vLBR event may be active and LBR msr could be
+> > > passthrough into guest.
+> > >
+> > > Signed-off-by: Xiong Zhang <xiong.y.zhang@intel.com>
+> > > ---
+> > >  arch/x86/kvm/vmx/pmu_intel.c | 11 ++++++++++-
+> > >  1 file changed, 10 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/arch/x86/kvm/vmx/pmu_intel.c
+> > > b/arch/x86/kvm/vmx/pmu_intel.c index 741efe2c497b..5a3ab8c8711b 100644
+> > > --- a/arch/x86/kvm/vmx/pmu_intel.c
+> > > +++ b/arch/x86/kvm/vmx/pmu_intel.c
+> > > @@ -314,7 +314,16 @@ static bool intel_pmu_handle_lbr_msrs_access(struct
+> > kvm_vcpu *vcpu,
+> > >  	if (!intel_pmu_is_valid_lbr_msr(vcpu, index))
+> > >  		return false;
+> > >
+> > > -	if (!lbr_desc->event && intel_pmu_create_guest_lbr_event(vcpu) < 0)
+> > > +	/* vLBR event may be inactive, but physical LBR may be free now.
+> > 
+> > 	/*
+> > 	 * This is the preferred block comment style.
+> > 	 */
+> > 
+> > > +	 * but vLBR event is pinned event, once it is inactive state, perf
+> > > +	 * will force it to error state in merge_sched_in() and exclude it from
+> > > +	 * perf schedule, so even if LBR is free now, vLBR event couldn't be
+> > active
+> > > +	 * through perf scheduler and vLBR event could be active through
+> > > +	 * perf_event_enable().
+> > > +	 */
+> > 
+> > Trimming that down, is this what you mean?
+> Yes, thanks a lot.
+> > 
+> > 	/*
+> > 	 * Attempt to re-enable the vLBR event if it was disabled due to
+> > 	 * contention with host LBR usage, i.e. was put into an error state.
+> > 	 * Perf doesn't notify KVM if the host stops using LBRs, i.e. KVM needs
+> > 	 * to manually re-enable the event.
+> > 	 */
+> > 
+> > Which begs the question, why can't there be a notification of some form that
+> > the LBRs are once again available?
+> This is perf scheduler rule. If pinned event couldn't get resource as
+> resource limitation, perf will put it into error state and exclude it from
+> perf scheduler, even if resource available later, perf won't schedule it
+> again as it is in error state, the only way to reschedule it is to enable it
+> again.  If non-pinned event couldn't get resource as resource limitation,
+> perf will put it into inactive state, perf will reschedule it automatically
+> once resource is available.  vLBR event is per process pinned event.
 
-> +          ASCII text like "00:11:22:33:44:55" (cell length 17).
-> +
->    reg:
->      maxItems: 1
->  
-> @@ -25,6 +34,23 @@ properties:
->          description:
->            Size in bit within the address range specified by reg.
->  
-> +allOf:
-> +  - if:
-> +      required: [ compatible ]
-> +    then:
-> +      if:
-> +        properties:
-> +          compatible:
-> +            contains:
-> +              const: mac-base
-> +      then:
-> +        properties:
-> +          "#nvmem-cell-cells":
-> +            description: The first argument is a MAC address offset.
-> +            const: 1
-> +        required:
-> +          - "#nvmem-cell-cells"
-> +
->  required:
->    - reg
->  
-> diff --git a/Documentation/devicetree/bindings/nvmem/layouts/fixed-layout.yaml b/Documentation/devicetree/bindings/nvmem/layouts/fixed-layout.yaml
-> index c271537d0714..b3a09e8864f1 100644
-> --- a/Documentation/devicetree/bindings/nvmem/layouts/fixed-layout.yaml
-> +++ b/Documentation/devicetree/bindings/nvmem/layouts/fixed-layout.yaml
-> @@ -44,6 +44,18 @@ examples:
->          #address-cells = <1>;
->          #size-cells = <1>;
->  
-> +        mac@100 {
-> +            compatible = "mac-base";
-> +            reg = <0x100 0xc>;
-> +            #nvmem-cell-cells = <1>;
-> +        };
-> +
-> +        mac@110 {
-> +            compatible = "mac-base";
-> +            reg = <0x110 0x11>;
-> +            #nvmem-cell-cells = <1>;
-> +        };
-> +
->          calibration@4000 {
->              reg = <0x4000 0x100>;
->          };
-> diff --git a/Documentation/devicetree/bindings/nvmem/nvmem.yaml b/Documentation/devicetree/bindings/nvmem/nvmem.yaml
-> index 980244100690..9f921d940142 100644
-> --- a/Documentation/devicetree/bindings/nvmem/nvmem.yaml
-> +++ b/Documentation/devicetree/bindings/nvmem/nvmem.yaml
-> @@ -49,7 +49,10 @@ properties:
->  patternProperties:
->    "@[0-9a-f]+(,[0-7])?$":
->      type: object
-> -    $ref: layouts/fixed-cell.yaml
-> +    allOf:
-> +      - $ref: layouts/fixed-cell.yaml
-> +      - properties:
-> +          compatible: false
->      deprecated: true
->  
->  additionalProperties: true
-> -- 
-> 2.35.3
-> 
+That doesn't answer my question.  I get that all of this is subject to perf
+scheduling, I'm asking why perf doesn't communicate directly with KVM to coordinate
+access to LBRs instead of pulling the rug out from under KVM.
+
+> > Assuming that's too difficult for whatever reason, why wait until the guest tries
+> > to read LBRs?  E.g. why not be more aggressive and try to re-enable vLBRs on
+> > every VM-Exit.
+> Yes, it is a good suggestion. Actually vmx_passthrough_lbr_msrs() is called on every
+> VM-exit, it also check vLBR event state, so I could re-enable vLBR in this function.
+> > 
+> > And if we do wait until the guest touches relevant MSRs, shouldn't writes to
+> > DEBUG_CTL that set DEBUGCTLMSR_LBR also try to re-enable the event?
+> Only perf know whether vLBR event could be active or not at this moment, if
+> vLBR is active, KVM could read/write DEBUG_CTL[0] with irq disable/enable
+> pair in theory, but it is better that kvm don't touch perf hw resource
+> directly, as vLBR event is one host LBR event, host may have other LBR event,
+> perf will schedule them according to perf scheduler rule.  If vLBR is
+> inactive, KVM shouldn't touch DEBUG_CTL MSR totally.
+
+Again, this doesn't answer my question.  I didn't suggest KVM write anything
+directly, I asked why KVM doesn't try to re-enable the perf LBR event when emulating
+a guest write to DEBUG_CTL.
+
+> > Lastly, what guarantees that the MSRs hold guest data?  I assume perf purges
+> > the MSRs at some point, but it would be helpful to call that out in the changelog.
+> For DEBUG_CTL msr, VMCS has two fields for this:
+> 1. "Save debug controls" in VM-Exit controls
+> 2. "Load debug controls" in VM-Entry controls
+> For LBR records MSRs, perf will save them at process schedule out and load them at process schedule in.
+
+Once again, this doesn't answer my question.  I want to know *exactly* when perf
+can take control of the LBRs.  The fact that intel_pmu_handle_lbr_msrs_access()
+disables IRQs when checking lbr_desc->event->state strongly suggests that the
+answer isn't "when a task is scheduled in".
+
+Your other response[1] mostly answered that question, but I want explicit documentation
+on the contract between perf and KVM with respect to LBRs.  In short, please work
+with Weijiang to fulfill my request/demand[*] that someone document KVM's LBR support,
+and justify the "design".  I am simply not willing to take KVM LBR patches until that
+documentation is provided.
+
+Copy+pasting my request/demand for convenience:
+
+  : First and foremost, the existing LBR support needs to be documented.  Someone,
+  : I don't care who, needs to provide a detailed writeup of the contract between KVM
+  : and perf.  Specifically, I want to know:
+  : 
+  :   1. When exactly is perf allowed to take control of LBR MRS.  Task switch?  IRQ?
+  :      NMI?
+  : 
+  :   2. What is the expected behavior when perf is using LBRs?  Is the guest supposed
+  :      to be traced?
+  : 
+  :   3. Why does KVM snapshot DEBUGCTL with IRQs enabled, but disables IRQs when
+  :      accessing LBR MSRs?
+  : 
+  : It doesn't have to be polished, e.g. I'll happily wordsmith things into proper
+  : documentation, but I want to have a very clear understanding of how LBR support
+  : is _intended_ to function and how it all _actually_ functions without having to
+  : make guesses.
+  : 
+  : And depending on the answers, I want to revisit KVM's LBR implementation before
+  : tackling arch LBRs.  Letting perf usurp LBRs while KVM has the vCPU loaded is
+  : frankly ridiculous.  Just have perf set a flag telling KVM that it needs to take
+  : control of LBRs and have KVM service the flag as a request or something.  Stealing
+  : the LBRs back in IRQ context adds a stupid amount of complexity without much value,
+  : e.g. waiting a few branches for KVM to get to a safe place isn't going to meaningfully
+  : change the traces.  If that can't actually happen, then why on earth does KVM need
+  : to disable IRQs to read MSRs?
+  : 
+  : And AFAICT, since KVM unconditionally loads the guest's DEBUGCTL, whether or not
+  : guest branches show up in the LBRs when the host is tracing is completely up to
+  : the whims of the guest.  If that's correct, then again, what's the point of the
+  : dance between KVM and perf?
+
+[1] https://lkml.kernel.org/r/MW4PR11MB5824480492ED55C63769FF11BB21A%40MW4PR11MB5824.namprd11.prod.outlook.com
+[2] https://lore.kernel.org/all/Y9RUOvJ5dkCU9J8C@google.com
