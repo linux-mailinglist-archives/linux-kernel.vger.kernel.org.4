@@ -2,159 +2,335 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A966F73E26E
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 16:49:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D48173E27B
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 16:51:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbjFZOte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 10:49:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55072 "EHLO
+        id S230003AbjFZOv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 10:51:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbjFZOtc (ORCPT
+        with ESMTP id S229978AbjFZOv1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 10:49:32 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D056112E
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 07:49:30 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id 41be03b00d2f7-553a1f13d9fso2907025a12.1
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 07:49:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1687790970; x=1690382970;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pQb0qOt7za3JfyuW5vz4QFCethrcqJk2saWua6HMAXU=;
-        b=jZXsSwFUnSSRaPAEYACr0E/2WajdCjyhOaJxs0Mv22a/FivBQTyxlWgeUoo055b7SK
-         KhIzjME2oTmSjsPl9uP4sty9sDJAflnRE0syYDXb/aNJtdQjTZNg6vDnUdXdCtz6q8ZX
-         l7TOz+YUv4+kMhLv2gZfNkPxwsxfRMKEbz5vQHDblVC9QD5eYQ3/PUASCMnxpxpnBl+9
-         qZRgTciQudVmLfp5y6yM31C8R93erE2nsnbi3xsJRzg7ZTm9AUNIAklzymRw/QmOO+1Z
-         PEMxPIPPbTA+zsbOavFCwxeQnXzDo/C8WCx4lv3OkwpdGffxyvH7DtwumyiIMc6r39t4
-         rC4g==
+        Mon, 26 Jun 2023 10:51:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27E3510D9
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 07:50:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687791035;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=S5+kCdPQqZvUN049y0wQiq4t+E5gwWas2OhKvBA5CYQ=;
+        b=hLTkFjOzhDvrfWHZn+EgvDOHSs4RwkE7lUNjIApOqB3Ch04aAHTrsNlKaGCv+NImoHZvuK
+        PaTVRtNYto8WcJEXLqmb43x9pCW88VuPhA3OPlsgNuJaD42a0KRbPIgvH8y/6fmcgipfTQ
+        WEIIleB4LrKlAXklryXdVMSC/W6KYus=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-314-F1WnTiRAPxycGI3khAx8-w-1; Mon, 26 Jun 2023 10:50:33 -0400
+X-MC-Unique: F1WnTiRAPxycGI3khAx8-w-1
+Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-62e85844711so34554136d6.2
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 07:50:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687790970; x=1690382970;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=pQb0qOt7za3JfyuW5vz4QFCethrcqJk2saWua6HMAXU=;
-        b=YIxPPJIG+gxsftfHo5xht2Y/XeJCF2dDe5GWsN4YfPS+aBZ1KFQcQmWSAS1KFBb81p
-         DykmatCjeWSi4thBzvTnbPwTrsofdIqrC2wO72o98e8zYKOTCq0/IkJkoD+HffvrViWH
-         kZCz+2fGPmtICXr0N6/VkPahHpALYwxZRCFpfGWbSL9OShbQ1rZuw98eTzi5xbqpjuTd
-         BbrB6lSnzFCReI4tMWVqhjVftbeutQh3kueUJsFp6WNTH8G09D9MxuTNJjJuzbo1KDgr
-         t9FFEJL0H+oQCcWQV5mDaj5EV/+ek5VhcV/uRbgy1p9n6lGCadokIhwPmn54cg9Iwof8
-         BdkQ==
-X-Gm-Message-State: AC+VfDyqQfLae9cWJlmZMnsL9U2xalQBjEmnoCkqR9VninZYaaJ/zsNZ
-        uAKor/a4RDol7lPdQkGQbenq8A==
-X-Google-Smtp-Source: ACHHUZ5GGmQmZK6Pdk/0WOE4p0jN9ts4cyRWDEezIQMn0sNMLYw4rloFGLp7ys1IgYmzAuUjLFF+nQ==
-X-Received: by 2002:a17:90a:17ec:b0:262:ba8a:f7ef with SMTP id q99-20020a17090a17ec00b00262ba8af7efmr9419568pja.23.1687790970330;
-        Mon, 26 Jun 2023 07:49:30 -0700 (PDT)
-Received: from [10.255.209.141] ([139.177.225.255])
-        by smtp.gmail.com with ESMTPSA id 18-20020a17090a199200b00262f59ce2edsm1900239pji.10.2023.06.26.07.49.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Jun 2023 07:49:30 -0700 (PDT)
-Message-ID: <ba821a60-06f9-7bc5-2362-b1b3c44b0088@bytedance.com>
-Date:   Mon, 26 Jun 2023 22:49:24 +0800
+        d=1e100.net; s=20221208; t=1687791032; x=1690383032;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=S5+kCdPQqZvUN049y0wQiq4t+E5gwWas2OhKvBA5CYQ=;
+        b=MESsEM1UACHDrdDGpG0rFmHaw8DHpxtAMQ4yb0hVIvVjZQr4MD0Ad0ioWKZqTiUJqK
+         Fl5QV5bAFNLkWf5QiW2aI8VMY2dpKPuKrQPh1PiEKp2v+Gg2Le8MKPrdfIo2InaHbbdg
+         JAcXYuqDHMyGkxMV1FXEGjSzX5LRaShjURsiYyUClj2Y81AL/TIUhU4GApnflfdJHG7t
+         HdhsiwwUIfsoteAiOcHYXzffSRqECYbYrff4SloMptHu2I/0qk0h/TtR1o1lg5F2R4+N
+         5Jr6t1U5HDmRsEUsTDQyPDkgOmIc6kt6NikoPl2OFtB0BmnBy9370MRp04q9FDLNAEEH
+         UzHw==
+X-Gm-Message-State: AC+VfDwfdZp1TIbg/scKNqlqdh/vSYgfFi7bz9aoePwePl3sbkKal0JZ
+        bADt258cTehVbXmnsg3/7LRVlRJ0Vt3S0ggZ6SGdBJIlLHtKmCs1vD7ZZ+kGEsQtxbZ+cO32pOl
+        SZjVdWs+EtErx5uHu65LRGy8i
+X-Received: by 2002:a05:6214:29e4:b0:635:e696:b314 with SMTP id jv4-20020a05621429e400b00635e696b314mr1005719qvb.58.1687791032278;
+        Mon, 26 Jun 2023 07:50:32 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6TmnUDHDdLDrYwlG8x2M9rK8Vc0auOUbahtUoqXs378EEmUDgmMHtci3th6fKJraKyUyH9eA==
+X-Received: by 2002:a05:6214:29e4:b0:635:e696:b314 with SMTP id jv4-20020a05621429e400b00635e696b314mr1005704qvb.58.1687791031954;
+        Mon, 26 Jun 2023 07:50:31 -0700 (PDT)
+Received: from sgarzare-redhat (host-87-11-6-160.retail.telecomitalia.it. [87.11.6.160])
+        by smtp.gmail.com with ESMTPSA id dp8-20020a05621409c800b0062ff179a538sm2315271qvb.123.2023.06.26.07.50.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jun 2023 07:50:31 -0700 (PDT)
+Date:   Mon, 26 Jun 2023 16:50:24 +0200
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Bobby Eshleman <bobbyeshleman@gmail.com>
+Cc:     Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        linux-hyperv@vger.kernel.org,
+        Stefan Hajnoczi <stefanha@redhat.com>, kvm@vger.kernel.org,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        virtualization@lists.linux-foundation.org,
+        Eric Dumazet <edumazet@google.com>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Krasnov Arseniy <oxffffaa@gmail.com>,
+        Vishnu Dasa <vdasa@vmware.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH RFC net-next v4 3/8] vsock: support multi-transport
+ datagrams
+Message-ID: <zp6jvoddzjquq2bngujpy5wnameuopou7jonqvm2vexebrbr5k@lh4imo4zyi4k>
+References: <20230413-b4-vsock-dgram-v4-0-0cebbb2ae899@bytedance.com>
+ <20230413-b4-vsock-dgram-v4-3-0cebbb2ae899@bytedance.com>
+ <tngyeva5by3aldrhlixajjin2hqmcl6uruvuoed7hyrndlesfd@bbv7aphqye2q>
+ <ZJUIWcgg13F7DNBm@bullseye>
+ <ZJUKi+NtOajbplQg@bullseye>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.2
-Subject: Re: [PATCH v2 14/16] maple_tree: Refine mas_preallocate() node
- calculations
-To:     Danilo Krummrich <dakr@redhat.com>
-Cc:     maple-tree@lists.infradead.org, linux-mm@kvack.org,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        linux-kernel@vger.kernel.org,
-        Peng Zhang <zhangpeng.00@bytedance.com>,
-        David Airlie <airlied@redhat.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>
-References: <20230612203953.2093911-1-Liam.Howlett@oracle.com>
- <20230612203953.2093911-15-Liam.Howlett@oracle.com>
- <26d8fbcf-d34f-0a79-9d91-8c60e66f7341@redhat.com>
- <cdab5e74-7559-cb31-90ca-b99a5c3a6dd6@gmail.com>
- <43ce08db-210a-fec8-51b4-351625b3cdfb@redhat.com>
- <ZJmQVeiLtkFAGfW0@casper.infradead.org>
- <57527c36-57a1-6699-b6f0-373ba895014c@redhat.com>
-From:   Peng Zhang <zhangpeng.00@bytedance.com>
-In-Reply-To: <57527c36-57a1-6699-b6f0-373ba895014c@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <ZJUKi+NtOajbplQg@bullseye>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-在 2023/6/26 22:27, Danilo Krummrich 写道:
-> On 6/26/23 15:19, Matthew Wilcox wrote:
->> On Mon, Jun 26, 2023 at 02:38:06AM +0200, Danilo Krummrich wrote:
->>> On the other hand, unless I miss something (and if so, please let me 
->>> know),
->>> something is bogus with the API then.
->>>
->>> While the documentation of the Advanced API of the maple tree explicitly
->>> claims that the user of the API is responsible for locking, this 
->>> should be
->>> limited to the bounds set by the maple tree implementation. Which 
->>> means, the
->>> user must decide for either the internal (spin-) lock or an external 
->>> lock
->>> (which possibly goes away in the future) and acquire and release it
->>> according to the rules maple tree enforces through lockdep checks.
->>>
->>> Let's say one picks the internal lock. How is one supposed to ensure the
->>> tree isn't modified using the internal lock with mas_preallocate()?
->>>
->>> Besides that, I think the documentation should definitely mention this
->>> limitation and give some guidance for the locking.
->>>
->>> Currently, from an API perspective, I can't see how anyone not 
->>> familiar with
->>> the implementation details would be able to recognize this limitation.
->>>
->>> In terms of the GPUVA manager, unfortunately, it seems like I need to 
->>> drop
->>> the maple tree and go back to using a rb-tree, since it seems there 
->>> is no
->>> sane way doing a worst-case pre-allocation that does not suffer from 
->>> this
->>> limitation.
+On Fri, Jun 23, 2023 at 02:59:23AM +0000, Bobby Eshleman wrote:
+>On Fri, Jun 23, 2023 at 02:50:01AM +0000, Bobby Eshleman wrote:
+>> On Thu, Jun 22, 2023 at 05:19:08PM +0200, Stefano Garzarella wrote:
+>> > On Sat, Jun 10, 2023 at 12:58:30AM +0000, Bobby Eshleman wrote:
+>> > > This patch adds support for multi-transport datagrams.
+>> > >
+>> > > This includes:
+>> > > - Per-packet lookup of transports when using sendto(sockaddr_vm)
+>> > > - Selecting H2G or G2H transport using VMADDR_FLAG_TO_HOST and CID in
+>> > >  sockaddr_vm
+>> > >
+>> > > To preserve backwards compatibility with VMCI, some important changes
+>> > > were made. The "transport_dgram" / VSOCK_TRANSPORT_F_DGRAM is changed to
+>> > > be used for dgrams iff there is not yet a g2h or h2g transport that has
+>> >
+>> > s/iff/if
+>> >
+>> > > been registered that can transmit the packet. If there is a g2h/h2g
+>> > > transport for that remote address, then that transport will be used and
+>> > > not "transport_dgram". This essentially makes "transport_dgram" a
+>> > > fallback transport for when h2g/g2h has not yet gone online, which
+>> > > appears to be the exact use case for VMCI.
+>> > >
+>> > > This design makes sense, because there is no reason that the
+>> > > transport_{g2h,h2g} cannot also service datagrams, which makes the role
+>> > > of transport_dgram difficult to understand outside of the VMCI context.
+>> > >
+>> > > The logic around "transport_dgram" had to be retained to prevent
+>> > > breaking VMCI:
+>> > >
+>> > > 1) VMCI datagrams appear to function outside of the h2g/g2h
+>> > >   paradigm. When the vmci transport becomes online, it registers itself
+>> > >   with the DGRAM feature, but not H2G/G2H. Only later when the
+>> > >   transport has more information about its environment does it register
+>> > >   H2G or G2H. In the case that a datagram socket becomes active
+>> > >   after DGRAM registration but before G2H/H2G registration, the
+>> > >   "transport_dgram" transport needs to be used.
+>> >
+>> > IIRC we did this, because at that time only VMCI supported DGRAM. Now that
+>> > there are more transports, maybe DGRAM can follow the h2g/g2h paradigm.
+>> >
 >>
->> I haven't been paying much attention here (too many other things going
->> on), but something's wrong.
+>> Totally makes sense. I'll add the detail above that the prior design was
+>> a result of chronology.
 >>
->> First, you shouldn't need to preallocate.  Preallocation is only there
-> 
-> Unfortunately, I think we really have a case where we have to. Typically 
-> GPU mappings are created in a dma-fence signalling critical path and 
-> that is where such mappings need to be added to the maple tree. Hence, 
-> we can't do any sleeping allocations there.
-> 
->> for really gnarly cases.  The way this is *supposed* to work is that
->> the store walks down to the leaf, attempts to insert into that leaf
->> and tries to allocate new nodes with __GFP_NOWAIT.  If that fails,
->> it drops the spinlock, allocates with the gfp flags you've specified,
->> then rewalks the tree to retry the store, this time with allocated
->> nodes in its back pocket so that the store will succeed.
-> 
-> You are talking about mas_store_gfp() here, right? And I guess, if the 
-> tree has changed while the spinlock was dropped and even more nodes are 
-> needed it just retries until it succeeds?
-> 
-> But what about mas_preallocate()? What happens if the tree changed in 
-> between mas_preallocate() and mas_store_prealloc()? Does the latter one 
-> fall back to __GFP_NOWAIT in such a case? I guess not, since 
-> mas_store_prealloc() has a void return type, and __GFP_NOWAIT could fail 
-> as well.
-mas_store_prealloc() will fallback to __GFP_NOWAIT and issue a warning.
-If __GFP_NOWAIT allocation fails, BUG_ON() in mas_store_prealloc() will
-be triggered.
+>> > >
+>> > > 2) VMCI seems to require special message be sent by the transport when a
+>> > >   datagram socket calls bind(). Under the h2g/g2h model, the transport
+>> > >   is selected using the remote_addr which is set by connect(). At
+>> > >   bind time there is no remote_addr because often no connect() has been
+>> > >   called yet: the transport is null. Therefore, with a null transport
+>> > >   there doesn't seem to be any good way for a datagram socket a tell the
+>> > >   VMCI transport that it has just had bind() called upon it.
+>> >
+>> > @Vishnu, @Bryan do you think we can avoid this in some way?
+>> >
+>> > >
+>> > > Only transports with a special datagram fallback use-case such as VMCI
+>> > > need to register VSOCK_TRANSPORT_F_DGRAM.
+>> >
+>> > Maybe we should rename it in VSOCK_TRANSPORT_F_DGRAM_FALLBACK or
+>> > something like that.
+>> >
+>> > In any case, we definitely need to update the comment in
+>> > include/net/af_vsock.h on top of VSOCK_TRANSPORT_F_DGRAM mentioning
+>> > this.
+>> >
+>>
+>> Agreed. I'll rename to VSOCK_TRANSPORT_F_DGRAM_FALLBACK, unless we find
+>> there is a better way altogether.
+>>
+>> > >
+>> > > Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
+>> > > ---
+>> > > drivers/vhost/vsock.c                   |  1 -
+>> > > include/linux/virtio_vsock.h            |  2 -
+>> > > net/vmw_vsock/af_vsock.c                | 78 +++++++++++++++++++++++++--------
+>> > > net/vmw_vsock/hyperv_transport.c        |  6 ---
+>> > > net/vmw_vsock/virtio_transport.c        |  1 -
+>> > > net/vmw_vsock/virtio_transport_common.c |  7 ---
+>> > > net/vmw_vsock/vsock_loopback.c          |  1 -
+>> > > 7 files changed, 60 insertions(+), 36 deletions(-)
+>> > >
+>> > > diff --git a/drivers/vhost/vsock.c b/drivers/vhost/vsock.c
+>> > > index c8201c070b4b..8f0082da5e70 100644
+>> > > --- a/drivers/vhost/vsock.c
+>> > > +++ b/drivers/vhost/vsock.c
+>> > > @@ -410,7 +410,6 @@ static struct virtio_transport vhost_transport = {
+>> > > 		.cancel_pkt               = vhost_transport_cancel_pkt,
+>> > >
+>> > > 		.dgram_enqueue            = virtio_transport_dgram_enqueue,
+>> > > -		.dgram_bind               = virtio_transport_dgram_bind,
+>> > > 		.dgram_allow              = virtio_transport_dgram_allow,
+>> > > 		.dgram_get_cid		  = virtio_transport_dgram_get_cid,
+>> > > 		.dgram_get_port		  = virtio_transport_dgram_get_port,
+>> > > diff --git a/include/linux/virtio_vsock.h b/include/linux/virtio_vsock.h
+>> > > index 23521a318cf0..73afa09f4585 100644
+>> > > --- a/include/linux/virtio_vsock.h
+>> > > +++ b/include/linux/virtio_vsock.h
+>> > > @@ -216,8 +216,6 @@ void virtio_transport_notify_buffer_size(struct vsock_sock *vsk, u64 *val);
+>> > > u64 virtio_transport_stream_rcvhiwat(struct vsock_sock *vsk);
+>> > > bool virtio_transport_stream_is_active(struct vsock_sock *vsk);
+>> > > bool virtio_transport_stream_allow(u32 cid, u32 port);
+>> > > -int virtio_transport_dgram_bind(struct vsock_sock *vsk,
+>> > > -				struct sockaddr_vm *addr);
+>> > > bool virtio_transport_dgram_allow(u32 cid, u32 port);
+>> > > int virtio_transport_dgram_get_cid(struct sk_buff *skb, unsigned int *cid);
+>> > > int virtio_transport_dgram_get_port(struct sk_buff *skb, unsigned int *port);
+>> > > diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+>> > > index 74358f0b47fa..ef86765f3765 100644
+>> > > --- a/net/vmw_vsock/af_vsock.c
+>> > > +++ b/net/vmw_vsock/af_vsock.c
+>> > > @@ -438,6 +438,18 @@ vsock_connectible_lookup_transport(unsigned int cid, __u8 flags)
+>> > > 	return transport;
+>> > > }
+>> > >
+>> > > +static const struct vsock_transport *
+>> > > +vsock_dgram_lookup_transport(unsigned int cid, __u8 flags)
+>> > > +{
+>> > > +	const struct vsock_transport *transport;
+>> > > +
+>> > > +	transport = vsock_connectible_lookup_transport(cid, flags);
+>> > > +	if (transport)
+>> > > +		return transport;
+>> > > +
+>> > > +	return transport_dgram;
+>> > > +}
+>> > > +
+>> > > /* Assign a transport to a socket and call the .init transport callback.
+>> > >  *
+>> > >  * Note: for connection oriented socket this must be called when vsk->remote_addr
+>> > > @@ -474,7 +486,8 @@ int vsock_assign_transport(struct vsock_sock *vsk, struct vsock_sock *psk)
+>> > >
+>> > > 	switch (sk->sk_type) {
+>> > > 	case SOCK_DGRAM:
+>> > > -		new_transport = transport_dgram;
+>> > > +		new_transport = vsock_dgram_lookup_transport(remote_cid,
+>> > > +							     remote_flags);
+>> > > 		break;
+>> > > 	case SOCK_STREAM:
+>> > > 	case SOCK_SEQPACKET:
+>> > > @@ -691,6 +704,9 @@ static int __vsock_bind_connectible(struct vsock_sock *vsk,
+>> > > static int __vsock_bind_dgram(struct vsock_sock *vsk,
+>> > > 			      struct sockaddr_vm *addr)
+>> > > {
+>> > > +	if (!vsk->transport || !vsk->transport->dgram_bind)
+>> > > +		return -EINVAL;
+>> > > +
+>> > > 	return vsk->transport->dgram_bind(vsk, addr);
+>> > > }
+>> > >
+>> > > @@ -1172,19 +1188,24 @@ static int vsock_dgram_sendmsg(struct socket *sock, struct msghdr *msg,
+>> > >
+>> > > 	lock_sock(sk);
+>> > >
+>> > > -	transport = vsk->transport;
+>> > > -
+>> > > -	err = vsock_auto_bind(vsk);
+>> > > -	if (err)
+>> > > -		goto out;
+>> > > -
+>> > > -
+>> > > 	/* If the provided message contains an address, use that.  Otherwise
+>> > > 	 * fall back on the socket's remote handle (if it has been connected).
+>> > > 	 */
+>> > > 	if (msg->msg_name &&
+>> > > 	    vsock_addr_cast(msg->msg_name, msg->msg_namelen,
+>> > > 			    &remote_addr) == 0) {
+>> > > +		transport = vsock_dgram_lookup_transport(remote_addr->svm_cid,
+>> > > +							 remote_addr->svm_flags);
+>> > > +		if (!transport) {
+>> > > +			err = -EINVAL;
+>> > > +			goto out;
+>> > > +		}
+>> > > +
+>> > > +		if (!try_module_get(transport->module)) {
+>> > > +			err = -ENODEV;
+>> > > +			goto out;
+>> > > +		}
+>> > > +
+>> > > 		/* Ensure this address is of the right type and is a valid
+>> > > 		 * destination.
+>> > > 		 */
+>> > > @@ -1193,11 +1214,27 @@ static int vsock_dgram_sendmsg(struct socket *sock, struct msghdr *msg,
+>> > > 			remote_addr->svm_cid = transport->get_local_cid();
+>> > >
+>> >
+>> > From here ...
+>> >
+>> > > 		if (!vsock_addr_bound(remote_addr)) {
+>> > > +			module_put(transport->module);
+>> > > +			err = -EINVAL;
+>> > > +			goto out;
+>> > > +		}
+>> > > +
+>> > > +		if (!transport->dgram_allow(remote_addr->svm_cid,
+>> > > +					    remote_addr->svm_port)) {
+>> > > +			module_put(transport->module);
+>> > > 			err = -EINVAL;
+>> > > 			goto out;
+>> > > 		}
+>> > > +
+>> > > +		err = transport->dgram_enqueue(vsk, remote_addr, msg, len);
+>> >
+>> > ... to here, looks like duplicate code, can we get it out of the if block?
+>> >
+>>
+>> Yes, I think using something like this:
+>>
+>> [...]
+>> 	bool module_got = false;
+>>
+>> [...]
+>> 		if (!try_module_get(transport->module)) {
+>> 			err = -ENODEV;
+>> 			goto out;
+>> 		}
+>> 		module_got = true;
+>>
+>> [...]
+>>
+>> out:
+>> 	if (likely(transport && !err && module_got))
+>
+>Actually, just...
+>
+>	if (module_got)
+>
 
-> 
-> So, how to use the internal spinlock for mas_preallocate() and 
-> mas_store_prealloc() to ensure the tree can't change?
-> 
+Yep, I think it should work ;-)
+
+Thanks,
+Stefano
+
