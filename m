@@ -2,127 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5308773D5CA
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 04:28:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E5E973D5CE
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 04:31:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230088AbjFZC2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 22:28:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35888 "EHLO
+        id S230055AbjFZCb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 22:31:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbjFZC2g (ORCPT
+        with ESMTP id S229480AbjFZCbY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 22:28:36 -0400
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE244E54;
-        Sun, 25 Jun 2023 19:28:33 -0700 (PDT)
-Received: by mail-oi1-x233.google.com with SMTP id 5614622812f47-3a1c162cdfeso1325338b6e.2;
-        Sun, 25 Jun 2023 19:28:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687746513; x=1690338513;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=d07EwE8g+yc7wNG17fy7wXO+B9zTjhytplxN3znDkOo=;
-        b=cw1S+ae/2xM2HzGCre0rEl7dYJyF4ZcbsoSM8E7NKkxlBQQyqM22kM2CKreZstuhpq
-         VhPE2op6zi6NBpnPacLtXOtVTN3V1s3CTj/m+7MtniXSg3Q2rhKN8uZexvpBuLHc3dee
-         83KcZWODwgY5bZ2yGqCuR6hvSOihYOULmivmaW9cY2qHH5H251fO8bOQrt5EcFBqaxCo
-         MLf3TrvAl6eDdx65yyJD/23kBEWrJbAiV8lSYqmRA60RahSDzvx81UFdntu/nieO+2Op
-         LL0cVBxhDC1v4lyzLu5ozb2CbzFAz5bCsAGxh33Xfnhgz6WQSZZjgVuT1n9hrwvHS17u
-         bnPQ==
+        Sun, 25 Jun 2023 22:31:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29853B1
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 19:30:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687746637;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=oyVJTlx31H4Is5RtNpqHEWThTelTV7dr4ksD2iywiNs=;
+        b=HV0guCNvmBdnUu9igIgrRkOXc/RPH64m+oaQIRiuKS+GFVjZ9r4q9/PydPFqHtvzShFjfH
+        kIaq/MnlAOEl+OTybJqNkSAiidAT3YmsQGqVLZA3YVp4GMC8CDMaYs75oB5YfAF+eLpZ9p
+        bFVkVo7xjSviMfBUSUo/kgTWGpMufuo=
+Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com
+ [209.85.208.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-46-sMldV61UMrm6MNVzVTrGLw-1; Sun, 25 Jun 2023 22:30:36 -0400
+X-MC-Unique: sMldV61UMrm6MNVzVTrGLw-1
+Received: by mail-lj1-f197.google.com with SMTP id 38308e7fff4ca-2b698377ed7so6652171fa.3
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 19:30:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687746513; x=1690338513;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=d07EwE8g+yc7wNG17fy7wXO+B9zTjhytplxN3znDkOo=;
-        b=LGQHSJk+2WK7CBz7q5AIEBNlfSqnu7B4pBrxuO70XCxTFMT0Upzkhm8AGAL0EN/srM
-         z9PzpdU/sA0YynexLd0NS0xurwjv2VNYF6fGrEZARlNc9tuA1/fsmUy7d4IJ3iOpc0bE
-         6WfdW1S8uUWuEhmGBMGtucOVcf8sy9nyH35/JIZiMv+onCLLeExfoHW7eF5cvuDyN4l/
-         lN9+QE1yrXWOaWvoYQRj3TpNYiH0BQYuwi7Aa9JrEeA8My3o6fcShrsImWbSiXdvtHFc
-         0D8Ob6tjxsK8+q7Qxyq7aI9wW0dLMsnDV1IC6a6jHNcw4Xu5G126D8qUUYhKzYvofi2c
-         qKow==
-X-Gm-Message-State: AC+VfDwkG4s6wkTX2lTmAoTFI/XY+DpCzcwGAKVoEw6dTVkd4oLZJ2Fu
-        tQgk0Jqi0W+W7Wx5fwbPc9I=
-X-Google-Smtp-Source: ACHHUZ4Q0ry54BpxtAQfduyo5cC1UFvZSrIEf7o9kdkVzENgsOv78sn5aZWqWgTZi1Ftc4DrqfTgtw==
-X-Received: by 2002:a54:4091:0:b0:398:2f06:329 with SMTP id i17-20020a544091000000b003982f060329mr27376498oii.9.1687746512932;
-        Sun, 25 Jun 2023 19:28:32 -0700 (PDT)
-Received: from [192.168.220.128] ([183.63.252.58])
-        by smtp.gmail.com with ESMTPSA id iz13-20020a170902ef8d00b001b7fe13c97csm1111555plb.72.2023.06.25.19.28.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 25 Jun 2023 19:28:32 -0700 (PDT)
-Message-ID: <ed353f12-7ba7-1831-2ac7-b6135b2a5abb@gmail.com>
-Date:   Mon, 26 Jun 2023 10:28:26 +0800
+        d=1e100.net; s=20221208; t=1687746634; x=1690338634;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oyVJTlx31H4Is5RtNpqHEWThTelTV7dr4ksD2iywiNs=;
+        b=SrTwEvc7WfqHs5a9584fU8RP1qIC9skFI6hmRM1tKTz6yqdynzvI8USAH5AaqmS5/B
+         v2vjLfbhVKwkGy2+tAmRoMJHWKAA/CYUeaR6HQM6WBU/6SNZVfigKuJzGn1ndlmE/E1P
+         SmCXJO3QTthn4AP+lxYfFtYYG3VOIksNa3+slE2kykidt3bHoqy7vYLl7Q6w8c+qq3cs
+         HEIEGegZNjXgcj71DYFmwGZG6ofygfmVu/x2QaQ4K0gvGXnlvixlN05QU5uGsuxPmR4s
+         DRfr0q+EyH3d09SaVh+ZEMGK+AaAMJeuMHG7ou7av1WKMrxzaA0+2KC/B6Q63gy49VZE
+         pR/g==
+X-Gm-Message-State: AC+VfDzmB+m6Sih09rWYNhWcfG7OUAJmanitur2FMp6ARRtgxEn2Ai6j
+        xxOf9x1AOM3MZWggXq0fLPX4IDllzXiAuHzViZqVxIdCJL0FkjaHli3CqS4YGhZyKOrGBqiUKSx
+        oPimW02D25ld5PAT3NjQ5J+NLzbo3/un6/O/N0ZlULyeSrpYV1Xw=
+X-Received: by 2002:a2e:9650:0:b0:2b6:9d4a:d67b with SMTP id z16-20020a2e9650000000b002b69d4ad67bmr1157083ljh.44.1687746634077;
+        Sun, 25 Jun 2023 19:30:34 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4HE5Ezou0qdo0xZEVjTVRdjNGvL6VVNXXpvsoN0NxxZSiZjMETeAiuuywApgDMhKzz0YDmkwXa9PxEvFhwehE=
+X-Received: by 2002:a2e:9650:0:b0:2b6:9d4a:d67b with SMTP id
+ z16-20020a2e9650000000b002b69d4ad67bmr1157076ljh.44.1687746633791; Sun, 25
+ Jun 2023 19:30:33 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.10.0
-Subject: Re: [PATCH v2] usb: ohci-at91: Fix the unhandle interrupt when resume
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     gregkh@linuxfoundation.org, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+References: <20230608090124.1807-1-angus.chen@jaguarmicro.com>
+In-Reply-To: <20230608090124.1807-1-angus.chen@jaguarmicro.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Mon, 26 Jun 2023 10:30:22 +0800
+Message-ID: <CACGkMEtp6H1x301CynwDfsXCMOVt_mrVh9G7dUxVdDLdLBB8yg@mail.gmail.com>
+Subject: Re: [PATCH v2] vdpa/vp_vdpa: Check queue number of vdpa device from add_config
+To:     Angus Chen <angus.chen@jaguarmicro.com>
+Cc:     mst@redhat.com, virtualization@lists.linux-foundation.org,
         linux-kernel@vger.kernel.org
-References: <20230625161553.11073-1-aarongt.shen@gmail.com>
- <552b1ac6-2149-48fa-9432-49655bfbc366@rowland.harvard.edu>
-Content-Language: en-US
-From:   Guiting Shen <aarongt.shen@gmail.com>
-In-Reply-To: <552b1ac6-2149-48fa-9432-49655bfbc366@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 26, 2023 at 04:04:29AM GMT+8, Alan Stern wrote:
-> On Mon, Jun 26, 2023 at 12:15:53AM +0800, Guiting Shen wrote:
->> The ohci_hcd_at91_drv_suspend() sets ohci->rh_state to OHCI_RH_HALTED when
->> suspend which will let the ohci_irq() skip the interrupt after resume. And
->> nobody to handle this interrupt.
->>
->> According to the comment in ohci_hcd_at91_drv_suspend(), it need to reset
->> when resume from suspend(MEM) to fix.
->>
->> Signed-off-by: Guiting Shen <aarongt.shen@gmail.com>
->> ---
->>  drivers/usb/host/ohci-at91.c | 7 ++++++-
->>  1 file changed, 6 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/usb/host/ohci-at91.c b/drivers/usb/host/ohci-at91.c
->> index b9ce8d80f20b..1a0356d9ea15 100644
->> --- a/drivers/usb/host/ohci-at91.c
->> +++ b/drivers/usb/host/ohci-at91.c
->> @@ -672,7 +672,12 @@ ohci_hcd_at91_drv_resume(struct device *dev)
->>  	else
->>  		at91_start_clock(ohci_at91);
->>  
->> -	ohci_resume(hcd, false);
->> +	/*
->> +	 * need to reset according to the comment of suspend routine,
->> +	 * otherwise the ohci_irq would skip the interrupt if ohci_state
->> +	 * was OHCI_RH_HALTED.
->> +	 */
->> +	ohci_resume(hcd, !ohci_at91->wakeup);
-> 
-> This comment doesn't say why the code uses !ohci_at91->wakeup.  It 
-> should explain that.  For example:
-> 
-> 	/*
-> 	 * According to the comment in ohci_hcd_at91_drv_suspend()
-> 	 * we need to do a reset if the 48-MHz clock was stopped,
-> 	 * that is, if ohci_at91->wakeup is clear.  Tell ohci_resume()
-> 	 * to reset in this case by setting its "hibernated" flag.
-> 	 */
-> 
+On Thu, Jun 8, 2023 at 5:02=E2=80=AFPM Angus Chen <angus.chen@jaguarmicro.c=
+om> wrote:
+>
+> When add virtio_pci vdpa device,check the vqs number of device cap
+> and max_vq_pairs from add_config.
+> Simply starting from failing if the provisioned #qp is not
+> equal to the one that hardware has.
+>
+> Signed-off-by: Angus Chen <angus.chen@jaguarmicro.com>
+> ---
+> v1: Use max_vqs from add_config
+> v2: Just return fail if max_vqs from add_config is not same as device
+>         cap. Suggested by jason.
+>
+>  drivers/vdpa/virtio_pci/vp_vdpa.c | 35 ++++++++++++++++++-------------
+>  1 file changed, 21 insertions(+), 14 deletions(-)
+>
+> diff --git a/drivers/vdpa/virtio_pci/vp_vdpa.c b/drivers/vdpa/virtio_pci/=
+vp_vdpa.c
+> index 281287fae89f..c1fb6963da12 100644
+> --- a/drivers/vdpa/virtio_pci/vp_vdpa.c
+> +++ b/drivers/vdpa/virtio_pci/vp_vdpa.c
+> @@ -480,32 +480,39 @@ static int vp_vdpa_dev_add(struct vdpa_mgmt_dev *v_=
+mdev, const char *name,
+>         u64 device_features;
+>         int ret, i;
+>
+> -       vp_vdpa =3D vdpa_alloc_device(struct vp_vdpa, vdpa,
+> -                                   dev, &vp_vdpa_ops, 1, 1, name, false)=
+;
+> -
+> -       if (IS_ERR(vp_vdpa)) {
+> -               dev_err(dev, "vp_vdpa: Failed to allocate vDPA structure\=
+n");
+> -               return PTR_ERR(vp_vdpa);
+> +       if (add_config->mask & BIT_ULL(VDPA_ATTR_DEV_NET_CFG_MAX_VQP)) {
+> +               if (add_config->net.max_vq_pairs !=3D (v_mdev->max_suppor=
+ted_vqs / 2)) {
+> +                       dev_err(&pdev->dev, "max vqs 0x%x should be equal=
+ to 0x%x which device has\n",
+> +                               add_config->net.max_vq_pairs*2, v_mdev->m=
+ax_supported_vqs);
+> +                       return -EINVAL;
+> +               }
+>         }
+>
+> -       vp_vdpa_mgtdev->vp_vdpa =3D vp_vdpa;
+> -
+> -       vp_vdpa->vdpa.dma_dev =3D &pdev->dev;
+> -       vp_vdpa->queues =3D vp_modern_get_num_queues(mdev);
+> -       vp_vdpa->mdev =3D mdev;
+> -
+>         device_features =3D vp_modern_get_features(mdev);
+>         if (add_config->mask & BIT_ULL(VDPA_ATTR_DEV_FEATURES)) {
+>                 if (add_config->device_features & ~device_features) {
+> -                       ret =3D -EINVAL;
+>                         dev_err(&pdev->dev, "Try to provision features "
+>                                 "that are not supported by the device: "
+>                                 "device_features 0x%llx provisioned 0x%ll=
+x\n",
+>                                 device_features, add_config->device_featu=
+res);
+> -                       goto err;
+> +                       return -EINVAL;
+>                 }
+>                 device_features =3D add_config->device_features;
+>         }
+> +
+> +       vp_vdpa =3D vdpa_alloc_device(struct vp_vdpa, vdpa,
+> +                                   dev, &vp_vdpa_ops, 1, 1, name, false)=
+;
+> +
+> +       if (IS_ERR(vp_vdpa)) {
+> +               dev_err(dev, "vp_vdpa: Failed to allocate vDPA structure\=
+n");
+> +               return PTR_ERR(vp_vdpa);
+> +       }
+> +
+> +       vp_vdpa_mgtdev->vp_vdpa =3D vp_vdpa;
+> +
+> +       vp_vdpa->vdpa.dma_dev =3D &pdev->dev;
+> +       vp_vdpa->queues =3D v_mdev->max_supported_vqs;
 
-Ok, Thank you!
-Do I send the v3 patch after the merge window close?
+Why bother with those changes?
 
--- 
-Regards,
-Guiting Shen
+        mgtdev->max_supported_vqs =3D vp_modern_get_num_queues(mdev);
+
+Thanks
+
+
+> +       vp_vdpa->mdev =3D mdev;
+>         vp_vdpa->device_features =3D device_features;
+>
+>         ret =3D devm_add_action_or_reset(dev, vp_vdpa_free_irq_vectors, p=
+dev);
+> --
+> 2.25.1
+>
 
