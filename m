@@ -2,53 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8366F73E622
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 19:15:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF41E73E60E
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 19:14:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229566AbjFZRPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 13:15:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51272 "EHLO
+        id S230432AbjFZRO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 13:14:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230509AbjFZROt (ORCPT
+        with ESMTP id S230022AbjFZRO1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 13:14:49 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9C69E10E7;
-        Mon, 26 Jun 2023 10:14:41 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 23F3C2F4;
-        Mon, 26 Jun 2023 10:15:25 -0700 (PDT)
-Received: from e125769.cambridge.arm.com (e125769.cambridge.arm.com [10.1.196.26])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 37CCD3F663;
-        Mon, 26 Jun 2023 10:14:38 -0700 (PDT)
-From:   Ryan Roberts <ryan.roberts@arm.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Yin Fengwei <fengwei.yin@intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Yu Zhao <yuzhao@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Cc:     Ryan Roberts <ryan.roberts@arm.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-s390@vger.kernel.org
-Subject: [PATCH v1 00/10] variable-order, large folios for anonymous memory
-Date:   Mon, 26 Jun 2023 18:14:20 +0100
-Message-Id: <20230626171430.3167004-1-ryan.roberts@arm.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 26 Jun 2023 13:14:27 -0400
+Received: from tarta.nabijaczleweli.xyz (unknown [139.28.40.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4FF5610C0;
+        Mon, 26 Jun 2023 10:14:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
+        s=202305; t=1687799662;
+        bh=amdb1mPfMsiRmJBm8Eo09Eid0hPoWdxAGT5Zxy6Ft/Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZWXPCQTWw623Q1vNv+xoIPOLumVdCGoXhA34p7bmbWUlqxfk7aEHff5ginUKhvfCT
+         NqSKAvzs0byFrBDSFis97ckUcRPZ271Tulc7EHqcTi167+eAOFykJlnWgSlEJlSFuQ
+         XTLRWxdBJlR6NgqPtWfzGlDxJSeZgAia0K4LVfno8iJeBT11yFzhtYDMig/Gtzaka6
+         1ir6IFISFNHk+9BpSvh7T8ESPP5iDpM0rHJ0m3lHFfhy3FmCs413WI7KSppjRvNXWY
+         0XiDkP2b/UikPNZnR0tHEEg4r0L8w8Jv8AeVOyb77KJT3QDwuGdbZG4uTm6lFeZHyb
+         B8/ARNKYvOaww==
+Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
+        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id 6B7961812;
+        Mon, 26 Jun 2023 19:14:22 +0200 (CEST)
+Date:   Mon, 26 Jun 2023 19:14:21 +0200
+From:   Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= 
+        <nabijaczleweli@nabijaczleweli.xyz>
+To:     Amir Goldstein <amir73il@gmail.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jan Kara <jack@suse.cz>,
+        Chung-Chiang Cheng <cccheng@synology.com>
+Subject: Re: splice(-> FIFO) never wakes up inotify IN_MODIFY?
+Message-ID: <hjsfjimeuwnfz4xip3lthehuntabxc7tdbiopfzvk6vb4er7ur@3vb3r77wfeym>
+References: <jbyihkyk5dtaohdwjyivambb2gffyjs3dodpofafnkkunxq7bu@jngkdxx65pux>
+ <CAOQ4uxhut2NHc+MY-XOJay5B-OKXU2X5Fe0-6-RCMKt584ft5A@mail.gmail.com>
+ <ndm45oojyc5swspfxejfq4nd635xnx5m35otsireckxp6heduh@2opifgi3b3cw>
+ <CAOQ4uxgCrxMKO7ZgAriMkKU-aKnShN+CG0XqP-yYFiyR=Os82A@mail.gmail.com>
+ <jbg6kfxwniksrgnmnxr7go5kml2iw3tucnnbe4pqhvi4in6wlo@z6m4tcanewmk>
+ <CAOQ4uxjizutWR37dm5RxiBY_L-bVHndJYaK_CHi88ZTT0DNpjg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="b55wfdvnqlf24i5q"
+Content-Disposition: inline
+In-Reply-To: <CAOQ4uxjizutWR37dm5RxiBY_L-bVHndJYaK_CHi88ZTT0DNpjg@mail.gmail.com>
+User-Agent: NeoMutt/20230517
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_RDNS_DYNAMIC_FP,
+        RDNS_DYNAMIC,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,143 +61,237 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi All,
 
-Following on from the previous RFCv2 [1], this series implements variable order,
-large folios for anonymous memory. The objective of this is to improve
-performance by allocating larger chunks of memory during anonymous page faults:
+--b55wfdvnqlf24i5q
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
- - Since SW (the kernel) is dealing with larger chunks of memory than base
-   pages, there are efficiency savings to be had; fewer page faults, batched PTE
-   and RMAP manipulation, fewer items on lists, etc. In short, we reduce kernel
-   overhead. This should benefit all architectures.
- - Since we are now mapping physically contiguous chunks of memory, we can take
-   advantage of HW TLB compression techniques. A reduction in TLB pressure
-   speeds up kernel and user space. arm64 systems have 2 mechanisms to coalesce
-   TLB entries; "the contiguous bit" (architectural) and HPA (uarch).
+On Mon, Jun 26, 2023 at 07:21:16PM +0300, Amir Goldstein wrote:
+> On Mon, Jun 26, 2023 at 6:12=E2=80=AFPM Ahelenia Ziemia=C5=84ska
+> <nabijaczleweli@nabijaczleweli.xyz> wrote:
+> >
+> > On Mon, Jun 26, 2023 at 05:53:46PM +0300, Amir Goldstein wrote:
+> > > > So is it really true that the only way to poll a pipe is a
+> > > > sleep()/read(O_NONBLOCK) loop?
+> > > I don't think so, but inotify is not the way.
+> > So what is? What do the kernel developers recommend as a way to see if a
+> > file is written to, and that file happens to be a pipe?
+> >
+> > FTR, I've opened the symmetric Debian#1039488:
+> >   https://bugs.debian.org/1039488
+> > against coreutils, since, if this is expected, and writing to a pipe
+> > should not generate write events on that pipe, then tail -f is currently
+> > broken on most systems.
+> First of all, it is better to mention that you are trying to fix a real
+> world use case when you are reporting a kernel misbehavior.
+I hadn't actually realised this affected coreutils tail as well before
+re-testing it today.
 
-This patch set deals with the SW side of things only and based on feedback from
-the RFC, aims to be the most minimal initial change, upon which future
-incremental changes can be added. For this reason, the new behaviour is hidden
-behind a new Kconfig switch, CONFIG_LARGE_ANON_FOLIO, which is disabled by
-default. Although the code has been refactored to parameterize the desired order
-of the allocation, when the feature is disabled (by forcing the order to be
-always 0) my performance tests measure no regression. So I'm hoping this will be
-a suitable mechanism to allow incremental submissions to the kernel without
-affecting the rest of the world.
+> What this makes me wonder is, if tail -f <fifo> is broken as you claim
+> it is, how is it that decades go by without anyone noticing this problem?
+Most people don't use cat(1) that splice(2)s, I do;
+even if they do, they probably haven't filled the whole buffer so the
+missed splice(2) write was potentially covered by a later write(2) write.
 
-The patches are based on top of v6.4 plus Matthew Wilcox's set_ptes() series
-[2], which is a hard dependency. I'm not sure of Matthew's exact plans for
-getting that series into the kernel, but I'm hoping we can start the review
-process on this patch set independently. I have a branch at [3].
+> When looking at tail source code I see:
+>=20
+> /* Mark as '.ignore'd each member of F that corresponds to a
+>    pipe or fifo, and return the number of non-ignored members.  */
+> static size_t
+> ignore_fifo_and_pipe (struct File_spec *f, size_t n_files)
+> {
+>   /* When there is no FILE operand and stdin is a pipe or FIFO
+>      POSIX requires that tail ignore the -f option.
+>      Since we allow multiple FILE operands, we extend that to say: with -=
+f,
+>      ignore any "-" operand that corresponds to a pipe or FIFO.  */
+>=20
+> and it looks like tail_forever_inotify() is not being called unless
+> there are non pipes:
+>=20
+>   if (forever && ignore_fifo_and_pipe (F, n_files))
+>     {
+>=20
+> The semantics of tail -f on a pipe input would be very odd, because
+> the writer would need to close before tail can figure out which are
+> the last lines.
+The semantics of tail -f for FIFOs are formalised in POSIX, which says
+(Issue 8 Draft 3):
+  115551  =E2=88=92f If the input file is a regular file or if the file ope=
+rand specifies a FIFO, do not
+  115552     terminate after the last line of the input file has been copie=
+d, but read and copy
+  115553     further bytes from the input file when they become available. =
+If no file operand is
+  115554     specified and standard input is a pipe or FIFO, the =E2=88=92f=
+ option shall be ignored. If the
+  115555     input file is not a FIFO, pipe, or regular file, it is unspeci=
+fied whether or not the =E2=88=92f
+  115556     option shall be ignored.
+coreutils sensibly interprets these in accordance with
+  https://www.mail-archive.com/austin-group-l@opengroup.org/msg11402.html
 
-I've posted a separate series concerning the HW part (contpte mapping) for arm64
-at [4].
+There are no special provisions for pipes/FIFOs before the input is
+exhausted, correct: tail is two programs in one; the first bit reads the
+input(s) to completion and outputs the bit you wanted, the second bit
+(-f) keeps reading the inputs from where the first bit left off.
+
+(Note that tail with -c +123 and -n +123 doesn't "care" what lines are
+ last, and just copies from byte/line 123, but that's beside the point.
+ Indeed, "tail -c+1 fifo > log" is the idealised log collection program
+ from before: many programs may write to fifo, and all output is
+ collected in log.)
+
+But yes: tail -f fifo first reads the entire "contents" of fifo
+(where for pipes this is defined as "until all writers hang up"),
+then continues reading fifo and copying whatever it reads.
+On a strict single-file implementation you can get away with reading and
+then sleeping when you get 0 (this is what traditional UNIX tails do).
+
+When you have multiple files, well, you want to poll them, and since
+pipes are unpollable, to avoid waking up every second and reading every
+unpollable input file to see if you got something (regular files, fifos),
+you use inotify(7) (coreutils) or kqueue(2) (NetBSD, probably others)
+to tell you when there's data.
+
+If inotify(7) for pipes worked, the entire coreutils tail -f semantic
+is implementable as a single poll(2):
+  * of each individual pollable (sockets, chardevs)
+  * of inotify of unpollables   (pipes, regular files)
+  * of pidfd                    (if --pid)
+this is very attractive. Naturally, I could also fall back to just a
+poll of pollables and pidfd with a second timeout if there are pipes in
+the inputs, but you see how this is sub-optimal for no real good reason.
+And, well, coreutils tail doesn't do this, so it's vulnerable.
+
+> So honestly, we could maybe add IN_ACCESS/IN_MODIFY for the
+> splice_pipe_to_pipe() case, but I would really like to know what
+> the real use case is.
+And splice_file_to_pipe() which is what we're hitting here.
+The real use case is as I said: I would like to be able to poll pipes
+with inotify instead of with sleep()/read().
+
+> Another observation is that splice(2) never used to report any
+> inotify events at all until a very recent commit in v6.4
+> 983652c69199 ("splice: report related fsnotify events")
+> but this commit left out the splice_pipe_to_pipe() case.
+>=20
+> CC the author of the patch to ask why this case was left
+> out and whether he would be interested in fixing that.
+I'm reading the discussion following
+<20230322062519.409752-1-cccheng@synology.com> as
+"people just forget to add inotify hooks to their I/O routines as a rule",
+thus my guess on why it was left out was "didn't even cross my mind"
+(or, perhaps "didn't think we even supported fsnotify for pipes").
+
+Below you'll find a scissor-patch based on current linus HEAD;
+I've tested it works as-expected for both tty-to-pipe and pipe-to-pipe
+splices in my original reproducer.
+-- >8 --
+=46rom: =3D?UTF-8?q?Ahelenia=3D20Ziemia=3DC5=3D84ska?=3D
+ <nabijaczleweli@nabijaczleweli.xyz>
+Date: Mon, 26 Jun 2023 19:02:28 +0200
+Subject: [PATCH] splice: always fsnotify_access(in), fsnotify_modify(out) on
+ success
+
+The current behaviour caused an asymmetry where some write APIs
+(write, sendfile) would notify the written-to/read-from objects,
+but splice wouldn't.
+
+This affected userspace which used inotify, like coreutils tail -f.
+
+Link: https://lore.kernel.org/linux-fsdevel/jbyihkyk5dtaohdwjyivambb2gffyjs=
+3dodpofafnkkunxq7bu@jngkdxx65pux/t/#u
+Signed-off-by: Ahelenia Ziemia=C5=84ska <nabijaczleweli@nabijaczleweli.xyz>
+---
+ fs/splice.c | 21 ++++++++++++---------
+ 1 file changed, 12 insertions(+), 9 deletions(-)
+
+diff --git a/fs/splice.c b/fs/splice.c
+index 3e06611d19ae..94fae24f9d54 100644
+--- a/fs/splice.c
++++ b/fs/splice.c
+@@ -1154,7 +1154,8 @@ long do_splice(struct file *in, loff_t *off_in, struc=
+t file *out,
+ 		if ((in->f_flags | out->f_flags) & O_NONBLOCK)
+ 			flags |=3D SPLICE_F_NONBLOCK;
+=20
+-		return splice_pipe_to_pipe(ipipe, opipe, len, flags);
++		ret =3D splice_pipe_to_pipe(ipipe, opipe, len, flags);
++		goto notify;
+ 	}
+=20
+ 	if (ipipe) {
+@@ -1182,15 +1183,12 @@ long do_splice(struct file *in, loff_t *off_in, str=
+uct file *out,
+ 		ret =3D do_splice_from(ipipe, out, &offset, len, flags);
+ 		file_end_write(out);
+=20
+-		if (ret > 0)
+-			fsnotify_modify(out);
+-
+ 		if (!off_out)
+ 			out->f_pos =3D offset;
+ 		else
+ 			*off_out =3D offset;
+=20
+-		return ret;
++		goto notify;
+ 	}
+=20
+ 	if (opipe) {
+@@ -1209,18 +1207,23 @@ long do_splice(struct file *in, loff_t *off_in, str=
+uct file *out,
+=20
+ 		ret =3D splice_file_to_pipe(in, opipe, &offset, len, flags);
+=20
+-		if (ret > 0)
+-			fsnotify_access(in);
+-
+ 		if (!off_in)
+ 			in->f_pos =3D offset;
+ 		else
+ 			*off_in =3D offset;
+=20
+-		return ret;
++		goto notify;
+ 	}
+=20
+ 	return -EINVAL;
++
++notify:
++	if (ret > 0) {
++		fsnotify_access(in);
++		fsnotify_modify(out);
++	}
++
++	return ret;
+ }
+=20
+ static long __do_splice(struct file *in, loff_t __user *off_in,
+--=20
+2.39.2
 
 
-Performance
------------
+--b55wfdvnqlf24i5q
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Below results show 2 benchmarks; kernel compilation and speedometer 2.0 (a
-javascript benchmark running in Chromium). Both cases are running on Ampere
-Altra with 1 NUMA node enabled, Ubuntu 22.04 and XFS filesystem. Each benchmark
-is repeated 15 times over 5 reboots and averaged.
+-----BEGIN PGP SIGNATURE-----
 
-All improvements are relative to baseline-4k. 'anonfolio-basic' is this series.
-'anonfolio' is the full patch set similar to the RFC with the additional changes
-to the extra 3 fault paths. The rest of the configs are described at [4].
+iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmSZx2wACgkQvP0LAY0m
+WPF7ow/8DJFZiBtowlD7Knds3uqv8cUJKjXB/RGZCju4FvHaxGoU50H5SxRSx4Zd
+7tZOYV14Y9CgBF14lBJ3k1qH5+2gxE4XLwUT6kijo2uHE/sHzdgTwciqLMd6Hb8r
+O0jy9xsbiemK8SQWVZDpZ708X/qzIycQj19kwzMi2ceRHh+UTTyTHr2WGx8wEfh3
+RSx34ebxcsPMQSKcA3irq4kYQXTn9dBA8X287Zy2C6BKC/B/t+cDUaqk+S3fdUjP
+RU7lTuWnugh+42Q8mC9zbTaEoWgGsRfVCq9xdOgp94LOiTwnpI+bK6kYXEdZSscZ
+iFZ/Fzhjwwkt2bmyq55XR914VaMvgmMcL+x2W0KEIi3OdJ5FdHNSpbj+QyLk9WPL
+Dt563G7aoX+jdx/H+l/kzcO74sE9ZTd0MYCnR3q1OlhQhzVOgZJvOF/YiSL9biEN
+fXDYSb9Ms6ql/2Nr1V5sk9yZLbugqUlQIDxL/lWHLQlXK7UNCxePlqNhEXkLOatS
+IsKABjEs35iQa3lTVSLcPebp/liJLYtUDsT77swpNLPpRdme/5/0PKAMUrvu4uFa
+mITvuknEIP2WbybR28QJ4zDwS6/1YQtqBNqMUmfHSUupuWN+j9NdlnPJBaTFsupY
++1pzkuBjBFJHpycp4b3XSk37weN30K7EmDCnnheq8FTx5D737EQ=
+=Qxn/
+-----END PGP SIGNATURE-----
 
-Kernel Compilation (smaller is better):
-
-| kernel          |   real-time |   kern-time |   user-time |
-|:----------------|------------:|------------:|------------:|
-| baseline-4k     |        0.0% |        0.0% |        0.0% |
-| anonfolio-basic |       -5.3% |      -42.9% |       -0.6% |
-| anonfolio       |       -5.4% |      -46.0% |       -0.3% |
-| contpte         |       -6.8% |      -45.7% |       -2.1% |
-| exefolio        |       -8.4% |      -46.4% |       -3.7% |
-| baseline-16k    |       -8.7% |      -49.2% |       -3.7% |
-| baseline-64k    |      -10.5% |      -66.0% |       -3.5% |
-
-Speedometer 2.0 (bigger is better):
-
-| kernel          |   runs_per_min |
-|:----------------|---------------:|
-| baseline-4k     |           0.0% |
-| anonfolio-basic |           0.7% |
-| anonfolio       |           1.2% |
-| contpte         |           3.1% |
-| exefolio        |           4.2% |
-| baseline-16k    |           5.3% |
-
-
-Changes since RFCv2
--------------------
-
-  - Simplified series to bare minimum (on David Hildenbrand's advice)
-      - Removed changes to 3 fault paths:
-          - write fault on zero page: wp_page_copy()
-          - write fault on non-exclusive CoW page: wp_page_copy()
-          - write fault on exclusive CoW page: do_wp_page()/wp_page_reuse()
-      - Only 1 fault path change remains:
-          - write fault on unallocated address: do_anonymous_page()
-      - Removed support patches that are no longer needed
-  - Added Kconfig CONFIG_LARGE_ANON_FOLIO and friends
-      - Whole feature defaults to off
-      - Arch opts-in to allowing feature and provides max allocation order
-
-
-Future Work
------------
-
-Once this series is in, there are some more incremental changes I plan to follow
-up with:
-
-  - Add the other 3 fault path changes back in
-  - Properly support pte-mapped folios for:
-      - numa balancing (do_numa_page())
-      - fix assumptions about exclusivity for large folios in madvise()
-      - compaction (although I think this is already a problem for large folios
-        in the file cache so perhaps someone is working on it?)
-
-
-[1] https://lore.kernel.org/linux-mm/20230414130303.2345383-1-ryan.roberts@arm.com/
-[2] https://lore.kernel.org/linux-mm/20230315051444.3229621-1-willy@infradead.org/
-[3] https://gitlab.arm.com/linux-arm/linux-rr/-/tree/features/granule_perf/anonfolio-lkml_v1
-[4] https://lore.kernel.org/linux-arm-kernel/20230622144210.2623299-1-ryan.roberts@arm.com/
-
-Thanks,
-Ryan
-
-
-Ryan Roberts (10):
-  mm: Expose clear_huge_page() unconditionally
-  mm: pass gfp flags and order to vma_alloc_zeroed_movable_folio()
-  mm: Introduce try_vma_alloc_movable_folio()
-  mm: Implement folio_add_new_anon_rmap_range()
-  mm: Implement folio_remove_rmap_range()
-  mm: Allow deferred splitting of arbitrary large anon folios
-  mm: Batch-zap large anonymous folio PTE mappings
-  mm: Kconfig hooks to determine max anon folio allocation order
-  arm64: mm: Declare support for large anonymous folios
-  mm: Allocate large folios for anonymous memory
-
- arch/alpha/include/asm/page.h   |   5 +-
- arch/arm64/Kconfig              |  13 ++
- arch/arm64/include/asm/page.h   |   3 +-
- arch/arm64/mm/fault.c           |   7 +-
- arch/ia64/include/asm/page.h    |   5 +-
- arch/m68k/include/asm/page_no.h |   7 +-
- arch/s390/include/asm/page.h    |   5 +-
- arch/x86/include/asm/page.h     |   5 +-
- include/linux/highmem.h         |  23 ++-
- include/linux/mm.h              |   3 +-
- include/linux/rmap.h            |   4 +
- mm/Kconfig                      |  39 ++++
- mm/memory.c                     | 324 ++++++++++++++++++++++++++++++--
- mm/rmap.c                       | 107 ++++++++++-
- 14 files changed, 506 insertions(+), 44 deletions(-)
-
---
-2.25.1
-
+--b55wfdvnqlf24i5q--
