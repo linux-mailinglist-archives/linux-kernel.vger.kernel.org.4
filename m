@@ -2,135 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2456873E4E4
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 18:23:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F5BA73E4EB
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 18:25:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231152AbjFZQXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 12:23:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52432 "EHLO
+        id S231175AbjFZQZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 12:25:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231954AbjFZQXX (ORCPT
+        with ESMTP id S231558AbjFZQYk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 12:23:23 -0400
-Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EEA11B7;
-        Mon, 26 Jun 2023 09:21:29 -0700 (PDT)
-Received: by mail-ua1-x933.google.com with SMTP id a1e0cc1a2514c-7919342c456so834172241.2;
-        Mon, 26 Jun 2023 09:21:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687796488; x=1690388488;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vwwgqiMrVmM1eYVFUtW7ZXKf6dJ3xT9dHrtUvYYp2tI=;
-        b=nid/mGjZJ3pQbK55R+nmNZ6cJsJi/dvJrlPbqKkaDDEDQ+xeLSdri+PpvpxvN1fJy2
-         pliA2WN1SgSDcGtZJ0CtW6PCToSSJGYSmlrYMds9bb9E7KfiECWBiOsFTO/10TAfrksm
-         cFLuSnL9fQ01QyDe50lt9xHv2rrXYtEMwczRm5TDj3J/dwAHmDq+GClGmcpIaYFC7Hzt
-         zaTcth93OyGCb7cD5O2mw4w3J7mOzppOb2DXRr3i6N0e89jgfMlnn6KywEjxK+XFuO81
-         gcoXmNCOC4ZFN4X91uUcgsFIMcPHJTX9l2BthtOJqx6vu1QLyMNitt4v67374esCIiI2
-         l13g==
+        Mon, 26 Jun 2023 12:24:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00BE22107
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 09:23:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687796586;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=igMfXFR5kNoI10TQDurWKUzwN6Z45JekZK2Q72EILNo=;
+        b=GaDyr3cVu1DNKsQ8pqoXBjwzdBQgtkJsV/H4MtFLVgjE1uzKebyqeODdCoT8GTs97WtG4B
+        6r1y21BMTtOqHUB+eW9sWEPF3Nve2ZIss0CTkzxwtoEbXjk5k+xNllZYXguX4uWx7Rafvb
+        L4Vbmgfyy9XqGQ/9rNvMQWA7l7dMGOQ=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-620-t9xs6tmKORif65ww_Ke-bA-1; Mon, 26 Jun 2023 12:23:03 -0400
+X-MC-Unique: t9xs6tmKORif65ww_Ke-bA-1
+Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-62ffa1214edso6296736d6.0
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 09:23:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687796488; x=1690388488;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vwwgqiMrVmM1eYVFUtW7ZXKf6dJ3xT9dHrtUvYYp2tI=;
-        b=M3Qo9tCr3SC+jTpdrvAfr1facEPPXE468ip8L7ficgOImbGJEjRM7mGdmlXuXCdA1w
-         0GYNOx8SjI6UbR54E9GRZFaSzeK2KoyEk/uWMqp5HHIW3pQNNqP5gLkzP1PSeQZ3IBNJ
-         eolRRIxg36JpiD/WwPFyiZoe0iPFL3+PsGceJSITVXW+DH7gdeI1QI9IXjtc9h42KGvk
-         ivfkMxxSqXCgR/mUK6GUpOO0FrZPHDOnXuvEtjbiZwr02owkZzT8HA0RET/1trDYTgqq
-         IheENUpeYfi5VFpw9oDVaBzxvUycSKlmFf1BCe6YU81dnNNx1+LjpHOXHDOBi/yS22+B
-         7wyw==
-X-Gm-Message-State: AC+VfDxKO/VO2QHf1mkZqvwCUJkcdb+kkGMYdNEfc0uAlxKo+5KlB9qG
-        gdBgWbjiTLASE+4bUgzk7ah9izBiSo2Rz7vcPUk=
-X-Google-Smtp-Source: ACHHUZ4JukKKcmEtxtgN72mCvCGMNSEQ7HZucR2Pd+aIipmM4vhLc0izGrmJnCoy5Jr1froBK7eYAPNlSP+8yUUjXLI=
-X-Received: by 2002:a05:6102:3550:b0:443:5340:e29e with SMTP id
- e16-20020a056102355000b004435340e29emr1211662vss.27.1687796488155; Mon, 26
- Jun 2023 09:21:28 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687796582; x=1690388582;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=igMfXFR5kNoI10TQDurWKUzwN6Z45JekZK2Q72EILNo=;
+        b=P7ZwJhmf+u1xy1vlxTCIUimGX80E0UmCBvpL5m9OQ0b6fqrF8kEh2UbKdO8Kvrcrhj
+         cI3tkbWUdV/StqTcSn7/QYkJyX/3dxoxoj083qV36rJlBOgTh/f5RAOygXWYmuJdI08g
+         s50GPIpBYvISrinw4ZwswrnGh13V8zh+wdigonIuAMeOtHUwPixQ1uCPcZHM+GAoTKs3
+         64dB6T9rwzG7nSfCqJ8UXqF2ty2WWTCw7Vzbv8JTJImsborF9uk7fCSPMsBxOnC0OyZJ
+         ZpELx6WG4kj+YfcHj7/xQk+onQv0sYb1gsub0R3OB5GL288CUON/S6EPM6NDv4ZvZfuj
+         ASxg==
+X-Gm-Message-State: AC+VfDzBYeFwAqHp0AB4zwGMTp3C/qr6Dj9ClWjFn+bh1D6kmqO9xTfN
+        Yvg41n/u33fEI1dOyRoR+o1tAveENcO9kI0CG9ZE/lmlmkCGC9lOjidq13zm0brYB6+YzzP6Uux
+        ZJ6X41kBkNn9/eg9c4L/12TLw48KBJI/5
+X-Received: by 2002:a05:6214:27eb:b0:616:870c:96b8 with SMTP id jt11-20020a05621427eb00b00616870c96b8mr36132629qvb.3.1687796582595;
+        Mon, 26 Jun 2023 09:23:02 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5oVBR2URFNF062kj36ByRSo63M2eJzjnhcU1VZ6ZJnCR3z2r+9LNb0CCEiOx2Y22cP34jYBA==
+X-Received: by 2002:a05:6214:27eb:b0:616:870c:96b8 with SMTP id jt11-20020a05621427eb00b00616870c96b8mr36132612qvb.3.1687796582255;
+        Mon, 26 Jun 2023 09:23:02 -0700 (PDT)
+Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
+        by smtp.gmail.com with ESMTPSA id f19-20020ae9ea13000000b007592174cb08sm2864932qkg.10.2023.06.26.09.23.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jun 2023 09:23:01 -0700 (PDT)
+Date:   Mon, 26 Jun 2023 12:23:00 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        James Houghton <jthoughton@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Subject: Re: [PATCH v3 2/8] mm/hugetlb: Prepare hugetlb_follow_page_mask()
+ for FOLL_PIN
+Message-ID: <ZJm7ZMdo7+G541wG@x1n>
+References: <20230623142936.268456-1-peterx@redhat.com>
+ <20230623142936.268456-3-peterx@redhat.com>
+ <89fee4bf-29a1-db19-e0ae-dd827d277504@redhat.com>
 MIME-Version: 1.0
-References: <jbyihkyk5dtaohdwjyivambb2gffyjs3dodpofafnkkunxq7bu@jngkdxx65pux>
- <CAOQ4uxhut2NHc+MY-XOJay5B-OKXU2X5Fe0-6-RCMKt584ft5A@mail.gmail.com>
- <ndm45oojyc5swspfxejfq4nd635xnx5m35otsireckxp6heduh@2opifgi3b3cw>
- <CAOQ4uxgCrxMKO7ZgAriMkKU-aKnShN+CG0XqP-yYFiyR=Os82A@mail.gmail.com> <jbg6kfxwniksrgnmnxr7go5kml2iw3tucnnbe4pqhvi4in6wlo@z6m4tcanewmk>
-In-Reply-To: <jbg6kfxwniksrgnmnxr7go5kml2iw3tucnnbe4pqhvi4in6wlo@z6m4tcanewmk>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Mon, 26 Jun 2023 19:21:16 +0300
-Message-ID: <CAOQ4uxjizutWR37dm5RxiBY_L-bVHndJYaK_CHi88ZTT0DNpjg@mail.gmail.com>
-Subject: Re: splice(-> FIFO) never wakes up inotify IN_MODIFY?
-To:     =?UTF-8?Q?Ahelenia_Ziemia=C5=84ska?= 
-        <nabijaczleweli@nabijaczleweli.xyz>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jan Kara <jack@suse.cz>,
-        Chung-Chiang Cheng <cccheng@synology.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <89fee4bf-29a1-db19-e0ae-dd827d277504@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 26, 2023 at 6:12=E2=80=AFPM Ahelenia Ziemia=C5=84ska
-<nabijaczleweli@nabijaczleweli.xyz> wrote:
->
-> On Mon, Jun 26, 2023 at 05:53:46PM +0300, Amir Goldstein wrote:
-> > > So is it really true that the only way to poll a pipe is a
-> > > sleep()/read(O_NONBLOCK) loop?
-> > I don't think so, but inotify is not the way.
-> So what is? What do the kernel developers recommend as a way to see if a
-> file is written to, and that file happens to be a pipe?
->
-> FTR, I've opened the symmetric Debian#1039488:
->   https://bugs.debian.org/1039488
-> against coreutils, since, if this is expected, and writing to a pipe
-> should not generate write events on that pipe, then tail -f is currently
-> broken on most systems.
+On Mon, Jun 26, 2023 at 10:06:24AM +0200, David Hildenbrand wrote:
+> On 23.06.23 16:29, Peter Xu wrote:
+> > follow_page() doesn't use FOLL_PIN, meanwhile hugetlb seems to not be the
+> > target of FOLL_WRITE either.  However add the checks.
+> > 
+> > Namely, either the need to CoW due to missing write bit, or proper
+> > unsharing on !AnonExclusive pages over R/O pins to reject the follow page.
+> > That brings this function closer to follow_hugetlb_page().
+> > 
+> > So we don't care before, and also for now.  But we'll care if we switch
+> > over slow-gup to use hugetlb_follow_page_mask().  We'll also care when to
+> > return -EMLINK properly, as that's the gup internal api to mean "we should
+> > unshare".  Not really needed for follow page path, though.
+> > 
+> > When at it, switching the try_grab_page() to use WARN_ON_ONCE(), to be
+> > clear that it just should never fail.  When error happens, instead of
+> > setting page==NULL, capture the errno instead.
+> > 
+> > Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
+> > Signed-off-by: Peter Xu <peterx@redhat.com>
+> > ---
+> >   mm/hugetlb.c | 31 ++++++++++++++++++++-----------
+> >   1 file changed, 20 insertions(+), 11 deletions(-)
+> > 
+> > diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> > index f75f5e78ff0b..27367edf5c72 100644
+> > --- a/mm/hugetlb.c
+> > +++ b/mm/hugetlb.c
+> > @@ -6462,13 +6462,7 @@ struct page *hugetlb_follow_page_mask(struct vm_area_struct *vma,
+> >   	struct page *page = NULL;
+> >   	spinlock_t *ptl;
+> >   	pte_t *pte, entry;
+> > -
+> > -	/*
+> > -	 * FOLL_PIN is not supported for follow_page(). Ordinary GUP goes via
+> > -	 * follow_hugetlb_page().
+> > -	 */
+> > -	if (WARN_ON_ONCE(flags & FOLL_PIN))
+> > -		return NULL;
+> > +	int ret;
+> >   	hugetlb_vma_lock_read(vma);
+> >   	pte = hugetlb_walk(vma, haddr, huge_page_size(h));
+> > @@ -6478,8 +6472,21 @@ struct page *hugetlb_follow_page_mask(struct vm_area_struct *vma,
+> >   	ptl = huge_pte_lock(h, mm, pte);
+> >   	entry = huge_ptep_get(pte);
+> >   	if (pte_present(entry)) {
+> > -		page = pte_page(entry) +
+> > -				((address & ~huge_page_mask(h)) >> PAGE_SHIFT);
+> > +		page = pte_page(entry);
+> > +
+> > +		if ((flags & FOLL_WRITE) && !huge_pte_write(entry)) {
+> > +			page = NULL;
+> > +			goto out;
+> > +		}
+> > +
+> > +		if (gup_must_unshare(vma, flags, page)) {
+> > +			/* Tell the caller to do unsharing */
+> > +			page = ERR_PTR(-EMLINK);
+> > +			goto out;
+> > +		}
+> 
+> 
+> No need to check if the page is writable (like all other callers and as
+> gup_must_unshare() documents -- "for which pages that are write-protected in
+> the page table")
+> 
+> if (!huge_pte_write(entry) && gup_must_unshare(vma, flags, page)) {
 
-First of all, it is better to mention that you are trying to fix a real
-world use case when you are reporting a kernel misbehavior.
+Sure.
 
-What this makes me wonder is, if tail -f <fifo> is broken as you claim
-it is, how is it that decades go by without anyone noticing this problem?
+I was wondering whether we should just allow passing in "write" into
+gup_must_unshare(), it'll just be a bit weird that it'll return false
+directly if write, meanwhile hopefully that makes it easier to be
+consistent.  I'll leave that as-is for now, anyway.
 
-When looking at tail source code I see:
+For this one I'll just merge it into:
 
-/* Mark as '.ignore'd each member of F that corresponds to a
-   pipe or fifo, and return the number of non-ignored members.  */
-static size_t
-ignore_fifo_and_pipe (struct File_spec *f, size_t n_files)
-{
-  /* When there is no FILE operand and stdin is a pipe or FIFO
-     POSIX requires that tail ignore the -f option.
-     Since we allow multiple FILE operands, we extend that to say: with -f,
-     ignore any "-" operand that corresponds to a pipe or FIFO.  */
+		if (!huge_pte_write(entry)) {
+			if (flags & FOLL_WRITE) {
+				page = NULL;
+				goto out;
+			}
 
-and it looks like tail_forever_inotify() is not being called unless
-there are non pipes:
+			if (gup_must_unshare(vma, flags, page)) {
+				/* Tell the caller to do unsharing */
+				page = ERR_PTR(-EMLINK);
+				goto out;
+			}
+		}
 
-  if (forever && ignore_fifo_and_pipe (F, n_files))
-    {
-
-The semantics of tail -f on a pipe input would be very odd, because
-the writer would need to close before tail can figure out which are
-the last lines.
-
-So honestly, we could maybe add IN_ACCESS/IN_MODIFY for the
-splice_pipe_to_pipe() case, but I would really like to know what
-the real use case is.
-
-Another observation is that splice(2) never used to report any
-inotify events at all until a very recent commit in v6.4
-983652c69199 ("splice: report related fsnotify events")
-but this commit left out the splice_pipe_to_pipe() case.
-
-CC the author of the patch to ask why this case was left
-out and whether he would be interested in fixing that.
+> 
+> 
+> With that
+> 
+> Reviewed-by: David Hildenbrand <david@redhat.com>
 
 Thanks,
-Amir.
+
+-- 
+Peter Xu
+
