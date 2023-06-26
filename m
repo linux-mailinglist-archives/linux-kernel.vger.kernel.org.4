@@ -2,161 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B0D073E5D7
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 18:52:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6143D73E5E0
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 18:57:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230167AbjFZQw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 12:52:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42908 "EHLO
+        id S230023AbjFZQ5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 12:57:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229823AbjFZQw0 (ORCPT
+        with ESMTP id S229457AbjFZQ5x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 12:52:26 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81BAD1B1;
-        Mon, 26 Jun 2023 09:52:22 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Mon, 26 Jun 2023 12:57:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E669C4
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 09:57:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 066651F896;
-        Mon, 26 Jun 2023 16:52:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1687798341; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ix/uWItcnnwsKrXY7YkKCqWMvLxQFgNVJE2AJR1BvvM=;
-        b=3AdjnVjh+55mJOWVxSTPtswQuxxsNYoASuG3LhbZls0wQtg6HMooN6NhLAe4D4D67hPrIK
-        L5aPVXoomk3R8gAJNOkGwlJdJYmhnURezZH3WChSmdgmMoD5ud4l2AnOGx42U1E+jSAzR2
-        S4Arr/8lkUNgUJqoeLv5PT2PmU9H93g=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1687798341;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ix/uWItcnnwsKrXY7YkKCqWMvLxQFgNVJE2AJR1BvvM=;
-        b=GBDSwTaixfVefWGt/NTLHkhLaMhQ99c3l4DAY2EUmv+fY2mslsTHYAZTIwySkgvNg8p4qc
-        clD0OYP0XiYJx2CQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EA32013905;
-        Mon, 26 Jun 2023 16:52:20 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id kacnOUTCmWR3TAAAMHmgww
-        (envelope-from <jack@suse.cz>); Mon, 26 Jun 2023 16:52:20 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 74AE3A0754; Mon, 26 Jun 2023 18:52:20 +0200 (CEST)
-Date:   Mon, 26 Jun 2023 18:52:20 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= 
-        <nabijaczleweli@nabijaczleweli.xyz>
-Cc:     Jan Kara <jack@suse.cz>, Amir Goldstein <amir73il@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: splice(-> FIFO) never wakes up inotify IN_MODIFY?
-Message-ID: <20230626165220.elo4xwfqq6sjboh7@quack3>
-References: <jbyihkyk5dtaohdwjyivambb2gffyjs3dodpofafnkkunxq7bu@jngkdxx65pux>
- <CAOQ4uxhut2NHc+MY-XOJay5B-OKXU2X5Fe0-6-RCMKt584ft5A@mail.gmail.com>
- <ndm45oojyc5swspfxejfq4nd635xnx5m35otsireckxp6heduh@2opifgi3b3cw>
- <vlzqpije6ltf2jga7btkccraxxnucxrcsqbskdnk6s2sarkitb@5huvtml62a5c>
- <20230626135159.wzbtjgo6qryfet4e@quack3>
- <bngangrplbxesizu5kbi442fw2et5dzh723nzxsqj2b2p5ikze@dtnajlktfc2g>
- <20230626150001.rl7m7ngjsus4hzcs@quack3>
- <sw26o55ax3cfaaqhlbd2qxkdroujnfxtbxrmt2rpjztmedz3mn@uauqn6hexwdq>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7F21760EC7
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 16:57:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4411AC433C8;
+        Mon, 26 Jun 2023 16:57:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687798670;
+        bh=D7OOp/89DCaiYbQMxKU0tOSDhjvcdtKgZcq1oLiZYw8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=mH7PKJVyDXTVMM0pvqVTZGZvdM1pTfAZhbM2tmvYqv21ZLuWCizd5/AqVqL2/EY6i
+         sFJYZoHET3zvjjKjCXV06M/ruxB21ID8bExYeIy75+ZTY2Frv30nCMAqU4wq8jTBzs
+         lfc49vv+jxFKL4s0cr9XO5JWA+PyLk9E9uurc6k5RZKuyt05qEq2SobHhk051/mB0q
+         q7gwjoJ2UXZc6A6RpUXHPJoZpj3oLfgFqy/tECf4oOrk4zIrRqpWKISigmCKlc8LmI
+         E2klUHvloTfAnOQHCbbUkdsjQP5yqf5gx0eGloy2PVLHQTjFc0sglpyFXTiaupH3Sj
+         GGPSInHOFd0MQ==
+From:   =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org
+Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>,
+        linux-kernel@vger.kernel.org, linux@rivosinc.com,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        =?UTF-8?q?R=C3=A9mi=20Denis-Courmont?= <remi@remlab.net>,
+        Darius Rad <darius@bluespec.com>,
+        Andy Chiu <andy.chiu@sifive.com>
+Subject: [PATCH v2] riscv: Discard vector state on syscalls
+Date:   Mon, 26 Jun 2023 18:57:36 +0200
+Message-Id: <20230626165736.65927-1-bjorn@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <sw26o55ax3cfaaqhlbd2qxkdroujnfxtbxrmt2rpjztmedz3mn@uauqn6hexwdq>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 26-06-23 17:15:23, Ahelenia Ziemiańska wrote:
-> On Mon, Jun 26, 2023 at 05:00:01PM +0200, Jan Kara wrote:
-> > On Mon 26-06-23 16:25:41, Ahelenia Ziemiańska wrote:
-> > > On Mon, Jun 26, 2023 at 03:51:59PM +0200, Jan Kara wrote:
-> > > > On Mon 26-06-23 14:57:55, Ahelenia Ziemiańska wrote:
-> > > > > On Mon, Jun 26, 2023 at 02:19:42PM +0200, Ahelenia Ziemiańska wrote:
-> > > > > > > splice(2) differentiates three different cases:
-> > > > > > >         if (ipipe && opipe) {
-> > > > > > > ...
-> > > > > > >         if (ipipe) {
-> > > > > > > ...
-> > > > > > >         if (opipe) {
-> > > > > > > ...
-> > > > > > > 
-> > > > > > > IN_ACCESS will only be generated for non-pipe input
-> > > > > > > IN_MODIFY will only be generated for non-pipe output
-> > > > > > >
-> > > > > > > Similarly FAN_ACCESS_PERM fanotify permission events
-> > > > > > > will only be generated for non-pipe input.
-> > > > > Sorry, I must've misunderstood this as "splicing to a pipe generates
-> > > > > *ACCESS". Testing reveals this is not the case. So is it really true
-> > > > > that the only way to poll a pipe is a sleep()/read(O_NONBLOCK) loop?
-> > > > So why doesn't poll(3) work? AFAIK it should...
-> > > poll returns instantly with revents=POLLHUP for pipes that were closed
-> > > by the last writer.
-> > > 
-> > > Thus, you're either in a hot loop or you have to explicitly detect this
-> > > and fall back to sleeping, which defeats the point of polling:
-> > I see. There are two ways around this:
-> > 
-> > a) open the file descriptor with O_RDWR (so there's always at least one
-> > writer).
-> Not allowed in the general case, since you need to be able to tail -f
-> files you can't write to.
+From: Björn Töpel <bjorn@rivosinc.com>
 
-Hum, fair point.
+The RISC-V vector specification states:
+  Executing a system call causes all caller-saved vector registers
+  (v0-v31, vl, vtype) and vstart to become unspecified.
 
-> > b) when you get POLLHUP, just close the fd and open it again.
-> Not allowed semantically, since tail -f follows the file, not the name.
+The vector registers are set to all 1s, vill is set (invalid), and the
+vector status is set to Initial.
 
-Well, you can workaround that by using /proc/<pid>/fd/ magic links for
-reopening.
+That way we can prevent userspace from accidentally relying on the
+stated save.
 
-> > In these cases poll(3) will behave as you need (tested)...
-> Alas, those are not applicable to the standard use-case.
-> If only linux exposed a way to see if a file was written to!
+Rémi pointed out [1] that writing to the registers might be
+superfluous, and setting vill is sufficient.
 
-I agree that having to jump through the hoops with poll for this relatively
-standard usage is annoying. Looking into the code, the kernel actually has
-extra code to generate these repeated POLLHUPs because apparently that was
-how the poll was behaving ages ago.
+Link: https://lore.kernel.org/linux-riscv/12784326.9UPPK3MAeB@basile.remlab.net/ # [1]
+Suggested-by: Darius Rad <darius@bluespec.com>
+Suggested-by: Palmer Dabbelt <palmer@rivosinc.com>
+Suggested-by: Rémi Denis-Courmont <remi@remlab.net>
+Signed-off-by: Björn Töpel <bjorn@rivosinc.com>
+---
+v1->v2:
+  Proper register restore for initial state (Andy)
+  Set registers to 1s, and not 0s (Darius)
+---
+ arch/riscv/include/asm/vector.h | 42 ++++++++++++++++++++++++++++++---
+ arch/riscv/kernel/traps.c       |  2 ++
+ 2 files changed, 41 insertions(+), 3 deletions(-)
 
-Hum, researching some more about this, epoll(7) actually doesn't have this
-problem. I've tested using epoll(2) (in edge-triggered case) instead of
-poll(2) and that doesn't return repeated POLLHUP events.
+diff --git a/arch/riscv/include/asm/vector.h b/arch/riscv/include/asm/vector.h
+index 04c0b07bf6cd..93d702d9988c 100644
+--- a/arch/riscv/include/asm/vector.h
++++ b/arch/riscv/include/asm/vector.h
+@@ -139,14 +139,49 @@ static inline void riscv_v_vstate_save(struct task_struct *task,
+ 	}
+ }
+ 
++static inline void __riscv_v_vstate_discard(void)
++{
++	unsigned long vl, vtype_inval = 1UL << (BITS_PER_LONG - 1);
++
++	riscv_v_enable();
++	asm volatile (
++		".option push\n\t"
++		".option arch, +v\n\t"
++		"vsetvli	%0, x0, e8, m8, ta, ma\n\t"
++		"vmv.v.i	v0, -1\n\t"
++		"vmv.v.i	v8, -1\n\t"
++		"vmv.v.i	v16, -1\n\t"
++		"vmv.v.i	v24, -1\n\t"
++		"vsetvl		%0, x0, %1\n\t"
++		".option pop\n\t"
++		: "=&r" (vl) : "r" (vtype_inval) : "memory");
++	riscv_v_disable();
++}
++
++static inline void riscv_v_vstate_discard(struct pt_regs *regs)
++{
++	if (!riscv_v_vstate_query(regs))
++		return;
++
++	__riscv_v_vstate_discard();
++	riscv_v_vstate_on(regs);
++}
++
+ static inline void riscv_v_vstate_restore(struct task_struct *task,
+ 					  struct pt_regs *regs)
+ {
+-	if ((regs->status & SR_VS) != SR_VS_OFF) {
+-		struct __riscv_v_ext_state *vstate = &task->thread.vstate;
+-
++	struct __riscv_v_ext_state *vstate = &task->thread.vstate;
++	unsigned long status = regs->status & SR_VS;
++
++	switch (status) {
++	case SR_VS_INITIAL:
++		__riscv_v_vstate_discard();
++		break;
++	case SR_VS_CLEAN:
++	case SR_VS_DIRTY:
+ 		__riscv_v_vstate_restore(vstate, vstate->datap);
+ 		__riscv_v_vstate_clean(regs);
++		break;
+ 	}
+ }
+ 
+@@ -178,6 +213,7 @@ static inline bool riscv_v_vstate_ctrl_user_allowed(void) { return false; }
+ #define __switch_to_vector(__prev, __next)	do {} while (0)
+ #define riscv_v_vstate_off(regs)		do {} while (0)
+ #define riscv_v_vstate_on(regs)			do {} while (0)
++#define riscv_v_vstate_discard(regs)		do {} while (0)
+ 
+ #endif /* CONFIG_RISCV_ISA_V */
+ 
+diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
+index 5158961ea977..5ff63a784a6d 100644
+--- a/arch/riscv/kernel/traps.c
++++ b/arch/riscv/kernel/traps.c
+@@ -296,6 +296,8 @@ asmlinkage __visible __trap_section void do_trap_ecall_u(struct pt_regs *regs)
+ 		regs->epc += 4;
+ 		regs->orig_a0 = regs->a0;
+ 
++		riscv_v_vstate_discard(regs);
++
+ 		syscall = syscall_enter_from_user_mode(regs, syscall);
+ 
+ 		if (syscall < NR_syscalls)
 
-> For reference with other implementations,
-> this just works and is guaranteed to work under kqueue(2) EVFILT_READ
-> (admittedly, kqueue(2) is an epoll(7)-style system and not an
->  inotify(7)-style one, but it solves the issue,
->  and that's what NetBSD tail -f uses).
-> 
-> Maybe this is short-sighted but I don't actually really see why inotify
-> is... expected? To only generate file-was-written events only for some
-> writes?
-
-Well, inotify similarly as fanotify have been created as filesystem
-monitoring APIs. Not as general "file descriptor monitoring" APIs. So they
-work well with regular files and directories but for other objects such as
-sockets or pipes or even for these "looking like files" objects in virtual
-filesystems like /proc, the results are pretty much undefined.
-
-								Honza
+base-commit: 488833ccdcac118da16701f4ee0673b20ba47fe3
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+2.39.2
+
