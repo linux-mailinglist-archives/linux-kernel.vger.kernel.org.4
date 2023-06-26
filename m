@@ -2,48 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 483D473D617
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 05:05:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D358F73D61A
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 05:06:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbjFZDFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 23:05:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49126 "EHLO
+        id S230159AbjFZDGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 23:06:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjFZDFL (ORCPT
+        with ESMTP id S229481AbjFZDGA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 23:05:11 -0400
-Received: from tarta.nabijaczleweli.xyz (unknown [139.28.40.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F0C37E58;
-        Sun, 25 Jun 2023 20:05:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
-        s=202305; t=1687748699;
-        bh=0edVz5yigfQngdKgWO2r/1KXyXrbS0vsfLBCYGnjUOw=;
-        h=Date:From:To:Subject:From;
-        b=C3nJ8JBAe/bv3WPFX8kM/ZV6WDOz1qbfugBogTvfUUkP3Kn4rvtz0die0lhoLoaId
-         5EFV6ULOBdwC0jI3f2Hg3C6V47JTlujPaqXqyTv5g+7Sq0bOFQl+rnaOSWw0bexuGd
-         iFUPTqj4olJ+EbyeseyUhDNm6OLXeUMkK8FASAyM/ZLZ0g3+JhQoyoVKjhAAOPEc47
-         AEU2pkaf6iOsDcxhjUZ1R6S5mCjQn6cyUb4Zy7Y3NXGfDCOg9qVXhDXCf0/xY60WI1
-         TLLX2TpnlZWrd03k0ztuC2P+xMT/1nTWKlM+/3kQgihl71l6Wzs1dndvtp92EkMm8u
-         /eoqLhpaawdcw==
-Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
-        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id 9C072C7A;
-        Mon, 26 Jun 2023 05:04:59 +0200 (CEST)
-Date:   Mon, 26 Jun 2023 05:04:58 +0200
-From:   Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= 
-        <nabijaczleweli@nabijaczleweli.xyz>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: splice(-> FIFO) never wakes up inotify IN_MODIFY?
-Message-ID: <jbyihkyk5dtaohdwjyivambb2gffyjs3dodpofafnkkunxq7bu@jngkdxx65pux>
+        Sun, 25 Jun 2023 23:06:00 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C6BC1AC;
+        Sun, 25 Jun 2023 20:05:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687748758; x=1719284758;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=IVdrsMXWAyLKSwTiYdoS74Rnpw1mLG0wwfjSkKYp1mM=;
+  b=Ktuju3z50aRHTET5yJ+WQHLtGfseqqvZCEp5oSlvF2rRW4bVVbpZj1qe
+   8GKLgKT2uZB/Es8ZrkLQvt2RzYvjp29EE5ig4OVmYB7Ej3h2Bm9tJnms8
+   NYw1WPmcenVD5vMn7p4xl5hODjvBWFKcD2nEt4LkT0i7sX/RO4yRxw4xE
+   NzGKfS2gU7KE/AIPISqj5c+fAUny7Pz3E+0ewUnwk/a3BMRg2AS9lmuFi
+   o7xgt5MCWfuk+JPg9wrRyu3ye9ofMQgf5lBVCy9CUBek9VFTNgLF/oNSq
+   cKXRE6E6xFsZfIsx+ROiUweKhoThpR8n4u49ljTlrHZgHKWp/RkigOFqB
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="341499419"
+X-IronPort-AV: E=Sophos;i="6.01,158,1684825200"; 
+   d="scan'208";a="341499419"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2023 20:05:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="710082540"
+X-IronPort-AV: E=Sophos;i="6.01,158,1684825200"; 
+   d="scan'208";a="710082540"
+Received: from dbkinder-mobl.amr.corp.intel.com (HELO [10.212.241.20]) ([10.212.241.20])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2023 20:05:56 -0700
+Message-ID: <9437b176-e15a-3cec-e5cb-68ff57dbc25c@linux.intel.com>
+Date:   Sun, 25 Jun 2023 20:05:56 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ld2mt2xgxgm2cqup"
-Content-Disposition: inline
-User-Agent: NeoMutt/20230517
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_RDNS_DYNAMIC_FP,
-        RDNS_DYNAMIC,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.11.0
+Subject: Re: [PATCH v3 3/3] selftests/tdx: Test GetQuote TDX attestation
+ feature
+Content-Language: en-US
+To:     Dan Williams <dan.j.williams@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Dionna Amalie Glaze <dionnaglaze@google.com>,
+        Chong Cai <chongc@google.com>, Qinkun Bao <qinkun@apache.org>,
+        Guorui Yu <GuoRui.Yu@linux.alibaba.com>,
+        Du Fan <fan.du@intel.com>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        dhowells@redhat.com, brijesh.singh@amd.com, atishp@rivosinc.com,
+        gregkh@linuxfoundation.org
+References: <cover.1684048511.git.sathyanarayanan.kuppuswamy@linux.intel.com>
+ <972e1d5c5ec53e2757fb17a586558c5385e987dd.1684048511.git.sathyanarayanan.kuppuswamy@linux.intel.com>
+ <64876bf6c30e2_1433ac29415@dwillia2-xfh.jf.intel.com.notmuch>
+ <64961c3baf8ce_142af829436@dwillia2-xfh.jf.intel.com.notmuch>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <64961c3baf8ce_142af829436@dwillia2-xfh.jf.intel.com.notmuch>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,125 +83,460 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Dan,
 
---ld2mt2xgxgm2cqup
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On 6/23/23 3:27 PM, Dan Williams wrote:
+> Dan Williams wrote:
+>> [ add David, Brijesh, and Atish]
+>>
+>> Kuppuswamy Sathyanarayanan wrote:
+>>> In TDX guest, the second stage of the attestation process is Quote
+>>> generation. This process is required to convert the locally generated
+>>> TDREPORT into a remotely verifiable Quote. It involves sending the
+>>> TDREPORT data to a Quoting Enclave (QE) which will verify the
+>>> integrity of the TDREPORT and sign it with an attestation key.
+>>>
+>>> Intel's TDX attestation driver exposes TDX_CMD_GET_QUOTE IOCTL to
+>>> allow the user agent to get the TD Quote.
+>>>
+>>> Add a kernel selftest module to verify the Quote generation feature.
+>>>
+>>> TD Quote generation involves following steps:
+>>>
+>>> * Get the TDREPORT data using TDX_CMD_GET_REPORT IOCTL.
+>>> * Embed the TDREPORT data in quote buffer and request for quote
+>>>   generation via TDX_CMD_GET_QUOTE IOCTL request.
+>>> * Upon completion of the GetQuote request, check for non zero value
+>>>   in the status field of Quote header to make sure the generated
+>>>   quote is valid.
+>>
+>> What this cover letter does not say is that this is adding another
+>> instance of the similar pattern as SNP_GET_REPORT.
+>>
+>> Linux is best served when multiple vendors trying to do similar
+>> operations are brought together behind a common ABI. We see this in the
+>> history of wrangling SCSI vendors behind common interfaces. Now multiple
+>> confidential computing vendors trying to develop similar flows with
+>> differentiated formats where that differentiation need not leak over the
+>> ABI boundary.
+> [..]
+> 
+> Below is a rough mock up of this approach to demonstrate the direction.
+> Again, the goal is to define an ABI that can support any vendor's
+> arch-specific attestation method and key provisioning flows without
+> leaking vendor-specific details, or confidential material over the
+> user/kernel ABI.
 
-Hi!
+Thanks for working on this mock code and helping out. It gives me the
+general idea about your proposal.
 
-Consider the following programs:
--- >8 --
-==> ino.c <==
-#define _GNU_SOURCE
-#include <stdio.h>
-#include <sys/inotify.h>
-#include <unistd.h>
-int main() {
-  int ino = inotify_init1(IN_CLOEXEC);
-  inotify_add_watch(ino, "/dev/fd/0", IN_MODIFY);
+> 
+> The observation is that there are a sufficient number of attestation
+> flows available to review where Linux can define a superset ABI to
+> contain them all. The other observation is that the implementations have
+> features that may cross-polinate over time. For example the SEV
+> privelege level consideration ("vmpl"), and the TDX RTMR (think TPM
+> PCRs) mechanisms address generic Confidential Computing use cases.
 
-  char buf[64 * 1024];
-  struct inotify_event ev;
-  while (read(ino, &ev, sizeof(ev)) > 0) {
-    fprintf(stderr, "%d: mask=%x, cook=%x, len=%x, name=%.*s\n", ev.wd, ev.mask,
-            ev.cookie, ev.len, (int)ev.len, ev.name);
-    fprintf(stderr, "rd=%zd\n", read(0, buf, sizeof(buf)));
-  }
-}
 
-==> se.c <==
-#define _GNU_SOURCE
-#include <stdio.h>
-#include <sys/sendfile.h>
-int main() {
-  ssize_t rd, acc = 0;
-  while ((rd = sendfile(1, 0, 0, 128 * 1024 * 1024)) > 0)
-    acc += rd;
-  fprintf(stderr, "se=%zd: %m\n", acc);
-}
+I agree with your point about VMPL and RTMR feature cases. This observation
+is valid for AMD SEV and TDX attestation flows. But I am not sure whether
+it will hold true for other vendor implementations. Our sample set is not
+good enough to make this conclusion. The reason for my concern is, if you
+check the ABI interface used in the S390 arch attestation driver
+(drivers/s390/char/uvdevice.c), you would notice that there is a significant
+difference between the ABI used in that driver and SEV/TDX drivers. The S390
+driver attestation request appears to accept two data blobs as input, as well
+as a variety of vendor-specific header configurations.
 
-==> sp.c <==
-#define _GNU_SOURCE
-#include <fcntl.h>
-#include <stdio.h>
-int main() {
-  ssize_t rd, acc = 0;
-  while ((rd = splice(0, 0, 1, 0, 128 * 1024 * 1024, 0)) > 0)
-    acc += rd;
-  fprintf(stderr, "sp=%zd: %m\n", acc);
-}
--- >8 --
+Maybe the s390 attestation model is a special case, but, I think we consider
+this issue. Since we don't have a common spec, there is chance that any
+superset ABI we define now may not meet future vendor requirements. One way to
+handle it to leave enough space in the generic ABI to handle future vendor
+requirements.
 
-By all means, ./sp | ./ino and ./se | ./ino should be equivalent,
-right?
+I think it would be better if other vendors (like ARM or RISC) can comment and
+confirm whether this proposal meets their demands.
 
--- >8 --
-$ make se sp ino
-$ mkfifo fifo
-$ ./ino < fifo &
-[1] 230
-$ echo a > fifo
-$ echo a > fifo
-1: mask=2, cook=0, len=0, name=
-rd=4
-$ echo c > fifo
-1: mask=2, cook=0, len=0, name=
-rd=2
-$ ./se > fifo
-abcdef
-1: mask=2, cook=0, len=0, name=
-asd
-^D
-se=11: Success
-rd=11
-1: mask=2, cook=0, len=0, name=
-rd=0
-$ ./sp > fifo
-abcdefg
-asd
-dsasdadadad
-sp=24: Success
-$ < sp ./sp > fifo
-sp=25856: Success
-$ < sp ./sp > fifo
-^C
-$ echo sp > fifo
-^C
--- >8 --
+> 
+> Vendor specific ioctls for all of this feels like surrender when Linux
+> already has the keys subsystem which has plenty of degrees of freedom
+> for tracking blobs with signatures and using those blobs to instantiate
+> other blobs. It already serves as the ABI wrapping various TPM
+> implementations and marshaling keys for storage encryption and other use
+> cases that intersect Confidential Computing.
+> 
+> The benefit of deprecating vendor-specific abstraction layers in
+> userspace is secondary. The primary benefit is collaboration. It enables
+> kernel developers from various architectures to collaborate on common
+> infrastructure. If, referring back to my previous example, SEV adopts an
+> RTMR-like mechanism and TDX adopts a vmpl-like mechanism it would be
+> unfortunate if those efforts were siloed, duplicated, and needlessly
+> differentiated to userspace. So while there are arguably a manageable
+> number of basic arch attestation methods the planned expansion of those
+> to build incremental functionality is where I believe we, as a
+> community, will be glad that we invested in a "Linux format" for all of
+> this.
+> 
+> An example, to show what the strawman patch below enables: (req_key is
+> the sample program from "man 2 request_key")
+> 
+> # ./req_key guest_attest guest_attest:0:0-$desc $(cat user_data | base64)
+> Key ID is 10e2f3a7
+> # keyctl pipe 0x10e2f3a7 | hexdump -C
+> 00000000  54 44 58 20 47 65 6e 65  72 61 74 65 64 20 51 75  |TDX Generated Qu|
+> 00000010  6f 74 65 00 00 00 00 00  00 00 00 00 00 00 00 00  |ote.............|
+> 00000020  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+> *
+> 00004000
+> 
+> This is the kernel instantiating a TDX Quote without the TDREPORT
+> implementation detail ever leaving the kernel. Now, this is only the
 
-Note how in all ./sp > fifo cases, ./ino doesn't wake up!
-Note also how, thus, we've managed to fill the pipe buffer with ./sp
-(when it transferred 25856), and now we can't /ever/ write there again
-(both splicing and normal writes block, since there's no space left in
- the pipe; ./ino hasn't seen this and will never wake up or service the
- pipe):
-so we've effectively "denied service" by slickily using a different
-syscall to do the write, right?
+IIUC, the idea here is to cache the quote data and return it to the user whenever
+possible, right? If yes, I think such optimization may not be very useful for our
+case. AFAIK, the quote data will change whenever there is a change in the guest
+measurement data. Since the validity of the generated quote will not be long,
+and the frequency of quote generation requests is expected to be less, we may not
+get much benefit from caching the quote data. I think we can keep this logic simple
+by directly retrieving the quote data from the quoting enclave whenever there is a
+request from the user.
 
-I consider this to be unexpected behaviour because (a) obviously and
-(b) sendfile() sends the inotify event.
+> top-half of what is needed. The missing bottom half takes that material
+> and uses it to instantiate derived key material like the storage
+> decryption key internal to the kernel. See "The Process" in
+> Documentation/security/keys/request-key.rst for how the Keys subsystem
+> handles the "keys for keys" use case.
 
-Happens on my linus checkout (v6.4-rc7-234-g547cc9be86f4) and bookworm (6.1.27-1).
+This is only useful for key-server use case, right? Attestation can also be
+used for use cases like pattern matching or uploading some secure data, etc.
+Since key-server is not the only use case, does it make sense to suppport
+this derived key feature?
 
---ld2mt2xgxgm2cqup
-Content-Type: application/pgp-signature; name="signature.asc"
+> 
+> ---
+> diff --git a/drivers/virt/Kconfig b/drivers/virt/Kconfig
+> index f79ab13a5c28..0f775847028e 100644
+> --- a/drivers/virt/Kconfig
+> +++ b/drivers/virt/Kconfig
+> @@ -54,4 +54,8 @@ source "drivers/virt/coco/sev-guest/Kconfig"
+>  
+>  source "drivers/virt/coco/tdx-guest/Kconfig"
+>  
+> +config GUEST_ATTEST
+> +	tristate
+> +	select KEYS
+> +
+>  endif
+> diff --git a/drivers/virt/Makefile b/drivers/virt/Makefile
+> index e9aa6fc96fab..66f6b838f8f4 100644
+> --- a/drivers/virt/Makefile
+> +++ b/drivers/virt/Makefile
+> @@ -12,3 +12,4 @@ obj-$(CONFIG_ACRN_HSM)		+= acrn/
+>  obj-$(CONFIG_EFI_SECRET)	+= coco/efi_secret/
+>  obj-$(CONFIG_SEV_GUEST)		+= coco/sev-guest/
+>  obj-$(CONFIG_INTEL_TDX_GUEST)	+= coco/tdx-guest/
+> +obj-$(CONFIG_GUEST_ATTEST)	+= coco/guest-attest/
+> diff --git a/drivers/virt/coco/guest-attest/Makefile b/drivers/virt/coco/guest-attest/Makefile
+> new file mode 100644
+> index 000000000000..5581c5a27588
+> --- /dev/null
+> +++ b/drivers/virt/coco/guest-attest/Makefile
+> @@ -0,0 +1,2 @@
+> +obj-$(CONFIG_GUEST_ATTEST) += guest_attest.o
+> +guest_attest-y := key.o
+> diff --git a/drivers/virt/coco/guest-attest/key.c b/drivers/virt/coco/guest-attest/key.c
+> new file mode 100644
+> index 000000000000..2a494b6dd7a7
+> --- /dev/null
+> +++ b/drivers/virt/coco/guest-attest/key.c
+> @@ -0,0 +1,159 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/* Copyright(c) 2023 Intel Corporation. All rights reserved. */
+> +
+> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> +#include <linux/seq_file.h>
+> +#include <linux/key-type.h>
+> +#include <linux/module.h>
+> +#include <linux/base64.h>
+> +
+> +#include <keys/request_key_auth-type.h>
+> +#include <keys/user-type.h>
+> +
+> +#include "guest-attest.h"
 
------BEGIN PGP SIGNATURE-----
+Can you share you guest-attest.h?
 
-iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmSZAFgACgkQvP0LAY0m
-WPEj+xAArngJ5sIFn5AM1VnqV2Q9bCbBOdPAeibWSiD8aa9K5uGlaMRnAalHnHxf
-rckHg8YpQ1gktG5tEME4hBmuPbpFPkbgK9dWgYBQQkuUzsltAav8P5uIof2EIe3y
-Cq0CCEK0Jfw8/8N+X9Fgdw/ZcVgbbWMF6TvOHUPL+tvmdAXf083kJvORt5bV7AgU
-o3BIns27GREBHxJA9sIdxhcHrx4MyldEI4q6Q/Yf2SuITnpBk6S9sjLONF9qVs63
-fuoyr6DAle8/svSA2t1srMwJxYJsZChGBYi6Rec7UJupCGYQLJ3SM1rvmf5M5Kd/
-nBnqw1fiXwTysgnJlpIyLZMjSf4m8akwRTQTW9AzOBfctijbkYzdqZUr9/rYfPTo
-vM7tqV7Az85Ko0q3NL8fmXPYfJcuAeiiFnJlPrLdDxE/lnPmd/LEryucH+DRqVgb
-P98Y3VWOJ/skGmX8BYaGV6hDgQafGaWjwPDCmd0Gq/WHBRnBbfG4P5KQvqlWnbMl
-5SyjS8KSchRU3maBMFnpEcCpSvTqcWRHIpQunfBEdJBVQM5YNTSKy0WwEA6q9Qfb
-mzlsxe8lEnjHz/i8gAclINpljWlUdhFOW1IR6bPGw1XTGpScFZrBogWLkbfh4qY5
-mShDweKYE7u7kUU2XF7MeX2U0mWj/h4RrO2HdTKGYV+jsF8cUt0=
-=lt2X
------END PGP SIGNATURE-----
+> +
+> +static LIST_HEAD(guest_attest_list);
+> +static DECLARE_RWSEM(guest_attest_rwsem);
+> +
+> +static struct guest_attest_ops *fetch_ops(void)
+> +{
+> +	return list_first_entry_or_null(&guest_attest_list,
+> +					struct guest_attest_ops, list);
+> +}
+> +
+> +static struct guest_attest_ops *get_ops(void)
+> +{
+> +	down_read(&guest_attest_rwsem);
+> +	return fetch_ops();
+> +}
+> +
+> +static void put_ops(void)
+> +{
+> +	up_read(&guest_attest_rwsem);
+> +}
+> +
+> +int register_guest_attest_ops(struct guest_attest_ops *ops)
+> +{
+> +	struct guest_attest_ops *conflict;
+> +	int rc;
+> +
+> +	down_write(&guest_attest_rwsem);
+> +	conflict = fetch_ops();
+> +	if (conflict) {
+> +		pr_err("\"%s\" ops already registered\n", conflict->name);
+> +		rc = -EEXIST;
+> +		goto out;
+> +	}
+> +	list_add(&ops->list, &guest_attest_list);
+> +	try_module_get(ops->module);
+> +	rc = 0;
+> +out:
+> +	up_write(&guest_attest_rwsem);
+> +	return rc;
+> +}
+> +EXPORT_SYMBOL_GPL(register_guest_attest_ops);
+> +
+> +void unregister_guest_attest_ops(struct guest_attest_ops *ops)
+> +{
+> +	down_write(&guest_attest_rwsem);
+> +	list_del(&ops->list);
+> +	up_write(&guest_attest_rwsem);
+> +	module_put(ops->module);
+> +}
+> +EXPORT_SYMBOL_GPL(unregister_guest_attest_ops);
+> +
+> +static int __guest_attest_request_key(struct key *key, int level,
+> +				      struct key *dest_keyring,
+> +				      const char *callout_info, int callout_len,
+> +				      struct key *authkey)
+> +{
+> +	struct guest_attest_ops *ops;
+> +	void *payload = NULL;
+> +	int rc, payload_len;
+> +
+> +	ops = get_ops();
+> +	if (!ops)
+> +		return -ENOKEY;
+> +
+> +	payload = kzalloc(max(GUEST_ATTEST_DATALEN, callout_len), GFP_KERNEL);
+> +	if (!payload) {
+> +		rc = -ENOMEM;
+> +		goto out;
+> +	}
 
---ld2mt2xgxgm2cqup--
+Is the idea to get the values like vmpl part of the payload?
+
+> +
+> +	payload_len = base64_decode(callout_info, callout_len, payload);
+> +	if (payload_len < 0 || payload_len > GUEST_ATTEST_DATALEN) {
+> +		rc = -EINVAL;
+> +		goto out;
+> +	}
+> +
+> +	rc = ops->request_attest(key, level, dest_keyring, payload, payload_len,
+> +				 authkey);
+> +out:
+> +	kfree(payload);
+> +	put_ops();
+> +	return rc;
+> +}
+> +
+> +static int guest_attest_request_key(struct key *authkey, void *data)
+> +{
+> +	struct request_key_auth *rka = get_request_key_auth(authkey);
+> +	struct key *key = rka->target_key;
+> +	unsigned long long id;
+> +	int rc, level;
+> +
+> +	pr_debug("desc: %s op: %s callout: %s\n", key->description, rka->op,
+> +		 rka->callout_info ? (char *)rka->callout_info : "\"none\"");
+> +
+> +	if (sscanf(key->description, "guest_attest:%d:%llu", &level, &id) != 2)
+> +		return -EINVAL;
+> +
+
+Can you explain some details about the id and level? It is not very clear why
+we need it.
+
+> +	if (!rka->callout_info) {
+> +		rc = -EINVAL;
+> +		goto out;
+> +	}
+> +
+> +	rc = __guest_attest_request_key(key, level, rka->dest_keyring,
+> +					rka->callout_info, rka->callout_len,
+> +					authkey);
+> +out:
+> +	complete_request_key(authkey, rc);
+> +	return rc;
+> +}
+> +
+> +static int guest_attest_vet_description(const char *desc)
+> +{
+> +	unsigned long long id;
+> +	int level;
+> +
+> +	if (sscanf(desc, "guest_attest:%d:%llu", &level, &id) != 2)
+> +		return -EINVAL;
+> +	return 0;
+> +}
+> +
+> +static struct key_type key_type_guest_attest = {
+> +	.name = "guest_attest",
+> +	.preparse = user_preparse,
+> +	.free_preparse = user_free_preparse,
+> +	.instantiate = generic_key_instantiate,
+> +	.revoke = user_revoke,
+> +	.destroy = user_destroy,
+> +	.describe = user_describe,
+> +	.read = user_read,
+> +	.vet_description = guest_attest_vet_description,
+> +	.request_key = guest_attest_request_key,
+> +};
+> +
+> +static int __init guest_attest_init(void)
+> +{
+> +	return register_key_type(&key_type_guest_attest);
+> +}
+> +
+> +static void __exit guest_attest_exit(void)
+> +{
+> +	unregister_key_type(&key_type_guest_attest);
+> +}
+> +
+> +module_init(guest_attest_init);
+> +module_exit(guest_attest_exit);
+> +MODULE_LICENSE("GPL v2");
+> diff --git a/drivers/virt/coco/tdx-guest/Kconfig b/drivers/virt/coco/tdx-guest/Kconfig
+> index 14246fc2fb02..9a1ec85369fe 100644
+> --- a/drivers/virt/coco/tdx-guest/Kconfig
+> +++ b/drivers/virt/coco/tdx-guest/Kconfig
+> @@ -1,6 +1,7 @@
+>  config TDX_GUEST_DRIVER
+>  	tristate "TDX Guest driver"
+>  	depends on INTEL_TDX_GUEST
+> +	select GUEST_ATTEST
+>  	help
+>  	  The driver provides userspace interface to communicate with
+>  	  the TDX module to request the TDX guest details like attestation
+> diff --git a/drivers/virt/coco/tdx-guest/tdx-guest.c b/drivers/virt/coco/tdx-guest/tdx-guest.c
+> index 388491fa63a1..65b5aab284d9 100644
+> --- a/drivers/virt/coco/tdx-guest/tdx-guest.c
+> +++ b/drivers/virt/coco/tdx-guest/tdx-guest.c
+> @@ -13,11 +13,13 @@
+>  #include <linux/string.h>
+>  #include <linux/uaccess.h>
+>  #include <linux/set_memory.h>
+> +#include <linux/key-type.h>
+>  
+>  #include <uapi/linux/tdx-guest.h>
+>  
+>  #include <asm/cpu_device_id.h>
+>  #include <asm/tdx.h>
+> +#include "../guest-attest/guest-attest.h"
+>  
+>  /*
+>   * Intel's SGX QE implementation generally uses Quote size less
+> @@ -229,6 +231,62 @@ static const struct x86_cpu_id tdx_guest_ids[] = {
+>  };
+>  MODULE_DEVICE_TABLE(x86cpu, tdx_guest_ids);
+>  
+> +static int tdx_request_attest(struct key *key, int level,
+> +			      struct key *dest_keyring, void *payload,
+> +			      int payload_len, struct key *authkey)
+> +{
+> +	u8 *tdreport;
+> +	long ret;
+> +
+> +	tdreport = kzalloc(TDX_REPORT_LEN, GFP_KERNEL);
+> +	if (!tdreport)
+> +		return -ENOMEM;
+> +
+> +	/* Generate TDREPORT0 using "TDG.MR.REPORT" TDCALL */
+> +	ret = tdx_mcall_get_report0(payload, tdreport);
+> +	if (ret)
+> +		goto out;
+> +
+> +	mutex_lock(&quote_lock);
+> +
+> +	memset(qentry->buf, 0, qentry->buf_len);
+> +	reinit_completion(&qentry->compl);
+> +	qentry->valid = true;
+> +
+> +	/* Submit GetQuote Request using GetQuote hyperetall */
+> +	ret = tdx_hcall_get_quote(qentry->buf, qentry->buf_len);
+> +	if (ret) {
+> +		pr_err("GetQuote hyperetall failed, status:%lx\n", ret);
+> +		ret = -EIO;
+> +		goto quote_failed;
+> +	}
+> +
+> +	/*
+> +	 * Although the GHCI specification does not state explicitly that
+> +	 * the VMM must not wait indefinitely for the Quote request to be
+> +	 * completed, a sane VMM should always notify the guest after a
+> +	 * certain time, regardless of whether the Quote generation is
+> +	 * successful or not.  For now just assume the VMM will do so.
+> +	 */
+> +	wait_for_completion(&qentry->compl);
+> +
+> +	ret = key_instantiate_and_link(key, qentry->buf, qentry->buf_len,
+> +				       dest_keyring, authkey);
+> +
+> +quote_failed:
+> +	qentry->valid = false;
+> +	mutex_unlock(&quote_lock);
+> +out:
+> +	kfree(tdreport);
+> +	return ret;
+> +}
+> +
+> +static struct guest_attest_ops tdx_attest_ops = {
+> +	.name = KBUILD_MODNAME,
+> +	.module = THIS_MODULE,
+> +	.request_attest = tdx_request_attest,
+> +};
+> +
+>  static int __init tdx_guest_init(void)
+>  {
+>  	int ret;
+> @@ -251,8 +309,14 @@ static int __init tdx_guest_init(void)
+>  	if (ret)
+>  		goto free_quote;
+>  
+> +	ret = register_guest_attest_ops(&tdx_attest_ops);
+> +	if (ret)
+> +		goto free_irq;
+> +
+>  	return 0;
+>  
+> +free_irq:
+> +	tdx_unregister_event_irq_cb(quote_cb_handler, qentry);
+>  free_quote:
+>  	free_quote_entry(qentry);
+>  free_misc:
+> @@ -264,6 +328,7 @@ module_init(tdx_guest_init);
+>  
+>  static void __exit tdx_guest_exit(void)
+>  {
+> +	unregister_guest_attest_ops(&tdx_attest_ops);
+>  	tdx_unregister_event_irq_cb(quote_cb_handler, qentry);
+>  	free_quote_entry(qentry);
+>  	misc_deregister(&tdx_misc_dev);
+
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
