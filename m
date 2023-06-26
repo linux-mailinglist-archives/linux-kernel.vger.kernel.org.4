@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BB1273D62E
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 05:12:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77B9D73D631
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 05:12:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231210AbjFZDMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 23:12:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52254 "EHLO
+        id S231304AbjFZDMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 23:12:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230498AbjFZDM1 (ORCPT
+        with ESMTP id S231138AbjFZDM1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 25 Jun 2023 23:12:27 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B74E53
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3459B1AA
         for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 20:12:24 -0700 (PDT)
 Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id CF3FC2C0547;
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id C24362C0124;
         Mon, 26 Jun 2023 15:12:20 +1200 (NZST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
         s=mail181024; t=1687749140;
-        bh=jaft/Wql30k5S8yiUIGneVwgwK9Vf12SNTJw/A9l/5c=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ShCTtcPZUPzIvhJuok8iXidLPnKeiIp3gLaLTo4ajQf2ifq5Rf9/NRUBd1ey0mQj1
-         kOFjhGDsmCp0ApouNO/sOnNCQcnFR+AW64uS6vMHN1Vx7fY8UltPBj27qAx98q7TLd
-         dAZR0KUFhmcj1vDe7+XBefwLCWI9uQOHYZ4COpA8CEqXuJTgonUuuWPFFHsLoyo3WW
-         jmPWSKSqjssG9Hf+ktH9wYz4gIpmAgerRNxm0J1YxxhA/wjitU8KtbvpT+Cq9O4HGi
-         upzg7syaFrlFQhCQuCHkxugZ/keI9yVOOabvk9nWYNyupkm6mMJLPiV5/kK1occvwE
-         8zkEMsglTyXKw==
+        bh=eMOEgUa0E7z5p8qfBp+CWlp5a+uQqNd4H4SB3Ukp/sI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=vIUNGZmGgGMYtCfI7k9W+Tkqud2W9P9ld6G9+cL2sKP5ipW3oVSGHltSOg51f24gc
+         xm0j9dZueRrYl7qzbompeuTj/ugt+EU3kTjR1XOliLsejmwF8lSrqEb2xI6p1xxUHi
+         EtRGCXXCnxyrBHHFCzlG/E3iw6Rj76SO29KuNJqtzpujmHPxbmId970OhZJalSt4GW
+         4EFAmZjTbD9TFXS1bWfjUJWD6+31xPJ/dRqpKwMIDc/GFXuAGoOBw1FkXY8HvQOXfv
+         6tQvCdgG5Gt05a3yqghMzDXkYdUjJ51g+k5flW5S2kLyFqLEHocUnp2e2zB6yvr57C
+         tVADcqSF0AH1Q==
 Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B649902140000>; Mon, 26 Jun 2023 15:12:20 +1200
+        id <B649902140001>; Mon, 26 Jun 2023 15:12:20 +1200
 Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
-        by pat.atlnz.lc (Postfix) with ESMTP id 9F65413EE4B;
+        by pat.atlnz.lc (Postfix) with ESMTP id A0D8B13EE52;
         Mon, 26 Jun 2023 15:12:20 +1200 (NZST)
 Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-        id 9D858283B1A; Mon, 26 Jun 2023 15:12:20 +1200 (NZST)
+        id 9F556281AA0; Mon, 26 Jun 2023 15:12:20 +1200 (NZST)
 From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
 To:     miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
         robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
@@ -46,53 +46,56 @@ To:     miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
 Cc:     linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH v2 0/3] mtd: rawnand: marvell: add support for AC5 SoC
-Date:   Mon, 26 Jun 2023 15:12:14 +1200
-Message-ID: <20230626031217.870938-1-chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH v2 1/3] dt-bindings: mtd: Add AC5 specific binding
+Date:   Mon, 26 Jun 2023 15:12:15 +1200
+Message-ID: <20230626031217.870938-2-chris.packham@alliedtelesis.co.nz>
 X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230626031217.870938-1-chris.packham@alliedtelesis.co.nz>
+References: <20230626031217.870938-1-chris.packham@alliedtelesis.co.nz>
 MIME-Version: 1.0
 X-Patchwork-Bot: notify
 Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=NPqrBHyg c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=of4jigFt-DYA:10 a=VwQbUJbxAAAA:8 a=BTILRwyEkoqLbeD1fBkA:9 a=AjGcO6oz07-iQ99wixmX:22
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=NPqrBHyg c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=of4jigFt-DYA:10 a=uX4zeqIseCYJFCGchTMA:9
 X-SEG-SpamProfiler-Score: 0
 x-atlnz-ls: pat
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series adds support for the NAND Flash Controller on the AC5/AC5X SO=
-C. It
-needs to be applied on top of two other recent series [1] (applied to
-mtd/fixes and mainline) [2] (applied to nand/next).
+Add binding for AC5 SoC. This SoC only supports NAND SDR timings up to
+mode 3 so a specific compatible value is needed.
 
-I've tried to stick to the minimal changes required to get the NFC workin=
-g on
-the board I have (AC5X + S34ML02G2). Marvell's SDK has hard coded tables =
-of
-ndtr values for the different timing modes but so far that seems unnecess=
-ary.
+Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+---
 
-[1] - https://lore.kernel.org/linux-mtd/20230525003154.2303012-1-chris.pa=
-ckham@alliedtelesis.co.nz/raw
-[2] - https://lore.kernel.org/linux-mtd/20230619040742.1108172-2-chris.pa=
-ckham@alliedtelesis.co.nz/raw
+Notes:
+    Changes in v2:
+    - Keep compatibles in alphabetical order
+    - Explain AC5 limitations in commit message
 
-Chris Packham (3):
-  dt-bindings: mtd: Add AC5 specific binding
-  arm64: dts: marvell: Add NAND flash controller to AC5
-  mtd: rawnand: marvell: add support for AC5 SoC
+ .../devicetree/bindings/mtd/marvell,nand-controller.yaml         | 1 +
+ 1 file changed, 1 insertion(+)
 
- .../bindings/mtd/marvell,nand-controller.yaml    |  1 +
- arch/arm64/boot/dts/marvell/ac5-98dx25xx.dtsi    | 10 ++++++++++
- drivers/mtd/nand/raw/Kconfig                     |  2 +-
- drivers/mtd/nand/raw/marvell_nand.c              | 16 ++++++++++++++++
- 4 files changed, 28 insertions(+), 1 deletion(-)
-
+diff --git a/Documentation/devicetree/bindings/mtd/marvell,nand-controlle=
+r.yaml b/Documentation/devicetree/bindings/mtd/marvell,nand-controller.ya=
+ml
+index a10729bb1840..1ecea848e8b9 100644
+--- a/Documentation/devicetree/bindings/mtd/marvell,nand-controller.yaml
++++ b/Documentation/devicetree/bindings/mtd/marvell,nand-controller.yaml
+@@ -16,6 +16,7 @@ properties:
+           - const: marvell,armada-8k-nand-controller
+           - const: marvell,armada370-nand-controller
+       - enum:
++          - marvell,ac5-nand-controller
+           - marvell,armada370-nand-controller
+           - marvell,pxa3xx-nand-controller
+       - description: legacy bindings
 --=20
 2.41.0
 
