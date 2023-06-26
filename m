@@ -2,98 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F97A73EC38
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 22:55:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D354D73EC43
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 22:58:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230357AbjFZUyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 16:54:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50620 "EHLO
+        id S230041AbjFZU5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 16:57:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbjFZUys (ORCPT
+        with ESMTP id S229868AbjFZU5j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 16:54:48 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B579E
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 13:54:47 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-666eb03457cso1825792b3a.1
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 13:54:47 -0700 (PDT)
+        Mon, 26 Jun 2023 16:57:39 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C456125
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 13:57:35 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-5728df0a7d9so42151977b3.1
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 13:57:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687812887; x=1690404887;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CYCMueTG15Qd1hUiZSyBUCrvl3HLbRhK1eO0hU0rYmo=;
-        b=eN4qrz+mMTFYIEfFEyq1QI2MWjiI+eEvtZhA88aK8RuBZimsVRiixPZ7go+NmPC+S+
-         OitaiLPChpCnBz7nFnfrLbxLiV2aQ0qbnVn4Yz1QfGhLZEyV+w9xru5+alYYx/OOsbzV
-         i2klmHgdT2HHG947IVXKDyis1VWjM5PtFH/OMaf2YbYutHuUakl2O8SfXm7tF2diW1RS
-         INPrzAwtUjgA50heG2jeTYAKST8UUGXQxmB1QB5YN7jeSwnmvPDoark3AgXaNF2E+7e6
-         ib3GY7cJKytz4uRqiC/Yv0DQGxueK5QfoNc+1vg8BoUQ9fT7C0BiQUUk8QF+QrP1qVME
-         ExIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687812887; x=1690404887;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:sender:x-gm-message-state:from:to:cc:subject
+        d=paul-moore.com; s=google; t=1687813054; x=1690405054;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=CYCMueTG15Qd1hUiZSyBUCrvl3HLbRhK1eO0hU0rYmo=;
-        b=GOfnni+JGpe8Qs5x6El0LcGKTQSPtyGGWPOfYFpLDRFQvUmj1caccm0+UlFv+v58U7
-         uTiPmTWHNZ+1olK/4ocBTBczjBxXW/1rpH+8F8v4dBfEWcE6hpTirfEBcQXsr+tgju2C
-         +czwtSNJX7ize7s3Q6p+O8GuIn3TPdfbb7PlnMWt4YluqMIWid/QF+02q696mMnYeQAX
-         DGtGfhOb5KFn0aDnixUcWc1qf2UfJa3EMv2pJEaGP73CH9vGk9f8KxTlMCN4B2MZsFtR
-         jBOtHJJllW7K9ZsY+vfOiieBOFBB8DzMz0oyNaYiFGxi72f0DiBJTjcF7oW4JXbWSGmn
-         JcyA==
-X-Gm-Message-State: AC+VfDxbIRZqSHsLVD++YFDwMVKWp/3jXTK3y4JWijs0l3jBwT53OMeg
-        6AMcaejegy/10D+19tJyXHE=
-X-Google-Smtp-Source: ACHHUZ4UJpj0J5WHUC3A67nRWAG5f+vx1KatSNGWN/rxZdlJRnReWXk9i2msPbsvaNUXKbhz0ZEz6g==
-X-Received: by 2002:a05:6a20:4e06:b0:125:56d8:6724 with SMTP id gk6-20020a056a204e0600b0012556d86724mr7964586pzb.58.1687812886805;
-        Mon, 26 Jun 2023 13:54:46 -0700 (PDT)
-Received: from localhost (dhcp-72-235-13-41.hawaiiantel.net. [72.235.13.41])
-        by smtp.gmail.com with ESMTPSA id j6-20020aa78006000000b00643355ff6a6sm4354053pfi.99.2023.06.26.13.54.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jun 2023 13:54:46 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 26 Jun 2023 10:54:46 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, linux-kernel@vger.kernel.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        fuyuanli@didiglobal.com, zwp10758@gmail.com, zyhtheonly@gmail.com,
-        zyhtheonly@yeah.net
-Subject: Re: [PATCH v3] sched/isolation: add a workqueue parameter onto
- isolcpus to constrain unbound CPUs
-Message-ID: <ZJn7Fm4OI1ySPHZg@slm.duckdns.org>
-References: <ZJNizvI-7A2hFDoM@slm.duckdns.org>
- <20230622032133.GA29012@didi-ThinkCentre-M930t-N000>
+        bh=kfxo+qeDQtE6pfqX2pSVRn4Ktm5TmTSx9jMdiyp1OT4=;
+        b=XpIIXT1JP95o4USFFOxXJXcoIrgMALNoGaOpjXNUYPtNxL7AVGgjNT6tncC8SlNk8a
+         CnOjClmdLziA56k70SuTLjis8gL0y+NTFNoRD/lyp/e1Q6RLilOSBu9xwRv0TKPTFYr3
+         P2Cq9DNnieb5kUuX/V+XO8r0C5u4fMJKtAFhl74uh4Ki56mSMca6ZrnGh8B6Z7suZlrA
+         Z64D+gn2ajp29P3YJ0aoDE75vvLTMtQz9kNcR8nsqOlRMrt6kcDXERIsIEy986yU/daH
+         gPo91Efo56Z73JxuTvfrRwedHJT15lWBCDgcNbNcuTY61aqTSV7eikyJig1lQAluz3ZH
+         GfQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687813054; x=1690405054;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kfxo+qeDQtE6pfqX2pSVRn4Ktm5TmTSx9jMdiyp1OT4=;
+        b=MBtuvH9ZXrGh60Gne9KkDtQcRH9LIPbc5SfyMz9etvPC1x429hWcu36XKcrcZlOMfr
+         7Q0pv4xI1N7trgnUyhufCYYro7mV78yZTuypD7jyW4CHDevt09flbzmHuoGickV87xoL
+         Kj1Yz2DqQhYMGvtMPTMbj5D4S3Wh6szR1XOE0K88/P6sHzc7xGlYNBk21/88e2vOS7jo
+         m2Yfl0pr3jfDm6ztQW404YavnVxjvBMn1GnYuTtXQ7X4tT2U0scdQzfZr+QHKZb0kQyT
+         t/eNKf7FC+m9YQopdGCYy0vAjr8tbKrsRr73z30+dhCsv355LvuUgLxk2aeIDEhxCQHs
+         DUzQ==
+X-Gm-Message-State: AC+VfDzRNj0gODJuHFBzrBiQx6e79ugofhB8e7At4DQDmgg+OtLX14j1
+        6TSEDYxQXGqnlmK9W2VDgLKXYjik+7gKaNz0ORu/
+X-Google-Smtp-Source: ACHHUZ6ZyOU0JoT8cNBcFBcx5J+DrrL8BN+fGLFUQjVOnsFRFC3jsF+bemFQsyMFGAHKSXzDBI4TNpCJZCtTZ1xUNZI=
+X-Received: by 2002:a81:e943:0:b0:576:916d:96b with SMTP id
+ e3-20020a81e943000000b00576916d096bmr9971637ywm.36.1687813054539; Mon, 26 Jun
+ 2023 13:57:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230622032133.GA29012@didi-ThinkCentre-M930t-N000>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Mon, 26 Jun 2023 16:57:23 -0400
+Message-ID: <CAHC9VhTcPVRAoxWn+EpMcGPThgtfhB=z3LM3BkMtxKv6aQYPFw@mail.gmail.com>
+Subject: [GIT PULL] Audit patches for v6.5
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     audit@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 22, 2023 at 11:22:17AM +0800, tiozhang wrote:
-> Motivation of doing this is to better improve boot times for devices when
-> we want to prevent our workqueue works from running on some specific CPUs,
-> i,e, some CPUs are busy with interrupts.
-> 
-> Also remove HK_FLAG_WQ from nohz_full to prevent nohz_full overriding
-> workqueue's cpu config.
-> 
-> Suggested-by: Tejun Heo <tj@kernel.org>
-> Signed-off-by: tiozhang <tiozhang@didiglobal.com>
+Hi Linus,
 
-Let's just do the workqueue specific parameter. I'll apply the other one to
-the workqueue branch after the merge window.
+A single audit patch for the Linux v6.5 merge window that resolves two
+compiler warnings regarding missing function prototypes.  Please
+merge.
 
-Thanks.
+Thanks,
+-Paul
+
+--
+The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
+
+ Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
+
+are available in the Git repository at:
+
+ https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git
+   tags/audit-pr-20230626
+
+for you to fetch changes up to e455ca40dbcf2cd50d1e59bf4b2752b300bcdad4:
+
+ audit: avoid missing-prototype warnings (2023-05-17 11:34:55 -0400)
+
+----------------------------------------------------------------
+audit/stable-6.5 PR 20230626
+
+----------------------------------------------------------------
+Arnd Bergmann (1):
+     audit: avoid missing-prototype warnings
+
+include/linux/audit.h      | 2 --
+include/linux/audit_arch.h | 2 ++
+kernel/audit.h             | 2 +-
+3 files changed, 3 insertions(+), 3 deletions(-)
 
 -- 
-tejun
+paul-moore.com
