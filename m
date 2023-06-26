@@ -2,127 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20C6D73E433
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 18:07:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DB7773E432
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 18:07:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231694AbjFZQHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 12:07:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43054 "EHLO
+        id S231646AbjFZQHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 12:07:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231651AbjFZQHi (ORCPT
+        with ESMTP id S229562AbjFZQHd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 12:07:38 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6EBC6
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 09:06:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687795610;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RJPNo+/LgG0KXsCyIerMFPAI/JqqDRK/rvfGQLVSbrI=;
-        b=TcNhM9uszDwXEuqg6uNwzcN+w0avqDvI8Yz4DEJhocJulKmig4b1rvgAx5HVM86opr3BUx
-        qLLtT3lM+vqudrBMtYKaoGBJM/jI7k/p94YdNt/ZVesBRgBfsXTnUDUBxrp/aeUc+Jsqx4
-        uTvCRtsHBcdmBVS9HAsHa6pQ/I9nqVw=
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com
- [209.85.166.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-491-lo8-XRDiPlem1lzWqR5cHA-1; Mon, 26 Jun 2023 12:06:45 -0400
-X-MC-Unique: lo8-XRDiPlem1lzWqR5cHA-1
-Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-7778eb7966eso225339039f.1
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 09:06:33 -0700 (PDT)
+        Mon, 26 Jun 2023 12:07:33 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1DD4FA;
+        Mon, 26 Jun 2023 09:07:31 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2b69e6d324aso21827371fa.0;
+        Mon, 26 Jun 2023 09:07:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687795650; x=1690387650;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+4iSzTg8EChOOzM4BxDcM+RvFk02kmVmbliMB8mfUCk=;
+        b=RlnK3OZoaEKxJnom2X8CXl92pbWx7OOPW4z0jpKaCHbGXroW0iQAsSISlIaV4C8G8x
+         gK1MOooiRRWfenFnvdfXiSVEVcMWb8LVrk+kNPSJIiB4OthW+XopAMs0ohxXFBO6MZzx
+         xSS+fZp9IO2IqrTy2iaKTdrItk2cvv2xVSz2QF7kcl2N3PQsgFWom2cZkSD7OlepUhRh
+         QeyFDcM0MFp5+izZO5CpgbepvcNdsGpIMb9zj2O9x3o9Wz383Fh4CGG6pOxAOoVXe+26
+         Ud/6Sl6lcVCtQjx7rER0jxpx+HyFIEctGfvtCyVSt1QRfo4NaN7sZ6JzkmyeXZNdV+mw
+         6o5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687795593; x=1690387593;
-        h=content-transfer-encoding:mime-version:organization:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RJPNo+/LgG0KXsCyIerMFPAI/JqqDRK/rvfGQLVSbrI=;
-        b=W5ATKJz4jLo2C2rYjj5scO+N4FtYnRHAK6nRiw0hf+4KXB6PZduqzHMKNl9LNqIawC
-         zrICiPCQKxDhOeu/Fjewcx91geSX60fVoLSKL9Wos6xNKtv+WanqTHPhsHt6zrUBh1O0
-         qNabNlcciTgwWe+ao1YnHrQU+gz7sXrYOU3bQb7QBy4waCUt9oVtE+SX2FmNTpOVlr0a
-         5KB3jiM3VuMRB4GoaYkfsTeR+tI1rvf3CFdPqdGOETl0kRs1PbvsbWgbhc2DWJz1vJJD
-         uB82BFtyabG1HaNQMig7yCG8KOxKQT422D/qD7O8yGfvFYf43CI/H3YWVg/U4UsV9k2t
-         eM6w==
-X-Gm-Message-State: AC+VfDyR2O0vpYXznX/s58j2zjeNfwU00diS8HWngLY0/WxP4Ba1ysRc
-        t8F/0HbuiAJmTcAZRrKkqZqZWu4KFpYTylyqfod9xe8x9H0aTzcy2eQuxqPHv11iKPlYiECYHP/
-        apTAlqZw5E/8oTFpxws/SfeFM
-X-Received: by 2002:a6b:f417:0:b0:777:b4af:32a3 with SMTP id i23-20020a6bf417000000b00777b4af32a3mr24592667iog.14.1687795592672;
-        Mon, 26 Jun 2023 09:06:32 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ53FUa3LHmQBZC6LWteROXsScIosACWPyU08IRlkyg3/dKKqdkS4z/oGdbp+hN7l0kO2tLOkw==
-X-Received: by 2002:a6b:f417:0:b0:777:b4af:32a3 with SMTP id i23-20020a6bf417000000b00777b4af32a3mr24592636iog.14.1687795592402;
-        Mon, 26 Jun 2023 09:06:32 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id h21-20020a02b615000000b004231ee0fed4sm1831402jam.78.2023.06.26.09.06.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jun 2023 09:06:31 -0700 (PDT)
-Date:   Mon, 26 Jun 2023 10:06:29 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     ankita@nvidia.com, aniketa@nvidia.com, cjia@nvidia.com,
-        kwankhede@nvidia.com, targupta@nvidia.com, vsethi@nvidia.com,
-        acurrid@nvidia.com, apopple@nvidia.com, jhubbard@nvidia.com,
-        danw@nvidia.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/1] vfio/nvgpu: Add vfio pci variant module for
- grace hopper
-Message-ID: <20230626100629.3c318922.alex.williamson@redhat.com>
-In-Reply-To: <ZJWdbbNESp1+6GVN@nvidia.com>
-References: <20230622030720.19652-1-ankita@nvidia.com>
-        <ZJWdbbNESp1+6GVN@nvidia.com>
-Organization: Red Hat
+        d=1e100.net; s=20221208; t=1687795650; x=1690387650;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+4iSzTg8EChOOzM4BxDcM+RvFk02kmVmbliMB8mfUCk=;
+        b=hVK5CsuX4NcJqQAbmE4tmF6kCGlqHVmQ0kNLhh/q0Hzs4sOKfw4oMOLQysFsnuFUKp
+         gtyFTSeIj6N4PRx1unjFeFJq+3jxpaGG80FAMyCRnFpCc2zU3nkKK/ofuRMdFDXekNJr
+         rLY9AGLSWGuQb4Y6Tf52nhGNNE83WnnrsTqDtq4o6SYhza4Iw6cUzbFX5aa28Us7EABC
+         6N7hVLtXcqjAo36bXyLXInC8YENRm70a9dqGVN/JfUqMA/6imh7zVIO4crgj4PVfYlPB
+         ZGdl141KeY5SHB9/aU6EHhSjNSNPlZl/o279NBu+DfvdxGpOm1lf6Kq9eV961a9A0+R+
+         e/Kw==
+X-Gm-Message-State: AC+VfDy9i2E//s7LCpdkIQayJ2h7LrWot5tIK1XzguiI3iufdCxXHAOI
+        alAdhVnnanYHb6x7tzsbCikI2m3cXaF+IH3GJDY=
+X-Google-Smtp-Source: ACHHUZ4lqZ0HZVO22tySvTRMn9GTWb4kquzbA2i7q+jgXEC8Llv50w26JmRWX6NR8AVm/Q3ttM2tntum2WpC3Qy2R/A=
+X-Received: by 2002:a2e:a401:0:b0:2b6:a186:52ac with SMTP id
+ p1-20020a2ea401000000b002b6a18652acmr1820365ljn.47.1687795649926; Mon, 26 Jun
+ 2023 09:07:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230623225513.2732256-1-dhowells@redhat.com> <20230623225513.2732256-5-dhowells@redhat.com>
+ <CAOi1vP_Bn918j24S94MuGyn+Gxk212btw7yWeDrRcW1U8pc_BA@mail.gmail.com> <3070989.1687793422@warthog.procyon.org.uk>
+In-Reply-To: <3070989.1687793422@warthog.procyon.org.uk>
+From:   Ilya Dryomov <idryomov@gmail.com>
+Date:   Mon, 26 Jun 2023 18:07:18 +0200
+Message-ID: <CAOi1vP9hOhaAWp6ext=6tH7XjKUFAkC0xhkB91QozWr0-fw0NA@mail.gmail.com>
+Subject: Re: [PATCH net-next v5 04/16] ceph: Use sendmsg(MSG_SPLICE_PAGES)
+ rather than sendpage()
+To:     David Howells <dhowells@redhat.com>
+Cc:     netdev@vger.kernel.org,
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Xiubo Li <xiubli@redhat.com>,
+        Jeff Layton <jlayton@kernel.org>, ceph-devel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 23 Jun 2023 10:26:05 -0300
-Jason Gunthorpe <jgg@nvidia.com> wrote:
+On Mon, Jun 26, 2023 at 5:30=E2=80=AFPM David Howells <dhowells@redhat.com>=
+ wrote:
+>
+> Ilya Dryomov <idryomov@gmail.com> wrote:
+>
+> > write_partial_message_data() is net/ceph/messenger_v1.c specific, so it
+> > doesn't apply here.  I would suggest squashing the two net/ceph patches
+> > into one since even the titles are the same.
+>
+> I would, but they're now applied to net-next, so we need to patch that.
 
-> On Wed, Jun 21, 2023 at 08:07:20PM -0700, ankita@nvidia.com wrote:
-> > +			if (caps.size) {
-> > +				info.flags |= VFIO_REGION_INFO_FLAG_CAPS;
-> > +				if (info.argsz < sizeof(info) + caps.size) {
-> > +					info.argsz = sizeof(info) + caps.size;
-> > +					info.cap_offset = 0;  
-> 
-> Shouldn't this be an error if we can't fit the caps into the response?
-> Silently discarding the caps seems wrong..
+I don't see a problem with that given that the patches themselves have
+major issues (i.e. it's not just a commit message/title nit).
 
-It's required for backwards compatibility.  If a userspace doesn't
-support the info ioctl capabilities chain, it gets the basic
-information successfully, while an enlightened userspace makes use of
-the flags to know that a capability chain is available but unreported
-due to an insufficient buffer size, with the required size being
-provided in the return structure.
- 
-> > +static ssize_t nvgpu_vfio_pci_read(struct vfio_device *core_vdev,
-> > +		char __user *buf, size_t count, loff_t *ppos)
-> > +{
-> > +	unsigned int index = VFIO_PCI_OFFSET_TO_INDEX(*ppos);
-> > +
-> > +	/*
-> > +	 * Only the device memory present on the hardware is mapped, which may
-> > +	 * not be power-of-2 aligned. A read to the BAR2 region implies an
-> > +	 * access outside the available device memory on the hardware.
-> > +	 */
-> > +	if (index == VFIO_PCI_BAR2_REGION_INDEX)
-> > +		return -EINVAL;  
-> 
-> What does the qemu do in this case? Crash the VM?
+>
+> > >   * Write as much as possible.  The socket is expected to be corked,
+> > > - * so we don't bother with MSG_MORE/MSG_SENDPAGE_NOTLAST here.
+> > > + * so we don't bother with MSG_MORE here.
+> > >   *
+> > >   * Return:
+> > > - *   1 - done, nothing (else) to write
+> > > + *  >0 - done, nothing (else) to write
+> >
+> > It would be nice to avoid making tweaks like this to the outer
+> > interface as part of switching to a new internal API.
+>
+> Ok.  I'll change that and wrap the sendmsg in a loop.  Though, as I asked=
+ in
+> an earlier reply, why is MSG_DONTWAIT used here?
 
-Yes, I don't think return -errno matches what we discussed for
-returning -1 on read and dropping writes outside of the device memory.
-Also see comments in my review that read/write should handle the
-coherent memory area as well, the device should work with x-no-mmap=on.
+See my reply there.
+
+>
+> > > +       if (WARN_ON(!iov_iter_is_bvec(&con->v2.out_iter)))
+> > > +               return -EINVAL;
+> >
+> > Previously, this WARN_ON + error applied only to the "try sendpage"
+> > path.  There is a ton of kvec usage in net/ceph/messenger_v2.c, so I'm
+> > pretty sure that placing it here breaks everything.
+>
+> This should have been removed as MSG_SPLICE_PAGES now accepts KVEC and XA=
+RRAY
+> iterators also.
+>
+> Btw, is it feasible to use con->v2.out_iter_sendpage to apply MSG_SPLICE_=
+PAGES
+> to the iterator to be transmitted as a whole?  It seems to be set dependi=
+ng on
+> iterator type.
+
+I'm not sure I understand what you mean by "transmitted as a whole".
+con->v2.out_iter_sendpage is set only when zerocopy is desired.  If the
+underlying data is not guaranteed to remain stable, zerocopy behavior
+is not safe.
+
 Thanks,
 
-Alex
-
+                Ilya
