@@ -2,123 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E93073D624
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 05:10:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3F8C73D627
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 05:11:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbjFZDKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 23:10:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51270 "EHLO
+        id S229619AbjFZDLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 23:11:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231194AbjFZDJ4 (ORCPT
+        with ESMTP id S229481AbjFZDLu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 23:09:56 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BACF2189;
-        Sun, 25 Jun 2023 20:09:55 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QqCWP188lz4wb0;
-        Mon, 26 Jun 2023 13:09:53 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1687748994;
-        bh=+czq6miQ0mBDch3gmdYhKC0gx38ZSOssz4z8cIyVzrw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Xel0quGwLJn+HtPTqGPfqsT5vMdJ+W6r13r0GJewXUxdBj/nXt2igRHUq0lbdRr/i
-         KJc2p2poDtGL0FBEGdwzPgztVomdhwc/dV4pcIzRPJykQCzRMceZaZTWoYuwwjSH1O
-         9BB66rHCEL25ZhIe6jvt/8S2MtW8mmNBwR27hxpGiSUF1FuY+y7Alvx9YVUE22/bHr
-         MZoHu13Ipdxti2iZC7hZpAAaj2gXDye5ORqpE+ci2O3k0UoD5yRgkJUcuxjwCj4hWG
-         t2ze96Ja/JB1DmyX4bv3UM+SGkY5zve0uefAkBHl2AFoZfOyQ6gBMQQrIRWPrbzkpV
-         R5uNFYJO2CyHA==
-Date:   Mon, 26 Jun 2023 13:09:51 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jens Axboe <axboe@kernel.dk>, Theodore Ts'o <tytso@mit.edu>
-Cc:     Christoph Hellwig <hch@lst.de>, Jan Kara <jack@suse.cz>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Zhihao Cheng <chengzhihao1@huawei.com>
-Subject: linux-next: manual merge of the block tree with the ext4 tree
-Message-ID: <20230626130951.54c4254a@canb.auug.org.au>
+        Sun, 25 Jun 2023 23:11:50 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1434E10F;
+        Sun, 25 Jun 2023 20:11:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687749109; x=1719285109;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=5YoipUYft7QUMlguglJAyMKmrjX7z/rO5ECyxekdJdY=;
+  b=IuCSS/wD5D8zpM3mPmI3CyOOuK0JwguXtJMP32mBuko0Cyat7QcF/TSw
+   DUPYaU0Y88zPzl78vo/z6YRLIqHxMxnjNyiG/SVEZEZp5QxrazxA1Dq0m
+   oX9wKgHdJd5kjKsvVFo1pQ+Wi8hWc+GTCzs2HQMnqhwstXq8GryfO32TY
+   Ld10iJ95Y3rCclDAQEuTCs4EawMrezodMfk0YIlohQx7Lm8KbKVE5SHTV
+   vP8Im1DI/N4Ogc50cwMDoMZ5KijN9X/0Q1oy8wSrw7wfF7WBwQVLO4jNX
+   mW95gHdQkPeixKQBXFvTnVFsasz7QpsTaHGI5EdGEmleusW27kAer/hKx
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="361196957"
+X-IronPort-AV: E=Sophos;i="6.01,158,1684825200"; 
+   d="scan'208";a="361196957"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2023 20:11:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="666139337"
+X-IronPort-AV: E=Sophos;i="6.01,158,1684825200"; 
+   d="scan'208";a="666139337"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.127]) ([10.239.159.127])
+  by orsmga003.jf.intel.com with ESMTP; 25 Jun 2023 20:11:44 -0700
+Message-ID: <e374e0be-3e29-3128-b3df-6183a7a0e98e@linux.intel.com>
+Date:   Mon, 26 Jun 2023 11:10:22 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/KydiTxXQEOVAP8cdvwZGdIX";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Cc:     baolu.lu@linux.intel.com, Jason Gunthorpe <jgg@ziepe.ca>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Yi Liu <yi.l.liu@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        iommu@lists.linux.dev, linux-kselftest@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCHES 00/17] IOMMUFD: Deliver IO page faults to user space
+Content-Language: en-US
+To:     Nicolin Chen <nicolinc@nvidia.com>
+References: <20230530053724.232765-1-baolu.lu@linux.intel.com>
+ <ZHZFi28jRxeZMKK3@Asurada-Nvidia>
+ <a8ccbac8-c456-d116-24a2-7503ccbb720c@linux.intel.com>
+ <ZJiTuO/9Bs4hMAiC@Asurada-Nvidia>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <ZJiTuO/9Bs4hMAiC@Asurada-Nvidia>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/KydiTxXQEOVAP8cdvwZGdIX
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 6/26/23 3:21 AM, Nicolin Chen wrote:
+> On Sun, Jun 25, 2023 at 02:30:46PM +0800, Baolu Lu wrote:
+>> External email: Use caution opening links or attachments
+>>
+>>
+>> On 2023/5/31 2:50, Nicolin Chen wrote:
+>>> Hi Baolu,
+>>>
+>>> On Tue, May 30, 2023 at 01:37:07PM +0800, Lu Baolu wrote:
+>>>
+>>>> This series implements the functionality of delivering IO page faults to
+>>>> user space through the IOMMUFD framework. The use case is nested
+>>>> translation, where modern IOMMU hardware supports two-stage translation
+>>>> tables. The second-stage translation table is managed by the host VMM
+>>>> while the first-stage translation table is owned by the user space.
+>>>> Hence, any IO page fault that occurs on the first-stage page table
+>>>> should be delivered to the user space and handled there. The user space
+>>>> should respond the page fault handling result to the device top-down
+>>>> through the IOMMUFD response uAPI.
+>>>>
+>>>> User space indicates its capablity of handling IO page faults by setting
+>>>> a user HWPT allocation flag IOMMU_HWPT_ALLOC_FLAGS_IOPF_CAPABLE. IOMMUFD
+>>>> will then setup its infrastructure for page fault delivery. Together
+>>>> with the iopf-capable flag, user space should also provide an eventfd
+>>>> where it will listen on any down-top page fault messages.
+>>>>
+>>>> On a successful return of the allocation of iopf-capable HWPT, a fault
+>>>> fd will be returned. User space can open and read fault messages from it
+>>>> once the eventfd is signaled.
+>>> I think that, whether the guest has an IOPF capability or not,
+>>> the host should always forward any stage-1 fault/error back to
+>>> the guest. Yet, the implementation of this series builds with
+>>> the IOPF framework that doesn't report IOMMU_FAULT_DMA_UNRECOV.
+>>>
+>>> And I have my doubt at the using the IOPF framework with that
+>>> IOMMU_PAGE_RESP_ASYNC flag: using the IOPF framework is for
+>>> its bottom half workqueue, because a page response could take
+>>> a long cycle. But adding that flag feels like we don't really
+>>> need the bottom half workqueue, i.e. losing the point of using
+>>> the IOPF framework, IMHO.
+>>>
+>>> Combining the two facts above, I wonder if we really need to
+>>> go through the IOPF framework; can't we just register a user
+>>> fault handler in the iommufd directly upon a valid event_fd?
+>> Agreed. We should avoid workqueue in sva iopf framework. Perhaps we
+>> could go ahead with below code? It will be registered to device with
+>> iommu_register_device_fault_handler() in IOMMU_DEV_FEAT_IOPF enabling
+>> path. Un-registering in the disable path of cause.
+> Well, for a virtualization use case, I still think it's should
+> be registered in iommufd.
 
-Hi all,
+Emm.. you suggest iommufd calls iommu_register_device_fault_handler() to
+register its own page fault handler, right?
 
-Today's linux-next merge of the block tree got a conflict in:
+I have a different opinion, iommu_register_device_fault_handler() is
+called to register a fault handler for a device. It should be called
+or initiated by a device driver. The iommufd only needs to install a
+per-domain io page fault handler.
 
-  fs/ext4/super.c
+I am considering a use case on Intel platform. Perhaps it's similar
+on other platforms. An SIOV-capable device can support host SVA and
+assigning mediated devices to user space at the same time. Both host
+SVA and mediated devices require IOPF. So there will be multiple places
+where a page fault handler needs to be registered.
 
-between commit:
+> Having a device without an IOPF/PRI
+> capability, a guest OS should receive some faults too, if that
+> device causes a translation failure.
 
-  ffea255f4052 ("ext4: Fix reusing stale buffer heads from last failed moun=
-ting")
+Yes. DMA faults are also a consideration. But I would like to have it
+supported in a separated series. As I explained in the previous reply,
+we also need to consider the software nested translation case.
 
-from the ext4 tree and commits:
+> 
+> And for a vSVA use case, the IOMMU_DEV_FEAT_IOPF feature only
+> gets enabled in the guest VM right? How could the host enable
+> the IOMMU_DEV_FEAT_IOPF to trigger this handler?
 
-  2736e8eeb0cc ("block: use the holder as indication for exclusive opens")
-  a42fb5a75ccc ("ext4: Fix warning in blkdev_put()")
+As mentioned above, this should be initiated by the kernel device
+driver, vfio or possible mediated device driver.
 
-from the block tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc fs/ext4/super.c
-index b3819e70093e,64342adcd679..000000000000
---- a/fs/ext4/super.c
-+++ b/fs/ext4/super.c
-@@@ -1128,13 -1133,7 +1133,13 @@@ static void ext4_blkdev_remove(struct e
-  	struct block_device *bdev;
-  	bdev =3D sbi->s_journal_bdev;
-  	if (bdev) {
- +		/*
- +		 * Invalidate the journal device's buffers.  We don't want them
- +		 * floating about in memory - the physical journal device may
- +		 * hotswapped, and it breaks the `ro-after' testing code.
- +		 */
- +		invalidate_bdev(bdev);
-- 		ext4_blkdev_put(bdev);
-+ 		blkdev_put(bdev, sbi->s_sb);
-  		sbi->s_journal_bdev =3D NULL;
-  	}
-  }
-
---Sig_/KydiTxXQEOVAP8cdvwZGdIX
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSZAX8ACgkQAVBC80lX
-0GzC9wf/Ue390rIGA2bNChucOnzwaq8JO4xrpT0EbaLBQkmwLW1XU9AOZDurDLnp
-bTHZeqD4YFmhUmpbHidN/D4uV4RWE5PUVfryT9ktosPHLvhZrXM8eaz7zHhvvcbM
-NDy1UE+wDAjsViLtMZi+HdNBmtGU8alE8kccrwTHAkmz7WIuhrzwXFVhYjGsZygV
-mWewz+/z6uUY5Rc7q6ZkCNAAyUM9a7iOVkQMvrDFnKkmmkddRP8YxDUyXT2RURaU
-uC6NoZMHXVT1jWO62fkhPpAYZR+XmePTWAuCJmZ6WrnGbGNJwZxwPjPVkoiQ5v2q
-KbtY5Ce57rL+jbpW2D+rVebhzNMS0w==
-=tREb
------END PGP SIGNATURE-----
-
---Sig_/KydiTxXQEOVAP8cdvwZGdIX--
+Best regards,
+baolu
