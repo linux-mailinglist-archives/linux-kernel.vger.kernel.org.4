@@ -2,132 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C781E73E331
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 17:23:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B0E373E32C
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 17:23:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbjFZPXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 11:23:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44330 "EHLO
+        id S229877AbjFZPXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 11:23:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbjFZPXr (ORCPT
+        with ESMTP id S229767AbjFZPXn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 11:23:47 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59E24C7;
-        Mon, 26 Jun 2023 08:23:46 -0700 (PDT)
+        Mon, 26 Jun 2023 11:23:43 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53CB718D;
+        Mon, 26 Jun 2023 08:23:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687793026; x=1719329026;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=h8sLHtBTnVZJQ+VK9Mju0L08CrA3iMKmjHrpKD0aiOc=;
-  b=ECe5SCNpphI5xmkgzFTz31oj4jHQN0McmeanHyQ0a7Eap74aUONG/xsy
-   XNNinuQBx0LXj2wjlhUo0n1qQyV2qi+oUq1IdJOlnFYt7Sd7M9hYxsmLO
-   kEutjEhUqOwmAmEX2l6ONDIBeX/oz9EUjj1RwDFfCzcsvFA1IFeOoUzRp
-   DgjQDXHUTf0C7zq4CSBJPhlttopMp6KXm7nrXz+ose0MMQyr4cnWoTgqg
-   vLwW4utIZW8XuUUl6rr1BELvF1PvjcEsj/0aA3flf29pB9TWEwSJBsxbF
-   A9K1qH4YJ+2s+Qu8F14UmUzCHFN3izB0+2y/SZCoSyqtx4bCBOcs+OTFM
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="358796819"
+  t=1687793021; x=1719329021;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=kGBsoJpqJ94noc4JnODvig8KugWVEyn0TcAx8lTmHng=;
+  b=gTD3QeI4yXHQs1W3NHJUgERo14RNQ8yXwLgmnJO+63rH8zIcTI5knx/0
+   Fc0eddCflufwBJxlwxYm/82mFS2AUFEEc8FLN/fxcuZCPrpb/VRFVucFZ
+   5blJudxAf+JtHQiSL5MZKAXAL6D31uIt1CuXW+9UIOaAVaSh6DrE+6UC8
+   8zytxlJURSZYmVn/fTm9v0Dq+XlZHNlnxP8k9j3lqogmx3/hZAi3qZzIy
+   hXl0RedBmhyTAWcvRcfZVMn42gG2otdYsi0ZLHVQraVmDywyL8LFhA0Hb
+   OQP8KuQ4K8MRmyBKzdsdk1Hj6tHgoFoYTD2swes38NtICKWJbNEBg1cQ5
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="346054638"
 X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
-   d="scan'208";a="358796819"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 08:23:22 -0700
+   d="scan'208";a="346054638"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 08:23:31 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="781476701"
+X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="890311953"
 X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
-   d="scan'208";a="781476701"
-Received: from mshindo-mobl5.amr.corp.intel.com (HELO [10.212.198.145]) ([10.212.198.145])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 08:23:19 -0700
-Message-ID: <14f91337-ac7d-52f7-bc86-4091bec4d099@intel.com>
-Date:   Mon, 26 Jun 2023 08:23:19 -0700
+   d="scan'208";a="890311953"
+Received: from ettammin-mobl1.ger.corp.intel.com (HELO [10.249.254.105]) ([10.249.254.105])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 08:23:29 -0700
+Message-ID: <06e1342e5bee87e53e4c43bf31572cda0910513d.camel@linux.intel.com>
+Subject: Re: [Intel-xe] [PATCH v2 2/4] drm/ttm: Don't shadow the operation
+ context
+From:   Thomas =?ISO-8859-1?Q?Hellstr=F6m?= 
+        <thomas.hellstrom@linux.intel.com>
+To:     Christian =?ISO-8859-1?Q?K=F6nig?= 
+        <ckoenig.leichtzumerken@gmail.com>, intel-xe@lists.freedesktop.org
+Cc:     intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Roger He <Hongbo.He@amd.com>,
+        dri-devel@lists.freedesktop.org,
+        Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Date:   Mon, 26 Jun 2023 17:23:27 +0200
+In-Reply-To: <88cbec2d2ae6329d44426cece4b558b7d83b1ff6.camel@linux.intel.com>
+References: <20230626091450.14757-1-thomas.hellstrom@linux.intel.com>
+         <20230626091450.14757-3-thomas.hellstrom@linux.intel.com>
+         <8b22c855-c84d-4b56-c94b-a3a079ab3037@gmail.com>
+         <88cbec2d2ae6329d44426cece4b558b7d83b1ff6.camel@linux.intel.com>
+Organization: Intel Sweden AB, Registration Number: 556189-6027
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 2/2] mm/mmu_gather: send tlb_remove_table_smp_sync IPI
- only to MM CPUs
-Content-Language: en-US
-To:     ypodemsk@redhat.com, mtosatti@redhat.com, ppandit@redhat.com,
-        david@redhat.com, linux@armlinux.org.uk, mpe@ellerman.id.au,
-        npiggin@gmail.com, christophe.leroy@csgroup.eu, hca@linux.ibm.com,
-        gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        davem@davemloft.net, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        keescook@chromium.org, paulmck@kernel.org, frederic@kernel.org,
-        will@kernel.org, peterz@infradead.org, ardb@kernel.org,
-        samitolvanen@google.com, juerg.haefliger@canonical.com,
-        arnd@arndb.de, rmk+kernel@armlinux.org.uk, geert+renesas@glider.be,
-        linus.walleij@linaro.org, akpm@linux-foundation.org,
-        sebastian.reichel@collabora.com, rppt@kernel.org,
-        aneesh.kumar@linux.ibm.com, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20230620144618.125703-1-ypodemsk@redhat.com>
- <20230620144618.125703-3-ypodemsk@redhat.com>
- <680fadba-9104-3914-5175-e207fd3d9246@intel.com>
- <79f29f99fa07c46dbaee7b802cdd7b477b2d8dd1.camel@redhat.com>
- <d0ef9148-3c95-87bb-26f9-ea0920a4faa4@intel.com>
- <cccb5351e48b11e6c657bcfa28632f49cb9cc800.camel@redhat.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <cccb5351e48b11e6c657bcfa28632f49cb9cc800.camel@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/26/23 07:36, ypodemsk@redhat.com wrote:
-> On Thu, 2023-06-22 at 06:37 -0700, Dave Hansen wrote:
->> On 6/22/23 06:14, ypodemsk@redhat.com wrote:
->>> I will send a new version with the local variable as you suggested
->>> soon.
->>> As for the config name, what about CONFIG_ARCH_HAS_MM_CPUMASK?
->>
->> The confusing part about that name is that mm_cpumask() and
->> mm->cpu_bitmap[] are defined unconditionally.  So, they're *around*
->> unconditionally but just aren't updated.
->>
-> I think your right about the config name,
-> How about the
-> CONFIG_ARCH_USE_MM_CPUMASK?
-> This has the right semantic as these archs use the cpumask field of the
-> mm struct.
+On Mon, 2023-06-26 at 17:18 +0200, Thomas Hellstr=C3=B6m wrote:
+> On Mon, 2023-06-26 at 17:15 +0200, Christian K=C3=B6nig wrote:
+> > Am 26.06.23 um 11:14 schrieb Thomas Hellstr=C3=B6m:
+> > > ttm_bo_swapout() shadows the ttm operation context which may
+> > > cause
+> > > major confusion in driver callbacks when swapping out
+> > > !TTM_PL_SYSTEM
+> > > memory. Fix this by reusing the operation context argument to
+> > > ttm_bo_swapout().
+> > >=20
+> > > Cc: "Christian K=C3=B6nig" <christian.koenig@amd.com>
+> > > Cc: Roger He <Hongbo.He@amd.com>
+> > > Cc: <dri-devel@lists.freedesktop.org>
+> > > Cc: <intel-gfx@lists.freedesktop.org>
+> > > Cc: <stable@vger.kernel.org> # v4.16+
+> > > Fixes: dc947770cf34 ("drm/ttm: enable swapout for reserved BOs
+> > > during allocation")
+> > > Signed-off-by: Thomas Hellstr=C3=B6m
+> > > <thomas.hellstrom@linux.intel.com>
+> > > Acked-by: Matthew Brost <matthew.brost@intel.com>
+> >=20
+> > We intentionally didn't used the parameter here, but I absolutely
+> > can't=20
+> > figure out why.
+> >=20
+> > Feel free to add my rb, but let's give it some time upstream before
+> > you=20
+> > base anything on top of this. Just in case we missed something.
+>=20
+> Sure. Thanks for reviewing,
 
-"USE" is still a command.  It should, at worst, be "USES".  But that's
-still kinda generic.  How about:
+BTW, I'll remove the Fixes: tag as well.
 
-	CONFIG_ARCH_UPDATES_MM_CPUMASK
+/Thomas
 
-?
 
->> BTW, it would also be nice to have _some_ kind of data behind this
->> patch.
->>
->> Fewer IPIs are better I guess, but it would still be nice if you
->> could say:
->>
->> 	Before this patch, /proc/interrupts showed 123 IPIs/hour for an
->> 	isolated CPU.  After the approach here, it was 0.
->>
->> ... or something.
-> 
-> This is part of an ongoing effort to remove IPIs and this one was found
-> via code inspection.
-
-OK, so it should be something more like:
-
-	This was found via code inspection, but fixing it isn't very
-	important so we didn't bother to test it any more than just
-	making sure the thing still boots when it is applied.
-
-Does that cover it?
+> /Thomas
+>=20
+> >=20
+> > Regards,
+> > Christian.
+> >=20
+> > > ---
+> > > =C2=A0 drivers/gpu/drm/ttm/ttm_bo.c | 3 +--
+> > > =C2=A0 1 file changed, 1 insertion(+), 2 deletions(-)
+> > >=20
+> > > diff --git a/drivers/gpu/drm/ttm/ttm_bo.c
+> > > b/drivers/gpu/drm/ttm/ttm_bo.c
+> > > index bd5dae4d1624..615d30c4262d 100644
+> > > --- a/drivers/gpu/drm/ttm/ttm_bo.c
+> > > +++ b/drivers/gpu/drm/ttm/ttm_bo.c
+> > > @@ -1154,7 +1154,6 @@ int ttm_bo_swapout(struct ttm_buffer_object
+> > > *bo, struct ttm_operation_ctx *ctx,
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Move to system cac=
+hed
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (bo->resource->mem=
+_type !=3D TTM_PL_SYSTEM) {
+> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0struct ttm_operation_ctx ctx =3D { false, false };
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0struct ttm_resource *evict_mem;
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0struct ttm_place hop;
+> > > =C2=A0=20
+> > > @@ -1164,7 +1163,7 @@ int ttm_bo_swapout(struct ttm_buffer_object
+> > > *bo, struct ttm_operation_ctx *ctx,
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0if (unlikely(ret))
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+goto out;
+> > > =C2=A0=20
+> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0ret =3D ttm_bo_handle_move_mem(bo, evict_mem, true,
+> > > &ctx, &hop);
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0ret =3D ttm_bo_handle_move_mem(bo, evict_mem, true,
+> > > ctx, &hop);
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0if (unlikely(ret !=3D 0)) {
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+WARN(ret =3D=3D -EMULTIHOP, "Unexpected
+> > > multihop in swaput - likely driver bug.\n");
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+goto out;
+> >=20
+>=20
 
