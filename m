@@ -2,192 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0247573E101
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 15:49:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E9AC73E102
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 15:50:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbjFZNtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 09:49:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47782 "EHLO
+        id S229566AbjFZNt6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 09:49:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbjFZNtF (ORCPT
+        with ESMTP id S230185AbjFZNtu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 09:49:05 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE30C97;
-        Mon, 26 Jun 2023 06:49:04 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35QDj0DM002113;
-        Mon, 26 Jun 2023 13:48:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=6+8OkCZArvWYY6PhcQbzx178eTb3rVs046GAiayFmOU=;
- b=Uv2zscYYo9wfGgq89yDjx56OjQB+Hd7H1njVHbIwCEzWMw0aesNn4wiU0amJWeGBhCYA
- GYlgOjv5uRZ4LkoS7ZOBn10mytRiNvzjkSUP+UvEva+n+mw0xaM5vhVw9r71sE5j+37p
- AZrZBplYrF+0Wo1TbS+/tdidEHQbbPO3WrRmrPbJVmaVObICvw5QxqGaVcSJmXYGLaul
- 9tKrMIRbSOeOoexHEbQntfgEieDiKLjUI30Ho8l0gAU1t/UoGYKD4La0U31YVFcybBg2
- 9yz9I3oeiTccONz4LpvEw+XB5QjObbFvkXNz8fVVRTcvGPt1LCeGWhrlSMFQMJ60F62Q MQ== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rfarq85km-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 26 Jun 2023 13:48:58 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35QDmv1n032139
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 26 Jun 2023 13:48:57 GMT
-Received: from [10.216.43.155] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 26 Jun
- 2023 06:48:53 -0700
-Message-ID: <1b41ba64-51e2-7c66-104d-bc60ac131a0f@quicinc.com>
-Date:   Mon, 26 Jun 2023 19:18:49 +0530
+        Mon, 26 Jun 2023 09:49:50 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D23D106
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 06:49:49 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-51d9865b8a2so1440769a12.3
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 06:49:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687787388; x=1690379388;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GlOpr6CFcofR/OtisGeiHYQyUSZ+cCPo7y63qj/Di68=;
+        b=YD9pM5Dp8yx5VNsRdse2GTcQH6I9q+pNLKL0CIIcFmseaAKIiaQqZJMIUE1kvnUPws
+         8Sbi+WfeewWWPTeW2T2jmBKlU7zzVfap5Wvweom5ditiltALT98GdjdEwyfrzHPi5Rxs
+         vZAnqKOi/LhFYlZpZ46OAgBO7/+d/QzxSSFTReqycTnXP47+x+MaORT9JCaA8f25/nqr
+         80fCyEzB8z4YMA/luKhM5r76ihdGHyFlgWujGqobsFRIlrTR0/kuI3XMtK8zdblf5AVP
+         MPuP+G9L+F91J7DzBcx1RmF7pwl/0wsuHPdsBVWsfFUIbdYhoPjYciY8/KRvkdXn35SS
+         91og==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687787388; x=1690379388;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GlOpr6CFcofR/OtisGeiHYQyUSZ+cCPo7y63qj/Di68=;
+        b=W39Qp984JYqg19wzqZF/+A6btb9dfGaKFBexqL1S/AT57PgvrF2XOJYmTLv7zKfFdj
+         LOYu4ZzIk5VXLpMLuOtzYNDZQBaK4tt83F8p/yKWpY03qGZaQ2tr7wjVoJjgX9RG7YPm
+         2uh8loR8AU7eF++h/FVjKmlGLccJARukSwMXRE24u5ATBbMF6T/wfrMLiJyLc4MaO+j5
+         PfRdsWJzkWzLm0vlhoH5lluI4AAzvuOPthEqovEvbrEWgTnWqahgVCRVaqQFTB3hwo1x
+         YC7CSH7QmkYvDgubu0ZD5FxNkhVB2kP+pMbpN/bql99pBtH8ok00qwUMQcI5HD+TdWnU
+         bOEg==
+X-Gm-Message-State: AC+VfDw2+Yui13wBDdSVbBbxdM3AnghQgjwiY9i7Yi92uZvfJ4byDZTD
+        xOXsawpZZAefyP3EAbASaeA=
+X-Google-Smtp-Source: ACHHUZ73qVn2KMGO3A5dGjG+8KzBVHr5zTtnx8X6UkGy2vsFGzG1Xhvo6RiikHPoN3hzGQAZ+zm8JA==
+X-Received: by 2002:a05:6402:3c5:b0:51d:a4a1:f8a4 with SMTP id t5-20020a05640203c500b0051da4a1f8a4mr274479edw.10.1687787387725;
+        Mon, 26 Jun 2023 06:49:47 -0700 (PDT)
+Received: from [10.100.102.18] ([83.136.201.74])
+        by smtp.gmail.com with ESMTPSA id j13-20020aa7de8d000000b0051a2c7f5b0fsm2932937edv.88.2023.06.26.06.49.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Jun 2023 06:49:47 -0700 (PDT)
+Message-ID: <41239c2c-3599-3f0d-59d3-a8eb32814c58@gmail.com>
+Date:   Mon, 26 Jun 2023 16:49:46 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH RFC v1 3/3] PCI: qcom: ep: Add wake up host op to
- dw_pcie_ep_ops
-Content-Language: en-US
-To:     Manivannan Sadhasivam <mani@kernel.org>
-CC:     <manivannan.sadhasivam@linaro.org>, <quic_vbadigan@quicinc.com>,
-        <quic_ramkri@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <konrad.dybcio@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "open list:PCIE ENDPOINT DRIVER FOR QUALCOMM" 
-        <linux-pci@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <1686754850-29817-1-git-send-email-quic_krichai@quicinc.com>
- <1686754850-29817-4-git-send-email-quic_krichai@quicinc.com>
- <20230623061839.GC5611@thinkpad>
-From:   Krishna Chaitanya Chundru <quic_krichai@quicinc.com>
-In-Reply-To: <20230623061839.GC5611@thinkpad>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH RFC v4 06/13] regulator: set required ops for monitoring
+ workarounds
+Content-Language: en-US, en-GB
+To:     Benjamin Bara <bbara93@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     support.opensource@diasemi.com,
+        DLG-Adam.Ward.opensource@dm.renesas.com,
+        Martin Fuzzey <martin.fuzzey@flowbird.group>,
+        linux-kernel@vger.kernel.org,
+        Benjamin Bara <benjamin.bara@skidata.com>
+References: <20230419-dynamic-vmon-v4-0-4d3734e62ada@skidata.com>
+ <20230419-dynamic-vmon-v4-6-4d3734e62ada@skidata.com>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+In-Reply-To: <20230419-dynamic-vmon-v4-6-4d3734e62ada@skidata.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: cN8LgCwLLlNyvNwXqGPg8g7u7iu9bXxj
-X-Proofpoint-GUID: cN8LgCwLLlNyvNwXqGPg8g7u7iu9bXxj
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-26_11,2023-06-26_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- malwarescore=0 mlxscore=0 lowpriorityscore=0 suspectscore=0 phishscore=0
- clxscore=1015 spamscore=0 bulkscore=0 mlxlogscore=999 adultscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306260123
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 6/20/23 23:02, Benjamin Bara wrote:
+> From: Benjamin Bara <benjamin.bara@skidata.com>
+> 
+> If the core should be able to handle the monitoring workarounds, certain
+> regulator ops are required:
+> - is_enabled() to decide whether a monitor should be turned off or not.
+> - get_active_protections() to find out if the device-tree is missing
+>    active protections.
+> - get_mode() if the regulator is in a mode where monitoring is not
+>    supported.
+> 
+> Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
 
-On 6/23/2023 11:48 AM, Manivannan Sadhasivam wrote:
-> On Wed, Jun 14, 2023 at 08:30:49PM +0530, Krishna chaitanya chundru wrote:
->> Add wakeup host op to dw_pcie_ep_ops to wake up host from D3cold
->> or D3hot.
->>
-> Commit message should describe how the wakeup is implemented in the driver.
-I will correct this in next series.
->
->> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
->> ---
->>   drivers/pci/controller/dwc/pcie-qcom-ep.c | 34 +++++++++++++++++++++++++++++++
->>   1 file changed, 34 insertions(+)
->>
->> diff --git a/drivers/pci/controller/dwc/pcie-qcom-ep.c b/drivers/pci/controller/dwc/pcie-qcom-ep.c
->> index 5d146ec..916a138 100644
->> --- a/drivers/pci/controller/dwc/pcie-qcom-ep.c
->> +++ b/drivers/pci/controller/dwc/pcie-qcom-ep.c
->> @@ -91,6 +91,7 @@
->>   /* PARF_PM_CTRL register fields */
->>   #define PARF_PM_CTRL_REQ_EXIT_L1		BIT(1)
->>   #define PARF_PM_CTRL_READY_ENTR_L23		BIT(2)
->> +#define PARF_PM_CTRL_XMT_PME			BIT(4)
->>   #define PARF_PM_CTRL_REQ_NOT_ENTR_L1		BIT(5)
->>   
->>   /* PARF_MHI_CLOCK_RESET_CTRL fields */
->> @@ -794,10 +795,43 @@ static void qcom_pcie_ep_init(struct dw_pcie_ep *ep)
->>   		dw_pcie_ep_reset_bar(pci, bar);
->>   }
->>   
->> +static int qcom_pcie_ep_wakeup_host(struct dw_pcie_ep *ep, u8 func_no)
->> +{
->> +	struct dw_pcie *pci = to_dw_pcie_from_ep(ep);
->> +	struct qcom_pcie_ep *pcie_ep = to_pcie_ep(pci);
->> +	struct device *dev = pci->dev;
->> +	u32 perst, dstate, val;
->> +
->> +	perst = gpiod_get_value(pcie_ep->reset);
->> +	/* Toggle wake GPIO when device is in D3 cold */
->> +	if (perst) {
->> +		dev_info(dev, "Device is in D3 cold toggling wake\n");
-> dev_dbg(). "Waking up the host by toggling WAKE#"
->
->> +		gpiod_set_value_cansleep(pcie_ep->wake, 1);
-> Waking a device from D3cold requires power-on sequence by the host and in the
-> presence of Vaux, the EPF should be prepared for that. In that case, the mode of
-> wakeup should be decided by the EPF driver. So the wakeup API should have an
-> argument to decide whether the wakeup is through PME or sideband WAKE#.
->
-> Also note that as per PCIe Spec 3.0, the devices can support PME generation from
-> D3cold provided that the Vaux is supplied to the device. I do not know if that
-> is supported by Qcom devices but API should honor the spec. So the wakeup
-> control should come from EPF driver as I suggested above.
+Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
 
-I aggre with you, but how will EPF know the PCI device state is in 
-D3cold or D3hot.
+> ---
+>   drivers/regulator/core.c | 34 ++++++++++++++++++++++++++++++++++
+>   1 file changed, 34 insertions(+)
+> 
+> diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
+> index dc741ac156c3..ca5d6ba889dc 100644
+> --- a/drivers/regulator/core.c
+> +++ b/drivers/regulator/core.c
+> @@ -5540,6 +5540,40 @@ regulator_register(struct device *dev,
+>   		goto rinse;
+>   	}
+>   
+> +	/* monitor workaround properties require ops to ensure functionality. */
+> +	if (regulator_desc->mon_disable_reg_disabled ||
+> +	    regulator_desc->mon_disable_reg_set_higher ||
+> +	    regulator_desc->mon_disable_reg_set_lower ||
+> +	    regulator_desc->mon_unsupported_reg_modes) {
+> +		/*
+> +		 * is_enabled() to make sure the monitors aren't disabled on
+> +		 * disabled regulators.
+> +		 */
+> +		if (!regulator_desc->ops->is_enabled) {
+> +			ret = -EINVAL;
+> +			goto rinse;
+> +		}
+> +
+> +		/*
+> +		 * get_active_protections() to know if a regulator is monitored
+> +		 * without the device-tree being aware of it.
+> +		 */
+> +		if (!regulator_desc->ops->get_active_protections) {
+> +			ret = -EINVAL;
+> +			goto rinse;
+> +		}
+> +
+> +		/*
+> +		 * mon_unsupported_reg_modes property requires get_mode() to get
+> +		 * the old state in case a state switch is failing.
+> +		 */
+> +		if (regulator_desc->mon_unsupported_reg_modes &&
+> +		    !regulator_desc->ops->get_mode) {
+> +			ret = -EINVAL;
+> +			goto rinse;
+> +		}
+> +	}
+> +
+>   	rdev = kzalloc(sizeof(struct regulator_dev), GFP_KERNEL);
+>   	if (rdev == NULL) {
+>   		ret = -ENOMEM;
+> 
 
-And how the EPF knows whether Vaux is supported or not in D3cold?
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
 
-If there is any existing mechanism can you please point me that.
+~~ When things go utterly wrong vim users can always type :help! ~~
 
-FYI Qcom does not support vaux power in D3 cold.
-
->> +		usleep_range(WAKE_DELAY_US, WAKE_DELAY_US + 500);
->> +		gpiod_set_value_cansleep(pcie_ep->wake, 0);
->> +		return 0;
->> +	}
->> +
->> +	dstate = dw_pcie_readl_dbi(pci, DBI_CON_STATUS) &
->> +				   DBI_CON_STATUS_POWER_STATE_MASK;
->> +	if (dstate == 3) {
->> +		dev_info(dev, "Device is in D3 hot sending inband PME\n");
-> dev_dbg(). As I said, the device can sent PME from D3cold also. So the log could
-> be "Waking up the host using PME".
->
->> +		val = readl_relaxed(pcie_ep->parf + PARF_PM_CTRL);
->> +		val |= PARF_PM_CTRL_XMT_PME;
->> +		writel_relaxed(val, pcie_ep->parf + PARF_PM_CTRL);
->> +	} else {
->> +		dev_err(dev, "Device is not in D3 state wakeup is not supported\n");
->> +		return -EPERM;
-> -ENOTSUPP
->
-> - Mani
->
->> +	}
->> +
->> +	return 0;
->> +}
->> +
->>   static const struct dw_pcie_ep_ops pci_ep_ops = {
->>   	.ep_init = qcom_pcie_ep_init,
->>   	.raise_irq = qcom_pcie_ep_raise_irq,
->>   	.get_features = qcom_pcie_epc_get_features,
->> +	.wakeup_host = qcom_pcie_ep_wakeup_host,
->>   };
->>   
->>   static int qcom_pcie_ep_probe(struct platform_device *pdev)
->> -- 
->> 2.7.4
->>
