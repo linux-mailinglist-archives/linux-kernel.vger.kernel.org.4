@@ -2,59 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99D5573E0EA
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 15:43:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80F3073E0F1
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 15:45:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbjFZNn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 09:43:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45748 "EHLO
+        id S230064AbjFZNpr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 09:45:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbjFZNny (ORCPT
+        with ESMTP id S229706AbjFZNpp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 09:43:54 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD569134
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 06:43:52 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-51a52a7d859so7900930a12.0
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 06:43:52 -0700 (PDT)
+        Mon, 26 Jun 2023 09:45:45 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6AFE97
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 06:45:43 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-98e1b1d1698so238548566b.2
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 06:45:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687787031; x=1690379031;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dzDlve5/NsqkSu1s/yZ2DWXi6Pe8+asZ2Rh+Bil9dzw=;
-        b=JgY4p5ULOGzMOwNQ7O8imoMdUpnnTJbfdEr5WH9ME5Sai+sfTK8TxrfPR+kFKKdJyq
-         rhdFNsac8YWGWNi3Fzurt2FQeBdrrJ6U5ZC70879a2Ftv+BHb8MUd3gY1khX07mAIGkH
-         s8Jw/DzTwwbEfDRwo1c2V53myhIAOYtWalhTJ0cPDi5lWdRlhbWUL2cHUgldRAklvxnD
-         29xs6Jhs/FGQmgbnZbI5uLWQfwm4HqDFPCwDR0Go/fYhNsx8kT/YZHjlc+pMSlNWX+O+
-         YBdZvz3nayILgpU5YUkA3ln/HLVGAltTRoMoMa23PIlPPJ5z1yDknpzxK14sh35FdmYD
-         5Rzw==
+        d=gmail.com; s=20221208; t=1687787142; x=1690379142;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MHr5CN9tWotWY0lZswi0KAOutntMvLiH5JUUvyfraFM=;
+        b=aUvXcodcI/4uxxmd4xVKXN3xwWlt5n2GGwc6MxieVkElvUvaKnXhrQhb6EY0Vyr8ce
+         TzaqOy5uAn50SU+05wqh+eRP30SSZGo/s8wusFeksAYGDmrVXctsVy0LQ8syLGlsFga7
+         Nedq8CAioZuY2hsU9Hn1iyNlEl8stIvWULjQxOdYv0/jcnobzvVL95KilQT164HiiCZD
+         feH62BOv+emjq9x53/yCfO8w0hu0enSmdSkqCWciG2TaNPVrMuhMj6cG4YR8R84DXiQL
+         KcxhLvAUcNboa56PesBy89Sq8vsaO53Z0EI+81WFfOmM68cHSHC4ne9xPrrwudBsLIpn
+         upCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687787031; x=1690379031;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1687787142; x=1690379142;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dzDlve5/NsqkSu1s/yZ2DWXi6Pe8+asZ2Rh+Bil9dzw=;
-        b=TkqrZpP334FpHgWafiaJXb5pjfmmsGUFQ43nRbdOM9/PosUSndNkb1ELEDaqG5HX4N
-         mQYpH9m2WOgGzMFgQQu1vyVQw1eHfNSfOU50bkjML0Na6ifZ4luLa1PFNlwLFNKTSiKR
-         jTtRNgIjMudinGWcCA4wduffVkJNjKYtdolpThLMOPWdxIGfZnVplUE0nMYHYe7nE4GH
-         9iPITYAyCsYsRGrYObGh1C07Y8csnb+tfbdW1c72Lcbbk45iL5Xz5K6ahk5eQWjm7ncd
-         9VeFbByOv4qvDv21ZV7GDpnQh8BrFQMRu4cPNRf63UMXUOq3vwojucTxFxBGLxGfJXAs
-         k+zw==
-X-Gm-Message-State: AC+VfDyl7GrF4lmNk1NH0xmA6r+AXuCqhn+gRY3MtrgKbxwRxezbmM7x
-        srgn1QJuZXDswNtL3FaeTAo=
-X-Google-Smtp-Source: ACHHUZ7wQ1Bo/MO+jR9+iG7p3x3tdDILQY13qvw0E/DuElDnrW0i28Jr9DaQx4N6ZP1ig6ZtZ60Flg==
-X-Received: by 2002:a05:6402:5112:b0:514:387c:930 with SMTP id m18-20020a056402511200b00514387c0930mr34023894edd.5.1687787031013;
-        Mon, 26 Jun 2023 06:43:51 -0700 (PDT)
+        bh=MHr5CN9tWotWY0lZswi0KAOutntMvLiH5JUUvyfraFM=;
+        b=E8FwKIH2OLkczj3gpelI/3NXFuTPzXiMU4J1jGEoV7RFvv7OW93qwWNQR//J6ijrw+
+         v7/WDaWi71EI9tr37JLogw53TJYgZp3BxHj0IdQRmHXNg4UEzZ1NAYnUPns19/X/lteU
+         Gnip5qLwHKIMJYbsoN8+ox1qV2gxnm8CgETV45WAL3V6tN5YYX7PyhgOFHTfuwHQYx5G
+         rgB9hlun7Y0seQibR47aLHlF1vp5xHwKm+0x8pQQPca1MYQ1xypyA+d65uf4SVOfAmvs
+         hOJ0mbBNi1RtGieRBDewW0kiQc5JEBuoq5FciCHKCHG9+AHNRvX6x0QV7uFQOKsz+Y21
+         mp7w==
+X-Gm-Message-State: AC+VfDxxXWSKlHLE1mnQLvlUENHcAbQ4xX0mLbTF8X+ykO1XHdz1rjA0
+        pIKsVOjqRmm3/9/uNDW2rdM=
+X-Google-Smtp-Source: ACHHUZ7ED0oZ57bf8RVEBJHVOvdXnnI18HEQoHW7h5wiKbVZTpohuiyKTSJgSv+6rmNLZNA2GGDAWQ==
+X-Received: by 2002:a17:907:9804:b0:98c:d355:bb38 with SMTP id ji4-20020a170907980400b0098cd355bb38mr11413644ejc.11.1687787142143;
+        Mon, 26 Jun 2023 06:45:42 -0700 (PDT)
 Received: from [10.100.102.18] ([83.136.201.74])
-        by smtp.gmail.com with ESMTPSA id v14-20020aa7d80e000000b0051a59d81c4dsm2878520edq.3.2023.06.26.06.43.50
+        by smtp.gmail.com with ESMTPSA id n19-20020a170906841300b00988d0ad4477sm3275965ejx.29.2023.06.26.06.45.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Jun 2023 06:43:50 -0700 (PDT)
-Message-ID: <4a71b08e-0c0d-a378-7a3a-0cd12912d4d4@gmail.com>
-Date:   Mon, 26 Jun 2023 16:43:49 +0300
+        Mon, 26 Jun 2023 06:45:41 -0700 (PDT)
+Message-ID: <b026778d-51b1-6211-3287-7c1ad374e54c@gmail.com>
+Date:   Mon, 26 Jun 2023 16:45:41 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
+Subject: Re: [PATCH RFC v4 04/13] regulator: bd718x7: implement
+ get_active_protections()
 Content-Language: en-US, en-GB
 To:     Benjamin Bara <bbara93@gmail.com>,
         Liam Girdwood <lgirdwood@gmail.com>,
@@ -65,10 +67,9 @@ Cc:     support.opensource@diasemi.com,
         linux-kernel@vger.kernel.org,
         Benjamin Bara <benjamin.bara@skidata.com>
 References: <20230419-dynamic-vmon-v4-0-4d3734e62ada@skidata.com>
- <20230419-dynamic-vmon-v4-2-4d3734e62ada@skidata.com>
+ <20230419-dynamic-vmon-v4-4-4d3734e62ada@skidata.com>
 From:   Matti Vaittinen <mazziesaccount@gmail.com>
-Subject: Re: [PATCH RFC v4 02/13] regulator: add getter for active monitors
-In-Reply-To: <20230419-dynamic-vmon-v4-2-4d3734e62ada@skidata.com>
+In-Reply-To: <20230419-dynamic-vmon-v4-4-4d3734e62ada@skidata.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -84,67 +85,12 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On 6/20/23 23:02, Benjamin Bara wrote:
 > From: Benjamin Bara <benjamin.bara@skidata.com>
 > 
-> Add an op to get all active monitors of a regulator. This is useful to
-> find out if any monitor is turned on, of which the device-tree is not
-> aware of (e.g. by bootloader or OTP).
-> 
-> Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
-
-Just a couple of minor remarks. Feel free to change those if you end up 
-respinning.
+> This is required as the mon_disable_reg_set_higher workaround property
+> requires the ops to find out if it the monitor is set without the
+> device-tree being aware of it.
+>  > Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
 
 Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
-
-> ---
->   include/linux/regulator/driver.h | 10 ++++++++++
->   1 file changed, 10 insertions(+)
-> 
-> diff --git a/include/linux/regulator/driver.h b/include/linux/regulator/driver.h
-> index d3b4a3d4514a..9a9163cae769 100644
-> --- a/include/linux/regulator/driver.h
-> +++ b/include/linux/regulator/driver.h
-> @@ -25,6 +25,13 @@ struct regulator_config;
->   struct regulator_init_data;
->   struct regulator_enable_gpio;
->   
-> +#define REGULATOR_MONITOR_NONE 0x0
-> +#define REGULATOR_MONITOR_OVER_CURRENT 0x1
-> +#define REGULATOR_MONITOR_OVER_VOLTAGE 0x2
-> +#define REGULATOR_MONITOR_UNDER_VOLTAGE 0x4
-> +#define REGULATOR_MONITOR_OVER_TEMPERATURE 0x8
-> +#define REGULATOR_MONITOR_ALL 0xF
-
-Not a big thing but maybe use BIT() to underline this is a bitmask?
-
-> +
->   enum regulator_status {
->   	REGULATOR_STATUS_OFF,
->   	REGULATOR_STATUS_ON,
-> @@ -112,6 +119,8 @@ enum regulator_detection_severity {
->    * @set_thermal_protection: Support enabling of and setting limits for over
->    *	temperature situation detection.Detection can be configured for same
->    *	severities as over current protection. Units of degree Kelvin.
-> + * @get_active_protections: Get all enabled monitors of a regulator. OR'ed val
-> + *	of REGULATOR_MONITOR_*.
-
-I think it wouldn't hurt to have doc stating in which case populating 
-this call-back is needed? I haven't read rest of the patches yet but I 
-guess this callback is going to be used internally by the regulator core 
-and maybe it is not obvious for driver author that this is needed by 
-core to be able to support automatic protection handling.
-
->    *
->    * @set_active_discharge: Set active discharge enable/disable of regulators.
->    *
-> @@ -183,6 +192,7 @@ struct regulator_ops {
->   					    int severity, bool enable);
->   	int (*set_thermal_protection)(struct regulator_dev *, int lim,
->   				      int severity, bool enable);
-> +	int (*get_active_protections)(struct regulator_dev *dev, unsigned int *state);
->   	int (*set_active_discharge)(struct regulator_dev *, bool enable);
->   
->   	/* enable/disable regulator */
-> 
 
 -- 
 Matti Vaittinen
