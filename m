@@ -2,171 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09A6373D5C9
+	by mail.lfdr.de (Postfix) with ESMTP id 5308773D5CA
 	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 04:28:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230029AbjFZC2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 22:28:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35646 "EHLO
+        id S230088AbjFZC2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 22:28:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbjFZC2N (ORCPT
+        with ESMTP id S229506AbjFZC2g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 22:28:13 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC29AB1;
-        Sun, 25 Jun 2023 19:28:11 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QqBbD054cz4f3nbl;
-        Mon, 26 Jun 2023 10:28:08 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgBn0LO395hkXGkxMg--.37238S3;
-        Mon, 26 Jun 2023 10:28:08 +0800 (CST)
-Subject: Re: [PATCH 1/3] md/raid10: optimize fix_read_error
-To:     linan666@huaweicloud.com, song@kernel.org
-Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linan122@huawei.com, yi.zhang@huawei.com, houtao1@huawei.com,
-        yangerkun@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-References: <20230623173236.2513554-1-linan666@huaweicloud.com>
- <20230623173236.2513554-2-linan666@huaweicloud.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <292862ac-f0e0-6068-eb16-511a01f185b2@huaweicloud.com>
-Date:   Mon, 26 Jun 2023 10:28:07 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Sun, 25 Jun 2023 22:28:36 -0400
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE244E54;
+        Sun, 25 Jun 2023 19:28:33 -0700 (PDT)
+Received: by mail-oi1-x233.google.com with SMTP id 5614622812f47-3a1c162cdfeso1325338b6e.2;
+        Sun, 25 Jun 2023 19:28:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687746513; x=1690338513;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=d07EwE8g+yc7wNG17fy7wXO+B9zTjhytplxN3znDkOo=;
+        b=cw1S+ae/2xM2HzGCre0rEl7dYJyF4ZcbsoSM8E7NKkxlBQQyqM22kM2CKreZstuhpq
+         VhPE2op6zi6NBpnPacLtXOtVTN3V1s3CTj/m+7MtniXSg3Q2rhKN8uZexvpBuLHc3dee
+         83KcZWODwgY5bZ2yGqCuR6hvSOihYOULmivmaW9cY2qHH5H251fO8bOQrt5EcFBqaxCo
+         MLf3TrvAl6eDdx65yyJD/23kBEWrJbAiV8lSYqmRA60RahSDzvx81UFdntu/nieO+2Op
+         LL0cVBxhDC1v4lyzLu5ozb2CbzFAz5bCsAGxh33Xfnhgz6WQSZZjgVuT1n9hrwvHS17u
+         bnPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687746513; x=1690338513;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=d07EwE8g+yc7wNG17fy7wXO+B9zTjhytplxN3znDkOo=;
+        b=LGQHSJk+2WK7CBz7q5AIEBNlfSqnu7B4pBrxuO70XCxTFMT0Upzkhm8AGAL0EN/srM
+         z9PzpdU/sA0YynexLd0NS0xurwjv2VNYF6fGrEZARlNc9tuA1/fsmUy7d4IJ3iOpc0bE
+         6WfdW1S8uUWuEhmGBMGtucOVcf8sy9nyH35/JIZiMv+onCLLeExfoHW7eF5cvuDyN4l/
+         lN9+QE1yrXWOaWvoYQRj3TpNYiH0BQYuwi7Aa9JrEeA8My3o6fcShrsImWbSiXdvtHFc
+         0D8Ob6tjxsK8+q7Qxyq7aI9wW0dLMsnDV1IC6a6jHNcw4Xu5G126D8qUUYhKzYvofi2c
+         qKow==
+X-Gm-Message-State: AC+VfDwkG4s6wkTX2lTmAoTFI/XY+DpCzcwGAKVoEw6dTVkd4oLZJ2Fu
+        tQgk0Jqi0W+W7Wx5fwbPc9I=
+X-Google-Smtp-Source: ACHHUZ4Q0ry54BpxtAQfduyo5cC1UFvZSrIEf7o9kdkVzENgsOv78sn5aZWqWgTZi1Ftc4DrqfTgtw==
+X-Received: by 2002:a54:4091:0:b0:398:2f06:329 with SMTP id i17-20020a544091000000b003982f060329mr27376498oii.9.1687746512932;
+        Sun, 25 Jun 2023 19:28:32 -0700 (PDT)
+Received: from [192.168.220.128] ([183.63.252.58])
+        by smtp.gmail.com with ESMTPSA id iz13-20020a170902ef8d00b001b7fe13c97csm1111555plb.72.2023.06.25.19.28.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 25 Jun 2023 19:28:32 -0700 (PDT)
+Message-ID: <ed353f12-7ba7-1831-2ac7-b6135b2a5abb@gmail.com>
+Date:   Mon, 26 Jun 2023 10:28:26 +0800
 MIME-Version: 1.0
-In-Reply-To: <20230623173236.2513554-2-linan666@huaweicloud.com>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgBn0LO395hkXGkxMg--.37238S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxWryfCw1DXr43tF4kJF1DKFg_yoW5ZryUpF
-        WDua4FvrWDJFyUZF17tFWDC3ZYy34fGFWUKr4rt34fWw1Skr9xKF18Wryavr1kJF93uw17
-        Zas8ursrCFs7tF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkC14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
-        IcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
-        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
-        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
-        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_
-        Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUoOJ5UU
-        UUU
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.10.0
+Subject: Re: [PATCH v2] usb: ohci-at91: Fix the unhandle interrupt when resume
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     gregkh@linuxfoundation.org, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20230625161553.11073-1-aarongt.shen@gmail.com>
+ <552b1ac6-2149-48fa-9432-49655bfbc366@rowland.harvard.edu>
+Content-Language: en-US
+From:   Guiting Shen <aarongt.shen@gmail.com>
+In-Reply-To: <552b1ac6-2149-48fa-9432-49655bfbc366@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-ÔÚ 2023/06/24 1:32, linan666@huaweicloud.com Ð´µÀ:
-> From: Li Nan <linan122@huawei.com>
+On Mon, Jun 26, 2023 at 04:04:29AM GMT+8, Alan Stern wrote:
+> On Mon, Jun 26, 2023 at 12:15:53AM +0800, Guiting Shen wrote:
+>> The ohci_hcd_at91_drv_suspend() sets ohci->rh_state to OHCI_RH_HALTED when
+>> suspend which will let the ohci_irq() skip the interrupt after resume. And
+>> nobody to handle this interrupt.
+>>
+>> According to the comment in ohci_hcd_at91_drv_suspend(), it need to reset
+>> when resume from suspend(MEM) to fix.
+>>
+>> Signed-off-by: Guiting Shen <aarongt.shen@gmail.com>
+>> ---
+>>  drivers/usb/host/ohci-at91.c | 7 ++++++-
+>>  1 file changed, 6 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/usb/host/ohci-at91.c b/drivers/usb/host/ohci-at91.c
+>> index b9ce8d80f20b..1a0356d9ea15 100644
+>> --- a/drivers/usb/host/ohci-at91.c
+>> +++ b/drivers/usb/host/ohci-at91.c
+>> @@ -672,7 +672,12 @@ ohci_hcd_at91_drv_resume(struct device *dev)
+>>  	else
+>>  		at91_start_clock(ohci_at91);
+>>  
+>> -	ohci_resume(hcd, false);
+>> +	/*
+>> +	 * need to reset according to the comment of suspend routine,
+>> +	 * otherwise the ohci_irq would skip the interrupt if ohci_state
+>> +	 * was OHCI_RH_HALTED.
+>> +	 */
+>> +	ohci_resume(hcd, !ohci_at91->wakeup);
 > 
-> We dereference r10_bio->read_slot too many times in fix_read_error().
-> Optimize it by using a variable to store read_slot.
+> This comment doesn't say why the code uses !ohci_at91->wakeup.  It 
+> should explain that.  For example:
+> 
+> 	/*
+> 	 * According to the comment in ohci_hcd_at91_drv_suspend()
+> 	 * we need to do a reset if the 48-MHz clock was stopped,
+> 	 * that is, if ohci_at91->wakeup is clear.  Tell ohci_resume()
+> 	 * to reset in this case by setting its "hibernated" flag.
+> 	 */
 > 
 
-Other than a nit below, this patch LGTM.
+Ok, Thank you!
+Do I send the v3 patch after the merge window close?
 
-Reviewed-by: Yu Kuai <yukuai3@huawei.com>
-
-> Signed-off-by: Li Nan <linan122@huawei.com>
-> ---
->   drivers/md/raid10.c | 20 ++++++++++----------
->   1 file changed, 10 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
-> index 381c21f7fb06..94ae294c8a3c 100644
-> --- a/drivers/md/raid10.c
-> +++ b/drivers/md/raid10.c
-> @@ -2725,10 +2725,10 @@ static int r10_sync_page_io(struct md_rdev *rdev, sector_t sector,
->   static void fix_read_error(struct r10conf *conf, struct mddev *mddev, struct r10bio *r10_bio)
->   {
->   	int sect = 0; /* Offset from r10_bio->sector */
-> -	int sectors = r10_bio->sectors;
-> +	int sectors = r10_bio->sectors, slot = r10_bio->read_slot;
->   	struct md_rdev *rdev;
->   	int max_read_errors = atomic_read(&mddev->max_corr_read_errors);
-> -	int d = r10_bio->devs[r10_bio->read_slot].devnum;
-> +	int d = r10_bio->devs[slot].devnum;
->   
->   	/* still own a reference to this rdev, so it cannot
->   	 * have been cleared recently.
-> @@ -2749,13 +2749,13 @@ static void fix_read_error(struct r10conf *conf, struct mddev *mddev, struct r10
->   		pr_notice("md/raid10:%s: %pg: Failing raid device\n",
->   			  mdname(mddev), rdev->bdev);
->   		md_error(mddev, rdev);
-> -		r10_bio->devs[r10_bio->read_slot].bio = IO_BLOCKED;
-> +		r10_bio->devs[slot].bio = IO_BLOCKED;
->   		return;
->   	}
->   
->   	while(sectors) {
->   		int s = sectors;
-> -		int sl = r10_bio->read_slot;
-> +		int sl = slot;
->   		int success = 0;
->   		int start;
->   
-> @@ -2790,7 +2790,7 @@ static void fix_read_error(struct r10conf *conf, struct mddev *mddev, struct r10
->   			sl++;
->   			if (sl == conf->copies)
->   				sl = 0;
-> -		} while (!success && sl != r10_bio->read_slot);
-> +		} while (!success && sl != slot);
->   		rcu_read_unlock();
->   
->   		if (!success) {
-> @@ -2798,16 +2798,16 @@ static void fix_read_error(struct r10conf *conf, struct mddev *mddev, struct r10
->   			 * as bad on the first device to discourage future
->   			 * reads.
->   			 */
-> -			int dn = r10_bio->devs[r10_bio->read_slot].devnum;
-> +			int dn = r10_bio->devs[slot].devnum;
->   			rdev = conf->mirrors[dn].rdev;
->   
->   			if (!rdev_set_badblocks(
->   				    rdev,
-> -				    r10_bio->devs[r10_bio->read_slot].addr
-> +				    r10_bio->devs[slot].addr
->   				    + sect,
->   				    s, 0)) {
->   				md_error(mddev, rdev);
-> -				r10_bio->devs[r10_bio->read_slot].bio
-> +				r10_bio->devs[slot].bio
->   					= IO_BLOCKED;
-
-There is no need to split lines now.
-
-Thanks,
-Kuai
->   			}
->   			break;
-> @@ -2816,7 +2816,7 @@ static void fix_read_error(struct r10conf *conf, struct mddev *mddev, struct r10
->   		start = sl;
->   		/* write it back and re-read */
->   		rcu_read_lock();
-> -		while (sl != r10_bio->read_slot) {
-> +		while (sl != slot) {
->   			if (sl==0)
->   				sl = conf->copies;
->   			sl--;
-> @@ -2850,7 +2850,7 @@ static void fix_read_error(struct r10conf *conf, struct mddev *mddev, struct r10
->   			rcu_read_lock();
->   		}
->   		sl = start;
-> -		while (sl != r10_bio->read_slot) {
-> +		while (sl != slot) {
->   			if (sl==0)
->   				sl = conf->copies;
->   			sl--;
-> 
+-- 
+Regards,
+Guiting Shen
 
