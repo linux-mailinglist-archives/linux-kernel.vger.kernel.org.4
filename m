@@ -2,67 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21CAD73D940
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 10:11:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1A8D73D946
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 10:12:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229623AbjFZILl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 04:11:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50770 "EHLO
+        id S230112AbjFZIMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 04:12:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbjFZILj (ORCPT
+        with ESMTP id S229698AbjFZIMg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 04:11:39 -0400
+        Mon, 26 Jun 2023 04:12:36 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 826E52101
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 01:10:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B3DAE7B
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 01:11:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687767030;
+        s=mimecast20190719; t=1687767075;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=5RgipMs2QNRwrDwP1+AYISiKEXaCi8Y3rMMEhdUsrBU=;
-        b=iVzX5yBoSleiurXDpfLNOSNNWlM9M5BOYRyULU+yLtqXOtRTZ0Jj4shBX1PjRhtQrgf4/9
-        bCGuICPp/GE2nGc9r9VYFH3Z28m459yMjJSZPiYpRs5gxQI2xF2BYph3azJ4GAnZrAT0w1
-        E4KKaCZplXY1m4dp4zz7X4hCnO4JtzM=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=jUsVECAHLrmaJYpk+Nn2dS1lmU/QQyFZdqFXTwAdThA=;
+        b=e9VZRzNe2hkkcWkdDYRXzvJ5vCI6R+j5O6rOYI7lJrxzsXoORi/3G3W1dJ/9VfqnEzuYA+
+        zk0p7d5K5SUm1F3Ogz+Xm/xcFhmub+SdqlQhCBFgUwYfaufT3rJvJctKAdZOvShFUk9qsw
+        Rr94WfikaBuF38MucU2tOwiJjTIiGF0=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-606-d_Jm8n2kO2ewqQiTFfAMuQ-1; Mon, 26 Jun 2023 04:10:29 -0400
-X-MC-Unique: d_Jm8n2kO2ewqQiTFfAMuQ-1
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-313f59eba37so107510f8f.2
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 01:10:28 -0700 (PDT)
+ us-mta-644-kBXmB8qWOh2PTsjummTHYg-1; Mon, 26 Jun 2023 04:11:14 -0400
+X-MC-Unique: kBXmB8qWOh2PTsjummTHYg-1
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-31275586740so1717770f8f.3
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 01:11:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687767028; x=1690359028;
+        d=1e100.net; s=20221208; t=1687767073; x=1690359073;
         h=content-transfer-encoding:in-reply-to:organization:from:references
          :cc:to:content-language:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=5RgipMs2QNRwrDwP1+AYISiKEXaCi8Y3rMMEhdUsrBU=;
-        b=baaOEix+eXuIOpq0YuZ7VEJKB0ilVoyBICdYyMWv+QLrLhYXjvPq/zHxWsfYphnhGk
-         UMkez83YmydanIz9FuWonQJo/2M9itXH+reBDflSkYCbMFM4vdoecLBFifWP/E2TV/I6
-         vBSebhZMtSGrNtPaI7HoFwdlFOjzxpQPL5j5SmzhKViTyYg00NxskUv3tK/8JGHusSj7
-         QOks0omEeJlPUhHZYTvTomYcS5T8TwZoprKjvsISF1fuU0vxCGNEjlwLQLvnRpdOefyo
-         CL4iEfTeyHpRr1baENKa0dr5uY7GCzW2Zx8U3mUd0xBaWRQMMghReCtX9aWjtLOf0kBQ
-         T37g==
-X-Gm-Message-State: AC+VfDx54ebw8gnmRF0FdOfcHoT+83W17TVDGxvHlYI/R5BqoCgdDAPE
-        MXROyXAyIrFuQbP96sJo0OdrWqSaNr1/DmOH1CgWh0XZQ2XS31ypGjjj/JbDStaQ+3pQ4fB6qyN
-        wSj/kxQ/8qTa1N7+41YxP02ll
-X-Received: by 2002:a5d:608f:0:b0:313:f157:7d56 with SMTP id w15-20020a5d608f000000b00313f1577d56mr1136958wrt.30.1687767027957;
-        Mon, 26 Jun 2023 01:10:27 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6wB14MWsdDFj2VS6mKBjZ6mqz1J6Y46vrzsW+wHvF+lBxDI0rff1rB7+CdMq/wIMfnSNfU1g==
-X-Received: by 2002:a5d:608f:0:b0:313:f157:7d56 with SMTP id w15-20020a5d608f000000b00313f1577d56mr1136945wrt.30.1687767027583;
-        Mon, 26 Jun 2023 01:10:27 -0700 (PDT)
+        bh=jUsVECAHLrmaJYpk+Nn2dS1lmU/QQyFZdqFXTwAdThA=;
+        b=CLPb4gZQ/SCUlzPpbxsadCXtpkynUyHF0GDNaG25NZ7mzymNAq+wh1OKhpAuqjc9W1
+         IW7xL+nZV5g353cNeqc2qb4Kmp+uOcTIwa8VMefJ226VnWBfoIJqI/Gs1y4U5lTwa0dl
+         b+cymdUDc6IsLsy6W1ueBIiGBWWPSHiktNP1w64TxE4v8h7Rsjw+NU7EG0xfTC0mEUk+
+         +qSnKvnlc1BSD//EzUgW0x8Q2HF3Ac9WOEaiMFpNnthsD5h5IfLIdvwDuRQMkvHVmXHm
+         SmA858AX/M8ryjCYuFuRsq5WpezFu6zEWtWWh2IIQiYLKGuaSC13TYD0VBT3+ljZ+RXH
+         NH4w==
+X-Gm-Message-State: AC+VfDzJLtG5/qP8nkggDE+0QdEuoKm9OIoqUT7j3oiLs+H3+oFnYsi5
+        Lnygr9ctHo13kp9eULSeyvAso/omQd3dOK3jnB0C8LbeZrkPeXyNANNhDKRLuz9rJJGH9R54mz1
+        xrSch7qCWD4C3DLjOoMLYc4Vt
+X-Received: by 2002:a5d:4dc7:0:b0:30f:d12a:d0b5 with SMTP id f7-20020a5d4dc7000000b0030fd12ad0b5mr21970865wru.55.1687767073233;
+        Mon, 26 Jun 2023 01:11:13 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6Gtp8sZIKIhnkPVgSBJnBy5AnfsqhjWuG0Ovror8xCc17YdLNdfEMgobWcv+EIg2anXWJLvg==
+X-Received: by 2002:a5d:4dc7:0:b0:30f:d12a:d0b5 with SMTP id f7-20020a5d4dc7000000b0030fd12ad0b5mr21970853wru.55.1687767072971;
+        Mon, 26 Jun 2023 01:11:12 -0700 (PDT)
 Received: from ?IPV6:2003:cb:c74b:7300:2ef6:6cd6:703c:e498? (p200300cbc74b73002ef66cd6703ce498.dip0.t-ipconnect.de. [2003:cb:c74b:7300:2ef6:6cd6:703c:e498])
-        by smtp.gmail.com with ESMTPSA id l1-20020adff481000000b003113ed02080sm6512838wro.95.2023.06.26.01.10.26
+        by smtp.gmail.com with ESMTPSA id j9-20020a5d4649000000b0030aefa3a957sm6573001wrs.28.2023.06.26.01.11.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Jun 2023 01:10:27 -0700 (PDT)
-Message-ID: <1f81260b-f569-87b9-a100-f6cd65ee5a5f@redhat.com>
-Date:   Mon, 26 Jun 2023 10:10:26 +0200
+        Mon, 26 Jun 2023 01:11:12 -0700 (PDT)
+Message-ID: <2e8bb0a4-b887-deaf-898b-75226313127d@redhat.com>
+Date:   Mon, 26 Jun 2023 10:11:11 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH v3 7/8] selftests/mm: Add -a to run_vmtests.sh
+Subject: Re: [PATCH v3 8/8] selftests/mm: Add gup test matrix in
+ run_vmtests.sh
 Content-Language: en-US
 To:     Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
@@ -80,10 +81,10 @@ Cc:     Lorenzo Stoakes <lstoakes@gmail.com>,
         Hugh Dickins <hughd@google.com>,
         Jason Gunthorpe <jgg@nvidia.com>
 References: <20230623142936.268456-1-peterx@redhat.com>
- <20230623142936.268456-8-peterx@redhat.com>
+ <20230623142936.268456-9-peterx@redhat.com>
 From:   David Hildenbrand <david@redhat.com>
 Organization: Red Hat
-In-Reply-To: <20230623142936.268456-8-peterx@redhat.com>
+In-Reply-To: <20230623142936.268456-9-peterx@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -98,11 +99,20 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 23.06.23 16:29, Peter Xu wrote:
-> Allows to specify optional tests in run_vmtests.sh, where we can run time
-> consuming test matrix only when user specified "-a".
-
-I'd have used something like "-e: extended tests that might be more 
-time-consuming".
+> Add a matrix for testing gup based on the current gup_test.  Only run the
+> matrix when -a is specified because it's a bit slow.
+> 
+> It covers:
+> 
+>    - Different types of huge pages: thp, hugetlb, or no huge page
+>    - Permissions: Write / Read-only
+>    - Fast-gup, with/without
+>    - Types of the GUP: pin / gup / longterm pins
+>    - Shared / Private memories
+>    - GUP size: 1 / 512 / random page sizes
+> 
+> Signed-off-by: Peter Xu <peterx@redhat.com>
+> ---
 
 Acked-by: David Hildenbrand <david@redhat.com>
 
