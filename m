@@ -2,121 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2782773EB30
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 21:25:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B9E073EB31
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 21:26:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230320AbjFZTZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 15:25:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42424 "EHLO
+        id S230158AbjFZT0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 15:26:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230158AbjFZTZ2 (ORCPT
+        with ESMTP id S229779AbjFZT0V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 15:25:28 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4177A1700;
-        Mon, 26 Jun 2023 12:25:26 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2b5c2433134so30032651fa.0;
-        Mon, 26 Jun 2023 12:25:26 -0700 (PDT)
+        Mon, 26 Jun 2023 15:26:21 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E606E74
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 12:26:20 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2b698937f85so33838891fa.2
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 12:26:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687807524; x=1690399524;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1687807578; x=1690399578;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9NFypNUympay54cWESrUztMRbmrTa5aoLaDv8wRaHyk=;
-        b=LnHIUwEIcP2pbXYaPoaAF/4xSheQVBu061Iu2+/UOzv5F5HeQk9tVn3M+KeSXKcgn5
-         bH/gjVAeB+ISb5Dt9HYF773Wv3RyiXBXEBjjkF1NKcUtjA0Z9QQ/j+gDOWBAFH3r3ute
-         wNyyiLmezGAH2Q/bfZJ8rkWwBAySe8cNp4MB7J9fqJtmoqLbXIljLZNVkj0hLV9TeJhZ
-         My50++zYAkbgOEEZ9OEZgjdVFaCFPhzmL0KiXcAYe4/F4ythLq8wWNqJgxb0dbZHKVzU
-         0u0uibLstNJ1ggzsHso8yXTR3nPdHQVK/aPeSDHY5WGYvUIqDRA/N3o6MM70q0et/T6h
-         4bvg==
+        bh=fdhf6AU7xFfNbH+mJiJHsGXbFeFQT625rjZDqqOdH3o=;
+        b=bgQhc/tr2dOe24OxURwIssbTAW8cinuImIIs4wxHR6Rc7m0aBRrPdrUU7Jb0PV14Of
+         H5LAfIJNZdoqSOzMGajcsDrKQNrrYBZEH8wGxi1sH3WiSkjNlD0/vZHRKhZOB6MLINN3
+         HiKYxu/V+NkQQNGeIellk1sTw1t4NZp/8z2MRdlaOlzQZDAhYuxh9EnitqS0eQ0dTRuG
+         pbhNH+1jx3H+tdIX8yhkaYetXbqO+GiOAHbpYGmdXkTIacwcyRW3D8hzwpxAf8bPsi+Z
+         OOk9/xOz7ut8bYdvDV8GohEmgVSYbepXzPgadEf37nFtZ+5LrxZavKr+e1X30LyhQlAl
+         hY4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687807524; x=1690399524;
+        d=1e100.net; s=20221208; t=1687807578; x=1690399578;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9NFypNUympay54cWESrUztMRbmrTa5aoLaDv8wRaHyk=;
-        b=d74MmAwB+fFC8uKLLyjOwTF0t5C+5vwo8Z/IboTRF8QQYfRI+VgKR/rZYXxDLiwysS
-         3yvF6sBH/ozi2TGdaA5gXm2mvomQz5j8m13y6VjnJKg/CZMmAUaBLwtlbFUzyjU0/SEY
-         McSQImaZwQR6YtITZc91sfq75e4UViISe9JSknL3lyXpGOjsQas4R8RZU73OVRaj6hG2
-         GwKaYuh9sohn/6fql74mmqL6rBi+uh048Ns84JSy7rlTYOtsF1T4rob+QCLBj1cVg7Ya
-         eIhtfZDDvTr+qLw6eky0s0ayuTzzypbh4zYjigKZE1DerYbS5saPc2yyoKeG2bzQU1qx
-         XpqA==
-X-Gm-Message-State: AC+VfDx2HcO+tcyG1vbI5HyszLijL05dEDF8HftTdRUwmtE3ZSLYmzFb
-        cJt2OAgxvDjbiW1KvdO15P7wywyynquFhXhgHwY=
-X-Google-Smtp-Source: ACHHUZ52YLNCzMs7G5WhmajLVFQEbSpIPEzBT2uH/WajntZtI7mXMfpPIwlie0L7t6pFa9D+R6aydxShD/0DtMiCZk0=
-X-Received: by 2002:a2e:a268:0:b0:2b4:7763:c1fb with SMTP id
- k8-20020a2ea268000000b002b47763c1fbmr9829487ljm.13.1687807524076; Mon, 26 Jun
- 2023 12:25:24 -0700 (PDT)
+        bh=fdhf6AU7xFfNbH+mJiJHsGXbFeFQT625rjZDqqOdH3o=;
+        b=BD5j/PQl/74tmFTtwOFm1SnywNwUnCPRHwcWr7ZYd+ZSb8W4B1vrjTRARN9OIIJsrv
+         tkxxFnjNxrp1tEi/HXRObhsov+WXO+WxUa6QAT39v/Ud/T7Wf+LZ39t8V/juW74snTMP
+         tXgxRwaSr2IMOdff7rC24QIDgjImw+YnQvjZ8ThIbOwoC93OJszUQmc5WICO7lnNlQNZ
+         ZH7JOUiq0/1iN+bE+6FjvlMITfnCsZpSN9+lJ63Wf14etOB6LZy5No9ZxRiGwvsCKopX
+         AjcByaLUQL+EGvxmTpPyKsUYgIKUPOgGR5t1IDBlBuhEuGFX6ACL1ZnB8tXsdoghiuyG
+         Y7mA==
+X-Gm-Message-State: AC+VfDxbiM6ZoYKpVksEEjRcxDKescuZ8GeyrSzRV61cMGAMIeOgp+aY
+        5hogDgGPe2qumT0iJXZVLhpLYGxSIMcdVTf7m9aksg==
+X-Google-Smtp-Source: ACHHUZ4k70aHHQYBZk12ajsNjQus+hTZHIiTLLotn416SbSKOwhRtCLRw3mxXJt91UCR61iwRgGJbhf+2GPBiHpZSUw=
+X-Received: by 2002:a05:6512:280b:b0:4fb:2c1e:4e03 with SMTP id
+ cf11-20020a056512280b00b004fb2c1e4e03mr3277813lfb.32.1687807578527; Mon, 26
+ Jun 2023 12:26:18 -0700 (PDT)
 MIME-Version: 1.0
-References: <259e755c.4eaad.188f817a0f3.Coremail.lxybhu@buaa.edu.cn>
-In-Reply-To: <259e755c.4eaad.188f817a0f3.Coremail.lxybhu@buaa.edu.cn>
-From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date:   Mon, 26 Jun 2023 12:25:12 -0700
-Message-ID: <CABBYNZJtGo2SSRREH9jpAKM8UoEUNgK9uzyPuzqDdks_KBoDdw@mail.gmail.com>
-Subject: Re: [BUG]Bluetooth: HCI_Command_Status: possible semantic bug when
- Num_HCI_Command_Packets set to zero
-To:     =?UTF-8?B?5YiY5paw5a6H?= <lxybhu@buaa.edu.cn>
-Cc:     marcel@holtmann.org, johan.hedberg@gmail.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        baijiaju1990@gmail.com, sy2239101@buaa.edu.cn,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
+References: <20230623222353.3742384-1-evan@rivosinc.com> <20230624-mortally-parking-68f6bc1dd5ee@spud>
+In-Reply-To: <20230624-mortally-parking-68f6bc1dd5ee@spud>
+From:   Evan Green <evan@rivosinc.com>
+Date:   Mon, 26 Jun 2023 12:25:42 -0700
+Message-ID: <CALs-HstvXcwBa+h0u4mz_Pjm-bNd=9DX49Xy-=Fq0t3ECmAi2w@mail.gmail.com>
+Subject: Re: [PATCH] RISC-V: Show accurate per-hart isa in /proc/cpuinfo
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Sunil V L <sunilvl@ventanamicro.com>,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, Jun 23, 2023 at 5:12=E2=80=AFPM Conor Dooley <conor@kernel.org> wro=
+te:
+>
+> Hey Evan,
+>
+> On Fri, Jun 23, 2023 at 03:23:53PM -0700, Evan Green wrote:
+> > In /proc/cpuinfo, most of the information we show for each processor is
+> > specific to that hart: marchid, mvendorid, mimpid, processor, hart,
+> > compatible, and the mmu size. But the ISA string gets filtered through =
+a
+> > lowest common denominator mask, so that if one CPU is missing an ISA
+> > extension, no CPUs will show it.
+> >
+> > Now that we track the ISA extensions for each hart, let's report ISA
+> > extension info accurately per-hart in /proc/cpuinfo.
+>
+> No, you can't do this as it breaks the assumptions of userspace that
+> this shows the set supported across all harts.
+> Sorry, but NAK.
 
-On Mon, Jun 26, 2023 at 7:25=E2=80=AFAM =E5=88=98=E6=96=B0=E5=AE=87 <lxybhu=
-@buaa.edu.cn> wrote:
->
-> Hello,
->
-> Our fuzzing tool finds a possible semantic bug in the Bluetooth system in=
- Linux 5.18:
->
-> During the connection process, the host server needs to receive the HCI_C=
-ommand_Status packet from the hardware controller. In normal cases, the Num=
-_HCI_Command_Packets field of this packet is not zero, and the host server =
-can normally handle this packet. However, in our testing, when the Num_HCI_=
-Command_Packets field is set to zero, the Bluetooth functionality is totall=
-y stopped until it is manually reopened.
->
-> In the Bluetooth Core Specification 5.4, the section 7.7.15 "Command Stat=
-us event" says that:
->
-> "The Num_HCI_Command_Packets event parameter allows the Controller to ind=
-icate the number of HCI command packets the Host can send to the Controller=
-. If the Controller requires the Host to stop sending commands, the Num_HCI=
-_Command_Packets event parameter will be set to zero."
->
-> This section does not mean that the Bluetooth functionality needs to be t=
-otally stopped when Num_HCI_Command_Packets is zero. Maybe in this case, th=
-e Bluetooth functionality could be still available, but the host server cou=
-ld reject any packet until Num_HCI_Command_Packets is not zero.
+My hope was that we were still early enough that no production systems
+existed (yet) that actually had different ISA extensions in the set we
+track, and therefore usermode would have been unable to make those
+assumptions at this point. If such a system exists, and I don't know
+if it does or not, then I agree it's too late to make a change like
+this.
 
-Well it says, If the Controller requires the Host to stop sending
-commands, so if your tool is sending 0 then it is requesting he host
-to stop sending more commands, if you want it to continue just send
-another Num_HCI_Command_Packets, or are you saying some other
-functionality that doesn't require sending commands shall still work?
+I thought I'd put this out here and see if someone could point at such
+a system; but if not it'd be great to keep /proc/cpuinfo accurate and
+consistent with hwprobe (which does return accurate per-hart ISA
+extension info).
 
-> We are not sure whether this is a semantic bug or implementation feature =
-in the Linux kernel. Any feedback would be appreciated, thanks!
+-Evan
+
 >
->
-> Best wishes,
-> Xin-Yu Liu
-
-
-
---=20
-Luiz Augusto von Dentz
+> Cheers,
+> Conor.
