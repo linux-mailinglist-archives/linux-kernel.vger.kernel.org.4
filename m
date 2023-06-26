@@ -2,49 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 307B173DC1F
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 12:20:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ABB573DC27
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 12:21:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230157AbjFZKU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 06:20:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55646 "EHLO
+        id S229621AbjFZKVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 06:21:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbjFZKUz (ORCPT
+        with ESMTP id S230176AbjFZKVm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 06:20:55 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7AFF719F;
-        Mon, 26 Jun 2023 03:20:53 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 27F392F4;
-        Mon, 26 Jun 2023 03:21:37 -0700 (PDT)
-Received: from [192.168.1.3] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D511D3F64C;
-        Mon, 26 Jun 2023 03:20:50 -0700 (PDT)
-Message-ID: <e60de124-ae61-c8a0-c012-ce6d4dabad10@arm.com>
-Date:   Mon, 26 Jun 2023 11:20:49 +0100
+        Mon, 26 Jun 2023 06:21:42 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AA401AA;
+        Mon, 26 Jun 2023 03:21:41 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2b69f958ef3so14076721fa.1;
+        Mon, 26 Jun 2023 03:21:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687774899; x=1690366899;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HeacIq0iGBmlMTVQdsWhJFRPflCyuB9lhDlBAARX9pM=;
+        b=MU0bhlG+BLyjbACqov3lAaQ+x/BLQbwWuoLQXFBcrNlTaUiR/oJWoe7If8mNFbrM/a
+         KvMV6iQ3ndKT2Suyh/cxeNu4v3aqi07XLFg0oFMSxlyKzitdS4c7H/9KvIkBKskwaP++
+         ilkzuD9jrM8gIYUops8xBUT2pJSAYAxUNkIGqHiqMACIbaTvGUD7kzZgilU+NqtJr6qq
+         ka8nNQC5CnSkSDCOmFbAoCy0/PBwsreflYYQR35R/SB7KRmRgubkBQ+zAT8WjkkBQy3/
+         8fLLCI1ltpyhICG2SNJvoDhiXlp5Yl7PaGueJEIDk/DFKvKBJ9bPfkf/9Ju5D8fRqaXZ
+         1p5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687774899; x=1690366899;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HeacIq0iGBmlMTVQdsWhJFRPflCyuB9lhDlBAARX9pM=;
+        b=IuucYF7KuWWNyd4vIOFfjYOy7/yZHITgLu2Uoe3rVWwNcfI+TqwiyYY4X7yum8ZBHt
+         4wto4h46Z5syH4nPKeuARjn9upOq76bfgYQTmETXvUq9tJ1WWwXb7SaxyC93sf1+mKEk
+         nsNt7P9zNFHbbHDLdzpMbELvyaeJpj52DLacMs7qRf6+bhwMXGQwNSyT0i2SpprsGc7d
+         Oagf5We4EfV8NYX8i798Cmhe0CHd6eSLjVxZrO9Sg7cM5bumcNQ+mn5ENApHx9vonI/e
+         JUpiSEg1Beh1+nyZYdCwhfhq99Nd6/k4bGgMahiPDrC5vqGHkTreD0XokhMuFDZ8worz
+         s8sg==
+X-Gm-Message-State: AC+VfDynXEk+H4kwcNcPEOELcFhMAGZz6b3kmJBZbi2a6/anMTAP/xtv
+        a4cX4WKF3M2m8dpvyakfEQc=
+X-Google-Smtp-Source: ACHHUZ4FJTWxVTLMoTaqDFVe37vxY6VWwgHI7xhOcZo5HF8sUgxfA4+6g6TYMz7Wt/q2BtpA2MneDw==
+X-Received: by 2002:a2e:8088:0:b0:2b4:7f66:8c85 with SMTP id i8-20020a2e8088000000b002b47f668c85mr13594865ljg.48.1687774898695;
+        Mon, 26 Jun 2023 03:21:38 -0700 (PDT)
+Received: from ?IPV6:2a00:e180:158d:7600:d62f:c4fb:6eee:7b87? ([2a00:e180:158d:7600:d62f:c4fb:6eee:7b87])
+        by smtp.gmail.com with ESMTPSA id m10-20020a50ef0a000000b0051d8f9ec3basm2024177eds.15.2023.06.26.03.21.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Jun 2023 03:21:38 -0700 (PDT)
+Message-ID: <dd54ed9e-b548-67a9-4998-b969b6d888a4@gmail.com>
+Date:   Mon, 26 Jun 2023 12:21:37 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 1/1] perf: cs-etm: Fixes in instruction sample synthesis
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 1/4] drm/ttm: Fix ttm_lru_bulk_move_pos_tail()
 Content-Language: en-US
-To:     Tanmay Jagdale <tanmay@marvell.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sgoutham@marvell.com, gcherian@marvell.com, lcherian@marvell.com,
-        areddy3@marvell.com, john.g.garry@oracle.com, will@kernel.org,
-        mike.leach@linaro.org, suzuki.poulose@arm.com,
-        peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        mark.rutland@arm.com, irogers@google.com, adrian.hunter@intel.com,
-        "coresight@lists.linaro.org" <coresight@lists.linaro.org>
-References: <20230623182204.25199-1-tanmay@marvell.com>
- <20230623182204.25199-2-tanmay@marvell.com>
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <20230623182204.25199-2-tanmay@marvell.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+To:     =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
+        <thomas.hellstrom@linux.intel.com>, intel-xe@lists.freedesktop.org
+Cc:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, stable@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Andi Shyti <andi.shyti@linux.intel.com>
+References: <20230626091450.14757-1-thomas.hellstrom@linux.intel.com>
+ <20230626091450.14757-2-thomas.hellstrom@linux.intel.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
+In-Reply-To: <20230626091450.14757-2-thomas.hellstrom@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,125 +80,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+I've already pushed the version from Teddy to drm-misc-fixes last week.
 
+So no need for that one any more.
 
-On 23/06/2023 19:22, Tanmay Jagdale wrote:
-> The existing method of synthesizing instruction samples has the
-> following issues:
-> 1. Non-branch instructions have mnemonics of branch instructions.
-> 2. Branch target address is missing.
-> 
-> Set the sample flags only when we reach the last instruction in
-> the tidq (which would be a branch instruction) to solve issue 1).
-> 
-> To fix issue 2), start synthesizing the instructions from the
-> previous packet (tidq->prev_packet) instead of current packet
-> (tidq->packet). This way, it is easy to figure out the target
-> address of the branch instruction in tidq->prev_packet which
-> is the current packet's (tidq->packet) first executed instruction.
-> 
-> After the switch to processing the previous packet first, we no
-> longer need to swap the packets during cs_etm__flush().
+Christian.
 
-Hi Tanmay,
-
-I think the fix for setting the right flags and instruction type makes
-sense, but is it possible to do it without the change to swapping in
-cs_etm__flush() or some of the other changes to
-cs_etm__synth_instruction_sample()?
-
-I'm seeing some differences in the output related to the PID that's
-assigned to a sample and some of the addresses that aren't explained by
-the commit message. Also there is no corresponding change to
-cs_etm__synth_branch_sample(), which is also using prev_packet etc so
-I'm wondering if that's correct now without the swap? That function gets
-used with the default itrace options or itrace=b
-
-For example if I run 'perf script --itrace=i100ns' and diff the output
-before and after your change I see a difference even though branch and
-instruction info isn't printed, so I wouldn't expect to see any changes.
-This is on a systemwide recording of a system under load.
-
-Thanks
-James
-
-> 
-> Signed-off-by: Tanmay Jagdale <tanmay@marvell.com>
+Am 26.06.23 um 11:14 schrieb Thomas Hellström:
+> The value of pos->first was not updated when the first resource of the
+> range was moved. This could lead to errors like the one below.
+> Fix this by updating pos->first when needed.
+>
+> <3> [218.963342] BUG: KASAN: null-ptr-deref in ttm_lru_bulk_move_del+0xc5/0x180 [ttm]
+> <3> [218.963456] Read of size 8 at addr 0000000000000038 by task xe_evict/1529
+> <3> [218.963546]
+> <3> [218.963566] CPU: 0 PID: 1529 Comm: xe_evict Not tainted 6.3.0-xe #1
+> <3> [218.963664] Hardware name: Intel Corporation Tiger Lake Client Platform/TigerLake H DDR4 SODIMM RVP, BIOS TGLSFWI1.R00.4064.A00.2102041619 02/04/2021
+> <3> [218.963841] Call Trace:
+> <3> [218.963881]  <TASK>
+> <3> [218.963915]  dump_stack_lvl+0x64/0xb0
+> <3> [218.963976]  print_report+0x3e5/0x600
+> <3> [218.964036]  ? ttm_lru_bulk_move_del+0xc5/0x180 [ttm]
+> <3> [218.964127]  kasan_report+0x96/0xc0
+> <3> [218.964183]  ? ttm_lru_bulk_move_del+0xc5/0x180 [ttm]
+> <3> [218.964276]  ttm_lru_bulk_move_del+0xc5/0x180 [ttm]
+> <3> [218.964365]  ttm_bo_set_bulk_move+0x92/0x140 [ttm]
+> <3> [218.964454]  xe_gem_object_close+0xc8/0x120 [xe]
+> <3> [218.964675]  ? __pfx_xe_gem_object_close+0x10/0x10 [xe]
+> <3> [218.964908]  ? drm_gem_object_handle_put_unlocked+0xc7/0x170 [drm]
+> <3> [218.965071]  drm_gem_object_release_handle+0x45/0x80 [drm]
+> <3> [218.965220]  ? __pfx_drm_gem_object_release_handle+0x10/0x10 [drm]
+> <3> [218.965381]  idr_for_each+0xc9/0x180
+> <3> [218.965437]  ? __pfx_idr_for_each+0x10/0x10
+> <3> [218.965504]  drm_gem_release+0x20/0x30 [drm]
+> <3> [218.965637]  drm_file_free.part.0+0x4cb/0x4f0 [drm]
+> <3> [218.965778]  ? drm_close_helper.isra.0+0xb7/0xe0 [drm]
+> <3> [218.965921]  drm_release_noglobal+0x49/0x90 [drm]
+> <3> [218.966061]  __fput+0x122/0x450
+> <3> [218.966115]  task_work_run+0xfe/0x190
+> <3> [218.966175]  ? __pfx_task_work_run+0x10/0x10
+> <3> [218.966239]  ? do_raw_spin_unlock+0xa7/0x140
+> <3> [218.966308]  do_exit+0x55f/0x1430
+> <3> [218.966364]  ? __pfx_lock_release+0x10/0x10
+> <3> [218.966431]  ? do_raw_spin_lock+0x11d/0x1e0
+> <3> [218.966498]  ? __pfx_do_exit+0x10/0x10
+> <3> [218.966554]  ? __pfx_do_raw_spin_lock+0x10/0x10
+> <3> [218.966625]  ? mark_held_locks+0x24/0x90
+> <3> [218.966688]  ? lockdep_hardirqs_on_prepare+0x136/0x210
+> <3> [218.966768]  do_group_exit+0x68/0x110
+> <3> [218.966828]  __x64_sys_exit_group+0x2c/0x30
+> <3> [218.966896]  do_syscall_64+0x3c/0x90
+> <3> [218.966955]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+> <3> [218.967035] RIP: 0033:0x7f77b194f146
+> <3> [218.967094] Code: Unable to access opcode bytes at 0x7f77b194f11c.
+> <3> [218.967174] RSP: 002b:00007ffc64791188 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+> <3> [218.967271] RAX: ffffffffffffffda RBX: 00007f77b1a548a0 RCX: 00007f77b194f146
+> <3> [218.967364] RDX: 0000000000000062 RSI: 000000000000003c RDI: 0000000000000062
+> <3> [218.967458] RBP: 0000000000000062 R08: 00000000000000e7 R09: ffffffffffffff78
+> <3> [218.967553] R10: 0000000000000058 R11: 0000000000000246 R12: 00007f77b1a548a0
+> <3> [218.967648] R13: 0000000000000003 R14: 00007f77b1a5d2e8 R15: 0000000000000000
+> <3> [218.967745]  </TASK>
+>
+> Fixes: fee2ede15542 ("drm/ttm: rework bulk move handling v5")
+> Cc: "Christian König" <christian.koenig@amd.com>
+> Cc: "Christian König" <ckoenig.leichtzumerken@gmail.com>
+> Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: <stable@vger.kernel.org> # v5.19+
+> Link: https://gitlab.freedesktop.org/drm/xe/kernel/-/issues/411
+> Signed-off-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
 > ---
->  tools/perf/util/cs-etm.c | 32 +++++++++++++++++++++++++-------
->  1 file changed, 25 insertions(+), 7 deletions(-)
-> 
-> diff --git a/tools/perf/util/cs-etm.c b/tools/perf/util/cs-etm.c
-> index 91299cc56bf7..446e00d98fd5 100644
-> --- a/tools/perf/util/cs-etm.c
-> +++ b/tools/perf/util/cs-etm.c
-> @@ -1418,10 +1418,26 @@ static int cs_etm__synth_instruction_sample(struct cs_etm_queue *etmq,
->  	sample.stream_id = etmq->etm->instructions_id;
->  	sample.period = period;
->  	sample.cpu = tidq->packet->cpu;
-> -	sample.flags = tidq->prev_packet->flags;
->  	sample.cpumode = event->sample.header.misc;
->  
-> -	cs_etm__copy_insn(etmq, tidq->trace_chan_id, tidq->packet, &sample);
-> +	cs_etm__copy_insn(etmq, tidq->trace_chan_id, tidq->prev_packet, &sample);
-> +
-> +	/* Populate branch target information only when we encounter
-> +	 * branch instruction, which is at the end of tidq->prev_packet.
-> +	 */
-> +	if (addr == (tidq->prev_packet->end_addr - 4)) {
-> +		/* Update the perf_sample flags using the prev_packet
-> +		 * since that is the queue we are synthesizing.
-> +		 */
-> +		sample.flags = tidq->prev_packet->flags;
-> +
-> +		/* The last instruction of the previous queue would be a
-> +		 * branch operation. Get the target of that branch by looking
-> +		 * into the first executed instruction of the current packet
-> +		 * queue.
-> +		 */
-> +		sample.addr = cs_etm__first_executed_instr(tidq->packet);
-> +	}
->  
->  	if (etm->synth_opts.last_branch)
->  		sample.branch_stack = tidq->last_branch;
-> @@ -1641,7 +1657,7 @@ static int cs_etm__sample(struct cs_etm_queue *etmq,
->  	/* Get instructions remainder from previous packet */
->  	instrs_prev = tidq->period_instructions;
->  
-> -	tidq->period_instructions += tidq->packet->instr_count;
-> +	tidq->period_instructions += tidq->prev_packet->instr_count;
->  
->  	/*
->  	 * Record a branch when the last instruction in
-> @@ -1721,8 +1737,11 @@ static int cs_etm__sample(struct cs_etm_queue *etmq,
->  			 * been executed, but PC has not advanced to next
->  			 * instruction)
->  			 */
-> +			/* Get address from prev_packet since we are synthesizing
-> +			 * that in cs_etm__synth_instruction_sample()
-> +			 */
->  			addr = cs_etm__instr_addr(etmq, trace_chan_id,
-> -						  tidq->packet, offset - 1);
-> +						  tidq->prev_packet, offset - 1);
->  			ret = cs_etm__synth_instruction_sample(
->  				etmq, tidq, addr,
->  				etm->instructions_sample_period);
-> @@ -1786,7 +1805,7 @@ static int cs_etm__flush(struct cs_etm_queue *etmq,
->  
->  	/* Handle start tracing packet */
->  	if (tidq->prev_packet->sample_type == CS_ETM_EMPTY)
-> -		goto swap_packet;
-> +		goto reset_last_br;
->  
->  	if (etmq->etm->synth_opts.last_branch &&
->  	    etmq->etm->synth_opts.instructions &&
-> @@ -1822,8 +1841,7 @@ static int cs_etm__flush(struct cs_etm_queue *etmq,
->  			return err;
->  	}
->  
-> -swap_packet:
-> -	cs_etm__packet_swap(etm, tidq);
-> +reset_last_br:
->  
->  	/* Reset last branches after flush the trace */
->  	if (etm->synth_opts.last_branch)
+>   drivers/gpu/drm/ttm/ttm_resource.c | 2 ++
+>   1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/ttm/ttm_resource.c b/drivers/gpu/drm/ttm/ttm_resource.c
+> index 7333f7a87a2f..cb05e0a36576 100644
+> --- a/drivers/gpu/drm/ttm/ttm_resource.c
+> +++ b/drivers/gpu/drm/ttm/ttm_resource.c
+> @@ -86,6 +86,8 @@ static void ttm_lru_bulk_move_pos_tail(struct ttm_lru_bulk_move_pos *pos,
+>   				       struct ttm_resource *res)
+>   {
+>   	if (pos->last != res) {
+> +		if (pos->first == res)
+> +			pos->first = list_next_entry(res, lru);
+>   		list_move(&res->lru, &pos->last->lru);
+>   		pos->last = res;
+>   	}
+
