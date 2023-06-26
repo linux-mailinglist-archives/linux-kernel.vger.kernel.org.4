@@ -2,90 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E97D73E2C8
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 17:06:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 205FD73E2CF
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 17:09:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229533AbjFZPGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 11:06:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35042 "EHLO
+        id S229488AbjFZPJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 11:09:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbjFZPGC (ORCPT
+        with ESMTP id S229487AbjFZPJR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 11:06:02 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC356D3;
-        Mon, 26 Jun 2023 08:06:01 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35QAYQr2000870;
-        Mon, 26 Jun 2023 15:05:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=IdtCwDjHqmXMfxmzwDZMSg9ypgdODVVb+Pq+cftBNow=;
- b=Qd0fF8i39cELqb2ccIS94MzQ/tREKTQUmXOX+qr2f8Sasm6YHQWKKD7c1FLoVNYL3eg8
- /dSdL+3Ii99oqB4oCqdIk0MIaSoCezuuxaw38wvlG6GQJTyWIyT54Nc6nit7z3ok/pnT
- zk+1xip+ZXh509JNIz9sO596OC17YAF2x/a5VQhSTxv6UfDewln0Tx0Fwp48o/znn7LX
- mgskrCx8itqkNRq8tvo39rZIDKLPfQpYT/v+Da+j5fxJZkCFQGbTIn3jbB3J43niYrZ6
- HcLUnQAKJSTI9hmWa9VwoFcR83cwvoPjkX43B71vi9IVtstrI4tH9R75MGLvvhkYPfFG iw== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rev821xbw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 26 Jun 2023 15:05:28 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35QF5RTW028970
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 26 Jun 2023 15:05:27 GMT
-Received: from [10.110.49.97] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 26 Jun
- 2023 08:05:26 -0700
-Message-ID: <f0606765-d643-06b8-9c44-960b6f52bd00@quicinc.com>
-Date:   Mon, 26 Jun 2023 08:05:26 -0700
+        Mon, 26 Jun 2023 11:09:17 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3DEE73
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 08:09:13 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-313e742a787so1634081f8f.1
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 08:09:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent.com; s=google; t=1687792152; x=1690384152;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5ZOVpA71i/AmTOr0v+BW3r06CAsw8oH2AC2V9/+6+As=;
+        b=GdsYVkur6vkSIf0v6Fb43unznX4XRRgVC0nO8m3/Wvzo43eywYYD8cZIE10xszPHYD
+         qtL+X/ISsd3Nbz35oFyQxCqeKX8UiDW3l2JYhjuGxmEtE7QYDkJNOA5G52xZ6ovYdyxJ
+         T4PNAA9bWvRyX1HUH+rYROW+GZ5SJ3ZaceXUxz4EcRCbNOq7/0HMoVIccaopzDgsS6ZT
+         qUqFPFXp7cdwD/5KUM1U3Wa9d0hqaWF4EwNWUnTaPWFOOS3yW7eFl0to57i7wRWlpd0z
+         gRu0/k26VreSnSLNRdz5smGVftdT87VaSVGsTU3loSxOK+rSn7V8oUbYSOcZKf3DH+aM
+         bjoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687792152; x=1690384152;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5ZOVpA71i/AmTOr0v+BW3r06CAsw8oH2AC2V9/+6+As=;
+        b=MkEGndFetgGutXO9sZ0edKlZ5z7ECbUmSqQYj0NJ24OzLG3vQeGjkkk77rzH0qHrXf
+         0Fu84d0h+GmGRKXtwYDngOrDdSnEUnmCYfSaFyd1FjBRGaHqegAA+6bv32fV2gb/Se8U
+         1Z19Z52Jb5NejkBE0ImtPzjvNFQRSNDeh+NggmhrhQIyPFM0fLs48gqEFYiOuHd+L91v
+         sF/sXeUkAGjYy6HLcrzhGdMh8dVcs1JAy/kKGnSLbNwXy5nly8XNDbOW+ZrH6dmZ/r39
+         LUh6a9a7DalHwIsGZreFAM9DZV8GsU0hU5VGeOqVzGZkFPIsoRhqqigIvj4nXfGmkoBf
+         TvhA==
+X-Gm-Message-State: AC+VfDw6GUyFnZkojqkVm63DypnRNif225hpeOnOZrMm4F4GJuG8+dtI
+        HoaYSmo9L1BWc6N6drx+scQ3ww==
+X-Google-Smtp-Source: ACHHUZ7RHNZDCoPo174rAheI28qWcIkZjyKzfraeQtsbeiQnL7uXSNAtSOPnpXuirEpaYXMI0vMHeA==
+X-Received: by 2002:a5d:61c9:0:b0:313:f5ea:44f7 with SMTP id q9-20020a5d61c9000000b00313f5ea44f7mr1418213wrv.35.1687792152332;
+        Mon, 26 Jun 2023 08:09:12 -0700 (PDT)
+Received: from [192.168.1.193] (f.c.7.0.0.0.0.0.0.0.0.0.0.0.0.0.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff::7cf])
+        by smtp.gmail.com with ESMTPSA id v1-20020adfe281000000b00311299df211sm7668710wri.77.2023.06.26.08.09.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jun 2023 08:09:12 -0700 (PDT)
+From:   Lorenz Bauer <lmb@isovalent.com>
+Subject: [PATCH bpf-next v3 0/7] Add SO_REUSEPORT support for TC
+ bpf_sk_assign
+Date:   Mon, 26 Jun 2023 16:08:57 +0100
+Message-Id: <20230613-so-reuseport-v3-0-907b4cbb7b99@isovalent.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v3 01/28] xhci: Add support to allocate several
- interrupters
-Content-Language: en-US
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
-        <perex@perex.cz>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
-        <krzysztof.kozlowski+dt@linaro.org>, <agross@kernel.org>,
-        <Thinh.Nguyen@synopsys.com>, <bgoswami@quicinc.com>,
-        <andersson@kernel.org>, <robh+dt@kernel.org>,
-        <gregkh@linuxfoundation.org>, <tiwai@suse.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <quic_jackp@quicinc.com>,
-        <quic_plai@quicinc.com>
-References: <20230308235751.495-1-quic_wcheng@quicinc.com>
- <20230308235751.495-2-quic_wcheng@quicinc.com>
- <a45ff335-0563-85c7-3b31-d6ca23a54a3f@linux.intel.com>
- <ed0397eb-da17-fbee-647e-f3a2a57577fe@quicinc.com>
- <9f30e9f9-280e-b381-fecc-2a032c1117af@quicinc.com>
- <da468fe6-709c-b6e6-159d-10f76d296307@linux.intel.com>
-From:   Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <da468fe6-709c-b6e6-159d-10f76d296307@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 5D7z_PDWYDVj5u53kIqTXqnKn4F8kFD3
-X-Proofpoint-GUID: 5D7z_PDWYDVj5u53kIqTXqnKn4F8kFD3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-26_12,2023-06-26_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- adultscore=0 bulkscore=0 clxscore=1015 impostorscore=0 mlxscore=0
- spamscore=0 phishscore=0 lowpriorityscore=0 suspectscore=0 mlxlogscore=999
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306260136
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAmqmWQC/22OwQ6CMBBEf4Xs2TXQKgRP/ofh0NZFmmjbdGuDI
+ fy7hZMHj5M3kzcLMEVLDJdqgUjZsvWuBHmowEzKPQjtvWQQtZB120hkj5HeTMHHhNQLcxZt00k
+ iKBOtmFBH5cy0jX67Gw6RRjvvthvoMKKjOcFQyGQ5+fjZb2Sx8//GLLBG3Zm2V/JUzPJq2Wf1J
+ JeOxr9gWNf1C0IJORzVAAAA
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        David Ahern <dsahern@kernel.org>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Joe Stringer <joe@wand.net.nz>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc:     Hemanth Malla <hemanthmalla@gmail.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Lorenz Bauer <lmb@isovalent.com>,
+        Joe Stringer <joe@cilium.io>
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,99 +94,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mathias,
+We want to replace iptables TPROXY with a BPF program at TC ingress.
+To make this work in all cases we need to assign a SO_REUSEPORT socket
+to an skb, which is currently prohibited. This series adds support for
+such sockets to bpf_sk_assing.
 
-On 6/26/2023 6:55 AM, Mathias Nyman wrote:
-> On 24.6.2023 1.37, Wesley Cheng wrote:
->> Hi Mathias,
->>
->> On 3/13/2023 1:32 PM, Wesley Cheng wrote:
->>> Hi Mathias,
->>>
->>> On 3/10/2023 7:07 AM, Mathias Nyman wrote:
->>>> On 9.3.2023 1.57, Wesley Cheng wrote:
->>>>> From: Mathias Nyman <mathias.nyman@linux.intel.com>
->>>>>
->>>>> Introduce xHCI APIs to allow for clients to allocate and free
->>>>> interrupters.  This allocates an array of interrupters, which is 
->>>>> based on
->>>>> the max_interrupters parameter.  The primary interrupter is set as the
->>>>> first entry in the array, and secondary interrupters following after.
->>>>>
->>>>
->>>> I'm thinking about changing this offloading xHCI API
->>>> xhci should be aware and keep track of which devices and endpoints that
->>>> are offloaded to avoid device getting offloaded twice, avoid xhci 
->>>> driver
->>>> from queuing anything itself for these, and act properly if the 
->>>> offloaded
->>>> device or entire host is removed.
->>>>
->>>> So first thing audio side would need to do do is register/create an
->>>> offload entry for the device using the API:
->>>>
->>>> struct xhci_sideband *xhci_sideband_register(struct usb_device *udev)
->>>>
->>>> (xHCI specs calls offload sideband)
->>>> Then endpoints and interrupters can be added and removed from this
->>>> offload entry
->>>>
->>>> I have some early thoughts written as non-compiling code in:
->>>>
->>>> git://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git 
->>>> feature_interrupters
->>>> https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/log/?h=feature_interrupters 
->>>>
->>>>
->>>> Let me know what you think about this.
->>>>
->>>>> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
->>>>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
->>>>
->>>> My Signed-off-by tag is being misused here.
->>>>
->>>> I wrote a chunk of the code in this patch as PoC that I shared in a 
->>>> separate topic branch.
->>>> It was incomplete and not intended for upstream yet. (lacked 
->>>> locking, several fixme parts, etc..)
->>>> The rest of the code in this patch is completely new to me.
->>>>
->>>
->>> Sorry about this.  I cherry picked the change directly from your 
->>> branch, so it carried your signed off tag with it.  Will make to 
->>> include them properly next time.
->>>
->>
->> I'm about ready to submit the next revision for this set of changes, 
->> and I was wondering how we should handle the changes you made on:
->> https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/log/?h=feature_interrupters 
->>
->>
->> I did make some modifications to some of the interrupter fixme tags 
->> you had, and also updated the xhci-sideband APIs with the proper 
->> logic.  I don't believe it is correct for me to submit a set of 
->> patches authored by you without your signed off tag. (checkpatch 
->> throws an error saying the author did not sign off on the change)
->>
-> 
-> Note that the first patch "xhci: split allocate interrupter into 
-> separate alloacte and add parts"
-> is already in usb-next on its way to 6.5
-> 
-> Maybe Co-developed-by would work in this case, with a small explanation 
-> at the end of the commit message.
-> Something like:
-> 
-> Locking, DMA something and feataure x added by Wesley Cheng to
-> complete original concept code by Mathias
-> 
-> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-> Co-developed-by: Wesley Cheng <quic_wcheng@quicinc.com>
-> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
-> 
+I did some refactoring to cut down on the amount of duplicate code. The
+key to this is to use INDIRECT_CALL in the reuseport helpers. To show
+that this approach is not just beneficial to TC sk_assign I removed
+duplicate code for bpf_sk_lookup as well.
 
-Sounds good!  Thanks for helping with a non-technical question :).  Just 
-wanted to make sure I wasn't overstepping anywhere.
+Changes from v1:
+- Correct commit abbrev length (Kuniyuki)
+- Reduce duplication (Kuniyuki)
+- Add checks on sk_state (Martin)
+- Split exporting inet[6]_lookup_reuseport into separate patch (Eric)
 
-Thanks
-Wesley Cheng
+Joint work with Daniel Borkmann.
+
+Signed-off-by: Lorenz Bauer <lmb@isovalent.com>
+---
+Changes in v3:
+- Fix warning re udp_ehashfn and udp6_ehashfn (Simon)
+- Return higher scoring connected UDP reuseport sockets (Kuniyuki)
+- Fix ipv6 module builds
+- Link to v2: https://lore.kernel.org/r/20230613-so-reuseport-v2-0-b7c69a342613@isovalent.com
+
+---
+Daniel Borkmann (1):
+      selftests/bpf: Test that SO_REUSEPORT can be used with sk_assign helper
+
+Lorenz Bauer (6):
+      udp: re-score reuseport groups when connected sockets are present
+      net: export inet_lookup_reuseport and inet6_lookup_reuseport
+      net: document inet[6]_lookup_reuseport sk_state requirements
+      net: remove duplicate reuseport_lookup functions
+      net: remove duplicate sk_lookup helpers
+      bpf, net: Support SO_REUSEPORT sockets with bpf_sk_assign
+
+ include/net/inet6_hashtables.h                     |  84 ++++++++-
+ include/net/inet_hashtables.h                      |  77 +++++++-
+ include/net/sock.h                                 |   7 +-
+ include/net/udp.h                                  |   8 +
+ include/uapi/linux/bpf.h                           |   3 -
+ net/core/filter.c                                  |   2 -
+ net/ipv4/inet_hashtables.c                         |  70 +++++---
+ net/ipv4/udp.c                                     |  88 ++++-----
+ net/ipv6/inet6_hashtables.c                        |  73 +++++---
+ net/ipv6/udp.c                                     |  98 ++++------
+ tools/include/uapi/linux/bpf.h                     |   3 -
+ tools/testing/selftests/bpf/network_helpers.c      |   3 +
+ .../selftests/bpf/prog_tests/assign_reuse.c        | 197 +++++++++++++++++++++
+ .../selftests/bpf/progs/test_assign_reuse.c        | 142 +++++++++++++++
+ 14 files changed, 676 insertions(+), 179 deletions(-)
+---
+base-commit: 970308a7b544fa1c7ee98a2721faba3765be8dd8
+change-id: 20230613-so-reuseport-e92c526173ee
+
+Best regards,
+-- 
+Lorenz Bauer <lmb@isovalent.com>
+
