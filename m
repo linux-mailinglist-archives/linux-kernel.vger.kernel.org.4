@@ -2,128 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB9CF73D97C
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 10:18:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F419573D983
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 10:19:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230160AbjFZISO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 04:18:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57034 "EHLO
+        id S230189AbjFZITP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 04:19:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbjFZISM (ORCPT
+        with ESMTP id S229862AbjFZITN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 04:18:12 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D34395
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 01:18:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=bX3GKkivlGqKtau6aT0ZWFoAsoXorNhDrWoD2Qk0BYc=; b=CNybrfXPdEDAxK0BL7QydXiUFk
-        hWBkk0vZarcJkiCekkz169F22TLh0Wt1hNDUQFm+2Ra+7euiyfUfxA4dWcZ4qZFM94k/owtyJnysM
-        oGonRvTe/rcJt1ls6tpC1r1ycwV59lWma4U8Q/N14KOEriBAHTJNk7AMqgMCHqTUykKa1d83RaM0Z
-        gKMRyWyQfh06Te4VZf1oG2bySXHiAXNYCZYN0RHQudPzifH3jhPMxFRwmzQpou+rv9f5A9HOWLRKe
-        U5idfy87ZnEDaqL18YsD5GcWTXy0gVWt5Y80uj+9A4WRI4CMdzmOy0/i6W0/wVJ6cGy+tTqS4Hmm2
-        XOCaY7/g==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qDhQ9-001WP2-Fr; Mon, 26 Jun 2023 08:18:01 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1ED2C3002A9;
-        Mon, 26 Jun 2023 10:18:00 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id DF25F2024C49A; Mon, 26 Jun 2023 10:17:59 +0200 (CEST)
-Date:   Mon, 26 Jun 2023 10:17:59 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Borislav Petkov <bp@alien8.de>, x86-ml <x86@kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>, osandov@fb.com,
-        jpoimboe@kernel.org
-Subject: Re: [GIT PULL] objtool/urgent for v6.4
-Message-ID: <20230626081759.GU83892@hirez.programming.kicks-ass.net>
-References: <20230625092842.GBZJgIyqJL/FtKW4nU@fat_crate.local>
- <CAHk-=wgQsAB-5_9vF3Ok26=Wf55ayNJ80eMVVYtgrLZ-if5BVg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wgQsAB-5_9vF3Ok26=Wf55ayNJ80eMVVYtgrLZ-if5BVg@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 26 Jun 2023 04:19:13 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F64A95
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 01:19:12 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-9875c2d949eso458564866b.0
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 01:19:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fairphone.com; s=fair; t=1687767550; x=1690359550;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6vGI+nta4xCb7jjtw4SWdamXlIICUlHtM/Q20S/nMlw=;
+        b=lunbIA+tI5QGU+sYKJbiveO7P3sCFCXTWS+j97EzgY6iJlkaSMi97c9Ko94N4P+Lgj
+         6Rj9PnlZCeN+RJlQe/7PJDGwPpPLUgFGVe5Rq8sKCDhMcbQH9XxElWOIK5D1s0lIQbPe
+         cQ/zvTrnRu0V+H0IW8YT6zE9Csm83cdAkFdWFgxsfn8c/HbF8u0hawfzgncwtpMI5hlp
+         UPsdQ60xqpI5mO09VVHotOLyE6FC2M5mJhUCmMAHY+u6JcwdhJbbydtcBq5m35h9hfcb
+         yuYhV0aZ+LVR8EiCDV0WLA0VAs0qD1eirChspsSMiMAkC4vkyMMFS55SO5SKPE9u0EYG
+         ZJOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687767550; x=1690359550;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=6vGI+nta4xCb7jjtw4SWdamXlIICUlHtM/Q20S/nMlw=;
+        b=a/dd3nqjTTykDydj2NHQTnDGNf1x4tpNc7cDQw4e9wAvksJRxyP/eDi6fTYv02hpp4
+         ze6WrLuMpjw7/oLCIGHlbCCTNop2lSBGrLONgZv6gon8qDPuDPu31Pxcp2riTBi+tcMP
+         QFAEXF7/uwX6T3T0adOX1cJe79yyD5UhA6RITJEmZcC8KlfXHOsxKCdLayu4+3NoFR5f
+         WSF/16TaogjeLde/k8ic1FfVKu8pWa6yg8vsdfGV+RxveoI8szR+nXoXSYUWRe3rmflx
+         eAb6cVFther75/ahZdi8gSHi6ngl9o8EX95KDZ1KjAQwxf0BM8j0Ucn5tieTqeAEr0Zt
+         uLYg==
+X-Gm-Message-State: AC+VfDz+ofn8ShgtD9+31xsWebaUJtqqBDvEwRic2AUlAO+Xxx0C/7a5
+        5kQfwDPy44GJPZZCaFnfV0yIhg==
+X-Google-Smtp-Source: ACHHUZ6tDjEL7i629oGAPKobpegpi1tWcqiC6lIxFPHE3WnYQ2IkEVA9iayQg7YPMnyuVyqfRh8ygQ==
+X-Received: by 2002:a17:907:96ab:b0:991:d2a8:658a with SMTP id hd43-20020a17090796ab00b00991d2a8658amr1104916ejc.34.1687767550551;
+        Mon, 26 Jun 2023 01:19:10 -0700 (PDT)
+Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
+        by smtp.gmail.com with ESMTPSA id gw10-20020a170906f14a00b0098e16f8c198sm2300279ejb.18.2023.06.26.01.19.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Jun 2023 01:19:10 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Mon, 26 Jun 2023 10:19:09 +0200
+Message-Id: <CTMFNWKMSCJP.DBPZEW25594L@otso>
+To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
+        "Rob Herring" <robh@kernel.org>
+Cc:     "Abel Vesa" <abel.vesa@linaro.org>,
+        "Manivannan Sadhasivam" <mani@kernel.org>,
+        "Andy Gross" <agross@kernel.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        "Conor Dooley" <conor+dt@kernel.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "Alim Akhtar" <alim.akhtar@samsung.com>,
+        "Avri Altman" <avri.altman@wdc.com>,
+        "Bart Van Assche" <bvanassche@acm.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 5/5] scsi: dt-bindings: ufs: qcom: Fix warning for
+ sdm845 by adding reg-names
+From:   "Luca Weiss" <luca.weiss@fairphone.com>
+X-Mailer: aerc 0.15.1
+References: <20230623113009.2512206-1-abel.vesa@linaro.org>
+ <20230623113009.2512206-6-abel.vesa@linaro.org>
+ <cd84b8c6-fac7-ecef-26be-792a1b04a102@linaro.org>
+ <CTK1AI4TVYRZ.F77OZB62YYC0@otso> <20230623211746.GA1128583-robh@kernel.org>
+ <CTMDIQGOYMKD.1BP88GSB03U54@otso>
+ <d3970163-b8e8-9665-3761-8942c28adaa8@linaro.org>
+In-Reply-To: <d3970163-b8e8-9665-3761-8942c28adaa8@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 25, 2023 at 10:09:25AM -0700, Linus Torvalds wrote:
-> On Sun, 25 Jun 2023 at 02:28, Borislav Petkov <bp@alien8.de> wrote:
-> >
-> > - Add a ORC format hash to vmlinux and modules in order for other tools
-> >   which use it, to detect changes to it and adapt accordingly
-> 
-> Hmm. That "hash" is pretty horrendous. If I read that awk script
-> right, it will change for things like whitespace changes (or comment
-> changes) as long as they are around those magic #defines or the
-> 'orc_entry' definition.
+On Mon Jun 26, 2023 at 9:41 AM CEST, Krzysztof Kozlowski wrote:
+> On 26/06/2023 08:38, Luca Weiss wrote:
+> >>>> but I guess no resends and it can be superseded.
+> >>>
+> >>> Right, the patches got reviews but was never applied... I really need=
+ to
+> >>> find a strategy to keep track of sent patches until they're applied w=
+ith
+> >>> my work mailbox, it's not the first time that a patch has gotten
+> >>> forgotten.
+> >>
+> >> There was an error reported on the above series. Why would it be=20
+> >> applied?
+> >=20
+> > The error report at [0] complains about reg-names but I'm quite sure
+> > that patch 2/3 resolves this error. Does your bot only apply one patch
+> > at a time and run the check or apply all of them and then run it? It's
+> > been a while but I'm fairly sure I ran all of the checks before sending
+> > since I also documented some other patches in the cover letter there.
+>
+> You did it in cover letter, not in the patch, so there is no dependency
+> for bots recorded.
 
-Yes, if those lines get tail comments or someone mucks about with the
-whitespace, the hash changes.
+I'm not aware how to put extra comments into a patch in a series with
+b4, at least last time I checked I don't think it was possible? But I
+also thought the cover letter was exactly there for giving some
+background of the series and documenting any dependencies on other
+patches.
 
-The advantage is that if the thing changes we can't forget to increment
-a version number -- and this file hasn't had many changes.
+>
+> >=20
+> > [0] https://lore.kernel.org/all/167241769341.1925758.178566816349494461=
+14.robh@kernel.org/
+>
+> Your patch 2/3 could not be=C2=A0applied to any tree. 3/3 applied but wit=
+hout
+> previous one caused warnings.
 
-The current output looks like:
+Anyways, just resent the series as v4, maybe this time it can get picked
+up... Should have enough reviews by now :)
 
-$ awk '/^#define ORC_(REG|TYPE)_/ { print }/^struct orc_entry {$/ { p=1 }p { print }/^}/ { p=0 }' < arch/x86/include//asm/orc_types.h
-#define ORC_REG_UNDEFINED               0
-#define ORC_REG_PREV_SP                 1
-#define ORC_REG_DX                      2
-#define ORC_REG_DI                      3
-#define ORC_REG_BP                      4
-#define ORC_REG_SP                      5
-#define ORC_REG_R10                     6
-#define ORC_REG_R13                     7
-#define ORC_REG_BP_INDIRECT             8
-#define ORC_REG_SP_INDIRECT             9
-#define ORC_REG_MAX                     15
-#define ORC_TYPE_UNDEFINED              0
-#define ORC_TYPE_END_OF_STACK           1
-#define ORC_TYPE_CALL                   2
-#define ORC_TYPE_REGS                   3
-#define ORC_TYPE_REGS_PARTIAL           4
-struct orc_entry {
-s16             sp_offset;
-s16             bp_offset;
-#if defined(__LITTLE_ENDIAN_BITFIELD)
-unsigned        sp_reg:4;
-unsigned        bp_reg:4;
-unsigned        type:3;
-unsigned        signal:1;
-#elif defined(__BIG_ENDIAN_BITFIELD)
-unsigned        bp_reg:4;
-unsigned        sp_reg:4;
-unsigned        unused:4;
-unsigned        signal:1;
-unsigned        type:3;
-#endif
-} __packed;
-$
+Regards
+Luca
 
-I suppose we could add a lint pass to it to clean it up and make it more
-consistent, but I don't expect it would buy us much. In fact, then we
-have the build depend on the linter being present, which is a fairly big
-down-side.
+>
+>
+>
+>
+> Best regards,
+> Krzysztof
 
-> I've pulled this, but it all seems pretty random and hacky.
-
-Thanks! So our concern was mostly about not being able to accidentally
-change things and not notice the change.
-
-If you want we can add an explicit comment to that file to be careful
-about things. Omar's purpose is to detect change, the occasional
-harmless change is better than not detecting change.
