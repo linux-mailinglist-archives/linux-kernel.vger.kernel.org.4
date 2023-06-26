@@ -2,394 +2,273 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9422573D8C9
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 09:48:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E691C73D8DE
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 09:52:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbjFZHst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 03:48:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38392 "EHLO
+        id S229954AbjFZHvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 03:51:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbjFZHsn (ORCPT
+        with ESMTP id S229601AbjFZHvq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 03:48:43 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D2DB1B1;
-        Mon, 26 Jun 2023 00:48:37 -0700 (PDT)
-Received: from [IPV6:2a01:e0a:120:3210:960a:2463:3114:4c3a] (unknown [IPv6:2a01:e0a:120:3210:960a:2463:3114:4c3a])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 55F0E6607113;
-        Mon, 26 Jun 2023 08:48:35 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1687765715;
-        bh=G/GIgYrmoJj0dG40UwbmNhWWtziwx1kJTwCIfcKa/os=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=DPSJrQaXeeLSwERR2pUdSOSuMx+7/fb5bAJMBR8c9n7bDN58icTSNzWFKa0A1cL2J
-         xxbLPB9dTt4ffUHKAhdhMJqSmOXg9vLr5toQ/at+X8zNBdvOq8pN9dX1BQhYbyCyX+
-         tx4949AZoGURQ77PNVE9QnU17NWXH4WtaE2yOCaruWTBmMklPW97vTBStMZffJ/L9p
-         di5W9qpTazPRFDOrYR5+Ag4cHP055yTR9eXFl1KH4cCqkA8h/aioMpfbLrX7gmkf13
-         BlJ0lyfPoOxEmK7qxFR6EVvkIfQyW+a5U/TLRIzP0IOsubqTfnfPX3J+59sntvumwM
-         L9ThGrQ8AEPzg==
-Message-ID: <d89a9237-8fb9-73a2-5caa-e14146b10065@collabora.com>
-Date:   Mon, 26 Jun 2023 09:48:33 +0200
+        Mon, 26 Jun 2023 03:51:46 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89DB4128
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 00:51:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687765904; x=1719301904;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=CevVugZWyLM2yKe1xRiTE42MTeJD9rkcmF3hfxiyumE=;
+  b=U50AgdlqT1NlHMdAQW0anvbXlqBqbOx4HeuQZ0GQ/p3D+wzwwnsxwcdU
+   lPxQ08CtM5br0wfPDArDXxiehUaHM5FwYnYNt/z78ofmD0EVe9w7yA/S8
+   8gPhmRkU7th1xE2+MBIb0z6ImRSP4swCmucSG3DuNwMx6JrDvasrzgsnD
+   HWyRkeHZ5gd+8XeG34lVw2uNgu8Dbj9zx0WvMFVR+SxMlJeHrcZGYqano
+   qz/LmguqzvIrKHgXwkZpVhF3uglczih2+seJAEK/yVmGz9u0CkDtbCLJG
+   Y+JjSExpQBB88sRiZq6/rtgelMMmeTw+SDxBU6xaxlrNMxkaykLhj/Zrb
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="427198216"
+X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
+   d="scan'208";a="427198216"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 00:51:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="1046399544"
+X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
+   d="scan'208";a="1046399544"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by fmsmga005.fm.intel.com with ESMTP; 26 Jun 2023 00:51:42 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Mon, 26 Jun 2023 00:51:41 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Mon, 26 Jun 2023 00:51:40 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27 via Frontend Transport; Mon, 26 Jun 2023 00:51:40 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.109)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Mon, 26 Jun 2023 00:51:40 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QlH5ytabDeiX+jGd7ij/jEVTKqQYiW9o0SDLEvuSVg03kiHkcZzHvspzobYVPAoHH4tEBIGSHUfk/SZd1mSqwFmANJOfAXK3Sf3jDSgQuBqTTMdHYV6UNt+V/h2Bmp4rXnABBzOzapC3FnMwToVdp/IecU2vp/p4h+4YnqXTEB8yXu3WV82e2PXZX+wkEB8HMXVGTekeC1zPmJomPy8oX1s6jJeSDo20Ct4iT/IXuTG6dO1dKF6OAP/JEsBnvGsCzlBonWahp3jenJet8yo9yCtS6ImmvSe2+3gzQNgHDH/LGoeiVMkkmlgCugFcfjeBteLCWYFkxsnEEyCc9fPgVw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tusn25xz7MiKAZ/wOxkIUQqU6bgbZS0hwrq0wFDm7Kw=;
+ b=OGz0qrbPEDAtppn6Uobb5lQVrqGZu69faEqvbsoWTgvDYxLUed7aJKpHqkgsIP8E6KDj34BIngnkJFtMuE8MLl34fYYewjgtJ3p3sFoWqQb0GiSnHHLAvgriGB6Snc0RA7ApAPsUF1/x8jUwyyZM2zJuLq+mUkD1nTRzh1iZPvtQ+afD+j7MDPVKSQNdxDWDzqiv31Pk2Zyc29ekD8n85cv80CCnqFxSbDW1McdMBOhquobLCTUZL8hc330OHaLK6y4BgqA8ps9vxkFxcWKmzG74SOpx1S7ewEhqkUK0U/A9Bb0+4+1Vezu/gc1SsFwCIgfAgrvvKlMNLQC9qW+70g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CY5PR11MB6392.namprd11.prod.outlook.com (2603:10b6:930:37::15)
+ by PH0PR11MB5048.namprd11.prod.outlook.com (2603:10b6:510:3d::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.23; Mon, 26 Jun
+ 2023 07:51:38 +0000
+Received: from CY5PR11MB6392.namprd11.prod.outlook.com
+ ([fe80::5486:41e6:7c9e:740e]) by CY5PR11MB6392.namprd11.prod.outlook.com
+ ([fe80::5486:41e6:7c9e:740e%7]) with mapi id 15.20.6521.024; Mon, 26 Jun 2023
+ 07:51:37 +0000
+Date:   Mon, 26 Jun 2023 15:48:34 +0800
+From:   kernel test robot <yujie.liu@intel.com>
+To:     Mark Rutland <mark.rutland@arm.com>
+CC:     <oe-kbuild-all@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
+        "Catalin Marinas" <catalin.marinas@arm.com>
+Subject: include/linux/compiler_types.h:82:5: sparse: sparse: undefined
+ preprocessor identifier 'CONFIG_FUNCTION_ALIGNMENT'
+Message-ID: <202306220043.IHVrU1h8-lkp@intel.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+X-ClientProxiedBy: SI1PR02CA0014.apcprd02.prod.outlook.com
+ (2603:1096:4:1f7::9) To CY5PR11MB6392.namprd11.prod.outlook.com
+ (2603:10b6:930:37::15)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [EXT] [PATCH v3 10/11] media: v4l2: Add DELETE_BUF ioctl
-To:     Ming Qian <ming.qian@nxp.com>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        "tfiga@chromium.org" <tfiga@chromium.org>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "ezequiel@vanguardiasur.com.ar" <ezequiel@vanguardiasur.com.ar>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "hverkuil-cisco@xs4all.nl" <hverkuil-cisco@xs4all.nl>,
-        "nicolas.dufresne@collabora.com" <nicolas.dufresne@collabora.com>
-Cc:     "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "linux-rockchip@lists.infradead.org" 
-        <linux-rockchip@lists.infradead.org>,
-        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
-        "kernel@collabora.com" <kernel@collabora.com>
-References: <20230622131349.144160-1-benjamin.gaignard@collabora.com>
- <20230622131349.144160-11-benjamin.gaignard@collabora.com>
- <AM6PR04MB63410CCAE0686CC95DD2B8E0E726A@AM6PR04MB6341.eurprd04.prod.outlook.com>
-Content-Language: en-US
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-In-Reply-To: <AM6PR04MB63410CCAE0686CC95DD2B8E0E726A@AM6PR04MB6341.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY5PR11MB6392:EE_|PH0PR11MB5048:EE_
+X-MS-Office365-Filtering-Correlation-Id: f94843cf-905e-4423-042e-08db761a2bb5
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: tdAZh99Xni87s9u73d9dLiCPA24TyGVkbZQduBqdbqcDC9dk5o+pcMsqLS8c8h/+23sFvfbhUbtjGata/Orcz9AxtksRSD5tqDtpmkbAr7+Ub7wBz6LUWKH8RBGLUCMBiaAvIaA1maQe5twJBN2y3g5JJT38PtfVsTvjWI5DYaQYKMBrmvMGfL2wJWEIXtTSbe7nfpOGLOWJdkZYCo8vWlen7difSmKMFtc4CsFeZohbooU3zYycBBxl3FzeFBkAfZI2BC1tFeTMjLByjMiN6XGpr8htIkljzGzyXAb7uudXgPq8Voz7LQHEX2Qxwykt9aWQvjJ3a7ya9L4eQp/nW1FEYk03QvUczM8PT03cPLslU4VnDHZelenUZ2jb9vxjjZuwd6ZkPULzvJAJYLdOOqKNH0gdYvtzQvxjleqFCPrGeU5+5u2gAqhM2BjJNnUntDsuCjZCdgxMH1K+HgNFcYok5WfSkwGpV+y1CXHLBLj6UWdBhzCZh0k1M/o8n8qppeAsS0SHP6mmXS72Wp6FGzRyus7FScKpv4VrQ9ARGyI6hsG75FNGxIr7U8kcISLply1MlceOzUgPFNbiSGqPFg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(376002)(366004)(136003)(346002)(39860400002)(451199021)(8676002)(8936002)(66476007)(66556008)(66946007)(41300700001)(316002)(6916009)(4326008)(6506007)(6512007)(1076003)(26005)(186003)(2616005)(478600001)(6666004)(966005)(6486002)(2906002)(5660300002)(30864003)(82960400001)(38100700002)(36756003)(86362001)(83380400001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?0vJVP7T/1s7L7Q2qBe2l+NZ+WgduASCMP1p7Vjsh0ReoosDHpXGN1C7bmwVz?=
+ =?us-ascii?Q?0klRa1567YuKwUOkxzFMKPLqVav9kyiv0G+YcJjCnbBxtnOeVWk3YLvlUkOU?=
+ =?us-ascii?Q?6gweL5wFsBH5s+Q46YHglGPASyCUkAPdfmASlVjJdog+X05FxB3pbxx1zoVy?=
+ =?us-ascii?Q?Ly2fPH2OJfwZRzZncKMt8MQrSuXYNOf7JwwjVfb3RyMJpPYrbz5wOcCjs8OY?=
+ =?us-ascii?Q?jHqLVnrXCHoetBEu4iQ/s7rU54ixo0vr6CNTG08OxB6jIg8t1HExPASDJFCF?=
+ =?us-ascii?Q?+1f2FDeAdtxFzOzuF+cHr6da2KQ+nJu0gC+HbNpSZdhXJdj96JxXHBd08dhC?=
+ =?us-ascii?Q?HbdBSLP/lvLbUrAE6QItgQA6tRCtchXA2bM5iMe9xyr/V5KBmgW1IcURW5b2?=
+ =?us-ascii?Q?o9TAlLKCTVoqvnNqe/zjUcoSkk8zOylvxfscrUqLkTzh4hQCFMkBwEJvnoSV?=
+ =?us-ascii?Q?TmYuXanu89Gec0xIF7+3TEcoBuf24kD/6AdwI1uKNWdZWg//ByjSUzXtEyqP?=
+ =?us-ascii?Q?ViOM0Yce0pZdr0hYpg4rFdaM0dZn51+uSsKgTPn+76lC8BVjqdCcTckGwTvi?=
+ =?us-ascii?Q?1JSklIB5lsA2/IRLXqQapWMM6xCbFCBkUCxGixjQ3hTb1mVnaJxnhoxx57aR?=
+ =?us-ascii?Q?U6/5hcJNn4YV8iH+o7xy1ld/CRYDMKrMSN+7j91KucbnUaSL9K9NR9p3JGT3?=
+ =?us-ascii?Q?WLU4NUlM2XEIUSHGGl6ih4CdQktLHjpTCWaMYpQCrbmn/48yuh59yn6oplDW?=
+ =?us-ascii?Q?HZXdg09vYeN0YZ/pfYENee78nm4BJM8ZOPufNKfmBRWjG7/6nlw5h3ahhlH1?=
+ =?us-ascii?Q?rnFOyurKiK2AlD7WPKM8HDvLVDzMiMkZv7KLFXrGJO2oJbE6Wnne/CGuR4qX?=
+ =?us-ascii?Q?nx9MiJVKEOF3xEb5FqtXg0pAXXZKyJ4fEZGLWqij6kmi+lfX5K6h0Q33W0jj?=
+ =?us-ascii?Q?UE8op2azkuE+kjApcLhNrYmhTYgLgaqqEta0L4jVRBW48Q8Z7NL2GVPmHd/y?=
+ =?us-ascii?Q?3z4xzHLQT3eH27w19vjU9gCzz2UyERez567zRHEV0/M1w3mIYpqXWVyWNK/o?=
+ =?us-ascii?Q?7/zNBO0tHpSR+vUEFWJ1ylhinWIBr1sOQCECJDLn++ieYLCEyX1IiyPRIy26?=
+ =?us-ascii?Q?JH2akB6WDFdBQ5yu4P/6xPQWLhflULmZXSQvCpX9nP4Ll7X+G+Tex0khiENp?=
+ =?us-ascii?Q?kM7YFGdce3umZBCFQj3ORqdToMUkFKivSIO61IVY+q8gDJh+amfJa5f2breR?=
+ =?us-ascii?Q?hkXKJg4P6IjVq2mn2wQF5XwA/w7DifjDiejf2vNAjwHW6f8cfOSi5FZOeASx?=
+ =?us-ascii?Q?O9lVtIcnqWEQLEIKbyhCnyT0HXCGyKaOPdzrItvSrYKkErYuyH6uOyboVqv6?=
+ =?us-ascii?Q?p4Y9fAIsRjBrqmioi9Z1HD1VcwyyV6w0827topv5aYMRJLrt/rEKfO6lJyM5?=
+ =?us-ascii?Q?3HlTXWatQaWI+EuRT6N+b4ndfGiA1U8lEb9S25ycELqhZwtjikcRM20uXaqj?=
+ =?us-ascii?Q?/p2jRP7KTuNuI4R2M0SL3YXt4RJOXPxmwbx7+ggFB9P/qIdVMkhM8USoi1q+?=
+ =?us-ascii?Q?hf2+SIOet5cj0un07LbJZR9+QXauGivv32ZDZyS/?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: f94843cf-905e-4423-042e-08db761a2bb5
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6392.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jun 2023 07:51:37.9346
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 2V0RQ87JGX4ngTBWJM/kYgs/ssDHAunhRC+MPKardnp1bi44SwlROS65OqQ+v/JfWiXdN2qXzR8gyI9JgfC2+Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB5048
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   e660abd551f1172e428b4e4003de887176a8a1fd
+commit: c27cd083cfb9d392f304657ed00fcde1136704e7 Compiler attributes: GCC cold function alignment workarounds
+date:   5 months ago
+config: um-randconfig-s053-20230621 (https://download.01.org/0day-ci/archive/20230622/202306220043.IHVrU1h8-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce: (https://download.01.org/0day-ci/archive/20230622/202306220043.IHVrU1h8-lkp@intel.com/reproduce)
 
-Le 26/06/2023 à 09:08, Ming Qian a écrit :
-> Hi Benjamin,
->
->> -----Original Message-----
->> From: Benjamin Gaignard <benjamin.gaignard@collabora.com>
->> Sent: 2023年6月22日 21:14
->> To: mchehab@kernel.org; tfiga@chromium.org; m.szyprowski@samsung.com;
->> Ming Qian <ming.qian@nxp.com>; ezequiel@vanguardiasur.com.ar;
->> p.zabel@pengutronix.de; gregkh@linuxfoundation.org; hverkuil-
->> cisco@xs4all.nl; nicolas.dufresne@collabora.com
->> Cc: linux-media@vger.kernel.org; linux-kernel@vger.kernel.org; linux-arm-
->> kernel@lists.infradead.org; linux-mediatek@lists.infradead.org; linux-arm-
->> msm@vger.kernel.org; linux-rockchip@lists.infradead.org; linux-
->> staging@lists.linux.dev; kernel@collabora.com; Benjamin Gaignard
->> <benjamin.gaignard@collabora.com>
->> Subject: [EXT] [PATCH v3 10/11] media: v4l2: Add DELETE_BUF ioctl
->>
->> Caution: This is an external email. Please take care when clicking links or
->> opening attachments. When in doubt, report the message using the 'Report
->> this email' button
->>
->>
->> VIDIOC_DELETE_BUF ioctl allows to delete a buffer from a queue.
->>
->> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
->> ---
->> .../userspace-api/media/v4l/user-func.rst     |  1 +
->> .../media/v4l/vidioc-delete-buf.rst           | 51 +++++++++++++++++++
->> .../media/common/videobuf2/videobuf2-core.c   | 33 ++++++++++++
->> .../media/common/videobuf2/videobuf2-v4l2.c   |  6 +++
->> drivers/media/v4l2-core/v4l2-dev.c            |  1 +
->> drivers/media/v4l2-core/v4l2-ioctl.c          | 10 ++++
->> include/media/v4l2-ioctl.h                    |  4 ++
->> include/media/videobuf2-core.h                |  9 ++++
->> include/media/videobuf2-v4l2.h                | 11 ++++
->> include/uapi/linux/videodev2.h                |  2 +
->> 10 files changed, 128 insertions(+)
->> create mode 100644 Documentation/userspace-api/media/v4l/vidioc-delete-
->> buf.rst
->>
->> diff --git a/Documentation/userspace-api/media/v4l/user-func.rst
->> b/Documentation/userspace-api/media/v4l/user-func.rst
->> index 15ff0bf7bbe6..8c74016e12fd 100644
->> --- a/Documentation/userspace-api/media/v4l/user-func.rst
->> +++ b/Documentation/userspace-api/media/v4l/user-func.rst
->> @@ -17,6 +17,7 @@ Function Reference
->>      vidioc-dbg-g-chip-info
->>      vidioc-dbg-g-register
->>      vidioc-decoder-cmd
->> +    vidioc-delete-buf
->>      vidioc-dqevent
->>      vidioc-dv-timings-cap
->>      vidioc-encoder-cmd
->> diff --git a/Documentation/userspace-api/media/v4l/vidioc-delete-buf.rst
->> b/Documentation/userspace-api/media/v4l/vidioc-delete-buf.rst
->> new file mode 100644
->> index 000000000000..0e7ce58f91bc
->> --- /dev/null
->> +++ b/Documentation/userspace-api/media/v4l/vidioc-delete-buf.rst
->> @@ -0,0 +1,51 @@
->> +.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later ..
->> +c:namespace:: V4L
->> +
->> +.. _VIDIOC_DELETE_BUF:
->> +
->> +************************
->> +ioctl VIDIOC_DELETE_BUF
->> +************************
->> +
->> +Name
->> +====
->> +
->> +VIDIOC_DELETE_BUF - Delete a buffer from a queue
->> +
->> +Synopsis
->> +========
->> +
->> +.. c:macro:: VIDIOC_DELETE_BUF
->> +
->> +``int ioctl(int fd, VIDIOC_DELETE_BUF, struct v4l2_buffer *argp)``
->> +
->> +Arguments
->> +=========
->> +
->> +``fd``
->> +    File descriptor returned by :c:func:`open()`.
->> +
->> +``argp``
->> +    Pointer to struct :c:type:`v4l2_buffer`.
->> +
->> +Description
->> +===========
->> +
->> +Applications can optionally call the :ref:`VIDIOC_DELETE_BUF` ioctl to
->> +delete a buffer from a queue.
->> +
->> +The struct :c:type:`v4l2_buffer` structure is specified in
->> +:ref:`buffer`.
->> +
->> +Return Value
->> +============
->> +
->> +On success 0 is returned, on error -1 and the ``errno`` variable is set
->> +appropriately. The generic error codes are described at the
->> +:ref:`Generic Error Codes <gen-errors>` chapter.
->> +
->> +EBUSY
->> +    File I/O is in progress.
->> +
->> +EINVAL
->> +    The buffer ``index`` doesn't exist in the queue.
->> diff --git a/drivers/media/common/videobuf2/videobuf2-core.c
->> b/drivers/media/common/videobuf2/videobuf2-core.c
->> index 899783f67580..aa546c972c3d 100644
->> --- a/drivers/media/common/videobuf2/videobuf2-core.c
->> +++ b/drivers/media/common/videobuf2/videobuf2-core.c
->> @@ -1637,6 +1637,39 @@ int vb2_core_prepare_buf(struct vb2_queue *q,
->> unsigned int index, void *pb)  }
->> EXPORT_SYMBOL_GPL(vb2_core_prepare_buf);
->>
->> +int vb2_core_delete_buf(struct vb2_queue *q, unsigned int index) {
->> +       struct vb2_buffer *vb;
->> +
->> +       vb = vb2_get_buffer(q, index);
->> +       if (!vb) {
->> +               dprintk(q, 1, "invalid buffer index %d\n", index);
->> +               return -EINVAL;
->> +       }
->> +
->> +       if (vb->state != VB2_BUF_STATE_DEQUEUED) {
->> +               dprintk(q, 1, "can't delete non dequeued buffer index %d\n", index);
->> +               return -EINVAL;
->> +       }
->> +
->> +       if (vb->planes[0].mem_priv)
->> +               call_void_vb_qop(vb, buf_cleanup, vb);
->> +
->> +       /* Free MMAP buffers or release USERPTR buffers */
->> +       if (q->memory == VB2_MEMORY_MMAP)
->> +               __vb2_buf_mem_free(vb);
->> +       else if (q->memory == VB2_MEMORY_DMABUF)
->> +               __vb2_buf_dmabuf_put(vb);
->> +       else
->> +               __vb2_buf_userptr_put(vb);
->> +
->> +       vb2_queue_remove_buffer(q, vb);
->> +       kfree(vb);
-> The num_buffers is not changed, Is that on purpose?
-> num_buffers doesn't mean the number of vb2 buffers,  but only decides the max index of allocated vb2 buffer?
-> Once the index is deleted, then it won't be used anymore, unless free the vb2 queue? is it a hole in vb2 queue?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <yujie.liu@intel.com>
+| Closes: https://lore.kernel.org/r/202306220043.IHVrU1h8-lkp@intel.com/
 
-Yes num_buffers isn't change and still represent the highest index of allocated buffer.
-DELETE_BUF remove the buffer from the list and free the memory.
-That could a create a hole in vb2 queue, that why the first patch of this series change
-all places where vb2 queue array was used by calls to helpers function and also check the return value.
-num_buffers is used as the lowest possible value when finding the free indexes for buffers (see vb2_queue_add_buffer())
-this way I can guaranty that the indexes a continuous which is a requirement for create_bufs.
-I choose this solution because XArray API doesn't offer way to find continuous free range.
-It doesn't seem impossible to add it but this series is already big enough from my point of view.
+sparse warnings: (new ones prefixed by >>)
+   arch/um/kernel/config.c: note: in included file (through include/linux/compiler_types.h, arch/um/include/shared/init.h):
+   include/linux/compiler_attributes.h:55:9: sparse: sparse: preprocessor token __always_inline redefined
+   arch/um/kernel/config.c: note: in included file (through /usr/include/features.h, /usr/include/sys/types.h, arch/um/include/shared/user.h, builtin):
+   /usr/include/sys/cdefs.h:424:10: sparse: this was the original definition
+   arch/um/kernel/config.c: note: in included file (through arch/um/include/shared/init.h):
+>> include/linux/compiler_types.h:82:5: sparse: sparse: undefined preprocessor identifier 'CONFIG_FUNCTION_ALIGNMENT'
+--
+   arch/um/drivers/fd.c: note: in included file (through include/linux/compiler_types.h, arch/um/include/shared/init.h, arch/um/drivers/chan_user.h):
+   include/linux/compiler_attributes.h:55:9: sparse: sparse: preprocessor token __always_inline redefined
+   arch/um/drivers/fd.c: note: in included file (through /usr/include/features.h, /usr/include/sys/types.h, arch/um/include/shared/user.h, builtin):
+   /usr/include/sys/cdefs.h:424:10: sparse: this was the original definition
+   arch/um/drivers/fd.c: note: in included file (through arch/um/include/shared/init.h, arch/um/drivers/chan_user.h):
+>> include/linux/compiler_types.h:82:5: sparse: sparse: undefined preprocessor identifier 'CONFIG_FUNCTION_ALIGNMENT'
+--
+   arch/um/drivers/chan_user.c: note: in included file (through include/linux/compiler_types.h, arch/um/include/shared/init.h, arch/um/drivers/chan_user.h):
+   include/linux/compiler_attributes.h:55:9: sparse: sparse: preprocessor token __always_inline redefined
+   arch/um/drivers/chan_user.c: note: in included file (through /usr/include/features.h, /usr/include/sys/types.h, arch/um/include/shared/user.h, builtin):
+   /usr/include/sys/cdefs.h:424:10: sparse: this was the original definition
+   arch/um/drivers/chan_user.c: note: in included file (through arch/um/include/shared/init.h, arch/um/drivers/chan_user.h):
+>> include/linux/compiler_types.h:82:5: sparse: sparse: undefined preprocessor identifier 'CONFIG_FUNCTION_ALIGNMENT'
+--
+   arch/um/drivers/port_user.c: note: in included file (through include/linux/compiler_types.h, arch/um/include/shared/init.h, arch/um/drivers/chan_user.h):
+   include/linux/compiler_attributes.h:55:9: sparse: sparse: preprocessor token __always_inline redefined
+   arch/um/drivers/port_user.c: note: in included file (through /usr/include/features.h, /usr/include/sys/types.h, arch/um/include/shared/user.h, builtin):
+   /usr/include/sys/cdefs.h:424:10: sparse: this was the original definition
+   arch/um/drivers/port_user.c: note: in included file (through arch/um/include/shared/init.h, arch/um/drivers/chan_user.h):
+>> include/linux/compiler_types.h:82:5: sparse: sparse: undefined preprocessor identifier 'CONFIG_FUNCTION_ALIGNMENT'
+   arch/um/drivers/port_user.c:179:32: sparse: sparse: Using plain integer as NULL pointer
+--
+   arch/um/os-Linux/main.c: note: in included file (through include/linux/compiler_types.h, arch/um/include/shared/init.h):
+   include/linux/compiler_attributes.h:55:9: sparse: sparse: preprocessor token __always_inline redefined
+   arch/um/os-Linux/main.c: note: in included file (through /usr/include/features.h, /usr/include/sys/types.h, arch/um/include/shared/user.h, builtin):
+   /usr/include/sys/cdefs.h:424:10: sparse: this was the original definition
+   arch/um/os-Linux/main.c: note: in included file (through arch/um/include/shared/init.h):
+>> include/linux/compiler_types.h:82:5: sparse: sparse: undefined preprocessor identifier 'CONFIG_FUNCTION_ALIGNMENT'
+   arch/um/os-Linux/main.c:187:6: sparse: sparse: symbol '__wrap_malloc' was not declared. Should it be static?
+   arch/um/os-Linux/main.c:208:6: sparse: sparse: symbol '__wrap_calloc' was not declared. Should it be static?
+   arch/um/os-Linux/main.c:222:6: sparse: sparse: symbol '__wrap_free' was not declared. Should it be static?
+--
+   arch/um/os-Linux/mem.c: note: in included file (through include/linux/compiler_types.h, arch/um/include/shared/init.h):
+   include/linux/compiler_attributes.h:55:9: sparse: sparse: preprocessor token __always_inline redefined
+   arch/um/os-Linux/mem.c: note: in included file (through /usr/include/features.h, /usr/include/sys/types.h, arch/um/include/shared/user.h, builtin):
+   /usr/include/sys/cdefs.h:424:10: sparse: this was the original definition
+   arch/um/os-Linux/mem.c: note: in included file (through arch/um/include/shared/init.h):
+>> include/linux/compiler_types.h:82:5: sparse: sparse: undefined preprocessor identifier 'CONFIG_FUNCTION_ALIGNMENT'
+--
+   arch/um/os-Linux/process.c: note: in included file (through include/linux/compiler_types.h, arch/um/include/shared/init.h):
+   include/linux/compiler_attributes.h:55:9: sparse: sparse: preprocessor token __always_inline redefined
+   arch/um/os-Linux/process.c: note: in included file (through /usr/include/features.h, /usr/include/sys/types.h, arch/um/include/shared/user.h, builtin):
+   /usr/include/sys/cdefs.h:424:10: sparse: this was the original definition
+   arch/um/os-Linux/process.c: note: in included file (through arch/um/include/shared/init.h):
+>> include/linux/compiler_types.h:82:5: sparse: sparse: undefined preprocessor identifier 'CONFIG_FUNCTION_ALIGNMENT'
+--
+   arch/um/os-Linux/sigio.c: note: in included file (through include/linux/compiler_types.h, arch/um/include/shared/init.h):
+   include/linux/compiler_attributes.h:55:9: sparse: sparse: preprocessor token __always_inline redefined
+   arch/um/os-Linux/sigio.c: note: in included file (through /usr/include/features.h, /usr/include/sys/types.h, arch/um/include/shared/user.h, builtin):
+   /usr/include/sys/cdefs.h:424:10: sparse: this was the original definition
+   arch/um/os-Linux/sigio.c: note: in included file (through arch/um/include/shared/init.h):
+>> include/linux/compiler_types.h:82:5: sparse: sparse: undefined preprocessor identifier 'CONFIG_FUNCTION_ALIGNMENT'
+--
+   arch/um/os-Linux/start_up.c: note: in included file (through include/linux/compiler_types.h, arch/um/include/shared/init.h):
+   include/linux/compiler_attributes.h:55:9: sparse: sparse: preprocessor token __always_inline redefined
+   arch/um/os-Linux/start_up.c: note: in included file (through /usr/include/features.h, /usr/include/sys/types.h, arch/um/include/shared/user.h, builtin):
+   /usr/include/sys/cdefs.h:424:10: sparse: this was the original definition
+   arch/um/os-Linux/start_up.c: note: in included file (through arch/um/include/shared/init.h):
+>> include/linux/compiler_types.h:82:5: sparse: sparse: undefined preprocessor identifier 'CONFIG_FUNCTION_ALIGNMENT'
+--
+   arch/um/os-Linux/umid.c: note: in included file (through include/linux/compiler_types.h, arch/um/include/shared/init.h):
+   include/linux/compiler_attributes.h:55:9: sparse: sparse: preprocessor token __always_inline redefined
+   arch/um/os-Linux/umid.c: note: in included file (through /usr/include/features.h, /usr/include/sys/types.h, arch/um/include/shared/user.h, builtin):
+   /usr/include/sys/cdefs.h:424:10: sparse: this was the original definition
+   arch/um/os-Linux/umid.c: note: in included file (through arch/um/include/shared/init.h):
+>> include/linux/compiler_types.h:82:5: sparse: sparse: undefined preprocessor identifier 'CONFIG_FUNCTION_ALIGNMENT'
+--
+   arch/um/os-Linux/util.c: note: in included file (through include/linux/compiler_types.h, arch/um/include/shared/init.h):
+   include/linux/compiler_attributes.h:55:9: sparse: sparse: preprocessor token __always_inline redefined
+   arch/um/os-Linux/util.c: note: in included file (through /usr/include/features.h, /usr/include/sys/types.h, arch/um/include/shared/user.h, builtin):
+   /usr/include/sys/cdefs.h:424:10: sparse: this was the original definition
+   arch/um/os-Linux/util.c: note: in included file (through arch/um/include/shared/init.h):
+>> include/linux/compiler_types.h:82:5: sparse: sparse: undefined preprocessor identifier 'CONFIG_FUNCTION_ALIGNMENT'
+   arch/um/os-Linux/util.c:93:48: sparse: sparse: Using plain integer as NULL pointer
+--
+   arch/um/os-Linux/skas/mem.c: note: in included file (through include/linux/compiler_types.h, arch/um/include/shared/init.h):
+   include/linux/compiler_attributes.h:55:9: sparse: sparse: preprocessor token __always_inline redefined
+   arch/um/os-Linux/skas/mem.c: note: in included file (through /usr/include/features.h, /usr/include/sys/types.h, arch/um/include/shared/user.h, builtin):
+   /usr/include/sys/cdefs.h:424:10: sparse: this was the original definition
+   arch/um/os-Linux/skas/mem.c: note: in included file (through arch/um/include/shared/init.h):
+>> include/linux/compiler_types.h:82:5: sparse: sparse: undefined preprocessor identifier 'CONFIG_FUNCTION_ALIGNMENT'
+--
+   arch/um/os-Linux/skas/process.c: note: in included file (through include/linux/compiler_types.h, arch/um/include/shared/init.h):
+   include/linux/compiler_attributes.h:55:9: sparse: sparse: preprocessor token __always_inline redefined
+   arch/um/os-Linux/skas/process.c: note: in included file (through /usr/include/features.h, /usr/include/sys/types.h, arch/um/include/shared/user.h, builtin):
+   /usr/include/sys/cdefs.h:424:10: sparse: this was the original definition
+   arch/um/os-Linux/skas/process.c: note: in included file (through arch/um/include/shared/init.h):
+>> include/linux/compiler_types.h:82:5: sparse: sparse: undefined preprocessor identifier 'CONFIG_FUNCTION_ALIGNMENT'
+   arch/um/os-Linux/skas/process.c:300:5: sparse: sparse: symbol 'kill_userspace_mm' was not declared. Should it be static?
 
-Regards,
-Benjamin
+vim +/CONFIG_FUNCTION_ALIGNMENT +82 include/linux/compiler_types.h
 
->
-> And you can use xa_for_each() instead the for loop to iterate over the present buffers in vb2 queue.
->
->> +
->> +       dprintk(q, 2, "buffer %d deleted\n", index);
->> +       return 0;
->> +}
->> +
->> /*
->>   * vb2_start_streaming() - Attempt to start streaming.
->>   * @q:         videobuf2 queue
->> diff --git a/drivers/media/common/videobuf2/videobuf2-v4l2.c
->> b/drivers/media/common/videobuf2/videobuf2-v4l2.c
->> index 724135d41f7f..cea666c17b41 100644
->> --- a/drivers/media/common/videobuf2/videobuf2-v4l2.c
->> +++ b/drivers/media/common/videobuf2/videobuf2-v4l2.c
->> @@ -751,6 +751,12 @@ int vb2_prepare_buf(struct vb2_queue *q, struct
->> media_device *mdev,  }  EXPORT_SYMBOL_GPL(vb2_prepare_buf);
->>
->> +int vb2_delete_buf(struct vb2_queue *q, struct v4l2_buffer *b) {
->> +       return vb2_core_delete_buf(q, b->index); }
->> +EXPORT_SYMBOL_GPL(vb2_delete_buf);
->> +
->> int vb2_create_bufs(struct vb2_queue *q, struct v4l2_create_buffers *create)
->> {
->>         unsigned requested_planes = 1;
->> diff --git a/drivers/media/v4l2-core/v4l2-dev.c b/drivers/media/v4l2-
->> core/v4l2-dev.c
->> index f81279492682..80ace2e1e932 100644
->> --- a/drivers/media/v4l2-core/v4l2-dev.c
->> +++ b/drivers/media/v4l2-core/v4l2-dev.c
->> @@ -720,6 +720,7 @@ static void determine_valid_ioctls(struct video_device
->> *vdev)
->>                 SET_VALID_IOCTL(ops, VIDIOC_PREPARE_BUF, vidioc_prepare_buf);
->>                 SET_VALID_IOCTL(ops, VIDIOC_STREAMON, vidioc_streamon);
->>                 SET_VALID_IOCTL(ops, VIDIOC_STREAMOFF, vidioc_streamoff);
->> +               SET_VALID_IOCTL(ops, VIDIOC_DELETE_BUF,
->> + vidioc_delete_buf);
->>         }
->>
->>         if (is_vid || is_vbi || is_meta) { diff --git a/drivers/media/v4l2-core/v4l2-
->> ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
->> index a858acea6547..1c737279d3ef 100644
->> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
->> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
->> @@ -2156,6 +2156,15 @@ static int v4l_prepare_buf(const struct
->> v4l2_ioctl_ops *ops,
->>         return ret ? ret : ops->vidioc_prepare_buf(file, fh, b);  }
->>
->> +static int v4l_delete_buf(const struct v4l2_ioctl_ops *ops,
->> +                         struct file *file, void *fh, void *arg) {
->> +       struct v4l2_buffer *b = arg;
->> +       int ret = check_fmt(file, b->type);
->> +
->> +       return ret ? ret : ops->vidioc_delete_buf(file, fh, b); }
->> +
->> static int v4l_g_parm(const struct v4l2_ioctl_ops *ops,
->>                                 struct file *file, void *fh, void *arg)  { @@ -2905,6 +2914,7
->> @@ static const struct v4l2_ioctl_info v4l2_ioctls[] = {
->>         IOCTL_INFO(VIDIOC_ENUM_FREQ_BANDS, v4l_enum_freq_bands,
->> v4l_print_freq_band, 0),
->>         IOCTL_INFO(VIDIOC_DBG_G_CHIP_INFO, v4l_dbg_g_chip_info,
->> v4l_print_dbg_chip_info, INFO_FL_CLEAR(v4l2_dbg_chip_info, match)),
->>         IOCTL_INFO(VIDIOC_QUERY_EXT_CTRL, v4l_query_ext_ctrl,
->> v4l_print_query_ext_ctrl, INFO_FL_CTRL | INFO_FL_CLEAR(v4l2_query_ext_ctrl,
->> id)),
->> +       IOCTL_INFO(VIDIOC_DELETE_BUF, v4l_delete_buf, v4l_print_buffer,
->> + INFO_FL_QUEUE),
->> };
->> #define V4L2_IOCTLS ARRAY_SIZE(v4l2_ioctls)
->>
->> diff --git a/include/media/v4l2-ioctl.h b/include/media/v4l2-ioctl.h index
->> edb733f21604..2f232ed884c7 100644
->> --- a/include/media/v4l2-ioctl.h
->> +++ b/include/media/v4l2-ioctl.h
->> @@ -163,6 +163,8 @@ struct v4l2_fh;
->>   *     :ref:`VIDIOC_CREATE_BUFS <vidioc_create_bufs>` ioctl
->>   * @vidioc_prepare_buf: pointer to the function that implements
->>   *     :ref:`VIDIOC_PREPARE_BUF <vidioc_prepare_buf>` ioctl
->> + * @vidioc_delete_buf: pointer to the function that implements
->> + *     :ref:`VIDIOC_DELETE_BUF <vidioc_delete_buf>` ioctl
->>   * @vidioc_overlay: pointer to the function that implements
->>   *     :ref:`VIDIOC_OVERLAY <vidioc_overlay>` ioctl
->>   * @vidioc_g_fbuf: pointer to the function that implements @@ -422,6 +424,8
->> @@ struct v4l2_ioctl_ops {
->>                                   struct v4l2_create_buffers *b);
->>         int (*vidioc_prepare_buf)(struct file *file, void *fh,
->>                                   struct v4l2_buffer *b);
->> +       int (*vidioc_delete_buf)(struct file *file, void *fh,
->> +                                struct v4l2_buffer *b);
->>
->>         int (*vidioc_overlay)(struct file *file, void *fh, unsigned int i);
->>         int (*vidioc_g_fbuf)(struct file *file, void *fh, diff --git
->> a/include/media/videobuf2-core.h b/include/media/videobuf2-core.h index
->> 080b783d608d..0f9e68f76b77 100644
->> --- a/include/media/videobuf2-core.h
->> +++ b/include/media/videobuf2-core.h
->> @@ -840,6 +840,15 @@ int vb2_core_create_bufs(struct vb2_queue *q,
->> enum vb2_memory memory,
->>   */
->> int vb2_core_prepare_buf(struct vb2_queue *q, unsigned int index, void *pb);
->>
->> +/**
->> + * vb2_core_delete_buf() -
->> + * @q: pointer to &struct vb2_queue with videobuf2 queue.
->> + * @index:     id number of the buffer.
->> + *
->> + *  Return: returns zero on success; an error code otherwise.
->> + */
->> +int vb2_core_delete_buf(struct vb2_queue *q, unsigned int index);
->> +
->> /**
->>   * vb2_core_qbuf() - Queue a buffer from userspace
->>   *
->> diff --git a/include/media/videobuf2-v4l2.h b/include/media/videobuf2-v4l2.h
->> index 88a7a565170e..3beeb4c735f0 100644
->> --- a/include/media/videobuf2-v4l2.h
->> +++ b/include/media/videobuf2-v4l2.h
->> @@ -114,6 +114,17 @@ int vb2_create_bufs(struct vb2_queue *q, struct
->> v4l2_create_buffers *create);
->>   */
->> int vb2_prepare_buf(struct vb2_queue *q, struct media_device *mdev,
->>                     struct v4l2_buffer *b);
->> +/**
->> + * vb2_delete_buf() - Delete the buffer from the queue
->> + *
->> + * @q:         pointer to &struct vb2_queue with videobuf2 queue.
->> + * @b:         buffer structure passed from userspace to
->> + *             &v4l2_ioctl_ops->vidioc_delete_buf handler in driver
->> + *
->> + * The return values from this function are intended to be directly
->> +returned
->> + * from &v4l2_ioctl_ops->vidioc_delete_buf handler in driver.
->> + */
->> +int vb2_delete_buf(struct vb2_queue *q, struct v4l2_buffer *b);
->>
->> /**
->>   * vb2_qbuf() - Queue a buffer from userspace diff --git
->> a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h index
->> aee75eb9e686..31bba1915642 100644
->> --- a/include/uapi/linux/videodev2.h
->> +++ b/include/uapi/linux/videodev2.h
->> @@ -2702,6 +2702,8 @@ struct v4l2_create_buffers {  #define
->> VIDIOC_DBG_G_CHIP_INFO  _IOWR('V', 102, struct v4l2_dbg_chip_info)
->>
->> #define VIDIOC_QUERY_EXT_CTRL  _IOWR('V', 103, struct v4l2_query_ext_ctrl)
->> +#define VIDIOC_DELETE_BUF      _IOWR('V', 104, struct v4l2_buffer)
->> +
->>
->> /* Reminder: when adding new ioctls please add support for them to
->>     drivers/media/v4l2-core/v4l2-compat-ioctl32.c as well! */
->> --
->> 2.39.2
+a3f8a30f3f0079 Miguel Ojeda 2018-08-30  81  
+c27cd083cfb9d3 Mark Rutland 2023-01-23 @82  #if CONFIG_FUNCTION_ALIGNMENT > 0
+c27cd083cfb9d3 Mark Rutland 2023-01-23  83  #define __function_aligned		__aligned(CONFIG_FUNCTION_ALIGNMENT)
+c27cd083cfb9d3 Mark Rutland 2023-01-23  84  #else
+c27cd083cfb9d3 Mark Rutland 2023-01-23  85  #define __function_aligned
+c27cd083cfb9d3 Mark Rutland 2023-01-23  86  #endif
+c27cd083cfb9d3 Mark Rutland 2023-01-23  87  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
+
