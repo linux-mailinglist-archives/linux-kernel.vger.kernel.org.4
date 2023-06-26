@@ -2,161 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5E3873D6CD
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 06:06:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 421E873D6D1
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 06:11:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbjFZEGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 00:06:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38028 "EHLO
+        id S229738AbjFZELO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 00:11:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjFZEGP (ORCPT
+        with ESMTP id S229621AbjFZELM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 00:06:15 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6972D11B
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 21:06:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687752374; x=1719288374;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=NXivVSXkHgMkEjie+k5Nfpvk7wUxPvO4QF7oBYqQcII=;
-  b=Bn1n+sMrvyB2rPUsWnQHyqMry0aMoksfex181QjYC1SqxtyJfq9TX0Qb
-   e16vmTl282HOfsZ/Sa4ssq/w2lN5i9a8JovYuDNS4YCt9Kz0vJyhwr8ho
-   rqdLo8MapP69YbKkfZsvwKGIbkJU6LJ9pMhNEmCvYsLYhq4O5H+rvPiZK
-   NvtLcOrDrwBYqpt0jRMle6dopzKEL4tHko2Y0JIBnsecEjSf8PzIsCX06
-   +tXaP8HlQ605kb6wFt4GozelhY4PQaJoy9DTvHSBkNbkiqd22njnP1+8C
-   WmpdRfymqToJZKCgZ0tDI8gR16FXFCPXUPnNrexl2K2JlyKx8Z7z19VFH
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="364616785"
-X-IronPort-AV: E=Sophos;i="6.01,158,1684825200"; 
-   d="scan'208";a="364616785"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2023 21:06:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="890150588"
-X-IronPort-AV: E=Sophos;i="6.01,158,1684825200"; 
-   d="scan'208";a="890150588"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 25 Jun 2023 21:06:10 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qDdUP-000AT5-2x;
-        Mon, 26 Jun 2023 04:06:09 +0000
-Date:   Mon, 26 Jun 2023 12:05:53 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Li zeming <zeming@nfschina.com>, jstultz@google.com,
-        tglx@linutronix.de, sboyd@kernel.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Li zeming <zeming@nfschina.com>
-Subject: Re: [PATCH] time: ntp: Remove =?utf-8?Q?un?=
- =?utf-8?B?bmVjZXNzYXJ5IOKAmC1FTk9ERVbigJk=?= values from err
-Message-ID: <202306261141.5MEtBJtk-lkp@intel.com>
-References: <20230627182540.5243-1-zeming@nfschina.com>
+        Mon, 26 Jun 2023 00:11:12 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC0BDD1;
+        Sun, 25 Jun 2023 21:11:07 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QqDt12dsbz4wZv;
+        Mon, 26 Jun 2023 14:11:05 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1687752666;
+        bh=DgXWd7rCTm7X5hwjHdCWcplbDtrDixFpRuzbvTCxIHg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=O1X061WiyF5H5DMrCAX7s8u0cjmch8JyTS3f5BlRe7raAMnXd1vTQs6Y515h/aJGZ
+         85epaHPYcFQYA0rt3Uy1yG8SwHlWOLDURnyQiDyKXfHGDty9adMAifcIDJDtoEWXlR
+         xaFwnj7ODaLrwQ5RjrBOv7HW4tsDrVLJkxodhp7DS9IVhIFyT78+cLQvf5yr3f7JLv
+         hReS1JMjSUE36OhawcWzeKhe62RrHQko5A4VTIz0I66+l71mIslh1hijhKONTRB974
+         vGe1zVB7D7QTQcilPg6HVcacS4a44rIOnbh1F+t7ppZBV4CTtNhKljYWtXDq6GZjas
+         6BQWQxuu3BGUQ==
+Date:   Mon, 26 Jun 2023 14:11:03 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the workqueues tree with Linus' tree
+Message-ID: <20230626141103.4ad0eac9@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230627182540.5243-1-zeming@nfschina.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/Vrxg0VrsNjU5t/ZTOs2ePkW";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Li,
+--Sig_/Vrxg0VrsNjU5t/ZTOs2ePkW
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-kernel test robot noticed the following build warnings:
+Hi all,
 
-[auto build test WARNING on tip/timers/core]
-[also build test WARNING on linus/master v6.4 next-20230623]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Today's linux-next merge of the workqueues tree got a conflict in:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Li-zeming/time-ntp-Remove-unnecessary-ENODEV-values-from-err/20230626-095508
-base:   tip/timers/core
-patch link:    https://lore.kernel.org/r/20230627182540.5243-1-zeming%40nfschina.com
-patch subject: [PATCH] time: ntp: Remove unnecessary ‘-ENODEV’ values from err
-config: i386-randconfig-i004-20230626 (https://download.01.org/0day-ci/archive/20230626/202306261141.5MEtBJtk-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230626/202306261141.5MEtBJtk-lkp@intel.com/reproduce)
+  include/linux/workqueue.h
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306261141.5MEtBJtk-lkp@intel.com/
+between commit:
 
-All warnings (new ones prefixed by >>):
+  afa4bb778e48 ("workqueue: clean up WORK_* constant types, clarify masking=
+")
 
->> kernel/time/ntp.c:591:6: warning: variable 'err' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (!rtc->ops || !rtc->ops->set_time)
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/ntp.c:605:9: note: uninitialized use occurs here
-           return err;
-                  ^~~
-   kernel/time/ntp.c:591:2: note: remove the 'if' if its condition is always false
-           if (!rtc->ops || !rtc->ops->set_time)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> kernel/time/ntp.c:591:6: warning: variable 'err' is used uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
-           if (!rtc->ops || !rtc->ops->set_time)
-               ^~~~~~~~~
-   kernel/time/ntp.c:605:9: note: uninitialized use occurs here
-           return err;
-                  ^~~
-   kernel/time/ntp.c:591:6: note: remove the '||' if its condition is always false
-           if (!rtc->ops || !rtc->ops->set_time)
-               ^~~~~~~~~~~~
-   kernel/time/ntp.c:585:9: note: initialize the variable 'err' to silence this warning
-           int err;
-                  ^
-                   = 0
-   2 warnings generated.
+from Linus' tree and commit:
 
+  525ff9c29657 ("workqueue: fix enum type for gcc-13")
 
-vim +591 kernel/time/ntp.c
+from the workqueues tree.
 
-76e87d96b30b5f Thomas Gleixner 2020-12-06  578  
-33e62e832384c8 Thomas Gleixner 2020-12-06  579  #ifdef CONFIG_RTC_SYSTOHC
-76e87d96b30b5f Thomas Gleixner 2020-12-06  580  /* Save NTP synchronized time to the RTC */
-76e87d96b30b5f Thomas Gleixner 2020-12-06  581  static int update_rtc(struct timespec64 *to_set, unsigned long *offset_nsec)
-33e62e832384c8 Thomas Gleixner 2020-12-06  582  {
-33e62e832384c8 Thomas Gleixner 2020-12-06  583  	struct rtc_device *rtc;
-33e62e832384c8 Thomas Gleixner 2020-12-06  584  	struct rtc_time tm;
-7c397afa918b1a Li zeming       2023-06-28  585  	int err;
-33e62e832384c8 Thomas Gleixner 2020-12-06  586  
-33e62e832384c8 Thomas Gleixner 2020-12-06  587  	rtc = rtc_class_open(CONFIG_RTC_SYSTOHC_DEVICE);
-33e62e832384c8 Thomas Gleixner 2020-12-06  588  	if (!rtc)
-76e87d96b30b5f Thomas Gleixner 2020-12-06  589  		return -ENODEV;
-33e62e832384c8 Thomas Gleixner 2020-12-06  590  
-33e62e832384c8 Thomas Gleixner 2020-12-06 @591  	if (!rtc->ops || !rtc->ops->set_time)
-33e62e832384c8 Thomas Gleixner 2020-12-06  592  		goto out_close;
-33e62e832384c8 Thomas Gleixner 2020-12-06  593  
-76e87d96b30b5f Thomas Gleixner 2020-12-06  594  	/* First call might not have the correct offset */
-76e87d96b30b5f Thomas Gleixner 2020-12-06  595  	if (*offset_nsec == rtc->set_offset_nsec) {
-76e87d96b30b5f Thomas Gleixner 2020-12-06  596  		rtc_time64_to_tm(to_set->tv_sec, &tm);
-76e87d96b30b5f Thomas Gleixner 2020-12-06  597  		err = rtc_set_time(rtc, &tm);
-76e87d96b30b5f Thomas Gleixner 2020-12-06  598  	} else {
-76e87d96b30b5f Thomas Gleixner 2020-12-06  599  		/* Store the update offset and let the caller try again */
-69eca258c85000 Thomas Gleixner 2020-12-06  600  		*offset_nsec = rtc->set_offset_nsec;
-76e87d96b30b5f Thomas Gleixner 2020-12-06  601  		err = -EAGAIN;
-33e62e832384c8 Thomas Gleixner 2020-12-06  602  	}
-33e62e832384c8 Thomas Gleixner 2020-12-06  603  out_close:
-33e62e832384c8 Thomas Gleixner 2020-12-06  604  	rtc_class_close(rtc);
-33e62e832384c8 Thomas Gleixner 2020-12-06  605  	return err;
-33e62e832384c8 Thomas Gleixner 2020-12-06  606  }
-33e62e832384c8 Thomas Gleixner 2020-12-06  607  #else
-76e87d96b30b5f Thomas Gleixner 2020-12-06  608  static inline int update_rtc(struct timespec64 *to_set, unsigned long *offset_nsec)
-3c00a1fe8496ff Xunlei Pang     2015-04-01  609  {
-926617889dc838 Arnd Bergmann   2018-08-14  610  	return -ENODEV;
-3c00a1fe8496ff Xunlei Pang     2015-04-01  611  }
-3c00a1fe8496ff Xunlei Pang     2015-04-01  612  #endif
-3c00a1fe8496ff Xunlei Pang     2015-04-01  613  
+I fixed it up (I just used the former version) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Vrxg0VrsNjU5t/ZTOs2ePkW
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSZD9cACgkQAVBC80lX
+0GwAIgf/c7X2O9Zck5wnRuUlrcWI1u0bGDBq8U4sJLz8PhjiVgF2s+swn2ete+o0
+nxt7kA9PnEvz6PooKQyjQ1i9aFqRiW4NojS3ii7qCiQ5sHgBu7S8XMLw9dlhN6Xy
+5aq7UEqgjWcwTeVxj+cEouFhnnh0uDAKJITYOAEMBNun8RzflEOQ6HxGA4d8AeY5
+wQVyzaj6LIBmkct3X7mPwOtavJ6M1VvXUypD5CSN15kufsVzzGRD72jyDkKCX5x/
+XEQDJsTOZUr4ytyKIeRfVyRh/I6uEo8VlxY4HpiaxDE7V6lYFbhN9IiUPrbDL9as
+GfbYU6NFP8329xQ8NZ7SXwp88Ie+Dg==
+=l6AI
+-----END PGP SIGNATURE-----
+
+--Sig_/Vrxg0VrsNjU5t/ZTOs2ePkW--
