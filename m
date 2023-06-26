@@ -2,123 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 659EB73D594
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 03:43:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 700AF73D596
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 03:47:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbjFZBnu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 21:43:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56704 "EHLO
+        id S229776AbjFZBr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 21:47:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjFZBns (ORCPT
+        with ESMTP id S229452AbjFZBrx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 21:43:48 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77CEA196
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 18:43:47 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Qq9XL4nh6zMpZD;
-        Mon, 26 Jun 2023 09:40:34 +0800 (CST)
-Received: from [10.174.151.185] (10.174.151.185) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Mon, 26 Jun 2023 09:43:44 +0800
-Subject: Re: [PATCH] mm: memory-failure: remove unneeded page state check in
- shake_page()
-To:     Naoya Horiguchi <naoya.horiguchi@linux.dev>
-CC:     <akpm@linux-foundation.org>, <naoya.horiguchi@nec.com>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        Matthew Wilcox <willy@infradead.org>
-References: <20230625113430.2310385-1-linmiaohe@huawei.com>
- <20230626005221.GA353339@ik1-406-35019.vs.sakura.ne.jp>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <2cd57a67-1cb2-83b8-3f73-6da72cd6159d@huawei.com>
-Date:   Mon, 26 Jun 2023 09:43:44 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Sun, 25 Jun 2023 21:47:53 -0400
+Received: from out-2.mta1.migadu.com (out-2.mta1.migadu.com [IPv6:2001:41d0:203:375::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC438180
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 18:47:51 -0700 (PDT)
+Message-ID: <773de46a-fef9-54de-75fd-c1c6a97326f5@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1687744070;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FJB0VvYTG87mr/6bxPUvLxNLcEpmxlf6gbHI8JQXnfs=;
+        b=VQ5ezXEtUt4R46BXdIsW7fAw+CES0LSozNr+bFqZgVxzFL2v9yzVmKHPlzw1ePKfZtWZxE
+        6MgHsQidycItFOp5rWmq+yWzbO5r63wLI4c79AUYekYuoQXqYq+aiv4kG7YBQ+hweDInFq
+        JGcQkvB3uUNFHDD0bK0tFgJ9Po8UPQM=
+Date:   Mon, 26 Jun 2023 09:47:42 +0800
 MIME-Version: 1.0
-In-Reply-To: <20230626005221.GA353339@ik1-406-35019.vs.sakura.ne.jp>
-Content-Type: text/plain; charset="utf-8"
+Subject: Re: [PATCH] binder: fix memory leak in binder_init()
 Content-Language: en-US
+To:     gregkh@linuxfoundation.org, arve@android.com, tkjos@android.com,
+        maco@android.com, joel@joelfernandes.org, brauner@kernel.org,
+        cmllamas@google.com, surenb@google.com
+Cc:     linux-kernel@vger.kernel.org
+References: <20230625154937.64316-1-qi.zheng@linux.dev>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Qi Zheng <qi.zheng@linux.dev>
+In-Reply-To: <20230625154937.64316-1-qi.zheng@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.151.185]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/6/26 8:52, Naoya Horiguchi wrote:
-> On Sun, Jun 25, 2023 at 07:34:30PM +0800, Miaohe Lin wrote:
->> Remove unneeded PageLRU(p) and is_free_buddy_page(p) check as slab caches
->> are not shrunk now. This check can be added back when a lightweight range
->> based shrinker is available.
->>
->> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-> 
-> This looks to me a good cleanup because the result of
-> "if (PageLRU(p) || is_free_buddy_page(p))" check is not used, so the check
-> itself is unneeded.
-> 
->> ---
->>  mm/memory-failure.c | 9 ++++-----
->>  1 file changed, 4 insertions(+), 5 deletions(-)
->>
->> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
->> index 5b663eca1f29..92f951df3e87 100644
->> --- a/mm/memory-failure.c
->> +++ b/mm/memory-failure.c
->> @@ -373,11 +373,10 @@ void shake_page(struct page *p)
->>  	if (PageHuge(p))
->>  		return;
->>  
->> -	if (!PageSlab(p)) {
->> -		lru_add_drain_all();
->> -		if (PageLRU(p) || is_free_buddy_page(p))
->> -			return;
->> -	}
->> +	if (PageSlab(p))
->> +		return;
->> +
->> +	lru_add_drain_all();
->>  
->>  	/*
->>  	 * TODO: Could shrink slab caches here if a lightweight range-based
-> 
-> I think that this TODO comment can be put together with "if (PageSlab)" block.
 
-Thanks for your comment and advice. Do you mean something like below?
 
-diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index 5b663eca1f29..66e7b3ceaf2d 100644
---- a/mm/memory-failure.c
-+++ b/mm/memory-failure.c
-@@ -372,17 +372,14 @@ void shake_page(struct page *p)
- {
-        if (PageHuge(p))
-                return;
--
--       if (!PageSlab(p)) {
--               lru_add_drain_all();
--               if (PageLRU(p) || is_free_buddy_page(p))
--                       return;
--       }
--
-        /*
-         * TODO: Could shrink slab caches here if a lightweight range-based
-         * shrinker will be available.
-         */
-+       if (PageSlab(p))
-+               return;
-+
-+       lru_add_drain_all();
- }
- EXPORT_SYMBOL_GPL(shake_page);
+On 2023/6/25 23:49, Qi Zheng wrote:
+> From: Qi Zheng <zhengqi.arch@bytedance.com>
+> 
+> In binder_init(), the destruction of binder_alloc_shrinker_init() is not
+> performed in the wrong path, which will cause memory leaks. So this commit
+> introduces binder_alloc_shrinker_exit() and calls it in the wrong path to
+> fix that.
+> 
+> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
 
-Thanks.
+Oh, I forgot to add Fixes tag:
+
+Fixes: f2517eb76f1f ("android: binder: Add global lru shrinker to binder")
+
+> ---
+>   drivers/android/binder.c       | 1 +
+>   drivers/android/binder_alloc.c | 6 ++++++
+>   drivers/android/binder_alloc.h | 1 +
+>   3 files changed, 8 insertions(+)
+> 
+> diff --git a/drivers/android/binder.c b/drivers/android/binder.c
+> index 486c8271cab7..d720f93d8b19 100644
+> --- a/drivers/android/binder.c
+> +++ b/drivers/android/binder.c
+> @@ -6617,6 +6617,7 @@ static int __init binder_init(void)
+>   
+>   err_alloc_device_names_failed:
+>   	debugfs_remove_recursive(binder_debugfs_dir_entry_root);
+> +	binder_alloc_shrinker_exit();
+>   
+>   	return ret;
+>   }
+> diff --git a/drivers/android/binder_alloc.c b/drivers/android/binder_alloc.c
+> index 662a2a2e2e84..e3db8297095a 100644
+> --- a/drivers/android/binder_alloc.c
+> +++ b/drivers/android/binder_alloc.c
+> @@ -1087,6 +1087,12 @@ int binder_alloc_shrinker_init(void)
+>   	return ret;
+>   }
+>   
+> +void binder_alloc_shrinker_exit(void)
+> +{
+> +	unregister_shrinker(&binder_shrinker);
+> +	list_lru_destroy(&binder_alloc_lru);
+> +}
+> +
+>   /**
+>    * check_buffer() - verify that buffer/offset is safe to access
+>    * @alloc: binder_alloc for this proc
+> diff --git a/drivers/android/binder_alloc.h b/drivers/android/binder_alloc.h
+> index 138d1d5af9ce..dc1e2b01dd64 100644
+> --- a/drivers/android/binder_alloc.h
+> +++ b/drivers/android/binder_alloc.h
+> @@ -129,6 +129,7 @@ extern struct binder_buffer *binder_alloc_new_buf(struct binder_alloc *alloc,
+>   						  int pid);
+>   extern void binder_alloc_init(struct binder_alloc *alloc);
+>   extern int binder_alloc_shrinker_init(void);
+> +extern void binder_alloc_shrinker_exit(void);
+>   extern void binder_alloc_vma_close(struct binder_alloc *alloc);
+>   extern struct binder_buffer *
+>   binder_alloc_prepare_to_free(struct binder_alloc *alloc,
