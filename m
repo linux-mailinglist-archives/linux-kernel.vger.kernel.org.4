@@ -2,99 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61FB473EB38
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 21:35:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FA8F73EB39
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 21:36:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbjFZTfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 15:35:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44852 "EHLO
+        id S229849AbjFZTg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 15:36:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjFZTfn (ORCPT
+        with ESMTP id S229456AbjFZTgZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 15:35:43 -0400
-Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBB9210DA;
-        Mon, 26 Jun 2023 12:35:40 -0700 (PDT)
-Received: by mail-io1-f41.google.com with SMTP id ca18e2360f4ac-7836164a08aso45903339f.1;
-        Mon, 26 Jun 2023 12:35:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687808140; x=1690400140;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BGfCwcbVLNoCSLzgxFgaQHuuup0hQXpRqIa+hpJXPdc=;
-        b=dXZBj1J5m8Y5Q3lPq4/jUo8q8lCgLGD7Is/63mplyAzlwMH8L8Fw646D1t9kKaeYW/
-         91DxcIrQMMrktDGPOse4fcgHXEHLwmxW3VEd5ZpuGS27L0a3cUlqtlFw7Ya97hrUdnlV
-         X0HyxO2rCh6LV/gvsWhy8p2sL+ZULFCOS17M4iEouwMD8U55Wx7VbgbSXY2GjAWMKCwr
-         mkrQZX9tfb4c2kVhx+1uDL9bpElYp1G2ChX5aCXEnLexBkEwLe+hEJM011cMu7kOJL43
-         /JLSeCu7DUnZco+RY12x5QXEyoYJo6UbHSO1KOWSFH3vZh4IIn1p8CLdw0VXhOJp+y8p
-         N+FA==
-X-Gm-Message-State: AC+VfDzlpmuOqsiLeOViVbEosLCnAVCo18/uGaXn26b/AZh1AhqHkz0+
-        f5RJJIDKnsapfY8crm+4ug==
-X-Google-Smtp-Source: ACHHUZ5n+5iHOWhRthQiOeSfPq/OI+/OPCixQPcsYGvRwG60osxotB0cF5A7pDV6dz3Nptrxo1Q4lQ==
-X-Received: by 2002:a5d:96c1:0:b0:76f:1664:672 with SMTP id r1-20020a5d96c1000000b0076f16640672mr28860112iol.13.1687808140076;
-        Mon, 26 Jun 2023 12:35:40 -0700 (PDT)
-Received: from robh_at_kernel.org ([199.114.228.113])
-        by smtp.gmail.com with ESMTPSA id l14-20020a02a88e000000b00423076f5442sm409363jam.2.2023.06.26.12.35.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jun 2023 12:35:39 -0700 (PDT)
-Received: (nullmailer pid 3613294 invoked by uid 1000);
-        Mon, 26 Jun 2023 19:32:38 -0000
-Date:   Mon, 26 Jun 2023 13:32:38 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     linux-pci@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Shawn Lin <shawn.lin@rock-chips.com>,
-        Simon Xue <xxm@rock-chips.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kernel@collabora.com
-Subject: Re: [PATCH v1 0/4] RK3588 PCIe2 support
-Message-ID: <20230626193238.GA3553158-robh@kernel.org>
-References: <20230616170022.76107-1-sebastian.reichel@collabora.com>
+        Mon, 26 Jun 2023 15:36:25 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CEDD10DA
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 12:36:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687808185; x=1719344185;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=s2bBVzbs0mPzNnuPaqyoVSnWQrfPRKFxiCSlmw6qCH0=;
+  b=N/cYv1Jl4LGlsxVLQs/5dL3FnWSVpJ/nTTO44q5xCQ9c1vwbLtxAr5V1
+   jOJd3r092ap9Ej9Qx61rPfbxDXBmgvKrPUfxPerzYIBLCTrEBOQUW7z1a
+   hwj86Usw89n/PEqa9czVy9nYmpaqeRG31ybIAPNKdzmk2ru+NhCkPvptO
+   /nETlooSWsYfjjdHgo7Ui0Xz+4GDHQKRNqnPRTWiQdcxY/0+A+9OO4w7z
+   nxZFEoXZFr0euj1ugqRKWQH2w+1hcKh9g5cxX/b+7HnTGuCMW4R94Kr0I
+   BP/foYvASDX05YfbCU+4jrp5r5ci+q7ePOdz1JVBf9H1LEoItE7obYTeQ
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="351148343"
+X-IronPort-AV: E=Sophos;i="6.01,160,1684825200"; 
+   d="scan'208,223";a="351148343"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 12:36:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="716270794"
+X-IronPort-AV: E=Sophos;i="6.01,160,1684825200"; 
+   d="scan'208,223";a="716270794"
+Received: from yjie-desk1.jf.intel.com ([10.24.96.120])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 12:36:23 -0700
+From:   Keyon Jie <yang.jie@linux.intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Yair Podemsky <ypodemsk@redhat.com>,
+        Keyon Jie <yang.jie@linux.intel.com>
+Subject: [PATCH] x86/aperfmperf: Fix the fallback condition in arch_freq_get_on_cpu()
+Date:   Mon, 26 Jun 2023 12:36:01 -0700
+Message-Id: <20230626193601.9169-1-yang.jie@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230616170022.76107-1-sebastian.reichel@collabora.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 16, 2023 at 07:00:18PM +0200, Sebastian Reichel wrote:
-> Hi,
-> 
-> This adds PCIe2 support for RK3588. The series has been tested with the
-> onboard RTL8125 network card on Rockchip RK3588 EVB1 (&pcie2x1l1) and
-> Radxa Rock 5B (&pcie2x1l2). The final patch in this series depends on
-> the combo PHY support added by the SATA series [0].
-> 
-> [0] https://lore.kernel.org/all/20230612171337.74576-1-sebastian.reichel@collabora.com/
-> 
-> Thanks,
-> 
-> -- Sebastian
-> 
-> Sebastian Reichel (4):
->   dt-bindings: PCI: dwc: rockchip: Fix interrupt-names issue
->   dt-bindings: PCI: dwc: rockchip: Add missing
->     legacy-interrupt-controller
->   dt-bindings: PCI: dwc: rockchip: Update for RK3588
->   arm64: dts: rockchip: rk3588: add PCIe2 support
+From the commit f3eca381bd49 on, the fallback condition about the 'the
+last update was too long' have been comparing ticks and milliseconds by
+mistake, which leads to that the condition is met and the fallback
+method is used frequently.
 
-I applied patches 1-3.
+The change to compare ticks here corrects that and fixes related issues
+have been seen on x86 platforms since 5.18 kernel.
 
-Rob
+Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217597
+Fixes: f3eca381bd49 ("x86/aperfmperf: Replace arch_freq_get_on_cpu()")
+CC: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Keyon Jie <yang.jie@linux.intel.com>
+---
+ arch/x86/kernel/cpu/aperfmperf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/x86/kernel/cpu/aperfmperf.c b/arch/x86/kernel/cpu/aperfmperf.c
+index fdbb5f07448f..24e24e137226 100644
+--- a/arch/x86/kernel/cpu/aperfmperf.c
++++ b/arch/x86/kernel/cpu/aperfmperf.c
+@@ -432,7 +432,7 @@ unsigned int arch_freq_get_on_cpu(int cpu)
+ 	 * Bail on invalid count and when the last update was too long ago,
+ 	 * which covers idle and NOHZ full CPUs.
+ 	 */
+-	if (!mcnt || (jiffies - last) > MAX_SAMPLE_AGE)
++	if (!mcnt || (jiffies - last) > MAX_SAMPLE_AGE * cpu_khz)
+ 		goto fallback;
+ 
+ 	return div64_u64((cpu_khz * acnt), mcnt);
+-- 
+2.34.1
+
