@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3013873DE9B
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 14:14:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E8C673DE9D
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 14:14:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230162AbjFZMOI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 08:14:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49164 "EHLO
+        id S230189AbjFZMOR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 08:14:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230064AbjFZMN5 (ORCPT
+        with ESMTP id S230026AbjFZMN6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 08:13:57 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA029E60
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 05:13:51 -0700 (PDT)
+        Mon, 26 Jun 2023 08:13:58 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E83F6E6E
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 05:13:52 -0700 (PDT)
 From:   Thomas Gleixner <tglx@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1687781630;
+        s=2020; t=1687781631;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:  references:references;
-        bh=JyxsuPSSC6pJrkwpit78ZzSOEQCMqa+J/oqa/Gyx4OM=;
-        b=nxB+TWxGgRRq5Xg0LciM94iTC6fY4u3w8auMGBHuRXl/0yr1dRIOMiN0h5XOH6rg34mjcZ
-        H6qEx8yucVtFoGynlCbpSHKZLBL8tWvydZuHUOwMeyswyMbSn3Oryd3Qv0eJjV4Hc4hqeT
-        2331RKkdAvTw4TaLqnx9oCSnP/l6Cop9AN4tIlLRVT1tJjXrZNqP41ALorvtgnZT2jg3Fx
-        NEN6WKbDJKG4SA27PF+KabqdLiyLASkwPL1Gn05BaCaK3uzqYRnPLFDhLE8XQJEAjf1bXW
-        j/1pYdm/iTEsF+7cwJrxRj4o1m3hEfhdeNUpTWVgUiq2t64lWXANaSPAZgO0SQ==
+        bh=guAMmtV1/LQW/9efZgn0pOJwtz/r5RWvqThZ+ES8NVQ=;
+        b=kcK4te14PDWPtXxxL1l4U+Z/NGq4tPYP/ar1J9AnS1rXWQtwGpNIO5uI0KKUzJH/ARo5Ab
+        mLFsZiCSiRgl/huLa6yIR6U+hR/P02qX946wlXKVNk/RKsPLf6HG/2p8JNrXG1y8SRSXWv
+        L5vK/5Wfh8HojZluZz4r74pbfZV+zUh1CTrcpPdDQ7mr0b+XOXhqr1jACoDJrToJq24B8P
+        vUHwLM+zjpD7LwcCK8Z7Ks05x12OechU5M0nJa5sjnfBSH7ku9o8KH2y1+wssflfFLNh3c
+        niN1gohmECqSMJYPyoJRsWF6ok4fVkOKn/4cr7wVSwuBXpgLVXxaI6jyUhvgyw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1687781630;
+        s=2020e; t=1687781631;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:  references:references;
-        bh=JyxsuPSSC6pJrkwpit78ZzSOEQCMqa+J/oqa/Gyx4OM=;
-        b=r2Pb6dnBaWRS6nWwvzESBeqr1661zYUPIPYVSUG6387arNYo6boej+cS9ICtCJj4R4TXgc
-        AZMo9/PtQjPnAeBA==
+        bh=guAMmtV1/LQW/9efZgn0pOJwtz/r5RWvqThZ+ES8NVQ=;
+        b=Utem5kbvG58CjYOwqSIVDEsk8H4lDmv5FEd7mD+PJ69yZOEn3y8i60qID/4gGCRkwEIz3q
+        aW3lSFK5mnrlyrBw==
 To:     Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     linux-kernel@vger.kernel.org, x86@kernel.org
-Subject: [GIT pull] smp/core for v6.5-rc1
+Subject: [GIT pull] timers/core for v6.5-rc1
 References: <168778150975.3634408.5562070824299155127.tglx@vps.praguecc.cz>
-Message-ID: <168778151245.3634408.4606396781291833683.tglx@vps.praguecc.cz>
+Message-ID: <168778151379.3634408.18079668842542971614.tglx@vps.praguecc.cz>
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Date:   Mon, 26 Jun 2023 14:13:50 +0200 (CEST)
+Date:   Mon, 26 Jun 2023 14:13:51 +0200 (CEST)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -56,4141 +56,2378 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Linus,
 
-please pull the latest smp/core branch from:
+please pull the latest timers/core branch from:
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git smp-core-2023-06=
--26
+   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git timers-core-2023=
+-06-26
 
-up to:  bf5a8c26ad7c: trace,smp: Add tracepoints for scheduling remotelly cal=
-led functions
-
-
-A large update for SMP management:
-
-  - Parallel CPU bringup
-
-    The reason why people are interested in parallel bringup is to shorten
-    the (kexec) reboot time of cloud servers to reduce the downtime of the
-    VM tenants.
-
-    The current fully serialized bringup does the following per AP:
-
-      1) Prepare callbacks (allocate, intialize, create threads)
-      2) Kick the AP alive (e.g. INIT/SIPI on x86)
-      3) Wait for the AP to report alive state
-      4) Let the AP continue through the atomic bringup
-      5) Let the AP run the threaded bringup to full online state
-
-    There are two significant delays:
-
-      #3 The time for an AP to report alive state in start_secondary() on
-         x86 has been measured in the range between 350us and 3.5ms
-         depending on vendor and CPU type, BIOS microcode size etc.
-
-      #4 The atomic bringup does the microcode update. This has been
-         measured to take up to ~8ms on the primary threads depending on
-         the microcode patch size to apply.
-
-    On a two socket SKL server with 56 cores (112 threads) the boot CPU
-    spends on current mainline about 800ms busy waiting for the APs to come
-    up and apply microcode. That's more than 80% of the actual onlining
-    procedure.
-
-    This can be reduced significantly by splitting the bringup mechanism
-    into two parts:
-
-      1) Run the prepare callbacks and kick the AP alive for each AP which
-      	 needs to be brought up.
-
-	 The APs wake up, do their firmware initialization and run the low
-      	 level kernel startup code including microcode loading in parallel
-      	 up to the first synchronization point. (#1 and #2 above)
-
-      2) Run the rest of the bringup code strictly serialized per CPU
-      	 (#3 - #5 above) as it's done today.
-
-	 Parallelizing that stage of the CPU bringup might be possible in
-	 theory, but it's questionable whether required surgery would be
-	 justified for a pretty small gain.
-
-    If the system is large enough the first AP is already waiting at the
-    first synchronization point when the boot CPU finished the wake-up of
-    the last AP. That reduces the AP bringup time on that SKL from ~800ms
-    to ~80ms, i.e. by a factor ~10x.
-
-    The actual gain varies wildly depending on the system, CPU, microcode
-    patch size and other factors. There are some opportunities to reduce
-    the overhead further, but that needs some deep surgery in the x86 CPU
-    bringup code.
-
-    For now this is only enabled on x86, but the core functionality
-    obviously works for all SMP capable architectures.
+up to:  d2b32be7debd: Merge tag 'timers-v6.5-rc1' of https://git.linaro.org/p=
+eople/daniel.lezcano/linux into timers/core
 
 
-  - Enhancements for SMP function call tracing so it is possible to locate
-    the scheduling and the actual execution points. That allows to measure
-    IPI delivery time precisely.
+Time, timekeeping and related device driver updates:
+
+ - Core:
+
+   - A set of fixes, cleanups and enhancements to the posix timer code:
+
+     - Prevent another possible live lock scenario in the exit() path,
+       which affects POSIX_CPU_TIMERS_TASK_WORK enabled architectures.
+
+     - Fix a loop termination issue which was reported syzcaller/KSAN in
+       the posix timer ID allocation code.
+
+       That triggered a deeper look into the posix-timer code which
+       unearthed more small issues.
+
+     - Add missing READ/WRITE_ONCE() annotations
+
+     - Fix or remove completely outdated comments
+
+     - Document places which are subtle and completely undocumented.
+
+   - Add missing hrtimer modes to the trace event decoder
+
+   - Small cleanups and enhancements all over the place
+
+ - Drivers:
+
+     - Rework the Hyper-V clocksource and sched clock setup code
+
+     - Remove a deprecated clocksource driver
+
+     - Small fixes and enhancements all over the place
 
 Thanks,
 
 	tglx
 
 ------------------>
-Andrew Cooper (1):
-      x86/apic: Fix use of X{,2}APIC_ENABLE in asm with older binutils
+Arnd Bergmann (2):
+      vdso/timens: Always provide arch_get_vdso_data() prototype for vdso
+      posix-timers: Add sys_ni_posix_timers() prototype
 
-David Woodhouse (3):
-      x86/smpboot: Split up native_cpu_up() into separate phases and document=
- them
-      cpu/hotplug: Reset task stack state in _cpu_up()
-      x86/smpboot: Support parallel startup of secondary CPUs
+Ben Dooks (1):
+      hrtimer: Add missing sparse annotations to hrtimer locking
 
-Leonardo Bras (2):
-      trace,smp: Add tracepoints around remotelly called functions
-      trace,smp: Add tracepoints for scheduling remotelly called functions
+Feng Mingxi (1):
+      clocksource/drivers/cadence-ttc: Fix memory leak in ttc_timer_probe
 
-Thomas Gleixner (39):
-      x86/smpboot: Cleanup topology_phys_to_logical_pkg()/die()
-      cpu/hotplug: Mark arch_disable_smp_support() and bringup_nonboot_cpus()=
- __init
-      x86/smpboot: Avoid pointless delay calibration if TSC is synchronized
-      x86/smpboot: Rename start_cpu0() to soft_restart_cpu()
-      x86/topology: Remove CPU0 hotplug option
-      x86/smpboot: Remove the CPU0 hotplug kludge
-      x86/smpboot: Restrict soft_restart_cpu() to SEV
-      x86/smpboot: Remove unnecessary barrier()
-      x86/smpboot: Get rid of cpu_init_secondary()
-      x86/cpu/cacheinfo: Remove cpu_callout_mask dependency
-      x86/smpboot: Move synchronization masks to SMP boot code
-      x86/smpboot: Make TSC synchronization function call based
-      x86/smpboot: Remove cpu_callin_mask
-      cpu/hotplug: Rework sparse_irq locking in bringup_cpu()
-      x86/smpboot: Remove wait for cpu_online()
-      x86/xen/smp_pv: Remove wait for CPU online
-      x86/xen/hvm: Get rid of DEAD_FROZEN handling
-      cpu/hotplug: Add CPU state tracking and synchronization
-      x86/smpboot: Switch to hotplug core state synchronization
-      cpu/hotplug: Remove cpu_report_state() and related unused cruft
-      ARM: smp: Switch to hotplug core state synchronization
-      arm64: smp: Switch to hotplug core state synchronization
-      csky/smp: Switch to hotplug core state synchronization
-      MIPS: SMP_CPS: Switch to hotplug core state synchronization
-      parisc: Switch to hotplug core state synchronization
-      riscv: Switch to hotplug core state synchronization
-      cpu/hotplug: Remove unused state functions
-      cpu/hotplug: Provide a split up CPUHP_BRINGUP mechanism
-      x86/smpboot: Enable split CPU startup
-      x86/apic: Provide cpu_primary_thread mask
-      cpu/hotplug: Allow "parallel" bringup up to CPUHP_BP_KICK_AP_STATE
-      x86/apic: Save the APIC virtual base address
-      x86/smpboot: Implement a bit spinlock to protect the realmode stack
-      x86/smpboot/64: Implement arch_cpuhp_init_parallel_bringup() and enable=
- it
-      cpu/hotplug: Fix off by one in cpuhp_bringup_mask()
-      x86/smp: Initialize cpu_primary_thread_mask late
-      x86/realmode: Make stack lock work in trampoline_compat()
-      x86/smpboot: Fix the parallel bringup decision
-      MAINTAINERS: Add CPU HOTPLUG entry
+Keguang Zhang (3):
+      MIPS: Loongson32: Remove deprecated PWM timer clocksource
+      dt-bindings: timer: Add Loongson-1 clocksource
+      clocksource/drivers/loongson1: Move PWM timer to clocksource framework
+
+Li zeming (2):
+      alarmtimer: Remove unnecessary initialization of variable 'ret'
+      alarmtimer: Remove unnecessary (void *) cast
+
+Lukas Bulwahn (1):
+      posix-timers: Refer properly to CONFIG_HIGH_RES_TIMERS
+
+Michael Kelley (1):
+      clocksource/drivers/hyper-v: Rework clocksource and sched clock setup
+
+Paul Cercueil (1):
+      clocksource/drivers/ingenic-timer: Use pm_sleep_ptr() macro
+
+Sebastian Andrzej Siewior (1):
+      tracing/timer: Add missing hrtimer modes to decode_hrtimer_mode().
+
+Sergio Paracuellos (1):
+      dt-bindings: timers: Add Ralink SoCs timer
+
+Stanislav Jakubek (1):
+      dt-bindings: timer: brcm,kona-timer: convert to YAML
+
+Thomas Gleixner (20):
+      posix-timers: Prevent RT livelock in itimer_delete()
+      posix-timers: Ensure timer ID search-loop limit is valid
+      posix-timers: Clarify timer_wait_running() comment
+      posix-timers: Cleanup comments about timer ID tracking
+      posix-timers: Add comments about timer lookup
+      posix-timers: Annotate concurrent access to k_itimer:: It_signal
+      posix-timers: Set k_itimer:: It_signal to NULL on exit()
+      posix-timers: Remove pointless irqsafe from hash_lock
+      posix-timers: Split release_posix_timers()
+      posix-timers: Document sys_clock_getres() correctly
+      posix-timers: Document common_clock_get() correctly
+      posix-timers: Document sys_clock_getoverrun()
+      posix-timers: Document sys_clock_settime() permissions in place
+      posix-timers: Document nanosleep() details
+      posix-timers: Add proper comments in do_timer_create()
+      posix-timers: Comment SIGEV_THREAD_ID properly
+      posix-timers: Clarify posix_timer_rearm() comment
+      posix-timers: Clarify posix_timer_fn() comments
+      posix-timers: Remove pointless comments
+      posix-timers: Polish coding style in a few places
+
+Uwe Kleine-K=C3=B6nig (3):
+      clocksource/drivers/imx-gpt: Use only a single name for functions
+      clk: imx: Drop inclusion of unused header <soc/imx/timer.h>
+      clocksource/drivers/imx-gpt: Fold <soc/imx/timer.h> into its only user
+
+Wen Yang (1):
+      tick/rcu: Fix bogus ratelimit condition
 
 
- Documentation/admin-guide/kernel-parameters.txt |  20 +-
- Documentation/core-api/cpu_hotplug.rst          |  13 +-
- MAINTAINERS                                     |  12 +
- arch/Kconfig                                    |  23 ++
- arch/arm/Kconfig                                |   1 +
- arch/arm/include/asm/smp.h                      |   2 +-
- arch/arm/kernel/smp.c                           |  18 +-
- arch/arm64/Kconfig                              |   1 +
- arch/arm64/include/asm/smp.h                    |   2 +-
- arch/arm64/kernel/smp.c                         |  14 +-
- arch/csky/Kconfig                               |   1 +
- arch/csky/include/asm/smp.h                     |   2 +-
- arch/csky/kernel/smp.c                          |   8 +-
- arch/mips/Kconfig                               |   1 +
- arch/mips/cavium-octeon/smp.c                   |   1 +
- arch/mips/include/asm/smp-ops.h                 |   1 +
- arch/mips/kernel/smp-bmips.c                    |   1 +
- arch/mips/kernel/smp-cps.c                      |  14 +-
- arch/mips/kernel/smp.c                          |   8 +
- arch/mips/loongson64/smp.c                      |   1 +
- arch/parisc/Kconfig                             |   1 +
- arch/parisc/kernel/process.c                    |   4 +-
- arch/parisc/kernel/smp.c                        |   7 +-
- arch/riscv/Kconfig                              |   1 +
- arch/riscv/include/asm/smp.h                    |   2 +-
- arch/riscv/kernel/cpu-hotplug.c                 |  14 +-
- arch/x86/Kconfig                                |  45 +-
- arch/x86/coco/tdx/tdx.c                         |  11 +
- arch/x86/include/asm/apic.h                     |   5 +-
- arch/x86/include/asm/apicdef.h                  |  11 +-
- arch/x86/include/asm/cpu.h                      |   5 +-
- arch/x86/include/asm/cpumask.h                  |   5 -
- arch/x86/include/asm/processor.h                |   1 -
- arch/x86/include/asm/realmode.h                 |   3 +
- arch/x86/include/asm/smp.h                      |  24 +-
- arch/x86/include/asm/topology.h                 |  22 +-
- arch/x86/include/asm/tsc.h                      |   2 -
- arch/x86/include/asm/x86_init.h                 |   3 +
- arch/x86/kernel/acpi/sleep.c                    |   9 +-
- arch/x86/kernel/apic/apic.c                     |  40 +-
- arch/x86/kernel/callthunks.c                    |   4 +-
- arch/x86/kernel/cpu/cacheinfo.c                 |  21 +-
- arch/x86/kernel/cpu/common.c                    |  50 +--
- arch/x86/kernel/head_32.S                       |  14 -
- arch/x86/kernel/head_64.S                       |  85 +++-
- arch/x86/kernel/sev.c                           |   2 +-
- arch/x86/kernel/smp.c                           |   3 +-
- arch/x86/kernel/smpboot.c                       | 523 ++++++++--------------=
+ .../devicetree/bindings/timer/brcm,kona-timer.txt  |  25 -
+ .../devicetree/bindings/timer/brcm,kona-timer.yaml |  52 ++
+ .../bindings/timer/loongson,ls1x-pwmtimer.yaml     |  48 ++
+ .../bindings/timer/ralink,rt2880-timer.yaml        |  44 ++
+ arch/alpha/kernel/osf_sys.c                        |   2 -
+ arch/mips/include/asm/mach-loongson32/loongson1.h  |   1 -
+ arch/mips/include/asm/mach-loongson32/regs-pwm.h   |  25 -
+ arch/mips/loongson32/Kconfig                       |  37 --
+ arch/mips/loongson32/common/time.c                 | 210 ---------
+ drivers/clk/imx/clk-imx1.c                         |   1 -
+ drivers/clk/imx/clk-imx27.c                        |   1 -
+ drivers/clk/imx/clk-imx31.c                        |   1 -
+ drivers/clk/imx/clk-imx35.c                        |   1 -
+ drivers/clocksource/Kconfig                        |   9 +
+ drivers/clocksource/Makefile                       |   1 +
+ drivers/clocksource/hyperv_timer.c                 |  54 +--
+ drivers/clocksource/ingenic-timer.c                |  10 +-
+ drivers/clocksource/timer-cadence-ttc.c            |  19 +-
+ drivers/clocksource/timer-imx-gpt.c                |  25 +-
+ drivers/clocksource/timer-loongson1-pwm.c          | 236 +++++++++
+ include/linux/sched/signal.h                       |   2 +-
+ include/linux/syscalls.h                           |   1 +
+ include/linux/time_namespace.h                     |   3 +-
+ include/soc/imx/timer.h                            |  16 -
+ include/trace/events/timer.h                       |   6 +-
+ kernel/time/alarmtimer.c                           |   4 +-
+ kernel/time/hrtimer.c                              |   3 +
+ kernel/time/posix-timers.c                         | 525 +++++++++++++------=
 --
- arch/x86/kernel/topology.c                      |  98 +----
- arch/x86/kernel/tsc.c                           |  20 +-
- arch/x86/kernel/tsc_sync.c                      |  36 +-
- arch/x86/kernel/x86_init.c                      |   1 +
- arch/x86/mm/mem_encrypt_amd.c                   |  15 +
- arch/x86/power/cpu.c                            |  37 --
- arch/x86/realmode/init.c                        |   3 +
- arch/x86/realmode/rm/trampoline_64.S            |  27 +-
- arch/x86/xen/enlighten_hvm.c                    |  11 +-
- arch/x86/xen/smp_hvm.c                          |  16 +-
- arch/x86/xen/smp_pv.c                           |  56 +--
- drivers/acpi/processor_idle.c                   |   4 -
- include/linux/cpu.h                             |   4 -
- include/linux/cpuhotplug.h                      |  17 +
- include/trace/events/csd.h                      |  72 ++++
- kernel/cpu.c                                    | 402 +++++++++++++++++-
- kernel/smp.c                                    |  43 +-
- kernel/smpboot.c                                | 163 --------
- 66 files changed, 1076 insertions(+), 1010 deletions(-)
- create mode 100644 include/trace/events/csd.h
+ kernel/time/tick-sched.c                           |   2 +-
+ 29 files changed, 777 insertions(+), 587 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/timer/brcm,kona-timer.t=
+xt
+ create mode 100644 Documentation/devicetree/bindings/timer/brcm,kona-timer.y=
+aml
+ create mode 100644 Documentation/devicetree/bindings/timer/loongson,ls1x-pwm=
+timer.yaml
+ create mode 100644 Documentation/devicetree/bindings/timer/ralink,rt2880-tim=
+er.yaml
+ delete mode 100644 arch/mips/include/asm/mach-loongson32/regs-pwm.h
+ create mode 100644 drivers/clocksource/timer-loongson1-pwm.c
+ delete mode 100644 include/soc/imx/timer.h
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/=
-admin-guide/kernel-parameters.txt
-index 9e5bab29685f..79fb1248f0ce 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -818,20 +818,6 @@
- 			Format:
- 			<first_slot>,<last_slot>,<port>,<enum_bit>[,<debug>]
-=20
--	cpu0_hotplug	[X86] Turn on CPU0 hotplug feature when
--			CONFIG_BOOTPARAM_HOTPLUG_CPU0 is off.
--			Some features depend on CPU0. Known dependencies are:
--			1. Resume from suspend/hibernate depends on CPU0.
--			Suspend/hibernate will fail if CPU0 is offline and you
--			need to online CPU0 before suspend/hibernate.
--			2. PIC interrupts also depend on CPU0. CPU0 can't be
--			removed if a PIC interrupt is detected.
--			It's said poweroff/reboot may depend on CPU0 on some
--			machines although I haven't seen such issues so far
--			after CPU0 is offline on a few tested machines.
--			If the dependencies are under your control, you can
--			turn on cpu0_hotplug.
+diff --git a/Documentation/devicetree/bindings/timer/brcm,kona-timer.txt b/Do=
+cumentation/devicetree/bindings/timer/brcm,kona-timer.txt
+deleted file mode 100644
+index 39adf54b4388..000000000000
+--- a/Documentation/devicetree/bindings/timer/brcm,kona-timer.txt
++++ /dev/null
+@@ -1,25 +0,0 @@
+-Broadcom Kona Family timer
+------------------------------------------------------
+-This timer is used in the following Broadcom SoCs:
+- BCM11130, BCM11140, BCM11351, BCM28145, BCM28155
 -
- 	cpuidle.off=3D1	[CPU_IDLE]
- 			disable the cpuidle sub-system
-=20
-@@ -852,6 +838,12 @@
- 			on every CPU online, such as boot, and resume from suspend.
- 			Default: 10000
-=20
-+	cpuhp.parallel=3D
-+			[SMP] Enable/disable parallel bringup of secondary CPUs
-+			Format: <bool>
-+			Default is enabled if CONFIG_HOTPLUG_PARALLEL=3Dy. Otherwise
-+			the parameter has no effect.
-+
- 	crash_kexec_post_notifiers
- 			Run kdump after running panic-notifiers and dumping
- 			kmsg. This only for the users who doubt kdump always
-diff --git a/Documentation/core-api/cpu_hotplug.rst b/Documentation/core-api/=
-cpu_hotplug.rst
-index f75778d37488..e6f5bc39cf5c 100644
---- a/Documentation/core-api/cpu_hotplug.rst
-+++ b/Documentation/core-api/cpu_hotplug.rst
-@@ -127,17 +127,8 @@ bring CPU4 back online::
-  $ echo 1 > /sys/devices/system/cpu/cpu4/online
-  smpboot: Booting Node 0 Processor 4 APIC 0x1
-=20
--The CPU is usable again. This should work on all CPUs. CPU0 is often special
--and excluded from CPU hotplug. On X86 the kernel option
--*CONFIG_BOOTPARAM_HOTPLUG_CPU0* has to be enabled in order to be able to
--shutdown CPU0. Alternatively the kernel command option *cpu0_hotplug* can be
--used. Some known dependencies of CPU0:
+-Required properties:
+-- compatible : "brcm,kona-timer"
+-- DEPRECATED: compatible : "bcm,kona-timer"
+-- reg : Register range for the timer
+-- interrupts : interrupt for the timer
+-- clocks: phandle + clock specifier pair of the external clock
+-- clock-frequency: frequency that the clock operates
 -
--* Resume from hibernate/suspend. Hibernate/suspend will fail if CPU0 is offl=
-ine.
--* PIC interrupts. CPU0 can't be removed if a PIC interrupt is detected.
+-Only one of clocks or clock-frequency should be specified.
 -
--Please let Fenghua Yu <fenghua.yu@intel.com> know if you find any dependenci=
-es
--on CPU0.
-+The CPU is usable again. This should work on all CPUs, but CPU0 is often spe=
-cial
-+and excluded from CPU hotplug.
-=20
- The CPU hotplug coordination
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D
-diff --git a/MAINTAINERS b/MAINTAINERS
-index e0ad886d3163..273f9804d544 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -5341,6 +5341,18 @@ F:	include/linux/sched/cpufreq.h
- F:	kernel/sched/cpufreq*.c
- F:	tools/testing/selftests/cpufreq/
-=20
-+CPU HOTPLUG
-+M:	Thomas Gleixner <tglx@linutronix.de>
-+M:	Peter Zijlstra <peterz@infradead.org>
-+L:	linux-kernel@vger.kernel.org
-+S:	Maintained
-+T:	git git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git smp/core
-+F:	kernel/cpu.c
-+F:	kernel/smpboot.*
-+F:	include/linux/cpu.h
-+F:	include/linux/cpuhotplug.h
-+F:	include/linux/smpboot.h
-+
- CPU IDLE TIME MANAGEMENT FRAMEWORK
- M:	"Rafael J. Wysocki" <rafael@kernel.org>
- M:	Daniel Lezcano <daniel.lezcano@linaro.org>
-diff --git a/arch/Kconfig b/arch/Kconfig
-index 205fd23e0cad..64d771855ecd 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -34,6 +34,29 @@ config ARCH_HAS_SUBPAGE_FAULTS
- config HOTPLUG_SMT
- 	bool
-=20
-+# Selected by HOTPLUG_CORE_SYNC_DEAD or HOTPLUG_CORE_SYNC_FULL
-+config HOTPLUG_CORE_SYNC
-+	bool
-+
-+# Basic CPU dead synchronization selected by architecture
-+config HOTPLUG_CORE_SYNC_DEAD
-+	bool
-+	select HOTPLUG_CORE_SYNC
-+
-+# Full CPU synchronization with alive state selected by architecture
-+config HOTPLUG_CORE_SYNC_FULL
-+	bool
-+	select HOTPLUG_CORE_SYNC_DEAD if HOTPLUG_CPU
-+	select HOTPLUG_CORE_SYNC
-+
-+config HOTPLUG_SPLIT_STARTUP
-+	bool
-+	select HOTPLUG_CORE_SYNC_FULL
-+
-+config HOTPLUG_PARALLEL
-+	bool
-+	select HOTPLUG_SPLIT_STARTUP
-+
- config GENERIC_ENTRY
- 	bool
-=20
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index 0fb4b218f665..775ce86507d7 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -124,6 +124,7 @@ config ARM
- 	select HAVE_SYSCALL_TRACEPOINTS
- 	select HAVE_UID16
- 	select HAVE_VIRT_CPU_ACCOUNTING_GEN
-+	select HOTPLUG_CORE_SYNC_DEAD if HOTPLUG_CPU
- 	select IRQ_FORCED_THREADING
- 	select MODULES_USE_ELF_REL
- 	select NEED_DMA_MAP_STATE
-diff --git a/arch/arm/include/asm/smp.h b/arch/arm/include/asm/smp.h
-index 7c1c90d9f582..8c05a7f374d8 100644
---- a/arch/arm/include/asm/smp.h
-+++ b/arch/arm/include/asm/smp.h
-@@ -64,7 +64,7 @@ extern void secondary_startup_arm(void);
-=20
- extern int __cpu_disable(void);
-=20
--extern void __cpu_die(unsigned int cpu);
-+static inline void __cpu_die(unsigned int cpu) { }
-=20
- extern void arch_send_call_function_single_ipi(int cpu);
- extern void arch_send_call_function_ipi_mask(const struct cpumask *mask);
-diff --git a/arch/arm/kernel/smp.c b/arch/arm/kernel/smp.c
-index 87f8d0e5e314..6756203e45f3 100644
---- a/arch/arm/kernel/smp.c
-+++ b/arch/arm/kernel/smp.c
-@@ -288,15 +288,11 @@ int __cpu_disable(void)
- }
-=20
- /*
-- * called on the thread which is asking for a CPU to be shutdown -
-- * waits until shutdown has completed, or it is timed out.
-+ * called on the thread which is asking for a CPU to be shutdown after the
-+ * shutdown completed.
-  */
--void __cpu_die(unsigned int cpu)
-+void arch_cpuhp_cleanup_dead_cpu(unsigned int cpu)
- {
--	if (!cpu_wait_death(cpu, 5)) {
--		pr_err("CPU%u: cpu didn't die\n", cpu);
--		return;
--	}
- 	pr_debug("CPU%u: shutdown\n", cpu);
-=20
- 	clear_tasks_mm_cpumask(cpu);
-@@ -336,11 +332,11 @@ void __noreturn arch_cpu_idle_dead(void)
- 	flush_cache_louis();
-=20
- 	/*
--	 * Tell __cpu_die() that this CPU is now safe to dispose of.  Once
--	 * this returns, power and/or clocks can be removed at any point
--	 * from this CPU and its cache by platform_cpu_kill().
-+	 * Tell cpuhp_bp_sync_dead() that this CPU is now safe to dispose
-+	 * of. Once this returns, power and/or clocks can be removed at
-+	 * any point from this CPU and its cache by platform_cpu_kill().
- 	 */
--	(void)cpu_report_death();
-+	cpuhp_ap_report_dead();
-=20
- 	/*
- 	 * Ensure that the cache lines associated with that completion are
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index b1201d25a8a4..fcb945bde648 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -222,6 +222,7 @@ config ARM64
- 	select HAVE_KPROBES
- 	select HAVE_KRETPROBES
- 	select HAVE_GENERIC_VDSO
-+	select HOTPLUG_CORE_SYNC_DEAD if HOTPLUG_CPU
- 	select IRQ_DOMAIN
- 	select IRQ_FORCED_THREADING
- 	select KASAN_VMALLOC if KASAN
-diff --git a/arch/arm64/include/asm/smp.h b/arch/arm64/include/asm/smp.h
-index f2d26235bfb4..9b31e6d0da17 100644
---- a/arch/arm64/include/asm/smp.h
-+++ b/arch/arm64/include/asm/smp.h
-@@ -99,7 +99,7 @@ static inline void arch_send_wakeup_ipi_mask(const struct c=
-pumask *mask)
-=20
- extern int __cpu_disable(void);
-=20
--extern void __cpu_die(unsigned int cpu);
-+static inline void __cpu_die(unsigned int cpu) { }
- extern void __noreturn cpu_die(void);
- extern void __noreturn cpu_die_early(void);
-=20
-diff --git a/arch/arm64/kernel/smp.c b/arch/arm64/kernel/smp.c
-index d00d4cbb31b1..edd63894d61e 100644
---- a/arch/arm64/kernel/smp.c
-+++ b/arch/arm64/kernel/smp.c
-@@ -332,17 +332,13 @@ static int op_cpu_kill(unsigned int cpu)
- }
-=20
- /*
-- * called on the thread which is asking for a CPU to be shutdown -
-- * waits until shutdown has completed, or it is timed out.
-+ * Called on the thread which is asking for a CPU to be shutdown after the
-+ * shutdown completed.
-  */
--void __cpu_die(unsigned int cpu)
-+void arch_cpuhp_cleanup_dead_cpu(unsigned int cpu)
- {
- 	int err;
-=20
--	if (!cpu_wait_death(cpu, 5)) {
--		pr_crit("CPU%u: cpu didn't die\n", cpu);
--		return;
--	}
- 	pr_debug("CPU%u: shutdown\n", cpu);
-=20
- 	/*
-@@ -369,8 +365,8 @@ void __noreturn cpu_die(void)
-=20
- 	local_daif_mask();
-=20
--	/* Tell __cpu_die() that this CPU is now safe to dispose of */
--	(void)cpu_report_death();
-+	/* Tell cpuhp_bp_sync_dead() that this CPU is now safe to dispose of */
-+	cpuhp_ap_report_dead();
-=20
- 	/*
- 	 * Actually shutdown the CPU. This must never fail. The specific hotplug
-diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
-index 4df1f8c9d170..95f1e9bfd1c7 100644
---- a/arch/csky/Kconfig
-+++ b/arch/csky/Kconfig
-@@ -96,6 +96,7 @@ config CSKY
- 	select HAVE_REGS_AND_STACK_ACCESS_API
- 	select HAVE_STACKPROTECTOR
- 	select HAVE_SYSCALL_TRACEPOINTS
-+	select HOTPLUG_CORE_SYNC_DEAD if HOTPLUG_CPU
- 	select MAY_HAVE_SPARSE_IRQ
- 	select MODULES_USE_ELF_RELA if MODULES
- 	select OF
-diff --git a/arch/csky/include/asm/smp.h b/arch/csky/include/asm/smp.h
-index 668b79ce29ea..d3db334f3196 100644
---- a/arch/csky/include/asm/smp.h
-+++ b/arch/csky/include/asm/smp.h
-@@ -23,7 +23,7 @@ void __init set_send_ipi(void (*func)(const struct cpumask =
-*mask), int irq);
-=20
- int __cpu_disable(void);
-=20
--void __cpu_die(unsigned int cpu);
-+static inline void __cpu_die(unsigned int cpu) { }
-=20
- #endif /* CONFIG_SMP */
-=20
-diff --git a/arch/csky/kernel/smp.c b/arch/csky/kernel/smp.c
-index b12e2c3c387f..8e42352cbf12 100644
---- a/arch/csky/kernel/smp.c
-+++ b/arch/csky/kernel/smp.c
-@@ -291,12 +291,8 @@ int __cpu_disable(void)
- 	return 0;
- }
-=20
--void __cpu_die(unsigned int cpu)
-+void arch_cpuhp_cleanup_dead_cpu(unsigned int cpu)
- {
--	if (!cpu_wait_death(cpu, 5)) {
--		pr_crit("CPU%u: shutdown failed\n", cpu);
--		return;
--	}
- 	pr_notice("CPU%u: shutdown\n", cpu);
- }
-=20
-@@ -304,7 +300,7 @@ void __noreturn arch_cpu_idle_dead(void)
- {
- 	idle_task_exit();
-=20
--	cpu_report_death();
-+	cpuhp_ap_report_dead();
-=20
- 	while (!secondary_stack)
- 		arch_cpu_idle();
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index c2f5498d207f..30e90a2d53f4 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -2285,6 +2285,7 @@ config MIPS_CPS
- 	select MIPS_CM
- 	select MIPS_CPS_PM if HOTPLUG_CPU
- 	select SMP
-+	select HOTPLUG_CORE_SYNC_DEAD if HOTPLUG_CPU
- 	select SYNC_R4K if (CEVT_R4K || CSRC_R4K)
- 	select SYS_SUPPORTS_HOTPLUG_CPU
- 	select SYS_SUPPORTS_SCHED_SMT if CPU_MIPSR6
-diff --git a/arch/mips/cavium-octeon/smp.c b/arch/mips/cavium-octeon/smp.c
-index 4212584e6efa..33c09688210f 100644
---- a/arch/mips/cavium-octeon/smp.c
-+++ b/arch/mips/cavium-octeon/smp.c
-@@ -345,6 +345,7 @@ void play_dead(void)
- 	int cpu =3D cpu_number_map(cvmx_get_core_num());
-=20
- 	idle_task_exit();
-+	cpuhp_ap_report_dead();
- 	octeon_processor_boot =3D 0xff;
- 	per_cpu(cpu_state, cpu) =3D CPU_DEAD;
-=20
-diff --git a/arch/mips/include/asm/smp-ops.h b/arch/mips/include/asm/smp-ops.h
-index 0145bbfb5efb..5719ff49eff1 100644
---- a/arch/mips/include/asm/smp-ops.h
-+++ b/arch/mips/include/asm/smp-ops.h
-@@ -33,6 +33,7 @@ struct plat_smp_ops {
- #ifdef CONFIG_HOTPLUG_CPU
- 	int (*cpu_disable)(void);
- 	void (*cpu_die)(unsigned int cpu);
-+	void (*cleanup_dead_cpu)(unsigned cpu);
- #endif
- #ifdef CONFIG_KEXEC
- 	void (*kexec_nonboot_cpu)(void);
-diff --git a/arch/mips/kernel/smp-bmips.c b/arch/mips/kernel/smp-bmips.c
-index 15466d4cf4a0..c074ecce3fbf 100644
---- a/arch/mips/kernel/smp-bmips.c
-+++ b/arch/mips/kernel/smp-bmips.c
-@@ -392,6 +392,7 @@ static void bmips_cpu_die(unsigned int cpu)
- void __ref play_dead(void)
- {
- 	idle_task_exit();
-+	cpuhp_ap_report_dead();
-=20
- 	/* flush data cache */
- 	_dma_cache_wback_inv(0, ~0);
-diff --git a/arch/mips/kernel/smp-cps.c b/arch/mips/kernel/smp-cps.c
-index 62f677b2306f..d7fdbec232da 100644
---- a/arch/mips/kernel/smp-cps.c
-+++ b/arch/mips/kernel/smp-cps.c
-@@ -503,8 +503,7 @@ void play_dead(void)
- 		}
- 	}
-=20
--	/* This CPU has chosen its way out */
--	(void)cpu_report_death();
-+	cpuhp_ap_report_dead();
-=20
- 	cps_shutdown_this_cpu(cpu_death);
-=20
-@@ -527,7 +526,9 @@ static void wait_for_sibling_halt(void *ptr_cpu)
- 	} while (!(halted & TCHALT_H));
- }
-=20
--static void cps_cpu_die(unsigned int cpu)
-+static void cps_cpu_die(unsigned int cpu) { }
-+
-+static void cps_cleanup_dead_cpu(unsigned cpu)
- {
- 	unsigned core =3D cpu_core(&cpu_data[cpu]);
- 	unsigned int vpe_id =3D cpu_vpe_id(&cpu_data[cpu]);
-@@ -535,12 +536,6 @@ static void cps_cpu_die(unsigned int cpu)
- 	unsigned stat;
- 	int err;
-=20
--	/* Wait for the cpu to choose its way out */
--	if (!cpu_wait_death(cpu, 5)) {
--		pr_err("CPU%u: didn't offline\n", cpu);
--		return;
--	}
+-Refer to clocks/clock-bindings.txt for generic clock consumer properties.
 -
- 	/*
- 	 * Now wait for the CPU to actually offline. Without doing this that
- 	 * offlining may race with one or more of:
-@@ -624,6 +619,7 @@ static const struct plat_smp_ops cps_smp_ops =3D {
- #ifdef CONFIG_HOTPLUG_CPU
- 	.cpu_disable		=3D cps_cpu_disable,
- 	.cpu_die		=3D cps_cpu_die,
-+	.cleanup_dead_cpu	=3D cps_cleanup_dead_cpu,
- #endif
- #ifdef CONFIG_KEXEC
- 	.kexec_nonboot_cpu	=3D cps_kexec_nonboot_cpu,
-diff --git a/arch/mips/kernel/smp.c b/arch/mips/kernel/smp.c
-index 1d93b85271ba..90c71d800b59 100644
---- a/arch/mips/kernel/smp.c
-+++ b/arch/mips/kernel/smp.c
-@@ -690,6 +690,14 @@ void flush_tlb_one(unsigned long vaddr)
- EXPORT_SYMBOL(flush_tlb_page);
- EXPORT_SYMBOL(flush_tlb_one);
-=20
-+#ifdef CONFIG_HOTPLUG_CORE_SYNC_DEAD
-+void arch_cpuhp_cleanup_dead_cpu(unsigned int cpu)
-+{
-+	if (mp_ops->cleanup_dead_cpu)
-+		mp_ops->cleanup_dead_cpu(cpu);
-+}
-+#endif
+-Example:
+-	timer@35006000 {
+-		compatible =3D "brcm,kona-timer";
+-		reg =3D <0x35006000 0x1000>;
+-		interrupts =3D <0x0 7 0x4>;
+-		clocks =3D <&hub_timer_clk>;
+-	};
+-
+diff --git a/Documentation/devicetree/bindings/timer/brcm,kona-timer.yaml b/D=
+ocumentation/devicetree/bindings/timer/brcm,kona-timer.yaml
+new file mode 100644
+index 000000000000..d6af8383d6fc
+--- /dev/null
++++ b/Documentation/devicetree/bindings/timer/brcm,kona-timer.yaml
+@@ -0,0 +1,52 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/timer/brcm,kona-timer.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
- #ifdef CONFIG_GENERIC_CLOCKEVENTS_BROADCAST
-=20
- static void tick_broadcast_callee(void *info)
-diff --git a/arch/mips/loongson64/smp.c b/arch/mips/loongson64/smp.c
-index b0e8bb9fa036..cdecd7af11a6 100644
---- a/arch/mips/loongson64/smp.c
-+++ b/arch/mips/loongson64/smp.c
-@@ -775,6 +775,7 @@ void play_dead(void)
- 	void (*play_dead_at_ckseg1)(int *);
-=20
- 	idle_task_exit();
-+	cpuhp_ap_report_dead();
-=20
- 	prid_imp =3D read_c0_prid() & PRID_IMP_MASK;
- 	prid_rev =3D read_c0_prid() & PRID_REV_MASK;
-diff --git a/arch/parisc/Kconfig b/arch/parisc/Kconfig
-index 466a25525364..67a3f98a2c5e 100644
---- a/arch/parisc/Kconfig
-+++ b/arch/parisc/Kconfig
-@@ -57,6 +57,7 @@ config PARISC
- 	select HAVE_ARCH_SECCOMP_FILTER
- 	select HAVE_ARCH_TRACEHOOK
- 	select HAVE_REGS_AND_STACK_ACCESS_API
-+	select HOTPLUG_CORE_SYNC_DEAD if HOTPLUG_CPU
- 	select GENERIC_SCHED_CLOCK
- 	select GENERIC_IRQ_MIGRATION if SMP
- 	select HAVE_UNSTABLE_SCHED_CLOCK if SMP
-diff --git a/arch/parisc/kernel/process.c b/arch/parisc/kernel/process.c
-index 97c6f875bd0e..66f6543417b7 100644
---- a/arch/parisc/kernel/process.c
-+++ b/arch/parisc/kernel/process.c
-@@ -166,8 +166,8 @@ void __noreturn arch_cpu_idle_dead(void)
-=20
- 	local_irq_disable();
-=20
--	/* Tell __cpu_die() that this CPU is now safe to dispose of. */
--	(void)cpu_report_death();
-+	/* Tell the core that this CPU is now safe to dispose of. */
-+	cpuhp_ap_report_dead();
-=20
- 	/* Ensure that the cache lines are written out. */
- 	flush_cache_all_local();
-diff --git a/arch/parisc/kernel/smp.c b/arch/parisc/kernel/smp.c
-index b7fc859fa87d..6b6eaa485946 100644
---- a/arch/parisc/kernel/smp.c
-+++ b/arch/parisc/kernel/smp.c
-@@ -500,11 +500,10 @@ int __cpu_disable(void)
- void __cpu_die(unsigned int cpu)
- {
- 	pdc_cpu_rendezvous_lock();
-+}
-=20
--	if (!cpu_wait_death(cpu, 5)) {
--		pr_crit("CPU%u: cpu didn't die\n", cpu);
--		return;
--	}
-+void arch_cpuhp_cleanup_dead_cpu(unsigned int cpu)
-+{
- 	pr_info("CPU%u: is shutting down\n", cpu);
-=20
- 	/* set task's state to interruptible sleep */
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 348c0fa1fc8c..13f058490608 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -122,6 +122,7 @@ config RISCV
- 	select HAVE_RSEQ
- 	select HAVE_STACKPROTECTOR
- 	select HAVE_SYSCALL_TRACEPOINTS
-+	select HOTPLUG_CORE_SYNC_DEAD if HOTPLUG_CPU
- 	select IRQ_DOMAIN
- 	select IRQ_FORCED_THREADING
- 	select KASAN_VMALLOC if KASAN
-diff --git a/arch/riscv/include/asm/smp.h b/arch/riscv/include/asm/smp.h
-index c4b77017ec58..0d555847cde6 100644
---- a/arch/riscv/include/asm/smp.h
-+++ b/arch/riscv/include/asm/smp.h
-@@ -70,7 +70,7 @@ asmlinkage void smp_callin(void);
-=20
- #if defined CONFIG_HOTPLUG_CPU
- int __cpu_disable(void);
--void __cpu_die(unsigned int cpu);
-+static inline void __cpu_die(unsigned int cpu) { }
- #endif /* CONFIG_HOTPLUG_CPU */
-=20
- #else
-diff --git a/arch/riscv/kernel/cpu-hotplug.c b/arch/riscv/kernel/cpu-hotplug.c
-index a941adc7cbf2..457a18efcb11 100644
---- a/arch/riscv/kernel/cpu-hotplug.c
-+++ b/arch/riscv/kernel/cpu-hotplug.c
-@@ -8,6 +8,7 @@
- #include <linux/sched.h>
- #include <linux/err.h>
- #include <linux/irq.h>
-+#include <linux/cpuhotplug.h>
- #include <linux/cpu.h>
- #include <linux/sched/hotplug.h>
- #include <asm/irq.h>
-@@ -49,17 +50,15 @@ int __cpu_disable(void)
- 	return ret;
++title: Broadcom Kona family timer
++
++maintainers:
++  - Florian Fainelli <f.fainelli@gmail.com>
++
++properties:
++  compatible:
++    const: brcm,kona-timer
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  clock-frequency: true
++
++oneOf:
++  - required:
++      - clocks
++  - required:
++      - clock-frequency
++
++required:
++  - compatible
++  - reg
++  - interrupts
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/bcm281xx.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    timer@35006000 {
++        compatible =3D "brcm,kona-timer";
++        reg =3D <0x35006000 0x1000>;
++        interrupts =3D <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>;
++        clocks =3D <&aon_ccu BCM281XX_AON_CCU_HUB_TIMER>;
++    };
++...
+diff --git a/Documentation/devicetree/bindings/timer/loongson,ls1x-pwmtimer.y=
+aml b/Documentation/devicetree/bindings/timer/loongson,ls1x-pwmtimer.yaml
+new file mode 100644
+index 000000000000..ad61ae55850b
+--- /dev/null
++++ b/Documentation/devicetree/bindings/timer/loongson,ls1x-pwmtimer.yaml
+@@ -0,0 +1,48 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/timer/loongson,ls1x-pwmtimer.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Loongson-1 PWM timer
++
++maintainers:
++  - Keguang Zhang <keguang.zhang@gmail.com>
++
++description:
++  Loongson-1 PWM timer can be used for system clock source
++  and clock event timers.
++
++properties:
++  compatible:
++    const: loongson,ls1b-pwmtimer
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - interrupts
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/loongson,ls1x-clk.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++    clocksource: timer@1fe5c030 {
++        compatible =3D "loongson,ls1b-pwmtimer";
++        reg =3D <0x1fe5c030 0x10>;
++
++        clocks =3D <&clkc LS1X_CLKID_APB>;
++        interrupt-parent =3D <&intc0>;
++        interrupts =3D <20 IRQ_TYPE_LEVEL_HIGH>;
++    };
+diff --git a/Documentation/devicetree/bindings/timer/ralink,rt2880-timer.yaml=
+ b/Documentation/devicetree/bindings/timer/ralink,rt2880-timer.yaml
+new file mode 100644
+index 000000000000..daa7832babe3
+--- /dev/null
++++ b/Documentation/devicetree/bindings/timer/ralink,rt2880-timer.yaml
+@@ -0,0 +1,44 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/timer/ralink,rt2880-timer.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Timer present in Ralink family SoCs
++
++maintainers:
++  - Sergio Paracuellos <sergio.paracuellos@gmail.com>
++
++properties:
++  compatible:
++    const: ralink,rt2880-timer
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - interrupts
++
++additionalProperties: false
++
++examples:
++  - |
++    timer@100 {
++        compatible =3D "ralink,rt2880-timer";
++        reg =3D <0x100 0x20>;
++
++        clocks =3D <&sysc 3>;
++
++        interrupt-parent =3D <&intc>;
++        interrupts =3D <1>;
++    };
++...
+diff --git a/arch/alpha/kernel/osf_sys.c b/arch/alpha/kernel/osf_sys.c
+index 2a9a877a0508..d98701ee36c6 100644
+--- a/arch/alpha/kernel/osf_sys.c
++++ b/arch/alpha/kernel/osf_sys.c
+@@ -1014,8 +1014,6 @@ SYSCALL_DEFINE2(osf_settimeofday, struct timeval32 __us=
+er *, tv,
+ 	return do_sys_settimeofday64(tv ? &kts : NULL, tz ? &ktz : NULL);
  }
 =20
-+#ifdef CONFIG_HOTPLUG_CPU
- /*
-- * Called on the thread which is asking for a CPU to be shutdown.
-+ * Called on the thread which is asking for a CPU to be shutdown, if the
-+ * CPU reported dead to the hotplug core.
-  */
--void __cpu_die(unsigned int cpu)
-+void arch_cpuhp_cleanup_dead_cpu(unsigned int cpu)
+-asmlinkage long sys_ni_posix_timers(void);
+-
+ SYSCALL_DEFINE2(osf_utimes, const char __user *, filename,
+ 		struct timeval32 __user *, tvs)
  {
- 	int ret =3D 0;
+diff --git a/arch/mips/include/asm/mach-loongson32/loongson1.h b/arch/mips/in=
+clude/asm/mach-loongson32/loongson1.h
+index eb3ddbec1752..d8f9dec0ecc3 100644
+--- a/arch/mips/include/asm/mach-loongson32/loongson1.h
++++ b/arch/mips/include/asm/mach-loongson32/loongson1.h
+@@ -47,7 +47,6 @@
 =20
--	if (!cpu_wait_death(cpu, 5)) {
--		pr_err("CPU %u: didn't die\n", cpu);
--		return;
--	}
- 	pr_notice("CPU%u: off\n", cpu);
+ #include <regs-clk.h>
+ #include <regs-mux.h>
+-#include <regs-pwm.h>
+ #include <regs-rtc.h>
+ #include <regs-wdt.h>
 =20
- 	/* Verify from the firmware if the cpu is really stopped*/
-@@ -76,9 +75,10 @@ void __noreturn arch_cpu_idle_dead(void)
- {
- 	idle_task_exit();
+diff --git a/arch/mips/include/asm/mach-loongson32/regs-pwm.h b/arch/mips/inc=
+lude/asm/mach-loongson32/regs-pwm.h
+deleted file mode 100644
+index ec870c82d492..000000000000
+--- a/arch/mips/include/asm/mach-loongson32/regs-pwm.h
++++ /dev/null
+@@ -1,25 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-or-later */
+-/*
+- * Copyright (c) 2014 Zhang, Keguang <keguang.zhang@gmail.com>
+- *
+- * Loongson 1 PWM Register Definitions.
+- */
+-
+-#ifndef __ASM_MACH_LOONGSON32_REGS_PWM_H
+-#define __ASM_MACH_LOONGSON32_REGS_PWM_H
+-
+-/* Loongson 1 PWM Timer Register Definitions */
+-#define PWM_CNT			0x0
+-#define PWM_HRC			0x4
+-#define PWM_LRC			0x8
+-#define PWM_CTRL		0xc
+-
+-/* PWM Control Register Bits */
+-#define CNT_RST			BIT(7)
+-#define INT_SR			BIT(6)
+-#define INT_EN			BIT(5)
+-#define PWM_SINGLE		BIT(4)
+-#define PWM_OE			BIT(3)
+-#define CNT_EN			BIT(0)
+-
+-#endif /* __ASM_MACH_LOONGSON32_REGS_PWM_H */
+diff --git a/arch/mips/loongson32/Kconfig b/arch/mips/loongson32/Kconfig
+index 2ef9da0016df..a7c500959577 100644
+--- a/arch/mips/loongson32/Kconfig
++++ b/arch/mips/loongson32/Kconfig
+@@ -35,41 +35,4 @@ config LOONGSON1_LS1C
+ 	select COMMON_CLK
+ endchoice
 =20
--	(void)cpu_report_death();
-+	cpuhp_ap_report_dead();
-=20
- 	cpu_ops[smp_processor_id()]->cpu_stop();
- 	/* It should never reach here */
- 	BUG();
- }
-+#endif
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 53bab123a8ee..953823fdf57b 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -274,7 +274,9 @@ config X86
- 	select HAVE_UNSTABLE_SCHED_CLOCK
- 	select HAVE_USER_RETURN_NOTIFIER
- 	select HAVE_GENERIC_VDSO
-+	select HOTPLUG_PARALLEL			if SMP && X86_64
- 	select HOTPLUG_SMT			if SMP
-+	select HOTPLUG_SPLIT_STARTUP		if SMP && X86_32
- 	select IRQ_FORCED_THREADING
- 	select NEED_PER_CPU_EMBED_FIRST_CHUNK
- 	select NEED_PER_CPU_PAGE_FIRST_CHUNK
-@@ -2305,49 +2307,6 @@ config HOTPLUG_CPU
- 	def_bool y
- 	depends on SMP
-=20
--config BOOTPARAM_HOTPLUG_CPU0
--	bool "Set default setting of cpu0_hotpluggable"
--	depends on HOTPLUG_CPU
+-menuconfig CEVT_CSRC_LS1X
+-	bool "Use PWM Timer for clockevent/clocksource"
+-	select MIPS_EXTERNAL_TIMER
+-	depends on CPU_LOONGSON32
 -	help
--	  Set whether default state of cpu0_hotpluggable is on or off.
--
--	  Say Y here to enable CPU0 hotplug by default. If this switch
--	  is turned on, there is no need to give cpu0_hotplug kernel
--	  parameter and the CPU0 hotplug feature is enabled by default.
--
--	  Please note: there are two known CPU0 dependencies if you want
--	  to enable the CPU0 hotplug feature either by this switch or by
--	  cpu0_hotplug kernel parameter.
--
--	  First, resume from hibernate or suspend always starts from CPU0.
--	  So hibernate and suspend are prevented if CPU0 is offline.
--
--	  Second dependency is PIC interrupts always go to CPU0. CPU0 can not
--	  offline if any interrupt can not migrate out of CPU0. There may
--	  be other CPU0 dependencies.
--
--	  Please make sure the dependencies are under your control before
--	  you enable this feature.
--
--	  Say N if you don't want to enable CPU0 hotplug feature by default.
--	  You still can enable the CPU0 hotplug feature at boot by kernel
--	  parameter cpu0_hotplug.
--
--config DEBUG_HOTPLUG_CPU0
--	def_bool n
--	prompt "Debug CPU0 hotplug"
--	depends on HOTPLUG_CPU
--	help
--	  Enabling this option offlines CPU0 (if CPU0 can be offlined) as
--	  soon as possible and boots up userspace with CPU0 offlined. User
--	  can online CPU0 back after boot time.
--
--	  To debug CPU0 hotplug, you need to enable CPU0 offline/online
--	  feature by either turning on CONFIG_BOOTPARAM_HOTPLUG_CPU0 during
--	  compilation or giving cpu0_hotplug kernel parameter at boot.
+-	  This option changes the default clockevent/clocksource to PWM Timer,
+-	  and is required by Loongson1 CPUFreq support.
 -
 -	  If unsure, say N.
 -
- config COMPAT_VDSO
- 	def_bool n
- 	prompt "Disable the 32-bit vDSO (needed for glibc 2.3.3)"
-diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
-index e146b599260f..27ce10c9ff61 100644
---- a/arch/x86/coco/tdx/tdx.c
-+++ b/arch/x86/coco/tdx/tdx.c
-@@ -871,5 +871,16 @@ void __init tdx_early_init(void)
- 	x86_platform.guest.enc_tlb_flush_required   =3D tdx_tlb_flush_required;
- 	x86_platform.guest.enc_status_change_finish =3D tdx_enc_status_changed;
-=20
-+	/*
-+	 * TDX intercepts the RDMSR to read the X2APIC ID in the parallel
-+	 * bringup low level code. That raises #VE which cannot be handled
-+	 * there.
-+	 *
-+	 * Intel-TDX has a secure RDMSR hypercall, but that needs to be
-+	 * implemented seperately in the low level startup ASM code.
-+	 * Until that is in place, disable parallel bringup for TDX.
-+	 */
-+	x86_cpuinit.parallel_bringup =3D false;
-+
- 	pr_info("Guest detected\n");
- }
-diff --git a/arch/x86/include/asm/apic.h b/arch/x86/include/asm/apic.h
-index 3216da7074ba..98c32aa5963a 100644
---- a/arch/x86/include/asm/apic.h
-+++ b/arch/x86/include/asm/apic.h
-@@ -55,6 +55,8 @@ extern int local_apic_timer_c2_ok;
- extern int disable_apic;
- extern unsigned int lapic_timer_period;
-=20
-+extern int cpuid_to_apicid[];
-+
- extern enum apic_intr_mode_id apic_intr_mode;
- enum apic_intr_mode_id {
- 	APIC_PIC,
-@@ -377,7 +379,6 @@ extern struct apic *__apicdrivers[], *__apicdrivers_end[];
-  * APIC functionality to boot other CPUs - only used on SMP:
-  */
- #ifdef CONFIG_SMP
--extern int wakeup_secondary_cpu_via_nmi(int apicid, unsigned long start_eip);
- extern int lapic_can_unplug_cpu(void);
- #endif
-=20
-@@ -507,10 +508,8 @@ extern int default_check_phys_apicid_present(int phys_ap=
-icid);
- #endif /* CONFIG_X86_LOCAL_APIC */
-=20
- #ifdef CONFIG_SMP
--bool apic_id_is_primary_thread(unsigned int id);
- void apic_smt_update(void);
- #else
--static inline bool apic_id_is_primary_thread(unsigned int id) { return false=
-; }
- static inline void apic_smt_update(void) { }
- #endif
-=20
-diff --git a/arch/x86/include/asm/apicdef.h b/arch/x86/include/asm/apicdef.h
-index 68d213e83fcc..4b125e5b3187 100644
---- a/arch/x86/include/asm/apicdef.h
-+++ b/arch/x86/include/asm/apicdef.h
-@@ -2,6 +2,8 @@
- #ifndef _ASM_X86_APICDEF_H
- #define _ASM_X86_APICDEF_H
-=20
-+#include <linux/bits.h>
-+
- /*
-  * Constants for various Intel APICs. (local APIC, IOAPIC, etc.)
-  *
-@@ -138,9 +140,10 @@
- #define		APIC_EILVT_MASKED	(1 << 16)
-=20
- #define APIC_BASE (fix_to_virt(FIX_APIC_BASE))
--#define APIC_BASE_MSR	0x800
--#define XAPIC_ENABLE	(1UL << 11)
--#define X2APIC_ENABLE	(1UL << 10)
-+#define APIC_BASE_MSR		0x800
-+#define APIC_X2APIC_ID_MSR	0x802
-+#define XAPIC_ENABLE		BIT(11)
-+#define X2APIC_ENABLE		BIT(10)
-=20
- #ifdef CONFIG_X86_32
- # define MAX_IO_APICS 64
-@@ -162,6 +165,7 @@
- #define APIC_CPUID(apicid)	((apicid) & XAPIC_DEST_CPUS_MASK)
- #define NUM_APIC_CLUSTERS	((BAD_APICID + 1) >> XAPIC_DEST_CPUS_SHIFT)
-=20
-+#ifndef __ASSEMBLY__
- /*
-  * the local APIC register structure, memory mapped. Not terribly well
-  * tested, but we might eventually use this one in the future - the
-@@ -435,4 +439,5 @@ enum apic_delivery_modes {
- 	APIC_DELIVERY_MODE_EXTINT	=3D 7,
- };
-=20
-+#endif /* !__ASSEMBLY__ */
- #endif /* _ASM_X86_APICDEF_H */
-diff --git a/arch/x86/include/asm/cpu.h b/arch/x86/include/asm/cpu.h
-index 78796b98a544..c854376e1cb9 100644
---- a/arch/x86/include/asm/cpu.h
-+++ b/arch/x86/include/asm/cpu.h
-@@ -30,10 +30,7 @@ struct x86_cpu {
- #ifdef CONFIG_HOTPLUG_CPU
- extern int arch_register_cpu(int num);
- extern void arch_unregister_cpu(int);
--extern void start_cpu0(void);
--#ifdef CONFIG_DEBUG_HOTPLUG_CPU0
--extern int _debug_hotplug_cpu(int cpu, int action);
--#endif
-+extern void soft_restart_cpu(void);
- #endif
-=20
- extern void ap_init_aperfmperf(void);
-diff --git a/arch/x86/include/asm/cpumask.h b/arch/x86/include/asm/cpumask.h
-index c5aed9e9226c..4acfd57de8f1 100644
---- a/arch/x86/include/asm/cpumask.h
-+++ b/arch/x86/include/asm/cpumask.h
-@@ -4,11 +4,6 @@
- #ifndef __ASSEMBLY__
- #include <linux/cpumask.h>
-=20
--extern cpumask_var_t cpu_callin_mask;
--extern cpumask_var_t cpu_callout_mask;
--extern cpumask_var_t cpu_initialized_mask;
--extern cpumask_var_t cpu_sibling_setup_mask;
+-choice
+-	prompt "Select clockevent/clocksource"
+-	depends on CEVT_CSRC_LS1X
+-	default TIMER_USE_PWM0
 -
- extern void setup_cpu_local_masks(void);
-=20
- /*
-diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processo=
-r.h
-index a1e4fa58b357..d46300e94f85 100644
---- a/arch/x86/include/asm/processor.h
-+++ b/arch/x86/include/asm/processor.h
-@@ -551,7 +551,6 @@ extern void switch_gdt_and_percpu_base(int);
- extern void load_direct_gdt(int);
- extern void load_fixmap_gdt(int);
- extern void cpu_init(void);
--extern void cpu_init_secondary(void);
- extern void cpu_init_exception_handling(void);
- extern void cr4_init(void);
-=20
-diff --git a/arch/x86/include/asm/realmode.h b/arch/x86/include/asm/realmode.h
-index f6a1737c77be..87e5482acd0d 100644
---- a/arch/x86/include/asm/realmode.h
-+++ b/arch/x86/include/asm/realmode.h
-@@ -52,6 +52,7 @@ struct trampoline_header {
- 	u64 efer;
- 	u32 cr4;
- 	u32 flags;
-+	u32 lock;
- #endif
- };
-=20
-@@ -64,6 +65,8 @@ extern unsigned long initial_stack;
- extern unsigned long initial_vc_handler;
- #endif
-=20
-+extern u32 *trampoline_lock;
-+
- extern unsigned char real_mode_blob[];
- extern unsigned char real_mode_relocs[];
-=20
-diff --git a/arch/x86/include/asm/smp.h b/arch/x86/include/asm/smp.h
-index 4e91054c84be..42060775a3d0 100644
---- a/arch/x86/include/asm/smp.h
-+++ b/arch/x86/include/asm/smp.h
-@@ -38,7 +38,9 @@ struct smp_ops {
- 	void (*crash_stop_other_cpus)(void);
- 	void (*smp_send_reschedule)(int cpu);
-=20
--	int (*cpu_up)(unsigned cpu, struct task_struct *tidle);
-+	void (*cleanup_dead_cpu)(unsigned cpu);
-+	void (*poll_sync_state)(void);
-+	int (*kick_ap_alive)(unsigned cpu, struct task_struct *tidle);
- 	int (*cpu_disable)(void);
- 	void (*cpu_die)(unsigned int cpu);
- 	void (*play_dead)(void);
-@@ -78,11 +80,6 @@ static inline void smp_cpus_done(unsigned int max_cpus)
- 	smp_ops.smp_cpus_done(max_cpus);
- }
-=20
--static inline int __cpu_up(unsigned int cpu, struct task_struct *tidle)
--{
--	return smp_ops.cpu_up(cpu, tidle);
--}
+-config TIMER_USE_PWM0
+-	bool "Use PWM Timer 0"
+-	help
+-	  Use PWM Timer 0 as the default clockevent/clocksourcer.
 -
- static inline int __cpu_disable(void)
- {
- 	return smp_ops.cpu_disable();
-@@ -90,7 +87,8 @@ static inline int __cpu_disable(void)
+-config TIMER_USE_PWM1
+-	bool "Use PWM Timer 1"
+-	help
+-	  Use PWM Timer 1 as the default clockevent/clocksourcer.
+-
+-config TIMER_USE_PWM2
+-	bool "Use PWM Timer 2"
+-	help
+-	  Use PWM Timer 2 as the default clockevent/clocksourcer.
+-
+-config TIMER_USE_PWM3
+-	bool "Use PWM Timer 3"
+-	help
+-	  Use PWM Timer 3 as the default clockevent/clocksourcer.
+-
+-endchoice
+-
+ endif # MACH_LOONGSON32
+diff --git a/arch/mips/loongson32/common/time.c b/arch/mips/loongson32/common=
+/time.c
+index 965c04aa56fd..74ad2b17918d 100644
+--- a/arch/mips/loongson32/common/time.c
++++ b/arch/mips/loongson32/common/time.c
+@@ -5,208 +5,8 @@
 =20
- static inline void __cpu_die(unsigned int cpu)
- {
--	smp_ops.cpu_die(cpu);
-+	if (smp_ops.cpu_die)
-+		smp_ops.cpu_die(cpu);
- }
+ #include <linux/clk.h>
+ #include <linux/of_clk.h>
+-#include <linux/interrupt.h>
+-#include <linux/sizes.h>
+ #include <asm/time.h>
 =20
- static inline void __noreturn play_dead(void)
-@@ -121,16 +119,13 @@ void native_smp_prepare_cpus(unsigned int max_cpus);
- void calculate_max_logical_packages(void);
- void native_smp_cpus_done(unsigned int max_cpus);
- int common_cpu_up(unsigned int cpunum, struct task_struct *tidle);
--int native_cpu_up(unsigned int cpunum, struct task_struct *tidle);
-+int native_kick_ap(unsigned int cpu, struct task_struct *tidle);
- int native_cpu_disable(void);
--int common_cpu_die(unsigned int cpu);
--void native_cpu_die(unsigned int cpu);
- void __noreturn hlt_play_dead(void);
- void native_play_dead(void);
- void play_dead_common(void);
- void wbinvd_on_cpu(int cpu);
- int wbinvd_on_all_cpus(void);
--void cond_wakeup_cpu0(void);
-=20
- void native_smp_send_reschedule(int cpu);
- void native_send_call_func_ipi(const struct cpumask *mask);
-@@ -201,7 +196,14 @@ extern void nmi_selftest(void);
- #endif
-=20
- extern unsigned int smpboot_control;
-+extern unsigned long apic_mmio_base;
-=20
- #endif /* !__ASSEMBLY__ */
-=20
-+/* Control bits for startup_64 */
-+#define STARTUP_READ_APICID	0x80000000
-+
-+/* Top 8 bits are reserved for control */
-+#define STARTUP_PARALLEL_MASK	0xFF000000
-+
- #endif /* _ASM_X86_SMP_H */
-diff --git a/arch/x86/include/asm/topology.h b/arch/x86/include/asm/topology.h
-index 458c891a8273..caf41c4869a0 100644
---- a/arch/x86/include/asm/topology.h
-+++ b/arch/x86/include/asm/topology.h
-@@ -31,9 +31,9 @@
-  * CONFIG_NUMA.
-  */
- #include <linux/numa.h>
-+#include <linux/cpumask.h>
-=20
- #ifdef CONFIG_NUMA
--#include <linux/cpumask.h>
-=20
- #include <asm/mpspec.h>
- #include <asm/percpu.h>
-@@ -139,23 +139,31 @@ static inline int topology_max_smt_threads(void)
- int topology_update_package_map(unsigned int apicid, unsigned int cpu);
- int topology_update_die_map(unsigned int dieid, unsigned int cpu);
- int topology_phys_to_logical_pkg(unsigned int pkg);
--int topology_phys_to_logical_die(unsigned int die, unsigned int cpu);
--bool topology_is_primary_thread(unsigned int cpu);
- bool topology_smt_supported(void);
+-#include <loongson1.h>
+-#include <platform.h>
+-
+-#ifdef CONFIG_CEVT_CSRC_LS1X
+-
+-#if defined(CONFIG_TIMER_USE_PWM1)
+-#define LS1X_TIMER_BASE	LS1X_PWM1_BASE
+-#define LS1X_TIMER_IRQ	LS1X_PWM1_IRQ
+-
+-#elif defined(CONFIG_TIMER_USE_PWM2)
+-#define LS1X_TIMER_BASE	LS1X_PWM2_BASE
+-#define LS1X_TIMER_IRQ	LS1X_PWM2_IRQ
+-
+-#elif defined(CONFIG_TIMER_USE_PWM3)
+-#define LS1X_TIMER_BASE	LS1X_PWM3_BASE
+-#define LS1X_TIMER_IRQ	LS1X_PWM3_IRQ
+-
 -#else
-+
-+extern struct cpumask __cpu_primary_thread_mask;
-+#define cpu_primary_thread_mask ((const struct cpumask *)&__cpu_primary_thre=
-ad_mask)
-+
-+/**
-+ * topology_is_primary_thread - Check whether CPU is the primary SMT thread
-+ * @cpu:	CPU to check
-+ */
-+static inline bool topology_is_primary_thread(unsigned int cpu)
-+{
-+	return cpumask_test_cpu(cpu, cpu_primary_thread_mask);
-+}
-+#else /* CONFIG_SMP */
- #define topology_max_packages()			(1)
- static inline int
- topology_update_package_map(unsigned int apicid, unsigned int cpu) { return =
-0; }
- static inline int
- topology_update_die_map(unsigned int dieid, unsigned int cpu) { return 0; }
- static inline int topology_phys_to_logical_pkg(unsigned int pkg) { return 0;=
- }
--static inline int topology_phys_to_logical_die(unsigned int die,
--		unsigned int cpu) { return 0; }
- static inline int topology_max_die_per_package(void) { return 1; }
- static inline int topology_max_smt_threads(void) { return 1; }
- static inline bool topology_is_primary_thread(unsigned int cpu) { return tru=
-e; }
- static inline bool topology_smt_supported(void) { return false; }
--#endif
-+#endif /* !CONFIG_SMP */
-=20
- static inline void arch_fix_phys_package_id(int num, u32 slot)
- {
-diff --git a/arch/x86/include/asm/tsc.h b/arch/x86/include/asm/tsc.h
-index fbdc3d951494..dc1b03be43eb 100644
---- a/arch/x86/include/asm/tsc.h
-+++ b/arch/x86/include/asm/tsc.h
-@@ -55,12 +55,10 @@ extern bool tsc_async_resets;
- #ifdef CONFIG_X86_TSC
- extern bool tsc_store_and_check_tsc_adjust(bool bootcpu);
- extern void tsc_verify_tsc_adjust(bool resume);
--extern void check_tsc_sync_source(int cpu);
- extern void check_tsc_sync_target(void);
- #else
- static inline bool tsc_store_and_check_tsc_adjust(bool bootcpu) { return fal=
-se; }
- static inline void tsc_verify_tsc_adjust(bool resume) { }
--static inline void check_tsc_sync_source(int cpu) { }
- static inline void check_tsc_sync_target(void) { }
- #endif
-=20
-diff --git a/arch/x86/include/asm/x86_init.h b/arch/x86/include/asm/x86_init.h
-index 88085f369ff6..0bf4d735ff00 100644
---- a/arch/x86/include/asm/x86_init.h
-+++ b/arch/x86/include/asm/x86_init.h
-@@ -177,11 +177,14 @@ struct x86_init_ops {
-  * struct x86_cpuinit_ops - platform specific cpu hotplug setups
-  * @setup_percpu_clockev:	set up the per cpu clock event device
-  * @early_percpu_clock_init:	early init of the per cpu clock event device
-+ * @fixup_cpu_id:		fixup function for cpuinfo_x86::phys_proc_id
-+ * @parallel_bringup:		Parallel bringup control
-  */
- struct x86_cpuinit_ops {
- 	void (*setup_percpu_clockev)(void);
- 	void (*early_percpu_clock_init)(void);
- 	void (*fixup_cpu_id)(struct cpuinfo_x86 *c, int node);
-+	bool parallel_bringup;
- };
-=20
- struct timespec64;
-diff --git a/arch/x86/kernel/acpi/sleep.c b/arch/x86/kernel/acpi/sleep.c
-index 1328c221af30..6dfecb27b846 100644
---- a/arch/x86/kernel/acpi/sleep.c
-+++ b/arch/x86/kernel/acpi/sleep.c
-@@ -16,6 +16,7 @@
- #include <asm/cacheflush.h>
- #include <asm/realmode.h>
- #include <asm/hypervisor.h>
-+#include <asm/smp.h>
-=20
- #include <linux/ftrace.h>
- #include "../../realmode/rm/wakeup.h"
-@@ -127,7 +128,13 @@ int x86_acpi_suspend_lowlevel(void)
- 	 * value is in the actual %rsp register.
- 	 */
- 	current->thread.sp =3D (unsigned long)temp_stack + sizeof(temp_stack);
--	smpboot_control =3D smp_processor_id();
-+	/*
-+	 * Ensure the CPU knows which one it is when it comes back, if
-+	 * it isn't in parallel mode and expected to work that out for
-+	 * itself.
-+	 */
-+	if (!(smpboot_control & STARTUP_PARALLEL_MASK))
-+		smpboot_control =3D smp_processor_id();
- #endif
- 	initial_code =3D (unsigned long)wakeup_long64;
- 	saved_magic =3D 0x123456789abcdef0L;
-diff --git a/arch/x86/kernel/apic/apic.c b/arch/x86/kernel/apic/apic.c
-index 770557110051..af49e24b46a4 100644
---- a/arch/x86/kernel/apic/apic.c
-+++ b/arch/x86/kernel/apic/apic.c
-@@ -101,6 +101,9 @@ static int apic_extnmi __ro_after_init =3D APIC_EXTNMI_BS=
-P;
-  */
- static bool virt_ext_dest_id __ro_after_init;
-=20
-+/* For parallel bootup. */
-+unsigned long apic_mmio_base __ro_after_init;
-+
- /*
-  * Map cpu index to physical APIC ID
-  */
-@@ -2163,6 +2166,7 @@ void __init register_lapic_address(unsigned long addres=
-s)
-=20
- 	if (!x2apic_mode) {
- 		set_fixmap_nocache(FIX_APIC_BASE, address);
-+		apic_mmio_base =3D APIC_BASE;
- 		apic_printk(APIC_VERBOSE, "mapped APIC to %16lx (%16lx)\n",
- 			    APIC_BASE, address);
- 	}
-@@ -2376,7 +2380,7 @@ static int nr_logical_cpuids =3D 1;
- /*
-  * Used to store mapping between logical CPU IDs and APIC IDs.
-  */
--static int cpuid_to_apicid[] =3D {
-+int cpuid_to_apicid[] =3D {
- 	[0 ... NR_CPUS - 1] =3D -1,
- };
-=20
-@@ -2386,20 +2390,31 @@ bool arch_match_cpu_phys_id(int cpu, u64 phys_id)
- }
-=20
- #ifdef CONFIG_SMP
--/**
-- * apic_id_is_primary_thread - Check whether APIC ID belongs to a primary th=
-read
-- * @apicid: APIC ID to check
-+static void cpu_mark_primary_thread(unsigned int cpu, unsigned int apicid)
-+{
-+	/* Isolate the SMT bit(s) in the APICID and check for 0 */
-+	u32 mask =3D (1U << (fls(smp_num_siblings) - 1)) - 1;
-+
-+	if (smp_num_siblings =3D=3D 1 || !(apicid & mask))
-+		cpumask_set_cpu(cpu, &__cpu_primary_thread_mask);
-+}
-+
-+/*
-+ * Due to the utter mess of CPUID evaluation smp_num_siblings is not valid
-+ * during early boot. Initialize the primary thread mask before SMP
-+ * bringup.
-  */
--bool apic_id_is_primary_thread(unsigned int apicid)
-+static int __init smp_init_primary_thread_mask(void)
- {
--	u32 mask;
-+	unsigned int cpu;
-=20
--	if (smp_num_siblings =3D=3D 1)
--		return true;
--	/* Isolate the SMT bit(s) in the APICID and check for 0 */
--	mask =3D (1U << (fls(smp_num_siblings) - 1)) - 1;
--	return !(apicid & mask);
-+	for (cpu =3D 0; cpu < nr_logical_cpuids; cpu++)
-+		cpu_mark_primary_thread(cpu, cpuid_to_apicid[cpu]);
-+	return 0;
- }
-+early_initcall(smp_init_primary_thread_mask);
-+#else
-+static inline void cpu_mark_primary_thread(unsigned int cpu, unsigned int ap=
-icid) { }
- #endif
-=20
- /*
-@@ -2544,6 +2559,9 @@ int generic_processor_info(int apicid, int version)
- 	set_cpu_present(cpu, true);
- 	num_processors++;
-=20
-+	if (system_state !=3D SYSTEM_BOOTING)
-+		cpu_mark_primary_thread(cpu, apicid);
-+
- 	return cpu;
- }
-=20
-diff --git a/arch/x86/kernel/callthunks.c b/arch/x86/kernel/callthunks.c
-index 22ab13966427..8bb937331acb 100644
---- a/arch/x86/kernel/callthunks.c
-+++ b/arch/x86/kernel/callthunks.c
-@@ -133,8 +133,8 @@ static bool skip_addr(void *dest)
- 	/* Accounts directly */
- 	if (dest =3D=3D ret_from_fork)
- 		return true;
--#ifdef CONFIG_HOTPLUG_CPU
--	if (dest =3D=3D start_cpu0)
-+#if defined(CONFIG_HOTPLUG_CPU) && defined(CONFIG_AMD_MEM_ENCRYPT)
-+	if (dest =3D=3D soft_restart_cpu)
- 		return true;
- #endif
- #ifdef CONFIG_FUNCTION_TRACER
-diff --git a/arch/x86/kernel/cpu/cacheinfo.c b/arch/x86/kernel/cpu/cacheinfo.c
-index 4063e8991211..8f86eacf69f7 100644
---- a/arch/x86/kernel/cpu/cacheinfo.c
-+++ b/arch/x86/kernel/cpu/cacheinfo.c
-@@ -39,6 +39,8 @@ DEFINE_PER_CPU_READ_MOSTLY(cpumask_var_t, cpu_llc_shared_ma=
-p);
- /* Shared L2 cache maps */
- DEFINE_PER_CPU_READ_MOSTLY(cpumask_var_t, cpu_l2c_shared_map);
-=20
-+static cpumask_var_t cpu_cacheinfo_mask;
-+
- /* Kernel controls MTRR and/or PAT MSRs. */
- unsigned int memory_caching_control __ro_after_init;
-=20
-@@ -1172,8 +1174,10 @@ void cache_bp_restore(void)
- 		cache_cpu_init();
- }
-=20
--static int cache_ap_init(unsigned int cpu)
-+static int cache_ap_online(unsigned int cpu)
- {
-+	cpumask_set_cpu(cpu, cpu_cacheinfo_mask);
-+
- 	if (!memory_caching_control || get_cache_aps_delayed_init())
- 		return 0;
-=20
-@@ -1191,11 +1195,17 @@ static int cache_ap_init(unsigned int cpu)
- 	 *      lock to prevent MTRR entry changes
- 	 */
- 	stop_machine_from_inactive_cpu(cache_rendezvous_handler, NULL,
--				       cpu_callout_mask);
-+				       cpu_cacheinfo_mask);
-=20
- 	return 0;
- }
-=20
-+static int cache_ap_offline(unsigned int cpu)
-+{
-+	cpumask_clear_cpu(cpu, cpu_cacheinfo_mask);
-+	return 0;
-+}
-+
- /*
-  * Delayed cache initialization for all AP's
-  */
-@@ -1210,9 +1220,12 @@ void cache_aps_init(void)
-=20
- static int __init cache_ap_register(void)
- {
-+	zalloc_cpumask_var(&cpu_cacheinfo_mask, GFP_KERNEL);
-+	cpumask_set_cpu(smp_processor_id(), cpu_cacheinfo_mask);
-+
- 	cpuhp_setup_state_nocalls(CPUHP_AP_CACHECTRL_STARTING,
- 				  "x86/cachectrl:starting",
--				  cache_ap_init, NULL);
-+				  cache_ap_online, cache_ap_offline);
- 	return 0;
- }
--core_initcall(cache_ap_register);
-+early_initcall(cache_ap_register);
-diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-index 80710a68ef7d..7cc44ebead5a 100644
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -67,14 +67,6 @@
-=20
- u32 elf_hwcap2 __read_mostly;
-=20
--/* all of these masks are initialized in setup_cpu_local_masks() */
--cpumask_var_t cpu_initialized_mask;
--cpumask_var_t cpu_callout_mask;
--cpumask_var_t cpu_callin_mask;
--
--/* representing cpus for which sibling maps can be computed */
--cpumask_var_t cpu_sibling_setup_mask;
--
- /* Number of siblings per CPU package */
- int smp_num_siblings =3D 1;
- EXPORT_SYMBOL(smp_num_siblings);
-@@ -169,15 +161,6 @@ static void ppin_init(struct cpuinfo_x86 *c)
- 	clear_cpu_cap(c, info->feature);
- }
-=20
--/* correctly size the local cpu masks */
--void __init setup_cpu_local_masks(void)
--{
--	alloc_bootmem_cpumask_var(&cpu_initialized_mask);
--	alloc_bootmem_cpumask_var(&cpu_callin_mask);
--	alloc_bootmem_cpumask_var(&cpu_callout_mask);
--	alloc_bootmem_cpumask_var(&cpu_sibling_setup_mask);
--}
--
- static void default_init(struct cpuinfo_x86 *c)
- {
- #ifdef CONFIG_X86_64
-@@ -2123,19 +2106,6 @@ static void dbg_restore_debug_regs(void)
- #define dbg_restore_debug_regs()
- #endif /* ! CONFIG_KGDB */
-=20
--static void wait_for_master_cpu(int cpu)
--{
--#ifdef CONFIG_SMP
--	/*
--	 * wait for ACK from master CPU before continuing
--	 * with AP initialization
--	 */
--	WARN_ON(cpumask_test_and_set_cpu(cpu, cpu_initialized_mask));
--	while (!cpumask_test_cpu(cpu, cpu_callout_mask))
--		cpu_relax();
--#endif
--}
--
- static inline void setup_getcpu(int cpu)
- {
- 	unsigned long cpudata =3D vdso_encode_cpunode(cpu, early_cpu_to_node(cpu));
-@@ -2158,11 +2128,7 @@ static inline void setup_getcpu(int cpu)
- }
-=20
- #ifdef CONFIG_X86_64
--static inline void ucode_cpu_init(int cpu)
--{
--	if (cpu)
--		load_ucode_ap();
--}
-+static inline void ucode_cpu_init(int cpu) { }
-=20
- static inline void tss_setup_ist(struct tss_struct *tss)
- {
-@@ -2239,8 +2205,6 @@ void cpu_init(void)
- 	struct task_struct *cur =3D current;
- 	int cpu =3D raw_smp_processor_id();
-=20
--	wait_for_master_cpu(cpu);
--
- 	ucode_cpu_init(cpu);
-=20
- #ifdef CONFIG_NUMA
-@@ -2293,18 +2257,6 @@ void cpu_init(void)
- 	load_fixmap_gdt(cpu);
- }
-=20
--#ifdef CONFIG_SMP
--void cpu_init_secondary(void)
--{
--	/*
--	 * Relies on the BP having set-up the IDT tables, which are loaded
--	 * on this CPU in cpu_init_exception_handling().
--	 */
--	cpu_init_exception_handling();
--	cpu_init();
--}
+-#define LS1X_TIMER_BASE	LS1X_PWM0_BASE
+-#define LS1X_TIMER_IRQ	LS1X_PWM0_IRQ
 -#endif
 -
- #ifdef CONFIG_MICROCODE_LATE_LOADING
- /**
-  * store_cpu_caps() - Store a snapshot of CPU capabilities
-diff --git a/arch/x86/kernel/head_32.S b/arch/x86/kernel/head_32.S
-index 67c8ed99144b..c9318993f959 100644
---- a/arch/x86/kernel/head_32.S
-+++ b/arch/x86/kernel/head_32.S
-@@ -138,20 +138,6 @@ SYM_CODE_START(startup_32)
- 	jmp .Ldefault_entry
- SYM_CODE_END(startup_32)
-=20
--#ifdef CONFIG_HOTPLUG_CPU
--/*
-- * Boot CPU0 entry point. It's called from play_dead(). Everything has been =
-set
-- * up already except stack. We just set up stack here. Then call
-- * start_secondary().
-- */
--SYM_FUNC_START(start_cpu0)
--	movl initial_stack, %ecx
--	movl %ecx, %esp
--	call *(initial_code)
--1:	jmp 1b
--SYM_FUNC_END(start_cpu0)
--#endif
+-DEFINE_RAW_SPINLOCK(ls1x_timer_lock);
 -
- /*
-  * Non-boot CPU entry point; entered from trampoline.S
-  * We can't lgdt here, because lgdt itself uses a data segment, but
-diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
-index a5df3e994f04..9cd77d319555 100644
---- a/arch/x86/kernel/head_64.S
-+++ b/arch/x86/kernel/head_64.S
-@@ -24,7 +24,9 @@
- #include "../entry/calling.h"
- #include <asm/export.h>
- #include <asm/nospec-branch.h>
-+#include <asm/apicdef.h>
- #include <asm/fixmap.h>
-+#include <asm/smp.h>
-=20
- /*
-  * We are not able to switch in one step to the final KERNEL ADDRESS SPACE
-@@ -234,8 +236,67 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GL=
-OBAL)
- 	ANNOTATE_NOENDBR // above
-=20
- #ifdef CONFIG_SMP
-+	/*
-+	 * For parallel boot, the APIC ID is read from the APIC, and then
-+	 * used to look up the CPU number.  For booting a single CPU, the
-+	 * CPU number is encoded in smpboot_control.
-+	 *
-+	 * Bit 31	STARTUP_READ_APICID (Read APICID from APIC)
-+	 * Bit 0-23	CPU# if STARTUP_xx flags are not set
-+	 */
- 	movl	smpboot_control(%rip), %ecx
-+	testl	$STARTUP_READ_APICID, %ecx
-+	jnz	.Lread_apicid
-+	/*
-+	 * No control bit set, single CPU bringup. CPU number is provided
-+	 * in bit 0-23. This is also the boot CPU case (CPU number 0).
-+	 */
-+	andl	$(~STARTUP_PARALLEL_MASK), %ecx
-+	jmp	.Lsetup_cpu
-=20
-+.Lread_apicid:
-+	/* Check whether X2APIC mode is already enabled */
-+	mov	$MSR_IA32_APICBASE, %ecx
-+	rdmsr
-+	testl	$X2APIC_ENABLE, %eax
-+	jnz	.Lread_apicid_msr
-+
-+	/* Read the APIC ID from the fix-mapped MMIO space. */
-+	movq	apic_mmio_base(%rip), %rcx
-+	addq	$APIC_ID, %rcx
-+	movl	(%rcx), %eax
-+	shr	$24, %eax
-+	jmp	.Llookup_AP
-+
-+.Lread_apicid_msr:
-+	mov	$APIC_X2APIC_ID_MSR, %ecx
-+	rdmsr
-+
-+.Llookup_AP:
-+	/* EAX contains the APIC ID of the current CPU */
-+	xorq	%rcx, %rcx
-+	leaq	cpuid_to_apicid(%rip), %rbx
-+
-+.Lfind_cpunr:
-+	cmpl	(%rbx,%rcx,4), %eax
-+	jz	.Lsetup_cpu
-+	inc	%ecx
-+#ifdef CONFIG_FORCE_NR_CPUS
-+	cmpl	$NR_CPUS, %ecx
-+#else
-+	cmpl	nr_cpu_ids(%rip), %ecx
-+#endif
-+	jb	.Lfind_cpunr
-+
-+	/*  APIC ID not found in the table. Drop the trampoline lock and bail. */
-+	movq	trampoline_lock(%rip), %rax
-+	movl	$0, (%rax)
-+
-+1:	cli
-+	hlt
-+	jmp	1b
-+
-+.Lsetup_cpu:
- 	/* Get the per cpu offset for the given CPU# which is in ECX */
- 	movq	__per_cpu_offset(,%rcx,8), %rdx
- #else
-@@ -251,6 +312,16 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GL=
-OBAL)
- 	movq	pcpu_hot + X86_current_task(%rdx), %rax
- 	movq	TASK_threadsp(%rax), %rsp
-=20
-+	/*
-+	 * Now that this CPU is running on its own stack, drop the realmode
-+	 * protection. For the boot CPU the pointer is NULL!
-+	 */
-+	movq	trampoline_lock(%rip), %rax
-+	testq	%rax, %rax
-+	jz	.Lsetup_gdt
-+	movl	$0, (%rax)
-+
-+.Lsetup_gdt:
- 	/*
- 	 * We must switch to a new descriptor in kernel space for the GDT
- 	 * because soon the kernel won't have access anymore to the userspace
-@@ -375,13 +446,13 @@ SYM_CODE_END(secondary_startup_64)
- #include "verify_cpu.S"
- #include "sev_verify_cbit.S"
-=20
--#ifdef CONFIG_HOTPLUG_CPU
-+#if defined(CONFIG_HOTPLUG_CPU) && defined(CONFIG_AMD_MEM_ENCRYPT)
- /*
-- * Boot CPU0 entry point. It's called from play_dead(). Everything has been =
-set
-- * up already except stack. We just set up stack here. Then call
-- * start_secondary() via .Ljump_to_C_code.
-+ * Entry point for soft restart of a CPU. Invoked from xxx_play_dead() for
-+ * restarting the boot CPU or for restarting SEV guest CPUs after CPU hot
-+ * unplug. Everything is set up already except the stack.
-  */
--SYM_CODE_START(start_cpu0)
-+SYM_CODE_START(soft_restart_cpu)
- 	ANNOTATE_NOENDBR
- 	UNWIND_HINT_END_OF_STACK
-=20
-@@ -390,7 +461,7 @@ SYM_CODE_START(start_cpu0)
- 	movq	TASK_threadsp(%rcx), %rsp
-=20
- 	jmp	.Ljump_to_C_code
--SYM_CODE_END(start_cpu0)
-+SYM_CODE_END(soft_restart_cpu)
- #endif
-=20
- #ifdef CONFIG_AMD_MEM_ENCRYPT
-@@ -433,6 +504,8 @@ SYM_DATA(initial_code,	.quad x86_64_start_kernel)
- #ifdef CONFIG_AMD_MEM_ENCRYPT
- SYM_DATA(initial_vc_handler,	.quad handle_vc_boot_ghcb)
- #endif
-+
-+SYM_DATA(trampoline_lock, .quad 0);
- 	__FINITDATA
-=20
- 	__INIT
-diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
-index b031244d6d2d..d095a5d3c14a 100644
---- a/arch/x86/kernel/sev.c
-+++ b/arch/x86/kernel/sev.c
-@@ -1328,7 +1328,7 @@ static void sev_es_play_dead(void)
- 	 * If we get here, the VCPU was woken up again. Jump to CPU
- 	 * startup code to get it back online.
- 	 */
--	start_cpu0();
-+	soft_restart_cpu();
- }
- #else  /* CONFIG_HOTPLUG_CPU */
- #define sev_es_play_dead	native_play_dead
-diff --git a/arch/x86/kernel/smp.c b/arch/x86/kernel/smp.c
-index 375b33ecafa2..0d54115c3859 100644
---- a/arch/x86/kernel/smp.c
-+++ b/arch/x86/kernel/smp.c
-@@ -268,8 +268,7 @@ struct smp_ops smp_ops =3D {
- #endif
- 	.smp_send_reschedule	=3D native_smp_send_reschedule,
-=20
--	.cpu_up			=3D native_cpu_up,
--	.cpu_die		=3D native_cpu_die,
-+	.kick_ap_alive		=3D native_kick_ap,
- 	.cpu_disable		=3D native_cpu_disable,
- 	.play_dead		=3D native_play_dead,
-=20
-diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index 352f0ce1ece4..aaa876cfd9d9 100644
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -57,6 +57,8 @@
- #include <linux/pgtable.h>
- #include <linux/overflow.h>
- #include <linux/stackprotector.h>
-+#include <linux/cpuhotplug.h>
-+#include <linux/mc146818rtc.h>
-=20
- #include <asm/acpi.h>
- #include <asm/cacheinfo.h>
-@@ -74,7 +76,7 @@
- #include <asm/fpu/api.h>
- #include <asm/setup.h>
- #include <asm/uv/uv.h>
--#include <linux/mc146818rtc.h>
-+#include <asm/microcode.h>
- #include <asm/i8259.h>
- #include <asm/misc.h>
- #include <asm/qspinlock.h>
-@@ -101,6 +103,12 @@ EXPORT_PER_CPU_SYMBOL(cpu_die_map);
- DEFINE_PER_CPU_READ_MOSTLY(struct cpuinfo_x86, cpu_info);
- EXPORT_PER_CPU_SYMBOL(cpu_info);
-=20
-+/* CPUs which are the primary SMT threads */
-+struct cpumask __cpu_primary_thread_mask __read_mostly;
-+
-+/* Representing CPUs for which sibling maps can be computed */
-+static cpumask_var_t cpu_sibling_setup_mask;
-+
- /* Logical package management. We might want to allocate that dynamically */
- unsigned int __max_logical_packages __read_mostly;
- EXPORT_SYMBOL(__max_logical_packages);
-@@ -121,7 +129,6 @@ int arch_update_cpu_topology(void)
- 	return retval;
- }
-=20
+-static void __iomem *timer_reg_base;
+-static uint32_t ls1x_jiffies_per_tick;
 -
- static unsigned int smpboot_warm_reset_vector_count;
-=20
- static inline void smpboot_setup_warm_reset_vector(unsigned long start_eip)
-@@ -154,66 +161,59 @@ static inline void smpboot_restore_warm_reset_vector(vo=
-id)
-=20
- }
-=20
--/*
-- * Report back to the Boot Processor during boot time or to the caller proce=
-ssor
-- * during CPU online.
-- */
--static void smp_callin(void)
-+/* Run the next set of setup steps for the upcoming CPU */
-+static void ap_starting(void)
- {
--	int cpuid;
-+	int cpuid =3D smp_processor_id();
-=20
- 	/*
--	 * If waken up by an INIT in an 82489DX configuration
--	 * cpu_callout_mask guarantees we don't get here before
--	 * an INIT_deassert IPI reaches our local APIC, so it is
--	 * now safe to touch our local APIC.
--	 */
--	cpuid =3D smp_processor_id();
--
--	/*
--	 * the boot CPU has finished the init stage and is spinning
--	 * on callin_map until we finish. We are free to set up this
--	 * CPU, first the APIC. (this is probably redundant on most
--	 * boards)
-+	 * If woken up by an INIT in an 82489DX configuration the alive
-+	 * synchronization guarantees that the CPU does not reach this
-+	 * point before an INIT_deassert IPI reaches the local APIC, so it
-+	 * is now safe to touch the local APIC.
-+	 *
-+	 * Set up this CPU, first the APIC, which is probably redundant on
-+	 * most boards.
- 	 */
- 	apic_ap_setup();
-=20
--	/*
--	 * Save our processor parameters. Note: this information
--	 * is needed for clock calibration.
--	 */
-+	/* Save the processor parameters. */
- 	smp_store_cpu_info(cpuid);
-=20
- 	/*
- 	 * The topology information must be up to date before
--	 * calibrate_delay() and notify_cpu_starting().
-+	 * notify_cpu_starting().
- 	 */
--	set_cpu_sibling_map(raw_smp_processor_id());
-+	set_cpu_sibling_map(cpuid);
-=20
- 	ap_init_aperfmperf();
-=20
--	/*
--	 * Get our bogomips.
--	 * Update loops_per_jiffy in cpu_data. Previous call to
--	 * smp_store_cpu_info() stored a value that is close but not as
--	 * accurate as the value just calculated.
--	 */
--	calibrate_delay();
--	cpu_data(cpuid).loops_per_jiffy =3D loops_per_jiffy;
- 	pr_debug("Stack at about %p\n", &cpuid);
-=20
- 	wmb();
-=20
-+	/*
-+	 * This runs the AP through all the cpuhp states to its target
-+	 * state CPUHP_ONLINE.
-+	 */
- 	notify_cpu_starting(cpuid);
-+}
-=20
-+static void ap_calibrate_delay(void)
-+{
- 	/*
--	 * Allow the master to continue.
-+	 * Calibrate the delay loop and update loops_per_jiffy in cpu_data.
-+	 * smp_store_cpu_info() stored a value that is close but not as
-+	 * accurate as the value just calculated.
-+	 *
-+	 * As this is invoked after the TSC synchronization check,
-+	 * calibrate_delay_is_known() will skip the calibration routine
-+	 * when TSC is synchronized across sockets.
- 	 */
--	cpumask_set_cpu(cpuid, cpu_callin_mask);
-+	calibrate_delay();
-+	cpu_data(smp_processor_id()).loops_per_jiffy =3D loops_per_jiffy;
- }
-=20
--static int cpu0_logical_apicid;
--static int enable_start_cpu0;
- /*
-  * Activate a secondary processor.
-  */
-@@ -226,24 +226,62 @@ static void notrace start_secondary(void *unused)
- 	 */
- 	cr4_init();
-=20
--#ifdef CONFIG_X86_32
--	/* switch away from the initial page table */
--	load_cr3(swapper_pg_dir);
--	__flush_tlb_all();
--#endif
--	cpu_init_secondary();
-+	/*
-+	 * 32-bit specific. 64-bit reaches this code with the correct page
-+	 * table established. Yet another historical divergence.
-+	 */
-+	if (IS_ENABLED(CONFIG_X86_32)) {
-+		/* switch away from the initial page table */
-+		load_cr3(swapper_pg_dir);
-+		__flush_tlb_all();
-+	}
-+
-+	cpu_init_exception_handling();
-+
-+	/*
-+	 * 32-bit systems load the microcode from the ASM startup code for
-+	 * historical reasons.
-+	 *
-+	 * On 64-bit systems load it before reaching the AP alive
-+	 * synchronization point below so it is not part of the full per
-+	 * CPU serialized bringup part when "parallel" bringup is enabled.
-+	 *
-+	 * That's even safe when hyperthreading is enabled in the CPU as
-+	 * the core code starts the primary threads first and leaves the
-+	 * secondary threads waiting for SIPI. Loading microcode on
-+	 * physical cores concurrently is a safe operation.
-+	 *
-+	 * This covers both the Intel specific issue that concurrent
-+	 * microcode loading on SMT siblings must be prohibited and the
-+	 * vendor independent issue`that microcode loading which changes
-+	 * CPUID, MSRs etc. must be strictly serialized to maintain
-+	 * software state correctness.
-+	 */
-+	if (IS_ENABLED(CONFIG_X86_64))
-+		load_ucode_ap();
-+
-+	/*
-+	 * Synchronization point with the hotplug core. Sets this CPUs
-+	 * synchronization state to ALIVE and spin-waits for the control CPU to
-+	 * release this CPU for further bringup.
-+	 */
-+	cpuhp_ap_sync_alive();
-+
-+	cpu_init();
- 	rcu_cpu_starting(raw_smp_processor_id());
- 	x86_cpuinit.early_percpu_clock_init();
--	smp_callin();
-=20
--	enable_start_cpu0 =3D 0;
-+	ap_starting();
-+
-+	/* Check TSC synchronization with the control CPU. */
-+	check_tsc_sync_target();
-=20
--	/* otherwise gcc will move up smp_processor_id before the cpu_init */
--	barrier();
- 	/*
--	 * Check TSC synchronization with the boot CPU:
-+	 * Calibrate the delay loop after the TSC synchronization check.
-+	 * This allows to skip the calibration when TSC is synchronized
-+	 * across sockets.
- 	 */
--	check_tsc_sync_target();
-+	ap_calibrate_delay();
-=20
- 	speculative_store_bypass_ht_init();
-=20
-@@ -257,7 +295,6 @@ static void notrace start_secondary(void *unused)
- 	set_cpu_online(smp_processor_id(), true);
- 	lapic_online();
- 	unlock_vector_lock();
--	cpu_set_state_online(smp_processor_id());
- 	x86_platform.nmi_init();
-=20
- 	/* enable local interrupts */
-@@ -269,15 +306,6 @@ static void notrace start_secondary(void *unused)
- 	cpu_startup_entry(CPUHP_AP_ONLINE_IDLE);
- }
-=20
--/**
-- * topology_is_primary_thread - Check whether CPU is the primary SMT thread
-- * @cpu:	CPU to check
-- */
--bool topology_is_primary_thread(unsigned int cpu)
+-static inline void ls1x_pwmtimer_set_period(uint32_t period)
 -{
--	return apic_id_is_primary_thread(per_cpu(x86_cpu_to_apicid, cpu));
+-	__raw_writel(period, timer_reg_base + PWM_HRC);
+-	__raw_writel(period, timer_reg_base + PWM_LRC);
 -}
 -
- /**
-  * topology_smt_supported - Check whether SMT is supported by the CPUs
-  */
-@@ -288,6 +316,7 @@ bool topology_smt_supported(void)
-=20
- /**
-  * topology_phys_to_logical_pkg - Map a physical package id to a logical
-+ * @phys_pkg:	The physical package id to map
-  *
-  * Returns logical package id or -1 if not found
-  */
-@@ -304,15 +333,17 @@ int topology_phys_to_logical_pkg(unsigned int phys_pkg)
- 	return -1;
- }
- EXPORT_SYMBOL(topology_phys_to_logical_pkg);
-+
- /**
-  * topology_phys_to_logical_die - Map a physical die id to logical
-+ * @die_id:	The physical die id to map
-+ * @cur_cpu:	The CPU for which the mapping is done
-  *
-  * Returns logical die id or -1 if not found
-  */
--int topology_phys_to_logical_die(unsigned int die_id, unsigned int cur_cpu)
-+static int topology_phys_to_logical_die(unsigned int die_id, unsigned int cu=
-r_cpu)
- {
--	int cpu;
--	int proc_id =3D cpu_data(cur_cpu).phys_proc_id;
-+	int cpu, proc_id =3D cpu_data(cur_cpu).phys_proc_id;
-=20
- 	for_each_possible_cpu(cpu) {
- 		struct cpuinfo_x86 *c =3D &cpu_data(cpu);
-@@ -323,7 +354,6 @@ int topology_phys_to_logical_die(unsigned int die_id, uns=
-igned int cur_cpu)
- 	}
- 	return -1;
- }
--EXPORT_SYMBOL(topology_phys_to_logical_die);
-=20
- /**
-  * topology_update_package_map - Update the physical to logical package map
-@@ -398,7 +428,7 @@ void smp_store_cpu_info(int id)
- 	c->cpu_index =3D id;
- 	/*
- 	 * During boot time, CPU0 has this setup already. Save the info when
--	 * bringing up AP or offlined CPU0.
-+	 * bringing up an AP.
- 	 */
- 	identify_secondary_cpu(c);
- 	c->initialized =3D true;
-@@ -706,9 +736,9 @@ static void impress_friends(void)
- 	 * Allow the user to impress friends.
- 	 */
- 	pr_debug("Before bogomips\n");
--	for_each_possible_cpu(cpu)
--		if (cpumask_test_cpu(cpu, cpu_callout_mask))
--			bogosum +=3D cpu_data(cpu).loops_per_jiffy;
-+	for_each_online_cpu(cpu)
-+		bogosum +=3D cpu_data(cpu).loops_per_jiffy;
-+
- 	pr_info("Total of %d processors activated (%lu.%02lu BogoMIPS)\n",
- 		num_online_cpus(),
- 		bogosum/(500000/HZ),
-@@ -795,51 +825,14 @@ static void __init smp_quirk_init_udelay(void)
- }
-=20
- /*
-- * Poke the other CPU in the eye via NMI to wake it up. Remember that the no=
-rmal
-- * INIT, INIT, STARTUP sequence will reset the chip hard for us, and this
-- * won't ... remember to clear down the APIC, etc later.
-+ * Wake up AP by INIT, INIT, STARTUP sequence.
-  */
--int
--wakeup_secondary_cpu_via_nmi(int apicid, unsigned long start_eip)
+-static inline void ls1x_pwmtimer_restart(void)
 -{
--	u32 dm =3D apic->dest_mode_logical ? APIC_DEST_LOGICAL : APIC_DEST_PHYSICAL;
--	unsigned long send_status, accept_status =3D 0;
--	int maxlvt;
--
--	/* Target chip */
--	/* Boot on the stack */
--	/* Kick the second */
--	apic_icr_write(APIC_DM_NMI | dm, apicid);
--
--	pr_debug("Waiting for send to finish...\n");
--	send_status =3D safe_apic_wait_icr_idle();
--
--	/*
--	 * Give the other CPU some time to accept the IPI.
--	 */
--	udelay(200);
--	if (APIC_INTEGRATED(boot_cpu_apic_version)) {
--		maxlvt =3D lapic_get_maxlvt();
--		if (maxlvt > 3)			/* Due to the Pentium erratum 3AP.  */
--			apic_write(APIC_ESR, 0);
--		accept_status =3D (apic_read(APIC_ESR) & 0xEF);
--	}
--	pr_debug("NMI sent\n");
--
--	if (send_status)
--		pr_err("APIC never delivered???\n");
--	if (accept_status)
--		pr_err("APIC delivery error (%lx)\n", accept_status);
--
--	return (send_status | accept_status);
+-	__raw_writel(0x0, timer_reg_base + PWM_CNT);
+-	__raw_writel(INT_EN | CNT_EN, timer_reg_base + PWM_CTRL);
 -}
 -
--static int
--wakeup_secondary_cpu_via_init(int phys_apicid, unsigned long start_eip)
-+static int wakeup_secondary_cpu_via_init(int phys_apicid, unsigned long star=
-t_eip)
- {
- 	unsigned long send_status =3D 0, accept_status =3D 0;
- 	int maxlvt, num_starts, j;
-=20
-+	preempt_disable();
- 	maxlvt =3D lapic_get_maxlvt();
-=20
- 	/*
-@@ -945,15 +938,16 @@ wakeup_secondary_cpu_via_init(int phys_apicid, unsigned=
- long start_eip)
- 	if (accept_status)
- 		pr_err("APIC delivery error (%lx)\n", accept_status);
-=20
-+	preempt_enable();
- 	return (send_status | accept_status);
- }
-=20
- /* reduce the number of lines printed when booting a large cpu count system =
-*/
- static void announce_cpu(int cpu, int apicid)
- {
-+	static int width, node_width, first =3D 1;
- 	static int current_node =3D NUMA_NO_NODE;
- 	int node =3D early_cpu_to_node(cpu);
--	static int width, node_width;
-=20
- 	if (!width)
- 		width =3D num_digits(num_possible_cpus()) + 1; /* + '#' sign */
-@@ -961,10 +955,10 @@ static void announce_cpu(int cpu, int apicid)
- 	if (!node_width)
- 		node_width =3D num_digits(num_possible_nodes()) + 1; /* + '#' */
-=20
--	if (cpu =3D=3D 1)
--		printk(KERN_INFO "x86: Booting SMP configuration:\n");
--
- 	if (system_state < SYSTEM_RUNNING) {
-+		if (first)
-+			pr_info("x86: Booting SMP configuration:\n");
-+
- 		if (node !=3D current_node) {
- 			if (current_node > (-1))
- 				pr_cont("\n");
-@@ -975,77 +969,16 @@ static void announce_cpu(int cpu, int apicid)
- 		}
-=20
- 		/* Add padding for the BSP */
--		if (cpu =3D=3D 1)
-+		if (first)
- 			pr_cont("%*s", width + 1, " ");
-+		first =3D 0;
-=20
- 		pr_cont("%*s#%d", width - num_digits(cpu), " ", cpu);
--
- 	} else
- 		pr_info("Booting Node %d Processor %d APIC 0x%x\n",
- 			node, cpu, apicid);
- }
-=20
--static int wakeup_cpu0_nmi(unsigned int cmd, struct pt_regs *regs)
+-void __init ls1x_pwmtimer_init(void)
 -{
--	int cpu;
+-	timer_reg_base =3D ioremap(LS1X_TIMER_BASE, SZ_16);
+-	if (!timer_reg_base)
+-		panic("Failed to remap timer registers");
 -
--	cpu =3D smp_processor_id();
--	if (cpu =3D=3D 0 && !cpu_online(cpu) && enable_start_cpu0)
--		return NMI_HANDLED;
+-	ls1x_jiffies_per_tick =3D DIV_ROUND_CLOSEST(mips_hpt_frequency, HZ);
 -
--	return NMI_DONE;
+-	ls1x_pwmtimer_set_period(ls1x_jiffies_per_tick);
+-	ls1x_pwmtimer_restart();
 -}
 -
--/*
-- * Wake up AP by INIT, INIT, STARTUP sequence.
-- *
-- * Instead of waiting for STARTUP after INITs, BSP will execute the BIOS
-- * boot-strap code which is not a desired behavior for waking up BSP. To
-- * void the boot-strap code, wake up CPU0 by NMI instead.
-- *
-- * This works to wake up soft offlined CPU0 only. If CPU0 is hard offlined
-- * (i.e. physically hot removed and then hot added), NMI won't wake it up.
-- * We'll change this code in the future to wake up hard offlined CPU0 if
-- * real platform and request are available.
-- */
--static int
--wakeup_cpu_via_init_nmi(int cpu, unsigned long start_ip, int apicid,
--	       int *cpu0_nmi_registered)
+-static u64 ls1x_clocksource_read(struct clocksource *cs)
 -{
--	int id;
--	int boot_error;
--
--	preempt_disable();
--
--	/*
--	 * Wake up AP by INIT, INIT, STARTUP sequence.
--	 */
--	if (cpu) {
--		boot_error =3D wakeup_secondary_cpu_via_init(apicid, start_ip);
--		goto out;
--	}
--
--	/*
--	 * Wake up BSP by nmi.
--	 *
--	 * Register a NMI handler to help wake up CPU0.
--	 */
--	boot_error =3D register_nmi_handler(NMI_LOCAL,
--					  wakeup_cpu0_nmi, 0, "wake_cpu0");
--
--	if (!boot_error) {
--		enable_start_cpu0 =3D 1;
--		*cpu0_nmi_registered =3D 1;
--		id =3D apic->dest_mode_logical ? cpu0_logical_apicid : apicid;
--		boot_error =3D wakeup_secondary_cpu_via_nmi(id, start_ip);
--	}
--
--out:
--	preempt_enable();
--
--	return boot_error;
--}
--
- int common_cpu_up(unsigned int cpu, struct task_struct *idle)
- {
- 	int ret;
-@@ -1071,17 +1004,13 @@ int common_cpu_up(unsigned int cpu, struct task_struc=
-t *idle)
- /*
-  * NOTE - on most systems this is a PHYSICAL apic ID, but on multiquad
-  * (ie clustered apic addressing mode), this is a LOGICAL apic ID.
-- * Returns zero if CPU booted OK, else error code from
-+ * Returns zero if startup was successfully sent, else error code from
-  * ->wakeup_secondary_cpu.
-  */
--static int do_boot_cpu(int apicid, int cpu, struct task_struct *idle,
--		       int *cpu0_nmi_registered)
-+static int do_boot_cpu(int apicid, int cpu, struct task_struct *idle)
- {
--	/* start_ip had better be page-aligned! */
- 	unsigned long start_ip =3D real_mode_header->trampoline_start;
--
--	unsigned long boot_error =3D 0;
--	unsigned long timeout;
-+	int ret;
-=20
- #ifdef CONFIG_X86_64
- 	/* If 64-bit wakeup method exists, use the 64-bit mode trampoline IP */
-@@ -1094,7 +1023,7 @@ static int do_boot_cpu(int apicid, int cpu, struct task=
-_struct *idle,
- 	if (IS_ENABLED(CONFIG_X86_32)) {
- 		early_gdt_descr.address =3D (unsigned long)get_cpu_gdt_rw(cpu);
- 		initial_stack  =3D idle->thread.sp;
--	} else {
-+	} else if (!(smpboot_control & STARTUP_PARALLEL_MASK)) {
- 		smpboot_control =3D cpu;
- 	}
-=20
-@@ -1108,7 +1037,6 @@ static int do_boot_cpu(int apicid, int cpu, struct task=
-_struct *idle,
- 	 * This grunge runs the startup process for
- 	 * the targeted processor.
- 	 */
--
- 	if (x86_platform.legacy.warm_reset) {
-=20
- 		pr_debug("Setting warm reset code and vector.\n");
-@@ -1123,13 +1051,6 @@ static int do_boot_cpu(int apicid, int cpu, struct tas=
-k_struct *idle,
- 		}
- 	}
-=20
--	/*
--	 * AP might wait on cpu_callout_mask in cpu_init() with
--	 * cpu_initialized_mask set if previous attempt to online
--	 * it timed-out. Clear cpu_initialized_mask so that after
--	 * INIT/SIPI it could start with a clean state.
--	 */
--	cpumask_clear_cpu(cpu, cpu_initialized_mask);
- 	smp_mb();
-=20
- 	/*
-@@ -1137,66 +1058,25 @@ static int do_boot_cpu(int apicid, int cpu, struct ta=
-sk_struct *idle,
- 	 * - Use a method from the APIC driver if one defined, with wakeup
- 	 *   straight to 64-bit mode preferred over wakeup to RM.
- 	 * Otherwise,
--	 * - Use an INIT boot APIC message for APs or NMI for BSP.
-+	 * - Use an INIT boot APIC message
- 	 */
- 	if (apic->wakeup_secondary_cpu_64)
--		boot_error =3D apic->wakeup_secondary_cpu_64(apicid, start_ip);
-+		ret =3D apic->wakeup_secondary_cpu_64(apicid, start_ip);
- 	else if (apic->wakeup_secondary_cpu)
--		boot_error =3D apic->wakeup_secondary_cpu(apicid, start_ip);
-+		ret =3D apic->wakeup_secondary_cpu(apicid, start_ip);
- 	else
--		boot_error =3D wakeup_cpu_via_init_nmi(cpu, start_ip, apicid,
--						     cpu0_nmi_registered);
--
--	if (!boot_error) {
--		/*
--		 * Wait 10s total for first sign of life from AP
--		 */
--		boot_error =3D -1;
--		timeout =3D jiffies + 10*HZ;
--		while (time_before(jiffies, timeout)) {
--			if (cpumask_test_cpu(cpu, cpu_initialized_mask)) {
--				/*
--				 * Tell AP to proceed with initialization
--				 */
--				cpumask_set_cpu(cpu, cpu_callout_mask);
--				boot_error =3D 0;
--				break;
--			}
--			schedule();
--		}
--	}
--
--	if (!boot_error) {
--		/*
--		 * Wait till AP completes initial initialization
--		 */
--		while (!cpumask_test_cpu(cpu, cpu_callin_mask)) {
--			/*
--			 * Allow other tasks to run while we wait for the
--			 * AP to come online. This also gives a chance
--			 * for the MTRR work(triggered by the AP coming online)
--			 * to be completed in the stop machine context.
--			 */
--			schedule();
--		}
--	}
--
--	if (x86_platform.legacy.warm_reset) {
--		/*
--		 * Cleanup possible dangling ends...
--		 */
--		smpboot_restore_warm_reset_vector();
--	}
-+		ret =3D wakeup_secondary_cpu_via_init(apicid, start_ip);
-=20
--	return boot_error;
-+	/* If the wakeup mechanism failed, cleanup the warm reset vector */
-+	if (ret)
-+		arch_cpuhp_cleanup_kick_cpu(cpu);
-+	return ret;
- }
-=20
--int native_cpu_up(unsigned int cpu, struct task_struct *tidle)
-+int native_kick_ap(unsigned int cpu, struct task_struct *tidle)
- {
- 	int apicid =3D apic->cpu_present_to_apicid(cpu);
--	int cpu0_nmi_registered =3D 0;
 -	unsigned long flags;
--	int err, ret =3D 0;
-+	int err;
-=20
- 	lockdep_assert_irqs_enabled();
-=20
-@@ -1209,25 +1089,12 @@ int native_cpu_up(unsigned int cpu, struct task_struc=
-t *tidle)
- 		return -EINVAL;
- 	}
-=20
+-	int count;
+-	u32 jifs;
+-	static int old_count;
+-	static u32 old_jifs;
+-
+-	raw_spin_lock_irqsave(&ls1x_timer_lock, flags);
 -	/*
--	 * Already booted CPU?
+-	 * Although our caller may have the read side of xtime_lock,
+-	 * this is now a seqlock, and we are cheating in this routine
+-	 * by having side effects on state that we cannot undo if
+-	 * there is a collision on the seqlock and our caller has to
+-	 * retry.  (Namely, old_jifs and old_count.)  So we must treat
+-	 * jiffies as volatile despite the lock.  We read jiffies
+-	 * before latching the timer count to guarantee that although
+-	 * the jiffies value might be older than the count (that is,
+-	 * the counter may underflow between the last point where
+-	 * jiffies was incremented and the point where we latch the
+-	 * count), it cannot be newer.
 -	 */
--	if (cpumask_test_cpu(cpu, cpu_callin_mask)) {
--		pr_debug("do_boot_cpu %d Already started\n", cpu);
--		return -ENOSYS;
--	}
+-	jifs =3D jiffies;
+-	/* read the count */
+-	count =3D __raw_readl(timer_reg_base + PWM_CNT);
 -
- 	/*
- 	 * Save current MTRR state in case it was changed since early boot
- 	 * (e.g. by the ACPI SMI) to initialize new CPUs with MTRRs in sync:
- 	 */
- 	mtrr_save_state();
-=20
--	/* x86 CPUs take themselves offline, so delayed offline is OK. */
--	err =3D cpu_check_up_prepare(cpu);
--	if (err && err !=3D -EBUSY)
--		return err;
--
- 	/* the FPU context is blank, nobody can own it */
- 	per_cpu(fpu_fpregs_owner_ctx, cpu) =3D NULL;
-=20
-@@ -1235,41 +1102,44 @@ int native_cpu_up(unsigned int cpu, struct task_struc=
-t *tidle)
- 	if (err)
- 		return err;
-=20
--	err =3D do_boot_cpu(apicid, cpu, tidle, &cpu0_nmi_registered);
--	if (err) {
-+	err =3D do_boot_cpu(apicid, cpu, tidle);
-+	if (err)
- 		pr_err("do_boot_cpu failed(%d) to wakeup CPU#%u\n", err, cpu);
--		ret =3D -EIO;
--		goto unreg_nmi;
--	}
-=20
 -	/*
--	 * Check TSC synchronization with the AP (keep irqs disabled
--	 * while doing so):
+-	 * It's possible for count to appear to go the wrong way for this
+-	 * reason:
+-	 *
+-	 *  The timer counter underflows, but we haven't handled the resulting
+-	 *  interrupt and incremented jiffies yet.
+-	 *
+-	 * Previous attempts to handle these cases intelligently were buggy, so
+-	 * we just do the simple thing now.
 -	 */
--	local_irq_save(flags);
--	check_tsc_sync_source(cpu);
--	local_irq_restore(flags);
-+	return err;
-+}
-=20
--	while (!cpu_online(cpu)) {
--		cpu_relax();
--		touch_nmi_watchdog();
--	}
-+int arch_cpuhp_kick_ap_alive(unsigned int cpu, struct task_struct *tidle)
-+{
-+	return smp_ops.kick_ap_alive(cpu, tidle);
-+}
-=20
--unreg_nmi:
--	/*
--	 * Clean up the nmi handler. Do this after the callin and callout sync
--	 * to avoid impact of possible long unregister time.
--	 */
--	if (cpu0_nmi_registered)
--		unregister_nmi_handler(NMI_LOCAL, "wake_cpu0");
-+void arch_cpuhp_cleanup_kick_cpu(unsigned int cpu)
-+{
-+	/* Cleanup possible dangling ends... */
-+	if (smp_ops.kick_ap_alive =3D=3D native_kick_ap && x86_platform.legacy.warm=
-_reset)
-+		smpboot_restore_warm_reset_vector();
-+}
-=20
--	return ret;
-+void arch_cpuhp_cleanup_dead_cpu(unsigned int cpu)
-+{
-+	if (smp_ops.cleanup_dead_cpu)
-+		smp_ops.cleanup_dead_cpu(cpu);
-+
-+	if (system_state =3D=3D SYSTEM_RUNNING)
-+		pr_info("CPU %u is now offline\n", cpu);
-+}
-+
-+void arch_cpuhp_sync_state_poll(void)
-+{
-+	if (smp_ops.poll_sync_state)
-+		smp_ops.poll_sync_state();
- }
-=20
- /**
-- * arch_disable_smp_support() - disables SMP support for x86 at runtime
-+ * arch_disable_smp_support() - Disables SMP support for x86 at boottime
-  */
--void arch_disable_smp_support(void)
-+void __init arch_disable_smp_support(void)
- {
- 	disable_ioapic_support();
- }
-@@ -1361,14 +1231,6 @@ static void __init smp_cpu_index_default(void)
- 	}
- }
-=20
--static void __init smp_get_logical_apicid(void)
--{
--	if (x2apic_mode)
--		cpu0_logical_apicid =3D apic_read(APIC_LDR);
--	else
--		cpu0_logical_apicid =3D GET_APIC_LOGICAL_ID(apic_read(APIC_LDR));
+-	if (count < old_count && jifs =3D=3D old_jifs)
+-		count =3D old_count;
+-
+-	old_count =3D count;
+-	old_jifs =3D jifs;
+-
+-	raw_spin_unlock_irqrestore(&ls1x_timer_lock, flags);
+-
+-	return (u64) (jifs * ls1x_jiffies_per_tick) + count;
 -}
 -
- void __init smp_prepare_cpus_common(void)
- {
- 	unsigned int i;
-@@ -1379,7 +1241,6 @@ void __init smp_prepare_cpus_common(void)
- 	 * Setup boot CPU information
- 	 */
- 	smp_store_boot_cpu_info(); /* Final full version of the data */
--	cpumask_copy(cpu_callin_mask, cpumask_of(0));
- 	mb();
-=20
- 	for_each_possible_cpu(i) {
-@@ -1402,6 +1263,21 @@ void __init smp_prepare_cpus_common(void)
- 	set_cpu_sibling_map(0);
- }
-=20
-+#ifdef CONFIG_X86_64
-+/* Establish whether parallel bringup can be supported. */
-+bool __init arch_cpuhp_init_parallel_bringup(void)
-+{
-+	if (!x86_cpuinit.parallel_bringup) {
-+		pr_info("Parallel CPU startup disabled by the platform\n");
-+		return false;
-+	}
-+
-+	smpboot_control =3D STARTUP_READ_APICID;
-+	pr_debug("Parallel CPU startup enabled: 0x%08x\n", smpboot_control);
-+	return true;
-+}
-+#endif
-+
- /*
-  * Prepare for SMP bootup.
-  * @max_cpus: configured maximum number of CPUs, It is a legacy parameter
-@@ -1431,8 +1307,6 @@ void __init native_smp_prepare_cpus(unsigned int max_cp=
-us)
- 	/* Setup local timer */
- 	x86_init.timers.setup_percpu_clockev();
-=20
--	smp_get_logical_apicid();
+-static struct clocksource ls1x_clocksource =3D {
+-	.name		=3D "ls1x-pwmtimer",
+-	.read		=3D ls1x_clocksource_read,
+-	.mask		=3D CLOCKSOURCE_MASK(24),
+-	.flags		=3D CLOCK_SOURCE_IS_CONTINUOUS,
+-};
 -
- 	pr_info("CPU0: ");
- 	print_cpu_info(&cpu_data(0));
-=20
-@@ -1466,9 +1340,6 @@ void __init native_smp_prepare_boot_cpu(void)
- 	if (!IS_ENABLED(CONFIG_SMP))
- 		switch_gdt_and_percpu_base(me);
-=20
--	/* already set me in cpu_online_mask in boot_cpu_init() */
--	cpumask_set_cpu(me, cpu_callout_mask);
--	cpu_set_state_online(me);
- 	native_pv_lock_init();
- }
-=20
-@@ -1592,6 +1463,12 @@ __init void prefill_possible_map(void)
- 		set_cpu_possible(i, true);
- }
-=20
-+/* correctly size the local cpu masks */
-+void __init setup_cpu_local_masks(void)
-+{
-+	alloc_bootmem_cpumask_var(&cpu_sibling_setup_mask);
-+}
-+
- #ifdef CONFIG_HOTPLUG_CPU
-=20
- /* Recompute SMT state for all CPUs on offline */
-@@ -1650,10 +1527,6 @@ static void remove_siblinginfo(int cpu)
- static void remove_cpu_from_maps(int cpu)
- {
- 	set_cpu_online(cpu, false);
--	cpumask_clear_cpu(cpu, cpu_callout_mask);
--	cpumask_clear_cpu(cpu, cpu_callin_mask);
--	/* was set by cpu_init() */
--	cpumask_clear_cpu(cpu, cpu_initialized_mask);
- 	numa_remove_cpu(cpu);
- }
-=20
-@@ -1704,54 +1577,17 @@ int native_cpu_disable(void)
- 	return 0;
- }
-=20
--int common_cpu_die(unsigned int cpu)
+-static irqreturn_t ls1x_clockevent_isr(int irq, void *devid)
 -{
--	int ret =3D 0;
+-	struct clock_event_device *cd =3D devid;
 -
--	/* We don't do anything here: idle task is faking death itself. */
+-	ls1x_pwmtimer_restart();
+-	cd->event_handler(cd);
 -
--	/* They ack this in play_dead() by setting CPU_DEAD */
--	if (cpu_wait_death(cpu, 5)) {
--		if (system_state =3D=3D SYSTEM_RUNNING)
--			pr_info("CPU %u is now offline\n", cpu);
--	} else {
--		pr_err("CPU %u didn't die...\n", cpu);
--		ret =3D -1;
--	}
--
--	return ret;
+-	return IRQ_HANDLED;
 -}
 -
--void native_cpu_die(unsigned int cpu)
+-static int ls1x_clockevent_set_state_periodic(struct clock_event_device *cd)
 -{
--	common_cpu_die(cpu);
--}
+-	raw_spin_lock(&ls1x_timer_lock);
+-	ls1x_pwmtimer_set_period(ls1x_jiffies_per_tick);
+-	ls1x_pwmtimer_restart();
+-	__raw_writel(INT_EN | CNT_EN, timer_reg_base + PWM_CTRL);
+-	raw_spin_unlock(&ls1x_timer_lock);
 -
- void play_dead_common(void)
- {
- 	idle_task_exit();
-=20
--	/* Ack it */
--	(void)cpu_report_death();
--
-+	cpuhp_ap_report_dead();
- 	/*
- 	 * With physical CPU hotplug, we should halt the cpu
- 	 */
- 	local_irq_disable();
- }
-=20
--/**
-- * cond_wakeup_cpu0 - Wake up CPU0 if needed.
-- *
-- * If NMI wants to wake up CPU0, start CPU0.
-- */
--void cond_wakeup_cpu0(void)
--{
--	if (smp_processor_id() =3D=3D 0 && enable_start_cpu0)
--		start_cpu0();
--}
--EXPORT_SYMBOL_GPL(cond_wakeup_cpu0);
--
- /*
-  * We need to flush the caches before going to sleep, lest we have
-  * dirty data in our caches when we come back up.
-@@ -1819,8 +1655,6 @@ static inline void mwait_play_dead(void)
- 		__monitor(mwait_ptr, 0, 0);
- 		mb();
- 		__mwait(eax, 0);
--
--		cond_wakeup_cpu0();
- 	}
- }
-=20
-@@ -1829,11 +1663,8 @@ void __noreturn hlt_play_dead(void)
- 	if (__this_cpu_read(cpu_info.x86) >=3D 4)
- 		wbinvd();
-=20
--	while (1) {
-+	while (1)
- 		native_halt();
--
--		cond_wakeup_cpu0();
--	}
- }
-=20
- void native_play_dead(void)
-@@ -1852,12 +1683,6 @@ int native_cpu_disable(void)
- 	return -ENOSYS;
- }
-=20
--void native_cpu_die(unsigned int cpu)
--{
--	/* We said "no" in __cpu_disable */
--	BUG();
--}
--
- void native_play_dead(void)
- {
- 	BUG();
-diff --git a/arch/x86/kernel/topology.c b/arch/x86/kernel/topology.c
-index 1b83377274b8..ca004e2e4469 100644
---- a/arch/x86/kernel/topology.c
-+++ b/arch/x86/kernel/topology.c
-@@ -38,102 +38,12 @@
- static DEFINE_PER_CPU(struct x86_cpu, cpu_devices);
-=20
- #ifdef CONFIG_HOTPLUG_CPU
--
--#ifdef CONFIG_BOOTPARAM_HOTPLUG_CPU0
--static int cpu0_hotpluggable =3D 1;
--#else
--static int cpu0_hotpluggable;
--static int __init enable_cpu0_hotplug(char *str)
--{
--	cpu0_hotpluggable =3D 1;
--	return 1;
--}
--
--__setup("cpu0_hotplug", enable_cpu0_hotplug);
--#endif
--
--#ifdef CONFIG_DEBUG_HOTPLUG_CPU0
--/*
-- * This function offlines a CPU as early as possible and allows userspace to
-- * boot up without the CPU. The CPU can be onlined back by user after boot.
-- *
-- * This is only called for debugging CPU offline/online feature.
-- */
--int _debug_hotplug_cpu(int cpu, int action)
-+int arch_register_cpu(int cpu)
- {
--	int ret;
--
--	if (!cpu_is_hotpluggable(cpu))
--		return -EINVAL;
-+	struct x86_cpu *xc =3D per_cpu_ptr(&cpu_devices, cpu);
-=20
--	switch (action) {
--	case 0:
--		ret =3D remove_cpu(cpu);
--		if (!ret)
--			pr_info("DEBUG_HOTPLUG_CPU0: CPU %u is now offline\n", cpu);
--		else
--			pr_debug("Can't offline CPU%d.\n", cpu);
--		break;
--	case 1:
--		ret =3D add_cpu(cpu);
--		if (ret)
--			pr_debug("Can't online CPU%d.\n", cpu);
--
--		break;
--	default:
--		ret =3D -EINVAL;
--	}
--
--	return ret;
--}
--
--static int __init debug_hotplug_cpu(void)
--{
--	_debug_hotplug_cpu(0, 0);
 -	return 0;
 -}
 -
--late_initcall_sync(debug_hotplug_cpu);
--#endif /* CONFIG_DEBUG_HOTPLUG_CPU0 */
--
--int arch_register_cpu(int num)
+-static int ls1x_clockevent_tick_resume(struct clock_event_device *cd)
 -{
--	struct cpuinfo_x86 *c =3D &cpu_data(num);
+-	raw_spin_lock(&ls1x_timer_lock);
+-	__raw_writel(INT_EN | CNT_EN, timer_reg_base + PWM_CTRL);
+-	raw_spin_unlock(&ls1x_timer_lock);
 -
--	/*
--	 * Currently CPU0 is only hotpluggable on Intel platforms. Other
--	 * vendors can add hotplug support later.
--	 * Xen PV guests don't support CPU0 hotplug at all.
--	 */
--	if (c->x86_vendor !=3D X86_VENDOR_INTEL ||
--	    cpu_feature_enabled(X86_FEATURE_XENPV))
--		cpu0_hotpluggable =3D 0;
+-	return 0;
+-}
 -
--	/*
--	 * Two known BSP/CPU0 dependencies: Resume from suspend/hibernate
--	 * depends on BSP. PIC interrupts depend on BSP.
--	 *
--	 * If the BSP dependencies are under control, one can tell kernel to
--	 * enable BSP hotplug. This basically adds a control file and
--	 * one can attempt to offline BSP.
--	 */
--	if (num =3D=3D 0 && cpu0_hotpluggable) {
--		unsigned int irq;
--		/*
--		 * We won't take down the boot processor on i386 if some
--		 * interrupts only are able to be serviced by the BSP in PIC.
--		 */
--		for_each_active_irq(irq) {
--			if (!IO_APIC_IRQ(irq) && irq_has_action(irq)) {
--				cpu0_hotpluggable =3D 0;
--				break;
--			}
--		}
--	}
--	if (num || cpu0_hotpluggable)
--		per_cpu(cpu_devices, num).cpu.hotpluggable =3D 1;
+-static int ls1x_clockevent_set_state_shutdown(struct clock_event_device *cd)
+-{
+-	raw_spin_lock(&ls1x_timer_lock);
+-	__raw_writel(__raw_readl(timer_reg_base + PWM_CTRL) & ~CNT_EN,
+-		     timer_reg_base + PWM_CTRL);
+-	raw_spin_unlock(&ls1x_timer_lock);
 -
--	return register_cpu(&per_cpu(cpu_devices, num).cpu, num);
-+	xc->cpu.hotpluggable =3D cpu > 0;
-+	return register_cpu(&xc->cpu, cpu);
- }
- EXPORT_SYMBOL(arch_register_cpu);
-=20
-diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
-index 344698852146..1412b771651e 100644
---- a/arch/x86/kernel/tsc.c
-+++ b/arch/x86/kernel/tsc.c
-@@ -1598,10 +1598,7 @@ void __init tsc_init(void)
-=20
- #ifdef CONFIG_SMP
- /*
-- * If we have a constant TSC and are using the TSC for the delay loop,
-- * we can skip clock calibration if another cpu in the same socket has alrea=
-dy
-- * been calibrated. This assumes that CONSTANT_TSC applies to all
-- * cpus in the socket - this should be a safe assumption.
-+ * Check whether existing calibration data can be reused.
-  */
- unsigned long calibrate_delay_is_known(void)
+-	return 0;
+-}
+-
+-static int ls1x_clockevent_set_next(unsigned long evt,
+-				    struct clock_event_device *cd)
+-{
+-	raw_spin_lock(&ls1x_timer_lock);
+-	ls1x_pwmtimer_set_period(evt);
+-	ls1x_pwmtimer_restart();
+-	raw_spin_unlock(&ls1x_timer_lock);
+-
+-	return 0;
+-}
+-
+-static struct clock_event_device ls1x_clockevent =3D {
+-	.name			=3D "ls1x-pwmtimer",
+-	.features		=3D CLOCK_EVT_FEAT_PERIODIC,
+-	.rating			=3D 300,
+-	.irq			=3D LS1X_TIMER_IRQ,
+-	.set_next_event		=3D ls1x_clockevent_set_next,
+-	.set_state_shutdown	=3D ls1x_clockevent_set_state_shutdown,
+-	.set_state_periodic	=3D ls1x_clockevent_set_state_periodic,
+-	.set_state_oneshot	=3D ls1x_clockevent_set_state_shutdown,
+-	.tick_resume		=3D ls1x_clockevent_tick_resume,
+-};
+-
+-static void __init ls1x_time_init(void)
+-{
+-	struct clock_event_device *cd =3D &ls1x_clockevent;
+-	int ret;
+-
+-	if (!mips_hpt_frequency)
+-		panic("Invalid timer clock rate");
+-
+-	ls1x_pwmtimer_init();
+-
+-	clockevent_set_clock(cd, mips_hpt_frequency);
+-	cd->max_delta_ns =3D clockevent_delta2ns(0xffffff, cd);
+-	cd->max_delta_ticks =3D 0xffffff;
+-	cd->min_delta_ns =3D clockevent_delta2ns(0x000300, cd);
+-	cd->min_delta_ticks =3D 0x000300;
+-	cd->cpumask =3D cpumask_of(smp_processor_id());
+-	clockevents_register_device(cd);
+-
+-	ls1x_clocksource.rating =3D 200 + mips_hpt_frequency / 10000000;
+-	ret =3D clocksource_register_hz(&ls1x_clocksource, mips_hpt_frequency);
+-	if (ret)
+-		panic(KERN_ERR "Failed to register clocksource: %d\n", ret);
+-
+-	if (request_irq(LS1X_TIMER_IRQ, ls1x_clockevent_isr,
+-			IRQF_PERCPU | IRQF_TIMER, "ls1x-pwmtimer",
+-			&ls1x_clockevent))
+-		pr_err("Failed to register ls1x-pwmtimer interrupt\n");
+-}
+-#endif /* CONFIG_CEVT_CSRC_LS1X */
+-
+ void __init plat_time_init(void)
  {
-@@ -1609,6 +1606,21 @@ unsigned long calibrate_delay_is_known(void)
- 	int constant_tsc =3D cpu_has(&cpu_data(cpu), X86_FEATURE_CONSTANT_TSC);
- 	const struct cpumask *mask =3D topology_core_cpumask(cpu);
+ 	struct clk *clk =3D NULL;
+@@ -214,20 +14,10 @@ void __init plat_time_init(void)
+ 	/* initialize LS1X clocks */
+ 	of_clk_init(NULL);
 =20
-+	/*
-+	 * If TSC has constant frequency and TSC is synchronized across
-+	 * sockets then reuse CPU0 calibration.
-+	 */
-+	if (constant_tsc && !tsc_unstable)
-+		return cpu_data(0).loops_per_jiffy;
+-#ifdef CONFIG_CEVT_CSRC_LS1X
+-	/* setup LS1X PWM timer */
+-	clk =3D clk_get(NULL, "ls1x-pwmtimer");
+-	if (IS_ERR(clk))
+-		panic("unable to get timer clock, err=3D%ld", PTR_ERR(clk));
+-
+-	mips_hpt_frequency =3D clk_get_rate(clk);
+-	ls1x_time_init();
+-#else
+ 	/* setup mips r4k timer */
+ 	clk =3D clk_get(NULL, "cpu_clk");
+ 	if (IS_ERR(clk))
+ 		panic("unable to get cpu clock, err=3D%ld", PTR_ERR(clk));
+=20
+ 	mips_hpt_frequency =3D clk_get_rate(clk) / 2;
+-#endif /* CONFIG_CEVT_CSRC_LS1X */
+ }
+diff --git a/drivers/clk/imx/clk-imx1.c b/drivers/clk/imx/clk-imx1.c
+index 22fc7491ba00..f6ea7e5052d5 100644
+--- a/drivers/clk/imx/clk-imx1.c
++++ b/drivers/clk/imx/clk-imx1.c
+@@ -10,7 +10,6 @@
+ #include <linux/of.h>
+ #include <linux/of_address.h>
+ #include <dt-bindings/clock/imx1-clock.h>
+-#include <soc/imx/timer.h>
+ #include <asm/irq.h>
+=20
+ #include "clk.h"
+diff --git a/drivers/clk/imx/clk-imx27.c b/drivers/clk/imx/clk-imx27.c
+index 5d177125728d..99618ded0939 100644
+--- a/drivers/clk/imx/clk-imx27.c
++++ b/drivers/clk/imx/clk-imx27.c
+@@ -8,7 +8,6 @@
+ #include <linux/of_address.h>
+ #include <dt-bindings/clock/imx27-clock.h>
+ #include <soc/imx/revision.h>
+-#include <soc/imx/timer.h>
+ #include <asm/irq.h>
+=20
+ #include "clk.h"
+diff --git a/drivers/clk/imx/clk-imx31.c b/drivers/clk/imx/clk-imx31.c
+index c44e18c6f63f..4c8d9ff0b2ad 100644
+--- a/drivers/clk/imx/clk-imx31.c
++++ b/drivers/clk/imx/clk-imx31.c
+@@ -11,7 +11,6 @@
+ #include <linux/of.h>
+ #include <linux/of_address.h>
+ #include <soc/imx/revision.h>
+-#include <soc/imx/timer.h>
+ #include <asm/irq.h>
+=20
+ #include "clk.h"
+diff --git a/drivers/clk/imx/clk-imx35.c b/drivers/clk/imx/clk-imx35.c
+index 7dcbaea3fea3..3b6fdb4e0be7 100644
+--- a/drivers/clk/imx/clk-imx35.c
++++ b/drivers/clk/imx/clk-imx35.c
+@@ -10,7 +10,6 @@
+ #include <linux/of.h>
+ #include <linux/err.h>
+ #include <soc/imx/revision.h>
+-#include <soc/imx/timer.h>
+ #include <asm/irq.h>
+=20
+ #include "clk.h"
+diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
+index 526382dc7482..c4d671a5a13d 100644
+--- a/drivers/clocksource/Kconfig
++++ b/drivers/clocksource/Kconfig
+@@ -612,6 +612,15 @@ config TIMER_IMX_SYS_CTR
+ 	  Enable this option to use i.MX system counter timer as a
+ 	  clockevent.
+=20
++config CLKSRC_LOONGSON1_PWM
++	bool "Clocksource using Loongson1 PWM"
++	depends on MACH_LOONGSON32 || COMPILE_TEST
++	select MIPS_EXTERNAL_TIMER
++	select TIMER_OF
++	help
++	  Enable this option to use Loongson1 PWM timer as clocksource
++	  instead of the performance counter.
 +
-+	/*
-+	 * If TSC has constant frequency and TSC is not synchronized across
-+	 * sockets and this is not the first CPU in the socket, then reuse
-+	 * the calibration value of an already online CPU on that socket.
-+	 *
-+	 * This assumes that CONSTANT_TSC is consistent for all CPUs in a
-+	 * socket.
-+	 */
- 	if (!constant_tsc || !mask)
- 		return 0;
-=20
-diff --git a/arch/x86/kernel/tsc_sync.c b/arch/x86/kernel/tsc_sync.c
-index 9452dc9664b5..bbc440c93e08 100644
---- a/arch/x86/kernel/tsc_sync.c
-+++ b/arch/x86/kernel/tsc_sync.c
-@@ -245,7 +245,6 @@ bool tsc_store_and_check_tsc_adjust(bool bootcpu)
-  */
- static atomic_t start_count;
- static atomic_t stop_count;
--static atomic_t skip_test;
- static atomic_t test_runs;
-=20
- /*
-@@ -344,20 +343,13 @@ static inline unsigned int loop_timeout(int cpu)
+ config CLKSRC_ST_LPC
+ 	bool "Low power clocksource found in the LPC" if COMPILE_TEST
+ 	select TIMER_OF if OF
+diff --git a/drivers/clocksource/Makefile b/drivers/clocksource/Makefile
+index f12d3987a960..5d93c9e3fc55 100644
+--- a/drivers/clocksource/Makefile
++++ b/drivers/clocksource/Makefile
+@@ -89,3 +89,4 @@ obj-$(CONFIG_MICROCHIP_PIT64B)		+=3D timer-microchip-pit64b=
+.o
+ obj-$(CONFIG_MSC313E_TIMER)		+=3D timer-msc313e.o
+ obj-$(CONFIG_GOLDFISH_TIMER)		+=3D timer-goldfish.o
+ obj-$(CONFIG_GXP_TIMER)			+=3D timer-gxp.o
++obj-$(CONFIG_CLKSRC_LOONGSON1_PWM)	+=3D timer-loongson1-pwm.o
+diff --git a/drivers/clocksource/hyperv_timer.c b/drivers/clocksource/hyperv_=
+timer.c
+index bcd9042a0c9f..9fc008c16636 100644
+--- a/drivers/clocksource/hyperv_timer.c
++++ b/drivers/clocksource/hyperv_timer.c
+@@ -475,15 +475,9 @@ static u64 notrace read_hv_clock_msr_cs(struct clocksour=
+ce *arg)
+ 	return read_hv_clock_msr();
  }
 =20
- /*
-- * Source CPU calls into this - it waits for the freshly booted
-- * target CPU to arrive and then starts the measurement:
-+ * The freshly booted CPU initiates this via an async SMP function call.
-  */
--void check_tsc_sync_source(int cpu)
-+static void check_tsc_sync_source(void *__cpu)
- {
-+	unsigned int cpu =3D (unsigned long)__cpu;
- 	int cpus =3D 2;
+-static u64 notrace read_hv_sched_clock_msr(void)
+-{
+-	return (read_hv_clock_msr() - hv_sched_clock_offset) *
+-		(NSEC_PER_SEC / HV_CLOCK_HZ);
+-}
+-
+ static struct clocksource hyperv_cs_msr =3D {
+ 	.name	=3D "hyperv_clocksource_msr",
+-	.rating	=3D 500,
++	.rating	=3D 495,
+ 	.read	=3D read_hv_clock_msr_cs,
+ 	.mask	=3D CLOCKSOURCE_MASK(64),
+ 	.flags	=3D CLOCK_SOURCE_IS_CONTINUOUS,
+@@ -513,7 +507,7 @@ static __always_inline void hv_setup_sched_clock(void *sc=
+hed_clock)
+ static __always_inline void hv_setup_sched_clock(void *sched_clock) {}
+ #endif /* CONFIG_GENERIC_SCHED_CLOCK */
 =20
--	/*
--	 * No need to check if we already know that the TSC is not
--	 * synchronized or if we have no TSC.
--	 */
--	if (unsynchronized_tsc())
+-static bool __init hv_init_tsc_clocksource(void)
++static void __init hv_init_tsc_clocksource(void)
+ {
+ 	union hv_reference_tsc_msr tsc_msr;
+=20
+@@ -524,17 +518,14 @@ static bool __init hv_init_tsc_clocksource(void)
+ 	 * Hyper-V Reference TSC rating, causing the generic TSC to be used.
+ 	 * TSC_INVARIANT is not offered on ARM64, so the Hyper-V Reference
+ 	 * TSC will be preferred over the virtualized ARM64 arch counter.
+-	 * While the Hyper-V MSR clocksource won't be used since the
+-	 * Reference TSC clocksource is present, change its rating as
+-	 * well for consistency.
+ 	 */
+ 	if (ms_hyperv.features & HV_ACCESS_TSC_INVARIANT) {
+ 		hyperv_cs_tsc.rating =3D 250;
+-		hyperv_cs_msr.rating =3D 250;
++		hyperv_cs_msr.rating =3D 245;
+ 	}
+=20
+ 	if (!(ms_hyperv.features & HV_MSR_REFERENCE_TSC_AVAILABLE))
+-		return false;
++		return;
+=20
+ 	hv_read_reference_counter =3D read_hv_clock_tsc;
+=20
+@@ -565,33 +556,34 @@ static bool __init hv_init_tsc_clocksource(void)
+=20
+ 	clocksource_register_hz(&hyperv_cs_tsc, NSEC_PER_SEC/100);
+=20
+-	hv_sched_clock_offset =3D hv_read_reference_counter();
+-	hv_setup_sched_clock(read_hv_sched_clock_tsc);
+-
+-	return true;
++	/*
++	 * If TSC is invariant, then let it stay as the sched clock since it
++	 * will be faster than reading the TSC page. But if not invariant, use
++	 * the TSC page so that live migrations across hosts with different
++	 * frequencies is handled correctly.
++	 */
++	if (!(ms_hyperv.features & HV_ACCESS_TSC_INVARIANT)) {
++		hv_sched_clock_offset =3D hv_read_reference_counter();
++		hv_setup_sched_clock(read_hv_sched_clock_tsc);
++	}
+ }
+=20
+ void __init hv_init_clocksource(void)
+ {
+ 	/*
+-	 * Try to set up the TSC page clocksource. If it succeeds, we're
+-	 * done. Otherwise, set up the MSR clocksource.  At least one of
+-	 * these will always be available except on very old versions of
+-	 * Hyper-V on x86.  In that case we won't have a Hyper-V
++	 * Try to set up the TSC page clocksource, then the MSR clocksource.
++	 * At least one of these will always be available except on very old
++	 * versions of Hyper-V on x86.  In that case we won't have a Hyper-V
+ 	 * clocksource, but Linux will still run with a clocksource based
+ 	 * on the emulated PIT or LAPIC timer.
++	 *
++	 * Never use the MSR clocksource as sched clock.  It's too slow.
++	 * Better to use the native sched clock as the fallback.
+ 	 */
+-	if (hv_init_tsc_clocksource())
 -		return;
 -
- 	/*
- 	 * Set the maximum number of test runs to
- 	 *  1 if the CPU does not provide the TSC_ADJUST MSR
-@@ -368,16 +360,9 @@ void check_tsc_sync_source(int cpu)
- 	else
- 		atomic_set(&test_runs, 3);
- retry:
--	/*
--	 * Wait for the target to start or to skip the test:
--	 */
--	while (atomic_read(&start_count) !=3D cpus - 1) {
--		if (atomic_read(&skip_test) > 0) {
--			atomic_set(&skip_test, 0);
--			return;
--		}
-+	/* Wait for the target to start. */
-+	while (atomic_read(&start_count) !=3D cpus - 1)
- 		cpu_relax();
--	}
+-	if (!(ms_hyperv.features & HV_MSR_TIME_REF_COUNT_AVAILABLE))
+-		return;
+-
+-	hv_read_reference_counter =3D read_hv_clock_msr;
+-	clocksource_register_hz(&hyperv_cs_msr, NSEC_PER_SEC/100);
++	hv_init_tsc_clocksource();
 =20
- 	/*
- 	 * Trigger the target to continue into the measurement too:
-@@ -397,14 +382,14 @@ void check_tsc_sync_source(int cpu)
- 	if (!nr_warps) {
- 		atomic_set(&test_runs, 0);
-=20
--		pr_debug("TSC synchronization [CPU#%d -> CPU#%d]: passed\n",
-+		pr_debug("TSC synchronization [CPU#%d -> CPU#%u]: passed\n",
- 			smp_processor_id(), cpu);
-=20
- 	} else if (atomic_dec_and_test(&test_runs) || random_warps) {
- 		/* Force it to 0 if random warps brought us here */
- 		atomic_set(&test_runs, 0);
-=20
--		pr_warn("TSC synchronization [CPU#%d -> CPU#%d]:\n",
-+		pr_warn("TSC synchronization [CPU#%d -> CPU#%u]:\n",
- 			smp_processor_id(), cpu);
- 		pr_warn("Measured %Ld cycles TSC warp between CPUs, "
- 			"turning off TSC clock.\n", max_warp);
-@@ -457,11 +442,12 @@ void check_tsc_sync_target(void)
- 	 * SoCs the TSC is frequency synchronized, but still the TSC ADJUST
- 	 * register might have been wreckaged by the BIOS..
- 	 */
--	if (tsc_store_and_check_tsc_adjust(false) || tsc_clocksource_reliable) {
--		atomic_inc(&skip_test);
-+	if (tsc_store_and_check_tsc_adjust(false) || tsc_clocksource_reliable)
- 		return;
--	}
-=20
-+	/* Kick the control CPU into the TSC synchronization function */
-+	smp_call_function_single(cpumask_first(cpu_online_mask), check_tsc_sync_sou=
-rce,
-+				 (unsigned long *)(unsigned long)cpu, 0);
- retry:
- 	/*
- 	 * Register this CPU's participation and wait for the
-diff --git a/arch/x86/kernel/x86_init.c b/arch/x86/kernel/x86_init.c
-index d82f4fa2f1bf..1da4baa34d1b 100644
---- a/arch/x86/kernel/x86_init.c
-+++ b/arch/x86/kernel/x86_init.c
-@@ -126,6 +126,7 @@ struct x86_init_ops x86_init __initdata =3D {
- struct x86_cpuinit_ops x86_cpuinit =3D {
- 	.early_percpu_clock_init	=3D x86_init_noop,
- 	.setup_percpu_clockev		=3D setup_secondary_APIC_clock,
-+	.parallel_bringup		=3D true,
- };
-=20
- static void default_nmi_init(void) { };
-diff --git a/arch/x86/mm/mem_encrypt_amd.c b/arch/x86/mm/mem_encrypt_amd.c
-index e0b51c09109f..4855e5f92970 100644
---- a/arch/x86/mm/mem_encrypt_amd.c
-+++ b/arch/x86/mm/mem_encrypt_amd.c
-@@ -501,6 +501,21 @@ void __init sme_early_init(void)
- 	x86_platform.guest.enc_status_change_finish  =3D amd_enc_status_change_fini=
-sh;
- 	x86_platform.guest.enc_tlb_flush_required    =3D amd_enc_tlb_flush_required;
- 	x86_platform.guest.enc_cache_flush_required  =3D amd_enc_cache_flush_requir=
-ed;
-+
-+	/*
-+	 * AMD-SEV-ES intercepts the RDMSR to read the X2APIC ID in the
-+	 * parallel bringup low level code. That raises #VC which cannot be
-+	 * handled there.
-+	 * It does not provide a RDMSR GHCB protocol so the early startup
-+	 * code cannot directly communicate with the secure firmware. The
-+	 * alternative solution to retrieve the APIC ID via CPUID(0xb),
-+	 * which is covered by the GHCB protocol, is not viable either
-+	 * because there is no enforcement of the CPUID(0xb) provided
-+	 * "initial" APIC ID to be the same as the real APIC ID.
-+	 * Disable parallel bootup.
-+	 */
-+	if (sev_status & MSR_AMD64_SEV_ES_ENABLED)
-+		x86_cpuinit.parallel_bringup =3D false;
+-	hv_sched_clock_offset =3D hv_read_reference_counter();
+-	hv_setup_sched_clock(read_hv_sched_clock_msr);
++	if (ms_hyperv.features & HV_MSR_TIME_REF_COUNT_AVAILABLE)
++		clocksource_register_hz(&hyperv_cs_msr, NSEC_PER_SEC/100);
  }
 =20
- void __init mem_encrypt_free_decrypted_mem(void)
-diff --git a/arch/x86/power/cpu.c b/arch/x86/power/cpu.c
-index 7a4d5e911415..63230ff8cf4f 100644
---- a/arch/x86/power/cpu.c
-+++ b/arch/x86/power/cpu.c
-@@ -351,43 +351,6 @@ static int bsp_pm_callback(struct notifier_block *nb, un=
-signed long action,
- 	case PM_HIBERNATION_PREPARE:
- 		ret =3D bsp_check();
- 		break;
--#ifdef CONFIG_DEBUG_HOTPLUG_CPU0
--	case PM_RESTORE_PREPARE:
--		/*
--		 * When system resumes from hibernation, online CPU0 because
--		 * 1. it's required for resume and
--		 * 2. the CPU was online before hibernation
--		 */
--		if (!cpu_online(0))
--			_debug_hotplug_cpu(0, 1);
--		break;
--	case PM_POST_RESTORE:
--		/*
--		 * When a resume really happens, this code won't be called.
--		 *
--		 * This code is called only when user space hibernation software
--		 * prepares for snapshot device during boot time. So we just
--		 * call _debug_hotplug_cpu() to restore to CPU0's state prior to
--		 * preparing the snapshot device.
--		 *
--		 * This works for normal boot case in our CPU0 hotplug debug
--		 * mode, i.e. CPU0 is offline and user mode hibernation
--		 * software initializes during boot time.
--		 *
--		 * If CPU0 is online and user application accesses snapshot
--		 * device after boot time, this will offline CPU0 and user may
--		 * see different CPU0 state before and after accessing
--		 * the snapshot device. But hopefully this is not a case when
--		 * user debugging CPU0 hotplug. Even if users hit this case,
--		 * they can easily online CPU0 back.
--		 *
--		 * To simplify this debug code, we only consider normal boot
--		 * case. Otherwise we need to remember CPU0's state and restore
--		 * to that state and resolve racy conditions etc.
--		 */
--		_debug_hotplug_cpu(0, 0);
--		break;
--#endif
- 	default:
- 		break;
- 	}
-diff --git a/arch/x86/realmode/init.c b/arch/x86/realmode/init.c
-index af565816d2ba..788e5559549f 100644
---- a/arch/x86/realmode/init.c
-+++ b/arch/x86/realmode/init.c
-@@ -154,6 +154,9 @@ static void __init setup_real_mode(void)
-=20
- 	trampoline_header->flags =3D 0;
-=20
-+	trampoline_lock =3D &trampoline_header->lock;
-+	*trampoline_lock =3D 0;
-+
- 	trampoline_pgd =3D (u64 *) __va(real_mode_header->trampoline_pgd);
-=20
- 	/* Map the real mode stub as virtual =3D=3D physical */
-diff --git a/arch/x86/realmode/rm/trampoline_64.S b/arch/x86/realmode/rm/tram=
-poline_64.S
-index e38d61d6562e..c9f76fae902e 100644
---- a/arch/x86/realmode/rm/trampoline_64.S
-+++ b/arch/x86/realmode/rm/trampoline_64.S
-@@ -37,6 +37,24 @@
- 	.text
- 	.code16
-=20
-+.macro LOCK_AND_LOAD_REALMODE_ESP lock_pa=3D0
-+	/*
-+	 * Make sure only one CPU fiddles with the realmode stack
-+	 */
-+.Llock_rm\@:
-+	.if \lock_pa
-+        lock btsl       $0, pa_tr_lock
-+	.else
-+        lock btsl       $0, tr_lock
-+	.endif
-+        jnc             2f
-+        pause
-+        jmp             .Llock_rm\@
-+2:
-+	# Setup stack
-+	movl	$rm_stack_end, %esp
-+.endm
-+
- 	.balign	PAGE_SIZE
- SYM_CODE_START(trampoline_start)
- 	cli			# We should be safe anyway
-@@ -49,8 +67,7 @@ SYM_CODE_START(trampoline_start)
- 	mov	%ax, %es
- 	mov	%ax, %ss
-=20
--	# Setup stack
--	movl	$rm_stack_end, %esp
-+	LOCK_AND_LOAD_REALMODE_ESP
-=20
- 	call	verify_cpu		# Verify the cpu supports long mode
- 	testl   %eax, %eax		# Check for return code
-@@ -93,8 +110,7 @@ SYM_CODE_START(sev_es_trampoline_start)
- 	mov	%ax, %es
- 	mov	%ax, %ss
-=20
--	# Setup stack
--	movl	$rm_stack_end, %esp
-+	LOCK_AND_LOAD_REALMODE_ESP
-=20
- 	jmp	.Lswitch_to_protected
- SYM_CODE_END(sev_es_trampoline_start)
-@@ -177,7 +193,7 @@ SYM_CODE_START(pa_trampoline_compat)
- 	 * In compatibility mode.  Prep ESP and DX for startup_32, then disable
- 	 * paging and complete the switch to legacy 32-bit mode.
- 	 */
--	movl	$rm_stack_end, %esp
-+	LOCK_AND_LOAD_REALMODE_ESP lock_pa=3D1
- 	movw	$__KERNEL_DS, %dx
-=20
- 	movl	$(CR0_STATE & ~X86_CR0_PG), %eax
-@@ -241,6 +257,7 @@ SYM_DATA_START(trampoline_header)
- 	SYM_DATA(tr_efer,		.space 8)
- 	SYM_DATA(tr_cr4,		.space 4)
- 	SYM_DATA(tr_flags,		.space 4)
-+	SYM_DATA(tr_lock,		.space 4)
- SYM_DATA_END(trampoline_header)
-=20
- #include "trampoline_common.S"
-diff --git a/arch/x86/xen/enlighten_hvm.c b/arch/x86/xen/enlighten_hvm.c
-index c1cd28e915a3..a6820ca940bf 100644
---- a/arch/x86/xen/enlighten_hvm.c
-+++ b/arch/x86/xen/enlighten_hvm.c
-@@ -161,13 +161,12 @@ static int xen_cpu_up_prepare_hvm(unsigned int cpu)
- 	int rc =3D 0;
-=20
- 	/*
--	 * This can happen if CPU was offlined earlier and
--	 * offlining timed out in common_cpu_die().
-+	 * If a CPU was offlined earlier and offlining timed out then the
-+	 * lock mechanism is still initialized. Uninit it unconditionally
-+	 * as it's safe to call even if already uninited. Interrupts and
-+	 * timer have already been handled in xen_cpu_dead_hvm().
- 	 */
--	if (cpu_report_state(cpu) =3D=3D CPU_DEAD_FROZEN) {
--		xen_smp_intr_free(cpu);
--		xen_uninit_lock_cpu(cpu);
--	}
-+	xen_uninit_lock_cpu(cpu);
-=20
- 	if (cpu_acpi_id(cpu) !=3D U32_MAX)
- 		per_cpu(xen_vcpu_id, cpu) =3D cpu_acpi_id(cpu);
-diff --git a/arch/x86/xen/smp_hvm.c b/arch/x86/xen/smp_hvm.c
-index b70afdff419c..ac95d1981cc0 100644
---- a/arch/x86/xen/smp_hvm.c
-+++ b/arch/x86/xen/smp_hvm.c
-@@ -55,18 +55,16 @@ static void __init xen_hvm_smp_prepare_cpus(unsigned int =
-max_cpus)
- }
-=20
- #ifdef CONFIG_HOTPLUG_CPU
--static void xen_hvm_cpu_die(unsigned int cpu)
-+static void xen_hvm_cleanup_dead_cpu(unsigned int cpu)
- {
--	if (common_cpu_die(cpu) =3D=3D 0) {
--		if (xen_have_vector_callback) {
--			xen_smp_intr_free(cpu);
--			xen_uninit_lock_cpu(cpu);
--			xen_teardown_timer(cpu);
--		}
-+	if (xen_have_vector_callback) {
-+		xen_smp_intr_free(cpu);
-+		xen_uninit_lock_cpu(cpu);
-+		xen_teardown_timer(cpu);
- 	}
- }
- #else
--static void xen_hvm_cpu_die(unsigned int cpu)
-+static void xen_hvm_cleanup_dead_cpu(unsigned int cpu)
- {
- 	BUG();
- }
-@@ -77,7 +75,7 @@ void __init xen_hvm_smp_init(void)
- 	smp_ops.smp_prepare_boot_cpu =3D xen_hvm_smp_prepare_boot_cpu;
- 	smp_ops.smp_prepare_cpus =3D xen_hvm_smp_prepare_cpus;
- 	smp_ops.smp_cpus_done =3D xen_smp_cpus_done;
--	smp_ops.cpu_die =3D xen_hvm_cpu_die;
-+	smp_ops.cleanup_dead_cpu =3D xen_hvm_cleanup_dead_cpu;
-=20
- 	if (!xen_have_vector_callback) {
- #ifdef CONFIG_PARAVIRT_SPINLOCKS
-diff --git a/arch/x86/xen/smp_pv.c b/arch/x86/xen/smp_pv.c
-index a9cf8c8fa074..a92e8002b5cf 100644
---- a/arch/x86/xen/smp_pv.c
-+++ b/arch/x86/xen/smp_pv.c
-@@ -62,6 +62,7 @@ static void cpu_bringup(void)
- 	int cpu;
-=20
- 	cr4_init();
-+	cpuhp_ap_sync_alive();
- 	cpu_init();
- 	touch_softlockup_watchdog();
-=20
-@@ -83,7 +84,7 @@ static void cpu_bringup(void)
-=20
- 	set_cpu_online(cpu, true);
-=20
--	cpu_set_state_online(cpu);  /* Implies full memory barrier. */
-+	smp_mb();
-=20
- 	/* We can take interrupts now: we're officially "up". */
- 	local_irq_enable();
-@@ -254,15 +255,12 @@ cpu_initialize_context(unsigned int cpu, struct task_st=
-ruct *idle)
- 	struct desc_struct *gdt;
- 	unsigned long gdt_mfn;
-=20
--	/* used to tell cpu_init() that it can proceed with initialization */
--	cpumask_set_cpu(cpu, cpu_callout_mask);
- 	if (cpumask_test_and_set_cpu(cpu, xen_cpu_initialized_map))
- 		return 0;
-=20
- 	ctxt =3D kzalloc(sizeof(*ctxt), GFP_KERNEL);
- 	if (ctxt =3D=3D NULL) {
- 		cpumask_clear_cpu(cpu, xen_cpu_initialized_map);
--		cpumask_clear_cpu(cpu, cpu_callout_mask);
- 		return -ENOMEM;
- 	}
-=20
-@@ -316,7 +314,7 @@ cpu_initialize_context(unsigned int cpu, struct task_stru=
-ct *idle)
+ void __init hv_remap_tsc_clocksource(void)
+diff --git a/drivers/clocksource/ingenic-timer.c b/drivers/clocksource/ingeni=
+c-timer.c
+index 089ce64b1c3f..154ee5f7954a 100644
+--- a/drivers/clocksource/ingenic-timer.c
++++ b/drivers/clocksource/ingenic-timer.c
+@@ -369,7 +369,7 @@ static int __init ingenic_tcu_probe(struct platform_devic=
+e *pdev)
  	return 0;
  }
 =20
--static int xen_pv_cpu_up(unsigned int cpu, struct task_struct *idle)
-+static int xen_pv_kick_ap(unsigned int cpu, struct task_struct *idle)
+-static int __maybe_unused ingenic_tcu_suspend(struct device *dev)
++static int ingenic_tcu_suspend(struct device *dev)
  {
- 	int rc;
-=20
-@@ -326,14 +324,6 @@ static int xen_pv_cpu_up(unsigned int cpu, struct task_s=
-truct *idle)
-=20
- 	xen_setup_runstate_info(cpu);
-=20
--	/*
--	 * PV VCPUs are always successfully taken down (see 'while' loop
--	 * in xen_cpu_die()), so -EBUSY is an error.
--	 */
--	rc =3D cpu_check_up_prepare(cpu);
--	if (rc)
--		return rc;
--
- 	/* make sure interrupts start blocked */
- 	per_cpu(xen_vcpu, cpu)->evtchn_upcall_mask =3D 1;
-=20
-@@ -343,15 +333,20 @@ static int xen_pv_cpu_up(unsigned int cpu, struct task_=
-struct *idle)
-=20
- 	xen_pmu_init(cpu);
-=20
--	rc =3D HYPERVISOR_vcpu_op(VCPUOP_up, xen_vcpu_nr(cpu), NULL);
--	BUG_ON(rc);
--
--	while (cpu_report_state(cpu) !=3D CPU_ONLINE)
--		HYPERVISOR_sched_op(SCHEDOP_yield, NULL);
-+	/*
-+	 * Why is this a BUG? If the hypercall fails then everything can be
-+	 * rolled back, no?
-+	 */
-+	BUG_ON(HYPERVISOR_vcpu_op(VCPUOP_up, xen_vcpu_nr(cpu), NULL));
-=20
+ 	struct ingenic_tcu *tcu =3D dev_get_drvdata(dev);
+ 	unsigned int cpu;
+@@ -382,7 +382,7 @@ static int __maybe_unused ingenic_tcu_suspend(struct devi=
+ce *dev)
  	return 0;
  }
 =20
-+static void xen_pv_poll_sync_state(void)
-+{
-+	HYPERVISOR_sched_op(SCHEDOP_yield, NULL);
-+}
-+
- #ifdef CONFIG_HOTPLUG_CPU
- static int xen_pv_cpu_disable(void)
+-static int __maybe_unused ingenic_tcu_resume(struct device *dev)
++static int ingenic_tcu_resume(struct device *dev)
  {
-@@ -367,18 +362,18 @@ static int xen_pv_cpu_disable(void)
-=20
- static void xen_pv_cpu_die(unsigned int cpu)
- {
--	while (HYPERVISOR_vcpu_op(VCPUOP_is_up,
--				  xen_vcpu_nr(cpu), NULL)) {
-+	while (HYPERVISOR_vcpu_op(VCPUOP_is_up, xen_vcpu_nr(cpu), NULL)) {
- 		__set_current_state(TASK_UNINTERRUPTIBLE);
- 		schedule_timeout(HZ/10);
- 	}
-+}
-=20
--	if (common_cpu_die(cpu) =3D=3D 0) {
--		xen_smp_intr_free(cpu);
--		xen_uninit_lock_cpu(cpu);
--		xen_teardown_timer(cpu);
--		xen_pmu_finish(cpu);
--	}
-+static void xen_pv_cleanup_dead_cpu(unsigned int cpu)
-+{
-+	xen_smp_intr_free(cpu);
-+	xen_uninit_lock_cpu(cpu);
-+	xen_teardown_timer(cpu);
-+	xen_pmu_finish(cpu);
- }
-=20
- static void __noreturn xen_pv_play_dead(void) /* used only with HOTPLUG_CPU =
-*/
-@@ -400,6 +395,11 @@ static void xen_pv_cpu_die(unsigned int cpu)
- 	BUG();
- }
-=20
-+static void xen_pv_cleanup_dead_cpu(unsigned int cpu)
-+{
-+	BUG();
-+}
-+
- static void __noreturn xen_pv_play_dead(void)
- {
- 	BUG();
-@@ -438,8 +438,10 @@ static const struct smp_ops xen_smp_ops __initconst =3D {
- 	.smp_prepare_cpus =3D xen_pv_smp_prepare_cpus,
- 	.smp_cpus_done =3D xen_smp_cpus_done,
-=20
--	.cpu_up =3D xen_pv_cpu_up,
-+	.kick_ap_alive =3D xen_pv_kick_ap,
- 	.cpu_die =3D xen_pv_cpu_die,
-+	.cleanup_dead_cpu =3D xen_pv_cleanup_dead_cpu,
-+	.poll_sync_state =3D xen_pv_poll_sync_state,
- 	.cpu_disable =3D xen_pv_cpu_disable,
- 	.play_dead =3D xen_pv_play_dead,
-=20
-diff --git a/drivers/acpi/processor_idle.c b/drivers/acpi/processor_idle.c
-index 9718d07cc2a2..dc615ef6550a 100644
---- a/drivers/acpi/processor_idle.c
-+++ b/drivers/acpi/processor_idle.c
-@@ -597,10 +597,6 @@ static int acpi_idle_play_dead(struct cpuidle_device *de=
-v, int index)
- 			io_idle(cx->address);
- 		} else
- 			return -ENODEV;
--
--#if defined(CONFIG_X86) && defined(CONFIG_HOTPLUG_CPU)
--		cond_wakeup_cpu0();
--#endif
- 	}
-=20
- 	/* Never reached */
-diff --git a/include/linux/cpu.h b/include/linux/cpu.h
-index 8582a7142623..d321dbd53405 100644
---- a/include/linux/cpu.h
-+++ b/include/linux/cpu.h
-@@ -184,8 +184,6 @@ void arch_cpu_idle_enter(void);
- void arch_cpu_idle_exit(void);
- void __noreturn arch_cpu_idle_dead(void);
-=20
--int cpu_report_state(int cpu);
--int cpu_check_up_prepare(int cpu);
- void cpu_set_state_online(int cpu);
- void play_idle_precise(u64 duration_ns, u64 latency_ns);
-=20
-@@ -195,8 +193,6 @@ static inline void play_idle(unsigned long duration_us)
- }
-=20
- #ifdef CONFIG_HOTPLUG_CPU
--bool cpu_wait_death(unsigned int cpu, int seconds);
--bool cpu_report_death(void);
- void cpuhp_report_idle_dead(void);
- #else
- static inline void cpuhp_report_idle_dead(void) { }
-diff --git a/include/linux/cpuhotplug.h b/include/linux/cpuhotplug.h
-index 0f1001dca0e0..a5e414cd82be 100644
---- a/include/linux/cpuhotplug.h
-+++ b/include/linux/cpuhotplug.h
-@@ -133,6 +133,7 @@ enum cpuhp_state {
- 	CPUHP_MIPS_SOC_PREPARE,
- 	CPUHP_BP_PREPARE_DYN,
- 	CPUHP_BP_PREPARE_DYN_END		=3D CPUHP_BP_PREPARE_DYN + 20,
-+	CPUHP_BP_KICK_AP,
- 	CPUHP_BRINGUP_CPU,
-=20
- 	/*
-@@ -517,4 +518,20 @@ void cpuhp_online_idle(enum cpuhp_state state);
- static inline void cpuhp_online_idle(enum cpuhp_state state) { }
- #endif
-=20
-+struct task_struct;
-+
-+void cpuhp_ap_sync_alive(void);
-+void arch_cpuhp_sync_state_poll(void);
-+void arch_cpuhp_cleanup_kick_cpu(unsigned int cpu);
-+int arch_cpuhp_kick_ap_alive(unsigned int cpu, struct task_struct *tidle);
-+bool arch_cpuhp_init_parallel_bringup(void);
-+
-+#ifdef CONFIG_HOTPLUG_CORE_SYNC_DEAD
-+void cpuhp_ap_report_dead(void);
-+void arch_cpuhp_cleanup_dead_cpu(unsigned int cpu);
-+#else
-+static inline void cpuhp_ap_report_dead(void) { }
-+static inline void arch_cpuhp_cleanup_dead_cpu(unsigned int cpu) { }
-+#endif
-+
- #endif
-diff --git a/include/trace/events/csd.h b/include/trace/events/csd.h
-new file mode 100644
-index 000000000000..67e9d01f80c2
---- /dev/null
-+++ b/include/trace/events/csd.h
-@@ -0,0 +1,72 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#undef TRACE_SYSTEM
-+#define TRACE_SYSTEM csd
-+
-+#if !defined(_TRACE_CSD_H) || defined(TRACE_HEADER_MULTI_READ)
-+#define _TRACE_CSD_H
-+
-+#include <linux/tracepoint.h>
-+
-+TRACE_EVENT(csd_queue_cpu,
-+
-+	TP_PROTO(const unsigned int cpu,
-+		unsigned long callsite,
-+		smp_call_func_t func,
-+		struct __call_single_data *csd),
-+
-+	TP_ARGS(cpu, callsite, func, csd),
-+
-+	TP_STRUCT__entry(
-+		__field(unsigned int, cpu)
-+		__field(void *, callsite)
-+		__field(void *, func)
-+		__field(void *, csd)
-+		),
-+
-+	    TP_fast_assign(
-+		__entry->cpu =3D cpu;
-+		__entry->callsite =3D (void *)callsite;
-+		__entry->func =3D func;
-+		__entry->csd  =3D csd;
-+		),
-+
-+	TP_printk("cpu=3D%u callsite=3D%pS func=3D%ps csd=3D%p",
-+		__entry->cpu, __entry->callsite, __entry->func, __entry->csd)
-+	);
-+
-+/*
-+ * Tracepoints for a function which is called as an effect of smp_call_funct=
-ion.*
-+ */
-+DECLARE_EVENT_CLASS(csd_function,
-+
-+	TP_PROTO(smp_call_func_t func, struct __call_single_data *csd),
-+
-+	TP_ARGS(func, csd),
-+
-+	TP_STRUCT__entry(
-+		__field(void *,	func)
-+		__field(void *,	csd)
-+	),
-+
-+	TP_fast_assign(
-+		__entry->func	=3D func;
-+		__entry->csd	=3D csd;
-+	),
-+
-+	TP_printk("func=3D%ps, csd=3D%p", __entry->func, __entry->csd)
-+);
-+
-+DEFINE_EVENT(csd_function, csd_function_entry,
-+	TP_PROTO(smp_call_func_t func, struct __call_single_data *csd),
-+	TP_ARGS(func, csd)
-+);
-+
-+DEFINE_EVENT(csd_function, csd_function_exit,
-+	TP_PROTO(smp_call_func_t func, struct __call_single_data *csd),
-+	TP_ARGS(func, csd)
-+);
-+
-+#endif /* _TRACE_CSD_H */
-+
-+/* This part must be outside protection */
-+#include <trace/define_trace.h>
-diff --git a/kernel/cpu.c b/kernel/cpu.c
-index f4a2c5845bcb..88a7ede322bd 100644
---- a/kernel/cpu.c
-+++ b/kernel/cpu.c
-@@ -17,6 +17,7 @@
- #include <linux/cpu.h>
- #include <linux/oom.h>
- #include <linux/rcupdate.h>
-+#include <linux/delay.h>
- #include <linux/export.h>
- #include <linux/bug.h>
- #include <linux/kthread.h>
-@@ -59,6 +60,7 @@
-  * @last:	For multi-instance rollback, remember how far we got
-  * @cb_state:	The state for a single callback (install/uninstall)
-  * @result:	Result of the operation
-+ * @ap_sync_state:	State for AP synchronization
-  * @done_up:	Signal completion to the issuer of the task for cpu-up
-  * @done_down:	Signal completion to the issuer of the task for cpu-down
-  */
-@@ -76,6 +78,7 @@ struct cpuhp_cpu_state {
- 	struct hlist_node	*last;
- 	enum cpuhp_state	cb_state;
- 	int			result;
-+	atomic_t		ap_sync_state;
- 	struct completion	done_up;
- 	struct completion	done_down;
- #endif
-@@ -276,6 +279,182 @@ static bool cpuhp_is_atomic_state(enum cpuhp_state stat=
-e)
- 	return CPUHP_AP_IDLE_DEAD <=3D state && state < CPUHP_AP_ONLINE;
- }
-=20
-+/* Synchronization state management */
-+enum cpuhp_sync_state {
-+	SYNC_STATE_DEAD,
-+	SYNC_STATE_KICKED,
-+	SYNC_STATE_SHOULD_DIE,
-+	SYNC_STATE_ALIVE,
-+	SYNC_STATE_SHOULD_ONLINE,
-+	SYNC_STATE_ONLINE,
-+};
-+
-+#ifdef CONFIG_HOTPLUG_CORE_SYNC
-+/**
-+ * cpuhp_ap_update_sync_state - Update synchronization state during bringup/=
-teardown
-+ * @state:	The synchronization state to set
-+ *
-+ * No synchronization point. Just update of the synchronization state, but i=
-mplies
-+ * a full barrier so that the AP changes are visible before the control CPU =
-proceeds.
-+ */
-+static inline void cpuhp_ap_update_sync_state(enum cpuhp_sync_state state)
-+{
-+	atomic_t *st =3D this_cpu_ptr(&cpuhp_state.ap_sync_state);
-+
-+	(void)atomic_xchg(st, state);
-+}
-+
-+void __weak arch_cpuhp_sync_state_poll(void) { cpu_relax(); }
-+
-+static bool cpuhp_wait_for_sync_state(unsigned int cpu, enum cpuhp_sync_stat=
-e state,
-+				      enum cpuhp_sync_state next_state)
-+{
-+	atomic_t *st =3D per_cpu_ptr(&cpuhp_state.ap_sync_state, cpu);
-+	ktime_t now, end, start =3D ktime_get();
-+	int sync;
-+
-+	end =3D start + 10ULL * NSEC_PER_SEC;
-+
-+	sync =3D atomic_read(st);
-+	while (1) {
-+		if (sync =3D=3D state) {
-+			if (!atomic_try_cmpxchg(st, &sync, next_state))
-+				continue;
-+			return true;
-+		}
-+
-+		now =3D ktime_get();
-+		if (now > end) {
-+			/* Timeout. Leave the state unchanged */
-+			return false;
-+		} else if (now - start < NSEC_PER_MSEC) {
-+			/* Poll for one millisecond */
-+			arch_cpuhp_sync_state_poll();
-+		} else {
-+			usleep_range_state(USEC_PER_MSEC, 2 * USEC_PER_MSEC, TASK_UNINTERRUPTIBLE=
-);
-+		}
-+		sync =3D atomic_read(st);
-+	}
-+	return true;
-+}
-+#else  /* CONFIG_HOTPLUG_CORE_SYNC */
-+static inline void cpuhp_ap_update_sync_state(enum cpuhp_sync_state state) {=
- }
-+#endif /* !CONFIG_HOTPLUG_CORE_SYNC */
-+
-+#ifdef CONFIG_HOTPLUG_CORE_SYNC_DEAD
-+/**
-+ * cpuhp_ap_report_dead - Update synchronization state to DEAD
-+ *
-+ * No synchronization point. Just update of the synchronization state.
-+ */
-+void cpuhp_ap_report_dead(void)
-+{
-+	cpuhp_ap_update_sync_state(SYNC_STATE_DEAD);
-+}
-+
-+void __weak arch_cpuhp_cleanup_dead_cpu(unsigned int cpu) { }
-+
-+/*
-+ * Late CPU shutdown synchronization point. Cannot use cpuhp_state::done_down
-+ * because the AP cannot issue complete() at this stage.
-+ */
-+static void cpuhp_bp_sync_dead(unsigned int cpu)
-+{
-+	atomic_t *st =3D per_cpu_ptr(&cpuhp_state.ap_sync_state, cpu);
-+	int sync =3D atomic_read(st);
-+
-+	do {
-+		/* CPU can have reported dead already. Don't overwrite that! */
-+		if (sync =3D=3D SYNC_STATE_DEAD)
-+			break;
-+	} while (!atomic_try_cmpxchg(st, &sync, SYNC_STATE_SHOULD_DIE));
-+
-+	if (cpuhp_wait_for_sync_state(cpu, SYNC_STATE_DEAD, SYNC_STATE_DEAD)) {
-+		/* CPU reached dead state. Invoke the cleanup function */
-+		arch_cpuhp_cleanup_dead_cpu(cpu);
-+		return;
-+	}
-+
-+	/* No further action possible. Emit message and give up. */
-+	pr_err("CPU%u failed to report dead state\n", cpu);
-+}
-+#else /* CONFIG_HOTPLUG_CORE_SYNC_DEAD */
-+static inline void cpuhp_bp_sync_dead(unsigned int cpu) { }
-+#endif /* !CONFIG_HOTPLUG_CORE_SYNC_DEAD */
-+
-+#ifdef CONFIG_HOTPLUG_CORE_SYNC_FULL
-+/**
-+ * cpuhp_ap_sync_alive - Synchronize AP with the control CPU once it is alive
-+ *
-+ * Updates the AP synchronization state to SYNC_STATE_ALIVE and waits
-+ * for the BP to release it.
-+ */
-+void cpuhp_ap_sync_alive(void)
-+{
-+	atomic_t *st =3D this_cpu_ptr(&cpuhp_state.ap_sync_state);
-+
-+	cpuhp_ap_update_sync_state(SYNC_STATE_ALIVE);
-+
-+	/* Wait for the control CPU to release it. */
-+	while (atomic_read(st) !=3D SYNC_STATE_SHOULD_ONLINE)
-+		cpu_relax();
-+}
-+
-+static bool cpuhp_can_boot_ap(unsigned int cpu)
-+{
-+	atomic_t *st =3D per_cpu_ptr(&cpuhp_state.ap_sync_state, cpu);
-+	int sync =3D atomic_read(st);
-+
-+again:
-+	switch (sync) {
-+	case SYNC_STATE_DEAD:
-+		/* CPU is properly dead */
-+		break;
-+	case SYNC_STATE_KICKED:
-+		/* CPU did not come up in previous attempt */
-+		break;
-+	case SYNC_STATE_ALIVE:
-+		/* CPU is stuck cpuhp_ap_sync_alive(). */
-+		break;
-+	default:
-+		/* CPU failed to report online or dead and is in limbo state. */
-+		return false;
-+	}
-+
-+	/* Prepare for booting */
-+	if (!atomic_try_cmpxchg(st, &sync, SYNC_STATE_KICKED))
-+		goto again;
-+
-+	return true;
-+}
-+
-+void __weak arch_cpuhp_cleanup_kick_cpu(unsigned int cpu) { }
-+
-+/*
-+ * Early CPU bringup synchronization point. Cannot use cpuhp_state::done_up
-+ * because the AP cannot issue complete() so early in the bringup.
-+ */
-+static int cpuhp_bp_sync_alive(unsigned int cpu)
-+{
-+	int ret =3D 0;
-+
-+	if (!IS_ENABLED(CONFIG_HOTPLUG_CORE_SYNC_FULL))
-+		return 0;
-+
-+	if (!cpuhp_wait_for_sync_state(cpu, SYNC_STATE_ALIVE, SYNC_STATE_SHOULD_ONL=
-INE)) {
-+		pr_err("CPU%u failed to report alive state\n", cpu);
-+		ret =3D -EIO;
-+	}
-+
-+	/* Let the architecture cleanup the kick alive mechanics. */
-+	arch_cpuhp_cleanup_kick_cpu(cpu);
-+	return ret;
-+}
-+#else /* CONFIG_HOTPLUG_CORE_SYNC_FULL */
-+static inline int cpuhp_bp_sync_alive(unsigned int cpu) { return 0; }
-+static inline bool cpuhp_can_boot_ap(unsigned int cpu) { return true; }
-+#endif /* !CONFIG_HOTPLUG_CORE_SYNC_FULL */
-+
- /* Serializes the updates to cpu_online_mask, cpu_present_mask */
- static DEFINE_MUTEX(cpu_add_remove_lock);
- bool cpuhp_tasks_frozen;
-@@ -470,8 +649,23 @@ bool cpu_smt_possible(void)
- 		cpu_smt_control !=3D CPU_SMT_NOT_SUPPORTED;
- }
- EXPORT_SYMBOL_GPL(cpu_smt_possible);
-+
-+static inline bool cpuhp_smt_aware(void)
-+{
-+	return topology_smt_supported();
-+}
-+
-+static inline const struct cpumask *cpuhp_get_primary_thread_mask(void)
-+{
-+	return cpu_primary_thread_mask;
-+}
- #else
- static inline bool cpu_smt_allowed(unsigned int cpu) { return true; }
-+static inline bool cpuhp_smt_aware(void) { return false; }
-+static inline const struct cpumask *cpuhp_get_primary_thread_mask(void)
-+{
-+	return cpu_present_mask;
-+}
- #endif
-=20
- static inline enum cpuhp_state
-@@ -558,7 +752,7 @@ static int cpuhp_kick_ap(int cpu, struct cpuhp_cpu_state =
-*st,
+ 	struct ingenic_tcu *tcu =3D dev_get_drvdata(dev);
+ 	unsigned int cpu;
+@@ -406,7 +406,7 @@ static int __maybe_unused ingenic_tcu_resume(struct devic=
+e *dev)
  	return ret;
  }
 =20
--static int bringup_wait_for_ap(unsigned int cpu)
-+static int bringup_wait_for_ap_online(unsigned int cpu)
- {
- 	struct cpuhp_cpu_state *st =3D per_cpu_ptr(&cpuhp_state, cpu);
-=20
-@@ -579,38 +773,94 @@ static int bringup_wait_for_ap(unsigned int cpu)
+-static const struct dev_pm_ops __maybe_unused ingenic_tcu_pm_ops =3D {
++static const struct dev_pm_ops ingenic_tcu_pm_ops =3D {
+ 	/* _noirq: We want the TCU clocks to be gated last / ungated first */
+ 	.suspend_noirq =3D ingenic_tcu_suspend,
+ 	.resume_noirq  =3D ingenic_tcu_resume,
+@@ -415,9 +415,7 @@ static const struct dev_pm_ops __maybe_unused ingenic_tcu=
+_pm_ops =3D {
+ static struct platform_driver ingenic_tcu_driver =3D {
+ 	.driver =3D {
+ 		.name	=3D "ingenic-tcu-timer",
+-#ifdef CONFIG_PM_SLEEP
+-		.pm	=3D &ingenic_tcu_pm_ops,
+-#endif
++		.pm	=3D pm_sleep_ptr(&ingenic_tcu_pm_ops),
+ 		.of_match_table =3D ingenic_tcu_of_match,
+ 	},
+ };
+diff --git a/drivers/clocksource/timer-cadence-ttc.c b/drivers/clocksource/ti=
+mer-cadence-ttc.c
+index 4efd0cf3b602..0d52e28fea4d 100644
+--- a/drivers/clocksource/timer-cadence-ttc.c
++++ b/drivers/clocksource/timer-cadence-ttc.c
+@@ -486,10 +486,10 @@ static int __init ttc_timer_probe(struct platform_devic=
+e *pdev)
+ 	 * and use it. Note that the event timer uses the interrupt and it's the
+ 	 * 2nd TTC hence the irq_of_parse_and_map(,1)
  	 */
- 	if (!cpu_smt_allowed(cpu))
- 		return -ECANCELED;
+-	timer_baseaddr =3D of_iomap(timer, 0);
+-	if (!timer_baseaddr) {
++	timer_baseaddr =3D devm_of_iomap(&pdev->dev, timer, 0, NULL);
++	if (IS_ERR(timer_baseaddr)) {
+ 		pr_err("ERROR: invalid timer base address\n");
+-		return -ENXIO;
++		return PTR_ERR(timer_baseaddr);
+ 	}
+=20
+ 	irq =3D irq_of_parse_and_map(timer, 1);
+@@ -513,20 +513,27 @@ static int __init ttc_timer_probe(struct platform_devic=
+e *pdev)
+ 	clk_ce =3D of_clk_get(timer, clksel);
+ 	if (IS_ERR(clk_ce)) {
+ 		pr_err("ERROR: timer input clock not found\n");
+-		return PTR_ERR(clk_ce);
++		ret =3D PTR_ERR(clk_ce);
++		goto put_clk_cs;
+ 	}
+=20
+ 	ret =3D ttc_setup_clocksource(clk_cs, timer_baseaddr, timer_width);
+ 	if (ret)
+-		return ret;
++		goto put_clk_ce;
+=20
+ 	ret =3D ttc_setup_clockevent(clk_ce, timer_baseaddr + 4, irq);
+ 	if (ret)
+-		return ret;
++		goto put_clk_ce;
+=20
+ 	pr_info("%pOFn #0 at %p, irq=3D%d\n", timer, timer_baseaddr, irq);
+=20
+ 	return 0;
++
++put_clk_ce:
++	clk_put(clk_ce);
++put_clk_cs:
++	clk_put(clk_cs);
++	return ret;
+ }
+=20
+ static const struct of_device_id ttc_timer_of_match[] =3D {
+diff --git a/drivers/clocksource/timer-imx-gpt.c b/drivers/clocksource/timer-=
+imx-gpt.c
+index ca3e4cbc80c6..28ab4f1a7c71 100644
+--- a/drivers/clocksource/timer-imx-gpt.c
++++ b/drivers/clocksource/timer-imx-gpt.c
+@@ -16,7 +16,6 @@
+ #include <linux/of.h>
+ #include <linux/of_address.h>
+ #include <linux/of_irq.h>
+-#include <soc/imx/timer.h>
+=20
+ /*
+  * There are 4 versions of the timer hardware on Freescale MXC hardware.
+@@ -25,6 +24,12 @@
+  *  - MX25, MX31, MX35, MX37, MX51, MX6Q(rev1.0)
+  *  - MX6DL, MX6SX, MX6Q(rev1.1+)
+  */
++enum imx_gpt_type {
++	GPT_TYPE_IMX1,		/* i.MX1 */
++	GPT_TYPE_IMX21,		/* i.MX21/27 */
++	GPT_TYPE_IMX31,		/* i.MX31/35/25/37/51/6Q */
++	GPT_TYPE_IMX6DL,	/* i.MX6DL/SX/SL */
++};
+=20
+ /* defines common for all i.MX */
+ #define MXC_TCTL		0x00
+@@ -93,13 +98,11 @@ static void imx1_gpt_irq_disable(struct imx_timer *imxtm)
+ 	tmp =3D readl_relaxed(imxtm->base + MXC_TCTL);
+ 	writel_relaxed(tmp & ~MX1_2_TCTL_IRQEN, imxtm->base + MXC_TCTL);
+ }
+-#define imx21_gpt_irq_disable imx1_gpt_irq_disable
+=20
+ static void imx31_gpt_irq_disable(struct imx_timer *imxtm)
+ {
+ 	writel_relaxed(0, imxtm->base + V2_IR);
+ }
+-#define imx6dl_gpt_irq_disable imx31_gpt_irq_disable
+=20
+ static void imx1_gpt_irq_enable(struct imx_timer *imxtm)
+ {
+@@ -108,13 +111,11 @@ static void imx1_gpt_irq_enable(struct imx_timer *imxtm)
+ 	tmp =3D readl_relaxed(imxtm->base + MXC_TCTL);
+ 	writel_relaxed(tmp | MX1_2_TCTL_IRQEN, imxtm->base + MXC_TCTL);
+ }
+-#define imx21_gpt_irq_enable imx1_gpt_irq_enable
+=20
+ static void imx31_gpt_irq_enable(struct imx_timer *imxtm)
+ {
+ 	writel_relaxed(1<<0, imxtm->base + V2_IR);
+ }
+-#define imx6dl_gpt_irq_enable imx31_gpt_irq_enable
+=20
+ static void imx1_gpt_irq_acknowledge(struct imx_timer *imxtm)
+ {
+@@ -131,7 +132,6 @@ static void imx31_gpt_irq_acknowledge(struct imx_timer *i=
+mxtm)
+ {
+ 	writel_relaxed(V2_TSTAT_OF1, imxtm->base + V2_TSTAT);
+ }
+-#define imx6dl_gpt_irq_acknowledge imx31_gpt_irq_acknowledge
+=20
+ static void __iomem *sched_clock_reg;
+=20
+@@ -296,7 +296,6 @@ static void imx1_gpt_setup_tctl(struct imx_timer *imxtm)
+ 	tctl_val =3D MX1_2_TCTL_FRR | MX1_2_TCTL_CLK_PCLK1 | MXC_TCTL_TEN;
+ 	writel_relaxed(tctl_val, imxtm->base + MXC_TCTL);
+ }
+-#define imx21_gpt_setup_tctl imx1_gpt_setup_tctl
+=20
+ static void imx31_gpt_setup_tctl(struct imx_timer *imxtm)
+ {
+@@ -343,10 +342,10 @@ static const struct imx_gpt_data imx21_gpt_data =3D {
+ 	.reg_tstat =3D MX1_2_TSTAT,
+ 	.reg_tcn =3D MX1_2_TCN,
+ 	.reg_tcmp =3D MX1_2_TCMP,
+-	.gpt_irq_enable =3D imx21_gpt_irq_enable,
+-	.gpt_irq_disable =3D imx21_gpt_irq_disable,
++	.gpt_irq_enable =3D imx1_gpt_irq_enable,
++	.gpt_irq_disable =3D imx1_gpt_irq_disable,
+ 	.gpt_irq_acknowledge =3D imx21_gpt_irq_acknowledge,
+-	.gpt_setup_tctl =3D imx21_gpt_setup_tctl,
++	.gpt_setup_tctl =3D imx1_gpt_setup_tctl,
+ 	.set_next_event =3D mx1_2_set_next_event,
+ };
+=20
+@@ -365,9 +364,9 @@ static const struct imx_gpt_data imx6dl_gpt_data =3D {
+ 	.reg_tstat =3D V2_TSTAT,
+ 	.reg_tcn =3D V2_TCN,
+ 	.reg_tcmp =3D V2_TCMP,
+-	.gpt_irq_enable =3D imx6dl_gpt_irq_enable,
+-	.gpt_irq_disable =3D imx6dl_gpt_irq_disable,
+-	.gpt_irq_acknowledge =3D imx6dl_gpt_irq_acknowledge,
++	.gpt_irq_enable =3D imx31_gpt_irq_enable,
++	.gpt_irq_disable =3D imx31_gpt_irq_disable,
++	.gpt_irq_acknowledge =3D imx31_gpt_irq_acknowledge,
+ 	.gpt_setup_tctl =3D imx6dl_gpt_setup_tctl,
+ 	.set_next_event =3D v2_set_next_event,
+ };
+diff --git a/drivers/clocksource/timer-loongson1-pwm.c b/drivers/clocksource/=
+timer-loongson1-pwm.c
+new file mode 100644
+index 000000000000..6335fee03017
+--- /dev/null
++++ b/drivers/clocksource/timer-loongson1-pwm.c
+@@ -0,0 +1,236 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Clocksource driver for Loongson-1 SoC
++ *
++ * Copyright (c) 2023 Keguang Zhang <keguang.zhang@gmail.com>
++ */
++
++#include <linux/clockchips.h>
++#include <linux/interrupt.h>
++#include <linux/sizes.h>
++#include "timer-of.h"
++
++/* Loongson-1 PWM Timer Register Definitions */
++#define PWM_CNTR		0x0
++#define PWM_HRC			0x4
++#define PWM_LRC			0x8
++#define PWM_CTRL		0xc
++
++/* PWM Control Register Bits */
++#define INT_LRC_EN		BIT(11)
++#define INT_HRC_EN		BIT(10)
++#define CNTR_RST		BIT(7)
++#define INT_SR			BIT(6)
++#define INT_EN			BIT(5)
++#define PWM_SINGLE		BIT(4)
++#define PWM_OE			BIT(3)
++#define CNT_EN			BIT(0)
++
++#define CNTR_WIDTH		24
++
++DEFINE_RAW_SPINLOCK(ls1x_timer_lock);
++
++struct ls1x_clocksource {
++	void __iomem *reg_base;
++	unsigned long ticks_per_jiffy;
++	struct clocksource clksrc;
++};
++
++static inline struct ls1x_clocksource *to_ls1x_clksrc(struct clocksource *c)
++{
++	return container_of(c, struct ls1x_clocksource, clksrc);
++}
++
++static inline void ls1x_pwmtimer_set_period(unsigned int period,
++					    struct timer_of *to)
++{
++	writel(period, timer_of_base(to) + PWM_LRC);
++	writel(period, timer_of_base(to) + PWM_HRC);
++}
++
++static inline void ls1x_pwmtimer_clear(struct timer_of *to)
++{
++	writel(0, timer_of_base(to) + PWM_CNTR);
++}
++
++static inline void ls1x_pwmtimer_start(struct timer_of *to)
++{
++	writel((INT_EN | PWM_OE | CNT_EN), timer_of_base(to) + PWM_CTRL);
++}
++
++static inline void ls1x_pwmtimer_stop(struct timer_of *to)
++{
++	writel(0, timer_of_base(to) + PWM_CTRL);
++}
++
++static inline void ls1x_pwmtimer_irq_ack(struct timer_of *to)
++{
++	int val;
++
++	val =3D readl(timer_of_base(to) + PWM_CTRL);
++	val |=3D INT_SR;
++	writel(val, timer_of_base(to) + PWM_CTRL);
++}
++
++static irqreturn_t ls1x_clockevent_isr(int irq, void *dev_id)
++{
++	struct clock_event_device *clkevt =3D dev_id;
++	struct timer_of *to =3D to_timer_of(clkevt);
++
++	ls1x_pwmtimer_irq_ack(to);
++	ls1x_pwmtimer_clear(to);
++	ls1x_pwmtimer_start(to);
++
++	clkevt->event_handler(clkevt);
++
++	return IRQ_HANDLED;
++}
++
++static int ls1x_clockevent_set_state_periodic(struct clock_event_device *clk=
+evt)
++{
++	struct timer_of *to =3D to_timer_of(clkevt);
++
++	raw_spin_lock(&ls1x_timer_lock);
++	ls1x_pwmtimer_set_period(timer_of_period(to), to);
++	ls1x_pwmtimer_clear(to);
++	ls1x_pwmtimer_start(to);
++	raw_spin_unlock(&ls1x_timer_lock);
++
 +	return 0;
 +}
 +
-+#ifdef CONFIG_HOTPLUG_SPLIT_STARTUP
-+static int cpuhp_kick_ap_alive(unsigned int cpu)
++static int ls1x_clockevent_tick_resume(struct clock_event_device *clkevt)
 +{
-+	if (!cpuhp_can_boot_ap(cpu))
-+		return -EAGAIN;
++	raw_spin_lock(&ls1x_timer_lock);
++	ls1x_pwmtimer_start(to_timer_of(clkevt));
++	raw_spin_unlock(&ls1x_timer_lock);
 +
-+	return arch_cpuhp_kick_ap_alive(cpu, idle_thread_get(cpu));
++	return 0;
 +}
 +
-+static int cpuhp_bringup_ap(unsigned int cpu)
++static int ls1x_clockevent_set_state_shutdown(struct clock_event_device *clk=
+evt)
 +{
-+	struct cpuhp_cpu_state *st =3D per_cpu_ptr(&cpuhp_state, cpu);
-+	int ret;
++	raw_spin_lock(&ls1x_timer_lock);
++	ls1x_pwmtimer_stop(to_timer_of(clkevt));
++	raw_spin_unlock(&ls1x_timer_lock);
 +
-+	/*
-+	 * Some architectures have to walk the irq descriptors to
-+	 * setup the vector space for the cpu which comes online.
-+	 * Prevent irq alloc/free across the bringup.
-+	 */
-+	irq_lock_sparse();
-+
-+	ret =3D cpuhp_bp_sync_alive(cpu);
-+	if (ret)
-+		goto out_unlock;
-+
-+	ret =3D bringup_wait_for_ap_online(cpu);
-+	if (ret)
-+		goto out_unlock;
-+
-+	irq_unlock_sparse();
-=20
- 	if (st->target <=3D CPUHP_AP_ONLINE_IDLE)
- 		return 0;
-=20
- 	return cpuhp_kick_ap(cpu, st, st->target);
--}
-=20
-+out_unlock:
-+	irq_unlock_sparse();
-+	return ret;
++	return 0;
 +}
-+#else
- static int bringup_cpu(unsigned int cpu)
- {
-+	struct cpuhp_cpu_state *st =3D per_cpu_ptr(&cpuhp_state, cpu);
- 	struct task_struct *idle =3D idle_thread_get(cpu);
- 	int ret;
-=20
--	/*
--	 * Reset stale stack state from the last time this CPU was online.
--	 */
--	scs_task_reset(idle);
--	kasan_unpoison_task_stack(idle);
-+	if (!cpuhp_can_boot_ap(cpu))
-+		return -EAGAIN;
-=20
- 	/*
- 	 * Some architectures have to walk the irq descriptors to
- 	 * setup the vector space for the cpu which comes online.
--	 * Prevent irq alloc/free across the bringup.
-+	 *
-+	 * Prevent irq alloc/free across the bringup by acquiring the
-+	 * sparse irq lock. Hold it until the upcoming CPU completes the
-+	 * startup in cpuhp_online_idle() which allows to avoid
-+	 * intermediate synchronization points in the architecture code.
- 	 */
- 	irq_lock_sparse();
-=20
--	/* Arch-specific enabling code. */
- 	ret =3D __cpu_up(cpu, idle);
--	irq_unlock_sparse();
- 	if (ret)
--		return ret;
--	return bringup_wait_for_ap(cpu);
-+		goto out_unlock;
 +
-+	ret =3D cpuhp_bp_sync_alive(cpu);
-+	if (ret)
-+		goto out_unlock;
-+
-+	ret =3D bringup_wait_for_ap_online(cpu);
-+	if (ret)
-+		goto out_unlock;
-+
-+	irq_unlock_sparse();
-+
-+	if (st->target <=3D CPUHP_AP_ONLINE_IDLE)
-+		return 0;
-+
-+	return cpuhp_kick_ap(cpu, st, st->target);
-+
-+out_unlock:
-+	irq_unlock_sparse();
-+	return ret;
- }
-+#endif
-=20
- static int finish_cpu(unsigned int cpu)
- {
-@@ -1099,6 +1349,8 @@ static int takedown_cpu(unsigned int cpu)
- 	/* This actually kills the CPU. */
- 	__cpu_die(cpu);
-=20
-+	cpuhp_bp_sync_dead(cpu);
-+
- 	tick_cleanup_dead_cpu(cpu);
- 	rcutree_migrate_callbacks(cpu);
- 	return 0;
-@@ -1345,8 +1597,10 @@ void cpuhp_online_idle(enum cpuhp_state state)
- 	if (state !=3D CPUHP_AP_ONLINE_IDLE)
- 		return;
-=20
-+	cpuhp_ap_update_sync_state(SYNC_STATE_ONLINE);
-+
- 	/*
--	 * Unpart the stopper thread before we start the idle loop (and start
-+	 * Unpark the stopper thread before we start the idle loop (and start
- 	 * scheduling); this ensures the stopper task is always available.
- 	 */
- 	stop_machine_unpark(smp_processor_id());
-@@ -1383,6 +1637,12 @@ static int _cpu_up(unsigned int cpu, int tasks_frozen,=
- enum cpuhp_state target)
- 			ret =3D PTR_ERR(idle);
- 			goto out;
- 		}
-+
-+		/*
-+		 * Reset stale stack state from the last time this CPU was online.
-+		 */
-+		scs_task_reset(idle);
-+		kasan_unpoison_task_stack(idle);
- 	}
-=20
- 	cpuhp_tasks_frozen =3D tasks_frozen;
-@@ -1502,18 +1762,96 @@ int bringup_hibernate_cpu(unsigned int sleep_cpu)
- 	return 0;
- }
-=20
--void bringup_nonboot_cpus(unsigned int setup_max_cpus)
-+static void __init cpuhp_bringup_mask(const struct cpumask *mask, unsigned i=
-nt ncpus,
-+				      enum cpuhp_state target)
- {
- 	unsigned int cpu;
-=20
--	for_each_present_cpu(cpu) {
--		if (num_online_cpus() >=3D setup_max_cpus)
-+	for_each_cpu(cpu, mask) {
-+		struct cpuhp_cpu_state *st =3D per_cpu_ptr(&cpuhp_state, cpu);
-+
-+		if (cpu_up(cpu, target) && can_rollback_cpu(st)) {
-+			/*
-+			 * If this failed then cpu_up() might have only
-+			 * rolled back to CPUHP_BP_KICK_AP for the final
-+			 * online. Clean it up. NOOP if already rolled back.
-+			 */
-+			WARN_ON(cpuhp_invoke_callback_range(false, cpu, st, CPUHP_OFFLINE));
-+		}
-+
-+		if (!--ncpus)
- 			break;
--		if (!cpu_online(cpu))
--			cpu_up(cpu, CPUHP_ONLINE);
- 	}
- }
-=20
-+#ifdef CONFIG_HOTPLUG_PARALLEL
-+static bool __cpuhp_parallel_bringup __ro_after_init =3D true;
-+
-+static int __init parallel_bringup_parse_param(char *arg)
++static int ls1x_clockevent_set_next(unsigned long evt,
++				    struct clock_event_device *clkevt)
 +{
-+	return kstrtobool(arg, &__cpuhp_parallel_bringup);
++	struct timer_of *to =3D to_timer_of(clkevt);
++
++	raw_spin_lock(&ls1x_timer_lock);
++	ls1x_pwmtimer_set_period(evt, to);
++	ls1x_pwmtimer_clear(to);
++	ls1x_pwmtimer_start(to);
++	raw_spin_unlock(&ls1x_timer_lock);
++
++	return 0;
 +}
-+early_param("cpuhp.parallel", parallel_bringup_parse_param);
++
++static struct timer_of ls1x_to =3D {
++	.flags =3D TIMER_OF_IRQ | TIMER_OF_BASE | TIMER_OF_CLOCK,
++	.clkevt =3D {
++		.name			=3D "ls1x-pwmtimer",
++		.features		=3D CLOCK_EVT_FEAT_PERIODIC |
++					  CLOCK_EVT_FEAT_ONESHOT,
++		.rating			=3D 300,
++		.set_next_event		=3D ls1x_clockevent_set_next,
++		.set_state_periodic	=3D ls1x_clockevent_set_state_periodic,
++		.set_state_oneshot	=3D ls1x_clockevent_set_state_shutdown,
++		.set_state_shutdown	=3D ls1x_clockevent_set_state_shutdown,
++		.tick_resume		=3D ls1x_clockevent_tick_resume,
++	},
++	.of_irq =3D {
++		.handler		=3D ls1x_clockevent_isr,
++		.flags			=3D IRQF_TIMER,
++	},
++};
 +
 +/*
-+ * On architectures which have enabled parallel bringup this invokes all BP
-+ * prepare states for each of the to be onlined APs first. The last state
-+ * sends the startup IPI to the APs. The APs proceed through the low level
-+ * bringup code in parallel and then wait for the control CPU to release
-+ * them one by one for the final onlining procedure.
-+ *
-+ * This avoids waiting for each AP to respond to the startup IPI in
-+ * CPUHP_BRINGUP_CPU.
++ * Since the PWM timer overflows every two ticks, its not very useful
++ * to just read by itself. So use jiffies to emulate a free
++ * running counter:
 + */
-+static bool __init cpuhp_bringup_cpus_parallel(unsigned int ncpus)
++static u64 ls1x_clocksource_read(struct clocksource *cs)
 +{
-+	const struct cpumask *mask =3D cpu_present_mask;
++	struct ls1x_clocksource *ls1x_cs =3D to_ls1x_clksrc(cs);
++	unsigned long flags;
++	int count;
++	u32 jifs;
++	static int old_count;
++	static u32 old_jifs;
 +
-+	if (__cpuhp_parallel_bringup)
-+		__cpuhp_parallel_bringup =3D arch_cpuhp_init_parallel_bringup();
-+	if (!__cpuhp_parallel_bringup)
-+		return false;
-+
-+	if (cpuhp_smt_aware()) {
-+		const struct cpumask *pmask =3D cpuhp_get_primary_thread_mask();
-+		static struct cpumask tmp_mask __initdata;
-+
-+		/*
-+		 * X86 requires to prevent that SMT siblings stopped while
-+		 * the primary thread does a microcode update for various
-+		 * reasons. Bring the primary threads up first.
-+		 */
-+		cpumask_and(&tmp_mask, mask, pmask);
-+		cpuhp_bringup_mask(&tmp_mask, ncpus, CPUHP_BP_KICK_AP);
-+		cpuhp_bringup_mask(&tmp_mask, ncpus, CPUHP_ONLINE);
-+		/* Account for the online CPUs */
-+		ncpus -=3D num_online_cpus();
-+		if (!ncpus)
-+			return true;
-+		/* Create the mask for secondary CPUs */
-+		cpumask_andnot(&tmp_mask, mask, pmask);
-+		mask =3D &tmp_mask;
-+	}
-+
-+	/* Bring the not-yet started CPUs up */
-+	cpuhp_bringup_mask(mask, ncpus, CPUHP_BP_KICK_AP);
-+	cpuhp_bringup_mask(mask, ncpus, CPUHP_ONLINE);
-+	return true;
-+}
-+#else
-+static inline bool cpuhp_bringup_cpus_parallel(unsigned int ncpus) { return =
-false; }
-+#endif /* CONFIG_HOTPLUG_PARALLEL */
-+
-+void __init bringup_nonboot_cpus(unsigned int setup_max_cpus)
-+{
-+	/* Try parallel bringup optimization if enabled */
-+	if (cpuhp_bringup_cpus_parallel(setup_max_cpus))
-+		return;
-+
-+	/* Full per CPU serialized bringup */
-+	cpuhp_bringup_mask(cpu_present_mask, setup_max_cpus, CPUHP_ONLINE);
-+}
-+
- #ifdef CONFIG_PM_SLEEP_SMP
- static cpumask_var_t frozen_cpus;
-=20
-@@ -1740,13 +2078,38 @@ static struct cpuhp_step cpuhp_hp_states[] =3D {
- 		.startup.single		=3D timers_prepare_cpu,
- 		.teardown.single	=3D timers_dead_cpu,
- 	},
--	/* Kicks the plugged cpu into life */
-+
-+#ifdef CONFIG_HOTPLUG_SPLIT_STARTUP
++	raw_spin_lock_irqsave(&ls1x_timer_lock, flags);
 +	/*
-+	 * Kicks the AP alive. AP will wait in cpuhp_ap_sync_alive() until
-+	 * the next step will release it.
++	 * Although our caller may have the read side of xtime_lock,
++	 * this is now a seqlock, and we are cheating in this routine
++	 * by having side effects on state that we cannot undo if
++	 * there is a collision on the seqlock and our caller has to
++	 * retry.  (Namely, old_jifs and old_count.)  So we must treat
++	 * jiffies as volatile despite the lock.  We read jiffies
++	 * before latching the timer count to guarantee that although
++	 * the jiffies value might be older than the count (that is,
++	 * the counter may underflow between the last point where
++	 * jiffies was incremented and the point where we latch the
++	 * count), it cannot be newer.
 +	 */
-+	[CPUHP_BP_KICK_AP] =3D {
-+		.name			=3D "cpu:kick_ap",
-+		.startup.single		=3D cpuhp_kick_ap_alive,
++	jifs =3D jiffies;
++	/* read the count */
++	count =3D readl(ls1x_cs->reg_base + PWM_CNTR);
++
++	/*
++	 * It's possible for count to appear to go the wrong way for this
++	 * reason:
++	 *
++	 *  The timer counter underflows, but we haven't handled the resulting
++	 *  interrupt and incremented jiffies yet.
++	 *
++	 * Previous attempts to handle these cases intelligently were buggy, so
++	 * we just do the simple thing now.
++	 */
++	if (count < old_count && jifs =3D=3D old_jifs)
++		count =3D old_count;
++
++	old_count =3D count;
++	old_jifs =3D jifs;
++
++	raw_spin_unlock_irqrestore(&ls1x_timer_lock, flags);
++
++	return (u64)(jifs * ls1x_cs->ticks_per_jiffy) + count;
++}
++
++static struct ls1x_clocksource ls1x_clocksource =3D {
++	.clksrc =3D {
++		.name           =3D "ls1x-pwmtimer",
++		.rating		=3D 300,
++		.read           =3D ls1x_clocksource_read,
++		.mask           =3D CLOCKSOURCE_MASK(CNTR_WIDTH),
++		.flags          =3D CLOCK_SOURCE_IS_CONTINUOUS,
 +	},
++};
 +
-+	/*
-+	 * Waits for the AP to reach cpuhp_ap_sync_alive() and then
-+	 * releases it for the complete bringup.
-+	 */
-+	[CPUHP_BRINGUP_CPU] =3D {
-+		.name			=3D "cpu:bringup",
-+		.startup.single		=3D cpuhp_bringup_ap,
-+		.teardown.single	=3D finish_cpu,
-+		.cant_stop		=3D true,
-+	},
-+#else
-+	/*
-+	 * All-in-one CPU bringup state which includes the kick alive.
-+	 */
- 	[CPUHP_BRINGUP_CPU] =3D {
- 		.name			=3D "cpu:bringup",
- 		.startup.single		=3D bringup_cpu,
- 		.teardown.single	=3D finish_cpu,
- 		.cant_stop		=3D true,
- 	},
-+#endif
- 	/* Final state before CPU kills itself */
- 	[CPUHP_AP_IDLE_DEAD] =3D {
- 		.name			=3D "idle:dead",
-@@ -2723,6 +3086,7 @@ void __init boot_cpu_hotplug_init(void)
- {
- #ifdef CONFIG_SMP
- 	cpumask_set_cpu(smp_processor_id(), &cpus_booted_once_mask);
-+	atomic_set(this_cpu_ptr(&cpuhp_state.ap_sync_state), SYNC_STATE_ONLINE);
- #endif
- 	this_cpu_write(cpuhp_state.state, CPUHP_ONLINE);
- 	this_cpu_write(cpuhp_state.target, CPUHP_ONLINE);
-diff --git a/kernel/smp.c b/kernel/smp.c
-index ab3e5dad6cfe..385179dae360 100644
---- a/kernel/smp.c
-+++ b/kernel/smp.c
-@@ -27,6 +27,9 @@
- #include <linux/jump_label.h>
-=20
- #include <trace/events/ipi.h>
-+#define CREATE_TRACE_POINTS
-+#include <trace/events/csd.h>
-+#undef CREATE_TRACE_POINTS
-=20
- #include "smpboot.h"
- #include "sched/smp.h"
-@@ -121,6 +124,14 @@ send_call_function_ipi_mask(struct cpumask *mask)
- 	arch_send_call_function_ipi_mask(mask);
- }
-=20
-+static __always_inline void
-+csd_do_func(smp_call_func_t func, void *info, struct __call_single_data *csd)
++static int __init ls1x_pwm_clocksource_init(struct device_node *np)
 +{
-+	trace_csd_function_entry(func, csd);
-+	func(info);
-+	trace_csd_function_exit(func, csd);
++	struct timer_of *to =3D &ls1x_to;
++	int ret;
++
++	ret =3D timer_of_init(np, to);
++	if (ret)
++		return ret;
++
++	clockevents_config_and_register(&to->clkevt, timer_of_rate(to),
++					0x1, GENMASK(CNTR_WIDTH - 1, 0));
++
++	ls1x_clocksource.reg_base =3D timer_of_base(to);
++	ls1x_clocksource.ticks_per_jiffy =3D timer_of_period(to);
++
++	return clocksource_register_hz(&ls1x_clocksource.clksrc,
++				       timer_of_rate(to));
 +}
 +
- #ifdef CONFIG_CSD_LOCK_WAIT_DEBUG
++TIMER_OF_DECLARE(ls1x_pwm_clocksource, "loongson,ls1b-pwmtimer",
++		 ls1x_pwm_clocksource_init);
+diff --git a/include/linux/sched/signal.h b/include/linux/sched/signal.h
+index 20099268fa25..669e8cff40c7 100644
+--- a/include/linux/sched/signal.h
++++ b/include/linux/sched/signal.h
+@@ -135,7 +135,7 @@ struct signal_struct {
+ #ifdef CONFIG_POSIX_TIMERS
 =20
- static DEFINE_STATIC_KEY_MAYBE(CONFIG_CSD_LOCK_WAIT_DEBUG_DEFAULT, csdlock_d=
-ebug_enabled);
-@@ -329,7 +340,7 @@ void __smp_call_single_queue(int cpu, struct llist_node *=
-node)
- 	 * even if we haven't sent the smp_call IPI yet (e.g. the stopper
- 	 * executes migration_cpu_stop() on the remote CPU).
- 	 */
--	if (trace_ipi_send_cpu_enabled()) {
-+	if (trace_csd_queue_cpu_enabled()) {
- 		call_single_data_t *csd;
- 		smp_call_func_t func;
+ 	/* POSIX.1b Interval Timers */
+-	int			posix_timer_id;
++	unsigned int		next_posix_timer_id;
+ 	struct list_head	posix_timers;
 =20
-@@ -337,7 +348,7 @@ void __smp_call_single_queue(int cpu, struct llist_node *=
-node)
- 		func =3D CSD_TYPE(csd) =3D=3D CSD_TYPE_TTWU ?
- 			sched_ttwu_pending : csd->func;
+ 	/* ITIMER_REAL timer for the process */
+diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
+index 33a0ee3bcb2e..24871f8ec8bb 100644
+--- a/include/linux/syscalls.h
++++ b/include/linux/syscalls.h
+@@ -1280,6 +1280,7 @@ asmlinkage long sys_ni_syscall(void);
 =20
--		trace_ipi_send_cpu(cpu, _RET_IP_, func);
-+		trace_csd_queue_cpu(cpu, _RET_IP_, func, csd);
- 	}
+ #endif /* CONFIG_ARCH_HAS_SYSCALL_WRAPPER */
 =20
- 	/*
-@@ -375,7 +386,7 @@ static int generic_exec_single(int cpu, struct __call_sin=
-gle_data *csd)
- 		csd_lock_record(csd);
- 		csd_unlock(csd);
- 		local_irq_save(flags);
--		func(info);
-+		csd_do_func(func, info, NULL);
- 		csd_lock_record(NULL);
- 		local_irq_restore(flags);
- 		return 0;
-@@ -477,7 +488,7 @@ static void __flush_smp_call_function_queue(bool warn_cpu=
-_offline)
- 			}
++asmlinkage long sys_ni_posix_timers(void);
 =20
- 			csd_lock_record(csd);
--			func(info);
-+			csd_do_func(func, info, csd);
- 			csd_unlock(csd);
- 			csd_lock_record(NULL);
- 		} else {
-@@ -508,7 +519,7 @@ static void __flush_smp_call_function_queue(bool warn_cpu=
-_offline)
+ /*
+  * Kernel code should not call syscalls (i.e., sys_xyzyyz()) directly.
+diff --git a/include/linux/time_namespace.h b/include/linux/time_namespace.h
+index bb9d3f5542f8..03d9c5ac01d1 100644
+--- a/include/linux/time_namespace.h
++++ b/include/linux/time_namespace.h
+@@ -44,7 +44,6 @@ struct time_namespace *copy_time_ns(unsigned long flags,
+ 				    struct time_namespace *old_ns);
+ void free_time_ns(struct time_namespace *ns);
+ void timens_on_fork(struct nsproxy *nsproxy, struct task_struct *tsk);
+-struct vdso_data *arch_get_vdso_data(void *vvar_page);
+ struct page *find_timens_vvar_page(struct vm_area_struct *vma);
 =20
- 				csd_lock_record(csd);
- 				csd_unlock(csd);
--				func(info);
-+				csd_do_func(func, info, csd);
- 				csd_lock_record(NULL);
- 			} else if (type =3D=3D CSD_TYPE_IRQ_WORK) {
- 				irq_work_single(csd);
-@@ -522,8 +533,10 @@ static void __flush_smp_call_function_queue(bool warn_cp=
-u_offline)
- 	/*
- 	 * Third; only CSD_TYPE_TTWU is left, issue those.
- 	 */
--	if (entry)
--		sched_ttwu_pending(entry);
-+	if (entry) {
-+		csd =3D llist_entry(entry, typeof(*csd), node.llist);
-+		csd_do_func(sched_ttwu_pending, entry, csd);
-+	}
+ static inline void put_time_ns(struct time_namespace *ns)
+@@ -163,4 +162,6 @@ static inline ktime_t timens_ktime_to_host(clockid_t cloc=
+kid, ktime_t tim)
  }
-=20
-=20
-@@ -728,7 +741,7 @@ static void smp_call_function_many_cond(const struct cpum=
-ask *mask,
- 	int cpu, last_cpu, this_cpu =3D smp_processor_id();
- 	struct call_function_data *cfd;
- 	bool wait =3D scf_flags & SCF_WAIT;
--	int nr_cpus =3D 0, nr_queued =3D 0;
-+	int nr_cpus =3D 0;
- 	bool run_remote =3D false;
- 	bool run_local =3D false;
-=20
-@@ -786,21 +799,15 @@ static void smp_call_function_many_cond(const struct cp=
-umask *mask,
- 			csd->node.src =3D smp_processor_id();
- 			csd->node.dst =3D cpu;
  #endif
-+			trace_csd_queue_cpu(cpu, _RET_IP_, func, csd);
-+
- 			if (llist_add(&csd->node.llist, &per_cpu(call_single_queue, cpu))) {
- 				__cpumask_set_cpu(cpu, cfd->cpumask_ipi);
- 				nr_cpus++;
- 				last_cpu =3D cpu;
- 			}
--			nr_queued++;
- 		}
 =20
--		/*
--		 * Trace each smp_function_call_*() as an IPI, actual IPIs
--		 * will be traced with func=3D=3Dgeneric_smp_call_function_single_ipi().
--		 */
--		if (nr_queued)
--			trace_ipi_send_cpumask(cfd->cpumask, _RET_IP_, func);
++struct vdso_data *arch_get_vdso_data(void *vvar_page);
++
+ #endif /* _LINUX_TIMENS_H */
+diff --git a/include/soc/imx/timer.h b/include/soc/imx/timer.h
+deleted file mode 100644
+index 25f29c6bbd0b..000000000000
+--- a/include/soc/imx/timer.h
++++ /dev/null
+@@ -1,16 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-only */
+-/*
+- * Copyright 2015 Linaro Ltd.
+- */
 -
- 		/*
- 		 * Choose the most efficient way to send an IPI. Note that the
- 		 * number of CPUs might be zero due to concurrent changes to the
-@@ -816,7 +823,7 @@ static void smp_call_function_many_cond(const struct cpum=
-ask *mask,
- 		unsigned long flags;
+-#ifndef __SOC_IMX_TIMER_H__
+-#define __SOC_IMX_TIMER_H__
+-
+-enum imx_gpt_type {
+-	GPT_TYPE_IMX1,		/* i.MX1 */
+-	GPT_TYPE_IMX21,		/* i.MX21/27 */
+-	GPT_TYPE_IMX31,		/* i.MX31/35/25/37/51/6Q */
+-	GPT_TYPE_IMX6DL,	/* i.MX6DL/SX/SL */
+-};
+-
+-#endif  /* __SOC_IMX_TIMER_H__ */
+diff --git a/include/trace/events/timer.h b/include/trace/events/timer.h
+index 3e8619c72f77..b4bc2828fa09 100644
+--- a/include/trace/events/timer.h
++++ b/include/trace/events/timer.h
+@@ -158,7 +158,11 @@ DEFINE_EVENT(timer_class, timer_cancel,
+ 		{ HRTIMER_MODE_ABS_SOFT,	"ABS|SOFT"	},	\
+ 		{ HRTIMER_MODE_REL_SOFT,	"REL|SOFT"	},	\
+ 		{ HRTIMER_MODE_ABS_PINNED_SOFT,	"ABS|PINNED|SOFT" },	\
+-		{ HRTIMER_MODE_REL_PINNED_SOFT,	"REL|PINNED|SOFT" })
++		{ HRTIMER_MODE_REL_PINNED_SOFT,	"REL|PINNED|SOFT" },	\
++		{ HRTIMER_MODE_ABS_HARD,	"ABS|HARD" },		\
++		{ HRTIMER_MODE_REL_HARD,	"REL|HARD" },		\
++		{ HRTIMER_MODE_ABS_PINNED_HARD, "ABS|PINNED|HARD" },	\
++		{ HRTIMER_MODE_REL_PINNED_HARD,	"REL|PINNED|HARD" })
 =20
- 		local_irq_save(flags);
--		func(info);
-+		csd_do_func(func, info, NULL);
- 		local_irq_restore(flags);
- 	}
+ /**
+  * hrtimer_init - called when the hrtimer is initialized
+diff --git a/kernel/time/alarmtimer.c b/kernel/time/alarmtimer.c
+index 82b28ab0f328..8d9f13d847f0 100644
+--- a/kernel/time/alarmtimer.c
++++ b/kernel/time/alarmtimer.c
+@@ -751,7 +751,7 @@ static int alarm_timer_create(struct k_itimer *new_timer)
+ static enum alarmtimer_restart alarmtimer_nsleep_wakeup(struct alarm *alarm,
+ 								ktime_t now)
+ {
+-	struct task_struct *task =3D (struct task_struct *)alarm->data;
++	struct task_struct *task =3D alarm->data;
 =20
-@@ -892,7 +899,7 @@ EXPORT_SYMBOL(setup_max_cpus);
-  * SMP mode to <NUM>.
+ 	alarm->data =3D NULL;
+ 	if (task)
+@@ -847,7 +847,7 @@ static int alarm_timer_nsleep(const clockid_t which_clock=
+, int flags,
+ 	struct restart_block *restart =3D &current->restart_block;
+ 	struct alarm alarm;
+ 	ktime_t exp;
+-	int ret =3D 0;
++	int ret;
+=20
+ 	if (!alarmtimer_get_rtcdev())
+ 		return -EOPNOTSUPP;
+diff --git a/kernel/time/hrtimer.c b/kernel/time/hrtimer.c
+index e8c08292defc..238262e4aba7 100644
+--- a/kernel/time/hrtimer.c
++++ b/kernel/time/hrtimer.c
+@@ -164,6 +164,7 @@ static inline bool is_migration_base(struct hrtimer_clock=
+_base *base)
+ static
+ struct hrtimer_clock_base *lock_hrtimer_base(const struct hrtimer *timer,
+ 					     unsigned long *flags)
++	__acquires(&timer->base->lock)
+ {
+ 	struct hrtimer_clock_base *base;
+=20
+@@ -280,6 +281,7 @@ static inline bool is_migration_base(struct hrtimer_clock=
+_base *base)
+=20
+ static inline struct hrtimer_clock_base *
+ lock_hrtimer_base(const struct hrtimer *timer, unsigned long *flags)
++	__acquires(&timer->base->cpu_base->lock)
+ {
+ 	struct hrtimer_clock_base *base =3D timer->base;
+=20
+@@ -1013,6 +1015,7 @@ void hrtimers_resume_local(void)
   */
-=20
--void __weak arch_disable_smp_support(void) { }
-+void __weak __init arch_disable_smp_support(void) { }
-=20
- static int __init nosmp(char *str)
+ static inline
+ void unlock_hrtimer_base(const struct hrtimer *timer, unsigned long *flags)
++	__releases(&timer->base->cpu_base->lock)
  {
-diff --git a/kernel/smpboot.c b/kernel/smpboot.c
-index 2c7396da470c..f47d8f375946 100644
---- a/kernel/smpboot.c
-+++ b/kernel/smpboot.c
-@@ -325,166 +325,3 @@ void smpboot_unregister_percpu_thread(struct smp_hotplu=
-g_thread *plug_thread)
- 	cpus_read_unlock();
+ 	raw_spin_unlock_irqrestore(&timer->base->cpu_base->lock, *flags);
  }
- EXPORT_SYMBOL_GPL(smpboot_unregister_percpu_thread);
--
--static DEFINE_PER_CPU(atomic_t, cpu_hotplug_state) =3D ATOMIC_INIT(CPU_POST_=
-DEAD);
--
+diff --git a/kernel/time/posix-timers.c b/kernel/time/posix-timers.c
+index 808a247205a9..b924f0f096fa 100644
+--- a/kernel/time/posix-timers.c
++++ b/kernel/time/posix-timers.c
+@@ -35,20 +35,17 @@
+ #include "timekeeping.h"
+ #include "posix-timers.h"
+=20
 -/*
-- * Called to poll specified CPU's state, for example, when waiting for
-- * a CPU to come online.
+- * Management arrays for POSIX timers. Timers are now kept in static hash ta=
+ble
+- * with 512 entries.
+- * Timer ids are allocated by local routine, which selects proper hash head =
+by
+- * key, constructed from current->signal address and per signal struct count=
+er.
+- * This keeps timer ids unique per process, but now they can intersect betwe=
+en
+- * processes.
 - */
--int cpu_report_state(int cpu)
--{
--	return atomic_read(&per_cpu(cpu_hotplug_state, cpu));
--}
++static struct kmem_cache *posix_timers_cache;
+=20
+ /*
+- * Lets keep our timers in a slab cache :-)
++ * Timers are managed in a hash table for lockless lookup. The hash key is
++ * constructed from current::signal and the timer ID and the timer is
++ * matched against current::signal and the timer ID when walking the hash
++ * bucket list.
++ *
++ * This allows checkpoint/restore to reconstruct the exact timer IDs for
++ * a process.
+  */
+-static struct kmem_cache *posix_timers_cache;
 -
+ static DEFINE_HASHTABLE(posix_timers_hashtable, 9);
+ static DEFINE_SPINLOCK(hash_lock);
+=20
+@@ -56,52 +53,12 @@ static const struct k_clock * const posix_clocks[];
+ static const struct k_clock *clockid_to_kclock(const clockid_t id);
+ static const struct k_clock clock_realtime, clock_monotonic;
+=20
 -/*
-- * If CPU has died properly, set its state to CPU_UP_PREPARE and
-- * return success.  Otherwise, return -EBUSY if the CPU died after
-- * cpu_wait_death() timed out.  And yet otherwise again, return -EAGAIN
-- * if cpu_wait_death() timed out and the CPU still hasn't gotten around
-- * to dying.  In the latter two cases, the CPU might not be set up
-- * properly, but it is up to the arch-specific code to decide.
-- * Finally, -EIO indicates an unanticipated problem.
+- * we assume that the new SIGEV_THREAD_ID shares no bits with the other
+- * SIGEV values.  Here we put out an error if this assumption fails.
+- */
++/* SIGEV_THREAD_ID cannot share a bit with the other SIGEV values. */
+ #if SIGEV_THREAD_ID !=3D (SIGEV_THREAD_ID & \
+-                       ~(SIGEV_SIGNAL | SIGEV_NONE | SIGEV_THREAD))
++			~(SIGEV_SIGNAL | SIGEV_NONE | SIGEV_THREAD))
+ #error "SIGEV_THREAD_ID must not share bit with other SIGEV values!"
+ #endif
+=20
+-/*
+- * The timer ID is turned into a timer address by idr_find().
+- * Verifying a valid ID consists of:
 - *
-- * Note that it is permissible to omit this call entirely, as is
-- * done in architectures that do no CPU-hotplug error checking.
+- * a) checking that idr_find() returns other than -1.
+- * b) checking that the timer id matches the one in the timer itself.
+- * c) that the timer owner is in the callers thread group.
 - */
--int cpu_check_up_prepare(int cpu)
--{
--	if (!IS_ENABLED(CONFIG_HOTPLUG_CPU)) {
--		atomic_set(&per_cpu(cpu_hotplug_state, cpu), CPU_UP_PREPARE);
--		return 0;
--	}
--
--	switch (atomic_read(&per_cpu(cpu_hotplug_state, cpu))) {
--
--	case CPU_POST_DEAD:
--
--		/* The CPU died properly, so just start it up again. */
--		atomic_set(&per_cpu(cpu_hotplug_state, cpu), CPU_UP_PREPARE);
--		return 0;
--
--	case CPU_DEAD_FROZEN:
--
--		/*
--		 * Timeout during CPU death, so let caller know.
--		 * The outgoing CPU completed its processing, but after
--		 * cpu_wait_death() timed out and reported the error. The
--		 * caller is free to proceed, in which case the state
--		 * will be reset properly by cpu_set_state_online().
--		 * Proceeding despite this -EBUSY return makes sense
--		 * for systems where the outgoing CPUs take themselves
--		 * offline, with no post-death manipulation required from
--		 * a surviving CPU.
--		 */
--		return -EBUSY;
--
--	case CPU_BROKEN:
--
--		/*
--		 * The most likely reason we got here is that there was
--		 * a timeout during CPU death, and the outgoing CPU never
--		 * did complete its processing.  This could happen on
--		 * a virtualized system if the outgoing VCPU gets preempted
--		 * for more than five seconds, and the user attempts to
--		 * immediately online that same CPU.  Trying again later
--		 * might return -EBUSY above, hence -EAGAIN.
--		 */
--		return -EAGAIN;
--
--	case CPU_UP_PREPARE:
--		/*
--		 * Timeout while waiting for the CPU to show up. Allow to try
--		 * again later.
--		 */
--		return 0;
--
--	default:
--
--		/* Should not happen.  Famous last words. */
--		return -EIO;
--	}
--}
 -
 -/*
-- * Mark the specified CPU online.
+- * CLOCKs: The POSIX standard calls for a couple of clocks and allows us
+- *	    to implement others.  This structure defines the various
+- *	    clocks.
 - *
-- * Note that it is permissible to omit this call entirely, as is
-- * done in architectures that do no CPU-hotplug error checking.
-- */
--void cpu_set_state_online(int cpu)
--{
--	(void)atomic_xchg(&per_cpu(cpu_hotplug_state, cpu), CPU_ONLINE);
--}
--
--#ifdef CONFIG_HOTPLUG_CPU
--
--/*
-- * Wait for the specified CPU to exit the idle loop and die.
-- */
--bool cpu_wait_death(unsigned int cpu, int seconds)
--{
--	int jf_left =3D seconds * HZ;
--	int oldstate;
--	bool ret =3D true;
--	int sleep_jf =3D 1;
--
--	might_sleep();
--
--	/* The outgoing CPU will normally get done quite quickly. */
--	if (atomic_read(&per_cpu(cpu_hotplug_state, cpu)) =3D=3D CPU_DEAD)
--		goto update_state_early;
--	udelay(5);
--
--	/* But if the outgoing CPU dawdles, wait increasingly long times. */
--	while (atomic_read(&per_cpu(cpu_hotplug_state, cpu)) !=3D CPU_DEAD) {
--		schedule_timeout_uninterruptible(sleep_jf);
--		jf_left -=3D sleep_jf;
--		if (jf_left <=3D 0)
--			break;
--		sleep_jf =3D DIV_ROUND_UP(sleep_jf * 11, 10);
--	}
--update_state_early:
--	oldstate =3D atomic_read(&per_cpu(cpu_hotplug_state, cpu));
--update_state:
--	if (oldstate =3D=3D CPU_DEAD) {
--		/* Outgoing CPU died normally, update state. */
--		smp_mb(); /* atomic_read() before update. */
--		atomic_set(&per_cpu(cpu_hotplug_state, cpu), CPU_POST_DEAD);
--	} else {
--		/* Outgoing CPU still hasn't died, set state accordingly. */
--		if (!atomic_try_cmpxchg(&per_cpu(cpu_hotplug_state, cpu),
--					&oldstate, CPU_BROKEN))
--			goto update_state;
--		ret =3D false;
--	}
--	return ret;
--}
--
--/*
-- * Called by the outgoing CPU to report its successful death.  Return
-- * false if this report follows the surviving CPU's timing out.
+- * RESOLUTION: Clock resolution is used to round up timer and interval
+- *	    times, NOT to report clock times, which are reported with as
+- *	    much resolution as the system can muster.  In some cases this
+- *	    resolution may depend on the underlying clock hardware and
+- *	    may not be quantifiable until run time, and only then is the
+- *	    necessary code is written.	The standard says we should say
+- *	    something about this issue in the documentation...
 - *
-- * A separate "CPU_DEAD_FROZEN" is used when the surviving CPU
-- * timed out.  This approach allows architectures to omit calls to
-- * cpu_check_up_prepare() and cpu_set_state_online() without defeating
-- * the next cpu_wait_death()'s polling loop.
+- * FUNCTIONS: The CLOCKs structure defines possible functions to
+- *	    handle various clock functions.
+- *
+- *	    The standard POSIX timer management code assumes the
+- *	    following: 1.) The k_itimer struct (sched.h) is used for
+- *	    the timer.  2.) The list, it_lock, it_clock, it_id and
+- *	    it_pid fields are not modified by timer code.
+- *
+- * Permissions: It is assumed that the clock_settime() function defined
+- *	    for each clock will take care of permission checks.	 Some
+- *	    clocks may be set able by any user (i.e. local process
+- *	    clocks) others not.	 Currently the only set able clock we
+- *	    have is CLOCK_REALTIME and its high res counter part, both of
+- *	    which we beg off on and pass to do_sys_settimeofday().
 - */
--bool cpu_report_death(void)
--{
--	int oldstate;
--	int newstate;
--	int cpu =3D smp_processor_id();
--
--	oldstate =3D atomic_read(&per_cpu(cpu_hotplug_state, cpu));
+ static struct k_itimer *__lock_timer(timer_t timer_id, unsigned long *flags);
+=20
+ #define lock_timer(tid, flags)						   \
+@@ -121,9 +78,9 @@ static struct k_itimer *__posix_timers_find(struct hlist_h=
+ead *head,
+ {
+ 	struct k_itimer *timer;
+=20
+-	hlist_for_each_entry_rcu(timer, head, t_hash,
+-				 lockdep_is_held(&hash_lock)) {
+-		if ((timer->it_signal =3D=3D sig) && (timer->it_id =3D=3D id))
++	hlist_for_each_entry_rcu(timer, head, t_hash, lockdep_is_held(&hash_lock)) {
++		/* timer->it_signal can be set concurrently */
++		if ((READ_ONCE(timer->it_signal) =3D=3D sig) && (timer->it_id =3D=3D id))
+ 			return timer;
+ 	}
+ 	return NULL;
+@@ -140,25 +97,30 @@ static struct k_itimer *posix_timer_by_id(timer_t id)
+ static int posix_timer_add(struct k_itimer *timer)
+ {
+ 	struct signal_struct *sig =3D current->signal;
+-	int first_free_id =3D sig->posix_timer_id;
+ 	struct hlist_head *head;
+-	int ret =3D -ENOENT;
++	unsigned int cnt, id;
+=20
 -	do {
--		if (oldstate !=3D CPU_BROKEN)
--			newstate =3D CPU_DEAD;
--		else
--			newstate =3D CPU_DEAD_FROZEN;
--	} while (!atomic_try_cmpxchg(&per_cpu(cpu_hotplug_state, cpu),
--				     &oldstate, newstate));
--	return newstate =3D=3D CPU_DEAD;
--}
++	/*
++	 * FIXME: Replace this by a per signal struct xarray once there is
++	 * a plan to handle the resulting CRIU regression gracefully.
++	 */
++	for (cnt =3D 0; cnt <=3D INT_MAX; cnt++) {
+ 		spin_lock(&hash_lock);
+-		head =3D &posix_timers_hashtable[hash(sig, sig->posix_timer_id)];
+-		if (!__posix_timers_find(head, sig, sig->posix_timer_id)) {
++		id =3D sig->next_posix_timer_id;
++
++		/* Write the next ID back. Clamp it to the positive space */
++		sig->next_posix_timer_id =3D (id + 1) & INT_MAX;
++
++		head =3D &posix_timers_hashtable[hash(sig, id)];
++		if (!__posix_timers_find(head, sig, id)) {
+ 			hlist_add_head_rcu(&timer->t_hash, head);
+-			ret =3D sig->posix_timer_id;
++			spin_unlock(&hash_lock);
++			return id;
+ 		}
+-		if (++sig->posix_timer_id < 0)
+-			sig->posix_timer_id =3D 0;
+-		if ((sig->posix_timer_id =3D=3D first_free_id) && (ret =3D=3D -ENOENT))
+-			/* Loop over all possible ids completed */
+-			ret =3D -EAGAIN;
+ 		spin_unlock(&hash_lock);
+-	} while (ret =3D=3D -ENOENT);
+-	return ret;
++	}
++	/* POSIX return code when no timer ID could be allocated */
++	return -EAGAIN;
+ }
+=20
+ static inline void unlock_timer(struct k_itimer *timr, unsigned long flags)
+@@ -166,7 +128,6 @@ static inline void unlock_timer(struct k_itimer *timr, un=
+signed long flags)
+ 	spin_unlock_irqrestore(&timr->it_lock, flags);
+ }
+=20
+-/* Get clock_realtime */
+ static int posix_get_realtime_timespec(clockid_t which_clock, struct timespe=
+c64 *tp)
+ {
+ 	ktime_get_real_ts64(tp);
+@@ -178,7 +139,6 @@ static ktime_t posix_get_realtime_ktime(clockid_t which_c=
+lock)
+ 	return ktime_get_real();
+ }
+=20
+-/* Set clock_realtime */
+ static int posix_clock_realtime_set(const clockid_t which_clock,
+ 				    const struct timespec64 *tp)
+ {
+@@ -191,9 +151,6 @@ static int posix_clock_realtime_adj(const clockid_t which=
+_clock,
+ 	return do_adjtimex(t);
+ }
+=20
+-/*
+- * Get monotonic time for posix timers
+- */
+ static int posix_get_monotonic_timespec(clockid_t which_clock, struct timesp=
+ec64 *tp)
+ {
+ 	ktime_get_ts64(tp);
+@@ -206,9 +163,6 @@ static ktime_t posix_get_monotonic_ktime(clockid_t which_=
+clock)
+ 	return ktime_get();
+ }
+=20
+-/*
+- * Get monotonic-raw time for posix timers
+- */
+ static int posix_get_monotonic_raw(clockid_t which_clock, struct timespec64 =
+*tp)
+ {
+ 	ktime_get_raw_ts64(tp);
+@@ -216,7 +170,6 @@ static int posix_get_monotonic_raw(clockid_t which_clock,=
+ struct timespec64 *tp)
+ 	return 0;
+ }
+=20
 -
--#endif /* #ifdef CONFIG_HOTPLUG_CPU */
+ static int posix_get_realtime_coarse(clockid_t which_clock, struct timespec6=
+4 *tp)
+ {
+ 	ktime_get_coarse_real_ts64(tp);
+@@ -267,9 +220,6 @@ static int posix_get_hrtimer_res(clockid_t which_clock, s=
+truct timespec64 *tp)
+ 	return 0;
+ }
+=20
+-/*
+- * Initialize everything, well, just everything in Posix clocks/timers ;)
+- */
+ static __init int init_posix_timers(void)
+ {
+ 	posix_timers_cache =3D kmem_cache_create("posix_timers_cache",
+@@ -300,15 +250,9 @@ static void common_hrtimer_rearm(struct k_itimer *timr)
+ }
+=20
+ /*
+- * This function is exported for use by the signal deliver code.  It is
+- * called just prior to the info block being released and passes that
+- * block to us.  It's function is to update the overrun entry AND to
+- * restart the timer.  It should only be called if the timer is to be
+- * restarted (i.e. we have flagged this in the sys_private entry of the
+- * info block).
+- *
+- * To protect against the timer going away while the interrupt is queued,
+- * we require that the it_requeue_pending flag be set.
++ * This function is called from the signal delivery code if
++ * info->si_sys_private is not zero, which indicates that the timer has to
++ * be rearmed. Restart the timer and update info::si_overrun.
+  */
+ void posixtimer_rearm(struct kernel_siginfo *info)
+ {
+@@ -357,18 +301,18 @@ int posix_timer_event(struct k_itimer *timr, int si_pri=
+vate)
+ }
+=20
+ /*
+- * This function gets called when a POSIX.1b interval timer expires.  It
+- * is used as a callback from the kernel internal timer.  The
+- * run_timer_list code ALWAYS calls with interrupts on.
+-
+- * This code is for CLOCK_REALTIME* and CLOCK_MONOTONIC* timers.
++ * This function gets called when a POSIX.1b interval timer expires from
++ * the HRTIMER interrupt (soft interrupt on RT kernels).
++ *
++ * Handles CLOCK_REALTIME, CLOCK_MONOTONIC, CLOCK_BOOTTIME and CLOCK_TAI
++ * based timers.
+  */
+ static enum hrtimer_restart posix_timer_fn(struct hrtimer *timer)
+ {
++	enum hrtimer_restart ret =3D HRTIMER_NORESTART;
+ 	struct k_itimer *timr;
+ 	unsigned long flags;
+ 	int si_private =3D 0;
+-	enum hrtimer_restart ret =3D HRTIMER_NORESTART;
+=20
+ 	timr =3D container_of(timer, struct k_itimer, it.real.timer);
+ 	spin_lock_irqsave(&timr->it_lock, flags);
+@@ -379,9 +323,10 @@ static enum hrtimer_restart posix_timer_fn(struct hrtime=
+r *timer)
+=20
+ 	if (posix_timer_event(timr, si_private)) {
+ 		/*
+-		 * signal was not sent because of sig_ignor
+-		 * we will not get a call back to restart it AND
+-		 * it should be restarted.
++		 * The signal was not queued due to SIG_IGN. As a
++		 * consequence the timer is not going to be rearmed from
++		 * the signal delivery path. But as a real signal handler
++		 * can be installed later the timer must be rearmed here.
+ 		 */
+ 		if (timr->it_interval !=3D 0) {
+ 			ktime_t now =3D hrtimer_cb_get_time(timer);
+@@ -390,34 +335,35 @@ static enum hrtimer_restart posix_timer_fn(struct hrtim=
+er *timer)
+ 			 * FIXME: What we really want, is to stop this
+ 			 * timer completely and restart it in case the
+ 			 * SIG_IGN is removed. This is a non trivial
+-			 * change which involves sighand locking
+-			 * (sigh !), which we don't want to do late in
+-			 * the release cycle.
++			 * change to the signal handling code.
++			 *
++			 * For now let timers with an interval less than a
++			 * jiffie expire every jiffie and recheck for a
++			 * valid signal handler.
++			 *
++			 * This avoids interrupt starvation in case of a
++			 * very small interval, which would expire the
++			 * timer immediately again.
++			 *
++			 * Moving now ahead of time by one jiffie tricks
++			 * hrtimer_forward() to expire the timer later,
++			 * while it still maintains the overrun accuracy
++			 * for the price of a slight inconsistency in the
++			 * timer_gettime() case. This is at least better
++			 * than a timer storm.
+ 			 *
+-			 * For now we just let timers with an interval
+-			 * less than a jiffie expire every jiffie to
+-			 * avoid softirq starvation in case of SIG_IGN
+-			 * and a very small interval, which would put
+-			 * the timer right back on the softirq pending
+-			 * list. By moving now ahead of time we trick
+-			 * hrtimer_forward() to expire the timer
+-			 * later, while we still maintain the overrun
+-			 * accuracy, but have some inconsistency in
+-			 * the timer_gettime() case. This is at least
+-			 * better than a starved softirq. A more
+-			 * complex fix which solves also another related
+-			 * inconsistency is already in the pipeline.
++			 * Only required when high resolution timers are
++			 * enabled as the periodic tick based timers are
++			 * automatically aligned to the next tick.
+ 			 */
+-#ifdef CONFIG_HIGH_RES_TIMERS
+-			{
+-				ktime_t kj =3D NSEC_PER_SEC / HZ;
++			if (IS_ENABLED(CONFIG_HIGH_RES_TIMERS)) {
++				ktime_t kj =3D TICK_NSEC;
+=20
+ 				if (timr->it_interval < kj)
+ 					now =3D ktime_add(now, kj);
+ 			}
+-#endif
+-			timr->it_overrun +=3D hrtimer_forward(timer, now,
+-							    timr->it_interval);
++
++			timr->it_overrun +=3D hrtimer_forward(timer, now, timr->it_interval);
+ 			ret =3D HRTIMER_RESTART;
+ 			++timr->it_requeue_pending;
+ 			timr->it_active =3D 1;
+@@ -454,8 +400,8 @@ static struct pid *good_sigevent(sigevent_t * event)
+=20
+ static struct k_itimer * alloc_posix_timer(void)
+ {
+-	struct k_itimer *tmr;
+-	tmr =3D kmem_cache_zalloc(posix_timers_cache, GFP_KERNEL);
++	struct k_itimer *tmr =3D kmem_cache_zalloc(posix_timers_cache, GFP_KERNEL);
++
+ 	if (!tmr)
+ 		return tmr;
+ 	if (unlikely(!(tmr->sigq =3D sigqueue_alloc()))) {
+@@ -473,21 +419,21 @@ static void k_itimer_rcu_free(struct rcu_head *head)
+ 	kmem_cache_free(posix_timers_cache, tmr);
+ }
+=20
+-#define IT_ID_SET	1
+-#define IT_ID_NOT_SET	0
+-static void release_posix_timer(struct k_itimer *tmr, int it_id_set)
++static void posix_timer_free(struct k_itimer *tmr)
+ {
+-	if (it_id_set) {
+-		unsigned long flags;
+-		spin_lock_irqsave(&hash_lock, flags);
+-		hlist_del_rcu(&tmr->t_hash);
+-		spin_unlock_irqrestore(&hash_lock, flags);
+-	}
+ 	put_pid(tmr->it_pid);
+ 	sigqueue_free(tmr->sigq);
+ 	call_rcu(&tmr->rcu, k_itimer_rcu_free);
+ }
+=20
++static void posix_timer_unhash_and_free(struct k_itimer *tmr)
++{
++	spin_lock(&hash_lock);
++	hlist_del_rcu(&tmr->t_hash);
++	spin_unlock(&hash_lock);
++	posix_timer_free(tmr);
++}
++
+ static int common_timer_create(struct k_itimer *new_timer)
+ {
+ 	hrtimer_init(&new_timer->it.real.timer, new_timer->it_clock, 0);
+@@ -501,7 +447,6 @@ static int do_timer_create(clockid_t which_clock, struct =
+sigevent *event,
+ 	const struct k_clock *kc =3D clockid_to_kclock(which_clock);
+ 	struct k_itimer *new_timer;
+ 	int error, new_timer_id;
+-	int it_id_set =3D IT_ID_NOT_SET;
+=20
+ 	if (!kc)
+ 		return -EINVAL;
+@@ -513,13 +458,18 @@ static int do_timer_create(clockid_t which_clock, struc=
+t sigevent *event,
+ 		return -EAGAIN;
+=20
+ 	spin_lock_init(&new_timer->it_lock);
++
++	/*
++	 * Add the timer to the hash table. The timer is not yet valid
++	 * because new_timer::it_signal is still NULL. The timer id is also
++	 * not yet visible to user space.
++	 */
+ 	new_timer_id =3D posix_timer_add(new_timer);
+ 	if (new_timer_id < 0) {
+-		error =3D new_timer_id;
+-		goto out;
++		posix_timer_free(new_timer);
++		return new_timer_id;
+ 	}
+=20
+-	it_id_set =3D IT_ID_SET;
+ 	new_timer->it_id =3D (timer_t) new_timer_id;
+ 	new_timer->it_clock =3D which_clock;
+ 	new_timer->kclock =3D kc;
+@@ -547,30 +497,33 @@ static int do_timer_create(clockid_t which_clock, struc=
+t sigevent *event,
+ 	new_timer->sigq->info.si_tid   =3D new_timer->it_id;
+ 	new_timer->sigq->info.si_code  =3D SI_TIMER;
+=20
+-	if (copy_to_user(created_timer_id,
+-			 &new_timer_id, sizeof (new_timer_id))) {
++	if (copy_to_user(created_timer_id, &new_timer_id, sizeof (new_timer_id))) {
+ 		error =3D -EFAULT;
+ 		goto out;
+ 	}
+-
++	/*
++	 * After succesful copy out, the timer ID is visible to user space
++	 * now but not yet valid because new_timer::signal is still NULL.
++	 *
++	 * Complete the initialization with the clock specific create
++	 * callback.
++	 */
+ 	error =3D kc->timer_create(new_timer);
+ 	if (error)
+ 		goto out;
+=20
+ 	spin_lock_irq(&current->sighand->siglock);
+-	new_timer->it_signal =3D current->signal;
++	/* This makes the timer valid in the hash table */
++	WRITE_ONCE(new_timer->it_signal, current->signal);
+ 	list_add(&new_timer->list, &current->signal->posix_timers);
+ 	spin_unlock_irq(&current->sighand->siglock);
+-
+-	return 0;
+ 	/*
+-	 * In the case of the timer belonging to another task, after
+-	 * the task is unlocked, the timer is owned by the other task
+-	 * and may cease to exist at any time.  Don't use or modify
+-	 * new_timer after the unlock call.
++	 * After unlocking sighand::siglock @new_timer is subject to
++	 * concurrent removal and cannot be touched anymore
+ 	 */
++	return 0;
+ out:
+-	release_posix_timer(new_timer, it_id_set);
++	posix_timer_unhash_and_free(new_timer);
+ 	return error;
+ }
+=20
+@@ -604,13 +557,6 @@ COMPAT_SYSCALL_DEFINE3(timer_create, clockid_t, which_cl=
+ock,
+ }
+ #endif
+=20
+-/*
+- * Locking issues: We need to protect the result of the id look up until
+- * we get the timer locked down so it is not deleted under us.  The
+- * removal is done under the idr spinlock so we use that here to bridge
+- * the find to the timer lock.  To avoid a dead lock, the timer id MUST
+- * be release with out holding the timer lock.
+- */
+ static struct k_itimer *__lock_timer(timer_t timer_id, unsigned long *flags)
+ {
+ 	struct k_itimer *timr;
+@@ -622,10 +568,35 @@ static struct k_itimer *__lock_timer(timer_t timer_id, =
+unsigned long *flags)
+ 	if ((unsigned long long)timer_id > INT_MAX)
+ 		return NULL;
+=20
++	/*
++	 * The hash lookup and the timers are RCU protected.
++	 *
++	 * Timers are added to the hash in invalid state where
++	 * timr::it_signal =3D=3D NULL. timer::it_signal is only set after the
++	 * rest of the initialization succeeded.
++	 *
++	 * Timer destruction happens in steps:
++	 *  1) Set timr::it_signal to NULL with timr::it_lock held
++	 *  2) Release timr::it_lock
++	 *  3) Remove from the hash under hash_lock
++	 *  4) Call RCU for removal after the grace period
++	 *
++	 * Holding rcu_read_lock() accross the lookup ensures that
++	 * the timer cannot be freed.
++	 *
++	 * The lookup validates locklessly that timr::it_signal =3D=3D
++	 * current::it_signal and timr::it_id =3D=3D @timer_id. timr::it_id
++	 * can't change, but timr::it_signal becomes NULL during
++	 * destruction.
++	 */
+ 	rcu_read_lock();
+ 	timr =3D posix_timer_by_id(timer_id);
+ 	if (timr) {
+ 		spin_lock_irqsave(&timr->it_lock, *flags);
++		/*
++		 * Validate under timr::it_lock that timr::it_signal is
++		 * still valid. Pairs with #1 above.
++		 */
+ 		if (timr->it_signal =3D=3D current->signal) {
+ 			rcu_read_unlock();
+ 			return timr;
+@@ -652,20 +623,16 @@ static s64 common_hrtimer_forward(struct k_itimer *timr=
+, ktime_t now)
+ }
+=20
+ /*
+- * Get the time remaining on a POSIX.1b interval timer.  This function
+- * is ALWAYS called with spin_lock_irq on the timer, thus it must not
+- * mess with irq.
++ * Get the time remaining on a POSIX.1b interval timer.
+  *
+- * We have a couple of messes to clean up here.  First there is the case
+- * of a timer that has a requeue pending.  These timers should appear to
+- * be in the timer list with an expiry as if we were to requeue them
+- * now.
++ * Two issues to handle here:
+  *
+- * The second issue is the SIGEV_NONE timer which may be active but is
+- * not really ever put in the timer list (to save system resources).
+- * This timer may be expired, and if so, we will do it here.  Otherwise
+- * it is the same as a requeue pending timer WRT to what we should
+- * report.
++ *  1) The timer has a requeue pending. The return value must appear as
++ *     if the timer has been requeued right now.
++ *
++ *  2) The timer is a SIGEV_NONE timer. These timers are never enqueued
++ *     into the hrtimer queue and therefore never expired. Emulate expiry
++ *     here taking #1 into account.
+  */
+ void common_timer_get(struct k_itimer *timr, struct itimerspec64 *cur_settin=
+g)
+ {
+@@ -681,8 +648,12 @@ void common_timer_get(struct k_itimer *timr, struct itim=
+erspec64 *cur_setting)
+ 		cur_setting->it_interval =3D ktime_to_timespec64(iv);
+ 	} else if (!timr->it_active) {
+ 		/*
+-		 * SIGEV_NONE oneshot timers are never queued. Check them
+-		 * below.
++		 * SIGEV_NONE oneshot timers are never queued and therefore
++		 * timr->it_active is always false. The check below
++		 * vs. remaining time will handle this case.
++		 *
++		 * For all other timers there is nothing to update here, so
++		 * return.
+ 		 */
+ 		if (!sig_none)
+ 			return;
+@@ -691,18 +662,29 @@ void common_timer_get(struct k_itimer *timr, struct iti=
+merspec64 *cur_setting)
+ 	now =3D kc->clock_get_ktime(timr->it_clock);
+=20
+ 	/*
+-	 * When a requeue is pending or this is a SIGEV_NONE timer move the
+-	 * expiry time forward by intervals, so expiry is > now.
++	 * If this is an interval timer and either has requeue pending or
++	 * is a SIGEV_NONE timer move the expiry time forward by intervals,
++	 * so expiry is > now.
+ 	 */
+ 	if (iv && (timr->it_requeue_pending & REQUEUE_PENDING || sig_none))
+ 		timr->it_overrun +=3D kc->timer_forward(timr, now);
+=20
+ 	remaining =3D kc->timer_remaining(timr, now);
+-	/* Return 0 only, when the timer is expired and not pending */
++	/*
++	 * As @now is retrieved before a possible timer_forward() and
++	 * cannot be reevaluated by the compiler @remaining is based on the
++	 * same @now value. Therefore @remaining is consistent vs. @now.
++	 *
++	 * Consequently all interval timers, i.e. @iv > 0, cannot have a
++	 * remaining time <=3D 0 because timer_forward() guarantees to move
++	 * them forward so that the next timer expiry is > @now.
++	 */
+ 	if (remaining <=3D 0) {
+ 		/*
+-		 * A single shot SIGEV_NONE timer must return 0, when
+-		 * it is expired !
++		 * A single shot SIGEV_NONE timer must return 0, when it is
++		 * expired! Timers which have a real signal delivery mode
++		 * must return a remaining time greater than 0 because the
++		 * signal has not yet been delivered.
+ 		 */
+ 		if (!sig_none)
+ 			cur_setting->it_value.tv_nsec =3D 1;
+@@ -711,11 +693,10 @@ void common_timer_get(struct k_itimer *timr, struct iti=
+merspec64 *cur_setting)
+ 	}
+ }
+=20
+-/* Get the time remaining on a POSIX.1b interval timer. */
+ static int do_timer_gettime(timer_t timer_id,  struct itimerspec64 *setting)
+ {
+-	struct k_itimer *timr;
+ 	const struct k_clock *kc;
++	struct k_itimer *timr;
+ 	unsigned long flags;
+ 	int ret =3D 0;
+=20
+@@ -765,20 +746,29 @@ SYSCALL_DEFINE2(timer_gettime32, timer_t, timer_id,
+=20
+ #endif
+=20
+-/*
+- * Get the number of overruns of a POSIX.1b interval timer.  This is to
+- * be the overrun of the timer last delivered.  At the same time we are
+- * accumulating overruns on the next timer.  The overrun is frozen when
+- * the signal is delivered, either at the notify time (if the info block
+- * is not queued) or at the actual delivery time (as we are informed by
+- * the call back to posixtimer_rearm().  So all we need to do is
+- * to pick up the frozen overrun.
++/**
++ * sys_timer_getoverrun - Get the number of overruns of a POSIX.1b interval =
+timer
++ * @timer_id:	The timer ID which identifies the timer
++ *
++ * The "overrun count" of a timer is one plus the number of expiration
++ * intervals which have elapsed between the first expiry, which queues the
++ * signal and the actual signal delivery. On signal delivery the "overrun
++ * count" is calculated and cached, so it can be returned directly here.
++ *
++ * As this is relative to the last queued signal the returned overrun count
++ * is meaningless outside of the signal delivery path and even there it
++ * does not accurately reflect the current state when user space evaluates
++ * it.
++ *
++ * Returns:
++ *	-EINVAL		@timer_id is invalid
++ *	1..INT_MAX	The number of overruns related to the last delivered signal
+  */
+ SYSCALL_DEFINE1(timer_getoverrun, timer_t, timer_id)
+ {
+ 	struct k_itimer *timr;
+-	int overrun;
+ 	unsigned long flags;
++	int overrun;
+=20
+ 	timr =3D lock_timer(timer_id, &flags);
+ 	if (!timr)
+@@ -831,10 +821,18 @@ static void common_timer_wait_running(struct k_itimer *=
+timer)
+ }
+=20
+ /*
+- * On PREEMPT_RT this prevent priority inversion against softirq kthread in
+- * case it gets preempted while executing a timer callback. See comments in
+- * hrtimer_cancel_wait_running. For PREEMPT_RT=3Dn this just results in a
+- * cpu_relax().
++ * On PREEMPT_RT this prevents priority inversion and a potential livelock
++ * against the ksoftirqd thread in case that ksoftirqd gets preempted while
++ * executing a hrtimer callback.
++ *
++ * See the comments in hrtimer_cancel_wait_running(). For PREEMPT_RT=3Dn this
++ * just results in a cpu_relax().
++ *
++ * For POSIX CPU timers with CONFIG_POSIX_CPU_TIMERS_TASK_WORK=3Dn this is
++ * just a cpu_relax(). With CONFIG_POSIX_CPU_TIMERS_TASK_WORK=3Dy this
++ * prevents spinning on an eventually scheduled out task and a livelock
++ * when the task which tries to delete or disarm the timer has preempted
++ * the task which runs the expiry in task work context.
+  */
+ static struct k_itimer *timer_wait_running(struct k_itimer *timer,
+ 					   unsigned long *flags)
+@@ -943,8 +941,7 @@ SYSCALL_DEFINE4(timer_settime, timer_t, timer_id, int, fl=
+ags,
+ 		const struct __kernel_itimerspec __user *, new_setting,
+ 		struct __kernel_itimerspec __user *, old_setting)
+ {
+-	struct itimerspec64 new_spec, old_spec;
+-	struct itimerspec64 *rtn =3D old_setting ? &old_spec : NULL;
++	struct itimerspec64 new_spec, old_spec, *rtn;
+ 	int error =3D 0;
+=20
+ 	if (!new_setting)
+@@ -953,6 +950,7 @@ SYSCALL_DEFINE4(timer_settime, timer_t, timer_id, int, fl=
+ags,
+ 	if (get_itimerspec64(&new_spec, new_setting))
+ 		return -EFAULT;
+=20
++	rtn =3D old_setting ? &old_spec : NULL;
+ 	error =3D do_timer_settime(timer_id, flags, &new_spec, rtn);
+ 	if (!error && old_setting) {
+ 		if (put_itimerspec64(&old_spec, old_setting))
+@@ -1026,38 +1024,71 @@ SYSCALL_DEFINE1(timer_delete, timer_t, timer_id)
+ 	list_del(&timer->list);
+ 	spin_unlock(&current->sighand->siglock);
+ 	/*
+-	 * This keeps any tasks waiting on the spin lock from thinking
+-	 * they got something (see the lock code above).
++	 * A concurrent lookup could check timer::it_signal lockless. It
++	 * will reevaluate with timer::it_lock held and observe the NULL.
+ 	 */
+-	timer->it_signal =3D NULL;
++	WRITE_ONCE(timer->it_signal, NULL);
+=20
+ 	unlock_timer(timer, flags);
+-	release_posix_timer(timer, IT_ID_SET);
++	posix_timer_unhash_and_free(timer);
+ 	return 0;
+ }
+=20
+ /*
+- * return timer owned by the process, used by exit_itimers
++ * Delete a timer if it is armed, remove it from the hash and schedule it
++ * for RCU freeing.
+  */
+ static void itimer_delete(struct k_itimer *timer)
+ {
+-retry_delete:
+-	spin_lock_irq(&timer->it_lock);
++	unsigned long flags;
+=20
++	/*
++	 * irqsave is required to make timer_wait_running() work.
++	 */
++	spin_lock_irqsave(&timer->it_lock, flags);
++
++retry_delete:
++	/*
++	 * Even if the timer is not longer accessible from other tasks
++	 * it still might be armed and queued in the underlying timer
++	 * mechanism. Worse, that timer mechanism might run the expiry
++	 * function concurrently.
++	 */
+ 	if (timer_delete_hook(timer) =3D=3D TIMER_RETRY) {
+-		spin_unlock_irq(&timer->it_lock);
++		/*
++		 * Timer is expired concurrently, prevent livelocks
++		 * and pointless spinning on RT.
++		 *
++		 * timer_wait_running() drops timer::it_lock, which opens
++		 * the possibility for another task to delete the timer.
++		 *
++		 * That's not possible here because this is invoked from
++		 * do_exit() only for the last thread of the thread group.
++		 * So no other task can access and delete that timer.
++		 */
++		if (WARN_ON_ONCE(timer_wait_running(timer, &flags) !=3D timer))
++			return;
++
+ 		goto retry_delete;
+ 	}
+ 	list_del(&timer->list);
+=20
+-	spin_unlock_irq(&timer->it_lock);
+-	release_posix_timer(timer, IT_ID_SET);
++	/*
++	 * Setting timer::it_signal to NULL is technically not required
++	 * here as nothing can access the timer anymore legitimately via
++	 * the hash table. Set it to NULL nevertheless so that all deletion
++	 * paths are consistent.
++	 */
++	WRITE_ONCE(timer->it_signal, NULL);
++
++	spin_unlock_irqrestore(&timer->it_lock, flags);
++	posix_timer_unhash_and_free(timer);
+ }
+=20
+ /*
+- * This is called by do_exit or de_thread, only when nobody else can
+- * modify the signal->posix_timers list. Yet we need sighand->siglock
+- * to prevent the race with /proc/pid/timers.
++ * Invoked from do_exit() when the last thread of a thread group exits.
++ * At that point no other task can access the timers of the dying
++ * task anymore.
+  */
+ void exit_itimers(struct task_struct *tsk)
+ {
+@@ -1067,10 +1098,12 @@ void exit_itimers(struct task_struct *tsk)
+ 	if (list_empty(&tsk->signal->posix_timers))
+ 		return;
+=20
++	/* Protect against concurrent read via /proc/$PID/timers */
+ 	spin_lock_irq(&tsk->sighand->siglock);
+ 	list_replace_init(&tsk->signal->posix_timers, &timers);
+ 	spin_unlock_irq(&tsk->sighand->siglock);
+=20
++	/* The timers are not longer accessible via tsk::signal */
+ 	while (!list_empty(&timers)) {
+ 		tmr =3D list_first_entry(&timers, struct k_itimer, list);
+ 		itimer_delete(tmr);
+@@ -1089,6 +1122,10 @@ SYSCALL_DEFINE2(clock_settime, const clockid_t, which_=
+clock,
+ 	if (get_timespec64(&new_tp, tp))
+ 		return -EFAULT;
+=20
++	/*
++	 * Permission checks have to be done inside the clock specific
++	 * setter callback.
++	 */
+ 	return kc->clock_set(which_clock, &new_tp);
+ }
+=20
+@@ -1139,6 +1176,79 @@ SYSCALL_DEFINE2(clock_adjtime, const clockid_t, which_=
+clock,
+ 	return err;
+ }
+=20
++/**
++ * sys_clock_getres - Get the resolution of a clock
++ * @which_clock:	The clock to get the resolution for
++ * @tp:			Pointer to a a user space timespec64 for storage
++ *
++ * POSIX defines:
++ *
++ * "The clock_getres() function shall return the resolution of any
++ * clock. Clock resolutions are implementation-defined and cannot be set by
++ * a process. If the argument res is not NULL, the resolution of the
++ * specified clock shall be stored in the location pointed to by res. If
++ * res is NULL, the clock resolution is not returned. If the time argument
++ * of clock_settime() is not a multiple of res, then the value is truncated
++ * to a multiple of res."
++ *
++ * Due to the various hardware constraints the real resolution can vary
++ * wildly and even change during runtime when the underlying devices are
++ * replaced. The kernel also can use hardware devices with different
++ * resolutions for reading the time and for arming timers.
++ *
++ * The kernel therefore deviates from the POSIX spec in various aspects:
++ *
++ * 1) The resolution returned to user space
++ *
++ *    For CLOCK_REALTIME, CLOCK_MONOTONIC, CLOCK_BOOTTIME, CLOCK_TAI,
++ *    CLOCK_REALTIME_ALARM, CLOCK_BOOTTIME_ALAREM and CLOCK_MONOTONIC_RAW
++ *    the kernel differentiates only two cases:
++ *
++ *    I)  Low resolution mode:
++ *
++ *	  When high resolution timers are disabled at compile or runtime
++ *	  the resolution returned is nanoseconds per tick, which represents
++ *	  the precision at which timers expire.
++ *
++ *    II) High resolution mode:
++ *
++ *	  When high resolution timers are enabled the resolution returned
++ *	  is always one nanosecond independent of the actual resolution of
++ *	  the underlying hardware devices.
++ *
++ *	  For CLOCK_*_ALARM the actual resolution depends on system
++ *	  state. When system is running the resolution is the same as the
++ *	  resolution of the other clocks. During suspend the actual
++ *	  resolution is the resolution of the underlying RTC device which
++ *	  might be way less precise than the clockevent device used during
++ *	  running state.
++ *
++ *   For CLOCK_REALTIME_COARSE and CLOCK_MONOTONIC_COARSE the resolution
++ *   returned is always nanoseconds per tick.
++ *
++ *   For CLOCK_PROCESS_CPUTIME and CLOCK_THREAD_CPUTIME the resolution
++ *   returned is always one nanosecond under the assumption that the
++ *   underlying scheduler clock has a better resolution than nanoseconds
++ *   per tick.
++ *
++ *   For dynamic POSIX clocks (PTP devices) the resolution returned is
++ *   always one nanosecond.
++ *
++ * 2) Affect on sys_clock_settime()
++ *
++ *    The kernel does not truncate the time which is handed in to
++ *    sys_clock_settime(). The kernel internal timekeeping is always using
++ *    nanoseconds precision independent of the clocksource device which is
++ *    used to read the time from. The resolution of that device only
++ *    affects the presicion of the time returned by sys_clock_gettime().
++ *
++ * Returns:
++ *	0		Success. @tp contains the resolution
++ *	-EINVAL		@which_clock is not a valid clock ID
++ *	-EFAULT		Copying the resolution to @tp faulted
++ *	-ENODEV		Dynamic POSIX clock is not backed by a device
++ *	-EOPNOTSUPP	Dynamic POSIX clock does not support getres()
++ */
+ SYSCALL_DEFINE2(clock_getres, const clockid_t, which_clock,
+ 		struct __kernel_timespec __user *, tp)
+ {
+@@ -1230,7 +1340,7 @@ SYSCALL_DEFINE2(clock_getres_time32, clockid_t, which_c=
+lock,
+ #endif
+=20
+ /*
+- * nanosleep for monotonic and realtime clocks
++ * sys_clock_nanosleep() for CLOCK_REALTIME and CLOCK_TAI
+  */
+ static int common_nsleep(const clockid_t which_clock, int flags,
+ 			 const struct timespec64 *rqtp)
+@@ -1242,8 +1352,13 @@ static int common_nsleep(const clockid_t which_clock, =
+int flags,
+ 				 which_clock);
+ }
+=20
++/*
++ * sys_clock_nanosleep() for CLOCK_MONOTONIC and CLOCK_BOOTTIME
++ *
++ * Absolute nanosleeps for these clocks are time-namespace adjusted.
++ */
+ static int common_nsleep_timens(const clockid_t which_clock, int flags,
+-			 const struct timespec64 *rqtp)
++				const struct timespec64 *rqtp)
+ {
+ 	ktime_t texp =3D timespec64_to_ktime(*rqtp);
+=20
+diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
+index 52254679ec48..89055050d1ac 100644
+--- a/kernel/time/tick-sched.c
++++ b/kernel/time/tick-sched.c
+@@ -1030,7 +1030,7 @@ static bool report_idle_softirq(void)
+ 			return false;
+ 	}
+=20
+-	if (ratelimit < 10)
++	if (ratelimit >=3D 10)
+ 		return false;
+=20
+ 	/* On RT, softirqs handling may be waiting on some lock */
 
