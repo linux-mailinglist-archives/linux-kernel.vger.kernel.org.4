@@ -2,60 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B7AB73EB8C
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 22:13:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A36A73EB85
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 22:13:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231329AbjFZUGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 16:06:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56766 "EHLO
+        id S230070AbjFZUGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 16:06:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232128AbjFZUGA (ORCPT
+        with ESMTP id S231268AbjFZUGA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 26 Jun 2023 16:06:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91BC0198A
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 13:05:43 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D68B11987;
+        Mon, 26 Jun 2023 13:05:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3736B60FCB
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 20:02:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9FC5BC433CA;
-        Mon, 26 Jun 2023 20:02:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5EEA560FB7;
+        Mon, 26 Jun 2023 20:02:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C5BBEC433CA;
+        Mon, 26 Jun 2023 20:02:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687809762;
-        bh=q1AYkOo0C8d8bzUL4fGWSkmp4uaLYnCzLu3ARo76SDY=;
+        s=k20201202; t=1687809765;
+        bh=pR5uYHKuBMIQ6AErHECeqCYmgFJfy36bD9p/7SIgvuM=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=aOwikcGfuaQzIiWEhkZQPjq6RkGcGHX0pzPbw5nuK7pVZq2DA/QWquaGPukkiH3Ss
-         gFnb2Kfk5o7LjPARYLRPsRP+g2LlBoIV8nZaZ/m1bbWu/MIUQpRzYSsXg8x795XGcg
-         pX5e0VlMCDGL0ET92HGwe9VAKemfJGVmROK29WewM0StWTwqmWJ328a1tucjN67+rd
-         WJO1XFKkLClmyD22agHyIWjDp4vIxV++Zl6DBztLkokce2kh09ToOeb3e8GsS7lhV9
-         7s+BDsGcfs3Tuid13a5x1B4DVAkC5tFJyUu+yhNabjoOVLZLHbk87OtxKVcpF7wf04
-         VLUMvRXkTk4/Q==
+        b=Yiii9ncUZ4+4lo9RKaPl8uJgg6VGdDZTemwJhQ5HJenzl/29FZlOJKaTfI76kB5G5
+         A26PUmUhQt6oKUlI7MznAu6UwOnU/OYZGVJB7vm+per4v6MTqnwwsHzyywIgUcoj/e
+         JqBrSra80KR9k/hKDJ7QV+sVS34xlsD7if+3RHDfqIcu80qmVUcIsAZ9LEn2qLP+2w
+         MZZ0sArfh1oDqqNL0SodTk6GFO0whC/ZPP0bKEArIobycp36eWzZlynEAdf/V4UtpI
+         UEYxJQqI5MRkThvcR57RCP8Ql2aQUzqaT90KS5XbZOPptZiXGwGGOE3B55NlpeZ/yF
+         pR9BsJcRq7SZQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8E708C43170;
-        Mon, 26 Jun 2023 20:02:42 +0000 (UTC)
-Subject: Re: [GIT PULL] erofs updates for 6.5-rc1
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B5579E537FE;
+        Mon, 26 Jun 2023 20:02:45 +0000 (UTC)
+Subject: Re: [GIT PULL] Btrfs updates for 6.5
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <ZJkWa+t/WBCXs9XT@debian>
-References: <ZJkWa+t/WBCXs9XT@debian>
-X-PR-Tracked-List-Id: Development of Linux EROFS file system <linux-erofs.lists.ozlabs.org>
-X-PR-Tracked-Message-Id: <ZJkWa+t/WBCXs9XT@debian>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git tags/erofs-for-6.5-rc1
-X-PR-Tracked-Commit-Id: 8241fdd3cdfe88e31a3de09a72b5bff661e4534a
+In-Reply-To: <cover.1687802358.git.dsterba@suse.com>
+References: <cover.1687802358.git.dsterba@suse.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <cover.1687802358.git.dsterba@suse.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-6.5
+X-PR-Tracked-Commit-Id: 8a4a0b2a3eaf75ca8854f856ef29690c12b2f531
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 098c5dd9cf96fc6d7f35429561ef58cd7c5fcecf
-Message-Id: <168780976257.7651.3821421140079280801.pr-tracker-bot@kernel.org>
-Date:   Mon, 26 Jun 2023 20:02:42 +0000
-To:     Gao Xiang <xiang@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Yangtao Li <frank.li@vivo.com>,
-        LKML <linux-kernel@vger.kernel.org>, Yue Hu <huyue2@coolpad.com>,
-        linux-erofs@lists.ozlabs.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-PR-Merge-Commit-Id: cc423f6337d0a5ff1906f3b3d465d28c0d1705f6
+Message-Id: <168780976573.7651.10316510860564213650.pr-tracker-bot@kernel.org>
+Date:   Mon, 26 Jun 2023 20:02:45 +0000
+To:     David Sterba <dsterba@suse.com>
+Cc:     torvalds@linux-foundation.org, David Sterba <dsterba@suse.com>,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,12 +62,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Mon, 26 Jun 2023 12:39:07 +0800:
+The pull request you sent on Mon, 26 Jun 2023 20:14:42 +0200:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git tags/erofs-for-6.5-rc1
+> git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-6.5
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/098c5dd9cf96fc6d7f35429561ef58cd7c5fcecf
+https://git.kernel.org/torvalds/c/cc423f6337d0a5ff1906f3b3d465d28c0d1705f6
 
 Thank you!
 
