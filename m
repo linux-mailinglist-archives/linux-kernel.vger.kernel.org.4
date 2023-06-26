@@ -2,60 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 316C173EEC1
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 00:46:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A18B73EEC7
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 00:46:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229679AbjFZWqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 18:46:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45282 "EHLO
+        id S230033AbjFZWqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 18:46:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbjFZWqL (ORCPT
+        with ESMTP id S230054AbjFZWqe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 18:46:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FC45188
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 15:46:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A5EE260F97
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 22:46:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82E15C433C8;
-        Mon, 26 Jun 2023 22:46:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687819569;
-        bh=7968kreExZC6Fc9zOW2Q2czxDskvgfvx/LKbzujqlvk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cYYQSvkGKfbfqAtqEsr4YwE4tR7gxrieDqDEC7hFi6bRGMuZH2Ape+uzMUfxwAql0
-         UFXmxMrz/C0jiIdwgMCn4HqGjQXNrm9Efstm2L5vsNbq3dH2IJ7nGXVNELvaCdi7lm
-         zpBt9qEVcqTsKnHlMOTR8xuqWWd99F/9PZMcseaGZuV0vKQ/V/7W6aSalexlGpGKeB
-         N/Y++1H0E4E4DhB7zoyP3HbKV1venorZ5QeBTOELB7ufgCdxqSkmj+16kExqtkCu9l
-         cnMMJdhybfgo+iXY+PQyT0Km3k3QlcHzoXNfzGU4vMg0Ii+zwVIw73IabLyTCmqNoS
-         dvDyJuxxTr1iA==
-Date:   Tue, 27 Jun 2023 00:46:05 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        John Stultz <jstultz@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Oleg Nesterov <oleg@redhat.com>
-Subject: Re: [patch 09/45] posix-cpu-timers: Fix posix_cpu_timer_get()
- behaviour
-Message-ID: <ZJoVLadeU9Y5KMO8@lothringen>
-References: <20230606132949.068951363@linutronix.de>
- <20230606142031.532247561@linutronix.de>
+        Mon, 26 Jun 2023 18:46:34 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38EB1188
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 15:46:32 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2b44d77e56bso59402931fa.1
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 15:46:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687819590; x=1690411590;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=g/HbI+tlHDdTUjnW9h4L8w2WP0zE6rcb9swUHefgPkU=;
+        b=SOpWDX2f3Sf5+j1ArGQZP/YJvY47JwcAoGYiM0PA4TdvZKjtFHVL7C79r1CKa+9sGP
+         HWgavLF/CMaFsyMfN/W86D/ZXSxdwaJPt/BrHnQNRwuGVfQ9/jBuaGtYqUajNZkySabX
+         QeMwlAvoCXvJvAXEFusyEhfl3n55Wma/kqU+EeGxJG40KTzI7GOWz59muJfsxcvOfjD5
+         8FH1S9PCEg3xvcgsRaT8fmXZUiL0qM/bwlOCfs/XSkg8CwXE40RPNLZXuEVlXskGIvm4
+         xjbAf79YnLLFuDnKELitkEf3Wq6RvTrYH9wrHb7Aml7w2g0wc0uwK6D0ty8zRu9pj0mE
+         HRuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687819590; x=1690411590;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=g/HbI+tlHDdTUjnW9h4L8w2WP0zE6rcb9swUHefgPkU=;
+        b=EiXGsr1zS/QUJuHRbSLf4ZXK86fNfbv8KOC/sBJ6W55NwvY7J8N9FUXT4Wf8s6VE7R
+         K9mRFXJLcsz9ud5Ukjpwn3mCmF07CwP8fzwIZpWchdBuSL3fTvy3SEy+6pt6Vn6Rl9ys
+         Tboxu047M3Y7rvBUJvZefgPEOgcxflCUnHEPgXuctUWjyXQtmHp9GBay78hO6op5lIeR
+         fuOmriVSicKcRoxXiIuAUSmK4tfPPDQkeEZYzUNntogrfTS2o4PFk8Ou8wo6bbKtHr+i
+         wnjVb2ks79dwsy1bU/5SDSt/LvMNEqToDMij6j9g78t0/j3WfM4KYiNlhud9uxVOCQLP
+         M2KA==
+X-Gm-Message-State: AC+VfDzIfAGDWGS4PGrFePoNTwKluo/9PEdZIGgp0qLKHgVgvv6sMgpH
+        3g48lc86POevAWSDkzvE8gKpBA==
+X-Google-Smtp-Source: ACHHUZ7orXO0/gHnY40bHHASzmg4vD9JU29mG9WnTHLbvrh5LxgCuKRDdOKL+vDSA5TiHT1i6pW4ZA==
+X-Received: by 2002:a05:6512:3088:b0:4f6:2d47:274c with SMTP id z8-20020a056512308800b004f62d47274cmr12489431lfd.15.1687819590412;
+        Mon, 26 Jun 2023 15:46:30 -0700 (PDT)
+Received: from [192.168.1.101] (abyk179.neoplus.adsl.tpnet.pl. [83.9.30.179])
+        by smtp.gmail.com with ESMTPSA id q1-20020ac25101000000b004f858249932sm1277950lfb.90.2023.06.26.15.46.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Jun 2023 15:46:30 -0700 (PDT)
+Message-ID: <1808f43b-5a76-d4e6-a36d-88779ecd3836@linaro.org>
+Date:   Tue, 27 Jun 2023 00:46:28 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230606142031.532247561@linutronix.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 06/15] dt-bindings: display/msm: sc7180-dpu: Describe
+ SM6125
+Content-Language: en-US
+To:     Marijn Suijten <marijn.suijten@somainline.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, Lux Aliaga <they@mint.lgbt>
+References: <20230624-sm6125-dpu-v1-0-1d5a638cebf2@somainline.org>
+ <20230624-sm6125-dpu-v1-6-1d5a638cebf2@somainline.org>
+ <6bbf239f-d530-2f1e-ff52-361f7c9cc951@linaro.org>
+ <75d64lixeawfoqbrctm4thzh73cxkvnlmnh5xgbpf277pmh3gz@zthnqvvuxmeq>
+ <a6f3906a-98a7-de7a-3e26-4b8c45fe93f7@linaro.org>
+ <w3bbdq72thnerbyglb4dyshzg4vu5go2wpsciprk27vah6w2ms@yc4eqclct24a>
+ <3daf9990-79da-9adf-af6a-d9007c186557@linaro.org>
+ <26pqxmuuyznb4qbi4wkiexr5excxenfmiuojrqgrz5k5t5palm@ttlk6m2zuokm>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <26pqxmuuyznb4qbi4wkiexr5excxenfmiuojrqgrz5k5t5palm@ttlk6m2zuokm>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,120 +105,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 04:37:33PM +0200, Thomas Gleixner wrote:
-> timer_gettime() must return the remaining time to the next expiry of a
-> timer or 0 if the timer is not armed and no signal pending.
+On 26.06.2023 22:28, Marijn Suijten wrote:
+> On 2023-06-26 20:57:51, Konrad Dybcio wrote:
+>> On 26.06.2023 19:54, Marijn Suijten wrote:
+>>> On 2023-06-26 18:16:58, Krzysztof Kozlowski wrote:
+>>>> On 25/06/2023 21:52, Marijn Suijten wrote:
+>>>>> On 2023-06-24 11:12:52, Krzysztof Kozlowski wrote:
+>>>>>> On 24/06/2023 02:41, Marijn Suijten wrote:
+>>>>>>> SM6125 is identical to SM6375 except that while downstream also defines
+>>>>>>> a throttle clock, its presence results in timeouts whereas SM6375
+>>>>>>> requires it to not observe any timeouts.
+>>>>>>
+>>>>>> Then it should not be allowed, so you need either "else:" block or
+>>>>>> another "if: properties: compatible:" to disallow it. Because in current
+>>>>>> patch it would be allowed.
+>>>>>
+>>>>> That means this binding is wrong/incomplete for all other SoCs then.
+>>>>> clock(-name)s has 6 items, and sets `minItems: 6`.  Only for sm6375-dpu
+>>>
+>>> Of course meant to say that clock(-name)s has **7** items, not 6.
+>>>
+>>>>> does it set `minItems: 7`, but an else case is missing.
+>>>>
+>>>> Ask the author why it is done like this.
+>>>
+>>> Konrad, can you clarify why other 
 > 
-> This has to be correct also for interval timers even if the signal is
-> pending or the timer has been created with SIGEV_NONE.
+> (Looks like I forgot to complete this sentence before sending,
+> apologies)
 > 
-> The posix CPU timer implementation fails for both cases as it does not
-> forward the timer in posix_cpu_timer_get() before calculating the expiry
-> time.
+>> 6375 needs the throttle clk and the clock(-names) are strongly ordered
+>> so having minItems: 6 discards the last entry
 > 
-> It neither clears the expiry value when a oneshot SIGEV_NONE timer expired
-> and returns 1nsec instead, which is only correct for timers with signals
-> when the signal delivery did not happen yet.
-> 
-> Aside of that posix_cpu_timer_set() pointlessly arms SIGEV_NONE timers
-> which are later disarmed when the initial expiry happens. That's bogus and
-> just keeping the process wide timer active for nothing.
-> 
-> Cure this by:
-> 
->      1) Avoiding to arm SIGEV_NONE timers
-> 
->      2) Forwarding interval timers in posix_cpu_timer_get()
-> 
->      3) Taking SIGEV_NONE into account when a oneshot timer has expired
+> The question is whether or not we should have maxItems: 6 to disallow
+> the clock from being passed: right now it is optional and either is
+> allowed for any !6375 SoC.
+That's a very good question. I don't have a 7180 to test, but for
+you it seems to cause inexplicable issues on 6125..
 
-This patch does too many things at once...
-
+Konrad
 > 
-> Make the update logic a separate function so it can be reused to simplify
-> posix_cpu_timer_set().
+> - Marijn
 > 
-> Fixes: ae1a78eecc45 ("cpu-timers: Return correct previous timer reload value")
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> ---
->  kernel/time/posix-cpu-timers.c |   96 +++++++++++++++++++++++------------------
->  1 file changed, 54 insertions(+), 42 deletions(-)
-> 
-> --- a/kernel/time/posix-cpu-timers.c
-> +++ b/kernel/time/posix-cpu-timers.c
-> @@ -785,45 +782,60 @@ static int posix_cpu_timer_set(struct k_
->  	return ret;
->  }
->  
-> -static void posix_cpu_timer_get(struct k_itimer *timer, struct itimerspec64 *itp)
-> +static void __posix_cpu_timer_get(struct k_itimer *timer, struct itimerspec64 *itp, u64 now)
->  {
-> -	clockid_t clkid = CPUCLOCK_WHICH(timer->it_clock);
-> -	struct cpu_timer *ctmr = &timer->it.cpu;
-> -	u64 now, expires = cpu_timer_getexpires(ctmr);
-> -	struct task_struct *p;
-> -
-> -	rcu_read_lock();
-> -	p = cpu_timer_task_rcu(timer);
-> -	if (!p)
-> -		goto out;
-> +	bool sigev_none = timer->it_sigev_notify == SIGEV_NONE;
-> +	u64 expires;
->  
->  	/*
-> -	 * Easy part: convert the reload time.
-> +	 * Make sure that interval timers are moved forward for the
-> +	 * following cases:
-> +	 *  - SIGEV_NONE timers which are never armed
-> +	 *  - Timers which expired, but the signal has not yet been
-> +	 *    delivered
->  	 */
-> -	itp->it_interval = ktime_to_timespec64(timer->it_interval);
-> -
-> -	if (!expires)
-> -		goto out;
-> +	expires = bump_cpu_timer(timer, now);
-
-What if the expiration has been reached but we arrived here before
-handle_posix_cpu_timers() had a chance? In that case the call to
-bump_cpu_timer() may forward the timer and artificially create an
-overrun / missed event.
-
-Also we are not holding the sighand lock here. So even though the timer
-is forwarded, it may still be picked up afterward by check_thread_timers()
-based on its stalled previous expires value... This can create a discrepancy
-between the overrun count and the actual events received, and perhaps other
-funny things...
-
-Thanks.
-
->  
->  	/*
-> -	 * Sample the clock to take the difference with the expiry time.
-> +	 * Interval timers cannot have a remaining time <= 0 because the
-> +	 * forwarding guarantees to move them forward so that the next
-> +	 * timer expiry is > @now.
->  	 */
-> -	if (CPUCLOCK_PERTHREAD(timer->it_clock))
-> -		now = cpu_clock_sample(clkid, p);
-> -	else
-> -		now = cpu_clock_sample_group(clkid, p, false);
-> -
->  	if (now < expires) {
->  		itp->it_value = ns_to_timespec64(expires - now);
->  	} else {
->  		/*
-> -		 * The timer should have expired already, but the firing
-> -		 * hasn't taken place yet.  Say it's just about to expire.
-> +		 * A single shot SIGEV_NONE timer must return 0, when it is
-> +		 * expired! Timers which have a real signal delivery mode
-> +		 * must return a remaining time greater than 0 because the
-> +		 * signal has not yet been delivered.
->  		 */
-> -		itp->it_value.tv_nsec = 1;
-> -		itp->it_value.tv_sec = 0;
-> +		if (!sigev_none)
-> +			itp->it_value.tv_nsec = 1;
-> +	}
-> +}
-
+>>
+>> Konrad
+>>>
+>>>>> Shall I send a Fixes: ed41005f5b7c ("dt-bindings: display/msm:
+>>>>> sc7180-dpu: Describe SM6350 and SM6375") for that, and should maxItems:
+>>>>> 6 be the default under clock(-name)s or in an else:?
+>>>>
+>>>> There is no bug to fix. Or at least it is not yet known. Whether other
+>>>> devices should be constrained as well - sure, sounds reasonable, but I
+>>>> did not check the code exactly.
+>>>
+>>> I don't know either, but we need this information to decide whether to
+>>> use `maxItems: 6`:
+>>>
+>>> 1. Directly on the property;
+>>> 2. In an `else:` case on the current `if: sm6375-dpu` (should have the
+>>>    same effect as 1., afaik);
+>>> 3. In a second `if:` case that lists all SoCS explicitly.
+>>>
+>>> Since we don't have this information, I think option 3. is the right way
+>>> to go, setting `maxItems: 6` for qcom,sm6125-dpu.
+>>>
+>>> However, it is not yet understood why downstream is able to use the
+>>> throttle clock without repercussions.
+>>>
+>>>> We talk here about this patch.
+>>>
+>>> We used this patch to discover that other SoCs are similarly
+>>> unconstrained.  But if you don't want me to look into it, by all means!
+>>> Saves me a lot of time.  So I will go with option 3.
+>>>
+>>> - Marijn
