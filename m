@@ -2,56 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61E8673EE87
+	by mail.lfdr.de (Postfix) with ESMTP id B508873EE88
 	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 00:13:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229456AbjFZWMz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 18:12:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58684 "EHLO
+        id S230383AbjFZWM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 18:12:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232214AbjFZWL5 (ORCPT
+        with ESMTP id S232236AbjFZWMX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 18:11:57 -0400
-Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0666D30DE;
-        Mon, 26 Jun 2023 15:10:10 -0700 (PDT)
-Received: by mail-io1-f47.google.com with SMTP id ca18e2360f4ac-78362f57500so46562339f.3;
-        Mon, 26 Jun 2023 15:10:09 -0700 (PDT)
+        Mon, 26 Jun 2023 18:12:23 -0400
+Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E694230F3;
+        Mon, 26 Jun 2023 15:10:17 -0700 (PDT)
+Received: by mail-io1-f46.google.com with SMTP id ca18e2360f4ac-7835ffc53bfso37462139f.1;
+        Mon, 26 Jun 2023 15:10:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687817409; x=1690409409;
+        d=1e100.net; s=20221208; t=1687817417; x=1690409417;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=gXVzfpbKiVE2Um8xkwdkPXmLDJPJN7uoe/+dP9OECgU=;
-        b=bqSzDUFzAuCVpNUUROGXqezi640VlBZ7Cz2rv4pi+ixzmnUba4NX6l767EJu/XChgg
-         ByVAXostNAMjTAVC0bfKMc52iDSlGFpc1kMwXnVujBJoa04rt+GsK2FQkVj9fPxQimmp
-         Qo8BV8P4BDModqtoH+aOBrEKasAnFOgs4Uo0DgPG7MikpSflIDM/fT5QAkfbFSd8YGXr
-         clihCE91m08IhMZnN239wcNsM/YJ1C50Z0NQvkdPwsnByrvwLlx0yYqxiu6ioAAeokly
-         MTkgs+ARqnXTaSkpf8Njoy4R0Hmj8J3hPTYIUc3lOFCGG7DXaexT8dNFxyhbbEbCw6d9
-         x7Kg==
-X-Gm-Message-State: AC+VfDx9jlvYrxG8vYLW/mWvZLazZ4A82qFaSa8ulYjDXOYmtaGoxqaV
-        COkp0gWOTGMx5+8dFNFuTw==
-X-Google-Smtp-Source: ACHHUZ6Em2q77BZkyb3EXRuKN1+CG0wJU+b/3s/pA+hq0hKLcPgEgO9eqtGefN34Dkkz/L0vdBeH/A==
-X-Received: by 2002:a6b:d307:0:b0:780:ce72:ac55 with SMTP id s7-20020a6bd307000000b00780ce72ac55mr13596230iob.10.1687817408914;
-        Mon, 26 Jun 2023 15:10:08 -0700 (PDT)
+        bh=riyoS0XQhiArcxIoPKub70n8ZIyykLagdDPG18REZSA=;
+        b=GQHaiIp8cfp3GCInPaC0EWrDijS5+OQZJi6ITTV9AfwIDAdkzTNgfnCx1KvsDoWFrf
+         TeRMS0kv0j4QEJz2qRqWdEzlmy4kWq9RGAB8Dl1TVLzWNO5mf/JLeInPrq2kEDK20UDY
+         hN8YpLKYggEY/+dXvWgIo4F6CQxahc4Og5WIvC+RbDXLzN0QkIgZCMJJI8Rb2o2L3LPU
+         OvH1fz3HiFuhAIu5JqveG3btDCQXQOMrJ9yV3zn0YAvio1tsrqqmR4WbbaSJbxBPoXQL
+         Jxituw+d7CK8XLDpDVxdmO/Ep45IT6QzBDLNcoNdB//Vx+EYWgQTlmzfl6+xJgPQCDVm
+         CB+g==
+X-Gm-Message-State: AC+VfDzylt0EaCsZd6bHDgOLAHAGdl7ZX8wE5GSrNOXd9s068UfDWJ0t
+        FSD3CiqoTlG6OcEiXLYXlvOCLdh2Ag==
+X-Google-Smtp-Source: ACHHUZ4NnWJsAfN5DLGSbWMvOtqp/CfSR59mOLh3GQVF1iyJtqhN/myX//Gf+m7RBPwsVByz850IMA==
+X-Received: by 2002:a5d:9cd5:0:b0:783:727a:8e15 with SMTP id w21-20020a5d9cd5000000b00783727a8e15mr349465iow.6.1687817416929;
+        Mon, 26 Jun 2023 15:10:16 -0700 (PDT)
 Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id z22-20020a6be216000000b0076c5926b381sm2455806ioc.31.2023.06.26.15.10.07
+        by smtp.gmail.com with ESMTPSA id c11-20020a6bfd0b000000b0077e24ace3edsm2363315ioi.52.2023.06.26.15.10.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jun 2023 15:10:08 -0700 (PDT)
-Received: (nullmailer pid 3946180 invoked by uid 1000);
-        Mon, 26 Jun 2023 22:10:06 -0000
+        Mon, 26 Jun 2023 15:10:16 -0700 (PDT)
+Received: (nullmailer pid 3946378 invoked by uid 1000);
+        Mon, 26 Jun 2023 22:10:14 -0000
 From:   Rob Herring <robh@kernel.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH] arm64: dts: mediatek: Fix "status" values
-Date:   Mon, 26 Jun 2023 16:10:05 -0600
-Message-Id: <20230626221005.3946136-1-robh@kernel.org>
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] ARM: dts: at91-vinco: Fix "status" values
+Date:   Mon, 26 Jun 2023 16:10:10 -0600
+Message-Id: <20230626221010.3946263-1-robh@kernel.org>
 X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -70,27 +69,31 @@ The defined value for "status" is "disabled", not "disable".
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- arch/arm64/boot/dts/mediatek/mt7622-bananapi-bpi-r64.dts | 4 ++--
+ arch/arm/boot/dts/microchip/at91-vinco.dts | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt7622-bananapi-bpi-r64.dts b/arch/arm64/boot/dts/mediatek/mt7622-bananapi-bpi-r64.dts
-index e4605d23fdc8..86cedb0bf1a9 100644
---- a/arch/arm64/boot/dts/mediatek/mt7622-bananapi-bpi-r64.dts
-+++ b/arch/arm64/boot/dts/mediatek/mt7622-bananapi-bpi-r64.dts
-@@ -585,11 +585,11 @@ &pwrap {
- };
+diff --git a/arch/arm/boot/dts/microchip/at91-vinco.dts b/arch/arm/boot/dts/microchip/at91-vinco.dts
+index ebeaa6ab500e..ecbdacf48708 100644
+--- a/arch/arm/boot/dts/microchip/at91-vinco.dts
++++ b/arch/arm/boot/dts/microchip/at91-vinco.dts
+@@ -159,7 +159,7 @@ usb0: gadget@400000 {
+ 			atmel,vbus-gpio = <&pioE 31 GPIO_ACTIVE_HIGH>;
+ 			pinctrl-names = "default";
+ 			pinctrl-0 = <&pinctrl_usba_vbus>;
+-			status = "disable";
++			status = "disabled";
+ 		};
  
- &sata {
--	status = "disable";
-+	status = "disabled";
- };
+ 		usb1: ohci@500000 {
+@@ -168,7 +168,7 @@ usb1: ohci@500000 {
+ 					   &pioE 11 GPIO_ACTIVE_LOW
+ 					   &pioE 12 GPIO_ACTIVE_LOW
+ 					  >;
+-			status = "disable";
++			status = "disabled";
+ 		};
  
- &sata_phy {
--	status = "disable";
-+	status = "disabled";
- };
- 
- &spi0 {
+ 		usb2: ehci@600000 {
 -- 
 2.40.1
 
