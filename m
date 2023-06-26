@@ -2,113 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E12D73DA86
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 10:52:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4181E73DAA4
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 11:00:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229666AbjFZIwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 04:52:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41234 "EHLO
+        id S231339AbjFZJAK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 05:00:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231381AbjFZIvl (ORCPT
+        with ESMTP id S231169AbjFZI7j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 04:51:41 -0400
-Received: from smtp-42af.mail.infomaniak.ch (smtp-42af.mail.infomaniak.ch [IPv6:2001:1600:3:17::42af])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 517913583
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 01:49:32 -0700 (PDT)
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4QqM2M0mHtzMpqsT;
-        Mon, 26 Jun 2023 08:48:43 +0000 (UTC)
-Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4QqM2L1jyXzMpvVT;
-        Mon, 26 Jun 2023 10:48:42 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1687769323;
-        bh=aEhUEFjlWBzIziOJJuCpxbJR2jQcCyx7meGNZnSvhvk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=MZ7Nlj8eZb95HPTOedrkSDfhjlo2sRy4yuyIQMydvoqcfNvedTf3b8bIzBMun4lJ1
-         VtzLHyotWl8rHCLzSE9oT2lbpGtyjenJjAWryvZQttYBXTRLb4HfLl836g8K0x4cVH
-         LFdChgyxRi3Zi+H5y11/TQQRLq5/N2C+qhfgJqf8=
-From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        =?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack3000@gmail.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
-        Richard Weinberger <richard@nod.at>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-um@lists.infradead.org
-Subject: [GIT PULL] Landlock updates for v6.5
-Date:   Mon, 26 Jun 2023 10:48:30 +0200
-Message-ID: <20230626084830.717289-1-mic@digikod.net>
+        Mon, 26 Jun 2023 04:59:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BD7A3A96;
+        Mon, 26 Jun 2023 01:55:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9EB3760CF4;
+        Mon, 26 Jun 2023 08:54:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 551BBC433C8;
+        Mon, 26 Jun 2023 08:54:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687769696;
+        bh=DEIMe5XDnPx9xmBprqQ4BwzUKNcmLu7DPgVnu+X2mBg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CPz/03UFZKoppLCLlRCHYWZ+OA1yeujxHkjvqDTtpPj2lLWm4Jt2bfzuqsK2MC9Fe
+         GpVACk/1wB/rbPlli3yts3ixM6U7QP2+CF/iVBEu7IwRLH1iUUhlNGt63MmnGlqCV2
+         ORqBEGc/TNHcpT+96MGN+gubQZFUCTk+X4uexo0IBeAyistYA9ouPyTsgmBzytICiN
+         qC2vR5JM0CxD4Obrg0nhN1RLGe7KN4noB6heXJyJf35XJnVQlCDbeHREPZYKnx7LzL
+         530MlrGSE07S0sszDhsPA9kTMEggV1cUFkj/qa22JNRk3kqegO1WqPrDean1Sb4rPR
+         3Ni8zcOkbLuaw==
+Date:   Mon, 26 Jun 2023 09:54:50 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     linux-tip-commits@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        stable@vger.kernel.org, x86@kernel.org
+Subject: Re: [tip: x86/urgent] x86/mm: Avoid using set_pgd() outside of real
+ PGD pages
+Message-ID: <20230626085450.GA1344014@google.com>
+References: <168694160067.404.13343792487331756749.tip-bot2@tip-bot2>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Infomaniak-Routing: alpha
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <168694160067.404.13343792487331756749.tip-bot2@tip-bot2>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Dear Stable,
 
-This PR adds support for Landlock to UML.  In fact, this fixes the way
-hostfs manages inodes according to the underlying filesystem [1].  They
-are now properly handled as for other filesystems, which enables to
-support Landlock (and probably other features).  This PR also extends
-Landlock's tests with 6 pseudo filesystems, including hostfs.
+On Fri, 16 Jun 2023, tip-bot2 for Lee Jones wrote:
 
-This PR can lead to a trivial merge conflict with tip [2] where one of
-Thomas's commit adds ARCH_HAS_CPU_FINALIZE_INIT and one of mine removes
-ARCH_EPHEMERAL_INODES in arch/um/Kconfig.
+> The following commit has been merged into the x86/urgent branch of tip:
+> 
+> Commit-ID:     d082d48737c75d2b3cc1f972b8c8674c25131534
+> Gitweb:        https://git.kernel.org/tip/d082d48737c75d2b3cc1f972b8c8674c25131534
+> Author:        Lee Jones <lee@kernel.org>
+> AuthorDate:    Wed, 14 Jun 2023 17:38:54 +01:00
+> Committer:     Dave Hansen <dave.hansen@linux.intel.com>
+> CommitterDate: Fri, 16 Jun 2023 11:46:42 -07:00
+> 
+> x86/mm: Avoid using set_pgd() outside of real PGD pages
+> 
+> KPTI keeps around two PGDs: one for userspace and another for the
+> kernel. Among other things, set_pgd() contains infrastructure to
+> ensure that updates to the kernel PGD are reflected in the user PGD
+> as well.
+> 
+> One side-effect of this is that set_pgd() expects to be passed whole
+> pages.  Unfortunately, init_trampoline_kaslr() passes in a single entry:
+> 'trampoline_pgd_entry'.
+> 
+> When KPTI is on, set_pgd() will update 'trampoline_pgd_entry' (an
+> 8-Byte globally stored [.bss] variable) and will then proceed to
+> replicate that value into the non-existent neighboring user page
+> (located +4k away), leading to the corruption of other global [.bss]
+> stored variables.
+> 
+> Fix it by directly assigning 'trampoline_pgd_entry' and avoiding
+> set_pgd().
+> 
+> [ dhansen: tweak subject and changelog ]
+> 
+> Fixes: 0925dda5962e ("x86/mm/KASLR: Use only one PUD entry for real mode trampoline")
+> Suggested-by: Dave Hansen <dave.hansen@linux.intel.com>
+> Signed-off-by: Lee Jones <lee@kernel.org>
+> Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: <stable@vger.kernel.org>
+> Link: https://lore.kernel.org/all/20230614163859.924309-1-lee@kernel.org/g
+> ---
+>  arch/x86/mm/kaslr.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/x86/mm/kaslr.c b/arch/x86/mm/kaslr.c
+> index 557f0fe..37db264 100644
+> --- a/arch/x86/mm/kaslr.c
+> +++ b/arch/x86/mm/kaslr.c
+> @@ -172,10 +172,10 @@ void __meminit init_trampoline_kaslr(void)
+>  		set_p4d(p4d_tramp,
+>  			__p4d(_KERNPG_TABLE | __pa(pud_page_tramp)));
+>  
+> -		set_pgd(&trampoline_pgd_entry,
+> -			__pgd(_KERNPG_TABLE | __pa(p4d_page_tramp)));
+> +		trampoline_pgd_entry =
+> +			__pgd(_KERNPG_TABLE | __pa(p4d_page_tramp));
+>  	} else {
+> -		set_pgd(&trampoline_pgd_entry,
+> -			__pgd(_KERNPG_TABLE | __pa(pud_page_tramp)));
+> +		trampoline_pgd_entry =
+> +			__pgd(_KERNPG_TABLE | __pa(pud_page_tramp));
+>  	}
+>  }
 
-Please pull these changes for v6.5-rc1 .  These commits merged cleanly
-with v6.4, and have been successfully tested in the latest linux-next
-releases for a few weeks.
+Could we have this expedited please?  There are users waiting for it.
 
-[1] https://lore.kernel.org/all/20230612191430.339153-1-mic@digikod.net/
-[2] https://lore.kernel.org/all/b57481af-5824-72f7-d20f-cfd78fcde519@digikod.net/
+Upstream commit is:
 
-Regards,
- Mickaël
+  d082d48737c75 ("x86/mm: Avoid using set_pgd() outside of real PGD pages")
 
---
-The following changes since commit 858fd168a95c5b9669aac8db6c14a9aeab446375:
+Thanks muchly.
 
-  Linux 6.4-rc6 (2023-06-11 14:35:30 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/mic/linux.git tags/landlock-6.5-rc1
-
-for you to fetch changes up to 35ca4239929737bdc021ee923f97ebe7aff8fcc4:
-
-  selftests/landlock: Add hostfs tests (2023-06-12 21:26:23 +0200)
-
-----------------------------------------------------------------
-Landlock updates for v6.5-rc1
-
-----------------------------------------------------------------
-Mickaël Salaün (6):
-      hostfs: Fix ephemeral inodes
-      selftests/landlock: Don't create useless file layouts
-      selftests/landlock: Add supports_filesystem() helper
-      selftests/landlock: Make mounts configurable
-      selftests/landlock: Add tests for pseudo filesystems
-      selftests/landlock: Add hostfs tests
-
- arch/Kconfig                               |   7 -
- arch/um/Kconfig                            |   1 -
- fs/hostfs/hostfs.h                         |   1 +
- fs/hostfs/hostfs_kern.c                    | 213 ++++++++--------
- fs/hostfs/hostfs_user.c                    |   1 +
- security/landlock/Kconfig                  |   2 +-
- tools/testing/selftests/landlock/config    |   9 +-
- tools/testing/selftests/landlock/config.um |   1 +
- tools/testing/selftests/landlock/fs_test.c | 387 +++++++++++++++++++++++++++--
- 9 files changed, 478 insertions(+), 144 deletions(-)
- create mode 100644 tools/testing/selftests/landlock/config.um
+-- 
+Lee Jones [李琼斯]
