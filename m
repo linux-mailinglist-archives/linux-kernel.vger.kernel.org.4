@@ -2,82 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15EF073D636
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 05:15:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D01F73D634
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 05:15:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230514AbjFZDPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 23:15:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54154 "EHLO
+        id S229880AbjFZDP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 23:15:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbjFZDPn (ORCPT
+        with ESMTP id S229520AbjFZDPZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 23:15:43 -0400
-Received: from mail.inventec.com (mail.inventec.com [61.220.76.156])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A3EB1A5;
-        Sun, 25 Jun 2023 20:15:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-    s=sEx04; d=inventec.com;
-    h=from:to:cc:subject:date:message-id:in-reply-to:content-type:
-      mime-version;
-    bh=cNfFLHsN73Cgx4cIxE+oAhvs7QHOb84die9agNfgxyg=;
-    b=OknEdtjHuHFOENJjwEaKTR55Kv9jMEoYO5gh8f4i88hg5FDUF61FjDqb3ox7mm
-      +vTpwtOAkeLuWXPG5aoVx43ocbUOsSCoyyqARxlfpapXJwxoyOd/lLF3eqQhUU
-      m7YdcZNKFjQEDsl45rTYfjCYN0kwW1yDfg8/L8lPeRRzWPg=
-Received: from IEC1-EX2016-03.iec.inventec (10.15.2.59) by
- IEC1-EX2016-04.iec.inventec (10.1.254.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 26 Jun 2023 11:15:28 +0800
-Received: from IEC1-MSE-FE1.inventec.com (10.1.254.203) by
- IEC1-EX2016-03.iec.inventec (10.15.2.59) with Microsoft SMTP Server id
- 15.1.2507.23 via Frontend Transport; Mon, 26 Jun 2023 11:15:28 +0800
-Received: from IEC1-EX2016-01.iec.inventec (IEC1-EX2016-01.iec.inventec [10.15.2.58])
-        by IEC1-MSE-FE1.inventec.com with ESMTP id 35Q3FNle043708;
-        Mon, 26 Jun 2023 11:15:23 +0800 (GMT-8)
-        (envelope-from Chen.PJ@inventec.com)
-Received: from IEC1-EX2016-01.iec.inventec (10.15.2.58) by
- IEC1-EX2016-01.iec.inventec (10.15.2.58) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Mon, 26 Jun 2023 11:15:23 +0800
-Received: from IEC1-EX2016-01.iec.inventec ([fe80::4086:c45a:2131:8c05]) by
- IEC1-EX2016-01.iec.inventec ([fe80::4086:c45a:2131:8c05%7]) with mapi id
- 15.01.2507.023; Mon, 26 Jun 2023 11:15:23 +0800
-From:   =?big5?B?Q2hlbi5QSiCzr6xmpfQgVEFP?= <Chen.PJ@inventec.com>
-To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        "soc@kernel.org" <soc@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>
-CC:     =?big5?B?WWUuVmljILitpnSyTSBUQU8=?= <ye.vic@inventec.com>,
-        =?big5?B?SHVhbmcuQWxhbmcgtsCtXq2mIFRBTw==?= 
-        <Huang.Alang@inventec.com>
-Subject: [PATCH v6 2/2] ARM: dts: aspeed: Adding Inventec Starscream BMC
-Thread-Topic: [PATCH v6 2/2] ARM: dts: aspeed: Adding Inventec Starscream BMC
-Thread-Index: AQHZp9xy8PC8iVFlCEK7wP++sb4reQ==
-Date:   Mon, 26 Jun 2023 03:15:23 +0000
-Message-ID: <853b4f8157524445b9a518724fbd7a4d@inventec.com>
-References: <f5e6a29f-6df7-b56c-c7b2-9914008eaa33@linaro.org>
-In-Reply-To: <f5e6a29f-6df7-b56c-c7b2-9914008eaa33@linaro.org>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-imapappendstamp: IEC1-EX2016-01.iec.inventec (15.01.2507.023)
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [10.6.245.192]
-Content-Type: text/plain; charset="big5"
-Content-Transfer-Encoding: base64
+        Sun, 25 Jun 2023 23:15:25 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132A610F;
+        Sun, 25 Jun 2023 20:15:22 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QqCdf17c4z4f3nJX;
+        Mon, 26 Jun 2023 11:15:18 +0800 (CST)
+Received: from ubuntu20.huawei.com (unknown [10.67.174.33])
+        by APP2 (Coremail) with SMTP id Syh0CgA33uumAplkXQblMQ--.6560S2;
+        Mon, 26 Jun 2023 11:15:16 +0800 (CST)
+From:   "GONG, Ruiqi" <gongruiqi@huaweicloud.com>
+To:     Vlastimil Babka <vbabka@suse.cz>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        David Rientjes <rientjes@google.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Christoph Lameter <cl@linux.com>, Tejun Heo <tj@kernel.org>,
+        Dennis Zhou <dennis@kernel.org>,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>,
+        Kees Cook <keescook@chromium.org>, Jann Horn <jannh@google.com>
+Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Alexander Lobakin <aleksander.lobakin@intel.com>,
+        Pedro Falcato <pedro.falcato@gmail.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Markus Elfring <Markus.Elfring@web.de>,
+        Wang Weiyang <wangweiyang2@huawei.com>,
+        Xiu Jianfeng <xiujianfeng@huawei.com>, linux-mm@kvack.org,
+        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gongruiqi1@huawei.com
+Subject: [PATCH v4] Randomized slab caches for kmalloc()
+Date:   Mon, 26 Jun 2023 11:18:35 +0800
+Message-Id: <20230626031835.2279738-1-gongruiqi@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MAIL: IEC1-MSE-FE1.inventec.com 35Q3FNle043708
-X-TM-SNTS-SMTP: 3541382B538827170457F80A1E6995C1B02B9C4B2E338176515CFB675203D1012000:8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,WEIRD_QUOTING autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: Syh0CgA33uumAplkXQblMQ--.6560S2
+X-Coremail-Antispam: 1UD129KBjvAXoW3uw4ktw13XFWDGw4DKF1xXwb_yoW8AFykAo
+        WfGF15Aw1fKry3AF4Uuan3GrWDuF9YgwnxZFn8ZrZ5GFyUX34DG3y5trWfWFy5GF1IqFsx
+        Ar12ga1UG39Ivr93n29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+        AaLaJ3UjIYCTnIWjp_UUUY87kC6x804xWl14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK
+        8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4
+        AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF
+        7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7
+        CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8C
+        rVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4
+        IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k2
+        0xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI
+        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41l
+        IxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIx
+        AIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2
+        z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1c4S7UUUUU==
+X-CM-SenderInfo: pjrqw2pxltxq5kxd4v5lfo033gof0z/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,158 +78,428 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SW5pdGlhbCBpbnRyb2R1Y3Rpb24gb2YgSW52ZW50ZWMgU3RhcnNjcmVhbSB4ODYgZmFtaWx5DQpl
-cXVpcHBlZCB3aXRoIEFTVDI2MDAgQk1DIFNvQy4NCg0KU2lnbmVkLW9mZi1ieTogQ2hlbiBQSiA8
-Q2hlbi5wakBpbnZlbnRlYy5jb20+DQoNCi0tLQ0KIFY1IC0+IFY2Og0KICAtIFJlbW92ZSBzZXR0
-aW5nIG5vdCBtYXRjaCBkdC1iaW5naW5nIGNoZWNrLg0KIFY0IC0+IFY1Og0KICAtIFJlbW92ZSBk
-ZXZpY2VzIG5vdCBkZWZpbmVkIGluIGR0LWJpbmRpbmcgeWV0Lg0KIFYzIC0+IFY0Og0KICAtIFJl
-cGx5IHdpdGggZGV2aWNldHJlZSBiaW5kaW5nDQogICAgaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcv
-YWxsLzI4ZjBjZTBhODI0NjQwODNhZTI0ZjllZjJmNTk4NDI1QGludmVudGVjLmNvbS8NCiBWMiAt
-PiBWMzoNCiAgLSBSZW5hbWUgdGhlIG5vZGUgbmFtZSB0byBnZW5lcmljLg0KIFYxIC0+IFYyOg0K
-ICAtIENvcnJlY3QgTGljZW5zZSBkZXNjcmlwdGlvbg0KICAtIFJlbW92ZSBub3Qgc3VwcG9ydGVk
-IGRldmljZQ0KICAtIFVzaW5nIG9wZW5ibWMtZmxhc2gtbGF5b3V0LmR0c2kNCiAgLSBDb3JyZWN0
-IGRldmljZSBmb3JtYXQNCi0tLQ0KIGFyY2gvYXJtL2Jvb3QvZHRzL01ha2VmaWxlICAgICAgICAg
-ICAgICAgICAgICB8ICAgMSArDQogLi4uL2R0cy9hc3BlZWQtYm1jLWludmVudGVjLXN0YXJzY3Jl
-YW0uZHRzICAgIHwgMzkyICsrKysrKysrKysrKysrKysrKw0KIDIgZmlsZXMgY2hhbmdlZCwgMzkz
-IGluc2VydGlvbnMoKykNCiBjcmVhdGUgbW9kZSAxMDA2NDQgYXJjaC9hcm0vYm9vdC9kdHMvYXNw
-ZWVkLWJtYy1pbnZlbnRlYy1zdGFyc2NyZWFtLmR0cw0KDQpkaWZmIC0tZ2l0IGEvYXJjaC9hcm0v
-Ym9vdC9kdHMvTWFrZWZpbGUgYi9hcmNoL2FybS9ib290L2R0cy9NYWtlZmlsZQ0KaW5kZXggZWI2
-ODE5MDNkNTBiLi42YTg5N2ZmNDBmZjAgMTAwNjQ0DQotLS0gYS9hcmNoL2FybS9ib290L2R0cy9N
-YWtlZmlsZQ0KKysrIGIvYXJjaC9hcm0vYm9vdC9kdHMvTWFrZWZpbGUNCkBAIC0xNjI5LDYgKzE2
-MjksNyBAQCBkdGItJChDT05GSUdfQVJDSF9BU1BFRUQpICs9IFwNCiAJYXNwZWVkLWJtYy1xdWFu
-dGEtcTcxbC5kdGIgXA0KIAlhc3BlZWQtYm1jLXF1YW50YS1zNnEuZHRiIFwNCiAJYXNwZWVkLWJt
-Yy1zdXBlcm1pY3JvLXgxMXNwaS5kdGIgXA0KKwlhc3BlZWQtYm1jLWludmVudGVjLXN0YXJzY3Jl
-YW0uZHRiIFwNCiAJYXNwZWVkLWJtYy1pbnZlbnRlYy10cmFuc2Zvcm1lcnMuZHRiIFwNCiAJYXNw
-ZWVkLWJtYy10eWFuLXM3MTA2LmR0YiBcDQogCWFzcGVlZC1ibWMtdHlhbi1zODAzNi5kdGIgXA0K
-ZGlmZiAtLWdpdCBhL2FyY2gvYXJtL2Jvb3QvZHRzL2FzcGVlZC1ibWMtaW52ZW50ZWMtc3RhcnNj
-cmVhbS5kdHMgYi9hcmNoL2FybS9ib290L2R0cy9hc3BlZWQtYm1jLWludmVudGVjLXN0YXJzY3Jl
-YW0uZHRzDQpuZXcgZmlsZSBtb2RlIDEwMDY0NA0KaW5kZXggMDAwMDAwMDAwMDAwLi44MTA1MDdk
-MzI0NDMNCi0tLSAvZGV2L251bGwNCisrKyBiL2FyY2gvYXJtL2Jvb3QvZHRzL2FzcGVlZC1ibWMt
-aW52ZW50ZWMtc3RhcnNjcmVhbS5kdHMNCkBAIC0wLDAgKzEsMzkyIEBADQorLy8gU1BEWC1MaWNl
-bnNlLUlkZW50aWZpZXI6IEdQTC0yLjAtb3ItbGF0ZXINCisvLyBDb3B5cmlnaHQgMjAyMyBJbnZl
-bnRlYyBDb3JwLg0KKw0KKy9kdHMtdjEvOw0KKw0KKyNpbmNsdWRlICJhc3BlZWQtZzYuZHRzaSIN
-CisjaW5jbHVkZSAiYXNwZWVkLWc2LXBpbmN0cmwuZHRzaSINCisjaW5jbHVkZSA8ZHQtYmluZGlu
-Z3MvaTJjL2kyYy5oPg0KKyNpbmNsdWRlIDxkdC1iaW5kaW5ncy9ncGlvL2FzcGVlZC1ncGlvLmg+
-DQorDQorLyB7DQorCW1vZGVsID0gIlNUQVJTQ1JFQU0gQk1DIjsNCisJY29tcGF0aWJsZSA9ICJp
-bnZlbnRlYyxzdGFyc2NyZWFtLWJtYyIsICJhc3BlZWQsYXN0MjYwMCI7DQorDQorCWFsaWFzZXMg
-ew0KKwkJc2VyaWFsNCA9ICZ1YXJ0NTsNCisJfTsNCisNCisJY2hvc2VuIHsNCisJCXN0ZG91dC1w
-YXRoID0gJnVhcnQ1Ow0KKwl9Ow0KKw0KKwltZW1vcnlAODAwMDAwMDAgew0KKwkJZGV2aWNlX3R5
-cGUgPSAibWVtb3J5IjsNCisJCXJlZyA9IDwweDgwMDAwMDAwIDB4ODAwMDAwMDA+Ow0KKwl9Ow0K
-Kw0KKwlyZXNlcnZlZC1tZW1vcnkgew0KKwkJI2FkZHJlc3MtY2VsbHMgPSA8MT47DQorCQkjc2l6
-ZS1jZWxscyA9IDwxPjsNCisJCXJhbmdlczsNCisNCisJCXZpZGVvX2VuZ2luZV9tZW1vcnk6IHZp
-ZGVvIHsNCisJCQlzaXplID0gPDB4MDQwMDAwMDA+Ow0KKwkJCWFsaWdubWVudCA9IDwweDAxMDAw
-MDAwPjsNCisJCQljb21wYXRpYmxlID0gInNoYXJlZC1kbWEtcG9vbCI7DQorCQkJcmV1c2FibGU7
-DQorCQl9Ow0KKwl9Ow0KKw0KKwlsZWRzIHsNCisJCWNvbXBhdGlibGUgPSAiZ3Bpby1sZWRzIjsN
-CisNCisJCWxlZC11aWQgew0KKwkJCWxhYmVsID0gIlVJRF9MRUQiOw0KKwkJCWdwaW9zID0gPCZn
-cGlvMCAxODYgR1BJT19BQ1RJVkVfTE9XPjsNCisJCX07DQorDQorCQlsZWQtaGVhcnRiZWF0IHsN
-CisJCQlsYWJlbCA9ICJIQl9MRUQiOw0KKwkJCWdwaW9zID0gPCZncGlvMCAxMjcgR1BJT19BQ1RJ
-VkVfTE9XPjsNCisJCX07DQorCX07DQorfTsNCisNCismbWRpbzAgew0KKwlzdGF0dXMgPSAib2th
-eSI7DQorDQorCWV0aHBoeTA6IGV0aGVybmV0LXBoeUAwIHsNCisJCWNvbXBhdGlibGUgPSAiZXRo
-ZXJuZXQtcGh5LWllZWU4MDIuMy1jMjIiOw0KKwkJcmVnID0gPDE+Ow0KKwl9Ow0KK307DQorDQor
-Jm1hYzIgew0KKwlzdGF0dXMgPSAib2theSI7DQorCXBpbmN0cmwtbmFtZXMgPSAiZGVmYXVsdCI7
-DQorCXBoeS1tb2RlID0gInJtaWkiOw0KKwlwaW5jdHJsLTAgPSA8JnBpbmN0cmxfcm1paTNfZGVm
-YXVsdD47DQorCXVzZS1uY3NpOw0KK307DQorDQorJm1hYzMgew0KKwlzdGF0dXMgPSAib2theSI7
-DQorCXBoeS1tb2RlID0gInJnbWlpIjsNCisJcGh5LWhhbmRsZSA9IDwmZXRocGh5MD47DQorCXBp
-bmN0cmwtbmFtZXMgPSAiZGVmYXVsdCI7DQorCXBpbmN0cmwtMCA9IDwmcGluY3RybF9yZ21paTRf
-ZGVmYXVsdD47DQorfTsNCisNCismZm1jIHsNCisJc3RhdHVzID0gIm9rYXkiOw0KKwlmbGFzaEAw
-IHsNCisJCXN0YXR1cyA9ICJva2F5IjsNCisJCW0yNXAsZmFzdC1yZWFkOw0KKwkJbGFiZWwgPSAi
-Ym1jIjsNCisJCXNwaS1tYXgtZnJlcXVlbmN5ID0gPDUwMDAwMDAwPjsNCisJCXNwaS10eC1idXMt
-d2lkdGggPSA8ND47DQorCQlzcGktcngtYnVzLXdpZHRoID0gPDQ+Ow0KKyNpbmNsdWRlICJvcGVu
-Ym1jLWZsYXNoLWxheW91dC5kdHNpIg0KKwl9Ow0KKw0KKwlmbGFzaEAxIHsNCisJCXN0YXR1cyA9
-ICJva2F5IjsNCisJCW0yNXAsZmFzdC1yZWFkOw0KKwkJbGFiZWwgPSAiYm1jMiI7DQorCQlzcGkt
-bWF4LWZyZXF1ZW5jeSA9IDw1MDAwMDAwMD47DQorCQlzcGktdHgtYnVzLXdpZHRoID0gPDQ+Ow0K
-KwkJc3BpLXJ4LWJ1cy13aWR0aCA9IDw0PjsNCisJfTsNCit9Ow0KKw0KKyZzcGkxIHsNCisJc3Rh
-dHVzID0gIm9rYXkiOw0KKwlwaW5jdHJsLW5hbWVzID0gImRlZmF1bHQiOw0KKwlwaW5jdHJsLTAg
-PSA8JnBpbmN0cmxfc3BpMV9kZWZhdWx0PjsNCisNCisJZmxhc2hAMCB7DQorCQlzdGF0dXMgPSAi
-b2theSI7DQorCQltMjVwLGZhc3QtcmVhZDsNCisJCWxhYmVsID0gImJpb3MiOw0KKwkJc3BpLW1h
-eC1mcmVxdWVuY3kgPSA8NTAwMDAwMDA+Ow0KKwkJc3BpLXR4LWJ1cy13aWR0aCA9IDw0PjsNCisJ
-CXNwaS1yeC1idXMtd2lkdGggPSA8ND47DQorCX07DQorfTsNCisNCismdnVhcnQxIHsNCisJc3Rh
-dHVzID0gIm9rYXkiOw0KK307DQorDQorJnVhcnQxIHsNCisJc3RhdHVzID0gIm9rYXkiOw0KK307
-DQorDQorJnVhcnQzIHsNCisJc3RhdHVzID0gIm9rYXkiOw0KK307DQorDQorJnVhcnQ1IHsNCisJ
-c3RhdHVzID0gIm9rYXkiOw0KK307DQorDQorJmtjczMgew0KKwlhc3BlZWQsbHBjLWlvLXJlZyA9
-IDwweGNhMj47DQorCXN0YXR1cyA9ICJva2F5IjsNCit9Ow0KKw0KKyZ1YXJ0X3JvdXRpbmcgew0K
-KwlzdGF0dXMgPSAib2theSI7DQorfTsNCisNCismaTJjMCB7DQorCXN0YXR1cyA9ICJva2F5IjsN
-Cit9Ow0KKyZpMmMxIHsNCisJc3RhdHVzID0gIm9rYXkiOw0KK307DQorJmkyYzIgew0KKwlzdGF0
-dXMgPSAib2theSI7DQorfTsNCismaTJjMyB7DQorCXN0YXR1cyA9ICJva2F5IjsNCit9Ow0KKw0K
-KyZpMmM0IHsNCisJc3RhdHVzID0gIm9rYXkiOw0KKw0KKwkvLyBJMkMgRVhQQU5ERVINCisJaTJj
-LW11eEA3MSB7DQorCQljb21wYXRpYmxlID0gIm54cCxwY2E5NTQ2IjsNCisJCSNhZGRyZXNzLWNl
-bGxzID0gPDE+Ow0KKwkJI3NpemUtY2VsbHMgPSA8MD47DQorCQlyZWcgPSA8MHg3MT47DQorDQor
-CQlpMmNAMCB7DQorCQkJI2FkZHJlc3MtY2VsbHMgPSA8MT47DQorCQkJI3NpemUtY2VsbHMgPSA8
-MD47DQorCQkJcmVnID0gPDA+Ow0KKwkJCS8vIEFNRCBTQi1UU0kgQ1BVMQ0KKwkJCXNidHNpQDRj
-IHsNCisJCQkJY29tcGF0aWJsZSA9ICJhbWQsc2J0c2kiOw0KKwkJCQlyZWcgPSA8MHg0Yz47DQor
-CQkJfTsNCisJCX07DQorDQorCQlpMmNAMSB7DQorCQkJI2FkZHJlc3MtY2VsbHMgPSA8MT47DQor
-CQkJI3NpemUtY2VsbHMgPSA8MD47DQorCQkJcmVnID0gPDE+Ow0KKwkJCS8vIEFNRCBTQi1UU0kg
-Q1BVMg0KKwkJCXNidHNpQDQ4IHsNCisJCQkJY29tcGF0aWJsZSA9ICJhbWQsc2J0c2kiOw0KKwkJ
-CQlyZWcgPSA8MHg0OD47DQorCQkJfTsNCisJCX07DQorCX07DQorfTsNCisNCismaTJjNSB7DQor
-CXN0YXR1cyA9ICJva2F5IjsNCisNCisJLy8gSTJDIEVYUEFOREVSIFUxNTMNCisJaTJjLW11eEA3
-MCB7DQorCQljb21wYXRpYmxlID0gIm54cCxwY2E5NTQ2IjsNCisJCSNhZGRyZXNzLWNlbGxzID0g
-PDE+Ow0KKwkJI3NpemUtY2VsbHMgPSA8MD47DQorCQlyZWcgPSA8MHg3MD47DQorDQorCQl1c2Jf
-aHViOiBpMmNAMCB7DQorCQkJI2FkZHJlc3MtY2VsbHMgPSA8MT47DQorCQkJI3NpemUtY2VsbHMg
-PSA8MD47DQorCQkJcmVnID0gPDA+Ow0KKwkJfTsNCisNCisJCXJpc2VyMTogaTJjQDEgew0KKwkJ
-CSNhZGRyZXNzLWNlbGxzID0gPDE+Ow0KKwkJCSNzaXplLWNlbGxzID0gPDA+Ow0KKwkJCXJlZyA9
-IDwxPjsNCisJCX07DQorDQorCQlyaXNlcjI6IGkyY0AyIHsNCisJCQkjYWRkcmVzcy1jZWxscyA9
-IDwxPjsNCisJCQkjc2l6ZS1jZWxscyA9IDwwPjsNCisJCQlyZWcgPSA8Mj47DQorCQl9Ow0KKw0K
-KwkJaTJjQDMgew0KKwkJCSNhZGRyZXNzLWNlbGxzID0gPDE+Ow0KKwkJCSNzaXplLWNlbGxzID0g
-PDA+Ow0KKwkJCXJlZyA9IDwzPjsNCisJCX07DQorCX07DQorfTsNCisNCismaTJjNiB7DQorCXN0
-YXR1cyA9ICJva2F5IjsNCisNCisJLy8gTW90aGVyYm9hcmQgVGVtcF9VODkNCisJdGVtcGVyYXR1
-cmUtc2Vuc29yQDRlIHsNCisJCWNvbXBhdGlibGUgPSAidGksdG1wNDIxIjsNCisJCXJlZyA9IDww
-eDRlPjsNCisJfTsNCisNCisJLy8gUnVuQk1DIFRlbXBfVTYNCisJdGVtcGVyYXR1cmUtc2Vuc29y
-QDQ5IHsNCisJCWNvbXBhdGlibGUgPSAidGksdG1wNzUiOw0KKwkJcmVnID0gPDB4NDk+Ow0KKwl9
-Ow0KK307DQorDQorJmkyYzcgew0KKwlzdGF0dXMgPSAib2theSI7DQorCS8vIEkyQyBFWFBBTkRF
-UiBVNDANCisJaTJjLW11eEA3MCB7DQorCQljb21wYXRpYmxlID0gIm54cCxwY2E5NTQ1IjsNCisJ
-CSNhZGRyZXNzLWNlbGxzID0gPDE+Ow0KKwkJI3NpemUtY2VsbHMgPSA8MD47DQorCQlyZWcgPSA8
-MHg3MD47DQorDQorCQlpMmNAMCB7DQorCQkJI2FkZHJlc3MtY2VsbHMgPSA8MT47DQorCQkJI3Np
-emUtY2VsbHMgPSA8MD47DQorCQkJcmVnID0gPDA+Ow0KKwkJfTsNCisNCisJCWkyY0AxIHsNCisJ
-CQkjYWRkcmVzcy1jZWxscyA9IDwxPjsNCisJCQkjc2l6ZS1jZWxscyA9IDwwPjsNCisJCQlyZWcg
-PSA8MT47DQorCQl9Ow0KKw0KKwkJaTJjQDIgew0KKwkJCSNhZGRyZXNzLWNlbGxzID0gPDE+Ow0K
-KwkJCSNzaXplLWNlbGxzID0gPDA+Ow0KKwkJCXJlZyA9IDwyPjsNCisJCX07DQorDQorCQlpMmNA
-MyB7DQorCQkJI2FkZHJlc3MtY2VsbHMgPSA8MT47DQorCQkJI3NpemUtY2VsbHMgPSA8MD47DQor
-CQkJcmVnID0gPDM+Ow0KKwkJfTsNCisJfTsNCit9Ow0KKw0KKw0KKyZpMmM4IHsNCisJc3RhdHVz
-ID0gIm9rYXkiOw0KKwkvLyBGUlUgUnVuQk1DDQorCWVlcHJvbUA1MSB7DQorCQljb21wYXRpYmxl
-ID0gImF0bWVsLDI0YzUxMiI7DQorCQlyZWcgPSA8MHg1MT47DQorCQlwYWdlc2l6ZSA9IDwxMjg+
-Ow0KKwl9Ow0KK307DQorDQorJmkyYzkgew0KKwlzdGF0dXMgPSAib2theSI7DQorfTsNCisNCism
-aTJjMTAgew0KKwlzdGF0dXMgPSAib2theSI7DQorfTsNCisNCismaTJjMTEgew0KKwlzdGF0dXMg
-PSAib2theSI7DQorfTsNCisNCismaTJjMTIgew0KKwlzdGF0dXMgPSAib2theSI7DQorCS8vIEZS
-VSBTQ00NCisJZWVwcm9tQDUxIHsNCisJCWNvbXBhdGlibGUgPSAiYXRtZWwsMjRjNTEyIjsNCisJ
-CXJlZyA9IDwweDUxPjsNCisJCXBhZ2VzaXplID0gPDEyOD47DQorCX07DQorDQorCS8vIFNDTSBU
-ZW1wX1UxNw0KKwl0ZW1wZXJhdHVyZS1zZW5zb3JANGYgew0KKwkJY29tcGF0aWJsZSA9ICJ0aSx0
-bXA3NSI7DQorCQlyZWcgPSA8MHg0Zj47DQorCX07DQorfTsNCisNCisNCismZ3BpbzAgew0KKwlz
-dGF0dXMgPSAib2theSI7DQorCWdwaW8tbGluZS1uYW1lcyA9DQorCS8qQTAtQTcqLyAgICIiLCIi
-LCIiLCIiLCIiLCIiLCIiLCIiLA0KKwkvKkIwLUI3Ki8gICAiYWxlcnQtcHN1MC1zbWItci1uIiwi
-Ym1jLXJlYWR5IiwiIiwiYXNzZXJ0LWNwdTAtcHJvY2hvdC1yLW4iLA0KKwkiIiwiIiwiIiwiIiwN
-CisJLypDMC1DNyovICAgIiIsIiIsIiIsIiIsIiIsIiIsIiIsIiIsDQorCS8qRDAtRDcqLyAgICIi
-LCIiLCIiLCIiLCIiLCIiLCIiLCIiLA0KKwkvKkUwLUU3Ki8gICAiIiwiIiwiIiwiIiwiIiwiIiwi
-IiwiIiwNCisJLypGMC1GNyovICAgIiIsIiIsIiIsIiIsInJlc2V0LXNncGlvLXItbiIsIiIsIiIs
-IiIsDQorCS8qRzAtRzcqLyAgICIiLCIiLCJzY20tanRhZy1tdXgtc2VsZWN0IiwiIiwiIiwiIiwi
-IiwiIiwNCisJLypIMC1INyovICAgIiIsIiIsIiIsIiIsInJlc2V0LW91dCIsInBvd2VyLW91dCIs
-IiIsIiIsDQorCS8qSTAtSTcqLyAgICIiLCIiLCIiLCIiLCIiLCIiLCJpcnEtYm1jLWNwdTAtYnVm
-LW5taS1uIiwiIiwNCisJLypKMC1KNyovICAgIiIsIiIsIiIsIiIsIiIsIiIsIiIsIiIsDQorCS8q
-SzAtSzcqLyAgICIiLCIiLCIiLCIiLCIiLCIiLCIiLCIiLA0KKwkvKkwwLUw3Ki8gICAiIiwiIiwi
-IiwiIiwiIiwiIiwiIiwiIiwNCisJLypNMC1NNyovICAgIiIsIiIsIiIsIiIsIiIsIiIsIiIsIiIs
-DQorCS8qTjAtTjcqLyAgICIiLCIiLCJuY3NpLW9jcC1jbGstZW4tbiIsIiIsIiIsIiIsIiIsIiIs
-DQorCS8qTzAtTzcqLyAgICIiLCIiLCIiLCIiLCIiLCIiLCJjcHUxLXRoZXJtYWwtdHJpcC1uIiwi
-IiwNCisJLypQMC1QNyovICAgIiIsIiIsIiIsIiIsIiIsIiIsIiIsIiIsDQorCS8qUTAtUTcqLyAg
-ICJjcHUwLXByb2Nob3QtbiIsIiIsImNwdTEtcHJvY2hvdC1uIiwiIiwiY3B1MC1wZS1yc3QwIiwi
-IiwiIiwiIiwNCisJLypSMC1SNyovICAgIiIsIiIsIiIsIiIsIiIsIiIsIiIsIiIsDQorCS8qUzAt
-UzcqLyAgICIiLCIiLCIiLCIiLA0KKwkiIiwiUENIX1NMUF9TNF9CTUNfTiIsImNwdTAtdGhlcm10
-cmlwLW4iLCJhbGVydC1wc3UxLXNtYi1yLW4iLA0KKwkvKlQwLVQ3Ki8gICAiIiwiIiwiIiwiIiwi
-IiwiIiwiIiwiIiwNCisJLypVMC1VNyovICAgIiIsIiIsIiIsIiIsIiIsIiIsIiIsIiIsDQorCS8q
-VjAtVjcqLyAgICJiaW9zLXJlY292ZXJ5LWJ1Zi1uIiwiIiwiYXNzZXJ0LWNwdTEtcHJvY2hvdC1y
-LW4iLCIiLA0KKwkicG93ZXItY2hhc3Npcy1nb29kIiwiIiwiIiwiIiwNCisJLypXMC1XNyovICAg
-IiIsIiIsIiIsIiIsIiIsIiIsIiIsIiIsDQorCS8qWDAtWDcqLyAgICIiLCIiLCIiLCIiLCJwbGF0
-Zm9ybS10eXBlIiwiIiwiIiwiIiwNCisJLypZMC1ZNyovICAgIiIsIiIsIiIsIiIsIiIsIiIsIiIs
-IiIsDQorCS8qWjAtWjcqLyAgICIiLCJjcGxkLXBvd2VyLWJyZWFrLW4iLCIiLCIiLCIiLCIiLCIi
-LCIiLA0KKwkvKkFBMC1BQTcqLyAiIiwiIiwiIiwiIiwiIiwiIiwiIiwiIiwNCisJLypBQjAtQUI3
-Ki8gIiIsIiIsIiIsIiIsIiIsIiIsIiIsIiIsDQorCS8qQUMwLUFDNyovICIiLCIiLCIiLCIiLCIi
-LCIiLCIiLCIiOw0KK307DQorDQorJnNncGlvbTAgew0KKwlzdGF0dXMgPSAib2theSI7DQorCW5n
-cGlvcyA9IDw2ND47DQorCWJ1cy1mcmVxdWVuY3kgPSA8MTAwMDAwMD47DQorfTsNCisNCisNCism
-bHBjX3Nub29wIHsNCisJc3RhdHVzID0gIm9rYXkiOw0KKwlzbm9vcC1wb3J0cyA9IDwweDgwPjsN
-Cit9Ow0KKw0KKyZlbW1jX2NvbnRyb2xsZXIgew0KKwlzdGF0dXMgPSAib2theSI7DQorfTsNCisN
-CismZW1tYyB7DQorCXN0YXR1cyA9ICJva2F5IjsNCisJbm9uLXJlbW92YWJsZTsNCisJbWF4LWZy
-ZXF1ZW5jeSA9IDw1MjAwMDAwMD47DQorCWJ1cy13aWR0aCA9IDw4PjsNCit9Ow0KKw0KKyZ2aWRl
-byB7DQorCXN0YXR1cyA9ICJva2F5IjsNCisJbWVtb3J5LXJlZ2lvbiA9IDwmdmlkZW9fZW5naW5l
-X21lbW9yeT47DQorfTsNCisNCismdmh1YiB7DQorCXN0YXR1cyA9ICJva2F5IjsNCisJYXNwZWVk
-LHZodWItZG93bnN0cmVhbS1wb3J0cyA9IDw3PjsNCisJYXNwZWVkLHZodWItZ2VuZXJpYy1lbmRw
-b2ludHMgPSA8MjE+Ow0KKwlwaW5jdHJsLW5hbWVzID0gImRlZmF1bHQiOw0KKwlwaW5jdHJsLTAg
-PSA8JnBpbmN0cmxfdXNiMmFkX2RlZmF1bHQ+Ow0KK307DQorDQorJnJ0YyB7DQorCXN0YXR1cyA9
-ICJva2F5IjsNCit9Ow0KLS0gDQoyLjI1LjENCg0K
+When exploiting memory vulnerabilities, "heap spraying" is a common
+technique targeting those related to dynamic memory allocation (i.e. the
+"heap"), and it plays an important role in a successful exploitation.
+Basically, it is to overwrite the memory area of vulnerable object by
+triggering allocation in other subsystems or modules and therefore
+getting a reference to the targeted memory location. It's usable on
+various types of vulnerablity including use after free (UAF), heap out-
+of-bound write and etc.
+
+There are (at least) two reasons why the heap can be sprayed: 1) generic
+slab caches are shared among different subsystems and modules, and
+2) dedicated slab caches could be merged with the generic ones.
+Currently these two factors cannot be prevented at a low cost: the first
+one is a widely used memory allocation mechanism, and shutting down slab
+merging completely via `slub_nomerge` would be overkill.
+
+To efficiently prevent heap spraying, we propose the following approach:
+to create multiple copies of generic slab caches that will never be
+merged, and random one of them will be used at allocation. The random
+selection is based on the address of code that calls `kmalloc()`, which
+means it is static at runtime (rather than dynamically determined at
+each time of allocation, which could be bypassed by repeatedly spraying
+in brute force). In other words, the randomness of cache selection will
+be with respect to the code address rather than time, i.e. allocations
+in different code paths would most likely pick different caches,
+although kmalloc() at each place would use the same cache copy whenever
+it is executed. In this way, the vulnerable object and memory allocated
+in other subsystems and modules will (most probably) be on different
+slab caches, which prevents the object from being sprayed.
+
+Meanwhile, the static random selection is further enhanced with a
+per-boot random seed, which prevents the attacker from finding a usable
+kmalloc that happens to pick the same cache with the vulnerable
+subsystem/module by analyzing the open source code. In other words, with
+the per-boot seed, the random selection is static during each time the
+system starts and runs, but not across different system startups.
+
+The overhead of performance has been tested on a 40-core x86 server by
+comparing the results of `perf bench all` between the kernels with and
+without this patch based on the latest linux-next kernel, which shows
+minor difference. A subset of benchmarks are listed below:
+
+                sched/  sched/  syscall/       mem/       mem/
+             messaging    pipe     basic     memcpy     memset
+                 (sec)   (sec)     (sec)   (GB/sec)   (GB/sec)
+
+control1         0.019   5.459     0.733  15.258789  51.398026
+control2         0.019   5.439     0.730  16.009221  48.828125
+control3         0.019   5.282     0.735  16.009221  48.828125
+control_avg      0.019   5.393     0.733  15.759077  49.684759
+
+experiment1      0.019   5.374     0.741  15.500992  46.502976
+experiment2      0.019   5.440     0.746  16.276042  51.398026
+experiment3      0.019   5.242     0.752  15.258789  51.398026
+experiment_avg   0.019   5.352     0.746  15.678608  49.766343
+
+The overhead of memory usage was measured by executing `free` after boot
+on a QEMU VM with 1GB total memory, and as expected, it's positively
+correlated with # of cache copies:
+
+           control  4 copies  8 copies  16 copies
+
+total       969.8M    968.2M    968.2M     968.2M
+used         20.0M     21.9M     24.1M      26.7M
+free        936.9M    933.6M    931.4M     928.6M
+available   932.2M    928.8M    926.6M     923.9M
+
+Co-developed-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+Signed-off-by: GONG, Ruiqi <gongruiqi@huaweicloud.com>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+---
+
+v4:
+  - Set # of cache copies to 16 and remove config selection.
+  - Shorten "kmalloc-random-" to "kmalloc-rnd-".
+  - Update commit log and config's help paragraph.
+  - Fine-tune PERCPU_DYNAMIC_SIZE_SHIFT to 12 instead of 13 (enough to
+    pass compilation with allmodconfig and CONFIG_SLUB_TINY=n).
+  - Some cleanup and typo fixing.
+
+v3:
+  - Replace SLAB_RANDOMSLAB with the new existing SLAB_NO_MERGE flag.
+  - Shorten long code lines by wrapping and renaming.
+  - Update commit message with latest perf benchmark and additional
+    theorectical explanation.
+  - Remove "RFC" from patch title and make it a formal patch
+  - Link: https://lore.kernel.org/all/20230616111843.3677378-1-gongruiqi@huaweicloud.com/
+
+v2:
+  - Use hash_64() and a per-boot random seed to select kmalloc() caches.
+  - Change acceptable # of caches from [4,16] to {2,4,8,16}, which is
+    more compatible with hashing.
+  - Supplement results of performance and memory overhead tests.
+  - Link: https://lore.kernel.org/all/20230508075507.1720950-1-gongruiqi1@huawei.com/
+
+v1:
+  - Link: https://lore.kernel.org/all/20230315095459.186113-1-gongruiqi1@huawei.com/
+
+ include/linux/percpu.h  | 12 ++++++++---
+ include/linux/slab.h    | 25 ++++++++++++++++++----
+ mm/Kconfig              | 16 ++++++++++++++
+ mm/kfence/kfence_test.c |  6 ++++--
+ mm/slab.c               |  2 +-
+ mm/slab.h               |  2 +-
+ mm/slab_common.c        | 47 ++++++++++++++++++++++++++++++++++++-----
+ 7 files changed, 94 insertions(+), 16 deletions(-)
+
+diff --git a/include/linux/percpu.h b/include/linux/percpu.h
+index 42125cf9c506..7692b5559098 100644
+--- a/include/linux/percpu.h
++++ b/include/linux/percpu.h
+@@ -34,6 +34,12 @@
+ #define PCPU_BITMAP_BLOCK_BITS		(PCPU_BITMAP_BLOCK_SIZE >>	\
+ 					 PCPU_MIN_ALLOC_SHIFT)
+ 
++#ifdef CONFIG_RANDOM_KMALLOC_CACHES
++#define PERCPU_DYNAMIC_SIZE_SHIFT      12
++#else
++#define PERCPU_DYNAMIC_SIZE_SHIFT      10
++#endif
++
+ /*
+  * Percpu allocator can serve percpu allocations before slab is
+  * initialized which allows slab to depend on the percpu allocator.
+@@ -41,7 +47,7 @@
+  * for this.  Keep PERCPU_DYNAMIC_RESERVE equal to or larger than
+  * PERCPU_DYNAMIC_EARLY_SIZE.
+  */
+-#define PERCPU_DYNAMIC_EARLY_SIZE	(20 << 10)
++#define PERCPU_DYNAMIC_EARLY_SIZE	(20 << PERCPU_DYNAMIC_SIZE_SHIFT)
+ 
+ /*
+  * PERCPU_DYNAMIC_RESERVE indicates the amount of free area to piggy
+@@ -55,9 +61,9 @@
+  * intelligent way to determine this would be nice.
+  */
+ #if BITS_PER_LONG > 32
+-#define PERCPU_DYNAMIC_RESERVE		(28 << 10)
++#define PERCPU_DYNAMIC_RESERVE		(28 << PERCPU_DYNAMIC_SIZE_SHIFT)
+ #else
+-#define PERCPU_DYNAMIC_RESERVE		(20 << 10)
++#define PERCPU_DYNAMIC_RESERVE		(20 << PERCPU_DYNAMIC_SIZE_SHIFT)
+ #endif
+ 
+ extern void *pcpu_base_addr;
+diff --git a/include/linux/slab.h b/include/linux/slab.h
+index 791f7453a04f..747fc2587b56 100644
+--- a/include/linux/slab.h
++++ b/include/linux/slab.h
+@@ -18,6 +18,7 @@
+ #include <linux/types.h>
+ #include <linux/workqueue.h>
+ #include <linux/percpu-refcount.h>
++#include <linux/hash.h>
+ 
+ 
+ /*
+@@ -342,6 +343,13 @@ static inline unsigned int arch_slab_minalign(void)
+ #define SLAB_OBJ_MIN_SIZE      (KMALLOC_MIN_SIZE < 16 ? \
+                                (KMALLOC_MIN_SIZE) : 16)
+ 
++#ifdef CONFIG_RANDOM_KMALLOC_CACHES
++#define RANDOM_KMALLOC_CACHES_NR	16 // # of cache copies
++#define RANDOM_KMALLOC_CACHES_BITS	4  // =log2(_NR), for hashing
++#else
++#define RANDOM_KMALLOC_CACHES_NR	1
++#endif
++
+ /*
+  * Whenever changing this, take care of that kmalloc_type() and
+  * create_kmalloc_caches() still work as intended.
+@@ -351,7 +359,9 @@ static inline unsigned int arch_slab_minalign(void)
+  * kmem caches can have both accounted and unaccounted objects.
+  */
+ enum kmalloc_cache_type {
+-	KMALLOC_NORMAL = 0,
++	KMALLOC_RANDOM_START = 0,
++	KMALLOC_RANDOM_END = KMALLOC_RANDOM_START + RANDOM_KMALLOC_CACHES_NR - 1,
++	KMALLOC_NORMAL = KMALLOC_RANDOM_END,
+ #ifndef CONFIG_ZONE_DMA
+ 	KMALLOC_DMA = KMALLOC_NORMAL,
+ #endif
+@@ -383,14 +393,21 @@ kmalloc_caches[NR_KMALLOC_TYPES][KMALLOC_SHIFT_HIGH + 1];
+ 	(IS_ENABLED(CONFIG_ZONE_DMA)   ? __GFP_DMA : 0) |	\
+ 	(IS_ENABLED(CONFIG_MEMCG_KMEM) ? __GFP_ACCOUNT : 0))
+ 
+-static __always_inline enum kmalloc_cache_type kmalloc_type(gfp_t flags)
++extern unsigned long random_kmalloc_seed;
++
++static __always_inline enum kmalloc_cache_type kmalloc_type(gfp_t flags, unsigned long caller)
+ {
+ 	/*
+ 	 * The most common case is KMALLOC_NORMAL, so test for it
+ 	 * with a single branch for all the relevant flags.
+ 	 */
+ 	if (likely((flags & KMALLOC_NOT_NORMAL_BITS) == 0))
++#ifdef CONFIG_RANDOM_KMALLOC_CACHES
++		return KMALLOC_RANDOM_START + hash_64(caller ^ random_kmalloc_seed,
++						      RANDOM_KMALLOC_CACHES_BITS);
++#else
+ 		return KMALLOC_NORMAL;
++#endif
+ 
+ 	/*
+ 	 * At least one of the flags has to be set. Their priorities in
+@@ -577,7 +594,7 @@ static __always_inline __alloc_size(1) void *kmalloc(size_t size, gfp_t flags)
+ 
+ 		index = kmalloc_index(size);
+ 		return kmalloc_trace(
+-				kmalloc_caches[kmalloc_type(flags)][index],
++				kmalloc_caches[kmalloc_type(flags, _RET_IP_)][index],
+ 				flags, size);
+ 	}
+ 	return __kmalloc(size, flags);
+@@ -593,7 +610,7 @@ static __always_inline __alloc_size(1) void *kmalloc_node(size_t size, gfp_t fla
+ 
+ 		index = kmalloc_index(size);
+ 		return kmalloc_node_trace(
+-				kmalloc_caches[kmalloc_type(flags)][index],
++				kmalloc_caches[kmalloc_type(flags, _RET_IP_)][index],
+ 				flags, node, size);
+ 	}
+ 	return __kmalloc_node(size, flags, node);
+diff --git a/mm/Kconfig b/mm/Kconfig
+index a3c95338cd3a..e9dc606c9317 100644
+--- a/mm/Kconfig
++++ b/mm/Kconfig
+@@ -337,6 +337,22 @@ config SLUB_CPU_PARTIAL
+ 	  which requires the taking of locks that may cause latency spikes.
+ 	  Typically one would choose no for a realtime system.
+ 
++config RANDOM_KMALLOC_CACHES
++	default n
++	depends on SLUB
++	bool "Random slab caches for normal kmalloc"
++	help
++	  A hardening feature that creates multiple copies of slab caches for
++	  normal kmalloc allocation and makes kmalloc randomly pick one based
++	  on code address, which makes the attackers unable to spray vulnerable
++	  memory objects on the heap for the purpose of exploiting memory
++	  vulnerabilities.
++
++	  Currently the number of copies is set to 16, a reasonably large value
++	  that effectively diverges the memory objects allocated for different
++	  subsystems or modules into different caches, at the expense of about
++	  7 MB of memory overhead.
++
+ endmenu # SLAB allocator options
+ 
+ config SHUFFLE_PAGE_ALLOCATOR
+diff --git a/mm/kfence/kfence_test.c b/mm/kfence/kfence_test.c
+index 9e008a336d9f..7f5ffb490328 100644
+--- a/mm/kfence/kfence_test.c
++++ b/mm/kfence/kfence_test.c
+@@ -212,7 +212,8 @@ static void test_cache_destroy(void)
+ 
+ static inline size_t kmalloc_cache_alignment(size_t size)
+ {
+-	return kmalloc_caches[kmalloc_type(GFP_KERNEL)][__kmalloc_index(size, false)]->align;
++	enum kmalloc_cache_type type = kmalloc_type(GFP_KERNEL, _RET_IP_);
++	return kmalloc_caches[type][__kmalloc_index(size, false)]->align;
+ }
+ 
+ /* Must always inline to match stack trace against caller. */
+@@ -282,8 +283,9 @@ static void *test_alloc(struct kunit *test, size_t size, gfp_t gfp, enum allocat
+ 
+ 		if (is_kfence_address(alloc)) {
+ 			struct slab *slab = virt_to_slab(alloc);
++			enum kmalloc_cache_type type = kmalloc_type(GFP_KERNEL, _RET_IP_);
+ 			struct kmem_cache *s = test_cache ?:
+-					kmalloc_caches[kmalloc_type(GFP_KERNEL)][__kmalloc_index(size, false)];
++				kmalloc_caches[type][__kmalloc_index(size, false)];
+ 
+ 			/*
+ 			 * Verify that various helpers return the right values
+diff --git a/mm/slab.c b/mm/slab.c
+index 88194391d553..9ad3d0f2d1a5 100644
+--- a/mm/slab.c
++++ b/mm/slab.c
+@@ -1670,7 +1670,7 @@ static size_t calculate_slab_order(struct kmem_cache *cachep,
+ 			if (freelist_size > KMALLOC_MAX_CACHE_SIZE) {
+ 				freelist_cache_size = PAGE_SIZE << get_order(freelist_size);
+ 			} else {
+-				freelist_cache = kmalloc_slab(freelist_size, 0u);
++				freelist_cache = kmalloc_slab(freelist_size, 0u, _RET_IP_);
+ 				if (!freelist_cache)
+ 					continue;
+ 				freelist_cache_size = freelist_cache->size;
+diff --git a/mm/slab.h b/mm/slab.h
+index 6a5633b25eb5..4ebe3bdfc17c 100644
+--- a/mm/slab.h
++++ b/mm/slab.h
+@@ -282,7 +282,7 @@ void setup_kmalloc_cache_index_table(void);
+ void create_kmalloc_caches(slab_flags_t);
+ 
+ /* Find the kmalloc slab corresponding for a certain size */
+-struct kmem_cache *kmalloc_slab(size_t, gfp_t);
++struct kmem_cache *kmalloc_slab(size_t size, gfp_t flags, unsigned long caller);
+ 
+ void *__kmem_cache_alloc_node(struct kmem_cache *s, gfp_t gfpflags,
+ 			      int node, size_t orig_size,
+diff --git a/mm/slab_common.c b/mm/slab_common.c
+index fe436d35f333..6f385956ef07 100644
+--- a/mm/slab_common.c
++++ b/mm/slab_common.c
+@@ -678,6 +678,11 @@ kmalloc_caches[NR_KMALLOC_TYPES][KMALLOC_SHIFT_HIGH + 1] __ro_after_init =
+ { /* initialization for https://bugs.llvm.org/show_bug.cgi?id=42570 */ };
+ EXPORT_SYMBOL(kmalloc_caches);
+ 
++#ifdef CONFIG_RANDOM_KMALLOC_CACHES
++unsigned long random_kmalloc_seed __ro_after_init;
++EXPORT_SYMBOL(random_kmalloc_seed);
++#endif
++
+ /*
+  * Conversion table for small slabs sizes / 8 to the index in the
+  * kmalloc array. This is necessary for slabs < 192 since we have non power
+@@ -720,7 +725,7 @@ static inline unsigned int size_index_elem(unsigned int bytes)
+  * Find the kmem_cache structure that serves a given size of
+  * allocation
+  */
+-struct kmem_cache *kmalloc_slab(size_t size, gfp_t flags)
++struct kmem_cache *kmalloc_slab(size_t size, gfp_t flags, unsigned long caller)
+ {
+ 	unsigned int index;
+ 
+@@ -735,7 +740,7 @@ struct kmem_cache *kmalloc_slab(size_t size, gfp_t flags)
+ 		index = fls(size - 1);
+ 	}
+ 
+-	return kmalloc_caches[kmalloc_type(flags)][index];
++	return kmalloc_caches[kmalloc_type(flags, caller)][index];
+ }
+ 
+ size_t kmalloc_size_roundup(size_t size)
+@@ -753,7 +758,7 @@ size_t kmalloc_size_roundup(size_t size)
+ 		return PAGE_SIZE << get_order(size);
+ 
+ 	/* The flags don't matter since size_index is common to all. */
+-	c = kmalloc_slab(size, GFP_KERNEL);
++	c = kmalloc_slab(size, GFP_KERNEL, _RET_IP_);
+ 	return c ? c->object_size : 0;
+ }
+ EXPORT_SYMBOL(kmalloc_size_roundup);
+@@ -776,12 +781,36 @@ EXPORT_SYMBOL(kmalloc_size_roundup);
+ #define KMALLOC_RCL_NAME(sz)
+ #endif
+ 
++#ifdef CONFIG_RANDOM_KMALLOC_CACHES
++#define __KMALLOC_RANDOM_CONCAT(a, b) a ## b
++#define KMALLOC_RANDOM_NAME(N, sz) __KMALLOC_RANDOM_CONCAT(KMA_RAND_, N)(sz)
++#define KMA_RAND_1(sz)                  .name[KMALLOC_RANDOM_START +  0] = "kmalloc-rnd-01-" #sz,
++#define KMA_RAND_2(sz)  KMA_RAND_1(sz)  .name[KMALLOC_RANDOM_START +  1] = "kmalloc-rnd-02-" #sz,
++#define KMA_RAND_3(sz)  KMA_RAND_2(sz)  .name[KMALLOC_RANDOM_START +  2] = "kmalloc-rnd-03-" #sz,
++#define KMA_RAND_4(sz)  KMA_RAND_3(sz)  .name[KMALLOC_RANDOM_START +  3] = "kmalloc-rnd-04-" #sz,
++#define KMA_RAND_5(sz)  KMA_RAND_4(sz)  .name[KMALLOC_RANDOM_START +  4] = "kmalloc-rnd-05-" #sz,
++#define KMA_RAND_6(sz)  KMA_RAND_5(sz)  .name[KMALLOC_RANDOM_START +  5] = "kmalloc-rnd-06-" #sz,
++#define KMA_RAND_7(sz)  KMA_RAND_6(sz)  .name[KMALLOC_RANDOM_START +  6] = "kmalloc-rnd-07-" #sz,
++#define KMA_RAND_8(sz)  KMA_RAND_7(sz)  .name[KMALLOC_RANDOM_START +  7] = "kmalloc-rnd-08-" #sz,
++#define KMA_RAND_9(sz)  KMA_RAND_8(sz)  .name[KMALLOC_RANDOM_START +  8] = "kmalloc-rnd-09-" #sz,
++#define KMA_RAND_10(sz) KMA_RAND_9(sz)  .name[KMALLOC_RANDOM_START +  9] = "kmalloc-rnd-10-" #sz,
++#define KMA_RAND_11(sz) KMA_RAND_10(sz) .name[KMALLOC_RANDOM_START + 10] = "kmalloc-rnd-11-" #sz,
++#define KMA_RAND_12(sz) KMA_RAND_11(sz) .name[KMALLOC_RANDOM_START + 11] = "kmalloc-rnd-12-" #sz,
++#define KMA_RAND_13(sz) KMA_RAND_12(sz) .name[KMALLOC_RANDOM_START + 12] = "kmalloc-rnd-13-" #sz,
++#define KMA_RAND_14(sz) KMA_RAND_13(sz) .name[KMALLOC_RANDOM_START + 13] = "kmalloc-rnd-14-" #sz,
++#define KMA_RAND_15(sz) KMA_RAND_14(sz) .name[KMALLOC_RANDOM_START + 14] = "kmalloc-rnd-15-" #sz,
++#define KMA_RAND_16(sz) KMA_RAND_15(sz) .name[KMALLOC_RANDOM_START + 15] = "kmalloc-rnd-16-" #sz,
++#else // CONFIG_RANDOM_KMALLOC_CACHES
++#define KMALLOC_RANDOM_NAME(N, sz)
++#endif
++
+ #define INIT_KMALLOC_INFO(__size, __short_size)			\
+ {								\
+ 	.name[KMALLOC_NORMAL]  = "kmalloc-" #__short_size,	\
+ 	KMALLOC_RCL_NAME(__short_size)				\
+ 	KMALLOC_CGROUP_NAME(__short_size)			\
+ 	KMALLOC_DMA_NAME(__short_size)				\
++	KMALLOC_RANDOM_NAME(RANDOM_KMALLOC_CACHES_NR, __short_size)	\
+ 	.size = __size,						\
+ }
+ 
+@@ -890,6 +919,11 @@ new_kmalloc_cache(int idx, enum kmalloc_cache_type type, slab_flags_t flags)
+ 		flags |= SLAB_CACHE_DMA;
+ 	}
+ 
++#ifdef CONFIG_RANDOM_KMALLOC_CACHES
++	if (type >= KMALLOC_RANDOM_START && type <= KMALLOC_RANDOM_END)
++		flags |= SLAB_NO_MERGE;
++#endif
++
+ 	if (minalign > ARCH_KMALLOC_MINALIGN) {
+ 		aligned_size = ALIGN(aligned_size, minalign);
+ 		aligned_idx = __kmalloc_index(aligned_size, false);
+@@ -923,7 +957,7 @@ void __init create_kmalloc_caches(slab_flags_t flags)
+ 	/*
+ 	 * Including KMALLOC_CGROUP if CONFIG_MEMCG_KMEM defined
+ 	 */
+-	for (type = KMALLOC_NORMAL; type < NR_KMALLOC_TYPES; type++) {
++	for (type = KMALLOC_RANDOM_START; type < NR_KMALLOC_TYPES; type++) {
+ 		for (i = KMALLOC_SHIFT_LOW; i <= KMALLOC_SHIFT_HIGH; i++) {
+ 			if (!kmalloc_caches[type][i])
+ 				new_kmalloc_cache(i, type, flags);
+@@ -941,6 +975,9 @@ void __init create_kmalloc_caches(slab_flags_t flags)
+ 				new_kmalloc_cache(2, type, flags);
+ 		}
+ 	}
++#ifdef CONFIG_RANDOM_KMALLOC_CACHES
++	random_kmalloc_seed = get_random_u64();
++#endif
+ 
+ 	/* Kmalloc array is now usable */
+ 	slab_state = UP;
+@@ -976,7 +1013,7 @@ void *__do_kmalloc_node(size_t size, gfp_t flags, int node, unsigned long caller
+ 		return ret;
+ 	}
+ 
+-	s = kmalloc_slab(size, flags);
++	s = kmalloc_slab(size, flags, caller);
+ 
+ 	if (unlikely(ZERO_OR_NULL_PTR(s)))
+ 		return s;
+-- 
+2.25.1
+
