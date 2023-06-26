@@ -2,407 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51E2D73DE59
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 14:00:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF03873DE5B
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 14:00:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229471AbjFZMAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 08:00:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44434 "EHLO
+        id S229790AbjFZMAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 08:00:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjFZMAU (ORCPT
+        with ESMTP id S229715AbjFZMAa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 08:00:20 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32962E44;
-        Mon, 26 Jun 2023 05:00:19 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35QAYCuE024933;
-        Mon, 26 Jun 2023 12:00:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=6DRLqzPUZZ+XglBXAvaJTmUVYlu8d6+SvRU0rRU1AqY=;
- b=GDaIJYXlnCS0TxJT2PdUNKmuQtZTlDfoEAj1IALmcxVDLxofUMp9qX2oiqJeX/ueznFd
- IfjzCN8/g5OFK9VJOM5KFf+42nXRZBvcQYjiGPcJgreOmssnHwVXEAg7KIb06ihsl0nL
- karDdGHfXjxMcFa0LesxPq1n7k4RLpMgolXI79FtznVxkbaD5kI5zwstO/Vn5M79hEp/
- praLr/0gFWEN4O8lL+NTEfWJkXzi85QGUQlaLpHlHoiG/tOIR6T9aDwEqGUlPp4Dgykg
- 0bSOqEyuVE4RoPmy1TR1m03OfvMdo5sUD8rZoxNmyAKD5dUvHPlef/nlgFNRxp4QLdAh oA== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rdqtr3wwx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 26 Jun 2023 12:00:12 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35QC0AWs000701
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 26 Jun 2023 12:00:11 GMT
-Received: from [10.218.5.19] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 26 Jun
- 2023 05:00:05 -0700
-Message-ID: <99aebcb3-89d4-993b-5bc1-abc475b94843@quicinc.com>
-Date:   Mon, 26 Jun 2023 17:29:53 +0530
+        Mon, 26 Jun 2023 08:00:30 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2109.outbound.protection.outlook.com [40.107.215.109])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F66DE52
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 05:00:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Teht7YiioCzjKyg1DdJyXCUmUAHxijNEuAU9i4vOiDZfdcRm8gA7bQzGIbcZvXLYGHXLt7Dv5S5u/VXKygeHCO4iPPvWGA5xUd3N7eyKvFjO28kMbQc8Y/+S2dKQyvyEkgq+FI2WA567DWYTFGk1/WoPaA3Kcc4Obp4Vks4M/GqFbZE6I/6hHQyqH1qH/Ldi0n86N3JmfmLPt51NvLEe8+EcDpEInFohTzOVJX6hW4+++p6/jC5hXQFzJVh5+xshX4zf3zOsBjdeSiKeJogVKnbSvT5jkeoQ+6a6za7PqIeI0wKnq6aZ+SU7WmPbpmI+G5QbtnAMhR+uTtE31thQVQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nZyTuPgkmUcByTjC/ScUClvlm8OL8REf4meiejdlEQo=;
+ b=YeNRFZZd+IgM1fTvGoEjBdoOsOUaYXlUwEUya1arh3lafzvGT9cKjjxxnlvZsK2gAqbsms8osx5L5ZDWpI3tdRmHWG8WGHxjbdZ+61wwUuCUIyS7Ewyn2oyRUhDHYvixoZeEAa9vXbA5wRjNoVkRS/XjEIn/TEY98kmozqwPh19k76RfR7QvSClYpn3jrQEEZPtttXUVk+pK2id2pYOoeDzcTfdG/gYNB6LyvtwUqyWp4MuaSg4HzVi00ooptelwfK2q+9fOAOMMb3biWjG/EPOKc2O37v9bhkpDVN2QVF96vmZZC78KM+IfsvCx0IQcucW9sM07TnmW2ueWRCHB3w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nZyTuPgkmUcByTjC/ScUClvlm8OL8REf4meiejdlEQo=;
+ b=kMoo5UD6Myt7O4FXT6nwk/giqU1RjCcvZtfcCv3ur4yYyqgsXFDMT0XbFpxqIxmdUIUsaKcMEXFgtGkGEQMqj25SJIZDPrRuotlcr9j9AetdL5ePMOKHi3BAUMlPcG14sILxVmatQGnSA7GCznZzeZXwfthjn/EXydr2BYMwc+Y58Rz26kZmSEx6Y0Md6J616YfdjXEqPVKukEBORdN7VeiSE9sggKgI5WGoYGw5lzesTpAdJ+y+Gm2l9ftgW5QE6lgVfzf8qc1WUqbNx1Hc5yGtTIfHEE2hKYGwkKhuzgRsExTxU8R1VKyTIAgHoc6ZWjD4i5GScRjgvUouhGGR7w==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from PUZPR06MB5936.apcprd06.prod.outlook.com (2603:1096:301:11d::13)
+ by SEYPR06MB6754.apcprd06.prod.outlook.com (2603:1096:101:174::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.26; Mon, 26 Jun
+ 2023 12:00:23 +0000
+Received: from PUZPR06MB5936.apcprd06.prod.outlook.com
+ ([fe80::adc0:c22:ffae:227b]) by PUZPR06MB5936.apcprd06.prod.outlook.com
+ ([fe80::adc0:c22:ffae:227b%6]) with mapi id 15.20.6500.045; Mon, 26 Jun 2023
+ 12:00:23 +0000
+From:   You Kangren <youkangren@vivo.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org (open list:POSIX CLOCKS and TIMERS)
+Cc:     opensource.kernel@vivo.com, youkangren@vivo.com
+Subject: [PATCH] posix-timers: Release the acquired lock before returning
+Date:   Mon, 26 Jun 2023 20:00:17 +0800
+Message-Id: <20230626120017.3030-1-youkangren@vivo.com>
+X-Mailer: git-send-email 2.39.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: TY2PR02CA0012.apcprd02.prod.outlook.com
+ (2603:1096:404:56::24) To PUZPR06MB5936.apcprd06.prod.outlook.com
+ (2603:1096:301:11d::13)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH V5 4/5] clk: qcom: camcc-sm8550: Add support for qdss,
- sleep and xo clocks
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-CC:     Bjorn Andersson <andersson@kernel.org>,
-        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Taniya Das <quic_tdas@quicinc.com>,
-        "Satya Priya Kakitapalli" <quic_skakitap@quicinc.com>,
-        Imran Shaik <quic_imrashai@quicinc.com>,
-        Ajit Pandey <quic_ajipan@quicinc.com>
-References: <20230623164619.11464-1-quic_jkona@quicinc.com>
- <20230623164619.11464-5-quic_jkona@quicinc.com>
- <11b3058c-2261-95a4-2347-b0a33fdeb1e3@linaro.org>
-Content-Language: en-US
-From:   Jagadeesh Kona <quic_jkona@quicinc.com>
-In-Reply-To: <11b3058c-2261-95a4-2347-b0a33fdeb1e3@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: eSYt05f620-QocfIb6sGF8p6LqJ5BxkE
-X-Proofpoint-ORIG-GUID: eSYt05f620-QocfIb6sGF8p6LqJ5BxkE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-26_08,2023-06-26_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- bulkscore=0 malwarescore=0 mlxlogscore=999 priorityscore=1501
- suspectscore=0 mlxscore=0 adultscore=0 spamscore=0 clxscore=1015
- impostorscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2305260000 definitions=main-2306260107
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PUZPR06MB5936:EE_|SEYPR06MB6754:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2c606663-c699-4dab-9c73-08db763ceba7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: lbMMuYf9qkQY8FX/egJ5axQC+cfTVZTXmpB0ORPAJFTc2uGlY6TIZyNtBlyaxVMryr7Vq+r0O64qn03+7IK21SCwpQvnUeYc3swVfxVaEzLGN0SwW54Q53BDNR6ZsBtihnDLR5pJJhdoElHiNh3W3p0eJ/tc3VnyaoJSEyBFajd7i9FztG9FW2fh3Ab1lt94ANNtObwBuVMQvJeEGqDQVCGnWo8KvMcTcyo+gKPMejQgPeMhzAmSgoM5BJzjqQVkEG5make7cNwBr1DCQ4dbOquU0KQD++u0CL2RGcuwJUxmHeiA4u22K3yHeGKSmoGfX+WIaFyGECby8CCcVuQqVZH71dyHB7+S2ISrDXw1NpheYGGIxzUbldtM5LO5OnbGi5cY8kXMQFsVDHRPpoGYdzDWXd96ATC68w6PczNJo53FpcIUq5blvWta5gk35Q+mDhr1d5yFi4ns+r1Smqw64b828l8RL6LVsiq0vkduD+0dBrv4bz9t2Z+KICgDXoP7gjvhEFdJt45r7D3hq9d80s2PMBcwFzT9wSDLzlPb6R43nqkqTyXers3kNqSPHuO6UyfF8Zr8zNcFHMmLs1O2BJvc4EHgDJy/ukmRypE6FVLplC02r3UyFc92w/O14908
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PUZPR06MB5936.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(366004)(376002)(136003)(346002)(396003)(451199021)(2906002)(6486002)(52116002)(6666004)(38100700002)(38350700002)(107886003)(2616005)(83380400001)(6512007)(6506007)(1076003)(186003)(26005)(41300700001)(86362001)(478600001)(66946007)(66556008)(66476007)(316002)(4326008)(8936002)(8676002)(5660300002)(36756003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?8SO7/3sKMdoTyaEh+4smMYYAy8+9WQtjpV6V3XXlIk0JmTfyj8P2seZBhxae?=
+ =?us-ascii?Q?XF5Ckb65NsfT8yQ0apHB1B3DzaWQizISOAjKBW9Q7+efH7KUf2c0HW++xjbh?=
+ =?us-ascii?Q?0268ol1PH/+jDGXkcwcmg0ZySaJVNGhxm5vbPBEVyTHKDJr+FU60TRcdH/jJ?=
+ =?us-ascii?Q?MBCnu/cONN49KeD9i+ysaSPm8UYvF0TeCJwciABvW2oRIk65UzQvVWiGYvyS?=
+ =?us-ascii?Q?iHWTyPim2F7o8FyQqhrJL2H3mRP3wrnrJtJUXTV7F0Livb6tGgTEINN1v1aS?=
+ =?us-ascii?Q?dazqJpLFrCLCxEiFt/SnU8aQTpi5OPIdiY5NBlE9YMgYPhxPuCPWxa6iZnwJ?=
+ =?us-ascii?Q?2QLiw49WZ/C/M3vXi8Tg2elBPxMP5+9oSzK/WskTvvFsN/7Tkk8JIEZ7CI5/?=
+ =?us-ascii?Q?CZr8GkpTwD2RrpWpgAhVfdY9sVrBNdFixXg7Tl4RG2ctrQ2vIMYDP6ZB5yuS?=
+ =?us-ascii?Q?kFx6JLzU+SuUItaxEC0ssEYZJ24c9gJ/0Zt+29S0Ld+5yId7vJOdubSvU6Vr?=
+ =?us-ascii?Q?Ief5QStLwC7JzSI7PJ22yiQ80h0WtfhvwKcGz1LNS4uJYGbBlLQ7FeRZVTPw?=
+ =?us-ascii?Q?KjhueboKnDKcGFimXPCHS9dms/qoREvQ9eNxII+iHvfPUsjJrAqmcSy83ScX?=
+ =?us-ascii?Q?gEBgHpH3n3Dcc87siorzVOntJ5T6nT6nT4ze6gDEl46at0ouSqxin44YbA8k?=
+ =?us-ascii?Q?fgJxXiMr327k19f/N062+FY0xfkT/Ci/8LF3/NKSG+hzoQEaZ3G47DMsZbLx?=
+ =?us-ascii?Q?r8t7HbuyszAq4OBomu70uB+adoU0WASoisNiqpD5srG8fGVJXupOjBrgEl+f?=
+ =?us-ascii?Q?o5uL8oORm+bsicCqGxv0oFt8X5wc4Kf3By/OyjWiswAWDW/aX/y4cP+S2pXY?=
+ =?us-ascii?Q?WYxRNL622/PM1KSuXi1UK6MFhMG+HY7F/fXy0FDe/TdclPAGj0/bHF2MHsbt?=
+ =?us-ascii?Q?MRNerOm363PD4vpX49KLEl7f9xQuLnxue5gjX/iitIOc5xG8BuYu+yC8dE7Y?=
+ =?us-ascii?Q?6I5cilf4bpq5HbsjTaFIUFy63SjnsGZF9oPxJ3y6Ru+opJYlWu3jq7ZMGI0r?=
+ =?us-ascii?Q?JBsURAYQAxaCnlROts1ki6bp+FPGhz+zxvmKlsANyqBSTl987/zlLKGk1KmN?=
+ =?us-ascii?Q?JYDakK9s3mpayWcwynNorBXqsUsWPDa3CkIUUyViwD+vG0A+ts7tTOqw1mJb?=
+ =?us-ascii?Q?nl5oTQapQTkM1lczOB7YK/GIk1Po26vISnHUTP+trFIY15H6+sX1q+7TDJFn?=
+ =?us-ascii?Q?8iU6tHPoe2rjtaBW24u6eW6JZdWZ0gaeoYaa9hFsHe9tzA8X2aH1CYza83ZR?=
+ =?us-ascii?Q?1NX78L4PaJlx4Jd++jxc/BXZqdSXLwZbfmLbKEBZnPBUc1RXESZwf7zeoMP8?=
+ =?us-ascii?Q?jQJJY9GptzGGmXUIyGMW39xwM98b/MmSiRnsztYm8Bj18fzDcQDVy85O8TPn?=
+ =?us-ascii?Q?iSvQxb1TX5MdJbmJwcKPTG1q1uKIFYmMbjZb8SLj8jm32wsqY90FVGRzX9P7?=
+ =?us-ascii?Q?1yG8OSc+4LGRINxcHgFIyngtz0JS0DvcYny950XPDqxAFnf5JlS/zREpsOIT?=
+ =?us-ascii?Q?4S46JfLDO4EFNdhxRayjLXEPe9vwKx1zLQzLSG0a?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2c606663-c699-4dab-9c73-08db763ceba7
+X-MS-Exchange-CrossTenant-AuthSource: PUZPR06MB5936.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jun 2023 12:00:22.9188
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: beK8cuVTVPR+DFy5zfPjV4UHnTqy0OWpi+RXkeWRwLrcAqAbHlhtl0R87Zi/T1K5IAu0QmYJMBGyKMD++7fENQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR06MB6754
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Release the acquired lock before returning to prevent errors
 
+Signed-off-by: You Kangren <youkangren@vivo.com>
+---
+ kernel/time/posix-timers.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-On 6/24/2023 5:49 PM, Konrad Dybcio wrote:
-> On 23.06.2023 18:46, Jagadeesh Kona wrote:
->> Add support for camera qdss, sleep and xo clocks.
->>
->> Co-developed-by: Taniya Das <quic_tdas@quicinc.com>
->> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
->> Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
->> ---
->> Changes since v4:
->>   - No changes.
->> Changes since v3:
->>   - No changes.
->> Changes since v2:
->>   - No changes.
->> Changes since v1:
->>   - Newly added.
->>
->>   drivers/clk/qcom/camcc-sm8550.c | 180 ++++++++++++++++++++++++++++++++
->>   1 file changed, 180 insertions(+)
->>
->> diff --git a/drivers/clk/qcom/camcc-sm8550.c b/drivers/clk/qcom/camcc-sm8550.c
->> index 075bea32087c..7b4882444d58 100644
->> --- a/drivers/clk/qcom/camcc-sm8550.c
->> +++ b/drivers/clk/qcom/camcc-sm8550.c
->> @@ -22,6 +22,8 @@
->>   enum {
->>   	DT_IFACE,
->>   	DT_BI_TCXO,
->> +	DT_BI_TCXO_AO,
->> +	DT_SLEEP_CLK,
->>   };
->>   
->>   enum {
->> @@ -43,6 +45,7 @@ enum {
->>   	P_CAM_CC_PLL10_OUT_EVEN,
->>   	P_CAM_CC_PLL11_OUT_EVEN,
->>   	P_CAM_CC_PLL12_OUT_EVEN,
->> +	P_SLEEP_CLK,
->>   };
->>   
->>   static const struct pll_vco lucid_ole_vco[] = {
->> @@ -881,6 +884,22 @@ static const struct clk_parent_data cam_cc_parent_data_11[] = {
->>   	{ .hw = &cam_cc_pll7_out_even.clkr.hw },
->>   };
->>   
->> +static const struct parent_map cam_cc_parent_map_12[] = {
->> +	{ P_SLEEP_CLK, 0 },
->> +};
->> +
->> +static const struct clk_parent_data cam_cc_parent_data_12[] = {
->> +	{ .index = DT_SLEEP_CLK },
->> +};
->> +
->> +static const struct parent_map cam_cc_parent_map_13[] = {
->> +	{ P_BI_TCXO, 0 },
->> +};
->> +
->> +static const struct clk_parent_data cam_cc_parent_data_13_ao[] = {
->> +	{ .index = DT_BI_TCXO_AO },
->> +};
->> +
->>   static const struct freq_tbl ftbl_cam_cc_bps_clk_src[] = {
->>   	F(19200000, P_BI_TCXO, 1, 0, 0),
->>   	F(200000000, P_CAM_CC_PLL8_OUT_EVEN, 1, 0, 0),
->> @@ -1565,6 +1584,29 @@ static struct clk_rcg2 cam_cc_mclk7_clk_src = {
->>   	},
->>   };
->>   
->> +static const struct freq_tbl ftbl_cam_cc_qdss_debug_clk_src[] = {
->> +	F(19200000, P_BI_TCXO, 1, 0, 0),
->> +	F(75000000, P_CAM_CC_PLL0_OUT_EVEN, 8, 0, 0),
->> +	F(150000000, P_CAM_CC_PLL0_OUT_EVEN, 4, 0, 0),
->> +	F(300000000, P_CAM_CC_PLL0_OUT_MAIN, 4, 0, 0),
->> +	{ }
->> +};
->> +
->> +static struct clk_rcg2 cam_cc_qdss_debug_clk_src = {
->> +	.cmd_rcgr = 0x13f24,
->> +	.mnd_width = 0,
->> +	.hid_width = 5,
->> +	.parent_map = cam_cc_parent_map_0,
->> +	.freq_tbl = ftbl_cam_cc_qdss_debug_clk_src,
->> +	.clkr.hw.init = &(const struct clk_init_data) {
->> +		.name = "cam_cc_qdss_debug_clk_src",
->> +		.parent_data = cam_cc_parent_data_0,
->> +		.num_parents = ARRAY_SIZE(cam_cc_parent_data_0),
->> +		.flags = CLK_SET_RATE_PARENT,
->> +		.ops = &clk_rcg2_shared_ops,
->> +	},
->> +};
->> +
->>   static const struct freq_tbl ftbl_cam_cc_sfe_0_clk_src[] = {
->>   	F(466000000, P_CAM_CC_PLL6_OUT_EVEN, 1, 0, 0),
->>   	F(594000000, P_CAM_CC_PLL6_OUT_EVEN, 1, 0, 0),
->> @@ -1611,6 +1653,26 @@ static struct clk_rcg2 cam_cc_sfe_1_clk_src = {
->>   	},
->>   };
->>   
->> +static const struct freq_tbl ftbl_cam_cc_sleep_clk_src[] = {
->> +	F(32000, P_SLEEP_CLK, 1, 0, 0),
->> +	{ }
->> +};
->> +
->> +static struct clk_rcg2 cam_cc_sleep_clk_src = {
->> +	.cmd_rcgr = 0x141a0,
->> +	.mnd_width = 0,
->> +	.hid_width = 5,
->> +	.parent_map = cam_cc_parent_map_12,
->> +	.freq_tbl = ftbl_cam_cc_sleep_clk_src,
->> +	.clkr.hw.init = &(const struct clk_init_data) {
->> +		.name = "cam_cc_sleep_clk_src",
->> +		.parent_data = cam_cc_parent_data_12,
->> +		.num_parents = ARRAY_SIZE(cam_cc_parent_data_12),
->> +		.flags = CLK_SET_RATE_PARENT,
->> +		.ops = &clk_rcg2_shared_ops,
->> +	},
->> +};
->> +
->>   static const struct freq_tbl ftbl_cam_cc_slow_ahb_clk_src[] = {
->>   	F(19200000, P_BI_TCXO, 1, 0, 0),
->>   	F(80000000, P_CAM_CC_PLL0_OUT_EVEN, 7.5, 0, 0),
->> @@ -1632,6 +1694,26 @@ static struct clk_rcg2 cam_cc_slow_ahb_clk_src = {
->>   	},
->>   };
->>   
->> +static const struct freq_tbl ftbl_cam_cc_xo_clk_src[] = {
->> +	F(19200000, P_BI_TCXO, 1, 0, 0),
-> You're overloading P_BI_TCXO with a different parent clock (XO_A).
-> 
+diff --git a/kernel/time/posix-timers.c b/kernel/time/posix-timers.c
+index b924f0f096fa..8ab383cba0af 100644
+--- a/kernel/time/posix-timers.c
++++ b/kernel/time/posix-timers.c
+@@ -599,6 +599,7 @@ static struct k_itimer *__lock_timer(timer_t timer_id, unsigned long *flags)
+ 		 */
+ 		if (timr->it_signal == current->signal) {
+ 			rcu_read_unlock();
++			spin_unlock_irqrestore(&timr->it_lock, *flags);
+ 			return timr;
+ 		}
+ 		spin_unlock_irqrestore(&timr->it_lock, *flags);
+@@ -1066,9 +1067,10 @@ static void itimer_delete(struct k_itimer *timer)
+ 		 * do_exit() only for the last thread of the thread group.
+ 		 * So no other task can access and delete that timer.
+ 		 */
+-		if (WARN_ON_ONCE(timer_wait_running(timer, &flags) != timer))
++		if (WARN_ON_ONCE(timer_wait_running(timer, &flags) != timer)) {
++			spin_unlock_irqrestore(&timer->it_lock, flags);
+ 			return;
+-
++		}
+ 		goto retry_delete;
+ 	}
+ 	list_del(&timer->list);
+-- 
+2.39.0
 
-This RCG just requires active only voting, hence using XO_A as its parent.
-
-Both XO and XO_A are same clock in HW (BI_TCXO), hence we can reuse 
-P_BI_TCXO in frequency table for XO_A parent as well.
-
-Thanks,
-Jagadeesh
-
-> The rest lgtm
-> 
-> Konrad
->> +	{ }
->> +};
->> +
->> +static struct clk_rcg2 cam_cc_xo_clk_src = {
->> +	.cmd_rcgr = 0x14070,
->> +	.mnd_width = 0,
->> +	.hid_width = 5,
->> +	.parent_map = cam_cc_parent_map_13,
->> +	.freq_tbl = ftbl_cam_cc_xo_clk_src,
->> +	.clkr.hw.init = &(const struct clk_init_data) {
->> +		.name = "cam_cc_xo_clk_src",
->> +		.parent_data = cam_cc_parent_data_13_ao,
->> +		.num_parents = ARRAY_SIZE(cam_cc_parent_data_13_ao),
->> +		.flags = CLK_SET_RATE_PARENT,
->> +		.ops = &clk_rcg2_shared_ops,
->> +	},
->> +};
->> +
->>   static struct clk_branch cam_cc_bps_ahb_clk = {
->>   	.halt_reg = 0x10274,
->>   	.halt_check = BRANCH_HALT,
->> @@ -1704,6 +1786,42 @@ static struct clk_branch cam_cc_camnoc_axi_clk = {
->>   	},
->>   };
->>   
->> +static struct clk_branch cam_cc_camnoc_dcd_xo_clk = {
->> +	.halt_reg = 0x13f18,
->> +	.halt_check = BRANCH_HALT,
->> +	.clkr = {
->> +		.enable_reg = 0x13f18,
->> +		.enable_mask = BIT(0),
->> +		.hw.init = &(const struct clk_init_data) {
->> +			.name = "cam_cc_camnoc_dcd_xo_clk",
->> +			.parent_hws = (const struct clk_hw*[]) {
->> +				&cam_cc_xo_clk_src.clkr.hw,
->> +			},
->> +			.num_parents = 1,
->> +			.flags = CLK_SET_RATE_PARENT,
->> +			.ops = &clk_branch2_ops,
->> +		},
->> +	},
->> +};
->> +
->> +static struct clk_branch cam_cc_camnoc_xo_clk = {
->> +	.halt_reg = 0x13f1c,
->> +	.halt_check = BRANCH_HALT,
->> +	.clkr = {
->> +		.enable_reg = 0x13f1c,
->> +		.enable_mask = BIT(0),
->> +		.hw.init = &(const struct clk_init_data) {
->> +			.name = "cam_cc_camnoc_xo_clk",
->> +			.parent_hws = (const struct clk_hw*[]) {
->> +				&cam_cc_xo_clk_src.clkr.hw,
->> +			},
->> +			.num_parents = 1,
->> +			.flags = CLK_SET_RATE_PARENT,
->> +			.ops = &clk_branch2_ops,
->> +		},
->> +	},
->> +};
->> +
->>   static struct clk_branch cam_cc_cci_0_clk = {
->>   	.halt_reg = 0x13a2c,
->>   	.halt_check = BRANCH_HALT,
->> @@ -2370,6 +2488,24 @@ static struct clk_branch cam_cc_drv_ahb_clk = {
->>   	},
->>   };
->>   
->> +static struct clk_branch cam_cc_drv_xo_clk = {
->> +	.halt_reg = 0x142d4,
->> +	.halt_check = BRANCH_HALT,
->> +	.clkr = {
->> +		.enable_reg = 0x142d4,
->> +		.enable_mask = BIT(0),
->> +		.hw.init = &(const struct clk_init_data) {
->> +			.name = "cam_cc_drv_xo_clk",
->> +			.parent_hws = (const struct clk_hw*[]) {
->> +				&cam_cc_xo_clk_src.clkr.hw,
->> +			},
->> +			.num_parents = 1,
->> +			.flags = CLK_SET_RATE_PARENT,
->> +			.ops = &clk_branch2_ops,
->> +		},
->> +	},
->> +};
->> +
->>   static struct clk_branch cam_cc_icp_ahb_clk = {
->>   	.halt_reg = 0x138fc,
->>   	.halt_check = BRANCH_HALT,
->> @@ -2910,6 +3046,42 @@ static struct clk_branch cam_cc_mclk7_clk = {
->>   	},
->>   };
->>   
->> +static struct clk_branch cam_cc_qdss_debug_clk = {
->> +	.halt_reg = 0x14050,
->> +	.halt_check = BRANCH_HALT,
->> +	.clkr = {
->> +		.enable_reg = 0x14050,
->> +		.enable_mask = BIT(0),
->> +		.hw.init = &(const struct clk_init_data) {
->> +			.name = "cam_cc_qdss_debug_clk",
->> +			.parent_hws = (const struct clk_hw*[]) {
->> +				&cam_cc_qdss_debug_clk_src.clkr.hw,
->> +			},
->> +			.num_parents = 1,
->> +			.flags = CLK_SET_RATE_PARENT,
->> +			.ops = &clk_branch2_ops,
->> +		},
->> +	},
->> +};
->> +
->> +static struct clk_branch cam_cc_qdss_debug_xo_clk = {
->> +	.halt_reg = 0x14054,
->> +	.halt_check = BRANCH_HALT,
->> +	.clkr = {
->> +		.enable_reg = 0x14054,
->> +		.enable_mask = BIT(0),
->> +		.hw.init = &(const struct clk_init_data) {
->> +			.name = "cam_cc_qdss_debug_xo_clk",
->> +			.parent_hws = (const struct clk_hw*[]) {
->> +				&cam_cc_xo_clk_src.clkr.hw,
->> +			},
->> +			.num_parents = 1,
->> +			.flags = CLK_SET_RATE_PARENT,
->> +			.ops = &clk_branch2_ops,
->> +		},
->> +	},
->> +};
->> +
->>   static struct clk_branch cam_cc_sbi_clk = {
->>   	.halt_reg = 0x10540,
->>   	.halt_check = BRANCH_HALT,
->> @@ -3133,6 +3305,8 @@ static struct clk_regmap *cam_cc_sm8550_clocks[] = {
->>   	[CAM_CC_BPS_FAST_AHB_CLK] = &cam_cc_bps_fast_ahb_clk.clkr,
->>   	[CAM_CC_CAMNOC_AXI_CLK] = &cam_cc_camnoc_axi_clk.clkr,
->>   	[CAM_CC_CAMNOC_AXI_CLK_SRC] = &cam_cc_camnoc_axi_clk_src.clkr,
->> +	[CAM_CC_CAMNOC_DCD_XO_CLK] = &cam_cc_camnoc_dcd_xo_clk.clkr,
->> +	[CAM_CC_CAMNOC_XO_CLK] = &cam_cc_camnoc_xo_clk.clkr,
->>   	[CAM_CC_CCI_0_CLK] = &cam_cc_cci_0_clk.clkr,
->>   	[CAM_CC_CCI_0_CLK_SRC] = &cam_cc_cci_0_clk_src.clkr,
->>   	[CAM_CC_CCI_1_CLK] = &cam_cc_cci_1_clk.clkr,
->> @@ -3184,6 +3358,7 @@ static struct clk_regmap *cam_cc_sm8550_clocks[] = {
->>   	[CAM_CC_CSIPHY6_CLK] = &cam_cc_csiphy6_clk.clkr,
->>   	[CAM_CC_CSIPHY7_CLK] = &cam_cc_csiphy7_clk.clkr,
->>   	[CAM_CC_DRV_AHB_CLK] = &cam_cc_drv_ahb_clk.clkr,
->> +	[CAM_CC_DRV_XO_CLK] = &cam_cc_drv_xo_clk.clkr,
->>   	[CAM_CC_FAST_AHB_CLK_SRC] = &cam_cc_fast_ahb_clk_src.clkr,
->>   	[CAM_CC_ICP_AHB_CLK] = &cam_cc_icp_ahb_clk.clkr,
->>   	[CAM_CC_ICP_CLK] = &cam_cc_icp_clk.clkr,
->> @@ -3260,6 +3435,9 @@ static struct clk_regmap *cam_cc_sm8550_clocks[] = {
->>   	[CAM_CC_PLL11_OUT_EVEN] = &cam_cc_pll11_out_even.clkr,
->>   	[CAM_CC_PLL12] = &cam_cc_pll12.clkr,
->>   	[CAM_CC_PLL12_OUT_EVEN] = &cam_cc_pll12_out_even.clkr,
->> +	[CAM_CC_QDSS_DEBUG_CLK] = &cam_cc_qdss_debug_clk.clkr,
->> +	[CAM_CC_QDSS_DEBUG_CLK_SRC] = &cam_cc_qdss_debug_clk_src.clkr,
->> +	[CAM_CC_QDSS_DEBUG_XO_CLK] = &cam_cc_qdss_debug_xo_clk.clkr,
->>   	[CAM_CC_SBI_CLK] = &cam_cc_sbi_clk.clkr,
->>   	[CAM_CC_SBI_FAST_AHB_CLK] = &cam_cc_sbi_fast_ahb_clk.clkr,
->>   	[CAM_CC_SFE_0_CLK] = &cam_cc_sfe_0_clk.clkr,
->> @@ -3268,7 +3446,9 @@ static struct clk_regmap *cam_cc_sm8550_clocks[] = {
->>   	[CAM_CC_SFE_1_CLK] = &cam_cc_sfe_1_clk.clkr,
->>   	[CAM_CC_SFE_1_CLK_SRC] = &cam_cc_sfe_1_clk_src.clkr,
->>   	[CAM_CC_SFE_1_FAST_AHB_CLK] = &cam_cc_sfe_1_fast_ahb_clk.clkr,
->> +	[CAM_CC_SLEEP_CLK_SRC] = &cam_cc_sleep_clk_src.clkr,
->>   	[CAM_CC_SLOW_AHB_CLK_SRC] = &cam_cc_slow_ahb_clk_src.clkr,
->> +	[CAM_CC_XO_CLK_SRC] = &cam_cc_xo_clk_src.clkr,
->>   };
->>   
->>   static struct gdsc *cam_cc_sm8550_gdscs[] = {
