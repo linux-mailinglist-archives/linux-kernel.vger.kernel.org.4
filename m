@@ -2,105 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40B3273EB35
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 21:31:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61FB473EB38
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 21:35:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229823AbjFZTa5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 15:30:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44332 "EHLO
+        id S229689AbjFZTfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 15:35:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229638AbjFZTaz (ORCPT
+        with ESMTP id S229456AbjFZTfn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 15:30:55 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBDD7E74
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 12:30:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687807852; x=1719343852;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=qEzo2K0bbHOwosWcye5uApxGCWDZFso+NzL92l7ysaA=;
-  b=OfTmUMquH8vEcGQft0Far+hRW8cXJTGtxYffkKZ3vfMTp552nZpYe/4R
-   WYhOiQfbTpiO0moAO8Y2s4Kn3esN5cZkZ8wYnSKGMpmA4kbYuPpqZ7jeR
-   8KR6NzZ35RDN152/4DmtC9jjPJ92KP0+AAECWCU3yiwIlGaSOszuCGRSg
-   FJ7p3BP+uWGNW6hAfKNZ30xwDHYZaWhwVFPRAjloSuXjyz+4tzA/xvrrc
-   0BzlZu1gq/zwfzVk96dsRNnnKZBFwfHnxUfnygsGoQInMyr6dZw7y/YLg
-   hFTwceNE9ixOv2a0BJBUNSHccZ1dqJcQ9XGKm2PiepxHye+a8gq+TnwQu
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="340954351"
-X-IronPort-AV: E=Sophos;i="6.01,160,1684825200"; 
-   d="scan'208";a="340954351"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 12:30:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="781572308"
-X-IronPort-AV: E=Sophos;i="6.01,160,1684825200"; 
-   d="scan'208";a="781572308"
-Received: from viggo.jf.intel.com (HELO ray2.intel.com) ([10.54.77.144])
-  by fmsmga008.fm.intel.com with ESMTP; 26 Jun 2023 12:30:52 -0700
-From:   Dave Hansen <dave.hansen@linux.intel.com>
-To:     torvalds@linux-foundation.org
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Subject: [GIT PULL] x86/tdx for 6.5
-Date:   Mon, 26 Jun 2023 12:30:50 -0700
-Message-Id: <20230626193050.1532183-1-dave.hansen@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 26 Jun 2023 15:35:43 -0400
+Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBB9210DA;
+        Mon, 26 Jun 2023 12:35:40 -0700 (PDT)
+Received: by mail-io1-f41.google.com with SMTP id ca18e2360f4ac-7836164a08aso45903339f.1;
+        Mon, 26 Jun 2023 12:35:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687808140; x=1690400140;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BGfCwcbVLNoCSLzgxFgaQHuuup0hQXpRqIa+hpJXPdc=;
+        b=dXZBj1J5m8Y5Q3lPq4/jUo8q8lCgLGD7Is/63mplyAzlwMH8L8Fw646D1t9kKaeYW/
+         91DxcIrQMMrktDGPOse4fcgHXEHLwmxW3VEd5ZpuGS27L0a3cUlqtlFw7Ya97hrUdnlV
+         X0HyxO2rCh6LV/gvsWhy8p2sL+ZULFCOS17M4iEouwMD8U55Wx7VbgbSXY2GjAWMKCwr
+         mkrQZX9tfb4c2kVhx+1uDL9bpElYp1G2ChX5aCXEnLexBkEwLe+hEJM011cMu7kOJL43
+         /JLSeCu7DUnZco+RY12x5QXEyoYJo6UbHSO1KOWSFH3vZh4IIn1p8CLdw0VXhOJp+y8p
+         N+FA==
+X-Gm-Message-State: AC+VfDzlpmuOqsiLeOViVbEosLCnAVCo18/uGaXn26b/AZh1AhqHkz0+
+        f5RJJIDKnsapfY8crm+4ug==
+X-Google-Smtp-Source: ACHHUZ5n+5iHOWhRthQiOeSfPq/OI+/OPCixQPcsYGvRwG60osxotB0cF5A7pDV6dz3Nptrxo1Q4lQ==
+X-Received: by 2002:a5d:96c1:0:b0:76f:1664:672 with SMTP id r1-20020a5d96c1000000b0076f16640672mr28860112iol.13.1687808140076;
+        Mon, 26 Jun 2023 12:35:40 -0700 (PDT)
+Received: from robh_at_kernel.org ([199.114.228.113])
+        by smtp.gmail.com with ESMTPSA id l14-20020a02a88e000000b00423076f5442sm409363jam.2.2023.06.26.12.35.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jun 2023 12:35:39 -0700 (PDT)
+Received: (nullmailer pid 3613294 invoked by uid 1000);
+        Mon, 26 Jun 2023 19:32:38 -0000
+Date:   Mon, 26 Jun 2023 13:32:38 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     linux-pci@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Shawn Lin <shawn.lin@rock-chips.com>,
+        Simon Xue <xxm@rock-chips.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kernel@collabora.com
+Subject: Re: [PATCH v1 0/4] RK3588 PCIe2 support
+Message-ID: <20230626193238.GA3553158-robh@kernel.org>
+References: <20230616170022.76107-1-sebastian.reichel@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230616170022.76107-1-sebastian.reichel@collabora.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Fri, Jun 16, 2023 at 07:00:18PM +0200, Sebastian Reichel wrote:
+> Hi,
+> 
+> This adds PCIe2 support for RK3588. The series has been tested with the
+> onboard RTL8125 network card on Rockchip RK3588 EVB1 (&pcie2x1l1) and
+> Radxa Rock 5B (&pcie2x1l2). The final patch in this series depends on
+> the combo PHY support added by the SATA series [0].
+> 
+> [0] https://lore.kernel.org/all/20230612171337.74576-1-sebastian.reichel@collabora.com/
+> 
+> Thanks,
+> 
+> -- Sebastian
+> 
+> Sebastian Reichel (4):
+>   dt-bindings: PCI: dwc: rockchip: Fix interrupt-names issue
+>   dt-bindings: PCI: dwc: rockchip: Add missing
+>     legacy-interrupt-controller
+>   dt-bindings: PCI: dwc: rockchip: Update for RK3588
+>   arm64: dts: rockchip: rk3588: add PCIe2 support
 
-Please pull some x86/tdx changes for 6.5.  This includes a very minor
-cleanup and a fix for a race.  The race has never been observed in
-practice but might allow load_unaligned_zeropad() to catch a TDX page
-in the middle of its conversion process which would lead to a fatal
-and unrecoverable guest shutdown.
+I applied patches 1-3.
 
---
-
-The following changes since commit 44c026a73be8038f03dbdeef028b642880cf1511:
-
-  Linux 6.4-rc3 (2023-05-21 14:05:48 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_tdx_for_6.5
-
-for you to fetch changes up to 94142c9d1bdf1c18027a42758ceb6bdd59a92012:
-
-  x86/mm: Fix enc_status_change_finish_noop() (2023-06-06 16:24:27 -0700)
-
-----------------------------------------------------------------
- - Fix a race window where load_unaligned_zeropad() could cause
-   a fatal shutdown during TDX private<=>shared conversion
- - Annotate sites where VM "exit reasons" are reused as hypercall
-   numbers.
-
-----------------------------------------------------------------
-Kirill A. Shutemov (3):
-      x86/mm: Allow guest.enc_status_change_prepare() to fail
-      x86/tdx: Fix race between set_memory_encrypted() and load_unaligned_zeropad()
-      x86/mm: Fix enc_status_change_finish_noop()
-
-Nikolay Borisov (1):
-      x86/tdx: Wrap exit reason with hcall_func()
-
- arch/x86/boot/compressed/tdx.c    |  4 +--
- arch/x86/coco/tdx/tdx.c           | 62 ++++++++++++++++++++++++++++++---------
- arch/x86/include/asm/shared/tdx.h | 11 +++++++
- arch/x86/include/asm/x86_init.h   |  2 +-
- arch/x86/kernel/x86_init.c        |  4 +--
- arch/x86/mm/mem_encrypt_amd.c     |  4 ++-
- arch/x86/mm/pat/set_memory.c      |  3 +-
- 7 files changed, 69 insertions(+), 21 deletions(-)
+Rob
