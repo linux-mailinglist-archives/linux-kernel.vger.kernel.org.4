@@ -2,104 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B181573E5C3
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 18:49:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A2C073E5C7
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 18:50:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbjFZQto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 12:49:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40970 "EHLO
+        id S230177AbjFZQuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 12:50:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbjFZQtm (ORCPT
+        with ESMTP id S229736AbjFZQtq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 12:49:42 -0400
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A07A51B1;
-        Mon, 26 Jun 2023 09:49:40 -0700 (PDT)
-Received: by mail-ot1-x32c.google.com with SMTP id 46e09a7af769-6b78916ea66so145476a34.1;
-        Mon, 26 Jun 2023 09:49:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687798180; x=1690390180;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0D9OFT0J8N9jcY4CKBEcVZQgCuAlL3uNYGNYsazarPM=;
-        b=CzMQI/kBYO1ahWW1DLWuET26J2pDpVuK2Hi9YxFHx6A4MNbjwbA4XhQ2Tj6DjP9yhw
-         djXxiFtW+QxF/hsN7AD/6l2z+qUVtJg20yxsUR/9ac5MvFg0fzpnGpXVDKLdKh41BHdH
-         vnZ6UdTFiEhf+gzmFdLwlvxxLHeHfX3Q9072zc8qAl+Oj9hw3ouJeLPI8Xo03n6kCg5y
-         WVDQZpOCzfZcuHf+67JOr6+LUaAQS5d6u8YwaWrAO/qjoRXYdVA67w5gsVT4d9aVnIBr
-         c8fT/JkIM7hNaOoat0aslSzya0m+9PLqcRrgqeHr/MKaMNPzN1ggelFyzwLdNwVlLBk6
-         ZSRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687798180; x=1690390180;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0D9OFT0J8N9jcY4CKBEcVZQgCuAlL3uNYGNYsazarPM=;
-        b=j9Pbbkd4x+DsBzjO4GitYRALbEHtOjVjWhYyGsr2kYFcEzN3ZgfF8bKqjSjSk2n1Rh
-         ohxF0DRJE8eWE4jpj2vQQz+ztlWOtFRZamst3+HftRs7ykV67ilrjxFgvGoWu+H0PLe2
-         GV2abF+Yf1sJruFc0iudqv7F3iOUqd/LqmrxYdv4yIo8LJQrqiCrFBMuEPVaXzsfaGH9
-         W8ReopKZLrZD4/g+B49HCYjjn2T+Nphop2pAY/QrcZCPwb+1n8hPxBxhzkt4EbgV8uM5
-         63RiYGZd2/TiBDKl92lYgtxhNNq7tQp68ibS3tG/7V1yPSfg5AHqfqsGiYWQnWgVZJp6
-         Uyvw==
-X-Gm-Message-State: AC+VfDw9XlnLfhSV2ScXpBOUDShERoz8lujWjmH2j/T5JjKm6F+Im3Q2
-        joka/Id4Wh4bMA5kTnrmMFii7D3+dr4=
-X-Google-Smtp-Source: ACHHUZ4puXRreohcxKytYSV9RgTThgR/wnT9ek9sbNxxw6ZZogB+bcYRFthdPDuvWBzSiSsoStuSZQ==
-X-Received: by 2002:a9d:4f01:0:b0:6b7:52ce:ff38 with SMTP id d1-20020a9d4f01000000b006b752ceff38mr1748306otl.16.1687798179865;
-        Mon, 26 Jun 2023 09:49:39 -0700 (PDT)
-Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
-        by smtp.gmail.com with ESMTPSA id dj23-20020a0568303a9700b006b469ace1b1sm2775637otb.22.2023.06.26.09.49.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Jun 2023 09:49:39 -0700 (PDT)
-Message-ID: <743b4c1f-6c46-6d5d-24e9-b286d021389b@gmail.com>
-Date:   Mon, 26 Jun 2023 13:49:35 -0300
+        Mon, 26 Jun 2023 12:49:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAB321B1
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 09:49:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 50EE660EFB
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 16:49:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF5DDC433C0;
+        Mon, 26 Jun 2023 16:49:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687798184;
+        bh=paOKeyA2C+7w0aTvrydeWORhfmX3bTsvihkIatcTxbE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Vb/yUXRBnuFU0aX8A1csFH/aBCs0vyhRSbEaADfifwI9F/Or/V5Ie41uZJcAIPDSZ
+         nklHFHv/T6kUIVOOUTXHP/51WhU4I/jNmtWaleIfq1SlzfD1D3RRV8uEsX9ELvXA/j
+         ip/dC8pn5xZpNM29R+A+LTW3Iwy1PI6y5fgM6J2LtBhDiBr07gHPtLLriQXoVwhSgY
+         e50puBGBVFPcDglJnjrrIt4P/0xWah7CGkXjLkB/Ist4/g8cOsM1l6gOBrn5d6484K
+         19nKfHTOPRr4kYY7z/UCRvxw0hjDbdaMg4EnPEB3+EXKDuV0VYphJKveoFeOQzruzD
+         v0NTqanoMWWyw==
+Date:   Mon, 26 Jun 2023 17:49:39 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Benjamin Bara <bbara93@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        support.opensource@diasemi.com,
+        DLG-Adam.Ward.opensource@dm.renesas.com,
+        Martin Fuzzey <martin.fuzzey@flowbird.group>,
+        linux-kernel@vger.kernel.org,
+        Benjamin Bara <benjamin.bara@skidata.com>
+Subject: Re: [PATCH RFC v4 07/13] regulator: find active protections during
+ initialization
+Message-ID: <08d6fc5d-30bc-4a55-a495-2a73b5800f79@sirena.org.uk>
+References: <20230419-dynamic-vmon-v4-0-4d3734e62ada@skidata.com>
+ <20230419-dynamic-vmon-v4-7-4d3734e62ada@skidata.com>
+ <030a99f7-98f3-a24d-612c-d460859fc276@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 1/1] rust: macros: fix redefine const_name in `vtable`
-Content-Language: en-US
-To:     Qingsong Chen <changxian.cqs@antgroup.com>,
-        linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?B?55Sw5rSq5Lqu?= <tate.thl@antgroup.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        =?UTF-8?Q?Sergio_Gonz=c3=a1lez_Collado?= <sergio.collado@gmail.com>,
-        rust-for-linux@vger.kernel.org
-References: <20230626074242.3945398-1-changxian.cqs@antgroup.com>
- <20230626074242.3945398-2-changxian.cqs@antgroup.com>
-From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-In-Reply-To: <20230626074242.3945398-2-changxian.cqs@antgroup.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="jBYkEf8Gah+7Cv60"
+Content-Disposition: inline
+In-Reply-To: <030a99f7-98f3-a24d-612c-d460859fc276@gmail.com>
+X-Cookie: Nihilism should commence with oneself.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/26/23 04:42, Qingsong Chen wrote:
-> If the trait has same function name, the `vtable` macro
-> will redefine its `gen_const_name`, e.g.:
-> ```rust
->      #[vtable]
->      pub trait Foo {
->          #[cfg(CONFIG_X)]
->          fn bar();
-> 
->          #[cfg(not(CONFIG_X))]
->          fn bar(x: usize);
->      }
-> ```
-> Use `HashSet` to avoid this.
-> 
-> Signed-off-by: Qingsong Chen <changxian.cqs@antgroup.com>
-> ---
-> [...]
-Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+
+--jBYkEf8Gah+7Cv60
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Mon, Jun 26, 2023 at 04:56:21PM +0300, Matti Vaittinen wrote:
+> On 6/20/23 23:03, Benjamin Bara wrote:
+
+> > Warning can be fixed by enabling (or disabling) monitoring in the DT,
+> > e.g.:
+> > regulator-uv-protection-microvolt =3D <1>;
+> > or
+> > regulator-ov-error-microvolt =3D <0>;
+> >=20
+> > Constraints regarding the monitoring of a regulator can usually be found
+> > in the docu.
+
+> I am not entirely sure if this is the right thing to do. Should we expect
+> the hardware state to be what is described in DT at Linux boot-up - or,
+> should we silently accept the fact that for example boot can alter things.
+
+> From the 'code pov' I have no complaints though. I just can't say if warn=
+ing
+> is the right idea. I'll leave this for bigger brains to decide :)
+
+Yes, this isn't really the idiom we normally adopt - the default thing
+is to just leave the hardware untouched, that should not usually be
+regarded as a problem.
+
+--jBYkEf8Gah+7Cv60
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSZwaMACgkQJNaLcl1U
+h9A9AQf+JCwR05HQvAZptjbBH8ZJk0cx7I6V68t1BVndeViMr7PbqgW44nyiHQRb
+TvwrSlGTj34zGSXItM+srnOJBdPLxH1UrrBPA0UFcY5J6Zn0e7YJ+V3KKA9khhDT
+vqZTFhbzBbSImS8Kj32j7sL2FflJVX46Ob66LKsD8zi0FXpl+HHiuqBuKntQ7gss
+iz2+vtrYlJTNxlEKB/f09dvN42KyQz/NmT46gKKAGMNykdpZsJcmvfiYMcKhl35F
+mOlQCsqBCxMbwKe3xjNV1PTXCT6q3AjtuG4eG65kx1MKl/DTGqBSd9lJFaXzfFRB
+3hrCBBxLyBWzhZ6MTHmdSb4+ekTrnA==
+=923m
+-----END PGP SIGNATURE-----
+
+--jBYkEf8Gah+7Cv60--
