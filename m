@@ -2,139 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97F6573EEB7
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 00:38:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC49473EEB9
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 00:41:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229792AbjFZWig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 18:38:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42996 "EHLO
+        id S229825AbjFZWlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 18:41:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjFZWie (ORCPT
+        with ESMTP id S229456AbjFZWla (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 18:38:34 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33D9FE5A;
-        Mon, 26 Jun 2023 15:38:33 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2b698dd515dso33294421fa.3;
-        Mon, 26 Jun 2023 15:38:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687819111; x=1690411111;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=/4BPPMHxIuX4VVUkfnAZKGZOTCGN6vqENFDffRdr5PA=;
-        b=jQFjf4X3mG+0YOiNUYcjsja7cQ+ItKtzN8+vj6u4YVgsB4JaIqtuhMT5UCVUxUJz4i
-         ZEDU69/ocAs3SvgoX+rDPvyDPOlHzbuQz/lyEAYF6L0LH+8LgctjGFNm4Vejo7MxVzDt
-         qiJjofMJtWSRxEVa10tAOWjc+h7fi/7Hv05huAdjtBimk8g1S+ueVSLTo7op4BLp7ON5
-         jvf5lj7DKxmOb5m6ju6QC6fnctbhz4mgT/io2QdujpKtpLMPYeNaco6tAscDk9Xkz5rQ
-         pWWh3HUFbUIbbkW+Cf/iIIqufSPZY+ydtcQZIpa8QIJJJ0JPVMXz72S6TAns18MhtEP2
-         apKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687819111; x=1690411111;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/4BPPMHxIuX4VVUkfnAZKGZOTCGN6vqENFDffRdr5PA=;
-        b=KdG6a8oX4NOaAkuTiwR08HNMfZ7cGM56n/Zr0ucn90jsMLoOKSDHLOlpxKR04sEyK/
-         rCQVRingfPSY1OW1ENCdL3xAnZpGyXaMTxuzVk3wf3ZS83CCswUW96ve1+3q+nn+Qx5k
-         QTmwHYda4KBsslZWuTzn0hAYR7s0A3RWof8chgu2R2AzYuyyNSj7C1ZBV/s+YONkRKfm
-         cAHhdQ89gRXviYF0vo3RJjKFLpdNpEh5/LQJdFvUfY8ApdVhaXWHDE9PDt7G3S0yUiRq
-         +XHNcrQYR52gnKLZdW8HmIrOVM7pdpfm+9E+3cqQLtVCbCFoUQ0GnltjwPiMp8h9A2q2
-         qNIw==
-X-Gm-Message-State: AC+VfDxlglwQSVfY/8os9E5S2wjghPXGEY2qAj6ozImSOWEfKlD3HlQw
-        vUlY9+iRIO70XU3tZkey+Di9o99AJqRraKN6h2A=
-X-Google-Smtp-Source: ACHHUZ6lR+r47SwmWrLOLwTX0weKHcxS2NtYt9q6sHoMoPzLK4Ljmu+yCVm3VJkQRyQVU7ShZUnwFUHfeto+xg4lEu4=
-X-Received: by 2002:a2e:2e10:0:b0:2b6:9b4a:2608 with SMTP id
- u16-20020a2e2e10000000b002b69b4a2608mr2962412lju.37.1687819111001; Mon, 26
- Jun 2023 15:38:31 -0700 (PDT)
+        Mon, 26 Jun 2023 18:41:30 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1669E5A
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 15:41:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687819289; x=1719355289;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to;
+  bh=8/m1xDTML3SNSnfRs3fLNjoB1vRmrSY2CPIGGu/dmz8=;
+  b=UMY/vAoQBU1ncB04dapfW0mzwIxpojh4TVDPFGmOVUtBI5fvp0D56eQq
+   OXr0HVJHQxmLw8RgKcjpV9cJsZuG20Io+UL6dyIihKHt6SzKjWutyGcK2
+   AMLIUvoxc1wnbEA/EFscTDgGdKSwXqqD6aOpVZOa0A9bX8r3pDPyfgXvD
+   hWs34Tn9WtwPV+MZhiL9wLxT9JiFGnsflOZ791gHlv20hdWb0UDizR1Rx
+   zhfdFNIU+mSV1dwc/r595ShoADeuSCk7QdNDwPqTsIMrCY/zIqYLwhaWV
+   nKN76Ol6f+JeTxp02tEMJHWWHAcGwN5BT/QxBzTu4RRbX+yXcwUxrEYUn
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="351192298"
+X-IronPort-AV: E=Sophos;i="6.01,160,1684825200"; 
+   d="scan'208";a="351192298"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 15:41:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="806240616"
+X-IronPort-AV: E=Sophos;i="6.01,160,1684825200"; 
+   d="scan'208";a="806240616"
+Received: from mshindo-mobl5.amr.corp.intel.com (HELO [10.212.198.145]) ([10.212.198.145])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 15:41:28 -0700
+Content-Type: multipart/mixed; boundary="------------zZi90UpyOni7zEgX10gMwGUA"
+Message-ID: <02b36386-a18c-8bfb-2c70-c398f6fc964b@intel.com>
+Date:   Mon, 26 Jun 2023 15:41:27 -0700
 MIME-Version: 1.0
-References: <20230620004217.4700-1-dakr@redhat.com> <20230620004217.4700-4-dakr@redhat.com>
- <cf6846ea-5bd0-0b41-b7e6-901c70701751@amd.com> <a8edf75b-e0f7-a6c7-7d29-f0d39923549b@redhat.com>
- <41aecd10-9956-0752-2838-34c97834f0c8@amd.com> <bcde7ea3-fbab-3a18-e810-64b6589ddb18@redhat.com>
- <86ef9898-c4b6-f4c0-7ad3-3ffe5358365a@amd.com> <c1f05169-dec0-22ee-52fa-c8070678394e@redhat.com>
- <2f502150-c1f8-615c-66d9-c3fb59b8c409@redhat.com> <4a52ac7c-19ba-8906-5902-fbf75673bf59@amd.com>
- <d18a4ea5-4e8e-be69-84c3-ca658f5cfd24@redhat.com> <923e914f-d367-2f74-9774-f0024d946bdd@amd.com>
-In-Reply-To: <923e914f-d367-2f74-9774-f0024d946bdd@amd.com>
-From:   Dave Airlie <airlied@gmail.com>
-Date:   Tue, 27 Jun 2023 08:38:18 +1000
-Message-ID: <CAPM=9tzQ51LEc9if5HBCgbn7-HUOPw+qEvx7jEE2hk6gYBKvOA@mail.gmail.com>
-Subject: Re: [PATCH drm-next v5 03/14] drm: manager to keep track of GPUs VA mappings
-To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc:     Danilo Krummrich <dakr@redhat.com>, daniel@ffwll.ch,
-        tzimmermann@suse.de, mripard@kernel.org, corbet@lwn.net,
-        bskeggs@redhat.com, Liam.Howlett@oracle.com,
-        matthew.brost@intel.com, boris.brezillon@collabora.com,
-        alexdeucher@gmail.com, ogabbay@kernel.org, bagasdotme@gmail.com,
-        willy@infradead.org, jason@jlekstrand.net,
-        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Donald Robson <donald.robson@imgtec.com>,
-        Dave Airlie <airlied@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [Bug report] __arch_hweight32/64 x86
+Content-Language: en-US
+To:     Sebastian Sumpf <Sebastian.Sumpf@genode-labs.com>,
+        Borislav Petkov <bp@alien8.de>
+Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+References: <cb18590f-686e-cc53-7781-1a36e91faade@genode-labs.com>
+ <20230626210604.GLZJn9vA3gcMAuy/eP@fat_crate.local>
+ <ce1cc0a5-3393-d16f-eaaf-5e7149d5164f@genode-labs.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <ce1cc0a5-3393-d16f-eaaf-5e7149d5164f@genode-labs.com>
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > As pointed out by Christian, this would optimize the "get all mappings
-> > backed by a specific BO from a given VM" use case.
-> >
-> > The question for me is, do other drivers than amdgpu commonly need this?
->
-> I have no idea.
->
-> >
-> > And what does amdgpu need this for? Maybe amdgpu does something we're
-> > not doing (yet)?
->
-> Basically when we do a CS we need to make sure that the VM used by this
-> CS is up to date. For this we walk over the relocation list of BOs and
-> check the status of each BO+VM structure.
->
-> This is done because we don't want to update all VMs at the same time,
-> but rather just those who needs the update.
+This is a multi-part message in MIME format.
+--------------zZi90UpyOni7zEgX10gMwGUA
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-This seems like a legacy from GL and possibly older vulkan, going
-forward vulkan can't rely on passing lists of objects into the kernel
-due to things like buffer_device_address, I'm not sure we should
-optimise for this situation, and moving the tracking list into the
-drivers is going to mean having a bunch of drivers all having the same
-boilerplate, to do the same thing just so amdgpu can't avoid doing it.
+On 6/26/23 14:42, Sebastian Sumpf wrote:
+> 
+>>> Therefore, these registers will not be restored
+>>> upon function return by the compiler. This leads to varying
+>>> exceptions/bad behavior caused by the thus corrupted registers later
+>>> on.
+>>
+>> How do I reproduce what you're observing so that I can take a look?
+> 
+> This is hard to tell, I would disable the " X86_FEATURE_POPCNT" feature
+> and use the ' CONFIG_ARCH_HAS_FAST_MULTIPLIER' option in order to use
+> the multiplier implementation in '__sw_hweight64' in 'lib/hweight.c' At
+> least that is what triggered it here.
 
-Now there might be some benchmark somewhere we can produce a benefit
-in this, and if there is then we should consider going this way for
-all drivers and not just allowing drivers to choose their own path
-here.
+Looks like you'd also have to be using UML:
 
-> >
-> > Christian - I know you didn't ask for "do it the way amdgpu does",
-> > instead you voted for keeping it entirely driver specific. But I think
-> > everyone is pretty close and I'm still optimistic that we could just
-> > generalize this.
->
-> Well, you should *not* necessarily do it like amdgpu does! Basically the
-> implementation in amdgpu was driven by requirements, e.g. we need that,
-> let's do it like this.
->
-> It's perfectly possible that other requirements (e.g. focus on Vulkan)
-> lead to a completely different implementation.
->
-> It's just that ideally I would like to have an implementation where I
-> can apply at least the basics to amdgpu as well.
->
+$ grep hweight lib/Makefile
+obj-$(CONFIG_GENERIC_HWEIGHT) += hweight.o
+$ grep -r GENERIC_HWEIGHT arch/x86
+arch/x86/um/Kconfig:config GENERIC_HWEIGHT
 
-I think we can still do that just either have an option to disable
-using the list internally in the gpuva or have the driver keep it's
-own tracking alongside, there may still be use cases where it can use
-the gpuva tracking instead of it's own.
+I'm not even sure that UML needs GENERIC_HWEIGHT.  From a quick glance,
+it looks like x86 used to use GENERIC_HWEIGHT, but got arch-specific
+versions later.  UML just never moved over to the arch-specific versions.
 
-I don't think we should forklift what is pretty likely to be common
-code across every driver that uses this going forward just to benefit
-an amdgpu design decision for older stacks.
+I _think_ the attached patch might just fix the problems with the C
+version and bring the x86/UML implementation back in line with the rest
+of x86.
 
-Dave.
+Thoughts?
+--------------zZi90UpyOni7zEgX10gMwGUA
+Content-Type: text/x-patch; charset=UTF-8; name="um-hweight.patch"
+Content-Disposition: attachment; filename="um-hweight.patch"
+Content-Transfer-Encoding: base64
+
+ZGlmZiAtLWdpdCBhL2FyY2gveDg2L3VtL0tjb25maWcgYi9hcmNoL3g4Ni91bS9LY29uZmln
+CmluZGV4IDE4NmYxMzI2ODQwMS4uNzZkNTA3ODYwYmU0IDEwMDY0NAotLS0gYS9hcmNoL3g4
+Ni91bS9LY29uZmlnCisrKyBiL2FyY2gveDg2L3VtL0tjb25maWcKQEAgLTQ0LDYgKzQ0LDMg
+QEAgY29uZmlnIEFSQ0hfSEFTX1NDX1NJR05BTFMKIAogY29uZmlnIEFSQ0hfUkVVU0VfSE9T
+VF9WU1lTQ0FMTF9BUkVBCiAJZGVmX2Jvb2wgITY0QklUCi0KLWNvbmZpZyBHRU5FUklDX0hX
+RUlHSFQKLQlkZWZfYm9vbCB5Cg==
+
+--------------zZi90UpyOni7zEgX10gMwGUA--
