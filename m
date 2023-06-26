@@ -2,300 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 219D873ECB7
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 23:15:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B21B273ECC0
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 23:17:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229964AbjFZVPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 17:15:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56066 "EHLO
+        id S230087AbjFZVRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 17:17:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjFZVPS (ORCPT
+        with ESMTP id S229808AbjFZVRe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 17:15:18 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43646E75
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 14:15:17 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5766e49b802so53359667b3.1
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 14:15:17 -0700 (PDT)
+        Mon, 26 Jun 2023 17:17:34 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF7CA0;
+        Mon, 26 Jun 2023 14:17:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eWCmEqkLySVp6OgYEQwpepbd1ah/jQZttrTDoCMlDEW+KBPmXYQ4n1K/HH4yWfHistup1yivGUOGMHQbJDFI30rYaQs6PurBY9wUZwNKA0/AbGKRWAEDuBuUrC1PHriwe73PixYcrUCjLG4jopFVfFVMrcLCslx5DfsSFMP3N31aUQZsJZqFPjgGXOQqrhyCOlduU32w9QNiRiGAfEdkL97Z7OnnTrU5bDnYASfkuuXRidqp9r5f389PopqOUB36y1pWnuEU1F0m7oNcgTJjJEZH1D3B2kuXIhgxI7kt4CfPh8obBsob9Ic8Jzz9QF84wWOwMv4iROQ/tPwNJVOlqg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=R0JZCt41Q31bNOEwMoxjG3zo6wpEHess263s+hM3YAE=;
+ b=YQMtTaM++n7nfu4EtHy4LS0Bvn0MOpSvCMQ3pZicmfRe5d1P+3EoADRLNVGNuPCbLAwepbkzjB4ugg0bW3IxnnP0rkPp760a6MP3Cp3//fiZEZhNXLVOeO4CjxR5Tp0vGlavVBf0mwSnw2aRUgqKxHNjpOeecCjIg7j3IATJSgXtlYodHyoSmXC8Me4Rd9k2CCEHfIgyo/g3fsU5nmRN+bFTVPaEjNn4uceIVpJvzJXBE14GSJ2qAijo40C/hE+zok+OB2YkYlL//Mc5ReSl7CKqJ5myvur8bMnXue7lQJUy6kpIcCJcF7tlMg0TrZeYkOulv9D39pFcTf/YTmXM9Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=labundy.com; dmarc=pass action=none header.from=labundy.com;
+ dkim=pass header.d=labundy.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687814116; x=1690406116;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4cwqySIl0zrvyJR1a97p66vr+UthjL+qON8WoF64SHI=;
-        b=4+4Iq23bk63JNu2KypmpQAiE0iUGVrJf3DB5XcBnilF67WEwId76dGVTpo5K+1wQBT
-         G6czgGE7OEy9bjKJLE1UaIIcaFH+3RWdmP/nPYszA3dfjUK/zePRfQvdfSBY0ERbpq44
-         cmpVMUBKiEeqER1B3XYKfRXUk4yFFcUg/mKUUl0aPZPUvzx0wTc3tWShFwf97mp1xc33
-         c7UetKUnfQ3gV3WvKHdFxQf9wkKtGPlcZgOsF74STGxkle8Jtsoh1/40ZmKW7rMCVukl
-         JwRfn/U4/mFYfdXLNz7rBq2/BewMAn56Go5PiFgOkVpkMGNQGc2xYHj8JhFaUtPqipoz
-         h+Gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687814116; x=1690406116;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=4cwqySIl0zrvyJR1a97p66vr+UthjL+qON8WoF64SHI=;
-        b=T+oaI88wfRJR9lfdm8uBFeU2VuC1uppDwAVabehqJkqgXg0d7V3uiPDbR6yMdEOZUq
-         VPm1RPBybzKpGhuH67/9vq+9gf4XgPmOqE6ue1hdl7xG8UnyjsxvqDggz7aitpeOsfkv
-         osBd076k9e6K1jkaOR79nfJIs3fJ7mtCvJgmAJaSQKqHkr9fIvndikpA5lCtri1Z27YS
-         zvD9PnJEvKXQD93HxiUGcPjmRLee99aVu/yvQ1fr92HJfyo8VmcPo2FRHrLXmZSY80N8
-         59vTmEw/0VYkBvOm0y4v9t0yeRYuWLSVFKOjueN9wkiRdKK5hjzYTgpRiZ/GRwZZZWn3
-         90wQ==
-X-Gm-Message-State: AC+VfDwwfqzP/vBq1C5jABiSlm+Ha2Tbra9Z6r/KxO2hET7/NFIORaTR
-        GcQgOQQT/Z0LOu59q/tTV3roIF8AIHw=
-X-Google-Smtp-Source: ACHHUZ7XOB1SIhYjOA6x33Zqyshy1ZiI4i5aWBJI1tfr58tOURcNdt8TR+SgEfwBNxaUPAHwVC7yJviIaNA=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:6906:0:b0:bc3:abea:b3f1 with SMTP id
- e6-20020a256906000000b00bc3abeab3f1mr12552921ybc.8.1687814116482; Mon, 26 Jun
- 2023 14:15:16 -0700 (PDT)
-Date:   Mon, 26 Jun 2023 14:15:14 -0700
-In-Reply-To: <9b12207f-7aec-7d46-9b7a-99355bc9d38d@intel.com>
-Mime-Version: 1.0
-References: <20230511040857.6094-1-weijiang.yang@intel.com>
- <20230511040857.6094-14-weijiang.yang@intel.com> <ZJYwg3Lnq3nJZgQf@google.com>
- <9b12207f-7aec-7d46-9b7a-99355bc9d38d@intel.com>
-Message-ID: <ZJn/4qC35eFjfqJv@google.com>
-Subject: Re: [PATCH v3 13/21] KVM:VMX: Emulate reads and writes to CET MSRs
-From:   Sean Christopherson <seanjc@google.com>
-To:     Weijiang Yang <weijiang.yang@intel.com>
-Cc:     pbonzini@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, peterz@infradead.org,
-        rppt@kernel.org, binbin.wu@linux.intel.com,
-        rick.p.edgecombe@intel.com, john.allen@amd.com,
-        Sean Christopherson <sean.j.christopherson@intel.com>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+ d=NETORG5796793.onmicrosoft.com; s=selector1-NETORG5796793-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=R0JZCt41Q31bNOEwMoxjG3zo6wpEHess263s+hM3YAE=;
+ b=bL1hX7Jzr0Kj4saP+bHTipIcG75N+BekzDgS6JmXwoPORPKsXfRTq56m82iCXLU9h7d4tzx8bYpB2I1HvCvYD6PVqHYQaHATUR8jL7SWpRqMs7E8VpNw8IKcExnKLsDZ22SYHZdu5u/950j9S7ScHRNJJBod0MRNJyKlmpaM16g=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=labundy.com;
+Received: from SN4PR0801MB3774.namprd08.prod.outlook.com
+ (2603:10b6:803:43::21) by CO1PR08MB6546.namprd08.prod.outlook.com
+ (2603:10b6:303:9f::6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.26; Mon, 26 Jun
+ 2023 21:17:30 +0000
+Received: from SN4PR0801MB3774.namprd08.prod.outlook.com
+ ([fe80::b94e:6032:56d4:35b2]) by SN4PR0801MB3774.namprd08.prod.outlook.com
+ ([fe80::b94e:6032:56d4:35b2%6]) with mapi id 15.20.6521.024; Mon, 26 Jun 2023
+ 21:17:30 +0000
+Date:   Mon, 26 Jun 2023 16:17:26 -0500
+From:   Jeff LaBundy <jeff@labundy.com>
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bastien Nocera <hadess@hadess.net>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Henrik Rydberg <rydberg@bitmath.org>,
+        linux-input@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 4/4] input: touchscreen: add SPI support for Goodix
+ Berlin Touchscreen IC
+Message-ID: <ZJoAZgn2b7RcofzY@nixie71>
+References: <20230606-topic-goodix-berlin-upstream-initial-v3-0-f0577cead709@linaro.org>
+ <20230606-topic-goodix-berlin-upstream-initial-v3-4-f0577cead709@linaro.org>
+ <ZJiXopmFr4dPbqll@nixie71>
+ <e36a697f-a54d-7bdf-1e18-38f72ec2966c@linaro.org>
+ <ZJmMJxXxLrC9Xevi@nixie71>
+ <94e80a49-11ae-e5b0-7eea-6ed4ec6d2ac8@linaro.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <94e80a49-11ae-e5b0-7eea-6ed4ec6d2ac8@linaro.org>
+X-ClientProxiedBy: DM6PR13CA0003.namprd13.prod.outlook.com
+ (2603:10b6:5:bc::16) To SN4PR0801MB3774.namprd08.prod.outlook.com
+ (2603:10b6:803:43::21)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN4PR0801MB3774:EE_|CO1PR08MB6546:EE_
+X-MS-Office365-Filtering-Correlation-Id: 41f6b462-3ca6-4342-0722-08db768abfc5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: FZTcPmGdx8uZib4aZ1Y6uHjDM/tY5Qnqn262KaBqh3p2jkVRYU34DJcUj1B0NtzSkKx78L8ymvoZGIsr6dG+g82aAoXFoyjqAt5o4GOCbi2HT8B6eEDnZZ0UyjKmmdQOK6PjfxRDOyff1ibGdiMitH0BM59WbrhPR27v8gV9dEIiggJDzzQO+C04AuD9qseTRsJzwGsUvwAClkh4D5++seEl2dpG718PFyOu3MmQDUqtzIVaoRoT6jG0aiemKPykRuW0EDFwZkiEXqn2xjRcaXegTLHP0a8Nmfby6azdpJL1ypzHmDUZsEoA92sxXSR9ktvORf+ty8CsYhRehYKLQODFCtjDmVWKVmR+GAY3iOsh1mi6o7y/aedr4kz8471d2OKfzKWa0tlKZ52Swe2pcwERbFT2alrfqu/UTlWG+AUCP2aZkSTWL0EEKik7fZJ63++/aUGaoDj9OpMDmpnUcg/dHjQ5++LuBFBC11jw2uXn+Y+ef78eIgUyyXzgNKnyc4SqJgcNOtQSy0DJ/Tkxon4nESr+5NkrJJYkH/77b1fq/DhISXM7yHgRgVVxHYUl
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN4PR0801MB3774.namprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(39830400003)(396003)(346002)(136003)(366004)(376002)(451199021)(53546011)(6486002)(6666004)(54906003)(26005)(9686003)(6506007)(6512007)(478600001)(2906002)(186003)(5660300002)(33716001)(7416002)(6916009)(4326008)(316002)(38100700002)(66946007)(8676002)(41300700001)(66556008)(86362001)(8936002)(66476007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?gMKPqyr5t4JRuCfJctqsrwELDJ5TO5yd7j/UtSZ6APfdkGJctTHjhzFECPgC?=
+ =?us-ascii?Q?5GKykYHy0T5aQzYgQsCpSo7iECGj5C5YrWQG4zNcWwtyJW7PyuzJrugBTspv?=
+ =?us-ascii?Q?100PI5XQWl8rK0SurPQtvyRp1CQP+AciX8vigXmvwqga927ILk25rv49N+hj?=
+ =?us-ascii?Q?/eOZuRHGorVt0X4MD6FTPtyuimxICuwsSHZDSMhOhMCamSxZ9RbHChCR81Lh?=
+ =?us-ascii?Q?+8Epjf++Pz0QM4b3VJYfd2+qjilD/Ne4JUdagrJokoCHflSThjpoKsNNueto?=
+ =?us-ascii?Q?u96mPkKmidnnBIexAYXFVjkAWL7f4AqOu7u4YgDXRiz9f2uGM7doW6cHO1kS?=
+ =?us-ascii?Q?3ikDeLt0Te8DfFyxLXrdqovsLNpyn6vjXwUwkvyiUOa+L2+cw0YGIpkomlrP?=
+ =?us-ascii?Q?oYUz379SVKFUtzJ6SKOaaDQrnLy/evoelGbgZCTdgyLhJea4hkt92SuRG/QX?=
+ =?us-ascii?Q?m/ab+rNWwxj6EAihmw6lzdtAgSflWkuykPvTl2j+QnLSSCV54Vl7L86q6kGu?=
+ =?us-ascii?Q?QcVEqsQkkdltvp7mzwCPBiKWJuLP59PT2fT7x37OxY16AqprAwaR9FgHkACU?=
+ =?us-ascii?Q?KrJxyhKOssxiTFwI33QLFnzQbAD2YrG0qS5dSch/oWgETufUBfB2AMLfkdc0?=
+ =?us-ascii?Q?I5SBneRHAkKz88I9kqgXDsoAkDgHQEZZfKs2ftEgdBDLuit8FYPmL6BvFvtR?=
+ =?us-ascii?Q?O5JoWxCkLnsV677iBkVdvNpzI9XbOnnTW/TJowy3qb1nDrMXPEIjPKYsPeWV?=
+ =?us-ascii?Q?m10b0A2gsG3tCnGjvHxkTCqRzu7ZgaA7xZCqveI/SW/UPugNd9bjfTLZnmF6?=
+ =?us-ascii?Q?/t3QccZXNzazOJ3YZur0WKMXa0YXo+5yy1P24CnMkpUonF4CIn/HuTE+K9Ce?=
+ =?us-ascii?Q?ZZA4BOXJY9oyR98/WSyq2mPoVId57OP7MNvIvYLjo+ND6Xib+KWcHekSMYCA?=
+ =?us-ascii?Q?6EipH+UEKzKzDruDT+f/gXvN6n0GfuW6TSwcEIuUl3W5w9iqXqZccwq2D9c8?=
+ =?us-ascii?Q?oJhaJ0/b6fmjlJocbIddEGksyeFzRspbkssIaD8hOoWyXeNaAyANxd57RPXM?=
+ =?us-ascii?Q?Qhs0OvMlvHiE+9JXWX94mqh9tD9r1GPsFcOkYjNiCvVJshT2ERlcl4TMAt1E?=
+ =?us-ascii?Q?Wx4efZav0atz7y3JZtMGAtRQMdrafvTgb5rz1cR0Axfy5gK8ZJk+NXxlbint?=
+ =?us-ascii?Q?bIPZBkzV2+M2i/dMNtc6mZP1l4/Vyy68QMV9qmAoDvuAGvpAmCNJqgM0f5MP?=
+ =?us-ascii?Q?63YxQ7TuShsulK9izdIPT9tz4rkjJXVHz832mieKPr7zf9INk6+x91ziGqxk?=
+ =?us-ascii?Q?ti81YesfJmYOkxINvUhSoVMrT6gwzgfaYeAqRes4+zwHNuNnKShWDOPRvk9Q?=
+ =?us-ascii?Q?EnRPCUraTAP8hhOcd6mf3g6HmI4cuekdiYje2NVCEBmCuno0Hp2Jacx6Te/I?=
+ =?us-ascii?Q?XQr13u5asZA84V8hkpEf/LaODv/AX2C+KpYt8fmwzoH9+hXoneYpH9dMFNaQ?=
+ =?us-ascii?Q?ttPhzHjrFdvqdk769EHF+Z0YTX+9iHX88tcgRJYQhOW+FZvJLEgsaQqDWktt?=
+ =?us-ascii?Q?VCeY5sGgl179yfy1h7acUtgmJmJ9AiJFoShfvMOi?=
+X-OriginatorOrg: labundy.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 41f6b462-3ca6-4342-0722-08db768abfc5
+X-MS-Exchange-CrossTenant-AuthSource: SN4PR0801MB3774.namprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jun 2023 21:17:30.0424
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 00b69d09-acab-4585-aca7-8fb7c6323e6f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Nq6NLQJViiPL4Mo6y/qaEVjCRHLzJnnnCHHCXdueIlUAX3Y9urwlUDXlfBalScSsX6h9aGdocCZB98/Ko1XXgg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR08MB6546
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 26, 2023, Weijiang Yang wrote:
->=20
-> On 6/24/2023 7:53 AM, Sean Christopherson wrote:
-> > On Thu, May 11, 2023, Yang Weijiang wrote:
-> > Side topic, what on earth does the SDM mean by this?!?
-> >=20
-> >    The linear address written must be aligned to 8 bytes and bits 2:0 m=
-ust be 0
-> >    (hardware requires bits 1:0 to be 0).
-> >=20
-> > I know Intel retroactively changed the alignment requirements, but the =
-above
-> > is nonsensical.  If ucode prevents writing bits 2:0, who cares what har=
-dware
-> > requires?
->=20
-> So do I ;-/
+Hi Neil,
 
-Can you follow-up with someone to get clarification?  If writing bit 2 with=
- '1'
-does not #GP despite the statement that it "must be aligned", then KVM shou=
-ldn't
-injected a #GP on that case.
+On Mon, Jun 26, 2023 at 03:20:35PM +0200, Neil Armstrong wrote:
+> Hi,
+> 
+> On 26/06/2023 15:01, Jeff LaBundy wrote:
+> > Hi Neil,
+> > 
+> > On Mon, Jun 26, 2023 at 09:02:16AM +0200, Neil Armstrong wrote:
+> > 
+> > [...]
+> > 
+> > > > > +static int goodix_berlin_spi_probe(struct spi_device *spi)
+> > > > > +{
+> > > > > +	struct regmap_config *regmap_config;
+> > > > > +	struct regmap *regmap;
+> > > > > +	size_t max_size;
+> > > > > +	int error = 0;
+> > > > > +
+> > > > > +	regmap_config = devm_kmemdup(&spi->dev, &goodix_berlin_spi_regmap_conf,
+> > > > > +				     sizeof(*regmap_config), GFP_KERNEL);
+> > > > > +	if (!regmap_config)
+> > > > > +		return -ENOMEM;
+> > > > 
+> > > > Is there any reason we cannot simply pass goodix_berlin_spi_regmap_conf to
+> > > > devm_regmap_init() below? Why to duplicate and pass the copy?
+> > > > 
+> > > > For reference, BMP280 in IIO is a similar example of a device with regmap
+> > > > sitting atop a bespoke SPI protocol; it does not seem to take this extra
+> > > > step.
+> > > 
+> > > The goodix_berlin_spi_regmap_conf copy is modified after with the correct
+> > > max raw read/write size, and I'm not a fan of modifying a global structure
+> > > that could be use for multiple probes, I can make a copy in a stack variable
+> > > if it feels simpler.
+> > 
+> > Ah, that makes sense; in that case, the existing implementation seems fine
+> > to me. No changes necessary.
+> > 
+> > Correct me if I'm wrong, but the stack variable method wouldn't work since
+> > that memory is gone after goodix_berlin_spi_probe() returns.
+> 
+> The config is only needed for the devm_regmap_init() duration, so keeping
+> the memory allocated for the whole lifetime of the device seems useless.
 
-> > > +			return 1;
-> > > +		kvm_set_xsave_msr(msr_info);
-> > > +		break;
-> > >   	case MSR_IA32_PERF_CAPABILITIES:
-> > >   		if (data && !vcpu_to_pmu(vcpu)->version)
-> > >   			return 1;
-> > > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> > > index b6eec9143129..2e3a39c9297c 100644
-> > > --- a/arch/x86/kvm/x86.c
-> > > +++ b/arch/x86/kvm/x86.c
-> > > @@ -13630,6 +13630,26 @@ int kvm_sev_es_string_io(struct kvm_vcpu *vc=
-pu, unsigned int size,
-> > >   }
-> > >   EXPORT_SYMBOL_GPL(kvm_sev_es_string_io);
-> > > +bool kvm_cet_is_msr_accessible(struct kvm_vcpu *vcpu, struct msr_dat=
-a *msr)
-> > > +{
-> > > +	if (!kvm_cet_user_supported())
-> > This feels wrong.  KVM should differentiate between SHSTK and IBT in th=
-e host.
-> > E.g. if running in a VM with SHSTK but not IBT, or vice versa, KVM shou=
-ld allow
-> > writes to non-existent MSRs.
->=20
-> I don't follow you, in this case, which part KVM is on behalf of? guest o=
-r
-> user space?
+I revisted the regmap code, and you are indeed correct. I agree with your
+suggestion.
 
-Sorry, typo.  KVM *shouldn't* allow writes to non-existent MSRs. =20
+> 
+> Neil
+> 
+> > 
+> > Kind regards,
+> > Jeff LaBundy
+> 
 
-> > I.e. this looks wrong:
-> >=20
-> > 	/*
-> > 	 * If SHSTK and IBT are available in KVM, clear CET user bit in
-> > 	 * kvm_caps.supported_xss so that kvm_cet_user_supported() returns
-> > 	 * false when called.
-> > 	 */
-> > 	if (!kvm_cpu_cap_has(X86_FEATURE_SHSTK) &&
-> > 	    !kvm_cpu_cap_has(X86_FEATURE_IBT))
-> > 		kvm_caps.supported_xss &=3D ~XFEATURE_MASK_CET_USER;
->=20
-> The comment is wrong, it should be "are not available in KVM". My intent =
-is,=EF=BF=BD
-> if both features are not available in KVM, then clear the precondition bi=
-t so
-> that all dependent checks will fail quickly.
-
-Checking kvm_caps.supported_xss.CET_USER is worthless in 99% of the cases t=
-hough.
-Unless I'm missing something, the only time it's useful is for CR4.CET, whi=
-ch
-doesn't differentiate between SHSTK and IBT.  For everything else that KVM =
-cares
-about, at some point KVM needs to precisely check for SHSTK and IBT support
-anyways
-
-> > and by extension, all dependent code is also wrong.  IIRC, there's a vi=
-rtualization
-> > hole, but I don't see any reason why KVM has to make the hole even bigg=
-er.
->=20
-> Do you mean the issue that both SHSTK and IBT share one control MSR? i.e.=
-,
-> U_CET/S_CET?
-
-I mean that passing through PLx_SSP if the host has IBT but *not* SHSTK is =
-wrong.
-
-> > > +		return false;
-> > > +
-> > > +	if (msr->host_initiated)
-> > > +		return true;
-> > > +
-> > > +	if (!guest_cpuid_has(vcpu, X86_FEATURE_SHSTK) &&
-> > > +	    !guest_cpuid_has(vcpu, X86_FEATURE_IBT))
-> > > +		return false;
-> > > +
-> > > +	if (msr->index =3D=3D MSR_IA32_PL3_SSP &&
-> > > +	    !guest_cpuid_has(vcpu, X86_FEATURE_SHSTK))
-> > I probably asked this long ago, but if I did I since forgot.  Is it rea=
-lly just
-> > PL3_SSP that depends on SHSTK?  I would expect all shadow stack MSRs to=
- depend
-> > on SHSTK.
->=20
-> All PL{0,1,2,3}_SSP plus INT_SSP_TAB msr depend on SHSTK. In patch 21, I
-> added more MSRs in this helper.
-
-Sure, except that patch 21 never adds handling for PL{0,1,2}_SSP.  I see:
-
-	if (!kvm_cet_user_supported() &&
-	    !(kvm_cpu_cap_has(X86_FEATURE_IBT) ||
-	      kvm_cpu_cap_has(X86_FEATURE_SHSTK)))
-		return false;
-
-	if (msr->host_initiated)
-		return true;
-
-	if (!guest_cpuid_has(vcpu, X86_FEATURE_SHSTK) &&
-	    !guest_cpuid_has(vcpu, X86_FEATURE_IBT))
-		return false;
-
-	/* The synthetic MSR is for userspace access only. */
-	if (msr->index =3D=3D MSR_KVM_GUEST_SSP)
-		return false;
-
-	if (msr->index =3D=3D MSR_IA32_U_CET)
-		return true;
-
-	if (msr->index =3D=3D MSR_IA32_S_CET)
-		return guest_cpuid_has(vcpu, X86_FEATURE_IBT) ||
-		       kvm_cet_kernel_shstk_supported();
-
-	if (msr->index =3D=3D MSR_IA32_INT_SSP_TAB)
-		return guest_cpuid_has(vcpu, X86_FEATURE_SHSTK) &&
-		       kvm_cet_kernel_shstk_supported();
-
-	if (msr->index =3D=3D MSR_IA32_PL3_SSP &&
-	    !guest_cpuid_has(vcpu, X86_FEATURE_SHSTK))
-		return false;
-
-	mask =3D (msr->index =3D=3D MSR_IA32_PL3_SSP) ? XFEATURE_MASK_CET_USER :
-						  XFEATURE_MASK_CET_KERNEL;
-	return !!(kvm_caps.supported_xss & mask);
-
-Which means that KVM will allow guest accesses to PL{0,1,2}_SSP regardless =
-of
-whether or not X86_FEATURE_SHSTK is enumerated to the guest.
-
-And the above is also wrong for host_initiated writes to SHSTK MSRs.  E.g. =
-if KVM
-is running on a CPU that has IBT but not SHSTK, then userspace can write to=
- MSRs
-that do not exist.
-
-Maybe this confusion is just a symptom of the series not providing proper
-Supervisor Shadow Stack support, but that's still a poor excuse for posting
-broken code.
-
-I suspect you tried to get too fancy.  I don't see any reason to ever care =
-about
-kvm_caps.supported_xss beyond emulating writes to XSS itself.  Just require=
- that
-both CET_USER and CET_KERNEL are supported in XSS to allow IBT or SHSTK, i.=
-e. let
-X86_FEATURE_IBT and X86_FEATURE_SHSTK speak for themselves.  That way, this=
- can
-simply be:
-
-bool kvm_cet_is_msr_accessible(struct kvm_vcpu *vcpu, struct msr_data *msr)
-{
-	if (is_shadow_stack_msr(...))
-		if (!kvm_cpu_cap_has(X86_FEATURE_SHSTK))
-			return false;
-
-		return msr->host_initiated ||
-		       guest_cpuid_has(vcpu, X86_FEATURE_SHSTK);
-	}
-
-	if (!kvm_cpu_cap_has(X86_FEATURE_IBT) &&
-	    !kvm_cpu_cap_has(X86_FEATURE_SHSTK))
-		return false;
-
-	return msr->host_initiated ||
-	       guest_cpuid_has(vcpu, X86_FEATURE_IBT) ||
-	       guest_cpuid_has(vcpu, X86_FEATURE_SHSTK);
-}
-
-> > > + * and reload the guest fpu states before read/write xsaves-managed =
-MSRs.
-> > > + */
-> > > +static inline void kvm_get_xsave_msr(struct msr_data *msr_info)
-> > > +{
-> > > +	fpregs_lock_and_load();
-> > KVM already has helpers that do exactly this, and they have far better =
-names for
-> > KVM: kvm_fpu_get() and kvm_fpu_put().  Can you convert kvm_fpu_get() to
-> > fpregs_lock_and_load() and use those isntead? And if the extra consiste=
-ncy checks
-> > in fpregs_lock_and_load() fire, we definitely want to know, as it means=
- we probably
-> > have bugs in KVM.
->=20
-> Do you want me to do some experiments to make sure the WARN()=EF=BF=BD in
-> fpregs_lock_and load() would be triggered or not?
-
-Yes, though I shouldn't have to clarify that.  The well-documented (as of n=
-ow)
-expectation is that any code that someone posts is tested, unless explicitl=
-y
-stated otherwise.  I.e. you should not have to ask if you should verify the=
- WARN
-doesn't trigger, because you should be doing that for all code you post.
-
-> If no WARN() trigger, then replace fpregs_lock_and_load()/fpregs_unlock()
-> with kvm_fpu_get()/
->=20
-> kvm_fpu_put()?
-
-Yes.
+Kind regards,
+Jeff LaBundy
