@@ -2,369 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A74F373E1E3
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 16:17:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B29C673E1AB
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 16:13:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231144AbjFZORs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 10:17:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35890 "EHLO
+        id S230382AbjFZONn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 10:13:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231174AbjFZORZ (ORCPT
+        with ESMTP id S231164AbjFZONj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 10:17:25 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F25D2728;
-        Mon, 26 Jun 2023 07:16:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687789001; x=1719325001;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=kQktyAbtdZBS432xYsZBwAB18tndlfwU9Pgj+CVTLyg=;
-  b=oIczBCxnT6/2YBLznOQ4m4f4jrC0VhoaDTSNcyVSgagHYuzABx2URTaD
-   h9kNPl7NpZwnkkvcjV7hNNwSmixlYgY02Gj8f9fxkPzO2r7dWB4ly5w0+
-   bnPFg29WFN/z5meaPyApybsPZbFOTW0FxuDapkkwolVcV0okFDpOySzQJ
-   1UrJ6wV3FuuSB6FQV/dVq/8qN64/jDfu0p5DwGCyUrafqPyNGPsc0sHCw
-   N3avSUFY2OQ1bYyDFGVLR3J1EK9et33MPafbERkd9UZ3ajLqzyuyIDu47
-   oIcx37klrwTTKt8vQFvS7m6mQALUGHtgKsSOD6KRDPZRW3QZn4oMDrBKL
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="346034310"
-X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
-   d="scan'208";a="346034310"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 07:16:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="890292512"
-X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
-   d="scan'208";a="890292512"
-Received: from smithau-mobl1.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.213.179.223])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 07:15:57 -0700
-From:   Kai Huang <kai.huang@intel.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     linux-mm@kvack.org, x86@kernel.org, dave.hansen@intel.com,
-        kirill.shutemov@linux.intel.com, tony.luck@intel.com,
-        peterz@infradead.org, tglx@linutronix.de, bp@alien8.de,
-        mingo@redhat.com, hpa@zytor.com, seanjc@google.com,
-        pbonzini@redhat.com, david@redhat.com, dan.j.williams@intel.com,
-        rafael.j.wysocki@intel.com, ashok.raj@intel.com,
-        reinette.chatre@intel.com, len.brown@intel.com, ak@linux.intel.com,
-        isaku.yamahata@intel.com, ying.huang@intel.com, chao.gao@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, nik.borisov@suse.com,
-        bagasdotme@gmail.com, sagis@google.com, imammedo@redhat.com,
-        kai.huang@intel.com
-Subject: [PATCH v12 22/22] Documentation/x86: Add documentation for TDX host support
-Date:   Tue, 27 Jun 2023 02:12:52 +1200
-Message-Id: <180efee808936fcf017af4e79caec2b7111028a4.1687784645.git.kai.huang@intel.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <cover.1687784645.git.kai.huang@intel.com>
-References: <cover.1687784645.git.kai.huang@intel.com>
+        Mon, 26 Jun 2023 10:13:39 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0E95810CB;
+        Mon, 26 Jun 2023 07:13:19 -0700 (PDT)
+Received: from [10.171.21.113] (unknown [167.220.238.145])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 3085221C3F3B;
+        Mon, 26 Jun 2023 07:13:09 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 3085221C3F3B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1687788798;
+        bh=arhrccEDU/8IYlgG/8DTb4iy24jRvQPaA2ChU1M97HI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=KwSocRBsFmMC8Ej4aJUFk89Emg2JoHBvQtFNCvnasRIMMlW0DEgMKO/zhjrINro1M
+         yPNjhjJPL8l6Z0U0AXgY2lVDfHd9qzGzjZqb/grjA883NsAu+1CNbgXcS3ow3124GZ
+         WMCgQj4IuvJ0F10Ezsu+6GPO0FBuISJTQ19xsSvI=
+Message-ID: <578faf91-35e6-d946-d9ec-c949e57eadef@linux.microsoft.com>
+Date:   Mon, 26 Jun 2023 19:43:07 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 2/2 V3 net] net: mana: Fix MANA VF unload when host is
+ unresponsive
+To:     souradeep chakrabarti <schakrabarti@linux.microsoft.com>,
+        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, longli@microsoft.com,
+        sharmaajay@microsoft.com, leon@kernel.org, cai.huoqing@linux.dev,
+        ssengar@linux.microsoft.com, vkuznets@redhat.com,
+        tglx@linutronix.de, linux-hyperv@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org
+Cc:     stable@vger.kernel.org, schakrabarti@microsoft.com
+References: <1687771098-26775-1-git-send-email-schakrabarti@linux.microsoft.com>
+ <1687771224-27162-1-git-send-email-schakrabarti@linux.microsoft.com>
+Content-Language: en-US
+From:   Praveen Kumar <kumarpraveen@linux.microsoft.com>
+In-Reply-To: <1687771224-27162-1-git-send-email-schakrabarti@linux.microsoft.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-19.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add documentation for TDX host kernel support.  There is already one
-file Documentation/x86/tdx.rst containing documentation for TDX guest
-internals.  Also reuse it for TDX host kernel support.
+On 6/26/2023 2:50 PM, souradeep chakrabarti wrote:
+> From: Souradeep Chakrabarti <schakrabarti@linux.microsoft.com>
+> 
+> This is the second part of the fix.
+> 
+> Also this patch adds a new attribute in mana_context, which gets set when
+> mana_hwc_send_request() hits a timeout because of host unresponsiveness.
+> This flag then helps to avoid the timeouts in successive calls.
+> 
+> Fixes: ca9c54d2d6a5ab2430c4eda364c77125d62e5e0f (net: mana: Add a driver for
+> Microsoft Azure Network Adapter)
+> Signed-off-by: Souradeep Chakrabarti <schakrabarti@linux.microsoft.com>
+> ---
+> V2 -> V3:
+> * Removed the initialization of vf_unload_timeout
+> * Splitted the patch in two.
+> * Fixed extra space from the commit message.
+> ---
+>  drivers/net/ethernet/microsoft/mana/gdma_main.c  |  4 +++-
+>  drivers/net/ethernet/microsoft/mana/hw_channel.c | 12 +++++++++++-
+>  include/net/mana/mana.h                          |  2 ++
+>  3 files changed, 16 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/microsoft/mana/gdma_main.c b/drivers/net/ethernet/microsoft/mana/gdma_main.c
+> index 8f3f78b68592..6411f01be0d9 100644
+> --- a/drivers/net/ethernet/microsoft/mana/gdma_main.c
+> +++ b/drivers/net/ethernet/microsoft/mana/gdma_main.c
+> @@ -946,10 +946,12 @@ int mana_gd_deregister_device(struct gdma_dev *gd)
+>  	struct gdma_context *gc = gd->gdma_context;
+>  	struct gdma_general_resp resp = {};
+>  	struct gdma_general_req req = {};
+> +	struct mana_context *ac;
+>  	int err;
+>  
+>  	if (gd->pdid == INVALID_PDID)
+>  		return -EINVAL;
+> +	ac = gd->driver_data;
+>  
+>  	mana_gd_init_req_hdr(&req.hdr, GDMA_DEREGISTER_DEVICE, sizeof(req),
+>  			     sizeof(resp));
+> @@ -957,7 +959,7 @@ int mana_gd_deregister_device(struct gdma_dev *gd)
+>  	req.hdr.dev_id = gd->dev_id;
+>  
+>  	err = mana_gd_send_request(gc, sizeof(req), &req, sizeof(resp), &resp);
+> -	if (err || resp.hdr.status) {
+> +	if ((err || resp.hdr.status) && !ac->vf_unload_timeout) {
+>  		dev_err(gc->dev, "Failed to deregister device: %d, 0x%x\n",
+>  			err, resp.hdr.status);
 
-Introduce a new level menu "TDX Guest Support" and move existing
-materials under it, and add a new menu for TDX host kernel support.
+With !ac->vf_unload_timeout option, this message may not be correctly showing err, status. Probably you want to add explicit information during timeouts so that it give right information ? Or have the err, status field properly updated.
 
-Signed-off-by: Kai Huang <kai.huang@intel.com>
----
+>  		if (!err)
+> diff --git a/drivers/net/ethernet/microsoft/mana/hw_channel.c b/drivers/net/ethernet/microsoft/mana/hw_channel.c
+> index 9d1507eba5b9..492cb2c6e2cb 100644
+> --- a/drivers/net/ethernet/microsoft/mana/hw_channel.c
+> +++ b/drivers/net/ethernet/microsoft/mana/hw_channel.c
+> @@ -1,8 +1,10 @@
+>  // SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
+>  /* Copyright (c) 2021, Microsoft Corporation. */
+>  
+> +#include "asm-generic/errno.h"
+>  #include <net/mana/gdma.h>
+>  #include <net/mana/hw_channel.h>
+> +#include <net/mana/mana.h>
+>  
+>  static int mana_hwc_get_msg_index(struct hw_channel_context *hwc, u16 *msg_id)
+>  {
+> @@ -786,12 +788,19 @@ int mana_hwc_send_request(struct hw_channel_context *hwc, u32 req_len,
+>  	struct hwc_wq *txq = hwc->txq;
+>  	struct gdma_req_hdr *req_msg;
+>  	struct hwc_caller_ctx *ctx;
+> +	struct mana_context *ac;
+>  	u32 dest_vrcq = 0;
+>  	u32 dest_vrq = 0;
+>  	u16 msg_id;
+>  	int err;
+>  
+>  	mana_hwc_get_msg_index(hwc, &msg_id);
+> +	ac = hwc->gdma_dev->driver_data;
 
-v11 -> v12:
- - Removed "no CPUID/MSR to detect TDX module" related (Dave).
- - Fixed some spelling errors.
+Is there a case where gdma_dev be invalid here ? If so, lets check the state and then proceed further ?
 
----
- Documentation/arch/x86/tdx.rst | 189 +++++++++++++++++++++++++++++++--
- 1 file changed, 178 insertions(+), 11 deletions(-)
+> +	if (ac->vf_unload_timeout) {
+> +		dev_err(hwc->dev, "HWC: vport is already unloaded.\n");
+> +		err = -ETIMEDOUT;
+> +		goto out;
+> +	}
+>  
+>  	tx_wr = &txq->msg_buf->reqs[msg_id];
+>  
+> @@ -825,9 +834,10 @@ int mana_hwc_send_request(struct hw_channel_context *hwc, u32 req_len,
+>  		goto out;
+>  	}
+>  
+> -	if (!wait_for_completion_timeout(&ctx->comp_event, 30 * HZ)) {
+> +	if (!wait_for_completion_timeout(&ctx->comp_event, 5 * HZ)) {
 
-diff --git a/Documentation/arch/x86/tdx.rst b/Documentation/arch/x86/tdx.rst
-index dc8d9fd2c3f7..f8017a2a663e 100644
---- a/Documentation/arch/x86/tdx.rst
-+++ b/Documentation/arch/x86/tdx.rst
-@@ -10,6 +10,173 @@ encrypting the guest memory. In TDX, a special module running in a special
- mode sits between the host and the guest and manages the guest/host
- separation.
- 
-+TDX Host Kernel Support
-+=======================
-+
-+TDX introduces a new CPU mode called Secure Arbitration Mode (SEAM) and
-+a new isolated range pointed by the SEAM Ranger Register (SEAMRR).  A
-+CPU-attested software module called 'the TDX module' runs inside the new
-+isolated range to provide the functionalities to manage and run protected
-+VMs.
-+
-+TDX also leverages Intel Multi-Key Total Memory Encryption (MKTME) to
-+provide crypto-protection to the VMs.  TDX reserves part of MKTME KeyIDs
-+as TDX private KeyIDs, which are only accessible within the SEAM mode.
-+BIOS is responsible for partitioning legacy MKTME KeyIDs and TDX KeyIDs.
-+
-+Before the TDX module can be used to create and run protected VMs, it
-+must be loaded into the isolated range and properly initialized.  The TDX
-+architecture doesn't require the BIOS to load the TDX module, but the
-+kernel assumes it is loaded by the BIOS.
-+
-+TDX boot-time detection
-+-----------------------
-+
-+The kernel detects TDX by detecting TDX private KeyIDs during kernel
-+boot.  Below dmesg shows when TDX is enabled by BIOS::
-+
-+  [..] tdx: BIOS enabled: private KeyID range: [16, 64).
-+
-+TDX module initialization
-+---------------------------------------
-+
-+The kernel talks to the TDX module via the new SEAMCALL instruction.  The
-+TDX module implements SEAMCALL leaf functions to allow the kernel to
-+initialize it.
-+
-+If the TDX module isn't loaded, the SEAMCALL instruction fails with a
-+special error.  In this case the kernel fails the module initialization
-+and reports the module isn't loaded::
-+
-+  [..] tdx: Module isn't loaded.
-+
-+Initializing the TDX module consumes roughly ~1/256th system RAM size to
-+use it as 'metadata' for the TDX memory.  It also takes additional CPU
-+time to initialize those metadata along with the TDX module itself.  Both
-+are not trivial.  The kernel initializes the TDX module at runtime on
-+demand.
-+
-+Besides initializing the TDX module, a per-cpu initialization SEAMCALL
-+must be done on one cpu before any other SEAMCALLs can be made on that
-+cpu.
-+
-+The kernel provides two functions, tdx_enable() and tdx_cpu_enable() to
-+allow the user of TDX to enable the TDX module and enable TDX on local
-+cpu.
-+
-+Making SEAMCALL requires the CPU already being in VMX operation (VMXON
-+has been done).  For now both tdx_enable() and tdx_cpu_enable() don't
-+handle VMXON internally, but depends on the caller to guarantee that.
-+
-+To enable TDX, the caller of TDX should: 1) hold read lock of CPU hotplug
-+lock; 2) do VMXON and tdx_enable_cpu() on all online cpus successfully;
-+3) call tdx_enable().  For example::
-+
-+        cpus_read_lock();
-+        on_each_cpu(vmxon_and_tdx_cpu_enable());
-+        ret = tdx_enable();
-+        cpus_read_unlock();
-+        if (ret)
-+                goto no_tdx;
-+        // TDX is ready to use
-+
-+And the caller of TDX must guarantee the tdx_cpu_enable() has been
-+successfully done on any cpu before it wants to run any other SEAMCALL.
-+A typical usage is do both VMXON and tdx_cpu_enable() in CPU hotplug
-+online callback, and refuse to online if tdx_cpu_enable() fails.
-+
-+User can consult dmesg to see the presence of the TDX module, and whether
-+it has been initialized.
-+
-+If the TDX module is not loaded, dmesg shows below::
-+
-+  [..] tdx: TDX module is not loaded.
-+
-+If the TDX module is initialized successfully, dmesg shows something
-+like below::
-+
-+  [..] tdx: TDX module: attributes 0x0, vendor_id 0x8086, major_version 1, minor_version 0, build_date 20211209, build_num 160
-+  [..] tdx: 262668 KBs allocated for PAMT.
-+  [..] tdx: TDX module initialized.
-+
-+If the TDX module failed to initialize, dmesg also shows it failed to
-+initialize::
-+
-+  [..] tdx: TDX module initialization failed ...
-+
-+TDX Interaction to Other Kernel Components
-+------------------------------------------
-+
-+TDX Memory Policy
-+~~~~~~~~~~~~~~~~~
-+
-+TDX reports a list of "Convertible Memory Region" (CMR) to tell the
-+kernel which memory is TDX compatible.  The kernel needs to build a list
-+of memory regions (out of CMRs) as "TDX-usable" memory and pass those
-+regions to the TDX module.  Once this is done, those "TDX-usable" memory
-+regions are fixed during module's lifetime.
-+
-+To keep things simple, currently the kernel simply guarantees all pages
-+in the page allocator are TDX memory.  Specifically, the kernel uses all
-+system memory in the core-mm at the time of initializing the TDX module
-+as TDX memory, and in the meantime, refuses to online any non-TDX-memory
-+in the memory hotplug.
-+
-+This can be enhanced in the future, i.e. by allowing adding non-TDX
-+memory to a separate NUMA node.  In this case, the "TDX-capable" nodes
-+and the "non-TDX-capable" nodes can co-exist, but the kernel/userspace
-+needs to guarantee memory pages for TDX guests are always allocated from
-+the "TDX-capable" nodes.
-+
-+Physical Memory Hotplug
-+~~~~~~~~~~~~~~~~~~~~~~~
-+
-+Note TDX assumes convertible memory is always physically present during
-+machine's runtime.  A non-buggy BIOS should never support hot-removal of
-+any convertible memory.  This implementation doesn't handle ACPI memory
-+removal but depends on the BIOS to behave correctly.
-+
-+CPU Hotplug
-+~~~~~~~~~~~
-+
-+TDX module requires the per-cpu initialization SEAMCALL (TDH.SYS.LP.INIT)
-+must be done on one cpu before any other SEAMCALLs can be made on that
-+cpu, including those involved during the module initialization.
-+
-+The kernel provides tdx_cpu_enable() to let the user of TDX to do it when
-+the user wants to use a new cpu for TDX task.
-+
-+TDX doesn't support physical (ACPI) CPU hotplug.  During machine boot,
-+TDX verifies all boot-time present logical CPUs are TDX compatible before
-+enabling TDX.  A non-buggy BIOS should never support hot-add/removal of
-+physical CPU.  Currently the kernel doesn't handle physical CPU hotplug,
-+but depends on the BIOS to behave correctly.
-+
-+Note TDX works with CPU logical online/offline, thus the kernel still
-+allows to offline logical CPU and online it again.
-+
-+Kexec()
-+~~~~~~~
-+
-+There are two problems in terms of using kexec() to boot to a new kernel
-+when the old kernel has enabled TDX: 1) Part of the memory pages are
-+still TDX private pages; 2) There might be dirty cachelines associated
-+with TDX private pages.
-+
-+The first problem doesn't matter.  KeyID 0 doesn't have integrity check.
-+Even the new kernel wants use any non-zero KeyID, it needs to convert
-+the memory to that KeyID and such conversion would work from any KeyID.
-+
-+However the old kernel needs to guarantee there's no dirty cacheline
-+left behind before booting to the new kernel to avoid silent corruption
-+from later cacheline writeback (Intel hardware doesn't guarantee cache
-+coherency across different KeyIDs).
-+
-+Similar to AMD SME, the kernel just uses wbinvd() to flush cache before
-+booting to the new kernel.
-+
-+TDX Guest Support
-+=================
- Since the host cannot directly access guest registers or memory, much
- normal functionality of a hypervisor must be moved into the guest. This is
- implemented using a Virtualization Exception (#VE) that is handled by the
-@@ -20,7 +187,7 @@ TDX includes new hypercall-like mechanisms for communicating from the
- guest to the hypervisor or the TDX module.
- 
- New TDX Exceptions
--==================
-+------------------
- 
- TDX guests behave differently from bare-metal and traditional VMX guests.
- In TDX guests, otherwise normal instructions or memory accesses can cause
-@@ -30,7 +197,7 @@ Instructions marked with an '*' conditionally cause exceptions.  The
- details for these instructions are discussed below.
- 
- Instruction-based #VE
-----------------------
-+~~~~~~~~~~~~~~~~~~~~~
- 
- - Port I/O (INS, OUTS, IN, OUT)
- - HLT
-@@ -41,7 +208,7 @@ Instruction-based #VE
- - CPUID*
- 
- Instruction-based #GP
-----------------------
-+~~~~~~~~~~~~~~~~~~~~~
- 
- - All VMX instructions: INVEPT, INVVPID, VMCLEAR, VMFUNC, VMLAUNCH,
-   VMPTRLD, VMPTRST, VMREAD, VMRESUME, VMWRITE, VMXOFF, VMXON
-@@ -52,7 +219,7 @@ Instruction-based #GP
- - RDMSR*,WRMSR*
- 
- RDMSR/WRMSR Behavior
----------------------
-+~~~~~~~~~~~~~~~~~~~~
- 
- MSR access behavior falls into three categories:
- 
-@@ -73,7 +240,7 @@ trapping and handling in the TDX module.  Other than possibly being slow,
- these MSRs appear to function just as they would on bare metal.
- 
- CPUID Behavior
----------------
-+~~~~~~~~~~~~~~
- 
- For some CPUID leaves and sub-leaves, the virtualized bit fields of CPUID
- return values (in guest EAX/EBX/ECX/EDX) are configurable by the
-@@ -93,7 +260,7 @@ not know how to handle. The guest kernel may ask the hypervisor for the
- value with a hypercall.
- 
- #VE on Memory Accesses
--======================
-+----------------------
- 
- There are essentially two classes of TDX memory: private and shared.
- Private memory receives full TDX protections.  Its content is protected
-@@ -107,7 +274,7 @@ entries.  This helps ensure that a guest does not place sensitive
- information in shared memory, exposing it to the untrusted hypervisor.
- 
- #VE on Shared Memory
----------------------
-+~~~~~~~~~~~~~~~~~~~~
- 
- Access to shared mappings can cause a #VE.  The hypervisor ultimately
- controls whether a shared memory access causes a #VE, so the guest must be
-@@ -127,7 +294,7 @@ be careful not to access device MMIO regions unless it is also prepared to
- handle a #VE.
- 
- #VE on Private Pages
----------------------
-+~~~~~~~~~~~~~~~~~~~~
- 
- An access to private mappings can also cause a #VE.  Since all kernel
- memory is also private memory, the kernel might theoretically need to
-@@ -145,7 +312,7 @@ The hypervisor is permitted to unilaterally move accepted pages to a
- to handle the exception.
- 
- Linux #VE handler
--=================
-+-----------------
- 
- Just like page faults or #GP's, #VE exceptions can be either handled or be
- fatal.  Typically, an unhandled userspace #VE results in a SIGSEGV.
-@@ -167,7 +334,7 @@ While the block is in place, any #VE is elevated to a double fault (#DF)
- which is not recoverable.
- 
- MMIO handling
--=============
-+-------------
- 
- In non-TDX VMs, MMIO is usually implemented by giving a guest access to a
- mapping which will cause a VMEXIT on access, and then the hypervisor
-@@ -189,7 +356,7 @@ MMIO access via other means (like structure overlays) may result in an
- oops.
- 
- Shared Memory Conversions
--=========================
-+-------------------------
- 
- All TDX guest memory starts out as private at boot.  This memory can not
- be accessed by the hypervisor.  However, some kernel users like device
--- 
-2.40.1
+IMHO we should have macros instead of magic numbers (5 , 30 or so). But would like others to comment here.
+
+>  		dev_err(hwc->dev, "HWC: Request timed out!\n");
+>  		err = -ETIMEDOUT;
+> +		ac->vf_unload_timeout = true;
+>  		goto out;
+>  	}
+>  
+> diff --git a/include/net/mana/mana.h b/include/net/mana/mana.h
+> index 9eef19972845..5f5affdca1eb 100644
+> --- a/include/net/mana/mana.h
+> +++ b/include/net/mana/mana.h
+> @@ -358,6 +358,8 @@ struct mana_context {
+>  
+>  	u16 num_ports;
+>  
+> +	bool vf_unload_timeout;
+> +
+>  	struct mana_eq *eqs;
+>  
+>  	struct net_device *ports[MAX_PORTS_IN_MANA_DEV];
 
