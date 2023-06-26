@@ -2,111 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A697E73D90A
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 10:00:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2133B73D90F
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 10:02:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230018AbjFZIAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 04:00:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46086 "EHLO
+        id S230010AbjFZICb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 04:02:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjFZIAp (ORCPT
+        with ESMTP id S229479AbjFZICa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 04:00:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6C7383
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 01:00:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 73E1B60AF3
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 08:00:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5142AC433C0;
-        Mon, 26 Jun 2023 08:00:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1687766441;
-        bh=hKiV/WwYl3DxovukHZrT5iE9tPCMqgKS1pslSEaZlPc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=G/m36xCa94mTESoY+9sDnJQsZnr6LxV+XbpITivos/n0cT4sF7ZFD9cdM9cB/EVdd
-         XnG22WpvkpqZPQkBoU+0bxEZgslNIjgczTZ9jOlQC7irtznCNvkDkJSiAEdqfA8Jxb
-         x28dZrnM295VTOsociQbekQXTdGnKKQf8/Ror33c=
-Date:   Mon, 26 Jun 2023 10:00:38 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Nipun Gupta <nipun.gupta@amd.com>
-Cc:     maz@kernel.org, tglx@linutronix.de, jgg@ziepe.ca,
-        linux-kernel@vger.kernel.org, git@amd.com, harpreet.anand@amd.com,
-        pieter.jansen-van-vuuren@amd.com, nikhil.agarwal@amd.com,
-        michal.simek@amd.com, abhijit.gangurde@amd.com
-Subject: Re: [PATCH v2] cdx: add MSI support for CDX bus
-Message-ID: <2023062612-navigate-hyphen-6fc7@gregkh>
-References: <20230518114418.18025-1-nipun.gupta@amd.com>
- <ffb49486-4e29-a44d-97f6-18fea5386ba1@amd.com>
- <d866dba9-3b0f-3573-9baf-0d02f4049fcb@amd.com>
+        Mon, 26 Jun 2023 04:02:30 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D530B83;
+        Mon, 26 Jun 2023 01:02:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687766549; x=1719302549;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=33R3Tx+sLALtrskmrs2zu7v/fiTCIeLJSoVnhjKIrwU=;
+  b=ZhCbPCt/g1IF00B4Fq+MdF75MwxRtMqiGl/YHRZBmpQPPd0CP0M3V7KO
+   FOhs4h+f8kTylaBv06YPh1hjJ5ete37V/1j1SkSdnL6NTb6P8fpjX9FYh
+   Qdn+p1m6+vs5MX3+RNKnCjEoQclnn51LWW+vs5h7VB1XJZIiEjGT9a7qP
+   CC5yQ/nlooPlxmJD1CKiGVuPKALxrRFPshoQkqEONfHUK24wMLtfkpPIV
+   fgLBhS3hNsBTI03WPQOO6MhwQi5NiEcfwKtURLHG6gVZFtsJ8T5guN8Kj
+   4z2helMGMd9aLIBl3RCKFicMN8HHQDxew9dffgtyEReSGOahrfFtAmw6D
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="447587397"
+X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
+   d="scan'208";a="447587397"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 01:02:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="860594379"
+X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
+   d="scan'208";a="860594379"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 26 Jun 2023 01:02:26 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 26 Jun 2023 11:02:26 +0300
+Date:   Mon, 26 Jun 2023 11:02:26 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Arnd Bergmann <arnd@kernel.org>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: nb7vpq904m: fix CONFIG_DRM dependency
+Message-ID: <ZJlGEiE64A2qQHD7@kuha.fi.intel.com>
+References: <20230622-topic-sm8x50-upstream-redriver-config-fix-v1-1-005ab6f4d1f5@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d866dba9-3b0f-3573-9baf-0d02f4049fcb@amd.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230622-topic-sm8x50-upstream-redriver-config-fix-v1-1-005ab6f4d1f5@linaro.org>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 26, 2023 at 01:23:27PM +0530, Nipun Gupta wrote:
+On Thu, Jun 22, 2023 at 06:16:26PM +0200, Neil Armstrong wrote:
+> With the following config set:
+> CONFIG_DRM=m
+> CONFIG_DRM_PANEL=y
+> CONFIG_DRM_BRIDGE=y
+> CONFIG_DRM_PANEL_BRIDGE=y
+> CONFIG_TYPEC_MUX_NB7VPQ904M=y
 > 
+> vmlinux fails on the following symbols:
+>   ld.lld: error: undefined symbol: devm_drm_bridge_add
+>   ld.lld: error: undefined symbol: devm_drm_of_get_bridge
 > 
-> On 6/6/2023 4:32 PM, Nipun Gupta wrote:
-> > 
-> > 
-> > On 5/18/2023 5:14 PM, Nipun Gupta wrote:
-> > > Add CDX-MSI domain per CDX controller with gic-its domain as
-> > > a parent, to support MSI for CDX devices. CDX devices allocate
-> > > MSIs from the CDX domain. Also, introduce APIs to alloc and free
-> > > IRQs for CDX domain.
-> > > 
-> > > In CDX subsystem firmware is a controller for all devices and
-> > > their configuration. CDX bus controller sends all the write_msi_msg
-> > > commands to firmware running on RPU and the firmware interfaces with
-> > > actual devices to pass this information to devices
-> > > 
-> > > Since, CDX controller is the only way to communicate with the Firmware
-> > > for MSI write info, CDX domain per controller required in contrast to
-> > > having a CDX domain per device.
-> > > 
-> > > Co-developed-by: Nikhil Agarwal <nikhil.agarwal@amd.com>
-> > > Signed-off-by: Nikhil Agarwal <nikhil.agarwal@amd.com>
-> > > Co-developed-by: Abhijit Gangurde <abhijit.gangurde@amd.com>
-> > > Signed-off-by: Abhijit Gangurde <abhijit.gangurde@amd.com>
-> > > Signed-off-by: Nipun Gupta <nipun.gupta@amd.com>
-> > > Reviewed-by: Pieter Jansen van Vuuren <pieter.jansen-van-vuuren@amd.com>
-> > > Tested-by: Nikhil Agarwal <nikhil.agarwal@amd.com>
-> > > ---
-> > > 
-> > > Changes v1->v2:
-> > > - fixed scenario where msi write was called asyncronously in
-> > >    an atomic context, by using irq_chip_(un)lock, and using sync
-> > >    MCDI API for write MSI message.
-> > > - fixed broken Signed-off-by chain.
-> > 
-> > Hi Thomas,
-> > 
-> > Did you had a chance to look at patch v2. Please let me know in case
-> > anything else is required to be updated.
+> Add dependendy on DRM || DRM=no since CONFIG_DRM dependency is optional
+> and guarded by:
+> IS_ENABLED(CONFIG_OF) && IS_ENABLED(CONFIG_DRM_PANEL_BRIDGE)
+> in the drive.
 > 
-> Hi Thomas,
+> Also add "select DRM_PANEL_BRIDGE if DRM" to clarify DRM_PANEL_BRIDGE
+> is required if CONFIG_DRM is enabled.
 > 
-> A gentle reminder, could you please have a look into this updated version of
-> the patch?
+> Fixes: 88d8f3ac9c67 ("usb: typec: add support for the nb7vpq904m Type-C Linear Redriver")
+> Reported-by: Arnd Bergmann <arnd@kernel.org>
+> Suggested-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 
-It's the middle of the merge window, nothing we can do now with new
-stuff.  Perhaps resend it after 6.5-rc1 is out and you have rebased it
-against that release?
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-thanks,
+> ---
+> This is re-spin of [1]
+> 
+> [1] https://lore.kernel.org/all/20230622101813.3453772-1-arnd@kernel.org/
+> ---
+>  drivers/usb/typec/mux/Kconfig | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/mux/Kconfig b/drivers/usb/typec/mux/Kconfig
+> index 8c4d6b8fb75c..784b9d8107e9 100644
+> --- a/drivers/usb/typec/mux/Kconfig
+> +++ b/drivers/usb/typec/mux/Kconfig
+> @@ -38,6 +38,8 @@ config TYPEC_MUX_INTEL_PMC
+>  config TYPEC_MUX_NB7VPQ904M
+>  	tristate "On Semiconductor NB7VPQ904M Type-C redriver driver"
+>  	depends on I2C
+> +	depends on DRM || DRM=n
+> +	select DRM_PANEL_BRIDGE if DRM
+>  	select REGMAP_I2C
+>  	help
+>  	  Say Y or M if your system has a On Semiconductor NB7VPQ904M Type-C
+> 
+> ---
+> base-commit: c87d46a9e8ebd2f2c3960927b1d21687096d1109
+> change-id: 20230622-topic-sm8x50-upstream-redriver-config-fix-8f0aef3e2129
+> 
+> Best regards,
+> -- 
+> Neil Armstrong <neil.armstrong@linaro.org>
 
-greg k-h
+-- 
+heikki
