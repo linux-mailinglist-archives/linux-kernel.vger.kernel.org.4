@@ -2,120 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A62E73E293
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 16:55:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7E2773E298
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 16:56:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230185AbjFZOzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 10:55:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58616 "EHLO
+        id S229834AbjFZO4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 10:56:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230154AbjFZOzE (ORCPT
+        with ESMTP id S229567AbjFZO4w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 10:55:04 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7E050D9;
-        Mon, 26 Jun 2023 07:54:58 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8DxtMTApplke3ACAA--.3778S3;
-        Mon, 26 Jun 2023 22:54:56 +0800 (CST)
-Received: from openarena.loongson.cn (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxJ8zApplkbs4JAA--.2557S2;
-        Mon, 26 Jun 2023 22:54:56 +0800 (CST)
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/tegra: Kconfig: Express the dependency by using the depends on
-Date:   Mon, 26 Jun 2023 22:54:56 +0800
-Message-Id: <20230626145456.641252-1-suijingfeng@loongson.cn>
-X-Mailer: git-send-email 2.25.1
+        Mon, 26 Jun 2023 10:56:52 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D143FB6
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 07:56:50 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4fb7acaa7a5so913794e87.1
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 07:56:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687791409; x=1690383409;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=27Hbm1nSTxidmaHo4Rsegreg1V1tH8Gk8PNfLl0C8PA=;
+        b=yP0c98lED55xbAKz8zbKU1ATE3K32QLBopwmRpSh8g1Y1Ojq8YClIoGm4+vYsfDFq8
+         ggIT1Qu2kJ0+KUNB0Me+LyObyRutbVBuRbfZXe1Jguah+T60OAoQWMA0O6w6HMP8HuU+
+         DGnxXZ2h1qqG4TCTgMeekRp0ORKF+L76Cskmrf3OLXIVoscwkY5hS4B0KrVo1euF3OJL
+         yH/VPdDAuhlD6fkNmMvX5xUSXioRpTjxEi7z/0ZwBJ2M8yEywwhWKdyE0ef7nsxE72lJ
+         C1dsPkqMDgcfrrjRJpVKxEnIMuFpI9EKvfl2KtTcoomhOyEv831f+hcbGqd/gC3k1XDp
+         rqLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687791409; x=1690383409;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=27Hbm1nSTxidmaHo4Rsegreg1V1tH8Gk8PNfLl0C8PA=;
+        b=aSLP/o8x4X26kHN8lfCqdy5R0neSOUr23SLR16FVzXsBxltgGGEHcvnr5pL45D2zx8
+         YrQcYyT8L9AyCoWTtnH7KtvPq435D5rj8ZhOV4VyU9N41oDQ58H/bBnK7BRP+tq/MOlI
+         GFcNk4wP0wiLvs9jU8T3dOYr1D645MVSDPqOgudoscST3fjY6zkDIMIDv19QTiGU/ofv
+         AzVfNzaOo2YJGGgLekEWfjPsHI3z8SDUiiY4k3WjkXRvDWypFvLApy9GCrr3uT8ZL/7U
+         aBKym0ualPbYGGNiO4gdVh3thufYVniblwGpxRb0c6/vxMxqDuFgvStqKYb6js7tUiOM
+         PAFw==
+X-Gm-Message-State: AC+VfDy42JYz4NbiLYBiVcZqvEMqJdEgYDoJxBwHhEWwpY+Wfs987kR8
+        P7EAWdjReSnYPJVOzb9pqDh1VQ==
+X-Google-Smtp-Source: ACHHUZ6P7QfhEqbtbj9aseFYQVWHwwnAwptFktv1oZjineiJeroop5wpb3fzQZhk2mVjtmuWOBq71Q==
+X-Received: by 2002:a05:6512:3b95:b0:4f9:5d2a:e0f5 with SMTP id g21-20020a0565123b9500b004f95d2ae0f5mr12270695lfv.19.1687791409014;
+        Mon, 26 Jun 2023 07:56:49 -0700 (PDT)
+Received: from krzk-bin.. ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id w10-20020a1cf60a000000b003f9bd9e3226sm7945737wmc.7.2023.06.26.07.56.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jun 2023 07:56:48 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] dt-bindings: dma: qcom,bam: require one of control methods
+Date:   Mon, 26 Jun 2023 16:56:45 +0200
+Message-Id: <20230626145645.646136-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxJ8zApplkbs4JAA--.2557S2
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj93XoW7ArWfJF4xtr1kGr18CFy3Awc_yoW8Xw1fpF
-        s8tryFyrykJan8tw47Aa48GFy3Xa9xGFW5GrZxG3sxur4jy3s5Zryqyay3AryUZrs7trW3
-        KF93KF1UuF9rCrcCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUk2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-        xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
-        1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv
-        67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2
-        Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
-        6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0x
-        vE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE
-        42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6x
-        kF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU2ID7UUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Because using the 'depends on' is easy to understand and more obvious.
+The BAM DMA resources can be controlled remotely (e.g. by trusted
+environment; needs qcom,powered-remotely or qcom,controlled-remotely
+properties) or locally.  In the latter case we need to provide its
+clock.
 
-Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+Require one of methods of such control to properly validate DTS.
+
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/gpu/drm/tegra/Kconfig | 6 ++----
- drivers/gpu/host1x/Kconfig    | 5 +----
- 2 files changed, 3 insertions(+), 8 deletions(-)
+ Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/drivers/gpu/drm/tegra/Kconfig b/drivers/gpu/drm/tegra/Kconfig
-index 498313778175..e7e3856665b1 100644
---- a/drivers/gpu/drm/tegra/Kconfig
-+++ b/drivers/gpu/drm/tegra/Kconfig
-@@ -26,19 +26,17 @@ config DRM_TEGRA
- 	  To compile this driver as a module, choose M here: the module
- 	  will be called tegra-drm.
+diff --git a/Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml b/Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml
+index c9c34f7cdf5b..a0af90ec86f1 100644
+--- a/Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml
++++ b/Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml
+@@ -95,6 +95,15 @@ required:
+   - qcom,ee
+   - reg
  
--if DRM_TEGRA
--
- config DRM_TEGRA_DEBUG
- 	bool "NVIDIA Tegra DRM debug support"
-+	depends on DRM_TEGRA
- 	help
- 	  Say yes here to enable debugging support.
++anyOf:
++  - required:
++      - qcom,powered-remotely
++  - required:
++      - qcom,controlled-remotely
++  - required:
++      - clocks
++      - clock-names
++
+ additionalProperties: false
  
- config DRM_TEGRA_STAGING
- 	bool "Enable HOST1X interface"
-+	depends on DRM_TEGRA
- 	depends on STAGING
- 	help
- 	  Say yes if HOST1X should be available for userspace DRM users.
- 
- 	  If unsure, choose N.
--
--endif
-diff --git a/drivers/gpu/host1x/Kconfig b/drivers/gpu/host1x/Kconfig
-index e6c78ae2003a..36eb98d93637 100644
---- a/drivers/gpu/host1x/Kconfig
-+++ b/drivers/gpu/host1x/Kconfig
-@@ -17,14 +17,11 @@ config TEGRA_HOST1X
- 	  by host1x are referred to as clients. host1x includes some other
- 	  functionality, such as synchronization.
- 
--if TEGRA_HOST1X
--
- config TEGRA_HOST1X_FIREWALL
- 	bool "Enable HOST1X security firewall"
-+	depends on TEGRA_HOST1X
- 	default y
- 	help
- 	  Say yes if kernel should protect command streams from tampering.
- 
- 	  If unsure, choose Y.
--
--endif
+ examples:
 -- 
-2.25.1
+2.34.1
 
