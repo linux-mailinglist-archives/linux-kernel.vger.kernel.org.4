@@ -2,85 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 543A473E53D
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 18:36:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D9CC73E54E
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 18:37:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230112AbjFZQgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 12:36:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35558 "EHLO
+        id S230016AbjFZQhy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 12:37:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjFZQgb (ORCPT
+        with ESMTP id S230274AbjFZQhv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 12:36:31 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 16EF9C5;
-        Mon, 26 Jun 2023 09:36:29 -0700 (PDT)
-Received: from W11-BEAU-MD.localdomain (unknown [76.135.27.212])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 54DD421C4265;
-        Mon, 26 Jun 2023 09:36:28 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 54DD421C4265
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1687797388;
-        bh=icVczakG28FAD0REpW+p4noUrRkMyVkU1sHsJFRQldE=;
+        Mon, 26 Jun 2023 12:37:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A28B4E58
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 09:37:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0675A60EEE
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 16:37:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1783C433CA;
+        Mon, 26 Jun 2023 16:37:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687797469;
+        bh=1i7XqBzoj13xzWb3eezHQwHub6Bm84S+qf7dqubxYCg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rAERRU2/qbqd3eHtrtZJ0S0w6V90DN8uf/0mTpwZhAM1rc1vNjIuqOS3hVg8rKras
-         wcDJ7QZaiDPtjfSROw9N6sFdwx/q9av2RtWPyboqReloy+5M6b+EMbOGUiFHMwJ63i
-         qhIClxJFwEwlNwpI6ZVspi6OJO0SdCq/XIR7J7/s=
-Date:   Mon, 26 Jun 2023 09:36:21 -0700
-From:   Beau Belgrave <beaub@linux.microsoft.com>
-To:     sunliming <sunliming@kylinos.cn>
-Cc:     rostedt@goodmis.org, mhiramat@kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 0/3] tracing/user_events: Fix incorrect return value
- for writes when events are disabled and add its tests
-Message-ID: <20230626163621.GA104@W11-BEAU-MD.localdomain>
-References: <20230626111344.19136-1-sunliming@kylinos.cn>
+        b=iIMqYynh+e4BvY8rhyaUKU6duy7a6cqsct52yzWf8DEwcgjkmsMS8UdOlYP4VxOl1
+         Q2vREqz+mZpu3OmWgtZqtX6aY1UGdGxT9DgrTTeVoyQ/8f2PpXS0ve1oUC4BFg+Xss
+         n3s+54U0VMIbYGYSwNNMY4Dhu0AI/HS65FWpqarmZLjIw4pFGlldVWkVG7Ykqgya7t
+         DYc7mUEjKgMxprkgwpQzdN2OJ5kXjPpOTfONeYKKIVKewo9IVIEeRuZzuAkcsDqrXf
+         Uz+K5q7doL6cICN5zEYZ/5Bh2FAH+4HXgh4f6UCi3rPqSVQ7PNpXYqiPPR2KFwIvUT
+         cMcw6+DRSsj4Q==
+Date:   Mon, 26 Jun 2023 17:37:44 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Benjamin Bara <bbara93@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        support.opensource@diasemi.com,
+        DLG-Adam.Ward.opensource@dm.renesas.com,
+        Martin Fuzzey <martin.fuzzey@flowbird.group>,
+        linux-kernel@vger.kernel.org,
+        Benjamin Bara <benjamin.bara@skidata.com>
+Subject: Re: [PATCH RFC v4 02/13] regulator: add getter for active monitors
+Message-ID: <c7ba005c-27ca-4787-a3ba-eda0fb91b584@sirena.org.uk>
+References: <20230419-dynamic-vmon-v4-0-4d3734e62ada@skidata.com>
+ <20230419-dynamic-vmon-v4-2-4d3734e62ada@skidata.com>
+ <4a71b08e-0c0d-a378-7a3a-0cd12912d4d4@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="FJtQkIrtI0wk0GDO"
 Content-Disposition: inline
-In-Reply-To: <20230626111344.19136-1-sunliming@kylinos.cn>
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <4a71b08e-0c0d-a378-7a3a-0cd12912d4d4@gmail.com>
+X-Cookie: Nihilism should commence with oneself.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 26, 2023 at 07:13:41PM +0800, sunliming wrote:
-> Now the writing operation return the count of writes regardless of whether
-> events are enabled or disabled. Fix this by just return -EBADF when events
-> are disabled.
-> 
-> v3 -> v4:
-> - Change the return value from zero to -EBADF
-> 
 
-Applied these locally, ran a few tests. This looks good to me.
+--FJtQkIrtI0wk0GDO
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Acked-by: Beau Belgrave <beaub@linux.microsoft.com>
+On Mon, Jun 26, 2023 at 04:43:49PM +0300, Matti Vaittinen wrote:
+> On 6/20/23 23:02, Benjamin Bara wrote:
 
-Thanks,
--Beau
+> > + * @get_active_protections: Get all enabled monitors of a regulator. OR'ed val
+> > + *	of REGULATOR_MONITOR_*.
 
-> v2 -> v3:
-> - Change the return value from -ENOENT to zero
-> 
-> v1 -> v2:
-> - Change the return value from -EFAULT to -ENOENT
-> 
-> sunliming (3):
->   tracing/user_events: Fix incorrect return value for writing operation
->     when events are disabled
->   selftests/user_events: Enable the event before write_fault test in
->     ftrace self-test
->   selftests/user_events: Add test cases when event is disabled
-> 
->  kernel/trace/trace_events_user.c                  | 3 ++-
->  tools/testing/selftests/user_events/ftrace_test.c | 8 ++++++++
->  2 files changed, 10 insertions(+), 1 deletion(-)
-> 
-> -- 
-> 2.25.1
+> I think it wouldn't hurt to have doc stating in which case populating this
+> call-back is needed? I haven't read rest of the patches yet but I guess this
+> callback is going to be used internally by the regulator core and maybe it
+> is not obvious for driver author that this is needed by core to be able to
+> support automatic protection handling.
+
+I think this is true for pretty much all callbacks - broadly it's just
+the case that if the hardware has a feature the best practice is that
+the driver should implement all relevant operations.
+
+--FJtQkIrtI0wk0GDO
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSZvtcACgkQJNaLcl1U
+h9Cm/AgAgGrZhSisrmIkumW02U2K/+3GY8d4MiLn9Vs+TBgpb86N2KdXP7bjQiSl
+gCbI3644D7vHr4A2X5P9DB2YmyylAi4Abfu8rI5yc5ACoOqCopXgIxY1pHnxGf80
+EypnD3YbaQjMfNuzReQ0GOH0CuOCFD+zKlpxDK2VnElqoHLPwNfiOT3Okmm5PsIv
+05ocg6ncP418swTGaQ4xTYICaOqChb1HQb4hJpJjLw85xvvkepVBuuap9k6Apkew
+RFo/twdelPpxEsBZRy3BAQO6oe/XEObkfm/pG1ehYpLfJFSErtrVDdiihkfaaAoY
+L3rsaP8n8Vrd3tIgecP6hC6oJM64Jg==
+=gRrb
+-----END PGP SIGNATURE-----
+
+--FJtQkIrtI0wk0GDO--
