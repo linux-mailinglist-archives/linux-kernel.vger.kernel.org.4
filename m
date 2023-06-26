@@ -2,47 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD42273ED2D
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 23:51:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2815873ED3D
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 23:51:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230444AbjFZVuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 17:50:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40376 "EHLO
+        id S231154AbjFZVua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 17:50:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230423AbjFZVuE (ORCPT
+        with ESMTP id S230509AbjFZVuX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 17:50:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9550DE6F;
-        Mon, 26 Jun 2023 14:50:03 -0700 (PDT)
+        Mon, 26 Jun 2023 17:50:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C58E173B;
+        Mon, 26 Jun 2023 14:50:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D0AF60F7B;
-        Mon, 26 Jun 2023 21:50:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52113C433CC;
-        Mon, 26 Jun 2023 21:50:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 15CD160F77;
+        Mon, 26 Jun 2023 21:50:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40E1DC433C9;
+        Mon, 26 Jun 2023 21:50:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687816202;
-        bh=Z/uZcXcuQG5J00a1DC5dZxIb90/pLfM1x/WwP3iM2gs=;
+        s=k20201202; t=1687816209;
+        bh=eILe6tqhNhpZACdsWqZn4iOyDKTwjWGnq/A5eEc+f1s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XeBzV/NdTm2zFXkPg2eJFrzZsVWLueCzCgOOpVjsOzILuYjgL4cWUlfhQMIAgRv8U
-         i/nwZNV7gNZElB72/o0E6pWy4Qqs8jeMKrMIEmGaR9jsTsGu1TOwmfY/1d2QMEqgVr
-         /V4GDnCfSM4Vkn+Uu8FBgpyHFdtm2fNCUClg9V0p1tPmC2mRZ+nqMyOgWcBR6O5ctT
-         TRqNuTM4bSOKaJyHe0vylFP3B0v3yUVgIPfUIrfL0UPKd3Mi2o+q+zhizAC3JSsRtV
-         rknj9itxEgLTdgHbK+pU1fU2GGOtdoVUCEtbDim5I8usY1628tNz39IUQJzrHJgML8
-         GRO3PfUUztchA==
+        b=vEeU2jWCxj+/zPOxHFQuYAS3Jt4S9nPDBZ8CkGWF4nG0VPzFNwIpctsuPoJqBpGQn
+         I/PujUNgI3Voq2HrPmuFFdxma+BL1uY8/663TmAVg4aZ95RN9froogcRDYG9ML6rOx
+         EhQsRrifoxIKgyEVxkj2dtiO6RUwxiD0wUx+puZX2Rro5uE7DP44MGs9jhGGjWdxon
+         i2/JuHDo9j7zmulwjiU5cogVueSgDcd/dSrB37j6bS3/xFhYPB7RrcByWTbyAWfDMc
+         CBdh6Zcn3Dqd+lX6W+ZbzQO9pZMe8Oo4IS58S3Cf+ukMrs6kYmQcyTQCh+bzq0dmpU
+         r5ldnvq2AizlQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Enzo Matsumiya <ematsumiya@suse.de>,
-        Shyam Prasad N <sprasad@microsoft.com>,
+Cc:     Shyam Prasad N <sprasad@microsoft.com>,
+        kernel test robot <lkp@intel.com>,
+        Dan Carpenter <error27@gmail.com>,
         Steve French <stfrench@microsoft.com>,
-        Sasha Levin <sashal@kernel.org>, pc@manguebit.com, pc@cjr.nz,
-        yuzhe@nfschina.com
-Subject: [PATCH AUTOSEL 6.3 05/16] smb/client: print "Unknown" instead of bogus link speed value
-Date:   Mon, 26 Jun 2023 17:49:45 -0400
-Message-Id: <20230626214956.178942-5-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, pc@cjr.nz,
+        lsahlber@redhat.com, pc@manguebit.com, ematsumiya@suse.de,
+        zhangxiaoxu5@huawei.com, dhowells@redhat.com, brauner@kernel.org,
+        vl@samba.org
+Subject: [PATCH AUTOSEL 6.3 06/16] cifs: fix sockaddr comparison in iface_cmp
+Date:   Mon, 26 Jun 2023 17:49:46 -0400
+Message-Id: <20230626214956.178942-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230626214956.178942-1-sashal@kernel.org>
 References: <20230626214956.178942-1-sashal@kernel.org>
@@ -51,8 +54,8 @@ X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.3.9
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,113 +64,196 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Enzo Matsumiya <ematsumiya@suse.de>
+From: Shyam Prasad N <sprasad@microsoft.com>
 
-[ Upstream commit 50e63d6db6fd30a6dd9a33c49aa5b0bba36e1a92 ]
+[ Upstream commit 2991b77409891e14a10b96899755c004b0c07edb ]
 
-The virtio driver for Linux guests will not set a link speed to its
-paravirtualized NICs.  This will be seen as -1 in the ethernet layer, and
-when some servers (e.g. samba) fetches it, it's converted to an unsigned
-value (and multiplied by 1000 * 1000), so in client side we end up with:
+iface_cmp used to simply do a memcmp of the two
+provided struct sockaddrs. The comparison needs to do more
+based on the address family. Similar logic was already
+present in cifs_match_ipaddr. Doing something similar now.
 
-1)      Speed: 4294967295000000 bps
-
-in DebugData.
-
-This patch introduces a helper that returns a speed string (in Mbps or
-Gbps) if interface speed is valid (>= SPEED_10 and <= SPEED_800000), or
-"Unknown" otherwise.
-
-The reason to not change the value in iface->speed is because we don't
-know the real speed of the HW backing the server NIC, so let's keep
-considering these as the fastest NICs available.
-
-Also print "Capabilities: None" when the interface doesn't support any.
-
-Signed-off-by: Enzo Matsumiya <ematsumiya@suse.de>
-Reviewed-by: Shyam Prasad N <sprasad@microsoft.com>
+Signed-off-by: Shyam Prasad N <sprasad@microsoft.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <error27@gmail.com>
 Signed-off-by: Steve French <stfrench@microsoft.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/cifs/cifs_debug.c | 47 +++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 46 insertions(+), 1 deletion(-)
+ fs/cifs/cifsglob.h  | 37 ---------------------------------
+ fs/cifs/cifsproto.h |  1 +
+ fs/cifs/connect.c   | 50 +++++++++++++++++++++++++++++++++++++++++++++
+ fs/cifs/smb2ops.c   | 37 +++++++++++++++++++++++++++++++++
+ 4 files changed, 88 insertions(+), 37 deletions(-)
 
-diff --git a/fs/cifs/cifs_debug.c b/fs/cifs/cifs_debug.c
-index d4ed200a94714..7d3bc418d36d5 100644
---- a/fs/cifs/cifs_debug.c
-+++ b/fs/cifs/cifs_debug.c
-@@ -12,6 +12,7 @@
- #include <linux/module.h>
- #include <linux/proc_fs.h>
- #include <linux/uaccess.h>
-+#include <uapi/linux/ethtool.h>
- #include "cifspdu.h"
- #include "cifsglob.h"
- #include "cifsproto.h"
-@@ -146,18 +147,62 @@ cifs_dump_channel(struct seq_file *m, int i, struct cifs_chan *chan)
- 		   atomic_read(&server->num_waiters));
+diff --git a/fs/cifs/cifsglob.h b/fs/cifs/cifsglob.h
+index 5f8fd20951af3..58ffeb02d037c 100644
+--- a/fs/cifs/cifsglob.h
++++ b/fs/cifs/cifsglob.h
+@@ -970,43 +970,6 @@ release_iface(struct kref *ref)
+ 	kfree(iface);
  }
  
-+static inline const char *smb_speed_to_str(size_t bps)
+-/*
+- * compare two interfaces a and b
+- * return 0 if everything matches.
+- * return 1 if a has higher link speed, or rdma capable, or rss capable
+- * return -1 otherwise.
+- */
+-static inline int
+-iface_cmp(struct cifs_server_iface *a, struct cifs_server_iface *b)
+-{
+-	int cmp_ret = 0;
+-
+-	WARN_ON(!a || !b);
+-	if (a->speed == b->speed) {
+-		if (a->rdma_capable == b->rdma_capable) {
+-			if (a->rss_capable == b->rss_capable) {
+-				cmp_ret = memcmp(&a->sockaddr, &b->sockaddr,
+-						 sizeof(a->sockaddr));
+-				if (!cmp_ret)
+-					return 0;
+-				else if (cmp_ret > 0)
+-					return 1;
+-				else
+-					return -1;
+-			} else if (a->rss_capable > b->rss_capable)
+-				return 1;
+-			else
+-				return -1;
+-		} else if (a->rdma_capable > b->rdma_capable)
+-			return 1;
+-		else
+-			return -1;
+-	} else if (a->speed > b->speed)
+-		return 1;
+-	else
+-		return -1;
+-}
+-
+ struct cifs_chan {
+ 	unsigned int in_reconnect : 1; /* if session setup in progress for this channel */
+ 	struct TCP_Server_Info *server;
+diff --git a/fs/cifs/cifsproto.h b/fs/cifs/cifsproto.h
+index c1c704990b986..d127aded2f287 100644
+--- a/fs/cifs/cifsproto.h
++++ b/fs/cifs/cifsproto.h
+@@ -87,6 +87,7 @@ extern int cifs_handle_standard(struct TCP_Server_Info *server,
+ 				struct mid_q_entry *mid);
+ extern int smb3_parse_devname(const char *devname, struct smb3_fs_context *ctx);
+ extern int smb3_parse_opt(const char *options, const char *key, char **val);
++extern int cifs_ipaddr_cmp(struct sockaddr *srcaddr, struct sockaddr *rhs);
+ extern bool cifs_match_ipaddr(struct sockaddr *srcaddr, struct sockaddr *rhs);
+ extern int cifs_discard_remaining_data(struct TCP_Server_Info *server);
+ extern int cifs_call_async(struct TCP_Server_Info *server,
+diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
+index 8e9a672320ab7..180b06c363726 100644
+--- a/fs/cifs/connect.c
++++ b/fs/cifs/connect.c
+@@ -1288,6 +1288,56 @@ cifs_demultiplex_thread(void *p)
+ 	module_put_and_kthread_exit(0);
+ }
+ 
++int
++cifs_ipaddr_cmp(struct sockaddr *srcaddr, struct sockaddr *rhs)
 +{
-+	size_t mbps = bps / 1000 / 1000;
++	struct sockaddr_in *saddr4 = (struct sockaddr_in *)srcaddr;
++	struct sockaddr_in *vaddr4 = (struct sockaddr_in *)rhs;
++	struct sockaddr_in6 *saddr6 = (struct sockaddr_in6 *)srcaddr;
++	struct sockaddr_in6 *vaddr6 = (struct sockaddr_in6 *)rhs;
 +
-+	switch (mbps) {
-+	case SPEED_10:
-+		return "10Mbps";
-+	case SPEED_100:
-+		return "100Mbps";
-+	case SPEED_1000:
-+		return "1Gbps";
-+	case SPEED_2500:
-+		return "2.5Gbps";
-+	case SPEED_5000:
-+		return "5Gbps";
-+	case SPEED_10000:
-+		return "10Gbps";
-+	case SPEED_14000:
-+		return "14Gbps";
-+	case SPEED_20000:
-+		return "20Gbps";
-+	case SPEED_25000:
-+		return "25Gbps";
-+	case SPEED_40000:
-+		return "40Gbps";
-+	case SPEED_50000:
-+		return "50Gbps";
-+	case SPEED_56000:
-+		return "56Gbps";
-+	case SPEED_100000:
-+		return "100Gbps";
-+	case SPEED_200000:
-+		return "200Gbps";
-+	case SPEED_400000:
-+		return "400Gbps";
-+	case SPEED_800000:
-+		return "800Gbps";
++	switch (srcaddr->sa_family) {
++	case AF_UNSPEC:
++		switch (rhs->sa_family) {
++		case AF_UNSPEC:
++			return 0;
++		case AF_INET:
++		case AF_INET6:
++			return 1;
++		default:
++			return -1;
++		}
++	case AF_INET: {
++		switch (rhs->sa_family) {
++		case AF_UNSPEC:
++			return -1;
++		case AF_INET:
++			return memcmp(saddr4, vaddr4,
++				      sizeof(struct sockaddr_in));
++		case AF_INET6:
++			return 1;
++		default:
++			return -1;
++		}
++	}
++	case AF_INET6: {
++		switch (rhs->sa_family) {
++		case AF_UNSPEC:
++		case AF_INET:
++			return -1;
++		case AF_INET6:
++			return memcmp(saddr6,
++				      vaddr6,
++				      sizeof(struct sockaddr_in6));
++		default:
++			return -1;
++		}
++	}
 +	default:
-+		return "Unknown";
++		return -1; /* don't expect to be here */
 +	}
 +}
 +
- static void
- cifs_dump_iface(struct seq_file *m, struct cifs_server_iface *iface)
- {
- 	struct sockaddr_in *ipv4 = (struct sockaddr_in *)&iface->sockaddr;
- 	struct sockaddr_in6 *ipv6 = (struct sockaddr_in6 *)&iface->sockaddr;
+ /*
+  * Returns true if srcaddr isn't specified and rhs isn't specified, or
+  * if srcaddr is specified and matches the IP address of the rhs argument
+diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
+index 5065398665f11..6a944134095e6 100644
+--- a/fs/cifs/smb2ops.c
++++ b/fs/cifs/smb2ops.c
+@@ -510,6 +510,43 @@ smb3_negotiate_rsize(struct cifs_tcon *tcon, struct smb3_fs_context *ctx)
+ 	return rsize;
+ }
  
--	seq_printf(m, "\tSpeed: %zu bps\n", iface->speed);
-+	seq_printf(m, "\tSpeed: %s\n", smb_speed_to_str(iface->speed));
- 	seq_puts(m, "\t\tCapabilities: ");
- 	if (iface->rdma_capable)
- 		seq_puts(m, "rdma ");
- 	if (iface->rss_capable)
- 		seq_puts(m, "rss ");
-+	if (!iface->rdma_capable && !iface->rss_capable)
-+		seq_puts(m, "None");
- 	seq_putc(m, '\n');
- 	if (iface->sockaddr.ss_family == AF_INET)
- 		seq_printf(m, "\t\tIPv4: %pI4\n", &ipv4->sin_addr);
++/*
++ * compare two interfaces a and b
++ * return 0 if everything matches.
++ * return 1 if a is rdma capable, or rss capable, or has higher link speed
++ * return -1 otherwise.
++ */
++static int
++iface_cmp(struct cifs_server_iface *a, struct cifs_server_iface *b)
++{
++	int cmp_ret = 0;
++
++	WARN_ON(!a || !b);
++	if (a->rdma_capable == b->rdma_capable) {
++		if (a->rss_capable == b->rss_capable) {
++			if (a->speed == b->speed) {
++				cmp_ret = cifs_ipaddr_cmp((struct sockaddr *) &a->sockaddr,
++							  (struct sockaddr *) &b->sockaddr);
++				if (!cmp_ret)
++					return 0;
++				else if (cmp_ret > 0)
++					return 1;
++				else
++					return -1;
++			} else if (a->speed > b->speed)
++				return 1;
++			else
++				return -1;
++		} else if (a->rss_capable > b->rss_capable)
++			return 1;
++		else
++			return -1;
++	} else if (a->rdma_capable > b->rdma_capable)
++		return 1;
++	else
++		return -1;
++}
++
+ static int
+ parse_server_interfaces(struct network_interface_info_ioctl_rsp *buf,
+ 			size_t buf_len, struct cifs_ses *ses, bool in_mount)
 -- 
 2.39.2
 
