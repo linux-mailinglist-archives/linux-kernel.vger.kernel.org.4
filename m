@@ -2,256 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A98CB73E034
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 15:07:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C385C73E031
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 15:07:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230242AbjFZNHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 09:07:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56938 "EHLO
+        id S230111AbjFZNHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 09:07:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230303AbjFZNHu (ORCPT
+        with ESMTP id S230305AbjFZNH3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 09:07:50 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F5198
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 06:07:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1687784866; x=1719320866;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=72rXoisws5aoVjq6A8u6xAy4hwxZtdurVUlSFvLS0h0=;
-  b=V6KvnhdVvvIo7Rs+yq4h+feZiY2kUC0SYzaPPlTxSugh7xv4wNDyvGRG
-   ovHtH4WKzQOiQK9kBfMpMPFXuyGn+C3sXTEGckwBnllDTspN3Swx/JIsH
-   tIYxLsYfms22PqALsR/KLGnUGhPIE9oYc/QRYSPb2p5tN6wTa8D1nSVH5
-   82ENukxMafpxmVPL2bm824IBBoIo0LBiSQ+gbOmHzI7BcLvQN1sCDpTWL
-   HHvGoWKCrWFiWEEJRRpoqrEoTEIav6DEE5eJ65ggPVZYleilUxl7L/Guc
-   DqKhp0KduKGwicM8jqaMYDrthAlBaN5BJFdgLS6V/HwUiJMR9CpjYTsLg
-   g==;
-X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
-   d="asc'?scan'208";a="232202157"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 26 Jun 2023 06:07:44 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 26 Jun 2023 06:07:44 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Mon, 26 Jun 2023 06:07:41 -0700
-Date:   Mon, 26 Jun 2023 14:07:13 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Evan Green <evan@rivosinc.com>
-CC:     Palmer Dabbelt <palmer@rivosinc.com>,
-        Simon Hosie <shosie@rivosinc.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Guo Ren <guoren@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Ley Foon Tan <leyfoon.tan@starfivetech.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Sunil V L <sunilvl@ventanamicro.com>,
-        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH 2/2] RISC-V: alternative: Remove feature_probe_func
-Message-ID: <20230626-hardcopy-upchuck-7c37f1a6ef7b@wendy>
-References: <20230623222016.3742145-1-evan@rivosinc.com>
- <20230623222016.3742145-3-evan@rivosinc.com>
+        Mon, 26 Jun 2023 09:07:29 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA3210D;
+        Mon, 26 Jun 2023 06:07:28 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3fa8692a006so24213405e9.3;
+        Mon, 26 Jun 2023 06:07:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687784846; x=1690376846;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=N2AygcecPtn2LrwTAFghsbuSyei/AofSmSKKBMyrpNk=;
+        b=dfjTTHqIPsYowz1YtzqV8uTL0zNrBLVlTpmXbF2oDmf0tyJEAf4bqCbyK/sACThn0K
+         5r+iqvwdoghTWQ0B/cu7IKp/2Z11Q8KiM2avtTJRTHYkw7xHHK483jie61ymLtEo+Ki0
+         1dMZoDnL8M1i14YjI6RFia+4cK9rbduD8STErSztM9cgmaQai2OhybwBkobvezIu6qwg
+         oVYu7O4R/eQ2n24XW1tBiTXBj1te+ITGB6J2KNfr/UMHnjvKHbsqNdFb6mEHN2CokaI7
+         YCKrCGmOzcEfBC5E2EK9iwAKK3gHMS/I0gkvBmPN8U3BozsXj7kA53kZviiEIYdD2McK
+         TBYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687784846; x=1690376846;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=N2AygcecPtn2LrwTAFghsbuSyei/AofSmSKKBMyrpNk=;
+        b=c5/iehqDPcMnSCz5Ivnq9+FRSLfhe11onHWNfMsFnw5hoyC9YVWE9adUQllIjukdmm
+         3q+pxJCJdr/svnD8DvsaYQwUy6R5NSF36X6MTJWuSah3Begqjyqs2xK/2cbTRjAu2hsJ
+         NulXmQbA3qgLW26TmO4/LS8Y3KP4OwSKjGKDBxoJqXqDyoq1hfAatn09Jvfda2uTiEmo
+         pSY73r80FGtAkPiPhRVFvSsfLMIWU0C/9fnMShYcva5pUrng/ctPftgCBlBIimJ33o+a
+         5YBwqrZ/UDBsZd8eRDRMdHnLivXLwx/H90icEmzcHKDNGps1GNgBPLf5/FI6SPLDNZYe
+         thiQ==
+X-Gm-Message-State: AC+VfDxj8qGrPeSbOdCuPyGq6+fxxCEQIptsFN9uCSVsk/uY9GRximSJ
+        hnxHxg4PnwuQtuEHKpXPuJT2VK6oEbc=
+X-Google-Smtp-Source: ACHHUZ5YNkYCJJUBeg29BkC3m2kmUDS+U6gVhk6E3OMqWsH2NcwEpdnuXYmLCfY0RFUU3aLtZWKdnA==
+X-Received: by 2002:a05:600c:2152:b0:3f9:a6f3:8a53 with SMTP id v18-20020a05600c215200b003f9a6f38a53mr18390284wml.20.1687784845540;
+        Mon, 26 Jun 2023 06:07:25 -0700 (PDT)
+Received: from suse.localnet (host-79-17-50-162.retail.telecomitalia.it. [79.17.50.162])
+        by smtp.gmail.com with ESMTPSA id 4-20020a05600c228400b003f7e4d143cfsm7622409wmf.15.2023.06.26.06.07.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jun 2023 06:07:24 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sumitra Sharma <sumitraartsy@gmail.com>
+Cc:     Ira Weiny <ira.weiny@intel.com>, Deepak R Varma <drv@mailo.com>,
+        Sumitra Sharma <sumitraartsy@gmail.com>
+Subject: Re: [PATCH v4] lib/test_bpf: Call page_address() on page acquired with
+ GFP_KERNEL flag
+Date:   Mon, 26 Jun 2023 15:07:22 +0200
+Message-ID: <5846758.MhkbZ0Pkbq@suse>
+In-Reply-To: <20230623151644.GA434468@sumitra.com>
+References: <20230623151644.GA434468@sumitra.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="dm2SjiLkQREWuB17"
-Content-Disposition: inline
-In-Reply-To: <20230623222016.3742145-3-evan@rivosinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---dm2SjiLkQREWuB17
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hey Evan,
-
-On Fri, Jun 23, 2023 at 03:20:16PM -0700, Evan Green wrote:
-> Now that we're testing unaligned memory copy and making that
-> determination generically, there are no more users of the vendor
-> feature_probe_func(). While I think it's probably going to need to come
-> back, there are no users right now, so let's remove it until it's
-> needed.
-
-How come this is done as a separate patch, rather than delete the dead
-code as part of the probe addition? Ease of review?
-
-Change itself seems fine to me though, so
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-
-Cheers,
-Conor.
-
+On venerd=EC 23 giugno 2023 17:16:44 CEST Sumitra Sharma wrote:
+> generate_test_data() acquires a page with alloc_page(GFP_KERNEL).
+> The GFP_KERNEL is typical for kernel-internal allocations.
+> The caller requires ZONE_NORMAL or a lower zone for direct access.
 >=20
-> Signed-off-by: Evan Green <evan@rivosinc.com>
+> Therefore the page cannot come from ZONE_HIGHMEM. Thus there's
+> no need to map it with kmap().
 >=20
+> Also, the kmap() is being deprecated in favor of kmap_local_page() [1].
+>=20
+> Hence, use a plain page_address() directly.
+>=20
+> Since the page passed to the page_address() is not from the highmem
+> zone, the page_address() function will always return a valid kernel
+> virtual address and will not return NULL. Hence, remove the check
+> 'if (!ptr)'.
+>=20
+> Remove the unused variable 'ptr' and label 'err_free_page'.
+>=20
+> [1]: https://lore.kernel.org/all/20220813220034.806698-1-ira.weiny@intel.=
+com/
+>=20
+> Suggested-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+
+I can't see no more things that prevent my tag, then it is...
+
+Reviewed-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+
+Thanks for working on it for all the time it took to get to v4 and for=20
+listening to what you've been suggested to change.
+
+Well done :-)
+
+=46abio
+
+> Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
 > ---
 >=20
->  arch/riscv/errata/thead/errata.c     |  8 --------
->  arch/riscv/include/asm/alternative.h |  5 -----
->  arch/riscv/kernel/alternative.c      | 19 -------------------
->  arch/riscv/kernel/smpboot.c          |  1 -
->  4 files changed, 33 deletions(-)
+> - Link to v1:
+> https://lore.kernel.org/bpf/20230613073020.GA359792@sumitra.com/T/ - Link=
+ to
+> v2: https://lore.kernel.org/all/20230613071756.GA359746@sumitra.com/ - Li=
+nk
+> to v3: https://lore.kernel.org/all/20230622080729.GA426913@sumitra.com/
 >=20
-> diff --git a/arch/riscv/errata/thead/errata.c b/arch/riscv/errata/thead/e=
-rrata.c
-> index c259dc925ec1..bf42857c977f 100644
-> --- a/arch/riscv/errata/thead/errata.c
-> +++ b/arch/riscv/errata/thead/errata.c
-> @@ -117,11 +117,3 @@ void thead_errata_patch_func(struct alt_entry *begin=
-, struct alt_entry *end,
->  	if (stage =3D=3D RISCV_ALTERNATIVES_EARLY_BOOT)
->  		local_flush_icache_all();
->  }
+> Changes in v4:
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes:
+> https://lore.kernel.org/oe-kbuild-all/202306230559.hU5Aonpl-lkp@intel.com=
+/ -
+> Remove unused label 'err_free_page'.
+>=20
+> Changes in v3:
+> Noted by: Fabio M. De Francesco<fmdefrancesco@gmail.com>
+> 	- Remove the check 'if (!ptr)'.
+> 	- Remove the unused variable 'ptr'.
+> 	- Change the commit message.
+>=20
+> Changes in v2:
+> Noted by: Fabio M. De Francesco<fmdefrancesco@gmail.com>
+> 	- Remove the kmap() call and call page_address() instead.
+> 	- Change the commit subject and message.
+>=20
+>  lib/test_bpf.c | 10 +---------
+>  1 file changed, 1 insertion(+), 9 deletions(-)
+>=20
+> diff --git a/lib/test_bpf.c b/lib/test_bpf.c
+> index ade9ac672adb..a5cc5f9fc4e8 100644
+> --- a/lib/test_bpf.c
+> +++ b/lib/test_bpf.c
+> @@ -14381,25 +14381,17 @@ static void *generate_test_data(struct bpf_test
+> *test, int sub) * single fragment to the skb, filled with
+>  		 * test->frag_data.
+>  		 */
+> -		void *ptr;
 > -
-> -void thead_feature_probe_func(unsigned int cpu,
-> -			      unsigned long archid,
-> -			      unsigned long impid)
-> -{
-> -	if ((archid =3D=3D 0) && (impid =3D=3D 0))
-> -		per_cpu(misaligned_access_speed, cpu) =3D RISCV_HWPROBE_MISALIGNED_FAS=
-T;
-> -}
-> diff --git a/arch/riscv/include/asm/alternative.h b/arch/riscv/include/as=
-m/alternative.h
-> index 6a41537826a7..58ccd2f8cab7 100644
-> --- a/arch/riscv/include/asm/alternative.h
-> +++ b/arch/riscv/include/asm/alternative.h
-> @@ -30,7 +30,6 @@
->  #define ALT_OLD_PTR(a)			__ALT_PTR(a, old_offset)
->  #define ALT_ALT_PTR(a)			__ALT_PTR(a, alt_offset)
-> =20
-> -void probe_vendor_features(unsigned int cpu);
->  void __init apply_boot_alternatives(void);
->  void __init apply_early_boot_alternatives(void);
->  void apply_module_alternatives(void *start, size_t length);
-> @@ -53,15 +52,11 @@ void thead_errata_patch_func(struct alt_entry *begin,=
- struct alt_entry *end,
->  			     unsigned long archid, unsigned long impid,
->  			     unsigned int stage);
-> =20
-> -void thead_feature_probe_func(unsigned int cpu, unsigned long archid,
-> -			      unsigned long impid);
-> -
->  void riscv_cpufeature_patch_func(struct alt_entry *begin, struct alt_ent=
-ry *end,
->  				 unsigned int stage);
-> =20
->  #else /* CONFIG_RISCV_ALTERNATIVE */
-> =20
-> -static inline void probe_vendor_features(unsigned int cpu) { }
->  static inline void apply_boot_alternatives(void) { }
->  static inline void apply_early_boot_alternatives(void) { }
->  static inline void apply_module_alternatives(void *start, size_t length)=
- { }
-> diff --git a/arch/riscv/kernel/alternative.c b/arch/riscv/kernel/alternat=
-ive.c
-> index 6b75788c18e6..85056153fa23 100644
-> --- a/arch/riscv/kernel/alternative.c
-> +++ b/arch/riscv/kernel/alternative.c
-> @@ -27,8 +27,6 @@ struct cpu_manufacturer_info_t {
->  	void (*patch_func)(struct alt_entry *begin, struct alt_entry *end,
->  				  unsigned long archid, unsigned long impid,
->  				  unsigned int stage);
-> -	void (*feature_probe_func)(unsigned int cpu, unsigned long archid,
-> -				   unsigned long impid);
->  };
-> =20
->  static void riscv_fill_cpu_mfr_info(struct cpu_manufacturer_info_t *cpu_=
-mfr_info)
-> @@ -43,7 +41,6 @@ static void riscv_fill_cpu_mfr_info(struct cpu_manufact=
-urer_info_t *cpu_mfr_info
->  	cpu_mfr_info->imp_id =3D sbi_get_mimpid();
->  #endif
-> =20
-> -	cpu_mfr_info->feature_probe_func =3D NULL;
->  	switch (cpu_mfr_info->vendor_id) {
->  #ifdef CONFIG_ERRATA_SIFIVE
->  	case SIFIVE_VENDOR_ID:
-> @@ -53,7 +50,6 @@ static void riscv_fill_cpu_mfr_info(struct cpu_manufact=
-urer_info_t *cpu_mfr_info
->  #ifdef CONFIG_ERRATA_THEAD
->  	case THEAD_VENDOR_ID:
->  		cpu_mfr_info->patch_func =3D thead_errata_patch_func;
-> -		cpu_mfr_info->feature_probe_func =3D thead_feature_probe_func;
->  		break;
->  #endif
->  	default:
-> @@ -143,20 +139,6 @@ void riscv_alternative_fix_offsets(void *alt_ptr, un=
-signed int len,
+>  		page =3D alloc_page(GFP_KERNEL);
+>=20
+>  		if (!page)
+>  			goto err_kfree_skb;
+>=20
+> -		ptr =3D kmap(page);
+> -		if (!ptr)
+> -			goto err_free_page;
+> -		memcpy(ptr, test->frag_data, MAX_DATA);
+> -		kunmap(page);
+> +		memcpy(page_address(page), test->frag_data, MAX_DATA);
+>  		skb_add_rx_frag(skb, 0, page, 0, MAX_DATA, MAX_DATA);
 >  	}
->  }
-> =20
-> -/* Called on each CPU as it starts */
-> -void probe_vendor_features(unsigned int cpu)
-> -{
-> -	struct cpu_manufacturer_info_t cpu_mfr_info;
-> -
-> -	riscv_fill_cpu_mfr_info(&cpu_mfr_info);
-> -	if (!cpu_mfr_info.feature_probe_func)
-> -		return;
-> -
-> -	cpu_mfr_info.feature_probe_func(cpu,
-> -					cpu_mfr_info.arch_id,
-> -					cpu_mfr_info.imp_id);
-> -}
-> -
->  /*
->   * This is called very early in the boot process (directly after we run
->   * a feature detect on the boot CPU). No need to worry about other CPUs
-> @@ -211,7 +193,6 @@ void __init apply_boot_alternatives(void)
->  	/* If called on non-boot cpu things could go wrong */
->  	WARN_ON(smp_processor_id() !=3D 0);
-> =20
-> -	probe_vendor_features(0);
->  	_apply_alternatives((struct alt_entry *)__alt_start,
->  			    (struct alt_entry *)__alt_end,
->  			    RISCV_ALTERNATIVES_BOOT);
-> diff --git a/arch/riscv/kernel/smpboot.c b/arch/riscv/kernel/smpboot.c
-> index e34a71b4786b..054f2d4474d0 100644
-> --- a/arch/riscv/kernel/smpboot.c
-> +++ b/arch/riscv/kernel/smpboot.c
-> @@ -246,7 +246,6 @@ asmlinkage __visible void smp_callin(void)
->  	numa_add_cpu(curr_cpuid);
->  	set_cpu_online(curr_cpuid, 1);
->  	check_misaligned_access(curr_cpuid);
-> -	probe_vendor_features(curr_cpuid);
-> =20
->  	if (has_vector()) {
->  		if (riscv_v_setup_vsize())
-> --=20
-> 2.34.1
 >=20
+>  	return skb;
+>=20
+> -err_free_page:
+> -	__free_page(page);
+>  err_kfree_skb:
+>  	kfree_skb(skb);
+>  	return NULL;
+> --
+> 2.25.1
 
---dm2SjiLkQREWuB17
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJmNgQAKCRB4tDGHoIJi
-0uZ1AQCaXD/7qRSevo8gVSDWW1BMzamB/j0Byc20k2xUgtD4WQD+J9sfr3d7bckd
-U0eAHnNUuxiYihEdPeHVoeLUk0n8qQ4=
-=4xip
------END PGP SIGNATURE-----
 
---dm2SjiLkQREWuB17--
