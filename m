@@ -2,187 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C385C73E031
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 15:07:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D00B673E038
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 15:10:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230111AbjFZNHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 09:07:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56646 "EHLO
+        id S230326AbjFZNKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 09:10:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230305AbjFZNH3 (ORCPT
+        with ESMTP id S229481AbjFZNKE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 09:07:29 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA3210D;
-        Mon, 26 Jun 2023 06:07:28 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3fa8692a006so24213405e9.3;
-        Mon, 26 Jun 2023 06:07:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687784846; x=1690376846;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=N2AygcecPtn2LrwTAFghsbuSyei/AofSmSKKBMyrpNk=;
-        b=dfjTTHqIPsYowz1YtzqV8uTL0zNrBLVlTpmXbF2oDmf0tyJEAf4bqCbyK/sACThn0K
-         5r+iqvwdoghTWQ0B/cu7IKp/2Z11Q8KiM2avtTJRTHYkw7xHHK483jie61ymLtEo+Ki0
-         1dMZoDnL8M1i14YjI6RFia+4cK9rbduD8STErSztM9cgmaQai2OhybwBkobvezIu6qwg
-         oVYu7O4R/eQ2n24XW1tBiTXBj1te+ITGB6J2KNfr/UMHnjvKHbsqNdFb6mEHN2CokaI7
-         YCKrCGmOzcEfBC5E2EK9iwAKK3gHMS/I0gkvBmPN8U3BozsXj7kA53kZviiEIYdD2McK
-         TBYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687784846; x=1690376846;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=N2AygcecPtn2LrwTAFghsbuSyei/AofSmSKKBMyrpNk=;
-        b=c5/iehqDPcMnSCz5Ivnq9+FRSLfhe11onHWNfMsFnw5hoyC9YVWE9adUQllIjukdmm
-         3q+pxJCJdr/svnD8DvsaYQwUy6R5NSF36X6MTJWuSah3Begqjyqs2xK/2cbTRjAu2hsJ
-         NulXmQbA3qgLW26TmO4/LS8Y3KP4OwSKjGKDBxoJqXqDyoq1hfAatn09Jvfda2uTiEmo
-         pSY73r80FGtAkPiPhRVFvSsfLMIWU0C/9fnMShYcva5pUrng/ctPftgCBlBIimJ33o+a
-         5YBwqrZ/UDBsZd8eRDRMdHnLivXLwx/H90icEmzcHKDNGps1GNgBPLf5/FI6SPLDNZYe
-         thiQ==
-X-Gm-Message-State: AC+VfDxj8qGrPeSbOdCuPyGq6+fxxCEQIptsFN9uCSVsk/uY9GRximSJ
-        hnxHxg4PnwuQtuEHKpXPuJT2VK6oEbc=
-X-Google-Smtp-Source: ACHHUZ5YNkYCJJUBeg29BkC3m2kmUDS+U6gVhk6E3OMqWsH2NcwEpdnuXYmLCfY0RFUU3aLtZWKdnA==
-X-Received: by 2002:a05:600c:2152:b0:3f9:a6f3:8a53 with SMTP id v18-20020a05600c215200b003f9a6f38a53mr18390284wml.20.1687784845540;
-        Mon, 26 Jun 2023 06:07:25 -0700 (PDT)
-Received: from suse.localnet (host-79-17-50-162.retail.telecomitalia.it. [79.17.50.162])
-        by smtp.gmail.com with ESMTPSA id 4-20020a05600c228400b003f7e4d143cfsm7622409wmf.15.2023.06.26.06.07.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jun 2023 06:07:24 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sumitra Sharma <sumitraartsy@gmail.com>
-Cc:     Ira Weiny <ira.weiny@intel.com>, Deepak R Varma <drv@mailo.com>,
-        Sumitra Sharma <sumitraartsy@gmail.com>
-Subject: Re: [PATCH v4] lib/test_bpf: Call page_address() on page acquired with
- GFP_KERNEL flag
-Date:   Mon, 26 Jun 2023 15:07:22 +0200
-Message-ID: <5846758.MhkbZ0Pkbq@suse>
-In-Reply-To: <20230623151644.GA434468@sumitra.com>
-References: <20230623151644.GA434468@sumitra.com>
+        Mon, 26 Jun 2023 09:10:04 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E699B9;
+        Mon, 26 Jun 2023 06:10:03 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 3A4031F8AB;
+        Mon, 26 Jun 2023 13:10:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1687785002; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=p6JfJgn7WigU75C2F7rQV1RIBlnMRsvyrWJCIdw/dCA=;
+        b=eys9iBcHZeEhwoM+4xJcArAsNTJEoZ4F5/JuvySgzA6lig0YQ2tKBwmhJgJeGuTKW0ojic
+        uU6ctK6n8OkxZ1BPLsNhpVVwGfa3dN5NOYQdiORfGNJsaHjXve08g9PgKOjHS89z+XuLtS
+        G20EEJ5kA0P7k0HkW1y/WVHUf7dDKB8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1687785002;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=p6JfJgn7WigU75C2F7rQV1RIBlnMRsvyrWJCIdw/dCA=;
+        b=VXWH/ebYmCkoxq1Jrdwc3zdPADBQ/c6B+J2fQ2Otd4ECu7PfiGlen3urUdNidZRR7g2tvt
+        zOaSHX36FGPHZwAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9D9F613483;
+        Mon, 26 Jun 2023 13:10:01 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id hTf9JSmOmWQaXgAAMHmgww
+        (envelope-from <jack@suse.cz>); Mon, 26 Jun 2023 13:10:01 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 472B1A0754; Mon, 26 Jun 2023 15:09:57 +0200 (CEST)
+Date:   Mon, 26 Jun 2023 15:09:57 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Baokun Li <libaokun1@huawei.com>
+Cc:     Jan Kara <jack@suse.cz>, linux-fsdevel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, yangerkun@huawei.com, chengzhihao1@huawei.com,
+        yukuai3@huawei.com
+Subject: Re: [PATCH] quota: fix race condition between dqput() and
+ dquot_mark_dquot_dirty()
+Message-ID: <20230626130957.kvfli23djxc2opkq@quack3>
+References: <20230616085608.42435-1-libaokun1@huawei.com>
+ <20230616152824.ndpgvkegvvip2ahh@quack3>
+ <c8daf4a0-769f-f769-50f6-8b7063542499@huawei.com>
+ <20230622145620.hk3bdjxtlr64gtzl@quack3>
+ <b73894fc-0c7a-0503-25ad-ab5a9dfbd852@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b73894fc-0c7a-0503-25ad-ab5a9dfbd852@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On venerd=EC 23 giugno 2023 17:16:44 CEST Sumitra Sharma wrote:
-> generate_test_data() acquires a page with alloc_page(GFP_KERNEL).
-> The GFP_KERNEL is typical for kernel-internal allocations.
-> The caller requires ZONE_NORMAL or a lower zone for direct access.
->=20
-> Therefore the page cannot come from ZONE_HIGHMEM. Thus there's
-> no need to map it with kmap().
->=20
-> Also, the kmap() is being deprecated in favor of kmap_local_page() [1].
->=20
-> Hence, use a plain page_address() directly.
->=20
-> Since the page passed to the page_address() is not from the highmem
-> zone, the page_address() function will always return a valid kernel
-> virtual address and will not return NULL. Hence, remove the check
-> 'if (!ptr)'.
->=20
-> Remove the unused variable 'ptr' and label 'err_free_page'.
->=20
-> [1]: https://lore.kernel.org/all/20220813220034.806698-1-ira.weiny@intel.=
-com/
->=20
-> Suggested-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+Hello!
 
-I can't see no more things that prevent my tag, then it is...
+On Sun 25-06-23 15:56:10, Baokun Li wrote:
+> > > I think we can simply focus on the race between the DQ_ACTIVE_B flag and
+> > > the DQ_MOD_B flag, which is the core problem, because the same quota
+> > > should not have both flags. These two flags are protected by dq_list_lock
+> > > and dquot->dq_lock respectively, so it makes sense to add a
+> > > wait_on_dquot() to ensure the accuracy of DQ_ACTIVE_B.
+> > But the fundamental problem is not only the race with DQ_MOD_B setting. The
+> > dquot structure can be completely freed by the time
+> > dquot_claim_space_nodirty() calls dquot_mark_dquot_dirty() on it. That's
+> > why I think making __dquot_transfer() obey dquot_srcu rules is the right
+> > solution.
+> Yes, now I also think that making __dquot_transfer() obey dquot_srcu
+> rules is a better solution. But with inode->i_lock protection, why would
+> the dquot structure be completely freed?
 
-Reviewed-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+Well, when dquot_claim_space_nodirty() calls mark_all_dquot_dirty() it does
+not hold any locks (only dquot_srcu). So nothing prevents dquot_transfer()
+to go, swap dquot structure pointers and drop dquot references and after
+that mark_all_dquot_dirty() can use a stale pointer to call
+mark_dquot_dirty() on already freed memory.
 
-Thanks for working on it for all the time it took to get to v4 and for=20
-listening to what you've been suggested to change.
-
-Well done :-)
-
-=46abio
-
-> Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
-> ---
->=20
-> - Link to v1:
-> https://lore.kernel.org/bpf/20230613073020.GA359792@sumitra.com/T/ - Link=
- to
-> v2: https://lore.kernel.org/all/20230613071756.GA359746@sumitra.com/ - Li=
-nk
-> to v3: https://lore.kernel.org/all/20230622080729.GA426913@sumitra.com/
->=20
-> Changes in v4:
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes:
-> https://lore.kernel.org/oe-kbuild-all/202306230559.hU5Aonpl-lkp@intel.com=
-/ -
-> Remove unused label 'err_free_page'.
->=20
-> Changes in v3:
-> Noted by: Fabio M. De Francesco<fmdefrancesco@gmail.com>
-> 	- Remove the check 'if (!ptr)'.
-> 	- Remove the unused variable 'ptr'.
-> 	- Change the commit message.
->=20
-> Changes in v2:
-> Noted by: Fabio M. De Francesco<fmdefrancesco@gmail.com>
-> 	- Remove the kmap() call and call page_address() instead.
-> 	- Change the commit subject and message.
->=20
->  lib/test_bpf.c | 10 +---------
->  1 file changed, 1 insertion(+), 9 deletions(-)
->=20
-> diff --git a/lib/test_bpf.c b/lib/test_bpf.c
-> index ade9ac672adb..a5cc5f9fc4e8 100644
-> --- a/lib/test_bpf.c
-> +++ b/lib/test_bpf.c
-> @@ -14381,25 +14381,17 @@ static void *generate_test_data(struct bpf_test
-> *test, int sub) * single fragment to the skb, filled with
->  		 * test->frag_data.
->  		 */
-> -		void *ptr;
-> -
->  		page =3D alloc_page(GFP_KERNEL);
->=20
->  		if (!page)
->  			goto err_kfree_skb;
->=20
-> -		ptr =3D kmap(page);
-> -		if (!ptr)
-> -			goto err_free_page;
-> -		memcpy(ptr, test->frag_data, MAX_DATA);
-> -		kunmap(page);
-> +		memcpy(page_address(page), test->frag_data, MAX_DATA);
->  		skb_add_rx_frag(skb, 0, page, 0, MAX_DATA, MAX_DATA);
->  	}
->=20
->  	return skb;
->=20
-> -err_free_page:
-> -	__free_page(page);
->  err_kfree_skb:
->  	kfree_skb(skb);
->  	return NULL;
-> --
-> 2.25.1
-
-
-
-
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
