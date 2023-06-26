@@ -2,75 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB12873D848
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 09:14:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17D0F73D84A
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 09:15:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbjFZHOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 03:14:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56622 "EHLO
+        id S229800AbjFZHPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 03:15:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229768AbjFZHOd (ORCPT
+        with ESMTP id S229933AbjFZHO4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 03:14:33 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD64E70
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 00:14:26 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id af79cd13be357-765942d497fso99748685a.1
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 00:14:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687763665; x=1690355665;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RUSGWbCXntBTkO9sHXbN7XbI0NcyxewHoKY9x8+FCk8=;
-        b=w3kVtyCJ4ESUpPms38IJ30YO6oVYBMt0UEKIlCatn9cTvC7xC8K+wv6U4swkyfoQ9+
-         3K2suYs6a1ErbqyeTSMcn5Xi3Y7tpNgOvIN7oPdi91jPlcYOHaFf8Bdbdz4+iupUtMiU
-         /mlPzoFtxaHuhMa2wKMNuHtV8jRuC62mZNPzaMbQNLPuV7zl+AC/7mDwEh/JTJuIWQvR
-         pWT9GV4rKv/bu6X+SEiRJDkIxqfF+ONHj6WFvBnR52L4ZC4jBdE/ug7z/pxlwxMVTSiq
-         3SregEObJ9zB+JtXUB+4FX1bIAJ0F3h5TDiW3NKT3F6zep1HLwKhAT8geDiu1WwYjmHR
-         Ltxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687763665; x=1690355665;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RUSGWbCXntBTkO9sHXbN7XbI0NcyxewHoKY9x8+FCk8=;
-        b=WjzDAkBCuzc+0zXrI5ojKTYrF2+PcOG57wVAiHj4Jc8BOlo72uCrgj2lCVD3ALmo36
-         bwmeLOgAcFjeM+ec9x9YgkLv0XE6HplLiwSyw0q+KW76QlBd+ooSFNwCQ0UU1eFphd7M
-         tyuvQmt26nGYgMTonH8jkfmepQAFR2CP90+o6lCrHI+m702wbhDBLo+VVMgnQJQ523IH
-         lyaSCwZOGVwawPAhG2oIB+1lNeJYGet2WikG9Zdmn6Ac6ocF9apICArQAiFUe7Yb2s9w
-         8uVUrMWIsepaMBEm+b7ZhlcN9UtHoLNtQtU5S/HodMLo7yVh2ipNABhy/QDxnSx3XQaf
-         4DXQ==
-X-Gm-Message-State: AC+VfDzicTMRz9kuRGAzBBjLYlJ/SHUEsbE7du74CBnjG/oHSTMEeqsx
-        jAQlLp3YxKGbeyBoCkbngdN1imHa9n6JgTeHgrBBmQ==
-X-Google-Smtp-Source: ACHHUZ7Yi47S0NNvpHTlPpY242vz1Sc33NqGJQi5jVb+lJAPeo7W02dKbmeBe32LQ8HnC9fNVcvXrI+GtETdyJy0gTI=
-X-Received: by 2002:a05:6214:c6c:b0:626:15bb:f57b with SMTP id
- t12-20020a0562140c6c00b0062615bbf57bmr30736446qvj.26.1687763665174; Mon, 26
- Jun 2023 00:14:25 -0700 (PDT)
+        Mon, 26 Jun 2023 03:14:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 056141AD
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 00:14:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3760E60CBB
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 07:14:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEB0AC433C9;
+        Mon, 26 Jun 2023 07:14:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687763691;
+        bh=oQZ84XlT6gBokBX5+oyJLL3d5IYeNAfxZeJGitZc8so=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=NAAjePZ5DL9HIveOd5UEX7UkXAVtNas2WyE0Br2ufbEipVdloMac8N1ApcPtWRNiX
+         UJsE9UHhrn/njbHFaY7X+rBB9S4Rma8x4OqxeYxK+4YbdqhLTnIQXqiV1TqQjJhklp
+         f6UALBkriIcA79z8tVXfkdiaNoyDPyXOsRPJqFjig/Qjntot6Gn03XE0cnLabuk/CO
+         +3gWRDCse/on6d3GfUbhX9z1YmMUcDy580obmxPxT94Ds2F5Nkf7nRXj58MFOeRQ4f
+         Rr2TjHQODBrwYN9EulNzAnnjpY5YszEpZ0g0oWVqmxp2UjxPDuMHX4hm9mEr8/IJFv
+         snKgKr6Bk6Jyg==
 MIME-Version: 1.0
-References: <20230625162817.100397-1-krzysztof.kozlowski@linaro.org> <20230625162817.100397-3-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230625162817.100397-3-krzysztof.kozlowski@linaro.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 26 Jun 2023 09:14:14 +0200
-Message-ID: <CACRpkda2maO-dM9F=6pZnpDh9LtPGqeSTUbh1AAMeDiG27yY9A@mail.gmail.com>
-Subject: Re: [PATCH v4 02/24] Input: gpio-vibra - Simplify with dev_err_probe()
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Bastien Nocera <hadess@hadess.net>,
-        Sangwon Jee <jeesw@melfas.com>,
-        Eugen Hristev <eugen.hristev@collabora.com>,
-        =?UTF-8?Q?Mika_Penttil=C3=A4?= <mpenttil@redhat.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Date:   Mon, 26 Jun 2023 09:14:46 +0200
+From:   Michael Walle <mwalle@kernel.org>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Yisen Zhuang <yisen.zhuang@huawei.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        =?UTF-8?Q?Marek_Beh=C3=BAn?= <kabel@kernel.org>,
+        Xu Liang <lxu@maxlinear.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v2 07/10] net: phy: add support for C45-over-C22
+ transfers
+In-Reply-To: <52859948-9812-4b0b-ae5f-7e174926d5c4@lunn.ch>
+References: <20230620-feature-c45-over-c22-v2-0-def0ab9ccee2@kernel.org>
+ <20230620-feature-c45-over-c22-v2-7-def0ab9ccee2@kernel.org>
+ <52859948-9812-4b0b-ae5f-7e174926d5c4@lunn.ch>
+Message-ID: <6288946d020417d9c87236235d5c664f@kernel.org>
+X-Sender: mwalle@kernel.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,17 +72,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 25, 2023 at 6:28=E2=80=AFPM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
+Am 2023-06-24 22:15, schrieb Andrew Lunn:
+>>  int __phy_read_mmd(struct phy_device *phydev, int devad, u32 regnum)
+>>  {
+>> -	int val;
+>> +	struct mii_bus *bus = phydev->mdio.bus;
+>> +	int phy_addr = phydev->mdio.addr;
+>> +	bool check_rc = true;
+>> +	int ret;
+> 
+> Although __phy_read_mmd() is exported as a GPL symbol, it is not in
+> fact used outside of this file. I think we can easily change it
+> signature.
+> 
+>> +	switch (phydev->access_mode) {
+> 
+> Have access_mode passed in as a parameter. It then becomes a generic
+> low level helper.
 
-> Common pattern of handling deferred probe can be simplified with
-> dev_err_probe().  Less code and also it prints the error value.
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Are you sure? Why is it a generic helper then? You still need the phydev
+parameter. E.g. for the bus, the address and more importantly, for the
+phydev->drv->read_mmd op. And in this case, you can't use it for my new
+phy_probe_mmd_read() because there is no phydev structure at that time.
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Also __phy_read_mmd() is just one of a whole block of (unlocked) 
+functions
+to access the MMDs of a PHY. So, to be consistent you'd have to change 
+all
+the other ones, too. No?
 
-Yours,
-Linus Walleij
+That being said, what about a true generic helper, without the phydev
+parameter, which is then called in __phy_{read,write}_mmd()? Where
+would that helper belong to? Without the C45-over-C22 I'd have suggested
+to put it into mdio_bus.c but C45-over-C22 being a PHY thing, I guess
+it should be in phy-core.c.
+
+> The function which is really exported and expected to by used by PHY
+> drivers is:
+> 
+> int phy_read_mmd(struct phy_device *phydev, int devad, u32 regnum)
+> {
+> 	int ret;
+> 
+> 	phy_lock_mdio_bus(phydev);
+> 	ret = __phy_read_mmd(phydev, devad, regnum);
+> 	phy_unlock_mdio_bus(phydev);
+> 
+> 	return ret;
+> }
+> EXPORT_SYMBOL(phy_read_mmd);
+> 
+> This can easily pass phydev->access_mode as a parameter.
+> 
+>> +static int phy_probe_mmd_read(struct mii_bus *bus, int prtad, int 
+>> devad,
+>> +			      u16 regnum, bool c45_over_c22)
+>> +{
+> 
+> What i don't like is this bool c45_over_c22. Why have both the enum
+> for the three access modes, and this bool. Pass an access mode.
+
+Ok, but just to be sure, access mode c22 is then a "return -EINVAL".
+
+>> +	int ret;
+>> +
+>> +	if (!c45_over_c22)
+>> +		return mdiobus_c45_read(bus, prtad, devad, regnum);
+>> +
+>> +	mutex_lock(&bus->mdio_lock);
+>> +
+>> +	ret = __phy_mmd_indirect(bus, prtad, devad, regnum);
+>> +	if (ret)
+>> +		goto out;
+>> +
+>> +	ret = __mdiobus_read(bus, prtad, MII_MMD_DATA);
+> 
+> And then this just uses the generic low level __phy_read_mmd().
+
+See above, no there is no *phydev.
+
+-michael
