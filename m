@@ -2,139 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E75E73DE00
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 13:46:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A73773DE13
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 13:49:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229472AbjFZLqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 07:46:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40438 "EHLO
+        id S229954AbjFZLs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 07:48:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjFZLqm (ORCPT
+        with ESMTP id S229454AbjFZLs4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 07:46:42 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E267194
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 04:46:41 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3fb10fd9ad3so3864195e9.0
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 04:46:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687780000; x=1690372000;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8uLRq7795u4+vU/HBiNzObZsPTqHBcq4PBCGfIyiv8U=;
-        b=tfenV3K/5msWzUWIJDSY0OWhthXuDD3ucDJAjhgFk0dR+QhiGUeDxYgKxmgxYaldI9
-         o4b32YKaZ40pFe6w6XBfOz9qF5oFP9Qcu+yvjxCdKH50ZBrODL1jcuWUnKGF6VOaW9ON
-         uDCc4/2ZhSQAlVDHx0/jqkIdm3xGlE8h6cKoUMloFmwbICvo9/hMw2zTwy4NmoZXPEpV
-         0TPVIpFmHOxwgR18a4d9ggAreHiCxAMRKZJteekdudKdgilHhS5hvVlPqQxX9oCFNzvN
-         84SOjJDzPr7y6EC962FNUpm9y0ksFAAMgji5AO3UO8pWcM2s7jd8V5p6HAwoQspNzgb6
-         OYQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687780000; x=1690372000;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8uLRq7795u4+vU/HBiNzObZsPTqHBcq4PBCGfIyiv8U=;
-        b=UtEChi742WBYRT5NhW7lNB1w5/I9FzKWKczQTjFOsVETqKA7Lnu60gMTgcPWY4Qia6
-         qNJi2x7pmMqRxACNsUbbHdzqvZAbgY/CepHB3IjUGFK6Sor82ecKBaQlUgGDxSdHGL4j
-         N9yZa5OUvfYi86uhgReKcB+u7zQPxvAnyG624FBwi8yYqxQhKkjgv7uUUsKL4vSBqo3W
-         2XImLMScpGq7w1Q06KSsqkJVmdOwv8RcFYklEHGMlj2ZcmmDaorzUCrAlCKQq2Y9Vr60
-         tDSZ9idGLdhUe1iz83dJFYu5xKnzAO7a3mxfDXzA1RGaGRGxEE/POtJ+TDPXJo7wFu4s
-         oqXw==
-X-Gm-Message-State: AC+VfDzA3/hs2JSJTtQripNsjKiEfG1pgLEBWh/byqRSjgpoikI5lxb6
-        UzHvrANKm/RHs5BGy+h1XhNRF7SA90/v/eXUBYg=
-X-Google-Smtp-Source: ACHHUZ7WNyF3ul5N2txN+WskY9mQAIhRpA72QramL2D9DR0QWsJ4McpAL8WrYx1uZQVXdo3iQz4lgQ==
-X-Received: by 2002:a05:600c:2152:b0:3f9:a6f3:8a53 with SMTP id v18-20020a05600c215200b003f9a6f38a53mr18239381wml.20.1687779999962;
-        Mon, 26 Jun 2023 04:46:39 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id h15-20020a05600004cf00b0030e52d4c1bcsm7221461wri.71.2023.06.26.04.46.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jun 2023 04:46:38 -0700 (PDT)
-Date:   Mon, 26 Jun 2023 14:46:35 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     Jeffrey Hugo <quic_jhugo@quicinc.com>
-Cc:     Julia Lawall <Julia.Lawall@inria.fr>,
-        Manivannan Sadhasivam <mani@kernel.org>, keescook@chromium.org,
-        kernel-janitors@vger.kernel.org, mhi@lists.linux.dev,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 10/26] bus: mhi: host: use array_size
-Message-ID: <aaa1bf4b-c546-402f-8ad2-667fd35caa74@kadam.mountain>
-References: <20230623211457.102544-1-Julia.Lawall@inria.fr>
- <20230623211457.102544-11-Julia.Lawall@inria.fr>
- <3b4ff79b-93b4-cf56-1488-113905b3981d@quicinc.com>
+        Mon, 26 Jun 2023 07:48:56 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85E681AA;
+        Mon, 26 Jun 2023 04:48:54 -0700 (PDT)
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id BBA451EC01E0;
+        Mon, 26 Jun 2023 13:48:52 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1687780132;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:references;
+        bh=bF/RKkVqs08gMd1k9tLXLy67+puaEetKPnBj+725Lec=;
+        b=ahS0juFeZnkvOWE9h4SGm90h1JxIAvlvLG+QSwHiLxIAhFWc6EFk0Rs8QDi6FpHcv3XZsw
+        gy5INs1Kr0jpurHf3lZI6G3CUybKFhbuh8dP3IfyOrnrPKTXtobNoXyl71Z/0ZaEcrKtfU
+        fYtQhNIhaTWlF5RpbhtJj5fbyIWr2vo=
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+        header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id TuOGT6dOfjzs; Mon, 26 Jun 2023 11:48:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+        t=1687780129; bh=bF/RKkVqs08gMd1k9tLXLy67+puaEetKPnBj+725Lec=;
+        h=Date:From:To:Cc:Subject:From;
+        b=efL4rvvIHTD76uLuyOCxG9h3+mL31Pr/69/F6NlOXgUeP9NCB+b8eebjRF5O3WWPR
+         2s1XMeQoJrISYXaI0J1NYK5vxEzey1uxjtqu0IJPaCJc5VOy0iKSSIzdUPYAeeHfWG
+         Um/1rhcs5M786v5IYoBI2upXwiCDsyNy8ot8RjUY4mLhcX3WsnamLyavnwd16wayQK
+         qqs6Gs5TY069bVk7ypWV8H2NbKjWpLcxle4m8FDEw+sODzhFY5ZIMiJ+Tlmdsz1Lvr
+         DYdQOgZozDllDtWjZ383cEbYLTcwvNxUBA5NkuEgpp7KNiIROrsqlL6D1IF81x5YUF
+         NyxDPIfA1cNpuA5UhOmROLFiuvl5xd896e6VlOq3ND22zgkZk/k9TpIcm4kqfRfNrq
+         Zevop8GeYLxs/GGuqp3c/cTpun2GPNIOhx3RP9JAM7ouYNjiG2fTaeoyQjIdrfRNkT
+         CX9Z9DPyYLv1+G/ryGdglwhDhy8WBJW/FP7giTzkYsxk7kaJf85nze7EsQ4NItBrxG
+         7gIaaGf+H29QoEkjqnVWB3pdT0p/l2QYIbxXN0ud/A1Bjp0QXh2DSlUbwVf67xQlTO
+         mb+5IXcRBZ/gUU8JjlUM5ukD2mIi9mpW3dHLIEDiuavj4haD/hRHAgMnzTO7lJZKbY
+         B4Hi82eQpu4xEqY66LdQxUco=
+Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+        (No client certificate requested)
+        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C3AAC40E01E1;
+        Mon, 26 Jun 2023 11:48:46 +0000 (UTC)
+Date:   Mon, 26 Jun 2023 13:48:42 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-edac <linux-edac@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] EDAC updates for 6.5
+Message-ID: <20230626114842.GAZJl7GsleaEc2+cU1@fat_crate.local>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <3b4ff79b-93b4-cf56-1488-113905b3981d@quicinc.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 23, 2023 at 03:30:36PM -0600, Jeffrey Hugo wrote:
-> On 6/23/2023 3:14 PM, Julia Lawall wrote:
-> > Use array_size to protect against multiplication overflows.
-> > 
-> > The changes were done using the following Coccinelle semantic patch:
-> > 
-> > // <smpl>
-> > @@
-> >      expression E1, E2;
-> >      constant C1, C2;
-> >      identifier alloc = {vmalloc,vzalloc};
-> > @@
-> > (
-> >        alloc(C1 * C2,...)
-> > |
-> >        alloc(
-> > -           (E1) * (E2)
-> > +           array_size(E1, E2)
-> >        ,...)
-> > )
-> > // </smpl>
-> > 
-> > Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
-> > 
-> > ---
-> >   drivers/bus/mhi/host/init.c |    4 ++--
-> >   1 file changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/bus/mhi/host/init.c b/drivers/bus/mhi/host/init.c
-> > index f72fcb66f408..34a543a67068 100644
-> > --- a/drivers/bus/mhi/host/init.c
-> > +++ b/drivers/bus/mhi/host/init.c
-> > @@ -759,8 +759,8 @@ static int parse_ch_cfg(struct mhi_controller *mhi_cntrl,
-> >   	 * so to avoid any memory possible allocation failures, vzalloc is
-> >   	 * used here
-> >   	 */
-> > -	mhi_cntrl->mhi_chan = vzalloc(mhi_cntrl->max_chan *
-> > -				      sizeof(*mhi_cntrl->mhi_chan));
-> > +	mhi_cntrl->mhi_chan = vzalloc(array_size(mhi_cntrl->max_chan,
-> > +				      sizeof(*mhi_cntrl->mhi_chan)));
-> >   	if (!mhi_cntrl->mhi_chan)
-> >   		return -ENOMEM;
-> > 
-> > 
-> 
-> This doesn't seem like a good fix.
-> 
-> If we've overflowed the multiplication, I don't think we should continue,
-> and the function should return an error.  array_size() is going to return
-> SIZE_MAX, and it looks like it is possible that vzalloc() may be able to
-> allocate that successfully in some scenarios.
+Hi Linus,
 
-Nope.  You can never allocate more that size_t because that's the
-highest number that the kernel allocation functions can accept.
+please pull the accumulated EDAC updates for 6.5.
 
-Obviously on 64bit size_t is unbelievably large.  If I remember right,
-on 32bit you didn't used to be able to allocate more than 2GB without
-doing all sorts of tricks.  And everyone deleted those tricks when 64bit
-machines became super common.
+Thx.
 
-regards,
-dan carpenter
+---
 
+The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
+
+  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_updates_for_v6.5
+
+for you to fetch changes up to 852667c317ae23f366cfaade3b9269b1943888dd:
+
+  Merge ras/edac-drivers into for-next (2023-06-12 15:15:36 +0200)
+
+----------------------------------------------------------------
+- amd64_edac: Add support for Zen4 client hardware
+
+- amd64_edac: Remove the version string as it is useless and actively
+  confusing when looking at backported versions of the driver
+
+- Add a driver for the Nuvoton NPCM memory controller
+
+- A debugfs error checking cleanup
+
+----------------------------------------------------------------
+Borislav Petkov (AMD) (2):
+      Merge ras/edac-misc into for-next
+      Merge ras/edac-drivers into for-next
+
+Hristo Venev (1):
+      EDAC/amd64: Add support for ECC on family 19h model 60h-7Fh
+
+Marvin Lin (2):
+      dt-bindings: memory-controllers: nuvoton: Add NPCM memory controller
+      EDAC/npcm: Add NPCM memory controller driver
+
+Yazen Ghannam (1):
+      EDAC/amd64: Remove module version string
+
+Yeqi Fu (1):
+      EDAC/thunderx: Check debugfs file creation retval properly
+
+ .../nuvoton,npcm-memory-controller.yaml            |  50 ++
+ MAINTAINERS                                        |   8 +
+ drivers/edac/Kconfig                               |  11 +
+ drivers/edac/Makefile                              |   1 +
+ drivers/edac/amd64_edac.c                          |  12 +-
+ drivers/edac/amd64_edac.h                          |   1 -
+ drivers/edac/npcm_edac.c                           | 543 +++++++++++++++++++++
+ drivers/edac/thunderx_edac.c                       |   2 +-
+ 8 files changed, 623 insertions(+), 5 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/memory-controllers/nuvoton,npcm-memory-controller.yaml
+ create mode 100644 drivers/edac/npcm_edac.c
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
