@@ -2,107 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8373573EE8D
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 00:16:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 527C073EE93
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 00:18:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229457AbjFZWQ0 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 26 Jun 2023 18:16:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60900 "EHLO
+        id S229578AbjFZWSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 18:18:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230353AbjFZWQL (ORCPT
+        with ESMTP id S229448AbjFZWSd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 18:16:11 -0400
-Received: from mail-vs1-f53.google.com (mail-vs1-f53.google.com [209.85.217.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92CA32729;
-        Mon, 26 Jun 2023 15:15:15 -0700 (PDT)
-Received: by mail-vs1-f53.google.com with SMTP id ada2fe7eead31-44357f34e2dso620340137.3;
-        Mon, 26 Jun 2023 15:15:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687817714; x=1690409714;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sBTU3bSkJsZYHidxKUw6bezPRH0mHvAIcWPR5hMhfp0=;
-        b=TQ4VCxHUyKs++cOBTB3tC+0p6i+rKM2E2piLFm2/DQifSuVcuSF6/PjLjGjFJpjh5Y
-         hMm9DWnVAzQVx2M6QufwCGHTZ4E3D0tz1itRSkn3j/C+/zAkEpiup4nAyfLpNrPc8ksA
-         p3Uw8GFbSmnvNU++Vhdo8nVDQVGq5Yvuh2UhF9KCRjocXPHf6dWNP/eArMXH/EmkrTD9
-         E4nhd6haCdW+379p+cYnCnubytyusg3XXViONanQxQGznyFsbtU+CmDC1gf22Owd13nO
-         myoD9L8HEl6dIFQGn5QqaIH4FLBF1cLoS6qXOzryFUeCk2OEt2ff7RZPTSduUaB57X3F
-         HOSQ==
-X-Gm-Message-State: AC+VfDwf3/JvFMfmCsXTVOtx6jEsONZOkn2jaId6+nypd4/0WCaGa+zM
-        qpMPSf/TMt/oivD8ghsnth/DTGT4Zcgkkr22PyQ6FY7/
-X-Google-Smtp-Source: ACHHUZ6Xriv1+IpDgIMwYF2u+SPTqxO8SUqTUa01WvUDpZlZgsYOWrP4UtGxnf+7I39VE5YrxW9sTMVJsCFGJ/AVNnQ=
-X-Received: by 2002:a05:6102:ce:b0:443:69fd:3628 with SMTP id
- u14-20020a05610200ce00b0044369fd3628mr1875394vsp.13.1687817714410; Mon, 26
- Jun 2023 15:15:14 -0700 (PDT)
+        Mon, 26 Jun 2023 18:18:33 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D4A793
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 15:18:32 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1687817909;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Pq/278w4iPtQ/1zu8/UxhpVibR0HxFF7LZ7PyP6/uDk=;
+        b=oUamhx0rLt4dcw/AQ3qg+MgT76iLEVTGRKZhmAqGkYxpGFk5a+wq9uJymebAd9vTLwlCwq
+        PBCXaDakbpjF7gfUoxQ/GUNbFT/Fez+w5a7qb4T+I6pFlPsm6VHAuJKScP6LDUaDCQ4O+B
+        h9bre/C6lGbHttiIUPChB2nDo0yB6Jbec52Q0Qr9hqESsdIG8vQ/1eOXDQUmhevVsHhWbE
+        4u9iqYCR9h25+LtrT0Dp1Tek0Q0+THZNO6peap+BLmbhYoiYbECFEVB7bhg1xL3wtadCBb
+        yOAcswjsf6gpb0OUGp8lTQ1cKJm4wFh6Wu9IH4zHb8rcnYrpOnq98fxPDQtROQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1687817909;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Pq/278w4iPtQ/1zu8/UxhpVibR0HxFF7LZ7PyP6/uDk=;
+        b=F0WSs03MlycwNPxgn8BcKucWNc1MWQPuHAO4NcExLpLa+aK+gKx1mBYV9+5qwJRveuscLD
+        Y9TWCupbAOSMrJDA==
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org
+Subject: Re: [GIT pull] x86/core for v6.5-rc1
+In-Reply-To: <CAHk-=wgoVt9izQi2iA3F8PZbnmT+r4CcqaHp+FhEozSj2D=UFg@mail.gmail.com>
+References: <168778150975.3634408.5562070824299155127.tglx@vps.praguecc.cz>
+ <168778151644.3634408.18311962903658740097.tglx@vps.praguecc.cz>
+ <CAHk-=wgoVt9izQi2iA3F8PZbnmT+r4CcqaHp+FhEozSj2D=UFg@mail.gmail.com>
+Date:   Tue, 27 Jun 2023 00:18:28 +0200
+Message-ID: <87zg4l50ln.ffs@tglx>
 MIME-Version: 1.0
-References: <20230626053048.257959-1-irogers@google.com>
-In-Reply-To: <20230626053048.257959-1-irogers@google.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Mon, 26 Jun 2023 15:15:03 -0700
-Message-ID: <CAM9d7cgrVEUBrmF4+w02ENQwSG-Ek6H_O7B0cUgPxv_wvsj5MQ@mail.gmail.com>
-Subject: Re: [PATCH v1] perf pmu: Correct auto_merge_stats test
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        James Clark <james.clark@arm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andi Kleen <ak@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ian,
+Linus!
 
-On Sun, Jun 25, 2023 at 10:31 PM Ian Rogers <irogers@google.com> wrote:
+On Mon, Jun 26 2023 at 15:00, Linus Torvalds wrote:
+> On Mon, 26 Jun 2023 at 05:14, Thomas Gleixner <tglx@linutronix.de> wrote:
+>>
+>> This conflicts with smp/core and x86/boot. The recommended ordering of
+>> merging these three branches is smp/core, x86/boot, x86/core.
+>>
+>> The x86/boot and final x86/core merge have both subtle conflicts. I've
+>> pushed out the following tags:
+>>
+>>    git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git merge_smp_core_x86_boot_for_6_5
+>>    git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git merge_smp_core_x86_boot_x86_core_for_6_5
+>>
+>> for your conveniance to check against.
 >
-> The original logic was:
-> https://lore.kernel.org/all/20230527072210.2900565-35-irogers@google.com/
-> return !is_pmu_hybrid(pmu->name)
->
-> is_pmu_hybrid was removed but with the incorrect condition which was
-> fixed for core PMUs but not uncore. This change fixes both.
->
-> Fixes: e23421426e13 ("perf pmu: Correct perf_pmu__auto_merge_stats() affecting hybrid")
-> Signed-off-by: Ian Rogers <irogers@google.com>
+> Bah. I read this after I had already done the merges in a different
+> order, and my result is a bit different from your merges.
 
-Tested-by: Namhyung Kim <namhyung@kernel.org>
+I see you started with x86/boot, which has a similar note. I clearly
+missed to add one to smp/core :)
+
+> All my differences seem to be benign, though. The main one seems to be
+> that I kept a preempt_disable/preempt_enable pair in
+> wakeup_secondary_cpu_via_init(), the others seem to be just comments
+> and declaration ordering changes.
+
+That's fine. I do the comment fixup and the preempt_*able() removal in a
+follow up.
+
+> Still, you might want to double-check the end result.
+
+Other than the cosmetic issues you noticed yourself, it's all good.
 
 Thanks,
-Namhyung
 
-
-> ---
->  tools/perf/util/pmu.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
-> index 64fa568a5426..8d5ecd4ff1a9 100644
-> --- a/tools/perf/util/pmu.c
-> +++ b/tools/perf/util/pmu.c
-> @@ -1427,7 +1427,7 @@ bool perf_pmu__supports_legacy_cache(const struct perf_pmu *pmu)
->
->  bool perf_pmu__auto_merge_stats(const struct perf_pmu *pmu)
->  {
-> -       return pmu->is_core && perf_pmus__num_core_pmus() == 1;
-> +       return !pmu->is_core || perf_pmus__num_core_pmus() == 1;
->  }
->
->  bool perf_pmu__have_event(const struct perf_pmu *pmu, const char *name)
-> --
-> 2.41.0.162.gfafddb0af9-goog
->
+        tglx
