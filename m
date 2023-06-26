@@ -2,88 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93CDA73E8DB
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 20:30:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 372BD73E931
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 20:33:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232054AbjFZSac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 14:30:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42716 "EHLO
+        id S232272AbjFZSdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 14:33:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232385AbjFZSaP (ORCPT
+        with ESMTP id S232248AbjFZSdV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 14:30:15 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6976B172E
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 11:30:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687804213; x=1719340213;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=6wCp+iY2jLtglNEKCAZRgKw1YzPBg7/kB29FoaIR90I=;
-  b=UkJ8uQog4JJux+bfMOD6DYt7rYVofgudx3nhJlOJP5Q+SCGHCZV//bBy
-   3QhTdiL8sWFg+GozICoLxLNKUZSiFnnUE9XCfQ9IzzIujQJT+cIyhQLvu
-   AW9sBpY3nqy6qkll5mfZZrzNdqlBUVuzUGGuNf4vrDRhQGE6mYiA+MIqJ
-   4Bl2CK6n48f0xoRAzD4FdaOiW/LXM/+54Rm3PihZj32EC5E4c0aia0jKR
-   kILr6cBfyaw2zDopSUagkP4E8jpfqv80euTeIuaIm7JK9i18YkhRj4f+1
-   CH2gwne1LuSI9jCQv8vJtK5Ftr0OeKw8/rngLQd+N1V6Pa8Sr77yV6ixj
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="340939391"
-X-IronPort-AV: E=Sophos;i="6.01,160,1684825200"; 
-   d="scan'208";a="340939391"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 11:30:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="840381425"
-X-IronPort-AV: E=Sophos;i="6.01,160,1684825200"; 
-   d="scan'208";a="840381425"
-Received: from viggo.jf.intel.com (HELO ray2.intel.com) ([10.54.77.144])
-  by orsmga004.jf.intel.com with ESMTP; 26 Jun 2023 11:30:13 -0700
-From:   Dave Hansen <dave.hansen@linux.intel.com>
-To:     torvalds@linux-foundation.org
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Subject: [GIT PULL] x86/irq for 6.5
-Date:   Mon, 26 Jun 2023 11:30:11 -0700
-Message-Id: <20230626183011.1516068-1-dave.hansen@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 26 Jun 2023 14:33:21 -0400
+Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B9EDC
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 11:33:20 -0700 (PDT)
+Received: by mail-vk1-xa2d.google.com with SMTP id 71dfb90a1353d-471b3ad20e1so998615e0c.1
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 11:33:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1687804399; x=1690396399;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Llh4gIlToO5IIgOre9UJS/YUO0ldCTUXip1sWklWSMQ=;
+        b=JVUAS6Mwd4CGVgbTg2A/4nZBcOTwKzPyRt4TC3yOvNM2+tIbS6xPD0y0D61ppUoIqP
+         kZrkBWOA7Ql4ra0BfHP6nORKavSIwwHUciNKkQa/xmCuLHQQU0FKrjqNuDpFFUV2WhAs
+         bj0vBswCZ/jeImDakg37V6RL9mG+1bVuMZuVcmiIwOAR2fw7RzomjAA6nEM2czoRF5T3
+         UfxPt3ZwyqtBl2AfZC59Q6h21ylliaEpNdI5EVodei9o/wAyUMzWRcPPeO/chWAPw5Vz
+         /ewQOBhvCVgbaU8C2DAN4F+GwhoddBQvjmntOXBFEFx01mMP8Ky6gACQ9gm16ROU2eWf
+         tjRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687804399; x=1690396399;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Llh4gIlToO5IIgOre9UJS/YUO0ldCTUXip1sWklWSMQ=;
+        b=SuHbPRHU/F5484FMMKWClf3xM9KjEYwo2Kg5G0uVf39mRfbQtZeUKUwjbg680NYB18
+         MHC23IYgKhyJVz2lz8bgqyqnb71DuCVkdwU7qdYnFfiy2N8vs1DVS3eDYp8ZsEJ6F/sE
+         JywrqKQZF5Id6GvV/HHgRv9BSKa0UzNUdu4sssTawMSpfz9IDrEVVmrip8MLowxg9qUf
+         IeRq8EIncCb/iqX9qkKq5ige+iG1M0NqHaWCmL4lCPRQCkRWTl0aUefXiweoPML+DasE
+         Enxa/PyJWaNPwzSgLPi2Zyxfrk4S79tj8Qg2peqVxs8+oX9/F/KkTwa4iJpePk7AWqdU
+         YiJA==
+X-Gm-Message-State: AC+VfDwnHY0vgsAykfN+ISDebjJRl5k3D4j35Mf9r8S9AA0FBUJ6Nezv
+        1q12MRiBq29IBIVLSVe+4WF+eQ==
+X-Google-Smtp-Source: ACHHUZ71l/DblDrK7Oyn3lB5D1oIYfT7tQ+BssB+t+iwqPFJMSrWpCc/dst5XGo0zmyM+elBVv+q6Q==
+X-Received: by 2002:a1f:3fca:0:b0:471:5939:f4f2 with SMTP id m193-20020a1f3fca000000b004715939f4f2mr9532857vka.8.1687804399118;
+        Mon, 26 Jun 2023 11:33:19 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-68-25-194.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.25.194])
+        by smtp.gmail.com with ESMTPSA id z24-20020ac875d8000000b003fddd8e7bbasm3348807qtq.30.2023.06.26.11.33.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jun 2023 11:33:18 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1qDr1Z-008pJc-JP;
+        Mon, 26 Jun 2023 15:33:17 -0300
+Date:   Mon, 26 Jun 2023 15:33:17 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Baolu Lu <baolu.lu@linux.intel.com>
+Cc:     Nicolin Chen <nicolinc@nvidia.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Yi Liu <yi.l.liu@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        iommu@lists.linux.dev, linux-kselftest@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCHES 00/17] IOMMUFD: Deliver IO page faults to user space
+Message-ID: <ZJnZ7bEIZHsqmyAG@ziepe.ca>
+References: <20230530053724.232765-1-baolu.lu@linux.intel.com>
+ <ZHZFi28jRxeZMKK3@Asurada-Nvidia>
+ <a8ccbac8-c456-d116-24a2-7503ccbb720c@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a8ccbac8-c456-d116-24a2-7503ccbb720c@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Sun, Jun 25, 2023 at 02:30:46PM +0800, Baolu Lu wrote:
 
-Please pull a single x86/irq change for 6.5.  This ensures that
-Hyper-V-specific interrupts are accounted for in /proc/stat.
+> Agreed. We should avoid workqueue in sva iopf framework. Perhaps we
+> could go ahead with below code? It will be registered to device with
+> iommu_register_device_fault_handler() in IOMMU_DEV_FEAT_IOPF enabling
+> path. Un-registering in the disable path of cause.
 
---
+This maze needs to be undone as well.
 
-The following changes since commit 9561de3a55bed6bdd44a12820ba81ec416e705a7:
+It makes no sense that all the drivers are calling 
 
-  Linux 6.4-rc5 (2023-06-04 14:04:27 -0400)
+ iommu_register_device_fault_handler(dev, iommu_queue_iopf, dev);
 
-are available in the Git repository at:
+The driver should RX a PRI fault and deliver it to some core code
+function, this looks like a good start:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_irq_for_6.5
+> static int io_pgfault_handler(struct iommu_fault *fault, void *cookie)
+> {
+>         ioasid_t pasid = fault->prm.pasid;
+>         struct device *dev = cookie;
+>         struct iommu_domain *domain;
+> 
+>         if (fault->type != IOMMU_FAULT_PAGE_REQ)
+>                 return -EOPNOTSUPP;
+> 
+>         if (fault->prm.flags & IOMMU_FAULT_PAGE_REQUEST_PASID_VALID)
+>                 domain = iommu_get_domain_for_dev_pasid(dev, pasid, 0);
+>         else
+>                 domain = iommu_get_domain_for_dev(dev);
+> 
+>         if (!domain || !domain->iopf_handler)
+>                 return -ENODEV;
+> 
+>         if (domain->type == IOMMU_DOMAIN_SVA)
+>                 return iommu_queue_iopf(fault, cookie);
+> 
+>         return domain->iopf_handler(fault, dev, domain->fault_data);
 
-for you to fetch changes up to 504dba50b0c3fa02ec513d7d0405ddffba2d1c0a:
+Then we find the domain that owns the translation and invoke its
+domain->ops->iopf_handler()
 
-  x86/irq: Add hardcoded hypervisor interrupts to /proc/stat (2023-06-08 08:28:08 -0700)
+If the driver created a SVA domain then the op should point to some
+generic 'handle sva fault' function. There shouldn't be weird SVA
+stuff in the core code.
 
-----------------------------------------------------------------
-Add Hyper-V interrupts to /proc/stat
+The weird SVA stuff is really just a generic per-device workqueue
+dispatcher, so if we think that is valuable then it should be
+integrated into the iommu_domain (domain->ops->use_iopf_workqueue =
+true for instance). Then it could route the fault through the
+workqueue and still invoke domain->ops->iopf_handler.
 
-----------------------------------------------------------------
-Michael Kelley (1):
-      x86/irq: Add hardcoded hypervisor interrupts to /proc/stat
+The word "SVA" should not appear in any of this.
 
- arch/x86/kernel/irq.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+Not sure what iommu_register_device_fault_handler() has to do with all
+of this.. Setting up the dev_iommu stuff to allow for the workqueue
+should happen dynamically during domain attach, ideally in the core
+code before calling to the driver.
+
+Also, I can understand there is a need to turn on PRI support really
+early, and it can make sense to have some IOMMU_DEV_FEAT_IOPF/SVA to
+ask to turn it on.. But that should really only be needed if the HW
+cannot turn it on dynamically during domain attach of a PRI enabled
+domain.
+
+It needs cleaning up..
+
+Jason
