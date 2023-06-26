@@ -2,225 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56E8173D72E
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 07:32:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7D0E73D72B
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 07:32:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbjFZFcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 01:32:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55830 "EHLO
+        id S229753AbjFZFc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 01:32:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbjFZFcf (ORCPT
+        with ESMTP id S229727AbjFZFcZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 01:32:35 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C8F7116;
-        Sun, 25 Jun 2023 22:32:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1687757553; x=1719293553;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=i+Z0930QMYx1AIfFCLnYb1Q4Vz//+myiMyG9zKckmD8=;
-  b=SmfITqfXRWHaQo5Yp+FrJHk3cV+ZSRaxOri5b/VN3aLKHoA6txjSSMsu
-   xt+tLqKJKkR7F/tDYvWDAotxZBJdvQ8wxZf+mrploXMseFPvBiCYos8dd
-   MatNjwSS/Jwf2GBkzSwRZ3O2e832mK/l5SQ7XASrF6x082hLSE+xLmUSm
-   vvnM4qKc369xFTud30+gn4cQLlzBMX9PfMWc+PJkaHPk7u+f6fRJulNWa
-   njdXUiTt5gsnDe3sXp/OWuodnJloTaOzcpysMSYAt/PqHrz0M3q/xCl9N
-   MOw3gyXopB+tcHziFgeE70DJL7DU4V5IM5tVsdIEcOUKw0Wb/EIlCEOdd
-   g==;
-X-IronPort-AV: E=Sophos;i="6.01,158,1684825200"; 
-   d="scan'208";a="158579855"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 25 Jun 2023 22:32:32 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Sun, 25 Jun 2023 22:32:03 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Sun, 25 Jun 2023 22:32:02 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PopAZcjYJMD5Eclp4kLiL3bzNb+xs5NR4epFqFryFvmALbyUNooxOgo3Aq0FJw5ocIL2EzzEu8KDTDKKaNXDrsj3SpBvhDw1OPDFLXoQ3TJ35pIshNBJO3lgcUYOGj7dwVPnZilKtaIul5WPXwkR/FwiGL3VC0b9hQ5PXOcLBp8y0zTtDyuVxRhridfwDQLcn3J4ZAVlTal9/hZ74DyjNxc1HOziRiyrTa1GRBn7SG8qkROxX163rtibvXUehAqdGxGn8CzJPj9yqIxRMwv3UJX+U9Q14DehZlFQHyBHinEZutN2kP5tBRBQRE90qGAuwSgRm9P6w1NBTBlkYlrDvA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=i+Z0930QMYx1AIfFCLnYb1Q4Vz//+myiMyG9zKckmD8=;
- b=BPD1XE5ywt7Y08Aa4pfGZ++ca7b7kovBom3guwWarJBK6IGUeBbncDv0X57tlJTJ+R8cWkM24y8wjAaQjEVul23cOBVarf4CCHQocZ1vZzuAfI2LMGYulqKLK8BBDTzPGCA/4GE+Af9IgaOQejrD1JeZzSBOJHYwayz9xkBLhvfOeVBLTlhO2DBq2KVhx53lLS9v5RRbnacpFMOTioZGmzjVUxz/uWnm/bIV17z9W2KeL3a55nCDScL5LNO+ZGwFbnCX3dL6niTla5yScV700kCG06B9hlrxR0w3RGiVNuoI71fSQWCZ5ZGUrHqErew5eBLLJ1SwyPx9NXEeKRT07A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+        Mon, 26 Jun 2023 01:32:25 -0400
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8764C9C;
+        Sun, 25 Jun 2023 22:32:24 -0700 (PDT)
+Received: by mail-qv1-xf2c.google.com with SMTP id 6a1803df08f44-5ed99ebe076so34301066d6.2;
+        Sun, 25 Jun 2023 22:32:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=i+Z0930QMYx1AIfFCLnYb1Q4Vz//+myiMyG9zKckmD8=;
- b=XGx6uTWTK8m8jINhGcYMiB0VgNeoCFbCIY+G3owVf/ln/h5URJiBorMOznCoHeZQ3cacmdnaewhhncaAiYWzHKyjnuA8fvatHuzO00ssJRnY/M8cfTRTDNtBcbdDXAXVYcgRFoY1BSXVwDnONBLC7inX4iIJLSX0QZneJyqGrn0=
-Received: from IA1PR11MB6193.namprd11.prod.outlook.com (2603:10b6:208:3eb::19)
- by MW4PR11MB6983.namprd11.prod.outlook.com (2603:10b6:303:226::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24; Mon, 26 Jun
- 2023 05:31:59 +0000
-Received: from IA1PR11MB6193.namprd11.prod.outlook.com
- ([fe80::fae1:9490:ead6:1009]) by IA1PR11MB6193.namprd11.prod.outlook.com
- ([fe80::fae1:9490:ead6:1009%4]) with mapi id 15.20.6521.024; Mon, 26 Jun 2023
- 05:31:59 +0000
-From:   <Manikandan.M@microchip.com>
-To:     <Nicolas.Ferre@microchip.com>, <conor@kernel.org>,
-        <krzysztof.kozlowski@linaro.org>
-CC:     <lee@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <alexandre.belloni@bootlin.com>, <Claudiu.Beznea@microchip.com>,
-        <sam@ravnborg.org>, <bbrezillon@kernel.org>, <airlied@gmail.com>,
-        <daniel@ffwll.ch>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <Hari.PrasathGE@microchip.com>,
-        <Balamanikandan.Gunasundar@microchip.com>,
-        <Durai.ManickamKR@microchip.com>, <Nayabbasha.Sayed@microchip.com>,
-        <Dharma.B@microchip.com>, <Varshini.Rajendran@microchip.com>,
-        <Balakrishnan.S@microchip.com>
-Subject: Re: [PATCH 1/9] dt-bindings: mfd: Add bindings for SAM9X7 LCD
- controller
-Thread-Topic: [PATCH 1/9] dt-bindings: mfd: Add bindings for SAM9X7 LCD
- controller
-Thread-Index: AQHZncV3ordx/PO3iU6nscrl1YKhkq+JCwKAgAABLICAAVS0AIACn6iAgAftQoCAB7WzAA==
-Date:   Mon, 26 Jun 2023 05:31:59 +0000
-Message-ID: <1252fa40-dd8e-73f3-18b7-7010a7f8085e@microchip.com>
-References: <20230613070426.467389-1-manikandan.m@microchip.com>
- <20230613070426.467389-2-manikandan.m@microchip.com>
- <a0b059d1-df4d-10ce-fb7c-7acea0a20793@linaro.org>
- <20230613-slider-coherent-d508d67afc91@spud>
- <423eef3c-54f0-5c88-9bc9-82c0198b6da6@microchip.com>
- <3a3f4463-981a-e8d8-8ec4-06f2abfa3b4d@microchip.com>
- <ef09246c-9220-4c71-4ac2-2792d9ca519d@microchip.com>
-In-Reply-To: <ef09246c-9220-4c71-4ac2-2792d9ca519d@microchip.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-GB
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: IA1PR11MB6193:EE_|MW4PR11MB6983:EE_
-x-ms-office365-filtering-correlation-id: ca8e5b68-a204-4ad4-17db-08db7606a9fc
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: fJRp+bnlgnRxG7hWmRT2d1PA87IwlTaaoavRlY5X2HAsYMlQmJkdQeux3bebMYQaznpJkUdZ5mA6vOMcQ+JRIBb6fQNFLkeerwLyY2ZK26Zxb9CYekGcwIcwMmquuu/5X6/mUz/GmdwVlJ8+nfjrGyEaVxaGB2OV+n7dG23dzIjIc1IBGAP5EUJt3EZttgkGFs2//B1wBkTjEs/9Rj2vVadAADbUhyXJRrqucS0WWtwMl70rgbvlfdWVR0UQjp7jxvnjgt0JOmS2v8TZ3GZ9FSZq5VagFOjvq8ssVEdRXgIB4adlMrUQ9cxvq0zIUj9H9uRsw/GCvfD3e5Fmr5tsGbezfT/NbqNzWAbm1GuaRU0aVKO6qFKV3RdX7WR+nxh09ZS8Bmx7h6e/WoTcUfA56im/KE+zd2ygmNaUVcz8luQG2yA7WCtJhoqvd4gBILpSXwYMjzsYqs9e0QE3RPXfHkvCS/B2cHjQ0/mxppnADi4rG7FOD2bK7aoZcXdH1FqmjIjfaUgapHdOHwIJEpcRsv1HceF8D9y/uSJd+3bLNAbLL7wvOmGL81mjbse3rn5aWlrZ14WuyRENaDlYCh5CfhdvYkNKBv12ndd6Mcyuf5juYM7ufsjrU/qCHCA5PFRULsvat5eP97gPCDy9yEgow4aDhr0YOp1clUgwf6wyLG4=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR11MB6193.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(376002)(39860400002)(366004)(396003)(136003)(451199021)(966005)(107886003)(478600001)(6486002)(54906003)(71200400001)(2616005)(110136005)(83380400001)(26005)(6506007)(53546011)(186003)(66446008)(2906002)(5660300002)(7416002)(36756003)(38100700002)(122000001)(76116006)(91956017)(4326008)(66946007)(316002)(31696002)(86362001)(8936002)(8676002)(41300700001)(38070700005)(66476007)(64756008)(66556008)(31686004)(6512007)(21314003)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WDZtbVFoaE1YT2NwVXV2cVdyamgrSUc0RWVETWxXSlBxYWtjNVdRR0cxTXBF?=
- =?utf-8?B?QlZNWFk1ekdGVUpGOVk0UHFodk9zK3pWR0JOdjAyeXdNY04wSWhFUjVjNkJK?=
- =?utf-8?B?VkR2VVdmZnZObVMyS3JzNmFBWXVyckF0eXRaMUtZQytaNndBK0dMdSt0VDFB?=
- =?utf-8?B?WkF2cTVNc3NGMHp1UlRXODg2a24yNXlDd3FaWnNCNkgxNzFOV3R2ZXVFdkpW?=
- =?utf-8?B?a3NJNHVFQzBVejBGU1pOdW1obStrZDU5ODdSOGtvc0hNU1Bnak9Gb0c1OTlQ?=
- =?utf-8?B?eDBVSmRZWDFkUW9KbzdvKzQ5WmJjNG9IVGQyRi9YSWFCODd5aEgvRmVIa25U?=
- =?utf-8?B?OEJCbnNFeTJxMnBHaGNOTUFMK0lDR3FYeUtnN2dvckZ2QmVlRUJLSTFMWWVv?=
- =?utf-8?B?Qmo4TW5zMy9jYWxuUGJXQm9CeG1FU3I0VlFaRnJkTUVwQkRBeDBVaGgyMFN5?=
- =?utf-8?B?NHlESWQreGdiT0ZXa3Y5M2NMMEtJTDVKNmZ5OHJXK2QyeVhZMUUzNkIyTElq?=
- =?utf-8?B?WXB3M3FnWjNQblA2Z1U4ZXZaM0o3WjUzYmFiR0dpL2JEV0NtaExSTjVLUHNC?=
- =?utf-8?B?cVNzQ205ZmU2bWJVeFh4WTV0N3NOMTVmTHJlZ25KTDVNZWQ1d1A4SmFjaVFh?=
- =?utf-8?B?TlZsVUlvUGs2TXVsL3BkQ2EzcW9mRnNrRUxjbzFkTFBrQzc4NmhzVHNGYmJR?=
- =?utf-8?B?VnFiVm9xRldYSmFuNHQ5UEZRWWlFVXJyVmJuVjQ3NVBrNHB5bmhSSDl3cVlk?=
- =?utf-8?B?c0hQNVpsdUhIL3VpRERjMGtxSlBJUGhpRlgybmhHQjhERjJ4ZmdSNkk5ZEp5?=
- =?utf-8?B?R0FMUUVqazVCWCs3R3dIZ1dwUjVlNXA0UUJhVm9ySG0rZTVaZ25yMWxGWEJj?=
- =?utf-8?B?b0huZXJ0Qlp5aG1TMjlBMEdGVDhFZXJTZkNTb015WkhLQm1yaTl4SW42bzBj?=
- =?utf-8?B?bkZpbTFKNFJNdHhWdVFzNEpRcUVkOVhra1JoRGFNbHZuNWNJNkoySkovQ3E2?=
- =?utf-8?B?c21XWURiV1RMdEdscjdUci9mWmw5VG42MjZiWUU4L0dxSWxtaFNhT2tnRnBD?=
- =?utf-8?B?UlA0ditzTG4xVGlOdGxyck1kRlcxUG9xUHNwb2dtak8wYW52V2F4VFJROGF0?=
- =?utf-8?B?TGVDWU9oZHpBTFppRitxaHNaOVNKQkpCQWZUY041WGtWd3VWUEN5Smo5QzJi?=
- =?utf-8?B?MVF3MEpFUFZqWGEvVXRrQjdtTysyWHp1ckxyTWlVZmxqak1RZmg3VkVXNWZI?=
- =?utf-8?B?cUVVQWY2ekU3ZzNDTURNVU1QdFdFcjI3eWFiT1pvM29kWmdqdXZsQTdQR0F5?=
- =?utf-8?B?d3E2MFA3bTF1ZG9FLzFiYUNQRENxL2NVNTNVNXQvekF6dUdtK3dab1lZU0VL?=
- =?utf-8?B?UkdkcTlRa00rQzlGdjlhN2tvbStxTEpSU2ExNmxuWG4rbkdUckRneWkxQjNU?=
- =?utf-8?B?SktFaVA2NTM5VlZGditZc2ZOSXlQOEU4c1VPbW92Y2VRWm55SFMzL0VwczUr?=
- =?utf-8?B?aVBmcjFONkM2aElqZldyYktuMjBiQXlEb2tuL052V3NrRFoyT2pEQkJCb05U?=
- =?utf-8?B?K04vcHBPZDRqWFh6dTlybUlpdlN6YWExemlhTTF0NHhuaVZieFpOZnRTbFI4?=
- =?utf-8?B?YUdqZmNkVll4TnhkYXRNd2RpS1RJc1ZuMzc0aGpOZUU2Y3ZuNHQ3STF4Qmw0?=
- =?utf-8?B?aDQvOVJKWm1sVk4vZkpIcjVKK1lqejNmbDVQL2FDV1RnQklvNUQ2Tjl5S0Nn?=
- =?utf-8?B?djVBbkJNRERPTWZCVTI5Wldqek9oK1lWRTJNYUV6azRNMi8zSFc0aklsMUtK?=
- =?utf-8?B?TTdiL1VoaTlmV2ZJQlNPTGJrZFhxRW5ReE1KQXFVVkl1TmdETzJzRjJuQXB0?=
- =?utf-8?B?cXE2eUNHbHNURXEycUV0dkVvZWJlN3dkMkFvUm1zQWhKdGhVaDhPbkRoTUdR?=
- =?utf-8?B?aS9lRmVaT0thUmttS3ZsbUFUV3FUajlRK1hWa29DbVdsQTgvV3gxQmFwaVJQ?=
- =?utf-8?B?L0xCbHJnbnh0QnBCa0ZpNkt6Nk0rcWxnc095dVRDbndTQzd2SDJBZE5wcmVN?=
- =?utf-8?B?dTRpSDlMbWh1b0ltOWZwQTF2S2lnYjlTZVNxTmRRVEI3YVBqeC9hZU5VUUcv?=
- =?utf-8?Q?ShaRB/FZVbQmOJUOcF15whuUm?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <571706867A2A7848AB4D3D2A7C094FDD@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        d=gmail.com; s=20221208; t=1687757543; x=1690349543;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dXB+jTquqi7d4yxzf9mtpgvS8op2p5ZPrpvvnM7qWf8=;
+        b=B2cZPZlD9ur3DHMvgTy4QNiMTBrYwHySlfCUgWKgJ/vn3Ppl9iZLPJCiAWPEDnAmbh
+         sLu+CCBvQCKIRJJeL9NvyjlWYkh7WxmT21bMsuCUsOJ3AHzvL9LZay4PMTsrx+IQAwx4
+         sjoA2L0Wp/fnScDdU1VNwR3Z9dLOktWy58GQcAnVi5shVIjenGjAMtt8jDz0skxM0DOf
+         dzYfbWD1b9ncUR7UfRVxux7i/fVneR7IPVMB4QGaM1QvYZUUYyCamPSafAGQMmDz3d2B
+         HhMkZnyM7bKpKVigIm+tAVCZjA3eVqhMr8+AaLPduRTBp4YG/JT8jedu6KfevZVoS5lb
+         AsCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687757543; x=1690349543;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dXB+jTquqi7d4yxzf9mtpgvS8op2p5ZPrpvvnM7qWf8=;
+        b=KncJ9gik9INpU2elYvesG8HjiMb4YQ74x7b19a98NvXxdvTUSHfY+ub15kI4X6nQ1V
+         VM6vwrrukQY0fVzF8YmXICZr9IxixdMn2/cXNo45o6JkY0jQkWS1tcLRUeyNMgdGh0V7
+         /5qH6hRRmrWniV1tqTgVl94QLKthKjCQUJiqYn90gRj+no84t8puFA4RTLCIKrEy5iaF
+         w44J3IV3Ezb97DWjEMFZM8vje9JjZds6XXKBNJvDUTpYQAb1B+4+b0+ZtKwQ4WSxER6A
+         y59PS/5qeJy7uUDv3HSiEfMQiwLO248NLQwoKO1Vpys8kg8jIgJECYwMNFMl/TGqMCky
+         A+9A==
+X-Gm-Message-State: AC+VfDzsq1YAWIF/Hm1ZlATKb+CASRhiNUwN6Jydf4yyVP7H0uy+LmMd
+        UwGAvWDzLKYI5wJJSW9CDaU5NzVMcbMsUo+aWNA=
+X-Google-Smtp-Source: ACHHUZ4dal3x3Kork/lvMSHzLlfs8I8kIYraLC3d1xmKc2SJcxw6PWmUfHM6Cp0x3Xv7pSHFmZ8DnQKL6CAR5TXwsx4=
+X-Received: by 2002:ad4:5cac:0:b0:5f7:a9e1:bbbf with SMTP id
+ q12-20020ad45cac000000b005f7a9e1bbbfmr4961593qvh.44.1687757543623; Sun, 25
+ Jun 2023 22:32:23 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: IA1PR11MB6193.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ca8e5b68-a204-4ad4-17db-08db7606a9fc
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Jun 2023 05:31:59.6586
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 0VcxScAuylOO2Ymg6iwXuM83buJPTdxDKdeX9ZmVNfF1YwEmMRjmp/awBKrAijGCEw+3FujybCArNdG0ZHW04N2woI8MWeVl6ZumuW/GOIY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR11MB6983
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230515094955.GB23880@lst.de> <20230512094210.141540-1-yajun.deng@linux.dev>
+ <055f964384a2bb4ba51c64a0be6072c9@linux.dev> <20230515133821.769158bb@meshulam.tesarici.cz>
+ <20230623174046.66ce934bcf5c1303003a5afc@linux-foundation.org> <a18b0cf466191b0d692e431fe33c7c80@linux.dev>
+In-Reply-To: <a18b0cf466191b0d692e431fe33c7c80@linux.dev>
+From:   Barry Song <21cnbao@gmail.com>
+Date:   Mon, 26 Jun 2023 17:32:12 +1200
+Message-ID: <CAGsJ_4xZp_1jLZnsZsUzaxvkkaOv=FDOiGKNgCmPN1gvJugSTg@mail.gmail.com>
+Subject: Re: [PATCH] dma-contiguous: support per-numa CMA for all architectures
+To:     Yajun Deng <yajun.deng@linux.dev>,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        Tian Tao <tiantao6@hisilicon.com>
+Cc:     v-songbaohua@oppo.com, Christoph Hellwig <hch@lst.de>,
+        corbet@lwn.net, catalin.marinas@arm.com, will@kernel.org,
+        m.szyprowski@samsung.com, robin.murphy@arm.com, paulmck@kernel.org,
+        bp@suse.de, peterz@infradead.org, rdunlap@infradead.org,
+        kim.phillips@amd.com, rostedt@goodmis.org,
+        thunder.leizhen@huawei.com, ardb@kernel.org, bhe@redhat.com,
+        anshuman.khandual@arm.com, song.bao.hua@hisilicon.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        =?UTF-8?B?UGV0ciBUZXNhxZnDrWs=?= <petr@tesarici.cz>,
+        Andrew Morton <akpm@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMjEvMDYvMjMgMTM6MTcsIE5pY29sYXMgRmVycmUgd3JvdGU6DQo+IE9uIDE2LzA2LzIwMjMg
-YXQgMDg6NDQsIE1hbmlrYW5kYW4gTSAtIEk2NzEzMSB3cm90ZToNCj4+IE9uIDE0LzA2LzIzIDIw
-OjEwLCBOaWNvbGFzIEZlcnJlIHdyb3RlOg0KPj4+IE9uIDEzLzA2LzIwMjMgYXQgMjA6MjEsIENv
-bm9yIERvb2xleSB3cm90ZToNCj4+Pj4gT24gVHVlLCBKdW4gMTMsIDIwMjMgYXQgMDg6MTc6MTNQ
-TSArMDIwMCwgS3J6eXN6dG9mIEtvemxvd3NraSB3cm90ZToNCj4+Pj4+IE9uIDEzLzA2LzIwMjMg
-MDk6MDQsIE1hbmlrYW5kYW4gTXVyYWxpZGhhcmFuIHdyb3RlOg0KPj4+Pj4+IEFkZCBuZXcgY29t
-cGF0aWJsZSBzdHJpbmcgZm9yIHRoZSBYTENEIGNvbnRyb2xsZXIgb24gU0FNOVg3IFNvQy4NCj4+
-Pj4+Pg0KPj4+Pj4+IFNpZ25lZC1vZmYtYnk6IE1hbmlrYW5kYW4gTXVyYWxpZGhhcmFuPG1hbmlr
-YW5kYW4ubUBtaWNyb2NoaXAuY29tPg0KPj4+Pj4+IC0tLQ0KPj4+Pj4+IMKgwqAgRG9jdW1lbnRh
-dGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL21mZC9hdG1lbC1obGNkYy50eHQgfCAxICsNCj4+Pj4+
-PiDCoMKgIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKQ0KPj4+Pj4+DQo+Pj4+Pj4gZGlm
-ZiAtLWdpdCBhL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9tZmQvYXRtZWwtaGxj
-ZGMudHh0DQo+Pj4+Pj4gYi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvbWZkL2F0
-bWVsLWhsY2RjLnR4dA0KPj4+Pj4+IGluZGV4IDVmODg4MGNjNzU3ZS4uN2M3N2I2YmY0YWRiIDEw
-MDY0NA0KPj4+Pj4+IC0tLSBhL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9tZmQv
-YXRtZWwtaGxjZGMudHh0DQo+Pj4+Pj4gKysrIGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2Jp
-bmRpbmdzL21mZC9hdG1lbC1obGNkYy50eHQNCj4+Pj4+PiBAQCAtOCw2ICs4LDcgQEAgUmVxdWly
-ZWQgcHJvcGVydGllczoNCj4+Pj4+PiDCoMKgwqDCoMKgICJhdG1lbCxzYW1hNWQzLWhsY2RjIg0K
-Pj4+Pj4+IMKgwqDCoMKgwqAgImF0bWVsLHNhbWE1ZDQtaGxjZGMiDQo+Pj4+Pj4gwqDCoMKgwqDC
-oCAibWljcm9jaGlwLHNhbTl4NjAtaGxjZGMiDQo+Pj4+Pj4gK8KgwqAgIm1pY3JvY2hpcCxzYW05
-eDcteGxjZGMiDQo+Pj4+PiBHb29nbGUgc2F5cyBzYW05eDcgaXMgYSBzZXJpZXMsIG5vdCBhIFNv
-Qy4gUGxlYXNlIGFkZCBjb21wYXRpYmxlcyBmb3INCj4+Pj4+IHNwZWNpZmljIFNvQ3MsIG5vdCBm
-b3Igc2VyaWVzLg0KPj4+PiBXZSBoYWQgdGhpcyBvbmUgYSBmZXcgd2Vla3MgYWdvLCBzZWUNCj4+
-Pj4gaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvYWxsL2FkZDVlNDllLTg0MTYtYmE5Zi04MTlhLWRh
-OTQ0OTM4YzA1ZkBtaWNyb2NoaXAuY29tLw0KPj4+PiBhbmQgaXRzIHBhcmVudHMuIE91dGNvbWUg
-b2YgdGhhdCBzZWVtZWQgdG8gYmUgdGhhdCB1c2luZyAic2FtOXg3IiB3YXMNCj4+Pj4gZmluZS4N
-Cj4+Pg0KPj4+IEFuZCBpdCdzIHdoZXJlIGl0IGJlZ2lucyB0byBiZSBmdW5ueSwgYXMgdGhlIExD
-RCBpcyBwcmVjaXNlbHkgb25lIGFzcGVjdA0KPj4+IHdoZXJlIHdlIGRpZmZlcmVudGlhdGUgYmV0
-d2VlbiBzYW05eDc1LCBzYW05eDcyIGFuZCBzYW05eDcwLi4uDQo+Pj4gU28gcGxlYXNlIE1hbmlr
-YW5kYW4gc29ydCB0aGlzIG91dCBpZiBkaWZmZXJlbmNlIGJldHdlZW4gdGhlc2UgY2hpcHMNCj4+
-PiB3aWxsIGJlIGJldHRlciBoYW5kbGVkIHdpdGggZGlmZmVyZW50IGNvbXBhdGliaWxpdHkgc3Ry
-aW5nLCBpbg0KPj4+IHBhcnRpY3VsYXIgYWJvdXQgLy8sIExWRFMgYW5kIE1JUEktRFNJIHZhcmlh
-bnRzIQ0KPj4gWWVzIFN1cmUsIEkgd2lsbCByZXBsYWNlIHRoZSBjb21wYXRpYmxlIGFzIHMvc2Ft
-OXg3L3NhbTl4NzUvZyB0byBoYW5kbGUNCj4+IHRoZSBkaWZmZXJlbnQgdmFyaWFudHMgb2Ygc2Ft
-OXg3IGJldHRlci4NCj4gDQo+IE1vdmluZyB0byBzYW05eDc1IGlzIHByb2JhYmx5IGdvb2QuIEJ1
-dCB3aGF0IGlzIHlvdXIgcGxhbiBmb3IgDQo+IGRpZmZlcmVudGlhdGluZyBwYXJhbGxlbCBhbmQg
-TFZEUyAob24gc2FtOXg3MikgYW5kIHByZWNpc2VseSB0aGlzIA0KPiBzYW05eDc1IHZhcmlhbnQg
-d2hpY2ggaW4gYWRkaXRpb24gaGFzIE1JUEktRFNJPw0KSW4gc2FtOXg3NSB3aXRoIHN1cHBvcnQg
-Zm9yIExWRFMgYW5kIE1JUEksIFBhcmFsbGVsIGludGVyZmFjaW5nIA0KcGVyaXBoZXJhbHMsIHRo
-ZSBhZGRpdGlvbnMgcGVyZm9ybWVkIG9uIHRoZSBMQ0QgY29udHJvbGxlciBkcml2ZXIgaXMgdGhl
-IA0Kc2FtZS5Db25zaWRlcmluZyB0aGUgTENEQyBJUCB1c2VkIGluIHNhbTl4NzUsIHRoZXJlIGFy
-ZSBubyByZWdpc3RlcnMgDQpzZXRzIHRoYXQgbmVlZHMgbW9kaWZpY2F0aW9uIHBlciBjb25uZWN0
-aW5nIHBlcmlwaGVyYWwgdmFyaWFudHMsIG9ubHkgDQp0aGUgY2xvY2sgYW5kIERSTV9FTkNPREVS
-X01PREVfWFhYIChzZXQgYnkgY29ubmVjdGluZyBwZXJpcGhlcmFsIGRyaXZlcikgDQpkaWZmZXJz
-LCB3aGljaCBjYW4gYmUgaGFuZGxlZCBpbiBEVCwgYXRtZWwtbGNkYyBNRkQgZHJpdmVyIGFuZCAN
-CnBlcmlwaGVyYWwgZHJpdmVyLg0KDQpJbiBmdXR1cmUsIHNhbTl4NzIgd2l0aCBYTENEIGNvbnRy
-b2xsZXIgY2FuIGJlIGRpZmZlcmVudGlhdGVkIHdpdGggDQpzYW05eDcyIGNvbXBhdGlibGUgc3Ry
-aW5nIGFuZCB3aXRoIGEgSVAgdmVyc2lvbiBmbGFnKGlzX3hsY2RjX3YyKSBpbiBpdHMgDQpkcml2
-ZXIgZGF0YSBpZiBhbiB1cGdyYWRlZCBYTENEIElQIGlzIHVzZWQgd2l0aCBkaWZmZXJlbmNlIGlu
-IGJpdHMgb3IgDQpyZWdpc3RlciBzZXQgZXhpc3QgY29tcGFyZWQgdG8gY3VycmVudCBJUC4NCj4g
-DQo+IFJlZ2FyZHMsDQo+ICDCoE5pY29sYXMNCj4gDQo+IA0KDQotLSANClRoYW5rcyBhbmQgUmVn
-YXJkcywNCk1hbmlrYW5kYW4gTS4NCg0K
+On Sun, Jun 25, 2023 at 7:30=E2=80=AFPM Yajun Deng <yajun.deng@linux.dev> w=
+rote:
+>
+> June 24, 2023 8:40 AM, "Andrew Morton" <akpm@linux-foundation.org> wrote:
+>
+> > On Mon, 15 May 2023 13:38:21 +0200 Petr Tesa=C5=99=C3=ADk <petr@tesaric=
+i.cz> wrote:
+> >
+> >> On Mon, 15 May 2023 11:23:27 +0000
+> >> "Yajun Deng" <yajun.deng@linux.dev> wrote:
+> >>
+> >> May 15, 2023 5:49 PM, "Christoph Hellwig" <hch@lst.de> wrote:
+> >
+> > This looks fine to me. Can you please work with Barry to make sure
+> > the slight different place of the initcall doesn't break anything
+> > for his setup? I doubt it would, but I'd rather have a Tested-by:
+> > tag.
+> >> Barry's email is no longer in use. I can't reach him.
+> >>
+> >> Which one? I would hope that his Gmail account is still valid:
+> >>
+> >> Barry Song <21cnbao@gmail.com>
+> >
+> > Maybe his kernel.org address works...
+> >
+> > I have this patch stuck in limbo for 6.4. I guess I'll carry it over
+> > into the next -rc cycle, see what happens.
+> >
+> > fwiw, it has been in -next for six weeks, no known issues.
+>
+> Hi, Barry, The slight different place of the initcall, does break anythin=
+g?
+
+i don't see a fundamental difference as anyway it is still after
+arch_numa_init()
+which is really what we depend on.
+
+and i did a test on qemu with the command line:
+qemu-system-aarch64 -M virt,gic-version=3D3 -nographic \
+ -smp cpus=3D8 \
+ -numa node,cpus=3D0-1,nodeid=3D0 \
+ -numa node,cpus=3D2-3,nodeid=3D1 \
+ -numa node,cpus=3D4-5,nodeid=3D2 \
+ -numa node,cpus=3D6-7,nodeid=3D3 \
+ -numa dist,src=3D0,dst=3D1,val=3D12 \
+ -numa dist,src=3D0,dst=3D2,val=3D20 \
+ -numa dist,src=3D0,dst=3D3,val=3D22 \
+ -numa dist,src=3D1,dst=3D2,val=3D22 \
+ -numa dist,src=3D2,dst=3D3,val=3D12 \
+ -numa dist,src=3D1,dst=3D3,val=3D24 \
+ -m 4096M -cpu cortex-a57 -kernel arch/arm64/boot/Image \
+ -nographic -append "cma_pernuma=3D32M root=3D/dev/vda2  rw ip=3Ddhcp
+sched_debug irqchip.gicv3_pseudo_nmi=3D1" \
+ -drive if=3Dnone,file=3Dextra/ubuntu16.04-arm64.img,id=3Dhd0 -device
+virtio-blk-device,drive=3Dhd0 \
+ -net nic -net user,hostfwd=3Dtcp::2222-:22
+
+and in system, i can see all cma areas are correctly reserved:
+~# dmesg | grep cma
+[    0.000000] cma: cma_declare_contiguous_nid(size
+0x0000000002000000, base 0x0000000000000000, limit 0x0000000000000000
+alignment 0x0000000000000000)
+[    0.000000] cma: Reserved 32 MiB at 0x000000007ce00000
+[    0.000000] cma: dma_pernuma_cma_reserve: reserved 32 MiB on node 0
+[    0.000000] cma: cma_declare_contiguous_nid(size
+0x0000000002000000, base 0x0000000000000000, limit 0x0000000000000000
+alignment 0x0000000000000000)
+[    0.000000] cma: Reserved 32 MiB at 0x00000000bce00000
+[    0.000000] cma: dma_pernuma_cma_reserve: reserved 32 MiB on node 1
+[    0.000000] cma: cma_declare_contiguous_nid(size
+0x0000000002000000, base 0x0000000000000000, limit 0x0000000000000000
+alignment 0x0000000000000000)
+[    0.000000] cma: Reserved 32 MiB at 0x00000000fce00000
+[    0.000000] cma: dma_pernuma_cma_reserve: reserved 32 MiB on node 2
+[    0.000000] cma: cma_declare_contiguous_nid(size
+0x0000000002000000, base 0x0000000000000000, limit 0x0000000000000000
+alignment 0x0000000000000000)
+[    0.000000] cma: Reserved 32 MiB at 0x0000000100000000
+[    0.000000] cma: dma_pernuma_cma_reserve: reserved 32 MiB on node 3
+[    0.000000] cma: dma_contiguous_reserve(limit 100000000)
+[    0.000000] cma: dma_contiguous_reserve: reserving 32 MiB for global are=
+a
+[    0.000000] cma: cma_declare_contiguous_nid(size
+0x0000000002000000, base 0x0000000000000000, limit 0x0000000100000000
+alignment 0x0000000000000000)
+[    0.000000] cma: Reserved 32 MiB at 0x00000000fae00000
+[    0.000000] Kernel command line: cma_pernuma=3D32M root=3D/dev/vda2  rw
+ip=3Ddhcp sched_debug irqchip.gicv3_pseudo_nmi=3D1
+[    0.000000] Memory: 3848784K/4194304K available (16128K kernel
+code, 4152K rwdata, 10244K rodata, 8512K init, 612K bss, 181680K
+reserved, 163840K cma-reserved)
+[    0.175309] cma: cma_alloc(cma (____ptrval____), count 128, align 7)
+[    0.179264] cma: cma_alloc(): returned (____ptrval____)
+[    0.179869] cma: cma_alloc(cma (____ptrval____), count 128, align 7)
+[    0.180027] cma: cma_alloc(): returned (____ptrval____)
+[    0.180187] cma: cma_alloc(cma (____ptrval____), count 128, align 7)
+[    0.180374] cma: cma_alloc(): returned (____ptrval____)
+
+so my feeling is that this patch is fine. but I would prefer Yicong
+and Tiantao who have a real numa machine
+and we can get some real device drivers to call dma APIs to allocate
+memory from pernuma cma on arm64
+even though it is 99.9% OK.
+
+With their testing done, please feel free to add
+Acked-by: Barry Song <baohua@kernel.org>
+
+Thanks
+Barry
