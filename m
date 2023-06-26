@@ -2,137 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E298973D5C5
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 04:22:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09A6373D5C9
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 04:28:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229964AbjFZCW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 22:22:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34920 "EHLO
+        id S230029AbjFZC2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 22:28:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbjFZCW0 (ORCPT
+        with ESMTP id S229506AbjFZC2N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 22:22:26 -0400
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2120.outbound.protection.outlook.com [40.107.117.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF6918D;
-        Sun, 25 Jun 2023 19:22:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ud0KCepAa2AAhRzEOJKS7KaM5Gb6UHvkwugk7lnZBLDSK3d5Mw2s3tk/GCz9fxCLuD6df8eWu+IDpDSSckjiaS6bS7X4KlsdDqaKQEz3P2vQWN+5NtjBBj1ggkZhMKGc7HfBXcscdhQsBHQFydcEfsPmVUbi6cavRmIRifr+b6mWZl5HUczrySDL3N8KvnkyCNgyUP104sQ/z90/XaqC71gvKFjN6Qb1AsnS4lYzQIKppZ0q2X9e9ZkwiuSUHx2JdIqu+XEamQC8lSrz4aqUc5kWTSWJ46CMRw7eO0c8JU0PQ3Mv7SpCrnZB1B36TePGv1Mdvyt38EtfVvZxLe0BVA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=M1VZXuA5FY4aP11+wbi0TJZvIsm2JQmjpPOm1lMiyjI=;
- b=QvTDy9n5Qrbztr697ZXBsPEq196xUjesQytYV2nWMYBmxFEZH6KH1+TJbrot52SsXfWkU7bdkIPVPJZiVhLTd+grvUp0r/cbwp7WJJ/Zw/+BGahwhfFm8Rkw1/xmyNrJqNqhy1mURrifA6gQXKnU+Ew9RgWEO6Dhfyygm9hZw1p/knFIgbM1snibq8di4SSa4+m/xq5sbu0/GKJ0JrYmwfBj8oZPVZjrV9IcufLyNsw8aF/imTv/5FLxYuxoVZv+5+gcMpQcgjU0xI93kHZcO4KjmaAMifRvFU8KueLBhvJ825YHIdLkHL0UBs7fllIkCGS5A1VvRP//ZuY6FM7Rsg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=M1VZXuA5FY4aP11+wbi0TJZvIsm2JQmjpPOm1lMiyjI=;
- b=pJPSISTfERgBHhZMEq+CRzow+WCTcZymkb8mZFO8ycN9hoxCsVINW9uMWy+x+wUccsJTB7/WtAncQHDdSs2IrELsQusjdCG0Wd3adkZKv/zarFeUopN+kg4E/J2ArUo8gGleJH0HHWSKb0VZl+yeXIc3FNtYlyasHpZ6pDiIkm8C4+6ROs6ME46Xb7Gekyj21J2S6KXjKwyxfdRAXqoIV/qxhgXqrLKXl1dUG3Tbfxc1/5dqXLgxkOkyIbMw+th9XSgv8N9Hdz7VTsosTNAhp4JTc7M5PdMIt6URLCf3nCGSmzDU/sADVY1T09VepN98tN7zI2F3Djp4ul7q45ytwQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from TYZPR06MB6697.apcprd06.prod.outlook.com (2603:1096:400:451::6)
- by TYZPR06MB6215.apcprd06.prod.outlook.com (2603:1096:400:33d::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.23; Mon, 26 Jun
- 2023 02:22:21 +0000
-Received: from TYZPR06MB6697.apcprd06.prod.outlook.com
- ([fe80::f652:a96b:482:409e]) by TYZPR06MB6697.apcprd06.prod.outlook.com
- ([fe80::f652:a96b:482:409e%6]) with mapi id 15.20.6521.023; Mon, 26 Jun 2023
- 02:22:21 +0000
-From:   Lu Hongfei <luhongfei@vivo.com>
-To:     Christoph Hellwig <hch@infradead.org>,
-        "Darrick J. Wong" <djwong@kernel.org>, linux-xfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     opensource.kernel@vivo.com, luhongfei@vivo.com
-Subject: [PATCH] fs: iomap: replace the ternary conditional operator with max_t()
-Date:   Mon, 26 Jun 2023 10:22:12 +0800
-Message-Id: <20230626022212.30297-1-luhongfei@vivo.com>
-X-Mailer: git-send-email 2.39.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: TYCP286CA0073.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:31a::18) To TYZPR06MB6697.apcprd06.prod.outlook.com
- (2603:1096:400:451::6)
+        Sun, 25 Jun 2023 22:28:13 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC29AB1;
+        Sun, 25 Jun 2023 19:28:11 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QqBbD054cz4f3nbl;
+        Mon, 26 Jun 2023 10:28:08 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP4 (Coremail) with SMTP id gCh0CgBn0LO395hkXGkxMg--.37238S3;
+        Mon, 26 Jun 2023 10:28:08 +0800 (CST)
+Subject: Re: [PATCH 1/3] md/raid10: optimize fix_read_error
+To:     linan666@huaweicloud.com, song@kernel.org
+Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linan122@huawei.com, yi.zhang@huawei.com, houtao1@huawei.com,
+        yangerkun@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
+References: <20230623173236.2513554-1-linan666@huaweicloud.com>
+ <20230623173236.2513554-2-linan666@huaweicloud.com>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <292862ac-f0e0-6068-eb16-511a01f185b2@huaweicloud.com>
+Date:   Mon, 26 Jun 2023 10:28:07 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYZPR06MB6697:EE_|TYZPR06MB6215:EE_
-X-MS-Office365-Filtering-Correlation-Id: 59a5cb2c-51ef-4512-36e9-08db75ec2bf6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: rQnW5s3s3eqF6eXYojZ966ddSjDSsQ4fX0S0awi2r2KuNsO/FioLUNyOO31BeIv+vx0/siU7Wk0GC8wPrSydonY7nFTHFfSCUDVY4iT11nvL+Xrp6LHYtTyvGLlbI0J5icii02KDGsA3ge+jiVhS8x3eHVuWR8JW5y28TIORN6JT3DEk77S4VezSRtOH6aRvyFsl/W+q4YeTDgB4wbFzOrIudNsN6h+vR2gXksEbELIhg7837I37HQ7Z8a4+oWRKhBOF/1uAY9M8mPDYS0ZeQ7igp0ecCY9nihOMdiBqX1jgcTnW9Bi1fK/+Mx8NHDgri+9gXUz/boSqzFZebV2FjPxF/t3IoIY57S9aZiAOuAMKAZ6oTAT9fg16RxtgucssblOmlIS5GHpA9ZIucl7vzd5ho4NJafN06wOIuIC1s81rxQfPwYtROZZ2K2DVZeaVmRHfGoP/uDvXXx+WrIrpSPROb/KQy+WP2Koy5PaC5Cwv5EUQEGdUtH//GMCZZ/QNZSI8IShu8byyHv9jO/ua8HZbegMw3X9IwsVqHdO8QAcciO0clC2UK3D04Y1E6cFUemepi9L4pDr5EhmtDhvZ6+GnoOd3XO3rwOSXa8QRHjAdSMxNzBy+EsSF6wVvDIXx
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB6697.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39850400004)(136003)(346002)(396003)(376002)(366004)(451199021)(8676002)(8936002)(66556008)(66946007)(41300700001)(316002)(66476007)(4326008)(6506007)(26005)(6512007)(1076003)(186003)(107886003)(2616005)(478600001)(110136005)(6666004)(52116002)(6486002)(2906002)(4744005)(5660300002)(38350700002)(38100700002)(36756003)(86362001)(83380400001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?opzszIhSluMuDS1yygl2L+OWslmMcscICaSckKS24DMyfz9q3h1etlFyCo3/?=
- =?us-ascii?Q?7FG3ei7X2uFIQwZKyj4BGpl+vkWRnxKosqcNRPG72ASGne/7aGLIf4zE2jfj?=
- =?us-ascii?Q?pUzScd1fOf00EiPM1rvBa0I1lVDQwqAWsRSF+1/vJTVt9yIaMprk3zGoNial?=
- =?us-ascii?Q?VB4jDadKjKA4S46FGHYbxrPwkzc0dqYrS/WFpBwkrV2lNSA8iZyR1n2PV+Vl?=
- =?us-ascii?Q?dbZU9Hx39zSIVYGW9hLVFf3bjbRpowSNVyrKcZhNZrSC+5T1UhbRhpIcje+K?=
- =?us-ascii?Q?XlckC8AT/tuDxxcKBVWxyeXSzwy9HMyjEXNP7TdXhFnF4xzQ2rv5WeK9Qnnz?=
- =?us-ascii?Q?V/NzYIfr1R4tezOM38+9GRBhgYvn8iKF54TkITKv/e2dM0AP3f1NOEpQyedX?=
- =?us-ascii?Q?2iPplNZEd10WKxIWYC0v4La0UPj4vdpSkfnckjGQD1w3Li94AZ53scNA9Wh2?=
- =?us-ascii?Q?Uar3GXtlpyZq/zz8hqKiBCFKN09f1NiUKACaX7PYlwZctSmvULocLp8qU5ZP?=
- =?us-ascii?Q?lfoBoFbOZ7+QRs7jQou4qTbMhpjclAgvtJzTZl0ZCZF0QVjJ5M5dsHSjnW99?=
- =?us-ascii?Q?MwUsNDCnhHKz9HhuMuzkRLCkk8nMqUJbtlWsNq/ptzkvgqLeHZymJxzfUxYl?=
- =?us-ascii?Q?xLkWUtZ0/UzC31h0n9EaHiN5g5BTmNxAfPgxfmna8VHYFohAuZfHBVWp922K?=
- =?us-ascii?Q?FgbBtOpztkgPLJYCl7N8M0QWxdh9jeGMtMRd36PI+kQafVLPj7VMy3Px2zZd?=
- =?us-ascii?Q?kDWh/h3d4wBgQfuMc/Y96eFxrL8o30oOosrisafdXf4sLFsPiz+9t9+2ocFt?=
- =?us-ascii?Q?2GUCVeWgoV0TYAzmR9zPmiWC7KlkXYBU29M9NQM0blX95yZ/ILA7LDtWM6//?=
- =?us-ascii?Q?dOCIvjYD6429zoswsNyb5y0ycfc3VEmsMYVqCI+YrYeFnutQomp+RvaL4T2q?=
- =?us-ascii?Q?t/bAopijd/6dLbeC2YZUT+RrJ6SCQzGTAUD2J7/L3tMHcgydo9U+vkCNFtZc?=
- =?us-ascii?Q?V7nyBJ1VIrmfNtjshn+LJKJkvaPNqU61SOrz7k9TWq0miMPmQUS11ezDQ6lR?=
- =?us-ascii?Q?eJL9AD66UeK5q0pYTrGJiH+ZGC6JSDjTE8pdsaEOTUlV6pQmT6nVQypTaYdU?=
- =?us-ascii?Q?T/491YiOcpgY9FUgZAaQj4EYqkiCw3xOHv4XPSL6kG2UtL+HX4AiS3iGQjnx?=
- =?us-ascii?Q?kQUk811iIClM/yKSW2yx0FHNORJy1qrNaVkVpByig0GeRpU1n9OhE0WMmJci?=
- =?us-ascii?Q?43d+A9p4uDSWSfrbmMWHxnDqCzhVyY7+apXJtl8Prw8/hvooZuI1dAoAaKbd?=
- =?us-ascii?Q?sgsBjQLgCxu78S92PQKXHsh9S9p1U2m3+T3ncCyj24w/g4oBhWzTnLF8iwfL?=
- =?us-ascii?Q?GzDfLLVCRUXWBUr9YmuGr+2Qiyb0DQcaXwjv5aHNwb2kTAmPP/WmxD5g6efr?=
- =?us-ascii?Q?kI+gUTKU/P1nO8vUSKn5RCLCys6JVE03eMPH1aWh4nSXhG4HeffWHWQjKR28?=
- =?us-ascii?Q?/sleuoZPl55Ui8gBOILnoIlXJqcsS37+gKOyi/R37oUpdd+b1ilbmAPEoDxf?=
- =?us-ascii?Q?HlDi5cBcOSomRuBM8IXmaLrAuz2UJtfmt0BPyBnV?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 59a5cb2c-51ef-4512-36e9-08db75ec2bf6
-X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB6697.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jun 2023 02:22:21.5700
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: S6MMS7ms5UfbzlmA4CkgUSQFOmzfcNyfbRf/MLbLQC1cpcVFs1QWPcyxYq9Jx4A6SxRkd+3IZ1NayDUYVH70EQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB6215
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230623173236.2513554-2-linan666@huaweicloud.com>
+Content-Type: text/plain; charset=gbk; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgBn0LO395hkXGkxMg--.37238S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxWryfCw1DXr43tF4kJF1DKFg_yoW5ZryUpF
+        WDua4FvrWDJFyUZF17tFWDC3ZYy34fGFWUKr4rt34fWw1Skr9xKF18Wryavr1kJF93uw17
+        Zas8ursrCFs7tF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkC14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
+        IcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
+        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
+        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
+        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_
+        Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUoOJ5UU
+        UUU
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It would be better to replace the traditional ternary conditional
-operator with max_t() in iomap_iter
+Hi,
 
-Signed-off-by: Lu Hongfei <luhongfei@vivo.com>
----
- fs/iomap/iter.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ÔÚ 2023/06/24 1:32, linan666@huaweicloud.com Ð´µÀ:
+> From: Li Nan <linan122@huawei.com>
+> 
+> We dereference r10_bio->read_slot too many times in fix_read_error().
+> Optimize it by using a variable to store read_slot.
+> 
 
-diff --git a/fs/iomap/iter.c b/fs/iomap/iter.c
-index 79a0614eaab7..528fd196c50b 100644
---- a/fs/iomap/iter.c
-+++ b/fs/iomap/iter.c
-@@ -77,7 +77,7 @@ int iomap_iter(struct iomap_iter *iter, const struct iomap_ops *ops)
- 
- 	if (iter->iomap.length && ops->iomap_end) {
- 		ret = ops->iomap_end(iter->inode, iter->pos, iomap_length(iter),
--				iter->processed > 0 ? iter->processed : 0,
-+				max_t(s64, iter->processed, 0),
- 				iter->flags, &iter->iomap);
- 		if (ret < 0 && !iter->processed)
- 			return ret;
--- 
-2.39.0
+Other than a nit below, this patch LGTM.
+
+Reviewed-by: Yu Kuai <yukuai3@huawei.com>
+
+> Signed-off-by: Li Nan <linan122@huawei.com>
+> ---
+>   drivers/md/raid10.c | 20 ++++++++++----------
+>   1 file changed, 10 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
+> index 381c21f7fb06..94ae294c8a3c 100644
+> --- a/drivers/md/raid10.c
+> +++ b/drivers/md/raid10.c
+> @@ -2725,10 +2725,10 @@ static int r10_sync_page_io(struct md_rdev *rdev, sector_t sector,
+>   static void fix_read_error(struct r10conf *conf, struct mddev *mddev, struct r10bio *r10_bio)
+>   {
+>   	int sect = 0; /* Offset from r10_bio->sector */
+> -	int sectors = r10_bio->sectors;
+> +	int sectors = r10_bio->sectors, slot = r10_bio->read_slot;
+>   	struct md_rdev *rdev;
+>   	int max_read_errors = atomic_read(&mddev->max_corr_read_errors);
+> -	int d = r10_bio->devs[r10_bio->read_slot].devnum;
+> +	int d = r10_bio->devs[slot].devnum;
+>   
+>   	/* still own a reference to this rdev, so it cannot
+>   	 * have been cleared recently.
+> @@ -2749,13 +2749,13 @@ static void fix_read_error(struct r10conf *conf, struct mddev *mddev, struct r10
+>   		pr_notice("md/raid10:%s: %pg: Failing raid device\n",
+>   			  mdname(mddev), rdev->bdev);
+>   		md_error(mddev, rdev);
+> -		r10_bio->devs[r10_bio->read_slot].bio = IO_BLOCKED;
+> +		r10_bio->devs[slot].bio = IO_BLOCKED;
+>   		return;
+>   	}
+>   
+>   	while(sectors) {
+>   		int s = sectors;
+> -		int sl = r10_bio->read_slot;
+> +		int sl = slot;
+>   		int success = 0;
+>   		int start;
+>   
+> @@ -2790,7 +2790,7 @@ static void fix_read_error(struct r10conf *conf, struct mddev *mddev, struct r10
+>   			sl++;
+>   			if (sl == conf->copies)
+>   				sl = 0;
+> -		} while (!success && sl != r10_bio->read_slot);
+> +		} while (!success && sl != slot);
+>   		rcu_read_unlock();
+>   
+>   		if (!success) {
+> @@ -2798,16 +2798,16 @@ static void fix_read_error(struct r10conf *conf, struct mddev *mddev, struct r10
+>   			 * as bad on the first device to discourage future
+>   			 * reads.
+>   			 */
+> -			int dn = r10_bio->devs[r10_bio->read_slot].devnum;
+> +			int dn = r10_bio->devs[slot].devnum;
+>   			rdev = conf->mirrors[dn].rdev;
+>   
+>   			if (!rdev_set_badblocks(
+>   				    rdev,
+> -				    r10_bio->devs[r10_bio->read_slot].addr
+> +				    r10_bio->devs[slot].addr
+>   				    + sect,
+>   				    s, 0)) {
+>   				md_error(mddev, rdev);
+> -				r10_bio->devs[r10_bio->read_slot].bio
+> +				r10_bio->devs[slot].bio
+>   					= IO_BLOCKED;
+
+There is no need to split lines now.
+
+Thanks,
+Kuai
+>   			}
+>   			break;
+> @@ -2816,7 +2816,7 @@ static void fix_read_error(struct r10conf *conf, struct mddev *mddev, struct r10
+>   		start = sl;
+>   		/* write it back and re-read */
+>   		rcu_read_lock();
+> -		while (sl != r10_bio->read_slot) {
+> +		while (sl != slot) {
+>   			if (sl==0)
+>   				sl = conf->copies;
+>   			sl--;
+> @@ -2850,7 +2850,7 @@ static void fix_read_error(struct r10conf *conf, struct mddev *mddev, struct r10
+>   			rcu_read_lock();
+>   		}
+>   		sl = start;
+> -		while (sl != r10_bio->read_slot) {
+> +		while (sl != slot) {
+>   			if (sl==0)
+>   				sl = conf->copies;
+>   			sl--;
+> 
 
