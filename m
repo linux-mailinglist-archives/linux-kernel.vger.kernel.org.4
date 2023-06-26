@@ -2,156 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E969373E608
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 19:13:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06D1073E609
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 19:13:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229599AbjFZRNd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 13:13:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50396 "EHLO
+        id S230399AbjFZRNk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 13:13:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229664AbjFZRNb (ORCPT
+        with ESMTP id S230079AbjFZRNi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 13:13:31 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8874E10C0;
-        Mon, 26 Jun 2023 10:13:30 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2b69e6d324aso23042611fa.0;
-        Mon, 26 Jun 2023 10:13:30 -0700 (PDT)
+        Mon, 26 Jun 2023 13:13:38 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88E1E10CB
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 10:13:37 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id 41be03b00d2f7-53482b44007so1712303a12.2
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 10:13:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687799609; x=1690391609;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0Oc7x/uNZcuI9+aQUxJoFoxo0ij8lVVR/Lt9mbAHnYU=;
-        b=o8kwWefw7213vmURmXJ4lUkIXOgjAABFy5AEQLU4hV4CCpbW5/LDJr9qBIG8HsL/ZN
-         cdujWgmSCvI9td4KVaLYwvHR7LeZaX0MOHAQ2dFEPs05jpPCU/8Y2UVlDUt7XZ39+pWc
-         TkKvIPw8YGj/eV0WZhlVcBh3+ZN6i9LYruMH0S3ZNbIZm9LA78OAvqFU8gJ/468Y85pZ
-         X204/S8s41JVz/lmkq1+YpSyNDefB0C8Qujrl8XbuR4ISb4DomKR20h+L2Kb+7h1utwB
-         8ee1DsbaWGYnjeU4nc5u3APMdLMP6Wcq3cu3IRPGaD4FTl5tOjVvnI89o9xm2jr93+Fu
-         DYsw==
+        d=gmail.com; s=20221208; t=1687799617; x=1690391617;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sFA2O0087NjvyF0S8z80vIbG5VDSf/bqj4h/bFzML38=;
+        b=JbE9+VbXHtv0KaXgv8REdZPmNZCdym4muJIwo1avxe7YnLPOVhuCTngHxzR6LhnUaL
+         8mgRNK4mi2wp25WOg6OQJpa/L2qVAgloBqhdi+L71OHMt/AeCi+b1kAgBhe4bOutjJZ/
+         9yN/tbqmrk4isFmrPiQ7bT5bMugSCQqvFDpht+pQ/hsOaD+bRtCzkYDrCGH9mkIFNAcO
+         OED2MdW4AQSjB/TLds5FMzIMsTB98yWJy1+IAJ3+eJ1atPzX+/bb3iCYfztcsSG/sleQ
+         rg/yyEPB0ZX76v/dRVRWuCALQxaALnOsGumZ7VRVjVQ7U7ZxmYoeVcq7U5xjMaczgGpm
+         pRQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687799609; x=1690391609;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1687799617; x=1690391617;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=0Oc7x/uNZcuI9+aQUxJoFoxo0ij8lVVR/Lt9mbAHnYU=;
-        b=eUX/G6NWVMbBJLmQ9fnABO/P74xTl2dNkTEGeABZi72S5gMKUpu1zA3JR2vOFU7WOd
-         F4gghXuT0O0nLueFnhf96lgzBCQKxpzrwhSlyubU0D4cW/jKDtlZbQiGQ655zcuJTCKm
-         nSIqnxkbkUtBCHeIBAvpDN1Rh8J59Et2Dm9gXu4MIGs4SWqLqnvi24ID6rHtBy/mgOwu
-         5X+j8viGk7FmKd+yOgkK65TuPjSBH6Z4judPRB1t1eGCu/ie4KZ+CcDML8TB6JfAw7nP
-         yELj+vglc9cHdhHXGs8LWw6WsmLZwpv5EohbJJ6tCMov5ngmPIGDvJ++HGXJcfQzrnfC
-         5u1Q==
-X-Gm-Message-State: AC+VfDyxNUryUro0S7T63A1ZJhPSynXXq1fICzEcXTIlhH9HYzUOI22m
-        9JiEQ25OSjueeceWSxEV+/YBQProFdX92QecCm0=
-X-Google-Smtp-Source: ACHHUZ4nMybg+ZdPRO18PgwmDjwvDhQf2f8JyIxYrIkKQfOXGrkouPrGJcgofEqRy8aQN+8GIIZ6mBYRPImyhCFRR9U=
-X-Received: by 2002:a05:6512:2316:b0:4fb:761c:7c18 with SMTP id
- o22-20020a056512231600b004fb761c7c18mr2073498lfu.61.1687799608269; Mon, 26
- Jun 2023 10:13:28 -0700 (PDT)
+        bh=sFA2O0087NjvyF0S8z80vIbG5VDSf/bqj4h/bFzML38=;
+        b=e6mW/YOlwbFte7+/CDcm/n23PEKQXWf3ZP8Q5zM76kVt49icI6o15e1Ujom7MOnc5z
+         D7SVosRXmIWesEXgmzuo+eoqSPk6Y9TjR80BjgydLUSLApSdYIPRrr9bghVPkiivS09D
+         egtmAvn2aPJ7UKA7IMOWE6KjysX6qdddk8OB2bt+GZXR5c4biMAeowEqJstVCkmk0zwA
+         QlIy2pOY1qaSAEcQGDjRqgO0t2VgIJpM2PWAgk34r4pYO8LDaw4fkHNwEVA2ryN/o1dv
+         hv75bOcWcB6BDsM2qYRaGG3RC5d6oSCJoQfJe0bGN0gU1Az3kSG5aHjvWL1ZB/uf2xTf
+         mXTQ==
+X-Gm-Message-State: AC+VfDzTtuyD4ZH0FdybXJlL+ezZXKg1fCOvMY6mNMUlxJN7Vd+EhRn1
+        M9if0eIKDRvN4N5Xo1aBGW6SFbep5M0=
+X-Google-Smtp-Source: ACHHUZ4dXhOCbjlSYFXgM89GNkYYkb/dD23shwvEkg9d2j5rYrUfNXMnT6vMeFxaH8n/9N+rlS4XbQ==
+X-Received: by 2002:a17:90a:4e:b0:25b:b2ba:2ff4 with SMTP id 14-20020a17090a004e00b0025bb2ba2ff4mr19276461pjb.17.1687799616908;
+        Mon, 26 Jun 2023 10:13:36 -0700 (PDT)
+Received: from google.com ([2620:15c:211:201:9abd:c54f:4c3a:e10a])
+        by smtp.gmail.com with ESMTPSA id ip4-20020a17090b314400b0025374fedab4sm6413464pjb.22.2023.06.26.10.13.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jun 2023 10:13:35 -0700 (PDT)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+Date:   Mon, 26 Jun 2023 10:13:33 -0700
+From:   Minchan Kim <minchan@kernel.org>
+To:     Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Alexey Romanov <AVRomanov@sberdevices.ru>
+Subject: Re: [PATCHv2 1/3] zsmalloc: do not scan for allocated objects in
+ empty zspage
+Message-ID: <ZJnHPdJVbUyq06k7@google.com>
+References: <20230624053120.643409-1-senozhatsky@chromium.org>
+ <20230624053120.643409-2-senozhatsky@chromium.org>
 MIME-Version: 1.0
-References: <1680076012-10785-1-git-send-email-quic_mojha@quicinc.com>
- <1680076012-10785-5-git-send-email-quic_mojha@quicinc.com>
- <ZHEt2mrYpSMKBuIX@surfacebook> <6d9f251e-2c1a-ed50-638e-a052404ffc64@quicinc.com>
-In-Reply-To: <6d9f251e-2c1a-ed50-638e-a052404ffc64@quicinc.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 26 Jun 2023 20:12:52 +0300
-Message-ID: <CAHp75VdU+ee8_UveZp3SD2UKYYg4Jm0cYUpcXfVwMEVC1d0Bdw@mail.gmail.com>
-Subject: Re: [PATCH v6 4/5] firmware: qcom_scm: Refactor code to support
- multiple download mode
-To:     Mukesh Ojha <quic_mojha@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        linus.walleij@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230624053120.643409-2-senozhatsky@chromium.org>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 26, 2023 at 7:28=E2=80=AFPM Mukesh Ojha <quic_mojha@quicinc.com=
-> wrote:
-> On 5/27/2023 3:38 AM, andy.shevchenko@gmail.com wrote:
-> > Wed, Mar 29, 2023 at 01:16:51PM +0530, Mukesh Ojha kirjoitti:
-
-...
-
-> >>              ret =3D qcom_scm_io_update_field(__scm->dload_mode_addr,
-> >> -                            QCOM_DOWNLOAD_MODE_MASK,
-> >> -                            enable ? QCOM_DOWNLOAD_FULLDUMP : 0);
-> >> +                            QCOM_DOWNLOAD_MODE_MASK, download_mode);
-> >
-> > Can ping-pong style be avoided? I.e. do the right thing in the previous=
- patch,
-> > so you won't change lines that were introduced just before.
->
-> If you notice, I have just converted download mode data type from bool
-> to int in this patch and hence the changing the line here. Last patch
-> was about just using the exported API, so i hope you would be fine here.
-
-Thank you for elaboration. I'm fine with that.
-
-...
-
-> >  > Also, what about download_mode that doesn't fit to the above two?
->
-> return sysfs_emit(buffer, "unknown\n"); ?
-
-For example, yes.
-
-...
-
-> >> +static int set_download_mode(const char *val, const struct kernel_par=
-am *kp)
-> >> +{
-> >> +    u32 old =3D download_mode;
-> >> +
-> >> +    if (sysfs_streq(val, "full")) {
-> >> +            download_mode =3D QCOM_DOWNLOAD_FULLDUMP;
-> >> +    } else if (sysfs_streq(val, "off")) {
-> >> +            download_mode =3D QCOM_DOWNLOAD_NODUMP;
-> >
-> > NIH sysfs_match_string().
->
-> NIH ?
-
-Not Invented Here
-
-> My apology, if i did not get this..
-> Do you want me to use sysfs_match_string()
-
-Yes.
-
-> and how would that help compare to what is present now ?
-
-This will make your ABi gathered in one place (all strings and all
-values) and less code will be used esp. if it's going to be expanded
-in the future (isn't it in the next patches?).
-
-
-> >> +    }
-> >> +
-> >> +    if (__scm)
-> >> +            qcom_scm_set_download_mode(download_mode);
-> >> +
-> >> +    return 0;
-> >> +}
-
-...
-
-> > Have you updated corresponding documentation about this parameter?
-> > Or there is none?
->
-> There is none as of yet outside this file; should that be good what i
-> have added in 5/5..
-
-It was a long time ago when I reviewed this. Just a note that all ABI
-must be documented, debugfs is highly recommended to be documented.
-
---=20
-With Best Regards,
-Andy Shevchenko
+On Sat, Jun 24, 2023 at 02:12:14PM +0900, Sergey Senozhatsky wrote:
+> zspage migration can terminate as soon as it moves the last
+> allocated object from the source zspage.  Add a simple helper
+> zspage_empty() that tests zspage ->inuse on each migration
+> iteration.
+> 
+> Suggested-by: Alexey Romanov <AVRomanov@sberdevices.ru>
+> Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+Acked-by: Minchan Kim <minchan@kernel.org>
