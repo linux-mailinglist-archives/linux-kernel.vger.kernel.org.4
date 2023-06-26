@@ -2,59 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52E3873ED28
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 23:51:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AE2D73ED4C
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 23:52:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230491AbjFZVuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 17:50:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40360 "EHLO
+        id S229965AbjFZVwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 17:52:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbjFZVuC (ORCPT
+        with ESMTP id S231389AbjFZVvl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 17:50:02 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C3910D5;
-        Mon, 26 Jun 2023 14:50:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=Q/bpZdoiYyoU4Gkjmy8VvNxg9emqxR5ZyFFTQhyTkns=; b=ztKWY99lIx2Z02G7tiqjQFOhP2
-        HLlM4ZIC05BSoFGjl/lr/rXZmUKTOF9+brILZX3BKE0rPcLijQQZL8ynE6vCdIg2iMLO0DyBt6Qww
-        p+b3hB/qb/8W0YfrC1HBjzjfBGNpjEakY0TcRcWRGoIGfvAv3JGV7mxmx0Ch1AZBr/U+BYoWo4Zlh
-        BPC9Jeci7ePlT09ztE0h0usD8xUjEg0c/Lqmm14RW33nz9aMbbKh44gSkBOSmaywqT9WMwToJ7ZX7
-        vgU50R/LtZBDZz9KG3tyW7RCb7Eyb/IT4ayaJ68eOwR9hvuLRfTHvGk4cQCQ9Id1lafCXOExn5Obh
-        nUhPaVyg==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qDu5u-00B5ru-0A;
-        Mon, 26 Jun 2023 21:49:58 +0000
-Message-ID: <ec65c77a-3499-6278-f352-9bbe25a44b96@infradead.org>
-Date:   Mon, 26 Jun 2023 14:49:57 -0700
+        Mon, 26 Jun 2023 17:51:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CC99297D;
+        Mon, 26 Jun 2023 14:50:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 27C8860F79;
+        Mon, 26 Jun 2023 21:50:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A4F7C433C8;
+        Mon, 26 Jun 2023 21:50:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687816232;
+        bh=BElIyGm/sxQtcF6iwtpyXz1F8nrc7dChyXX1AZVCY5c=;
+        h=From:To:Cc:Subject:Date:From;
+        b=bgaR00wqIrtSXwd0SZRTOGHD9jK0vMvt6jShKzFoFL2KDkb929N8zA+B9PG9m8A/U
+         uGqT6PXz1FU/NCYWAELpzRp9pbSF/SYgV25eUGVHx4GvMUmEVbZzgupp8+X24E5DFb
+         /XtTIdtHxJ/4t8dftHUZs3vug2gN0O+EG1g0U7Gj3oTESMY167eiHTjsTuQT41hFN4
+         xCiqGsBvambcHZblZraSgvpw8VeA+hZjQ+w70D0cBtEKmjc4ZBLwK1m+Inp0x7cBqi
+         f7dXYyyEK983Aru9mJEJwi0//aEjXzTZhxbDfKzuBm2R5sbrvhAFvqTLhTYhttxC9M
+         XCKZU8Z/ZndNw==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Johannes Berg <johannes.berg@intel.com>,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Sasha Levin <sashal@kernel.org>, johannes@sipsolutions.net,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.1 01/15] wifi: cfg80211: remove links only on AP
+Date:   Mon, 26 Jun 2023 17:50:17 -0400
+Message-Id: <20230626215031.179159-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v2 2/6] KVM: Documentation: Update the field name gfns and
- its description in kvm_mmu_page
-Content-Language: en-US
-To:     Mingwei Zhang <mizhang@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Kai Huang <kai.huang@intel.com>,
-        Jim Mattson <jmattson@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>, Xu Yilun <yilun.xu@intel.com>,
-        Zhi Wang <zhi.wang.linux@gmail.com>
-References: <20230626182016.4127366-1-mizhang@google.com>
- <20230626182016.4127366-3-mizhang@google.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230626182016.4127366-3-mizhang@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.1.35
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,50 +60,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
+From: Johannes Berg <johannes.berg@intel.com>
 
-On 6/26/23 11:20, Mingwei Zhang wrote:
-> Update the field 'gfns' in kvm_mmu_page to 'shadowed_translation' to be
-> consistent with the code. Also update the corresponding 'gfns' in the
-> comments. The more detailed description of 'shadowed_translation' is
-> already inlined in the data structure definition, so no need to duplicate
-> the text but simply just update the names.
-> 
-> Signed-off-by: Mingwei Zhang <mizhang@google.com>
-> Reviewed-by: Kai Huang <kai.huang@intel.com>
-> ---
->  Documentation/virt/kvm/x86/mmu.rst | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
-> 
-> diff --git a/Documentation/virt/kvm/x86/mmu.rst b/Documentation/virt/kvm/x86/mmu.rst
-> index 561efa8ec7d7..4c9044b4dc6c 100644
-> --- a/Documentation/virt/kvm/x86/mmu.rst
-> +++ b/Documentation/virt/kvm/x86/mmu.rst
-> @@ -221,11 +221,12 @@ Shadow pages contain the following information:
->      at __pa(sp2->spt).  sp2 will point back at sp1 through parent_pte.
->      The spt array forms a DAG structure with the shadow page as a node, and
->      guest pages as leaves.
-> -  gfns:
-> -    An array of 512 guest frame numbers, one for each present pte.  Used to
-> -    perform a reverse map from a pte to a gfn. When role.direct is set, any
-> +  shadowed_translation:
-> +    An array of 512 shadow translation entries, one for each present pte. Used
-> +    to perform a reverse map from a pte to a gfn. When role.direct is set, any
->      element of this array can be calculated from the gfn field when used, in
-> -    this case, the array of gfns is not allocated. See role.direct and gfn.
-> +    this case, the array of shadowed_translation is not allocated. See
+[ Upstream commit 34d4e3eb67fed9c19719bedb748e5a8b6ccc97a5 ]
 
-I cannot parse the before version nor the after version of this sentence (new version):
+Since links are only controlled by userspace via cfg80211
+in AP mode, also only remove them from the driver in that
+case.
 
-                                                  When role.direct is set, any
-    element of this array can be calculated from the gfn field when used, in
-    this case, the array of shadowed_translation is not allocated.
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Signed-off-by: Gregory Greenman <gregory.greenman@intel.com>
+Link: https://lore.kernel.org/r/20230608163202.ed65b94916fa.I2458c46888284cc5ce30715fe642bc5fc4340c8f@changeid
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ net/wireless/util.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-
-> +    role.direct and gfn.
->    root_count:
->      A counter keeping track of how many hardware registers (guest cr3 or
->      pdptrs) are now pointing at the page.  While this counter is nonzero, the
-
+diff --git a/net/wireless/util.c b/net/wireless/util.c
+index 39680e7bad45a..f433f3fdd9e94 100644
+--- a/net/wireless/util.c
++++ b/net/wireless/util.c
+@@ -5,7 +5,7 @@
+  * Copyright 2007-2009	Johannes Berg <johannes@sipsolutions.net>
+  * Copyright 2013-2014  Intel Mobile Communications GmbH
+  * Copyright 2017	Intel Deutschland GmbH
+- * Copyright (C) 2018-2022 Intel Corporation
++ * Copyright (C) 2018-2023 Intel Corporation
+  */
+ #include <linux/export.h>
+ #include <linux/bitops.h>
+@@ -2479,6 +2479,13 @@ void cfg80211_remove_links(struct wireless_dev *wdev)
+ {
+ 	unsigned int link_id;
+ 
++	/*
++	 * links are controlled by upper layers (userspace/cfg)
++	 * only for AP mode, so only remove them here for AP
++	 */
++	if (wdev->iftype != NL80211_IFTYPE_AP)
++		return;
++
+ 	wdev_lock(wdev);
+ 	if (wdev->valid_links) {
+ 		for_each_valid_link(wdev, link_id)
 -- 
-~Randy
+2.39.2
+
