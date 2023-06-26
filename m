@@ -2,139 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63E0973E388
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 17:37:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A51373E38A
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 17:38:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231288AbjFZPhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 11:37:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53284 "EHLO
+        id S231310AbjFZPiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 11:38:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230290AbjFZPhp (ORCPT
+        with ESMTP id S231304AbjFZPiB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 11:37:45 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6BF310CC
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 08:37:39 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4fb7acaa7a5so993078e87.1
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 08:37:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687793858; x=1690385858;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fKkRNwsx7OGC3htuJ6t0WseieN66ntYIb/oJ43FaioA=;
-        b=ZEN2E34gix3aICYfeshAMb+/jjQoPlHL1kcE+BnBdWbhW8yG1Hc7rBJ7WOpX8yeNpf
-         29u20Me+Mn9NKpGGTav87InA/JqZTZGCAH+efEmdB/FctQs/KwY9OGoD8uPVW3WlaEeA
-         0FRyVSikgjIJK2yN318Q2ARbt55FsjaBhMGJEJIeRG/LKLWeN+MdwVRUmKl1Zt1lJNg+
-         hTE2joZ9gHZr+bW63O4fWxMpSYiRqz+nkWyxDGc8ALWVnWK0qU7DljlonGMT7iHd+Sst
-         +RJckniERxbN4R0G6I8b1z/0gildcKdDUqQxXuY6ZhMNhI1zhTZJTkMuoX7gHtnDsS4+
-         gcMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687793858; x=1690385858;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fKkRNwsx7OGC3htuJ6t0WseieN66ntYIb/oJ43FaioA=;
-        b=Z42x/Jiz6jrGK+YxWYJN+uk8aCwa5WKpxqUQ1QS4hAn7AdCyGtP+sgIEiJK9NXgC+6
-         qN2AQmWCA7mqnEg97pwhs9TXtAALcrE0Uc0w4qRo15VkSg+yug8j6pCilb9tb20EGoA6
-         JmgPKnVnXGwMl/F0vWSiF5lewS+mCPQWW0vSkMq4A5L9H0K7w+WOMDdmqbkvs87xvYjS
-         VvpqnzVm7mrH2H7X5MigA7uRimMReIVQ7QpmAiguUPPGRRdD20JxZP0LwZEdSHEd0wQf
-         fmNV9rq8KgloycJ1FNnf1hdKNx8czmyT7jOhibcLBglrmjVRH/u4rPwUnBjHLyV928WC
-         AC/A==
-X-Gm-Message-State: AC+VfDzHAiXv71OPvMqpShs89qyPln2fNAt4JwwOkWB7Hb/kdF6uGDlh
-        EyQn8xW5+Zl2ScIHOi2k0ZVOCA==
-X-Google-Smtp-Source: ACHHUZ6jMYjdJZ1HoyYgAU6kz2QdE7jTIOjWgnOMeoRoMCekZ5ZDXQ2IpPk81NPGk7My2L/36+mmzg==
-X-Received: by 2002:a05:6512:3290:b0:4f7:5f9e:fc59 with SMTP id p16-20020a056512329000b004f75f9efc59mr16963278lfe.39.1687793857818;
-        Mon, 26 Jun 2023 08:37:37 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id z7-20020a05600c220700b003fa999cefc0sm2350762wml.36.2023.06.26.08.37.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Jun 2023 08:37:37 -0700 (PDT)
-Message-ID: <2a0154ec-7949-f1b1-760f-3ba64d2cff3f@linaro.org>
-Date:   Mon, 26 Jun 2023 17:37:35 +0200
+        Mon, 26 Jun 2023 11:38:01 -0400
+Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B980710E9
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 08:37:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:From:References:To:
+        MIME-Version:Date:Message-ID:cc:content-disposition;
+        bh=rs1VdpLvoww5s8ZfEwPD+th0v+6ysNz41twwOh5VYog=; b=ix3DoD+BAF36mSF1bbWTcUTb6/
+        dWrzM9dovHRuE2ru86vti7cx0IqWGLef0rBB5LnHZvwpVqw92+23ErEjAAHHJOQUBw+xSzQWO82S8
+        5sDmToR6zSxltwBhHsJN47u7snlxdSx0Vci5cL6taJXnL7dP4nPvEfv5qgkPT6Qhe8WYxlZgpUQbK
+        i3eovpRKjatD1z4wRfx9SBvhWzKJ3tTa17DSxiZYcYPYIxaItZfVSlduYM2lefIVMaqSDR0+tbYjS
+        k/EYmZbEJjmDZeLtw8SPm1nv1f07bWWUTEo8d6Nr7N0bjJnKj009yFoHsNo+Abby71sjmwWXFNJgD
+        y3n9FX3Q==;
+Received: from guinness.priv.deltatee.com ([172.16.1.162])
+        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <logang@deltatee.com>)
+        id 1qDoHk-002qwq-Po; Mon, 26 Jun 2023 09:37:49 -0600
+Message-ID: <cd5ed21c-04f3-2c9c-4b56-225d3f20e016@deltatee.com>
+Date:   Mon, 26 Jun 2023 09:37:46 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH v1 5/5] riscv: dts: starfive: Add JH7110 PWM-DAC support
-Content-Language: en-US
-To:     Hal Feng <hal.feng@starfivetech.com>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor@kernel.org>,
-        Walker Chen <walker.chen@starfivetech.com>,
-        Xingyu Wu <xingyu.wu@starfivetech.com>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230626110909.38718-1-hal.feng@starfivetech.com>
- <20230626110909.38718-6-hal.feng@starfivetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230626110909.38718-6-hal.feng@starfivetech.com>
+Content-Language: en-CA
+To:     kelvin.cao@microchip.com, kurt.schwemmer@microsemi.com,
+        bhelgaas@google.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230624000003.2315364-1-kelvin.cao@microchip.com>
+From:   Logan Gunthorpe <logang@deltatee.com>
+In-Reply-To: <20230624000003.2315364-1-kelvin.cao@microchip.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 172.16.1.162
+X-SA-Exim-Rcpt-To: kelvin.cao@microchip.com, kurt.schwemmer@microsemi.com, bhelgaas@google.com, linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: logang@deltatee.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
+Subject: Re: [PATCH 0/2] PCI: switchtec: Add support for PCIe Gen5 devices
+X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
+X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/06/2023 13:09, Hal Feng wrote:
-> Add PWM-DAC support for StarFive JH7110 SoC.
+
+
+On 2023-06-23 18:00, kelvin.cao@microchip.com wrote:
+> From: Kelvin Cao <kelvin.cao@microchip.com>
 > 
-> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
-> ---
->  .../jh7110-starfive-visionfive-2.dtsi         | 50 +++++++++++++++++++
->  arch/riscv/boot/dts/starfive/jh7110.dtsi      | 13 +++++
->  2 files changed, 63 insertions(+)
+> Hi,
 > 
-> diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
-> index 19b5954ee72d..5ca66a65e722 100644
-> --- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
-> +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
-> @@ -36,6 +36,34 @@ gpio-restart {
->  		gpios = <&sysgpio 35 GPIO_ACTIVE_HIGH>;
->  		priority = <224>;
->  	};
-> +
-> +	pwmdac_dit: pwmdac-dit {
-> +		compatible = "starfive,jh7110-pwmdac-dit";
-> +		#sound-dai-cells = <0>;
-> +	};
-> +
-> +	sound {
-> +		compatible = "simple-audio-card";
-> +		simple-audio-card,name = "StarFive-PWMDAC-Sound-Card";
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-> +		simple-audio-card,dai-link@0 {
-> +			reg = <0>;
-> +			format = "left_j";
-> +			bitclock-master = <&sndcpu0>;
-> +			frame-master = <&sndcpu0>;
-> +			status = "okay";
+> This patchset adds support for Switchtec PCIe Gen5 devices by adding
+> device IDs to the driver and PCI quirks. There's also minor code change
+> to accommodate those devices.
+> 
+> The patchset is based off of v6.4-rc7.
+> 
+> Thanks,
+> Kelvin
+> 
+> Kelvin Cao (2):
+>   PCI: switchtec: Use normal comment style
+>   PCI: switchtec: Add support for PCIe Gen5 devices
 
-Drop
+Both patches look good to me, thanks.
 
-> +
-> +			sndcpu0: cpu {
-> +				sound-dai = <&pwmdac>;
-> +			};
-> +
-> +			codec {
-> +				sound-dai = <&pwmdac_dit>;
+Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
 
-You said it is a transmitter, not a codec...
-
-
-Best regards,
-Krzysztof
-
+Logan
