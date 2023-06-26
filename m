@@ -2,77 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C86E073ECDA
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 23:27:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63CB773ECDC
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 23:27:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230362AbjFZV1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 17:27:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60280 "EHLO
+        id S230405AbjFZV1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 17:27:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbjFZV13 (ORCPT
+        with ESMTP id S230383AbjFZV1j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 17:27:29 -0400
-Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 304B7B1;
-        Mon, 26 Jun 2023 14:27:29 -0700 (PDT)
-Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-345b231322fso3380655ab.2;
-        Mon, 26 Jun 2023 14:27:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687814848; x=1690406848;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=avBjJWfibsZdQeCWvAjApLqo6hXIYkVIdlb5U2XqZs0=;
-        b=ZOmn3yroLBzdZxb79yyXHPz65pbqJZXCMkVYVPSZjIOnKeLLjCgQtfldgcS54yGhli
-         r135gVTQT59jjvDxC0YLkjrnRADKDXATWfDj1G3QunSKYS8Sp9wfTDeHH/Ia19bDwiHB
-         +NLiQbpNXx83+wAsGUBa2DxoEXf6AXxLa7y1QfKPO90aWtVGJdDhuEwlDN5P5e7YSb9b
-         jIa5SxIkChnTgtFWeKEPwUw2QqMz2vdBdmUs2JTupfZNN84iZZKXoYUN33N+OZmJ5HpV
-         Az14/qRVv7UFy0jObawifFuZ4LJZIdLcykvN/XEOY1hM1bk32hr5tLQ+yQnk4EKxOjaP
-         EHmg==
-X-Gm-Message-State: AC+VfDyl/gC6qcRVPJzEarhqHPpY6xQee7Rn8TWOlq7mJ7ZEeWkxJc8d
-        bGMLsNUYdd0vDgs6r3eEnZLHiduEEw==
-X-Google-Smtp-Source: ACHHUZ6UkVZjSj1u1k9+RdwdmznVPLiWtyCjlufEfW5+WQVL9ireq9EnVIj4c+KH6q7zFQWZ0WYpVA==
-X-Received: by 2002:a92:d651:0:b0:345:66f5:3404 with SMTP id x17-20020a92d651000000b0034566f53404mr7248388ilp.0.1687814848321;
-        Mon, 26 Jun 2023 14:27:28 -0700 (PDT)
-Received: from robh_at_kernel.org ([199.114.228.113])
-        by smtp.gmail.com with ESMTPSA id f25-20020a056638023900b0042887e69e99sm1996354jaq.95.2023.06.26.14.27.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jun 2023 14:27:27 -0700 (PDT)
-Received: (nullmailer pid 3927531 invoked by uid 1000);
-        Mon, 26 Jun 2023 21:27:26 -0000
-Date:   Mon, 26 Jun 2023 15:27:26 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Luca Weiss <luca.weiss@fairphone.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        AngeloGioacchino Del Regno <kholk11@gmail.com>,
-        Luca Weiss <luca@z3ntu.xyz>, Vinod Koul <vkoul@kernel.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-Subject: Re: [PATCH 1/7] dt-bindings: qcom: Allow SoC names ending in "pro"
-Message-ID: <20230626212726.GA3924052-robh@kernel.org>
-References: <20230626-topic-bindingsfixups-v1-0-254ae8642e69@linaro.org>
- <20230626-topic-bindingsfixups-v1-1-254ae8642e69@linaro.org>
+        Mon, 26 Jun 2023 17:27:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56A1D1702;
+        Mon, 26 Jun 2023 14:27:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DAE160EB2;
+        Mon, 26 Jun 2023 21:27:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57EAFC433C0;
+        Mon, 26 Jun 2023 21:27:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687814856;
+        bh=cD+DlgssDHp9bWUfoAqdwHPtpJlWEj+4Ut4kvVblUg0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ljNIZ97KtuHOBzk+gfTMQAonQtKrXqmArEvp6gf6th8U9snAirn5HZDr1pg39P5AM
+         38gQsvUyYJlV3jRaJ6kdS4HMZqqEbbjpqCwKDqWHdOiJQ00c6CDF3KnUyl1a+uCfIT
+         +xjUvT7wagBbCIUxOr1Ysw1TFcb4kRMdstAYOVJmeh1c2aJ1ajmTMXLray5ohrZA1k
+         TGJKSOFKLXOkfZHHSsu2DT8/xHwyfZDfAaRIj4k7jAwNPPrkoK47wsuRy8FgpA5QG0
+         MiMilxWpzVqMxN+muUL8m1ErVMR7jUvIEziUej63OU+jBJM+NfvkJEhv2s1qez5gY8
+         SzPCGc2kupEtQ==
+Date:   Mon, 26 Jun 2023 14:27:34 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@redhat.com>
+Cc:     Matthieu Baerts <matthieu.baerts@tessares.net>,
+        dhowells@redhat.com, acme@kernel.org, adrian.hunter@intel.com,
+        alexander.shishkin@linux.intel.com, bpf@vger.kernel.org,
+        davem@davemloft.net, irogers@google.com, jolsa@kernel.org,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, mark.rutland@arm.com,
+        mingo@redhat.com, namhyung@kernel.org, netdev@vger.kernel.org,
+        peterz@infradead.org, sfr@canb.auug.org.au
+Subject: Re: [PATCH net-next] perf trace: fix MSG_SPLICE_PAGES build error
+Message-ID: <20230626142734.0fa4fa68@kernel.org>
+In-Reply-To: <20230626090239.899672-1-matthieu.baerts@tessares.net>
+References: <2947430.1687765706@warthog.procyon.org.uk>
+        <20230626090239.899672-1-matthieu.baerts@tessares.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230626-topic-bindingsfixups-v1-1-254ae8642e69@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,36 +62,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 26, 2023 at 10:00:23PM +0200, Konrad Dybcio wrote:
-> There are a couple of SoCs whose names end in "pro", with the currently-
-> upstream examples being msm8974pro and msm8996pro. Allow such suffix in
-> SoC-specific compatibles.
+On Mon, 26 Jun 2023 11:02:39 +0200 Matthieu Baerts wrote:
+> Our MPTCP CI and Stephen got this error:
 > 
-> Fixes: 5aa332c5e7ca ("dt-bindings: qcom: document preferred compatible naming")
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>     In file included from builtin-trace.c:907:
+>     trace/beauty/msg_flags.c: In function 'syscall_arg__scnprintf_msg_flags':
+>     trace/beauty/msg_flags.c:28:21: error: 'MSG_SPLICE_PAGES' undeclared (first use in this function)
+>        28 |         if (flags & MSG_##n) {           |                     ^~~~
+>     trace/beauty/msg_flags.c:50:9: note: in expansion of macro 'P_MSG_FLAG'
+>        50 |         P_MSG_FLAG(SPLICE_PAGES);
+>           |         ^~~~~~~~~~
+>     trace/beauty/msg_flags.c:28:21: note: each undeclared identifier is reported only once for each function it appears in
+>        28 |         if (flags & MSG_##n) {           |                     ^~~~
+>     trace/beauty/msg_flags.c:50:9: note: in expansion of macro 'P_MSG_FLAG'
+>        50 |         P_MSG_FLAG(SPLICE_PAGES);
+>           |         ^~~~~~~~~~
+> 
+> The fix is similar to what was done with MSG_FASTOPEN: the new macro is
+> defined if it is not defined in the system headers.
+> 
+> Fixes: b848b26c6672 ("net: Kill MSG_SENDPAGE_NOTLAST")
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Closes: https://lore.kernel.org/r/20230626112847.2ef3d422@canb.auug.org.au/
+> Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
 > ---
->  Documentation/devicetree/bindings/arm/qcom-soc.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/arm/qcom-soc.yaml b/Documentation/devicetree/bindings/arm/qcom-soc.yaml
-> index e333ec4a9c5f..607a1cf1ef94 100644
-> --- a/Documentation/devicetree/bindings/arm/qcom-soc.yaml
-> +++ b/Documentation/devicetree/bindings/arm/qcom-soc.yaml
-> @@ -31,7 +31,7 @@ properties:
->    compatible:
->      oneOf:
->        # Preferred naming style for compatibles of SoC components:
-> -      - pattern: "^qcom,(apq|ipq|mdm|msm|qcm|qcs|sa|sc|sdm|sdx|sm)[0-9]+-.*$"
-> +      - pattern: "^qcom,(apq|ipq|mdm|msm|qcm|qcs|sa|sc|sdm|sdx|sm)[0-9]+(pro|)-.*$"
-
-"(pro)?" would be slightly better than "(pro|)" IMO.
-
-Acked-by: Rob Herring <robh@kernel.org>
-
->        - pattern: "^qcom,(sa|sc)8[0-9]+[a-z][a-z]?-.*$"
->  
->        # Legacy namings - variations of existing patterns/compatibles are OK,
+> Notes:
+>     @David: I solved it like that in MPTCP tree. Does it work for you too?
 > 
-> -- 
-> 2.41.0
+>     I guess tools/perf/trace/beauty/include/linux/socket.h file still needs
+>     to be updated, not just to add MSG_SPLICE_PAGES but also other
+>     modifications done in this file. Maybe best to sync with Arnaldo because
+>     he might do it soon during the coming merge window I guess.
 > 
+> Cc: David Howells <dhowells@redhat.com>
+> Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
+
+Hi Arnaldo, are you okay with us taking this into the networking tree?
+Or do you prefer to sync the header after everything lands in Linus's
+tree?
