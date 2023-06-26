@@ -2,56 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA5BB73D640
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 05:20:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F21F73D64A
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 05:26:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230044AbjFZDUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 23:20:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55014 "EHLO
+        id S229892AbjFZD0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 23:26:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbjFZDUk (ORCPT
+        with ESMTP id S229480AbjFZD0Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 23:20:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F09B411C
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 20:20:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A13660C72
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 03:20:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A60E1C433C8;
-        Mon, 26 Jun 2023 03:20:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687749638;
-        bh=0j42pFaHzOUI6swjUOLjkgy+NNh2RUt8s6H5ez2k5IM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Lgqx4Tr02Iw9n2yo+uU0QlSokM0TVEq9+ArAqcY9hQEFnVFq4ks++nrhAS3lR2TA5
-         uu8czI9zAZg8kicW5bE+OlAFIaJWeudWIOR358LrAYgfnP/irTMaL2gn8aGxjV5jw8
-         M3LXLctJ024YN17riX4Z9Chx+B7cg+0AtR7pqZKrLusTldNVnQwQinz+ZvE0qCYUyz
-         hdSgm3sqlug63AAFT+bTkfnJPK2UFj3ut75xqqNnGaJiZnlrH474nw5PPkyc+O9pYU
-         LdIsZOw4wDJZEnVWvVRmO22MWwH7oUfdg5/phrjwIDRCxdCUuApOfEA9WJwCWnyaFM
-         i7bIbbup2JaxA==
-Date:   Sun, 25 Jun 2023 20:20:36 -0700
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     kernel test robot <lkp@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>
-Subject: Re: [PATCH] objtool: Make 'sec-address' always on
-Message-ID: <20230626032036.m7vdthsguezm52wa@treble>
-References: <e7e1de1d01194df3ff4053cb0815fc2ddba33213.1687360711.git.christophe.leroy@csgroup.eu>
- <202306241520.4jIgEhK4-lkp@intel.com>
- <2bd6c377-51ac-e2e2-6fcf-9c9b0f96f9cf@csgroup.eu>
+        Sun, 25 Jun 2023 23:26:16 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D131137
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 20:26:14 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4f954d7309fso3403432e87.1
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 20:26:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google; t=1687749972; x=1690341972;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=d27TruML66ln41kwNbriVUdepzW6hpF0owzY5DYOBTc=;
+        b=nixJQJW/JM6ZhF95VwmPO9q32GpVx4+kO1Jmhh/m7AxWBjPVzuurbPplCHiZUph8mw
+         VnRHpeZ3gcLpVRVkfDX06lKeR4XaNhXausla1rXJrdpuGiKqBJfGxv76yyPKOJoEsJyS
+         I5OwAaHw+Mq0hOSCYi9hLEEnAyhv7xVwJi0N9wxmDMYvmcoQqRMpLl2Y1JG66sJSMy+q
+         T3S4xp4Z+gicg7GlFaO4KbttvqvArCRV8Euj44ijnI7DbobMrWJ/Chn5iX238i19mFAV
+         FtmcPTBarugpL9drzBlyxjoj3bpyCgnVGBm0yH/dS5Z0QJ4LKgk+1IZ/oLJSz6E7FYVO
+         V2DQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687749972; x=1690341972;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=d27TruML66ln41kwNbriVUdepzW6hpF0owzY5DYOBTc=;
+        b=jDkmIsx8QYkcNRWNVCR0B4rLiTjsOobVlOp2v5qnO8cOqBVIbjLx7aMFJ2r0da1wX1
+         b+z5IhSigTtkrAKAIoX3TMm9ZV6Ekw7pkPcG8Wb9F5ehpvWzKzg3t+VeFpwb0IjhDGHw
+         l6VMSSecXPz5BSiqCuDEKYrmkj17HVW8kagNlxPkcF08L6wIxcIkixwW7DCNw7w4hifD
+         MVqzyhOav3DGZx3o9+CtvZCACjvDtzbg6IUWr/f13Fp4wR8hvRVWPDvvNJkPpRIqwmK7
+         2Ie2GYqhgtIZOph6/4wQOEpb0ft5rmURZ3SfJNIfUZmxLd6eYe0Ztm9/2kC5WxxmS+lu
+         79mQ==
+X-Gm-Message-State: AC+VfDySb2c9pRxLprjlko0ljdp8ZsxsXv6Yz/MXvRz+ZYaR0j1SvYjk
+        vVtwxwtEYfOULh4MGRUC3kpS6LjCwQzFxQiDQVR73A==
+X-Google-Smtp-Source: ACHHUZ5VXGFfIfcr1N1JRpfM8xoJIYXrZpWVXnEnMRRfEDsgxdragBOW5kVhTdzGVenAUlCT+DBser0m2zTw3Zexh0g=
+X-Received: by 2002:a05:6512:3f18:b0:4eb:46c2:e771 with SMTP id
+ y24-20020a0565123f1800b004eb46c2e771mr9802992lfa.14.1687749972447; Sun, 25
+ Jun 2023 20:26:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <2bd6c377-51ac-e2e2-6fcf-9c9b0f96f9cf@csgroup.eu>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20230616063210.19063-1-eric.lin@sifive.com> <20230616063210.19063-4-eric.lin@sifive.com>
+ <2437bda9-bbdb-ad80-7201-1e16e1388890@linaro.org>
+In-Reply-To: <2437bda9-bbdb-ad80-7201-1e16e1388890@linaro.org>
+From:   Eric Lin <eric.lin@sifive.com>
+Date:   Mon, 26 Jun 2023 11:26:00 +0800
+Message-ID: <CAPqJEFoTsmVZ4kvsSB0RkQZaQGyXC96KV6RvdpeC5XxURCOZ0w@mail.gmail.com>
+Subject: Re: [PATCH 3/3] dt-bindings: riscv: sifive: Add SiFive Private L2
+ cache controller
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     conor@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, aou@eecs.berkeley.edu, maz@kernel.org,
+        chenhuacai@kernel.org, baolu.lu@linux.intel.com, will@kernel.org,
+        kan.liang@linux.intel.com, nnac123@linux.ibm.com,
+        pierre.gondois@arm.com, jgross@suse.com, chao.gao@intel.com,
+        maobibo@loongson.cn, linux-riscv@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dslin1010@gmail.com, Zong Li <zong.li@sifive.com>,
+        Nick Hu <nick.hu@sifive.com>,
+        Greentime Hu <greentime.hu@sifive.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,19 +80,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 24, 2023 at 08:30:48AM +0000, Christophe Leroy wrote:
-> >>> vmlinux.o: warning: objtool: ibt_selftest+0x14 (.text+0x92b54): sibling call from callable instruction with modified stack frame
-> >     vmlinux.o: warning: objtool: .altinstr_replacement+0x19a4: redundant UACCESS disable
-> >     vmlinux.o: warning: objtool: iovec_from_user.part.0+0xb1 (.text+0x1c47761): call to copy_iovec_from_user.part.0() with UACCESS enabled
-> >     vmlinux.o: warning: objtool: ibt_selftest+0x1e (.text+0x92b5e): return with modified stack frame
-> > 
-> 
-> I can't really see any link between that warning and the changes in the 
-> patch.
+Hi Krzysztof,
 
-I suspect it's a pre-existing warning, but because the patch made a
-change to the default formatting (adding .text+off), it looks like a new
-warning to the bots.
+On Fri, Jun 16, 2023 at 6:45=E2=80=AFPM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 16/06/2023 08:32, Eric Lin wrote:
+> > This add YAML DT binding documentation for SiFive Private L2
+> > cache controller
+> >
+> > Signed-off-by: Eric Lin <eric.lin@sifive.com>
+> > Reviewed-by: Zong Li <zong.li@sifive.com>
+> > Reviewed-by: Nick Hu <nick.hu@sifive.com>
+> > ---
+> >  .../bindings/riscv/sifive,pL2Cache0.yaml      | 81 +++++++++++++++++++
+> >  1 file changed, 81 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/riscv/sifive,pL2C=
+ache0.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/riscv/sifive,pL2Cache0.y=
+aml b/Documentation/devicetree/bindings/riscv/sifive,pL2Cache0.yaml
+> > new file mode 100644
+> > index 000000000000..b5d8d4a39dde
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/riscv/sifive,pL2Cache0.yaml
+> > @@ -0,0 +1,81 @@
+> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > +# Copyright (C) 2023 SiFive, Inc.
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/riscv/sifive,pL2Cache0.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: SiFive Private L2 Cache Controller
+> > +
+> > +maintainers:
+> > +  - Greentime Hu  <greentime.hu@sifive.com>
+> > +  - Eric Lin      <eric.lin@sifive.com>
+> > +
+> > +description:
+> > +  The SiFive Private L2 Cache Controller is per hart and communicates =
+with both the upstream
+> > +  L1 caches and downstream L3 cache or memory, enabling a high-perform=
+ance cache subsystem.
+> > +  All the properties in ePAPR/DeviceTree specification applies for thi=
+s platform.
+>
+> Drop the last sentence. Why specification would not apply?
+>
+OK, I'll drop it in v2.
 
--- 
-Josh
+> > +
+> > +allOf:
+> > +  - $ref: /schemas/cache-controller.yaml#
+> > +
+> > +select:
+> > +  properties:
+> > +    compatible:
+> > +      contains:
+> > +        enum:
+> > +          - sifive,pL2Cache0
+> > +          - sifive,pL2Cache
+> > +
+> > +  required:
+> > +    - compatible
+> > +
+> > +properties:
+> > +  compatible:
+> > +    items:
+>
+>
+> You have only one item, so no need for items... unless you just missed
+> proper fallback.
+
+OK, I'll fix it in v2.
+
+>
+> > +      - enum:
+> > +          - sifive,pL2Cache0
+> > +          - sifive,pL2Cache1
+>
+> What is "0" and "1" here? What do these compatibles represent? Why they
+> do not have any SoC related part?
+
+The pL2Cache1 has minor changes in hardware, but it can use the same
+pl2 cache driver.
+May I ask, what do you mean about the SoC-related part? Thanks.
+
+>
+> > +
+> > +  cache-block-size:
+> > +    const: 64
+> > +
+> > +  cache-level:
+> > +    const: 2
+> > +
+> > +  cache-sets:
+> > +    const: 512
+> > +
+> > +  cache-size:
+> > +    const: 262144
+>
+> Are you sure? So all private L2 cache controllers will have fixed size
+> of cache?
+
+The private L2 cache controllers will have different sizes.
+OK, I'll fix in v2.
+
+>
+> > +
+> > +  cache-unified: true
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  next-level-cache: true
+> > +
+> > +additionalProperties: false
+> > +
+> > +required:
+>
+> required: goes before additionalProperties:.
+>
+OK, I'll fix it in v2.
+Thanks for the review.
+
+Best Regards,
+Eric Lin.
+>
+> Best regards,
+> Krzysztof
+>
