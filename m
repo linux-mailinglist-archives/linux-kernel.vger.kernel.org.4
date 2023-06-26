@@ -2,123 +2,298 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E90C973D5FE
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 04:45:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF00473D600
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 04:46:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229964AbjFZCpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 22:45:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44200 "EHLO
+        id S230160AbjFZCqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 22:46:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231134AbjFZCoz (ORCPT
+        with ESMTP id S229555AbjFZCqB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 22:44:55 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55BCFE7;
-        Sun, 25 Jun 2023 19:44:54 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id 98e67ed59e1d1-262e839647eso704604a91.2;
-        Sun, 25 Jun 2023 19:44:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687747494; x=1690339494;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=QcoEetkUYJEXKBOLQWwPPuBN/feg1Dag8bMvH33Pf/s=;
-        b=NUTMwh3INPCVhHlFkUQxtTQ2i0zj8GT0N9HIgPMEu9lQX9MtpNsdqd1k9ARhmLJAnf
-         1mj38H0tths6ud0yl9vp/wHJ3w2gxxGOc1d28M+OO98WtTs/3ONFepL23oVd1Q3ISysA
-         Vem6zUzO6wAM3q2AYfXHiCTewLHDbRvBX75pyd1W718RIuKB7lc9n/0balpf8BP7X4ds
-         IXQ56jC+vxt0/USsYNJHi02K9TDwnp8NhSk3cEEAKtHMqZ8rgOQtsD6VyrseYJdHM4nr
-         I8TIvlN6Ed8Gd1DDCLidrGZ2g3amzE3jcoDQpV38zkd1B31cFD8gfExpyGG45Ty0rxVt
-         ub3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687747494; x=1690339494;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QcoEetkUYJEXKBOLQWwPPuBN/feg1Dag8bMvH33Pf/s=;
-        b=LQLSebeZUl0kZns1gE0DOmz/mJVRI0swzOE7WUYdL3IHHcx5V62x+KmPdwWXFomsSn
-         E3zA0eUZAZHE/8/nTawwPyO73Yz3v+91q2u8pC/fnxAa/gXQWHLVfrQP72AEF82hJ8HA
-         SUyGFfgXdGq4z0BDn+gmwBP/Bg0IZqjBMONMaeEGzijeVa/AXnsMqDeeKvJWNW/wbv8o
-         uPGBQnsFAnPiqbaktzfoPFgCsa6ez/QT29SML7XR8MvbQzl2L5ck2SoEgkOy5SQWuQi8
-         LACZHu5STW/AClZdTx8Nxu7IFlZeM+geCorvhrxGjVHEcNP0i9fS3xdsk74NECBu0+Ak
-         TVYQ==
-X-Gm-Message-State: AC+VfDwbYXqnvM//fE5s2I0Fezkhal51KrTPTNf/6i2ALTVhGiBEKPiK
-        zc2pR3iaUcQ0pzlKD/lmorA=
-X-Google-Smtp-Source: ACHHUZ6JiHGb4Um9Iewl0YM9ptygQkUjOcrCWXlGbc6EiLUckuZKPIiBJTA3HDfRpMQtHM07UqDiWw==
-X-Received: by 2002:a17:90a:199:b0:25b:d8fe:2c92 with SMTP id 25-20020a17090a019900b0025bd8fe2c92mr24951784pjc.48.1687747493748;
-        Sun, 25 Jun 2023 19:44:53 -0700 (PDT)
-Received: from oslab-pc.tsinghua.edu.cn ([166.111.139.122])
-        by smtp.gmail.com with ESMTPSA id p12-20020a17090a284c00b00256799877ffsm3486687pjf.47.2023.06.25.19.44.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Jun 2023 19:44:53 -0700 (PDT)
-From:   Tuo Li <islituo@gmail.com>
-To:     mchehab@kernel.org, yongsuyoo0215@gmail.com,
-        tommaso.merciai@amarulasolutions.com, colin.i.king@gmail.com,
-        hverkuil-cisco@xs4all.nl
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        baijiaju1990@outlook.com, Tuo Li <islituo@gmail.com>,
-        BassCheck <bass@buaa.edu.cn>
-Subject: [PATCH] media: dvb-core: Fix a possible null-pointer dereference due to data race in dvbdmx_write()
-Date:   Mon, 26 Jun 2023 10:44:29 +0800
-Message-Id: <20230626024429.994136-1-islituo@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Sun, 25 Jun 2023 22:46:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5259AE5F
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 19:45:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687747515;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+sW7gYbyomXlaISFUC6EgejmKO1/ILu0IheXlcjPjyk=;
+        b=cEk0j8kmMMKPhPvfG1k7Jdgh1SFKv+yD6qNhRhcl7Nc5hT3eA0k4J/+5Q6AB9Ym4bCh2XR
+        NE9We1O9WI76bp/RKKMaD9ZKprUbeQbiFGX6DmYKPvWJYEG3BNyw2DAp4An5Z4zNMolK3b
+        yJb/CGEy52GvxbeFqfgTKOE/0rnpYRw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-562-FuIKwq6rN9OcRg5vXZBuKA-1; Sun, 25 Jun 2023 22:45:11 -0400
+X-MC-Unique: FuIKwq6rN9OcRg5vXZBuKA-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BCA76800B35;
+        Mon, 26 Jun 2023 02:45:10 +0000 (UTC)
+Received: from localhost (ovpn-12-53.pek2.redhat.com [10.72.12.53])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id B366C492B01;
+        Mon, 26 Jun 2023 02:45:08 +0000 (UTC)
+Date:   Mon, 26 Jun 2023 10:45:03 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, arnd@arndb.de, hch@lst.de,
+        christophe.leroy@csgroup.eu, rppt@kernel.org, willy@infradead.org,
+        agordeev@linux.ibm.com, wangkefeng.wang@huawei.com,
+        schnelle@linux.ibm.com, David.Laight@aculab.com, shorne@gmail.com,
+        deller@gmx.de, nathan@kernel.org,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org
+Subject: Re: [PATCH v7 12/19] sh: mm: Convert to GENERIC_IOREMAP
+Message-ID: <ZJj7r+FCPu/tWDyV@MiWiFi-R3L-srv>
+References: <20230620131356.25440-1-bhe@redhat.com>
+ <20230620131356.25440-13-bhe@redhat.com>
+ <20fdf89dde5eee365ab15d9f4753e3c9fc43d46e.camel@physik.fu-berlin.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20fdf89dde5eee365ab15d9f4753e3c9fc43d46e.camel@physik.fu-berlin.de>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The struct field dmx_demux.frontend is often protected by the lock 
-dvb_demux.mutex when is accessed. Here is an example in 
-dvbdmx_connect_frontend():
+On 06/25/23 at 11:12pm, John Paul Adrian Glaubitz wrote:
+> Hi Baoquan!
+> 
+> On Tue, 2023-06-20 at 21:13 +0800, Baoquan He wrote:
+> > By taking GENERIC_IOREMAP method, the generic generic_ioremap_prot(),
+> > generic_iounmap(), and their generic wrapper ioremap_prot(), ioremap()
+> > and iounmap() are all visible and available to arch. Arch needs to
+> > provide wrapper functions to override the generic versions if there's
+> > arch specific handling in its ioremap_prot(), ioremap() or iounmap().
+> > This change will simplify implementation by removing duplicated codes
+>                                                                   ^^^^^
+> Nit-pick: It should be "code", not "codes".
 
-  mutex_lock(&dvbdemux->mutex);
+Will change.
 
-  demux->frontend = frontend;
-  mutex_unlock(&dvbdemux->mutex);
+> 
+> I'll review and test the rest tomorrow. There are quite some changes.
 
-However, the variable demux->frontend is accessed without holding the lock
-dvbdemux->mutex in dvbdmx_write():
+That would be great, thanks a lot for your help.
 
-  if ((!demux->frontend) || (demux->frontend->source != DMX_MEMORY_FE))
-
-In my opinion, this may be a harmful race, because if demux->fontend is set
-to NULL right after the first condition is checked, a null-pointer 
-dereference can occur when accessing the field demux->frontend->source.
-
-To fix this possible null-pointer dereference caused by data race, a lock
-and unlock pair is added when accessing the variable demux->frontend.
-
-Reported-by: BassCheck <bass@buaa.edu.cn>
-Signed-off-by: Tuo Li <islituo@gmail.com>
----
- drivers/media/dvb-core/dvb_demux.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/media/dvb-core/dvb_demux.c b/drivers/media/dvb-core/dvb_demux.c
-index 7c4d86bfdd6c..d26738e3310a 100644
---- a/drivers/media/dvb-core/dvb_demux.c
-+++ b/drivers/media/dvb-core/dvb_demux.c
-@@ -1140,9 +1140,13 @@ static int dvbdmx_write(struct dmx_demux *demux, const char __user *buf, size_t
- {
- 	struct dvb_demux *dvbdemux = (struct dvb_demux *)demux;
- 	void *p;
--
--	if ((!demux->frontend) || (demux->frontend->source != DMX_MEMORY_FE))
-+	
-+	mutex_lock(&dvbdemux->mutex);
-+	if ((!demux->frontend) || (demux->frontend->source != DMX_MEMORY_FE)) {
-+		mutex_unlock(&dvbdemux->mutex);
- 		return -EINVAL;
-+	}
-+	mutex_unlock(&dvbdemux->mutex);
- 
- 	p = memdup_user(buf, count);
- 	if (IS_ERR(p))
--- 
-2.34.1
+> 
+> > with generic_ioremap_prot() and generic_iounmap(), and has the equivalent
+> > functioality as before.
+> > 
+> > Here, add wrapper functions ioremap_prot() and iounmap() for SuperH's
+> > special operation when ioremap() and iounmap().
+> > 
+> > Signed-off-by: Baoquan He <bhe@redhat.com>
+> > Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+> > Cc: Rich Felker <dalias@libc.org>
+> > Cc: linux-sh@vger.kernel.org
+> > ---
+> >  arch/sh/Kconfig          |  1 +
+> >  arch/sh/include/asm/io.h | 40 +++++--------------------
+> >  arch/sh/mm/ioremap.c     | 65 +++++++---------------------------------
+> >  3 files changed, 20 insertions(+), 86 deletions(-)
+> > 
+> > diff --git a/arch/sh/Kconfig b/arch/sh/Kconfig
+> > index 9652d367fc37..f326985e46e0 100644
+> > --- a/arch/sh/Kconfig
+> > +++ b/arch/sh/Kconfig
+> > @@ -28,6 +28,7 @@ config SUPERH
+> >  	select GENERIC_SMP_IDLE_THREAD
+> >  	select GUP_GET_PXX_LOW_HIGH if X2TLB
+> >  	select HAS_IOPORT if HAS_IOPORT_MAP
+> > +	select GENERIC_IOREMAP if MMU
+> >  	select HAVE_ARCH_AUDITSYSCALL
+> >  	select HAVE_ARCH_KGDB
+> >  	select HAVE_ARCH_SECCOMP_FILTER
+> > diff --git a/arch/sh/include/asm/io.h b/arch/sh/include/asm/io.h
+> > index 270e7952950c..b3a26b405c8d 100644
+> > --- a/arch/sh/include/asm/io.h
+> > +++ b/arch/sh/include/asm/io.h
+> > @@ -266,40 +266,16 @@ unsigned long long poke_real_address_q(unsigned long long addr,
+> >  #endif
+> >  
+> >  #ifdef CONFIG_MMU
+> > -void iounmap(void __iomem *addr);
+> > -void __iomem *__ioremap_caller(phys_addr_t offset, unsigned long size,
+> > -			       pgprot_t prot, void *caller);
+> > -
+> > -static inline void __iomem *ioremap(phys_addr_t offset, unsigned long size)
+> > -{
+> > -	return __ioremap_caller(offset, size, PAGE_KERNEL_NOCACHE,
+> > -			__builtin_return_address(0));
+> > -}
+> > -
+> > -static inline void __iomem *
+> > -ioremap_cache(phys_addr_t offset, unsigned long size)
+> > -{
+> > -	return __ioremap_caller(offset, size, PAGE_KERNEL,
+> > -			__builtin_return_address(0));
+> > -}
+> > -#define ioremap_cache ioremap_cache
+> > -
+> > -#ifdef CONFIG_HAVE_IOREMAP_PROT
+> > -static inline void __iomem *ioremap_prot(phys_addr_t offset, unsigned long size,
+> > -		unsigned long flags)
+> > -{
+> > -	return __ioremap_caller(offset, size, __pgprot(flags),
+> > -			__builtin_return_address(0));
+> > -}
+> > -#endif /* CONFIG_HAVE_IOREMAP_PROT */
+> > +/*
+> > + * I/O memory mapping functions.
+> > + */
+> > +#define ioremap_prot ioremap_prot
+> > +#define iounmap iounmap
+> >  
+> > -#else /* CONFIG_MMU */
+> > -static inline void __iomem *ioremap(phys_addr_t offset, size_t size)
+> > -{
+> > -	return (void __iomem *)(unsigned long)offset;
+> > -}
+> > +#define _PAGE_IOREMAP pgprot_val(PAGE_KERNEL_NOCACHE)
+> >  
+> > -static inline void iounmap(volatile void __iomem *addr) { }
+> > +#define ioremap_cache(addr, size)  \
+> > +	ioremap_prot((addr), (size), pgprot_val(PAGE_KERNEL))
+> >  #endif /* CONFIG_MMU */
+> >  
+> >  #define ioremap_uc	ioremap
+> > diff --git a/arch/sh/mm/ioremap.c b/arch/sh/mm/ioremap.c
+> > index 21342581144d..c33b3daa4ad1 100644
+> > --- a/arch/sh/mm/ioremap.c
+> > +++ b/arch/sh/mm/ioremap.c
+> > @@ -72,22 +72,11 @@ __ioremap_29bit(phys_addr_t offset, unsigned long size, pgprot_t prot)
+> >  #define __ioremap_29bit(offset, size, prot)		NULL
+> >  #endif /* CONFIG_29BIT */
+> >  
+> > -/*
+> > - * Remap an arbitrary physical address space into the kernel virtual
+> > - * address space. Needed when the kernel wants to access high addresses
+> > - * directly.
+> > - *
+> > - * NOTE! We need to allow non-page-aligned mappings too: we will obviously
+> > - * have to convert them into an offset in a page-aligned mapping, but the
+> > - * caller shouldn't need to know that small detail.
+> > - */
+> > -void __iomem * __ref
+> > -__ioremap_caller(phys_addr_t phys_addr, unsigned long size,
+> > -		 pgprot_t pgprot, void *caller)
+> > +void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
+> > +			   unsigned long prot)
+> >  {
+> > -	struct vm_struct *area;
+> > -	unsigned long offset, last_addr, addr, orig_addr;
+> >  	void __iomem *mapped;
+> > +	pgprot_t pgprot = __pgprot(prot);
+> >  
+> >  	mapped = __ioremap_trapped(phys_addr, size);
+> >  	if (mapped)
+> > @@ -97,11 +86,6 @@ __ioremap_caller(phys_addr_t phys_addr, unsigned long size,
+> >  	if (mapped)
+> >  		return mapped;
+> >  
+> > -	/* Don't allow wraparound or zero size */
+> > -	last_addr = phys_addr + size - 1;
+> > -	if (!size || last_addr < phys_addr)
+> > -		return NULL;
+> > -
+> >  	/*
+> >  	 * If we can't yet use the regular approach, go the fixmap route.
+> >  	 */
+> > @@ -112,34 +96,14 @@ __ioremap_caller(phys_addr_t phys_addr, unsigned long size,
+> >  	 * First try to remap through the PMB.
+> >  	 * PMB entries are all pre-faulted.
+> >  	 */
+> > -	mapped = pmb_remap_caller(phys_addr, size, pgprot, caller);
+> > +	mapped = pmb_remap_caller(phys_addr, size, pgprot,
+> > +			__builtin_return_address(0));
+> >  	if (mapped && !IS_ERR(mapped))
+> >  		return mapped;
+> >  
+> > -	/*
+> > -	 * Mappings have to be page-aligned
+> > -	 */
+> > -	offset = phys_addr & ~PAGE_MASK;
+> > -	phys_addr &= PAGE_MASK;
+> > -	size = PAGE_ALIGN(last_addr+1) - phys_addr;
+> > -
+> > -	/*
+> > -	 * Ok, go for it..
+> > -	 */
+> > -	area = get_vm_area_caller(size, VM_IOREMAP, caller);
+> > -	if (!area)
+> > -		return NULL;
+> > -	area->phys_addr = phys_addr;
+> > -	orig_addr = addr = (unsigned long)area->addr;
+> > -
+> > -	if (ioremap_page_range(addr, addr + size, phys_addr, pgprot)) {
+> > -		vunmap((void *)orig_addr);
+> > -		return NULL;
+> > -	}
+> > -
+> > -	return (void __iomem *)(offset + (char *)orig_addr);
+> > +	return generic_ioremap_prot(phys_addr, size, pgprot);
+> >  }
+> > -EXPORT_SYMBOL(__ioremap_caller);
+> > +EXPORT_SYMBOL(ioremap_prot);
+> >  
+> >  /*
+> >   * Simple checks for non-translatable mappings.
+> > @@ -158,10 +122,9 @@ static inline int iomapping_nontranslatable(unsigned long offset)
+> >  	return 0;
+> >  }
+> >  
+> > -void iounmap(void __iomem *addr)
+> > +void iounmap(volatile void __iomem *addr)
+> >  {
+> >  	unsigned long vaddr = (unsigned long __force)addr;
+> > -	struct vm_struct *p;
+> >  
+> >  	/*
+> >  	 * Nothing to do if there is no translatable mapping.
+> > @@ -172,21 +135,15 @@ void iounmap(void __iomem *addr)
+> >  	/*
+> >  	 * There's no VMA if it's from an early fixed mapping.
+> >  	 */
+> > -	if (iounmap_fixed(addr) == 0)
+> > +	if (iounmap_fixed((void __iomem *)addr) == 0)
+> >  		return;
+> >  
+> >  	/*
+> >  	 * If the PMB handled it, there's nothing else to do.
+> >  	 */
+> > -	if (pmb_unmap(addr) == 0)
+> > +	if (pmb_unmap((void __iomem *)addr) == 0)
+> >  		return;
+> >  
+> > -	p = remove_vm_area((void *)(vaddr & PAGE_MASK));
+> > -	if (!p) {
+> > -		printk(KERN_ERR "%s: bad address %p\n", __func__, addr);
+> > -		return;
+> > -	}
+> > -
+> > -	kfree(p);
+> > +	generic_iounmap(addr);
+> >  }
+> >  EXPORT_SYMBOL(iounmap);
+> 
+> -- 
+>  .''`.  John Paul Adrian Glaubitz
+> : :' :  Debian Developer
+> `. `'   Physicist
+>   `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+> 
 
