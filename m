@@ -2,300 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B59173DC90
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 12:55:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 081A573DC94
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 12:58:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230002AbjFZKzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 06:55:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41924 "EHLO
+        id S230033AbjFZK6C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 06:58:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229880AbjFZKzt (ORCPT
+        with ESMTP id S229564AbjFZK57 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 06:55:49 -0400
-Received: from rcdn-iport-3.cisco.com (rcdn-iport-3.cisco.com [173.37.86.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7204E8F
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 03:55:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=cisco.com; i=@cisco.com; l=9154; q=dns/txt; s=iport;
-  t=1687776948; x=1688986548;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Jok1Iz5nXQsbUXyMJQ58YLr/WHMi5qND6uVNGD/RMig=;
-  b=CyEuOxC6Urdw7lYQ8mXeQd1SpxAr9Q/Qj/NfiqZKTlhfnVZCVntpNnjN
-   fOHM+SVm74wQdgn0muxRKSbQxzrEyoK/Rlf0PH1mgLrsLnIT5KVWT173l
-   b3r/3ftZ5mgZzj/NJ9Tgr6fYhcT/nfdghZGeudHQMbAFguiG1q5MHMsbS
-   E=;
-X-IronPort-AV: E=Sophos;i="6.01,159,1684800000"; 
-   d="scan'208";a="78606347"
-Received: from rcdn-core-4.cisco.com ([173.37.93.155])
-  by rcdn-iport-3.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 26 Jun 2023 10:55:47 +0000
-Received: from sjc-ads-7449.cisco.com (sjc-ads-7449.cisco.com [10.30.220.234])
-        by rcdn-core-4.cisco.com (8.15.2/8.15.2) with ESMTPS id 35QAtkMb012982
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Mon, 26 Jun 2023 10:55:47 GMT
-Received: by sjc-ads-7449.cisco.com (Postfix, from userid 1777032)
-        id 46494CCD0B1; Mon, 26 Jun 2023 03:55:46 -0700 (PDT)
-From:   Marcin Wierzbicki <mawierzb@cisco.com>
-To:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Swapnil Jakhade <sjakhade@cadence.com>,
-        Marcin Wierzbicki <mawierzb@cisco.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     xe-linux-external@cisco.com, danielwa@cisco.com, olicht@cisco.com,
-        Bartosz Wawrzyniak <bwawrzyn@cisco.com>
-Subject: [PATCH v4] phy: cadence: Sierra: Add single link SGMII register configuration
-Date:   Mon, 26 Jun 2023 10:55:32 +0000
-Message-Id: <20230626105533.2999966-1-mawierzb@cisco.com>
-X-Mailer: git-send-email 2.28.0
+        Mon, 26 Jun 2023 06:57:59 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD66D8F
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 03:57:57 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 086765FD4C;
+        Mon, 26 Jun 2023 13:57:56 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1687777076;
+        bh=tF8tjj7sdIyMXAlJ3nUVa6bWrMEF1krZs+eU62ZwWlM=;
+        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
+        b=iMv7yrHtdWJS2xtGZYFvF6VNySfmW6k3eI2quO4DVtsFxwrmkoAkf9g/A70mczdDt
+         OAidEaicyr8PHxs89vEp4XIrCOAWlbPM/6nVAZXt6pgiIbYLzGxeShhpYDNITrVqBp
+         uuJrpxOc/1cmxnJQnL2Ql37sIVyXmmRKQi76+pMXeV9LSb1F93tnFRgSS1Efz7Uhxi
+         FJSUiovHDMNVarM3pJc9RRdBgqSd5jbKJJO9qYKaMv+ZUdy10yYxYEFqekRrXlB+g1
+         irkS0/UXUqL6mNIRaKXlwhndqsJAChWVTWfThBs8GPBwQOyX2vimPcqMujcgAzWZmb
+         tCxGGrmFEpmnQ==
+Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Mon, 26 Jun 2023 13:57:56 +0300 (MSK)
+From:   Alexey Romanov <AVRomanov@sberdevices.ru>
+To:     Sergey Senozhatsky <senozhatsky@chromium.org>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Minchan Kim <minchan@kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCHv2 1/3] zsmalloc: do not scan for allocated objects in
+ empty zspage
+Thread-Topic: [PATCHv2 1/3] zsmalloc: do not scan for allocated objects in
+ empty zspage
+Thread-Index: AQHZpl0UZXCORNUGAkShFrCp/4fRxa+cuxQA
+Date:   Mon, 26 Jun 2023 10:57:15 +0000
+Message-ID: <20230626105750.x7dxn7z4l6t4sicb@cab-wsm-0029881>
+References: <20230624053120.643409-1-senozhatsky@chromium.org>
+ <20230624053120.643409-2-senozhatsky@chromium.org>
+In-Reply-To: <20230624053120.643409-2-senozhatsky@chromium.org>
+Accept-Language: ru-RU, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.16.18.93]
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <B30B94A8F941E04998D7A666222F0D45@sberdevices.ru>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Auto-Response-Suppress: DR, OOF, AutoReply
-X-Outbound-SMTP-Client: 10.30.220.234, sjc-ads-7449.cisco.com
-X-Outbound-Node: rcdn-core-4.cisco.com
-X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIMWL_WL_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/06/26 05:54:00 #21579740
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add single link SGMII register configuration for no SSC for
-cdns,sierra-phy-t0 compatibility string.
-The configuration is based on Sierra Programmer's Guide and
-validated in Cisco CrayAR SoC.
+Hi,
 
-Co-developed-by: Bartosz Wawrzyniak <bwawrzyn@cisco.com>
-Signed-off-by: Bartosz Wawrzyniak <bwawrzyn@cisco.com>
-Signed-off-by: Marcin Wierzbicki <mawierzb@cisco.com>
----
-v4
-- moved TYPE_NONE under existing TYPE_SGMII entry,
-- v3: https://lore.kernel.org/all/20230522172415.1668975-1-mawierzb@cisco.com/
+On Sat, Jun 24, 2023 at 02:12:14PM +0900, Sergey Senozhatsky wrote:
+> zspage migration can terminate as soon as it moves the last
+> allocated object from the source zspage.  Add a simple helper
+> zspage_empty() that tests zspage ->inuse on each migration
+> iteration.
+>=20
+> Suggested-by: Alexey Romanov <AVRomanov@sberdevices.ru>
+> Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+> ---
+>  mm/zsmalloc.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+>=20
+> diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
+> index 3f057970504e..5d60eaedc3b7 100644
+> --- a/mm/zsmalloc.c
+> +++ b/mm/zsmalloc.c
+> @@ -1147,6 +1147,11 @@ static bool zspage_full(struct size_class *class, =
+struct zspage *zspage)
+>  	return get_zspage_inuse(zspage) =3D=3D class->objs_per_zspage;
+>  }
+> =20
+> +static bool zspage_empty(struct zspage *zspage)
+> +{
+> +	return get_zspage_inuse(zspage) =3D=3D 0;
+> +}
+> +
+>  /**
+>   * zs_lookup_class_index() - Returns index of the zsmalloc &size_class
+>   * that hold objects of the provided size.
+> @@ -1625,6 +1630,10 @@ static void migrate_zspage(struct zs_pool *pool, s=
+truct size_class *class,
+>  		obj_idx++;
+>  		record_obj(handle, free_obj);
+>  		obj_free(class->size, used_obj);
+> +
+> +		/* Stop if there are no more objects to migrate */
+> +		if (zspage_empty(get_zspage(s_page)))
+> +			break;
+>  	}
+> =20
+>  	/* Remember last position in this iteration */
+> --=20
+> 2.41.0.162.gfafddb0af9-goog
+>=20
 
-v3
-- removed Change-Id from commit msg,
-- removed unnecessary new line,
-- renamed sgmii_cmn_vals to sgmii_pma_cmn_vals,
-- renamed sgmii_ln_vals to sgmii_pma_ln_vals.
-- v2: https://lore.kernel.org/lkml/20230508160142.2489365-1-mawierzb@cisco.com/T/#u
+not sure if I can keep this tag but,
 
-v2
-- rebased version on top of commit 0cfa43ab46b5 ("phy: cadence: Sierra: Add PCIe + SGMII PHY multilink configuration")
-- v1: https://lore.kernel.org/lkml/20230419093008.195094-1-mawierzb@cisco.com/T/
+Reviewed-by: Alexey Romanov <avromanov@sberdevices.ru>
 
-v1
-- initial version of single SGMII link support
-
-Regards,
-Marcin
----
----
- drivers/phy/cadence/phy-cadence-sierra.c | 98 ++++++++++++++++++++++++
- 1 file changed, 98 insertions(+)
-
-diff --git a/drivers/phy/cadence/phy-cadence-sierra.c b/drivers/phy/cadence/phy-cadence-sierra.c
-index 13fcd3a65fe9..3c1f5ebe667b 100644
---- a/drivers/phy/cadence/phy-cadence-sierra.c
-+++ b/drivers/phy/cadence/phy-cadence-sierra.c
-@@ -30,23 +30,34 @@
- #define SIERRA_COMMON_CDB_OFFSET			0x0
- #define SIERRA_MACRO_ID_REG				0x0
- #define SIERRA_CMN_PLLLC_GEN_PREG			0x42
-+#define SIERRA_CMN_PLLLC_FBDIV_INT_MODE0_PREG		0x43
-+#define SIERRA_CMN_PLLLC_DCOCAL_CTRL_PREG		0x45
-+#define SIERRA_CMN_PLLLC_INIT_PREG			0x46
-+#define SIERRA_CMN_PLLLC_ITERTMR_PREG			0x47
- #define SIERRA_CMN_PLLLC_MODE_PREG			0x48
- #define SIERRA_CMN_PLLLC_LF_COEFF_MODE1_PREG		0x49
- #define SIERRA_CMN_PLLLC_LF_COEFF_MODE0_PREG		0x4A
- #define SIERRA_CMN_PLLLC_LOCK_CNTSTART_PREG		0x4B
-+#define SIERRA_CMN_PLLLC_LOCKSEARCH_PREG		0x4C
- #define SIERRA_CMN_PLLLC_CLK1_PREG			0x4D
-+#define SIERRA_CMN_PLLLC_CLK0_PREG			0x4E
- #define SIERRA_CMN_PLLLC_BWCAL_MODE1_PREG		0x4F
- #define SIERRA_CMN_PLLLC_BWCAL_MODE0_PREG		0x50
- #define SIERRA_CMN_PLLLC_DSMCORR_PREG			0x51
- #define SIERRA_CMN_PLLLC_SS_PREG			0x52
- #define SIERRA_CMN_PLLLC_SS_AMP_STEP_SIZE_PREG		0x53
- #define SIERRA_CMN_PLLLC_SSTWOPT_PREG			0x54
-+#define SIERRA_CMN_PLLCSM_PLLEN_TMR_PREG		0x5D
-+#define SIERRA_CMN_PLLCSM_PLLPRE_TMR_PREG		0x5E
- #define SIERRA_CMN_PLLLC_SS_TIME_STEPSIZE_MODE_PREG	0x62
- #define SIERRA_CMN_PLLLC_LOCK_DELAY_CTRL_PREG		0x63
-+#define SIERRA_SDOSCCAL_CLK_CNT_PREG			0x6E
- #define SIERRA_CMN_REFRCV_PREG				0x98
-+#define SIERRA_CMN_RESCAL_CTRLA_PREG			0xA0
- #define SIERRA_CMN_REFRCV1_PREG				0xB8
- #define SIERRA_CMN_PLLLC1_GEN_PREG			0xC2
- #define SIERRA_CMN_PLLLC1_FBDIV_INT_PREG		0xC3
-+#define SIERRA_CMN_PLLLC1_DCOCAL_CTRL_PREG		0xC5
- #define SIERRA_CMN_PLLLC1_LF_COEFF_MODE0_PREG		0xCA
- #define SIERRA_CMN_PLLLC1_CLK0_PREG			0xCE
- #define SIERRA_CMN_PLLLC1_BWCAL_MODE0_PREG		0xD0
-@@ -86,6 +97,7 @@
- #define SIERRA_DFE_BIASTRIM_PREG			0x04C
- #define SIERRA_DRVCTRL_ATTEN_PREG			0x06A
- #define SIERRA_DRVCTRL_BOOST_PREG			0x06F
-+#define SIERRA_LANE_TX_RECEIVER_DETECT_PREG		0x071
- #define SIERRA_TX_RCVDET_OVRD_PREG			0x072
- #define SIERRA_CLKPATHCTRL_TMR_PREG			0x081
- #define SIERRA_RX_CREQ_FLTR_A_MODE3_PREG		0x085
-@@ -101,6 +113,8 @@
- #define SIERRA_CREQ_SPARE_PREG				0x096
- #define SIERRA_CREQ_EQ_OPEN_EYE_THRESH_PREG		0x097
- #define SIERRA_CTLELUT_CTRL_PREG			0x098
-+#define SIERRA_DEQ_BLK_TAU_CTRL1_PREG			0x0AC
-+#define SIERRA_DEQ_BLK_TAU_CTRL4_PREG			0x0AF
- #define SIERRA_DFE_ECMP_RATESEL_PREG			0x0C0
- #define SIERRA_DFE_SMP_RATESEL_PREG			0x0C1
- #define SIERRA_DEQ_PHALIGN_CTRL				0x0C4
-@@ -129,6 +143,9 @@
- #define SIERRA_DEQ_GLUT14				0x0F6
- #define SIERRA_DEQ_GLUT15				0x0F7
- #define SIERRA_DEQ_GLUT16				0x0F8
-+#define SIERRA_POSTPRECUR_EN_CEPH_CTRL_PREG		0x0F9
-+#define SIERRA_TAU_EN_CEPH2TO0_PREG			0x0FB
-+#define SIERRA_TAU_EN_CEPH5TO3_PREG			0x0FC
- #define SIERRA_DEQ_ALUT0				0x108
- #define SIERRA_DEQ_ALUT1				0x109
- #define SIERRA_DEQ_ALUT2				0x10A
-@@ -143,6 +160,7 @@
- #define SIERRA_DEQ_ALUT11				0x113
- #define SIERRA_DEQ_ALUT12				0x114
- #define SIERRA_DEQ_ALUT13				0x115
-+#define SIERRA_OEPH_EN_CTRL_PREG			0x124
- #define SIERRA_DEQ_DFETAP_CTRL_PREG			0x128
- #define SIERRA_DEQ_DFETAP0				0x129
- #define SIERRA_DEQ_DFETAP1				0x12B
-@@ -157,6 +175,7 @@
- #define SIERRA_DEQ_TAU_CTRL2_PREG			0x151
- #define SIERRA_DEQ_TAU_CTRL3_PREG			0x152
- #define SIERRA_DEQ_OPENEYE_CTRL_PREG			0x158
-+#define SIERRA_DEQ_CONCUR_EPIOFFSET_MODE_PREG		0x159
- #define SIERRA_DEQ_PICTRL_PREG				0x161
- #define SIERRA_CPICAL_TMRVAL_MODE1_PREG			0x170
- #define SIERRA_CPICAL_TMRVAL_MODE0_PREG			0x171
-@@ -165,6 +184,7 @@
- #define SIERRA_CPI_RESBIAS_BIN_PREG			0x17E
- #define SIERRA_CPI_TRIM_PREG				0x17F
- #define SIERRA_CPICAL_RES_STARTCODE_MODE23_PREG		0x183
-+#define SIERRA_CPICAL_RES_STARTCODE_MODE01_PREG		0x184
- #define SIERRA_EPI_CTRL_PREG				0x187
- #define SIERRA_LFPSDET_SUPPORT_PREG			0x188
- #define SIERRA_LFPSFILT_NS_PREG				0x18A
-@@ -176,6 +196,7 @@
- #define SIERRA_RXBUFFER_CTLECTRL_PREG			0x19E
- #define SIERRA_RXBUFFER_RCDFECTRL_PREG			0x19F
- #define SIERRA_RXBUFFER_DFECTRL_PREG			0x1A0
-+#define SIERRA_LN_SPARE_REG_PREG			0x1B0
- #define SIERRA_DEQ_TAU_CTRL1_FAST_MAINT_PREG		0x14F
- #define SIERRA_DEQ_TAU_CTRL1_SLOW_MAINT_PREG		0x150
-
-@@ -2401,6 +2422,77 @@ static struct cdns_sierra_vals usb_100_ext_ssc_ln_vals = {
- 	.num_regs = ARRAY_SIZE(cdns_usb_ln_regs_ext_ssc),
- };
-
-+/* SGMII PHY common configuration */
-+static const struct cdns_reg_pairs sgmii_pma_cmn_vals[] = {
-+	{0x0180, SIERRA_SDOSCCAL_CLK_CNT_PREG},
-+	{0x6000, SIERRA_CMN_REFRCV_PREG},
-+	{0x0031, SIERRA_CMN_RESCAL_CTRLA_PREG},
-+	{0x001C, SIERRA_CMN_PLLLC_FBDIV_INT_MODE0_PREG},
-+	{0x2106, SIERRA_CMN_PLLLC_LF_COEFF_MODE0_PREG},
-+	{0x0000, SIERRA_CMN_PLLLC_LOCKSEARCH_PREG},
-+	{0x8103, SIERRA_CMN_PLLLC_CLK0_PREG},
-+	{0x0000, SIERRA_CMN_PLLLC_BWCAL_MODE0_PREG},
-+	{0x0027, SIERRA_CMN_PLLCSM_PLLEN_TMR_PREG},
-+	{0x0062, SIERRA_CMN_PLLCSM_PLLPRE_TMR_PREG},
-+	{0x0800, SIERRA_CMN_PLLLC_SS_TIME_STEPSIZE_MODE_PREG},
-+	{0x0000, SIERRA_CMN_PLLLC_INIT_PREG},
-+	{0x0000, SIERRA_CMN_PLLLC_ITERTMR_PREG},
-+	{0x0020, SIERRA_CMN_PLLLC_LOCK_CNTSTART_PREG},
-+	{0x0013, SIERRA_CMN_PLLLC_DCOCAL_CTRL_PREG},
-+	{0x0013, SIERRA_CMN_PLLLC1_DCOCAL_CTRL_PREG},
-+};
-+
-+static struct cdns_sierra_vals sgmii_cmn_vals = {
-+	.reg_pairs = sgmii_pma_cmn_vals,
-+	.num_regs = ARRAY_SIZE(sgmii_pma_cmn_vals),
-+};
-+
-+/* SGMII PHY lane configuration */
-+static const struct cdns_reg_pairs sgmii_ln_regs[] = {
-+	{0x691E, SIERRA_DET_STANDEC_D_PREG},
-+	{0x0FFE, SIERRA_PSC_RX_A0_PREG},
-+	{0x0104, SIERRA_PLLCTRL_FBDIV_MODE01_PREG},
-+	{0x0013, SIERRA_PLLCTRL_SUBRATE_PREG},
-+	{0x0106, SIERRA_PLLCTRL_GEN_D_PREG},
-+	{0x5234, SIERRA_PLLCTRL_CPGAIN_MODE_PREG},
-+	{0x0000, SIERRA_DRVCTRL_ATTEN_PREG},
-+	{0x00AB, SIERRA_RX_CREQ_FLTR_A_MODE0_PREG},
-+	{0x3C0E, SIERRA_CREQ_CCLKDET_MODE01_PREG},
-+	{0x3220, SIERRA_CREQ_FSMCLK_SEL_PREG},
-+	{0x0000, SIERRA_CREQ_EQ_CTRL_PREG},
-+	{0x6320, SIERRA_DEQ_CONCUR_EPIOFFSET_MODE_PREG},
-+	{0x0000, SIERRA_CPI_OUTBUF_RATESEL_PREG},
-+	{0x15A2, SIERRA_LN_SPARE_REG_PREG},
-+	{0x7900, SIERRA_DEQ_BLK_TAU_CTRL1_PREG},
-+	{0x2202, SIERRA_DEQ_BLK_TAU_CTRL4_PREG},
-+	{0x2206, SIERRA_DEQ_TAU_CTRL2_PREG},
-+	{0x0005, SIERRA_LANE_TX_RECEIVER_DETECT_PREG},
-+	{0x8001, SIERRA_CREQ_SPARE_PREG},
-+	{0x0000, SIERRA_DEQ_CONCUR_CTRL1_PREG},
-+	{0xD004, SIERRA_DEQ_CONCUR_CTRL2_PREG},
-+	{0x0101, SIERRA_DEQ_GLUT9},
-+	{0x0101, SIERRA_DEQ_GLUT10},
-+	{0x0101, SIERRA_DEQ_GLUT11},
-+	{0x0101, SIERRA_DEQ_GLUT12},
-+	{0x0000, SIERRA_DEQ_GLUT13},
-+	{0x0000, SIERRA_DEQ_GLUT16},
-+	{0x0000, SIERRA_POSTPRECUR_EN_CEPH_CTRL_PREG},
-+	{0x0000, SIERRA_TAU_EN_CEPH2TO0_PREG},
-+	{0x0003, SIERRA_TAU_EN_CEPH5TO3_PREG},
-+	{0x0101, SIERRA_DEQ_ALUT8},
-+	{0x0101, SIERRA_DEQ_ALUT9},
-+	{0x0100, SIERRA_DEQ_ALUT10},
-+	{0x0000, SIERRA_OEPH_EN_CTRL_PREG},
-+	{0x5425, SIERRA_DEQ_OPENEYE_CTRL_PREG},
-+	{0x7458, SIERRA_CPICAL_RES_STARTCODE_MODE23_PREG},
-+	{0x321F, SIERRA_CPICAL_RES_STARTCODE_MODE01_PREG},
-+};
-+
-+static struct cdns_sierra_vals sgmii_pma_ln_vals = {
-+	.reg_pairs = sgmii_ln_regs,
-+	.num_regs = ARRAY_SIZE(sgmii_ln_regs),
-+};
-+
- static const struct cdns_sierra_data cdns_map_sierra = {
- 	.id_value = SIERRA_MACRO_ID,
- 	.block_offset_shift = 0x2,
-@@ -2448,6 +2540,9 @@ static const struct cdns_sierra_data cdns_map_sierra = {
- 			},
- 		},
- 		[TYPE_SGMII] = {
-+			[TYPE_NONE] = {
-+				[NO_SSC] = &sgmii_cmn_vals,
-+			},
- 			[TYPE_PCIE] = {
- 				[NO_SSC] = &sgmii_100_no_ssc_plllc1_opt3_cmn_vals,
- 				[EXTERNAL_SSC] = &sgmii_100_no_ssc_plllc1_opt3_cmn_vals,
-@@ -2486,6 +2581,9 @@ static const struct cdns_sierra_data cdns_map_sierra = {
- 			},
- 		},
- 		[TYPE_SGMII] = {
-+			[TYPE_NONE] = {
-+				[NO_SSC] = &sgmii_pma_ln_vals,
-+			},
- 			[TYPE_PCIE] = {
- 				[NO_SSC] = &sgmii_100_no_ssc_plllc1_opt3_ln_vals,
- 				[EXTERNAL_SSC] = &sgmii_100_no_ssc_plllc1_opt3_ln_vals,
---
-2.28.0
-
+--=20
+Thank you,
+Alexey=
