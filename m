@@ -2,115 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E84373D7A8
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 08:14:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CDCB73D7AC
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 08:15:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230173AbjFZGOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 02:14:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38840 "EHLO
+        id S230155AbjFZGPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 02:15:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230157AbjFZGN5 (ORCPT
+        with ESMTP id S229724AbjFZGPi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 02:13:57 -0400
+        Mon, 26 Jun 2023 02:15:38 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0356CE66;
-        Sun, 25 Jun 2023 23:13:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51DBAF4;
+        Sun, 25 Jun 2023 23:15:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B91660C8B;
-        Mon, 26 Jun 2023 06:13:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9042CC433C0;
-        Mon, 26 Jun 2023 06:13:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1687760033;
-        bh=54PtTxWRzFP0itf/Mt4orIihn+z6G/UUgX7hBydsugs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hmkF/rPXG9eQj6OGjBFN4dFWFRcGsMKk0gm++h01AQ/avdwPb7yyG7aAnZx4fxs4R
-         KDaN0TuRCZzzP+HRruBhFjaSiP7Ds3xczQgS7QM5aiNtvGmBdrG6Huo0cjY/Qv1hIx
-         Z/CWyZmFWGASwSNFUgySHcrRxqySr3BKpPtgT9vg=
-Date:   Mon, 26 Jun 2023 08:13:49 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Shyam Prasad N <nspmangalore@gmail.com>
-Cc:     Rishabh Bhatnagar <risbhat@amazon.com>, pc@cjr.nz,
-        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-cifs@vger.kernel.org, Aurelien Aptel <aaptel@suse.com>,
-        Steve French <stfrench@microsoft.com>
-Subject: Re: [PATCH 5.4 3/5] cifs: Introduce helpers for finding TCP
- connection
-Message-ID: <2023062626-bless-cytoplast-a147@gregkh>
-References: <20230623213406.5596-1-risbhat@amazon.com>
- <20230623213406.5596-4-risbhat@amazon.com>
- <CANT5p=o3KqnxfLEuJ+veVaK1EdYJapevP60oCSS76-UhuQ101w@mail.gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DC45D60C8C;
+        Mon, 26 Jun 2023 06:15:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6963DC433C8;
+        Mon, 26 Jun 2023 06:15:34 +0000 (UTC)
+Date:   Mon, 26 Jun 2023 02:15:30 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     sunliming <sunliming@kylinos.cn>
+Cc:     mhiramat@kernel.org, beaub@linux.microsoft.com,
+        kelulanainsley@gmail.com, linux-trace-kernel@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH v3 1/3] tracing/user_events: Fix incorrect return value
+ for writing operation when events are disable
+Message-ID: <20230626021530.26603164@rorschach.local.home>
+In-Reply-To: <20230621060827.151564-2-sunliming@kylinos.cn>
+References: <20230621060827.151564-1-sunliming@kylinos.cn>
+        <20230621060827.151564-2-sunliming@kylinos.cn>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANT5p=o3KqnxfLEuJ+veVaK1EdYJapevP60oCSS76-UhuQ101w@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 26, 2023 at 11:34:44AM +0530, Shyam Prasad N wrote:
-> On Sat, Jun 24, 2023 at 3:14 AM Rishabh Bhatnagar <risbhat@amazon.com> wrote:
-> >
-> > From: "Paulo Alcantara (SUSE)" <pc@cjr.nz>
-> >
-> > commit 345c1a4a9e09dc5842b7bbb6728a77910db69c52 upstream.
-> >
-> > Add helpers for finding TCP connections that are good candidates for
-> > being used by DFS refresh worker.
-> >
-> > Signed-off-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
-> > Reviewed-by: Aurelien Aptel <aaptel@suse.com>
-> > Signed-off-by: Steve French <stfrench@microsoft.com>
-> > Signed-off-by: Rishabh Bhatnagar <risbhat@amazon.com>
-> > ---
-> >  fs/cifs/dfs_cache.c | 44 +++++++++++++++++++++++++++++++-------------
-> >  1 file changed, 31 insertions(+), 13 deletions(-)
-> >
-> > diff --git a/fs/cifs/dfs_cache.c b/fs/cifs/dfs_cache.c
-> > index 3ca65051b55c..31b3dc09e109 100644
-> > --- a/fs/cifs/dfs_cache.c
-> > +++ b/fs/cifs/dfs_cache.c
-> > @@ -1305,6 +1305,30 @@ static char *get_dfs_root(const char *path)
-> >         return npath;
-> >  }
-> >
-> > +static inline void put_tcp_server(struct TCP_Server_Info *server)
-> > +{
-> > +       cifs_put_tcp_session(server, 0);
-> > +}
-> > +
-> > +static struct TCP_Server_Info *get_tcp_server(struct smb_vol *vol)
-> > +{
-> > +       struct TCP_Server_Info *server;
-> > +
-> > +       server = cifs_find_tcp_session(vol);
-> > +       if (IS_ERR_OR_NULL(server))
-> > +               return NULL;
-> > +
-> > +       spin_lock(&GlobalMid_Lock);
-> > +       if (server->tcpStatus != CifsGood) {
-> > +               spin_unlock(&GlobalMid_Lock);
-> > +               put_tcp_server(server);
-> > +               return NULL;
-> > +       }
-> > +       spin_unlock(&GlobalMid_Lock);
+On Wed, 21 Jun 2023 14:08:24 +0800
+sunliming <sunliming@kylinos.cn> wrote:
+
+> The writing operation return the count of writes regardless of whether events
+> are enabled or disabled. Switch it to return 0 to indicates that the event
+> is disabled.
 > 
-> We've moved away from using GlobalMid_Lock for anything other than MIDs.
-> Please use server->srv_lock instead.
+> Signed-off-by: sunliming <sunliming@kylinos.cn>
+> ---
+>  kernel/trace/trace_events_user.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
+> index 1ac5ba5685ed..c085ff829a58 100644
+> --- a/kernel/trace/trace_events_user.c
+> +++ b/kernel/trace/trace_events_user.c
+> @@ -1957,7 +1957,8 @@ static ssize_t user_events_write_core(struct file *file, struct iov_iter *i)
+>  
+>  		if (unlikely(faulted))
+>  			return -EFAULT;
+> -	}
+> +	} else
+> +		return 0;
+>  
 
-This is just a backport of a commit that showed up in the 5.6 release.
-It's not new development.
+sunliming,
 
-thanks,
+If you missed the conversation about the pull request with Linus, he
+pointed out (correctly) that we were mistaken to tell you to return
+zero. It should return an error if the ring buffer is disabled.
 
-greg k-h
+But instead of returning -EFAULT, let's follow the behavior of
+trace_marker and return -EBADF. This way user space has a better idea
+why it failed.
+
+Care to send another update?
+
+Thanks!
+
+-- Steve
+
+
+>  	return ret;
+>  }
+
