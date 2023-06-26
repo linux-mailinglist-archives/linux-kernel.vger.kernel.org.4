@@ -2,96 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67D3B73D737
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 07:39:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C59BB73D743
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 07:42:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229749AbjFZFjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 01:39:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57456 "EHLO
+        id S229823AbjFZFmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 01:42:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjFZFjS (ORCPT
+        with ESMTP id S229584AbjFZFmk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 01:39:18 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50013116
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 22:39:17 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-66869feb7d1so1297700b3a.3
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 22:39:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687757957; x=1690349957;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=M9AnamMRwkc7LzsyydvW/HwuIqH8aQkipGg2iJDVQCk=;
-        b=YLPh9B+ykE7OGu19a7yX0rMf1tZJcP5m55rotvO8GefTPpx6e5qyq2D1odDFHe5GSQ
-         56Kowxqbe96pmMpu8G4nEHykXYdADsyW5XR7NQdF16yBp24zGB1jNTA/p1xCn83lf+Lu
-         toViC8qt+5gH0+WFxuEIy+CHFJkRhhWKe87vRHpHBcjURCiU/lYTufVv9hVNOOPlbTPd
-         vE2YJToiyx0eONQ01DqewBW5qDL1cGRTz2K8+toGaM9TMUxiueMWxfO6vQi3cTgIsoR6
-         ldDVQlhfUv3JPlf/twe/fDEKc31TYc66zu/orYAuGfSayBi35YQKlda8CZdT4WMVxYqf
-         c5dA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687757957; x=1690349957;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=M9AnamMRwkc7LzsyydvW/HwuIqH8aQkipGg2iJDVQCk=;
-        b=aXQQmYXIOOfvoNVLeP6KrTdnNPJ+ip/vJtd4Yd8t0FI/o5bq2NkjYGtl0uuV0S70+f
-         8RLPyzGbWE1etwQhqoz7FAaUXioyeITq4ZgBu77Rx0DkHo4zQ2V/RTBKNubv+mzQjyDu
-         hrRXsxV4NyCr4hkVXg+gbl21zFgZq1krnqsyL82mMqIjXnJpSTF807sTlHdHuyWMJHhv
-         hQGXkogyWhPWW9Bz35enwAUjDKhWQJKEDnLMt2E+fC/n81TEAFSdHdVAnxdWm3594Zcr
-         gM9qr8/+UoG0oszIBn+39zJkK4dMjO7+ynG7m59mGJCuAXsA45Hu9jZj2Yi81ZvIMU9X
-         qPLw==
-X-Gm-Message-State: AC+VfDwavPP2uwMI/ZKs3xacwqLa1+gBn1tT4U0MvWwLAJMe3SqvTBhC
-        NpMflX+gK2eVuBKBh6Y5GUWsRlrQ7t0=
-X-Google-Smtp-Source: ACHHUZ4JE0xJ120ybak3csX/uHfo05X62Qdin6xBeO5STe79hUDcbmuI0vr2XfGTzQYahtkSNc5Z1A==
-X-Received: by 2002:a05:6a20:428b:b0:126:3759:582d with SMTP id o11-20020a056a20428b00b001263759582dmr4577900pzj.15.1687757956675;
-        Sun, 25 Jun 2023 22:39:16 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id jb19-20020a170903259300b001b50f35aff1sm3263712plb.140.2023.06.25.22.39.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Jun 2023 22:39:16 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 25 Jun 2023 22:39:14 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: Linux 6.4
-Message-ID: <8815f965-cc79-47b6-aee9-668b47a6d9dc@roeck-us.net>
-References: <CAHk-=wi7fwNWfqj-QQqEfZTUOB4bbKT8QiEUDHoPk0ecuYA7cA@mail.gmail.com>
+        Mon, 26 Jun 2023 01:42:40 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEE1AE48;
+        Sun, 25 Jun 2023 22:42:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1687758122; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=UmdVEWQo0uezW3gzYI8AGYJNrAzST0w0p1m2K4Gy2/HaL3YMKh7dU9JGWY34mJWvao
+    tVZGMtToJJXaBr+FtXfc2Hp+9Q0eTwxER7h4Cirqz6zVdFMLDqc3bq4xy3k4sdcYiGol
+    AYUsMDSdsXz3JeRWShwCtvAzSY7BxUappx0oLIikg5lZFDjhjL5wtEqnDFWQ44xCYbH+
+    F/pbaWPKcsAtGFuT4cDtpqgAIlLq5FL6YD505NS0hQ1I5pjQfEf5rShD8oqXBbc3sAI3
+    M8l0oKQxsYvPvT3V5bSQn2FNYdNaY4ew1RaA7FyZPWCui//6DW4knLYasqq5q7uB5SGs
+    TOCg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1687758122;
+    s=strato-dkim-0002; d=strato.com;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=u84PcML5e480sTa8HkZqNl0cQA2NFsZSaC6NnQ5PLFk=;
+    b=VOecyVDzGmcEar+tZSwaVZyvYyR8xoGyhAQnnqiMsg6OtOOCDfe8UpiXNOB804DSAl
+    EQhcGlisbAy39RKUfSMEQXPk9m34sJNPGbyvwasodeICCBFmfUvkvsylcCCnqu+0veSO
+    llB312bnL9vrAvk0bsxykpgs90VcaiUBEYVStDWAJ1SrJgkL7eZhuQaWKc+2vzaHh9sw
+    7X1GG2IJlMrQNydAsFY8We50jGKdGNWFs9MUDaAk/BDQxrlyhpON/uDpOLSSN7xFCJsh
+    +/oivfnz9nJ3EiS2ojGy4bm2LWKqUTa3w7sD2l2pmvogEEx/WoTDL25qXuuVF03PB07f
+    QRvQ==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1687758122;
+    s=strato-dkim-0002; d=iokpp.de;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=u84PcML5e480sTa8HkZqNl0cQA2NFsZSaC6NnQ5PLFk=;
+    b=VWyoD7aBvrrl7+S6R0ytC2ezlnhivupTe/tkyi9bL53i2l0PfntXr5aRcliYRAZHAC
+    C/u1YtTTPFjGTnRllVi98JpknXUgKYkl6D3iWd9nWORos8Jr8UeVafDS2Am4o2rIdH2M
+    UfQX5T7QqKOVF4nAJ8f1y0j0Tzf32cTBu4ALeO0JWZgKxYLZit+/SmR6qn/LmRIBxkg6
+    ZteTTqpM+OOat1t+EKkFO3Reu5u8Nm5RIzAZBIPIVipRGUR3oZ6XCoZQluIImECgTZp6
+    JwHybKNru2Iqz5FepNKxaR3jqFN3EQ44UTzGkaymgAbZf6DluhUJarGI47bxKbt4xYq4
+    Sm6w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1687758122;
+    s=strato-dkim-0003; d=iokpp.de;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=u84PcML5e480sTa8HkZqNl0cQA2NFsZSaC6NnQ5PLFk=;
+    b=4uursAC7+f1zlisTJ7H6N9A601ItGoeMxAgnDzNgxvc7m1glMB5P017maCLOAHDQTA
+    HuKG8Jw+3DqAcCVw8LDw==
+X-RZG-AUTH: ":LmkFe0i9dN8c2t4QQyGBB/NDXvjDB6pBSedrgBzPc9DUyubU4DD1QLj68UeUr1+U1RrW5o+P9bSFaHg+gZu+uCjL2b+VQTRnVQrIOQ=="
+Received: from blinux.speedport.ip
+    by smtp.strato.de (RZmta 49.6.0 AUTH)
+    with ESMTPSA id zb0c8bz5Q5g1Vv8
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Mon, 26 Jun 2023 07:42:01 +0200 (CEST)
+From:   Bean Huo <beanhuo@iokpp.de>
+To:     viro@zeniv.linux.org.uk, brauner@kernel.org,
+        akpm@linux-foundation.org, jack@suse.cz, jack@suse.com,
+        tytso@mit.edu, adilger.kernel@dilger.ca, mark@fasheh.com,
+        jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
+        willy@infradead.org, hch@infradead.org
+Cc:     linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ocfs2-devel@oss.oracle.com,
+        beanhuo@micron.com, Bean Huo <beanhuo@iokpp.de>
+Subject: [PATCH v3 0/2] clean up block_commit_write
+Date:   Mon, 26 Jun 2023 07:41:51 +0200
+Message-Id: <20230626054153.839672-1-beanhuo@iokpp.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wi7fwNWfqj-QQqEfZTUOB4bbKT8QiEUDHoPk0ecuYA7cA@mail.gmail.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 25, 2023 at 04:40:48PM -0700, Linus Torvalds wrote:
-> Hmm. Final week of 6.4 is done, and we've mainly got some netfilter
-> fixes, some mm reverts, and a few tracing updates.
-> 
-> There's random small changes elsewhere: the usual architecture noise,
-> a number of selftest updates, some filesystem fixes (btrfs, ksmb),
-> etc.
-> 
-> Most of the stuff in my mailbox the last week has been about upcoming
-> things for 6.5, and I already have 15 pull requests pending. I
-> appreciate all you proactive people.
-> 
-> But that's for tomorrow. Today we're all busy build-testing the newest
-> kernel release, and checking that it's all good. Right?
-> 
+change log:
+    v1--v2:
+        1. reordered patches
+    v2-v3:
+        1. rebased patches to git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next
 
-Build results:
-	total: 152 pass: 152 fail: 0
-Qemu test results:
-	total: 520 pass: 520 fail: 0
 
-Guenter
+Bean Huo (2):
+  fs/buffer: clean up block_commit_write
+  fs: convert block_commit_write to return void
+
+ fs/buffer.c                 | 20 ++++++++------------
+ fs/ext4/move_extent.c       |  7 ++-----
+ fs/ocfs2/file.c             |  7 +------
+ fs/udf/file.c               |  6 +++---
+ include/linux/buffer_head.h |  2 +-
+ 5 files changed, 15 insertions(+), 27 deletions(-)
+
+-- 
+2.34.1
+
