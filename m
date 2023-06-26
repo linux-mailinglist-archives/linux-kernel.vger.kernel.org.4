@@ -2,58 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69B9A73DF0E
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 14:25:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BDC873DF10
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 14:25:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229757AbjFZMZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 08:25:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54704 "EHLO
+        id S230482AbjFZMZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 08:25:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231264AbjFZMYX (ORCPT
+        with ESMTP id S229495AbjFZMYl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 08:24:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F592970;
-        Mon, 26 Jun 2023 05:22:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 80C7E60E26;
-        Mon, 26 Jun 2023 12:22:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6806C433C0;
-        Mon, 26 Jun 2023 12:22:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687782168;
-        bh=QFJoYAoa2djqSERhowqC20itD6kv95F3np82eWmAz+Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=i3jnKCElPEbglru8D6DfI9k7iJ3oTU2OgLAtuSR1cTHVDbx5ifZGflwTYAg4yhF1O
-         dQDDRBx/KXYZILa3/e164u2C7PBxgNDRXZIkWQ11X8yKy3Gvv44hS4ZuU1cI4lkfaV
-         fwPPAEXiXjwAcyYLpvEjI7tX3ZAYfFe0XL5api/mri1HFt2lfrlcNXPGG0Z2RGhUOm
-         YCaUbL88VvEEHyNrROXamBXPm9qNEMmoHALDylSN5P4GYYFfbzEippl1y9RHeCZt5j
-         hGN+389eLoFso3N7Pv+WdeH79D4Sh3EVz2d3wX/didUC8GBoVLQUrvh685YFUBQXFM
-         q1WSJ4f2++6TA==
-Date:   Mon, 26 Jun 2023 13:22:44 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Alan Huang <mmpgouride@gmail.com>
-Cc:     paulmck@kernel.org, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] rcu: Add necessary WRITE_ONCE()
-Message-ID: <20230626122243.GB19941@willie-the-truck>
-References: <20230620171346.207076-1-mmpgouride@gmail.com>
- <50c4aa37-388b-449c-8184-00a9d69471fc@paulmck-laptop>
- <B9A94CB4-DB9B-43D2-9D34-ADB4F7EA737D@gmail.com>
- <2fd1169a-a695-4bff-9611-a84dd02025b2@paulmck-laptop>
- <C75370D0-3A0C-48AA-AF20-ABCD74969F11@gmail.com>
+        Mon, 26 Jun 2023 08:24:41 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 654372D62;
+        Mon, 26 Jun 2023 05:23:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687782192; x=1719318192;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=QAtvPIkccnlu6Ank7qJ23cw0df5MPmI943wyhruOK7I=;
+  b=BCd/MaiDg+HtxceL576XQeC0hn9/ZvEeSfwoeuiOJZWGP+jJl6TYOdmK
+   VQSoFh8FwlWt8ia506twE8fnK3jG9X0eIMj/MbMr676r57VDyS5kCLenV
+   x3Qqvbq9ihYY8xUrr1fR7dWA71/aJO6dUsbXH+WmSv6ZTNT5RNzkOn3QX
+   Y38HH2oq+NptrIP09t0lUSBfy2+zZYuVDIgLG62Oc7K0nHdXgTOF9sBJ1
+   LpHMVQe5+CsbA9m9HKSs9kdB1+y8PFtniNySzwfhAtXZ2YoGbbfSj26Jy
+   oRxiJI5VDEea7PlDjXVz5Q5lJIXcN5uHz44YkFQNj6kYBojOlf2hrVSa/
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="424921617"
+X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
+   d="scan'208";a="424921617"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 05:23:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="1046490771"
+X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
+   d="scan'208";a="1046490771"
+Received: from ettammin-mobl1.ger.corp.intel.com (HELO [10.249.254.105]) ([10.249.254.105])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 05:23:09 -0700
+Message-ID: <e7098908-811b-3d26-5b72-b57afd8a1fdd@linux.intel.com>
+Date:   Mon, 26 Jun 2023 14:23:06 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.1
+Subject: Re: [PATCH v2 4/4] drm/ttm: Don't leak a resource on swapout move
+ error
+Content-Language: en-US
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>,
+        intel-xe@lists.freedesktop.org
+Cc:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        dri-devel@lists.freedesktop.org, stable@vger.kernel.org,
+        Nirmoy Das <nirmoy.das@intel.com>,
+        Andi Shyti <andi.shyti@linux.intel.com>,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20230626091450.14757-1-thomas.hellstrom@linux.intel.com>
+ <20230626091450.14757-5-thomas.hellstrom@linux.intel.com>
+ <f63137cd-2032-1598-a1d7-484248ef1d02@gmail.com>
+From:   =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
+        <thomas.hellstrom@linux.intel.com>
+In-Reply-To: <f63137cd-2032-1598-a1d7-484248ef1d02@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <C75370D0-3A0C-48AA-AF20-ABCD74969F11@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,67 +72,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 24, 2023 at 02:31:12AM +0800, Alan Huang wrote:
-> 
-> > 2023年6月23日 下午1:17，Paul E. McKenney <paulmck@kernel.org> 写道：
-> > 
-> > On Wed, Jun 21, 2023 at 10:08:28AM +0800, Alan Huang wrote:
-> >> 
-> >>> 2023年6月21日 06:26，Paul E. McKenney <paulmck@kernel.org> 写道：
-> >>> 
-> >>> On Tue, Jun 20, 2023 at 05:13:46PM +0000, Alan Huang wrote:
-> >>>> Commit c54a2744497d("list: Add hlist_unhashed_lockless()") and
-> >>>> commit 860c8802ace1("rcu: Use WRITE_ONCE() for assignments to
-> >>>> ->pprev for hlist_nulls") added various WRITE_ONCE() to pair with
-> >>>> the READ_ONCE() in hlist_unhashed_lockless(), but there are still
-> >>>> some places where WRITE_ONCE() was not added, this commit adds that.
-> >>>> 
-> >>>> Also add WRITE_ONCE() to pair with the READ_ONCE() in hlist_empty().
-> >>>> 
-> >>>> Signed-off-by: Alan Huang <mmpgouride@gmail.com>
-> >>> 
-> >>> On hlist_nulls_add_tail_rcu(), good catch, thank you!
-> >>> 
-> >>> On the others, are there really cases where a lockless read races with
-> >>> the update?  At first glance, that sounds like a usage bug.  For example,
-> >>> as I understand it, when you use something like hlist_del(), you are
-> >>> supposed to ensure that there are no concurrent readers.  Which is the
-> >>> point of the assignment of the special value LIST_POISON2, right?
-> >> 
-> >> Do you mean there are cases where a lockless read races with hlist_add_head/hlist_add_before
-> >> hlist_add_behind/__hlist_del, but there is no real case where a lockless read races with the hlist_del_init/hlist_del
-> >> hlist_move_list?
-> >> 
-> >> There may be no real case where a lockless read races with the hlist_del_init/hlist_del
-> >> hlist_move_list. But for the sake of completeness, I added those WRITE_ONCE, after all, if there is WRITE_ONCE
-> >> in __hlist_del, why not add WRITE_ONCE in its caller, like hlist_del()?
-> > 
-> > You might well have located a larger issue.  We want to be able to use
-> > KCSAN to find unintended data races, but as you noted, there might
-> > be different requirements for RCU-protected linked lists and for
-> > lock-protected linked lists.  If there are, then there is probably
-> > existing linked-list code that is using the wrong primitive, for
-> > example, using (or failing to use) the one that Eric Dumazet provided.
-> > For example, mismatched API usage might be causing the differences in
-> > uses of _ONCE() primitives that you are calling out.
-> 
-> I noticed a thread:
-> 
-> https://lore.kernel.org/lkml/20200324153643.15527-2-will@kernel.org/
-> 
-> It seems like Will wanted to remove that hlist_unhashed_lockless()?
-> But I can’t find any further updates.
-> 
-> Will: Can you tell me what happened later?
+Hi, Christian,
 
-IIRC, there were potential correctness issues with accesses being torn
-(possibly by the compiler) which meant that some additional surgery was
-needed to make some of the list accesses safe without locks.
+Will you take a look at 2/4 as well? Will you merge these?
 
-I then ran into problems understanding how list_empty_careful() is supposed
-to work which weren't resolved. I think the best summary of where I got
-stuck (and moved onto more pressing things) is:
+Thanks,
 
-https://lore.kernel.org/lkml/20200424173932.GK21141@willie-the-truck/
+Thomas
 
-Will
+
+On 6/26/23 13:33, Christian König wrote:
+> Am 26.06.23 um 11:14 schrieb Thomas Hellström:
+>> If moving the bo to system for swapout failed, we were leaking
+>> a resource. Fix.
+>>
+>> Fixes: bfa3357ef9ab ("drm/ttm: allocate resource object instead of 
+>> embedding it v2")
+>> Cc: Christian König <christian.koenig@amd.com>
+>> Cc: "Christian König" <ckoenig.leichtzumerken@gmail.com>
+>> Cc: dri-devel@lists.freedesktop.org
+>> Cc: <stable@vger.kernel.org> # v5.14+
+>> Signed-off-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
+>> Reviewed-by: Nirmoy Das <nirmoy.das@intel.com>
+>> Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
+>
+> Reviewed-by: Christian König <christian.koenig@amd.com>
+>
+>> ---
+>>   drivers/gpu/drm/ttm/ttm_bo.c | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/drivers/gpu/drm/ttm/ttm_bo.c b/drivers/gpu/drm/ttm/ttm_bo.c
+>> index c0e3bbd21d3d..d9a8f227f310 100644
+>> --- a/drivers/gpu/drm/ttm/ttm_bo.c
+>> +++ b/drivers/gpu/drm/ttm/ttm_bo.c
+>> @@ -1166,6 +1166,7 @@ int ttm_bo_swapout(struct ttm_buffer_object 
+>> *bo, struct ttm_operation_ctx *ctx,
+>>           ret = ttm_bo_handle_move_mem(bo, evict_mem, true, ctx, &hop);
+>>           if (unlikely(ret != 0)) {
+>>               WARN(ret == -EMULTIHOP, "Unexpected multihop in swaput 
+>> - likely driver bug.\n");
+>> +            ttm_resource_free(bo, &evict_mem);
+>>               goto out;
+>>           }
+>>       }
+>
