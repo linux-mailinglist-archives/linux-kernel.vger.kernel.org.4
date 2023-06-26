@@ -2,153 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 372BD73E931
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 20:33:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D73FC73E941
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 20:34:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232272AbjFZSdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 14:33:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47288 "EHLO
+        id S232302AbjFZSeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 14:34:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232248AbjFZSdV (ORCPT
+        with ESMTP id S232300AbjFZSeB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 14:33:21 -0400
-Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B9EDC
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 11:33:20 -0700 (PDT)
-Received: by mail-vk1-xa2d.google.com with SMTP id 71dfb90a1353d-471b3ad20e1so998615e0c.1
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 11:33:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1687804399; x=1690396399;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Llh4gIlToO5IIgOre9UJS/YUO0ldCTUXip1sWklWSMQ=;
-        b=JVUAS6Mwd4CGVgbTg2A/4nZBcOTwKzPyRt4TC3yOvNM2+tIbS6xPD0y0D61ppUoIqP
-         kZrkBWOA7Ql4ra0BfHP6nORKavSIwwHUciNKkQa/xmCuLHQQU0FKrjqNuDpFFUV2WhAs
-         bj0vBswCZ/jeImDakg37V6RL9mG+1bVuMZuVcmiIwOAR2fw7RzomjAA6nEM2czoRF5T3
-         UfxPt3ZwyqtBl2AfZC59Q6h21ylliaEpNdI5EVodei9o/wAyUMzWRcPPeO/chWAPw5Vz
-         /ewQOBhvCVgbaU8C2DAN4F+GwhoddBQvjmntOXBFEFx01mMP8Ky6gACQ9gm16ROU2eWf
-         tjRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687804399; x=1690396399;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Llh4gIlToO5IIgOre9UJS/YUO0ldCTUXip1sWklWSMQ=;
-        b=SuHbPRHU/F5484FMMKWClf3xM9KjEYwo2Kg5G0uVf39mRfbQtZeUKUwjbg680NYB18
-         MHC23IYgKhyJVz2lz8bgqyqnb71DuCVkdwU7qdYnFfiy2N8vs1DVS3eDYp8ZsEJ6F/sE
-         JywrqKQZF5Id6GvV/HHgRv9BSKa0UzNUdu4sssTawMSpfz9IDrEVVmrip8MLowxg9qUf
-         IeRq8EIncCb/iqX9qkKq5ige+iG1M0NqHaWCmL4lCPRQCkRWTl0aUefXiweoPML+DasE
-         Enxa/PyJWaNPwzSgLPi2Zyxfrk4S79tj8Qg2peqVxs8+oX9/F/KkTwa4iJpePk7AWqdU
-         YiJA==
-X-Gm-Message-State: AC+VfDwnHY0vgsAykfN+ISDebjJRl5k3D4j35Mf9r8S9AA0FBUJ6Nezv
-        1q12MRiBq29IBIVLSVe+4WF+eQ==
-X-Google-Smtp-Source: ACHHUZ71l/DblDrK7Oyn3lB5D1oIYfT7tQ+BssB+t+iwqPFJMSrWpCc/dst5XGo0zmyM+elBVv+q6Q==
-X-Received: by 2002:a1f:3fca:0:b0:471:5939:f4f2 with SMTP id m193-20020a1f3fca000000b004715939f4f2mr9532857vka.8.1687804399118;
-        Mon, 26 Jun 2023 11:33:19 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-68-25-194.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.25.194])
-        by smtp.gmail.com with ESMTPSA id z24-20020ac875d8000000b003fddd8e7bbasm3348807qtq.30.2023.06.26.11.33.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jun 2023 11:33:18 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1qDr1Z-008pJc-JP;
-        Mon, 26 Jun 2023 15:33:17 -0300
-Date:   Mon, 26 Jun 2023 15:33:17 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Baolu Lu <baolu.lu@linux.intel.com>
-Cc:     Nicolin Chen <nicolinc@nvidia.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Yi Liu <yi.l.liu@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        iommu@lists.linux.dev, linux-kselftest@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
+        Mon, 26 Jun 2023 14:34:01 -0400
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15DC7CC
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 11:33:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:
+        Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=hcEG/EDV/jBYrfWeHJXPYu8t7rz0vK43YGRhzJYLXqU=; b=JXWyM354SH54g4cNBKh2UBKOJL
+        bxkzvOkbwxGcd0uxU71v0BFjl9fBLwS+jyrqDHOLbviRZFMTBl88Wga5ePaIPASYTYbePo/lc/yMJ
+        Iw/68HE/Es4xIKDnGnz9lR+/Hnb2w+0axYfIT34YV5hksAt51LJBowkabzPfolQBctp2tiaXYL99t
+        eDQGD5Yx+OWEestabkwv4WCLvRn8m7kPsW3or9OFVgAP6xXqCqFJCsCm/PDWjqdOC2LFgfMoT3YX9
+        UMtXwnoHQZ4V0ehzM+Mt5ss1vPc114IFnG7jl6mVBKSbctSaJsAK3IHMt0TLPH40prc7UlL2guiUZ
+        OuYLA78w==;
+Received: from [179.113.218.86] (helo=steammachine.lan)
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+        id 1qDr2A-0047zl-6M; Mon, 26 Jun 2023 20:33:54 +0200
+From:   =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>
+To:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCHES 00/17] IOMMUFD: Deliver IO page faults to user space
-Message-ID: <ZJnZ7bEIZHsqmyAG@ziepe.ca>
-References: <20230530053724.232765-1-baolu.lu@linux.intel.com>
- <ZHZFi28jRxeZMKK3@Asurada-Nvidia>
- <a8ccbac8-c456-d116-24a2-7503ccbb720c@linux.intel.com>
+Cc:     kernel-dev@igalia.com, alexander.deucher@amd.com,
+        christian.koenig@amd.com, pierre-eric.pelloux-prayer@amd.com,
+        Simon Ser <contact@emersion.fr>,
+        Rob Clark <robdclark@gmail.com>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Stone <daniel@fooishbar.org>,
+        =?UTF-8?q?=27Marek=20Ol=C5=A1=C3=A1k=27?= <maraeo@gmail.com>,
+        Dave Airlie <airlied@gmail.com>,
+        =?UTF-8?q?Michel=20D=C3=A4nzer?= <michel.daenzer@mailbox.org>,
+        Samuel Pitoiset <samuel.pitoiset@gmail.com>,
+        =?UTF-8?q?Timur=20Krist=C3=B3f?= <timur.kristof@gmail.com>,
+        Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
+        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>
+Subject: [PATCH v4 0/1] drm/doc: Document DRM device reset expectations
+Date:   Mon, 26 Jun 2023 15:33:46 -0300
+Message-ID: <20230626183347.55118-1-andrealmeid@igalia.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a8ccbac8-c456-d116-24a2-7503ccbb720c@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 25, 2023 at 02:30:46PM +0800, Baolu Lu wrote:
+This v4 removes the common DRM ioctl, and adds just the documentation for now,
+giving the lack of a common "DRM context" infrascture make it hard to implement.
 
-> Agreed. We should avoid workqueue in sva iopf framework. Perhaps we
-> could go ahead with below code? It will be registered to device with
-> iommu_register_device_fault_handler() in IOMMU_DEV_FEAT_IOPF enabling
-> path. Un-registering in the disable path of cause.
+v3: https://lore.kernel.org/lkml/20230621005719.836857-1-andrealmeid@igalia.com/
 
-This maze needs to be undone as well.
+Changes: 
+ - Drop the ioctl
+ - Addresed comments com Pekka, as making the documentation more clear and
+ consistent.
 
-It makes no sense that all the drivers are calling 
+André Almeida (1):
+  drm/doc: Document DRM device reset expectations
 
- iommu_register_device_fault_handler(dev, iommu_queue_iopf, dev);
+ Documentation/gpu/drm-uapi.rst | 68 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 68 insertions(+)
 
-The driver should RX a PRI fault and deliver it to some core code
-function, this looks like a good start:
+-- 
+2.41.0
 
-> static int io_pgfault_handler(struct iommu_fault *fault, void *cookie)
-> {
->         ioasid_t pasid = fault->prm.pasid;
->         struct device *dev = cookie;
->         struct iommu_domain *domain;
-> 
->         if (fault->type != IOMMU_FAULT_PAGE_REQ)
->                 return -EOPNOTSUPP;
-> 
->         if (fault->prm.flags & IOMMU_FAULT_PAGE_REQUEST_PASID_VALID)
->                 domain = iommu_get_domain_for_dev_pasid(dev, pasid, 0);
->         else
->                 domain = iommu_get_domain_for_dev(dev);
-> 
->         if (!domain || !domain->iopf_handler)
->                 return -ENODEV;
-> 
->         if (domain->type == IOMMU_DOMAIN_SVA)
->                 return iommu_queue_iopf(fault, cookie);
-> 
->         return domain->iopf_handler(fault, dev, domain->fault_data);
-
-Then we find the domain that owns the translation and invoke its
-domain->ops->iopf_handler()
-
-If the driver created a SVA domain then the op should point to some
-generic 'handle sva fault' function. There shouldn't be weird SVA
-stuff in the core code.
-
-The weird SVA stuff is really just a generic per-device workqueue
-dispatcher, so if we think that is valuable then it should be
-integrated into the iommu_domain (domain->ops->use_iopf_workqueue =
-true for instance). Then it could route the fault through the
-workqueue and still invoke domain->ops->iopf_handler.
-
-The word "SVA" should not appear in any of this.
-
-Not sure what iommu_register_device_fault_handler() has to do with all
-of this.. Setting up the dev_iommu stuff to allow for the workqueue
-should happen dynamically during domain attach, ideally in the core
-code before calling to the driver.
-
-Also, I can understand there is a need to turn on PRI support really
-early, and it can make sense to have some IOMMU_DEV_FEAT_IOPF/SVA to
-ask to turn it on.. But that should really only be needed if the HW
-cannot turn it on dynamically during domain attach of a PRI enabled
-domain.
-
-It needs cleaning up..
-
-Jason
