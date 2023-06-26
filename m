@@ -2,107 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3291973E344
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 17:27:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60E7473E394
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 17:40:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230189AbjFZP1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 11:27:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46568 "EHLO
+        id S231312AbjFZPkP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 11:40:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbjFZP1g (ORCPT
+        with ESMTP id S231210AbjFZPkO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 11:27:36 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 984DBC7;
-        Mon, 26 Jun 2023 08:27:35 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1b7ffab7ff1so6900885ad.2;
-        Mon, 26 Jun 2023 08:27:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687793255; x=1690385255;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=DtF7Bv5SvW35SPc+Oj+N7Ltt+S4wZnjN/u3LXzV4SC0=;
-        b=pIhMjoXIxis/rCCSFQxeFzMYPXL5eVCVKvB0keoDspMGy9J9aRDZhqckNe5MTqhnRp
-         GgQiCHHZ9wq0B7dCJ9vqzSuk61K4vBy8wMKf1hFdBZ2Mz1ZoZcw97UQ5sUG+dLGm6k7y
-         qKLoiEVMLAzDo64siF3ZD1546ng8FY9QODIqq2J4cHJnjZtxed4QAT1texovd9KW/Pw7
-         /95u2W3GZLxLNKe3qvpiyVW+kjDsrcrAMepzt919i0R8GPxt0TrLwRmtWKqJ9aBlvtJp
-         bQdnLAvaSTvTBabOQXFMhRwXeO397n3nrYTaHxyJ0z759Zol0cHmZjiIvBW1a1C0roeQ
-         wrng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687793255; x=1690385255;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DtF7Bv5SvW35SPc+Oj+N7Ltt+S4wZnjN/u3LXzV4SC0=;
-        b=h3z9iuCJA299OumKKM6oBN29B7bg2Glmw00DlGtn0NsGzwlkqqwi+NNwZstzN5vSuK
-         iHNbOqU1ggyO2sROtSZ18BUfQyF6AIJf7WOq5BJ2Y0ruaJ/awzDAg9fqgt+MLNETEYcm
-         LEFL1jlHrTrAV8x9VG2VwKKjowszCWS91z+SBlfY80uY9mafld1Eu35ey41NsHVHWLoK
-         ceSIOQbo5jzfkZmQy+dAbTyCrly8ZsA0x9SXMiwC/2Y3fMdfvDQ+B96OHOPUFq1PhQ2t
-         KUk7LbfE47UY0hClZlr2mnlhNJW4EqKhVfa9jE9FashIBfm5jDd19m7Ria092alYaoOQ
-         jXRA==
-X-Gm-Message-State: AC+VfDx15NZxVqG0CQsGvWvqxbsBRlKe8AL++Jy7soZVeObjVohdXIl1
-        feVZJ5Yw/DJBCa24mne8Tz8=
-X-Google-Smtp-Source: ACHHUZ6g0uPrJaai9JngmtxS8LEGJckoJ8+hnH+joZaWY6SyCdkbf1ED3bxVqkCCgVwQRpFnQRnquA==
-X-Received: by 2002:a17:902:ce01:b0:1b6:9b29:bb1a with SMTP id k1-20020a170902ce0100b001b69b29bb1amr4243063plg.9.1687793254920;
-        Mon, 26 Jun 2023 08:27:34 -0700 (PDT)
-Received: from localhost.localdomain ([113.103.4.28])
-        by smtp.gmail.com with ESMTPSA id q2-20020a170902dac200b001a9bcedd598sm4368345plx.11.2023.06.26.08.27.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jun 2023 08:27:34 -0700 (PDT)
-From:   Guiting Shen <aarongt.shen@gmail.com>
-To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
-        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        claudiu.beznea@microchip.com
-Cc:     linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Guiting Shen <aarongt.shen@gmail.com>
-Subject: [PATCH v3] usb: ohci-at91: Fix the unhandle interrupt when resume
-Date:   Mon, 26 Jun 2023 23:27:13 +0800
-Message-Id: <20230626152713.18950-1-aarongt.shen@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 26 Jun 2023 11:40:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B19FF3
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 08:40:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C730560EC2
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 15:40:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88117C433C8;
+        Mon, 26 Jun 2023 15:40:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687794012;
+        bh=dwXCF9f2fQo97nSVcp6MB0XwLHJLjovoiu215aV3VIM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=W6J0PeX7nYnoL6w01+rkgKirTv4OLMBI/68lgNEjJ6QrTT0+U5tJy43V9tdw/p/FZ
+         U2Z4ez+Tej6OdPwLCrOOl9FQ1K5JE0Ccdy0fuIysYDlXH/mZMxJ5jFoWmr644S/Gio
+         UgHgnyTrtpDXoh+g8dOS3EHJY4MXMPaVoF+H0FfZARHiKKZwVQD8QNdO97ieAMcsTT
+         UbpzN2fWkB+xjxgFhRaxcAJ/XpEDcZcc1+0bgc0P85runCJPxLuWnkmi5LHgl4Sw9O
+         +r/8+L+FQU0eI8iTkh7peEb5CZohWf6/NNMPyDEIYjWZSjTP9yp3GTvlUUYRXwfnDq
+         EM5evYV8nKdyg==
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>
+Cc:     netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        Simon Horman <simon.horman@corigine.com>
+Subject: [PATCH net-next v4 0/2] net: stmmac: improve driver statistics
+Date:   Mon, 26 Jun 2023 23:28:42 +0800
+Message-Id: <20230626152844.484-1-jszhang@kernel.org>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ohci_hcd_at91_drv_suspend() sets ohci->rh_state to OHCI_RH_HALTED when
-suspend which will let the ohci_irq() skip the interrupt after resume. And
-nobody to handle this interrupt.
+improve the stmmac driver statistics:
 
-According to the comment in ohci_hcd_at91_drv_suspend(), it need to reset
-when resume from suspend(MEM) to fix by setting "hibernated" argument of
-ohci_resume().
+1. don't clear network driver statistics in .ndo_close() and
+.ndo_open() cycle
+2. avoid some network driver statistics overflow on 32 bit platforms
+3. use per-queue statistics where necessary to remove frequent
+cacheline ping pongs.
 
-Signed-off-by: Guiting Shen <aarongt.shen@gmail.com>
----
- drivers/usb/host/ohci-at91.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+NOTE: v1 and v2 are back ported from an internal LTS tree, I made
+some mistakes when backporting and squashing. Now, net-next + v3
+has been well tested with 'ethtool -s' and 'ip -s link show'.
 
-diff --git a/drivers/usb/host/ohci-at91.c b/drivers/usb/host/ohci-at91.c
-index 533537ef3c21..360680769494 100644
---- a/drivers/usb/host/ohci-at91.c
-+++ b/drivers/usb/host/ohci-at91.c
-@@ -673,7 +673,13 @@ ohci_hcd_at91_drv_resume(struct device *dev)
- 	else
- 		at91_start_clock(ohci_at91);
- 
--	ohci_resume(hcd, false);
-+	/*
-+	 * According to the comment in ohci_hcd_at91_drv_suspend()
-+	 * we need to do a reset if the 48Mhz clock was stopped,
-+	 * that is, if ohci_at91->wakeup is clear. Tell ohci_resume()
-+	 * to reset in this case by setting its "hibernated" flag.
-+	 */
-+	ohci_resume(hcd, !ohci_at91->wakeup);
- 
- 	return 0;
- }
+Since v3:
+  - coding style pointed out by Simon, I.E reverse xmas tree for local
+    variable declarations and so on.
+  - put the counters in queue structs, I.E per-queue rather than per-cpu
+  - use _irqsave() variant where necessary.
+
+Since v2:
+  - fix ethtool .get_sset_count, .get_strings and per queue stats
+    couting.
+  - fix .ndo_get_stats64 only counts the last cpu's pcpu stats.
+  - fix typo: s/iff/if in commit msg.
+  - remove unnecessary if statement brackets since we have removed
+    one LoC.
+
+Since v1:
+  - rebase on net-next
+  - fold two original patches into one patch
+  - fix issues found by lkp
+  - update commit msg
+
+Jisheng Zhang (2):
+  net: stmmac: don't clear network statistics in .ndo_open()
+  net: stmmac: use per-queue 64 bit statistics where necessary
+
+ drivers/net/ethernet/stmicro/stmmac/common.h  |  39 ++--
+ .../net/ethernet/stmicro/stmmac/dwmac-sun8i.c |  12 +-
+ .../ethernet/stmicro/stmmac/dwmac100_dma.c    |   7 +-
+ .../ethernet/stmicro/stmmac/dwmac4_descs.c    |  16 +-
+ .../net/ethernet/stmicro/stmmac/dwmac4_lib.c  |  15 +-
+ .../net/ethernet/stmicro/stmmac/dwmac_lib.c   |  12 +-
+ .../ethernet/stmicro/stmmac/dwxgmac2_descs.c  |   6 +-
+ .../ethernet/stmicro/stmmac/dwxgmac2_dma.c    |  14 +-
+ .../net/ethernet/stmicro/stmmac/enh_desc.c    |  20 +-
+ drivers/net/ethernet/stmicro/stmmac/hwif.h    |  12 +-
+ .../net/ethernet/stmicro/stmmac/norm_desc.c   |  15 +-
+ drivers/net/ethernet/stmicro/stmmac/stmmac.h  |   2 +
+ .../ethernet/stmicro/stmmac/stmmac_ethtool.c  | 123 ++++++++---
+ .../net/ethernet/stmicro/stmmac/stmmac_main.c | 206 ++++++++++++++----
+ 14 files changed, 337 insertions(+), 162 deletions(-)
+
 -- 
-2.25.1
+2.40.1
 
