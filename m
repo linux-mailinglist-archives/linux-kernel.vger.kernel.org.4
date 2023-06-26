@@ -2,66 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2AE873D8C5
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 09:48:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EFFA73D8CC
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 09:49:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229596AbjFZHs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 03:48:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38176 "EHLO
+        id S229767AbjFZHt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 03:49:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjFZHs0 (ORCPT
+        with ESMTP id S229506AbjFZHtY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 03:48:26 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D98641AD
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 00:48:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687765704; x=1719301704;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=LK1I7Y9xB0oaCr6kyKG+9IR2e8ZYmgTZaZI2mvVKLzg=;
-  b=I+8UA+e5jga9x9iJ0hqJOUVvOYjGdV7g5K6HO5PezBEvK23M8DzH3HJI
-   m0dTeodPSdTyYQDfkN5DYzc+ckWPUHXJcEPPmlx5794QV8E1vw8xjkU/4
-   pzSfywsAsXI1dib/Xw3jC5jeY80k0buz5WdAo2p2URca9tccRBP291TTO
-   x615yiMzxVcPqbM/0w0xpMzaJ0UAz5xxfq3HV/JQ7f3FuxU5FfOJj7DIP
-   sYYZ6l1Y4cjQZYzhC4qYzpA8IAc38a2Vn7hw1yaltOe5h6/Ui09gYr8k2
-   /SKLdBGifcXYbSM7gike0jL3ALa2aX51hKxMipf+sZGfKgF7oiRxkrRqR
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="364653463"
-X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
-   d="scan'208";a="364653463"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 00:48:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="829133001"
-X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
-   d="scan'208";a="829133001"
-Received: from mkomuves-mobl2.ger.corp.intel.com (HELO localhost) ([10.252.63.201])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 00:48:19 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Sui Jingfeng <suijingfeng@loongson.cn>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian Koenig <christian.koenig@amd.com>,
-        Pan Xinhui <Xinhui.Pan@amd.com>
-Cc:     amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH] drm: Remove the deprecated drm_put_dev() function
-In-Reply-To: <20230625050901.393055-1-suijingfeng@loongson.cn>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20230625050901.393055-1-suijingfeng@loongson.cn>
-Date:   Mon, 26 Jun 2023 10:48:04 +0300
-Message-ID: <87jzvqy897.fsf@intel.com>
+        Mon, 26 Jun 2023 03:49:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5971CE44
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 00:48:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687765713;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ocXyG+slkr0gL4aywexn0lNOfJV4nZ/IWmE7AdPVwQ0=;
+        b=ZwooTgz/NUQBEOjQTJi1rkTJMnv6dg9WIy+NQOLZ/q9w7hPIN5VwCJZAEztKPKpVUhRNyd
+        YSCB1iPafxABtKZ+wBALfYDfy1cKkdW3GlT0C+r77AjaoJYF6eIjFBARdfX1FpFXHn9wsL
+        d2mcA9ymypavXIXzN2qGCwe7fszDqtU=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-518-LZEMRXVMNku8ZOzuiFUVAA-1; Mon, 26 Jun 2023 03:48:30 -0400
+X-MC-Unique: LZEMRXVMNku8ZOzuiFUVAA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3FBDE29A9D2A;
+        Mon, 26 Jun 2023 07:48:29 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.4])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 173F640C6CD1;
+        Mon, 26 Jun 2023 07:48:27 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20230626112847.2ef3d422@canb.auug.org.au>
+References: <20230626112847.2ef3d422@canb.auug.org.au>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     dhowells@redhat.com, Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
+        linux-next@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: linux-next: build failure after merge of the net-next tree
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2947428.1687765706.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Mon, 26 Jun 2023 08:48:26 +0100
+Message-ID: <2947430.1687765706@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,106 +79,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 25 Jun 2023, Sui Jingfeng <suijingfeng@loongson.cn> wrote:
-> As this function can be replaced with drm_dev_unregister() + drm_dev_put(),
-> it is already marked as deprecated, so remove it. No functional change.
->
-> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
-> ---
->  drivers/gpu/drm/drm_drv.c           | 28 ----------------------------
->  drivers/gpu/drm/drm_pci.c           |  3 ++-
->  drivers/gpu/drm/radeon/radeon_drv.c |  3 ++-
->  include/drm/drm_drv.h               |  1 -
->  4 files changed, 4 insertions(+), 31 deletions(-)
->
-> diff --git a/drivers/gpu/drm/drm_drv.c b/drivers/gpu/drm/drm_drv.c
-> index 12687dd9e1ac..5057307fe22a 100644
-> --- a/drivers/gpu/drm/drm_drv.c
-> +++ b/drivers/gpu/drm/drm_drv.c
-> @@ -406,34 +406,6 @@ void drm_minor_release(struct drm_minor *minor)
->   * possibly leaving the hardware enabled.
->   */
->  
-> -/**
-> - * drm_put_dev - Unregister and release a DRM device
-> - * @dev: DRM device
-> - *
-> - * Called at module unload time or when a PCI device is unplugged.
-> - *
-> - * Cleans up all DRM device, calling drm_lastclose().
-> - *
-> - * Note: Use of this function is deprecated. It will eventually go away
-> - * completely.  Please use drm_dev_unregister() and drm_dev_put() explicitly
-> - * instead to make sure that the device isn't userspace accessible any more
-> - * while teardown is in progress, ensuring that userspace can't access an
-> - * inconsistent state.
+Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-The last sentence is the crucial one. While the patch has no functional
-changes, I believe the goal never was to just mechanically replace one
-call with the two.
+> After merging the net-next tree, today's linux-next build (native perf)
+> failed like this:
+> =
 
-BR,
-Jani.
+> In file included from builtin-trace.c:907:
+> trace/beauty/msg_flags.c: In function 'syscall_arg__scnprintf_msg_flags'=
+:
+> trace/beauty/msg_flags.c:28:21: error: 'MSG_SPLICE_PAGES' undeclared (fi=
+rst use in this function)
 
+I tried applying the attached patch, but it doesn't make any difference.
 
-> - */
-> -void drm_put_dev(struct drm_device *dev)
-> -{
-> -	DRM_DEBUG("\n");
-> -
-> -	if (!dev) {
-> -		DRM_ERROR("cleanup called no dev\n");
-> -		return;
-> -	}
-> -
-> -	drm_dev_unregister(dev);
-> -	drm_dev_put(dev);
-> -}
-> -EXPORT_SYMBOL(drm_put_dev);
-> -
->  /**
->   * drm_dev_enter - Enter device critical section
->   * @dev: DRM device
-> diff --git a/drivers/gpu/drm/drm_pci.c b/drivers/gpu/drm/drm_pci.c
-> index 39d35fc3a43b..b3a68a92eaa6 100644
-> --- a/drivers/gpu/drm/drm_pci.c
-> +++ b/drivers/gpu/drm/drm_pci.c
-> @@ -257,7 +257,8 @@ void drm_legacy_pci_exit(const struct drm_driver *driver,
->  					 legacy_dev_list) {
->  			if (dev->driver == driver) {
->  				list_del(&dev->legacy_dev_list);
-> -				drm_put_dev(dev);
-> +				drm_dev_unregister(dev);
-> +				drm_dev_put(dev);
->  			}
->  		}
->  		mutex_unlock(&legacy_dev_list_lock);
-> diff --git a/drivers/gpu/drm/radeon/radeon_drv.c b/drivers/gpu/drm/radeon/radeon_drv.c
-> index e4374814f0ef..a4955ae10659 100644
-> --- a/drivers/gpu/drm/radeon/radeon_drv.c
-> +++ b/drivers/gpu/drm/radeon/radeon_drv.c
-> @@ -357,7 +357,8 @@ radeon_pci_remove(struct pci_dev *pdev)
->  {
->  	struct drm_device *dev = pci_get_drvdata(pdev);
->  
-> -	drm_put_dev(dev);
-> +	drm_dev_unregister(dev);
-> +	drm_dev_put(dev);
->  }
->  
->  static void
-> diff --git a/include/drm/drm_drv.h b/include/drm/drm_drv.h
-> index 89e2706cac56..289c97b12e82 100644
-> --- a/include/drm/drm_drv.h
-> +++ b/include/drm/drm_drv.h
-> @@ -511,7 +511,6 @@ void drm_dev_unregister(struct drm_device *dev);
->  
->  void drm_dev_get(struct drm_device *dev);
->  void drm_dev_put(struct drm_device *dev);
-> -void drm_put_dev(struct drm_device *dev);
->  bool drm_dev_enter(struct drm_device *dev, int *idx);
->  void drm_dev_exit(int idx);
->  void drm_dev_unplug(struct drm_device *dev);
+Any idea what I've missed?  Also, why do we have duplicates of all the ker=
+nel
+headers in the tools/ directory?
 
--- 
-Jani Nikula, Intel Open Source Graphics Center
+David
+---
+
+commit 878ff45f5f746f6773224ff952c490b5812462f2
+Author: David Howells <dhowells@redhat.com>
+Date:   Mon Jun 26 08:08:12 2023 +0100
+
+    tools: Fix MSG_SPLICE_PAGES build error in trace tools
+    =
+
+    Fix the following error:
+    =
+
+    In file included from builtin-trace.c:907:
+    trace/beauty/msg_flags.c: In function 'syscall_arg__scnprintf_msg_flag=
+s':
+    trace/beauty/msg_flags.c:28:21: error: 'MSG_SPLICE_PAGES' undeclared (=
+first use in this function)
+       28 |         if (flags & MSG_##n) { \
+          |                     ^~~~
+    trace/beauty/msg_flags.c:50:9: note: in expansion of macro 'P_MSG_FLAG=
+'
+       50 |         P_MSG_FLAG(SPLICE_PAGES);
+          |         ^~~~~~~~~~
+    trace/beauty/msg_flags.c:28:21: note: each undeclared identifier is re=
+ported only once for each function it appears in
+       28 |         if (flags & MSG_##n) { \
+          |                     ^~~~
+    trace/beauty/msg_flags.c:50:9: note: in expansion of macro 'P_MSG_FLAG=
+'
+       50 |         P_MSG_FLAG(SPLICE_PAGES);
+          |         ^~~~~~~~~~
+    =
+
+    There is no MSG_SPLICE_PAGES in tools/perf/trace/beauty/include/linux/=
+socket.h
+    =
+
+    Fixes: b848b26c6672 ("net: Kill MSG_SENDPAGE_NOTLAST")
+    Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+    Link: https://lore.kernel.org/r/20230626112847.2ef3d422@canb.auug.org.=
+au/
+    Signed-off-by: David Howells <dhowells@redhat.com>
+    cc: "David S. Miller" <davem@davemloft.net>
+    cc: Eric Dumazet <edumazet@google.com>
+    cc: Jakub Kicinski <kuba@kernel.org>
+    cc: Paolo Abeni <pabeni@redhat.com>
+    cc: Jens Axboe <axboe@kernel.dk>
+    cc: Matthew Wilcox <willy@infradead.org>
+    cc: bpf@vger.kernel.org
+    cc: dccp@vger.kernel.org
+    cc: linux-afs@lists.infradead.org
+    cc: linux-arm-msm@vger.kernel.org
+    cc: linux-can@vger.kernel.org
+    cc: linux-crypto@vger.kernel.org
+    cc: linux-doc@vger.kernel.org
+    cc: linux-hams@vger.kernel.org
+    cc: linux-perf-users@vger.kernel.org
+    cc: linux-rdma@vger.kernel.org
+    cc: linux-sctp@vger.kernel.org
+    cc: linux-wpan@vger.kernel.org
+    cc: linux-x25@vger.kernel.org
+    cc: mptcp@lists.linux.dev
+    cc: netdev@vger.kernel.org
+    cc: rds-devel@oss.oracle.com
+    cc: tipc-discussion@lists.sourceforge.net
+    cc: virtualization@lists.linux-foundation.org
+
+diff --git a/tools/perf/trace/beauty/include/linux/socket.h b/tools/perf/t=
+race/beauty/include/linux/socket.h
+index 3bef212a24d7..77cb707a566a 100644
+--- a/tools/perf/trace/beauty/include/linux/socket.h
++++ b/tools/perf/trace/beauty/include/linux/socket.h
+@@ -326,6 +326,7 @@ struct ucred {
+ 					  */
+ =
+
+ #define MSG_ZEROCOPY	0x4000000	/* Use user data in kernel path */
++#define MSG_SPLICE_PAGES 0x8000000	/* Splice the pages from the iterator =
+in sendmsg() */
+ #define MSG_FASTOPEN	0x20000000	/* Send data in TCP SYN */
+ #define MSG_CMSG_CLOEXEC 0x40000000	/* Set close_on_exec for file
+ 					   descriptor received through
+
