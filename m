@@ -2,215 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11A4973D865
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 09:23:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D70AC73D86A
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 09:24:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbjFZHXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 03:23:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58826 "EHLO
+        id S229742AbjFZHYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 03:24:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjFZHXe (ORCPT
+        with ESMTP id S229500AbjFZHYf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 03:23:34 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50EDDE0;
-        Mon, 26 Jun 2023 00:23:33 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-6682909acadso1167606b3a.3;
-        Mon, 26 Jun 2023 00:23:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687764213; x=1690356213;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pAoHpYkt2lBs67uUYdErp3v/viJTQC8Dihr6kiw5jT0=;
-        b=JF7SLFjjJojECO7To1D2VB9yhY0eyzwOtsZ9C6as64pdYMLvep8qXrA9DXDpsezGyA
-         sa5Q+4ZJjGXhJVmxoQY9hnOFth+za+46Vs9se9172javfESFXTo/bAyrBvRXcwBMFo0+
-         7JKN4sMcMMeghXjo8TzpyYdsRLU799lTKoSQhIaF/QIEWtOQYhaFqlVrkr7PEXuO1Q+A
-         Gm6z5TepsnfeKZ9AJX5yG8zvFGq0kHuJeCxWB8Clxh9Bz59i+uZIhVSzXvQDrvYilpvI
-         iypANLaV2THFVwBUqDprMO93x+BzWwzR4kcT8LeTI6hGX/m4+MbaKiBW2ZToF2HIOR0q
-         6cng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687764213; x=1690356213;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pAoHpYkt2lBs67uUYdErp3v/viJTQC8Dihr6kiw5jT0=;
-        b=LI9Y8iAno56jMUoYilZC7qhlRcgkuJIqAg46reFjev576jFBzpdWMl5oR0+qna0o14
-         44e4fq9sv7Gg2qDCL23HMHfqg+vu9hMzdc6D/9c4xa8Rms91iAuOoYHEfdu25RuXPCqe
-         /dsEF6sYzQhiTHzKcBB9agaH4AUXXUpVlYRvJiTHJ6qVJItBsHup/DDIXfoYlPMw3/bv
-         Xku6sSXncLCPmKyZA/dbJp9wAchJMSzz+edPK/R+VPf+CeI5XoN54WM3FHvpZAgax8l/
-         tmT7A9d4pXl0KR65KbHij20y2RIh7o6E6BEekKb2EwTdYolcLQdja+x604sT9tKVsonX
-         2U0A==
-X-Gm-Message-State: AC+VfDyHms4bMuopgaFxyJeO7EV44gro+S9fNjUA0SaCwehVg0cv01mm
-        4Rzm/RwkaM777eRjkkVxgCP5lrxGdO4=
-X-Google-Smtp-Source: ACHHUZ4rYOSEmn3CtaffZSSiMXxV2WwV5WlljV233A0cvBcVDENylrF0yQW7CLWEHPuEqJuGYaNrCg==
-X-Received: by 2002:a05:6a00:3a0e:b0:661:4a00:1ea5 with SMTP id fj14-20020a056a003a0e00b006614a001ea5mr23090693pfb.20.1687764212616;
-        Mon, 26 Jun 2023 00:23:32 -0700 (PDT)
-Received: from sol (194-223-178-180.tpgi.com.au. [194.223.178.180])
-        by smtp.gmail.com with ESMTPSA id e17-20020a62aa11000000b00625037cf695sm3218213pff.86.2023.06.26.00.23.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jun 2023 00:23:32 -0700 (PDT)
-Date:   Mon, 26 Jun 2023 15:23:26 +0800
-From:   Kent Gibson <warthog618@gmail.com>
-To:     YE Chengfeng <cyeaa@connect.ust.hk>
-Cc:     "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "brgl@bgdev.pl" <brgl@bgdev.pl>,
-        "andy@kernel.org" <andy@kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] gpio: gpiolib-cdev: Fix potential &lr->wait.lock
- deadlock issue
-Message-ID: <ZJk87rWsDj7pWJIP@sol>
-References: <TYCP286MB1188B6A0379F7928C63288DF8A21A@TYCP286MB1188.JPNP286.PROD.OUTLOOK.COM>
+        Mon, 26 Jun 2023 03:24:35 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DF661AC;
+        Mon, 26 Jun 2023 00:24:34 -0700 (PDT)
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35Q4cFVa013318;
+        Mon, 26 Jun 2023 00:24:16 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=pfpt0220;
+ bh=fqHrSBL3hoY+JjPtKwIfd8KWeoYZRh46fiQOckzwMdQ=;
+ b=XGxYJz1AFJt4HQZiGZ1PFAWXQePEYmRTYH1KXucCFPzM33drrEjWavsQVnMk1rzUfHQ5
+ QnUcm991Hz8v6pLIZDIZqlsRAui7mPcw+j2wQc7N0NXa+QDN0IyPMMXt7RCbiqrWWEsG
+ jv/je2u/g/4iJwqyLLeAD/+NcHeE9rwEHxjej9glfODinXDk2cLH/BSxr8Xf9TM9ne7j
+ lodr9nCq/6X73rtHgCz+t7K1RR917rfNxvKgPBSzPbMC62au+kK+V0UgLIm6aS02edkE
+ u20iF7jJ2mnPlayCMkm2/O0PvphFiItjnPQEdCE+PPO7T+JwMdbccipHK3RYgu9Hm4o5 UA== 
+Received: from dc5-exch01.marvell.com ([199.233.59.181])
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3re00juuf2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Mon, 26 Jun 2023 00:24:16 -0700
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Mon, 26 Jun
+ 2023 00:24:14 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
+ Transport; Mon, 26 Jun 2023 00:24:14 -0700
+Received: from hyd1soter3.marvell.com (unknown [10.29.37.12])
+        by maili.marvell.com (Postfix) with ESMTP id A2F693F7063;
+        Mon, 26 Jun 2023 00:24:08 -0700 (PDT)
+From:   Hariprasad Kelam <hkelam@marvell.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <kuba@kernel.org>, <davem@davemloft.net>,
+        <willemdebruijn.kernel@gmail.com>, <andrew@lunn.ch>,
+        <sgoutham@marvell.com>, <lcherian@marvell.com>,
+        <gakula@marvell.com>, <jerinj@marvell.com>, <sbhatta@marvell.com>,
+        <hkelam@marvell.com>, <naveenm@marvell.com>, <edumazet@google.com>,
+        <pabeni@redhat.com>, <jhs@mojatatu.com>,
+        <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
+        <maxtram95@gmail.com>, <corbet@lwn.net>,
+        <linux-doc@vger.kernel.org>
+Subject: [net-next Patchv2 0/3] support Round Robin scheduling
+Date:   Mon, 26 Jun 2023 12:54:04 +0530
+Message-ID: <20230626072407.32158-1-hkelam@marvell.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <TYCP286MB1188B6A0379F7928C63288DF8A21A@TYCP286MB1188.JPNP286.PROD.OUTLOOK.COM>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Proofpoint-GUID: vNeRXWrTxbJqQtv2s7bxOfdxXm9gdQPh
+X-Proofpoint-ORIG-GUID: vNeRXWrTxbJqQtv2s7bxOfdxXm9gdQPh
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-26_04,2023-06-22_02,2023-05-22_02
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 25, 2023 at 02:45:12PM +0000, YE Chengfeng wrote:
-> linereq_put_event is called from both interrupt context (e.g.,
-> edge_irq_thread) and process context (process_hw_ts_thread).
-> Therefore, interrupt should be disabled before acquiring lock
-> &lr->wait.lock inside linereq_put_event to avoid deadlock when
-> the lock is held in process context and edge_irq_thread comes.
-> 
-> Similarly, linereq_read_unlocked running in process context
-> also acquies the same lock. It also need to disable interrupt
-> otherwise deadlock could happen if the irq edge_irq_thread
-> comes to execution while the lock is held.
-> 
+octeontx2 and CN10K silicons support Round Robin scheduling. When multiple
+traffic flows reach transmit level with the same priority, with Round Robin
+scheduling traffic flow with the highest quantum value is picked. With this
+support, the user can add multiple classes with the same priority and
+different quantum in htb offload.
 
-So, in both cases, a process context holding the lock is interrupted, on
-the same CPU, and the edge_irq_thread() deadlocks on that lock, as the
-interrupted process holds the lock and cannot proceed.
-That makes sense to me, but it would be good for Bart to confirm as he
-knows a lot more about the kfifo locking than I do.
+This series of patches adds support for the same.
 
-Note that the same problem also exists in lineevent_read_unlocked() - the
-uAPI v1 equivalent of linereq_read_unlocked().
+Patch1: implement transmit schedular allocation algorithm as preparation
+        for support round robin scheduling.
 
-> Fix the two potential deadlock issues by spin_lock_irqsave.
-> 
+Patch2: Allow quantum parameter in HTB offload mode.
 
-spin_lock_bh() should be sufficient, given that edge_irq_thread() is run
-in a softirq?  That is faster and would allow the hard irq handlers to
-still run, and timestamp the event, but inhibit the edge_irq_thread()
-from being called on that CPU until the lock is released.
-(hmmm, gpio_desc_to_lineinfo() also uses spin_lock_irqsave() but it is
-never called from hard irq context, so there is a good chance I'm missing
-something here??)
-More on spin_lock choice below.
+Patch3: extends octeontx2 htb offload support for  Round Robin scheduling
 
-This should have a Fixes tag.
-For v2, it has been there since it was added, so:
 
-73e0341992b6 ("gpiolib: cdev: support edge detection for uAPI v2")
+Naveen Mamindlapalli (3):
+  octeontx2-pf: implement transmit schedular allocation algorithm
+  sch_htb: Allow HTB quantum parameter in offload mode
+  octeontx2-pf: htb offload support for Round Robin scheduling
+--
+v2 * change data type of otx2_index_used to reduce size of structure
+     otx2_qos_cfg
 
-And it also applies to lineevent_read_unlocked() from uAPI v1, so there
-should be a separate fix for that, or at least a separate tag.
 
-I looks to me that it was first introduced in uAPI v1 here:
+ .../marvell/octeontx2/nic/otx2_common.c       |   1 +
+ .../marvell/octeontx2/nic/otx2_common.h       |   1 +
+ .../net/ethernet/marvell/octeontx2/nic/qos.c  | 347 ++++++++++++++++--
+ .../net/ethernet/marvell/octeontx2/nic/qos.h  |  11 +-
+ .../net/ethernet/mellanox/mlx5/core/en/qos.c  |   4 +-
+ include/net/pkt_cls.h                         |   1 +
+ net/sched/sch_htb.c                           |   7 +-
+ 7 files changed, 329 insertions(+), 43 deletions(-)
 
-dea9c80ee672 ("gpiolib: rework the locking mechanism for lineevent kfifo")
-
-> Signed-off-by: Chengfeng Ye <cyeaa@connect.ust.hk>
-> ---
->  drivers/gpio/gpiolib-cdev.c | 16 +++++++++-------
->  1 file changed, 9 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/gpio/gpiolib-cdev.c b/drivers/gpio/gpiolib-cdev.c
-> index 0a33971c964c..714631fde9a8 100644
-> --- a/drivers/gpio/gpiolib-cdev.c
-> +++ b/drivers/gpio/gpiolib-cdev.c
-> @@ -614,14 +614,15 @@ static void linereq_put_event(struct linereq *lr,
->  			      struct gpio_v2_line_event *le)
->  {
->  	bool overflow = false;
-> +	unsigned long flags;
->  
-> -	spin_lock(&lr->wait.lock);
-> +	spin_lock_irqsave(&lr->wait.lock, flags);
-
-linereq_put_event() is never called from hard irq context, so
-spin_lock_irq() or spin_lock_bh() should suffice?
-
->  	if (kfifo_is_full(&lr->events)) {
->  		overflow = true;
->  		kfifo_skip(&lr->events);
->  	}
->  	kfifo_in(&lr->events, le, 1);
-> -	spin_unlock(&lr->wait.lock);
-> +	spin_unlock_irqrestore(&lr->wait.lock, flags);
->  	if (!overflow)
->  		wake_up_poll(&lr->wait, EPOLLIN);
->  	else
-> @@ -1505,6 +1506,7 @@ static ssize_t linereq_read_unlocked(struct file *file, char __user *buf,
->  	struct linereq *lr = file->private_data;
->  	struct gpio_v2_line_event le;
->  	ssize_t bytes_read = 0;
-> +	unsigned long flags;
->  	int ret;
->  
->  	if (!lr->gdev->chip)
-> @@ -1514,28 +1516,28 @@ static ssize_t linereq_read_unlocked(struct file *file, char __user *buf,
->  		return -EINVAL;
->  
->  	do {
-> -		spin_lock(&lr->wait.lock);
-> +		spin_lock_irqsave(&lr->wait.lock, flags);
-
-linereq_read_unlocked() is only ever called in process context, so this
-could be spin_lock_irq() or even spin_lock_bh()?
-
->  		if (kfifo_is_empty(&lr->events)) {
->  			if (bytes_read) {
-> -				spin_unlock(&lr->wait.lock);
-> +				spin_unlock_irqrestore(&lr->wait.lock, flags);
->  				return bytes_read;
->  			}
->  
->  			if (file->f_flags & O_NONBLOCK) {
-> -				spin_unlock(&lr->wait.lock);
-> +				spin_unlock_irqrestore(&lr->wait.lock, flags);
->  				return -EAGAIN;
->  			}
->  
->  			ret = wait_event_interruptible_locked(lr->wait,
->  					!kfifo_is_empty(&lr->events));
-
-wait_event_interruptible_locked() works with locks that are
-spin_lock()/spin_unlock(), so this will leave irqs disabled while
-waiting for a new event??
-
-And while there is a wait_event_interruptible_locked_irq(), there is
-no wait_event_interruptible_locked_bh() form that I can see, so using
-spin_lock_bh() would require some extra work.
-
->  			if (ret) {
-> -				spin_unlock(&lr->wait.lock);
-> +				spin_unlock_irqrestore(&lr->wait.lock, flags);
->  				return ret;
->  			}
->  		}
->  
->  		ret = kfifo_out(&lr->events, &le, 1);
-> -		spin_unlock(&lr->wait.lock);
-> +		spin_unlock_irqrestore(&lr->wait.lock, flags);
->  		if (ret != 1) {
->  			/*
->  			 * This should never happen - we were holding the
-> -- 
-> 2.17.1
-
-Anyway, good catch.
-
-Cheers,
-Kent.
+--
+2.17.1
