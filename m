@@ -2,75 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD0E173EEC0
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 00:45:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 316C173EEC1
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 00:46:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230000AbjFZWpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 18:45:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44994 "EHLO
+        id S229679AbjFZWqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 18:46:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbjFZWpu (ORCPT
+        with ESMTP id S229720AbjFZWqL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 18:45:50 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5508B134
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 15:45:47 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2b69e6d324aso27505801fa.0
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 15:45:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687819545; x=1690411545;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=u5bCPFlR0nu3jWbwFkLqvSTjglnwST8IppmOFOBlz+8=;
-        b=qJaoDjzNpYqpEsQQchoys5kprXHinuZsVAbE7N7V/tlJf7exDUN9nXheqBQ3Wt5HZX
-         qLHbwWjeDphPHrkLxuJCXCOraN0phIUtTIJrqMu9VRDQgCyVDC2y5RcQIkkpKXEZT9cO
-         l0HDCIfP2hsnDGXj5vf5/7hYBcWcDPddrEoOo1m7AYUN2dDi2/8vJ4EwmK85Anpy+Bja
-         ivq+Z4hE8BVoQxwlFibrDQKyAl6Giwh2hdpyOyaQQR1HzirVjHQa6kA2Ar+GUOeFHGUN
-         cqQy3iqzLN/7Diix2rDuE3D9eGh6d5dWByWnv3Fwl04aCtuzNi0U7gMUVulLL6tw1yJ/
-         4b4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687819545; x=1690411545;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=u5bCPFlR0nu3jWbwFkLqvSTjglnwST8IppmOFOBlz+8=;
-        b=WEO9m9yixXPq9eQMS5yoR2rzSfREy5rIJFLiTtft9BDBcLazrx3pIrSCZQOlKRUFI2
-         m4++ha601s2ZXa13UMKFGxHecIOCgetg5ERyJzPouCYQI9dwF+wgO2l6iIeS/LTXLmLI
-         DLH61C6dXvBUEQpTbrKjD+DC/hJWtHukh5/If9xQ/Q0FiE9eJMh32vh858k+/drhCyzX
-         so7J1Vj6bRi4A5h8j/fFfRXT6nJqY4pghZf1iB14zIyoVT0YzWEmorPXadRNUVSZOTi5
-         JUWjk1mcpunT5VuIuh5KtmF3ntBFGBR8ZpJvAWoMFW1K2u9nx4ggGN8ZEgGhlzTu470U
-         +iGA==
-X-Gm-Message-State: AC+VfDyA7vByvoZPwRGqZ81eaFpaAPMpOVTjXEq7C+SRh1K4TXcTabdG
-        CIU53vgey81TiBXBAY0mJNLclw==
-X-Google-Smtp-Source: ACHHUZ4MkezrTg7Z9UArmCvbs17mEfFgUWI0FF/DGZkDKPVqQnLigk+6CZEVrjsFa5tbSdDqhTREeg==
-X-Received: by 2002:a2e:9107:0:b0:2b5:9b3b:f7ea with SMTP id m7-20020a2e9107000000b002b59b3bf7eamr6470282ljg.41.1687819545471;
-        Mon, 26 Jun 2023 15:45:45 -0700 (PDT)
-Received: from [192.168.1.101] (abyk179.neoplus.adsl.tpnet.pl. [83.9.30.179])
-        by smtp.gmail.com with ESMTPSA id b6-20020a2e9886000000b002b69f44646bsm938501ljj.17.2023.06.26.15.45.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Jun 2023 15:45:45 -0700 (PDT)
-Message-ID: <ab41462a-330f-263d-718f-e449e9ca8c5c@linaro.org>
-Date:   Tue, 27 Jun 2023 00:45:43 +0200
+        Mon, 26 Jun 2023 18:46:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FC45188
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 15:46:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A5EE260F97
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 22:46:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82E15C433C8;
+        Mon, 26 Jun 2023 22:46:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687819569;
+        bh=7968kreExZC6Fc9zOW2Q2czxDskvgfvx/LKbzujqlvk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cYYQSvkGKfbfqAtqEsr4YwE4tR7gxrieDqDEC7hFi6bRGMuZH2Ape+uzMUfxwAql0
+         UFXmxMrz/C0jiIdwgMCn4HqGjQXNrm9Efstm2L5vsNbq3dH2IJ7nGXVNELvaCdi7lm
+         zpBt9qEVcqTsKnHlMOTR8xuqWWd99F/9PZMcseaGZuV0vKQ/V/7W6aSalexlGpGKeB
+         N/Y++1H0E4E4DhB7zoyP3HbKV1venorZ5QeBTOELB7ufgCdxqSkmj+16kExqtkCu9l
+         cnMMJdhybfgo+iXY+PQyT0Km3k3QlcHzoXNfzGU4vMg0Ii+zwVIw73IabLyTCmqNoS
+         dvDyJuxxTr1iA==
+Date:   Tue, 27 Jun 2023 00:46:05 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Anna-Maria Behnsen <anna-maria@linutronix.de>,
+        John Stultz <jstultz@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Oleg Nesterov <oleg@redhat.com>
+Subject: Re: [patch 09/45] posix-cpu-timers: Fix posix_cpu_timer_get()
+ behaviour
+Message-ID: <ZJoVLadeU9Y5KMO8@lothringen>
+References: <20230606132949.068951363@linutronix.de>
+ <20230606142031.532247561@linutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] arm64: dts: qcom: Fix "status" value
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230626220957.3945972-1-robh@kernel.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230626220957.3945972-1-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230606142031.532247561@linutronix.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,25 +63,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27.06.2023 00:09, Rob Herring wrote:
-> The defined value for "status" is "disabled", not "disable".
+On Tue, Jun 06, 2023 at 04:37:33PM +0200, Thomas Gleixner wrote:
+> timer_gettime() must return the remaining time to the next expiry of a
+> timer or 0 if the timer is not armed and no signal pending.
 > 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> This has to be correct also for interval timers even if the signal is
+> pending or the timer has been created with SIGEV_NONE.
+> 
+> The posix CPU timer implementation fails for both cases as it does not
+> forward the timer in posix_cpu_timer_get() before calculating the expiry
+> time.
+> 
+> It neither clears the expiry value when a oneshot SIGEV_NONE timer expired
+> and returns 1nsec instead, which is only correct for timers with signals
+> when the signal delivery did not happen yet.
+> 
+> Aside of that posix_cpu_timer_set() pointlessly arms SIGEV_NONE timers
+> which are later disarmed when the initial expiry happens. That's bogus and
+> just keeping the process wide timer active for nothing.
+> 
+> Cure this by:
+> 
+>      1) Avoiding to arm SIGEV_NONE timers
+> 
+>      2) Forwarding interval timers in posix_cpu_timer_get()
+> 
+>      3) Taking SIGEV_NONE into account when a oneshot timer has expired
 
-Konrad
->  arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+This patch does too many things at once...
+
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts b/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts
-> index cfbc4fc1eba9..c6914db7dc6d 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts
-> +++ b/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts
-> @@ -779,5 +779,5 @@ &wifi {
+> Make the update logic a separate function so it can be reused to simplify
+> posix_cpu_timer_set().
+> 
+> Fixes: ae1a78eecc45 ("cpu-timers: Return correct previous timer reload value")
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> ---
+>  kernel/time/posix-cpu-timers.c |   96 +++++++++++++++++++++++------------------
+>  1 file changed, 54 insertions(+), 42 deletions(-)
+> 
+> --- a/kernel/time/posix-cpu-timers.c
+> +++ b/kernel/time/posix-cpu-timers.c
+> @@ -785,45 +782,60 @@ static int posix_cpu_timer_set(struct k_
+>  	return ret;
+>  }
 >  
->  &crypto {
->  	/* FIXME: qce_start triggers an SError */
-> -	status = "disable";
-> +	status = "disabled";
->  };
+> -static void posix_cpu_timer_get(struct k_itimer *timer, struct itimerspec64 *itp)
+> +static void __posix_cpu_timer_get(struct k_itimer *timer, struct itimerspec64 *itp, u64 now)
+>  {
+> -	clockid_t clkid = CPUCLOCK_WHICH(timer->it_clock);
+> -	struct cpu_timer *ctmr = &timer->it.cpu;
+> -	u64 now, expires = cpu_timer_getexpires(ctmr);
+> -	struct task_struct *p;
+> -
+> -	rcu_read_lock();
+> -	p = cpu_timer_task_rcu(timer);
+> -	if (!p)
+> -		goto out;
+> +	bool sigev_none = timer->it_sigev_notify == SIGEV_NONE;
+> +	u64 expires;
+>  
+>  	/*
+> -	 * Easy part: convert the reload time.
+> +	 * Make sure that interval timers are moved forward for the
+> +	 * following cases:
+> +	 *  - SIGEV_NONE timers which are never armed
+> +	 *  - Timers which expired, but the signal has not yet been
+> +	 *    delivered
+>  	 */
+> -	itp->it_interval = ktime_to_timespec64(timer->it_interval);
+> -
+> -	if (!expires)
+> -		goto out;
+> +	expires = bump_cpu_timer(timer, now);
+
+What if the expiration has been reached but we arrived here before
+handle_posix_cpu_timers() had a chance? In that case the call to
+bump_cpu_timer() may forward the timer and artificially create an
+overrun / missed event.
+
+Also we are not holding the sighand lock here. So even though the timer
+is forwarded, it may still be picked up afterward by check_thread_timers()
+based on its stalled previous expires value... This can create a discrepancy
+between the overrun count and the actual events received, and perhaps other
+funny things...
+
+Thanks.
+
+>  
+>  	/*
+> -	 * Sample the clock to take the difference with the expiry time.
+> +	 * Interval timers cannot have a remaining time <= 0 because the
+> +	 * forwarding guarantees to move them forward so that the next
+> +	 * timer expiry is > @now.
+>  	 */
+> -	if (CPUCLOCK_PERTHREAD(timer->it_clock))
+> -		now = cpu_clock_sample(clkid, p);
+> -	else
+> -		now = cpu_clock_sample_group(clkid, p, false);
+> -
+>  	if (now < expires) {
+>  		itp->it_value = ns_to_timespec64(expires - now);
+>  	} else {
+>  		/*
+> -		 * The timer should have expired already, but the firing
+> -		 * hasn't taken place yet.  Say it's just about to expire.
+> +		 * A single shot SIGEV_NONE timer must return 0, when it is
+> +		 * expired! Timers which have a real signal delivery mode
+> +		 * must return a remaining time greater than 0 because the
+> +		 * signal has not yet been delivered.
+>  		 */
+> -		itp->it_value.tv_nsec = 1;
+> -		itp->it_value.tv_sec = 0;
+> +		if (!sigev_none)
+> +			itp->it_value.tv_nsec = 1;
+> +	}
+> +}
+
