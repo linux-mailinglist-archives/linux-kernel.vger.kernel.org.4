@@ -2,224 +2,333 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3CBF73D79C
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 08:12:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85CA973D7A4
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 08:13:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230053AbjFZGMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 02:12:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38298 "EHLO
+        id S230110AbjFZGNg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 02:13:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbjFZGMH (ORCPT
+        with ESMTP id S229586AbjFZGNd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 02:12:07 -0400
-Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44B8EEE;
-        Sun, 25 Jun 2023 23:12:05 -0700 (PDT)
-Received: by mail-ua1-x92b.google.com with SMTP id a1e0cc1a2514c-78a5384a5daso557659241.0;
-        Sun, 25 Jun 2023 23:12:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687759924; x=1690351924;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aWiNkr7svo+LwhrDq8mI2+KVwjyWuAbuHc8qcJJ40l4=;
-        b=NVg6UP3h1sfMl7waiNHRNbbIMeY6YlVJ7w6iJOS7AQkWO6A/RRe1Z8RbIBX6B7uiHm
-         5kumfhuY3QGWNkP687csxPo2nc3kN8+h9Uy6D0wqt8FanGeIWzAQoLsmr3RebM00psJ/
-         qyUCP3GVubSTfmD1G+wuxBXJEw5wNNXajnBsJYuCnLBjWE3rrwyrKeR7PMBGveVzN90g
-         zw6KcqCrQfdyWxDsKajhLY11SqX3q9tEdX3xhP5djybzrRxEdHDtk/BsCTYLm9T8PfMf
-         pHpgQGpJuCOB8Hi4sgPf7K79xwahtVeKfOn0L/lZaC7G5/wlbRawP7WrIK7OKj71QZ4n
-         B0xQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687759924; x=1690351924;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aWiNkr7svo+LwhrDq8mI2+KVwjyWuAbuHc8qcJJ40l4=;
-        b=P2P84rSnpQ7VOa9Z2dKz8lyR+d+DMwI7+x6TKtRiJ2JLn0qunr0BJzzR3PsURiQH8e
-         avMRtwe3G8S8yLjoU75Lr3kIlS4UBWUtEbUBm74mpTNVJ7rAQSRGfBWaGhnZSoG42ERL
-         wIiS28pwrpjPuLen4ipLOmw+4w02DFTgW09IxepgnZul+kaygxz1WZYOB+/Y/6zqEby6
-         zLKENA2QtK/PHxyrhksG1d5wKi1iedmiQhAkC9e4rkOR9cuMDd5ztExo88QYtl9PIRxl
-         CY42hggAF0t84MxnsIFamXGqJRMo0+KiH1u4Ho6+NIq9S0zyrx2CL+MULEE0xJReXRSI
-         EKAA==
-X-Gm-Message-State: AC+VfDwaB/GEn3hiPENxeEg2JaMKcn8JTvUt8KXjxPAF1H4CXttG6kjy
-        Nc89zk3f4tO5lfuZg6+krRlBvDwEkl6J2MmZex/xl+5ENRc=
-X-Google-Smtp-Source: ACHHUZ6Mt7T7WOGheqCz8eTtbl6Lv6c6WI57bKj4DOh871nBqkbJWws+6lSTfjxGhFnoy77ryhgUCD4nAaIM+KAI15w=
-X-Received: by 2002:a67:fc41:0:b0:443:682e:2088 with SMTP id
- p1-20020a67fc41000000b00443682e2088mr127623vsq.12.1687759924180; Sun, 25 Jun
- 2023 23:12:04 -0700 (PDT)
+        Mon, 26 Jun 2023 02:13:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19C34EB;
+        Sun, 25 Jun 2023 23:13:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D0DD60C8C;
+        Mon, 26 Jun 2023 06:13:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A64A6C433D9;
+        Mon, 26 Jun 2023 06:13:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687760010;
+        bh=tIDPiX4oZCQnSjoJrRmXYm4/HW+kneyQ9COWSK2/0ZY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Kqp3cvsRJ3zrwxvYCz0cNhvxJ+ddOQlZbdAd6MYB7hpQfGaPjaEWx4XRgumHA3asl
+         2pfxaCvJsapTma27TczMyDfkLmZLMX4LxIpbXhwpJJZRXNZyd0yCBPciRDI7IG26pW
+         ZofYK78Vy6+X23yGoPjG4iHaIJX3xZk1Cf5VyXONw4g0+lhwJyZb3QOZc9UC1abgeN
+         JpHRigJrpulMhEXYrJrzp6iqFIELQ33QjiEoR3RKROk8Rgf0ZADCCTCGDDgSsfyqIA
+         PxNsesDEzXoQ4yNdH5/98H+JDv2HJQTHEWa2ob8wVV0DOdBO7Eu/aKKZ0U8efnWun+
+         0ZC+zZqTlmuaA==
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-4f4b2bc1565so3627446e87.2;
+        Sun, 25 Jun 2023 23:13:30 -0700 (PDT)
+X-Gm-Message-State: AC+VfDx3RS1tSDV4GnIXUXfaas/h7pEg6GTeJf56cXwb5ntnihtFlMH2
+        4eNkqPkScdfHuPfCm6ZyZQyYLXmlruTm9AAJST8=
+X-Google-Smtp-Source: ACHHUZ7Z1BsryLRBJgwSdFpXVYEgN5RfTaOqmCtmT2+wVlbf2QTe+Yf05nZb1BtwYAaKvRHJWuEELQy+6WhHrJTYCe0=
+X-Received: by 2002:a05:6512:705:b0:4f9:ec5e:d624 with SMTP id
+ b5-20020a056512070500b004f9ec5ed624mr1614382lfs.38.1687760008514; Sun, 25 Jun
+ 2023 23:13:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <jbyihkyk5dtaohdwjyivambb2gffyjs3dodpofafnkkunxq7bu@jngkdxx65pux>
-In-Reply-To: <jbyihkyk5dtaohdwjyivambb2gffyjs3dodpofafnkkunxq7bu@jngkdxx65pux>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Mon, 26 Jun 2023 09:11:53 +0300
-Message-ID: <CAOQ4uxhut2NHc+MY-XOJay5B-OKXU2X5Fe0-6-RCMKt584ft5A@mail.gmail.com>
-Subject: Re: splice(-> FIFO) never wakes up inotify IN_MODIFY?
-To:     =?UTF-8?Q?Ahelenia_Ziemia=C5=84ska?= 
-        <nabijaczleweli@nabijaczleweli.xyz>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jan Kara <jack@suse.cz>
+References: <20230616085038.4121892-1-rppt@kernel.org> <20230616085038.4121892-3-rppt@kernel.org>
+ <f9a7eebe-d36e-4587-b99d-35d4edefdd14@app.fastmail.com> <20230618080027.GA52412@kernel.org>
+ <a17c65c6-863f-4026-9c6f-a04b659e9ab4@app.fastmail.com> <20230625161417.GK52412@kernel.org>
+ <90161ac9-3ca0-4c72-b1c4-ab1293e55445@app.fastmail.com> <20230625174257.GL52412@kernel.org>
+ <20230625180741.jrrtkq55c4jrqh3t@moria.home.lan>
+In-Reply-To: <20230625180741.jrrtkq55c4jrqh3t@moria.home.lan>
+From:   Song Liu <song@kernel.org>
+Date:   Sun, 25 Jun 2023 23:13:15 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW45gmtCVgA0mg6X87x5EOzSmVqq3SCMSR6agyiukiJvEQ@mail.gmail.com>
+Message-ID: <CAPhsuW45gmtCVgA0mg6X87x5EOzSmVqq3SCMSR6agyiukiJvEQ@mail.gmail.com>
+Subject: Re: [PATCH v2 02/12] mm: introduce execmem_text_alloc() and jit_text_alloc()
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     Mike Rapoport <rppt@kernel.org>, Andy Lutomirski <luto@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Kees Cook <keescook@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Helge Deller <deller@gmx.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Puranjay Mohan <puranjay12@gmail.com>,
+        Rick P Edgecombe <rick.p.edgecombe@intel.com>,
+        "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+        netdev@vger.kernel.org, sparclinux@vger.kernel.org,
+        "the arch/x86 maintainers" <x86@kernel.org>, pjt@google.com,
+        torvalds@linux-foundation.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 26, 2023 at 6:54=E2=80=AFAM Ahelenia Ziemia=C5=84ska
-<nabijaczleweli@nabijaczleweli.xyz> wrote:
+On Sun, Jun 25, 2023 at 11:07=E2=80=AFAM Kent Overstreet
+<kent.overstreet@linux.dev> wrote:
 >
-> Hi!
+> On Sun, Jun 25, 2023 at 08:42:57PM +0300, Mike Rapoport wrote:
+> > On Sun, Jun 25, 2023 at 09:59:34AM -0700, Andy Lutomirski wrote:
+> > >
+> > >
+> > > On Sun, Jun 25, 2023, at 9:14 AM, Mike Rapoport wrote:
+> > > > On Mon, Jun 19, 2023 at 10:09:02AM -0700, Andy Lutomirski wrote:
+> > > >>
+> > > >> On Sun, Jun 18, 2023, at 1:00 AM, Mike Rapoport wrote:
+> > > >> > On Sat, Jun 17, 2023 at 01:38:29PM -0700, Andy Lutomirski wrote:
+> > > >> >> On Fri, Jun 16, 2023, at 1:50 AM, Mike Rapoport wrote:
+> > > >> >> > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+> > > >> >> >
+> > > >> >> > module_alloc() is used everywhere as a mean to allocate memor=
+y for code.
+> > > >> >> >
+> > > >> >> > Beside being semantically wrong, this unnecessarily ties all =
+subsystems
+> > > >> >> > that need to allocate code, such as ftrace, kprobes and BPF t=
+o modules
+> > > >> >> > and puts the burden of code allocation to the modules code.
+> > > >> >> >
+> > > >> >> > Several architectures override module_alloc() because of vari=
+ous
+> > > >> >> > constraints where the executable memory can be located and th=
+is causes
+> > > >> >> > additional obstacles for improvements of code allocation.
+> > > >> >> >
+> > > >> >> > Start splitting code allocation from modules by introducing
+> > > >> >> > execmem_text_alloc(), execmem_free(), jit_text_alloc(), jit_f=
+ree() APIs.
+> > > >> >> >
+> > > >> >> > Initially, execmem_text_alloc() and jit_text_alloc() are wrap=
+pers for
+> > > >> >> > module_alloc() and execmem_free() and jit_free() are replacem=
+ents of
+> > > >> >> > module_memfree() to allow updating all call sites to use the =
+new APIs.
+> > > >> >> >
+> > > >> >> > The intention semantics for new allocation APIs:
+> > > >> >> >
+> > > >> >> > * execmem_text_alloc() should be used to allocate memory that=
+ must reside
+> > > >> >> >   close to the kernel image, like loadable kernel modules and=
+ generated
+> > > >> >> >   code that is restricted by relative addressing.
+> > > >> >> >
+> > > >> >> > * jit_text_alloc() should be used to allocate memory for gene=
+rated code
+> > > >> >> >   when there are no restrictions for the code placement. For
+> > > >> >> >   architectures that require that any code is within certain =
+distance
+> > > >> >> >   from the kernel image, jit_text_alloc() will be essentially=
+ aliased to
+> > > >> >> >   execmem_text_alloc().
+> > > >> >> >
+> > > >> >>
+> > > >> >> Is there anything in this series to help users do the appropria=
+te
+> > > >> >> synchronization when the actually populate the allocated memory=
+ with
+> > > >> >> code?  See here, for example:
+> > > >> >
+> > > >> > This series only factors out the executable allocations from mod=
+ules and
+> > > >> > puts them in a central place.
+> > > >> > Anything else would go on top after this lands.
+> > > >>
+> > > >> Hmm.
+> > > >>
+> > > >> On the one hand, there's nothing wrong with factoring out common c=
+ode. On
+> > > >> the other hand, this is probably the right time to at least start
+> > > >> thinking about synchronization, at least to the extent that it mig=
+ht make
+> > > >> us want to change this API.  (I'm not at all saying that this seri=
+es
+> > > >> should require changes -- I'm just saying that this is a good time=
+ to
+> > > >> think about how this should work.)
+> > > >>
+> > > >> The current APIs, *and* the proposed jit_text_alloc() API, don't a=
+ctually
+> > > >> look like the one think in the Linux ecosystem that actually
+> > > >> intelligently and efficiently maps new text into an address space:
+> > > >> mmap().
+> > > >>
+> > > >> On x86, you can mmap() an existing file full of executable code PR=
+OT_EXEC
+> > > >> and jump to it with minimal synchronization (just the standard imp=
+licit
+> > > >> ordering in the kernel that populates the pages before setting up =
+the
+> > > >> PTEs and whatever user synchronization is needed to avoid jumping =
+into
+> > > >> the mapping before mmap() finishes).  It works across CPUs, and th=
+e only
+> > > >> possible way userspace can screw it up (for a read-only mapping of
+> > > >> read-only text, anyway) is to jump to the mapping too early, in wh=
+ich
+> > > >> case userspace gets a page fault.  Incoherence is impossible, and =
+no one
+> > > >> needs to "serialize" (in the SDM sense).
+> > > >>
+> > > >> I think the same sequence (from userspace's perspective) works on =
+other
+> > > >> architectures, too, although I think more cache management is need=
+ed on
+> > > >> the kernel's end.  As far as I know, no Linux SMP architecture nee=
+ds an
+> > > >> IPI to map executable text into usermode, but I could easily be wr=
+ong.
+> > > >> (IIRC RISC-V has very developer-unfriendly icache management, but =
+I don't
+> > > >> remember the details.)
+> > > >>
+> > > >> Of course, using ptrace or any other FOLL_FORCE to modify text on =
+x86 is
+> > > >> rather fraught, and I bet many things do it wrong when userspace i=
+s
+> > > >> multithreaded.  But not in production because it's mostly not used=
+ in
+> > > >> production.)
+> > > >>
+> > > >> But jit_text_alloc() can't do this, because the order of operation=
+s
+> > > >> doesn't match.  With jit_text_alloc(), the executable mapping show=
+s up
+> > > >> before the text is populated, so there is no atomic change from no=
+t-there
+> > > >> to populated-and-executable.  Which means that there is an opportu=
+nity
+> > > >> for CPUs, speculatively or otherwise, to start filling various cac=
+hes
+> > > >> with intermediate states of the text, which means that various
+> > > >> architectures (even x86!) may need serialization.
+> > > >>
+> > > >> For eBPF- and module- like use cases, where JITting/code gen is qu=
+ite
+> > > >> coarse-grained, perhaps something vaguely like:
+> > > >>
+> > > >> jit_text_alloc() -> returns a handle and an executable virtual add=
+ress,
+> > > >> but does *not* map it there
+> > > >> jit_text_write() -> write to that handle
+> > > >> jit_text_map() -> map it and synchronize if needed (no sync needed=
+ on
+> > > >> x86, I think)
+> > > >>
+> > > >> could be more efficient and/or safer.
+> > > >>
+> > > >> (Modules could use this too.  Getting alternatives right might tak=
+e some
+> > > >> fiddling, because off the top of my head, this doesn't match how i=
+t works
+> > > >> now.)
+> > > >>
+> > > >> To make alternatives easier, this could work, maybe (haven't fully
+> > > >> thought it through):
+> > > >>
+> > > >> jit_text_alloc()
+> > > >> jit_text_map_rw_inplace() -> map at the target address, but RW, !X
+> > > >>
+> > > >> write the text and apply alternatives
+> > > >>
+> > > >> jit_text_finalize() -> change from RW to RX *and synchronize*
+> > > >>
+> > > >> jit_text_finalize() would either need to wait for RCU (possibly ex=
+tra
+> > > >> heavy weight RCU to get "serialization") or send an IPI.
+> > > >
+> > > > This essentially how modules work now. The memory is allocated RW, =
+written
+> > > > and updated with alternatives and then made ROX in the end with set=
+_memory
+> > > > APIs.
+> > > >
+> > > > The issue with not having the memory mapped X when it's written is =
+that we
+> > > > cannot use large pages to map it. One of the goals is to have execu=
+table
+> > > > memory mapped with large pages and make code allocator able to divi=
+de that
+> > > > page among several callers.
+> > > >
+> > > > So the idea was that jit_text_alloc() will have a cache of large pa=
+ges
+> > > > mapped ROX, will allocate memory from those caches and there will b=
+e
+> > > > jit_update() that uses text poking for writing to that memory.
+> > > >
+> > > > Upon allocation of a large page to increase the cache, that large p=
+age will
+> > > > be "invalidated" by filling it with breakpoint instructions (e.g in=
+t3 on
+> > > > x86)
+> > >
+> > > Is this actually valid?  In between int3 and real code, there=E2=80=
+=99s a
+> > > potential torn read of real code mixed up with 0xcc.
+> >
+> > You mean while doing text poking?
 >
-> Consider the following programs:
-> -- >8 --
-> =3D=3D> ino.c <=3D=3D
-> #define _GNU_SOURCE
-> #include <stdio.h>
-> #include <sys/inotify.h>
-> #include <unistd.h>
-> int main() {
->   int ino =3D inotify_init1(IN_CLOEXEC);
->   inotify_add_watch(ino, "/dev/fd/0", IN_MODIFY);
+> I think we've been getting distracted by text_poke(). text_poke() does
+> updates via a different virtual address which introduce new
+> synchroniation wrinkles, but it's not the main issue.
 >
->   char buf[64 * 1024];
->   struct inotify_event ev;
->   while (read(ino, &ev, sizeof(ev)) > 0) {
->     fprintf(stderr, "%d: mask=3D%x, cook=3D%x, len=3D%x, name=3D%.*s\n", =
-ev.wd, ev.mask,
->             ev.cookie, ev.len, (int)ev.len, ev.name);
->     fprintf(stderr, "rd=3D%zd\n", read(0, buf, sizeof(buf)));
->   }
-> }
+> As _think_ I understand it, the root of the issue is that speculative
+> execution - and that per Andy, speculative execution doesn't obey memory
+> barriers.
 >
-
-That's a very odd (and wrong) way to implement poll(2).
-This is not a documented way to use pipes, so it may
-happen to work with sendfile(2), but there is no guarantee.
-
-> =3D=3D> se.c <=3D=3D
-> #define _GNU_SOURCE
-> #include <stdio.h>
-> #include <sys/sendfile.h>
-> int main() {
->   ssize_t rd, acc =3D 0;
->   while ((rd =3D sendfile(1, 0, 0, 128 * 1024 * 1024)) > 0)
->     acc +=3D rd;
->   fprintf(stderr, "se=3D%zd: %m\n", acc);
-> }
+> I have _not_ dug into the details of how retpolines work and all the
+> spectre stuff that was going on, but - retpoline uses lfence, doesn't
+> it? And if speculative execution is the issue here, isn't retpoline what
+> we need?
 >
-> =3D=3D> sp.c <=3D=3D
-> #define _GNU_SOURCE
-> #include <fcntl.h>
-> #include <stdio.h>
-> int main() {
->   ssize_t rd, acc =3D 0;
->   while ((rd =3D splice(0, 0, 1, 0, 128 * 1024 * 1024, 0)) > 0)
->     acc +=3D rd;
->   fprintf(stderr, "sp=3D%zd: %m\n", acc);
-> }
-> -- >8 --
+> For this particular issue, I'm not sure "invalidate by filling with
+> illegal instructions" makes sense. For that to work, would the processor
+> have to execute a serialize operation and a retry on hitting an illegal
+> instruction - or perhaps we do in the interrupt handler?
 >
-> By all means, ./sp | ./ino and ./se | ./ino should be equivalent,
-> right?
->
+> But if filling with illegal instructions does act as a speculation
+> barrier, then the issue is that a torn read could generate a legal but
+> incorrect instruction.
 
-Maybe it should, but it's not.
-
-> -- >8 --
-> $ make se sp ino
-> $ mkfifo fifo
-> $ ./ino < fifo &
-> [1] 230
-> $ echo a > fifo
-> $ echo a > fifo
-> 1: mask=3D2, cook=3D0, len=3D0, name=3D
-> rd=3D4
-> $ echo c > fifo
-> 1: mask=3D2, cook=3D0, len=3D0, name=3D
-> rd=3D2
-> $ ./se > fifo
-> abcdef
-> 1: mask=3D2, cook=3D0, len=3D0, name=3D
-> asd
-> ^D
-> se=3D11: Success
-> rd=3D11
-> 1: mask=3D2, cook=3D0, len=3D0, name=3D
-> rd=3D0
-> $ ./sp > fifo
-> abcdefg
-> asd
-> dsasdadadad
-> sp=3D24: Success
-> $ < sp ./sp > fifo
-> sp=3D25856: Success
-> $ < sp ./sp > fifo
-> ^C
-> $ echo sp > fifo
-> ^C
-> -- >8 --
->
-> Note how in all ./sp > fifo cases, ./ino doesn't wake up!
-> Note also how, thus, we've managed to fill the pipe buffer with ./sp
-> (when it transferred 25856), and now we can't /ever/ write there again
-> (both splicing and normal writes block, since there's no space left in
->  the pipe; ./ino hasn't seen this and will never wake up or service the
->  pipe):
-> so we've effectively "denied service" by slickily using a different
-> syscall to do the write, right?
->
-
-Only applications that do not check for availability
-of input in the pipe correctly will get "denied service".
-
-> I consider this to be unexpected behaviour because (a) obviously and
-> (b) sendfile() sends the inotify event.
->
-
-The fact is that relying on inotify IN_MODIFY and IN_ACCESS events
-for pipes is not a good idea.
-
-splice(2) differentiates three different cases:
-        if (ipipe && opipe) {
-...
-        if (ipipe) {
-...
-        if (opipe) {
-...
-
-IN_ACCESS will only be generated for non-pipe input
-IN_MODIFY will only be generated for non-pipe output
-
-Similarly FAN_ACCESS_PERM fanotify permission events
-will only be generated for non-pipe input.
-
-sendfile(2) OTOH does not special cases the pipe input
-case at all and it generates IN_MODIFY for the pipe output
-case as well.
-
-If you would insist on fixing this inconsistency, I would be
-willing to consider a patch that matches sendfile(2) behavior
-to that of splice(2) and not the other way around.
-
-My general opinion about IN_ACCESS/IN_MODIFY
-(as well as FAN_ACCESS_PERM) is that they are not
-very practical, not well defined for pipes and anyway do
-not cover all the ways that a file can be modified/accessed
-(i.e. mmap). Therefore, IMO, there is no incentive to fix
-something that has been broken for decades unless
-you have a very real use case - not a made up one.
-
-Incidentally, I am working on a new set of fanotify
-permission events (FAN_PRE_ACCESS/MODIFY)
-that will have better defined semantics - those are not
-going to be applicable to pipes though.
+What is a "torn read" here? I assume it is an instruction read that
+goes at the wrong instruction boundary (CISC). If this is correct, do
+we need to handle torn read caused by software bug, or hardware
+bit flip, or both?
 
 Thanks,
-Amir.
+Song
