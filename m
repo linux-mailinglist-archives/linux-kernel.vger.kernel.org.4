@@ -2,167 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3EF673EBBA
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 22:21:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5392373EBBC
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 22:21:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbjFZUVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 16:21:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34618 "EHLO
+        id S229780AbjFZUVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 16:21:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbjFZUVX (ORCPT
+        with ESMTP id S229745AbjFZUVb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 16:21:23 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E24BF0
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 13:21:19 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id 3f1490d57ef6-c13b0941a38so3739014276.0
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 13:21:19 -0700 (PDT)
+        Mon, 26 Jun 2023 16:21:31 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2F2611D;
+        Mon, 26 Jun 2023 13:21:30 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id 41be03b00d2f7-5533c545786so2423855a12.1;
+        Mon, 26 Jun 2023 13:21:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687810878; x=1690402878;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NfWVz+A34dcRU8jVvD1uvLnBMJMnVmBYO+8hH+swTnI=;
-        b=auOTUoCoLj8ulXOSurwSalH+VuiHVvQyIP0D6uN0eGXwvkBNl/WLBgXr5yjtB9hacj
-         II7AOSuuj06hwAL4gt41/64RMS+bch7IHSNAL1C4zLRU0sNopNW/Q8KirQKa0K3jnFb2
-         TGFz6U6BuaVX58KAN69EkFvN/7LzPl/DlaaQ559Dm3886dCgpLDoPws/tniO7DIewVQA
-         klhNgV/peNBRwZJJx/9HLRDEkLHvp7Wh+yceEDZn+W/5/mFWuDFX3NnLXOJCm0oS3/8H
-         Bsx8VblwwOvzuPXDRoGjZ+UUkPJysSqI0MNNUTIb+4gTI3gLNPXUcnbwO/NqYT470F1n
-         4lrQ==
+        d=gmail.com; s=20221208; t=1687810890; x=1690402890;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2gp9pHGIFobLb/ub4aK2fR6jSEu86S+QQeKX1nWkWvE=;
+        b=fvhxAdCNuGnceSESiy0qMI/h57psQdf4WAKEwNbQKCeI/ZhdE4mVl0pA90r3gGXB2g
+         3ewf0YzLXD+7fOuBmoc4T/ZRMa3OGp89pzKtjPO5bLxkN0ZE5oEayDkCajNwLA10POc3
+         CaA4hQSoBh6cfxBywWEQLvHNnt1LYX+VCaAEbKmM88AXMLStHR/Q/4xflwacOQ+8iVna
+         Fh2+Jr0gUqlWOwgsjx2wg2IPLvNP7ZNvfSPvzbTLCKSXgXuojFsIKu9JAk1uWj91nrtk
+         4zts0YMtQYqFdtGvKstVaPG8/JJu/0ws1ob70cSh0UdJRVadBLgSpsbYER/xdxVwfgwv
+         O7Ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687810878; x=1690402878;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1687810890; x=1690402890;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=NfWVz+A34dcRU8jVvD1uvLnBMJMnVmBYO+8hH+swTnI=;
-        b=O/WKGDUUudb/xWtS2OVSEZ0Jb+wIxf4FJeWTaSYXxbAkZ13e6QiTKhbM9POeRa9tVh
-         wbtlpLl6BQ1HS8uuTsQVSKxEuBHQ6pZCemUrtdOec6tJfH5Flo6LHZYJUKYUnD8N9CVk
-         dZrc2k4IbgCRW1ZFv6LCDliJAkyCgofCI5imG7zwyFYMO9EwpCOXgXs9uCrTowOMGyi1
-         w2VF6OvDVGybIASfD9gXaQ6DQ8USuVMRS5WVR3HHoIVywRtWW8dPGzsw5MhjtVGREAYC
-         ax799lLcHGwQC1yW+gLqJAHV31w+AEbHdiK4bZ7mWqkcGN23/VAWHPpF6zPvdS4Xu0j5
-         hHJQ==
-X-Gm-Message-State: AC+VfDxGe0LiHwzLNbW1k4Zo+qKTZiffqVREctz9s8uHvIE39YGWpk5v
-        kQI2V/6axYb3P8Xrk5AO8Ct3fxYTzlrih7gXKRgRZg==
-X-Google-Smtp-Source: ACHHUZ5w3pQbU8Vk/9yXucz2a1X58clqa+7Yvqizc4nYXFIQuZBFx/ZD7I+9n81+91zXnjYZcoTlO7zw9sNt2u1mPZ4=
-X-Received: by 2002:a25:8187:0:b0:c1f:6862:d8fd with SMTP id
- p7-20020a258187000000b00c1f6862d8fdmr5140516ybk.7.1687810878517; Mon, 26 Jun
- 2023 13:21:18 -0700 (PDT)
+        bh=2gp9pHGIFobLb/ub4aK2fR6jSEu86S+QQeKX1nWkWvE=;
+        b=U7tfNL8yDlDaFSKPSxKLbhf9thOOv4aqVfws72gJ9ZsJV3Ic7AosVVBFE6wzRA1TNW
+         NFW2GZIwdDRrRqSWTbxld2WWWoNtjRt35YN5dZPmSIbZRnf/M/RUOi5RJfAlYx4e02pF
+         pqtjvVOpfrUCzbSu6IB7nIOHMoLj8gHVy7GIggmneCNXtisPDqopC5+Lk22WCcKs+yiq
+         0gIRVIj7BXt2pnfu/hm0E6iI5Ygqv9tSWI3+3Sf3mk3ciimYN20gIgNX/L86H+IEPCwl
+         bvJRKAeu2favx/3b95Wg1Pxupg8T8D9BbG7drhRr/FkeMcXY2frhOYHYEMZQ+y4gkcJj
+         KpVA==
+X-Gm-Message-State: AC+VfDwVHM8Fw4WX0u3ji+3kzWLlFRLfqXfy66Q4YjkfB6pF9ss0dL4T
+        dqH8M0qmhPFb7sRaIVGy8Ui088oiIrJFfQ==
+X-Google-Smtp-Source: ACHHUZ6c65qKJqjRFTsTCErbai7aegvBFMr+pJ6kbEf5erTOOngJ/7IiQPSzg8IFTcpoJuxX1GFdWQ==
+X-Received: by 2002:a17:90a:4d88:b0:25c:18ad:6b82 with SMTP id m8-20020a17090a4d8800b0025c18ad6b82mr40026146pjh.21.1687810890086;
+        Mon, 26 Jun 2023 13:21:30 -0700 (PDT)
+Received: from localhost (dhcp-72-235-13-41.hawaiiantel.net. [72.235.13.41])
+        by smtp.gmail.com with ESMTPSA id n20-20020a17090ade9400b0025bc49aa716sm4817295pjv.27.2023.06.26.13.21.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jun 2023 13:21:29 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 26 Jun 2023 10:21:29 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Chuck Lever III <chuck.lever@oracle.com>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        Linux NFS Mailing List <linux-nfs@vger.kernel.org>
+Subject: Re: contention on pwq->pool->lock under heavy NFS workload
+Message-ID: <ZJnzSSMdWhnuXYNE@slm.duckdns.org>
+References: <38FA0353-5303-4A3D-86A5-EF1E989CD497@oracle.com>
+ <ZJNrht3NlLyPn2A0@slm.duckdns.org>
+ <CF5AF0E6-5213-489D-87CD-8E8325A6560F@oracle.com>
+ <ZJSfsvFtC_d265M1@slm.duckdns.org>
+ <36C8F75A-7C84-4D86-A721-6BCD6001CAFF@oracle.com>
+ <7E9EF026-EF8B-4125-AB00-A1E9F0F907C5@oracle.com>
+ <ZJZKb4CvyKmHBwmg@slm.duckdns.org>
+ <24E8E2D2-F91B-47F6-91BF-02D02750054F@oracle.com>
 MIME-Version: 1.0
-References: <20230626201713.1204982-1-surenb@google.com>
-In-Reply-To: <20230626201713.1204982-1-surenb@google.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Mon, 26 Jun 2023 13:21:07 -0700
-Message-ID: <CAJuCfpGM-yEoG0YsjA_3AQ9PZa=daC7eJHL7huXAzB8zV7AmKg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] kernfs: add kernfs_ops.free operation to free
- resources tied to the file
-To:     tj@kernel.org
-Cc:     gregkh@linuxfoundation.org, peterz@infradead.org,
-        lujialin4@huawei.com, lizefan.x@bytedance.com, hannes@cmpxchg.org,
-        mingo@redhat.com, ebiggers@kernel.org, oleg@redhat.com,
-        akpm@linux-foundation.org, viro@zeniv.linux.org.uk,
-        brauner@kernel.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <24E8E2D2-F91B-47F6-91BF-02D02750054F@oracle.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 26, 2023 at 1:17=E2=80=AFPM Suren Baghdasaryan <surenb@google.c=
-om> wrote:
->
-> kernfs_ops.release operation can be called from kernfs_drain_open_files
-> which is not tied to the file's real lifecycle. Introduce a new kernfs_op=
-s
-> free operation which is called only when the last fput() of the file is
-> performed and therefore is strictly tied to the file's lifecycle. This
-> operation will be used for freeing resources tied to the file, like
-> waitqueues used for polling the file.
+On Sun, Jun 25, 2023 at 04:01:38PM +0000, Chuck Lever III wrote:
+> Both wq_pool_mutex and copy_workqueue_attrs() are static, so having
+> only apply_workqueue_attrs() is not yet enough to carry this off
+> in workqueue consumers such as sunrpc.ko.
+> 
+> It looks like padata_setup_cpumasks() for example is holding the
+> CPU read lock, but it doesn't take the wq_pool_mutex.
+> apply_wqattrs_prepare() has a "lockdep_assert_held(&wq_pool_mutex);" .
+> 
+> I can wait for a v3 of this series so you can construct the public
+> API the way you prefer.
 
-While this patchset touches kernfs, cgroups and psi areas (3 different
-maintainers), I think cgroups are the most relevant area for it, so
-IMHO Tejun's tree would be the right one to get them once reviewed and
-acknowledged. Thanks!
+Ah, indeed. That API isn't really useable right now. It's gonna be a while
+before the affinity scope patches are applied. I'll fix up the apply
+interface afterwards.
 
->
-> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> ---
->  fs/kernfs/file.c       | 8 +++++---
->  include/linux/kernfs.h | 5 +++++
->  2 files changed, 10 insertions(+), 3 deletions(-)
->
-> diff --git a/fs/kernfs/file.c b/fs/kernfs/file.c
-> index 40c4661f15b7..acc52d23d8f6 100644
-> --- a/fs/kernfs/file.c
-> +++ b/fs/kernfs/file.c
-> @@ -766,7 +766,7 @@ static int kernfs_fop_open(struct inode *inode, struc=
-t file *file)
->
->  /* used from release/drain to ensure that ->release() is called exactly =
-once */
->  static void kernfs_release_file(struct kernfs_node *kn,
-> -                               struct kernfs_open_file *of)
-> +                               struct kernfs_open_file *of, bool final)
->  {
->         /*
->          * @of is guaranteed to have no other file operations in flight a=
-nd
-> @@ -787,6 +787,8 @@ static void kernfs_release_file(struct kernfs_node *k=
-n,
->                 of->released =3D true;
->                 of_on(of)->nr_to_release--;
->         }
-> +       if (final && kn->attr.ops->free)
-> +               kn->attr.ops->free(of);
->  }
->
->  static int kernfs_fop_release(struct inode *inode, struct file *filp)
-> @@ -798,7 +800,7 @@ static int kernfs_fop_release(struct inode *inode, st=
-ruct file *filp)
->                 struct mutex *mutex;
->
->                 mutex =3D kernfs_open_file_mutex_lock(kn);
-> -               kernfs_release_file(kn, of);
-> +               kernfs_release_file(kn, of, true);
->                 mutex_unlock(mutex);
->         }
->
-> @@ -852,7 +854,7 @@ void kernfs_drain_open_files(struct kernfs_node *kn)
->                 }
->
->                 if (kn->flags & KERNFS_HAS_RELEASE)
-> -                       kernfs_release_file(kn, of);
-> +                       kernfs_release_file(kn, of, false);
->         }
->
->         WARN_ON_ONCE(on->nr_mmapped || on->nr_to_release);
-> diff --git a/include/linux/kernfs.h b/include/linux/kernfs.h
-> index 73f5c120def8..a7e404ff31bb 100644
-> --- a/include/linux/kernfs.h
-> +++ b/include/linux/kernfs.h
-> @@ -273,6 +273,11 @@ struct kernfs_ops {
->          */
->         int (*open)(struct kernfs_open_file *of);
->         void (*release)(struct kernfs_open_file *of);
-> +       /*
-> +        * Free resources tied to the lifecycle of the file, like a
-> +        * waitqueue used for polling.
-> +        */
-> +       void (*free)(struct kernfs_open_file *of);
->
->         /*
->          * Read is handled by either seq_file or raw_read().
-> --
-> 2.41.0.162.gfafddb0af9-goog
->
+Thanks.
+
+-- 
+tejun
