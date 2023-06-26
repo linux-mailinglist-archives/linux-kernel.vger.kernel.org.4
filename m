@@ -2,128 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 533D773D98A
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 10:23:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 401A973D98C
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 10:23:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbjFZIXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 04:23:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58960 "EHLO
+        id S230164AbjFZIXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 04:23:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjFZIXB (ORCPT
+        with ESMTP id S229516AbjFZIXc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 04:23:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7ED795;
-        Mon, 26 Jun 2023 01:22:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6431860D24;
-        Mon, 26 Jun 2023 08:22:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C59B9C433CB;
-        Mon, 26 Jun 2023 08:22:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687767778;
-        bh=P3+JV6+Pn1MuKtmU6/nLqOAPWXJCPA/e3Ct5ze9xX9w=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=UPy8Yc+LKOA9er8GGm/aH8bjiBPMrWQAPWrEvbPSAqpA8/uaKVfzGHFw6PLs06QiZ
-         DzynlleyBjlGZJpOBqOtSLywu2BNftjemBLXRiGuw9WgVNQ9jwRnjiLRovYoyC/AGv
-         x13rbO9JIdwK21T5lsY+O84KkZDQfcLj0QhIJAhAds0Y4NM78GD5uaCKhzplmmo/dQ
-         jAzx67DiwY3LaEb7E7f4tRvz4e9W2DCTYfBpbCbysGSmWU6R9IvKB/AXeCrjlyphz/
-         9B3c57xMGnORmHCVwjc+Ugl+dUS9iOzp4pJItsTjvTA9Kh/zxOky5rERa3kx7JUO+m
-         AbNHpk3dv3vyA==
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-4f8777caaa1so3805898e87.3;
-        Mon, 26 Jun 2023 01:22:58 -0700 (PDT)
-X-Gm-Message-State: AC+VfDwvblg464Zws8SHfzm+W+yA/nCfUtFB7O9QrTJXVhVBT1GbeS3Q
-        1zeZap4GmfhQAGoyx55R1g9bq3vVCD68wYOgWfQ=
-X-Google-Smtp-Source: ACHHUZ6V992UdonyD1tdbLNjlWaFnubF9o6xFj75lGF04s3z9bepvio5LoGeebXmGXTYbkJlfuLdaCAhMfLauflN8LA=
-X-Received: by 2002:a19:ab12:0:b0:4f9:5933:8ee8 with SMTP id
- u18-20020a19ab12000000b004f959338ee8mr8109583lfe.32.1687767776741; Mon, 26
- Jun 2023 01:22:56 -0700 (PDT)
+        Mon, 26 Jun 2023 04:23:32 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 436A2DC
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 01:23:30 -0700 (PDT)
+Received: from dggpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QqLQ53T1JztRQ9;
+        Mon, 26 Jun 2023 16:20:45 +0800 (CST)
+Received: from [10.174.179.5] (10.174.179.5) by dggpemm500002.china.huawei.com
+ (7.185.36.229) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 26 Jun
+ 2023 16:23:27 +0800
+Subject: Re: [Question] report a race condition between CPU hotplug state
+ machine and hrtimer 'sched_cfs_period_timer' for cfs bandwidth throttling
+From:   Xiongfeng Wang <wangxiongfeng2@huawei.com>
+To:     Thomas Gleixner <tglx@linutronix.de>, <vschneid@redhat.com>,
+        Phil Auld <pauld@redhat.com>, <vdonnefort@google.com>
+CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Wei Li <liwei391@huawei.com>,
+        "liaoyu (E)" <liaoyu15@huawei.com>, <zhangqiao22@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@kernel.org>
+References: <8e785777-03aa-99e1-d20e-e956f5685be6@huawei.com>
+ <87mt18it1y.ffs@tglx> <68baeac9-9fa7-5594-b5e7-4baf8ac86b77@huawei.com>
+Message-ID: <ba352e83-b8b1-d900-9c1f-56b8c8a8b8fb@huawei.com>
+Date:   Mon, 26 Jun 2023 16:23:26 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-References: <20230426034001.16-1-cuiyunhui@bytedance.com> <CAMj1kXEKh9O-ndk3QFibJMYfMbG7vm-cLN2vVQM5eDsYK84NzQ@mail.gmail.com>
- <CAEEQ3wkJB5CKm33mHXUOPX5makYOHF8By6FYGnNzRkM-Mo72OQ@mail.gmail.com>
- <ZEj33QLZqEeL+/y4@FVFF77S0Q05N> <CAEEQ3wmDBJkfOeKCQfcnuE+1=1K0D2pzu+Sn+zPEWk+RHs0NFQ@mail.gmail.com>
- <CAP6exY+ydbzh1EkWTFejzwaW+PA-ySVO2Qj+CVJ1XbSMce2S9Q@mail.gmail.com>
- <CAP6exY+tqAU0j1TVEMTzTb18M6_mPH5bWWiAS=94gyDGTY3hyQ@mail.gmail.com>
- <CAEEQ3w=wBdpZWnUd2WWVBC3BtFiUp-PQtNAtdXE4cO4n0XT-fg@mail.gmail.com>
- <CAMj1kXFGpXEPtYpy1+bs13F2P_LLZf9rTMfYMU=6jzgd3=SEcw@mail.gmail.com>
- <CAEEQ3wnbXE0vJnQRLo5MhfDc-Q4PbNWBoWS-oMn71CcJU51JdA@mail.gmail.com>
- <CAMj1kXHfqkU2QxvjTkGBSkEcTf_HirbdOReOJwdpgz3hM8fBHw@mail.gmail.com>
- <CAEEQ3wn2n48TpNQ3MuvrRH4zzg28SaiOswunPeZ01jFm-TbJ5w@mail.gmail.com>
- <CAMj1kXHgaLD43jx0f6hn_j209LGT_4G+w5XEGaYB9znV5p9tdA@mail.gmail.com>
- <CAP6exYJRE8iM63SX3hQP9_5aKYcnN5x0KOAtZOgeEWU5bwLEBA@mail.gmail.com>
- <CAEEQ3wn2zHUZP8gs8ezCczQLdQJqU6MqAgpcG0YeDW2aYTz0TA@mail.gmail.com>
- <CAMj1kXFn7+W=ZGNcSLL6p383SbA8=wstutJ85+qvXzt2G66Seg@mail.gmail.com> <CAEEQ3wnXJVBLdqW6GRFuCKuBtr38uKHz7E2+P8TAv1_+b6kBKA@mail.gmail.com>
-In-Reply-To: <CAEEQ3wnXJVBLdqW6GRFuCKuBtr38uKHz7E2+P8TAv1_+b6kBKA@mail.gmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Mon, 26 Jun 2023 10:22:45 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXFAsG0nH+2OcG3CBZYqKg=hCRHp8wAmVBFy9vNx6rWgOQ@mail.gmail.com>
-Message-ID: <CAMj1kXFAsG0nH+2OcG3CBZYqKg=hCRHp8wAmVBFy9vNx6rWgOQ@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH] firmware: added a firmware information
- passing method FFI
-To:     =?UTF-8?B?6L+Q6L6J5bSU?= <cuiyunhui@bytedance.com>
-Cc:     ron minnich <rminnich@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>, rafael@kernel.org,
-        lenb@kernel.org, jdelvare@suse.com, yc.hung@mediatek.com,
-        angelogioacchino.delregno@collabora.com,
-        allen-kh.cheng@mediatek.com, pierre-louis.bossart@linux.intel.com,
-        tinghan.shen@mediatek.com,
-        lkml - Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-acpi@vger.kernel.org,
-        =?UTF-8?B?6JGb5aOr5bu6?= <geshijian@bytedance.com>,
-        =?UTF-8?B?6Z+m5Lic?= <weidong.wd@bytedance.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <68baeac9-9fa7-5594-b5e7-4baf8ac86b77@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.179.5]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500002.china.huawei.com (7.185.36.229)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 26 Jun 2023 at 10:05, =E8=BF=90=E8=BE=89=E5=B4=94 <cuiyunhui@byteda=
-nce.com> wrote:
->
-> Hi Ard,
->
-> On Mon, Jun 26, 2023 at 2:43=E2=80=AFPM Ard Biesheuvel <ardb@kernel.org> =
-wrote:
->
-> > I think all of this belongs under arch/riscv
->
-> Could you look at the content of the patch again? As we discussed
-> before, we need to connect to the ACPI and the SMBIOS entry
-> At least this part of the code has to be placed in the corresponding plac=
-e:
-> drivers/acpi/osl.c: acpi_os_get_root_pointer()
-> drivers/firmware/dmi_scan.c:dmi_scan_machine()
->
-> Because obtaining firmware information through DTS belongs to the
-> content of the driver firmware, it is appropriate to put this piece of
-> code in drivers/firmware/ffi.c.
->
-> So I insist on the current revision, what do you think?
->
+Hi,
 
-DT support for SMBIOS can live in generic code, but the binding has to
-be sane. As I suggested before, it probably makes sense to supplant
-the entrypoint rather than just carry its address - this means a 'reg'
-property with base and size to describe the physical region, and at
-least major/minor/docrev fields to describe the version.
+Kindly ping~
+Could you please take a look at this issue and the below temporary fix ?
 
-In any case, there is really no point in supporting both entrypoints
-(this applies to the ACPI root pointer as well).
+Thanks,
+Xiongfeng
 
-For the ACPI side, you should just implement
-acpi_arch_get_root_pointer() under arch/riscv, and wire it up in
-whichever way you want. But please check with the RISC-V maintainers
-if they are up for this, and whether they want to see this mechanism
-contributed to one of the pertinent specifications.
-
-So NAK on the current revision, in case this was unclear.
+On 2023/6/12 20:49, Xiongfeng Wang wrote:
+> 
+> 
+> On 2023/6/9 22:55, Thomas Gleixner wrote:
+>> On Fri, Jun 09 2023 at 19:24, Xiongfeng Wang wrote:
+>>
+>> Cc+ scheduler people, leave context intact
+>>
+>>> Hello,
+>>>  When I do some low power tests, the following hung task is printed.
+>>>
+>>>   Call trace:
+>>>    __switch_to+0xd4/0x160
+>>>    __schedule+0x38c/0x8c4
+>>>    __cond_resched+0x24/0x50
+>>>    unmap_kernel_range_noflush+0x210/0x240
+>>>    kretprobe_trampoline+0x0/0xc8
+>>>    __vunmap+0x70/0x31c
+>>>    __vfree+0x34/0x8c
+>>>    vfree+0x40/0x58
+>>>    free_vm_stack_cache+0x44/0x74
+>>>    cpuhp_invoke_callback+0xc4/0x71c
+>>>    _cpu_down+0x108/0x284
+>>>    kretprobe_trampoline+0x0/0xc8
+>>>    suspend_enter+0xd8/0x8ec
+>>>    suspend_devices_and_enter+0x1f0/0x360
+>>>    pm_suspend.part.1+0x428/0x53c
+>>>    pm_suspend+0x3c/0xa0
+>>>    devdrv_suspend_proc+0x148/0x248 [drv_devmng]
+>>>    devdrv_manager_set_power_state+0x140/0x680 [drv_devmng]
+>>>    devdrv_manager_ioctl+0xcc/0x210 [drv_devmng]
+>>>    drv_ascend_intf_ioctl+0x84/0x248 [drv_davinci_intf]
+>>>    __arm64_sys_ioctl+0xb4/0xf0
+>>>    el0_svc_common.constprop.0+0x140/0x374
+>>>    do_el0_svc+0x80/0xa0
+>>>    el0_svc+0x1c/0x28
+>>>    el0_sync_handler+0x90/0xf0
+>>>    el0_sync+0x168/0x180
+>>>
+>>> After some analysis, I found it is caused by the following race condition.
+>>>
+>>> 1. A task running on CPU1 is throttled for cfs bandwidth. CPU1 starts the
+>>> hrtimer cfs_bandwidth 'period_timer' and enqueue the hrtimer on CPU1's rbtree.
+>>> 2. Then the task is migrated to CPU2 and starts to offline CPU1. CPU1 starts
+>>> CPUHP AP steps, and then the hrtimer 'period_timer' expires and re-enqueued on CPU1.
+>>> 3. CPU1 runs to take_cpu_down() and disable irq. After CPU1 finished CPUHP AP
+>>> steps, CPU2 starts the rest CPUHP step.
+>>> 4. When CPU2 runs to free_vm_stack_cache(), it is sched out in __vunmap()
+>>> because it run out of CPU quota. start_cfs_bandwidth() does not restart the
+>>> hrtimer because 'cfs_b->period_active' is set.
+>>> 5. The task waits the hrtimer 'period_timer' to expire to wake itself up, but
+>>> CPU1 has disabled irq and the hrtimer won't expire until it is migrated to CPU2
+>>> in hrtimers_dead_cpu(). But the task is blocked and cannot proceed to
+>>> hrtimers_dead_cpu() step. So the task hungs.
+>>>
+>>>     CPU1      			                 	 CPU2
+>>> Task set cfs_quota
+>>> start hrtimer cfs_bandwidth 'period_timer'
+>>> 						start to offline CPU1
+>>> CPU1 start CPUHP AP step
+>>> ...
+>>> 'period_timer' expired and re-enqueued on CPU1
+>>> ...
+>>> disable irq in take_cpu_down()
+>>> ...
+>>> 						CPU2 start the rest CPUHP steps
+>>> 						...
+>>> 					      sched out in free_vm_stack_cache()
+>>> 						wait for 'period_timer' expires
+>>>
+>>>
+>>> Appreciate it a lot if anyone can give some suggestion on how fix this problem !
+>>>
+>>> Thanks,
+>>> Xiongfeng
+>> .
+>>
+> 
+> Test script:
+> taskset -cp 1 $$
+> mkdir /sys/fs/cgroup/cpu/test
+> echo $$ > /sys/fs/cgroup/cpu/test/tasks
+> echo 80000 > /sys/fs/cgroup/cpu/test/cpu.cfs_quota_us
+> echo 100000 > /sys/fs/cgroup/cpu/test/cpu.cfs_period_us
+> taskset -cp 2 $$
+> echo 0 > /sys/devices/system/cpu/cpu1/online
+> 
+> 
+> Tests show that the following modification can solve the problem of above test
+> scripts. But I am not sure if there exists some other issues.
+> 
+> diff --cc kernel/sched/fair.c
+> index d9d6519fae01,bd6624353608..000000000000
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@@ -5411,10 -5411,16 +5411,15 @@@ void start_cfs_bandwidth(struct cfs_ban
+>   {
+>         lockdep_assert_held(&cfs_b->lock);
+> 
+> -       if (cfs_b->period_active)
+> +       if (cfs_b->period_active) {
+> +               struct hrtimer_clock_base *clock_base = cfs_b->period_timer.base;
+> +               int cpu = clock_base->cpu_base->cpu;
+> +               if (!cpu_active(cpu) && cpu != smp_processor_id())
+> +                       hrtimer_start_expires(&cfs_b->period_timer,
+> HRTIMER_MODE_ABS_PINNED);
+>                 return;
+> +       }
+> 
+>         cfs_b->period_active = 1;
+>  -
+>         hrtimer_forward_now(&cfs_b->period_timer, cfs_b->period);
+>         hrtimer_start_expires(&cfs_b->period_timer, HRTIMER_MODE_ABS_PINNED);
+>   }
+> 
+> Thanks,
+> Xiongfeng
+> 
+> .
+> 
