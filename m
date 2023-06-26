@@ -2,78 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23B0773E24F
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 16:39:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53EC273E254
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 16:42:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229578AbjFZOjw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 10:39:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51180 "EHLO
+        id S230079AbjFZOmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 10:42:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230208AbjFZOjn (ORCPT
+        with ESMTP id S229526AbjFZOmH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 10:39:43 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 657B910CB
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 07:39:42 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-313df030ccaso3027050f8f.1
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 07:39:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687790381; x=1690382381;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GbmG/0Wb9nQ6z/PJEyshEPOBYP8Ve8ZuPqHoAlT0PBU=;
-        b=v+xGmGJ0qIKRU0aurzhYHzIhjNpseb32nFxtt0cVXyZgxRKLexvjA1I7WRCD30AJL5
-         Eh+qbIjAP4NQcnlNR1I/NzBsJKqid+podoDPCDocJl+LEfk/pJHXsu1L4EtQQNKsx5dP
-         fef50DtyMYVYCyHso5OggdKwQmH6wr7etq++Nio8hL9QiYjg2gVJtWMqiO7yErYgevzf
-         8IKienQinE4jICssw7dY926yyBUebZc/1seLsWOtDpNlnlmAc6/i5uAzbdv+jtLbsHnA
-         hNiVcwkKf/6G4yupLdqBQJX93vw8ruAa85Bj++UM8ySsTwFkZPPROGk10fcd/nOaXpWw
-         /H4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687790381; x=1690382381;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GbmG/0Wb9nQ6z/PJEyshEPOBYP8Ve8ZuPqHoAlT0PBU=;
-        b=cd8q1WWDq4ChsN607WtAvl2qIWGFEu/dQgglZo+V8NlUa0MuCC5JZL+WpGvbs8cx2l
-         JPLER7e6BlS9LTMsF790ZWd/CMmdlM0NBxypU/NHC76WiIR02JmEUM5tWTPt9aqHvdVk
-         ICVlEN81fYkwaw/BsfXaHKlyhZ8IO+B+IHxrqWJxS/pp9CtQSCdpno6IuoCd5f2KNqQE
-         QAAaJLUywPKDIY/L08JN/LCSuc4tJRG4OCUww6imo2Ss6Q4WVgjHRv9OPZFxuUr1259D
-         vZjzf1LP7eB9PRYdjqffb4dzbAr7bvbnAyxsVDXPlOUq074Jkhho0vcG+OlUux8TI4t9
-         jAqg==
-X-Gm-Message-State: AC+VfDzAfgHyj1puNw0d/BEOy9rE8W/avl126Nh/7EnH9elBNDR1IZ5s
-        /q6iW3wHbvqNRYia+ciYiVetig==
-X-Google-Smtp-Source: ACHHUZ5u0xLo84AQuU8IWtL8/XKYwsSCcaLqPaN0OzwE1PROPfhND29UAU7NVe45aBYE+KDJ8dq3Jw==
-X-Received: by 2002:a5d:4250:0:b0:311:170e:8d with SMTP id s16-20020a5d4250000000b00311170e008dmr23526468wrr.26.1687790380687;
-        Mon, 26 Jun 2023 07:39:40 -0700 (PDT)
-Received: from aspen.lan (aztw-34-b2-v4wan-166919-cust780.vm26.cable.virginm.net. [82.37.195.13])
-        by smtp.gmail.com with ESMTPSA id u14-20020adfdb8e000000b003112ab916cdsm7675793wri.73.2023.06.26.07.39.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jun 2023 07:39:40 -0700 (PDT)
-Date:   Mon, 26 Jun 2023 15:39:38 +0100
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Maximilian Weigand <mweigand2017@gmail.com>
-Cc:     Lee Jones <lee@kernel.org>, Jingoo Han <jingoohan1@gmail.com>,
-        Helge Deller <deller@gmx.de>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        Maximilian Weigand <mweigand@mweigand.net>
-Subject: Re: [PATCH 1/3] backlight: lm3630a: add support for changing the
- boost frequency
-Message-ID: <20230626143938.GC95170@aspen.lan>
-References: <20230602-lm3630a_boost_frequency-v1-0-076472036d1a@mweigand.net>
- <20230602-lm3630a_boost_frequency-v1-1-076472036d1a@mweigand.net>
+        Mon, 26 Jun 2023 10:42:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15BEAE7E;
+        Mon, 26 Jun 2023 07:42:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9670060EA5;
+        Mon, 26 Jun 2023 14:42:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D5BFC433C0;
+        Mon, 26 Jun 2023 14:42:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687790525;
+        bh=L52cfU8cNq6uou6/bZ8tK6hh1Kl1s94l1tWbXWw/lAo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OaBsPVWCxzitqlENhTyVt6B8OAjiMC63ES5TIBAf5vcRfKr6lyDTte7X/FyHa5pRv
+         VxxxEHlepMRn+2kghdO9gvALQUPGC5HMx9jumJ6sJ7JCeBvjYoUtLhVDz4cP8UBwjA
+         eFiUdCFrHqmb9wBnGpVf8R1IYsSx8RgBa1B6UDQSmKFZQdOEeXWNsemzlQF7TS3glk
+         eWNaxmvrVbN0buJEbOogNS0MVoKxVjYHl1mBI4cUK66tvNVkHiDTUw2IqLCRm91RCl
+         l5M1TiaU2ie3wIMPOuTlL5Gr5PYSj5me4V6tTgHy+DJE6/IIny9RDvpMg2CCmUR27p
+         DHMJblcXS48DA==
+Date:   Mon, 26 Jun 2023 15:41:58 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-stable <stable@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>
+Subject: Re: arm64: fp-stress: BUG: KFENCE: memory corruption in
+ fpsimd_release_task
+Message-ID: <20230626144157.GA20162@willie-the-truck>
+References: <CA+G9fYtU7HsV0R0dp4XEH5xXHSJFw8KyDf5VQrLLfMxWfxQkag@mail.gmail.com>
+ <b4bfd69f-2092-4d15-b7ce-b814f5f10ff2@sirena.org.uk>
+ <CA+G9fYv=uyQaJs0JLMmZWLeLH0G5FF7WGcTa7y0bi0nCDfoi+A@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230602-lm3630a_boost_frequency-v1-1-076472036d1a@mweigand.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <CA+G9fYv=uyQaJs0JLMmZWLeLH0G5FF7WGcTa7y0bi0nCDfoi+A@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,27 +67,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 09:08:52PM +0200, Maximilian Weigand wrote:
-> From: Maximilian Weigand <mweigand@mweigand.net>
->
-> The led driver supports changing the switching frequency of the boost
-> converter by two means: the base switching frequency can be changed from
-> 500 kHz to 1 MHz, and a frequency shift can be activated, leading to
-> switching frequencies of 560 kHz or 1.12 Mhz, respectively.
->
-> Add this functionality to the led driver by introducing two dts entries
-> that control the boost frequency (500 kHz by default) and the frequency
-> shift (no shift by default).
->
-> Signed-off-by: Maximilian Weigand <mweigand@mweigand.net>
+On Thu, May 25, 2023 at 07:21:24PM +0530, Naresh Kamboju wrote:
+> On Tue, 23 May 2023 at 03:42, Mark Brown <broonie@kernel.org> wrote:
+> > On Tue, May 16, 2023 at 11:58:40AM +0530, Naresh Kamboju wrote:
+> > > Test log links:
+> > > ========
+> > >
+> > >  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.28-240-gb82733c0ff99/testrun/17007082/suite/log-parser-test/test/check-kernel-kfence/log
+> > >  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.28-240-gb82733c0ff99/testrun/17007082/suite/log-parser-test/tests/
+> > >  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.28-240-gb82733c0ff99/testrun/17007268/suite/kselftest-arm64/tests/
+> > >
+> > >  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.3.y/build/v6.3.2-247-g5a952cfef67c/testrun/17015127/suite/log-parser-test/test/check-kernel-bug/log
+> > >  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.3.y/build/v6.3.2-247-g5a952cfef67c/testrun/17015127/suite/log-parser-test/tests/
+> > >  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.3.y/build/v6.3.2-247-g5a952cfef67c/testrun/17015127/suite/kselftest-arm64/tests/
+> >
+> > None of these seem to provide me with information like what kernel
+> > config was used but I did manage to find
+> >
+> >   https://storage.tuxsuite.com/public/linaro/lkft/builds/2Pq5NvLiBcWRMuy6lXftDVQMvca/config
+> >
+> > which might be it?  Or one of them?  However even trying to use that I'm
+> > unable to reproduce issues with either the FVP or qemu.
+> 
+> You got the right config file which we are using for testing
+> FVP selftests.
 
-Driver changes look ok (or at least will be when the DT bindings are
-finalized).
+Sadly, the config link above no longer works (404 file not found).
 
-However... I think patches 1 and 2 of this series are in the wrong
-order. See #5 in
-https://docs.kernel.org/devicetree/bindings/submitting-patches.html
-for details.
+However, I notice that the failure still seems to occur with 6.4:
 
+https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.4/testrun/17767612/suite/log-parser-test/tests/
 
-Daniel.
+Please can you point me at the config file for that run? I can't figure
+out which one I need from the web interface.
+
+Will
