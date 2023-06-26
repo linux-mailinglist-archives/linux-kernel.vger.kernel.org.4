@@ -2,266 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A746873D59A
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 03:52:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA00773D565
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 02:51:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229901AbjFZBwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 21:52:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58142 "EHLO
+        id S229905AbjFZArG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 20:47:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjFZBwr (ORCPT
+        with ESMTP id S229529AbjFZArE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 21:52:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13FA3187
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 18:51:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687744319;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sfgyyq+iw8RNZpIOQEvl88qX1LmwtfH97CloAGRNmOk=;
-        b=RgFP7yQenEpE+joACsgmToOYLbxcR1C6AotX8NUSPyNEDGk60F4S2Vc+iLV37Zr1a6z2aW
-        0g39zNAsqQaeSVtbyTZxbIAOOZW0ID60pZCpiGYJ0OcHuI6AHtqnDuYtWrWYKLccsKu71M
-        Al7h73+o6D7+giKCDSe+E8jomYdtR9U=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-57-6ycQJCCLNpWteJ1r-RblhQ-1; Sun, 25 Jun 2023 21:51:57 -0400
-X-MC-Unique: 6ycQJCCLNpWteJ1r-RblhQ-1
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3f7e4dc0fe5so16365395e9.3
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 18:51:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687744316; x=1690336316;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sfgyyq+iw8RNZpIOQEvl88qX1LmwtfH97CloAGRNmOk=;
-        b=CNP2rr4qv0bct4Wg/OShRjBc1qiOZPO2q+ZjekRKxCQOZNZrwr3iByNJDSUULcmQuO
-         ZUFXOp3deBUpD4XKF9AbTTE25OdIcrmrQ7dPJh7erhQvY483/mJnSlNZuwzRHDC7evbO
-         Cw0NNtrk3H5WUl+c4ExhucsEXJblURN39Bcro/Hv4x2unazGDdA4S+SxGzFu3YJnJN5N
-         VYnllq5FU+TBEkwWQBDlV9yOtPcu9wRr3z1dGpkCNYPudllpY0jgDXorjPg10k80S2A0
-         7ax9eQr+EXqcf4l3vldtMuoKV5cp0RAdEzow97f9qAEuANuf65FShS/1tTkcvuYZ0jp4
-         YKNw==
-X-Gm-Message-State: AC+VfDzLf9rTj+6IIO5/c1zb+U0R5p2g5UKfbkqwaK9jheBDqB7T3kme
-        YCl8/ujCIQS5wf23Uwbh1h+Kbj1FihzwpVVcuNM6LjOvPA1bjWSBSIzXnKiFJ+w8XpYD5K8FQc8
-        OmTYOu/peVLK12g0bLlEgT6Gj
-X-Received: by 2002:a5d:448a:0:b0:30e:3ec4:e49e with SMTP id j10-20020a5d448a000000b0030e3ec4e49emr21850451wrq.70.1687744316674;
-        Sun, 25 Jun 2023 18:51:56 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6gpIipJLYnEFx5Q6D/rGiHsZp2nIwlN2f6BezUcw8AvNfBg0LfKZogchXEwUma5epKE/hvvw==
-X-Received: by 2002:a5d:448a:0:b0:30e:3ec4:e49e with SMTP id j10-20020a5d448a000000b0030e3ec4e49emr21850445wrq.70.1687744316371;
-        Sun, 25 Jun 2023 18:51:56 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:4b3f:de9c:642:1aff:fe31:a15c? ([2a02:810d:4b3f:de9c:642:1aff:fe31:a15c])
-        by smtp.gmail.com with ESMTPSA id k26-20020a5d525a000000b003078354f774sm5830052wrc.36.2023.06.25.18.51.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 25 Jun 2023 18:51:55 -0700 (PDT)
-Message-ID: <43ce08db-210a-fec8-51b4-351625b3cdfb@redhat.com>
-Date:   Mon, 26 Jun 2023 02:38:06 +0200
+        Sun, 25 Jun 2023 20:47:04 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 035A1BD;
+        Sun, 25 Jun 2023 17:47:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687740424; x=1719276424;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=VXsRJQsvO7IRZ3uVQLIs4sCvYYKXeqssXDKhRM7iKqM=;
+  b=PCN/uqEoLpT0njf93L5l2O56myOy24bxLZJhWNwmQK9SWACcZenxyGke
+   u4+LPNr5RpiI2wbHiAOyhFOuhHfJzyc/wfOiTLGOV4NHOpJzIiNERGfzX
+   wTzuKKbSN6hjqZ5s7247WTRHwfPbcy5+REy1m4MFGenNPky4U3Ae7BGUz
+   qRRWKPfywx6Wrunsdh3rfmc6hBn18ikta5NMs7G9HHcnwa2960TS3xlhE
+   xeGIPj79d++mnBJprc7aO+VEnmTJrFvvJnN+i3joBaRmWV0fdRNLh37H+
+   S2DjScWndDe5ToWbZJZ1Yck4rcWaIjB7RLHzFX2R+0thtLb2NJbz2i/MS
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="350910752"
+X-IronPort-AV: E=Sophos;i="6.01,158,1684825200"; 
+   d="scan'208";a="350910752"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2023 17:47:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="829042310"
+X-IronPort-AV: E=Sophos;i="6.01,158,1684825200"; 
+   d="scan'208";a="829042310"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by fmsmga002.fm.intel.com with ESMTP; 25 Jun 2023 17:47:01 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Sun, 25 Jun 2023 17:47:01 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Sun, 25 Jun 2023 17:47:01 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27 via Frontend Transport; Sun, 25 Jun 2023 17:47:01 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.102)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Sun, 25 Jun 2023 17:47:00 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cQUalgDun9oP0EFLKHLSnrrQNyRtFzExiG+xjdv7d0Yrcba9KfkAvwpkZX3pJ/JG3Nynpt1qRMjpdvT6K4NC3L6XmmMZmi3CU7D+UlR9RZF5v53iYl/5VsiG2YNlfTLbYEF2kXSUKn/iDi/Jorx+aBX+ED0BkK5WeQHWVaHjRJK+rK6wBehAYOCVLINYeiGETZPPBVRUWy4ZC1O3lZut7jpZygGXPMqSkM/Ybsg2a4Rl4mLRv/Np2mKuKCvuCU2vTCJISAccd1DsQEth6PPvRXrIfPbOOIXq9APXij4ACApgUxWAlwLLI4NDfgALKWbL1U89RAuSaVghyp8EKqj4jg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZBcaJdLMjkX+H1DroTcwW58Ae8TCMYTg6ZJ1I1OHUYQ=;
+ b=MkDe4ksFVMsLnmL9g3+ZZihUhmSSZAfxZ48b6UlJbixKPCzn70+o/6vmeT1xt3VgBxNhsQvsXsc4v5h/O8OVNk2yaWD4h1VlevoiO1dOBK5b1IJJh22NTDOHIoueKqXjBHXIc0ZWjhxRNdAhjVAb7KgVzI40Gcur7PVnQHb9pEhxrpZUjVjPa05/vAqxacP7fqXW5UyptSUxBy3IeSUBPwyNV8CbTK9Q1Fp8vL1l+tKaNhFzvG2r0Gbq9xvdPb780KslBGB9ZqhqhDLyWeCDJK1Ad7IDEZvGPGxEFr2kpCOYbCZTEJ+Epfhz4V1OO6Oy7JxGZAVFQeRNYwpbDtFvrA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com (2603:10b6:510:256::6)
+ by MN0PR11MB6057.namprd11.prod.outlook.com (2603:10b6:208:375::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.26; Mon, 26 Jun
+ 2023 00:46:58 +0000
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::aeb:12b5:6ac9:fab0]) by PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::aeb:12b5:6ac9:fab0%7]) with mapi id 15.20.6500.029; Mon, 26 Jun 2023
+ 00:46:58 +0000
+Date:   Sun, 25 Jun 2023 17:46:53 -0700
+From:   Dan Williams <dan.j.williams@intel.com>
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Namhyung Kim <namhyung@gmail.com>,
+        Liang Kan <kan.liang@linux.intel.com>,
+        <linux-cxl@vger.kernel.org>, <peterz@infradead.org>
+CC:     <mingo@reresetdhat.com>, <acme@kernel.org>, <mark.rutland@arm.com>,
+        <will@kernel.org>, <dan.j.williams@intel.com>,
+        <linuxarm@huawei.com>, <linux-perf-users@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Dave Jiang <dave.jiang@intel.com>
+Subject: RE: [PATCH v8 3/5] cxl/pci: Find and register CXL PMU devices
+Message-ID: <6498dffd2e228_8e17829465@dwillia2-xfh.jf.intel.com.notmuch>
+References: <20230531110011.13963-1-Jonathan.Cameron@huawei.com>
+ <20230531110011.13963-4-Jonathan.Cameron@huawei.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230531110011.13963-4-Jonathan.Cameron@huawei.com>
+X-ClientProxiedBy: MW4PR03CA0268.namprd03.prod.outlook.com
+ (2603:10b6:303:b4::33) To PH8PR11MB8107.namprd11.prod.outlook.com
+ (2603:10b6:510:256::6)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 14/16] maple_tree: Refine mas_preallocate() node
- calculations
-Content-Language: en-US
-To:     Peng Zhang <perlyzhang@gmail.com>
-Cc:     maple-tree@lists.infradead.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        linux-kernel@vger.kernel.org,
-        Peng Zhang <zhangpeng.00@bytedance.com>,
-        David Airlie <airlied@redhat.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>
-References: <20230612203953.2093911-1-Liam.Howlett@oracle.com>
- <20230612203953.2093911-15-Liam.Howlett@oracle.com>
- <26d8fbcf-d34f-0a79-9d91-8c60e66f7341@redhat.com>
- <cdab5e74-7559-cb31-90ca-b99a5c3a6dd6@gmail.com>
-From:   Danilo Krummrich <dakr@redhat.com>
-Organization: RedHat
-In-Reply-To: <cdab5e74-7559-cb31-90ca-b99a5c3a6dd6@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH8PR11MB8107:EE_|MN0PR11MB6057:EE_
+X-MS-Office365-Filtering-Correlation-Id: ab943ffd-62a0-4763-f920-08db75ded847
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: c98RjdqydQJ7j02zqpUzPCB1RUA8S23X0eQFI6m3AWSP4y//wYfIWuuZI1gleSFTq6PYiPKTbDWJXQE6EamPRXeUMAr7ytdWCtJZhVpoBEyAgaA8Hz/TsMQUTp2XuAlX6kqToOXXIi2z/Tds3lVzF3oZWZwc6RI3WKAjDCXcadACwPNvhfBktpnEy+guw+qCjOiRGVHWakkXbW12Tg/r+c9HWr05uwqntdywQ1xq3PkxVUpKImLMhUzuencii+YhlclZt0WrB4b8tkaFT/ag0x78MYXdbTKWCmsYJyAzLygDor7zFU1OqQnMeQNS/BUSDk5np2X/TsO0dcQHkntANlQkzrxtm71RVz+tsaMKxAPOag2ae4frbkYv5dqUS0rK9tBh6BJ4+F0ks1oSUyf4cHJpySXvrYz12kbbix+d7jQM402fQsuRSel8tIzWTGfg6ysToG1K8V+kNmfmAdGkDvM7OtEsQbVS67L4IzoSfNGPDQv3yn2Yjz6JDYlfjuFiCWPTiRgEiYmhj0k+HZ4aExLe5ULGmVseEpysbkr2g1Pfo7mAOJ1aO4SwPzlKO2mh
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB8107.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(376002)(346002)(136003)(396003)(39860400002)(451199021)(82960400001)(38100700002)(83380400001)(86362001)(478600001)(54906003)(110136005)(6486002)(6666004)(41300700001)(66476007)(66556008)(66946007)(316002)(8676002)(8936002)(26005)(4326008)(6506007)(6512007)(186003)(9686003)(2906002)(7416002)(5660300002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?9HsodgjSjBT7UrX20WPIpisfP+TKyo5hq4Sw0Ac6u9oBRCnf5sLraTqJWLaS?=
+ =?us-ascii?Q?nt4SLQbJywItdy3TNhbHrtcpkZ7I/zTF6Gf16FLbKg8QjFSQ9fABtiqD4qQS?=
+ =?us-ascii?Q?2xV8xNfVRinpElj1gBc4JuWTuPd5QE3k8AB6Z6fXR9kfHtrbRnTBfZvOlrVE?=
+ =?us-ascii?Q?lkP3a2xqMKvqbUbj34O+mP4k5u3uvzVoU+mo+jKpgGOQTSQDCl7DTUf9t+nS?=
+ =?us-ascii?Q?o1PuHlLiOWoUd5VoMlu2sy9Ab6JSadu2tYZ/eUMDYst5kQh+w0lfFyiXltSv?=
+ =?us-ascii?Q?O7hyqhJ7yLod+d9SLg+JsbJ3wPQ/FxMpJIrJX/JHnfj8SrtW9qPoN9V6ZhVh?=
+ =?us-ascii?Q?Vc5wbCmLKdNfvlB3pZR29jOn16nfOp7bWx0o59+i5JNq4zcf1pyouXGLSEaO?=
+ =?us-ascii?Q?v2QiBdvD2o4WIB99ZsEMoYRdiNvAFXFK5GClkBZ5CZ4KwQHYo8kJC0q96rP0?=
+ =?us-ascii?Q?Yf96kefM0CfkWYRlBuEEjAgrpChkFzWOi2kHiNP86mrau0PG6gANxphHNMjy?=
+ =?us-ascii?Q?3OkMMR2tfnUvVu2hnJu3eUXLLLLV/askmBpGx450xWOah96mUaleDiP/Jii/?=
+ =?us-ascii?Q?mGqbiGUIMvb0JKQa/BAWuGNtNeerrOsI+JQPO6CLIK9ideck8oHKd+bbhJ7I?=
+ =?us-ascii?Q?MDBYk3e4h+X7ltHD2YXCWmRRnmAsvSNtBj+uWrJSgfHp6BB1Nekefx9/MZEL?=
+ =?us-ascii?Q?8fLa0417k5cmjQoQFsAcwVVlD8/K2yuja9x67NIx59jIynSkjMAghyJ6RXGj?=
+ =?us-ascii?Q?H+nr6jdelSy7PmzMfu+OCYvENcJ6TX1y9Y7IkA+BKXMHU6Ke6jv+Uilh1Y2D?=
+ =?us-ascii?Q?5GU0OETipuZLI75Ly9uV6DhCyXp2RAUAj1J3z4KMQDBTrY/f+SCNYlwOoUK1?=
+ =?us-ascii?Q?j0dDE9qaCjkkeTe6bQ1BS6FzT8fpwUJQMYitlJUrXt+734uCg28K3Q+kd9WT?=
+ =?us-ascii?Q?2bfpj6o3OTch8hUXdVbzz1xmpgvrRNO+VxlDQNgfcZxb3zCz5W4RNXy/kwUZ?=
+ =?us-ascii?Q?VYoO9KT5n7CPaVsgFIxsfGAojcCK16f4tbDqr3aKGf7+8WA6gdMHfR9jg4mO?=
+ =?us-ascii?Q?nIaSOlXoojobonWyHszZNNObGIm+V1IFWkyR1PptKLqWB5sHOiAXT18YqtkG?=
+ =?us-ascii?Q?5dMb4sIxn8q2nDS6ppTn/1w+kTU5ihbzG1Pnt19pURkjWfLjOmNk5NcRjDwh?=
+ =?us-ascii?Q?RP+wx1KBu9684FElAbOtZrEbtWRzlSIyU3QyK3Dl5f0fgWiZ/xFGq91JB9FT?=
+ =?us-ascii?Q?2LKhI513t7ZIvbAfZaaNAGTRariw8wmypc44ZmgK8P2UwNRNJzoniwrSJ/cv?=
+ =?us-ascii?Q?5CsKWUUSBaiblNEOOqO5m3cYTFSXfsIxiJKaATCu/mpJiGRbhMjoUD34fIUK?=
+ =?us-ascii?Q?gdiKlUFmNaBQCT2frA3c7WahkGp6NId2luQnChfwyqyierDttvLJshlFBDBj?=
+ =?us-ascii?Q?D6Yvy4WEY61yTJL/1wPXQ0baulcObmkTqZ3Bs8L1Qhr7v86SR4sqwGvRREZD?=
+ =?us-ascii?Q?xLA/wBdEtlh+c3+i86C1YznjvD7uifTZ0UT0m4xZpyXJx7So9j7+Yoh8fJFC?=
+ =?us-ascii?Q?7jIN6UfaGz9uejuymBj0Xgx+Uioyo4yJjmkaH94YP3bFWdjtBIHertkiLSnN?=
+ =?us-ascii?Q?Sw=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: ab943ffd-62a0-4763-f920-08db75ded847
+X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB8107.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jun 2023 00:46:57.7246
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: y5WHP2phyaQcoTchGVaFcf1JWvHJrzsPw48Ac8NEGfA1ztVsawcMG2A6IjX0aKLRDBS+2AUcUzID9yhAOoQjSwzhvln4CiXdqKA/QWr0eKI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR11MB6057
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peng,
-
-On 6/25/23 05:28, Peng Zhang wrote:
+Jonathan Cameron wrote:
+> CXL PMU devices can be found from entries in the Register
+> Locator DVSEC.
 > 
+> Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+> Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> ---
+>  drivers/cxl/core/Makefile |  1 +
+>  drivers/cxl/core/core.h   |  1 +
+>  drivers/cxl/core/pmu.c    | 68 +++++++++++++++++++++++++++++++++++++++
+>  drivers/cxl/core/port.c   |  2 ++
+>  drivers/cxl/core/regs.c   | 16 +++++++++
+>  drivers/cxl/cxl.h         | 13 ++++++++
+>  drivers/cxl/cxlpci.h      |  1 +
+>  drivers/cxl/pci.c         | 26 ++++++++++++++-
+>  drivers/cxl/pmu.h         | 28 ++++++++++++++++
+>  9 files changed, 155 insertions(+), 1 deletion(-)
 > 
-> 在 2023/6/23 00:41, Danilo Krummrich 写道:
->> On 6/12/23 22:39, Liam R. Howlett wrote:
->>> Calculate the number of nodes based on the pending write action instead
->>> of assuming the worst case.
->>
->> Liam already gave me a heads-up on this patch, which I already replied 
->> to [1].
->>
->> However, I think it might make sense to also reply to this patch 
->> directly.
->>
->> For a mas_preallocate() calculating the actual required nodes to be 
->> allocated instead of assuming the worst to work, it is required to 
->> ensure that the tree does not change between calling mas_preallocate() 
->> and mas_store_prealloc() if my understanding is correct.
->>
->> In DRM however, more specifically the DRM GPUVA Manager [2], we do 
->> have the case that we are not able to ensure this:
->>
->> Jobs to create GPU mappings can be submitted by userspace, are queued 
->> up by the kernel and are processed asynchronously in dma-fence 
->> signalling critical paths, e.g. by using the drm_gpu_scheduler. Hence, 
->> we must be able to allocate the worst case amount of node, since at 
->> the time a job is submitted we can't predict the state the maple tree 
->> keeping track of mappings has once a mapping is inserted in the 
->> (asynchronous) dma-fence signalling critical path.
->>
->> A more detailed explanation can be found in [1].
->>
->> Could we keep a separate function for allocating the worst case amount 
->> of nodes additionally to this optimization? E.g. something like 
->> mas_preallocate_worst_case() or mas_preallocate_unlocked() (since I 
->> guess the new one requires the maple tree to be kept locked in order 
->> not to change)?
-> Hi Danilo,
-> 
-> Your understanding seems incorrect. Even with previously unoptimized
-> mas_preallocate(), the maple tree cannot be modified between calls to
-> mas_preallocate() and mas_store_prealloc(). The calculation of the
-> number of pre-allocated nodes depends on the structure of the maple
-> tree. In the unoptimized mas_preallocate(), it depends on the height of
-> the tree. If the maple tree is modified before mas_store_prealloc() and
-> the height of the tree changes, the number of pre-allocated nodes is
-> inaccurate.
+> diff --git a/drivers/cxl/core/Makefile b/drivers/cxl/core/Makefile
+> index ca4ae31d8f57..1f66b5d4d935 100644
+> --- a/drivers/cxl/core/Makefile
+> +++ b/drivers/cxl/core/Makefile
+> @@ -12,5 +12,6 @@ cxl_core-y += memdev.o
+>  cxl_core-y += mbox.o
+>  cxl_core-y += pci.o
+>  cxl_core-y += hdm.o
+> +cxl_core-y += pmu.o
 
-Thanks for pointing this out!
+One small addition I will make to this patch is to fix the cxl_test
+build with the following complimentary change:
 
-First of all, it's probably fair to say "naive me", it totally makes 
-sense the tree height is needed - it's a b-tree.
-
-On the other hand, unless I miss something (and if so, please let me 
-know), something is bogus with the API then.
-
-While the documentation of the Advanced API of the maple tree explicitly 
-claims that the user of the API is responsible for locking, this should 
-be limited to the bounds set by the maple tree implementation. Which 
-means, the user must decide for either the internal (spin-) lock or an 
-external lock (which possibly goes away in the future) and acquire and 
-release it according to the rules maple tree enforces through lockdep 
-checks.
-
-Let's say one picks the internal lock. How is one supposed to ensure the 
-tree isn't modified using the internal lock with mas_preallocate()?
-
-Besides that, I think the documentation should definitely mention this 
-limitation and give some guidance for the locking.
-
-Currently, from an API perspective, I can't see how anyone not familiar 
-with the implementation details would be able to recognize this limitation.
-
-In terms of the GPUVA manager, unfortunately, it seems like I need to 
-drop the maple tree and go back to using a rb-tree, since it seems there 
-is no sane way doing a worst-case pre-allocation that does not suffer 
-from this limitation.
-
-- Danilo
-
-> 
-> Regards,
-> Peng
-> 
->>
->> [1] 
->> https://lore.kernel.org/nouveau/68cd25de-e767-725e-2e7b-703217230bb0@redhat.com/T/#ma326e200b1de1e3c9df4e9fcb3bf243061fee8b5
->>
->> [2] 
->> https://lore.kernel.org/linux-mm/20230620004217.4700-8-dakr@redhat.com/T/#m47ab82310f87793d0f0cc1825a316eb30ad5b653
->>
->> - Danilo
->>
->>>
->>> This addresses a performance regression introduced in platforms that
->>> have longer allocation timing.
->>>
->>> Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
->>> ---
->>>   lib/maple_tree.c | 48 +++++++++++++++++++++++++++++++++++++++++++++++-
->>>   1 file changed, 47 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/lib/maple_tree.c b/lib/maple_tree.c
->>> index 048d6413a114..7ac5b5457603 100644
->>> --- a/lib/maple_tree.c
->>> +++ b/lib/maple_tree.c
->>> @@ -5541,9 +5541,55 @@ EXPORT_SYMBOL_GPL(mas_store_prealloc);
->>>    */
->>>   int mas_preallocate(struct ma_state *mas, void *entry, gfp_t gfp)
->>>   {
->>> +    MA_WR_STATE(wr_mas, mas, entry);
->>> +    unsigned char node_size;
->>> +    int request = 1;
->>>       int ret;
->>> -    mas_node_count_gfp(mas, 1 + mas_mt_height(mas) * 3, gfp);
->>> +
->>> +    if (unlikely(!mas->index && mas->last == ULONG_MAX))
->>> +        goto ask_now;
->>> +
->>> +    mas_wr_store_setup(&wr_mas);
->>> +    wr_mas.content = mas_start(mas);
->>> +    /* Root expand */
->>> +    if (unlikely(mas_is_none(mas) || mas_is_ptr(mas)))
->>> +        goto ask_now;
->>> +
->>> +    if (unlikely(!mas_wr_walk(&wr_mas))) {
->>> +        /* Spanning store, use worst case for now */
->>> +        request = 1 + mas_mt_height(mas) * 3;
->>> +        goto ask_now;
->>> +    }
->>> +
->>> +    /* At this point, we are at the leaf node that needs to be 
->>> altered. */
->>> +    /* Exact fit, no nodes needed. */
->>> +    if (wr_mas.r_min == mas->index && wr_mas.r_max == mas->last)
->>> +        return 0;
->>> +
->>> +    mas_wr_end_piv(&wr_mas);
->>> +    node_size = mas_wr_new_end(&wr_mas);
->>> +    /* Slot store can avoid using any nodes */
->>> +    if (node_size == wr_mas.node_end && wr_mas.offset_end - 
->>> mas->offset == 1)
->>> +        return 0;
->>> +
->>> +    if (node_size >= mt_slots[wr_mas.type]) {
->>> +        /* Split, worst case for now. */
->>> +        request = 1 + mas_mt_height(mas) * 2;
->>> +        goto ask_now;
->>> +    }
->>> +
->>> +    /* Appending does not need any nodes */
->>> +    if (node_size == wr_mas.node_end + 1 && mas->offset == 
->>> wr_mas.node_end)
->>> +        return 0;
->>> +
->>> +    /* Potential spanning rebalance collapsing a node, use 
->>> worst-case */
->>> +    if (node_size  - 1 <= mt_min_slots[wr_mas.type])
->>> +        request = mas_mt_height(mas) * 2 - 1;
->>> +
->>> +    /* node store needs one node */
->>> +ask_now:
->>> +    mas_node_count_gfp(mas, request, gfp);
->>>       mas->mas_flags |= MA_STATE_PREALLOC;
->>>       if (likely(!mas_is_err(mas)))
->>>           return 0;
->>
->>
-> 
-
+diff --git a/tools/testing/cxl/Kbuild b/tools/testing/cxl/Kbuild
+index 6f9347ade82c..aa0ca7095a64 100644
+--- a/tools/testing/cxl/Kbuild
++++ b/tools/testing/cxl/Kbuild
+@@ -57,6 +57,7 @@ cxl_core-y += $(CXL_CORE_SRC)/memdev.o
+ cxl_core-y += $(CXL_CORE_SRC)/mbox.o
+ cxl_core-y += $(CXL_CORE_SRC)/pci.o
+ cxl_core-y += $(CXL_CORE_SRC)/hdm.o
++cxl_core-y += $(CXL_CORE_SRC)/pmu.o
+ cxl_core-$(CONFIG_TRACING) += $(CXL_CORE_SRC)/trace.o
+ cxl_core-$(CONFIG_CXL_REGION) += $(CXL_CORE_SRC)/region.o
+ cxl_core-y += config_check.o
