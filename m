@@ -2,117 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 013B173E353
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 17:30:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CE1873E356
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 17:30:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbjFZPaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 11:30:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47920 "EHLO
+        id S231180AbjFZPa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 11:30:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjFZPaN (ORCPT
+        with ESMTP id S230268AbjFZPaU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 11:30:13 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA5EE11D
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 08:30:11 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-51d9c71fb4bso984197a12.2
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 08:30:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687793410; x=1690385410;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=/1HTC5ZhhMAuXvXN5vNw4RkpUiNDEWqp3tgl9F0VVlg=;
-        b=ou6MzCG1frjlgy9qsGRBTds7V6GpVEKsdlQcVd+ItL3tZ3Ah4hi0icMgbvxYtCDk70
-         XPppGC2zp9bXdATVl3SnqWKbzZZLd3IJ+BINw1gQN+IKhpuQtIrqdUFFrq0AnLFahSRT
-         OEMiE+iRLMAp5CxTQqpv1LjVhtiS4X2p8sARZNrExhbOJyeSop6t4HxtMaTTuN6Va4pM
-         q/ZUKqEeiXmKRpofaKeFRyOA1TjjXsADhKnbNNk34krRwvX05JHJeyT2eZU6CgQ4TSxt
-         4XhA1PFRjKEO1s8vAlUuXCxMYWO/4pDD5dml3qkrSWnyQL/Lmc1yYRQaDu4JOKdgE8DZ
-         Ys0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687793410; x=1690385410;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/1HTC5ZhhMAuXvXN5vNw4RkpUiNDEWqp3tgl9F0VVlg=;
-        b=jAEMl5EAMLVM7makeJyz/Xa8izFaEGeyjTKaV7JH8rn3CTsd/mHZcL+E/r6NAkz/YC
-         O6wa1FEAL/pfGUeuKy65V50qrW7KO/ZLuBhC1c/Xp56SfUWA/YfviVfoMI4abyNTVz8g
-         A9pYsFtAwGDSB9Y5UqysA+NO4O/W3404/yr1C/ImU62rKay2YwIvOKOUBTyCuT6QDULa
-         wWmpNB+DKMDnyP3I9A5X8HoA0LiRx445mtP/wgHOjrAgiMKXfZiUUOz0ZqsXmdXSXdEv
-         7odD1O0F9bvHUo/rlhmbcYUGUiUR2iW2N5BBeqlyMW2Fby22dVloJ158yl4mZeISj3W4
-         AqEQ==
-X-Gm-Message-State: AC+VfDxFo2eMAiWhwbGiskJfbQyHlLkqKQyn8w/BmtTg5wwc420JKY7H
-        YChHRoNLcms7d4JPSfItfe0a7gWqmOIjOd7v/Oo=
-X-Google-Smtp-Source: ACHHUZ7O96ek549hLneb8wz3+qCS5/a22dXEaVThmTsnXsK2GrC9ZGRy2ucV3dxHIyIEhrI8Y4OnJD85ZyHCVT1780Q=
-X-Received: by 2002:a05:6402:358:b0:51d:9db4:8201 with SMTP id
- r24-20020a056402035800b0051d9db48201mr1737662edw.7.1687793410006; Mon, 26 Jun
- 2023 08:30:10 -0700 (PDT)
+        Mon, 26 Jun 2023 11:30:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD02191
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 08:30:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BEF6360ECF
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 15:30:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0083DC433C8;
+        Mon, 26 Jun 2023 15:30:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687793418;
+        bh=53scOIRiyUvo1bQ31bLWEAzYQBHJ1VAec+PK9RRAeNI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=acJeh38HK0X0EB2DCiG+ZL1pCaXWHFkUIlg7iMPP9YfXZ8LACO/k+FgE21pWrZw3u
+         t6GnzFRUrPtvSI6B6DNHis8FhOzJOSMn64DamAJSfqc+xl4sGICxgLOyCihdLGpZ2p
+         u2EoravVWawbrmd5KUHik4mQpq+GxF5tho8ebiDn5hcYDrybCUkOyRUH7NR0Cqjd/F
+         zpytNn2pUJfmWBBebr6ONKc26tmWyrjmuJG8Hf5no0ZEnvNwaSnQmE3uQNGWNGoAOI
+         eQOMYiGji49xM+3J/I0yX9jntxmNzYSz1ztiPpsO+GiM8TALb/TP8hTv7TSx28sg1z
+         etZNMdmf+hTQw==
+Date:   Mon, 26 Jun 2023 16:30:12 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Mans Rullgard <mans@mansr.com>
+Cc:     Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] backlight: led_bl: take led_access lock when required
+Message-ID: <20230626153012.GB10378@google.com>
+References: <20230619160249.10414-1-mans@mansr.com>
 MIME-Version: 1.0
-Received: by 2002:a54:3144:0:b0:223:f71d:ebef with HTTP; Mon, 26 Jun 2023
- 08:30:09 -0700 (PDT)
-Reply-To: anapayne80@gmail.com
-From:   Ana Payne <kaboreprince3@gmail.com>
-Date:   Mon, 26 Jun 2023 08:30:09 -0700
-Message-ID: <CAEEqVUeNcD_wg9p3Qsy-W9scphSuVu4u6mHvX+G8q=BBium6fQ@mail.gmail.com>
-Subject: =?UTF-8?B?5oiR6ZyA6KaB5L2g55qE5biu5Yqp?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230619160249.10414-1-mans@mansr.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-5oiR5biM5pyb5oKo6IO955CG6Kej5oiR55qE5L+h5oGv77yM5Zug5Li65oiR5q2j5Zyo5L2/55So
-57+76K+R5Zmo44CCDQoNCuaIkeaYr+WuieWonMK35L2p5oGp5Lit5aOr5aSr5Lq644CCDQoNCuWc
-qOe+juWbvemZhuWGm+eahOWGm+S6i+mDqOmXqOOAgiDnvo7lm73vvIzkuIDlkI3kuK3lo6vvvIwz
-MiDlsoHvvIzmiJHmnaXoh6rnvo7lm73kv4TkuqXkv4Tlt57lhYvliKnlpKvlhbDvvIzljZXouqvv
-vIznm67liY3kuI7lkIzkuovkuIDotbflnKjliKnmr5Tkuprnj63liqDopb/miafooYzkuIDpobnn
-ibnmrorku7vliqHjgIINCg0K5oiR5piv5LiA5Liq5YWF5ruh54ix5b+D44CB6K+a5a6e44CB5rex
-5oOF55qE5Lq677yM5YW35pyJ6Imv5aW955qE5bm96buY5oSf77yM5oiR5Zac5qyi57uT6K+G5paw
-5pyL5Y+L5bm25LqG6Kej5LuW5Lus55qE55Sf5rS75pa55byP77yM5oiR5Zac5qyi55yL5Yiw5aSn
-5rW355qE5rOi5rWq44CB5bGx6ISJ55qE576O5Li95Lul5Y+K5aSn6Ieq54S255qE5LiA5YiHDQrm
-j5DkvpvjgIIg5b6I6auY5YW05pu05aSa5Zyw5LqG6Kej5oKo77yM5oiR6K6k5Li65oiR5Lus5Y+v
-5Lul5bu656uL6Imv5aW955qE5ZWG5Lia5Y+L6LCK44CCDQoNCuaIkeS4gOebtOW+iOS4jeW8gOW/
-g++8jOWboOS4uuWkmuW5tOadpeeUn+a0u+WvueaIkeS4jeWFrOW5s++8myDmiJEyMeWygeaXtuWw
-seWkseWOu+S6hueItuavjeOAgiDmiJHniLbkurLnmoTlkI3lrZfmmK/luJXnibnph4zlhYvCt+S9
-qeaBqe+8jOaIkeeahOavjeS6suaYr+eOm+S4vcK35L2p5oGp44CCDQrmsqHmnInkurrluK7liqnm
-iJHvvIzkvYbmiJHlvojpq5jlhbTmiJHnu4jkuo7lnKjnvo7lm73lhpvpmJ/kuK3mib7liLDkuobo
-h6rlt7HjgIINCg0K5oiR57uT5ama5LqG77yM5pyJ5LqG5a2p5a2Q77yM5L2G5LuW5Y675LiW5LqG
-77yM5LiN5LmF5oiR5LiI5aSr5bCx5byA5aeL5qy66aqX5oiR77yM5omA5Lul5oiR5LiN5b6X5LiN
-5pS+5byD5ama5ae744CCDQoNCuaIkeS5n+W+iOW5uOi/kO+8jOWcqOaIkeeahOWbveWutue+juWb
-veWSjOWIqeavlOS6muePreWKoOilv+i/memHjO+8jOaIkeaLpeacieeUn+a0u+S4reaJgOmcgOea
-hOS4gOWIh++8jOS9huayoeacieS6uue7meaIkeW7uuiuruOAgg0K5oiR6ZyA6KaB5LiA5Liq6K+a
-5a6e55qE5Lq65p2l5L+h5Lu777yM5bm25LiU5LuW5Lmf5Lya5bCx5aaC5L2V5oqV6LWE5oiR55qE
-6ZKx5o+Q5L6b5bu66K6u44CCIOWboOS4uuaIkeaYr+aIkeeItuavjeWOu+S4luWJjeeUn+S4i+ea
-hOWUr+S4gOeahOWls+WtqeOAgg0KDQrmiJHkuI3orqTor4bkvaDmnKzkurrvvIzkvYbmiJHorqTk
-uLrmnInkuIDkuKrlgLzlvpfkv6Hku7vnmoTlpb3kurrvvIzlj6/ku6Xlu7rnq4vnnJ/mraPnmoTk
-v6Hku7vlkozoia/lpb3nmoTllYbkuJrlj4vosIrvvIzlpoLmnpzkvaDnoa7lrp7mnInor5rlrp7l
-kozor5rlrp7nmoTlkI3lo7DvvIzmiJHkuZ/mnInkuIDkupvkuJzopb/lj6/ku6XkuI7kvaDliIbk
-uqvjgIINCuebuOS/oeOAgiDlr7nkvaDmnaXor7TvvIzlm6DkuLrmiJHpnIDopoHkvaDnmoTluK7l
-iqnjgIINCg0K5oiR5omL6YeM5pyJ5oiR5Lus5Zyo5pGp5rSb5ZOl5omn6KGM5Lu75Yqh5pe25omA
-5oul5pyJ55qE5oC76YeR6aKd77yINy4yMDAuMDAwLjAwIOe+juWFg++8ieOAgg0K5oiR5bCG5Zyo
-5LiL5LiA5bCB55S15a2Q6YKu5Lu25Lit5ZGK6K+J5oKo5oiR5aaC5L2V6I635b6X6L+Z56yU6LWE
-6YeR77yM5LiN6KaB5oOK5oWM77yM5a6D5Lus5piv5peg6aOO6Zmp55qE77yM5oiR6L+Y5Zyo5LiO
-57qi6Imy5pyJ5YWz55qE5Lq66YGT5Li75LmJ5Yy755Sf55qE5biu5Yqp5LiL5bCG6L+Z56yU6LWE
-6YeR5a2Y5YWl5pGp5rSb5ZOl55qE5LiA5a626ZO26KGM44CCDQrmiJHluIzmnJvmgqjku6XmiJHn
-moTlj5fnm4rkurrouqvku73mjqXlj5for6Xln7rph5HvvIzlubblnKjmiJHlnKjliKnmr5Tkuprn
-u5PmnZ/lt6XkvZzlkI7lpqXlloTkv53nrqHor6Xln7rph5HvvIzlubbojrflvpfmiJHnmoTlhpvk
-uovpgJrooYzor4HvvIzku6Xkvr/lnKjmgqjnmoTlm73lrrbkuI7mgqjkvJrpnaLvvJsNCuS4jeim
-geaLheW/g+mTtuihjOS8mumAmui/h+mTtuihjOmXtOi9rOi0puWwhui1hOmHkei9rOe7meaCqO+8
-jOi/meWvueaIkeS7rOadpeivtOaXouWuieWFqOWPiOW/q+aNt+OAgg0KDQrnrJTorrA7IOaIkeS4
-jeefpemBk+aIkeS7rOimgeWcqOi/memHjOWRhuWkmuS5he+8jOS5n+S4jeefpemBk+aIkeeahOWR
-vei/kO+8jOWboOS4uuaIkeWcqOi/memHjOe7j+WOhuS6huS4pOasoeeCuOW8ueiireWHu++8jOi/
-meWvvOiHtOaIkeWvu+aJvuS4gOS4quWAvOW+l+S/oei1lueahOS6uuadpeW4ruWKqeaIkeaOpeaU
-tuWSjOaKlei1hOWfuumHke+8jOWboOS4uuaIkeWwhuadpeWIsOS9oOS7rOeahOWbveWutg0K5Ye6
-6Lqr5oqV6LWE5bm25byA5aeL5paw55qE55Sf5rS777yM5LiN5YaN5b2T5YW144CCDQoNCuWmguae
-nOaCqOaEv+aEj+iwqOaFjuWkhOeQhuatpOmXrumimO+8jOivt+WbnuWkjeaIkeOAgiDmiJHkvJrl
-kYror4nmgqjmjqXkuIvmnaXnmoTmtYHnqIvlubblkJHmgqjlj5HpgIHmnInlhbPmraTkuqTmmJPn
-moTmm7TlpJrkv6Hmga/jgIIg5aaC5p6c5L2g5pyJ5YW06Laj77yM6K+35LiO5oiR6IGU57O744CC
-DQo=
+On Mon, 19 Jun 2023, Mans Rullgard wrote:
+
+> The led_access lock must be held when calling led_sysfs_enable() and
+> led_sysfs_disable().  This fixes warnings such as this:
+> 
+> [    2.432495] ------------[ cut here ]------------
+> [    2.437316] WARNING: CPU: 0 PID: 22 at drivers/leds/led-core.c:349 led_sysfs_disable+0x54/0x58
+> [    2.446105] Modules linked in:
+> [    2.449218] CPU: 0 PID: 22 Comm: kworker/u2:1 Not tainted 6.3.8+ #1
+> [    2.456268] Hardware name: Generic AM3517 (Flattened Device Tree)
+> [    2.462402] Workqueue: events_unbound deferred_probe_work_func
+> [    2.468353]  unwind_backtrace from show_stack+0x10/0x14
+> [    2.473632]  show_stack from dump_stack_lvl+0x24/0x2c
+> [    2.478759]  dump_stack_lvl from __warn+0x9c/0xc4
+> [    2.483551]  __warn from warn_slowpath_fmt+0x64/0xc0
+> [    2.488586]  warn_slowpath_fmt from led_sysfs_disable+0x54/0x58
+> [    2.494567]  led_sysfs_disable from led_bl_probe+0x20c/0x3b0
+> [    2.500305]  led_bl_probe from platform_probe+0x5c/0xb8
+> [    2.505615]  platform_probe from really_probe+0xc8/0x2a0
+> [    2.510986]  really_probe from __driver_probe_device+0x88/0x19c
+> [    2.516967]  __driver_probe_device from driver_probe_device+0x30/0xcc
+> [    2.523498]  driver_probe_device from __device_attach_driver+0x94/0xc4
+> [    2.530090]  __device_attach_driver from bus_for_each_drv+0x80/0xcc
+> [    2.536437]  bus_for_each_drv from __device_attach+0xf8/0x19c
+> [    2.542236]  __device_attach from bus_probe_device+0x8c/0x90
+> [    2.547973]  bus_probe_device from deferred_probe_work_func+0x80/0xb0
+> [    2.554504]  deferred_probe_work_func from process_one_work+0x228/0x4c0
+> [    2.561187]  process_one_work from worker_thread+0x1fc/0x4d0
+> [    2.566925]  worker_thread from kthread+0xb4/0xd0
+> [    2.571685]  kthread from ret_from_fork+0x14/0x2c
+> [    2.576446] Exception stack(0xd0079fb0 to 0xd0079ff8)
+> [    2.581573] 9fa0:                                     00000000 00000000 00000000 00000000
+> [    2.589813] 9fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+> [    2.598052] 9fe0: 00000000 00000000 00000000 00000000 00000013 00000000
+> [    2.604888] ---[ end trace 0000000000000000 ]---
+> 
+> 
+> Signed-off-by: Mans Rullgard <mans@mansr.com>
+> ---
+>  drivers/video/backlight/led_bl.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+
+Applied, thanks
+
+-- 
+Lee Jones [李琼斯]
