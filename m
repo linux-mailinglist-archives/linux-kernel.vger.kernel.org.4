@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1263673EDCF
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 23:57:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16CA673EDA2
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 23:55:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231934AbjFZV4o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 17:56:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40686 "EHLO
+        id S231488AbjFZVxy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 17:53:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232005AbjFZVzF (ORCPT
+        with ESMTP id S231453AbjFZVxN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 17:55:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25EC92D73;
-        Mon, 26 Jun 2023 14:52:38 -0700 (PDT)
+        Mon, 26 Jun 2023 17:53:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A3CC26B5;
+        Mon, 26 Jun 2023 14:51:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A082060F7E;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1386560F7F;
+        Mon, 26 Jun 2023 21:51:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54DBAC433CB;
         Mon, 26 Jun 2023 21:51:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7635C433CC;
-        Mon, 26 Jun 2023 21:51:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1687816274;
-        bh=BrdkU5EVnSJEE7MAs2xrXJXdwJuzTzbf+zV8nPHI4tQ=;
+        bh=jO5uZUBRiN/NPgamZmjgA6gEWaSHrzURLBREsEohfKA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LyXv2De6My3yKg9cuLZzFlxQxfhwH+ghE6vJzmqM1Jjsvty9v/GHDSg4OHhaBg1Zx
-         H2kl26pkmmOarSAeolf3cWyvqD3UkWHF/NTEPc5NHbWSV8vVj6nxlUTuSMSqTpji9N
-         gDpu+ZWVrqyG1uBOgj8XqXwf5KAlemluayQUDDSnYlTqm1cYn5ozF5fCrQItefV2h4
-         5RluQq4+KCpLiUf+bBU/V1YsgoiutW8NBt/36PV+1X1SLUwaGEEPpGTEO6peeOBDAc
-         /o/uBx1GBK4SW2/iC9VuWbuzZdwfI/FQRZIFjjMhe3DwQqYWus0vVjZOIqJJ+tKB6C
-         56vl0BZAXup/g==
+        b=FIxenhoT7/MSCJ2ththFfh7BGWK1jg1qN71o5V7Txp2lPCnK7ZlS2w/PRiRMkX4ct
+         WQXwrxsnOuzVMzDZ6OOYOdEOcilcQV5kDs+ROysij0kpHkCi47aFAZcf9SOSZalTky
+         8tIb9LROzmSvFTMgxOVfzghGATDwQ1q2ij+DmhdxCyNCPmjcsUMWOtFLTboGWDno5c
+         fArii4xW6gusucbW9zERuQyZTSg02Htj+Gjn3ANSaHkFkk5zBSQ0nQzNvupi+fJRuI
+         UuAmE6O8qzZUfcMDLlbcihQnfL7s5rM/lUYjBlyk7Ws51evGkbGZBdgKuPRbnjI2eS
+         bsBWpmy0wowdQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Shyam Prasad N <sprasad@microsoft.com>,
-        Bharath SM <bharathsm@microsoft.com>,
-        Steve French <stfrench@microsoft.com>,
-        Sasha Levin <sashal@kernel.org>, pc@cjr.nz,
-        lsahlber@redhat.com, dhowells@redhat.com, ematsumiya@suse.de,
-        pc@manguebit.com, vl@samba.org
-Subject: [PATCH AUTOSEL 5.10 5/7] cifs: add a warning when the in-flight count goes negative
-Date:   Mon, 26 Jun 2023 17:51:05 -0400
-Message-Id: <20230626215108.179483-5-sashal@kernel.org>
+Cc:     Michael Kelley <mikelley@microsoft.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>, kys@microsoft.com,
+        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+        jejb@linux.ibm.com, linux-hyperv@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 6/7] scsi: storvsc: Always set no_report_opcodes
+Date:   Mon, 26 Jun 2023 17:51:06 -0400
+Message-Id: <20230626215108.179483-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230626215108.179483-1-sashal@kernel.org>
 References: <20230626215108.179483-1-sashal@kernel.org>
@@ -52,8 +52,8 @@ X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 5.10.185
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,36 +62,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shyam Prasad N <sprasad@microsoft.com>
+From: Michael Kelley <mikelley@microsoft.com>
 
-[ Upstream commit e4645cc2f1e2d6f268bb8dcfac40997c52432aed ]
+[ Upstream commit 31d16e712bdcaee769de4780f72ff8d6cd3f0589 ]
 
-We've seen the in-flight count go into negative with some
-internal stress testing in Microsoft.
+Hyper-V synthetic SCSI devices do not support the MAINTENANCE_IN SCSI
+command, so scsi_report_opcode() always fails, resulting in messages like
+this:
 
-Adding a WARN when this happens, in hope of understanding
-why this happens when it happens.
+hv_storvsc <guid>: tag#205 cmd 0xa3 status: scsi 0x2 srb 0x86 hv 0xc0000001
 
-Signed-off-by: Shyam Prasad N <sprasad@microsoft.com>
-Reviewed-by: Bharath SM <bharathsm@microsoft.com>
-Signed-off-by: Steve French <stfrench@microsoft.com>
+The recently added support for command duration limits calls
+scsi_report_opcode() four times as each device comes online, which
+significantly increases the number of messages logged in a system with many
+disks.
+
+Fix the problem by always marking Hyper-V synthetic SCSI devices as not
+supporting scsi_report_opcode(). With this setting, the MAINTENANCE_IN SCSI
+command is not issued and no messages are logged.
+
+Signed-off-by: Michael Kelley <mikelley@microsoft.com>
+Link: https://lore.kernel.org/r/1686343101-18930-1-git-send-email-mikelley@microsoft.com
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/cifs/smb2ops.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/scsi/storvsc_drv.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
-index 015b7b37edee5..7ed6c2d4c549a 100644
---- a/fs/cifs/smb2ops.c
-+++ b/fs/cifs/smb2ops.c
-@@ -82,6 +82,7 @@ smb2_add_credits(struct TCP_Server_Info *server,
- 		*val = 65000; /* Don't get near 64K credits, avoid srv bugs */
- 		pr_warn_once("server overflowed SMB3 credits\n");
- 	}
-+	WARN_ON_ONCE(server->in_flight == 0);
- 	server->in_flight--;
- 	if (server->in_flight == 0 && (optype & CIFS_OP_MASK) != CIFS_NEG_OP)
- 		rc = change_conf(server);
+diff --git a/drivers/scsi/storvsc_drv.c b/drivers/scsi/storvsc_drv.c
+index 70b4868fe2f7d..17efb6c9e21f4 100644
+--- a/drivers/scsi/storvsc_drv.c
++++ b/drivers/scsi/storvsc_drv.c
+@@ -1537,6 +1537,8 @@ static int storvsc_device_configure(struct scsi_device *sdevice)
+ {
+ 	blk_queue_rq_timeout(sdevice->request_queue, (storvsc_timeout * HZ));
+ 
++	/* storvsc devices don't support MAINTENANCE_IN SCSI cmd */
++	sdevice->no_report_opcodes = 1;
+ 	sdevice->no_write_same = 1;
+ 
+ 	/*
 -- 
 2.39.2
 
