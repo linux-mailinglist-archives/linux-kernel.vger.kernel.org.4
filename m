@@ -2,114 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C614B73E0C8
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 15:36:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7907273E0CF
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 15:37:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbjFZNgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 09:36:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42768 "EHLO
+        id S230002AbjFZNhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 09:37:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229764AbjFZNg3 (ORCPT
+        with ESMTP id S229821AbjFZNhk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 09:36:29 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F0A6E64
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 06:36:27 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3fb10fd9ae9so5504885e9.2
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 06:36:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687786586; x=1690378586;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=zdAAUjMq1y7wfLWcQNAaxgJmEQr9gQBVn17s0TNFY3s=;
-        b=MJvJ+BDDMP5m14GpFy+9WfqZ2oABvFrcpJ3CqyRiZ2jg8XirfxfqsNMA77Y8qdTPpU
-         q8So4CfTI5n9kWDxNzU8aaQbpnWvv9Tw7lq0OFa5TuiCTZQl79AppxFtJVA5Kb4pnQVD
-         bRXsCzOnXd5ll2dcGFcEwknyDF9bKLWLSy1RwMXzXY0VlVTxsXdupVDy2qcCCdbZIVYN
-         qHV/AjkW2uB+/1ngrvSgOqRegouuR0rMxb9OS+Koav95WQVaAbFWqZGEZmNi5l+wGsmu
-         Bh+chTDMuL/revbimYTm6krQxnbDYYlMjJ2Gw6sjmzJtOETnBLDNzs7QHsiIFugTegVE
-         MDgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687786586; x=1690378586;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zdAAUjMq1y7wfLWcQNAaxgJmEQr9gQBVn17s0TNFY3s=;
-        b=G8OxF7YgM8b6DTCcWYavGC1q6pPKTm8EgjFI96qRVcQ6z1W/NNEiSfdP4DteazQ3FU
-         svHmi/ON29mCw73zL2eyUZwNblyKaGGi7X8+kerQz14TbHP23k+djFkylkRpcgW1KNfC
-         lMdHSqwEm4Cy+HCj4bZSk8VanxWwRKLW+kuEnCjdojfCNF7bbin96z+138c3iWnD9L+u
-         fzdq1Ic3izwUfuVxNS0n1uatS0cilK3Cq6WOwDZyrCPirc4MSVmRWLy4gE/kPTr+sebW
-         f5YPEBM76F7113ASgEjv5XmzvLMdacHDoPWt04aau1ipIgAfQExnvdDNXMHf2EGvhT0g
-         PCKw==
-X-Gm-Message-State: AC+VfDzOaH8rrAt1zUwSL9Nu5Kj2/wwrG83lT3ahS3qtREwbAg+V6soh
-        BEiz3AS3b10HMPSOgn4Pbhog3w==
-X-Google-Smtp-Source: ACHHUZ4KDlrxPN0DkcnPjN3hKw3cGBfyGCmIkYwPJYPv7vqp0WhYABootPEQ9XYW8moz8aTWe9XAaw==
-X-Received: by 2002:a05:600c:2119:b0:3fb:407e:9b31 with SMTP id u25-20020a05600c211900b003fb407e9b31mr687651wml.37.1687786585412;
-        Mon, 26 Jun 2023 06:36:25 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:b25a:b26e:71f3:870c? ([2a01:e0a:982:cbb0:b25a:b26e:71f3:870c])
-        by smtp.gmail.com with ESMTPSA id f23-20020a1c6a17000000b003eddc6aa5fasm10574507wmc.39.2023.06.26.06.36.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Jun 2023 06:36:25 -0700 (PDT)
-Message-ID: <41e6d93a-8899-e792-0859-d26360ef5dab@linaro.org>
-Date:   Mon, 26 Jun 2023 15:36:23 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-From:   neil.armstrong@linaro.org
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v1 6/6] arm64: dts: meson: a1: add eMMC controller and its
- pins
-Content-Language: en-US
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Dmitry Rokosov <ddrokosov@sberdevices.ru>
-Cc:     jbrunet@baylibre.com, mturquette@baylibre.com, sboyd@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        khilman@baylibre.com, conor+dt@kernel.org, kernel@sberdevices.ru,
-        sdfw_system_team@sberdevices.ru, rockosov@gmail.com,
-        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Jan Dakinevich <yvdakinevich@sberdevices.ru>
-References: <20230607201641.20982-1-ddrokosov@sberdevices.ru>
- <20230607201641.20982-7-ddrokosov@sberdevices.ru>
- <CAFBinCC_g6FhzR=PNDsYwT4OZb4uAXAWYGKSe7vSX7_pWM8pNA@mail.gmail.com>
-Organization: Linaro Developer Services
-In-Reply-To: <CAFBinCC_g6FhzR=PNDsYwT4OZb4uAXAWYGKSe7vSX7_pWM8pNA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Mon, 26 Jun 2023 09:37:40 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F14FB1
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 06:37:38 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id A912221867;
+        Mon, 26 Jun 2023 13:37:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1687786657; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jUBjTAufjEln2vbph+DCrSwWVeakUOgT748UPyQBH7M=;
+        b=Y3YnlDlewui2Sb35svlBgg7ORuRA3ZV7JeBHNwi5NMNYO9HUhl3hCvL3UN0fyHsU3Vr8YE
+        KA4SHIzscegqf3Rj5oHx8jRluTevvWccvWTxoiAYI/XlylKkrJs+2Y5zxoKVe+j10dPneM
+        0HDFSkY6im9coOSsbsKHnz48ZHlIsac=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1687786657;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jUBjTAufjEln2vbph+DCrSwWVeakUOgT748UPyQBH7M=;
+        b=QeZ8uo/1BufTlRiSiyzrtNc7gPHInwJdTcNbeccLQoCtWnqlp/J5dA0bH2BWeFT3BEgzdR
+        nSaq7Tw9qHpXz4CA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7D7E413483;
+        Mon, 26 Jun 2023 13:37:37 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id X+K4HaGUmWTzawAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 26 Jun 2023 13:37:37 +0000
+Date:   Mon, 26 Jun 2023 15:37:36 +0200
+Message-ID: <87bkh2uyxr.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Jaroslav Kysela <perex@perex.cz>
+Cc:     Tuo Li <islituo@gmail.com>, tiwai@suse.com,
+        alsa-devel@alsa-project.org,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        baijiaju1990@outlook.com
+Subject: Re: [BUG] ALSA: core: pcm_memory: a possible data race in do_alloc_pages()
+In-Reply-To: <fb9db138-82a3-678c-bb94-035f923b3e16@perex.cz>
+References: <CADm8Tek6t0WedK+3Y6rbE5YEt19tML8BUL45N2ji4ZAz1KcN_A@mail.gmail.com>
+        <877crqwvi1.wl-tiwai@suse.de>
+        <CADm8Tenfy8joto5WLCqQWjfT8WimsbJgOss0hJe-ciyDRMrSXw@mail.gmail.com>
+        <871qhywucj.wl-tiwai@suse.de>
+        <4d0931bf-b356-6969-5aaf-b663d7f2b21a@perex.cz>
+        <87wmzqv64o.wl-tiwai@suse.de>
+        <45445f57-0a73-59e6-6f3d-3983ce93a324@perex.cz>
+        <87ttuuv5m6.wl-tiwai@suse.de>
+        <87jzvquzyr.wl-tiwai@suse.de>
+        <fb9db138-82a3-678c-bb94-035f923b3e16@perex.cz>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 25/06/2023 23:11, Martin Blumenstingl wrote:
-> On Wed, Jun 7, 2023 at 10:16 PM Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
->>
->> From: Jan Dakinevich <yvdakinevich@sberdevices.ru>
->>
->> The definition is inspired by a similar one for AXG SoC family.
->> 'sdio_pins' and 'sdio_clk_gate_pins' pinctrls are supposed to be used as
->> "default" and "clk-gate" in board-specific device trees.
-> Let's wait for Neil's response on the other patch for the question
-> about pin mux settings
+On Mon, 26 Jun 2023 15:32:40 +0200,
+Jaroslav Kysela wrote:
 > 
->> 'meson-gx' driver during initialization sets clock to safe low-frequency
->> value (400kHz). However, both source clocks ("clkin0" and "clkin1") are
->> high-frequency by default, and using of eMMC's internal divider is not
->> enough to achieve so low values. To provide low-frequency source,
->> reparent "sd_emmc_sel2" clock using 'assigned-clocks' property.
-> Even if the pinctrl part should be postponed then I think it's worth
-> adding &sd_emmc
+> On 26. 06. 23 15:15, Takashi Iwai wrote:
+> > On Mon, 26 Jun 2023 13:13:21 +0200,
+> > Takashi Iwai wrote:
+> >> 
+> >> On Mon, 26 Jun 2023 13:09:00 +0200,
+> >> Jaroslav Kysela wrote:
+> >>> 
+> >>> On 26. 06. 23 13:02, Takashi Iwai wrote:
+> >>>> On Mon, 26 Jun 2023 09:56:47 +0200,
+> >>>> Jaroslav Kysela wrote:
+> >>>>> 
+> >>>>> On 26. 06. 23 9:33, Takashi Iwai wrote:
+> >>>>>> On Mon, 26 Jun 2023 09:31:18 +0200,
+> >>>>>> Tuo Li wrote:
+> >>>>>>> 
+> >>>>>>> 
+> >>>>>>> Hello,
+> >>>>>>> 
+> >>>>>>> Thank you for your reply!
+> >>>>>> 
+> >>>>>> FWIW, the simplest fix would be something like below, just extending
+> >>>>>> the mutex coverage.  But it'll serialize the all calls, so it might
+> >>>>>> influence on the performance, while it's the safest way.
+> >>>>> 
+> >>>>> It may be better to update total_pcm_alloc_bytes before
+> >>>>> snd_dma_alloc_dir_pages() call and decrease this value when allocation
+> >>>>> fails to allow parallel allocations. Then the mutex can be held only
+> >>>>> for the total_pcm_alloc_bytes variable update.
+> >>>> 
+> >>>> Yes, it'd work.  But a tricky part is that the actual allocation size
+> >>>> can be bigger, and we need to correct the total_pcm_alloc_bytes after
+> >>>> the allocation result.  So the end result would be a patch like below,
+> >>>> which is a bit more complex than the previous simpler approach.  But
+> >>>> it might be OK.
+> >>> 
+> >>> The patch looks good, but it may be better to move the "post" variable
+> >>> updates to an inline function (mutex lock - update - mutex unlock) for
+> >>> a better readability.
+> >> 
+> >> Sounds like a good idea.  Let me cook later.
+> > 
+> > ... and here it is.
+> > 
+> > If that looks OK, I'll submit a proper fix patch.
+> > 
+> > 
+> > thanks,
+> > 
+> > Takashi
+> > 
+> > --- a/sound/core/pcm_memory.c
+> > +++ b/sound/core/pcm_memory.c
+> > @@ -31,15 +31,41 @@ static unsigned long max_alloc_per_card = 32UL * 1024UL * 1024UL;
+> >   module_param(max_alloc_per_card, ulong, 0644);
+> >   MODULE_PARM_DESC(max_alloc_per_card, "Max total allocation bytes per card.");
+> >   +static void __update_allocated_size(struct snd_card *card,
+> > ssize_t bytes)
+> 
+> Missing inline ? May be also used for
+> 
+> > +static void update_allocated_size(struct snd_card *card, ssize_t bytes)
+> > +static void decrease_allocated_size(struct snd_card *card, size_t bytes)
 
-Yeah it's weird to add HW definition and to not enable them,
-so please enable them in the board if you add them in the DTSI.
+I left the optimizations to compilers.  Usually they do inline if it
+makes sense, and it's often a more sensible choice.
 
-Neil
+
+thanks,
+
+Takashi
