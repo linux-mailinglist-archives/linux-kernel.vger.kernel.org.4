@@ -2,157 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8FB773E337
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 17:25:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23FFE73E33B
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 17:26:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbjFZPZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 11:25:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44920 "EHLO
+        id S229637AbjFZP0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 11:26:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231267AbjFZPYz (ORCPT
+        with ESMTP id S229502AbjFZP0N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 11:24:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC1618E
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 08:24:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687793058;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pNcIf8DGlU4ngflbaStrLY/OgH3ZgZfAt2j/tScjlPs=;
-        b=B8jcWkxIoLJZCfZbWwRlDzONXq/HhUyujXuvj1F2aJ31L8iiy1v5KiqokWzSSP7breviKO
-        JVqS1R9A2CFfGWDElQtE5RA4uyDzHABpGT9/iajCLBFf1FSKR7m0G/ANkmFZJmoPF9gvPV
-        ITID4h7tGpt0Q4iiUguvlrlG7up3C04=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-173-zc8S0bi9OnqWJ0am3R8gJA-1; Mon, 26 Jun 2023 11:24:16 -0400
-X-MC-Unique: zc8S0bi9OnqWJ0am3R8gJA-1
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-765a4e67064so191175985a.3
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 08:24:12 -0700 (PDT)
+        Mon, 26 Jun 2023 11:26:13 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35581191
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 08:26:12 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-3113dabc549so5054438f8f.1
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 08:26:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687793170; x=1690385170;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tw7C9oT93L7YXZBRkdfMrjtsff4cNqwiulutKWQ+2bQ=;
+        b=Q0llsL7nMjYyRXTFnc4KHHs37dL5UZzylqD2tSdpr2izHti3uC/DvUggBruaxbLKRq
+         jsAa4XfX40TBxFaqZ4MmofhupUyQIAK5p0F13TJ/rpF3UsQ0zVaNu2klNdcZrR76KKUy
+         f/l+70dW/Hu3ngSz4rVsUD1/y/1IKkZsAGnOpJcYE2IzNCSflSsZDxrk+XlUzDLtXd/X
+         09Yewg7ijV4zXIno4ba7y2681VXuIzu7Xl7DZklAsmh6g8lMu3k3x/NGK5G7DhfUzqBJ
+         3/6kE9mqnZAMZFe5UX7ICYyR4VE+6F6+1udRx6CcnJ2+ZmIsjz3ZoUO5vGZyoEZsnnx5
+         BViA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687793052; x=1690385052;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pNcIf8DGlU4ngflbaStrLY/OgH3ZgZfAt2j/tScjlPs=;
-        b=S1zGvIAKRO+3D7LRO7KhAB2pCWO9zIPSlF/uvhIzqf3eMqFATY6M5hjWhIHt0ODhjf
-         mk6yaS7UgUMD2uACN87lP5Ca4zddsTUe8AxOZONG4E0jhBhhKYCHR9kgKUXSAdX802lp
-         1nk4SXY2ncFhyq1YUVDukOrpe9iGWuc6qVc2IoCY/V0FA2x/R9/D6WlYC3waA8LiXaMr
-         HMLeCz/QlKjdnZx8BmLcAdvLy7FJHGFeNKF3WAb2Od62thjnXFSmvyRg9eHtfMhoLXyz
-         uexBBHB8L06lpiMkwKhlawVY5gwmBHO5D0AFRhXH0L2Qp4DA1QKuVfTMZhiZv2ivHOwD
-         FiSg==
-X-Gm-Message-State: AC+VfDzUS+ld0RN3Olr5vEXRyUClaxBxuBU+hQk6if7fe6DNCxZQ+m22
-        cssmWg+tQiqmwEwanRYLSqNquPiqkZNeHiijdezoRLzyFEs1ix3PLCNsfmu5/GrcRgxKm88Azf/
-        us0jDZamKqD8OTVM6ZbuaUPTF
-X-Received: by 2002:a05:620a:880f:b0:75b:23a1:363d with SMTP id qj15-20020a05620a880f00b0075b23a1363dmr20468174qkn.78.1687793052464;
-        Mon, 26 Jun 2023 08:24:12 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ67krRALDwbYzxNGPfYizrvdl7LS+HU+avZAWHRkye9gBvomn4n/ypyeI8Y0aTbS2T5cmmDUw==
-X-Received: by 2002:a05:620a:880f:b0:75b:23a1:363d with SMTP id qj15-20020a05620a880f00b0075b23a1363dmr20468165qkn.78.1687793052227;
-        Mon, 26 Jun 2023 08:24:12 -0700 (PDT)
-Received: from sgarzare-redhat (host-87-11-6-160.retail.telecomitalia.it. [87.11.6.160])
-        by smtp.gmail.com with ESMTPSA id y24-20020a37e318000000b007579ea33cdesm2785460qki.62.2023.06.26.08.24.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jun 2023 08:24:11 -0700 (PDT)
-Date:   Mon, 26 Jun 2023 17:24:07 +0200
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@sberdevices.ru, oxffffaa@gmail.com
-Subject: Re: [RFC PATCH v4 02/17] vhost/vsock: read data from non-linear skb
-Message-ID: <vpcrdclcic7oiuat4oapnkj54dolld6hh2wixe3fozlthyt2ni@omyjyem3uj3t>
-References: <20230603204939.1598818-1-AVKrasnov@sberdevices.ru>
- <20230603204939.1598818-3-AVKrasnov@sberdevices.ru>
+        d=1e100.net; s=20221208; t=1687793170; x=1690385170;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tw7C9oT93L7YXZBRkdfMrjtsff4cNqwiulutKWQ+2bQ=;
+        b=WVcGWCbVn3y9wtMtoLybhg41krOkpfIAKFXeURH3oFM+sp1lEnICb4TlwR0BFTGT5e
+         oc9/Se6Pwp4mRciRZwHvLEzSz/dvLxs2L2vLbV7K7/bOb5Tkr9DtSzb8q4Y3sC8Q4ZCQ
+         rUX/U9vmiLaDNaWeoX0Z7xhlONrsWdKIMJius0OPBSjelotB2yCSQvH/neiHy1Gqxu9A
+         JzFWKQoBB0YbYLukT5wDvlB/VIzE/F+QbYASyFfKTife4+EC6sDpqb621NcMP+TDDOS+
+         2nfStFTB+XRW/NQGzPj0uxAktbB01Ud062XxnLj5eDY0xRMCwVIeTT4lQTZXYn2vUuJm
+         OOtg==
+X-Gm-Message-State: AC+VfDxEvapSo3yVcAQKyqgtNnHhnDvtRn6IUC3ubwTLg+MBY8UPbloJ
+        oeWBAn07PfLll7LrJlZ/OSIKkw==
+X-Google-Smtp-Source: ACHHUZ7ubpwYvu7BiTPrQiruSbiDo19so9jcb0VpAKJaifwruU8APvyge2msFRwCDdPj5kwb46Y6Bg==
+X-Received: by 2002:adf:f389:0:b0:313:f551:b037 with SMTP id m9-20020adff389000000b00313f551b037mr2426683wro.68.1687793170609;
+        Mon, 26 Jun 2023 08:26:10 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id cw8-20020a056000090800b00311d8c2561bsm7645463wrb.60.2023.06.26.08.26.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Jun 2023 08:26:10 -0700 (PDT)
+Message-ID: <f0f9d4d5-4603-7f62-ea18-ea7e120200c3@linaro.org>
+Date:   Mon, 26 Jun 2023 17:26:07 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20230603204939.1598818-3-AVKrasnov@sberdevices.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [RESEND v6 6/8] arm64: dts: qcom: sc7280: Modify VA/RX/TX macro
+ clock nodes for audioreach solution
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mohammad Rafi Shaik <quic_mohs@quicinc.com>,
+        krzysztof.kozlowski+dt@linaro.org, swboyd@chromium.org,
+        andersson@kernel.org, broonie@kernel.org, agross@kernel.org
+Cc:     robh+dt@kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_rohkumar@quicinc.com, srinivas.kandagatla@linaro.org,
+        dianders@chromium.org, judyhsiao@chromium.org,
+        quic_visr@quicinc.com,
+        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+References: <20230616103534.4031331-1-quic_mohs@quicinc.com>
+ <20230616103534.4031331-7-quic_mohs@quicinc.com>
+ <7d2e580e-1861-d22f-e67d-726a2a69043e@linaro.org>
+ <3441b3cb-29dd-691c-1e95-5bddd66c684a@quicinc.com>
+ <af148e01-4026-a086-af78-a1e252fcc724@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <af148e01-4026-a086-af78-a1e252fcc724@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 03, 2023 at 11:49:24PM +0300, Arseniy Krasnov wrote:
->This adds copying to guest's virtio buffers from non-linear skbs. Such
->skbs are created by protocol layer when MSG_ZEROCOPY flags is used. It
->changes call of 'copy_to_iter()' to 'skb_copy_datagram_iter()'. Second
->function can read data from non-linear skb.
->
->See commit to 'net/vmw_vsock/virtio_transport_common.c' with the same
->name for more details.
+On 26/06/2023 14:24, Konrad Dybcio wrote:
+> On 26.06.2023 13:13, Mohammad Rafi Shaik wrote:
+>>
+>> On 6/16/2023 4:59 PM, Konrad Dybcio wrote:
+>>> On 16.06.2023 12:35, Mohammad Rafi Shaik wrote:
+>>>> From: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+>>>>
+>>>> Modify VA, RX and TX macro and lpass_tlmm clock properties and
+>>>> enable them. For audioreach solution mclk, npl and fsgen clocks
+>>>> are enabled through the q6prm clock driver.
+>>>>
+>>>> Delete the power domain properties from VA, RX and TX macro,
+>>>> for audioreach solution the macro, dcodec power domains enabled
+>>>> through the q6prm clock driver.
+>>>>
+>>>> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+>>>> Signed-off-by: Mohammad Rafi Shaik <quic_mohs@quicinc.com>
+>>>> ---
+>>> Maybe sc7280-audioreach.dtsi containing all these changes that could be
+>>> reused by others would be in order?
+>> Thanks for comment,
+>>
+>> yes, will create a common sc7280-audioreach.dtsi file, which will contain common audioreach changes
+>> and could be reused by others.
+>>>>   .../sc7280-herobrine-audioreach-wcd9385.dtsi  | 43 +++++++++++++++++++
+>>>>   1 file changed, 43 insertions(+)
+>>>>
+>>>> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi
+>>>> index 9daea1b25656..c02ca393378f 100644
+>>>> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi
+>>>> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi
+>>>> @@ -196,3 +196,46 @@ q6prmcc: clock-controller {
+>>>>           };
+>>>>       };
+>>>>   };
+>>>> +
+>>>> +&lpass_rx_macro {
+>>>> +    /delete-property/ power-domains;
+>>>> +    /delete-property/ power-domain-names;
+>>> Surely they shouldn't cause issues, even if the vote would be
+>>> superfluous? They are still powered by these power domains, I'd assume?
+>> No, In Audioreach case this macro and decodec clocks are not power by power domains,
+>> this macro and decodec hw clocks are enrolled by q6prmcc clock voting.
+> So the same piece of hardware is modeled differently twice?
+> 
+> i.e. the same GDSCs are reached once with register accesses and once
+> registered as "Q6 vote clocks"?
+> 
+> that sounds like a bit of an overstep to register them with genpd and CCF
+> depending on what entity controls them.. perhaps the "q6 vote clocks" could
+> be remodeled as power domains as that's what they're ultimately seem to
+> be referencing.. Krzysztof should have an opinion.
 
-I think it's okay if we report the same details here.
+I think on SM8450 and newer these were already modeled as clocks, not
+power domains. Anyway, for me, the previous/existing/coming code looks
+like done by coincidence or copying some downstream choices, not with
+any design in mind. Unfortunately, I don't know what to do with it now,
+because the bindings were merged like that.
 
->
->Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->---
-> drivers/vhost/vsock.c | 12 +++++++-----
-> 1 file changed, 7 insertions(+), 5 deletions(-)
->
->diff --git a/drivers/vhost/vsock.c b/drivers/vhost/vsock.c
->index 6578db78f0ae..b254aa4b756a 100644
->--- a/drivers/vhost/vsock.c
->+++ b/drivers/vhost/vsock.c
->@@ -156,7 +156,7 @@ vhost_transport_do_send_pkt(struct vhost_vsock *vsock,
-> 		}
->
-> 		iov_iter_init(&iov_iter, ITER_DEST, &vq->iov[out], in, iov_len);
->-		payload_len = skb->len;
->+		payload_len = skb->len - VIRTIO_VSOCK_SKB_CB(skb)->frag_off;
 
-Also here a variable should make the code more readable.
-
-Stefano
-
-> 		hdr = virtio_vsock_hdr(skb);
->
-> 		/* If the packet is greater than the space available in the
->@@ -197,8 +197,10 @@ vhost_transport_do_send_pkt(struct vhost_vsock *vsock,
-> 			break;
-> 		}
->
->-		nbytes = copy_to_iter(skb->data, payload_len, &iov_iter);
->-		if (nbytes != payload_len) {
->+		if (skb_copy_datagram_iter(skb,
->+					   VIRTIO_VSOCK_SKB_CB(skb)->frag_off,
->+					   &iov_iter,
->+					   payload_len)) {
-> 			kfree_skb(skb);
-> 			vq_err(vq, "Faulted on copying pkt buf\n");
-> 			break;
->@@ -212,13 +214,13 @@ vhost_transport_do_send_pkt(struct vhost_vsock *vsock,
-> 		vhost_add_used(vq, head, sizeof(*hdr) + payload_len);
-> 		added = true;
->
->-		skb_pull(skb, payload_len);
->+		VIRTIO_VSOCK_SKB_CB(skb)->frag_off += payload_len;
-> 		total_len += payload_len;
->
-> 		/* If we didn't send all the payload we can requeue the packet
-> 		 * to send it with the next available buffer.
-> 		 */
->-		if (skb->len > 0) {
->+		if (VIRTIO_VSOCK_SKB_CB(skb)->frag_off < skb->len) {
-> 			hdr->flags |= cpu_to_le32(flags_to_restore);
->
-> 			/* We are queueing the same skb to handle
->-- 
->2.25.1
->
+Best regards,
+Krzysztof
 
