@@ -2,231 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EECB173E642
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 19:17:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94B1D73E645
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 19:19:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231178AbjFZRRw convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 26 Jun 2023 13:17:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51668 "EHLO
+        id S230241AbjFZRTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 13:19:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231130AbjFZRQS (ORCPT
+        with ESMTP id S229853AbjFZRSl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 13:16:18 -0400
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D6F1BEE;
-        Mon, 26 Jun 2023 10:15:27 -0700 (PDT)
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-98e2865e2f2so46484266b.0;
-        Mon, 26 Jun 2023 10:15:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687799725; x=1690391725;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KtbCFdM31VuS7J+4uQXZ2N2jb4VKT9MQHjf41EIMETQ=;
-        b=hDHf0B2Gyg3CDKlPo+7HF0z0+6dxgPWIaMcwJ8Jut7k+FMNCQHwj5ObQ8f6INaXSuj
-         qPUp7gFrGDRFckcaxu4lphku407fqBnNkZe+cwiVruT36qVd4UU9j+oEV2m+XKL7hrcM
-         TI16dovFumRFAhqmtUeLkSiANfW09NcHd3l3HC/zuIQESW1eoZvFxBpxK49wLdp7SNPG
-         2qgASr4tsVG7sy7H/VGIBNYW3QlJkkOKQZdkLCAt+3rX7fYjfTqqcyeBsSWZ2jRnEWBQ
-         ELppPL0/R30L6RAjERVe6xFF//nifAtDIZRv/N3A7jG98itk3y6mpkH1Uuu1FUziUMtu
-         PegA==
-X-Gm-Message-State: AC+VfDwjat6qcUgUKWSJ33Nfn3SN29xBPhLnF31Xu3EPArLpvHb9R2Ak
-        yxNMrkhhInZP5QpiPiaf+aHa4MVRThCU/YL7hFY=
-X-Google-Smtp-Source: ACHHUZ5i49hsGEMviP4cvK4Drkv3i9ic2FdjAGUF90dcLJbGHAC/4L57HdDYVvbFWWt9cW4kBH41Cg2c729uSiSRqKY=
-X-Received: by 2002:a17:906:74da:b0:974:5480:6270 with SMTP id
- z26-20020a17090674da00b0097454806270mr21458379ejl.0.1687799725381; Mon, 26
- Jun 2023 10:15:25 -0700 (PDT)
+        Mon, 26 Jun 2023 13:18:41 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04E212D49
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 10:16:24 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35QAbfRq019286;
+        Mon, 26 Jun 2023 17:15:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=NkiFzCe25ddo2CI1iUwfIKdPfKGFMT4upqMXkk7C3OQ=;
+ b=WvfTG+Ce7OiqRZEwOJypw6r1nMQ/R0jtiAAIIAgz0VJLJIrAAVa3C/9xr69fqlvxi48l
+ iE4agheJleyfEyZQUJPvjyEvLZ+iQxKaQoTp+/OIJsoSWxE8Ro9N+D8HRvFqzW73J420
+ bx+WePGvCngnh5uFXOLEoZdHddUwqECKX6qxIxRd9iFe/49u4Rlrr907HKXT/OtGd3Tj
+ jQ7CFQzLJIl6kkiXeCG10o2AtyvFCmDA+66INFAdvhgotncKWtEq9V1Jt+Y7g+BCpAkJ
+ hFi02Ka4KdLlzbq15kQAZ/5FB0s6lheuWqXpBWyQhr6m7Sx14jd9wAy+7UzzWi0DUe9E sw== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rdssdmmaa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 26 Jun 2023 17:15:58 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35QHFvhs001058
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 26 Jun 2023 17:15:57 GMT
+Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 26 Jun
+ 2023 10:15:57 -0700
+Message-ID: <507f4cc2-15c2-8323-878e-4da00505bc45@quicinc.com>
+Date:   Mon, 26 Jun 2023 11:15:56 -0600
 MIME-Version: 1.0
-References: <47423e79-8a68-87c3-c357-6d67c0653adf@linaro.org>
-In-Reply-To: <47423e79-8a68-87c3-c357-6d67c0653adf@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 26 Jun 2023 19:15:14 +0200
-Message-ID: <CAJZ5v0gt3jBtWKhL3PNV97FbBzoHm-iGs+cL+YSWF5Qi-wafkA@mail.gmail.com>
-Subject: Re: [GIT PULL] thermal for v6.5-rc1
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        =?UTF-8?Q?Matti_Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>,
-        Praveenkumar I <quic_ipkumar@quicinc.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Thierry Reding <treding@nvidia.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        =?UTF-8?Q?Ricardo_Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Peng Fan <peng.fan@nxp.com>,
-        Alex Leibovich <alexl@marvell.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        Chen-Yu Tsai <wenst@chromium.org>, Luca Weiss <luca@z3ntu.xyz>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH v2 0/2] Add MHI quirk for QAIC
+Content-Language: en-US
+To:     Manivannan Sadhasivam <mani@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <mhi@lists.linux.dev>
+References: <20230519163902.4170-1-quic_jhugo@quicinc.com>
+ <20230608115928.GA5672@thinkpad>
+From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
+In-Reply-To: <20230608115928.GA5672@thinkpad>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: tc5UBN98mjMhOlVn5IJFVr011CeDJDEI
+X-Proofpoint-ORIG-GUID: tc5UBN98mjMhOlVn5IJFVr011CeDJDEI
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-26_14,2023-06-26_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
+ phishscore=0 suspectscore=0 clxscore=1015 malwarescore=0 bulkscore=0
+ priorityscore=1501 lowpriorityscore=0 impostorscore=0 spamscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306260158
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+On 6/8/2023 5:59 AM, Manivannan Sadhasivam wrote:
+> On Fri, May 19, 2023 at 10:39:00AM -0600, Jeffrey Hugo wrote:
+>> With the QAIC driver in -next, I'd like to suggest some MHI changes that
+>> specific to AIC100 devices, but perhaps provide a framework for other
+>> device oddities.
+>>
+>> AIC100 devices technically violate the MHI spec in two ways. Sadly, these
+>> issues comes from the device hardware, so host SW needs to work around
+>> them.
+>>
+>> Thie first issue, presented in this series, has to do with the
+>> SOC_HW_VERSION register. This register is suposed to be initialized by the
+>> hardware prior to the MHI being accessable by the host to contain a
+>> version string for the SoC of the device. This could be used by the host
+>> MHI controller software to identify and handle version to version changes.
+>> The AIC100 hardware does not initialize this register, and thus it
+>> contains garbage.
+>>
+>> This would not be much of a problem normally - the QAIC driver would just
+>> never use it. However the MHI stack uses this register as part of the init
+>> sequence and if the controller reports that the register is inaccessable
+>> then the init sequence fails.  On some AIC100 cards, the garbage value
+>> ends up being 0xFFFFFFFF which is PCIe spec defined to be a special value
+>> indicating the access failed.  The MHI controller cannot tell if that
+>> value is a PCIe link issue, or just garbage.
+>>
+>> QAIC needs a way to tell MHI not to use this register. Other buses have a
+>> quirk mechanism - a way to describe oddities in a particular
+>> implementation that have some kind of workaround. Since this seems to be
+>> the first need for such a thing in MHI, introduce a quirk framework.
+>>
+>> The second issue AIC100 has involves the PK Hash registers. A solution for
+>> this is expected to be proposed in the near future and is anticipated to
+>> make use of the quirk framework proposed here. With PK Hash, there are two
+>> oddities to handle. AIC100 does not initialize these registers until the
+>> SBL is running, which is later than the spec indicates, and in practice
+>> is after MHI reads/caches them. Also, AIC100 does not have enough
+>> registers defined to fully report the 5 PK Hash slots, so a custom
+>> reporting format is defined by the device.
+>>
+> 
+> Looking at the two issues you reported above, it looks to me that they can be
+> handled inside the aic100 mhi_controller driver itself. Since the MHI stack
+> exports the read_reg callback to controller drivers, if some registers are not
+> supported by the device, then the callback can provide some fixed dummy data
+> emulating the register until the issue is fixed in the device (if at all).
+> 
+> Quirk framework could be useful if the device misbehaves against the protocol
+> itself but for the register issues like this, I think the controller driver can
+> handle itself.
+> 
+> What do you think?
 
-On Mon, Jun 26, 2023 at 5:33 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> Hi Rafael,
->
-> please consider the following changes since commit
-> 0bb619f9227aa370330d2b309733d74750705053:
->
->    thermal/intel/intel_soc_dts_iosf: Fix reporting wrong temperatures
-> (2023-06-15 18:07:48 +0200)
->
-> are available in the Git repository at:
->
->
-> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git
-> tags/thermal-v6.5-rc1
->
-> for you to fetch changes up to 57c9eaa4de537e6f08819d9214de502cac5a989c:
->
->    thermal/drivers/qcom/temp-alarm: Use dev_err_probe (2023-06-26
-> 12:10:22 +0200)
->
-> ----------------------------------------------------------------
-> - Add DT bindings for SM6375, MSM8226 and QCM2290 Qcom platforms (Konrad
->    Dybcio)
->
-> - Add DT bindings and support for QCom MSM8226 (Matti Lehtimäki)
->
-> - Add DT bindings for QCom ipq9574 (Praveenkumar I)
->
-> - Convert bcm2835 DT bindings to the yaml schema (Stefan Wahren)
->
-> - Allow selecting the bang-bang governor as default (Thierry Reding)
->
-> - Refactor and prepare the code to set the scene for RCar Gen4
->    (Wolfram Sang)
->
-> - Cleanup and fixes for the QCom tsens drivers. Add DT bindings and
->    calibration for the MSM8909 platform (Stephan Gerhold)
->
-> - Revert a patch introducing a wrong usage of devm_of_iomap() on the
->    Mediatek platform (Ricardo Cañuelo)
->
-> - Fix the clock vs reset ordering in order to conform to the
->    documentation on the sun8i (Christophe JAILLET)
->
-> - Prevent setting up undocumented registers, enable the only described
->    sensors and add the version 2.1 on the Qoriq sensor (Peng Fan)
->
-> - Add DT bindings and support for the Armada AP807 (Alex Leibovich)
->
-> - Update the mlx5 driver with the recent thermal changes (Daniel
->    Lezcano)
->
-> - Convert to platform remove callback returning void on STM32 (Uwe
->    Kleine-König)
->
-> - Add an error information printing for devm_thermal_add_hwmon_sysfs()
->    and remove the error from the Sun8i, Amlogic, i.MX, TI, K3, Tegra,
->    Qoriq, Mediateka and QCom (Yangtao Li)
->
-> - Register as hwmon sensor for the Generic ADC (Chen-Yu Tsai)
->
-> - Use the dev_err_probe() function in the QCom tsens alarm driver
->    (Luca Weiss)
->
-> ----------------------------------------------------------------
-> Alex Leibovich (2):
->        dt-bindings: armada-thermal: Add armada-ap807-thermal compatible
->        thermal/drivers/armada: Add support for AP807 thermal data
->
-> Chen-Yu Tsai (2):
->        thermal/drivers/mediatek/lvts_thermal: Register thermal zones as
-> hwmon sensors
->        thermal/drivers/generic-adc: Register thermal zones as hwmon sensors
->
-> Christophe JAILLET (1):
->        thermal/drivers/sun8i: Fix some error handling paths in
-> sun8i_ths_probe()
->
-> Daniel Lezcano (1):
->        net/mlx5: Update the driver with the recent thermal changes
->
-> Konrad Dybcio (2):
->        dt-bindings: thermal: tsens: Add QCM2290
->        dt-bindings: thermal: tsens: Add compatible for SM6375
->
-> Luca Weiss (1):
->        thermal/drivers/qcom/temp-alarm: Use dev_err_probe
->
-> Matti Lehtimäki (2):
->        dt-bindings: thermal: tsens: Add compatible for MSM8226
->        thermal/drivers/qcom/tsens-v0_1: Add support for MSM8226
->
-> Pankit Garg (1):
->        thermal/drivers/qoriq: No need to program site adjustment register
->
-> Peng Fan (2):
->        thermal/drivers/qoriq: Only enable supported sensors
->        thermal/drivers/qoriq: Support version 2.1
->
-> Praveenkumar I (1):
->        dt-bindings: thermal: tsens: Add ipq9574 compatible
->
-> Ricardo Cañuelo (1):
->        Revert "thermal/drivers/mediatek: Use devm_of_iomap to avoid
-> resource leak in mtk_thermal_probe"
->
-> Stefan Wahren (1):
->        dt-bindings: thermal: convert bcm2835-thermal bindings to YAML
->
-> Stephan Gerhold (6):
->        thermal/drivers/qcom/tsens: Drop unused legacy structs
->        thermal/drivers/qcom/tsens-v0_1: Fix mdm9607 slope values
->        thermal/drivers/qcom/tsens-v0_1: Add mdm9607 correction offsets
->        dt-bindings: thermal: qcom-tsens: Drop redundant compatibles
->        dt-bindings: thermal: qcom-tsens: Add MSM8909 compatible
->        thermal/drivers/qcom/tsens-v0_1: Add MSM8909 data
->
-> Thierry Reding (1):
->        thermal: Allow selecting the bang-bang governor as default
->
-> Uwe Kleine-König (1):
->        thermal/drivers/stm32: Convert to platform remove callback
-> returning void
->
-> Wolfram Sang (3):
->        drivers/thermal/rcar_gen3_thermal: introduce 'info' structure
->        drivers/thermal/rcar_gen3_thermal: refactor reading fuses into
-> seprarate function
->        drivers/thermal/rcar_gen3_thermal: add reading fuses for Gen4
->
-> Yangtao Li (10):
->        thermal/hwmon: Add error information printing for
-> devm_thermal_add_hwmon_sysfs()
->        thermal/drivers/sun8i: Remove redundant msg in sun8i_ths_register()
->        thermal/drivers/amlogic: Remove redundant msg in
-> amlogic_thermal_probe()
->        thermal/drivers/imx: Remove redundant msg in imx8mm_tmu_probe()
-> and imx_sc_thermal_probe()
->        drivers/thermal/k3: Remove redundant msg in k3_bandgap_probe()
->        thermal/drivers/tegra: Remove redundant msg in
-> tegra_tsensor_register_channel()
->        thermal/drivers/qoriq: Remove redundant msg in
-> qoriq_tmu_register_tmu_zone()
->        thermal/drivers/ti-soc: Remove redundant msg in
-> ti_thermal_expose_sensor()
->        thermal/drivers/qcom: Remove redundant msg at probe time
->        thermal/drivers/mediatek/lvts_thermal: Remove redundant msg in
-> lvts_ctrl_start()
+I think for the HW_VERSION register, your suggestion is very good, and 
+something I plan to adopt.
 
-Pulled and added to the thermal branch of linux-pm.git.
+For the PK Hash registers, I don't think it quite works.
 
-Thanks!
+HW_VERSION I can hard code to a valid value, or just stub out to 0 since 
+that appears to be only consumed by the MHI Controller, and we don't use it.
+
+The PK Hash registers are programmed into the SoC, and can be unique 
+from SoC to SoC.  I don't see how the driver can provide valid, but 
+faked information for them.  Also, the user consumes this data via 
+sysfs.  We'd like to give the data to the user, and we can't fake it. 
+Also the data is dynamic.
+
+Lets start with the dynamic data issue.  Right now MHI reads these 
+registers once, and caches the values.  I would propose a quirk to 
+change that behavior for AIC100, but does MHI really need to operate in 
+a "read once" mode?  Would something actually break if MHI read the 
+registers every time the sysfs node is accessed?  Then sysfs would 
+display the latest data, which would be beneficial to AIC100 and should 
+not be a behavior change for other devices which have static data (MHI 
+just displays the same data because it hasn't changed).
+
+Do you recall the reason behind making the PK Hash registers read once 
+and cached?
+
+> 
+> - Mani
+> 
+>> v2:
+>> -Fix build error
+>> -Fix typo in commit text
+>>
+>> Jeffrey Hugo (2):
+>>    bus: mhi: host: Add quirk framework and initial quirk
+>>    accel/qaic: Add MHI_QUIRK_SOC_HW_VERSION_UNRELIABLE
+>>
+>>   drivers/accel/qaic/mhi_controller.c |  1 +
+>>   drivers/bus/mhi/host/init.c         | 13 +++++++++----
+>>   include/linux/mhi.h                 | 18 ++++++++++++++++++
+>>   3 files changed, 28 insertions(+), 4 deletions(-)
+>>
+>> -- 
+>> 2.40.1
+>>
+>>
+> 
+
