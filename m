@@ -2,162 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B0E373E32C
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 17:23:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8FB773E337
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 17:25:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbjFZPXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 11:23:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44314 "EHLO
+        id S229868AbjFZPZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 11:25:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229767AbjFZPXn (ORCPT
+        with ESMTP id S231267AbjFZPYz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 11:23:43 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53CB718D;
-        Mon, 26 Jun 2023 08:23:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687793021; x=1719329021;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=kGBsoJpqJ94noc4JnODvig8KugWVEyn0TcAx8lTmHng=;
-  b=gTD3QeI4yXHQs1W3NHJUgERo14RNQ8yXwLgmnJO+63rH8zIcTI5knx/0
-   Fc0eddCflufwBJxlwxYm/82mFS2AUFEEc8FLN/fxcuZCPrpb/VRFVucFZ
-   5blJudxAf+JtHQiSL5MZKAXAL6D31uIt1CuXW+9UIOaAVaSh6DrE+6UC8
-   8zytxlJURSZYmVn/fTm9v0Dq+XlZHNlnxP8k9j3lqogmx3/hZAi3qZzIy
-   hXl0RedBmhyTAWcvRcfZVMn42gG2otdYsi0ZLHVQraVmDywyL8LFhA0Hb
-   OQP8KuQ4K8MRmyBKzdsdk1Hj6tHgoFoYTD2swes38NtICKWJbNEBg1cQ5
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="346054638"
-X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
-   d="scan'208";a="346054638"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 08:23:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="890311953"
-X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
-   d="scan'208";a="890311953"
-Received: from ettammin-mobl1.ger.corp.intel.com (HELO [10.249.254.105]) ([10.249.254.105])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 08:23:29 -0700
-Message-ID: <06e1342e5bee87e53e4c43bf31572cda0910513d.camel@linux.intel.com>
-Subject: Re: [Intel-xe] [PATCH v2 2/4] drm/ttm: Don't shadow the operation
- context
-From:   Thomas =?ISO-8859-1?Q?Hellstr=F6m?= 
-        <thomas.hellstrom@linux.intel.com>
-To:     Christian =?ISO-8859-1?Q?K=F6nig?= 
-        <ckoenig.leichtzumerken@gmail.com>, intel-xe@lists.freedesktop.org
-Cc:     intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Roger He <Hongbo.He@amd.com>,
-        dri-devel@lists.freedesktop.org,
-        Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
-Date:   Mon, 26 Jun 2023 17:23:27 +0200
-In-Reply-To: <88cbec2d2ae6329d44426cece4b558b7d83b1ff6.camel@linux.intel.com>
-References: <20230626091450.14757-1-thomas.hellstrom@linux.intel.com>
-         <20230626091450.14757-3-thomas.hellstrom@linux.intel.com>
-         <8b22c855-c84d-4b56-c94b-a3a079ab3037@gmail.com>
-         <88cbec2d2ae6329d44426cece4b558b7d83b1ff6.camel@linux.intel.com>
-Organization: Intel Sweden AB, Registration Number: 556189-6027
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Mon, 26 Jun 2023 11:24:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC1618E
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 08:24:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687793058;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pNcIf8DGlU4ngflbaStrLY/OgH3ZgZfAt2j/tScjlPs=;
+        b=B8jcWkxIoLJZCfZbWwRlDzONXq/HhUyujXuvj1F2aJ31L8iiy1v5KiqokWzSSP7breviKO
+        JVqS1R9A2CFfGWDElQtE5RA4uyDzHABpGT9/iajCLBFf1FSKR7m0G/ANkmFZJmoPF9gvPV
+        ITID4h7tGpt0Q4iiUguvlrlG7up3C04=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-173-zc8S0bi9OnqWJ0am3R8gJA-1; Mon, 26 Jun 2023 11:24:16 -0400
+X-MC-Unique: zc8S0bi9OnqWJ0am3R8gJA-1
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-765a4e67064so191175985a.3
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 08:24:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687793052; x=1690385052;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pNcIf8DGlU4ngflbaStrLY/OgH3ZgZfAt2j/tScjlPs=;
+        b=S1zGvIAKRO+3D7LRO7KhAB2pCWO9zIPSlF/uvhIzqf3eMqFATY6M5hjWhIHt0ODhjf
+         mk6yaS7UgUMD2uACN87lP5Ca4zddsTUe8AxOZONG4E0jhBhhKYCHR9kgKUXSAdX802lp
+         1nk4SXY2ncFhyq1YUVDukOrpe9iGWuc6qVc2IoCY/V0FA2x/R9/D6WlYC3waA8LiXaMr
+         HMLeCz/QlKjdnZx8BmLcAdvLy7FJHGFeNKF3WAb2Od62thjnXFSmvyRg9eHtfMhoLXyz
+         uexBBHB8L06lpiMkwKhlawVY5gwmBHO5D0AFRhXH0L2Qp4DA1QKuVfTMZhiZv2ivHOwD
+         FiSg==
+X-Gm-Message-State: AC+VfDzUS+ld0RN3Olr5vEXRyUClaxBxuBU+hQk6if7fe6DNCxZQ+m22
+        cssmWg+tQiqmwEwanRYLSqNquPiqkZNeHiijdezoRLzyFEs1ix3PLCNsfmu5/GrcRgxKm88Azf/
+        us0jDZamKqD8OTVM6ZbuaUPTF
+X-Received: by 2002:a05:620a:880f:b0:75b:23a1:363d with SMTP id qj15-20020a05620a880f00b0075b23a1363dmr20468174qkn.78.1687793052464;
+        Mon, 26 Jun 2023 08:24:12 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ67krRALDwbYzxNGPfYizrvdl7LS+HU+avZAWHRkye9gBvomn4n/ypyeI8Y0aTbS2T5cmmDUw==
+X-Received: by 2002:a05:620a:880f:b0:75b:23a1:363d with SMTP id qj15-20020a05620a880f00b0075b23a1363dmr20468165qkn.78.1687793052227;
+        Mon, 26 Jun 2023 08:24:12 -0700 (PDT)
+Received: from sgarzare-redhat (host-87-11-6-160.retail.telecomitalia.it. [87.11.6.160])
+        by smtp.gmail.com with ESMTPSA id y24-20020a37e318000000b007579ea33cdesm2785460qki.62.2023.06.26.08.24.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jun 2023 08:24:11 -0700 (PDT)
+Date:   Mon, 26 Jun 2023 17:24:07 +0200
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@sberdevices.ru, oxffffaa@gmail.com
+Subject: Re: [RFC PATCH v4 02/17] vhost/vsock: read data from non-linear skb
+Message-ID: <vpcrdclcic7oiuat4oapnkj54dolld6hh2wixe3fozlthyt2ni@omyjyem3uj3t>
+References: <20230603204939.1598818-1-AVKrasnov@sberdevices.ru>
+ <20230603204939.1598818-3-AVKrasnov@sberdevices.ru>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20230603204939.1598818-3-AVKrasnov@sberdevices.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-06-26 at 17:18 +0200, Thomas Hellstr=C3=B6m wrote:
-> On Mon, 2023-06-26 at 17:15 +0200, Christian K=C3=B6nig wrote:
-> > Am 26.06.23 um 11:14 schrieb Thomas Hellstr=C3=B6m:
-> > > ttm_bo_swapout() shadows the ttm operation context which may
-> > > cause
-> > > major confusion in driver callbacks when swapping out
-> > > !TTM_PL_SYSTEM
-> > > memory. Fix this by reusing the operation context argument to
-> > > ttm_bo_swapout().
-> > >=20
-> > > Cc: "Christian K=C3=B6nig" <christian.koenig@amd.com>
-> > > Cc: Roger He <Hongbo.He@amd.com>
-> > > Cc: <dri-devel@lists.freedesktop.org>
-> > > Cc: <intel-gfx@lists.freedesktop.org>
-> > > Cc: <stable@vger.kernel.org> # v4.16+
-> > > Fixes: dc947770cf34 ("drm/ttm: enable swapout for reserved BOs
-> > > during allocation")
-> > > Signed-off-by: Thomas Hellstr=C3=B6m
-> > > <thomas.hellstrom@linux.intel.com>
-> > > Acked-by: Matthew Brost <matthew.brost@intel.com>
-> >=20
-> > We intentionally didn't used the parameter here, but I absolutely
-> > can't=20
-> > figure out why.
-> >=20
-> > Feel free to add my rb, but let's give it some time upstream before
-> > you=20
-> > base anything on top of this. Just in case we missed something.
->=20
-> Sure. Thanks for reviewing,
+On Sat, Jun 03, 2023 at 11:49:24PM +0300, Arseniy Krasnov wrote:
+>This adds copying to guest's virtio buffers from non-linear skbs. Such
+>skbs are created by protocol layer when MSG_ZEROCOPY flags is used. It
+>changes call of 'copy_to_iter()' to 'skb_copy_datagram_iter()'. Second
+>function can read data from non-linear skb.
+>
+>See commit to 'net/vmw_vsock/virtio_transport_common.c' with the same
+>name for more details.
 
-BTW, I'll remove the Fixes: tag as well.
+I think it's okay if we report the same details here.
 
-/Thomas
+>
+>Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>---
+> drivers/vhost/vsock.c | 12 +++++++-----
+> 1 file changed, 7 insertions(+), 5 deletions(-)
+>
+>diff --git a/drivers/vhost/vsock.c b/drivers/vhost/vsock.c
+>index 6578db78f0ae..b254aa4b756a 100644
+>--- a/drivers/vhost/vsock.c
+>+++ b/drivers/vhost/vsock.c
+>@@ -156,7 +156,7 @@ vhost_transport_do_send_pkt(struct vhost_vsock *vsock,
+> 		}
+>
+> 		iov_iter_init(&iov_iter, ITER_DEST, &vq->iov[out], in, iov_len);
+>-		payload_len = skb->len;
+>+		payload_len = skb->len - VIRTIO_VSOCK_SKB_CB(skb)->frag_off;
 
+Also here a variable should make the code more readable.
 
-> /Thomas
->=20
-> >=20
-> > Regards,
-> > Christian.
-> >=20
-> > > ---
-> > > =C2=A0 drivers/gpu/drm/ttm/ttm_bo.c | 3 +--
-> > > =C2=A0 1 file changed, 1 insertion(+), 2 deletions(-)
-> > >=20
-> > > diff --git a/drivers/gpu/drm/ttm/ttm_bo.c
-> > > b/drivers/gpu/drm/ttm/ttm_bo.c
-> > > index bd5dae4d1624..615d30c4262d 100644
-> > > --- a/drivers/gpu/drm/ttm/ttm_bo.c
-> > > +++ b/drivers/gpu/drm/ttm/ttm_bo.c
-> > > @@ -1154,7 +1154,6 @@ int ttm_bo_swapout(struct ttm_buffer_object
-> > > *bo, struct ttm_operation_ctx *ctx,
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Move to system cac=
-hed
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (bo->resource->mem=
-_type !=3D TTM_PL_SYSTEM) {
-> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0struct ttm_operation_ctx ctx =3D { false, false };
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0struct ttm_resource *evict_mem;
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0struct ttm_place hop;
-> > > =C2=A0=20
-> > > @@ -1164,7 +1163,7 @@ int ttm_bo_swapout(struct ttm_buffer_object
-> > > *bo, struct ttm_operation_ctx *ctx,
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0if (unlikely(ret))
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-goto out;
-> > > =C2=A0=20
-> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0ret =3D ttm_bo_handle_move_mem(bo, evict_mem, true,
-> > > &ctx, &hop);
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0ret =3D ttm_bo_handle_move_mem(bo, evict_mem, true,
-> > > ctx, &hop);
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0if (unlikely(ret !=3D 0)) {
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-WARN(ret =3D=3D -EMULTIHOP, "Unexpected
-> > > multihop in swaput - likely driver bug.\n");
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-goto out;
-> >=20
->=20
+Stefano
+
+> 		hdr = virtio_vsock_hdr(skb);
+>
+> 		/* If the packet is greater than the space available in the
+>@@ -197,8 +197,10 @@ vhost_transport_do_send_pkt(struct vhost_vsock *vsock,
+> 			break;
+> 		}
+>
+>-		nbytes = copy_to_iter(skb->data, payload_len, &iov_iter);
+>-		if (nbytes != payload_len) {
+>+		if (skb_copy_datagram_iter(skb,
+>+					   VIRTIO_VSOCK_SKB_CB(skb)->frag_off,
+>+					   &iov_iter,
+>+					   payload_len)) {
+> 			kfree_skb(skb);
+> 			vq_err(vq, "Faulted on copying pkt buf\n");
+> 			break;
+>@@ -212,13 +214,13 @@ vhost_transport_do_send_pkt(struct vhost_vsock *vsock,
+> 		vhost_add_used(vq, head, sizeof(*hdr) + payload_len);
+> 		added = true;
+>
+>-		skb_pull(skb, payload_len);
+>+		VIRTIO_VSOCK_SKB_CB(skb)->frag_off += payload_len;
+> 		total_len += payload_len;
+>
+> 		/* If we didn't send all the payload we can requeue the packet
+> 		 * to send it with the next available buffer.
+> 		 */
+>-		if (skb->len > 0) {
+>+		if (VIRTIO_VSOCK_SKB_CB(skb)->frag_off < skb->len) {
+> 			hdr->flags |= cpu_to_le32(flags_to_restore);
+>
+> 			/* We are queueing the same skb to handle
+>-- 
+>2.25.1
+>
 
