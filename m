@@ -2,242 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 614F773EBE8
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 22:37:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 986F473EBEC
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 22:39:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230145AbjFZUgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 16:36:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40440 "EHLO
+        id S229844AbjFZUjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 16:39:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjFZUgs (ORCPT
+        with ESMTP id S229604AbjFZUje (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 16:36:48 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B26B0E4D;
-        Mon, 26 Jun 2023 13:36:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687811807; x=1719347807;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=EpXIVl/sMTGdWkvNqtqcriGI+S5B9klQttO6f03fg6I=;
-  b=REXr3EU2xpQpREBK3mKF/bNca/6yJE8IMcPFdmgfVP2LkOBTzcSqwtrB
-   O04GkyYoY7OZJBrjoth55WqUB2KqZ0jbAhn03loAL4nHtb3RhBZBhyjY6
-   1PyoROZBwMmOO5y2FRedUbg07Ad//DKdTKZ/A0dpv/LIh8m6IiBqPUGY+
-   UiaQb6ej39VpxRiMzw5iXeLKmCNRn6x3JHt8piWIY4muWjBItYAyy0YMW
-   5j5UxuJy2IqvOhEw0CU06CX72XRRTIHMXTI6RIvMYMhcKfuXtVVpkcKYt
-   SM16i9GwheyUt034Kq+b2abIqy4c+D8LMgfC+Bqez3gEZTODHzJDu7gkn
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="363924884"
-X-IronPort-AV: E=Sophos;i="6.01,160,1684825200"; 
-   d="scan'208";a="363924884"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 13:36:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="1046642103"
-X-IronPort-AV: E=Sophos;i="6.01,160,1684825200"; 
-   d="scan'208";a="1046642103"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by fmsmga005.fm.intel.com with ESMTP; 26 Jun 2023 13:36:46 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Mon, 26 Jun 2023 13:36:46 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Mon, 26 Jun 2023 13:36:45 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27 via Frontend Transport; Mon, 26 Jun 2023 13:36:45 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.100)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Mon, 26 Jun 2023 13:36:45 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MSEgwj9ty5xVX5aevXmhp+wFps5S/LyXL+Kp4LAZJrMZR68TNHbrjA1pVZkLNh/ARfG9L3AqOmrNWk5QRcCX3zg1Zj9u/s5WvHq9F0ulHdFdwheembePwftWScptTDgdVMOwslEREEjRl3areHbT8Wv3gBpRRLzzG4KbkrfBqwARtZSx8Z8s5brBSIV/3Kd1zEDIQyd/xBA9v3KMN3rcfCL9SdJoS5zEmM/CP0Yb3+L/evNpVU7avFOhV/y9GB6okY/ckPBWmZ7SlRhEScXjsHR4xF6khyj8SWefrduW9wnjjzxMnf4hW1U6JQvTrmUN/KtpfIoWKfTQi4usvwfKhw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=K5zWWcBitxMAAsXg/oViT2XjxagoXKZcd8ra3h3lC2Y=;
- b=TJiNFK+/xpvQ7O38+9DLRPiMT4lGgi7zXpPhqvD2ZrIV+Bp7VAvPdcJNfH6F9IzvBwq08bZEV/mE6pvatdDH3vl8gD5mqq9GUPLSUPOI8P61kvaaafRDYd+2L26/36wjJtv5oB/Dsd78N8TWTg2qp8XqqCvqg8Sfufc9pQlTBTJYpVqRz3dwV0KgY7MgLg7d8un5Lhl76aHxPPYTHG3ry+GET38wG1TDZc+1HofJnbYM32Ke/BgNv1ELwjpEkJkzMS/suGniWrIVsKEqXof5qLJgC6fHR0D8zT8M9Ld3M2VAqKJyB0WofoFSKTqUNr6QH8SeIrFJh45aETjj/pnDQA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SA1PR11MB6733.namprd11.prod.outlook.com (2603:10b6:806:25c::17)
- by PH8PR11MB6804.namprd11.prod.outlook.com (2603:10b6:510:1bc::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.23; Mon, 26 Jun
- 2023 20:36:37 +0000
-Received: from SA1PR11MB6733.namprd11.prod.outlook.com
- ([fe80::7237:cab8:f7f:52a5]) by SA1PR11MB6733.namprd11.prod.outlook.com
- ([fe80::7237:cab8:f7f:52a5%7]) with mapi id 15.20.6521.024; Mon, 26 Jun 2023
- 20:36:37 +0000
-Date:   Mon, 26 Jun 2023 13:36:28 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Sumitra Sharma <sumitraartsy@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Ira Weiny <ira.weiny@intel.com>, Fabio <fmdefrancesco@gmail.com>,
-        "Deepak R Varma" <drv@mailo.com>,
-        Sumitra Sharma <sumitraartsy@gmail.com>
-Subject: Re: [PATCH v3] lib/test_bpf: Call page_address() on page acquired
- with GFP_KERNEL flag
-Message-ID: <6499f6cc97d6e_7517929478@iweiny-mobl.notmuch>
-References: <20230622075244.GA426694@sumitra.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230622075244.GA426694@sumitra.com>
-X-ClientProxiedBy: BYAPR01CA0042.prod.exchangelabs.com (2603:10b6:a03:94::19)
- To SA1PR11MB6733.namprd11.prod.outlook.com (2603:10b6:806:25c::17)
+        Mon, 26 Jun 2023 16:39:34 -0400
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 783C7E5B
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 13:39:30 -0700 (PDT)
+Received: by mail-ot1-x32c.google.com with SMTP id 46e09a7af769-6b5f362f4beso3748233a34.2
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 13:39:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687811970; x=1690403970;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MEFUJeeBn6YjH4lK418olg3ruMKuxKIepWsfszUOpy4=;
+        b=L6+t78u34A4EOsgO/5wyxp0/LGY+KJO2+xEm2/un0aE1W+UJ2WdK6S/UKVpguxRp5L
+         R5MBxyaqs+VsDVFucNqfi5acwzpetEuEiNoaZ8TINLUMNyLQrLw5ImKiNAUPyZP6AkhM
+         z9B43yz4ZPCStialiseimZwqXg90RajcVEsWa9D609XnTsfkElxPVXq9vzh/7VCTNHVv
+         ziS22l4ZeeTvBn6hGJgR0FsPhw4xt3yYJhqLCQR4EOQ9FePLgVx2Z54nPJ8gKrH0uwRL
+         cxZ5QZHAFRxraqfIGAatLgaElWfrPTD/K+Aa76+FxYyYGofVf9k/HTmhNNqiY77DmCW5
+         0/5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687811970; x=1690403970;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MEFUJeeBn6YjH4lK418olg3ruMKuxKIepWsfszUOpy4=;
+        b=hXA5uRz+uSTM/ll4haq4hLUbeHfpm+0ULjcRVmZ0gETddPOz9uy8oZsGvWaRalviEy
+         juiDnYn5xgn5LD6vp2r3GdBB/pzBvwDL06cIGvHCglt8/nPAx4gzkcPPIaZCrFofxptj
+         QuSx+74bE8vwYjzgIpVsTCm7Ezm0mjxlsyVMEhO3vYy0Xh3/Edzze1U7uIfbKCTHBdP7
+         kUMA2xOiiNyWzdSRdwldNQvdR6FKpDfxxlUFnQJlTuLr6HM4DfB1bo5jXzgiBbfwSdiB
+         2voMSmycsalq5xH1Ak5ECPKn8tfb318ADtlc2H7wdF5k2KJWlHZRrSY66tgcEXQM0sCA
+         YjRw==
+X-Gm-Message-State: AC+VfDx310TNY0es+aw+H573g/We/yi/T3COSTs2TyHr8aERq8S2D8FU
+        qWovShCFylzLwv7++avghVZJ2+FZtJZVv15A6NHxxA==
+X-Google-Smtp-Source: ACHHUZ4olQu8xtmPGwoaeFjq8yuKCjhhdxoXmfM/VHedl6d4Bu5m3oQg0VOJUL1hz/bBmYwBRV/mspwFs9D3oYgx/to=
+X-Received: by 2002:a05:6358:cd1c:b0:132:71e7:15b6 with SMTP id
+ gv28-20020a056358cd1c00b0013271e715b6mr13920779rwb.29.1687811969526; Mon, 26
+ Jun 2023 13:39:29 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA1PR11MB6733:EE_|PH8PR11MB6804:EE_
-X-MS-Office365-Filtering-Correlation-Id: 73c96063-038c-43dd-e215-08db768509ea
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QhnOK2M1g3t4HxPCKj3hnZALB0LbtBykr5Ix8xfGiQpLfDxqJZ5osDDyzMYboYAE31HKrDm+SUghhSZHPshmhBM9qvIwWkobIdxCp7iMQZOmqg+1V1cAnCF/Uu/KBkp358Ag1LDgmTj+5NRTergAxggVqahOCYF8Te17PP0KAdF2vP/7SdJ2CG0YglpNTGyhAyd9toh5uDGBagUj/NYfboYRBsI5H4SyqH9q9f80rCzVp9vTTTHDk8Q9+6vSmVm1/EY5l+kW1xFR0s5tMJ7X840Gu/+15uTIa92ZYHK4aFAs91nw+RLQgLeRsQaysD6jtUKDgXPPkq8+OHrCwah8ZBbnvzQHWGM32RNeFUJIbxI2pB9bj/BHbEy+V4H7+aqbTpw2SMR29cGeTCOGI/hOtXXbYKds3M5UUY979/wzvx7Ff5kJsBp9IVrmuek7+cPY+DufhrvAXw/qgJyBQ6LxFBPhsJEfwHo9qx+Y1JZskfoMpOg5Pg7jbKs0uO7SGlA4RfcD27oD5Kak/MHjPJoq2dQggNmmPDQQZH0uA1TKYefL5TjwRDb+5J3PpKEM4uA/grwsQwXlfkSc95DqM/9v1vFT3eanSYlBASOQQbbETRuYfyD88K4VSQ7nmUvIexbb
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6733.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(376002)(136003)(346002)(366004)(39860400002)(451199021)(6506007)(6486002)(966005)(478600001)(54906003)(6666004)(110136005)(83380400001)(2906002)(6512007)(26005)(186003)(9686003)(5660300002)(7416002)(44832011)(316002)(86362001)(921005)(38100700002)(82960400001)(66946007)(8936002)(8676002)(66476007)(4326008)(41300700001)(66556008);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?20SVV+eScw2b3+niupHrN58kKJbWelESEb9EHAIA5j+fe53+uexmiSJD30zo?=
- =?us-ascii?Q?iPLsFBsqDaTtj7T8PGOYvxdizsEREBEPmEHeoOZ+vvltKfC68NW5rsS4DnLQ?=
- =?us-ascii?Q?gnlUwIXmIvkyPA12dTkFQNtkuCrwtHROUUsIQiHsCaTpyTrJ1XF/9RGUQj6Z?=
- =?us-ascii?Q?0itKYUWYBUgSmwKGHy0UmHWIcoJp68ZOxubxyeGrRiODvkBMZ18fnaN4qK/4?=
- =?us-ascii?Q?FJ7xicSADBM2aYEWmIbL1Jr+O8UP3syXIHyX01aLKQyjQx14RAt85h8MQ9Ss?=
- =?us-ascii?Q?lxk7RFzY1GeDGULsZEazm3mvJ/x8FSIaU0ncar+EWup3kXX0RgjAtNhO2TEY?=
- =?us-ascii?Q?prhqOgyp1Pqsdt/fdAB5oQ6Tm/ewAo++rxyx+DjwCcVACNef3UCaf6XcVPpO?=
- =?us-ascii?Q?fWToYlZgFs5HK6JypYaHzSyR+WG2gazjcP9JvaAo3IIA8ZgCMmPXt5Zo8c4t?=
- =?us-ascii?Q?sOe+WlF8R3WbWK7fi4gdgWc256d+EMlaDpI6vIcjarLZ+itGGkyAfbR/6zkG?=
- =?us-ascii?Q?twRK+tOPYeXopU7/eYp7wAE6A7VQCFB42QP2DSgT0cEpm8bCHyFzMvfDxY4l?=
- =?us-ascii?Q?AxjQkS67dFAjXE5Amklc0dtf+LfjfbjHCjjmpdafsa0Z9iQkSMlhY2KG9kYI?=
- =?us-ascii?Q?1JcgUceqNaRTkaboXtyPcNIGo2+n5iiJfB6Ia58ZtDB10ExQyLZQJ5NJN4Nf?=
- =?us-ascii?Q?95kda2be8y9XVAqUf0SME4V2n0C4PEKpij7ha8J93v9vxXLXVIrKVdS8heti?=
- =?us-ascii?Q?yoLGSmqpHRHjyCfnUvc4m0pTZZfoaTf/+sO6qRTuP+K9IdpcN6ZijC9/y1+O?=
- =?us-ascii?Q?aVCHu3dWIaDr/cgmxJkDrQLc4gBeWqBJqv/7BwfRwGZDSSe63mcVi5nJVxA7?=
- =?us-ascii?Q?G6xSpFZIuHC8z9vEA3lW1zFYcVbt+VkeO37vJJ0Di12T2NGzN2hZ2MIWl5fQ?=
- =?us-ascii?Q?MwdKyZRnhYMIBlMYIxdiB7wpUD+xR5qo40Vhvl0p5a84iUR2fdmXHA8fFRQY?=
- =?us-ascii?Q?J9Fub+JfsktMDWTN9wNGkhTpvtF/Jm4c1tCVjVsnle8O+P7Ypzeu0rwYEV6I?=
- =?us-ascii?Q?gFuH/3UdIKrCG1gL2gTUtM/7ZhbHX8+F/xx6tEuwGQgDTIYFIB7qpKZjSC59?=
- =?us-ascii?Q?WKoVQO2keHZEDVerZdDRcgLT9MrlQPyhGZsFGYZvNFeiQl0r85V25S0m7PXa?=
- =?us-ascii?Q?nhQo/7GdW8eVFP1baAOMYfr/ii3j6YPwKz1JZYTTr7NGWod+GQlnE2+i0twm?=
- =?us-ascii?Q?hr4dpxojFTLzcdGEWXKVZT6tPMaVBnCFRa/Dy8WtS+Z7CJVFx/U4cW595VQ+?=
- =?us-ascii?Q?2J7aUr/fkMm9Yix10jUnobAAIXNl2o1SdGhO+b5gWK2YNVN/mc7IPXWCng30?=
- =?us-ascii?Q?4W8I46JoINy4UgUUWERAOpbfDJhfoSFG4G6Rzf7hFd6dcvsOEI557uwF+jeY?=
- =?us-ascii?Q?F4ezCmc0It9zWtjbzgjDCD/3LH7Pg2HtWVn6QYeR6Lmg5eN9gFPNVQD/5IsL?=
- =?us-ascii?Q?NKibrUB4DGp6cf0gsnOQOXQ3M7g9yi2lFc05ZC7akByQ2rRoQcEkp4Sl5sws?=
- =?us-ascii?Q?kHdY+tQY9SpL2dL4NgqZv+yD1NoFtNfnp3xPiw0n?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 73c96063-038c-43dd-e215-08db768509ea
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6733.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jun 2023 20:36:37.6366
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1TzifbTWf4a0F1S3INoMeIbZGQ5OiuCCzmWlErLoyOIYnFJA+lp2q/dzltp4BfPbvOp0X3ZVXEETXaqZRlB8dA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR11MB6804
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230626201713.1204982-1-surenb@google.com> <ZJn1tQDgfmcE7mNG@slm.duckdns.org>
+In-Reply-To: <ZJn1tQDgfmcE7mNG@slm.duckdns.org>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Mon, 26 Jun 2023 13:39:18 -0700
+Message-ID: <CAJuCfpGt8Bg1VLkx-aMw7_JTvh=co4QSM9B=fvikp0mQ-6rvjg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] kernfs: add kernfs_ops.free operation to free
+ resources tied to the file
+To:     Tejun Heo <tj@kernel.org>
+Cc:     gregkh@linuxfoundation.org, peterz@infradead.org,
+        lujialin4@huawei.com, lizefan.x@bytedance.com, hannes@cmpxchg.org,
+        mingo@redhat.com, ebiggers@kernel.org, oleg@redhat.com,
+        akpm@linux-foundation.org, viro@zeniv.linux.org.uk,
+        brauner@kernel.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sumitra Sharma wrote:
-> generate_test_data() acquires a page with alloc_page(GFP_KERNEL).
-> The GFP_KERNEL is typical for kernel-internal allocations.
-> The caller requires ZONE_NORMAL or a lower zone for direct access.
-> 
-> Therefore the page cannot come from ZONE_HIGHMEM. Thus there's
-> no need to map it with kmap().
-> 
-> Also, the kmap() is being deprecated in favor of
-> kmap_local_page() [1].
-> 
-> Hence, use a plain page_address() directly.
-> 
-> Since the page passed to the page_address() is not from the highmem
-> zone, the page_address() function will always return a valid kernel
-> virtual address and will not return NULL. Hence, remove the check
-> 'if (!ptr)'.
-> 
-> Remove the unused variable 'ptr'.
-> 
-> [1]: https://lore.kernel.org/all/20220813220034.806698-1-ira.weiny
-> @intel.com/
+On Mon, Jun 26, 2023 at 1:31=E2=80=AFPM Tejun Heo <tj@kernel.org> wrote:
+>
+> On Mon, Jun 26, 2023 at 01:17:12PM -0700, Suren Baghdasaryan wrote:
+> > diff --git a/include/linux/kernfs.h b/include/linux/kernfs.h
+> > index 73f5c120def8..a7e404ff31bb 100644
+> > --- a/include/linux/kernfs.h
+> > +++ b/include/linux/kernfs.h
+> > @@ -273,6 +273,11 @@ struct kernfs_ops {
+> >        */
+> >       int (*open)(struct kernfs_open_file *of);
+> >       void (*release)(struct kernfs_open_file *of);
+> > +     /*
+> > +      * Free resources tied to the lifecycle of the file, like a
+> > +      * waitqueue used for polling.
+> > +      */
+> > +     void (*free)(struct kernfs_open_file *of);
+>
+> I think this can use a bit more commenting - ie. explain that release may=
+ be
+> called earlier than the actual freeing of the file and how that can lead =
+to
+> problems. Othre than that, looks fine to me.
 
-Odd line break here which makes looking at this reference harder.
+Sure, once I get more feedback I'll post the next version with
+expanded description.
+Thanks!
 
-> 
-> Suggested-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-> Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
-
-The code looks good though.
-
-Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-
-> ---
-> 
-> - Link to v1: https://lore.kernel.org/bpf/20230613073020.GA359792@sumitra.com/T/
-> - Link to v2: https://lore.kernel.org/lkml/3564297.R56niFO833@suse/T/
-> 
-> Changes in v3:
-> Noted by: Fabio M. De Francesco<fmdefrancesco@gmail.com>
-> 	- Remove the check 'if (!ptr)'.
-> 	- Remove the unused variable 'ptr'.
-> 	- Change the commit message.
-> 
-> Changes in v2:
-> Noted by: Fabio M. De Francesco<fmdefrancesco@gmail.com>
-> 	- Remove the kmap() call and call page_address() instead.
-> 	- Change the commit subject and message.
-> 
-> 
->  lib/test_bpf.c | 8 +-------
->  1 file changed, 1 insertion(+), 7 deletions(-)
-> 
-> diff --git a/lib/test_bpf.c b/lib/test_bpf.c
-> index ade9ac672adb..448bc1b0b8b5 100644
-> --- a/lib/test_bpf.c
-> +++ b/lib/test_bpf.c
-> @@ -14381,18 +14381,12 @@ static void *generate_test_data(struct bpf_test *test, int sub)
->  		 * single fragment to the skb, filled with
->  		 * test->frag_data.
->  		 */
-> -		void *ptr;
-> -
->  		page = alloc_page(GFP_KERNEL);
->  
->  		if (!page)
->  			goto err_kfree_skb;
->  
-> -		ptr = kmap(page);
-> -		if (!ptr)
-> -			goto err_free_page;
-> -		memcpy(ptr, test->frag_data, MAX_DATA);
-> -		kunmap(page);
-> +		memcpy(page_address(page), test->frag_data, MAX_DATA);
->  		skb_add_rx_frag(skb, 0, page, 0, MAX_DATA, MAX_DATA);
->  	}
->  
-> -- 
-> 2.25.1
-> 
-
-
+>
+> Greg, as Suren suggested, I can route both patches through the cgroup tre=
+e
+> if you're okay with it.
+>
+> Thanks.
+>
+> --
+> tejun
