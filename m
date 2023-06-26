@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F145173ED67
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 23:53:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4F2773ED8F
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 23:55:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231177AbjFZVxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 17:53:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40970 "EHLO
+        id S231805AbjFZVyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 17:54:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231195AbjFZVwW (ORCPT
+        with ESMTP id S231535AbjFZVxm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 17:52:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D19AF213F;
-        Mon, 26 Jun 2023 14:51:10 -0700 (PDT)
+        Mon, 26 Jun 2023 17:53:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB1F198D;
+        Mon, 26 Jun 2023 14:51:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DA54460F7C;
-        Mon, 26 Jun 2023 21:50:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BE50C433C8;
-        Mon, 26 Jun 2023 21:50:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A6D7660F96;
+        Mon, 26 Jun 2023 21:50:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3F6AC433C9;
+        Mon, 26 Jun 2023 21:50:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687816255;
-        bh=aSLq5uHp6/F3LAD0eREO/jTQOhAVrAYg972K5sNmKu0=;
+        s=k20201202; t=1687816257;
+        bh=HB5ik3gv4Co5XN3kmgZPaP1UTspqkoXwyNIw4+YFVPc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=agC99o7qr/lXPtorgCzcO1ZQ+no/KwjBLiT9jEhv3tQsZlv1Y47XTZ0rRUbFGdbVq
-         Xh3ItLr/WR/bDyNqUiKPHQTLl8U9Mi8DzJpxrmcnqhG4lk4iPxQknta88qM9rTOvA4
-         616sfNUn8Kwnpxc6glPtkBpv4J/jVPzfmoSjwQQl6wg1uD54sMS/G1K6pC7RCYBRsr
-         Y403MtuEUNz2zeMifFiO/vjgSw9tCrqE7KHr5Rx4xHw0dBrja5Tkv+pUvOr+f6iZW/
-         3CAdPeudJrKmelh6P6tbIoy37bVITKLC4X0b7bIw0XB8P8Q7FTygs8+3Hlem+eAw5a
-         1MXxpbbXUKqxA==
+        b=M4unscMCEB9mWzGVGQmjPLTJB59J4YIkcW4cgcBhwDmpPy7BOzaxoQntW4tPsJACl
+         fIneVwpFJsM8U+Pv2huClevabHx8e7oUZ1vkO2uyCQ6EzZMPtn+CixgX8cKGcs6waO
+         c+BvKR+Y9bBpkdRzmSp2aHY88M3nPCoq2HTsB/RCe4WNhLJ/Ap+1LSHCP+KNrpRT92
+         iXrJ8itefetNi+fLeLA/zNI+bNJjZxdgVNMhZUqZYsfjDZ1kpiituMpGPHmGEobYJC
+         lLUebIlbMDeJ8CDYN4Aaa3ONJI/+K0biLSB7xhWKtrapcZdJn1DVYwEX//zBw6Z1+z
+         XnuPmXY8uddgg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Qi Hu <huqi@loongson.cn>, Miao HAO <haomiao19@mails.ucas.ac.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Sasha Levin <sashal@kernel.org>, chenhuacai@kernel.org,
-        git@xen0n.name, zhangqing@loongson.cn, lienze@kylinos.cn,
-        loongarch@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.1 14/15] LoongArch: Fix the write_fcsr() macro
-Date:   Mon, 26 Jun 2023 17:50:30 -0400
-Message-Id: <20230626215031.179159-14-sashal@kernel.org>
+Cc:     Takashi Iwai <tiwai@suse.de>, "Gong, Sishuai" <sishuai@purdue.edu>,
+        Sasha Levin <sashal@kernel.org>, perex@perex.cz,
+        tiwai@suse.com, alsa-devel@alsa-project.org
+Subject: [PATCH AUTOSEL 6.1 15/15] ALSA: seq: oss: Fix racy open/close of MIDI devices
+Date:   Mon, 26 Jun 2023 17:50:31 -0400
+Message-Id: <20230626215031.179159-15-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230626215031.179159-1-sashal@kernel.org>
 References: <20230626215031.179159-1-sashal@kernel.org>
@@ -51,8 +49,8 @@ X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.1.35
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,34 +59,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Qi Hu <huqi@loongson.cn>
+From: Takashi Iwai <tiwai@suse.de>
 
-[ Upstream commit 346dc929623cef70ff7832a4fa0ffd1b696e312a ]
+[ Upstream commit 297224fc0922e7385573a30c29ffdabb67f27b7d ]
 
-The "write_fcsr()" macro uses wrong the positions for val and dest in
-asm. Fix it!
+Although snd_seq_oss_midi_open() and snd_seq_oss_midi_close() can be
+called concurrently from different code paths, we have no proper data
+protection against races.  Introduce open_mutex to each seq_oss_midi
+object for avoiding the races.
 
-Reported-by: Miao HAO <haomiao19@mails.ucas.ac.cn>
-Signed-off-by: Qi Hu <huqi@loongson.cn>
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+Reported-by: "Gong, Sishuai" <sishuai@purdue.edu>
+Closes: https://lore.kernel.org/r/7DC9AF71-F481-4ABA-955F-76C535661E33@purdue.edu
+Link: https://lore.kernel.org/r/20230612125533.27461-1-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/loongarch/include/asm/loongarch.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ sound/core/seq/oss/seq_oss_midi.c | 35 +++++++++++++++++++------------
+ 1 file changed, 22 insertions(+), 13 deletions(-)
 
-diff --git a/arch/loongarch/include/asm/loongarch.h b/arch/loongarch/include/asm/loongarch.h
-index 62835d84a647d..3d15fa5bef37d 100644
---- a/arch/loongarch/include/asm/loongarch.h
-+++ b/arch/loongarch/include/asm/loongarch.h
-@@ -1488,7 +1488,7 @@ __BUILD_CSR_OP(tlbidx)
- #define write_fcsr(dest, val) \
- do {	\
- 	__asm__ __volatile__(	\
--	"	movgr2fcsr	%0, "__stringify(dest)"	\n"	\
-+	"	movgr2fcsr	"__stringify(dest)", %0	\n"	\
- 	: : "r" (val));	\
- } while (0)
+diff --git a/sound/core/seq/oss/seq_oss_midi.c b/sound/core/seq/oss/seq_oss_midi.c
+index 07efb38f58ac1..f2940b29595f0 100644
+--- a/sound/core/seq/oss/seq_oss_midi.c
++++ b/sound/core/seq/oss/seq_oss_midi.c
+@@ -37,6 +37,7 @@ struct seq_oss_midi {
+ 	struct snd_midi_event *coder;	/* MIDI event coder */
+ 	struct seq_oss_devinfo *devinfo;	/* assigned OSSseq device */
+ 	snd_use_lock_t use_lock;
++	struct mutex open_mutex;
+ };
  
+ 
+@@ -172,6 +173,7 @@ snd_seq_oss_midi_check_new_port(struct snd_seq_port_info *pinfo)
+ 	mdev->flags = pinfo->capability;
+ 	mdev->opened = 0;
+ 	snd_use_lock_init(&mdev->use_lock);
++	mutex_init(&mdev->open_mutex);
+ 
+ 	/* copy and truncate the name of synth device */
+ 	strscpy(mdev->name, pinfo->name, sizeof(mdev->name));
+@@ -322,15 +324,17 @@ snd_seq_oss_midi_open(struct seq_oss_devinfo *dp, int dev, int fmode)
+ 	int perm;
+ 	struct seq_oss_midi *mdev;
+ 	struct snd_seq_port_subscribe subs;
++	int err;
+ 
+ 	mdev = get_mididev(dp, dev);
+ 	if (!mdev)
+ 		return -ENODEV;
+ 
++	mutex_lock(&mdev->open_mutex);
+ 	/* already used? */
+ 	if (mdev->opened && mdev->devinfo != dp) {
+-		snd_use_lock_free(&mdev->use_lock);
+-		return -EBUSY;
++		err = -EBUSY;
++		goto unlock;
+ 	}
+ 
+ 	perm = 0;
+@@ -340,14 +344,14 @@ snd_seq_oss_midi_open(struct seq_oss_devinfo *dp, int dev, int fmode)
+ 		perm |= PERM_READ;
+ 	perm &= mdev->flags;
+ 	if (perm == 0) {
+-		snd_use_lock_free(&mdev->use_lock);
+-		return -ENXIO;
++		err = -ENXIO;
++		goto unlock;
+ 	}
+ 
+ 	/* already opened? */
+ 	if ((mdev->opened & perm) == perm) {
+-		snd_use_lock_free(&mdev->use_lock);
+-		return 0;
++		err = 0;
++		goto unlock;
+ 	}
+ 
+ 	perm &= ~mdev->opened;
+@@ -372,13 +376,17 @@ snd_seq_oss_midi_open(struct seq_oss_devinfo *dp, int dev, int fmode)
+ 	}
+ 
+ 	if (! mdev->opened) {
+-		snd_use_lock_free(&mdev->use_lock);
+-		return -ENXIO;
++		err = -ENXIO;
++		goto unlock;
+ 	}
+ 
+ 	mdev->devinfo = dp;
++	err = 0;
++
++ unlock:
++	mutex_unlock(&mdev->open_mutex);
+ 	snd_use_lock_free(&mdev->use_lock);
+-	return 0;
++	return err;
+ }
+ 
+ /*
+@@ -393,10 +401,9 @@ snd_seq_oss_midi_close(struct seq_oss_devinfo *dp, int dev)
+ 	mdev = get_mididev(dp, dev);
+ 	if (!mdev)
+ 		return -ENODEV;
+-	if (! mdev->opened || mdev->devinfo != dp) {
+-		snd_use_lock_free(&mdev->use_lock);
+-		return 0;
+-	}
++	mutex_lock(&mdev->open_mutex);
++	if (!mdev->opened || mdev->devinfo != dp)
++		goto unlock;
+ 
+ 	memset(&subs, 0, sizeof(subs));
+ 	if (mdev->opened & PERM_WRITE) {
+@@ -415,6 +422,8 @@ snd_seq_oss_midi_close(struct seq_oss_devinfo *dp, int dev)
+ 	mdev->opened = 0;
+ 	mdev->devinfo = NULL;
+ 
++ unlock:
++	mutex_unlock(&mdev->open_mutex);
+ 	snd_use_lock_free(&mdev->use_lock);
+ 	return 0;
+ }
 -- 
 2.39.2
 
