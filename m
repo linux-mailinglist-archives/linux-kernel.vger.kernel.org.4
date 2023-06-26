@@ -2,112 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D69C73D930
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 10:10:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBA2D73D92B
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 10:09:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbjFZIJ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 04:09:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49992 "EHLO
+        id S230054AbjFZIJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 04:09:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230083AbjFZIJq (ORCPT
+        with ESMTP id S229767AbjFZIJ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 04:09:46 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB1EBE74
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 01:09:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687766982; x=1719302982;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+lr7gWkrUK24BQPjHF38fYVzI+XtiPSL5/A2F9B/bVc=;
-  b=nPWDQ7/Zm0DBqqcv3crUARjCwlKAitfjzGQHBUvpwnUhzpuaGqfkNROv
-   DjZn2ikVhckSHTo899HhU8zqO76Kith7dvFw8kxWBIpOfoSUhuIdir7wb
-   lBoIhsIK3y+Ep7wDA5OZQpKA7O9VuDpqzql9HflWLWz7oSQBjqrnQ2qsf
-   evdE44zC5pRFloDxj/dtfd4KFmHCwcSsOLWOjekYNYxkwdQ/vUhkU9yPG
-   vhMTNiPJWNO+8YEFOIDuyyfnBeeTEljYZS+ajgNPrc7aNEtsgO8S/h0d8
-   Ni0j7AqD6xf3Yjg0AKMD4YTmDbeyfpuok6fS/AxELZKwehl7q+FkYEjB1
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="447588949"
-X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
-   d="scan'208";a="447588949"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 01:09:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="860596455"
-X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
-   d="scan'208";a="860596455"
-Received: from csteeb-mobl2.ger.corp.intel.com (HELO intel.com) ([10.251.217.4])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 01:09:24 -0700
-Date:   Mon, 26 Jun 2023 10:09:15 +0200
-From:   Andi Shyti <andi.shyti@linux.intel.com>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
-Subject: Re: [Intel-gfx] [PATCH] i915: avoid unused-but-set-variable warning
-Message-ID: <ZJlHq30vUxVuv/Qh@ashyti-mobl2.lan>
-References: <20230622101848.3482277-1-arnd@kernel.org>
+        Mon, 26 Jun 2023 04:09:29 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4500F1BB;
+        Mon, 26 Jun 2023 01:09:28 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 111332F4;
+        Mon, 26 Jun 2023 01:10:12 -0700 (PDT)
+Received: from [192.168.1.100] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4F7D93F73F;
+        Mon, 26 Jun 2023 01:09:25 -0700 (PDT)
+Message-ID: <0050f8d2-a4cd-2b84-77ad-6fa93bb14b16@arm.com>
+Date:   Mon, 26 Jun 2023 09:09:23 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230622101848.3482277-1-arnd@kernel.org>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] perf tests: Fix test_arm_callgraph_fp variable expansion
+To:     Markus Elfring <Markus.Elfring@web.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, cocci@inria.fr,
+        linux-perf-users@vger.kernel.org, spoorts2@in.ibm.com,
+        kernel-janitors@vger.kernel.org,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Ian Rogers <irogers@google.com>,
+        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+References: <20230622101809.2431897-1-james.clark@arm.com>
+ <2b1cec46-52a9-21f1-bfcd-fbb4298f072a@web.de>
+Content-Language: en-US
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <2b1cec46-52a9-21f1-bfcd-fbb4298f072a@web.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
 
-On Thu, Jun 22, 2023 at 12:18:41PM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> The mchbar_addr variable is only used inside of an #ifdef:
-> 
-> drivers/gpu/drm/i915/soc/intel_gmch.c:41:6: error: variable 'mchbar_addr' set but not used [-Werror,-Wunused-but-set-variable]
-> 
-> Change this to an IS_ENABLED() check to let the compiler see how
-> it's used and no longer warn about it.
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  drivers/gpu/drm/i915/soc/intel_gmch.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/i915/soc/intel_gmch.c b/drivers/gpu/drm/i915/soc/intel_gmch.c
-> index 6d0204942f7a5..49c7fb16e934f 100644
-> --- a/drivers/gpu/drm/i915/soc/intel_gmch.c
-> +++ b/drivers/gpu/drm/i915/soc/intel_gmch.c
-> @@ -47,11 +47,9 @@ intel_alloc_mchbar_resource(struct drm_i915_private *i915)
->  	mchbar_addr = ((u64)temp_hi << 32) | temp_lo;
->  
->  	/* If ACPI doesn't have it, assume we need to allocate it ourselves */
-> -#ifdef CONFIG_PNP
-> -	if (mchbar_addr &&
-> +	if (IS_ENABLED(CONFIG_PNP) && mchbar_addr &&
->  	    pnp_range_reserved(mchbar_addr, mchbar_addr + MCHBAR_SIZE))
->  		return 0;
-> -#endif
 
-you actually already sent this same patch[*] and I did push it in
-drm-intel-next.
+On 23/06/2023 17:56, Markus Elfring wrote:
+> …
+>> At the same time silence the shellcheck warning for that line and fix
+>> two more shellcheck errors at the end of the script.
+> 
+> Does such a wording really fit to the known requirement “Solve only one problem per patch.”?
+> 
+> See also:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/submitting-patches.rst?h=v6.4-rc7#n81
+> 
+> 
+> Regards,
+> Markus
 
-Andi
+I think so, it fixes all the shellcheck errors that were claimed to be
+fixed and introduced by the referenced fix.
 
-[*] https://patchwork.freedesktop.org/patch/542054/
-
->  
->  	/* Get some space for it */
->  	i915->gmch.mch_res.name = "i915 MCHBAR";
-> -- 
-> 2.39.2
+To be honest I would have rather just reverted the original change
+completely because it was obviously never tested.
