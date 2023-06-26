@@ -2,52 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6EFF73E26C
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 16:49:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A966F73E26E
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 16:49:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229932AbjFZOtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 10:49:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54840 "EHLO
+        id S229891AbjFZOte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 10:49:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbjFZOtF (ORCPT
+        with ESMTP id S229521AbjFZOtc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 10:49:05 -0400
-Received: from mail-io1-f78.google.com (mail-io1-f78.google.com [209.85.166.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91CADE79
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 07:49:03 -0700 (PDT)
-Received: by mail-io1-f78.google.com with SMTP id ca18e2360f4ac-77a1d6d2f7fso271791039f.2
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 07:49:03 -0700 (PDT)
+        Mon, 26 Jun 2023 10:49:32 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D056112E
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 07:49:30 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id 41be03b00d2f7-553a1f13d9fso2907025a12.1
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 07:49:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1687790970; x=1690382970;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pQb0qOt7za3JfyuW5vz4QFCethrcqJk2saWua6HMAXU=;
+        b=jZXsSwFUnSSRaPAEYACr0E/2WajdCjyhOaJxs0Mv22a/FivBQTyxlWgeUoo055b7SK
+         KhIzjME2oTmSjsPl9uP4sty9sDJAflnRE0syYDXb/aNJtdQjTZNg6vDnUdXdCtz6q8ZX
+         l7TOz+YUv4+kMhLv2gZfNkPxwsxfRMKEbz5vQHDblVC9QD5eYQ3/PUASCMnxpxpnBl+9
+         qZRgTciQudVmLfp5y6yM31C8R93erE2nsnbi3xsJRzg7ZTm9AUNIAklzymRw/QmOO+1Z
+         PEMxPIPPbTA+zsbOavFCwxeQnXzDo/C8WCx4lv3OkwpdGffxyvH7DtwumyiIMc6r39t4
+         rC4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687790943; x=1690382943;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CTN8eHqEhul73km71ivyoMn8wepYg6lP56Aehd1zurw=;
-        b=Uwpq+sAlPjDHDoNHAqnevFVKRK0dCHIjLKQ31dE1h0d+kftzuC05Bk5KN2CRGxx/QZ
-         K5wICaIN3AR5Kb48tChV0hWXo3LBXL38yuzyySzKVx2XCL/9+Nc1Jke8gKnuIhnxRPbW
-         NyNXYoN0rcBbas/27/yxxk3KnX6IIIeuqrDlOVrHdHd0iYuSRKMvMI8IC9hX+TjJOusn
-         wo+MBhmdp3oKAJGm7n9W5MA38YjAQF/Er95vtFyczpXPRlJrTlsleXKjFdYtXxJDV8ZG
-         2Q2pcM8oc9nwfnEf7DcBm0iqkkm3r6z4GfnG/iWEg0gLoM6nRuHRfq/njm+TBEr9K5PX
-         SJjw==
-X-Gm-Message-State: AC+VfDxo9hTtvmr5SubMp5XG0e4lVQrzCOD7XXewX0ynSEu8ZY2qUs6V
-        s57sF+CWM0nD/KnS6xYp66BQeRT636Z+cLisBQFaFJ8C7O7s
-X-Google-Smtp-Source: ACHHUZ4+hTti2HmsrPZcwfsQg7QEBOd/QgofzbVD+/4rVBXv8S2zC8hQy1eAdXR3PKj0290cJrV312trnSMGQdB9GycUPZebrj5f
+        d=1e100.net; s=20221208; t=1687790970; x=1690382970;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=pQb0qOt7za3JfyuW5vz4QFCethrcqJk2saWua6HMAXU=;
+        b=YIxPPJIG+gxsftfHo5xht2Y/XeJCF2dDe5GWsN4YfPS+aBZ1KFQcQmWSAS1KFBb81p
+         DykmatCjeWSi4thBzvTnbPwTrsofdIqrC2wO72o98e8zYKOTCq0/IkJkoD+HffvrViWH
+         kZCz+2fGPmtICXr0N6/VkPahHpALYwxZRCFpfGWbSL9OShbQ1rZuw98eTzi5xbqpjuTd
+         BbrB6lSnzFCReI4tMWVqhjVftbeutQh3kueUJsFp6WNTH8G09D9MxuTNJjJuzbo1KDgr
+         t9FFEJL0H+oQCcWQV5mDaj5EV/+ek5VhcV/uRbgy1p9n6lGCadokIhwPmn54cg9Iwof8
+         BdkQ==
+X-Gm-Message-State: AC+VfDyqQfLae9cWJlmZMnsL9U2xalQBjEmnoCkqR9VninZYaaJ/zsNZ
+        uAKor/a4RDol7lPdQkGQbenq8A==
+X-Google-Smtp-Source: ACHHUZ5GGmQmZK6Pdk/0WOE4p0jN9ts4cyRWDEezIQMn0sNMLYw4rloFGLp7ys1IgYmzAuUjLFF+nQ==
+X-Received: by 2002:a17:90a:17ec:b0:262:ba8a:f7ef with SMTP id q99-20020a17090a17ec00b00262ba8af7efmr9419568pja.23.1687790970330;
+        Mon, 26 Jun 2023 07:49:30 -0700 (PDT)
+Received: from [10.255.209.141] ([139.177.225.255])
+        by smtp.gmail.com with ESMTPSA id 18-20020a17090a199200b00262f59ce2edsm1900239pji.10.2023.06.26.07.49.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Jun 2023 07:49:30 -0700 (PDT)
+Message-ID: <ba821a60-06f9-7bc5-2362-b1b3c44b0088@bytedance.com>
+Date:   Mon, 26 Jun 2023 22:49:24 +0800
 MIME-Version: 1.0
-X-Received: by 2002:a02:9505:0:b0:423:ea8:4271 with SMTP id
- y5-20020a029505000000b004230ea84271mr10127175jah.6.1687790942937; Mon, 26 Jun
- 2023 07:49:02 -0700 (PDT)
-Date:   Mon, 26 Jun 2023 07:49:02 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000009be70d05ff097338@google.com>
-Subject: [syzbot] [nilfs?] possible deadlock in nilfs_dirty_inode
-From:   syzbot <syzbot+903a7b353239d83ad434@syzkaller.appspotmail.com>
-To:     konishi.ryusuke@gmail.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-nilfs@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.2
+Subject: Re: [PATCH v2 14/16] maple_tree: Refine mas_preallocate() node
+ calculations
+To:     Danilo Krummrich <dakr@redhat.com>
+Cc:     maple-tree@lists.infradead.org, linux-mm@kvack.org,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        linux-kernel@vger.kernel.org,
+        Peng Zhang <zhangpeng.00@bytedance.com>,
+        David Airlie <airlied@redhat.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>
+References: <20230612203953.2093911-1-Liam.Howlett@oracle.com>
+ <20230612203953.2093911-15-Liam.Howlett@oracle.com>
+ <26d8fbcf-d34f-0a79-9d91-8c60e66f7341@redhat.com>
+ <cdab5e74-7559-cb31-90ca-b99a5c3a6dd6@gmail.com>
+ <43ce08db-210a-fec8-51b4-351625b3cdfb@redhat.com>
+ <ZJmQVeiLtkFAGfW0@casper.infradead.org>
+ <57527c36-57a1-6699-b6f0-373ba895014c@redhat.com>
+From:   Peng Zhang <zhangpeng.00@bytedance.com>
+In-Reply-To: <57527c36-57a1-6699-b6f0-373ba895014c@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,206 +87,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit:    dad9774deaf1 Merge tag 'timers-urgent-2023-06-21' of git:/..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=106a4b33280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=2cbd298d0aff1140
-dashboard link: https://syzkaller.appspot.com/bug?extid=903a7b353239d83ad434
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: i386
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/7bc7510fe41f/non_bootable_disk-dad9774d.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/04ba8cb302c4/vmlinux-dad9774d.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/9b26d41c591b/bzImage-dad9774d.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+903a7b353239d83ad434@syzkaller.appspotmail.com
-
-======================================================
-WARNING: possible circular locking dependency detected
-6.4.0-rc7-syzkaller-00072-gdad9774deaf1 #0 Not tainted
-------------------------------------------------------
-kswapd0/111 is trying to acquire lock:
-ffff888050c6e650 (sb_internal#3){.+.+}-{0:0}, at: nilfs_dirty_inode+0x18a/0x260 fs/nilfs2/inode.c:1147
-
-but task is already holding lock:
-ffffffff8c8efae0 (fs_reclaim){+.+.}-{0:0}, at: set_task_reclaim_state mm/vmscan.c:512 [inline]
-ffffffff8c8efae0 (fs_reclaim){+.+.}-{0:0}, at: balance_pgdat+0x170/0x1ac0 mm/vmscan.c:7349
-
-which lock already depends on the new lock.
 
 
-the existing dependency chain (in reverse order) is:
+在 2023/6/26 22:27, Danilo Krummrich 写道:
+> On 6/26/23 15:19, Matthew Wilcox wrote:
+>> On Mon, Jun 26, 2023 at 02:38:06AM +0200, Danilo Krummrich wrote:
+>>> On the other hand, unless I miss something (and if so, please let me 
+>>> know),
+>>> something is bogus with the API then.
+>>>
+>>> While the documentation of the Advanced API of the maple tree explicitly
+>>> claims that the user of the API is responsible for locking, this 
+>>> should be
+>>> limited to the bounds set by the maple tree implementation. Which 
+>>> means, the
+>>> user must decide for either the internal (spin-) lock or an external 
+>>> lock
+>>> (which possibly goes away in the future) and acquire and release it
+>>> according to the rules maple tree enforces through lockdep checks.
+>>>
+>>> Let's say one picks the internal lock. How is one supposed to ensure the
+>>> tree isn't modified using the internal lock with mas_preallocate()?
+>>>
+>>> Besides that, I think the documentation should definitely mention this
+>>> limitation and give some guidance for the locking.
+>>>
+>>> Currently, from an API perspective, I can't see how anyone not 
+>>> familiar with
+>>> the implementation details would be able to recognize this limitation.
+>>>
+>>> In terms of the GPUVA manager, unfortunately, it seems like I need to 
+>>> drop
+>>> the maple tree and go back to using a rb-tree, since it seems there 
+>>> is no
+>>> sane way doing a worst-case pre-allocation that does not suffer from 
+>>> this
+>>> limitation.
+>>
+>> I haven't been paying much attention here (too many other things going
+>> on), but something's wrong.
+>>
+>> First, you shouldn't need to preallocate.  Preallocation is only there
+> 
+> Unfortunately, I think we really have a case where we have to. Typically 
+> GPU mappings are created in a dma-fence signalling critical path and 
+> that is where such mappings need to be added to the maple tree. Hence, 
+> we can't do any sleeping allocations there.
+> 
+>> for really gnarly cases.  The way this is *supposed* to work is that
+>> the store walks down to the leaf, attempts to insert into that leaf
+>> and tries to allocate new nodes with __GFP_NOWAIT.  If that fails,
+>> it drops the spinlock, allocates with the gfp flags you've specified,
+>> then rewalks the tree to retry the store, this time with allocated
+>> nodes in its back pocket so that the store will succeed.
+> 
+> You are talking about mas_store_gfp() here, right? And I guess, if the 
+> tree has changed while the spinlock was dropped and even more nodes are 
+> needed it just retries until it succeeds?
+> 
+> But what about mas_preallocate()? What happens if the tree changed in 
+> between mas_preallocate() and mas_store_prealloc()? Does the latter one 
+> fall back to __GFP_NOWAIT in such a case? I guess not, since 
+> mas_store_prealloc() has a void return type, and __GFP_NOWAIT could fail 
+> as well.
+mas_store_prealloc() will fallback to __GFP_NOWAIT and issue a warning.
+If __GFP_NOWAIT allocation fails, BUG_ON() in mas_store_prealloc() will
+be triggered.
 
--> #2 (fs_reclaim){+.+.}-{0:0}:
-       __fs_reclaim_acquire mm/page_alloc.c:3893 [inline]
-       fs_reclaim_acquire+0x11d/0x160 mm/page_alloc.c:3907
-       might_alloc include/linux/sched/mm.h:303 [inline]
-       prepare_alloc_pages+0x159/0x570 mm/page_alloc.c:4539
-       __alloc_pages+0x149/0x4a0 mm/page_alloc.c:4757
-       alloc_pages+0x1aa/0x270 mm/mempolicy.c:2279
-       folio_alloc+0x20/0x70 mm/mempolicy.c:2289
-       filemap_alloc_folio+0x3c1/0x470 mm/filemap.c:976
-       __filemap_get_folio+0x2a6/0x990 mm/filemap.c:1971
-       pagecache_get_page+0x2e/0x270 mm/folio-compat.c:99
-       block_write_begin+0x35/0x4d0 fs/buffer.c:2171
-       nilfs_write_begin+0xa0/0x1a0 fs/nilfs2/inode.c:261
-       page_symlink+0x386/0x480 fs/namei.c:5193
-       nilfs_symlink+0x235/0x3c0 fs/nilfs2/namei.c:153
-       vfs_symlink fs/namei.c:4475 [inline]
-       vfs_symlink+0x10c/0x2c0 fs/namei.c:4459
-       do_symlinkat+0x262/0x2e0 fs/namei.c:4501
-       __do_sys_symlinkat fs/namei.c:4517 [inline]
-       __se_sys_symlinkat fs/namei.c:4514 [inline]
-       __ia32_sys_symlinkat+0x97/0xc0 fs/namei.c:4514
-       do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
-       __do_fast_syscall_32+0x65/0xf0 arch/x86/entry/common.c:178
-       do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
-       entry_SYSENTER_compat_after_hwframe+0x70/0x82
-
--> #1 (&nilfs->ns_segctor_sem){++++}-{3:3}:
-       down_read+0x9c/0x480 kernel/locking/rwsem.c:1520
-       nilfs_transaction_begin+0x31a/0xa20 fs/nilfs2/segment.c:223
-       nilfs_create+0x9b/0x300 fs/nilfs2/namei.c:82
-       lookup_open.isra.0+0x105a/0x1400 fs/namei.c:3492
-       open_last_lookups fs/namei.c:3560 [inline]
-       path_openat+0x975/0x2750 fs/namei.c:3788
-       do_filp_open+0x1ba/0x410 fs/namei.c:3818
-       do_sys_openat2+0x16d/0x4c0 fs/open.c:1356
-       do_sys_open fs/open.c:1372 [inline]
-       __do_compat_sys_open fs/open.c:1423 [inline]
-       __se_compat_sys_open fs/open.c:1421 [inline]
-       __ia32_compat_sys_open+0x11d/0x1c0 fs/open.c:1421
-       do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
-       __do_fast_syscall_32+0x65/0xf0 arch/x86/entry/common.c:178
-       do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
-       entry_SYSENTER_compat_after_hwframe+0x70/0x82
-
--> #0 (sb_internal#3){.+.+}-{0:0}:
-       check_prev_add kernel/locking/lockdep.c:3113 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3232 [inline]
-       validate_chain kernel/locking/lockdep.c:3847 [inline]
-       __lock_acquire+0x2fcd/0x5f30 kernel/locking/lockdep.c:5088
-       lock_acquire kernel/locking/lockdep.c:5705 [inline]
-       lock_acquire+0x1b1/0x520 kernel/locking/lockdep.c:5670
-       percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
-       __sb_start_write include/linux/fs.h:1494 [inline]
-       sb_start_intwrite include/linux/fs.h:1616 [inline]
-       nilfs_transaction_begin+0x21e/0xa20 fs/nilfs2/segment.c:220
-       nilfs_dirty_inode+0x18a/0x260 fs/nilfs2/inode.c:1147
-       __mark_inode_dirty+0x1e0/0xd60 fs/fs-writeback.c:2424
-       mark_inode_dirty_sync include/linux/fs.h:2149 [inline]
-       iput.part.0+0x57/0x740 fs/inode.c:1770
-       iput+0x5c/0x80 fs/inode.c:1763
-       dentry_unlink_inode+0x2b1/0x460 fs/dcache.c:401
-       __dentry_kill+0x3c0/0x640 fs/dcache.c:607
-       shrink_dentry_list+0x12c/0x4f0 fs/dcache.c:1201
-       prune_dcache_sb+0xeb/0x150 fs/dcache.c:1282
-       super_cache_scan+0x33a/0x590 fs/super.c:104
-       do_shrink_slab+0x428/0xaa0 mm/vmscan.c:895
-       shrink_slab_memcg mm/vmscan.c:964 [inline]
-       shrink_slab+0x38f/0x6c0 mm/vmscan.c:1043
-       shrink_one+0x4f9/0x710 mm/vmscan.c:5365
-       shrink_many mm/vmscan.c:5415 [inline]
-       lru_gen_shrink_node mm/vmscan.c:5532 [inline]
-       shrink_node+0x1fd5/0x3500 mm/vmscan.c:6473
-       kswapd_shrink_node mm/vmscan.c:7273 [inline]
-       balance_pgdat+0xa02/0x1ac0 mm/vmscan.c:7463
-       kswapd+0x677/0xd60 mm/vmscan.c:7723
-       kthread+0x344/0x440 kernel/kthread.c:379
-       ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
-
-other info that might help us debug this:
-
-Chain exists of:
-  sb_internal#3 --> &nilfs->ns_segctor_sem --> fs_reclaim
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(fs_reclaim);
-                               lock(&nilfs->ns_segctor_sem);
-                               lock(fs_reclaim);
-  rlock(sb_internal#3);
-
- *** DEADLOCK ***
-
-3 locks held by kswapd0/111:
- #0: ffffffff8c8efae0 (fs_reclaim){+.+.}-{0:0}, at: set_task_reclaim_state mm/vmscan.c:512 [inline]
- #0: ffffffff8c8efae0 (fs_reclaim){+.+.}-{0:0}, at: balance_pgdat+0x170/0x1ac0 mm/vmscan.c:7349
- #1: ffffffff8c8a3b10 (shrinker_rwsem){++++}-{3:3}, at: shrink_slab_memcg mm/vmscan.c:937 [inline]
- #1: ffffffff8c8a3b10 (shrinker_rwsem){++++}-{3:3}, at: shrink_slab+0x2a0/0x6c0 mm/vmscan.c:1043
- #2: ffff888050c6e0e0 (&type->s_umount_key#61){++++}-{3:3}, at: trylock_super fs/super.c:414 [inline]
- #2: ffff888050c6e0e0 (&type->s_umount_key#61){++++}-{3:3}, at: super_cache_scan+0x70/0x590 fs/super.c:79
-
-stack backtrace:
-CPU: 0 PID: 111 Comm: kswapd0 Not tainted 6.4.0-rc7-syzkaller-00072-gdad9774deaf1 #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
- check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2188
- check_prev_add kernel/locking/lockdep.c:3113 [inline]
- check_prevs_add kernel/locking/lockdep.c:3232 [inline]
- validate_chain kernel/locking/lockdep.c:3847 [inline]
- __lock_acquire+0x2fcd/0x5f30 kernel/locking/lockdep.c:5088
- lock_acquire kernel/locking/lockdep.c:5705 [inline]
- lock_acquire+0x1b1/0x520 kernel/locking/lockdep.c:5670
- percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
- __sb_start_write include/linux/fs.h:1494 [inline]
- sb_start_intwrite include/linux/fs.h:1616 [inline]
- nilfs_transaction_begin+0x21e/0xa20 fs/nilfs2/segment.c:220
- nilfs_dirty_inode+0x18a/0x260 fs/nilfs2/inode.c:1147
- __mark_inode_dirty+0x1e0/0xd60 fs/fs-writeback.c:2424
- mark_inode_dirty_sync include/linux/fs.h:2149 [inline]
- iput.part.0+0x57/0x740 fs/inode.c:1770
- iput+0x5c/0x80 fs/inode.c:1763
- dentry_unlink_inode+0x2b1/0x460 fs/dcache.c:401
- __dentry_kill+0x3c0/0x640 fs/dcache.c:607
- shrink_dentry_list+0x12c/0x4f0 fs/dcache.c:1201
- prune_dcache_sb+0xeb/0x150 fs/dcache.c:1282
- super_cache_scan+0x33a/0x590 fs/super.c:104
- do_shrink_slab+0x428/0xaa0 mm/vmscan.c:895
- shrink_slab_memcg mm/vmscan.c:964 [inline]
- shrink_slab+0x38f/0x6c0 mm/vmscan.c:1043
- shrink_one+0x4f9/0x710 mm/vmscan.c:5365
- shrink_many mm/vmscan.c:5415 [inline]
- lru_gen_shrink_node mm/vmscan.c:5532 [inline]
- shrink_node+0x1fd5/0x3500 mm/vmscan.c:6473
- kswapd_shrink_node mm/vmscan.c:7273 [inline]
- balance_pgdat+0xa02/0x1ac0 mm/vmscan.c:7463
- kswapd+0x677/0xd60 mm/vmscan.c:7723
- kthread+0x344/0x440 kernel/kthread.c:379
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+> 
+> So, how to use the internal spinlock for mas_preallocate() and 
+> mas_store_prealloc() to ensure the tree can't change?
+> 
