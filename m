@@ -2,113 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D678873E22A
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 16:31:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3D2873E22E
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 16:32:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230110AbjFZObp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 10:31:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47452 "EHLO
+        id S230484AbjFZOcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 10:32:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjFZObn (ORCPT
+        with ESMTP id S229520AbjFZOcn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 10:31:43 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2E510C
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 07:31:42 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35QCVxPv024164;
-        Mon, 26 Jun 2023 14:31:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=EPBgG7RePFl33JUP0Sp09a5Cq4hKOg3JaOTgQmLXP44=;
- b=EsJFqPI9kARvLQYfcvNC+tLFTwQ4Hh4j+wN9CNebuWO8vOhjqAzpNXPxcsX3mur029sC
- 6/fc83T0PB94NJodGUaMnAmNh6pBmxyDrvLJh+/maARGuGcL0h4oKOVxLzQI4hhGIr53
- U4IMoG9zIi4o55/Ccb771dAOeht1ETZftNXhNtO1g56oUOV2AW0of4JN9X+tVXEL0OFT
- 3sh1kQsi//Vl6Kf3rAUjSfkbWPxfoYwg7zY9SdX+HdRqnP0tID4W8szr5SYiz+CzVt+r
- fM+HTxW/qq5972srbuNAuayvNw9MrHxplz0RbLI1c7nfv/1NpNrhaiMI52n/vDJUr34N KA== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rfart88hh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 26 Jun 2023 14:31:30 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35QEVTFK015488
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 26 Jun 2023 14:31:29 GMT
-Received: from [10.214.66.119] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 26 Jun
- 2023 07:31:26 -0700
-Message-ID: <70743150-dc85-1a1a-87ec-e3dd9f72c5d0@quicinc.com>
-Date:   Mon, 26 Jun 2023 20:01:23 +0530
+        Mon, 26 Jun 2023 10:32:43 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91044E74
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 07:32:42 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-312826ffedbso3876104f8f.0
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 07:32:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1687789961; x=1690381961;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0xifpWCjzQTN6wRfQL9oeo1fgrnPC7xl+aGU5N4Yu6A=;
+        b=RVPxNZgu36KUFT5H8FgT+jHwoc06ROYIC9YqiemtZ5d40LXR39skaMUiMgV4EA768/
+         ADZ/bbDHZ5XvnvKFxBJzae9FuiIsNGxKe8fmFnOK1Dzh0TArvqizeXoNF9u4+302W6ba
+         0VxjXyUzgcKCnJGjgQ/nv8cNE1odKGCUPryU92WObg86FpOId32kNMIdaTbvY+nsyWYK
+         XI1cseZM2C26APa4YnVVN5WfVCVxOWBLkGUtHBCQlUqL/OtJpQCEc3hUQUPe+Q+pHKfL
+         34npT3MEvrsNBE2pmyQCTio1783XIupfVLOmnsRvbn1N9XppwGfgNhttduphLK9KFHf3
+         LDKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687789961; x=1690381961;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0xifpWCjzQTN6wRfQL9oeo1fgrnPC7xl+aGU5N4Yu6A=;
+        b=fDWXdo0fDMVHQP0kIB9E2DFU26QwkBLtQjm3eNKVst2Fqhyblh3XnUgELSFji5IG64
+         +fOu8P0SFExUSHamuhWGjUCbRxddX5/Pszt8UtdkSXSkizRxK7tKEW6aGPXFSiZ89N3H
+         QaooEVsdlV/qWH7HXpW+aGjSWJYutOO9Cmo+zPLiNxweN2Jsb7ft3cwbX1r+BQV3QWzS
+         hsD1cWqewjtTI9xjxx1rnTkgxhcDj9MsA1UXNw5ULuYFmUcRahx411orBlGEZb0MA/1h
+         FT3DUNnQlKgEGdR54o5eYUx7h6SJD5ef1JUB454bkUothNVpvX50JbvLqiXuAqeN6p+w
+         xRuQ==
+X-Gm-Message-State: AC+VfDxPCRy8DvrlvAASGiaGljuvD1zv46UTGCHtrTKgF0rWv+w3dHB3
+        2XYKCwAIOb+7V+qwr2cAlevg7nedKqvX/KkBP4vvbg==
+X-Google-Smtp-Source: ACHHUZ4IgqEOhodScx0AEA+jCLvvL6P5B9+0OYCeO04Najnk8I35USY/Zjm7Rv0b4Mem2ps/tw2L8geqfmafNkXiry0=
+X-Received: by 2002:adf:e98c:0:b0:313:ed13:38d1 with SMTP id
+ h12-20020adfe98c000000b00313ed1338d1mr3990360wrm.25.1687789960902; Mon, 26
+ Jun 2023 07:32:40 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH] mm: madvise: fix uneven accounting of psi
-Content-Language: en-US
-To:     Suren Baghdasaryan <surenb@google.com>
-CC:     Johannes Weiner <hannes@cmpxchg.org>, <akpm@linux-foundation.org>,
-        <minchan@kernel.org>, <quic_pkondeti@quicinc.com>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
-References: <1685531374-6091-1-git-send-email-quic_charante@quicinc.com>
- <20230531221955.GD102494@cmpxchg.org>
- <230e45e8-8cd8-3668-bbfa-a95212b4cb99@quicinc.com>
- <20230605180013.GD221380@cmpxchg.org>
- <f3f15b6a-8618-f755-f21c-4193c502e65c@quicinc.com>
- <CAJuCfpFB33GLbwvYspg966b6AGMopS3ca68hjL94kgpM7et7CQ@mail.gmail.com>
- <4543c4e5-43f1-bae2-245e-951437e4bd07@quicinc.com>
- <CAJuCfpE42OJZur-1u2hvvXmPkRdV1uOfK-Aqm2POmvrDpRwg0Q@mail.gmail.com>
-From:   Charan Teja Kalla <quic_charante@quicinc.com>
-In-Reply-To: <CAJuCfpE42OJZur-1u2hvvXmPkRdV1uOfK-Aqm2POmvrDpRwg0Q@mail.gmail.com>
+References: <20230623095547.51881-1-alexghiti@rivosinc.com>
+ <20230623095547.51881-2-alexghiti@rivosinc.com> <87o7l6mgxg.fsf@meer.lwn.net>
+ <CAHVXubhk2xf59XbNiRYKdr4J1yadpeX0KMgW1cFMR4GRN97MYA@mail.gmail.com> <877crrl1jm.fsf@meer.lwn.net>
+In-Reply-To: <877crrl1jm.fsf@meer.lwn.net>
+From:   Alexandre Ghiti <alexghiti@rivosinc.com>
+Date:   Mon, 26 Jun 2023 16:32:30 +0200
+Message-ID: <CAHVXubit1pun1r-TC48TxR0esfDo49=PYFE+c10HBKqQ=AnZxA@mail.gmail.com>
+Subject: Re: [PATCH v3 2/3] Documentation: riscv: Add early boot document
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Sunil V L <sunilvl@ventanamicro.com>,
+        Song Shuai <songshuaishuai@tinylab.org>,
+        linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: rYb3HqzQqoMwNIR0IvxMYEqb-zvBTMxD
-X-Proofpoint-ORIG-GUID: rYb3HqzQqoMwNIR0IvxMYEqb-zvBTMxD
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-26_11,2023-06-26_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=472 clxscore=1015
- bulkscore=0 mlxscore=0 lowpriorityscore=0 impostorscore=0
- priorityscore=1501 suspectscore=0 malwarescore=0 spamscore=0 adultscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306260130
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Suren,
-
-On 6/10/2023 4:43 AM, Suren Baghdasaryan wrote:
->>> I can see use for that from userspace to detect incorrect madvise()
->>> and adjust its aggressiveness. I think the API might get a bit complex
->>> because of the need to associate refaults with specific madvise()/VMAs
->>> to understand which hint was incorrect and adjust the behavior.
->>> Instead what is the opinion about giving an MADV_PAGEOUT_INACTIVE
->> interface which does operate on a page only If it is on the inactive
->> list and !PageWorkingset ?
-> IOW you want a less aggressive mechanism which can be used by the
-> userspace to tell the kernel "I think these pages won't be used but
-> I'm not 100% sure, so drop them only if they are inactive"?
->  I don't know how much that will help when the madvise() ends up being
-> wrong but maybe you can quickly experiment and tell us if the
-> difference is substantial?
-
-We did some extensive testing on Android and this ask is not helping us
-much. I am really not sure if there is some other usecase that can
-benefit from this. So, for now I just stick to your suggestion of making
-the pages on the Active list as the Workingset at the time of pageout.
+On Sun, Jun 25, 2023 at 10:39=E2=80=AFPM Jonathan Corbet <corbet@lwn.net> w=
+rote:
 >
+> Alexandre Ghiti <alexghiti@rivosinc.com> writes:
+>
+> >> Please don't use :c:func:.  If you just write setup_vm(), all the righ=
+t
+> >> magic will happen.
+> >
+> > The magic indeed happens with virt_to_phys()/phys_to_virt(), but not
+> > with setup_vm(): is there something we should do when declaring those
+> > functions?
+>
+> If the function in question has no kerneldoc comment, there will be
+> nothing to make the magic link to.  In other words, if you want it to
+> link to the documentation, the documentation needs to actually exist :)
 
-Thanks.
+Ok, that's for another patchset then, thanks for your help!
 
+>
+> Thanks,
+>
+> jon
