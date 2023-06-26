@@ -2,79 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6581873D599
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 03:51:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD0DE73D59E
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 03:53:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229506AbjFZBvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 21:51:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57816 "EHLO
+        id S229653AbjFZBxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 21:53:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjFZBvf (ORCPT
+        with ESMTP id S229574AbjFZBww (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 21:51:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D2F180;
-        Sun, 25 Jun 2023 18:51:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Sun, 25 Jun 2023 21:52:52 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6D7196;
+        Sun, 25 Jun 2023 18:52:50 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0AE1060BEF;
-        Mon, 26 Jun 2023 01:51:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 332FFC433C8;
-        Mon, 26 Jun 2023 01:51:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687744293;
-        bh=i0BJzq+S+kAaSYz2lVGfmZ1peFQkvlqg/MoLC/PWQNM=;
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Qq9pR5tMnz4wb0;
+        Mon, 26 Jun 2023 11:52:47 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1687744368;
+        bh=e9QR4udaTl7ttfZ1FiKf7+VkKI3pHgJ7/+zJ+cFuc3c=;
         h=Date:From:To:Cc:Subject:From;
-        b=Z1WP7Qpa9MoQMJleHipXMqjw9XJj7JURYqO2FXlRJFLpaLKHH1Lr1AmiPCblAr/Px
-         p9tL2CMSq8P58LVP7tX8VAgoSzrEKrnO6r9zsOv8SnxicNUiAWP4TOIngqyZFcV4Kw
-         42LXDrFuqF3gp5DT7XT2zhVyk8WEInyTorXt2e6FlmcVzcdOK63l6W0x3sWpQPatkt
-         SOF+UnEWlDS+WjMgaii8OVCojxHAOHNjkd+RqHGye7fAW8Xv6OkoiJuiZoFy67HipM
-         CZRuSR+/pLX51l/t5oU9htHFIIN8wmQ4sAq47CIA/fwX5+y9YCY8gDMQYdCtRrf8Mt
-         JxQ3sYkvXuQkg==
-Date:   Sun, 25 Jun 2023 18:51:31 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-fscrypt@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
-        Jaegeuk Kim <jaegeuk@kernel.org>
-Subject: [GIT PULL] fscrypt updates for 6.5
-Message-ID: <20230626015131.GA1024@sol.localdomain>
+        b=grLeYn9ImtEOFl+3FYDC6WNlwnz+b9uccJX2eFqK+YUtkvUbuBYZCCNK8fQPr4Unj
+         dfoTUuGpiOCRRnKwvRxQ55VK7g/sxy1jm8+vZpZfifOYg3BPIZEPLJyWDUAhjnSt/b
+         wRQs1fKm+DvokcbHLj1jajBIlzpnPWxOQY/QFzn04gm0+YZKY0pay7W36iBOKIJEUk
+         p6UUOWyHlPRIBu0b91CpeXb8bBdK9sTyO+bCaD7eShOB4+ylmpCYOkJzTR6ctDaVB1
+         tnpLZqkdvNjp1DFi1NqIdElWBP59vC7Ib2mQyTkV/4q/3GHCbVnAFPMbDjE4V2vigL
+         rZdyek8w3Q8Zw==
+Date:   Mon, 26 Jun 2023 11:52:46 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        Linux Crypto List <linux-crypto@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: linux-next: manual merge of the crypto tree with Linus' tree
+Message-ID: <20230626115246.40f74129@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/=TT7ka17ueYMQT7khVr3Gw0";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--Sig_/=TT7ka17ueYMQT7khVr3Gw0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-The following changes since commit 44c026a73be8038f03dbdeef028b642880cf1511:
+Hi all,
 
-  Linux 6.4-rc3 (2023-05-21 14:05:48 -0700)
+Today's linux-next merge of the crypto tree got a conflict in:
 
-are available in the Git repository at:
+  crypto/asymmetric_keys/public_key.c
 
-  https://git.kernel.org/pub/scm/fs/fscrypt/linux.git tags/fscrypt-for-linus
+between commit:
 
-for you to fetch changes up to d617ef039fb8eec48a3424f79327220e0b7cbff7:
+  c3d03e8e35e0 ("KEYS: asymmetric: Copy sig and digest in public_key_verify=
+_signature()")
 
-  fscrypt: Replace 1-element array with flexible array (2023-05-23 19:46:09 -0700)
+from Linus' tree and commits:
 
-----------------------------------------------------------------
+  e5221fa6a355 ("KEYS: asymmetric: Move sm2 code into x509_public_key")
+  63ba4d67594a ("KEYS: asymmetric: Use new crypto interface without scatter=
+lists")
 
-Just one flex array conversion patch.
+from the crypto tree.
 
-----------------------------------------------------------------
-Kees Cook (1):
-      fscrypt: Replace 1-element array with flexible array
+I fixed it up (I effectively reverted the former commit - which may or may
+not be the correc thing to do) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
- fs/crypto/fscrypt_private.h |  2 +-
- fs/crypto/hooks.c           | 10 +++++-----
- 2 files changed, 6 insertions(+), 6 deletions(-)
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/=TT7ka17ueYMQT7khVr3Gw0
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSY724ACgkQAVBC80lX
+0Gx1/QgAoiU3VsgWprUWu2oqvELfhH6E8oDg1LyMbJyqaaracN5aJhzSHkE8z/B9
+g0zY8i3H00sWHYzX5L+p76HaKJGqGNmOudhazSXQg9IXOr7OjZLB9ZHh4IZQMVto
+quRm/WLHoGa5FhehJ0G/ptx0OolR12GIov1+M6zdVy+ieFjYyKUNmFYurLy5pGnq
+HXTFsmgp7ce8Kvb7Ru9K0K92HwPVgTa1b5/xfMB21qeKMvkW6tmPAY9xD2P7oYwV
+KDKepfaxjhlpusOzCnnMoJxns5ZEGavE+hu3xCmJH70umC3vW0/Uij1FlY8iryIS
+zjMB8YItNFPKIpuWJ5787MWstIZzEg==
+=Rt8a
+-----END PGP SIGNATURE-----
+
+--Sig_/=TT7ka17ueYMQT7khVr3Gw0--
