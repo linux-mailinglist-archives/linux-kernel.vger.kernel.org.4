@@ -2,60 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFFEF73D93D
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 10:10:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D69C73D930
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 10:10:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230086AbjFZIK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 04:10:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50468 "EHLO
+        id S229742AbjFZIJ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 04:09:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230088AbjFZIKN (ORCPT
+        with ESMTP id S230083AbjFZIJq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 04:10:13 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43AAC10DB;
-        Mon, 26 Jun 2023 01:10:06 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QqL9k4m2yz4f4689;
-        Mon, 26 Jun 2023 16:10:02 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.104.67])
-        by APP4 (Coremail) with SMTP id gCh0CgAHcLPWR5lkQbNDMg--.19922S8;
-        Mon, 26 Jun 2023 16:10:03 +0800 (CST)
-From:   linan666@huaweicloud.com
-To:     axboe@kernel.dk, linan122@huawei.com, vishal.l.verma@intel.com,
-        dan.j.williams@intel.com, ashok_raj@linux.intel.com
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yukuai3@huawei.com, yi.zhang@huawei.com, houtao1@huawei.com,
-        yangerkun@huawei.com
-Subject: [PATCH v4 4/4] block/badblocks: fix the bug of reverse order
-Date:   Mon, 26 Jun 2023 16:09:13 +0800
-Message-Id: <20230626080913.3493135-5-linan666@huaweicloud.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230626080913.3493135-1-linan666@huaweicloud.com>
-References: <20230626080913.3493135-1-linan666@huaweicloud.com>
+        Mon, 26 Jun 2023 04:09:46 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB1EBE74
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 01:09:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687766982; x=1719302982;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+lr7gWkrUK24BQPjHF38fYVzI+XtiPSL5/A2F9B/bVc=;
+  b=nPWDQ7/Zm0DBqqcv3crUARjCwlKAitfjzGQHBUvpwnUhzpuaGqfkNROv
+   DjZn2ikVhckSHTo899HhU8zqO76Kith7dvFw8kxWBIpOfoSUhuIdir7wb
+   lBoIhsIK3y+Ep7wDA5OZQpKA7O9VuDpqzql9HflWLWz7oSQBjqrnQ2qsf
+   evdE44zC5pRFloDxj/dtfd4KFmHCwcSsOLWOjekYNYxkwdQ/vUhkU9yPG
+   vhMTNiPJWNO+8YEFOIDuyyfnBeeTEljYZS+ajgNPrc7aNEtsgO8S/h0d8
+   Ni0j7AqD6xf3Yjg0AKMD4YTmDbeyfpuok6fS/AxELZKwehl7q+FkYEjB1
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="447588949"
+X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
+   d="scan'208";a="447588949"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 01:09:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="860596455"
+X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
+   d="scan'208";a="860596455"
+Received: from csteeb-mobl2.ger.corp.intel.com (HELO intel.com) ([10.251.217.4])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 01:09:24 -0700
+Date:   Mon, 26 Jun 2023 10:09:15 +0200
+From:   Andi Shyti <andi.shyti@linux.intel.com>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
+Subject: Re: [Intel-gfx] [PATCH] i915: avoid unused-but-set-variable warning
+Message-ID: <ZJlHq30vUxVuv/Qh@ashyti-mobl2.lan>
+References: <20230622101848.3482277-1-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgAHcLPWR5lkQbNDMg--.19922S8
-X-Coremail-Antispam: 1UD129KBjvJXoW7uF43Kw4rWFy3GrWDtF18Zrb_yoW8Gr4rpF
-        nxJwn3Gryjgr1UZa18Za4UGr4xCa43XF4UGw45Zr1UGasrJw1xJF1kXayYqryjqF43Xw1q
-        v3W5uryUZa48C37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUm2b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-        Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-        rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-        AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E
-        14v26rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I
-        8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AK
-        xVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxV
-        A2Y2ka0xkIwI1lw4CEc2x0rVAKj4xxMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY
-        6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17
-        CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF
-        0xvE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMI
-        IF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVF
-        xhVjvjDU0xZFpf9x07UMa0PUUUUU=
-X-CM-SenderInfo: polqt0awwwqx5xdzvxpfor3voofrz/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230622101848.3482277-1-arnd@kernel.org>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,61 +67,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Li Nan <linan122@huawei.com>
+Hi Arnd,
 
-Badblocks are arranged from small to large, but order of badblocks will
-be reversed if we set a large area at once as below:
-  $ echo 0 2048 > bad_blocks
-  $ cat bad_blocks
-    1536 512
-    1024 512
-    512 512
-    0 512
+On Thu, Jun 22, 2023 at 12:18:41PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The mchbar_addr variable is only used inside of an #ifdef:
+> 
+> drivers/gpu/drm/i915/soc/intel_gmch.c:41:6: error: variable 'mchbar_addr' set but not used [-Werror,-Wunused-but-set-variable]
+> 
+> Change this to an IS_ENABLED() check to let the compiler see how
+> it's used and no longer warn about it.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  drivers/gpu/drm/i915/soc/intel_gmch.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/i915/soc/intel_gmch.c b/drivers/gpu/drm/i915/soc/intel_gmch.c
+> index 6d0204942f7a5..49c7fb16e934f 100644
+> --- a/drivers/gpu/drm/i915/soc/intel_gmch.c
+> +++ b/drivers/gpu/drm/i915/soc/intel_gmch.c
+> @@ -47,11 +47,9 @@ intel_alloc_mchbar_resource(struct drm_i915_private *i915)
+>  	mchbar_addr = ((u64)temp_hi << 32) | temp_lo;
+>  
+>  	/* If ACPI doesn't have it, assume we need to allocate it ourselves */
+> -#ifdef CONFIG_PNP
+> -	if (mchbar_addr &&
+> +	if (IS_ENABLED(CONFIG_PNP) && mchbar_addr &&
+>  	    pnp_range_reserved(mchbar_addr, mchbar_addr + MCHBAR_SIZE))
+>  		return 0;
+> -#endif
 
-Actually, it should be:
-  $ echo 0 2048 > bad_blocks
-  $ cat bad_blocks
-    0 512
-    512 512
-    1024 512
-    1536 512
+you actually already sent this same patch[*] and I did push it in
+drm-intel-next.
 
-'hi' remains unchanged while setting continuous badblocks is wrong, the
-next badblocks is greater than 'p[hi]', and it should be added to
-'p[hi+1]'. Let 'hi' +1 each cycle.
+Andi
 
-  (0 512)				0	 512
-  |_________|				|_________|
-     p[hi]				   p[hi]
+[*] https://patchwork.freedesktop.org/patch/542054/
 
-  (512 512) (0 512)		 fix	0	 512	   1024
-  |_________|_________|		 ===>	|_________|_________|
-     p[hi]					    p[hi+1]
-
-  (1024 512)(512 512) (0 512)		0	 512	   1024	     1536
-  |_________|_________|_________|	|_________|_________|_________|
-     p[hi]						      p[hi+2]
-
-  ...
-
-Fixes: 9e0e252a048b ("badblocks: Add core badblock management code")
-Signed-off-by: Li Nan <linan122@huawei.com>
----
- block/badblocks.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/block/badblocks.c b/block/badblocks.c
-index c1745b76d8f1..b79d37a4bf0e 100644
---- a/block/badblocks.c
-+++ b/block/badblocks.c
-@@ -301,6 +301,7 @@ int badblocks_set(struct badblocks *bb, sector_t s, int sectors,
- 			p[hi] = BB_MAKE(s, this_sectors, acknowledged);
- 			sectors -= this_sectors;
- 			s += this_sectors;
-+			hi++;
- 			changed = true;
- 		}
- 	}
--- 
-2.39.2
-
+>  
+>  	/* Get some space for it */
+>  	i915->gmch.mch_res.name = "i915 MCHBAR";
+> -- 
+> 2.39.2
