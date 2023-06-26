@@ -2,115 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17BEE73E221
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 16:28:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8900F73E224
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 16:28:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230004AbjFZO17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 10:27:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46046 "EHLO
+        id S230149AbjFZO2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 10:28:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229709AbjFZO15 (ORCPT
+        with ESMTP id S229709AbjFZO2t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 10:27:57 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 276F0194
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 07:27:56 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3fa8cd4a1f2so13414965e9.1
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 07:27:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687789674; x=1690381674;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4DnGyVoee8gvGuSTj8BLFAgu78VLTgNZVx6wVHkdXbQ=;
-        b=LwYwK+/i0bFdFZGaDi24JeRIDv6mzwkLHYe3k8g7oGo1ClMh7V5+CaEThR6xOldga5
-         ijp1ruDfBiLS3Bgv8iuIaBaYgHibEqdOak3qSOeKgFwUcbNZDQme5SFUgNDOBNCVT2Qn
-         7lITrSHmspgfWdg0h5WjjB4ddRtC/Jr3UjNWCAXnkwHLkmFafq7kdIrqktjwTW5G7hwv
-         rO3xHl/32vdk1QtigyH9L7RT+fG62cvqxejAvJ7ms5UWdC7PIE8KkeabfyHd9usols1P
-         V3kjVEVZsffqt+r8CNLrFCXODgIcci9L+EPJrRWIkdrHcMZYIqyxOWtJjFlS89HjYBDH
-         KIew==
+        Mon, 26 Jun 2023 10:28:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC1F898
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 07:28:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687789680;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YoyWyxXX7ShezkxwEtGhHhAWKCuXh2pj0Y+G9zY6kLU=;
+        b=AJYbtuQyhCyJ2YVpTdMFI8Vw+3L2J3rrgPPFRD8e2jW6QEqjTLeXLYen8R9wJJVMLwy6zZ
+        RJ8xlpHLx3lO8eaO5MLOHSX+YGOJ5m43tXWXQlMmS4I8bd84/nbpJT8HnvLDAAqPDEWNpS
+        kkmoVWGGUpy1SnOyQ25znafch5nwU8E=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-645-i1_C2gIiMZK_pqSVfLmWAw-1; Mon, 26 Jun 2023 10:27:58 -0400
+X-MC-Unique: i1_C2gIiMZK_pqSVfLmWAw-1
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3fa96b67ac1so22254955e9.0
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 07:27:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687789674; x=1690381674;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20221208; t=1687789676; x=1690381676;
+        h=content-transfer-encoding:in-reply-to:organization:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4DnGyVoee8gvGuSTj8BLFAgu78VLTgNZVx6wVHkdXbQ=;
-        b=DnT8lyNgMlfO9ZjN1+jj3fivtlf0SZJ7LpqJvdBebLAK+qAeqcxzE+Cfo3jXN+3XJP
-         8OVLCu/r74lFVjDNp5V65mVGsVd6VkogojNbPMU9zQZZriSGq8VtJNUPdnGz4q7Wz8h7
-         JPsKE7ZPG1HavHi42J/bZ1CF9P4Icgc+J5wnb82iBGWOT16zj4BvPm8fjvBVaOIS4AK8
-         hO8Lw770cK2eXX15ATPb33K0rORscaU1EtxuQr1azGupSrQfZ8xgPYSgkjLPAfwkVnEG
-         KloNknPMEmL3qCduD8FfjkALPDCaJWQ4qc7BcWGnGzf3IFbWqy46WBD/spMK3QrUYLTO
-         XMAw==
-X-Gm-Message-State: AC+VfDwGtCQ6yMzheP5iw8VW+IUvsEG+JgEpsNgL4DZG9h9GKxuJJyjD
-        VW2Yj8fA/5ml/QRZQZzC1/G5gw==
-X-Google-Smtp-Source: ACHHUZ5XIfVFgiVsCRS/7OXRvpEvOG87JJDUFfAi0DygtyZj6YDzuRIuF9OVvfa8xcoBU4ZFnTj1uw==
-X-Received: by 2002:adf:f8cd:0:b0:313:f4f5:2ddc with SMTP id f13-20020adff8cd000000b00313f4f52ddcmr1361891wrq.62.1687789674566;
-        Mon, 26 Jun 2023 07:27:54 -0700 (PDT)
-Received: from aspen.lan (aztw-34-b2-v4wan-166919-cust780.vm26.cable.virginm.net. [82.37.195.13])
-        by smtp.gmail.com with ESMTPSA id d13-20020a5d4f8d000000b003063db8f45bsm7559591wru.23.2023.06.26.07.27.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jun 2023 07:27:54 -0700 (PDT)
-Date:   Mon, 26 Jun 2023 15:27:52 +0100
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Mans Rullgard <mans@mansr.com>
-Cc:     Lee Jones <lee@kernel.org>, Jingoo Han <jingoohan1@gmail.com>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] backlight: led_bl: take led_access lock when required
-Message-ID: <20230626142752.GA95170@aspen.lan>
-References: <20230619160249.10414-1-mans@mansr.com>
+        bh=YoyWyxXX7ShezkxwEtGhHhAWKCuXh2pj0Y+G9zY6kLU=;
+        b=F/MkuAemBhuvSwDTb+GAvknSrVp+QUhHmtXSVoZvFkd0QMt6bUywgsTYpIs1kgCa+p
+         Fbi1gJLgyh/ZweZfdBlNfD+rcsPBW74rX0jtz0pLyRv5KpVEI43JJCBx5TYxtMqZ6yY3
+         Wgh2H611+08W0uwmXX+nPATXezNloSF5RjzvuuuQafZCVTyAfog2OS9WbgmlcFv8Iiny
+         92PcpEzP6jUtxpjB8bb4g/M6ELskC/ARfMIJc4A8dzBAGvuNpU7R53MU2aS5G2EOT/mI
+         oAU2K044W+iPytgtAnbI4hh0AWUS8NDwWWT6kvhbF7HSnqgfbGJpir5FYx+oFeC8W9aP
+         htHw==
+X-Gm-Message-State: AC+VfDyANAEPusvCzPmDd1hBhxFiXqBo4v/FKb/A2HD0VHiSc6Y1iM6l
+        wezI8aYwoUiyOQmlpdq9QT5har+/qn5yFK8eUDajIy4PNv6Hvn+fK8wKQ3Wn6DLoC/PsVyp+jdV
+        /f2Z8QMdSGDjzw4Vt07zz3yWl
+X-Received: by 2002:a05:600c:2284:b0:3fa:8219:9163 with SMTP id 4-20020a05600c228400b003fa82199163mr10267674wmf.21.1687789676707;
+        Mon, 26 Jun 2023 07:27:56 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7K552SJ/lZjinu84fOMgSD+Rx2qEd1aQy6B7PJIPCKHf1jhpcjAX6S6KSzOQjPctTzvRro+w==
+X-Received: by 2002:a05:600c:2284:b0:3fa:8219:9163 with SMTP id 4-20020a05600c228400b003fa82199163mr10267658wmf.21.1687789676389;
+        Mon, 26 Jun 2023 07:27:56 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:4b3f:de9c:642:1aff:fe31:a15c? ([2a02:810d:4b3f:de9c:642:1aff:fe31:a15c])
+        by smtp.gmail.com with ESMTPSA id u3-20020a05600c00c300b003faa6ce54b2sm1933871wmm.2.2023.06.26.07.27.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Jun 2023 07:27:56 -0700 (PDT)
+Message-ID: <57527c36-57a1-6699-b6f0-373ba895014c@redhat.com>
+Date:   Mon, 26 Jun 2023 16:27:54 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230619160249.10414-1-mans@mansr.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 14/16] maple_tree: Refine mas_preallocate() node
+ calculations
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Peng Zhang <perlyzhang@gmail.com>, maple-tree@lists.infradead.org,
+        linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        linux-kernel@vger.kernel.org,
+        Peng Zhang <zhangpeng.00@bytedance.com>,
+        David Airlie <airlied@redhat.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>
+References: <20230612203953.2093911-1-Liam.Howlett@oracle.com>
+ <20230612203953.2093911-15-Liam.Howlett@oracle.com>
+ <26d8fbcf-d34f-0a79-9d91-8c60e66f7341@redhat.com>
+ <cdab5e74-7559-cb31-90ca-b99a5c3a6dd6@gmail.com>
+ <43ce08db-210a-fec8-51b4-351625b3cdfb@redhat.com>
+ <ZJmQVeiLtkFAGfW0@casper.infradead.org>
+Content-Language: en-US
+From:   Danilo Krummrich <dakr@redhat.com>
+Organization: RedHat
+In-Reply-To: <ZJmQVeiLtkFAGfW0@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 19, 2023 at 05:02:49PM +0100, Mans Rullgard wrote:
-> The led_access lock must be held when calling led_sysfs_enable() and
-> led_sysfs_disable().  This fixes warnings such as this:
->
-> [    2.432495] ------------[ cut here ]------------
-> [    2.437316] WARNING: CPU: 0 PID: 22 at drivers/leds/led-core.c:349 led_sysfs_disable+0x54/0x58
-> [    2.446105] Modules linked in:
-> [    2.449218] CPU: 0 PID: 22 Comm: kworker/u2:1 Not tainted 6.3.8+ #1
-> [    2.456268] Hardware name: Generic AM3517 (Flattened Device Tree)
-> [    2.462402] Workqueue: events_unbound deferred_probe_work_func
-> [    2.468353]  unwind_backtrace from show_stack+0x10/0x14
-> [    2.473632]  show_stack from dump_stack_lvl+0x24/0x2c
-> [    2.478759]  dump_stack_lvl from __warn+0x9c/0xc4
-> [    2.483551]  __warn from warn_slowpath_fmt+0x64/0xc0
-> [    2.488586]  warn_slowpath_fmt from led_sysfs_disable+0x54/0x58
-> [    2.494567]  led_sysfs_disable from led_bl_probe+0x20c/0x3b0
-> [    2.500305]  led_bl_probe from platform_probe+0x5c/0xb8
-> [    2.505615]  platform_probe from really_probe+0xc8/0x2a0
-> [    2.510986]  really_probe from __driver_probe_device+0x88/0x19c
-> [    2.516967]  __driver_probe_device from driver_probe_device+0x30/0xcc
-> [    2.523498]  driver_probe_device from __device_attach_driver+0x94/0xc4
-> [    2.530090]  __device_attach_driver from bus_for_each_drv+0x80/0xcc
-> [    2.536437]  bus_for_each_drv from __device_attach+0xf8/0x19c
-> [    2.542236]  __device_attach from bus_probe_device+0x8c/0x90
-> [    2.547973]  bus_probe_device from deferred_probe_work_func+0x80/0xb0
-> [    2.554504]  deferred_probe_work_func from process_one_work+0x228/0x4c0
-> [    2.561187]  process_one_work from worker_thread+0x1fc/0x4d0
-> [    2.566925]  worker_thread from kthread+0xb4/0xd0
-> [    2.571685]  kthread from ret_from_fork+0x14/0x2c
-> [    2.576446] Exception stack(0xd0079fb0 to 0xd0079ff8)
-> [    2.581573] 9fa0:                                     00000000 00000000 00000000 00000000
-> [    2.589813] 9fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-> [    2.598052] 9fe0: 00000000 00000000 00000000 00000000 00000013 00000000
-> [    2.604888] ---[ end trace 0000000000000000 ]---
->
->
-> Signed-off-by: Mans Rullgard <mans@mansr.com>
+On 6/26/23 15:19, Matthew Wilcox wrote:
+> On Mon, Jun 26, 2023 at 02:38:06AM +0200, Danilo Krummrich wrote:
+>> On the other hand, unless I miss something (and if so, please let me know),
+>> something is bogus with the API then.
+>>
+>> While the documentation of the Advanced API of the maple tree explicitly
+>> claims that the user of the API is responsible for locking, this should be
+>> limited to the bounds set by the maple tree implementation. Which means, the
+>> user must decide for either the internal (spin-) lock or an external lock
+>> (which possibly goes away in the future) and acquire and release it
+>> according to the rules maple tree enforces through lockdep checks.
+>>
+>> Let's say one picks the internal lock. How is one supposed to ensure the
+>> tree isn't modified using the internal lock with mas_preallocate()?
+>>
+>> Besides that, I think the documentation should definitely mention this
+>> limitation and give some guidance for the locking.
+>>
+>> Currently, from an API perspective, I can't see how anyone not familiar with
+>> the implementation details would be able to recognize this limitation.
+>>
+>> In terms of the GPUVA manager, unfortunately, it seems like I need to drop
+>> the maple tree and go back to using a rb-tree, since it seems there is no
+>> sane way doing a worst-case pre-allocation that does not suffer from this
+>> limitation.
+> 
+> I haven't been paying much attention here (too many other things going
+> on), but something's wrong.
+> 
+> First, you shouldn't need to preallocate.  Preallocation is only there
 
-Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
+Unfortunately, I think we really have a case where we have to. Typically 
+GPU mappings are created in a dma-fence signalling critical path and 
+that is where such mappings need to be added to the maple tree. Hence, 
+we can't do any sleeping allocations there.
 
+> for really gnarly cases.  The way this is *supposed* to work is that
+> the store walks down to the leaf, attempts to insert into that leaf
+> and tries to allocate new nodes with __GFP_NOWAIT.  If that fails,
+> it drops the spinlock, allocates with the gfp flags you've specified,
+> then rewalks the tree to retry the store, this time with allocated
+> nodes in its back pocket so that the store will succeed.
 
-Daniel.
+You are talking about mas_store_gfp() here, right? And I guess, if the 
+tree has changed while the spinlock was dropped and even more nodes are 
+needed it just retries until it succeeds?
+
+But what about mas_preallocate()? What happens if the tree changed in 
+between mas_preallocate() and mas_store_prealloc()? Does the latter one 
+fall back to __GFP_NOWAIT in such a case? I guess not, since 
+mas_store_prealloc() has a void return type, and __GFP_NOWAIT could fail 
+as well.
+
+So, how to use the internal spinlock for mas_preallocate() and 
+mas_store_prealloc() to ensure the tree can't change?
+
