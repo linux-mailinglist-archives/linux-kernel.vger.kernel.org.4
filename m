@@ -2,52 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC7D273DEBC
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 14:19:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2566673DED4
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 14:20:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230112AbjFZMS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 08:18:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52832 "EHLO
+        id S230468AbjFZMTx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 08:19:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230167AbjFZMSh (ORCPT
+        with ESMTP id S229698AbjFZMT3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 08:18:37 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8419E10C6
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 05:18:16 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qDlAT-0007Pu-Az; Mon, 26 Jun 2023 14:18:05 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qDlAR-00ACvO-Lt; Mon, 26 Jun 2023 14:18:03 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qDlAQ-00HY4i-Ry; Mon, 26 Jun 2023 14:18:02 +0200
-Date:   Mon, 26 Jun 2023 14:18:02 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     "Sahin, Okan" <Okan.Sahin@analog.com>
-Cc:     Julien Panis <jpanis@baylibre.com>, Lee Jones <lee@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>
-Subject: Re: [PATCH] mfd: Switch two more drivers back to use struct
- i2c_driver::probe
-Message-ID: <20230626121802.qlvoiytzurrvd22z@pengutronix.de>
-References: <20230626091941.557733-1-u.kleine-koenig@pengutronix.de>
- <MN2PR03MB516846A1A4FD31515D98FA4BE726A@MN2PR03MB5168.namprd03.prod.outlook.com>
+        Mon, 26 Jun 2023 08:19:29 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAA3E10DE
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 05:19:07 -0700 (PDT)
+Received: from dggpemm500011.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QqRdx6QH2zlVwY;
+        Mon, 26 Jun 2023 20:16:21 +0800 (CST)
+Received: from [10.174.179.155] (10.174.179.155) by
+ dggpemm500011.china.huawei.com (7.185.36.110) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Mon, 26 Jun 2023 20:19:03 +0800
+Message-ID: <faeb60a9-8bde-d31d-acf5-a2bcda6cad72@huawei.com>
+Date:   Mon, 26 Jun 2023 20:19:03 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="h24k2dwwo42ljdm2"
-Content-Disposition: inline
-In-Reply-To: <MN2PR03MB516846A1A4FD31515D98FA4BE726A@MN2PR03MB5168.namprd03.prod.outlook.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:104.0) Gecko/20100101
+ Thunderbird/104.0
+To:     <thornber@redhat.com>, <dm-devel@redhat.com>, <agk@redhat.com>,
+        <snitzer@kernel.org>, Joe Thornber <ejt@redhat.com>
+CC:     <linux-kernel@vger.kernel.org>, Hou Tao <houtao1@huawei.com>,
+        "zhangyi (F)" <yi.zhang@huawei.com>,
+        "yukuai (C)" <yukuai3@huawei.com>, yangerkun <yangerkun@huawei.com>
+From:   Li Lingfeng <lilingfeng3@huawei.com>
+Subject: [Question] Can DATA_DEV_BLOCK_SIZE_MIN_SECTORS be set to a smaller
+ value
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.155]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500011.china.huawei.com (7.185.36.110)
+X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
@@ -57,93 +50,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello:
 
---h24k2dwwo42ljdm2
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Recently, I found that the used space of the thin-pool will keep rising 
+if I use dm-thin as follow:
 
-On Mon, Jun 26, 2023 at 12:01:16PM +0000, Sahin, Okan wrote:
-> >Sent: Monday, June 26, 2023 12:20 PM
-> >To: Julien Panis <jpanis@baylibre.com>; Sahin, Okan <Okan.Sahin@analog.c=
-om>; Lee
-> >Jones <lee@kernel.org>
-> >Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>; linux-
-> >kernel@vger.kernel.org; kernel@pengutronix.de
-> >Subject: [PATCH] mfd: Switch two more drivers back to use struct i2c_dri=
-ver::probe
-> >
-> >[External]
-> >
-> >struct i2c_driver::probe_new is about to go away. Switch the driver to
-> >use the probe callback with the same prototype.
-> >
-> >Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> >---
-> > drivers/mfd/max77541.c    | 2 +-
-> > drivers/mfd/tps6594-i2c.c | 2 +-
-> > 2 files changed, 2 insertions(+), 2 deletions(-)
-> >
-> >diff --git a/drivers/mfd/max77541.c b/drivers/mfd/max77541.c
-> >index 4a3bad3493b3..e147e949c2b3 100644
-> >--- a/drivers/mfd/max77541.c
-> >+++ b/drivers/mfd/max77541.c
-> >@@ -214,7 +214,7 @@ static struct i2c_driver max77541_driver =3D {
-> > 		.name =3D "max77541",
-> > 		.of_match_table =3D max77541_of_id,
-> > 	},
-> >-	.probe_new =3D max77541_probe,
-> >+	.probe =3D max77541_probe,
-> > 	.id_table =3D max77541_id,
-> > };
-> > module_i2c_driver(max77541_driver);
-> >diff --git a/drivers/mfd/tps6594-i2c.c b/drivers/mfd/tps6594-i2c.c
-> >index 50a3cd03b3b0..899c88c0fe77 100644
-> >--- a/drivers/mfd/tps6594-i2c.c
-> >+++ b/drivers/mfd/tps6594-i2c.c
-> >@@ -235,7 +235,7 @@ static struct i2c_driver tps6594_i2c_driver =3D {
-> > 		.name =3D "tps6594",
-> > 		.of_match_table =3D tps6594_i2c_of_match_table,
-> > 	},
-> >-	.probe_new =3D tps6594_i2c_probe,
-> >+	.probe =3D tps6594_i2c_probe,
-> > };
-> > module_i2c_driver(tps6594_i2c_driver);
-> >
-> >
-> >base-commit: e0cbc202388af454eb771043b20db6dfe68199ec
-> >--
-> >2.39.2
->=20
-> Should I update the code then resend patch again? Or should I send anothe=
-r patch after merge is completed?
+// create dm-thin
+dmsetup create linear_1 --table "0 2097152 linear /dev/sdc 0"
+dmsetup create linear_2 --table "0 16777216  linear /dev/sdc 2097153"
+dd if=/dev/zero of=/dev/mapper/linear_1 bs=4096 count=1
+dmsetup create pool --table "0 16777216 thin-pool /dev/mapper/linear_1 
+/dev/mapper/linear_2 128 0 1 skip_block_zeroing"
+dmsetup message /dev/mapper/pool 0 "create_thin 0"
+dmsetup create thin --table "0 14680064 thin /dev/mapper/pool 0"
 
-I'm not Lee, but I'll try an answer anyhow: Your patch is in next (via
-Lee's tree) as commit e0cbc202388af454eb771043b20db6dfe68199ec. So I
-guess Lee will keep the patch as is and send it to Linus. There is
-nothing grave wrong, so no need to revert or rewrite the tree. I expect
-Lee to just apply my patch on top of his tree.
+// mkfs and mount with discard
+mkfs.ext4 /dev/mapper/thin
+mount /dev/mapper/thin /mnt/test -o discard
+cd /mnt/test
 
-Best regards
-Uwe
+// create a file(17KB)
+dd if=/dev/random of=testfile bs=1k count=17 oflag=direct
+sync
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+// truncate the file and write it for many times
+dd if=/dev/random of=testfile bs=1k count=17 oflag=direct
+sync
+...
 
---h24k2dwwo42ljdm2
-Content-Type: application/pgp-signature; name="signature.asc"
+Ext4 will issue discard IO to dm-thin when truncating file. However, 
+DATA_DEV_BLOCK_SIZE_MIN_SECTORS is set as 64KB which means the discard 
+covers less than a block when I truncating a 17KB file. As the result of 
+it, discard bio will end in process_discard_bio(), and more and more 
+blocks will leak.
 
------BEGIN PGP SIGNATURE-----
+I'm curious about the reason behind setting 
+DATA_DEV_BLOCK_SIZE_MIN_SECTORS to 64KB. Is there any specific 
+consideration for this? Would it be possible to set this minimum limit 
+to a smaller value, such as 4KB?
 
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmSZgfkACgkQj4D7WH0S
-/k4mPAf+MO4zy+XZ/oZnFPS9xxEvsMPBm5uEti29PF/k2eKmAeODtNZY9Gzz9lO1
-5DLpfaQ8xtrLipBF6nOx6K6n6LcPvJ0YC7Sg85GmlknqUcw6YsKxS7WFECEFIKGv
-SrXizYxJ+d6LVPBC7JGw3uSFSHJzzPZlZcz/MyJz8qAtPEv+7Fvi7kzNOKopOkgT
-vPoyQ3xt2Ek87GMZVMGbJZ33ai2GYRKdXzhiIItWr8TnuzikUS5gw4POV+HwPykE
-+SccGbxtMz4OyMhrIab4H/wZoYE6+kX6vm6XFQMovzhzb/b5rgvNL9PouH7hvgyP
-tsCV6YsF6EuDjIWy0FDP6UDFfN5cnw==
-=3eSK
------END PGP SIGNATURE-----
-
---h24k2dwwo42ljdm2--
