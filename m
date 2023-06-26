@@ -2,87 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CD1473EC00
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 22:44:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D2EB73EBF8
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 22:44:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230177AbjFZUmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 16:42:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42396 "EHLO
+        id S230269AbjFZUn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 16:43:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjFZUmb (ORCPT
+        with ESMTP id S230070AbjFZUnX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 16:42:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B512412C;
-        Mon, 26 Jun 2023 13:42:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0DF4560F59;
-        Mon, 26 Jun 2023 20:42:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 74434C433C8;
-        Mon, 26 Jun 2023 20:42:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687812134;
-        bh=gOj1k9JojrNwRP9mT37pNzDg/rLxVjtZQAF51Mcy+ew=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=kn0aopctOVfmLUS9K0QnhWSG70BVPy1jSGhOy24BBgYtctIho+//6ZpNbZJ32NrIp
-         BdrBuF6qQckboalLHd1ZqruaYaMQTE9fUKoLJQk5E62wTNA/O/z0TycdbC7jwhVegh
-         z3IVe0Wk4e5weRLv12TpAtDn6OJ8CKx1HkpRIyLlOcni3MxZEanL916yc+R0/l5Zmv
-         Gaim8qQFNVQiRAL+8YrgV3xdFA+fkGfe91/KtenF/jxYIKr96KcusTJ3739jToydhG
-         FKbHcCYvBxkfvbYhQvJDzBXkOWf+6aX/dmSpXd4OehrABm5kSDtpcixtNsnZ7SAhJg
-         BSeJ68E92KRTg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 530F4C395E0;
-        Mon, 26 Jun 2023 20:42:14 +0000 (UTC)
+        Mon, 26 Jun 2023 16:43:23 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC6B2696
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 13:42:44 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id 98e67ed59e1d1-262e0c70e8eso744582a91.2
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 13:42:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687812154; x=1690404154;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=roNwuphAhOKRAuXeRi7d1wmxywx48d/MTesOiCetVbg=;
+        b=003hPm8k6NkDyLnmn8q7pqzAPTuLiKwFD/H+x8IJOvsA5No1rQQZVs76OoCgWM/lGV
+         e40lpmvDP9S8v47UiCO+j01tJUQkYF7qIQpJoVvfHsTPiiR2i5d+EZcXZtJPGjs+38na
+         OnibD67CD8VswKAE8fu6Vdb9w+eu7plm1dW0UKCgEJxKj80sndBMZHaPimQs/4AosyJ7
+         cwggDPnwnQR8So6SZh/LJIFgCuGaZFp5JnRKcDFbtx4biUxBjB9x9owq4GqhjKfM9Ljx
+         dsqdV9Ea+S2vfwzd3/WUb/+VeS/6XpDrYWvKsD1jDgXK1qFyL/lvHMhEgQZYqcY+nI5A
+         UuRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687812154; x=1690404154;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=roNwuphAhOKRAuXeRi7d1wmxywx48d/MTesOiCetVbg=;
+        b=H2L5u1X2yOo4fqbFEoijS3le9vqiawGUOAaLp6zb+9Tq6/miRlbfMMbSNm3z8zysN1
+         4RrMqG46Tf1o0l8CNHCYh/u8YlSHDzlETIwgdSw9DJj3KhgOtADqfRCfCbw/C1X/w6zY
+         CdIxXE69wB+QjGACmHuhBzOzQXXhYaV7yb6B+2/gf0Xe0BSR/RPd/9BqlRg5V8mDLHjU
+         aFs7mrgdTXzQmN+98sC1P8ftIEBnBm8OOczhGLTAMVqPsm7VIZiChZPUSEvECKQGSfLD
+         Rptzgl29LwDvdiFgVHFiZnLkxOzkjmwZkFWqCg8iDSxWz3CvtyYgd0c7+T/p6wHOTdIv
+         pYjg==
+X-Gm-Message-State: AC+VfDxaL/AzzRug+zvarGeqFlc6C93RpGdABRBkfog6a6kgQH/ahMoB
+        MmNdSKbMPAdrypuSU2V3lOaXHvknO6w=
+X-Google-Smtp-Source: ACHHUZ5VFQ8ouxtbrP37Y8tQO/Qx83nWyjN/Y6ZCv2huHQVZaO2HLCH9aT4mxg5cjHlnkWSZQ5HKldWJm+g=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:90b:400e:b0:262:ffa8:f49d with SMTP id
+ ie14-20020a17090b400e00b00262ffa8f49dmr394485pjb.9.1687812154391; Mon, 26 Jun
+ 2023 13:42:34 -0700 (PDT)
+Date:   Mon, 26 Jun 2023 13:42:32 -0700
+In-Reply-To: <CALMp9eRvUky-jcrkJ75N5-kvWWxVMNaf95XpyGTa_k49n48g9A@mail.gmail.com>
+Mime-Version: 1.0
+References: <20230605004334.1930091-1-mizhang@google.com> <CALMp9eSQgcKd=SN4q2QRYbveKoayKzuYEQPM0Xu+FgQ_Mja8-g@mail.gmail.com>
+ <CAL715WJowYL=W40SWmtPoz1F9WVBFDG7TQwbsV2Bwf9-cS77=Q@mail.gmail.com>
+ <ZH4ofuj0qvKNO9Bz@google.com> <CAL715WKtsC=93Nqr7QJZxspWzF04_CLqN3FUxUaqTHWFRUrwBA@mail.gmail.com>
+ <ZH+8GafaNLYPvTJI@google.com> <CAL715WJ1rHS9ORR2ttyAw+idqbaLnOhLveUhW8f4tB9o+ZsuiQ@mail.gmail.com>
+ <ZH/PKMmWWgJQdcJQ@google.com> <CAL715W+KSgNMk+kTt3=B-CgxTkToH6xmvHWvVmm3V+hir-jE=g@mail.gmail.com>
+ <CALMp9eRvUky-jcrkJ75N5-kvWWxVMNaf95XpyGTa_k49n48g9A@mail.gmail.com>
+Message-ID: <ZJn4OFrQfTYpoIYE@google.com>
+Subject: Re: [PATCH] KVM: x86/mmu: Remove KVM MMU write lock when accessing indirect_shadow_pages
+From:   Sean Christopherson <seanjc@google.com>
+To:     Jim Mattson <jmattson@google.com>
+Cc:     Mingwei Zhang <mizhang@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ben Gardon <bgardon@google.com>
 Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] Bluetooth: hci_conn: Use kmemdup() to replace kzalloc +
- memcpy
-From:   patchwork-bot+bluetooth@kernel.org
-Message-Id: <168781213432.29844.16837505476926129837.git-patchwork-notify@kernel.org>
-Date:   Mon, 26 Jun 2023 20:42:14 +0000
-References: <20230625084513.6319-1-jiapeng.chong@linux.alibaba.com>
-In-Reply-To: <20230625084513.6319-1-jiapeng.chong@linux.alibaba.com>
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        abaci@linux.alibaba.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Mon, Jun 26, 2023, Jim Mattson wrote:
+> On Thu, Jun 15, 2023 at 4:58=E2=80=AFPM Mingwei Zhang <mizhang@google.com=
+> wrote:
+> >
+> > On Tue, Jun 6, 2023 at 5:28=E2=80=AFPM Sean Christopherson <seanjc@goog=
+le.com> wrote:
+> > >
+> > > On Tue, Jun 06, 2023, Mingwei Zhang wrote:
+> > > > > > Hmm. I agree with both points above, but below, the change seem=
+s too
+> > > > > > heavyweight. smp_wb() is a mfence(), i.e., serializing all
+> > > > > > loads/stores before the instruction. Doing that for every shado=
+w page
+> > > > > > creation and destruction seems a lot.
+> > > > >
+> > > > > No, the smp_*b() variants are just compiler barriers on x86.
+> > > >
+> > > > hmm, it is a "lock addl" now for smp_mb(). Check this: 450cbdd0125c
+> > > > ("locking/x86: Use LOCK ADD for smp_mb() instead of MFENCE")
+> > > >
+> > > > So this means smp_mb() is not a free lunch and we need to be a litt=
+le
+> > > > bit careful.
+> > >
+> > > Oh, those sneaky macros.  x86 #defines __smp_mb(), not the outer help=
+er.  I'll
+> > > take a closer look before posting to see if there's a way to avoid th=
+e runtime
+> > > barrier.
+> >
+> > Checked again, I think using smp_wmb() and smp_rmb() should be fine as
+> > those are just compiler barriers. We don't need a full barrier here.
+>=20
+> That seems adequate.
 
-This patch was applied to bluetooth/bluetooth-next.git (master)
-by Luiz Augusto von Dentz <luiz.von.dentz@intel.com>:
-
-On Sun, 25 Jun 2023 16:45:13 +0800 you wrote:
-> Use kmemdup rather than duplicating its implementation.
-> 
-> ./net/bluetooth/hci_conn.c:1880:7-14: WARNING opportunity for kmemdup.
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Closes: https://bugzilla.openanolis.cn/show_bug.cgi?id=5597
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-> 
-> [...]
-
-Here is the summary with links:
-  - Bluetooth: hci_conn: Use kmemdup() to replace kzalloc + memcpy
-    https://git.kernel.org/bluetooth/bluetooth-next/c/f1a9a7cc825f
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Strictly speaking, no, because neither FNAME(fetch) nor kvm_mmu_pte_write()=
+ are
+pure readers or writers.  FNAME(fetch) reads guest memory (guest PTEs) and =
+writes
+indirect_shadow_pages.   kvm_mmu_pte_write() writes guest memory (guest PTE=
+s) and
+reads indirect_shadow_pages (it later writes indirect_shadow_pages too, but=
+ that
+write isn't relevant to the ordering we care about here).
