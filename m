@@ -2,115 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DF7E73EF17
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 01:15:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 137B273EF1C
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 01:20:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229693AbjFZXPA convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 26 Jun 2023 19:15:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57406 "EHLO
+        id S229763AbjFZXUk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 19:20:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjFZXO7 (ORCPT
+        with ESMTP id S229459AbjFZXUi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 19:14:59 -0400
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB42F10D2;
-        Mon, 26 Jun 2023 16:14:57 -0700 (PDT)
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-5701e8f2b79so41583987b3.0;
-        Mon, 26 Jun 2023 16:14:57 -0700 (PDT)
+        Mon, 26 Jun 2023 19:20:38 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8C58FB
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 16:20:36 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4fa16c6a85cso3510509e87.3
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 16:20:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1687821635; x=1690413635;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WsuDpkg4STj8VScLUF1v+q9KU/sRwZdf0lwfYtb4nAU=;
+        b=C1YJv7l5E3ROxSNyp2Ma6wOHfw4IZG4XuKs7uygKnjuEeNdgXPdVAbHlgIu26QN7+d
+         f/E6Klo+Jt15f+XgaseGnZbh5P4e4AskGzdAJPBVkNsec1Edy2+5r0YfY3FUHNs4I3Fx
+         9hUvqUZYv6RZtVMZKo0YOyaUV7s+t5PwywAzl1+gfNqOyX4RVzhzuOExFRdEJyCryp7v
+         DqFfxkYgVUzi4GcaPCfvmRH7HeGbxRarFUtHWbhupqIaPypod8XI3JzmwbkrApzMB3TJ
+         dePdQY3aEed7GXqATYVhwFYTukwJoUt9sKREaaZr59XUMO0q4hJSRXALp4jE1X8Hbtg/
+         1rug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687821297; x=1690413297;
+        d=1e100.net; s=20221208; t=1687821635; x=1690413635;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=kM73dDXJJ2LQE16TI30w/dkhZfJCFiiWEY4v9vd3CAI=;
-        b=LDX72YnIUSr+k4xLstF51E7GaDxYyBd6KxcvBbZNYLVFq/ugCcPmyF7e/qlFrs+Dwl
-         b22mLaJen3XLfYOFittbcOp6jCcq1lOMnNF3ujmJ/YNxntuRoEpnc828EVLyKt3pUL+i
-         gRv+1SqBEijiwFdNt4Pwn5t9/lM3QjolL2MwwbAVokjrizCNr2vUXB8BN6xdjj72bg3N
-         u/iVqTOh1Gk9fJfhzjkGfhUN9Jk5KBDhXDv8c7RcYsWgSmyRmdPZhmWxncb7LvjJZcl3
-         HdH4JtRM0QbD0S8JrRBcIAPxiM6OMnrZ8WhqwbaxpyywQVLnaik1qKIaY2dsD7gy56eF
-         xLMQ==
-X-Gm-Message-State: AC+VfDxnXkVzmVdIdpc81pblavP9+yE6qUi04NPzqM+V6bQiRkguUIZ4
-        dkNIzQek31lUrb98FBHtDGKywk5jT6y8mk3z7wA=
-X-Google-Smtp-Source: ACHHUZ6SlNxvS+0k1RkdHbPMGvtR/zIR689flvvkM6fGCsnFYzBJ3gb7C/t8rh8Gglh4bBOZPBk7Q91WVqTWMmesHvU=
-X-Received: by 2002:a25:2903:0:b0:bff:d530:f06 with SMTP id
- p3-20020a252903000000b00bffd5300f06mr14953523ybp.41.1687821296805; Mon, 26
- Jun 2023 16:14:56 -0700 (PDT)
+        bh=WsuDpkg4STj8VScLUF1v+q9KU/sRwZdf0lwfYtb4nAU=;
+        b=CEusmrYnF04q1Hp8rLWu4rU5qSxXnFTwSSepjfGaWv8W6NIi8YN1C9rR8AKaxz7kz9
+         ZL/JKUf1JVVmGu4qYoQBDaza/uZ/hW+Cv1CQTdAoB0oCpPdWo63vCNIuJhW3zN6yrb64
+         m9w9iMbd2BdJo/u7bNWXyqTnaY52bIyPbpnJ6mAOe0dg5kQ7NNC8Eifeys2TRVhS0u+W
+         9cUfDCYm5M7WNMzZ8IfXbqfHqqUV77VAk2pvpY5AwWPNQTAkF32DAJL9uR4OWeRDpd7B
+         tWUGZ6f3P9vFmVFwNxLtyR2YuLeQhEbt63Y/VAW3VZwzRbxOPTFp2qwHbHsv+UZYMVLB
+         FqBg==
+X-Gm-Message-State: AC+VfDwSDgbKWJjtcWrMIGQGFG5WRxoIdA/T79O7D5Dy/3VSDfAiiZBA
+        PFRv+bwAanJu4wpjBAAUoAeqWQUfmuy45fuEO+jEzA==
+X-Google-Smtp-Source: ACHHUZ7ggykNDv4GNwR59J6Un/xdcCwEfTkyvP6dZPtd3LNrRL+OzpPAQH0aK5EpljAet7sMLGfDHuCLj8AS/0jchBg=
+X-Received: by 2002:a05:6512:12c7:b0:4f9:72a5:2b72 with SMTP id
+ p7-20020a05651212c700b004f972a52b72mr7112983lfg.22.1687821634913; Mon, 26 Jun
+ 2023 16:20:34 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAM9d7cjtisDVPijfU=iEGxc0YF=RnAt+r18Jg+8Av-+RAO=jeg@mail.gmail.com>
- <IA1PR20MB49536C0DA47122E9E3CB7CBBBB20A@IA1PR20MB4953.namprd20.prod.outlook.com>
- <CAM9d7cis-rb0fozK+T6R8MCEcT0ZF=RRNpv1qAWsLkMfsG6KxA@mail.gmail.com> <20230624-supermom-disparity-37546ffed0a4@spud>
-In-Reply-To: <20230624-supermom-disparity-37546ffed0a4@spud>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Mon, 26 Jun 2023 16:14:45 -0700
-Message-ID: <CAM9d7cjHndHrcH95uwmYRMRpm-a0kX2BHQ1jzmyo6f48w69jbg@mail.gmail.com>
-Subject: Re: [PATCH V3] perf vendor events riscv: add T-HEAD C9xx JSON file
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Inochi Amaoto <inochiama@outlook.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Nikita Shubin <n.shubin@yadro.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+References: <20230626-nature-seventh-6102e17bb4be@spud> <mhng-7656ce4f-bdcb-419c-8a77-18ab7d301cd7@palmer-ri-x1c9>
+In-Reply-To: <mhng-7656ce4f-bdcb-419c-8a77-18ab7d301cd7@palmer-ri-x1c9>
+From:   Evan Green <evan@rivosinc.com>
+Date:   Mon, 26 Jun 2023 16:19:58 -0700
+Message-ID: <CALs-HstCEFJD0xC1Ro8bjTL-bu4ramiXk5LZRr8QNsW1OcUZFA@mail.gmail.com>
+Subject: Re: [PATCH] RISC-V: Show accurate per-hart isa in /proc/cpuinfo
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     Conor Dooley <conor@kernel.org>, aou@eecs.berkeley.edu,
+        ajones@ventanamicro.com, apatel@ventanamicro.com,
+        Conor Dooley <conor.dooley@microchip.com>,
+        heiko.stuebner@vrull.eu, Paul Walmsley <paul.walmsley@sifive.com>,
+        sunilvl@ventanamicro.com, linux-kernel@vger.kernel.org,
         linux-riscv@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Mon, Jun 26, 2023 at 1:48=E2=80=AFPM Palmer Dabbelt <palmer@dabbelt.com>=
+ wrote:
+>
+> On Mon, 26 Jun 2023 13:34:24 PDT (-0700), Conor Dooley wrote:
+> > On Mon, Jun 26, 2023 at 12:25:42PM -0700, Evan Green wrote:
+> >> On Fri, Jun 23, 2023 at 5:12=E2=80=AFPM Conor Dooley <conor@kernel.org=
+> wrote:
+> >> > On Fri, Jun 23, 2023 at 03:23:53PM -0700, Evan Green wrote:
+> >> > > In /proc/cpuinfo, most of the information we show for each process=
+or is
+> >> > > specific to that hart: marchid, mvendorid, mimpid, processor, hart=
+,
+> >> > > compatible, and the mmu size. But the ISA string gets filtered thr=
+ough a
+> >> > > lowest common denominator mask, so that if one CPU is missing an I=
+SA
+> >> > > extension, no CPUs will show it.
+> >> > >
+> >> > > Now that we track the ISA extensions for each hart, let's report I=
+SA
+> >> > > extension info accurately per-hart in /proc/cpuinfo.
+> >> >
+> >> > No, you can't do this as it breaks the assumptions of userspace that
+> >> > this shows the set supported across all harts.
+> >> > Sorry, but NAK.
+> >
+> >> My hope was that we were still early enough that no production systems
+> >> existed (yet) that actually had different ISA extensions in the set we
+> >> track, and therefore usermode would have been unable to make those
+> >> assumptions at this point. If such a system exists, and I don't know
+> >> if it does or not, then I agree it's too late to make a change like
+> >> this.
+> >
+> > You should put this information into your commit messages & not just
+> > hope that people understand your intent.
 
-On Sat, Jun 24, 2023 at 1:54 AM Conor Dooley <conor@kernel.org> wrote:
->
-> On Fri, Jun 23, 2023 at 09:35:01PM -0700, Namhyung Kim wrote:
-> > On Fri, Jun 23, 2023 at 6:33 PM Inochi Amaoto <inochiama@outlook.com> wrote:
->
-> > >
-> > > As for c9xx wildcard, the T-HEAD provides a `MCPUID` vendor CSR to allow
-> > > its CKLINK to get the detail CPU info. The format of this CSR are:
-> > >
-> > > ------------------------------------------------
-> > > |31   28|27  26|25    22|21   18|17    8|7    0|
-> > > | index | WLRL | family | class | model | WLRL |
-> > > ------------------------------------------------
-> > >
-> > > And for C9xx series (only index 0000 is vaild for us, as `MCPUID` also
-> > > provides other index).
-> > >
-> > > | 0000 | xx | 0100 | class | xxxxxxxxxx | xxxxxxxx |
-> > >
-> > > The class codes are:
-> > >
-> > > C910: 0011
-> > > c906: 0100
-> > >
-> > > The CSR is a M-mode only CSR, so now I'm exploring a clean way to
-> > > integrate this CSR into the kernel. Any advice?
->
-> See for example how riscv_cpuinfo_starting() reads mvendorid & Co.
->
-> > I don't know about the details.  Is this CSR available from user space?
-> > If not, you could add it somewhere in the sysfs.
->
-> Machine mode is the highest privilege level, Supervisor mode is next &
-> User mode is the lowest. Typically the kernel runs in Supervisor mode.
+Fair enough.
 
-Maybe you're interested in this thread for user visible identifiers.
+> > Userspace does actually make these assumptions already, see for example
+> > this Google "cpu features" repo:
+> > https://github.com/google/cpu_features/tree/main
+> > To be quite honest, I really dislike the fragility of what they have
+> > implemented - with only one of the reasons being they made the mistake
+> > of assuming homogeneity.
 
-https://lore.kernel.org/all/1687245156-61215-1-git-send-email-renyu.zj@linux.alibaba.com/
+> >
+> > There's got to be a line somewhere for what constitutes buggy userspace
+> > and what's a regression. Up to Palmer I suppose as to what constitutes
+> > which.
+>
+> Maybe let's just add a pretty printed version of the hwprobe info to
+> /proc/cpuinfo, and then leave the ISA string alone as a legacy
+> interface?
 
-Thanks,
-Namhyung
+I like it! I'll aim for that for v2. I'll resist the urge to name the
+row isa_for_real.
+
+>
+> Having something so poorly defined as uABI is a bit embarassing, but
+> it's our mistake so we've got to live with it.
+>
+> >> I thought I'd put this out here and see if someone could point at such
+> >> a system; but if not it'd be great to keep /proc/cpuinfo accurate and
+> >> consistent with hwprobe (which does return accurate per-hart ISA
+> >> extension info).
+> >
+> > Just another nail in the coffin for a bad interface :)
+> > There are apparently some mixed c906 chips that support vector on one
+> > core and not the other - although it is thead vector which is not
+> > supported upstream yet...
+> >
+> > Other than that, SiFive stuff technically can be mixed - rv64imac &
+> > rv64imafdc on a bunch of the older stuff. I don't think anyone actually
+> > runs those sort of configurations on them though.
