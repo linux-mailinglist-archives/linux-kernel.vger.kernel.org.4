@@ -2,157 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77C6573DF51
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 14:34:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDEE073DF56
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 14:35:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbjFZMeG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 08:34:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35834 "EHLO
+        id S230225AbjFZMfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 08:35:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbjFZMeE (ORCPT
+        with ESMTP id S229578AbjFZMfX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 08:34:04 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3DA19B
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 05:34:02 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2b699284ff4so23105811fa.2
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 05:34:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687782841; x=1690374841;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=R8FOnv3gtQFJsCvmXDuYUpI+3WBXTjrzWw58By60ndY=;
-        b=aPsCgqnHY9LpR6RbZBVMOGzI99IBgoIg+UqKz7B8CmtFbCeFb8KPFPHbPFVtLJXrRV
-         O+HmEjWC7jsayOxJgDmWFHn4PHZX+XU5kgd8AmIc+8C86qwlswbuXa0rfC7IngOOzmwk
-         dVxZTaLqNEM5HtZ6Z2l+4e15N3JrCa7qU1bTGYPlmN/lkLlJkI5M2F2CVkMZPPR+PS0L
-         p2K3AfQsiWF0/c8Wdqlr+OCRkNtkqGEEYGI9ISV1+fn7UWW16nTOtZHZC5r3aGhvd/9D
-         Cp0zVwj2car6BeAXZynyVp0tw+l6XOfqeqfIdTb2B1r4aDmHGKPNvVCrghUWG6CzzVPV
-         1VmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687782841; x=1690374841;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=R8FOnv3gtQFJsCvmXDuYUpI+3WBXTjrzWw58By60ndY=;
-        b=VUz0vQPFHQValTdXuFaXKLOsM8Dw44vkDmqQ7Y+6VWFLjDKponQ8lnqkcx/9OE9NUW
-         TDXC9cCuso/IPLABPIg0+K/4rwJ4x0ZZtfmUSu5L1JreSqvE+T/4gvb0IPGPc66h94DL
-         sQoFvuL7+761YVO+UG9I4tJrud4JL+5VEcvPRYjjo00qv3AVRxH0CmcABwH5jXk7h9jR
-         ShARDNbqHez/5S5zYpLx/dx85X5VskqACXk3ik0N+uq6s4AGCZwtEbpkSN6eoG/iXdgN
-         QqnWs8o+IheXZ2EtLozvel3WdTxAN0dOTPb0mLk1Z5bUSSlSczu8PnagzjlLfGbr7O5U
-         x0gw==
-X-Gm-Message-State: AC+VfDzXJEllbmXkwxGrvsdlfrHbl/dys+kFa0FiLUPgID/3CK4m63lL
-        rO73WTu0kqIF36Tt0oKI2+BpGA==
-X-Google-Smtp-Source: ACHHUZ4+N8TcEJs9qamJpwXe8cSYN3hg1vfPjOZIJ4AOBE2Rkjx/KxCj2PAaXbM09/9nIMMPJo227w==
-X-Received: by 2002:a2e:7819:0:b0:2b4:7fc5:21ab with SMTP id t25-20020a2e7819000000b002b47fc521abmr13916835ljc.51.1687782840867;
-        Mon, 26 Jun 2023 05:34:00 -0700 (PDT)
-Received: from [192.168.1.101] (abyk179.neoplus.adsl.tpnet.pl. [83.9.30.179])
-        by smtp.gmail.com with ESMTPSA id u22-20020a2ea176000000b002adb10a6620sm1167948ljl.107.2023.06.26.05.33.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Jun 2023 05:34:00 -0700 (PDT)
-Message-ID: <e5c412a0-a3e9-9938-d767-96364cde0e7e@linaro.org>
-Date:   Mon, 26 Jun 2023 14:33:58 +0200
+        Mon, 26 Jun 2023 08:35:23 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FE6510A;
+        Mon, 26 Jun 2023 05:35:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687782922; x=1719318922;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=2X73gKfRraYZuAhGQlSUD3OziUlK09NRQyEmxmdiB0A=;
+  b=AV7X8L9RJ1RoeSbzxjXq+k64BUNDYb5KMhU+LqRZkD+LAPOKgPniz6gH
+   9JERp9qJCbcrVjizIkEeKUxcyS2QGjkN+Avn2VZAFsq7W9KOQavqZkOQb
+   C8Jv2CPcbEPc+aH4Vrpj/Z2aTqLsVnHMqKzYzM+kVVypcS1aQ4G/3v0VD
+   UBuruscQ+paxHwZn4DTtxkbLJLnmvPK+oRpM/Fs658C1M0ZzJaDpNCZAO
+   OHOQlSoXKIcpjNWNE+2XeAYnxq0L7SkG26lUqCDuZGCf9QT7RzLRmugPA
+   oWRbUwdurZf/CLVQqnVRuqiNDEx09IjSvV9KmzB+i5CVthVPaKdaVf4CU
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="391552684"
+X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
+   d="scan'208";a="391552684"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 05:35:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="829220129"
+X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
+   d="scan'208";a="829220129"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmsmga002.fm.intel.com with ESMTP; 26 Jun 2023 05:35:11 -0700
+Message-ID: <e387d3e1-c5b2-aeb0-b6f5-fb2763cf35e0@linux.intel.com>
+Date:   Mon, 26 Jun 2023 15:36:38 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
+ Firefox/102.0 Thunderbird/102.10.0
+Subject: Re: [PATCH v3 0/2] Avoid re-initializing XHCI HC during removal
 Content-Language: en-US
-To:     Mohammad Rafi Shaik <quic_mohs@quicinc.com>,
-        krzysztof.kozlowski+dt@linaro.org, swboyd@chromium.org,
-        andersson@kernel.org, broonie@kernel.org, agross@kernel.org
-Cc:     robh+dt@kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_rohkumar@quicinc.com, srinivas.kandagatla@linaro.org,
-        dianders@chromium.org, judyhsiao@chromium.org,
-        quic_visr@quicinc.com,
-        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-References: <20230616103534.4031331-1-quic_mohs@quicinc.com>
- <20230616103534.4031331-9-quic_mohs@quicinc.com>
- <b2553058-bd78-6d9f-dcd0-d1c086b4fc3b@linaro.org>
- <20ec31b3-667a-0617-71d4-586789e2c2a4@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Subject: Re: [RESEND v6 8/8] arm64: dts: qcom: sc7280: Add qcom,adsp-pil-mode
- property in clock nodes
-In-Reply-To: <20ec31b3-667a-0617-71d4-586789e2c2a4@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Wesley Cheng <quic_wcheng@quicinc.com>, mathias.nyman@intel.com,
+        gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20230531222719.14143-1-quic_wcheng@quicinc.com>
+ <ae1a7788-acdd-8964-1450-61a741386fbd@quicinc.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <ae1a7788-acdd-8964-1450-61a741386fbd@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26.06.2023 13:17, Mohammad Rafi Shaik wrote:
+On 21.6.2023 22.46, Wesley Cheng wrote:
+> Friendly ping to see if there are any review feedback/concerns with this series?
 > 
-> On 6/16/2023 5:06 PM, Konrad Dybcio wrote:
->> On 16.06.2023 12:35, Mohammad Rafi Shaik wrote:
->>> From: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
->>>
->>> Add "qcom,adsp-pil-mode" property in clock nodes for herobrine
->>> crd revision 3 board specific device tree.
->>> This is to register clocks conditionally by differentiating ADSP
->>> based platforms and legacy path platforms.
->>> Also disable lpass_core clock, as it is creating conflict
->>> with ADSP clocks and it is not required for ADSP based platforms.
->>>
->>> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
->>> Signed-off-by: Mohammad Rafi Shaik <quic_mohs@quicinc.com>
->>> ---
->>>   .../qcom/sc7280-herobrine-audioreach-wcd9385.dtsi    | 12 ++++++++++++
->>>   1 file changed, 12 insertions(+)
->>>
->>> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi
->>> index c02ca393378f..876a29178d46 100644
->>> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi
->>> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi
->>> @@ -197,6 +197,14 @@ q6prmcc: clock-controller {
->>>       };
->>>   };
->>>   +&lpass_aon {
->>> +    qcom,adsp-pil-mode;
->> That's a whole bunch of hacky bindings that makes no sense..
->>
->> What should have been done from the beginning is:
->>
->> - all clocks should be registered inside the clock driver, unconditionally
->>    as far as .c code is concerned
->>
->> - the regmap properties within should reflect the actual max register
->>    range within the hardware block
->>
->> - device-tree should contain protected-clocks, which omits registering
->>    specified clks (I guess in the ADSP-less case you could probably even
->>    register all of them and it wouldn't hurt)
->>
-> For AR solution, it is required to add "qcom,adsp-pil-mode" flag to enable ahbm and ahbs clocks.
-> Please refer: https://elixir.bootlin.com/linux/v6.4-rc7/source/drivers/clk/qcom/lpassaudiocc-sc7280.c
-It does what I've just said, except in an implementation-specific way,
-instead of using an existing, common DT property.
 
-Konrad
+Looks good to me.
+Seems that Greg already applied these
 
->>> +};
->>> +
->>> +&lpass_core {
->>> +    status = "disabled";
->> status = "reserved";
->>
->> Konrad
-> Okay, will change status flag.
-> 
-> Rafi
->>> +};
->>> +
->>>   &lpass_rx_macro {
->>>       /delete-property/ power-domains;
->>>       /delete-property/ power-domain-names;
->>> @@ -239,3 +247,7 @@ &lpass_va_macro {
->>>         status = "okay";
->>>   };
->>> +
->>> +&lpasscc {
->>> +    qcom,adsp-pil-mode;
->>> +};
+-Mathias
+
