@@ -2,103 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8A9473E049
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 15:15:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66FC373E04C
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 15:15:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230023AbjFZNPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 09:15:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59556 "EHLO
+        id S230203AbjFZNPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 09:15:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbjFZNOo (ORCPT
+        with ESMTP id S229899AbjFZNPd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 09:14:44 -0400
-Received: from outbound-smtp46.blacknight.com (outbound-smtp46.blacknight.com [46.22.136.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10DBD10A
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 06:14:43 -0700 (PDT)
-Received: from mail.blacknight.com (pemlinmail02.blacknight.ie [81.17.254.11])
-        by outbound-smtp46.blacknight.com (Postfix) with ESMTPS id 43A69FABDD
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 14:14:41 +0100 (IST)
-Received: (qmail 26953 invoked from network); 26 Jun 2023 13:14:41 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.21.103])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 26 Jun 2023 13:14:40 -0000
-Date:   Mon, 26 Jun 2023 14:14:38 +0100
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v3 2/2] mm/page_alloc: Use write_seqlock_irqsave()
- instead write_seqlock() + local_irq_save().
-Message-ID: <20230626131438.54bupbuujbqe4b5a@techsingularity.net>
-References: <20230623171232.892937-1-bigeasy@linutronix.de>
- <20230623171232.892937-3-bigeasy@linutronix.de>
- <ZJXhxJU2jFccMjkg@dhcp22.suse.cz>
- <20230623201517.yw286Knb@linutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <20230623201517.yw286Knb@linutronix.de>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 26 Jun 2023 09:15:33 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A267F1AB
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 06:15:26 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 48CFC2186C;
+        Mon, 26 Jun 2023 13:15:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1687785325; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3qcdlrRe7UNQ3MoyAvsaAyy1Z+/jbolyeeT23DgRd4g=;
+        b=fzZFAPE09sPo7Jfzczkugqdvrwvi69PlDLdEEHlMk6ePa2D7tbb0aa99sAxnakFSkdxgkn
+        44Yc5KFD7CEelcPtfK2gUH9Lg2qDQnGdWtDBbKATNoOPMO0utA4hI0wrgiK8LiSr4vSYOY
+        B5bNHk7XYlhzon/Gchx3/iDLskfVMV0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1687785325;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3qcdlrRe7UNQ3MoyAvsaAyy1Z+/jbolyeeT23DgRd4g=;
+        b=RIxn85tyyPk5Oy2URnHvbhkXbGJQG/l+78cUA5jfJXbXULX0a8kIb1OXuL9MBrGwBoDPRZ
+        40rfR93ujIiRV8BA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 17E7613483;
+        Mon, 26 Jun 2023 13:15:25 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ls88BG2PmWQhYQAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 26 Jun 2023 13:15:25 +0000
+Date:   Mon, 26 Jun 2023 15:15:24 +0200
+Message-ID: <87jzvquzyr.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Jaroslav Kysela <perex@perex.cz>
+Cc:     Tuo Li <islituo@gmail.com>, tiwai@suse.com,
+        alsa-devel@alsa-project.org,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        baijiaju1990@outlook.com
+Subject: Re: [BUG] ALSA: core: pcm_memory: a possible data race in do_alloc_pages()
+In-Reply-To: <87ttuuv5m6.wl-tiwai@suse.de>
+References: <CADm8Tek6t0WedK+3Y6rbE5YEt19tML8BUL45N2ji4ZAz1KcN_A@mail.gmail.com>
+        <877crqwvi1.wl-tiwai@suse.de>
+        <CADm8Tenfy8joto5WLCqQWjfT8WimsbJgOss0hJe-ciyDRMrSXw@mail.gmail.com>
+        <871qhywucj.wl-tiwai@suse.de>
+        <4d0931bf-b356-6969-5aaf-b663d7f2b21a@perex.cz>
+        <87wmzqv64o.wl-tiwai@suse.de>
+        <45445f57-0a73-59e6-6f3d-3983ce93a324@perex.cz>
+        <87ttuuv5m6.wl-tiwai@suse.de>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 23, 2023 at 10:15:17PM +0200, Sebastian Andrzej Siewior wrote:
-> __build_all_zonelists() acquires zonelist_update_seq by first disabling
-> interrupts via local_irq_save() and then acquiring the seqlock with
-> write_seqlock(). This is troublesome and leads to problems on
-> PREEMPT_RT. The problem is that the inner spinlock_t becomes a sleeping
-> lock on PREEMPT_RT and must not be acquired with disabled interrupts.
+On Mon, 26 Jun 2023 13:13:21 +0200,
+Takashi Iwai wrote:
 > 
-> The API provides write_seqlock_irqsave() which does the right thing in
-> one step.
-> printk_deferred_enter() has to be invoked in non-migrate-able context to
-> ensure that deferred printing is enabled and disabled on the same CPU.
-> This is the case after zonelist_update_seq has been acquired.
+> On Mon, 26 Jun 2023 13:09:00 +0200,
+> Jaroslav Kysela wrote:
+> > 
+> > On 26. 06. 23 13:02, Takashi Iwai wrote:
+> > > On Mon, 26 Jun 2023 09:56:47 +0200,
+> > > Jaroslav Kysela wrote:
+> > >> 
+> > >> On 26. 06. 23 9:33, Takashi Iwai wrote:
+> > >>> On Mon, 26 Jun 2023 09:31:18 +0200,
+> > >>> Tuo Li wrote:
+> > >>>> 
+> > >>>> 
+> > >>>> Hello,
+> > >>>> 
+> > >>>> Thank you for your reply!
+> > >>> 
+> > >>> FWIW, the simplest fix would be something like below, just extending
+> > >>> the mutex coverage.  But it'll serialize the all calls, so it might
+> > >>> influence on the performance, while it's the safest way.
+> > >> 
+> > >> It may be better to update total_pcm_alloc_bytes before
+> > >> snd_dma_alloc_dir_pages() call and decrease this value when allocation
+> > >> fails to allow parallel allocations. Then the mutex can be held only
+> > >> for the total_pcm_alloc_bytes variable update.
+> > > 
+> > > Yes, it'd work.  But a tricky part is that the actual allocation size
+> > > can be bigger, and we need to correct the total_pcm_alloc_bytes after
+> > > the allocation result.  So the end result would be a patch like below,
+> > > which is a bit more complex than the previous simpler approach.  But
+> > > it might be OK.
+> > 
+> > The patch looks good, but it may be better to move the "post" variable
+> > updates to an inline function (mutex lock - update - mutex unlock) for
+> > a better readability.
 > 
-> There was discussion on the first submission that the order should be:
-> 	local_irq_disable();
-> 	printk_deferred_enter();
-> 	write_seqlock();
-> 
-> to avoid pitfalls like having an unaccounted printk() coming from
-> write_seqlock_irqsave() before printk_deferred_enter() is invoked. The
-> only origin of such a printk() can be a lockdep splat because the
-> lockdep annotation happens after the sequence count is incremented.
-> This is exceptional and subject to change.
-> 
-> It was also pointed that PREEMPT_RT can be affected by the printk
-> problem since its write_seqlock_irqsave() does not really disable
-> interrupts. This isn't the case because PREEMPT_RT's printk
-> implementation differs from the mainline implementation in two important
-> aspects:
-> - Printing happens in a dedicated threads and not at during the
->   invocation of printk().
-> - In emergency cases where synchronous printing is used, a different
->   driver is used which does not use tty_port::lock.
-> 
-> Acquire zonelist_update_seq with write_seqlock_irqsave() and then defer
-> printk output.
-> 
-> Fixes: 1007843a91909 ("mm/page_alloc: fix potential deadlock on zonelist_update_seq seqlock")
-> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> Acked-by: Michal Hocko <mhocko@suse.com>
+> Sounds like a good idea.  Let me cook later.
 
-Acked-by: Mel Gorman <mgorman@techsingularity.net>
+... and here it is.
 
--- 
-Mel Gorman
-SUSE Labs
+If that looks OK, I'll submit a proper fix patch.
+
+
+thanks,
+
+Takashi
+
+--- a/sound/core/pcm_memory.c
++++ b/sound/core/pcm_memory.c
+@@ -31,15 +31,41 @@ static unsigned long max_alloc_per_card = 32UL * 1024UL * 1024UL;
+ module_param(max_alloc_per_card, ulong, 0644);
+ MODULE_PARM_DESC(max_alloc_per_card, "Max total allocation bytes per card.");
+ 
++static void __update_allocated_size(struct snd_card *card, ssize_t bytes)
++{
++	card->total_pcm_alloc_bytes += bytes;
++}
++
++static void update_allocated_size(struct snd_card *card, ssize_t bytes)
++{
++	mutex_lock(&card->memory_mutex);
++	__update_allocated_size(card, bytes);
++	mutex_unlock(&card->memory_mutex);
++}
++
++static void decrease_allocated_size(struct snd_card *card, size_t bytes)
++{
++	mutex_lock(&card->memory_mutex);
++	WARN_ON(card->total_pcm_alloc_bytes < bytes);
++	__update_allocated_size(card, -(ssize_t)bytes);
++	mutex_unlock(&card->memory_mutex);
++}
++
+ static int do_alloc_pages(struct snd_card *card, int type, struct device *dev,
+ 			  int str, size_t size, struct snd_dma_buffer *dmab)
+ {
+ 	enum dma_data_direction dir;
+ 	int err;
+ 
++	/* check and reserve the requested size */
++	mutex_lock(&card->memory_mutex);
+ 	if (max_alloc_per_card &&
+-	    card->total_pcm_alloc_bytes + size > max_alloc_per_card)
++	    card->total_pcm_alloc_bytes + size > max_alloc_per_card) {
++		mutex_unlock(&card->memory_mutex);
+ 		return -ENOMEM;
++	}
++	__update_allocated_size(card, size);
++	mutex_unlock(&card->memory_mutex);
+ 
+ 	if (str == SNDRV_PCM_STREAM_PLAYBACK)
+ 		dir = DMA_TO_DEVICE;
+@@ -47,9 +73,14 @@ static int do_alloc_pages(struct snd_card *card, int type, struct device *dev,
+ 		dir = DMA_FROM_DEVICE;
+ 	err = snd_dma_alloc_dir_pages(type, dev, dir, size, dmab);
+ 	if (!err) {
+-		mutex_lock(&card->memory_mutex);
+-		card->total_pcm_alloc_bytes += dmab->bytes;
+-		mutex_unlock(&card->memory_mutex);
++		/* the actual allocation size might be bigger than requested,
++		 * and we need to correct the account
++		 */
++		if (dmab->bytes != size)
++			update_allocated_size(card, dmab->bytes - size);
++	} else {
++		/* take back on allocation failure */
++		decrease_allocated_size(card, size);
+ 	}
+ 	return err;
+ }
+@@ -58,10 +89,7 @@ static void do_free_pages(struct snd_card *card, struct snd_dma_buffer *dmab)
+ {
+ 	if (!dmab->area)
+ 		return;
+-	mutex_lock(&card->memory_mutex);
+-	WARN_ON(card->total_pcm_alloc_bytes < dmab->bytes);
+-	card->total_pcm_alloc_bytes -= dmab->bytes;
+-	mutex_unlock(&card->memory_mutex);
++	decrease_allocated_size(card, dmab->bytes);
+ 	snd_dma_free_pages(dmab);
+ 	dmab->area = NULL;
+ }
