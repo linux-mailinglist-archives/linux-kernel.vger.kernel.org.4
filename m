@@ -2,122 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7381873E6FE
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 19:54:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8DC373E701
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 19:55:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230418AbjFZRyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 13:54:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49208 "EHLO
+        id S230440AbjFZRzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 13:55:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230349AbjFZRy3 (ORCPT
+        with ESMTP id S231651AbjFZRy6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 13:54:29 -0400
-Received: from relay06.th.seeweb.it (relay06.th.seeweb.it [IPv6:2001:4b7a:2000:18::167])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4895E186;
-        Mon, 26 Jun 2023 10:54:26 -0700 (PDT)
-Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 3CB883E7AF;
-        Mon, 26 Jun 2023 19:54:23 +0200 (CEST)
-Date:   Mon, 26 Jun 2023 19:54:21 +0200
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        Mon, 26 Jun 2023 13:54:58 -0400
+Received: from mail-il1-f172.google.com (mail-il1-f172.google.com [209.85.166.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 839F6173A;
+        Mon, 26 Jun 2023 10:54:47 -0700 (PDT)
+Received: by mail-il1-f172.google.com with SMTP id e9e14a558f8ab-3457cba78f3so14996895ab.3;
+        Mon, 26 Jun 2023 10:54:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687802087; x=1690394087;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KSyc+a73j8m7K0KIeaQ8LsysU/zcItL6sttRvkyrMs0=;
+        b=ZC6KBDFDHy1QZWie8h0zIupyg8Gp0dAVUy0kAa8GHyFBenat5vjK3B8WgzXWYuoBB8
+         3Fkq6rfE8Jz8dAy8pXukfNhmWfNFpVXQloWEeYlfsTKLotCXdl/h+m4pRUipBvVOUthi
+         kjKw3g2Zso+uMZyyGAJSfXvgxreX/Nw03nBEk4eWEGUHyd/1lPU1s9kaQW4xjy68ximI
+         urVTt53+Y4ixVOB9MAbaKk1XOD5CCWwY/tbsI4mNaQite7KFtWR9SgtNkQ3elcrTRWeo
+         zKLENzDqf9hY1OJgKySl1qTTHnUFHmAKoXkPi1e1fNMYqOYWuRJOfZkzkloGFyafY9/C
+         O1AA==
+X-Gm-Message-State: AC+VfDxULjaBRs6+VgMiLHROkZ4/4/byLtwibRq18L37/yvRcGmKMdne
+        qEEnwrb3zKHviGDkho9+0g==
+X-Google-Smtp-Source: ACHHUZ7MkE7zJamNHOTyZHvfsoPXdRWHmol8FfHFGI+5hV9U+RZMqHt3x9FryQJytL8Xc8IwSyMcVQ==
+X-Received: by 2002:a92:d30e:0:b0:340:72d1:69a with SMTP id x14-20020a92d30e000000b0034072d1069amr31489125ila.28.1687802086721;
+        Mon, 26 Jun 2023 10:54:46 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id w4-20020a029684000000b0041ac54cbc60sm1880991jai.56.2023.06.26.10.54.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jun 2023 10:54:45 -0700 (PDT)
+Received: (nullmailer pid 3455212 invoked by uid 1000);
+        Mon, 26 Jun 2023 17:54:43 -0000
+Date:   Mon, 26 Jun 2023 11:54:43 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Lee Jones <lee@kernel.org>
+Cc:     "Sahin, Okan" <Okan.Sahin@analog.com>,
+        Mark Brown <broonie@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Cosmin Tanislav <demonsingur@gmail.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, Lux Aliaga <they@mint.lgbt>
-Subject: Re: [PATCH 06/15] dt-bindings: display/msm: sc7180-dpu: Describe
- SM6125
-Message-ID: <w3bbdq72thnerbyglb4dyshzg4vu5go2wpsciprk27vah6w2ms@yc4eqclct24a>
-References: <20230624-sm6125-dpu-v1-0-1d5a638cebf2@somainline.org>
- <20230624-sm6125-dpu-v1-6-1d5a638cebf2@somainline.org>
- <6bbf239f-d530-2f1e-ff52-361f7c9cc951@linaro.org>
- <75d64lixeawfoqbrctm4thzh73cxkvnlmnh5xgbpf277pmh3gz@zthnqvvuxmeq>
- <a6f3906a-98a7-de7a-3e26-4b8c45fe93f7@linaro.org>
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        Marcus Folkesson <marcus.folkesson@gmail.com>,
+        "Bolboaca, Ramona" <Ramona.Bolboaca@analog.com>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        "Tilki, Ibrahim" <Ibrahim.Tilki@analog.com>,
+        William Breathitt Gray <william.gray@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Haibo Chen <haibo.chen@nxp.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
+Subject: Re: [PATCH v7 5/5] mfd: max77541: Add ADI MAX77541/MAX77540 PMIC
+ Support
+Message-ID: <20230626175443.GA3446604-robh@kernel.org>
+References: <20230412111256.40013-1-okan.sahin@analog.com>
+ <20230412111256.40013-6-okan.sahin@analog.com>
+ <20230420103438.GI9904@google.com>
+ <09eb8e4c-3e73-41f0-bf42-8ddf3c4254ec@sirena.org.uk>
+ <20230421073938.GO996918@google.com>
+ <82612171-46d7-4d82-a8fc-c7d6a99d57e9@sirena.org.uk>
+ <MN2PR03MB516860989BD8ED6AC9A767FBE755A@MN2PR03MB5168.namprd03.prod.outlook.com>
+ <20230621171315.GL10378@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a6f3906a-98a7-de7a-3e26-4b8c45fe93f7@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230621171315.GL10378@google.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-06-26 18:16:58, Krzysztof Kozlowski wrote:
-> On 25/06/2023 21:52, Marijn Suijten wrote:
-> > On 2023-06-24 11:12:52, Krzysztof Kozlowski wrote:
-> >> On 24/06/2023 02:41, Marijn Suijten wrote:
-> >>> SM6125 is identical to SM6375 except that while downstream also defines
-> >>> a throttle clock, its presence results in timeouts whereas SM6375
-> >>> requires it to not observe any timeouts.
-> >>
-> >> Then it should not be allowed, so you need either "else:" block or
-> >> another "if: properties: compatible:" to disallow it. Because in current
-> >> patch it would be allowed.
+On Wed, Jun 21, 2023 at 06:13:15PM +0100, Lee Jones wrote:
+> On Tue, 13 Jun 2023, Sahin, Okan wrote:
+> 
+> > >On Fri, Apr 21, 2023 at 08:39:38AM +0100, Lee Jones wrote:
+> > >
+> > >> I'll try anything once!
+> > >
+> > >> Fair warning, I think this is going to massively complicate things.
+> > >
+> > >> Either we're going to be left with a situation where child-driver
+> > >> maintainers are scrabbling around looking for previous versions for the
+> > >> MFD pull-request or contributors being forced to wait a full cycle for
+> > >> their dependencies to arrive in the maintainer's base.
+> > >
+> > >If people are resending after the MFD has gone in they really ought to
+> > >be including the pull request in the cover letter, with some combination
+> > >of either referencing the mail or just saying "this depends on the
+> > >signed tag at url+tag", the same way they would for any other dependency.
+> > >
+> > >I can't see how you applying stuff when you can slow things down TBH,
+> > >the MFD bits will be applied faster and either people can pull in a
+> > >shared tag or you can apply more commits on top of the existing core
+> > >driver.
+> > >
+> > >> I'm not sure why simply providing your Ack when you're happy with the
+> > >> driver and forgetting about the set until the pull-request arrives, like
+> > >> we've been doing for nearly a decade now, isn't working for you anymore
+> > >> but I'm mostly sure this method will be a regression.
+> > >
+> > >Like I said I've not been doing that, I've mostly been just applying the
+> > >driver when it's ready.  This might not have been so visible to you
+> > >since it means that the regulator driver doesn't appear in the series by
+> > >the time the MFD settles down.  The whole "Acked-for-MFD" has always
+> > >been a bit confusing TBH, it's not a normal ack ("go ahead and apply
+> > >this, I'm fine with it") so it was never clear what the intention was.
+> > >
+> > >Before I started just applying the drivers there used to be constant
+> > >problems with things like tags going missing (which some of the time is
+> > >the submitter just not carrying them but can also be the result of some
+> > >churn causing them to be deliberately dropped due to changes) or
+> > >forgetting the series as you suggest and then not looking at some other
+> > >very similarly named series that was also getting lots of versions after
+> > >thinking it was one that had been reviewed already.  It was all very
+> > >frustrating.  Not doing the tags until the dependencies have settled
+> > >down means that if it's in my inbox it at least consistently needs some
+> > >kind of attention and that the submitter didn't drop tags or anything so
+> > >I know why there's no tag on it even though the version number is high,
+> > >though it's not ideal either.
 > > 
-> > That means this binding is wrong/incomplete for all other SoCs then.
-> > clock(-name)s has 6 items, and sets `minItems: 6`.  Only for sm6375-dpu
-
-Of course meant to say that clock(-name)s has **7** items, not 6.
-
-> > does it set `minItems: 7`, but an else case is missing.
+> > Hi Mark and Lee,
+> > 
+> > Is there anything that I need to do for this patch set. I have received reviewed
+> > by tag for all of them so far. 
 > 
-> Ask the author why it is done like this.
-
-Konrad, can you clarify why other 
-
-> > Shall I send a Fixes: ed41005f5b7c ("dt-bindings: display/msm:
-> > sc7180-dpu: Describe SM6350 and SM6375") for that, and should maxItems:
-> > 6 be the default under clock(-name)s or in an else:?
+> Since we are so late in the day, I'm going to just apply this for v6.5.
 > 
-> There is no bug to fix. Or at least it is not yet known. Whether other
-> devices should be constrained as well - sure, sounds reasonable, but I
-> did not check the code exactly.
+> The remainder can then be applied, friction free, for v6.6.
 
-I don't know either, but we need this information to decide whether to
-use `maxItems: 6`:
+Now we have undocmented bindings in use by the driver (as pointed out by 
+'make dt_compatible_check').
 
-1. Directly on the property;
-2. In an `else:` case on the current `if: sm6375-dpu` (should have the
-   same effect as 1., afaik);
-3. In a second `if:` case that lists all SoCS explicitly.
+The whole series has all the acks/reviews needed for you to apply the 
+whole thing, so why not take the whole thing? Plus this series has been 
+sitting for 2 months. Not a great experience for submitters...
 
-Since we don't have this information, I think option 3. is the right way
-to go, setting `maxItems: 6` for qcom,sm6125-dpu.
-
-However, it is not yet understood why downstream is able to use the
-throttle clock without repercussions.
-
-> We talk here about this patch.
-
-We used this patch to discover that other SoCs are similarly
-unconstrained.  But if you don't want me to look into it, by all means!
-Saves me a lot of time.  So I will go with option 3.
-
-- Marijn
+Rob
