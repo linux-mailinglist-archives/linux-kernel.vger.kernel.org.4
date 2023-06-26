@@ -2,113 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2062E73D91A
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 10:05:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47CC173D91E
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 10:07:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229664AbjFZIFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 04:05:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47876 "EHLO
+        id S229807AbjFZIHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 04:07:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbjFZIFS (ORCPT
+        with ESMTP id S229553AbjFZIHU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 04:05:18 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18B2BB8
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 01:05:17 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-3112f256941so2577718f8f.1
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 01:05:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1687766715; x=1690358715;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mRzmdoMOtwkf0T97YbD2JaDd570KRK5k9OjuvNurjw8=;
-        b=XeB3HoE8oMKBsezzW5LgcB9DcBXwyNp3TCTl63jec1OkUmWQoPRDnM8T8j5tk2EODK
-         eAIftr0uWaFzQ5LZWXCpMPe2pmJ8E6VRQHvEofQScu9rtyUSmhSurvndmJ3Gn0/ULHA9
-         1540fICw2DmnEMWkdl5jZe/h8lya1AZF4IxTd+gajLlzIe8MHlPevohJ72v3MqB3Su/Y
-         C8GSzDfLFPwPMp06mlq71dM9h/K72L5Mem1dOeZ2Los3FRw3+cRM2ALCs3JY8IYChqmC
-         HhHrHc1z0jTNj8PBMXLYdNldipHV7Yr2L/0CJvbIysheBhr3NoaAzsKC0UbW2+VANiJa
-         qMOg==
+        Mon, 26 Jun 2023 04:07:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB12C83
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 01:06:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687766791;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bdy6ilB9MCEHjnSXB3UxFLYarjo26SKIUeQi/Jp98Ng=;
+        b=fseRFZ2Y1C86eQ4Ycewy0oPh723ulsVvm8pgKTZWC5KH08TabAuhac1yZJB/BUeBuVJZZE
+        S4PHbwBXCD1PiR2pbGOYvngX9sJxsEK76m3A18b3SoHZWITy6poSkI+frJpx0KKPv7cIjA
+        K0591gMt08R7+Uh7r/dGVMCV2FX8VuQ=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-672-DwZpn1tsOHC4lmOapfi0fQ-1; Mon, 26 Jun 2023 04:06:27 -0400
+X-MC-Unique: DwZpn1tsOHC4lmOapfi0fQ-1
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-313f3c115eeso192691f8f.0
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 01:06:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687766715; x=1690358715;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mRzmdoMOtwkf0T97YbD2JaDd570KRK5k9OjuvNurjw8=;
-        b=bs97Gg++4I5BKCDAVPTVwHkh2sXB+Kiz8aguvaNjkabjDZw3H+6l6v35CIbuwknGIP
-         urul2521oJqEclQWJGLWyAeFp++Y+rLW2dKzWmOr6BfNWwtcPAxBrcF/k1ejOveWLjbM
-         OuT+NA13Mo6ZvWJbvosGFfE7ZQessnMLX17cfw5+XHV2a/aHA87SuOrJ6iA14+LtU3Yl
-         cmvRFc71jYcNuJ/9Mef2ePa6TA/N8Ibjk/ohMr4So7GEPrNm1QzbgDVYcUtBWG1fs1Tw
-         kYf6ViYSRtQl0Ab6BBEEcMtlh/Ady1p8yV6pF9YE15eNo/iDguK3iA0PhE2egqu/PC0Y
-         63qw==
-X-Gm-Message-State: AC+VfDzmJrtNsfl9IHZ9k2AVroTFvrbDD8PrsEyiiQTIpVH6QYPZBWAY
-        oZMtieiYVVz4tX0wxJTBFP4FXS9oGhhoL6s7XjfUYA==
-X-Google-Smtp-Source: ACHHUZ6srR5n1hfE/ujkiDx2OVuKCraquwPXnR8VYkKk9WgEeorrj44802tRcCvvefKDWYtGcXR2XxP3ak5xsTpC1mk=
-X-Received: by 2002:a5d:674b:0:b0:313:ebbf:3696 with SMTP id
- l11-20020a5d674b000000b00313ebbf3696mr2389037wrw.46.1687766715552; Mon, 26
- Jun 2023 01:05:15 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687766786; x=1690358786;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bdy6ilB9MCEHjnSXB3UxFLYarjo26SKIUeQi/Jp98Ng=;
+        b=P57eFJ32SXLmDHsQG6QImxE0FMdgFMDHT8uiMooTG+QzDvvXjnBcse5kjU3cYAF9/X
+         eBbbPlv281D/vC5DdRQD1IX5KSpBqFbL+ubQGa1JG8ii1ic93jI2ET9C0R8e5/e85MYa
+         efLnix21ta/Cg2Fh3I7NYYtxQnOlP+mdt1tb4C6WihY1Dm81Jfa6Qscc2nY1b25RaOaJ
+         61depiJUebRu80wDFfzu9Z/njSxJtisxX7UXCg/3P+1aBteHePVwF2zaWEq0cttUUwY1
+         PueLjHYEPWScR7QGcuyw5EM17SjuCv5c0hRLl7gA+oREsPhnVlxxS6dRJB7/KsGokQUQ
+         bkQw==
+X-Gm-Message-State: AC+VfDw+u/1UeAegsIWjeqvA/rU5g+9VB9bJPprZL/L+080Rj2j3NYMq
+        AFceT7YbHbx3cukMoVTyUSQpd/l7vZLVcczgHMq7kISeuXGTyQ02ui9QwcuUCv034OojjrxZMf0
+        iPQF2IM5e7SnX0RpYqHhwaTWz
+X-Received: by 2002:a5d:5507:0:b0:313:e5ca:7517 with SMTP id b7-20020a5d5507000000b00313e5ca7517mr4774726wrv.9.1687766786181;
+        Mon, 26 Jun 2023 01:06:26 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ76umJhgn/Hm6w0c6df0Vzwzqxxov5wQMyiuFZk9tAwcFYpmaRyYFJYCRhnVdFCT+eZjeiL5Q==
+X-Received: by 2002:a5d:5507:0:b0:313:e5ca:7517 with SMTP id b7-20020a5d5507000000b00313e5ca7517mr4774703wrv.9.1687766785754;
+        Mon, 26 Jun 2023 01:06:25 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c74b:7300:2ef6:6cd6:703c:e498? (p200300cbc74b73002ef66cd6703ce498.dip0.t-ipconnect.de. [2003:cb:c74b:7300:2ef6:6cd6:703c:e498])
+        by smtp.gmail.com with ESMTPSA id l6-20020a5d4106000000b0030c2e3c7fb3sm6559048wrp.101.2023.06.26.01.06.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Jun 2023 01:06:25 -0700 (PDT)
+Message-ID: <89fee4bf-29a1-db19-e0ae-dd827d277504@redhat.com>
+Date:   Mon, 26 Jun 2023 10:06:24 +0200
 MIME-Version: 1.0
-References: <20230426034001.16-1-cuiyunhui@bytedance.com> <CAMj1kXEKh9O-ndk3QFibJMYfMbG7vm-cLN2vVQM5eDsYK84NzQ@mail.gmail.com>
- <CAEEQ3wkJB5CKm33mHXUOPX5makYOHF8By6FYGnNzRkM-Mo72OQ@mail.gmail.com>
- <ZEj33QLZqEeL+/y4@FVFF77S0Q05N> <CAEEQ3wmDBJkfOeKCQfcnuE+1=1K0D2pzu+Sn+zPEWk+RHs0NFQ@mail.gmail.com>
- <CAP6exY+ydbzh1EkWTFejzwaW+PA-ySVO2Qj+CVJ1XbSMce2S9Q@mail.gmail.com>
- <CAP6exY+tqAU0j1TVEMTzTb18M6_mPH5bWWiAS=94gyDGTY3hyQ@mail.gmail.com>
- <CAEEQ3w=wBdpZWnUd2WWVBC3BtFiUp-PQtNAtdXE4cO4n0XT-fg@mail.gmail.com>
- <CAMj1kXFGpXEPtYpy1+bs13F2P_LLZf9rTMfYMU=6jzgd3=SEcw@mail.gmail.com>
- <CAEEQ3wnbXE0vJnQRLo5MhfDc-Q4PbNWBoWS-oMn71CcJU51JdA@mail.gmail.com>
- <CAMj1kXHfqkU2QxvjTkGBSkEcTf_HirbdOReOJwdpgz3hM8fBHw@mail.gmail.com>
- <CAEEQ3wn2n48TpNQ3MuvrRH4zzg28SaiOswunPeZ01jFm-TbJ5w@mail.gmail.com>
- <CAMj1kXHgaLD43jx0f6hn_j209LGT_4G+w5XEGaYB9znV5p9tdA@mail.gmail.com>
- <CAP6exYJRE8iM63SX3hQP9_5aKYcnN5x0KOAtZOgeEWU5bwLEBA@mail.gmail.com>
- <CAEEQ3wn2zHUZP8gs8ezCczQLdQJqU6MqAgpcG0YeDW2aYTz0TA@mail.gmail.com> <CAMj1kXFn7+W=ZGNcSLL6p383SbA8=wstutJ85+qvXzt2G66Seg@mail.gmail.com>
-In-Reply-To: <CAMj1kXFn7+W=ZGNcSLL6p383SbA8=wstutJ85+qvXzt2G66Seg@mail.gmail.com>
-From:   =?UTF-8?B?6L+Q6L6J5bSU?= <cuiyunhui@bytedance.com>
-Date:   Mon, 26 Jun 2023 16:05:04 +0800
-Message-ID: <CAEEQ3wnXJVBLdqW6GRFuCKuBtr38uKHz7E2+P8TAv1_+b6kBKA@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH] firmware: added a firmware information
- passing method FFI
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     ron minnich <rminnich@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>, rafael@kernel.org,
-        lenb@kernel.org, jdelvare@suse.com, yc.hung@mediatek.com,
-        angelogioacchino.delregno@collabora.com,
-        allen-kh.cheng@mediatek.com, pierre-louis.bossart@linux.intel.com,
-        tinghan.shen@mediatek.com,
-        lkml - Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-acpi@vger.kernel.org,
-        =?UTF-8?B?6JGb5aOr5bu6?= <geshijian@bytedance.com>,
-        =?UTF-8?B?6Z+m5Lic?= <weidong.wd@bytedance.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Cc:     Lorenzo Stoakes <lstoakes@gmail.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        James Houghton <jthoughton@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+References: <20230623142936.268456-1-peterx@redhat.com>
+ <20230623142936.268456-3-peterx@redhat.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v3 2/8] mm/hugetlb: Prepare hugetlb_follow_page_mask() for
+ FOLL_PIN
+In-Reply-To: <20230623142936.268456-3-peterx@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ard,
+On 23.06.23 16:29, Peter Xu wrote:
+> follow_page() doesn't use FOLL_PIN, meanwhile hugetlb seems to not be the
+> target of FOLL_WRITE either.  However add the checks.
+> 
+> Namely, either the need to CoW due to missing write bit, or proper
+> unsharing on !AnonExclusive pages over R/O pins to reject the follow page.
+> That brings this function closer to follow_hugetlb_page().
+> 
+> So we don't care before, and also for now.  But we'll care if we switch
+> over slow-gup to use hugetlb_follow_page_mask().  We'll also care when to
+> return -EMLINK properly, as that's the gup internal api to mean "we should
+> unshare".  Not really needed for follow page path, though.
+> 
+> When at it, switching the try_grab_page() to use WARN_ON_ONCE(), to be
+> clear that it just should never fail.  When error happens, instead of
+> setting page==NULL, capture the errno instead.
+> 
+> Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
+> Signed-off-by: Peter Xu <peterx@redhat.com>
+> ---
+>   mm/hugetlb.c | 31 ++++++++++++++++++++-----------
+>   1 file changed, 20 insertions(+), 11 deletions(-)
+> 
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index f75f5e78ff0b..27367edf5c72 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -6462,13 +6462,7 @@ struct page *hugetlb_follow_page_mask(struct vm_area_struct *vma,
+>   	struct page *page = NULL;
+>   	spinlock_t *ptl;
+>   	pte_t *pte, entry;
+> -
+> -	/*
+> -	 * FOLL_PIN is not supported for follow_page(). Ordinary GUP goes via
+> -	 * follow_hugetlb_page().
+> -	 */
+> -	if (WARN_ON_ONCE(flags & FOLL_PIN))
+> -		return NULL;
+> +	int ret;
+>   
+>   	hugetlb_vma_lock_read(vma);
+>   	pte = hugetlb_walk(vma, haddr, huge_page_size(h));
+> @@ -6478,8 +6472,21 @@ struct page *hugetlb_follow_page_mask(struct vm_area_struct *vma,
+>   	ptl = huge_pte_lock(h, mm, pte);
+>   	entry = huge_ptep_get(pte);
+>   	if (pte_present(entry)) {
+> -		page = pte_page(entry) +
+> -				((address & ~huge_page_mask(h)) >> PAGE_SHIFT);
+> +		page = pte_page(entry);
+> +
+> +		if ((flags & FOLL_WRITE) && !huge_pte_write(entry)) {
+> +			page = NULL;
+> +			goto out;
+> +		}
+> +
+> +		if (gup_must_unshare(vma, flags, page)) {
+> +			/* Tell the caller to do unsharing */
+> +			page = ERR_PTR(-EMLINK);
+> +			goto out;
+> +		}
 
-On Mon, Jun 26, 2023 at 2:43=E2=80=AFPM Ard Biesheuvel <ardb@kernel.org> wr=
-ote:
 
-> I think all of this belongs under arch/riscv
+No need to check if the page is writable (like all other callers and as 
+gup_must_unshare() documents -- "for which pages that are 
+write-protected in the page table")
 
-Could you look at the content of the patch again? As we discussed
-before, we need to connect to the ACPI and the SMBIOS entry
-At least this part of the code has to be placed in the corresponding place:
-drivers/acpi/osl.c: acpi_os_get_root_pointer()
-drivers/firmware/dmi_scan.c:dmi_scan_machine()
+if (!huge_pte_write(entry) && gup_must_unshare(vma, flags, page)) {
 
-Because obtaining firmware information through DTS belongs to the
-content of the driver firmware, it is appropriate to put this piece of
-code in drivers/firmware/ffi.c.
 
-So I insist on the current revision, what do you think?
+With that
 
-Thanks,
-Yunhui
+Reviewed-by: David Hildenbrand <david@redhat.com>
+
+-- 
+Cheers,
+
+David / dhildenb
+
