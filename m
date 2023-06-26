@@ -2,141 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2048B73D5D4
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 04:34:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FC1773D5DC
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 04:35:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230175AbjFZCeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 22:34:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37944 "EHLO
+        id S230104AbjFZCf4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 22:35:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbjFZCeg (ORCPT
+        with ESMTP id S229693AbjFZCfu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 22:34:36 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 804E7B1
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 19:34:35 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id d75a77b69052e-4007b5bafceso286861cf.1
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 19:34:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687746874; x=1690338874;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CVihiOZ7lPOY7hWnryBrA+/oD8EUpfcein9lW0Ydcsk=;
-        b=GhmUcgPljQdG2384d7n4zPhgPF1A8jlJj/FoVpS3RNM7mhOMGGIPZxppBsMavyMNWi
-         HRqepk1SgLdE5JPLTmheF5+H8SovFdX6IpPjbQEGc6us6sAChK+55yvCG14vmmkXoWPn
-         pPJ1ABIlsLv3Zgr8aAnRWCtZs0I2sk+yAKUxvYiy7KQLO5LHexdpm97nHa1jJOoAaVWN
-         poZl9GcVW6o6syEFLGKR6Bp+F1q7SV3NZB0xArX1BCRMvm9cwZaV1p25JLZYYUVhriqA
-         IPIK0SbR02E0xlDNoPoWCrODaTO8r9CDCxeABmG3/xLp0r174r1lRlqksMwtfsv7gUbB
-         ldUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687746874; x=1690338874;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CVihiOZ7lPOY7hWnryBrA+/oD8EUpfcein9lW0Ydcsk=;
-        b=Yei7pGWA9t1S5rT0LTmjSHyd/LLvLKfmWK9CL/K6Px9OqQco9AJfYtGrv09/RRt4Kv
-         cHnw8L4zYWkFSiKFK9NKhyCok8E8DP9zALFaqYYR1cQATxdkbPy/pq14YOsjhA6PpCAV
-         ZS3Xnqn6bIKI9cx2zjYLn3ZTJmRzE5DSRGvtNiejc2nev9LSSfVK5i+6qXCyftgktQZ3
-         +m8V63b08bnxehOgGJkDPcBLR/H9v6Y29zX3cj//q/hl5gRPhLCfmCDRK2rwquNHtUH/
-         JpVtPSJkGUbQ6ElKBCXKUknldcElFrJne7MPVWvNpKWo4KjNy+zMQrFQYISetqjs4D75
-         zveg==
-X-Gm-Message-State: AC+VfDwL1jAK2PEk/3CvBGvJ1YmnIl5Qz5qZS9j+nIm+gKKdnaD7vFWD
-        I22b+cH+ykdEn+cmAZKrBlDKphdUBxsVhvvwAZtpUQ==
-X-Google-Smtp-Source: ACHHUZ7KqHud5NmiMLt8ROhheSgT/+vI3VHyqtcHQSYmrTg3qxQ9b3kP3R6Lk5LWQ/Dwf1B2MxFkjILp3mELs2c9mGQ=
-X-Received: by 2002:a05:622a:8d:b0:3f9:6930:1308 with SMTP id
- o13-20020a05622a008d00b003f969301308mr267696qtw.13.1687746874453; Sun, 25 Jun
- 2023 19:34:34 -0700 (PDT)
+        Sun, 25 Jun 2023 22:35:50 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 409ECE5A;
+        Sun, 25 Jun 2023 19:35:32 -0700 (PDT)
+X-UUID: 19b1dee213ca11eeb20a276fd37b9834-20230626
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=Iwm0zG4h3gdP7jHydJXH0fWBg1eTZidbjOVJW6/TgdU=;
+        b=SnoQq1dU0WmTTMLJIWRB6QFoCIsbegxc2VK7dDC3xJVMV8megKtP4Qh2CSxign9Bwv2yHi2RaesfwyONrlsIA3pAZXOnPlKR58C/0m6ZzuaRKQ/71klhZWowFY5SlBF+QY9R0Gz5auPnAxpuzOJyAImvhxrJ+jZZVM2xi8LUrko=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.27,REQID:41937417-b15c-444f-ac88-b8ba1722d666,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:01c9525,CLOUDID:9bd3a03f-7aa7-41f3-a6bd-0433bee822f3,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: 19b1dee213ca11eeb20a276fd37b9834-20230626
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <maso.huang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 881512161; Mon, 26 Jun 2023 10:35:23 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Mon, 26 Jun 2023 10:35:21 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Mon, 26 Jun 2023 10:35:21 +0800
+From:   Maso Huang <maso.huang@mediatek.com>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Trevor Wu <trevor.wu@mediatek.com>,
+        Jiaxin Yu <jiaxin.yu@mediatek.com>,
+        Ren Zhijie <renzhijie2@huawei.com>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+CC:     Maso Huang <maso.huang@mediatek.com>
+Subject: [PATCH v2 0/7] ASoC: mediatek: Add support for MT7986 SoC
+Date:   Mon, 26 Jun 2023 10:34:54 +0800
+Message-ID: <20230626023501.11120-1-maso.huang@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-References: <20230621063825.268890-1-mshavit@google.com> <20230621063825.268890-10-mshavit@google.com>
- <ZJToAfeKg8FF1sZL@Asurada-Nvidia>
-In-Reply-To: <ZJToAfeKg8FF1sZL@Asurada-Nvidia>
-From:   Michael Shavit <mshavit@google.com>
-Date:   Mon, 26 Jun 2023 10:33:58 +0800
-Message-ID: <CAKHBV266J1S6EMMjNCRMPhSXCKnqU7-H=rhi5iMbV4D9rH7WgQ@mail.gmail.com>
-Subject: Re: [PATCH v4 09/13] iommu/arm-smmu-v3: Implement set_dev_pasid
-To:     Nicolin Chen <nicolinc@nvidia.com>
-Cc:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>, jean-philippe@linaro.org,
-        jgg@nvidia.com, baolu.lu@linux.intel.com,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,RDNS_NONE,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Would you please elaborate a bit more for the use case of
-allowing that?
+Changes in v2:
+ - v1 title: [PATCH 0/7] ASoC: mediatek: Add support for MT79xx SoC
+ - add missing maintainers
+ - rename mt79xx to mt7986 in all files
+ - use clk bulk api in mt7986-afe-clk.c [2/7]
+ - refine mt7986-afe-pcm.c based on reviewer's suggestions [4/7]
+ - refine dt-binding files based on reviewer's suggestions [6/7] [7/7]
+ - transpose [3/7] and [4/7] in v1 to fix test build errors
+ 
+This series of patches adds support for MediaTek AFE of MT7986 SoC.
+Patches are based on broonie tree "for-next" branch.
 
-In short; to support devices that use SSID to isolate different
-(device) contexts. Those contexts (and the memory available to them)
-is partially managed by the device's Kernel driver.
+Maso Huang (7):
+  ASoC: mediatek: mt7986: add common header
+  ASoC: mediatek: mt7986: support audio clock control
+  ASoC: mediatek: mt7986: support etdm in platform driver
+  ASoC: mediatek: mt7986: add platform driver
+  ASoC: mediatek: mt7986: add machine driver with wm8960
+  ASoC: dt-bindings: mediatek,mt7986-wm8960: add mt7986-wm8960 document
+  ASoC: dt-bindings: mediatek,mt7986-afe: add audio afe document
 
-> And which test configuration do you cover
-using smmute? Would you mind sharing your test commands?
+ .../bindings/sound/mediatek,mt7986-afe.yaml   |  89 +++
+ .../sound/mediatek,mt7986-wm8960.yaml         |  53 ++
+ sound/soc/mediatek/Kconfig                    |  20 +
+ sound/soc/mediatek/Makefile                   |   1 +
+ sound/soc/mediatek/mt7986/Makefile            |  10 +
+ sound/soc/mediatek/mt7986/mt7986-afe-clk.c    |  75 +++
+ sound/soc/mediatek/mt7986/mt7986-afe-clk.h    |  18 +
+ sound/soc/mediatek/mt7986/mt7986-afe-common.h |  51 ++
+ sound/soc/mediatek/mt7986/mt7986-afe-pcm.c    | 598 ++++++++++++++++++
+ sound/soc/mediatek/mt7986/mt7986-dai-etdm.c   | 421 ++++++++++++
+ sound/soc/mediatek/mt7986/mt7986-reg.h        | 206 ++++++
+ sound/soc/mediatek/mt7986/mt7986-wm8960.c     | 184 ++++++
+ 12 files changed, 1726 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/sound/mediatek,mt7986-afe.yaml
+ create mode 100644 Documentation/devicetree/bindings/sound/mediatek,mt7986-wm8960.yaml
+ create mode 100644 sound/soc/mediatek/mt7986/Makefile
+ create mode 100644 sound/soc/mediatek/mt7986/mt7986-afe-clk.c
+ create mode 100644 sound/soc/mediatek/mt7986/mt7986-afe-clk.h
+ create mode 100644 sound/soc/mediatek/mt7986/mt7986-afe-common.h
+ create mode 100644 sound/soc/mediatek/mt7986/mt7986-afe-pcm.c
+ create mode 100644 sound/soc/mediatek/mt7986/mt7986-dai-etdm.c
+ create mode 100644 sound/soc/mediatek/mt7986/mt7986-reg.h
+ create mode 100644 sound/soc/mediatek/mt7986/mt7986-wm8960.c
 
-I used the setup suggested by Jean in
-https://lore.kernel.org/all/20230511195928.GA288490@myrica/ , with the
-following commands:
->>>
-# Basic test
-./smmute;
-./smmute -u mmap;
+-- 
+2.18.0
 
-# Test invalid access to not-mapped address
-./smmute -u mmap -f drv;
-
-# Test invalid access after unmap
-./smmute -u mmap -f write -d;
-
-# Check smmu_mn released when killed
-mount -t tracefs nodev /sys/kernel/tracing;
-echo 1 > /sys/kernel/tracing/events/iommu/enable;
-echo 1 > /sys/kernel/tracing/events/smmu/enable;
-./smmute -u mmap -k bind;
-cat /sys/kernel/tracing/trace;
-<<<
-
-This only covers existing SVA functionality. To test the functionality
-introduced by this patch, I used a device capable of generating DMA
-transactions w/ SSID and a test driver with following tests:
-1. Successful dma Read/Write to buffer mapped on domain attached with pasid
-2. Unsuccessful dma Read/Write to same buffer after domain detached
-from pasid, or after buffer unmapped from domain
-3. Variations of the above with a domain attached to multiple pasids
-
-I've been considering migrating those tests to the smmute driver if
-that would be valuable.
-
-
-
-On Fri, Jun 23, 2023 at 8:32=E2=80=AFAM Nicolin Chen <nicolinc@nvidia.com> =
-wrote:
->
-> Hi Michael,
->
-> On Wed, Jun 21, 2023 at 02:37:21PM +0800, Michael Shavit wrote:
-> >
-> > This change enables the use of the iommu_attach_dev_pasid API for
-> > UNMANAGED domains. The primary use-case is to allow in-kernel users of
-> > the iommu API to manage domains with PASID. This change also allows for
-> > future support of pasid in the DMA api.
->
-> Would you please elaborate a bit more for the use case of
-> allowing that? And which test configuration do you cover
-> using smmute? Would you mind sharing your test commands?
->
-> I have run a sanity with this series using an SVA domain
-> with a real master. It seems to be fine.
->
-> Thanks
-> Nicolin
