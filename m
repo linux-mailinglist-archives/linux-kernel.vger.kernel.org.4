@@ -2,85 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE53873D830
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 09:02:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E95CA73D838
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 09:07:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229610AbjFZHCa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 03:02:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53770 "EHLO
+        id S229742AbjFZHHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 03:07:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbjFZHC0 (ORCPT
+        with ESMTP id S229550AbjFZHHM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 03:02:26 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C99F012A
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 00:02:21 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f9b4bf99c2so38370845e9.3
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 00:02:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687762940; x=1690354940;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=PGWZfcI+ygYewNhDuM0SYl47YqYvcG68Xrvt5FnKs4o=;
-        b=XdYtF2EvTOPk5ZDrokR/u8wGAZLqSExt8bHLEgTIYru7Rro2X10eehexpNdBHl9Wje
-         Zwtpc5ea1dC93KOl4J5pP6WAJ0sgfg+Q43sHOs9uSVv6YaRXuuvPuOBa/MiX/1fgUFwQ
-         ch2miYjKjT5JsrkjqyjFe3P3ecBjqIysl459ErpiM8nPNL0bzsLmEOYkqOI79gQMoctr
-         U2eJnU4pTNoTLnDpzypjQgzsHvSW7Z+Y6NZQhl9MWFnvgjei+XPTls1gGFOuPKO7Au6J
-         OJZF52xWj42yluQVPKUpeOtZXi0/dVuH3gFHKmXGwo0bEC9NGsZlOZr+jRwWMdrplTta
-         wqsQ==
+        Mon, 26 Jun 2023 03:07:12 -0400
+Received: from mail-il1-f206.google.com (mail-il1-f206.google.com [209.85.166.206])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA87109
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 00:06:55 -0700 (PDT)
+Received: by mail-il1-f206.google.com with SMTP id e9e14a558f8ab-345a75b1624so4868415ab.1
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 00:06:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687762940; x=1690354940;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PGWZfcI+ygYewNhDuM0SYl47YqYvcG68Xrvt5FnKs4o=;
-        b=PLfinHwjN/dIilyZkEFXOUKwzgVVv5m5qcVIwJdbtVK/NIgzMzAFsgwLWQ/4IZcdiF
-         f1VwOWk8veJzx9agDMMVojjPWFedsJjB9Fd9PHim5u/8/frdvWkvjAGRcxn7JG9KhtsP
-         JwpXmaDoloOM7Bh1eiTTSRJcDfXtL6JNvdvLHvB0VRnTr8mGoTmulr0SnB2OD4YymwuW
-         L2UD9ukVzrCXRenoj70oSfF0GJUzbjnlwq6QHRBSAXfW0j/px8I6WhA6ff1a0ko3BFFs
-         PWmaxZFWFFqnZTYrw9F3BrR7BeI6L0nug0O6RzpjrggwRhIF5p5daObPjoM7JQbsb3RG
-         PgQw==
-X-Gm-Message-State: AC+VfDwrFUsw3jlfCP9fcMhzwu21p3ZQdUCnMyUZmZFh9B6PTdpTlOVc
-        XsknJ/F1lPwDA6J6QjfGjR19dQ==
-X-Google-Smtp-Source: ACHHUZ6dryO+h7ysP/DnH1V8ruGXuDieBUNB9D2BNiaOACtfp7vGwdgKCWTWyDnkNkYq/8nV2R1S4g==
-X-Received: by 2002:a1c:4b0c:0:b0:3f9:b083:109 with SMTP id y12-20020a1c4b0c000000b003f9b0830109mr17024110wma.33.1687762940221;
-        Mon, 26 Jun 2023 00:02:20 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:9a76:3d38:5d1f:60c? ([2a01:e0a:982:cbb0:9a76:3d38:5d1f:60c])
-        by smtp.gmail.com with ESMTPSA id x26-20020a1c7c1a000000b003fa740ef99esm6590678wmc.45.2023.06.26.00.02.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Jun 2023 00:02:19 -0700 (PDT)
-Message-ID: <e36a697f-a54d-7bdf-1e18-38f72ec2966c@linaro.org>
-Date:   Mon, 26 Jun 2023 09:02:16 +0200
+        d=1e100.net; s=20221208; t=1687763214; x=1690355214;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fXcwNiHEj4amqBCnv7s3j5wJPuDkZ0zT42+TEnL8kLE=;
+        b=VA6AlzzenuEluTuY+WRFyTj71MqCPQP0tklNkGLT81GB0xGUuKMZ/3maBVN0gtBzez
+         GSb/vWwc47Apllbq9/0kTDZMOmlKv1FITnmgyJW6feeqBDJz7CUx4NksvytnU5O1k95h
+         mo/DuOMxJZhLcoOcd0BXDNNo+iFHE7DiRm4xEWY3qI/3eQrU7x0dylBlItvLzwuSfMmG
+         /HsmSHDBzoNbxgF8KP0i9TjplArd4a1K7cw9DJJSVtihYGOCxFIw8J4gLMXB5G23aZ5J
+         r27k8b14OWDAMYmZQqeB1WoQ1ouiX3+GsARkcl+og5FITTB1ItxNReTQNIrWJTv++vsg
+         5gEA==
+X-Gm-Message-State: AC+VfDzcT12MeTlYfA8JuexxN37WF6HYO3wek0LPUL/r+T2v/JEg1sGN
+        oiWJzkdB982jlsCoxG6hnvbBlpYbPQoEGmpfxf4qSpLQrmxS
+X-Google-Smtp-Source: ACHHUZ6Yb+d93L6BiWKrEkD2MqEQiAME4CB12iRJdkPZes0TMwtBbRazsp0iQ/aZx49z/FODF7KaaUAZ8S6Usx+R49Z5B+ienrit
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v3 4/4] input: touchscreen: add SPI support for Goodix
- Berlin Touchscreen IC
-Content-Language: en-US
-To:     Jeff LaBundy <jeff@labundy.com>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Henrik Rydberg <rydberg@bitmath.org>,
-        linux-input@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230606-topic-goodix-berlin-upstream-initial-v3-0-f0577cead709@linaro.org>
- <20230606-topic-goodix-berlin-upstream-initial-v3-4-f0577cead709@linaro.org>
- <ZJiXopmFr4dPbqll@nixie71>
-Organization: Linaro Developer Services
-In-Reply-To: <ZJiXopmFr4dPbqll@nixie71>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Received: by 2002:a92:cf48:0:b0:345:9269:341f with SMTP id
+ c8-20020a92cf48000000b003459269341fmr1521551ilr.4.1687763214612; Mon, 26 Jun
+ 2023 00:06:54 -0700 (PDT)
+Date:   Mon, 26 Jun 2023 00:06:54 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000df3e3b05ff02fe20@google.com>
+Subject: [syzbot] [net?] [virt?] [kvm?] KASAN: slab-use-after-free Read in __vhost_vq_attach_worker
+From:   syzbot <syzbot+8540db210d403f1aa214@syzkaller.appspotmail.com>
+To:     jasowang@redhat.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, michael.christie@oracle.com,
+        mst@redhat.com, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com,
+        virtualization@lists.linux-foundation.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,304 +57,225 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jeff,
+Hello,
 
-On 25/06/2023 21:38, Jeff LaBundy wrote:
-> Hi Neil,
-> 
-> On Thu, Jun 22, 2023 at 04:29:02PM +0200, Neil Armstrong wrote:
->> Add initial support for the new Goodix "Berlin" touchscreen ICs
->> over the SPI interface.
->>
->> The driver doesn't use the regmap_spi code since the SPI messages
->> needs to be prefixed, thus this custom regmap code.
->>
->> This initial driver is derived from the Goodix goodix_ts_berlin
->> available at [1] and [2] and only supports the GT9916 IC
->> present on the Qualcomm SM8550 MTP & QRD touch panel.
->>
->> The current implementation only supports BerlinD, aka GT9916.
->>
->> [1] https://github.com/goodix/goodix_ts_berlin
->> [2] https://git.codelinaro.org/clo/la/platform/vendor/opensource/touch-drivers
->>
->> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
->> ---
-> 
-> Just a few comments below, then feel free to add:
-> 
-> Reviewed-by: Jeff LaBundy <jeff@labundy.com>
-> 
->>   drivers/input/touchscreen/Kconfig             |  13 ++
->>   drivers/input/touchscreen/Makefile            |   1 +
->>   drivers/input/touchscreen/goodix_berlin_spi.c | 172 ++++++++++++++++++++++++++
->>   3 files changed, 186 insertions(+)
->>
->> diff --git a/drivers/input/touchscreen/Kconfig b/drivers/input/touchscreen/Kconfig
->> index 5e21cca6025d..2d86615e5090 100644
->> --- a/drivers/input/touchscreen/Kconfig
->> +++ b/drivers/input/touchscreen/Kconfig
->> @@ -435,6 +435,19 @@ config TOUCHSCREEN_GOODIX_BERLIN_I2C
->>   	  To compile this driver as a module, choose M here: the
->>   	  module will be called goodix_berlin_i2c.
->>   
->> +config TOUCHSCREEN_GOODIX_BERLIN_SPI
->> +	tristate "Goodix Berlin SPI touchscreen"
->> +	depends on SPI_MASTER
-> 
-> select REGMAP
-> 
-> (keep "depends on SPI_MASTER")
+syzbot found the following issue on:
 
-Ack, indeed it looks cleaner to do that
+HEAD commit:    8d2be868b42c Add linux-next specific files for 20230623
+git tree:       linux-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=12872950a80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d8ac8dd33677e8e0
+dashboard link: https://syzkaller.appspot.com/bug?extid=8540db210d403f1aa214
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15c1b70f280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=122ee4cb280000
 
-> 
->> +	select TOUCHSCREEN_GOODIX_BERLIN_CORE
->> +	help
->> +	  Say Y here if you have a Goodix Berlin IC connected to
->> +	  your system via SPI.
->> +
->> +	  If unsure, say N.
->> +
->> +	  To compile this driver as a module, choose M here: the
->> +	  module will be called goodix_berlin_spi.
->> +
->>   config TOUCHSCREEN_HIDEEP
->>   	tristate "HiDeep Touch IC"
->>   	depends on I2C
->> diff --git a/drivers/input/touchscreen/Makefile b/drivers/input/touchscreen/Makefile
->> index 921a2da0c2be..29524e8a83db 100644
->> --- a/drivers/input/touchscreen/Makefile
->> +++ b/drivers/input/touchscreen/Makefile
->> @@ -49,6 +49,7 @@ obj-$(CONFIG_TOUCHSCREEN_FUJITSU)	+= fujitsu_ts.o
->>   obj-$(CONFIG_TOUCHSCREEN_GOODIX)	+= goodix_ts.o
->>   obj-$(CONFIG_TOUCHSCREEN_GOODIX_BERLIN_CORE)	+= goodix_berlin_core.o
->>   obj-$(CONFIG_TOUCHSCREEN_GOODIX_BERLIN_I2C)	+= goodix_berlin_i2c.o
->> +obj-$(CONFIG_TOUCHSCREEN_GOODIX_BERLIN_SPI)	+= goodix_berlin_spi.o
->>   obj-$(CONFIG_TOUCHSCREEN_HIDEEP)	+= hideep.o
->>   obj-$(CONFIG_TOUCHSCREEN_HYNITRON_CSTXXX)	+= hynitron_cstxxx.o
->>   obj-$(CONFIG_TOUCHSCREEN_ILI210X)	+= ili210x.o
->> diff --git a/drivers/input/touchscreen/goodix_berlin_spi.c b/drivers/input/touchscreen/goodix_berlin_spi.c
->> new file mode 100644
->> index 000000000000..3a1bc251b32d
->> --- /dev/null
->> +++ b/drivers/input/touchscreen/goodix_berlin_spi.c
->> @@ -0,0 +1,172 @@
->> +// SPDX-License-Identifier: GPL-2.0-or-later
->> +/*
->> + * Goodix Berlin Touchscreen Driver
->> + *
->> + * Copyright (C) 2020 - 2021 Goodix, Inc.
->> + * Copyright (C) 2023 Linaro Ltd.
->> + *
->> + * Based on goodix_ts_berlin driver.
->> + */
->> +#include <asm/unaligned.h>
->> +#include <linux/kernel.h>
->> +#include <linux/module.h>
->> +#include <linux/regmap.h>
->> +#include <linux/spi/spi.h>
->> +
->> +#include "goodix_berlin.h"
->> +
->> +#define SPI_TRANS_PREFIX_LEN	1
->> +#define REGISTER_WIDTH		4
->> +#define SPI_READ_DUMMY_LEN	3
->> +#define SPI_READ_PREFIX_LEN	(SPI_TRANS_PREFIX_LEN + REGISTER_WIDTH + SPI_READ_DUMMY_LEN)
->> +#define SPI_WRITE_PREFIX_LEN	(SPI_TRANS_PREFIX_LEN + REGISTER_WIDTH)
->> +
->> +#define SPI_WRITE_FLAG		0xF0
->> +#define SPI_READ_FLAG		0xF1
-> 
-> Please namespace all of these as you have done in the core driver.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/2a004483aca3/disk-8d2be868.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/5688cb13b277/vmlinux-8d2be868.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/76de0b63bc53/bzImage-8d2be868.xz
 
-Ack
+The issue was bisected to:
 
-> 
->> +
->> +static int goodix_berlin_spi_read(void *context, const void *reg_buf,
->> +				  size_t reg_size, void *val_buf,
->> +				  size_t val_size)
->> +{
->> +	struct spi_device *spi = context;
->> +	struct spi_transfer xfers;
->> +	struct spi_message spi_msg;
->> +	const u32 *reg = reg_buf; /* reg is stored as native u32 at start of buffer */
->> +	u8 *buf;
->> +	int ret;
-> 
-> 	int error;
-> 
->> +
->> +	if (reg_size != REGISTER_WIDTH)
->> +		return -EINVAL;
->> +
->> +	buf = kzalloc(SPI_READ_PREFIX_LEN + val_size, GFP_KERNEL);
->> +	if (!buf)
->> +		return -ENOMEM;
->> +
->> +	spi_message_init(&spi_msg);
->> +	memset(&xfers, 0, sizeof(xfers));
->> +
->> +	/* buffer format: 0xF1 + addr(4bytes) + dummy(3bytes) + data */
->> +	buf[0] = SPI_READ_FLAG;
->> +	put_unaligned_be32(*reg, buf + SPI_TRANS_PREFIX_LEN);
->> +	memset(buf + SPI_TRANS_PREFIX_LEN + REGISTER_WIDTH, 0xff,
->> +	       SPI_READ_DUMMY_LEN);
->> +
->> +	xfers.tx_buf = buf;
->> +	xfers.rx_buf = buf;
->> +	xfers.len = SPI_READ_PREFIX_LEN + val_size;
->> +	xfers.cs_change = 0;
->> +	spi_message_add_tail(&xfers, &spi_msg);
->> +
->> +	ret = spi_sync(spi, &spi_msg);
-> 
-> 	error = spi_sync(...);
-> 
->> +	if (ret < 0)
-> 
-> 	if (error)
-> 
->> +		dev_err(&spi->dev, "transfer error:%d", ret);
->> +	else
->> +		memcpy(val_buf, buf + SPI_READ_PREFIX_LEN, val_size);
->> +
->> +	kfree(buf);
->> +	return ret;
->> +}
->> +
->> +static int goodix_berlin_spi_write(void *context, const void *data,
->> +				   size_t count)
->> +{
->> +	unsigned int len = count - REGISTER_WIDTH;
->> +	struct spi_device *spi = context;
->> +	struct spi_transfer xfers;
->> +	struct spi_message spi_msg;
->> +	const u32 *reg = data; /* reg is stored as native u32 at start of buffer */
->> +	u8 *buf;
->> +	int ret;
-> 
-> Same comments here regarding 'error' vs. 'ret'.
+commit 21a18f4a51896fde11002165f0e7340f4131d6a0
+Author: Mike Christie <michael.christie@oracle.com>
+Date:   Tue Jun 13 01:32:46 2023 +0000
 
-Seems I forgot to do the rename here, thanks for pointing it!
+    vhost: allow userspace to create workers
 
-> 
->> +
->> +	buf = kzalloc(SPI_WRITE_PREFIX_LEN + len, GFP_KERNEL);
->> +	if (!buf)
->> +		return -ENOMEM;
->> +
->> +	spi_message_init(&spi_msg);
->> +	memset(&xfers, 0, sizeof(xfers));
->> +
->> +	buf[0] = SPI_WRITE_FLAG;
->> +	put_unaligned_be32(*reg, buf + SPI_TRANS_PREFIX_LEN);
->> +	memcpy(buf + SPI_WRITE_PREFIX_LEN, data + REGISTER_WIDTH, len);
->> +
->> +	xfers.tx_buf = buf;
->> +	xfers.len = SPI_WRITE_PREFIX_LEN + len;
->> +	xfers.cs_change = 0;
->> +	spi_message_add_tail(&xfers, &spi_msg);
->> +
->> +	ret = spi_sync(spi, &spi_msg);
->> +	if (ret < 0)
->> +		dev_err(&spi->dev, "transfer error:%d", ret);
->> +
->> +	kfree(buf);
->> +	return ret;
->> +}
->> +
->> +static const struct regmap_config goodix_berlin_spi_regmap_conf = {
->> +	.reg_bits = 32,
->> +	.val_bits = 8,
->> +	.read = goodix_berlin_spi_read,
->> +	.write = goodix_berlin_spi_write,
->> +};
->> +
->> +/* vendor & product left unassigned here, should probably be updated from fw info */
->> +static const struct input_id goodix_berlin_spi_input_id = {
->> +	.bustype = BUS_SPI,
->> +};
->> +
->> +static int goodix_berlin_spi_probe(struct spi_device *spi)
->> +{
->> +	struct regmap_config *regmap_config;
->> +	struct regmap *regmap;
->> +	size_t max_size;
->> +	int error = 0;
->> +
->> +	regmap_config = devm_kmemdup(&spi->dev, &goodix_berlin_spi_regmap_conf,
->> +				     sizeof(*regmap_config), GFP_KERNEL);
->> +	if (!regmap_config)
->> +		return -ENOMEM;
-> 
-> Is there any reason we cannot simply pass goodix_berlin_spi_regmap_conf to
-> devm_regmap_init() below? Why to duplicate and pass the copy?
-> 
-> For reference, BMP280 in IIO is a similar example of a device with regmap
-> sitting atop a bespoke SPI protocol; it does not seem to take this extra
-> step.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=130850bf280000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=108850bf280000
+console output: https://syzkaller.appspot.com/x/log.txt?x=170850bf280000
 
-The goodix_berlin_spi_regmap_conf copy is modified after with the correct
-max raw read/write size, and I'm not a fan of modifying a global structure
-that could be use for multiple probes, I can make a copy in a stack variable
-if it feels simpler.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+8540db210d403f1aa214@syzkaller.appspotmail.com
+Fixes: 21a18f4a5189 ("vhost: allow userspace to create workers")
 
-> 
->> +
->> +	spi->mode = SPI_MODE_0;
->> +	spi->bits_per_word = 8;
->> +	error = spi_setup(spi);
->> +	if (error)
->> +		return error;
->> +
->> +	max_size = spi_max_transfer_size(spi);
->> +	regmap_config->max_raw_read = max_size - SPI_READ_PREFIX_LEN;
->> +	regmap_config->max_raw_write = max_size - SPI_WRITE_PREFIX_LEN;
->> +
->> +	regmap = devm_regmap_init(&spi->dev, NULL, spi, regmap_config);
->> +	if (IS_ERR(regmap))
->> +		return PTR_ERR(regmap);
->> +
->> +	return goodix_berlin_probe(&spi->dev, spi->irq,
->> +				   &goodix_berlin_spi_input_id, regmap);
->> +}
->> +
->> +static const struct spi_device_id goodix_berlin_spi_ids[] = {
->> +	{ "gt9916" },
->> +	{ },
->> +};
->> +MODULE_DEVICE_TABLE(spi, goodix_berlin_spi_ids);
->> +
->> +static const struct of_device_id goodix_berlin_spi_of_match[] = {
->> +	{ .compatible = "goodix,gt9916", },
->> +	{ }
->> +};
->> +MODULE_DEVICE_TABLE(of, goodix_berlin_spi_of_match);
->> +
->> +static struct spi_driver goodix_berlin_spi_driver = {
->> +	.driver = {
->> +		.name = "goodix-berlin-spi",
->> +		.of_match_table = goodix_berlin_spi_of_match,
->> +		.pm = pm_sleep_ptr(&goodix_berlin_pm_ops),
->> +	},
->> +	.probe = goodix_berlin_spi_probe,
->> +	.id_table = goodix_berlin_spi_ids,
->> +};
->> +module_spi_driver(goodix_berlin_spi_driver);
->> +
->> +MODULE_LICENSE("GPL");
->> +MODULE_DESCRIPTION("Goodix Berlin SPI Touchscreen driver");
->> +MODULE_AUTHOR("Neil Armstrong <neil.armstrong@linaro.org>");
->>
->> -- 
->> 2.34.1
->>
-> 
-> Kind regards,
-> Jeff LaBundy
+==================================================================
+BUG: KASAN: slab-use-after-free in __mutex_lock_common kernel/locking/mutex.c:582 [inline]
+BUG: KASAN: slab-use-after-free in __mutex_lock+0x1029/0x1350 kernel/locking/mutex.c:747
+Read of size 8 at addr ffff8880703fff68 by task syz-executor204/5105
 
-Thanks,
-Neil
+CPU: 0 PID: 5105 Comm: syz-executor204 Not tainted 6.4.0-rc7-next-20230623-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
+ print_address_description.constprop.0+0x2c/0x3c0 mm/kasan/report.c:364
+ print_report mm/kasan/report.c:475 [inline]
+ kasan_report+0x11d/0x130 mm/kasan/report.c:588
+ __mutex_lock_common kernel/locking/mutex.c:582 [inline]
+ __mutex_lock+0x1029/0x1350 kernel/locking/mutex.c:747
+ __vhost_vq_attach_worker+0xe7/0x390 drivers/vhost/vhost.c:678
+ vhost_dev_set_owner+0x670/0xa60 drivers/vhost/vhost.c:892
+ vhost_net_set_owner drivers/vhost/net.c:1687 [inline]
+ vhost_net_ioctl+0x668/0x16a0 drivers/vhost/net.c:1737
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl fs/ioctl.c:856 [inline]
+ __x64_sys_ioctl+0x19d/0x210 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fe7a9715629
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 21 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fe7a96ba208 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 000000000000000b RCX: 00007fe7a9715629
+RDX: 0000000000000000 RSI: 000000000000af01 RDI: 0000000000000003
+RBP: 00007fe7a979e240 R08: 00007fe7a979e248 R09: 00007fe7a979e248
+R10: 00007fe7a979e248 R11: 0000000000000246 R12: 00007fe7a979e24c
+R13: 00007ffcfa04d48f R14: 00007fe7a96ba300 R15: 0000000000022000
+ </TASK>
 
+Allocated by task 5105:
+ kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
+ kasan_set_track+0x25/0x30 mm/kasan/common.c:52
+ ____kasan_kmalloc mm/kasan/common.c:374 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:333 [inline]
+ __kasan_kmalloc+0xa2/0xb0 mm/kasan/common.c:383
+ kmalloc include/linux/slab.h:579 [inline]
+ kzalloc include/linux/slab.h:700 [inline]
+ vhost_worker_create+0x9c/0x320 drivers/vhost/vhost.c:627
+ vhost_dev_set_owner+0x5b9/0xa60 drivers/vhost/vhost.c:885
+ vhost_net_set_owner drivers/vhost/net.c:1687 [inline]
+ vhost_net_ioctl+0x668/0x16a0 drivers/vhost/net.c:1737
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl fs/ioctl.c:856 [inline]
+ __x64_sys_ioctl+0x19d/0x210 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Freed by task 5108:
+ kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
+ kasan_set_track+0x25/0x30 mm/kasan/common.c:52
+ kasan_save_free_info+0x2b/0x40 mm/kasan/generic.c:521
+ ____kasan_slab_free mm/kasan/common.c:236 [inline]
+ ____kasan_slab_free+0x160/0x1c0 mm/kasan/common.c:200
+ kasan_slab_free include/linux/kasan.h:164 [inline]
+ slab_free_hook mm/slub.c:1792 [inline]
+ slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1818
+ slab_free mm/slub.c:3801 [inline]
+ __kmem_cache_free+0xb8/0x2d0 mm/slub.c:3814
+ vhost_worker_destroy drivers/vhost/vhost.c:600 [inline]
+ vhost_workers_free drivers/vhost/vhost.c:615 [inline]
+ vhost_dev_cleanup+0x66b/0x850 drivers/vhost/vhost.c:991
+ vhost_dev_reset_owner+0x25/0x160 drivers/vhost/vhost.c:923
+ vhost_net_reset_owner drivers/vhost/net.c:1621 [inline]
+ vhost_net_ioctl+0x807/0x16a0 drivers/vhost/net.c:1735
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl fs/ioctl.c:856 [inline]
+ __x64_sys_ioctl+0x19d/0x210 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+The buggy address belongs to the object at ffff8880703fff00
+ which belongs to the cache kmalloc-cg-192 of size 192
+The buggy address is located 104 bytes inside of
+ freed 192-byte region [ffff8880703fff00, ffff8880703fffc0)
+
+The buggy address belongs to the physical page:
+page:ffffea0001c0ffc0 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x703ff
+flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
+page_type: 0xffffffff()
+raw: 00fff00000000200 ffff88801284ddc0 dead000000000122 0000000000000000
+raw: 0000000000000000 0000000000100010 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Unmovable, gfp_mask 0x16cc0(GFP_KERNEL|__GFP_NOWARN|__GFP_RETRY_MAYFAIL|__GFP_NORETRY), pid 5034, tgid 5034 (syz-executor204), ts 72916757418, free_ts 72797036103
+ set_page_owner include/linux/page_owner.h:31 [inline]
+ post_alloc_hook+0x2db/0x350 mm/page_alloc.c:1570
+ prep_new_page mm/page_alloc.c:1577 [inline]
+ get_page_from_freelist+0xfd9/0x2c40 mm/page_alloc.c:3257
+ __alloc_pages+0x1cb/0x4a0 mm/page_alloc.c:4513
+ alloc_pages+0x1aa/0x270 mm/mempolicy.c:2279
+ alloc_slab_page mm/slub.c:1862 [inline]
+ allocate_slab+0x25f/0x390 mm/slub.c:2009
+ new_slab mm/slub.c:2062 [inline]
+ ___slab_alloc+0xbc3/0x15d0 mm/slub.c:3215
+ __slab_alloc.constprop.0+0x56/0xa0 mm/slub.c:3314
+ __slab_alloc_node mm/slub.c:3367 [inline]
+ slab_alloc_node mm/slub.c:3460 [inline]
+ __kmem_cache_alloc_node+0x143/0x350 mm/slub.c:3509
+ __do_kmalloc_node mm/slab_common.c:984 [inline]
+ __kmalloc_node+0x51/0x1a0 mm/slab_common.c:992
+ kmalloc_node include/linux/slab.h:599 [inline]
+ kvmalloc_node+0xa2/0x1a0 mm/util.c:604
+ kvmalloc include/linux/slab.h:717 [inline]
+ kvzalloc include/linux/slab.h:725 [inline]
+ netif_alloc_rx_queues net/core/dev.c:9847 [inline]
+ alloc_netdev_mqs+0xbde/0x1270 net/core/dev.c:10660
+ ieee80211_if_add+0x1b7/0x19d0 net/mac80211/iface.c:2099
+ ieee80211_register_hw+0x37e5/0x40e0 net/mac80211/main.c:1407
+ mac80211_hwsim_new_radio+0x26e6/0x4c70 drivers/net/wireless/virtual/mac80211_hwsim.c:5303
+ hwsim_new_radio_nl+0xacf/0x1210 drivers/net/wireless/virtual/mac80211_hwsim.c:5983
+ genl_family_rcv_msg_doit.isra.0+0x1e6/0x2d0 net/netlink/genetlink.c:970
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1161 [inline]
+ free_unref_page_prepare+0x62e/0xcb0 mm/page_alloc.c:2384
+ free_unref_page+0x33/0x370 mm/page_alloc.c:2479
+ __unfreeze_partials+0x1fe/0x220 mm/slub.c:2647
+ qlink_free mm/kasan/quarantine.c:166 [inline]
+ qlist_free_all+0x6a/0x170 mm/kasan/quarantine.c:185
+ kasan_quarantine_reduce+0x195/0x220 mm/kasan/quarantine.c:292
+ __kasan_slab_alloc+0x63/0x90 mm/kasan/common.c:305
+ kasan_slab_alloc include/linux/kasan.h:188 [inline]
+ slab_post_alloc_hook mm/slab.h:750 [inline]
+ slab_alloc_node mm/slub.c:3470 [inline]
+ __kmem_cache_alloc_node+0x1ce/0x350 mm/slub.c:3509
+ __do_kmalloc_node mm/slab_common.c:984 [inline]
+ __kmalloc_node+0x51/0x1a0 mm/slab_common.c:992
+ kmalloc_node include/linux/slab.h:599 [inline]
+ kvmalloc_node+0xa2/0x1a0 mm/util.c:604
+ kvmalloc include/linux/slab.h:717 [inline]
+ seq_buf_alloc fs/seq_file.c:38 [inline]
+ seq_read_iter+0x7fb/0x12d0 fs/seq_file.c:210
+ kernfs_fop_read_iter+0x4ce/0x690 fs/kernfs/file.c:279
+ call_read_iter include/linux/fs.h:1865 [inline]
+ new_sync_read fs/read_write.c:389 [inline]
+ vfs_read+0x4a8/0x8d0 fs/read_write.c:470
+ ksys_read+0x122/0x250 fs/read_write.c:613
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Memory state around the buggy address:
+ ffff8880703ffe00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffff8880703ffe80: 00 00 00 00 00 00 00 00 fc fc fc fc fc fc fc fc
+>ffff8880703fff00: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                                                          ^
+ ffff8880703fff80: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
+ ffff888070400000: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
