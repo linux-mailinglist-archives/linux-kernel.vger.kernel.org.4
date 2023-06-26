@@ -2,92 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58C0373E2BF
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 17:05:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5633573E2C0
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 17:05:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230383AbjFZPFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 11:05:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34380 "EHLO
+        id S230432AbjFZPFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 11:05:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230377AbjFZPFU (ORCPT
+        with ESMTP id S230416AbjFZPFa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 11:05:20 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A993E7E
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 08:05:19 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-3112f256941so3054606f8f.1
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 08:05:19 -0700 (PDT)
+        Mon, 26 Jun 2023 11:05:30 -0400
+Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90F1F10C1;
+        Mon, 26 Jun 2023 08:05:26 -0700 (PDT)
+Received: by mail-yb1-xb41.google.com with SMTP id 3f1490d57ef6-be30cbe88b3so3408152276.1;
+        Mon, 26 Jun 2023 08:05:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687791917; x=1690383917;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=348adPXQRKrKNTWGAwb9z5LOcOD3S5LIRa6IrQyqmGc=;
-        b=BpdMkRqMxf6XEjAul5+0XQ4Uqv2kRvyAG7uM//NhkYVZS74eHBo+NlzGx6Km7k8dew
-         blQILAw7fwJy27T2x3DKaUlmEQcDJRSCj8uKQURAmWzo7FGHZNgXP+PTFSBy3ViEwxDK
-         bwUXavKKzBgmLv3XDq49ITl/dbsCckPuHheh1OyxNCa9H1yrYB1OubNaNBFQMYfXVyf9
-         4jZ/Dp+NUWclfn5YkfLFegJDrQ6plDOZ1zLMYwpsVnYWM2AtacotDLe1spyxM2z0yHPk
-         j0ZN67PMABHain93jKjzWnpDNib5oPHQXOXXsIpIXONZ9UFxlFj04vrTDLF/c98FZA07
-         LqIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687791917; x=1690383917;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1687791926; x=1690383926;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=348adPXQRKrKNTWGAwb9z5LOcOD3S5LIRa6IrQyqmGc=;
-        b=MN2Jj9F6C5sAT2KuZXqCMhlonRgqXbcDRg4wVEu8YT4XoIgxPCGrworSFAwEnqkxIH
-         AgV1/LUC4e9qKlU5wnepmSQdaqQSndMfOv+WcAOETrUUPRmUlwbIHfrl+UkF9CYNUl1S
-         0NxsG4OI87NtGDdIBYp/ZS00T+gGDiQnHIDoqXEtUIQKc/snNJa2INasE2gZzt+ZRWKG
-         eghv7LBjMjh70ZL1lHPltV9Y0haAbgvHFXvAavR9LiXbyAvVq3dpO8PNEIbNZhuFp/zw
-         iJaaRRUx8teSLpUAqPz8cFJsCNtqqE4ASIT8N2jJdk0wqM9uVqXOjureP23pJSNIx+v8
-         AJLw==
-X-Gm-Message-State: AC+VfDzxCJAC1G3OR6U4jteMMb1Q74pDX0ggjI3nCamjCTiGWuz06NLS
-        J+djNXIcaHHO5CoY3rBSNajSOQ==
-X-Google-Smtp-Source: ACHHUZ5VYTqqVMy0dhtZ4hxs5N4mrJgTTvouyQr7HxLT3nJwXi1SuqaAezHLUswOmb65Bowi8io8Mg==
-X-Received: by 2002:a5d:5960:0:b0:30f:c56c:b5b3 with SMTP id e32-20020a5d5960000000b0030fc56cb5b3mr8897292wri.4.1687791917522;
-        Mon, 26 Jun 2023 08:05:17 -0700 (PDT)
-Received: from aspen.lan (aztw-34-b2-v4wan-166919-cust780.vm26.cable.virginm.net. [82.37.195.13])
-        by smtp.gmail.com with ESMTPSA id e15-20020adfe7cf000000b0030fae360f14sm7644766wrn.68.2023.06.26.08.05.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jun 2023 08:05:16 -0700 (PDT)
-Date:   Mon, 26 Jun 2023 16:05:14 +0100
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee@kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Helge Deller <deller@gmx.de>, linux-pwm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] backlight: pwm_bl: Avoid backlight flicker applying
- initial PWM state
-Message-ID: <20230626150514.GD95170@aspen.lan>
-References: <20230608-backlight-pwm-avoid-flicker-v1-1-afd380d50174@pengutronix.de>
+        bh=pegs9TJqI5ERPmTyKCB6W0EPsjXwbILtGPmjonf7lUo=;
+        b=FHpX/4uQkZFdx3lLDSfby1RmDagKbu4vZhGJTRYZVNDN95xLwPS+VyiZxZtl6flZ2l
+         MkqG6GYz/9gCQ9y/rMg8Zo5BvIKioYnCtOga3ARdet3G0KHjWfVYL+AphiWEzNK3VKC5
+         hBIX8QHEQwbnLQgDhj5UhFLwXcP+FrHjaAGfMJoXkJo1NJRKY/xXaY3YqLU79q2un5vG
+         K6p6DCXQYx6Ms91CADcoudgnLXnRv1U3t6woEHz/Bu2RuLx/5uJ/NVrkM13X7lSQmcPL
+         rlke+4xXjAXCWgAHX0N/o/wjuS/jLcvYdQZWmeUde7Vg0kiPowuJah3An6o2qkffIWv+
+         Fzzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687791926; x=1690383926;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pegs9TJqI5ERPmTyKCB6W0EPsjXwbILtGPmjonf7lUo=;
+        b=QEYGI4pE8yRP5C3dXomStZW5jvqpTXqIg/GDe6ut6uZ9eVXpTBI+LtVu1Won/Qqq0V
+         JFa6MwBiTU5F5tX9Yk2nusXWUOklUOLmWYB5Z3R7gDG1Sj5BDM/PggphazY5zJuocaym
+         5R4NsKl8s2aMo0Iu9BdWHA4Ng+JQsVqH9lO9CHK7vZ65Eou78w54C5vAU+CUrohAerIj
+         6TcpMwcd5+iKcZDRvlbQ4hwJb837nVyf1GmTLmVw/wRa7f6tVqxkBxVomUxJN6Z4xiZK
+         yokrZpZxjx7xQnM7785aWl3OoldOhzafV66Ogf6OWBCg2qBc/PQ2TNwwSLqsQdx8WT+c
+         S/IA==
+X-Gm-Message-State: AC+VfDyiqJOjpgbctb7IFYYHCPhL/zdC01E6JoJpVqzL21RDjArTyseL
+        3k2n8LmNWKPwSiux0L5CAY5+k/hzC8AZOIDblDcqOrCdnnY4+Q==
+X-Google-Smtp-Source: ACHHUZ4uT88kn0A+GVn574Fj3hlzzxtPyUec+Ql3r0zISMuteIdMVRgP5ybnqF5b1hW18/wDqCA+q5MrVSCgjXL7CRE=
+X-Received: by 2002:a25:dd0:0:b0:c13:aca0:b70a with SMTP id
+ 199-20020a250dd0000000b00c13aca0b70amr6337670ybn.32.1687791925693; Mon, 26
+ Jun 2023 08:05:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230608-backlight-pwm-avoid-flicker-v1-1-afd380d50174@pengutronix.de>
+References: <20230622075715.1818144-1-imagedong@tencent.com>
+ <20230622075715.1818144-4-imagedong@tencent.com> <d507239c-0e73-abb3-3863-f4363b8fdd11@iogearbox.net>
+In-Reply-To: <d507239c-0e73-abb3-3863-f4363b8fdd11@iogearbox.net>
+From:   Menglong Dong <menglong8.dong@gmail.com>
+Date:   Mon, 26 Jun 2023 23:05:14 +0800
+Message-ID: <CADxym3an3zOxzHJyCWuvNTs4nG+bUn0S2FKpTM-mwCnPcQ0kmw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v7 3/3] selftests/bpf: add testcase for TRACING
+ with 6+ arguments
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     yhs@meta.com, alexei.starovoitov@gmail.com, ast@kernel.org,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        benbjiang@tencent.com, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Menglong Dong <imagedong@tencent.com>, revest@chromium.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 08, 2023 at 04:11:14PM +0200, Philipp Zabel wrote:
-> The initial PWM state returned by pwm_init_state() has a duty cycle
-> of 0 ns. To avoid backlight flicker when taking over an enabled
-> display from the bootloader, skip the initial pwm_apply_state()
-> and leave the PWM be until backlight_update_state() will apply the
-> state with the desired brightness.
+On Mon, Jun 26, 2023 at 10:47=E2=80=AFPM Daniel Borkmann <daniel@iogearbox.=
+net> wrote:
+>
+> On 6/22/23 9:57 AM, menglong8.dong@gmail.com wrote:
+> > From: Menglong Dong <imagedong@tencent.com>
+>
+> (CC'ing also Florent wrt arm64)
+>
+> > Add test9/test10 in fexit_test.c and fentry_test.c to test the fentry
+> > and fexit whose target function have 7/11 arguments.
+> >
+> > Correspondingly, add bpf_testmod_fentry_test7() and
+> > bpf_testmod_fentry_test11() to bpf_testmod.c
+> >
+> > Meanwhile, add bpf_modify_return_test2() to test_run.c to test the
+> > MODIFY_RETURN with 7 arguments.
+> >
+> > Add bpf_testmod_test_struct_arg_7/bpf_testmod_test_struct_arg_7 in
+> > bpf_testmod.c to test the struct in the arguments.
+> >
+> > And the testcases passed:
+> >
+> > ./test_progs -t fexit
+> > Summary: 5/12 PASSED, 0 SKIPPED, 0 FAILED
+> >
+> > ./test_progs -t fentry
+> > Summary: 3/0 PASSED, 0 SKIPPED, 0 FAILED
+> >
+> > ./test_progs -t modify_return
+> > Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+> >
+> > ./test_progs -t tracing_struct
+> > Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+> >
+> > Signed-off-by: Menglong Dong <imagedong@tencent.com>
+> > Acked-by: Yonghong Song <yhs@fb.com>
+> > ---
+> > v6:
+> > - add testcases to tracing_struct.c instead of fentry_test.c and
+> >    fexit_test.c
+> > v5:
+> > - add testcases for MODIFY_RETURN
+> > v4:
+> > - use different type for args in bpf_testmod_fentry_test{7,12}
+> > - add testcase for grabage values in ctx
+> > v3:
+> > - move bpf_fentry_test{7,12} to bpf_testmod.c and rename them to
+> >    bpf_testmod_fentry_test{7,12} meanwhile
+> > - get return value by bpf_get_func_ret() in
+> >    "fexit/bpf_testmod_fentry_test12", as we don't change ___bpf_ctx_cas=
+t()
+> >    in this version
+> > ---
+> >   net/bpf/test_run.c                            | 23 ++++++--
+> >   .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 49 ++++++++++++++++-
+> >   .../selftests/bpf/prog_tests/fentry_fexit.c   |  4 +-
+> >   .../selftests/bpf/prog_tests/fentry_test.c    |  2 +
+> >   .../selftests/bpf/prog_tests/fexit_test.c     |  2 +
+> >   .../selftests/bpf/prog_tests/modify_return.c  | 20 ++++++-
+> >   .../selftests/bpf/prog_tests/tracing_struct.c | 19 +++++++
+> >   .../testing/selftests/bpf/progs/fentry_test.c | 32 +++++++++++
+> >   .../testing/selftests/bpf/progs/fexit_test.c  | 33 ++++++++++++
+> >   .../selftests/bpf/progs/modify_return.c       | 40 ++++++++++++++
+> >   .../selftests/bpf/progs/tracing_struct.c      | 54 ++++++++++++++++++=
++
+> >   11 files changed, 271 insertions(+), 7 deletions(-)
+>
+> This triggers test failures on arm64 in BPF CI given the additions are
+> not yet supported there:
+>
+> https://github.com/kernel-patches/bpf/actions/runs/5371020820/jobs/974360=
+6263
+> https://github.com/kernel-patches/bpf/actions/runs/5371020820/jobs/974360=
+6326
+>
+> [...]
+> Notice: Success: 362/3077, Skipped: 12, Failed: 3
+> Error: #71 fentry_fexit
+>    Error: #71 fentry_fexit
+>    test_fentry_fexit:PASS:fentry_skel_load 0 nsec
+>    test_fentry_fexit:PASS:fexit_skel_load 0 nsec
+>    test_fentry_fexit:FAIL:fentry_attach unexpected error: -1 (errno 524)
+> Error: #72 fentry_test
+>    Error: #72 fentry_test
+>    test_fentry_test:PASS:fentry_skel_load 0 nsec
+>    fentry_test:FAIL:fentry_attach unexpected error: -1 (errno 524)
+>    test_fentry_test:FAIL:fentry_first_attach unexpected error: -1 (errno =
+524)
+> Error: #76 fexit_test
+>    Error: #76 fexit_test
+>    test_fexit_test:PASS:fexit_skel_load 0 nsec
+>    fexit_test:FAIL:fexit_attach unexpected error: -1 (errno 524)
+>    test_fexit_test:FAIL:fexit_first_attach unexpected error: -1 (errno 52=
+4)
+> [...]
+>
+> I think probably the best way would be to separate the new test cases and
+> then update tools/testing/selftests/bpf/DENYLIST.aarch64 to exclude them
+> from being run on arm64 until support gets added there too.
 
-backlight_update_state() uses pwm_get_state() to update the PWM.
+Good idea! I didn't know the existence of DENYLIST,
+or I'll already do it like this.
 
-Without applying something that came from pwm_init_state() then
-we will never adopt the reference values from pwm->args.
+I'll send a new version.
 
+Thanks!
+Menglong Dong
 
-Daniel.
+>
+> Thanks,
+> Daniel
