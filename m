@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E6A073E635
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 19:16:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BBC473E63A
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 19:16:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231366AbjFZRQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 13:16:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51354 "EHLO
+        id S229526AbjFZRQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 13:16:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230497AbjFZRPH (ORCPT
+        with ESMTP id S231127AbjFZRPK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 13:15:07 -0400
+        Mon, 26 Jun 2023 13:15:10 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E080D10C0;
-        Mon, 26 Jun 2023 10:15:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EBAFE10D5;
+        Mon, 26 Jun 2023 10:15:08 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B2AB21596;
-        Mon, 26 Jun 2023 10:15:49 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C111215A1;
+        Mon, 26 Jun 2023 10:15:52 -0700 (PDT)
 Received: from e125769.cambridge.arm.com (e125769.cambridge.arm.com [10.1.196.26])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C8DE63F663;
-        Mon, 26 Jun 2023 10:15:02 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D7EBC3F663;
+        Mon, 26 Jun 2023 10:15:05 -0700 (PDT)
 From:   Ryan Roberts <ryan.roberts@arm.com>
 To:     Andrew Morton <akpm@linux-foundation.org>,
         "Matthew Wilcox (Oracle)" <willy@infradead.org>,
@@ -41,9 +41,9 @@ Cc:     Ryan Roberts <ryan.roberts@arm.com>, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, linux-alpha@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
         linux-m68k@lists.linux-m68k.org, linux-s390@vger.kernel.org
-Subject: [PATCH v1 08/10] mm: Kconfig hooks to determine max anon folio allocation order
-Date:   Mon, 26 Jun 2023 18:14:28 +0100
-Message-Id: <20230626171430.3167004-9-ryan.roberts@arm.com>
+Subject: [PATCH v1 09/10] arm64: mm: Declare support for large anonymous folios
+Date:   Mon, 26 Jun 2023 18:14:29 +0100
+Message-Id: <20230626171430.3167004-10-ryan.roberts@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230626171430.3167004-1-ryan.roberts@arm.com>
 References: <20230626171430.3167004-1-ryan.roberts@arm.com>
@@ -58,108 +58,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For variable-order anonymous folios, we need to determine the order that
-we will allocate. From a SW perspective, the higher the order we
-allocate, the less overhead we will have; fewer faults, fewer folios in
-lists, etc. But of course there will also be more memory wastage as the
-order increases.
-
-From a HW perspective, there are memory block sizes that can be
-beneficial to reducing TLB pressure. arm64, for example, has the ability
-to map "contpte" sized chunks (64K for a 4K base page, 2M for 16K and
-64K base pages) such that one of these chunks only uses a single TLB
-entry.
-
-So we let the architecture specify the order of the maximally beneficial
-mapping unit when PTE-mapped. Furthermore, because in some cases, this
-order may be quite big (and therefore potentially wasteful of memory),
-allow the arch to specify 2 values; One is the max order for a mapping
-that _would not_ use THP if all size and alignment constraints were met,
-and the other is the max order for a mapping that _would_ use THP if all
-those constraints were met.
-
-Implement this with Kconfig by introducing some new options to allow the
-architecture to declare that it supports large anonymous folios along
-with these 2 preferred max order values. Then introduce a user-facing
-option, LARGE_ANON_FOLIO, which defaults to disabled and can only be
-enabled if the architecture has declared its support. When disabled, it
-forces the max order values, LARGE_ANON_FOLIO_NOTHP_ORDER_MAX and
-LARGE_ANON_FOLIO_THP_ORDER_MAX to 0, meaning only a single page is ever
-allocated.
+For the unhinted case, when THP is not permitted for the vma, don't
+allow anything bigger than 64K. This means we don't waste too much
+memory. Additionally, for 4K pages this is the contpte size, and for
+16K, this is (usually) the HPA size when the uarch feature is
+implemented. For the hinted case, when THP is permitted for the vma,
+allow the contpte size for all page size configurations; 64K for 4K, 2M
+for 16K and 2M for 64K.
 
 Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
 ---
- mm/Kconfig  | 39 +++++++++++++++++++++++++++++++++++++++
- mm/memory.c |  8 ++++++++
- 2 files changed, 47 insertions(+)
+ arch/arm64/Kconfig | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/mm/Kconfig b/mm/Kconfig
-index 7672a22647b4..f4ba48c37b75 100644
---- a/mm/Kconfig
-+++ b/mm/Kconfig
-@@ -1208,4 +1208,43 @@ config PER_VMA_LOCK
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index 343e1e1cae10..0e91b5bc8cd9 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -243,6 +243,7 @@ config ARM64
+ 	select TRACE_IRQFLAGS_SUPPORT
+ 	select TRACE_IRQFLAGS_NMI_SUPPORT
+ 	select HAVE_SOFTIRQ_ON_OWN_STACK
++	select ARCH_SUPPORTS_LARGE_ANON_FOLIO
+ 	help
+ 	  ARM 64-bit (AArch64) Linux support.
  
- source "mm/damon/Kconfig"
+@@ -281,6 +282,18 @@ config ARM64_CONT_PMD_SHIFT
+ 	default 5 if ARM64_16K_PAGES
+ 	default 4
  
-+config ARCH_SUPPORTS_LARGE_ANON_FOLIO
-+	def_bool n
-+	help
-+	  An arch should select this symbol if wants to allow LARGE_ANON_FOLIO
-+	  to be enabled. It must also set the following integer values:
-+	  - ARCH_LARGE_ANON_FOLIO_NOTHP_ORDER_MAX
-+	  - ARCH_LARGE_ANON_FOLIO_THP_ORDER_MAX
-+
 +config ARCH_LARGE_ANON_FOLIO_NOTHP_ORDER_MAX
 +	int
-+	help
-+	  The maximum size of folio to allocate for an anonymous VMA PTE-mapping
-+	  that does not have the MADV_HUGEPAGE hint set.
++	default 0 if ARM64_64K_PAGES	# 64K (1 page)
++	default 2 if ARM64_16K_PAGES	# 64K (4 pages; benefits from HPA where HW supports it)
++	default 4 if ARM64_4K_PAGES	# 64K (16 pages; eligible for contpte-mapping)
 +
 +config ARCH_LARGE_ANON_FOLIO_THP_ORDER_MAX
 +	int
-+	help
-+	  The maximum size of folio to allocate for an anonymous VMA PTE-mapping
-+	  that has the MADV_HUGEPAGE hint set.
++	default 5 if ARM64_64K_PAGES	# 2M  (32 page; eligible for contpte-mapping)
++	default 7 if ARM64_16K_PAGES	# 2M  (128 pages; eligible for contpte-mapping)
++	default 4 if ARM64_4K_PAGES	# 64K (16 pages; eligible for contpte-mapping)
 +
-+config LARGE_ANON_FOLIO
-+	bool "Allocate large folios for anonymous memory"
-+	depends on ARCH_SUPPORTS_LARGE_ANON_FOLIO
-+	default n
-+	help
-+	  Use large (bigger than order-0) folios to back anonymous memory where
-+	  possible. This reduces the number of page faults, as well as other
-+	  per-page overheads to improve performance for many workloads.
-+
-+config LARGE_ANON_FOLIO_NOTHP_ORDER_MAX
-+	int
-+	default 0 if !LARGE_ANON_FOLIO
-+	default ARCH_LARGE_ANON_FOLIO_NOTHP_ORDER_MAX
-+
-+config LARGE_ANON_FOLIO_THP_ORDER_MAX
-+	int
-+	default 0 if !LARGE_ANON_FOLIO
-+	default ARCH_LARGE_ANON_FOLIO_THP_ORDER_MAX
-+
- endmenu
-diff --git a/mm/memory.c b/mm/memory.c
-index 9165ed1b9fc2..a8f7e2b28d7a 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -3153,6 +3153,14 @@ static struct folio *try_vma_alloc_movable_folio(struct vm_area_struct *vma,
- 	return vma_alloc_movable_folio(vma, vaddr, 0, zeroed);
- }
- 
-+static inline int max_anon_folio_order(struct vm_area_struct *vma)
-+{
-+	if (hugepage_vma_check(vma, vma->vm_flags, false, true, true))
-+		return CONFIG_LARGE_ANON_FOLIO_THP_ORDER_MAX;
-+	else
-+		return CONFIG_LARGE_ANON_FOLIO_NOTHP_ORDER_MAX;
-+}
-+
- /*
-  * Handle write page faults for pages that can be reused in the current vma
-  *
+ config ARCH_MMAP_RND_BITS_MIN
+ 	default 14 if ARM64_64K_PAGES
+ 	default 16 if ARM64_16K_PAGES
 -- 
 2.25.1
 
