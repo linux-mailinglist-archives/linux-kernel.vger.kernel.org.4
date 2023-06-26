@@ -2,104 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B650D73D5F7
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 04:40:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D95E973D5FA
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 04:42:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230242AbjFZCkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 22:40:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42380 "EHLO
+        id S230355AbjFZCmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 22:42:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbjFZCkO (ORCPT
+        with ESMTP id S229529AbjFZCmQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 22:40:14 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D6D110D;
-        Sun, 25 Jun 2023 19:39:54 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QqBrh51X0z4wb1;
-        Mon, 26 Jun 2023 12:39:48 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1687747188;
-        bh=YRYS5rodKLDM5QmZrejVxwridNiZjtQfoMD2mlp31Fg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Y2toNPQXtCZS6Aq1VDMwO7TuL0/HldJ/+//NbHVcOFRqE0bPf+QgWXu7OKR3YZkUk
-         ZC+l4bepQYRf3F0LrIxbFTSKa/1O0/nQ/R9ZN52deFSKkDC2eaOf6hA31bYhNsRZsW
-         7Tmc0zP8qHBKMoycSHXYP+xAYa9/ydaYYEe8inxlFQ+8TLbXZZ4J2aLMhNTH2e1by4
-         yjwKVK9AvCEJNF7IMnM5CX4dxgTJAnpjAJfjI87j/6qiH2CML6h5n2jMVlIG4aMRHP
-         Pm36ogGtZIonvyhH5y+NvkI57qHNkp4oHmTsvLQEoTMCvwQhDWZ3gXyPBwbVMmLUj7
-         9UHsv2lIa6ddw==
-Date:   Mon, 26 Jun 2023 12:39:46 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Herbert Xu <herbert@gondor.apana.org.au>,
-        Linux Crypto List <linux-crypto@vger.kernel.org>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the crypto tree
-Message-ID: <20230626123946.6de22527@canb.auug.org.au>
+        Sun, 25 Jun 2023 22:42:16 -0400
+Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DBC7F3;
+        Sun, 25 Jun 2023 19:42:14 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4QqBvN3fywz4f3knj;
+        Mon, 26 Jun 2023 10:42:08 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP4 (Coremail) with SMTP id gCh0CgBXwLMA+5hk6icyMg--.7443S3;
+        Mon, 26 Jun 2023 10:42:10 +0800 (CST)
+Subject: Re: [PATCH 3/3] md/raid10: handle replacement devices in
+ fix_read_error
+To:     linan666@huaweicloud.com, song@kernel.org
+Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linan122@huawei.com, yi.zhang@huawei.com, houtao1@huawei.com,
+        yangerkun@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
+References: <20230623173236.2513554-1-linan666@huaweicloud.com>
+ <20230623173236.2513554-4-linan666@huaweicloud.com>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <55b4bebc-0e78-92d9-9b0e-5869c6c04479@huaweicloud.com>
+Date:   Mon, 26 Jun 2023 10:42:08 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/HScrxUH+i7hEBmNz4NBuy6A";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230623173236.2513554-4-linan666@huaweicloud.com>
+Content-Type: text/plain; charset=gbk; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgBXwLMA+5hk6icyMg--.7443S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxAF4rtw1ktrW5Zr15XFyDGFg_yoWrJrW3pF
+        WDGa4YvrZrJrZrur1UtrWDCa9Y9ryftFWFkr18Aw1xuwn5tr98KF1DGryY9ryUAFZxCr10
+        qan0grsrCF9FgF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkE14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
+        IcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
+        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
+        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j
+        6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUp6w
+        ZUUUUU=
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        MAY_BE_FORGED,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/HScrxUH+i7hEBmNz4NBuy6A
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi,
 
-Hi all,
+ÔÚ 2023/06/24 1:32, linan666@huaweicloud.com Ð´µÀ:
+> From: Li Nan <linan122@huawei.com>
+> 
+> In fix_read_error(), the handling of replacement devices is missing. If
+> read replacement device errors, we will attempt to fix 'mirror->rdev'.
+> It is wrong. Get rdev from r10bio to ensure that the fixed device is the
+> one which read error occurred.
+> 
+I'll suggest not to fix read error for replacement, it's better to error
+replacement directly instead of setting badblock, like what write does. 
+Otherwise, there is risk of losing data after replacement replace rdev.
 
-After merging the crypto tree, today's linux-next build (powerpc
-ppc64_defconfig) failed like this:
+Thanks,
+Kuai
 
-ld: warning: discarding dynamic section .glink
-ld: warning: discarding dynamic section .plt
-ld: linkage table error against `sm2_compute_z_digest'
-ld: stubs don't match calculated size
-ld: can not build stubs: bad value
-ld: crypto/asymmetric_keys/x509_public_key.o: in function `x509_get_sig_par=
-ams':
-x509_public_key.c:(.text+0x474): undefined reference to `sm2_compute_z_dige=
-st'
+> Signed-off-by: Li Nan <linan122@huawei.com>
+> ---
+>   drivers/md/raid10.c | 32 +++++++++++++++++---------------
+>   1 file changed, 17 insertions(+), 15 deletions(-)
+> 
+> diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
+> index a36e53fce21f..4a7c8eaf6ea0 100644
+> --- a/drivers/md/raid10.c
+> +++ b/drivers/md/raid10.c
+> @@ -2726,15 +2726,10 @@ static void fix_read_error(struct r10conf *conf, struct mddev *mddev, struct r10
+>   {
+>   	int sect = 0; /* Offset from r10_bio->sector */
+>   	int sectors = r10_bio->sectors, slot = r10_bio->read_slot;
+> -	struct md_rdev *rdev;
+> +	struct md_rdev *rdev = r10_bio->devs[slot].rdev;
+>   	int max_read_errors = atomic_read(&mddev->max_corr_read_errors);
+>   	int d = r10_bio->devs[slot].devnum;
+>   
+> -	/* still own a reference to this rdev, so it cannot
+> -	 * have been cleared recently.
+> -	 */
+> -	rdev = conf->mirrors[d].rdev;
+> -
+>   	if (test_bit(Faulty, &rdev->flags))
+>   		/* drive has already been failed, just ignore any
+>   		   more fix_read_error() attempts */
+> @@ -2763,12 +2758,11 @@ static void fix_read_error(struct r10conf *conf, struct mddev *mddev, struct r10
+>   			s = PAGE_SIZE >> 9;
+>   
+>   		rcu_read_lock();
+> +		rdev = r10_bio->devs[slot].rdev;
+>   		do {
+>   			sector_t first_bad;
+>   			int bad_sectors;
+>   
+> -			d = r10_bio->devs[sl].devnum;
+> -			rdev = rcu_dereference(conf->mirrors[d].rdev);
+>   			if (rdev &&
+>   			    test_bit(In_sync, &rdev->flags) &&
+>   			    !test_bit(Faulty, &rdev->flags) &&
+> @@ -2790,6 +2784,8 @@ static void fix_read_error(struct r10conf *conf, struct mddev *mddev, struct r10
+>   			sl++;
+>   			if (sl == conf->copies)
+>   				sl = 0;
+> +			d = r10_bio->devs[sl].devnum;
+> +			rdev = rcu_dereference(conf->mirrors[d].rdev);
+>   		} while (sl != slot);
+>   		rcu_read_unlock();
+>   
+> @@ -2798,9 +2794,7 @@ static void fix_read_error(struct r10conf *conf, struct mddev *mddev, struct r10
+>   			 * as bad on the first device to discourage future
+>   			 * reads.
+>   			 */
+> -			int dn = r10_bio->devs[slot].devnum;
+> -			rdev = conf->mirrors[dn].rdev;
+> -
+> +			rdev = r10_bio->devs[slot].rdev;
+>   			if (!rdev_set_badblocks(
+>   				    rdev,
+>   				    r10_bio->devs[slot].addr
+> @@ -2820,8 +2814,12 @@ static void fix_read_error(struct r10conf *conf, struct mddev *mddev, struct r10
+>   			if (sl==0)
+>   				sl = conf->copies;
+>   			sl--;
+> -			d = r10_bio->devs[sl].devnum;
+> -			rdev = rcu_dereference(conf->mirrors[d].rdev);
+> +			if (sl == slot) {
+> +				rdev = r10_bio->devs[slot].rdev;
+> +			} else {
+> +				d = r10_bio->devs[sl].devnum;
+> +				rdev = rcu_dereference(conf->mirrors[d].rdev);
+> +			}
+>   			if (!rdev ||
+>   			    test_bit(Faulty, &rdev->flags) ||
+>   			    !test_bit(In_sync, &rdev->flags))
+> @@ -2854,8 +2852,12 @@ static void fix_read_error(struct r10conf *conf, struct mddev *mddev, struct r10
+>   			if (sl==0)
+>   				sl = conf->copies;
+>   			sl--;
+> -			d = r10_bio->devs[sl].devnum;
+> -			rdev = rcu_dereference(conf->mirrors[d].rdev);
+> +			if (sl == slot) {
+> +				rdev = r10_bio->devs[slot].rdev;
+> +			} else {
+> +				d = r10_bio->devs[sl].devnum;
+> +				rdev = rcu_dereference(conf->mirrors[d].rdev);
+> +			}
+>   			if (!rdev ||
+>   			    test_bit(Faulty, &rdev->flags) ||
+>   			    !test_bit(In_sync, &rdev->flags))
+> 
 
-Possibly caused by commit
-
-  e5221fa6a355 ("KEYS: asymmetric: Move sm2 code into x509_public_key")
-
-This looks like it may be a compiler bug?  Maybe the deep ternary
-expressions may be contributing to that? (cc'ing the ppc guys in case
-they have any ideas.)
-
-I have reverted that commit (and the following one) for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/HScrxUH+i7hEBmNz4NBuy6A
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSY+nIACgkQAVBC80lX
-0Gxhugf/db+U5ipJ0TNqttnNlAMQqUTTN6HE01Vl/VDq2ZBVWgJGhiUEBsc6Hypa
-a1vHn4xFm/A9z7sEeoiBJDzcnq/89LimWAquEQLhGlcyxcN7GUGyuNsuOL3TYktV
-Kg6WpMSXTWbfmltvNKBVyr0cRe1TFGXgs2afNce8E9i24i+D6MLQUFIKfJv61cIB
-nnd9swDUqJLCRjLVwRx/rV3Fsd0sRRuexOACVsfv+wN+Wy4qQWxAW90MakfyyQ1y
-pPleqCBsmsxOpdE5qKcvy4SWm2KkdTODyZ/wQ/f+lSVM22xqiWLihhnzrc4Qe0jF
-4GXxbymZqmfZl9QNJt4poJCD/gO4Dw==
-=uP7F
------END PGP SIGNATURE-----
-
---Sig_/HScrxUH+i7hEBmNz4NBuy6A--
