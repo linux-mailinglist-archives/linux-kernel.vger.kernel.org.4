@@ -2,59 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63CB773ECDC
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 23:27:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7517073ECE2
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 23:28:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230405AbjFZV1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 17:27:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60304 "EHLO
+        id S229725AbjFZV2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 17:28:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230383AbjFZV1j (ORCPT
+        with ESMTP id S230383AbjFZV2J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 17:27:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56A1D1702;
-        Mon, 26 Jun 2023 14:27:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DAE160EB2;
-        Mon, 26 Jun 2023 21:27:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57EAFC433C0;
-        Mon, 26 Jun 2023 21:27:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687814856;
-        bh=cD+DlgssDHp9bWUfoAqdwHPtpJlWEj+4Ut4kvVblUg0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ljNIZ97KtuHOBzk+gfTMQAonQtKrXqmArEvp6gf6th8U9snAirn5HZDr1pg39P5AM
-         38gQsvUyYJlV3jRaJ6kdS4HMZqqEbbjpqCwKDqWHdOiJQ00c6CDF3KnUyl1a+uCfIT
-         +xjUvT7wagBbCIUxOr1Ysw1TFcb4kRMdstAYOVJmeh1c2aJ1ajmTMXLray5ohrZA1k
-         TGJKSOFKLXOkfZHHSsu2DT8/xHwyfZDfAaRIj4k7jAwNPPrkoK47wsuRy8FgpA5QG0
-         MiMilxWpzVqMxN+muUL8m1ErVMR7jUvIEziUej63OU+jBJM+NfvkJEhv2s1qez5gY8
-         SzPCGc2kupEtQ==
-Date:   Mon, 26 Jun 2023 14:27:34 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@redhat.com>
-Cc:     Matthieu Baerts <matthieu.baerts@tessares.net>,
-        dhowells@redhat.com, acme@kernel.org, adrian.hunter@intel.com,
-        alexander.shishkin@linux.intel.com, bpf@vger.kernel.org,
-        davem@davemloft.net, irogers@google.com, jolsa@kernel.org,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, mark.rutland@arm.com,
-        mingo@redhat.com, namhyung@kernel.org, netdev@vger.kernel.org,
-        peterz@infradead.org, sfr@canb.auug.org.au
-Subject: Re: [PATCH net-next] perf trace: fix MSG_SPLICE_PAGES build error
-Message-ID: <20230626142734.0fa4fa68@kernel.org>
-In-Reply-To: <20230626090239.899672-1-matthieu.baerts@tessares.net>
-References: <2947430.1687765706@warthog.procyon.org.uk>
-        <20230626090239.899672-1-matthieu.baerts@tessares.net>
+        Mon, 26 Jun 2023 17:28:09 -0400
+Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8F14BD;
+        Mon, 26 Jun 2023 14:28:02 -0700 (PDT)
+Received: by mail-il1-f178.google.com with SMTP id e9e14a558f8ab-345ad94db0aso4943795ab.1;
+        Mon, 26 Jun 2023 14:28:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687814882; x=1690406882;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0zK2Mav2vb8JF0Fy3zgYjfX71+8hxBKQuHXPFvrmmGM=;
+        b=Hd+BH7wAj6/Qkt/W3FH1UPfkVqI143iLcftpY7immNTRg768tmP3aFl/O7YkfUjAFF
+         PmXksPtm2klYIVPl/WW2awOkkbrZSpxSSxwqvdu7PBTtpswlSoM77nS9B3HsJhI0u/GV
+         td8t8e3+dyjTBEGV2tTO0zs3ZDjWIC3j3yeH12b1sZmJ7zBoh1DCVWuAx+zoklMXpSYU
+         wftz839YEmaQZ7VMQ4nznCwd3LihFMEmtkB0MEp5drLJGAQZ3ey4a8zbhkvRnr+OtOR8
+         wlElwNRS8FQJFRwOlFb1jkIAvdpiXXfCAcHfgBhyNWZFGI/+VhPIbnnRMLghg0XkBBjr
+         IZqw==
+X-Gm-Message-State: AC+VfDz+fuyT/pge2QYIQzUgDXjPu4HYAtnePyXy41J+8GCbeZa7EmmZ
+        RNy5/bMDahjHEkI+lfPvmA==
+X-Google-Smtp-Source: ACHHUZ7jHnb/zyrVLJqne0rdhbKBqgq5BwI/rrAQp52zF8/hXNAaImKe9kC5laVUV6/ht3rofQVxug==
+X-Received: by 2002:a92:c141:0:b0:345:97a9:48bf with SMTP id b1-20020a92c141000000b0034597a948bfmr5117562ilh.26.1687814881973;
+        Mon, 26 Jun 2023 14:28:01 -0700 (PDT)
+Received: from robh_at_kernel.org ([199.114.228.113])
+        by smtp.gmail.com with ESMTPSA id dx1-20020a0566381d0100b00411b4acc990sm2060972jab.7.2023.06.26.14.28.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jun 2023 14:28:01 -0700 (PDT)
+Received: (nullmailer pid 3928119 invoked by uid 1000);
+        Mon, 26 Jun 2023 21:28:00 -0000
+Date:   Mon, 26 Jun 2023 15:28:00 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Luca Weiss <luca.weiss@fairphone.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        AngeloGioacchino Del Regno <kholk11@gmail.com>,
+        Luca Weiss <luca@z3ntu.xyz>, Vinod Koul <vkoul@kernel.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Subject: Re: [PATCH 2/7] dt-bindings: remoteproc: qcom,msm8996-mss-pil: Fix
+ 8996 clocks
+Message-ID: <20230626212800.GB3924052-robh@kernel.org>
+References: <20230626-topic-bindingsfixups-v1-0-254ae8642e69@linaro.org>
+ <20230626-topic-bindingsfixups-v1-2-254ae8642e69@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230626-topic-bindingsfixups-v1-2-254ae8642e69@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,42 +81,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 26 Jun 2023 11:02:39 +0200 Matthieu Baerts wrote:
-> Our MPTCP CI and Stephen got this error:
+On Mon, Jun 26, 2023 at 10:00:24PM +0200, Konrad Dybcio wrote:
+> Change RPMH to RPM (as RPMh was introduced 2 generations later) and drop
+> the prng reference, which made ARRAY_SIZE(clocks) !=
+> ARRAY_SIZE(clock-names).
 > 
->     In file included from builtin-trace.c:907:
->     trace/beauty/msg_flags.c: In function 'syscall_arg__scnprintf_msg_flags':
->     trace/beauty/msg_flags.c:28:21: error: 'MSG_SPLICE_PAGES' undeclared (first use in this function)
->        28 |         if (flags & MSG_##n) {           |                     ^~~~
->     trace/beauty/msg_flags.c:50:9: note: in expansion of macro 'P_MSG_FLAG'
->        50 |         P_MSG_FLAG(SPLICE_PAGES);
->           |         ^~~~~~~~~~
->     trace/beauty/msg_flags.c:28:21: note: each undeclared identifier is reported only once for each function it appears in
->        28 |         if (flags & MSG_##n) {           |                     ^~~~
->     trace/beauty/msg_flags.c:50:9: note: in expansion of macro 'P_MSG_FLAG'
->        50 |         P_MSG_FLAG(SPLICE_PAGES);
->           |         ^~~~~~~~~~
-> 
-> The fix is similar to what was done with MSG_FASTOPEN: the new macro is
-> defined if it is not defined in the system headers.
-> 
-> Fixes: b848b26c6672 ("net: Kill MSG_SENDPAGE_NOTLAST")
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Closes: https://lore.kernel.org/r/20230626112847.2ef3d422@canb.auug.org.au/
-> Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+> Fixes: bdea142295ff ("dt-bindings: remoteproc: qcom,q6v5: Move MSM8996 to schema")
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 > ---
-> 
-> Notes:
->     @David: I solved it like that in MPTCP tree. Does it work for you too?
-> 
->     I guess tools/perf/trace/beauty/include/linux/socket.h file still needs
->     to be updated, not just to add MSG_SPLICE_PAGES but also other
->     modifications done in this file. Maybe best to sync with Arnaldo because
->     he might do it soon during the coming merge window I guess.
-> 
-> Cc: David Howells <dhowells@redhat.com>
-> Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
+>  .../devicetree/bindings/remoteproc/qcom,msm8996-mss-pil.yaml       | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
 
-Hi Arnaldo, are you okay with us taking this into the networking tree?
-Or do you prefer to sync the header after everything lands in Linus's
-tree?
+Acked-by: Rob Herring <robh@kernel.org>
