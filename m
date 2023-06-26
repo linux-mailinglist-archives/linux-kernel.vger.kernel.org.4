@@ -2,146 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B6A773E348
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 17:28:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3291973E344
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 17:27:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230061AbjFZP2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 11:28:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46580 "EHLO
+        id S230189AbjFZP1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 11:27:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjFZP2S (ORCPT
+        with ESMTP id S229569AbjFZP1g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 11:28:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3DAAC7
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 08:27:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687793257;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nhVNEcGfHP6r7iYI6uK5UQkeoNFVEouUiPU/UXitWVk=;
-        b=eD6npWnCEeJgpDrZY1RVtZk1Aee7zfY2D7zM49K2+HXysFYZKOGCcw86KJdtc4uUc8/w9q
-        /Bp2e6/QDY2njXn3papOZXWGDzx/0BM4b/ThzDbY/nrLZCN+jzAv0COcQM7ncMf7bm4SlH
-        AKv9fh5+1WsH106Trg/I88rzXxVQc0k=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-567-Hw8UCdwrOB6KKCGe5wQdYw-1; Mon, 26 Jun 2023 11:27:36 -0400
-X-MC-Unique: Hw8UCdwrOB6KKCGe5wQdYw-1
-Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-401e07ebf2dso5104941cf.3
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 08:27:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687793256; x=1690385256;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nhVNEcGfHP6r7iYI6uK5UQkeoNFVEouUiPU/UXitWVk=;
-        b=ZnpwWn+88p8v+fDJQVfzw5sQK6+phand2ZZg7Iuzo1C+1BQ+AKVvo3XpVqXZMOMo+p
-         UlzP72C9Hi/ZVxwQTvNf8nb8g4d3MdE+CuBN7qO8FaDGHUpM4dujTwub8+WVa4F5goRw
-         meEczz1XPaHZ+sd78tqV6A668T8Owpav+pE1wNnSb7c72mIBgNZK9s7y967baoUsy2+n
-         E4mqo5seOoyqf6f/kEk1aqXQTUWeNAASUxaNhC1x6erw4CVxDDL5iFGho0sCDiXBP02z
-         dYzTcoGrqkvN38addAZQIFPFlU12TWIE6FuXB/h3Ct56xvZpmKew2f7MUZ+BlyrCyX2e
-         /RXA==
-X-Gm-Message-State: AC+VfDwhYeKQrp6kffnrKJTFQwzOYPhpJ/pl/p4vgb+qjxy94Vb7MBfh
-        sk02Oo12glnTh1g6q90nd4vmrF2POpEhrR9WPzVHLiU/6xhkv1m167LcBfnnWn5lJhdrqLNOYmm
-        bzKLTWkQis1hMqvt35WOrgULVQeberAbOPXX8IkkX
-X-Received: by 2002:a05:622a:50f:b0:400:8fb3:8647 with SMTP id l15-20020a05622a050f00b004008fb38647mr8721391qtx.6.1687793255828;
+        Mon, 26 Jun 2023 11:27:36 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 984DBC7;
         Mon, 26 Jun 2023 08:27:35 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4TwvuXDKy9e+gI/3I+HhSR4c5+nrW+tY8HR6PT1g2FTGTp5mDJpijnD1fEtWSWZiFto+eJ4Zptasa++w84gzk=
-X-Received: by 2002:a05:622a:50f:b0:400:8fb3:8647 with SMTP id
- l15-20020a05622a050f00b004008fb38647mr8721377qtx.6.1687793255624; Mon, 26 Jun
- 2023 08:27:35 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1b7ffab7ff1so6900885ad.2;
+        Mon, 26 Jun 2023 08:27:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687793255; x=1690385255;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=DtF7Bv5SvW35SPc+Oj+N7Ltt+S4wZnjN/u3LXzV4SC0=;
+        b=pIhMjoXIxis/rCCSFQxeFzMYPXL5eVCVKvB0keoDspMGy9J9aRDZhqckNe5MTqhnRp
+         GgQiCHHZ9wq0B7dCJ9vqzSuk61K4vBy8wMKf1hFdBZ2Mz1ZoZcw97UQ5sUG+dLGm6k7y
+         qKLoiEVMLAzDo64siF3ZD1546ng8FY9QODIqq2J4cHJnjZtxed4QAT1texovd9KW/Pw7
+         /95u2W3GZLxLNKe3qvpiyVW+kjDsrcrAMepzt919i0R8GPxt0TrLwRmtWKqJ9aBlvtJp
+         bQdnLAvaSTvTBabOQXFMhRwXeO397n3nrYTaHxyJ0z759Zol0cHmZjiIvBW1a1C0roeQ
+         wrng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687793255; x=1690385255;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DtF7Bv5SvW35SPc+Oj+N7Ltt+S4wZnjN/u3LXzV4SC0=;
+        b=h3z9iuCJA299OumKKM6oBN29B7bg2Glmw00DlGtn0NsGzwlkqqwi+NNwZstzN5vSuK
+         iHNbOqU1ggyO2sROtSZ18BUfQyF6AIJf7WOq5BJ2Y0ruaJ/awzDAg9fqgt+MLNETEYcm
+         LEFL1jlHrTrAV8x9VG2VwKKjowszCWS91z+SBlfY80uY9mafld1Eu35ey41NsHVHWLoK
+         ceSIOQbo5jzfkZmQy+dAbTyCrly8ZsA0x9SXMiwC/2Y3fMdfvDQ+B96OHOPUFq1PhQ2t
+         KUk7LbfE47UY0hClZlr2mnlhNJW4EqKhVfa9jE9FashIBfm5jDd19m7Ria092alYaoOQ
+         jXRA==
+X-Gm-Message-State: AC+VfDx15NZxVqG0CQsGvWvqxbsBRlKe8AL++Jy7soZVeObjVohdXIl1
+        feVZJ5Yw/DJBCa24mne8Tz8=
+X-Google-Smtp-Source: ACHHUZ6g0uPrJaai9JngmtxS8LEGJckoJ8+hnH+joZaWY6SyCdkbf1ED3bxVqkCCgVwQRpFnQRnquA==
+X-Received: by 2002:a17:902:ce01:b0:1b6:9b29:bb1a with SMTP id k1-20020a170902ce0100b001b69b29bb1amr4243063plg.9.1687793254920;
+        Mon, 26 Jun 2023 08:27:34 -0700 (PDT)
+Received: from localhost.localdomain ([113.103.4.28])
+        by smtp.gmail.com with ESMTPSA id q2-20020a170902dac200b001a9bcedd598sm4368345plx.11.2023.06.26.08.27.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jun 2023 08:27:34 -0700 (PDT)
+From:   Guiting Shen <aarongt.shen@gmail.com>
+To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
+        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        claudiu.beznea@microchip.com
+Cc:     linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Guiting Shen <aarongt.shen@gmail.com>
+Subject: [PATCH v3] usb: ohci-at91: Fix the unhandle interrupt when resume
+Date:   Mon, 26 Jun 2023 23:27:13 +0800
+Message-Id: <20230626152713.18950-1-aarongt.shen@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230418171524.274386-1-npache@redhat.com> <881c1f7e-6740-478d-2512-11a5a99563ec@amd.com>
-In-Reply-To: <881c1f7e-6740-478d-2512-11a5a99563ec@amd.com>
-From:   Nico Pache <npache@redhat.com>
-Date:   Mon, 26 Jun 2023 11:27:09 -0400
-Message-ID: <CAA1CXcDMghE4xv7+QS8hVpC5gm34d=GUfDNhKL7iDx_ZPA4LKQ@mail.gmail.com>
-Subject: Re: [PATCH] kunit: drm: make DRM buddy test compatible with other
- pages sizes
-To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        davidgow@google.com
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        ddutile@redhat.com, kunit-dev@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christian,
+The ohci_hcd_at91_drv_suspend() sets ohci->rh_state to OHCI_RH_HALTED when
+suspend which will let the ohci_irq() skip the interrupt after resume. And
+nobody to handle this interrupt.
 
-Thanks for the information! I am not very familiar with the inner
-workings of DRM, so I'm not really in a position to make any large or
-systematic changes to the test regarding the points you made. I am
-mainly trying to allow the tests to be run on more diverse hardware.
-From the looks of it this test has been adapted from an older test, so
-perhaps this rule was set in place in the past.
+According to the comment in ohci_hcd_at91_drv_suspend(), it need to reset
+when resume from suspend(MEM) to fix by setting "hibernated" argument of
+ohci_resume().
 
-Either way, I dont think my changes are going to break anything, so
-for the time being I think this small change is the best approach.
-Please let me know if you think otherwise.
+Signed-off-by: Guiting Shen <aarongt.shen@gmail.com>
+---
+ drivers/usb/host/ohci-at91.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-David, do you still have this on your radar? We've been carrying this
-as a RHEL-only since I originally posted it and have not noticed any
-issues due to it.
-
-Cheers,
--- Nico
-
-On Wed, Apr 19, 2023 at 4:30=E2=80=AFAM Christian K=C3=B6nig
-<christian.koenig@amd.com> wrote:
->
-> Am 18.04.23 um 19:15 schrieb Nico Pache:
-> > The DRM buddy test uses a fixed 12 bit shift to covert from pages to
-> > bytes. This number is then used to confirm that (chunk_size < PAGE_SIZE=
-)
-> > which can lead to a failing drm_buddy_init on systems with PAGE_SIZE > =
-4k.
->
-> Since the buddy allocator is used for resources which are independent of
-> the CPU PAGE size the later check is actually the broken one.
->
-> E.g. neither in the buddy allocator nor in it's test cases we should
-> have any of PAGE_SHIFT or PAGE_SIZE.
->
-> Otherwise the allocator wouldn't work correctly on systems with a
-> PAGE_SIZE different than 4k.
->
-> Regards,
-> Christian.
->
-> >
-> > Fixes: 92937f170d3f ("drm/selftests: add drm buddy alloc range testcase=
-")
-> > Signed-off-by: Nico Pache <npache@redhat.com>
-> > ---
-> >   drivers/gpu/drm/tests/drm_buddy_test.c | 4 ++--
-> >   1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/gpu/drm/tests/drm_buddy_test.c b/drivers/gpu/drm/t=
-ests/drm_buddy_test.c
-> > index 09ee6f6af896..a62b2690d3c2 100644
-> > --- a/drivers/gpu/drm/tests/drm_buddy_test.c
-> > +++ b/drivers/gpu/drm/tests/drm_buddy_test.c
-> > @@ -318,8 +318,8 @@ static void mm_config(u64 *size, u64 *chunk_size)
-> >       s &=3D -ms;
-> >
-> >       /* Convert from pages to bytes */
-> > -     *chunk_size =3D (u64)ms << 12;
-> > -     *size =3D (u64)s << 12;
-> > +     *chunk_size =3D (u64)ms << PAGE_SHIFT;
-> > +     *size =3D (u64)s << PAGE_SHIFT;
-> >   }
-> >
-> >   static void drm_test_buddy_alloc_pathological(struct kunit *test)
->
+diff --git a/drivers/usb/host/ohci-at91.c b/drivers/usb/host/ohci-at91.c
+index 533537ef3c21..360680769494 100644
+--- a/drivers/usb/host/ohci-at91.c
++++ b/drivers/usb/host/ohci-at91.c
+@@ -673,7 +673,13 @@ ohci_hcd_at91_drv_resume(struct device *dev)
+ 	else
+ 		at91_start_clock(ohci_at91);
+ 
+-	ohci_resume(hcd, false);
++	/*
++	 * According to the comment in ohci_hcd_at91_drv_suspend()
++	 * we need to do a reset if the 48Mhz clock was stopped,
++	 * that is, if ohci_at91->wakeup is clear. Tell ohci_resume()
++	 * to reset in this case by setting its "hibernated" flag.
++	 */
++	ohci_resume(hcd, !ohci_at91->wakeup);
+ 
+ 	return 0;
+ }
+-- 
+2.25.1
 
