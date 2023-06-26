@@ -2,62 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91FE173D604
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 04:46:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DEA573D60A
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 04:50:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230225AbjFZCqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 22:46:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44908 "EHLO
+        id S229612AbjFZCug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 22:50:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230189AbjFZCqX (ORCPT
+        with ESMTP id S229753AbjFZCud (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 22:46:23 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7336EFD;
-        Sun, 25 Jun 2023 19:46:18 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QqC062MMfz4f3jZD;
-        Mon, 26 Jun 2023 10:46:14 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgBH_rH2+5hkkGAyMg--.42822S3;
-        Mon, 26 Jun 2023 10:46:15 +0800 (CST)
-Subject: Re: [PATCH -next v3 0/5] blk-wbt: minor fix and cleanup
-To:     Yu Kuai <yukuai1@huaweicloud.com>, hch@lst.de, axboe@kernel.dk
-Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        yangerkun@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-References: <20230527010644.647900-1-yukuai1@huaweicloud.com>
- <e33b856f-1874-030f-1b45-3b036e9b17b6@huaweicloud.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <00cc4aa8-b725-e7ac-dec9-ccd03dd2fe21@huaweicloud.com>
-Date:   Mon, 26 Jun 2023 10:46:14 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Sun, 25 Jun 2023 22:50:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EBF7115;
+        Sun, 25 Jun 2023 19:50:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E5B960C68;
+        Mon, 26 Jun 2023 02:50:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F27C7C433C8;
+        Mon, 26 Jun 2023 02:50:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687747828;
+        bh=nELlQoOTkjP3LWXlu8vQM6HRztCcyTW55SVKYLv77+Y=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=RqMjjq1HMrrdB9euO/FGPW976/sUCFfkUHgIlj12shqfbMnU2xVvrerkP09pE+LnJ
+         fh3XTdewkEmJaudOESWj0Ljazt6dx/rD9VnuJVIPBIgN3W/S+vIbbM4JF9O5aaIWoK
+         jnarAtFC4A6vWEGM9gd6LWhpAd6ZqJLHFz90rGrBzae2Z9RLPxxcQPOlrKur8KOfUy
+         vy9dwhXTN8HrqPElvSEsE//zlItZNuc6aBXdh2/TJTxaQ4Vd+JXSn5jgLdREiNw09L
+         uEvVQt1G5GLoeJvaDTghbY9Bx34q6ZLNix89UNSapCque8i4gK962vc2MkjdGMCcbh
+         MCau7d6NV8bTA==
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-1a9db19d663so2819585fac.3;
+        Sun, 25 Jun 2023 19:50:27 -0700 (PDT)
+X-Gm-Message-State: AC+VfDzkT1+eCkvnUMzL96Dwd2vGd9gg9LiKUAETicDlxgJ8lGeOBdGe
+        6sVjHHK63Fz6kK0786QAznrg+IeLETLenr82tRk=
+X-Google-Smtp-Source: ACHHUZ64BoH0H2lITDuAHu8T7yKCEE8UlOKVHDyztK+8Z2dzH3Mm+GfSysrnQqCvGf8a5tK7J0rAzDKK1aKsjhO+CoE=
+X-Received: by 2002:a05:6870:a415:b0:1b0:2c27:c958 with SMTP id
+ m21-20020a056870a41500b001b02c27c958mr3283146oal.17.1687747827327; Sun, 25
+ Jun 2023 19:50:27 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <e33b856f-1874-030f-1b45-3b036e9b17b6@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgBH_rH2+5hkkGAyMg--.42822S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7CF43Ar17WF1ftrW3AF13urg_yoW8Gr47pr
-        Z3tasIkr4q9r92gr4fJF12qryfJw40qFykJry3tryruw1j9r1Utr48Wr4rur95ZrWxWF47
-        W3WDtrZ5Cr1kZr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkC14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
-        IcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
-        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
-        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv67AKxVWUJVW8
-        JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUF9a9DU
-        UUU
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20230625140630.2134298-1-masahiroy@kernel.org>
+In-Reply-To: <20230625140630.2134298-1-masahiroy@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Mon, 26 Jun 2023 11:49:51 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAT=Sy+cGphfrwOeaft7zPaQyzJopJ4MmLZ3pgQBd2QmzA@mail.gmail.com>
+Message-ID: <CAK7LNAT=Sy+cGphfrwOeaft7zPaQyzJopJ4MmLZ3pgQBd2QmzA@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] kbuild: unexport abs_srctree and abs_objtree
+To:     linux-kbuild@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,51 +66,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Jens
+On Sun, Jun 25, 2023 at 11:06=E2=80=AFPM Masahiro Yamada <masahiroy@kernel.=
+org> wrote:
+>
+> 'make rpm-pkg' builds the kernel in rpmbuild/BUILD, but $(abs_srctree)
+> and $(abs_objtree) point to the directory path where make was started,
+> not the kernel is actually being built. Fix it.
+>
+> In hindsight, there was no need to export abs_srctree and abs_objtree.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
 
-在 2023/06/08 10:36, Yu Kuai 写道:
-> Hi, Jens
-> 
-> Can you apply this patchset?
+Tools Makefiles rely on abs_*.
+I will keep them exported. Sigh.
 
-The only fix from this patchset is applied separately, so this patchset
-is just simple cleanups now, can you please consider this for the next
-merge window?
 
-Thanks,
-Kuai
-> 
-> Thanks,
-> Kuai
-> 
-> 在 2023/05/27 9:06, Yu Kuai 写道:
->> From: Yu Kuai <yukuai3@huawei.com>
->>
->> Changes in v3:
->>   - patch 1 from v2 is sent separately, and it's removd from this series.
->>   - add review tag for all the patches.
->>
->> Changes in v2:
->>   - make the code more readable for patch 1
->>   - add a new attr_group that is only visible for rq based device
->>   - explain in detail for patch 4
->>   - add review tag for patch 2,3,5
->>
->> Yu Kuai (5):
->>    blk-wbt: don't create wbt sysfs entry if CONFIG_BLK_WBT is disabled
->>    blk-wbt: remove dead code to handle wbt enable/disable with io
->>      inflight
->>    blk-wbt: cleanup rwb_enabled() and wbt_disabled()
->>    blk-iocost: move wbt_enable/disable_default() out of spinlock
->>    blk-sysfs: add a new attr_group for blk_mq
->>
->>   block/blk-iocost.c |   7 +-
->>   block/blk-sysfs.c  | 181 ++++++++++++++++++++++++++-------------------
->>   block/blk-wbt.c    |  21 +-----
->>   block/blk-wbt.h    |  19 -----
->>   4 files changed, 110 insertions(+), 118 deletions(-)
->>
-> 
-> .
-> 
 
+
+
+--=20
+Best Regards
+Masahiro Yamada
