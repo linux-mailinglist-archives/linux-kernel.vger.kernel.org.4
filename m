@@ -2,292 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C52C373E22B
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 16:31:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D678873E22A
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 16:31:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230087AbjFZObw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 10:31:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47320 "EHLO
+        id S230110AbjFZObp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 10:31:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjFZObt (ORCPT
+        with ESMTP id S229454AbjFZObn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 10:31:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C49A194
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 07:31:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687789860;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fI5bKyN+2a6dGAEULLZwYpYs8Vq+LvmQj425yEjhkiQ=;
-        b=Jjp0C7u0154DWMv3N58GW8h1cll/R/z4CnPKwaCvrzXRU1uKBFZkJ6s/48/p08vpHPZc3Y
-        6i8vQXb9HVXbmwnS7LWamYwnX9m4PhK6Jmr/klBP8ng9luOON5Rij8/3RBtK7mRBgryhyi
-        g/gYYL/PlWFjNHtmkyAwQ2TziYFFjXc=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-463-KBEr6dxWP7ykaPggYkpSig-1; Mon, 26 Jun 2023 10:30:53 -0400
-X-MC-Unique: KBEr6dxWP7ykaPggYkpSig-1
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-3113533a608so1259831f8f.0
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 07:30:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687789851; x=1690381851;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fI5bKyN+2a6dGAEULLZwYpYs8Vq+LvmQj425yEjhkiQ=;
-        b=DQczuqHnnhuwChY3Ku1q52ksLgWFXaIyNkqeeeYBgXkUR++34uCH6w8e4UUImTiHfk
-         mHztSIiuglGI/UXvXiZGSeZyShVjUutzrPR1q4a34MSttejulH2oYE4wFBZk6z9szHJU
-         ofLsPN4pGpbnbMafmhDMAl7kHzBWE+dMSUDyyx1EvzHDmatbhS3yV4NmDbVc7BaX9tXW
-         t10+CWorrA6kzkUw76C/HdJzd3mBzMGWSPrSz6maGrTLM2V18GkPnYmQlpssWppeMeVM
-         i8CHPU/pRqrTO1Pe50VeMHRsGoUuSNlCuoDOhAJgBMXFCIu9i5XesJ3wkOE4cEgSRoOP
-         O/pw==
-X-Gm-Message-State: AC+VfDx9oKgIzsER057oceXRFdpDTg/VDvnN7q8/N9kTRBNta+FwKtkQ
-        1d1Oe1JfOJiaY419QG5fmVrox69GVYefXFH94yXp93JAKC+Nqr3f11smfqg+4l1YNz0lF8V59ob
-        4mgF/sKyqtZwJma0uZhg6ogPQ
-X-Received: by 2002:a5d:5707:0:b0:30f:bafb:2468 with SMTP id a7-20020a5d5707000000b0030fbafb2468mr8822262wrv.40.1687789851274;
-        Mon, 26 Jun 2023 07:30:51 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6EJb2bHHP4jyEt0OOS3a9wWQOr7idvu6TIJ0MPTzFGBFSm5dniXfXeNoYdSm1+wALWhIG8fw==
-X-Received: by 2002:a5d:5707:0:b0:30f:bafb:2468 with SMTP id a7-20020a5d5707000000b0030fbafb2468mr8822246wrv.40.1687789850943;
-        Mon, 26 Jun 2023 07:30:50 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:4b3f:de9c:642:1aff:fe31:a15c? ([2a02:810d:4b3f:de9c:642:1aff:fe31:a15c])
-        by smtp.gmail.com with ESMTPSA id u8-20020adfdd48000000b0030ae6432504sm7496866wrm.38.2023.06.26.07.30.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Jun 2023 07:30:50 -0700 (PDT)
-Message-ID: <6d78d109-d027-0358-b1a8-2eaaa63e39af@redhat.com>
-Date:   Mon, 26 Jun 2023 16:30:49 +0200
+        Mon, 26 Jun 2023 10:31:43 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2E510C
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 07:31:42 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35QCVxPv024164;
+        Mon, 26 Jun 2023 14:31:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=EPBgG7RePFl33JUP0Sp09a5Cq4hKOg3JaOTgQmLXP44=;
+ b=EsJFqPI9kARvLQYfcvNC+tLFTwQ4Hh4j+wN9CNebuWO8vOhjqAzpNXPxcsX3mur029sC
+ 6/fc83T0PB94NJodGUaMnAmNh6pBmxyDrvLJh+/maARGuGcL0h4oKOVxLzQI4hhGIr53
+ U4IMoG9zIi4o55/Ccb771dAOeht1ETZftNXhNtO1g56oUOV2AW0of4JN9X+tVXEL0OFT
+ 3sh1kQsi//Vl6Kf3rAUjSfkbWPxfoYwg7zY9SdX+HdRqnP0tID4W8szr5SYiz+CzVt+r
+ fM+HTxW/qq5972srbuNAuayvNw9MrHxplz0RbLI1c7nfv/1NpNrhaiMI52n/vDJUr34N KA== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rfart88hh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 26 Jun 2023 14:31:30 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35QEVTFK015488
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 26 Jun 2023 14:31:29 GMT
+Received: from [10.214.66.119] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 26 Jun
+ 2023 07:31:26 -0700
+Message-ID: <70743150-dc85-1a1a-87ec-e3dd9f72c5d0@quicinc.com>
+Date:   Mon, 26 Jun 2023 20:01:23 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 14/16] maple_tree: Refine mas_preallocate() node
- calculations
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH] mm: madvise: fix uneven accounting of psi
 Content-Language: en-US
-To:     Peng Zhang <zhangpeng.00@bytedance.com>
-Cc:     maple-tree@lists.infradead.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        linux-kernel@vger.kernel.org, David Airlie <airlied@redhat.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Matthew Wilcox <willy@infradead.org>
-References: <20230612203953.2093911-1-Liam.Howlett@oracle.com>
- <20230612203953.2093911-15-Liam.Howlett@oracle.com>
- <26d8fbcf-d34f-0a79-9d91-8c60e66f7341@redhat.com>
- <cdab5e74-7559-cb31-90ca-b99a5c3a6dd6@gmail.com>
- <43ce08db-210a-fec8-51b4-351625b3cdfb@redhat.com>
- <e3af3f2f-ec87-e8e8-c72b-dfce20b32193@bytedance.com>
-From:   Danilo Krummrich <dakr@redhat.com>
-Organization: RedHat
-In-Reply-To: <e3af3f2f-ec87-e8e8-c72b-dfce20b32193@bytedance.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+To:     Suren Baghdasaryan <surenb@google.com>
+CC:     Johannes Weiner <hannes@cmpxchg.org>, <akpm@linux-foundation.org>,
+        <minchan@kernel.org>, <quic_pkondeti@quicinc.com>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
+References: <1685531374-6091-1-git-send-email-quic_charante@quicinc.com>
+ <20230531221955.GD102494@cmpxchg.org>
+ <230e45e8-8cd8-3668-bbfa-a95212b4cb99@quicinc.com>
+ <20230605180013.GD221380@cmpxchg.org>
+ <f3f15b6a-8618-f755-f21c-4193c502e65c@quicinc.com>
+ <CAJuCfpFB33GLbwvYspg966b6AGMopS3ca68hjL94kgpM7et7CQ@mail.gmail.com>
+ <4543c4e5-43f1-bae2-245e-951437e4bd07@quicinc.com>
+ <CAJuCfpE42OJZur-1u2hvvXmPkRdV1uOfK-Aqm2POmvrDpRwg0Q@mail.gmail.com>
+From:   Charan Teja Kalla <quic_charante@quicinc.com>
+In-Reply-To: <CAJuCfpE42OJZur-1u2hvvXmPkRdV1uOfK-Aqm2POmvrDpRwg0Q@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: rYb3HqzQqoMwNIR0IvxMYEqb-zvBTMxD
+X-Proofpoint-ORIG-GUID: rYb3HqzQqoMwNIR0IvxMYEqb-zvBTMxD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-26_11,2023-06-26_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=472 clxscore=1015
+ bulkscore=0 mlxscore=0 lowpriorityscore=0 impostorscore=0
+ priorityscore=1501 suspectscore=0 malwarescore=0 spamscore=0 adultscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306260130
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/26/23 16:08, Peng Zhang wrote:
-> 
-> 
-> 在 2023/6/26 08:38, Danilo Krummrich 写道:
->> Hi Peng,
->>
->> On 6/25/23 05:28, Peng Zhang wrote:
->>>
->>>
->>> 在 2023/6/23 00:41, Danilo Krummrich 写道:
->>>> On 6/12/23 22:39, Liam R. Howlett wrote:
->>>>> Calculate the number of nodes based on the pending write action 
->>>>> instead
->>>>> of assuming the worst case.
->>>>
->>>> Liam already gave me a heads-up on this patch, which I already 
->>>> replied to [1].
->>>>
->>>> However, I think it might make sense to also reply to this patch 
->>>> directly.
->>>>
->>>> For a mas_preallocate() calculating the actual required nodes to be 
->>>> allocated instead of assuming the worst to work, it is required to 
->>>> ensure that the tree does not change between calling 
->>>> mas_preallocate() and mas_store_prealloc() if my understanding is 
->>>> correct.
->>>>
->>>> In DRM however, more specifically the DRM GPUVA Manager [2], we do 
->>>> have the case that we are not able to ensure this:
->>>>
->>>> Jobs to create GPU mappings can be submitted by userspace, are 
->>>> queued up by the kernel and are processed asynchronously in 
->>>> dma-fence signalling critical paths, e.g. by using the 
->>>> drm_gpu_scheduler. Hence, we must be able to allocate the worst case 
->>>> amount of node, since at the time a job is submitted we can't 
->>>> predict the state the maple tree keeping track of mappings has once 
->>>> a mapping is inserted in the (asynchronous) dma-fence signalling 
->>>> critical path.
->>>>
->>>> A more detailed explanation can be found in [1].
->>>>
->>>> Could we keep a separate function for allocating the worst case 
->>>> amount of nodes additionally to this optimization? E.g. something 
->>>> like mas_preallocate_worst_case() or mas_preallocate_unlocked() 
->>>> (since I guess the new one requires the maple tree to be kept locked 
->>>> in order not to change)?
->>> Hi Danilo,
->>>
->>> Your understanding seems incorrect. Even with previously unoptimized
->>> mas_preallocate(), the maple tree cannot be modified between calls to
->>> mas_preallocate() and mas_store_prealloc(). The calculation of the
->>> number of pre-allocated nodes depends on the structure of the maple
->>> tree. In the unoptimized mas_preallocate(), it depends on the height of
->>> the tree. If the maple tree is modified before mas_store_prealloc() and
->>> the height of the tree changes, the number of pre-allocated nodes is
->>> inaccurate.
->>
->> Thanks for pointing this out!
->>
->> First of all, it's probably fair to say "naive me", it totally makes 
->> sense the tree height is needed - it's a b-tree.
->>
->> On the other hand, unless I miss something (and if so, please let me 
->> know), something is bogus with the API then.
->>
->> While the documentation of the Advanced API of the maple tree 
->> explicitly claims that the user of the API is responsible for locking, 
->> this should be limited to the bounds set by the maple tree 
->> implementation. Which means, the user must decide for either the 
->> internal (spin-) lock or an external lock (which possibly goes away in 
->> the future) and acquire and release it according to the rules maple 
->> tree enforces through lockdep checks.
->>
->> Let's say one picks the internal lock. How is one supposed to ensure 
->> the tree isn't modified using the internal lock with mas_preallocate()?
->>
->> Besides that, I think the documentation should definitely mention this 
->> limitation and give some guidance for the locking.
-> Yes, the documentation of maple tree is not detailed and complete.
->>
->> Currently, from an API perspective, I can't see how anyone not 
->> familiar with the implementation details would be able to recognize 
->> this limitation.
->>
->> In terms of the GPUVA manager, unfortunately, it seems like I need to 
->> drop the maple tree and go back to using a rb-tree, since it seems 
->> there is no sane way doing a worst-case pre-allocation that does not 
->> suffer from this limitation.
-> I also think preallocation may not be necessary, and I agree with what
-> Matthew said. Preallocation should be used in some cases where
-> preallocation has to be used. If preallocation is used, but the number
-> of preallocated nodes is insufficient because the tree is modified
-> midway, GFP_NOWAIT will be used for memory allocation during the tree
-> modification process, and the user may not notice that more nodes are
-> not from preallocation.
+Hi Suren,
 
-Please see my reply to Matthew. :)
+On 6/10/2023 4:43 AM, Suren Baghdasaryan wrote:
+>>> I can see use for that from userspace to detect incorrect madvise()
+>>> and adjust its aggressiveness. I think the API might get a bit complex
+>>> because of the need to associate refaults with specific madvise()/VMAs
+>>> to understand which hint was incorrect and adjust the behavior.
+>>> Instead what is the opinion about giving an MADV_PAGEOUT_INACTIVE
+>> interface which does operate on a page only If it is on the inactive
+>> list and !PageWorkingset ?
+> IOW you want a less aggressive mechanism which can be used by the
+> userspace to tell the kernel "I think these pages won't be used but
+> I'm not 100% sure, so drop them only if they are inactive"?
+>  I don't know how much that will help when the madvise() ends up being
+> wrong but maybe you can quickly experiment and tell us if the
+> difference is substantial?
 
-- Danilo
+We did some extensive testing on Android and this ask is not helping us
+much. I am really not sure if there is some other usecase that can
+benefit from this. So, for now I just stick to your suggestion of making
+the pages on the Active list as the Workingset at the time of pageout.
+>
 
-> 
->>
->> - Danilo
->>
->>>
->>> Regards,
->>> Peng
->>>
->>>>
->>>> [1] 
->>>> https://lore.kernel.org/nouveau/68cd25de-e767-725e-2e7b-703217230bb0@redhat.com/T/#ma326e200b1de1e3c9df4e9fcb3bf243061fee8b5
->>>>
->>>> [2] 
->>>> https://lore.kernel.org/linux-mm/20230620004217.4700-8-dakr@redhat.com/T/#m47ab82310f87793d0f0cc1825a316eb30ad5b653
->>>>
->>>> - Danilo
->>>>
->>>>>
->>>>> This addresses a performance regression introduced in platforms that
->>>>> have longer allocation timing.
->>>>>
->>>>> Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
->>>>> ---
->>>>>   lib/maple_tree.c | 48 
->>>>> +++++++++++++++++++++++++++++++++++++++++++++++-
->>>>>   1 file changed, 47 insertions(+), 1 deletion(-)
->>>>>
->>>>> diff --git a/lib/maple_tree.c b/lib/maple_tree.c
->>>>> index 048d6413a114..7ac5b5457603 100644
->>>>> --- a/lib/maple_tree.c
->>>>> +++ b/lib/maple_tree.c
->>>>> @@ -5541,9 +5541,55 @@ EXPORT_SYMBOL_GPL(mas_store_prealloc);
->>>>>    */
->>>>>   int mas_preallocate(struct ma_state *mas, void *entry, gfp_t gfp)
->>>>>   {
->>>>> +    MA_WR_STATE(wr_mas, mas, entry);
->>>>> +    unsigned char node_size;
->>>>> +    int request = 1;
->>>>>       int ret;
->>>>> -    mas_node_count_gfp(mas, 1 + mas_mt_height(mas) * 3, gfp);
->>>>> +
->>>>> +    if (unlikely(!mas->index && mas->last == ULONG_MAX))
->>>>> +        goto ask_now;
->>>>> +
->>>>> +    mas_wr_store_setup(&wr_mas);
->>>>> +    wr_mas.content = mas_start(mas);
->>>>> +    /* Root expand */
->>>>> +    if (unlikely(mas_is_none(mas) || mas_is_ptr(mas)))
->>>>> +        goto ask_now;
->>>>> +
->>>>> +    if (unlikely(!mas_wr_walk(&wr_mas))) {
->>>>> +        /* Spanning store, use worst case for now */
->>>>> +        request = 1 + mas_mt_height(mas) * 3;
->>>>> +        goto ask_now;
->>>>> +    }
->>>>> +
->>>>> +    /* At this point, we are at the leaf node that needs to be 
->>>>> altered. */
->>>>> +    /* Exact fit, no nodes needed. */
->>>>> +    if (wr_mas.r_min == mas->index && wr_mas.r_max == mas->last)
->>>>> +        return 0;
->>>>> +
->>>>> +    mas_wr_end_piv(&wr_mas);
->>>>> +    node_size = mas_wr_new_end(&wr_mas);
->>>>> +    /* Slot store can avoid using any nodes */
->>>>> +    if (node_size == wr_mas.node_end && wr_mas.offset_end - 
->>>>> mas->offset == 1)
->>>>> +        return 0;
->>>>> +
->>>>> +    if (node_size >= mt_slots[wr_mas.type]) {
->>>>> +        /* Split, worst case for now. */
->>>>> +        request = 1 + mas_mt_height(mas) * 2;
->>>>> +        goto ask_now;
->>>>> +    }
->>>>> +
->>>>> +    /* Appending does not need any nodes */
->>>>> +    if (node_size == wr_mas.node_end + 1 && mas->offset == 
->>>>> wr_mas.node_end)
->>>>> +        return 0;
->>>>> +
->>>>> +    /* Potential spanning rebalance collapsing a node, use 
->>>>> worst-case */
->>>>> +    if (node_size  - 1 <= mt_min_slots[wr_mas.type])
->>>>> +        request = mas_mt_height(mas) * 2 - 1;
->>>>> +
->>>>> +    /* node store needs one node */
->>>>> +ask_now:
->>>>> +    mas_node_count_gfp(mas, request, gfp);
->>>>>       mas->mas_flags |= MA_STATE_PREALLOC;
->>>>>       if (likely(!mas_is_err(mas)))
->>>>>           return 0;
->>>>
->>>>
->>>
->>
-> 
+Thanks.
 
