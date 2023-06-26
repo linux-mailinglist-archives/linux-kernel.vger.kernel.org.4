@@ -2,76 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE0FD73DF78
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 14:41:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D9ED73DF7B
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 14:42:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230061AbjFZMlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 08:41:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39156 "EHLO
+        id S230503AbjFZMmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 08:42:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229664AbjFZMlu (ORCPT
+        with ESMTP id S229736AbjFZMmM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 08:41:50 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A1090
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 05:41:48 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-9741caaf9d4so262559866b.0
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 05:41:48 -0700 (PDT)
+        Mon, 26 Jun 2023 08:42:12 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2687E122
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 05:42:11 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-312863a983fso3740743f8f.2
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 05:42:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687783307; x=1690375307;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1O/RvKWo1h5dGU5mnuc9NaA7NfFghj3K3EQLA18Z6+g=;
-        b=kmz+ri/+KnReuH1w1Kmf426oH88ZqYyfAb/jSzjMYH21Jo8oXbEYdhbtJMRL4kV5kI
-         exdyjBeM6KnX6e/qhKnA26o1Tq1hwKR/tVwvonDSubxaHR4hQlYL775+Evh0MpSIkR/k
-         33ojb8WHMAFMNZaO8Ikc7v3Ho7ZgbvPRebNsHuTMWhGdNqkwk2PESmswBVyGS4PIjyI5
-         cokDpAASIIkFNrHx+pujPS6H85mjyYoMkNwyVvcQSGJVMyVUSz6XqYLTtBGUcni8svUS
-         LEU5zIArhUdkCx4ddvKps99m0BVarzFVSjOzj2qF1PdK+jaJAXzNBdbxw666YaWtwWi1
-         Jb0Q==
+        d=linaro.org; s=google; t=1687783329; x=1690375329;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=1xYFUI/k6vE8xTpsdHwPYP/AxDoWz5CfcCmedbDcsCk=;
+        b=HulYCJn2XvaoDSsPKEw20CbMSvHHqVWwluwnv+5VYXvTK9JPgZ5nM3vQc35CmzxnVT
+         erSpLVKvkwcp9NcrYGD0XF6zV5/FE7ShtDTlaa7RRJ7lTJ0Rl+l2ql7V+xWoL7BQvspW
+         bUup2x/P3rogs01jgXA864coD/zr8aeVLsmxVpKFeUmYNif+lEEMcNwz+YQvJ90+V5/S
+         Sca/4xnf4cwZ0DktnLljqtStdu3CZ0hcXzeCEfW5nEmNFV6OPPRZQ53y7knjWUzVL219
+         qpuOQ/exS1vaqQXMVVL4IXxyw2LvSSZu8iPBjpgIMltUNPVUbagSRGficpDPylbcjgrn
+         /xvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687783307; x=1690375307;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1687783329; x=1690375329;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1O/RvKWo1h5dGU5mnuc9NaA7NfFghj3K3EQLA18Z6+g=;
-        b=AjQYSrNxFAL6NO4dI5d7JYt+u+6l3qLMsb8p4qK0auuTQRfCX9L44pUIKrUCn2C3wI
-         5ACCjLxM8yv41TYwd9P10HMzTQ48HsVOxu9zVv30E9ezAmxi6HBhVL9vpQq3Y7GFi/ea
-         bBsv6bK1rfR1AD5yh4cBnfmaMTVH3FPvOoOspbYJH3Q87CFrk4DljeNep1mqvVOqPBCZ
-         9TVc5GLIcTGNyoF/sOo5JaPf70BWVM4ILq1Vqsd6Nz9XXopctta+vD1rFX1AR9p6DjoU
-         hHWWdUqzg6I2J/LZL1oGS6EjfbY7A30xwLUFm6+wmAw3vRAkBUD5W2UIjZqX4cCSU6PF
-         z6eA==
-X-Gm-Message-State: AC+VfDxcjSlrdCCStIZ4Ua3DME0HiTmh8IUhhoK5CTP6u5mnOFleNrAZ
-        iyrMgdogv9O5VEKlJqgPlTtcaMnEC/NwzKmhmK4=
-X-Google-Smtp-Source: ACHHUZ6Wpbt5aBvPSMbzTXtLCmARkKMUks0jSYfwjFoZnw5UKS1jyuNJhgcE6lT0V71KZsa7fo62fg==
-X-Received: by 2002:a17:906:6a25:b0:989:40a9:505d with SMTP id qw37-20020a1709066a2500b0098940a9505dmr16561476ejc.0.1687783307102;
-        Mon, 26 Jun 2023 05:41:47 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id x6-20020a170906710600b0098e48ad11f2sm1792732ejj.93.2023.06.26.05.41.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Jun 2023 05:41:46 -0700 (PDT)
-Message-ID: <cd833975-7dd8-95a5-4bde-3dcdf9cf65a1@linaro.org>
-Date:   Mon, 26 Jun 2023 14:41:44 +0200
+        bh=1xYFUI/k6vE8xTpsdHwPYP/AxDoWz5CfcCmedbDcsCk=;
+        b=dXPw3G0qEvx7k5sQ43YUiyEi0BY1x7KyDDe2XwRq0eD11n8POnGwkI+Z3TmVqQvjEH
+         f0sUvkW4SeoUeBM2trg3G93m3zI3rr7QdSaUOlLFXCxCiyvSIkeBbv47IJi+Gb7HuvFl
+         HCGRJz3zMtNBWU9fRIEG0lx9hsLPIPRla3pnd7K3Qw4vt2krfvrFDNmSm7DSLqYA8l+N
+         Rgylp02GITG/s8B61NucU+s57NIOHCAgOkQkmJ9/GQ6zTC2AzExgWNOWs174laTvExWA
+         aW8Bc8UWG2RiyW2+IzFAjdKCV2c4+AkP8tfPlVSlhHmCJgbbYQuapt8COS/v2kiattI7
+         JFMg==
+X-Gm-Message-State: AC+VfDwVBcr77WxqENNk5mPJClHQVR/iyqDhA1k2l2VySpkCQRQhOMv3
+        ++ZINqdD1XfZmyySLcVOLxqSpg==
+X-Google-Smtp-Source: ACHHUZ4jV/fFHYVmJHIFWX5YYyvq2DO6Ztl2dE10nsLUPa3JM9Dl8QYQNK041AtNX4hZ2/9zrLf4Xg==
+X-Received: by 2002:adf:f203:0:b0:30f:ca58:39ca with SMTP id p3-20020adff203000000b0030fca5839camr23923068wro.31.1687783329608;
+        Mon, 26 Jun 2023 05:42:09 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id h10-20020a5d504a000000b00313e8dc7facsm5477055wrt.116.2023.06.26.05.42.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jun 2023 05:42:07 -0700 (PDT)
+Date:   Mon, 26 Jun 2023 15:42:03 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     Ian Rogers <irogers@google.com>, Sasha Levin <sashal@kernel.org>
+Cc:     Markus Elfring <Markus.Elfring@web.de>,
+        linux-perf-users@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Ivan Babrou <ivan@cloudflare.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>, cocci@inria.fr
+Subject: Re: [PATCH v2] perf unwind: Fix map reference counts
+Message-ID: <35569055-0873-4d5d-8c9c-78c818e9aa26@moroto.mountain>
+References: <20230623043107.4077510-1-irogers@google.com>
+ <64741e8e-e81a-afb9-9ce3-9c2d6baab44a@web.de>
+ <CAP-5=fVwhiGJEqTST2bfX8cUALpnTxELSHrvKtyJEPjqQjOacQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2 1/2] dt-bindings: input: microchip,cap11xx: add
- advanced sensitivity settings
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Jiri Valek - 2N <jiriv@axis.com>,
-        krzysztof.kozlowski+dt@linaro.org, dmitry.torokhov@gmail.com
-Cc:     devicetree@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        u.kleine-koenig@pengutronix.de
-References: <20230626113740.809871-1-jiriv@axis.com>
- <20230626113740.809871-2-jiriv@axis.com>
- <0503b8fd-e8ce-ffda-577a-b851a9eebb07@linaro.org>
-In-Reply-To: <0503b8fd-e8ce-ffda-577a-b851a9eebb07@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAP-5=fVwhiGJEqTST2bfX8cUALpnTxELSHrvKtyJEPjqQjOacQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,18 +85,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/06/2023 14:36, Krzysztof Kozlowski wrote:
-> On 26/06/2023 13:37, Jiri Valek - 2N wrote:
->> Add support for advanced sensitivity settings and signal guard feature.
->>
->> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On Fri, Jun 23, 2023 at 10:49:36AM -0700, Ian Rogers wrote:
+> >
+> > How do you think about to add the tag “Fixes”?
 > 
-> What? How did you get it?!?
+> In general we've not been adding Fixes as there is a danger a backport
+> will introduce a use-after-free.
 
-To clarify - your previous patch was not working, not tested and not
-correct. I pointed this out and I really wonder how from pointing out
-errors, you figured out that I give your patch green light!
+I feel like we have been discussing issues around Perf backports
+recently.  Wasn't there some build breakage that wasn't detected?  Why
+not just ask Sasha to leave perf out of the -stable tree?
 
-Best regards,
-Krzysztof
+Also Sasha has a tag to explain that patch AAA is included because
+patch BBB depends on it.  I feel like maybe those tags are backwards,
+it would be nicer to tag AAA as depending on BBB.  That way we could
+add the dependency tags here.
 
+I think at Linaro we have recently been testing taking the latest Perf
+tools and using them on older kernels.  I don't know the details around
+why we can't just use the perf that ships with the kernel...
+
+To tell the truth, I also don't really understand the problem for this
+patch specifically. From what I can see, the Fixes tag would have been:
+
+Fixes: 0dd5041c9a0e ("perf addr_location: Add init/exit/copy functions")
+
+1) Adding a Fixes tag would have automatically prevented any backports.
+2) I don't see any possible use after frees.  That probably means I have
+identified the wrong Fixes tag?
+
+I'm not going to dig further than that because I don't care.  I'm just
+looking at it because Markus added kernel-janitors to the CC list.  But
+for subsystems where I'm more involved then I always look at how a bug
+is introduced.  That information is essential to me as a reviewer.  So
+if I'm writing a patch and even if it's not a bug fix but let's say it
+deletes dead code then I often include include the information under the
+--- cut off line.
+
+---
+This dead code was introduced by commit 23423423 ("blah blah blah").
+
+regards,
+dan carpenter
