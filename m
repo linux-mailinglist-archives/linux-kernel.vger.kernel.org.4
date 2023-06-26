@@ -2,70 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9639E73E4CA
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 18:19:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 629FB73E4D3
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 18:21:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230061AbjFZQT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 12:19:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49004 "EHLO
+        id S231983AbjFZQU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 12:20:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbjFZQTF (ORCPT
+        with ESMTP id S230177AbjFZQUl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 12:19:05 -0400
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E3E2D62
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 09:15:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=slu41Trq4O3Esbd8wXKLjEegsdREKhu6+OYesH7zUvE=; b=l5Y50eFH5nYELas6XCTzOMOTNB
-        moOFu9+7uvrHyyOZFt1mH+dn9ySUNCSHk1bt0Vx8HCsuIsDLwoTHlw7by3AN+k+J0h/QtLhpgyrme
-        /9qEYlm1PSf/Zk+sqGitx+kbQeW2nCUYS7K5XQwaCldm2w8ew++bvsZP0UtnpmSZK5WXa4BVs+OoQ
-        ZKQM+O5umiam0Eenb0f4jn6MMeEtLNST3y1r/lMOK1NWddvrvaN+kUubd5zvwVTZx1YJEdkuqQ7W8
-        6ktZsoleWB1oz8Jzn+wa8ILNylfgRhn0RttNaKDrkopf98VS1jWaC64DC9Zn4EX2bXTeU8ueumySf
-        hXLwPllg==;
-Received: from [179.113.218.86] (helo=[192.168.1.111])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1qDosH-0044gc-Di; Mon, 26 Jun 2023 18:15:33 +0200
-Message-ID: <46eec220-5bed-cf7f-7bd7-0491883ef4fd@igalia.com>
-Date:   Mon, 26 Jun 2023 13:15:27 -0300
+        Mon, 26 Jun 2023 12:20:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6312F10C0
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 09:16:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687796162;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dQhNAf+TExCr+4Xu9asT4xEXXoB7XFc9GbCRqzaucKw=;
+        b=UZO2Ng4ADrVM/V3nZEC8AXtYhV3UEkaD4mqB1XNJlIfVzE7KRY4QJnlBooTRzhvxG+Ruf6
+        q6tl3pU8OSsxfAPONf5tRk1e1FOJqHnw46IzHxqlefhLnU9wdp+DwCYD6RfCo+4rujM/JL
+        CEBvFfwWtMTr/AqK32H09NCWfF/KCXM=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-593-Fj-hMpv2NrWB059h6bAMSg-1; Mon, 26 Jun 2023 12:16:01 -0400
+X-MC-Unique: Fj-hMpv2NrWB059h6bAMSg-1
+Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-635ddb30491so20540156d6.1
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 09:15:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687796159; x=1690388159;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dQhNAf+TExCr+4Xu9asT4xEXXoB7XFc9GbCRqzaucKw=;
+        b=bPs3EB5WQruRSiUY3HDLJckOMTsGEXT0lsGWgP4WycQtE5TC18om02le527fqU+U3z
+         ZA8fV+GbRM5+8u9LbPlmx8ke0E31hr53QeX4dohENjojEl+NW8JnoUH5weJ8/z0KUATh
+         /V2S5bQZjasuj1NaccbuBoNa9POLCKWnAGM8OYDM9lveNVHxE6+vr3aCEwXH4+jRNJ5B
+         +1fxw3Wl5yZEXdQyEvHQ5fuVX1IumMGqIxE0Mc5PE78ylWkyn+Mh5WJd7HEePJ0sm/lG
+         et/QTDGzqFnuoLk57iFbopfIJ56vUcGEpsIJtSnKCAcEWHvRiXAcDZ0xBPzxOGRod5l7
+         4wKQ==
+X-Gm-Message-State: AC+VfDxyWef7HzBaw/NIl6N1kCTF/CL4YUVuPAYr3Y72rwUKMmdOxQzj
+        G5bjEK2qB7aDIVPM0aaw3lUIfnmuNbiM4nU+qbAJGOM2yh6DM8A07rPbZlLZDrO3bvOcsaUNFSi
+        0cAKOKWPq2Q9opaHifAxyx4X9
+X-Received: by 2002:a05:6214:20e4:b0:62f:ebc4:89bc with SMTP id 4-20020a05621420e400b0062febc489bcmr26215331qvk.20.1687796158851;
+        Mon, 26 Jun 2023 09:15:58 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5z2/dWruxVtHYjnw3hfwHKiIUlRXEc7Ielx2zyIyhUlvUiU74HlQWqlpxElW40sJRPTZsnWw==
+X-Received: by 2002:a05:6214:20e4:b0:62f:ebc4:89bc with SMTP id 4-20020a05621420e400b0062febc489bcmr26215300qvk.20.1687796158535;
+        Mon, 26 Jun 2023 09:15:58 -0700 (PDT)
+Received: from sgarzare-redhat (host-87-11-6-160.retail.telecomitalia.it. [87.11.6.160])
+        by smtp.gmail.com with ESMTPSA id ml9-20020a056214584900b0062def68f75csm3297222qvb.124.2023.06.26.09.15.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jun 2023 09:15:58 -0700 (PDT)
+Date:   Mon, 26 Jun 2023 18:15:53 +0200
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@sberdevices.ru, oxffffaa@gmail.com
+Subject: Re: [RFC PATCH v4 00/17] vsock: MSG_ZEROCOPY flag support
+Message-ID: <kilgxopbdguge4bd6pfdjb3oqzemttwzf4na54xurwl62hi7uc@2njjwuhox3al>
+References: <20230603204939.1598818-1-AVKrasnov@sberdevices.ru>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [RFC PATCH v3 1/4] drm/doc: Document DRM device reset
- expectations
-Content-Language: en-US
-To:     Pekka Paalanen <ppaalanen@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, kernel-dev@igalia.com,
-        alexander.deucher@amd.com, christian.koenig@amd.com,
-        pierre-eric.pelloux-prayer@amd.com,
-        Simon Ser <contact@emersion.fr>,
-        Rob Clark <robdclark@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Stone <daniel@fooishbar.org>,
-        =?UTF-8?B?J01hcmVrIE9sxaHDoWsn?= <maraeo@gmail.com>,
-        Dave Airlie <airlied@gmail.com>,
-        =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel.daenzer@mailbox.org>,
-        Samuel Pitoiset <samuel.pitoiset@gmail.com>,
-        =?UTF-8?Q?Timur_Krist=c3=b3f?= <timur.kristof@gmail.com>,
-        Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>
-References: <20230621005719.836857-1-andrealmeid@igalia.com>
- <20230621005719.836857-2-andrealmeid@igalia.com>
- <20230621105842.0c21b161@eldfell>
- <26a4f7f3-33fa-c28e-dd71-e44e61ffa229@igalia.com>
- <20230622111234.71820ff8@eldfell>
-From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>
-In-Reply-To: <20230622111234.71820ff8@eldfell>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20230603204939.1598818-1-AVKrasnov@sberdevices.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,279 +87,290 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em 22/06/2023 05:12, Pekka Paalanen escreveu:
-> On Wed, 21 Jun 2023 13:28:34 -0300
-> André Almeida <andrealmeid@igalia.com> wrote:
-> 
->> Em 21/06/2023 04:58, Pekka Paalanen escreveu:
->>> On Tue, 20 Jun 2023 21:57:16 -0300
->>> André Almeida <andrealmeid@igalia.com> wrote:
->>>    
->>>> Create a section that specifies how to deal with DRM device resets for
->>>> kernel and userspace drivers.
->>>>
->>>> Signed-off-by: André Almeida <andrealmeid@igalia.com>
->>>
->>> Hi André,
->>>
->>> nice to see this! I ended up giving lots of grammar comments, but I'm
->>> not a native speaker. Generally it looks good to me.
->>
->> Thank you for your feedback :)
->>
->>>    
->>>> ---
->>>>    Documentation/gpu/drm-uapi.rst | 65 ++++++++++++++++++++++++++++++++++
->>>>    1 file changed, 65 insertions(+)
->>>>
->>>> diff --git a/Documentation/gpu/drm-uapi.rst b/Documentation/gpu/drm-uapi.rst
->>>> index 65fb3036a580..da4f8a694d8d 100644
->>>> --- a/Documentation/gpu/drm-uapi.rst
->>>> +++ b/Documentation/gpu/drm-uapi.rst
->>>> @@ -285,6 +285,71 @@ for GPU1 and GPU2 from different vendors, and a third handler for
->>>>    mmapped regular files. Threads cause additional pain with signal
->>>>    handling as well.
->>>>    
->>>> +Device reset
->>>> +============
->>>> +
->>>> +The GPU stack is really complex and is prone to errors, from hardware bugs,
->>>> +faulty applications and everything in between the many layers. To recover
->>>> +from this kind of state, sometimes is needed to reset the device. This section
->>>
->>> It seems unclear what "this kind of state" refers to, so maybe just write "errors"?
->>>
->>> Maybe:
->>>
->>> 	Some errors require resetting the device in order to make the
->>> 	device usable again.
->>>
->>> I presume that recovery does not mean that the failed job could recover.
->>>    
->>>> +describes what's the expectations for DRM and usermode drivers when a device
->>>> +resets and how to propagate the reset status.
->>>> +
->>>> +Kernel Mode Driver
->>>> +------------------
->>>> +
->>>> +The KMD is responsible for checking if the device needs a reset, and to perform
->>>> +it as needed. Usually a hung is detected when a job gets stuck executing. KMD
->>>
->>> s/hung/hang/ ?
->>>    
->>>> +then update it's internal reset tracking to be ready when userspace asks the
->>>
->>> updates its
->>>
->>> "update reset tracking"... do you mean that KMD records information
->>> about the reset in case userspace asks for it later?
->>
->> Yes, kernel drivers do annotate whenever a reset happens, so it can
->> report to userspace when it asks about resets.
->>
->> For instance, this is the amdgpu implementation of
->> AMDGPU_CTX_OP_QUERY_STATE2:
->>
->> https://elixir.bootlin.com/linux/v6.3.8/source/drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.c#L548
->>
->>
->> You can see there stored information about resets.
-> 
-> Hi André,
-> 
-> right. What I mean is, if I have to ask this, then that implies that
-> the wording could be more clear.
-> 
-> I don't know if "reset tracking" is some sub-system that is turned on
-> and off as needed or what updating it would mean.
-> 
+On Sat, Jun 03, 2023 at 11:49:22PM +0300, Arseniy Krasnov wrote:
+>Hello,
+>
+>                           DESCRIPTION
+>
+>this is MSG_ZEROCOPY feature support for virtio/vsock. I tried to follow
+>current implementation for TCP as much as possible:
+>
+>1) Sender must enable SO_ZEROCOPY flag to use this feature. Without this
+>   flag, data will be sent in "classic" copy manner and MSG_ZEROCOPY
+>   flag will be ignored (e.g. without completion).
+>
+>2) Kernel uses completions from socket's error queue. Single completion
+>   for single tx syscall (or it can merge several completions to single
+>   one). I used already implemented logic for MSG_ZEROCOPY support:
+>   'msg_zerocopy_realloc()' etc.
+>
+>Difference with copy way is not significant. During packet allocation,
+>non-linear skb is created and filled with pinned user pages.
+>There are also some updates for vhost and guest parts of transport - in
+>both cases i've added handling of non-linear skb for virtio part. vhost
+>copies data from such skb to the guest's rx virtio buffers. In the guest,
+>virtio transport fills tx virtio queue with pages from skb.
+>
+>Head of this patchset is:
+>https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/commit/?id=d20dd0ea14072e8a90ff864b2c1603bd68920b4b
+>
+>
+>This version has several limits/problems:
+>
+>1) As this feature totally depends on transport, there is no way (or it
+>   is difficult) to check whether transport is able to handle it or not
+>   during SO_ZEROCOPY setting. Seems I need to call AF_VSOCK specific
+>   setsockopt callback from setsockopt callback for SOL_SOCKET, but this
+>   leads to lock problem, because both AF_VSOCK and SOL_SOCKET callback
+>   are not considered to be called from each other. So in current version
+>   SO_ZEROCOPY is set successfully to any type (e.g. transport) of
+>   AF_VSOCK socket, but if transport does not support MSG_ZEROCOPY,
+>   tx routine will fail with EOPNOTSUPP.
+>
+>   ^^^
+>   This is still no resolved :(
+>
+>2) When MSG_ZEROCOPY is used, for each tx system call we need to enqueue
+>   one completion. In each completion there is flag which shows how tx
+>   was performed: zerocopy or copy. This leads that whole message must
+>   be send in zerocopy or copy way - we can't send part of message with
+>   copying and rest of message with zerocopy mode (or vice versa). Now,
+>   we need to account vsock credit logic, e.g. we can't send whole data
+>   once - only allowed number of bytes could sent at any moment. In case
+>   of copying way there is no problem as in worst case we can send single
+>   bytes, but zerocopy is more complex because smallest transmission
+>   unit is single page. So if there is not enough space at peer's side
+>   to send integer number of pages (at least one) - we will wait, thus
+>   stalling tx side. To overcome this problem i've added simple rule -
+>   zerocopy is possible only when there is enough space at another side
+>   for whole message (to check, that current 'msghdr' was already used
+>   in previous tx iterations i use 'iov_offset' field of it's iov iter).
+>
+>   ^^^
+>   Discussed as ok during v2. Link:
+>   https://lore.kernel.org/netdev/23guh3txkghxpgcrcjx7h62qsoj3xgjhfzgtbmqp2slrz3rxr4@zya2z7kwt75l/
+>
+>3) loopback transport is not supported, because it requires to implement
+>   non-linear skb handling in dequeue logic (as we "send" fragged skb
+>   and "receive" it from the same queue). I'm going to implement it in
+>   next versions.
+>
+>   ^^^ fixed in v2
+>
+>4) Current implementation sets max length of packet to 64KB. IIUC this
+>   is due to 'kmalloc()' allocated data buffers. I think, in case of
+>   MSG_ZEROCOPY this value could be increased, because 'kmalloc()' is
+>   not touched for data - user space pages are used as buffers. Also
+>   this limit trims every message which is > 64KB, thus such messages
+>   will be send in copy mode due to 'iov_offset' check in 2).
+>
+>   ^^^ fixed in v2
+>
+>                         PATCHSET STRUCTURE
+>
+>Patchset has the following structure:
+>1) Handle non-linear skbuff on receive in virtio/vhost.
+>2) Handle non-linear skbuff on send in virtio/vhost.
+>3) Updates for AF_VSOCK.
+>4) Enable MSG_ZEROCOPY support on transports.
+>5) Tests/tools/docs updates.
+>
+>                            PERFORMANCE
+>
+>Performance: it is a little bit tricky to compare performance between
+>copy and zerocopy transmissions. In zerocopy way we need to wait when
+>user buffers will be released by kernel, so it is like synchronous
+>path (wait until device driver will process it), while in copy way we
+>can feed data to kernel as many as we want, don't care about device
+>driver. So I compared only time which we spend in the 'send()' syscall.
+>Then if this value will be combined with total number of transmitted
+>bytes, we can get Gbit/s parameter. Also to avoid tx stalls due to not
+>enough credit, receiver allocates same amount of space as sender needs.
+>
+>Sender:
+>./vsock_perf --sender <CID> --buf-size <buf size> --bytes 256M [--zc]
+>
+>Receiver:
+>./vsock_perf --vsk-size 256M
+>
+>I run tests on two setups: desktop with Core i7 - I use this PC for
+>development and in this case guest is nested guest, and host is normal
+>guest. Another hardware is some embedded board with Atom - here I don't
+>have nested virtualization - host runs on hw, and guest is normal guest.
+>
+>G2H transmission (values are Gbit/s):
+>
+>   Core i7 with nested guest.            Atom with normal guest.
+>
+>*-------------------------------*   *-------------------------------*
+>|          |         |          |   |          |         |          |
+>| buf size |   copy  | zerocopy |   | buf size |   copy  | zerocopy |
+>|          |         |          |   |          |         |          |
+>*-------------------------------*   *-------------------------------*
+>|   4KB    |    3    |    10    |   |   4KB    |   0.8   |   1.9    |
+>*-------------------------------*   *-------------------------------*
+>|   32KB   |   20    |    61    |   |   32KB   |   6.8   |   20.2   |
+>*-------------------------------*   *-------------------------------*
+>|   256KB  |   33    |   244    |   |   256KB  |   7.8   |   55     |
+>*-------------------------------*   *-------------------------------*
+>|    1M    |   30    |   373    |   |    1M    |   7     |   95     |
+>*-------------------------------*   *-------------------------------*
+>|    8M    |   22    |   475    |   |    8M    |   7     |   114    |
+>*-------------------------------*   *-------------------------------*
+>
+>H2G:
+>
+>   Core i7 with nested guest.            Atom with normal guest.
+>
+>*-------------------------------*   *-------------------------------*
+>|          |         |          |   |          |         |          |
+>| buf size |   copy  | zerocopy |   | buf size |   copy  | zerocopy |
+>|          |         |          |   |          |         |          |
+>*-------------------------------*   *-------------------------------*
+>|   4KB    |   20    |    10    |   |   4KB    |   4.37  |    3     |
+>*-------------------------------*   *-------------------------------*
+>|   32KB   |   37    |    75    |   |   32KB   |   11    |   18     |
+>*-------------------------------*   *-------------------------------*
+>|   256KB  |   44    |   299    |   |   256KB  |   11    |   62     |
+>*-------------------------------*   *-------------------------------*
+>|    1M    |   28    |   335    |   |    1M    |   9     |   77     |
+>*-------------------------------*   *-------------------------------*
+>|    8M    |   27    |   417    |   |    8M    |  9.35   |  115     |
+>*-------------------------------*   *-------------------------------*
+>
+> * Let's look to the first line of both tables - where copy is better
+>   than zerocopy. I analyzed this case more deeply and found that
+>   bottleneck is function 'vhost_work_queue()'. With 4K buffer size,
+>   caller spends too much time in it with zerocopy mode (comparing to
+>   copy mode). This happens only with 4K buffer size. This function just
+>   calls 'wake_up_process()' and its internal logic does not depends on
+>   skb, so i think potential reason (may be) is interval between two
+>   calls of this function (e.g. how often it is called). Note, that
+>   'vhost_work_queue()' differs from the same function at guest's side of
+>   transport: 'virtio_transport_send_pkt()' uses 'queue_work()' which
+>   i think is more optimized for worker purposes, than direct call to
+>   'wake_up_process()'. But again - this is just my assumption.
 
-Understood, I'll rewrite it to be more clear.
+Thanks for the analysis, however for small payloads it makes sense that
+the cost might be too high that optimization does not bring benefits.
 
->>>    
->>>> +kernel about reset information. Drivers should implement the DRM_IOCTL_GET_RESET
->>>> +for that.
->>>
->>> At this point, I'm not sure what "reset tracking" or "reset
->>> information" entails. Could something be said about those?
->>>   >> +
->>>> +User Mode Driver
->>>> +----------------
->>>> +
->>>> +The UMD should check before submitting new commands to the KMD if the device has
->>>> +been reset, and this can be checked more often if it requires to. The
->>>> +DRM_IOCTL_GET_RESET is the default interface for those kind of checks. After
->>>> +detecting a reset, UMD will then proceed to report it to the application using
->>>> +the appropriated API error code, as explained in the bellow section about
->>>
->>> s/bellow/below/
->>>    
->>>> +robustness.
->>>> +
->>>> +Robustness
->>>> +----------
->>>> +
->>>> +The only way to try to keep an application working after a reset is if it
->>>> +complies with the robustness aspects of the graphical API that is using.
->>>
->>> that it is using.
->>>    
->>>> +
->>>> +Graphical APIs provide ways to application to deal with device resets. However,
->>>
->>> provide ways for applications to deal with
->>>    
->>>> +there's no guarantee that the app will be correctly using such features, and UMD
->>>> +can implement policies to close the app if it's a repeating offender, likely in
->>>> +a broken loop. This is done to ensure that it doesn't keeps blocking the user
->>>
->>> does not keep
->>>
->>> I think contractions are usually avoided in documents, but I'm not
->>> bothering to flag them all.
->>>    
->>>> +interface to be correctly displayed.
->>>
->>> interface from being correctly displayed.
->>>    
->>>> +
->>>> +OpenGL
->>>> +~~~~~~
->>>> +
->>>> +Apps using OpenGL can rely on ``GL_ARB_robustness`` to be robust. This extension
->>>> +tells if a reset has happened, and if so, all the context state is considered
->>>> +lost and the app proceeds by creating new ones. If robustness isn't in use, UMD
->>>> +will terminate the app when a reset is detected, giving that the contexts are
->>>> +lost and the app won't be able to figure this out and recreate the contexts.
->>>
->>> What about GL ES? Is GL_ARB_robustness implemented or even defined there?
->>>    
->>
->> I found this:
->> https://registry.khronos.org/OpenGL/extensions/EXT/EXT_robustness.txt
->>
->> "Since this is intended to be a version of ARB_robustness for OpenGL ES,
->> it should be named accordingly."
->>
->> I can add this to this paragraph.
-> 
-> Yes, please!
-> 
-> I suppose there could be even more extensions with similar benefits, so
-> maybe these extension should be mentioned as examples. Right now the
-> wording sounds like these are the chosen extensions, and if you don't
-> use one, the process will be terminated.
-> 
->>
->>> What about EGL returning errors like EGL_CONTEXT_LOST, would handling that not
->>> be enough from the app? The documented expectation is: "The application
->>> must destroy all contexts and reinitialise OpenGL ES state and objects
->>> to continue rendering."
->>
->> I couldn't find the spec for EGL_CONTEXT_LOST, but I found for
->> GL_CONTEXT_LOST, which I assume is similar.
-> 
-> EGL Version 1.5 - August 27, 2014
-> 
-> Section 2.7 Power Management
-> 
-> 	Following a power management event, calls to eglSwapBuffers,
-> 	eglCopyBuffers, or eglMakeCurrent will indicate failure by
-> 	returning EGL_FALSE. The error EGL_CONTEXT_LOST will be
-> 	returned if a power management event has occurred.
-> 
-> 	On detection of this error, the application must destroy all
-> 	contexts (by calling eglDestroyContext for each context). To
-> 	continue rendering the application must recreate any contexts
-> 	it requires, and subsequently restore any client API state and
-> 	objects it wishes to use.
-> 
-> It is talking about power management which is not quite GPU reset, but
-> I see so much similarity that I'd say it doesn't matter which one
-> actually happened. The only difference is that power management events
-> are not caused by application bugs, which means that the application
-> will simply re-initialize and retry, which may result in a reset loop.
-> 
-> You already wrote provision to handle reset loops, and I'm not sure
-> applications handling EGL_CONTEXT_LOST would/could ever infer that they
-> are the culprit without using robustness extensions.
-> 
-> I can see how EGL_CONTEXT_LOST could be deemed unsuitable for resets,
-> too.
-> 
+>
+>Loopback:
+>
+>   Core i7 with nested guest.            Atom with normal guest.
+>
+>*-------------------------------*   *-------------------------------*
+>|          |         |          |   |          |         |          |
+>| buf size |   copy  | zerocopy |   | buf size |   copy  | zerocopy |
+>|          |         |          |   |          |         |          |
+>*-------------------------------*   *-------------------------------*
+>|   4KB    |    8    |     7    |   |   4KB    |   1.8   |   1.3    |
+>*-------------------------------*   *-------------------------------*
+>|   32KB   |   38    |    44    |   |   32KB   |   10    |   10     |
+>*-------------------------------*   *-------------------------------*
+>|   256KB  |   55    |   168    |   |   256KB  |   15    |   36     |
+>*-------------------------------*   *-------------------------------*
+>|    1M    |   53    |   250    |   |    1M    |   12    |   45     |
+>*-------------------------------*   *-------------------------------*
+>|    8M    |   40    |   344    |   |    8M    |   11    |   74     |
+>*-------------------------------*   *-------------------------------*
+>
+>I analyzed performace difference more deeply for the following setup:
+>server: ./vsock_perf --vsk-size 16M
+>client: ./vsock_perf --sender 2 --bytes 16M --buf-size 16K/4K [--zc]
+>
+>In other words I send 16M of data from guest to host in copy/zerocopy
+>modes and with two different sizes of buffer - 4K and 64K. Let's see
+>to tx path for both modes - it consists of two steps:
+>
+>copy:
+>1) Allocate skb of buffer's length.
+>2) Copy data to skb from buffer.
+>
+>zerocopy:
+>1) Allocate skb with header space only.
+>2) Pin pages of the buffer and insert them to skb.
+>
+>I measured average number of ns (returned by 'ktime_get()') for each
+>step above:
+>1) Skb allocation (for both copy and zerocopy modes).
+>2) For copy mode in 'memcpy_to_msg()' - copying.
+>3) For zerocopy mode in '__zerocopy_sg_from_iter()' - pinning.
+>
+>Here are results for copy mode:
+>*-------------------------------------*
+>| buf | skb alloc | 'memcpy_to_msg()' |
+>*-------------------------------------*
+>|     |           |                   |
+>| 64K |  5000ns   |      25000ns      |
+>|     |           |                   |
+>*-------------------------------------*
+>|     |           |                   |
+>| 4K  |  800ns    |      2200ns       |
+>|     |           |                   |
+>*-------------------------------------*
+>
+>Here are results for zerocopy mode:
+>*-----------------------------------------------*
+>| buf | skb alloc | '__zerocopy_sg_from_iter()' |
+>*-----------------------------------------------*
+>|     |           |                             |
+>| 64K |  250ns    |          3500ns             |
+>|     |           |                             |
+>*-----------------------------------------------*
+>|     |           |                             |
+>| 4K  |  250ns    |          3000ns             |
+>|     |           |                             |
+>*-----------------------------------------------*
+>
+>I guess that reason of zerocopy performance is low overhead for page
+>pinning: there is big difference between 4K and 64K in case of copying
+>(25000 vs 2200), but in pinning case - just 3000 vs 3500.
+>
+>So, zerocopy is faster than classic copy mode, but of course it requires
+>specific architecture of application due to user pages pinning, buffer
+>size and alignment.
 
-Indeed, this is tricky. However, I believe that the complex nature of 
-the stack can lead to situations where an app is causing the hardware to 
-change it's power management settings. Even though the app isn't doing 
-it on purpose, as stated in the introduction of this section, resets can 
-be caused by hardware bugs, so unfortunately apps might not be able to 
-run correctly and will get reset notifications, and even get terminate.
+Makes sense!
 
->>
->> GL_CONTEXT_LOST is only returned in some specific commands (that might
->> cause a polling application to block indefinitely), so I don't think
->> it's enough, given that the we can't guarantee that the application will
->> call such commands after a reset, thus not being able to notice a reset.
->>
->> https://registry.khronos.org/OpenGL-Refpages/gl4/html/glGetGraphicsResetStatus.xhtml
-> 
-> Ok, another API for a similar thing.
-> 
-> So in that case, the app does not need to use a robustness extension if
-> it uses OpenGL 4.5 and bothers to check.
-> 
-> This makes the wording "If robustness is not in use" problematic,
-> because it seems complicated to determine if robusteness is in use in
-> any particular application. I suppose Mesa would track if the app ever
-> called glGetGraphicsResetStatus() before drawing after reset?
-> 
-> 
+>
+>                             NOTES
+>
+>If host fails to send data with "Cannot allocate memory", check value
+>/proc/sys/net/core/optmem_max - it is accounted during completion skb
+>allocation. Try to update it to for example 1M and try send again:
+>"echo 1048576 > /proc/sys/net/core/optmem_max" (as root).
+>
+>                            TESTING
+>
+>This patchset includes set of tests for MSG_ZEROCOPY feature. I tried to
+>cover new code as much as possible so there are different cases for
+>MSG_ZEROCOPY transmissions: with disabled SO_ZEROCOPY and several io
+>vector types (different sizes, alignments, with unmapped pages). I also
+>run tests with loopback transport and run vsockmon. In v3 i've added
+>io_uring test as separated application.
+>
+>           LET'S SPLIT PATCHSET TO MAKE REVIEW EASIER
+>
+>In v3 Stefano Garzarella <sgarzare@redhat.com> asked to split this patchset
+>for several parts, because it looks too big for review. I think in this
+>version (v4) we can do it in the following way:
+>
+>[0001 - 0005] - this is preparation for virtio/vhost part.
+>[0006 - 0009] - this is preparation for AF_VSOCK part.
+>[0010 - 0013] - these patches allows to trigger logic from the previous
+>                two parts.
+>[0014 - rest] - updates for doc, tests, utils. This part doesn't touch
+>                kernel code and looks not critical.
 
-I agree, I think tracking glGetGraphicsResetStatus() should be enough, 
-but I will let this part of the documentation as this for now:
+Yeah, I like this split, but I'd include 14 in the (10, 13) group.
 
-If it's _possible to guarantee_ that robustness is not in use [...]
+I have reviewed most of them and I think we are well on our way :-)
+I've already seen that Bobby suggested changes for v5, so I'll review
+that version better.
 
-> Thanks,
-> pq
-> 
->>>    
->>>> +
->>>> +Vulkan
->>>> +~~~~~~
->>>> +
->>>> +Apps using Vulkan should check for ``VK_ERROR_DEVICE_LOST`` for submissions.
->>>> +This error code means, among other things, that a device reset has happened and
->>>> +it needs to recreate the contexts to keep going.
->>>> +
->>>> +Reporting resets causes
->>>> +-----------------------
->>>> +
->>>> +Apart from propagating the reset through the stack so apps can recover, it's
->>>> +really useful for driver developers to learn more about what caused the reset in
->>>> +first place. DRM devices should make use of devcoredump to store relevant
->>>> +information about the reset, so this information can be added to user bug
->>>> +reports.
->>>> +
->>>>    .. _drm_driver_ioctl:
->>>>    
->>>>    IOCTL Support on Device Nodes
->>>
->>> What about VRAM contents? If userspace holds a dmabuf handle, can a GPU
->>> reset wipe that buffer? How would that be communicated?
->>>    
->>
->> Yes, it can.
->>
->>> The dmabuf may have originated in another process.
->>>    
->>
->> Indeed, I think we might need to add an error code for dmabuf calls so
->> the buffer user knows that it's invalid now because a reset has happened
->> in the other device. I will need to read more dmabuf code to make sure
->> how this would be possible.
->>
->>>
->>> Thanks,
->>> pq
-> 
+Great work so far!
+
+Thanks,
+Stefano
+
