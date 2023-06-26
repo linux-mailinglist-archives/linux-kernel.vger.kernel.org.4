@@ -2,126 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8790A73DDAC
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 13:33:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AAB173DDC0
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 13:35:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229932AbjFZLdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 07:33:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35126 "EHLO
+        id S229849AbjFZLev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 07:34:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230174AbjFZLdd (ORCPT
+        with ESMTP id S230242AbjFZLeD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 07:33:33 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60C4B10DB
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 04:33:26 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3fa96fd7a04so9703585e9.2
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 04:33:26 -0700 (PDT)
+        Mon, 26 Jun 2023 07:34:03 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80DA0E4E;
+        Mon, 26 Jun 2023 04:33:48 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-313f1085ac2so760521f8f.1;
+        Mon, 26 Jun 2023 04:33:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687779205; x=1690371205;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qMePQhdtBcD145xWWP6ObKBgPBwVavSA5DCnm+uLPN8=;
-        b=U6qu03h0316pgcKA70DgwCkGBgdWx68jKFZW+1WrRbBsaHb5uHLiy1iibBG3su9pDe
-         n4qg8U1R2B0+Q71zIEflIORXD3QiaQU/DDloPAr7wnCXwOLQVfxhWE7iGBtSuafeHA1n
-         McIfhqj0WwFIQLFFCB5JcbARHZvEHcMCwYDmkVCaIb69S3S73jdmMyOvg1Ryq5NIE35g
-         bWVeYdHid7Dtw2zL/YB69XFYaYIiWbTVnSADSY2s4q1Q+6ArVrR39Axfvui+9+kx/kVd
-         SliSHdJiwBXy5FFLZhNG6iy4Q7jX6afHZbji/zyaJEZJdkHVDnn0gUa+4K5mINDF3AtG
-         UxTw==
+        d=gmail.com; s=20221208; t=1687779227; x=1690371227;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uWJ2m6hM9/UPQKvpX2tpk6Qe1joTg2sFo9t5IZ8C27Y=;
+        b=Ql+QylvB8BF3n6GaTFakt0E4R1symVCHCxKDdOET0ikCKPKIj1sM99/pElSs9o4Xac
+         7fmS52uahIUk3AhQqELcArmqkluj4ZdAkE4PSfTbkrdRBehN3NVNog3rRzjkwlSIxuty
+         XZSmuMaQq7YWHm5C9w2KjDDkgaG2fFgQsjsRtSxqgqs11IkOu5oaUEQFxAwtO6/gLNL3
+         7QdUXieZM76VQOVRDLSDhDVazpPogTKowWfw+++vKkL8vUkHIXja4x3PWNkVwvD+R/Xh
+         g3cdNLtmJ/jlZmHpg2asTkQ/cHe+nzlvNAMtYsyhX6V146lfsXrT1rYfeI3YlJcVGzxf
+         VzRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687779205; x=1690371205;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qMePQhdtBcD145xWWP6ObKBgPBwVavSA5DCnm+uLPN8=;
-        b=JBXWPq0ZxAUb+UkMD0TVPnijjFGKxEZfSswgMEMWoolA/hFGKLKgLuDdHxarWVZ4zU
-         rWUSFIKHY4exqSpt1mFDMmpsOVKqAHIimJA/IYoc3kT7whcB8eN2enNchUcpUk6fbQrz
-         W85fd6q4baYpa83o3TVow7tDvBFVIsFjLFB/Kzjt5OHSm0JEGWpkFKA/i92OT+di6zrz
-         M0i6N6c7nsZ3mDuL43gkzNMvpHq1Bc7PMH0ydFHsrrLjyQ/Z3VEC5Ro38gQ5TzV09Xq7
-         L2sewgEHB/dQQBag0+qPCqwLKawfP2mtccwqjCYVhhRQTaj+ynyZlqbu1jZXTYkFOCh1
-         BdMQ==
-X-Gm-Message-State: AC+VfDxKQgtp33b93NxS89obPI3/zmH2XyGmN4Yy4IHilt6S7yJi9XoC
-        NzQJbFfzd3R/NAeCTfveCGBdLg==
-X-Google-Smtp-Source: ACHHUZ4VqIEYP2PnHQc0NwXfgsVq3bgr+yPFv0RukQVPK2hxMBmZPFYLFUNb0ZpxLDmYzqbgruO3Yg==
-X-Received: by 2002:a7b:cd11:0:b0:3f9:c7b0:4976 with SMTP id f17-20020a7bcd11000000b003f9c7b04976mr10274874wmj.12.1687779204683;
-        Mon, 26 Jun 2023 04:33:24 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id a10-20020a1cf00a000000b003f8fb02c413sm7453169wmb.8.2023.06.26.04.33.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jun 2023 04:33:23 -0700 (PDT)
-Date:   Mon, 26 Jun 2023 14:33:18 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     Daniel Wagner <dwagner@suse.de>
-Cc:     linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-block@vger.kernel.org, Chaitanya Kulkarni <kch@nvidia.com>,
-        Shin'ichiro Kawasaki <shinichiro@fastmail.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Hannes Reinecke <hare@suse.de>,
-        James Smart <jsmart2021@gmail.com>
-Subject: Re: [PATCH v2 4/5] nvme-fc: Make initial connect attempt synchronous
-Message-ID: <3ea88e87-9b24-4f7a-958c-97e27d94ec30@moroto.mountain>
-References: <20230620133711.22840-1-dwagner@suse.de>
- <20230620133711.22840-5-dwagner@suse.de>
+        d=1e100.net; s=20221208; t=1687779227; x=1690371227;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uWJ2m6hM9/UPQKvpX2tpk6Qe1joTg2sFo9t5IZ8C27Y=;
+        b=GdALX3x16AIWMkswHqsHfoSC8O60CA1I5Ti4rlZDuVuFUl/4K7VH69y5fJ4vtSOA7t
+         MC5P/uMrx2qXrpazJNtS+05xtRX1RMgOuYBe9l69W7fkdsSr3y3fdQ9RYxGaiT/3NuDr
+         xSpt5OqAC++89LEKW0lbLZa+eaAULKAT2b/m7CJWEB8yq5O16XYPQc5BlkSqbvxhTuUP
+         cuyuZ1pBVfCJQzGVUcv8TDnmg8DP58T1YMH8lgx/ADztpPfC2k8B3D4ky2Z2zvkzndfx
+         D+5RXA+Q8WahTHbiOgYTDxPRtq0WUkRHLysdC/AumudyzHijeSlUS/Kk0g1pFhzFQxi8
+         7uzg==
+X-Gm-Message-State: AC+VfDwjJuG1mlmsqkpeNzTflTKF3AvjAMx/8f7dFbZkVk95qJ9RUjjZ
+        mkmO+pL/Xt8Ag/r7d5eOfXM=
+X-Google-Smtp-Source: ACHHUZ6ZixlK0wtfB4OMzQSPYlAyxGBq5ZXjbhz31HoIbkWwoYL7eASSfRQ1bj4aUvmvOn9f6/NLog==
+X-Received: by 2002:a5d:4242:0:b0:311:de0:8975 with SMTP id s2-20020a5d4242000000b003110de08975mr19166661wrr.55.1687779226846;
+        Mon, 26 Jun 2023 04:33:46 -0700 (PDT)
+Received: from ?IPV6:2a00:e180:158d:7600:d62f:c4fb:6eee:7b87? ([2a00:e180:158d:7600:d62f:c4fb:6eee:7b87])
+        by smtp.gmail.com with ESMTPSA id u18-20020a5d6ad2000000b00313e90d1d0dsm5186467wrw.112.2023.06.26.04.33.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Jun 2023 04:33:46 -0700 (PDT)
+Message-ID: <f63137cd-2032-1598-a1d7-484248ef1d02@gmail.com>
+Date:   Mon, 26 Jun 2023 13:33:45 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230620133711.22840-5-dwagner@suse.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 4/4] drm/ttm: Don't leak a resource on swapout move
+ error
+Content-Language: en-US
+To:     =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
+        <thomas.hellstrom@linux.intel.com>, intel-xe@lists.freedesktop.org
+Cc:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        dri-devel@lists.freedesktop.org, stable@vger.kernel.org,
+        Nirmoy Das <nirmoy.das@intel.com>,
+        Andi Shyti <andi.shyti@linux.intel.com>,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20230626091450.14757-1-thomas.hellstrom@linux.intel.com>
+ <20230626091450.14757-5-thomas.hellstrom@linux.intel.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
+In-Reply-To: <20230626091450.14757-5-thomas.hellstrom@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 03:37:10PM +0200, Daniel Wagner wrote:
-> Commit 4c984154efa1 ("nvme-fc: change controllers first connect to use
-> reconnect path") made the connection attempt asynchronous in order to
-> make the connection attempt from autoconnect/boot via udev/systemd up
-> case a bit more reliable.
-> 
-> Unfortunately, one side effect of this is that any wrong parameters
-> provided from userspace will not be directly reported as invalid, e.g.
-> auth keys.
-> 
-> So instead having the policy code inside the kernel it's better to
-> address this in userspace, for example in nvme-cli or nvme-stas.
-> 
-> This aligns the fc transport with tcp and rdma.
-> 
-> Signed-off-by: Daniel Wagner <dwagner@suse.de>
+Am 26.06.23 um 11:14 schrieb Thomas Hellström:
+> If moving the bo to system for swapout failed, we were leaking
+> a resource. Fix.
+>
+> Fixes: bfa3357ef9ab ("drm/ttm: allocate resource object instead of embedding it v2")
+> Cc: Christian König <christian.koenig@amd.com>
+> Cc: "Christian König" <ckoenig.leichtzumerken@gmail.com>
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: <stable@vger.kernel.org> # v5.14+
+> Signed-off-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
+> Reviewed-by: Nirmoy Das <nirmoy.das@intel.com>
+> Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
+
+Reviewed-by: Christian König <christian.koenig@amd.com>
+
 > ---
->  drivers/nvme/host/fc.c | 19 ++++++++-----------
->  1 file changed, 8 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/nvme/host/fc.c b/drivers/nvme/host/fc.c
-> index 472ed285fd45..aa2911f07c6c 100644
-> --- a/drivers/nvme/host/fc.c
-> +++ b/drivers/nvme/host/fc.c
-> @@ -2943,6 +2943,8 @@ nvme_fc_create_io_queues(struct nvme_fc_ctrl *ctrl)
->  	/* force put free routine to ignore io queues */
->  	ctrl->ctrl.tagset = NULL;
->  
-> +	if (ret > 0)
-> +		ret = -EIO;
+>   drivers/gpu/drm/ttm/ttm_bo.c | 1 +
+>   1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/gpu/drm/ttm/ttm_bo.c b/drivers/gpu/drm/ttm/ttm_bo.c
+> index c0e3bbd21d3d..d9a8f227f310 100644
+> --- a/drivers/gpu/drm/ttm/ttm_bo.c
+> +++ b/drivers/gpu/drm/ttm/ttm_bo.c
+> @@ -1166,6 +1166,7 @@ int ttm_bo_swapout(struct ttm_buffer_object *bo, struct ttm_operation_ctx *ctx,
+>   		ret = ttm_bo_handle_move_mem(bo, evict_mem, true, ctx, &hop);
+>   		if (unlikely(ret != 0)) {
+>   			WARN(ret == -EMULTIHOP, "Unexpected multihop in swaput - likely driver bug.\n");
+> +			ttm_resource_free(bo, &evict_mem);
+>   			goto out;
+>   		}
+>   	}
 
-All these checks for ret > 0 make me unhappy.  I don't understand how
-they are a part of the commit.
-
-I have tried to look at the context and I think maybe you are working
-around the fact that qla_nvme_ls_req() returns QLA_FUNCTION_FAILED on
-error.
-
-Also the qla_nvme_ls_req() function EINVAL on error.  I just wrote a
-commit message saying that none of the callers cared but I missed that
-apparently gets returned to nvme_fc_init_ctrl().  :/
-https://lore.kernel.org/all/49866d28-4cfe-47b0-842b-78f110e61aab@moroto.mountain/
-
-Let's just fix qla_nvme_ls_req() instead of working around it here.
-
-And let's add a WARN_ON_ONCE() somewhere to prevent future bugs.
-
-regards,
-dan carpenter
