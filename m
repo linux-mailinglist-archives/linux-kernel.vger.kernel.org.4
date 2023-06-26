@@ -2,68 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C634973EBD9
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 22:29:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C97C73EBDE
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 22:32:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbjFZU25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 16:28:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38314 "EHLO
+        id S230061AbjFZUb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 16:31:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbjFZU2z (ORCPT
+        with ESMTP id S229478AbjFZUb4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 16:28:55 -0400
-Received: from relay01.th.seeweb.it (relay01.th.seeweb.it [IPv6:2001:4b7a:2000:18::162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53F5D98;
-        Mon, 26 Jun 2023 13:28:51 -0700 (PDT)
-Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 63F771F48A;
-        Mon, 26 Jun 2023 22:28:43 +0200 (CEST)
-Date:   Mon, 26 Jun 2023 22:28:41 +0200
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, Lux Aliaga <they@mint.lgbt>
-Subject: Re: [PATCH 06/15] dt-bindings: display/msm: sc7180-dpu: Describe
- SM6125
-Message-ID: <26pqxmuuyznb4qbi4wkiexr5excxenfmiuojrqgrz5k5t5palm@ttlk6m2zuokm>
-References: <20230624-sm6125-dpu-v1-0-1d5a638cebf2@somainline.org>
- <20230624-sm6125-dpu-v1-6-1d5a638cebf2@somainline.org>
- <6bbf239f-d530-2f1e-ff52-361f7c9cc951@linaro.org>
- <75d64lixeawfoqbrctm4thzh73cxkvnlmnh5xgbpf277pmh3gz@zthnqvvuxmeq>
- <a6f3906a-98a7-de7a-3e26-4b8c45fe93f7@linaro.org>
- <w3bbdq72thnerbyglb4dyshzg4vu5go2wpsciprk27vah6w2ms@yc4eqclct24a>
- <3daf9990-79da-9adf-af6a-d9007c186557@linaro.org>
+        Mon, 26 Jun 2023 16:31:56 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E47441B0;
+        Mon, 26 Jun 2023 13:31:50 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-666ecb21f86so3703341b3a.3;
+        Mon, 26 Jun 2023 13:31:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687811510; x=1690403510;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OTCUF3XNaBvj4PKCzDGtH7uEP3TDMjaq/uRkjjEZ9Kc=;
+        b=cuVy06QAcKG7awJdVWfu3saYHOdNHs21sEzuNJv1hP1fJMvoZXxx44+ki4ge02Zws6
+         3+H7SLURjdL0eGT0h09pJSxeORiSBwJC3GZQmDtWew8yDFbmp9pmcn7/+DMlBTpX6D15
+         Vf2rCPnevhB4/EoCpVRwAh3pbOxfls3TA4wg83yboMFqod0y+weJAf4BQuTKhFeZBYIz
+         yUYxqXLQ9sLYGGdYBlZXxxO+b7aRW5xiPbjVx4FOps38qMnvYtzeqF+/RB66SAD+jSsB
+         mLT49KB0jhpZeghMFlfDB4kLvTlGiK9P0huREC178+E7wxC9xlR7So/FVYt7A+DNeLAA
+         LdDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687811510; x=1690403510;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OTCUF3XNaBvj4PKCzDGtH7uEP3TDMjaq/uRkjjEZ9Kc=;
+        b=OgbYDvOrbUzkRWro3JjYzhS5rOKY1cFGMGfNpfhQ8MMl5hJl1QQYrx+yUScF7bNrhh
+         plEqdV3IyQBLQROoK/6i42nNV7KSeVGS0FFX6sYzY+tV8kts2YgmOT0ZjyF3zYWscFOJ
+         sObXcQkSa8dSH7EgopFS3WIKCiSr1acX6ZCWk3dj6Z1533UBjmO9T0HlnJ3prdxBJNKb
+         9v5x1ud/D25ELqIa7AU8rJ2BhzPNbH0kw8QeJb5UsCKdhjLfK+d3eRuJMdHFzNzOGCNj
+         rlAVsQzyCWMb+NQ/q5hlig2MoQUZD+zJhD0gwEf1XW6grV6QhRW3HAVhsw63LcixsSy2
+         GDDA==
+X-Gm-Message-State: AC+VfDzZv1zl3FJxrKDgsGeNapEmNchAmAzonu6ahOhesCeBNhlrhizA
+        u4GM1dAZku7Zo9Ghr0KrzgI=
+X-Google-Smtp-Source: ACHHUZ5kXAsJ08lvWJYI8HhejgiMKaZvIGp1FaOz0mDDM3eZT72Z6nPi0VuQRvPaNY++QvdLZ9svkA==
+X-Received: by 2002:a05:6a21:9016:b0:11d:4c79:90ee with SMTP id tq22-20020a056a21901600b0011d4c7990eemr31210442pzb.25.1687811510038;
+        Mon, 26 Jun 2023 13:31:50 -0700 (PDT)
+Received: from localhost (dhcp-72-235-13-41.hawaiiantel.net. [72.235.13.41])
+        by smtp.gmail.com with ESMTPSA id j17-20020aa79291000000b00640f588b36dsm4185288pfa.8.2023.06.26.13.31.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jun 2023 13:31:49 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 26 Jun 2023 10:31:49 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     gregkh@linuxfoundation.org, peterz@infradead.org,
+        lujialin4@huawei.com, lizefan.x@bytedance.com, hannes@cmpxchg.org,
+        mingo@redhat.com, ebiggers@kernel.org, oleg@redhat.com,
+        akpm@linux-foundation.org, viro@zeniv.linux.org.uk,
+        brauner@kernel.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH 1/2] kernfs: add kernfs_ops.free operation to free
+ resources tied to the file
+Message-ID: <ZJn1tQDgfmcE7mNG@slm.duckdns.org>
+References: <20230626201713.1204982-1-surenb@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3daf9990-79da-9adf-af6a-d9007c186557@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+In-Reply-To: <20230626201713.1204982-1-surenb@google.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,72 +83,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-06-26 20:57:51, Konrad Dybcio wrote:
-> On 26.06.2023 19:54, Marijn Suijten wrote:
-> > On 2023-06-26 18:16:58, Krzysztof Kozlowski wrote:
-> >> On 25/06/2023 21:52, Marijn Suijten wrote:
-> >>> On 2023-06-24 11:12:52, Krzysztof Kozlowski wrote:
-> >>>> On 24/06/2023 02:41, Marijn Suijten wrote:
-> >>>>> SM6125 is identical to SM6375 except that while downstream also defines
-> >>>>> a throttle clock, its presence results in timeouts whereas SM6375
-> >>>>> requires it to not observe any timeouts.
-> >>>>
-> >>>> Then it should not be allowed, so you need either "else:" block or
-> >>>> another "if: properties: compatible:" to disallow it. Because in current
-> >>>> patch it would be allowed.
-> >>>
-> >>> That means this binding is wrong/incomplete for all other SoCs then.
-> >>> clock(-name)s has 6 items, and sets `minItems: 6`.  Only for sm6375-dpu
-> > 
-> > Of course meant to say that clock(-name)s has **7** items, not 6.
-> > 
-> >>> does it set `minItems: 7`, but an else case is missing.
-> >>
-> >> Ask the author why it is done like this.
-> > 
-> > Konrad, can you clarify why other 
+On Mon, Jun 26, 2023 at 01:17:12PM -0700, Suren Baghdasaryan wrote:
+> diff --git a/include/linux/kernfs.h b/include/linux/kernfs.h
+> index 73f5c120def8..a7e404ff31bb 100644
+> --- a/include/linux/kernfs.h
+> +++ b/include/linux/kernfs.h
+> @@ -273,6 +273,11 @@ struct kernfs_ops {
+>  	 */
+>  	int (*open)(struct kernfs_open_file *of);
+>  	void (*release)(struct kernfs_open_file *of);
+> +	/*
+> +	 * Free resources tied to the lifecycle of the file, like a
+> +	 * waitqueue used for polling.
+> +	 */
+> +	void (*free)(struct kernfs_open_file *of);
 
-(Looks like I forgot to complete this sentence before sending,
-apologies)
+I think this can use a bit more commenting - ie. explain that release may be
+called earlier than the actual freeing of the file and how that can lead to
+problems. Othre than that, looks fine to me.
 
-> 6375 needs the throttle clk and the clock(-names) are strongly ordered
-> so having minItems: 6 discards the last entry
+Greg, as Suren suggested, I can route both patches through the cgroup tree
+if you're okay with it.
 
-The question is whether or not we should have maxItems: 6 to disallow
-the clock from being passed: right now it is optional and either is
-allowed for any !6375 SoC.
+Thanks.
 
-- Marijn
-
-> 
-> Konrad
-> > 
-> >>> Shall I send a Fixes: ed41005f5b7c ("dt-bindings: display/msm:
-> >>> sc7180-dpu: Describe SM6350 and SM6375") for that, and should maxItems:
-> >>> 6 be the default under clock(-name)s or in an else:?
-> >>
-> >> There is no bug to fix. Or at least it is not yet known. Whether other
-> >> devices should be constrained as well - sure, sounds reasonable, but I
-> >> did not check the code exactly.
-> > 
-> > I don't know either, but we need this information to decide whether to
-> > use `maxItems: 6`:
-> > 
-> > 1. Directly on the property;
-> > 2. In an `else:` case on the current `if: sm6375-dpu` (should have the
-> >    same effect as 1., afaik);
-> > 3. In a second `if:` case that lists all SoCS explicitly.
-> > 
-> > Since we don't have this information, I think option 3. is the right way
-> > to go, setting `maxItems: 6` for qcom,sm6125-dpu.
-> > 
-> > However, it is not yet understood why downstream is able to use the
-> > throttle clock without repercussions.
-> > 
-> >> We talk here about this patch.
-> > 
-> > We used this patch to discover that other SoCs are similarly
-> > unconstrained.  But if you don't want me to look into it, by all means!
-> > Saves me a lot of time.  So I will go with option 3.
-> > 
-> > - Marijn
+-- 
+tejun
