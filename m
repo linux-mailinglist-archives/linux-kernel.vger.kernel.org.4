@@ -2,176 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FD0E73E5C9
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 18:50:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38E9673E5D1
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 18:51:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbjFZQuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 12:50:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41304 "EHLO
+        id S230089AbjFZQvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 12:51:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230174AbjFZQuN (ORCPT
+        with ESMTP id S229947AbjFZQvm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 12:50:13 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9084E1B1;
-        Mon, 26 Jun 2023 09:50:12 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 4ED453200996;
-        Mon, 26 Jun 2023 12:50:11 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Mon, 26 Jun 2023 12:50:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1687798210; x=1687884610; bh=uc
-        Py9Z08T7ijcFZZufeshPLjrL+BVwngvheYN8Oakzw=; b=j/20MptmplyKB34SVX
-        tBO+SdHi4itCwDViM8PRk3dHwkW8JA21kelZfFa4ySd7DZ7lsv2eSZKpHb9yBcEp
-        sDAjk2JGHYZkX2e/yx4qdo0OR2grE2nMV1v0DoZ+0CgdjKDQGaEuAikOqVc3rOvo
-        4V96P9vwMz58CbjQg9KG533ojaEryTe8YG1w1oQHLOCDO1Hs21tzDoNdZVewMPhE
-        1hVdT5oQAJi9Z81vAXFZLkuUoLTzXaWntyOr3DzsP8aUUNMLrBFnRAgmzJZgnmGj
-        Qxp8zoPnPm3Ey5wFRCfOeQvhCucEZgZzEJH7pgVsVISdFz2xh49KMu7gKemOmeSa
-        eMkw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1687798210; x=1687884610; bh=ucPy9Z08T7ijc
-        FZZufeshPLjrL+BVwngvheYN8Oakzw=; b=ZgJRcCHRtbA7V3wVIHwQY4Q6cFsjk
-        WJA1FXLQyqu/GUQSg4iE9CAKfBFj/APedV20hlytPR+nhLC2GyCwR+wyR0f+qxsW
-        Cz0PdGdTEOs/UTwKMinbRlD0INDUrjXjtZ3h3bueGxqpAcYtY52Ts3UZrn3M6U8M
-        7Ys1VY/G4CGZTdkaJ+77PBqMClyaMmZHt4v+ptvfpY6LYgUQYmiAyL4TXisvo2KS
-        quotaEKEkYchNe3wTxBDhYXGyjNkD0uw7WssOHRZYGJHRFSJV17qCUSrJzBV0a0e
-        1myUVT1/djdZ0g78KXk97l3AT1ZlnjabvvLpBedztt1d5QgVaQtUiaf4A==
-X-ME-Sender: <xms:wcGZZGiaH_sYIpFHhad3zdvFPMgaqUenKTC3hkEkCYjdAs4Yvejm9A>
-    <xme:wcGZZHBKBCHlGLFOEcsijygBzA9migzvIR0Z1vAAJau5zY9Q0yJmmU5tY4GhmAdiV
-    r8sykaE11x6Uu4B2YQ>
-X-ME-Received: <xmr:wcGZZOGpVKD9G6eQyLfWfMZ3--U0oAn_P95Kn9NYWXaPtYOogLl2UcPX2xrUruaVALkA1lfk2M8NSAOda4XlZg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeehfedguddtvdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehgtdfsredttddvnecuhfhrohhmpeforgig
-    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
-    grthhtvghrnhepueevudehuedtkeevgfduveejueefvddvvefhjefglefgtdekveeugeet
-    kefgleefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:wcGZZPTm-1IICZVMuQcstfeM8RBOzm86Fn6MEnMUeGVtC1cYpFTGnA>
-    <xmx:wcGZZDxS9GMKZT1lZY2ZcQKDMlJc4MUSh2xZEzMl6z9_16tg7X11gg>
-    <xmx:wcGZZN6HH2m4iec7IO1Jq4C442VXqLdF14FMcGG68xcLCjK_7QiweA>
-    <xmx:wsGZZIrrQ52uUPAptBCy3rKYHhQqXwQXyYn-SOK9fHYKb5AgVYnefQ>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 26 Jun 2023 12:50:09 -0400 (EDT)
-Date:   Mon, 26 Jun 2023 18:50:00 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Frank Oltmanns <frank@oltmanns.dev>
-Cc:     Andre Przywara <andre.przywara@arm.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Roman Beranek <me@crly.cz>,
-        Samuel Holland <samuel@sholland.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH v2 1/2] clk: sunxi-ng: nkm: consider alternative parent
- rates when finding rate
-Message-ID: <lagot6cwcgdmdel7ce73tbmiyfalrlt56l4rx2fi3ibpso37zi@y7rkhou4tclm>
-References: <20230611090143.132257-1-frank@oltmanns.dev>
- <20230611090143.132257-2-frank@oltmanns.dev>
- <87edmh12s7.fsf@oltmanns.dev>
- <sfni3vehkhotsqrrirklhzrxzkcxzkq6nbtqokeab5if3jgm53@frh7z3iowsfe>
- <878rc7stuu.fsf@oltmanns.dev>
+        Mon, 26 Jun 2023 12:51:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E27D2E53;
+        Mon, 26 Jun 2023 09:51:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7924460EA5;
+        Mon, 26 Jun 2023 16:51:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D619DC433BA;
+        Mon, 26 Jun 2023 16:51:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687798299;
+        bh=qIUv4Fe+3WugCwIM1o3REC8yj3q1DXIElw4pe0hsbUs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Bbq3fEukXVqtCwxMNaTsFsz6mjT6vkG/i5TkDXhYxOSB7H0CKtw3CygtSjvCM+/Zl
+         m2sB6Zj7vROASggyXPb6g1zznnRyyq/1V9ml3TdJ5Ynle493UbdxbqXgjBpouwmreb
+         BacmKDMgIfWV96IjNN5v4Tp4tj8wnyFTbBFUKWAkNcYBvzsFMY1MYbIuP6Xb3ZRzr4
+         0157gTulF63YNzWY/Ztqj/VKdzLPnrMZHBrqN+jgWj3NT76SaMj6+PB7ewUrmWq2Ms
+         vd9jxbVqmBwqh2pBtTZSvF6JCKMZvykQrb7n1W+54/fzfK+ab0/TD3kd2MpwRvM9Te
+         HMtbzZxc78lkw==
+Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2b69a48368fso27071731fa.0;
+        Mon, 26 Jun 2023 09:51:39 -0700 (PDT)
+X-Gm-Message-State: AC+VfDyqwdfwJgdsZ8HXDwB8V6AetKjYWvCtsPugIIMseFrA/a36KDPl
+        T+Nv5XmWMo/ZRiNB9Q8esIPCZAgHSwboo95uIQ==
+X-Google-Smtp-Source: ACHHUZ6lj2aMlI2b0GlWuJAeCaXXp/x3AoWj41EMlST4hTYj9y8SSHwszu+D4w6NFOEutOWZC9gvpFKRQ3sk/XdWO60=
+X-Received: by 2002:a2e:8443:0:b0:2b1:edfe:8171 with SMTP id
+ u3-20020a2e8443000000b002b1edfe8171mr17644357ljh.36.1687798297868; Mon, 26
+ Jun 2023 09:51:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="u5p73wr2fp7f5ue6"
-Content-Disposition: inline
-In-Reply-To: <878rc7stuu.fsf@oltmanns.dev>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <1687368849-36722-1-git-send-email-lizhi.hou@amd.com>
+ <1687368849-36722-6-git-send-email-lizhi.hou@amd.com> <20230622122742.379a34d2@bootlin.com>
+In-Reply-To: <20230622122742.379a34d2@bootlin.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Mon, 26 Jun 2023 10:51:25 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKnShsngeq+9_Y24rQSCmAJ3uqP0kKB3UoG4+2TT8MOsQ@mail.gmail.com>
+Message-ID: <CAL_JsqKnShsngeq+9_Y24rQSCmAJ3uqP0kKB3UoG4+2TT8MOsQ@mail.gmail.com>
+Subject: Re: [PATCH V9 5/5] of: unittest: Add pci_dt_testdrv pci driver
+To:     Herve Codina <herve.codina@bootlin.com>,
+        Lizhi Hou <lizhi.hou@amd.com>
+Cc:     linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, max.zhen@amd.com,
+        sonal.santan@amd.com, stefano.stabellini@xilinx.com,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---u5p73wr2fp7f5ue6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Sun, Jun 25, 2023 at 12:45:45PM +0200, Frank Oltmanns wrote:
-> Hi Maxime,
->=20
-> On 2023-06-12 at 14:31:21 +0200, Maxime Ripard <maxime@cerno.tech> wrote:
-> > [[PGP Signed Part:Undecided]]
-> > On Mon, Jun 12, 2023 at 10:51:52AM +0200, Frank Oltmanns wrote:
-> >> > @@ -28,12 +68,17 @@ static unsigned long ccu_nkm_find_best(unsigned =
-long parent, unsigned long rate,
-> >> >  			for (_m =3D nkm->min_m; _m <=3D nkm->max_m; _m++) {
-> >>
-> >> According to the manual M/N has to be <=3D 3. Therefore we need a
-> >> different maximum value for the _m-for-loop:
-> >>
-> >>         unsigned long max_m =3D min(3 * _n, nkm->max_m);
-> >>         for (_m =3D nkm->min_m; _m <=3D max_m; _m++) {
-> >>
-> >> I suggest that I add an optional member max_mn_ratio to the structs
-> >> ccu_nkm and _ccu_nkm. Optional meaning: Ignore if 0.
+On Thu, Jun 22, 2023 at 4:27=E2=80=AFAM Herve Codina <herve.codina@bootlin.=
+com> wrote:
+>
+> Hi all,
+>
+> On Wed, 21 Jun 2023 10:34:09 -0700
+> Lizhi Hou <lizhi.hou@amd.com> wrote:
+>
+> > pci_dt_testdrv is bound to QEMU PCI Test Device. It reads
+> > overlay_pci_node fdt fragment and apply it to Test Device. Then it
+> > calls of_platform_default_populate() to populate the platform
+> > devices.
 > >
-> > Which workload is affected by this restriction?
-> >
->=20
-> Firstly, the restriction increases the minimum rate that pll-mipi of the
-> A64 SoC can use. The rate off pll-mipi is
->         pll-video0 * K * N / M
->=20
-> The Allwinner's user manual ([1], p.94) states that the maximum ratio of
-> M/N (note how numerator and denominator changed) is 3. So, looking back
-> to the original formula, the N / M part can be at most 1/3. That
-> effectively limits the minimum rate that pll-mipi can provide to
->         min(pll-video0) * 2 * 1 / 3
->=20
-> The minimum rate of pll-video0 is 192 MHz, i.e., the minimum rate for
-> pll-mipi becomes 128 MHz. Without the restriction, the minimum rate
-> currently is 24 MHz. It is my (albeit limited) understanding, that is no
-> real limitation because no panel would request such low rates. I should
-> also mention that Allwinner states in the user manual ([1], p. 94) that
-> the rate must be in the 500 MHz - 1.4 GHz range.
->=20
-> Secondly, it decreases the number of options for M for all N <=3D 6.
-> Therefore it reduces the number of meaningful NKM combinations from 275
-> (without the restriction) to 238. (With meaningful combinations, I mean
-> the combinations that result in a different rate for pll-mipi, e.g.,
-> K=3D2, M=3D1, N=3D2 is the same as K=3D4, M=3D1, N=3D1). The consequence =
-is that the
-> precision of pll-mipi is slightly reduced. Note, however, that this loss
-> of precision is more than offset by the option that pll-mipi can now
-> "freely" choose its parent rate.
->=20
-> In conclusion, I don't see any real world limitation that this
-> restriction introduces.
+> > Signed-off-by: Lizhi Hou <lizhi.hou@amd.com>
+> > ---
+> >  drivers/of/unittest-data/Makefile             |   3 +-
+> >  .../of/unittest-data/overlay_pci_node.dtso    |  22 ++
+> >  drivers/of/unittest.c                         | 188 ++++++++++++++++++
+> >  drivers/pci/quirks.c                          |   1 +
+> >  4 files changed, 213 insertions(+), 1 deletion(-)
+> >  create mode 100644 drivers/of/unittest-data/overlay_pci_node.dtso
+>
+> Did the test under QEMU with the instructions that Lizhi provided at
+>   https://github.com/houlz0507/xoclv2/blob/pci-dt-0329/pci-dt-patch-0329/=
+README
 
-If we want to go that way, I'd rather use a function that validates
-whether or not the current set of parameter is valid.
+Instructions need to be in the tree, not living somewhere else. Don't
+need the full QEMU setup, but just stating 'add "-device pci-testdev"'
+somewhere. Probably in the test failure messages would be the most
+helpful location.
 
-That way, we can express pretty much any constraints without
-special-casing the main structure too much.
+>
+> The unittest results were:
+> --- 8< ---
+> [    1.107378] ### dt-test ### pass of_unittest_lifecycle():3273
+> [    1.110068] ### dt-test ### pass of_unittest_pci_node():3909
+> [    1.110401] ### dt-test ### pass unittest_pci_probe():3840
+> [    1.110618] ### dt-test ### pass of_unittest_pci_node():3914
+> [    1.110759] ### dt-test ### pass of_unittest_pci_node_verify():3870
+> [    1.110894] ### dt-test ### pass of_unittest_pci_node_verify():3877
+> [    1.110985] ### dt-test ### pass of_unittest_pci_node_verify():3884
+> [    1.111088] ### dt-test ### pass of_unittest_pci_node():3926
+> [    1.111171] ### dt-test ### pass of_unittest_pci_node():3927
+> [    1.112056] ### dt-test ### pass of_unittest_pci_node_verify():3870
+> [    1.112201] ### dt-test ### pass of_unittest_pci_node_verify():3890
+> [    1.112326] ### dt-test ### pass of_unittest_pci_node_verify():3892
+> [    1.112489] ### dt-test ### pass of_unittest_check_tree_linkage():271
+> --- 8< ---
+>
+> Based on the test provided, no failure detected.
+>
+> Tested-by: Herve Codina <herve.codina@bootlin.com>
+>
+> Further more, I dumped the dt (PCI related nodes) available on the target=
+.
+> If someone needs to look at it:
 
-Maxime
+Thanks!
 
---u5p73wr2fp7f5ue6
-Content-Type: application/pgp-signature; name="signature.asc"
+> --- 8< ---
+> # cat /tmp/dt.dts
+> /dts-v1/;
+>
+> / {
+>         #address-cells =3D <0x02>;
+>         #size-cells =3D <0x02>;
+>         interrupt-parent =3D <0x8002>;
+>         compatible =3D "linux,dummy-virt";
+>         name =3D [00];
+> [...]
+>         pcie@10000000 {
+>                 #address-cells =3D <0x03>;
+>                 dma-coherent;
+>                 bus-range =3D <0x00 0xff>;
+>                 interrupt-map =3D <0x00 0x00 0x00 0x01 0x8002 0x00 0x00 0=
+x00 0x03 0x04 0x00 0x00 0x00 0x02 0x8002 0x00 0x00 0x00 0x04 0x04 0x00 0x00=
+ 0x00 0x03 0x8002 0x00 0x00 0x00 0x05 0x04 0x00 0x00 0x00 0x04 0x8002 0x00 =
+0x00 0x00 0x06 0x04 0x800 0x00 0x00 0x01 0x8002 0x00 0x00 0x00 0x04 0x04 0x=
+800 0x00 0x00 0x02 0x8002 0x00 0x00 0x00 0x05 0x04 0x800 0x00 0x00 0x03 0x8=
+002 0x00 0x00 0x00 0x06 0x04 0x800 0x00 0x00 0x04 0x8002 0x00 0x00 0x00 0x0=
+3 0x04 0x1000 0x00 0x00 0x01 0x8002 0x00 0x00 0x00 0x05 0x04 0x1000 0x00 0x=
+00 0x02 0x8002 0x00 0x00 0x00 0x06 0x04 0x1000 0x00 0x00 0x03 0x8002 0x00 0=
+x00 0x00 0x03 0x04 0x1000 0x00 0x00 0x04 0x8002 0x00 0x00 0x00 0x04 0x04 0x=
+1800 0x00 0x00 0x01 0x8002 0x00 0x00 0x00 0x06 0x04 0x1800 0x00 0x00 0x02 0=
+x8002 0x00 0x00 0x00 0x03 0x04 0x1800 0x00 0x00 0x03 0x8002 0x00 0x00 0x00 =
+0x04 0x04 0x1800 0x00 0x00 0x04 0x8002 0x00 0x00 0x00 0x05 0x04>;
+>                 #size-cells =3D <0x02>;
+>                 device_type =3D "pci";
+>                 interrupt-map-mask =3D <0x1800 0x00 0x00 0x07>;
+>                 compatible =3D "pci-host-ecam-generic";
+>                 ranges =3D <0x1000000 0x00 0x00 0x00 0x3eff0000 0x00 0x10=
+000 0x2000000 0x00 0x10000000 0x00 0x10000000 0x00 0x2eff0000 0x3000000 0x8=
+0 0x00 0x80 0x00 0x80 0x00>;
+>                 #interrupt-cells =3D <0x01>;
+>                 reg =3D <0x40 0x10000000 0x00 0x10000000>;
+>                 linux,pci-domain =3D <0x00>;
+>                 msi-parent =3D <0x8003>;
+>                 name =3D "pcie";
+>
+>                 pci@3,0 {
+>                         #address-cells =3D <0x03>;
+>                         #size-cells =3D <0x02>;
+>                         device_type =3D "pci";
+>                         compatible =3D "pci1b36,c\0pciclass,060400\0pcicl=
+ass,0604";
+>                         ranges =3D <0x81001800 0x00 0x1000 0x81001800 0x0=
+0 0x1000 0x00 0x2000 0x82001800 0x00 0x10000000 0x82001800 0x00 0x10000000 =
+0x00 0x200000 0xc3001800 0x80 0x00 0xc3001800 0x80 0x00 0x00 0x200000>;
+>                         reg =3D <0x1800 0xffff6d76 0xc2b23600 0xffff6d76 =
+0x3fbf63a0>;
 
------BEGIN PGP SIGNATURE-----
+Something looks wrong with the values here. I found this running it thru dt=
+c.
 
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZJnBuAAKCRDj7w1vZxhR
-xb80AQCpuUfjRsZDj4oX2zh/hfNYEzytGHWy4prrDYI0zK6udgD/eFjJYhGo55Cz
-pUxEKq7T3qrcxW6icqzfjmw8A+IR4gY=
-=ApE4
------END PGP SIGNATURE-----
+<stdout>: Warning (pci_device_reg): /pcie@10000000/pci@3,0:reg: PCI
+reg config space address cells 2 and 3 must be 0
 
---u5p73wr2fp7f5ue6--
+Rob
