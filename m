@@ -2,98 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D60773EE4E
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 00:06:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D43E73EE5B
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 00:07:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231660AbjFZWF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 18:05:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52194 "EHLO
+        id S229524AbjFZWH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 18:07:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231492AbjFZWFK (ORCPT
+        with ESMTP id S232051AbjFZWHE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 18:05:10 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F4B73C32
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 15:01:37 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-98e39784a85so356260966b.1
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 15:01:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1687816876; x=1690408876;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=4hqcaZFG4SkQyDioD67UaRG3sDwtH8eXvV9QXoJ/JhQ=;
-        b=Zp5DJ78C/Ed59HL5pMiVliC1IWjahxraA7plMufmte4mjwWjik6jxNOvsfKSaIcQYo
-         r0Lzh+8NhQo26DVuJw51/QuQaAiS7vqpAs8M86G4eR0+LR4XmthrrDr5XWXbR6IMHbjs
-         edu4mc7U8jh9A+1vK3/pROhIXvabBO1F+7jn0=
+        Mon, 26 Jun 2023 18:07:04 -0400
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA23D2120;
+        Mon, 26 Jun 2023 15:03:26 -0700 (PDT)
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-6682909acadso1810878b3a.3;
+        Mon, 26 Jun 2023 15:03:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687816876; x=1690408876;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4hqcaZFG4SkQyDioD67UaRG3sDwtH8eXvV9QXoJ/JhQ=;
-        b=LBxQFMD5T5Hi5sLBkysKE2ZD7VLcTt2DnlgWLT8PgKJjgHzBrAhejAVmxWimQlEJmM
-         oDQA2Y76BzCxnW3EV08+Kic6ZKvaLXqkp263YelSw9DglvOqXPGc2A08L6TRwQ2bspaD
-         HlwYYw3OazKtKJfLfQ3xEH49qdttTecdEjznDbnZvyKXv53tmiPHkW8KuzBY8rWgPsZu
-         qhJXqgsuNyrhNdFx2iw9xFxcDHgjeXcaV+tszJahljaeRZY0RBscb3/+Rg5NYVlfMynA
-         6/CzJyFLkDNCE2LDrbCbJvOn9+MvsyFNm69gvsEtUNCqlU+x2yHTbgi+J9VQ7uJvFyQP
-         nJtA==
-X-Gm-Message-State: AC+VfDx4FB2hoRR5YJomJGFjtmDi5u07j4L50/1rx2prmJ/jPfqEKlMB
-        Dhmwra0mdrAldQW5w87ki2rjcLkPwicbrRanFuAZX6Pw
-X-Google-Smtp-Source: ACHHUZ6j7gUDepxR4ObYfVVEZExC867W7e4btWQYBMtB3GvY+/emthB5blgJKpILG/QkNkFBYeKnOg==
-X-Received: by 2002:a17:907:94ce:b0:988:f2ad:73f3 with SMTP id dn14-20020a17090794ce00b00988f2ad73f3mr18852797ejc.32.1687816876157;
-        Mon, 26 Jun 2023 15:01:16 -0700 (PDT)
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com. [209.85.208.50])
-        by smtp.gmail.com with ESMTPSA id lw24-20020a170906bcd800b0099027b40d88sm1996943ejb.88.2023.06.26.15.01.15
-        for <linux-kernel@vger.kernel.org>
+        d=1e100.net; s=20221208; t=1687816975; x=1690408975;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PCoCOYjDLNke2rP949BWReOPXfmEB68n0cAwCJbJEkg=;
+        b=KpOAlT4H6P0NesfVSPb/pCXK3FQHBu8fe4XyiHR3qBx4Mqdl1e7XRi4Juy3C3LNxeR
+         Fi2FebYHqCU7X4BCxfXyifsrQGjP2fipd2DyPJZw6z0xkczGIZCJ/h8YXZDbqQH+z9rW
+         bR6ajyT077kQ5NLSP2heONC8XEr8mZX6naQIqnDcfVv6EAj3N+iZyuuGqiwwZ3YhWYnw
+         nAz+Wy7WiNuRbqHM7vxfORRICCN6CbZXiIwFxB+2Mlf3Xg+8QeoWsWvyQG1zErJZUdJT
+         igRNz3S3pGggNt7tUFFnGFtg89T2pHrdSp0nQ9/GuhUwIxnn5O8D/PMKcKah61rPQqh+
+         mkWw==
+X-Gm-Message-State: AC+VfDxFoYB5o5vT2zrk9yt4MFbfZnmLofaEixcQcBV1rBWbq2YSQEsF
+        QBaOjusIzHR/QTGLvULrUbE=
+X-Google-Smtp-Source: ACHHUZ6wh2CqCVGxZ1aIa20hYMpt2E7HkVeKdNjheVjuSlz5ylPO+mTQOT+GjYxkmu3HBge04PxP0Q==
+X-Received: by 2002:a05:6a00:2294:b0:66a:359f:6f6e with SMTP id f20-20020a056a00229400b0066a359f6f6emr15809560pfe.19.1687816975000;
+        Mon, 26 Jun 2023 15:02:55 -0700 (PDT)
+Received: from [192.168.3.219] ([98.51.102.78])
+        by smtp.gmail.com with ESMTPSA id g26-20020a62e31a000000b0065016fffc81sm4191122pfh.216.2023.06.26.15.02.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Jun 2023 15:01:15 -0700 (PDT)
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-51cff235226so5308999a12.0
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 15:01:15 -0700 (PDT)
-X-Received: by 2002:aa7:d9d7:0:b0:51d:914a:9f3d with SMTP id
- v23-20020aa7d9d7000000b0051d914a9f3dmr5578524eds.10.1687816875064; Mon, 26
- Jun 2023 15:01:15 -0700 (PDT)
+        Mon, 26 Jun 2023 15:02:54 -0700 (PDT)
+Message-ID: <3a330a82-6101-72af-197f-4ac0e5d2136f@acm.org>
+Date:   Mon, 26 Jun 2023 15:02:52 -0700
 MIME-Version: 1.0
-References: <168778150975.3634408.5562070824299155127.tglx@vps.praguecc.cz> <168778151644.3634408.18311962903658740097.tglx@vps.praguecc.cz>
-In-Reply-To: <168778151644.3634408.18311962903658740097.tglx@vps.praguecc.cz>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 26 Jun 2023 15:00:58 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgoVt9izQi2iA3F8PZbnmT+r4CcqaHp+FhEozSj2D=UFg@mail.gmail.com>
-Message-ID: <CAHk-=wgoVt9izQi2iA3F8PZbnmT+r4CcqaHp+FhEozSj2D=UFg@mail.gmail.com>
-Subject: Re: [GIT pull] x86/core for v6.5-rc1
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v3] docs: target: Remove useless tcm_mod_builder.py
+Content-Language: en-US
+To:     Rong Tao <rtoax@foxmail.com>, martin.petersen@oracle.com,
+        corbet@lwn.net
+Cc:     rongtao@cestc.cn,
+        "open list:SCSI TARGET SUBSYSTEM" <linux-scsi@vger.kernel.org>,
+        "open list:SCSI TARGET SUBSYSTEM" <target-devel@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <tencent_58D7935159C421036421B42CD04B0A959207@qq.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <tencent_58D7935159C421036421B42CD04B0A959207@qq.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 26 Jun 2023 at 05:14, Thomas Gleixner <tglx@linutronix.de> wrote:
->
-> This conflicts with smp/core and x86/boot. The recommended ordering of
-> merging these three branches is smp/core, x86/boot, x86/core.
->
-> The x86/boot and final x86/core merge have both subtle conflicts. I've
-> pushed out the following tags:
->
->    git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git merge_smp_core_x86_boot_for_6_5
->    git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git merge_smp_core_x86_boot_x86_core_for_6_5
->
-> for your conveniance to check against.
+On 6/25/23 17:51, Rong Tao wrote:
+> This script is not used and requires additional development to sync with
+> the SCSI target code.
 
-Bah. I read this after I had already done the merges in a different
-order, and my result is a bit different from your merges.
-
-All my differences seem to be benign, though. The main one seems to be
-that I kept a preempt_disable/preempt_enable pair in
-wakeup_secondary_cpu_via_init(), the others seem to be just comments
-and declaration ordering changes.
-
-Still, you might want to double-check the end result.
-
-                   Linus
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
