@@ -2,96 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 223C973DBBF
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 11:50:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66B3173DBC5
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 11:51:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230139AbjFZJuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 05:50:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47360 "EHLO
+        id S229670AbjFZJvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 05:51:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229828AbjFZJuH (ORCPT
+        with ESMTP id S229541AbjFZJve (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 05:50:07 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A108CAF
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 02:50:05 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4f86dbce369so3873928e87.0
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 02:50:05 -0700 (PDT)
+        Mon, 26 Jun 2023 05:51:34 -0400
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58F689F
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 02:51:31 -0700 (PDT)
+Received: by mail-qt1-x829.google.com with SMTP id d75a77b69052e-40097b0a124so17443311cf.0
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 02:51:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687773004; x=1690365004;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=r48qhWy74bZBBa7bMcUvYWqc1h0+KVW4IUCOHacmlpM=;
-        b=qV1mIEwHOGw5gY7390ETBIZaF9GKYobrrLXpVWevs0+byXiuoEJ29jFm+B8QBsbsdS
-         je7AB1mQGEjNSC6D1F4+N4MDLnvU4O3A2+1cggsJ9iHtgYJNQtpdyp9iaLVjfl+Ni8kG
-         hjMr+lBP0T7MJ9Xd5ZlNRrJR7Be6IwtJcSaCKgy5YggT8aa4LclwAPufocODFHNFJl28
-         +pPg90W4dj/VcooFn0qJAuCrfRPKnkJgIwgVh1XAdDhLKOaO/CN1IR2blqHpCi0cTgA4
-         ywYwlcltNY6GyxCUt8Fd6HywhS9Ogi7l/RCpndLwfapJdGbd0ABGJ21JlHCBQQaqW1WU
-         HL6A==
+        d=linaro.org; s=google; t=1687773090; x=1690365090;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=wGW+DIgS9CWK2N0BnzgUdE8nx3ZQWbzDbAeMKQmOQr4=;
+        b=pOs4+sT+bkINnS/Qp7vbPVDPv2V40ihC2yeclx54KDjAQhW2cD1l+t7uHMEoWK1TJo
+         fv5NbFkQd9oOe80HxHLHMsOGRPo/FbXVBXD/Cc1s6xbOm60v8Xtm12KT+P+46Jau2fEW
+         I045Xp5zB7XMZw58/5RCyvFHQS6grngsqXpvpBJUUWLjiI8lUFjvARnWcH/iu5nYfajK
+         82rJ8k6tn9HqPHeCZ2gGfXxpZ2Yd5VxyGCznVhqj684aZpHevqGwzx9k+UzVbm4gLyka
+         G0b0gej4PzvJZwuVRJLJN0Q5oUYK1xCJ3N/HexSu1HBLYnaXYXxAAjBIQPxVy5Z/vkKE
+         IBgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687773004; x=1690365004;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=r48qhWy74bZBBa7bMcUvYWqc1h0+KVW4IUCOHacmlpM=;
-        b=fdOyfuWnmwvHLB0YbLnYhiItowIAr2vAoSJg1EV4OkH0rg06jauYjLaf16URrxNnP9
-         q8aspWEVydsO7WlTyxL/rrwSMM996GnyUKRpsdvtfjUvIfjjog8KCJiX2NV8tD1Y6fnG
-         U4i7wRFLig3KN8vTkioZtmn4hoI00f+f6gn55+PNY1P+2ijuaS8ixUswqcbDP89kba1y
-         5yE45rXrmWH8u57K0T6vKGRE6QIW8PsbkqejHD0Db9GsAGFPmjveFPAiKUB7rEzBdWha
-         dlKQTw54VREPb8BscWlZWowYMc8WdTPRAut+UeLb23YYNovzeAfPOHp/95C5SsWarlhe
-         BCBQ==
-X-Gm-Message-State: AC+VfDyTFAIiz9234Una6dqtF8f/oacSTI/kO9Wweq1TB4SJY8r6AVtE
-        Xurabc31tRkF24rTHMZXrpzGbQ==
-X-Google-Smtp-Source: ACHHUZ7hTovAqUp5UnE6VLhes9zqA0lA31zfJhvcxKrA/PaCx+BCGRop8CXI/UCD382peuIof/GzBw==
-X-Received: by 2002:a19:3813:0:b0:4f8:7697:5207 with SMTP id f19-20020a193813000000b004f876975207mr11276238lfa.23.1687773003856;
-        Mon, 26 Jun 2023 02:50:03 -0700 (PDT)
-Received: from [192.168.1.101] (abyk179.neoplus.adsl.tpnet.pl. [83.9.30.179])
-        by smtp.gmail.com with ESMTPSA id b2-20020a056512024200b004f87726f531sm1033542lfo.174.2023.06.26.02.50.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Jun 2023 02:50:03 -0700 (PDT)
-Message-ID: <72915ade-7bd5-2f82-b294-e96fd1e71569@linaro.org>
-Date:   Mon, 26 Jun 2023 11:50:01 +0200
+        d=1e100.net; s=20221208; t=1687773090; x=1690365090;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wGW+DIgS9CWK2N0BnzgUdE8nx3ZQWbzDbAeMKQmOQr4=;
+        b=T0HZD9XPV0FgJzkmg/rizMlIkicvPWljhH6y302J2P/fh3pATLVOFYDAaTJpV07sk4
+         dpPNxWv+ldD/JVByiJTzXfLUPgVjnMjYHoqATCzwQBVfTOplndbF//DGNnJkGHgSNN/M
+         oPUEIt5k2iRN7wuypUjMcD6Fo+vGz5hbFnDeL6vf5/2SBsg+WuOWwfAFxvJaEw+K6Pl4
+         Q6Vb4Xem2GRj1LTBfpqHtSUm3tIDK2zeuiTrsQw0ZHX7xquOORimZOQsYWDSzB9PBjTZ
+         jnzWE9dLVYOA2obBuV2aOepQ//dfl54CNYU0/sUJAtG77mkrlceS68TNWKJuL3377yxK
+         Qctw==
+X-Gm-Message-State: AC+VfDxzjf9+IEuknxZ4D7m5BRntJanXGlcI4GIAwxIiyo7nPmioe5jM
+        POR6cw2qe22FVRfp3Ej8jGh/Q921nTtvD5R9oERMIQ==
+X-Google-Smtp-Source: ACHHUZ5X/UJpmXJIJc6ZXppn28jsGMTWM4wUsAypeexxOb7BxDFv3oIqJNK7ECnQ0vf/in1F+aplIYki5kCUQchfyes=
+X-Received: by 2002:ac8:5bd1:0:b0:400:790c:c5db with SMTP id
+ b17-20020ac85bd1000000b00400790cc5dbmr13655588qtb.30.1687773090388; Mon, 26
+ Jun 2023 02:51:30 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 11/15] drm/msm/dsi: Add 14nm phy configuration for SM6125
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, Lux Aliaga <they@mint.lgbt>
-References: <20230624-sm6125-dpu-v1-0-1d5a638cebf2@somainline.org>
- <20230624-sm6125-dpu-v1-11-1d5a638cebf2@somainline.org>
- <18d969bb-69b5-0d42-1518-e8a3b92859b7@linaro.org>
- <sdz26twflxyew2ejqkpqpe4eaz57hcsphi2so2wjndqxsh3q5c@diksxdwico33>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <sdz26twflxyew2ejqkpqpe4eaz57hcsphi2so2wjndqxsh3q5c@diksxdwico33>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <20220726083257.1730630-1-martin.kepplinger@puri.sm>
+ <20220726083257.1730630-2-martin.kepplinger@puri.sm> <CAPDyKFrLLw=y9+t3f_bOH2mw2NVDGJxKE5=+XHY7C6SUzLzUDg@mail.gmail.com>
+ <d1db07c8ca57c72b4f0820fcb6832dd7e4501055.camel@puri.sm> <CAPDyKFpz0HG_AzCkj8LkyisO1fjJiiyX2QjKTWDTLng2O7PDgA@mail.gmail.com>
+ <77baacb930bf2ba1a65cb1515e6795b48d2d4ed5.camel@puri.sm> <CAPDyKFoS=E3c9XWWCaG2byMm-3nvvW5jXS0X7Bh-NK_msTUykQ@mail.gmail.com>
+ <3bbba64dc4fd9ef37fb937f5176b1ef50b8b2d73.camel@puri.sm> <CAPDyKFqRAo+r0kW3H1ipu0trX0FC6EnG-PpFvXD7c1WmfPhtSA@mail.gmail.com>
+ <1dec928bee02d46688a7041d64f2d951a44f8a9e.camel@puri.sm>
+In-Reply-To: <1dec928bee02d46688a7041d64f2d951a44f8a9e.camel@puri.sm>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 26 Jun 2023 11:50:54 +0200
+Message-ID: <CAPDyKFo=j6r+LA06RjD8=v72LK3voK9APR6rNFN+q1Xc_tHn-A@mail.gmail.com>
+Subject: Re: [PATCH v6 1/2] power: domain: handle genpd correctly when needing interrupts
+To:     Martin Kepplinger <martin.kepplinger@puri.sm>
+Cc:     rafael@kernel.org, khilman@kernel.org, robh@kernel.org,
+        krzysztof.kozlowski@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, festevam@gmail.com, pavel@ucw.cz,
+        kernel@puri.sm, linux-imx@nxp.com, broonie@kernel.org,
+        l.stach@pengutronix.de, aford173@gmail.com,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,99 +77,226 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25.06.2023 22:23, Marijn Suijten wrote:
-> On 2023-06-24 03:49:25, Konrad Dybcio wrote:
->> On 24.06.2023 02:41, Marijn Suijten wrote:
->>> SM6125 features only a single PHY (despite a secondary PHY PLL source
->>> being available to the disp_cc_mdss_pclk0_clk_src clock), and downstream
->>> sources for this "trinket" SoC do not define the typical "vcca"
->>> regulator to be available nor used.
->>>
->>> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
->>> ---
->> The introduced ops are identical to 2290, modulo regulator..
-> 
-> Sure, I can create a "drop unused regulators from 14nm qcm2290 config"
-> and a second "reuse qcm2290 14nm dsi phy for sm6125" patch, instead of
-> this one.
-Please do.
+On Wed, 21 Jun 2023 at 20:20, Martin Kepplinger
+<martin.kepplinger@puri.sm> wrote:
+>
+> Am Freitag, dem 23.09.2022 um 15:55 +0200 schrieb Ulf Hansson:
+> > On Thu, 25 Aug 2022 at 09:06, Martin Kepplinger
+> > <martin.kepplinger@puri.sm> wrote:
+> > >
+> > > Am Mittwoch, dem 24.08.2022 um 15:30 +0200 schrieb Ulf Hansson:
+> > > > On Mon, 22 Aug 2022 at 10:38, Martin Kepplinger
+> > > > <martin.kepplinger@puri.sm> wrote:
+> > > > >
+> > > > > Am Freitag, dem 19.08.2022 um 16:53 +0200 schrieb Ulf Hansson:
+> > > > > > On Fri, 19 Aug 2022 at 11:17, Martin Kepplinger
+> > > > > > <martin.kepplinger@puri.sm> wrote:
+> > > > > > >
+> > > > > > > Am Dienstag, dem 26.07.2022 um 17:07 +0200 schrieb Ulf
+> > > > > > > Hansson:
+> > > > > > > > On Tue, 26 Jul 2022 at 10:33, Martin Kepplinger
+> > > > > > > > <martin.kepplinger@puri.sm> wrote:
+> > > > > > > > >
+> > > > > > > > > If for example the power-domains' power-supply node
+> > > > > > > > > (regulator)
+> > > > > > > > > needs
+> > > > > > > > > interrupts to work, the current setup with noirq
+> > > > > > > > > callbacks
+> > > > > > > > > cannot
+> > > > > > > > > work; for example a pmic regulator on i2c, when
+> > > > > > > > > suspending,
+> > > > > > > > > usually
+> > > > > > > > > already
+> > > > > > > > > times out during suspend_noirq:
+> > > > > > > > >
+> > > > > > > > > [   41.024193] buck4: failed to disable: -ETIMEDOUT
+> > > > > > > > >
+> > > > > > > > > So fix system suspend and resume for these power-
+> > > > > > > > > domains by
+> > > > > > > > > using
+> > > > > > > > > the
+> > > > > > > > > "outer" suspend/resume callbacks instead. Tested on the
+> > > > > > > > > imx8mq-
+> > > > > > > > > librem5 board,
+> > > > > > > > > but by looking at the dts, this will fix imx8mq-evk and
+> > > > > > > > > possibly
+> > > > > > > > > many other
+> > > > > > > > > boards too.
+> > > > > > > > >
+> > > > > > > > > This is designed so that genpd providers just say "this
+> > > > > > > > > genpd
+> > > > > > > > > needs
+> > > > > > > > > interrupts" (by setting the flag) - without implying an
+> > > > > > > > > implementation.
+> > > > > > > > >
+> > > > > > > > > Initially system suspend problems had been discussed at
+> > > > > > > > > https://lore.kernel.org/linux-arm-kernel/20211002005954.1367653-8-l.stach@pengutronix.de/
+> > > > > > > > > which led to discussing the pmic that contains the
+> > > > > > > > > regulators
+> > > > > > > > > which
+> > > > > > > > > serve as power-domain power-supplies:
+> > > > > > > > > https://lore.kernel.org/linux-pm/573166b75e524517782471c2b7f96e03fd93d175.camel@puri.sm/T/
+> > > > > > > > >
+> > > > > > > > > Signed-off-by: Martin Kepplinger
+> > > > > > > > > <martin.kepplinger@puri.sm>
+> > > > > > > > > ---
+> > > > > > > > >  drivers/base/power/domain.c | 13 +++++++++++--
+> > > > > > > > >  include/linux/pm_domain.h   |  5 +++++
+> > > > > > > > >  2 files changed, 16 insertions(+), 2 deletions(-)
+> > > > > > > > >
+> > > > > > > > > diff --git a/drivers/base/power/domain.c
+> > > > > > > > > b/drivers/base/power/domain.c
+> > > > > > > > > index 5a2e0232862e..58376752a4de 100644
+> > > > > > > > > --- a/drivers/base/power/domain.c
+> > > > > > > > > +++ b/drivers/base/power/domain.c
+> > > > > > > > > @@ -130,6 +130,7 @@ static const struct genpd_lock_ops
+> > > > > > > > > genpd_spin_ops = {
+> > > > > > > > >  #define genpd_is_active_wakeup(genpd)  (genpd->flags &
+> > > > > > > > > GENPD_FLAG_ACTIVE_WAKEUP)
+> > > > > > > > >  #define genpd_is_cpu_domain(genpd)     (genpd->flags &
+> > > > > > > > > GENPD_FLAG_CPU_DOMAIN)
+> > > > > > > > >  #define genpd_is_rpm_always_on(genpd)  (genpd->flags &
+> > > > > > > > > GENPD_FLAG_RPM_ALWAYS_ON)
+> > > > > > > > > +#define genpd_irq_on(genpd)            (genpd->flags &
+> > > > > > > > > GENPD_FLAG_IRQ_ON)
+> > > > > > > > >
+> > > > > > > > >  static inline bool irq_safe_dev_in_sleep_domain(struct
+> > > > > > > > > device
+> > > > > > > > > *dev,
+> > > > > > > > >                 const struct generic_pm_domain *genpd)
+> > > > > > > > > @@ -2065,8 +2066,15 @@ int pm_genpd_init(struct
+> > > > > > > > > generic_pm_domain
+> > > > > > > > > *genpd,
+> > > > > > > > >         genpd->domain.ops.runtime_suspend =
+> > > > > > > > > genpd_runtime_suspend;
+> > > > > > > > >         genpd->domain.ops.runtime_resume =
+> > > > > > > > > genpd_runtime_resume;
+> > > > > > > > >         genpd->domain.ops.prepare = genpd_prepare;
+> > > > > > > > > -       genpd->domain.ops.suspend_noirq =
+> > > > > > > > > genpd_suspend_noirq;
+> > > > > > > > > -       genpd->domain.ops.resume_noirq =
+> > > > > > > > > genpd_resume_noirq;
+> > > > > > > > > +
+> > > > > > > > > +       if (genpd_irq_on(genpd)) {
+> > > > > > > > > +               genpd->domain.ops.suspend =
+> > > > > > > > > genpd_suspend_noirq;
+> > > > > > > > > +               genpd->domain.ops.resume =
+> > > > > > > > > genpd_resume_noirq;
+> > > > > > > > > +       } else {
+> > > > > > > > > +               genpd->domain.ops.suspend_noirq =
+> > > > > > > > > genpd_suspend_noirq;
+> > > > > > > > > +               genpd->domain.ops.resume_noirq =
+> > > > > > > > > genpd_resume_noirq;
+> > > > > > > >
+> > > > > > > > As we discussed previously, I am thinking that it may be
+> > > > > > > > better
+> > > > > > > > to
+> > > > > > > > move to using genpd->domain.ops.suspend_late and
+> > > > > > > > genpd->domain.ops.resume_early instead.
+> > > > > > >
+> > > > > > > Wouldn't that better be a separate patch (on top)? Do you
+> > > > > > > really
+> > > > > > > want
+> > > > > > > me to change the current behaviour (default case) to from
+> > > > > > > noirq
+> > > > > > > to
+> > > > > > > late? Then I'll resend this series with such a patch added.
+> > > > > >
+> > > > > > Sorry, I wasn't clear enough, the default behaviour should
+> > > > > > remain
+> > > > > > as
+> > > > > > is.
+> > > > > >
+> > > > > > What I meant was, when genpd_irq_on() is true, we should use
+> > > > > > the
+> > > > > > genpd->domain.ops.suspend_late and genpd-
+> > > > > > > domain.ops.resume_early.
+> > > > >
+> > > > > Testing that shows that this isn't working. I can provide the
+> > > > > logs
+> > > > > later, but suspend fails and I think it makes sense:
+> > > > > "suspend_late"
+> > > > > is
+> > > > > simply already too late when i2c (or any needed driver) uses
+> > > > > "suspend".
+> > > >
+> > > > Okay, I see.
+> > > >
+> > > > The reason why I suggested moving the callbacks to
+> > > > "suspend_late",
+> > > > was
+> > > > that I was worried that some of the attached devices to genpd
+> > > > could
+> > > > use "suspend_late" themselves. This is the case for some drivers
+> > > > for
+> > > > DMA/clock/gpio/pinctrl-controllers, for example. That said, I am
+> > > > curious to look at the DT files for the platform you are running,
+> > > > would you mind giving me a pointer?
+> > >
+> > > I'm running
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/boot/dts/freescale/imx8mq-librem5.dtsi
+> > > with these (small) patches on top:
+> > > https://source.puri.sm/martin.kepplinger/linux-next/-/commits/5.19.3/librem5
+> >
+> > Thanks for sharing the information!
+> >
+> > >
+> > > >
+> > > > So, this made me think about this a bit more. In the end, just
+> > > > using
+> > > > different levels (suspend, suspend_late, suspend_noirq) of
+> > > > callbacks
+> > > > are just papering over the real *dependency* problem.
+> > >
+> > > true, it doesn't feel like a stable solution.
+> > >
+> > > >
+> > > > What we need for the genpd provider driver, is to be asked to be
+> > > > suspended under the following conditions:
+> > > > 1. All consumer devices (and child-domains) for its corresponding
+> > > > PM
+> > > > domain have been suspended.
+> > > > 2. All its supplier devices supplies must remain resumed, until
+> > > > the
+> > > > genpd provider has been suspended.
+> > > >
+> > > > Please allow me a few more days to think in more detail about
+> > > > this.
+> > >
+> > > Thanks a lot for thinking about this!
+> >
+> > I have made some more thinking, but it's been a busy period for me,
+> > so
+> > unfortunately I need some additional time (another week). It seems
+> > like I also need to do some prototyping, to convince myself about the
+> > approach.
+> >
+> > So, my apologies for the delay!
+> >
+> > Kind regards
+> > Uffe
+>
+> Hi Ulf and all interested,
+>
+> Has there been any development regarding this bug? - genpd that needs
+> interrupts for power-on/off being run in noirq phases - you remember
+> it? it's been a while :)
 
-> 
->> But the regulator is absent on both (VDD_MX powers it instead), so
-> 
-> In the DT patch you requested me to use CX instead of MX... Which one is
-> it?
-You're confusing DSI host with DSI PHY.
+Yes, sorry for the no-progress on my side. Except for some thinking
+and drawing, I don't have an update.
 
-> 
-> Also note that I moved it from DSI PHY to DSI0 because that's where the
-> rpmpd opps reside.
-Both of them need their separate power lines to be active!
+Although, to clarify, I have not forgotten about it. It's in my TODO
+list of prioritized things. I just need to complete a couple other
+things before I come to this and I will certainly keep you in the loop
+if I post something.
 
-Also, OPP is not necessary for genpd activation.
+>
+> Anyway I still run these patches and while it's a reasonable workaround
+> IMO, I wanted to check whether you are aware of anything that might
+> solve this. (or maybe it *is* solved and I simply overlooked because my
+> patches still apply?)
 
-Konrad
-> 
-> - Marijn
-> 
->> feel free to clean that up and reuse it ;)
-> 
->>
->> Konrad
->>>  drivers/gpu/drm/msm/dsi/phy/dsi_phy.c      |  2 ++
->>>  drivers/gpu/drm/msm/dsi/phy/dsi_phy.h      |  1 +
->>>  drivers/gpu/drm/msm/dsi/phy/dsi_phy_14nm.c | 15 +++++++++++++++
->>>  3 files changed, 18 insertions(+)
->>>
->>> diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
->>> index 9d5795c58a98..8688ed502dcf 100644
->>> --- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
->>> +++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
->>> @@ -559,6 +559,8 @@ static const struct of_device_id dsi_phy_dt_match[] = {
->>>  	  .data = &dsi_phy_14nm_2290_cfgs },
->>>  	{ .compatible = "qcom,dsi-phy-14nm-660",
->>>  	  .data = &dsi_phy_14nm_660_cfgs },
->>> +	{ .compatible = "qcom,dsi-phy-14nm-6125",
->>> +	  .data = &dsi_phy_14nm_6125_cfgs },
->>>  	{ .compatible = "qcom,dsi-phy-14nm-8953",
->>>  	  .data = &dsi_phy_14nm_8953_cfgs },
->>>  #endif
->>> diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.h b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.h
->>> index 8b640d174785..ebf915f5e6c6 100644
->>> --- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.h
->>> +++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.h
->>> @@ -52,6 +52,7 @@ extern const struct msm_dsi_phy_cfg dsi_phy_20nm_cfgs;
->>>  extern const struct msm_dsi_phy_cfg dsi_phy_14nm_cfgs;
->>>  extern const struct msm_dsi_phy_cfg dsi_phy_14nm_660_cfgs;
->>>  extern const struct msm_dsi_phy_cfg dsi_phy_14nm_2290_cfgs;
->>> +extern const struct msm_dsi_phy_cfg dsi_phy_14nm_6125_cfgs;
->>>  extern const struct msm_dsi_phy_cfg dsi_phy_14nm_8953_cfgs;
->>>  extern const struct msm_dsi_phy_cfg dsi_phy_10nm_cfgs;
->>>  extern const struct msm_dsi_phy_cfg dsi_phy_10nm_8998_cfgs;
->>> diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_14nm.c b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_14nm.c
->>> index 3ce45b023e63..5d43c9ec69ae 100644
->>> --- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_14nm.c
->>> +++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_14nm.c
->>> @@ -1068,6 +1068,21 @@ const struct msm_dsi_phy_cfg dsi_phy_14nm_660_cfgs = {
->>>  	.num_dsi_phy = 2,
->>>  };
->>>  
->>> +const struct msm_dsi_phy_cfg dsi_phy_14nm_6125_cfgs = {
->>> +	.has_phy_lane = true,
->>> +	.ops = {
->>> +		.enable = dsi_14nm_phy_enable,
->>> +		.disable = dsi_14nm_phy_disable,
->>> +		.pll_init = dsi_pll_14nm_init,
->>> +		.save_pll_state = dsi_14nm_pll_save_state,
->>> +		.restore_pll_state = dsi_14nm_pll_restore_state,
->>> +	},
->>> +	.min_pll_rate = VCO_MIN_RATE,
->>> +	.max_pll_rate = VCO_MAX_RATE,
->>> +	.io_start = { 0x5e94400 },
->>> +	.num_dsi_phy = 1,
->>> +};
->>> +
->>>  const struct msm_dsi_phy_cfg dsi_phy_14nm_8953_cfgs = {
->>>  	.has_phy_lane = true,
->>>  	.regulator_data = dsi_phy_14nm_17mA_regulators,
->>>
+The problem is still there, unfortunately.
+
+Kind regards
+Uffe
