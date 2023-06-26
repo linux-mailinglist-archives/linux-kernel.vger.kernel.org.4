@@ -2,95 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A0DB73EF16
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 01:11:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DF7E73EF17
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 01:15:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229621AbjFZXLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 19:11:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56700 "EHLO
+        id S229693AbjFZXPA convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 26 Jun 2023 19:15:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjFZXLd (ORCPT
+        with ESMTP id S229459AbjFZXO7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 19:11:33 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2872210FE
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 16:11:32 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1b816d30140so918995ad.0
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 16:11:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1687821091; x=1690413091;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=4CPuQ5HYLfaP9JIMxrmKe7n4kIln48bN6Na9rBaA1Bc=;
-        b=Mf0wsMXIpm+R4t+5rDb4/Ck9+QwFYPT5/nb527wI4PfBMEcQfxvBCiige+M1YtFTRN
-         J0CQ2au30YqMbKQaRVsev/noR8phdU1Lo3k0kbnQureJDjYEdS9d2eN8bmP9rUmMhGS6
-         xhzJTI/UH6e6ACuOjOPe4mO6sDURwj8BiNepVRXlEZhZ30/2dEvQimSnLoFEgJ0LvqTb
-         rvW8FSRDSS7ITjan3+RKrbrFgGUc3WzRXFP76knXhXas+Omx6gzDzaSLlF0KOP1Ml+G3
-         B5TaEzZjqVQwLEcK8rOAV4leSVVbwWNpCohZzhYcg6fL++KtaN+0NZ8FkyJQ7dqXQafa
-         OTyQ==
+        Mon, 26 Jun 2023 19:14:59 -0400
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB42F10D2;
+        Mon, 26 Jun 2023 16:14:57 -0700 (PDT)
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-5701e8f2b79so41583987b3.0;
+        Mon, 26 Jun 2023 16:14:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687821091; x=1690413091;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4CPuQ5HYLfaP9JIMxrmKe7n4kIln48bN6Na9rBaA1Bc=;
-        b=KVOg2NOZWnbo87eEeYK+4q6gDgTZ3dRvIq+0BRSGzBtCPOzGRKUje95IAbCoPzhiu8
-         raVVPXBq4RGvQ9eZa9EX6cdLA2DCch02WmvouM6avr9u1wJOqUHtttaEO91z1Xly9F+j
-         U7ft8mkQz4ha+35PI9MvTO59ITHsEZH8dE1C2VD9C2ym5CSnJuF6ZsF3vq5jDvIJF5WZ
-         toXcPBnSy3r/awmYNadqebdNIYoCgv2cxbTIQZ1mwi7QhgYdgtKoHjk7Z+4YOxpsWNei
-         D7wzKJXgVXGUI1ePh43nSRbmKuYLLpZ6waDQ9Z6UCRDKMac8OC9Q4gLMLTT76iVD8QMb
-         kEOw==
-X-Gm-Message-State: AC+VfDzVCgAHBg1voYEyIops1zVbZ9XwsQbEgeL7w8ZxCDBHFV2Tkbp8
-        B5tkU9PBlRWkhevTunHyHR1EYg==
-X-Google-Smtp-Source: ACHHUZ6v/dvpLfopQ3/7RYntaktPdFwjv+AD316VSdGbHxUx/tr7wrQMmGiHs7lMRnYCwERDpyVAaw==
-X-Received: by 2002:a17:902:f984:b0:1b8:811:b05a with SMTP id ky4-20020a170902f98400b001b80811b05amr3995296plb.6.1687821091356;
-        Mon, 26 Jun 2023 16:11:31 -0700 (PDT)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id g7-20020a1709026b4700b001b7f40a8959sm3338143plt.76.2023.06.26.16.11.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Jun 2023 16:11:30 -0700 (PDT)
-Message-ID: <aeb2690c-4f0a-003d-ba8b-fe06cd4142d1@kernel.dk>
-Date:   Mon, 26 Jun 2023 17:11:29 -0600
+        d=1e100.net; s=20221208; t=1687821297; x=1690413297;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kM73dDXJJ2LQE16TI30w/dkhZfJCFiiWEY4v9vd3CAI=;
+        b=LDX72YnIUSr+k4xLstF51E7GaDxYyBd6KxcvBbZNYLVFq/ugCcPmyF7e/qlFrs+Dwl
+         b22mLaJen3XLfYOFittbcOp6jCcq1lOMnNF3ujmJ/YNxntuRoEpnc828EVLyKt3pUL+i
+         gRv+1SqBEijiwFdNt4Pwn5t9/lM3QjolL2MwwbAVokjrizCNr2vUXB8BN6xdjj72bg3N
+         u/iVqTOh1Gk9fJfhzjkGfhUN9Jk5KBDhXDv8c7RcYsWgSmyRmdPZhmWxncb7LvjJZcl3
+         HdH4JtRM0QbD0S8JrRBcIAPxiM6OMnrZ8WhqwbaxpyywQVLnaik1qKIaY2dsD7gy56eF
+         xLMQ==
+X-Gm-Message-State: AC+VfDxnXkVzmVdIdpc81pblavP9+yE6qUi04NPzqM+V6bQiRkguUIZ4
+        dkNIzQek31lUrb98FBHtDGKywk5jT6y8mk3z7wA=
+X-Google-Smtp-Source: ACHHUZ6SlNxvS+0k1RkdHbPMGvtR/zIR689flvvkM6fGCsnFYzBJ3gb7C/t8rh8Gglh4bBOZPBk7Q91WVqTWMmesHvU=
+X-Received: by 2002:a25:2903:0:b0:bff:d530:f06 with SMTP id
+ p3-20020a252903000000b00bffd5300f06mr14953523ybp.41.1687821296805; Mon, 26
+ Jun 2023 16:14:56 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-From:   Jens Axboe <axboe@kernel.dk>
-Subject: Re: [GIT PULL] bcachefs
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-bcachefs@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>
-References: <20230626214656.hcp4puionmtoloat@moria.home.lan>
-Content-Language: en-US
-In-Reply-To: <20230626214656.hcp4puionmtoloat@moria.home.lan>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <CAM9d7cjtisDVPijfU=iEGxc0YF=RnAt+r18Jg+8Av-+RAO=jeg@mail.gmail.com>
+ <IA1PR20MB49536C0DA47122E9E3CB7CBBBB20A@IA1PR20MB4953.namprd20.prod.outlook.com>
+ <CAM9d7cis-rb0fozK+T6R8MCEcT0ZF=RRNpv1qAWsLkMfsG6KxA@mail.gmail.com> <20230624-supermom-disparity-37546ffed0a4@spud>
+In-Reply-To: <20230624-supermom-disparity-37546ffed0a4@spud>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Mon, 26 Jun 2023 16:14:45 -0700
+Message-ID: <CAM9d7cjHndHrcH95uwmYRMRpm-a0kX2BHQ1jzmyo6f48w69jbg@mail.gmail.com>
+Subject: Re: [PATCH V3] perf vendor events riscv: add T-HEAD C9xx JSON file
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Inochi Amaoto <inochiama@outlook.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Nikita Shubin <n.shubin@yadro.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> (Worth noting the bug causing the most test failures by a wide margin is
-> actually an io_uring bug that causes random umount failures in shutdown
-> tests. Would be great to get that looked at, it doesn't just affect
-> bcachefs).
+Hello,
 
-Maybe if you had told someone about that it could get looked at?
-What is the test case and what is going wrong?
+On Sat, Jun 24, 2023 at 1:54 AM Conor Dooley <conor@kernel.org> wrote:
+>
+> On Fri, Jun 23, 2023 at 09:35:01PM -0700, Namhyung Kim wrote:
+> > On Fri, Jun 23, 2023 at 6:33 PM Inochi Amaoto <inochiama@outlook.com> wrote:
+>
+> > >
+> > > As for c9xx wildcard, the T-HEAD provides a `MCPUID` vendor CSR to allow
+> > > its CKLINK to get the detail CPU info. The format of this CSR are:
+> > >
+> > > ------------------------------------------------
+> > > |31   28|27  26|25    22|21   18|17    8|7    0|
+> > > | index | WLRL | family | class | model | WLRL |
+> > > ------------------------------------------------
+> > >
+> > > And for C9xx series (only index 0000 is vaild for us, as `MCPUID` also
+> > > provides other index).
+> > >
+> > > | 0000 | xx | 0100 | class | xxxxxxxxxx | xxxxxxxx |
+> > >
+> > > The class codes are:
+> > >
+> > > C910: 0011
+> > > c906: 0100
+> > >
+> > > The CSR is a M-mode only CSR, so now I'm exploring a clean way to
+> > > integrate this CSR into the kernel. Any advice?
+>
+> See for example how riscv_cpuinfo_starting() reads mvendorid & Co.
+>
+> > I don't know about the details.  Is this CSR available from user space?
+> > If not, you could add it somewhere in the sysfs.
+>
+> Machine mode is the highest privilege level, Supervisor mode is next &
+> User mode is the lowest. Typically the kernel runs in Supervisor mode.
 
->       block: Add some exports for bcachefs
->       block: Allow bio_iov_iter_get_pages() with bio->bi_bdev unset
->       block: Bring back zero_fill_bio_iter
->       block: Don't block on s_umount from __invalidate_super()
+Maybe you're interested in this thread for user visible identifiers.
 
-OK...
+https://lore.kernel.org/all/1687245156-61215-1-git-send-email-renyu.zj@linux.alibaba.com/
 
--- 
-Jens Axboe
-
-
+Thanks,
+Namhyung
