@@ -2,390 +2,298 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8D7873EC10
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 22:50:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49A7373EC24
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 22:53:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229800AbjFZUtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 16:49:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47510 "EHLO
+        id S230416AbjFZUvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 16:51:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbjFZUtT (ORCPT
+        with ESMTP id S230355AbjFZUvZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 16:49:19 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB5599E;
-        Mon, 26 Jun 2023 13:49:16 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2b5c231c23aso37194611fa.0;
-        Mon, 26 Jun 2023 13:49:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687812555; x=1690404555;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2ZHpqF/1DwLchfO/E1isy5Jjb+iD/kON+N4YR2/Rvi0=;
-        b=dTfkG8sEnv1OONyJ1ulcHt5Ll+GljRlBIui1D0dtBqL6+PV/u85hgyA9giCol+pVlL
-         kfUfUhUh9zgWhKTo7WaFynUO/F/pQ9wumpC1H+AeNXaTf2e6Zqlw3aGFl24eBvSB05j2
-         +THy2YigMXLI+gjgBlucZc5Fc9TIvb24BybQpWt87koFvV7fzF4RSd0u5T/9M/Cm4/zd
-         he5PCp/CNtajIrO3u/jDPz0KAo41c2V4kD8zlww4XHURJFpK2tD0BySOAiL1+b2Ju1z/
-         N1z1rbTIOXMoZnLp6rGRefvpooDZFp/4KkxGKajNgeTxGdyGYDvaFXhyM5tmkwrxCDzK
-         LTlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687812555; x=1690404555;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2ZHpqF/1DwLchfO/E1isy5Jjb+iD/kON+N4YR2/Rvi0=;
-        b=JS4s0IbSXY6U+IOinHFJpidZTxR7aa5GwxaQTO9OE6+cyN4BRNq0pO+SM4O9CAzzCq
-         TN+L8L45Bh8HGLxOfUNsvPO9/0LxiEj43XOwt4pzUn0tbCWrcy45JVhrHBQTN9ehCZTg
-         KC+/Pc3mh6vv0qGPTHY/7GWfejuYXvKZmlTf3D3aUlZEsXWwp4byH/p301Cv21cvzE19
-         nAWguTY7v6vcEl7lNyrEfPIjXEU+VTExr8/fQXhahvuCGubo1gucC21GSzBk9AXCmnjt
-         b9n0gdle2n7JOBUGO5DAEY1Oh6h0mbHXa6v6despNtXuPsQ61spE7j9FRCrL2ndhpzoB
-         hxeQ==
-X-Gm-Message-State: AC+VfDzHfDX+XkIwbOnMGoXi8Rj9pdK0KPHjHfCY1K5wJq+MbBWOqz3b
-        h3S3iTRjOMewwaxtjTRp1rlnsCfQ9h7CqK7PVRENm9QHFsMYHA==
-X-Google-Smtp-Source: ACHHUZ5LD702vJx9z6IG7ZDQSTOpEbwB7T7eT1AkAJo55TrAeYPh1RjRkuCe1SURpa6Rmhnwi9DWP5ZwL8EhBH59c08=
-X-Received: by 2002:a2e:721a:0:b0:2b4:836b:3cb5 with SMTP id
- n26-20020a2e721a000000b002b4836b3cb5mr14291683ljc.43.1687812554393; Mon, 26
- Jun 2023 13:49:14 -0700 (PDT)
+        Mon, 26 Jun 2023 16:51:25 -0400
+Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D61D912A
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 13:51:22 -0700 (PDT)
+Received: from submission (posteo.de [185.67.36.169]) 
+        by mout02.posteo.de (Postfix) with ESMTPS id 36104240103
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 22:51:09 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+        t=1687812669; bh=tNIMKCKftTirXMggzoPi3H2tlA7Th71YKmucyD7m0pc=;
+        h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:
+         Content-Transfer-Encoding:From;
+        b=lyEDE9TkJ/RrF7TULqNbc/e465txk7WVij0EUPzDXrtmV12qhAEbwp6oBDQmOUc4W
+         Ix/mC9ruP5KYXKD64s3txiJ7FJsSbZykqRKRA6fgCvlNp2WxjiQQ8mx+WgPXBTMLiH
+         ScHibYQzj5OyoAzPEL2jVvoLTQQ54k2Fl8hn/geWqO5LXCN/P4DWbANII+VuZdP771
+         50aqd9uJEdYnMftL9NDLcKr2zMzBm0lruK/TSK9yUTTNTWkj8L3Jmoeyzgs98rqdF8
+         GY3MHG7ZhbGQ3c39TSbxvOEid4qkOvzP74G4pN0zWheoyY12HRiKtrpniwhvOfaJNU
+         VHazwfUa3JkqA==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4Qqg3s3ckFz9rxH;
+        Mon, 26 Jun 2023 22:51:05 +0200 (CEST)
+From:   Anne Macedo <retpolanne@posteo.net>
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Anne Macedo <retpolanne@posteo.net>,
+        Vinod Koul <vkoul@kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Christian Lamparter <chunkeey@googlemail.com>,
+        Rene Treffer <treffer@measite.de>
+Subject: [PATCH] usb: host: xhci: remove renesas rom wiping
+Date:   Mon, 26 Jun 2023 20:49:12 +0000
+Message-ID: <20230626204910.728-3-retpolanne@posteo.net>
 MIME-Version: 1.0
-References: <2d7bef70b876e4cbd447c5109956f716bad5bc2d.1687565769.git.objelf@gmail.com>
- <0bf904a2581fe3ede716f329bb59d81b5fbec1f0.1687565769.git.objelf@gmail.com>
-In-Reply-To: <0bf904a2581fe3ede716f329bb59d81b5fbec1f0.1687565769.git.objelf@gmail.com>
-From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date:   Mon, 26 Jun 2023 13:49:01 -0700
-Message-ID: <CABBYNZKk_nXP+zBrZt4FSrT6hRW2WrsUfuV6av4nud7f8LXdrg@mail.gmail.com>
-Subject: Re: [PATCH v7 2/3] Bluetooth: btmtk: introduce btmtk reset work
-To:     sean.wang@mediatek.com
-Cc:     marcel@holtmann.org, johan.hedberg@gmail.com,
-        chris.lu@mediatek.com, Soul.Huang@mediatek.com,
-        Leon.Yen@mediatek.com, Deren.Wu@mediatek.com, km.lin@mediatek.com,
-        robin.chiu@mediatek.com, Eddie.Chen@mediatek.com,
-        ch.yeh@mediatek.com, jenhao.yang@mediatek.com,
-        Stella.Chang@mediatek.com, Tom.Chou@mediatek.com,
-        steve.lee@mediatek.com, jsiuda@google.com, frankgor@google.com,
-        abhishekpandit@google.com, michaelfsun@google.com,
-        abhishekpandit@chromium.org, mcchou@chromium.org,
-        shawnku@google.com, linux-bluetooth@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jing Cai <jing.cai@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sean,
+Cards based on Renesas uPD72020x currently have their ROM wiped on
+module start if they have an external ROM. This means that every time
+you start up the module, the ROM gets cleaned up and the firmware
+redownloaded.
 
-On Mon, Jun 26, 2023 at 1:41=E2=80=AFPM <sean.wang@mediatek.com> wrote:
->
-> From: Jing Cai <jing.cai@mediatek.com>
->
-> Introduce btmtk_reset_work which can be called whenever the firmware abor=
-t,
-> HCI command timeout, other fatal error happen.
->
-> Co-developed-by: Chris Lu <chris.lu@mediatek.com>
-> Signed-off-by: Chris Lu <chris.lu@mediatek.com>
-> Co-developed-by: Sean Wang <sean.wang@mediatek.com>
-> Signed-off-by: Sean Wang <sean.wang@mediatek.com>
-> Signed-off-by: Jing Cai <jing.cai@mediatek.com>
-> ---
-> v2, v3, v4: rebase onto the latest codebase
-> v5: reset the device on hdev basis and use hci_cmd_sync_queue to
->     schedule reset work
-> v6 and v7: rebase onto the latest codebase
-> ---
->  drivers/bluetooth/btmtk.c |  15 ++++
->  drivers/bluetooth/btmtk.h |   8 +++
->  drivers/bluetooth/btusb.c | 145 +++++++++++++++++++-------------------
->  3 files changed, 97 insertions(+), 71 deletions(-)
->
-> diff --git a/drivers/bluetooth/btmtk.c b/drivers/bluetooth/btmtk.c
-> index 9482401d97fa..b8678b75276e 100644
-> --- a/drivers/bluetooth/btmtk.c
-> +++ b/drivers/bluetooth/btmtk.c
-> @@ -280,6 +280,21 @@ int btmtk_set_bdaddr(struct hci_dev *hdev, const bda=
-ddr_t *bdaddr)
->  }
->  EXPORT_SYMBOL_GPL(btmtk_set_bdaddr);
->
-> +void btmtk_reset_sync(struct hci_dev *hdev)
-> +{
-> +       struct btmediatek_data *reset_work =3D hci_get_priv(hdev);
-> +       int err;
-> +
-> +       hci_dev_lock(hdev);
-> +
-> +       err =3D hci_cmd_sync_queue(hdev, reset_work->reset_sync, NULL, NU=
-LL);
-> +       if (err)
-> +               bt_dev_err(hdev, "failed to reset (%d)", err);
-> +
-> +       hci_dev_unlock(hdev);
-> +}
-> +EXPORT_SYMBOL_GPL(btmtk_reset_sync);
-> +
->  MODULE_AUTHOR("Sean Wang <sean.wang@mediatek.com>");
->  MODULE_AUTHOR("Mark Chen <mark-yw.chen@mediatek.com>");
->  MODULE_DESCRIPTION("Bluetooth support for MediaTek devices ver " VERSION=
-);
-> diff --git a/drivers/bluetooth/btmtk.h b/drivers/bluetooth/btmtk.h
-> index fadc1a520652..75d8e71efcd3 100644
-> --- a/drivers/bluetooth/btmtk.h
-> +++ b/drivers/bluetooth/btmtk.h
-> @@ -120,8 +120,11 @@ struct btmtk_hci_wmt_params {
->         u32 *status;
->  };
->
-> +typedef int (*btmtk_reset_sync_func_t)(struct hci_dev *, void *);
-> +
->  struct btmediatek_data {
->         u32 dev_id;
-> +       btmtk_reset_sync_func_t reset_sync;
->  };
->
->  typedef int (*wmt_cmd_sync_func_t)(struct hci_dev *,
-> @@ -136,6 +139,8 @@ int btmtk_setup_firmware_79xx(struct hci_dev *hdev, c=
-onst char *fwname,
->
->  int btmtk_setup_firmware(struct hci_dev *hdev, const char *fwname,
->                          wmt_cmd_sync_func_t wmt_cmd_sync);
-> +
-> +void btmtk_reset_sync(struct hci_dev *hdev);
->  #else
->
->  static inline int btmtk_set_bdaddr(struct hci_dev *hdev,
-> @@ -156,4 +161,7 @@ static int btmtk_setup_firmware(struct hci_dev *hdev,=
- const char *fwname,
->         return -EOPNOTSUPP;
->  }
->
-> +static void btmtk_reset_sync(struct hci_dev *hdev)
-> +{
-> +}
->  #endif
-> diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
-> index 71b119bcff29..4ebab61c288c 100644
-> --- a/drivers/bluetooth/btusb.c
-> +++ b/drivers/bluetooth/btusb.c
-> @@ -3037,6 +3037,78 @@ static u32 btusb_mtk_reset_done(struct hci_dev *hd=
-ev)
->         return val & MTK_BT_RST_DONE;
->  }
->
-> +static int btusb_mtk_reset_work(struct hci_dev *hdev, void *rst_data)
+Wiping the ROM all the time is not necessary and can lead to situations
+where, for example, people with stable firmwares might have their card fail
+due to incomplete flashes (due to timeouts, for example).
 
-You can probably drop _work suffix since it no longer runs on its own
-dedicated work.
+Another case is when PCI configs are set up after the ROM is flashed
+(e.g. disabling hotplugging). The ROM wipe and reflash process will
+overwrite these configs.
 
-> +{
-> +       struct btusb_data *data =3D hci_get_drvdata(hdev);
-> +       struct btmediatek_data *mediatek;
-> +       u32 val;
-> +       int err;
-> +
-> +       /* It's MediaTek specific bluetooth reset mechanism via USB */
-> +       if (test_and_set_bit(BTUSB_HW_RESET_ACTIVE, &data->flags)) {
-> +               bt_dev_err(hdev, "last reset failed? Not resetting again"=
-);
-> +               return -EBUSY;
-> +       }
-> +
-> +       err =3D usb_autopm_get_interface(data->intf);
-> +       if (err < 0)
-> +               return err;
-> +
-> +       btusb_stop_traffic(data);
-> +       usb_kill_anchored_urbs(&data->tx_anchor);
-> +       mediatek =3D hci_get_priv(hdev);
-> +
-> +       if (mediatek->dev_id =3D=3D 0x7925) {
-> +               btusb_mtk_uhw_reg_read(data, MTK_BT_RESET_REG_CONNV3, &va=
-l);
-> +               val |=3D (1 << 5);
-> +               btusb_mtk_uhw_reg_write(data, MTK_BT_RESET_REG_CONNV3, va=
-l);
-> +               btusb_mtk_uhw_reg_read(data, MTK_BT_RESET_REG_CONNV3, &va=
-l);
-> +               val &=3D 0xFFFF00FF;
-> +               val |=3D (1 << 13);
-> +               btusb_mtk_uhw_reg_write(data, MTK_BT_RESET_REG_CONNV3, va=
-l);
-> +               btusb_mtk_uhw_reg_write(data, MTK_EP_RST_OPT, 0x00010001)=
-;
-> +               btusb_mtk_uhw_reg_read(data, MTK_BT_RESET_REG_CONNV3, &va=
-l);
-> +               val |=3D (1 << 0);
-> +               btusb_mtk_uhw_reg_write(data, MTK_BT_RESET_REG_CONNV3, va=
-l);
-> +               btusb_mtk_uhw_reg_write(data, MTK_UDMA_INT_STA_BT, 0x0000=
-00FF);
-> +               btusb_mtk_uhw_reg_read(data, MTK_UDMA_INT_STA_BT, &val);
-> +               btusb_mtk_uhw_reg_write(data, MTK_UDMA_INT_STA_BT1, 0x000=
-000FF);
-> +               btusb_mtk_uhw_reg_read(data, MTK_UDMA_INT_STA_BT1, &val);
-> +               msleep(100);
-> +       } else {
-> +               /* It's Device EndPoint Reset Option Register */
-> +               bt_dev_dbg(hdev, "Initiating reset mechanism via uhw");
-> +               btusb_mtk_uhw_reg_write(data, MTK_EP_RST_OPT, MTK_EP_RST_=
-IN_OUT_OPT);
-> +               btusb_mtk_uhw_reg_read(data, MTK_BT_WDT_STATUS, &val);
-> +
-> +               /* Reset the bluetooth chip via USB interface. */
-> +               btusb_mtk_uhw_reg_write(data, MTK_BT_SUBSYS_RST, 1);
-> +               btusb_mtk_uhw_reg_write(data, MTK_UDMA_INT_STA_BT, 0x0000=
-00FF);
-> +               btusb_mtk_uhw_reg_read(data, MTK_UDMA_INT_STA_BT, &val);
-> +               btusb_mtk_uhw_reg_write(data, MTK_UDMA_INT_STA_BT1, 0x000=
-000FF);
-> +               btusb_mtk_uhw_reg_read(data, MTK_UDMA_INT_STA_BT1, &val);
-> +               /* MT7921 need to delay 20ms between toggle reset bit */
-> +               msleep(20);
-> +               btusb_mtk_uhw_reg_write(data, MTK_BT_SUBSYS_RST, 0);
-> +               btusb_mtk_uhw_reg_read(data, MTK_BT_SUBSYS_RST, &val);
-> +       }
-> +
-> +       err =3D readx_poll_timeout(btusb_mtk_reset_done, hdev, val,
-> +                                val & MTK_BT_RST_DONE, 20000, 1000000);
-> +       if (err < 0)
-> +               bt_dev_err(hdev, "Reset timeout");
-> +
-> +       btusb_mtk_id_get(data, 0x70010200, &val);
-> +       if (!val)
-> +               bt_dev_err(hdev, "Can't get device id, subsys reset fail.=
-");
-> +
-> +       usb_queue_reset_device(data->intf);
-> +
-> +       clear_bit(BTUSB_HW_RESET_ACTIVE, &data->flags);
-> +
-> +       return err;
-> +}
-> +
->  static int btusb_mtk_setup(struct hci_dev *hdev)
->  {
->         struct btusb_data *data =3D hci_get_drvdata(hdev);
-> @@ -3076,6 +3148,7 @@ static int btusb_mtk_setup(struct hci_dev *hdev)
->
->         mediatek =3D hci_get_priv(hdev);
->         mediatek->dev_id =3D dev_id;
-> +       mediatek->reset_sync =3D btusb_mtk_reset_work;
->
->         switch (dev_id) {
->         case 0x7663:
-> @@ -3233,76 +3306,6 @@ static int btusb_mtk_shutdown(struct hci_dev *hdev=
-)
->         return 0;
->  }
->
-> -static void btusb_mtk_cmd_timeout(struct hci_dev *hdev)
-> -{
-> -       struct btusb_data *data =3D hci_get_drvdata(hdev);
-> -       u32 val;
-> -       int err;
-> -       struct btmediatek_data *mediatek;
-> -
-> -       /* It's MediaTek specific bluetooth reset mechanism via USB */
-> -       if (test_and_set_bit(BTUSB_HW_RESET_ACTIVE, &data->flags)) {
-> -               bt_dev_err(hdev, "last reset failed? Not resetting again"=
-);
-> -               return;
-> -       }
-> -
-> -       err =3D usb_autopm_get_interface(data->intf);
-> -       if (err < 0)
-> -               return;
-> -
-> -       btusb_stop_traffic(data);
-> -       usb_kill_anchored_urbs(&data->tx_anchor);
-> -       mediatek =3D hci_get_priv(hdev);
-> -
-> -       if (mediatek->dev_id =3D=3D 0x7925) {
-> -               btusb_mtk_uhw_reg_read(data, MTK_BT_RESET_REG_CONNV3, &va=
-l);
-> -               val |=3D (1 << 5);
-> -               btusb_mtk_uhw_reg_write(data, MTK_BT_RESET_REG_CONNV3, va=
-l);
-> -               btusb_mtk_uhw_reg_read(data, MTK_BT_RESET_REG_CONNV3, &va=
-l);
-> -               val &=3D 0xFFFF00FF;
-> -               val |=3D (1 << 13);
-> -               btusb_mtk_uhw_reg_write(data, MTK_BT_RESET_REG_CONNV3, va=
-l);
-> -               btusb_mtk_uhw_reg_write(data, MTK_EP_RST_OPT, 0x00010001)=
-;
-> -               btusb_mtk_uhw_reg_read(data, MTK_BT_RESET_REG_CONNV3, &va=
-l);
-> -               val |=3D (1 << 0);
-> -               btusb_mtk_uhw_reg_write(data, MTK_BT_RESET_REG_CONNV3, va=
-l);
-> -               btusb_mtk_uhw_reg_write(data, MTK_UDMA_INT_STA_BT, 0x0000=
-00FF);
-> -               btusb_mtk_uhw_reg_read(data, MTK_UDMA_INT_STA_BT, &val);
-> -               btusb_mtk_uhw_reg_write(data, MTK_UDMA_INT_STA_BT1, 0x000=
-000FF);
-> -               btusb_mtk_uhw_reg_read(data, MTK_UDMA_INT_STA_BT1, &val);
-> -               msleep(100);
-> -       } else {
-> -               /* It's Device EndPoint Reset Option Register */
-> -               bt_dev_dbg(hdev, "Initiating reset mechanism via uhw");
-> -               btusb_mtk_uhw_reg_write(data, MTK_EP_RST_OPT, MTK_EP_RST_=
-IN_OUT_OPT);
-> -               btusb_mtk_uhw_reg_read(data, MTK_BT_WDT_STATUS, &val);
-> -
-> -               /* Reset the bluetooth chip via USB interface. */
-> -               btusb_mtk_uhw_reg_write(data, MTK_BT_SUBSYS_RST, 1);
-> -               btusb_mtk_uhw_reg_write(data, MTK_UDMA_INT_STA_BT, 0x0000=
-00FF);
-> -               btusb_mtk_uhw_reg_read(data, MTK_UDMA_INT_STA_BT, &val);
-> -               btusb_mtk_uhw_reg_write(data, MTK_UDMA_INT_STA_BT1, 0x000=
-000FF);
-> -               btusb_mtk_uhw_reg_read(data, MTK_UDMA_INT_STA_BT1, &val);
-> -               /* MT7921 need to delay 20ms between toggle reset bit */
-> -               msleep(20);
-> -               btusb_mtk_uhw_reg_write(data, MTK_BT_SUBSYS_RST, 0);
-> -               btusb_mtk_uhw_reg_read(data, MTK_BT_SUBSYS_RST, &val);
-> -       }
-> -
-> -       err =3D readx_poll_timeout(btusb_mtk_reset_done, hdev, val,
-> -                                val & MTK_BT_RST_DONE, 20000, 1000000);
-> -       if (err < 0)
-> -               bt_dev_err(hdev, "Reset timeout");
-> -
-> -       btusb_mtk_id_get(data, 0x70010200, &val);
-> -       if (!val)
-> -               bt_dev_err(hdev, "Can't get device id, subsys reset fail.=
-");
-> -
-> -       usb_queue_reset_device(data->intf);
-> -
-> -       clear_bit(BTUSB_HW_RESET_ACTIVE, &data->flags);
-> -}
-> -
->  static int btusb_recv_acl_mtk(struct hci_dev *hdev, struct sk_buff *skb)
->  {
->         struct btusb_data *data =3D hci_get_drvdata(hdev);
-> @@ -4429,7 +4432,7 @@ static int btusb_probe(struct usb_interface *intf,
->                 hdev->setup =3D btusb_mtk_setup;
->                 hdev->shutdown =3D btusb_mtk_shutdown;
->                 hdev->manufacturer =3D 70;
-> -               hdev->cmd_timeout =3D btusb_mtk_cmd_timeout;
-> +               hdev->cmd_timeout =3D btmtk_reset_sync;
->                 hdev->set_bdaddr =3D btmtk_set_bdaddr;
->                 set_bit(HCI_QUIRK_BROKEN_ENHANCED_SETUP_SYNC_CONN, &hdev-=
->quirks);
->                 set_bit(HCI_QUIRK_NON_PERSISTENT_SETUP, &hdev->quirks);
-> --
-> 2.25.1
->
+Also, the current ROM setup can't work: the flash layout contains more
+than the firmware – for uploading, it needs to be prefixed with ~40
+bytes that differ by card vendor. This config is documented on the
+"uPD720201/uPD720202 User's Manual", section 6.3 (Data Format).
 
+This patch, if applied, removes the cleanup and the setup of the Renesas
+ROM as to not make it wipe and reset the ROM.
 
---=20
-Luiz Augusto von Dentz
+It also reduces load time, especially during boot, as problems with the
+EEPROM chip or CRC checks might take some time during reflashing and
+possibly lead to timeouts. Since the ROM is already flashed (either
+manually by a tool such as uPD72020x-load or by the kernel module) it
+just needs to be loaded during module startup.
+
+Suggested-by: Rene Treffer <treffer@measite.de>
+Signed-off-by: Anne Macedo <retpolanne@posteo.net>
+---
+ drivers/usb/host/xhci-pci-renesas.c | 188 ----------------------------
+ 1 file changed, 188 deletions(-)
+
+diff --git a/drivers/usb/host/xhci-pci-renesas.c b/drivers/usb/host/xhci-pci-renesas.c
+index 93f8b355bc70..28656beb808d 100644
+--- a/drivers/usb/host/xhci-pci-renesas.c
++++ b/drivers/usb/host/xhci-pci-renesas.c
+@@ -375,199 +375,11 @@ static int renesas_fw_download(struct pci_dev *pdev,
+ 	return 0;
+ }
+ 
+-static void renesas_rom_erase(struct pci_dev *pdev)
+-{
+-	int retval, i;
+-	u8 status;
+-
+-	dev_dbg(&pdev->dev, "Performing ROM Erase...\n");
+-	retval = pci_write_config_dword(pdev, RENESAS_DATA0,
+-					RENESAS_ROM_ERASE_MAGIC);
+-	if (retval) {
+-		dev_err(&pdev->dev, "ROM erase, magic word write failed: %d\n",
+-			pcibios_err_to_errno(retval));
+-		return;
+-	}
+-
+-	retval = pci_read_config_byte(pdev, RENESAS_ROM_STATUS, &status);
+-	if (retval) {
+-		dev_err(&pdev->dev, "ROM status read failed: %d\n",
+-			pcibios_err_to_errno(retval));
+-		return;
+-	}
+-	status |= RENESAS_ROM_STATUS_ERASE;
+-	retval = pci_write_config_byte(pdev, RENESAS_ROM_STATUS, status);
+-	if (retval) {
+-		dev_err(&pdev->dev, "ROM erase set word write failed\n");
+-		return;
+-	}
+-
+-	/* sleep a bit while ROM is erased */
+-	msleep(20);
+-
+-	for (i = 0; i < RENESAS_RETRY; i++) {
+-		retval = pci_read_config_byte(pdev, RENESAS_ROM_STATUS,
+-					      &status);
+-		status &= RENESAS_ROM_STATUS_ERASE;
+-		if (!status)
+-			break;
+-
+-		mdelay(RENESAS_DELAY);
+-	}
+-
+-	if (i == RENESAS_RETRY)
+-		dev_dbg(&pdev->dev, "Chip erase timedout: %x\n", status);
+-
+-	dev_dbg(&pdev->dev, "ROM Erase... Done success\n");
+-}
+-
+-static bool renesas_setup_rom(struct pci_dev *pdev, const struct firmware *fw)
+-{
+-	const u32 *fw_data = (const u32 *)fw->data;
+-	int err, i;
+-	u8 status;
+-
+-	/* 2. Write magic word to Data0 */
+-	err = pci_write_config_dword(pdev, RENESAS_DATA0,
+-				     RENESAS_ROM_WRITE_MAGIC);
+-	if (err)
+-		return false;
+-
+-	/* 3. Set External ROM access */
+-	err = pci_write_config_byte(pdev, RENESAS_ROM_STATUS,
+-				    RENESAS_ROM_STATUS_ACCESS);
+-	if (err)
+-		goto remove_bypass;
+-
+-	/* 4. Check the result */
+-	err = pci_read_config_byte(pdev, RENESAS_ROM_STATUS, &status);
+-	if (err)
+-		goto remove_bypass;
+-	status &= GENMASK(6, 4);
+-	if (status) {
+-		dev_err(&pdev->dev,
+-			"setting external rom failed: %x\n", status);
+-		goto remove_bypass;
+-	}
+-
+-	/* 5 to 16 Write FW to DATA0/1 while checking SetData0/1 */
+-	for (i = 0; i < fw->size / 4; i++) {
+-		err = renesas_fw_download_image(pdev, fw_data, i, true);
+-		if (err) {
+-			dev_err(&pdev->dev,
+-				"ROM Download Step %d failed at position %d bytes with (%d)\n",
+-				 i, i * 4, err);
+-			goto remove_bypass;
+-		}
+-	}
+-
+-	/*
+-	 * wait till DATA0/1 is cleared
+-	 */
+-	for (i = 0; i < RENESAS_RETRY; i++) {
+-		err = pci_read_config_byte(pdev, RENESAS_ROM_STATUS_MSB,
+-					   &status);
+-		if (err)
+-			goto remove_bypass;
+-		if (!(status & (BIT(0) | BIT(1))))
+-			break;
+-
+-		udelay(RENESAS_DELAY);
+-	}
+-	if (i == RENESAS_RETRY) {
+-		dev_err(&pdev->dev, "Final Firmware ROM Download step timed out\n");
+-		goto remove_bypass;
+-	}
+-
+-	/* 17. Remove bypass */
+-	err = pci_write_config_byte(pdev, RENESAS_ROM_STATUS, 0);
+-	if (err)
+-		return false;
+-
+-	udelay(10);
+-
+-	/* 18. check result */
+-	for (i = 0; i < RENESAS_RETRY; i++) {
+-		err = pci_read_config_byte(pdev, RENESAS_ROM_STATUS, &status);
+-		if (err) {
+-			dev_err(&pdev->dev, "Read ROM status failed:%d\n",
+-				pcibios_err_to_errno(err));
+-			return false;
+-		}
+-		status &= RENESAS_ROM_STATUS_RESULT;
+-		if (status ==  RENESAS_ROM_STATUS_SUCCESS) {
+-			dev_dbg(&pdev->dev, "Download ROM success\n");
+-			break;
+-		}
+-		udelay(RENESAS_DELAY);
+-	}
+-	if (i == RENESAS_RETRY) { /* Timed out */
+-		dev_err(&pdev->dev,
+-			"Download to external ROM TO: %x\n", status);
+-		return false;
+-	}
+-
+-	dev_dbg(&pdev->dev, "Download to external ROM succeeded\n");
+-
+-	/* Last step set Reload */
+-	err = pci_write_config_byte(pdev, RENESAS_ROM_STATUS,
+-				    RENESAS_ROM_STATUS_RELOAD);
+-	if (err) {
+-		dev_err(&pdev->dev, "Set ROM execute failed: %d\n",
+-			pcibios_err_to_errno(err));
+-		return false;
+-	}
+-
+-	/*
+-	 * wait till Reload is cleared
+-	 */
+-	for (i = 0; i < RENESAS_RETRY; i++) {
+-		err = pci_read_config_byte(pdev, RENESAS_ROM_STATUS, &status);
+-		if (err)
+-			return false;
+-		if (!(status & RENESAS_ROM_STATUS_RELOAD))
+-			break;
+-
+-		udelay(RENESAS_DELAY);
+-	}
+-	if (i == RENESAS_RETRY) {
+-		dev_err(&pdev->dev, "ROM Exec timed out: %x\n", status);
+-		return false;
+-	}
+-
+-	return true;
+-
+-remove_bypass:
+-	pci_write_config_byte(pdev, RENESAS_ROM_STATUS, 0);
+-	return false;
+-}
+-
+ static int renesas_load_fw(struct pci_dev *pdev, const struct firmware *fw)
+ {
+ 	int err = 0;
+-	bool rom;
+-
+-	/* Check if the device has external ROM */
+-	rom = renesas_check_rom(pdev);
+-	if (rom) {
+-		/* perform chip erase first */
+-		renesas_rom_erase(pdev);
+-
+-		/* lets try loading fw on ROM first */
+-		rom = renesas_setup_rom(pdev, fw);
+-		if (!rom) {
+-			dev_dbg(&pdev->dev,
+-				"ROM load failed, falling back on FW load\n");
+-		} else {
+-			dev_dbg(&pdev->dev,
+-				"ROM load success\n");
+-			goto exit;
+-		}
+-	}
+ 
+ 	err = renesas_fw_download(pdev, fw);
+-
+-exit:
+ 	if (err)
+ 		dev_err(&pdev->dev, "firmware failed to download (%d).", err);
+ 	return err;
+-- 
+2.41.0
+
