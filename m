@@ -2,98 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34D8F73E4D1
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 18:20:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E574173E4D6
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 18:21:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229969AbjFZQUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 12:20:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52310 "EHLO
+        id S231952AbjFZQVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 12:21:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232142AbjFZQUI (ORCPT
+        with ESMTP id S231954AbjFZQUy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 12:20:08 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B24E71BF8
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 09:17:10 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3fa8cd4a1c0so16764885e9.1
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 09:17:10 -0700 (PDT)
+        Mon, 26 Jun 2023 12:20:54 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C49244BD
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 09:18:07 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2b69923a715so27583571fa.0
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 09:18:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687796222; x=1690388222;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JXeypSA36Qg27xwQK6BwDtx9kWu+FNhZhOD5YziOszI=;
-        b=sPsZ86m5T5T04cUPJ6T5/9291QbjPMFyaSlceLp+6Z3VkTseFFaRaaj41GdRaDMyKW
-         AvmGwchSI6OBo/R40KeXNU5aHaqvZvg0lsACalGibHKNU+CNWuFw1mvHO/nh0DKSi9a0
-         4bS3YQTuGx565//jrqHhGQlMAG8aZv1g8XI2BA12PuebSxfmh6hdCsToQiU7W6v0XrZZ
-         8FPHh/SQoESnw4D6xAaMCB6CFHo+5T5YfwNWcymt+52ohKUxeXvttYBts30DvDz1SqJ1
-         BuzYc+04nuOYWdh7C96S21OoNlqBBJiFS3mSwLElfEbgAGB8EKt0oDV1Lviql/E0lEQa
-         8pGw==
+        d=ventanamicro.com; s=google; t=1687796272; x=1690388272;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/z5+xnWs45041h00fl+tQyUR27zX4P0GYrInlN6dMa4=;
+        b=C+rGlXVSints3DyywlkPL26WbmmecTvwwJKt1v8DTHBHf3r8EAnqVlaiy1HfZBeeaV
+         VA26tv36Utp8r5Ed69RB1c8zxMfd+sh4Tzks+hYxN8Ii1FIur9ViElAEEz03wIbKCxGt
+         1bHlPXQADceudRPsHUAwgRV5xbh1G9Vv8MAOgAduJTCpBbd0/NFDyCXVnHsfTJHaHTX0
+         wR6hbX5ARGbECAb/xKctC6SIydaBPN+S+kfoeGAPlc9bEiUqr7a7PiyqDqu5ZsTzOVsu
+         7NP43BtapSeNj3jtljv/QLgU9hqEZDJRLVWWQaxQAykRwzMr26qDjHBNWFkPPHLhSmuT
+         PYSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687796222; x=1690388222;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JXeypSA36Qg27xwQK6BwDtx9kWu+FNhZhOD5YziOszI=;
-        b=Ix6zKqrWPWUyOHVXE/zuwndo+TF6ag3SLoKjCi1/XMVrFq2CmqyGhx99PgGk2lh835
-         lfgZ+yfaM+sy8VBn4WdC2tqQQA/6DlALbyWuE214X9rzukK4VNTAt7bBQ2p2zG+0nogd
-         aI7ez9QFSnaiEI2Z50Nh6dpUxE4wEmOVEyhi8qE3dHFoQCPGjDUpSAj4M0mTWEAOc9vL
-         sk7YFkvAapOiIrMrxnuUzdEyDOo1w9SfQwqp2Fsq4urdmrIFhhmHTcGE2aaxoyxQTQ40
-         XTrUIRT4osgwuSiYnCA3duK2iWfMstVmRMmdOYznj5QZz4NmOFc3VHxBZkpNGlKNKRZo
-         z0Ww==
-X-Gm-Message-State: AC+VfDyeBUI/Py+fE57B+F2fjXbX5vQ1XSKyCxG35NAaapjP4oJ66M/T
-        XYgvoACUFkUklt+LP++bnJC9YA==
-X-Google-Smtp-Source: ACHHUZ5D7uHptdZqFo2PIkF6RpQXHdVAueCcOlxaXh158opWn01xLXfxyk7SpixUISeHvjWi2z+a3Q==
-X-Received: by 2002:a7b:cd1a:0:b0:3fb:7184:53eb with SMTP id f26-20020a7bcd1a000000b003fb718453ebmr127490wmj.18.1687796221657;
-        Mon, 26 Jun 2023 09:17:01 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id 7-20020a05600c230700b003fa968e9c27sm3404076wmo.9.2023.06.26.09.16.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Jun 2023 09:17:01 -0700 (PDT)
-Message-ID: <a6f3906a-98a7-de7a-3e26-4b8c45fe93f7@linaro.org>
-Date:   Mon, 26 Jun 2023 18:16:58 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 06/15] dt-bindings: display/msm: sc7180-dpu: Describe
- SM6125
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
+        d=1e100.net; s=20221208; t=1687796272; x=1690388272;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/z5+xnWs45041h00fl+tQyUR27zX4P0GYrInlN6dMa4=;
+        b=kIpe2WS6zxwR0UpzT1ohS03D3/cw8J7VsvYC5clryoT6GFEeiKoDBkdRXVn0Ic3cZX
+         NvrQUbCAkufOtM9lSoCLNeF6ms1SnzXtp7/v2vdEezdrPCCqCMDO7bMLJXpDn+LYAGf7
+         NdRyU3dtEZ1K2zEiMLsDSwUbUV1FTnnTfm5QtYJqEPOCEFMM21CP+gy9z+CjIBkeQrdR
+         G9e/uNr1qpBhNZ1orMxSQKlcoAHysy02v4HkBGGlkTfhYgvs8atpA378A5r9SVAkxyIK
+         F65h8Smgcs9pONSVWzhe4Sg4VXm5E8kj60QCCfO/tsLP8fA9rJHNBaVrCBjD7+/oXmrQ
+         YkZg==
+X-Gm-Message-State: AC+VfDwAsrDxcu787tFLn4G1hCPwfc1aT8GPqYrEWXYDFCyEpKSI9x9H
+        F0TXCRO9zYnt+5dQ6QLY7X2KWA==
+X-Google-Smtp-Source: ACHHUZ5k6uZBNezS9GNCWKfwqTUDPk5naondFMJ4S/crxxAvehZQuVd7g+h4xHf7XbUhF+H8lb3WoQ==
+X-Received: by 2002:a2e:848a:0:b0:2b4:6c76:332f with SMTP id b10-20020a2e848a000000b002b46c76332fmr19796985ljh.9.1687796272233;
+        Mon, 26 Jun 2023 09:17:52 -0700 (PDT)
+Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
+        by smtp.gmail.com with ESMTPSA id h22-20020a170906829600b00988a364023bsm3392930ejx.127.2023.06.26.09.17.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jun 2023 09:17:51 -0700 (PDT)
+Date:   Mon, 26 Jun 2023 18:17:51 +0200
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     palmer@dabbelt.com, conor@kernel.org,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, Lux Aliaga <they@mint.lgbt>
-References: <20230624-sm6125-dpu-v1-0-1d5a638cebf2@somainline.org>
- <20230624-sm6125-dpu-v1-6-1d5a638cebf2@somainline.org>
- <6bbf239f-d530-2f1e-ff52-361f7c9cc951@linaro.org>
- <75d64lixeawfoqbrctm4thzh73cxkvnlmnh5xgbpf277pmh3gz@zthnqvvuxmeq>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <75d64lixeawfoqbrctm4thzh73cxkvnlmnh5xgbpf277pmh3gz@zthnqvvuxmeq>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>,
+        Evan Green <evan@rivosinc.com>,
+        Sunil V L <sunilvl@ventanamicro.com>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 7/9] RISC-V: split riscv_fill_hwcap() in 3
+Message-ID: <20230626-0176f6ea5768a6013a7aecdc@orel>
+References: <20230626-provable-angrily-81760e8c3cc6@wendy>
+ <20230626-prevalent-heaviness-e35188de1225@wendy>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230626-prevalent-heaviness-e35188de1225@wendy>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,34 +80,415 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/06/2023 21:52, Marijn Suijten wrote:
-> On 2023-06-24 11:12:52, Krzysztof Kozlowski wrote:
->> On 24/06/2023 02:41, Marijn Suijten wrote:
->>> SM6125 is identical to SM6375 except that while downstream also defines
->>> a throttle clock, its presence results in timeouts whereas SM6375
->>> requires it to not observe any timeouts.
->>
->> Then it should not be allowed, so you need either "else:" block or
->> another "if: properties: compatible:" to disallow it. Because in current
->> patch it would be allowed.
+On Mon, Jun 26, 2023 at 12:19:45PM +0100, Conor Dooley wrote:
+> Before adding more complexity to it, split riscv_fill_hwcap() into 3
+> distinct sections:
+> - riscv_fill_hwcap() still is the top level function, into which the
+>   additional complexity will be added.
+> - riscv_fill_hwcap_from_isa_string() handles getting the information
+>   from the riscv,isa/ACPI equivalent across harts & the various quirks
+>   there
+> - riscv_parse_isa_string() does what it says on the tin.
 > 
-> That means this binding is wrong/incomplete for all other SoCs then.
-> clock(-name)s has 6 items, and sets `minItems: 6`.  Only for sm6375-dpu
-> does it set `minItems: 7`, but an else case is missing.
-
-Ask the author why it is done like this.
-
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>  arch/riscv/kernel/cpufeature.c | 350 +++++++++++++++++----------------
+>  1 file changed, 182 insertions(+), 168 deletions(-)
 > 
-> Shall I send a Fixes: ed41005f5b7c ("dt-bindings: display/msm:
-> sc7180-dpu: Describe SM6350 and SM6375") for that, and should maxItems:
-> 6 be the default under clock(-name)s or in an else:?
+> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+> index 5405d8a58537..366477ba1eea 100644
+> --- a/arch/riscv/kernel/cpufeature.c
+> +++ b/arch/riscv/kernel/cpufeature.c
+> @@ -180,29 +180,172 @@ const struct riscv_isa_ext_data riscv_isa_ext[] = {
+>  
+>  const size_t riscv_isa_ext_count = ARRAY_SIZE(riscv_isa_ext);
+>  
+> -void __init riscv_fill_hwcap(void)
+> +static void __init riscv_parse_isa_string(unsigned long *this_hwcap, struct riscv_isainfo *isainfo,
+> +					  unsigned long *isa2hwcap, const char *isa)
+> +{
+> +	/*
+> +	 * For all possible cpus, we have already validated in
+> +	 * the boot process that they at least contain "rv" and
+> +	 * whichever of "32"/"64" this kernel supports, and so this
+> +	 * section can be skipped.
+> +	 */
+> +	isa += 4;
+> +
+> +	while (*isa) {
+> +		const char *ext = isa++;
+> +		const char *ext_end = isa;
+> +		bool ext_long = false, ext_err = false;
+> +
+> +		switch (*ext) {
+> +		case 's':
+> +			/*
+> +			 * Workaround for invalid single-letter 's' & 'u'(QEMU).
+> +			 * No need to set the bit in riscv_isa as 's' & 'u' are
+> +			 * not valid ISA extensions. It works until multi-letter
+> +			 * extension starting with "Su" appears.
+> +			 */
+> +			if (ext[-1] != '_' && ext[1] == 'u') {
+> +				++isa;
+> +				ext_err = true;
+> +				break;
+> +			}
+> +			fallthrough;
+> +		case 'S':
+> +		case 'x':
+> +		case 'X':
+> +		case 'z':
+> +		case 'Z':
+> +			/*
+> +			 * Before attempting to parse the extension itself, we find its end.
+> +			 * As multi-letter extensions must be split from other multi-letter
+> +			 * extensions with an "_", the end of a multi-letter extension will
+> +			 * either be the null character or the "_" at the start of the next
+> +			 * multi-letter extension.
+> +			 *
+> +			 * Next, as the extensions version is currently ignored, we
+> +			 * eliminate that portion. This is done by parsing backwards from
+> +			 * the end of the extension, removing any numbers. This may be a
+> +			 * major or minor number however, so the process is repeated if a
+> +			 * minor number was found.
+> +			 *
+> +			 * ext_end is intended to represent the first character *after* the
+> +			 * name portion of an extension, but will be decremented to the last
+> +			 * character itself while eliminating the extensions version number.
+> +			 * A simple re-increment solves this problem.
+> +			 */
+> +			ext_long = true;
+> +			for (; *isa && *isa != '_'; ++isa)
+> +				if (unlikely(!isalnum(*isa)))
+> +					ext_err = true;
+> +
+> +			ext_end = isa;
+> +			if (unlikely(ext_err))
+> +				break;
+> +
+> +			if (!isdigit(ext_end[-1]))
+> +				break;
+> +
+> +			while (isdigit(*--ext_end))
+> +				;
+> +
+> +			if (tolower(ext_end[0]) != 'p' || !isdigit(ext_end[-1])) {
+> +				++ext_end;
+> +				break;
+> +			}
+> +
+> +			while (isdigit(*--ext_end))
+> +				;
+> +
+> +			++ext_end;
+> +			break;
+> +		default:
+> +			/*
+> +			 * Things are a little easier for single-letter extensions, as they
+> +			 * are parsed forwards.
+> +			 *
+> +			 * After checking that our starting position is valid, we need to
+> +			 * ensure that, when isa was incremented at the start of the loop,
+> +			 * that it arrived at the start of the next extension.
+> +			 *
+> +			 * If we are already on a non-digit, there is nothing to do. Either
+> +			 * we have a multi-letter extension's _, or the start of an
+> +			 * extension.
+> +			 *
+> +			 * Otherwise we have found the current extension's major version
+> +			 * number. Parse past it, and a subsequent p/minor version number
+> +			 * if present. The `p` extension must not appear immediately after
+> +			 * a number, so there is no fear of missing it.
+> +			 *
+> +			 */
+> +			if (unlikely(!isalpha(*ext))) {
+> +				ext_err = true;
+> +				break;
+> +			}
+> +
+> +			if (!isdigit(*isa))
+> +				break;
+> +
+> +			while (isdigit(*++isa))
+> +				;
+> +
+> +			if (tolower(*isa) != 'p')
+> +				break;
+> +
+> +			if (!isdigit(*++isa)) {
+> +				--isa;
+> +				break;
+> +			}
+> +
+> +			while (isdigit(*++isa))
+> +				;
+> +
+> +			break;
+> +		}
+> +
+> +		/*
+> +		 * The parser expects that at the start of an iteration isa points to the
+> +		 * first character of the next extension. As we stop parsing an extension
+> +		 * on meeting a non-alphanumeric character, an extra increment is needed
+> +		 * where the succeeding extension is a multi-letter prefixed with an "_".
+> +		 */
+> +		if (*isa == '_')
+> +			++isa;
+> +
+> +#define SET_ISA_EXT_MAP(name, bit)						\
+> +		do {								\
+> +			if ((ext_end - ext == sizeof(name) - 1) &&		\
+> +			     !strncasecmp(ext, name, sizeof(name) - 1) &&	\
+> +			     riscv_isa_extension_check(bit))			\
+> +				set_bit(bit, isainfo->isa);			\
+> +		} while (false)							\
+> +
+> +		if (unlikely(ext_err))
+> +			continue;
+> +		if (!ext_long) {
+> +			int nr = tolower(*ext) - 'a';
+> +
+> +			if (riscv_isa_extension_check(nr)) {
+> +				*this_hwcap |= isa2hwcap[nr];
+> +				set_bit(nr, isainfo->isa);
+> +			}
+> +		} else {
+> +			for (int i = 0; i < riscv_isa_ext_count; i++)
+> +				SET_ISA_EXT_MAP(riscv_isa_ext[i].name,
+> +						riscv_isa_ext[i].id);
+> +		}
+> +#undef SET_ISA_EXT_MAP
+> +	}
+> +}
+> +
+> +static void __init riscv_fill_hwcap_from_isa_string(unsigned long *isa2hwcap)
+>  {
+>  	struct device_node *node;
+>  	const char *isa;
+> -	char print_str[NUM_ALPHA_EXTS + 1];
+> -	int i, j, rc;
+> -	unsigned long isa2hwcap[26] = {0};
+> +	int rc;
+>  	struct acpi_table_header *rhct;
+>  	acpi_status status;
+>  	unsigned int cpu;
+>  
+> -	isa2hwcap['i' - 'a'] = COMPAT_HWCAP_ISA_I;
+> -	isa2hwcap['m' - 'a'] = COMPAT_HWCAP_ISA_M;
+> -	isa2hwcap['a' - 'a'] = COMPAT_HWCAP_ISA_A;
+> -	isa2hwcap['f' - 'a'] = COMPAT_HWCAP_ISA_F;
+> -	isa2hwcap['d' - 'a'] = COMPAT_HWCAP_ISA_D;
+> -	isa2hwcap['c' - 'a'] = COMPAT_HWCAP_ISA_C;
+> -	isa2hwcap['v' - 'a'] = COMPAT_HWCAP_ISA_V;
+> -
+> -	elf_hwcap = 0;
+> -
+> -	bitmap_zero(riscv_isa, RISCV_ISA_EXT_MAX);
+> -
+>  	if (!acpi_disabled) {
+>  		status = acpi_get_table(ACPI_SIG_RHCT, 0, &rhct);
+>  		if (ACPI_FAILURE(status))
+> @@ -234,158 +377,7 @@ void __init riscv_fill_hwcap(void)
+>  			}
+>  		}
+>  
+> -		/*
+> -		 * For all possible cpus, we have already validated in
+> -		 * the boot process that they at least contain "rv" and
+> -		 * whichever of "32"/"64" this kernel supports, and so this
+> -		 * section can be skipped.
+> -		 */
+> -		isa += 4;
+> -
+> -		while (*isa) {
+> -			const char *ext = isa++;
+> -			const char *ext_end = isa;
+> -			bool ext_long = false, ext_err = false;
+> -
+> -			switch (*ext) {
+> -			case 's':
+> -				/*
+> -				 * Workaround for invalid single-letter 's' & 'u'(QEMU).
+> -				 * No need to set the bit in riscv_isa as 's' & 'u' are
+> -				 * not valid ISA extensions. It works until multi-letter
+> -				 * extension starting with "Su" appears.
+> -				 */
+> -				if (ext[-1] != '_' && ext[1] == 'u') {
+> -					++isa;
+> -					ext_err = true;
+> -					break;
+> -				}
+> -				fallthrough;
+> -			case 'S':
+> -			case 'x':
+> -			case 'X':
+> -			case 'z':
+> -			case 'Z':
+> -				/*
+> -				 * Before attempting to parse the extension itself, we find its end.
+> -				 * As multi-letter extensions must be split from other multi-letter
+> -				 * extensions with an "_", the end of a multi-letter extension will
+> -				 * either be the null character or the "_" at the start of the next
+> -				 * multi-letter extension.
+> -				 *
+> -				 * Next, as the extensions version is currently ignored, we
+> -				 * eliminate that portion. This is done by parsing backwards from
+> -				 * the end of the extension, removing any numbers. This may be a
+> -				 * major or minor number however, so the process is repeated if a
+> -				 * minor number was found.
+> -				 *
+> -				 * ext_end is intended to represent the first character *after* the
+> -				 * name portion of an extension, but will be decremented to the last
+> -				 * character itself while eliminating the extensions version number.
+> -				 * A simple re-increment solves this problem.
+> -				 */
+> -				ext_long = true;
+> -				for (; *isa && *isa != '_'; ++isa)
+> -					if (unlikely(!isalnum(*isa)))
+> -						ext_err = true;
+> -
+> -				ext_end = isa;
+> -				if (unlikely(ext_err))
+> -					break;
+> -
+> -				if (!isdigit(ext_end[-1]))
+> -					break;
+> -
+> -				while (isdigit(*--ext_end))
+> -					;
+> -
+> -				if (tolower(ext_end[0]) != 'p' || !isdigit(ext_end[-1])) {
+> -					++ext_end;
+> -					break;
+> -				}
+> -
+> -				while (isdigit(*--ext_end))
+> -					;
+> -
+> -				++ext_end;
+> -				break;
+> -			default:
+> -				/*
+> -				 * Things are a little easier for single-letter extensions, as they
+> -				 * are parsed forwards.
+> -				 *
+> -				 * After checking that our starting position is valid, we need to
+> -				 * ensure that, when isa was incremented at the start of the loop,
+> -				 * that it arrived at the start of the next extension.
+> -				 *
+> -				 * If we are already on a non-digit, there is nothing to do. Either
+> -				 * we have a multi-letter extension's _, or the start of an
+> -				 * extension.
+> -				 *
+> -				 * Otherwise we have found the current extension's major version
+> -				 * number. Parse past it, and a subsequent p/minor version number
+> -				 * if present. The `p` extension must not appear immediately after
+> -				 * a number, so there is no fear of missing it.
+> -				 *
+> -				 */
+> -				if (unlikely(!isalpha(*ext))) {
+> -					ext_err = true;
+> -					break;
+> -				}
+> -
+> -				if (!isdigit(*isa))
+> -					break;
+> -
+> -				while (isdigit(*++isa))
+> -					;
+> -
+> -				if (tolower(*isa) != 'p')
+> -					break;
+> -
+> -				if (!isdigit(*++isa)) {
+> -					--isa;
+> -					break;
+> -				}
+> -
+> -				while (isdigit(*++isa))
+> -					;
+> -
+> -				break;
+> -			}
+> -
+> -			/*
+> -			 * The parser expects that at the start of an iteration isa points to the
+> -			 * first character of the next extension. As we stop parsing an extension
+> -			 * on meeting a non-alphanumeric character, an extra increment is needed
+> -			 * where the succeeding extension is a multi-letter prefixed with an "_".
+> -			 */
+> -			if (*isa == '_')
+> -				++isa;
+> -
+> -#define SET_ISA_EXT_MAP(name, bit)							\
+> -			do {								\
+> -				if ((ext_end - ext == sizeof(name) - 1) &&		\
+> -				     !strncasecmp(ext, name, sizeof(name) - 1) &&	\
+> -				     riscv_isa_extension_check(bit))			\
+> -					set_bit(bit, isainfo->isa);			\
+> -			} while (false)							\
+> -
+> -			if (unlikely(ext_err))
+> -				continue;
+> -			if (!ext_long) {
+> -				int nr = tolower(*ext) - 'a';
+> -
+> -				if (riscv_isa_extension_check(nr)) {
+> -					this_hwcap |= isa2hwcap[nr];
+> -					set_bit(nr, isainfo->isa);
+> -				}
+> -			} else {
+> -				for (int i = 0; i < riscv_isa_ext_count; i++)
+> -					SET_ISA_EXT_MAP(riscv_isa_ext[i].name,
+> -							riscv_isa_ext[i].id);
+> -			}
+> -#undef SET_ISA_EXT_MAP
+> -		}
+> +		riscv_parse_isa_string(&this_hwcap, isainfo, isa2hwcap, isa);
+>  
+>  		/*
+>  		 * Linux requires the following extensions, so we may as well
+> @@ -422,6 +414,28 @@ void __init riscv_fill_hwcap(void)
+>  
+>  	if (!acpi_disabled && rhct)
+>  		acpi_put_table((struct acpi_table_header *)rhct);
+> +}
+> +
+> +void __init riscv_fill_hwcap(void)
+> +{
+> +	struct device_node *node;
+> +	const char *isa;
+> +	char print_str[NUM_ALPHA_EXTS + 1];
+> +	int i, j, rc;
+> +	unsigned long isa2hwcap[26] = {0};
+> +	struct acpi_table_header *rhct;
+> +	acpi_status status;
+> +	unsigned int cpu;
 
-There is no bug to fix. Or at least it is not yet known. Whether other
-devices should be constrained as well - sure, sounds reasonable, but I
-did not check the code exactly.
+I see all these unused variables get removed in the next patch, but they
+should get removed here, lest they trigger some warnings and bots come
+after you!
 
-We talk here about this patch.
+> +
+> +	isa2hwcap['i' - 'a'] = COMPAT_HWCAP_ISA_I;
+> +	isa2hwcap['m' - 'a'] = COMPAT_HWCAP_ISA_M;
+> +	isa2hwcap['a' - 'a'] = COMPAT_HWCAP_ISA_A;
+> +	isa2hwcap['f' - 'a'] = COMPAT_HWCAP_ISA_F;
+> +	isa2hwcap['d' - 'a'] = COMPAT_HWCAP_ISA_D;
+> +	isa2hwcap['c' - 'a'] = COMPAT_HWCAP_ISA_C;
+> +	isa2hwcap['v' - 'a'] = COMPAT_HWCAP_ISA_V;
+> +
+> +	riscv_fill_hwcap_from_isa_string(isa2hwcap);
+>  
+>  	/* We don't support systems with F but without D, so mask those out
+>  	 * here. */
+> -- 
+> 2.40.1
+>
 
-Best regards,
-Krzysztof
+Otherwise,
 
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+
+Thanks,
+drew
