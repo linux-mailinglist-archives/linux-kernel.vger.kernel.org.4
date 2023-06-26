@@ -2,75 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3DC273D56D
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 02:53:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CB7573D56F
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 02:56:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230041AbjFZAxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 20:53:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47584 "EHLO
+        id S230054AbjFZA4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 20:56:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjFZAxl (ORCPT
+        with ESMTP id S229452AbjFZA4r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 20:53:41 -0400
-Received: from out203-205-221-164.mail.qq.com (out203-205-221-164.mail.qq.com [203.205.221.164])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFDBF114;
-        Sun, 25 Jun 2023 17:53:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1687740817;
-        bh=uHss9sAi+BkodLXCCxVWpP2rO/AqcIvC63aHn5xoSDE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=fsrBonckOhtrOvxQqgG0G4Ww74ue+qgzTStBvp/4GI3irM+EBTPYGApzTW4bM2YLV
-         2fkQbOTZIXGc4JV9qj3H8cLmrcvquaV0/P+RKqq174tPkACG0RnU+jou5GH+Wdr54h
-         OVb/4tPJ+2HUc/eEsEs8r41KNbaFCLJhpxv83xUo=
-Received: from localhost.localdomain ([39.156.73.12])
-        by newxmesmtplogicsvrsza7-0.qq.com (NewEsmtp) with SMTP
-        id D620A411; Mon, 26 Jun 2023 08:53:34 +0800
-X-QQ-mid: xmsmtpt1687740814t3ck9jg1n
-Message-ID: <tencent_2E65037221902CF14B5F95DCD78E514FC407@qq.com>
-X-QQ-XMAILINFO: MGSlRwRrdVfIisT3TiXB4uZPk7W6In/1TvGVgklfmnUyf6+68w+k7zjcQTVeQd
-         0W4iIR+q1O+eReyH0RzazhC9cQsg0RqCZnQBy5nAfgPGp1gUmP20NwzkUOz3FnWq9SBp0GVIn0Eo
-         B4s75AGMo3jb+AwneIHXTNP/48afTscK52RK/SNqAATK7l1s3LdBy3V6pPROdginc6CRarYtKCjj
-         QTXnEer4hrxuZsbcQ7tL9qi41xWabzI+InRe+VmeuJsfQ7RMwuMw3jb7ybZC0KYA6avfe0wxY7p1
-         Yx+mH8Zt15+1Q7zWx3K39zOvWF0FrNhA16tDW8/vqdZe1rkGin539mBus87IOYQr4mVMSnvcOKkV
-         48jk8K2H6Mr2nmaWHKnmZ40O9y4l7wvB7DXzxmR4Vy+4onN/aNp0FHKlumvle/gXA5V5nI9LqsUO
-         8766Tc7naKSD4WiUy0byWXP/I0CZgwIiNdxNfELyIXoyfd77RlhP+9hWTvzH3pqkK1QWigvwnxXD
-         q/LbM1AU3Gtu+HbZydXp1EpcuZx0kl/yae59jUym6yO4Epq+UTO+1Qd4ZhnxwfBIOhaILiwFXjBV
-         V+Iegce9hMf0XUrQUP1vTsQJwWul3TSKg2q2YE3+58NbnL0Iy286EP1K6V1k4S+ndnJXiPKpkvYD
-         mcGz80CbSBVYN7lhNobvXDUDv/S2LSDMbuFPmOFBsblLjRd/fYUyg9mBJuzHJvzI6sGsZcK2Nt1m
-         dgoe6ElS39GFmuPxr7p4TqCoQieP/6F3H5M1valmKZpWaDUjNB/SA2H1iwviWmcPWElQP7BC0NYp
-         Iuhup1a0liAGX4QhvfmxkrQ7YPY4LSs728+SQZS/OQOKQWYAczb4VM1joCEdSZ07QgqWutuVqZma
-         t25SDkXnHohkPXnYvwhSUFQqDBwQpdqXWWG84/9pNxI2eZzfRUIFMUY9tmnmjbbb88wjspk/tFt7
-         Xy1MjQOA224OvgS0/TXVQA/yXAnrZTrFIgRar3V5okzrX0RrXTGQ==
-X-QQ-XMRINFO: NjIWXnpjOUTzjNa+72IgnqZv1lPwKoxBEg==
-From:   Rong Tao <rtoax@foxmail.com>
-To:     corbet@lwn.net
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org, martin.petersen@oracle.com,
-        rongtao@cestc.cn, rtoax@foxmail.com, target-devel@vger.kernel.org
-Subject: Re: [PATCH v2] docs: target: Remove useless tcm_mod_builder.py
-Date:   Mon, 26 Jun 2023 08:53:33 +0800
-X-OQ-MSGID: <20230626005333.40560-1-rtoax@foxmail.com>
-X-Mailer: git-send-email 2.39.3
-In-Reply-To: <87bkh3l1mr.fsf@meer.lwn.net>
-References: <87bkh3l1mr.fsf@meer.lwn.net>
+        Sun, 25 Jun 2023 20:56:47 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 837B48E;
+        Sun, 25 Jun 2023 17:56:45 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Qq8Yj4GXsz4f4HYw;
+        Mon, 26 Jun 2023 08:56:41 +0800 (CST)
+Received: from [10.67.110.48] (unknown [10.67.110.48])
+        by APP3 (Coremail) with SMTP id _Ch0CgDHrQtI4phkuS+ALg--.18069S2;
+        Mon, 26 Jun 2023 08:56:42 +0800 (CST)
+Message-ID: <71bd6de4-2cde-54eb-5720-3665d421d8ea@huaweicloud.com>
+Date:   Mon, 26 Jun 2023 08:56:40 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3 0/1] Randomized slab caches for kmalloc()
+Content-Language: en-US
+To:     Markus Elfring <Markus.Elfring@web.de>, linux-mm@kvack.org,
+        linux-hardening@vger.kernel.org, kernel-janitors@vger.kernel.org
+Cc:     LKML <linux-kernel@vger.kernel.org>, cocci@inria.fr,
+        Alexander Lobakin <aleksander.lobakin@intel.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dennis Zhou <dennis@kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Pedro Falcato <pedro.falcato@gmail.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        "Serge E . Hallyn" <serge@hallyn.com>, Tejun Heo <tj@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Wang Weiyang <wangweiyang2@huawei.com>,
+        Xiu Jianfeng <xiujianfeng@huawei.com>
+References: <20230616111843.3677378-1-gongruiqi@huaweicloud.com>
+ <570d788b-d7f3-64ab-97e1-4e847aef1321@web.de>
+From:   "GONG, Ruiqi" <gongruiqi@huaweicloud.com>
+In-Reply-To: <570d788b-d7f3-64ab-97e1-4e847aef1321@web.de>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SORTED_RECIPS,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-CM-TRANSID: _Ch0CgDHrQtI4phkuS+ALg--.18069S2
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYI7kC6x804xWl14x267AKxVWrJVCq3wAF
+        c2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII
+        0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xv
+        wVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4
+        x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG
+        64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r
+        1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kI
+        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
+        AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
+        17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
+        IF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq
+        3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
+        nIWIevJa73UjIFyTuYvjxUFYFCUUUUU
+X-CM-SenderInfo: pjrqw2pxltxq5kxd4v5lfo033gof0z/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thank you, jon. I just submit v3, remove the reference in
-Documentation/target/scripts.rst.
 
-Thanks,
+On 2023/06/23 16:30, Markus Elfring wrote:
+>> I adapted the v2 patch to …
+> 
+> I suggest to omit the cover letter for a single patch.
+> 
+> Will any patch series evolve for your proposed changes?
+> 
 
-Rong Tao
+Usually I wouldn't made a cover letter for a single patch, while this
+case is an exception because I need a place to hold the additional
+explanation about its transformation from RFC patch to formal patch.
+
+> Regards,
+> Markus
 
