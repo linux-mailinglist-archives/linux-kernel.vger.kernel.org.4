@@ -2,295 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8383473E63E
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 19:16:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EECB173E642
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 19:17:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231172AbjFZRQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 13:16:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51670 "EHLO
+        id S231178AbjFZRRw convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 26 Jun 2023 13:17:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231163AbjFZRPO (ORCPT
+        with ESMTP id S231130AbjFZRQS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 13:15:14 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1418510E6;
-        Mon, 26 Jun 2023 10:15:12 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D0EE615DB;
-        Mon, 26 Jun 2023 10:15:55 -0700 (PDT)
-Received: from e125769.cambridge.arm.com (e125769.cambridge.arm.com [10.1.196.26])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E66B63F663;
-        Mon, 26 Jun 2023 10:15:08 -0700 (PDT)
-From:   Ryan Roberts <ryan.roberts@arm.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Yin Fengwei <fengwei.yin@intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Yu Zhao <yuzhao@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Cc:     Ryan Roberts <ryan.roberts@arm.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-s390@vger.kernel.org
-Subject: [PATCH v1 10/10] mm: Allocate large folios for anonymous memory
-Date:   Mon, 26 Jun 2023 18:14:30 +0100
-Message-Id: <20230626171430.3167004-11-ryan.roberts@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230626171430.3167004-1-ryan.roberts@arm.com>
-References: <20230626171430.3167004-1-ryan.roberts@arm.com>
+        Mon, 26 Jun 2023 13:16:18 -0400
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D6F1BEE;
+        Mon, 26 Jun 2023 10:15:27 -0700 (PDT)
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-98e2865e2f2so46484266b.0;
+        Mon, 26 Jun 2023 10:15:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687799725; x=1690391725;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KtbCFdM31VuS7J+4uQXZ2N2jb4VKT9MQHjf41EIMETQ=;
+        b=hDHf0B2Gyg3CDKlPo+7HF0z0+6dxgPWIaMcwJ8Jut7k+FMNCQHwj5ObQ8f6INaXSuj
+         qPUp7gFrGDRFckcaxu4lphku407fqBnNkZe+cwiVruT36qVd4UU9j+oEV2m+XKL7hrcM
+         TI16dovFumRFAhqmtUeLkSiANfW09NcHd3l3HC/zuIQESW1eoZvFxBpxK49wLdp7SNPG
+         2qgASr4tsVG7sy7H/VGIBNYW3QlJkkOKQZdkLCAt+3rX7fYjfTqqcyeBsSWZ2jRnEWBQ
+         ELppPL0/R30L6RAjERVe6xFF//nifAtDIZRv/N3A7jG98itk3y6mpkH1Uuu1FUziUMtu
+         PegA==
+X-Gm-Message-State: AC+VfDwjat6qcUgUKWSJ33Nfn3SN29xBPhLnF31Xu3EPArLpvHb9R2Ak
+        yxNMrkhhInZP5QpiPiaf+aHa4MVRThCU/YL7hFY=
+X-Google-Smtp-Source: ACHHUZ5i49hsGEMviP4cvK4Drkv3i9ic2FdjAGUF90dcLJbGHAC/4L57HdDYVvbFWWt9cW4kBH41Cg2c729uSiSRqKY=
+X-Received: by 2002:a17:906:74da:b0:974:5480:6270 with SMTP id
+ z26-20020a17090674da00b0097454806270mr21458379ejl.0.1687799725381; Mon, 26
+ Jun 2023 10:15:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <47423e79-8a68-87c3-c357-6d67c0653adf@linaro.org>
+In-Reply-To: <47423e79-8a68-87c3-c357-6d67c0653adf@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 26 Jun 2023 19:15:14 +0200
+Message-ID: <CAJZ5v0gt3jBtWKhL3PNV97FbBzoHm-iGs+cL+YSWF5Qi-wafkA@mail.gmail.com>
+Subject: Re: [GIT PULL] thermal for v6.5-rc1
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        =?UTF-8?Q?Matti_Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>,
+        Praveenkumar I <quic_ipkumar@quicinc.com>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        =?UTF-8?Q?Ricardo_Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Peng Fan <peng.fan@nxp.com>,
+        Alex Leibovich <alexl@marvell.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        Chen-Yu Tsai <wenst@chromium.org>, Luca Weiss <luca@z3ntu.xyz>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With all of the enabler patches in place, modify the anonymous memory
-write allocation path so that it opportunistically attempts to allocate
-a large folio up to `max_anon_folio_order()` size (This value is
-ultimately configured by the architecture). This reduces the number of
-page faults, reduces the size of (e.g. LRU) lists, and generally
-improves performance by batching what were per-page operations into
-per-(large)-folio operations.
+Hi Daniel,
 
-If CONFIG_LARGE_ANON_FOLIO is not enabled (the default) then
-`max_anon_folio_order()` always returns 0, meaning we get the existing
-allocation behaviour.
+On Mon, Jun 26, 2023 at 5:33 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> Hi Rafael,
+>
+> please consider the following changes since commit
+> 0bb619f9227aa370330d2b309733d74750705053:
+>
+>    thermal/intel/intel_soc_dts_iosf: Fix reporting wrong temperatures
+> (2023-06-15 18:07:48 +0200)
+>
+> are available in the Git repository at:
+>
+>
+> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git
+> tags/thermal-v6.5-rc1
+>
+> for you to fetch changes up to 57c9eaa4de537e6f08819d9214de502cac5a989c:
+>
+>    thermal/drivers/qcom/temp-alarm: Use dev_err_probe (2023-06-26
+> 12:10:22 +0200)
+>
+> ----------------------------------------------------------------
+> - Add DT bindings for SM6375, MSM8226 and QCM2290 Qcom platforms (Konrad
+>    Dybcio)
+>
+> - Add DT bindings and support for QCom MSM8226 (Matti Lehtimäki)
+>
+> - Add DT bindings for QCom ipq9574 (Praveenkumar I)
+>
+> - Convert bcm2835 DT bindings to the yaml schema (Stefan Wahren)
+>
+> - Allow selecting the bang-bang governor as default (Thierry Reding)
+>
+> - Refactor and prepare the code to set the scene for RCar Gen4
+>    (Wolfram Sang)
+>
+> - Cleanup and fixes for the QCom tsens drivers. Add DT bindings and
+>    calibration for the MSM8909 platform (Stephan Gerhold)
+>
+> - Revert a patch introducing a wrong usage of devm_of_iomap() on the
+>    Mediatek platform (Ricardo Cañuelo)
+>
+> - Fix the clock vs reset ordering in order to conform to the
+>    documentation on the sun8i (Christophe JAILLET)
+>
+> - Prevent setting up undocumented registers, enable the only described
+>    sensors and add the version 2.1 on the Qoriq sensor (Peng Fan)
+>
+> - Add DT bindings and support for the Armada AP807 (Alex Leibovich)
+>
+> - Update the mlx5 driver with the recent thermal changes (Daniel
+>    Lezcano)
+>
+> - Convert to platform remove callback returning void on STM32 (Uwe
+>    Kleine-König)
+>
+> - Add an error information printing for devm_thermal_add_hwmon_sysfs()
+>    and remove the error from the Sun8i, Amlogic, i.MX, TI, K3, Tegra,
+>    Qoriq, Mediateka and QCom (Yangtao Li)
+>
+> - Register as hwmon sensor for the Generic ADC (Chen-Yu Tsai)
+>
+> - Use the dev_err_probe() function in the QCom tsens alarm driver
+>    (Luca Weiss)
+>
+> ----------------------------------------------------------------
+> Alex Leibovich (2):
+>        dt-bindings: armada-thermal: Add armada-ap807-thermal compatible
+>        thermal/drivers/armada: Add support for AP807 thermal data
+>
+> Chen-Yu Tsai (2):
+>        thermal/drivers/mediatek/lvts_thermal: Register thermal zones as
+> hwmon sensors
+>        thermal/drivers/generic-adc: Register thermal zones as hwmon sensors
+>
+> Christophe JAILLET (1):
+>        thermal/drivers/sun8i: Fix some error handling paths in
+> sun8i_ths_probe()
+>
+> Daniel Lezcano (1):
+>        net/mlx5: Update the driver with the recent thermal changes
+>
+> Konrad Dybcio (2):
+>        dt-bindings: thermal: tsens: Add QCM2290
+>        dt-bindings: thermal: tsens: Add compatible for SM6375
+>
+> Luca Weiss (1):
+>        thermal/drivers/qcom/temp-alarm: Use dev_err_probe
+>
+> Matti Lehtimäki (2):
+>        dt-bindings: thermal: tsens: Add compatible for MSM8226
+>        thermal/drivers/qcom/tsens-v0_1: Add support for MSM8226
+>
+> Pankit Garg (1):
+>        thermal/drivers/qoriq: No need to program site adjustment register
+>
+> Peng Fan (2):
+>        thermal/drivers/qoriq: Only enable supported sensors
+>        thermal/drivers/qoriq: Support version 2.1
+>
+> Praveenkumar I (1):
+>        dt-bindings: thermal: tsens: Add ipq9574 compatible
+>
+> Ricardo Cañuelo (1):
+>        Revert "thermal/drivers/mediatek: Use devm_of_iomap to avoid
+> resource leak in mtk_thermal_probe"
+>
+> Stefan Wahren (1):
+>        dt-bindings: thermal: convert bcm2835-thermal bindings to YAML
+>
+> Stephan Gerhold (6):
+>        thermal/drivers/qcom/tsens: Drop unused legacy structs
+>        thermal/drivers/qcom/tsens-v0_1: Fix mdm9607 slope values
+>        thermal/drivers/qcom/tsens-v0_1: Add mdm9607 correction offsets
+>        dt-bindings: thermal: qcom-tsens: Drop redundant compatibles
+>        dt-bindings: thermal: qcom-tsens: Add MSM8909 compatible
+>        thermal/drivers/qcom/tsens-v0_1: Add MSM8909 data
+>
+> Thierry Reding (1):
+>        thermal: Allow selecting the bang-bang governor as default
+>
+> Uwe Kleine-König (1):
+>        thermal/drivers/stm32: Convert to platform remove callback
+> returning void
+>
+> Wolfram Sang (3):
+>        drivers/thermal/rcar_gen3_thermal: introduce 'info' structure
+>        drivers/thermal/rcar_gen3_thermal: refactor reading fuses into
+> seprarate function
+>        drivers/thermal/rcar_gen3_thermal: add reading fuses for Gen4
+>
+> Yangtao Li (10):
+>        thermal/hwmon: Add error information printing for
+> devm_thermal_add_hwmon_sysfs()
+>        thermal/drivers/sun8i: Remove redundant msg in sun8i_ths_register()
+>        thermal/drivers/amlogic: Remove redundant msg in
+> amlogic_thermal_probe()
+>        thermal/drivers/imx: Remove redundant msg in imx8mm_tmu_probe()
+> and imx_sc_thermal_probe()
+>        drivers/thermal/k3: Remove redundant msg in k3_bandgap_probe()
+>        thermal/drivers/tegra: Remove redundant msg in
+> tegra_tsensor_register_channel()
+>        thermal/drivers/qoriq: Remove redundant msg in
+> qoriq_tmu_register_tmu_zone()
+>        thermal/drivers/ti-soc: Remove redundant msg in
+> ti_thermal_expose_sensor()
+>        thermal/drivers/qcom: Remove redundant msg at probe time
+>        thermal/drivers/mediatek/lvts_thermal: Remove redundant msg in
+> lvts_ctrl_start()
 
-Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
----
- mm/memory.c | 159 +++++++++++++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 144 insertions(+), 15 deletions(-)
+Pulled and added to the thermal branch of linux-pm.git.
 
-diff --git a/mm/memory.c b/mm/memory.c
-index a8f7e2b28d7a..d23c44cc5092 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -3161,6 +3161,90 @@ static inline int max_anon_folio_order(struct vm_area_struct *vma)
- 		return CONFIG_LARGE_ANON_FOLIO_NOTHP_ORDER_MAX;
- }
- 
-+/*
-+ * Returns index of first pte that is not none, or nr if all are none.
-+ */
-+static inline int check_ptes_none(pte_t *pte, int nr)
-+{
-+	int i;
-+
-+	for (i = 0; i < nr; i++) {
-+		if (!pte_none(ptep_get(pte++)))
-+			return i;
-+	}
-+
-+	return nr;
-+}
-+
-+static int calc_anon_folio_order_alloc(struct vm_fault *vmf, int order)
-+{
-+	/*
-+	 * The aim here is to determine what size of folio we should allocate
-+	 * for this fault. Factors include:
-+	 * - Order must not be higher than `order` upon entry
-+	 * - Folio must be naturally aligned within VA space
-+	 * - Folio must not breach boundaries of vma
-+	 * - Folio must be fully contained inside one pmd entry
-+	 * - Folio must not overlap any non-none ptes
-+	 *
-+	 * Additionally, we do not allow order-1 since this breaks assumptions
-+	 * elsewhere in the mm; THP pages must be at least order-2 (since they
-+	 * store state up to the 3rd struct page subpage), and these pages must
-+	 * be THP in order to correctly use pre-existing THP infrastructure such
-+	 * as folio_split().
-+	 *
-+	 * As a consequence of relying on the THP infrastructure, if the system
-+	 * does not support THP, we always fallback to order-0.
-+	 *
-+	 * Note that the caller may or may not choose to lock the pte. If
-+	 * unlocked, the calculation should be considered an estimate that will
-+	 * need to be validated under the lock.
-+	 */
-+
-+	struct vm_area_struct *vma = vmf->vma;
-+	int nr;
-+	unsigned long addr;
-+	pte_t *pte;
-+	pte_t *first_set = NULL;
-+	int ret;
-+
-+	if (has_transparent_hugepage()) {
-+		order = min(order, PMD_SHIFT - PAGE_SHIFT);
-+
-+		for (; order > 1; order--) {
-+			nr = 1 << order;
-+			addr = ALIGN_DOWN(vmf->address, nr << PAGE_SHIFT);
-+			pte = vmf->pte - ((vmf->address - addr) >> PAGE_SHIFT);
-+
-+			/* Check vma bounds. */
-+			if (addr < vma->vm_start ||
-+			    addr + (nr << PAGE_SHIFT) > vma->vm_end)
-+				continue;
-+
-+			/* Ptes covered by order already known to be none. */
-+			if (pte + nr <= first_set)
-+				break;
-+
-+			/* Already found set pte in range covered by order. */
-+			if (pte <= first_set)
-+				continue;
-+
-+			/* Need to check if all the ptes are none. */
-+			ret = check_ptes_none(pte, nr);
-+			if (ret == nr)
-+				break;
-+
-+			first_set = pte + ret;
-+		}
-+
-+		if (order == 1)
-+			order = 0;
-+	} else
-+		order = 0;
-+
-+	return order;
-+}
-+
- /*
-  * Handle write page faults for pages that can be reused in the current vma
-  *
-@@ -4201,6 +4285,9 @@ static vm_fault_t do_anonymous_page(struct vm_fault *vmf)
- 	struct folio *folio;
- 	vm_fault_t ret = 0;
- 	pte_t entry;
-+	unsigned long addr;
-+	int order = uffd_wp ? 0 : max_anon_folio_order(vma);
-+	int pgcount = BIT(order);
- 
- 	/* File mapping without ->vm_ops ? */
- 	if (vma->vm_flags & VM_SHARED)
-@@ -4242,24 +4329,44 @@ static vm_fault_t do_anonymous_page(struct vm_fault *vmf)
- 			pte_unmap_unlock(vmf->pte, vmf->ptl);
- 			return handle_userfault(vmf, VM_UFFD_MISSING);
- 		}
--		goto setpte;
-+		if (uffd_wp)
-+			entry = pte_mkuffd_wp(entry);
-+		set_pte_at(vma->vm_mm, vmf->address, vmf->pte, entry);
-+
-+		/* No need to invalidate - it was non-present before */
-+		update_mmu_cache(vma, vmf->address, vmf->pte);
-+		goto unlock;
- 	}
- 
--	/* Allocate our own private page. */
-+retry:
-+	/*
-+	 * Estimate the folio order to allocate. We are not under the ptl here
-+	 * so this estiamte needs to be re-checked later once we have the lock.
-+	 */
-+	vmf->pte = pte_offset_map(vmf->pmd, vmf->address);
-+	order = calc_anon_folio_order_alloc(vmf, order);
-+	pte_unmap(vmf->pte);
-+
-+	/* Allocate our own private folio. */
- 	if (unlikely(anon_vma_prepare(vma)))
- 		goto oom;
--	folio = vma_alloc_zeroed_movable_folio(vma, vmf->address, 0, 0);
-+	folio = try_vma_alloc_movable_folio(vma, vmf->address, order, true);
- 	if (!folio)
- 		goto oom;
- 
-+	/* We may have been granted less than we asked for. */
-+	order = folio_order(folio);
-+	pgcount = BIT(order);
-+	addr = ALIGN_DOWN(vmf->address, pgcount << PAGE_SHIFT);
-+
- 	if (mem_cgroup_charge(folio, vma->vm_mm, GFP_KERNEL))
- 		goto oom_free_page;
- 	folio_throttle_swaprate(folio, GFP_KERNEL);
- 
- 	/*
- 	 * The memory barrier inside __folio_mark_uptodate makes sure that
--	 * preceding stores to the page contents become visible before
--	 * the set_pte_at() write.
-+	 * preceding stores to the folio contents become visible before
-+	 * the set_ptes() write.
- 	 */
- 	__folio_mark_uptodate(folio);
- 
-@@ -4268,11 +4375,31 @@ static vm_fault_t do_anonymous_page(struct vm_fault *vmf)
- 	if (vma->vm_flags & VM_WRITE)
- 		entry = pte_mkwrite(pte_mkdirty(entry));
- 
--	vmf->pte = pte_offset_map_lock(vma->vm_mm, vmf->pmd, vmf->address,
--			&vmf->ptl);
--	if (vmf_pte_changed(vmf)) {
--		update_mmu_tlb(vma, vmf->address, vmf->pte);
--		goto release;
-+	vmf->pte = pte_offset_map_lock(vma->vm_mm, vmf->pmd, addr, &vmf->ptl);
-+
-+	/*
-+	 * Ensure our estimate above is still correct; we could have raced with
-+	 * another thread to service a fault in the region.
-+	 */
-+	if (order == 0) {
-+		if (vmf_pte_changed(vmf)) {
-+			update_mmu_tlb(vma, vmf->address, vmf->pte);
-+			goto release;
-+		}
-+	} else if (check_ptes_none(vmf->pte, pgcount) != pgcount) {
-+		pte_t *pte = vmf->pte + ((vmf->address - addr) >> PAGE_SHIFT);
-+
-+		/* If faulting pte was allocated by another, exit early. */
-+		if (!pte_none(ptep_get(pte))) {
-+			update_mmu_tlb(vma, vmf->address, pte);
-+			goto release;
-+		}
-+
-+		/* Else try again, with a lower order. */
-+		pte_unmap_unlock(vmf->pte, vmf->ptl);
-+		folio_put(folio);
-+		order--;
-+		goto retry;
- 	}
- 
- 	ret = check_stable_address_space(vma->vm_mm);
-@@ -4286,16 +4413,18 @@ static vm_fault_t do_anonymous_page(struct vm_fault *vmf)
- 		return handle_userfault(vmf, VM_UFFD_MISSING);
- 	}
- 
--	inc_mm_counter(vma->vm_mm, MM_ANONPAGES);
--	folio_add_new_anon_rmap(folio, vma, vmf->address);
-+	folio_ref_add(folio, pgcount - 1);
-+
-+	add_mm_counter(vma->vm_mm, MM_ANONPAGES, pgcount);
-+	folio_add_new_anon_rmap_range(folio, &folio->page, pgcount, vma, addr);
- 	folio_add_lru_vma(folio, vma);
--setpte:
-+
- 	if (uffd_wp)
- 		entry = pte_mkuffd_wp(entry);
--	set_pte_at(vma->vm_mm, vmf->address, vmf->pte, entry);
-+	set_ptes(vma->vm_mm, addr, vmf->pte, entry, pgcount);
- 
- 	/* No need to invalidate - it was non-present before */
--	update_mmu_cache(vma, vmf->address, vmf->pte);
-+	update_mmu_cache_range(vma, addr, vmf->pte, pgcount);
- unlock:
- 	pte_unmap_unlock(vmf->pte, vmf->ptl);
- 	return ret;
--- 
-2.25.1
-
+Thanks!
