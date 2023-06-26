@@ -2,112 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 091F273D94A
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 10:13:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DBF573D94C
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 10:13:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230145AbjFZIMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 04:12:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52564 "EHLO
+        id S230113AbjFZINX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 04:13:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbjFZIMm (ORCPT
+        with ESMTP id S229790AbjFZINS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 04:12:42 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06D63E76;
-        Mon, 26 Jun 2023 01:12:35 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QqLDc5xCyz4wZr;
-        Mon, 26 Jun 2023 18:12:32 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1687767154;
-        bh=YL4WtG8LHm8HUihCvX1m65X1iguc/Lla+C+qJnkgHSU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=l/0v/jqK+E4RhCKLhMKi2A2cfLf7MEG/IjT47KrFbvNwUcc/ak2DcL4RwaSXDX5HU
-         32GcpNT4wkfyYrOboPEi/MBWW99W9Hs4wuyupj1wBRh9zSyX1B4QhqA96VXrhyfuG9
-         wZANibg/LWtdko5+N4iG4gJ8/GrLEK186mgGG4z3akt2rQTtTq5Xw3tUOGoIsuO+Ub
-         4JIZZmUIHPUjc4KZoHW2y8iin8mA5M4WHvkRIW0+vcWGxPxQOqKrG37PR8lxBH/Mq7
-         DpOn27+D47aUPU6eNxX6RONJ2cLF8/RpY47ESCplSGpmtbCldGCdPLzG+wWdHUteUZ
-         tqaKUnDV2rudw==
-Date:   Mon, 26 Jun 2023 18:12:31 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Mon, 26 Jun 2023 04:13:18 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FB5A10E7
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 01:12:59 -0700 (PDT)
+Date:   Mon, 26 Jun 2023 10:12:54 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1687767176;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ieJMa1dJGSeBQ+5q42kvQ0aAwTr385DfbQKxpY80eJY=;
+        b=IgG+lBKQBgg9H8LdKmQ8ypTwQqagxrKjxmmRdAW8dlqjmExvsJ7u6Rn9HiUDllJJ5hez9Q
+        M85Kbzb9hu8kmT5rYmioCqBTqiWQJ+E+e6z+AFBPbxl71X0T6HsYz911uizKvWak5XbMZT
+        3ndKHvticc/yMbZsBTGbhapUxnznG6Jq8+fNSZKVx8pcB4SxleIZfJddGVvl3T6wld6V5e
+        ktpQx1ib0ydwYFUzvkyrwFFuggu3cNUffpsweJoUJLT9C3WhrxWue5hh3FmpmN5iDp1som
+        t2CDRc+NC1kRlDCrYTbSi1FwYWTYw0tDAKhnPJdd1KDv4LoJpIhRpDyvuCjYtQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1687767176;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ieJMa1dJGSeBQ+5q42kvQ0aAwTr385DfbQKxpY80eJY=;
+        b=imivjTsUAOGZ3TGDtu6GA8nDyVCkx2kGtQLzCLhB+1IN2eYad2VW4HiTO+RfnyH6p3qQl6
+        aRurbMNxTP5jbIAw==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
         Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
-        linux-next@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: linux-next: build failure after merge of the net-next tree
-Message-ID: <20230626181231.70405c1f@canb.auug.org.au>
-In-Reply-To: <2947430.1687765706@warthog.procyon.org.uk>
-References: <20230626112847.2ef3d422@canb.auug.org.au>
-        <2947430.1687765706@warthog.procyon.org.uk>
+        John Ogness <john.ogness@linutronix.de>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Michal Hocko <mhocko@suse.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v2 1/2] seqlock: Do the lockdep annotation before locking
+ in do_write_seqcount_begin_nested()
+Message-ID: <20230626081254.XmorFrhs@linutronix.de>
+References: <20230623171232.892937-1-bigeasy@linutronix.de>
+ <20230623171232.892937-2-bigeasy@linutronix.de>
+ <d9b7c170-ed0d-5d37-e099-20d233115943@I-love.SAKURA.ne.jp>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/1Ge+Wr0ku4FcBxMax3jOKWi";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <d9b7c170-ed0d-5d37-e099-20d233115943@I-love.SAKURA.ne.jp>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/1Ge+Wr0ku4FcBxMax3jOKWi
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi David,
-
-On Mon, 26 Jun 2023 08:48:26 +0100 David Howells <dhowells@redhat.com> wrot=
-e:
->
-> Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+On 2023-06-24 15:54:12 [+0900], Tetsuo Handa wrote:
+> Why not to do the same on the end side?
 >=20
-> > After merging the net-next tree, today's linux-next build (native perf)
-> > failed like this:
-> >=20
-> > In file included from builtin-trace.c:907:
-> > trace/beauty/msg_flags.c: In function 'syscall_arg__scnprintf_msg_flags=
-':
-> > trace/beauty/msg_flags.c:28:21: error: 'MSG_SPLICE_PAGES' undeclared (f=
-irst use in this function) =20
->=20
-> I tried applying the attached patch, but it doesn't make any difference.
+>  static inline void do_write_seqcount_end(seqcount_t *s)
+>  {
+> - 	seqcount_release(&s->dep_map, _RET_IP_);
+>  	do_raw_write_seqcount_end(s);
+> +	seqcount_release(&s->dep_map, _RET_IP_);
+>  }
 
-I wonder if it is using the system headers?  Or depends on "make headers-in=
-stall"?
+I don't have a compelling argument for doing it. It is probably better
+to release the lock from lockdep's point of view and then really release
+it (so it can't be acquired before it is released).
 
---=20
-Cheers,
-Stephen Rothwell
+Looking at other locking primitives (spin_lock_unlock(),
+mutex_unlock(),=E2=80=A6) that is what they do in the unlock path: lockdep
+annotation followed by the actual operation. Therefore I would keep the
+current ordering to remain in-sync with the other primitives.
 
---Sig_/1Ge+Wr0ku4FcBxMax3jOKWi
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSZSG8ACgkQAVBC80lX
-0Gxg/ggAkTZ+/82QjJe4wJrDgQ+zyJhq4vhN3TFH56b9I64FB9blMUZicISKfQte
-O/y63r6wPVD5Tsjc8v81egJO+i4/jXd/jp4i+ce7xSNDk0uSIjeRoXr8wMD3R793
-Z0925rEhClPbyGwjhNZulvAOEcNZOyN/2A8z+zFSN/3ie6bTNxWNrVXkN1P25RTd
-FAQYiT+YtY5taSmAnmO+O7ckJl69o3K8xUPct4a0oeEWxgNnjrXfKlhAUyFZzLzv
-TjYK7Vk3KfGKJ2rGrLEw2RlgaIMMJ5/3NupwFqbpa6UMHtyMfv+5Z2EzHVs8BqFJ
-G9IHURBU29V9G16Lrjo2uPr0UBOIaw==
-=IP/A
------END PGP SIGNATURE-----
-
---Sig_/1Ge+Wr0ku4FcBxMax3jOKWi--
+Sebastian
