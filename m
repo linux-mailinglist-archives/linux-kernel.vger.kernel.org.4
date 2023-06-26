@@ -2,123 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 444C173E29C
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 16:58:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C96E73E2A2
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 17:00:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230241AbjFZO6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 10:58:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59674 "EHLO
+        id S230194AbjFZPAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 11:00:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229922AbjFZO6K (ORCPT
+        with ESMTP id S230016AbjFZPAI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 10:58:10 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1545101;
-        Mon, 26 Jun 2023 07:58:08 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1b7f68f1c9eso14437055ad.2;
-        Mon, 26 Jun 2023 07:58:08 -0700 (PDT)
+        Mon, 26 Jun 2023 11:00:08 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98FC712E
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 08:00:05 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-3113da5260dso2903678f8f.2
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 08:00:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687791488; x=1690383488;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Hmh8wbv8PZygexgxnyH4qZ7wQNevvIr6Du0+ni35xCo=;
-        b=qZnXvzcd2hJ3+aXJpt7yZh25TZGXjgiAXbclTWSXY9GxefrudhkGjH3O4YrdJ57bTv
-         Q16QNuuMiSmjVZVWfCmJPzsrm2wxNiBOc/WphyZRbSz78TWdRHdlWkI77Le3b8DD0yfJ
-         Qs+rAgQJeA3zJ/6NUimnZ1gRk6hDdm95g9rZCu234V2Cx2L477PuAInbgzpLUXokIxIJ
-         ZiLhJVfFT5G4tJkvLxQMzGDZXAkDAa3ebu0IkFOyckaQLz1wqMBuO/b4goacTHrfbYp+
-         exZlcHyawxmP/068E+Q6swe+BWptcsP2Jicops8TTxYEtGwe8SNg1PIvB3xYSPLAvPkb
-         h32Q==
+        d=linaro.org; s=google; t=1687791604; x=1690383604;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ysbiVMlRUPpmijvxEgiqELqD4pocrI8KujWeqKckrNk=;
+        b=rxS+vi8VhGBDXLjpUQcsEhtzPnyVlg1GpEc72GOwk1v07t5i1xxdc4FvqFuJPThvnc
+         6tw0DaAPUYNCpOVkWW1maSwwu4be/ugnVKpuYrQtw7mYqtLCRnLYstsXEGgz1/zG0R6i
+         JrEPstX17B7jx2V/aJbePsMziYnB+26omlQ0wbAABSllNmOIo44VDPFrOR+Dra9XQHZE
+         PblvkvD/5/bogBc6PrYgJ1x3bahrGFlEhPBmlX8hhMbxhDpRtrQ8vYrqtxzwFJ98UoUx
+         zfBycvUU0ukCpc2xTKq4M7932LqCa9ob01W3o3QVpFn7Bs/RLthho8a6Rg1EisyGfkI2
+         lrww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687791488; x=1690383488;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Hmh8wbv8PZygexgxnyH4qZ7wQNevvIr6Du0+ni35xCo=;
-        b=Jn92gbupaQMLTvDymqHKOjFm1MkXCWe/CMPEVHlby88c4T+2klBbAebIMReKp41Mwa
-         vw1CT85Gjz2FKUMPkRe/2vNNzEQ9+qg+Zry5Xnpt6WUsLISE4fgDsnYm1AsAf1RgXvLH
-         Lpuu724kYz07F+J3gC9e3TauLTD4DSI/ZBQnpJrUIctN4gF1wWWixrznH3cEkullJENL
-         Yx/5G69Qs+FfcAZldyKlVR0o/Eu0YY8QRnfy+RTMYFWf2dmJQDYtgk8tSiiO2kOXFVar
-         sfQ+tixP217WUV9iDrPy36VC4M/guQo1rLTguVZqR41wysAPwVoI38yh4HaFXnE66JIe
-         gk/g==
-X-Gm-Message-State: AC+VfDyV4mQKtFiIRpNjd+1x4xJ4Ur2c+LxE+IcMA1YvRVsbjRvTaM1D
-        NhSQRhgsC8mGyzAWkDe6kG4=
-X-Google-Smtp-Source: ACHHUZ6+/UHdi5peXrr2q6q5paiSAe744S/gQ1FkDR6baMkvQ+7IrFOjVgV2aptlE+PekUaFm/3Yyg==
-X-Received: by 2002:a17:903:188:b0:1b2:4b28:793c with SMTP id z8-20020a170903018800b001b24b28793cmr9013547plg.29.1687791488320;
-        Mon, 26 Jun 2023 07:58:08 -0700 (PDT)
-Received: from 377044c6c369.cse.ust.hk (191host097.mobilenet.cse.ust.hk. [143.89.191.97])
-        by smtp.gmail.com with ESMTPSA id x20-20020a170902821400b001b1a2bf5277sm4313303pln.39.2023.06.26.07.58.06
+        d=1e100.net; s=20221208; t=1687791604; x=1690383604;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ysbiVMlRUPpmijvxEgiqELqD4pocrI8KujWeqKckrNk=;
+        b=jfiSdjyiExSTZPDw0a8fdw1PekGQqX204M1nPVHM0dBVWMKRrMn1bHonIdb8sYHQOY
+         zciOvbdOxy4bvyiczpLyBz9smCbrgp0i6czCnyj2Q+P0r8jEByB0jsqSJeofB9rCWKiH
+         jNJSDroiXTxQtgW1V9wbiiXifkwWnFNdbh3rtXEZt0aCxonkDPvSzTKvHNgkcZEj4PJ+
+         p0ggjHVjVcOq+6vUJUvhBCnvc/mI1nh/ejhbZi21OcBtQ4gM/4NHhqb/WQ7euXg7aDMY
+         CZcdv6BUqOTx5dGujncbJzSDYcnJ8+En6Rsu+WcZKhlrv1MGS5JGB9jWecw1JAb7+rSV
+         x8Dg==
+X-Gm-Message-State: AC+VfDx+gjq9BfqloAHoIVi2OZlXuSV/3bHMKt9X5nfvI5dpw9XW8eV7
+        eH7u8XNnDLqqUBMw3FpksTb/Kg==
+X-Google-Smtp-Source: ACHHUZ7udFgKBee119WAQc9HfTv87IIlEp5QgIr91900E3CZgGj828TfAtq4gdInkQIw8Q/mNE+WyQ==
+X-Received: by 2002:a5d:4ad0:0:b0:313:f98a:1fd3 with SMTP id y16-20020a5d4ad0000000b00313f98a1fd3mr29021wrs.27.1687791603958;
+        Mon, 26 Jun 2023 08:00:03 -0700 (PDT)
+Received: from krzk-bin.. ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id m16-20020a5d6250000000b003068f5cca8csm7585484wrv.94.2023.06.26.08.00.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jun 2023 07:58:07 -0700 (PDT)
-From:   Chengfeng Ye <dg573847474@gmail.com>
-To:     linus.walleij@linaro.org, brgl@bgdev.pl, andy@kernel.org
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        cyeaa@connect.ust.hk, Chengfeng Ye <dg573847474@gmail.com>
-Subject: [PATCH v2 2/2] gpiolib: cdev: Fix &le->wait.lock deadlock issue
-Date:   Mon, 26 Jun 2023 14:57:56 +0000
-Message-Id: <20230626145756.30696-2-dg573847474@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230626145756.30696-1-dg573847474@gmail.com>
-References: <20230626145756.30696-1-dg573847474@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 26 Jun 2023 08:00:03 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Luca Weiss <luca.weiss@fairphone.com>
+Subject: [PATCH v2] arm64: dts: qcom: sm8350: fix BAM DMA crash and reboot
+Date:   Mon, 26 Jun 2023 16:59:59 +0200
+Message-Id: <20230626145959.646747-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The softirq lineevent_irq_thread() could deadlock on &le->wait.lock
-if it preempts lineevent_read_unlocked() which acquires the same
-lock but not disable irq.
+SM8350 HDK and MTP boards were silently dying and rebooting during BAM
+DMA probe, probably during reading BAM_REVISION register:
 
-Fix the potential deadlock by spin_lock_irq().
+  [    1.574304] vreg_bob: Setting 3008000-3960000uV
+  [    1.576918] bam-dFormat: Log Type - Time(microsec) - Message -
+  Optional Info
+  Log Type: B - Since Boot(Power On Reset),  D - Delta,  S - Statistic
+  S - QC_IMAGE_VERSION_STRING=BOOT.MXF.1.0-00637.1-LAHAINA-1
+  S - IMAGE_VARIANT_STRING=SocLahainaLAA
+  S - OEM_IMAGE_VERSION_STRING=crm-ubuntu77
+  S - Boot Interface: UFS
 
-Fixes: dea9c80ee672 ("gpiolib: rework the locking mechanism for lineevent kfifo")
-Signed-off-by: Chengfeng Ye <dg573847474@gmail.com>
+It seems that BAM DMA is not yet operational, thus mark it as failed and
+disable also QCE because it won't work without BAM DMA.
+
+Fixes: f1040a7fe8f0 ("arm64: dts: qcom: sm8350: Add Crypto Engine support")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
 ---
- drivers/gpio/gpiolib-cdev.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/gpio/gpiolib-cdev.c b/drivers/gpio/gpiolib-cdev.c
-index f768d46bdea7..a2c108f172f2 100644
---- a/drivers/gpio/gpiolib-cdev.c
-+++ b/drivers/gpio/gpiolib-cdev.c
-@@ -1858,28 +1858,28 @@ static ssize_t lineevent_read_unlocked(struct file *file, char __user *buf,
- 		return -EINVAL;
+Changes in v2:
+1. Disable the nodes instead of failing the probe. Due to this change,
+   no Reviewed/Tested tags.
+
+Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc: Luca Weiss <luca.weiss@fairphone.com>
+---
+ arch/arm64/boot/dts/qcom/sm8350.dtsi | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+index 88ef478cb5cc..ec451c616f3e 100644
+--- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+@@ -1744,6 +1744,8 @@ cryptobam: dma-controller@1dc4000 {
+ 			qcom,controlled-remotely;
+ 			iommus = <&apps_smmu 0x594 0x0011>,
+ 				 <&apps_smmu 0x596 0x0011>;
++			/* FIXME: Probing BAM DMA causes some abort and system hang */
++			status = "fail";
+ 		};
  
- 	do {
--		spin_lock(&le->wait.lock);
-+		spin_lock_irq(&le->wait.lock);
- 		if (kfifo_is_empty(&le->events)) {
- 			if (bytes_read) {
--				spin_unlock(&le->wait.lock);
-+				spin_unlock_irq(&le->wait.lock);
- 				return bytes_read;
- 			}
+ 		crypto: crypto@1dfa000 {
+@@ -1755,6 +1757,8 @@ crypto: crypto@1dfa000 {
+ 				 <&apps_smmu 0x596 0x0011>;
+ 			interconnects = <&aggre2_noc MASTER_CRYPTO 0 &mc_virt SLAVE_EBI1 0>;
+ 			interconnect-names = "memory";
++			/* FIXME: dependency BAM DMA is disabled */
++			status = "disabled";
+ 		};
  
- 			if (file->f_flags & O_NONBLOCK) {
--				spin_unlock(&le->wait.lock);
-+				spin_unlock_irq(&le->wait.lock);
- 				return -EAGAIN;
- 			}
- 
--			ret = wait_event_interruptible_locked(le->wait,
-+			ret = wait_event_interruptible_locked_irq(le->wait,
- 					!kfifo_is_empty(&le->events));
- 			if (ret) {
--				spin_unlock(&le->wait.lock);
-+				spin_unlock_irq(&le->wait.lock);
- 				return ret;
- 			}
- 		}
- 
- 		ret = kfifo_out(&le->events, &ge, 1);
--		spin_unlock(&le->wait.lock);
-+		spin_unlock_irq(&le->wait.lock);
- 		if (ret != 1) {
- 			/*
- 			 * This should never happen - we were holding the lock
+ 		ipa: ipa@1e40000 {
 -- 
-2.17.1
+2.34.1
 
