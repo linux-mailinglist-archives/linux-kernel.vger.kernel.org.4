@@ -2,129 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C89473DC12
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 12:13:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6274C73DC18
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 12:17:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230121AbjFZKNC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 06:13:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54024 "EHLO
+        id S230031AbjFZKQ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 06:16:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjFZKNB (ORCPT
+        with ESMTP id S229446AbjFZKQ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 06:13:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5278D18E;
-        Mon, 26 Jun 2023 03:13:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DC11E60DCF;
-        Mon, 26 Jun 2023 10:12:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E57FCC433C0;
-        Mon, 26 Jun 2023 10:12:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687774379;
-        bh=kpLEOgBekJKzTbb19C33i9D78u2j2+zBDjlD73GNP94=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=KJWphZS2G90c951n2Z7eKff79huYUejh1Jx/pPWoxCPR3p9tT5v2uMhIvZd/WnkpJ
-         NN8msgtncrcjrNn6hUfdSTgdn0MCx2ZS4aKXNwE+a1WQ1rmjWXdV2pcshaoBPSCCjM
-         BvDCy0mFCm4DdeKIAQZa4aVkgbuTbPvZmozjjBJ93DKXpWOgt3Cynqnc4ksGp971t2
-         bfQv/MJGtfzHQ1R0hfA6KDf827wknEXU1azFM9mNUzjqTO3dyaYQQj36wbbl1h0Vtr
-         6J48VtjklBSd6LdstUV/oANBd4IvLn0ArIWtyIh+zK9dG4wSEvZC5rWGG8qUwYI3uT
-         Xegc0+dzWq9fQ==
-Date:   Mon, 26 Jun 2023 19:12:55 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Cc:     Zheng Yejian <zhengyejian1@huawei.com>, <rostedt@goodmis.org>,
-        <shuah@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-trace-kernel@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH] selftests/ftrace: Correctly enable event in
- instance-event.tc
-Message-Id: <20230626191255.53baab4ed48d7111dcd44cad@kernel.org>
-In-Reply-To: <20230626191114.8c5a66fbaa28af3c303923bd@kernel.org>
-References: <20230626001144.2635956-1-zhengyejian1@huawei.com>
-        <20230626191114.8c5a66fbaa28af3c303923bd@kernel.org>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 26 Jun 2023 06:16:56 -0400
+Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D5B819F
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 03:16:55 -0700 (PDT)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:e662:523d:cfc0:1ef2])
+        by albert.telenet-ops.be with bizsmtp
+        id DmGs2A00D0kkhwT06mGsyv; Mon, 26 Jun 2023 12:16:52 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtp (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1qDjH6-000Qfb-JB;
+        Mon, 26 Jun 2023 12:16:52 +0200
+Received: from geert by rox.of.borg with local (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1qDjHA-00CnyG-BQ;
+        Mon, 26 Jun 2023 12:16:52 +0200
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: [GIT PULL] m68k updates for v6.5
+Date:   Mon, 26 Jun 2023 12:16:48 +0200
+Message-Id: <20230626101648.3052015-1-geert@linux-m68k.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,SUSPICIOUS_RECIPS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 26 Jun 2023 19:11:14 +0900
-Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
+	Hi Linus,
 
-> On Mon, 26 Jun 2023 08:11:44 +0800
-> Zheng Yejian <zhengyejian1@huawei.com> wrote:
-> 
-> > Function instance_set() expects to enable event 'sched_switch', so we
-> > should set 1 to its 'enable' file.
-> > 
-> > Testcase passed after this patch:
-> >   # ./ftracetest test.d/instances/instance-event.tc
-> >   === Ftrace unit tests ===
-> >   [1] Test creation and deletion of trace instances while setting an event
-> >   [PASS]
-> > 
-> >   # of passed:  1
-> >   # of failed:  0
-> >   # of unresolved:  0
-> >   # of untested:  0
-> >   # of unsupported:  0
-> >   # of xfailed:  0
-> >   # of undefined(test bug):  0
-> > 
-> 
-> Good catch!
-> 
-> Fixes: 91e6f1ce8657 ("ftracetest: Add instance created, delete, read and enable event test")
-> 
-> It seems this tests internally broken but the result is same because this disabled
-> error checking ('set +e').
+The following changes since commit b845b574f86dcb6a70dfa698aa87a237b0878d2a:
 
-And
+  m68k: Move signal frame following exception on 68020/030 (2023-05-22 13:51:20 +0200)
 
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+are available in the Git repository at:
 
-Thanks!
+  git://git.kernel.org/pub/scm/linux/kernel/git/geert/linux-m68k.git tags/m68k-for-v6.5-tag1
 
-> 
-> 
-> > Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
-> > ---
-> >  .../testing/selftests/ftrace/test.d/instances/instance-event.tc | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/tools/testing/selftests/ftrace/test.d/instances/instance-event.tc b/tools/testing/selftests/ftrace/test.d/instances/instance-event.tc
-> > index 0eb47fbb3f44..42422e425107 100644
-> > --- a/tools/testing/selftests/ftrace/test.d/instances/instance-event.tc
-> > +++ b/tools/testing/selftests/ftrace/test.d/instances/instance-event.tc
-> > @@ -39,7 +39,7 @@ instance_read() {
-> >  
-> >  instance_set() {
-> >          while :; do
-> > -                echo 1 > foo/events/sched/sched_switch
-> > +                echo 1 > foo/events/sched/sched_switch/enable
-> >          done 2> /dev/null
-> >  }
-> >  
-> > -- 
-> > 2.25.1
-> > 
-> 
-> 
-> -- 
-> Masami Hiramatsu (Google) <mhiramat@kernel.org>
+for you to fetch changes up to 4055eabe04a26f5d113b5a02588b20b5e166a753:
 
+  m68k: defconfig: Update defconfigs for v6.4-rc1 (2023-06-12 11:20:44 +0200)
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+----------------------------------------------------------------
+m68k updates for v6.5
+
+  - Miscellaneous NuBus fixes and improvements,
+  - Defconfig updates.
+
+Thanks for pulling!
+
+----------------------------------------------------------------
+Finn Thain (3):
+      nubus: Partially revert proc_create_single_data() conversion
+      nubus: Remove proc entries before adding them
+      nubus: Don't list slot resources by default
+
+Geert Uytterhoeven (1):
+      m68k: defconfig: Update defconfigs for v6.4-rc1
+
+ arch/m68k/configs/amiga_defconfig    |  2 +-
+ arch/m68k/configs/apollo_defconfig   |  2 +-
+ arch/m68k/configs/atari_defconfig    |  2 +-
+ arch/m68k/configs/bvme6000_defconfig |  2 +-
+ arch/m68k/configs/hp300_defconfig    |  2 +-
+ arch/m68k/configs/mac_defconfig      |  2 +-
+ arch/m68k/configs/multi_defconfig    |  2 +-
+ arch/m68k/configs/mvme147_defconfig  |  2 +-
+ arch/m68k/configs/mvme16x_defconfig  |  2 +-
+ arch/m68k/configs/q40_defconfig      |  2 +-
+ arch/m68k/configs/sun3_defconfig     |  1 -
+ arch/m68k/configs/sun3x_defconfig    |  2 +-
+ arch/m68k/configs/virt_defconfig     |  2 --
+ drivers/nubus/nubus.c                | 13 ++++++++++---
+ drivers/nubus/proc.c                 | 33 ++++++++++++++++++++++++---------
+ include/linux/nubus.h                |  1 +
+ 16 files changed, 46 insertions(+), 26 deletions(-)
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
