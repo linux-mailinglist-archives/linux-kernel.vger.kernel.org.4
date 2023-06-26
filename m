@@ -2,56 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07EE673ED5A
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 23:52:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52E3873ED28
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 23:51:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231219AbjFZVwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 17:52:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40786 "EHLO
+        id S230491AbjFZVuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 17:50:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231359AbjFZVvr (ORCPT
+        with ESMTP id S229677AbjFZVuC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 17:51:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8CF82D64;
-        Mon, 26 Jun 2023 14:50:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B5D560F8B;
-        Mon, 26 Jun 2023 21:50:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68AF1C433C8;
-        Mon, 26 Jun 2023 21:50:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687816230;
-        bh=HB5ik3gv4Co5XN3kmgZPaP1UTspqkoXwyNIw4+YFVPc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vR3KuYyM/U/ra9uf+68V3j1v+tH1D4VL6z9GqSj8Joipj/WUvLAeDZcSLH0npZbBD
-         k9bA2GamEOhPFsiv1OVDqPxR7gjNv/v/KSWe7qsljI/efT8bzgyR0PjZDMsA9vwarR
-         P/oIplP/VjJIWTxkaALokwA0SVwhFbKUaOIpjfqSDI/T6ATCeeT/NoV4WLSbtcrvpc
-         secvImJdYxeZLdsTb8cuQk3xXMxOl67Z+VF/7z9bMAp3MZ67GC1RZAt8JNzEgMpjNI
-         LHeRmtMgrdSFu3USbZaOWEkO3fBuCHZ6xjMtzSAP42iqUlHTOA8BNL7ZybLn21APQG
-         PRHpUmwvpW6xA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Takashi Iwai <tiwai@suse.de>, "Gong, Sishuai" <sishuai@purdue.edu>,
-        Sasha Levin <sashal@kernel.org>, perex@perex.cz,
-        tiwai@suse.com, alsa-devel@alsa-project.org
-Subject: [PATCH AUTOSEL 6.3 16/16] ALSA: seq: oss: Fix racy open/close of MIDI devices
-Date:   Mon, 26 Jun 2023 17:49:56 -0400
-Message-Id: <20230626214956.178942-16-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230626214956.178942-1-sashal@kernel.org>
-References: <20230626214956.178942-1-sashal@kernel.org>
+        Mon, 26 Jun 2023 17:50:02 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C3910D5;
+        Mon, 26 Jun 2023 14:50:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=Q/bpZdoiYyoU4Gkjmy8VvNxg9emqxR5ZyFFTQhyTkns=; b=ztKWY99lIx2Z02G7tiqjQFOhP2
+        HLlM4ZIC05BSoFGjl/lr/rXZmUKTOF9+brILZX3BKE0rPcLijQQZL8ynE6vCdIg2iMLO0DyBt6Qww
+        p+b3hB/qb/8W0YfrC1HBjzjfBGNpjEakY0TcRcWRGoIGfvAv3JGV7mxmx0Ch1AZBr/U+BYoWo4Zlh
+        BPC9Jeci7ePlT09ztE0h0usD8xUjEg0c/Lqmm14RW33nz9aMbbKh44gSkBOSmaywqT9WMwToJ7ZX7
+        vgU50R/LtZBDZz9KG3tyW7RCb7Eyb/IT4ayaJ68eOwR9hvuLRfTHvGk4cQCQ9Id1lafCXOExn5Obh
+        nUhPaVyg==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qDu5u-00B5ru-0A;
+        Mon, 26 Jun 2023 21:49:58 +0000
+Message-ID: <ec65c77a-3499-6278-f352-9bbe25a44b96@infradead.org>
+Date:   Mon, 26 Jun 2023 14:49:57 -0700
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.3.9
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v2 2/6] KVM: Documentation: Update the field name gfns and
+ its description in kvm_mmu_page
+Content-Language: en-US
+To:     Mingwei Zhang <mizhang@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Kai Huang <kai.huang@intel.com>,
+        Jim Mattson <jmattson@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>, Xu Yilun <yilun.xu@intel.com>,
+        Zhi Wang <zhi.wang.linux@gmail.com>
+References: <20230626182016.4127366-1-mizhang@google.com>
+ <20230626182016.4127366-3-mizhang@google.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230626182016.4127366-3-mizhang@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,127 +62,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+Hi--
 
-[ Upstream commit 297224fc0922e7385573a30c29ffdabb67f27b7d ]
+On 6/26/23 11:20, Mingwei Zhang wrote:
+> Update the field 'gfns' in kvm_mmu_page to 'shadowed_translation' to be
+> consistent with the code. Also update the corresponding 'gfns' in the
+> comments. The more detailed description of 'shadowed_translation' is
+> already inlined in the data structure definition, so no need to duplicate
+> the text but simply just update the names.
+> 
+> Signed-off-by: Mingwei Zhang <mizhang@google.com>
+> Reviewed-by: Kai Huang <kai.huang@intel.com>
+> ---
+>  Documentation/virt/kvm/x86/mmu.rst | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+> 
+> diff --git a/Documentation/virt/kvm/x86/mmu.rst b/Documentation/virt/kvm/x86/mmu.rst
+> index 561efa8ec7d7..4c9044b4dc6c 100644
+> --- a/Documentation/virt/kvm/x86/mmu.rst
+> +++ b/Documentation/virt/kvm/x86/mmu.rst
+> @@ -221,11 +221,12 @@ Shadow pages contain the following information:
+>      at __pa(sp2->spt).  sp2 will point back at sp1 through parent_pte.
+>      The spt array forms a DAG structure with the shadow page as a node, and
+>      guest pages as leaves.
+> -  gfns:
+> -    An array of 512 guest frame numbers, one for each present pte.  Used to
+> -    perform a reverse map from a pte to a gfn. When role.direct is set, any
+> +  shadowed_translation:
+> +    An array of 512 shadow translation entries, one for each present pte. Used
+> +    to perform a reverse map from a pte to a gfn. When role.direct is set, any
+>      element of this array can be calculated from the gfn field when used, in
+> -    this case, the array of gfns is not allocated. See role.direct and gfn.
+> +    this case, the array of shadowed_translation is not allocated. See
 
-Although snd_seq_oss_midi_open() and snd_seq_oss_midi_close() can be
-called concurrently from different code paths, we have no proper data
-protection against races.  Introduce open_mutex to each seq_oss_midi
-object for avoiding the races.
+I cannot parse the before version nor the after version of this sentence (new version):
 
-Reported-by: "Gong, Sishuai" <sishuai@purdue.edu>
-Closes: https://lore.kernel.org/r/7DC9AF71-F481-4ABA-955F-76C535661E33@purdue.edu
-Link: https://lore.kernel.org/r/20230612125533.27461-1-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- sound/core/seq/oss/seq_oss_midi.c | 35 +++++++++++++++++++------------
- 1 file changed, 22 insertions(+), 13 deletions(-)
+                                                  When role.direct is set, any
+    element of this array can be calculated from the gfn field when used, in
+    this case, the array of shadowed_translation is not allocated.
 
-diff --git a/sound/core/seq/oss/seq_oss_midi.c b/sound/core/seq/oss/seq_oss_midi.c
-index 07efb38f58ac1..f2940b29595f0 100644
---- a/sound/core/seq/oss/seq_oss_midi.c
-+++ b/sound/core/seq/oss/seq_oss_midi.c
-@@ -37,6 +37,7 @@ struct seq_oss_midi {
- 	struct snd_midi_event *coder;	/* MIDI event coder */
- 	struct seq_oss_devinfo *devinfo;	/* assigned OSSseq device */
- 	snd_use_lock_t use_lock;
-+	struct mutex open_mutex;
- };
- 
- 
-@@ -172,6 +173,7 @@ snd_seq_oss_midi_check_new_port(struct snd_seq_port_info *pinfo)
- 	mdev->flags = pinfo->capability;
- 	mdev->opened = 0;
- 	snd_use_lock_init(&mdev->use_lock);
-+	mutex_init(&mdev->open_mutex);
- 
- 	/* copy and truncate the name of synth device */
- 	strscpy(mdev->name, pinfo->name, sizeof(mdev->name));
-@@ -322,15 +324,17 @@ snd_seq_oss_midi_open(struct seq_oss_devinfo *dp, int dev, int fmode)
- 	int perm;
- 	struct seq_oss_midi *mdev;
- 	struct snd_seq_port_subscribe subs;
-+	int err;
- 
- 	mdev = get_mididev(dp, dev);
- 	if (!mdev)
- 		return -ENODEV;
- 
-+	mutex_lock(&mdev->open_mutex);
- 	/* already used? */
- 	if (mdev->opened && mdev->devinfo != dp) {
--		snd_use_lock_free(&mdev->use_lock);
--		return -EBUSY;
-+		err = -EBUSY;
-+		goto unlock;
- 	}
- 
- 	perm = 0;
-@@ -340,14 +344,14 @@ snd_seq_oss_midi_open(struct seq_oss_devinfo *dp, int dev, int fmode)
- 		perm |= PERM_READ;
- 	perm &= mdev->flags;
- 	if (perm == 0) {
--		snd_use_lock_free(&mdev->use_lock);
--		return -ENXIO;
-+		err = -ENXIO;
-+		goto unlock;
- 	}
- 
- 	/* already opened? */
- 	if ((mdev->opened & perm) == perm) {
--		snd_use_lock_free(&mdev->use_lock);
--		return 0;
-+		err = 0;
-+		goto unlock;
- 	}
- 
- 	perm &= ~mdev->opened;
-@@ -372,13 +376,17 @@ snd_seq_oss_midi_open(struct seq_oss_devinfo *dp, int dev, int fmode)
- 	}
- 
- 	if (! mdev->opened) {
--		snd_use_lock_free(&mdev->use_lock);
--		return -ENXIO;
-+		err = -ENXIO;
-+		goto unlock;
- 	}
- 
- 	mdev->devinfo = dp;
-+	err = 0;
-+
-+ unlock:
-+	mutex_unlock(&mdev->open_mutex);
- 	snd_use_lock_free(&mdev->use_lock);
--	return 0;
-+	return err;
- }
- 
- /*
-@@ -393,10 +401,9 @@ snd_seq_oss_midi_close(struct seq_oss_devinfo *dp, int dev)
- 	mdev = get_mididev(dp, dev);
- 	if (!mdev)
- 		return -ENODEV;
--	if (! mdev->opened || mdev->devinfo != dp) {
--		snd_use_lock_free(&mdev->use_lock);
--		return 0;
--	}
-+	mutex_lock(&mdev->open_mutex);
-+	if (!mdev->opened || mdev->devinfo != dp)
-+		goto unlock;
- 
- 	memset(&subs, 0, sizeof(subs));
- 	if (mdev->opened & PERM_WRITE) {
-@@ -415,6 +422,8 @@ snd_seq_oss_midi_close(struct seq_oss_devinfo *dp, int dev)
- 	mdev->opened = 0;
- 	mdev->devinfo = NULL;
- 
-+ unlock:
-+	mutex_unlock(&mdev->open_mutex);
- 	snd_use_lock_free(&mdev->use_lock);
- 	return 0;
- }
+
+> +    role.direct and gfn.
+>    root_count:
+>      A counter keeping track of how many hardware registers (guest cr3 or
+>      pdptrs) are now pointing at the page.  While this counter is nonzero, the
+
 -- 
-2.39.2
-
+~Randy
