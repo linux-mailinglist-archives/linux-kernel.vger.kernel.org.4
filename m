@@ -2,152 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 210B673D718
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 07:12:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A2A173D728
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 07:31:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229663AbjFZFMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 01:12:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52930 "EHLO
+        id S229766AbjFZFb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 01:31:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbjFZFML (ORCPT
+        with ESMTP id S229727AbjFZFbY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 01:12:11 -0400
-Received: from mail-io1-f79.google.com (mail-io1-f79.google.com [209.85.166.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 306FC121
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 22:12:09 -0700 (PDT)
-Received: by mail-io1-f79.google.com with SMTP id ca18e2360f4ac-77d89a08a50so176718339f.1
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 22:12:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687756328; x=1690348328;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ojb7kuTKJ18/8e1gtXeaa7XjyqwxGsX0VX1WGna9B+8=;
-        b=BMm0jKBcNLo2Heog5Ss/c/1Fz2ZL8WUKMwwZSEKl5UlylEDg+HU7t8uj/7fojLEqee
-         4s4MtzC8Ata2GizNTnrm6BNFBYvZKntPscMTAI0o9AuMqgcWTyJXmrlNLg/apz8vmDER
-         +oah0yG+kIWkJYmCqQY1Nj9QliwIGag+SBAw+YtzRFkWB8TyO/knDEoHGgTrKB6vnPnR
-         Z4+yYM8oM3B/kNWjygFORA1zJ1dUwJKpLZrWOrbtdYgNwl2+QEK967cTn1gWoVBnPtt0
-         f4k4vIyHPDm1oqkrnoCHeZ99R1KaejpjznypgW4YQ8XfL8MSnwLoZ9vcKjVRupgH/7Ap
-         XRYQ==
-X-Gm-Message-State: AC+VfDxzqH6F6hjdDTO9pRxnr7sIhmDZiQi8NGmOnWugFcD6hmwxxU4X
-        WmgSHIMh74DYevgSD7VAiIIVpTSJ+Lwdlwjyuh9xLv7cQCme
-X-Google-Smtp-Source: ACHHUZ6zna+P9pQSuzjChjv9oSj/1mVil2IGnrtDaf9QAW2R/UmAwrXdOKHJ1zU4OU57/HMQ0VeOZRODjeUfO6zmwbmfc7b6Ka+e
+        Mon, 26 Jun 2023 01:31:24 -0400
+X-Greylist: delayed 500 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 25 Jun 2023 22:31:18 PDT
+Received: from tsukuyomi.43-1.org (tsukuyomi.43-1.org [116.203.33.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7D04E44;
+        Sun, 25 Jun 2023 22:31:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=43-1.org;
+ i=@43-1.org; q=dns/txt; s=2019; t=1687756972; h=from : to : cc :
+ subject : in-reply-to : references : date : message-id : mime-version
+ : content-type : from;
+ bh=Eq4k6m+p07AiJXh4wBi2hik11r7Xs7nEHyzRzDKtkag=;
+ b=NUgI0vT/PM49fItVgX9+3ne7CAVuWcZ2azz+OC2gdh6Z/z8WGBcH1Yxu2BP5PcWdcqbaD
+ /2cSrI/nMbkSoBywV/4dBeAUV0gqTOjbhczJkf6pxtSL62RxONgXyONN7SdAses43lUD7iV
+ 9/Z5rLIfcOgQKth2mnle3+GxAKmBBc0+kaNAMs41Hh0Z3k93LxJ9xKGiEaBrVxiD1ExMrIJ
+ y5O1072Sec5G9Inj5ZmPRgiCY+uHJSP3D1fLaNi3CFNo0O1SIauQqfoQdDs3JgEYmD/bbGc
+ Uso8ddxYK1WjsR7/f0mqNWy+5TEJ90jlzckIWBD65k4Ua3NzEF8ZLDS2pHtg==
+From:   Matthias Maier <tamiko@43-1.org>
+To:     Pablo Neira Ayuso <pablo@netfilter.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        netfilter-devel@vger.kernel.org
+Subject: Re: Kernel oops with netfilter: nf_tables: incorrect error path
+ handling with NFT_MSG_NEWRULE
+In-Reply-To: <ZJjIRQevLKW+YJP6@calendula> (Pablo Neira Ayuso's message of
+        "Mon, 26 Jun 2023 01:05:41 +0200")
+References: <87cz1j5tof.fsf@43-1.org> <ZJjIRQevLKW+YJP6@calendula>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+Date:   Mon, 26 Jun 2023 00:22:51 -0500
+Message-ID: <87ttuuajbo.fsf@43-1.org>
 MIME-Version: 1.0
-X-Received: by 2002:a92:c607:0:b0:345:6ce1:d252 with SMTP id
- p7-20020a92c607000000b003456ce1d252mr2171523ilm.0.1687756328515; Sun, 25 Jun
- 2023 22:12:08 -0700 (PDT)
-Date:   Sun, 25 Jun 2023 22:12:08 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000006dbf1305ff0164a9@google.com>
-Subject: [syzbot] [btrfs?] WARNING: refcount bug in __btrfs_release_delayed_node
-From:   syzbot <syzbot+2bf8c3b6bedb88990d40@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Pablo,
 
-syzbot found the following issue on:
-
-HEAD commit:    45a3e24f65e9 Linux 6.4-rc7
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=12c15540a80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=2cbd298d0aff1140
-dashboard link: https://syzkaller.appspot.com/bug?extid=2bf8c3b6bedb88990d40
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/872a8054b07c/disk-45a3e24f.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/329227d8d5e9/vmlinux-45a3e24f.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/e6e7d7b9074e/bzImage-45a3e24f.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+2bf8c3b6bedb88990d40@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-refcount_t: underflow; use-after-free.
-WARNING: CPU: 1 PID: 5056 at lib/refcount.c:28 refcount_warn_saturate+0x107/0x1f0 lib/refcount.c:28
-Modules linked in:
-CPU: 1 PID: 5056 Comm: syz-executor.4 Not tainted 6.4.0-rc7-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
-RIP: 0010:refcount_warn_saturate+0x107/0x1f0 lib/refcount.c:28
-Code: 1d c4 8b 51 0a 31 ff 89 de e8 f5 ef 70 fd 84 db 75 a3 e8 0c f4 70 fd 48 c7 c7 c0 d6 a6 8a c6 05 a4 8b 51 0a 01 e8 49 af 38 fd <0f> 0b eb 87 e8 f0 f3 70 fd 0f b6 1d 8d 8b 51 0a 31 ff 89 de e8 c0
-RSP: 0018:ffffc900042cfa60 EFLAGS: 00010286
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: ffff8880286bbb80 RSI: ffffffff814c03b7 RDI: 0000000000000001
-RBP: ffff8880275112f8 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000082828 R12: ffff88802b4cf300
-R13: ffff8880275112f8 R14: ffff888027511308 R15: ffff8880275111c8
-FS:  0000555556773400(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fcf1bad56be CR3: 000000003f591000 CR4: 0000000000350ee0
-Call Trace:
- <TASK>
- __refcount_sub_and_test include/linux/refcount.h:283 [inline]
- __refcount_dec_and_test include/linux/refcount.h:315 [inline]
- refcount_dec_and_test include/linux/refcount.h:333 [inline]
- __btrfs_release_delayed_node.part.0+0xb3b/0xf50 fs/btrfs/delayed-inode.c:263
- __btrfs_release_delayed_node fs/btrfs/delayed-inode.c:251 [inline]
- btrfs_release_delayed_node fs/btrfs/delayed-inode.c:281 [inline]
- btrfs_remove_delayed_node+0x52/0x60 fs/btrfs/delayed-inode.c:1285
- btrfs_evict_inode+0x4f4/0xe50 fs/btrfs/inode.c:5336
- evict+0x2ed/0x6b0 fs/inode.c:665
- dispose_list+0x117/0x1e0 fs/inode.c:698
- evict_inodes+0x345/0x440 fs/inode.c:748
- generic_shutdown_super+0xaf/0x480 fs/super.c:479
- kill_anon_super+0x3a/0x60 fs/super.c:1107
- btrfs_kill_super+0x3c/0x50 fs/btrfs/super.c:2144
- deactivate_locked_super+0x98/0x160 fs/super.c:331
- deactivate_super+0xb1/0xd0 fs/super.c:362
- cleanup_mnt+0x2ae/0x3d0 fs/namespace.c:1177
- task_work_run+0x16f/0x270 kernel/task_work.c:179
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- exit_to_user_mode_loop kernel/entry/common.c:171 [inline]
- exit_to_user_mode_prepare+0x210/0x240 kernel/entry/common.c:204
- __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
- syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:297
- do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f4b5f28d7f7
-Code: ff ff ff f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f 44 00 00 31 f6 e9 09 00 00 00 66 0f 1f 84 00 00 00 00 00 b8 a6 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffd5b600188 EFLAGS: 00000246 ORIG_RAX: 00000000000000a6
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 00007f4b5f28d7f7
-RDX: 00007ffd5b60025c RSI: 000000000000000a RDI: 00007ffd5b600250
-RBP: 00007ffd5b600250 R08: 00000000ffffffff R09: 00007ffd5b600020
-R10: 0000555556774893 R11: 0000000000000246 R12: 00007f4b5f2d643b
-R13: 00007ffd5b601310 R14: 0000555556774810 R15: 00007ffd5b601350
- </TASK>
+Thanks a lot for the quick reponse!
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+On Sun, Jun 25, 2023, at 18:05 CDT, Pablo Neira Ayuso <pablo@netfilter.org> wrote:
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> [...]
+>
+> Could you give a try to these two fixes on top?
+>
+> 26b5a5712eb8 netfilter: nf_tables: add NFT_TRANS_PREPARE_ERROR to deal with bound set/chain
+> 4bedf9eee016 netfilter: nf_tables: fix chain binding transaction logic
 
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
+These two patches alone were not enough, I had to apply the third patch
+you mentioned:
 
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
+> https://patchwork.ozlabs.org/project/netfilter-devel/patch/20230625224219.64876-1-pablo@netfilter.org/
 
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
+With all three patches I do not run into the oops any more.
 
-If you want to undo deduplication, reply with:
-#syz undup
+
+Nevertheless, please find below a (somehwat minimal) reproducer. Loading
+this ruleset into nft_tables via  $ nft -f reproducer.ruleset  previously
+oopsed the kernel.
+
+Best,
+Matthias
+
+
+
+define guarded_ports = {ssh}
+
+table inet portknock {
+        set clients_ipv4 {
+                type ipv4_addr
+                flags timeout
+        }
+
+        set candidates_ipv4 {
+                type ipv4_addr . inet_service
+                flags timeout
+        }
+
+        chain input {
+                type filter hook input priority -10; policy accept;
+
+                tcp dport 10001 add @candidates_ipv4 {ip  saddr . 10002 timeout 1s}
+                tcp dport 10002 ip  saddr . tcp dport @candidates_ipv4 add @candidates_ipv4 {ip  saddr . 10003 timeout 1s}
+                tcp dport 10003 ip  saddr . tcp dport @candidates_ipv4 add @candidates_ipv4 {ip  saddr . 10004 timeout 1s}
+                tcp dport 10004 ip  saddr . tcp dport @candidates_ipv4 add @candidates_ipv4 {ip  saddr . 10005 timeout 1s}
+                tcp dport 10005 ip  saddr . tcp dport @candidates_ipv4 add @clients_ipv4 {ip  saddr timeout 600s} log prefix "Successful portknock: "
+
+                tcp dport $guarded_ports ip  saddr @clients_ipv4 counter accept
+                tcp dport $guarded_ports ct state established,related counter accept
+
+                tcp dport $guarded_ports reject with tcp reset
+        }
+}
