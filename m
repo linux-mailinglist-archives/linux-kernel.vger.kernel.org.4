@@ -2,61 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF2D973EB67
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 22:05:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73B2673EB79
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 22:05:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229783AbjFZUAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 16:00:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51146 "EHLO
+        id S229978AbjFZUAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 16:00:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbjFZUAn (ORCPT
+        with ESMTP id S229742AbjFZUAp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 16:00:43 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2340DE7B
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 13:00:42 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4f9fdb0ef35so3073612e87.0
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 13:00:42 -0700 (PDT)
+        Mon, 26 Jun 2023 16:00:45 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 015041722
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 13:00:43 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4fb7b2e3dacso1432604e87.0
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 13:00:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687809640; x=1690401640;
+        d=linaro.org; s=google; t=1687809642; x=1690401642;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=+ew8UatElinQVBbDWQGC104jo5vUD1VtlF84hGFnzhg=;
-        b=EAe6QtmYYgTZelseWCLZ5EjotNUhXYzKz6i2W5LPHuT7Fgx6BY0Er7F5edr6pkkfQb
-         8LJk2y+JZTunXE48IGHcFmw4j5aR5Ic4+SwYC9bRTRk3WM2jDFrsyariapKF+VyvegTo
-         JJt/yVtrTTPBgPA1jjlR0sJhKXJDOStinipwR5qDOFSOtW6kGT7a1mL6PhTFKxF1Qqby
-         jh8SdD0LH7clWQ7lEhrfTihibtQyJshXCRA5J1SVc1Dmhy4qXpuyMSUWkz1WJUkrNcnb
-         1ZlV07l/cxsFBYUBmxgxvs3yZAcpCGUMXcKtiFtwSZzICpjgtxC5dqNTUVbdR3XBE84D
-         Gofw==
+        bh=dZhC2Qk4+yJVkkmC8iX7qYnuk5bnEQ8L34QUHmXs8vw=;
+        b=U2aWaZtOHvhc/tKfTB+0SlQRqDY5QHhWsCbw2kMbONbX0OX8Gvpy7vNrcukYX3evN9
+         /N09KCeZaXV/iSnpawCT6lv6Mv45BnlEx2dkHVUjt0c6FxfLQlB9ysli1awgPAwOMRfZ
+         ttBzGhpIOW9XOoZGu4zq0MDqNSO81EC4GkTz2FmOG8hvgZE1dEEFTSolPFiHwKZPVJ1V
+         e7sZeKMrkWUlPTAneMAUTCq5E35LW1SKeYqz1UHdaa9lmskLDeLkhjLVNniIc+70phXx
+         hkcqZMPL7NibAdnP9m11jHH+cnCUAbt/tUYg7AvcWa5EllOs9ILwxpmrR0+3YOwJGH8G
+         lmQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687809640; x=1690401640;
+        d=1e100.net; s=20221208; t=1687809642; x=1690401642;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+ew8UatElinQVBbDWQGC104jo5vUD1VtlF84hGFnzhg=;
-        b=dlz16b4sYz4RiLpUBq7c+LP1KC4rpPxaBXquLDsjT3jwcKuWLpCf1LzawXP6XUjy/B
-         zVkTaJrudXKVvlJb90bLKT/Tr3W6gT1Dn0p8LN/Dy9bkFV4DWD43HkrHlu6/f6yzmqOK
-         DXxgIj+Slutwqw0TV2fjzwQPgFBCBq5J3JuWGUJXe9xWxiu47nsavVQ3XwSU9Grul/2I
-         cKXR26WuO/gPjd6v855nA2b0TkSUbSTGzz5xk+oJQmnWQmzYEpMyr/RugFWnsRHxyxZT
-         JA0B7Ni149gXwgT7GO5V7yWoq2KeAibB0GnXq84qyKjaAsm2O9evMvnaPjCS2YVFZQQx
-         FYlw==
-X-Gm-Message-State: AC+VfDxCZ0bVg9LCOsfd6/wf0DdhHOwT2yUetRxaeGNE6oJItDE2Vr6n
-        t+3eGyL86j6JI7l+ynVE7CD9qg==
-X-Google-Smtp-Source: ACHHUZ48rX088vH0dhMGHftvtlxvi1YK3Clds1VpB2F/cRhWAq/7GpE+v7k0g0C/xt0AZckG9Iywcw==
-X-Received: by 2002:ac2:5f4c:0:b0:4fb:7666:3bbf with SMTP id 12-20020ac25f4c000000b004fb76663bbfmr1813808lfz.26.1687809640337;
-        Mon, 26 Jun 2023 13:00:40 -0700 (PDT)
+        bh=dZhC2Qk4+yJVkkmC8iX7qYnuk5bnEQ8L34QUHmXs8vw=;
+        b=EqFB6+fNx9wQiQii8+tL3bAujsVQ7PDnxc/5yReD3AuSkmcYjUaM5w3Sii0e4IoJl6
+         dy2PB2xiadumWs6SDRkpKFNWKhaeBNj7y2TlyHRcm2V3CD54jmwvf1XBHV3YhyNJzp2W
+         mj1UkVK3hQSVGLm6SJw8ErjWY0Fh1Z+MlIN5SzqVikeCjXEe7Lv7ECJMvE2IBFZdPuyw
+         uu810ryWSe6HF+h28sp2PP6cxYjjmFx7BH9M5u5xUpp82Uukt86VlA532ex7+bQwgO2K
+         g/iosy30B5WGLg6wQkO/3BrP8nPznXAEIhoYO8NF0unhX/aIHkk2WdDF3u1uAWe1GAf4
+         bZdg==
+X-Gm-Message-State: AC+VfDx+jjgppAetVVpixQupwv1McJOG/BehGwkbgemOsk6NXlEYAuGI
+        5bWsV/F6vadEsINEIRvLkFe/fA==
+X-Google-Smtp-Source: ACHHUZ6b2hQMNtTLi1F+9X3vOIZprHgCOQOLawP7qUc5CtwhNvkTYGBI63YfknDA9064/FJoU2QL+g==
+X-Received: by 2002:a19:ab11:0:b0:4f8:75ac:c4e8 with SMTP id u17-20020a19ab11000000b004f875acc4e8mr6484561lfe.43.1687809642027;
+        Mon, 26 Jun 2023 13:00:42 -0700 (PDT)
 Received: from [192.168.1.101] (abyk179.neoplus.adsl.tpnet.pl. [83.9.30.179])
-        by smtp.gmail.com with ESMTPSA id o11-20020ac2494b000000b004fb74cb9670sm628082lfi.125.2023.06.26.13.00.38
+        by smtp.gmail.com with ESMTPSA id o11-20020ac2494b000000b004fb74cb9670sm628082lfi.125.2023.06.26.13.00.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jun 2023 13:00:40 -0700 (PDT)
+        Mon, 26 Jun 2023 13:00:41 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Mon, 26 Jun 2023 22:00:23 +0200
-Subject: [PATCH 1/7] dt-bindings: qcom: Allow SoC names ending in "pro"
+Date:   Mon, 26 Jun 2023 22:00:24 +0200
+Subject: [PATCH 2/7] dt-bindings: remoteproc: qcom,msm8996-mss-pil: Fix
+ 8996 clocks
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230626-topic-bindingsfixups-v1-1-254ae8642e69@linaro.org>
+Message-Id: <20230626-topic-bindingsfixups-v1-2-254ae8642e69@linaro.org>
 References: <20230626-topic-bindingsfixups-v1-0-254ae8642e69@linaro.org>
 In-Reply-To: <20230626-topic-bindingsfixups-v1-0-254ae8642e69@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
@@ -81,16 +82,16 @@ Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         Konrad Dybcio <konrad.dybcio@somainline.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1687809636; l=1157;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1687809636; l=1513;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=MDTupbJX2laygjY7lrmHa0kx1X7wxMzcrvh+5JykFVY=;
- b=kC6o6929j1t55J2hnXYqgbd4NnLclYK9YjNA7k63aZI53tl69GPgQjtg6jgH3tEMmNjunfaA8
- 7HVChW9ztcNCPrB45d9eIuq/BqcLZKrjrJ7r7CvYser9Twh0m02WwCu
+ bh=nOsZ7J30rWic3dHnzSrrbrvLqXr5jRF6S1BliJFP7HM=;
+ b=xXNJCYMVsUEMs8T/YRxPTYogaCoAaGuG3UV4Oy/qRyyaaZBJ9v4crXyNyHdsJERbS2rDBIjMb
+ UUAjZ7jB5QjC0M6yU/NbsUPgqyRiUcMXXmEdYthuNgQHllHIKmAy4Lo
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,29 +99,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are a couple of SoCs whose names end in "pro", with the currently-
-upstream examples being msm8974pro and msm8996pro. Allow such suffix in
-SoC-specific compatibles.
+Change RPMH to RPM (as RPMh was introduced 2 generations later) and drop
+the prng reference, which made ARRAY_SIZE(clocks) !=
+ARRAY_SIZE(clock-names).
 
-Fixes: 5aa332c5e7ca ("dt-bindings: qcom: document preferred compatible naming")
+Fixes: bdea142295ff ("dt-bindings: remoteproc: qcom,q6v5: Move MSM8996 to schema")
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- Documentation/devicetree/bindings/arm/qcom-soc.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../devicetree/bindings/remoteproc/qcom,msm8996-mss-pil.yaml       | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/arm/qcom-soc.yaml b/Documentation/devicetree/bindings/arm/qcom-soc.yaml
-index e333ec4a9c5f..607a1cf1ef94 100644
---- a/Documentation/devicetree/bindings/arm/qcom-soc.yaml
-+++ b/Documentation/devicetree/bindings/arm/qcom-soc.yaml
-@@ -31,7 +31,7 @@ properties:
-   compatible:
-     oneOf:
-       # Preferred naming style for compatibles of SoC components:
--      - pattern: "^qcom,(apq|ipq|mdm|msm|qcm|qcs|sa|sc|sdm|sdx|sm)[0-9]+-.*$"
-+      - pattern: "^qcom,(apq|ipq|mdm|msm|qcm|qcs|sa|sc|sdm|sdx|sm)[0-9]+(pro|)-.*$"
-       - pattern: "^qcom,(sa|sc)8[0-9]+[a-z][a-z]?-.*$"
- 
-       # Legacy namings - variations of existing patterns/compatibles are OK,
+diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,msm8996-mss-pil.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,msm8996-mss-pil.yaml
+index c1ac6ca1e759..4e2358fea49e 100644
+--- a/Documentation/devicetree/bindings/remoteproc/qcom,msm8996-mss-pil.yaml
++++ b/Documentation/devicetree/bindings/remoteproc/qcom,msm8996-mss-pil.yaml
+@@ -215,13 +215,12 @@ allOf:
+             - description: GCC MSS IFACE clock
+             - description: GCC MSS BUS clock
+             - description: GCC MSS MEM clock
+-            - description: RPMH XO clock
++            - description: RPM XO clock
+             - description: GCC MSS GPLL0 clock
+             - description: GCC MSS SNOC_AXI clock
+             - description: GCC MSS MNOC_AXI clock
+-            - description: RPMH PNOC clock
+-            - description: GCC MSS PRNG clock
+-            - description: RPMH QDSS clock
++            - description: RPM PNOC clock
++            - description: RPM QDSS clock
+         clock-names:
+           items:
+             - const: iface
 
 -- 
 2.41.0
