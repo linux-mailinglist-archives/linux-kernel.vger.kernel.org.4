@@ -2,187 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61E2A73DAC7
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 11:05:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FF6173DAC9
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 11:06:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230107AbjFZJFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 05:05:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50772 "EHLO
+        id S230088AbjFZJGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 05:06:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229843AbjFZJEr (ORCPT
+        with ESMTP id S229578AbjFZJFn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 05:04:47 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDC34172B
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 02:00:40 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3fa7512e599so38574185e9.2
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 02:00:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687770039; x=1690362039;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lWuRpgBJ6l/Pv7FEU0LOn4g2AJlmwxkqUVtV4vBWbo0=;
-        b=dCouLOJEMAHZhupYzWJn4YCs1cfYGA6w/i1YDJ9hurs7r4T8/Wuwu1PtGIUPFxKzM1
-         hBTpiBsTwJXCzHnAjtAUJnOVzbh2Yw4kq5J972WPrdmxokV6c4EIwgdC7rBZEWfu/MNL
-         2BXlcxZvTpFvKE0ZG4yPqrCZ6EWF3UcqQgtxykRc1AZMaNHM/YbRZK61wT6ztTsEbZYf
-         /S+xYwrMKPGSm3+RjBF5fV5GwKO5gugJkcGZ0NLgdbJS5nxOF99Wq45vjLKNmGm3KF8Y
-         8g2Lql5bv7Sa14oo8l4jIL40U+4FSmVoQ3SZyjrRjZehcm1J93MqxFOMdCVwS1US6/tI
-         pxZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687770039; x=1690362039;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=lWuRpgBJ6l/Pv7FEU0LOn4g2AJlmwxkqUVtV4vBWbo0=;
-        b=AirvJn7ug/WbYpYr5aTRfLGlooxkzLhiWJCdILi96Ee3TEBKEJP2TbE2kOXjDkHSbJ
-         FyAI4R4mzuH2ampF0kvoXP/wGUhlNg9zFrZD4yetsMzmqATrDjZz/liai1tWhbH3Knz8
-         tRKyaoby0Z4roNEMZwFRICQQxEjlLGk/FnMmsB+zPWkLhMKQ194BAC6fD5/yzKWwqTrU
-         bjnHz8AB7Z3YKHoI7C4hoc0Uj8JfuIEjMs7vhCOG/LLmJ9gnnjhnoN+pv8rtmSftzr/Z
-         dG9ulHjcmxGqqO8of7ZWRLlhasZzgJySTfsWh1PNrnoMuDYbBPSVdCt2BHgF7aWDbEEm
-         W5nA==
-X-Gm-Message-State: AC+VfDx6EEkCy9KSTKFeUzkjOmShmI0hnPKLLGLwbxPu/6oDIhvYkuVG
-        3qqORgQBHyxVKPa2mlc1rDB2+w==
-X-Google-Smtp-Source: ACHHUZ5U/GAew0W09eAQvVrbahBMRJNntgHXBQfHSojJ5cVjw3dCL3DIOzCNiDRhe9j7MBz7E77LaA==
-X-Received: by 2002:a7b:c392:0:b0:3fa:8fb1:50fe with SMTP id s18-20020a7bc392000000b003fa8fb150femr2344346wmj.15.1687770039100;
-        Mon, 26 Jun 2023 02:00:39 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id k1-20020a05600c0b4100b003fa82210e7asm7100396wmr.14.2023.06.26.02.00.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Jun 2023 02:00:38 -0700 (PDT)
-Message-ID: <c0d4cc77-149e-9a59-4093-b5ba9b2361ae@linaro.org>
-Date:   Mon, 26 Jun 2023 11:00:38 +0200
+        Mon, 26 Jun 2023 05:05:43 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F9FD26A5
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 02:02:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687770175; x=1719306175;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=UM1r9KTEsMc/uyww/lZ8f5bqgszra6Nb5ggkVJu6Ujk=;
+  b=a6WSCGQOqkx+nV46shujAbsLi0e4Sn2mloP/Tq3oDtfkMhjQ0eCpjhMm
+   dIY7Dk1aRwQo2U1qnJlnHUYeholH46QeN2JaKvAIPIysqWRa+8kGPkHvk
+   +GeVzmDF+Yn+IvJSpEM0mH1Ms0e5VTxC7lV/pqCDTD0jz/NQY+uNBqGLk
+   iXCMzM6DlFC1GIqtm8/xbYWefILn7cKZJtmJUVKR3vgf6O2E9J74aBiDk
+   qYXUNU8WrtlLnlhzZ65v9EHPWD6rYV4nb3JNv2fBVY5ovJuDl8wJpfNJx
+   Srm06/jMp4gAX/q5fxOYWwfxrZEWWvBnAa0pgfg8PBQNfOEZP4Tm4mRjX
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="364667982"
+X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
+   d="scan'208";a="364667982"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 02:02:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="840195585"
+X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
+   d="scan'208";a="840195585"
+Received: from mcherry-mobl.ger.corp.intel.com (HELO [10.213.228.175]) ([10.213.228.175])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 02:02:20 -0700
+Message-ID: <d7a6f81e-94b8-1cb3-5fd6-ac944a052470@linux.intel.com>
+Date:   Mon, 26 Jun 2023 10:02:18 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
+Subject: Re: [PATCH v2] drm/i915: Replace kmap() with kmap_local_page()
 Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Feng Mingxi <m202271825@hust.edu.cn>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Keguang Zhang <keguang.zhang@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: [GIT PULL] timer drivers for v6.5
+To:     Ira Weiny <ira.weiny@intel.com>,
+        Sumitra Sharma <sumitraartsy@gmail.com>
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?Q?Thomas_Hellstr=c3=b6m_=28Intel=29?= 
+        <thomas_os@shipmail.org>, Fabio <fmdefrancesco@gmail.com>,
+        Deepak R Varma <drv@mailo.com>
+References: <20230617180420.GA410966@sumitra.com>
+ <648f48bc3d3c2_1de3f9294a3@iweiny-mobl.notmuch>
+ <20230619154550.GB412243@sumitra.com>
+ <6491a85a37cc8_28e729425@iweiny-mobl.notmuch>
+From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Organization: Intel Corporation UK Plc
+In-Reply-To: <6491a85a37cc8_28e729425@iweiny-mobl.notmuch>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
 
-sorry for not sending the pull request earlier, I've been overwhelmed by 
-a lot of stuff.
+On 20/06/2023 14:23, Ira Weiny wrote:
+> Sumitra Sharma wrote:
+>> On Sun, Jun 18, 2023 at 11:11:08AM -0700, Ira Weiny wrote:
+>>> Sumitra Sharma wrote:
+>>>> kmap() has been deprecated in favor of the kmap_local_page()
+>>>> due to high cost, restricted mapping space, the overhead of a
+>>>> global lock for synchronization, and making the process sleep
+>>>> in the absence of free slots.
+>>>>
+>>>> kmap_local_page() is faster than kmap() and offers thread-local
+>>>> and CPU-local mappings, take pagefaults in a local kmap region
+>>>> and preserves preemption by saving the mappings of outgoing tasks
+>>>> and restoring those of the incoming one during a context switch.
+>>>>
+>>>> The mapping is kept thread local in the function
+>>>> “i915_vma_coredump_create” in i915_gpu_error.c
+>>>>
+>>>> Therefore, replace kmap() with kmap_local_page().
+>>>>
+>>>> Suggested-by: Ira Weiny <ira.weiny@intel.com>
+>>>>
+>>>
+>>> NIT: No need for the line break between Suggested-by and your signed off line.
+>>>
+>>
+>> Hi Ira,
+>>
+>> What does NIT stand for?
+> 
+> Shorthand for 'nitpicking'.
+> 
+> "giving too much attention to details that are not important, especially
+> as a way of criticizing: "
+> 
+> 	- https://dictionary.cambridge.org/dictionary/english/nitpicking
+> 
+> Via email this is a way for authors of an email to indicate something is
+> technically wrong but while nicely acknowledging that it is not very
+> significant and could be seen as overly critical.
+> 
+> For this particular comment I'm showing something to pay attention to next
+> time but that was not a big deal this time around.
+> 
+>>
+>> Thank you. I will take care about the line breaks.
+>>
+>>>> Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
+>>>> ---
+>>>>
+>>>> Changes in v2:
+>>>> 	- Replace kmap() with kmap_local_page().
+>>>
+>>> Generally it is customary to attribute a change like this to those who
+>>> suggested it in a V1 review.
+>>>
+>>> For example:
+>>>
+>>>   	- Tvrtko/Thomas: Use kmap_local_page() instead of page_address()
+>>>
+>>> Also I don't see Thomas on the new email list.  Since he took the time to
+>>> review V1 he might want to check this version out.  I've added him to the
+>>> 'To:' list.
+>>>
+>>> Also a link to V1 is nice.  B4 formats it like this:
+>>>
+>>> - Link to v1: https://lore.kernel.org/all/20230614123556.GA381200@sumitra.com/
+>>>
+>>> All that said the code looks good to me.  So with the above changes.
+>>>
+>>> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+>>>
+>>
+>> I have noted down the points mentioned above. Thank you again.
+>>
+>> I am not supposed to create another version of this patch for
+>> adding the above mentions, as you and Thomas both gave this patch
+>> a reviewed-by tag. Right?
+>>
+> 
+> Based on this response[*] from Tvrtko I think this version can move
+> through without a v3.
+> 
+> Thanks!
+> Ira
+> 
+> [*] https://lore.kernel.org/all/bcb0a1d2-cd4d-a56f-1ee6-7ccfdd2f7b38@linux.intel.com/
+> 
+> <quote>
+> Thanks all! I'll just re-send the patch for our CI, since it didn't get
+> picked up automatically (stuck in moderation perhaps), with all r-b tags
+> added and extra line space removed and merge it if results will be green.
+> 
+> Regards,
+> 
+> Tvrtko
+> </quote>
 
-Please consider the following changes since commit 
-2951580ba6adb082bb6b7154a5ecb24e7c1f7569:
+Pushed to drm-intel-gt-next, thanks for the patch and reviews!
 
-   tracing/timer: Add missing hrtimer modes to decode_hrtimer_mode(). 
-(2023-06-19 09:09:14 +0200)
+Regards,
 
-are available in the Git repository at:
-
-   https://git.linaro.org/people/daniel.lezcano/linux.git 
-tags/timers-v6.5-rc1
-
-for you to fetch changes up to 8b5bf64c89c7100c921bd807ba39b2eb003061ab:
-
-   clocksource/drivers/cadence-ttc: Fix memory leak in ttc_timer_probe 
-(2023-06-23 09:33:44 +0200)
-
-----------------------------------------------------------------
-- Fix memory leak on Cadence TTC at probe time (Feng Mingxi)
-
-- Use the pm_sleep_ptr macro for the Ingenic driver (Paul Cercueil)
-
-- Relocate the PMW timer Loongson from the mips arch directory to the
-   drivers/clocksource (Keguang Zhang)
-
-- Use the same function names instead of using aliases and move data
-   defined in the header to the driver directly as this one is the only
-   user of the header file and remove this one on i.MX GPT (Uwe
-   Kleine-König)
-
-- Convert Broadcom Kona family timer bindings to DT schema (Michael
-    Kelley)
-
-- Add DT bindings for Ralink SoCs timer (Sergio Paracuellos)
-
-----------------------------------------------------------------
-Feng Mingxi (1):
-       clocksource/drivers/cadence-ttc: Fix memory leak in ttc_timer_probe
-
-Keguang Zhang (3):
-       MIPS: Loongson32: Remove deprecated PWM timer clocksource
-       dt-bindings: timer: Add Loongson-1 clocksource
-       clocksource/drivers/loongson1: Move PWM timer to clocksource 
-framework
-
-Michael Kelley (1):
-       clocksource/drivers/hyper-v: Rework clocksource and sched clock setup
-
-Paul Cercueil (1):
-       clocksource/drivers/ingenic-timer: Use pm_sleep_ptr() macro
-
-Sergio Paracuellos (1):
-       dt-bindings: timers: Add Ralink SoCs timer
-
-Stanislav Jakubek (1):
-       dt-bindings: timer: brcm,kona-timer: convert to YAML
-
-Uwe Kleine-König (3):
-       clocksource/drivers/imx-gpt: Use only a single name for functions
-       clk: imx: Drop inclusion of unused header <soc/imx/timer.h>
-       clocksource/drivers/imx-gpt: Fold <soc/imx/timer.h> into its only 
-user
-
-  .../devicetree/bindings/timer/brcm,kona-timer.txt  |  25 ---
-  .../devicetree/bindings/timer/brcm,kona-timer.yaml |  52 +++++
-  .../bindings/timer/loongson,ls1x-pwmtimer.yaml     |  48 +++++
-  .../bindings/timer/ralink,rt2880-timer.yaml        |  44 ++++
-  arch/mips/include/asm/mach-loongson32/loongson1.h  |   1 -
-  arch/mips/include/asm/mach-loongson32/regs-pwm.h   |  25 ---
-  arch/mips/loongson32/Kconfig                       |  37 ----
-  arch/mips/loongson32/common/time.c                 | 210 
-------------------
-  drivers/clk/imx/clk-imx1.c                         |   1 -
-  drivers/clk/imx/clk-imx27.c                        |   1 -
-  drivers/clk/imx/clk-imx31.c                        |   1 -
-  drivers/clk/imx/clk-imx35.c                        |   1 -
-  drivers/clocksource/Kconfig                        |   9 +
-  drivers/clocksource/Makefile                       |   1 +
-  drivers/clocksource/hyperv_timer.c                 |  54 ++---
-  drivers/clocksource/ingenic-timer.c                |  10 +-
-  drivers/clocksource/timer-cadence-ttc.c            |  19 +-
-  drivers/clocksource/timer-imx-gpt.c                |  25 ++-
-  drivers/clocksource/timer-loongson1-pwm.c          | 236 
-+++++++++++++++++++++
-  include/soc/imx/timer.h                            |  16 --
-  20 files changed, 442 insertions(+), 374 deletions(-)
-  delete mode 100644 
-Documentation/devicetree/bindings/timer/brcm,kona-timer.txt
-  create mode 100644 
-Documentation/devicetree/bindings/timer/brcm,kona-timer.yaml
-  create mode 100644 
-Documentation/devicetree/bindings/timer/loongson,ls1x-pwmtimer.yaml
-  create mode 100644 
-Documentation/devicetree/bindings/timer/ralink,rt2880-timer.yaml
-  delete mode 100644 arch/mips/include/asm/mach-loongson32/regs-pwm.h
-  create mode 100644 drivers/clocksource/timer-loongson1-pwm.c
-  delete mode 100644 include/soc/imx/timer.h
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Tvrtko
