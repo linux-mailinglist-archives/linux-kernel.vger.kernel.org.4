@@ -2,49 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30EA373EDC9
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 23:57:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6913E73ED7E
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 23:53:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231839AbjFZV4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 17:56:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40958 "EHLO
+        id S231433AbjFZVxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 17:53:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231317AbjFZVyP (ORCPT
+        with ESMTP id S231529AbjFZVwy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 17:54:15 -0400
+        Mon, 26 Jun 2023 17:52:54 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C0DB2965;
-        Mon, 26 Jun 2023 14:52:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6432735AB;
+        Mon, 26 Jun 2023 14:51:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F6B960FBC;
-        Mon, 26 Jun 2023 21:51:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 835C2C433C9;
-        Mon, 26 Jun 2023 21:51:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0FF2160F8F;
+        Mon, 26 Jun 2023 21:51:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61333C433C0;
+        Mon, 26 Jun 2023 21:51:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687816265;
-        bh=2D/vySHldUQKqJoKYFnqD5TSIZMW8dM2gXiasK+Atto=;
+        s=k20201202; t=1687816267;
+        bh=HB5ik3gv4Co5XN3kmgZPaP1UTspqkoXwyNIw4+YFVPc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hg6pN2Er0FXAZlPfSa/JnlajhgBE6TKVd3ZXOhoR58W2wbrYkCWuabIkbMj/CuSjQ
-         PXDADl+aZFt+Q/3yK4BMCMe8JfJkdHl2VgCs8uBING3VTA8Sf+e5+qaurjYpOoe3aJ
-         6te0Pb5mGeGiKxEVqyGHr6c0HF3gafgz/HIgJdBL/a0Z05Hdr4cqbPwvuEN93jN543
-         ETQhbpavkHJcdv9sj59iiAUbmWMnNxSgfCzbzSyN70BbbtjokJQrMe3Py+qzMwCThU
-         Z8nyuU66nN1f0OWqZi+QG/tfxQ5HeqydbyNSc4w8tR/3HXjr+1BzOgHDiZ2AIniXb0
-         LR224PUs7Nu9Q==
+        b=BA9eRs3QavycxpB6GH5FR8dlu4Cm4yv1WSIsNcKVjIErrb/PtnGGfe3Hnxzu8bFj3
+         hc5+Ced9QDX+BEmnrJBnVZWKu66rOCxWqywqL5AhDHlSgUP/I1Vu8Es70q1h3c/75+
+         c7WFLCv1l53Wy//Dzva2t/peQ0aNzDezhq4+y6/5sRD55A5utHOckQ9cKP/un+yw03
+         psgGvnYD7i21ocpHKkoIMlIQhwzrTab3crUDHIBd6wusKsXlY8aIEhozxmuoVgn1H0
+         grhKG6f3ahvsDQQaPxvTJh0wfo4QGxjwt7E2lApYTihVEtOim3xEQ8tZbgOLExDy4c
+         imkUFYeshiXpg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Justin Tee <justintee8345@gmail.com>,
-        Justin Tee <justin.tee@broadcom.com>,
-        kernel test robot <lkp@intel.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, james.smart@broadcom.com,
-        dick.kennedy@broadcom.com, jejb@linux.ibm.com,
-        linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 8/9] scsi: lpfc: Fix incorrect big endian type assignment in bsg loopback path
-Date:   Mon, 26 Jun 2023 17:50:56 -0400
-Message-Id: <20230626215057.179363-8-sashal@kernel.org>
+Cc:     Takashi Iwai <tiwai@suse.de>, "Gong, Sishuai" <sishuai@purdue.edu>,
+        Sasha Levin <sashal@kernel.org>, perex@perex.cz,
+        tiwai@suse.com, alsa-devel@alsa-project.org
+Subject: [PATCH AUTOSEL 5.15 9/9] ALSA: seq: oss: Fix racy open/close of MIDI devices
+Date:   Mon, 26 Jun 2023 17:50:57 -0400
+Message-Id: <20230626215057.179363-9-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230626215057.179363-1-sashal@kernel.org>
 References: <20230626215057.179363-1-sashal@kernel.org>
@@ -63,59 +59,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Justin Tee <justintee8345@gmail.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-[ Upstream commit 9cefd6e7e0a77b0fbca5c793f6fb6821b0962775 ]
+[ Upstream commit 297224fc0922e7385573a30c29ffdabb67f27b7d ]
 
-The kernel test robot reported sparse warnings regarding incorrect type
-assignment for __be16 variables in bsg loopback path.
+Although snd_seq_oss_midi_open() and snd_seq_oss_midi_close() can be
+called concurrently from different code paths, we have no proper data
+protection against races.  Introduce open_mutex to each seq_oss_midi
+object for avoiding the races.
 
-Change the flagged lines to use the be16_to_cpu() and cpu_to_be16() macros
-appropriately.
-
-Signed-off-by: Justin Tee <justin.tee@broadcom.com>
-Link: https://lore.kernel.org/r/20230614175944.3577-1-justintee8345@gmail.com
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202306110819.sDIKiGgg-lkp@intel.com/
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Reported-by: "Gong, Sishuai" <sishuai@purdue.edu>
+Closes: https://lore.kernel.org/r/7DC9AF71-F481-4ABA-955F-76C535661E33@purdue.edu
+Link: https://lore.kernel.org/r/20230612125533.27461-1-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/lpfc/lpfc_bsg.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ sound/core/seq/oss/seq_oss_midi.c | 35 +++++++++++++++++++------------
+ 1 file changed, 22 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_bsg.c b/drivers/scsi/lpfc/lpfc_bsg.c
-index fdf08cb572071..ed827f198cb68 100644
---- a/drivers/scsi/lpfc/lpfc_bsg.c
-+++ b/drivers/scsi/lpfc/lpfc_bsg.c
-@@ -911,7 +911,7 @@ lpfc_bsg_ct_unsol_event(struct lpfc_hba *phba, struct lpfc_sli_ring *pring,
- 			struct lpfc_iocbq *piocbq)
- {
- 	uint32_t evt_req_id = 0;
--	uint32_t cmd;
-+	u16 cmd;
- 	struct lpfc_dmabuf *dmabuf = NULL;
- 	struct lpfc_bsg_event *evt;
- 	struct event_data *evt_dat = NULL;
-@@ -936,7 +936,7 @@ lpfc_bsg_ct_unsol_event(struct lpfc_hba *phba, struct lpfc_sli_ring *pring,
+diff --git a/sound/core/seq/oss/seq_oss_midi.c b/sound/core/seq/oss/seq_oss_midi.c
+index 07efb38f58ac1..f2940b29595f0 100644
+--- a/sound/core/seq/oss/seq_oss_midi.c
++++ b/sound/core/seq/oss/seq_oss_midi.c
+@@ -37,6 +37,7 @@ struct seq_oss_midi {
+ 	struct snd_midi_event *coder;	/* MIDI event coder */
+ 	struct seq_oss_devinfo *devinfo;	/* assigned OSSseq device */
+ 	snd_use_lock_t use_lock;
++	struct mutex open_mutex;
+ };
  
- 	ct_req = (struct lpfc_sli_ct_request *)bdeBuf1->virt;
- 	evt_req_id = ct_req->FsType;
--	cmd = ct_req->CommandResponse.bits.CmdRsp;
-+	cmd = be16_to_cpu(ct_req->CommandResponse.bits.CmdRsp);
  
- 	spin_lock_irqsave(&phba->ct_ev_lock, flags);
- 	list_for_each_entry(evt, &phba->ct_ev_waiters, node) {
-@@ -3243,8 +3243,8 @@ lpfc_bsg_diag_loopback_run(struct bsg_job *job)
- 			ctreq->RevisionId.bits.InId = 0;
- 			ctreq->FsType = SLI_CT_ELX_LOOPBACK;
- 			ctreq->FsSubType = 0;
--			ctreq->CommandResponse.bits.CmdRsp = ELX_LOOPBACK_DATA;
--			ctreq->CommandResponse.bits.Size   = size;
-+			ctreq->CommandResponse.bits.CmdRsp = cpu_to_be16(ELX_LOOPBACK_DATA);
-+			ctreq->CommandResponse.bits.Size   = cpu_to_be16(size);
- 			segment_offset = ELX_LOOPBACK_HEADER_SZ;
- 		} else
- 			segment_offset = 0;
+@@ -172,6 +173,7 @@ snd_seq_oss_midi_check_new_port(struct snd_seq_port_info *pinfo)
+ 	mdev->flags = pinfo->capability;
+ 	mdev->opened = 0;
+ 	snd_use_lock_init(&mdev->use_lock);
++	mutex_init(&mdev->open_mutex);
+ 
+ 	/* copy and truncate the name of synth device */
+ 	strscpy(mdev->name, pinfo->name, sizeof(mdev->name));
+@@ -322,15 +324,17 @@ snd_seq_oss_midi_open(struct seq_oss_devinfo *dp, int dev, int fmode)
+ 	int perm;
+ 	struct seq_oss_midi *mdev;
+ 	struct snd_seq_port_subscribe subs;
++	int err;
+ 
+ 	mdev = get_mididev(dp, dev);
+ 	if (!mdev)
+ 		return -ENODEV;
+ 
++	mutex_lock(&mdev->open_mutex);
+ 	/* already used? */
+ 	if (mdev->opened && mdev->devinfo != dp) {
+-		snd_use_lock_free(&mdev->use_lock);
+-		return -EBUSY;
++		err = -EBUSY;
++		goto unlock;
+ 	}
+ 
+ 	perm = 0;
+@@ -340,14 +344,14 @@ snd_seq_oss_midi_open(struct seq_oss_devinfo *dp, int dev, int fmode)
+ 		perm |= PERM_READ;
+ 	perm &= mdev->flags;
+ 	if (perm == 0) {
+-		snd_use_lock_free(&mdev->use_lock);
+-		return -ENXIO;
++		err = -ENXIO;
++		goto unlock;
+ 	}
+ 
+ 	/* already opened? */
+ 	if ((mdev->opened & perm) == perm) {
+-		snd_use_lock_free(&mdev->use_lock);
+-		return 0;
++		err = 0;
++		goto unlock;
+ 	}
+ 
+ 	perm &= ~mdev->opened;
+@@ -372,13 +376,17 @@ snd_seq_oss_midi_open(struct seq_oss_devinfo *dp, int dev, int fmode)
+ 	}
+ 
+ 	if (! mdev->opened) {
+-		snd_use_lock_free(&mdev->use_lock);
+-		return -ENXIO;
++		err = -ENXIO;
++		goto unlock;
+ 	}
+ 
+ 	mdev->devinfo = dp;
++	err = 0;
++
++ unlock:
++	mutex_unlock(&mdev->open_mutex);
+ 	snd_use_lock_free(&mdev->use_lock);
+-	return 0;
++	return err;
+ }
+ 
+ /*
+@@ -393,10 +401,9 @@ snd_seq_oss_midi_close(struct seq_oss_devinfo *dp, int dev)
+ 	mdev = get_mididev(dp, dev);
+ 	if (!mdev)
+ 		return -ENODEV;
+-	if (! mdev->opened || mdev->devinfo != dp) {
+-		snd_use_lock_free(&mdev->use_lock);
+-		return 0;
+-	}
++	mutex_lock(&mdev->open_mutex);
++	if (!mdev->opened || mdev->devinfo != dp)
++		goto unlock;
+ 
+ 	memset(&subs, 0, sizeof(subs));
+ 	if (mdev->opened & PERM_WRITE) {
+@@ -415,6 +422,8 @@ snd_seq_oss_midi_close(struct seq_oss_devinfo *dp, int dev)
+ 	mdev->opened = 0;
+ 	mdev->devinfo = NULL;
+ 
++ unlock:
++	mutex_unlock(&mdev->open_mutex);
+ 	snd_use_lock_free(&mdev->use_lock);
+ 	return 0;
+ }
 -- 
 2.39.2
 
