@@ -2,116 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D40C973D807
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 08:51:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 861A373D80B
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 08:51:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229639AbjFZGvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 02:51:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49854 "EHLO
+        id S229654AbjFZGvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 02:51:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbjFZGv3 (ORCPT
+        with ESMTP id S229644AbjFZGvr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 02:51:29 -0400
-X-Greylist: delayed 41273 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 25 Jun 2023 23:51:24 PDT
-Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC97DE7B
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 23:51:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1687762277; bh=Pgn7S7GW3U6u3f3Hy8tc/2FAPWJkWS46rNADXIMWKy4=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
-         Content-Type;
-        b=PRpAQuq9eHEuXF0MJhvvlHEm7wlDa1lGzzqt5J8Q+MaLVMRLZeFFkRIjrJglUR2lI
-         llD8LnPmQSEsdNFiQm/hk5FNXr9z+fMcksD+w9U8jldbTs+Gm4IDJ1yqK3gMQ58Mg3
-         yjY/gYln4YRMoT85o2c/Vum7nYKQJGoJtEuUkz1k=
-Received: by b221-6.in.mailobj.net [192.168.90.26] with ESMTP
-        via ip-20.mailobj.net [213.182.54.20]
-        Mon, 26 Jun 2023 08:51:16 +0200 (CEST)
-X-EA-Auth: Eu/Q3BBGOZASBNR3dpmx6ET/wlVioDsvV4FoUhX+WcVKwrfl6adetu3e6VtSUbBvxZC7qTm86HVr6Td9HE/uWXqx2GV65Gol
-Date:   Mon, 26 Jun 2023 12:21:09 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Bob Peterson <rpeterso@redhat.com>,
-        Andreas Gruenbacher <agruenba@redhat.com>,
-        cluster-devel@redhat.com, linux-kernel@vger.kernel.org
-Cc:     Ira Weiny <ira.weiny@intel.com>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Sumitra Sharma <sumitraartsy@gmail.com>,
-        Deepak R Varma <drv@mailo.com>
-Subject: [PATCH v2] gfs2: Replace deprecated kmap_atomic() by
- kmap_local_page()
-Message-ID: <ZJk1XTtgLFxIcxzp@bu2204.myguest.virtualbox.org>
+        Mon, 26 Jun 2023 02:51:47 -0400
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF897E7D;
+        Sun, 25 Jun 2023 23:51:42 -0700 (PDT)
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-9891c73e0fbso538417866b.1;
+        Sun, 25 Jun 2023 23:51:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687762301; x=1690354301;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KjqDZn3lJ7Kgt+uw5GaBXsy3/mcmdXSrFa1NBqXg2gw=;
+        b=fNY3rk2rI+y7KhNmyEEZoKPGKzy3gGh4ZQYRPP0b+vpQ5jwyxIc10D9i+Rm71dXTyH
+         z9f1gjNpCEw80BBrC1TzSTTPtsMT6D+Kkls7YX+oJOVW75XWABkZcHy5sWEtDbKPQW5d
+         /9N1mouapMqFfaG8jb8t8eaesPJ7/Tc8PBxqKXct4ACoVPSLMfg0g4xGSXSUsNja0YjZ
+         /kEpoAbv51RhWZSLli2jP2pSJcaAE//NVsQzqbKPrq0rOYDjIZCpYxAhGkHMv+3+7RMQ
+         gfp1IP1nrzopk4awpnYltMKcm8AR46HwepdItY+mXBvXgBpf4Ug0NYGRPfz67gGN7zLP
+         617A==
+X-Gm-Message-State: AC+VfDzwR7yGVj/S870jahKNlya48uQ57M23ZFZDbv7nzy7AQo0vzGEU
+        i6jQyjuJD65W0nILzz7mUuk=
+X-Google-Smtp-Source: ACHHUZ5TcqpCU/a4lfTn1GgvzKl82Z0/y61evtBh4iRo/bk0tPXvJwuCzDR8a77/ADGCM+JawAyd4g==
+X-Received: by 2002:a17:907:3f87:b0:977:d660:c5aa with SMTP id hr7-20020a1709073f8700b00977d660c5aamr26059155ejc.31.1687762301096;
+        Sun, 25 Jun 2023 23:51:41 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:59? ([2a0b:e7c0:0:107::aaaa:59])
+        by smtp.gmail.com with ESMTPSA id k19-20020a1709061c1300b00988b6d05f33sm2846673ejg.223.2023.06.25.23.51.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 25 Jun 2023 23:51:40 -0700 (PDT)
+Message-ID: <eba3d9ce-389b-b4cf-1af2-6a5ee9ca5049@kernel.org>
+Date:   Mon, 26 Jun 2023 08:51:39 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 1/2] carl9170: re-fix fortified-memset warning
+Content-Language: en-US
+To:     Christian Lamparter <chunkeey@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, Arnd Bergmann <arnd@kernel.org>,
+        Kalle Valo <kvalo@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Shiji Yang <yangshiji66@outlook.com>,
+        Nick Kossifidis <mickflemm@gmail.com>,
+        Christian Marangi <ansuelsmth@gmail.com>
+Cc:     linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230623152443.2296825-1-arnd@kernel.org>
+ <7c4622e7-d7a8-ae5d-e381-f726cb511228@gmail.com>
+ <24986b5e-5cd1-4cd5-aff3-b5eab2c0fdde@app.fastmail.com>
+ <3bb839fe-1dfd-57f5-a5b0-be5adac57a4c@gmail.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <3bb839fe-1dfd-57f5-a5b0-be5adac57a4c@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kmap_atomic() is deprecated in favor of kmap_local_{folio,page}().
+On 23. 06. 23, 19:15, Christian Lamparter wrote:
+> On 6/23/23 18:05, Arnd Bergmann wrote:
+>> On Fri, Jun 23, 2023, at 17:38, Christian Lamparter wrote:
+>>> On 6/23/23 17:23, Arnd Bergmann wrote:
+>>>
+>>> Wait! I want to point out this funny thing is happening in ath too!
+>>>
+>>> https://lore.kernel.org/linux-wireless/TYAP286MB03154F9AAFD4C35BEEDE4A99BC4CA@TYAP286MB0315.JPNP286.PROD.OUTLOOK.COM/T/#mf1b8919a000fe661803c17073f48b3c410888541
+>>>
+>>> And that patch got NACK by Jiri Slaby because like me he suspects that
+>>> this is a compiler bug.
+>>
+>> FWIW, that is one I don't see with clang-17 or gcc-13. The one I'm 
+>> addressing
+>> here is the only thing I see in ath wireless with the default set of
+>> warning options, though this driver does have a couple of others that
+>> are unrelated, when you enable the source data check in memcpy() by
+>> building with W=1.
+>>
+>>   In file included from  drivers/net/wireless/ath/ath9k/xmit.c:17:
+>> In file included from  include/linux/dma-mapping.h:7:
+>> In file included from include/linux/string.h:254:
+>> /home/arnd/arm-soc/include/linux/fortify-string.h:592:4: error: call 
+>> to '__read_overflow2_field' declared with 'warning' attribute: 
+>> detected read beyond size of field (2nd parameter); maybe use 
+>> struct_group()? [-Werror,-Wattribute-warning]
+>>                          __read_overflow2_field(q_size_field, size);
+>>                          ^
+>> include/linux/fortify-string.h:592:4: error: call to 
+>> '__read_overflow2_field' declared with 'warning' attribute: detected 
+>> read beyond size of field (2nd parameter); maybe use struct_group()? 
+>> [-Werror,-Wattribute-warning]
+>> 2 errors generated.
+>> /home/arnd/arm-soc/include/linux/fortify-string.h:592:4: error: call 
+>> to '__read_overflow2_field' declared with 'warning' attribute: 
+>> detected read beyond size of field (2nd parameter); maybe use 
+>> struct_group()? [-Werror,-Wattribute-warning]
+>>                          __read_overflow2_field(q_size_field, size);
+>>
+>>> so, what's going wrong with fortified there?
+>>
+>> Kees might have a better answer to that, my best guess is that
+>> the one I'm addressing stems from the confusion between different
+>> union members.
+>>
+>> Doing the randconfig builds with the latest compilers, carl9170 is the
+>> only one I see with fortified-string warnings, and there are a few
+>> dozen other drivers that I see with W=1, including one that affects
+>> all wireless drivers.
+> 
+> Hm, question here (to Jiri as well). Do you think that a workaround patch
+> for these 
+> sort-of-obvious-but-compiler-bug-but-failed-to-make-a-simple-reproducer
+> would be OK to get NACKed? In my case, I fiddled around with it and 
+> replaced the
+> the cc_ani memset in the following way:
+> 
+> |        memset(&common->cc_survey, 0, sizeof(common->cc_survey));
+> |-       memset(&common->cc_ani, 0, sizeof(common->cc_ani));
+> |+       common->cc_ani.cycles = common->cc_ani.rx_busy = 
+> common->cc_ani.rx_frame = common->cc_ani.tx_frame = 0;
 
-Therefore, replace kmap_atomic() with kmap_local_page() in
-gfs2_internal_read() and stuffed_readpage().
+Nah, you are still changing the code for the compiler. And espectially 
+this one calls for troubles later -- when cc_ani changes.
 
-kmap_atomic() disables page-faults and preemption (the latter only for
-!PREEMPT_RT kernels), However, the code within the mapping/un-mapping in
-gfs2_internal_read() and stuffed_readpage() does not depend on the
-above-mentioned side effects.
+Again, work also with compiler guys, they are usually helpful. Both in 
+helping to understand the issue (from the compiler POV) and provide a 
+fix/workaround.
 
-Therefore, a mere replacement of the old API with the new one is all that
-is required (i.e., there is no need to explicitly add any calls to
-pagefault_disable() and/or preempt_disable()).
+Even this carl9170 change looks very bad to me. While 
+"memset_after(&txinfo->status, 0, rates);" means exactly what it does, 
+those two memsets barely. It took me a while to understand what is going 
+on and that it is the same. Don't do this.
 
-Signed-off-by: Deepak R Varma <drv@mailo.com>
----
-Note: The Patch is build tested only. I will be happy to run recommended testing
-with some guidance if required.
+Perhaps we need memset_no_check()?
 
-Changes in v2:
-   - Update patch description to correct the replacement function name from
-     kmap_local_folio to kmap_local _page 
-
-
- fs/gfs2/aops.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/fs/gfs2/aops.c b/fs/gfs2/aops.c
-index 3b41542d6697..7bd92054d353 100644
---- a/fs/gfs2/aops.c
-+++ b/fs/gfs2/aops.c
-@@ -432,10 +432,10 @@ static int stuffed_readpage(struct gfs2_inode *ip, struct page *page)
- 	if (error)
- 		return error;
- 
--	kaddr = kmap_atomic(page);
-+	kaddr = kmap_local_page(page);
- 	memcpy(kaddr, dibh->b_data + sizeof(struct gfs2_dinode), dsize);
- 	memset(kaddr + dsize, 0, PAGE_SIZE - dsize);
--	kunmap_atomic(kaddr);
-+	kunmap_local(kaddr);
- 	flush_dcache_page(page);
- 	brelse(dibh);
- 	SetPageUptodate(page);
-@@ -498,12 +498,12 @@ int gfs2_internal_read(struct gfs2_inode *ip, char *buf, loff_t *pos,
- 				continue;
- 			return PTR_ERR(page);
- 		}
--		p = kmap_atomic(page);
-+		p = kmap_local_page(page);
- 		amt = size - copied;
- 		if (offset + size > PAGE_SIZE)
- 			amt = PAGE_SIZE - offset;
- 		memcpy(buf + copied, p + offset, amt);
--		kunmap_atomic(p);
-+		kunmap_local(p);
- 		put_page(page);
- 		copied += amt;
- 		index++;
+thanks,
 -- 
-2.34.1
-
-
+js
+suse labs
 
