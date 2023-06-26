@@ -2,118 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6C2373DAE0
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 11:11:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E206673DAE6
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 11:12:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230152AbjFZJLC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 05:11:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56058 "EHLO
+        id S230174AbjFZJMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 05:12:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjFZJKY (ORCPT
+        with ESMTP id S229737AbjFZJMN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 05:10:24 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84DFA1987;
-        Mon, 26 Jun 2023 02:08:33 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id B5FC5218A9;
-        Mon, 26 Jun 2023 09:08:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1687770511; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Mon, 26 Jun 2023 05:12:13 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D58A10E3;
+        Mon, 26 Jun 2023 02:10:48 -0700 (PDT)
+Date:   Mon, 26 Jun 2023 09:10:46 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1687770647;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=5Z3BwE/rMDL9sl3DkNyM9QjJJyC1nTbjXqZGpksBHdg=;
-        b=fIxurrjVGHc9FD+2RG8txljxmBG0FCedwfMRjrWFQF0XuNa6PvTHpuqyMejsKh3Jua2X3T
-        1teV9cakJLPxVhN44pJPXqiHReBUvn1frqAJYgTQ7bIEmJi6B8H7/wXCr+8D9ZTcBnxPNb
-        cVq2OKK1WJJ50SDOojjWGvaeeKsuRag=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1687770511;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        bh=GYTQrCC+RSsXOLgejvaT9+3BmV6u5vHSR79WcyKmmcU=;
+        b=zsoz/X5XPLCX/M6x5Y7zOOejCePWaSjuQZlV0Ty83i6j60Wpdk8HwfCYu043ytcSO49m/F
+        O8ID/YNn1HmIWpvebGfglOQjwOmkJBaw7wObOAl8t2/vAg8eUh7XPrmzQxqj/u5AZiCJ66
+        4gbBBJA8G1bLXofhwxKxjSJaF1Xh/hAfezo/UJQjIlozgNeMry1YogT8axJWpfbDPIc9P9
+        p3poSeWohWKDBij8WYBHQGhNEUx5XrwxsQ+Z0p+EJub+cGgqjQpP6GIbkrnZ7b1GPOMdZf
+        GvMEz9EcIYJ6gHWsuZ41c7y4tw9nnRhS4RlptG1GUqgok1w7zxGUwaSKS/z/Nw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1687770647;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=5Z3BwE/rMDL9sl3DkNyM9QjJJyC1nTbjXqZGpksBHdg=;
-        b=ARm8Qvwb/bPr8l1xrJHBZ03gy8VE98uMY4fCjbzU92aP5nupTlX2lMJYqVCJwjLfhUHkBy
-        WctuSYBphMJVZkCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6E1F513483;
-        Mon, 26 Jun 2023 09:08:31 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Qo0oGo9VmWTbZQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Mon, 26 Jun 2023 09:08:31 +0000
-Message-ID: <2126cc69-b779-565b-98c7-4fbb0bf9f557@suse.cz>
-Date:   Mon, 26 Jun 2023 11:08:31 +0200
+        bh=GYTQrCC+RSsXOLgejvaT9+3BmV6u5vHSR79WcyKmmcU=;
+        b=NGytLUmfbO/oNPtlO1qrFJJbGEdAKPNf1xdVnOiLeyDSfKzJEC1Rx8HzJVUmt9gmK0nUmw
+        7CdLZmWtLTfajuDw==
+From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: irq/core] Merge tag 'irqchip-6.5' of
+ git://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms into irq/core
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, maz@kernel.org
+In-Reply-To: <20230623224345.3577134-1-maz@kernel.org>
+References: <20230623224345.3577134-1-maz@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] mm/vmalloc: do not output a spurious warning when huge
- vmalloc() fails
-To:     Lorenzo Stoakes <lstoakes@gmail.com>, Forza <forza@tnonline.net>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Baoquan He <bhe@redhat.com>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Linux btrfs <linux-btrfs@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, a1bert@atlas.cz,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Song Liu <song@kernel.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>
-References: <20230605201107.83298-1-lstoakes@gmail.com>
- <cd47d6ac-69ce-0315-dd45-2cb9dce57f36@suse.cz>
- <f6b42d95-09f1-48d6-8274-e6145febb31d@lucifer.local>
- <2a6fa9d6-53b8-93cd-16c8-309ce2b8e3ac@suse.cz>
- <20230607093316.cdf60df195915fa9d38067ea@linux-foundation.org>
- <11b893e.86425ef4.188f33688b8@tnonline.net>
- <e3ce1745-0a3e-4c9d-955e-2a0ce20422cf@lucifer.local>
-Content-Language: en-US
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <e3ce1745-0a3e-4c9d-955e-2a0ce20422cf@lucifer.local>
-Content-Type: text/plain; charset=UTF-8
+Message-ID: <168777064603.404.8030430839930136395.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/25/23 17:59, Lorenzo Stoakes wrote:
-> On Sun, Jun 25, 2023 at 05:40:17PM +0200, Forza wrote:
->>
->>
->> ---- From: Andrew Morton <akpm@linux-foundation.org> -- Sent: 2023-06-07 - 18:33 ----
->>
->> > On Wed, 7 Jun 2023 10:58:40 +0200 Vlastimil Babka <vbabka@suse.cz> wrote:
->> >
->> >> I would really suggest moving the fix to
->> >> mm-hotfixes instead of mm-unstable, and
->> >>
->> >> Fixes: 80b1d8fdfad1 ("mm: vmalloc: correct use of __GFP_NOWARN mask in __vmalloc_area_node()")
->> >> Cc: <stable@vger.kernel.org>
->> >
->> > I've made those changes.
->>
->> Did the chabge go into 6.3 stable? I saw these issues with kernels 6.3.0-6 3.7. I now updated to 6.3.9 and have had no more warnings since.
-> 
-> Yeah, got the notification from Greg's script that it landed in 6.3 stable.
+The following commit has been merged into the irq/core branch of tip:
 
-It did, but was not yet released. 6.3.9 from Wed Jun 21 doesn't have it yet,
-so it's interesting the warnings are gone already.
+Commit-ID:     f121ab7f4ac32ed2aa51035534926f9507a8308b
+Gitweb:        https://git.kernel.org/tip/f121ab7f4ac32ed2aa51035534926f9507a8308b
+Author:        Thomas Gleixner <tglx@linutronix.de>
+AuthorDate:    Mon, 26 Jun 2023 11:05:49 +02:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Mon, 26 Jun 2023 11:05:49 +02:00
 
->>
+Merge tag 'irqchip-6.5' of git://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms into irq/core
 
+Pull irqchip updates from Marc Zyngier:
+
+  - A number of Loogson/Loogarch fixes
+
+  - Allow the core code to retrigger an interrupt that has
+    fired while the same interrupt is being handled on another
+    CPU, papering over a GICv3 architecture issue
+
+  - Work around an integration problem on ASR8601, where the CPU
+    numbering isn't representable in the GIC implementation...
+
+  - Add some missing interrupt to the STM32 irqchip
+
+  - A bunch of warning squashing triggered by W=1 builds
+
+Link: https://lore.kernel.org/r/20230623224345.3577134-1-maz@kernel.org
+---
