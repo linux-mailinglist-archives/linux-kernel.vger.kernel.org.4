@@ -2,246 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC12E73D57A
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 03:10:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D25D73D57C
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 03:12:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229827AbjFZBKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 21:10:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50676 "EHLO
+        id S230104AbjFZBMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 21:12:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbjFZBKS (ORCPT
+        with ESMTP id S229683AbjFZBMO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 21:10:18 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2045.outbound.protection.outlook.com [40.107.94.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB0AA18F;
-        Sun, 25 Jun 2023 18:10:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=P52a6+SAMtb1aoZeZXGzw5K0TfSg4xSoWjj68sEpQmIVouueoegPMUsJf5orcSbZ1brq6JBtfrN8MCtgArKkkrLEVkFv3USdhFueJsoiU/1diABMqh1GicaG6XnOHj0j1+nnyjmSZX5v+WiKCN5KzEABntxTIpPAuPNKP2x7AKo2uq1itqZFfOlPLO7kRSLX6RQasDl19RhZYbmu4jEW3scBgXmNrlgFj9K9yaBvsEQlDgDOCCW3vVRwWW6wdmNUoZIZT9Q4gjbZ1ind65fbZg0FPzQ+wWdXpynGXVpDDXF9FUyrq3q6pAspkoRBfUoPPuJiCnoWbBe+jGR8JV8h8w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LjxjwiMnU79gNSi25wzZMGhJ54M3DmfS2lU4aNJ+Joo=;
- b=i39ve7FVtqueijhYte1blXHUEHFbWSl2G0Byg8UZV1B7hFC913o+eKpSiriAfmTXIeij78caDIsuqQbC1FNoAIqP/1vH9wj6A3+ToWaKOk/PRDvi6vk1CTMvVLigclyi1CHvzHul0niGtrdAw7Zd4KesimbHG8eRQmqOI2Aiz3VyPwgGB7YNKmTMSTccrSHDKqTZAJr3v+kfocc/wb9oTKKo6TpT3RNaQuPyHXKaZmsA1hBeancEx+A1q8EG+DJMRMbBGmz6lvrUIb1blhgB6/6OKKkGXRBr75+Rg71m+dTDM9Nx9TCKgi7gU4Fi0ybgzJ1YA4rDDcJz0UPYOF3GCg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=google.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LjxjwiMnU79gNSi25wzZMGhJ54M3DmfS2lU4aNJ+Joo=;
- b=0s9fbHfrBLicuG0tVnekQkCja5wvJsMcwMV1xVB/E7boRL0y5PrIE88LW7zWDmr6SPsjzfdOCCFRAntmLPiRzo+G2QbHtFGDd0h74ZRvjSsR9Xnl8u1YBijV6F1YL+P0g4ct0x3VvNRfUX9bEZQRoYdOX3FfOlgVf8rW4WvXpJk=
-Received: from DM6PR05CA0048.namprd05.prod.outlook.com (2603:10b6:5:335::17)
- by PH7PR12MB7966.namprd12.prod.outlook.com (2603:10b6:510:274::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24; Mon, 26 Jun
- 2023 01:10:13 +0000
-Received: from DM6NAM11FT069.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:335:cafe::3b) by DM6PR05CA0048.outlook.office365.com
- (2603:10b6:5:335::17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.15 via Frontend
- Transport; Mon, 26 Jun 2023 01:10:12 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT069.mail.protection.outlook.com (10.13.173.202) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6500.47 via Frontend Transport; Mon, 26 Jun 2023 01:10:12 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Sun, 25 Jun
- 2023 20:10:11 -0500
-Date:   Sun, 25 Jun 2023 20:07:53 -0500
-From:   Michael Roth <michael.roth@amd.com>
-To:     Sean Christopherson <seanjc@google.com>
-CC:     <isaku.yamahata@intel.com>, <kvm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <isaku.yamahata@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, <erdemaktas@google.com>,
-        Sagi Shahar <sagis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Zhi Wang <zhi.wang.linux@gmail.com>, <chen.bo@intel.com>,
-        <linux-coco@lists.linux.dev>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Vishal Annapurve <vannapurve@google.com>
-Subject: Re: [RFC PATCH v2 4/6] KVM: x86: Introduce fault type to indicate
- kvm page fault is private
-Message-ID: <20230626010753.xru5ph3irmyokrgc@amd.com>
-References: <cover.1687474039.git.isaku.yamahata@intel.com>
- <a3a19de92c7ac6e607ac3e663d84a4312876084b.1687474039.git.isaku.yamahata@intel.com>
- <ZJX6s2HxbHOUMXlj@google.com>
+        Sun, 25 Jun 2023 21:12:14 -0400
+Received: from tarta.nabijaczleweli.xyz (unknown [139.28.40.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F2400194;
+        Sun, 25 Jun 2023 18:12:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
+        s=202305; t=1687741930;
+        bh=pqnPYGTfh1ZIMZQeiwgOUejdA3LSVPWbpNYvcMysFf8=;
+        h=Date:From:To:Subject:From;
+        b=iXxfdo8LgtiVhBj7vyKKmHRzb/590CG4zTFOGSqiTockvak6aMAkWhkHOhoKXoKcZ
+         lzt13zDH66SgwQUNyi7DZLBK1yDoCGlKaBHxzmIfWmDEHRl2xM9GiSgFWeG25k/m5j
+         7JbQLes6Kst46omDevVJ9Id7YVj59Q9WeydH6Bi7UYSHyUH7rgFry7AweJg5NS5CIv
+         GlmHDe9UO+C6Q+RNJqSgdr5ZgukGNISPVMwxVzYlsdfbm1tk9+K5U9v0nIvxPe6qjT
+         gv+bpHkoFdWmKdcPXfwFvDrsHAFFEiUEmJ7mwz+E4NTdZougael8cT1FbM6D2rOo9s
+         Kr15xH3VfZ6Tw==
+Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
+        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id 957CA12AE;
+        Mon, 26 Jun 2023 03:12:10 +0200 (CEST)
+Date:   Mon, 26 Jun 2023 03:12:09 +0200
+From:   Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= 
+        <nabijaczleweli@nabijaczleweli.xyz>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Pending splice(file -> FIFO) always blocks read(FIFO), regardless of
+ O_NONBLOCK on read side?
+Message-ID: <qk6hjuam54khlaikf2ssom6custxf5is2ekkaequf4hvode3ls@zgf7j5j4ubvw>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5sqj5xnglnda2l7b"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZJX6s2HxbHOUMXlj@google.com>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT069:EE_|PH7PR12MB7966:EE_
-X-MS-Office365-Filtering-Correlation-Id: b5ceaa75-84a0-4c73-a463-08db75e217be
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +5ePdfD1bdCTAGUYPCjDebs2U1EVvSqxCN4PNhncwLBTaKz6O3Rag1/spiwa4K7L8eL6vsvnL4OhHZz5NQwc+PZyPdv3L6EDSYsAbVsqR2zHblzKd79HWSGe1HokJIbSs3ftZXvqyde2VDuLFT8jEP3LbXUQCYNXiirm0sfAOQ6pghtq/g411WLd82A7NiblGfJPoem6BPSdv2uTj4cB1I0jzbIop1uBVZ4+LBgk+Zl9Ged/E1DkEpxGIb00XLGiui0unXR0akeBwdMAwxMgHYfUTcmOEBGqhkFFNijj64L+AjwLU1ccc/meYpUZzaw4EY59pypUaGM3TiV3G4pj1VYFLgEIe1L1jwVbdR3d1Xk1oDZYIRoha7PgSUub/6/MmlzG+D/bA8XUlx4cycr4QMwG5aKRszCP0VvdX5ymQQJXG+fP9xZTCz0NjvDxY3ao+dNrJq9c1KqKT2+r2sruMhA8cLxI8yGL4fBxniB5xvNzFs2Xi1vlYO0C92EGq6WrVKUEWxfLWbbDCEsSo11SlPrKDnyIeBtN03PdyY2C80ac6V4hU0s1raf7ev+vd+FdYt0r5KJB+W0uZk1qvRxJSLC3ckvQJ5s+ilRhFcSoQ7sB8gDAAk1gCW5Xx62vL27yoKxH/eChjY61f7m3DdidsQTXcfejciqI8l+VSuSL66mzhUTvwIAvWcjS3AaOESPJN+YYsykkLeblC1P8CohOi19u5IPh5rHbMD6z59qKS4Lq66D039fI56Gl82t27adCrCgE3bCibM/T2wPJyi2naA==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(346002)(376002)(136003)(451199021)(46966006)(36840700001)(40470700004)(82310400005)(36860700001)(40460700003)(36756003)(70206006)(356005)(5660300002)(44832011)(7416002)(41300700001)(316002)(86362001)(6916009)(8936002)(8676002)(4326008)(81166007)(40480700001)(70586007)(82740400003)(966005)(47076005)(1076003)(26005)(2906002)(186003)(16526019)(478600001)(54906003)(426003)(336012)(6666004)(83380400001)(2616005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jun 2023 01:10:12.3704
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b5ceaa75-84a0-4c73-a463-08db75e217be
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT069.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7966
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: NeoMutt/20230517
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_RDNS_DYNAMIC_FP,
+        RDNS_DYNAMIC,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 23, 2023 at 01:04:03PM -0700, Sean Christopherson wrote:
-> On Thu, Jun 22, 2023, isaku.yamahata@intel.com wrote:
-> > diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
-> > index 7f9ec1e5b136..0ec0b927a391 100644
-> > --- a/arch/x86/kvm/mmu/mmu_internal.h
-> > +++ b/arch/x86/kvm/mmu/mmu_internal.h
-> > @@ -188,6 +188,13 @@ static inline bool is_nx_huge_page_enabled(struct kvm *kvm)
-> >  	return READ_ONCE(nx_huge_pages) && !kvm->arch.disable_nx_huge_pages;
-> >  }
-> >  
-> > +enum kvm_fault_type {
-> > +	KVM_FAULT_MEM_ATTR,
-> > +	KVM_FAULT_SHARED,
-> > +	KVM_FAULT_SHARED_ALWAYS,
-> > +	KVM_FAULT_PRIVATE,
-> 
-> This is silly.  Just use AMD's error code bit, i.e. PFERR_GUEST_ENC_MASK as per
-> the SNP series.
-> 
->   Bit 34 (ENC): Set to 1 if the guest’s effective C-bit was 1, 0 otherwise.
-> 
-> Just because Intel's ucode is too crusty to support error codes larger than 16
-> bits doesn't mean KVM can't utilize the bits :-)  KVM already translates to AMD's
-> error codes for other things, e.g.
-> 
-> 	error_code |= (exit_qualification & EPT_VIOLATION_GVA_TRANSLATED) != 0 ?
-> 	       PFERR_GUEST_FINAL_MASK : PFERR_GUEST_PAGE_MASK;
-> 
-> For TDX, handle_ept_violation() can do something like:
-> 
-> 	if (is_tdx(vcpu->kvm))
-> 		error_code |= (gpa & shared) ? 0 : PFERR_GUEST_ENC_MASK;
-> 	else if (kvm_mem_is_private(vcpu->kvm, gpa_to_gfn(gpa)))
-> 		error_code |= PFERR_GUEST_ENC_MASK;
 
-Maybe this is what you're getting at below, but seems awkward to have this
-being handling in TDX code since that would suggest that SVM module would
-also need to duplicate that logic and synthesize this PFERR_GUEST_ENC_MASK
-bit for non-SNP VMs (e.g. gmem self-tests).
+--5sqj5xnglnda2l7b
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-So maybe SNP/TDX can rely on passing this via error_code, and then some
-common code, like kvm_mem_is_private(), can handle this for non-TDX/SNP
-guest types. But the current gmem series does this via a new .is_private
-in kvm_page_fault:
+Hi! (starting with get_maintainers.pl fs/splice.c,
+     idk if that's right though)
 
-  .is_private = kvm_mem_is_private(vcpu->kvm, cr2_or_gpa >> PAGE_SHIFT),
+Per fs/splice.c:
+ * The traditional unix read/write is extended with a "splice()" operation
+ * that transfers data buffers to or from a pipe buffer.
+so I expect splice() to work just about the same as read()/write()
+(and, to a large extent, it does so).
 
-This seems at odds with the idea of storing this 'fault->is_private'
-logic into the error_code. Isaku and I were discussing[1] that we
-should do one or the other:
+Thus, a refresher on pipe read() semantics
+(quoting Issue 8 Draft 3; Linux when writing with write()):
+60746  When attempting to read from an empty pipe or FIFO:
+60747  =E2=80=A2 If no process has the pipe open for writing, read( ) shall=
+ return 0 to indicate end-of-file.
+60748  =E2=80=A2 If some process has the pipe open for writing and O_NONBLO=
+CK is set, read( ) shall return
+60749    =E2=88=921 and set errno to [EAGAIN].
+60750  =E2=80=A2 If some process has the pipe open for writing and O_NONBLO=
+CK is clear, read( ) shall
+60751    block the calling thread until some data is written or the pipe is=
+ closed by all processes that
+60752    had the pipe open for writing.
 
-  a) store everything in error_code
-  b) use the .is_private field that seems to have been introduced to
-     track exactly this information
+However, I've observed that this is not the case when splicing from
+something that sleeps on read to a pipe, and that in that case all
+readers block, /including/ ones that are reading from fds with
+O_NONBLOCK set!
 
-So I think this series is attempting to do b). If you're suggesting we
-should do a), then what purpose is fault->is_private field meant to
-serve? Are you planning to get rid of it? Otherwise it seems redundant.
+As an example, consider these two programs:
+-- >8 --
+// wr.c
+#define _GNU_SOURCE
+#include <fcntl.h>
+#include <stdio.h>
+int main() {
+  while (splice(0, 0, 1, 0, 128 * 1024 * 1024, 0) > 0)
+    ;
+  fprintf(stderr, "wr: %m\n");
+}
+-- >8 --
 
-But I think approach b) is useful for another reason:
+-- >8 --
+// rd.c
+#define _GNU_SOURCE
+#include <errno.h>
+#include <fcntl.h>
+#include <stdio.h>
+#include <unistd.h>
+int main() {
+  fcntl(0, F_SETFL, fcntl(0, F_GETFL) | O_NONBLOCK);
 
-> 
-> And that's not even taking into account that TDX might have a separate entry point,
-> i.e. the "is_tdx()" check can probably be avoided.
-> 
-> As for optimizing kvm_mem_is_private() to avoid unnecessary xarray lookups, that
-> can and should be done separately, e.g.
-> 
->   static inline bool kvm_mem_is_private(struct kvm *kvm, gfn_t gfn)
->   {
-> 	return IS_ENABLED(CONFIG_KVM_PRIVATE_MEM) &&
-> 	       kvm_guest_has_private_mem(kvm) &&
-> 	       kvm_get_memory_attributes(kvm, gfn) & KVM_MEMORY_ATTRIBUTE_PRIVATE;
->   }
-> 
-> where x86's implementation of kvm_guest_has_private_mem() can be
-> 
->   #define kvm_guest_has_private_mem(kvm) (!!(kvm)->vm_type)
+  char buf[64 * 1024] =3D {};
+  for (ssize_t rd;;) {
+#if 1
+    while ((rd =3D read(0, buf, sizeof(buf))) =3D=3D -1 && errno =3D=3D EIN=
+TR)
+      ;
+#else
+    while ((rd =3D splice(0, 0, 1, 0, 128 * 1024 * 1024, 0)) =3D=3D -1 &&
+           errno =3D=3D EINTR)
+      ;
+#endif
+    fprintf(stderr, "rd=3D%zd: %m\n", rd);
+    write(1, buf, rd);
 
-It's just about not checking xarray for non-protected case. The
-optimization here is that neither TDX nor SNP care about the xarray as
-far as determining whether the *fault* was a private or not. We only
-care later, in part of the KVM MMU code that determines whether the
-fault type is at odds with the xarray state and whether to generate a
-KVM_EXIT_MEMORY_FAULT as a result.
+    errno =3D 0;
+    sleep(1);
+  }
+}
+-- >8 --
 
-In that code, both TDX/SNP, as well as gmem self-tests, will all end up
-calling kvm_mem_is_private().
+Thus:
+-- >8 --
+a$ make rd wr
+a$ mkfifo fifo
+a$ ./rd < fifo                           b$ echo qwe > fifo
+rd=3D4: Success
+qwe
+rd=3D0: Success
+rd=3D0: Success                            b$ sleep 2 > fifo
+rd=3D-1: Resource temporarily unavailable
+rd=3D-1: Resource temporarily unavailable
+rd=3D0: Success
+rd=3D0: Success                           =20
+rd=3D-1: Resource temporarily unavailable  b$ /bin/cat > fifo
+rd=3D-1: Resource temporarily unavailable
+rd=3D4: Success                            abc
+abc
+rd=3D-1: Resource temporarily unavailable
+rd=3D4: Success                            def
+def
+rd=3D0: Success                            ^D
+rd=3D0: Success
+rd=3D0: Success                            b$ ./wr > fifo
+-- >8 --
+and nothing. Until you actually type a line (or a few) into teletype b
+so that the splice completes, at which point so does the read.
 
-In the gmem self-test case, in current gmem base series, and I think with
-what you've proposed here, we'd check the xarray via kvm_mem_is_privae(),
-both in kvm_mmu_do_page_fault(), as well as later kvm_faultin_pfn() where
-KVM_EXIT_MEMORY_FAULT case is handled. That seems off because:
+An even simpler case is=20
+-- >8 --
+$ ./wr | ./rd
+abc
+def
+rd=3D8: Success
+abc
+def
+ghi
+jkl
+rd=3D8: Success
+ghi
+jkl
+^D
+wr: Success
+rd=3D-1: Resource temporarily unavailable
+rd=3D0: Success
+rd=3D0: Success
+-- >8 --
 
-  1) Checking in kvm_mem_is_private() via kvm_mmu_do_page_fault() means
-     that we will grab the value prior to when the KVM MMU records the
-     mmu_invalidate_seq, which means there's a window between
-     kvm_mmu_do_page_fault() and kvm_faultin_pfn() where an updated
-     xarray won't be noticed, and the #NPF retry logic will not get
-     triggered.
+splice flags don't do anything.
+Tested on bookworm (6.1.27-1) and Linus' HEAD (v6.4-rc7-234-g547cc9be86f4).
 
-  2) For gmem self-test, kvm_mem_is_private() is the authority on
-     whether the fault is private or not. There's no need to distinguish
-     between what was set via KVM_SET_MEMORY_ATTRIBUTES, vs. what was
-     indicated via fault flags/GPA like TDX/SNP do.
+You could say this is a "denial of service", since this is a valid
+way of following pipes (and, sans SIGIO, the only portable one),
+and this makes it so the reader is completely blocked,
+and impervious to all deadly signals (incl. SIGKILL).
+I've also observed strace hanging (but it responded to SIGKILL).
 
-So it makes sense, in the gmem case (and TDX/SNP), to defer the
-kvm_mem_is_private() till later in kvm_faultin_pfn(). It avoid a
-duplicate lookup, and a race. But .is_private only conveys
-encrypted/unencrypted fault in TDX/SNP case, it doesn't have a way to
-cleanly convey this case "just use whatever kvm_mem_is_private() reports
-later, because it will always be what the VMM set, and it's too early
-to check kvm_mem_is_private() right now".
 
-So that's where this enum type came from. Although in the discussion I
-linked to above I suggested just:
+Rudimentary analysis shows that sys_splice() -> __do_splice() ->
+do_splice() -> {!(ipipe && opipe) -> !(ipipe) -> (ipipe)}:
+splice_file_to_pipe which then does
+-- >8 --
+	pipe_lock(opipe);
+	ret =3D wait_for_space(opipe, flags);
+	if (!ret)
+		ret =3D do_splice_to(in, offset, opipe, len, flags);
+	pipe_unlock(opipe);
+-- >8 --
+conversely:
+-- >8 --
+static ssize_t
+pipe_read(struct kiocb *iocb, struct iov_iter *to)
+{
+        size_t total_len =3D iov_iter_count(to);
+        struct file *filp =3D iocb->ki_filp;
+        struct pipe_inode_info *pipe =3D filp->private_data;
+        bool was_full, wake_next_reader =3D false;
+        ssize_t ret;
 
-  enum kvm_fault_type {
-    KVM_FAULT_VMM_DEFINED,
-    KVM_FAULT_SHARED,
-    KVM_FAULT_PRIVATE,
+        /* Null read succeeds. */
+        if (unlikely(total_len =3D=3D 0))
+                return 0;
 
-Which I think would work just as well, since VMM_DEFINED is basically what
-MEM_ATTR case handles in this patch, and if you also add the
-kvm_guest_has_private_mem() check into kvm_mem_is_private() as you suggested,
-it would naturally cover the SHARED_ALWAYS case as well.
+        ret =3D 0;
+        __pipe_lock(pipe);
+-- >8 --
+so, naturally(?), all non-empty reads wait for the splice to end.
 
-I'm fine with other approaches, but think there are a couple good reasons
-(#1 and #2 above) for what Isaku is proposing, and any alternative
-approach should account for them as well.
+To validate this, I've applied the following
+(which I'm 100% sure is wrong and breaks unrelated stuff):
+-- >8 --
+diff --git a/fs/pipe.c b/fs/pipe.c
+index 2d88f73f585a..a76535839d32 100644
+--- a/fs/pipe.c
++++ b/fs/pipe.c
+@@ -240,6 +240,11 @@ pipe_read(struct kiocb *iocb, struct iov_iter *to)
+ 	if (unlikely(total_len =3D=3D 0))
+ 		return 0;
+=20
++	if ((filp->f_flags & O_NONBLOCK) || (iocb->ki_flags & IOCB_NOWAIT)) {
++		if (mutex_is_locked(&pipe->mutex))
++			return -EAGAIN;
++	}
++
+ 	ret =3D 0;
+ 	__pipe_lock(pipe);
+-- >8 --
+which does make the aforementioned cases less pathological
+(naturally this now means it always EAGAINs even if there is data to be
+ read since the splice() loop keeps it locked, but you get the picture).
 
-[1] https://lore.kernel.org/kvm/20230612042559.375660-1-michael.roth@amd.com/T/#mdb24fe4998aa3ff3e568e8a0cba4d12b159087c7
+--5sqj5xnglnda2l7b
+Content-Type: application/pgp-signature; name="signature.asc"
 
--Mike
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmSY5ecACgkQvP0LAY0m
+WPF4YQ/+OeAzvWkC1fUJcUjJPAtI4mP6QKzJivJOyURVReOi0ZE4tjTt8S1iAd6y
+7/68LBFevNEwa+vf1hREBgGVEqJvxW7FN2+yreeSSo4SKul1XNW/U8oRM7V+5Jrh
+YjOl2+9twVppr4eF+C0FqM06fiO/84CJMjZCoaylcxtLGwDyOSRgkLDd3JcHJEQc
+YlkThlrLOJ+RPF0BL78AWpHjxAmpDTWynDrs9VvpUoYNSzt+cu8uuHYN75NG+SOh
+rH+QOc4s10nMHnUGzm/Jjegnq5m/Ul/prWQJ2QDT6NQXrue0aKO1x5TIRmLuiP5B
+Flh6C7YB2vLJOLIeXb/jzRH+7bsQMQFdzY3BwV24S5POy/feCtH3x/wySUPVioU3
+SG43J/5hHDgSyY7R7zpSUQpTZ/eieNB4VTld+wy7nXsIpKLhkR4V/klUIgVdDSQI
+fLpR5SkYIp+cWhPTEwGEKblwZtYFBxl8604P7/Aml+CCeFn50pPjaj9EDLIN/hBf
+HVhl3Wh3w7xZlcnR2BB5Jh9Ia/ANPJnWvt2VPAxg5dmOe9ipFAcaRVrIciIVbJim
+UZPr2hRf/gnnXhDibcixayOy/e4ZLh3e23xrgOTItwOTdKNoDV8yamw6m3ZK8zPE
++vnTZZ83i/fLOQr0DEXqeNk2YK+qBu258eoQ9l3Qmy2fU7dul3w=
+=Z4Qg
+-----END PGP SIGNATURE-----
+
+--5sqj5xnglnda2l7b--
