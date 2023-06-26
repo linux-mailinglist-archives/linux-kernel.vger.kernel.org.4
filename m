@@ -2,140 +2,292 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4724B73E228
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 16:30:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C52C373E22B
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 16:31:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230328AbjFZOar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 10:30:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47060 "EHLO
+        id S230087AbjFZObw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 10:31:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbjFZOao (ORCPT
+        with ESMTP id S229520AbjFZObt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 10:30:44 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F287498
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 07:30:42 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3fa71e253f2so39118335e9.0
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 07:30:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687789841; x=1690381841;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=sOo0XC/Y4flNUsbiJzBoRTnJAgB9VDv1XM+zJzFrca0=;
-        b=QsW3/nHLhkexzxGA0twe/x2qW+MofrKWc20XzfvTwk9ZpPAmfEi5ih1e5YIuIT2lNC
-         tjzCItcBDxFEFpbD7plDyGkfJ6B6tktDh1RDsc6ybYsCUOAiNzUnoB7b3UCawebRTjP+
-         IoVoceQUvr2vN6a2MOQFkk1b5sL3SecejNjv+vqiS03ImU7+AJ6TLazciDLoJy1LmNi/
-         QDPMsiuJuIIhwrC2wnDBhy0BD7hQrTbGaXffjQQ/QtmqFhMAfZPpTXoSijvnZwqpNWbS
-         O7tcEJhLj/e72X+eQkt3abY6eNBxVugwOG2ALiWE2YSEe8VNPf1Bl5GntO/vsmEX50nc
-         9ayg==
+        Mon, 26 Jun 2023 10:31:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C49A194
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 07:31:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687789860;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fI5bKyN+2a6dGAEULLZwYpYs8Vq+LvmQj425yEjhkiQ=;
+        b=Jjp0C7u0154DWMv3N58GW8h1cll/R/z4CnPKwaCvrzXRU1uKBFZkJ6s/48/p08vpHPZc3Y
+        6i8vQXb9HVXbmwnS7LWamYwnX9m4PhK6Jmr/klBP8ng9luOON5Rij8/3RBtK7mRBgryhyi
+        g/gYYL/PlWFjNHtmkyAwQ2TziYFFjXc=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-463-KBEr6dxWP7ykaPggYkpSig-1; Mon, 26 Jun 2023 10:30:53 -0400
+X-MC-Unique: KBEr6dxWP7ykaPggYkpSig-1
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-3113533a608so1259831f8f.0
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 07:30:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687789841; x=1690381841;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sOo0XC/Y4flNUsbiJzBoRTnJAgB9VDv1XM+zJzFrca0=;
-        b=ZTyknMNP2t6WJUZgqM7sfDRMdoYJPcvHv8Hq9srkG5AgrsADuSJPDgkua+QIZiJOUW
-         XpEfFYHdRvV8794a4mbPAU8vw7jvT/JCnlcaqgpqx3nV2pEgTRrxsVlnE0VvaJTeGHaE
-         zMtvRRtf7TWVo7KyEHkVrPhwd2ZTzbLhfEm6T9IePIUTTrq6Y/LtA05OgPc0JS2Osk43
-         v5QN6PnAGaDitPlU93e7Qllvw93/MJ6+NDMZrjy7/+eFyrmJuNjZjEGqZBfh9eTRd7rC
-         S/6u+hWzuhc24qdyD9rkLseZfKZUSYfovr0jogk6VAnt9NTSUY/tTzmMtlztZJByvDXf
-         Fafw==
-X-Gm-Message-State: AC+VfDwWkt4F+QixI4n5UmWAcW8narHojQkY0to18myrABy1qoXzvGqs
-        fFQBnl3rO38Z6myOCec064Y/Kw==
-X-Google-Smtp-Source: ACHHUZ6VWP4raj9cfLAIOeEgLIdxBNSr9wdsVkIQVnyoeIOHSC4oDNzgvxTcgh/C0ZjUg/zNHcMRlg==
-X-Received: by 2002:a05:600c:10d1:b0:3f7:a20a:561d with SMTP id l17-20020a05600c10d100b003f7a20a561dmr27638549wmd.8.1687789841362;
-        Mon, 26 Jun 2023 07:30:41 -0700 (PDT)
-Received: from aspen.lan (aztw-34-b2-v4wan-166919-cust780.vm26.cable.virginm.net. [82.37.195.13])
-        by smtp.gmail.com with ESMTPSA id t15-20020a0560001a4f00b00313f676832bsm1380811wry.93.2023.06.26.07.30.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jun 2023 07:30:40 -0700 (PDT)
-Date:   Mon, 26 Jun 2023 15:30:38 +0100
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        linux-perf-users@vger.kernel.org, ito-yuichi@fujitsu.com,
-        Chen-Yu Tsai <wens@csie.org>, Ard Biesheuvel <ardb@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-arm-kernel@lists.infradead.org,
-        kgdb-bugreport@lists.sourceforge.net,
-        Masayoshi Mizuma <msys.mizuma@gmail.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Lecopzer Chen <lecopzer.chen@mediatek.com>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v9 6/7] kgdb: Provide a stub kgdb_nmicallback() if
- !CONFIG_KGDB
-Message-ID: <20230626143038.GB95170@aspen.lan>
-References: <20230601213440.2488667-1-dianders@chromium.org>
- <20230601143109.v9.6.Ia3aeac89bb6751b682237e76e5ba594318e4b1aa@changeid>
- <CAD=FV=XbnUZh2uQ5Sr3Dg=+Kiz7rfZVyP-zNQtXrV_NSsCTFcA@mail.gmail.com>
+        d=1e100.net; s=20221208; t=1687789851; x=1690381851;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fI5bKyN+2a6dGAEULLZwYpYs8Vq+LvmQj425yEjhkiQ=;
+        b=DQczuqHnnhuwChY3Ku1q52ksLgWFXaIyNkqeeeYBgXkUR++34uCH6w8e4UUImTiHfk
+         mHztSIiuglGI/UXvXiZGSeZyShVjUutzrPR1q4a34MSttejulH2oYE4wFBZk6z9szHJU
+         ofLsPN4pGpbnbMafmhDMAl7kHzBWE+dMSUDyyx1EvzHDmatbhS3yV4NmDbVc7BaX9tXW
+         t10+CWorrA6kzkUw76C/HdJzd3mBzMGWSPrSz6maGrTLM2V18GkPnYmQlpssWppeMeVM
+         i8CHPU/pRqrTO1Pe50VeMHRsGoUuSNlCuoDOhAJgBMXFCIu9i5XesJ3wkOE4cEgSRoOP
+         O/pw==
+X-Gm-Message-State: AC+VfDx9oKgIzsER057oceXRFdpDTg/VDvnN7q8/N9kTRBNta+FwKtkQ
+        1d1Oe1JfOJiaY419QG5fmVrox69GVYefXFH94yXp93JAKC+Nqr3f11smfqg+4l1YNz0lF8V59ob
+        4mgF/sKyqtZwJma0uZhg6ogPQ
+X-Received: by 2002:a5d:5707:0:b0:30f:bafb:2468 with SMTP id a7-20020a5d5707000000b0030fbafb2468mr8822262wrv.40.1687789851274;
+        Mon, 26 Jun 2023 07:30:51 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6EJb2bHHP4jyEt0OOS3a9wWQOr7idvu6TIJ0MPTzFGBFSm5dniXfXeNoYdSm1+wALWhIG8fw==
+X-Received: by 2002:a5d:5707:0:b0:30f:bafb:2468 with SMTP id a7-20020a5d5707000000b0030fbafb2468mr8822246wrv.40.1687789850943;
+        Mon, 26 Jun 2023 07:30:50 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:4b3f:de9c:642:1aff:fe31:a15c? ([2a02:810d:4b3f:de9c:642:1aff:fe31:a15c])
+        by smtp.gmail.com with ESMTPSA id u8-20020adfdd48000000b0030ae6432504sm7496866wrm.38.2023.06.26.07.30.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Jun 2023 07:30:50 -0700 (PDT)
+Message-ID: <6d78d109-d027-0358-b1a8-2eaaa63e39af@redhat.com>
+Date:   Mon, 26 Jun 2023 16:30:49 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 14/16] maple_tree: Refine mas_preallocate() node
+ calculations
+Content-Language: en-US
+To:     Peng Zhang <zhangpeng.00@bytedance.com>
+Cc:     maple-tree@lists.infradead.org, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        linux-kernel@vger.kernel.org, David Airlie <airlied@redhat.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Matthew Wilcox <willy@infradead.org>
+References: <20230612203953.2093911-1-Liam.Howlett@oracle.com>
+ <20230612203953.2093911-15-Liam.Howlett@oracle.com>
+ <26d8fbcf-d34f-0a79-9d91-8c60e66f7341@redhat.com>
+ <cdab5e74-7559-cb31-90ca-b99a5c3a6dd6@gmail.com>
+ <43ce08db-210a-fec8-51b4-351625b3cdfb@redhat.com>
+ <e3af3f2f-ec87-e8e8-c72b-dfce20b32193@bytedance.com>
+From:   Danilo Krummrich <dakr@redhat.com>
+Organization: RedHat
+In-Reply-To: <e3af3f2f-ec87-e8e8-c72b-dfce20b32193@bytedance.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAD=FV=XbnUZh2uQ5Sr3Dg=+Kiz7rfZVyP-zNQtXrV_NSsCTFcA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 11:14:18AM -0700, Doug Anderson wrote:
-> Daniel,
->
-> On Thu, Jun 1, 2023 at 2:37 PM Douglas Anderson <dianders@chromium.org> wrote:
-> >
-> > To save architectures from needing to wrap the call in #ifdefs, add a
-> > stub no-op version of kgdb_nmicallback(), which returns 1 if it didn't
-> > handle anything.
-> >
-> > Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
-> > Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> > ---
-> > In v9 this is the only kgdb dependency. I'm assuming it could go
-> > through the arm64 tree? If that's not a good idea, we could always
-> > change the patch ("arm64: kgdb: Roundup cpus using IPI as NMI") not to
-> > depend on it by only calling kgdb_nmicallback() if CONFIG_KGDB is not
-> > defined.
-> >
-> > Changes in v9:
-> > - Added missing "inline"
-> >
-> > Changes in v8:
-> > - "Provide a stub kgdb_nmicallback() if !CONFIG_KGDB" new for v8
-> >
-> >  include/linux/kgdb.h | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/include/linux/kgdb.h b/include/linux/kgdb.h
-> > index 258cdde8d356..76e891ee9e37 100644
-> > --- a/include/linux/kgdb.h
-> > +++ b/include/linux/kgdb.h
-> > @@ -365,5 +365,6 @@ extern void kgdb_free_init_mem(void);
-> >  #define dbg_late_init()
-> >  static inline void kgdb_panic(const char *msg) {}
-> >  static inline void kgdb_free_init_mem(void) { }
-> > +static inline int kgdb_nmicallback(int cpu, void *regs) { return 1; }
->
-> What do you think about landing just ${SUBJECT} patch in kgdb right
-> now so it can end up in v6.5-rc1? It seems like this series is
-> currently blocked on Mark getting a spare moment and it seems unlikely
-> that'll happen this cycle. If we at least land the kgdb patch then it
-> would make things all that much easier to land in the next cycle. The
-> kgdb patch feels like it can make sense on its own...
+On 6/26/23 16:08, Peng Zhang wrote:
+> 
+> 
+> 在 2023/6/26 08:38, Danilo Krummrich 写道:
+>> Hi Peng,
+>>
+>> On 6/25/23 05:28, Peng Zhang wrote:
+>>>
+>>>
+>>> 在 2023/6/23 00:41, Danilo Krummrich 写道:
+>>>> On 6/12/23 22:39, Liam R. Howlett wrote:
+>>>>> Calculate the number of nodes based on the pending write action 
+>>>>> instead
+>>>>> of assuming the worst case.
+>>>>
+>>>> Liam already gave me a heads-up on this patch, which I already 
+>>>> replied to [1].
+>>>>
+>>>> However, I think it might make sense to also reply to this patch 
+>>>> directly.
+>>>>
+>>>> For a mas_preallocate() calculating the actual required nodes to be 
+>>>> allocated instead of assuming the worst to work, it is required to 
+>>>> ensure that the tree does not change between calling 
+>>>> mas_preallocate() and mas_store_prealloc() if my understanding is 
+>>>> correct.
+>>>>
+>>>> In DRM however, more specifically the DRM GPUVA Manager [2], we do 
+>>>> have the case that we are not able to ensure this:
+>>>>
+>>>> Jobs to create GPU mappings can be submitted by userspace, are 
+>>>> queued up by the kernel and are processed asynchronously in 
+>>>> dma-fence signalling critical paths, e.g. by using the 
+>>>> drm_gpu_scheduler. Hence, we must be able to allocate the worst case 
+>>>> amount of node, since at the time a job is submitted we can't 
+>>>> predict the state the maple tree keeping track of mappings has once 
+>>>> a mapping is inserted in the (asynchronous) dma-fence signalling 
+>>>> critical path.
+>>>>
+>>>> A more detailed explanation can be found in [1].
+>>>>
+>>>> Could we keep a separate function for allocating the worst case 
+>>>> amount of nodes additionally to this optimization? E.g. something 
+>>>> like mas_preallocate_worst_case() or mas_preallocate_unlocked() 
+>>>> (since I guess the new one requires the maple tree to be kept locked 
+>>>> in order not to change)?
+>>> Hi Danilo,
+>>>
+>>> Your understanding seems incorrect. Even with previously unoptimized
+>>> mas_preallocate(), the maple tree cannot be modified between calls to
+>>> mas_preallocate() and mas_store_prealloc(). The calculation of the
+>>> number of pre-allocated nodes depends on the structure of the maple
+>>> tree. In the unoptimized mas_preallocate(), it depends on the height of
+>>> the tree. If the maple tree is modified before mas_store_prealloc() and
+>>> the height of the tree changes, the number of pre-allocated nodes is
+>>> inaccurate.
+>>
+>> Thanks for pointing this out!
+>>
+>> First of all, it's probably fair to say "naive me", it totally makes 
+>> sense the tree height is needed - it's a b-tree.
+>>
+>> On the other hand, unless I miss something (and if so, please let me 
+>> know), something is bogus with the API then.
+>>
+>> While the documentation of the Advanced API of the maple tree 
+>> explicitly claims that the user of the API is responsible for locking, 
+>> this should be limited to the bounds set by the maple tree 
+>> implementation. Which means, the user must decide for either the 
+>> internal (spin-) lock or an external lock (which possibly goes away in 
+>> the future) and acquire and release it according to the rules maple 
+>> tree enforces through lockdep checks.
+>>
+>> Let's say one picks the internal lock. How is one supposed to ensure 
+>> the tree isn't modified using the internal lock with mas_preallocate()?
+>>
+>> Besides that, I think the documentation should definitely mention this 
+>> limitation and give some guidance for the locking.
+> Yes, the documentation of maple tree is not detailed and complete.
+>>
+>> Currently, from an API perspective, I can't see how anyone not 
+>> familiar with the implementation details would be able to recognize 
+>> this limitation.
+>>
+>> In terms of the GPUVA manager, unfortunately, it seems like I need to 
+>> drop the maple tree and go back to using a rb-tree, since it seems 
+>> there is no sane way doing a worst-case pre-allocation that does not 
+>> suffer from this limitation.
+> I also think preallocation may not be necessary, and I agree with what
+> Matthew said. Preallocation should be used in some cases where
+> preallocation has to be used. If preallocation is used, but the number
+> of preallocated nodes is insufficient because the tree is modified
+> midway, GFP_NOWAIT will be used for memory allocation during the tree
+> modification process, and the user may not notice that more nodes are
+> not from preallocation.
 
-Yes, grabbing this one should be fine!
+Please see my reply to Matthew. :)
 
+- Danilo
 
-Daniel.
+> 
+>>
+>> - Danilo
+>>
+>>>
+>>> Regards,
+>>> Peng
+>>>
+>>>>
+>>>> [1] 
+>>>> https://lore.kernel.org/nouveau/68cd25de-e767-725e-2e7b-703217230bb0@redhat.com/T/#ma326e200b1de1e3c9df4e9fcb3bf243061fee8b5
+>>>>
+>>>> [2] 
+>>>> https://lore.kernel.org/linux-mm/20230620004217.4700-8-dakr@redhat.com/T/#m47ab82310f87793d0f0cc1825a316eb30ad5b653
+>>>>
+>>>> - Danilo
+>>>>
+>>>>>
+>>>>> This addresses a performance regression introduced in platforms that
+>>>>> have longer allocation timing.
+>>>>>
+>>>>> Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
+>>>>> ---
+>>>>>   lib/maple_tree.c | 48 
+>>>>> +++++++++++++++++++++++++++++++++++++++++++++++-
+>>>>>   1 file changed, 47 insertions(+), 1 deletion(-)
+>>>>>
+>>>>> diff --git a/lib/maple_tree.c b/lib/maple_tree.c
+>>>>> index 048d6413a114..7ac5b5457603 100644
+>>>>> --- a/lib/maple_tree.c
+>>>>> +++ b/lib/maple_tree.c
+>>>>> @@ -5541,9 +5541,55 @@ EXPORT_SYMBOL_GPL(mas_store_prealloc);
+>>>>>    */
+>>>>>   int mas_preallocate(struct ma_state *mas, void *entry, gfp_t gfp)
+>>>>>   {
+>>>>> +    MA_WR_STATE(wr_mas, mas, entry);
+>>>>> +    unsigned char node_size;
+>>>>> +    int request = 1;
+>>>>>       int ret;
+>>>>> -    mas_node_count_gfp(mas, 1 + mas_mt_height(mas) * 3, gfp);
+>>>>> +
+>>>>> +    if (unlikely(!mas->index && mas->last == ULONG_MAX))
+>>>>> +        goto ask_now;
+>>>>> +
+>>>>> +    mas_wr_store_setup(&wr_mas);
+>>>>> +    wr_mas.content = mas_start(mas);
+>>>>> +    /* Root expand */
+>>>>> +    if (unlikely(mas_is_none(mas) || mas_is_ptr(mas)))
+>>>>> +        goto ask_now;
+>>>>> +
+>>>>> +    if (unlikely(!mas_wr_walk(&wr_mas))) {
+>>>>> +        /* Spanning store, use worst case for now */
+>>>>> +        request = 1 + mas_mt_height(mas) * 3;
+>>>>> +        goto ask_now;
+>>>>> +    }
+>>>>> +
+>>>>> +    /* At this point, we are at the leaf node that needs to be 
+>>>>> altered. */
+>>>>> +    /* Exact fit, no nodes needed. */
+>>>>> +    if (wr_mas.r_min == mas->index && wr_mas.r_max == mas->last)
+>>>>> +        return 0;
+>>>>> +
+>>>>> +    mas_wr_end_piv(&wr_mas);
+>>>>> +    node_size = mas_wr_new_end(&wr_mas);
+>>>>> +    /* Slot store can avoid using any nodes */
+>>>>> +    if (node_size == wr_mas.node_end && wr_mas.offset_end - 
+>>>>> mas->offset == 1)
+>>>>> +        return 0;
+>>>>> +
+>>>>> +    if (node_size >= mt_slots[wr_mas.type]) {
+>>>>> +        /* Split, worst case for now. */
+>>>>> +        request = 1 + mas_mt_height(mas) * 2;
+>>>>> +        goto ask_now;
+>>>>> +    }
+>>>>> +
+>>>>> +    /* Appending does not need any nodes */
+>>>>> +    if (node_size == wr_mas.node_end + 1 && mas->offset == 
+>>>>> wr_mas.node_end)
+>>>>> +        return 0;
+>>>>> +
+>>>>> +    /* Potential spanning rebalance collapsing a node, use 
+>>>>> worst-case */
+>>>>> +    if (node_size  - 1 <= mt_min_slots[wr_mas.type])
+>>>>> +        request = mas_mt_height(mas) * 2 - 1;
+>>>>> +
+>>>>> +    /* node store needs one node */
+>>>>> +ask_now:
+>>>>> +    mas_node_count_gfp(mas, request, gfp);
+>>>>>       mas->mas_flags |= MA_STATE_PREALLOC;
+>>>>>       if (likely(!mas_is_err(mas)))
+>>>>>           return 0;
+>>>>
+>>>>
+>>>
+>>
+> 
+
