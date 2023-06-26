@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60D3073D845
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 09:14:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB12873D848
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 09:14:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbjFZHOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 03:14:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56282 "EHLO
+        id S229788AbjFZHOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 03:14:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjFZHOF (ORCPT
+        with ESMTP id S229768AbjFZHOd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 03:14:05 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D9D31AC
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 00:14:04 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id d75a77b69052e-4008324d85bso29510851cf.1
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 00:14:04 -0700 (PDT)
+        Mon, 26 Jun 2023 03:14:33 -0400
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD64E70
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 00:14:26 -0700 (PDT)
+Received: by mail-qk1-x736.google.com with SMTP id af79cd13be357-765942d497fso99748685a.1
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 00:14:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687763643; x=1690355643;
+        d=linaro.org; s=google; t=1687763665; x=1690355665;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
         bh=RUSGWbCXntBTkO9sHXbN7XbI0NcyxewHoKY9x8+FCk8=;
-        b=JQ3i5hlcNNawUt+qj1ljvA9FJ0Im+H88QY9lY05bsjAfE2q4m3iA7PEHWrmPaE1svp
-         eIXan4f1hjUYaqBfHrgo4b/wXDBjcNxZTM3uFou/50/XKrjQc6Inmjw1nzFW4EZ6eR9n
-         jIvNa++eL6AecOt5OvPJxesVDzGww348vywSvZ5jMMLFg3LzAERssj6kgf4VTV+L2dhm
-         onXiThYPyPJdNNVINgulXcAniCGeB1+R7105zc2ZzfXRKs5635n/aiRQSWXIUMd8Bs6f
-         GIbHcXqO1TFlvRR/aA9hjo/J1DsELauFYWTF2zKiEJqFJYAZEoTkC+TuZi9LAq/Axly0
-         ccPg==
+        b=w3kVtyCJ4ESUpPms38IJ30YO6oVYBMt0UEKIlCatn9cTvC7xC8K+wv6U4swkyfoQ9+
+         3K2suYs6a1ErbqyeTSMcn5Xi3Y7tpNgOvIN7oPdi91jPlcYOHaFf8Bdbdz4+iupUtMiU
+         /mlPzoFtxaHuhMa2wKMNuHtV8jRuC62mZNPzaMbQNLPuV7zl+AC/7mDwEh/JTJuIWQvR
+         pWT9GV4rKv/bu6X+SEiRJDkIxqfF+ONHj6WFvBnR52L4ZC4jBdE/ug7z/pxlwxMVTSiq
+         3SregEObJ9zB+JtXUB+4FX1bIAJ0F3h5TDiW3NKT3F6zep1HLwKhAT8geDiu1WwYjmHR
+         Ltxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687763643; x=1690355643;
+        d=1e100.net; s=20221208; t=1687763665; x=1690355665;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
         bh=RUSGWbCXntBTkO9sHXbN7XbI0NcyxewHoKY9x8+FCk8=;
-        b=MYSXAQwjE3KfEkyexpVGnyEtSpVxok2kcgI8Y236nlUBkOEjHQY3xFlYIAa8SpTuuh
-         ASlL6Gr49F/V263kItU3APSVGYTzBZS6UF/Te1rHXAkKgNcNGDRUAkCeodt1gEcKBC3b
-         1UxORDI6QNaG3EpVOvMAdr0Oom68/3aLMg6dw8iiibD8D/ouyVFWRoqfmnhSRLpl5ljg
-         1HP2+C5ZCkU+J1071qad+U61GxlWqrzeT9Vn/TMt7fsyIB1t40DhbX5fMgUlLai05uPG
-         /OEXVYu1RL27+paj+yPmWdi7JIRJQoP99uhOtpgaE8S8icgBL9bWUEfMBQy89QHoFI2/
-         tZgw==
-X-Gm-Message-State: AC+VfDwJSNZ5pBzdp7uarbua6dHqjsY8Pzp2Xom6WCG7lIefbVI/uHX+
-        3OrpSprewcYnVKO4eRYJnZhNd8dYH52cYRPP+3zFAA==
-X-Google-Smtp-Source: ACHHUZ4kyVjT45z1qW52OYC5r21iJ5DWdiLHWlP21TQ+BkuBeujtoRUUWblnmXCOaleIiMVQenOTn9I5XN2vy1AbFm0=
-X-Received: by 2002:a05:622a:104c:b0:3f0:b4ee:6f4c with SMTP id
- f12-20020a05622a104c00b003f0b4ee6f4cmr35747340qte.41.1687763643515; Mon, 26
- Jun 2023 00:14:03 -0700 (PDT)
+        b=WjzDAkBCuzc+0zXrI5ojKTYrF2+PcOG57wVAiHj4Jc8BOlo72uCrgj2lCVD3ALmo36
+         bwmeLOgAcFjeM+ec9x9YgkLv0XE6HplLiwSyw0q+KW76QlBd+ooSFNwCQ0UU1eFphd7M
+         tyuvQmt26nGYgMTonH8jkfmepQAFR2CP90+o6lCrHI+m702wbhDBLo+VVMgnQJQ523IH
+         lyaSCwZOGVwawPAhG2oIB+1lNeJYGet2WikG9Zdmn6Ac6ocF9apICArQAiFUe7Yb2s9w
+         8uVUrMWIsepaMBEm+b7ZhlcN9UtHoLNtQtU5S/HodMLo7yVh2ipNABhy/QDxnSx3XQaf
+         4DXQ==
+X-Gm-Message-State: AC+VfDzicTMRz9kuRGAzBBjLYlJ/SHUEsbE7du74CBnjG/oHSTMEeqsx
+        jAQlLp3YxKGbeyBoCkbngdN1imHa9n6JgTeHgrBBmQ==
+X-Google-Smtp-Source: ACHHUZ7Yi47S0NNvpHTlPpY242vz1Sc33NqGJQi5jVb+lJAPeo7W02dKbmeBe32LQ8HnC9fNVcvXrI+GtETdyJy0gTI=
+X-Received: by 2002:a05:6214:c6c:b0:626:15bb:f57b with SMTP id
+ t12-20020a0562140c6c00b0062615bbf57bmr30736446qvj.26.1687763665174; Mon, 26
+ Jun 2023 00:14:25 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230625162817.100397-1-krzysztof.kozlowski@linaro.org> <20230625162817.100397-2-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230625162817.100397-2-krzysztof.kozlowski@linaro.org>
+References: <20230625162817.100397-1-krzysztof.kozlowski@linaro.org> <20230625162817.100397-3-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230625162817.100397-3-krzysztof.kozlowski@linaro.org>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 26 Jun 2023 09:13:51 +0200
-Message-ID: <CACRpkdZ5U4XA40j4MoMpp11mcrPf-NU+c35TPmk064w0xdk7Dw@mail.gmail.com>
-Subject: Re: [PATCH v4 01/24] Input: gpio_keys_polled - Simplify with dev_err_probe()
+Date:   Mon, 26 Jun 2023 09:14:14 +0200
+Message-ID: <CACRpkda2maO-dM9F=6pZnpDh9LtPGqeSTUbh1AAMeDiG27yY9A@mail.gmail.com>
+Subject: Re: [PATCH v4 02/24] Input: gpio-vibra - Simplify with dev_err_probe()
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Hans de Goede <hdegoede@redhat.com>,
