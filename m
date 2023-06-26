@@ -2,77 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4865073D61C
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 05:06:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B31B773D620
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 05:07:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230355AbjFZDGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 23:06:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50028 "EHLO
+        id S230026AbjFZDHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 23:07:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbjFZDGv (ORCPT
+        with ESMTP id S229552AbjFZDHe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 23:06:51 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42CBCE6
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 20:06:50 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2b44eddb52dso39996751fa.3
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 20:06:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1687748808; x=1690340808;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nD4rzl7wHSnevOLG2NiHgv978jXc76hQfIAH8/FPQhU=;
-        b=btDaLufx7cp58A8p/Se0hLvmXRbldFAC3h0fs5y5ViaFsEm9zl2vEQUednCysWwZGo
-         SqhBvfEO/YXxxy8knMOuaClpSZt5QwxtGoHOZ8OSiED+u1ubIbZnl8e5EpgYWfMP7/Ig
-         8lyd6/nVSYly7K4eQyhBkYJ9cv85ahUznwbbhvr6fzrCgTDv+bQaW3jnRVQg4EOVfg3t
-         F354rBk3bieDTMvToztoTN6/2Tajc8GnzD9pKzFIyATvbfEAe4wokzIVZUakERZratg1
-         WXkReZMUyw+IGknhNu6NO2FamPSiKqspIERa0WDsCeIqIsC+jMFTRlCRwjYrOKxrM2nt
-         weYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687748808; x=1690340808;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nD4rzl7wHSnevOLG2NiHgv978jXc76hQfIAH8/FPQhU=;
-        b=andL7Vevgl2IiYQrpudRRa14gQpA9in6eFlO+x0PQ4XQtHs3//7LO01fG4iBfIONPR
-         TzT/O4iqQEP3EnC/OzVrSRlDvsPVMptbDn/MiW8dWbaRfemUiRi1M4WxdgEth1ukEy/F
-         nmQ8Gv2gl4dUNxWoH+PTqpwG5PhKdnBGFyR5Q8Gq4lGX7XybcqyXS4ZKXv1SJ4mh8/0g
-         WSGKD9pWjxAd3I/UJmNahbOOPcv3HpJn2vXGXBdxsJOaAvXo5iQHN0XIBVoqgY+h9etC
-         nCNIRkDm1tmxFaJcSfliWwTsZscHxOSDNHV1dD65W6kx3PTW63TqsrYwQ97lt9Mvdkpb
-         WPNA==
-X-Gm-Message-State: AC+VfDw8KWMLj9NOzge5xF8AY1IiM5qoC6dIiyvtm/MtIFqa3gAPp3im
-        2wTGrFMB3AgC5OnY1hUBYZCgaJRkD9zWt1pdMiVCng==
-X-Google-Smtp-Source: ACHHUZ5SJIsRasQJlGe1qGG6AGfTPj5v1Fyn2OBo8PDT4ECRnP81aOb/XVz50aecRQdy9Ytkj2s7lCyEZM8af7lVZaU=
-X-Received: by 2002:a2e:8805:0:b0:2b6:a23d:57c8 with SMTP id
- x5-20020a2e8805000000b002b6a23d57c8mr416874ljh.14.1687748808365; Sun, 25 Jun
- 2023 20:06:48 -0700 (PDT)
+        Sun, 25 Jun 2023 23:07:34 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14EE2133;
+        Sun, 25 Jun 2023 20:07:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687748854; x=1719284854;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=vfwCfFpazuFdAYa86uv5p39Z9QwI0hlOweK8Ngh06zU=;
+  b=AUXsvY3u/2EOPg1WNGTNzDlN+LphvCbTvoLmy7pRYftPJI19BHNW2GHQ
+   AKX06iWm3UYeBs65Pn8kNvhr38vXr6gApIDPwNpaqeUnEDKIrSdsdRygs
+   pk7ttkZJl9cBBObb1k1x41ZuBYwlwhLIpQP/DhllxjsmCNP+O3+8YM9or
+   7784IhYloLmsbmtMJ3/nHqAOF4gc1y/0mci2LWMe1AYfw5Psz5qlZid6N
+   LYc8AiQKzx1YGVYgbOBMeBP7gCjP62qwBUYeZE+t7Z2mG+IK5rPonnG7s
+   8iBMXz53sAs7KaL2nD3ou97Gv3oMkYVenqjDGcA28Acp5gDuW6+zUVkJZ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="341499759"
+X-IronPort-AV: E=Sophos;i="6.01,158,1684825200"; 
+   d="scan'208";a="341499759"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2023 20:07:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="710083086"
+X-IronPort-AV: E=Sophos;i="6.01,158,1684825200"; 
+   d="scan'208";a="710083086"
+Received: from dbkinder-mobl.amr.corp.intel.com (HELO [10.212.241.20]) ([10.212.241.20])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2023 20:07:33 -0700
+Message-ID: <cdd04046-4bcb-d6fd-1688-0a85546e7b91@linux.intel.com>
+Date:   Sun, 25 Jun 2023 20:07:32 -0700
 MIME-Version: 1.0
-References: <20230616063210.19063-1-eric.lin@sifive.com> <20230616063210.19063-4-eric.lin@sifive.com>
- <20230616-renovate-country-12b9873b4494@wendy>
-In-Reply-To: <20230616-renovate-country-12b9873b4494@wendy>
-From:   Eric Lin <eric.lin@sifive.com>
-Date:   Mon, 26 Jun 2023 11:06:36 +0800
-Message-ID: <CAPqJEFrK8JPLjVEzLqr77kEx+KfYSQ_Fqh2hGXaA+BSL6pWwQw@mail.gmail.com>
-Subject: Re: [PATCH 3/3] dt-bindings: riscv: sifive: Add SiFive Private L2
- cache controller
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     conor@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, aou@eecs.berkeley.edu, maz@kernel.org,
-        chenhuacai@kernel.org, baolu.lu@linux.intel.com, will@kernel.org,
-        kan.liang@linux.intel.com, nnac123@linux.ibm.com,
-        pierre.gondois@arm.com, jgross@suse.com, chao.gao@intel.com,
-        maobibo@loongson.cn, linux-riscv@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dslin1010@gmail.com, Zong Li <zong.li@sifive.com>,
-        Nick Hu <nick.hu@sifive.com>,
-        Greentime Hu <greentime.hu@sifive.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.11.0
+Subject: Re: [PATCH v3 0/3] TDX Guest Quote generation support
+To:     Dan Williams <dan.j.williams@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Dionna Amalie Glaze <dionnaglaze@google.com>,
+        Chong Cai <chongc@google.com>, Qinkun Bao <qinkun@apache.org>,
+        Guorui Yu <GuoRui.Yu@linux.alibaba.com>,
+        Du Fan <fan.du@intel.com>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
+References: <cover.1684048511.git.sathyanarayanan.kuppuswamy@linux.intel.com>
+ <64966b842becf_142af8294a5@dwillia2-xfh.jf.intel.com.notmuch>
+Content-Language: en-US
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <64966b842becf_142af8294a5@dwillia2-xfh.jf.intel.com.notmuch>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,167 +78,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Conor,
 
-On Fri, Jun 16, 2023 at 6:12=E2=80=AFPM Conor Dooley <conor.dooley@microchi=
-p.com> wrote:
->
-> Hey Eric,
->
-> On Fri, Jun 16, 2023 at 02:32:10PM +0800, Eric Lin wrote:
-> > This add YAML DT binding documentation for SiFive Private L2
-> > cache controller
-> >
-> > Signed-off-by: Eric Lin <eric.lin@sifive.com>
-> > Reviewed-by: Zong Li <zong.li@sifive.com>
-> > Reviewed-by: Nick Hu <nick.hu@sifive.com>
->
-> Firstly, bindings need to come before the driver using them.
->
 
-OK, I'll fix it in v2.
+On 6/23/23 9:05 PM, Dan Williams wrote:
+> Kuppuswamy Sathyanarayanan wrote:
+>> Hi All,
+>>
+>> In TDX guest, the attestation process is used to verify the TDX guest
+>> trustworthiness to other entities before provisioning secrets to the
+>> guest.
+>>
+>> The TDX guest attestation process consists of two steps:
+>>
+>> 1. TDREPORT generation
+>> 2. Quote generation.
+>>
+>> The First step (TDREPORT generation) involves getting the TDX guest
+>> measurement data in the format of TDREPORT which is further used to
+>> validate the authenticity of the TDX guest. The second step involves
+>> sending the TDREPORT to a Quoting Enclave (QE) server to generate a
+>> remotely verifiable Quote. TDREPORT by design can only be verified on
+>> the local platform. To support remote verification of the TDREPORT,
+>> TDX leverages Intel SGX Quoting Enclave to verify the TDREPORT
+>> locally and convert it to a remotely verifiable Quote. Although
+>> attestation software can use communication methods like TCP/IP or
+>> vsock to send the TDREPORT to QE, not all platforms support these
+>> communication models. So TDX GHCI specification [1] defines a method
+>> for Quote generation via hypercalls. Please check the discussion from
+>> Google [2] and Alibaba [3] which clarifies the need for hypercall based
+>> Quote generation support. This patch set adds this support.
+>>
+>> Support for TDREPORT generation already exists in the TDX guest driver. 
+>> This patchset extends the same driver to add the Quote generation
+>> support.
+> 
+> I missed that the TDREPORT ioctl() and this character device are already
+> upstream. The TDREPORT ioctl() if it is only needed for quote generation
+> seems a waste because it just retrieves a blob that needs to be turned
+> around and injected back into the kernel to generate a quote.
 
-> > ---
-> >  .../bindings/riscv/sifive,pL2Cache0.yaml      | 81 +++++++++++++++++++
-> >  1 file changed, 81 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/riscv/sifive,pL2C=
-ache0.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/riscv/sifive,pL2Cache0.y=
-aml b/Documentation/devicetree/bindings/riscv/sifive,pL2Cache0.yaml
-> > new file mode 100644
-> > index 000000000000..b5d8d4a39dde
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/riscv/sifive,pL2Cache0.yaml
->
-> Cache bindings have moved to devicetree/bindings/cache.
->
-> > @@ -0,0 +1,81 @@
-> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > +# Copyright (C) 2023 SiFive, Inc.
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/riscv/sifive,pL2Cache0.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: SiFive Private L2 Cache Controller
-> > +
-> > +maintainers:
-> > +  - Greentime Hu  <greentime.hu@sifive.com>
-> > +  - Eric Lin      <eric.lin@sifive.com>
->
-> Drop the alignment here please.
->
+Although the end goal is to generate the quote, the method the user chooses to
+achieve it may differ for a variety of reasons. In this case, we're trying to
+support the use case where the user will use methods like TCP/IP or vsock to
+generate the Quote. They can use the GET_REPORT IOCTL to get the TDREPORT and
+send it to the quoting enclave via the above-mentioned methods.  TDVMCALL-based
+quote generation is intended for users who, for a variety of security reasons, do
+not wish to use the methods described above.
 
-OK, I'll fix it in v2.
 
-> > +
-> > +description:
-> > +  The SiFive Private L2 Cache Controller is per hart and communicates =
-with both the upstream
-> > +  L1 caches and downstream L3 cache or memory, enabling a high-perform=
-ance cache subsystem.
-> > +  All the properties in ePAPR/DeviceTree specification applies for thi=
-s platform.
->
-> Please wrap before 80 characters.
->
 
-OK, I'll fix it in v2.
-
-> > +
-> > +allOf:
-> > +  - $ref: /schemas/cache-controller.yaml#
-> > +
-> > +select:
-> > +  properties:
-> > +    compatible:
-> > +      contains:
-> > +        enum:
-> > +          - sifive,pL2Cache0
-> > +          - sifive,pL2Cache1
->
-> Why is this select: required?
->
-OK, I'll fix it in v2.
-
-> > +  required:
-> > +    - compatible
-> > +
-> > +properties:
-> > +  compatible:
-> > +    items:
-> > +      - enum:
-> > +          - sifive,pL2Cache0
-> > +          - sifive,pL2Cache1
->
-> What is the difference between these? (and drop the caps please)
-
-The pL2Cache1 has minor changes in hardware, but it can use the same
-pl2 cache driver.
-OK, I'll drop the caps in v2.
-
->
-> Should this also not fall back to "cache"?
->
-Yes,  I'll fix it in v2.
-
-> > +
-> > +  cache-block-size:
-> > +    const: 64
-> > +
-> > +  cache-level:
-> > +    const: 2
-> > +
-> > +  cache-sets:
-> > +    const: 512
-> > +
-> > +  cache-size:
-> > +    const: 262144
-> > +
-> > +  cache-unified: true
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  next-level-cache: true
-> > +
-> > +additionalProperties: false
-> > +
-> > +required:
-> > +  - compatible
-> > +  - cache-block-size
-> > +  - cache-level
-> > +  - cache-sets
-> > +  - cache-size
-> > +  - cache-unified
-> > +  - reg
-> > +
-> > +examples:
-> > +  - |
-> > +    pl2@10104000 {
->
-> cache-controller@
->
-
-OK, I'll fix it in v2.
-Thanks for the review.
-
-Best Regards,
-Eric Lin.
-
-> Cheers,
-> Conor.
->
-> > +        compatible =3D "sifive,pL2Cache0";
-> > +        cache-block-size =3D <64>;
-> > +        cache-level =3D <2>;
-> > +        cache-sets =3D <512>;
-> > +        cache-size =3D <262144>;
-> > +        cache-unified;
-> > +        reg =3D <0x10104000 0x4000>;
-> > +        next-level-cache =3D <&L4>;
-> > +    };
-> > --
-> > 2.40.1
-> >
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
