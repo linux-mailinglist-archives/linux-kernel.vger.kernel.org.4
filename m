@@ -2,71 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66B3173DBC5
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 11:51:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07C9173DBC8
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 11:52:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbjFZJvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 05:51:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47878 "EHLO
+        id S230169AbjFZJv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 05:51:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbjFZJve (ORCPT
+        with ESMTP id S230175AbjFZJv5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 05:51:34 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58F689F
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 02:51:31 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id d75a77b69052e-40097b0a124so17443311cf.0
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 02:51:31 -0700 (PDT)
+        Mon, 26 Jun 2023 05:51:57 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5055ACF
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 02:51:52 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2b6a152a933so10714881fa.1
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 02:51:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687773090; x=1690365090;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=wGW+DIgS9CWK2N0BnzgUdE8nx3ZQWbzDbAeMKQmOQr4=;
-        b=pOs4+sT+bkINnS/Qp7vbPVDPv2V40ihC2yeclx54KDjAQhW2cD1l+t7uHMEoWK1TJo
-         fv5NbFkQd9oOe80HxHLHMsOGRPo/FbXVBXD/Cc1s6xbOm60v8Xtm12KT+P+46Jau2fEW
-         I045Xp5zB7XMZw58/5RCyvFHQS6grngsqXpvpBJUUWLjiI8lUFjvARnWcH/iu5nYfajK
-         82rJ8k6tn9HqPHeCZ2gGfXxpZ2Yd5VxyGCznVhqj684aZpHevqGwzx9k+UzVbm4gLyka
-         G0b0gej4PzvJZwuVRJLJN0Q5oUYK1xCJ3N/HexSu1HBLYnaXYXxAAjBIQPxVy5Z/vkKE
-         IBgg==
+        d=linaro.org; s=google; t=1687773110; x=1690365110;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=5ggM1N3+w7ImiNtAZHXArGd84Z6U6HJ8t/slQ492qkA=;
+        b=FqHsMQ5vsBUDTg8Qu45FvgnX3xqTLM97k8uX6dT/yu2Eb3hdcwpsoETC22q1iX2xjI
+         fdRw4/PINKAYt0ptvLnXp8jq3UXTYTqk2hePWziqEWMDUpQ9ZL94UKNH5uYuleyzC/E0
+         WQ4YJVsU1d9unRENNAHKCjlXBr24hGZ1ZgGFMvJcHD0JDn0611kKx0hHNFhKOXALI+go
+         iEdWMF5DbOsUA476EvEUvA6sEu+NtNHD+XLeq4+UAwclbBkkMCW2fX8wi5gShPXUTayH
+         iShaJjMDyqVrAsSbcbwWrtHlvR3MkGOf7N5/MZguV3gX8fs9AFBigPXxMjNo8xmmIux4
+         pfVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687773090; x=1690365090;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wGW+DIgS9CWK2N0BnzgUdE8nx3ZQWbzDbAeMKQmOQr4=;
-        b=T0HZD9XPV0FgJzkmg/rizMlIkicvPWljhH6y302J2P/fh3pATLVOFYDAaTJpV07sk4
-         dpPNxWv+ldD/JVByiJTzXfLUPgVjnMjYHoqATCzwQBVfTOplndbF//DGNnJkGHgSNN/M
-         oPUEIt5k2iRN7wuypUjMcD6Fo+vGz5hbFnDeL6vf5/2SBsg+WuOWwfAFxvJaEw+K6Pl4
-         Q6Vb4Xem2GRj1LTBfpqHtSUm3tIDK2zeuiTrsQw0ZHX7xquOORimZOQsYWDSzB9PBjTZ
-         jnzWE9dLVYOA2obBuV2aOepQ//dfl54CNYU0/sUJAtG77mkrlceS68TNWKJuL3377yxK
-         Qctw==
-X-Gm-Message-State: AC+VfDxzjf9+IEuknxZ4D7m5BRntJanXGlcI4GIAwxIiyo7nPmioe5jM
-        POR6cw2qe22FVRfp3Ej8jGh/Q921nTtvD5R9oERMIQ==
-X-Google-Smtp-Source: ACHHUZ5X/UJpmXJIJc6ZXppn28jsGMTWM4wUsAypeexxOb7BxDFv3oIqJNK7ECnQ0vf/in1F+aplIYki5kCUQchfyes=
-X-Received: by 2002:ac8:5bd1:0:b0:400:790c:c5db with SMTP id
- b17-20020ac85bd1000000b00400790cc5dbmr13655588qtb.30.1687773090388; Mon, 26
- Jun 2023 02:51:30 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687773110; x=1690365110;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5ggM1N3+w7ImiNtAZHXArGd84Z6U6HJ8t/slQ492qkA=;
+        b=DyzvPEUc+aIR00uYivUZAsRsjkcSnM6/wnld/BiAdQ79a4KDv9Q88uXmauj/Lr38g6
+         ka/wOWx+qPVDrKn4zFN7cnSa39elGAp3lQ9srhgmjGXYI/k7JM6ibW+K3JBOuepOg95J
+         AsJF+ONttS0cz9xFlKMkV3ylWmYpKQIDCP1du0uJ4bQaXmOT5NpSTIvwKDmhwMi4yzY2
+         DSdxdqilNkV8nDfCikUfkKSsA4Dy7N8RHB2rvWWY6U+aeESIuPBedG1SpNt4xXeibulO
+         2lGj3TtwDYxRHczwaTgyjTaht5lEBnUvaCP5XPk1o1p5N191cUzKLmv0dANHxGTxvv4G
+         EAUg==
+X-Gm-Message-State: AC+VfDwJ43pniGcMJY3Sa9HBFnz2e+ewrZgRQNzYS/DzEpQ9u6l5Tm7a
+        9Qg8GvvJRlpjX5jFMl4fKK9ZxRDW0f1+SkQjMqw=
+X-Google-Smtp-Source: ACHHUZ6z1CFWIkB585T4AsGvxgWrYm0aA3bqu065Ypw3q/WfLWUkxYhOjK8FkfMVQVPSogtwBbHaIQ==
+X-Received: by 2002:a2e:948b:0:b0:2b4:491d:8d53 with SMTP id c11-20020a2e948b000000b002b4491d8d53mr17150106ljh.45.1687773110465;
+        Mon, 26 Jun 2023 02:51:50 -0700 (PDT)
+Received: from larix ([2a02:8428:1671:f801:5eff:2156:7b9f:50c2])
+        by smtp.gmail.com with ESMTPSA id f4-20020a0560001b0400b00307a86a4bcesm6879642wrz.35.2023.06.26.02.51.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jun 2023 02:51:50 -0700 (PDT)
+Date:   Mon, 26 Jun 2023 11:51:48 +0200
+From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
+To:     Baolu Lu <baolu.lu@linux.intel.com>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Kevin Tian <kevin.tian@intel.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Nicolin Chen <nicolinc@nvidia.com>,
+        Yi Liu <yi.l.liu@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        iommu@lists.linux.dev, linux-kselftest@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCHES 00/17] IOMMUFD: Deliver IO page faults to user space
+Message-ID: <ZJlftJF9ufnBMjHi@larix>
+References: <20230530053724.232765-1-baolu.lu@linux.intel.com>
+ <20230616113232.GA84678@myrica>
+ <bc963573-f4d3-1467-daaf-2d85f6befe3f@linux.intel.com>
 MIME-Version: 1.0
-References: <20220726083257.1730630-1-martin.kepplinger@puri.sm>
- <20220726083257.1730630-2-martin.kepplinger@puri.sm> <CAPDyKFrLLw=y9+t3f_bOH2mw2NVDGJxKE5=+XHY7C6SUzLzUDg@mail.gmail.com>
- <d1db07c8ca57c72b4f0820fcb6832dd7e4501055.camel@puri.sm> <CAPDyKFpz0HG_AzCkj8LkyisO1fjJiiyX2QjKTWDTLng2O7PDgA@mail.gmail.com>
- <77baacb930bf2ba1a65cb1515e6795b48d2d4ed5.camel@puri.sm> <CAPDyKFoS=E3c9XWWCaG2byMm-3nvvW5jXS0X7Bh-NK_msTUykQ@mail.gmail.com>
- <3bbba64dc4fd9ef37fb937f5176b1ef50b8b2d73.camel@puri.sm> <CAPDyKFqRAo+r0kW3H1ipu0trX0FC6EnG-PpFvXD7c1WmfPhtSA@mail.gmail.com>
- <1dec928bee02d46688a7041d64f2d951a44f8a9e.camel@puri.sm>
-In-Reply-To: <1dec928bee02d46688a7041d64f2d951a44f8a9e.camel@puri.sm>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 26 Jun 2023 11:50:54 +0200
-Message-ID: <CAPDyKFo=j6r+LA06RjD8=v72LK3voK9APR6rNFN+q1Xc_tHn-A@mail.gmail.com>
-Subject: Re: [PATCH v6 1/2] power: domain: handle genpd correctly when needing interrupts
-To:     Martin Kepplinger <martin.kepplinger@puri.sm>
-Cc:     rafael@kernel.org, khilman@kernel.org, robh@kernel.org,
-        krzysztof.kozlowski@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, festevam@gmail.com, pavel@ucw.cz,
-        kernel@puri.sm, linux-imx@nxp.com, broonie@kernel.org,
-        l.stach@pengutronix.de, aford173@gmail.com,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bc963573-f4d3-1467-daaf-2d85f6befe3f@linux.intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -77,226 +80,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 21 Jun 2023 at 20:20, Martin Kepplinger
-<martin.kepplinger@puri.sm> wrote:
->
-> Am Freitag, dem 23.09.2022 um 15:55 +0200 schrieb Ulf Hansson:
-> > On Thu, 25 Aug 2022 at 09:06, Martin Kepplinger
-> > <martin.kepplinger@puri.sm> wrote:
-> > >
-> > > Am Mittwoch, dem 24.08.2022 um 15:30 +0200 schrieb Ulf Hansson:
-> > > > On Mon, 22 Aug 2022 at 10:38, Martin Kepplinger
-> > > > <martin.kepplinger@puri.sm> wrote:
-> > > > >
-> > > > > Am Freitag, dem 19.08.2022 um 16:53 +0200 schrieb Ulf Hansson:
-> > > > > > On Fri, 19 Aug 2022 at 11:17, Martin Kepplinger
-> > > > > > <martin.kepplinger@puri.sm> wrote:
-> > > > > > >
-> > > > > > > Am Dienstag, dem 26.07.2022 um 17:07 +0200 schrieb Ulf
-> > > > > > > Hansson:
-> > > > > > > > On Tue, 26 Jul 2022 at 10:33, Martin Kepplinger
-> > > > > > > > <martin.kepplinger@puri.sm> wrote:
-> > > > > > > > >
-> > > > > > > > > If for example the power-domains' power-supply node
-> > > > > > > > > (regulator)
-> > > > > > > > > needs
-> > > > > > > > > interrupts to work, the current setup with noirq
-> > > > > > > > > callbacks
-> > > > > > > > > cannot
-> > > > > > > > > work; for example a pmic regulator on i2c, when
-> > > > > > > > > suspending,
-> > > > > > > > > usually
-> > > > > > > > > already
-> > > > > > > > > times out during suspend_noirq:
-> > > > > > > > >
-> > > > > > > > > [   41.024193] buck4: failed to disable: -ETIMEDOUT
-> > > > > > > > >
-> > > > > > > > > So fix system suspend and resume for these power-
-> > > > > > > > > domains by
-> > > > > > > > > using
-> > > > > > > > > the
-> > > > > > > > > "outer" suspend/resume callbacks instead. Tested on the
-> > > > > > > > > imx8mq-
-> > > > > > > > > librem5 board,
-> > > > > > > > > but by looking at the dts, this will fix imx8mq-evk and
-> > > > > > > > > possibly
-> > > > > > > > > many other
-> > > > > > > > > boards too.
-> > > > > > > > >
-> > > > > > > > > This is designed so that genpd providers just say "this
-> > > > > > > > > genpd
-> > > > > > > > > needs
-> > > > > > > > > interrupts" (by setting the flag) - without implying an
-> > > > > > > > > implementation.
-> > > > > > > > >
-> > > > > > > > > Initially system suspend problems had been discussed at
-> > > > > > > > > https://lore.kernel.org/linux-arm-kernel/20211002005954.1367653-8-l.stach@pengutronix.de/
-> > > > > > > > > which led to discussing the pmic that contains the
-> > > > > > > > > regulators
-> > > > > > > > > which
-> > > > > > > > > serve as power-domain power-supplies:
-> > > > > > > > > https://lore.kernel.org/linux-pm/573166b75e524517782471c2b7f96e03fd93d175.camel@puri.sm/T/
-> > > > > > > > >
-> > > > > > > > > Signed-off-by: Martin Kepplinger
-> > > > > > > > > <martin.kepplinger@puri.sm>
-> > > > > > > > > ---
-> > > > > > > > >  drivers/base/power/domain.c | 13 +++++++++++--
-> > > > > > > > >  include/linux/pm_domain.h   |  5 +++++
-> > > > > > > > >  2 files changed, 16 insertions(+), 2 deletions(-)
-> > > > > > > > >
-> > > > > > > > > diff --git a/drivers/base/power/domain.c
-> > > > > > > > > b/drivers/base/power/domain.c
-> > > > > > > > > index 5a2e0232862e..58376752a4de 100644
-> > > > > > > > > --- a/drivers/base/power/domain.c
-> > > > > > > > > +++ b/drivers/base/power/domain.c
-> > > > > > > > > @@ -130,6 +130,7 @@ static const struct genpd_lock_ops
-> > > > > > > > > genpd_spin_ops = {
-> > > > > > > > >  #define genpd_is_active_wakeup(genpd)  (genpd->flags &
-> > > > > > > > > GENPD_FLAG_ACTIVE_WAKEUP)
-> > > > > > > > >  #define genpd_is_cpu_domain(genpd)     (genpd->flags &
-> > > > > > > > > GENPD_FLAG_CPU_DOMAIN)
-> > > > > > > > >  #define genpd_is_rpm_always_on(genpd)  (genpd->flags &
-> > > > > > > > > GENPD_FLAG_RPM_ALWAYS_ON)
-> > > > > > > > > +#define genpd_irq_on(genpd)            (genpd->flags &
-> > > > > > > > > GENPD_FLAG_IRQ_ON)
-> > > > > > > > >
-> > > > > > > > >  static inline bool irq_safe_dev_in_sleep_domain(struct
-> > > > > > > > > device
-> > > > > > > > > *dev,
-> > > > > > > > >                 const struct generic_pm_domain *genpd)
-> > > > > > > > > @@ -2065,8 +2066,15 @@ int pm_genpd_init(struct
-> > > > > > > > > generic_pm_domain
-> > > > > > > > > *genpd,
-> > > > > > > > >         genpd->domain.ops.runtime_suspend =
-> > > > > > > > > genpd_runtime_suspend;
-> > > > > > > > >         genpd->domain.ops.runtime_resume =
-> > > > > > > > > genpd_runtime_resume;
-> > > > > > > > >         genpd->domain.ops.prepare = genpd_prepare;
-> > > > > > > > > -       genpd->domain.ops.suspend_noirq =
-> > > > > > > > > genpd_suspend_noirq;
-> > > > > > > > > -       genpd->domain.ops.resume_noirq =
-> > > > > > > > > genpd_resume_noirq;
-> > > > > > > > > +
-> > > > > > > > > +       if (genpd_irq_on(genpd)) {
-> > > > > > > > > +               genpd->domain.ops.suspend =
-> > > > > > > > > genpd_suspend_noirq;
-> > > > > > > > > +               genpd->domain.ops.resume =
-> > > > > > > > > genpd_resume_noirq;
-> > > > > > > > > +       } else {
-> > > > > > > > > +               genpd->domain.ops.suspend_noirq =
-> > > > > > > > > genpd_suspend_noirq;
-> > > > > > > > > +               genpd->domain.ops.resume_noirq =
-> > > > > > > > > genpd_resume_noirq;
-> > > > > > > >
-> > > > > > > > As we discussed previously, I am thinking that it may be
-> > > > > > > > better
-> > > > > > > > to
-> > > > > > > > move to using genpd->domain.ops.suspend_late and
-> > > > > > > > genpd->domain.ops.resume_early instead.
-> > > > > > >
-> > > > > > > Wouldn't that better be a separate patch (on top)? Do you
-> > > > > > > really
-> > > > > > > want
-> > > > > > > me to change the current behaviour (default case) to from
-> > > > > > > noirq
-> > > > > > > to
-> > > > > > > late? Then I'll resend this series with such a patch added.
-> > > > > >
-> > > > > > Sorry, I wasn't clear enough, the default behaviour should
-> > > > > > remain
-> > > > > > as
-> > > > > > is.
-> > > > > >
-> > > > > > What I meant was, when genpd_irq_on() is true, we should use
-> > > > > > the
-> > > > > > genpd->domain.ops.suspend_late and genpd-
-> > > > > > > domain.ops.resume_early.
-> > > > >
-> > > > > Testing that shows that this isn't working. I can provide the
-> > > > > logs
-> > > > > later, but suspend fails and I think it makes sense:
-> > > > > "suspend_late"
-> > > > > is
-> > > > > simply already too late when i2c (or any needed driver) uses
-> > > > > "suspend".
-> > > >
-> > > > Okay, I see.
-> > > >
-> > > > The reason why I suggested moving the callbacks to
-> > > > "suspend_late",
-> > > > was
-> > > > that I was worried that some of the attached devices to genpd
-> > > > could
-> > > > use "suspend_late" themselves. This is the case for some drivers
-> > > > for
-> > > > DMA/clock/gpio/pinctrl-controllers, for example. That said, I am
-> > > > curious to look at the DT files for the platform you are running,
-> > > > would you mind giving me a pointer?
-> > >
-> > > I'm running
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/boot/dts/freescale/imx8mq-librem5.dtsi
-> > > with these (small) patches on top:
-> > > https://source.puri.sm/martin.kepplinger/linux-next/-/commits/5.19.3/librem5
-> >
-> > Thanks for sharing the information!
-> >
-> > >
-> > > >
-> > > > So, this made me think about this a bit more. In the end, just
-> > > > using
-> > > > different levels (suspend, suspend_late, suspend_noirq) of
-> > > > callbacks
-> > > > are just papering over the real *dependency* problem.
-> > >
-> > > true, it doesn't feel like a stable solution.
-> > >
-> > > >
-> > > > What we need for the genpd provider driver, is to be asked to be
-> > > > suspended under the following conditions:
-> > > > 1. All consumer devices (and child-domains) for its corresponding
-> > > > PM
-> > > > domain have been suspended.
-> > > > 2. All its supplier devices supplies must remain resumed, until
-> > > > the
-> > > > genpd provider has been suspended.
-> > > >
-> > > > Please allow me a few more days to think in more detail about
-> > > > this.
-> > >
-> > > Thanks a lot for thinking about this!
-> >
-> > I have made some more thinking, but it's been a busy period for me,
-> > so
-> > unfortunately I need some additional time (another week). It seems
-> > like I also need to do some prototyping, to convince myself about the
-> > approach.
-> >
-> > So, my apologies for the delay!
-> >
-> > Kind regards
-> > Uffe
->
-> Hi Ulf and all interested,
->
-> Has there been any development regarding this bug? - genpd that needs
-> interrupts for power-on/off being run in noirq phases - you remember
-> it? it's been a while :)
+On Mon, Jun 19, 2023 at 11:35:50AM +0800, Baolu Lu wrote:
+> > Another outstanding issue was what to do for PASID stop. When the guest
+> > device driver stops using a PASID it issues a PASID stop request to the
+> > device (a device-specific mechanism). If the device is not using PRI stop
+> > markers it waits for pending PRs to complete and we're fine. Otherwise it
+> > sends a stop marker which is flushed to the PRI queue, but does not wait
+> > for pending PRs.
+> > 
+> > Handling stop markers is annoying. If the device issues one, then the PRI
+> > queue contains stale faults, a stop marker, followed by valid faults for
+> > the next address space bound to this PASID. The next address space will
+> > get all the spurious faults because the fault handler doesn't know that
+> > there is a stop marker coming. Linux is probably alright with spurious
+> > faults, though maybe not in all cases, and other guests may not support
+> > them at all.
+> > 
+> > We might need to revisit supporting stop markers: request that each device
+> > driver declares whether their device uses stop markers on unbind() ("This
+> > mechanism must indicate that a Stop Marker Message will be generated."
+> > says the spec, but doesn't say if the function always uses one or the
+> > other mechanism so it's per-unbind). Then we still have to synchronize
+> > unbind() with the fault handler to deal with the pending stop marker,
+> > which might have already gone through or be generated later.
+> 
+> I don't quite follow here. Once a PASID is unbound from the device, the
+> device driver should be free to release the PASID. The PASID could then
+> be used for any other purpose. The device driver has no idea when the
+> pending page requests are flushed after unbind(), so it cannot decide
+> how long should the PASID be delayed for reuse. Therefore, I understand
+> that a successful return from the unbind() function denotes that all
+> pending page requests have been flushed and the PASID is viable for
+> other use.
 
-Yes, sorry for the no-progress on my side. Except for some thinking
-and drawing, I don't have an update.
+Yes that's the contract for unbind() at the moment
 
-Although, to clarify, I have not forgotten about it. It's in my TODO
-list of prioritized things. I just need to complete a couple other
-things before I come to this and I will certainly keep you in the loop
-if I post something.
+> 
+> > 
+> > Currently we ignore all that and just flush the PRI queue, followed by the
+> > IOPF queue, to get rid of any stale fault before reassigning the PASID. A
+> > guest however would also need to first flush the HW PRI queue, but doesn't
+> > have a direct way to do that. If we want to support guests that don't deal
+> > with stop markers, the host needs to flush the PRI queue when a PASID is
+> > detached. I guess on Intel detaching the PASID goes through the host which
+> > can flush the host queue. On Arm we'll probably need to flush the queue
+> > when receiving a PASID cache invalidation, which the guest issues after
+> > clearing a PASID table entry.
+> 
+> The Intel VT-d driver follows below steps to drain pending page requests
+> when a PASID is unbound from a device.
+> 
+> - Tear down the device's pasid table entry for the stopped pasid.
+>   This ensures that ATS/PRI will stop putting more page requests for the
+>   pasid in VT-d PRQ.
 
->
-> Anyway I still run these patches and while it's a reasonable workaround
-> IMO, I wanted to check whether you are aware of anything that might
-> solve this. (or maybe it *is* solved and I simply overlooked because my
-> patches still apply?)
+Oh that's interesting, I didn't know about the implicit TLB invalidations
+on page requests for VT-d.
 
-The problem is still there, unfortunately.
+For Arm SMMU, clearing the PASID table entry does cause ATS Translation
+Requests to return with Completer Abort, but does not affect PRI. The SMMU
+pushes page requests directly into the PRI queue without reading any table
+(unless the queue overflows).
 
-Kind regards
-Uffe
+We're counting on the device driver to perform the PASID stop request
+before calling unbind(), described in PCIe 6.20.1 (Managing PASID Usage)
+and 10.4.1.2 (Managing PASID Usage on PRG Requests). This ensures that
+when unbind() is called, no more page request for the PASID is pushed into
+the PRI queue. But some may still be in the queue if the device uses stop
+markers.
+
+> - Sync with the PRQ handling thread until all related page requests in
+>   PRQ have been delivered.
+
+This is what I'm concerned about. For VT-d this happens in the host which
+is in charge of modifying the PASID table. For SMMU, the guest writes the
+PASID table. It flushes its virtual PRI queue, but not the physical queue
+that is managed by the host.
+
+One synchronization point where the host could flush the physical PRI
+queue is the PASID config invalidation (CMD_CFGI_CD). As Jason pointed out
+the host may not be able to observe those if a command queue is assigned
+directly to the guest (a theoretical SMMU extension), though in that case
+the guest may also have direct access to a PRI queue (like the AMD vIOMMU
+extension) and be able to flush the queue directly.
+
+But we can just wait for PRI implementations and see what the drivers
+need. Maybe no device will implement stop markers.
+
+Thanks,
+Jean
+
+> - Flush the iopf queue with iopf_queue_flush_dev().
+> - Follow the steps defined in VT-d spec section 7.10 to drain all page
+>   requests and responses between VT-d and the endpoint device.
