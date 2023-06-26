@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3284473ED77
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 23:53:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7B7173EDC8
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 23:57:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229777AbjFZVxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 17:53:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41184 "EHLO
+        id S231905AbjFZV4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 17:56:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231230AbjFZVw1 (ORCPT
+        with ESMTP id S231310AbjFZVym (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 17:52:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86D3C30F3;
-        Mon, 26 Jun 2023 14:51:14 -0700 (PDT)
+        Mon, 26 Jun 2023 17:54:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FDFA2D4A;
+        Mon, 26 Jun 2023 14:52:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 158FC60F53;
-        Mon, 26 Jun 2023 21:51:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51950C433C9;
-        Mon, 26 Jun 2023 21:50:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F0A9760F7B;
+        Mon, 26 Jun 2023 21:51:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D0FCC433C0;
+        Mon, 26 Jun 2023 21:51:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687816259;
-        bh=+Razs3xOyela9ENjzt3Ds9vXAXb3roZYjUTUVbY8YvI=;
+        s=k20201202; t=1687816261;
+        bh=8OZwjupndfwWbrk4lMvhLpi69nKpogsXep6K1Nets1I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kzyEtvMniTL4rCbAxyRT3oYtWDJd50jRvC/UWWKaGY4HXz4foFQzplillcLBvHoS+
-         G1MYj6qPjAs9Rq0rNlTPhsspNb0rhoGalT/g0SZhzI4/6WdHGrgtl0vQQKsp9rBr/h
-         TLygKgliwJ2WwUwuyGWuLMmZnaWVJxHi49gUT7GvQVzxgHv5a6ILssmKTD/+CaWvBH
-         wUT4AC5/ljMYoLQrZEuMWMT3TE5uCwNHRLwsDiafNbCvPyYY1/9Nlos7h9kjOWzbII
-         iVyhwy5xc7Cq9OfUQout8GVGeEn2O6ooBH0TRDq56NFJTDPcTM7OAY4tfIohKdiTr1
-         Q/sVB3jGc6+zQ==
+        b=k0y1gLwWIOw7Rz5k6UQcbSMqO4djDVfGFdXpq3jUqxd+yw/mpWyEKZTHSAI3xE5+c
+         pwZZl8Lv9NwRe30meKUtJUlPibC4aHZzm7+PLfLNfNkLb/naW5fxjuE7yWHVenEKqK
+         kUxHgkxMB3AXiBYWLKgXEd0yC8/hBYqjXdo5/NIWwfcAWZaNq2TRgxNztu8d5RZ8hp
+         Az2GgQF04XdXvovncTN6peK7elNdntxks80QisbQHG7OosIbXw+ufVvtZjIt8OUblA
+         /UmSt3eU1qq+qsjPQAuYqNEJE5ktQHnI5PpKErJBWckq8SdL/BOelJUHdVRVzfoTeH
+         iSKjAZQUv2IQQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     David Christensen <drc@linux.vnet.ibm.com>,
-        Sridhar Samudrala <sridhar.samudrala@intel.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, aelior@marvell.com,
-        skalluru@marvell.com, manishc@marvell.com, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 2/9] bnx2x: fix page fault following EEH recovery
-Date:   Mon, 26 Jun 2023 17:50:50 -0400
-Message-Id: <20230626215057.179363-2-sashal@kernel.org>
+Cc:     Enzo Matsumiya <ematsumiya@suse.de>,
+        Shyam Prasad N <sprasad@microsoft.com>,
+        Steve French <stfrench@microsoft.com>,
+        Sasha Levin <sashal@kernel.org>, pc@manguebit.com, pc@cjr.nz,
+        christophe.jaillet@wanadoo.fr
+Subject: [PATCH AUTOSEL 5.15 3/9] smb/client: print "Unknown" instead of bogus link speed value
+Date:   Mon, 26 Jun 2023 17:50:51 -0400
+Message-Id: <20230626215057.179363-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230626215057.179363-1-sashal@kernel.org>
 References: <20230626215057.179363-1-sashal@kernel.org>
@@ -52,8 +51,8 @@ X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 5.15.118
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,53 +61,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Christensen <drc@linux.vnet.ibm.com>
+From: Enzo Matsumiya <ematsumiya@suse.de>
 
-[ Upstream commit 7ebe4eda4265642859507d1b3ca330d8c196cfe5 ]
+[ Upstream commit 50e63d6db6fd30a6dd9a33c49aa5b0bba36e1a92 ]
 
-In the last step of the EEH recovery process, the EEH driver calls into
-bnx2x_io_resume() to re-initialize the NIC hardware via the function
-bnx2x_nic_load().  If an error occurs during bnx2x_nic_load(), OS and
-hardware resources are released and an error code is returned to the
-caller.  When called from bnx2x_io_resume(), the return code is ignored
-and the network interface is brought up unconditionally.  Later attempts
-to send a packet via this interface result in a page fault due to a null
-pointer reference.
+The virtio driver for Linux guests will not set a link speed to its
+paravirtualized NICs.  This will be seen as -1 in the ethernet layer, and
+when some servers (e.g. samba) fetches it, it's converted to an unsigned
+value (and multiplied by 1000 * 1000), so in client side we end up with:
 
-This patch checks the return code of bnx2x_nic_load(), prints an error
-message if necessary, and does not enable the interface.
+1)      Speed: 4294967295000000 bps
 
-Signed-off-by: David Christensen <drc@linux.vnet.ibm.com>
-Reviewed-by: Sridhar Samudrala <sridhar.samudrala@intel.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+in DebugData.
+
+This patch introduces a helper that returns a speed string (in Mbps or
+Gbps) if interface speed is valid (>= SPEED_10 and <= SPEED_800000), or
+"Unknown" otherwise.
+
+The reason to not change the value in iface->speed is because we don't
+know the real speed of the HW backing the server NIC, so let's keep
+considering these as the fastest NICs available.
+
+Also print "Capabilities: None" when the interface doesn't support any.
+
+Signed-off-by: Enzo Matsumiya <ematsumiya@suse.de>
+Reviewed-by: Shyam Prasad N <sprasad@microsoft.com>
+Signed-off-by: Steve French <stfrench@microsoft.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ fs/cifs/cifs_debug.c | 47 +++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 46 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c b/drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c
-index 553f3de939574..9c26c46771f5e 100644
---- a/drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c
-+++ b/drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c
-@@ -14317,11 +14317,16 @@ static void bnx2x_io_resume(struct pci_dev *pdev)
- 	bp->fw_seq = SHMEM_RD(bp, func_mb[BP_FW_MB_IDX(bp)].drv_mb_header) &
- 							DRV_MSG_SEQ_NUMBER_MASK;
- 
--	if (netif_running(dev))
--		bnx2x_nic_load(bp, LOAD_NORMAL);
-+	if (netif_running(dev)) {
-+		if (bnx2x_nic_load(bp, LOAD_NORMAL)) {
-+			netdev_err(bp->dev, "Error during driver initialization, try unloading/reloading the driver\n");
-+			goto done;
-+		}
-+	}
- 
- 	netif_device_attach(dev);
- 
-+done:
- 	rtnl_unlock();
+diff --git a/fs/cifs/cifs_debug.c b/fs/cifs/cifs_debug.c
+index e7501533c2ec9..8294e8be16661 100644
+--- a/fs/cifs/cifs_debug.c
++++ b/fs/cifs/cifs_debug.c
+@@ -11,6 +11,7 @@
+ #include <linux/module.h>
+ #include <linux/proc_fs.h>
+ #include <linux/uaccess.h>
++#include <uapi/linux/ethtool.h>
+ #include "cifspdu.h"
+ #include "cifsglob.h"
+ #include "cifsproto.h"
+@@ -144,18 +145,62 @@ cifs_dump_channel(struct seq_file *m, int i, struct cifs_chan *chan)
+ 		   atomic_read(&server->num_waiters));
  }
  
++static inline const char *smb_speed_to_str(size_t bps)
++{
++	size_t mbps = bps / 1000 / 1000;
++
++	switch (mbps) {
++	case SPEED_10:
++		return "10Mbps";
++	case SPEED_100:
++		return "100Mbps";
++	case SPEED_1000:
++		return "1Gbps";
++	case SPEED_2500:
++		return "2.5Gbps";
++	case SPEED_5000:
++		return "5Gbps";
++	case SPEED_10000:
++		return "10Gbps";
++	case SPEED_14000:
++		return "14Gbps";
++	case SPEED_20000:
++		return "20Gbps";
++	case SPEED_25000:
++		return "25Gbps";
++	case SPEED_40000:
++		return "40Gbps";
++	case SPEED_50000:
++		return "50Gbps";
++	case SPEED_56000:
++		return "56Gbps";
++	case SPEED_100000:
++		return "100Gbps";
++	case SPEED_200000:
++		return "200Gbps";
++	case SPEED_400000:
++		return "400Gbps";
++	case SPEED_800000:
++		return "800Gbps";
++	default:
++		return "Unknown";
++	}
++}
++
+ static void
+ cifs_dump_iface(struct seq_file *m, struct cifs_server_iface *iface)
+ {
+ 	struct sockaddr_in *ipv4 = (struct sockaddr_in *)&iface->sockaddr;
+ 	struct sockaddr_in6 *ipv6 = (struct sockaddr_in6 *)&iface->sockaddr;
+ 
+-	seq_printf(m, "\tSpeed: %zu bps\n", iface->speed);
++	seq_printf(m, "\tSpeed: %s\n", smb_speed_to_str(iface->speed));
+ 	seq_puts(m, "\t\tCapabilities: ");
+ 	if (iface->rdma_capable)
+ 		seq_puts(m, "rdma ");
+ 	if (iface->rss_capable)
+ 		seq_puts(m, "rss ");
++	if (!iface->rdma_capable && !iface->rss_capable)
++		seq_puts(m, "None");
+ 	seq_putc(m, '\n');
+ 	if (iface->sockaddr.ss_family == AF_INET)
+ 		seq_printf(m, "\t\tIPv4: %pI4\n", &ipv4->sin_addr);
 -- 
 2.39.2
 
