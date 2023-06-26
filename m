@@ -2,63 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 001D073D5A4
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 03:54:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F76573D5BB
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 04:13:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230000AbjFZByb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 21:54:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59078 "EHLO
+        id S229737AbjFZCN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 22:13:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbjFZBya (ORCPT
+        with ESMTP id S229506AbjFZCN1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 21:54:30 -0400
-Received: from mail.nfschina.com (unknown [42.101.60.195])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 7575A196
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 18:54:28 -0700 (PDT)
-Received: from localhost.localdomain (unknown [219.141.250.2])
-        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPA id 14E0B606536B5;
-        Mon, 26 Jun 2023 09:54:20 +0800 (CST)
-X-MD-Sfrom: zeming@nfschina.com
-X-MD-SrcIP: 219.141.250.2
-From:   Li zeming <zeming@nfschina.com>
-To:     jstultz@google.com, tglx@linutronix.de, sboyd@kernel.org
-Cc:     linux-kernel@vger.kernel.org, Li zeming <zeming@nfschina.com>
-Subject: [PATCH] =?UTF-8?q?time:=20ntp:=20Remove=20unnecessary=20=E2=80=98?= =?UTF-8?q?-ENODEV=E2=80=99=20values=20from=20err?=
-Date:   Wed, 28 Jun 2023 02:25:40 +0800
-Message-Id: <20230627182540.5243-1-zeming@nfschina.com>
-X-Mailer: git-send-email 2.18.2
+        Sun, 25 Jun 2023 22:13:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D12118D
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 19:12:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687745568;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NvHSlfKX+Q9EnaTb8YY7loKKccihuP0tvgv06rmGdeo=;
+        b=BKCMv65qYFzMcgrQ7yiOHrb9PW1RqBaLlkSWw72n/NBh7VOZxs+l1TQFw8sAd3QSQMJE1P
+        mxvzECoraOUUqmchv9w5YVq12ZpNG36tqR4cqb5/MP6SuJClhwrXV+uwOxQBU9XKRW6wnz
+        QlLlBTVg8iKjblR3MUaQ6Yj/qO0JatQ=
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com
+ [209.85.214.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-500-Xy4jaJIcPAaRTEsIqaX0Ww-1; Sun, 25 Jun 2023 22:12:46 -0400
+X-MC-Unique: Xy4jaJIcPAaRTEsIqaX0Ww-1
+Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-1b7f8598d5aso9396125ad.0
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 19:12:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687745565; x=1690337565;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NvHSlfKX+Q9EnaTb8YY7loKKccihuP0tvgv06rmGdeo=;
+        b=jpn6AwZlx7jVljoqyRWAJuL8BmUhhpQQ7XVtYLhHYGLE+AqQ2AhAVPhS2fpOucYxV6
+         pamcI9WUbObVzPh2Vq9knIkBm7nYJAkvHLsRoEoe0B11Xeuh/PnbG+3C5OLNDJ6//nPW
+         wWaipRlm7A5ZTLDwT+D+APKYs9XsosmU2dawNRGWHlEdkBSrc2xluX0A0rqxRP2HgK2j
+         rvjIuUeAuVghtEW218k+myytR11JYlp7LCTJjDb1ZDI9PU+ojbeAGfI9trspF9ObeVkH
+         V+d3TiqnpG0C+tQMew8uFFvhXaE9H/11KlTL89e8ZuzhPkrN4PpEzkrrVabb4y9Wlj86
+         GxNw==
+X-Gm-Message-State: AC+VfDwrZdGFMncneBHVsmG5kB8vhvfKUCxtW8uogTKsf+wH5BWSsAkv
+        7lQ0wLdpyacrNkxw4uJsChwp0cWpgLMFrqA1j2upM78gzhOkhnxroRMl0fGMjRmplHD12pDo9pZ
+        S1G5q3+Bvbk3rZsf0JdcPEyFg
+X-Received: by 2002:a05:6a20:3ca7:b0:121:bc20:f6c7 with SMTP id b39-20020a056a203ca700b00121bc20f6c7mr25834126pzj.19.1687745565659;
+        Sun, 25 Jun 2023 19:12:45 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5wcxGfN53h6dsr+wWOqZCl9CvqOw4NFsJ+DqE7HyvLS/BSMZ1rPtwqWZ9jfbJ0NMOOH8eQQQ==
+X-Received: by 2002:a05:6a20:3ca7:b0:121:bc20:f6c7 with SMTP id b39-20020a056a203ca700b00121bc20f6c7mr25834115pzj.19.1687745565360;
+        Sun, 25 Jun 2023 19:12:45 -0700 (PDT)
+Received: from [10.72.13.91] ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id q10-20020a65684a000000b0053f06d09725sm2647645pgt.32.2023.06.25.19.12.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 25 Jun 2023 19:12:44 -0700 (PDT)
+Message-ID: <4c4f73d8-8238-6ab8-ae50-d83c1441ac05@redhat.com>
+Date:   Mon, 26 Jun 2023 10:12:39 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v5 00/14] ceph: support idmapped mounts
+Content-Language: en-US
+To:     Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Cc:     Gregory Farnum <gfarnum@redhat.com>,
+        Christian Brauner <brauner@kernel.org>, stgraber@ubuntu.com,
+        linux-fsdevel@vger.kernel.org, Ilya Dryomov <idryomov@gmail.com>,
+        Jeff Layton <jlayton@kernel.org>, ceph-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230608154256.562906-1-aleksandr.mikhalitsyn@canonical.com>
+ <f3864ed6-8c97-8a7a-f268-dab29eb2fb21@redhat.com>
+ <CAEivzxcRsHveuW3nrPnSBK6_2-eT4XPvza3kN2oogvnbVXBKvQ@mail.gmail.com>
+ <20230609-alufolie-gezaubert-f18ef17cda12@brauner>
+ <CAEivzxc_LW6mTKjk46WivrisnnmVQs0UnRrh6p0KxhqyXrErBQ@mail.gmail.com>
+ <ac1c6817-9838-fcf3-edc8-224ff85691e0@redhat.com>
+ <CAJ4mKGby71qfb3gd696XH3AazeR0Qc_VGYupMznRH3Piky+VGA@mail.gmail.com>
+ <977d8133-a55f-0667-dc12-aa6fd7d8c3e4@redhat.com>
+ <CAEivzxcr99sERxZX17rZ5jW9YSzAWYvAjOOhBH+FqRoso2=yng@mail.gmail.com>
+ <626175e2-ee91-0f1a-9e5d-e506aea366fa@redhat.com>
+ <64241ff0-9af3-6817-478f-c24a0b9de9b3@redhat.com>
+ <CAEivzxeF51ZEKhQ-0M35nooZ7_cZgk1-q75-YbkeWpZ9RuHG4A@mail.gmail.com>
+From:   Xiubo Li <xiubli@redhat.com>
+In-Reply-To: <CAEivzxeF51ZEKhQ-0M35nooZ7_cZgk1-q75-YbkeWpZ9RuHG4A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_24_48,
-        RDNS_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-err is assigned first, so it does not need to initialize the assignment.
 
-Signed-off-by: Li zeming <zeming@nfschina.com>
----
- kernel/time/ntp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 6/24/23 15:11, Aleksandr Mikhalitsyn wrote:
+> On Sat, Jun 24, 2023 at 3:37 AM Xiubo Li <xiubli@redhat.com> wrote:
+>> [...]
+>>
+>>   > > >
+>>   > > > I thought about this too and came to the same conclusion, that
+>> UID/GID
+>>   > > > based
+>>   > > > restriction can be applied dynamically, so detecting it on mount-time
+>>   > > > helps not so much.
+>>   > > >
+>>   > > For this you please raise one PR to ceph first to support this, and in
+>>   > > the PR we can discuss more for the MDS auth caps. And after the PR
+>>   > > getting merged then in this patch series you need to check the
+>>   > > corresponding option or flag to determine whether could the idmap
+>>   > > mounting succeed.
+>>   >
+>>   > I'm sorry but I don't understand what we want to support here. Do we
+>> want to
+>>   > add some new ceph request that allows to check if UID/GID-based
+>>   > permissions are applied for
+>>   > a particular ceph client user?
+>>
+>> IMO we should prevent user to set UID/GID-based permisions caps from
+>> ceph side.
+>>
+>> As I know currently there is no way to prevent users to set MDS auth
+>> caps, IMO in ceph side at least we need one flag or option to disable
+>> this once users want this fs cluster sever for idmap mounts use case.
+> How this should be visible from the user side? We introducing a new
+> kernel client mount option,
+> like "nomdscaps", then pass flag to the MDS and MDS should check that
+> MDS auth permissions
+> are not applied (on the mount time) and prevent them from being
+> applied later while session is active. Like that?
+>
+> At the same time I'm thinking about protocol extension that adds 2
+> additional fields for UID/GID. This will allow to correctly
+> handle everything. I wanted to avoid any changes to the protocol or
+> server-side things. But if we want to change MDS side,
+> maybe it's better then to go this way?
 
-diff --git a/kernel/time/ntp.c b/kernel/time/ntp.c
-index 406dccb79c2b..3808bbf4db0c 100644
---- a/kernel/time/ntp.c
-+++ b/kernel/time/ntp.c
-@@ -582,7 +582,7 @@ static int update_rtc(struct timespec64 *to_set, unsigned long *offset_nsec)
- {
- 	struct rtc_device *rtc;
- 	struct rtc_time tm;
--	int err = -ENODEV;
-+	int err;
- 
- 	rtc = rtc_class_open(CONFIG_RTC_SYSTOHC_DEVICE);
- 	if (!rtc)
--- 
-2.18.2
+There is another way:
+
+For each client it will have a dedicated client auth caps, something like:
+
+client.foo
+   key: *key*
+   caps: [mds] allow r, allow rw path=/bar
+   caps: [mon] allow r
+   caps: [osd] allow rw tag cephfs data=cephfs_a
+
+When mounting this client with idmap enabled, then we can just check the 
+above [mds] caps, if there has any UID/GID based permissions set, then 
+fail the mounting.
+
+That means this kind client couldn't be mounted with idmap enabled.
+
+Also we need to make sure that once there is a mount with idmap enabled, 
+the corresponding client caps couldn't be append the UID/GID based 
+permissions. This need a patch in ceph anyway IMO.
+
+Thanks
+
+- Xiubo
+
+
+
+
+
+>
+> Thanks,
+> Alex
+>
+>> Thanks
+>>
+>> - Xiubo
+>>
 
