@@ -2,436 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7384F73E06D
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 15:20:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ED5573E07D
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 15:21:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229495AbjFZNUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 09:20:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34844 "EHLO
+        id S229977AbjFZNVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 09:21:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbjFZNUE (ORCPT
+        with ESMTP id S229889AbjFZNVJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 09:20:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD6C310A;
-        Mon, 26 Jun 2023 06:20:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        Mon, 26 Jun 2023 09:21:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29510B9
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 06:20:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687785622;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=p/Z1KtTHNDEz/UvhK/uC5AXS1uWtp7gEorowOqjT+2k=;
+        b=HlqHyZSuLOfLUnj11cWrTO5hMEOmeHo+x2zxMniqQ2Ho4PDv37JSMuWoZ5SfZSvMXjhCA4
+        7rJmheuMzLOGCZgtWATFuu1Mz3Wzb/6ZT1IH3Mnv7F0lkMqs43j4wao2nRPTezCnimJhzP
+        MA2Xl23OCct+qVwAF9CTHrVDFPK/J6s=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-654-CPSOP-6FMqeapgcO3dkupw-1; Mon, 26 Jun 2023 09:20:19 -0400
+X-MC-Unique: CPSOP-6FMqeapgcO3dkupw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3329960C87;
-        Mon, 26 Jun 2023 13:20:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DBA3C433C8;
-        Mon, 26 Jun 2023 13:20:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687785601;
-        bh=yMQFKEOUbbLx0TpxByXcJPO7nUBP5tMGqjH5D51qxFc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cpDfVC37gFTH9nEZE/L7ecqhPrV/wnDnhwXZYMzgklvn885TaQZV/dv+OlrJ/sNDM
-         6UhKd7rX6qcs/3Xzjpqo+l5OxAX38E5oyvceG2iwIi/NBjezR+RA2a19ex+D+vZCuz
-         DiWsrQ8UrHzS5iC3MU9zY9+vhQ+KuGGMu/Q6WA7jxK5QfrG1q47AX0Rsnh0vPdYDI6
-         RoRTVGPp9BQimY/UJHKT7t9M+feTA5wgO6auyY8YC6lbSCpdHGj4hbziG6kvoNjLIH
-         qROKZXoU6luxOz6kVyCecwc0+Yxs5CUoccck13R7UhhDTR06peL8nshm2gwhvZGGzU
-         4Hq7mfSTnSefg==
-Date:   Mon, 26 Jun 2023 15:19:58 +0200
-From:   Maxime Ripard <mripard@kernel.org>
-To:     Sui Jingfeng <suijingfeng@loongson.cn>
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn
-Subject: Re: [PATCH] drm: gem: add an option for supporting the dma-coherent
- hardware.
-Message-ID: <gmxnkyjkpedrem4ltixtgxruytbwsjrk5ggdvnqeqnncckti4r@tcsaokp3u6ax>
-References: <20230607053053.345101-1-suijingfeng@loongson.cn>
- <d4378aad1cf179d308068ef6072c5c7ff2bf2502.camel@crapouillou.net>
- <6db23d14-652e-4b13-24cb-bfb92fa3faed@loongson.cn>
- <e9714a0c29b1c4268081827571ad2545b0e6d5ec.camel@crapouillou.net>
- <d5494751-0af0-42f6-bcad-f75415e4a6bd@loongson.cn>
- <2dd4c870a5605a79105fb621c97a5f59a18c8c24.camel@crapouillou.net>
- <ae085320-c93c-5d96-58ef-c5ee8b58c306@loongson.cn>
- <i2odidvev3ztxit4iv4ndxcuk4opckgs5fg4jjjfrq5nike35u@mlo7hshexe2n>
- <02d6f220-b457-b980-8623-8da636cb495c@loongson.cn>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E48B2858EED;
+        Mon, 26 Jun 2023 13:20:17 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.4])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3B361C478C6;
+        Mon, 26 Jun 2023 13:20:15 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+To:     netdev@vger.kernel.org
+cc:     dhowells@redhat.com,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        David Miller <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
+        linux-next@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net-next] tools: Fix MSG_SPLICE_PAGES build error in trace tools
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="a2btcfxmbyj4gv5j"
-Content-Disposition: inline
-In-Reply-To: <02d6f220-b457-b980-8623-8da636cb495c@loongson.cn>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <3065879.1687785614.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Mon, 26 Jun 2023 14:20:14 +0100
+Message-ID: <3065880.1687785614@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The following error is being seen the perf tools because they have their
+own copies of a lot of kernel headers:
 
---a2btcfxmbyj4gv5j
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In file included from builtin-trace.c:907:
+trace/beauty/msg_flags.c: In function 'syscall_arg__scnprintf_msg_flags':
+trace/beauty/msg_flags.c:28:21: error: 'MSG_SPLICE_PAGES' undeclared (firs=
+t use in this function)
+   28 |         if (flags & MSG_##n) { \
+      |                     ^~~~
+trace/beauty/msg_flags.c:50:9: note: in expansion of macro 'P_MSG_FLAG'
+   50 |         P_MSG_FLAG(SPLICE_PAGES);
+      |         ^~~~~~~~~~
+trace/beauty/msg_flags.c:28:21: note: each undeclared identifier is report=
+ed only once for each function it appears in
+   28 |         if (flags & MSG_##n) { \
+      |                     ^~~~
+trace/beauty/msg_flags.c:50:9: note: in expansion of macro 'P_MSG_FLAG'
+   50 |         P_MSG_FLAG(SPLICE_PAGES);
+      |         ^~~~~~~~~~
 
-On Fri, Jun 23, 2023 at 04:38:34AM +0800, Sui Jingfeng wrote:
-> On 2023/6/8 15:39, Maxime Ripard wrote:
-> > On Thu, Jun 08, 2023 at 01:18:38AM +0800, Sui Jingfeng wrote:
-> > > Hi,
-> > >=20
-> > > On 2023/6/8 00:12, Paul Cercueil wrote:
-> > > > Hi Sui,
-> > > >=20
-> > > > Le mercredi 07 juin 2023 =E0 22:38 +0800, Sui Jingfeng a =E9crit=A0:
-> > > > > Hi,=A0 welcome to discussion.
-> > > > >=20
-> > > > >=20
-> > > > > I have limited skills in manipulating English.
-> > > > >=20
-> > > > > It may not express what I'm really means in the short time.
-> > > > >=20
-> > > > > Part of word in the sentence may not as accurate as your.
-> > > > >=20
-> > > > > Well, please don't misunderstand, I'm not doing the rude to you.
-> > > > No problem.
-> > > >=20
-> > > > > I will explain it with more details.
-> > > > >=20
-> > > > > See below:
-> > > > >=20
-> > > > >=20
-> > > > > On 2023/6/7 20:09, Paul Cercueil wrote:
-> > > > > > Hi Sui,
-> > > > > >=20
-> > > > > > Le mercredi 07 juin 2023 =E0 18:30 +0800, Sui Jingfeng a =E9cri=
-t=A0:
-> > > > > > > Hi,
-> > > > > > >=20
-> > > > > > >=20
-> > > > > > > On 2023/6/7 17:36, Paul Cercueil wrote:
-> > > > > > > > Hi Sui,
-> > > > > > > >=20
-> > > > > > > > Le mercredi 07 juin 2023 =E0 13:30 +0800, Sui Jingfeng a =
-=E9crit=A0:
-> > > > > > > > > The single map_noncoherent member of struct
-> > > > > > > > > drm_gem_dma_object
-> > > > > > > > > may
-> > > > > > > > > not
-> > > > > > > > > sufficient for describing the backing memory of the GEM
-> > > > > > > > > buffer
-> > > > > > > > > object.
-> > > > > > > > >=20
-> > > > > > > > > Especially on dma-coherent systems, the backing memory is
-> > > > > > > > > both
-> > > > > > > > > cached
-> > > > > > > > > coherent for multi-core CPUs and dma-coherent for periphe=
-ral
-> > > > > > > > > device.
-> > > > > > > > > Say architectures like X86-64, LoongArch64, Loongson Mips=
-64,
-> > > > > > > > > etc.
-> > > > > > > > >=20
-> > > > > > > > > Whether a peripheral device is dma-coherent or not can be
-> > > > > > > > > implementation-dependent. The single map_noncoherent opti=
-on
-> > > > > > > > > is
-> > > > > > > > > not
-> > > > > > > > > enough
-> > > > > > > > > to reflect real hardware anymore. For example, the Loongs=
-on
-> > > > > > > > > LS3A4000
-> > > > > > > > > CPU
-> > > > > > > > > and LS2K2000/LS2K1000 SoC, peripheral device of such hard=
-ware
-> > > > > > > > > platform
-> > > > > > > > > allways snoop CPU's cache. Doing the allocation with
-> > > > > > > > > dma_alloc_coherent
-> > > > > > > > > function is preferred. The return buffer is cached, it sh=
-ould
-> > > > > > > > > not
-> > > > > > > > > using
-> > > > > > > > > the default write-combine mapping. While with the current
-> > > > > > > > > implement,
-> > > > > > > > > there
-> > > > > > > > > no way to tell the drm core to reflect this.
-> > > > > > > > >=20
-> > > > > > > > > This patch adds cached and coherent members to struct
-> > > > > > > > > drm_gem_dma_object.
-> > > > > > > > > which allow driver implements to inform the core. Introdu=
-cing
-> > > > > > > > > new
-> > > > > > > > > mappings
-> > > > > > > > > while keeping the original default behavior unchanged.
-> > > > > > > > Did you try to simply set the "dma-coherent" property to the
-> > > > > > > > device's
-> > > > > > > > node?
-> > > > > > > But this approach can only be applied for the device driver w=
-ith
-> > > > > > > DT
-> > > > > > > support.
-> > > > > > >=20
-> > > > > > > X86-64, Loongson ls3a4000 mips64, Loongson ls3a5000 CPU typic=
-ally
-> > > > > > > do
-> > > > > > > not
-> > > > > > > have DT support.
-> > > > > > >=20
-> > > > > > > They using ACPI to pass parameter from the firmware to Linux
-> > > > > > > kernel.
-> > > > > > >=20
-> > > > > > > You approach will lost the effectiveness on such a case.
-> > > > > > Well, I don't really know how ACPI handles it - but it should j=
-ust
-> > > > > > be a
-> > > > > > matter of setting dev->dma_coherent. That's basically what the =
-DT
-> > > > > > code
-> > > > > > does.
-> > > > > >=20
-> > > > > > Some MIPS boards set it in their setup code for instance.
-> > > > > >=20
-> > > > > This is a *strategy*, not a *mechanism*.
-> > > > >=20
-> > > > > In this case, DT is just used to describing the hardware.
-> > > > >=20
-> > > > > (It is actually a hardware feature describing language, the
-> > > > > granularity
-> > > > > is large)
-> > > > >=20
-> > > > > It does not changing the state of the hardware.
-> > > > >=20
-> > > > > It's your platform firmware or kernel setting up code who actuall=
-y do
-> > > > > such a things.
-> > > > >=20
-> > > > >=20
-> > > > > It's just that it works on *one* platform, it does not guarantee =
-it
-> > > > > will
-> > > > > works on others.
-> > > > If you add the "dma-coherent" property in a device node in DT, you
-> > > > effectively specify that the device is DMA-coherent; so you describe
-> > > > the hardware, which is what DT is for, and you are not changing the
-> > > > state of the hardware.
-> > > >=20
-> > > > Note that some MIPS platforms (arch/mips/alchemy/common/setup.c)
-> > > > default to DMA-coherent mapping; I believe you could do something
-> > > > similar with your Loongson LS3A4000 CPU and LS2K2000/LS2K1000 SoC.
-> > > >=20
-> > > The preblem is that device driver can have various demand.
-> > >=20
-> > > It probably want to create different kind of buffers for different th=
-ing
-> > > simultaneously.
-> > >=20
-> > > Say, one allocated with dma_alloc_coherent for command buffer or dma
-> > > descriptor
-> > >=20
-> > > another one allocated with=A0 dma_alloc_wc for uploading shader etc.
-> > >=20
-> > > also has the third one allocated with dma_alloc_noncoherent() for doi=
-ng some
-> > > else.
-> > And it will work just fine.
-> >=20
-> > struct device dma_coherent, or DT's dma-coherent property define that
-> > the device doesn't need any kind of cache maintenance, ever. If it's
-> > missing, we need to perform cache maintenance to keep coherency.
-> >=20
-> > dma_alloc_* functions provide guarantees to the driver. With
-> > dma_alloc_wc and dma_alloc_coherent, the buffer is coherent, and thus
-> > you don't need to perform cache maintenance operations by hand in the
-> > driver.
-> >=20
-> > With dma_alloc_noncoherent, the buffer is non-coherent and the driver
-> > needs to perform them when relevant.
-> >=20
-> > How those buffers are created is platform specific, but the guarantees
-> > provided *to the driver* are always there.
-> >=20
-> > A buffer allocated with dma_alloc_coherent might be provided by
-> > different means (at the hardware level with a coherency unit, by mapping
-> > it non-cacheable), but as far as the driver is concerned it's always
-> > going to be coherent.
-> >=20
-> > Similarly, a driver using dma_alloc_noncoherent will always require
-> > cache maintenance operations to use the API properly, even if the
-> > hardware provides coherency (in which case, those operations will be
-> > nop).
-> >=20
-> > So, yeah, like I was saying in the other mail, it looks like you're
-> > confusing a bunch of things. dma_alloc_* functions are about the driver
-> > expectations and guarantees. DT's dma-coherent property is about how we
-> > can implement them on a given platform.
-> >=20
-> > They don't have to match, and that's precisely how we can have drivers
-> > that run on any combination of platforms: the driver only cares about
-> > the buffer guarantees, the platform description takes care of how they
-> > are implemented.
->=20
-> You are right in overall.
->=20
-> Yeah, you have better understanding than me.
->=20
->=20
-> But let me give you an example which may made people confusing:
->=20
->=20
-> The the drm/ingenic and drm/etnaviv (KMS-RO) as an example:
->=20
->=20
->=20
-> when drm/etnaviv's etnaviv_gem_prime_import_sg_table() function get calle=
-d,
->=20
-> drm/etnaviv is importing buffer from drm/ingenic.
->=20
-> drm/etnaviv is the importer, and drm/ingenic is the exporter.
->=20
-> drm/ingenic choose non-coherent mapping by default for JZ4770(this is gc8=
-00
-> in it).
->=20
-> It's cached, for fast CPU software rendering.
->=20
->=20
-> While drm/etnaviv import the buffer, get the SG, using the WC mapping by
-> default.
->=20
-> Dose this cause *cache aliasing* because of different driver using differ=
-ent
-> cache
->=20
-> mapping for the same backing memory ?
+Fix this by (1) adding MSG_SPLICE_PAGES to
+tools/perf/trace/beauty/include/linux/socket.h - which looks like it ought
+to work, but doesn't, and (2) defining it conditionally in the file on
+which the error occurs (suggested by Matthieu Baerts - this is also done
+for some other flags).
 
-This is a slightly different problem though. The main issue here is
-that there's multiple mapping with different attributes. Why is
-etnaviv even mapping the KMS buffer in the first place?
+Fixes: b848b26c6672 ("net: Kill MSG_SENDPAGE_NOTLAST")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Link: https://lore.kernel.org/r/20230626112847.2ef3d422@canb.auug.org.au/
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Matthieu Baerts <matthieu.baerts@tessares.net>
+cc: Arnaldo Carvalho de Melo <acme@redhat.com>
+cc: "David S. Miller" <davem@davemloft.net>
+cc: Eric Dumazet <edumazet@google.com>
+cc: Jakub Kicinski <kuba@kernel.org>
+cc: Paolo Abeni <pabeni@redhat.com>
+cc: Jens Axboe <axboe@kernel.dk>
+cc: Matthew Wilcox <willy@infradead.org>
+cc: bpf@vger.kernel.org
+cc: dccp@vger.kernel.org
+cc: linux-crypto@vger.kernel.org
+cc: mptcp@lists.linux.dev
+cc: netdev@vger.kernel.org
+cc: tipc-discussion@lists.sourceforge.net
+cc: virtualization@lists.linux-foundation.org
+---
+ include/linux/socket.h |    1 +
+ msg_flags.c            |    3 +++
+ 2 files changed, 4 insertions(+)
 
-I'd say it's largely a dma-buf problem if that actually happens.
+diff --git a/tools/perf/trace/beauty/include/linux/socket.h b/tools/perf/t=
+race/beauty/include/linux/socket.h
+index 3bef212a24d7..77cb707a566a 100644
+--- a/tools/perf/trace/beauty/include/linux/socket.h
++++ b/tools/perf/trace/beauty/include/linux/socket.h
+@@ -326,6 +326,7 @@ struct ucred {
+ 					  */
+ =
 
-> Because the imported buffer originally belong to the KMS driver side.
->=20
-> For drm/ingenic(jz4770), the BO will be cached, but their hardware can't
-> guarantee coherency.
+ #define MSG_ZEROCOPY	0x4000000	/* Use user data in kernel path */
++#define MSG_SPLICE_PAGES 0x8000000	/* Splice the pages from the iterator =
+in sendmsg() */
+ #define MSG_FASTOPEN	0x20000000	/* Send data in TCP SYN */
+ #define MSG_CMSG_CLOEXEC 0x40000000	/* Set close_on_exec for file
+ 					   descriptor received through
+diff --git a/tools/perf/trace/beauty/msg_flags.c b/tools/perf/trace/beauty=
+/msg_flags.c
+index 5cdebd7ece7e..aa9934020232 100644
+--- a/tools/perf/trace/beauty/msg_flags.c
++++ b/tools/perf/trace/beauty/msg_flags.c
+@@ -8,6 +8,9 @@
+ #ifndef MSG_WAITFORONE
+ #define MSG_WAITFORONE		   0x10000
+ #endif
++#ifndef MSG_SPLICE_PAGES
++#define MSG_SPLICE_PAGES	0x8000000
++#endif
+ #ifndef MSG_FASTOPEN
+ #define MSG_FASTOPEN		0x20000000
+ #endif
 
-You don't need to have hardware coherency to have a coherent buffer. A
-buffer mapped non-cacheable is coherent.
-
-> when etnaviv finished the rendering, they will do the resolve.
->=20
-> By using the WC mapping, the GPU will write directly to the system RAM.
-
-I'm confused. The WC mapping is for the *CPU* mapping. The GPU doesn't
-use the CPU mapping.
-
-> 1)
->=20
-> If CPU flush the cache back to the system RAM(framebuffer when running
-> glmark-es2-drm).
->=20
-> then the image(resolved by GPU) in framebuffer will be overwrite by the
-> stall data in the cache.
->=20
->=20
-> 2)
->=20
-> Think about occasions when we need the CPU to do the read access to the
-> rendered image.
->=20
-> (snap shoot, or using with X server fake EXA)
->=20
-> The CPU still think the share buffer as cached, it will read from the cac=
-he
-> if hit.
->=20
-> while GPU write to RAM directly by using WC mapping.
->=20
->=20
-> Even it call dma_sync_single_for_device(), it only get SYNC-ed for the
-> device.
->=20
-> there is no SYNC for the CPU's cached.
->=20
-> I think, In the end, it will lost of coherency.
->=20
->=20
-> 3)
->=20
-> If the user want to use X server graphic environment,
->=20
-> then the case will be more complex for 3D acceleration support.
->=20
->=20
-> Even it hacks somewhere to call the sync for CPU,
->=20
-> they still may need invalid the cache frequently.
->=20
-> In this case, it will not get a good performance.
->=20
->=20
-> At any case,=A0 such a KMS-RO combination((cached no-coherent + WC)) will=
- be a
-> misery./
-> /
->=20
-> While drm/ingenic could give up the hardware acceleration and the 3D
-> acceleration in X environment.
->=20
-> it's OK, as its for low-ended graphic application.
->=20
->=20
-> But, at the other hand, it is say also why arm soc adhere to the
-> write-combine.
->=20
-> because they have no choice.
->=20
-> While ingenic is the first exception, thanks Paul's patch which help us to
-> understand a lot thing .
->=20
->=20
-> 4)
->=20
-> While Loongson LS2K1000 SoC is DMA-coherent,
->=20
-> We are also prefer cached framebuffer for fast CPU software rendering.
->=20
-> I also get the hardware accelerated 3D works successfully,
->=20
-> even only for the GL client (such as glxgears and glmark2).
->=20
->=20
-> Therefore, on our hardware platform.
->=20
-> I force both the KMS driver and RO drivers to use cached mapping.
->=20
-> with the hardware maintained cache coherence blessing us.
->=20
-> It turn out that is works.
->=20
->=20
-> We don't need ( and don't want ) to call the dma_sync_*() series function,
-> not because we don't know it is no-op for DMA-coherent.
-
-Then don't do that? Ingenic is the only driver that does. That means
-that all the other drivers don't, so follow their lead instead of
-ingenic if the trade-off doesn't work for you.
-
-Maxime
---a2btcfxmbyj4gv5j
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZJmQfgAKCRDj7w1vZxhR
-xUuOAQCS1dAJnoIB9DknItLXnQoXEMKUJoDkl7jaqDjVuTph3gEA+1dCTWDdz5pm
-xJpehTZ4TZoElpcb9//oz8kMccVd2gw=
-=3yBT
------END PGP SIGNATURE-----
-
---a2btcfxmbyj4gv5j--
