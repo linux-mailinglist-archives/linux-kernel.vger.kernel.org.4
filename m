@@ -2,90 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A04673DB28
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 11:20:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C5AD73DB2D
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 11:21:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229777AbjFZJUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 05:20:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59360 "EHLO
+        id S230169AbjFZJVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 05:21:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229900AbjFZJTV (ORCPT
+        with ESMTP id S230457AbjFZJUG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 05:19:21 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55B4B3C1D
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 02:16:42 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-128--2i5PMHPMya9Tn9UXmmevQ-1; Mon, 26 Jun 2023 10:16:16 +0100
-X-MC-Unique: -2i5PMHPMya9Tn9UXmmevQ-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Mon, 26 Jun
- 2023 10:16:15 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Mon, 26 Jun 2023 10:16:15 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Linus Torvalds' <torvalds@linux-foundation.org>,
-        David Howells <dhowells@redhat.com>
-CC:     Franck Grosjean <fgrosjea@redhat.com>,
-        Phil Auld <pauld@redhat.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] pipe: Make a partially-satisfied blocking read wait for
- more
-Thread-Topic: [PATCH] pipe: Make a partially-satisfied blocking read wait for
- more
-Thread-Index: AQHZpir6nf64Bm6mB0W9DmTd8gcjT6+c0Jmg
-Date:   Mon, 26 Jun 2023 09:16:15 +0000
-Message-ID: <4fd200bd9df24106a6d19293a495b661@AcuMS.aculab.com>
-References: <2730511.1687559668@warthog.procyon.org.uk>
- <CAHk-=wiXr2WTDFZi6y8c4TjZXfTnw28BkLF9Fpe=SyvmSCvP2Q@mail.gmail.com>
- <CAHk-=wjjNErGaMCepX-2q_3kuZV_aNoqB5SE-LLR_eLk2+OHJA@mail.gmail.com>
- <CAHk-=wjrsPMko==NyQ1Y=Cta-ATshCwzSn9OwCq6KAx8Gh8RLA@mail.gmail.com>
-In-Reply-To: <CAHk-=wjrsPMko==NyQ1Y=Cta-ATshCwzSn9OwCq6KAx8Gh8RLA@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
-MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Mon, 26 Jun 2023 05:20:06 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 16ADC198A;
+        Mon, 26 Jun 2023 02:17:44 -0700 (PDT)
+Received: by linux.microsoft.com (Postfix, from userid 1099)
+        id 609A621C3F2C; Mon, 26 Jun 2023 02:17:43 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 609A621C3F2C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1687771063;
+        bh=rOKa5FGhb2DtzgJz+qz23ZNtLP6CMkP1uTRy0DPG8qg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=JPMkNncr0F9+kMGbGy3r+uJw6J5PmxpUkfNh75rAVDhqIn94+OaL/rYidImL7t5kd
+         XDk3QI158Q0CzvAJkiILrBXFQE4RFN0Bvm7UNoqZwFzC7VU6LQVDaa+Xtw2LAB46rU
+         2dU7ysn4L57YNwJ/jh6a59rKn13kHmWRRYbYNwAA=
+From:   souradeep chakrabarti <schakrabarti@linux.microsoft.com>
+To:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, longli@microsoft.com,
+        sharmaajay@microsoft.com, leon@kernel.org, cai.huoqing@linux.dev,
+        ssengar@linux.microsoft.com, vkuznets@redhat.com,
+        tglx@linutronix.de, linux-hyperv@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org
+Cc:     stable@vger.kernel.org, schakrabarti@microsoft.com,
+        Souradeep Chakrabarti <schakrabarti@linux.microsoft.com>
+Subject: [PATCH 0/2 V3 net] net: mana: Fix MANA VF unload when host is unresponsive
+Date:   Mon, 26 Jun 2023 02:17:38 -0700
+Message-Id: <1687771058-26634-1-git-send-email-schakrabarti@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogTGludXMgVG9ydmFsZHMNCj4gU2VudDogMjQgSnVuZSAyMDIzIDAwOjMyDQo+IA0KPiBP
-biBGcmksIDIzIEp1biAyMDIzIGF0IDE2OjA4LCBMaW51cyBUb3J2YWxkcw0KPiA8dG9ydmFsZHNA
-bGludXgtZm91bmRhdGlvbi5vcmc+IHdyb3RlOg0KPiA+DQo+ID4gSW4gZmFjdCwgSSdkIGV4cGVj
-dCB0aGF0IHBhdGNoIHRvIGZhaWwgaW1tZWRpYXRlbHkgb24gYSBwZXJmZWN0bHkNCj4gPiBub3Jt
-YWwgcHJvZ3JhbSB0aGF0IHBhc3NlcyBhIHRva2VuIGFyb3VuZCBieSBkb2luZyBhIHNtYWxsIHdy
-aXRlIHRvIGENCj4gPiBwaXBlLCBhbmQgaGF2ZSB0aGUgInRva2VuIHJlYWRlciIgZG8gYSBiaWdn
-ZXIgd3JpdGUuDQo+IA0KPiBCaWdnZXIgX3JlYWRfLCBvZiBjb3Vyc2UuDQo+IA0KPiBUaGlzIG1p
-Z2h0IGJlIGhpZGRlbiBieSBzdWNoIHByb2dyYW1zIHR5cGljYWxseSBkb2luZyBhIHNpbmdsZSBi
-eXRlDQo+IHdyaXRlIGFuZCBhIHNpbmdsZSBieXRlIHJlYWQsIGJ1dCBJIGNvdWxkIGVhc2lseSBp
-bWFnaW5lIHNpdHVhdGlvbnMNCj4gd2hlcmUgcGVvcGxlIGFjdHVhbGx5IGRlcGVuZCBvbiB0aGUg
-UE9TSVggYXRvbWljaXR5IGd1YXJhbnRlZXMsIGllIHlvdQ0KPiB3cml0ZSBhICJ0b2tlbiBwYWNr
-ZXQiIHRoYXQgbWlnaHQgYmUgdmFyaWFibGUtc2l6ZWQsIGFuZCB0aGUgcmVhZGVyDQo+IHRoZW4g
-anVzdCBkb2VzIGEgbWF4aW1hbGx5IHNpemVkIHJlYWQsIGtub3dpbmcgdGhhdCBpdCB3aWxsIGdl
-dCBhIGZ1bGwNCj4gcGFja2V0IG9yIG5vdGhpbmcuDQoNClRoZXJlIGFyZSBkZWZpbml0ZWx5IHBy
-b2dyYW1zIHRoYXQganVzdCBkbyBhIGxhcmdlIHJlYWQgaW4gb3JkZXINCnRvIGNvbnN1bWUgYWxs
-IHRoZSBzaW5nbGUgYnl0ZSAnd2FrZXVwJyB3cml0ZXMuDQoNCihUaGUgJ211c3QgY2hlY2snIG9u
-IHRoZXNlIHJlYWRzIGlzIGEgcmlnaHQgUElUQS4pDQoNClRoZXkgb3VnaHQgdG8gc2V0IHRoZSBw
-aXBlIG5vbi1ibG9ja2luZywgYnV0IEkgc3VzcGVjdCBtYW55DQpkb24ndCAtIGJlY2F1c2UgaXQg
-YWxsIHdvcmtzIGFueXdheS4NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtl
-c2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBV
-Sw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
+From: Souradeep Chakrabarti <schakrabarti@linux.microsoft.com>
+
+VF unload gets stuck in MANA driver, when the host is not responding.
+The function mana_dealloc_queues() tries to clear the inflight packets,
+and gets stuck in while loop. Another problem in this scenario is the
+timeout from hwc send request.
+These patch add fix for the same.
+In mana driver we are adding a timeout in the while loop, to fix it.
+Also we are adding a new attribute in mana_context, which gets set when
+mana_hwc_send_request() hits a timeout because of host unresponsiveness.
+
+Souradeep Chakrabarti (2):
+  net: mana: Fix MANA VF unload when host is unresponsive
+  net: mana: Fix MANA VF unload when host is unresponsive
+
+ .../net/ethernet/microsoft/mana/gdma_main.c   |  4 +++-
+ .../net/ethernet/microsoft/mana/hw_channel.c  | 12 +++++++++++-
+ drivers/net/ethernet/microsoft/mana/mana_en.c | 19 +++++++++++++++++--
+ include/net/mana/mana.h                       |  2 ++
+ 4 files changed, 33 insertions(+), 4 deletions(-)
+
+-- 
+2.34.1
 
