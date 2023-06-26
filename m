@@ -2,140 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3244373E437
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 18:09:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0514373E43C
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 18:09:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231684AbjFZQI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 12:08:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43922 "EHLO
+        id S231666AbjFZQJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 12:09:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231715AbjFZQIw (ORCPT
+        with ESMTP id S231699AbjFZQJa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 12:08:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5194DE56;
-        Mon, 26 Jun 2023 09:08:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E15E760EE6;
-        Mon, 26 Jun 2023 16:08:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFD41C433C8;
-        Mon, 26 Jun 2023 16:08:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687795713;
-        bh=YtBxDgCSo52EnCezN1xP/GLTHgcQBQ/UTGIq1c7iU7s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=d0cu9j7LYBWo5mX66CE2FbV41OSFcVyDdRYJkFWjFGvX1J6J8QUyCspssz5N0nwf5
-         mslVgIguao52pzHAfLvCU0FkwJlMksclNp7nQcnSN+uoYw3WnslJOZjQ496MkISJrs
-         wy/xylfHyjouzqpPt0pOEMR4rsomvo2Z1sY49fZiAPa+3BCMS6sbtiUnKq2OWkYqo8
-         dXDZeeLXB1gPenQ5jECRySGGd0u/JdEWoZ3wzbtdu0k1PKDX0F87HG/cAByLK7z/mR
-         KcIFOI/5ej+B7rbdlliOhOTLAXlb9TZ4l3yKQhwe8QVSptwIkTzjuELeK+ylxb/bcX
-         +r5e2ulfWVpTg==
-Date:   Mon, 26 Jun 2023 17:08:28 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Andrew Jones <ajones@ventanamicro.com>
-Cc:     Conor Dooley <conor.dooley@microchip.com>, palmer@dabbelt.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
-        Evan Green <evan@rivosinc.com>,
-        Sunil V L <sunilvl@ventanamicro.com>,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 2/9] RISC-V: drop a needless check in print_isa_ext()
-Message-ID: <20230626-jitters-spiral-68e941d0ad3f@spud>
-References: <20230626-provable-angrily-81760e8c3cc6@wendy>
- <20230626-skydiver-frown-659b982a43ad@wendy>
- <20230626-67e571e6d9f02c28a09dab33@orel>
+        Mon, 26 Jun 2023 12:09:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EE4B10F3
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 09:08:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687795726;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wVw/Wv9H1+jgHlFyXB8K46FNsZdoHq7Qo4C7jHkkuH8=;
+        b=Gv8v5rVl/cKgWUrbeFOyOQnomcweQm+JwsJ1Ofl8xMSdyiM8n4l0trzu+bXSJZ6x4TRBro
+        6nN9XnNXiE/dhKX7hmNr0SQonsEqmBT5rHd0jGaDTthNT41EDciIq8m04es0rv2ELD2Cfr
+        dbBxlwGSyV1Bsql3GiGIRaYrLuTZc2I=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-503-ffazVNFRP6GpyAmwPkqD2A-1; Mon, 26 Jun 2023 12:08:44 -0400
+X-MC-Unique: ffazVNFRP6GpyAmwPkqD2A-1
+Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-635e0889cc5so13638246d6.2
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 09:08:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687795722; x=1690387722;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wVw/Wv9H1+jgHlFyXB8K46FNsZdoHq7Qo4C7jHkkuH8=;
+        b=gC5vFcE2YhrSAWm/jEWXmFOv+Hk5D2qqkAZemfFYEZ9BCBof79omjGgfE17RoHVA4y
+         1jUqPeI2Vqdkh4V2ZmyB3c1ZlkKyrpqpr6FM5SE93Q2HutPTpEWjkIbWDul+1NSK1nRl
+         +T61bRUelUGqCZCfznZIL9Xv+r75n3yexzC9ahM+X3ZV9hlQq8M8X3JPoTrIw2OXWwFE
+         JG1jADezkqged0rvmhJ0LwDjdsXULYif6vyBa43R6XD2vVQi1rJe3kj6q+lb4seTgsGr
+         jJh43aN00ECoF04nKjqUzqAOnLYx1rZU+uAzaV+F7x3mfPl5rSdinuiEnU9wkRppByGf
+         nP6g==
+X-Gm-Message-State: AC+VfDyvH7kDG2nPHZkT0vDPN/XIZoXkzd3wUuqd0vgdQ/weeDvJUxLN
+        EeFdQK4mKhQh1lChLsm33neXjOotk8jMNum376vmQ0EwT5jOnfFCmOe9JjZBbgxZ8Ch5yvTGsDJ
+        mDn6CpFL220gRWbJxABpAvR0z
+X-Received: by 2002:a05:6214:27c9:b0:62d:f515:9320 with SMTP id ge9-20020a05621427c900b0062df5159320mr36074271qvb.28.1687795722199;
+        Mon, 26 Jun 2023 09:08:42 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5raYOLH44gjALQWDUf6IbJggeYwYWXvVHtOWcRvbl3wuo2Ee6zIMMrWONEOeu5ohWrGHlbZg==
+X-Received: by 2002:a05:6214:27c9:b0:62d:f515:9320 with SMTP id ge9-20020a05621427c900b0062df5159320mr36074244qvb.28.1687795721957;
+        Mon, 26 Jun 2023 09:08:41 -0700 (PDT)
+Received: from sgarzare-redhat (host-87-11-6-160.retail.telecomitalia.it. [87.11.6.160])
+        by smtp.gmail.com with ESMTPSA id l13-20020ad44d0d000000b0063227969cf7sm3308298qvl.96.2023.06.26.09.08.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jun 2023 09:08:41 -0700 (PDT)
+Date:   Mon, 26 Jun 2023 18:08:36 +0200
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@sberdevices.ru, oxffffaa@gmail.com
+Subject: Re: [RFC PATCH v4 07/17] vsock: read from socket's error queue
+Message-ID: <sq5jlfhhlj347uapazqnotc5rakzdvj33ruzqwxdjsfx275m5r@dxujwphcffkl>
+References: <20230603204939.1598818-1-AVKrasnov@sberdevices.ru>
+ <20230603204939.1598818-8-AVKrasnov@sberdevices.ru>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="UAbBwUXwcEUwpL43"
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20230626-67e571e6d9f02c28a09dab33@orel>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230603204939.1598818-8-AVKrasnov@sberdevices.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Jun 03, 2023 at 11:49:29PM +0300, Arseniy Krasnov wrote:
+>This adds handling of MSG_ERRQUEUE input flag in receive call. This flag
+>is used to read socket's error queue instead of data queue. Possible
+>scenario of error queue usage is receiving completions for transmission
+>with MSG_ZEROCOPY flag.
+>
+>Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>---
+> include/linux/socket.h   | 1 +
+> net/vmw_vsock/af_vsock.c | 5 +++++
+> 2 files changed, 6 insertions(+)
+>
+>diff --git a/include/linux/socket.h b/include/linux/socket.h
+>index bd1cc3238851..d79efd026880 100644
+>--- a/include/linux/socket.h
+>+++ b/include/linux/socket.h
+>@@ -382,6 +382,7 @@ struct ucred {
+> #define SOL_MPTCP	284
+> #define SOL_MCTP	285
+> #define SOL_SMC		286
+>+#define SOL_VSOCK	287
 
---UAbBwUXwcEUwpL43
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Maybe this change should go in another patch where we describe that
+we need to support setsockopt()
 
-On Mon, Jun 26, 2023 at 05:19:08PM +0200, Andrew Jones wrote:
-> On Mon, Jun 26, 2023 at 12:19:40PM +0100, Conor Dooley wrote:
-> > isa_ext_arr cannot be empty, as some of the extensions within it are
-> > always built into the kernel.
->=20
-> This is only true since commit 07edc32779e3 ("RISC-V: always report
-> presence of extensions formerly part of the base ISA"), right? If
-> so, it might be nice to call that commit out in this commit message.
+>
+> /* IPX options */
+> #define IPX_TYPE	1
+>diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+>index 45fd20c4ed50..07803d9fbf6d 100644
+>--- a/net/vmw_vsock/af_vsock.c
+>+++ b/net/vmw_vsock/af_vsock.c
+>@@ -110,6 +110,7 @@
+> #include <linux/workqueue.h>
+> #include <net/sock.h>
+> #include <net/af_vsock.h>
+>+#include <linux/errqueue.h>
+>
+> static int __vsock_bind(struct sock *sk, struct sockaddr_vm *addr);
+> static void vsock_sk_destruct(struct sock *sk);
+>@@ -2135,6 +2136,10 @@ vsock_connectible_recvmsg(struct socket *sock, struct msghdr *msg, size_t len,
+> 	int err;
+>
+> 	sk = sock->sk;
+>+
+>+	if (unlikely(flags & MSG_ERRQUEUE))
+>+		return sock_recv_errqueue(sk, msg, len, SOL_VSOCK, 0);
+>+
+> 	vsk = vsock_sk(sk);
+> 	err = 0;
+>
+>-- 
+>2.25.1
+>
 
-Per my last mail, where I commented on the origins of some of this code,
-there were no multi-letter extensions when this code was first added.
-When the first multi-letter ones did get added, it was Sscofpmf - that
-doesn't have a Kconfig symbol to disable it, so I think this has been
-redundant for a long time.
-
-Apart from the ones I recently added, there's a fair few others that
-are not gated & should always be present.
-It's probably not clear from the comment, but this check is for whether
-the kernel supports extensions, not whether the system it is running on
-does. I guess I should expand on that in my commit message.
-
-Thanks,
-Conor.
-
-> > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> > ---
-> >  arch/riscv/kernel/cpu.c | 4 ----
-> >  1 file changed, 4 deletions(-)
-> >=20
-> > diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
-> > index 742bb42e7e86..01f7e5c62997 100644
-> > --- a/arch/riscv/kernel/cpu.c
-> > +++ b/arch/riscv/kernel/cpu.c
-> > @@ -233,10 +233,6 @@ static void print_isa_ext(struct seq_file *f)
-> > =20
-> >  	arr_sz =3D ARRAY_SIZE(isa_ext_arr) - 1;
-> > =20
-> > -	/* No extension support available */
-> > -	if (arr_sz <=3D 0)
-> > -		return;
-> > -
-> >  	for (i =3D 0; i <=3D arr_sz; i++) {
-> >  		edata =3D &isa_ext_arr[i];
-> >  		if (!__riscv_isa_extension_available(NULL, edata->isa_ext_id))
-> > --=20
-> > 2.40.1
-> >
->=20
-> Otherwise,
->=20
-> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
->=20
-> Thanks,
-> drew
-
---UAbBwUXwcEUwpL43
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJm3/AAKCRB4tDGHoIJi
-0lvuAP9Wwmh7CDmYVwCrwm2QnFlvh2auna7EZPvP8MVubcvyMgD+JhXPQyKqs2g1
-Myse48aBIwDuIggV5cCfMWtC7cfUJgY=
-=KSGS
------END PGP SIGNATURE-----
-
---UAbBwUXwcEUwpL43--
