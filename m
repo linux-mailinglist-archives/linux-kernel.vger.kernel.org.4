@@ -2,150 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9575973DEBD
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 14:19:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC7D273DEBC
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 14:19:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230126AbjFZMTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 08:19:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52940 "EHLO
+        id S230112AbjFZMS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 08:18:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230229AbjFZMSo (ORCPT
+        with ESMTP id S230167AbjFZMSh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 08:18:44 -0400
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C61A1709
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 05:18:17 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id d75a77b69052e-40079b6fc56so378101cf.1
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 05:18:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687781892; x=1690373892;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/NL1ZhGwp5p1Bk1jm8YK95c2hrmINT6w/AO1rizscdM=;
-        b=2+r78AqfAQbVwe38A471bVTPTRy6Tz06JLOVBp5eRvWTq40ptutz99SDdtYiEBzpn0
-         1033/ZvHRvxr4lkU6EiqjUfKLL7wGEVrU41Yii5QKSAzYemeyiODMQYpej9HxjqvUtfd
-         GXqCuh0CWkUZ5Lzcw5owTf2s05OAeK6pBfoY2ZhKkr7WNZpSRgE6zbbklgAhR9DD7HM1
-         b3flBGLCddXNiXYtHWxZ7IduwRuD6IcREkud6bClQ8nRAJxs2Gev/ybra78jom/y/DBm
-         wYcMoLR059DdPKt5Wx5t6ciPLimGdtecNN0s4GsEa7xWiyQUquOyRdazJ42W4sCaaXT+
-         4vDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687781892; x=1690373892;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/NL1ZhGwp5p1Bk1jm8YK95c2hrmINT6w/AO1rizscdM=;
-        b=e1Wramfg/TrU09+JjmwB2fDZqHfyiqnDR8bCa2QAfxS+k5j9Fk4NazDFsuL5V2+wV6
-         f9CbGwKXpz3jhr8Nf2ECO7pJpIpLsmZrWexuM7CQqrHFDaUmvkGcBmLCF8JXzJxR9Sih
-         vgbcBtKwMyFDP1tkmut1tR35YGh8FhYoavoaOIZWHws9iTbrRZJi8EqFwrhxZijwhnz3
-         LXq8xcjOfzhZwf0FkUOqenC9tj7ElrVchADYFK+qhOdqGFEab+7HLORjc2ZRZT7aacp/
-         LcneJg44eLoKhxCVV2iQxLjCNe0Y/u1ZJMHrz46RUMyBK662fNPwHgldQkGEMIpGr0wj
-         6TIg==
-X-Gm-Message-State: AC+VfDy6W3Dz5qoIz5iXkkJWgi8oaS6y5muPfqHwfYfUYF4BcymOis6V
-        nxIUv7ExMK07UbhKVSfDqpWaamDMK7tEZDHvzpCCYA==
-X-Google-Smtp-Source: ACHHUZ6u0ym0t6UGw+Elhz8kFfslp5Z1MPSPenc+LA2HSYM/ODQbkxMC3hXrBqOVvlStPUbQnzMrEQjt8udM5tvUnwE=
-X-Received: by 2002:a05:622a:40b:b0:3fd:ad1b:4e8a with SMTP id
- n11-20020a05622a040b00b003fdad1b4e8amr70924qtx.22.1687781892621; Mon, 26 Jun
- 2023 05:18:12 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230621174006.42533-1-tony.luck@intel.com> <20230621174006.42533-8-tony.luck@intel.com>
- <CALPaoCgF04M0Jc-c4VmbKkRSFo677SBGoPHzNCSeQ4S6Bqb60w@mail.gmail.com>
- <SJ1PR11MB60836CD7493B0EAF0F687051FC22A@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <CALPaoCiaknUMSU4CunSQrRP=WS8DAbToVo5jibh8TaWNZXGMbQ@mail.gmail.com> <ZJX+lmQTUEujF88U@agluck-desk3>
-In-Reply-To: <ZJX+lmQTUEujF88U@agluck-desk3>
-From:   Peter Newman <peternewman@google.com>
-Date:   Mon, 26 Jun 2023 14:18:01 +0200
-Message-ID: <CALPaoCh=j+5_dA2Vgj1DtXgFWGCjJDXt=MwSVtMmPuuouWYokg@mail.gmail.com>
-Subject: Re: [PATCH v2 7/7] x86/resctrl: Determine if Sub-NUMA Cluster is
- enabled and initialize.
-To:     Tony Luck <tony.luck@intel.com>
-Cc:     "Yu, Fenghua" <fenghua.yu@intel.com>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "x86@kernel.org" <x86@kernel.org>,
-        Shaopeng Tan <tan.shaopeng@fujitsu.com>,
-        James Morse <james.morse@arm.com>,
-        Jamie Iles <quic_jiles@quicinc.com>,
-        Babu Moger <babu.moger@amd.com>,
+        Mon, 26 Jun 2023 08:18:37 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8419E10C6
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 05:18:16 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qDlAT-0007Pu-Az; Mon, 26 Jun 2023 14:18:05 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qDlAR-00ACvO-Lt; Mon, 26 Jun 2023 14:18:03 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qDlAQ-00HY4i-Ry; Mon, 26 Jun 2023 14:18:02 +0200
+Date:   Mon, 26 Jun 2023 14:18:02 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     "Sahin, Okan" <Okan.Sahin@analog.com>
+Cc:     Julien Panis <jpanis@baylibre.com>, Lee Jones <lee@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>,
-        "Eranian, Stephane" <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        "kernel@pengutronix.de" <kernel@pengutronix.de>
+Subject: Re: [PATCH] mfd: Switch two more drivers back to use struct
+ i2c_driver::probe
+Message-ID: <20230626121802.qlvoiytzurrvd22z@pengutronix.de>
+References: <20230626091941.557733-1-u.kleine-koenig@pengutronix.de>
+ <MN2PR03MB516846A1A4FD31515D98FA4BE726A@MN2PR03MB5168.namprd03.prod.outlook.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="h24k2dwwo42ljdm2"
+Content-Disposition: inline
+In-Reply-To: <MN2PR03MB516846A1A4FD31515D98FA4BE726A@MN2PR03MB5168.namprd03.prod.outlook.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tony,
 
-On Fri, Jun 23, 2023 at 10:20=E2=80=AFPM Tony Luck <tony.luck@intel.com> wr=
-ote:
-> On Fri, Jun 23, 2023 at 05:19:37PM +0200, Peter Newman wrote:
-> > On Thu, Jun 22, 2023 at 6:02=E2=80=AFPM Luck, Tony <tony.luck@intel.com=
-> wrote:
-> > >
-> > > > Unfortunately I'm not getting as good of results with the new serie=
-s.
-> > > > The main difference seems to be updating the 0xca0 MSR instead of
-> > > > applying the offset to PQR_ASSOC.
-> > >
-> > > I think I may have reversed the actions to update the MSR in one of
-> > > my refactor/rebase. The comment here is correct, but that's not
-> > > what the code is doing :-(
-> > >
-> > > Can you swap the bodies of these two functions and retest?
+--h24k2dwwo42ljdm2
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Mon, Jun 26, 2023 at 12:01:16PM +0000, Sahin, Okan wrote:
+> >Sent: Monday, June 26, 2023 12:20 PM
+> >To: Julien Panis <jpanis@baylibre.com>; Sahin, Okan <Okan.Sahin@analog.c=
+om>; Lee
+> >Jones <lee@kernel.org>
+> >Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>; linux-
+> >kernel@vger.kernel.org; kernel@pengutronix.de
+> >Subject: [PATCH] mfd: Switch two more drivers back to use struct i2c_dri=
+ver::probe
 > >
-> > It's a small improvement, but still not great. Still only node 0
-> > giving believable results, but at least no more empty results from the
-> > second package.
+> >[External]
 > >
-> > I poked around in /proc/kcore and noticed that my snc_ways is still 1, =
-though.
+> >struct i2c_driver::probe_new is about to go away. Switch the driver to
+> >use the probe callback with the same prototype.
+> >
+> >Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> >---
+> > drivers/mfd/max77541.c    | 2 +-
+> > drivers/mfd/tps6594-i2c.c | 2 +-
+> > 2 files changed, 2 insertions(+), 2 deletions(-)
+> >
+> >diff --git a/drivers/mfd/max77541.c b/drivers/mfd/max77541.c
+> >index 4a3bad3493b3..e147e949c2b3 100644
+> >--- a/drivers/mfd/max77541.c
+> >+++ b/drivers/mfd/max77541.c
+> >@@ -214,7 +214,7 @@ static struct i2c_driver max77541_driver =3D {
+> > 		.name =3D "max77541",
+> > 		.of_match_table =3D max77541_of_id,
+> > 	},
+> >-	.probe_new =3D max77541_probe,
+> >+	.probe =3D max77541_probe,
+> > 	.id_table =3D max77541_id,
+> > };
+> > module_i2c_driver(max77541_driver);
+> >diff --git a/drivers/mfd/tps6594-i2c.c b/drivers/mfd/tps6594-i2c.c
+> >index 50a3cd03b3b0..899c88c0fe77 100644
+> >--- a/drivers/mfd/tps6594-i2c.c
+> >+++ b/drivers/mfd/tps6594-i2c.c
+> >@@ -235,7 +235,7 @@ static struct i2c_driver tps6594_i2c_driver =3D {
+> > 		.name =3D "tps6594",
+> > 		.of_match_table =3D tps6594_i2c_of_match_table,
+> > 	},
+> >-	.probe_new =3D tps6594_i2c_probe,
+> >+	.probe =3D tps6594_i2c_probe,
+> > };
+> > module_i2c_driver(tps6594_i2c_driver);
+> >
+> >
+> >base-commit: e0cbc202388af454eb771043b20db6dfe68199ec
+> >--
+> >2.39.2
+>=20
+> Should I update the code then resend patch again? Or should I send anothe=
+r patch after merge is completed?
 
-It turns out I just forgot that I had KASLR on. snc_ways was in fact 2.
+I'm not Lee, but I'll try an answer anyhow: Your patch is in next (via
+Lee's tree) as commit e0cbc202388af454eb771043b20db6dfe68199ec. So I
+guess Lee will keep the patch as is and send it to Linus. There is
+nothing grave wrong, so no need to revert or rewrite the tree. I expect
+Lee to just apply my patch on top of his tree.
 
-The real problem was my test program was assuming that the absence of
-the snc_ways file meant no SNC, so it was using cache IDs instead of
-node IDs when choosing a mon_data subdirectory to read results from.
+Best regards
+Uwe
 
-With that fixed, the results look good:
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-cpu: 95 (3), rmid: 17 (g16): 0 -> 32313974784 (32313974784)
-cpu: 198 (3), rmid: 103 (g102): 0 -> 26078961664 (26078961664)
-cpu: 117 (0), rmid: 59 (g58): 0 -> 26692599808 (26692599808)
-cpu: 152 (1), rmid: 113 (g112): 0 -> 33368244224 (33368244224)
-cpu: 33 (1), rmid: 77 (g76): 0 -> 26902077440 (26902077440)
-cpu: 63 (2), rmid: 76 (g75): 0 -> 32478494720 (32478494720)
-cpu: 90 (3), rmid: 94 (g93): 0 -> 31206088704 (31206088704)
-cpu: 136 (0), rmid: 13 (g12): 0 -> 28095463424 (28095463424)
-cpu: 37 (1), rmid: 177 (g175): 0 -> 31255060480 (31255060480)
-cpu: 124 (0), rmid: 6 (g5): 0 -> 31128502272 (31128502272)
-cpu: 102 (3), rmid: 68 (g67): 0 -> 28848963584 (28848963584)
-cpu: 103 (3), rmid: 62 (g61): 0 -> 26091233280 (26091233280)
-cpu: 71 (2), rmid: 123 (g122): 0 -> 29157933056 (29157933056)
-cpu: 94 (3), rmid: 69 (g68): 0 -> 27776458752 (27776458752)
-cpu: 102 (3), rmid: 174 (g172): 0 -> 26349281280 (26349281280)
-cpu: 155 (1), rmid: 3 (g2): 0 -> 33489125376 (33489125376)
-cpu: 40 (1), rmid: 16 (g15): 0 -> 27142750208 (27142750208)
-cpu: 69 (2), rmid: 156 (g154): 0 -> 29294411776 (29294411776)
-cpu: 121 (0), rmid: 63 (g62): 0 -> 30636777472 (30636777472)
-cpu: 171 (2), rmid: 93 (g92): 0 -> 26103046144 (26103046144)
+--h24k2dwwo42ljdm2
+Content-Type: application/pgp-signature; name="signature.asc"
 
-(and it turns out I never needed to manually look up the node IDs,
-because the test output would have already told me, had the test been
-working correctly)
+-----BEGIN PGP SIGNATURE-----
 
-Sorry for the extra trouble. The series works well for me.
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmSZgfkACgkQj4D7WH0S
+/k4mPAf+MO4zy+XZ/oZnFPS9xxEvsMPBm5uEti29PF/k2eKmAeODtNZY9Gzz9lO1
+5DLpfaQ8xtrLipBF6nOx6K6n6LcPvJ0YC7Sg85GmlknqUcw6YsKxS7WFECEFIKGv
+SrXizYxJ+d6LVPBC7JGw3uSFSHJzzPZlZcz/MyJz8qAtPEv+7Fvi7kzNOKopOkgT
+vPoyQ3xt2Ek87GMZVMGbJZ33ai2GYRKdXzhiIItWr8TnuzikUS5gw4POV+HwPykE
++SccGbxtMz4OyMhrIab4H/wZoYE6+kX6vm6XFQMovzhzb/b5rgvNL9PouH7hvgyP
+tsCV6YsF6EuDjIWy0FDP6UDFfN5cnw==
+=3eSK
+-----END PGP SIGNATURE-----
 
-Tested-By: Peter Newman <peternewman@google.com>
-
-Thanks!
--Peter
+--h24k2dwwo42ljdm2--
