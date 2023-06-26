@@ -2,79 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F9E173DCB9
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 13:02:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D83073DCBA
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 13:02:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230307AbjFZLCl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 07:02:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45978 "EHLO
+        id S230107AbjFZLCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 07:02:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbjFZLC1 (ORCPT
+        with ESMTP id S229835AbjFZLCh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 07:02:27 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E96E2723;
-        Mon, 26 Jun 2023 04:02:01 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="447624778"
-X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
-   d="scan'208";a="447624778"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 04:01:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="786114085"
-X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
-   d="scan'208";a="786114085"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004.fm.intel.com with ESMTP; 26 Jun 2023 04:01:49 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andy@kernel.org>)
-        id 1qDjye-006juo-0N;
-        Mon, 26 Jun 2023 14:01:48 +0300
-Date:   Mon, 26 Jun 2023 14:01:47 +0300
-From:   "andy@kernel.org" <andy@kernel.org>
-To:     YE Chengfeng <cyeaa@connect.ust.hk>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/2] gpiolib: cdev: Fix &lr->wait.lock deadlock issue
-Message-ID: <ZJlwG4zzmm4ArMNX@smile.fi.intel.com>
-References: <TYCP286MB1188A94580A60F47CAF892C88A26A@TYCP286MB1188.JPNP286.PROD.OUTLOOK.COM>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <TYCP286MB1188A94580A60F47CAF892C88A26A@TYCP286MB1188.JPNP286.PROD.OUTLOOK.COM>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 26 Jun 2023 07:02:37 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FFC0173E
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 04:02:17 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id EC45E21861;
+        Mon, 26 Jun 2023 11:02:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1687777335; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nbqsb2L4j9asp0Yxl6Eyl8kIxlFivGaAHwXM+9WqDB8=;
+        b=eFEd58D+kQOIKSAmvIA/C7aJUK7aNO+6TWCMdriqrZVwF9YSoFWvnNxX+x++SortqYOOEM
+        YGIVJ6GL6ZVfJBNiOFj3jJy3vEbID9mp/+rRps29EvDxWkvT5p+Clwgj7EIHc4XIFuRlH5
+        dMhD9xlqsSx/xxj/OxZ+g+Ll/EVVpjA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1687777335;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nbqsb2L4j9asp0Yxl6Eyl8kIxlFivGaAHwXM+9WqDB8=;
+        b=wRzUWXpVfr9iB3sJfGLeJ8W6oHK2/QELqTR5N7/VRDS5HoKSF3VRHNxtfPnQPy8Ce7NBXG
+        /n4aqOCP+BYau6Cg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BD86713483;
+        Mon, 26 Jun 2023 11:02:15 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 7aHdLDdwmWRXHwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 26 Jun 2023 11:02:15 +0000
+Date:   Mon, 26 Jun 2023 13:02:15 +0200
+Message-ID: <87wmzqv64o.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Jaroslav Kysela <perex@perex.cz>
+Cc:     Tuo Li <islituo@gmail.com>, tiwai@suse.com,
+        alsa-devel@alsa-project.org,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        baijiaju1990@outlook.com
+Subject: Re: [BUG] ALSA: core: pcm_memory: a possible data race in do_alloc_pages()
+In-Reply-To: <4d0931bf-b356-6969-5aaf-b663d7f2b21a@perex.cz>
+References: <CADm8Tek6t0WedK+3Y6rbE5YEt19tML8BUL45N2ji4ZAz1KcN_A@mail.gmail.com>
+        <877crqwvi1.wl-tiwai@suse.de>
+        <CADm8Tenfy8joto5WLCqQWjfT8WimsbJgOss0hJe-ciyDRMrSXw@mail.gmail.com>
+        <871qhywucj.wl-tiwai@suse.de>
+        <4d0931bf-b356-6969-5aaf-b663d7f2b21a@perex.cz>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 26, 2023 at 10:39:56AM +0000, YE Chengfeng wrote:
-> linereq_put_event is called from both interrupt context (e.g.,
-> edge_irq_thread) and process context (process_hw_ts_thread).
-> Therefore, interrupt should be disabled before acquiring lock
-> &lr->wait.lock inside linereq_put_event to avoid deadlock when
-> the lock is held in process context and edge_irq_thread comes.
+On Mon, 26 Jun 2023 09:56:47 +0200,
+Jaroslav Kysela wrote:
 > 
-> Similarly, linereq_read_unlocked running in process context
-> also acquies the same lock. It also need to disable interrupt
-> otherwise deadlock could happen if the irq edge_irq_thread
-> comes to execution while the lock is held.
+> On 26. 06. 23 9:33, Takashi Iwai wrote:
+> > On Mon, 26 Jun 2023 09:31:18 +0200,
+> > Tuo Li wrote:
+> >> 
+> >> 
+> >> Hello,
+> >> 
+> >> Thank you for your reply!
+> > 
+> > FWIW, the simplest fix would be something like below, just extending
+> > the mutex coverage.  But it'll serialize the all calls, so it might
+> > influence on the performance, while it's the safest way.
 > 
-> Fix the two potential deadlock issues by spin_lock_bh() and
-> spin_lock_irq() separately.
+> It may be better to update total_pcm_alloc_bytes before
+> snd_dma_alloc_dir_pages() call and decrease this value when allocation
+> fails to allow parallel allocations. Then the mutex can be held only
+> for the total_pcm_alloc_bytes variable update.
 
-Side note: You have two patches in something that seems to be the series,
-but lacks the references in email headers. Whenever you send a series,
-do not forget to add --thread to `git send-email`.
+Yes, it'd work.  But a tricky part is that the actual allocation size
+can be bigger, and we need to correct the total_pcm_alloc_bytes after
+the allocation result.  So the end result would be a patch like below,
+which is a bit more complex than the previous simpler approach.  But
+it might be OK.
 
--- 
-With Best Regards,
-Andy Shevchenko
+> Eventually, total_pcm_alloc_bytes may be atomic.
+
+Possible, but the same problem like the above applies, so I believe
+the mutex is good enough.
+
+Another alternative would be to move the size check after the
+successful allocation, assuming that the size exceeds a very
+exceptional scenario.  The code flow would be a bit simpler.
 
 
+thanks,
+
+Takashi
+
+--- a/sound/core/pcm_memory.c
++++ b/sound/core/pcm_memory.c
+@@ -37,9 +37,14 @@ static int do_alloc_pages(struct snd_card *card, int type, struct device *dev,
+ 	enum dma_data_direction dir;
+ 	int err;
+ 
++	mutex_lock(&card->memory_mutex);
+ 	if (max_alloc_per_card &&
+-	    card->total_pcm_alloc_bytes + size > max_alloc_per_card)
++	    card->total_pcm_alloc_bytes + size > max_alloc_per_card) {
++		mutex_unlock(&card->memory_mutex);
+ 		return -ENOMEM;
++	}
++	card->total_pcm_alloc_bytes += size		
++	mutex_unlock(&card->memory_mutex);
+ 
+ 	if (str == SNDRV_PCM_STREAM_PLAYBACK)
+ 		dir = DMA_TO_DEVICE;
+@@ -47,8 +52,18 @@ static int do_alloc_pages(struct snd_card *card, int type, struct device *dev,
+ 		dir = DMA_FROM_DEVICE;
+ 	err = snd_dma_alloc_dir_pages(type, dev, dir, size, dmab);
+ 	if (!err) {
++		/* the actual allocation size might be bigger than requested,
++		 * and we need to correct the account
++		 */
++		if (dmab->bytes != size) {
++			mutex_lock(&card->memory_mutex);
++			card->total_pcm_alloc_bytes += dmab->bytes - size;
++			mutex_unlock(&card->memory_mutex);
++		}
++	} else {
++		/* allocation failure, take back */
+ 		mutex_lock(&card->memory_mutex);
+-		card->total_pcm_alloc_bytes += dmab->bytes;
++		card->total_pcm_alloc_bytes -= size;
+ 		mutex_unlock(&card->memory_mutex);
+ 	}
+ 	return err;
