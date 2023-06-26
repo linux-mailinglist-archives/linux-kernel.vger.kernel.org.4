@@ -2,335 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E32F473DB94
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 11:40:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D4CA73DB96
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 11:40:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229899AbjFZJk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 05:40:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43450 "EHLO
+        id S229821AbjFZJkz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 05:40:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbjFZJkX (ORCPT
+        with ESMTP id S229529AbjFZJkq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 05:40:23 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA80AC;
-        Mon, 26 Jun 2023 02:40:20 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: bbrezillon)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id EAF59660710F;
-        Mon, 26 Jun 2023 10:40:17 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1687772418;
-        bh=nrhR8oq2efpkrpJAJZoiEhcI2s3TuRKvjkM4txfnivA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=RE40B/BKGYWRgmT2p5cXPbnaGINdFGsssda3ob0DpmbfJCSTTyuz9mCbatF9Dc9hJ
-         bJ2n9Mx/+GNqXQa5ZwqgYNdE3tNjXHIOjfz3lK3lgZ86xE0peje8c0NtBke4fefm5G
-         j2kKocSrtjvSmF5uZebPKA71KkAAtDQR1eYZuD1/t2sg+ysFEQusImuLjMFI7vRRHK
-         u3AvocNF6F3GeDm7rFzxIUDIz2TNCfU8OxnPxEHmZoaGO+w97ief4Zb4Z+GqcgNYXN
-         3ulORtyxiypa+SY+ZNAtytfqQ5S1GUYiY6Jc85Hy/KB+c0yOaoxuPuzRoszNYaw3da
-         0n29csgLj575g==
-Date:   Mon, 26 Jun 2023 11:40:14 +0200
-From:   Boris Brezillon <boris.brezillon@collabora.com>
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        John Stultz <jstultz@google.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Tomi Valkeinen <tomba@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
-        kernel@collabora.com, linux-media@vger.kernel.org
-Subject: Re: [PATCH v4 6/6] drm/shmem-helper: Switch to reservation lock
-Message-ID: <20230626114014.2c837255@collabora.com>
-In-Reply-To: <20230529223935.2672495-7-dmitry.osipenko@collabora.com>
-References: <20230529223935.2672495-1-dmitry.osipenko@collabora.com>
-        <20230529223935.2672495-7-dmitry.osipenko@collabora.com>
-Organization: Collabora
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
+        Mon, 26 Jun 2023 05:40:46 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02C3ADC;
+        Mon, 26 Jun 2023 02:40:45 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id 3f1490d57ef6-bd729434fa0so3406805276.1;
+        Mon, 26 Jun 2023 02:40:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687772444; x=1690364444;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rkfbd+mjNe8bYAliUp48UHONMltNteP2PilREF950C0=;
+        b=aWdnVxIX9AMIXDoeSX0DZZNbyDBZ5SOrIICrTxz3TkgvZk9DurtkLA+RCKOOXqEyiX
+         iYbrDEvea6k8aMkIfl9g/oeaWZhvFKotA1gccu3aXbK0Hmn+Rl6gI+0/+6Gp9LA8J2te
+         TWgVB/MM06FqE5S7p/mxD2DHog01Yk0P+vFdWBvGJAyQR3hOvITUbKs2MLoOMse+ph8l
+         uTsl05GirF5DVCZ1gz6sLmAYdzcxKPkQWojPFXq82nGwiEJKxhv1+gKa9dGP5/DmLdC/
+         l7TgJSmQLVupDg0joVMHWvKGUs2WLirPIS0nRRl1K7b0fGAw+SQ3JUJktdBUOaGKhf4/
+         dOsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687772444; x=1690364444;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rkfbd+mjNe8bYAliUp48UHONMltNteP2PilREF950C0=;
+        b=f8GZo91sSf3Dr16+Pg/enycN+adXp4HgzI0qE5Lm0EsLoYZkJBVsVAjEePWV8J/KXu
+         Jode4nVkTmgsc5hQylp2aSLIj6OvaW8UpB/U4MZ6883/IIjWwFAj83a0z0sy/NDnvYMN
+         XEyq8zvn/Hm/RU5mTu+iw+C9f6qUM6Wx0ST8fhop3f2qE5FkqUPE5tm6z8QHaX9mqZzy
+         k1Gsr5KH5sOhfBD0MBNXjeCfC4ynR03Q113ajYF7KRH/V6WfkqZMYMPdNHgC0a0Daf++
+         rYwWvgquG2lu7dazgUYk5lu8FgSzSCvynu909cgOcamRjl98jyaUwp8PJVZrpJ3DaZcV
+         vY9A==
+X-Gm-Message-State: AC+VfDxVfTVKvfoJXM2oJMLSjuoN8gqgWCaQwQcNNvZSx2fPdiBU9MCY
+        rIRaY294SRD2WvkexmKY4H0H2CDvMZFKhS2YNMvEeesZ
+X-Google-Smtp-Source: ACHHUZ6TWMgGAy4/efXJ77Q26EdA0AgX8OxNUeLvDcH6OmvDK1ajBKzXHbUP9w0zeDEP4iwrSlVrTzahI8yoHcUYtLU=
+X-Received: by 2002:a5b:c8:0:b0:ba8:3613:76a8 with SMTP id d8-20020a5b00c8000000b00ba8361376a8mr27531316ybp.41.1687772444135;
+ Mon, 26 Jun 2023 02:40:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20230625232528.89306-1-boqun.feng@gmail.com> <a79002ec-aa2d-1eec-58be-372c3b2a0efa@gmail.com>
+In-Reply-To: <a79002ec-aa2d-1eec-58be-372c3b2a0efa@gmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Mon, 26 Jun 2023 11:40:33 +0200
+Message-ID: <CANiq72kVUv4djvhLxz5tRYn-U2kXZMs0N1M=CZxdznnN0jY47Q@mail.gmail.com>
+Subject: Re: [PATCH v2] rust: alloc: Add realloc and alloc_zeroed to the
+ GlobalAlloc impl
+To:     Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+Cc:     Boqun Feng <boqun.feng@gmail.com>, rust-for-linux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dmitry,
+On Mon, Jun 26, 2023 at 5:34=E2=80=AFAM Martin Rodriguez Reboredo
+<yakoyoku@gmail.com> wrote:
+>
+> I think that this should go above Link and Signed-off-bys, although I'm
+> not sure if maintainers do it when is merged.
 
-On Tue, 30 May 2023 01:39:35 +0300
-Dmitry Osipenko <dmitry.osipenko@collabora.com> wrote:
+Both styles are used, it is fine either way. Personally, I pick one or
+the other depending on the kind of comment.
 
-> Replace all drm-shmem locks with a GEM reservation lock. This makes locks
-> consistent with dma-buf locking convention where importers are responsible
-> for holding reservation lock for all operations performed over dma-bufs,
-> preventing deadlock between dma-buf importers and exporters.
+Having said that, there seems to be a missing `From:`, but I can fix
+that on my side if Bj=C3=B6rn is the intended author.
 
-I've rebased some of my work on drm-misc-next this morning and noticed
-that the drm_gem_shmem_get_pages() I was using to pin pages no longer
-exists, so I ended looking at this patch to check what I should use
-instead, and I have a few questions/comments.
+> Newbie question, aren't tabs in the commit message verboten?
 
-> 
-> Suggested-by: Daniel Vetter <daniel@ffwll.ch>
-> Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
-> Reviewed-by: Emil Velikov <emil.l.velikov@gmail.com>
-> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-> ---
->  drivers/gpu/drm/drm_gem_shmem_helper.c        | 210 ++++++++----------
->  drivers/gpu/drm/lima/lima_gem.c               |   8 +-
->  drivers/gpu/drm/panfrost/panfrost_drv.c       |   7 +-
->  .../gpu/drm/panfrost/panfrost_gem_shrinker.c  |   6 +-
->  drivers/gpu/drm/panfrost/panfrost_mmu.c       |  19 +-
->  include/drm/drm_gem_shmem_helper.h            |  14 +-
->  6 files changed, 116 insertions(+), 148 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/drm_gem_shmem_helper.c b/drivers/gpu/drm/drm_gem_shmem_helper.c
-> index 4ea6507a77e5..a783d2245599 100644
-> --- a/drivers/gpu/drm/drm_gem_shmem_helper.c
-> +++ b/drivers/gpu/drm/drm_gem_shmem_helper.c
-> @@ -88,8 +88,6 @@ __drm_gem_shmem_create(struct drm_device *dev, size_t size, bool private)
->  	if (ret)
->  		goto err_release;
->  
-> -	mutex_init(&shmem->pages_lock);
-> -	mutex_init(&shmem->vmap_lock);
->  	INIT_LIST_HEAD(&shmem->madv_list);
->  
->  	if (!private) {
-> @@ -141,11 +139,13 @@ void drm_gem_shmem_free(struct drm_gem_shmem_object *shmem)
->  {
->  	struct drm_gem_object *obj = &shmem->base;
->  
-> -	drm_WARN_ON(obj->dev, shmem->vmap_use_count);
-> -
->  	if (obj->import_attach) {
->  		drm_prime_gem_destroy(obj, shmem->sgt);
->  	} else {
-> +		dma_resv_lock(shmem->base.resv, NULL);
-> +
-> +		drm_WARN_ON(obj->dev, shmem->vmap_use_count);
-> +
->  		if (shmem->sgt) {
->  			dma_unmap_sgtable(obj->dev->dev, shmem->sgt,
->  					  DMA_BIDIRECTIONAL, 0);
-> @@ -154,22 +154,24 @@ void drm_gem_shmem_free(struct drm_gem_shmem_object *shmem)
->  		}
->  		if (shmem->pages)
->  			drm_gem_shmem_put_pages(shmem);
-> -	}
->  
-> -	drm_WARN_ON(obj->dev, shmem->pages_use_count);
-> +		drm_WARN_ON(obj->dev, shmem->pages_use_count);
-> +
-> +		dma_resv_unlock(shmem->base.resv);
-> +	}
->  
->  	drm_gem_object_release(obj);
-> -	mutex_destroy(&shmem->pages_lock);
-> -	mutex_destroy(&shmem->vmap_lock);
->  	kfree(shmem);
->  }
->  EXPORT_SYMBOL_GPL(drm_gem_shmem_free);
->  
-> -static int drm_gem_shmem_get_pages_locked(struct drm_gem_shmem_object *shmem)
-> +static int drm_gem_shmem_get_pages(struct drm_gem_shmem_object *shmem)
+I am not aware of such a rule, and there are commits in the kernel
+with tabs, e.g. commit 9828ed3f695a ("module: error out early on
+concurrent load of the same module file").
 
-I find this name change confusing, because the function requires the
-GEM resv lock to be held, and the _locked suffix was making it pretty
-clear.
+In any case, that text doesn't go into the commit message, because it
+is after the `---` line.
 
->  {
->  	struct drm_gem_object *obj = &shmem->base;
->  	struct page **pages;
->  
-> +	dma_resv_assert_held(shmem->base.resv);
-> +
->  	if (shmem->pages_use_count++ > 0)
->  		return 0;
->  
-> @@ -197,35 +199,16 @@ static int drm_gem_shmem_get_pages_locked(struct drm_gem_shmem_object *shmem)
->  }
->  
->  /*
-> - * drm_gem_shmem_get_pages - Allocate backing pages for a shmem GEM object
-> + * drm_gem_shmem_put_pages - Decrease use count on the backing pages for a shmem GEM object
->   * @shmem: shmem GEM object
->   *
-> - * This function makes sure that backing pages exists for the shmem GEM object
-> - * and increases the use count.
-> - *
-> - * Returns:
-> - * 0 on success or a negative error code on failure.
-> + * This function decreases the use count and puts the backing pages when use drops to zero.
->   */
-> -int drm_gem_shmem_get_pages(struct drm_gem_shmem_object *shmem)
-> +void drm_gem_shmem_put_pages(struct drm_gem_shmem_object *shmem)
-
-Same comment about the name change. That's even more confusing since
-this function was previously taking care of the locking. Also not sure
-why you'd want to expose this _put() helper when the _get() helper is
-private.
-
->  {
->  	struct drm_gem_object *obj = &shmem->base;
-> -	int ret;
->  
-> -	drm_WARN_ON(obj->dev, obj->import_attach);
-> -
-> -	ret = mutex_lock_interruptible(&shmem->pages_lock);
-> -	if (ret)
-> -		return ret;
-> -	ret = drm_gem_shmem_get_pages_locked(shmem);
-> -	mutex_unlock(&shmem->pages_lock);
-> -
-> -	return ret;
-> -}
-> -EXPORT_SYMBOL(drm_gem_shmem_get_pages);
-> -
-> -static void drm_gem_shmem_put_pages_locked(struct drm_gem_shmem_object *shmem)
-> -{
-> -	struct drm_gem_object *obj = &shmem->base;
-> +	dma_resv_assert_held(shmem->base.resv);
->  
->  	if (drm_WARN_ON_ONCE(obj->dev, !shmem->pages_use_count))
->  		return;
-> @@ -243,20 +226,25 @@ static void drm_gem_shmem_put_pages_locked(struct drm_gem_shmem_object *shmem)
->  			  shmem->pages_mark_accessed_on_put);
->  	shmem->pages = NULL;
->  }
-> +EXPORT_SYMBOL(drm_gem_shmem_put_pages);
->  
-> -/*
-> - * drm_gem_shmem_put_pages - Decrease use count on the backing pages for a shmem GEM object
-> - * @shmem: shmem GEM object
-> - *
-> - * This function decreases the use count and puts the backing pages when use drops to zero.
-> - */
-> -void drm_gem_shmem_put_pages(struct drm_gem_shmem_object *shmem)
-> +static int drm_gem_shmem_pin_locked(struct drm_gem_shmem_object *shmem)
->  {
-> -	mutex_lock(&shmem->pages_lock);
-> -	drm_gem_shmem_put_pages_locked(shmem);
-> -	mutex_unlock(&shmem->pages_lock);
-> +	int ret;
-> +
-> +	dma_resv_assert_held(shmem->base.resv);
-> +
-> +	ret = drm_gem_shmem_get_pages(shmem);
-> +
-> +	return ret;
-> +}
-> +
-> +static void drm_gem_shmem_unpin_locked(struct drm_gem_shmem_object *shmem)
-> +{
-> +	dma_resv_assert_held(shmem->base.resv);
-> +
-> +	drm_gem_shmem_put_pages(shmem);
->  }
-> -EXPORT_SYMBOL(drm_gem_shmem_put_pages);
->  
->  /**
->   * drm_gem_shmem_pin - Pin backing pages for a shmem GEM object
-> @@ -271,10 +259,17 @@ EXPORT_SYMBOL(drm_gem_shmem_put_pages);
->  int drm_gem_shmem_pin(struct drm_gem_shmem_object *shmem)
->  {
->  	struct drm_gem_object *obj = &shmem->base;
-> +	int ret;
->  
->  	drm_WARN_ON(obj->dev, obj->import_attach);
->  
-> -	return drm_gem_shmem_get_pages(shmem);
-> +	ret = dma_resv_lock_interruptible(shmem->base.resv, NULL);
-> +	if (ret)
-> +		return ret;
-
-I think here is the major problem I have with this patch: you've made
-drm_gem_shmem_{get_pages,pin}() private, which forces me to call
-drm_gem_shmem_pin() in a path where I already acquired the resv lock
-(using the drm_exec infra proposed by Christian). That would
-probably work if you were letting ret == -EALREADY go through, but I'm
-wondering if it wouldn't be preferable to expose
-drm_gem_shmem_pin_locked().
-
-> +	ret = drm_gem_shmem_pin_locked(shmem);
-> +	dma_resv_unlock(shmem->base.resv);
-> +
-> +	return ret;
->  }
->  EXPORT_SYMBOL(drm_gem_shmem_pin);
->  
-> @@ -291,12 +286,29 @@ void drm_gem_shmem_unpin(struct drm_gem_shmem_object *shmem)
->  
->  	drm_WARN_ON(obj->dev, obj->import_attach);
->  
-> -	drm_gem_shmem_put_pages(shmem);
-> +	dma_resv_lock(shmem->base.resv, NULL);
-> +	drm_gem_shmem_unpin_locked(shmem);
-> +	dma_resv_unlock(shmem->base.resv);
->  }
->  EXPORT_SYMBOL(drm_gem_shmem_unpin);
-
-If we want to be consistent, let's just expose drm_gem_shmem_unpin()
-and drm_gem_shmem_pin() and keep drm_gem_shmem_{get,put}_pages()
-private, or even better, rename them drm_gem_shmem_{pin,unpin}_locked()
-insert of having drm_gem_shmem_{pin,unpin}_locked() wrappers that just
-forward the call to drm_gem_shmem_{get,put}_pages().
-
->  
-> -static int drm_gem_shmem_vmap_locked(struct drm_gem_shmem_object *shmem,
-> -				     struct iosys_map *map)
-> +/*
-> + * drm_gem_shmem_vmap - Create a virtual mapping for a shmem GEM object
-> + * @shmem: shmem GEM object
-> + * @map: Returns the kernel virtual address of the SHMEM GEM object's backing
-> + *       store.
-> + *
-> + * This function makes sure that a contiguous kernel virtual address mapping
-> + * exists for the buffer backing the shmem GEM object. It hides the differences
-> + * between dma-buf imported and natively allocated objects.
-> + *
-> + * Acquired mappings should be cleaned up by calling drm_gem_shmem_vunmap().
-> + *
-> + * Returns:
-> + * 0 on success or a negative error code on failure.
-> + */
-> +int drm_gem_shmem_vmap(struct drm_gem_shmem_object *shmem,
-> +		       struct iosys_map *map)
-
-Same problem with this renaming: it's confusing because this function
-was previously taking care of the locking, and it's no longer the case.
-That's actually true for other public functions your patching, but I
-won't go over all of them.
-
-I know this patch has been under discussion for quite some time, and has
-been validated by other devs/maintainers, but I'd like to understand the
-reasoning behind these decisions. Not the decision to replace all locks
-by dma_resv, which I kinda understand, but the decision to change the
-behavior of functions without making the name reflect the new behavior
-(_locked prefix), or the fact we now prohibit some functions to
-succeed when the dma_resv lock is taken by the driver beforehand (which,
-unless I'm mistaken, will happen in the VM_BIND logic, and can happen
-in the SUBMIT ioctl too depending on the driver).
-
-Regards,
-
-Boris
-
+Cheers,
+Miguel
