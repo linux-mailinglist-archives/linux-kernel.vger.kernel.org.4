@@ -2,193 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0243373D85D
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 09:20:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11A4973D865
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 09:23:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229553AbjFZHUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 03:20:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58342 "EHLO
+        id S229660AbjFZHXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 03:23:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjFZHT7 (ORCPT
+        with ESMTP id S229500AbjFZHXe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 03:19:59 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A5B5E0
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 00:19:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687763997; x=1719299997;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=f31v2ZNDA4zPq7+rqtAVSePjvG1IKm9UoDrvE5LVvrg=;
-  b=nKQfeANLBoh7zgscwnBTIRrsRSzqEY0uOr/15kNgGpU609ASnVdCmztI
-   4PZcLqZbucI4Mk8381NoXRfu/o3tK1teSLOaWPz2DXiyyw5uj7TSqFluy
-   lTpl2Q9vcz/UAEqL5RrVIid9GRL4lIhEjYFrnW8fWH2ScEGKmZ6mjxSCZ
-   KchvczTsNMxfEEKM4aw7Aw7eTThL7Tx3V3EMnRHsBGn1W9ZRRbh6oPo91
-   rXDwEazmVxydBAo1ZnIyitFfUrMvFXQlo3ogZ8lT9Hp4ghWr43snxaFm1
-   ilDL+YP75SlsM6RUMG8kk6MEU4jBWGZE3NwZ8D8K36Fb3ewnpx/01KZY0
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="340787159"
-X-IronPort-AV: E=Sophos;i="6.01,158,1684825200"; 
-   d="scan'208";a="340787159"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 00:19:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="693375850"
-X-IronPort-AV: E=Sophos;i="6.01,158,1684825200"; 
-   d="scan'208";a="693375850"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by orsmga006.jf.intel.com with ESMTP; 26 Jun 2023 00:19:56 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Mon, 26 Jun 2023 00:19:47 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27 via Frontend Transport; Mon, 26 Jun 2023 00:19:47 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.177)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Mon, 26 Jun 2023 00:19:46 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jk9eZa144WIu7BJhRbyEQF86cwx2VnpgkRyiZU5MSeoddmF8WTHUekeWTD2KG9tun/Vl6Z+m67MYgaauhmMotc7ibT0qQnkcHR2QbYrHytST6pAutQL2kWzsKZZ/x3hymI4i9z4IF58m2aN1Cy+gURFTdhjf4k9/wZ63LtB7X+DabTbn+AbbjbmvXFuT1KZ/AU7AvUFwSOpYnlz3lYWZOO3To1k/CPk3a8rQlSlT9iNWxshwDsdcm5/7S9BS7WWrKt72os/AJY4WpOXBtddQfA2V2szdv1gOI3hfEKKyJ82Ub8UyCcVH90XYbWRBK3004ZQ7dAOVXaU3QtV3dAgCCA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dPL3codi5oeqhFjmCEbxcWD6Uion4kecq+iSFjGrIAE=;
- b=iUJiUCUz+FsdhJPW7DQduJnVjHjvuQ66G9bqJJHnwKxQybKBvJ6BS0eTv7MtUTlNRKmoV9eDTghAZlux2S0w1xHVBoXBCzCwK3cTbZI44//jUHkeQR206/pPQ+EGwm2+1qIDOCS8SYsImHkAGx32xeUVOTR5zgxnEIz/Baqt/m9cXsgFDnWFY6pfVSPVhVbJw4qkgyXqbDXG9kDWPwH1/m0zvR42Qt/RNUZtoz1nxOHHzcu+vpiX0SQELJbfcujSu2lN0umYOFh15gS7AGMykun+0SXA4lAb0NTAud4AZQMpy/R4RIit+MvNI6VoYCBA06hCRRTlE1+b2GUpdkbxcw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CY5PR11MB6392.namprd11.prod.outlook.com (2603:10b6:930:37::15)
- by DM4PR11MB6120.namprd11.prod.outlook.com (2603:10b6:8:af::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24; Mon, 26 Jun
- 2023 07:19:44 +0000
-Received: from CY5PR11MB6392.namprd11.prod.outlook.com
- ([fe80::5486:41e6:7c9e:740e]) by CY5PR11MB6392.namprd11.prod.outlook.com
- ([fe80::5486:41e6:7c9e:740e%7]) with mapi id 15.20.6521.024; Mon, 26 Jun 2023
- 07:19:44 +0000
-Date:   Mon, 26 Jun 2023 15:16:38 +0800
-From:   kernel test robot <yujie.liu@intel.com>
-To:     Patricia Alfonso <trishalfonso@google.com>
-CC:     <oe-kbuild-all@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-        "Richard Weinberger" <richard@nod.at>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        David Gow <davidgow@google.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "Andrey Konovalov" <andreyknvl@gmail.com>
-Subject: mm/kasan/kasan.h:485:2: error: #error kasan_arch_is_ready only works
- in KASAN generic outline mode!
-Message-ID: <202306191845.ddCTgcG9-lkp@intel.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-X-ClientProxiedBy: SI1PR02CA0003.apcprd02.prod.outlook.com
- (2603:1096:4:1f7::20) To CY5PR11MB6392.namprd11.prod.outlook.com
- (2603:10b6:930:37::15)
+        Mon, 26 Jun 2023 03:23:34 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50EDDE0;
+        Mon, 26 Jun 2023 00:23:33 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-6682909acadso1167606b3a.3;
+        Mon, 26 Jun 2023 00:23:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687764213; x=1690356213;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=pAoHpYkt2lBs67uUYdErp3v/viJTQC8Dihr6kiw5jT0=;
+        b=JF7SLFjjJojECO7To1D2VB9yhY0eyzwOtsZ9C6as64pdYMLvep8qXrA9DXDpsezGyA
+         sa5Q+4ZJjGXhJVmxoQY9hnOFth+za+46Vs9se9172javfESFXTo/bAyrBvRXcwBMFo0+
+         7JKN4sMcMMeghXjo8TzpyYdsRLU799lTKoSQhIaF/QIEWtOQYhaFqlVrkr7PEXuO1Q+A
+         Gm6z5TepsnfeKZ9AJX5yG8zvFGq0kHuJeCxWB8Clxh9Bz59i+uZIhVSzXvQDrvYilpvI
+         iypANLaV2THFVwBUqDprMO93x+BzWwzR4kcT8LeTI6hGX/m4+MbaKiBW2ZToF2HIOR0q
+         6cng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687764213; x=1690356213;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pAoHpYkt2lBs67uUYdErp3v/viJTQC8Dihr6kiw5jT0=;
+        b=LI9Y8iAno56jMUoYilZC7qhlRcgkuJIqAg46reFjev576jFBzpdWMl5oR0+qna0o14
+         44e4fq9sv7Gg2qDCL23HMHfqg+vu9hMzdc6D/9c4xa8Rms91iAuOoYHEfdu25RuXPCqe
+         /dsEF6sYzQhiTHzKcBB9agaH4AUXXUpVlYRvJiTHJ6qVJItBsHup/DDIXfoYlPMw3/bv
+         Xku6sSXncLCPmKyZA/dbJp9wAchJMSzz+edPK/R+VPf+CeI5XoN54WM3FHvpZAgax8l/
+         tmT7A9d4pXl0KR65KbHij20y2RIh7o6E6BEekKb2EwTdYolcLQdja+x604sT9tKVsonX
+         2U0A==
+X-Gm-Message-State: AC+VfDyHms4bMuopgaFxyJeO7EV44gro+S9fNjUA0SaCwehVg0cv01mm
+        4Rzm/RwkaM777eRjkkVxgCP5lrxGdO4=
+X-Google-Smtp-Source: ACHHUZ4rYOSEmn3CtaffZSSiMXxV2WwV5WlljV233A0cvBcVDENylrF0yQW7CLWEHPuEqJuGYaNrCg==
+X-Received: by 2002:a05:6a00:3a0e:b0:661:4a00:1ea5 with SMTP id fj14-20020a056a003a0e00b006614a001ea5mr23090693pfb.20.1687764212616;
+        Mon, 26 Jun 2023 00:23:32 -0700 (PDT)
+Received: from sol (194-223-178-180.tpgi.com.au. [194.223.178.180])
+        by smtp.gmail.com with ESMTPSA id e17-20020a62aa11000000b00625037cf695sm3218213pff.86.2023.06.26.00.23.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jun 2023 00:23:32 -0700 (PDT)
+Date:   Mon, 26 Jun 2023 15:23:26 +0800
+From:   Kent Gibson <warthog618@gmail.com>
+To:     YE Chengfeng <cyeaa@connect.ust.hk>
+Cc:     "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "brgl@bgdev.pl" <brgl@bgdev.pl>,
+        "andy@kernel.org" <andy@kernel.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] gpio: gpiolib-cdev: Fix potential &lr->wait.lock
+ deadlock issue
+Message-ID: <ZJk87rWsDj7pWJIP@sol>
+References: <TYCP286MB1188B6A0379F7928C63288DF8A21A@TYCP286MB1188.JPNP286.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY5PR11MB6392:EE_|DM4PR11MB6120:EE_
-X-MS-Office365-Filtering-Correlation-Id: de5b631f-4515-4856-cec1-08db7615b6c0
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ITHJMtqbRxzpHAQvWPtoLmUVzhCoY5/0HDr5o+lmftj0K+V2mFRnXOFjlnt7lL2xfD4eZMI5lU8pPl5hQ5bRW5PVaRgiSrIok2/kt56rywQEk0BvRjIkxFKRx5zPqtRZtzTkEP0Xd0Qlu3zUgkJQIm4BNU9P8CmoH55pR/JUYdrvO6XnNrojXixTqfz0/sDZ//rSlRP/qXmWKH+VaUgAukoUnkak9XpHE0REZS28ZJlx/aUVeBfcAE59sXKAVQAb7iwpOtKYx2Tv75dTS+FMHAnjbDbxZEk8OoVvDSEzDQnPZsG5SDojNBMzYzu7Rk9IgTkiQfylPm9K3XbR9bKd71ZQ7IdKrxJ2b4qkadZZu+vQZ1OO+JfmjugmYy89e4Fw9x6tPj09qgg917Sln1lRh5tYP1RRRANy1EixBtm9K9zfFSUHMHbqMsW5tbvqmJwcOZ0VGJ5bav2aKgdb6RsFVsfMLnpYzdJctcBveGXmKPuyLv/0ltCJXu+hI6BEUn0vDWVv7TEZNQac3WwoeD+4ZEV8V4wDlx6go/rsDEnw6mtS/JDB5BfqluZeovQT2XEbZOEFC2CD2VqEhcw1lR6yvYtwTG7fnVjIIaWVYPVukNVbdwT/04tRhRuu0PARGmtMo2k7xjiqEzvfJ3UQ/7+ChQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(39860400002)(366004)(376002)(346002)(136003)(451199021)(36756003)(5660300002)(6916009)(86362001)(8936002)(8676002)(41300700001)(66556008)(66476007)(4326008)(38100700002)(316002)(66946007)(82960400001)(966005)(1076003)(6506007)(26005)(6512007)(2906002)(186003)(478600001)(6666004)(54906003)(83380400001)(2616005)(6486002)(41533002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?dhR8RPx027a2zRBDJure6b2M296rLbrz3MDfQQ4wrHlBtnRV8JYnNQm+vl4Q?=
- =?us-ascii?Q?8/9lYmvdCeumDe5SIx75dEReCCQRJmtaiULo+F2+m84uqosR5RvBlW0o61gA?=
- =?us-ascii?Q?J58KTcgDK3y5jumONT0/4bQelMIfO75C5/zLCjFP8mwA1K0w/S/BKDZ1WPgR?=
- =?us-ascii?Q?S+lCSGDutn8kRquBwTawxX+BpDDnOJHuEiN8EK3Jb3G7S+H2woCrQWHmivoh?=
- =?us-ascii?Q?0w5km7QOEVr41emXwMV0EVI9jsnbk3p/QMlN51udOQ3RCONcAbcn+4OL7fjw?=
- =?us-ascii?Q?lZJsvaO3nblRYAG604l8cfDWTsqaBI0ulQa8l0Al99bH8RXVt24ThASfKHc0?=
- =?us-ascii?Q?6I25qgLRxDm/kpjapyl/7OzRkhOKc8aagvw85iZZ+bFiqUdh7QrUcXCRaJoK?=
- =?us-ascii?Q?400UNSTgKO8a3fWm7Ri7qkFrvxLVXaq3fLpp3IPg8QApd+FEmYJ43sNmsRIm?=
- =?us-ascii?Q?ljjkGGLq+bamcr1IvhjMxrl86uBSJaBaKZqOmXMcJNN+2yce1RFgpfGm5KpY?=
- =?us-ascii?Q?GLyOVEpBsPGUR+O15fV0UMVtrEtAgMkflOnIJN3a2OPNCL0lhmS1z74lore6?=
- =?us-ascii?Q?QOeEojWYqEzdwwxzXgCzm0naN+zlu229/0ZutXIlzszcK/vxFd6khbMIdsoU?=
- =?us-ascii?Q?iKv17A9EqiU6EPDmg43bt9cfCe/2i0XcYs58RH/tdsQ3xT44z8OAy+1ZcfTI?=
- =?us-ascii?Q?eL3wqhkPE7Hn5LvtU+C/sip0Xp7jAueuVfFvbC0/va14niTbAqgIOzfpYur4?=
- =?us-ascii?Q?RM/F2HDftTIQaG2JD4P9naz9gi9ae3mYbfp+Snlod87OzYlQ0QaEsvuiI01f?=
- =?us-ascii?Q?bgT32FuRy70BzcQ7MzOwaDY0JdZKlMMXdcfD+06BfzjUlJHPlukwY8fEi63v?=
- =?us-ascii?Q?W6uxYJLmvtpvCET8XPZZv/MaB2pUNN2k+UToS2CFQikNPmh5I0OU6aJ2rjt0?=
- =?us-ascii?Q?a5OiKe5+iPMmWfpXOxM0oDJ+hxbfcjO3PLp/IUBOXKmDnx9vPPTvQwzcRECQ?=
- =?us-ascii?Q?KEKot80QgBEwXSLFJvErt/AwKqB4H3NVYWobHULuN74uv23OnBGx6JsshZsE?=
- =?us-ascii?Q?WHCE6iDW5HCZXFLDUbIKVYW1Cgl6/qNczqK0hfgh96B5D6diial+5NS+3Md6?=
- =?us-ascii?Q?rF1GWYcbRP9Mj/6CXYK1aaDVZ1rFMACkYJEcQi83YHWGFJH6nOhkwJsqXtdF?=
- =?us-ascii?Q?X3Dv6ax6DGfCvs7Knx/uSful2toN6TVcjTCAp7r1JniN+Ti74zGK1XTlSiAq?=
- =?us-ascii?Q?6W0f7mAYTOs3rw5Hmk5QFILpxS54L6QcYdQ9kMGm3Eu6f7XiE1Ee2y6Xkxno?=
- =?us-ascii?Q?V7lc+jOCo4C0bvmToNTz9WoyDBrmD3uw7gxFV29jijO/akOTkbhYbb/BrYEu?=
- =?us-ascii?Q?UONvRurMO+/RLUzdJcBIx668dHX1sRCG1UtFK69+nPsGUeB5OJ1yQlCNO/sP?=
- =?us-ascii?Q?cgksyv2A3khZx37YGvZ3QI+KaWv62dXg9nlKvIdcwh5SOzsn/eDKaVIFPsl3?=
- =?us-ascii?Q?MSGgd3aYyCxrECWugPOy9Hl0yvAkWrTSGht9jL//VQXYyghkkjjYHB6bZ13S?=
- =?us-ascii?Q?AmbCvq/vJ1SnFXM2sWr7u/+syuC8iou3ZE1NA+B2?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: de5b631f-4515-4856-cec1-08db7615b6c0
-X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6392.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jun 2023 07:19:43.6875
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: lQxmdW1BK6Ce8o/oHspZj3ty8bR9KD8yeP+iG4qv5GSkIWxtYHkhFElleZfYQKnjQwISqJHDyywCm9ahG5M9MQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB6120
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <TYCP286MB1188B6A0379F7928C63288DF8A21A@TYCP286MB1188.JPNP286.PROD.OUTLOOK.COM>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   45a3e24f65e90a047bef86f927ebdc4c710edaa1
-commit: 5b301409e8bc5d7fad2ee138be44c5c529dd0874 UML: add support for KASAN under x86_64
-date:   11 months ago
-config: um-randconfig-r023-20230619 (https://download.01.org/0day-ci/archive/20230619/202306191845.ddCTgcG9-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce: (https://download.01.org/0day-ci/archive/20230619/202306191845.ddCTgcG9-lkp@intel.com/reproduce)
+On Sun, Jun 25, 2023 at 02:45:12PM +0000, YE Chengfeng wrote:
+> linereq_put_event is called from both interrupt context (e.g.,
+> edge_irq_thread) and process context (process_hw_ts_thread).
+> Therefore, interrupt should be disabled before acquiring lock
+> &lr->wait.lock inside linereq_put_event to avoid deadlock when
+> the lock is held in process context and edge_irq_thread comes.
+> 
+> Similarly, linereq_read_unlocked running in process context
+> also acquies the same lock. It also need to disable interrupt
+> otherwise deadlock could happen if the irq edge_irq_thread
+> comes to execution while the lock is held.
+> 
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <yujie.liu@intel.com>
-| Closes: https://lore.kernel.org/r/202306191845.ddCTgcG9-lkp@intel.com/
+So, in both cases, a process context holding the lock is interrupted, on
+the same CPU, and the edge_irq_thread() deadlocks on that lock, as the
+interrupted process holds the lock and cannot proceed.
+That makes sense to me, but it would be good for Bart to confirm as he
+knows a lot more about the kfifo locking than I do.
 
-All errors (new ones prefixed by >>):
+Note that the same problem also exists in lineevent_read_unlocked() - the
+uAPI v1 equivalent of linereq_read_unlocked().
 
-   In file included from mm/kasan/generic.c:34:
->> mm/kasan/kasan.h:485:2: error: #error kasan_arch_is_ready only works in KASAN generic outline mode!
-     485 | #error kasan_arch_is_ready only works in KASAN generic outline mode!
-         |  ^~~~~
---
-   In file included from lib/test_kasan.c:28:
->> lib/../mm/kasan/kasan.h:485:2: error: #error kasan_arch_is_ready only works in KASAN generic outline mode!
-     485 | #error kasan_arch_is_ready only works in KASAN generic outline mode!
-         |  ^~~~~
+> Fix the two potential deadlock issues by spin_lock_irqsave.
+> 
 
+spin_lock_bh() should be sufficient, given that edge_irq_thread() is run
+in a softirq?  That is faster and would allow the hard irq handlers to
+still run, and timestamp the event, but inhibit the edge_irq_thread()
+from being called on that CPU until the lock is released.
+(hmmm, gpio_desc_to_lineinfo() also uses spin_lock_irqsave() but it is
+never called from hard irq context, so there is a good chance I'm missing
+something here??)
+More on spin_lock choice below.
 
-CONFIG_KASAN_GENERIC=y
-# CONFIG_KASAN_OUTLINE is not set
+This should have a Fixes tag.
+For v2, it has been there since it was added, so:
 
+73e0341992b6 ("gpiolib: cdev: support edge detection for uAPI v2")
 
-vim +485 mm/kasan/kasan.h
+And it also applies to lineevent_read_unlocked() from uAPI v1, so there
+should be a separate fix for that, or at least a separate tag.
 
-e2db1a9aa38149 Andrey Konovalov 2021-02-25  481  
-af3751f3c2b628 Daniel Axtens    2021-06-28  482  #ifndef kasan_arch_is_ready
-af3751f3c2b628 Daniel Axtens    2021-06-28  483  static inline bool kasan_arch_is_ready(void)	{ return true; }
-af3751f3c2b628 Daniel Axtens    2021-06-28  484  #elif !defined(CONFIG_KASAN_GENERIC) || !defined(CONFIG_KASAN_OUTLINE)
-af3751f3c2b628 Daniel Axtens    2021-06-28 @485  #error kasan_arch_is_ready only works in KASAN generic outline mode!
-af3751f3c2b628 Daniel Axtens    2021-06-28  486  #endif
-af3751f3c2b628 Daniel Axtens    2021-06-28  487  
+I looks to me that it was first introduced in uAPI v1 here:
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+dea9c80ee672 ("gpiolib: rework the locking mechanism for lineevent kfifo")
 
+> Signed-off-by: Chengfeng Ye <cyeaa@connect.ust.hk>
+> ---
+>  drivers/gpio/gpiolib-cdev.c | 16 +++++++++-------
+>  1 file changed, 9 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/gpio/gpiolib-cdev.c b/drivers/gpio/gpiolib-cdev.c
+> index 0a33971c964c..714631fde9a8 100644
+> --- a/drivers/gpio/gpiolib-cdev.c
+> +++ b/drivers/gpio/gpiolib-cdev.c
+> @@ -614,14 +614,15 @@ static void linereq_put_event(struct linereq *lr,
+>  			      struct gpio_v2_line_event *le)
+>  {
+>  	bool overflow = false;
+> +	unsigned long flags;
+>  
+> -	spin_lock(&lr->wait.lock);
+> +	spin_lock_irqsave(&lr->wait.lock, flags);
+
+linereq_put_event() is never called from hard irq context, so
+spin_lock_irq() or spin_lock_bh() should suffice?
+
+>  	if (kfifo_is_full(&lr->events)) {
+>  		overflow = true;
+>  		kfifo_skip(&lr->events);
+>  	}
+>  	kfifo_in(&lr->events, le, 1);
+> -	spin_unlock(&lr->wait.lock);
+> +	spin_unlock_irqrestore(&lr->wait.lock, flags);
+>  	if (!overflow)
+>  		wake_up_poll(&lr->wait, EPOLLIN);
+>  	else
+> @@ -1505,6 +1506,7 @@ static ssize_t linereq_read_unlocked(struct file *file, char __user *buf,
+>  	struct linereq *lr = file->private_data;
+>  	struct gpio_v2_line_event le;
+>  	ssize_t bytes_read = 0;
+> +	unsigned long flags;
+>  	int ret;
+>  
+>  	if (!lr->gdev->chip)
+> @@ -1514,28 +1516,28 @@ static ssize_t linereq_read_unlocked(struct file *file, char __user *buf,
+>  		return -EINVAL;
+>  
+>  	do {
+> -		spin_lock(&lr->wait.lock);
+> +		spin_lock_irqsave(&lr->wait.lock, flags);
+
+linereq_read_unlocked() is only ever called in process context, so this
+could be spin_lock_irq() or even spin_lock_bh()?
+
+>  		if (kfifo_is_empty(&lr->events)) {
+>  			if (bytes_read) {
+> -				spin_unlock(&lr->wait.lock);
+> +				spin_unlock_irqrestore(&lr->wait.lock, flags);
+>  				return bytes_read;
+>  			}
+>  
+>  			if (file->f_flags & O_NONBLOCK) {
+> -				spin_unlock(&lr->wait.lock);
+> +				spin_unlock_irqrestore(&lr->wait.lock, flags);
+>  				return -EAGAIN;
+>  			}
+>  
+>  			ret = wait_event_interruptible_locked(lr->wait,
+>  					!kfifo_is_empty(&lr->events));
+
+wait_event_interruptible_locked() works with locks that are
+spin_lock()/spin_unlock(), so this will leave irqs disabled while
+waiting for a new event??
+
+And while there is a wait_event_interruptible_locked_irq(), there is
+no wait_event_interruptible_locked_bh() form that I can see, so using
+spin_lock_bh() would require some extra work.
+
+>  			if (ret) {
+> -				spin_unlock(&lr->wait.lock);
+> +				spin_unlock_irqrestore(&lr->wait.lock, flags);
+>  				return ret;
+>  			}
+>  		}
+>  
+>  		ret = kfifo_out(&lr->events, &le, 1);
+> -		spin_unlock(&lr->wait.lock);
+> +		spin_unlock_irqrestore(&lr->wait.lock, flags);
+>  		if (ret != 1) {
+>  			/*
+>  			 * This should never happen - we were holding the
+> -- 
+> 2.17.1
+
+Anyway, good catch.
+
+Cheers,
+Kent.
