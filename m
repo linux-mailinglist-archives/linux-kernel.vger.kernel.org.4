@@ -2,131 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CDDC73DA1B
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 10:44:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAAE073DA5C
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 10:50:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbjFZIoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 04:44:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39006 "EHLO
+        id S230005AbjFZItb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 04:49:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229965AbjFZIoB (ORCPT
+        with ESMTP id S230471AbjFZIsg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 04:44:01 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0B341A6
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 01:43:58 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id d75a77b69052e-4008d810c28so21475431cf.3
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 01:43:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687769038; x=1690361038;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=n3P9OZJWzMEw+HCOB/2/9OKBcaBnbB33CMEBt6EtuOg=;
-        b=NzJLbmTbs2cRWIXCuozi6jBQ2e1FyIyN0caD6N25S24shFOJHBMhlFPvmJrLxrTl+w
-         BIpxU78dMHsLwl25CQo9g8xyyHZ/hT7PNdzx2ljIgjwfhdbPuZUJVwF+5c/X7/Wo/u3w
-         4XVzj5LLV1s3POGgMEDzyn9ChPZ7gpvV+grYOMblm9286TplG2iXydjQRX04F5EjDoa7
-         YrBvOjNCvPmRDqsR4zYZHa7BXMdLbkOrUFeaajWb1sEKxStKEwvaOd/M+q8BOVMDHdDF
-         zNzxm0WpEuBjQ/WDkMlEV+krYm4EMcnAbK/NkIEc1M08PNH0ta/rNTmcfXCM3OKJXNO3
-         QEeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687769038; x=1690361038;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=n3P9OZJWzMEw+HCOB/2/9OKBcaBnbB33CMEBt6EtuOg=;
-        b=UGzjpbc7wcZrWN3J5HLZpIG5TxfQvkIF4qJL8R34iTdgYVJvw+qIB29MHoq6Zszf+B
-         fRyUnZeeIM653K8zZzeygxj1JB+w+yGRnUnKlYj8NwYlKaQhnSxlImTQ4CmB4uP0LWT9
-         Izl0c4gtZG0VvzIIMEgWtBm9AI4P0OTSEX9p9HC/JM7WAtY4LaytehADAs2TK+h5Sx/P
-         SI9i2IyPciX9nG7XOC7u62bpid7dzIEsu9y+DDJX8rM4e15gh6rSWEtH7CKH7Q67/N6i
-         FrFTVdhaf2++OjAkm5bG9uPXfWDBNs7R9x5DN89aaFnBDv7HFGw6Fg4eZasphzjxTTtk
-         2gzg==
-X-Gm-Message-State: AC+VfDwULFDz1ha0bf7y/LZA9rpdnCkZ8JQKyhDB/oax6XKwmHqShcZB
-        VcPSN4VvKDOkl3yepOlsftI=
-X-Google-Smtp-Source: ACHHUZ4+iTkBcVtKyis5jDcOlnkP7phLAgP0DEhfbF/w8zPszMxagkPQM8MT14U670wv27ZToEgmHA==
-X-Received: by 2002:a05:622a:20f:b0:3f9:c539:c9d5 with SMTP id b15-20020a05622a020f00b003f9c539c9d5mr36477606qtx.68.1687769037696;
-        Mon, 26 Jun 2023 01:43:57 -0700 (PDT)
-Received: from oslab-pc.tsinghua.edu.cn ([166.111.139.122])
-        by smtp.gmail.com with ESMTPSA id m23-20020aa78a17000000b0066a67637cfasm3340667pfa.26.2023.06.26.01.43.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jun 2023 01:43:57 -0700 (PDT)
-From:   Tuo Li <islituo@gmail.com>
-To:     dtwlin@gmail.com, johan@kernel.org, elder@kernel.org,
-        gregkh@linuxfoundation.org
-Cc:     greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, baijiaju1990@outlook.com,
-        Tuo Li <islituo@gmail.com>, BassCheck <bass@buaa.edu.cn>
-Subject: [PATCH] staging: greybus: fix a possible data-inconsistency due to data race in get_serial_info()
-Date:   Mon, 26 Jun 2023 16:43:39 +0800
-Message-Id: <20230626084339.998784-1-islituo@gmail.com>
+        Mon, 26 Jun 2023 04:48:36 -0400
+Received: from mail.nsr.re.kr (unknown [210.104.33.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2C3A10E2;
+        Mon, 26 Jun 2023 01:48:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; s=LIY0OQ3MUMW6182UNI14; d=nsr.re.kr; t=1687769154; c=relaxed/relaxed; h=content-type:date:from:message-id:mime-version:subject:to; bh=DyrfY0crg++/09jon1RFZl0ms2Mo5gm3lj4/Yg6if8A=; b=JZqEocwr89SrJWgT9XpYUcsO0hpZVR+K2HkMNYsKyzguFCzpgkKrsst4qeue2jiMNfTPmmpMNLgzVXGgnOFtn8QmbLZk9n9KLw5Ndwr+39G1aNaPYJwrBx+avkv0oSqtlndideAAyQvZxwb7j3MYlI5Da1qokWni/o/C7LvmHRjdWauDJDhSuUuaxugWsAXz4IM9FIYNIzG/UF8/v+Ll3W+6tH6Ezg3FEe5ldzsJdV2r1nnAUE3SBj2kXDhey0eQzgFuEuO7mJZ+V5RIzHsh8jYUu3O5JYFNJEYfECeqZY1hZ/9ABG6QCm6BEzUugvx9MmrUeqRnbWxhsWhuX/ZLpQ==
+Received: from 210.104.33.70 (nsr.re.kr)
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128 bits))
+        by mail.nsr.re.kr with SMTP; Mon, 26 Jun 2023 17:45:39 +0900
+Received: from 192.168.155.188 ([192.168.155.188])
+          by mail.nsr.re.kr (Crinity Message Backbone-7.0.1) with SMTP ID 334;
+          Mon, 26 Jun 2023 17:47:46 +0900 (KST)
+From:   Dongsoo Lee <letrhee@nsr.re.kr>
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jens Axboe <axboe@kernel.dk>,
+        Eric Biggers <ebiggers@kernel.org>,
+        "Theodore Y. Ts'o" <tytso@mit.edu>,
+        Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     linux-crypto@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Dongsoo Lee <letrhee@nsr.re.kr>
+Subject: [PATCH v3 0/4] crypto: LEA block cipher implementation
+Date:   Mon, 26 Jun 2023 17:46:59 +0900
+Message-Id: <20230626084703.907331-1-letrhee@nsr.re.kr>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The variables gb_tty->port.close_delay and gb_tty->port.closing_wait are
-ofter accessed together while holding the lock gb_tty->port.mutex. Here is 
-an example in set_serial_info():
+This submission contains a generic C implementation of the LEA cipher algorithm and test vectors for it. It also includes modifications to use the LEA in fscrypt.
 
-  mutex_lock(&gb_tty->port.mutex);
-  ...
-  gb_tty->port.close_delay = close_delay;
-  gb_tty->port.closing_wait = closing_wait;
-  ...
-  mutex_unlock(&gb_tty->port.mutex);
+The LEA algorithm is a lightweight block cipher that processes data blocks of 128-bits and has three different key lengths, each with a different number of rounds:
 
-However, they are accessed without holding the lock gb_tty->port.mutex when
-are accessed in get_serial_info():
+- LEA-128: 128-bit key, 24 rounds,
+- LEA-192: 192-bit key, 28 rounds, and
+- LEA-256: 256-bit key, 32 rounds.
 
-  ss->close_delay = jiffies_to_msecs(gb_tty->port.close_delay) / 10;
-  ss->closing_wait =
-    gb_tty->port.closing_wait == ASYNC_CLOSING_WAIT_NONE ?
-	ASYNC_CLOSING_WAIT_NONE :
-	jiffies_to_msecs(gb_tty->port.closing_wait) / 10;
+The round function of LEA consists of 32-bit ARX(modular Addition, bitwise Rotation, and bitwise XOR) operations. See [2, 5, 7] for details.
 
-In my opinion, this may be a harmful race, because ss->close_delay can be
-inconsistent with ss->closing_wait if gb_tty->port.close_delay and 
-gb_tty->port.closing_wait are updated by another thread after the 
-assignment to ss->close_delay.
-Besides, the select operator may return wrong value if 
-gb_tty->port.closing_wait is updated right after the condition is 
-calculated.
+LEA is a Korean national standard block cipher, described in "KS X 3246"[1] and is also included in the international standard, "ISO/IEC 29192-2:2019 standard"[2].
 
-To fix this possible data-inconsistency caused by data race, a lock and 
-unlock pair is added when accessing different fields of gb_tty->port.
+It is one of the approved block ciphers for the current Korean Cryptographic Module Validation Program (KCMVP).
 
-Reported-by: BassCheck <bass@buaa.edu.cn>
-Signed-off-by: Tuo Li <islituo@gmail.com>
----
- drivers/staging/greybus/uart.c | 2 ++
- 1 file changed, 2 insertions(+)
+We expect that the first application of the patch would be disk encryption on the Gooroom platform ('Gooroom' is a Korean word, meaning 'cloud') [3]. Currently, the Gooroom platform uses AES-XTS for disk encryption. The main reason for submitting this patch is to make disk encryption with LEA (e.g. LEA-XTS) available on there. It is possible to use LEA without any additional modifications in dm-crypt, a module that provides disk encryption functionality within the kernel.
 
-diff --git a/drivers/staging/greybus/uart.c b/drivers/staging/greybus/uart.c
-index 20a34599859f..b8875517ea6a 100644
---- a/drivers/staging/greybus/uart.c
-+++ b/drivers/staging/greybus/uart.c
-@@ -596,12 +596,14 @@ static int get_serial_info(struct tty_struct *tty,
- {
- 	struct gb_tty *gb_tty = tty->driver_data;
- 
-+	mutex_lock(&gb_tty->port.mutex);
- 	ss->line = gb_tty->minor;
- 	ss->close_delay = jiffies_to_msecs(gb_tty->port.close_delay) / 10;
- 	ss->closing_wait =
- 		gb_tty->port.closing_wait == ASYNC_CLOSING_WAIT_NONE ?
- 		ASYNC_CLOSING_WAIT_NONE :
- 		jiffies_to_msecs(gb_tty->port.closing_wait) / 10;
-+	mutex_unlock(&gb_tty->port.mutex);
- 
- 	return 0;
- }
+This patch also includes a modification to enable LEA for use in fscrypt, another data-at-rest method available within the kernel, and a modification to blk-crypto-fallback to enable the "inlinecrypt" mount option in fscrypt.
+
+The Gooroom platform is a government-driven Debian-based Linux distribution in South Korea. In Korea, there are many crypto companies that want to bundle Linux into their products and sell them. They create their own Gooroom platforms by modifying the original Gooroom platform for their services. (Of course, the Gooroom platform is not mandatory, and companies wishing to use Linux are free to choose an appropriate distribution.) BTW, in Korea, many crypto companies want to use LEA, because LEA is one of the block ciphers of the KCMVP, a validation program for commercial crypto S/W to be delivered to the Korean government.
+
+The Linux Crypto API already has another Korean block cipher, ARIA, also one of the block ciphers of the KCVMP. However, LEA is more widely used than ARIA in industry nowadays, because LEA is one of the lightweight cryptography standard of ISO/IEC [2] and performs well on low-end devices that support 32-bit operations. So we think they are complementary to each other.
+
+In general, it's obvious that the hardware-accelerated AES is the best performer. However, there exist not only environments where the hardware-accelerated AES is not supported, but also situations where AES is not preferred for various reasons. In these cases, if someone wants to encrypt using a block cipher, LEA could be an alternative.
+
+There are also SIMD implementations for efficiently using LEA, which is not included in this patch. We have SSE2 and AVX2 assembly implementations, some of which were included in the previous version of the patch. The SIMD implementations are being re-implemented to support a wider range of environments.
+
+Apart from this, we also have implemented LEA in lightweight environments such as 8-bit AVR, 16-bit MSP and 32-bit ARM [4]. If LEA were to be included in the Linux kernel, it would be possible to modify and supplement the submission with lightweight implementations to provide efficient encryption on embedded linux devices.
+
+Although the designers of LEA did not provide test vectors in their paper [5], the ISO/IEC standard [2] and the KS standard [1] do. Furthermore, the Block Cipher LEA Specification("블록암호 LEA 규격서", written in Korean) document on the LEA introduction page [6] and the Wikipedia article on LEA [7] show the same test vectors as in the standards.
+
+The test vectors for ECB, CBC, CTR, and GCM modes included in the testmgr module are taken from the KCMVP Cryptographic Algorithm Verification Criteria V3.0("KCMVP 검증대상 암호알고리즘 검증기준 V3.0", written in Korean) [8]. Test vectors for the XTS mode were generated by ourselves, and we crosschecked them using Crypto++ [9] and testmgr on Linux.
+
+The implementation has been tested with kernel module tcrypt.ko and has passed the selftest using above-mentioned test vectors. It also has been tested with CONFIG_CRYPTO_MANAGER_EXTRA_TESTS. The fscrypt patch was tested using a modified tool by forking https://github.com/google/fscrypt.
+
+[1] KS X 3246, 128-bit block cipher LEA.
+[2] ISO/IEC 29192-2:2019, Information security — Lightweight cryptography — Part 2: Block ciphers.
+[3] https://github.com/gooroom https://www.gooroom.kr/
+[4] https://github.com/cryptolu/FELICS/tree/master/block_ciphers/source/ciphers/LEA_128_128_v01/source
+[5] Hong, Deukjo, et al. "LEA: A 128-bit block cipher for fast encryption on common processors.", WISA 2013.
+[6] https://seed.kisa.or.kr/kisa/algorithm/EgovLeaInfo.do
+[7] https://en.wikipedia.org/wiki/LEA_(cipher)
+[8] https://seed.kisa.or.kr/kisa/kcmvp/EgovVerification.do
+[9] https://www.cryptopp.com/
+
+Changelog:
+v3:
+- Added implementations to enable LEA in fscrypt and blk-crypt.
+v2:
+- Reimplemented the Generic C implementation as a Loop version.
+  - The decryption code was adapted from an optimized implementation by Eric Biggers.
+    https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git/commit/?h=old/wip-lea&id=1d1cbba14380f8a1abc76baf939b9e51de047fb6
+- Removed AVX2 SIMD implementation.
+- Added comments for functions.
+- Improved the description in Kconfig.
+- Added test vectors from the standard documentation.
+
+Dongsoo Lee (4):
+  crypto: LEA block cipher implementation
+  crypto: add LEA testmgr tests
+  blk-crypto: Add LEA-256-XTS blk-crypto support
+  fscrypt: Add LEA-256-XTS, LEA-256-CTS support
+
+ Documentation/filesystems/fscrypt.rst |   12 +
+ block/blk-crypto.c                    |    6 +
+ crypto/Kconfig                        |   18 +
+ crypto/Makefile                       |    1 +
+ crypto/lea_generic.c                  |  410 ++++++++
+ crypto/tcrypt.c                       |   73 ++
+ crypto/testmgr.c                      |   32 +
+ crypto/testmgr.h                      | 1241 +++++++++++++++++++++++++
+ fs/crypto/fscrypt_private.h           |    2 +-
+ fs/crypto/keysetup.c                  |   15 +
+ fs/crypto/policy.c                    |    4 +
+ include/crypto/lea.h                  |   44 +
+ include/linux/blk-crypto.h            |    1 +
+ include/uapi/linux/fscrypt.h          |    4 +-
+ tools/include/uapi/linux/fscrypt.h    |    4 +-
+ 15 files changed, 1864 insertions(+), 3 deletions(-)
+ create mode 100644 crypto/lea_generic.c
+ create mode 100644 include/crypto/lea.h
+
 -- 
 2.34.1
-
