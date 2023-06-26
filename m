@@ -2,86 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E98273DFBC
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 14:48:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71E9473DFC7
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 14:49:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229977AbjFZMsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 08:48:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40774 "EHLO
+        id S231470AbjFZMtP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 08:49:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231366AbjFZMry (ORCPT
+        with ESMTP id S229914AbjFZMs5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 08:47:54 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C5C3295B
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 05:47:02 -0700 (PDT)
-Date:   Mon, 26 Jun 2023 14:46:29 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1687783591;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VmINLe5aE6bvM7zI6mza4ChXb7pzWJvnvszQrFwxRDQ=;
-        b=OqPiNHbVqow5azO7zVRY9vihAbZtmZBg3D7YNXXbb7HCdksak0UhztW5EDVoz23vVTJDqo
-        7/RPGZ72QeXDaI3a/CD0+UheqvsE7hz589JRB0DeQ8yX/Nu3lIF3Av8mLZkGrvFEZAogqm
-        htCzTDDHqtKZYQorYU9xhh+faqUwBidCFZqLLUCIcuB0Oga/cPUXTmPUZPcb2zYHevc4Yh
-        m7VmqnW++CoT0iTN/02DKsJ1woFt2jARa6cULFXfeIVNRLltGUJSJbvmePiXyGStE6lM4s
-        puOCg6Ez/4wPjJJO4HswdnLEylhYO8x8FHFqjV/votlfoXF9Rb8pkBN6YZlBAQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1687783591;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VmINLe5aE6bvM7zI6mza4ChXb7pzWJvnvszQrFwxRDQ=;
-        b=Bp/2A1C/ULc/ER9a16XwV37SHxAPLTufYUZ+R/9E1X6QwMIfFbaaPhO8yCC/Ct1GkIx/0U
-        CcyoOaGseNEa6JBA==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Peter Zijlstra <peterz@infradead.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Petr Mladek <pmladek@suse.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v2 1/2] seqlock: Do the lockdep annotation before locking
- in do_write_seqcount_begin_nested()
-Message-ID: <20230626124629.UDvM0W3m@linutronix.de>
-References: <20230623171232.892937-1-bigeasy@linutronix.de>
- <20230623171232.892937-2-bigeasy@linutronix.de>
- <d9b7c170-ed0d-5d37-e099-20d233115943@I-love.SAKURA.ne.jp>
- <20230626081254.XmorFrhs@linutronix.de>
- <0a0c768c-227d-c0cd-1b91-5a884d161c1b@I-love.SAKURA.ne.jp>
- <20230626104831.GT4253@hirez.programming.kicks-ass.net>
- <3a4ad958-a9a5-c367-a16d-bd89a173a628@I-love.SAKURA.ne.jp>
- <ZJl4C7aVk3gLLyMs@dhcp22.suse.cz>
+        Mon, 26 Jun 2023 08:48:57 -0400
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1C2410F9
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 05:47:53 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id d75a77b69052e-4007b5bafceso397711cf.1
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 05:47:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687783670; x=1690375670;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vyEDqjnLut49ARt31W5hpg3PmjCUAUxnPXi+41gN+q8=;
+        b=FRdAoSSh5TQTJl4OqCbbCHsE22mVG6Ok5OCrn5MKeK9kHtq19PJVM8DiZyrC3F9WR1
+         m+sAiS7q08Pg26fdbJNUqSUEvU4s7vs3CerZVVemANxcC2JLYHWTTPU9KKFyUOaP9Dhi
+         2RuzdRpWzOs57WG+Ych5/DQx5tsVNKd23Fzhgrqoc6UULqtnmt+RZ/DGUkN4Sx/rqLr8
+         LcB1VJjSnUFrmUQOx6Mze0kNLJnuoaruY7QRt52ABqThUO8APi9mfloEAh602SmPLt9M
+         TbSIGp5jx/iyXRjh+1QT75JKoBGehEg+mDrDwjLHPWke4MMOAWkb/K/0b0WVJQx7YLGu
+         +nVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687783670; x=1690375670;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vyEDqjnLut49ARt31W5hpg3PmjCUAUxnPXi+41gN+q8=;
+        b=FebRTYIFjAekceOTEWjA8YnkPkOVoqUIMqLTd9jhNnvGtqJdfkpNi6PWJSXxggqwM8
+         G850AQwFB/d7KuuohJXc+wbZTRqRRcrXrICJ3NMyX8mGefsSMQPlHaQlmfV3gAPW7m7O
+         yomJ3x+pARsUlMGiOPhGgkyncN6mUfycQwC6oN7b+zaaCxVZeRLYUiGAcTwiG7woQthZ
+         76tmDK/Av+mv5L5rk5/28Wy7OxqlfOrGroS8N1ElE5ul/VG7pNgWqyo1IaP4HRzgO1wY
+         E9Xn3jakl6Mvv2L3/h/nEt1izEb/jg1PIvu7xHAT+VT5tBbDRqKEL3sVAFwInBfGTuAd
+         lXJg==
+X-Gm-Message-State: AC+VfDxzHIxZtbVAERbBH2K+tMJQ6FpQYeDwgyM97gEQGdN72eTxq0Eg
+        zK9FiccJ4bBwjxnqCP+rlnfeYaVUgrif3EOzv5hdEg==
+X-Google-Smtp-Source: ACHHUZ491LjK2ZJ8DT1B1XEsv5vgGnY5irD3vwsmbd6T7VFu6qmyS/3Aybli2welLnSM5TpKJT1Voijj6VeAHGptqkU=
+X-Received: by 2002:a05:622a:134b:b0:3f3:75c2:7466 with SMTP id
+ w11-20020a05622a134b00b003f375c27466mr334768qtk.8.1687783669742; Mon, 26 Jun
+ 2023 05:47:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZJl4C7aVk3gLLyMs@dhcp22.suse.cz>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230621174006.42533-1-tony.luck@intel.com> <20230621174006.42533-8-tony.luck@intel.com>
+In-Reply-To: <20230621174006.42533-8-tony.luck@intel.com>
+From:   Peter Newman <peternewman@google.com>
+Date:   Mon, 26 Jun 2023 14:47:38 +0200
+Message-ID: <CALPaoCi+A5TxoReh=HRMsRKYDWb4eQ-NOB75Lj9674L6aV0T=Q@mail.gmail.com>
+Subject: Re: [PATCH v2 7/7] x86/resctrl: Determine if Sub-NUMA Cluster is
+ enabled and initialize.
+To:     Tony Luck <tony.luck@intel.com>
+Cc:     Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Jonathan Corbet <corbet@lwn.net>, x86@kernel.org,
+        Shaopeng Tan <tan.shaopeng@fujitsu.com>,
+        James Morse <james.morse@arm.com>,
+        Jamie Iles <quic_jiles@quicinc.com>,
+        Babu Moger <babu.moger@amd.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, patches@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-06-26 13:35:39 [+0200], Michal Hocko wrote:
-> Is there any reason to backport RT specific fixup to stable trees? I
-> mean seriously, is there any actual memory hotplug user using
-> PREEMPT_RT? I would be more than curious to hear the usecase.
+Hi Tony,
 
-There is no need for stable backports for RT-only fixes. We have
-RT-stable trees for that.
-The reason why we fix it in the RT-stable tree is not have something
-broken that was known to work.
+On Wed, Jun 21, 2023 at 7:40=E2=80=AFPM Tony Luck <tony.luck@intel.com> wro=
+te:
 
-Sebastian
+> diff --git a/arch/x86/include/asm/resctrl.h b/arch/x86/include/asm/resctr=
+l.h
+> index 255a78d9d906..f95e69bacc65 100644
+> --- a/arch/x86/include/asm/resctrl.h
+> +++ b/arch/x86/include/asm/resctrl.h
+> @@ -35,6 +35,8 @@ DECLARE_STATIC_KEY_FALSE(rdt_enable_key);
+>  DECLARE_STATIC_KEY_FALSE(rdt_alloc_enable_key);
+>  DECLARE_STATIC_KEY_FALSE(rdt_mon_enable_key);
+>
+> +DECLARE_PER_CPU(int, rmid_offset);
+> +
+
+I assumed that declarations in this file were those needed by
+__resctrl_sched_in(). Now that rmid_offset is used when setting
+PQR_ASSOC, would this go somewhere else?
+
+Other than this and fixing the MSR update, the series looks fine to me.
+
+Reviewed-By: Peter Newman <peternewman@google.com>
+
+Thanks!
+-Peter
