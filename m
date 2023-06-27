@@ -2,69 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B599C73FD83
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 16:13:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB37D73FD8D
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 16:15:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230023AbjF0ONc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 10:13:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55880 "EHLO
+        id S230145AbjF0OOs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 10:14:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjF0ONa (ORCPT
+        with ESMTP id S230085AbjF0OOp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 10:13:30 -0400
-Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE56E74;
-        Tue, 27 Jun 2023 07:13:29 -0700 (PDT)
-Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-345b231322fso5962595ab.2;
-        Tue, 27 Jun 2023 07:13:29 -0700 (PDT)
+        Tue, 27 Jun 2023 10:14:45 -0400
+Received: from mail-il1-f177.google.com (mail-il1-f177.google.com [209.85.166.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA43DD;
+        Tue, 27 Jun 2023 07:14:44 -0700 (PDT)
+Received: by mail-il1-f177.google.com with SMTP id e9e14a558f8ab-345b347196cso6009775ab.3;
+        Tue, 27 Jun 2023 07:14:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687875208; x=1690467208;
+        d=1e100.net; s=20221208; t=1687875283; x=1690467283;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+34dOqwiPYr04E0G4Xm/yOYM4qu798aPWQjNtLw1CjI=;
-        b=kRxOfX+Tz1dw+6ggsX1elYaytaNNzpnjd2Cwtzzxl7S+9GKgFDSchmWgZo53Wyk48W
-         NUZ2ONQygFeJ6Xwlk1+By80R6dLrm0Ci/1gQOmM334xWzsJZjrpPzM2weC1bu/edysQ+
-         FVxGR6orgyRQZ7vqdp+7YoqssidNUOVyKyWQGBi4EaVjig1u8LrbS7wQQWCId/cWlERN
-         e09R8P6zaZWakgVDBgYzEZnHmdodb+qQv8GXkU51XTYKra/7xkBuZrSoYi2QdggciZId
-         BhvEl4vUS0JWCLwpA4fuhk1Wu2It4H2m3CTbRs7tHkTPLm1qZse29AmLICHfAxQm8cKP
-         cOoA==
-X-Gm-Message-State: AC+VfDx6shN+Ydly0aic4bkbeNnXtT924oVSAv3o+boZCAzglI86YXgV
-        kWhPEEf2GCgkzPFHuC6ZdikMFfy0kg==
-X-Google-Smtp-Source: ACHHUZ4wRY2cU/zuyjuVAsmGPISWFZVleu8/CVMKM4HfKZ24n0tENdP0Afc+q+NMVSthuvPOYuL/gw==
-X-Received: by 2002:a92:d350:0:b0:345:c2ab:2394 with SMTP id a16-20020a92d350000000b00345c2ab2394mr542941ilh.15.1687875208646;
-        Tue, 27 Jun 2023 07:13:28 -0700 (PDT)
+        bh=JtpjMQbRGvdxDL2EiL2bPErftGmwHaii42RsuEkFumw=;
+        b=bLlOOcaDK61XDR5J2fbGs0xnbr/IlVy3qW0+4x55ti2KWJr6JBWzw2YC7zfl75HJBc
+         nVmJeJoJxbKuQ+yv9xVyu8G/twxSULJ/ERkwtVUwdrKwbSyoeDhwpTl8l97WHAJQvGdn
+         zo8tAu2txUNO5k1OyB3XuRO1aMN+vU8Q0RQyejcZHW12Bu1/NOV+tY2VjxBcyF9jcgSX
+         +c+Vv9gRbGzeiXxM6BdsEIcoHEFpPWXv+FEc6Xrrl7qsov/3q3YEW/nIxVxnbbQX6k39
+         i+dlYMQCIaIRpuM0fdh3vIDK0PYo+NmMJ6V9EGmJavelO3eBAozeo2jEe5P7SN8epRPc
+         jfwA==
+X-Gm-Message-State: AC+VfDzRlx7c5QJB7jrEgpJKC+NK17BGuJ/WxIpvyb4qf+Kh/85MYL+f
+        37f9YyjwfmCG7QK2nN/JmA==
+X-Google-Smtp-Source: ACHHUZ7NAxk5LAin+xCrhfjlJOkHv5JLXmJQWTUTwr/xexg6usRWq7g4Gs4ln+qATm3UxdCFT/LtuQ==
+X-Received: by 2002:a92:c08b:0:b0:342:3796:afd9 with SMTP id h11-20020a92c08b000000b003423796afd9mr28601216ile.31.1687875283442;
+        Tue, 27 Jun 2023 07:14:43 -0700 (PDT)
 Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id t9-20020a92c909000000b00345b53bdea4sm695274ilp.37.2023.06.27.07.13.26
+        by smtp.gmail.com with ESMTPSA id g7-20020a0566380c4700b0040fad79ac08sm2562055jal.89.2023.06.27.07.14.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jun 2023 07:13:27 -0700 (PDT)
-Received: (nullmailer pid 1834159 invoked by uid 1000);
-        Tue, 27 Jun 2023 14:13:25 -0000
-Date:   Tue, 27 Jun 2023 08:13:25 -0600
+        Tue, 27 Jun 2023 07:14:42 -0700 (PDT)
+Received: (nullmailer pid 1847867 invoked by uid 1000);
+        Tue, 27 Jun 2023 14:14:40 -0000
+Date:   Tue, 27 Jun 2023 08:14:40 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Luca Weiss <luca.weiss@fairphone.com>
-Cc:     linux-scsi@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Iskren Chernev <me@iskren.info>,
-        Avri Altman <avri.altman@wdc.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Bart Van Assche <bvanassche@acm.org>,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Conor Dooley <conor+dt@kernel.org>
-Subject: Re: [PATCH v5 3/5] dt-bindings: ufs: qcom: Add ICE to sm8450 example
-Message-ID: <168787520491.1834121.2564277926008455539.robh@kernel.org>
-References: <20221209-dt-binding-ufs-v5-0-c9a58c0a53f5@fairphone.com>
- <20221209-dt-binding-ufs-v5-3-c9a58c0a53f5@fairphone.com>
+To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     maz@kernel.org, linux-kernel@vger.kernel.org,
+        Conor Dooley <conor.dooley@microchip.com>, conor+dt@kernel.org,
+        robh+dt@kernel.org, devicetree@vger.kernel.org, tglx@linutronix.de,
+        krzysztof.kozlowski+dt@linaro.org
+Subject: Re: [PATCH v3] dt-bindings: interrupt-controller: add Ralink SoCs
+ interrupt controller
+Message-ID: <168787527937.1847641.4581724588120092902.robh@kernel.org>
+References: <20230623035901.1514341-1-sergio.paracuellos@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221209-dt-binding-ufs-v5-3-c9a58c0a53f5@fairphone.com>
+In-Reply-To: <20230623035901.1514341-1-sergio.paracuellos@gmail.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -77,15 +67,24 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Tue, 27 Jun 2023 10:28:03 +0200, Luca Weiss wrote:
-> SM8450 actually supports ICE (Inline Crypto Engine) so adjust the
-> example to match.
+On Fri, 23 Jun 2023 05:59:01 +0200, Sergio Paracuellos wrote:
+> Add YAML doc for the interrupt controller which is present on Ralink SoCs.
 > 
-> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
 > ---
->  Documentation/devicetree/bindings/ufs/qcom,ufs.yaml | 1 +
->  1 file changed, 1 insertion(+)
+> Changes in v3:
+>  - Drop '|' from description.
+>  - s/unevaluatedProperties/additionalProperties
+>  - Add Conor's Reviewed-by tag.
+> 
+> Changes in v2:
+>  - Drop label from the example.
+> 
+>  .../ralink,rt2880-intc.yaml                   | 54 +++++++++++++++++++
+>  1 file changed, 54 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/ralink,rt2880-intc.yaml
 > 
 
-Acked-by: Rob Herring <robh@kernel.org>
+Applied, thanks!
 
