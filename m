@@ -2,181 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0302973F8C0
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 11:29:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D42673F8C4
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 11:30:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230357AbjF0J3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 05:29:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44556 "EHLO
+        id S230460AbjF0JaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 05:30:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbjF0J3e (ORCPT
+        with ESMTP id S230238AbjF0JaP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 05:29:34 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8F6931734;
-        Tue, 27 Jun 2023 02:29:32 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.170])
-        by gateway (Coremail) with SMTP id _____8BxlfD6q5pkWgUDAA--.4775S3;
-        Tue, 27 Jun 2023 17:29:30 +0800 (CST)
-Received: from [10.20.42.170] (unknown [10.20.42.170])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxniP5q5pkwcULAA--.7400S3;
-        Tue, 27 Jun 2023 17:29:29 +0800 (CST)
-Message-ID: <b0a6db96-1062-ce90-f8da-b9866b3c8166@loongson.cn>
-Date:   Tue, 27 Jun 2023 17:29:29 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v3 5/8] LoongArch: Simplify the invtlb wrappers
-Content-Language: en-US
-To:     WANG Xuerui <kernel@xen0n.name>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     WANG Rui <wangrui@loongson.cn>, Xi Ruoyao <xry111@xry111.site>,
-        loongarch@lists.linux.dev, linux-kbuild@vger.kernel.org,
-        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        WANG Xuerui <git@xen0n.name>
-References: <20230625095644.3156349-1-kernel@xen0n.name>
- <20230625095644.3156349-6-kernel@xen0n.name>
-From:   bibo mao <maobibo@loongson.cn>
-In-Reply-To: <20230625095644.3156349-6-kernel@xen0n.name>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxniP5q5pkwcULAA--.7400S3
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBj93XoWxZr1UCr1xCw17JF4xCr17Arc_yoW5tw4fpF
-        y3CF47KFs7tF1fWa97Jr1vvr43Jrn8G34SvF9IgFnYkF1DX340grs8Ar4qyry5Ja9YyrW7
-        ZF4Yyry5uFsYv3gCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-        xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
-        1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv
-        67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07
-        AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02
-        F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GF
-        ylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7Cj
-        xVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r
-        4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jn
-        UUUUUUUU=
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 27 Jun 2023 05:30:15 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E05FC1987;
+        Tue, 27 Jun 2023 02:30:14 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 0B6C65C01D5;
+        Tue, 27 Jun 2023 05:30:14 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 27 Jun 2023 05:30:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1687858214; x=1687944614; bh=d/
+        8PAsCjbmMqsAZVfulXX8NLMmKaUcPEmXDNbRBP/iY=; b=r1/VlKLwjWRKxQKnr7
+        EeN5vuWsH4K5/M6jVqZVzAX8NjH3CgUzYePswdMd4UHACyZ6z8wdcg3YNz4Ffh5D
+        0T3XhcLN7bzWS8GtCL2kTxtY7s1YooHQ6ecW7RflD0T1TxJ1gi44wpVlRmI59dM7
+        2+/OSFs0BJ+RNkf+nbQ/Qa7WsYSCopCzYKPN2fnBbcCZO5kzmWt6EqBSrdYyl9LT
+        IDwSkH5LpjAzAzIj9KbMye2XTf/J9cKSz362tawBRK3z3kRZXFzTBXuxPBXKjPT5
+        UFxnpAJ4wttOZ90/adZrMDwV5d3z/C4IHHpq/URcUthI7ADS93ElS1UPXmV7Jirq
+        Fb5A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1687858214; x=1687944614; bh=d/8PAsCjbmMqs
+        AZVfulXX8NLMmKaUcPEmXDNbRBP/iY=; b=rCwudNcaAgAQJUVmw90VYxVfNvqm7
+        fy9DLhi/W77KBRwMHSFoxQXqU5fshBRCW3xOsT4GMGeWdb99ohRMzLpPyDhEQ06S
+        GFZZOrcdu0lJz3PFTKbqMkuYwyiYPso5m7o0Ja+66aNM+r9TAk3wHvgPNq/a8gR2
+        xd0t4kkOqPvXTlubXsYycTioiz50fnlqftXe6owfCdnWyTZYOgq5Ye2RnwoG/9JF
+        tW9ASyerDLMkCZ8hShqfgWoqbPs7VzvEyK4sio5jPFHWnBFMpCXttyQnHaDFC76H
+        mOnmYK6q43iVruVYfva6NXn1XGnnUveYyYewtcVCNQsaXun9FJsaN/Alg==
+X-ME-Sender: <xms:JayaZBitbYQs-Nbz28YFL0hH-f0e91zEr79uEZ1IirHIFTpGCjBsPA>
+    <xme:JayaZGBfTJaZktWQBIp1RUSjIN5yKIGrJm4THO0JeCCOpqZRSPrFGn8hfnT8TUcct
+    FDjcdDzbHv8a2_4hIA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeehhedgudehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:JayaZBE0FcAdCnr77YYyC4hha2Hm-2JikOM2MHIazIgLtw6DXchElg>
+    <xmx:JayaZGTdXdg0D5cq1tbQYM304eIeHx8lNL_d9G-BpuLbYqjr7gOAsw>
+    <xmx:JayaZOzfUoFjL_pt_6oCsyRCWL5__Cj3BSwdnysopAOk-ai5cDh0OA>
+    <xmx:JqyaZLhyZFgVQY0ouFIpf6Ake8BSf-89DyB_m7aWKn-7mfbBV0Rbiw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 7CBBCB60083; Tue, 27 Jun 2023 05:30:13 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
+Mime-Version: 1.0
+Message-Id: <8c50cf74-fd21-4b86-8ac8-1445ff242d48@app.fastmail.com>
+In-Reply-To: <20230609085214.31071-6-yi-de.wu@mediatek.com>
+References: <20230609085214.31071-1-yi-de.wu@mediatek.com>
+ <20230609085214.31071-6-yi-de.wu@mediatek.com>
+Date:   Tue, 27 Jun 2023 11:29:52 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     =?UTF-8?Q?Yi-De_Wu_=28=E5=90=B3=E4=B8=80=E5=BE=B7=29?= 
+        <yi-de.wu@mediatek.com>,
+        =?UTF-8?Q?Yingshiuan_Pan_=28=E6=BD=98=E7=A9=8E=E8=BB=92=29?= 
+        <yingshiuan.pan@mediatek.com>,
+        =?UTF-8?Q?Ze-yu_Wang_=28=E7=8E=8B=E6=BE=A4=E5=AE=87=29?= 
+        <ze-yu.wang@mediatek.com>, "Jonathan Corbet" <corbet@lwn.net>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Will Deacon" <will@kernel.org>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        "AngeloGioacchino Del Regno" 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-mediatek@lists.infradead.org,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Conor.Dooley" <conor.dooley@microchip.com>,
+        "Conor Dooley" <conor+dt@kernel.org>,
+        "Trilok Soni" <quic_tsoni@quicinc.com>,
+        "dbrazdil@google.com" <dbrazdil@google.com>,
+        =?UTF-8?Q?Jades_Shih_=28=E6=96=BD=E5=90=91=E7=8E=A8=29?= 
+        <jades.shih@mediatek.com>, "Miles Chen" <miles.chen@mediatek.com>,
+        =?UTF-8?Q?Ivan_Tseng_=28=E6=9B=BE=E5=BF=97=E8=BB=92=29?= 
+        <ivan.tseng@mediatek.com>,
+        =?UTF-8?Q?MY_Chuang_=28=E8=8E=8A=E6=98=8E=E8=BA=8D=29?= 
+        <my.chuang@mediatek.com>,
+        =?UTF-8?Q?Shawn_Hsiao_=28=E8=95=AD=E5=BF=97=E7=A5=A5=29?= 
+        <shawn.hsiao@mediatek.com>,
+        =?UTF-8?Q?PeiLun_Suei_=28=E9=9A=8B=E5=9F=B9=E5=80=AB=29?= 
+        <peilun.suei@mediatek.com>,
+        =?UTF-8?Q?Liju-clr_Chen_=28=E9=99=B3=E9=BA=97=E5=A6=82=29?= 
+        <liju-clr.chen@mediatek.com>,
+        =?UTF-8?Q?Chi-shen_Yeh_=28=E8=91=89=E5=A5=87=E8=BB=92=29?= 
+        <chi-shen.yeh@mediatek.com>
+Subject: Re: [PATCH v4 5/9] virt: geniezone: Add irqfd support
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-在 2023/6/25 17:56, WANG Xuerui 写道:
-> From: WANG Xuerui <git@xen0n.name>
+On Fri, Jun 9, 2023, at 10:52, Yi-De Wu wrote:
 > 
-> The invtlb instruction has been supported by upstream LoongArch
-> toolchains from day one, so ditch the raw opcode trickery and just use
-> plain inline asm for it.
-> 
-> While at it, also make the invtlb asm statements barriers, for proper
-> modeling of the side effects. The functions are also marked as
-> __always_inline instead of just "inline", because they cannot work at
-> all if not inlined: the op argument will not be compile-time const in
-> that case, thus failing to satisfy the "i" constraint.
-> 
-> The signature of the other more specific invtlb wrappers contain unused
-> arguments right now, but these are not removed right away in order for
-> the patch to be focused. In the meantime, assertions are added to ensure
-> no accidental misuse happens before the refactor. (The more specific
-> wrappers cannot re-use the generic invtlb wrapper, because the ISA
-> manual says $zero shall be used in case a particular op does not take
-> the respective argument: re-using the generic wrapper would mean losing
-> control over the register usage.)
-> 
-> Signed-off-by: WANG Xuerui <git@xen0n.name>
-> ---
->  arch/loongarch/include/asm/tlb.h | 43 ++++++++++++++------------------
->  1 file changed, 19 insertions(+), 24 deletions(-)
-> 
-> diff --git a/arch/loongarch/include/asm/tlb.h b/arch/loongarch/include/asm/tlb.h
-> index 0dc9ee2b05d2..da7a3b5b9374 100644
-> --- a/arch/loongarch/include/asm/tlb.h
-> +++ b/arch/loongarch/include/asm/tlb.h
-> @@ -88,52 +88,47 @@ enum invtlb_ops {
->  	INVTLB_GID_ADDR = 0x16,
->  };
->  
-> -/*
-> - * invtlb op info addr
-> - * (0x1 << 26) | (0x24 << 20) | (0x13 << 15) |
-> - * (addr << 10) | (info << 5) | op
-> - */
-> -static inline void invtlb(u32 op, u32 info, u64 addr)
-> +static __always_inline void invtlb(u32 op, u32 info, u64 addr)
->  {
->  	__asm__ __volatile__(
-> -		"parse_r addr,%0\n\t"
-> -		"parse_r info,%1\n\t"
-> -		".word ((0x6498000) | (addr << 10) | (info << 5) | %2)\n\t"
-> -		:
-> -		: "r"(addr), "r"(info), "i"(op)
-> +		"invtlb %0, %1, %2\n\t"
->  		:
-> +		: "i"(op), "r"(info), "r"(addr)
-> +		: "memory"
->  		);
+>  /**
+>   * gzvm_hypercall_wrapper()
+> @@ -72,6 +73,11 @@ static inline gzvm_vcpu_id_t 
+> get_vcpuid_from_tuple(unsigned int tuple)
+>  	return (gzvm_vcpu_id_t)(tuple & 0xffff);
 >  }
->  
-> -static inline void invtlb_addr(u32 op, u32 info, u64 addr)
-> +static __always_inline void invtlb_addr(u32 op, u32 info, u64 addr)
->  {
-> +	BUILD_BUG_ON(!__builtin_constant_p(info) || info != 0);
->  	__asm__ __volatile__(
-> -		"parse_r addr,%0\n\t"
-> -		".word ((0x6498000) | (addr << 10) | (0 << 5) | %1)\n\t"
-> -		:
-> -		: "r"(addr), "i"(op)
-> +		"invtlb %0, $zero, %1\n\t"
->  		:
-> +		: "i"(op), "r"(addr)
-> +		: "memory"
->  		);
->  }
->  
-> -static inline void invtlb_info(u32 op, u32 info, u64 addr)
-> +static __always_inline void invtlb_info(u32 op, u32 info, u64 addr)
->  {
-> +	BUILD_BUG_ON(!__builtin_constant_p(addr) || addr != 0);
->  	__asm__ __volatile__(
-> -		"parse_r info,%0\n\t"
-> -		".word ((0x6498000) | (0 << 10) | (info << 5) | %1)\n\t"
-> -		:
-> -		: "r"(info), "i"(op)
-> +		"invtlb %0, %1, $zero\n\t"
->  		:
-> +		: "i"(op), "r"(info)
-> +		: "memory"
->  		);
->  }
-macro parse_r is not used here, and it is not used any more.
-Can you remove definition of this macro also?
+> 
+> +struct gzvm_vcpu_hwstate {
+> +	__u32 nr_lrs;
+> +	__u64 lr[GIC_V3_NR_LRS];
+> +};
 
-Regards
-Bibo Mao
+This is not a good definition for a hardware data structure, as there
+is architecture specific implicit padding between the two members.
 
->  
-> -static inline void invtlb_all(u32 op, u32 info, u64 addr)
-> +static __always_inline void invtlb_all(u32 op, u32 info, u64 addr)
->  {
-> +	BUILD_BUG_ON(!__builtin_constant_p(info) || info != 0);
-> +	BUILD_BUG_ON(!__builtin_constant_p(addr) || addr != 0);
->  	__asm__ __volatile__(
-> -		".word ((0x6498000) | (0 << 10) | (0 << 5) | %0)\n\t"
-> +		"invtlb %0, $zero, $zero\n\t"
->  		:
->  		: "i"(op)
-> -		:
-> +		: "memory"
->  		);
->  }
->  
+Better add an explicit '__u32 __pad;' in the middle to make it clear
+what the actual layout is and make it portable.
 
+If this is an interface to the hypervisor, it should probably also
+use explicit endianess, using __le32 and __le64 instead of __u32
+and __u64, along with the corresponding accessors.
+
+      Arnd
