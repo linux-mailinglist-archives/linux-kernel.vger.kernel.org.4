@@ -2,200 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9738473F813
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 11:04:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDEFF73F811
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 11:03:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231191AbjF0JD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 05:03:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57002 "EHLO
+        id S230488AbjF0JDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 05:03:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229987AbjF0JDz (ORCPT
+        with ESMTP id S229987AbjF0JDv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 05:03:55 -0400
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2095.outbound.protection.outlook.com [40.107.117.95])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9FF799;
-        Tue, 27 Jun 2023 02:03:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=b5Ta/SVxfVHuktLAOrWHo15vSLnxMlIkor5tYTyLeWZb/72tPG5a0cOJyyUZojFDM6WjSVoIfp846JR4Q4e/oZvUk+3ph0/2Pd5aZCAkp4Ik5aPEJbinCNcjyJ0ALtASNS8lpTRxE5zr3nJOUunBVBaALecAjURvXSmxBlJ7UOu/9XxIMIRXd7DoTTRyhoXFvA7DjIjzqLrPdZ5le0D7vDMRjGlHbiJIvoAjDTrp+eo1Phv45D5wC4w2tPizfrpDDyMQ/6hNU+jJi3WgHLw8ErbNLT09a0XdAFB2IvZfvICFb0LO766z2yrU33XiVPXq3+FFB1c6bvV40UmPhZgUhQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Oe+DX559Lvj9hJld1PPKWW1PUGNt89CYhAKnvZmA6vU=;
- b=e5cEmdXaVwaD64+YZbpmO7zWPp07AMrojMVhJYLg/Hbr9JEBxcXPPRIXRE3ZDXNkZ6l4hGqXI62RpgcB322ZYpTnW9cOn5KH7Ugd1uwIOQzNWUFIPFiz9Z4cES50wzI4dDj3e+mM1S01Mg4bFJ9WFzMpQgJABK6KX+AxgrUYXG364m9jNXvoasH2fG0OZtEXOVTKkNzAUJswI8dzLROMR2qomQZWv+JdTS2IEXtCxdApadASAmhR5yYogmZLbscT5H5/SFstPGU+VzIQ9Hh9v4MVOcn27mr7K7eKT2PkPBfDeO2IkuX6hzcm4tIUM0/ipEdlSm6PnD1OxeDh0S1RBQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amlogic.com; dmarc=pass action=none header.from=amlogic.com;
- dkim=pass header.d=amlogic.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amlogic.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Oe+DX559Lvj9hJld1PPKWW1PUGNt89CYhAKnvZmA6vU=;
- b=G4Kfz2D0Je3rfdzzUvSHBp3nZxsSL0zVsOkYw5vV64k0JKFJEqwSWaSrEeYSri3dFzxF2f2QE08h7h92GekNMXulMIHyE4RBBSDcmjk7LD0a/AZkyVawuV8r08uhFV6ZeM6RQsWGTMPoVuRdW3x/LZ18PVB7gZ2/gr54BWUdDgJP9m4NhvmRDRUgv+y5RiuSXh04wTxc9LIfMUiK61sEeQoJJSSPCIXz7iPbRfXZzeZYvBdfM1QeMcrKqTl25mvKjcfpsEIAU+hcnLUDwM3WWFYp+arwE7+z7gWRFEf/sFTWghuLHYJGF+94dLCYCpGtPP+11yoaK6xRvUy8KxqThg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amlogic.com;
-Received: from TYZPR03MB6896.apcprd03.prod.outlook.com (2603:1096:400:289::14)
- by SEZPR03MB7401.apcprd03.prod.outlook.com (2603:1096:101:124::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.36; Tue, 27 Jun
- 2023 09:03:05 +0000
-Received: from TYZPR03MB6896.apcprd03.prod.outlook.com
- ([fe80::e659:543b:2ac9:8fd7]) by TYZPR03MB6896.apcprd03.prod.outlook.com
- ([fe80::e659:543b:2ac9:8fd7%3]) with mapi id 15.20.6521.026; Tue, 27 Jun 2023
- 09:03:05 +0000
-Message-ID: <d33f35f2-d8ac-7b8d-6f23-e89cb8636109@amlogic.com>
-Date:   Tue, 27 Jun 2023 17:02:56 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 1/2] dt-bindings: arm: amlogic: add T7 based AN400
- bindings
-Content-Language: en-US
-To:     Christian Hewitt <christianshewitt@gmail.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        AML <linux-amlogic@lists.infradead.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-References: <20230626095223.721011-1-xianwei.zhao@amlogic.com>
- <20230626095223.721011-2-xianwei.zhao@amlogic.com>
- <94551B90-19E8-49C7-90FC-FAFA5E5E2D9C@gmail.com>
-From:   Xianwei Zhao <xianwei.zhao@amlogic.com>
-In-Reply-To: <94551B90-19E8-49C7-90FC-FAFA5E5E2D9C@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SI1PR02CA0029.apcprd02.prod.outlook.com
- (2603:1096:4:1f4::20) To TYZPR03MB6896.apcprd03.prod.outlook.com
- (2603:1096:400:289::14)
+        Tue, 27 Jun 2023 05:03:51 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FB02F7
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 02:03:50 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-55b12286476so45309a12.1
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 02:03:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google; t=1687856630; x=1690448630;
+        h=user-agent:in-reply-to:content-transfer-encoding
+         :content-disposition:mime-version:references:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ixaYXWdqqrrJg8cQ7E6QHdJnqRvhIWUz6w33u+meqtA=;
+        b=a7wWg2p36hct93D9zA5W05eLIWgaP/shRnPWDWShYYVcwwnhQdhap0dwprneV88sEA
+         TyYXeKCPu8s28Kp5Jbe9io0sC/pMdJ3hH/FLGiD1gtAR7vcLwycSA1wT6mSpX8uGi6hH
+         3wtIus1/7GcCQ6Nq7k6qibDqu2MVDku52L2TlBwUtl4YPEmRlKCf57oqr9J6oMYYjQ9R
+         dYzT+2XN034S8jg+3ijUgfPX5K+mK8O3plZsHufay5hN3fUyzTu/tQq27KLBiLQUGbvc
+         Z9uuFjRAV48Sq5AqWlEf/vjCN8neTiLEErsYBKe/phZABYBW6kdoJonGK91UI/JljWX4
+         w74Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687856630; x=1690448630;
+        h=user-agent:in-reply-to:content-transfer-encoding
+         :content-disposition:mime-version:references:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ixaYXWdqqrrJg8cQ7E6QHdJnqRvhIWUz6w33u+meqtA=;
+        b=K0UcLmYNwOUT/33a+rQfWauRqX+2X08uCdM7IV5q3dNGg87quilhC9SKkpJu+9I+Cl
+         apELn108kqFXAxSNIzgbw7EfDW9Q9TxdR6ZuxJjtMlsFNO2ocEKu8AnRJPGzG6200Y8D
+         lVMPJ1qb44iD6iTWVUSy5hB5dslXU+OTKXCNqlO3T6HTLZ7LjQ5zQPpSw2XW7ss1wePc
+         bBW13rCTdgWvYSNLquVsbE/Jr4jW6rJWUmTx7RiHDsM3SF/E+BPb65q+LM9ybYzfzAdH
+         yv55GU9NhW/Cy4/Iiqan9eSSaTszRnfhm9FAAxtauveCSN5TYwJIA7ZCW3QyrRWluoKr
+         xnMQ==
+X-Gm-Message-State: AC+VfDynEQgTCDWumCIwdOYYGE3K47oSNURJkU2iArgZHo/JUIDdVcPK
+        q71LZI1GYz7alrZjeKXtqtM7fw==
+X-Google-Smtp-Source: ACHHUZ5jaLU4eL50/GBZAmrIESYCW9muKoFt5cKjNe7KFKdCJrnZKb0XTQ3ve826XHuWO1wonBcRtw==
+X-Received: by 2002:a17:90a:1b63:b0:262:ec64:f941 with SMTP id q90-20020a17090a1b6300b00262ec64f941mr3833170pjq.5.1687856629763;
+        Tue, 27 Jun 2023 02:03:49 -0700 (PDT)
+Received: from hsinchu16 (59-124-168-89.hinet-ip.hinet.net. [59.124.168.89])
+        by smtp.gmail.com with ESMTPSA id w5-20020a17090aea0500b002532ddc3a00sm7402441pjy.15.2023.06.27.02.03.46
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 27 Jun 2023 02:03:49 -0700 (PDT)
+Date:   Tue, 27 Jun 2023 17:03:44 +0800
+From:   Eric Lin <eric.lin@sifive.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Stephane Eranian <eranian@google.com>
+Cc:     mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, irogers@google.com, adrian.hunter@intel.com,
+        palmer@dabbelt.com, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        greentime.hu@sifive.com, vincent.chen@sifive.com
+Subject: Re: [PATCH] perf/core: Add pmu stop before unthrottling to prevent
+ WARNING
+Message-ID: <20230627090343.GA11571@hsinchu16>
+References: <20230602094841.1225-1-eric.lin@sifive.com>
+ <CAPqJEFpamQSbCcD0QJ16u7ctRf1=NYihod6gdZJfxFpE0YUVHQ@mail.gmail.com>
+ <CABPqkBRyqsMnNbokBKepkWq1DtzfB0npXySGbKS1T3nQTwmaAw@mail.gmail.com>
+ <20230621115811.GD2053369@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYZPR03MB6896:EE_|SEZPR03MB7401:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2bd986a5-4c16-4953-f274-08db76ed516a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zt+SLERtf8AS5QNfEz4rkasjps5CKxj5v366qJFZHOS/UJZvx5sKnNmqzNwZ5NMiZF4fnNtuwZhZhuhoSygU0Rf+aF/aao4cxSx7NI8rV5nIul3i1LdDY2co3x8Oc8Tz9nAwB76gzByuA0cbpW8uzvR2KSRUDVkZl3vnxOHphyyioPN64NLSvWMsHpEY6Z++UcFOAk+tQMl2CZvtSMj5gE04aRmpyG4ToWJpUG0bKV19QmXYold8ips0/d6E1lPhFMmb6hRkjlq6nrHe+7x6GRQWnibsuBsV7Bs6wYGmHlla5nmyJH/K1Y1UYzHcIRvc9O2vEDiK+4A93cJGtBvtvlfrH/pF5rixb3Qjk4pg9QgDxBA/JK1mGYOxOgKN48ydI55762jUX0KSnyePaffDvyOBlD5xKw6Nz3rNevkg/G93ycl+9eBzfebRjl0mWslEMRmDLwfOt6v7i3fCfYzK/8Vc6R1TBEECkwyGt+amIXCPQavK2KCJLJR0g82b7x5CNa++3KiJV8oz49nOxrX/DaQhQiKJWaIIxA/IYP1+FnojY2eSdXGd1WZfPZVWt8pqOx1sBluR/MdhvFK89zc1xybhlmu0u9EO5lv7/ZGsX+q2j4aP9jy/Z7n9CeIGipEsvkOZAc60oF8fYnW60xyw6p57wZlw3zyLxV28nOTpXwmcMAOcQc2upG802/5fwlDU
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR03MB6896.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(366004)(376002)(39850400004)(396003)(346002)(451199021)(2906002)(186003)(6486002)(38100700002)(2616005)(83380400001)(6666004)(6506007)(6512007)(53546011)(26005)(966005)(31696002)(41300700001)(54906003)(86362001)(316002)(478600001)(36756003)(66556008)(4326008)(66946007)(66476007)(6916009)(31686004)(44832011)(7416002)(5660300002)(8676002)(8936002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VitiSE1HZUR3bm8zQmUycUMyQlBaSzZKcWtGK1owVWpPRCs3Q2tWa1NMNkxs?=
- =?utf-8?B?NFZBM1hsZTh4ZXBQK0dPWjNaU1RzRGhrOStpbXdHdDZNRm9Ma05yVXorMmtE?=
- =?utf-8?B?RXRvZnJSNjBrZEVWUlA3Q25uNzJzYjI3ZGNqY2QrNWUxQWliU0hpRStzSUpl?=
- =?utf-8?B?TkhzRTM4N3NEM0NONnBsNkRFc2pGWitoVHc4MHQyZUJwUjZuZng0Q0UyeFR0?=
- =?utf-8?B?TU00U1V5eE1idllrNVhTcGNDc2FUaUwrZ3BjS0V0WHBlNzZtT2ppYldJZmR5?=
- =?utf-8?B?cG8xaTIzdHlCS0pXL3Z2Z3JReUxRanA5LzNYTVF3cEtPT2tQL3U4V3IzcXhs?=
- =?utf-8?B?Njl5emZkTzY4cyt0K2ZpMEpRVmV5cFBXM0k3bU1CWGkxRThrOWFjS1doSlJF?=
- =?utf-8?B?b25FNkpnSU04Q0cwWU4rdzBIc3pSeWZrdGdpRzViRUlJRmZtTXhmbFdUWGlI?=
- =?utf-8?B?MDkya0hReFU0eHYreW5EZy9KWHFtdHBSaWdhT2VINHVMb2dpM2NCYWQ2Tm9n?=
- =?utf-8?B?TU1RYVFaY1hLRG42eHFneUs3SThCU1ZDODhRK3RHejFVKzF5aUZRbDBzSXFo?=
- =?utf-8?B?d0oweDladnF2RUNuMDI1TVRLWE1vUTBCa0xYUWpnZjJwZHlUZHQ4K0srYTNR?=
- =?utf-8?B?TG5VdWJyeGJEMEg2OGhPMTBSUzJXNjJ1K0hBUGZTWDhRMlNuWG9QVW90REQ1?=
- =?utf-8?B?cWE4M3ZWMGpSQXFzaWJHYXp0ZCtsYjBLZ3MxQUhrSVBvWU5qS05va1FCaGlU?=
- =?utf-8?B?NDRkci85Z3lyRWVLTEZpVlg0bFFTWWVzWmlLZlNqYklTL2NqdDF4R0xjSzlN?=
- =?utf-8?B?TVNNMUZRWG9TU1hGbEtld0RYVGN4MG45QWV2d1Q0djZyUVBwaVdSVWR5NXVy?=
- =?utf-8?B?OXpNSlFGUjMxV3VxYUM2Nm1BUCtxWm8wbkdiSzN1YWlsSUZGQ1JTZHBScVpH?=
- =?utf-8?B?OHc2RHN4YXdUSkpwSkRwYXhJRUZ3VHpRbUduc2RVSmxGVkhVY2xVTTJidHZj?=
- =?utf-8?B?Sy9RMVRsR2RidERFTC9CTnpUQzJONmYySk03Smp0dlMxaHhHZEI1ck1Qalo0?=
- =?utf-8?B?QzRLTFdNRlEwdTE5NXVIQ3BESTZrTCtIbDl1YjRBMHB4Z1BtM1hRS3lGRUdX?=
- =?utf-8?B?bkh6OURaQWNXYnh2TlFudHA5bUpDRVhodVpvclloS0ZleWFlbDRBS1YwVHJF?=
- =?utf-8?B?cGdCTEJjazlrK2NlckprMTFnZXllbmFuSittOS9Lb2dHQ2owbVVKbWpYS2tj?=
- =?utf-8?B?Q3d5QlRQQXdMMzdabjJwSTNLbnJUeGxHQUp4dmUwakh5K29VOFJQcUFxUkJL?=
- =?utf-8?B?MWdhWENidHJuMWhDdy9nTThLODJXUkxvQUtMNEcvdUZ4Q01HVjlCamc2WjIx?=
- =?utf-8?B?bW8zSHFKRFc1VHgvU1pUblAyOTErSmUySTVGd0hHSUZGdUcxM2ZHYkhXUW9Y?=
- =?utf-8?B?dTdsaG9EYVJjS3ZzRmc3NGZ2VGFjTU9DSmd2S1BQMlpydjBkbDZDRHV6ZUFx?=
- =?utf-8?B?c3U4N0xHM3ZkZmJZVnBsOUNLbzVxOVdES3krWXFNWk5uUEl1blc3Njh4M3ky?=
- =?utf-8?B?UWRzWEpPelVrcS85U2ZBNHUvWER2OFNLaXBkYTYvc1dVY05pUCtWVHJibHF4?=
- =?utf-8?B?b1daM1NCeUZTelRPUkJ2U01NYVEwcUg5UjBlS3J5QXJyMTFzRndYQloyMzMv?=
- =?utf-8?B?Rjh3M25ITFRqbkFlSmJQODRJckFjY2V0dzhycC9JeDdOdGhsSVRQa3RFbkFM?=
- =?utf-8?B?KzdPMkZQMVJ1bW5oRkVNMFpsdHV4YUZ6Uy94NHV3L3BqVldVQkNTelJyZDZH?=
- =?utf-8?B?dHM3dkR2YklrZlJ5SkJTRklrd0tKZmp5Sit4OWcwOWdlMnVBNmEvTXpvT1FS?=
- =?utf-8?B?V3BlTDRxUkJVVHExTDhMR3o3SzM0NkVLaGk1TExLZi9tR3BqVis4R1F3RCsw?=
- =?utf-8?B?TlFGYjNNTFFRWTlXUjhTZGw5UlMwTUNLQTRlLy9ZcVpORnd2MXdQbWE3SGNL?=
- =?utf-8?B?Wkx6T3dlUkhRT1JFcUxTeERsR0swbW1DUCs4aWxDTkVIQTZLS2dIK1B1MVZS?=
- =?utf-8?B?T2FvdFgxTEt1S2IyR0JqbEt5NTRDT1hqVEViV09nUjhyYkFEeGVCWWp3MzBy?=
- =?utf-8?B?b2wxMFpYempLUVFHRGVodTZZUy9mZmVsVTdMenBrMnl1eklXemRMVGhpMDVM?=
- =?utf-8?B?d3c9PQ==?=
-X-OriginatorOrg: amlogic.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2bd986a5-4c16-4953-f274-08db76ed516a
-X-MS-Exchange-CrossTenant-AuthSource: TYZPR03MB6896.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jun 2023 09:03:05.0446
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 0df2add9-25ca-4b3a-acb4-c99ddf0b1114
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: A8c9GjSxsVBRDZ83ogArxIPcuBGl7Ft6U+ErX2v2cqSKoEQnC0cQXIj7IlXRnKgCCJxnGsBBhIobMnE/oLXrWFFDhTW4FPd+7TUVgfUPYMo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR03MB7401
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230621115811.GD2053369@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christian,
-       Thanks for your advice.
+On Wed, Jun 21, 2023 at 01:58:11PM +0200, Peter Zijlstra wrote:
+> On Tue, Jun 20, 2023 at 11:18:05PM -0700, Stephane Eranian wrote:
+> > On Tue, Jun 20, 2023 at 9:25 PM Eric Lin <eric.lin@sifive.com> wrote:
+> > >
+> > > CC: Stephane Eranian
+> > >
+> > > On Fri, Jun 2, 2023 at 5:49 PM Eric Lin <eric.lin@sifive.com> wrote:
+> > > >
+> > > > Currently, during the perf sampling, if the perf interrupt takes too long,
+> > > > perf framework will lower the perf_event_max_sample_rate. This will limit
+> > > > the number of samples per timer tick (max_samples_per_tick) and set hwc->interrupts
+> > > > to MAX_INTERRUPTS within the __perf_event_account_interrupt() function.
+> > > >
+> > > > Afterward, the perf framework will unthrottle the event in the timer interrupt
+> > > > handler, which triggers the driver's *_pmu_start() function. Most of the driver's
+> > > > *_pmu_start() functions will check the event->hw.state to determine whether this
+> > > > event has stopped. If the event has not stopped, a WARN_ON_ONCE() warning
+> > > > will be triggered as shown below:
+> > > >
+> > > > [ 2110.224723] ------------[ cut here ]------------
+> > > > [ 2110.224851] WARNING: CPU: 0 PID: 240 at drivers/perf/riscv_pmu.c:184 riscv_pmu_start+0x7c/0x8e
+> > > > [ 2110.225242] Modules linked in:
+> > > > [ 2110.225380] CPU: 0 PID: 240 Comm: ls Not tainted 6.4-rc4-g19d0788e9ef2 #1
+> > > > [ 2110.225574] Hardware name: SiFive (DT)
+> > > > [ 2110.225657] epc : riscv_pmu_start+0x7c/0x8e
+> > > > [ 2110.225834]  ra : riscv_pmu_start+0x28/0x8e
+> > > > [ 2110.225998] epc : ffffffff80aef864 ra : ffffffff80aef810 sp : ffff8f80004db6f0
+> > > > [ 2110.226135]  gp : ffffffff81c83750 tp : ffffaf80069f9bc0 t0 : ffff8f80004db6c0
+> > > > [ 2110.226245]  t1 : 0000000000000000 t2 : 000000000000001f s0 : ffff8f80004db720
+> > > > [ 2110.226367]  s1 : ffffaf8008ca1068 a0 : 0000ffffffffffff a1 : 0000000000000000
+> > > > [ 2110.226488]  a2 : 0000000000000001 a3 : 0000000000000870 a4 : 0000000000000000
+> > > > [ 2110.226605]  a5 : 0000000000000000 a6 : 0000000000000840 a7 : 0000000000000030
+> > > > [ 2110.226721]  s2 : 0000000000000000 s3 : ffffaf8005165800 s4 : ffffaf800424da00
+> > > > [ 2110.226838]  s5 : ffffffffffffffff s6 : ffffffff81cc7590 s7 : 0000000000000000
+> > > > [ 2110.226955]  s8 : 0000000000000006 s9 : 0000000000000001 s10: ffffaf807efbc340
+> > > > [ 2110.227064]  s11: ffffaf807efbbf00 t3 : ffffaf8006a16028 t4 : 00000000dbfbb796
+> > > > [ 2110.227180]  t5 : 0000000700000000 t6 : ffffaf8005269870
+> > > > [ 2110.227277] status: 0000000200000100 badaddr: 0000000000000000 cause: 0000000000000003
+> > > > [ 2110.227407] [<ffffffff80aef864>] riscv_pmu_start+0x7c/0x8e
+> > > > [ 2110.227622] [<ffffffff80185b56>] perf_adjust_freq_unthr_context+0x15e/0x174
+> > > > [ 2110.227961] [<ffffffff80188642>] perf_event_task_tick+0x88/0x9c
+> > > > [ 2110.228235] [<ffffffff800626a8>] scheduler_tick+0xfe/0x27c
+> > > > [ 2110.228463] [<ffffffff800b5640>] update_process_times+0x9a/0xba
+> > > > [ 2110.228690] [<ffffffff800c5bd4>] tick_sched_handle+0x32/0x66
+> > > > [ 2110.229007] [<ffffffff800c5e0c>] tick_sched_timer+0x64/0xb0
+> > > > [ 2110.229253] [<ffffffff800b5e50>] __hrtimer_run_queues+0x156/0x2f4
+> > > > [ 2110.229446] [<ffffffff800b6bdc>] hrtimer_interrupt+0xe2/0x1fe
+> > > > [ 2110.229637] [<ffffffff80acc9e8>] riscv_timer_interrupt+0x38/0x42
+> > > > [ 2110.229984] [<ffffffff80090a16>] handle_percpu_devid_irq+0x90/0x1d2
+> > > > [ 2110.230162] [<ffffffff8008a9f4>] generic_handle_domain_irq+0x28/0x36
+> > > >
+> > > > To prevent this warning, we should call the driver's *_pmu_stop() function before unthrottling
+> > > >
+> > > > Signed-off-by: Eric Lin <eric.lin@sifive.com>
+> > > > ---
+> > > >  kernel/events/core.c | 1 +
+> > > >  1 file changed, 1 insertion(+)
+> > > >
+> > > > diff --git a/kernel/events/core.c b/kernel/events/core.c
+> > > > index db016e418931..098c875abe88 100644
+> > > > --- a/kernel/events/core.c
+> > > > +++ b/kernel/events/core.c
+> > > > @@ -4128,6 +4128,7 @@ perf_adjust_freq_unthr_context(struct perf_event_context *ctx, bool unthrottle)
+> > > >
+> > > >                 if (hwc->interrupts == MAX_INTERRUPTS) {
+> > > >                         hwc->interrupts = 0;
+> > > > +                       event->pmu->stop(event, 0);
+> > 
+> > But how could the event have been stopped with a call to pmu->stop()
+> > during throttling?
+> 
+> Yeah, Changelog fails to explain how we got to the faulty state -- and
+> without that we can't judge if the proposed solution actually fixes the
+> problem or not.
+> 
 
-On 2023/6/27 16:56, Christian Hewitt wrote:
-> [你通常不会收到来自 christianshewitt@gmail.com 的电子邮件。请访问 https://aka.ms/LearnAboutSenderIdentification，以了解这一点为什么很重要]
-> 
-> [ EXTERNAL EMAIL ]
-> 
->> On 26 Jun 2023, at 1:52 pm, Xianwei Zhao <xianwei.zhao@amlogic.com> wrote:
->>
->> Document the new T7 SoC/board device tree bindings.
->>
->> T7 is an advanced application processor designed for smart display.
->> It integrates a powerful CPU/GPU subsystem, a secured 8K video
->> CODEC engine with all major peripherals.
-> 
-> ^ please avoid marketing text in commit messages (and same for the
-> other commits in this series).
-> 
-Will do
->> The main system CPU is based on Big.LITTLE architecture,
->> with quad core Cortex-A73 cluster and quad core Cortex-A53 cluster.
-> 
-> “T7 is an Amlogic SoC for smart display applications. The main CPU is
-> based on a big.LITTLE architecture with a quad-core A73 cluster and
-> quad-core A53 cluster.”
-> 
-Will do
-> Christian
-> 
->> Signed-off-by: Xianwei Zhao <xianwei.zhao@amlogic.com>
->> ---
->> Documentation/devicetree/bindings/arm/amlogic.yaml | 6 ++++++
->> 1 file changed, 6 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/arm/amlogic.yaml b/Documentation/devicetree/bindings/arm/amlogic.yaml
->> index 08d59842655c..79a8b44ffd03 100644
->> --- a/Documentation/devicetree/bindings/arm/amlogic.yaml
->> +++ b/Documentation/devicetree/bindings/arm/amlogic.yaml
->> @@ -218,6 +218,12 @@ properties:
->>                - amlogic,aq222
->>            - const: amlogic,s4
->>
->> +      - description: Boards with the Amlogic T7 A311D2 SoC
->> +        items:
->> +          - enum:
->> +              - amlogic,an400
->> +          - const: amlogic,t7
->> +
->> additionalProperties: true
->>
->> ...
->> --
->> 2.37.1
->>
->>
->> _______________________________________________
->> linux-amlogic mailing list
->> linux-amlogic@lists.infradead.org
->> http://lists.infradead.org/mailman/listinfo/linux-amlogic
-> 
+Hi Stephane, Peter,
+
+Most of the pmu driver will call *_pmu_stop(event,0) in the *_pmu_handle_irq() function and update the hwc->state with PERF_HES_STOPPED flag
+as below:
+
+arch/alpha/kernel/perf_event.c:856:             if (perf_event_overflow(event, &data, regs)) {
+arch/alpha/kernel/perf_event.c-857-                     /* Interrupts coming too quickly; "throttle" the
+arch/alpha/kernel/perf_event.c-858-                      * counter, i.e., disable it for a little while.
+arch/alpha/kernel/perf_event.c-859-                      */
+arch/alpha/kernel/perf_event.c-860-                     alpha_pmu_stop(event, 0);
+arch/alpha/kernel/perf_event.c-861-             }
+-----
+arch/arc/kernel/perf_event.c:603:                       if (perf_event_overflow(event, &data, regs))
+arch/arc/kernel/perf_event.c-604-                               arc_pmu_stop(event, 0);
+arch/arc/kernel/perf_event.c-605-               }
+-----
+arch/x86/events/amd/core.c:935:         if (perf_event_overflow(event, &data, regs))
+arch/x86/events/amd/core.c-936-                 x86_pmu_stop(event, 0);
+arch/x86/events/amd/core.c-937- }
+-----
+
+However, some of the pmu drivers stop the event in the *_pmu_handle_irq() without update the hwc->state with PERF_HES_STOPPED flag
+as below:
+
+arch/arm/kernel/perf_event_v7.c:994:            if (perf_event_overflow(event, &data, regs))
+arch/arm/kernel/perf_event_v7.c-995-                    cpu_pmu->disable(event); // <== not update with PERF_HES_STOPPED
+arch/arm/kernel/perf_event_v7.c-996-    }
+------
+arch/csky/kernel/perf_event.c:1142:             if (perf_event_overflow(event, &data, regs))
+arch/csky/kernel/perf_event.c-1143-                     csky_pmu_stop_event(event); // <== not update with PERF_HES_STOPPED
+arch/csky/kernel/perf_event.c-1144-     }
+-------
+arch/loongarch/kernel/perf_event.c:492: if (perf_event_overflow(event, data, regs))
+arch/loongarch/kernel/perf_event.c-493-         loongarch_pmu_disable_event(idx);    // <== not update with PERF_HES_STOPPED
+arch/loongarch/kernel/perf_event.c-494-}
+-------
+arch/mips/kernel/perf_event_mipsxx.c:794:       if (perf_event_overflow(event, data, regs))
+arch/mips/kernel/perf_event_mipsxx.c-795-               mipsxx_pmu_disable_event(idx); // <== not update with PERF_HES_STOPPED
+arch/mips/kernel/perf_event_mipsxx.c-796-}
+....
+
+Furthermore, these drivers did not add event->hw.state checking in *_pmu_start() before starting the event like x86 does:
+
+1497 static void x86_pmu_start(struct perf_event *event, int flags)
+1498 {
+1499     struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
+1500     int idx = event->hw.idx;
+1501
+1502     if (WARN_ON_ONCE(!(event->hw.state & PERF_HES_STOPPED)))
+1503         return;
+1504
+
+As a result, these drivers won't trigger the WARN_ON_ONCE warning as shown in this patch.
+
+However, if a pmu driver like RISC-V pmu which didn't call *_pmu_stop(event,0) without update the hwc->state with PERF_HES_STOPPED flag in the *_pmu_handle_irq() function
+but has event->hw.state checking in *_pmu_start(), it could trigger the WARN_ON_ONCE warning as shown in this patch.
+
+Therefore, I think we need to call pmu->stop() before unthrottling the event to prevent this warning.
+
+Or maybe we can add hwc->state checking before we call pmu->stop() as below:
+
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -4128,7 +4128,8 @@ perf_adjust_freq_unthr_context(struct perf_event_context *ctx, bool unthrottle)
+
+                if (hwc->interrupts == MAX_INTERRUPTS) {
+                        hwc->interrupts = 0;
+-                       event->pmu->stop(event, 0);
++                       if (!(hwc->state & PERF_HES_STOPPED))
++                               event->pmu->stop(event, 0);
+                        perf_log_throttle(event, 1);
+                        event->pmu->start(event, 0);
+                }
+
+Thanks.
+
+Best Regards,
+Eric Lin.
+
+
+> > >
+> > > >                         perf_log_throttle(event, 1);
+> > > >                         event->pmu->start(event, 0);
+> > > >                 }
+> > > > --
+> > > > 2.17.1
+> > > >
