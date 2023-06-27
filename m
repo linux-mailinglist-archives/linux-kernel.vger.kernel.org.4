@@ -2,153 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D41187404E4
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 22:23:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E36DD7404F2
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 22:26:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231237AbjF0UXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 16:23:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44082 "EHLO
+        id S231376AbjF0U0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 16:26:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230249AbjF0UXT (ORCPT
+        with ESMTP id S230003AbjF0UZ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 16:23:19 -0400
-Received: from mail-vk1-xa2c.google.com (mail-vk1-xa2c.google.com [IPv6:2607:f8b0:4864:20::a2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4432926B3;
-        Tue, 27 Jun 2023 13:23:18 -0700 (PDT)
-Received: by mail-vk1-xa2c.google.com with SMTP id 71dfb90a1353d-47151ee3fe6so1740895e0c.2;
-        Tue, 27 Jun 2023 13:23:18 -0700 (PDT)
+        Tue, 27 Jun 2023 16:25:58 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE86D1FEA
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 13:25:55 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-57003dac4a8so5280817b3.1
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 13:25:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687897397; x=1690489397;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=XyxfD9AUIg2iTzlBcGzh8Wih0Y3imsz9gj7xi6wKtx8=;
-        b=koHZ08MnrVDbU2irdaX4bFsxS5srJPhxf48peiHqFPqFeuRhGaiyAP1h20q1CX9de+
-         UaIZTHDVWPb6lnOqyNYtpysiIwgxCEr+kygoQShTRu2VmDg1zW4Ll3HBk4KGE22lYKAd
-         VjEU3gpzQpUcQ7xG2j3doVw9ye29JMXPpt/TqDbphSe+K0euz3Svp3FZOa1kFrufk+IV
-         tDYQAvDZF0Qcb2ilLx+Ru6pydkb5Pw61regJwpT7CZDcDuVHoo4RMxyv9/qothtC0SNm
-         bYx6yVbOC/M4nGKIdV7Yhyixw6yFtjx7Se3mnRaK5BFAPHu1gGNwXTv3odoyKO4kXI6L
-         hroQ==
+        d=google.com; s=20221208; t=1687897555; x=1690489555;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=OrGhpjSBH+uvN2RlFVrnMyWFjf7MZCvpoWYUAG+UcGg=;
+        b=J1Ay4xaAwE50titRnLAf8EZ4tOlp28f3hhclzOHSVchSUxINJwhyXY9wEHPBbWfTge
+         jR+g6Qg7w9D7qLD7y8MPyelzGYCKfMt40xm05TJk8JQzDZ2Xv0FIDFrt2MjLrE7EqPuR
+         +FhFBpbySZ4yVC722kZ+WSAf44aMVbcssT1g9QIOqa1me2sIWUujzxgSR4AmrFtTObz6
+         Nt50EtsaW67uPWXg8PwR3SWnu+MuBJwsepJWfrwtDsUVeqqnYqx3jWepoAWjotKXDVyn
+         gkqH3ypgLtrjW9EZmi1a24+cbBfm9HqDaddwo2Q2fhlXEhzIELgqVmz9o0rwAVUyCkoW
+         JuiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687897397; x=1690489397;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XyxfD9AUIg2iTzlBcGzh8Wih0Y3imsz9gj7xi6wKtx8=;
-        b=MrW2k9Y8kVstE1SlXAjnna2Lg/jnfogmBh8uTYUEgfLb5aC0/dfqFhwUqz+NOEpHR0
-         iblpoisswfCY3TiKRRCZshrgCdfW02B5NS9VxwpAyE1e4O6Bda8LjcB4SDZ0sRfMwtdf
-         PAroDmqaTCr7wJXpYAYPsPogDZTwko/l7OrwA5uxE8SJkE8L6ZwjKsB7cV+ixhZKFSi3
-         l0Eu0UMHZZM4p78XyAYCBRumZNY76Bq1qXmcGOc8TDBnacjeJDEI7sk1Cz6ZwZI6JSy4
-         BRPIjkMWytinNtG8hFp35tXzkiTaJiQHdLyWeO+hqIw0GsM6ztWoK/0gM/2rpngA6yzG
-         v3Hw==
-X-Gm-Message-State: AC+VfDzNXbxKYAq62geGCIWG5X3c7e84N/YmVEMqD6Tx8Dto+l7JuM5j
-        FK8yMFWMiLC7K1WNvdoJAMNxVjRxarsTUxrvhwU=
-X-Google-Smtp-Source: ACHHUZ4PyoxONGZTeRCEIhcDxzHtnt+IEVgRBXOCsedIgWwD4lBKZrkMV4j9a/bh45+2EBrfTgPrINL32HQLiNaPPoE=
-X-Received: by 2002:a1f:5f8f:0:b0:471:5427:39a5 with SMTP id
- t137-20020a1f5f8f000000b00471542739a5mr13416868vkb.10.1687897397207; Tue, 27
- Jun 2023 13:23:17 -0700 (PDT)
-MIME-Version: 1.0
-References: <CA+CX+bjcvbtW2Wto1XF1dKcAbpGGisdyHAGHX12v3TchhLbKtg@mail.gmail.com>
- <CAPDyKFoTH0j1uVSKvY_d7boMdG0kt_WvmLEKenYG22ZJR=UmvA@mail.gmail.com>
-In-Reply-To: <CAPDyKFoTH0j1uVSKvY_d7boMdG0kt_WvmLEKenYG22ZJR=UmvA@mail.gmail.com>
-From:   Pascal Terjan <pterjan@gmail.com>
-Date:   Tue, 27 Jun 2023 21:22:58 +0100
-Message-ID: <CA+CX+bjKv4eu=zW1karu4CLKB5M+CbFjPDk5Q5x4ewWdcnq0Aw@mail.gmail.com>
-Subject: Re: rtsx_usb_sdmmc not detecting card insertion anymore
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Kai Heng Feng <kai.heng.feng@canonical.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-mmc@vger.kernel.org, Ricky WU <ricky_wu@realtek.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>
+        d=1e100.net; s=20221208; t=1687897555; x=1690489555;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OrGhpjSBH+uvN2RlFVrnMyWFjf7MZCvpoWYUAG+UcGg=;
+        b=B0nKsYCREMLpvOdrSj3X1w83EseQPBeSbSiug120R79JNRyUoLUl7tb7MxEKB7FPML
+         JTpZFQydAW8Qv7czCDGdZOyJef3tekgx/CbXhKIPxKZjizrOh1WQzJm9bGxaNQYSB/EE
+         ti/Km5dlXVUoH+7ZG2tM+R27ZoFPDsPkIUv72Qyy+UvLv5poRTIpWzdilgQJhuqGhgtH
+         Pij71c10SBjVQdwk/wdFkgiepoNzBmZMnwTt7Yv8PHfYGFC3VB+P6IkFj1K/2TJwRyky
+         NCvzQRMjSxFViFoeEngDrXNhAWVYoSkb83Ozc+px+2paM2fGbWhpb2r9H3/twc1BaDg1
+         R76Q==
+X-Gm-Message-State: AC+VfDymZN6XVB7vfe2EOyES7Flhtp5w4XbJHIx6GYsM+8FuPFHpyv6d
+        5VIEh0Orbm4l/66gR57z4HOgvTpAp0GRZTOIvQ==
+X-Google-Smtp-Source: ACHHUZ7pwzISo3tUi89gxWua4UMbJKl2ONFmvL3K96MUD3/tkU2czKYAmuuzG/84BwbTNX2A7s33obaNpq3hC+l0CQ==
+X-Received: from yuxiao.svl.corp.google.com ([2620:15c:2a3:200:372c:3efd:f120:f25d])
+ (user=yuxiaozhang job=sendgmr) by 2002:a25:d205:0:b0:ba8:381b:f764 with SMTP
+ id j5-20020a25d205000000b00ba8381bf764mr12393540ybg.3.1687897555050; Tue, 27
+ Jun 2023 13:25:55 -0700 (PDT)
+Date:   Tue, 27 Jun 2023 13:25:41 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+Message-ID: <20230627202540.881909-2-yuxiaozhang@google.com>
+Subject: [PATCH] pstore: ramoops: support pmsg size larger than kmalloc limitation
+From:   Yuxiao Zhang <yuxiaozhang@google.com>
+To:     Kees Cook <keescook@chromium.org>, Tony Luck <tony.luck@intel.com>,
+        "'Guilherme G . Piccoli'" <gpiccoli@igalia.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        linux-hardening@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, wak@google.com,
+        Yuxiao Zhang <yuxiaozhang@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 27 Jun 2023 at 12:01, Ulf Hansson <ulf.hansson@linaro.org> wrote:
->
-> + Ricky WU, Kai Heng Feng, Oleksandr Natalenko
->
-> On Sat, 24 Jun 2023 at 22:39, Pascal Terjan <pterjan@gmail.com> wrote:
-> >
-> > Hi,
-> > I have an ASUS PN50 machine with a 0bda:0129 card reader. The card is
-> > not seen unless I reload the rtsx_usb_sdmmc module.
->
-> Thanks for reporting, let's see how we can move this forward.
+Current pmsg implementation is using kmalloc for pmsg record buffer,
+which has max size limits based on page size. Currently even we
+allocate enough space with pmsg-size, pmsg will still fail if the
+file size is larger than what kmalloc allowed.
 
-> I have looped in some of the people that has been involved in the
-> relevant changes for rtsx_usb. Let's see if they can help too.
->
-> >
-> > I found a Debian bug report for the same regression
-> > https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=993068 but nothing
-> > to see there.
-> >
-> > Trying to understand things I found
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4dad599b8b5d1ffc5ef12a2edb13d15d537202ba
-> > which seemed related, so I first tried to revert it and that worked.
->
-> Okay! That's certainly good information. Are you willing to help
-> running further debug testings?
->
-> Unless I mistaken, I think we should avoid doing a plain revert
-> (assuming we can find another option) as it will cause us to waste a
-> lot of energy instead.
->
-> >
-> > Assuming the description is correct and the rtsx USB driver runtime
-> > resumes the rtsx_usb_sdmmc device when it detects that a new card has
-> > been inserted, I assume this means it doesn't detect that a card was
-> > inserted and the problem would be in rtsx_usb rather than
-> > rtsx_usb_sdmmc.
->
-> There is also another interesting commit, which was also part of the
-> re-work of the rtsx_usb_sdmmc driver that you pointed to above.
->
-> commit 883a87ddf2f1 (misc: rtsx_usb: Use USB remote wakeup signaling
-> for card insertion detection")
->
-> >
-> > I am not sure how to debug this further, usbmon doesn't see anything
-> > when I insert the card.
->
-> If you are willing to run some tests, I suggest to add some debug prints in:
-> drivers/mmc/host/rtsx_usb_sdmmc.c
->   sdmmc_get_cd()
->   rtsx_usb_sdmmc_runtime_resume()
->   rtsx_usb_sdmmc_runtime_suspend()
->
-> sdmmc_get_cd() should be returning 1 when it finds that there is card
-> inserted, but of course the error path would be interesting too.
->
-> rtsx_usb_sdmmc_runtime_resume() may be called during probing of the
-> rtsx_usb_sdmmc driver. Beyond that point, it should also be called
-> when you insert an SD card. Just having a debug print in there should
-> help answer if that actually happens.
+Since we don't need physical contiguous memory for pmsg buffer
+, we can use kvmalloc to avoid such limitation.
 
-Loading the module without a card as expected doesn't detect anything:
+Signed-off-by: Yuxiao Zhang <yuxiaozhang@google.com>
+---
+ fs/pstore/inode.c    | 2 +-
+ fs/pstore/platform.c | 9 +++++----
+ fs/pstore/ram.c      | 5 +++--
+ fs/pstore/ram_core.c | 3 ++-
+ 4 files changed, 11 insertions(+), 8 deletions(-)
 
-[7188511.342324] rtsx_usb_sdmmc rtsx_usb_sdmmc.6.auto: : Realtek USB
-SD/MMC controller found
-[7188511.342499] rtsx_usb_sdmmc rtsx_usb_sdmmc.6.auto: :
-rtsx_usb_sdmmc_runtime_resume
-[7188511.342503] rtsx_usb_sdmmc rtsx_usb_sdmmc.6.auto: sdmmc_get_cd
-[7188511.342616] rtsx_usb_sdmmc rtsx_usb_sdmmc.6.auto: sdmmc_get_cd 0
-[7188511.342626] rtsx_usb_sdmmc rtsx_usb_sdmmc.6.auto: sdmmc_get_cd
-[7188511.342700] rtsx_usb_sdmmc rtsx_usb_sdmmc.6.auto: sdmmc_get_cd 0
-[7188511.342703] rtsx_usb_sdmmc rtsx_usb_sdmmc.6.auto: sdmmc_set_ios
-[7188511.342779] rtsx_usb_sdmmc rtsx_usb_sdmmc.6.auto: sdmmc_set_ios end
-[7188511.344062] rtsx_usb_sdmmc rtsx_usb_sdmmc.6.auto: :
-rtsx_usb_sdmmc_runtime_suspend
-
-Then nothing happens when inserting a card until reloading the module
-
->
-> Kind regards
-> Uffe
+diff --git a/fs/pstore/inode.c b/fs/pstore/inode.c
+index ffbadb8b3032..df7fb2ad4599 100644
+--- a/fs/pstore/inode.c
++++ b/fs/pstore/inode.c
+@@ -54,7 +54,7 @@ static void free_pstore_private(struct pstore_private *private)
+ 	if (!private)
+ 		return;
+ 	if (private->record) {
+-		kfree(private->record->buf);
++		kvfree(private->record->buf);
+ 		kfree(private->record->priv);
+ 		kfree(private->record);
+ 	}
+diff --git a/fs/pstore/platform.c b/fs/pstore/platform.c
+index cbc0b468c1ab..f51e9460ac9d 100644
+--- a/fs/pstore/platform.c
++++ b/fs/pstore/platform.c
+@@ -32,6 +32,7 @@
+ #include <linux/uaccess.h>
+ #include <linux/jiffies.h>
+ #include <linux/workqueue.h>
++#include <linux/mm.h>
+ 
+ #include "internal.h"
+ 
+@@ -549,7 +550,7 @@ static int pstore_write_user_compat(struct pstore_record *record,
+ 	if (record->buf)
+ 		return -EINVAL;
+ 
+-	record->buf = memdup_user(buf, record->size);
++	record->buf = vmemdup_user(buf, record->size);
+ 	if (IS_ERR(record->buf)) {
+ 		ret = PTR_ERR(record->buf);
+ 		goto out;
+@@ -557,7 +558,7 @@ static int pstore_write_user_compat(struct pstore_record *record,
+ 
+ 	ret = record->psi->write(record);
+ 
+-	kfree(record->buf);
++	kvfree(record->buf);
+ out:
+ 	record->buf = NULL;
+ 
+@@ -730,7 +731,7 @@ static void decompress_record(struct pstore_record *record)
+ 		return;
+ 
+ 	/* Swap out compressed contents with decompressed contents. */
+-	kfree(record->buf);
++	kvfree(record->buf);
+ 	record->buf = unzipped;
+ 	record->size = unzipped_len;
+ 	record->compressed = false;
+@@ -783,7 +784,7 @@ void pstore_get_backend_records(struct pstore_info *psi,
+ 		rc = pstore_mkfile(root, record);
+ 		if (rc) {
+ 			/* pstore_mkfile() did not take record, so free it. */
+-			kfree(record->buf);
++			kvfree(record->buf);
+ 			kfree(record->priv);
+ 			kfree(record);
+ 			if (rc != -EEXIST || !quiet)
+diff --git a/fs/pstore/ram.c b/fs/pstore/ram.c
+index ade66dbe5f39..296465b14fa9 100644
+--- a/fs/pstore/ram.c
++++ b/fs/pstore/ram.c
+@@ -20,6 +20,7 @@
+ #include <linux/compiler.h>
+ #include <linux/of.h>
+ #include <linux/of_address.h>
++#include <linux/mm.h>
+ 
+ #include "internal.h"
+ #include "ram_internal.h"
+@@ -268,7 +269,7 @@ static ssize_t ramoops_pstore_read(struct pstore_record *record)
+ 	/* ECC correction notice */
+ 	record->ecc_notice_size = persistent_ram_ecc_string(prz, NULL, 0);
+ 
+-	record->buf = kmalloc(size + record->ecc_notice_size + 1, GFP_KERNEL);
++	record->buf = kvmalloc(size + record->ecc_notice_size + 1, GFP_KERNEL);
+ 	if (record->buf == NULL) {
+ 		size = -ENOMEM;
+ 		goto out;
+@@ -282,7 +283,7 @@ static ssize_t ramoops_pstore_read(struct pstore_record *record)
+ 
+ out:
+ 	if (free_prz) {
+-		kfree(prz->old_log);
++		kvfree(prz->old_log);
+ 		kfree(prz);
+ 	}
+ 
+diff --git a/fs/pstore/ram_core.c b/fs/pstore/ram_core.c
+index 966191d3a5ba..3453d493ec27 100644
+--- a/fs/pstore/ram_core.c
++++ b/fs/pstore/ram_core.c
+@@ -17,6 +17,7 @@
+ #include <linux/slab.h>
+ #include <linux/uaccess.h>
+ #include <linux/vmalloc.h>
++#include <linux/mm.h>
+ #include <asm/page.h>
+ 
+ #include "ram_internal.h"
+@@ -385,7 +386,7 @@ void *persistent_ram_old(struct persistent_ram_zone *prz)
+ 
+ void persistent_ram_free_old(struct persistent_ram_zone *prz)
+ {
+-	kfree(prz->old_log);
++	kvfree(prz->old_log);
+ 	prz->old_log = NULL;
+ 	prz->old_log_size = 0;
+ }
+-- 
+2.41.0.162.gfafddb0af9-goog
