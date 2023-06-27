@@ -2,150 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD53073FB72
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 13:53:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5150173FB73
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 13:54:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230365AbjF0Lx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 07:53:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56052 "EHLO
+        id S230460AbjF0LyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 07:54:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229707AbjF0LxY (ORCPT
+        with ESMTP id S229707AbjF0Lx7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 07:53:24 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8948DA
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 04:53:22 -0700 (PDT)
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5224E1EC068B;
-        Tue, 27 Jun 2023 13:53:21 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1687866801;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:references;
-        bh=QVMqZQIXUOVG5eYZAyqFtJFEjSnD1IRV6U7Mbt88SAo=;
-        b=Sl6nRiSL5vsXMqI9fYXwubLzKiGooiprAOUHYQ9llbTAazYYREiWu9IoO9VEQs7CnvZH90
-        nLDGAgqgcQODa+oiCXdH5W6T4SeBqY1S9k/b9ykuHJINqymZJX0kLedt0gVLWbDcCt3Ad4
-        jJlSp03x2jdzCGDuAUr46FiZ/FkkUXk=
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-        header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id yf7zup4Kvp_z; Tue, 27 Jun 2023 11:53:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-        t=1687866798; bh=QVMqZQIXUOVG5eYZAyqFtJFEjSnD1IRV6U7Mbt88SAo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=bjA7XTCVvv1bFynBtGa78lIxaRIWXCXz+7ecOtNZltuym7GCJvV6IIhlWeSJhEQre
-         xII9Ulk184/CSYhClj4XAAWOMlnFnVUCiJqz5JQ4akDR4Lux7Pam1AvlDX32yg1gg2
-         He1ER6d8SSbX9gfyUOTLtER047L4sIjQPZnD9b4+x3SEFn28qQceCumeSLc0/6wwN1
-         nQfnWRjR8I/OHS/pOwpWicqXO/ZKPEAHHyVwPHrwUyoaqgVfHMF2drJcZKNzvIwwtY
-         NSOHSTdkHy+duZpY9aHydMh+ESMCvbdZEC4dFr+pNBNl9XxamZ+pKnLuym4dxX6q7g
-         68i3XfyntVDLMyXYFQ55WwS+PW+d5QcMgcgnvqbAJhZuH5e7LrIC64a4JTzJoF5E3r
-         l5G0hDp0zkjc1uDZuFEmBo9Qdhmn/Pa74YtA297k8uMZ5YjR7d0it5g3oOyv2lFPi9
-         9fyL+sZTL7sQPzj8Gsk0imFrFZDBJOCAZzqFn0/apfrEupgXaTRuCGj+ezGkXa4y+R
-         xOG71IMJ0WkuEmfR2ZnujAaR2zEcfZAfQ2sBm6jXREikwhdXzm0nftrgnmarCxrL/x
-         SK+AjdGB0VaBR73xB/nf0K5+FeAyp8Zi1TWQALUIKcVfR6xOkOPnKjztsaGIjejfRD
-         WjRUJm1fy3td7TZ9g6cPoXsw=
-Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-        (No client certificate requested)
-        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A5E5240E0035;
-        Tue, 27 Jun 2023 11:53:15 +0000 (UTC)
-Date:   Tue, 27 Jun 2023 13:53:11 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] x86/mtrr for 6.5
-Message-ID: <20230627115311.GEZJrNp+K+a3qqNKGO@fat_crate.local>
+        Tue, 27 Jun 2023 07:53:59 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F30DA;
+        Tue, 27 Jun 2023 04:53:58 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id d2e1a72fcca58-66f5faba829so1815450b3a.3;
+        Tue, 27 Jun 2023 04:53:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687866838; x=1690458838;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=DC8eCS1n/CqPPownotds85d4i2CHzR+X63I8C5DwGqs=;
+        b=J+FA3HqAGy0keXFdKQ+mmKFY6L4ay6ZdVGTdiXlHApv5lt6lO/+cWlqXXp1psvyhpr
+         xJMMw0poN4MSd+jKyQg11EErgupFl4NZwRO5anv5tmA8HXsAhN2wnC38DJYTMQgx2hCU
+         2k0/e/vNzaJzPU6gt+Xqn+uGZY+KpCbzWzsKPDRuiwmf30VHcaXoSxNEa7g1QZSWrY2E
+         fyts9EJPGTanPq7z65rqRnTW3KwoUtvPAm/G3HHz/NuybJQLWa0KEa/SQ6niHxqcsPmR
+         Pk1bKNhZO0bMTZY3qDmpo35bFhawth9ZT9mx38ohN6lLspewZOGM3XwcvUPCu/juLjDB
+         sx6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687866838; x=1690458838;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DC8eCS1n/CqPPownotds85d4i2CHzR+X63I8C5DwGqs=;
+        b=jn19+qOvbXIasg0Btn6Uwk85obY8NJZWfWgwu2F9urVN9yOSIXYlrmrOgCGl1Nn0QU
+         ZzumOj+mhUgTfG1m8/vFRHVzV8RuDt+puya9j+fvNqOF+fuU7NZdisY7Hrs7pCMua2bm
+         JM/R1dZb3oAGfidV6sDMPfnMbH2ELpGsgs4IBMYaen8/PPcBfYes8UXqUVX+iUFtq7Aq
+         IYQpNogCdYRLYEsxZfM2Daaes3ffsPIexbdV13xMjBZRxR2PQM3nNDN+cjWH0prGlf3/
+         HmE/zRdRih5v0IkzMt8x+bMYzECDr5PNa+Shf9KhEylCnlVNlGfNIcDEB/eMviDqKFMi
+         qfZA==
+X-Gm-Message-State: AC+VfDxK7Bto9e2cKGwK+wK2OuisIEmOKKb+fEOYU5cPJKqgd+WWJAZS
+        TnNxv6flJdLrQ9cJ3JapnACFh9Bn1nAcnc0J
+X-Google-Smtp-Source: ACHHUZ5Yvs47lFIcE4oAAjTBmSUBTDYvklyepVJLOo2hknr4eWGMXKQ71GQZoMUAm5sTX2fm1aF6CQ==
+X-Received: by 2002:a05:6a20:54a7:b0:125:517c:4f18 with SMTP id i39-20020a056a2054a700b00125517c4f18mr14154689pzk.8.1687866837767;
+        Tue, 27 Jun 2023 04:53:57 -0700 (PDT)
+Received: from localhost.localdomain ([43.132.98.112])
+        by smtp.gmail.com with ESMTPSA id jg3-20020a17090326c300b001a2104d706fsm4961236plb.225.2023.06.27.04.53.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Jun 2023 04:53:57 -0700 (PDT)
+From:   menglong8.dong@gmail.com
+X-Google-Original-From: imagedong@tencent.com
+To:     daniel@iogearbox.net, yhs@meta.com, alexei.starovoitov@gmail.com
+Cc:     ast@kernel.org, andrii@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Menglong Dong <imagedong@tencent.com>
+Subject: [PATCH bpf-next v8 0/3] bpf, x86: allow function arguments up to 12 for TRACING
+Date:   Tue, 27 Jun 2023 19:53:16 +0800
+Message-Id: <20230627115319.13128-1-imagedong@tencent.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+From: Menglong Dong <imagedong@tencent.com>
 
-please pull the MTRR cleanup Juergen has been working on for a while
-now, for 6.5.
+For now, the BPF program of type BPF_PROG_TYPE_TRACING can only be used
+on the kernel functions whose arguments count less than or equal to 6, if
+not considering '> 8 bytes' struct argument. This is not friendly at all,
+as too many functions have arguments count more than 6. According to the
+current kernel version, below is a statistics of the function arguments
+count:
 
-Thx.
+argument count | function count
+7              | 704
+8              | 270
+9              | 84
+10             | 47
+11             | 47
+12             | 27
+13             | 22
+14             | 5
+15             | 0
+16             | 1
 
----
+Therefore, let's enhance it by increasing the function arguments count
+allowed in arch_prepare_bpf_trampoline(), for now, only x86_64.
 
-The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
+In the 1st patch, we save/restore regs with BPF_DW size to make the code
+in save_regs()/restore_regs() simpler.
 
-  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
+In the 2nd patch, we make arch_prepare_bpf_trampoline() support to copy
+function arguments in stack for x86 arch. Therefore, the maximum
+arguments can be up to MAX_BPF_FUNC_ARGS for FENTRY, FEXIT and
+MODIFY_RETURN. Meanwhile, we clean the potential garbage value when we
+copy the arguments on-stack.
 
-are available in the Git repository at:
+And the 3rd patch is for the testcases of the this series.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_mtrr_for_v6.5
+Changes since v7:
+- split the testcases, and add fentry_many_args/fexit_many_args to
+  DENYLIST.aarch64 in 3rd patch
 
-for you to fetch changes up to 30d65d1b19850c9bc8c17dba8ebe9be5e0c17054:
+Changes since v6:
+- somit nits from commit message and comment in the 1st patch
+- remove the inline in get_nr_regs() in the 1st patch
+- rename some function and various in the 1st patch
 
-  x86/xen: Set default memory type for PV guests to WB (2023-06-16 11:22:33 +0200)
+Changes since v5:
+- adjust the commit log of the 1st patch, avoiding confusing people that
+  bugs exist in current code
+- introduce get_nr_regs() to get the space that used to pass args on
+  stack correct in the 2nd patch
+- add testcases to tracing_struct.c instead of fentry_test.c and
+  fexit_test.c
 
-----------------------------------------------------------------
-- A serious scrubbing of the MTRR code including adding a new map
-  mechanism in order to look up the memory type of a region easily. Also
-  address memory range lookup issues like returning an invalid memory
-  type. Furthermore, this handles the decoupling of PAT from MTRR more
-  naturally. All work by Juergen Gross
+Changes since v4:
+- consider the case of the struct in arguments can't be hold by regs
+- add comment for some code
+- add testcases for MODIFY_RETURN
+- rebase to the latest
 
-----------------------------------------------------------------
-Borislav Petkov (AMD) (1):
-      x86/mtrr: Unify debugging printing
+Changes since v3:
+- try make the stack pointer 16-byte aligned. Not sure if I'm right :)
+- introduce clean_garbage() to clean the grabage when argument count is 7
+- use different data type in bpf_testmod_fentry_test{7,12}
+- add testcase for grabage values in ctx
 
-Juergen Gross (17):
-      x86/mtrr: Remove physical address size calculation
-      x86/mtrr: Replace size_or_mask and size_and_mask with a much easier concept
-      x86/mtrr: Support setting MTRR state for software defined MTRRs
-      x86/hyperv: Set MTRR state when running as SEV-SNP Hyper-V guest
-      x86/xen: Set MTRR state when running as Xen PV initial domain
-      x86/mtrr: Replace vendor tests in MTRR code
-      x86/mtrr: Have only one set_mtrr() variant
-      x86/mtrr: Move 32-bit code from mtrr.c to legacy.c
-      x86/mtrr: Allocate mtrr_value array dynamically
-      x86/mtrr: Add get_effective_type() service function
-      x86/mtrr: Construct a memory map with cache modes
-      x86/mtrr: Add mtrr=debug command line option
-      x86/mtrr: Use new cache_map in mtrr_type_lookup()
-      x86/mtrr: Don't let mtrr_type_lookup() return MTRR_TYPE_INVALID
-      x86/mm: Only check uniform after calling mtrr_type_lookup()
-      x86/mtrr: Remove unused code
-      x86/xen: Set default memory type for PV guests to WB
+Changes since v2:
+- keep MAX_BPF_FUNC_ARGS still
+- clean garbage value in upper bytes in the 2nd patch
+- move bpf_fentry_test{7,12} to bpf_testmod.c and rename them to
+  bpf_testmod_fentry_test{7,12} meanwhile in the 3rd patch
 
- Documentation/admin-guide/kernel-parameters.txt |   4 +
- arch/x86/hyperv/ivm.c                           |   4 +
- arch/x86/include/asm/mtrr.h                     |  51 +-
- arch/x86/include/uapi/asm/mtrr.h                |  14 +-
- arch/x86/kernel/cpu/mtrr/Makefile               |   2 +-
- arch/x86/kernel/cpu/mtrr/amd.c                  |   2 +-
- arch/x86/kernel/cpu/mtrr/centaur.c              |  11 +-
- arch/x86/kernel/cpu/mtrr/cleanup.c              |  87 ++-
- arch/x86/kernel/cpu/mtrr/cyrix.c                |   2 +-
- arch/x86/kernel/cpu/mtrr/generic.c              | 675 ++++++++++++++++--------
- arch/x86/kernel/cpu/mtrr/legacy.c               |  90 ++++
- arch/x86/kernel/cpu/mtrr/mtrr.c                 | 206 ++------
- arch/x86/kernel/cpu/mtrr/mtrr.h                 |  31 +-
- arch/x86/kernel/setup.c                         |   2 +
- arch/x86/mm/pgtable.c                           |  24 +-
- arch/x86/xen/enlighten_pv.c                     |  54 ++
- 16 files changed, 777 insertions(+), 482 deletions(-)
- create mode 100644 arch/x86/kernel/cpu/mtrr/legacy.c
+Changes since v1:
+- change the maximun function arguments to 14 from 12
+- add testcases (Jiri Olsa)
+- instead EMIT4 with EMIT3_off32 for "lea" to prevent overflow
+
+Menglong Dong (3):
+  bpf, x86: save/restore regs with BPF_DW size
+  bpf, x86: allow function arguments up to 12 for TRACING
+  selftests/bpf: add testcase for TRACING with 6+ arguments
+
+ arch/x86/net/bpf_jit_comp.c                   | 246 +++++++++++++++---
+ net/bpf/test_run.c                            |  23 +-
+ tools/testing/selftests/bpf/DENYLIST.aarch64  |   2 +
+ .../selftests/bpf/bpf_testmod/bpf_testmod.c   |  49 +++-
+ .../selftests/bpf/prog_tests/fentry_test.c    |  43 ++-
+ .../selftests/bpf/prog_tests/fexit_test.c     |  43 ++-
+ .../selftests/bpf/prog_tests/modify_return.c  |  20 +-
+ .../selftests/bpf/prog_tests/tracing_struct.c |  19 ++
+ .../selftests/bpf/progs/fentry_many_args.c    |  39 +++
+ .../selftests/bpf/progs/fexit_many_args.c     |  40 +++
+ .../selftests/bpf/progs/modify_return.c       |  40 +++
+ .../selftests/bpf/progs/tracing_struct.c      |  54 ++++
+ 12 files changed, 561 insertions(+), 57 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/fentry_many_args.c
+ create mode 100644 tools/testing/selftests/bpf/progs/fexit_many_args.c
 
 -- 
-Regards/Gruss,
-    Boris.
+2.40.1
 
-https://people.kernel.org/tglx/notes-about-netiquette
