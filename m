@@ -2,89 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3E127401E5
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 19:08:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D6987401ED
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 19:10:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230450AbjF0RIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 13:08:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42660 "EHLO
+        id S231191AbjF0RJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 13:09:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbjF0RIn (ORCPT
+        with ESMTP id S230507AbjF0RJl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 13:08:43 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEBB0198C
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 10:08:41 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-565d1b86a64so51708537b3.3
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 10:08:41 -0700 (PDT)
+        Tue, 27 Jun 2023 13:09:41 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21D6198D
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 10:09:39 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id 3f1490d57ef6-bfee679b7efso4697887276.0
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 10:09:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687885721; x=1690477721;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zmTYBHiq1aAEhFeB5lbw1u0SmbjoMvuQpM4GCZ6yf38=;
-        b=IVA1fW9z3fvV2citHCS4ShP8SJ355AticUoDo8b4hCd7KVDGS3NOP0gYlyt4iz5YTS
-         HAki00VvRLmzk1A388nL1Pqw2E6th3LdFtMjILyxEZmr6mdFs80Vlq4cbYPVMVjSULq9
-         OguibegXP3fdCKzrispjaCvcaiHsItetv3OaZKsfWM4B3krqFqOCDKXyaU5FtaHoUa54
-         lhfjc5h563F0SoDc6Y9XXlljkNAANgnzNQQElnZrKXuCxNX5naT2+Y041W0YBSdPOBmS
-         EIOddBn7CiOslBCcl+66cqhgqclSDddd2PKx6mBJdkjOGd/lQ6yVYUwgjexWDhQ5WfHU
-         Wr6w==
+        d=google.com; s=20221208; t=1687885779; x=1690477779;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AEfOOj7zZRsR4093w5Xezdtfqq/JXEJS/CeyQ2VX6y0=;
+        b=qAGBVo+6BR+jme9c+D+CU2a/HdzfRO4Smyw+4vv/W4I1jKgLWzo2vd5hMJUHdw3fkX
+         IJNH8qRtKo+5gPnluLFgDX0SPxosg2Tr1jNfFqqoiSu11uqRJYvDMtanGXBT1x0IkF6Y
+         ba6+9LwZiwkO7sWkoB43e404iG9OBoNL5QBSX0MGxliMIjCNPke9m99etfmYL8jhdCUV
+         tX883ywh8R4BwLNDanA/fkNoFWFXCJC5yWiuCCLPQoJxcVJR+gMgtIVUupMj4ruxQvGL
+         ebhN165884+Diht68TH0anDDe0ObeWm+6pLlX+boJpCHjSxzQPWEWJVmPkxSSa+JouHz
+         JL0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687885721; x=1690477721;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zmTYBHiq1aAEhFeB5lbw1u0SmbjoMvuQpM4GCZ6yf38=;
-        b=k6bnmhdoBg1lpmdeeZ5PNkOMHYj/5ZBT+Zi9xlF1WEju/N+5P1WKDM9YC2OWyQ1sei
-         5onJRfhN664j47+/10g7d+gytb7Y55mmqO1/HAE4MQkDNh93JA2CQMDrAVZrlOODqndm
-         mHzlYLjIcR98yzqSj/fDXa0PiUJsuwaMNj9xnpE6+mWeT17Qo+DMF2E++LZ4u4xBzY4Z
-         QXzbRnpl0kaHqhKBGTmwHHXgVDeHrWaAdO30NEVd9Lx4cb5Wi9Dhc9oTsjOUCGjqf/Dq
-         NKOIKg5HGA97eimTeJBPaaxIxnJlvGHBfIRR1qHF5Ae4RJeUkS4DIrSlRmbdmAKGGqeG
-         dLqg==
-X-Gm-Message-State: AC+VfDx2566QRlB91cK6WVWBZ0U1aLxbo97QvYeg7nx0f1tOKVARhgyo
-        kLQarWHudmisb2YMtyuY5uG7cszVjm0=
-X-Google-Smtp-Source: ACHHUZ4x/kmMRFuVDQPoWm9oePlEoaxawv+Tl+xLy1w6ikaFM/ufb1HKrZ3JhOLWb11Z/yZ7OXbmMpfiMmA=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:4046:0:b0:55d:d5b1:c2bd with SMTP id
- m6-20020a814046000000b0055dd5b1c2bdmr10445571ywn.8.1687885720828; Tue, 27 Jun
- 2023 10:08:40 -0700 (PDT)
-Date:   Tue, 27 Jun 2023 10:08:39 -0700
-In-Reply-To: <20230601142309.6307-1-guang.zeng@intel.com>
-Mime-Version: 1.0
-References: <20230601142309.6307-1-guang.zeng@intel.com>
-Message-ID: <ZJsXl6emfV2yr4rs@google.com>
-Subject: Re: [PATCH v1 0/6] LASS KVM virtualization support
-From:   Sean Christopherson <seanjc@google.com>
-To:     Zeng Guang <guang.zeng@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        H Peter Anvin <hpa@zytor.com>, kvm@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
-        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1687885779; x=1690477779;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AEfOOj7zZRsR4093w5Xezdtfqq/JXEJS/CeyQ2VX6y0=;
+        b=YpQ0d6yQhpzhiP6bWF4wm9P65qOQsg3pIRc5vCXRdYg0pCUIElTMCtiMOrFagWFiS+
+         fZ+LuzLqcb/HHoFV+ivRwCkLT1BYB9S5HxlyQdlFRIPxNSyLCRSCR8QVv378VXuqp6Je
+         mZZqqMozPMQGQ5TkkiHfeMzStciTEhZewvK40wZ0acYzLmFJHyUWOSnMD93BLv+AqEVk
+         2AKPDCUUvYgHCgAFxTnvidR6QNa9dFczZOFGFvOQiNmeaTPHH+OxQHeFHyKXBOcFmCQx
+         OzrlxKZAHGnzVVmVk+OIH7z3K+TbOewJA4/iPAOh//fcHpzrTETbwYDhZwFyxrP8l+iK
+         zWyg==
+X-Gm-Message-State: AC+VfDw+NxT/nAcRD2rylW25ThLsegULAR0a70gcJTR0AGpULONJJFC5
+        hNZqHnYpCnhaDxMqxxJ0tmNqS9tNuFj4yilaOSMt+A==
+X-Google-Smtp-Source: ACHHUZ7BtHxgVW1W1XrKrjwW5U8vVpsEPZv6JStuwihqH7MgrzQKZ6h1CfZqEbifWrFKNPuWb1XHCmKI5k0ybOr7NLI=
+X-Received: by 2002:a25:2903:0:b0:bff:d530:f06 with SMTP id
+ p3-20020a252903000000b00bffd5300f06mr16876866ybp.41.1687885778638; Tue, 27
+ Jun 2023 10:09:38 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230626201713.1204982-1-surenb@google.com> <ZJn1tQDgfmcE7mNG@slm.duckdns.org>
+ <20230627-kanon-hievt-bfdb583ddaa6@brauner>
+In-Reply-To: <20230627-kanon-hievt-bfdb583ddaa6@brauner>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Tue, 27 Jun 2023 10:09:27 -0700
+Message-ID: <CAJuCfpECKqYiekDK6Zw58w10n1T4Q3R+2nymfHX2ZGfQVDC3VQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] kernfs: add kernfs_ops.free operation to free
+ resources tied to the file
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Tejun Heo <tj@kernel.org>, gregkh@linuxfoundation.org,
+        peterz@infradead.org, lujialin4@huawei.com,
+        lizefan.x@bytedance.com, hannes@cmpxchg.org, mingo@redhat.com,
+        ebiggers@kernel.org, oleg@redhat.com, akpm@linux-foundation.org,
+        viro@zeniv.linux.org.uk, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 01, 2023, Zeng Guang wrote:
-> This patch series provide a LASS KVM solution.
+On Tue, Jun 27, 2023 at 1:24=E2=80=AFAM Christian Brauner <brauner@kernel.o=
+rg> wrote:
+>
+> On Mon, Jun 26, 2023 at 10:31:49AM -1000, Tejun Heo wrote:
+> > On Mon, Jun 26, 2023 at 01:17:12PM -0700, Suren Baghdasaryan wrote:
+> > > diff --git a/include/linux/kernfs.h b/include/linux/kernfs.h
+> > > index 73f5c120def8..a7e404ff31bb 100644
+> > > --- a/include/linux/kernfs.h
+> > > +++ b/include/linux/kernfs.h
+> > > @@ -273,6 +273,11 @@ struct kernfs_ops {
+> > >      */
+> > >     int (*open)(struct kernfs_open_file *of);
+> > >     void (*release)(struct kernfs_open_file *of);
+> > > +   /*
+> > > +    * Free resources tied to the lifecycle of the file, like a
+> > > +    * waitqueue used for polling.
+> > > +    */
+> > > +   void (*free)(struct kernfs_open_file *of);
+> >
+> > I think this can use a bit more commenting - ie. explain that release m=
+ay be
+> > called earlier than the actual freeing of the file and how that can lea=
+d to
+> > problems. Othre than that, looks fine to me.
+>
+> It seems the more natural thing to do would be to introduce a ->drain()
+> operation and order it before ->release(), no?
 
-... and depends on kernel enabling that can be found at
-
-https://lore.kernel.org/all/20230609183632.48706-1-alexander.shishkin@linux.intel.com
-
-> We tested the basic function of LASS virtualization including LASS
-> enumeration and enabling in non-root and nested environment. As KVM
-> unittest framework is not compatible to LASS rule, we use kernel module
-> and application test to emulate LASS violation instead. With KVM forced
-> emulation mechanism, we also verified the LASS functionality on some
-> emulation path with instruction fetch and data access to have same
-> behavior as hardware.
-> 
-> [1] Intel ISE https://cdrdv2.intel.com/v1/dl/getContent/671368
-> Chapter Linear Address Space Separation (LASS)
+I assume you mean we should add a ->drain() operation and call it when
+kernfs_drain_open_files()  causes kernfs_release_file()? That would
+work but if any existing release() handler counts on the current
+behavior (release() being called while draining) then we should find
+and fix these. Hopefully they don't really depend on the current
+behavior but I dunno.
