@@ -2,152 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41FAE73FFD3
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 17:36:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EF7B73FFCC
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 17:35:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231200AbjF0PgX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 11:36:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49602 "EHLO
+        id S231352AbjF0Pfc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 11:35:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231974AbjF0PgL (ORCPT
+        with ESMTP id S229562AbjF0Pf3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 11:36:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C99A02D4E
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 08:35:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687880122;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=G1ALzO/wFiWKSePyymH4fMjBT5VyA413q3eqPcghorU=;
-        b=S0zYvqXmyS67WS4awvnZvKr2EiUcWTYsvZpKITIEeau2ykzlWNNG8a3h4kMKwKmIrp869y
-        AxpY/3mfbMb3PIul8v8eDq/qVED/mXkBlPfyHTD/Vx6uOpegVyaubGUEPa2vQE2D06zoFe
-        KqwkWEpXhh0+QMgGu3ji/3OnamgpT+A=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-326-UKoZAadONkq8v0QYqerUvQ-1; Tue, 27 Jun 2023 11:32:57 -0400
-X-MC-Unique: UKoZAadONkq8v0QYqerUvQ-1
-Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-3f9e7a1caf2so14671901cf.0
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 08:32:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687879957; x=1690471957;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=G1ALzO/wFiWKSePyymH4fMjBT5VyA413q3eqPcghorU=;
-        b=Nqsan68kZ2s23JYne28i34Vqqdn9yc/drzscxgDtNvzDuMLvsi9WxvSFwNrLjuzFUI
-         PZf5lHpLXga40+ELKARAYpsTiE7wHSY6Oz7XHqMiQkaXpekQ5/fdDAaCYIhh1rO2INrM
-         gXCXHvtyltiaMgmq9gLdyVrSXZzhUgdwWLUHf2F8CNVuLE87ABbBV26nzuHoo1Te9kkh
-         5nQmhAWV01l+Yg4kleD3rzt6BfpyY0nvTVCy0s7s5QJ3sQwDL2NAb0tar6d3Y7nM0nPB
-         vEvOV3gnzUXCnf2UQSoGQD4HThCZIrFZuaARuKbIC3S9rh95Vda4JHpWFcTLuvioJFQ2
-         +u2A==
-X-Gm-Message-State: AC+VfDxa+g4OdFoZ6ZowrU8ZvbIethJTAfZKZQpzMZgklnoHyvN8ZAWD
-        b4SGZGo+Ppz2a5GAPvjqZSqfwHsdBBJoZptgVJV4XhRzjMq9O86OLYsz6vAbhmmkU2fzKTK6KnV
-        3q6N/A5fxzHqrKicmkKl6F+8I
-X-Received: by 2002:a05:622a:cd:b0:400:7965:cfe with SMTP id p13-20020a05622a00cd00b0040079650cfemr21655417qtw.4.1687879957104;
-        Tue, 27 Jun 2023 08:32:37 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6zPzMhz4REkPK/MBYPYe5SrH6d3O3dbP7Q5ElYBJDoHZfw+Ezf8WGzTdhTD7wkJOjvplAZ+Q==
-X-Received: by 2002:a05:622a:cd:b0:400:7965:cfe with SMTP id p13-20020a05622a00cd00b0040079650cfemr21655381qtw.4.1687879956819;
-        Tue, 27 Jun 2023 08:32:36 -0700 (PDT)
-Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
-        by smtp.gmail.com with ESMTPSA id w22-20020ac843d6000000b003fb6cd74482sm4656322qtn.50.2023.06.27.08.32.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jun 2023 08:32:36 -0700 (PDT)
-Date:   Tue, 27 Jun 2023 11:32:34 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     akpm@linux-foundation.org, willy@infradead.org, hannes@cmpxchg.org,
-        mhocko@suse.com, josef@toxicpanda.com, jack@suse.cz,
-        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
-        michel@lespinasse.org, liam.howlett@oracle.com, jglisse@google.com,
-        vbabka@suse.cz, minchan@google.com, dave@stgolabs.net,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com, hdanton@sina.com,
-        apopple@nvidia.com, ying.huang@intel.com, david@redhat.com,
-        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
-        viro@zeniv.linux.org.uk, brauner@kernel.org,
-        pasha.tatashin@soleen.com, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com
-Subject: Re: [PATCH v3 5/8] mm: make folio_lock_fault indicate the state of
- mmap_lock upon return
-Message-ID: <ZJsBEk4OHlp39vEK@x1n>
-References: <20230627042321.1763765-1-surenb@google.com>
- <20230627042321.1763765-6-surenb@google.com>
+        Tue, 27 Jun 2023 11:35:29 -0400
+Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679F42978;
+        Tue, 27 Jun 2023 08:35:28 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.west.internal (Postfix) with ESMTP id D527D2B0013F;
+        Tue, 27 Jun 2023 11:35:22 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Tue, 27 Jun 2023 11:35:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1687880122; x=1687887322; bh=Ma
+        Wd3XEowwvLUFCc41uoQ1RE2kMoRIlrDDw0f1G5UY8=; b=Fs0XZFqcF1Z6kxWEqj
+        VyipIL1Lu2IQBe6WPOIhyccgGX5pW5thA0IpIpbrLMyRZP46FokJJG4n8nge6xrd
+        wPZDY+RpHlYiMHbTEKOu2REa5lfjAvtfeRplS3fQrQVkr7vM3+OT9gKOQSTbscub
+        B8633BC4A1OB2ZHv2WKhM/Z3jGftxhXO8mrY5sex96hQ9iZOiwUcjNSS6pxkG9rq
+        4UwbkU6eUdBRhYz00e3DymWK2h30gFAeXrypMHue27O2Jflbx7+g2lggx4U1fXqU
+        KrtZZwzQcFpB7CWvAFM6YSVq2UZtnVqmdBMMOYUFFhlTJP0gmlv/YU5kr4x2JCRe
+        lXyg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1687880122; x=1687887322; bh=MaWd3XEowwvLU
+        FCc41uoQ1RE2kMoRIlrDDw0f1G5UY8=; b=j9ZSCj7W+XQf8JkJmrPDFf7EOxMTB
+        tqpymNDN9SIS7JTjR0gqqySkBRVgGPlNr8FQZCFfRcjlQx7IXrirGJH6D7aBaqPs
+        Z9AZoTDeJMQg08S6ImwCc4hNp0yKrSZqWISMHPmKhAPXtKeArXRJ+WKUHOTNo1Be
+        ByNZVCUa+1HJJ2lU9IDKk6j0io8jicWURhhuWVlZiiTnAqi9XPbyUUlzUgrZHRd5
+        a/bAh8a817zKOYuku1V0Ow+I0cSSq+FfF1fFIXn9NvivMXIXNBn1B/Xe0rp6mvlR
+        +5GP662che8RMu08ZyxWWK18q0j2d4Mjj1jYXVnGIO3xGbPVYMkwvwLPg==
+X-ME-Sender: <xms:uQGbZBx6DGW6t-IECKNUw9WFzYNO294lwPkVNHxyHlz_3F6G3EF6HQ>
+    <xme:uQGbZBRCy13UqbAxIjL1uoQ0lx2HM4dxvIdNQaHQnKTQqE7zuc0k2JaIleHXPT9ye
+    jweR9REd79c82u06g>
+X-ME-Received: <xmr:uQGbZLVyucbrKlXZfODVGfTwDAq0TkrrQoL2WKfzbiDmdUrmWFEfwApHG7FptRznwUrRTimviu8aa6jxWKWmqfngLEBo8zGbeboD>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrtddtgdegkecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenfg
+    hrlhcuvffnffculdejtddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtsfdttddt
+    vdenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihusegugihuuhhurdighiiiqeenuc
+    ggtffrrghtthgvrhhnpedvfeekteduudefieegtdehfeffkeeuudekheduffduffffgfeg
+    iedttefgvdfhvdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpegugihusegugihuuhhurdighiii
+X-ME-Proxy: <xmx:ugGbZDjhwzOYxW82dEuuydsSiFPt6dk92wWs2bXOdWBfZEnthxCS5w>
+    <xmx:ugGbZDD5onJICIyrRsab8yj9lDnwB5wntHPq9i8M9-jUzu5r67Tf_Q>
+    <xmx:ugGbZMLVaxTNm5BPF_9vLR3xOAbGZgGjCcWXjiz5zfYxLoOwfrOVWg>
+    <xmx:ugGbZFzStJSByafpx22ow7dsPAOzBtJREFBZQ6xrOy9l9mqE81gHgsDSFqg>
+Feedback-ID: i6a694271:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 27 Jun 2023 11:35:20 -0400 (EDT)
+Date:   Tue, 27 Jun 2023 09:35:19 -0600
+From:   Daniel Xu <dxu@dxuuu.xyz>
+To:     Florian Westphal <fw@strlen.de>
+Cc:     daniel@iogearbox.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, pablo@netfilter.org, andrii@kernel.org,
+        davem@davemloft.net, ast@kernel.org, kadlec@netfilter.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, netdev@vger.kernel.org, dsahern@kernel.org
+Subject: Re: [PATCH bpf-next 4/7] netfilter: bpf: Support
+ BPF_F_NETFILTER_IP_DEFRAG in netfilter link
+Message-ID: <5hnelxxsrwyon36k3t7uhxbdaqu4ku246vkec6kxkfkqivkcsm@xusgh57bm2xj>
+References: <cover.1687819413.git.dxu@dxuuu.xyz>
+ <242c66138bf4ec8aa26b29d736fb48242b4164ce.1687819413.git.dxu@dxuuu.xyz>
+ <20230627111248.GH3207@breakpoint.cc>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230627042321.1763765-6-surenb@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230627111248.GH3207@breakpoint.cc>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 26, 2023 at 09:23:18PM -0700, Suren Baghdasaryan wrote:
-> folio_lock_fault might drop mmap_lock before returning and to extend it
-> to work with per-VMA locks, the callers will need to know whether the
-> lock was dropped or is still held. Introduce new fault_flag to indicate
-> whether the lock got dropped and store it inside vm_fault flags.
+On Tue, Jun 27, 2023 at 01:12:48PM +0200, Florian Westphal wrote:
+> Daniel Xu <dxu@dxuuu.xyz> wrote:
+> > +static int bpf_nf_enable_defrag(struct bpf_nf_link *link)
+> > +{
+> > +	int err;
+> > +
+> > +	switch (link->hook_ops.pf) {
+> > +#if IS_ENABLED(CONFIG_NF_DEFRAG_IPV4)
+> > +	case NFPROTO_IPV4:
+> > +		const struct nf_defrag_v4_hook *v4_hook;
+> > +
+> > +		err = request_module("nf_defrag_ipv4");
+> > +		if (err)
+> > +			return err;
+> > +
+> > +		rcu_read_lock();
+> > +		v4_hook = rcu_dereference(nf_defrag_v4_hook);
+> > +		err = v4_hook->enable(link->net);
+> > +		rcu_read_unlock();
 > 
-> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> ---
->  include/linux/mm_types.h | 1 +
->  mm/filemap.c             | 2 ++
->  2 files changed, 3 insertions(+)
+> I'd reverse this, first try rcu_dereference(), then modprobe
+> if thats returned NULL.
+
+Ack.
+
 > 
-> diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-> index 79765e3dd8f3..6f0dbef7aa1f 100644
-> --- a/include/linux/mm_types.h
-> +++ b/include/linux/mm_types.h
-> @@ -1169,6 +1169,7 @@ enum fault_flag {
->  	FAULT_FLAG_UNSHARE =		1 << 10,
->  	FAULT_FLAG_ORIG_PTE_VALID =	1 << 11,
->  	FAULT_FLAG_VMA_LOCK =		1 << 12,
-> +	FAULT_FLAG_LOCK_DROPPED =	1 << 13,
->  };
->  
->  typedef unsigned int __bitwise zap_flags_t;
-> diff --git a/mm/filemap.c b/mm/filemap.c
-> index 87b335a93530..8ad06d69895b 100644
-> --- a/mm/filemap.c
-> +++ b/mm/filemap.c
-> @@ -1723,6 +1723,7 @@ vm_fault_t __folio_lock_fault(struct folio *folio, struct vm_fault *vmf)
->  			return VM_FAULT_RETRY;
->  
->  		mmap_read_unlock(mm);
-> +		vmf->flags |= FAULT_FLAG_LOCK_DROPPED;
->  		if (vmf->flags & FAULT_FLAG_KILLABLE)
->  			folio_wait_locked_killable(folio);
->  		else
-> @@ -1735,6 +1736,7 @@ vm_fault_t __folio_lock_fault(struct folio *folio, struct vm_fault *vmf)
->  		ret = __folio_lock_killable(folio);
->  		if (ret) {
->  			mmap_read_unlock(mm);
-> +			vmf->flags |= FAULT_FLAG_LOCK_DROPPED;
->  			return VM_FAULT_RETRY;
->  		}
->  	} else {
+> > +static void bpf_nf_disable_defrag(struct bpf_nf_link *link)
+> > +{
+> > +	switch (link->hook_ops.pf) {
+> > +#if IS_ENABLED(CONFIG_NF_DEFRAG_IPV4)
+> > +	case NFPROTO_IPV4:
+> > +		const struct nf_defrag_v4_hook *v4_hook;
+> > +
+> > +		rcu_read_lock();
+> > +		v4_hook = rcu_dereference(nf_defrag_v4_hook);
+> > +		v4_hook->disable(link->net);
+> > +		rcu_read_unlock();
+> 
+> if (v4_hook)
+> 	v4_hook->disable()
+> 
+> Else we get trouble on manual 'rmmod'.
 
-IIRC we've discussed about this bits in previous version, and the consensus
-was that we don't need yet another flag?  Just to recap: I think relying on
-RETRY|COMPLETE would be enough for vma lock, as NOWAIT is only used by gup
-while not affecting vma lockings, no?
+Ah good catch, thanks.
 
-As mentioned in the other reply, even COMPLETE won't appear for vma lock
-path yet afaict, so mostly only RETRY matters here and it can 100% imply a
-lock release happened.  It's just that it's very easy to still cover
-COMPLETE altogether in this case, being prepared for any possible shared
-support on vma locks, IMHO.
+> 
+> > +	/* make sure conntrack confirm is always last */
+> > +	prio = attr->link_create.netfilter.priority;
+> > +	if (prio == NF_IP_PRI_FIRST)
+> > +		return -ERANGE;  /* sabotage_in and other warts */
+> > +	else if (prio == NF_IP_PRI_LAST)
+> > +		return -ERANGE;  /* e.g. conntrack confirm */
+> > +	else if ((attr->link_create.netfilter.flags & BPF_F_NETFILTER_IP_DEFRAG) &&
+> > +		 (prio > NF_IP_PRI_FIRST && prio <= NF_IP_PRI_CONNTRACK_DEFRAG))
+> > +		return -ERANGE;  /* cannot use defrag if prog runs before nf_defrag */
+> 
+> You could elide the (prio > NF_IP_PRI_FIRST, its already handled by
+> first conditional.  Otherwise this looks good to me.
+> 
+
+Ah, right. It's INT_MIN.
+
 
 Thanks,
-
--- 
-Peter Xu
-
+Daniel
