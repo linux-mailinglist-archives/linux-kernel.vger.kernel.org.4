@@ -2,295 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77D63740331
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 20:26:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EF99740336
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 20:27:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230229AbjF0S0J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 14:26:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53110 "EHLO
+        id S231140AbjF0S1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 14:27:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbjF0S0H (ORCPT
+        with ESMTP id S230373AbjF0S1E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 14:26:07 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D64B8
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 11:26:06 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-c337c5c56ecso854877276.3
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 11:26:06 -0700 (PDT)
+        Tue, 27 Jun 2023 14:27:04 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BBB1E58
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 11:27:02 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id d75a77b69052e-4007b5bafceso37741cf.1
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 11:27:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687890365; x=1690482365;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=81m5xWkNP+GjS/HPbi1v2wGzICrWPoT0YnSmr493DPo=;
-        b=S5qhxSKQLWuqHJMFSZ3V2fGCaDXnXsv01q3Lzmy/uAjyq9HwRx48ZlUFgaUInREavH
-         5f4Dy7d2Bxl5xqY4u+IXQ9dCHJsVUVB22LxZTBAUidCOuVkitiig1Xzi+krc7bqz5ng7
-         sMAO4tJC4jlcRoNihM4U89dTGQ/UDZJxG1rkrEfTk3FhZWqJ8Io2q2ny6PxekGc/02ht
-         GhjCjpGygblvO8BZCjn9/yQuhfT+qK1wQdEwwM1y4o/2wOJ58b4OlwSQBFNa1Kh39n9G
-         Yi0AcpDfLv1f0Qcd7UELh4TdQGivz0ik9Mw4j2dHaO+UBIqPWIcwfXBxAinTvpJaJ0Mt
-         vk9Q==
+        d=google.com; s=20221208; t=1687890421; x=1690482421;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=p3Nmjy2pgfjuqrruYrf3lVaHDsPBe2Ms9OHkO4l14Tc=;
+        b=a5RlIMj6/IRppc+ipWDHPaQTI2NhmfAqOceI7FC6rDBUZ0YdWXpB5zfD+TDmPmokOg
+         jJXKx4J2oRR8E3NnFmWvYg9la8baydeNVr9oJbMJyt50K9AMIZlmte0xfGlr6TV3MML5
+         LrQAUxCQfhlj2l++9GUeDiQl/rQ+QmOHDqrNKf7heXFnN+EDTaAWQdahCnuSKR+hGYi8
+         mEYm2joPAYfJ/fx11Sys9/N3cPzfAaHa0lhslrsT7SZV8q4oWy5oGXQwkxGDn3xrr6JJ
+         AKbfCrZGMBQjGn035U+41RxpE/ToIdBPphfBiTFtcaLZRR63Up3cgl2i04ScxAi1WsUV
+         6uQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687890365; x=1690482365;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=81m5xWkNP+GjS/HPbi1v2wGzICrWPoT0YnSmr493DPo=;
-        b=VWm0cvXLQHJUsxLFmtaow0ml3ch6qFIQ5HiYUMtIqcO10NAEf850fv0j8MhRgY/l6q
-         Bk0crtfCUA5WguKP1bB8m0CCkakv9DRxB/LjplCBNqipkF74xnvfdgUjfrZj1lbTUw6E
-         13zXUfrbhXRd4Mg+2Q0pGrtjktZHAWj5DG8BnIPUqXH6/spOxp3WarzIe6e/48kbZ+MS
-         jROLUITIGfqnrwxA9oDjwwCU625WjxeOZdSh3jA6PESGfdouSZK3aHxUFrR67SP/xQK6
-         MTmukgE0/zxVGROa9FYp8V7FI3jtqz6in/7QqAiPVKXBTqrozyh0KXxhrlGfIWkNxbTV
-         0mQQ==
-X-Gm-Message-State: AC+VfDxmFzU1bB+w/e+71HMNX5yu1p5OxGC5Mh8aKGYcarjDMLJCWXPT
-        JmjroZJ14pllTV7jCxy4jmAIM7yOakU=
-X-Google-Smtp-Source: ACHHUZ6enSW0eb2knSbUgE8LCETGfCR0YbBP1xlXox8wJIQwA7JaTkXrZ+5CQJjillg+07WBR5k6DgOGRCY=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:addb:0:b0:be3:b9a6:a6b2 with SMTP id
- d27-20020a25addb000000b00be3b9a6a6b2mr7679867ybe.9.1687890365383; Tue, 27 Jun
- 2023 11:26:05 -0700 (PDT)
-Date:   Tue, 27 Jun 2023 11:26:03 -0700
-In-Reply-To: <20230601142309.6307-4-guang.zeng@intel.com>
-Mime-Version: 1.0
-References: <20230601142309.6307-1-guang.zeng@intel.com> <20230601142309.6307-4-guang.zeng@intel.com>
-Message-ID: <ZJspu3uS2mirF+4k@google.com>
-Subject: Re: [PATCH v1 3/6] KVM: VMX: Add new ops in kvm_x86_ops for LASS
- violation check
-From:   Sean Christopherson <seanjc@google.com>
-To:     Zeng Guang <guang.zeng@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        d=1e100.net; s=20221208; t=1687890421; x=1690482421;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=p3Nmjy2pgfjuqrruYrf3lVaHDsPBe2Ms9OHkO4l14Tc=;
+        b=GJqZq1NnqTcOt9IUi62ygEgzmx9S+pbUEQWoaZaWxlH+mEhmdkcIrZ3GCnd0jLsKrg
+         Kjq2tT4SlJX/nUswAaPGSrYfSpJWhlPMqgBytyAmodqme26D2H9K8a+i7udVo3XagJmD
+         d9GXOFwr8Zro4d1Ap8e4eCPYzfuhgBufYn63GRrvxun8XG7TFhW8o0PfI3UQp3qGukAx
+         RKRQX5/aKmdne8u8CBL3cZBOpc+L4TImvSrUbNYPYqFxk0c4ZGX0kYLQPK/7AYTyWt+X
+         uzGiwTDR3n7u4Hm6TKZN7rqt6SUcnnKB97+804p7+KKJLCbQc/XFGfVVJqlpwOL7y8wA
+         KfnQ==
+X-Gm-Message-State: AC+VfDxalAsBN/QyKV7M9CKbRNUFN6HdXyh23L9Tcafywu/ok6hBS/9Z
+        iUyJrqW8RMnVyisZb3BK3R069Qti4ioFHSpIA5PLtg==
+X-Google-Smtp-Source: ACHHUZ7AEqZrzh/K1utyZf5ok0cHqv3xg8Py/k6kKIR4nUU8VzPiHpf2nmqNfAfLWWb4tXJtlvac6dFD7KRPewyjF7A=
+X-Received: by 2002:ac8:57ca:0:b0:3f8:6685:c944 with SMTP id
+ w10-20020ac857ca000000b003f86685c944mr20146qta.14.1687890420797; Tue, 27 Jun
+ 2023 11:27:00 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230626171430.3167004-1-ryan.roberts@arm.com>
+ <20230626171430.3167004-2-ryan.roberts@arm.com> <CAOUHufacvArJh7NjL_3LT-e3s1X+bazkvbgvEU+KPKGKEoW+dw@mail.gmail.com>
+ <2ff8ccf6-bf36-48b2-7dc2-e6c0d962f8b7@arm.com> <CAOUHufZoT-maN3kY5eYQmrYV48shmKAAancEvabXzfTDncDa9A@mail.gmail.com>
+ <91e3364f-1d1b-f959-636b-4f60bf5a577b@arm.com>
+In-Reply-To: <91e3364f-1d1b-f959-636b-4f60bf5a577b@arm.com>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Tue, 27 Jun 2023 12:26:24 -0600
+Message-ID: <CAOUHufaEwY=cm8mBi4HSbxYBvAr_x4_vyZZM2NYHEt-U7KaFhA@mail.gmail.com>
+Subject: Re: [PATCH v1 01/10] mm: Expose clear_huge_page() unconditionally
+To:     Ryan Roberts <ryan.roberts@arm.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Yin Fengwei <fengwei.yin@intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        H Peter Anvin <hpa@zytor.com>, kvm@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
-        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-s390@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Similar to comments on an earlier patch, don't try to describe the literal code
-change, e.g. this does far more than just "Add new ops in kvm_x86_ops".  Something
-like
+On Tue, Jun 27, 2023 at 3:41=E2=80=AFAM Ryan Roberts <ryan.roberts@arm.com>=
+ wrote:
+>
+> On 27/06/2023 09:29, Yu Zhao wrote:
+> > On Tue, Jun 27, 2023 at 1:21=E2=80=AFAM Ryan Roberts <ryan.roberts@arm.=
+com> wrote:
+> >>
+> >> On 27/06/2023 02:55, Yu Zhao wrote:
+> >>> On Mon, Jun 26, 2023 at 11:14=E2=80=AFAM Ryan Roberts <ryan.roberts@a=
+rm.com> wrote:
+> >>>>
+> >>>> In preparation for extending vma_alloc_zeroed_movable_folio() to
+> >>>> allocate a arbitrary order folio, expose clear_huge_page()
+> >>>> unconditionally, so that it can be used to zero the allocated folio =
+in
+> >>>> the generic implementation of vma_alloc_zeroed_movable_folio().
+> >>>>
+> >>>> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
+> >>>> ---
+> >>>>  include/linux/mm.h | 3 ++-
+> >>>>  mm/memory.c        | 2 +-
+> >>>>  2 files changed, 3 insertions(+), 2 deletions(-)
+> >>>>
+> >>>> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> >>>> index 7f1741bd870a..7e3bf45e6491 100644
+> >>>> --- a/include/linux/mm.h
+> >>>> +++ b/include/linux/mm.h
+> >>>> @@ -3684,10 +3684,11 @@ enum mf_action_page_type {
+> >>>>   */
+> >>>>  extern const struct attribute_group memory_failure_attr_group;
+> >>>>
+> >>>> -#if defined(CONFIG_TRANSPARENT_HUGEPAGE) || defined(CONFIG_HUGETLBF=
+S)
+> >>>>  extern void clear_huge_page(struct page *page,
+> >>>>                             unsigned long addr_hint,
+> >>>>                             unsigned int pages_per_huge_page);
+> >>>> +
+> >>>> +#if defined(CONFIG_TRANSPARENT_HUGEPAGE) || defined(CONFIG_HUGETLBF=
+S)
+> >>>
+> >>> We might not want to depend on THP eventually. Right now, we still
+> >>> have to, unless splitting is optional, which seems to contradict
+> >>> 06/10. (deferred_split_folio()  is a nop without THP.)
+> >>
+> >> Yes, I agree - for large anon folios to work, we depend on THP. But I =
+don't
+> >> think that helps us here.
+> >>
+> >> In the next patch, I give vma_alloc_zeroed_movable_folio() an extra `o=
+rder`
+> >> parameter. So the generic/default version of the function now needs a =
+way to
+> >> clear a compound page.
+> >>
+> >> I guess I could do something like:
+> >>
+> >>  static inline
+> >>  struct folio *vma_alloc_zeroed_movable_folio(struct vm_area_struct *v=
+ma,
+> >>                                    unsigned long vaddr, gfp_t gfp, int=
+ order)
+> >>  {
+> >>         struct folio *folio;
+> >>
+> >>         folio =3D vma_alloc_folio(GFP_HIGHUSER_MOVABLE | gfp,
+> >>                                         order, vma, vaddr, false);
+> >>         if (folio) {
+> >> #ifdef CONFIG_LARGE_FOLIO
+> >>                 clear_huge_page(&folio->page, vaddr, 1U << order);
+> >> #else
+> >>                 BUG_ON(order !=3D 0);
+> >>                 clear_user_highpage(&folio->page, vaddr);
+> >> #endif
+> >>         }
+> >>
+> >>         return folio;
+> >>  }
+> >>
+> >> But that's pretty messy and there's no reason why other users might co=
+me along
+> >> that pass order !=3D 0 and will be surprised by the BUG_ON.
+> >
+> > #ifdef CONFIG_LARGE_ANON_FOLIO // depends on CONFIG_TRANSPARENT_HUGE_PA=
+GE
+> > struct folio *alloc_anon_folio(struct vm_area_struct *vma, unsigned
+> > long vaddr, int order)
+> > {
+> >   // how do_huge_pmd_anonymous_page() allocs and clears
+> >   vma_alloc_folio(..., *true*);
+>
+> This controls the mem allocation policy (see mempolicy.c::vma_alloc_folio=
+()) not
+> clearing. Clearing is done in __do_huge_pmd_anonymous_page():
+>
+>   clear_huge_page(page, vmf->address, HPAGE_PMD_NR);
 
-  KVM: VMX: Add emulation of LASS violation checks on linear address 
+Sorry for rushing this previously. This is what I meant. The #ifdef
+makes it safe to use clear_huge_page() without 01/10. I highlighted
+the last parameter to vma_alloc_folio() only because it's different
+from what you chose (not implying it clears the folio).
 
-On Thu, Jun 01, 2023, Zeng Guang wrote:
-> Intel introduces LASS (Linear Address Separation) feature providing
-> an independent mechanism to achieve the mode-based protection.
-> 
-> LASS partitions 64-bit linear address space into two halves, user-mode
-> address (LA[bit 63]=0) and supervisor-mode address (LA[bit 63]=1). It
-> stops any code execution or conditional data access[1]
->     1. from user mode to supervisor-mode address space
->     2. from supervisor mode to user-mode address space
-> and generates LASS violation fault accordingly.
-> 
-> [1]A supervisor mode data access causes a LASS violation only if supervisor
-> mode access protection is enabled (CR4.SMAP = 1) and either RFLAGS.AC = 0
-> or the access implicitly accesses a system data structure.
-> 
-> Following are the rules of LASS violation check on the linear address(LA).
-> User access to supervisor-mode address space:
->     LA[bit 63] && (CPL == 3)
-> Supervisor access to user-mode address space:
->     Instruction fetch: !LA[bit 63] && (CPL < 3)
->     Data access: !LA[bit 63] && (CR4.SMAP==1) && ((RFLAGS.AC == 0 &&
->                  CPL < 3) || Implicit supervisor access)
-> 
-> Add new ops in kvm_x86_ops to do LASS violation check.
-> 
-> Signed-off-by: Zeng Guang <guang.zeng@intel.com>
-> Tested-by: Xuelian Guo <xuelian.guo@intel.com>
-> ---
->  arch/x86/include/asm/kvm-x86-ops.h |  3 +-
->  arch/x86/include/asm/kvm_host.h    |  2 ++
->  arch/x86/kvm/kvm_emulate.h         |  1 +
->  arch/x86/kvm/vmx/vmx.c             | 47 ++++++++++++++++++++++++++++++
->  arch/x86/kvm/vmx/vmx.h             |  2 ++
->  5 files changed, 54 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
-> index 13bc212cd4bc..8980a3bfa687 100644
-> --- a/arch/x86/include/asm/kvm-x86-ops.h
-> +++ b/arch/x86/include/asm/kvm-x86-ops.h
-> @@ -132,7 +132,8 @@ KVM_X86_OP_OPTIONAL(migrate_timers)
->  KVM_X86_OP(msr_filter_changed)
->  KVM_X86_OP(complete_emulated_msr)
->  KVM_X86_OP(vcpu_deliver_sipi_vector)
-> -KVM_X86_OP_OPTIONAL_RET0(vcpu_get_apicv_inhibit_reasons);
-> +KVM_X86_OP_OPTIONAL_RET0(vcpu_get_apicv_inhibit_reasons)
-> +KVM_X86_OP_OPTIONAL_RET0(check_lass)
+> > }
+> > #else
+> > #define alloc_anon_folio(vma, addr, order)
+> > vma_alloc_zeroed_movable_folio(vma, addr)
+> > #endif
+>
+> Sorry I don't get this at all... If you are suggesting to bypass
+> vma_alloc_zeroed_movable_folio() entirely for the LARGE_ANON_FOLIO case
 
-Use "is_lass_violation" instead of "check_lass" for all function names.  "check"
-doesn't convey that the function is a predicate, i.e. that it returns true/false.
+Correct.
 
->  #undef KVM_X86_OP
->  #undef KVM_X86_OP_OPTIONAL
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index 92d8e65fe88c..98666d1e7727 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -1731,6 +1731,8 @@ struct kvm_x86_ops {
->  	 * Returns vCPU specific APICv inhibit reasons
->  	 */
->  	unsigned long (*vcpu_get_apicv_inhibit_reasons)(struct kvm_vcpu *vcpu);
-> +
-> +	bool (*check_lass)(struct kvm_vcpu *vcpu, u64 access, u64 la, u32 flags);
->  };
->  
->  struct kvm_x86_nested_ops {
-> diff --git a/arch/x86/kvm/kvm_emulate.h b/arch/x86/kvm/kvm_emulate.h
-> index 5b9ec610b2cb..f1439ab7c14b 100644
-> --- a/arch/x86/kvm/kvm_emulate.h
-> +++ b/arch/x86/kvm/kvm_emulate.h
-> @@ -91,6 +91,7 @@ struct x86_instruction_info {
->  /* x86-specific emulation flags */
->  #define X86EMUL_F_FETCH			BIT(0)
->  #define X86EMUL_F_WRITE			BIT(1)
-> +#define X86EMUL_F_SKIPLASS		BIT(2)
+> I don't
+> think that works because the arch code adds its own gfp flags there. For
+> example, arm64 adds __GFP_ZEROTAGS for VM_MTE VMAs.
 
-This belongs in the patch that integrates LASS into the emulator.  And rather than
-make the flag a command (SKIPLASS), I think it makes sense to make the flag describe
-the access.  It'll mean more flags, but those are free.  That way the originators of
-the accesses, e.g. em_invlpg(), don't need to document how they interact with LASS,
-e.g. this code is self-documenting, and if someone wants to understand why KVM
-has a dedicated X86EMUL_F_INVLPG flag, it's easy enough to find the consumer.
-And in the unlikely scenario that other things care about INVLPG, branch targets,
-etc., we won't end up with X86EMUL_F_SKIPLASS, X86EMUL_F_SKIPOTHER, etc.
+I think it's the opposite: it should be safer to reuse the THP code because
+1. It's an existing case that has been working for PMD_ORDER folios
+mapped by PTEs, and it's an arch-independent API which would be easier
+to review.
+2. Use vma_alloc_zeroed_movable_folio() for large folios is a *new*
+case. It's an arch-*dependent* API which I have no idea what VM_MTE
+does (should do) to large folios and don't plan to answer that for
+now.
 
-	rc = __linearize(ctxt, ctxt->src.addr.mem, &max_size, 1,
-			 X86EMUL_F_INVLPG, ctxt->mode, &linear);
+> Perhaps we can do away with an arch-owned vma_alloc_zeroed_movable_folio(=
+) and
+> replace it with a new arch_get_zeroed_movable_gfp_flags() then
+> alloc_anon_folio() add in those flags?
+>
+> But I still think the cleanest, simplest change is just to unconditionall=
+y
+> expose clear_huge_page() as I've done it.
 
-So this?
-
-  #define X86EMUL_F_IMPLICIT
-  #define X86EMUL_F_INVLPG
-  #define X86EMUL_F_BRANCH_TARGET
-
->  struct x86_emulate_ops {
->  	void (*vm_bugged)(struct x86_emulate_ctxt *ctxt);
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index a33205ded85c..876997e8448e 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -8130,6 +8130,51 @@ static void vmx_vm_destroy(struct kvm *kvm)
->  	free_pages((unsigned long)kvm_vmx->pid_table, vmx_get_pid_table_order(kvm));
->  }
->  
-> +/*
-> + * Determine whether an access to the linear address causes a LASS violation.
-> + * LASS protection is only effective in long mode. As a prerequisite, caller
-> + * should make sure vCPU running in long mode and invoke this api to do LASS
-> + * violation check.
-> + */
-> +bool vmx_check_lass(struct kvm_vcpu *vcpu, u64 access, u64 la, u32 flags)
-> +{
-> +	bool user_mode, user_as, rflags_ac;
-> +
-> +	if (!!(flags & X86EMUL_F_SKIPLASS) ||
-> +	    !kvm_is_cr4_bit_set(vcpu, X86_CR4_LASS))
-> +		return false;
-> +
-> +	WARN_ON_ONCE(!is_long_mode(vcpu));
-
-This is silly.  By making this a preqreq, 2 of the 3 callers are forced to explicitly
-check for is_long_mode(), *and* it unnecessarily bleeds LASS details outside of VMX.
-
-> +
-> +	user_as = !(la >> 63);
-> +
-> +	/*
-> +	 * An access is a supervisor-mode access if CPL < 3 or if it implicitly
-> +	 * accesses a system data structure. For implicit accesses to system
-> +	 * data structure, the processor acts as if RFLAGS.AC is clear.
-> +	 */
-> +	if (access & PFERR_IMPLICIT_ACCESS) {
-
-Please don't use PFERR_IMPLICIT_ACCESS, just extend the new flags.  This is
-obviously not coming from a page fault.  PFERR_IMPLICIT_ACCESS really shouldn't
-exist, but at least there was reasonable justification for adding it (changing
-all of the paths that lead to permission_fault() would have require a massive
-overhaul).
-
-***HOWEVER***
-
-I think the entire approach of hooking __linearize() may be a mistake, and LASS
-should instead be implemented in a wrapper of ->gva_to_gpa().  The two calls to
-__linearize() that are escaped with SKIPLASS are escaped *because* they don't
-actually access memory (branch targets and INVLPG), and so if LASS is enforced
-only when ->gva_to_gpa() is invoked, all of these new flags go away because the
-cases that ignore LASS are naturally handled.
-
-That should also make it unnecessary to add one-off checks since e.g. kvm_handle_invpcid()
-will hit kvm_read_guest_virt() and thus ->gva_to_gpa(), i.e. we won't end up playing
-an ongoing game of whack-a-mole.
-
-And one question that needs to be answered is what happens when an access rolls
-over from supervisor to user, e.g. if the kernel access 8 bytes at -1ull and thus
-reads all Fs => 0x6, does the access get a LASS violation on the access to user
-memory.  User=>supervisor can't happen because non-canonical checks have higher
-priority, but supervisor=>user can.  And that matters because it will impact
-whether or not KVM needs to check each *page* or just the initial address.
-
-> +		user_mode = false;
-> +		rflags_ac = false;
-> +	} else {
-> +		user_mode = vmx_get_cpl(vcpu) == 3;
-> +		if (!user_mode)
-> +			rflags_ac = !!(kvm_get_rflags(vcpu) & X86_EFLAGS_AC);
-> +	}
-> +
-> +	if (user_mode == user_as)
-> +		return false;
-> +
-> +	/*
-> +	 * Supervisor-mode _data_ accesses to user address space
-> +	 * cause LASS violations only if SMAP is enabled.
-> +	 */
-> +	if (!user_mode && !(access & PFERR_FETCH_MASK))
-> +		return kvm_is_cr4_bit_set(vcpu, X86_CR4_SMAP) && !rflags_ac;
-
-This is all more complex than it needs to be.  Using local bools just so that
-the "user_mode == user_as" is common is not a good tradeoff.  User addresses have
-*significantly* different behavior, lean into that instead of dancing around it.
-
-bool is_lass_violation(struct kvm_vcpu *vcpu, unsigned long addr,
-		       unsigned int flags)
-{
-	const bool is_supervisor_access = addr & BIT_ULL(63);
-	const bool implicit = flags & X86EMUL_F_IMPLICIT;
-
-	bool user_mode, user_as, rflags_ac;
-
-	if (!kvm_is_cr4_bit_set(vcpu, X86_CR4_LASS) || !is_long_mode(vcpu))
-		return false;
-
-	/*
-	 * INVLPG isn't subject to LASS, e.g. to allow invalidating userspace
-	 * addresses without toggling RFLAGS.AC.  Branch targets aren't subject
-	 * to LASS in order to simplifiy far control transfers (the subsequent
-	 * fetch will enforce LASS as appropriate).
-	 */
-	if (flags & (X86EMUL_F_BRANCH_TARGET | X86EMUL_F_INVLPG))
-		return false;
-
-	if (!implicit && vmx_get_cpl(vcpu) == 3)
-		return is_supervisor_address;
-
-	/* LASS is enforced for supervisor access iff SMAP is enabled. */
-	if (!kvm_is_cr4_bit_set(vcpu, X86_CR4_SMAP))
-		return false;
-
-	/* Like SMAP, RFLAGS.AC disables LASS checks in supervisor mode. */
-	if (!implicit && (kvm_get_rflags(vcpu) & X86_EFLAGS_AC))
-		return false;
-
-	return !is_supervisor_address;
-}
-
-> +	return true;
-> +}
+The fundamental choice there as I see it is to whether the first step
+of large anon folios should lean toward the THP code base or the base
+page code base (I'm a big fan of the answer "Neither -- we should
+create something entirely new instead"). My POV is that the THP code
+base would allow us to move faster, since it's proven to work for a
+very similar case (PMD_ORDER folios mapped by PTEs).
