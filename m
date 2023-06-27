@@ -2,431 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDB5873FCCC
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 15:24:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD30A73FCC8
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 15:24:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230205AbjF0NYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 09:24:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33648 "EHLO
+        id S230161AbjF0NYJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 09:24:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230203AbjF0NYY (ORCPT
+        with ESMTP id S231148AbjF0NYD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 09:24:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5F5E1BC8
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 06:23:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687872218;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tGxhg8QGQ9+BpJAoqUPu1JIoDVbHcL8KnysND43NiuE=;
-        b=NKlCv0Bw2XPUT/wLubwwfLoIzPWdQzMn8DrdOlaKHKjcnscnZG33hKDlu4S3zW5XRfTkrK
-        lU7LHZFlz5uHT6VRo62ysGvaO9ASYhuIVibyiCAHiWxRFJoTyauVPalyHuNLQ4zbdlJUtZ
-        yYSS82dHa90eV9U8z2/2hG+hly/GtIg=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-584-6fhsQWDzNKWYKeBeWfH-Vg-1; Tue, 27 Jun 2023 09:23:36 -0400
-X-MC-Unique: 6fhsQWDzNKWYKeBeWfH-Vg-1
-Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-987accb96dbso307221166b.2
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 06:23:35 -0700 (PDT)
+        Tue, 27 Jun 2023 09:24:03 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB97B2978
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 06:23:57 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id 3f1490d57ef6-bfe97b3752bso4534722276.1
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 06:23:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687872237; x=1690464237;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=/JjYFWhUkMupfyA5wc877/4DODs5BAde5YzMX5S1gP8=;
+        b=ho7foCp1iomzBMJUN9dgNTqgOYV6foh3PxhD42wyab2lTivFel6OtChoy2wARvAwTW
+         zipYDhOBCN8mIHqoPsGCzD459X7nQ2yK0seUpuAeigWN82vCEioSp+r1T+TnOZc1NbK2
+         eK2scxkS9uuEgo7FVcQ6mwn68nEjbwJ0VyTij68U75ELIKTD5RfmZkWYjWV/oE7txY1d
+         hA3woL1CXR1sOioU9frSebjeK7RF5tQCACjcVcyTg/DmHy/Q3XwyZC8rgC5QpobPeJE6
+         2Zx18Yd2gF6zilQdrAuR4Fxau7QYqfvPst97Ut56Zxh9g8YbwgHm0nZLrISFJl8txg+Q
+         sLRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687872214; x=1690464214;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tGxhg8QGQ9+BpJAoqUPu1JIoDVbHcL8KnysND43NiuE=;
-        b=kgMr7S6gNdRovTp+URY72h5t+ITq+EPlhdpeD0xYyqzVCTKZ6bsV2F3/m6wH/l8vu+
-         sBjbaQ4uOGEOoTxxejyAuKu9JzHzywos1yPW7XuezRaorJ9aH25DS5GFaWP2LHwZuYYw
-         l3O/sXcMF7MpS5eebGoVYKjYVlCuUMFFrpksIbQ8CewkU17RYKn18dr1pRdbYRDparIA
-         ctnQZQWbH04In1xBnZmGz05l9NXRDJdUs0zzGFB3hoUUjH61uZ6FaojECH2IAz6Jjj4w
-         Uo5YFMw1YGQBZq/5vlv2U5g+RqvsStMPYLvTjZito8UVPeyW2xZwE44053WRGFfjqykL
-         FueQ==
-X-Gm-Message-State: AC+VfDwDPYuP1daXL5D7OMzQ4EiTmSPUagyP6xspjpaVQ8ZLuiLpACLw
-        r72KsD3z9YW+FYV9JtPgrKPrjjpd+13DskXAWJ0bPZxEvjeebTxWj6+HmElBmuZwMZQZCSNcO7V
-        9vq8Ij6i1GuruN0Az3xcIlwxL0oH7iyY=
-X-Received: by 2002:a17:907:6d1f:b0:991:d336:9b32 with SMTP id sa31-20020a1709076d1f00b00991d3369b32mr4605037ejc.35.1687872213990;
-        Tue, 27 Jun 2023 06:23:33 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7ZI6wqeMqj0mC7/1kR2G2bIYUZUExPbAvxtZ249lLZ7QyeDSV0ok3T7mdKpUcxIdnPlIifmQ==
-X-Received: by 2002:a17:907:6d1f:b0:991:d336:9b32 with SMTP id sa31-20020a1709076d1f00b00991d3369b32mr4605021ejc.35.1687872213562;
-        Tue, 27 Jun 2023 06:23:33 -0700 (PDT)
-Received: from [192.168.9.16] (net-2-34-24-242.cust.vodafonedsl.it. [2.34.24.242])
-        by smtp.gmail.com with ESMTPSA id w6-20020a17090633c600b0098748422178sm4516770eja.56.2023.06.27.06.23.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Jun 2023 06:23:33 -0700 (PDT)
-Message-ID: <d230b259-b3b2-c6b1-1238-c3f04587f340@redhat.com>
-Date:   Tue, 27 Jun 2023 15:23:32 +0200
+        d=1e100.net; s=20221208; t=1687872237; x=1690464237;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/JjYFWhUkMupfyA5wc877/4DODs5BAde5YzMX5S1gP8=;
+        b=ecffaSNFU8jjB9YYTwyJV5kAjxko1SHmPAjkSG5MvNumhLExZ+nEAmNMbSk5KSswWI
+         vTT/7ePfn0S1/F9WOeFFlJXO3VMVKawb/JUHBPDXlOr0/bliy6cc7n2u7SSbd5PPmEVa
+         0m7N/yA0yMfenz+dCy+4hOhqTjWVrPAKsYQ5ziPXWcJwqQx8huxv/k9f6spEqRxsVIvS
+         X84jYOlwW33NOODovzhX2a8aqa7HSUVsoVJNXDiFV5cL8c9GKr0/VzuAtOepTNMb/9cf
+         k2S7RSgQaYRMvgkAcrjOckOo/6Q0i3IAx9B5bqg9uUiIN+t+N7/3SxQ/+IQMikibb39U
+         GFAA==
+X-Gm-Message-State: AC+VfDzutmZa1oLKRwuwqCqC22/DDJ+QET12y7GdCJiHr+7lfE0TPFHc
+        tmjoWW41n6eJtgj1yAT3QSuCwMcOoM+8Y8n39JQ=
+X-Google-Smtp-Source: ACHHUZ5kYle0pb+ExBj6UrSHmU6RI+90cNOJvoGrC4RF/jQeBWkHQHDJOqw+v3NeiwRfA/nyZjyyhfvCiY6CN8+asB8=
+X-Received: by 2002:a25:dd8:0:b0:beb:5abc:763e with SMTP id
+ 207-20020a250dd8000000b00beb5abc763emr26131120ybn.26.1687872236662; Tue, 27
+ Jun 2023 06:23:56 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v7 1/4] fpga: add an initial KUnit suite for the FPGA
- Manager
-To:     Xu Yilun <yilun.xu@intel.com>
-Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-fpga@vger.kernel.org
-References: <20230616154405.220502-1-marpagan@redhat.com>
- <20230616154405.220502-2-marpagan@redhat.com>
- <ZJfokyHdapZEgTyY@yilunxu-OptiPlex-7050>
-Content-Language: en-US
-From:   Marco Pagani <marpagan@redhat.com>
-In-Reply-To: <ZJfokyHdapZEgTyY@yilunxu-OptiPlex-7050>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230619075315.49114-1-zhiguangni01@gmail.com>
+In-Reply-To: <20230619075315.49114-1-zhiguangni01@gmail.com>
+From:   Liam Ni <zhiguangni01@gmail.com>
+Date:   Tue, 27 Jun 2023 21:23:40 +0800
+Message-ID: <CACZJ9cXTJkHKGfZQsjf6LsySSwfYDht=fR+e+8bpMxT+Wi722g@mail.gmail.com>
+Subject: Re: [PATCH V2] x86,NUMA:improve the execution efficiency of numa_meminfo_cover_memory()
+To:     rppt@kernel.org
+Cc:     dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
+        hpa@zytor.com, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+friendly ping
 
-
-On 2023-06-25 09:11, Xu Yilun wrote:
-> On 2023-06-16 at 17:44:02 +0200, Marco Pagani wrote:
->> The suite tests the basic behaviors of the FPGA Manager including
->> programming using a single contiguous buffer and a scatter gather table.
->>
->> Signed-off-by: Marco Pagani <marpagan@redhat.com>
->> ---
->>  drivers/fpga/tests/fpga-mgr-test.c | 302 +++++++++++++++++++++++++++++
->>  1 file changed, 302 insertions(+)
->>  create mode 100644 drivers/fpga/tests/fpga-mgr-test.c
->>
->> diff --git a/drivers/fpga/tests/fpga-mgr-test.c b/drivers/fpga/tests/fpga-mgr-test.c
->> new file mode 100644
->> index 000000000000..70e897dad3b6
->> --- /dev/null
->> +++ b/drivers/fpga/tests/fpga-mgr-test.c
->> @@ -0,0 +1,302 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * KUnit test for the FPGA Manager
->> + *
->> + * Copyright (C) 2023 Red Hat, Inc.
->> + *
->> + * Author: Marco Pagani <marpagan@redhat.com>
->> + */
->> +
->> +#include <linux/types.h>
->> +#include <linux/module.h>
->> +#include <linux/device.h>
->> +#include <linux/scatterlist.h>
->> +#include <kunit/test.h>
->> +#include <linux/fpga/fpga-mgr.h>
-> 
-> alphabetical order please
+On Mon, 19 Jun 2023 at 15:53, Liam Ni <zhiguangni01@gmail.com> wrote:
 >
-
-I'll sort all includes alphabetically in the next version.
-
->> +
->> +#define HEADER_FILL		'H'
->> +#define IMAGE_FILL		'P'
->> +#define IMAGE_BLOCK		1024
->> +
->> +#define HEADER_SIZE		IMAGE_BLOCK
->> +#define IMAGE_SIZE		(IMAGE_BLOCK * 4)
->> +
->> +struct mgr_stats {
->> +	bool header_match;
->> +	bool image_match;
->> +	u32 seq_num;
->> +	u32 op_parse_header_seq;
->> +	u32 op_write_init_seq;
->> +	u32 op_write_seq;
->> +	u32 op_write_sg_seq;
->> +	u32 op_write_complete_seq;
->> +	enum fpga_mgr_states op_parse_header_state;
->> +	enum fpga_mgr_states op_write_init_state;
->> +	enum fpga_mgr_states op_write_state;
->> +	enum fpga_mgr_states op_write_sg_state;
->> +	enum fpga_mgr_states op_write_complete_state;
->> +};
->> +
->> +struct mgr_ctx {
->> +	struct fpga_image_info *img_info;
->> +	struct fpga_manager *mgr;
->> +	struct platform_device *pdev;
->> +	struct mgr_stats stats;
->> +};
->> +
->> +/**
->> + * init_test_buffer() - Allocate and initialize a test image in a buffer.
->> + * @test: KUnit test context object.
->> + * @count: image size in bytes.
->> + *
->> + * Return: pointer to the newly allocated image.
->> + */
->> +static char *init_test_buffer(struct kunit *test, size_t count)
->> +{
->> +	char *buf;
->> +	size_t i;
->> +
->> +	buf = kunit_kzalloc(test, count, GFP_KERNEL);
->> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, buf);
->> +
->> +	for (i = 0; i < count; i++)
->> +		buf[i] = i < HEADER_SIZE ? HEADER_FILL : IMAGE_FILL;
-> 
-> memset?
+> The number of pages in memblock that doesn't have the node
+> assigned,which also means that these pages are not in numa_info.
+> So these pages can represent the number of lose pages.
 >
-
-Okay, I'll use memset in the next version.
-
->> +
->> +	return buf;
->> +}
->> +
->> +static int op_parse_header(struct fpga_manager *mgr, struct fpga_image_info *info,
->> +			   const char *buf, size_t count)
->> +{
->> +	struct mgr_stats *stats = mgr->priv;
->> +	size_t i;
->> +
->> +	/* Set header_size and data_size for later */
->> +	info->header_size = HEADER_SIZE;
->> +	info->data_size = info->count - HEADER_SIZE;
->> +
->> +	stats->header_match = true;
->> +
->> +	/* Check header */
->> +	for (i = 0; i < info->header_size; i++)
->> +		if (buf[i] != HEADER_FILL)
->> +			stats->header_match = false;
->> +
->> +	stats->op_parse_header_state = mgr->state;
->> +	stats->op_parse_header_seq = stats->seq_num++;
->> +
->> +	return 0;
->> +}
->> +
->> +static int op_write_init(struct fpga_manager *mgr, struct fpga_image_info *info,
->> +			 const char *buf, size_t count)
->> +{
->> +	struct mgr_stats *stats = mgr->priv;
->> +
->> +	stats->op_write_init_state = mgr->state;
->> +	stats->op_write_init_seq = stats->seq_num++;
->> +
->> +	return 0;
->> +}
->> +
->> +static int op_write(struct fpga_manager *mgr, const char *buf, size_t count)
->> +{
->> +	struct mgr_stats *stats = mgr->priv;
->> +	size_t i;
->> +
->> +	/* Check image */
->> +	stats->image_match = true;
->> +	for (i = 0; i < count; i++)
->> +		if (buf[i] != IMAGE_FILL)
->> +			stats->image_match = false;
->> +
->> +	stats->op_write_state = mgr->state;
->> +	stats->op_write_seq = stats->seq_num++;
->> +
->> +	return 0;
->> +}
->> +
->> +static int op_write_sg(struct fpga_manager *mgr, struct sg_table *sgt)
->> +{
->> +	struct mgr_stats *stats = mgr->priv;
->> +	struct scatterlist *sg;
->> +	char *img;
->> +	unsigned int si, i, j = 0;
->> +
->> +	stats->image_match = true;
->> +
->> +	/* Check image (write_sg will still get whole image in sg_table) */
->> +	for_each_sgtable_sg(sgt, sg, si) {
->> +		img = sg_virt(sg);
->> +		for (i = 0; i < sg->length; i++) {
->> +			if (i + j > HEADER_SIZE && img[i] != IMAGE_FILL)
-> 
-> Is it possible just use sg_miter_skip() to skip the image header?
-> 
-
-I'll use sg_miter_* functions in the next version.
-
->> +				stats->image_match = false;
->> +		}
->> +		j += i;
->> +	}
->> +
->> +	stats->op_write_sg_state = mgr->state;
->> +	stats->op_write_sg_seq = stats->seq_num++;
->> +
->> +	return 0;
->> +}
->> +
->> +static int op_write_complete(struct fpga_manager *mgr, struct fpga_image_info *info)
->> +{
->> +	struct mgr_stats *stats = mgr->priv;
->> +
->> +	stats->op_write_complete_state = mgr->state;
->> +	stats->op_write_complete_seq = stats->seq_num++;
->> +
->> +	return 0;
->> +}
->> +
->> +/*
->> + * Fake Manager that implements all ops required to check the programming
->> + * sequence using a single contiguous buffer and a scatter gather table.
->> + */
->> +static const struct fpga_manager_ops fake_mgr_ops = {
->> +	.skip_header = true,
->> +	.parse_header = op_parse_header,
->> +	.write_init = op_write_init,
->> +	.write = op_write,
->> +	.write_sg = op_write_sg,
->> +	.write_complete = op_write_complete,
->> +};
->> +
->> +static void fpga_mgr_test_get(struct kunit *test)
->> +{
->> +	struct mgr_ctx *ctx = test->priv;
->> +	struct fpga_manager *mgr;
->> +
->> +	mgr = fpga_mgr_get(&ctx->pdev->dev);
->> +	KUNIT_EXPECT_PTR_EQ(test, mgr, ctx->mgr);
->> +
->> +	fpga_mgr_put(ctx->mgr);
->> +}
->> +
->> +static void fpga_mgr_test_lock(struct kunit *test)
->> +{
->> +	struct mgr_ctx *ctx = test->priv;
->> +	int ret;
->> +
->> +	ret = fpga_mgr_lock(ctx->mgr);
->> +	KUNIT_EXPECT_EQ(test, ret, 0);
->> +
->> +	ret = fpga_mgr_lock(ctx->mgr);
->> +	KUNIT_EXPECT_EQ(test, ret, -EBUSY);
->> +
->> +	fpga_mgr_unlock(ctx->mgr);
->> +}
->> +
->> +/* Check the programming sequence using an image in a buffer */
->> +static void fpga_mgr_test_img_load_buf(struct kunit *test)
->> +{
->> +	struct mgr_ctx *ctx = test->priv;
->> +	char *img_buf;
->> +	int ret;
->> +
->> +	img_buf = init_test_buffer(test, IMAGE_SIZE);
->> +
->> +	ctx->img_info->count = IMAGE_SIZE;
->> +	ctx->img_info->buf = img_buf;
->> +
->> +	ret = fpga_mgr_load(ctx->mgr, ctx->img_info);
->> +	KUNIT_EXPECT_EQ(test, ret, 0);
->> +
->> +	KUNIT_EXPECT_TRUE(test, ctx->stats.header_match);
->> +	KUNIT_EXPECT_TRUE(test, ctx->stats.image_match);
->> +
->> +	KUNIT_EXPECT_EQ(test, ctx->stats.op_parse_header_state, FPGA_MGR_STATE_PARSE_HEADER);
->> +	KUNIT_EXPECT_EQ(test, ctx->stats.op_write_init_state, FPGA_MGR_STATE_WRITE_INIT);
->> +	KUNIT_EXPECT_EQ(test, ctx->stats.op_write_state, FPGA_MGR_STATE_WRITE);
->> +	KUNIT_EXPECT_EQ(test, ctx->stats.op_write_complete_state, FPGA_MGR_STATE_WRITE_COMPLETE);
->> +
->> +	KUNIT_EXPECT_EQ(test, ctx->stats.op_write_init_seq, ctx->stats.op_parse_header_seq + 1);
->> +	KUNIT_EXPECT_EQ(test, ctx->stats.op_write_seq, ctx->stats.op_parse_header_seq + 2);
->> +	KUNIT_EXPECT_EQ(test, ctx->stats.op_write_complete_seq, ctx->stats.op_parse_header_seq + 3);
->> +}
->> +
->> +/* Check the programming sequence using an image in a scatter gather table */
->> +static void fpga_mgr_test_img_load_sgt(struct kunit *test)
->> +{
->> +	struct mgr_ctx *ctx = test->priv;
->> +	struct sg_table *sgt;
->> +	char *img_buf;
->> +	int ret;
->> +
->> +	img_buf = init_test_buffer(test, IMAGE_SIZE);
->> +
->> +	sgt = kunit_kzalloc(test, sizeof(*sgt), GFP_KERNEL);
->> +	ret = sg_alloc_table(sgt, 1, GFP_KERNEL);
->> +	KUNIT_ASSERT_EQ(test, ret, 0);
->> +	sg_init_one(sgt->sgl, img_buf, IMAGE_SIZE);
->> +
->> +	ctx->img_info->sgt = sgt;
->> +
->> +	ret = fpga_mgr_load(ctx->mgr, ctx->img_info);
->> +	KUNIT_EXPECT_EQ(test, ret, 0);
->> +
->> +	KUNIT_EXPECT_TRUE(test, ctx->stats.header_match);
->> +	KUNIT_EXPECT_TRUE(test, ctx->stats.image_match);
->> +
->> +	KUNIT_EXPECT_EQ(test, ctx->stats.op_parse_header_state, FPGA_MGR_STATE_PARSE_HEADER);
->> +	KUNIT_EXPECT_EQ(test, ctx->stats.op_write_init_state, FPGA_MGR_STATE_WRITE_INIT);
->> +	KUNIT_EXPECT_EQ(test, ctx->stats.op_write_sg_state, FPGA_MGR_STATE_WRITE);
->> +	KUNIT_EXPECT_EQ(test, ctx->stats.op_write_complete_state, FPGA_MGR_STATE_WRITE_COMPLETE);
->> +
->> +	KUNIT_EXPECT_EQ(test, ctx->stats.op_write_init_seq, ctx->stats.op_parse_header_seq + 1);
->> +	KUNIT_EXPECT_EQ(test, ctx->stats.op_write_sg_seq, ctx->stats.op_parse_header_seq + 2);
->> +	KUNIT_EXPECT_EQ(test, ctx->stats.op_write_complete_seq, ctx->stats.op_parse_header_seq + 3);
->> +
->> +	sg_free_table(ctx->img_info->sgt);
->> +}
->> +
->> +static int fpga_mgr_test_init(struct kunit *test)
->> +{
->> +	struct mgr_ctx *ctx;
->> +
->> +	ctx = kunit_kzalloc(test, sizeof(*ctx), GFP_KERNEL);
->> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx);
->> +
->> +	ctx->pdev = platform_device_register_simple("mgr_pdev", PLATFORM_DEVID_AUTO, NULL, 0);
->> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx->pdev);
->> +
->> +	ctx->mgr = devm_fpga_mgr_register(&ctx->pdev->dev, "Fake FPGA Manager", &fake_mgr_ops,
->> +					  &ctx->stats);
->> +	KUNIT_ASSERT_FALSE(test, IS_ERR_OR_NULL(ctx->mgr));
->> +
->> +	ctx->img_info = fpga_image_info_alloc(&ctx->pdev->dev);
->> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx->img_info);
->> +
->> +	test->priv = ctx;
->> +
->> +	return 0;
->> +}
->> +
->> +static void fpga_mgr_test_exit(struct kunit *test)
->> +{
->> +	struct mgr_ctx *ctx = test->priv;
->> +
->> +	fpga_image_info_free(ctx->img_info);
->> +	platform_device_unregister(ctx->pdev);
->> +}
->> +
->> +static struct kunit_case fpga_mgr_test_cases[] = {
->> +	KUNIT_CASE(fpga_mgr_test_get),
->> +	KUNIT_CASE(fpga_mgr_test_lock),
->> +	KUNIT_CASE(fpga_mgr_test_img_load_buf),
->> +	KUNIT_CASE(fpga_mgr_test_img_load_sgt),
->> +	{}
->> +};
->> +
->> +static struct kunit_suite fpga_mgr_suite = {
->> +	.name = "fpga_mgr",
->> +	.init = fpga_mgr_test_init,
->> +	.exit = fpga_mgr_test_exit,
->> +	.test_cases = fpga_mgr_test_cases,
->> +};
->> +
->> +kunit_test_suite(fpga_mgr_suite);
->> +
->> +MODULE_LICENSE("GPL");
->> -- 
->> 2.40.1
->>
-> 
-
+> Signed-off-by: Liam Ni <zhiguangni01@gmail.com>
+> ---
+>  arch/x86/mm/numa.c | 25 ++++++-------------------
+>  include/linux/mm.h |  2 ++
+>  mm/mm_init.c       | 26 ++++++++++++++++++++++++++
+>  3 files changed, 34 insertions(+), 19 deletions(-)
+>
+> diff --git a/arch/x86/mm/numa.c b/arch/x86/mm/numa.c
+> index 2aadb2019b4f..ffe3b771eac7 100644
+> --- a/arch/x86/mm/numa.c
+> +++ b/arch/x86/mm/numa.c
+> @@ -451,28 +451,15 @@ EXPORT_SYMBOL(__node_distance);
+>   * Sanity check to catch more bad NUMA configurations (they are amazingly
+>   * common).  Make sure the nodes cover all memory.
+>   */
+> -static bool __init numa_meminfo_cover_memory(const struct numa_meminfo *mi)
+> +static bool __init numa_meminfo_cover_memory(void)
+>  {
+> -       u64 numaram, e820ram;
+> -       int i;
+> -
+> -       numaram = 0;
+> -       for (i = 0; i < mi->nr_blks; i++) {
+> -               u64 s = mi->blk[i].start >> PAGE_SHIFT;
+> -               u64 e = mi->blk[i].end >> PAGE_SHIFT;
+> -               numaram += e - s;
+> -               numaram -= __absent_pages_in_range(mi->blk[i].nid, s, e);
+> -               if ((s64)numaram < 0)
+> -                       numaram = 0;
+> -       }
+> +       u64 lo_pages;
+>
+> -       e820ram = max_pfn - absent_pages_in_range(0, max_pfn);
+> +       lo_pages = without_node_pages_in_range(0, max_pfn);
+>
+>         /* We seem to lose 3 pages somewhere. Allow 1M of slack. */
+> -       if ((s64)(e820ram - numaram) >= (1 << (20 - PAGE_SHIFT))) {
+> -               printk(KERN_ERR "NUMA: nodes only cover %LuMB of your %LuMB e820 RAM. Not used.\n",
+> -                      (numaram << PAGE_SHIFT) >> 20,
+> -                      (e820ram << PAGE_SHIFT) >> 20);
+> +       if (lo_pages >= (1 << (20 - PAGE_SHIFT))) {
+> +               printk(KERN_ERR "NUMA: we lose more than 1M pages\n");
+>                 return false;
+>         }
+>         return true;
+> @@ -583,7 +570,7 @@ static int __init numa_register_memblks(struct numa_meminfo *mi)
+>                         return -EINVAL;
+>                 }
+>         }
+> -       if (!numa_meminfo_cover_memory(mi))
+> +       if (!numa_meminfo_cover_memory())
+>                 return -EINVAL;
+>
+>         /* Finally register nodes. */
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index 0daef3f2f029..99b7b49f1378 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -3043,6 +3043,8 @@ unsigned long __absent_pages_in_range(int nid, unsigned long start_pfn,
+>                                                 unsigned long end_pfn);
+>  extern unsigned long absent_pages_in_range(unsigned long start_pfn,
+>                                                 unsigned long end_pfn);
+> +extern unsigned long without_node_pages_in_range(unsigned long start_pfn,
+> +                                               unsigned long end_pfn);
+>  extern void get_pfn_range_for_nid(unsigned int nid,
+>                         unsigned long *start_pfn, unsigned long *end_pfn);
+>
+> diff --git a/mm/mm_init.c b/mm/mm_init.c
+> index 3ddd18a89b66..1d5085a8f93b 100644
+> --- a/mm/mm_init.c
+> +++ b/mm/mm_init.c
+> @@ -1132,6 +1132,32 @@ static void __init adjust_zone_range_for_zone_movable(int nid,
+>         }
+>  }
+>
+> +/**
+> + * @start_pfn: The start PFN to start searching for holes
+> + * @end_pfn: The end PFN to stop searching for holes
+> + *
+> + * Return: Return the number of page frames without node assigned within a range.
+> + */
+> +unsigned long __init without_node_pages_in_range(unsigned long start_pfn,
+> +                                               unsigned long end_pfn)
+> +{
+> +       struct memblock_type *type = &memblock.memory;
+> +       struct memblock_region *r;
+> +       unsigned long num_pages;
+> +       int i, nid;
+> +
+> +       for (i = 0; i < type->cnt; i++) {
+> +               r = &type->regions[i];
+> +               nid = memblock_get_region_node(r);
+> +
+> +               if (PFN_UP(r->base) >= PFN_DOWN(r->base + r->size))
+> +                       continue;
+> +               if (nid == NUMA_NO_NODE)
+> +                       num_pages += PFN_DOWN(r->base + r->size) - PFN_UP(r->base);
+> +       }
+> +       return num_pages;
+> +}
+> +
+>  /*
+>   * Return the number of holes in a range on a node. If nid is MAX_NUMNODES,
+>   * then all holes in the requested range will be accounted for.
+> --
+> 2.25.1
+>
