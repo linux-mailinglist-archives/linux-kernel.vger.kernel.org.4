@@ -2,72 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9797E73F468
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 08:20:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D91C573F46A
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 08:21:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229690AbjF0GUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 02:20:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60932 "EHLO
+        id S229647AbjF0GVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 02:21:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbjF0GUW (ORCPT
+        with ESMTP id S230272AbjF0GUt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 02:20:22 -0400
-Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA869E52;
-        Mon, 26 Jun 2023 23:20:21 -0700 (PDT)
-Received: by mail-vs1-xe2a.google.com with SMTP id ada2fe7eead31-43f4167d2b5so1147707137.2;
-        Mon, 26 Jun 2023 23:20:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687846820; x=1690438820;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RS+/DS6a2ZYIFGecpsQdsKJGuE+9ACCGxU7vGr6grZo=;
-        b=iVaPXWK9tZSiTjDa5a8NN2c6GzXqjIqFOiq69070t0z3VV8YMemqpA+GR8Qet7YseR
-         IbHBccyauw7G68TJUEqt6wym94Zx8gjQ0jLbQEHqUuT1U3XS/ZfumEzfF2jk6zJbgUov
-         KXwbJOLAncKU+YnC6L/lf9eWI/7i/F9uNjc8yqIH8scuI83VI/m0EKWQcRLLqCB51SKT
-         BDomQ9atYo0WjImVB40m0eAOqzZAwRSvT5ghWvyGt7pXh8FsWAd8FCvvQIc4xzDubwar
-         cY94FPb8FQJEza0h+BTmo58Fw/oijiAz/WqMzsg0hdm5lUK3S5ykM7nQuHAwoZNAby6H
-         GQ+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687846820; x=1690438820;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RS+/DS6a2ZYIFGecpsQdsKJGuE+9ACCGxU7vGr6grZo=;
-        b=ITMxpcWZaV0jmOGixbBdSlAcb2WxXIPOWreL7p0E1NFcaS6zWI2yU4zhNAuFIe7jqO
-         1O/Ww7lZbIDyJctmHEW6iDZY0MaXz9MAPgZNNIl6xy7mImSMYdGFLTeHkZhCd8WYW19Z
-         elxZvWWCPZaNpr9SWeYhJ4vJ+TC81rmaX2KchXWVNfsxeD5kvskWhI+Mb4yb8nPN0NUb
-         klisR7e6beYdk27ZyrkwlmGoS9Xi6cgrpxjhnStfnAR/DF3CmKlzeO6Sh3T3yua5blXi
-         z5eBF5Koldo0OTICIF+6e6UpGtFh75rGX6VsVDSvnBXyUa5vaGFedogHooc9SkxuaBYh
-         2njw==
-X-Gm-Message-State: AC+VfDx/YZ/ldfgnJPwzX5pRPsPDuhyW5zTGWgSnOndWlfsr2SmveHBZ
-        jlP3zRoGaQ8AdBAYWb6nQjnk0RPCfaJkmw6BY5A=
-X-Google-Smtp-Source: ACHHUZ5APtrw6EbTALR7i+Yi6sAOVvsG9V6EW3lvUsMAdgWgkMerHr1dvt7+ErqrEbdId5uIw4N/ijFNMx6QaqkdgJA=
-X-Received: by 2002:a05:6102:95:b0:443:5aea:408f with SMTP id
- t21-20020a056102009500b004435aea408fmr2282548vsp.27.1687846820694; Mon, 26
- Jun 2023 23:20:20 -0700 (PDT)
+        Tue, 27 Jun 2023 02:20:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2768A1BEC;
+        Mon, 26 Jun 2023 23:20:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9682261000;
+        Tue, 27 Jun 2023 06:20:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92C20C433C0;
+        Tue, 27 Jun 2023 06:20:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1687846846;
+        bh=l4sdQVtdskG6Mkgh9MiE5yVwbijeefSmMiWzWt9R8T0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=xwjehW9sN/yaLGYTWI0H8PfSePdWqrKHKAjdhM2tfthiD3b0xXOghBzzsZVnHE/s4
+         oenOVg/oCpwrUopOhNf8LTDbPifAUKEoCV+tx9RN2fUZ/9SN+VMxMsn+QhOA0uE064
+         ofiml2BLNPda9q+YYX1hYS7E38wCMFy2tVVs4KlQ=
+Date:   Tue, 27 Jun 2023 08:20:44 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Yuxiao Zhang <yuxiaozhang@google.com>
+Cc:     keescook@chromium.org, tony.luck@intel.com, gpiccoli@igalia.com,
+        linux-hardening@vger.kernel.org,
+        William Kennington <wak@google.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: support pmsg record size larger than kmalloc limitation
+Message-ID: <2023062715-eldercare-washed-3c29@gregkh>
+References: <CAOOoKeQ=b4u1C_FZ-OFHSfVt5Z9xw1KtpJ4316zubt46Tny41Q@mail.gmail.com>
 MIME-Version: 1.0
-References: <CAOQ4uxj_DLm8_stRJPR7i8bp9aJ5VtjzWqHL2egCTKe3M-6KSw@mail.gmail.com>
- <sun5nn6nzp7cvn43m7476rchcel42zuxv6mo2fab6tu24wc2it@intt5usuvpoq>
-In-Reply-To: <sun5nn6nzp7cvn43m7476rchcel42zuxv6mo2fab6tu24wc2it@intt5usuvpoq>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Tue, 27 Jun 2023 09:20:09 +0300
-Message-ID: <CAOQ4uxhz1HqJMxB4tgc4dOXZ6soG5zij9UcRu4__N6b0jYtHmw@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] splice: fsnotify_access(in), fsnotify_modify(out)
- on success in tee
-To:     =?UTF-8?Q?Ahelenia_Ziemia=C5=84ska?= 
-        <nabijaczleweli@nabijaczleweli.xyz>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jan Kara <jack@suse.cz>,
-        Chung-Chiang Cheng <cccheng@synology.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAOOoKeQ=b4u1C_FZ-OFHSfVt5Z9xw1KtpJ4316zubt46Tny41Q@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,42 +54,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 2:09=E2=80=AFAM Ahelenia Ziemia=C5=84ska
-<nabijaczleweli@nabijaczleweli.xyz> wrote:
->
-> Same logic applies here: this can fill up the pipe, and pollers that rely
-> on getting IN_MODIFY notifications never wake up.
->
-> Fixes: 983652c69199 ("splice: report related fsnotify events")
-> Link: https://lore.kernel.org/linux-fsdevel/jbyihkyk5dtaohdwjyivambb2gffy=
-js3dodpofafnkkunxq7bu@jngkdxx65pux/t/#u
-> Signed-off-by: Ahelenia Ziemia=C5=84ska <nabijaczleweli@nabijaczleweli.xy=
-z>
+On Mon, Jun 26, 2023 at 06:20:29PM -0700, Yuxiao Zhang wrote:
+> @@ -730,7 +731,7 @@ static void decompress_record(struct pstore_record *record)
+>   return;
+> 
+>   /* Swap out compressed contents with decompressed contents. */
+> - kfree(record->buf);
+> + kvfree(record->buf);
+>   record->buf = unzipped;
+>   record->size = unzipped_len;
+>   record->compressed = false;
+> @@ -783,7 +784,7 @@ void pstore_get_backend_records(struct pstore_info *psi,
 
-Makes sense.
+Patch is corrupted and can not be applied at all, please fix up your
+email client to not do this.
 
-Reviewed-by: Amir Goldstein <amir73il@gmail.com>
+thanks,
 
-> ---
->  fs/splice.c | 5 +++++
->  1 file changed, 5 insertions(+)
->
-> diff --git a/fs/splice.c b/fs/splice.c
-> index a18274209dc1..3234aaa6e957 100644
-> --- a/fs/splice.c
-> +++ b/fs/splice.c
-> @@ -1819,6 +1819,11 @@ long do_tee(struct file *in, struct file *out, siz=
-e_t len, unsigned int flags)
->                 }
->         }
->
-> +       if (ret > 0) {
-> +               fsnotify_access(in);
-> +               fsnotify_modify(out);
-> +       }
-> +
->         return ret;
->  }
->
-> --
-> 2.39.2
+greg k-h
