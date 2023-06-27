@@ -2,81 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7BBD73F77C
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 10:36:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 546D373F77E
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 10:36:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231255AbjF0IgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 04:36:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41344 "EHLO
+        id S231339AbjF0Igb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 04:36:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230494AbjF0Ifn (ORCPT
+        with ESMTP id S229720AbjF0IgH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 04:35:43 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9192F10CF
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 01:35:41 -0700 (PDT)
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 25002423E9
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 08:35:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1687854939;
-        bh=cRPd42UjLsQHHlZk9zoi1NoFgO3UAhUdUSvEc9A0iZk=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=dmJu8jPzzyyvTdUNWV9vjdq1TsWOcIVodf5VrX41eGFs04e7s1zMx7m3uUw6e4Kkd
-         9LYhzbVzCZdsMTvbAjAafOn1f4T9S/Ujj5R2XaPrhnc0eoNS2C3nPO6xGUyQ8/EJcq
-         JzcAffZALUEAmp1Zi/1StX5LMsrrmNDq1jGrap196+3YG0CfwRfkUh+JRqjvx3KeDq
-         dlXNEDwYOvuLdM1c3uO6aLEq+3nNu8DDX2zH5tftHNQRoA6mJHIGIf2lhpzlpC1mla
-         bP3+00z6D7+OCT0M1D0gWYTzc/pgDsFGOcCmzUyRwOXnQHG4Jlt2/iHbC9jWH9j/VY
-         zlCYW1RUyUjzw==
-Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-262e04a6fd1so1270578a91.3
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 01:35:39 -0700 (PDT)
+        Tue, 27 Jun 2023 04:36:07 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94AE5E6F;
+        Tue, 27 Jun 2023 01:35:40 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3fa94ea1caaso18042585e9.1;
+        Tue, 27 Jun 2023 01:35:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687854939; x=1690446939;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=j5dQeYHYKYlJGoRN0EElGK6VPybOH+UnW7mCvvK0jmI=;
+        b=bMdPxlNve1ptwbBvvg3YZSu7PK70OsE4K3JS3uD/L+E9SjPnZbWxWyEcUupbNIFjbF
+         CGMLLfuGZV7S5bP7oRgxd1dUTFUmM2CIlm30RSqDXJ43NOx/VIZN6VDJpi7wM0Br6xas
+         Hvk1dAyK98XbcVJ4I816D+gVz5/43og1o8p+BCgH2ZzRqjXBnmz99VHYm9jmHFWoNolJ
+         Xy+Eqv+qLDw6Fuz/BIm3S6mQ1LBVeTuZ97N3wRWnQYURYITefb0U4UrQ6uNx6TXzXvlD
+         oHxGu3Mz1paoaqJDd7ufeU/bQ0IfqOoWZe3+V/MYlVsNKsvF87QA4TnSWv6EGmjsbzvo
+         Lwdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687854937; x=1690446937;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cRPd42UjLsQHHlZk9zoi1NoFgO3UAhUdUSvEc9A0iZk=;
-        b=LaDccfSB25k9QY26LEsg0u+KXJXOF+BEUUnB2n5MDLZMcVsmPh+NZ3M6dKVDUvk+2I
-         uWKYQmoAr5UNFy+fCtt0xd06YJKyKt3XtYd4CJh2QmeqdUCAJjcPdzGgBM6/zbF+yDG+
-         j7TGS8LWpcIJDvjosP2r/GdR9P6SS2mxozKGo/cXyd13/Dg5w3nV8phZB0EnZkf5C1q9
-         EbFEmQiYEzRsgmM+WQQxd22tPBz5TCj8V49/E8u/75WcFChWdiRhIlcNYZvWTxTnfWPJ
-         IDeenu1OPzGWjshIzeYLykJBebjgNxlbWIF4m6bxsxTjCuOOX2+jknPk317BWhqCgcpB
-         rbIw==
-X-Gm-Message-State: AC+VfDx6UP8tAZnHuwG2AqA2BLsPAmVN9Fl8GKatXmxRXeMm8Q/UJi8f
-        xmyOTrFbH46JA59gRfDCJuYV2j4IqaBmu4zTD9c53EdD0/I7TalnegeFDr8hUnTXYQw7KADh1aO
-        cE1kBW9oI4aVdxXmscOdPQKpD+4jE6iEeyM12otTIBtMsa9x28cCO8PG4xQ==
-X-Received: by 2002:a17:90b:38cf:b0:262:d4c8:cb3c with SMTP id nn15-20020a17090b38cf00b00262d4c8cb3cmr4511922pjb.49.1687854937513;
-        Tue, 27 Jun 2023 01:35:37 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7MioXDYJkmV3SVO/wCnwnRIelqTF7AbSlaDlO1rO00diyGula96bz59WjKHfHlP5jECR7f1hwhWVHtmzuxmwQ=
-X-Received: by 2002:a17:90b:38cf:b0:262:d4c8:cb3c with SMTP id
- nn15-20020a17090b38cf00b00262d4c8cb3cmr4511912pjb.49.1687854937083; Tue, 27
- Jun 2023 01:35:37 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687854939; x=1690446939;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=j5dQeYHYKYlJGoRN0EElGK6VPybOH+UnW7mCvvK0jmI=;
+        b=Fa6YRNlnLur2q21Q5l+Sk1mqcAxQHkikGGITQENF6wrumcZwnX3GJlagPMJMRgUCta
+         LkSIOq0W6A3TIfoKhq4srJY0M1uuqT1Q03EEVZ01KomWMsH6Qa4TaRowcXsiL8HRrA/C
+         SzxWAOSs0Zx178xJcD/YdnEpuCZwaapZ/w1dwMRqN2V+YixLuK9IDc+txj6DJAorKK56
+         GI+naoa1U7XSnA259xVHnJn+E7eD8m3c09aOPEF64Pvfgtfq5hujDjYb7Ap1MBdOMeCm
+         YWFGn6L2Te+j1EatpOKhstonfPspzpNHlfXG2vbE7Qsu4uwLsHz2usTIyRSeJWUTM33m
+         9vaQ==
+X-Gm-Message-State: AC+VfDxFMqbS+VCx6q/WTwBiQzvdjyEMLWnzLuckfpIKapAWrFgrc+2L
+        0qGvEsmCU8R9w7y6nWrt4t0=
+X-Google-Smtp-Source: ACHHUZ6lMfDIQEfRLBxoYy6NK8cy1ffoV03IuwFDgbqQ1Lmh8SDB7VL77m97d9KgkHl3HSWa0jjOow==
+X-Received: by 2002:a05:600c:511f:b0:3fa:9996:8e03 with SMTP id o31-20020a05600c511f00b003fa99968e03mr4416331wms.10.1687854938850;
+        Tue, 27 Jun 2023 01:35:38 -0700 (PDT)
+Received: from krava (85-160-25-217.reb.o2.cz. [85.160.25.217])
+        by smtp.gmail.com with ESMTPSA id z16-20020a5d4d10000000b00313eeca9f4asm6184873wrt.14.2023.06.27.01.35.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Jun 2023 01:35:38 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Tue, 27 Jun 2023 10:35:28 +0200
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <a.p.zijlstra@chello.nl>,
+        Ingo Molnar <mingo@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH] perf tools: Add missing else to cmd_daemon subcommand
+ condition
+Message-ID: <ZJqfUL1gnkTbUx5n@krava>
+References: <20230626201606.2514679-1-jolsa@kernel.org>
+ <CAM9d7chMGzEJ3GKyxXD-RwUpjje7u3Cp810TRD+ZGgCT+mFrEQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <1b4b2c6c-8119-95fd-8958-dbbecc66510c@amd.com> <20230622230607.GA155247@bhelgaas>
-In-Reply-To: <20230622230607.GA155247@bhelgaas>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Tue, 27 Jun 2023 16:35:25 +0800
-Message-ID: <CAAd53p4kH7E92++jabBhvsM_+M7Dpyk2JP+aoVdb_sxZn47eyQ@mail.gmail.com>
-Subject: Re: [PATCH] PCI/ASPM: Enable ASPM on external PCIe devices
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     "Limonciello, Mario" <mario.limonciello@amd.com>,
-        bhelgaas@google.com,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Vidya Sagar <vidyas@nvidia.com>,
-        Michael Bottini <michael.a.bottini@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAM9d7chMGzEJ3GKyxXD-RwUpjje7u3Cp810TRD+ZGgCT+mFrEQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,80 +83,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 23, 2023 at 7:06=E2=80=AFAM Bjorn Helgaas <helgaas@kernel.org> =
-wrote:
->
-> On Tue, Jun 20, 2023 at 01:36:59PM -0500, Limonciello, Mario wrote:
-> > <snip>
-> > > > A variety of Intel chipsets don't support lane width switching
-> > > > or speed switching.  When ASPM has been enabled on a dGPU,
-> > > > these features are utilized and breakage ensues.
-> > > Maybe this helps explain all the completely unmaintainable ASPM
-> > > garbage in amdgpu and radeon.
-> > >
-> > > If these devices are broken, we need quirks for them.
+On Mon, Jun 26, 2023 at 01:58:48PM -0700, Namhyung Kim wrote:
+> Hi Jiri,
+> 
+> On Mon, Jun 26, 2023 at 1:16 PM Jiri Olsa <jolsa@kernel.org> wrote:
 > >
-> > The problem is which device do you consider "broken"?
-> > The dGPU that uses these features when the platform advertises ASPM
-> > or the chipset which doesn't support the features that the device
-> > uses when ASPM is active?
+> > Namhyung reported segfault in perf daemon start command.
 > >
-> > With this problem I'm talking about the dGPU works fine on hosts
-> > that support these features.
->
-> Without more details about what's broken and when, I can't say.  What
-> I *think* is that a device that doesn't work per spec needs a quirk.
-> Typically it's a device that advertises a capability that doesn't work
-> correctly.
-
-Many silicon vendors use the same "PCI IP" and integrate it into their
-own chip. That's one of the reason why the capability doesn't really
-reflect what actually being support.
-The vendors then send their private datasheet to system integrator so
-BIOS can enable what's really supported.
-
-So the logic is to ignore the capability and trust the default set by BIOS.
-
->
-> > > > > > I think the pragmatic way to approach it is to (essentially)
-> > > > > > apply the policy as BIOS defaults and allow overrides from
-> > > > > > that.
-> > > > >
-> > > > > Do you mean that when enumerating a device (at boot-time or
-> > > > > hot-add time), we would read the current ASPM config but not
-> > > > > change it?  And users could use the sysfs knobs to
-> > > > > enable/disable ASPM as desired?
-> > > >
-> > > > Yes.
-> > > >
-> > > Hot-added devices power up with ASPM disabled.  This policy would
-> > > mean the user has to explicitly enable it, which doesn't seem
-> > > practical to me.
+> > It's caused by extra check on argv[0] which is set to NULL by previous
+> > __cmd_start call. Adding missing else to skip the extra check.
 > >
-> > Could we maybe have the hot added devices follow the policy of
-> > the bridge they're connected to by default?
+> > Fixes: 92294b906e6c ("perf daemon: Dynamically allocate path to perf")
+> > Reported-by: Namhyung Kim <namhyung@kernel.org>
+> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> 
+> Thanks for the fix.  Now it runs ok.
+> 
+> Before:
+>   $ sudo ./perf test -v daemon
+>    85: daemon operations                                               :
+>   --- start ---
+>   test child forked, pid 82420
+>   test daemon list
+>   ./tests/shell/daemon.sh: line 133: 82426 Segmentation fault
+> perf daemon start --config ${config}
+>   test daemon reconfig
+>   ./tests/shell/daemon.sh: line 133: 82520 Segmentation fault
+> perf daemon start --config ${config}
+>   test daemon stop
+>   ./tests/shell/daemon.sh: line 133: 82636 Segmentation fault
+> perf daemon start --config ${config}
+>   test daemon signal
+>   ./tests/shell/daemon.sh: line 133: 82674 Segmentation fault
+> perf daemon start --config ${config}
+>   signal 12 sent to session 'test [82676]'
+>   signal 12 sent to session 'test [82676]'
+>   test daemon ping
+>   ./tests/shell/daemon.sh: line 133: 82702 Segmentation fault
+> perf daemon start --config ${config}
+>   test daemon lock
+>   ./tests/shell/daemon.sh: line 133: 82734 Segmentation fault
+> perf daemon start --config ${config}
+>   test child finished with 0
+>   ---- end ----
+>   daemon operations: Ok
+> 
+> Maybe we need to investigate more why it was ok..
+> But at least I don't see segfaults anymore
+
+yea, for some reason parse_options would put NULL into argv[0]
+
+I'll try to check what changed, in any case the fix makes the
+condition alligned with the other legs and fixes the segfault
+
+jirka
+
+> 
+> 
+> After:
+>    85: daemon operations                                               :
+>   --- start ---
+>   test child forked, pid 80752
+>   test daemon list
+>   test daemon reconfig
+>   test daemon stop
+>   test daemon signal
+>   signal 12 sent to session 'test [81022]'
+>   signal 12 sent to session 'test [81022]'
+>   test daemon ping
+>   test daemon lock
+>   test child finished with 0
+>   ---- end ----
+>   daemon operations: Ok
+> 
+> 
+> Tested-by: Namhyung Kim <namhyung@kernel.org>
+> 
+> Thanks,
+> Namhyung
+> 
+> 
+> 
+> > ---
+> >  tools/perf/builtin-daemon.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
 > >
-> > > > > That wouldn't solve the problem Kai-Heng is trying to solve.
-> > > >
-> > > > Alone it wouldn't; but if you treated the i225 PCIe device
-> > > > connected to the system as a "quirk" to apply ASPM policy
-> > > > from the parent device to this child device it could.
-> > >
-> > > I want quirks for BROKEN devices.  Quirks for working hardware is a
-> > > maintenance nightmare.
+> > diff --git a/tools/perf/builtin-daemon.c b/tools/perf/builtin-daemon.c
+> > index f5674d824a40..83954af36753 100644
+> > --- a/tools/perf/builtin-daemon.c
+> > +++ b/tools/perf/builtin-daemon.c
+> > @@ -1524,7 +1524,7 @@ int cmd_daemon(int argc, const char **argv)
+> >         if (argc) {
+> >                 if (!strcmp(argv[0], "start"))
+> >                         ret = __cmd_start(&__daemon, daemon_options, argc, argv);
+> > -               if (!strcmp(argv[0], "signal"))
+> > +               else if (!strcmp(argv[0], "signal"))
+> >                         ret = __cmd_signal(&__daemon, daemon_options, argc, argv);
+> >                 else if (!strcmp(argv[0], "stop"))
+> >                         ret = __cmd_stop(&__daemon, daemon_options, argc, argv);
+> > --
+> > 2.41.0
 > >
-> > If you follow my idea of hot added devices the policy follows
-> > the parent would it work for the i225 PCIe device case?
->
-> That doesn't *sound* really robust to me because even if the default
-> config after hot-add works, the user can change things via sysfs, and
-> any configuration we set it to should work as well.  If there are
-> land-mines there, we need a quirk that prevents sysfs from running
-> into it.
-
-For this case it means driver needs to provide a ASPM callback to flip
-PTM based on ASPM sysfs.
-
-Kai-Heng
-
-> Bjorn
