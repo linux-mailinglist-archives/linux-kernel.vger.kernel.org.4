@@ -2,191 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D88B73FE6E
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 16:40:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45E3073FE61
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 16:39:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231772AbjF0Ojk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 10:39:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39216 "EHLO
+        id S231573AbjF0OjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 10:39:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231617AbjF0OjD (ORCPT
+        with ESMTP id S231918AbjF0Oi5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 10:39:03 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B0E44227
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 07:38:32 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2b6a5fd1f46so28885091fa.1
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 07:38:32 -0700 (PDT)
+        Tue, 27 Jun 2023 10:38:57 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3B553C07;
+        Tue, 27 Jun 2023 07:38:23 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-98e25fa6f5bso468411566b.3;
+        Tue, 27 Jun 2023 07:38:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1687876707; x=1690468707;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FEVMNWZBLS5DhwYM44VfQcdvAzGjTI9zLgPIzTOkT24=;
-        b=v9B9fq/vnNw5vf4/XMj+DEzij4XdCJ6Qu3k6rdu3hoknkqAcbiibMohh2vV1/Xvhlm
-         PVaQZZfTbieNjPjrodFPdFF6p6fpJKmmnsJQx91yFtgkyLi0YcnJSBLXQh4oYYljL26q
-         IGt46axPduHixlBtVb/5lQePN3POydzxHqBhIZFUqEjbKyyaTtHxN8xOgSenCmW4HRqU
-         TLC4AhqDMkMlYe2TP6NJOJpaqjrNqF/guZWbSEh+/mYnMkAfhdVrabcJI5aZwTcCn4Ki
-         CI+2GPpo2kDgHTQ+TxX6K4o0XuQtjUcASMJnhRuvVXQVHTtf7qPEnvwiHK41v+237soc
-         aO2A==
+        d=gmail.com; s=20221208; t=1687876701; x=1690468701;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=aycEXc1p8AecpgCVFe3SN1Ps1KLQUbHdHOvGWse/Ca4=;
+        b=jaXJB/YU3JQz39KDQb+QDAKFdsmnrticA9rtbWy1ykxlRnJIevC3j1hKmX/0MXVoJg
+         w8jKqiTx/y9VWXNo0RJK0TTbnTi+K67/HN2VTh7KHWkPnGQEfyVpXole7nMsnq9KjbdU
+         GNfMDg+30KGrk9ZG/1UvMhYx20ICRMS0AAYEUTAkoRSst1k7LoXzQD/0L2Mwvdp2379C
+         9Muz3hE2k134stWl1rFqKDHWVHUbta01qqTOZNiG0/KdvW/8J6F83ImxVyahIfkbFR4+
+         1IDF/pq7mHSbbSGFCBjfbVDLBkWqS+TO2qIz6/IRHUNtSzGJL0jvOsy4E/pKGoM6RguG
+         b7ZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687876707; x=1690468707;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FEVMNWZBLS5DhwYM44VfQcdvAzGjTI9zLgPIzTOkT24=;
-        b=fYH1De3azmeJrgWh16WXQoNsLnQO1Gy6B7s1cs2FPh0YwCiQMLDFf1YseiQaf31NS5
-         nGxuUjvOty1WWypKBmlZR9CaPnIB9PF2rHzpCzdszrrV6mceudXZb6inbZ/AWTrCCb7V
-         IHIzj7HfVmAvaFis9Lyiwok1r09VZGuVrELINIUotbnmxy2a5dDnTSQTqA0LObwsNnNW
-         XqsUST6EKDzJkxT5W80rz9yyTcn3MpW+rJ18XdO1JIr2Gmd8YlfEitKDG8vVAw8aIoeP
-         CRykGM+0l2zsYPCPUjmT4ZruDeOh0RuBXNG35AeJoZdmmaK9RGsEPQPv82jLJnzp+FP0
-         5C3w==
-X-Gm-Message-State: AC+VfDyRXPFQSa7bq7NeuHCx0NCi34KQ1fRwTxlhrjpcQgbZVMRZygUP
-        bEkAh9E2azQ+O1G/eMTlZ3kK4A==
-X-Google-Smtp-Source: ACHHUZ5gRueMgICNs3RdPFGz2gRhMpqeYApnug8Cx+udx1fIHBUDvYkXd9ZgIOxCf+aCf1+CRY+/zA==
-X-Received: by 2002:a05:6512:2512:b0:4fb:52f1:9aab with SMTP id be18-20020a056512251200b004fb52f19aabmr5533732lfb.66.1687876706673;
-        Tue, 27 Jun 2023 07:38:26 -0700 (PDT)
-Received: from vermeer.tail79c99.ts.net ([2a01:cb1d:81a9:dd00:b570:b34c:ffd4:c805])
-        by smtp.gmail.com with ESMTPSA id c21-20020a7bc855000000b003f8fac0ad4bsm10894793wml.17.2023.06.27.07.38.25
+        d=1e100.net; s=20221208; t=1687876701; x=1690468701;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aycEXc1p8AecpgCVFe3SN1Ps1KLQUbHdHOvGWse/Ca4=;
+        b=lSFl+keIJRKLNlxxvi/IYSQgC5RyZdzlBeGLlGveVECxWk9ydnk6rTtT9yFB+z2oPG
+         wBI6htaCD4DykRIJm1GIrkkoKkPTGPO+VwW/3RXJpSsdLBFm8oz1d9HAcgnv10khL7Dy
+         jUXu2od7fPUAoSanaU9NIw8q04iRI4WgoljXQJWY7gTUkZuwOrrbin914328fD8kX/ki
+         IAVkCtjDTRJq7ujsSiXSkWJNlT19fg7lPGnLFWtcxD3ycTz5hmVxDsTgerM53hEGUcO/
+         QCY71+zUAlwAJHClEKtvOWuiPpQKIbgTOd8d5ynTUiCYxme3ajAjmFkOmE9iI/MS76qY
+         OxQg==
+X-Gm-Message-State: AC+VfDxSNYTNpqrDRaDun+Vf/z7Glm8KJUrW4yQTkQSNf9/5XrUSGkDC
+        uHwbsNUi1r8C3YrFz0LbAJcounQB7fvEJi8+
+X-Google-Smtp-Source: ACHHUZ50qYhprpbhs8hRwJ1pExP9hgcQpDJ1t3RmUD8qchv2Au4jmHRBJUCn5fqkbiSdOan16EquKQ==
+X-Received: by 2002:a17:907:7293:b0:988:d841:7f8d with SMTP id dt19-20020a170907729300b00988d8417f8dmr21453302ejc.71.1687876700555;
+        Tue, 27 Jun 2023 07:38:20 -0700 (PDT)
+Received: from tom-HP-ZBook-Fury-15-G7-Mobile-Workstation ([193.85.242.128])
+        by smtp.gmail.com with ESMTPSA id b21-20020a170906491500b009828dac8425sm4590406ejq.105.2023.06.27.07.38.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jun 2023 07:38:26 -0700 (PDT)
-From:   Samuel Ortiz <sameo@rivosinc.com>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org
-Cc:     Samuel Ortiz <sameo@rivosinc.com>, linux@rivosinc.com,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
-        Anup Patel <apatel@ventanamicro.com>,
-        linux-kernel@vger.kernel.org,
-        "Hongren (Zenithal) Zheng" <i@zenithal.me>,
-        Guo Ren <guoren@kernel.org>, Atish Patra <atishp@rivosinc.com>,
-        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>,
-        Evan Green <evan@rivosinc.com>
-Subject: [PATCH 3/3] RISC-V: Implement archrandom when Zkr is available
-Date:   Tue, 27 Jun 2023 16:37:44 +0200
-Message-ID: <20230627143747.1599218-4-sameo@rivosinc.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230627143747.1599218-1-sameo@rivosinc.com>
-References: <20230627143747.1599218-1-sameo@rivosinc.com>
+        Tue, 27 Jun 2023 07:38:20 -0700 (PDT)
+Date:   Tue, 27 Jun 2023 16:38:18 +0200
+From:   Tommaso Merciai <tomm.merciai@gmail.com>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH][next] media: bt8xx: make read-only arrays static
+Message-ID: <ZJr0WvhFfCILwbeP@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
+References: <20230627134851.728487-1-colin.i.king@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230627134851.728487-1-colin.i.king@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Zkr extension is ratified and provides 16 bits of entropy seed when
-reading the SEED CSR.
+Hi Colin,
 
-We can implement arch_get_random_seed_longs() by doing multiple csrrw to
-that CSR and filling an unsigned long with valid entropy bits.
+On Tue, Jun 27, 2023 at 02:48:51PM +0100, Colin Ian King wrote:
+> Don't populate the arrays on the stack, instead make them static const.
+> Also add spaces between values to clean up checkpatch style warnings.
+> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> ---
+>  drivers/media/pci/bt8xx/dvb-bt8xx.c | 12 ++++++++----
+>  1 file changed, 8 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/media/pci/bt8xx/dvb-bt8xx.c b/drivers/media/pci/bt8xx/dvb-bt8xx.c
+> index 4cb890b949c3..df83b59a618d 100644
+> --- a/drivers/media/pci/bt8xx/dvb-bt8xx.c
+> +++ b/drivers/media/pci/bt8xx/dvb-bt8xx.c
+> @@ -190,11 +190,15 @@ static int cx24108_tuner_set_params(struct dvb_frontend *fe)
+>  	u32 freq = c->frequency;
+>  	int i, a, n, pump;
+>  	u32 band, pll;
+> -	u32 osci[]={950000,1019000,1075000,1178000,1296000,1432000,
+> -		1576000,1718000,1856000,2036000,2150000};
+> -	u32 bandsel[]={0,0x00020000,0x00040000,0x00100800,0x00101000,
+> +	static const u32 osci[] = {
+> +		950000, 1019000, 1075000, 1178000, 1296000, 1432000,
+> +		1576000, 1718000, 1856000, 2036000, 2150000
+> +	};
+> +	static const u32 bandsel[] = {
+> +		0, 0x00020000, 0x00040000, 0x00100800, 0x00101000,
+>  		0x00102000,0x00104000,0x00108000,0x00110000,
 
-Signed-off-by: Samuel Ortiz <sameo@rivosinc.com>
----
- arch/riscv/include/asm/archrandom.h | 66 +++++++++++++++++++++++++++++
- arch/riscv/include/asm/csr.h        |  9 ++++
- 2 files changed, 75 insertions(+)
- create mode 100644 arch/riscv/include/asm/archrandom.h
+Are you not missing space also here?
 
-diff --git a/arch/riscv/include/asm/archrandom.h b/arch/riscv/include/asm/archrandom.h
-new file mode 100644
-index 000000000000..3d01aab2800a
---- /dev/null
-+++ b/arch/riscv/include/asm/archrandom.h
-@@ -0,0 +1,66 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Kernel interface for the RISCV arch_random_* functions
-+ *
-+ * Copyright (c) 2022 by Rivos Inc.
-+ *
-+ */
-+
-+#ifndef ASM_RISCV_ARCHRANDOM_H
-+#define ASM_RISCV_ARCHRANDOM_H
-+
-+#include <asm/csr.h>
-+
-+#define PR_PREFIX "Zkr Extension: "
-+#define SEED_RETRY_LOOPS 10
-+
-+static inline bool __must_check csr_seed_long(unsigned long *v)
-+{
-+	unsigned int retry = SEED_RETRY_LOOPS;
-+	unsigned int needed_seeds = sizeof(unsigned long) / 2, valid_seeds = 0;
-+	u16 *entropy = (u16 *)v;
-+
-+	do {
-+		/*
-+		 * The SEED CSR (0x015) must be accessed with a read-write
-+		 * instruction. Moreover, implementations must ignore the write
-+		 * value, its purpose is to signal polling for new seed.
-+		 */
-+		unsigned long csr_seed = csr_swap(CSR_SEED, 0);
-+
-+		switch (csr_seed & SEED_OPST_MASK) {
-+		case SEED_OPST_ES16:
-+			entropy[valid_seeds++] = csr_seed & SEED_ENTROPY_MASK;
-+			if (valid_seeds == needed_seeds)
-+				return true;
-+			break;
-+
-+		case SEED_OPST_DEAD:
-+			pr_err_once(PR_PREFIX "Unrecoverable error\n");
-+			return false;
-+
-+		case SEED_OPST_BIST:
-+			pr_info(PR_PREFIX "On going Built-in Self Test\n");
-+			fallthrough;
-+
-+		case SEED_OPST_WAIT:
-+		default:
-+			continue;
-+		}
-+
-+	} while (--retry);
-+
-+	return false;
-+}
-+
-+static inline size_t __must_check arch_get_random_longs(unsigned long *v, size_t max_longs)
-+{
-+	return 0;
-+}
-+
-+static inline size_t __must_check arch_get_random_seed_longs(unsigned long *v, size_t max_longs)
-+{
-+	return max_longs && riscv_isa_extension_available(NULL, ZKR) && csr_seed_long(v) ? 1 : 0;
-+}
-+
-+#endif /* ASM_RISCV_ARCHRANDOM_H */
-diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
-index b98b3b6c9da2..7d0ca9082c66 100644
---- a/arch/riscv/include/asm/csr.h
-+++ b/arch/riscv/include/asm/csr.h
-@@ -389,6 +389,15 @@
- #define CSR_VTYPE		0xc21
- #define CSR_VLENB		0xc22
- 
-+/* Scalar Crypto Extension - Entropy */
-+#define CSR_SEED		0x015
-+#define SEED_OPST_MASK		_AC(0xC0000000, UL)
-+#define SEED_OPST_BIST		_AC(0x00000000, UL)
-+#define SEED_OPST_WAIT		_AC(0x40000000, UL)
-+#define SEED_OPST_ES16		_AC(0x80000000, UL)
-+#define SEED_OPST_DEAD		_AC(0xC0000000, UL)
-+#define SEED_ENTROPY_MASK	_AC(0xFFFF, UL)
-+
- #ifdef CONFIG_RISCV_M_MODE
- # define CSR_STATUS	CSR_MSTATUS
- # define CSR_IE		CSR_MIE
--- 
-2.41.0
+> -		0x00120000,0x00140000};
+> +		0x00120000, 0x00140000
+> +	};
+>  
+>  	#define XTAL 1011100 /* Hz, really 1.0111 MHz and a /10 prescaler */
+>  	dprintk("cx24108 debug: entering SetTunerFreq, freq=%d\n", freq);
+> -- 
+> 2.39.2
+> 
 
+Regards,
+Tommaso
