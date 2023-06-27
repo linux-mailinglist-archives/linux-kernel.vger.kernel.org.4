@@ -2,429 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0DA974036B
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 20:32:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EE3374036E
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 20:33:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231230AbjF0ScK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 14:32:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55918 "EHLO
+        id S231356AbjF0Sdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 14:33:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231372AbjF0Sbh (ORCPT
+        with ESMTP id S231182AbjF0SdM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 14:31:37 -0400
-Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A78D430CF;
-        Tue, 27 Jun 2023 11:31:12 -0700 (PDT)
-Received: by mail-ua1-x92b.google.com with SMTP id a1e0cc1a2514c-78f6a9800c9so1702148241.3;
-        Tue, 27 Jun 2023 11:31:12 -0700 (PDT)
+        Tue, 27 Jun 2023 14:33:12 -0400
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DFCD359D
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 11:32:34 -0700 (PDT)
+Received: by mail-qt1-x829.google.com with SMTP id d75a77b69052e-40079620a83so44311cf.0
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 11:32:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687890671; x=1690482671;
+        d=google.com; s=20221208; t=1687890749; x=1690482749;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=M+O48OjU/IUexRRWWS35B+8H7eX2rz5tEnV5kqlvttg=;
-        b=qdsBwFXzDTaJXiWEmH2Zr6L/JDkoanKXKWWghL0NJLXdodQewlEnZEerjKpjY/lm7y
-         v+ewLUhmHd1LazXL2ZPc7UdBpTgkqsw6JpHnRJXEf0v3BK+xKisylNXicCK6DaAomnO3
-         dTOSmabrdGASfElfJnoxlE0iVi5gJOVgX9qySUR2Ulqzm+Nr423BBmlHWvEcsdcmbsXJ
-         lHsQ21qLWm3Pxk58dm07mlIeMNcnYbRpPJbW0SBc3nnzWDoWY4rSZGUXdpfAdxWe2O7D
-         hz8vYFpBNeMhQ1tUKcAsYLyNLDNBSiOdcaUFH2/KGB5nZWane5eupKfI+xd5/FYeLO4I
-         WBeQ==
+        bh=m7K0Na1ueMpAAs3MzlJF92Yho3FRcETqD8qwawTqqFc=;
+        b=e/pfOs22GIokVkqI5J7akSwBH2svdYxY0/QUERIXfSKF0jer7YNKJe3qoat3/Doj8/
+         TEs2uHi1AG79uoJLHbRiniLUvA8KKA0cXmgA5L5uQzC5EBzbVbzQl1Z9uY5ZW/MkRO7e
+         +DyACIFndYmHDRYNSDxOPiWj/Kgdc2O7lSNM871xivxiYZaf16+9udNm7nCAusHtPbMY
+         5iW8AhATTqwmv88VgSm0IR3gVRvOipsD0ZfzazENuMMwyTP2KTafwez0wTHloU2RgEPf
+         Uqqhz92bfq5jPXxjjfKryMoE+CWMxfY3cBfb+96QWQ4ojsqxJOosnENe1akjB4axgG5j
+         /sgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687890671; x=1690482671;
+        d=1e100.net; s=20221208; t=1687890749; x=1690482749;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=M+O48OjU/IUexRRWWS35B+8H7eX2rz5tEnV5kqlvttg=;
-        b=TQ5PirdqgEuU8Jkas7hMkLI8A5Z3huUR60C56aODzae8lVQz6xsKbyvLvKKcgLeOIH
-         5Crh4+LK1oQLMTUB1ugg0vo4u9GhZnjzyP43I1NMNya7tvXZ64XIq1V1xoxkNVwg5wo4
-         UJ0WrSUsGiYKBXBvuZxFkE/w3BOFAsYay2W0CdgtK5GB2fPfp74Fo2+kNisU/u3eEplQ
-         44cqFI19ciyMXW5crOSahKjXaW4rmLtN4l/znDCfxlzhpcHDKIEMh/Lp1fUm5QK04805
-         n8KHkYfZHOjbPY6/mmhXxnl87VTmcaLcMYA3/vKmXXbPZf8OT+BD7w67jl1+u/wTFEBr
-         n+ug==
-X-Gm-Message-State: AC+VfDy7wDXpmqi/DmNFJ1kZC7bQqWwSot1JM4spDmdD5E9vGEPV+GVF
-        HV0ANxO19uciAN+21XQfz1e4D6V6NhHJcJ45pkM=
-X-Google-Smtp-Source: ACHHUZ5VMexi5Z2Qng12sy4+UBcuvqmM66S+2Lj0H4iJzEwVkyl60PgkOiAzZS9sZHP1l7NApuJrhq3buU055G744og=
-X-Received: by 2002:a05:6102:11f6:b0:443:59e3:f4f8 with SMTP id
- e22-20020a05610211f600b0044359e3f4f8mr3889523vsg.29.1687890671553; Tue, 27
- Jun 2023 11:31:11 -0700 (PDT)
+        bh=m7K0Na1ueMpAAs3MzlJF92Yho3FRcETqD8qwawTqqFc=;
+        b=XR4JOgqlrFT2LHb+9TupfC7EFTrr6jCOiY5QQ+XoiFDnLl8RGIc9VEPD2PCPjc2CtZ
+         aLf0OmoPsNAQg+S+A5+KCEqCMX2MTQ1LQ1whnOUpxMNzDumyROltzrmXmO0UgOwOa5nv
+         W6GtC1fCcWvhlvsZGag5yqjBM4bkbDvcM0hltP++c+9lKgnk1PLPjBVyy41l71Y1K3nn
+         cGYIDQ6WXs48rauCcnEkB0VBGpzQLkZz3FThUW9ADAmnn/UTuzVRXhoOKMmJJ0g12jLT
+         L3NxCbPZd7d35Ag+BwyObhz5Hej/Ho92Om19Y25m/VoZKgp0D0G6NEA7GS1WKCnBSxXM
+         /Nrg==
+X-Gm-Message-State: AC+VfDws4HNuHOBhUQaXYACUJBrPGudeoIElyAcwcjusbvX1SMJDe4oJ
+        U1hwOW6TiD+xYBBWc0Q39+J7bLdtFABdXJznajDhjw==
+X-Google-Smtp-Source: ACHHUZ4c4KGXAte2Kf1JXrwjTmss/dsbjj7iiE1YmyPHwb5dqqOs3xpx/apLktvU8pCYy5sDex41OjZRTe6uHyncS4U=
+X-Received: by 2002:a05:622a:3c7:b0:3f6:97b4:1a4a with SMTP id
+ k7-20020a05622a03c700b003f697b41a4amr14542qtx.20.1687890749520; Tue, 27 Jun
+ 2023 11:32:29 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1687884029.git.nabijaczleweli@nabijaczleweli.xyz> <44neh3sog5jaskc4zy6lwnld7hussp5sslx4fun47fr45mxe3a@q2jgkjwlq74f>
-In-Reply-To: <44neh3sog5jaskc4zy6lwnld7hussp5sslx4fun47fr45mxe3a@q2jgkjwlq74f>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Tue, 27 Jun 2023 21:31:00 +0300
-Message-ID: <CAOQ4uxifYoKdup6gzyW0iV=KFBzTWu5T8=zq8s8pFw2X3+5xRg@mail.gmail.com>
-Subject: Re: [LTP PATCH] inotify13: new test for fs/splice.c functions vs
- pipes vs inotify
-To:     =?UTF-8?Q?Ahelenia_Ziemia=C5=84ska?= 
-        <nabijaczleweli@nabijaczleweli.xyz>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jan Kara <jack@suse.cz>,
-        Chung-Chiang Cheng <cccheng@synology.com>, ltp@vger.kernel.org,
-        Petr Vorel <pvorel@suse.cz>
+References: <20230614151625.2077-1-yangjihong1@huawei.com> <CAP-5=fUf0+7HwZ+AHUR0nRD5QnfPn9_CPMEdJZP_5goPfrPB+Q@mail.gmail.com>
+ <CAP-5=fVOXjjcusjv858SOGrnNgE2w2sb7zS=0sZUpdFfR1T_GA@mail.gmail.com>
+ <668a6159-b7a8-ed25-d8fa-5584a4c04d37@huawei.com> <CAP-5=fX6nWRboZ2dWc1h_y0pe5TAgs0QC0qwCeaLcALfJ+5YEA@mail.gmail.com>
+ <cc3a669d-570b-2f0d-ce0f-0f4bee417eb2@huawei.com>
+In-Reply-To: <cc3a669d-570b-2f0d-ce0f-0f4bee417eb2@huawei.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Tue, 27 Jun 2023 11:32:17 -0700
+Message-ID: <CAP-5=fU-F6sCP+Bf-RssRxtvZs79OcjONbphExiGq390cBcZvw@mail.gmail.com>
+Subject: Re: [PATCH] perf top & record: Fix segfault when default cycles event
+ is not supported
+To:     Yang Jihong <yangjihong1@huawei.com>
+Cc:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org, adrian.hunter@intel.com,
+        kan.liang@linux.intel.com, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 7:57=E2=80=AFPM Ahelenia Ziemia=C5=84ska
-<nabijaczleweli@nabijaczleweli.xyz> wrote:
+On Thu, Jun 15, 2023 at 4:46=E2=80=AFAM Yang Jihong <yangjihong1@huawei.com=
+> wrote:
 >
-> The only one that passes on 6.1.27-1 is sendfile_file_to_pipe.
+> Hello,
 >
-> Link: https://lore.kernel.org/linux-fsdevel/jbyihkyk5dtaohdwjyivambb2gffy=
-js3dodpofafnkkunxq7bu@jngkdxx65pux/t/#u
-> Signed-off-by: Ahelenia Ziemia=C5=84ska <nabijaczleweli@nabijaczleweli.xy=
-z>
-> ---
-> Formatted to clang-format defaults. Put the original Fixes:ed SHA in the
-> metadata, that's probably fine, right?
-
-No. The git commit is for the commits that fix the problem.
-This can only be added after your fixes are merged.
-
-I will let the LPT developers comment about style,
-but I think LTP project wants tab indents.
-I am personally unable to read this patch with so little indentation
-and so much macroing.
-
+> On 2023/6/15 10:04, Ian Rogers wrote:
+> > On Wed, Jun 14, 2023 at 6:55=E2=80=AFPM Yang Jihong <yangjihong1@huawei=
+.com> wrote:
+> >>
+> >> Hello,
+> >>
+> >> On 2023/6/15 6:03, Ian Rogers wrote:
+> >>> On Wed, Jun 14, 2023 at 9:18=E2=80=AFAM Ian Rogers <irogers@google.co=
+m> wrote:
+> >>>>
+> >>>> On Wed, Jun 14, 2023 at 8:18=E2=80=AFAM Yang Jihong <yangjihong1@hua=
+wei.com> wrote:
+> >>>>>
+> >>>>> The perf-record and perf-top call parse_event() to add a cycles eve=
+nt to
+> >>>>> an empty evlist. For the system that does not support hardware cycl=
+es
+> >>>>> event, such as QEMU, the evlist is empty due to the following code =
+process:
+> >>>>>
+> >>>>>     parse_event(evlist, "cycles:P" or ""cycles:Pu")
+> >>>>>       parse_events(evlist, "cycles:P")
+> >>>>>         __parse_events
+> >>>>>           ...
+> >>>>>           ret =3D parse_events__scanner(str, &parse_state);
+> >>>>>           // ret =3D 0
+> >>>>>           ...
+> >>>>>           ret2 =3D parse_events__sort_events_and_fix_groups()
+> >>>>>           if (ret2 < 0)
+> >>>>>             return ret;
+> >>>>>           // The cycles event is not supported, here ret2 =3D -EINV=
+AL,
+> >>>>>           // Here return 0.
+> >>>>>           ...
+> >>>>>           evlist__splice_list_tail(evlist)
+> >>>>>           // The code here does not execute to, so the evlist is st=
+ill empty.
+> >>>>>
+> >>>>> A null pointer occurs when the content in the evlist is accessed la=
+ter.
+> >>>>>
+> >>>>> Before:
+> >>>>>
+> >>>>>     # perf list hw
+> >>>>>
+> >>>>>     List of pre-defined events (to be used in -e or -M):
+> >>>>>
+> >>>>>     # perf record true
+> >>>>>     libperf: Miscounted nr_mmaps 0 vs 1
+> >>>>>     WARNING: No sample_id_all support, falling back to unordered pr=
+ocessing
+> >>>>>     perf: Segmentation fault
+> >>>>>     Obtained 1 stack frames.
+> >>>>>     [0xc5beff]
+> >>>>>     Segmentation fault
+> >>>>>
+> >>>>> Solution:
+> >>>>>     If cycles event is not supported, try to fall back to cpu-clock=
+ event.
+> >>>>>
+> >>>>> After:
+> >>>>>     # perf record true
+> >>>>>     [ perf record: Woken up 1 times to write data ]
+> >>>>>     [ perf record: Captured and wrote 0.006 MB perf.data ]
+> >>>>>     #
+> >>>>>
+> >>>>> Fixes: 7b100989b4f6 ("perf evlist: Remove __evlist__add_default")
+> >>>>> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+> >>>>
+> >>>> Thanks, useful addition. The cpu-clock fall back wasn't present befo=
+re
+> >>>> 7b100989b4f6 so is the fixes tag correct?
+> >>>
+> >>> Hmm... it should be coming from evsel__fallback:
+> >>> https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/t=
+ools/perf/util/evsel.c?h=3Dtmp.perf-tools-next#n2840
+> >>> so we shouldn't duplicate that logic. The question is why we're not
+> >>> doing the fallback.
+> >>>
+> >>
+> >> Yes, it's a bit of the same logic as evsel__fallback, or we can call
+> >> evlist__add_default() as before, simply create an evsel of hardware
+> >> cycles and add it directly to evlist.
+> >>
+> >> Please confirm whether this solution is feasible. If it is feasible, I
+> >> will send a v2 version.
+> >
+> > The previous evlist__add_default logic didn't handle wildcard PMUs for
+> > cycles, hence wanting to reuse the parse events logic. The error is
+> > that the logic now isn't doing the fallback properly. I think an
+> > evlist__add_cycles which uses evsel__fallback makes sense matching the
+> > previous logic. I'd be happy if you took a look. I'll write a patch so
+> > that the perf_pmus list of core PMUs is never empty.
+> >
 >
->  testcases/kernel/syscalls/inotify/.gitignore  |   1 +
->  testcases/kernel/syscalls/inotify/inotify13.c | 246 ++++++++++++++++++
->  2 files changed, 247 insertions(+)
->  create mode 100644 testcases/kernel/syscalls/inotify/inotify13.c
+> The gdb calltrace for core dump is as follows:
 >
-> diff --git a/testcases/kernel/syscalls/inotify/.gitignore b/testcases/ker=
-nel/syscalls/inotify/.gitignore
-> index f6e5c546a..b597ea63f 100644
-> --- a/testcases/kernel/syscalls/inotify/.gitignore
-> +++ b/testcases/kernel/syscalls/inotify/.gitignore
-> @@ -10,3 +10,4 @@
->  /inotify10
->  /inotify11
->  /inotify12
-> +/inotify13
-> diff --git a/testcases/kernel/syscalls/inotify/inotify13.c b/testcases/ke=
-rnel/syscalls/inotify/inotify13.c
-> new file mode 100644
-> index 000000000..c34f1dc9f
-> --- /dev/null
-> +++ b/testcases/kernel/syscalls/inotify/inotify13.c
-> @@ -0,0 +1,246 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*\
-> + * Verify splice-family functions (and sendfile) generate IN_ACCESS
-> + * for what they read and IN_MODIFY for what they write.
-> + *
-> + * Regression test for 983652c69199 and
-> + * https://lore.kernel.org/linux-fsdevel/jbyihkyk5dtaohdwjyivambb2gffyjs=
-3dodpofafnkkunxq7bu@jngkdxx65pux/t/#u
-> + */
-> +
-> +#define _GNU_SOURCE
-> +#include "config.h"
-> +
-> +#include <stdio.h>
-> +#include <unistd.h>
-> +#include <stdlib.h>
-> +#include <fcntl.h>
-> +#include <stdbool.h>
-> +#include <inttypes.h>
-> +#include <signal.h>
-> +#include <sys/mman.h>
-> +#include <sys/sendfile.h>
-> +
-> +#include "tst_test.h"
-> +#include "tst_safe_macros.h"
-> +#include "inotify.h"
-> +
-> +#if defined(HAVE_SYS_INOTIFY_H)
-> +#include <sys/inotify.h>
-> +
-> +
-> +static int pipes[2] =3D {-1, -1};
-> +static int inotify =3D -1;
-> +static int memfd =3D -1;
-> +static int data_pipes[2] =3D {-1, -1};
-> +
-> +static void watch_rw(int fd) {
-> +  char buf[64];
-> +  sprintf(buf, "/proc/self/fd/%d", fd);
-> +  SAFE_MYINOTIFY_ADD_WATCH(inotify, buf, IN_ACCESS | IN_MODIFY);
-> +}
-> +
-> +static int compar(const void *l, const void *r) {
-> +  const struct inotify_event *lie =3D l;
-> +  const struct inotify_event *rie =3D r;
-> +  return lie->wd - rie->wd;
-> +}
-> +
-> +static void get_events(size_t evcnt, struct inotify_event evs[static evc=
-nt]) {
-> +  struct inotify_event tail, *itr =3D evs;
-> +  for (size_t left =3D evcnt; left; --left)
-> +    SAFE_READ(true, inotify, itr++, sizeof(struct inotify_event));
-> +
-> +  TEST(read(inotify, &tail, sizeof(struct inotify_event)));
-> +  if (TST_RET !=3D -1)
-> +    tst_brk(TFAIL, "expect %zu events", evcnt);
-> +  if (TST_ERR !=3D EAGAIN)
-> +    tst_brk(TFAIL | TTERRNO, "expected EAGAIN");
-> +
-> +  qsort(evs, evcnt, sizeof(struct inotify_event), compar);
-> +}
-> +
-> +static void expect_event(struct inotify_event *ev, int wd, uint32_t mask=
-) {
-> +  if (ev->wd !=3D wd)
-> +    tst_brk(TFAIL, "expect event for wd %d got %d", wd, ev->wd);
-> +  if (ev->mask !=3D mask)
-> +    tst_brk(TFAIL, "expect event with mask %" PRIu32 " got %" PRIu32 "",=
- mask,
-> +            ev->mask);
-> +}
-> +
-> +#define F2P(splice)                                                     =
-       \
-> +  SAFE_WRITE(SAFE_WRITE_RETRY, memfd, __func__, sizeof(__func__));      =
-       \
-> +  SAFE_LSEEK(memfd, 0, SEEK_SET);                                       =
-       \
-> +  watch_rw(memfd);                                                      =
-       \
-> +  watch_rw(pipes[0]);                                                   =
-       \
-> +  TEST(splice);                                                         =
-       \
-> +  if (TST_RET =3D=3D -1)                                                =
-           \
-> +    tst_brk(TBROK | TERRNO, #splice);                                   =
-       \
-> +  if (TST_RET !=3D sizeof(__func__))                                    =
-         \
-> +    tst_brk(TBROK, #splice ": %" PRId64 "", TST_RET);                   =
-       \
-> +                                                                        =
-       \
-> +  /*expecting: IN_ACCESS memfd, IN_MODIFY pipes[0]*/                    =
-       \
-> +  struct inotify_event events[2];                                       =
-       \
-> +  get_events(ARRAY_SIZE(events), events);                               =
-       \
-> +  expect_event(events + 0, 1, IN_ACCESS);                               =
-       \
-> +  expect_event(events + 1, 2, IN_MODIFY);                               =
-       \
-> +                                                                        =
-       \
-> +  char buf[sizeof(__func__)];                                           =
-       \
-> +  SAFE_READ(true, pipes[0], buf, sizeof(__func__));                     =
-       \
-> +  if (memcmp(buf, __func__, sizeof(__func__)))                          =
-       \
-> +    tst_brk(TFAIL, "buf contents bad");
-> +static void splice_file_to_pipe(void) {
-> +  F2P(splice(memfd, NULL, pipes[1], NULL, 128 * 1024 * 1024, 0));
-> +}
-> +static void sendfile_file_to_pipe(void) {
-> +  F2P(sendfile(pipes[1], memfd, NULL, 128 * 1024 * 1024));
-> +}
-> +
-> +static void splice_pipe_to_file(void) {
-> +  SAFE_WRITE(SAFE_WRITE_RETRY, pipes[1], __func__, sizeof(__func__));
-> +  watch_rw(pipes[0]);
-> +  watch_rw(memfd);
-> +  TEST(splice(pipes[0], NULL, memfd, NULL, 128 * 1024 * 1024, 0));
-> +  if(TST_RET =3D=3D -1)
-> +               tst_brk(TBROK | TERRNO, "splice");
-> +       if(TST_RET !=3D sizeof(__func__))
-> +               tst_brk(TBROK, "splice: %" PRId64 "", TST_RET);
-> +
-> +       // expecting: IN_ACCESS pipes[0], IN_MODIFY memfd
-> +       struct inotify_event events[2];
-> +       get_events(ARRAY_SIZE(events), events);
-> +       expect_event(events + 0, 1, IN_ACCESS);
-> +       expect_event(events + 1, 2, IN_MODIFY);
-> +
-> +  char buf[sizeof(__func__)];
-> +  SAFE_LSEEK(memfd, 0, SEEK_SET);
-> +  SAFE_READ(true, memfd, buf, sizeof(__func__));
-> +  if (memcmp(buf, __func__, sizeof(__func__)))
-> +                tst_brk(TFAIL, "buf contents bad");
-> +}
-> +
-> +#define P2P(splice)                                                     =
-       \
-> +  SAFE_WRITE(SAFE_WRITE_RETRY, data_pipes[1], __func__, sizeof(__func__)=
-);     \
-> +  watch_rw(data_pipes[0]);                                              =
-       \
-> +  watch_rw(pipes[1]);                                                   =
-       \
-> +  TEST(splice);                                                         =
-       \
-> +  if (TST_RET =3D=3D -1)                                                =
-           \
-> +                tst_brk(TBROK | TERRNO, #splice);                       =
-       \
-> +  if (TST_RET !=3D sizeof(__func__))                                    =
-         \
-> +                tst_brk(TBROK, #splice ": %" PRId64 "", TST_RET);       =
-       \
-> +                                                                        =
-       \
-> +  /* expecting: IN_ACCESS data_pipes[0], IN_MODIFY pipes[1] */          =
-       \
-> +  struct inotify_event events[2];                                       =
-       \
-> +  get_events(ARRAY_SIZE(events), events);                               =
-       \
-> +  expect_event(events + 0, 1, IN_ACCESS);                               =
-       \
-> +  expect_event(events + 1, 2, IN_MODIFY);                               =
-       \
-> +                                                                        =
-       \
-> +  char buf[sizeof(__func__)];                                           =
-       \
-> +  SAFE_READ(true, pipes[0], buf, sizeof(__func__));                     =
-       \
-> +  if (memcmp(buf, __func__, sizeof(__func__)))                          =
-       \
-> +                tst_brk(TFAIL, "buf contents bad");
-> +static void splice_pipe_to_pipe(void) {
-> +  P2P(splice(data_pipes[0], NULL, pipes[1], NULL, 128 * 1024 * 1024, 0))=
-;
-> +}
-> +static void tee_pipe_to_pipe(void) {
-> +  P2P(tee(data_pipes[0], pipes[1], 128 * 1024 * 1024, 0));
-> +}
-> +
-> +static char vmsplice_pipe_to_mem_dt[32 * 1024];
-> +static void vmsplice_pipe_to_mem(void) {
-> +  memcpy(vmsplice_pipe_to_mem_dt, __func__, sizeof(__func__));
-> +  watch_rw(pipes[0]);
-> +  TEST(vmsplice(pipes[1],
-> +                &(struct iovec){.iov_base =3D vmsplice_pipe_to_mem_dt,
-> +                                .iov_len =3D sizeof(vmsplice_pipe_to_mem=
-_dt)},
-> +                1, SPLICE_F_GIFT));
-> +  if (TST_RET =3D=3D -1)
-> +    tst_brk(TBROK | TERRNO, "vmsplice");
-> +  if (TST_RET !=3D sizeof(vmsplice_pipe_to_mem_dt))
-> +    tst_brk(TBROK, "vmsplice: %" PRId64 "", TST_RET);
-> +
-> +  // expecting: IN_MODIFY pipes[0]
-> +  struct inotify_event event;
-> +  get_events(1, &event);
-> +  expect_event(&event, 1, IN_MODIFY);
-> +
-> +  char buf[sizeof(__func__)];
-> +  SAFE_READ(true, pipes[0], buf, sizeof(__func__));
-> +  if (memcmp(buf, __func__, sizeof(__func__)))
-> +    tst_brk(TFAIL, "buf contents bad");
-> +}
-> +
-> +static void vmsplice_mem_to_pipe(void) {
-> +  char buf[sizeof(__func__)];
-> +  SAFE_WRITE(SAFE_WRITE_RETRY, pipes[1], __func__, sizeof(__func__));
-> +  watch_rw(pipes[1]);
-> +  TEST(vmsplice(pipes[0],
-> +                &(struct iovec){.iov_base =3D buf, .iov_len =3D sizeof(b=
-uf)}, 1,
-> +                0));
-> +  if (TST_RET =3D=3D -1)
-> +    tst_brk(TBROK | TERRNO, "vmsplice");
-> +  if (TST_RET !=3D sizeof(buf))
-> +    tst_brk(TBROK, "vmsplice: %" PRId64 "", TST_RET);
-> +
-> +  // expecting: IN_ACCESS pipes[1]
-> +  struct inotify_event event;
-> +  get_events(1, &event);
-> +  expect_event(&event, 1, IN_ACCESS);
-> +  if (memcmp(buf, __func__, sizeof(__func__)))
-> +    tst_brk(TFAIL, "buf contents bad");
-> +}
-> +
-> +typedef void (*tests_f)(void);
-> +#define TEST_F(f) { f, #f }
-> +static const struct {
-> +        tests_f f;
-> +        const char *n;
-> +} tests[] =3D {
-> +    TEST_F(splice_file_to_pipe),  TEST_F(sendfile_file_to_pipe),
-> +    TEST_F(splice_pipe_to_file),  TEST_F(splice_pipe_to_pipe),
-> +    TEST_F(tee_pipe_to_pipe),     TEST_F(vmsplice_pipe_to_mem),
-> +    TEST_F(vmsplice_mem_to_pipe),
-> +};
-> +
-> +static void run_test(unsigned int n)
-> +{
-> +       tst_res(TINFO, "%s", tests[n].n);
-> +
-> +       SAFE_PIPE2(pipes, O_CLOEXEC);
-> +       SAFE_PIPE2(data_pipes, O_CLOEXEC);
-> +       inotify =3D SAFE_MYINOTIFY_INIT1(IN_NONBLOCK | IN_CLOEXEC);
-> +       if((memfd =3D memfd_create(__func__, MFD_CLOEXEC)) =3D=3D -1)
-> +               tst_brk(TCONF | TERRNO, "memfd");
-> +       tests[n].f();
+> (gdb) bt
+> #0  0x00000000005ffaa2 in __perf_cpu_map__nr (cpus=3D0x0) at cpumap.c:283
+> #1  0x00000000005ffd17 in perf_cpu_map__max (map=3D0x0) at cpumap.c:371
+> #2  0x0000000000565644 in cpu_map_data__alloc
+> (syn_data=3Dsyn_data@entry=3D0x7ffc843bff30,
+> header_size=3Dheader_size@entry=3D8) at util/synthetic-events.c:1273
+> #3  0x0000000000568712 in cpu_map_event__new (map=3D<optimized out>) at
+> util/synthetic-events.c:1321
+> #4  perf_event__synthesize_cpu_map (tool=3Dtool@entry=3D0xc37580 <record>=
+,
+> map=3D<optimized out>, process=3Dprocess@entry=3D0x413a80
+> <process_synthesized_event>, machine=3Dmachine@entry=3D0x0) at
+> util/synthetic-events.c:1341
+> #5  0x000000000041426e in record__synthesize (tail=3Dtail@entry=3Dfalse,
+> rec=3D0xc37580 <record>) at builtin-record.c:2050
+> #6  0x0000000000415a0b in __cmd_record (argc=3D<optimized out>,
+> argv=3D<optimized out>, rec=3D0xc37580 <record>) at builtin-record.c:2512
+> #7  0x0000000000418f22 in cmd_record (argc=3D<optimized out>,
+> argv=3D<optimized out>) at builtin-record.c:4260
+> #8  0x00000000004babdd in run_builtin (p=3Dp@entry=3D0xc3a0e8
+> <commands+264>, argc=3Dargc@entry=3D2, argv=3Dargv@entry=3D0x7ffc843c5b30=
+) at
+> perf.c:323
+> #9  0x0000000000401632 in handle_internal_command (argv=3D0x7ffc843c5b30,
+> argc=3D2) at perf.c:377
+> #10 run_argv (argcp=3D<synthetic pointer>, argv=3D<synthetic pointer>) at
+> perf.c:421
+> #11 main (argc=3D2, argv=3D0x7ffc843c5b30) at perf.c:537
+>
+> The direct cause of the problem is that rec->evlist->core.all_cpus is
+> empty, resulting in null pointer access.
+>
+> The code process is as follows:
+>
+> cmd_record
+>    parse_event(rec->evlist)
+>    // Hardware cycle events should not be supported here, so rec->evlist
+> is empty
+>    ...
+>
+>    evlist__create_maps(rec->evlist)
+>      perf_evlist__set_maps(&rec->evlist->core)
+>           perf_evlist__propagate_maps(&rec->evlist->core)
+>             perf_evlist__for_each_evsel(&rec->evlist->core, evsel)
+>                 // because rec->evlist is empty, don't get into that
+> __perf_evlist__propagate_maps(), so rec->evlist->core.all_cpus is NULL.
+>                   __perf_evlist__propagate_maps
+>                     rec->evlist->core.all_cpus =3D perf_cpu_map__merge(ev=
+list->all_cpus,
+> evsel->cpus);
+>    ...
+>
+>    __cmd_record
+>      record__synthesize
+>        perf_event__synthesize_cpu_map(rec->evlist->core.all_cpus)
+>          cpu_map_event__new(rec->evlist->core.all_cpus)
+>                   cpu_map_data__alloc(rec->evlist->core.all_cpus)
+>                     perf_cpu_map__max(rec->evlist->core.all_cpus)
+>                           __perf_cpu_map__nr
+>                           // Here null pointer access!
+>         ...
+>
+>         record__open
+>        evsel__fallback
+>           // Here fallback is just starting
+>
 
-Normally, a test cases table would encode things like
-the number of expected events and type of events.
-The idea is that the test template has parametrized code
-and not just a loop for test cases subroutines, but there
-are many ways to write tests, so as long as it gets the job
-done and is readable to humans, I don't mind.
-
-Right now this test may do the job, but it is not readable
-for this human ;-)
-mostly because of the huge macros -
-LTP is known for pretty large macros, but those are
-for generic utilities and you have complete test cases
-written as macros (templates).
-
-> +       tst_res(TPASS, "=D0=BE=D0=BA");
-> +}
-> +
-> +static void cleanup(void)
-> +{
-> +       if (memfd !=3D -1)
-> +               SAFE_CLOSE(memfd);
-> +       if (inotify !=3D -1)
-> +               SAFE_CLOSE(inotify);
-> +       if (pipes[0] !=3D -1)
-> +               SAFE_CLOSE(pipes[0]);
-> +       if (pipes[1] !=3D -1)
-> +               SAFE_CLOSE(pipes[1]);
-> +       if (data_pipes[0] !=3D -1)
-> +               SAFE_CLOSE(data_pipes[0]);
-> +       if (data_pipes[1] !=3D -1)
-> +               SAFE_CLOSE(data_pipes[1]);
-> +}
-> +
-
-This cleanup does not happen for every test case -
-it happens only at the end of all the tests IIRC.
-
-> +static struct tst_test test =3D {
-> +       .max_runtime =3D 10,
-> +       .cleanup =3D cleanup,
-> +       .test =3D run_test,
-> +       .tcnt =3D ARRAY_SIZE(tests),
-> +       .tags =3D (const struct tst_tag[]) {
-> +               {"linux-git", "983652c69199"},
-
-Leave this out for now.
+Sorry, I don't follow this. I sent out a patch for the no core PMU
+case - please take a look:
+https://lore.kernel.org/lkml/20230627182834.117565-1-irogers@google.com/
+I haven't got a reproduction for failing to open cycles and it's not
+clear to me why evsel__fallback isn't being used to fallback to clock.
+Were you able to look at this?
 
 Thanks,
-Amir.
+Ian
+
+> Thanks,
+> Yang
