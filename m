@@ -2,97 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A35AF73FC4F
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 14:59:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE40C73FC52
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 15:01:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230417AbjF0M7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 08:59:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52538 "EHLO
+        id S230229AbjF0NBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 09:01:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229841AbjF0M7M (ORCPT
+        with ESMTP id S229468AbjF0NBg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 08:59:12 -0400
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 545C4E1;
-        Tue, 27 Jun 2023 05:59:11 -0700 (PDT)
-Received: by mail-qv1-xf2a.google.com with SMTP id 6a1803df08f44-635dbfa710dso18548336d6.0;
-        Tue, 27 Jun 2023 05:59:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687870750; x=1690462750;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Q5+DuaCiOR+WAyBglQbQg08A79GQ+8qOpe+uAJINk1c=;
-        b=m0CC08U9FXkhchI54swpLsV6pI+g0px1bOiqzSuiiPa/mJruusL7KGGgD/ORhipJyM
-         5Z2sEQBsuEpSn8k12lr7hL2ta3/Bb0ZLy0Gp122QZSq0rLgi0b1banHOuhE1s9CXhnq0
-         jCWopxGWJZtyoIO2fLvsSK9y7QK7FBWyFQsAxM91HMWmPMVYV0u/of131gfQ65rSnnBg
-         XZZfd2MyLqF2cN7eI5HdYNNIJRL8N9keF+sUJy5dXDWnCYYyQGwUTyXubHWoblPLJQ1h
-         YhkFI1GVpgFupPMfhQdOk2HuJINgf0MJoXTe21+bWdNpX/L8SaUrgcd0TpTy+K/RVG39
-         HZYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687870750; x=1690462750;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Q5+DuaCiOR+WAyBglQbQg08A79GQ+8qOpe+uAJINk1c=;
-        b=cAmVUxDqOzU+sg8ZFbWldAc3uUdqG6SLCejl0mD9XI7r1PGcvDdV985DaiuykzQuff
-         qgOdhO2In5z/4WE023iqPa5UG9WoIGs+F8cb50d8IjmDc7dINno1JiuvcD8m0EDhvvVM
-         kvIrlt8lsHNrn57R9GhGb7Y5atEbSvQQhRdwdxz7qDi7VJ1IgWHLqPaupDpdY4W8OJdl
-         DaTsEhcqwa9JjPesTpFjZjZchaHx4GE2JxuriSdyFrGYDiaV0sG21VnDS8gjJNRojRjt
-         6VQVtOzmqTcIv3FYgjVQjiYpq0kasR3l7w1vepExnma+KEzWb7PYyLu9RbBMHGdFpuDf
-         9kgw==
-X-Gm-Message-State: AC+VfDy4/xdh0xTzydk/3FfAyTj7sPKbt+KJqMYudKcRXRaEznKwdTEZ
-        O26yDTKWDhXYrXm9CjYDssEgQVr3BvyU1U+8sw0=
-X-Google-Smtp-Source: ACHHUZ7+L3rt8Etz7M+6oZM4CgUMh79FhCOfRxyrdMbPFyBlJyxEgk6URk9C0QQdVRaEcqHAjx0Q6qJjixNcDd9/2tU=
-X-Received: by 2002:a05:6214:20e4:b0:62d:edf6:6dcd with SMTP id
- 4-20020a05621420e400b0062dedf66dcdmr33702421qvk.51.1687870750297; Tue, 27 Jun
- 2023 05:59:10 -0700 (PDT)
+        Tue, 27 Jun 2023 09:01:36 -0400
+Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B500E1;
+        Tue, 27 Jun 2023 06:01:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
+        t=1687870890; bh=LCFUho+x/i+9Jjg3s4a/kFQNBnAevgmTIXokYnqx08A=;
+        h=From:To:Cc:Subject:Date:From;
+        b=FGuCdZzgneemCBuX3vcnoudOfAQ2lUs1Kk8uaY3IccA/1ikmcBcxiFiPe3Fb+NoTo
+         bKaz7iCkg/iSqaR+ha7qDlHQyf/HCSghBRZL9QAqj9lVGFViWnzRE162cVBz0uTSMW
+         puxo8Vhb0RExNoCodLyHcxDCHzIu9O4NRpyRiXeU=
+Received: from ld50.lan (unknown [101.88.25.181])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id E9BCD6011B;
+        Tue, 27 Jun 2023 21:01:28 +0800 (CST)
+From:   WANG Xuerui <kernel@xen0n.name>
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     WANG Rui <wangrui@loongson.cn>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Xi Ruoyao <xry111@xry111.site>, loongarch@lists.linux.dev,
+        linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, WANG Xuerui <git@xen0n.name>
+Subject: [PATCH 0/2] Fix cross-compilation issues with Clang
+Date:   Tue, 27 Jun 2023 21:01:20 +0800
+Message-Id: <20230627130122.1491765-1-kernel@xen0n.name>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-References: <20230626102752.1583-1-youkangren@vivo.com> <CAGRGNgW_eeM2h7JBe98asaYjnF8hwAr50n8dfSabeK2H0u4=Qg@mail.gmail.com>
- <PUZPR06MB59369ADE01FB04AD9A7279A9AA27A@PUZPR06MB5936.apcprd06.prod.outlook.com>
-In-Reply-To: <PUZPR06MB59369ADE01FB04AD9A7279A9AA27A@PUZPR06MB5936.apcprd06.prod.outlook.com>
-From:   Julian Calaby <julian.calaby@gmail.com>
-Date:   Tue, 27 Jun 2023 22:58:58 +1000
-Message-ID: <CAGRGNgV=aNXvVZ8QkxE8R3Lr7edm6BPZ3adi5E23QeFO-q7nRw@mail.gmail.com>
-Subject: Re: [PATCH] wifi: ray_cs: Remove invalid conditional statements
-To:     =?UTF-8?B?5bCk5bq35LuB?= <youkangren@vivo.com>
-Cc:     Kalle Valo <kvalo@kernel.org>, Dongliang Mu <dzm91@hust.edu.cn>,
-        Simon Horman <simon.horman@corigine.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        "open list:RAYLINK/WEBGEAR 802.11 WIRELESS LAN DRIVER" 
-        <linux-wireless@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "opensource.kernel" <opensource.kernel@vivo.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: WANG Xuerui <git@xen0n.name>
+
 Hi,
 
-On Tue, Jun 27, 2023 at 10:44=E2=80=AFPM =E5=B0=A4=E5=BA=B7=E4=BB=81 <youka=
-ngren@vivo.com> wrote:
->
-> Dear Julian,
->
->     I found a warning at compiling time that the if and else branches had=
- no effect here. I looked at the code and found that the contents of both b=
-ranches were the same, so I merged the contents of both branches into one a=
-nd committed the changes.
+Just some quick fixes to the recently accepted Clang patches, thanks to
+Nathan's followup testing. (I test-compiled natively so didn't notice
+that cross-compilation was broken, and by chance the LLVM snapshot I
+used didn't contain the breaking commit either.)
 
-That's great, but it needs to be in the commit message.
+With an additional LLVM patch https://reviews.llvm.org/D153865 the Clang
+builds should now get fixed.
 
-Thanks,
+WANG Xuerui (2):
+  LoongArch: vDSO: Use CLANG_FLAGS instead of filtering out '--target='
+  LoongArch: Include KBUILD_CPPFLAGS in CHECKFLAGS invocation
 
---=20
-Julian Calaby
+ arch/loongarch/Makefile      | 2 +-
+ arch/loongarch/vdso/Makefile | 5 +----
+ 2 files changed, 2 insertions(+), 5 deletions(-)
 
-Email: julian.calaby@gmail.com
-Profile: http://www.google.com/profiles/julian.calaby/
+-- 
+2.40.0
+
