@@ -2,65 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A4F4740067
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 18:09:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08F1C74006B
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 18:09:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232006AbjF0QJS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 12:09:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37086 "EHLO
+        id S231532AbjF0QJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 12:09:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230401AbjF0QJQ (ORCPT
+        with ESMTP id S231452AbjF0QJa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 12:09:16 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1834D3590
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 09:09:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=mrpMVPePqZcp/TARbg/0wmIdMAyOFZ9lEopNh2bXlGI=; b=IVmklvoTr61w2Y5JHaAluqrrkB
-        QwielsATQOForcre5ApJ9MjIbkF8fEFy/wGOG5WKWKvMU/lKVfOBu4NlEZ2iqPT5uV0eBbi5Yt80Q
-        5CZ4Tm9aJCdXIx9Rwa9o6bc86Okrc+tMhsr2vY35p3QeVwJJJyrkWy1IjE+hnwrXFrKANLxjiSqF4
-        QBYV3cnNUvN8HliTm0RlH4XHR028lTdYvGV2al0Ju3+ctFHtngCtSkjPM1zlylzCajOm42iR/4Znq
-        DMBUpYOOBapxI87fWPI2/ETyetfW6hkI1pBktjX8FXUuqCocpjiZexjEjrdxdCZW96K4Kp9AAQCaO
-        WURxOjjg==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qEBFW-00DbMZ-1S;
-        Tue, 27 Jun 2023 16:09:02 +0000
-Message-ID: <a64df916-b945-1f6b-4888-a393bd75d9a1@infradead.org>
-Date:   Tue, 27 Jun 2023 09:09:01 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v5 1/1] drm/doc: Document DRM device reset expectations
-Content-Language: en-US
-To:     =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>,
-        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        Tue, 27 Jun 2023 12:09:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 163A330FF;
+        Tue, 27 Jun 2023 09:09:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9ED9F611DB;
+        Tue, 27 Jun 2023 16:09:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80A45C433C9;
+        Tue, 27 Jun 2023 16:09:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687882162;
+        bh=Um+DixtcgknExk4fdb8G9FQbeYY8JUWWPfgk6fKF9l0=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=cOYMBjBpm7gUvHE2Pbq4Kuz7r8aYq+lg35XxwCdxypDT/OaWWh6qLqMQ2xAZiX140
+         At+0qagxeACIV29B11Q2Od2ee4mySvlUEZ9PRu3nAN7RRRhj4LFl991ib5Jm/dwNHJ
+         Tf4kBNaR6ktGacrUM3gjFvaXlI6mN+h7VwgdC/NO6HCmSswqEtz5Fykp3J6KADxBja
+         QjHJ0t7I7k3BA57hxz09ZI6gqRpiiCu1Y8h3hoTSvwy4t5gKppk22DliiNfzTvDiCa
+         jh4JMDVrOrEa5fYZS3ElIqHq52Vol8TfAt3QT783iNoVGYD8DawLZfhFHRYlHwPyO0
+         YgtepU4+bfYiQ==
+Message-ID: <a640835f172acabfc24b10f526d5186b3f98621f.camel@kernel.org>
+Subject: Re: [PATCH] fs/nfsd: Fix creation time serialization order
+From:   Jeff Layton <jlayton@kernel.org>
+To:     tavianator@tavianator.com, linux-nfs@vger.kernel.org
+Cc:     Chuck Lever <chuck.lever@oracle.com>,
+        Ondrej Valousek <ondrej.valousek.xm@renesas.com>,
         linux-kernel@vger.kernel.org
-Cc:     kernel-dev@igalia.com, alexander.deucher@amd.com,
-        christian.koenig@amd.com, pierre-eric.pelloux-prayer@amd.com,
-        Simon Ser <contact@emersion.fr>,
-        Rob Clark <robdclark@gmail.com>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Stone <daniel@fooishbar.org>,
-        =?UTF-8?B?J01hcmVrIE9sxaHDoWsn?= <maraeo@gmail.com>,
-        Dave Airlie <airlied@gmail.com>,
-        =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel.daenzer@mailbox.org>,
-        Samuel Pitoiset <samuel.pitoiset@gmail.com>,
-        =?UTF-8?Q?Timur_Krist=c3=b3f?= <timur.kristof@gmail.com>,
-        Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
-        Pekka Paalanen <pekka.paalanen@collabora.com>
-References: <20230627132323.115440-1-andrealmeid@igalia.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230627132323.115440-1-andrealmeid@igalia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Date:   Tue, 27 Jun 2023 12:09:20 -0400
+In-Reply-To: <4154eb6503988c2096f5d30af26d06863fb5d973.1687554467.git.tavianator@tavianator.com>
+References: <4154eb6503988c2096f5d30af26d06863fb5d973.1687554467.git.tavianator@tavianator.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,122 +57,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi André,
-
-I have just a few more below:
-
-On 6/27/23 06:23, André Almeida wrote:
-> Create a section that specifies how to deal with DRM device resets for
-> kernel and userspace drivers.
-> 
-> Acked-by: Pekka Paalanen <pekka.paalanen@collabora.com>
-> Signed-off-by: André Almeida <andrealmeid@igalia.com>
+On Fri, 2023-06-23 at 17:09 -0400, tavianator@tavianator.com wrote:
+> From: Tavian Barnes <tavianator@tavianator.com>
+>=20
+> In nfsd4_encode_fattr(), TIME_CREATE was being written out after all
+> other times.  However, they should be written out in an order that
+> matches the bit flags in bmval1, which in this case are
+>=20
+>     #define FATTR4_WORD1_TIME_ACCESS        (1UL << 15)
+>     #define FATTR4_WORD1_TIME_CREATE        (1UL << 18)
+>     #define FATTR4_WORD1_TIME_DELTA         (1UL << 19)
+>     #define FATTR4_WORD1_TIME_METADATA      (1UL << 20)
+>     #define FATTR4_WORD1_TIME_MODIFY        (1UL << 21)
+>=20
+> so TIME_CREATE should come second.
+>=20
+> I noticed this on a FreeBSD NFSv4.2 client, which supports creation
+> times.  On this client, file times were weirdly permuted.  With this
+> patch applied on the server, times looked normal on the client.
+>=20
+> Fixes: e377a3e698fb ("nfsd: Add support for the birth time attribute")
+> Link: https://unix.stackexchange.com/q/749605/56202
+> Signed-off-by: Tavian Barnes <tavianator@tavianator.com>
 > ---
-> 
-> v4: https://lore.kernel.org/lkml/20230626183347.55118-1-andrealmeid@igalia.com/
-> 
-> Changes:
->  - Grammar fixes (Randy)
-> 
->  Documentation/gpu/drm-uapi.rst | 68 ++++++++++++++++++++++++++++++++++
->  1 file changed, 68 insertions(+)
-> 
-> diff --git a/Documentation/gpu/drm-uapi.rst b/Documentation/gpu/drm-uapi.rst
-> index 65fb3036a580..3cbffa25ed93 100644
-> --- a/Documentation/gpu/drm-uapi.rst
-> +++ b/Documentation/gpu/drm-uapi.rst
-> @@ -285,6 +285,74 @@ for GPU1 and GPU2 from different vendors, and a third handler for
->  mmapped regular files. Threads cause additional pain with signal
->  handling as well.
->  
-> +Device reset
-> +============
-> +
-> +The GPU stack is really complex and is prone to errors, from hardware bugs,
-> +faulty applications and everything in between the many layers. Some errors
-> +require resetting the device in order to make the device usable again. This
-> +sections describes the expectations for DRM and usermode drivers when a
+>  fs/nfsd/nfs4xdr.c | 14 +++++++-------
+>  1 file changed, 7 insertions(+), 7 deletions(-)
+>=20
+> diff --git a/fs/nfsd/nfs4xdr.c b/fs/nfsd/nfs4xdr.c
+> index 76db2fe29624..3037c5b0623e 100644
+> --- a/fs/nfsd/nfs4xdr.c
+> +++ b/fs/nfsd/nfs4xdr.c
+> @@ -3354,6 +3354,13 @@ nfsd4_encode_fattr(struct xdr_stream *xdr, struct =
+svc_fh *fhp,
+>  		p =3D xdr_encode_hyper(p, (s64)stat.atime.tv_sec);
+>  		*p++ =3D cpu_to_be32(stat.atime.tv_nsec);
+>  	}
+> +	if (bmval1 & FATTR4_WORD1_TIME_CREATE) {
+> +		p =3D xdr_reserve_space(xdr, 12);
+> +		if (!p)
+> +			goto out_resource;
+> +		p =3D xdr_encode_hyper(p, (s64)stat.btime.tv_sec);
+> +		*p++ =3D cpu_to_be32(stat.btime.tv_nsec);
+> +	}
+>  	if (bmval1 & FATTR4_WORD1_TIME_DELTA) {
+>  		p =3D xdr_reserve_space(xdr, 12);
+>  		if (!p)
+> @@ -3374,13 +3381,6 @@ nfsd4_encode_fattr(struct xdr_stream *xdr, struct =
+svc_fh *fhp,
+>  		p =3D xdr_encode_hyper(p, (s64)stat.mtime.tv_sec);
+>  		*p++ =3D cpu_to_be32(stat.mtime.tv_nsec);
+>  	}
+> -	if (bmval1 & FATTR4_WORD1_TIME_CREATE) {
+> -		p =3D xdr_reserve_space(xdr, 12);
+> -		if (!p)
+> -			goto out_resource;
+> -		p =3D xdr_encode_hyper(p, (s64)stat.btime.tv_sec);
+> -		*p++ =3D cpu_to_be32(stat.btime.tv_nsec);
+> -	}
+>  	if (bmval1 & FATTR4_WORD1_MOUNTED_ON_FILEID) {
+>  		u64 ino =3D stat.ino;
+> =20
 
-   section
-
-> +device resets and how to propagate the reset status.
-> +
-> +Kernel Mode Driver
-> +------------------
-> +
-> +The KMD is responsible for checking if the device needs a reset, and to perform
-> +it as needed. Usually a hang is detected when a job gets stuck executing. KMD
-> +should keep track of resets, because userspace can query any time about the
-> +reset stats for an specific context. This is needed to propagate to the rest of
-
-               for a specific
-
-stats or status?
-
-> +the stack that a reset has happened. Currently, this is implemented by each
-> +driver separately, with no common DRM interface.
-> +
-> +User Mode Driver
-> +----------------
-> +
-> +The UMD should check before submitting new commands to the KMD if the device has
-> +been reset, and this can be checked more often if the UMD requires it. After
-> +detecting a reset, UMD will then proceed to report it to the application using
-> +the appropriate API error code, as explained in the section below about
-> +robustness.
-> +
-> +Robustness
-> +----------
-> +
-> +The only way to try to keep an application working after a reset is if it
-> +complies with the robustness aspects of the graphical API that it is using.
-> +
-> +Graphical APIs provide ways to applications to deal with device resets. However,
-> +there is no guarantee that the app will use such features correctly, and the
-> +UMD can implement policies to close the app if it is a repeating offender,
-> +likely in a broken loop. This is done to ensure that it does not keep blocking
-> +the user interface from being correctly displayed. This should be done even if
-> +the app is correct but happens to trigger some bug in the hardware/driver.
-> +
-> +OpenGL
-> +~~~~~~
-> +
-> +Apps using OpenGL should use the available robust interfaces, like the
-> +extension ``GL_ARB_robustness`` (or ``GL_EXT_robustness`` for OpenGL ES). This
-> +interface tells if a reset has happened, and if so, all the context state is
-> +considered lost and the app proceeds by creating new ones. If it is possible to
-> +determine that robustness is not in use, the UMD will terminate the app when a
-> +reset is detected, giving that the contexts are lost and the app won't be able
-> +to figure this out and recreate the contexts.
-> +
-> +Vulkan
-> +~~~~~~
-> +
-> +Apps using Vulkan should check for ``VK_ERROR_DEVICE_LOST`` for submissions.
-> +This error code means, among other things, that a device reset has happened and
-> +it needs to recreate the contexts to keep going.
-> +
-> +Reporting causes of resets
-> +--------------------------
-> +
-> +Apart from propagating the reset through the stack so apps can recover, it's
-> +really useful for driver developers to learn more about what caused the reset in
-> +first place. DRM devices should make use of devcoredump to store relevant
-
-   the first place.
-
-> +information about the reset, so this information can be added to user bug
-> +reports.
-> +
->  .. _drm_driver_ioctl:
->  
->  IOCTL Support on Device Nodes
-
-and with those addressed:
-
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-
-Thanks for adding the documentation.
-
--- 
-~Randy
+Reviewed-by: Jeff Layton <jlayton@kernel.org>
