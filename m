@@ -2,172 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DDDF73F7CB
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 10:51:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C186773F7CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 10:51:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231903AbjF0Ivm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 04:51:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50748 "EHLO
+        id S230344AbjF0Ivs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 04:51:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231558AbjF0Ivj (ORCPT
+        with ESMTP id S231841AbjF0Ivk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 04:51:39 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 947C4131
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 01:51:37 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qE4Og-0007V2-F6; Tue, 27 Jun 2023 10:50:02 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qE4OT-00AOye-Qh; Tue, 27 Jun 2023 10:49:49 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qE4OS-000CFt-WF; Tue, 27 Jun 2023 10:49:49 +0200
-Date:   Tue, 27 Jun 2023 10:49:48 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     miquel.raynal@bootlin.com, rafael@kernel.org,
-        daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
-        mmayer@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
-        florian.fainelli@broadcom.com, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@linaro.org, thara.gopinath@gmail.com,
-        heiko@sntech.de, mcoquelin.stm32@gmail.com,
-        alexandre.torgue@foss.st.com, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, tglx@linutronix.de, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com,
-        srinivas.pandruvada@linux.intel.com,
-        DLG-Adam.Ward.opensource@dm.renesas.com, shangxiaojing@huawei.com,
-        bchihi@baylibre.com, wenst@chromium.org,
-        hayashi.kunihiko@socionext.com,
-        niklas.soderlund+renesas@ragnatech.se, chi.minghao@zte.com.cn,
-        johan+linaro@kernel.org, jernej.skrabec@gmail.com,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 01/15] genirq/devres: Add error information printing for
- devm_request_threaded_irq()
-Message-ID: <20230627084948.nwp7gmwpdtadcfhk@pengutronix.de>
-References: <20230627071707.77659-1-frank.li@vivo.com>
+        Tue, 27 Jun 2023 04:51:40 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D2ED10D;
+        Tue, 27 Jun 2023 01:51:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1687855897; x=1719391897;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CXsYWghN+E3gwCoJ+rRyfawRMHzc9mlxaZI/0JHowCY=;
+  b=CBQ33ownST3aciL70QFwHbT1jLQCH0JVc8QK/UszaotNJ4v9h0nsRHK0
+   X+mjie192ABtJNaYrAJsXikwwqRhi7Z/BW1o6Ni2Dra1bZSNfP62OXi3i
+   P7If8+6xlNCtYPsE+Y6wm6N1GMhfjE2d8b+LkTCaJswltCXMK+z4KlYnh
+   94u7q1z0KQpTX9C1HV2NH6sU7AhL507kDsktnEMfETCXNm9vL10ANXcJC
+   uBs0w8vSPlpxTOYncFKQGhESATOz3kDl2NSvOVMJO5wjzrpGebhCJxJIt
+   Sqrj/TUhUAmpbMIoyijOA26SWoXAD/6K42yoIhM1VHXjqUJYq05+cAQ51
+   Q==;
+X-IronPort-AV: E=Sophos;i="6.01,161,1684825200"; 
+   d="asc'?scan'208";a="220027967"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 27 Jun 2023 01:51:36 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 27 Jun 2023 01:51:36 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Tue, 27 Jun 2023 01:51:34 -0700
+Date:   Tue, 27 Jun 2023 09:51:05 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Sunil V L <sunilvl@ventanamicro.com>
+CC:     Conor Dooley <conor@kernel.org>,
+        Andrew Jones <ajones@ventanamicro.com>, <palmer@dabbelt.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>,
+        Evan Green <evan@rivosinc.com>,
+        <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1 1/9] RISC-V: don't parse dt/acpi isa string to get
+ rv32/rv64
+Message-ID: <20230627-gosling-crouch-635c07ae05b3@wendy>
+References: <20230626-provable-angrily-81760e8c3cc6@wendy>
+ <20230626-silk-colonize-824390303994@wendy>
+ <20230626-e3ea7beb39c584bfbf7ee836@orel>
+ <20230626-dragonish-romp-9acf4846ae01@spud>
+ <20230626-4fb963235f3ab08383a6d9ab@orel>
+ <20230626-ragweed-whenever-5b22e180dcd1@spud>
+ <ZJqXj7UdegnRP4mI@sunil-laptop>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="fbpfi3z6hsdafixb"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="ThX69JfIuFO+nHyA"
 Content-Disposition: inline
-In-Reply-To: <20230627071707.77659-1-frank.li@vivo.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <ZJqXj7UdegnRP4mI@sunil-laptop>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---fbpfi3z6hsdafixb
-Content-Type: text/plain; charset=iso-8859-1
+--ThX69JfIuFO+nHyA
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hello,
+On Tue, Jun 27, 2023 at 01:32:23PM +0530, Sunil V L wrote:
+> On Mon, Jun 26, 2023 at 05:16:09PM +0100, Conor Dooley wrote:
+> > On Mon, Jun 26, 2023 at 06:05:40PM +0200, Andrew Jones wrote:
+> > > On Mon, Jun 26, 2023 at 04:51:29PM +0100, Conor Dooley wrote:
+> > > > On Mon, Jun 26, 2023 at 05:14:15PM +0200, Andrew Jones wrote:
+> > > > > On Mon, Jun 26, 2023 at 12:19:39PM +0100, Conor Dooley wrote:
 
-On Tue, Jun 27, 2023 at 03:16:52PM +0800, Yangtao Li wrote:
-> Ensure that all error handling branches print error information. In this
-> way, when this function fails, the upper-layer functions can directly
-> return an error code without missing debugging information. Otherwise,
-> the error message will be printed redundantly or missing.
->=20
-> There are more than 700 calls to the devm_request_threaded_irq method.
-> If error messages are printed everywhere, more than 1000 lines of code
-> can be saved by removing the msg in the driver.
->=20
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
-> ---
->  kernel/irq/devres.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
->=20
-> diff --git a/kernel/irq/devres.c b/kernel/irq/devres.c
-> index f6e5515ee077..94039a915218 100644
-> --- a/kernel/irq/devres.c
-> +++ b/kernel/irq/devres.c
-> @@ -58,8 +58,10 @@ int devm_request_threaded_irq(struct device *dev, unsi=
-gned int irq,
-> =20
->  	dr =3D devres_alloc(devm_irq_release, sizeof(struct irq_devres),
->  			  GFP_KERNEL);
-> -	if (!dr)
-> +	if (!dr) {
-> +		dev_err(dev, "Failed to allocate device resource data\n");
->  		return -ENOMEM;
-> +	}
-> =20
->  	if (!devname)
->  		devname =3D dev_name(dev);
-> @@ -67,6 +69,7 @@ int devm_request_threaded_irq(struct device *dev, unsig=
-ned int irq,
->  	rc =3D request_threaded_irq(irq, handler, thread_fn, irqflags, devname,
->  				  dev_id);
->  	if (rc) {
-> +		dev_err(dev, "Failed to request threaded irq\n");
->  		devres_free(dr);
->  		return rc;
->  	}
+> > > > One of the few things I know does parsing of /proc/cpuinfo is:
+> > > > https://github.com/google/cpu_features/blob/main/src/impl_riscv_lin=
+ux.c
+> > > > and that doesn't seem to care about the mmu, but does rely on
+> > > > vendor/uarch ordering.
+> > > >=20
+> > > > Makes me wonder, does ACPI break things by leaving out uarch/vendor
+> > > > fields, if there is something that expects them to exist? We should
+> > > > not intentionally break stuff in /proc/cpuinfo, but can't say I fee=
+l any
+> > > > sympathy for naively parsing it.
+> > >=20
+> > > Yes, it would be nice for ACPI to be consistent. I'm not sure what ca=
+n be
+> > > done about that.
+> >=20
+> > Print "unknown", until there's a way of passing the info?
+> > Speaking of being an eejit, adding new fields to the file would probably
+> > break some really naive parsers & quite frankly that sort of thing can
+> > keep the pieces IMO. Ditto if adding more extensions breaks someone that
+> > expects _zicbom_zicboz that breaks when _zicbop is slid into the middle.
 
-My personal opinion is that generic allocation functions should be
-silent. The reason is that the consuming driver is in a better position
-to emit a helpful error message.
+> Instead of unknown, could you print "risc-v" or "riscv"?
 
-While there is some room to improvment in this generic variant (by
-mentioning the error code and maybe also the irq number), consider a
-device that has up to 3 irqs and sometimes only 1. So the driver might
-want to handle some irq requesting silently. And also for non-optional
-irqs
+I don't really see how that is better. "riscv" is not the uarch or
+vendor. If we don't know, we should either say we don't know or omit the
+field IMO.
 
-	mybus:mydev: Failed to request TX irq (EBUSY)
+Cheers,
+Conor.
 
-is much more helpful than
-
-	mybus:mydev: Failed to request threaded irq
-
-(Hint: "threaded" is not a helpful information here either.)
-
-Yes, a message in the driver has the downside of making the kernel image
-(or module) bigger, but the added value is IMHO worth that.
-
-Also you might want to handle -EPROBE_DEFER and not emit a message then?
-(Not sure if request_threaded_irq can return that.)
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---fbpfi3z6hsdafixb
+--ThX69JfIuFO+nHyA
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmSaoqwACgkQj4D7WH0S
-/k66Lwf9Hq5nC1KErm/UPzhqFFiQaUkm5tlRfhc0HKwY231RXIl8U/sEUzFOmVp1
-QoBQ3HUogIHlgELx2qVVR9friYW9RRjYQUIFa1Sr1AtICCHEbmveRdjqF07bZTdw
-czHwMp90yKmH9mbGpEb7JfmhP+Gl3EJHkFZsfr9AniTRYyiDRNnKIOY8GbHv+Uvz
-vtzJx3uAlv/rcGSMxY+OKqTl24TYEQAoL6nWjp2tDuv2qgqUyCXBFsNG3/NfKsED
-ldiOz1Wlgger5JmYqUI2EikRolCllLBqEhUMZVTFdtckl0N82zUG+SKNhaSK37yP
-Q6KBysmk81RWjCHUIWVmIbxhxxgdUQ==
-=Okxi
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJqi+QAKCRB4tDGHoIJi
+0odMAP9kKtThcpSAcsqVjnS6huAGPWKUX3mutzPXNe6QTDlWoAEA0U6dhi0/NMhn
+piv1C2IwpR2atmi3IYJKU226a/OWxQU=
+=NB1e
 -----END PGP SIGNATURE-----
 
---fbpfi3z6hsdafixb--
+--ThX69JfIuFO+nHyA--
