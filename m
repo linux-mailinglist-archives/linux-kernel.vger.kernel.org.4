@@ -2,166 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D918274018C
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 18:43:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1697674018E
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 18:43:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230211AbjF0QnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 12:43:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60356 "EHLO
+        id S231853AbjF0Qnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 12:43:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbjF0QnN (ORCPT
+        with ESMTP id S230424AbjF0Qn3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 12:43:13 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAC2697
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 09:43:12 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id e9e14a558f8ab-34292a63a13so2705ab.0
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 09:43:12 -0700 (PDT)
+        Tue, 27 Jun 2023 12:43:29 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F0B109;
+        Tue, 27 Jun 2023 09:43:29 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-6686a05bc66so3016317b3a.1;
+        Tue, 27 Jun 2023 09:43:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687884192; x=1690476192;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1687884208; x=1690476208;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=qd+gLHYQ1AoomQaxFmG+4g614Pp8bCTvfSrZgBja4D0=;
-        b=s3I0ZZUq41/3bkANZ5KYntfmHbG4p0O/HfbuiWMRtN51MfnHUKnfW4oXgNxzv6DFw0
-         5N40mdH9YD0X3dJCGJi6NB2OrwOoU6MX4PfoTvQ+R2+0WTQpIZkVQBsayH4I/O78+uUd
-         zg8nnBTLnnEt1e9PHxLzw1HJ1tEg8ANTPlHUNfP/YN5IXTqALw1cOB3NewqEGTnsAq9M
-         Gg7cL97mgOZbTWpXxWXV0p/JntnXhTLui/6uOlMKnBfqdmJ/9b2GOt6Vb3Sj5/btWjV9
-         qyjxaHoilYa9DzTyKw8wP2BqqPmABCrB8mUONyNB9rggS1/edGy6/zQYYqIcsE4wWYUM
-         ly4A==
+        bh=qy8/BA41lOJ9tHciVEFoPKVGOra2xL33Ff1AOugAL5g=;
+        b=FwCVNSPx8LXb6QTh7PdSqwrtSvAIf/zDW4EARi28pobQc75y5eN8Z2hpzA14/sX/k4
+         sP1RLiYE0RZL/qd4NtLiC///7VDecwKeu7J3hyW0X6zsCgkx5nd0Tt6Rp82j7uNFvXcj
+         XEwNwxjKLmYgCJg441CQSefrlqxkjYdO3j2nG1aX4vps+Qhw2Veho45XIKEOY0fap8PR
+         3lykX7x3kIQmyuDUm8gu3kt1zdFjl+y/Nv72Cv9eXS9QJ9Jp5hDYpa7lshd7S3exgus0
+         pPXWmaDnsdtCbxW7a5UM3bt6lzkbwyLASqBXQ4OIO0FV11ChvuhnuOs0gUDYHBInN2xq
+         DbcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687884192; x=1690476192;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1687884208; x=1690476208;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=qd+gLHYQ1AoomQaxFmG+4g614Pp8bCTvfSrZgBja4D0=;
-        b=Fv/q+XUrrNliPnPpDvtlixhZZ1i4XkUggNt/ZSogKhTaFR3Yhwq6ZaRDj+8HtDCyLH
-         JAP6qqauAcEZ7E922IzQyOnrc5q+2lMzR8RlVfFMXgta1XpR9edWqG0UpubnOVZkID5S
-         wnqkDgbK409DZyrEpuQcVCnwA+O40vt+vePc4CZb+ttBvEAltpLgoecJD14mHxQWvzbg
-         Vt4plC0hi39PGfPO7hgZcgz4Nm0/0XtV+riCQJqIuTxjFktsetO+/ZlUafW0H5xum7MQ
-         KvIPcyHgR3fDLjqK7g8Qnwe32y7pKcf+6hrE8Zt1CKvcV9StQUBud7bqZm44FTJP9yMI
-         w23Q==
-X-Gm-Message-State: AC+VfDzazI2pcglsyHaysmrF7arIZkgD60Gy2EhPY/USwaEXr9j35IdQ
-        HZVIBrlFwyv+bxh1VyqhAADXIVObltGaH+vUQcVlAQ==
-X-Google-Smtp-Source: ACHHUZ4zf4Hxtt1rbBisEBTD69na8j98wh/gboVZ/9Jzb7K+VyWXv0MjEDalCiq5CrPIk8DoXi/IHgVVOQPGaGsI6lc=
-X-Received: by 2002:a05:6e02:218b:b0:33d:8608:7596 with SMTP id
- j11-20020a056e02218b00b0033d86087596mr698518ila.15.1687884192170; Tue, 27 Jun
- 2023 09:43:12 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230626161059.324046-1-james.clark@arm.com> <20230626161059.324046-3-james.clark@arm.com>
- <ZJonE3ZZ2cBUq0U8@google.com>
-In-Reply-To: <ZJonE3ZZ2cBUq0U8@google.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Tue, 27 Jun 2023 09:42:58 -0700
-Message-ID: <CAP-5=fX+FDAkFoMhQY27_+fiRp_UDruP8qWTdjvqU5-uE0SdWA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] perf report: Don't add to histogram when there is no
- thread found
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     James Clark <james.clark@arm.com>,
-        linux-perf-users@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.g.garry@oracle.com>,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        bh=qy8/BA41lOJ9tHciVEFoPKVGOra2xL33Ff1AOugAL5g=;
+        b=HXteeD3HV+Hv9zlUCnKR4m/3W7tJkJLH0oXyqW4ueoeflCfPTqbGFnA5JHDUAAZ4wj
+         0aOQ3gQMKAX490O4OB73u9xGi5Hxa9kS6hWJCKWJ43vAmKNvpL7zVLcTUr8MhZqA6Gb2
+         Am+DWWGNCLdFAxHCH+lr+P5Ynz2oBaQB3XTVmC6Qqnol8tr5j7AsORuiRmzBZ/aFStx5
+         7jGWabVYhempDTM3kYF9+AiINBmlLID3wpyH+lWU/B7YEvgIR9uDQR7a1QdIZTiDYNCQ
+         RoGuqe7vKpNv6Tj3x3mka+P94slZUQ1BKv3Gh1FwYDfwZhhSjasf9cgSayix0ISDVgSG
+         N1Gw==
+X-Gm-Message-State: AC+VfDypZXQbhL14rV3n5PH4BPpk594shU3VAoThsdbwgNgCJ/wFxAEg
+        4mRx5Dod7VcTW65a2MX97rChGM9YsELEHg==
+X-Google-Smtp-Source: ACHHUZ5nR3SzvcwXIaA2STdJUbtdQU1KzmmjZQuZPBMKm/Wdu30ozJAOtD5F3e9gZWX4UsiH2KBDoA==
+X-Received: by 2002:a05:6a20:7f82:b0:11a:efaa:eb43 with SMTP id d2-20020a056a207f8200b0011aefaaeb43mr33140157pzj.3.1687884208460;
+        Tue, 27 Jun 2023 09:43:28 -0700 (PDT)
+Received: from 377044c6c369.cse.ust.hk (191host097.mobilenet.cse.ust.hk. [143.89.191.97])
+        by smtp.gmail.com with ESMTPSA id u5-20020aa78485000000b00671eb039b23sm4410638pfn.58.2023.06.27.09.43.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Jun 2023 09:43:27 -0700 (PDT)
+From:   Chengfeng Ye <dg573847474@gmail.com>
+To:     sean.wang@mediatek.com, vkoul@kernel.org, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com
+Cc:     dmaengine@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Chengfeng Ye <dg573847474@gmail.com>
+Subject: [PATCH] dmaengine: mediatek: mtk-hsdma: fix potential deadlock on &vc->lock
+Date:   Tue, 27 Jun 2023 16:43:09 +0000
+Message-Id: <20230627164309.59922-1-dg573847474@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 26, 2023 at 5:02=E2=80=AFPM Namhyung Kim <namhyung@kernel.org> =
-wrote:
->
-> On Mon, Jun 26, 2023 at 05:10:58PM +0100, James Clark wrote:
-> > thread__find_map() chooses to exit without assigning a thread to the
-> > addr_location in some scenarios, for example when there are samples fro=
-m
-> > a guest and perf_guest =3D=3D false. This results in a segfault when ad=
-ding
-> > to the histogram because it uses unguarded accesses to the thread membe=
-r
-> > of the addr_location.
->
-> Looking at the commit 0dd5041c9a0ea ("perf addr_location: Add
-> init/exit/copy functions") that introduced the change, I'm not sure if
-> it's the intend behavior.
->
-> It might change maps and map, but not thread.  Then I think no reason
-> to not set the al->thread at the beginning.
->
-> How about this?  Ian?
-> (I guess we can get rid of the duplicate 'al->map =3D NULL' part)
+As &vc->lock is acquired by the irq mtk_hsdma_irq(), other process
+context code acquiring the lock should disable irq. The terminate
+callback mtk_hsdma_terminate_all() acquires the same lock without
+closing irq.
 
-It seemed strange that we were failing to find a map (the function's
-purpose) but then populating the address_location. The change below
-brings back that somewhat odd behavior. I'm okay with reverting to the
-old behavior, clearly there were users relying on it. We should
-probably also copy maps and not just thread, as that was the previous
-behavior.
+Possible deadlock scenario:
+mtk_hsdma_free_active_desc()
+    -> spin_lock(&hvc->vc.lock)
+        <irq interrupt>
+        -> mtk_hsdma_irq()
+        -> mtk_hsdma_free_rooms_in_ring()
+        -> spin_lock(&hvc->vc.lock)  (deadlock here)
 
-Thanks,
-Ian
+This flaw was found using an experimental static analysis tool we are
+developing for irq-related deadlock.
 
-> Thanks,
-> Namhyung
->
->
-> ---8<---
->
-> diff --git a/tools/perf/util/event.c b/tools/perf/util/event.c
-> index 3860b0c74829..4cbb092e0684 100644
-> --- a/tools/perf/util/event.c
-> +++ b/tools/perf/util/event.c
-> @@ -581,15 +581,14 @@ struct map *thread__find_map(struct thread *thread,=
- u8 cpumode, u64 addr,
->         maps__zput(al->maps);
->         map__zput(al->map);
->         thread__zput(al->thread);
-> +       al->thread =3D thread__get(thread);
->
->         al->addr =3D addr;
->         al->cpumode =3D cpumode;
->         al->filtered =3D 0;
->
-> -       if (machine =3D=3D NULL) {
-> -               al->map =3D NULL;
-> +       if (machine =3D=3D NULL)
->                 return NULL;
-> -       }
->
->         if (cpumode =3D=3D PERF_RECORD_MISC_KERNEL && perf_host) {
->                 al->level =3D 'k';
-> @@ -605,7 +604,6 @@ struct map *thread__find_map(struct thread *thread, u=
-8 cpumode, u64 addr,
->                 al->level =3D 'u';
->         } else {
->                 al->level =3D 'H';
-> -               al->map =3D NULL;
->
->                 if ((cpumode =3D=3D PERF_RECORD_MISC_GUEST_USER ||
->                         cpumode =3D=3D PERF_RECORD_MISC_GUEST_KERNEL) &&
-> @@ -619,7 +617,6 @@ struct map *thread__find_map(struct thread *thread, u=
-8 cpumode, u64 addr,
->                 return NULL;
->         }
->         al->maps =3D maps__get(maps);
-> -       al->thread =3D thread__get(thread);
->         al->map =3D map__get(maps__find(maps, al->addr));
->         if (al->map !=3D NULL) {
->                 /*
+The tentative patch fix the potential deadlock by spin_lock_irqsave().
+
+Signed-off-by: Chengfeng Ye <dg573847474@gmail.com>
+---
+ drivers/dma/mediatek/mtk-hsdma.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/dma/mediatek/mtk-hsdma.c b/drivers/dma/mediatek/mtk-hsdma.c
+index 69cc61c0b262..6b6773575893 100644
+--- a/drivers/dma/mediatek/mtk-hsdma.c
++++ b/drivers/dma/mediatek/mtk-hsdma.c
+@@ -757,18 +757,19 @@ static void mtk_hsdma_free_active_desc(struct dma_chan *c)
+ {
+ 	struct mtk_hsdma_vchan *hvc = to_hsdma_vchan(c);
+ 	bool sync_needed = false;
++	unsigned long flags;
+ 
+ 	/*
+ 	 * Once issue_synchronize is being set, which means once the hardware
+ 	 * consumes all descriptors for the channel in the ring, the
+ 	 * synchronization must be notified immediately it is completed.
+ 	 */
+-	spin_lock(&hvc->vc.lock);
++	spin_lock_irqsave(&hvc->vc.lock, flags);
+ 	if (!list_empty(&hvc->desc_hw_processing)) {
+ 		hvc->issue_synchronize = true;
+ 		sync_needed = true;
+ 	}
+-	spin_unlock(&hvc->vc.lock);
++	spin_unlock_irqrestore(&hvc->vc.lock, flags);
+ 
+ 	if (sync_needed)
+ 		wait_for_completion(&hvc->issue_completion);
+-- 
+2.17.1
+
