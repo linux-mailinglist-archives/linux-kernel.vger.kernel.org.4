@@ -2,295 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C69573F0E6
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 04:39:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6B1173F0EA
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 04:42:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229986AbjF0Cja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 22:39:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54306 "EHLO
+        id S229578AbjF0Cmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 22:42:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbjF0Cj3 (ORCPT
+        with ESMTP id S229562AbjF0Cm0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 22:39:29 -0400
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9EA919A1;
-        Mon, 26 Jun 2023 19:39:27 -0700 (PDT)
-Received: by mail-oi1-x234.google.com with SMTP id 5614622812f47-3a1d9b64837so1691874b6e.0;
-        Mon, 26 Jun 2023 19:39:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687833567; x=1690425567;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=v4yjUuUHEpCaP+ghkho/RPIBeQxQEP/tQ09KT6l5PAw=;
-        b=llFkqqBLOJPE30qgsOOXK6LrX5TQhvgV0cu+09iiQefhoI2aMleqIqB9tyUokr8k0b
-         ce3LknC5fDn70y3o5IgpA28ZQ2G3GDTFnoC2leg20krOOvDccvvCDnkNzoo0WaFwMivv
-         OwDyMpqf9tiZSrhTl7/0LnJ8kW128IFQx2YfKnWqJwCjv2mnem66UooScWNqM+dFYyAJ
-         2h/cGkJ/QqehUhzsYXS8UqMCIC8b4I5dlJpj8bok1sjRobq5Vn7M5h1TvZFGirKt2E2h
-         NB6w4+G8JRnrT/KFbYgTQRb1jhxTY4IUy6VVrIziUYHda/Sb0Dg+R4nawbLDnQtrJcfH
-         4Rug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687833567; x=1690425567;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=v4yjUuUHEpCaP+ghkho/RPIBeQxQEP/tQ09KT6l5PAw=;
-        b=Sb4dRo5zBaT7cLxhJ2ztiPRXzXoDqLlbauZ2m8pHumSqtIkLIC0WOJ/KCucybZWBoF
-         muRINPqJbx+gpDSl615+dS89KUhWL9EyfZUEP55TxCS/jy3Atr+C+mQUQfxvHJElMl0w
-         6NixXVYn551/sI0wkOuFumrkiG7vHEKaUrV++F/UukGfepDwKWE02vx4F6vgc87Pzbee
-         iIazKX+q+ixYA2q+vHDmrtdAw5jQS6oXPktg3RdK18tCVIZ/FVrz8xTS3quprisD9ecL
-         xqBVuaJTAIeBcTrNXWnfyHFhKznnE/e2bNSNTRHB5Anc4HGUF1l4kLppwP4/ktgD6JA/
-         b9pQ==
-X-Gm-Message-State: AC+VfDxipDriFgtWk6pyJdbVYIp+ao6xuSbYmCz+XYnyeF3+I5pWKGxL
-        YCiJQJF2vT/JPbXU/kD0K4U=
-X-Google-Smtp-Source: ACHHUZ6tDy7pQnSxhb+myr30blaGiiHnpAGwDgTqzzW8pcEPwP4ijxQpdeCtDQT/TutbeqjoUM/E3g==
-X-Received: by 2002:aca:1a1a:0:b0:39a:531b:db6c with SMTP id a26-20020aca1a1a000000b0039a531bdb6cmr32888503oia.47.1687833566749;
-        Mon, 26 Jun 2023 19:39:26 -0700 (PDT)
-Received: from debian.me ([103.131.18.64])
-        by smtp.gmail.com with ESMTPSA id b19-20020a170902d89300b001b3ce619e2esm4837086plz.179.2023.06.26.19.39.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jun 2023 19:39:26 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id CCB6F81BD58D; Tue, 27 Jun 2023 09:39:20 +0700 (WIB)
-Date:   Tue, 27 Jun 2023 09:39:20 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     bugzilla-daemon@kernel.org,
-        Linux SCSI <linux-scsi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>
-Cc:     Adaptec OEM Raid Solutions <aacraid@microsemi.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        pheidologeton@protonmail.com
-Subject: Re: [Bug 217599] New: Adaptec 71605z hangs with aacraid: Host
- adapter abort request after update to linux 6.4.0
-Message-ID: <ZJpL2GD+VntdUXZp@debian.me>
-References: <bug-217599-11613@https.bugzilla.kernel.org/>
+        Mon, 26 Jun 2023 22:42:26 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2128.outbound.protection.outlook.com [40.107.117.128])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88414173A;
+        Mon, 26 Jun 2023 19:42:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=db0zS1AImQftSn+Z6rAs0mnBkKcNAkxLcwAoS2ZAltXP0wgdccfkT8gvjvlhjr7IT9mVPdsbvSuvOOdmXdOoNyRg1wh6hpugFwEoD0F7JGqPgSm/aLQZ0NHuULXl8uGysi0FksB7Xjd8Gxuwt2ahO5Xd+esaAiJHjk/x/RMF6QQNL2HZ4uXh3osvgbkFqlV2elmYqIlyMZYHRtnzDAQHuo80QQaHrkRCj+0cTIusXpFgJJDkf9QxQwmNvmWEeK4UUNLQYlUdSpcl9AFZ2vtsuPYss3by2OdGQm6vGYQsYhocG1K5g4yS+c75XUlRyEcrz4hUJeY6W/kZ6o2dwP5FEA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UOGB5c45cFt4pHBDtBGsipeS7s7UAioafrQLcGXqeZM=;
+ b=lKKTJMvfhMPh4bcrzgKbVKLhiu1lN3YLacNLO1jiEeLGIqtHKDIerQGmO7I9eXG2N5nCR3xoBMX4icxYlXyeN6vu2VLS5QqXXhefB03jE3hnCuhGjc3JMMTVtbynLtU642etYuk8ngX+gZK76okd8EJRNt/nQNqsOYNi819ow8AUiILsa+qUzvGGUMf5i6bkXrX7ARcGT/cDi7QeJsf4Wf5B/YHk2mSuT8MYHp+pKUvwwlIz3NT4ieJ52htwdK0sKios+mXhUF0Y9CmyiUK5UJ03FuyYaK6y3YuWWIFpglU9UpHCmvsBqnosvfJQnSOFeVbN0W2I8S3l11vkr45QSQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UOGB5c45cFt4pHBDtBGsipeS7s7UAioafrQLcGXqeZM=;
+ b=EMAnyei5KJofEeQpSNpxNbKyNVhXGb4xSa+iLaAeJGtiuZs8TsTixKDenqybQkeqLTqr6hbF2N1ObxMsyj9LtU5JYY7uKPzEC0FJTgNeVQ7PHEUA873zBC3aJmyx5xFKzZHi646YizbRodADaJIBFBK/IBmg8r/H0UKP3Fakv/d0ftYmluFutoqweWdMIr7oq49aAx48WNI1FQHTX/SbklOEppTHtrP3poNP4VaqNBu7WvRY1YoyOFFiKkOZdvM5co2fXWA0LFLifYKEGxzxLDc9/XljaOlJAJhKrPCzXgUhNYEjGbOt3qpp5XAv98PurQUNOx6+R2IJoHRw+Msipg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from PUZPR06MB5936.apcprd06.prod.outlook.com (2603:1096:301:11d::13)
+ by TYSPR06MB6528.apcprd06.prod.outlook.com (2603:1096:400:47a::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.23; Tue, 27 Jun
+ 2023 02:42:20 +0000
+Received: from PUZPR06MB5936.apcprd06.prod.outlook.com
+ ([fe80::adc0:c22:ffae:227b]) by PUZPR06MB5936.apcprd06.prod.outlook.com
+ ([fe80::adc0:c22:ffae:227b%6]) with mapi id 15.20.6500.045; Tue, 27 Jun 2023
+ 02:42:19 +0000
+From:   You Kangren <youkangren@vivo.com>
+To:     Kalle Valo <kvalo@kernel.org>, You Kangren <youkangren@vivo.com>,
+        Dongliang Mu <dzm91@hust.edu.cn>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Simon Horman <simon.horman@corigine.com>,
+        linux-wireless@vger.kernel.org (open list:RAYLINK/WEBGEAR 802.11
+        WIRELESS LAN DRIVER), linux-kernel@vger.kernel.org (open list)
+Cc:     opensource.kernel@vivo.com
+Subject: [PATCH v2] wifi: ray_cs: Remove unnecessary conditional statements
+Date:   Tue, 27 Jun 2023 10:42:07 +0800
+Message-Id: <20230627024211.18385-1-youkangren@vivo.com>
+X-Mailer: git-send-email 2.39.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR02CA0101.apcprd02.prod.outlook.com
+ (2603:1096:4:92::17) To PUZPR06MB5936.apcprd06.prod.outlook.com
+ (2603:1096:301:11d::13)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="UP4jKEPv6Asbr+1k"
-Content-Disposition: inline
-In-Reply-To: <bug-217599-11613@https.bugzilla.kernel.org/>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PUZPR06MB5936:EE_|TYSPR06MB6528:EE_
+X-MS-Office365-Filtering-Correlation-Id: e251c4ef-4e35-47aa-1b26-08db76b82065
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: cDSMzT3DBusG24E/CelomkNwRb5hjHiuQP4zoMr1oZ1EvIqBVZZKvlt6bFlI1qcmJIRk4VNHSp4/7aufwLQNVQY67QcA4/sffVThOeKrQOwkZSF7l78Yee1NaFZn12N+oHUTQ46zbbbIC3Zu/cmaBDKuAk7CqSlMR86kO2eIIUcSUQHwXRKpfin2nBEUP0i5X07cCD6Ex47eBOqJcOMfQcd0LKblxdnja0q2BTUiXBfyuqTf/M9dIT2u2CREEWI7rMoaOzkWeCqJR8IDiS9O/pa6H29699qECKS6i3GkUh+FLlik8HqHKGOn5rUFqlg8bXIHFiQ38gElDeWvgp3rP2CPit08vOYQIrWkkYhJQ8IporC8PgITud4F1122cb7s5vNKG1rQtPODmTTst7jmnKBfZ4pgqT5qtRFvrtGLnEgMxGTbGnzkWw8fchMAXasMGWvpJlqAbUADGbtE2JliXTKMZ6XXpSScxcMS4EwM+1vpBefvB4HN40MukfAJafpHPEpyoCD8xIBsV4gIwjsVRQp32e8tAo6p0ywospGJBiOH0tHXIF0g08imXtiVaGY5WB8jqW3vWazc2sBtcefQRD5AqIYH30EIxMV+30PofmWWhLAj6nDll3x7kA829b5s
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PUZPR06MB5936.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(39860400002)(376002)(366004)(346002)(451199021)(5660300002)(66946007)(66556008)(4326008)(66476007)(478600001)(36756003)(316002)(8676002)(8936002)(2906002)(110136005)(86362001)(41300700001)(6486002)(52116002)(186003)(38350700002)(6512007)(26005)(6506007)(1076003)(2616005)(38100700002)(107886003)(6666004)(83380400001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vrd3RBjginTj5+HuR1ZRZ32vLAP3ZYxcE8y6Cf9PRbOa1jlU7yyV+gcVGqh5?=
+ =?us-ascii?Q?eGADeQ31OnE2oTbdzxM36XAl4d45HDIK4ULFH7aAXnXXBYne5gBf+wumpV5g?=
+ =?us-ascii?Q?fchOx97aHjcvXiu+1YWfMFN7s44WiRrNMA3/wx4eIcX3+VO9+ge8tg8P9RDe?=
+ =?us-ascii?Q?10YwLRWzvGJ32Zy6Mge2BrB3OaWG49rByxywJnb5eNCPhIhc+8M/DmpCyppg?=
+ =?us-ascii?Q?+6Ze5cMIZTSPFZ+zE8HkdnChqVgVMKD0zr7/66Fw13o70TVYq4iNZObbPLlF?=
+ =?us-ascii?Q?m0ySY0ZwZ4xEoOW0GdAVkzcK3p/RUmrTsEl4JCSUHciKzielFgWVwTmdRp6J?=
+ =?us-ascii?Q?e+o+Tg1jgh/WpJQPwYFeCYOLFg5JTrtGb7cT3NIHcW3chk1mz4hz2NAtXpyf?=
+ =?us-ascii?Q?qi0AbJFS+NlilXfAUkfrh4Ux7xs3OqFLPYVrHCjLFVNfOlqJNJNw+qoPXzAz?=
+ =?us-ascii?Q?A+V8AHih9IV6rBnULFaNycsSGc3j9fh50EvLuJlNUb298AOf0xNSCiI7TpJ/?=
+ =?us-ascii?Q?h1iLMz5G614pXZ5pPX7NuQoA1Dbsj7VrZLGEL+PFPt8JMdDyDjEkc7atf4w3?=
+ =?us-ascii?Q?lmZO6GuZufuX9lYqRxFx2PcyJ6NO87gCfNDjovwtsnD+TXqYLukvzIhPK0/G?=
+ =?us-ascii?Q?s8QBcRL4/bJqcvkND1WWb644DS6u4h2GUtSM3vy5H9cbPHaqLjQSV1rLwjMb?=
+ =?us-ascii?Q?+1tIOj3/rjkOnknddgfrTQm7aWrwHj6wZ7sKTTnE0I9ZDDAB/EU3AjdrZv+W?=
+ =?us-ascii?Q?LX30pEzALpszkqnXXFVBqQlXS0zzjGrXYLhGmopUq09Sovw5dO/+Q2clat9R?=
+ =?us-ascii?Q?MJAv+WSsjqpuLsBrWBp1JXUQ0MolIDPJ7+TeOvCOeyTYf0uTNWdzCOtOiO38?=
+ =?us-ascii?Q?pFmoZGq641gPa0e25eEAEKrxJlrM9lYJTIPBv+/tEzvKJ0X0n/aiSduquLSI?=
+ =?us-ascii?Q?6itUN+qBjtzMB/GAEmSYOlrxeF7tgX6dI6lUhwoKzKiAlDzCNFRlJ/YpcCa4?=
+ =?us-ascii?Q?HgOYmWBmG6FwjtO6tP7gziJBTcJi1U3LxGlpd2Slhv6dt8u9DZy32FP2i7D+?=
+ =?us-ascii?Q?CvIqjHgk7id5FN9CqbwXAmvhSSoeu4Zcp2+GXi7wOWhBT0itrPugb+mTy+cN?=
+ =?us-ascii?Q?Sp08+iQ127qXobJHRMDi7zJc2F3dbdWngnIN5gqM4shOhIXDMMgyBGGNI7hz?=
+ =?us-ascii?Q?SS8d0LH9TlJCEOJI4ZPYTxWk6XV6RPXZNzBKviR2Ar1/dkCo/AR80KPLcv/s?=
+ =?us-ascii?Q?Blry1zNMXGF3EhsTFdw5gPHaNp2fkoWhZhFJhR+hD8x97wRqCZAhvI7NJoQh?=
+ =?us-ascii?Q?E9Wt6ulyehKegoVmqXkiyhTzxij3zAFH7o1ai4Bott8PVTJe/iUFYbRrgKmV?=
+ =?us-ascii?Q?AR5l8zwpG0xMiFvlbDwVa1dQ3Yw91THbR6Bpeb1YxJXCjH0gGGJGERwQxrJP?=
+ =?us-ascii?Q?k+fNaSNdzDbkRlvYOTK5565SOpohOgiCpxOf0gl6St7KVMqyp34VDuJYvcrr?=
+ =?us-ascii?Q?UCv+s4UXF8l9Zo0DrZmf8AcjBC1KoDa2uhzgtkPMYPk7rBBujVio8mWP0Iim?=
+ =?us-ascii?Q?YjzRSbZwpcH2NVEoTuqEYBskz2AUpbQr7Nk462gD?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e251c4ef-4e35-47aa-1b26-08db76b82065
+X-MS-Exchange-CrossTenant-AuthSource: PUZPR06MB5936.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jun 2023 02:42:19.4572
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: lQh2trPDZukMiH/T9SSBY3crT9rnWWbZoRsT/LgO07hkNGXMAi+ZsKAEEYc6Nu1/ZtLH43nPX/i0OHxu+Bn9JA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYSPR06MB6528
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Remove unnecessary conditional statements to simplify the code
 
---UP4jKEPv6Asbr+1k
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: You Kangren <youkangren@vivo.com>
+---
+ drivers/net/wireless/legacy/ray_cs.c | 30 ++++++----------------------
+ 1 file changed, 6 insertions(+), 24 deletions(-)
 
-[also Cc: aacraid and SCSI subsystem maintainers]
+diff --git a/drivers/net/wireless/legacy/ray_cs.c b/drivers/net/wireless/legacy/ray_cs.c
+index 5f97fcf5c4ba..e4ea22316a03 100644
+--- a/drivers/net/wireless/legacy/ray_cs.c
++++ b/drivers/net/wireless/legacy/ray_cs.c
+@@ -2115,30 +2115,12 @@ static void rx_data(struct net_device *dev, struct rcs __iomem *prcs,
+ 	u_char linksrcaddr[ETH_ALEN];	/* Other end of the wireless link */
+ #endif
+ 
+-	if (!sniffer) {
+-		if (translate) {
+-/* TBD length needs fixing for translated header */
+-			if (rx_len < (ETH_HLEN + RX_MAC_HEADER_LENGTH) ||
+-			    rx_len >
+-			    (dev->mtu + RX_MAC_HEADER_LENGTH + ETH_HLEN +
+-			     FCS_LEN)) {
+-				pr_debug(
+-				      "ray_cs invalid packet length %d received\n",
+-				      rx_len);
+-				return;
+-			}
+-		} else { /* encapsulated ethernet */
+-
+-			if (rx_len < (ETH_HLEN + RX_MAC_HEADER_LENGTH) ||
+-			    rx_len >
+-			    (dev->mtu + RX_MAC_HEADER_LENGTH + ETH_HLEN +
+-			     FCS_LEN)) {
+-				pr_debug(
+-				      "ray_cs invalid packet length %d received\n",
+-				      rx_len);
+-				return;
+-			}
+-		}
++	/* TBD length needs fixing for translated header */
++	if (!sniffer && (rx_len < (ETH_HLEN + RX_MAC_HEADER_LENGTH) ||
++			 rx_len > (dev->mtu + RX_MAC_HEADER_LENGTH +
++				 ETH_HLEN + FCS_LEN))) {
++		pr_debug("ray_cs invalid packet length %d received\n", rx_len);
++		return;
+ 	}
+ 	pr_debug("ray_cs rx_data packet\n");
+ 	/* If fragmented packet, verify sizes of fragments add up */
+-- 
+2.39.0
 
-On Mon, Jun 26, 2023 at 10:36:13PM +0000, bugzilla-daemon@kernel.org wrote:
-> https://bugzilla.kernel.org/show_bug.cgi?id=3D217599
->=20
->             Bug ID: 217599
->            Summary: Adaptec 71605z hangs with aacraid: Host adapter abort
->                     request after update to linux 6.4.0
->            Product: SCSI Drivers
->            Version: 2.5
->           Hardware: All
->                 OS: Linux
->             Status: NEW
->           Severity: high
->           Priority: P3
->          Component: AACRAID
->           Assignee: scsi_drivers-aacraid@kernel-bugs.osdl.org
->           Reporter: pheidologeton@protonmail.com
->         Regression: No
->=20
-> The controller works fine for a few minutes. Then it hangs for a few tens=
- of
-> seconds to a few minutes, then also works normally for a while. This bug =
-is
-> present in the 6.4.0 kernel release (6.3.9 works without hanging)
-> The messages in dmesg are as follows
->=20
-> [  287.137901] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  287.137909] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  287.137912] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  287.137914] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  287.137916] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  287.137919] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  287.137921] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  287.137924] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  287.137926] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  287.137928] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  287.137930] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  287.137933] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  287.137934] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  287.137937] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  287.137939] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  287.137941] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  287.137943] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  287.137945] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  287.137947] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  287.137949] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  287.137951] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  287.137952] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  287.137954] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  287.137956] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  287.137958] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  287.137960] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  287.137962] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  287.137964] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  287.137966] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  287.137967] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  287.137969] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  287.137971] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  287.157697] aacraid: Host bus reset request. SCSI hang ?
-> [  287.157706] aacraid 0000:02:00.0: outstanding cmd: midlevel-0
-> [  287.157708] aacraid 0000:02:00.0: outstanding cmd: lowlevel-0
-> [  287.157709] aacraid 0000:02:00.0: outstanding cmd: error handler-0
-> [  287.157711] aacraid 0000:02:00.0: outstanding cmd: firmware-32
-> [  287.157712] aacraid 0000:02:00.0: outstanding cmd: kernel-0
-> [  287.167040] aacraid 0000:02:00.0: Controller reset type is 3
-> [  287.167042] aacraid 0000:02:00.0: Issuing IOP reset
-> [  321.029712] aacraid 0000:02:00.0: IOP reset succeeded
-> [  321.066201] numacb=3D512 ignored
-> [  321.066843] aacraid: Comm Interface type2 enabled
-> [  344.845370] aacraid 0000:02:00.0: Scheduling bus rescan
-> [  358.294342] sd 10:0:0:0: [sda] Very big device. Trying to use READ
-> CAPACITY(16).
-> [  442.109147] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  442.109155] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  442.109158] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  442.109160] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  442.109162] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  442.109164] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  442.109166] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  442.109168] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  442.109170] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  442.109172] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  442.109174] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  442.109176] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  442.109178] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  442.109179] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  442.109181] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  442.109183] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  442.109185] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  442.109187] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  442.109189] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  442.109191] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  442.109193] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  442.109194] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  442.109196] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  442.109198] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  442.109200] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  442.109201] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  442.109203] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  442.109205] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  442.109207] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  442.109208] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  442.109210] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  442.137144] aacraid: Host adapter abort request.
->                aacraid: Outstanding commands on (10,0,0,0):
-> [  442.154292] aacraid: Host bus reset request. SCSI hang ?
-> [  442.154302] aacraid 0000:02:00.0: outstanding cmd: midlevel-0
-> [  442.154305] aacraid 0000:02:00.0: outstanding cmd: lowlevel-0
-> [  442.154307] aacraid 0000:02:00.0: outstanding cmd: error handler-0
-> [  442.154308] aacraid 0000:02:00.0: outstanding cmd: firmware-32
-> [  442.154310] aacraid 0000:02:00.0: outstanding cmd: kernel-0
-> [  442.171131] aacraid 0000:02:00.0: Controller reset type is 3
-> [  442.171133] aacraid 0000:02:00.0: Issuing IOP reset
-> [  476.040983] aacraid 0000:02:00.0: IOP reset succeeded
-> [  476.078055] numacb=3D512 ignored
-> [  476.078606] aacraid: Comm Interface type2 enabled
-> [  494.747632] aacraid 0000:02:00.0: Scheduling bus rescan
-> [  507.896453] sd 10:0:0:0: [sda] Very big device. Trying to use READ
-> CAPACITY(16).
->=20
-
-Thanks for automatically forwarding Bugzilla report. I'm adding it to
-regzbot to ensure it doesn't get fallen through cracks unnoticed:
-
-#regzbot ^introduced: v6.3..v6.4
-#regzbot title: Adaptec 71605z hangs with aacraid: Host adapter abort reque=
-st after update
-#regzbot monitor: https://bugzilla.kernel.org/show_bug.cgi?id=3D217599
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---UP4jKEPv6Asbr+1k
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZJpL2AAKCRD2uYlJVVFO
-o3h6AP0UHUgte+hmsV1B8lgpxfg0Z8WIM6rSRvF2JulKb/mETAEA4tgz+w3A4+3s
-KUec4pRjaCQC7oUHVyQHnQ/KPRrkkgI=
-=QwX3
------END PGP SIGNATURE-----
-
---UP4jKEPv6Asbr+1k--
