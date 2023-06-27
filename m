@@ -2,73 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D91C573F46A
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 08:21:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00DAA73F46C
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 08:21:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbjF0GVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 02:21:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33012 "EHLO
+        id S230152AbjF0GVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 02:21:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230272AbjF0GUt (ORCPT
+        with ESMTP id S230171AbjF0GVQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 02:20:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2768A1BEC;
-        Mon, 26 Jun 2023 23:20:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9682261000;
-        Tue, 27 Jun 2023 06:20:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92C20C433C0;
-        Tue, 27 Jun 2023 06:20:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1687846846;
-        bh=l4sdQVtdskG6Mkgh9MiE5yVwbijeefSmMiWzWt9R8T0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=xwjehW9sN/yaLGYTWI0H8PfSePdWqrKHKAjdhM2tfthiD3b0xXOghBzzsZVnHE/s4
-         oenOVg/oCpwrUopOhNf8LTDbPifAUKEoCV+tx9RN2fUZ/9SN+VMxMsn+QhOA0uE064
-         ofiml2BLNPda9q+YYX1hYS7E38wCMFy2tVVs4KlQ=
-Date:   Tue, 27 Jun 2023 08:20:44 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Yuxiao Zhang <yuxiaozhang@google.com>
-Cc:     keescook@chromium.org, tony.luck@intel.com, gpiccoli@igalia.com,
-        linux-hardening@vger.kernel.org,
-        William Kennington <wak@google.com>,
+        Tue, 27 Jun 2023 02:21:16 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3588D1FC7;
+        Mon, 26 Jun 2023 23:21:14 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 735B36732D; Tue, 27 Jun 2023 08:21:10 +0200 (CEST)
+Date:   Tue, 27 Jun 2023 08:21:10 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        Min Li <min15.li@samsung.com>, axboe@kernel.dk,
+        willy@infradead.org, linux-block@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: support pmsg record size larger than kmalloc limitation
-Message-ID: <2023062715-eldercare-washed-3c29@gregkh>
-References: <CAOOoKeQ=b4u1C_FZ-OFHSfVt5Z9xw1KtpJ4316zubt46Tny41Q@mail.gmail.com>
+Subject: Re: [PATCH v2] block: add check that partition length needs to be
+ aligned with block size
+Message-ID: <20230627062110.GA18485@lst.de>
+References: <CGME20230627031105epcas5p3010432ebd447ad865c3ddd986b3ffee0@epcas5p3.samsung.com> <20230627110918.7608-1-min15.li@samsung.com> <8ea3bdfb-f2d9-ee5e-f623-02b2b134490d@kernel.org> <20230627045924.GA16913@lst.de> <2023062753-speech-straw-f2f6@gregkh>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAOOoKeQ=b4u1C_FZ-OFHSfVt5Z9xw1KtpJ4316zubt46Tny41Q@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <2023062753-speech-straw-f2f6@gregkh>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 26, 2023 at 06:20:29PM -0700, Yuxiao Zhang wrote:
-> @@ -730,7 +731,7 @@ static void decompress_record(struct pstore_record *record)
->   return;
+On Tue, Jun 27, 2023 at 08:18:32AM +0200, Greg KH wrote:
+> > No, the lack of checks goes back all the way to when this code was
+> > added long before git was a thing.  So I don't think a Fixes tag makes
+> > all that much sense here.
 > 
->   /* Swap out compressed contents with decompressed contents. */
-> - kfree(record->buf);
-> + kvfree(record->buf);
->   record->buf = unzipped;
->   record->size = unzipped_len;
->   record->compressed = false;
-> @@ -783,7 +784,7 @@ void pstore_get_backend_records(struct pstore_info *psi,
+> Ok, then how about a normal "cc: stable@kernel.org" added to the s-o-b
+> area so it gets picked up for all stable trees as this is an issue that
+> has always been there?
 
-Patch is corrupted and can not be applied at all, please fix up your
-email client to not do this.
-
-thanks,
-
-greg k-h
+Yes, that sounds sensible.
