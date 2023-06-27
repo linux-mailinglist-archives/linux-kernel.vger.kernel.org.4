@@ -2,106 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A8EB740690
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 00:44:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFD7F74069B
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 00:45:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229861AbjF0WoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 18:44:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60078 "EHLO
+        id S229501AbjF0WpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 18:45:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjF0WoF (ORCPT
+        with ESMTP id S229645AbjF0WpP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 18:44:05 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 794BB211E
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 15:44:04 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-51dd0205b2cso23177a12.1
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 15:44:04 -0700 (PDT)
+        Tue, 27 Jun 2023 18:45:15 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98728212A
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 15:45:13 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id d9443c01a7336-1b806d07935so13596775ad.0
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 15:45:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1687905843; x=1690497843;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=62ZMa8IP6rzchtKNliU3xgtrtztxTiRDLodjcE3oYKw=;
-        b=B+n6JzSC5idXgfE44FSmmDdBudiS0zYbWvLaq9xowdVCDRYQVO1zmi6gXhHFp+hj+D
-         08DdaZK00cxAVDCyXIfHti50mYI8PWry8G4FCuyJPG7NEDveZEH4V/OIfFP36mBGCwrG
-         oIl7Hk+jg+7Z/V0uZ7d8C8s8SrmGg1HRRplF0=
+        d=google.com; s=20221208; t=1687905913; x=1690497913;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=qQl7WxhCDcJMe6QTdlAGh4IXmTTWyixOnnvB+eyw+fQ=;
+        b=mcnfKrfFS5X5dXTkSHwka9NxwdbPhR2fwJhoetdaaPdDRv3X3x7UxugYngfRtoXZ0m
+         wa5d2ei3qq/U3rsE5CUP2ZrTgpmFwPEGmiBJRZ9v/j2yhE9OHXXZi3rZinXe4RkSE75U
+         XMV+UxEpRvXjN/XAxStB2ZmmFkhDcPUcq5bVVt5Au+3WcRpyRT8jrGU6pz6+VvDqrzCY
+         X8mRPUPIn82qA9B/2zZ2twReqldHIOw8zL/QbNUPmwb4aLZwfl2MOI9TBCovCOkTW56X
+         ZAZduiLdbuOpLQSdu71hge6YLTPeMvM4+rSz+kxtf1PzXMLIDlMo+E3d/TG9sM6UHzZS
+         R6aA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687905843; x=1690497843;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=62ZMa8IP6rzchtKNliU3xgtrtztxTiRDLodjcE3oYKw=;
-        b=MPFGgoI5tnGjnD+aaImIUyGqFzD2IewUOEZ6MucX8qwy+gk/QqqoK6ovbw9/2b+Qai
-         RXzGEkRyvv1PP7YV+joJpWDxE6TDCCsx4oJ+X9TFGp4ZBvDPLKDmtfhskp1nWigKDYQe
-         IBVQiHjh314jz8a5LEDxqW4CJ47qekntbKccpGeEhjp1YE2ln91C19wausoMNBhFmlzk
-         UJmnkO4JAAVKDnMN6roJ7ZiXrYOqkw79ut86o9P9f6Czrmr+lkC3ZBWH+p/vensmlhhM
-         iN59Nrmd7E1sUtlGuvPXdvN/bZDY8WRBgDLuR6uDHzWr3hm9U+BKgIF3o/G7/078A9Bi
-         JdUg==
-X-Gm-Message-State: AC+VfDzFMHvRyBb5drIVDRoQ1AWa+APAKE3rDIcOsElBrxdD/MZRVbSR
-        iLW87HGIPl04zpBtoVRsrCgJ1DB/nTP7bXSkM0PM/6xe
-X-Google-Smtp-Source: ACHHUZ7RPhS4+1MK2WYfcFtSwTO6VgOnlV9aY3yjfxumQtziPhkIez7NiV6PsHU55PIlMiWc0aFeMA==
-X-Received: by 2002:a05:6402:34c7:b0:4fc:97d9:18ec with SMTP id w7-20020a05640234c700b004fc97d918ecmr32994129edc.21.1687905842923;
-        Tue, 27 Jun 2023 15:44:02 -0700 (PDT)
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com. [209.85.208.52])
-        by smtp.gmail.com with ESMTPSA id h9-20020a50ed89000000b0051d888df7f8sm3975793edr.56.2023.06.27.15.44.01
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Jun 2023 15:44:02 -0700 (PDT)
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-51a52a7d859so649612a12.0
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 15:44:01 -0700 (PDT)
-X-Received: by 2002:a05:6402:1614:b0:51d:927e:316f with SMTP id
- f20-20020a056402161400b0051d927e316fmr8347079edv.19.1687905841740; Tue, 27
- Jun 2023 15:44:01 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230627110038.GCZJrBVqu/4BfdyBeN@fat_crate.local>
- <CAHk-=wghuOwXtMH9u7RAW694BOwf_Q9TeWR2v=GgLy0gjTfu4A@mail.gmail.com>
- <1982e4b4-3858-d456-6c90-92782b95726a@linux.intel.com> <CAHk-=wiQEj1cP7tnQ6Uw1jjFYnZmMdNgodga3b+rw98vBBvENg@mail.gmail.com>
-In-Reply-To: <CAHk-=wiQEj1cP7tnQ6Uw1jjFYnZmMdNgodga3b+rw98vBBvENg@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 27 Jun 2023 15:43:44 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgMw2VE8afWp4p6RyJKCvnkhNXx4XUByUOHUWKiAo=WLQ@mail.gmail.com>
-Message-ID: <CAHk-=wgMw2VE8afWp4p6RyJKCvnkhNXx4XUByUOHUWKiAo=WLQ@mail.gmail.com>
-Subject: Re: [GIT PULL] x86/misc for 6.5
-To:     Arjan van de Ven <arjan@linux.intel.com>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Noah Goldstein <goldstein.w.n@gmail.com>,
+        d=1e100.net; s=20221208; t=1687905913; x=1690497913;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qQl7WxhCDcJMe6QTdlAGh4IXmTTWyixOnnvB+eyw+fQ=;
+        b=PudHp2x3NHiGFBPffZWA/W/ClTL4fDFy6mJr3BRmuLWCsMPKEn+vq+oPtqzMVCjj6E
+         Pe8LTxGxi6LYu45ysWdAHk+E9YoLe7y+IXq2/iEQ8eRykc1qltyizuNIWWPg3PF3Xq1N
+         ncdj+m/eOp7xsCIaAovhdIo0D4oDGk5szGel4CckrGmTcVKsKLwp09R/xTjSXs+hRYhD
+         licZxhvW8rReuhZWU2pVrjd0kxyGdCu02xonSXi7loN5Rxmd0OcL9ZfHIn3sSMM4pwl1
+         qvB5XA/6NxBGYfxZ7YGtj6KSg3oADLvPB3rAIzRWbQ345ZLEbVRCXp9OwxQbI9dXGuYE
+         qAug==
+X-Gm-Message-State: AC+VfDxJK5CRyTDkYCcjepMOhg2Hk++9y/Ez5rA60aM5WjPpVLhO9u8q
+        CIfw6Gd1jGeGiyUgHENcLpe/Zc1DCqI=
+X-Google-Smtp-Source: ACHHUZ5xQRT54Q3fsm5S2VBg5oxUqBZFQOwEvhmR3gix9ccCGfGpmR1ksoUMpjO5/Z/UmQ1y636i7aos+wk=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:903:64d:b0:1b5:32f2:5a7 with SMTP id
+ kh13-20020a170903064d00b001b532f205a7mr703788plb.13.1687905913091; Tue, 27
+ Jun 2023 15:45:13 -0700 (PDT)
+Date:   Tue, 27 Jun 2023 15:45:11 -0700
+In-Reply-To: <ZJspu3uS2mirF+4k@google.com>
+Mime-Version: 1.0
+References: <20230601142309.6307-1-guang.zeng@intel.com> <20230601142309.6307-4-guang.zeng@intel.com>
+ <ZJspu3uS2mirF+4k@google.com>
+Message-ID: <ZJtmdxrr2cC+gpVO@google.com>
+Subject: Re: [PATCH v1 3/6] KVM: VMX: Add new ops in kvm_x86_ops for LASS
+ violation check
+From:   Sean Christopherson <seanjc@google.com>
+To:     Zeng Guang <guang.zeng@intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+        H Peter Anvin <hpa@zytor.com>, kvm@vger.kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
+        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 27 Jun 2023 at 15:25, Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> I don't know what the rules are - and some of the functions you test
-> seem actively buggy (ie not handling alignment right etc).
+On Tue, Jun 27, 2023, Sean Christopherson wrote:
+> > +	/*
+> > +	 * An access is a supervisor-mode access if CPL < 3 or if it implicitly
+> > +	 * accesses a system data structure. For implicit accesses to system
+> > +	 * data structure, the processor acts as if RFLAGS.AC is clear.
+> > +	 */
+> > +	if (access & PFERR_IMPLICIT_ACCESS) {
+> 
+> Please don't use PFERR_IMPLICIT_ACCESS, just extend the new flags.  This is
+> obviously not coming from a page fault.  PFERR_IMPLICIT_ACCESS really shouldn't
+> exist, but at least there was reasonable justification for adding it (changing
+> all of the paths that lead to permission_fault() would have require a massive
+> overhaul).
+> 
+> ***HOWEVER***
+> 
+> I think the entire approach of hooking __linearize() may be a mistake, and LASS
+> should instead be implemented in a wrapper of ->gva_to_gpa().  The two calls to
+> __linearize() that are escaped with SKIPLASS are escaped *because* they don't
+> actually access memory (branch targets and INVLPG), and so if LASS is enforced
+> only when ->gva_to_gpa() is invoked, all of these new flags go away because the
+> cases that ignore LASS are naturally handled.
+> 
+> That should also make it unnecessary to add one-off checks since e.g. kvm_handle_invpcid()
+> will hit kvm_read_guest_virt() and thus ->gva_to_gpa(), i.e. we won't end up playing
+> an ongoing game of whack-a-mole.
 
-Oh. And you *only* test the 40-byte case. That seems a bit bogus.
+Drat, that won't work, at least not without quite a few more changes.
 
-If I change the packet size from 40 to 1500, I get
+  1. kvm_{read,write,fetch}_guest_virt() are effectively defined to work with a
+    fully resolve linear address, i.e. callers assume failure means #PF
 
-  02: 185.1 / 186.4 cycles (8b414316) Upcoming linux kernel version
-  04: 184.9 / 186.5 cycles (8b414316) Specialized to size 40
-  06: 107.3 / 117.2 cycles (8b414316) New version
-  22: 185.6 / 186.5 cycles (8b414316) Odd-alignment handling removed
+  2. Similar to (1), segment information isn't available, i.e. KVM wouldn't know
+     when to inject #SS instead of #GP
 
-which seems unexpectedly bad for the other versions.
+And IIUC, LASS violations are higher priority than instruction specific alignment
+checks, e.g. on CMPXCHG16B.  
 
-But those other functions have that 64-byte unrolling, rather than the
-"two 40-byte loops", so maybe it is real, and my version is actually
-just that good.
+And looking at LAM, that untagging needs to be done before the canonical checks,
+which means that we'll need at least X86EMUL_F_INVLPG.
 
-Or maybe it's a sign that my version is some seriously buggy crap, and
-it just looks good on the benchmark because it does the wrong thing.
-
-Whatever. Back to the merge window again.
-
-              Linus
+So my idea of shoving this into a ->gva_to_gpa() wrapper won't work well.  Bummer.
