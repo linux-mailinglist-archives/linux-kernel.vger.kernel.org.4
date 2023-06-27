@@ -2,142 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36D4B73EFC3
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 02:35:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EC9973EFCA
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 02:39:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229823AbjF0Afs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 20:35:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49226 "EHLO
+        id S229681AbjF0AjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 20:39:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjF0Afq (ORCPT
+        with ESMTP id S229841AbjF0AjI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 20:35:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAE351716;
-        Mon, 26 Jun 2023 17:35:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Mon, 26 Jun 2023 20:39:08 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA89C171A;
+        Mon, 26 Jun 2023 17:39:06 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D6FF60FBC;
-        Tue, 27 Jun 2023 00:35:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4338C433C9;
-        Tue, 27 Jun 2023 00:35:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687826143;
-        bh=ri8Lw0btK8xU98fieJeNgDYMq7tpyggvX0fT3i8LXvU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Y5byjoU8crCZ5+nUd5ao0pSbq5PDEH2HLWApGVhYwd5n072gix8PNM7837Pw3Jz/3
-         T3/HYrcYbw85FAxa852NPTyGg+/OIyksq1BQu4ywgbjQD9zdWxTeNoCVP6H3esfjoX
-         3wTEUeBRt67vDxrhnB7Dx0vhI1e5qAh29YjAfcsIe3LKD5zR8M6l9HE9cuSeXuY8Q1
-         tdA9oJw1U3GIX3dJxO+7FXf3O7k26sgh23Tz9o0gKzu49W5RaKFGwzvX5xPV5v6eTH
-         b1QBQPaEZPzMJHGCzDUgHw7Adq/uAKO/nZ4e6g/sph00uMADLLtq5KrlzS8Qkg6g/X
-         dgZGnVbkTfZVg==
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-4fafe87c6fbso2951236e87.3;
-        Mon, 26 Jun 2023 17:35:43 -0700 (PDT)
-X-Gm-Message-State: AC+VfDxoj79OZYxy/3J6ZALLABTHLarBVa8fQ9fk1qH/XXfUALPxqKYZ
-        zoeiUSPyHAW8r6/IaeO160XGJ1TM2G9otQLpjJY=
-X-Google-Smtp-Source: ACHHUZ6r6mwH6YsL2/0Z1A3dZTnXXWmub0BcbTsy21tD6ta5oIOu7Om/p7EXVx74EOcnySCJTXFUzRYUwTD6GVIoG0k=
-X-Received: by 2002:a19:6555:0:b0:4f8:5f32:b1da with SMTP id
- c21-20020a196555000000b004f85f32b1damr15112836lfj.24.1687826141758; Mon, 26
- Jun 2023 17:35:41 -0700 (PDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Qqm6s6Rxsz4wqW;
+        Tue, 27 Jun 2023 10:39:01 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1687826342;
+        bh=VBT+hkINubzn7ViFqxIo6R9gSORoTGH+ce7ZiG8bKuQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=RtevIlJxP+0j//DHKYgpQ3xpWkHD2EW2KTUSSFmgp0/2cPdasfm0t2t75O2tH9FGT
+         sAbw+G6J9McV/wQe0987xdbhumcYnIrFVFQBTeAK6p4L7oLP8VNgadxcp2Hu8eRgh9
+         k865VQokUQ2qeAPyYmODxlQ7GEj08F4/6GLutn0IKAIuiw0c30S1nBe8yNRcoS6Ylc
+         L/lJw0nC0xY7LpwK+nMahTOpnM2MiXHZKabEb9StG9kbAQ5goA6YAtDU1ck/EtlkpF
+         IiOubNLFSIVILoF1s/ziHKqpkVwiFLeHh1pJ/84Dk2VRwkjgZC3qruQyA4C0I1aiT8
+         H5O0+4T65ld7w==
+Date:   Tue, 27 Jun 2023 10:39:00 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Theodore Ts'o <tytso@mit.edu>
+Cc:     Chao Yu <chao@kernel.org>, Christoph Hellwig <hch@lst.de>,
+        Jens Axboe <axboe@kernel.dk>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the ext4 tree with Linus' tree
+Message-ID: <20230627103900.04fa564f@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20230623180523.1901230-1-jbaron@akamai.com>
-In-Reply-To: <20230623180523.1901230-1-jbaron@akamai.com>
-From:   Song Liu <song@kernel.org>
-Date:   Mon, 26 Jun 2023 17:35:29 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW4xyxS=oYmeaF2Jze76WC-e2p_dQNos+QDnFX6nr5AOCw@mail.gmail.com>
-Message-ID: <CAPhsuW4xyxS=oYmeaF2Jze76WC-e2p_dQNos+QDnFX6nr5AOCw@mail.gmail.com>
-Subject: Re: [PATCH] md/raid0: add discard support for the 'original' layout
-To:     Jason Baron <jbaron@akamai.com>
-Cc:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
-        NeilBrown <neilb@suse.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/HBQEYr8Ix=16y6_LUWeJbGf";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 23, 2023 at 11:05=E2=80=AFAM Jason Baron <jbaron@akamai.com> wr=
-ote:
->
-> We've found that using raid0 with the 'original' layout and discard
-> enabled with different disk sizes (such that at least two zones are
-> created) can result in data corruption. This is due to the fact that
-> the discard handling in 'raid0_handle_discard()' assumes the 'alternate'
-> layout. We've seen this corruption using ext4 but other filesystems are
-> likely susceptible as well.
->
-> More specifically, while multiple zones are necessary to create the
-> corruption, the corruption may not occur with multiple zones if they
-> layout in such a way the layout matches what the 'alternate' layout
-> would have produced. Thus, not all raid0 devices with the 'original'
-> layout, different size disks and discard enabled will encounter this
-> corruption.
->
-> The 3.14 kernel inadvertently changed the raid0 disk layout for different
-> size disks. Thus, running a pre-3.14 kernel and post-3.14 kernel on the
-> same raid0 array could corrupt data. This lead to the creation of the
-> 'original' layout (to match the pre-3.14 layout) and the 'alternate' layo=
-ut
-> (to match the post 3.14 layout) in the 5.4 kernel time frame and an optio=
-n
-> to tell the kernel which layout to use (since it couldn't be autodetected=
-).
-> However, when the 'original' layout was added back to 5.4 discard support
-> for the 'original' layout was not added leading this issue.
->
-> I've been able to reliably reproduce the corruption with the following
-> test case:
->
-> 1. create raid0 array with different size disks using original layout
-> 2. mkfs
-> 3. mount -o discard
-> 4. create lots of files
-> 5. remove 1/2 the files
-> 6. fstrim -a (or just the mount point for the raid0 array)
-> 7. umount
-> 8. fsck -fn /dev/md0 (spews all sorts of corruptions)
->
-> Let's fix this by adding proper discard support to the 'original' layout.
-> The fix 'maps' the 'original' layout disks to the order in which they are
-> read/written such that we can compare the disks in the same way that the
-> current 'alternate' layout does. A 'disk_shift' field is added to
-> 'struct strip_zone'. This could be computed on the fly in
-> raid0_handle_discard() but by adding this field, we save some computation
-> in the discard path.
->
-> Note we could also potentially fix this by re-ordering the disks in the
-> zones that follow the first one, and then always read/writing them using
-> the 'alternate' layout. However, that is seen as a more substantial chang=
-e,
-> and we are attempting the least invasive fix at this time to remedy the
-> corruption.
->
-> I've verified the change using the reproducer mentioned above. Typically,
-> the corruption is seen after less than 3 iterations, while the patch has
-> run 500+ iterations.
->
-> Cc: NeilBrown <neilb@suse.de>
-> Cc: Song Liu <song@kernel.org>
-> Fixes: c84a1372df92 ("md/raid0: avoid RAID0 data corruption due to layout=
- confusion.")
-> Signed-off-by: Jason Baron <jbaron@akamai.com>
+--Sig_/HBQEYr8Ix=16y6_LUWeJbGf
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
- Looks good to me! Applied to md-next.
+Hi all,
 
-Since this will be released with 6.6, we should have a smaller and safer fi=
-x
-before that. Would you mind create a patch that ignores all discards to
-orig_layout and not the first zone? We will roll that to 6.5 and back port =
-to
-stable. Then this version will be shipped to 6.6+.
+Today's linux-next merge of the ext4 tree got a conflict in:
 
-Thanks,
-Song
+  fs/ext4/ioctl.c
+
+between commit:
+
+  97524b454bc5 ("ext4: split ext4_shutdown")
+
+from Linus' tree and commit:
+
+  c4d13222afd8 ("ext4: fix to check return value of freeze_bdev() in ext4_s=
+hutdown()")
+
+from the ext4 tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc fs/ext4/ioctl.c
+index 961284cc9b65,55be1b8a6360..000000000000
+--- a/fs/ext4/ioctl.c
++++ b/fs/ext4/ioctl.c
+@@@ -793,10 -793,18 +793,11 @@@ static int ext4_ioctl_setproject(struc
+  }
+  #endif
+ =20
+ -static int ext4_shutdown(struct super_block *sb, unsigned long arg)
+ +int ext4_force_shutdown(struct super_block *sb, u32 flags)
+  {
+  	struct ext4_sb_info *sbi =3D EXT4_SB(sb);
+ -	__u32 flags;
++ 	int ret;
+ =20
+ -	if (!capable(CAP_SYS_ADMIN))
+ -		return -EPERM;
+ -
+ -	if (get_user(flags, (__u32 __user *)arg))
+ -		return -EFAULT;
+ -
+  	if (flags > EXT4_GOING_FLAGS_NOLOGFLUSH)
+  		return -EINVAL;
+ =20
+
+--Sig_/HBQEYr8Ix=16y6_LUWeJbGf
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSaL6QACgkQAVBC80lX
+0GwIFgf/UokoeB3Jb0j4QTLFAD53lLaMkyad8c+daW5gbsV7BHAcjnYpDXE4nvAj
+rn7agDHmoF4k3oMY10R0Gz2qdzZOhZV9g2i4l7TJn59ZQdp6vabORBk3pW/tIXoD
+/dqaSsODw9TumRXgpews0X7S3qjmcVOa0G/N49ribZyi5+dEu3GppOrMarIVC3f/
+/ScAyMTRl59LbqeZBU5iCJe+1rjttE6NF+1W0J4t+7EDYC+D28uvdrpV49llhASh
+xgHz8YkCVhf9Vwjr91iejcZWVbfUkbGkdlH7VnIDCJVLf8EKt5mzKuAgraNbF6KA
+rNvUAQt9fTJ2+1qybDbTobSbHW5nCA==
+=sukt
+-----END PGP SIGNATURE-----
+
+--Sig_/HBQEYr8Ix=16y6_LUWeJbGf--
