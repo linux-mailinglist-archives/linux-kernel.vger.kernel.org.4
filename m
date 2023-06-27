@@ -2,103 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5596573F615
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 09:50:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9125A73F619
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 09:51:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231532AbjF0HuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 03:50:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42790 "EHLO
+        id S230229AbjF0HvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 03:51:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231591AbjF0Ht7 (ORCPT
+        with ESMTP id S231547AbjF0Hut (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 03:49:59 -0400
-Received: from relay01.th.seeweb.it (relay01.th.seeweb.it [IPv6:2001:4b7a:2000:18::162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64302F7
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 00:49:56 -0700 (PDT)
-Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 4ABD92013B;
-        Tue, 27 Jun 2023 09:49:54 +0200 (CEST)
-Date:   Tue, 27 Jun 2023 09:49:52 +0200
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, Lux Aliaga <they@mint.lgbt>
-Subject: Re: [PATCH 03/15] dt-bindings: clock: qcom,dispcc-sm6125: Require
- GCC PLL0 DIV clock
-Message-ID: <3nnk4xvmpnum2q6g6c6crjlqq3ra7j2z5zis53xcqbvevymuhz@mkffvs45n6ut>
-References: <55b0ca89-8f2e-5383-59d4-6809e813abf8@linaro.org>
- <vnp263d43flny2ibt3n7fbloyi26enqrejnobogplfu5fcj6l3@s7zkxrsi2rde>
- <52c57cab-10cf-2e7e-2c1d-fa6506786d45@linaro.org>
- <jmtjuya4c423rmdlo4ubvvqndbxvgapal5otjqnejdpdd25izp@kewbjmqdu2xs>
- <6311f26f-79ee-c471-649f-5e0b4629cfcc@linaro.org>
- <uuy5prkjhhs66te7h6z3pu4lzj2cfbiqk6ftjijwoeqpw573av@ogs6cboanvzc>
- <ziykmixskqkgheigefvyo4q3katbc4uix6jtcg7mncs25z4tj5@5gykrfgns4bm>
- <16731023-7dc7-d43d-1b16-fda44c0948ed@linaro.org>
- <yofju7jp7vmv33x7dzvzoelpumfsz3fjqy2ozakfphsuysunon@pglt2wzlsjex>
- <683a6f7e-bf1a-aff2-070b-472fb14e0353@linaro.org>
+        Tue, 27 Jun 2023 03:50:49 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67BE5297D
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 00:50:31 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-98934f000a5so505641566b.2
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 00:50:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687852230; x=1690444230;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6/PlesO2yc7J0M0ez9vNMmpy4Sw/yrJpXbgL5YEpqPo=;
+        b=bQwAZxoWB6E2WY7I4fXXrTkwiGW8Q+FBD0Mnb4fTXoziEoQ5gByHx/4vebns6dNpk5
+         WuojIMrZzyD/DnuBWVTpStVv9gClUVaJ6JjT7ZAAvtJvyRdGiabkl/rvg+VhCVakj0fw
+         ZLeF7iHxxt3qMhhlUrS2JzHrd/BLFOWsayPmeietJ+SpprSmY3HoYK353sq2HelWPvu0
+         ssRvv418pXfKhpH3+Q2qc7mFlq7clRY19EZJd1fPJh34GjxQTHqwSGJjfL8rV4/ajb3g
+         w3muIzK2awRbDHZZ0zQmB5qS3cKulXE9QdvSfc3uEbQBgEUKaEy5aBJm/M7U/3Yn644l
+         kDwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687852230; x=1690444230;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6/PlesO2yc7J0M0ez9vNMmpy4Sw/yrJpXbgL5YEpqPo=;
+        b=fc3O+1Vpve23wbIHxJybTUrXKBZtWRfaofO/cjOWClUsgAh7vb6c6CLflSaqQEueXh
+         +QueJzT0tWIjuo/Q0fzuxqhzKK9/H/P0HMuQqyBCsxP+MVcd9h+herpuenHc5jChZD4o
+         y60EhH4ztRBEy1ZjyIR/bRGFrdkyGogIWi52JAYmpd1CMy1gchAqSfxLTizpigCpOJ/W
+         YfUR8XZrpcWv06K6i+3fBKhGDgSLSUCfO1vZoVmWUBbChoZL8BzvPku7/rsnWhgRBjGd
+         OpAam3CS20vl1Mf3EgpuqnMCfTp4jgVJOVMqoRdK6LQ0XREkM5UfQIFKPEF5kb3KaI6I
+         CI/w==
+X-Gm-Message-State: AC+VfDw5qSpxVDsCn3nOaM+MOK2oSCYI/zmyp7/LGT4HRmpgv6X0Hw7A
+        dJ4UD1yNB+QR40wl/Sl1dl0pb9TyGiO0PVdJBHhhMQ==
+X-Google-Smtp-Source: ACHHUZ6agsn+BeceXhNtzplectJNaNMpkfYDD4sUR+SS3O74iUfYKtJvbDjdKFmOwS7FN4RvZ0O0zWpbX+Kgc5FB4F8=
+X-Received: by 2002:a17:907:7f04:b0:991:f6d0:9bc1 with SMTP id
+ qf4-20020a1709077f0400b00991f6d09bc1mr2598779ejc.66.1687852229607; Tue, 27
+ Jun 2023 00:50:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <683a6f7e-bf1a-aff2-070b-472fb14e0353@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <cover.1684048511.git.sathyanarayanan.kuppuswamy@linux.intel.com>
+ <64966b842becf_142af8294a5@dwillia2-xfh.jf.intel.com.notmuch>
+ <cdd04046-4bcb-d6fd-1688-0a85546e7b91@linux.intel.com> <649914ab3de4d_8e17829490@dwillia2-xfh.jf.intel.com.notmuch>
+In-Reply-To: <649914ab3de4d_8e17829490@dwillia2-xfh.jf.intel.com.notmuch>
+From:   Chong Cai <chongc@google.com>
+Date:   Tue, 27 Jun 2023 00:50:16 -0700
+Message-ID: <CALRH0CiHjNeaHS88Oa_57hS_WGXY3-x2_aHco14nQpo-5e9seA@mail.gmail.com>
+Subject: Re: [PATCH v3 0/3] TDX Guest Quote generation support
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Dionna Amalie Glaze <dionnaglaze@google.com>,
+        Qinkun Bao <qinkun@apache.org>,
+        Guorui Yu <GuoRui.Yu@linux.alibaba.com>,
+        Du Fan <fan.du@intel.com>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-06-27 09:29:53, Krzysztof Kozlowski wrote:
-> On 27/06/2023 08:54, Marijn Suijten wrote:
-> > On 2023-06-27 08:24:41, Krzysztof Kozlowski wrote:
-> >> On 26/06/2023 20:53, Marijn Suijten wrote:
-> >>> On 2023-06-26 20:51:38, Marijn Suijten wrote:
-> >>> <snip>
-> >>>>> Not really, binding also defines the list of clocks - their order and
-> >>>>> specific entries. This changes.
-> >>>>
-> >>>> And so it does in "dt-bindings: clock: qcom,dispcc-sm6125: Remove unused
-> >>>> GCC_DISP_AHB_CLK"?
-> >>>
-> >>> Never mind: it is the last item so the order of the other items doesn't
-> >>> change.  The total number of items decreases though, which sounds like
-> >>> an ABI-break too?
-> >>
-> >> How does it break? Old DTS works exactly the same, doesn't it?
-> > 
-> > So deleting a new item at the end does not matter.  But what if I respin
-> > this patch to add the new clock _at the end_, which will then be at the
-> > same index as the previous GCC_DISP_AHB_CLK?
-> 
-> I think you know the answer, right? What do you want to prove? That two
-> independent changes can have together negative effect? We know this.
+On Sun, Jun 25, 2023 at 9:32=E2=80=AFPM Dan Williams <dan.j.williams@intel.=
+com> wrote:
+>
+> Sathyanarayanan Kuppuswamy wrote:
+> >
+> >
+> > On 6/23/23 9:05 PM, Dan Williams wrote:
+> > > Kuppuswamy Sathyanarayanan wrote:
+> > >> Hi All,
+> > >>
+> > >> In TDX guest, the attestation process is used to verify the TDX gues=
+t
+> > >> trustworthiness to other entities before provisioning secrets to the
+> > >> guest.
+> > >>
+> > >> The TDX guest attestation process consists of two steps:
+> > >>
+> > >> 1. TDREPORT generation
+> > >> 2. Quote generation.
+> > >>
+> > >> The First step (TDREPORT generation) involves getting the TDX guest
+> > >> measurement data in the format of TDREPORT which is further used to
+> > >> validate the authenticity of the TDX guest. The second step involves
+> > >> sending the TDREPORT to a Quoting Enclave (QE) server to generate a
+> > >> remotely verifiable Quote. TDREPORT by design can only be verified o=
+n
+> > >> the local platform. To support remote verification of the TDREPORT,
+> > >> TDX leverages Intel SGX Quoting Enclave to verify the TDREPORT
+> > >> locally and convert it to a remotely verifiable Quote. Although
+> > >> attestation software can use communication methods like TCP/IP or
+> > >> vsock to send the TDREPORT to QE, not all platforms support these
+> > >> communication models. So TDX GHCI specification [1] defines a method
+> > >> for Quote generation via hypercalls. Please check the discussion fro=
+m
+> > >> Google [2] and Alibaba [3] which clarifies the need for hypercall ba=
+sed
+> > >> Quote generation support. This patch set adds this support.
+> > >>
+> > >> Support for TDREPORT generation already exists in the TDX guest driv=
+er.
+> > >> This patchset extends the same driver to add the Quote generation
+> > >> support.
+> > >
+> > > I missed that the TDREPORT ioctl() and this character device are alre=
+ady
+> > > upstream. The TDREPORT ioctl() if it is only needed for quote generat=
+ion
+> > > seems a waste because it just retrieves a blob that needs to be turne=
+d
+> > > around and injected back into the kernel to generate a quote.
+> >
+> > Although the end goal is to generate the quote, the method the user cho=
+oses to
+> > achieve it may differ for a variety of reasons. In this case, we're try=
+ing to
+> > support the use case where the user will use methods like TCP/IP or vso=
+ck to
+> > generate the Quote. They can use the GET_REPORT IOCTL to get the TDREPO=
+RT and
+> > send it to the quoting enclave via the above-mentioned methods.  TDVMCA=
+LL-based
+> > quote generation is intended for users who, for a variety of security r=
+easons, do
+> > not wish to use the methods described above.
+>
+> This flexibility could be supported with keys if necessary, although I
+> would want to hear strong reasons not a "variety of reasons" why
+> everyone cannot use a unified approach. ABI proliferation has a
+> maintenance cost and a collaboration cost. It is within the kernel
+> community's right to judge the cost of ABI flexibility and opt for a
+> constrained implementation if that cost is too high.
+>
+> What I would ask of those who absolutely cannot support the TDVMCALL
+> method is to contribute a solution that intercepts the "upcall" to the
+> platform "guest_attest_ops" and turn it into a typical keys upcall to
+> userspace that can use the report data with a vsock tunnel.
+>
+> That way the end result is still the same, a key established with the
+> TDX Quote evidence contained within a Linux-defined envelope.
 
-The question is whether this is allowed?
-
-- Marijn
+I agree a unified ABI across vendors would be ideal in the long term.
+However, it sounds like a non-trivial task and could take quite some
+time to achieve.
+Given there's already an AMD equivalent approach upstreamed, can we
+also allow this TDVMCALL patch as an intermediate step to unblock
+various TDX attestation user cases while targeting unified ABI? The
+TDVMCALL here is quite isolated and serves a very specific purpose, it
+should be very low risk to other kernel features and easy to be
+reverted in the future.
