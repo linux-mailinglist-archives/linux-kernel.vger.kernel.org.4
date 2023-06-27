@@ -2,156 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F77373F879
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 11:13:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DDF273F87D
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 11:15:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231621AbjF0JN0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 05:13:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37110 "EHLO
+        id S231751AbjF0JPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 05:15:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231748AbjF0JNY (ORCPT
+        with ESMTP id S232018AbjF0JO4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 05:13:24 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3D8BFD;
-        Tue, 27 Jun 2023 02:13:23 -0700 (PDT)
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35R96B9i008761;
-        Tue, 27 Jun 2023 09:13:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=eRYl3tInGhDOkzzXnyLKjP4RygjUjtbP4SrRO0c+vWQ=;
- b=qDMffMBt8L6VJlwG8tURp2ZwilOX9K/rqLsrvTLNcHcNumo5bXR85n2fT0V+E8EjUk5Y
- MlWgFliseuH0ILUWdMKcO74nbfFS/WBE7JHU1CjKECJJGNRi3wHYo6DeppuQ3OdJdQrn
- Vbi1W3l1URgOENUohIs1eHwzBsJ1jkOe8pkB2S/b45Od2XToIs9s3TTdIAJ5lmd7Dpv/
- Kr47XyYy/CdcVx1PLxDAOnJIcagSMolnzSck45iCfK6vIL0+ZJ4rMkjXu9OHE0C6CyVN
- /LX4QweXpJ/o2Jw3gyZosKjZq3kQrz/FcGOCH/SxTFGXM6U/+vnhzy9/MS8svLtRjepB 3Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rfvq8rabp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Jun 2023 09:13:03 +0000
-Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 35R96GKB009302;
-        Tue, 27 Jun 2023 09:13:03 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rfvq8raar-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Jun 2023 09:13:03 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35R3BSQ5025785;
-        Tue, 27 Jun 2023 09:13:00 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3rdqre1bqm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Jun 2023 09:13:00 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35R9CwrH65798408
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 27 Jun 2023 09:12:58 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2A85F2004B;
-        Tue, 27 Jun 2023 09:12:58 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D7F0C20040;
-        Tue, 27 Jun 2023 09:12:57 +0000 (GMT)
-Received: from [9.152.212.248] (unknown [9.152.212.248])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 27 Jun 2023 09:12:57 +0000 (GMT)
-Message-ID: <43a1f34a6b1c5a14519f3967dff5eb42e82ee88d.camel@linux.ibm.com>
-Subject: Re: [PATCH v5 00/44] treewide: Remove I/O port accessors for
- HAS_IOPORT=n
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Heiko Carstens <hca@linux.ibm.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-pci@vger.kernel.org, Netdev <netdev@vger.kernel.org>
-Date:   Tue, 27 Jun 2023 11:12:57 +0200
-In-Reply-To: <7b5c40f3-d25b-4082-807d-4d75dc38886d@app.fastmail.com>
-References: <20230522105049.1467313-1-schnelle@linux.ibm.com>
-         <7b5c40f3-d25b-4082-807d-4d75dc38886d@app.fastmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: fZujSueKmVHDxjYCpP51RL3hPXVzRXrP
-X-Proofpoint-ORIG-GUID: XqQNy_k3bnezF-iSHCzgIlhzyUZTuwmi
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Tue, 27 Jun 2023 05:14:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCD6810D8
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 02:14:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687857243;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ij82bTMq6/uViGwAL8PXDdJMt9B/wmu4cITPZfAQEVw=;
+        b=VCEVoP/2JAzlM7h4IvVYr3iyRJWI/hqBiKMIXjAoAmrX5xVJ8HskiGtvpgKKL/m6z5d0kT
+        Xb5ZuG30lRJAog9CCcyLPJmcKciodbekCTFk+YOnGkS7u3Z9HgfNcQH1svwpm6m1ZfZrav
+        L9QDIoGHeHcPuRgwbAvRQEmB/rQJId4=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-581-oXSKtSVkPJCzMGdGTNqkag-1; Tue, 27 Jun 2023 05:14:02 -0400
+X-MC-Unique: oXSKtSVkPJCzMGdGTNqkag-1
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-313fe11f5e2so325519f8f.0
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 02:14:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687857241; x=1690449241;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ij82bTMq6/uViGwAL8PXDdJMt9B/wmu4cITPZfAQEVw=;
+        b=AhRx0cDDSg+Jcb3XRRfN72leuvUaVIOo1lm17XMaAvTlG50k6hpOFkGx/7P62nzgli
+         FiFJHt/eI7UygQCOQIqQ9Gc30EDYLkLGirLS+NpQs0Np/a0ji7qTSLS0osSgQClko9aa
+         eJSweanwGZjmL5yxoFhDppbfA71z73Q+OUmbOHfLrOY8Q59C5MIDfZJm5RxpulZfSMLV
+         T4MSNw6xOy86gKiAwfE9R5QIDQ0ys0GwX08RcCu92Z0gPLTAgifhlR7q42ztBayGKs5D
+         u/DVVSdiMTCzoNA/9HEU9jrgM+dLhH4vYgnInU2MG+QVpau4hmkLlpk69Vj2IIugLOkU
+         Pr3A==
+X-Gm-Message-State: AC+VfDzyd1hfESaehRSmELRD1761DENkN2hRsfBvzWFYaZleFl0f3i6g
+        9jsg0QWHb3byZjGlaRi18vWfnBg//du5lNzuI+QdB+aYyllTrdvKSZ0S2plHQWNsDHSykieogVA
+        HxeZBY6Ui9z0W17WaVeTKREAF
+X-Received: by 2002:a5d:46c5:0:b0:313:ef93:9e6e with SMTP id g5-20020a5d46c5000000b00313ef939e6emr4982669wrs.24.1687857241228;
+        Tue, 27 Jun 2023 02:14:01 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6tpmhqijmTKVbr0EEyMc4aKWpIkUQzTxfjhoUeKuFM2sfKFuMKThEy+JgS1uhzDpGcIn+Rmw==
+X-Received: by 2002:a5d:46c5:0:b0:313:ef93:9e6e with SMTP id g5-20020a5d46c5000000b00313ef939e6emr4982656wrs.24.1687857240727;
+        Tue, 27 Jun 2023 02:14:00 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c737:4900:68b3:e93b:e07a:558b? (p200300cbc737490068b3e93be07a558b.dip0.t-ipconnect.de. [2003:cb:c737:4900:68b3:e93b:e07a:558b])
+        by smtp.gmail.com with ESMTPSA id cw8-20020a056000090800b00311d8c2561bsm9750387wrb.60.2023.06.27.02.13.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Jun 2023 02:14:00 -0700 (PDT)
+Message-ID: <57c677d1-9809-966e-5254-f01f59eff7bc@redhat.com>
+Date:   Tue, 27 Jun 2023 11:13:59 +0200
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-27_05,2023-06-26_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
- malwarescore=0 impostorscore=0 mlxscore=0 bulkscore=0 adultscore=0
- clxscore=1011 priorityscore=1501 lowpriorityscore=0 suspectscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306270086
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Content-Language: en-US
+To:     Lorenzo Stoakes <lstoakes@gmail.com>
+Cc:     Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>
+References: <20230626204612.106165-1-lstoakes@gmail.com>
+ <074fc253-beb4-f7be-14a1-ee5f4745c15b@suse.cz>
+ <1832a772-93b4-70ad-3a2c-d8da104ce8dd@redhat.com>
+ <40cd965f-ba4f-44d8-8e7c-d6267b91a9b3@lucifer.local>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH] mm/mprotect: allow unfaulted VMAs to be unaccounted on
+ mprotect()
+In-Reply-To: <40cd965f-ba4f-44d8-8e7c-d6267b91a9b3@lucifer.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-05-22 at 13:29 +0200, Arnd Bergmann wrote:
-> On Mon, May 22, 2023, at 12:50, Niklas Schnelle wrote:
->=20
-> > A few patches have already been applied but I've kept those which are n=
-ot yet
-> > in v6.4-rc3.
-> >=20
-> > This version is based on v6.4-rc3 and is also available on my kernel.or=
-g tree
-> > in the has_ioport_v5:
-> >=20
-> > https://git.kernel.org/pub/scm/linux/kernel/git/niks/linux.git
->=20
-> I think it would be best if as many patches as possible get merged
-> into v6.5 through the individidual subsystems, though I can take
-> whatever is left through the asm-generic tree.
->=20
-> Since the goal is to have maintainers pick up part of this, I would
-> recommend splitting the series per subsystem, having either a
-> separate patch or a small series for each maintainer that should
-> pick them up.
->=20
-> More importantly, I think you should rebase the series against
-> linux-next in order to find and drop the patches that are queued
-> up for 6.5 already. The patches will be applied into branches
-> that are based on 6.4-rc of course, but basing on linux-next
-> is usually the easiest when targeting multiple maintainer
-> trees.
->=20
-> Maybe let's give it another week to have more maintainers pick
-> up stuff from v5, and then send out a v6 as separate submissions.
->=20
->     Arnd
+On 27.06.23 10:49, Lorenzo Stoakes wrote:
+> On Tue, Jun 27, 2023 at 08:59:33AM +0200, David Hildenbrand wrote:
+>> Hi all,
+>>
+>> On 27.06.23 08:28, Vlastimil Babka wrote:
+>>> On 6/26/23 22:46, Lorenzo Stoakes wrote:
+>>>> When mprotect() is used to make unwritable VMAs writable, they have the
+>>>> VM_ACCOUNT flag applied and memory accounted accordingly.
+>>>>
+>>>> If the VMA has had no pages faulted in and is then made unwritable once
+>>>> again, it will remain accounted for, despite not being capable of extending
+>>>> memory usage.
+>>>>
+>>>> Consider:-
+>>>>
+>>>> ptr = mmap(NULL, page_size * 3, PROT_READ, MAP_ANON | MAP_PRIVATE, -1, 0);
+>>>> mprotect(ptr + page_size, page_size, PROT_READ | PROT_WRITE);
+>>>> mprotect(ptr + page_size, page_size, PROT_READ);
+>>>
+>>> In the original Mike's example there were actual pages populated, in that
+>>> case we still won't merge the vma's, right? Guess that can't be helped.
+>>>
+>>
+>> I am clearly missing the motivation for this patch: above is a artificial
+>> reproducer that I cannot really imagine being relevant in practice.
+> 
+> I cc'd you on this patch exactly because I knew you'd scrutinise it
+> greatly :)
+> 
 
-Hi Arnd and All,
+Yeah, and that needs time and you have to motivate me :)
 
-I'm sorry there hasn't been an updated in a long time and we're missing
-v6.5. I've been quite busy with other work and life. Speaking of, I
-will be mostly out for around a month starting some time mid to end
-July as, if all goes well, I'm expecting to become a dad. That said, I
-haven't forgotten about this and your overall plan of sending per-
-subsystem patches sounds good, just haven't had the time to also
-incorporate the feedback.
+> Well the motivator for the initial investigation was rppt playing with
+> R[WO]X (this came from an #mm irc conversation), however in his case he
+> will be mapping pages between the two.
 
-Thanks,
-Niklas
+And that's the scenario I think we care about in practice (actually 
+accessing memory).
+
+> 
+> (apologies to rppt, I forgot to add the Reported-By...)
+> 
+>>
+>> So is there any sane workload that does random mprotect() without even
+>> touching memory once? Sure, fuzzing, ... artificial reproducers ... but is
+>> there any real-life problem we're solving here?
+>>
+>> IOW, why did you (Lorenzo) invest time optimizing for this andcrafting this
+>> patch and why should reviewer invest time to understand if it's correct? :)
+>>
+> 
+> So why I (that Stoakes guy) invested time here was, well I had chased down
+> the issue for rppt out of curiosity, and 'proved' the point by making
+> essentially this patch.
+> 
+> I dug into it further and (as the patch message aludes to) have convinced
+> myself that this is safe, so essentially why NOT submit it :)
+> 
+> In real-use scenarios, yes fuzzers are a thing, but what comes to mind more
+> immediately is a process that maps a big chunk of virtual memory PROT_NONE
+> and uses that as part of an internal allocator.
+> 
+> If the process then allocates memory from this chunk (mprotect() ->
+> PROT_READ | PROT_WRITE), which then gets freed without being used
+> (mprotect() -> PROT_NONE) we hit the issue. For OVERCOMMIT_NEVER this could
+> become quite an issue more so than the VMA fragmentation.
+
+Using mprotect() when allocating/freeing memory in an allocator is 
+already horribly harmful for performance (well, and the #VMAs), so I 
+don't think that scenario is relevant in practice.
+
+What some allocators (iirc even glibc) do is reserve a bigger area with 
+PROT_NONE and grow the accessible part slowly on demand, discarding 
+freed memory using MADV_DONTNEED. So you essentially end up with two 
+VMAs -- one completely accessible, one completely inaccessible.
+
+They don't use mprotect() because:
+(a) It's bad for performance
+(b) It might increase the #VMAs
+
+There is efence, but I remember it simply does mmap()+munmap() and runs 
+into VMA limits easily just by relying on a lot of mappings.
+
+
+> 
+> In addition, I think a user simply doing the artificial test above would
+> find the split remaining quite confusing, and somebody debugging some code
+> like this would equally wonder why it happened, so there is benefit in
+> clarity too (they of course observing the VMA fragmentation from the
+> perspective of /proc/$pid/[s]maps).
+
+My answer would have been "memory gets commited the first time we allow 
+write access, and that wasn't the case for all memory in that range".
+
+
+Now, take your example above and touch the memory.
+
+
+ptr = mmap(NULL, page_size * 3, PROT_READ, MAP_ANON | MAP_PRIVATE, -1, 0);
+mprotect(ptr + page_size, page_size, PROT_READ | PROT_WRITE);
+*(ptr + page_size) = 1;
+mprotect(ptr + page_size, page_size, PROT_READ);
+
+
+And we'll not merge the VMAs.
+
+Which, at least to me, makes existing handling more consistent.
+
+And users could rightfully wonder "why isn't it getting merged". And the 
+answer would be the same: "memory gets commited the first time we allow 
+write access, and that wasn't the case for all memory in that range".
+
+> 
+> I believe given we hold a very strong lock (write on mm->mmap_lock) and
+> that vma->anon_vma being NULL really does seem to imply no pages have been
+> allocated that this is therefore a safe thing to do and worthwhile.
+
+Do we have to care about the VMA locks now that pagefaults can be served 
+without the mmap_lock in write mode?
+
+[...]
+
+>>> So in practice programs will likely do the PROT_WRITE in order to actually
+>>> populate the area, so this won't trigger as I commented above. But it can
+>>> still help in some cases and is cheap to do, so:
+>>
+>> IMHO we should much rather look into getting hugetlb ranges merged. Mt
+>> recollection is that we'll never end up merging hugetlb VMAs once split.
+> 
+> I'm not sure how that's relevant to fragmented non-hugetlb VMAs though?
+
+It's a VMA merging issue that can be hit in practice, so I raised it.
+
+
+No strong opinion from my side, just my 2 cents reading the patch 
+description and wondering "why do we even invest time thinking about 
+this case" -- and eventually make handling less consistent IMHO (see above).
+
+-- 
+Cheers,
+
+David / dhildenb
+
