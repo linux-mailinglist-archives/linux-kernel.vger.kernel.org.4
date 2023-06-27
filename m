@@ -2,98 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E4567405C4
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 23:42:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63B017405C7
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 23:43:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230229AbjF0Vme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 17:42:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42316 "EHLO
+        id S230332AbjF0VnX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 17:43:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229957AbjF0Vmc (ORCPT
+        with ESMTP id S230271AbjF0VnU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 17:42:32 -0400
-Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [IPv6:2001:4b7a:2000:18::169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC79C272D;
-        Tue, 27 Jun 2023 14:42:30 -0700 (PDT)
-Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id AFA613F623;
-        Tue, 27 Jun 2023 23:42:26 +0200 (CEST)
-Date:   Tue, 27 Jun 2023 23:42:24 +0200
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: qcom: sdm845-tama: Set serial indices and
- stdout-path
-Message-ID: <pj45x6jpu2suliaxevak3fv5nownxqq3fmun6z4zdudl226kcm@jvbb47qic6ms>
-References: <20230627-topic-tama_uart-v1-1-0fa790248db8@linaro.org>
+        Tue, 27 Jun 2023 17:43:20 -0400
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 098472726
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 14:43:19 -0700 (PDT)
+Received: by mail-oi1-x231.google.com with SMTP id 5614622812f47-39ed35dfa91so3765946b6e.3
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 14:43:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687902198; x=1690494198;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MSllMEfZxRxH/Ncdk3MCdEqFObJmS1OPb8q9+W1DegI=;
+        b=2+sKZNQhP9V45I8qJWmARf2B8RZm3gD3w1G+fLrVbz3etG8Oy46GcaOZIS6i7K3h/K
+         SnY+Z8y93mRayVYzD/bBmI80k6bOpZEltc522mgvrW4dvBA20utkIhJVmxipLS63eotD
+         OyLxRMnsUYN/ZiQUZzCEJJzijs2bOmz42QDP0WZjEI6cTrxikwWePyRBiuQ5A9UsY3dC
+         HKRakkm9SFetS+kNfa6Lt+7YxydPGWd5AFikKCGvrj1w+1hBmz0IlQzke2XDQmZMWaJi
+         uq+Mg+T2/IijmOF+rcVsmhWxm+1bEl6ldl8lqzk8I27SotQNuNZbyDyOsVEeygiRqyqr
+         bXoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687902198; x=1690494198;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MSllMEfZxRxH/Ncdk3MCdEqFObJmS1OPb8q9+W1DegI=;
+        b=ZC6G1kiD2YDk5KbZ6wuVNrm0nnYw+P8RpI0xwa0eQrT0B5DwYNqrY6Ooy3OSJakwGG
+         f+NVlcLxco/UED9btabUJJ0r99uhqdlO3rahHDPAl36CclmPY71bgTGPNJM+S460A06+
+         PR+KwVfyMpgjqrv8DPFJv+Hjs0doM9xHhUfz7KyENlJFBPOjoX0kyH9FEnxeiLBdE9Hp
+         JB+U2d9Wrmh9cJGFR75sGfwiiBlDUR2qCRgQ9+rmaBUqMbUvVbj+sKhpi7zzbPp1wVhU
+         rMn57Xv6RtLbUcp2Udso0F6hqZPtzj8ACWSoNEiJB5Dvy0BwRHr1mMRr7GuI1qf7v+j3
+         UJKQ==
+X-Gm-Message-State: AC+VfDy6qTXsdStIxCKeqbprYz/5Lx8Q+pvYeztkzUOWOEgAMnmnWJzn
+        Paql+vXAQxrtHc/NIeL2UmjRvlR8hT1uQqYzXD3l/g==
+X-Google-Smtp-Source: ACHHUZ5NN7n+x2d9nfA/dWjNvQsLrsGjE2IAN6NXyzlKoA60nHqa/WX6aQ+BhuHdTgfam03zZqGyClh2IrEsyhW5Whg=
+X-Received: by 2002:a05:6808:21a2:b0:3a2:de7b:775f with SMTP id
+ be34-20020a05680821a200b003a2de7b775fmr2907663oib.22.1687902198145; Tue, 27
+ Jun 2023 14:43:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230627-topic-tama_uart-v1-1-0fa790248db8@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230626201713.1204982-1-surenb@google.com> <ZJn1tQDgfmcE7mNG@slm.duckdns.org>
+ <20230627-kanon-hievt-bfdb583ddaa6@brauner> <CAJuCfpECKqYiekDK6Zw58w10n1T4Q3R+2nymfHX2ZGfQVDC3VQ@mail.gmail.com>
+ <20230627-ausgaben-brauhaus-a33e292558d8@brauner> <ZJstlHU4Y3ZtiWJe@slm.duckdns.org>
+ <CAJuCfpFUrPGVSnZ9+CmMz31GjRNN+tNf6nUmiCgx0Cs5ygD64A@mail.gmail.com>
+In-Reply-To: <CAJuCfpFUrPGVSnZ9+CmMz31GjRNN+tNf6nUmiCgx0Cs5ygD64A@mail.gmail.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Tue, 27 Jun 2023 14:43:06 -0700
+Message-ID: <CAJuCfpFe2OdBjZkwHW5UCFUbnQh7hbNeqs7B99PXMXdFNjKb5Q@mail.gmail.com>
+Subject: Re: [PATCH 1/2] kernfs: add kernfs_ops.free operation to free
+ resources tied to the file
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Christian Brauner <brauner@kernel.org>, gregkh@linuxfoundation.org,
+        peterz@infradead.org, lujialin4@huawei.com,
+        lizefan.x@bytedance.com, hannes@cmpxchg.org, mingo@redhat.com,
+        ebiggers@kernel.org, oleg@redhat.com, akpm@linux-foundation.org,
+        viro@zeniv.linux.org.uk, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-06-27 19:27:50, Konrad Dybcio wrote:
-> UART6 is used for debug (routed via uSD pins) and UART9 is connected
-> to the bluetooth chip.
-> 
-> Set indexed aliases to make the GENI UART driver happy and route serial
-> traffic through the debug uart by default.
-> 
-> Fixes: 30a7f99befc6 ("arm64: dts: qcom: Add support for SONY Xperia XZ2 / XZ2C / XZ3 (Tama platform)")
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+On Tue, Jun 27, 2023 at 1:09=E2=80=AFPM Suren Baghdasaryan <surenb@google.c=
+om> wrote:
+>
+> On Tue, Jun 27, 2023 at 11:42=E2=80=AFAM Tejun Heo <tj@kernel.org> wrote:
+> >
+> > Hello, Christian.
+> >
+> > On Tue, Jun 27, 2023 at 07:30:26PM +0200, Christian Brauner wrote:
+> > ...
+> > > ->release() was added in
+> > >
+> > >     commit 0e67db2f9fe91937e798e3d7d22c50a8438187e1
+> > >     kernfs: add kernfs_ops->open/release() callbacks
+> > >
+> > >     Add ->open/release() methods to kernfs_ops.  ->open() is called w=
+hen
+> > >     the file is opened and ->release() when the file is either releas=
+ed or
+> > >     severed.  These callbacks can be used, for example, to manage
+> > >     persistent caching objects over multiple seq_file iterations.
+> > >
+> > >     Signed-off-by: Tejun Heo <tj@kernel.org>
+> > >     Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > >     Acked-by: Acked-by: Zefan Li <lizefan@huawei.com>
+> > >
+> > > which mentions "either releases or severed" which imho already points=
+ to
+> > > separate methods.
+> >
+> > This is because kernfs has revoking operation which doesn't exist for o=
+ther
+> > filesystems. Other filesystem implemenations can't just say "I'm done. =
+Bye!"
+> > and go away. Even if the underlying filesystem has completely failed, t=
+he
+> > code still has to remain attached and keep aborting operations.
+> >
+> > However, kernfs serves as the midlayer to a lot of device drivers and o=
+ther
+> > internal subsystems and it'd be really inconvenient for each of them to=
+ have
+> > to implement "I want to go away but I gotta wait out this user who's ho=
+lding
+> > onto my tuning knob file". So, kernfs exposes a revoke or severing sema=
+ntics
+> > something that's exposing interface through kernfs wants to stop doing =
+so.
+> >
+> > If you look at it from file operation implementation POV, this seems ex=
+actly
+> > like ->release. All open files are shutdown and there won't be any futu=
+re
+> > operations. After all, revoke is forced closing of all fd's. So, for mo=
+st
+> > users, treating severing just like ->release is the right thing to do.
+> >
+> > The PSI file which caused this is a special case because it attaches
+> > something to its kernfs file which outlives the severing operation bypa=
+ssing
+> > kernfs infra. A more complete way to fix this would be supporting the
+> > required behavior from kernfs side, so that the PSI file operates on ke=
+rnfs
+> > interface which knows the severing event and detaches properly. That sa=
+id,
+> > currently, this is very much an one-off.
+> >
+> > Suren, if you're interested, it might make sense to pipe poll through k=
+ernfs
+> > properly so that it has its kernfs operation and kernfs can sever it. T=
+hat
+> > said, as this is a fix for something which is currently causing crashes=
+,
+> > it'd be better to merge this simpler fix first no matter what.
+>
+> I'm happy to implement the right fix if you go into more details.
+> AFAIKT kernfs_ops already has poll() operation, we are hooking
+> cgroup_file_poll() to it and using kernfs_generic_poll(). I thought
+> this is the right way to pipe poll through kernfs but if that's
+> incorrect, please let me know. I'm happy to fix that.
 
-Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+Ah, sorry, for PSI we are not using kernfs_generic_poll(), so my claim
+misrepresents the situation. Let me look into how
+kernfs_generic_poll() is implemented and maybe I can find a better
+solution for PSI.
+Thanks,
+Suren.
 
-> ---
->  arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama.dtsi | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama.dtsi b/arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama.dtsi
-> index 3bc187a066ae..7ee61b20452e 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama.dtsi
-> @@ -15,6 +15,15 @@ / {
->  	qcom,msm-id = <321 0x20001>; /* SDM845 v2.1 */
->  	qcom,board-id = <8 0>;
->  
-> +	aliases {
-> +		serial0 = &uart6;
-> +		serial1 = &uart9;
-> +	};
-> +
-> +	chosen {
-> +		stdout-path = "serial0:115200n8";
-> +	};
-> +
->  	gpio-keys {
->  		compatible = "gpio-keys";
->  
-> 
-> ---
-> base-commit: 53cdf865f90ba922a854c65ed05b519f9d728424
-> change-id: 20230627-topic-tama_uart-bacfeac1d0e9
-> 
-> Best regards,
-> -- 
-> Konrad Dybcio <konrad.dybcio@linaro.org>
-> 
+> Thanks,
+> Suren.
+>
+> >
+> > Thanks.
+>
+> >
+> > --
+> > tejun
