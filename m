@@ -2,120 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26CF673FF46
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 17:07:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43F8973FF4A
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 17:07:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbjF0PHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 11:07:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34932 "EHLO
+        id S232140AbjF0PHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 11:07:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230423AbjF0PHK (ORCPT
+        with ESMTP id S230019AbjF0PHh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 11:07:10 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA6010CC
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 08:07:09 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id d2e1a72fcca58-666ecb21fb8so3838641b3a.1
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 08:07:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687878428; x=1690470428;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+4NeRXczD7gGlQyEmL4cAL0joikv2lUIDN2yHcDJeA8=;
-        b=VObHiFCGmoYjzOAcDlZZrTzBtB5q+60Uun/FvVcrztnM+UX9dTyr62+hgbDKh/SNWF
-         Jn9yfc3kCD7WjJx4QzbK2cEmvOia172MBkFDseQmEWoZykLY/AYdCqrjqiO+px1me7UZ
-         PLvwrPf+3yuRw31wVi5e4LzyLE074st3ppuknQLd055glGDa/za5S/iib7lfQgmjwWTY
-         mLDVHXKMEVBS51wHxSSzd9nUYJi0Gin2e2ewjLoTwMoO3Yp0CTc6SKtyAkSLqcXkKWqF
-         QfuRxqyPVt4CNPjYAUx15M1gOqx2GNt2nt/sbUPalRY+1m6qZqdVT50OkRJWQFw4b81R
-         26/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687878428; x=1690470428;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+4NeRXczD7gGlQyEmL4cAL0joikv2lUIDN2yHcDJeA8=;
-        b=ZodOZ/ZK/EvJUKuT61cfcZlLc7YtixJcsZZ1ukeO5bcgXcg9XsxW5YIpuXi4q8Od04
-         IXJlaY4uCFNvXxWwy6cQdkVBmTUCJDRpNy3jot8/N4bV0cmLkOjuvPKQOdt5tX/NJsQw
-         NHrXkjOI+BVntdYGvooYlx0gtekV4cmDcQe500rsCmBOSXNWgoHvH9aCPETgufXyk9/W
-         limGmveiLiDt0Cn9qaARMN2oeVyuFg2z2VdcIzjP3o2n5YN+3dFIvIapn/39ZemnRWYf
-         JIAcr+McAyS+BQdZm7tYdrCXmOC+1vWeBETLZYvBJbt3M9yfetMHjX2bxbz2FtApLc4s
-         jddA==
-X-Gm-Message-State: AC+VfDx7Oryt/RRZTIX9Vhc+VvPsCjSUo7G6nF1/z1ebMiYYxLKZLLOJ
-        Qhw3kff+udOCgafE7ZfWRQo14FyxW1w=
-X-Google-Smtp-Source: ACHHUZ47B6cZdW7yZxMDDmNpKPEXGCLMm9LmiUYWeZnxI8BDzBZCIUXgAG6E4W8ek+pUhab/t1JIxb8wiI0=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:248c:b0:66e:4df5:6c15 with SMTP id
- c12-20020a056a00248c00b0066e4df56c15mr2380674pfv.4.1687878428601; Tue, 27 Jun
- 2023 08:07:08 -0700 (PDT)
-Date:   Tue, 27 Jun 2023 08:07:07 -0700
-In-Reply-To: <MW4PR11MB5824B76276020C1A33A26A72BB27A@MW4PR11MB5824.namprd11.prod.outlook.com>
-Mime-Version: 1.0
-References: <20230616113353.45202-1-xiong.y.zhang@intel.com>
- <20230616113353.45202-4-xiong.y.zhang@intel.com> <ZJYCtDN+ITmrgCUs@google.com>
- <MW4PR11MB5824653862500CB4F9EE4519BB21A@MW4PR11MB5824.namprd11.prod.outlook.com>
- <ZJnEFTXMpQkXdHRj@google.com> <MW4PR11MB5824B76276020C1A33A26A72BB27A@MW4PR11MB5824.namprd11.prod.outlook.com>
-Message-ID: <ZJr7GtTFg2uzck1c@google.com>
-Subject: Re: [PATCH 3/4] KVM: VMX/pmu: Enable inactive vLBR event in guest LBR
- MSR emulation
-From:   Sean Christopherson <seanjc@google.com>
-To:     Xiong Y Zhang <xiong.y.zhang@intel.com>
-Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "like.xu.linux@gmail.com" <like.xu.linux@gmail.com>,
-        "kan.liang@linux.intel.com" <kan.liang@linux.intel.com>,
-        "zhenyuw@linux.intel.com" <zhenyuw@linux.intel.com>,
-        Zhiyuan Lv <zhiyuan.lv@intel.com>,
-        Weijiang Yang <weijiang.yang@intel.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 27 Jun 2023 11:07:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D1D26B3;
+        Tue, 27 Jun 2023 08:07:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 10EC4611D4;
+        Tue, 27 Jun 2023 15:07:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06C32C433C0;
+        Tue, 27 Jun 2023 15:07:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687878453;
+        bh=AXF7IKf4qXT069zemU/G/IVo2cZThyfn1QvsJuPHDDo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YEyh9e1eJ7A5at0AaLuc5T2nw8P2JF0HnTcofe2s3RIZuABuSFU0NWwUvY7OFBaJM
+         123XtMWzzljGeH+aBO04CMeGqeC9uMgzSl8CrUVsLpEuLZxM1uKZbzCqmBYppRI3ex
+         21cvQmzogEpH+cfgqJHiR8NpHnpGOLIfNsoF2toqOWmuyUu0dYCfzq6ItGQHNSa0y8
+         3x5rBlVOsIJG9A39ZcjgB4Z3Wn12RP5IzlOY8QpqWP+t3tbAEXmTX+RblhDNu3wKKB
+         +6O/cxMOpN7WVdywyzY6bR40i/CBv822KIXbh+q+0UI48yO9AokkFdgJt5tvBMOw2C
+         BttIy7JbfJ8Ig==
+Date:   Tue, 27 Jun 2023 20:37:18 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
+Cc:     Krishna chaitanya chundru <quic_krichai@quicinc.com>,
+        manivannan.sadhasivam@linaro.org, helgaas@kernel.org,
+        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_vbadigan@quicinc.com,
+        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
+        quic_ramkri@quicinc.com, krzysztof.kozlowski@linaro.org,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH v5 3/3] PCI: qcom-ep: Add ICC bandwidth voting support
+Message-ID: <20230627150718.GJ5490@thinkpad>
+References: <1687827692-6181-1-git-send-email-quic_krichai@quicinc.com>
+ <1687827692-6181-4-git-send-email-quic_krichai@quicinc.com>
+ <bdce0719-4f12-4e75-a8e7-1b38d269ac15@quicinc.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <bdce0719-4f12-4e75-a8e7-1b38d269ac15@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023, Xiong Y Zhang wrote:
-> > On Sun, Jun 25, 2023, Xiong Y Zhang wrote:
-> > > > > On Fri, Jun 16, 2023, Xiong Zhang wrote:
-> > > > 	/*
-> > > > 	 * Attempt to re-enable the vLBR event if it was disabled due to
-> > > > 	 * contention with host LBR usage, i.e. was put into an error state.
-> > > > 	 * Perf doesn't notify KVM if the host stops using LBRs, i.e. KVM needs
-> > > > 	 * to manually re-enable the event.
-> > > > 	 */
-> > > >
-> > > > Which begs the question, why can't there be a notification of some
-> > > > form that the LBRs are once again available?
-> > > This is perf scheduler rule. If pinned event couldn't get resource as
-> > > resource limitation, perf will put it into error state and exclude it
-> > > from perf scheduler, even if resource available later, perf won't
-> > > schedule it again as it is in error state, the only way to reschedule
-> > > it is to enable it again.  If non-pinned event couldn't get resource
-> > > as resource limitation, perf will put it into inactive state, perf
-> > > will reschedule it automatically once resource is available.  vLBR event is per
-> > process pinned event.
-> > 
-> > That doesn't answer my question.  I get that all of this is subject to perf
-> > scheduling, I'm asking why perf doesn't communicate directly with KVM to
-> > coordinate access to LBRs instead of pulling the rug out from under KVM.
-> Perf doesn't need such notification interface currently, as non-pinned event
-> will be active automatically once resource available, only pinned event is
-> still in inactive even if resource available, perf may refuse to add such
-> interface for KVM usage only.
+On Tue, Jun 27, 2023 at 12:05:23PM +0530, Pavan Kondeti wrote:
+> On Tue, Jun 27, 2023 at 06:31:31AM +0530, Krishna chaitanya chundru wrote:
+> > +static void qcom_pcie_ep_icc_update(struct qcom_pcie_ep *pcie_ep)
+> > +{
+> > +	struct dw_pcie *pci = &pcie_ep->pci;
+> > +	u32 offset, status, bw;
+> > +	int speed, width;
+> > +	int ret;
+> > +
+> > +	if (!pcie_ep->icc_mem)
+> > +		return;
+> > +
+> 
+> Is this check needed? interconnect is added as required property and
+> probe is failed if interconnect get fails. qcom_pcie_enable_resources()
+> which gets called before enabling this interrupt is assuming that
+> interconnect available.
+> 
 
-Or maybe perf will be overjoyed that someone is finally proposing a coherent
-interface.  Until we actually try/ask, we'll never know.
+Even though the current binding requires interconnect, driver needs to be
+backwards compatible with old dts where there was no interconnect.
 
-> > Your other response[1] mostly answered that question, but I want explicit
-> > documentation on the contract between perf and KVM with respect to LBRs.  In
-> > short, please work with Weijiang to fulfill my request/demand[*] that someone
-> > document KVM's LBR support, and justify the "design".  I am simply not willing to
-> > take KVM LBR patches until that documentation is provided.
-> Sure, I will work with Weijiang to supply such documentation. Will this
-> document be put in Documentation/virt/kvm/x86/ ?
+Also, devm_of_icc_get() will return NULL if the property is missing in dts. But
+we are just checking for IS_ERR not IS_ERR_OR_NULL. So this check is required.
 
-Ya, Documentation/virt/kvm/x86/pmu.rst please.
+- Mani
+
+> 
+> > +	offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
+> > +	status = readw(pci->dbi_base + offset + PCI_EXP_LNKSTA);
+> > +
+> > +	speed = FIELD_GET(PCI_EXP_LNKSTA_CLS, status);
+> > +	width = FIELD_GET(PCI_EXP_LNKSTA_NLW, status);
+> > +
+> > +	switch (speed) {
+> > +	case 1:
+> > +		bw = MBps_to_icc(PCIE_GEN1_BW_MBPS);
+> > +		break;
+> > +	case 2:
+> > +		bw = MBps_to_icc(PCIE_GEN2_BW_MBPS);
+> > +		break;
+> > +	case 3:
+> > +		bw = MBps_to_icc(PCIE_GEN3_BW_MBPS);
+> > +		break;
+> > +	default:
+> > +		dev_warn(pci->dev, "using default GEN4 bandwidth\n");
+> > +		fallthrough;
+> > +	case 4:
+> > +		bw = MBps_to_icc(PCIE_GEN4_BW_MBPS);
+> > +		break;
+> > +	}
+> > +
+> > +	ret = icc_set_bw(pcie_ep->icc_mem, 0, width * bw);
+> > +	if (ret) {
+> > +		dev_err(pci->dev, "failed to set interconnect bandwidth: %d\n",
+> > +			ret);
+> > +	}
+> 
+> Are you not seeing the below warning from checkpatch?
+> 
+> WARNING: braces {} are not necessary for single statement blocks
+> 
+> > +}
+> > +
+> >  static int qcom_pcie_enable_resources(struct qcom_pcie_ep *pcie_ep)
+> >  {
+> >  	int ret;
+> > +	struct dw_pcie *pci = &pcie_ep->pci;
+> >  
+> >  	ret = clk_bulk_prepare_enable(pcie_ep->num_clks, pcie_ep->clks);
+> >  	if (ret)
+> > @@ -277,6 +331,20 @@ static int qcom_pcie_enable_resources(struct qcom_pcie_ep *pcie_ep)
+> >  	if (ret)
+> >  		goto err_phy_exit;
+> >  
+> > +	/*
+> > +	 * Some Qualcomm platforms require interconnect bandwidth constraints
+> > +	 * to be set before enabling interconnect clocks.
+> > +	 *
+> > +	 * Set an initial peak bandwidth corresponding to single-lane Gen 1
+> > +	 * for the pcie-mem path.
+> > +	 */
+> > +	ret = icc_set_bw(pcie_ep->icc_mem, 0, MBps_to_icc(PCIE_GEN1_BW_MBPS));
+> > +	if (ret) {
+> > +		dev_err(pci->dev, "failed to set interconnect bandwidth: %d\n",
+> > +			ret);
+> > +		goto err_phy_exit;
+> > +	}
+> > +
+> >  	return 0;
+> 
+> Thanks,
+> Pavan
+
+-- 
+மணிவண்ணன் சதாசிவம்
