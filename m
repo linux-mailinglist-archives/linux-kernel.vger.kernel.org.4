@@ -2,72 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E84D73FD92
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 16:15:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3A6E73FD96
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 16:17:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230226AbjF0OPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 10:15:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56628 "EHLO
+        id S230014AbjF0ORq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 10:17:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230259AbjF0OPS (ORCPT
+        with ESMTP id S229664AbjF0ORo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 10:15:18 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3AEF12D7B
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 07:15:13 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8BxU8Tw7ppkXCYDAA--.5073S3;
-        Tue, 27 Jun 2023 22:15:12 +0800 (CST)
-Received: from [10.20.42.43] (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cx7yPv7ppkeVcMAA--.9012S3;
-        Tue, 27 Jun 2023 22:15:11 +0800 (CST)
-Message-ID: <ea709740-5aa7-a904-d15b-fe27f91578a5@loongson.cn>
-Date:   Tue, 27 Jun 2023 22:15:11 +0800
+        Tue, 27 Jun 2023 10:17:44 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEC82AB
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 07:17:42 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 97F8F1F459;
+        Tue, 27 Jun 2023 14:17:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1687875461; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=K6TZQqfTC0phvzBA5+w9u6YZyNkINgqRSZTxEAYxUCk=;
+        b=WTxcbKg3Ypgtl9LOZmsm2ItRA90Vd1ORSw9Ivf7jTlzkgPaptz7wItfYE+Dz/SfMjvjH31
+        lIQqlz0QKwsH5NWri+NopPqZDsRN4Wi5RLm2S6AXqD0qZG5D+ZEYqgKxCamb6RoIDC43rY
+        SdRxu5mtAVIp26G25JhQWYBB91Il/0c=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7C2FB13462;
+        Tue, 27 Jun 2023 14:17:41 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id cLbtG4XvmmRmBwAAMHmgww
+        (envelope-from <mhocko@suse.com>); Tue, 27 Jun 2023 14:17:41 +0000
+Date:   Tue, 27 Jun 2023 16:17:40 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        virtualization@lists.linux-foundation.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Jason Wang <jasowang@redhat.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Subject: Re: [PATCH v1 3/5] mm/memory_hotplug: make
+ offline_and_remove_memory() timeout instead of failing on fatal signals
+Message-ID: <ZJrvhACxmaQmmwYP@dhcp22.suse.cz>
+References: <20230627112220.229240-1-david@redhat.com>
+ <20230627112220.229240-4-david@redhat.com>
+ <ZJrYv0JIcrNyf2py@dhcp22.suse.cz>
+ <74cbbdd3-5a05-25b1-3f81-2fd47e089ac3@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] drm: Remove the deprecated drm_put_dev() function
-Content-Language: en-US
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian Koenig <christian.koenig@amd.com>,
-        Pan Xinhui <Xinhui.Pan@amd.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org
-References: <20230625050901.393055-1-suijingfeng@loongson.cn>
- <4672fc8d-ca95-6d00-1303-cb5968c51703@suse.de>
- <766f323a-efcf-6552-f7e5-a736830c3f12@loongson.cn>
-Organization: Loongson
-In-Reply-To: <766f323a-efcf-6552-f7e5-a736830c3f12@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Cx7yPv7ppkeVcMAA--.9012S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj9xXoW7Jw4xuFyUtFW8Aw4xJryUCFX_yoW3ZFg_Wa
-        yDuFZ3Ww4kJ397JF1DAr4xZry7GF4qvrykAa1SvF43Cry7XrZ5Ga45WrnYvryUWwsakry7
-        KrW5Zrn3J3WavosvyTuYvTs0mTUanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvT
-        s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
-        cSsGvfJTRUUUbg8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
-        vaj40_Wr0E3s1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-        w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-        WUJVW8JwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-        6r4UJVWxJr1ln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
-        xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r12
-        6r1DMcIj6I8E87Iv67AKxVWxJVW8Jr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
-        8JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vI
-        r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67
-        AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIY
-        rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14
-        v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWxJVW8
-        Jr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8xsqJ
-        UUUUU==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <74cbbdd3-5a05-25b1-3f81-2fd47e089ac3@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,46 +71,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue 27-06-23 15:14:11, David Hildenbrand wrote:
+> On 27.06.23 14:40, Michal Hocko wrote:
+> > On Tue 27-06-23 13:22:18, David Hildenbrand wrote:
+> > > John Hubbard writes [1]:
+> > > 
+> > >          Some device drivers add memory to the system via memory hotplug.
+> > >          When the driver is unloaded, that memory is hot-unplugged.
+> > > 
+> > >          However, memory hot unplug can fail. And these days, it fails a
+> > >          little too easily, with respect to the above case. Specifically, if
+> > >          a signal is pending on the process, hot unplug fails.
+> > > 
+> > >          [...]
+> > > 
+> > >          So in this case, other things (unmovable pages, un-splittable huge
+> > >          pages) can also cause the above problem. However, those are
+> > >          demonstrably less common than simply having a pending signal. I've
+> > >          got bug reports from users who can trivially reproduce this by
+> > >          killing their process with a "kill -9", for example.
+> > 
+> > This looks like a bug of the said driver no? If the tear down process is
+> > killed it could very well happen right before offlining so you end up in
+> > the very same state. Or what am I missing?
+> 
+> IIUC (John can correct me if I am wrong):
+> 
+> 1) The process holds the device node open
+> 2) The process gets killed or quits
+> 3) As the process gets torn down, it closes the device node
+> 4) Closing the device node results in the driver removing the device and
+>    calling offline_and_remove_memory()
+> 
+> So it's not a "tear down process" that triggers that offlining_removal
+> somehow explicitly, it's just a side-product of it letting go of the device
+> node as the process gets torn down.
 
-On 2023/6/27 16:41, Sui Jingfeng wrote:
-> I have verified that
->
-> if the ->probe() failed, then the ->remove will be get called.
->
-Sorry,
+Isn't that just fragile? The operation might fail for other reasons. Why
+cannot there be a hold on the resource to control the tear down
+explicitly?
 
-if the ->probe() failed, then the ->remove() will *NOT* get called.
+> > > Especially with ZONE_MOVABLE, offlining is supposed to work in most
+> > > cases when offlining actually hotplugged (not boot) memory, and only fail
+> > > in rare corner cases (e.g., some driver holds a reference to a page in
+> > > ZONE_MOVABLE, turning it unmovable).
+> > > 
+> > > In these corner cases we really don't want to be stuck forever in
+> > > offline_and_remove_memory(). But in the general cases, we really want to
+> > > do our best to make memory offlining succeed -- in a reasonable
+> > > timeframe.
+> > > 
+> > > Reliably failing in the described case when there is a fatal signal pending
+> > > is sub-optimal. The pending signal check is mostly only relevant when user
+> > > space explicitly triggers offlining of memory using sysfs device attributes
+> > > ("state" or "online" attribute), but not when coming via
+> > > offline_and_remove_memory().
+> > > 
+> > > So let's use a timer instead and ignore fatal signals, because they are
+> > > not really expressive for offline_and_remove_memory() users. Let's default
+> > > to 30 seconds if no timeout was specified, and limit the timeout to 120
+> > > seconds.
+> > 
+> > I really hate having timeouts back. They just proven to be hard to get
+> > right and it is essentially a policy implemented in the kernel. They
+> > simply do not belong to the kernel space IMHO.
+> 
+> As much as I agree with you in terms of offlining triggered from user space
+> (e.g., write "state" or "online" attribute) where user-space is actually in
+> charge  and can do something reasonable (timeout, retry, whatever), in these
+> the offline_and_remove_memory() case it's the driver that wants a
+> best-effort memory offlining+removal.
+> 
+> If it times out, virtio-mem will simply try another block or retry later.
+> Right now, it could get stuck forever in offline_and_remove_memory(), which
+> is obviously "not great". Fortunately, for virtio-mem it's configurable and
+> we use the alloc_contig_range()-method for now as default.
 
+It seems that offline_and_remove_memory is using a wrong operation then.
+If it wants an opportunistic offlining with some sort of policy. Timeout
+might be just one policy to use but failure mode or a retry count might
+be a better fit for some users. So rather than (ab)using offline_pages,
+would be make more sense to extract basic offlining steps and allow
+drivers like virtio-mem to reuse them and define their own policy?
 
-> I'm doing the test by add a line before the drm_dev_alloc()
->
-I do the test by adding one line code before the drm_dev_alloc() function
+> If it would time out for John's driver, we most certainly don't want to be
+> stuck in offline_and_remove_memory(), blocking device/driver unloading (and
+> even a reboot IIRC) possibly forever.
 
-  to generate a fault(error) manually,
-
-
->
-> See below:
->
-> ```
->
->     return -ENODEV;
->
->     dev = drm_dev_alloc(&kms_driver, &pdev->dev);
->     if (IS_ERR(dev))
->         return PTR_ERR(dev);
->
->     ret = pci_enable_device(pdev);
->     if (ret)
->         goto err_free;
-> ```
->
->
-> So, there is no problem, as far as I can see. 
-All in all,  if the ->probe() failed, then the ->remove() will *NOT* get 
-called.
-
+Now I am confused. John driver wants to tear down the device now? There
+is no way to release that memory otherwise AFAIU from the initial
+problem description.
 -- 
-Jingfeng
-
+Michal Hocko
+SUSE Labs
