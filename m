@@ -2,122 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AE1573F862
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 11:11:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9943673F86C
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 11:11:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232037AbjF0JLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 05:11:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34724 "EHLO
+        id S232031AbjF0JLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 05:11:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231964AbjF0JKy (ORCPT
+        with ESMTP id S232040AbjF0JL2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 05:10:54 -0400
-Received: from qproxy3-pub.mail.unifiedlayer.com (qproxy3-pub.mail.unifiedlayer.com [67.222.38.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BFDE1BDC
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 02:10:36 -0700 (PDT)
-Received: from gproxy2-pub.mail.unifiedlayer.com (gproxy2-pub.mail.unifiedlayer.com [69.89.18.3])
-        by qproxy3.mail.unifiedlayer.com (Postfix) with ESMTP id AE7D58032CFC
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 09:10:35 +0000 (UTC)
-Received: from cmgw14.mail.unifiedlayer.com (unknown [10.0.90.129])
-        by progateway4.mail.pro1.eigbox.com (Postfix) with ESMTP id 42A3910041A44
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 09:10:35 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id E4iZqzd95LmMcE4iZqvtVN; Tue, 27 Jun 2023 09:10:35 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=GtGHRm5C c=1 sm=1 tr=0 ts=649aa78b
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=of4jigFt-DYA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=px7gO8tibA5P/jgVTKrwYkVP+3FKSXVqtURPHT/Z82E=; b=hQa23w41qB7ODzSfANaeBAYXHM
-        yJU/UrmBY2uRdQPULeFlyMOmHMVXmZBWVEExYKv0uuTuZAQmvREIE2OOsTYvAQeOOQ0BUo5ESI8op
-        BOk0tQjLEgHpQMPyvUzb3X6RceXp//At+/JluugQOiSx6Rt9LDDP6sW4N4C8TKqkcKHC3GqE0qWWa
-        KG8o5ImLPmWmAmppRNjedsRB70dXjCJjTlPwNViO1gnbKnLGo87FEwFLlrDd0VBDJQr0o3ZXD4YVX
-        c+ZptZndPrT5OyV69joZ2TWumDP85b288gcJLP0/jP+5UQop0M6kN2AkD1Bibc27/G+kdfFChFfp1
-        6MzeR03w==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:45586 helo=[10.0.1.47])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1qE4iY-003VcY-8B;
-        Tue, 27 Jun 2023 03:10:34 -0600
-Subject: Re: [PATCH 6.3 000/199] 6.3.10-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org
-References: <20230626180805.643662628@linuxfoundation.org>
-In-Reply-To: <20230626180805.643662628@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <3db7c227-1d9b-39df-2ec8-cf39cdb5c039@w6rz.net>
-Date:   Tue, 27 Jun 2023 02:10:32 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 27 Jun 2023 05:11:28 -0400
+Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [IPv6:2001:4b7a:2000:18::171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A8462735
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 02:11:06 -0700 (PDT)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id CBBC83F39B;
+        Tue, 27 Jun 2023 11:11:02 +0200 (CEST)
+Date:   Tue, 27 Jun 2023 11:11:01 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        Lux Aliaga <they@mint.lgbt>
+Subject: Re: [PATCH 03/15] dt-bindings: clock: qcom,dispcc-sm6125: Require
+ GCC PLL0 DIV clock
+Message-ID: <3iyd2ptxdpnrzfh6qkzjnn2uvxftnjfoiinra5ji6skf53gkop@etttvi3a2lle>
+References: <6311f26f-79ee-c471-649f-5e0b4629cfcc@linaro.org>
+ <uuy5prkjhhs66te7h6z3pu4lzj2cfbiqk6ftjijwoeqpw573av@ogs6cboanvzc>
+ <ziykmixskqkgheigefvyo4q3katbc4uix6jtcg7mncs25z4tj5@5gykrfgns4bm>
+ <16731023-7dc7-d43d-1b16-fda44c0948ed@linaro.org>
+ <yofju7jp7vmv33x7dzvzoelpumfsz3fjqy2ozakfphsuysunon@pglt2wzlsjex>
+ <683a6f7e-bf1a-aff2-070b-472fb14e0353@linaro.org>
+ <3nnk4xvmpnum2q6g6c6crjlqq3ra7j2z5zis53xcqbvevymuhz@mkffvs45n6ut>
+ <145ab255-b3f8-1c6c-824d-5f1b40568d30@linaro.org>
+ <makhh4ebdmoa5f6r4mbx4g2v2cpcsi74wqf3622dxuli4w7tb6@els2rvqcnvgz>
+ <e1c53cd8-9875-08dc-5662-58f868c40628@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1qE4iY-003VcY-8B
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:45586
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 4
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_L3,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e1c53cd8-9875-08dc-5662-58f868c40628@kernel.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/26/23 11:08 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.3.10 release.
-> There are 199 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 28 Jun 2023 18:07:23 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.3.10-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.3.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On 2023-06-27 11:07:22, Krzysztof Kozlowski wrote:
+> On 27/06/2023 11:02, Marijn Suijten wrote:
+> >>>>> So deleting a new item at the end does not matter.  But what if I respin
+> >>>>> this patch to add the new clock _at the end_, which will then be at the
+> >>>>> same index as the previous GCC_DISP_AHB_CLK?
+> >>>>
+> >>>> I think you know the answer, right? What do you want to prove? That two
+> >>>> independent changes can have together negative effect? We know this.
+> >>>
+> >>> The question is whether this is allowed?
+> >>
+> >> That would be an ABI break and I already explained if it is or is not
+> >> allowed.
+> > 
+> > How should we solve it then, if we cannot remove GCC_DISP_AHB_CLK in one
+> > patch and add GCC_DISP_GPLL0_DIV_CLK_SRC **at the end** in the next
+> > patch?  Keep an empty spot at the original index of GCC_DISP_AHB_CLK?
+> 
+> I don't know if you are trolling me or really asking question, so just
+> in case it is the latter:
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+Apologies if it comes across that way, but I am genuinely
+misunderstanding what is and is not allowed as part of this ABI...
 
-Tested-by: Ron Economos <re@w6rz.net>
+> "No one is locked into the ABI. SoC maintainer decides on this. "
 
+Especially if it is up to the SoC mantainer.
+
+> Also:
+> https://lore.kernel.org/linux-arm-msm/20230608152759.GA2721945-robh@kernel.org/
+> 
+> https://lore.kernel.org/linux-arm-msm/CAL_JsqKOq+PdjUPVYqdC7QcjGxp-KbAG_O9e+zrfY7k-wRr1QQ@mail.gmail.com/
+> 
+> https://lore.kernel.org/linux-arm-msm/20220602143245.GA2256965-robh@kernel.org/
+> 
+> https://lore.kernel.org/linux-arm-msm/20220601202452.GA365963-robh@kernel.org/
+> 
+> Any many more.
+
+In that sense the question above is not for you, but for the SoC
+maintainer?  Whom, I hope, will say that we can be lenient in changing
+the ABI for a platform that is only slowly being brought up by a bunch
+of community developers and unlikely to be touched by anyone else.
+
+Thanks for helping out so far!
+
+- Marijn
