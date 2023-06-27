@@ -2,167 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05409740374
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 20:34:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D375C740377
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 20:35:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231187AbjF0SeX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 14:34:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55574 "EHLO
+        id S231379AbjF0SfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 14:35:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230063AbjF0SeT (ORCPT
+        with ESMTP id S231366AbjF0SfE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 14:34:19 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF313198C
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 11:33:46 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id d75a77b69052e-401f4408955so40461cf.1
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 11:33:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687890825; x=1690482825;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PTIY9reQDxCVjeBIGzBvbwdTkf7d3X2+E+ffOvvfOt8=;
-        b=IFZFZBAdSS5WPvdUVXRmtMP6d4it0zMJf/l2GDxZXOXh1ctIJNlPkvj2sinpxjJpBe
-         LSKJg/UTJqQVTKhWODYjkO1i4nmcSjjuGZmBYcplmBZiyiFW6CuoXRu+bQTCz2WCa1nH
-         SdQntuzU7sGVa9Zb4/4LWl80uj4Q0BPHxEdxix7lK5L3lwfGKXDqrn1GAAYX6QuI7vNE
-         z1pBKRtW9A03Pn/i46V3X9p17H8SAeO0G3yXELGKIy5uxYSjsIK7Iv6IFYtp9hQ3EnpD
-         eG251UrPtZeVpaEySuJiM3LXqN8D4gZAZ/2Sukeubj3yBMBzkQ54sCd/tzIGiPBSNQ4H
-         dJIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687890825; x=1690482825;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PTIY9reQDxCVjeBIGzBvbwdTkf7d3X2+E+ffOvvfOt8=;
-        b=hujNr027o3Y3JrZgmnqEKlMw6tG3zWPJDLntdbAftXwFaorfHYd1fYQMOivzc5/jPu
-         dPP05hPuTMEMOAq+5cjj69FB2aaE8Etp5sWSPr3BgLY3WeYnpHNF1DIDOYqoMCexUW90
-         20wVo9O3bHIupx6mHaEsf9z+rxpXt0OJoEB6HFJ3AY4kIdOAKY9kQ6rhh1wXFLKV79Lg
-         6B69MOnjVjHR+xFAcN4vIJhEYXxQwv9n+IdR2ABt1AJPva0WJVIqNZ7DBC0dgUL41O58
-         gAVeTUKu6CeQRI1lo3MsykE/dKCxb7LucoPYYHePuSbfkf03Ug91sGI2BTEPsSeZG0t8
-         TFLQ==
-X-Gm-Message-State: AC+VfDyE9voZRudS23V4X7cR/2cNDhWW0uBN5VELVQ3DhZ3lpJr/U/5x
-        WebMo/NOB394Rt9RY49+/KaFIVUVA4Dis1ecQoi08g==
-X-Google-Smtp-Source: ACHHUZ6J+FwNO1q3sZEb2eJpxaQ1yK9y93HAAT9rQ/w4kcix4s3yyUXUt2xkbkSmZhsyVHdXENGOFgl+h8r/6XgSKPU=
-X-Received: by 2002:a05:622a:2d2:b0:3fd:ad1b:4e8a with SMTP id
- a18-20020a05622a02d200b003fdad1b4e8amr15807qtx.22.1687890825017; Tue, 27 Jun
- 2023 11:33:45 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230626171430.3167004-1-ryan.roberts@arm.com>
- <20230626171430.3167004-11-ryan.roberts@arm.com> <CAOUHufarua_JmnTu5NM-W3K4Togw+24F=Pf0HU0ZOjuwbRMC0A@mail.gmail.com>
- <0c98f854-b4e4-9a71-8e0c-1556bc79468c@arm.com>
-In-Reply-To: <0c98f854-b4e4-9a71-8e0c-1556bc79468c@arm.com>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Tue, 27 Jun 2023 12:33:09 -0600
-Message-ID: <CAOUHufa21rX1ODOZ0iJxiy4pstgGqhkbfYozg8-+sRp5ZxAOjA@mail.gmail.com>
-Subject: Re: [PATCH v1 10/10] mm: Allocate large folios for anonymous memory
-To:     Ryan Roberts <ryan.roberts@arm.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Yin Fengwei <fengwei.yin@intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-s390@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Tue, 27 Jun 2023 14:35:04 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB482E4C
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 11:34:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687890878; x=1719426878;
+  h=date:from:to:cc:subject:message-id;
+  bh=teqLkhJpgVabImlTyJZUx3x5IHMxy15Wxxpn6V8Wqa8=;
+  b=DcGPFOF+TXa1cKPUED//0aRjQNPydKYweN2Yfs68lXiIob3HGTaG+6VY
+   9LjWdkXyRhqPoDAljs75zNBeOQcZQbtUjnC/Yes1Gf4y8kiInj6MXfIJS
+   dX0nz9c3pBuPeXGoVltWxD+fbXTFMhhYkIR6tRS+yOXL1LMAcu5DJyBJm
+   ESK2Wt6IoEQRDtlJpvqIc/DKBIdICAHNrkb95Qc884PrCnHVLh0ayGB8h
+   YfoFXWRTE9ZyFaUgvSzq31b8hdNVhT+FzM+x5mJSrNHzUAUEYDIhnhwU1
+   xQL+GSZ2NtmUS8QQRaENNlHlamiR8yTr+K+88Fb3TuMU9u/XLWPEdijhp
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="346416629"
+X-IronPort-AV: E=Sophos;i="6.01,163,1684825200"; 
+   d="scan'208";a="346416629"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 11:34:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="751859260"
+X-IronPort-AV: E=Sophos;i="6.01,163,1684825200"; 
+   d="scan'208";a="751859260"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 27 Jun 2023 11:34:15 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qEDW2-000C7k-12;
+        Tue, 27 Jun 2023 18:34:14 +0000
+Date:   Wed, 28 Jun 2023 02:33:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:core/merge] BUILD SUCCESS
+ a174a471139081b4947b87660f1ffcff8b8c82ee
+Message-ID: <202306280213.MuN6IABT-lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 3:57=E2=80=AFAM Ryan Roberts <ryan.roberts@arm.com>=
- wrote:
->
-> On 27/06/2023 04:01, Yu Zhao wrote:
-> > On Mon, Jun 26, 2023 at 11:15=E2=80=AFAM Ryan Roberts <ryan.roberts@arm=
-.com> wrote:
-> >>
-> >> With all of the enabler patches in place, modify the anonymous memory
-> >> write allocation path so that it opportunistically attempts to allocat=
-e
-> >> a large folio up to `max_anon_folio_order()` size (This value is
-> >> ultimately configured by the architecture). This reduces the number of
-> >> page faults, reduces the size of (e.g. LRU) lists, and generally
-> >> improves performance by batching what were per-page operations into
-> >> per-(large)-folio operations.
-> >>
-> >> If CONFIG_LARGE_ANON_FOLIO is not enabled (the default) then
-> >> `max_anon_folio_order()` always returns 0, meaning we get the existing
-> >> allocation behaviour.
-> >>
-> >> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
-> >> ---
-> >>  mm/memory.c | 159 +++++++++++++++++++++++++++++++++++++++++++++++----=
--
-> >>  1 file changed, 144 insertions(+), 15 deletions(-)
-> >>
-> >> diff --git a/mm/memory.c b/mm/memory.c
-> >> index a8f7e2b28d7a..d23c44cc5092 100644
-> >> --- a/mm/memory.c
-> >> +++ b/mm/memory.c
-> >> @@ -3161,6 +3161,90 @@ static inline int max_anon_folio_order(struct v=
-m_area_struct *vma)
-> >>                 return CONFIG_LARGE_ANON_FOLIO_NOTHP_ORDER_MAX;
-> >>  }
-> >>
-> >> +/*
-> >> + * Returns index of first pte that is not none, or nr if all are none=
-.
-> >> + */
-> >> +static inline int check_ptes_none(pte_t *pte, int nr)
-> >> +{
-> >> +       int i;
-> >> +
-> >> +       for (i =3D 0; i < nr; i++) {
-> >> +               if (!pte_none(ptep_get(pte++)))
-> >> +                       return i;
-> >> +       }
-> >> +
-> >> +       return nr;
-> >> +}
-> >> +
-> >> +static int calc_anon_folio_order_alloc(struct vm_fault *vmf, int orde=
-r)
-> >
-> > As suggested previously in 03/10, we can leave this for later.
->
-> I disagree. This is the logic that prevents us from accidentally replacin=
-g
-> already set PTEs, or wandering out of the VMA bounds etc. How would you c=
-atch
-> all those corener cases without this?
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git core/merge
+branch HEAD: a174a471139081b4947b87660f1ffcff8b8c82ee  Merge branch 'objtool/core' into core/merge, to ease integration testing
 
-Again, sorry for not being clear previously: we definitely need to
-handle alignments & overlapps. But the fallback, i.e., "for (; order >
-1; order--) {" in calc_anon_folio_order_alloc() is not necessary.
+elapsed time: 725m
 
-For now, we just need something like
+configs tested: 114
+configs skipped: 6
 
-  bool is_order_suitable() {
-    // check whether it fits properly
-  }
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Later on, we could add
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r035-20230627   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r031-20230627   gcc  
+arc                  randconfig-r043-20230627   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                         bcm2835_defconfig   clang
+arm                                 defconfig   gcc  
+arm                      jornada720_defconfig   gcc  
+arm                  randconfig-r013-20230627   gcc  
+arm                  randconfig-r046-20230627   gcc  
+arm64                            alldefconfig   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+csky                                defconfig   gcc  
+csky                 randconfig-r006-20230627   gcc  
+hexagon              randconfig-r003-20230627   clang
+hexagon              randconfig-r004-20230627   clang
+hexagon              randconfig-r025-20230627   clang
+hexagon              randconfig-r041-20230627   clang
+hexagon              randconfig-r045-20230627   clang
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-r004-20230627   gcc  
+i386         buildonly-randconfig-r005-20230627   gcc  
+i386         buildonly-randconfig-r006-20230627   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-i001-20230627   gcc  
+i386                 randconfig-i002-20230627   gcc  
+i386                 randconfig-i003-20230627   gcc  
+i386                 randconfig-i004-20230627   gcc  
+i386                 randconfig-i005-20230627   gcc  
+i386                 randconfig-i006-20230627   gcc  
+i386                 randconfig-i011-20230627   clang
+i386                 randconfig-i012-20230627   clang
+i386                 randconfig-i013-20230627   clang
+i386                 randconfig-i014-20230627   clang
+i386                 randconfig-i015-20230627   clang
+i386                 randconfig-i016-20230627   clang
+i386                 randconfig-r011-20230627   clang
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+m68k                             allmodconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r002-20230627   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                           xway_defconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                randconfig-r014-20230627   gcc  
+nios2                randconfig-r026-20230627   gcc  
+nios2                randconfig-r032-20230627   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc                generic-32bit_defconfig   gcc  
+parisc               randconfig-r005-20230627   gcc  
+parisc               randconfig-r016-20230627   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                 mpc8315_rdb_defconfig   clang
+powerpc                      pasemi_defconfig   gcc  
+powerpc              randconfig-r015-20230627   clang
+powerpc                    sam440ep_defconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r012-20230627   clang
+riscv                randconfig-r021-20230627   clang
+riscv                randconfig-r022-20230627   clang
+riscv                randconfig-r042-20230627   clang
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r044-20230627   clang
+sh                               allmodconfig   gcc  
+sh                        edosk7705_defconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   clang
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64       buildonly-randconfig-r001-20230627   gcc  
+x86_64       buildonly-randconfig-r002-20230627   gcc  
+x86_64       buildonly-randconfig-r003-20230627   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-r024-20230627   clang
+x86_64               randconfig-x001-20230627   clang
+x86_64               randconfig-x002-20230627   clang
+x86_64               randconfig-x003-20230627   clang
+x86_64               randconfig-x004-20230627   clang
+x86_64               randconfig-x005-20230627   clang
+x86_64               randconfig-x006-20230627   clang
+x86_64               randconfig-x011-20230627   gcc  
+x86_64               randconfig-x012-20230627   gcc  
+x86_64               randconfig-x013-20230627   gcc  
+x86_64               randconfig-x014-20230627   gcc  
+x86_64               randconfig-x015-20230627   gcc  
+x86_64               randconfig-x016-20230627   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+xtensa               randconfig-r036-20230627   gcc  
 
-  alloc_anon_folio_best_effort()
-  {
-    for a list of fallback orders
-      is_order_suitable()
-  }
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
