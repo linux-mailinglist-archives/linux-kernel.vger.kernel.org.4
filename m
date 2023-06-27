@@ -2,131 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0500B740224
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 19:27:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5510740227
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 19:29:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231455AbjF0R15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 13:27:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50354 "EHLO
+        id S231484AbjF0R3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 13:29:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230363AbjF0R1z (ORCPT
+        with ESMTP id S230363AbjF0R26 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 13:27:55 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3E6F213F
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 10:27:53 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4fb7373dd35so98891e87.1
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 10:27:53 -0700 (PDT)
+        Tue, 27 Jun 2023 13:28:58 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4506C1984
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 10:28:57 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2b69e6cce7dso43269981fa.2
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 10:28:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687886872; x=1690478872;
+        d=linaro.org; s=google; t=1687886935; x=1690478935;
         h=cc:to:message-id:content-transfer-encoding:mime-version:subject
          :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=HmZJiDmHOXzvcLFH+CkhF2O0s1JxneKrl7S3B3Km+E0=;
-        b=Fyn0Ss8gJ8W6qSjPlecef0bZzi7ZB9ieorBxH9HOeRgTh+B/aUiYlF8+KP3lLXb16i
-         T250EE7wyU4Kd0IGzXrBgcwZ7415ICLHKkJgMcbT2Dv5TkppDrtilDiFJsU8EFmYeE2b
-         jOGXnhGlvrcD5bgN/IOlWeAjH3up5wC+NZbkHjaMYvUgf+/0sWHw3UvRb8RfXwxso51k
-         UCtNg0qCuFmgCV3xnOFIyEtqApWbTynT1AxpKteOGVX0En9mrpnrzCTJ4X7OjgauTI3Z
-         9Y4RDvuv5fEd8Hue6RDQAvTvUvTcq7XHir9fWCgb16UqvUTOhNTuAzmLlQdSdvtr+zC4
-         kUbA==
+        bh=pAqs7r6SvR+yOhTRuHSNI/21zCFg6SVkCE8s0PfadnQ=;
+        b=SIE+M9V2p5nTcV1H7bNykf5wfP5sT+Gx1EX9Z+I6DBsTm1VCuHcWTH2luB1TIetDx5
+         rt9I4cQskYywKSNuj802bXH6ifa2S1CKeyebaleeWiZaB3I9+n/ttiNvZuRIsN6Hvy1Y
+         XDs2a1IBuiro4C8t7tOSBIvjVhmmGIY+eF0RhDXI1SCYwYEs8DE/HjNqPbY34EkPsC15
+         2bIPeynIG6X4fWaC1QK78LImWSX+4m9fxfrJ/RctkCyhifNfucQhelgj35MLia3MO2Fp
+         Hawi11ROeYASATgyytIYYe/l95qA8W+mDCDvlVhCgMf2CD3xUkL8/w4SL2Zdj+18nVoL
+         eodw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687886872; x=1690478872;
+        d=1e100.net; s=20221208; t=1687886935; x=1690478935;
         h=cc:to:message-id:content-transfer-encoding:mime-version:subject
          :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=HmZJiDmHOXzvcLFH+CkhF2O0s1JxneKrl7S3B3Km+E0=;
-        b=Atk4VIDCAyOt0y/37psZeyLhcCVoIok8AgoakOAEV5m7O7CFkvvPlt2qavlun0tEM9
-         z0yURyKi8CZwtX1vHCH53LAkFmg8e+fMx8Ul8ZkGeM5jTnHvBMlqW85Khd4Bx3LgoL7M
-         EFXNKwJAieil28DS5pyrdHcpPL2ft7SBydp2UoaHbwtjzBJkn3CMx3KgHYpNxAhsh2kX
-         ZrPJ0rl5bhtU/4KfHC+1pOHzF++7wsdL8hdoEEEsulLKHlzHHbt35cgo0BEcteb5i5p2
-         L0F3yScCzNu68y+0wHFf6cWb8KF0NgH+4yzFDQiUXPd4S8+td2R6+8oVLNNJF7GhykTe
-         3JmA==
-X-Gm-Message-State: AC+VfDxpkoW1h95KMa6jnvAcCQGqZ6QvhFs6138o4F3S/ElzpVaRDUqd
-        r/gsuVtk5OFAk0aW/gwkJCD1hw==
-X-Google-Smtp-Source: ACHHUZ5LaGYkAhyL0dpMACDeHX5aYWtqtvQR+IG35bXYLVEDGrqoxcFFhUHoOet/x6v1LF9Co/9Gew==
-X-Received: by 2002:a05:6512:1046:b0:4f4:7a5:e800 with SMTP id c6-20020a056512104600b004f407a5e800mr13600022lfb.10.1687886872054;
-        Tue, 27 Jun 2023 10:27:52 -0700 (PDT)
+        bh=pAqs7r6SvR+yOhTRuHSNI/21zCFg6SVkCE8s0PfadnQ=;
+        b=Wwckvz+gJuli0RH618aq9MT5SHoah7H9qg6vzsmxddQvejIY4bN7AoDcXChKT1hwDp
+         Tak7CJWLIzIL1OH+u1nDHDQFlLeM5W0q05xkzM6t943aSHf4sJ/giz8PzPMXDRZ2lV1j
+         CSMDSYU+3LuQlpYVjtF36hmZSUsc4zP5H1AXCwELb02A7mAMsVl/nNO+k0vD29OxnFmd
+         RHeDE9A+7dshFz/RhPG+QvYp/2URIbKjebNDpu1PqFygyZ8y8twWuNBEE8Q374Vfadpa
+         S8IZCkab/azRQ/LxAQyV3MvRTXrFqgyEgItm2oY83ZY14Zdg8G8b55HDqvA0gt9Nc8RZ
+         60hA==
+X-Gm-Message-State: AC+VfDynFlA/IwbolkFqOL5tsEU7IOqr1w4GO6Ugqgc+w66kEM+iv+tq
+        kzUNM53sKz172Op2sJjV1Vx/gQ==
+X-Google-Smtp-Source: ACHHUZ5ssiUwtSzFyEjw0dsCS/0lJJxjnNajJxOH+p3A+S+kslalWizXb7CU6H2889Y+FoKgkZ2SNQ==
+X-Received: by 2002:a2e:3502:0:b0:2b6:98c3:7a70 with SMTP id z2-20020a2e3502000000b002b698c37a70mr6009803ljz.41.1687886935527;
+        Tue, 27 Jun 2023 10:28:55 -0700 (PDT)
 Received: from [192.168.1.101] (abxj103.neoplus.adsl.tpnet.pl. [83.9.3.103])
-        by smtp.gmail.com with ESMTPSA id o2-20020a056512050200b004faf6a87d63sm1269391lfb.38.2023.06.27.10.27.50
+        by smtp.gmail.com with ESMTPSA id t9-20020a2e9d09000000b002b6a0ccc106sm1159633lji.12.2023.06.27.10.28.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jun 2023 10:27:51 -0700 (PDT)
+        Tue, 27 Jun 2023 10:28:55 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Tue, 27 Jun 2023 19:27:50 +0200
-Subject: [PATCH] arm64: dts: qcom: sdm845-tama: Set serial indices and
- stdout-path
+Date:   Tue, 27 Jun 2023 19:28:52 +0200
+Subject: [PATCH] arm64: dts: qcom: msm8998: Provide XO to RPMCC
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230627-topic-tama_uart-v1-1-0fa790248db8@linaro.org>
-X-B4-Tracking: v=1; b=H4sIABUcm2QC/x2N0QqDMAwAf0XyvEDtwLH9yhgjjXEGXJW0ykD8d
- 8Me7+C4HYqYSoFHs4PJpkXn7NBeGuCR8kdQe2eIIV5DF29Y50UZK33pvZJVTMSDELd9kDt4lag
- IJqPMo3d5nSaXi8mgv//m+TqOE0wjlYB2AAAA
+Message-Id: <20230627-topic-98_rpmcc-v1-1-4024e43ad0fc@linaro.org>
+X-B4-Tracking: v=1; b=H4sIAFMcm2QC/x2N0QrCMAwAf2Xk2UCNoJu/IiJtlrnA7Eo6ZTD27
+ ws+3sFxG1QxlQr3ZgOTn1ads8P51ACPMb8FtXcGCnQJV7rhMhdl7NqXlQ8zkiTqO6HQhgE8SrE
+ KJouZR8/yd5pcFpNB1//l8dz3A5om+tB1AAAA
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>
+        Conor Dooley <conor+dt@kernel.org>
 Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1687886870; l=1226;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1687886934; l=842;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=OBDDr1WmWttJM5U194JqyHQ0vF5NSbcT7U2XPb0GAGs=;
- b=buLOIZs9qbugz1J6O7Lhd9xBGRuR2FKNodxTjcZw6z3FR9enD2zgxgp6lHOV58pOy+hoaFHIg
- cKHHdQYax02B3napZ07N8Kin/lIMOUO65KRa4NfYydBjlCh/Y/1Y/C1
+ bh=JdUcoODkoasJyIKr57QND46EQoTekboMCKVsmUAjA9g=;
+ b=5xuq8iYoHYEUFL/xuxh/lOfp8qw80seNChWK7HHRJ/kk4TszwQVC8u5ffo/hrKjwiSTL5uQyM
+ i09UfdN2xH8Cug0aTvBAKQ9owe4GtzmJXHhWtDj1zeCsns1A/cRrXRe
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-UART6 is used for debug (routed via uSD pins) and UART9 is connected
-to the bluetooth chip.
+The RPMCC node should be fed a reference to the XO fixed clock.
+Do so.
 
-Set indexed aliases to make the GENI UART driver happy and route serial
-traffic through the debug uart by default.
-
-Fixes: 30a7f99befc6 ("arm64: dts: qcom: Add support for SONY Xperia XZ2 / XZ2C / XZ3 (Tama platform)")
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama.dtsi | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ arch/arm64/boot/dts/qcom/msm8998.dtsi | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama.dtsi b/arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama.dtsi
-index 3bc187a066ae..7ee61b20452e 100644
---- a/arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama.dtsi
-@@ -15,6 +15,15 @@ / {
- 	qcom,msm-id = <321 0x20001>; /* SDM845 v2.1 */
- 	qcom,board-id = <8 0>;
+diff --git a/arch/arm64/boot/dts/qcom/msm8998.dtsi b/arch/arm64/boot/dts/qcom/msm8998.dtsi
+index f0e943ff0046..171f2e21d80a 100644
+--- a/arch/arm64/boot/dts/qcom/msm8998.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8998.dtsi
+@@ -334,6 +334,8 @@ rpm_requests: rpm-requests {
  
-+	aliases {
-+		serial0 = &uart6;
-+		serial1 = &uart9;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
- 	gpio-keys {
- 		compatible = "gpio-keys";
+ 			rpmcc: clock-controller {
+ 				compatible = "qcom,rpmcc-msm8998", "qcom,rpmcc";
++				clocks = <&xo>;
++				clock-names = "xo";
+ 				#clock-cells = <1>;
+ 			};
  
 
 ---
 base-commit: 53cdf865f90ba922a854c65ed05b519f9d728424
-change-id: 20230627-topic-tama_uart-bacfeac1d0e9
+change-id: 20230627-topic-98_rpmcc-2eb2d9e2080f
 
 Best regards,
 -- 
