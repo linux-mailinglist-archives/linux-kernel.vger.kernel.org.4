@@ -2,50 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 259B573FEDE
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 16:47:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AC4373FEC8
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 16:46:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232158AbjF0Oqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 10:46:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43450 "EHLO
+        id S232176AbjF0Oqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 10:46:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231933AbjF0Op3 (ORCPT
+        with ESMTP id S231968AbjF0Opn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 10:45:29 -0400
+        Tue, 27 Jun 2023 10:45:43 -0400
 Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15FD23A9C;
-        Tue, 27 Jun 2023 07:45:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19721273C;
+        Tue, 27 Jun 2023 07:45:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=inria.fr; s=dc;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=7lnPTkCHesLh89B4y204QnH5Kjltfl8JZirnUVZstTQ=;
-  b=D48xdhBpfwiIgnA2AZQwT7G8kGdQLMyeE/bNp4/G1WWDhqy1NQswa8ef
-   9kJySCxs4j0zEvi1o43L6LZHm9SXMOsqjIMXYSNhk/lLG0nKoysVZDATI
-   LGnDCLIO1XSogZ+Tufk5B4mBrsaoHdTlFIQeH85shSvKwrjilzllcylk0
-   U=;
+  bh=tzdHyO2WkZ+/4hPd1oFud1vh1gFsmlhbwd5pOc3CStU=;
+  b=YFRO9acwySrxiS5SFbzoT1YrVzANqJrEedC6LESFP2q+N87wGaSsp+K8
+   coUUn8YtjsqjzxyiuVIzB57myohVF0rG/rM8ldUD8f745mtj2AO2ZIJGm
+   4Qdc3b6VAAKdCtQOCew/H5rCzZWc5hA4nQXETwpclVpOEGprtGSC06u5a
+   Y=;
 Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
 X-IronPort-AV: E=Sophos;i="6.01,162,1684792800"; 
-   d="scan'208";a="114936339"
+   d="scan'208";a="114936340"
 Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
   by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 16:43:52 +0200
 From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     Zhenyu Wang <zhenyuw@linux.intel.com>
+To:     Dmitry Vyukov <dvyukov@google.com>
 Cc:     kernel-janitors@vger.kernel.org, keescook@chromium.org,
         christophe.jaillet@wanadoo.fr, kuba@kernel.org,
-        Zhi Wang <zhi.a.wang@intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 16/24] drm/i915/gvt: use vmalloc_array and vcalloc
-Date:   Tue, 27 Jun 2023 16:43:31 +0200
-Message-Id: <20230627144339.144478-17-Julia.Lawall@inria.fr>
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 17/24] kcov: use vmalloc_array and vcalloc
+Date:   Tue, 27 Jun 2023 16:43:32 +0200
+Message-Id: <20230627144339.144478-18-Julia.Lawall@inria.fr>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20230627144339.144478-1-Julia.Lawall@inria.fr>
 References: <20230627144339.144478-1-Julia.Lawall@inria.fr>
@@ -113,29 +105,19 @@ v2: Use vmalloc_array and vcalloc instead of array_size.
 This also leaves a multiplication of a constant by a sizeof
 as is.  Two patches are thus dropped from the series.
 
- drivers/gpu/drm/i915/gvt/gtt.c |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ kernel/kcov.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff -u -p a/drivers/gpu/drm/i915/gvt/gtt.c b/drivers/gpu/drm/i915/gvt/gtt.c
---- a/drivers/gpu/drm/i915/gvt/gtt.c
-+++ b/drivers/gpu/drm/i915/gvt/gtt.c
-@@ -1969,14 +1969,16 @@ static struct intel_vgpu_mm *intel_vgpu_
- 		return ERR_PTR(-ENOMEM);
- 	}
- 
--	mm->ggtt_mm.host_ggtt_aperture = vzalloc((vgpu_aperture_sz(vgpu) >> PAGE_SHIFT) * sizeof(u64));
-+	mm->ggtt_mm.host_ggtt_aperture = vcalloc(vgpu_aperture_sz(vgpu) >> PAGE_SHIFT,
-+						 sizeof(u64));
- 	if (!mm->ggtt_mm.host_ggtt_aperture) {
- 		vfree(mm->ggtt_mm.virtual_ggtt);
- 		vgpu_free_mm(mm);
- 		return ERR_PTR(-ENOMEM);
- 	}
- 
--	mm->ggtt_mm.host_ggtt_hidden = vzalloc((vgpu_hidden_sz(vgpu) >> PAGE_SHIFT) * sizeof(u64));
-+	mm->ggtt_mm.host_ggtt_hidden = vcalloc(vgpu_hidden_sz(vgpu) >> PAGE_SHIFT,
-+					       sizeof(u64));
- 	if (!mm->ggtt_mm.host_ggtt_hidden) {
- 		vfree(mm->ggtt_mm.host_ggtt_aperture);
- 		vfree(mm->ggtt_mm.virtual_ggtt);
+diff -u -p a/kernel/kcov.c b/kernel/kcov.c
+--- a/kernel/kcov.c
++++ b/kernel/kcov.c
+@@ -901,7 +901,7 @@ void kcov_remote_start(u64 handle)
+ 	/* Can only happen when in_task(). */
+ 	if (!area) {
+ 		local_unlock_irqrestore(&kcov_percpu_data.lock, flags);
+-		area = vmalloc(size * sizeof(unsigned long));
++		area = vmalloc_array(size, sizeof(unsigned long));
+ 		if (!area) {
+ 			kcov_put(kcov);
+ 			return;
 
