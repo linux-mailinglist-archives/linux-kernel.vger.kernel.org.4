@@ -2,60 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14FC373F455
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 08:15:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0DE873F462
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 08:18:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230104AbjF0GPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 02:15:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58246 "EHLO
+        id S230024AbjF0GSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 02:18:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230025AbjF0GPB (ORCPT
+        with ESMTP id S229495AbjF0GR7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 02:15:01 -0400
-Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 920831BFB;
-        Mon, 26 Jun 2023 23:15:00 -0700 (PDT)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id E256850B;
-        Tue, 27 Jun 2023 08:14:57 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1687846497;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UvmboR1BMviOSQ7PsVkhSOxfTc1VG5c3nYyF5muyxD0=;
-        b=EE1kURunazGQ1GVYw9yAX4tHHZaKj/eZzng78T1g3a4vD2YUolfM6OgJSTUKGvG0iV+Urw
-        7YmVVweu87mPvKniop95Bec6euXwvGdTPaIwWiyPR6GMNPYVXuSobppkVnJLRfnhNUAcMB
-        wLraEhPRd68gTgv+9a4jNkQqU250fgAAPuh2GLdHe4qCEMGQEKiYWk94w5/iema9p7e//w
-        18HVbfKPfh2TEDtrFeqUYx6Z3S+sL3Z9EtR6J5CXc41fzytvUWCminuvAA9FFADiFMW4ET
-        JK86a0tu6gx7+GynYtX3/SlLvl8Y7A5SJl7aJnoi8q2Qa6F/In/POuEHUX05uQ==
+        Tue, 27 Jun 2023 02:17:59 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE68B99;
+        Mon, 26 Jun 2023 23:17:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de;
+ s=s31663417; t=1687846672; x=1688451472; i=deller@gmx.de;
+ bh=biWKrKStgCQVZ9bbSwx3mVIhNb6laWf8emSgOMQzZ5s=;
+ h=X-UI-Sender-Class:Date:From:To:Subject;
+ b=Adz33hOz0C9Rocc4r6kS7TC64qNTuom5XmlpJUnw3YOc2V2+t2PnKq5XWsv083Y0sRpYqfA
+ tZ62BYKklRNXuipkyAKSMlv1nqBoamk8EiRExx5chhIru3mB2g4pjTQk2kxtcmdgBqUc3q7oq
+ i88H7RIftKsTmUIx0Ax+gTKPfPfTE53NLNt9eicJJHBaGXOyX5oIBtjxfXEEvLh3f6FgfSLLz
+ nSeoaKTwJB2ciEFSMVE5E8ySVOeIznzkwMhEyDLUJFkMHdrasVgK8OdEp7yj9t9uA+FbqIJOd
+ ZTFexuq84oPfL6bkszWq0viaIBBOCWpo6TpaQ0E4RJbGR+v7SXVg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from ls3530 ([94.134.155.6]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mv31W-1pwVCi1ZY0-00r4BQ; Tue, 27
+ Jun 2023 08:17:52 +0200
+Date:   Tue, 27 Jun 2023 08:17:50 +0200
+From:   Helge Deller <deller@gmx.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: [GIT PULL] fbdev fixes for v6.5-rc1
+Message-ID: <ZJp/DpaLeYq6s3hB@ls3530>
 MIME-Version: 1.0
-Date:   Tue, 27 Jun 2023 08:14:57 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-Cc:     tudor.ambarus@linaro.org, pratyush@kernel.org,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, git@amd.com, linux-mtd@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        amitrkcian2002@gmail.com,
-        Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-Subject: Re: [PATCH v3 2/2] mtd: spi-nor: Avoid setting SRWD bit in SR if WP#
- signal not connected
-In-Reply-To: <20230625100251.31589-3-amit.kumar-mahapatra@amd.com>
-References: <20230625100251.31589-1-amit.kumar-mahapatra@amd.com>
- <20230625100251.31589-3-amit.kumar-mahapatra@amd.com>
-Message-ID: <5e5fe22aebe17da4f9ad2c4eaaa8985f@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Provags-ID: V03:K1:zTp4pv51aTHsupl3rEEfdVUmEV8y05XJW4UGEP7OX89HuzsBbmy
+ c6U9j4ZlZBZ6xf9PCz2lOnqrd6yeR9hXtmZo3Bp6gRAMIWms/FeKJpfLab2vTD4CEXqGRb/
+ wmfoRNtlDecQEXrWHtW/W+isM2p9e40mVbdpxDWs7qiejy6EIDUjXpySVD2NuxBESdLfDd4
+ Pp9czyrG+z8GatWr66Dmw==
+UI-OutboundReport: notjunk:1;M01:P0:k9dm2dWlI+w=;X+V+rc4OQJPNZciMEMo6pehR1oN
+ UtTEiI8CgsXW4213CZmjTsFwAK4Cr+RmnV5xUrJE31pPoZma8P1KmJIrfCnUWu2DRIZunjon3
+ b/e4ZDB7mTWvYnttxJWwnDLzOjoWHfMdkE28oH6fqxTkwNJ3hDlBBBuboMHCrJd9v6e2BnAax
+ GQ+0Fa5Bdj2f5Rj+n+KbbQ6EtIsvDoWUYEDojfmTNGYGWywDlDmzor1vZElBAOe3eft5KLIZJ
+ LdYzuSL5DFI1QhVQaoEuo8kyyVBcxyae1K2RdDgjR4byi+1CzxQQttiHLO2b9fpw805h7g3S4
+ sjzIk7bw7noCnIBKzesvhe/wC9ChHOSbQ3oyGxsKeMimKekJafNLNJ41gy/xfw0Muuw0P9YXk
+ E1WKEi9B+Bdf5IegeVycAD5TNqzt/Ha+qkHtfxSRo6ur/QujAJTxU4W97/FT9JWYdV7M3+pKh
+ L8MquGH614FZrXI6UPaExOLbJQwywDWTeJImxRO8j3WkJ2EhTI3BNfe1VOYQk67omXvymdu5/
+ j19KGHy5ynZuPOEFzm/Ln7+m7faCssbZlgHBPF8Ll3Ze8EYVefyXGB2/7yhnwc0opSpRLK7H7
+ kIssTzjdbNv5GcCuG6jniJThYGfdzQ/2IYM+Dyt936nIVHvrW6CKT37oZaDVXP8VA6qafpktB
+ pepsWWq8WqbO/aEna0SDg2u5+ckRSk/KdcnVepCzWi1NgSCnLy4C/Ay+MIjsjz8SjRbS9eZUC
+ xajiHmhJ1CN9Ub88Z1oP5ocWc4phAWu1FK6+jF4RtAmdZM8/KxqHfQ/o7VcKYmYXpgQFJHzue
+ 1r1fiIBucW+OdlJ8S/V38jjn3RZRlY5mQFaM+mELxJtTLHul11f7Krqg4L7719jVvgtb9s1k3
+ NmJqTx+lYMkRMA4p2shhwyrr1n7Uvvg0gZyfMyOZDWnyRLqYUOQ2JIo1S3m1beZwImjRw39rW
+ sqWblw==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,83 +68,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2023-06-25 12:02, schrieb Amit Kumar Mahapatra:
-> Setting the status register write disable (SRWD) bit in the status
-> register (SR) with WP# signal of the flash left floating or wrongly 
-> tied to
-> GND (that includes internal pull-downs), will configure the SR 
-> permanently
-> as read-only. If WP# signal is left floating or wrongly tied to GND, 
-> avoid
-> setting SRWD bit while writing the SR during flash protection.
-> 
-> Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-> ---
->  drivers/mtd/spi-nor/core.c | 3 +++
->  drivers/mtd/spi-nor/core.h | 1 +
->  drivers/mtd/spi-nor/swp.c  | 9 +++++++--
->  3 files changed, 11 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-> index 0bb0ad14a2fc..520f5ab86d2b 100644
-> --- a/drivers/mtd/spi-nor/core.c
-> +++ b/drivers/mtd/spi-nor/core.c
-> @@ -2864,6 +2864,9 @@ static void spi_nor_init_flags(struct spi_nor 
-> *nor)
->  	if (flags & NO_CHIP_ERASE)
->  		nor->flags |= SNOR_F_NO_OP_CHIP_ERASE;
-> 
-> +	if (of_property_read_bool(np, "no-wp"))
-> +		nor->flags |= SNOR_F_NO_WP;
-> +
+Hi Linus,
 
-Please put it below the of_property_read_bool() which is already
-there, just to keep things sorted.
+please pull some fbdev fixes & cleanups for kernel 6.5-rc1.
+Includes is a fix for a potential out-of-bound memory access in
+fast_imageblit() and the switch of the VIA fbdev driver to use GPIO
+descriptors.
 
->  	if (flags & SPI_NOR_RWW && nor->info->n_banks > 1 &&
->  	    !nor->controller_ops)
->  		nor->flags |= SNOR_F_RWW;
-> diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
-> index 4fb5ff09c63a..55b5e7abce6e 100644
-> --- a/drivers/mtd/spi-nor/core.h
-> +++ b/drivers/mtd/spi-nor/core.h
-> @@ -132,6 +132,7 @@ enum spi_nor_option_flags {
->  	SNOR_F_SWP_IS_VOLATILE	= BIT(13),
->  	SNOR_F_RWW		= BIT(14),
->  	SNOR_F_ECC		= BIT(15),
-> +	SNOR_F_NO_WP		= BIT(16),
+Thanks!
+Helge
 
-See the comment right above this enum :/
+--------------
 
->  };
-> 
->  struct spi_nor_read_command {
-> diff --git a/drivers/mtd/spi-nor/swp.c b/drivers/mtd/spi-nor/swp.c
-> index 0ba716e84377..cfaba41d74d6 100644
-> --- a/drivers/mtd/spi-nor/swp.c
-> +++ b/drivers/mtd/spi-nor/swp.c
-> @@ -214,8 +214,13 @@ static int spi_nor_sr_lock(struct spi_nor *nor, 
-> loff_t ofs, uint64_t len)
-> 
->  	status_new = (status_old & ~mask & ~tb_mask) | val;
-> 
-> -	/* Disallow further writes if WP pin is asserted */
-> -	status_new |= SR_SRWD;
-> +	/*
-> +	 * Disallow further writes if WP# pin is neither left floating nor
-> +	 * wrongly tied to GND(that includes internal pull-downs).
+The following changes since commit 9561de3a55bed6bdd44a12820ba81ec416e705a7:
 
-nit: space missing
+  Linux 6.4-rc5 (2023-06-04 14:04:27 -0400)
 
-Otherwise looks good.
+are available in the Git repository at:
 
-Thanks,
--michael
+  http://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git tags/fbdev-for-6.5-rc1
 
-> +	 * WP# pin hard strapped to GND can be a valid use case.
-> +	 */
-> +	if (!(nor->flags & SNOR_F_NO_WP))
-> +		status_new |= SR_SRWD;
-> 
->  	if (!use_top)
->  		status_new |= tb_mask;
+for you to fetch changes up to c2d22806aecb24e2de55c30a06e5d6eb297d161d:
+
+  fbdev: fix potential OOB read in fast_imageblit() (2023-06-24 21:55:11 +0200)
+
+----------------------------------------------------------------
+fbdev fixes for 6.5-rc1:
+
+- fix potential OOB read in fast_imageblit()
+- fbdev/media: Use GPIO descriptors for VIA GPIO
+- broadsheetfb & metronomefb: Add MODULE_FIRMWARE macro
+- omapfb: error handling fix in mipid_spi_probe()
+- sh_mobile_lcdcfb, sh7760fb: Typo and warning fixes
+- hitfb: code cleanups
+
+----------------------------------------------------------------
+Christophe JAILLET (2):
+      fbdev: omapfb: lcd_mipid: Fix an error handling path in mipid_spi_probe()
+      video/hdmi: Reorder fields in 'struct hdmi_avi_infoframe'
+
+Geert Uytterhoeven (1):
+      fbdev: sh_mobile_lcdcfb: Fix ARGB32 overlay format typo
+
+Gustavo A. R. Silva (1):
+      fbdev: sh7760fb: Fix -Wimplicit-fallthrough warnings
+
+Juerg Haefliger (2):
+      fbdev: metronomefb: Add MODULE_FIRMWARE macro
+      fbdev: broadsheetfb: Add MODULE_FIRMWARE macro
+
+Linus Walleij (1):
+      fbdev/media: Use GPIO descriptors for VIA GPIO
+
+Lukas Bulwahn (1):
+      MAINTAINERS: adjust entry in VIA UNICHROME(PRO)/CHROME9 FRAMEBUFFER DRIVER
+
+Thomas Zimmermann (3):
+      fbdev: hitfb: Declare hitfb_blank() as static
+      fbdev: hitfb: Fix integer-to-pointer cast
+      fbdev: hitfb: Use NULL for pointers
+
+Zhang Shurong (1):
+      fbdev: fix potential OOB read in fast_imageblit()
+
+ MAINTAINERS                                        |  1 -
+ drivers/media/platform/via/via-camera.c            | 51 +++++++++-------------
+ drivers/video/fbdev/broadsheetfb.c                 |  2 +
+ drivers/video/fbdev/core/sysimgblt.c               |  2 +-
+ drivers/video/fbdev/hitfb.c                        |  8 ++--
+ drivers/video/fbdev/metronomefb.c                  |  2 +
+ drivers/video/fbdev/omap/lcd_mipid.c               |  6 ++-
+ drivers/video/fbdev/sh7760fb.c                     |  2 +
+ drivers/video/fbdev/sh_mobile_lcdcfb.c             |  2 +-
+ drivers/video/fbdev/via/via-core.c                 |  2 +-
+ drivers/video/fbdev/via/via-gpio.c                 | 28 ++++++------
+ .../linux => drivers/video/fbdev/via}/via-gpio.h   |  1 -
+ include/linux/hdmi.h                               |  4 +-
+ 13 files changed, 54 insertions(+), 57 deletions(-)
+ rename {include/linux => drivers/video/fbdev/via}/via-gpio.h (84%)
