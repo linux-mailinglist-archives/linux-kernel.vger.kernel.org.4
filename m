@@ -2,149 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B482073F450
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 08:14:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1613373F454
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 08:15:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230076AbjF0GOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 02:14:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58058 "EHLO
+        id S230078AbjF0GPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 02:15:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229799AbjF0GOr (ORCPT
+        with ESMTP id S230019AbjF0GPB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 02:14:47 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABE3F1FD7;
-        Mon, 26 Jun 2023 23:14:33 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id af79cd13be357-766fd5f9536so76220685a.3;
-        Mon, 26 Jun 2023 23:14:33 -0700 (PDT)
+        Tue, 27 Jun 2023 02:15:01 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20CB51722
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 23:14:59 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3fa96fd79f0so25360235e9.3
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 23:14:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687846473; x=1690438473;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CGKfpXjOg1tRmeU1bzxCkZN0igEieCKHd+4ulvvFBzg=;
-        b=pUkPvrqhV6xLpR8mQZ9DQ2t4UXEXPecGbPFIepdjEdAdE8kvtT452MN3VtKQvk1n9O
-         HJismjo+zS1eFwhf3eOBkwJsqBPIMo0DkGDba6VScAZXU9pfPQxQZ64uHShtRtT6dn60
-         8xYjIxNxW5TLxp5H8v7KS5UI7eRcF/WhF4yR4JrMEKTZNctAQYI92F/5k9tDNFSKSVC7
-         /Hl4PqWVrskTEcAB7Gta6epp+LePkm/sndx19YP8QxnRiUbFXAydlJVo0Sd5BEKWRIhr
-         x2TWWjj5S3El15n/UUA1aOQpPherXeN99k19VvyWgQuQsGX1zQhDLMIuphXQbSDWCHVI
-         V7mA==
+        d=linaro.org; s=google; t=1687846497; x=1690438497;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=VHlKtlmPgyjqS986fc2zdJSD+esonOp/AIyWxyN5l1o=;
+        b=WYYQz/bPplsPqU3DeZIeOnb2Xo81iaxLANnfTGKMQhaxh/f6hgP7BAmiMn+8VDd3Y+
+         dejEPPrwyVSrDrVax13p7frJW508dsjA/+O8MUw85sczaCiTI8X5ortgaLG/oqwkLQKj
+         Hna0jO7+UaBx/hi0OM4TexEdWcNIOLV/jhUul6AUg3TAHOi8HJ4JjCzaTJML/VLxcM1X
+         NXZQgNsFBC1FybaOIpYIDXhxtd2unjCntcBFi9ECX49WWDU9vuujJIDgsJLoTuoS6myB
+         34UuTm+le/jyZXbutLL9NnHEChb3LG9KdZdqm1kIKGDGaUHVZBf2sLvEzL1csz+VPgYO
+         HZqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687846473; x=1690438473;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CGKfpXjOg1tRmeU1bzxCkZN0igEieCKHd+4ulvvFBzg=;
-        b=Ch7/NUYJGCeV1aRQRbjhUwLN1uYNPyjQJAMxpSsCg8DZ9vYbfwlexcpLJxCo8T9NsM
-         468MfS9FAUhnCbtOhNndhWT8YxaYcVymiw8K57psSKEWCtNmw2j2ZOdcuuN8LxYs8HuP
-         QIXoGYF/5sHyZ+5s71yhbXdekI5N1lRnIoOvGKOk0TBWoKhWLR5+xdM8No8mQSP1bdJi
-         d2O2D1+T9/tSfFWSNPhDEq9kG9mAUjoi42DBUJmj+zOmI3PWSWzNLxUlePiJaJOY4P6F
-         Nvf00nXALIFqdeEHJS0GWrXu4g7ZbfGiTkPlgMy6mh3I96mSvjDGhXTy/o10YPKpzuTc
-         toEg==
-X-Gm-Message-State: AC+VfDywPiLEUOGxHhGYGhdG+Z9msNW4Ft9CvCkUkpA0RP1WMzQYMZAi
-        utJfKHUSNdWIy9Ndj5eW4INSo2VF+sbeL6lH9PoC8kQ4/Go=
-X-Google-Smtp-Source: ACHHUZ4tPxAG2M/3+Wgt79gfG1OXKB1kV60hz6KxwcieZ9rVIKX3U44C0wA/7xmzJJFiRQ8gl0VVeIR2+VVKoTMQgdo=
-X-Received: by 2002:a05:620a:b5d:b0:765:a99c:96f3 with SMTP id
- x29-20020a05620a0b5d00b00765a99c96f3mr3813534qkg.28.1687846472623; Mon, 26
- Jun 2023 23:14:32 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687846497; x=1690438497;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VHlKtlmPgyjqS986fc2zdJSD+esonOp/AIyWxyN5l1o=;
+        b=VECPlKwJ95/0HVcgvp1MKzIDsg4AP9zqFe5epLWC1VxP7iz1N6TsmJzJFqGoCoh50p
+         KTvbUl4A4QjO/G0AV28Vyxhi14arFLE1DRNuwLwG2htblTD8Ojrsw4F1rz27WAqXpCk8
+         K514/32jZ8bpc+G20eBbaa/XwNoy856x3u3ZchaZoOrdJNsV9FVc9ufgEPEwsw4KrVpf
+         SfzbuLqNvCKxkeeLorARj/4Qy+RZJZWvi3zH4viAanx89kbNfHEYIvOA/mz4cg+90Bjj
+         eMJgIocQTnh4Alv7/fpSa/53CZBn7ChhgQGGgqGg/EO0VfODtQ1eb7lMYeoX9PT20Cdy
+         6V4Q==
+X-Gm-Message-State: AC+VfDwjax0mEoahFcI4d1mFMH6atmNiCgBJ203q4Y9OAeaUwZaHszwy
+        Rczf5jlULECe09br3D1fE1O41A==
+X-Google-Smtp-Source: ACHHUZ4Hau+zrVHaLTx/1I0GQLyePIEGyq3qbz6eW2P9G1juJuspLRx2PdBqMY5bk1GdQksQMKdIyQ==
+X-Received: by 2002:a05:600c:28e:b0:3fa:8aed:d57f with SMTP id 14-20020a05600c028e00b003fa8aedd57fmr7467202wmk.24.1687846497533;
+        Mon, 26 Jun 2023 23:14:57 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id l21-20020a1c7915000000b003f605566610sm12500939wme.13.2023.06.26.23.14.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jun 2023 23:14:55 -0700 (PDT)
+Date:   Tue, 27 Jun 2023 09:14:53 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     Markus Elfring <Markus.Elfring@web.de>
+Cc:     Demi Marie Obenour <demi@invisiblethingslab.com>,
+        dm-devel@redhat.com, kernel-janitors@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>
+Subject: Re: [PATCH v2 2/4] dm ioctl: Allow userspace to provide expected
+ diskseq
+Message-ID: <ab9f1618-5dde-4c70-a88e-c65f33abdb73@kadam.mountain>
+References: <20230624230950.2272-3-demi@invisiblethingslab.com>
+ <3241078c-2318-fe1b-33cc-7c33db71b1a6@web.de>
+ <ZJh73z2CsgHEJ4iv@itl-email>
+ <e42e8115-6f75-447e-9955-ca4ad43ed406@kadam.mountain>
+ <1c1cd489-6d59-00ed-a1f5-497ca532c08d@web.de>
 MIME-Version: 1.0
-References: <CAOQ4uxj_DLm8_stRJPR7i8bp9aJ5VtjzWqHL2egCTKe3M-6KSw@mail.gmail.com>
- <pw3ljisf6ctpku2o44bdy3aaqdt4ofnedrdt4a4qylhasxsli6@wxhy3nsjcwn4>
-In-Reply-To: <pw3ljisf6ctpku2o44bdy3aaqdt4ofnedrdt4a4qylhasxsli6@wxhy3nsjcwn4>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Tue, 27 Jun 2023 09:14:21 +0300
-Message-ID: <CAOQ4uxh7i_s4R9pFJPENALdWGG5-dDhqPLEUXuJqSoHraktFiA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/3] fanotify accounting for fs/splice.c
-To:     =?UTF-8?B?0L3QsNCx?= <nabijaczleweli@nabijaczleweli.xyz>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jan Kara <jack@suse.cz>,
-        Chung-Chiang Cheng <cccheng@synology.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1c1cd489-6d59-00ed-a1f5-497ca532c08d@web.de>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 2:08=E2=80=AFAM =D0=BD=D0=B0=D0=B1 <nabijaczleweli@=
-nabijaczleweli.xyz> wrote:
->
-> "people just forget to add inotify hooks to their I/O routines as a rule"=
-?
-> Guess what I did, fully knowing that some are missing in this file :)
->
-> =3D=3D> te.c <=3D=3D
-> #define _GNU_SOURCE
-> #include <fcntl.h>
-> #include <stdio.h>
-> int main() {
->   ssize_t rd, acc =3D 0;
->   while ((rd =3D tee(0, 1, 128 * 1024 * 1024, 0)) > 0)
->     acc +=3D rd;
->   fprintf(stderr, "te=3D%zd: %m\n", acc);
-> }
->
-> =3D=3D> vm.c <=3D=3D
-> #define _GNU_SOURCE
-> #include <fcntl.h>
-> #include <stdio.h>
-> #include <string.h>
-> static char sb[1024 * 1024];
-> int main() {
->   memcpy(sb, "=C5=BCupan", sizeof("=C5=BCupan"));
->   ssize_t rd =3D
->       vmsplice(1, &(struct iovec){.iov_base =3D sb, .iov_len =3D sizeof(s=
-b)}, 1,
->                SPLICE_F_GIFT);
->   fprintf(stderr, "vm=3D%zd: %m\n", rd);
-> }
->
->
-> echo zupa | ./te > fifo tees a few times and then blocks when the pipe
-> fills, at which point we get into the broken state.
->
-> Similarly, ./vm > fifo (with the default 64k F_GETPIPE_SZ) enters that
-> same state instantly.
->
-> With 2/3 and 3/3, they instead do
->   1: mask=3D2, cook=3D0, len=3D0, name=3D
->   rd=3D80
->   1: mask=3D2, cook=3D0, len=3D0, name=3D
->   rd=3D80
->   ...
-> in a loop, as-expected, and
->   # ./vm > fifo
->   vm=3D65200: Success
->   1: mask=3D2, cook=3D0, len=3D0, name=3D
->   rd=3D65200
->
-> I took the liberty of marking 2/3 and 3/3 as Fixes: of the original
-> fanotify-in-splice commit as well, I think they fit the bill.
->
+On Mon, Jun 26, 2023 at 06:20:14PM +0200, Markus Elfring wrote:
+> > …, stop bothering people about trivial nonsense. …
+> 
+> See also another bit of background information once more:
+> [PATCH v2] certs/extract-cert: Fix checkpatch issues
+> 2023-06-09
+> https://lore.kernel.org/kernel-janitors/c464c4ee-038c-47bf-857a-b11a89680e82@kadam.mountain/
+> https://lkml.org/lkml/2023/6/9/879
 
-Thank you for doing this thorough research on all the variants!
+Markus, it's not about imperative tense.  It's about you wasting
+people's time.
 
-It would be great if you could add test coverage for these syscalls.
+Read the subject again.  "Allow userspace to provide expected diskseq".
+That is imperative tense.  I have not pointed it out to you because it
+just doesn't matter at all.  If it's in imperative tense or if it's not
+in imperative tense, it doesn't matter.
 
-Simplest would be to clone an LTP inotify test, e.g.
-ltp/testcases/kernel/syscalls/inotify/inotify01
+You're sending out a lot of messages and quite a few times it looks like
+your targeting newbies.  One new developer sent me an email privately
+who was over the top grateful when I told him he could ignore you.  The
+guy was like, "I was so puzzled, because it's my first patch and I
+didn't know how to respond."  This was an experienced programmer who we
+want, but he was new to the kernel community so he didn't know if we had
+bizarre rules or whatever.
 
-for the different splice syscall variants (sendfile as well).
+I've looked through your patches that have recently been merged.  Some
+of those maintainers know that you are banned and that your patches are
+not getting any review from the mailing list.  We are really trying to
+be nice and to work around your situation.  But don't start bothering
+newbies who don't know what the situation is.
 
-LTP already has other tests for all those syscalls, so there are plenty
-of examples of how to use the LTP helpers to test those syscalls.
-
-You can either clone one inotify test per syscall, or clone one inotify
-test that creates a fifo instead of a file that inotify watches
-and use a test cases array for the different syscalls to test
-(see example of test cases array in inotify10 test).
-
-Thanks,
-Amir.
+regards,
+dan carpenter
