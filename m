@@ -2,130 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 246CF7406F3
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 01:46:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFF747406FD
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 01:55:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229501AbjF0XqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 19:46:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49454 "EHLO
+        id S229845AbjF0XzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 19:55:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjF0XqD (ORCPT
+        with ESMTP id S229497AbjF0XzU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 19:46:03 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA81C199E;
-        Tue, 27 Jun 2023 16:46:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687909562; x=1719445562;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=JwRZ15P1mfvGvsAhRba9m3i1avJ8D0VfdP6uCJ0rkDA=;
-  b=TtHLiNcPMlyYOWoOu/MKtHtUZDOP23bJW0ac5anl00RRS+Z3acvLi0NV
-   QNYcUCNh2fSgFni6CkOzFf+rhrZBrs2QBCgji66N4lApGjGidcoj1prJ4
-   U0o7QuPBY6cgQGBjqohgzO2io1nFYE+lZRJNfrP8A1cc+mht4SpUkt8od
-   AHQfgSI4TRIuwV0ke6NBwK6rGd2CxuNcNgyq0pzxm30oyExvTyKE57X59
-   d+iTaA/NGCU4LVtGD54lhl0fUg6rJ1MX/Ogm+4vJmqfhLA1HqExui/bqq
-   n/svSmEMcflUEhg8o0OLvO4QpgaMEUsCfJXYYfs9HihyAmfrUwsy6Sq1n
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="342046596"
-X-IronPort-AV: E=Sophos;i="6.01,163,1684825200"; 
-   d="scan'208";a="342046596"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 16:46:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="716711566"
-X-IronPort-AV: E=Sophos;i="6.01,163,1684825200"; 
-   d="scan'208";a="716711566"
-Received: from btalbott-mobl.amr.corp.intel.com (HELO [10.212.238.85]) ([10.212.238.85])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 16:46:01 -0700
-Message-ID: <fb9b4f10-b824-4e3c-d29f-f8bbb030cd96@intel.com>
-Date:   Tue, 27 Jun 2023 16:46:00 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v9 28/42] x86/shstk: Add user-mode shadow stack support
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
+        Tue, 27 Jun 2023 19:55:20 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35CFD1B2
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 16:55:20 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id 98e67ed59e1d1-2632336f75fso800185a91.3
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 16:55:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1687910119; x=1690502119;
+        h=content-transfer-encoding:content-disposition:mime-version
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/IYPcjHoEDd4tmLGtYzA/TrxXQKf+cNcE2N7tQMFmLY=;
+        b=Co6dHkgFLrUNgPuGuq5lRqhHqX92ONwxU/zud/hT5f8OqzWSqxgyN/b/ZIIrTMnAWr
+         PBhGrR6Dty+f0kjYEQUc0c/EKbsvIenzTP0xxbTBogCaaNvno7SNvSERQskH2p2IHV9o
+         lV3eKT0XhRbpWv2GMhKZfiDc/yVEtMrZA9l/0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687910119; x=1690502119;
+        h=content-transfer-encoding:content-disposition:mime-version
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/IYPcjHoEDd4tmLGtYzA/TrxXQKf+cNcE2N7tQMFmLY=;
+        b=O1+c0T1uDnvPTyK9eB+23NTT9M/4kgeYir37UgXwtg+llJF4DNE9cjRuO7QGbttJhE
+         cEKbepSZ4P6CQizMLOqU+HQqHIghejZwk8DT5XW46TRLE/MORoGY58ElG4gkCahQNRT6
+         l5/kVLe4Eyku+s6oRRaWssw9ADu+r/V+uRQG20YSyHGXUbJ1fMeFEDmFtOudZqkml2rr
+         9Ky5Vx5Cqqd3NrU9V2jI46roaPli4Si3Kal1TrdW4lQaNUCV0pZmcoSGxEPiv5OjJMmR
+         brc/Dz8kofQ9clVXA/dlgmWSVXH1iVRhm5Ztq04XK1be1jNIIbL3f0zHk+JfShzya/ux
+         nQwQ==
+X-Gm-Message-State: AC+VfDzn1AHitmJ9IdGw3VSixFSEvzYUP4tcgOEFY/ykIodnCtbB7BbH
+        O5e17n7+VTTCdfAxgXmXf0dOrQ==
+X-Google-Smtp-Source: ACHHUZ6lG109LmbzTwHjsPJyNgQsti0iT/eNiY3sCA5HoTyjbDzKUPvHqWZZuVRU7ef43nbVSGnWPQ==
+X-Received: by 2002:a17:90b:1648:b0:262:d661:75e4 with SMTP id il8-20020a17090b164800b00262d66175e4mr9641292pjb.0.1687910119690;
+        Tue, 27 Jun 2023 16:55:19 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id b1-20020a17090a800100b002599ef80ab9sm8375196pjn.3.2023.06.27.16.55.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Jun 2023 16:55:18 -0700 (PDT)
+Date:   Tue, 27 Jun 2023 16:55:18 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
         Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        david@redhat.com, debug@rivosinc.com, szabolcs.nagy@arm.com,
-        torvalds@linux-foundation.org, Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>
-References: <20230613001108.3040476-1-rick.p.edgecombe@intel.com>
- <20230613001108.3040476-29-rick.p.edgecombe@intel.com>
- <76a87cdf-4d4f-4b3f-b01f-0540eab71ac7@sirena.org.uk>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <76a87cdf-4d4f-4b3f-b01f-0540eab71ac7@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Subject: [GIT PULL] pstore updates for v6.5-rc1
+Message-ID: <202306271655.F397BDF@keescook>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/27/23 10:20, Mark Brown wrote:
-> On Mon, Jun 12, 2023 at 05:10:54PM -0700, Rick Edgecombe wrote:
-> 
->> +static void unmap_shadow_stack(u64 base, u64 size)
->> +{
->> +	while (1) {
->> +		int r;
->> +
->> +		r = vm_munmap(base, size);
->> +
->> +		/*
->> +		 * vm_munmap() returns -EINTR when mmap_lock is held by
->> +		 * something else, and that lock should not be held for a
->> +		 * long time.  Retry it for the case.
->> +		 */
->> +		if (r == -EINTR) {
->> +			cond_resched();
->> +			continue;
->> +		}
-> This looks generic, not even shadow stack specific - was there any
-> discussion of making it a vm_munmap_retry() (that's not a great name...)
-> or similar?  I didn't see any in old versions of the thread but I
-> might've missed something.
 
-Yeah, that looks odd.  Also odd is that none of the other users of
-vm_munmap() bother to check the return value (except for one passthrough
-in the nommu code).
+Hi Linus,
 
-I don't think the EINTR happens during contention, though.  It's really
-there to be able break out in the face of SIGKILL.  I think that's why
-nobody handles it: the task is dying anyway and nobody cares.
+Please pull these tiny pstore updates for v6.5-rc1.
 
-Rick, was this hunk here for a specific reason or were you just trying
-to be diligent in handling errors?
+Thanks!
+
+-Kees
+
+The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
+
+  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/pstore-v6.5-rc1
+
+for you to fetch changes up to d97038d5ec2062733c1e016caf9baaf68cf64ea1:
+
+  pstore/ram: Add check for kstrdup (2023-06-14 11:52:10 -0700)
+
+----------------------------------------------------------------
+pstore updates for v6.5-rc1
+
+- Check for out-of-memory condition (Jiasheng Jiang)
+
+- Convert to platform remove callback returning void (Uwe Kleine-König)
+
+----------------------------------------------------------------
+Jiasheng Jiang (1):
+      pstore/ram: Add check for kstrdup
+
+Uwe Kleine-König (1):
+      pstore/ram: Convert to platform remove callback returning void
+
+ fs/pstore/ram.c      | 6 ++----
+ fs/pstore/ram_core.c | 2 ++
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+-- 
+Kees Cook
