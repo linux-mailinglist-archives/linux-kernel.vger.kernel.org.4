@@ -2,154 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5FA573FD05
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 15:42:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E81F173FD0D
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 15:44:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230109AbjF0Nmw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 09:42:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41232 "EHLO
+        id S230409AbjF0NoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 09:44:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjF0Nmt (ORCPT
+        with ESMTP id S230284AbjF0NoW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 09:42:49 -0400
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2042.outbound.protection.outlook.com [40.107.6.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52F6F2115;
-        Tue, 27 Jun 2023 06:42:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iN9rmj8OcB/MEK0o23lq0opBcEJnQISiaZypK/hC/Mi56GWHw2tzXyt49L3ZkHYGawgpYgapgV4oD8mKy4auMJ+ifrhdxjzguJZHus9QkaM7C7nVqdH5gONajI+aMWkavz1LibdjlIi8zK9RSGkq0PpkmEZeTFiU0t7S+RsjkXilznHRMTj1PlaCDFJg4QAroIWP1nfpFI4Sga+1Zp4mFl9lhdaMgiAN4Fqpk6gwnB7TYvu8EZwocC0RQT+3vJ6JAuu0Wv1Ua5dVbuDIXIxNkC1dwFWO/je9kYLt8cQ2DaJ8EmJRPJFMB8PwktznO0x6cUPx3U+cQ8yxVo7SOt3tuw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ss1+zz6e5jPlAPIdVnMQIX1U02Lp6LOjhaErNFTYXrQ=;
- b=EOUYpWrbVgFfuBOt9QHjkUbYQ0SPbpHf1Hn9v0X+JzKjhOLHFvp3zK4Yjt1ZVPeipXYaY7aXEPpvgn14IIewsG4tNd/rpUNfvTzmsz0eOVBVonfJdrhlyttJizIGL8tqmWD36LoMlnGdWX2aYx5zuRXnW1TmbcfsFAbZU31435Dy6HXQckNiOH7sejGwa0l7eVLPpd9A3pGI8LRFkPX/IK2pF0rzJ+VLGJu7IZ1IFDnksTOhUWDrfo6niU1MAjnYm6q41e233ekACeEDvxxPdQi1rjcyfhDJB01F5xsZkRcIevFs4apbNUK/qx7eruwE88HlU29XeR0ZOvSdpyfwhQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ss1+zz6e5jPlAPIdVnMQIX1U02Lp6LOjhaErNFTYXrQ=;
- b=ZPpv4ICcL9JlhyTUTGw0GfZ6m6WuWD04w8ktT1NQ1ai6T0YveSZubEdOtb8BN6Fp8hPtZoT5hfAsyueb9sgdOYtJRXK8/RQ3Z0+/+1lTeLNO/iIZX9l4uQoxG3gtyaQs3TH/tcYSKadUdcZ1R7JwH/XR+MvPeR6QoWS9Rqbh9P4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM0PR04MB6452.eurprd04.prod.outlook.com (2603:10a6:208:16d::21)
- by AM9PR04MB8274.eurprd04.prod.outlook.com (2603:10a6:20b:3e8::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.26; Tue, 27 Jun
- 2023 13:42:45 +0000
-Received: from AM0PR04MB6452.eurprd04.prod.outlook.com
- ([fe80::c40e:d76:fd88:f460]) by AM0PR04MB6452.eurprd04.prod.outlook.com
- ([fe80::c40e:d76:fd88:f460%5]) with mapi id 15.20.6521.026; Tue, 27 Jun 2023
- 13:42:45 +0000
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     netdev@vger.kernel.org
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        Harini Katakam <harini.katakam@amd.com>
-Subject: [PATCH v2 net-next] net: phy: mscc: fix packet loss due to RGMII delays
-Date:   Tue, 27 Jun 2023 16:42:35 +0300
-Message-Id: <20230627134235.3453358-1-vladimir.oltean@nxp.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: VI1PR09CA0163.eurprd09.prod.outlook.com
- (2603:10a6:800:120::17) To AM0PR04MB6452.eurprd04.prod.outlook.com
- (2603:10a6:208:16d::21)
+        Tue, 27 Jun 2023 09:44:22 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A1D22115;
+        Tue, 27 Jun 2023 06:44:20 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35RC4fK3017073;
+        Tue, 27 Jun 2023 15:44:00 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ content-transfer-encoding : in-reply-to; s=selector1;
+ bh=gb/GTincEGAMp60icRQgZirL/MSQpEL+fvlyld9bd+c=;
+ b=M9myctKtAHQ4gFPupVkZEOOEz34Sy7bzAYQKf06TOliA/xhNizxbCJyrorDgf6I+31nm
+ IUp6kZe6kHrDOEd996V9qlCYm2NoR3UfpmQRhGckoVrrOmNT4ppn2WgVDRr5uIoUGvxl
+ c1YcpqV88/1VvhvRbvT9h/EGCn/XSNZzhzCOUT3BXDIhpzOpD/qAXMlitdpesM2nWtpN
+ l4PhKRlJ3KKDtnM9ZrKBqihhAMidT0aIR7wxGDRxXaWMhA25jcCsXD4LOG06HfqTJ7fz
+ jAH2fpGTpiuRU+dmZ3w9Q1VeCnvEm9KcJQEILcEM/mhavHvx2ptVL2V5utQ0HY/q2GcA eA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3rfv7a23mj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 27 Jun 2023 15:44:00 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id F38BD100057;
+        Tue, 27 Jun 2023 15:43:59 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E76A7237D9B;
+        Tue, 27 Jun 2023 15:43:59 +0200 (CEST)
+Received: from gnbcxd0016.gnb.st.com (10.129.178.213) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Tue, 27 Jun
+ 2023 15:43:59 +0200
+Date:   Tue, 27 Jun 2023 15:43:51 +0200
+From:   Alain Volmat <alain.volmat@foss.st.com>
+To:     sun yq <yqsun1997@gmail.com>
+CC:     <tiffany.lin@mediatek.com>, <andrew-ct.chen@mediatek.com>,
+        <yunfei.dong@mediatek.com>, <matthias.bgg@gmail.com>,
+        <angelogioacchino.delregno@collabora.com>,
+        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <499671216@qq.com>
+Subject: Re: [PATCH] OOB read and write in mtk multiple places
+Message-ID: <20230627134314.GA3605030@gnbcxd0016.gnb.st.com>
+Mail-Followup-To: sun yq <yqsun1997@gmail.com>, tiffany.lin@mediatek.com,
+        andrew-ct.chen@mediatek.com, yunfei.dong@mediatek.com,
+        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, 499671216@qq.com
+References: <20230627081002.1768990-1-yqsun1997@gmail.com>
+ <20230627104237.GA3601890@gnbcxd0016.gnb.st.com>
+ <CAA0BgY_bKg4qXmtmWqHQW+EOvfXUG0FqRtAJ7A8C40uL1v8qVA@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM0PR04MB6452:EE_|AM9PR04MB8274:EE_
-X-MS-Office365-Filtering-Correlation-Id: b69c7f22-d9c4-4a94-7862-08db77146313
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nMVdWRfL3TZmhfMcNUJ/3lkQrcKHvF/aTRpNnYMQ3U2vY/cFsdQdAgsL/3UqIvKDSmhdvs+2LMu00vwCu0stwHCytcFvdkOqCydBvr45l4z2es0TTqzWYFHOzNDRyElz9svVzPSlaWopFveetR6OoTMELk1uVuku5W4Hn97NHxdxBTAo7aTj4chPYFDzrErMUyzUPNnUPO08aEkIFgMGNrELtroMIxtQEZh9SK4dZLU5wCco2zxWPlWTE4/oxEWjcYUXi6GBVg1jT1Mr0bNABFpXJv9zP/YkieQ63wTHVD2CYgAq/xfnSwfpISVZhpLw+A+ipSpzCZw7e5Y3EWCGzMxgtVlteCY4TmdROVk4RVCZ1ftyAKT7pF0MX/zITSMDWuFF5sIEzU38k+r9NqOxnGEp0EpIcN3XCjIPNxxyaC8LhwVX36rmG2FJLEij6nxhEWhyhBOQ3slQpx1cxyXsGIWxmfF5BCkRYxqEo9nDKEAcVuJaXYomm/Qt+o5ZVKt52I86n8YOy+Odgr0k+iWp4cARj16jSmPBIpETzFgbM/U1557DONQ82KNK1KDiG5AcAMKCeB22tE/ec1ha80n17Jw5lgvIPqZk9YnPYlrrptl58a3Zdtgjc7tpoXVKvjpU
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6452.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(366004)(396003)(376002)(39860400002)(451199021)(6512007)(1076003)(44832011)(7416002)(66476007)(66556008)(4326008)(6916009)(66946007)(478600001)(316002)(36756003)(8936002)(5660300002)(8676002)(2906002)(86362001)(54906003)(41300700001)(26005)(52116002)(6486002)(186003)(6506007)(38350700002)(38100700002)(6666004)(2616005)(83380400001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?E7Mm9qhic4MX8PUK+cSjHIL9VeBt5+7YeGI7hpjfIh4yxtcIlEiToo5ttKcd?=
- =?us-ascii?Q?FHneUfiArjj4ASZP8CUlQCK0hmK0EDHjn0AgPnkHaKTV6WCTH0AvsUNWhoRW?=
- =?us-ascii?Q?POUdZHaQdPGLzF9ELTgmOo+outd+pVnepwneJ0JrVJhuwMfwm+ckBc/g9sTq?=
- =?us-ascii?Q?nAtyNg2Lb//huY0RBqnI5jLu/22kp5hrSYkMXaUaIvoHttfHFoaL6LiPzdue?=
- =?us-ascii?Q?xj7OpuIYJUTZ1n/8/H4lmMprXnLEutY7iOXUICyTF4C7kJ5WKekvbZWkzfNU?=
- =?us-ascii?Q?lLHKmC4wgJgCTJkHO+XMTieb6aXIsjFbTw1+aQ9BRgVBQ+AOw/jblDDmXWOP?=
- =?us-ascii?Q?nbSyywOz+iY9Ly7X5v4gmHibgWpkBwlAvqbWyfjHpxFZmeDtUmWvv8iuoFeH?=
- =?us-ascii?Q?lVE9XG5oJj8YOep6MNwLA8QNxH3Gwpu6mI1P9qCQlkljsTPimHCMsomrUgDE?=
- =?us-ascii?Q?r8Xz94vrloeAVy4sbY9fKpMWlFhjk+oMe+VgV2RNcX0V7beW4AKIK/FnMUXk?=
- =?us-ascii?Q?Plj579EjfRqePAp7gSweFIXQUMAjbkaxcZZghit1Y9uIJ2KyvDN3MVnBhcM7?=
- =?us-ascii?Q?aUDrMHo+Jo7qQ2hmOBu8bKIns9PApLDZpsrkq1rC6SU+rUsbzsmvrtivQxBc?=
- =?us-ascii?Q?wJk0b4WJHkfwt/vVQy2OxjtdFHR3VzZeJXHOMDXwXi7ZutrFaeS1Tl+p40WS?=
- =?us-ascii?Q?J/m9oH0tRFObuY8uBxe0Kkal1MQ8hPzoxKSiLhDEGdpluWfNwY7MhSIR+h31?=
- =?us-ascii?Q?zsfGp6u0YMN5D0fB4PCA55GTJb3AxxK4UzTI+iivL6B9wzeDB773jhpHzIX0?=
- =?us-ascii?Q?8YI18LGPRmNhrz4F5rA9pRZrn+CtJHd6xENsfkwtztttq3PI0/EqQDbU3BTL?=
- =?us-ascii?Q?VYa/Q32L+Bb5uvQY65gvo6qJFMLoBMM8s8mdyuInNPi53Vi0R4lrGOoh1JzS?=
- =?us-ascii?Q?luowhK8oKDxawSD3vsKCm6bweMymeirRUSq7trJjGE67a1vF8KApHdtJ7OkO?=
- =?us-ascii?Q?FAzVA8NigFLPmBpcsu0/ygGtT+IlxIZE+EWR20LBskF4GLOrzj5EmcUVA64u?=
- =?us-ascii?Q?Sie4FbavBWnJEXrkp6MR+aAWF0ZajykAx1L7sP4f8MwB9GYtsivfqZBMiNbr?=
- =?us-ascii?Q?xBjnNGV8cX9Ld/SckYWX3kpWccz0mckcNQ1p/yBgDF6vtLFu/Tl3vOzXzcQV?=
- =?us-ascii?Q?bmaPBHbaPMH7UgIHKhAscREn7+dxtICnhO+9p6s0bO0XV24juf4DPKoSW83N?=
- =?us-ascii?Q?aaKiSZS7NvWpKjONHHMRnzF8JVegHeRGzOvVrLf2MjmAHJ0zgaFb99tT7xa+?=
- =?us-ascii?Q?LHz3O1cKLpFuWBut/aYNbp/+tQTsroE8NoqKf3208plK1j/0v+qEPcu/XdZb?=
- =?us-ascii?Q?KEKLQzBfSGXoYMtaR29YBVkfbkmOBd/yjX/N+Gi+9O26sET6A6N3IAUmpRUI?=
- =?us-ascii?Q?oQ+Tg4NUguOlwsHqGCAMWUsAdjQWyCqYY7wSa3q1yusr8GYg0pJ/dPjLxYoQ?=
- =?us-ascii?Q?S3PuBzLiSxJtrSJMF6TPJTrIxstDSA5nK0VBxBg3ilEu6DgYnS1VYKTvaCc1?=
- =?us-ascii?Q?u8MxF5imdLFEhZVxUFOQ/nQKbc/Ps8Ikns8pIdl+q0rVQUWdYV36RfbB0rqm?=
- =?us-ascii?Q?hg=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b69c7f22-d9c4-4a94-7862-08db77146313
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6452.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jun 2023 13:42:45.0874
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: PHXso+Qz1gmcuw+36qzF2S3UFeqaFduuFudDIdMYnKLxKsusF+s7Ibtt3Kx6RyA0k5EvvrPhOoOQ7FWTuG6MRQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8274
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAA0BgY_bKg4qXmtmWqHQW+EOvfXUG0FqRtAJ7A8C40uL1v8qVA@mail.gmail.com>
+X-Disclaimer: ce message est personnel / this message is private
+X-Originating-IP: [10.129.178.213]
+X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-27_09,2023-06-27_01,2023-05-22_02
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Two deadly typos break RX and TX traffic on the VSC8502 PHY using RGMII
-if phy-mode = "rgmii-id" or "rgmii-txid", and no "tx-internal-delay-ps"
-override exists. The negative error code from phy_get_internal_delay()
-does not get overridden with the delay deduced from the phy-mode, and
-later gets committed to hardware. Also, the rx_delay gets overridden by
-what should have been the tx_delay.
+Hi,
 
-Fixes: dbb050d2bfc8 ("phy: mscc: Add support for RGMII delay configuration")
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-Reviewed-by: Harini Katakam <harini.katakam@amd.com>
----
-v1->v2: resend to net-next
+On Tue, Jun 27, 2023 at 08:28:11PM +0800, sun yq wrote:
+> When using V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE, the number of planes is
+> controlled by the user. Only checking the oob at the function may miss
+> other functions, so it is appropriate to change the size of the macro.
+> You can refer to other functions, such as
+o> mtk_dip_vb2_video_queue_setup, the max plane size of this module is 8
 
- drivers/net/phy/mscc/mscc_main.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+To my understanding, the vcodec driver only has formats requiring up to
+3 planes.  Could you explain why you need to change this macro to 8 ?
+Could you please describe the issue you had which led to this change ?
 
-diff --git a/drivers/net/phy/mscc/mscc_main.c b/drivers/net/phy/mscc/mscc_main.c
-index 669a4a7a28ce..4171f01d34e5 100644
---- a/drivers/net/phy/mscc/mscc_main.c
-+++ b/drivers/net/phy/mscc/mscc_main.c
-@@ -563,9 +563,9 @@ static int vsc85xx_update_rgmii_cntl(struct phy_device *phydev, u32 rgmii_cntl,
- 	if (tx_delay < 0) {
- 		if (phydev->interface == PHY_INTERFACE_MODE_RGMII_TXID ||
- 		    phydev->interface == PHY_INTERFACE_MODE_RGMII_ID)
--			rx_delay = RGMII_CLK_DELAY_2_0_NS;
-+			tx_delay = RGMII_CLK_DELAY_2_0_NS;
- 		else
--			rx_delay = RGMII_CLK_DELAY_0_2_NS;
-+			tx_delay = RGMII_CLK_DELAY_0_2_NS;
- 	}
- 
- 	reg_val |= rx_delay << rgmii_rx_delay_pos;
--- 
-2.34.1
-
+> 
+> 
+> On Tue, Jun 27, 2023 at 6:42 PM Alain Volmat <alain.volmat@foss.st.com> wrote:
+> >
+> > Hi,
+> >
+> > I had a look at some places where this macro MTK_VCODEC_MAX_PLANES
+> > is being used, such as q_data->bytesperline etc.
+> > This patch seems to be increasing the table size from 3 to 8 but,
+> > if my understanding is correct doesn't solve the issue that
+> > (taking the example you give in vidioc_venc_g_fmt) the table
+> > bytesperline is accessed taking into account a num_planes values which
+> > is unchecked if appropriate for this driver.
+> >
+> > What are the 8 planes you are referring to ?
+> >
+> > While increasing the table to 8 might also be necessary, it seems to me
+> > that the real OOB access issue should be solved by checking the num of
+> > planes value.
+> >
+> > Regards,
+> > Alain
+> >
+> > On Tue, Jun 27, 2023 at 04:10:02PM +0800, yqsun1997@gmail.com wrote:
+> > > From: yqsun1997 <yqsun1997@gmail.com>
+> > >
+> > > The num_planes max index is 8,
+> > > but bytesperline and bytesperline in struct mtk_q_data,
+> > > The max index is MTK_VCODEC_MAX_PLANES == 3,
+> > > so will cause OOB read and write in multiple places.like vidioc_venc_g_fmt
+> > > same as commit 8fbcf730
+> > >
+> > > Signed-off-by: yqsun1997 <yqsun1997@gmail.com>
+> > > ---
+> > >  drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > >
+> > > diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
+> > > index 9acab54fd..c2c157675 100644
+> > > --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
+> > > +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
+> > > @@ -22,7 +22,7 @@
+> > >  #define MTK_VCODEC_DEC_NAME  "mtk-vcodec-dec"
+> > >  #define MTK_VCODEC_ENC_NAME  "mtk-vcodec-enc"
+> > >
+> > > -#define MTK_VCODEC_MAX_PLANES        3
+> > > +#define MTK_VCODEC_MAX_PLANES        8
+> > >  #define MTK_V4L2_BENCHMARK   0
+> > >  #define WAIT_INTR_TIMEOUT_MS 1000
+> > >  #define IS_VDEC_LAT_ARCH(hw_arch) ((hw_arch) >= MTK_VDEC_LAT_SINGLE_CORE)
+> > > --
+> > > 2.39.2
+> > >
