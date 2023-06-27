@@ -2,161 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBDA573F83C
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 11:07:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68C8373F840
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 11:07:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231127AbjF0JHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 05:07:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59808 "EHLO
+        id S232036AbjF0JHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 05:07:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231923AbjF0JHS (ORCPT
+        with ESMTP id S232033AbjF0JHW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 05:07:18 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DFCAF10DA;
-        Tue, 27 Jun 2023 02:06:44 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 77D9A2F4;
-        Tue, 27 Jun 2023 02:07:00 -0700 (PDT)
-Received: from [10.57.28.204] (unknown [10.57.28.204])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6DBA73F73F;
-        Tue, 27 Jun 2023 02:06:13 -0700 (PDT)
-Message-ID: <150b90b5-23fb-c115-6517-e6941b9b06df@arm.com>
-Date:   Tue, 27 Jun 2023 10:06:11 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [PATCH V5 6/6] coresight: etm4x: Add ACPI support in platform
- driver
-To:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     scclevenger@os.amperecomputing.com,
-        Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>,
+        Tue, 27 Jun 2023 05:07:22 -0400
+Received: from relay06.th.seeweb.it (relay06.th.seeweb.it [5.144.164.167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 574662D73;
+        Tue, 27 Jun 2023 02:06:49 -0700 (PDT)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 99D103F7CC;
+        Tue, 27 Jun 2023 11:06:30 +0200 (CEST)
+Date:   Tue, 27 Jun 2023 11:06:29 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>, devicetree@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230529062511.52016-1-anshuman.khandual@arm.com>
- <20230529062511.52016-7-anshuman.khandual@arm.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <20230529062511.52016-7-anshuman.khandual@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, Lux Aliaga <they@mint.lgbt>
+Subject: Re: [PATCH 09/15] drm/msm/mdss: Add SM6125 support
+Message-ID: <222mwmijir3tv7lwxekp7r6jhx4uyhuo3xrtqec6oo3tj4kpyj@4pv56oukezsg>
+References: <20230624-sm6125-dpu-v1-0-1d5a638cebf2@somainline.org>
+ <20230624-sm6125-dpu-v1-9-1d5a638cebf2@somainline.org>
+ <9ba8e5c9-642d-a09d-7e82-adba8e5497aa@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9ba8e5c9-642d-a09d-7e82-adba8e5497aa@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
-
-On 29/05/2023 07:25, Anshuman Khandual wrote:
-> From: Suzuki K Poulose <suzuki.poulose@arm.com>
+On 2023-06-27 11:49:07, Dmitry Baryshkov wrote:
+> On 24/06/2023 03:41, Marijn Suijten wrote:
+> > SM6125's UBWC hardware decoder is version 3.0, and supports decoding
+> > UBWC 1.0.
 > 
-> Drop ETM4X ACPI ID from the AMBA ACPI device list, and instead just move it
-> inside the new ACPI devices list detected and used via platform driver.
+> I think it's UBWC encoder version, see 
+> https://git.codelinaro.org/clo/la/platform/vendor/opensource/display-drivers/-/blob/display-kernel.lnx.5.15.1.r17-rel/msm/sde/sde_hw_top.c?ref_type=heads#L357
 > 
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Len Brown <lenb@kernel.org>
-> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-> Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
-> Cc: Mike Leach <mike.leach@linaro.org>
-> Cc: Leo Yan <leo.yan@linaro.org>
-> Cc: Sudeep Holla <sudeep.holla@arm.com>
-> Cc: Lorenzo Pieralisi <lpieralisi@kernel.org>
-> Cc: linux-acpi@vger.kernel.org
-> Cc: coresight@lists.linaro.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-kernel@vger.kernel.org
-> Reviewed-by: Sudeep Holla <sudeep.holla@arm.com> (for ACPI specific changes)
-> Signed-off-by: Suzuki K Poulose <suzuki.poulose@arm.com>
-> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
-> ---
->   drivers/acpi/acpi_amba.c                           |  1 -
->   drivers/hwtracing/coresight/coresight-etm4x-core.c | 10 ++++++++++
->   2 files changed, 10 insertions(+), 1 deletion(-)
+> This is a part of 
+> https://patchwork.freedesktop.org/patch/538279/?series=118074&rev=1
 > 
-> diff --git a/drivers/acpi/acpi_amba.c b/drivers/acpi/acpi_amba.c
-> index f5b443ab01c2..099966cbac5a 100644
-> --- a/drivers/acpi/acpi_amba.c
-> +++ b/drivers/acpi/acpi_amba.c
-> @@ -22,7 +22,6 @@
->   static const struct acpi_device_id amba_id_list[] = {
->   	{"ARMH0061", 0}, /* PL061 GPIO Device */
->   	{"ARMH0330", 0}, /* ARM DMA Controller DMA-330 */
-> -	{"ARMHC500", 0}, /* ARM CoreSight ETM4x */
->   	{"ARMHC501", 0}, /* ARM CoreSight ETR */
->   	{"ARMHC502", 0}, /* ARM CoreSight STM */
->   	{"ARMHC503", 0}, /* ARM CoreSight Debug */
+> (no, you don't have to rebase on that patchset, it is not reviewed yet).
 
-This is a bit awkward request.
+Thanks for clarifying this.  I always thought that there only was a
+(decoder) hardware version, that is able to decode a specific format
+version of the UBWC data format.  And that it was confusingly using the
+same enum.
 
-I would like to get your opinion on merging this to coresight tree.
-This change is removing the coresight ETMv4 from the ACPI AMBA
-scan list and moving it to the coresight driver. This change is
-essential for
-1) Adding ACPI support for later versions of ETMv4 that are not AMBA
-    devices.
-2) Adding power management support for AMBA ETMv4 with ACPI.
+I will reword the message.
 
-The above change has been reviewed by Sudeep (Arm64 ACPI reviewer), but
-hasn't been Acked by the ACPI maintainer (Rafael) even after a month of
-follow up with at least 4 reminders [0].
+(Also didn't really see why MDSS would have to _encode_ to UBWC, for
+ readbacks?)
 
-Are you happy with the Reviews from Sudeep and given the minimal
-change to the drivers/acpi/acpi_amba.c file ?
+- Marijn
 
-Kind regards
-Suzuki
-
-[0] https://lkml.kernel.org/r/0327c5b6-9b6b-460a-dc7e-3a891485a9bd@arm.com
-
-
-> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
-> index e10f6676dd9b..fd6f9dff5881 100644
-> --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
-> +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
-> @@ -3,6 +3,7 @@
->    * Copyright (c) 2014, The Linux Foundation. All rights reserved.
->    */
->   
-> +#include <linux/acpi.h>
->   #include <linux/bitops.h>
->   #include <linux/kernel.h>
->   #include <linux/moduleparam.h>
-> @@ -2344,12 +2345,21 @@ static const struct of_device_id etm4_sysreg_match[] = {
->   	{}
->   };
->   
-> +#ifdef CONFIG_ACPI
-> +static const struct acpi_device_id etm4x_acpi_ids[] = {
-> +	{"ARMHC500", 0}, /* ARM CoreSight ETM4x */
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(acpi, etm4x_acpi_ids);
-> +#endif
-> +
->   static struct platform_driver etm4_platform_driver = {
->   	.probe		= etm4_probe_platform_dev,
->   	.remove		= etm4_remove_platform_dev,
->   	.driver			= {
->   		.name			= "coresight-etm4x",
->   		.of_match_table		= etm4_sysreg_match,
-> +		.acpi_match_table	= ACPI_PTR(etm4x_acpi_ids),
->   		.suppress_bind_attrs	= true,
->   		.pm			= &etm4_dev_pm_ops,
->   	},
-
+> > Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> > ---
+> >   drivers/gpu/drm/msm/msm_mdss.c | 8 ++++++++
+> >   1 file changed, 8 insertions(+)
+> > 
+> > diff --git a/drivers/gpu/drm/msm/msm_mdss.c b/drivers/gpu/drm/msm/msm_mdss.c
+> > index 05648c910c68..bf68bae23264 100644
+> > --- a/drivers/gpu/drm/msm/msm_mdss.c
+> > +++ b/drivers/gpu/drm/msm/msm_mdss.c
+> > @@ -559,6 +559,13 @@ static const struct msm_mdss_data sm6115_data = {
+> >   	.ubwc_static = 0x11f,
+> >   };
+> >   
+> > +static const struct msm_mdss_data sm6125_data = {
+> > +	.ubwc_version = UBWC_1_0,
+> > +	.ubwc_dec_version = UBWC_3_0,
+> > +	.ubwc_swizzle = 1,
+> > +	.highest_bank_bit = 1,
+> > +};
+> > +
+> >   static const struct msm_mdss_data sm8250_data = {
+> >   	.ubwc_version = UBWC_4_0,
+> >   	.ubwc_dec_version = UBWC_4_0,
+> > @@ -579,6 +586,7 @@ static const struct of_device_id mdss_dt_match[] = {
+> >   	{ .compatible = "qcom,sc8180x-mdss", .data = &sc8180x_data },
+> >   	{ .compatible = "qcom,sc8280xp-mdss", .data = &sc8280xp_data },
+> >   	{ .compatible = "qcom,sm6115-mdss", .data = &sm6115_data },
+> > +	{ .compatible = "qcom,sm6125-mdss", .data = &sm6125_data },
+> >   	{ .compatible = "qcom,sm6350-mdss", .data = &sm6350_data },
+> >   	{ .compatible = "qcom,sm6375-mdss", .data = &sm6350_data },
+> >   	{ .compatible = "qcom,sm8150-mdss", .data = &sm8150_data },
+> > 
+> 
+> -- 
+> With best wishes
+> Dmitry
+> 
