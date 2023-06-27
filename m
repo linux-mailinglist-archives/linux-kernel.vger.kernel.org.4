@@ -2,190 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0736373F39B
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 06:43:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A149F73F370
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 06:35:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231144AbjF0En0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 00:43:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37618 "EHLO
+        id S229969AbjF0EfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 00:35:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231137AbjF0EmZ (ORCPT
+        with ESMTP id S229750AbjF0EfU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 00:42:25 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84C0826A8;
-        Mon, 26 Jun 2023 21:39:35 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id A5B095FD20;
-        Tue, 27 Jun 2023 07:39:30 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1687840770;
-        bh=95OGPHRDGayh8A0YYyqNyKQ1yAf3hId+4mS4asKi6iA=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=ghf1LqwVimoV5AgcawNO04eGGiCBCjyEdL8auyfrIPdU5L4J5OmaTHhzqK6bE5+8J
-         2OyZwfTTaLjv9aumSOdQjIwGYx7fSGnN1LFjwiWPvS1CDmNJT92MDYyYCvKwe9TCLD
-         viZ3divoTp1VLsHQgqhzPuQtTAEcOmvAKXl3PCEwLpo2gIxP0OHNvY/YCXdxsCE9fn
-         4nZ4S++FAsSQomKRUmENtb77xbwNyKoNNoP3rXSzidVOPFGrkoJCy/D7R7sHLYFt/M
-         ZSb+IR+eCAafKKZu8be4GVLybrjHYt/uQegVLyEfQbCGZIyyYSplr9Mwaccz4TZx15
-         NFf1IVlarzDcg==
-Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Tue, 27 Jun 2023 07:39:26 +0300 (MSK)
-Message-ID: <9553a82f-ce31-e2e0-ff62-8abd2a6b639b@sberdevices.ru>
-Date:   Tue, 27 Jun 2023 07:34:29 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH v1 2/4] virtio/vsock: support MSG_PEEK for
- SOCK_SEQPACKET
-Content-Language: en-US
-To:     Stefano Garzarella <sgarzare@redhat.com>
-CC:     Stefan Hajnoczi <stefanha@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel@sberdevices.ru>, <oxffffaa@gmail.com>
-References: <20230618062451.79980-1-AVKrasnov@sberdevices.ru>
- <20230618062451.79980-3-AVKrasnov@sberdevices.ru>
- <yiy3kssoiyzs6ehnlo7g2xsb26zee5vih3jpgyc7i3dvfcyfpv@xvokxez3lzpo>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-In-Reply-To: <yiy3kssoiyzs6ehnlo7g2xsb26zee5vih3jpgyc7i3dvfcyfpv@xvokxez3lzpo>
+        Tue, 27 Jun 2023 00:35:20 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB521718
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 21:35:19 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-573cacf4804so54577697b3.1
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 21:35:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687840518; x=1690432518;
+        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=J/QPCwex7ROy04p3TgGaGQBp0Wh9htCcujKoYqvqbhU=;
+        b=YIEtfV/tr8KxF7V5aLrfZcniPuQsJM5gIdAoE4WgszjGdqZj/+0XoWec3H4jZsxwTc
+         d307Xf2HU3yt7LYA8UabPMG9pbguL2zus8l0v+IP62n6pyEFmEPbHMoLCh/8aZwA+F1G
+         10FmVM6LqW8okifrUT6mL66+rGSkX8QbXuPZamxpxgmM9Qt0KaCKnf03Dp7AVrI1WKOB
+         df/+FGralqpiwD1YHivBoDep8xn5io5pPK+/3RKivPOzF8d1oDawUKN45c8+sHn6HAS/
+         /CcyjyPDded8esXmFvegflLUBB6iqJ3FF9lzYLMgL2rK1txcMcGtxYSyXX2OSkpvwwOq
+         I/7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687840518; x=1690432518;
+        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=J/QPCwex7ROy04p3TgGaGQBp0Wh9htCcujKoYqvqbhU=;
+        b=kLsA8Hol0fIhoXvqWn9nuMt80oxJ8KJZ3dzmw4BlaHwDOPqh6CRqF29nnFb2MUOkBw
+         bQXpPHXH6N8ctCt0HjhH4GWyPZ1YQA65Cqt8oHzdS9Z4+nrNSWHmfSNDnS6CUM4YO9CT
+         qlsfal3FDrMl48EcCsSBwbdpJEhszd6cghpfnkY5WGo2fiPXvxpMOZBiqDpv1xSyDfus
+         u/pqIVzI4xP/y39vhsXvqeNRqZK1T13DZRg29RIokws+TzZJN+BpWVtJORE8eNrSNEtS
+         XnMEJTWrPZAGxGJX+jJ6Q1lHUeN4eYFCSykMrBzSvjpm0jvlSD9JIgyjjmETOQawJ2Ny
+         oBSA==
+X-Gm-Message-State: AC+VfDzIUOqY3b63sgw/IcNQ1NRAjdjj0km86spBWPHWOvuBt+o6YFfR
+        W5dMJqncmDingWkXMHw+0UkQwr2J5n9D
+X-Google-Smtp-Source: ACHHUZ5IpVTstgl7l3U4JaRHaOVP1KMYuAf/ZIqCFZ/h7GWQ0amGVNA0QYNxgmMIMoHLrDxsm7vKHYX2K0VF
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:497e:a125:3cde:94f])
+ (user=irogers job=sendgmr) by 2002:a81:4312:0:b0:56c:fce1:7d8d with SMTP id
+ q18-20020a814312000000b0056cfce17d8dmr13551974ywa.6.1687840518437; Mon, 26
+ Jun 2023 21:35:18 -0700 (PDT)
+Date:   Mon, 26 Jun 2023 21:34:45 -0700
+Message-Id: <20230627043458.662048-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+Subject: [PATCH v1 00/13] parse-events clean up
+From:   Ian Rogers <irogers@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [100.64.160.123]
-X-ClientProxiedBy: p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) To
- p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/06/27 02:11:00 #21585463
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Remove some tokens the lexer never produces. Ensure abort paths set an
+error. Previously scanning all PMUs meant bad events could fail with
+an invalid token, detect this at the point parsing for a PMU fails and
+add error strings. Try to be consistent in using YYNOMEM for memory
+failures and YYABORT for bad input.
 
+Ian Rogers (13):
+  perf parse-events: Remove unused PE_PMU_EVENT_FAKE token
+  perf parse-events: Remove unused PE_KERNEL_PMU_EVENT token
+  perf parse-events: Remove two unused tokens
+  perf parse-events: Add more comments to parse_events_state
+  perf parse-events: Avoid regrouped warning for wild card events
+  perf parse-event: Add memory allocation test for name terms
+  perf parse-events: Separate YYABORT and YYNOMEM cases
+  perf parse-events: Move instances of YYABORT to YYNOMEM
+  perf parse-events: Separate ENOMEM memory handling
+  perf parse-events: Additional error reporting
+  perf parse-events: Populate error column for BPF events
+  perf parse-events: Improve location for add pmu
+  perf parse-events: Remove ABORT_ON
 
-On 26.06.2023 19:28, Stefano Garzarella wrote:
-> On Sun, Jun 18, 2023 at 09:24:49AM +0300, Arseniy Krasnov wrote:
->> This adds support of MSG_PEEK flag for SOCK_SEQPACKET type of socket.
->> Difference with SOCK_STREAM is that this callback returns either length
->> of the message or error.
->>
->> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->> ---
->> net/vmw_vsock/virtio_transport_common.c | 63 +++++++++++++++++++++++--
->> 1 file changed, 60 insertions(+), 3 deletions(-)
->>
->> diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
->> index 2ee40574c339..352d042b130b 100644
->> --- a/net/vmw_vsock/virtio_transport_common.c
->> +++ b/net/vmw_vsock/virtio_transport_common.c
->> @@ -460,6 +460,63 @@ virtio_transport_stream_do_dequeue(struct vsock_sock *vsk,
->>     return err;
->> }
->>
->> +static ssize_t
->> +virtio_transport_seqpacket_do_peek(struct vsock_sock *vsk,
->> +                   struct msghdr *msg)
->> +{
->> +    struct virtio_vsock_sock *vvs = vsk->trans;
->> +    struct sk_buff *skb;
->> +    size_t total, len;
->> +
->> +    spin_lock_bh(&vvs->rx_lock);
->> +
->> +    if (!vvs->msg_count) {
->> +        spin_unlock_bh(&vvs->rx_lock);
->> +        return 0;
->> +    }
->> +
->> +    total = 0;
->> +    len = msg_data_left(msg);
->> +
->> +    skb_queue_walk(&vvs->rx_queue, skb) {
->> +        struct virtio_vsock_hdr *hdr;
->> +
->> +        if (total < len) {
->> +            size_t bytes;
->> +            int err;
->> +
->> +            bytes = len - total;
->> +            if (bytes > skb->len)
->> +                bytes = skb->len;
->> +
->> +            spin_unlock_bh(&vvs->rx_lock);
->> +
->> +            /* sk_lock is held by caller so no one else can dequeue.
->> +             * Unlock rx_lock since memcpy_to_msg() may sleep.
->> +             */
->> +            err = memcpy_to_msg(msg, skb->data, bytes);
->> +            if (err)
->> +                return err;
->> +
->> +            spin_lock_bh(&vvs->rx_lock);
->> +        }
->> +
->> +        total += skb->len;
->> +        hdr = virtio_vsock_hdr(skb);
->> +
->> +        if (le32_to_cpu(hdr->flags) & VIRTIO_VSOCK_SEQ_EOM) {
->> +            if (le32_to_cpu(hdr->flags) & VIRTIO_VSOCK_SEQ_EOR)
->> +                msg->msg_flags |= MSG_EOR;
->> +
->> +            break;
->> +        }
->> +    }
->> +
->> +    spin_unlock_bh(&vvs->rx_lock);
->> +
->> +    return total;
-> 
-> Should we return the minimum between total and len?
+ tools/perf/tests/bpf.c         |   2 +-
+ tools/perf/util/parse-events.c |  95 +++++----
+ tools/perf/util/parse-events.h |  20 +-
+ tools/perf/util/parse-events.y | 351 +++++++++++++++++----------------
+ 4 files changed, 256 insertions(+), 212 deletions(-)
 
-I guess no, because seqpacket dequeue callback always returns length of message,
-then, in af_vsock.c we return either number of bytes read or length of message
-depending on MSG_TRUNC flags.
+-- 
+2.41.0.162.gfafddb0af9-goog
 
-Thanks, Arseniy
-
-> 
-> Thanks,
-> Stefano
-> 
->> +}
->> +
->> static int virtio_transport_seqpacket_do_dequeue(struct vsock_sock *vsk,
->>                          struct msghdr *msg,
->>                          int flags)
->> @@ -554,9 +611,9 @@ virtio_transport_seqpacket_dequeue(struct vsock_sock *vsk,
->>                    int flags)
->> {
->>     if (flags & MSG_PEEK)
->> -        return -EOPNOTSUPP;
->> -
->> -    return virtio_transport_seqpacket_do_dequeue(vsk, msg, flags);
->> +        return virtio_transport_seqpacket_do_peek(vsk, msg);
->> +    else
->> +        return virtio_transport_seqpacket_do_dequeue(vsk, msg, flags);
->> }
->> EXPORT_SYMBOL_GPL(virtio_transport_seqpacket_dequeue);
->>
->> -- 
->> 2.25.1
->>
-> 
