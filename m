@@ -2,282 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 425217405B9
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 23:36:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE2227405BE
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 23:38:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230412AbjF0VgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 17:36:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40404 "EHLO
+        id S230372AbjF0Vil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 17:38:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230353AbjF0VgL (ORCPT
+        with ESMTP id S229912AbjF0Vij (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 17:36:11 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BCBE2D66
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 14:36:05 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2b44d77e56bso3935881fa.1
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 14:36:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687901764; x=1690493764;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gQoEUdCQmhCVof+x1iaXcNraVfHd+tkSB3JbLT+sqI0=;
-        b=UjOnMKo9T609SHgU+7jwWFLWlcpzeb5RV/VhQzzvv/l25urjB4wdEdxBpgt9YCPzYS
-         spphxOavZyAHJ7X2ilW5u8OZmlcoZyRFjhDDOh4NeVjtcLgMTHpALXivQBqqrlavRH7N
-         cu9mM4ibaEnkDSyBFhWfvfpWbsS1W6cIJbgSVC9K28YBL3ykdEOZuaDVZlia41cDq+1T
-         FDSaUfb2BZHfKhjp6E+2gvFt8VBgNzWHf3DQVNjluCw0gWbaQraruZBrcYC0IKptfBHv
-         lJOjjF9SPkArRRN2Vv90T61+Kg0JbyC9/iOMszXbU79Iwq2DUFXDjY/r1OZqUojZC6mg
-         1CUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687901764; x=1690493764;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gQoEUdCQmhCVof+x1iaXcNraVfHd+tkSB3JbLT+sqI0=;
-        b=AOVdQ+sPvqCgwQqT0ASHFComJihyDmdL7xhH6Q38opm7YXkC55w5qDoxnryOZSFVPf
-         AmqubgLWONuuUmOO6JA4nM3+A7M/JSlNKamqblKFWRrB9bZyAhtjy5+FW8MV1K3zafY3
-         pXVp6BhymIB7gNVU/UDnO6EQEqueQWda93vhNzyDJb52XpO+U2WQtooqE89Ee+23DP/m
-         2pV8a+cjKwJ7Bm31/enfIwFMblCrR4KO+XSzJzM54yshjmzprP6i5iJBQn5M4EMhj1ab
-         NKUgIJgt/A0TwqdVJIpKCld7lv5aoVZu8lk9PwHGVWt8sYi976I2bIrSYjfQxt0JgxAR
-         5lhQ==
-X-Gm-Message-State: AC+VfDzXRnnap7HHRy9P/enp+5pBDzI+y5pZHNSWeA0HVNGUEB4NLJho
-        9odeb2Xj5Gu23hjTpfYvsfMteg==
-X-Google-Smtp-Source: ACHHUZ6D+WW+X1zs/JP/pvR0q99L6cNp8JX8nUK4jGjYd7ThqXjfNA7WQwosEi2wc+Rxi1f1sL02VQ==
-X-Received: by 2002:a2e:9d1a:0:b0:2b4:7d45:7654 with SMTP id t26-20020a2e9d1a000000b002b47d457654mr8576663lji.21.1687901763792;
-        Tue, 27 Jun 2023 14:36:03 -0700 (PDT)
-Received: from [192.168.1.101] (abxj103.neoplus.adsl.tpnet.pl. [83.9.3.103])
-        by smtp.gmail.com with ESMTPSA id t9-20020a2e9d09000000b002b6a0ccc106sm1251597lji.12.2023.06.27.14.36.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Jun 2023 14:36:03 -0700 (PDT)
-Message-ID: <b250540c-ce64-471e-4224-dc9ea6814d77@linaro.org>
-Date:   Tue, 27 Jun 2023 23:36:01 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v11 0/9] Add support for Core Power Reduction v3, v4 and
- Hardened
-Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Niklas Cassel <nks@flawful.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     Robert Marko <robimarko@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Marijn Suijten <marijn.suijten@somainline.org>,
+        Tue, 27 Jun 2023 17:38:39 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8324726B6;
+        Tue, 27 Jun 2023 14:38:38 -0700 (PDT)
+Received: from notapiano (zone.collabora.co.uk [167.235.23.81])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7759D6607165;
+        Tue, 27 Jun 2023 22:38:34 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1687901916;
+        bh=cWkXTYDt/bMN7/WXTJkUfgfgP3H+Af/AjtPCKz5D3x4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HSDaRNvc1M2EN3RY1Pq8UC24N8DQTLqgClDJG4ECDz8mb2Hp/onmIpVYPU73ACGZZ
+         BR/IV+PWVbp4M/+cMsjrsTL6ZoukxBw4Ooyez+T2EGj/iVkfchk38fRlGSkyBsI4iO
+         nEj8Sypo5BAATF8NGPXynu7qwbPfjr1/TXgpdmw1ftakpGZM45RXEU8JtnNDY6i8UK
+         2ENTjRp1ltPvIpsMSHXIuD6AYDRfU1hLCaZKVtez/Jnei6h3KfudzohiLfN4DiqMCJ
+         QO+xLHpwGDiQPjKP9N+CatPE4mR7GdTrNZJcnPIPM6+07Q6uUBB1B0tQLb5tY8Vj02
+         Iq1FaAY15mrHw==
+Date:   Tue, 27 Jun 2023 17:38:30 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>
-References: <20230217-topic-cpr3h-v11-0-ba22b4daa5d6@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230217-topic-cpr3h-v11-0-ba22b4daa5d6@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v3 3/6] media: dt-bindings: mediatek,vcodec: Remove
+ VDEC_SYS for mt8183
+Message-ID: <51dfbae5-4250-4b89-adb5-ff0ebf52cc52@notapiano>
+References: <20230620000349.2122191-4-nfraprado@collabora.com>
+ <8b5e4a9b-7496-02a1-d3b6-a0be8ea85798@linaro.org>
+ <a82b7f2d-04d4-4ac0-9a72-ad1c17118e19@notapiano>
+ <cb2dd67a-d3df-f194-6595-789d12b38f3d@linaro.org>
+ <6b41c5e4-bae9-4c99-8a28-7272c8a598a3@notapiano>
+ <9c36cdbb-7204-f9ca-6191-88e0f0f71915@linaro.org>
+ <132ec056-2186-4be5-9770-4d8c4d07bd76@notapiano>
+ <6af2faf2-8624-948b-6efa-3bf00695293b@linaro.org>
+ <aef120c8-bb25-476f-8976-7f699a851334@notapiano>
+ <9bf3f3d0-9655-3549-1d1b-02816f51b666@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <9bf3f3d0-9655-3549-1d1b-02816f51b666@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27.06.2023 20:30, Konrad Dybcio wrote:
-> Changes in v11:
+On Mon, Jun 26, 2023 at 05:30:07PM +0200, Krzysztof Kozlowski wrote:
+> On 26/06/2023 15:54, Nícolas F. R. A. Prado wrote:
+> > On Fri, Jun 23, 2023 at 06:21:31PM +0200, Krzysztof Kozlowski wrote:
+> >> On 21/06/2023 20:00, Nícolas F. R. A. Prado wrote:
+> >>>>
+> >>>> But anyway this variant comes with some set of regs and reg-names. Other
+> >>>> variant comes with different set. In all cases they should be defined,
+> >>>> even by "defined" means not allowed.
+> >>>
+> >>> I'm not sure what you mean. Are you suggesting to disable reg-names on mt8173?
+> >>
+> >> That's one of the options if for some reason you don't want to define them.
+> >>
+> >>>
+> >>>>
+> >>>>>
+> >>>>> But in a separate series we could drop vdecsys from mt8173's reg as well,
+> >>>>> passing it as a syscon instead, which would solve the warning on that platform,
+> >>>>> though some more driver changes would be needed to be able to handle it for that
+> >>>>> SoC. The newer SoCs like mt8192, mt8195, etc, should also get vdecsys dropped
+> >>>>> from their regs to have a correct memory description.
+> >>>>>
+> >>>>
+> >>>> Sure, but I don't understand how does it affect defining and making
+> >>>> specific regs/reg-names or keeping them loose.
+> >>>
+> >>> We need some way to tell in the driver whether the first reg is VDEC_SYS or not.
+> >>> Since so far reg-names have not been used for the vcodec, the simplest, and
+> >>> cleanest, way to do it, is to add reg-names when VDEC_SYS is not present. When
+> >>> the other SoCs are updated to no longer have the first reg as VDEC_SYS, they
+> >>> would also have reg-names added to their binding, to clearly indicate that.
+> >>
+> >> Don't use reg-names for that. The order of entries is anyway strict.
+> > 
+> > Since the order of entries is strict, if I remove VDEC_SYS from mt8183, I also
+> > need to remove it from mt8173, is that what you mean?
 > 
-> CPR COMMON:
-> - split the commonizing patch, make it actually do what it says on the
->   tin..
-> - fix some overflow bugs
+> It's different compatible, so it can have different entries.
 > 
-> CPR3:
-> - fix some overflow bugs
-> - don't assume "lack of qcom,opp-?loop-vadj" means val=0"
 > 
-> CPR BINDINGS:
-> - drop quotes in items
-> - drop clock-names (there's just a single one)
-> - rewrite the description a bit
-> - fix up the example
-> - drop bogus minItems
-> - "acc-syscon" -> "qcom,acc"
+> > I would still check for
+> > the presence of reg-names in the driver to differentiate whether the old or new
+> > binding is used, you just don't want different reg-names between compatibles in
+> > the binding?
 > 
-> DTS:
-> - fix qfprom children so that the bits=<> doesn't overflow reg[size]
-> - drop unrelated changes
-> - place one reg entry per line
-I managed to send the wrong revision. Will send a new one, with more
-fixes soon.
+> I wrote already what I want:
+> 
+>   In all cases they should be defined, even by "defined" means not allowed.
+> 
+> Now of course the best would be if the reg-names are always the same, at
+> least in respect of order of items. This is what we try to do for all
+> devices.
+> 
+> > 
+> >>
+> >>>
+> >>> For example, for mt8173 we currently have
+> >>>
+> >>> 		vcodec_dec: vcodec@16000000 {
+> >>> 			compatible = "mediatek,mt8173-vcodec-dec";
+> >>> 			reg = <0 0x16000000 0 0x100>,	/* VDEC_SYS */
+> >>> 			      <0 0x16020000 0 0x1000>,	/* VDEC_MISC */
+> >>> 			      <0 0x16021000 0 0x800>,	/* VDEC_LD */
+> >>> 			      <0 0x16021800 0 0x800>,	/* VDEC_TOP */
+> >>> 			      <0 0x16022000 0 0x1000>,	/* VDEC_CM */
+> >>> 			      <0 0x16023000 0 0x1000>,	/* VDEC_AD */
+> >>> 			      <0 0x16024000 0 0x1000>,	/* VDEC_AV */
+> >>> 			      <0 0x16025000 0 0x1000>,	/* VDEC_PP */
+> >>> 			      <0 0x16026800 0 0x800>,	/* VDEC_HWD */
+> >>> 			      <0 0x16027000 0 0x800>,	/* VDEC_HWQ */
+> >>> 			      <0 0x16027800 0 0x800>,	/* VDEC_HWB */
+> >>> 			      <0 0x16028400 0 0x400>;	/* VDEC_HWG */
+> >>>
+> >>> In a future series, when removing VDEC_SYS from it, it would become
+> >>>
+> >>> 		vcodec_dec: vcodec@16020000 {
+> >>> 			compatible = "mediatek,mt8173-vcodec-dec";
+> >>> 			reg = <0 0x16020000 0 0x1000>,	/* VDEC_MISC */
+> >>> 			      <0 0x16021000 0 0x800>,	/* VDEC_LD */
+> >>> 			      <0 0x16021800 0 0x800>,	/* VDEC_TOP */
+> >>> 			      <0 0x16022000 0 0x1000>,	/* VDEC_CM */
+> >>> 			      <0 0x16023000 0 0x1000>,	/* VDEC_AD */
+> >>> 			      <0 0x16024000 0 0x1000>,	/* VDEC_AV */
+> >>> 			      <0 0x16025000 0 0x1000>,	/* VDEC_PP */
+> >>> 			      <0 0x16026800 0 0x800>,	/* VDEC_HWD */
+> >>> 			      <0 0x16027000 0 0x800>,	/* VDEC_HWQ */
+> >>> 			      <0 0x16027800 0 0x800>,	/* VDEC_HWB */
+> >>> 			      <0 0x16028400 0 0x400>;	/* VDEC_HWG */
+> >>> 			reg-names = "misc", "ld", "top", "cm", "ad", "av", "pp",
+> >>>                                     "hwd", "hwq", "hwb", "hwg";
+> >>
+> >> So you want to use reg-names to avoid ABI break. This is not the reason
+> >> not to define reg-names for other case.
+> > 
+> > There will be an ABI break anyway when the first reg is removed (as shown
+> > above), I'm just trying to avoid churn: adding a reg-name that will be removed
+> > later.
+> 
+> So remove the reg-name now and there will be no "later"?
 
-Konrad
-> 
-> Link to v10: https://lore.kernel.org/r/20230217-topic-cpr3h-v10-0-67aed8fdfa61@linaro.org
-> 
-> Changes in v10:
-> - Skip "Let qcom,opp-fuse-level be a 2-long array" (Applied by Viresh)
-> - Use b4 (it may be the first time you're receiving this if git send-email
->   omitted you before..)
-> - +Cc Robert Marko (expressed interest in previous revisions)
-> - Add "Document CPR3 open/closed loop volt adjustment"
-> CPR:
-> - %hhu -> %u (checkpatch)
-> CPR BINDINGS:
-> - Drop QCS404 fuse set (it doesn't use this driver, what did I even think..)
->   but leave the allOf:if: block for expansion (sdm660, msm8996, ipqABCD should
->   follow soon..)
-> - Drop Rob's R-b (as things changed *again*, please take one more look to make
->   sure you're okay with this file, Rob..)
-> 
-> Link to v9:
-> https://lore.kernel.org/linux-arm-msm/20230116093845.72621-1-konrad.dybcio@linaro.org/
-> 
-> Changes in v9:
-> - Restore forgotten MAINTAINERS patch (oops)
-> CPR:
-> - Include the missing header (big oops!)
-> - Fix kconfig dependencies
-> CPR bindings:
-> - Fix cpu reg in example (why didn't dt_binding_check scream at that)
-> - Add newlines between nodes in example
-> - Change opp table node names to opp-table-cpu[04]
-> - Change opp table labels to cpu[04]_opp_table
-> - Change CPRh opp subnode names to opp-N from oppN
-> - Remove some stray newlines
-> - Bring back nvmem-cell-names and add the 8998's set
-> - Allow power-domains for VDDCX_AO voting
-> - Remove Rob's r-b, there's been quite a bit of changes..
-> CPR DT:
-> - Send the correct revision of the patch this time around..
-> OPP bindings:
-> - Add Rob's ack
-> 
-> Link to v8:
-> https://lore.kernel.org/linux-arm-msm/20230110175605.1240188-1-konrad.dybcio@linaro.org/
-> 
-> Changes in v8:
-> - Overtake this series from AGdR
-> - Apply all review comments from v7 except Vladimir's request to
->   not create the include/ header; it will be strictly necessary for
->   OSM-aware cpufreq_hw programming, which this series was more or
->   less created just for..
-> - Drop QCS404 dtsi change, account for not breaking backwards compat
->   in [3/5]
-> - Add type phandle type reference to acc-syscon in [1/5]
-> - Update AGdR's email addresses for maintainer entries
-> - Add [2/5] to make dt_binding_check happy
-> - Separate the CPRh DT addition from cpufreq_hw addition, sort and
->   properly indent new nodes
-> - Drop CPR yaml conversion, that happened in meantime
-> - Reorder the patches to make a bit more sense
-> - Tested again on MSM8998 Xperia XZ Premium (Maple)
-> - I take no responsibility for AGdR's cheeky jokes, only the code!
-> 
-> Link to v7:
-> https://lore.kernel.org/lkml/20210901155735.629282-1-angelogioacchino.delregno@somainline.org/
-> 
-> Changes in v7:
-> - Rebased on linux-next as of 210901
-> - Changed cpr_read_efuse calls to nvmem_cell_read_variable_le_u32,
->   following what was done in commit c77634b9d916
-> 
-> Changes in v6:
-> - Fixes from Bjorn's review
-> - After a conversation with Viresh, it turned out I was abusing the
->   OPP API to pass the APM and MEM-ACC thresholds to qcom-cpufreq-hw,
->   so now the driver is using the genpd created virtual device and
->   passing drvdata instead to stop the abuse
-> - Since the CPR commonization was ignored for more than 6 months,
->   it is now included in the CPRv3/4/h series, as there is no point
->   in commonizing without having this driver
-> - Rebased on v5.13
-> 
-> Changes in v5:
-> - Fixed getting OPP table when not yet installed by the caller
->   of power domain attachment
-> 
-> Changes in v4:
-> - Huge patch series has been split for better reviewability,
->   as suggested by Bjorn
-> 
-> Changes in v3:
-> - Fixed YAML doc issues
-> - Removed unused variables and redundant if branch
-> 
-> Changes in v2:
-> - Implemented dynamic Memory Accelerator corners support, needed
->   by MSM8998
-> - Added MSM8998 Silver/Gold parameters
-> 
-> This commit introduces a new driver, based on the one for cpr v1,
-> to enable support for the newer Qualcomm Core Power Reduction
-> hardware, known downstream as CPR3, CPR4 and CPRh, and support
-> for MSM8998 and SDM630 CPU power reduction.
-> 
-> In these new versions of the hardware, support for various new
-> features was introduced, including voltage reduction for the GPU,
-> security hardening and a new way of controlling CPU DVFS,
-> consisting in internal communication between microcontrollers,
-> specifically the CPR-Hardened and the Operating State Manager.
-> 
-> The CPR v3, v4 and CPRh are present in a broad range of SoCs,
-> from the mid-range to the high end ones including, but not limited
-> to, MSM8953/8996/8998, SDM630/636/660/845.
-> 
-> As to clarify, SDM845 does the CPR/SAW/OSM setup in TZ firmware, but
-> this is limited to the CPU context; despite GPU CPR support being not
-> implemented in this series, it is planned for the future, and some
-> SDM845 need the CPR (in the context of GPU CPR) to be configured from
-> this driver.
-> 
-> It is also planned to add the CPR data for MSM8996, since this driver
-> does support the CPRv4 found on that SoC, but I currently have no time
-> to properly test that on a real device, so I prefer getting this big
-> implementation merged before adding more things on top.
-> 
-> As for MSM8953, we (read: nobody from SoMainline) have no device with
-> this chip: since we are unable to test the cpr data and the entire
-> driver on that one, we currently have no plans to do this addition
-> in the future. This is left to other nice developers: I'm sure that
-> somebody will come up with that, sooner or later
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
-> AngeloGioacchino Del Regno (7):
->       MAINTAINERS: Add entry for Qualcomm CPRv3/v4/Hardened driver
->       dt-bindings: soc: qcom: cpr3: Add bindings for CPR3 driver
->       soc: qcom: cpr: Move common functions to new file
->       soc: qcom: cpr-common: Add support for flat fuse adjustment
->       soc: qcom: cpr-common: Add threads support
->       soc: qcom: Add support for Core Power Reduction v3, v4 and Hardened
->       arm64: dts: qcom: msm8998: Configure CPRh
-> 
-> Konrad Dybcio (2):
->       dt-bindings: opp: v2-qcom-level: Document CPR3 open/closed loop volt adjustment
->       soc: qcom: cpr: Use u64 for frequency
-> 
->  .../devicetree/bindings/opp/opp-v2-qcom-level.yaml |   14 +
->  .../devicetree/bindings/soc/qcom/qcom,cpr3.yaml    |  289 ++
->  MAINTAINERS                                        |    6 +
->  arch/arm64/boot/dts/qcom/msm8998.dtsi              |  757 +++++
->  drivers/soc/qcom/Kconfig                           |   22 +
->  drivers/soc/qcom/Makefile                          |    2 +
->  drivers/soc/qcom/cpr-common.c                      |  362 +++
->  drivers/soc/qcom/cpr-common.h                      |  109 +
->  drivers/soc/qcom/cpr.c                             |  392 +--
->  drivers/soc/qcom/cpr3.c                            | 2932 ++++++++++++++++++++
->  include/soc/qcom/cpr.h                             |   17 +
->  11 files changed, 4535 insertions(+), 367 deletions(-)
-> ---
-> base-commit: 53cdf865f90ba922a854c65ed05b519f9d728424
-> change-id: 20230217-topic-cpr3h-de232bfb47ec
-> 
-> Best regards,
+OK, I'll send a v4 with VDEC_SYS also removed from mt8173.
+
+Thanks,
+Nícolas
