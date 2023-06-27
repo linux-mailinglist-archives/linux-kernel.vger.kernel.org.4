@@ -2,219 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A3DC73FEA6
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 16:45:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8268873FE75
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 16:40:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231504AbjF0Ooi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 10:44:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43232 "EHLO
+        id S231865AbjF0OkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 10:40:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231681AbjF0OoM (ORCPT
+        with ESMTP id S231820AbjF0Oj7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 10:44:12 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C2A44420E;
-        Tue, 27 Jun 2023 07:43:35 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8Cx68aD9Jpk4ScDAA--.4940S3;
-        Tue, 27 Jun 2023 22:38:59 +0800 (CST)
-Received: from [10.20.42.43] (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxJ82B9JpkWmEMAA--.47779S3;
-        Tue, 27 Jun 2023 22:38:57 +0800 (CST)
-Message-ID: <494efbf8-b6b6-7e34-3fb4-950080f60a0d@loongson.cn>
-Date:   Tue, 27 Jun 2023 22:38:57 +0800
+        Tue, 27 Jun 2023 10:39:59 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB2513AA8
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 07:39:23 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-6687446eaccso4206662b3a.3
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 07:39:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687876760; x=1690468760;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=4nJWDV0jywhxf0OMEHmO3nQx+Dc6iDsFe4yCSR+nmZo=;
+        b=kdgHbqxy6l7gE3SPWR0nWqtUAV597wHSuY6o8Fl9p27nal0aM6gMTEz7xLENW+Jws1
+         hlOTruXn7Hs+MgPpcR/2juT+bELpD8YS1/5TYD/dLrGMaxIXqiAVmRvDrhs1xlHx2gCZ
+         3trw24snpKKKFkqDv3nqUZvIlDAwhJKH7s5PaNzGxfmYwx/YvwjUHMearGW6Al66I0Fs
+         DHUyBty4p/VQVOaVpsMCyxEQvcaYpZk8ySM3DKXyDfV2UKjXmUesPxAY9/anaWKYu264
+         VqJWhFlMhXMdu9SaoisStiOEt0WEI+99CfhgAKs+fl16xhhX3bbp+O8UPpT9B6jN0NC0
+         kd6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687876760; x=1690468760;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4nJWDV0jywhxf0OMEHmO3nQx+Dc6iDsFe4yCSR+nmZo=;
+        b=YltX+hWbI1ztCNC5fsxn69czrj09oohbwZwhMYLCRCxZTC9TeM3z09PUOkY6IwC+kT
+         R2uRzyPm0pRKZWglHG5RWXjVnwoWgbMTHCg0NReF5t2Vz61CPJZTlqpAntSF7QUVu4Hp
+         j6PfQD9adTIH5wP208biNeU8ha7x0xJyzIndcLRYZatm78wDe5BlkM6jLuzyc0ZQJdVy
+         JBsq0x+q0o2mAB7MGTUE0mABjMy3psgskKHwHHvyAWtqXzk1VYGE/MdJZzGECRePNRf2
+         /xoWDoaxGO8qmLyoKisESCWf1TESVE/zqY6tDy13aT8Hc48tOuCM8P9ij23G00MkrdeM
+         FHnA==
+X-Gm-Message-State: AC+VfDxN0/Je3YtMRoMNwh527F9Bc2iL9GjFCX+JyN585f0qnP02J01G
+        8TX5pm09x03FsejTv7EYamaP
+X-Google-Smtp-Source: ACHHUZ5q4MSqBMad/7CU3n0bTQr5IyeSnkozHYAD/trBnbhPd2KNQd92dY2h/ORvdIT1OeC1SxnDzw==
+X-Received: by 2002:a05:6a20:549a:b0:123:2c2a:ee62 with SMTP id i26-20020a056a20549a00b001232c2aee62mr22355330pzk.14.1687876760443;
+        Tue, 27 Jun 2023 07:39:20 -0700 (PDT)
+Received: from thinkpad ([117.217.176.90])
+        by smtp.gmail.com with ESMTPSA id o6-20020a63e346000000b00553b9e0510esm5820482pgj.60.2023.06.27.07.39.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Jun 2023 07:39:20 -0700 (PDT)
+Date:   Tue, 27 Jun 2023 20:09:12 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Krishna chaitanya chundru <quic_krichai@quicinc.com>
+Cc:     helgaas@kernel.org, linux-pci@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_vbadigan@quicinc.com, quic_nitegupt@quicinc.com,
+        quic_skananth@quicinc.com, quic_ramkri@quicinc.com,
+        krzysztof.kozlowski@linaro.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+Subject: Re: [PATCH v5 2/3] arm: dts: qcom: sdx65: Add interconnect path
+Message-ID: <20230627143912.GG5490@thinkpad>
+References: <1687827692-6181-1-git-send-email-quic_krichai@quicinc.com>
+ <1687827692-6181-3-git-send-email-quic_krichai@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [25/39] drm: renesas: shmobile: Rename shmob_drm_crtc.crtc
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Magnus Damm <magnus.damm@gmail.com>
-Cc:     linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-References: <b3daca80f82625ba14e3aeaf2fca6dcefa056e47.1687423204.git.geert+renesas@glider.be>
-Content-Language: en-US
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-Organization: Loongson
-In-Reply-To: <b3daca80f82625ba14e3aeaf2fca6dcefa056e47.1687423204.git.geert+renesas@glider.be>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8DxJ82B9JpkWmEMAA--.47779S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj93XoWxtw17AF43CryrCw13Gw1ktFc_yoW7KFy5pF
-        48Aay3tF4FqFs0g343AFs2vF9xur15tas7CryUJ34akF1vqa47JF1fAFnxAF1UXry7Ca13
-        ZrsxKF4rAr48u3gCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUPmb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-        xVWxJr0_GcWln4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
-        xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q
-        6rW5McIj6I8E87Iv67AKxVW8Jr0_Cr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwI
-        xGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAK
-        I48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrV
-        AFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCI
-        c40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY1x0267
-        AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr1j
-        6F4UJwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU8
-        DDG5UUUUU==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1687827692-6181-3-git-send-email-quic_krichai@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jun 27, 2023 at 06:31:30AM +0530, Krishna chaitanya chundru wrote:
+> Add pcie-mem interconnect path to sdx65 target.
+> 
 
-On 2023/6/22 17:21, Geert Uytterhoeven wrote:
-> Rename the "crtc" member of the shmob_drm_crtc subclass structure to
-> "base", to improve readability.
->
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+"target" is meaningless in upstream. Call it "SoC or platform".
 
+Also the subject should mention PCIe interconnect.
 
-Reviewed-by: Sui Jingfeng <suijingfeng@loongson.cn>
+> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+
+With both changes above,
+
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+
+- Mani
 
 > ---
->   .../gpu/drm/renesas/shmobile/shmob_drm_crtc.c | 26 +++++++++----------
->   .../gpu/drm/renesas/shmobile/shmob_drm_crtc.h |  2 +-
->   2 files changed, 14 insertions(+), 14 deletions(-)
->
-> diff --git a/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c b/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c
-> index 3f6af12f45988124..3f0b71253ed929c9 100644
-> --- a/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c
-> +++ b/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c
-> @@ -64,7 +64,7 @@ static void shmob_drm_clk_off(struct shmob_drm_device *sdev)
->   
->   static void shmob_drm_crtc_setup_geometry(struct shmob_drm_crtc *scrtc)
->   {
-> -	struct drm_crtc *crtc = &scrtc->crtc;
-> +	struct drm_crtc *crtc = &scrtc->base;
->   	struct shmob_drm_device *sdev = to_shmob_device(crtc->dev);
->   	const struct drm_display_info *info = &sdev->connector->display_info;
->   	const struct drm_display_mode *mode = &crtc->mode;
-> @@ -152,7 +152,7 @@ static void shmob_drm_crtc_setup_geometry(struct shmob_drm_crtc *scrtc)
->   
->   static void shmob_drm_crtc_start_stop(struct shmob_drm_crtc *scrtc, bool start)
->   {
-> -	struct shmob_drm_device *sdev = to_shmob_device(scrtc->crtc.dev);
-> +	struct shmob_drm_device *sdev = to_shmob_device(scrtc->base.dev);
->   	u32 value;
->   
->   	value = lcdc_read(sdev, LDCNT2R);
-> @@ -185,7 +185,7 @@ static void shmob_drm_crtc_start_stop(struct shmob_drm_crtc *scrtc, bool start)
->    */
->   static void shmob_drm_crtc_start(struct shmob_drm_crtc *scrtc)
->   {
-> -	struct drm_crtc *crtc = &scrtc->crtc;
-> +	struct drm_crtc *crtc = &scrtc->base;
->   	struct shmob_drm_device *sdev = to_shmob_device(crtc->dev);
->   	const struct shmob_drm_interface_data *idata = &sdev->pdata->iface;
->   	const struct shmob_drm_format_info *format;
-> @@ -272,7 +272,7 @@ static void shmob_drm_crtc_start(struct shmob_drm_crtc *scrtc)
->   
->   static void shmob_drm_crtc_stop(struct shmob_drm_crtc *scrtc)
->   {
-> -	struct drm_crtc *crtc = &scrtc->crtc;
-> +	struct drm_crtc *crtc = &scrtc->base;
->   	struct shmob_drm_device *sdev = to_shmob_device(crtc->dev);
->   
->   	if (!scrtc->started)
-> @@ -308,7 +308,7 @@ void shmob_drm_crtc_resume(struct shmob_drm_crtc *scrtc)
->   static void shmob_drm_crtc_compute_base(struct shmob_drm_crtc *scrtc,
->   					int x, int y)
->   {
-> -	struct drm_crtc *crtc = &scrtc->crtc;
-> +	struct drm_crtc *crtc = &scrtc->base;
->   	struct drm_framebuffer *fb = crtc->primary->fb;
->   	struct drm_gem_dma_object *gem;
->   	unsigned int bpp;
-> @@ -329,7 +329,7 @@ static void shmob_drm_crtc_compute_base(struct shmob_drm_crtc *scrtc,
->   
->   static void shmob_drm_crtc_update_base(struct shmob_drm_crtc *scrtc)
->   {
-> -	struct drm_crtc *crtc = &scrtc->crtc;
-> +	struct drm_crtc *crtc = &scrtc->base;
->   	struct shmob_drm_device *sdev = to_shmob_device(crtc->dev);
->   
->   	shmob_drm_crtc_compute_base(scrtc, crtc->x, crtc->y);
-> @@ -343,7 +343,7 @@ static void shmob_drm_crtc_update_base(struct shmob_drm_crtc *scrtc)
->   
->   static inline struct shmob_drm_crtc *to_shmob_crtc(struct drm_crtc *crtc)
->   {
-> -	return container_of(crtc, struct shmob_drm_crtc, crtc);
-> +	return container_of(crtc, struct shmob_drm_crtc, base);
->   }
->   
->   static void shmob_drm_crtc_dpms(struct drm_crtc *crtc, int mode)
-> @@ -415,15 +415,15 @@ static const struct drm_crtc_helper_funcs crtc_helper_funcs = {
->   void shmob_drm_crtc_finish_page_flip(struct shmob_drm_crtc *scrtc)
->   {
->   	struct drm_pending_vblank_event *event;
-> -	struct drm_device *dev = scrtc->crtc.dev;
-> +	struct drm_device *dev = scrtc->base.dev;
->   	unsigned long flags;
->   
->   	spin_lock_irqsave(&dev->event_lock, flags);
->   	event = scrtc->event;
->   	scrtc->event = NULL;
->   	if (event) {
-> -		drm_crtc_send_vblank_event(&scrtc->crtc, event);
-> -		drm_crtc_vblank_put(&scrtc->crtc);
-> +		drm_crtc_send_vblank_event(&scrtc->base, event);
-> +		drm_crtc_vblank_put(&scrtc->base);
->   	}
->   	spin_unlock_irqrestore(&dev->event_lock, flags);
->   }
-> @@ -435,7 +435,7 @@ static int shmob_drm_crtc_page_flip(struct drm_crtc *crtc,
->   				    struct drm_modeset_acquire_ctx *ctx)
->   {
->   	struct shmob_drm_crtc *scrtc = to_shmob_crtc(crtc);
-> -	struct drm_device *dev = scrtc->crtc.dev;
-> +	struct drm_device *dev = scrtc->base.dev;
->   	unsigned long flags;
->   
->   	spin_lock_irqsave(&dev->event_lock, flags);
-> @@ -450,7 +450,7 @@ static int shmob_drm_crtc_page_flip(struct drm_crtc *crtc,
->   
->   	if (event) {
->   		event->pipe = 0;
-> -		drm_crtc_vblank_get(&scrtc->crtc);
-> +		drm_crtc_vblank_get(&scrtc->base);
->   		spin_lock_irqsave(&dev->event_lock, flags);
->   		scrtc->event = event;
->   		spin_unlock_irqrestore(&dev->event_lock, flags);
-> @@ -502,7 +502,7 @@ static const struct drm_crtc_funcs crtc_funcs = {
->   
->   int shmob_drm_crtc_create(struct shmob_drm_device *sdev)
->   {
-> -	struct drm_crtc *crtc = &sdev->crtc.crtc;
-> +	struct drm_crtc *crtc = &sdev->crtc.base;
->   	struct drm_plane *primary, *plane;
->   	unsigned int i;
->   	int ret;
-> diff --git a/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.h b/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.h
-> index f507eaf912e16a22..79cce0a0ada4cfce 100644
-> --- a/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.h
-> +++ b/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.h
-> @@ -21,7 +21,7 @@ struct shmob_drm_device;
->   struct shmob_drm_format_info;
->   
->   struct shmob_drm_crtc {
-> -	struct drm_crtc crtc;
-> +	struct drm_crtc base;
->   
->   	struct drm_pending_vblank_event *event;
->   	int dpms;
+>  arch/arm/boot/dts/qcom/qcom-sdx65.dtsi | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/arch/arm/boot/dts/qcom/qcom-sdx65.dtsi b/arch/arm/boot/dts/qcom/qcom-sdx65.dtsi
+> index 1a35830..77fa97c 100644
+> --- a/arch/arm/boot/dts/qcom/qcom-sdx65.dtsi
+> +++ b/arch/arm/boot/dts/qcom/qcom-sdx65.dtsi
+> @@ -332,6 +332,9 @@
+>  				     <GIC_SPI 145 IRQ_TYPE_LEVEL_HIGH>;
+>  			interrupt-names = "global", "doorbell";
+>  
+> +			interconnects = <&system_noc MASTER_PCIE_0 &mc_virt SLAVE_EBI1>;
+> +			interconnect-names = "pcie-mem";
+> +
+>  			resets = <&gcc GCC_PCIE_BCR>;
+>  			reset-names = "core";
+>  
+> -- 
+> 2.7.4
+> 
 
 -- 
-Jingfeng
-
+மணிவண்ணன் சதாசிவம்
