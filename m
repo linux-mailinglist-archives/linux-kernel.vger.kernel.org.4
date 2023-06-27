@@ -2,123 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EC4073FD11
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 15:45:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4482673FD33
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 15:49:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230424AbjF0NpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 09:45:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42398 "EHLO
+        id S231167AbjF0Ntm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 09:49:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230284AbjF0NpR (ORCPT
+        with ESMTP id S231180AbjF0Nti (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 09:45:17 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D93A211B
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 06:45:16 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-991f956fb5aso161223066b.0
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 06:45:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687873515; x=1690465515;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PCgJkdEEyunIECiH+1imlT3YGzipKdsZqBxVSz2hzhE=;
-        b=yEW2RYhaMp7O0Z7mBIYWx47qxCbbBC4kSyevnPwtr6Tu0coluudBLKH6m15BlQpYn+
-         cJDuTKCYgLXeWHos+R8qLp9feb4/WwTv/+uof1Ou+6Iwo1T0e+MEQVOQq5RsrMazadZu
-         69Az0u/b5gjl3lE0hMeLyC3uVppD7akAStRCrCYiWQEVqvuiMev5gWMXpv5hh9xkkcf1
-         EAtg6C8C9WQwsQsEt1eCqXUiKA3MVwremt76YObWu8CQl+mcI4F8mVFHZGW1rNcD+w72
-         i5zPK1FSGo/Xv/eOsjaaWAruPi2hhoXRVAkCpPDQF8pzP7CtVeVGIoe4YEIYw8KVSmd5
-         GBHg==
+        Tue, 27 Jun 2023 09:49:38 -0400
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA96A30C7;
+        Tue, 27 Jun 2023 06:49:31 -0700 (PDT)
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-3fb4146e8fcso13557425e9.0;
+        Tue, 27 Jun 2023 06:49:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687873515; x=1690465515;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PCgJkdEEyunIECiH+1imlT3YGzipKdsZqBxVSz2hzhE=;
-        b=QIGsxnmQdrgEiA68qnNdlYDLCcUon0EHWs5i6JM6TpY8yBrgKmbJ5d2uGOlaylI2bH
-         DZ2Tsxq8VZvb1l/B8qpqifuALjZ+1umt+wSfb29gbv74aPFOWQ+K6fBNbBRwB75EeorV
-         ilW49yz7luv0hxA8ZssmCAr7lCnsamiA0olNwW//hie6MELOKHYhBFFTtw+JB5bbsoxr
-         fVl/Ii47MSw+grdWR+iFdr8l+5H4g0ID0y9g1UpSBK0C51BHu2duhizBhYguF14EGuVK
-         51U9Om4arKtR2VX1qU3x/OUuvsgnPR+QiARwNWyForJ4dmC2jmIraUpMr9TcsToAwcG7
-         wwNQ==
-X-Gm-Message-State: AC+VfDzLaBITHqAGvXBdwEvxsdKFuelyFgQtwsOx1s39GukyTlfLxEh+
-        pQzYBZChunNyAefUoX/tTHCmsw==
-X-Google-Smtp-Source: ACHHUZ7xNs87HMMWtByJqpHlJHnDFoSkmWTxbl6mYxdivUVK9EldUno8mJHdDxO9cD97xkI8YLQ5MA==
-X-Received: by 2002:a17:907:74b:b0:971:484:6391 with SMTP id xc11-20020a170907074b00b0097104846391mr21886195ejb.20.1687873514820;
-        Tue, 27 Jun 2023 06:45:14 -0700 (PDT)
-Received: from [10.230.170.72] (46-253-189-43.dynamic.monzoon.net. [46.253.189.43])
-        by smtp.gmail.com with ESMTPSA id b6-20020a1709064d4600b00988c6ac6b86sm4537989ejv.186.2023.06.27.06.45.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Jun 2023 06:45:14 -0700 (PDT)
-Message-ID: <3ea32af9-406e-f6fe-1df1-a5988015dbb0@linaro.org>
-Date:   Tue, 27 Jun 2023 15:44:21 +0200
+        d=1e100.net; s=20221208; t=1687873770; x=1690465770;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JZ5UPZsAXXd/EwYzaHgJ76EEF/BDT+AfXC20CK5Riok=;
+        b=b2t5d3tliGUUZNB2eCUeBTpSO98DoYRLPB5cC6iwLsuAHvt5WDVXXZv0agMK5b3UqZ
+         2myWSDnGv4SXu6T5sYpM7Q4saFHbqPk16BQRsdm353L4eX3fnlsLSndGwnPIilxr63LG
+         JTzu3RDb2SxFU6+B2Qz2OPhhzmGMHQgwMZu+0bBFNf2xHB0CjzO1mnrXyJsIP0yy8w8T
+         Ykx5mmMsFA4/fnDqT9ai+Ghs0QocN+5kmR7vknJUvLENpDYDD5WuFjLX8iWITst0MYkn
+         om7QYVg7KW9ds6fob1inNpqmcrFrJQNNmw3hN74uNm024t3/u6eDIwllMzSng95tPZ90
+         ZgGw==
+X-Gm-Message-State: AC+VfDxfbhaCVB8AE1GbJce2m+LlySq9NxoSAdYZYjn7EXMg6s/G+tBe
+        LwVqGNtO3t5tWHgzN0lf1xA=
+X-Google-Smtp-Source: ACHHUZ55+HYPOt4lTrmikt44v/5u95rIpnFobtlTFnf4inIm8wtz5zO4X79B1NhnIW1SHbMi+nqHhg==
+X-Received: by 2002:a05:600c:4e92:b0:3fa:7515:902e with SMTP id f18-20020a05600c4e9200b003fa7515902emr14797741wmq.16.1687873769838;
+        Tue, 27 Jun 2023 06:49:29 -0700 (PDT)
+Received: from localhost (fwdproxy-cln-000.fbsv.net. [2a03:2880:31ff::face:b00c])
+        by smtp.gmail.com with ESMTPSA id n2-20020a5d67c2000000b003127741d7desm10381323wrw.58.2023.06.27.06.49.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Jun 2023 06:49:28 -0700 (PDT)
+From:   Breno Leitao <leitao@debian.org>
+To:     Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     gregkh@linuxfoundation.org, kuniyu@amazon.com,
+        io-uring@vger.kernel.org (open list:IO_URING),
+        linux-kernel@vger.kernel.org (open list),
+        netdev@vger.kernel.org (open list:NETWORKING [GENERAL])
+Subject: [PATCH v4] io_uring: Add io_uring command support for sockets
+Date:   Tue, 27 Jun 2023 06:44:24 -0700
+Message-Id: <20230627134424.2784797-1-leitao@debian.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v4 3/3] dt-bindings: ufs: qcom: Fix sm8450 bindings
-Content-Language: en-US
-To:     Luca Weiss <luca.weiss@fairphone.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Iskren Chernev <me@iskren.info>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Eric Biggers <ebiggers@google.com>
-References: <20221209-dt-binding-ufs-v4-0-14ced60f3d1b@fairphone.com>
- <20221209-dt-binding-ufs-v4-3-14ced60f3d1b@fairphone.com>
- <1f94de94-c5bd-738d-5fbe-907558333cb2@linaro.org>
- <CTNAIDCV0BIO.2JMX8MXEQ197U@otso>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CTNAIDCV0BIO.2JMX8MXEQ197U@otso>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/06/2023 10:29, Luca Weiss wrote:
-> On Mon Jun 26, 2023 at 10:27 AM CEST, Krzysztof Kozlowski wrote:
->> On 26/06/2023 10:15, Luca Weiss wrote:
->>> SM8450 actually supports ICE (Inline Crypto Engine) so adjust the
->>> bindings and the example to match.
->>>
->>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>> Reviewed-by: Eric Biggers <ebiggers@google.com>
->>> Reviewed-by: Iskren Chernev <me@iskren.info>
->>> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
->>
->> SM8450 should be rather converted to qcom,ice.
-> 
-> In v5 sm8450 is now using ICE, both in dtsi and binding example. But I
-> guess you could also argue reg-names should be purged from dtsi and
-> binding completely and to convert all existing dtsi to use the
-> standalone ice node, right?
+Enable io_uring commands on network sockets. Create two new
+SOCKET_URING_OP commands that will operate on sockets.
 
-It would be good, but that's no exactly my goal. My goal is to have
-dtbs_check without errors.
+In order to call ioctl on sockets, use the file_operations->io_uring_cmd
+callbacks, and map it to a uring socket function, which handles the
+SOCKET_URING_OP accordingly, and calls socket ioctls.
 
-> 
-> But I'd also like for this series to finally land at some point, we can
-> do this later, okay?
+This patches was tested by creating a new test case in liburing.
+Link: https://github.com/leitao/liburing/tree/io_uring_cmd
 
-I need to look at v5 then.
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+V1 -> V2:
+	* Keep uring code outside of network core subsystem
+	* Uses ioctl to define uring operation
+	* Use a generic ioctl function, instead of copying it over
+V2 -> V3:
+	* Do not use ioctl() helpers to create uring operations
+	* Rename uring_sock_cmd to io_uring_cmd_sock
+V3 -> V4:
+	* Uses READ_ONCE() when accessing sk->sk_prot
+---
+ include/linux/io_uring.h      |  6 ++++++
+ include/uapi/linux/io_uring.h |  8 ++++++++
+ io_uring/uring_cmd.c          | 28 ++++++++++++++++++++++++++++
+ net/socket.c                  |  2 ++
+ 4 files changed, 44 insertions(+)
 
-
-Best regards,
-Krzysztof
+diff --git a/include/linux/io_uring.h b/include/linux/io_uring.h
+index 7fe31b2cd02f..f00baf2929ff 100644
+--- a/include/linux/io_uring.h
++++ b/include/linux/io_uring.h
+@@ -71,6 +71,7 @@ static inline void io_uring_free(struct task_struct *tsk)
+ 	if (tsk->io_uring)
+ 		__io_uring_free(tsk);
+ }
++int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags);
+ #else
+ static inline int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
+ 			      struct iov_iter *iter, void *ioucmd)
+@@ -102,6 +103,11 @@ static inline const char *io_uring_get_opcode(u8 opcode)
+ {
+ 	return "";
+ }
++static inline int io_uring_cmd_sock(struct io_uring_cmd *cmd,
++				    unsigned int issue_flags)
++{
++	return -EOPNOTSUPP;
++}
+ #endif
+ 
+ #endif
+diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
+index 0716cb17e436..5c25f8c98aa8 100644
+--- a/include/uapi/linux/io_uring.h
++++ b/include/uapi/linux/io_uring.h
+@@ -703,6 +703,14 @@ struct io_uring_recvmsg_out {
+ 	__u32 flags;
+ };
+ 
++/*
++ * Argument for IORING_OP_URING_CMD when file is a socket
++ */
++enum {
++	SOCKET_URING_OP_SIOCINQ		= 0,
++	SOCKET_URING_OP_SIOCOUTQ,
++};
++
+ #ifdef __cplusplus
+ }
+ #endif
+diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
+index 5e32db48696d..bb24f67b0ad3 100644
+--- a/io_uring/uring_cmd.c
++++ b/io_uring/uring_cmd.c
+@@ -7,6 +7,7 @@
+ #include <linux/nospec.h>
+ 
+ #include <uapi/linux/io_uring.h>
++#include <uapi/asm-generic/ioctls.h>
+ 
+ #include "io_uring.h"
+ #include "rsrc.h"
+@@ -156,3 +157,30 @@ int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
+ 	return io_import_fixed(rw, iter, req->imu, ubuf, len);
+ }
+ EXPORT_SYMBOL_GPL(io_uring_cmd_import_fixed);
++
++int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags)
++{
++	struct socket *sock = cmd->file->private_data;
++	struct sock *sk = sock->sk;
++	struct proto *prot = READ_ONCE(sk->sk_prot);
++	int ret, arg = 0;
++
++	if (!prot || !prot->ioctl)
++		return -EOPNOTSUPP;
++
++	switch (cmd->sqe->cmd_op) {
++	case SOCKET_URING_OP_SIOCINQ:
++		ret = prot->ioctl(sk, SIOCINQ, &arg);
++		if (ret)
++			return ret;
++		return arg;
++	case SOCKET_URING_OP_SIOCOUTQ:
++		ret = prot->ioctl(sk, SIOCOUTQ, &arg);
++		if (ret)
++			return ret;
++		return arg;
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++EXPORT_SYMBOL_GPL(io_uring_cmd_sock);
+diff --git a/net/socket.c b/net/socket.c
+index b778fc03c6e0..09b105d00445 100644
+--- a/net/socket.c
++++ b/net/socket.c
+@@ -88,6 +88,7 @@
+ #include <linux/xattr.h>
+ #include <linux/nospec.h>
+ #include <linux/indirect_call_wrapper.h>
++#include <linux/io_uring.h>
+ 
+ #include <linux/uaccess.h>
+ #include <asm/unistd.h>
+@@ -159,6 +160,7 @@ static const struct file_operations socket_file_ops = {
+ #ifdef CONFIG_COMPAT
+ 	.compat_ioctl = compat_sock_ioctl,
+ #endif
++	.uring_cmd =    io_uring_cmd_sock,
+ 	.mmap =		sock_mmap,
+ 	.release =	sock_close,
+ 	.fasync =	sock_fasync,
+-- 
+2.34.1
 
