@@ -2,181 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58BBC7403F4
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 21:17:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D4E87403F5
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 21:18:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230164AbjF0TRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 15:17:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46446 "EHLO
+        id S229814AbjF0TS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 15:18:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjF0TRd (ORCPT
+        with ESMTP id S229437AbjF0TS0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 15:17:33 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 211ABE6C;
-        Tue, 27 Jun 2023 12:17:31 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 27 Jun 2023 15:18:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53EA3E6C
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 12:18:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 5482D379;
-        Tue, 27 Jun 2023 19:17:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 5482D379
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1687893451; bh=HtMhJa4GsclKvK3rE+gtegHehvDpoPX4rQp4mI/ZonM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=nF6pm+4pfkm2Spf7xeJ4tTd1sxP9UynePsd4Mph6b30a6Zu4gJs2LlmuURr6eXLtt
-         8b0TcOws93EbTI059HPMI+okwySmsP8ILtqTruXxefkZR2ptvTp+gAadaWi6zRvyHQ
-         XL6vYB41FTMM1Pe8groLxlJD05dARTW1CCMlrq/hbXEVB7KhynovI8+wIMKrpBqvv1
-         taizRABHA+hod7vcUMgW2ZeW66qmC3J/nSiK3DRRAHidqmoNavnx7toNraYHVtYs2P
-         I5NG8VzQ/KWD5RWdXEuzyHDQqGDp9yw/zUHDn5dcD2ljScadDnHWg8UJ0hS9KBy3Hh
-         PGD/NVWDMSIBg==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org
-Subject: [GIT PULL] Move arm64 documentation under Documentation/arch
-Date:   Tue, 27 Jun 2023 13:17:29 -0600
-Message-ID: <871qhwemuu.fsf@meer.lwn.net>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DB8FF6120E
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 19:18:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F25C5C433C8;
+        Tue, 27 Jun 2023 19:18:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687893504;
+        bh=uwzZUjZSCfj7+frIlsvFzZuiym3U7S7pNMgIXSdtB4Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=p89b6LX3hLunHjDY3X4M9F1r/ot+U5G1vIelARlufBDGrahv2EeW1K5E8jShoR0AL
+         Eez//ApvuP6lQfl3ln4QNkBjQhNSDVWrwdof9FiWWZvyDQcakaDKVJA+UVcHyjlMXY
+         YMW6xbMP08W82OGPQjLBSh2KQWfQyOIqfSxBig3nipuLY596mkuHKAGwISc2hYjVLA
+         OdnOnfHZa9J1YBGX5z22QUlqdD+zT23S4rAaeaVq+CrmkWCa4r8SXrJfe0Mph63Mqf
+         2E1BB7jDdM9AHEVw4jm8CHIdFxwaMHSbXyR2hHHRG8tv/IuAhKiagovj0DGDn+WIqA
+         DdlKQQ7zq/mew==
+Date:   Tue, 27 Jun 2023 20:18:18 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     "Hongren (Zenithal) Zheng" <i@zenithal.me>
+Cc:     Evan Green <evan@rivosinc.com>, Samuel Ortiz <sameo@rivosinc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org, linux@rivosinc.com,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>,
+        Anup Patel <apatel@ventanamicro.com>,
+        linux-kernel@vger.kernel.org, Guo Ren <guoren@kernel.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
+        Jiatai He <jiatai2021@iscas.ac.cn>
+Subject: Re: [PATCH 1/3] RISC-V: add Bitmanip/Scalar Crypto parsing from DT
+Message-ID: <20230627-projector-rockband-cac4bd138338@spud>
+References: <20230627143747.1599218-1-sameo@rivosinc.com>
+ <20230627143747.1599218-2-sameo@rivosinc.com>
+ <CALs-HssMkVikspnEi-Ek2t=ABvFvgptAhsBjk1+aLuVjiP7P7w@mail.gmail.com>
+ <20230627-debating-twelve-da2c1ed60948@spud>
+ <ZJsyntnQ/FDXgNPk@Sun>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="3UzS4ywJFe4Sz/og"
+Content-Disposition: inline
+In-Reply-To: <ZJsyntnQ/FDXgNPk@Sun>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit f8c25662028b38f31f55f9c5d8da45a75dbf094a:
 
-  dt-bindings: Update Documentation/arm references (2023-06-16 08:32:06 -0600)
+--3UzS4ywJFe4Sz/og
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-are available in the Git repository at:
+On Wed, Jun 28, 2023 at 03:03:58AM +0800, Hongren (Zenithal) Zheng wrote:
+> On Tue, Jun 27, 2023 at 07:48:15PM +0100, Conor Dooley wrote:
+> > On Tue, Jun 27, 2023 at 11:14:30AM -0700, Evan Green wrote:
+> > > On Tue, Jun 27, 2023 at 7:38=E2=80=AFAM Samuel Ortiz <sameo@rivosinc.=
+com> wrote:
+> > > >
+> > > > From: "Hongren (Zenithal) Zheng" <i@zenithal.me>
+> > > >
+> > > > This patch parses Zb/Zk related string from DT and
+> >=20
+> > %s/This patch//
+> >=20
+> > > > output them in cpuinfo
+> > > >
+> > > > One thing worth noting is that if DT provides zk,
+> > > > all zbkb, zbkc, zbkx and zkn, zkr, zkt would be enabled.
+> >=20
+> > Please explain why this is okay.
+>=20
+> From riscv scalar crypto spec, zk is a shorthand
+> for zkn, zkr and zkt and zkn also includes zbkb, zbkc
+> and zbkx.
 
-  git://git.lwn.net/linux.git tags/docs-arm64-move
+Hmm, seems you misunderstood, sorry about that.
+What I was looking for is an explanation of this in the commit message.
 
-for you to fetch changes up to f40f97aaf7fa6222f4ec073c24fb14f04ffb6f80:
+Hope that helps,
+Conor.
 
-  perf arm-spe: Fix a dangling Documentation/arm64 reference (2023-06-21 08:53:31 -0600)
+--3UzS4ywJFe4Sz/og
+Content-Type: application/pgp-signature; name="signature.asc"
 
-----------------------------------------------------------------
-Move the arm64 architecture documentation under Documentation/arch/.  This
-brings some order to the documentation directory, declutters the top-level
-directory, and makes the documentation organization more closely match that
-of the source.
+-----BEGIN PGP SIGNATURE-----
 
-This move generates a couple of last-minute conflicts with the arm64
-tree (and, thus, mainline).  They are easy enough to resolve by just
-adding the changed files in the new location.
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJs1+gAKCRB4tDGHoIJi
+0sEhAP4gjuEYPLur3H8NK87xQ6PWeP9nG9Wm91xRu6Yk/PC/VAEA42C+FQ5GUpKv
+Bf/0pPRGWuoqFLtpo0WEjUWORA7hKAk=
+=ZW5q
+-----END PGP SIGNATURE-----
 
-(This is the last such move for this cycle)
-----------------------------------------------------------------
-Jonathan Corbet (5):
-      docs: arm64: Move arm64 documentation under Documentation/arch/
-      dt-bindings: fix dangling Documentation/arm64 reference
-      arm64: Fix dangling references to Documentation/arm64
-      mm: Fix a dangling Documentation/arm64 reference
-      perf arm-spe: Fix a dangling Documentation/arm64 reference
-
- Documentation/ABI/testing/sysfs-devices-system-cpu           |  2 +-
- Documentation/admin-guide/kernel-parameters.txt              |  2 +-
- Documentation/admin-guide/sysctl/kernel.rst                  |  2 +-
- Documentation/{ => arch}/arm64/acpi_object_usage.rst         |  0
- Documentation/{ => arch}/arm64/amu.rst                       |  0
- Documentation/{ => arch}/arm64/arm-acpi.rst                  |  2 +-
- Documentation/{ => arch}/arm64/asymmetric-32bit.rst          |  0
- Documentation/{ => arch}/arm64/booting.rst                   |  0
- Documentation/{ => arch}/arm64/cpu-feature-registers.rst     |  0
- Documentation/{ => arch}/arm64/elf_hwcaps.rst                | 12 ++++++------
- Documentation/{ => arch}/arm64/features.rst                  |  0
- Documentation/{ => arch}/arm64/hugetlbpage.rst               |  0
- Documentation/{ => arch}/arm64/index.rst                     |  0
- Documentation/{ => arch}/arm64/kasan-offsets.sh              |  0
- Documentation/{ => arch}/arm64/legacy_instructions.rst       |  0
- Documentation/{ => arch}/arm64/memory-tagging-extension.rst  |  2 +-
- Documentation/{ => arch}/arm64/memory.rst                    |  0
- Documentation/{ => arch}/arm64/perf.rst                      |  0
- Documentation/{ => arch}/arm64/pointer-authentication.rst    |  0
- Documentation/{ => arch}/arm64/silicon-errata.rst            |  0
- Documentation/{ => arch}/arm64/sme.rst                       |  2 +-
- Documentation/{ => arch}/arm64/sve.rst                       |  2 +-
- Documentation/{ => arch}/arm64/tagged-address-abi.rst        |  2 +-
- Documentation/{ => arch}/arm64/tagged-pointers.rst           |  2 +-
- Documentation/arch/index.rst                                 |  2 +-
- Documentation/devicetree/bindings/cpu/idle-states.yaml       |  2 +-
- Documentation/translations/zh_CN/{ => arch}/arm64/amu.rst    |  4 ++--
- .../translations/zh_CN/{ => arch}/arm64/booting.txt          |  4 ++--
- .../translations/zh_CN/{ => arch}/arm64/elf_hwcaps.rst       | 10 +++++-----
- .../translations/zh_CN/{ => arch}/arm64/hugetlbpage.rst      |  4 ++--
- Documentation/translations/zh_CN/{ => arch}/arm64/index.rst  |  4 ++--
- .../zh_CN/{ => arch}/arm64/legacy_instructions.txt           |  4 ++--
- Documentation/translations/zh_CN/{ => arch}/arm64/memory.txt |  4 ++--
- Documentation/translations/zh_CN/{ => arch}/arm64/perf.rst   |  4 ++--
- .../translations/zh_CN/{ => arch}/arm64/silicon-errata.txt   |  4 ++--
- .../translations/zh_CN/{ => arch}/arm64/tagged-pointers.txt  |  4 ++--
- Documentation/translations/zh_CN/arch/index.rst              |  2 +-
- Documentation/translations/zh_TW/{ => arch}/arm64/amu.rst    |  4 ++--
- .../translations/zh_TW/{ => arch}/arm64/booting.txt          |  4 ++--
- .../translations/zh_TW/{ => arch}/arm64/elf_hwcaps.rst       | 10 +++++-----
- .../translations/zh_TW/{ => arch}/arm64/hugetlbpage.rst      |  4 ++--
- Documentation/translations/zh_TW/{ => arch}/arm64/index.rst  |  4 ++--
- .../zh_TW/{ => arch}/arm64/legacy_instructions.txt           |  4 ++--
- Documentation/translations/zh_TW/{ => arch}/arm64/memory.txt |  4 ++--
- Documentation/translations/zh_TW/{ => arch}/arm64/perf.rst   |  4 ++--
- .../translations/zh_TW/{ => arch}/arm64/silicon-errata.txt   |  4 ++--
- .../translations/zh_TW/{ => arch}/arm64/tagged-pointers.txt  |  4 ++--
- Documentation/translations/zh_TW/index.rst                   |  2 +-
- Documentation/virt/kvm/api.rst                               |  2 +-
- MAINTAINERS                                                  |  2 +-
- arch/arm64/Kconfig                                           |  4 ++--
- arch/arm64/include/asm/efi.h                                 |  2 +-
- arch/arm64/include/asm/image.h                               |  2 +-
- arch/arm64/include/uapi/asm/sigcontext.h                     |  2 +-
- arch/arm64/kernel/kexec_image.c                              |  2 +-
- mm/mremap.c                                                  |  3 ++-
- tools/perf/util/arm-spe-decoder/arm-spe-decoder.c            |  2 +-
- 57 files changed, 76 insertions(+), 75 deletions(-)
- rename Documentation/{ => arch}/arm64/acpi_object_usage.rst (100%)
- rename Documentation/{ => arch}/arm64/amu.rst (100%)
- rename Documentation/{ => arch}/arm64/arm-acpi.rst (99%)
- rename Documentation/{ => arch}/arm64/asymmetric-32bit.rst (100%)
- rename Documentation/{ => arch}/arm64/booting.rst (100%)
- rename Documentation/{ => arch}/arm64/cpu-feature-registers.rst (100%)
- rename Documentation/{ => arch}/arm64/elf_hwcaps.rst (96%)
- rename Documentation/{ => arch}/arm64/features.rst (100%)
- rename Documentation/{ => arch}/arm64/hugetlbpage.rst (100%)
- rename Documentation/{ => arch}/arm64/index.rst (100%)
- rename Documentation/{ => arch}/arm64/kasan-offsets.sh (100%)
- rename Documentation/{ => arch}/arm64/legacy_instructions.rst (100%)
- rename Documentation/{ => arch}/arm64/memory-tagging-extension.rst (99%)
- rename Documentation/{ => arch}/arm64/memory.rst (100%)
- rename Documentation/{ => arch}/arm64/perf.rst (100%)
- rename Documentation/{ => arch}/arm64/pointer-authentication.rst (100%)
- rename Documentation/{ => arch}/arm64/silicon-errata.rst (100%)
- rename Documentation/{ => arch}/arm64/sme.rst (99%)
- rename Documentation/{ => arch}/arm64/sve.rst (99%)
- rename Documentation/{ => arch}/arm64/tagged-address-abi.rst (99%)
- rename Documentation/{ => arch}/arm64/tagged-pointers.rst (98%)
- rename Documentation/translations/zh_CN/{ => arch}/arm64/amu.rst (97%)
- rename Documentation/translations/zh_CN/{ => arch}/arm64/booting.txt (98%)
- rename Documentation/translations/zh_CN/{ => arch}/arm64/elf_hwcaps.rst (94%)
- rename Documentation/translations/zh_CN/{ => arch}/arm64/hugetlbpage.rst (91%)
- rename Documentation/translations/zh_CN/{ => arch}/arm64/index.rst (63%)
- rename Documentation/translations/zh_CN/{ => arch}/arm64/legacy_instructions.txt (95%)
- rename Documentation/translations/zh_CN/{ => arch}/arm64/memory.txt (97%)
- rename Documentation/translations/zh_CN/{ => arch}/arm64/perf.rst (96%)
- rename Documentation/translations/zh_CN/{ => arch}/arm64/silicon-errata.txt (97%)
- rename Documentation/translations/zh_CN/{ => arch}/arm64/tagged-pointers.txt (94%)
- rename Documentation/translations/zh_TW/{ => arch}/arm64/amu.rst (97%)
- rename Documentation/translations/zh_TW/{ => arch}/arm64/booting.txt (98%)
- rename Documentation/translations/zh_TW/{ => arch}/arm64/elf_hwcaps.rst (94%)
- rename Documentation/translations/zh_TW/{ => arch}/arm64/hugetlbpage.rst (91%)
- rename Documentation/translations/zh_TW/{ => arch}/arm64/index.rst (71%)
- rename Documentation/translations/zh_TW/{ => arch}/arm64/legacy_instructions.txt (96%)
- rename Documentation/translations/zh_TW/{ => arch}/arm64/memory.txt (97%)
- rename Documentation/translations/zh_TW/{ => arch}/arm64/perf.rst (96%)
- rename Documentation/translations/zh_TW/{ => arch}/arm64/silicon-errata.txt (97%)
- rename Documentation/translations/zh_TW/{ => arch}/arm64/tagged-pointers.txt (95%)
+--3UzS4ywJFe4Sz/og--
