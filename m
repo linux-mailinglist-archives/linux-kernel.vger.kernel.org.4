@@ -2,50 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50CA673F39C
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 06:43:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 652C073F3AE
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 06:47:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230029AbjF0En3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 00:43:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38050 "EHLO
+        id S230152AbjF0Eqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 00:46:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbjF0Em0 (ORCPT
+        with ESMTP id S229900AbjF0EqH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 00:42:26 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2432A3AB5;
-        Mon, 26 Jun 2023 21:39:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=J9Qjh0LX2s6qZOttfC56stOAGkypOrOI+0uVjPVfqCA=; b=IY3N3Zn4wZ1gijmYE9QDvFalsP
-        9Gp6qKihOpI+6fenEe0mutGKT716nolrAUYI5KTWjqQ4XdGblrwBl/mj+z75sHDvqonFl5uj0/HOT
-        4paw/yYCrChQgsixkR+4JQCDdeDQcjUiv9gZssthBXZ1fRUDiJT1T5iSjDaE5CIYOk8y6oTS8MhQw
-        Bt7mw7koLvrWqcPuoWUDqHKzc4JWRUm4+kTl6LfjwLxatvRguT3uVqy3Z9tqwFaTjUsERlvkrzuGG
-        Yb5pWSqD9JLfSwg6PP6idOBITJv9WU110bTtf87AVL2Yfvw4QtZwIAv+U5hZZqT6VUf9R2LyZLzUZ
-        V4mvY6rQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1qE0UN-00BiYN-0z;
-        Tue, 27 Jun 2023 04:39:39 +0000
-Date:   Mon, 26 Jun 2023 21:39:39 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jan Kara <jack@suse.com>,
-        David Howells <dhowells@redhat.com>
-Subject: Re: [PATCH 09/12] writeback: Factor writeback_iter_next() out of
- write_cache_pages()
-Message-ID: <ZJpoCy7oWtqy2FoW@infradead.org>
-References: <20230626173521.459345-1-willy@infradead.org>
- <20230626173521.459345-10-willy@infradead.org>
+        Tue, 27 Jun 2023 00:46:07 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD6CDA;
+        Mon, 26 Jun 2023 21:45:00 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id CFBAD5FD20;
+        Tue, 27 Jun 2023 07:44:58 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1687841098;
+        bh=DZNK5j/xeNsVyBBEv+RLRU1x3PU1HApCTn4LArt68Do=;
+        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+        b=fLuVZLz4loF2srtztSqFqfVQX8aWoZ0d8ZsmzBR7YTP80A0nkT6kvSuQu9V8yzlXR
+         m78uJf6V3HAQjk23uo3qYRBDoU5uGUhkcx4CAeZ9P9f4uN7XNkrL6noNkMUQaqFOiN
+         ujpE4nfQ8bBtew7sJsFbfORDYvvHrfs/kQl6MQ0L7hSWvNcsLPGIPGCEwoDGra0Mel
+         /rrRVCkjeG+94MKEpEpAlaWHtynyhANCzu5+OfWQ4SavwPTVUDkOwxJljr79Ktv72g
+         GTOfRYzNGDlIhW+RIvvDeRX+Zly3crfCcDCXW+ObeVIFbcxVpOnF+viDGr4TCdz3zw
+         04UVHaWTIZGOA==
+Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Tue, 27 Jun 2023 07:44:58 +0300 (MSK)
+Message-ID: <0a89e51b-0f7f-b64b-c827-7c943d6f08a6@sberdevices.ru>
+Date:   Tue, 27 Jun 2023 07:39:41 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230626173521.459345-10-willy@infradead.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [RFC PATCH v4 03/17] vsock/virtio: support to send non-linear skb
+Content-Language: en-US
+To:     Stefano Garzarella <sgarzare@redhat.com>
+CC:     Stefan Hajnoczi <stefanha@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel@sberdevices.ru>, <oxffffaa@gmail.com>
+References: <20230603204939.1598818-1-AVKrasnov@sberdevices.ru>
+ <20230603204939.1598818-4-AVKrasnov@sberdevices.ru>
+ <3lg4apldxdrpbkgfa2o4wxe4qyayj2h7b2lfcw3q5a7u3hnofi@z2ifmmzt4xpc>
+From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
+In-Reply-To: <3lg4apldxdrpbkgfa2o4wxe4qyayj2h7b2lfcw3q5a7u3hnofi@z2ifmmzt4xpc>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [100.64.160.123]
+X-ClientProxiedBy: p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) To
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/06/27 02:11:00 #21585463
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,66 +77,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 26, 2023 at 06:35:18PM +0100, Matthew Wilcox (Oracle) wrote:
-> Pull the post-processing of the writepage_t callback into a
-> separate function.  That means changing writeback_finish() to
-> return NULL, and writeback_get_next() to call writeback_finish()
-> when we naturally run out of folios.
+
+
+On 26.06.2023 18:36, Stefano Garzarella wrote:
+> On Sat, Jun 03, 2023 at 11:49:25PM +0300, Arseniy Krasnov wrote:
+>> For non-linear skb use its pages from fragment array as buffers in
+>> virtio tx queue. These pages are already pinned by 'get_user_pages()'
+>> during such skb creation.
+>>
+>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>> ---
+>> net/vmw_vsock/virtio_transport.c | 37 ++++++++++++++++++++++++++------
+>> 1 file changed, 31 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/net/vmw_vsock/virtio_transport.c b/net/vmw_vsock/virtio_transport.c
+>> index e95df847176b..6053d8341091 100644
+>> --- a/net/vmw_vsock/virtio_transport.c
+>> +++ b/net/vmw_vsock/virtio_transport.c
+>> @@ -100,7 +100,9 @@ virtio_transport_send_pkt_work(struct work_struct *work)
+>>     vq = vsock->vqs[VSOCK_VQ_TX];
+>>
+>>     for (;;) {
+>> -        struct scatterlist hdr, buf, *sgs[2];
+>> +        /* +1 is for packet header. */
+>> +        struct scatterlist *sgs[MAX_SKB_FRAGS + 1];
+>> +        struct scatterlist bufs[MAX_SKB_FRAGS + 1];
+>>         int ret, in_sg = 0, out_sg = 0;
+>>         struct sk_buff *skb;
+>>         bool reply;
+>> @@ -111,12 +113,35 @@ virtio_transport_send_pkt_work(struct work_struct *work)
+>>
+>>         virtio_transport_deliver_tap_pkt(skb);
+>>         reply = virtio_vsock_skb_reply(skb);
+>> +        sg_init_one(&bufs[0], virtio_vsock_hdr(skb), sizeof(*virtio_vsock_hdr(skb)));
+>> +        sgs[out_sg++] = &bufs[0];
 > 
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> ---
->  mm/page-writeback.c | 84 ++++++++++++++++++++++++---------------------
->  1 file changed, 44 insertions(+), 40 deletions(-)
+> Can we use out_sg also to index bufs (here and in the rest of the code)?
 > 
-> diff --git a/mm/page-writeback.c b/mm/page-writeback.c
-> index 659df2b5c7c0..ef61d7006c5e 100644
-> --- a/mm/page-writeback.c
-> +++ b/mm/page-writeback.c
-> @@ -2360,7 +2360,7 @@ void tag_pages_for_writeback(struct address_space *mapping,
->  }
->  EXPORT_SYMBOL(tag_pages_for_writeback);
->  
-> -static int writeback_finish(struct address_space *mapping,
-> +static struct folio *writeback_finish(struct address_space *mapping,
->  		struct writeback_control *wbc, bool done)
->  {
->  	folio_batch_release(&wbc->fbatch);
-> @@ -2375,7 +2375,7 @@ static int writeback_finish(struct address_space *mapping,
->  	if (wbc->range_cyclic || (wbc->range_whole && wbc->nr_to_write > 0))
->  		mapping->writeback_index = wbc->done_index;
->  
-> -	return wbc->err;
-> +	return NULL;
+> E.g.
+> 
+>         sg_init_one(&bufs[out_sg], ...)
+>         sgs[out_sg] = &bufs[out_sg];
+>         ++out_sg;
+> 
+>         ...
+>             if (skb->len > 0) {
+>                 sg_init_one(&bufs[out_sg], skb->data, skb->len);
+>                 sgs[out_sg] = &bufs[out_sg];
+>                 ++out_sg;
+>             }
+> 
+>         etc...
+> 
+>> +
+> 
+> For readability, I would move the smaller branch above:
+> 
+>         if (!skb_is_nonlinear(skb)) {
+>             // small block
+>             ...
+>         } else {
+>             // big block
+>             ...
+>         }
+> 
+>> +        if (skb_is_nonlinear(skb)) {
+>> +            struct skb_shared_info *si;
+>> +            int i;
+>> +
+>> +            si = skb_shinfo(skb);
+>> +
+>> +            for (i = 0; i < si->nr_frags; i++) {
+>> +                skb_frag_t *skb_frag = &si->frags[i];
+>> +                void *va = page_to_virt(skb_frag->bv_page);
+>> +
+>> +                /* We will use 'page_to_virt()' for userspace page here,
+>> +                 * because virtio layer will call 'virt_to_phys()' later
+>> +                 * to fill buffer descriptor. We don't touch memory at
+>> +                 * "virtual" address of this page.
+>> +                 */
+>> +                sg_init_one(&bufs[i + 1],
+>> +                        va + skb_frag->bv_offset,
+>> +                        skb_frag->bv_len);
+>> +                sgs[out_sg++] = &bufs[i + 1];
+>> +            }
+>> +        } else {
+>> +            if (skb->len > 0) {
+> 
+> Should we do the same check (skb->len > 0) for nonlinear skb as well?
+> Or do the nonlinear ones necessarily have len > 0?
 
-Having a return value that is always NULL feels a bit weird vs just
-doing that return in the caller.
+Yes, non-linear skb always has 'data_len' > 0, e.g. such skbs always have some
+data in it.
 
-> +static struct folio *writeback_iter_next(struct address_space *mapping,
-> +		struct writeback_control *wbc, struct folio *folio, int error)
-> +{
-> +	if (unlikely(error)) {
-> +		/*
-> +		 * Handle errors according to the type of writeback.
-> +		 * There's no need to continue for background writeback.
-> +		 * Just push done_index past this folio so media
-> +		 * errors won't choke writeout for the entire file.
-> +		 * For integrity writeback, we must process the entire
-> +		 * dirty set regardless of errors because the fs may
-> +		 * still have state to clear for each folio.  In that
-> +		 * case we continue processing and return the first error.
-> +		 */
-> +		if (error == AOP_WRITEPAGE_ACTIVATE) {
-> +			folio_unlock(folio);
-> +			error = 0;
+Thanks, Arseniy
 
-Note there really shouldn't be any need for this in outside of the
-legacy >writepage case.  But it might make sense to delay the removal
-until after ->writepage is gone to avoid bugs in conversions.
-
-> +		} else if (wbc->sync_mode != WB_SYNC_ALL) {
-> +			wbc->err = error;
-> +			wbc->done_index = folio->index +
-> +					folio_nr_pages(folio);
-
-Btw, I wonder if a folio_next_index helper for this might be useful
-as it's a pattern we have in a few places.
+> 
+>> +                sg_init_one(&bufs[1], skb->data, skb->len);
+>> +                sgs[out_sg++] = &bufs[1];
+>> +            }
+>>
+>    ^
+> Blank line that we can remove.
+> 
+> Stefano
+> 
+>> -        sg_init_one(&hdr, virtio_vsock_hdr(skb), sizeof(*virtio_vsock_hdr(skb)));
+>> -        sgs[out_sg++] = &hdr;
+>> -        if (skb->len > 0) {
+>> -            sg_init_one(&buf, skb->data, skb->len);
+>> -            sgs[out_sg++] = &buf;
+>>         }
+>>
+>>         ret = virtqueue_add_sgs(vq, sgs, out_sg, in_sg, skb, GFP_KERNEL);
+>> -- 
+>> 2.25.1
+>>
+> 
