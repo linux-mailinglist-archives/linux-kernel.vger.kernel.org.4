@@ -2,74 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8334473FB52
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 13:47:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCB5A73FB54
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 13:47:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231614AbjF0Lq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 07:46:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52666 "EHLO
+        id S231488AbjF0Lrb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 07:47:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231402AbjF0Lqz (ORCPT
+        with ESMTP id S231230AbjF0Lr3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 07:46:55 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C30C120
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 04:46:49 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-3128fcd58f3so5224474f8f.1
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 04:46:49 -0700 (PDT)
+        Tue, 27 Jun 2023 07:47:29 -0400
+Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 203B2120
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 04:47:28 -0700 (PDT)
+Received: by mail-ua1-x935.google.com with SMTP id a1e0cc1a2514c-794470d8ac0so236890241.3
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 04:47:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687866408; x=1690458408;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=93ix1PFwMGcYNWGV6IVWE0KIXtRQfJZmFaSipqA6+E0=;
-        b=knLhWB3B+Xvns39e03ZtlStEtYlzyXWGSq9r+d8G+edWTvVdD6Q6ov+pClnJ49668e
-         FJ72HKXTWQfDhfCg8OyP7AGd9zSozHaUFxEPvmg0eaiJbJ/3wVw0Sg/VjRZ6APS1ZH4l
-         IVPX6Gpc6oDUZTOxU+6Ly+iAwlcN8NYyS4owJF1b7Iqgk5Oc71ZspouBY01BW3fF80hn
-         RtMSccfIuhHoX5sTc9hvTWKtc9YvdV4mthtb/px8nAZMlTJV8z6qtmjkbbhSd0Su4KFg
-         sxC8KJaoJD0z7jPXCbVzK4I2CM8kWHF6kGFpQe1o3P12DMNE7hI6Hsz2P3+OqPcJUAz3
-         ZUSA==
+        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1687866447; x=1690458447;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+Jb69VzvuiNXGuyYEDdj75WrAIwBneAlG3cVR4iAIDo=;
+        b=x5tBEBlLN90IiDChEwLolJyBlswwxYzTM5iBkWGIBi8JLPk/fevmsfGnAlHWmGopgF
+         gnuyugp1XsdWtjeWiwbvDfRvB7aogLW6Xl3TWt8pKnuXbesl4WgtK06G4JnmvESrWjsa
+         Mo5H7Gc7oW4sVQI+myttVmLThDZ070Glr4TGkQmt5egtjvO8FgpwXo6IdTRqOXucIJcp
+         /QxE+3O0ud/y6uFfa15E8yCfbypNcXSOgtGK1M6EeEMtcofO/OkBFIoPQlz/TivbyHPg
+         HQaHDCLVbFoY53pSf7Bgbr2DIGIXWAa/2fn3hlQdbNcIJXvu1dVxld8mkVSr3QHYnF5F
+         F3ew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687866408; x=1690458408;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1687866447; x=1690458447;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=93ix1PFwMGcYNWGV6IVWE0KIXtRQfJZmFaSipqA6+E0=;
-        b=lYmgusddvwvLYw7uBW1prewRk5E+VpYzmtPfD7oZvhL1507hrUPxzYkb4gIQizbJmu
-         OY13XkfKT6ah8Kiy3N5lM7ctKTKcX2ufvA1dwTpAMXI6zVSfGsugdr7c3YPL2oaok1rE
-         guzlxOBLAu/VOYDXcN1Mvwoj/5eZsR651c1NwDBhaYfd+/KgS+neQ5dgdobXKM3clHUk
-         j269Wa3Q/jk1l2nHAiP1WqBkN61a6kcHPTYVN7/rrXrRX4BNcdvAM+WE3Dub5paC3R7g
-         6atrKal9ZbJShOH64f3GV9dIKQ/ATtiuEo0OwYp9peT0z1stxs+oR58zIct6L78AWMaH
-         u67w==
-X-Gm-Message-State: AC+VfDyiV1M1nv/T8gBIz/oOX5HjKffoUGZFB6EHx9HKDW0+JqZQF3MU
-        Pm3FVepQbM/gp0BtUQeH2Co=
-X-Google-Smtp-Source: ACHHUZ7CyvZzAJr6uBq6De/Xba+6rOZ+iq+1IZHD5Wl0NIxxIwDKi3dF5dD3WZCivlMEJaZIfBNCZA==
-X-Received: by 2002:a05:6000:1370:b0:311:1a45:3606 with SMTP id q16-20020a056000137000b003111a453606mr25243539wrz.30.1687866407799;
-        Tue, 27 Jun 2023 04:46:47 -0700 (PDT)
-Received: from gmail.com (1F2EF7E2.nat.pool.telekom.hu. [31.46.247.226])
-        by smtp.gmail.com with ESMTPSA id j4-20020adfea44000000b0030fa3567541sm10253726wrn.48.2023.06.27.04.46.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jun 2023 04:46:47 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Tue, 27 Jun 2023 13:46:45 +0200
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [GIT PULL] objtool changes for v6.5
-Message-ID: <ZJrMJYz285GLB881@gmail.com>
-References: <ZJrGGfFl4MHEeftI@gmail.com>
+        bh=+Jb69VzvuiNXGuyYEDdj75WrAIwBneAlG3cVR4iAIDo=;
+        b=HL1mSFgX3+P3yPPizLDaS/7ZE+ZMbpsWjp3zZnm5+E5ImEuwAI0qqRg/do/bKSxp0E
+         /4eL9Kb6GLB7OIEFAtveEOHHnVSnJksa+ePKJPEBx+fwFWsSNE9oV3ba0hbKX0/3+GVN
+         RHLd1bSrVIARlv7YKIobnIQVpOkC4tO/dVk23K4RwjZ+nFASbA1od6GjjOdyEh+5PFqd
+         YGVVif5UTFN2sNMhOwIAcFh4QoFObswkIZ4sPiF8cmyD5K3Sq3+4csgthGkHw0rkIAcM
+         POVFM/2hWJxwJrAUjr7YCcxvtpiL+zbrZ/LpdRGUr6+7GlSpg1HpX4IVY1qDy1YL6shI
+         Eqzg==
+X-Gm-Message-State: AC+VfDz32nWqnLNx/JEzKMeN92yGtUMpBBHg8rROsY+Q7nOyMOfBPsGV
+        WPmqKYziapSe0mr30AqBq1bxbHa5H4hD494yuap7MQ==
+X-Google-Smtp-Source: ACHHUZ7AC91ntRak1vhDXqiVBt9TNQ9rq8sMr48JAcjfehZCIklNUVsHUkgyO30n9ui9NTOKXWbGIApzscMmVJux3Wk=
+X-Received: by 2002:a05:6102:527:b0:440:d3f0:b516 with SMTP id
+ m7-20020a056102052700b00440d3f0b516mr6782847vsa.25.1687866447077; Tue, 27 Jun
+ 2023 04:47:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZJrGGfFl4MHEeftI@gmail.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+References: <TYCP286MB1188B6A0379F7928C63288DF8A21A@TYCP286MB1188.JPNP286.PROD.OUTLOOK.COM>
+ <ZJk87rWsDj7pWJIP@sol> <CAMRc=McGOV+A8ROXRinUkWG0POTe37RWphRHDW6sy7UMU-e2UA@mail.gmail.com>
+ <ZJo+wBMsyHvu/7Mj@sol>
+In-Reply-To: <ZJo+wBMsyHvu/7Mj@sol>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Tue, 27 Jun 2023 13:47:16 +0200
+Message-ID: <CAMRc=MeyEuZpDXsZHVGdrivZbYjHr1YDiYAbu4A0--Xy9rKVUw@mail.gmail.com>
+Subject: Re: [PATCH] gpio: gpiolib-cdev: Fix potential &lr->wait.lock deadlock issue
+To:     Kent Gibson <warthog618@gmail.com>
+Cc:     YE Chengfeng <cyeaa@connect.ust.hk>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "andy@kernel.org" <andy@kernel.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,26 +74,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jun 27, 2023 at 3:43=E2=80=AFAM Kent Gibson <warthog618@gmail.com> =
+wrote:
+>
+> On Mon, Jun 26, 2023 at 05:50:47PM +0200, Bartosz Golaszewski wrote:
+> > On Mon, Jun 26, 2023 at 9:23=E2=80=AFAM Kent Gibson <warthog618@gmail.c=
+om> wrote:
+> > >
+> > >
+> > > spin_lock_bh() should be sufficient, given that edge_irq_thread() is =
+run
+> > > in a softirq?  That is faster and would allow the hard irq handlers t=
+o
+> > > still run, and timestamp the event, but inhibit the edge_irq_thread()
+> > > from being called on that CPU until the lock is released.
+> > > (hmmm, gpio_desc_to_lineinfo() also uses spin_lock_irqsave() but it i=
+s
+> > > never called from hard irq context, so there is a good chance I'm mis=
+sing
+> > > something here??)
+> > > More on spin_lock choice below.
+> >
+> > Again: this is incorrect - edge_irq_thread() doesn't execute in
+> > softirq context which can be verified by calling in_softirq() from it.
+> >
+>
+> Ok, that matches what I had initially thought.  Wading through the kernel
+> doc got me thinking the secondary handler was run as a softirq.
+> But it is a threaded irq used here, so the thread handler runs in a
+> kernel thread, as does the debounce_work_func() and hte thread handler
+> process_hw_ts_thread().
+> That's a relief.
+>
+> While we are on the subject of spin_locks, why does
+> gpio_desc_to_lineinfo() use spin_lock_irqsave()?
+> I assume the _irq is necessary as the desc could be updated at interrupt
+> level, but AFAICT gpio_desc_to_lineinfo() is only ever called from proces=
+s
+> context, so why not just spin_lock_irq()?
+>
+> Cheers,
+> Kent.
 
-* Ingo Molnar <mingo@kernel.org> wrote:
+Didn't we use an atomic notifier before for some reason? Then it got
+changed to blocking but the lock stayed like this? It does look like
+spin_lock_irq() would be fine here. On the other hand - if something
+isn't broken... :)
 
-> Linus,
-> 
-> Please pull the latest objtool/core git tree from:
-> 
->    git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git objtool-core-2023-06-27
-> 
->    # HEAD: 301cf77e21317b3465c5e2bb0188df24bbf1c2e2 x86/orc: Make the is_callthunk() definition depend on CONFIG_BPF_JIT=y
-
-I forgot to mention that there's a new conflict when you merge this, in 
-tools/objtool/check.c, plus a semantic conflict in the new 
-tools/objtool/noreturns.h file - to remove the 'btrfs_assertfail' entry 
-from the new tools/objtool/noreturns.h file.
-
-Our -tip CI conflict resolution can be double checked here:
-
-    git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git core/merge
-
-Thanks,
-
-	Ingo
+Bart
