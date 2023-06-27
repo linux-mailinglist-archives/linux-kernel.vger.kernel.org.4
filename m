@@ -2,103 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EB9173FF7D
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 17:17:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F82873FF7F
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 17:17:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232282AbjF0PQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 11:16:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40366 "EHLO
+        id S232284AbjF0PRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 11:17:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230267AbjF0PQu (ORCPT
+        with ESMTP id S232306AbjF0PR2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 11:16:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F37591735;
-        Tue, 27 Jun 2023 08:16:49 -0700 (PDT)
+        Tue, 27 Jun 2023 11:17:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16EF52D60
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 08:17:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8FCC0611CE;
-        Tue, 27 Jun 2023 15:16:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9746C433C8;
-        Tue, 27 Jun 2023 15:16:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9EFE26113C
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 15:17:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94714C433C8;
+        Tue, 27 Jun 2023 15:17:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687879009;
-        bh=zcg5VTHtV7nio5jd3NtBafSOvGTKTW5bNlR/bEqbIcI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=if16nDJdJKGrkct5P9OI/SaQ/Sx5SeEjD5dvafflrsul+ruUjSdJksYdmMNYWi6kC
-         FG9+Txe6R3g7UNU1xfaqlYE9YSAKPIBfjPIttpXCxu1dkK2SbwlPoiYukpjRLuc0LK
-         4j0q7SZ5wkve9JyX/1fnDaG+tKfAalIPjusK5M/G7UZeY31Dafmsu3jsGWVpeomwFz
-         FpzDPUtk3hITyS3PB4jrvT8p5nWxkOmhYoSlpApZ1/gXQG3LbZd6lDFt6lhCmNIwkp
-         TIw38VZnpk5b1HoTPQygFq0e8qHNohW4BJBROi9H+qmPy98LnoTTt5bg3WL+uFGVUK
-         KwVNCNXhAsbsA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1qEAQw-00045R-Gd; Tue, 27 Jun 2023 17:16:46 +0200
-Date:   Tue, 27 Jun 2023 17:16:46 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com,
-        quic_jackp@quicinc.com, quic_harshq@quicinc.com,
-        ahalaney@redhat.com, quic_shazhuss@quicinc.com
-Subject: Re: [PATCH v9 08/10] arm64: dts: qcom: sc8280xp: Add multiport
- controller node for SC8280
-Message-ID: <ZJr9Xiv6_0nG0Pui@hovoldconsulting.com>
-References: <20230621043628.21485-1-quic_kriskura@quicinc.com>
- <20230621043628.21485-9-quic_kriskura@quicinc.com>
- <2eab503f-fa0d-990e-bed2-2445c5496798@linaro.org>
- <b183a130-6237-7d15-5d5a-b56582b92b35@quicinc.com>
+        s=k20201202; t=1687879042;
+        bh=JLFnvqaCEuMGWGsFZp5HIVWVrdSzRgIIllbHWfNkc94=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Gix3SdZARGqFuya47b/hYn6M5FAKuv7SvLWXGPYTMsy9SlnzetL6xHKyOSAI96hkV
+         FHg90LgYR7bnVE4RE3n6wjE/aZd6/qY9QIw9g7KAA7JLTtXQcGaysw6zKMeEYmgR46
+         ssTN6wjNeSt/sWDv/2o3RumDcqw20UlYR3DipLLubZSteJPehZ7L1RsulcyjOJfBHT
+         bpBLqu9+lo15RU4jIqBl7d7+5xSaHIBiVCfniJPqFfn1aJpMqMghkuZzZwTQvAQxDD
+         FC+CO44MIRQQVJG5FlPuwTWPqAuEJeGOjiOwNemUjSoagYpySmgCstkYsuN5IV0YGL
+         YQqK31ebI0W/g==
+Message-ID: <53f5390d-b86a-94a0-3d3a-e2f6ffe19707@kernel.org>
+Date:   Tue, 27 Jun 2023 10:17:19 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b183a130-6237-7d15-5d5a-b56582b92b35@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 00/12] New Crypto service commands
+Content-Language: en-US
+To:     "Ang, Tien Sung" <tien.sung.ang@intel.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230623032029.1755017-1-tien.sung.ang@intel.com>
+ <239e7171-1d29-0208-ca6c-abc85ccbe0e9@kernel.org>
+ <DM8PR11MB5735AB9B7112E33B173C4251BE23A@DM8PR11MB5735.namprd11.prod.outlook.com>
+ <e65cd698-3ac5-4eb7-a65c-2647c77af78f@kernel.org>
+ <DM8PR11MB57351C38071E9960A6B5FECCBE23A@DM8PR11MB5735.namprd11.prod.outlook.com>
+From:   Dinh Nguyen <dinguyen@kernel.org>
+In-Reply-To: <DM8PR11MB57351C38071E9960A6B5FECCBE23A@DM8PR11MB5735.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 24, 2023 at 12:43:23PM +0530, Krishna Kurapati PSSNV wrote:
-> > On 21.06.2023 06:36, Krishna Kurapati wrote:
-> >> Add USB and DWC3 node for tertiary port of SC8280 along with multiport
-> >> IRQ's and phy's. This will be used as a base for SA8295P and SA8295-Ride
-> >> platforms.
-> >>
-> >> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
 
-> > Not a comment to the patch, but very nice that Qcom ensured every
-> > endpoint is wakeup-capable, this used not to be the case before :D
 
-> Yes wakeup is supported by all ports now, but I didn't make those 
-> changes now as I wanted to keep driver code diff minimal and don't need 
-> wakeup support for the product currently. But for sure, will update 
-> driver code to handle wakeup on all ports in near future.
+On 6/23/23 02:35, Ang, Tien Sung wrote:
+> 
+> 
+>> -----Original Message-----
+>> From: Dinh Nguyen <dinguyen@kernel.org>
+>> Sent: Friday, 23 June, 2023 3:32 PM
+>> To: Ang, Tien Sung <tien.sung.ang@intel.com>
+>> Cc: linux-kernel@vger.kernel.org
+>> Subject: Re: [PATCH 00/12] New Crypto service commands
+>>
+>>
+>>
+>> On 6/23/23 01:53, Ang, Tien Sung wrote:
+>>>
+>>>
+>>>> -----Original Message-----
+>>>> From: Dinh Nguyen <dinguyen@kernel.org>
+>>>> Sent: Friday, 23 June, 2023 1:37 PM
+>>>> To: Ang, Tien Sung <tien.sung.ang@intel.com>
+>>>> Cc: linux-kernel@vger.kernel.org
+>>>> Subject: Re: [PATCH 00/12] New Crypto service commands
+>>>>
+>>>>
+>>>>
+>>>> On 6/22/23 22:20, tien.sung.ang@intel.com wrote:
+>>>>> From: Ang Tien Sung <tien.sung.ang@intel.com>
+>>>>>
+>>>>> hi,
+>>>>> This patch set comprises updates to the svc driver to add new crypto
+>>>>> services for AES encryption/decryption, SHA2 digest generation, SHA2
+>>>>> MAC verification, ECDSA hash signing, ECDSA SHA2 data signing, ECDSA
+>>>>> hash signature verification, ECDSA SHA2 data signature verification
+>>>>> crypto key management and lastly ECDSA public key retrieval.
+>>>>> The additions of the commands are all standard entries to svc driver
+>>>>> with minimal logic.
+>>>>>
+>>>>
+>>>> I guess I'll ask the same question, who's the consumer for these?
+>>>>
+>>>>
+>>> This commands will be used by the future and current downstream crypto
+>>> driver that is under redesign.
+>>> The svc driver is merely a firmware messenger that is used to send
+>>> Mailbox commands to the SDM firmware.
+>>> It is essential for us to begin doing this first. Thanks
+>>>
+>>
+>> I think what you're going to find out quickly when you upstream more is that
+>> the community will not care about your downstream stuff. The problem I
+>> have with this patch is that you're adding code that no-one is using at the
+>> moment and with the crypto driver being redesigned, this code may or may
+>> not get used, right? Let's focus on the getting the crypto driver first.
+>>
+>> Dinh
+> I disagree. Our customers want the SVC driver to be updated. They will use a
+> combination of down-stream sources and upstream sources. The crypto driver
+> development is another matter. We should focus on ensuring the SVC driver is
+> fully upstream will all features. Hope you understand. Let us get there.
+> 
 
-Why didn't you include it in v9? I thought you had a working
-implementation for this?
+Sorry, but in good stewardship, I cannot accept code that is going to be 
+unused in the kernel. If any other community members want to chime in, 
+I'm open.
 
-Since wakeup will be another case where glue and core need to interact,
-it's good to have the wakeup implementation from the start to be able to
-evaluate your multiport implementation properly.
-
-Right now it looks like you only added wakeup interrupt lookup and
-request, but then you never actually enable them which is not very nice.
-
-Johan
+Dinh
