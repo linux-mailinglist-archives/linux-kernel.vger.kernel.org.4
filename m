@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F54A73FEE9
+	by mail.lfdr.de (Postfix) with ESMTP id 783AA73FEEA
 	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 16:47:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232215AbjF0Oqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 10:46:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43776 "EHLO
+        id S232226AbjF0Oq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 10:46:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230405AbjF0Opz (ORCPT
+        with ESMTP id S231986AbjF0Op4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 10:45:55 -0400
+        Tue, 27 Jun 2023 10:45:56 -0400
 Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03F8635A4;
-        Tue, 27 Jun 2023 07:45:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A5F41A2;
+        Tue, 27 Jun 2023 07:45:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=inria.fr; s=dc;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=pZdndxQjXQo3BjDH5lsbs+qaO6vkvVK0DG4Lv8xJQDg=;
-  b=g8uRt1mM441oG8JVpko4SPSsBHoBBFNgc9h+XNADjURwzgbxiF4pOxxw
-   rpfubCYGNo2a7MOBMZHsQ5NqmOwXA/WELw6L0eotmQyDA3gTbvDHCM72i
-   BK1nd4nWtLzc1fcFRMbFdp8G8mGEkpNIzyClpIYE/itJvBkxQW1F7CwPs
-   E=;
+  bh=VbQwbhgrDYedmuD3Y7RCVQ57pP4c57YQ3unyPj5Q6N4=;
+  b=nMz70TxR38nwlO049zqy5wzxY7CBD7tWCsU5Sn6Y6MlVDUptwIcjVDE5
+   p6BL4QWGL3Ag4tQzyaC7hjRzFtGLZRTZymYhHQTTx2ihXgi3j+8n0iMOR
+   bFTgYsROCO8yKBSy3R85gXtUQz94fVgblUf+B/eGNjmAxR9FgkimEm8r1
+   c=;
 Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
 X-IronPort-AV: E=Sophos;i="6.01,162,1684792800"; 
-   d="scan'208";a="114936342"
+   d="scan'208";a="114936343"
 Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
   by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 16:43:52 +0200
 From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     Selvin Xavier <selvin.xavier@broadcom.com>
+To:     Ian Abbott <abbotti@mev.co.uk>
 Cc:     kernel-janitors@vger.kernel.org, keescook@chromium.org,
         christophe.jaillet@wanadoo.fr, kuba@kernel.org,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org,
+        H Hartley Sweeten <hsweeten@visionengravers.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 19/24] RDMA/bnxt_re: use vmalloc_array and vcalloc
-Date:   Tue, 27 Jun 2023 16:43:34 +0200
-Message-Id: <20230627144339.144478-20-Julia.Lawall@inria.fr>
+Subject: [PATCH v2 20/24] comedi: use vmalloc_array and vcalloc
+Date:   Tue, 27 Jun 2023 16:43:35 +0200
+Message-Id: <20230627144339.144478-21-Julia.Lawall@inria.fr>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20230627144339.144478-1-Julia.Lawall@inria.fr>
 References: <20230627144339.144478-1-Julia.Lawall@inria.fr>
@@ -86,7 +85,7 @@ let rename alloc =
 |
       alloc(C1 * C2)
 |
-      alloc((sizeof(t)) * (COUNT), ...)
+      alloc((sizeof(t)) * (COUNT))
 |
 -     alloc((e1) * (e2))
 +     realloc(e1, e2)
@@ -104,26 +103,31 @@ Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 ---
 v2: Use vmalloc_array and vcalloc instead of array_size.
 This also leaves a multiplication of a constant by a sizeof
-as is.  Two patches are thus dropped from the series.
+as is.  The position of this patch in the series changed
+accordingly.
 
- drivers/infiniband/hw/bnxt_re/qplib_res.c |    4 ++--
+ drivers/comedi/comedi_buf.c |    4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff -u -p a/drivers/infiniband/hw/bnxt_re/qplib_res.c b/drivers/infiniband/hw/bnxt_re/qplib_res.c
---- a/drivers/infiniband/hw/bnxt_re/qplib_res.c
-+++ b/drivers/infiniband/hw/bnxt_re/qplib_res.c
-@@ -118,11 +118,11 @@ static int __alloc_pbl(struct bnxt_qplib
- 	else
- 		pages = sginfo->npages;
- 	/* page ptr arrays */
--	pbl->pg_arr = vmalloc(pages * sizeof(void *));
-+	pbl->pg_arr = vmalloc_array(pages, sizeof(void *));
- 	if (!pbl->pg_arr)
- 		return -ENOMEM;
+diff -u -p a/drivers/comedi/comedi_buf.c b/drivers/comedi/comedi_buf.c
+--- a/drivers/comedi/comedi_buf.c
++++ b/drivers/comedi/comedi_buf.c
+@@ -89,7 +89,7 @@ comedi_buf_map_alloc(struct comedi_devic
+ 		bm->dma_hw_dev = get_device(dev->hw_dev);
+ 	}
  
--	pbl->pg_map_arr = vmalloc(pages * sizeof(dma_addr_t));
-+	pbl->pg_map_arr = vmalloc_array(pages, sizeof(dma_addr_t));
- 	if (!pbl->pg_map_arr) {
- 		vfree(pbl->pg_arr);
- 		pbl->pg_arr = NULL;
+-	bm->page_list = vzalloc(sizeof(*buf) * n_pages);
++	bm->page_list = vcalloc(n_pages, sizeof(*buf));
+ 	if (!bm->page_list)
+ 		goto err;
+ 
+@@ -169,7 +169,7 @@ static void __comedi_buf_alloc(struct co
+ 		buf = &bm->page_list[0];
+ 		async->prealloc_buf = buf->virt_addr;
+ 	} else {
+-		pages = vmalloc(sizeof(struct page *) * n_pages);
++		pages = vmalloc_array(n_pages, sizeof(struct page *));
+ 		if (!pages)
+ 			return;
+ 
 
