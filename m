@@ -2,152 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D3DC740202
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 19:20:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24253740209
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 19:20:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231322AbjF0RU0 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 27 Jun 2023 13:20:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47014 "EHLO
+        id S231363AbjF0RUi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 13:20:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231210AbjF0RUY (ORCPT
+        with ESMTP id S231146AbjF0RUg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 13:20:24 -0400
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B65198;
-        Tue, 27 Jun 2023 10:20:23 -0700 (PDT)
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-570284c7e61so52181587b3.1;
-        Tue, 27 Jun 2023 10:20:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687886422; x=1690478422;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=we44SmO7mtsdbPqwEUGs/5m3S42M0ZPz1W2IALKFOrI=;
-        b=PuTzqYQNGyV9EDRNgMNrWQJEUX4K98nUKRMkdnji/c8b+SEIhnbsAFY9g9P8H3N0df
-         FDpWqupci0f/Ar/ewMhrbDdCcnMAVy6Ej0Pyym0WmDLeFCSG4KWhjf10eOJ/D65UmJq6
-         1XC6vH+UWsvOGjbOjOx/9Knx32tZB7ntbD0SLm376+Y/H2mZoDhewqPW3v7PeJLV20+v
-         BWkpn7RVZHvr9p6Jic521lnR1yF66q+ZFmpKMsLz7svbw5J3/uP4ZqoeP+zws+ej8/oc
-         Par9dg48h1xfCFzNquPxUr5yTv3xLsOePsMuPT6Z4xPkq8CmCuMpSi276MyehzaDFP2I
-         x1ew==
-X-Gm-Message-State: AC+VfDwh6p0wwudVDNbHuzEGgih2oba9U/5FR1c8ilHoq9xCxlEE4/C2
-        VT2cDdFeiP+XjSaVPAgzA4WizsH/wXI1uP78
-X-Google-Smtp-Source: ACHHUZ6wewllzRH48EmvkoG89o5K0oUHe0FOy1quWsvNv2z2ZQfyLyjVZp8PFu/+jMtSqmWyh7CXpw==
-X-Received: by 2002:a81:6f54:0:b0:570:8856:5dbc with SMTP id k81-20020a816f54000000b0057088565dbcmr31372303ywc.41.1687886421982;
-        Tue, 27 Jun 2023 10:20:21 -0700 (PDT)
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
-        by smtp.gmail.com with ESMTPSA id m5-20020a819e05000000b00568a207aaedsm1865118ywj.68.2023.06.27.10.20.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Jun 2023 10:20:21 -0700 (PDT)
-Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-be30cbe88b3so4700827276.1;
-        Tue, 27 Jun 2023 10:20:21 -0700 (PDT)
-X-Received: by 2002:a25:d207:0:b0:ba8:2e05:3e9c with SMTP id
- j7-20020a25d207000000b00ba82e053e9cmr29434011ybg.24.1687886421253; Tue, 27
- Jun 2023 10:20:21 -0700 (PDT)
+        Tue, 27 Jun 2023 13:20:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D249198;
+        Tue, 27 Jun 2023 10:20:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 85125611EE;
+        Tue, 27 Jun 2023 17:20:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E19DC433C9;
+        Tue, 27 Jun 2023 17:20:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687886433;
+        bh=yG+a22abZ9SzUNQMe+8vtxSHNs6hg3hQ7bJmtKEfq6g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hyU4+sm92oSYzUVPRTJlX+Fe8+ttP3U+br5Qu6kTbNbf5lZfR+LqFTbGiYEKIV8Q+
+         5RtK9Vqc8+8DspI54cUVWQ4w14eVSy2+Rv5XCiYaU6R+cA3pp+bjTUBvPBsuxG8/R+
+         5XDChTIqMS7+mQbhSiOPUMCfEr82Rp5khktKM6IqzLhSB7J7tunqkGu8E55EYQkF3+
+         mRES0K7flwKd7TMmFAgchyy7qWWCZpdIVYnU15tNXlY1LFxI8enQ8GdFiHvchx76Fp
+         B6X9WIMAwaBYF4kJZrpLfqjsBEN5q10onKUXCktEh8nnAM3zv8+2mKEcK5AetxE/4j
+         uk99KdZ6KzwgA==
+Date:   Tue, 27 Jun 2023 18:20:21 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        John Allen <john.allen@amd.com>, kcc@google.com,
+        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com, akpm@linux-foundation.org,
+        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
+        david@redhat.com, debug@rivosinc.com, szabolcs.nagy@arm.com,
+        torvalds@linux-foundation.org, Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        Pengfei Xu <pengfei.xu@intel.com>
+Subject: Re: [PATCH v9 28/42] x86/shstk: Add user-mode shadow stack support
+Message-ID: <76a87cdf-4d4f-4b3f-b01f-0540eab71ac7@sirena.org.uk>
+References: <20230613001108.3040476-1-rick.p.edgecombe@intel.com>
+ <20230613001108.3040476-29-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
-References: <20230329202148.71107-1-dennis@kernel.org> <ZCTOMVjW+pnZVGsQ@snowbird>
-In-Reply-To: <ZCTOMVjW+pnZVGsQ@snowbird>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 27 Jun 2023 19:20:09 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVK2zPnyB9s0uYwoKj0xspa0CRzqPjhrj-YFqVNdXxEkg@mail.gmail.com>
-Message-ID: <CAMuHMdVK2zPnyB9s0uYwoKj0xspa0CRzqPjhrj-YFqVNdXxEkg@mail.gmail.com>
-Subject: Re: [PATCH v2] mmc: inline the first mmc_scan() on mmc_start_host()
-To:     Dennis Zhou <dennis@kernel.org>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5kInKYAEl4EdyhTr"
+Content-Disposition: inline
+In-Reply-To: <20230613001108.3040476-29-rick.p.edgecombe@intel.com>
+X-Cookie: Money is the root of all wealth.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dennis,
 
-On Thu, Mar 30, 2023 at 1:48 AM Dennis Zhou <dennis@kernel.org> wrote:
-> When using dm-verity with a data partition on an emmc device, dm-verity
-> races with the discovery of attached emmc devices. This is because mmc's
-> probing code sets up the host data structure then a work item is
-> scheduled to do discovery afterwards. To prevent this race on init,
-> let's inline the first call to detection, __mm_scan(), and let
-> subsequent detect calls be handled via the workqueue.
->
-> Signed-off-by: Dennis Zhou <dennis@kernel.org>
+--5kInKYAEl4EdyhTr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Thanks for your patch, which is now commit 2cc83bf7d41113d9 ("mmc:
-core: Allow mmc_start_host() synchronously detect a card") in
-linux-next/master mmc/next next-20230614 next-20230615 next-20230616
+On Mon, Jun 12, 2023 at 05:10:54PM -0700, Rick Edgecombe wrote:
 
-I have bisected the following failure on Renesas Salvator-XS with R-Car H3
-ES2.0 to the above commit:
-
-    renesas_sdhi_internal_dmac ee140000.mmc: timeout waiting for
-hardware interrupt (CMD0)
-    renesas_sdhi_internal_dmac ee140000.mmc: timeout waiting for
-hardware interrupt (CMD1)
-    renesas_sdhi_internal_dmac ee140000.mmc: timeout waiting for
-hardware interrupt (CMD0)
-    renesas_sdhi_internal_dmac ee140000.mmc: timeout waiting for
-hardware interrupt (CMD1)
-    mmc0: Failed to initialize a non-removable card
-
-Reverting the commit fixes the issue for me.
-
-> --- a/drivers/mmc/core/core.c
-> +++ b/drivers/mmc/core/core.c
-> @@ -2185,10 +2185,8 @@ int mmc_card_alternative_gpt_sector(struct mmc_card *card, sector_t *gpt_sector)
->  }
->  EXPORT_SYMBOL(mmc_card_alternative_gpt_sector);
->
-> -void mmc_rescan(struct work_struct *work)
-> +static void __mmc_rescan(struct mmc_host *host)
->  {
-> -       struct mmc_host *host =
-> -               container_of(work, struct mmc_host, detect.work);
->         int i;
->
->         if (host->rescan_disable)
-> @@ -2249,6 +2247,14 @@ void mmc_rescan(struct work_struct *work)
->                 mmc_schedule_delayed_work(&host->detect, HZ);
->  }
->
-> +void mmc_rescan(struct work_struct *work)
+> +static void unmap_shadow_stack(u64 base, u64 size)
 > +{
-> +       struct mmc_host *host =
-> +               container_of(work, struct mmc_host, detect.work);
+> +	while (1) {
+> +		int r;
 > +
-> +       __mmc_rescan(host);
-> +}
+> +		r = vm_munmap(base, size);
 > +
->  void mmc_start_host(struct mmc_host *host)
->  {
->         host->f_init = max(min(freqs[0], host->f_max), host->f_min);
-> @@ -2261,7 +2267,8 @@ void mmc_start_host(struct mmc_host *host)
->         }
->
->         mmc_gpiod_request_cd_irq(host);
-> -       _mmc_detect_change(host, 0, false);
-> +       host->detect_change = 1;
-> +       __mmc_rescan(host);
->  }
->
->  void __mmc_stop_host(struct mmc_host *host)
+> +		/*
+> +		 * vm_munmap() returns -EINTR when mmap_lock is held by
+> +		 * something else, and that lock should not be held for a
+> +		 * long time.  Retry it for the case.
+> +		 */
+> +		if (r == -EINTR) {
+> +			cond_resched();
+> +			continue;
+> +		}
 
-Gr{oetje,eeting}s,
+This looks generic, not even shadow stack specific - was there any
+discussion of making it a vm_munmap_retry() (that's not a great name...)
+or similar?  I didn't see any in old versions of the thread but I
+might've missed something.
 
-                        Geert
+--5kInKYAEl4EdyhTr
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+-----BEGIN PGP SIGNATURE-----
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSbGlUACgkQJNaLcl1U
+h9BqNQf9HqQNIAUg29S+cA0RcGv/d0uACrgRR/Ug+8CHXDUGAdslLvPRGSp8km6O
+OA3sMI3JNRbsr4+QP5B8PduPbTiiePjlyNOfMrxz2oSChLugzh8gH+q7a4GtFc+T
+1AsfYswcEu8GMSy7zWw//Wq8JPfNX51jxYggMohGwEtFjgZmvT1RZAaKyZwf3UKd
+kYYChaAWrKWCe9lREGDuscGs1Udhg5nbpLJMgcKNDuBTJRn5UUZoMNY84TvuvNqm
+hy/IpJZ8m7d/utTLzzbJS3nPy6oQoFIo2riYi2hCRNZPtDvjko8UJ9uNJCbZOp3i
+gswqwIVtf/sJIXp0+Zi+a0WuiSOwdg==
+=nPJT
+-----END PGP SIGNATURE-----
+
+--5kInKYAEl4EdyhTr--
