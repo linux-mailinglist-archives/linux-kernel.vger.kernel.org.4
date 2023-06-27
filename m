@@ -2,108 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5AB873FB38
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 13:38:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D3EF73FB3C
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 13:38:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231610AbjF0LiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 07:38:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48096 "EHLO
+        id S231665AbjF0Lig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 07:38:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231410AbjF0LiH (ORCPT
+        with ESMTP id S231641AbjF0Lib (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 07:38:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E62F010FC
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 04:37:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687865848;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=M8uI9NITXhdIkfxIh/YGGZnndpIynq2QI9XP50PGOk8=;
-        b=JuSF3WmxLz7lhAimun51C0IfTJZPne1q7B5fpzfgTfwrxKKBHpiVK/tupIqLo0olX2v0Xu
-        96Cm9mCHcc1IuRokYbeFCqs38ylBdcVqKcgf6QpQ9b3U8idUwrhW4enXlDD0RZP6feGc51
-        NzbpPWG/+1TmlxOkNVXXNxQWoFdnNGM=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-605-6Rwe48HYN8aT70oaGUc4YA-1; Tue, 27 Jun 2023 07:37:24 -0400
-X-MC-Unique: 6Rwe48HYN8aT70oaGUc4YA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 472F13C0FC8D;
-        Tue, 27 Jun 2023 11:37:24 +0000 (UTC)
-Received: from max-t490s.redhat.com (unknown [10.39.208.28])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E0A63F5CD0;
-        Tue, 27 Jun 2023 11:37:21 +0000 (UTC)
-From:   Maxime Coquelin <maxime.coquelin@redhat.com>
-To:     xieyongji@bytedance.com, jasowang@redhat.com, mst@redhat.com,
-        david.marchand@redhat.com, lulu@redhat.com
-Cc:     linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        xuanzhuo@linux.alibaba.com, eperezma@redhat.com,
-        Maxime Coquelin <maxime.coquelin@redhat.com>
-Subject: [PATCH v1 2/2] vduse: enable Virtio-net device type
-Date:   Tue, 27 Jun 2023 13:36:52 +0200
-Message-ID: <20230627113652.65283-3-maxime.coquelin@redhat.com>
-In-Reply-To: <20230627113652.65283-1-maxime.coquelin@redhat.com>
-References: <20230627113652.65283-1-maxime.coquelin@redhat.com>
+        Tue, 27 Jun 2023 07:38:31 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAE242977;
+        Tue, 27 Jun 2023 04:38:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687865902; x=1719401902;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=pblGJiVM9kZOdgL3JsS2LvFnPRI4Ksm9ReZEZ35fwAc=;
+  b=KuYIBTvSnOuO/27SQ/qRm/I3mjUaw2sEz5PFKbPE+/UfCO8bFkIVri80
+   TBVM/yoV+Em/kJPnOWse7mNY4gbGU0x5BV264aw81Jo1yhru47ngFtYzp
+   Sb7JyUl/hEyLjY3hiYEG/4WBLzyI7sOZPjqEiGQEHhGVvUkaHBR/elSAk
+   xTaZVWRj9sXdJG6Eaxra8UJXwfI2zml04NjHddsZwgBltUPwsFCEs6cbQ
+   4hyP9cZtgybdJREryq1sBMSrbOlUUMoEuT01JmIg33H7piLRJq1mEZPej
+   GfZDQFREELexGJ7NQn6wVKdX97lGPpr7RBUIPNiA1/RV1HrC7JI/YoOYv
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="425216430"
+X-IronPort-AV: E=Sophos;i="6.01,162,1684825200"; 
+   d="scan'208";a="425216430"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 04:38:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="710620519"
+X-IronPort-AV: E=Sophos;i="6.01,162,1684825200"; 
+   d="scan'208";a="710620519"
+Received: from rbhaumik-mobl2.ger.corp.intel.com (HELO box.shutemov.name) ([10.251.217.121])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 04:37:55 -0700
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 05756103738; Tue, 27 Jun 2023 14:37:53 +0300 (+03)
+Date:   Tue, 27 Jun 2023 14:37:52 +0300
+From:   "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>
+To:     "Huang, Kai" <kai.huang@intel.com>
+Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "nik.borisov@suse.com" <nik.borisov@suse.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "imammedo@redhat.com" <imammedo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>, "Gao, Chao" <chao.gao@intel.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "Williams, Dan J" <dan.j.williams@intel.com>
+Subject: Re: [PATCH v12 08/22] x86/virt/tdx: Get information about TDX module
+ and TDX-capable memory
+Message-ID: <20230627113752.djyxgt4io6aiixwy@box.shutemov.name>
+References: <cover.1687784645.git.kai.huang@intel.com>
+ <a33f372df345f6232b55e26d498ea67d4adc18f0.1687784645.git.kai.huang@intel.com>
+ <20230627095124.nhiypr6ivi4kdfrw@box.shutemov.name>
+ <49f197f7756ac05b99717a9f63d56cfb860ab88b.camel@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <49f197f7756ac05b99717a9f63d56cfb860ab88b.camel@intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds Virtio-net device type to the supported
-devices types. Initialization fails if the device does
-not support VIRTIO_F_VERSION_1 feature, in order to
-guarantee the configuration space is read-only.
+On Tue, Jun 27, 2023 at 10:45:33AM +0000, Huang, Kai wrote:
+> On Tue, 2023-06-27 at 12:51 +0300, kirill.shutemov@linux.intel.com wrote:
+> > On Tue, Jun 27, 2023 at 02:12:38AM +1200, Kai Huang wrote:
+> > >  static int init_tdx_module(void)
+> > >  {
+> > > +	struct tdsysinfo_struct *sysinfo;
+> > > +	struct cmr_info *cmr_array;
+> > > +	int ret;
+> > > +
+> > > +	/*
+> > > +	 * Get the TDSYSINFO_STRUCT and CMRs from the TDX module.
+> > > +	 *
+> > > +	 * The buffers of the TDSYSINFO_STRUCT and the CMR array passed
+> > > +	 * to the TDX module must be 1024-bytes and 512-bytes aligned
+> > > +	 * respectively.  Allocate one page to accommodate them both and
+> > > +	 * also meet those alignment requirements.
+> > > +	 */
+> > > +	sysinfo = (struct tdsysinfo_struct *)__get_free_page(GFP_KERNEL);
+> > > +	if (!sysinfo)
+> > > +		return -ENOMEM;
+> > > +	cmr_array = (struct cmr_info *)((unsigned long)sysinfo + PAGE_SIZE / 2);
+> > > +
+> > > +	BUILD_BUG_ON(PAGE_SIZE / 2 < TDSYSINFO_STRUCT_SIZE);
+> > > +	BUILD_BUG_ON(PAGE_SIZE / 2 < sizeof(struct cmr_info) * MAX_CMRS);
+> > 
+> > This works, but why not just use slab for this? kmalloc has 512 and 1024
+> > pools already and you won't waste memory for rounding up.
+> > 
+> > Something like this:
+> > 
+> >         sysinfo = kmalloc(TDSYSINFO_STRUCT_SIZE, GFP_KERNEL);
+> >         if (!sysinfo)
+> >                 return -ENOMEM;
+> > 
+> >         cmr_array_size = sizeof(struct cmr_info) * MAX_CMRS;
+> > 
+> >         /* CMR array has to be 512-aligned */
+> >         cmr_array_size = round_up(cmr_array_size, 512);
+> 
+> Should we define a macro for 512
+> 
+> 	+#define CMR_INFO_ARRAY_ALIGNMENT	512
+> 
+> And get rid of this comment?  AFAICT Dave didn't like such comment mentioning
+> 512-bytes aligned if we have a macro for that.
 
-Signed-off-by: Maxime Coquelin <maxime.coquelin@redhat.com>
----
- drivers/vdpa/vdpa_user/vduse_dev.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+Good idea.
 
-diff --git a/drivers/vdpa/vdpa_user/vduse_dev.c b/drivers/vdpa/vdpa_user/vduse_dev.c
-index c1c2f4c711ae..89088fa27026 100644
---- a/drivers/vdpa/vdpa_user/vduse_dev.c
-+++ b/drivers/vdpa/vdpa_user/vduse_dev.c
-@@ -142,6 +142,7 @@ static struct workqueue_struct *vduse_irq_bound_wq;
- 
- static u32 allowed_device_id[] = {
- 	VIRTIO_ID_BLOCK,
-+	VIRTIO_ID_NET,
- };
- 
- static inline struct vduse_dev *vdpa_to_vduse(struct vdpa_device *vdpa)
-@@ -1668,6 +1669,10 @@ static bool features_is_valid(struct vduse_dev_config *config)
- 			(config->features & (1ULL << VIRTIO_BLK_F_CONFIG_WCE)))
- 		return false;
- 
-+	if ((config->device_id == VIRTIO_ID_NET) &&
-+			!(config->features & (1ULL << VIRTIO_F_VERSION_1)))
-+		return false;
-+
- 	return true;
- }
- 
-@@ -2023,6 +2028,7 @@ static const struct vdpa_mgmtdev_ops vdpa_dev_mgmtdev_ops = {
- 
- static struct virtio_device_id id_table[] = {
- 	{ VIRTIO_ID_BLOCK, VIRTIO_DEV_ANY_ID },
-+	{ VIRTIO_ID_NET, VIRTIO_DEV_ANY_ID },
- 	{ 0 },
- };
- 
+> >         cmr_array = kmalloc(cmr_array_size, GFP_KERNEL);
+> >         if (!cmr_array) {
+> >                 kfree(sysinfo);
+> >                 return -ENOMEM;
+> >         }
+> > 
+> > ?
+> > 
+> 
+> I confess the reason I used __get_free_page() was to avoid having to allocate
+> twice, and in case of failure, I need to handle additional memory free.  But I
+> can do if you think it's clearer?
+
+Less trickery is always cleaner. Especially if the trick is not justified.
+
+> I wouldn't worry about wasting memory.  The buffer is freed anyway for now. 
+> Long-termly it's just 4K.
+
 -- 
-2.41.0
-
+  Kiryl Shutsemau / Kirill A. Shutemov
