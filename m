@@ -2,113 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7727373F5F1
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 09:44:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5629473F5F4
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 09:46:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231268AbjF0Hox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 03:44:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40528 "EHLO
+        id S231310AbjF0HqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 03:46:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229900AbjF0Hot (ORCPT
+        with ESMTP id S229567AbjF0HqV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 03:44:49 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68D6010D5
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 00:44:48 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4f865f0e16cso5658432e87.3
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 00:44:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687851886; x=1690443886;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wFNM/13zo+D8MIGQZG1lJZIvVzqHNgB235Wb/AV3lUA=;
-        b=K/YymU1Fw0XlFUpLmM/JsiHLwp6gglJu2CMqRj/MvPnLc7dAWpN6W2xm9QdXW23zZp
-         EB/GIMb+FQD5HXV5uFtsqcfehGsDp50mJyMvPti+NlTe3jpVwhiMw/DL9pD3lBwH/38F
-         VI7hRahj2se3hwB30hdrHGJl97u6LAhwODzX4Bh+TtDsM7yK2QfDPkEM34BCfupe1bE5
-         CDgGRXGwvthPDiFaEmsp0zOTJsRR35s5RBS7lQRVYjDPWPfO1VPnfC4wOGKYltmqexFf
-         LOEniz8brkiDyP6blhoVPWh5jdm96n58qKU7Y+wgsyalJRh3ilMhvKZnh1kURlyvlsH5
-         6z4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687851886; x=1690443886;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wFNM/13zo+D8MIGQZG1lJZIvVzqHNgB235Wb/AV3lUA=;
-        b=XVI2jRgtJHSYJ0ZTcq+VP7PpJWIa62hB3lLh/+tLYD/j9NBcrJj5lSBm7mcbEUjAaT
-         opIn93b6ifveIhY27G49hEsu704jNgrTeEqLOLN//RO2qQqEwzQmzTd0OSHgGyiXLOtN
-         NjJjow3byL95zQQCKxvBska5+hqrz+aDDuC4N+S0/G7lh6lR9Qo0F7N2I6VgmkT9Gfdh
-         LMRQN2d8zjDsz+vxU92TxR595nrygWa5k6aT9FeMGXoc1ysMD6v6MxI+eMfIGAwvsqOb
-         IeS0z8iwkcjnGKuxSAvW17iW0O2SLHdam99D4hvCfooJaVz9vnj+TmD/HOpEtpdFOwHD
-         jk7g==
-X-Gm-Message-State: AC+VfDzAec5JwuRxtO/R9Bacs6WaPm/yw7nb8803mx5ZfXTCHY1I7/lZ
-        UXcj2WYiSV5fD+lcwxCsul5uVQ==
-X-Google-Smtp-Source: ACHHUZ6A6FWPC46/BuRGtluWDc8BUdgJ8Rg4tYYbbS+0qBeQ5xLXdOL8H0TzB80PlKS/a86NhKNNZg==
-X-Received: by 2002:a19:2d01:0:b0:4f8:7568:e948 with SMTP id k1-20020a192d01000000b004f87568e948mr13532699lfj.51.1687851886659;
-        Tue, 27 Jun 2023 00:44:46 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id o11-20020a05600c378b00b003fa95f328afsm5250918wmr.29.2023.06.27.00.44.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Jun 2023 00:44:46 -0700 (PDT)
-Message-ID: <3213e578-1c48-e1bb-f181-d0845f915031@linaro.org>
-Date:   Tue, 27 Jun 2023 09:44:42 +0200
+        Tue, 27 Jun 2023 03:46:21 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80116196;
+        Tue, 27 Jun 2023 00:46:18 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 9E82424E261;
+        Tue, 27 Jun 2023 15:46:15 +0800 (CST)
+Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 27 Jun
+ 2023 15:46:15 +0800
+Received: from [192.168.120.57] (171.223.208.138) by EXMBX068.cuchost.com
+ (172.16.6.68) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 27 Jun
+ 2023 15:46:14 +0800
+Message-ID: <c3c7fb8a-7c0c-5966-88cd-e004db69de83@starfivetech.com>
+Date:   Tue, 27 Jun 2023 15:46:08 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH 13/15] thermal/drivers/rockchip: remove redundant msg
+Subject: Re: [PATCH v4 0/4] StarFive's Pulse Width Modulation driver support
+To:     <devicetree@vger.kernel.org>, <linux-pwm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+CC:     Thierry Reding <thierry.reding@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Hal Feng <hal.feng@starfivetech.com>
+References: <20230601085154.36938-1-william.qiu@starfivetech.com>
 Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Yangtao Li <frank.li@vivo.com>, miquel.raynal@bootlin.com,
-        rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
-        rui.zhang@intel.com, mmayer@broadcom.com,
-        bcm-kernel-feedback-list@broadcom.com,
-        florian.fainelli@broadcom.com, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@linaro.org, thara.gopinath@gmail.com,
-        heiko@sntech.de, mcoquelin.stm32@gmail.com,
-        alexandre.torgue@foss.st.com, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, tglx@linutronix.de, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com,
-        srinivas.pandruvada@linux.intel.com,
-        DLG-Adam.Ward.opensource@dm.renesas.com, shangxiaojing@huawei.com,
-        bchihi@baylibre.com, wenst@chromium.org,
-        u.kleine-koenig@pengutronix.de, hayashi.kunihiko@socionext.com,
-        niklas.soderlund+renesas@ragnatech.se, chi.minghao@zte.com.cn,
-        johan+linaro@kernel.org, jernej.skrabec@gmail.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-tegra@vger.kernel.org, linux-mediatek@lists.infradead.org
-References: <20230627071707.77659-1-frank.li@vivo.com>
- <20230627071707.77659-13-frank.li@vivo.com>
- <61f9a781-81fe-d553-6c85-eb069174e6f0@linaro.org>
-In-Reply-To: <61f9a781-81fe-d553-6c85-eb069174e6f0@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+From:   William Qiu <william.qiu@starfivetech.com>
+In-Reply-To: <20230601085154.36938-1-william.qiu@starfivetech.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [171.223.208.138]
+X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX068.cuchost.com
+ (172.16.6.68)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/06/2023 09:40, Krzysztof Kozlowski wrote:
-> On 27/06/2023 09:17, Yangtao Li wrote:
->> The upper-layer devm_request_threaded_irq() function can directly
->> print error information.
+
+
+On 2023/6/1 16:51, William Qiu wrote:
+> Hi,
 > 
-> I don't understand. "Can print"? It does not matter if it can, if it
-> does not. Currently it doesn't, therefore change is not correct.
-> Otherwise explain a bit better why this is redundant.
+> This patchset adds initial rudimentary support for the StarFive
+> Pulse Width Modulation controller driver. And this driver will
+> be used in StarFive's VisionFive 2 board.The first patch add
+> Documentations for the device and Patch 2 adds device probe for
+> the module.
+> 
+> Changes v2->v3:
+> - Rebased to v6.4rc3.
+> - Sorted the header files in alphabetic order.
+> - Changed iowrite32() to writel().
+> - Added a way to turn off.
+> - Moified polarity inversion implementation.
+> - Added 7100 support.
+> - Added dts patches.
+> - Used the various helpers in linux/math.h.
+> - Corrected formatting problems.
+> - Renamed dtbinding  to 'starfive,jh7100-pwm.yaml'.
+> - Dropped the redundant code.
+> 
+> Changes v2->v3:
+> - Fixed some formatting issues.
+> 
+> Changes v1->v2:
+> - Renamed the dt-binding 'pwm-starfive.yaml' to 'starfive,jh7110-pwm.yaml'.
+> - Dropped the compatible's Items.
+> - Dropped the unuse defines.
+> - Modified the code to follow the Linux coding style.
+> - Changed return value to dev_err_probe.
+> - Dropped the unnecessary local variable.
+> 
+> The patch series is based on v6.4rc3.
+> 
+> William Qiu (4):
+>   dt-bindings: pwm: Add StarFive PWM module
+>   pwm: starfive: Add PWM driver support
+>   riscv: dts: starfive: jh7110: Add PWM node and pins configuration
+>   riscv: dts: starfive: jh7100: Add PWM node and pins configuration
+> 
+>  .../bindings/pwm/starfive,jh7100-pwm.yaml     |  55 +++++
+>  MAINTAINERS                                   |   7 +
+>  .../boot/dts/starfive/jh7100-common.dtsi      |  24 +++
+>  arch/riscv/boot/dts/starfive/jh7100.dtsi      |   9 +
+>  .../jh7110-starfive-visionfive-2.dtsi         |  22 ++
+>  arch/riscv/boot/dts/starfive/jh7110.dtsi      |   9 +
+>  drivers/pwm/Kconfig                           |   9 +
+>  drivers/pwm/Makefile                          |   1 +
+>  drivers/pwm/pwm-starfive-ptc.c                | 192 ++++++++++++++++++
+>  9 files changed, 328 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/pwm/starfive,jh7100-pwm.yaml
+>  create mode 100644 drivers/pwm/pwm-starfive-ptc.c
+> 
+> --
+> 2.34.1
+> 
+Hi everyone,
 
-All your patches ended up in spam, so now I found your patch one.
-Anyway, if this stays, please replace "can" with statement - "prints".
+Could you please help me review this patch series to see if there is
+anything that needs to be modified?
+Thanks for taking time to review this patch series.
 
-Best regards,
-Krzysztof
-
+Best Regards,
+William
