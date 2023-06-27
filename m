@@ -2,118 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A964C7401C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 18:57:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01DBC7401CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 18:58:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbjF0Q5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 12:57:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38544 "EHLO
+        id S229481AbjF0Q6K convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 27 Jun 2023 12:58:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230086AbjF0Q5u (ORCPT
+        with ESMTP id S230271AbjF0Q6H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 12:57:50 -0400
-Received: from mail.genode-labs.com (mail.genode-labs.com [94.130.141.206])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D774E10E7
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 09:57:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=genode-labs.com; s=2018-03; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:Subject:From:References:Cc:To:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=QZSD4OeyJjzUSAVsIghToG5ou0EbCOGlffCslfIitnY=; b=sTlGFP6JM5lRAi8/OXevQ6u9GN
-        nXYh9X83YZwOwHRoe9baRFUjmEpHXEG7iB1rDyClsOoBQ8H/U+pWiLiC1aURgR4Okz/HNnohyZK/Y
-        4Yn/wtddst3vK2787o7sLRiZrLRAd3atye34kq8cLbQPmBv4FnjY4LiDByi2Zm9feMl2gwzMXjSdn
-        XNeZJwu5NoVKwkqlecp55/d2xT7cw8P9aEhMnPUpZbJmLeP3Ih1gKM0feG7eXloB9xoxNvh/2rjsH
-        BQ1Zbp8J4PKz4iSayn3Czb/WTD7zWQemHVSLyDBBqot1XgCNPPeNr/54tmjY0iLQ0JFdm0wUVJAxT
-        WryFA9YQ==;
-Received: by mail.genode-labs.com (Exim 4.95-1-g73e85c617) with esmtpsa (TLS1.3:TLS_AES_128_GCM_SHA256:128)
-        (envelope-from <Sebastian.Sumpf@genode-labs.com>)
-        id 1qEC0S-008yrS-N5 ;
-        Tue, 27 Jun 2023 18:57:33 +0200
-Message-ID: <7738ff3a-3f5a-2583-93f7-458425fd84a5@genode-labs.com>
-Date:   Tue, 27 Jun 2023 18:57:32 +0200
+        Tue, 27 Jun 2023 12:58:07 -0400
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38A5D171A;
+        Tue, 27 Jun 2023 09:58:01 -0700 (PDT)
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-57023c9be80so48222027b3.3;
+        Tue, 27 Jun 2023 09:58:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687885080; x=1690477080;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=n6c/E6AXYzbisGWFmvmo6pUwZPWyqFohyT+yy2+nmio=;
+        b=GkQZgEpZRcV93bTL8u8jjRrkbWUAOjbdW0uYb7vvEcA0RV9X42sDgtT4qo1zmJBVNo
+         y5kMTtV4FBm+GrpOvR0JiPPyXlX2FPOQuVBMXaPJLnOcbyiogVvTGpaT999Vt994E4iQ
+         BcKC8WrY9or+vKCe0QKKnBg4p/SR0ZgqruFKYGuxsgqB9XgKMEdzzaTv56Qj9UW2yleq
+         Qns7fpWneCVGXH8K6CEF8GDBnsnkON7hzADrX2FjFCRKXjaD/ie1lSGFUeMXLKNQtoRZ
+         U5txGKmhpz/4L1uRVCVigzpsCCUawyHCl/jJYzPLb/JCv+3eteHMLmKNmcOoTCbfwLU4
+         NgIw==
+X-Gm-Message-State: AC+VfDy0ksUY4NkqH/8QwChMNzyiYq/MCGfYbY+oxYiTkmLd84BWghQq
+        jhVJUc6C0W59k80ewjZk2V7eMsbZBTo1shhDGxk=
+X-Google-Smtp-Source: ACHHUZ5za4SKXgCUycxICS4iLcZ0E0uXMbtX5kX1cppuI2T83ewm6+E4jBEdXR26Hqgi9kkyvRq2HjMdVCQm+QGqejs=
+X-Received: by 2002:a25:8407:0:b0:c19:9ca6:d18 with SMTP id
+ u7-20020a258407000000b00c199ca60d18mr7689380ybk.38.1687885080211; Tue, 27 Jun
+ 2023 09:58:00 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-To:     Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Richard Weinberger <richard@nod.at>
-Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-References: <cb18590f-686e-cc53-7781-1a36e91faade@genode-labs.com>
- <20230626210604.GLZJn9vA3gcMAuy/eP@fat_crate.local>
- <ce1cc0a5-3393-d16f-eaaf-5e7149d5164f@genode-labs.com>
- <02b36386-a18c-8bfb-2c70-c398f6fc964b@intel.com>
- <20230627042538.GAZJpkwldpkqTKeeDL@fat_crate.local>
-Content-Language: en-US
-From:   Sebastian Sumpf <Sebastian.Sumpf@genode-labs.com>
-Subject: Re: [Bug report] __arch_hweight32/64 x86
-In-Reply-To: <20230627042538.GAZJpkwldpkqTKeeDL@fat_crate.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230626161059.324046-1-james.clark@arm.com> <20230626161059.324046-3-james.clark@arm.com>
+ <ZJonE3ZZ2cBUq0U8@google.com> <CAP-5=fX+FDAkFoMhQY27_+fiRp_UDruP8qWTdjvqU5-uE0SdWA@mail.gmail.com>
+In-Reply-To: <CAP-5=fX+FDAkFoMhQY27_+fiRp_UDruP8qWTdjvqU5-uE0SdWA@mail.gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Tue, 27 Jun 2023 09:57:48 -0700
+Message-ID: <CAM9d7cj4xr6oTDKvxbNTVUewyZFTBchQS36KC0nN4i4HjCsq5w@mail.gmail.com>
+Subject: Re: [PATCH 2/2] perf report: Don't add to histogram when there is no
+ thread found
+To:     Ian Rogers <irogers@google.com>
+Cc:     James Clark <james.clark@arm.com>,
+        linux-perf-users@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/27/23 06:25, Borislav Petkov wrote:
-> On Mon, Jun 26, 2023 at 03:41:27PM -0700, Dave Hansen wrote:
->> I'm not even sure that UML needs GENERIC_HWEIGHT.  From a quick glance,
->> it looks like x86 used to use GENERIC_HWEIGHT, but got arch-specific
->> versions later.  UML just never moved over to the arch-specific versions.
-> 
-> Thanks - that could very well be the explanation.
-> 
-> That bug report made me blink a couple of times since I did take extra
-> precaution to not clobber regs in arch/x86/lib/hweight.S as this was
-> part of the whole pain back then with calling a function from asm where
-> gcc doesn't even know we're calling a function, see:
-> 
-> f5967101e9de ("x86/hweight: Get rid of the special calling convention")
-> 
->> I _think_ the attached patch might just fix the problems with the C
->> version and bring the x86/UML implementation back in line with the rest
->> of x86.
->>
->> Thoughts?
-> 
->> diff --git a/arch/x86/um/Kconfig b/arch/x86/um/Kconfig
->> index 186f13268401..76d507860be4 100644
->> --- a/arch/x86/um/Kconfig
->> +++ b/arch/x86/um/Kconfig
->> @@ -44,6 +44,3 @@ config ARCH_HAS_SC_SIGNALS
->>   
->>   config ARCH_REUSE_HOST_VSYSCALL_AREA
->>   	def_bool !64BIT
->> -
->> -config GENERIC_HWEIGHT
->> -	def_bool y
-> 
-> Yeah, we should do it. UML should not do anything different wrt calling
-> conventions so it should be able to handle the arch/x86/lib/hweight.S
-> versions just fine.
+On Tue, Jun 27, 2023 at 9:43 AM Ian Rogers <irogers@google.com> wrote:
+>
+> On Mon, Jun 26, 2023 at 5:02 PM Namhyung Kim <namhyung@kernel.org> wrote:
+> >
+> > On Mon, Jun 26, 2023 at 05:10:58PM +0100, James Clark wrote:
+> > > thread__find_map() chooses to exit without assigning a thread to the
+> > > addr_location in some scenarios, for example when there are samples from
+> > > a guest and perf_guest == false. This results in a segfault when adding
+> > > to the histogram because it uses unguarded accesses to the thread member
+> > > of the addr_location.
+> >
+> > Looking at the commit 0dd5041c9a0ea ("perf addr_location: Add
+> > init/exit/copy functions") that introduced the change, I'm not sure if
+> > it's the intend behavior.
+> >
+> > It might change maps and map, but not thread.  Then I think no reason
+> > to not set the al->thread at the beginning.
+> >
+> > How about this?  Ian?
+> > (I guess we can get rid of the duplicate 'al->map = NULL' part)
+>
+> It seemed strange that we were failing to find a map (the function's
+> purpose) but then populating the address_location. The change below
+> brings back that somewhat odd behavior. I'm okay with reverting to the
+> old behavior, clearly there were users relying on it. We should
+> probably also copy maps and not just thread, as that was the previous
+> behavior.
 
-Thank you for the quick resolution! It fixes the problem for me and sorry for 
-not explaining well enough.
+Probably.  But it used to support samples without maps and I think
+that's why it ignores the return value of thread__find_map().  So
+we can expect al.map is NULL and maybe fine to leave it for now.
 
-> Richi?
-> 
+As machine__resolve() returns -1 if it gets no thread, we should set
+al.thread when it returns 0.
 
--- 
-Sebastian Sumpf
-Genode Labs
+Can I get your Acked-by?
 
-http://www.genode-labs.com · http://genode.org
-
-Genode Labs GmbH · Amtsgericht Dresden · HRB 28424 · Sitz Dresden
-Geschäftsführer: Dr.-Ing. Norman Feske, Christian Helmuth
-
-
-
-
+Thanks,
+Namhyung
