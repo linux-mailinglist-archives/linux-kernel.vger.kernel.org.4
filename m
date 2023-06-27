@@ -2,203 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4482673FD33
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 15:49:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DFED73FD1A
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 15:46:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231167AbjF0Ntm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 09:49:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45282 "EHLO
+        id S229513AbjF0Nq2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 09:46:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231180AbjF0Nti (ORCPT
+        with ESMTP id S230479AbjF0Nq0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 09:49:38 -0400
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA96A30C7;
-        Tue, 27 Jun 2023 06:49:31 -0700 (PDT)
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-3fb4146e8fcso13557425e9.0;
-        Tue, 27 Jun 2023 06:49:31 -0700 (PDT)
+        Tue, 27 Jun 2023 09:46:26 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E284C2115
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 06:45:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687873536;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ke8XtFgDnQ3FKSI0uaIkAHLijeswZt+d/C720oEmj8g=;
+        b=YsuE1nPoIDEAMvK+/zuLYxdOk+c++7H61lsYy6wRPMFMVYN6TOMDYqZG60N94yy5WEUhzf
+        fFG0oQfPdjE1i5hY3dxyx/gHFu30H6byecdf3ydgQ0xPxeaDxtUR5/ljUwqYWaOD0Cf8mH
+        I9pz/Lgj7wY5wrE4Uyb0q4Kq6Vnnl1c=
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com
+ [209.85.214.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-155-2H2lRl8zMAG6hi1PdoXlIQ-1; Tue, 27 Jun 2023 09:45:34 -0400
+X-MC-Unique: 2H2lRl8zMAG6hi1PdoXlIQ-1
+Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-1b8303cd306so300675ad.2
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 06:45:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687873770; x=1690465770;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JZ5UPZsAXXd/EwYzaHgJ76EEF/BDT+AfXC20CK5Riok=;
-        b=b2t5d3tliGUUZNB2eCUeBTpSO98DoYRLPB5cC6iwLsuAHvt5WDVXXZv0agMK5b3UqZ
-         2myWSDnGv4SXu6T5sYpM7Q4saFHbqPk16BQRsdm353L4eX3fnlsLSndGwnPIilxr63LG
-         JTzu3RDb2SxFU6+B2Qz2OPhhzmGMHQgwMZu+0bBFNf2xHB0CjzO1mnrXyJsIP0yy8w8T
-         Ykx5mmMsFA4/fnDqT9ai+Ghs0QocN+5kmR7vknJUvLENpDYDD5WuFjLX8iWITst0MYkn
-         om7QYVg7KW9ds6fob1inNpqmcrFrJQNNmw3hN74uNm024t3/u6eDIwllMzSng95tPZ90
-         ZgGw==
-X-Gm-Message-State: AC+VfDxfbhaCVB8AE1GbJce2m+LlySq9NxoSAdYZYjn7EXMg6s/G+tBe
-        LwVqGNtO3t5tWHgzN0lf1xA=
-X-Google-Smtp-Source: ACHHUZ55+HYPOt4lTrmikt44v/5u95rIpnFobtlTFnf4inIm8wtz5zO4X79B1NhnIW1SHbMi+nqHhg==
-X-Received: by 2002:a05:600c:4e92:b0:3fa:7515:902e with SMTP id f18-20020a05600c4e9200b003fa7515902emr14797741wmq.16.1687873769838;
-        Tue, 27 Jun 2023 06:49:29 -0700 (PDT)
-Received: from localhost (fwdproxy-cln-000.fbsv.net. [2a03:2880:31ff::face:b00c])
-        by smtp.gmail.com with ESMTPSA id n2-20020a5d67c2000000b003127741d7desm10381323wrw.58.2023.06.27.06.49.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jun 2023 06:49:28 -0700 (PDT)
-From:   Breno Leitao <leitao@debian.org>
-To:     Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     gregkh@linuxfoundation.org, kuniyu@amazon.com,
-        io-uring@vger.kernel.org (open list:IO_URING),
-        linux-kernel@vger.kernel.org (open list),
-        netdev@vger.kernel.org (open list:NETWORKING [GENERAL])
-Subject: [PATCH v4] io_uring: Add io_uring command support for sockets
-Date:   Tue, 27 Jun 2023 06:44:24 -0700
-Message-Id: <20230627134424.2784797-1-leitao@debian.org>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20221208; t=1687873533; x=1690465533;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Ke8XtFgDnQ3FKSI0uaIkAHLijeswZt+d/C720oEmj8g=;
+        b=R1AmgRdsd52jzJtzbecvj8w2pshiqeWN9Z30db3L9BJ16DPiLKiHlaqb02BXZjZ4qi
+         PYWC5Vc4KFR6KsroXkyM10SGc9xikhjTtjZo5Z266/plq3erVEVzUGasFg4SSryKxof9
+         IKUYEjBHHkdKgi3ss0xRgzV77dOtysBcPvtcOXLEQu9tyi0lySWRRvx9d0Inab1lfUA3
+         VSykjpJZ3aHaqVgP50uGMkZ/YAVyZCW7TkaoGVB9w5/PMWrzUQlon3gazbmlF++BtFef
+         bFEsdZfkP+jau/YhFiBr1frlEmj0rkdAxva5kA2baYiq59A9tVPYCazTkcC5kyGqOLr+
+         M5uQ==
+X-Gm-Message-State: AC+VfDybEHdmJ5ChA6qZ8iMQSO579Q2dPU5SYWGe0922wWZcx4h6ToRX
+        +7l1t32AW1OIIdY3y4t/cSJ23TFL7lxrVsVr4Ihoes36J4+MpNz14ZAGpGZEouNA9xjAC0QRYTI
+        v/HwIHAQmRNHSARMYWA7O1uoSk8dqX7EdA9V2paCZbwNBoi42
+X-Received: by 2002:a17:902:b193:b0:1b5:1654:96d4 with SMTP id s19-20020a170902b19300b001b5165496d4mr7092072plr.4.1687873533134;
+        Tue, 27 Jun 2023 06:45:33 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6IthMHxZNbH8GTaGgIOza/GtvEVEKrKV37oXPkunKMrBHpu386zDko3S+M9ZBeuKxpniGopjQCoXrgnCg6hFs=
+X-Received: by 2002:a17:902:b193:b0:1b5:1654:96d4 with SMTP id
+ s19-20020a170902b19300b001b5165496d4mr7092055plr.4.1687873532820; Tue, 27 Jun
+ 2023 06:45:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <ZJk1XTtgLFxIcxzp@bu2204.myguest.virtualbox.org>
+In-Reply-To: <ZJk1XTtgLFxIcxzp@bu2204.myguest.virtualbox.org>
+From:   Andreas Gruenbacher <agruenba@redhat.com>
+Date:   Tue, 27 Jun 2023 15:45:20 +0200
+Message-ID: <CAHc6FU6P-BK=rU2w6JcswJsf93TwgvtUNNBe8LU4n2djuNjn_Q@mail.gmail.com>
+Subject: Re: [PATCH v2] gfs2: Replace deprecated kmap_atomic() by kmap_local_page()
+To:     Deepak R Varma <drv@mailo.com>
+Cc:     Bob Peterson <rpeterso@redhat.com>, cluster-devel@redhat.com,
+        linux-kernel@vger.kernel.org, Ira Weiny <ira.weiny@intel.com>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Sumitra Sharma <sumitraartsy@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable io_uring commands on network sockets. Create two new
-SOCKET_URING_OP commands that will operate on sockets.
+On Mon, Jun 26, 2023 at 8:51=E2=80=AFAM Deepak R Varma <drv@mailo.com> wrot=
+e:
+> kmap_atomic() is deprecated in favor of kmap_local_{folio,page}().
 
-In order to call ioctl on sockets, use the file_operations->io_uring_cmd
-callbacks, and map it to a uring socket function, which handles the
-SOCKET_URING_OP accordingly, and calls socket ioctls.
+I'll apply this, convert the remaining instances of kmap_atomic(), and
+switch to memcpy_{from,to}_page() where appropriate.
 
-This patches was tested by creating a new test case in liburing.
-Link: https://github.com/leitao/liburing/tree/io_uring_cmd
+Thanks,
+Andreas
 
-Signed-off-by: Breno Leitao <leitao@debian.org>
----
-V1 -> V2:
-	* Keep uring code outside of network core subsystem
-	* Uses ioctl to define uring operation
-	* Use a generic ioctl function, instead of copying it over
-V2 -> V3:
-	* Do not use ioctl() helpers to create uring operations
-	* Rename uring_sock_cmd to io_uring_cmd_sock
-V3 -> V4:
-	* Uses READ_ONCE() when accessing sk->sk_prot
----
- include/linux/io_uring.h      |  6 ++++++
- include/uapi/linux/io_uring.h |  8 ++++++++
- io_uring/uring_cmd.c          | 28 ++++++++++++++++++++++++++++
- net/socket.c                  |  2 ++
- 4 files changed, 44 insertions(+)
-
-diff --git a/include/linux/io_uring.h b/include/linux/io_uring.h
-index 7fe31b2cd02f..f00baf2929ff 100644
---- a/include/linux/io_uring.h
-+++ b/include/linux/io_uring.h
-@@ -71,6 +71,7 @@ static inline void io_uring_free(struct task_struct *tsk)
- 	if (tsk->io_uring)
- 		__io_uring_free(tsk);
- }
-+int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags);
- #else
- static inline int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
- 			      struct iov_iter *iter, void *ioucmd)
-@@ -102,6 +103,11 @@ static inline const char *io_uring_get_opcode(u8 opcode)
- {
- 	return "";
- }
-+static inline int io_uring_cmd_sock(struct io_uring_cmd *cmd,
-+				    unsigned int issue_flags)
-+{
-+	return -EOPNOTSUPP;
-+}
- #endif
- 
- #endif
-diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
-index 0716cb17e436..5c25f8c98aa8 100644
---- a/include/uapi/linux/io_uring.h
-+++ b/include/uapi/linux/io_uring.h
-@@ -703,6 +703,14 @@ struct io_uring_recvmsg_out {
- 	__u32 flags;
- };
- 
-+/*
-+ * Argument for IORING_OP_URING_CMD when file is a socket
-+ */
-+enum {
-+	SOCKET_URING_OP_SIOCINQ		= 0,
-+	SOCKET_URING_OP_SIOCOUTQ,
-+};
-+
- #ifdef __cplusplus
- }
- #endif
-diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
-index 5e32db48696d..bb24f67b0ad3 100644
---- a/io_uring/uring_cmd.c
-+++ b/io_uring/uring_cmd.c
-@@ -7,6 +7,7 @@
- #include <linux/nospec.h>
- 
- #include <uapi/linux/io_uring.h>
-+#include <uapi/asm-generic/ioctls.h>
- 
- #include "io_uring.h"
- #include "rsrc.h"
-@@ -156,3 +157,30 @@ int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
- 	return io_import_fixed(rw, iter, req->imu, ubuf, len);
- }
- EXPORT_SYMBOL_GPL(io_uring_cmd_import_fixed);
-+
-+int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags)
-+{
-+	struct socket *sock = cmd->file->private_data;
-+	struct sock *sk = sock->sk;
-+	struct proto *prot = READ_ONCE(sk->sk_prot);
-+	int ret, arg = 0;
-+
-+	if (!prot || !prot->ioctl)
-+		return -EOPNOTSUPP;
-+
-+	switch (cmd->sqe->cmd_op) {
-+	case SOCKET_URING_OP_SIOCINQ:
-+		ret = prot->ioctl(sk, SIOCINQ, &arg);
-+		if (ret)
-+			return ret;
-+		return arg;
-+	case SOCKET_URING_OP_SIOCOUTQ:
-+		ret = prot->ioctl(sk, SIOCOUTQ, &arg);
-+		if (ret)
-+			return ret;
-+		return arg;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+EXPORT_SYMBOL_GPL(io_uring_cmd_sock);
-diff --git a/net/socket.c b/net/socket.c
-index b778fc03c6e0..09b105d00445 100644
---- a/net/socket.c
-+++ b/net/socket.c
-@@ -88,6 +88,7 @@
- #include <linux/xattr.h>
- #include <linux/nospec.h>
- #include <linux/indirect_call_wrapper.h>
-+#include <linux/io_uring.h>
- 
- #include <linux/uaccess.h>
- #include <asm/unistd.h>
-@@ -159,6 +160,7 @@ static const struct file_operations socket_file_ops = {
- #ifdef CONFIG_COMPAT
- 	.compat_ioctl = compat_sock_ioctl,
- #endif
-+	.uring_cmd =    io_uring_cmd_sock,
- 	.mmap =		sock_mmap,
- 	.release =	sock_close,
- 	.fasync =	sock_fasync,
--- 
-2.34.1
+> Therefore, replace kmap_atomic() with kmap_local_page() in
+> gfs2_internal_read() and stuffed_readpage().
+>
+> kmap_atomic() disables page-faults and preemption (the latter only for
+> !PREEMPT_RT kernels), However, the code within the mapping/un-mapping in
+> gfs2_internal_read() and stuffed_readpage() does not depend on the
+> above-mentioned side effects.
+>
+> Therefore, a mere replacement of the old API with the new one is all that
+> is required (i.e., there is no need to explicitly add any calls to
+> pagefault_disable() and/or preempt_disable()).
+>
+> Signed-off-by: Deepak R Varma <drv@mailo.com>
+> ---
+> Note: The Patch is build tested only. I will be happy to run recommended =
+testing
+> with some guidance if required.
+>
+> Changes in v2:
+>    - Update patch description to correct the replacement function name fr=
+om
+>      kmap_local_folio to kmap_local _page
+>
+>
+>  fs/gfs2/aops.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/fs/gfs2/aops.c b/fs/gfs2/aops.c
+> index 3b41542d6697..7bd92054d353 100644
+> --- a/fs/gfs2/aops.c
+> +++ b/fs/gfs2/aops.c
+> @@ -432,10 +432,10 @@ static int stuffed_readpage(struct gfs2_inode *ip, =
+struct page *page)
+>         if (error)
+>                 return error;
+>
+> -       kaddr =3D kmap_atomic(page);
+> +       kaddr =3D kmap_local_page(page);
+>         memcpy(kaddr, dibh->b_data + sizeof(struct gfs2_dinode), dsize);
+>         memset(kaddr + dsize, 0, PAGE_SIZE - dsize);
+> -       kunmap_atomic(kaddr);
+> +       kunmap_local(kaddr);
+>         flush_dcache_page(page);
+>         brelse(dibh);
+>         SetPageUptodate(page);
+> @@ -498,12 +498,12 @@ int gfs2_internal_read(struct gfs2_inode *ip, char =
+*buf, loff_t *pos,
+>                                 continue;
+>                         return PTR_ERR(page);
+>                 }
+> -               p =3D kmap_atomic(page);
+> +               p =3D kmap_local_page(page);
+>                 amt =3D size - copied;
+>                 if (offset + size > PAGE_SIZE)
+>                         amt =3D PAGE_SIZE - offset;
+>                 memcpy(buf + copied, p + offset, amt);
+> -               kunmap_atomic(p);
+> +               kunmap_local(p);
+>                 put_page(page);
+>                 copied +=3D amt;
+>                 index++;
+> --
+> 2.34.1
+>
+>
+>
 
