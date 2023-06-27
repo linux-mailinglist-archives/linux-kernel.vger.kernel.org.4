@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2B9974013D
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 18:32:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 950FB740140
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 18:32:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230301AbjF0QcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 12:32:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51538 "EHLO
+        id S231996AbjF0Qcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 12:32:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229797AbjF0Qbw (ORCPT
+        with ESMTP id S231267AbjF0Qbx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 12:31:52 -0400
+        Tue, 27 Jun 2023 12:31:53 -0400
 Received: from EUR02-DB5-obe.outbound.protection.outlook.com (mail-db5eur02on2086.outbound.protection.outlook.com [40.107.249.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAA283AB2;
-        Tue, 27 Jun 2023 09:31:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0C513AB7;
+        Tue, 27 Jun 2023 09:31:35 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CsdFI4WgKG1K0dMUhUvBoHC02NZTtlIKKZ1ephCpx8UJXvcuXwhfSfwpgdzZyVg6urISqMEttbpDSsAOWhgQgHJ5Kfo2HtDvSiaNivQTOFtxjVu/4I5ceVd02LnOI3W/hnv3DltY3PLTpN6ge+fCxlo8PIIwt1cxoQ5Pul7p2ppGqSF6xx9+iDnCWAR0AK1LqIEbIx0Xr5bJk5ddr9weoydl+6bXxzTHYE560T4LGoMppXJqb33jepQ7TuBujjXclz9jX08BawKgJL+7ilfrMgTlElNXSvPEc8UfuZzrKT7LyJM5MaBUrnR0yW77t59mtlKVP69ydfadxd9IfN1LlQ==
+ b=lJTno22RrgP1c4aEqqKmZ+axVuFTmf4KNiGAzpYzZky0SbEcRF7NsvtwaT7amiN+IsjXDjRq/L4bwIh6qTP2R/qH+FmpEZ0bAbpyPl08ZfiR05uQ2MTwCrJxJECiMAXM0dUrsTmn3CHkJLCb1SL0syJI1dRnXKNOUzYJqs+1j78WMfoC2mRE99FMfpj6YwFLC2MxM22Y3DWD6XoEZp2Rpn4SL9MvW8Ecnh3ylv8WaRlrhpJHSge+u0eagxsYQNLYqQbW9dv0qKHXRkA7wUaS7UR0IqmbO1Oovtyh6W1QhMOsdd50Fr9m7UxZWp9Accy+Ft04HeQKlhsoOtyF36041g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Xb/bNxr5qDDU+4/yXYImJYFMcP2Sz2XQqYzvM23C2LE=;
- b=VqRSvDvC1iiiyYMHhDXBE1WHaGyFZoalw9iFWucrmnomFsLfOAfdNr+PtsKpanadthH2PG8ytpzs6yamEMEUQXifIfEDTsSSDDRs2qrmvi7s6wJYAvdgW60EPLh1zhSyBNq8H6+xcxLRKjxOZmzuPlvgZuDC+gL9xGJ4X0FYLP2ucxU00Ij0Xy86c4ZbBOBkY/9cEJQUtqHe8ZKZ1jE4FSXYeXOIpWiV8gmQYxCT2A9GL9BapKztlg/4iSwIvpGDz0kqly0Wd+29RuooZA5ICqvZoE2NG7b34TDoaVqKsfvUoe+hTkMXINPls5zoOf/RmArQl9cF2bTYMUUOMAf3pw==
+ bh=zzsh9DezhFnr46zoqNwvG2xkkkAQf05VNJB7IfbkEmc=;
+ b=F9gYKWY19R5Kj20Df2B+4YWmKUiwOb8pNv5V8m/oQuvRBWQC5eE7ldEdcH6qLAHdiIiI4UfmCEM+JQlnRcmVUmUNGWhRJRjnml6Z6T4ZcsKSpH+dinWBRG7EISfImOB7p+ueMWa2aWp7M1Ku9qt+7OEaHoIELB7qCe2uDwnJ4gfj/AbXL+Tb2FAC4JHSEc4JdmS3vSPICf4YjUTTJZHUl8uofT4Wh2oF9QrHMzT+S2UeVtssjWlB+awx0IghCkgSwNT3IfzL+Gog6SrvgAkuNC7ECRaqWGfy1kFWmapZRt4XoIbu42lYLERFLgFYds3DiQAsE0B7u+5qPLY6Zpq2cA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Xb/bNxr5qDDU+4/yXYImJYFMcP2Sz2XQqYzvM23C2LE=;
- b=coOSJRjMAJKLMV7nE3FyIftZimQoO0TnvhQMqHHe9TQq6WKA4Pn0EulkOjtZAFd8R295IxsqV8DNUbUmouLJkmIkFY5hMAWUgqKojvbZOW7DRqH3xjMINMsiWDwn9rQkcRdlXkKoSWz9XFkYD53nDozoWVhFLKhJF1Sw0LGxpbQ=
+ bh=zzsh9DezhFnr46zoqNwvG2xkkkAQf05VNJB7IfbkEmc=;
+ b=QQfqcmXWJaTea9FiaS4G64o+Jc/ulPZkas+kiuXPg45T5LyByCp6OUJHqOYODuRKn59pul3ge4dkf7yT5z18C/Z0g88RoOxYt3hluJT+cTfrnoKFEfxM+Rgykx2c8f7B40vhvwbiyByIBvsu8aX6Ce7l66QLIo50d+yFrWANLuI=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from AM0PR04MB6452.eurprd04.prod.outlook.com (2603:10a6:208:16d::21)
  by AM8PR04MB7314.eurprd04.prod.outlook.com (2603:10a6:20b:1df::13) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.26; Tue, 27 Jun
- 2023 16:31:30 +0000
+ 2023 16:31:32 +0000
 Received: from AM0PR04MB6452.eurprd04.prod.outlook.com
  ([fe80::c40e:d76:fd88:f460]) by AM0PR04MB6452.eurprd04.prod.outlook.com
  ([fe80::c40e:d76:fd88:f460%5]) with mapi id 15.20.6521.026; Tue, 27 Jun 2023
- 16:31:30 +0000
+ 16:31:32 +0000
 From:   Vladimir Oltean <vladimir.oltean@nxp.com>
 To:     netdev@vger.kernel.org
 Cc:     Andrew Lunn <andrew@lunn.ch>,
@@ -55,9 +55,9 @@ Cc:     Andrew Lunn <andrew@lunn.ch>,
         Richard Cochran <richardcochran@gmail.com>,
         Antoine Tenart <atenart@kernel.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 net 2/3] net: mscc: ocelot: don't keep PTP configuration of all ports in single structure
-Date:   Tue, 27 Jun 2023 19:31:13 +0300
-Message-Id: <20230627163114.3561597-3-vladimir.oltean@nxp.com>
+Subject: [PATCH v2 net 3/3] net: dsa: felix: don't drop PTP frames with tag_8021q when RX timestamping is disabled
+Date:   Tue, 27 Jun 2023 19:31:14 +0300
+Message-Id: <20230627163114.3561597-4-vladimir.oltean@nxp.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230627163114.3561597-1-vladimir.oltean@nxp.com>
 References: <20230627163114.3561597-1-vladimir.oltean@nxp.com>
@@ -69,51 +69,51 @@ X-ClientProxiedBy: FR3P281CA0078.DEUP281.PROD.OUTLOOK.COM
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: AM0PR04MB6452:EE_|AM8PR04MB7314:EE_
-X-MS-Office365-Filtering-Correlation-Id: ba184ade-b452-49d1-c94a-08db772bf68b
+X-MS-Office365-Filtering-Correlation-Id: ffcf2c18-e482-417d-708b-08db772bf737
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: HAeL96Z/Sc53Y4+p2ZaZszJf4nDihwHCgtxL5F3BaAxn62EQ1UiogeK2dTwDXOuMkc160Cwdbdj2OuSC6k/BgagXLEsPuaYJtgcUkTw/wxTWKUXv0zDF5eLnRgE7ybN2m7lVagYVfnCJGvEIBK3EgE5bJUfuU1cz3MqnESgKhH8AKRUhIq/d70sLl8zDUFIwoPPLzA4/6G8oMpvZ82g7oswuamEhkPr9XGSlP+0PyhYSBbniUch55aEmGlyDVlkZZBgUrzva0XNIhpDRikxQ9dETc616ERg2oeiA0Ko9heZRA92Ns6K84wGdD4lEwz9e1o5F0yXzpLciahbVBvkf926eQDbBVS4PD4yNsLLrFHpgt6f8pMlvi0xBetAKY57H2oGGwzzjvfIUKvQevDc4OHoZT2R4AekVkn0eNyFZ4tE8mw5ebNUqmhwdh18sgeXy5lRbZDDJbA1k0CrhwOWy+/fE9F8JIhy+OHKmXCp6nz1uY60vWdZzhyKnDxSahN9vBl2bJhV4yKPAGgnzI7Jvs49EjJ+DDYWf6Dnu/CVRWQ5tiDVPug8upgZYwlcxTYUdYTR0/mzqyOZz0ampy4kdyCJc/7pubJ2R/WPW7xcvt0M9EY3Eb2CkxMVy9kiEkE7Q
+X-Microsoft-Antispam-Message-Info: nntW6F0ly0KKK/QcYj8koJj52iXgsAZt0WU5I1MVbmldXSfEVYCjVvh/gnMBiLJGny6003CmtCagGHdPH7MhtGzGy5yVK4FrOFRzzRcUFhIXLVPLG2GtsmwkcqGj5zgdNXTVkm82KNZu5zLmCc1rtQ4EzqkAgM7HEPaVHLvaP7W7C3G3xDYAR2p6TdYyA4pn2rBCSUKGByb5mEP9Hm9W/BlC9UpGnhodTPRlRZtUpWd3evFMSXGUipQVLfrnetsJ8Zfq0aKxveDKjUhaGeWB6wNf65I3BAEy0xKKa/HNiM1joqY6Dp2AJY4esegMB2VWi3Ck4Vmnvj8/GfarYc6yfcCeiaHQvdkYI2kpzAXzFKmEvcHodHThLFJ15pzJdkQAw1od2fH54BbScenBJ6pbk+8DDUYN0zmGbZiI3CUuDJlGUdu2SqXlcJFWnDVQiuseqK48xHp51+pT9GxC9vclBfbFiHMrmRGrCmU+eboX2B2G8TVFqUCArPXaqkYTGlsjxTEUvx10uy3ScstdptumJzTuh+gadv+CHaqKXDwOQp2Vbh0pDfGxSy4Wllv+JwWep0s0MLafTVccSMqHnauj9SNMnVMb5yT8/BhgvlqClWMg6WG+dUC5BGWXwq9FT2KJ
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6452.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(376002)(396003)(39860400002)(366004)(451199021)(6512007)(1076003)(44832011)(7416002)(66556008)(4326008)(6916009)(66946007)(478600001)(316002)(36756003)(8936002)(66476007)(5660300002)(8676002)(2906002)(86362001)(54906003)(41300700001)(26005)(52116002)(6486002)(186003)(6506007)(38100700002)(6666004)(38350700002)(2616005)(83380400001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?jqUyazhrVOiGUdN1c/3zlIIIediC9rRsxnln/IhgIO6noi6UX0poPxtLRhWn?=
- =?us-ascii?Q?FvzwuuTZ7tUvMC+dBi9cK8c/2yHifiCQdSbinCa4ypseQGXgZfq9SelZ3Fik?=
- =?us-ascii?Q?nq9vep4GVhxmCM7N/aNNNNUed/uGR5xzz/I5WCo/s2LDzA+1mAtY1nQ1PMvs?=
- =?us-ascii?Q?otDOK/8+NYn2/SG6acCjRXhnr9yA4AFzeKiVeAuQiIhyPKKkYnF7kAhTg+CT?=
- =?us-ascii?Q?NZZlF3NmjF3kRkOljNR6LpJ6v5y6ZazM4OibYhX7w+tFEa6R49vrQ6bUg4cM?=
- =?us-ascii?Q?p5KnMdiMQNFOba4FY6EHXsTyS/Jgwp3c6mBBIRBwNguEEqrM6Pg/AdRPKymf?=
- =?us-ascii?Q?wIIWJfQHv8wObx3cod8DNV8K95Cz84tWDTB4O5UGFlUafZVZgDyXC6S1LWeC?=
- =?us-ascii?Q?4pVaoVnZ5lCTP71EK24AY8nfdUxtA6My0W3yAi+oczNzJYtMu5mg0R6mfxSE?=
- =?us-ascii?Q?7nRx2fQwU4gX8SYBWJxpet0J87ViNMp/vksGl8zoigded5TUwLTHDNGyYf09?=
- =?us-ascii?Q?R1gIBqkKHIFur53aupLu9rYjqrQYaR+jiBiutuiLMBXMGIm+3kSZsK0o4LM5?=
- =?us-ascii?Q?7ohwI/1ywzjrhLskXsmCmkPk59+AYZlxUZo9tKahUbtBETZx3Z021UyN48y1?=
- =?us-ascii?Q?ra6uLOtmv+MTDLVMYpp/avsNAyyXgyCs+KK5Vfqv5szNGWOya1hNlL4YMB/V?=
- =?us-ascii?Q?uYMezljagS52uoH5eU9wsiXXbVYYtcMa6F7O/Eg3mmzPjlWoUFDLJD4Cb1V5?=
- =?us-ascii?Q?Gd3X2VJLoB0rzofOqL7WNi88tJsfh9wTFhA0JgFOaWhhcPsxgzikVQSlKsPi?=
- =?us-ascii?Q?26/AzbjbUJZxsLm8HyFgJNtfufA3+xRSzZTJc4eV+2fQUnSLEGKGkUu5EXjD?=
- =?us-ascii?Q?hyWjGmizCB9DlJIad0Hqoh8CRH1eEk5QsdBChHUW4PTgVr54UkcGqRLFEeOY?=
- =?us-ascii?Q?EVdPLMp3ElAMbz2j+4PbF2GeGlD0zRZtquVTm2sxVS3LC/Mb061QFuSdtXbL?=
- =?us-ascii?Q?kSVlpoS50ec96nj19p5KxRmNuSlEG8DHnUnLNgvjsC8zLOm0G169P4CUzdIs?=
- =?us-ascii?Q?pgGyVOmxC/jtwk3T2O3aZ3ndJyl7E7RA/I2sXPLYOUqE8IIpQJUDTTIZB1JB?=
- =?us-ascii?Q?5Dqybamv+3vo7gsX0AgIZGtJz9aqIHtDOo9yDju96bq7DwItmRZQxNIe1fZ4?=
- =?us-ascii?Q?GKbo3OGuYgSpIVKDt5G0do0AP3FAncATxmJmQ+K0W4IbI94pE3T421OLRree?=
- =?us-ascii?Q?qv2VmuMaBNi5W++9RyaD/g9qLm4QPLhOGZ3kJ1xAA/V4xqLafuuRH42a4U4z?=
- =?us-ascii?Q?mmugve4pjeZfrESoW7BBzDYAJSKpMIj7vCY6CebN0lut0Fy7LcFLjtfnhoGx?=
- =?us-ascii?Q?VF/BJxj8EYXjL8xw0WDnq8NmckA+P+5HM6kTednQIbi2nmWcA150W9kEQ7n1?=
- =?us-ascii?Q?gvxZBMDWpNx1s5KSbl5lKNgK3YPzxU8Nr0dpmiAnSviBrVGEI+Ip06NwbKUS?=
- =?us-ascii?Q?Au/htsj49Js44o3KooIuum/X2Oh1tWvNDBa4OQ2UdpialOEi0e3gQ98AvoIM?=
- =?us-ascii?Q?siG3Me2Y5sAAHbja3nE30XXOlJXlAcqS+dUfHL5oKaO5xs1Y3GAX1v3crLvG?=
- =?us-ascii?Q?jw=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?KkLbsVZXS1PZHAvS4lM4uUpcnTxJJmEFE8FilFhtkmNKvCdHImYJdIAW0u+I?=
+ =?us-ascii?Q?8McGkwl1VGNpUtDngMYxDYMnx6G9gYuxkxA2/5dlWjPOhlASQUY20OTXeHR9?=
+ =?us-ascii?Q?JgdLImgygPdJtRaRVUZa55H9WnyddxJtGRqN8fHvVI32jJLIA/OUpNcgFuq/?=
+ =?us-ascii?Q?s6KQwAez6Uht+21MY4AmOqiUhrc8Ue0YXNZ5c/ITJCno0UfktEdIGuLGTXnU?=
+ =?us-ascii?Q?K6gNqV+SgJdlRsp724SCqe7UFDBLI15dXud3hrvbrq4BYJDRwYeWVpngGUvK?=
+ =?us-ascii?Q?SvychTOB/HBitGGOUpaPTxbB72/JRVdFdFN9Pt0IpS5nVVlKQm63i/57bFJI?=
+ =?us-ascii?Q?5G3or8Qubo3aOUh49/WfPCL2bxLOqrLptearftr7P2+FTIPjP3rbxzSs4pKX?=
+ =?us-ascii?Q?ympN15xHj/A79le2vTIMyBht+r+sgVg85D9JwBjss7/5LBMEn3+xzxLxkg+j?=
+ =?us-ascii?Q?xkXI4+oG0PZdzRXuQ7gNJNKcijH5rep3PU2G7D84iP78OyRCn9VzPaCG88Dg?=
+ =?us-ascii?Q?juIJAsQ1h1IWXvwWR/5VMyaUD4pJBzluWS4i7gviD+V+J2q1Fmfi6+vcZIZX?=
+ =?us-ascii?Q?43n5/3ga9A1v/69p+Ehutx/fFCNxHwfJgH7btIYX1PoxRe4K0fUNINT5p/oC?=
+ =?us-ascii?Q?s/GPH40DPMcDBvv/NxRt/hj6SlP/rXVPpBUv7ARzJDKXEBdIJlyyxwR8GGh/?=
+ =?us-ascii?Q?MW9lJNz30tKZVl9Uhka/Z6GmMQRo1Rz13O9IMGGWMEwjsGXiGt7g9vd79EGu?=
+ =?us-ascii?Q?mzbNJdfweh6ZEhySYzNqkjH0a4d2FKmD83vP9HI7hu+9c9F3O05arZL+2ZoO?=
+ =?us-ascii?Q?TOW4RHYcL6t2FUQuwoiUWHtX2W16Ubp+7Dire7Bpn6GeujCXQi6RUXaqx5CN?=
+ =?us-ascii?Q?mC9LiVRaUXgfUiMiLVfuST3J4Gw15hNYjctCnlSg3oXUp8WIcWIpsRHWcB3Y?=
+ =?us-ascii?Q?CilE5/2HfuooZjuNTlGXhfOU7e4qUa8RLtPGm6NxU4GL1kyEgvTZ8vWmRR27?=
+ =?us-ascii?Q?uxJfShzoXabBqgcFcTJ44/F5+eDi44f/oeDwozDo86uWZfi75u78HZ8vz7df?=
+ =?us-ascii?Q?BgLfK1qpXrteZ1AJTpC/6rb85/NZYhPrSQ85jZDSM5b8v4SsO4cfrj7ib1EY?=
+ =?us-ascii?Q?l6sfAnIHaApKRGFyxOsBhT59Pi2exXlOABgTGO80BkpNh8hA1aPVHlk4d9DZ?=
+ =?us-ascii?Q?cns2CtiphrNU6aKGtfiLS6mcYlNJO18eQDgGOumgKBsrmipMH/YYYuzY813R?=
+ =?us-ascii?Q?y1UKGYHUItg82X6wFshIMaQX8iAR2HZuKhhU478jsDfYaB1EP31Sg5PfhE+a?=
+ =?us-ascii?Q?yx6orK5n4KZE/YqlrfQS4HUtu48mrFSx++ygVuQiQCvTxROULTSeSVgryuSu?=
+ =?us-ascii?Q?JmbebdmuNefkAdHk4qNdoi2ir/c7GG6+D7QDzPa0WGJWRox4w7sF9lsY8e8w?=
+ =?us-ascii?Q?LuXCToT6O7rpflVx1Rke54989Rw3tqjhODmsHbSoIgWBYzeD98GGK/CfkkGn?=
+ =?us-ascii?Q?p2BJTMMhBDX2EcumyE+Rrtm4KULavNPoRsN87qhdV5vzYpgTNLazNFgyvxwZ?=
+ =?us-ascii?Q?M/6onERWq6VVW7D56P66JLBDbZorrFn7A+6mNJN2Vq5lrE9B5GlamUcz8/zd?=
+ =?us-ascii?Q?gQ=3D=3D?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ba184ade-b452-49d1-c94a-08db772bf68b
+X-MS-Exchange-CrossTenant-Network-Message-Id: ffcf2c18-e482-417d-708b-08db772bf737
 X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6452.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jun 2023 16:31:30.8862
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jun 2023 16:31:31.9752
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: TCCNk85RPUMmvFjBasjC8y71TcU7JSooedj345AwrpWUEy5erHL8Uh6vfTYIoVSKLdwItuMw0WurM1zM9FLs8Q==
+X-MS-Exchange-CrossTenant-UserPrincipalName: ZVPY/0B2djrLaqR2iROpazcwEuX3a+E7Is3ACY2Bo25TVn/L7LWIZuKn075AsFYwmunLiCeMye1amc8sJ/rk7g==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB7314
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -125,199 +125,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In a future change, the driver will need to determine whether PTP RX
-timestamping is enabled on a port (including whether traps were set up
-on that port in particular) and that is currently not possible.
+The driver implements a workaround for the fact that it doesn't have an
+IRQ source to tell it whether PTP frames are available through the
+extraction registers, for those frames to be processed and passed
+towards the network stack. That workaround is to configure the switch,
+through felix_hwtstamp_set() -> felix_update_trapping_destinations(),
+to create two copies of PTP packets: one sent over Ethernet to the DSA
+master, and one to be consumed through the aforementioned CPU extraction
+queue registers.
 
-The driver supports different RX filters (L2, L4) and kinds of TX
-timestamping (one-step, two-step) on its ports, but it saves all
-configuration in a single struct hwtstamp_config that is global to the
-switch. So, the latest timestamping configuration on one port
-(including a request to disable timestamping) affects what gets reported
-for all ports, even though the configuration itself is still individual
-to each port.
+The reason why we want PTP packets to be consumed through the CPU
+extraction registers in the first place is because we want to see their
+hardware RX timestamp. With tag_8021q, that is only visible that way,
+and it isn't visible with the copy of the packet that's transmitted over
+Ethernet.
 
-The port timestamping configurations are only coupled because of the
-common structure, so replace the hwtstamp_config with a mask of trapped
-protocols saved per port. We also have the ptp_cmd to distinguish
-between one-step and two-step PTP timestamping, so with those 2 bits of
-information we can fully reconstruct a descriptive struct
-hwtstamp_config for each port, during the SIOCGHWTSTAMP ioctl.
+The problem with the workaround implementation is that it drops the
+packet received over Ethernet, in expectation of its copy being present
+in the CPU extraction registers. However, if felix_hwtstamp_set() hasn't
+run (aka PTP RX timestamping is disabled), the driver will drop the
+original PTP frame and there will be no copy of it in the CPU extraction
+registers. So, the network stack will simply not see any PTP frame.
 
-Fixes: 4e3b0468e6d7 ("net: mscc: PTP Hardware Clock (PHC) support")
-Fixes: 96ca08c05838 ("net: mscc: ocelot: set up traps for PTP packets")
+Look at the port's trapping configuration to see whether the driver has
+previously enabled the CPU extraction registers. If it hasn't, just
+don't RX timestamp the frame and let it be passed up the stack by DSA,
+which is perfectly fine.
+
+Fixes: 0a6f17c6ae21 ("net: dsa: tag_ocelot_8021q: add support for PTP timestamping")
 Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 ---
-v1->v2: replace the ocelot_port->ptp_rx_filters (bit mask of UAPI enum
-hwtstamp_rx_filters) with the hardware-specific trap_proto (bit mask of
-enum ocelot_proto). This makes it easier for the next patch to
-distinguish between L2 and L4 PTP (not easy when saving the UAPI format).
+v1->v2: distinguish between L2 and L4 PTP packets
 
- drivers/net/ethernet/mscc/ocelot.c     |  1 -
- drivers/net/ethernet/mscc/ocelot_ptp.c | 61 +++++++++++++++++---------
- include/soc/mscc/ocelot.h              | 10 +++--
- 3 files changed, 48 insertions(+), 24 deletions(-)
+ drivers/net/dsa/ocelot/felix.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/drivers/net/ethernet/mscc/ocelot.c b/drivers/net/ethernet/mscc/ocelot.c
-index 1f5f00b30441..2fa833d041ba 100644
---- a/drivers/net/ethernet/mscc/ocelot.c
-+++ b/drivers/net/ethernet/mscc/ocelot.c
-@@ -2925,7 +2925,6 @@ int ocelot_init(struct ocelot *ocelot)
- 		}
- 	}
+diff --git a/drivers/net/dsa/ocelot/felix.c b/drivers/net/dsa/ocelot/felix.c
+index 80861ac090ae..70c0e2b1936b 100644
+--- a/drivers/net/dsa/ocelot/felix.c
++++ b/drivers/net/dsa/ocelot/felix.c
+@@ -1725,6 +1725,18 @@ static bool felix_rxtstamp(struct dsa_switch *ds, int port,
+ 	u32 tstamp_hi;
+ 	u64 tstamp;
  
--	mutex_init(&ocelot->ptp_lock);
- 	mutex_init(&ocelot->mact_lock);
- 	mutex_init(&ocelot->fwd_domain_lock);
- 	mutex_init(&ocelot->tas_lock);
-diff --git a/drivers/net/ethernet/mscc/ocelot_ptp.c b/drivers/net/ethernet/mscc/ocelot_ptp.c
-index 673bfd70867a..cb32234a5bf1 100644
---- a/drivers/net/ethernet/mscc/ocelot_ptp.c
-+++ b/drivers/net/ethernet/mscc/ocelot_ptp.c
-@@ -439,8 +439,12 @@ static int ocelot_ipv6_ptp_trap_del(struct ocelot *ocelot, int port)
- static int ocelot_setup_ptp_traps(struct ocelot *ocelot, int port,
- 				  bool l2, bool l4)
- {
-+	struct ocelot_port *ocelot_port = ocelot->ports[port];
- 	int err;
- 
-+	ocelot_port->trap_proto &= ~(OCELOT_PROTO_PTP_L2 |
-+				     OCELOT_PROTO_PTP_L4);
-+
- 	if (l2)
- 		err = ocelot_l2_ptp_trap_add(ocelot, port);
- 	else
-@@ -464,6 +468,11 @@ static int ocelot_setup_ptp_traps(struct ocelot *ocelot, int port,
- 	if (err)
- 		return err;
- 
-+	if (l2)
-+		ocelot_port->trap_proto |= OCELOT_PROTO_PTP_L2;
-+	if (l4)
-+		ocelot_port->trap_proto |= OCELOT_PROTO_PTP_L4;
-+
- 	return 0;
- 
- err_ipv6:
-@@ -474,10 +483,38 @@ static int ocelot_setup_ptp_traps(struct ocelot *ocelot, int port,
- 	return err;
- }
- 
-+static int ocelot_traps_to_ptp_rx_filter(unsigned int proto)
-+{
-+	if ((proto & OCELOT_PROTO_PTP_L2) && (proto & OCELOT_PROTO_PTP_L4))
-+		return HWTSTAMP_FILTER_PTP_V2_EVENT;
-+	else if (proto & OCELOT_PROTO_PTP_L2)
-+		return HWTSTAMP_FILTER_PTP_V2_L2_EVENT;
-+	else if (proto & OCELOT_PROTO_PTP_L4)
-+		return HWTSTAMP_FILTER_PTP_V2_L4_EVENT;
-+
-+	return HWTSTAMP_FILTER_NONE;
-+}
-+
- int ocelot_hwstamp_get(struct ocelot *ocelot, int port, struct ifreq *ifr)
- {
--	return copy_to_user(ifr->ifr_data, &ocelot->hwtstamp_config,
--			    sizeof(ocelot->hwtstamp_config)) ? -EFAULT : 0;
-+	struct ocelot_port *ocelot_port = ocelot->ports[port];
-+	struct hwtstamp_config cfg = {};
-+
-+	switch (ocelot_port->ptp_cmd) {
-+	case IFH_REW_OP_TWO_STEP_PTP:
-+		cfg.tx_type = HWTSTAMP_TX_ON;
++	switch (type & PTP_CLASS_PMASK) {
++	case PTP_CLASS_L2:
++		if (!(ocelot->ports[port]->trap_proto & OCELOT_PROTO_PTP_L2))
++			return false;
 +		break;
-+	case IFH_REW_OP_ORIGIN_PTP:
-+		cfg.tx_type = HWTSTAMP_TX_ONESTEP_SYNC;
-+		break;
-+	default:
-+		cfg.tx_type = HWTSTAMP_TX_OFF;
++	case PTP_CLASS_IPV4:
++	case PTP_CLASS_IPV6:
++		if (!(ocelot->ports[port]->trap_proto & OCELOT_PROTO_PTP_L4))
++			return false;
 +		break;
 +	}
 +
-+	cfg.rx_filter = ocelot_traps_to_ptp_rx_filter(ocelot_port->trap_proto);
-+
-+	return copy_to_user(ifr->ifr_data, &cfg, sizeof(cfg)) ? -EFAULT : 0;
- }
- EXPORT_SYMBOL(ocelot_hwstamp_get);
- 
-@@ -509,8 +546,6 @@ int ocelot_hwstamp_set(struct ocelot *ocelot, int port, struct ifreq *ifr)
- 		return -ERANGE;
- 	}
- 
--	mutex_lock(&ocelot->ptp_lock);
--
- 	switch (cfg.rx_filter) {
- 	case HWTSTAMP_FILTER_NONE:
- 		break;
-@@ -531,28 +566,14 @@ int ocelot_hwstamp_set(struct ocelot *ocelot, int port, struct ifreq *ifr)
- 		l4 = true;
- 		break;
- 	default:
--		mutex_unlock(&ocelot->ptp_lock);
- 		return -ERANGE;
- 	}
- 
- 	err = ocelot_setup_ptp_traps(ocelot, port, l2, l4);
--	if (err) {
--		mutex_unlock(&ocelot->ptp_lock);
-+	if (err)
- 		return err;
--	}
--
--	if (l2 && l4)
--		cfg.rx_filter = HWTSTAMP_FILTER_PTP_V2_EVENT;
--	else if (l2)
--		cfg.rx_filter = HWTSTAMP_FILTER_PTP_V2_L2_EVENT;
--	else if (l4)
--		cfg.rx_filter = HWTSTAMP_FILTER_PTP_V2_L4_EVENT;
--	else
--		cfg.rx_filter = HWTSTAMP_FILTER_NONE;
- 
--	/* Commit back the result & save it */
--	memcpy(&ocelot->hwtstamp_config, &cfg, sizeof(cfg));
--	mutex_unlock(&ocelot->ptp_lock);
-+	cfg.rx_filter = ocelot_traps_to_ptp_rx_filter(ocelot_port->trap_proto);
- 
- 	return copy_to_user(ifr->ifr_data, &cfg, sizeof(cfg)) ? -EFAULT : 0;
- }
-diff --git a/include/soc/mscc/ocelot.h b/include/soc/mscc/ocelot.h
-index cb8fbb241879..22aae505c813 100644
---- a/include/soc/mscc/ocelot.h
-+++ b/include/soc/mscc/ocelot.h
-@@ -730,6 +730,11 @@ enum macaccess_entry_type {
- 	ENTRYTYPE_MACv6,
- };
- 
-+enum ocelot_proto {
-+	OCELOT_PROTO_PTP_L2 = BIT(0),
-+	OCELOT_PROTO_PTP_L4 = BIT(1),
-+};
-+
- #define OCELOT_QUIRK_PCS_PERFORMS_RATE_ADAPTATION	BIT(0)
- #define OCELOT_QUIRK_QSGMII_PORTS_MUST_BE_UP		BIT(1)
- 
-@@ -775,6 +780,8 @@ struct ocelot_port {
- 	unsigned int			ptp_skbs_in_flight;
- 	struct sk_buff_head		tx_skbs;
- 
-+	unsigned int			trap_proto;
-+
- 	u16				mrp_ring_id;
- 
- 	u8				ptp_cmd;
-@@ -868,12 +875,9 @@ struct ocelot {
- 	u8				mm_supported:1;
- 	struct ptp_clock		*ptp_clock;
- 	struct ptp_clock_info		ptp_info;
--	struct hwtstamp_config		hwtstamp_config;
- 	unsigned int			ptp_skbs_in_flight;
- 	/* Protects the 2-step TX timestamp ID logic */
- 	spinlock_t			ts_id_lock;
--	/* Protects the PTP interface state */
--	struct mutex			ptp_lock;
- 	/* Protects the PTP clock */
- 	spinlock_t			ptp_clock_lock;
- 	struct ptp_pin_desc		ptp_pins[OCELOT_PTP_PINS_NUM];
+ 	/* If the "no XTR IRQ" workaround is in use, tell DSA to defer this skb
+ 	 * for RX timestamping. Then free it, and poll for its copy through
+ 	 * MMIO in the CPU port module, and inject that into the stack from
 -- 
 2.34.1
 
