@@ -2,216 +2,336 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7ACE73F5F9
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 09:48:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85C1E73F600
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 09:48:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231390AbjF0Hr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 03:47:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41558 "EHLO
+        id S230070AbjF0HsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 03:48:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230070AbjF0Hrx (ORCPT
+        with ESMTP id S231451AbjF0HsK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 03:47:53 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0FA010D2
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 00:47:50 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2b6a6f224a1so20186541fa.1
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 00:47:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20221208.gappssmtp.com; s=20221208; t=1687852069; x=1690444069;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=KZs6V3WoqaN2ypay6C0mcFsBihk+1Lib6W1lzqZUXcA=;
-        b=Rz8K10r/ZmO1qzysKmpchpOle08tg4KT4u6GRsFni1e+KT+Q7GV6ApCy00Dz7OcOqM
-         6n/XfFhdt/yzeWgoH4zyeRpxb7EurE6UK2KevyqJGWZuO+slFkp+sUiO41sIeBpuNIk8
-         jyK9euk926FUJXyXApfk42got5hopxVWBVlLhhfMWmJGhzi3WaX9kim9j/oaySZ+jeVK
-         6qyoKOEDNNtqRtX0CY072wjGXtRBKd4mshBzIatfkZI70N+csz+9SQ8EcdVxpBG1qsZi
-         6K2DQAjanlRgPFiXYosaHHjyMDzEt9JxkUdDEt2KB/KmbJpx4drs7cVFPfknmtfIjKp7
-         2HuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687852069; x=1690444069;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KZs6V3WoqaN2ypay6C0mcFsBihk+1Lib6W1lzqZUXcA=;
-        b=Ah5+3a5KhxiYVoTFxIZR+mQ+VvngqadWEbBYHmC436iUuBdE4M8dVK2ugxVhg4vgTx
-         OVXksKK77fi/tJ0NG36o/V6hr4d5qFH3JXp+CHwH6Yms4PxdEIlvTCb64jtN2k97KIZn
-         l2RGgyPr0yFmFZpFr1yjCLJXtY0lTWvIQ+6wv6tu/a0fuMuubnI4fW/hUmhlWvSpvSZo
-         NLIeUPY2IOXfovm+yGBxQk/jTAZTeqZ7bfNP8i9ZIunYLt/R9OQBSC+Ei3vrMGmg3cf5
-         9ZsZ8vTlvFQXTDzW7/Tyv+ZfANvpqkWBDzWGD6G8tpDHQMEYp4cVUuzLJXMjOjIOKUOY
-         PvQg==
-X-Gm-Message-State: AC+VfDwvfCGAJVl6prh+zOoJ0nIffzSOzo9eg9KoV9F+5m3nkZ57Tbxi
-        AyvKTMEc6JrUjr1A/KBcpRraNA==
-X-Google-Smtp-Source: ACHHUZ4wHEFcdjzPyulmOIHzpvd1zFWEJSswBnhAwGXK1zWk1HEEmYbkPLIJGMwRtpu+8lIxD1zvqA==
-X-Received: by 2002:a19:5f07:0:b0:4dd:9f86:859d with SMTP id t7-20020a195f07000000b004dd9f86859dmr17063106lfb.13.1687852068882;
-        Tue, 27 Jun 2023 00:47:48 -0700 (PDT)
-Received: from localhost (h-46-59-89-207.A463.priv.bahnhof.se. [46.59.89.207])
-        by smtp.gmail.com with ESMTPSA id u26-20020ac2519a000000b004f4b42e2d7dsm1413087lfi.230.2023.06.27.00.47.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jun 2023 00:47:48 -0700 (PDT)
-Date:   Tue, 27 Jun 2023 09:47:47 +0200
-From:   Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/6] drivers/thermal/rcar_gen3_thermal: Convert to
- devm_platform_ioremap_resource()
-Message-ID: <ZJqUI1hL29o-OBei@oden.dyn.berto.se>
-References: <20230626124334.15100-1-frank.li@vivo.com>
- <20230626124334.15100-4-frank.li@vivo.com>
- <ZJm8p4GnTG-vtb0Q@oden.dyn.berto.se>
- <2f33ff1e-ec4e-e060-a84d-ee38ed17c9f7@vivo.com>
+        Tue, 27 Jun 2023 03:48:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A591BEF;
+        Tue, 27 Jun 2023 00:48:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B6D96104F;
+        Tue, 27 Jun 2023 07:48:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35056C433C8;
+        Tue, 27 Jun 2023 07:48:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687852085;
+        bh=ZKJdk7+eb922UMMNDLeGRBSkHEMaZY+MyhMR+FRX4dg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QAYH7fThraQBh3W2I3HGXofUGkQ0inKnXYqn1U1rfQsXpW6+CXWbIfU5Nroq938fK
+         3aPLQdNauvp8TGiLZiv0UTEfMLt2UBpyjAaiABRay7wOFCt9xVMKfcgmH0w5rcZKDp
+         I+YWCqBz4mROI9QWEYTBmUjd6mT9fMoeq2tCL5GucVNa284duKUnf+B8tpy8MfpvTj
+         NzEodcc6qtOXhI8GiQxCb82AB57j39DK76LxAzFOW6NpheDKaR39V1sPsxqg0AvEKy
+         /uF93zqDB8pVIQwdaedVeMoZlmoNLDGiJ8SQjwmO+wXnNG6a/NpPvU0qpvvVCjZiX6
+         AkuSmyMYdIn0g==
+Date:   Tue, 27 Jun 2023 13:18:01 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Anne Macedo <retpolanne@posteo.net>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Christian Lamparter <chunkeey@googlemail.com>,
+        Rene Treffer <treffer@measite.de>
+Subject: Re: [PATCH] usb: host: xhci: remove renesas rom wiping
+Message-ID: <ZJqUMWv1jM2KQsYu@matsya>
+References: <20230626204910.728-3-retpolanne@posteo.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <2f33ff1e-ec4e-e060-a84d-ee38ed17c9f7@vivo.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230626204910.728-3-retpolanne@posteo.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yangtao,
+On 26-06-23, 20:49, Anne Macedo wrote:
+> Cards based on Renesas uPD72020x currently have their ROM wiped on
+> module start if they have an external ROM. This means that every time
+> you start up the module, the ROM gets cleaned up and the firmware
+> redownloaded.
 
-On 2023-06-27 10:58:16 +0800, Yangtao Li wrote:
-> Hi Niklas,
-> 
-> On 2023/6/27 0:28, Niklas Söderlund wrote:
-> 
-> > Hi Yangtao,
-> > 
-> > Thanks for your work.
-> > 
-> > On 2023-06-26 20:43:31 +0800, Yangtao Li wrote:
-> > > Use devm_platform_ioremap_resource() to simplify code.
-> > > 
-> > > Signed-off-by: Yangtao Li <frank.li@vivo.com>
-> > This do indeed simplify the code, but it also breaks the driver :-)
-> 
-> How about the patch below? Can the following rcar driver also take a similar
-> approach?
+Nak, that is not the correct understanding of the code!
 
-Maybe it could, I would need to test it and I'm traveling this week with 
-no access to hardware. But I don't like the change you propose, as it 
-makes the code more complex without any other goal then to 
-s/platform_get_resource/devm_platform_ioremap_resource/.
+In function renesas_xhci_check_request_fw(), we check ROM status first
+and if it is already programmed, we skip.. Not sure why you are assuming
+it is wiped every time!
 
-If you have a reason, like trying to remove platform_get_resource() from 
-the kernel or such I will consider the change. But if you only want to 
-change things *because* I think the current code do the right thing in a 
-clear way, look for resource, if found map it else use what resources 
-have been found already. Adding special case based on return code is 
-IMHO more complex, again if you need to go that route please add a 
-comment describing the special case.
+        /* Check if device has ROM and loaded, if so skip everything */
+        has_rom = renesas_check_rom(pdev);
+        if (has_rom) {
+                err = renesas_check_rom_state(pdev);
+                if (!err)
+                        return 0;
+                else if (err != -ENOENT)
+                        has_rom = false;
+        }
 
+Erasing ROM is part of ROM programming sequence and is also required to
+if we ever have to recover, so this patch is NAKed by me
+
+> Wiping the ROM all the time is not necessary and can lead to situations
+> where, for example, people with stable firmwares might have their card fail
+> due to incomplete flashes (due to timeouts, for example).
 > 
+> Another case is when PCI configs are set up after the ROM is flashed
+> (e.g. disabling hotplugging). The ROM wipe and reflash process will
+> overwrite these configs.
+
+Why would ROM programming overwrite PCI config, does your device update
+that. In case you are programming config space you should redo that
+after ROM load (which should be done once)
+
+> Also, the current ROM setup can't work: the flash layout contains more
+> than the firmware – for uploading, it needs to be prefixed with ~40
+> bytes that differ by card vendor. This config is documented on the
+> "uPD720201/uPD720202 User's Manual", section 6.3 (Data Format).
+
+I assure you it works for me on a publicly available Qualcomm Robotics
+RB3 board  and many people who have tested. It may not work for you, but
+you need to investigate better on what might be the cause. Btw what are
+you testing this on..
+
+> This patch, if applied, removes the cleanup and the setup of the Renesas
+> ROM as to not make it wipe and reset the ROM.
 > 
-> diff --git a/drivers/thermal/rcar_gen3_thermal.c
-> b/drivers/thermal/rcar_gen3_thermal.c
-> index 9029d01e029b..0cd9a030eb9e 100644
-> --- a/drivers/thermal/rcar_gen3_thermal.c
-> +++ b/drivers/thermal/rcar_gen3_thermal.c
-> @@ -481,7 +481,6 @@ static int rcar_gen3_thermal_probe(struct
-> platform_device *pdev)
->  {
->         struct rcar_gen3_thermal_priv *priv;
->         struct device *dev = &pdev->dev;
-> -       struct resource *res;
->         struct thermal_zone_device *zone;
->         unsigned int i;
->         int ret;
-> @@ -503,22 +502,23 @@ static int rcar_gen3_thermal_probe(struct
-> platform_device *pdev)
+> It also reduces load time, especially during boot, as problems with the
+> EEPROM chip or CRC checks might take some time during reflashing and
+> possibly lead to timeouts. Since the ROM is already flashed (either
+> manually by a tool such as uPD72020x-load or by the kernel module) it
+
+where is this tool, I have not heard of it, is it publicly available,
+where can I find the source of this tool?
+
+> just needs to be loaded during module startup.
 > 
->         for (i = 0; i < TSC_MAX_NUM; i++) {
->                 struct rcar_gen3_thermal_tsc *tsc;
-> +               void __iomem *base;
+> Suggested-by: Rene Treffer <treffer@measite.de>
+> Signed-off-by: Anne Macedo <retpolanne@posteo.net>
+> ---
+>  drivers/usb/host/xhci-pci-renesas.c | 188 ----------------------------
+>  1 file changed, 188 deletions(-)
 > 
-> -               res = platform_get_resource(pdev, IORESOURCE_MEM, i);
-> -               if (!res)
-> -                       break;
-> +               base = devm_platform_ioremap_resource(pdev, i);
-> +               if (IS_ERR(base)) {
-> +                       if (PTR_ERR(base) == -EINVAL)
-> +                               break;
-> 
-> -               tsc = devm_kzalloc(dev, sizeof(*tsc), GFP_KERNEL);
-> -               if (!tsc) {
-> -                       ret = -ENOMEM;
-> +                       ret = PTR_ERR(base);
->                         goto error_unregister;
->                 }
-> 
-> -               tsc->base = devm_ioremap_resource(dev, res);
-> -               if (IS_ERR(tsc->base)) {
-> -                       ret = PTR_ERR(tsc->base);
-> +               tsc = devm_kzalloc(dev, sizeof(*tsc), GFP_KERNEL);
-> +               if (!tsc) {
-> +                       ret = -ENOMEM;
->                         goto error_unregister;
->                 }
-> +               tsc->base = base;
-> 
->                 priv->tscs[i] = tsc;
->         }
-> 
-> 
-> > Before the change, failing to find a resource at position "i", breaks
-> > the probe loop, and probing continues and the number of resource
-> > described are the number of TSC find are used.
-> > 
-> > After the change failing to find all possible TCS will fail the whole
-> > probe process, even if some TCS where described. And not describing max
-> > number of TCS on each system is perfectly fine.
-> > 
-> > Nacked-by: Niklas Söderlund <niklas.soderlund@ragnatech.se>
-> > 
-> > > ---
-> > >   drivers/thermal/rcar_gen3_thermal.c | 7 +------
-> > >   1 file changed, 1 insertion(+), 6 deletions(-)
-> > > 
-> > > diff --git a/drivers/thermal/rcar_gen3_thermal.c b/drivers/thermal/rcar_gen3_thermal.c
-> > > index 9029d01e029b..5c623f13d9ec 100644
-> > > --- a/drivers/thermal/rcar_gen3_thermal.c
-> > > +++ b/drivers/thermal/rcar_gen3_thermal.c
-> > > @@ -481,7 +481,6 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
-> > >   {
-> > >   	struct rcar_gen3_thermal_priv *priv;
-> > >   	struct device *dev = &pdev->dev;
-> > > -	struct resource *res;
-> > >   	struct thermal_zone_device *zone;
-> > >   	unsigned int i;
-> > >   	int ret;
-> > > @@ -504,17 +503,13 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
-> > >   	for (i = 0; i < TSC_MAX_NUM; i++) {
-> > >   		struct rcar_gen3_thermal_tsc *tsc;
-> > > -		res = platform_get_resource(pdev, IORESOURCE_MEM, i);
-> > > -		if (!res)
-> > > -			break;
-> > > -
-> > >   		tsc = devm_kzalloc(dev, sizeof(*tsc), GFP_KERNEL);
-> > >   		if (!tsc) {
-> > >   			ret = -ENOMEM;
-> > >   			goto error_unregister;
-> > >   		}
-> > > -		tsc->base = devm_ioremap_resource(dev, res);
-> > > +		tsc->base = devm_platform_ioremap_resource(pdev, i);
-> > >   		if (IS_ERR(tsc->base)) {
-> > >   			ret = PTR_ERR(tsc->base);
-> > >   			goto error_unregister;
-> > > -- 
-> > > 2.39.0
-> > > 
+> diff --git a/drivers/usb/host/xhci-pci-renesas.c b/drivers/usb/host/xhci-pci-renesas.c
+> index 93f8b355bc70..28656beb808d 100644
+> --- a/drivers/usb/host/xhci-pci-renesas.c
+> +++ b/drivers/usb/host/xhci-pci-renesas.c
+> @@ -375,199 +375,11 @@ static int renesas_fw_download(struct pci_dev *pdev,
+>  	return 0;
+>  }
+>  
+> -static void renesas_rom_erase(struct pci_dev *pdev)
+> -{
+> -	int retval, i;
+> -	u8 status;
+> -
+> -	dev_dbg(&pdev->dev, "Performing ROM Erase...\n");
+> -	retval = pci_write_config_dword(pdev, RENESAS_DATA0,
+> -					RENESAS_ROM_ERASE_MAGIC);
+> -	if (retval) {
+> -		dev_err(&pdev->dev, "ROM erase, magic word write failed: %d\n",
+> -			pcibios_err_to_errno(retval));
+> -		return;
+> -	}
+> -
+> -	retval = pci_read_config_byte(pdev, RENESAS_ROM_STATUS, &status);
+> -	if (retval) {
+> -		dev_err(&pdev->dev, "ROM status read failed: %d\n",
+> -			pcibios_err_to_errno(retval));
+> -		return;
+> -	}
+> -	status |= RENESAS_ROM_STATUS_ERASE;
+> -	retval = pci_write_config_byte(pdev, RENESAS_ROM_STATUS, status);
+> -	if (retval) {
+> -		dev_err(&pdev->dev, "ROM erase set word write failed\n");
+> -		return;
+> -	}
+> -
+> -	/* sleep a bit while ROM is erased */
+> -	msleep(20);
+> -
+> -	for (i = 0; i < RENESAS_RETRY; i++) {
+> -		retval = pci_read_config_byte(pdev, RENESAS_ROM_STATUS,
+> -					      &status);
+> -		status &= RENESAS_ROM_STATUS_ERASE;
+> -		if (!status)
+> -			break;
+> -
+> -		mdelay(RENESAS_DELAY);
+> -	}
+> -
+> -	if (i == RENESAS_RETRY)
+> -		dev_dbg(&pdev->dev, "Chip erase timedout: %x\n", status);
+> -
+> -	dev_dbg(&pdev->dev, "ROM Erase... Done success\n");
+> -}
+> -
+> -static bool renesas_setup_rom(struct pci_dev *pdev, const struct firmware *fw)
+> -{
+> -	const u32 *fw_data = (const u32 *)fw->data;
+> -	int err, i;
+> -	u8 status;
+> -
+> -	/* 2. Write magic word to Data0 */
+> -	err = pci_write_config_dword(pdev, RENESAS_DATA0,
+> -				     RENESAS_ROM_WRITE_MAGIC);
+> -	if (err)
+> -		return false;
+> -
+> -	/* 3. Set External ROM access */
+> -	err = pci_write_config_byte(pdev, RENESAS_ROM_STATUS,
+> -				    RENESAS_ROM_STATUS_ACCESS);
+> -	if (err)
+> -		goto remove_bypass;
+> -
+> -	/* 4. Check the result */
+> -	err = pci_read_config_byte(pdev, RENESAS_ROM_STATUS, &status);
+> -	if (err)
+> -		goto remove_bypass;
+> -	status &= GENMASK(6, 4);
+> -	if (status) {
+> -		dev_err(&pdev->dev,
+> -			"setting external rom failed: %x\n", status);
+> -		goto remove_bypass;
+> -	}
+> -
+> -	/* 5 to 16 Write FW to DATA0/1 while checking SetData0/1 */
+> -	for (i = 0; i < fw->size / 4; i++) {
+> -		err = renesas_fw_download_image(pdev, fw_data, i, true);
+> -		if (err) {
+> -			dev_err(&pdev->dev,
+> -				"ROM Download Step %d failed at position %d bytes with (%d)\n",
+> -				 i, i * 4, err);
+> -			goto remove_bypass;
+> -		}
+> -	}
+> -
+> -	/*
+> -	 * wait till DATA0/1 is cleared
+> -	 */
+> -	for (i = 0; i < RENESAS_RETRY; i++) {
+> -		err = pci_read_config_byte(pdev, RENESAS_ROM_STATUS_MSB,
+> -					   &status);
+> -		if (err)
+> -			goto remove_bypass;
+> -		if (!(status & (BIT(0) | BIT(1))))
+> -			break;
+> -
+> -		udelay(RENESAS_DELAY);
+> -	}
+> -	if (i == RENESAS_RETRY) {
+> -		dev_err(&pdev->dev, "Final Firmware ROM Download step timed out\n");
+> -		goto remove_bypass;
+> -	}
+> -
+> -	/* 17. Remove bypass */
+> -	err = pci_write_config_byte(pdev, RENESAS_ROM_STATUS, 0);
+> -	if (err)
+> -		return false;
+> -
+> -	udelay(10);
+> -
+> -	/* 18. check result */
+> -	for (i = 0; i < RENESAS_RETRY; i++) {
+> -		err = pci_read_config_byte(pdev, RENESAS_ROM_STATUS, &status);
+> -		if (err) {
+> -			dev_err(&pdev->dev, "Read ROM status failed:%d\n",
+> -				pcibios_err_to_errno(err));
+> -			return false;
+> -		}
+> -		status &= RENESAS_ROM_STATUS_RESULT;
+> -		if (status ==  RENESAS_ROM_STATUS_SUCCESS) {
+> -			dev_dbg(&pdev->dev, "Download ROM success\n");
+> -			break;
+> -		}
+> -		udelay(RENESAS_DELAY);
+> -	}
+> -	if (i == RENESAS_RETRY) { /* Timed out */
+> -		dev_err(&pdev->dev,
+> -			"Download to external ROM TO: %x\n", status);
+> -		return false;
+> -	}
+> -
+> -	dev_dbg(&pdev->dev, "Download to external ROM succeeded\n");
+> -
+> -	/* Last step set Reload */
+> -	err = pci_write_config_byte(pdev, RENESAS_ROM_STATUS,
+> -				    RENESAS_ROM_STATUS_RELOAD);
+> -	if (err) {
+> -		dev_err(&pdev->dev, "Set ROM execute failed: %d\n",
+> -			pcibios_err_to_errno(err));
+> -		return false;
+> -	}
+> -
+> -	/*
+> -	 * wait till Reload is cleared
+> -	 */
+> -	for (i = 0; i < RENESAS_RETRY; i++) {
+> -		err = pci_read_config_byte(pdev, RENESAS_ROM_STATUS, &status);
+> -		if (err)
+> -			return false;
+> -		if (!(status & RENESAS_ROM_STATUS_RELOAD))
+> -			break;
+> -
+> -		udelay(RENESAS_DELAY);
+> -	}
+> -	if (i == RENESAS_RETRY) {
+> -		dev_err(&pdev->dev, "ROM Exec timed out: %x\n", status);
+> -		return false;
+> -	}
+> -
+> -	return true;
+> -
+> -remove_bypass:
+> -	pci_write_config_byte(pdev, RENESAS_ROM_STATUS, 0);
+> -	return false;
+> -}
+> -
+>  static int renesas_load_fw(struct pci_dev *pdev, const struct firmware *fw)
+>  {
+>  	int err = 0;
+> -	bool rom;
+> -
+> -	/* Check if the device has external ROM */
+> -	rom = renesas_check_rom(pdev);
+> -	if (rom) {
+> -		/* perform chip erase first */
+> -		renesas_rom_erase(pdev);
+> -
+> -		/* lets try loading fw on ROM first */
+> -		rom = renesas_setup_rom(pdev, fw);
+> -		if (!rom) {
+> -			dev_dbg(&pdev->dev,
+> -				"ROM load failed, falling back on FW load\n");
+> -		} else {
+> -			dev_dbg(&pdev->dev,
+> -				"ROM load success\n");
+> -			goto exit;
+> -		}
+> -	}
+>  
+>  	err = renesas_fw_download(pdev, fw);
+> -
+> -exit:
+>  	if (err)
+>  		dev_err(&pdev->dev, "firmware failed to download (%d).", err);
+>  	return err;
+> -- 
+> 2.41.0
 
 -- 
-Kind Regards,
-Niklas Söderlund
+~Vinod
