@@ -2,80 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBC5E73EF8D
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 02:07:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B3E773EF95
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 02:08:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229666AbjF0AG6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 20:06:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40486 "EHLO
+        id S229724AbjF0AI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 20:08:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjF0AGz (ORCPT
+        with ESMTP id S229456AbjF0AI0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 20:06:55 -0400
-Received: from out-17.mta0.migadu.com (out-17.mta0.migadu.com [IPv6:2001:41d0:1004:224b::11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE5ABD
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 17:06:45 -0700 (PDT)
-Date:   Mon, 26 Jun 2023 20:06:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1687824403;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Uw3yWAwfBaI2hHM3ExlD7wOVlLTFWVfIVemZ/ktRU7E=;
-        b=mxXDNAolCCtLqyQdmQ+Nj+Pan+xNzczBpQGviZY4jvXxQPMlySEyIi8OPWHl0bxNinqutD
-        thIo/TMEmFVqn9cScliS1rGXU+eTfv4Ch+SygcVE3obTKgXFgpnJSk3HNNA6vmRFtY5uWw
-        p4Z0qTeq5ORhw5+Na57j1ed2xy51BWQ=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-bcachefs@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: [GIT PULL] bcachefs
-Message-ID: <20230627000635.43azxbkd2uf3tu6b@moria.home.lan>
-References: <20230626214656.hcp4puionmtoloat@moria.home.lan>
- <aeb2690c-4f0a-003d-ba8b-fe06cd4142d1@kernel.dk>
+        Mon, 26 Jun 2023 20:08:26 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 314D11B0
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 17:08:24 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f867700f36so5413009e87.0
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 17:08:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687824502; x=1690416502;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HUDk6lpQO4D+lgSHC77eFwv9Vy/Pegzp1sgSsnp9oK0=;
+        b=f+Su9d7Hpedc2UzK0RZkyNTQBgyXbMbi8fisIqreldLGMax5DzH/S/iepoXQQJuGBY
+         Dj8rVoZ339Dce3SnqeY8MpcBU2wlaRXQc7N1rEjtjME3ruaQ/GbjpI+wFe36ap7eKi0A
+         l1niWEgBAt+n6vCEVeOcz5AH/b26VkWfp52VKIIc6FikhpQbn5FKMl7wsHYM03JzUFkj
+         zkC0S2NbsEe/fWo8kjVn0bH8TBbt6LVG5Ao9woHlVXF0+hgC0rbqLAIj9Nn5Jn+9pNnB
+         GQsghVxmsCT/ldzXdEgEfc4XQB1bYliScPfYvnd/thjEzyy6xC8ehXikHYeVsSpfdfXZ
+         1R3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687824502; x=1690416502;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HUDk6lpQO4D+lgSHC77eFwv9Vy/Pegzp1sgSsnp9oK0=;
+        b=i4xeXedeXODlhROvUk+sCvgpnpARduAhlkttep/0ib5/8DuDyGGCQyqspR4PVE/mPn
+         rBYu5fOvZGSp34V8yebFK4AOwWkZqCz/UapTqGYa7OsqGe2hj0xyAK+yrtFkbB33kNI0
+         w+umjYAPBd+BOIMcRLM67HoQhrC3TW4Eeq1GPlnEVr7Z043XXLtK3WrIxreVPaOcPK5K
+         XNh+cyGRCqGSiDFRLEUGdESyG57fzVRQdIbpt/K9/vfDXHX3Q8fNrMqj0hw8a+V8lxvS
+         UzzYqHucqlPmqdP0cAib3BVBClEsx1cwkCyZLtTS8eHz3fNdDFWwAFDQEsfYrGdypMJm
+         zEEw==
+X-Gm-Message-State: AC+VfDy84ga2sejim8H3mOA5QbugqQ+0PXQ6JHd9Ga8wLpEX7dSVlwOW
+        N433pVzsX4Ic549TIShd53uhJg==
+X-Google-Smtp-Source: ACHHUZ7z4NEHlcGmXI64eNVgNgFtpHutyjAz+SSbRa1145TwcmQyjPbWDbgt3pH7sTGeBG+HFKH6uA==
+X-Received: by 2002:a19:9151:0:b0:4f8:6b82:56c4 with SMTP id y17-20020a199151000000b004f86b8256c4mr14064306lfj.33.1687824502205;
+        Mon, 26 Jun 2023 17:08:22 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id m3-20020ac24ac3000000b004fb737737f9sm846593lfp.106.2023.06.26.17.08.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Jun 2023 17:08:21 -0700 (PDT)
+Message-ID: <e7c577c8-f42a-cdfa-3369-5a377f3914f1@linaro.org>
+Date:   Tue, 27 Jun 2023 03:08:20 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aeb2690c-4f0a-003d-ba8b-fe06cd4142d1@kernel.dk>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] iio: adc: qcom-spmi-adc5: Add ADC5_GPIO2_100K_PU
+Content-Language: en-GB
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230627-topic-adc-v1-1-c61581abffa3@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230627-topic-adc-v1-1-c61581abffa3@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 26, 2023 at 05:11:29PM -0600, Jens Axboe wrote:
-> > (Worth noting the bug causing the most test failures by a wide margin is
-> > actually an io_uring bug that causes random umount failures in shutdown
-> > tests. Would be great to get that looked at, it doesn't just affect
-> > bcachefs).
+On 27/06/2023 02:21, Konrad Dybcio wrote:
+> Even though it existed in bindings for the longest time,
+> ADC5_GPIO2_100K_PU was never assigned in the driver. Do so.
 > 
-> Maybe if you had told someone about that it could get looked at?
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>   drivers/iio/adc/qcom-spmi-adc5.c | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
 
-I'm more likely to report bugs to people who have a history of being
-responsive...
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-> What is the test case and what is going wrong?
+-- 
+With best wishes
+Dmitry
 
-Example: https://evilpiepirate.org/~testdashboard/c/82973f03c0683f7ecebe14dfaa2c3c9989dd29fc/xfstests.generic.388/log.br
-
-I haven't personally seen it on xfs - Darrick knew something about it
-but he's on vacation. If I track down a reproducer on xfs I'll let you
-know.
-
-If you're wanting to dig into it on bcachefs, ktest is pretty easy to
-get going: https://evilpiepirate.org/git/ktest.git
-
-  $ ~/ktest/root_image create
-  # from your kernel tree:
-  $ ~/ktest/build-test-kernel run -ILP ~/ktest/tests/bcachefs/xfstests.ktest/generic/388
-
-I have some debug code I can give you from when I was tracing it through
-the mount path, I still have to find or recreate the part that tracked
-it down to io_uring...
