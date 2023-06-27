@@ -2,189 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EDEA73FA5E
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 12:42:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8BB673FA61
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 12:43:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230189AbjF0Kmx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 06:42:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51472 "EHLO
+        id S230164AbjF0KnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 06:43:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbjF0Kmv (ORCPT
+        with ESMTP id S229513AbjF0KnO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 06:42:51 -0400
-Received: from mx.treblig.org (unknown [IPv6:2a00:1098:5b::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD6ED10CB;
-        Tue, 27 Jun 2023 03:42:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
-        ; s=bytemarkmx; h=In-Reply-To:Content-Transfer-Encoding:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=b6mr6IUj1sLKRFPC3AWOY5M8vnn/8M/C9oYU60Dvbts=; b=dR9ol1QSKJfK37McjDOz41Gsv0
-        neGIJPSNJah6e0ntbkCkVhdo+dfy5MXj/zjGGmjB2fyUvBM9b/AMTEKfA8Pt+7XLM/XzB6zWCReeP
-        uyIxa/yfYC4zQTIAsvKh0chKBxbXcFI+vdnleBudNHab8ZNbAdX1So/1EdquIwvaAcZcrLHASDFFH
-        Bgx22cUwiPmM6M0cg9q1wInlsxibkDPYsMFFGB/z+HEly1KdnZVd3ZP6Yz2mXhxHZfdDWFlJGn6EX
-        3jXcNSCSDRg9f4x6763Kx6/okBhfM5G3J6hcvHZzNMQt7CrwB0oYOe8j5rO31GiAgYFnLFKHGzP9q
-        yE0NBpmA==;
-Received: from dg by mx.treblig.org with local (Exim 4.94.2)
-        (envelope-from <dg@treblig.org>)
-        id 1qE69V-00GFnB-4Y; Tue, 27 Jun 2023 10:42:29 +0000
-Date:   Tue, 27 Jun 2023 10:42:29 +0000
-From:   "Dr. David Alan Gilbert" <linux@treblig.org>
-To:     Steve French <smfrench@gmail.com>
-Cc:     Dave Kleikamp <dave.kleikamp@oracle.com>, sfrench@samba.org,
-        linkinjeon@kernel.org, jfs-discussion@lists.sourceforge.net,
-        linux-cifs@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: Duplicate unicode tables in smb/cifs/jfs
-Message-ID: <ZJq9FcdFLQIZ8cja@gallifrey>
-References: <ZJhPIYSUzBpuqosh@gallifrey>
- <25821273-d391-1502-ff8a-07ea7a59c8f3@oracle.com>
- <CAH2r5mvwZnd+S8CmZGQSdtnAWD45YjFx-1j0EaFBR3Qn-SjHEA@mail.gmail.com>
- <ZJov5VNakxNXU0Mk@gallifrey>
- <CAH2r5mvEWeSOM=NYrxSG1EZ1py-DSkOrwEyh+_L-KuFLVWktQw@mail.gmail.com>
+        Tue, 27 Jun 2023 06:43:14 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C342010D2;
+        Tue, 27 Jun 2023 03:43:12 -0700 (PDT)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35RAf3ol003129;
+        Tue, 27 Jun 2023 12:42:54 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=selector1; bh=c/jV37qb4kjeB7WM/UZsZ8a3yqZF+ecyCOBKUdgrFBM=;
+ b=fTfcymJajp2SvJqvrx6F9vtwvxT8ERfhsUnUiMqCvzLRgUqfCbGsYp/tuhPsrmJhvE/G
+ uGAw43y1iD6V+A/9bMB5645mzmd5IA3JMdOI5fZ2w1kXEfQ3F8LIjJGdv1UJFs+IYRIV
+ tSbUp2DaN0R80qlpP66diJEZ4yifntsHd8g/ir5zFUMOaB1+wOYghkO1aJmNVkbICbe8
+ CDureOUy3pWPBgr/WvAnlkkkhJh5GVWFEnjS21U08lK/td5Toj22EyTk9MHneCPLmoUp
+ XMS3nM70hGaYImUCX5AKXMCVc/PSbSB+HMa74gBmpcKiP4Xx2WfOIOPCQQdlzZz8KYw3 xw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3rfue61dr0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 27 Jun 2023 12:42:54 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D12AE100057;
+        Tue, 27 Jun 2023 12:42:52 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id BAB102291CD;
+        Tue, 27 Jun 2023 12:42:52 +0200 (CEST)
+Received: from gnbcxd0016.gnb.st.com (10.129.178.213) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Tue, 27 Jun
+ 2023 12:42:52 +0200
+Date:   Tue, 27 Jun 2023 12:42:37 +0200
+From:   Alain Volmat <alain.volmat@foss.st.com>
+To:     <yqsun1997@gmail.com>
+CC:     <tiffany.lin@mediatek.com>, <andrew-ct.chen@mediatek.com>,
+        <yunfei.dong@mediatek.com>, <matthias.bgg@gmail.com>,
+        <angelogioacchino.delregno@collabora.com>,
+        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <499671216@qq.com>
+Subject: Re: [PATCH] OOB read and write in mtk multiple places
+Message-ID: <20230627104237.GA3601890@gnbcxd0016.gnb.st.com>
+Mail-Followup-To: yqsun1997@gmail.com, tiffany.lin@mediatek.com,
+        andrew-ct.chen@mediatek.com, yunfei.dong@mediatek.com,
+        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, 499671216@qq.com
+References: <20230627081002.1768990-1-yqsun1997@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAH2r5mvEWeSOM=NYrxSG1EZ1py-DSkOrwEyh+_L-KuFLVWktQw@mail.gmail.com>
-X-Chocolate: 70 percent or better cocoa solids preferably
-X-Operating-System: Linux/5.10.0-21-amd64 (x86_64)
-X-Uptime: 10:42:00 up 99 days, 21:16,  1 user,  load average: 0.08, 0.04, 0.01
-User-Agent: Mutt/2.0.5 (2021-01-21)
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230627081002.1768990-1-yqsun1997@gmail.com>
+X-Disclaimer: ce message est personnel / this message is private
+X-Originating-IP: [10.129.178.213]
+X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-27_06,2023-06-27_01,2023-05-22_02
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Steve French (smfrench@gmail.com) wrote:
-> On Mon, Jun 26, 2023 at 7:40 PM Dr. David Alan Gilbert <linux@treblig.org>
-> wrote:
-> 
-> > * Steve French (smfrench@gmail.com) wrote:
-> > > probably is low risk to make the ksmbd/cifs (server and client) code
-> > common
-> > > for this
-> >
-> > I'm up for trying to do that mod; do you have a feel of the best way?
-> > I guess this is two copies to avoid symbol clashes if both the server
-> > and clients are built/loaded on the same kernel?
-> >
-> 
-> First step would be to move common Unicode/UCS-2 header definitions from
-> fs/smb/client
-> and fs/smb/server to fs/smb/common
-> 
-> Second stuff could be having a common helper module in fs/smb/common
-> similar to
-> fs/smb/common/cifs_md4.ko
+Hi,
 
-OK, let me have a crack at that and see where I get to.
+I had a look at some places where this macro MTK_VCODEC_MAX_PLANES
+is being used, such as q_data->bytesperline etc.
+This patch seems to be increasing the table size from 3 to 8 but,
+if my understanding is correct doesn't solve the issue that
+(taking the example you give in vidioc_venc_g_fmt) the table
+bytesperline is accessed taking into account a num_planes values which
+is unchecked if appropriate for this driver.
 
-Dave
+What are the 8 planes you are referring to ?
 
+While increasing the table to 8 might also be necessary, it seems to me
+that the real OOB access issue should be solved by checking the num of
+planes value.
+
+Regards,
+Alain
+
+On Tue, Jun 27, 2023 at 04:10:02PM +0800, yqsun1997@gmail.com wrote:
+> From: yqsun1997 <yqsun1997@gmail.com>
 > 
+> The num_planes max index is 8,
+> but bytesperline and bytesperline in struct mtk_q_data,
+> The max index is MTK_VCODEC_MAX_PLANES == 3,
+> so will cause OOB read and write in multiple places.like vidioc_venc_g_fmt
+> same as commit 8fbcf730
 > 
-> > I guess the clean way is to make this a separate .c/module that the
-> > others depend on and hten you have a nice single copy in the binary
-> > as well as the source.
-> >
-> > The shorter hack that at least avoids the source dupe would be to
-> > change the declarations in the uniupr.h files to a #define that then
-> > instantiates it with different names in the place those are #included.
-> > You'd want to move the uniupr.h up somewhere, to hmm fs/uniupr.h ?
-> >
-> > (Incidentally, I think the UNIUPR_NOLOWER is always defined
-> > so that whole chunk can go in both of them).
-> >
-> > I guess the next level would be trying to merge parts of server/client
-> > unicode.[ch] - but I was just eyeing up this particularly simple dupe in
-> > that odd uniupr.h.
-> >
-> > > (and leave the JFS code alone as Dave Kleikamp suggests)
-> >
-> > Well hmm; my reading is the tables that JFS uses are *identical*
-> > to these; so if this header was somewhere outside of fs/smb it could
-> > probably #include it and just use the same table, with a
-> > no-binary-change.
-> >
-> > Dave
-> >
-> > > On Mon, Jun 26, 2023 at 12:03 PM Dave Kleikamp <dave.kleikamp@oracle.com
-> > >
-> > > wrote:
-> > >
-> > > > On 6/25/23 9:28AM, Dr. David Alan Gilbert wrote:
-> > > > > Hi All,
-> > > > >    I just tripped over three sets of duplicated unicode tables and
-> > > > > wondered if anyone had tried to rationalise them:
-> > > > >
-> > > > >    The pair of:
-> > > > >     ./fs/smb/server/uniupr.h
-> > > > >     ./fs/smb/client/cifs_uniupr.h
-> > > > >
-> > > > >     are identical except for formatting.
-> > > > >
-> > > > > ./fs/jfs/jfs_uniupr.c,
-> > > > >    and I think this is the same with some change in variable name.
-> > > >
-> > > >  From JFS's point of view, I wonder how relevant any of this code is.
-> > > > The Linux port of JFS originally was interested in compatibility with
-> > > > OS/2, which had case-insensitive file names. (Case-preserving, if I
-> > > > remember correctly, but names would match in a case-insensitive
-> > manner.)
-> > > >
-> > > > I would be surprised if anyone cares about this feature anymore.
-> > Without
-> > > > a JFS_OS2 flag set in the superblock, none of the case-conversion code
-> > > > comes into play.
-> > > >
-> > > > I assume SMB cares more about this and if Steve has an opinion on how
-> > to
-> > > > address this, I'd be happy to follow his lead. Probably better than
-> > > > ripping function out of JFS that could break some user that I'm not
-> > > > aware of.
-> > > >
-> > > > Shaggy
-> > > >
-> > > > >
-> > > > > (I'm guessing the same thing is implemented in a bunch of
-> > > > > other places as well in a different way)
-> > > > >
-> > > > > Would it make sense to swing fs/smb/server/uniupr.h up to
-> > > > > hmm, maybe fs/uniupr.h, remove any of the cifs_ prefixes
-> > > > > and then use the same include in all 3 places?
-> > > > >
-> > > > > Maybe then later look at using some of the nls code?
-> > > > >
-> > > > > Dave (who just tripped over this stuff)
-> > > > >
-> > > >
-> > >
-> > >
-> > > --
-> > > Thanks,
-> > >
-> > > Steve
-> > --
-> >  -----Open up your eyes, open up your mind, open up your code -------
-> > / Dr. David Alan Gilbert    |       Running GNU/Linux       | Happy  \
-> > \        dave @ treblig.org |                               | In Hex /
-> >  \ _________________________|_____ http://www.treblig.org   |_______/
-> >
+> Signed-off-by: yqsun1997 <yqsun1997@gmail.com>
+> ---
+>  drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> 
+> diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
+> index 9acab54fd..c2c157675 100644
+> --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
+> +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
+> @@ -22,7 +22,7 @@
+>  #define MTK_VCODEC_DEC_NAME	"mtk-vcodec-dec"
+>  #define MTK_VCODEC_ENC_NAME	"mtk-vcodec-enc"
+>  
+> -#define MTK_VCODEC_MAX_PLANES	3
+> +#define MTK_VCODEC_MAX_PLANES	8
+>  #define MTK_V4L2_BENCHMARK	0
+>  #define WAIT_INTR_TIMEOUT_MS	1000
+>  #define IS_VDEC_LAT_ARCH(hw_arch) ((hw_arch) >= MTK_VDEC_LAT_SINGLE_CORE)
 > -- 
-> Thanks,
+> 2.39.2
 > 
-> Steve
--- 
- -----Open up your eyes, open up your mind, open up your code -------   
-/ Dr. David Alan Gilbert    |       Running GNU/Linux       | Happy  \ 
-\        dave @ treblig.org |                               | In Hex /
- \ _________________________|_____ http://www.treblig.org   |_______/
