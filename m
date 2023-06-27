@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59EC073FECE
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 16:46:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5187C73FEBD
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 16:46:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232131AbjF0Oq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 10:46:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43468 "EHLO
+        id S232125AbjF0Oq0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 10:46:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231881AbjF0Op2 (ORCPT
+        with ESMTP id S231882AbjF0Op1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 10:45:28 -0400
+        Tue, 27 Jun 2023 10:45:27 -0400
 Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FBFA359E;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84C4935A2;
         Tue, 27 Jun 2023 07:45:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=inria.fr; s=dc;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=2mtRBGCOnnmq8owg9Z09zy3e8yDpPGmF5WIoD2SontQ=;
-  b=OcPuxrmwn0aRonaE3elKZrFZuEyIeBl9WsoH87B97Do+eEB8eWsAZn3m
-   Mp7IGkipazXYfiToh9tPy6Sbs1n//8Vov5hPoiHN59IzsQOpsXOz9RnUl
-   iW5QAnDPa8qdtv9RCOwkIRsBlWDTBUZkQl25OewNifuJY1oBC2/d9V/4S
-   M=;
+  bh=1sXATaOQFUGiET/ojS3B/ZSG4Py8hHBuvNarEMw2KCM=;
+  b=KSr4HdSZCErHO2NZAduGYuYcXD6gUFYTrhSuLZkHDtlEbDCReV+1qTH6
+   N/LpPNb9lFET+P9TMPaAnaiy9H1tpVEMXMX1ed6lg38ZguvsDMgkw6YfQ
+   6PqahJ+o3rvCXo9GjaocbTbqJbf4DpBod97Uyhx6lp6JPmc41SpqnKXVD
+   g=;
 Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
 X-IronPort-AV: E=Sophos;i="6.01,162,1684792800"; 
-   d="scan'208";a="114936333"
+   d="scan'208";a="114936335"
 Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
   by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 16:43:52 +0200
 From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     Chris Mason <clm@fb.com>
+To:     Thierry Reding <thierry.reding@gmail.com>
 Cc:     kernel-janitors@vger.kernel.org, keescook@chromium.org,
         christophe.jaillet@wanadoo.fr, kuba@kernel.org,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
+        Krishna Reddy <vdumpa@nvidia.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-tegra@vger.kernel.org, iommu@lists.linux.dev,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 12/24] btrfs: zoned: use vmalloc_array and vcalloc
-Date:   Tue, 27 Jun 2023 16:43:27 +0200
-Message-Id: <20230627144339.144478-13-Julia.Lawall@inria.fr>
+Subject: [PATCH v2 13/24] iommu/tegra: gart: use vmalloc_array and vcalloc
+Date:   Tue, 27 Jun 2023 16:43:28 +0200
+Message-Id: <20230627144339.144478-14-Julia.Lawall@inria.fr>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20230627144339.144478-1-Julia.Lawall@inria.fr>
 References: <20230627144339.144478-1-Julia.Lawall@inria.fr>
@@ -106,21 +109,21 @@ v2: Use vmalloc_array and vcalloc instead of array_size.
 This also leaves a multiplication of a constant by a sizeof
 as is.  Two patches are thus dropped from the series.
 
- fs/btrfs/zoned.c |    4 ++--
+ drivers/iommu/tegra-gart.c |    4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff -u -p a/fs/btrfs/zoned.c b/fs/btrfs/zoned.c
---- a/fs/btrfs/zoned.c
-+++ b/fs/btrfs/zoned.c
-@@ -465,8 +465,8 @@ int btrfs_get_dev_zone_info(struct btrfs
- 	 * use the cache.
- 	 */
- 	if (populate_cache && bdev_is_zoned(device->bdev)) {
--		zone_info->zone_cache = vzalloc(sizeof(struct blk_zone) *
--						zone_info->nr_zones);
-+		zone_info->zone_cache = vcalloc(zone_info->nr_zones,
-+						sizeof(struct blk_zone));
- 		if (!zone_info->zone_cache) {
- 			btrfs_err_in_rcu(device->fs_info,
- 				"zoned: failed to allocate zone cache for %s",
+diff -u -p a/drivers/iommu/tegra-gart.c b/drivers/iommu/tegra-gart.c
+--- a/drivers/iommu/tegra-gart.c
++++ b/drivers/iommu/tegra-gart.c
+@@ -348,8 +348,8 @@ struct gart_device *tegra_gart_probe(str
+ 	if (err)
+ 		goto remove_sysfs;
+ 
+-	gart->savedata = vmalloc(resource_size(res) / GART_PAGE_SIZE *
+-				 sizeof(u32));
++	gart->savedata = vmalloc_array(resource_size(res) / GART_PAGE_SIZE,
++				       sizeof(u32));
+ 	if (!gart->savedata) {
+ 		err = -ENOMEM;
+ 		goto unregister_iommu;
 
