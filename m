@@ -2,147 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E5B173FF94
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 17:22:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBF1D73FF9F
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 17:27:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232334AbjF0PWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 11:22:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43190 "EHLO
+        id S232356AbjF0P1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 11:27:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229967AbjF0PWj (ORCPT
+        with ESMTP id S232008AbjF0P1L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 11:22:39 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E2382942;
-        Tue, 27 Jun 2023 08:22:38 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f9bdb01ec0so55952065e9.2;
-        Tue, 27 Jun 2023 08:22:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687879357; x=1690471357;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IpTJWyv0zeCs9vl2nRoZaqUzt7MMDQDCNCafFpN+rt4=;
-        b=UrfLdfT1KVP3WVEwjVfdRfixOlZYb1f95OYjSH1LfqNxw1RXb0hR5SyMz+8x5FdzEf
-         A5sw25qTgVG9qU/Hh9RRWiOicAxvMraxYM2Y+b4sBkf6GX6JVS7eX55D3MHD5cvPW4N1
-         2qJNH7oOvo6ocWN3qnMFu5ZHZZHZeuluLJpGRJU1Gom8s8pYVIsZC7Nj7LiyamaBM7ed
-         bAwwfhuBK6LaI9uqszspCVZvIa5bE3HJthsQxBjYR7FWCnY4Vuk5HQvoTSMCFAdsKEMD
-         vGIKSZ6wDBdZQIxPmX/ktXDCo0oQwsH6vpyWcW7ce2tOBTXNqA98O66mC+lqI294TIhK
-         RgQA==
+        Tue, 27 Jun 2023 11:27:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 464362962
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 08:26:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687879571;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mpxx00XoyC132Mr6RO3yKQstSVhf2gcfuBHHVEFTNh0=;
+        b=KQF/VGQk34R4yoYPP//ZAESluqCW+Bw3TNvYaTOKuSmu+R+V59Oo1EBcVRllLtHRlgopEV
+        0kX4cOl7+c3/p4sWyuJd/aeYS8eKYXd1muEn6dO+NU4/O0NN/2VT2r7E6/PTb5TWFOjXOA
+        bA7LpsbWxQxSNAMajc+OV6j3IlnRxr4=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-36-qXyGxcF_MHSN8C-6M4AJjw-1; Tue, 27 Jun 2023 11:23:02 -0400
+X-MC-Unique: qXyGxcF_MHSN8C-6M4AJjw-1
+Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-62dd79f63e0so7955686d6.0
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 08:22:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687879357; x=1690471357;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IpTJWyv0zeCs9vl2nRoZaqUzt7MMDQDCNCafFpN+rt4=;
-        b=U0I6h5nBCWy76dCURvGav/M4pNLZlzpl9eaLrfvBNhW74qyN2GrX3M6QIDlLsfTQr/
-         wQQB1r8CeIxvYN5m1ZZP/h+Vnu88i/yhN45y1xINnYvGu6qfEIMCdo4CXK0V4uEd9Tz1
-         yvyt60IhvMmfejS7tw/rYrLzVFFRLDI326kBloCtUSkAmSRoxHJRN7iSlp0FAoYVfr8i
-         FU2IQv0EqVLDQkt1J6w9IxpEB6/yVawmxu2PP7TaGP2m1TRU9JIJ56hmJedes4zuTZq4
-         8WLu8hIy2jcbu2k8JBX7tVQrBinHgXGuVxj19+G19IN7ngXR7iamMwZ7FRuRi1u04V51
-         4uUg==
-X-Gm-Message-State: AC+VfDzfUO7+vdzLnVd7go2bRqH60yRjekylC8W4fhYk8CUMz7VyTf30
-        uDWCRpHJw/6BAmZdrsF0jIPDajFdMQeqOA==
-X-Google-Smtp-Source: ACHHUZ4r5ONkO5s/FhTu6NksD5GcctdRolmKRLtcod7q7cStbsJu62dnB3Oo0/5OG/wxMjx2qEeldg==
-X-Received: by 2002:a05:600c:2245:b0:3f8:f4f3:82ec with SMTP id a5-20020a05600c224500b003f8f4f382ecmr26820705wmm.8.1687879356637;
-        Tue, 27 Jun 2023 08:22:36 -0700 (PDT)
-Received: from [192.168.0.101] (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.googlemail.com with ESMTPSA id p8-20020a7bcc88000000b003fb225d414fsm4733425wma.21.2023.06.27.08.22.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Jun 2023 08:22:36 -0700 (PDT)
-Message-ID: <bb22b565-a309-063c-4c7f-dcc9f7195371@gmail.com>
-Date:   Tue, 27 Jun 2023 16:22:34 +0100
+        d=1e100.net; s=20221208; t=1687879361; x=1690471361;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mpxx00XoyC132Mr6RO3yKQstSVhf2gcfuBHHVEFTNh0=;
+        b=AY6gvaZAwA3c1DycrDgaulrCPaAPOGIJBw1j+4/IlSMNt0QCN4ZH65kANtwbMs3FWv
+         QVcvD7oLFmkyZ9drQ3btDqcXBCbyURSYVrObirAbppSxYvcoAs04RD7n4wBxVcsme5tB
+         D4MQSmhM3K1qO50CJsBobDzCANktQgZyvFDbAGko2xzfGkFQl8HsdUFi5Ud+9FGyhpiS
+         AIx0nK2lzjNzUTrBiuFEeqANz9HyRfyV6Y3T55RClPy4jk6bOgAvEtcvMiHqJF4pSzQA
+         DlLxWVZmVotp0YWG1eZpJG9ixm0OGOTm2vrIKaL9w4AD5ZELQ++tvrqp8ESwYrnCFhwp
+         DrCQ==
+X-Gm-Message-State: AC+VfDyy1vaAFe4eXmxUiiBE31iCHjZd57cWHuakkerrXWMZDznpp9kZ
+        N8dymBn7/uSAyV4tNKN/hv5/IJPS5b6ydfhyZC8amMLNcFB55MaxDE9PxfVFlTJPijdqvoNxwID
+        d/R+QrkgXBd+j2/pwADcQFMbl
+X-Received: by 2002:a05:6214:c22:b0:625:77a1:2a5f with SMTP id a2-20020a0562140c2200b0062577a12a5fmr40561812qvd.5.1687879361508;
+        Tue, 27 Jun 2023 08:22:41 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7k+Rvj2HAGIGv/kROiZog/CMhixAGLi2szEMwd9ZGPIqaz7MS5XLwAM8b1ix+sT9QAUyZ4HA==
+X-Received: by 2002:a05:6214:c22:b0:625:77a1:2a5f with SMTP id a2-20020a0562140c2200b0062577a12a5fmr40561789qvd.5.1687879361249;
+        Tue, 27 Jun 2023 08:22:41 -0700 (PDT)
+Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
+        by smtp.gmail.com with ESMTPSA id ej8-20020ad45a48000000b0063003786840sm4661038qvb.99.2023.06.27.08.22.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Jun 2023 08:22:40 -0700 (PDT)
+Date:   Tue, 27 Jun 2023 11:22:38 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, willy@infradead.org, hannes@cmpxchg.org,
+        mhocko@suse.com, josef@toxicpanda.com, jack@suse.cz,
+        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
+        michel@lespinasse.org, liam.howlett@oracle.com, jglisse@google.com,
+        vbabka@suse.cz, minchan@google.com, dave@stgolabs.net,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com, hdanton@sina.com,
+        apopple@nvidia.com, ying.huang@intel.com, david@redhat.com,
+        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
+        viro@zeniv.linux.org.uk, brauner@kernel.org,
+        pasha.tatashin@soleen.com, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Subject: Re: [PATCH v3 4/8] mm: replace folio_lock_or_retry with
+ folio_lock_fault
+Message-ID: <ZJr+vlkIpaHWj1xg@x1n>
+References: <20230627042321.1763765-1-surenb@google.com>
+ <20230627042321.1763765-5-surenb@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH][next] media: bt8xx: make read-only arrays static
-Content-Language: en-US
-To:     Tommaso Merciai <tomm.merciai@gmail.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230627134851.728487-1-colin.i.king@gmail.com>
- <ZJr0WvhFfCILwbeP@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
- <2b17acc9-44c3-acf6-0674-04a43aa742e0@gmail.com>
- <ZJr81Tg285kr4oEs@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
-From:   "Colin King (gmail)" <colin.i.king@gmail.com>
-In-Reply-To: <ZJr81Tg285kr4oEs@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230627042321.1763765-5-surenb@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/06/2023 16:14, Tommaso Merciai wrote:
-> Hi Coli,
+On Mon, Jun 26, 2023 at 09:23:17PM -0700, Suren Baghdasaryan wrote:
+> Change folio_lock_or_retry to accept vm_fault struct and return the
+> vm_fault_t directly. This will be used later to return additional
+> information about the state of the mmap_lock upon return from this
+> function.
 > 
-> On Tue, Jun 27, 2023 at 04:04:38PM +0100, Colin King (gmail) wrote:
->> On 27/06/2023 15:38, Tommaso Merciai wrote:
->>> Hi Colin,
->>>
->>> On Tue, Jun 27, 2023 at 02:48:51PM +0100, Colin Ian King wrote:
->>>> Don't populate the arrays on the stack, instead make them static const.
->>>> Also add spaces between values to clean up checkpatch style warnings.
->>>>
->>>> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
->>>> ---
->>>>    drivers/media/pci/bt8xx/dvb-bt8xx.c | 12 ++++++++----
->>>>    1 file changed, 8 insertions(+), 4 deletions(-)
->>>>
->>>> diff --git a/drivers/media/pci/bt8xx/dvb-bt8xx.c b/drivers/media/pci/bt8xx/dvb-bt8xx.c
->>>> index 4cb890b949c3..df83b59a618d 100644
->>>> --- a/drivers/media/pci/bt8xx/dvb-bt8xx.c
->>>> +++ b/drivers/media/pci/bt8xx/dvb-bt8xx.c
->>>> @@ -190,11 +190,15 @@ static int cx24108_tuner_set_params(struct dvb_frontend *fe)
->>>>    	u32 freq = c->frequency;
->>>>    	int i, a, n, pump;
->>>>    	u32 band, pll;
->>>> -	u32 osci[]={950000,1019000,1075000,1178000,1296000,1432000,
->>>> -		1576000,1718000,1856000,2036000,2150000};
->>>> -	u32 bandsel[]={0,0x00020000,0x00040000,0x00100800,0x00101000,
->>>> +	static const u32 osci[] = {
->>>> +		950000, 1019000, 1075000, 1178000, 1296000, 1432000,
->>>> +		1576000, 1718000, 1856000, 2036000, 2150000
->>>> +	};
->>>> +	static const u32 bandsel[] = {
->>>> +		0, 0x00020000, 0x00040000, 0x00100800, 0x00101000,
->>>>    		0x00102000,0x00104000,0x00108000,0x00110000,
-> +			0x00102000, 0x00104000, 0x00108000, 0x00110000,
-> 
-> ERROR: space required after that ',' (ctx:VxV)
-> #199: FILE: drivers/media/pci/bt8xx/dvb-bt8xx.c:199:
-> +		0x00102000,0x00104000,0x00108000,0x00110000,
+> Suggested-by: Matthew Wilcox <willy@infradead.org>
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 
-Yep, I can see it now, I'll send a V2. :-/
+The patch looks all fine to me except on the renaming..
 
-> 
-> I'm wrong?
-> 
-> Regards,
-> Tommaso
-> 
->>>
->>> Are you not missing space also here?
->>
->> I can't see the space you are referring to.
->>
->>>
->>>> -		0x00120000,0x00140000};
->>>> +		0x00120000, 0x00140000
->>>> +	};
->>>>    	#define XTAL 1011100 /* Hz, really 1.0111 MHz and a /10 prescaler */
->>>>    	dprintk("cx24108 debug: entering SetTunerFreq, freq=%d\n", freq);
->>>> -- 
->>>> 2.39.2
->>>>
->>>
->>> Regards,
->>> Tommaso
->>
+*_fault() makes me think of a fault handler, while *_lock_or_retry() was
+there for years and it still sounds better than the new one to me.
+
+Can we still come up with a better renaming, or just keep the name?
+
+Thanks,
+
+-- 
+Peter Xu
 
