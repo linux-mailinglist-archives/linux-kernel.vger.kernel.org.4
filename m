@@ -2,73 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB17D73FC0F
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 14:38:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B917C73FC16
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 14:39:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231232AbjF0Mil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 08:38:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44344 "EHLO
+        id S230089AbjF0Mjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 08:39:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230063AbjF0Mij (ORCPT
+        with ESMTP id S229495AbjF0Mji (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 08:38:39 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C330DD;
-        Tue, 27 Jun 2023 05:38:38 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-98bcc533490so539492666b.0;
-        Tue, 27 Jun 2023 05:38:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687869517; x=1690461517;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OGrEp5Q39HZGQ82JmPmmh2H94aW0HaIcywyFDbjcurE=;
-        b=NOB+ERmjStBCqjkPlUmP0vwjHclGmaLXnqNDFHvHmtpwUsypiY0Dtg72njUZPar5fx
-         CMvsdYa1RXWaHtmHE7/6LS64Hc7BlWnUNxZ6QfZiOQEw5+J61NdWupYFNjah6fJ7KpbR
-         D+O8KhKUI1jxIrmJyXi1VJ46pPvlWBiDBxQTvq5fXQLreeb5Vm4A+qaLpd8YJ89U3Txg
-         8IvQKsRZWyFKZyh2vCzBgo8DhCBTHAK25K1WtFERxDQdKYOnv2gKjFHSsp3ndc7tB0nR
-         lPuNnof4ooUQ+36toCZHblt3mVHO1b/juwSFn4mVBx4he9scyvzUYeZqP0xL8VX2Sn1l
-         Btcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687869517; x=1690461517;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OGrEp5Q39HZGQ82JmPmmh2H94aW0HaIcywyFDbjcurE=;
-        b=MwOmoqeGHqa4pd++TTaFa6UOfHO0ZltDgwQ7m/uCmMa0llvaDUBztEU6dbp1xG1zhs
-         8JAsB86KavtD3exn9gtH39XmMHoAaNnWaOm41tM/jnVi9B3Ve/REQZ+EEkuuD5cZXn0i
-         BL/nPjraMXOhatHo1gMImRt+v1ZKtiZAKSJTve4ai1MQ67NBRmZ85WfOj0lwqp0EHKQD
-         XDLWTOfvNXj+D2zc/XDrYAPPFH2OPhdpHQU/dvdp4LVJvjzimXtvzx5ZDakwtp480dgs
-         vo/byhJuKNqb3JW1AjwVCjLI0zOoZGYk36+iCzaBnJIKpD6dae1Bq/ee7ctTm9J+2UZY
-         MfBw==
-X-Gm-Message-State: AC+VfDy2RmjNtfVKTyYwO2+7hkozG0UPWRMePel892bozmmOjb/MMgj3
-        /Dt85w42xfCOqSL2HnJXtrATCssR5E0+Qg==
-X-Google-Smtp-Source: ACHHUZ5PyNyzI/RcofGx13FdqXcShZMBIm55egb8GztHqoIAr75k6TPoNEICmVO1Te79u4XXd8uENA==
-X-Received: by 2002:a17:907:3e0a:b0:974:1ef1:81ad with SMTP id hp10-20020a1709073e0a00b009741ef181admr30559593ejc.4.1687869516574;
-        Tue, 27 Jun 2023 05:38:36 -0700 (PDT)
-Received: from [192.168.148.233] ([193.85.242.128])
-        by smtp.gmail.com with ESMTPSA id a3-20020a17090682c300b00992025654c4sm1083297ejy.182.2023.06.27.05.38.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Jun 2023 05:38:36 -0700 (PDT)
-Message-ID: <94dca2c3-e5fc-c4bc-a945-31ebb728e353@gmail.com>
-Date:   Tue, 27 Jun 2023 15:38:35 +0300
+        Tue, 27 Jun 2023 08:39:38 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35F9CDD;
+        Tue, 27 Jun 2023 05:39:37 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35R9hmpI017215;
+        Tue, 27 Jun 2023 14:39:14 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=++8nkaCbYJRjEk4/xiM70BALnWisNUyizeXBtAiu6ZU=;
+ b=ZBs/gkJU3kseVP2hyxMcy9ho8eiK/BwsxzMidexTqX+SjniqYuP1R/j/JUpUGincMNJo
+ CX6rpoPkruwDq5cbEAzlZcnJssLFj+Xvk+ZhVL/l2gHPDXIWfo4NXZx4ewiTCylv2IfT
+ pz9XnwyqfHFQrG1lXnZ3k61z6HNgSU2tOF063vzPjw3Z9qI7kTiW5HUw7Zb9LlGTPK1F
+ g3DwRXjkA1hmrDaAK+Zdiwym83DaRdTZjHU2naj0eXamzacUPpD6lmajHicZgz2KHbJh
+ noS+wPnPDgM02AHy+kZRZY15jYPHe2jY6pjdkK9QVjvMxInrXAR+WIWyhBSSMejndhjM jg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3rfu65ach1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 27 Jun 2023 14:39:14 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D8CD4100057;
+        Tue, 27 Jun 2023 14:39:13 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 07013231514;
+        Tue, 27 Jun 2023 14:39:13 +0200 (CEST)
+Received: from localhost (10.201.20.168) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Tue, 27 Jun
+ 2023 14:39:12 +0200
+From:   Valentin Caron <valentin.caron@foss.st.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        <linux-spi@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Valentin Caron <valentin.caron@foss.st.com>
+Subject: [PATCH v2] spi: stm32: disable device mode with st,stm32f4-spi compatible
+Date:   Tue, 27 Jun 2023 14:39:06 +0200
+Message-ID: <20230627123906.147029-1-valentin.caron@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH][next] power: supply: bd99954: make read-only array
- sub_status_reg
-Content-Language: en-US, en-GB
-To:     Colin Ian King <colin.i.king@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230627121707.722021-1-colin.i.king@gmail.com>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <20230627121707.722021-1-colin.i.king@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.201.20.168]
+X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-27_08,2023-06-27_01,2023-05-22_02
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,23 +74,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/27/23 15:17, Colin Ian King wrote:
-> Don't populate the read-only array on the stack, instead make it
-> static const.
-> 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+STM32 SPI driver is not capable to handle device mode with stm32f4 soc.
+Stop probing if this case happens, and print an error with involved
+compatible.
 
-Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
+Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+---
+Changes since v1:
+- Replace of_match_device()->data by of_device_get_match_data()
 
-Thanks!
+ drivers/spi/spi-stm32.c | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
 
-Yours,
--- Matti
-
+diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
+index 6d10fa4ab783..0de56441f72e 100644
+--- a/drivers/spi/spi-stm32.c
++++ b/drivers/spi/spi-stm32.c
+@@ -238,6 +238,7 @@ struct stm32_spi;
+  * @baud_rate_div_min: minimum baud rate divisor
+  * @baud_rate_div_max: maximum baud rate divisor
+  * @has_fifo: boolean to know if fifo is used for driver
++ * @has_device_mode: is this compatible capable to switch on device mode
+  * @flags: compatible specific SPI controller flags used at registration time
+  */
+ struct stm32_spi_cfg {
+@@ -259,6 +260,7 @@ struct stm32_spi_cfg {
+ 	unsigned int baud_rate_div_min;
+ 	unsigned int baud_rate_div_max;
+ 	bool has_fifo;
++	bool has_device_mode;
+ 	u16 flags;
+ };
+ 
+@@ -1750,6 +1752,7 @@ static const struct stm32_spi_cfg stm32f4_spi_cfg = {
+ 	.baud_rate_div_min = STM32F4_SPI_BR_DIV_MIN,
+ 	.baud_rate_div_max = STM32F4_SPI_BR_DIV_MAX,
+ 	.has_fifo = false,
++	.has_device_mode = false,
+ 	.flags = SPI_MASTER_MUST_TX,
+ };
+ 
+@@ -1774,6 +1777,7 @@ static const struct stm32_spi_cfg stm32h7_spi_cfg = {
+ 	.baud_rate_div_min = STM32H7_SPI_MBR_DIV_MIN,
+ 	.baud_rate_div_max = STM32H7_SPI_MBR_DIV_MAX,
+ 	.has_fifo = true,
++	.has_device_mode = true,
+ };
+ 
+ static const struct of_device_id stm32_spi_of_match[] = {
+@@ -1798,8 +1802,16 @@ static int stm32_spi_probe(struct platform_device *pdev)
+ 	struct device_node *np = pdev->dev.of_node;
+ 	bool device_mode;
+ 	int ret;
++	const char *compatible =
++		of_match_device(pdev->dev.driver->of_match_table, &pdev->dev)->compatible;
++	const struct stm32_spi_cfg *cfg = (const struct stm32_spi_cfg *)
++		of_device_get_match_data(&pdev->dev);
+ 
+ 	device_mode = of_property_read_bool(np, "spi-slave");
++	if (!cfg->has_device_mode && device_mode) {
++		dev_err(&pdev->dev, "spi-slave not yet supported with %s\n", compatible);
++		return -EPERM;
++	}
+ 
+ 	if (device_mode)
+ 		ctrl = devm_spi_alloc_slave(&pdev->dev, sizeof(struct stm32_spi));
+@@ -1817,9 +1829,7 @@ static int stm32_spi_probe(struct platform_device *pdev)
+ 	spi->device_mode = device_mode;
+ 	spin_lock_init(&spi->lock);
+ 
+-	spi->cfg = (const struct stm32_spi_cfg *)
+-		of_match_device(pdev->dev.driver->of_match_table,
+-				&pdev->dev)->data;
++	spi->cfg = cfg;
+ 
+ 	spi->base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+ 	if (IS_ERR(spi->base))
 -- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
+2.25.1
 
