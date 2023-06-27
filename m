@@ -2,51 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBD2674001C
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 17:53:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEF8C74001E
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 17:53:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231859AbjF0Pw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 11:52:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58410 "EHLO
+        id S231865AbjF0Pxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 11:53:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjF0Pwz (ORCPT
+        with ESMTP id S229481AbjF0Pxg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 11:52:55 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56199297D;
-        Tue, 27 Jun 2023 08:52:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=F0YkNdNP4x/79Jg/HNWkUQMe3owuqwhhtLuSc41VQ5Y=; b=qoGyPe5VPadHN0hptR04XWwCM+
-        VpQ+9KpV91do6qeKZRjuFlELUhr25Kcv/oA5ru6SB18GxM4BIxx5VrB4f2N9hDjOEj2y4VaUHQ/XG
-        r8P7bfLGbEGcK7mH8Xo1ynQBshg1xClg1EKFocDXNf5KiH9xCIuXEWA1aPMy932Tl+uZHX5Z6cvcS
-        8K983SPFd/e8hawOFSQq5K2boxKAhSF/8G6dN2616V16b7pfokpgNOBbq6e5mIsc1mF0AM1H03oGe
-        y2CL94aOrZwN9kWf9mc9oqxLefbetxwb1ZZGfrsLQAUS4FdbeGZB2FAazn4cl2nYdZYqR5dA3CsPw
-        nRErmeRA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1qEAzq-00DZba-1O;
-        Tue, 27 Jun 2023 15:52:50 +0000
-Date:   Tue, 27 Jun 2023 08:52:50 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Lu Hongfei <luhongfei@vivo.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        "Darrick J. Wong" <djwong@kernel.org>, linux-xfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        opensource.kernel@vivo.com
-Subject: Re: [PATCH] fs: iomap: Change the type of blocksize from 'int' to
- 'unsigned int' in iomap_file_buffered_write_punch_delalloc
-Message-ID: <ZJsF0gs9FlNH78rE@infradead.org>
-References: <20230627100325.51290-1-luhongfei@vivo.com>
+        Tue, 27 Jun 2023 11:53:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1D2E19A4
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 08:53:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D427611D6
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 15:53:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61171C433C8;
+        Tue, 27 Jun 2023 15:53:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687881214;
+        bh=VFH04KQ3gvefUySLTDf8LtzRnAMEIEUyc0inlA7xpbM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=mI2EHfIeePjlJPuspRxyfSV9FsMA9HlLGkZd+HcdZ8vlvKxDr9MoWJKA8AsAqT8wd
+         1djlje/vvpiXQhKC925sxIhVOHfBuLGyYyjyFlMwBl5pLHfh/MYxlp3NGnL4yzegCk
+         KZqnQ757xoGvpJaSVeH8hDaGnocMW7uwHiTb9tIQmFhf2C29RTSQG1SJeINdPqfQKn
+         je1v5uyAAy8pne/K0OoQwv0m1esdCnx8hGhNpc8JzYMrZii7xyEt8Fy6w3fwaH1ZOM
+         8C1tUvcXeLzfOZ75STv4hhQzEc++98WCFIbnHrIsqQrgSl4BvZEdbCaX52uJ6MalrD
+         mMXt/XLNELSVA==
+Date:   Tue, 27 Jun 2023 08:53:33 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        UNGLinuxDriver@microchip.com,
+        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Antoine Tenart <atenart@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net 3/3] net: dsa: felix: don't drop PTP frames with
+ tag_8021q when RX timestamping is disabled
+Message-ID: <20230627085333.0968615d@kernel.org>
+In-Reply-To: <20230627155147.atvr32v3vldnybrc@skbuf>
+References: <20230626154003.3153076-1-vladimir.oltean@nxp.com>
+        <20230626154003.3153076-4-vladimir.oltean@nxp.com>
+        <20230627151222.bn3vboqjutkqzxjs@skbuf>
+        <20230627084651.055a228c@kernel.org>
+        <20230627155147.atvr32v3vldnybrc@skbuf>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230627100325.51290-1-luhongfei@vivo.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,14 +71,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 06:03:25PM +0800, Lu Hongfei wrote:
->  	loff_t			start_byte;
->  	loff_t			end_byte;
-> -	int			blocksize = i_blocksize(inode);
-> +	unsigned int	blocksize = i_blocksize(inode);
+On Tue, 27 Jun 2023 18:51:47 +0300 Vladimir Oltean wrote:
+> > pw-bot: changes-requested
+> > 
+> >  a) your email address is different and the bot doesn't understand
+> >     aliases
+> >  b) commands are hard to remember
+> >  c) don't care about patchwork
+> >  d) laziness
+> >  e) other  
+> 
+> hmm, I'll tick e) unslept...
 
-Please keep the existing alignment of the variable names.
-
-With that the patch looks good:
-
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+Ah, good, I was worried it was the aliases and I don't have a great
+plan yet for how to deal with that :)
