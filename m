@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDEC873FB0C
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 13:23:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97B7973FB0E
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 13:23:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231617AbjF0LXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 07:23:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40370 "EHLO
+        id S231237AbjF0LXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 07:23:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbjF0LXY (ORCPT
+        with ESMTP id S231305AbjF0LXZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 07:23:24 -0400
+        Tue, 27 Jun 2023 07:23:25 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A2D10C
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 04:22:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA2F26AE
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 04:22:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687864961;
+        s=mimecast20190719; t=1687864962;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=T3lZgYf4GUx7yLsElB4csYTB1LQXvieCj0NGb4r43Kk=;
-        b=GiXBeepRTYsfWFbuS5trU21wnCCJXsIQ9BnCXxzxYCNZ9tDJ+a+rA62gelwjD7l9qKC8hq
-        ypmK6ZFU8LJho+9VJ/FS8B/7WdIqM29Gu3n8gfQdjVlgygW1TsYbeKuubOb6mdBf27JktH
-        s8lJI9XWWi9YGN2c+OiW03+7npj7uwE=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=8+JMX7PmWMV8slSmifeWswXiVAWwIFJBeTLnY9EmnBs=;
+        b=bGSWd6LFKSE7dSoY8M4wGHs+aNMASw0bNTE9sYGGFOcBXiYzrwQVJHrLSBLlbatMlM+mxc
+        kA1JOpoFBd2flbG6+l2oeQ/UanIh5RgtmWObqoeoLPbAF/+2Hir2GLxWlvpFjtVsqkcsBo
+        ic6AgMp1JJQ34wWae6BvJg+ebjGIGcQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-354-SGCc500YMA6d6vSpb4530Q-1; Tue, 27 Jun 2023 07:22:36 -0400
-X-MC-Unique: SGCc500YMA6d6vSpb4530Q-1
+ us-mta-228-_3hHQO3VOiqe86__7AxxGg-1; Tue, 27 Jun 2023 07:22:38 -0400
+X-MC-Unique: _3hHQO3VOiqe86__7AxxGg-1
 Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A4EBE1C07588;
-        Tue, 27 Jun 2023 11:22:35 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CE10B858290;
+        Tue, 27 Jun 2023 11:22:37 +0000 (UTC)
 Received: from t480s.redhat.com (unknown [10.39.192.116])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E5588200A3AD;
-        Tue, 27 Jun 2023 11:22:33 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E37C0200A3AD;
+        Tue, 27 Jun 2023 11:22:35 +0000 (UTC)
 From:   David Hildenbrand <david@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-mm@kvack.org, virtualization@lists.linux-foundation.org,
@@ -49,9 +49,9 @@ Cc:     linux-mm@kvack.org, virtualization@lists.linux-foundation.org,
         Michal Hocko <mhocko@suse.com>,
         Jason Wang <jasowang@redhat.com>,
         Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Subject: [PATCH v1 4/5] virtio-mem: set the timeout for offline_and_remove_memory() to 10 seconds
-Date:   Tue, 27 Jun 2023 13:22:19 +0200
-Message-Id: <20230627112220.229240-5-david@redhat.com>
+Subject: [PATCH v1 5/5] virtio-mem: check if the config changed before (fake) offlining memory
+Date:   Tue, 27 Jun 2023 13:22:20 +0200
+Message-Id: <20230627112220.229240-6-david@redhat.com>
 In-Reply-To: <20230627112220.229240-1-david@redhat.com>
 References: <20230627112220.229240-1-david@redhat.com>
 MIME-Version: 1.0
@@ -67,47 +67,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently we use the default (30 seconds), let's reduce it to 10
-seconds. In BBM, we barely deal with blocks larger than 1/2 GiB, and
-after 10 seconds it's most probably best to give up on that memory block
-and try another one (or retry this one later).
+If we repeatedly fail to (fake) offline memory, we won't be sending
+any unplug requests to the device. However, we only check if the config
+changed when sending such (un)plug requests.
 
-In the common fake-offline case where we effectively fake-offline memory
-using alloc_contig_range() first (SBM or BBM with bbm_safe_unplug=on),
-we expect offline_and_remove_memory() to be blazingly fast and never take
-anywhere close to 10seconds -- so this should only affect BBM with
-bbm_safe_unplug=off.
+So we could end up trying for a long time to offline memory, even though
+the config changed already and we're not supposed to unplug memory
+anymore.
 
-While at it, update the parameter description and the relationship to
-unmovable pages.
+Let's optimize for that case, identified while testing the
+offline_and_remove() memory timeout and simulating it repeatedly running
+into the timeout.
 
 Signed-off-by: David Hildenbrand <david@redhat.com>
 ---
- drivers/virtio/virtio_mem.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/virtio/virtio_mem.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
 diff --git a/drivers/virtio/virtio_mem.c b/drivers/virtio/virtio_mem.c
-index f8792223f1db..7468b4a907e3 100644
+index 7468b4a907e3..247fb3e0ce61 100644
 --- a/drivers/virtio/virtio_mem.c
 +++ b/drivers/virtio/virtio_mem.c
-@@ -41,7 +41,7 @@ MODULE_PARM_DESC(bbm_block_size,
- static bool bbm_safe_unplug = true;
- module_param(bbm_safe_unplug, bool, 0444);
- MODULE_PARM_DESC(bbm_safe_unplug,
--	     "Use a safe unplug mechanism in BBM, avoiding long/endless loops");
-+	     "Use a safe/fast unplug mechanism in BBM, failing faster on unmovable pages");
+@@ -1922,6 +1922,10 @@ static int virtio_mem_sbm_unplug_sb_online(struct virtio_mem *vm,
+ 	unsigned long start_pfn;
+ 	int rc;
  
- /*
-  * virtio-mem currently supports the following modes of operation:
-@@ -738,7 +738,7 @@ static int virtio_mem_offline_and_remove_memory(struct virtio_mem *vm,
- 		"offlining and removing memory: 0x%llx - 0x%llx\n", addr,
- 		addr + size - 1);
++	/* Stop fake offlining attempts if the config changed. */
++	if (atomic_read(&vm->config_changed))
++		return -EAGAIN;
++
+ 	start_pfn = PFN_DOWN(virtio_mem_mb_id_to_phys(mb_id) +
+ 			     sb_id * vm->sbm.sb_size);
  
--	rc = offline_and_remove_memory(addr, size, 0);
-+	rc = offline_and_remove_memory(addr, size, 10 * MSEC_PER_SEC);
- 	if (!rc) {
- 		atomic64_sub(size, &vm->offline_size);
- 		/*
+@@ -2233,6 +2237,10 @@ static int virtio_mem_bbm_unplug_request(struct virtio_mem *vm, uint64_t diff)
+ 		virtio_mem_bbm_for_each_bb_rev(vm, bb_id, VIRTIO_MEM_BBM_BB_ADDED) {
+ 			cond_resched();
+ 
++			/* Stop (fake) offlining attempts if the config changed. */
++			if (atomic_read(&vm->config_changed))
++				return -EAGAIN;
++
+ 			/*
+ 			 * As we're holding no locks, these checks are racy,
+ 			 * but we don't care.
 -- 
 2.40.1
 
