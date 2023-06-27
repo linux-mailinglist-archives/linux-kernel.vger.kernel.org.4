@@ -2,139 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFEAF73F9B9
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 12:12:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 523B673F9B8
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 12:12:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230474AbjF0KMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 06:12:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35338 "EHLO
+        id S230283AbjF0KMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 06:12:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232059AbjF0KLh (ORCPT
+        with ESMTP id S232060AbjF0KLh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 27 Jun 2023 06:11:37 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D714AC9
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 03:11:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=4zqNnV0CnsHhr55I3vwqjRbQalEDsGW/EKXeK+n995M=; b=d3LfQiugbqmzx8tRj/MqnprqiY
-        CtmJtlHIYPjvPL03cg26fQq6KMctnn4cWPxE8M5pSIKauVRCqdY6J2ca7Ll7R/y+YYGCl78OIqZM7
-        tgSbot++XFu2Dm5DZkXSXmPw7Z3kp1FUdVI3APcs2hwIhD3ZAz3yPc8HKclx41jOf0/26ZK8FrSyw
-        Yma1VMRQLWzSZO4i23TGAH/QlqsYQT5JH4NumfAxHVfYrqyp7tkImws/4icIXGv7bWL7L+GiEWXRq
-        aEX8YvMHFLWQWMrAxOD8Z+0XAGhOwTiYzkiG5uFbu1e3qL26Dx0Cc0T9CbnowySEios30HoShs3BP
-        6157kKIQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qE5ex-004ds7-2s;
-        Tue, 27 Jun 2023 10:10:56 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5815F3002C5;
-        Tue, 27 Jun 2023 12:10:54 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id F2A582435114E; Tue, 27 Jun 2023 12:10:53 +0200 (CEST)
-Date:   Tue, 27 Jun 2023 12:10:53 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Aaron Lu <aaron.lu@intel.com>
-Cc:     Chen Yu <yu.c.chen@intel.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Deng Pan <pan.deng@intel.com>, tim.c.chen@intel.com,
-        linux-kernel@vger.kernel.org, tianyou.li@intel.com,
-        yu.ma@intel.com, lipeng.zhu@intel.com,
-        Tim Chen <tim.c.chen@linux.intel.com>
-Subject: Re: [PATCH v2] sched/task_group: Re-layout structure to reduce false
- sharing
-Message-ID: <20230627101053.GX4253@hirez.programming.kicks-ass.net>
-References: <20230621081425.420607-1-pan.deng@intel.com>
- <20230626054756.GA435374@ziqianlu-dell>
- <ZJlDsbyNmcKtweg4@chenyu5-mobl2.ccr.corp.intel.com>
- <20230626125335.GA508448@ziqianlu-dell>
+Received: from mail-vs1-xe42.google.com (mail-vs1-xe42.google.com [IPv6:2607:f8b0:4864:20::e42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BD6BDD
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 03:11:09 -0700 (PDT)
+Received: by mail-vs1-xe42.google.com with SMTP id ada2fe7eead31-440b4b0147bso849735137.1
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 03:11:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687860668; x=1690452668;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=MFG1KNlvf1Axxy9iiCRuF2Wv9mzsHvQM12J2RA1vN6Q=;
+        b=mLUKvwxGcWfZMjMQwm7TqFPmn4dTfkxsu1j2mSiWB81cbuaOlOoc2CM/JDB1UWA8k4
+         zGi9lIKF6/mbRapKguDvw+R6JkR784eBEJeE28s99SgiU1KOmb8e0mJpLb5tCmaa783M
+         zWhnU/VWEESvL3FbwM2OT1inLF3GOGxu24U2KtOIlgLnlNS+s8KdwMvaRBDUJDu+8ARJ
+         sTzgCcgTN32pD7ChV7gV6Aex6K7AMrUtezpax9ioPqo7+cbvTiUS2+rjp2W3GUE8eowC
+         jPSt0/3Fpg1E0DNQwZQdJGU9wFh8J8UraOLgnoZg2NW5itxF8FYU1KJ9uQXYgPqLHKAW
+         bJjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687860668; x=1690452668;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MFG1KNlvf1Axxy9iiCRuF2Wv9mzsHvQM12J2RA1vN6Q=;
+        b=i4Euqxwbpw4UEWb5hwAN36GjgBChQ2k4XnZKB2fRDMTlNsphOeEHNr3afop1JqWgHf
+         AJCZfumJHn5v1ViOOs5jtjrZbI7XYdsLT1IWdpNReOZwiCJSOjDFrdA42t5K9aD4A0rm
+         fh7dFZszxpIWrCVKAVDCL0tAHvYmG6M3kWQG3GsCApY3GXtUddxgOoTgn98oONn0h6Ag
+         iHk3zPR9VwQI1/H8BoFNvMc6SFut/pokBLeu1GHBHaloGbLcI6ih8YzaMwWqDZTGNtr2
+         sEjsz/KCpJEf9fBaJISPnLx05ChfLeutProsfn+xyTtmSjE5IgCsNRQDXU7mPMAp3sDw
+         /ZYQ==
+X-Gm-Message-State: AC+VfDyZwwBqeVAcprWno2ZkeAiC9PLkCAo9wQ3m0GAs6sY/AYZiSjLp
+        Nv2MYRexbcTx26Ie6rDTLKmAgqprHox7zve3lcQ=
+X-Google-Smtp-Source: ACHHUZ7jYkWfN09AJ+nA8kQv00YmErzl/11qjBBEHQl33pEg29DOolCxhRr+0yHGYyjLVFEwCairxE9HtQ+hXFV7EHU=
+X-Received: by 2002:a67:fc41:0:b0:443:682e:2088 with SMTP id
+ p1-20020a67fc41000000b00443682e2088mr1566797vsq.12.1687860668227; Tue, 27 Jun
+ 2023 03:11:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230626125335.GA508448@ziqianlu-dell>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a0c:9a02:0:b0:62d:f4ab:a2b2 with HTTP; Tue, 27 Jun 2023
+ 03:11:07 -0700 (PDT)
+Reply-To: lschantal86@gmail.com
+From:   "L.S Chantal" <ezekielcynthia8@gmail.com>
+Date:   Tue, 27 Jun 2023 10:11:07 +0000
+Message-ID: <CAHE9hdkB6q+hy=P+Nbv7x1BYCBZeCdYRHv0CfAm+eSzuNVOnZw@mail.gmail.com>
+Subject: Holle
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=6.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,HK_SCAM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:e42 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5001]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [lschantal86[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [ezekielcynthia8[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [ezekielcynthia8[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  2.0 HK_SCAM No description available.
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 26, 2023 at 08:53:35PM +0800, Aaron Lu wrote:
-> On Mon, Jun 26, 2023 at 03:52:17PM +0800, Chen Yu wrote:
-> > Besides the cache line alignment, if the task is not a rt one,
-> > why do we have to touch that, I wonder if the following change can avoid that:
-> > 
-> > diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-> > index ec7b3e0a2b20..067f1310bad2 100644
-> > --- a/kernel/sched/sched.h
-> > +++ b/kernel/sched/sched.h
-> > @@ -1958,8 +1958,10 @@ static inline void set_task_rq(struct task_struct *p, unsigned int cpu)
-> >  #endif
-> >  
-> >  #ifdef CONFIG_RT_GROUP_SCHED
-> > -	p->rt.rt_rq  = tg->rt_rq[cpu];
-> > -	p->rt.parent = tg->rt_se[cpu];
-> > +	if (p->sched_class = &rt_sched_class) {
->                            ==  :-)
-> 
-> > +		p->rt.rt_rq  = tg->rt_rq[cpu];
-> > +		p->rt.parent = tg->rt_se[cpu];
-> > +	}
-> >  #endif
-> >  }
-> 
-> If a task starts life as a SCHED_NORMAL one and then after some time
-> it's changed to a RT one, then during its next ttwu(), if it didn't
-> migrate, then set_task_rq() will not be called and p->rt.rt_rq will
-> keep as NULL which will cause problem when this task gets enqueued as
-> a rt one.
-> 
-> The follow diff seems to cure this issue:
-> 
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index c7db597e8175..8c57148e668c 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -7801,6 +7801,20 @@ static int __sched_setscheduler(struct task_struct *p,
->  	}
->  	__setscheduler_uclamp(p, attr);
->  
-> +#ifdef CONFIG_RT_GROUP_SCHED
-> +	/*
-> +	 * Make sure when this task becomes a rt one,
-> +	 * its rt fields have valid value.
-> +	 */
-> +	if (rt_prio(newprio)) {
-> +		struct task_group *tg = task_group(p);
-> +		int cpu = cpu_of(rq);
-> +
-> +		p->rt.rt_rq = tg->rt_rq[cpu];
-> +		p->rt.parent = tg->rt_se[cpu];
-> +	}
-> +#endif
-> +
->  	if (queued) {
->  		/*
->  		 * We enqueue to tail when the priority of a task is
-> 
-> But I'm not sure if it's worth the trouble.
+SANTANDER BANK COMPENSATION UNIT, IN AFFILIATION WITH THE UNITED NATION.
+Your compensation fund of =E2=82=AC5.1 million is ready for payment
+contact me for more details.
 
-Not sufficient, you can become RT through PI and not pass
-__sched_setscheduler().
-
-The common code-path in this case would be check_class_changed(), that's
-called for oth PI and __sched_setscheduler().
-
-Anyway, not against this per-se, but RT_GROUP_SCHED is utter shite and
-nobody should be using it. Also, if there's no measurable performance
-gain (as stated elsewhere IIRC) we shouldn't be adding complexity.
+Thanks
