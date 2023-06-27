@@ -2,127 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B94C0740582
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 23:19:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13BC974058A
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 23:25:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230058AbjF0VTc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 17:19:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34756 "EHLO
+        id S229953AbjF0VZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 17:25:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230030AbjF0VT1 (ORCPT
+        with ESMTP id S229618AbjF0VZ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 17:19:27 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2FC5198E
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 14:19:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687900765; x=1719436765;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9F6oczZXMEUoLAJfxEwJtk3XCCkCKi/30DZkczd5yX0=;
-  b=ZBh3EauGKjv5lsLz3jvHWPIbqoaszNHdUMD4vhoxKn1JXNc57qpWcXYZ
-   fSCoV8BCCsdAiwaZ5A0T3KHYJBG4Fj3Qp8eRbzvkeVEHgQPcdGzRPccmM
-   NVh+jwOnAqdnhZVxk7OVQ7TiFGi0Z1jybYwFzDahCd8qxT1Z6L3X3H79y
-   v0CKUiqfXxvxykSCw4Ec//GHtGL3M911fPIPvxn7xLVbkjogwz3nBknrM
-   IauYx8kljUkE8F3PeJ410r4m8ui1awgavjr4HTlD6am7U5+y8+eLdTvIL
-   N17TcCffeHS8QrrzW1vjGIfCLsIRuMeBqtfvyUSLeRrbDmH5YoHpQZR9u
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="448068758"
-X-IronPort-AV: E=Sophos;i="6.01,163,1684825200"; 
-   d="scan'208";a="448068758"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 14:19:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="694047086"
-X-IronPort-AV: E=Sophos;i="6.01,163,1684825200"; 
-   d="scan'208";a="694047086"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 27 Jun 2023 14:19:22 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qEG5p-000CHH-1b;
-        Tue, 27 Jun 2023 21:19:21 +0000
-Date:   Wed, 28 Jun 2023 05:19:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Phil Auld <pauld@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, Juri Lelli <juri.lelli@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Ben Segall <bsegall@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>, Phil Auld <pauld@redhat.com>
-Subject: Re: [PATCH v2] Sched/fair: Block nohz tick_stop when cfs bandwidth
- in use
-Message-ID: <202306280536.Zd5x1Zdv-lkp@intel.com>
-References: <20230627191201.344110-1-pauld@redhat.com>
+        Tue, 27 Jun 2023 17:25:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6706DA3;
+        Tue, 27 Jun 2023 14:25:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F39346121E;
+        Tue, 27 Jun 2023 21:25:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B37C2C433C0;
+        Tue, 27 Jun 2023 21:25:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687901125;
+        bh=LLkc2ILV6ywjaYsJmFGJxIn1C9hBkqgWAvWAxsYMweY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GrIvmvKm4mW6fWrlM5EQedJxF9Vg6pFbJsQQq+UgX2FcWtY2N/NjcUTWOiCzJXZe0
+         L3mP7B8Yfy2ruk313zezDEqfeE3CWVVEV70vvO1Bc9hJCX2nquDzeNgfexjyaZxQN3
+         ZDGopNcXveae1dZV9dZZe1qvvaB1+r8pcES/UYNNgjqqMVzATnWbSdTCAX8gJDlHOV
+         V2IuLEYq/54xoGzd/DJp1MPrC2ZVIxkgRL8ZitV3UvHxuT2Sw7oJWJ5YyfcJLq5jmI
+         hj47mcFRYyH25RGPqeJSzgQ7gLWHYTALJ8qw+KYJu5+5Y+0enr1lUXMiJl30ie+myn
+         NCVN/efKZV3ng==
+Date:   Tue, 27 Jun 2023 23:25:18 +0200
+From:   "wsa@kernel.org" <wsa@kernel.org>
+To:     Robert Hancock <robert.hancock@calian.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "shubhraj@xilinx.com" <shubhraj@xilinx.com>,
+        "michal.simek@amd.com" <michal.simek@amd.com>,
+        "marex@denx.de" <marex@denx.de>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "andi.shyti@kernel.org" <andi.shyti@kernel.org>
+Subject: Re: [PATCH] i2c: xiic: Don't try to handle more interrupt events
+ after error
+Message-ID: <ZJtTvleO7JURiBCQ@sai>
+Mail-Followup-To: "wsa@kernel.org" <wsa@kernel.org>,
+        Robert Hancock <robert.hancock@calian.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "shubhraj@xilinx.com" <shubhraj@xilinx.com>,
+        "michal.simek@amd.com" <michal.simek@amd.com>,
+        "marex@denx.de" <marex@denx.de>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+        "andi.shyti@kernel.org" <andi.shyti@kernel.org>
+References: <20230606182558.1301413-1-robert.hancock@calian.com>
+ <20230606192453.zjzz4kt76kus5hr5@intel.intel>
+ <c763371c710c9952154496026610e2ff583c173a.camel@calian.com>
+ <20230606212053.bwpoxyost4fkpati@intel.intel>
+ <ZINGGmRLYEQ+NfkI@shikoro>
+ <20230609212552.5o6aopv7iicej3kn@intel.intel>
+ <71637721f64b877255264d36293208402ef1a873.camel@calian.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Hh0iSTnw4k1MeSzd"
 Content-Disposition: inline
-In-Reply-To: <20230627191201.344110-1-pauld@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <71637721f64b877255264d36293208402ef1a873.camel@calian.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Phil,
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on tip/auto-latest]
-[also build test WARNING on linus/master v6.4 next-20230627]
-[cannot apply to tip/sched/core tip/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Phil-Auld/Sched-fair-Block-nohz-tick_stop-when-cfs-bandwidth-in-use/20230628-031312
-base:   tip/auto-latest
-patch link:    https://lore.kernel.org/r/20230627191201.344110-1-pauld%40redhat.com
-patch subject: [PATCH v2] Sched/fair: Block nohz tick_stop when cfs bandwidth in use
-config: nios2-randconfig-r035-20230627 (https://download.01.org/0day-ci/archive/20230628/202306280536.Zd5x1Zdv-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 12.3.0
-reproduce: (https://download.01.org/0day-ci/archive/20230628/202306280536.Zd5x1Zdv-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306280536.Zd5x1Zdv-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   kernel/sched/fair.c:688:5: warning: no previous prototype for 'sched_update_scaling' [-Wmissing-prototypes]
-     688 | int sched_update_scaling(void)
-         |     ^~~~~~~~~~~~~~~~~~~~
->> kernel/sched/fair.c:6220:6: warning: no previous prototype for 'sched_cfs_bandwidth_active' [-Wmissing-prototypes]
-    6220 | bool sched_cfs_bandwidth_active(struct cfs_rq *cfs_rq)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+--Hh0iSTnw4k1MeSzd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
 
-vim +/sched_cfs_bandwidth_active +6220 kernel/sched/fair.c
+> Just checking on this patch, was it merged? It shows accepted in
+> Patchwork, but I'm not seeing it in the Git tree.
 
-  6212	
-  6213	static inline struct cfs_bandwidth *tg_cfs_bandwidth(struct task_group *tg)
-  6214	{
-  6215		return NULL;
-  6216	}
-  6217	static inline void destroy_cfs_bandwidth(struct cfs_bandwidth *cfs_b) {}
-  6218	static inline void update_runtime_enabled(struct rq *rq) {}
-  6219	static inline void unthrottle_offline_cfs_rqs(struct rq *rq) {}
-> 6220	bool sched_cfs_bandwidth_active(struct cfs_rq *cfs_rq)
-  6221	{
-  6222		return false;
-  6223	}
-  6224	
+Sorry, it seems I forgot to apply it? I will make sure it will go in
+this merge window now.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+--Hh0iSTnw4k1MeSzd
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmSbU7oACgkQFA3kzBSg
+KbYpOA//bjyDt9DrMbTJmw34YKX4aWiIoWxF3WyWSAa18PcNV8k7zDlKWGJBtPfh
+sjaI5S7WIvzGgfUrJTR+uI7UjIFcIYRR+G2/XEjBsERSNx99m6K9t4ntJKPIeg3d
+E48ScalSM7tf/vfzc8NWB8MDeuC6iP2RHxPkIiP5Hojzapemse5JepqVr9v/m+yP
+LQs/Cz8fehWO9Dw2OityhtkVcuQhYRY9P/z8c3/PfNt/iMip8VopVRppCQoIr2WB
+3m/0YasQy6H44o8SdNnehPl8Z6bst2jGFr0D1iapu9sFKYBWQjbYYjwD8IPrgSj1
+7vSkNo7pC4oabwwTzfPDoNr9fQEcy0Erz5qd2kHmMT0jDs2P+YYRW6vnG9tZcTZ9
+K+e/0pL0WdVNGF8ifDxGQXiVxNvhjk7ggBSpGb/hilyqTf1sXxeZ0wNJGmUltzbA
+rTMwFJ1gX2mcZh2TGQ9j8M3II51csiAxk26OuMgqcfGmwrGjmx8Yr5PFhXklosG8
+Bogs8m74OyIrS61YCxK/QyvGUKRtopoAcc6RFbFsTs1fJgMR22f4tmDEn1AsuoaY
+n8yYQfNdoYxtwnqZ/HInWPjHOyga+3W4BOK7ThoJydcbee0ibwSrOmf03Zid/WTg
+f412ojOmiBWwsXsSe6L5t/HxX9rVDmXwTZQ9C7LWoFOy3N4y2vo=
+=Iuvi
+-----END PGP SIGNATURE-----
+
+--Hh0iSTnw4k1MeSzd--
