@@ -2,208 +2,321 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8647A740521
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 22:46:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D6B3740527
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 22:48:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230450AbjF0Uqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 16:46:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51462 "EHLO
+        id S231481AbjF0UsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 16:48:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230489AbjF0Uqo (ORCPT
+        with ESMTP id S230489AbjF0UsG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 16:46:44 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3E91270C;
-        Tue, 27 Jun 2023 13:46:42 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4fb8574a3a1so1833822e87.1;
-        Tue, 27 Jun 2023 13:46:42 -0700 (PDT)
+        Tue, 27 Jun 2023 16:48:06 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF55210D7
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 13:48:03 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2b6a152a933so42716151fa.1
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 13:48:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687898801; x=1690490801;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xg4AxPhZP87yhv5fBI4Lu3V6Q+5JB9PVkPOY/RBS8xY=;
-        b=TgFikHdUqIJnj50tFvQd/5p7XVGi/8nDLwTb/aK/3zSRDpMPLr93oqo5vayGq0D5fg
-         pCImK4lgNb4XTy/6SiV6xcHFKwp668xFDounZjw9VWISxiTK85z1ZZiujkGolQUJxzuX
-         w2sd8ZRocIizP7neeVZDZ2WHL6uVUCIa+Go2asBW5OnD2qN/Qk6PRGFgrcouUjZKLGEt
-         jDvrPdIUWt6N92FEguGVevDZPcqvJKnO0BbEEmwa5aM3ayGNqYXN40Z1oohU1HZWoZRL
-         pjDnYpXppmyh4ZeYhQAc5I+AY6ykD7fuHVnBPZppUet5eFO6Xf4ebMo2Bx122PQYevOP
-         OZZA==
+        d=linaro.org; s=google; t=1687898882; x=1690490882;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OA45c/xaQm/8v0q3zdahN+3s7QemecX5vnNWDdTNmVE=;
+        b=NrbYawTk+IbOjd0e+vE5nKImpTCP4PP0QeUjM/wDAxIZrtTMptQ38+OBbpg/ybppN2
+         MOCUyAGEVFZYCWstAu7xPjpl4i3qPgOj8AdKVxRMAb8qY9M3tNRY4QPnd+9r7N5EGxrF
+         ymLbqtUzDNz8K3PzP7L2pkb8/hhHtSKG/VA2N3W+g1xBuuOk1Wa1xXcKYS3M5SYr6ahm
+         UBKuwoRY+9LY+AHU2ZvrNsUQ2pj4Q/eBo7e2wHi28eVg1L4FxPQG/2aoN09GkMOG28zJ
+         O1rYX29H+o1vDa3zgYC/fjEv4OtW5yt+uQGzH1Gs035ZfnG/f+oeEvwBU9YdTyQC20Ys
+         j1xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687898801; x=1690490801;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Xg4AxPhZP87yhv5fBI4Lu3V6Q+5JB9PVkPOY/RBS8xY=;
-        b=Hamf1oES/ASzLWnJ6M8kps0ddrPPpG/PooYI02pZqOibhavF5M1lLEju27uj7tLLU5
-         ED4iEj0Mjjkey9kCzIkliXf8O490n6IyIfVVxUDz0jUU0+EuU5PvPosIuUIEDNSIXSye
-         j9hVacJR3EzEvynWsuHXqvP9lrXu5zf+xg27E+u9rULd48pwJWL411aJ79EmLDc06Dv5
-         ANfbmR6B9GZKPWzbfbhjooSra/fohwWfQVRhyRWArgfT9CcQqj1lrTlh7BJxe/sAmZW1
-         OfDC8mVDTe5JweAxEx84aovZFrIwfDieYc9dD7dJlBg0k/OixOsmeh5/UWXu7vqyRC8/
-         AC2g==
-X-Gm-Message-State: AC+VfDyOT+gh0eXO9wRk/qTWk26Z0Gp9PxwgKiGhQHn9Qo4IIjm6qZZI
-        Lf4Bp/r6mnjvCWbDokDaI/0=
-X-Google-Smtp-Source: ACHHUZ7Jta8Fiw0a6MNemirv+o2WHCgY+IOaudKsuyPKCc31koNIFA8H/b/wyOTmLo+/Kh0jdxJgzA==
-X-Received: by 2002:a19:da12:0:b0:4f9:5622:4795 with SMTP id r18-20020a19da12000000b004f956224795mr11514929lfg.42.1687898800559;
-        Tue, 27 Jun 2023 13:46:40 -0700 (PDT)
-Received: from localhost.lan (031011218106.poznan.vectranet.pl. [31.11.218.106])
-        by smtp.gmail.com with ESMTPSA id t5-20020ac243a5000000b004eb44c2ab6bsm1654087lfl.294.2023.06.27.13.46.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jun 2023 13:46:40 -0700 (PDT)
-From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        d=1e100.net; s=20221208; t=1687898882; x=1690490882;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OA45c/xaQm/8v0q3zdahN+3s7QemecX5vnNWDdTNmVE=;
+        b=QdNpXXGOGmqmdG9lH4qUlCpU/NAOIkKlXjMA41G/z9v3yC0lKMIs+sKt1UZS21hFeN
+         LxnK2Crm+cEnO4wTuw2hsQemvaOXgQd86+nAJf5i2n3fZPZ+yRhzTVNUZEWBgWXJXbeH
+         LlJf169+v+emKYCnWxRPsMtr+gWIDDhq8m0Bx4Gg2wAaocki6pPbE+66gWJUrmENm0Ew
+         loD8MznqgDrJhHPGUAMJnjof7S7A1i85DrDjv642D3Pp+qqr3nmgB81hGNisubfvvHKP
+         hcU7uM6IB30BLnU/omsPlxkORlp4btKoZE+7oRGlTKiFwQGtcgilkrxJ8ispIRZeuEfy
+         06xA==
+X-Gm-Message-State: AC+VfDxidWQdksvlDDZU7a4PhK+CVWflS6RLWzSK8PxT+skgG5pIPDQt
+        lYQtiNV/B1TXPaCxR4lngnhfEw==
+X-Google-Smtp-Source: ACHHUZ4x7OiookqL76PJ6QmT4hwDZzTCsj7kQ+WEHW63ZHmS7rrxNDUaxZu2JkPT4WtiQW7E3HQAoA==
+X-Received: by 2002:a05:6512:10cf:b0:4f9:657d:e4bd with SMTP id k15-20020a05651210cf00b004f9657de4bdmr11208436lfg.24.1687898881728;
+        Tue, 27 Jun 2023 13:48:01 -0700 (PDT)
+Received: from [192.168.1.101] (abxj103.neoplus.adsl.tpnet.pl. [83.9.3.103])
+        by smtp.gmail.com with ESMTPSA id q18-20020a19a412000000b004f3b319ed4bsm1647406lfc.120.2023.06.27.13.47.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Jun 2023 13:48:01 -0700 (PDT)
+Message-ID: <3cc619fc-4d48-919c-7e17-4b11a4e4dcd5@linaro.org>
+Date:   Tue, 27 Jun 2023 22:47:59 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2 14/15] arm64: dts: qcom: sm6125: Add display hardware
+ nodes
+Content-Language: en-US
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        devicetree@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
+        Conor Dooley <conor+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH V4] dt-bindings: nvmem: fixed-cell: add compatible for MAC cells
-Date:   Tue, 27 Jun 2023 22:46:30 +0200
-Message-Id: <20230627204630.9476-1-zajec5@gmail.com>
-X-Mailer: git-send-email 2.35.3
-MIME-Version: 1.0
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, Lux Aliaga <they@mint.lgbt>
+References: <20230627-sm6125-dpu-v2-0-03e430a2078c@somainline.org>
+ <20230627-sm6125-dpu-v2-14-03e430a2078c@somainline.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230627-sm6125-dpu-v2-14-03e430a2078c@somainline.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafał Miłecki <rafal@milecki.pl>
+On 27.06.2023 22:14, Marijn Suijten wrote:
+> Add the DT nodes that describe the MDSS hardware on SM6125, containing
+> one MDP (display controller) together with a single DSI and DSI PHY.  No
+> DisplayPort support is added for now.
+> 
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-A lot of home routers have NVMEM fixed cells containing MAC address that
-need some further processing. In ~99% cases MAC needs to be:
-1. Optionally parsed from ASCII format
-2. Increased by a vendor-picked value
-
-There was already an attempt to design a binding for that at NVMEM
-device level in the past. It wasn't accepted though as it didn't really
-fit NVMEM device layer.
-
-The introduction of NVMEM fixed-cells layout seems to be an opportunity
-to provide a relevant binding in a clean way.
-
-This commit adds a *generic* compatible string: "mac-base". As always it
-needs to be carefully reviewed.
-
-OpenWrt project currently supports ~300 home routers that have NVMEM
-cell with binary-stored base MAC.T hose devices are manufactured by
-multiple vendors. There are TP-Link devices (76 of them), Netgear (19),
-D-Link (11), OpenMesh (9), EnGenius (8), GL.iNet (8), ZTE (7),
-Xiaomi (5), Ubiquiti (6) and more. Those devices don't share an
-architecture or SoC.
-
-Another 200 devices have base MAC stored in an ASCII format (not all
-those devices have been converted to DT though).
-
-It would be impractical to provide unique "compatible" strings for NVMEM
-layouts of all those devices. It seems like a valid case for allowing a
-generic binding instead. Even if this binding will not be sufficient for
-some further devices it seems to be useful enough as it is.
-
-Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
----
-V2: Drop "mac-ascii" as length can be checked instead
-    Fix "allOf" by adding required: [ compatible ]
-V3: Fix cell length in "description" (thank you Rob!)
-V4: Fix cell length (12 → 6) in fixed-layout.yaml example as well
----
- .../bindings/nvmem/layouts/fixed-cell.yaml    | 26 +++++++++++++++++++
- .../bindings/nvmem/layouts/fixed-layout.yaml  | 12 +++++++++
- .../devicetree/bindings/nvmem/nvmem.yaml      |  5 +++-
- 3 files changed, 42 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/devicetree/bindings/nvmem/layouts/fixed-cell.yaml b/Documentation/devicetree/bindings/nvmem/layouts/fixed-cell.yaml
-index e698098450e1..ac2381e66027 100644
---- a/Documentation/devicetree/bindings/nvmem/layouts/fixed-cell.yaml
-+++ b/Documentation/devicetree/bindings/nvmem/layouts/fixed-cell.yaml
-@@ -11,6 +11,15 @@ maintainers:
-   - Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
- 
- properties:
-+  compatible:
-+    oneOf:
-+      - const: mac-base
-+        description: >
-+          Cell with base MAC address to be used for calculating extra relative
-+          addresses.
-+          It can be stored in a plain binary format (cell length 6) or as an
-+          ASCII text like "00:11:22:33:44:55" (cell length 17).
-+
-   reg:
-     maxItems: 1
- 
-@@ -25,6 +34,23 @@ properties:
-         description:
-           Size in bit within the address range specified by reg.
- 
-+allOf:
-+  - if:
-+      required: [ compatible ]
-+    then:
-+      if:
-+        properties:
-+          compatible:
-+            contains:
-+              const: mac-base
-+      then:
-+        properties:
-+          "#nvmem-cell-cells":
-+            description: The first argument is a MAC address offset.
-+            const: 1
-+        required:
-+          - "#nvmem-cell-cells"
-+
- required:
-   - reg
- 
-diff --git a/Documentation/devicetree/bindings/nvmem/layouts/fixed-layout.yaml b/Documentation/devicetree/bindings/nvmem/layouts/fixed-layout.yaml
-index c271537d0714..9bd34bd5af30 100644
---- a/Documentation/devicetree/bindings/nvmem/layouts/fixed-layout.yaml
-+++ b/Documentation/devicetree/bindings/nvmem/layouts/fixed-layout.yaml
-@@ -44,6 +44,18 @@ examples:
-         #address-cells = <1>;
-         #size-cells = <1>;
- 
-+        mac@100 {
-+            compatible = "mac-base";
-+            reg = <0x100 0x6>;
-+            #nvmem-cell-cells = <1>;
-+        };
-+
-+        mac@110 {
-+            compatible = "mac-base";
-+            reg = <0x110 0x11>;
-+            #nvmem-cell-cells = <1>;
-+        };
-+
-         calibration@4000 {
-             reg = <0x4000 0x100>;
-         };
-diff --git a/Documentation/devicetree/bindings/nvmem/nvmem.yaml b/Documentation/devicetree/bindings/nvmem/nvmem.yaml
-index 980244100690..9f921d940142 100644
---- a/Documentation/devicetree/bindings/nvmem/nvmem.yaml
-+++ b/Documentation/devicetree/bindings/nvmem/nvmem.yaml
-@@ -49,7 +49,10 @@ properties:
- patternProperties:
-   "@[0-9a-f]+(,[0-7])?$":
-     type: object
--    $ref: layouts/fixed-cell.yaml
-+    allOf:
-+      - $ref: layouts/fixed-cell.yaml
-+      - properties:
-+          compatible: false
-     deprecated: true
- 
- additionalProperties: true
--- 
-2.35.3
-
+Konrad
+>  arch/arm64/boot/dts/qcom/sm6125.dtsi | 191 ++++++++++++++++++++++++++++++++++-
+>  1 file changed, 189 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm6125.dtsi b/arch/arm64/boot/dts/qcom/sm6125.dtsi
+> index a5cc0d43d2d9..b21fa1256f95 100644
+> --- a/arch/arm64/boot/dts/qcom/sm6125.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm6125.dtsi
+> @@ -1204,12 +1204,199 @@ sram@4690000 {
+>  			reg = <0x04690000 0x10000>;
+>  		};
+>  
+> +		mdss: display-subsystem@5e00000 {
+> +			compatible = "qcom,sm6125-mdss";
+> +			reg = <0x05e00000 0x1000>;
+> +			reg-names = "mdss";
+> +
+> +			interrupts = <GIC_SPI 186 IRQ_TYPE_LEVEL_HIGH>;
+> +			interrupt-controller;
+> +			#interrupt-cells = <1>;
+> +
+> +			clocks = <&gcc GCC_DISP_AHB_CLK>,
+> +				 <&dispcc DISP_CC_MDSS_AHB_CLK>,
+> +				 <&dispcc DISP_CC_MDSS_MDP_CLK>;
+> +			clock-names = "iface",
+> +				      "ahb",
+> +				      "core";
+> +
+> +			power-domains = <&dispcc MDSS_GDSC>;
+> +
+> +			iommus = <&apps_smmu 0x400 0x0>;
+> +
+> +			#address-cells = <1>;
+> +			#size-cells = <1>;
+> +			ranges;
+> +
+> +			status = "disabled";
+> +
+> +			mdss_mdp: display-controller@5e01000 {
+> +				compatible = "qcom,sm6125-dpu";
+> +				reg = <0x05e01000 0x83208>,
+> +				      <0x05eb0000 0x2008>;
+> +				reg-names = "mdp", "vbif";
+> +
+> +				interrupt-parent = <&mdss>;
+> +				interrupts = <0>;
+> +
+> +				clocks = <&gcc GCC_DISP_HF_AXI_CLK>,
+> +					 <&dispcc DISP_CC_MDSS_AHB_CLK>,
+> +					 <&dispcc DISP_CC_MDSS_ROT_CLK>,
+> +					 <&dispcc DISP_CC_MDSS_MDP_LUT_CLK>,
+> +					 <&dispcc DISP_CC_MDSS_MDP_CLK>,
+> +					 <&dispcc DISP_CC_MDSS_VSYNC_CLK>;
+> +				clock-names = "bus",
+> +					      "iface",
+> +					      "rot",
+> +					      "lut",
+> +					      "core",
+> +					      "vsync";
+> +				assigned-clocks = <&dispcc DISP_CC_MDSS_VSYNC_CLK>;
+> +				assigned-clock-rates = <19200000>;
+> +
+> +				operating-points-v2 = <&mdp_opp_table>;
+> +				power-domains = <&rpmpd SM6125_VDDCX>;
+> +
+> +				ports {
+> +					#address-cells = <1>;
+> +					#size-cells = <0>;
+> +
+> +					port@0 {
+> +						reg = <0>;
+> +						dpu_intf1_out: endpoint {
+> +							remote-endpoint = <&mdss_dsi0_in>;
+> +						};
+> +					};
+> +				};
+> +
+> +				mdp_opp_table: opp-table {
+> +					compatible = "operating-points-v2";
+> +
+> +					opp-192000000 {
+> +						opp-hz = /bits/ 64 <192000000>;
+> +						required-opps = <&rpmpd_opp_low_svs>;
+> +					};
+> +
+> +					opp-256000000 {
+> +						opp-hz = /bits/ 64 <256000000>;
+> +						required-opps = <&rpmpd_opp_svs>;
+> +					};
+> +
+> +					opp-307200000 {
+> +						opp-hz = /bits/ 64 <307200000>;
+> +						required-opps = <&rpmpd_opp_svs_plus>;
+> +					};
+> +
+> +					opp-384000000 {
+> +						opp-hz = /bits/ 64 <384000000>;
+> +						required-opps = <&rpmpd_opp_nom>;
+> +					};
+> +
+> +					opp-400000000 {
+> +						opp-hz = /bits/ 64 <400000000>;
+> +						required-opps = <&rpmpd_opp_turbo>;
+> +					};
+> +				};
+> +			};
+> +
+> +			mdss_dsi0: dsi@5e94000 {
+> +				compatible = "qcom,sm6125-dsi-ctrl", "qcom,mdss-dsi-ctrl";
+> +				reg = <0x05e94000 0x400>;
+> +				reg-names = "dsi_ctrl";
+> +
+> +				interrupt-parent = <&mdss>;
+> +				interrupts = <4>;
+> +
+> +				clocks = <&dispcc DISP_CC_MDSS_BYTE0_CLK>,
+> +					 <&dispcc DISP_CC_MDSS_BYTE0_INTF_CLK>,
+> +					 <&dispcc DISP_CC_MDSS_PCLK0_CLK>,
+> +					 <&dispcc DISP_CC_MDSS_ESC0_CLK>,
+> +					 <&dispcc DISP_CC_MDSS_AHB_CLK>,
+> +					 <&gcc GCC_DISP_HF_AXI_CLK>;
+> +				clock-names = "byte",
+> +					      "byte_intf",
+> +					      "pixel",
+> +					      "core",
+> +					      "iface",
+> +					      "bus";
+> +				assigned-clocks = <&dispcc DISP_CC_MDSS_BYTE0_CLK_SRC>,
+> +						  <&dispcc DISP_CC_MDSS_PCLK0_CLK_SRC>;
+> +				assigned-clock-parents = <&mdss_dsi0_phy 0>, <&mdss_dsi0_phy 1>;
+> +
+> +				operating-points-v2 = <&dsi_opp_table>;
+> +				power-domains = <&rpmpd SM6125_VDDCX>;
+> +
+> +				phys = <&mdss_dsi0_phy>;
+> +				phy-names = "dsi";
+> +
+> +				#address-cells = <1>;
+> +				#size-cells = <0>;
+> +
+> +				status = "disabled";
+> +
+> +				ports {
+> +					#address-cells = <1>;
+> +					#size-cells = <0>;
+> +
+> +					port@0 {
+> +						reg = <0>;
+> +						mdss_dsi0_in: endpoint {
+> +							remote-endpoint = <&dpu_intf1_out>;
+> +						};
+> +					};
+> +
+> +					port@1 {
+> +						reg = <1>;
+> +						mdss_dsi0_out: endpoint {
+> +						};
+> +					};
+> +				};
+> +
+> +				dsi_opp_table: opp-table {
+> +					compatible = "operating-points-v2";
+> +
+> +					opp-164000000 {
+> +						opp-hz = /bits/ 64 <164000000>;
+> +						required-opps = <&rpmpd_opp_low_svs>;
+> +					};
+> +
+> +					opp-187500000 {
+> +						opp-hz = /bits/ 64 <187500000>;
+> +						required-opps = <&rpmpd_opp_svs>;
+> +					};
+> +				};
+> +			};
+> +
+> +			mdss_dsi0_phy: phy@5e94400 {
+> +				compatible = "qcom,sm6125-dsi-phy-14nm";
+> +				reg = <0x05e94400 0x100>,
+> +				      <0x05e94500 0x300>,
+> +				      <0x05e94800 0x188>;
+> +				reg-names = "dsi_phy",
+> +					    "dsi_phy_lane",
+> +					    "dsi_pll";
+> +
+> +				#clock-cells = <1>;
+> +				#phy-cells = <0>;
+> +
+> +				clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
+> +					 <&rpmcc RPM_SMD_XO_CLK_SRC>;
+> +				clock-names = "iface",
+> +					      "ref";
+> +
+> +				required-opps = <&rpmpd_opp_svs>;
+> +				power-domains = <&rpmpd SM6125_VDDMX>;
+> +
+> +				status = "disabled";
+> +			};
+> +		};
+> +
+>  		dispcc: clock-controller@5f00000 {
+>  			compatible = "qcom,sm6125-dispcc";
+>  			reg = <0x05f00000 0x20000>;
+>  			clocks = <&rpmcc RPM_SMD_XO_CLK_SRC>,
+> -				 <0>,
+> -				 <0>,
+> +				 <&mdss_dsi0_phy 0>,
+> +				 <&mdss_dsi0_phy 1>,
+>  				 <0>,
+>  				 <0>,
+>  				 <0>,
+> 
