@@ -2,83 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24253740209
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 19:20:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5D7A740211
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 19:22:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231363AbjF0RUi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 13:20:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47130 "EHLO
+        id S231366AbjF0RWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 13:22:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231146AbjF0RUg (ORCPT
+        with ESMTP id S230353AbjF0RW3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 13:20:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D249198;
-        Tue, 27 Jun 2023 10:20:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 85125611EE;
-        Tue, 27 Jun 2023 17:20:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E19DC433C9;
-        Tue, 27 Jun 2023 17:20:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687886433;
-        bh=yG+a22abZ9SzUNQMe+8vtxSHNs6hg3hQ7bJmtKEfq6g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hyU4+sm92oSYzUVPRTJlX+Fe8+ttP3U+br5Qu6kTbNbf5lZfR+LqFTbGiYEKIV8Q+
-         5RtK9Vqc8+8DspI54cUVWQ4w14eVSy2+Rv5XCiYaU6R+cA3pp+bjTUBvPBsuxG8/R+
-         5XDChTIqMS7+mQbhSiOPUMCfEr82Rp5khktKM6IqzLhSB7J7tunqkGu8E55EYQkF3+
-         mRES0K7flwKd7TMmFAgchyy7qWWCZpdIVYnU15tNXlY1LFxI8enQ8GdFiHvchx76Fp
-         B6X9WIMAwaBYF4kJZrpLfqjsBEN5q10onKUXCktEh8nnAM3zv8+2mKEcK5AetxE/4j
-         uk99KdZ6KzwgA==
-Date:   Tue, 27 Jun 2023 18:20:21 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        david@redhat.com, debug@rivosinc.com, szabolcs.nagy@arm.com,
-        torvalds@linux-foundation.org, Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>
-Subject: Re: [PATCH v9 28/42] x86/shstk: Add user-mode shadow stack support
-Message-ID: <76a87cdf-4d4f-4b3f-b01f-0540eab71ac7@sirena.org.uk>
-References: <20230613001108.3040476-1-rick.p.edgecombe@intel.com>
- <20230613001108.3040476-29-rick.p.edgecombe@intel.com>
+        Tue, 27 Jun 2023 13:22:29 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A3791722;
+        Tue, 27 Jun 2023 10:22:28 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 9A9DA320094F;
+        Tue, 27 Jun 2023 13:22:25 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Tue, 27 Jun 2023 13:22:26 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        invisiblethingslab.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1687886545; x=1687972945; bh=UGy1h7/yBoCL+NGQDbYT9sVoQM4JXCJ8XYZ
+        vW+aIHhY=; b=FN5HL4LiZK8BnmJSMpE/4/zQ5W/C8nfSKvARuC3qSq5gs0uzq2Z
+        oKV9lxM4Qc2b1v+0NeVUYTnghdAEqs4CVyQGuB1jdf+0VZaCdduxQhZ4Gx6gVyvX
+        nrZMzI5jwpenVLXlL7rUiKFvAE3hOZ3RRdGvt6ncXLcovTcTjHSKRz2LKL9P2/7T
+        7Xr8a9WA5fCeh3SZXwtC9NJUZTWdosp13qA+USMGIQrEuPVUfnxhqD7kPzIBSFKT
+        Pwuo/LrPxNLs84OiTDhQRE/oeqC/EmebfB9/3fiLV+gT/fdk6wb49Q2+Xz1z4EmL
+        kXE5p+sowB/15dDvqJOSWAkqoAfhZt8xwzQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1687886545; x=1687972945; bh=UGy1h7/yBoCL+
+        NGQDbYT9sVoQM4JXCJ8XYZvW+aIHhY=; b=RshzrOgydTM6POsx2gvl8qpFBzQY+
+        hfLxI4ngsrp2Yak8y0oehjzX17FaEp0rjXapJyK7rBuKeZTOM9SwLz4gxv4iLT+R
+        KCusRoBW2iXI72N3ec7O9LHmTFBMMfe44SwyRdhE604wBjlB/IsCq6hXXRGke+Lz
+        120dVvdIXTG5kE2F/+B3HFIgC6MWg7B1ziCvfaH/Uz/wawVnGI0MDyS3xqKSFdkR
+        fZz3tKU2JVa6GRV9jN82ECheBGOUOW8XhcmNh2SWTIH2A098spvle6YVeTQRS/sP
+        S2pQng0onjmgm2fdJic5bxsVEgTWttdIhw0z5sZ3NQIG6SAxXIOP9K8Eg==
+X-ME-Sender: <xms:0BqbZNWPtl-wKXZaPjE4XUHeZ242oq4VUzPEvCYHEeEuy1aQiZKaRg>
+    <xme:0BqbZNm3Rlwc-z13_al9lae6Fy8Or6tHvdaSRPPdqTwNXmE2Rt_AJ8OoR7IsMVdM8
+    qSQnu2ERAeBzc8>
+X-ME-Received: <xmr:0BqbZJaVtXTex6eRhKx5jBdthxmtvhutulvaS0YjQaVRKiS7lsqGbVxkW9ak-PFUpucBlgD051m48jPwTd8_2nGZVvTul2bapyoaUUDnlQE-QMd5Uw0g6PYvC_0Zv-ef>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrtddtgdeilecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpeffvghmihcuofgr
+    rhhivgcuqfgsvghnohhurhcuoeguvghmihesihhnvhhishhisghlvghthhhinhhgshhlrg
+    gsrdgtohhmqeenucggtffrrghtthgvrhhnpedvfeegkedvkefgffegkefhieejtdffkeeh
+    hfelheefjeeutefgleeggfdtveeileenucevlhhushhtvghrufhiiigvpedtnecurfgrrh
+    grmhepmhgrihhlfhhrohhmpeguvghmihesihhnvhhishhisghlvghthhhinhhgshhlrggs
+    rdgtohhm
+X-ME-Proxy: <xmx:0BqbZAXh4BTNSx8-fzHghPNpT61SOp_hrw5whh7nPGZdJhBVbpj0-w>
+    <xmx:0BqbZHkRyvBow9XrbrvMgjrw9gwhv3vlfQ-als92-4W1XPyJ4mquaQ>
+    <xmx:0BqbZNfCLpxQBVHWFO7_4bmnfkSA_4OWbQrb97BtCqMcCjBd9giElw>
+    <xmx:0RqbZFaUa3I26k-x-M1RNsSxFhR3V2fTY9PF-hnkzAxNKm226puxrQ>
+Feedback-ID: iac594737:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 27 Jun 2023 13:22:24 -0400 (EDT)
+From:   Demi Marie Obenour <demi@invisiblethingslab.com>
+To:     Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Jan Beulich <JBeulich@suse.com>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
+Cc:     Demi Marie Obenour <demi@invisiblethingslab.com>,
+        Xen developer discussion <xen-devel@lists.xenproject.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        stable@vger.kernel.org
+Subject: [PATCH v3] xen: speed up grant-table reclaim
+Date:   Tue, 27 Jun 2023 13:22:14 -0400
+Message-ID: <20230627172216.1359-1-demi@invisiblethingslab.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5kInKYAEl4EdyhTr"
-Content-Disposition: inline
-In-Reply-To: <20230613001108.3040476-29-rick.p.edgecombe@intel.com>
-X-Cookie: Money is the root of all wealth.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,48 +89,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+When a grant entry is still in use by the remote domain, Linux must put
+it on a deferred list.  Normally, this list is very short, because
+the PV network and block protocols expect the backend to unmap the grant
+first.  However, Qubes OS's GUI protocol is subject to the constraints
+of the X Window System, and as such winds up with the frontend unmapping
+the window first.  As a result, the list can grow very large, resulting
+in a massive memory leak and eventual VM freeze.
 
---5kInKYAEl4EdyhTr
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+To partially solve this problem, make the number of entries that the VM
+will attempt to free at each iteration tunable.  The default is still
+10, but it can be overridden at compile-time (via Kconfig), boot-time
+(via a kernel command-line option), or runtime (via sysfs).
 
-On Mon, Jun 12, 2023 at 05:10:54PM -0700, Rick Edgecombe wrote:
+This is Cc: stable because (when combined with appropriate userspace
+changes) it fixes a severe performance and stability problem for Qubes
+OS users.
 
-> +static void unmap_shadow_stack(u64 base, u64 size)
-> +{
-> +	while (1) {
-> +		int r;
-> +
-> +		r = vm_munmap(base, size);
-> +
-> +		/*
-> +		 * vm_munmap() returns -EINTR when mmap_lock is held by
-> +		 * something else, and that lock should not be held for a
-> +		 * long time.  Retry it for the case.
-> +		 */
-> +		if (r == -EINTR) {
-> +			cond_resched();
-> +			continue;
-> +		}
+Cc: stable@vger.kernel.org
+Signed-off-by: Demi Marie Obenour <demi@invisiblethingslab.com>
+---
+ drivers/xen/grant-table.c | 40 ++++++++++++++++++++++++++++-----------
+ 1 file changed, 29 insertions(+), 11 deletions(-)
 
-This looks generic, not even shadow stack specific - was there any
-discussion of making it a vm_munmap_retry() (that's not a great name...)
-or similar?  I didn't see any in old versions of the thread but I
-might've missed something.
+Changes since v2:
+- use atomic_inc_return(x) and atomic_dec_return(x) instead of
+  atomic_add_return(1, x) and atomic_sub_return(1, x) respectively.
+- move module_param macro closer to the definition of
+  free_per_iteration.
+- add blank line between declarations and statements.
 
---5kInKYAEl4EdyhTr
-Content-Type: application/pgp-signature; name="signature.asc"
+Changes since v1:
+- drop setting default via Kconfig
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSbGlUACgkQJNaLcl1U
-h9BqNQf9HqQNIAUg29S+cA0RcGv/d0uACrgRR/Ug+8CHXDUGAdslLvPRGSp8km6O
-OA3sMI3JNRbsr4+QP5B8PduPbTiiePjlyNOfMrxz2oSChLugzh8gH+q7a4GtFc+T
-1AsfYswcEu8GMSy7zWw//Wq8JPfNX51jxYggMohGwEtFjgZmvT1RZAaKyZwf3UKd
-kYYChaAWrKWCe9lREGDuscGs1Udhg5nbpLJMgcKNDuBTJRn5UUZoMNY84TvuvNqm
-hy/IpJZ8m7d/utTLzzbJS3nPy6oQoFIo2riYi2hCRNZPtDvjko8UJ9uNJCbZOp3i
-gswqwIVtf/sJIXp0+Zi+a0WuiSOwdg==
-=nPJT
------END PGP SIGNATURE-----
-
---5kInKYAEl4EdyhTr--
+diff --git a/drivers/xen/grant-table.c b/drivers/xen/grant-table.c
+index e1ec725c2819d4d5dede063eb00d86a6d52944c0..f13c3b76ad1eb7110e2a2981e9fa4e504174e431 100644
+--- a/drivers/xen/grant-table.c
++++ b/drivers/xen/grant-table.c
+@@ -498,14 +498,21 @@ static LIST_HEAD(deferred_list);
+ static void gnttab_handle_deferred(struct timer_list *);
+ static DEFINE_TIMER(deferred_timer, gnttab_handle_deferred);
+ 
++static atomic64_t deferred_count;
++static atomic64_t leaked_count;
++static unsigned int free_per_iteration = 10;
++module_param(free_per_iteration, uint, 0600);
++
+ static void gnttab_handle_deferred(struct timer_list *unused)
+ {
+-	unsigned int nr = 10;
++	unsigned int nr = READ_ONCE(free_per_iteration);
++	const bool ignore_limit = nr == 0;
+ 	struct deferred_entry *first = NULL;
+ 	unsigned long flags;
++	size_t freed = 0;
+ 
+ 	spin_lock_irqsave(&gnttab_list_lock, flags);
+-	while (nr--) {
++	while ((ignore_limit || nr--) && !list_empty(&deferred_list)) {
+ 		struct deferred_entry *entry
+ 			= list_first_entry(&deferred_list,
+ 					   struct deferred_entry, list);
+@@ -515,10 +522,14 @@ static void gnttab_handle_deferred(struct timer_list *unused)
+ 		list_del(&entry->list);
+ 		spin_unlock_irqrestore(&gnttab_list_lock, flags);
+ 		if (_gnttab_end_foreign_access_ref(entry->ref)) {
++			uint64_t ret = atomic64_dec_return(&deferred_count);
++
+ 			put_free_entry(entry->ref);
+-			pr_debug("freeing g.e. %#x (pfn %#lx)\n",
+-				 entry->ref, page_to_pfn(entry->page));
++			pr_debug("freeing g.e. %#x (pfn %#lx), %llu remaining\n",
++				 entry->ref, page_to_pfn(entry->page),
++				 (unsigned long long)ret);
+ 			put_page(entry->page);
++			freed++;
+ 			kfree(entry);
+ 			entry = NULL;
+ 		} else {
+@@ -530,21 +541,22 @@ static void gnttab_handle_deferred(struct timer_list *unused)
+ 		spin_lock_irqsave(&gnttab_list_lock, flags);
+ 		if (entry)
+ 			list_add_tail(&entry->list, &deferred_list);
+-		else if (list_empty(&deferred_list))
+-			break;
+ 	}
+-	if (!list_empty(&deferred_list) && !timer_pending(&deferred_timer)) {
++	if (list_empty(&deferred_list))
++		WARN_ON(atomic64_read(&deferred_count));
++	else if (!timer_pending(&deferred_timer)) {
+ 		deferred_timer.expires = jiffies + HZ;
+ 		add_timer(&deferred_timer);
+ 	}
+ 	spin_unlock_irqrestore(&gnttab_list_lock, flags);
++	pr_debug("Freed %zu references", freed);
+ }
+ 
+ static void gnttab_add_deferred(grant_ref_t ref, struct page *page)
+ {
+ 	struct deferred_entry *entry;
+ 	gfp_t gfp = (in_atomic() || irqs_disabled()) ? GFP_ATOMIC : GFP_KERNEL;
+-	const char *what = KERN_WARNING "leaking";
++	uint64_t leaked, deferred;
+ 
+ 	entry = kmalloc(sizeof(*entry), gfp);
+ 	if (!page) {
+@@ -567,10 +579,16 @@ static void gnttab_add_deferred(grant_ref_t ref, struct page *page)
+ 			add_timer(&deferred_timer);
+ 		}
+ 		spin_unlock_irqrestore(&gnttab_list_lock, flags);
+-		what = KERN_DEBUG "deferring";
++		deferred = atomic64_inc_return(&deferred_count);
++		leaked = atomic64_read(&leaked_count);
++		pr_debug("deferring g.e. %#x (pfn %#lx) (total deferred %llu, total leaked %llu)\n",
++			 ref, page ? page_to_pfn(page) : -1, deferred, leaked);
++	} else {
++		deferred = atomic64_read(&deferred_count);
++		leaked = atomic64_inc_return(&leaked_count);
++		pr_warn("leaking g.e. %#x (pfn %#lx) (total deferred %llu, total leaked %llu)\n",
++			ref, page ? page_to_pfn(page) : -1, deferred, leaked);
+ 	}
+-	printk("%s g.e. %#x (pfn %#lx)\n",
+-	       what, ref, page ? page_to_pfn(page) : -1);
+ }
+ 
+ int gnttab_try_end_foreign_access(grant_ref_t ref)
+-- 
+Sincerely,
+Demi Marie Obenour (she/her/hers)
+Invisible Things Lab
