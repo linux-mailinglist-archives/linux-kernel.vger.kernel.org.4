@@ -2,71 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B47173F484
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 08:28:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66EDD73F485
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 08:28:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230271AbjF0G2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 02:28:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35662 "EHLO
+        id S229623AbjF0G2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 02:28:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230167AbjF0G2A (ORCPT
+        with ESMTP id S230355AbjF0G2a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 02:28:00 -0400
-Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE5E6E5F;
-        Mon, 26 Jun 2023 23:27:57 -0700 (PDT)
-Received: by mail-vk1-xa2d.google.com with SMTP id 71dfb90a1353d-47193e20887so1437967e0c.3;
-        Mon, 26 Jun 2023 23:27:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687847277; x=1690439277;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gF8aIuRYtNs3jc1wnHqRPI29mBVuzl+wPTZVNGx3iDA=;
-        b=N/rhcDEqiqMw327Eu9TXoay0oLfU1pTvA42z8+pNh5liF4riVKNuvSS0ZmhJfDDCFf
-         DrC5XQK6cF6C4Km8BWn3QeU2Oz5LSEIgde7UbzCpxrOObIAAzx/CV6ucyhnJxq6u3nHL
-         KQi9rPqOAK8m/X9/PWpDAyW2ikzI7jbTY0UeJuYvmX2b8NSoNXpwIHPxjR3liGO54uzq
-         LGMZ+bttssX3b9DlOJJIwj3uhwDgjRHW+Rd6D0wYhwwdFOg9WuZiSDmHsyo4DzffMbJ2
-         USL/BBbaobw1IyioMGcu7Y6KLzOgeECPRwXcUUnP0AWLy2r4Bm0bzksx81TQXQZ8mruk
-         RcXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687847277; x=1690439277;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gF8aIuRYtNs3jc1wnHqRPI29mBVuzl+wPTZVNGx3iDA=;
-        b=QLnfAgiCJWuDirW2NagBbDOX3h0igbko+Ri0CDD5ktFYyalNYlZIxDrHnFFmILweUG
-         00uxcjlz9BixPV7MRD0VOPHS5sviQOvsFCW3rwNGafafukQDSp0Ms1oQgJaPjTKAyNku
-         QmMOmsoi5gxHJha1k5Ojsqae2b57GFfuH8aaRTqwGCL6JGdiZhhBOVtYWOqnpUxxP51/
-         N4+ogmf6NKbtnv5p47JyAgAzUiHtE3ugNGzZWOjCvMREn/3R5appA/JrFBCG+G9UzX/S
-         iC3/NQvNXPqJLVSey+G1eUcIJnjW2q4uD9sWMRHug56X1WDjxLtCicJCIKXq6+ETSyMw
-         ucgg==
-X-Gm-Message-State: AC+VfDwgBjW0JBcpNt+5+MAKhOuMs0FFuh0EnBDr/RH5xun+Kr+q5pNE
-        zYLsVd5Tz5OhnhTPaH/UcDJ37jpxCJu6UXMmGMvSMDWkysI=
-X-Google-Smtp-Source: ACHHUZ4JZ3EivcEs/4+W31dFvfZRYQLbKMKcAqiPTVbFRU+UuPfL6AHx4mSpodqp32hk4fn+En6D8s496ISPgcj93eA=
-X-Received: by 2002:a67:fe93:0:b0:440:c9cd:364c with SMTP id
- b19-20020a67fe93000000b00440c9cd364cmr10240052vsr.13.1687847276916; Mon, 26
- Jun 2023 23:27:56 -0700 (PDT)
+        Tue, 27 Jun 2023 02:28:30 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FBBE2117
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 23:28:27 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id B80F31F8B6;
+        Tue, 27 Jun 2023 06:28:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1687847305; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=z6YA6fL2joJ0ClnNKexgdl9gAy80OqHyknDXy5To9p4=;
+        b=uGtApQVu0dfKXKjxe0gwObmVprQXHVApCJ4elryKMNlC5ZUHh3Abo1t4vi+56HdQPFagBd
+        VrvI3lbXk3n3Dqe380ebtgBlFUYQoXNPP5HStBM2saLhf50XXvTR8Mu4DABfBpOpegqIEu
+        KgsE4a7BsgTAqK5VoPN/J57jcHiSrWs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1687847305;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=z6YA6fL2joJ0ClnNKexgdl9gAy80OqHyknDXy5To9p4=;
+        b=n5E2xF4mbQsbDk4XDfxofqz8E4o1JAU6hpvQ21+R7lFWd5EQtlQ04QXLDEkBeZ9wM8rGxq
+        duTNEpqum5uS9RCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9A85C13276;
+        Tue, 27 Jun 2023 06:28:25 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id LwIQJYmBmmSPfQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 27 Jun 2023 06:28:25 +0000
+Message-ID: <074fc253-beb4-f7be-14a1-ee5f4745c15b@suse.cz>
+Date:   Tue, 27 Jun 2023 08:28:25 +0200
 MIME-Version: 1.0
-References: <CAOQ4uxj_DLm8_stRJPR7i8bp9aJ5VtjzWqHL2egCTKe3M-6KSw@mail.gmail.com>
- <raezzuhjjoddoc5tsln2bg3rkudczwou4jjfq6noeawrtn6jre@uvf4rikifzpx>
-In-Reply-To: <raezzuhjjoddoc5tsln2bg3rkudczwou4jjfq6noeawrtn6jre@uvf4rikifzpx>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Tue, 27 Jun 2023 09:27:45 +0300
-Message-ID: <CAOQ4uxiFPw-Os+Beo+F8wA1Ebc_28gTQawjob-U6PcVCwte_rg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] splice: fsnotify_modify(fd) in vmsplice
-To:     =?UTF-8?Q?Ahelenia_Ziemia=C5=84ska?= 
-        <nabijaczleweli@nabijaczleweli.xyz>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jan Kara <jack@suse.cz>,
-        Chung-Chiang Cheng <cccheng@synology.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] mm/mprotect: allow unfaulted VMAs to be unaccounted on
+ mprotect()
+Content-Language: en-US
+To:     Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>
+References: <20230626204612.106165-1-lstoakes@gmail.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20230626204612.106165-1-lstoakes@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,39 +78,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 2:09=E2=80=AFAM Ahelenia Ziemia=C5=84ska
-<nabijaczleweli@nabijaczleweli.xyz> wrote:
->
-> Same logic applies here: this can fill up the pipe and pollers that rely
-> on getting IN_MODIFY notifications never wake up.
->
-> Fixes: 983652c69199 ("splice: report related fsnotify events")
-> Link: https://lore.kernel.org/linux-fsdevel/jbyihkyk5dtaohdwjyivambb2gffy=
-js3dodpofafnkkunxq7bu@jngkdxx65pux/t/#u
-> Signed-off-by: Ahelenia Ziemia=C5=84ska <nabijaczleweli@nabijaczleweli.xy=
-z>
+On 6/26/23 22:46, Lorenzo Stoakes wrote:
+> When mprotect() is used to make unwritable VMAs writable, they have the
+> VM_ACCOUNT flag applied and memory accounted accordingly.
+> 
+> If the VMA has had no pages faulted in and is then made unwritable once
+> again, it will remain accounted for, despite not being capable of extending
+> memory usage.
+> 
+> Consider:-
+> 
+> ptr = mmap(NULL, page_size * 3, PROT_READ, MAP_ANON | MAP_PRIVATE, -1, 0);
+> mprotect(ptr + page_size, page_size, PROT_READ | PROT_WRITE);
+> mprotect(ptr + page_size, page_size, PROT_READ);
+
+In the original Mike's example there were actual pages populated, in that
+case we still won't merge the vma's, right? Guess that can't be helped.
+
+> The first mprotect() splits the range into 3 VMAs and the second fails to
+> merge the three as the middle VMA has VM_ACCOUNT set and the others do not,
+> rendering them unmergeable.
+> 
+> This is unnecessary, since no pages have actually been allocated and the
+> middle VMA is not capable of utilising more memory, thereby introducing
+> unnecessary VMA fragmentation (and accounting for more memory than is
+> necessary).
+> 
+> Since we cannot efficiently determine which pages map to an anonymous VMA,
+> we have to be very conservative - determining whether any pages at all have
+> been faulted in, by checking whether vma->anon_vma is NULL.
+> 
+> We can see that the lack of anon_vma implies that no anonymous pages are
+> present as evidenced by vma_needs_copy() utilising this on fork to
+> determine whether page tables need to be copied.
+> 
+> The only place where anon_vma is set NULL explicitly is on fork with
+> VM_WIPEONFORK set, however since this flag is intended to cause the child
+> process to not CoW on a given memory range, it is right to interpret this
+> as indicating the VMA has no faulted-in anonymous memory mapped.
+> 
+> If the VMA was forked without VM_WIPEONFORK set, then anon_vma_fork() will
+> have ensured that a new anon_vma is assigned (and correctly related to its
+> parent anon_vma) should any pages be CoW-mapped.
+> 
+> The overall operation is safe against races as we hold a write lock against
+> mm->mmap_lock.
+> 
+> If we could efficiently look up the VMA's faulted-in pages then we would
+> unaccount all those pages not yet faulted in. However as the original
+> comment alludes this simply isn't currently possible, so we remain
+> conservative and account all pages or none at all.
+> 
+> Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
+
+So in practice programs will likely do the PROT_WRITE in order to actually
+populate the area, so this won't trigger as I commented above. But it can
+still help in some cases and is cheap to do, so:
+
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
+
 > ---
->  fs/splice.c | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/fs/splice.c b/fs/splice.c
-> index 94fae24f9d54..a18274209dc1 100644
-> --- a/fs/splice.c
-> +++ b/fs/splice.c
-> @@ -1447,6 +1447,9 @@ SYSCALL_DEFINE4(vmsplice, int, fd, const struct iov=
-ec __user *, uiov,
->         else
->                 error =3D vmsplice_to_user(f.file, &iter, flags);
->
-> +       if (error > 0)
-> +               fsnotify_modify(f.file);
+>  mm/mprotect.c | 13 +++++++++++--
+>  1 file changed, 11 insertions(+), 2 deletions(-)
+> 
+> diff --git a/mm/mprotect.c b/mm/mprotect.c
+> index 6f658d483704..9461c936082b 100644
+> --- a/mm/mprotect.c
+> +++ b/mm/mprotect.c
+> @@ -607,8 +607,11 @@ mprotect_fixup(struct vma_iterator *vmi, struct mmu_gather *tlb,
+>  	/*
+>  	 * If we make a private mapping writable we increase our commit;
+>  	 * but (without finer accounting) cannot reduce our commit if we
+> -	 * make it unwritable again. hugetlb mapping were accounted for
+> -	 * even if read-only so there is no need to account for them here
+> +	 * make it unwritable again except in the anonymous case where no
+> +	 * anon_vma has yet been assigned.
+> +	 *
+> +	 * hugetlb mapping were accounted for even if read-only so there is
+> +	 * no need to account for them here.
+>  	 */
+>  	if (newflags & VM_WRITE) {
+>  		/* Check space limits when area turns into data. */
+> @@ -622,6 +625,9 @@ mprotect_fixup(struct vma_iterator *vmi, struct mmu_gather *tlb,
+>  				return -ENOMEM;
+>  			newflags |= VM_ACCOUNT;
+>  		}
+> +	} else if ((oldflags & VM_ACCOUNT) && vma_is_anonymous(vma) &&
+> +		   !vma->anon_vma) {
+> +		newflags &= ~VM_ACCOUNT;
+>  	}
+>  
+>  	/*
+> @@ -652,6 +658,9 @@ mprotect_fixup(struct vma_iterator *vmi, struct mmu_gather *tlb,
+>  	}
+>  
+>  success:
+> +	if ((oldflags & VM_ACCOUNT) && !(newflags & VM_ACCOUNT))
+> +		vm_unacct_memory(nrpages);
 > +
+>  	/*
+>  	 * vm_flags and vm_page_prot are protected by the mmap_lock
+>  	 * held in write mode.
 
-Wow, that is a twisted syscall, it does either write or read on the pipe
-depending on whether it was open for read or write.
-
-so you need to move fsnotify_modify() into vmsplice_to_pipe() and
-add fsnotify_access() to vmsplice_to_user().
-
-Thanks,
-Amir.
