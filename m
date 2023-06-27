@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E1017406C3
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 01:10:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4732C7406C5
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 01:10:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230363AbjF0XKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 19:10:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39018 "EHLO
+        id S230401AbjF0XK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 19:10:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230311AbjF0XKR (ORCPT
+        with ESMTP id S230331AbjF0XKT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 19:10:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A64F297C
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 16:10:15 -0700 (PDT)
+        Tue, 27 Jun 2023 19:10:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CA0D294A
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 16:10:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 670586123D
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 23:10:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 38753C433CC;
-        Tue, 27 Jun 2023 23:10:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A19C61239
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 23:10:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7FE2FC433C8;
+        Tue, 27 Jun 2023 23:10:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687907415;
-        bh=yng0FmqgKRoBmPf/eooWitt8N2NyVf7Z939LZHz7L4M=;
+        s=k20201202; t=1687907417;
+        bh=hVCHUpOlEoxqwmxafSXGLFkBksh6GMy+hjOQjrGKxaA=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=jk2JGaIBYH30CQ8nYzHdI8GQNE4FsBYyS7QRDWce5o2xbnJbFJcj23X+c7ZIi3RS/
-         ncABrrLEpfjFG0bzz4lcbefVQSLQuMv+yQ0oek6+vL++P/AOAuHZILmRRYuqSZ2Ogr
-         fgkL362nzZy/2S68s+OExOpbOyXDPawH/tFma4rWyANykcbYqlK32Sk6aBphQJ8vxM
-         V8wi7nX6lKsX1W5M7cnIlh2N+UBrdfpAOmRKdogZd/quUfQGgCM53mv8ihoXp6rzSG
-         CNK+w6zOqUihHd2HbHlnMGKyoJwYaiPgrQHlUuvQraKDzS5AZuDSbkteqrIYeB3C9J
-         lTZWDfwOkhSJQ==
+        b=BgtBaukGQmymLrFGCN4p71oIXWzS+/pWezypnwZenfcxJ9Udc6clfpKFDjt+sYfFs
+         aRlCrfGybqV7yJEd2mZTVKaCnx8gKLAXINhYUyocdVp+xRZtVLBgjnl+5jxU3UHFso
+         XtmIlYuIQ32Q55/K8p207RvBhpN6i7QWF4ZxAoutuARu2FQVM9pCCKUkPGM0ezyLSM
+         Cs0ncNi8SNR0cvghwTA/b1SVbQeXSkRUS/127mSBoMn+aaHRdXu2TnzUmd/5YmgH0a
+         VyHFR8/75KLDp5sUMEO4gPGdgXnAfcclWp1fUUrrBY6O6XSr3pz379mstbBR4AXtvC
+         DS63EeQZaHCtQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0D412E5380A;
-        Tue, 27 Jun 2023 23:10:15 +0000 (UTC)
-Subject: Re: [GIT PULL] xen: branch for v6.5-rc1
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6CC45E53807;
+        Tue, 27 Jun 2023 23:10:17 +0000 (UTC)
+Subject: Re: [PULL 00/18] xtensa updates for v6.5
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230627060906.14981-1-jgross@suse.com>
-References: <20230627060906.14981-1-jgross@suse.com>
-X-PR-Tracked-List-Id: Xen developer discussion <xen-devel.lists.xenproject.org>
-X-PR-Tracked-Message-Id: <20230627060906.14981-1-jgross@suse.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/xen/tip.git for-linus-6.5-rc1-tag
-X-PR-Tracked-Commit-Id: fb9b7b4b2b82d72031bff6d615215c1c74064bb3
+In-Reply-To: <20230627105451.803122-1-jcmvbkbc@gmail.com>
+References: <20230627105451.803122-1-jcmvbkbc@gmail.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20230627105451.803122-1-jcmvbkbc@gmail.com>
+X-PR-Tracked-Remote: https://github.com/jcmvbkbc/linux-xtensa.git tags/xtensa-20230627
+X-PR-Tracked-Commit-Id: f7667ca106df50ff8b776db54f85074dc9c52e1b
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 18eb3b6dff007f2e4ef4f0d8567dfb5cdb6086fc
-Message-Id: <168790741504.21322.17901076437712757797.pr-tracker-bot@kernel.org>
-Date:   Tue, 27 Jun 2023 23:10:15 +0000
-To:     Juergen Gross <jgross@suse.com>
-Cc:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        xen-devel@lists.xenproject.org, sstabellini@kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-PR-Merge-Commit-Id: 8d8026f376c8e46cc90c59de91256d8ee4322ad8
+Message-Id: <168790741743.21322.13459979108280112690.pr-tracker-bot@kernel.org>
+Date:   Tue, 27 Jun 2023 23:10:17 +0000
+To:     Max Filippov <jcmvbkbc@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,12 +63,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Tue, 27 Jun 2023 08:09:06 +0200:
+The pull request you sent on Tue, 27 Jun 2023 03:54:51 -0700:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/xen/tip.git for-linus-6.5-rc1-tag
+> https://github.com/jcmvbkbc/linux-xtensa.git tags/xtensa-20230627
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/18eb3b6dff007f2e4ef4f0d8567dfb5cdb6086fc
+https://git.kernel.org/torvalds/c/8d8026f376c8e46cc90c59de91256d8ee4322ad8
 
 Thank you!
 
