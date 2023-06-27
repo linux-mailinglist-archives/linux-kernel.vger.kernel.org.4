@@ -2,123 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3425173F3BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 06:50:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD7B973F3AF
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 06:47:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229748AbjF0EuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 00:50:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41498 "EHLO
+        id S230444AbjF0Eq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 00:46:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230272AbjF0Et0 (ORCPT
+        with ESMTP id S230326AbjF0EqL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 00:49:26 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 553F8DA;
-        Mon, 26 Jun 2023 21:49:24 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 6EDAF5FD20;
-        Tue, 27 Jun 2023 07:49:22 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1687841362;
-        bh=V807p3ZyYW7VozU/hpm/pDn0fspIsaxrEAjOe0RwcXk=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=YNLyR48lXTdxN1pDrPjV7DNMvfCrYTN7MclDPWLqdkk/m3+LfLc4i4/xjX0V6m9G4
-         wQ6uf4Q+DqBk1FDaP45d6R7Y1tzGkF1467alGW+UY+NvnROGMnECphGRuQNCRjydWd
-         +oDEED9WCO1fublh89dQHpLQWa0M/PD9WKJ6TN//u1vcavWa6O/Pf3uSraUgE8tdIP
-         sj1dXj5h9wYRk6CPTSr8UKoi0opVFOAjQ3isBy5NdxhknX1v/YgKdd8F0pAkk9O2vj
-         UJDvZOo+P3wMVZBdck49q4BaqdjUCJH3Rcnf0F116cIj4Sm2VtU23+jMfml7auhOwN
-         syGCbNO81yBTA==
-Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Tue, 27 Jun 2023 07:49:22 +0300 (MSK)
-Message-ID: <94a133e5-a180-a9b5-91cb-c0ca44af35ea@sberdevices.ru>
-Date:   Tue, 27 Jun 2023 07:44:25 +0300
+        Tue, 27 Jun 2023 00:46:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA51F1718;
+        Mon, 26 Jun 2023 21:45:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4BC1C60DB7;
+        Tue, 27 Jun 2023 04:45:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C320DC433C0;
+        Tue, 27 Jun 2023 04:45:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687841140;
+        bh=ucn6HRgtgdO1FP92IX0w0I9MwtEw6R0qU4AqPCXSKg8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=SSBl11VixydpZ6zBAm7jwaZhhuM4bHk/UzNt1UOzzbj03gC5Nq77bwyBqIfXcjBnw
+         6HCALvPcIhNBf+LMdrSAIaXRKBwzz4pJ3CorLTcCBADVoOdS2GOqBZsdI0ZTmaqfxB
+         j40PNw9doeECWjz5jO26F7WOhDyTmPbC8pUW/NGeORc5XPOyCEajRbXY3iOigNvX3f
+         SukJqB/thOtnC0uF+edmjzye5EWCZA4f6gMQ7RJ5zuXqusirdsARlO/47HOMaaLxht
+         bpT5Qrw/VUZIJFLE0VD+pfwDRto4UFD+sE4E/Jya6ZW9gJ/lo3OUAzNTNGWNPedTnj
+         gEZbcmEHvh8+Q==
+Message-ID: <31ceba83-9d06-8fc6-4688-d568a698a4cc@kernel.org>
+Date:   Tue, 27 Jun 2023 13:45:38 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH v4 06/17] vsock: check error queue to set EPOLLERR
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] zonefs: do not use append if device does not support it
 Content-Language: en-US
-To:     Stefano Garzarella <sgarzare@redhat.com>
-CC:     Stefan Hajnoczi <stefanha@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel@sberdevices.ru>, <oxffffaa@gmail.com>
-References: <20230603204939.1598818-1-AVKrasnov@sberdevices.ru>
- <20230603204939.1598818-7-AVKrasnov@sberdevices.ru>
- <rg3qxgiqqi5ltt4jcf3k5tcnynh2so5ascvrte4gywcfffusv4@qjz3tkumeq7g>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-In-Reply-To: <rg3qxgiqqi5ltt4jcf3k5tcnynh2so5ascvrte4gywcfffusv4@qjz3tkumeq7g>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [100.64.160.123]
-X-ClientProxiedBy: p-i-exch-sc-m02.sberdevices.ru (172.16.192.103) To
- p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/06/27 02:11:00 #21585463
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Christoph Hellwig <hch@infradead.org>,
+        Andreas Hindborg <nmi@metaspace.dk>
+Cc:     "open list:ZONEFS FILESYSTEM" <linux-fsdevel@vger.kernel.org>,
+        gost.dev@samsung.com, Andreas Hindborg <a.hindborg@samsung.com>,
+        Naohiro Aota <naohiro.aota@wdc.com>,
+        Johannes Thumshirn <jth@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230626164752.1098394-1-nmi@metaspace.dk>
+ <ZJpbUShJUL788r7u@infradead.org>
+From:   Damien Le Moal <dlemoal@kernel.org>
+Organization: Western Digital Research
+In-Reply-To: <ZJpbUShJUL788r7u@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 26.06.2023 19:04, Stefano Garzarella wrote:
-> On Sat, Jun 03, 2023 at 11:49:28PM +0300, Arseniy Krasnov wrote:
->> If socket's error queue is not empty, EPOLLERR must be set. Otherwise,
->> reader of error queue won't detect data in it using EPOLLERR bit.
+On 6/27/23 12:45, Christoph Hellwig wrote:
+> On Mon, Jun 26, 2023 at 06:47:52PM +0200, Andreas Hindborg wrote:
+>> From: "Andreas Hindborg (Samsung)" <nmi@metaspace.dk>
 >>
->> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->> ---
->> net/vmw_vsock/af_vsock.c | 2 +-
->> 1 file changed, 1 insertion(+), 1 deletion(-)
+>> Zonefs will try to use `zonefs_file_dio_append()` for direct sync writes even if
+>> device `max_zone_append_sectors` is zero. This will cause the IO to fail as the
+>> io vector is truncated to zero. It also causes a call to
+>> `invalidate_inode_pages2_range()` with end set to UINT_MAX, which is probably
+>> not intentional. Thus, do not use append when device does not support it.
 > 
-> This patch looks like it can go even without this series.
-> 
-> Is it a fix? Should we add a fixes tag?
+> How do you even manage to hit this code?  Zone Append is a mandatory
+> feature and driver need to check it is available.
 
-Yes, it is fix and I can exclude it from this set to reduce number
-of patches, but there is no reproducer for this without MSG_ZEROCOPY
-support - at this moment this feature is the only user of error queue
-for AF_VSOCK.
+ublk driver probably is missing that check ? I have not looked at the code for
+zone support.
 
-Thanks, Arseniy
+But thinking of it, we probably would be better off having a generic check for
+"q->limits.max_zone_append_sectors != 0" in blk_revalidate_disk_zones().
 
-> 
-> Thanks,
-> Stefano
-> 
->>
->> diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
->> index efb8a0937a13..45fd20c4ed50 100644
->> --- a/net/vmw_vsock/af_vsock.c
->> +++ b/net/vmw_vsock/af_vsock.c
->> @@ -1030,7 +1030,7 @@ static __poll_t vsock_poll(struct file *file, struct socket *sock,
->>     poll_wait(file, sk_sleep(sk), wait);
->>     mask = 0;
->>
->> -    if (sk->sk_err)
->> +    if (sk->sk_err || !skb_queue_empty_lockless(&sk->sk_error_queue))
->>         /* Signify that there has been an error on this socket. */
->>         mask |= EPOLLERR;
->>
->> -- 
->> 2.25.1
->>
-> 
+-- 
+Damien Le Moal
+Western Digital Research
+
