@@ -2,270 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D62337406EA
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 01:40:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3B677406EB
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 01:41:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229544AbjF0Xko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 19:40:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47342 "EHLO
+        id S230089AbjF0Xlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 19:41:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbjF0Xkl (ORCPT
+        with ESMTP id S229488AbjF0Xlk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 19:40:41 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 053B91BE8
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 16:40:40 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-c18ebcb4358so851759276.1
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 16:40:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687909239; x=1690501239;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4kuye64R7CBgMaDLN8lrGwuRN3UwBizDiiMMe3qOfNs=;
-        b=w2a09hsoYsqWjJZfst/OW9sXBfPahnHX/cWgIakOV2k6qiWr+xwcXv+48Psp0MdB7h
-         pWtuxdbaMR+4SpvqvL5EJg3La6QtBTU53baxWNEe3dZK2THfoiYJAPUfDlaa1rGHIMEU
-         0iSdqVDiIcK5u0PeOiwVAZiz9kyZcAMqquwY5IxB6FO3Qq5fw3HW8c2z9+Q+UWUc16yH
-         bNmzijXcKVcd++ArgJdpKKFH2Fo34xwnYv8KexmG9zqRQWc50d1mk2wqwZZODRQLD5AV
-         LNSiN7caGJfnfGVgsdWl3ieMhBYBbw2mJ9v1uzql/b4IdYSMnVZ46tYYK+dsEtDCsEzB
-         gAKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687909239; x=1690501239;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4kuye64R7CBgMaDLN8lrGwuRN3UwBizDiiMMe3qOfNs=;
-        b=IvCVK9buwUAF5Bm3ZAqm9HQTaXAfiUTAFF67JP9Hc4se128OySBKzBpgm51Y12XF7E
-         qYI/U9Y3MhaAYm1hZ5SHjhtJuKO1o5BFT+bdsxFnG626JVbQN6ENF9IeOzNBFxX6ySi9
-         S9OV3EF7yECMTLJM/Hc/39g8bK/hyr4shsv/5/O2J01nnp/0ju96WZX8P8W3N1sW5j0E
-         xh/QBZtxW5MeRZiU2eS7oxUtlPGFecE7nqJEOYikQekAWHFHi0ter/59nEGI8zLrd6VX
-         ySdAkvKtxvDEqASGIwjyaRSFEG8TBZCSUJBHMUFje1ST3ubtdHgIQXVGnPytsnZQraQh
-         mICg==
-X-Gm-Message-State: AC+VfDxwwvR5I8SVU62aapOjo3n2l0zOiiJ7fNMHGzimb2a4vDs6bzrz
-        Y8f0gDmfUPVYikVG1Fp6XU5AWYI2qYU=
-X-Google-Smtp-Source: ACHHUZ7P8T83Cz7R8MxciPORMXvY2UAqRBCq1v6MDgDX8mfPZvTPtzOqjLsAjWH0qufStJSnMXARuKU0mDM=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:e60e:0:b0:c1c:9553:d4f4 with SMTP id
- d14-20020a25e60e000000b00c1c9553d4f4mr4869992ybh.3.1687909239261; Tue, 27 Jun
- 2023 16:40:39 -0700 (PDT)
-Date:   Tue, 27 Jun 2023 16:40:37 -0700
-In-Reply-To: <20230606091842.13123-4-binbin.wu@linux.intel.com>
-Mime-Version: 1.0
-References: <20230606091842.13123-1-binbin.wu@linux.intel.com> <20230606091842.13123-4-binbin.wu@linux.intel.com>
-Message-ID: <ZJtzdftocuwTvp67@google.com>
-Subject: Re: [PATCH v9 3/6] KVM: x86: Virtualize CR3.LAM_{U48,U57}
-From:   Sean Christopherson <seanjc@google.com>
-To:     Binbin Wu <binbin.wu@linux.intel.com>, t@google.com
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pbonzini@redhat.com, chao.gao@intel.com, kai.huang@intel.com,
-        David.Laight@aculab.com, robert.hu@linux.intel.com
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Tue, 27 Jun 2023 19:41:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6446B1BE8
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 16:41:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ED3516121C
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 23:41:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58985C433C0;
+        Tue, 27 Jun 2023 23:41:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687909298;
+        bh=z1GvJ00vioZSiRR1ZOMBDf0vCKBMJUK0WdI5BOEKyqE=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=Qoq3/4aOvR1Agudfp3kFnBmCUjPOWezZ5961VI2989QztAU11hldcF7le97u+dp43
+         94aw6uGRtqSvMw+DtPjDodqiL1TscNfFpASks2/qIwNRXRUdYTyurfcZ8Y7MkiQiem
+         eknbZt+bh0+PFuDvMYHuiq5kgIWg4yAlvd71quLOHHglmFiy5DPhUG0ZlRBC+IAg5C
+         yG9kbbX/Oj7Uv+In/mYI82WS0cwQ4I52ApYc8T6RxYh6LVoy5oFwHNY66zEj7E590Q
+         eZIf6Z8b/I9GAOZq0g+LKm9DoAKb5jFCFnGAb8UzCq7h9v/6TwGocIYHPj7PVA8/v7
+         KeFrUa5k0OgOg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id F0D6CCE3A0D; Tue, 27 Jun 2023 16:41:37 -0700 (PDT)
+Date:   Tue, 27 Jun 2023 16:41:37 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Dinh Nguyen <dinguyen@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, linux@roeck-us.net,
+        vishal.moola@gmail.com, akpm@linux-foundation.org,
+        sfr@canb.auug.org.au
+Subject: Re: [PATCH] Revert "nios2: Convert __pte_free_tlb() to use ptdescs"
+Message-ID: <8a2707a4-04d3-4bcf-b1ee-9a2ef15886a0@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20230627221430.464073-1-dinguyen@kernel.org>
+ <CAHk-=wgh1CDUTJD+F_utKnbW6d=wApBMC4D8hMfOs15bAn23Bg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wgh1CDUTJD+F_utKnbW6d=wApBMC4D8hMfOs15bAn23Bg@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 06, 2023, Binbin Wu wrote:
-> Opportunistically use GENMASK_ULL() to define __PT_BASE_ADDR_MASK.
-
-This are not the type of changes to do opportunstically.   Opportunstic changes
-are things like fixing comment typos, dropping unnecessary semi-colons, fixing
-coding styles violations, etc.
-
-> Opportunistically use kvm_vcpu_is_legal_cr3() to check CR3 in SVM nested code,
-> to provide a clear distinction b/t CR3 and GPA checks.
-
-This *shouldn't* be an opportunsitic thing.  That you felt compelled to call it
-out is a symptom of this patch doing too much.
-
-In short, split this into three patches:
-
-  1. Do the __PT_BASE_ADDR_MASK() changes
-  2. Add and use kvm_vcpu_is_legal_cr3()
-  3. Add support for CR3.LAM bits
-
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Robert Hoo <robert.hu@linux.intel.com>
-> Co-developed-by: Binbin Wu <binbin.wu@linux.intel.com>
-> Signed-off-by: Binbin Wu <binbin.wu@linux.intel.com>
-> Tested-by: Xuelian Guo <xuelian.guo@intel.com>
-> Reviewed-by: Kai Huang <kai.huang@intel.com>
-> Reviewed-by: Chao Gao <chao.gao@intel.com>
-> ---
->  arch/x86/include/asm/kvm_host.h | 5 +++++
->  arch/x86/kvm/cpuid.h            | 5 +++++
->  arch/x86/kvm/mmu.h              | 5 +++++
->  arch/x86/kvm/mmu/mmu.c          | 8 +++++++-
->  arch/x86/kvm/mmu/mmu_internal.h | 1 +
->  arch/x86/kvm/mmu/paging_tmpl.h  | 3 ++-
->  arch/x86/kvm/mmu/spte.h         | 2 +-
->  arch/x86/kvm/svm/nested.c       | 4 ++--
->  arch/x86/kvm/vmx/nested.c       | 4 ++--
->  arch/x86/kvm/vmx/vmx.c          | 8 +++++++-
->  arch/x86/kvm/x86.c              | 4 ++--
->  11 files changed, 39 insertions(+), 10 deletions(-)
+On Tue, Jun 27, 2023 at 03:35:45PM -0700, Linus Torvalds wrote:
+> On Tue, 27 Jun 2023 at 15:14, Dinh Nguyen <dinguyen@kernel.org> wrote:
+> >
+> > This reverts commit 6ebe94baa2b9ddf3ccbb7f94df6ab26234532734.
+> >
+> > The patch "nios2: Convert __pte_free_tlb() to use ptdescs" was supposed
+> > to go together with a patchset that Vishal Moola had planned taking it
+> > through the mm tree. By just having this patch, all NIOS2 builds are
+> > broken.
 > 
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index c6f03d151c31..46471dd9cc1b 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -727,6 +727,11 @@ struct kvm_vcpu_arch {
->  	unsigned long cr0_guest_owned_bits;
->  	unsigned long cr2;
->  	unsigned long cr3;
-> +	/*
-> +	 * CR3 non-address feature control bits.
-> +	 * Guest CR3 may contain any of those bits at runtime.
-> +	 */
-> +	u64 cr3_ctrl_bits;
+> This is now at least the third time just this merge window where some
+> base tree was broken, and people thought that linux-next is some kind
+> of testing ground for it all.
+> 
+> NO!
+> 
+> Linux-next is indeed for testing, and for finding situations where
+> there are interactions between different trees.
+> 
+> But linux-next is *not* a replacement for "this tree has to work on
+> its own". THAT testing needs to be done independently, and *before* a
+> tree hits linux-next.
+> 
+> It is *NOT* ok to say "this will work in combination with that other
+> tree". EVERY SINGLE TREE needs to work on its own, because otherwise
+> you cannot bisect the end result sanely.
+> 
+> We apparently had the NIOS2 tree being broken. And the RCU tree was
+> broken. And the KUnit tree was broken.
+> 
+> In all those cases, the base tree did not compile properly on its own,
+> and linux-next "magically fixed" it by either having Stephen Rothwell
+> literally fix the build breakage by hand, or by having some other tree
+> hide the problem.
+> 
+> This is very much not ok.
+> 
+> I'm not sure why it happened so much this release, but this needs to
+> stop. People need to realize that you can't just throw shit at the
+> wall and see if it sticks. You need to test your own trees *first*,
+> and *independently* of other peoples trees.
+> 
+> Then, if  you have done basic testing, you can then have it in
+> linux-next and that hopefully then finds any issues with bad
+> interactions with other trees, and maybe also ends up getting more
+> coverage testing on odd architectures and with odd configurations.
+> 
+> But linux-next must not in *any* way be a replacement for doing basic
+> testing on your own tree first.
 
-This should be an "unsigned long".
+On the off-chance that it helps someone else avoid my stupid mistakes,
+here is exactly how I messed this up so badly:
 
-Hmm, "ctrl_bits" is unnecessarily generic at this point.  It's also arguably wrong,
-because X86_CR3_PCID_NOFLUSH is also a control bit, it's just allowed in CR3 itself.
+1.	This API-name-change series went well, except for the usual
+	lagging changes.  This *should* not be a problem, as you
+	simply leave the old API in however long it takes for the
+	change to get in.
 
-I think I'd prefer to drop this field and avoid bikeshedding the name entirely.  The
-only reason to effectively cache "X86_CR3_LAM_U48 | X86_CR3_LAM_U57" is because
-guest_cpuid_has() is slow, and I'd rather solve that problem with the "governed
-feature" framework.
+2.	At some point -next was a single-argument kfree_rcu()-free zone.
+	So I queued the offending commit on the -rcu tree's rcu/next
+	branch, followed by a revert for my own testing.  The idea was
+	to make new uses fail in -next testing.
 
-More below.
+	So far, so good.
 
->  	unsigned long cr4;
->  	unsigned long cr4_guest_owned_bits;
->  	unsigned long cr4_guest_rsvd_bits;
-> diff --git a/arch/x86/kvm/cpuid.h b/arch/x86/kvm/cpuid.h
-> index b1658c0de847..ef8e1b912d7d 100644
-> --- a/arch/x86/kvm/cpuid.h
-> +++ b/arch/x86/kvm/cpuid.h
-> @@ -42,6 +42,11 @@ static inline int cpuid_maxphyaddr(struct kvm_vcpu *vcpu)
->  	return vcpu->arch.maxphyaddr;
->  }
->  
-> +static inline bool kvm_vcpu_is_legal_cr3(struct kvm_vcpu *vcpu, unsigned long cr3)
+3.	I noticed that -next was now free of kfree_rcu() calls.
 
-Heh, I think it makes sense to wrap this one.  I'll probably tell you differently
-tomorrow, but today, let's wrap.
+	At this point, I made three stupid mistakes:
 
-> +{
-> +	return !((cr3 & vcpu->arch.reserved_gpa_bits) & ~vcpu->arch.cr3_ctrl_bits);
+	a.	I failed to wait for mainline itself to be free of the
+		single-argument kfree_rcu(), thus pulling the offending
+		single-argument kfree_rcu() removal commit into my pull
+		request a merge window too soon.  This is of course
+		especially stupid since I tend to send you the RCU pull
+		request early.
 
-Don't open code something for which there is a perfect helper, i.e. use
-kvm_vcpu_is_legal_gpa().
+	b.	I failed to identify exactly which -next commit eliminated
+		single-argument kfree_rcu().  Had I done so, I would
+		have seen that this was in fact Stephen's rcu/next
+		merge commit, which was never going to go to mainline.
 
-If we go the governed feature route, this becomes:
+	c.	Worst yet, out of force of habit, I left the revert
+		from #2 above in my testing, thus failing to see the
+		-rcu failure due to that remaining single-argument
+		kfree_rcu() call.
 
-static inline bool kvm_vcpu_is_legal_cr3(struct kvm_vcpu *vcpu,
-					 unsigned long cr3)
-{
-	if (guest_can_use(vcpu, X86_FEATURE_LAM))
-		cr3 &= ~(X86_CR3_LAM_U48 | X86_CR3_LAM_U57);
+So a combination of three stupid mistakes on my part made the RCU
+happen.
 
-	return kvm_vcpu_is_legal_gpa(cr3);
-}
+As you say, testing *exactly* the commit heading up the pull request
+merged with your master branch would have spotted this, and I will
+of course make sure that I do this in the future.
 
-> +}
-> +
->  static inline bool kvm_vcpu_is_legal_gpa(struct kvm_vcpu *vcpu, gpa_t gpa)
->  {
->  	return !(gpa & vcpu->arch.reserved_gpa_bits);
-> diff --git a/arch/x86/kvm/mmu.h b/arch/x86/kvm/mmu.h
-> index 92d5a1924fc1..81d8a433dae1 100644
-> --- a/arch/x86/kvm/mmu.h
-> +++ b/arch/x86/kvm/mmu.h
-> @@ -144,6 +144,11 @@ static inline unsigned long kvm_get_active_pcid(struct kvm_vcpu *vcpu)
->  	return kvm_get_pcid(vcpu, kvm_read_cr3(vcpu));
->  }
->  
-> +static inline u64 kvm_get_active_cr3_ctrl_bits(struct kvm_vcpu *vcpu)
+And again, please accept my apologies for this mess.
 
-And then this becomes:
-
-static inline u64 kvm_get_active_cr3_lam_bits(struct kvm_vcpu *vcpu)
-{
-	if (!guest_can_use(vcpu, X86_FEATURE_LAM))
-		return 0;
-
-	return kvm_read_cr3(vcpu) & (X86_CR3_LAM_U48 | X86_CR3_LAM_U57);
-}
-
-> +{
-> +	return kvm_read_cr3(vcpu) & vcpu->arch.cr3_ctrl_bits;
-> +}
-> +
->  static inline void kvm_mmu_load_pgd(struct kvm_vcpu *vcpu)
->  {
->  	u64 root_hpa = vcpu->arch.mmu->root.hpa;
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index c8961f45e3b1..deea9a9f0c75 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -3812,7 +3812,13 @@ static int mmu_alloc_shadow_roots(struct kvm_vcpu *vcpu)
->  	hpa_t root;
->  
->  	root_pgd = kvm_mmu_get_guest_pgd(vcpu, mmu);
-> -	root_gfn = root_pgd >> PAGE_SHIFT;
-> +	/*
-> +	 * Guest PGD can be CR3 or EPTP (for nested EPT case). CR3 may contain
-> +	 * additional control bits (e.g. LAM control bits). To be generic,
-> +	 * unconditionally strip non-address bits when computing the GFN since
-> +	 * the guest PGD has already been checked for validity.
-> +	 */
-
-Drop this comment, the code is self-explanatory, and the comment is incomplete,
-e.g. it can also be nCR3.
-
-> +	root_gfn = (root_pgd & __PT_BASE_ADDR_MASK) >> PAGE_SHIFT;
->  
->  	if (mmu_check_root(vcpu, root_gfn))
->  		return 1;
-> diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
-> index d39af5639ce9..7d2105432d66 100644
-> --- a/arch/x86/kvm/mmu/mmu_internal.h
-> +++ b/arch/x86/kvm/mmu/mmu_internal.h
-> @@ -21,6 +21,7 @@ extern bool dbg;
->  #endif
->  
->  /* Page table builder macros common to shadow (host) PTEs and guest PTEs. */
-> +#define __PT_BASE_ADDR_MASK GENMASK_ULL(51, 12)
->  #define __PT_LEVEL_SHIFT(level, bits_per_level)	\
->  	(PAGE_SHIFT + ((level) - 1) * (bits_per_level))
->  #define __PT_INDEX(address, level, bits_per_level) \
-> diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
-> index 0662e0278e70..394733ac9088 100644
-> --- a/arch/x86/kvm/mmu/paging_tmpl.h
-> +++ b/arch/x86/kvm/mmu/paging_tmpl.h
-> @@ -62,7 +62,7 @@
->  #endif
->  
->  /* Common logic, but per-type values.  These also need to be undefined. */
-> -#define PT_BASE_ADDR_MASK	((pt_element_t)(((1ULL << 52) - 1) & ~(u64)(PAGE_SIZE-1)))
-> +#define PT_BASE_ADDR_MASK	((pt_element_t)__PT_BASE_ADDR_MASK)
->  #define PT_LVL_ADDR_MASK(lvl)	__PT_LVL_ADDR_MASK(PT_BASE_ADDR_MASK, lvl, PT_LEVEL_BITS)
->  #define PT_LVL_OFFSET_MASK(lvl)	__PT_LVL_OFFSET_MASK(PT_BASE_ADDR_MASK, lvl, PT_LEVEL_BITS)
->  #define PT_INDEX(addr, lvl)	__PT_INDEX(addr, lvl, PT_LEVEL_BITS)
-> @@ -324,6 +324,7 @@ static int FNAME(walk_addr_generic)(struct guest_walker *walker,
->  	trace_kvm_mmu_pagetable_walk(addr, access);
->  retry_walk:
->  	walker->level = mmu->cpu_role.base.level;
-> +	/* gpte_to_gfn() will strip non-address bits. */
-
-Drop this comment too, it's not relevant to the immediate code, i.e. it'd be
-better suited about this code:
-
-	table_gfn = gpte_to_gfn(pte);
-
-but IMO that code is quite self-explanatory too.
-
-> @@ -7740,6 +7741,11 @@ static void vmx_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
->  		vmx->msr_ia32_feature_control_valid_bits &=
->  			~FEAT_CTL_SGX_LC_ENABLED;
->  
-> +	if (guest_cpuid_has(vcpu, X86_FEATURE_LAM))
-
-This is wrong, KVM needs to check that the host supports LAM too, otherwise KVM
-will allow userspace to shove garbage into guest CR3 and induce VM-Entry failures
-and whatnot.  If we go the guest_can_use() route, this problem solves itself.
+							Thanx, Paul
