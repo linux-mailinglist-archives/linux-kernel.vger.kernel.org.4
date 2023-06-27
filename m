@@ -2,249 +2,270 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C9617406E6
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 01:38:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D62337406EA
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 01:40:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230079AbjF0Xij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 19:38:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46622 "EHLO
+        id S229544AbjF0Xko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 19:40:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229813AbjF0Xih (ORCPT
+        with ESMTP id S229623AbjF0Xkl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 19:38:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67DAE1FE5;
-        Tue, 27 Jun 2023 16:38:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D4FDD6121C;
-        Tue, 27 Jun 2023 23:38:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26B1FC433C0;
-        Tue, 27 Jun 2023 23:38:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687909113;
-        bh=uVAlmvfwTuYJ3dpsZuULPUGZVsxZWZjSUtB0+2wBi4o=;
-        h=Date:From:To:Cc:Subject:From;
-        b=HAO2hp4fLbDhTniJHnlFJRKh7cBSXEfEDMo1creVW9dA7VKLUpoI1DdpoUR7AFv4G
-         rw+yXxxmD2kqncu2y/VrGY6XgS6h6i6CYecYRxkTi40c8sx48VsKszXYMo9lgf7na2
-         2ChatiWUe40lP3Dn9iar6C2JU8hk6Cgtl0AmhWwj0TYJCiy1yW0SVr8/iR4KFFDW98
-         awnphEu7lR8xFJ4nCD15Mv6MDTIjYYmWYmp2bawnAnU8IMG7ypd2EKyn/2FrYYztTo
-         Crh+ToeFoIMPM8jDbcv8Qbsv9GXT9heBi8g06+Po2NvN2kUIXeaxOfLXbm9g4JShDI
-         /RnIY333JAciA==
-Date:   Tue, 27 Jun 2023 16:38:32 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     netdev@vger.kernel.org
-Cc:     netdev-driver-reviewers@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [ANN] netdev development stats for 6.5
-Message-ID: <20230627163832.75f3a340@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 27 Jun 2023 19:40:41 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 053B91BE8
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 16:40:40 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-c18ebcb4358so851759276.1
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 16:40:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687909239; x=1690501239;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4kuye64R7CBgMaDLN8lrGwuRN3UwBizDiiMMe3qOfNs=;
+        b=w2a09hsoYsqWjJZfst/OW9sXBfPahnHX/cWgIakOV2k6qiWr+xwcXv+48Psp0MdB7h
+         pWtuxdbaMR+4SpvqvL5EJg3La6QtBTU53baxWNEe3dZK2THfoiYJAPUfDlaa1rGHIMEU
+         0iSdqVDiIcK5u0PeOiwVAZiz9kyZcAMqquwY5IxB6FO3Qq5fw3HW8c2z9+Q+UWUc16yH
+         bNmzijXcKVcd++ArgJdpKKFH2Fo34xwnYv8KexmG9zqRQWc50d1mk2wqwZZODRQLD5AV
+         LNSiN7caGJfnfGVgsdWl3ieMhBYBbw2mJ9v1uzql/b4IdYSMnVZ46tYYK+dsEtDCsEzB
+         gAKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687909239; x=1690501239;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4kuye64R7CBgMaDLN8lrGwuRN3UwBizDiiMMe3qOfNs=;
+        b=IvCVK9buwUAF5Bm3ZAqm9HQTaXAfiUTAFF67JP9Hc4se128OySBKzBpgm51Y12XF7E
+         qYI/U9Y3MhaAYm1hZ5SHjhtJuKO1o5BFT+bdsxFnG626JVbQN6ENF9IeOzNBFxX6ySi9
+         S9OV3EF7yECMTLJM/Hc/39g8bK/hyr4shsv/5/O2J01nnp/0ju96WZX8P8W3N1sW5j0E
+         xh/QBZtxW5MeRZiU2eS7oxUtlPGFecE7nqJEOYikQekAWHFHi0ter/59nEGI8zLrd6VX
+         ySdAkvKtxvDEqASGIwjyaRSFEG8TBZCSUJBHMUFje1ST3ubtdHgIQXVGnPytsnZQraQh
+         mICg==
+X-Gm-Message-State: AC+VfDxwwvR5I8SVU62aapOjo3n2l0zOiiJ7fNMHGzimb2a4vDs6bzrz
+        Y8f0gDmfUPVYikVG1Fp6XU5AWYI2qYU=
+X-Google-Smtp-Source: ACHHUZ7P8T83Cz7R8MxciPORMXvY2UAqRBCq1v6MDgDX8mfPZvTPtzOqjLsAjWH0qufStJSnMXARuKU0mDM=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:e60e:0:b0:c1c:9553:d4f4 with SMTP id
+ d14-20020a25e60e000000b00c1c9553d4f4mr4869992ybh.3.1687909239261; Tue, 27 Jun
+ 2023 16:40:39 -0700 (PDT)
+Date:   Tue, 27 Jun 2023 16:40:37 -0700
+In-Reply-To: <20230606091842.13123-4-binbin.wu@linux.intel.com>
+Mime-Version: 1.0
+References: <20230606091842.13123-1-binbin.wu@linux.intel.com> <20230606091842.13123-4-binbin.wu@linux.intel.com>
+Message-ID: <ZJtzdftocuwTvp67@google.com>
+Subject: Re: [PATCH v9 3/6] KVM: x86: Virtualize CR3.LAM_{U48,U57}
+From:   Sean Christopherson <seanjc@google.com>
+To:     Binbin Wu <binbin.wu@linux.intel.com>, t@google.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pbonzini@redhat.com, chao.gao@intel.com, kai.huang@intel.com,
+        David.Laight@aculab.com, robert.hu@linux.intel.com
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
+On Tue, Jun 06, 2023, Binbin Wu wrote:
+> Opportunistically use GENMASK_ULL() to define __PT_BASE_ADDR_MASK.
 
-I have run the fair and impartial statistical analysis (!! :)) script
-against the mailing list traffic and git history for the 6.5 release.
+This are not the type of changes to do opportunstically.   Opportunstic changes
+are things like fixing comment typos, dropping unnecessary semi-colons, fixing
+coding styles violations, etc.
 
-6.5 statistics
---------------
+> Opportunistically use kvm_vcpu_is_legal_cr3() to check CR3 in SVM nested code,
+> to provide a clear distinction b/t CR3 and GPA checks.
 
-The cycle started on April 26th and ended on June 27th, it was the same
-length as the previous release cycle.
+This *shouldn't* be an opportunsitic thing.  That you felt compelled to call it
+out is a symptom of this patch doing too much.
 
-We have seen total of 15235 messages on the list (246 / day) which is
-5% lower than last time (but 9% higher than 6.3). The number of commits
-directly applied by netdev maintainers increased slightly but remains
-close to 18 commits a day for the 3rd release in a row.
+In short, split this into three patches:
 
-We have seen 778 people/aliases on the list during 6.5 development
-which is up 7% from last time. The distribution of the roles these=20
-people play remains stable - with 45% who posted patches but never
-replied to a thread started by another person, 33% were only replying
-and never posting patches, and 20% who did both.
+  1. Do the __PT_BASE_ADDR_MASK() changes
+  2. Add and use kvm_vcpu_is_legal_cr3()
+  3. Add support for CR3.LAM bits
 
-The number of commits which go into the tree with at least one
-Review/Ack tag has decreased by 6% and is now at 60% (53% of which do
-not come from the same email domain as the author). 6.4 was particularly
-good in terms of reviews, and 6.5 is still ~4% better than 6.3 but the
-decline is obviously sad to see.
+> Suggested-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Robert Hoo <robert.hu@linux.intel.com>
+> Co-developed-by: Binbin Wu <binbin.wu@linux.intel.com>
+> Signed-off-by: Binbin Wu <binbin.wu@linux.intel.com>
+> Tested-by: Xuelian Guo <xuelian.guo@intel.com>
+> Reviewed-by: Kai Huang <kai.huang@intel.com>
+> Reviewed-by: Chao Gao <chao.gao@intel.com>
+> ---
+>  arch/x86/include/asm/kvm_host.h | 5 +++++
+>  arch/x86/kvm/cpuid.h            | 5 +++++
+>  arch/x86/kvm/mmu.h              | 5 +++++
+>  arch/x86/kvm/mmu/mmu.c          | 8 +++++++-
+>  arch/x86/kvm/mmu/mmu_internal.h | 1 +
+>  arch/x86/kvm/mmu/paging_tmpl.h  | 3 ++-
+>  arch/x86/kvm/mmu/spte.h         | 2 +-
+>  arch/x86/kvm/svm/nested.c       | 4 ++--
+>  arch/x86/kvm/vmx/nested.c       | 4 ++--
+>  arch/x86/kvm/vmx/vmx.c          | 8 +++++++-
+>  arch/x86/kvm/x86.c              | 4 ++--
+>  11 files changed, 39 insertions(+), 10 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index c6f03d151c31..46471dd9cc1b 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -727,6 +727,11 @@ struct kvm_vcpu_arch {
+>  	unsigned long cr0_guest_owned_bits;
+>  	unsigned long cr2;
+>  	unsigned long cr3;
+> +	/*
+> +	 * CR3 non-address feature control bits.
+> +	 * Guest CR3 may contain any of those bits at runtime.
+> +	 */
+> +	u64 cr3_ctrl_bits;
 
-Rankings
---------
+This should be an "unsigned long".
 
-Top reviewers (thr):                 Top reviewers (msg):               =20
-   1 ( +1) [46] Simon Horman            1 ( +1) [73] Simon Horman       =20
-   2 ( -1) [27] Jakub Kicinski          2 ( -1) [50] Jakub Kicinski     =20
-   3 (   ) [15] Andrew Lunn             3 (   ) [34] Andrew Lunn        =20
-   4 ( +4) [ 9] Paolo Abeni             4 ( +4) [14] Eric Dumazet       =20
-   5 ( -1) [ 8] Eric Dumazet            5 ( +5) [14] Russell King       =20
-   6 ( +5) [ 7] Russell King            6 (   ) [14] Vladimir Oltean    =20
-   7 ( -1) [ 4] Krzysztof Kozlowski     7 ( -2) [13] Krzysztof Kozlowski=20
-   8 (***) [ 4] Jiri Pirko              8 (***) [12] Jiri Pirko         =20
-   9 (   ) [ 4] Vladimir Oltean         9 ( +5) [12] Paolo Abeni        =20
-  10 (+27) [ 4] Maciej Fijalkowski     10 ( +5) [10] Michael S. Tsirkin =20
-  11 ( +8) [ 4] David Ahern            11 (+18) [ 7] David Ahern        =20
-  12 (+12) [ 4] Stephen Hemminger      12 (+37) [ 7] Maciej Fijalkowski =20
+Hmm, "ctrl_bits" is unnecessarily generic at this point.  It's also arguably wrong,
+because X86_CR3_PCID_NOFLUSH is also a control bit, it's just allowed in CR3 itself.
 
-Simon rightfully takes the top reviewer position, with Andrew firmly
-holding the #3 spot. Thank you both for all the hard work!
-Maciej, David Ahern and Jiri Pirko have also been active reviewing,
-and enter the top 12 for 6.5, thank you!
+I think I'd prefer to drop this field and avoid bikeshedding the name entirely.  The
+only reason to effectively cache "X86_CR3_LAM_U48 | X86_CR3_LAM_U57" is because
+guest_cpuid_has() is slow, and I'd rather solve that problem with the "governed
+feature" framework.
 
+More below.
 
-Top authors (thr):                   Top authors (msg):                 =20
-   1 (   ) [6] Jakub Kicinski           1 ( +1) [33] David Howells      =20
-   2 (   ) [4] Eric Dumazet             2 ( -1) [22] Saeed Mahameed     =20
-   3 ( +1) [4] Tony Nguyen              3 ( +4) [18] Tony Nguyen        =20
-   4 (+36) [4] David Howells            4 (+29) [18] Russell King       =20
-   5 (+23) [4] Russell King             5 ( +1) [16] Jakub Kicinski     =20
-   6 (+14) [3] Kuniyuki Iwashima        6 (***) [14] Bartosz Golaszewski=20
-   7 (***) [3] Christophe JAILLET       7 (+32) [13] Marc Kleine-Budde  =20
-   8 (+29) [2] Stephen Rothwell         8 (***) [11] Maciej Fijalkowski =20
-   9 ( -6) [2] Vladimir Oltean          9 ( +7) [ 9] Pablo Neira Ayuso  =20
-  10 ( -3) [2] Daniel Golle            10 ( -2) [ 9] Ar=C4=B1n=C3=A7 =C3=9C=
-NAL         =20
+>  	unsigned long cr4;
+>  	unsigned long cr4_guest_owned_bits;
+>  	unsigned long cr4_guest_rsvd_bits;
+> diff --git a/arch/x86/kvm/cpuid.h b/arch/x86/kvm/cpuid.h
+> index b1658c0de847..ef8e1b912d7d 100644
+> --- a/arch/x86/kvm/cpuid.h
+> +++ b/arch/x86/kvm/cpuid.h
+> @@ -42,6 +42,11 @@ static inline int cpuid_maxphyaddr(struct kvm_vcpu *vcpu)
+>  	return vcpu->arch.maxphyaddr;
+>  }
+>  
+> +static inline bool kvm_vcpu_is_legal_cr3(struct kvm_vcpu *vcpu, unsigned long cr3)
 
-The top author list continues to change a lot release to release.
-Notably David Howells tops the patch posting count, with the large
-sendpage effort. Russell King authored various patches improving=20
-the infrastructure and common code for embedded drivers (general phylink
-improvements, SFP rate selection, C73 auto-neg, mdiodev pcs helpers).
-Kuniyuki sent quite a few fixes for IP and core layers of the stack.
-I make the list mostly due to YNL work.
+Heh, I think it makes sense to wrap this one.  I'll probably tell you differently
+tomorrow, but today, let's wrap.
 
+> +{
+> +	return !((cr3 & vcpu->arch.reserved_gpa_bits) & ~vcpu->arch.cr3_ctrl_bits);
 
-Company rankings
-----------------
+Don't open code something for which there is a perfect helper, i.e. use
+kvm_vcpu_is_legal_gpa().
 
-Top reviewers (thr):                 Top reviewers (msg):               =20
-   1 ( +1) [46] Corigine                1 ( +1) [73] Corigine           =20
-   2 ( -1) [32] Meta                    2 ( -1) [64] Meta               =20
-   3 ( +1) [22] RedHat                  3 ( +1) [56] RedHat             =20
-   4 ( -1) [19] Intel                   4 ( -1) [41] Intel              =20
-   5 ( +2) [15] Andrew Lunn             5 ( +1) [34] Andrew Lunn        =20
-   6 ( -1) [15] Google                  6 ( +1) [32] nVidia             =20
-   7 ( -1) [14] nVidia                  7 ( -2) [30] Google             =20
+If we go the governed feature route, this becomes:
 
-Simon's efforts put Corigine at #1 but overall no major movement.
-In fact companies at #8 have half of the review volume of #7, so
-the top #7 corp reviewers may be the most stable of all rankings
-for a long time.
+static inline bool kvm_vcpu_is_legal_cr3(struct kvm_vcpu *vcpu,
+					 unsigned long cr3)
+{
+	if (guest_can_use(vcpu, X86_FEATURE_LAM))
+		cr3 &= ~(X86_CR3_LAM_U48 | X86_CR3_LAM_U57);
 
+	return kvm_vcpu_is_legal_gpa(cr3);
+}
 
-Top authors (thr):                   Top authors (msg):                 =20
-   1 ( +1) [16] Intel                   1 ( +2) [79] Intel              =20
-   2 ( -1) [16] RedHat                  2 ( -1) [57] RedHat             =20
-   3 ( +1) [ 8] nVidia                  3 ( -1) [46] nVidia             =20
-   4 ( -1) [ 7] Meta                    4 ( +7) [23] Oracle             =20
-   5 (   ) [ 7] Google                  5 ( +1) [21] Meta               =20
-   6 ( +4) [ 6] Huawei                  6 (+27) [18] Microchip          =20
-   7 (   ) [ 6] AMD                     7 ( +7) [16] Pengutronix        =20
+> +}
+> +
+>  static inline bool kvm_vcpu_is_legal_gpa(struct kvm_vcpu *vcpu, gpa_t gpa)
+>  {
+>  	return !(gpa & vcpu->arch.reserved_gpa_bits);
+> diff --git a/arch/x86/kvm/mmu.h b/arch/x86/kvm/mmu.h
+> index 92d5a1924fc1..81d8a433dae1 100644
+> --- a/arch/x86/kvm/mmu.h
+> +++ b/arch/x86/kvm/mmu.h
+> @@ -144,6 +144,11 @@ static inline unsigned long kvm_get_active_pcid(struct kvm_vcpu *vcpu)
+>  	return kvm_get_pcid(vcpu, kvm_read_cr3(vcpu));
+>  }
+>  
+> +static inline u64 kvm_get_active_cr3_ctrl_bits(struct kvm_vcpu *vcpu)
 
-Intel takes #1 for patches sent because of the additional volume=20
-of iwl-next patches which now reach netdev. David Howells keeps
-Red Hat at #2.
+And then this becomes:
 
+static inline u64 kvm_get_active_cr3_lam_bits(struct kvm_vcpu *vcpu)
+{
+	if (!guest_can_use(vcpu, X86_FEATURE_LAM))
+		return 0;
 
-Changes
--------
+	return kvm_read_cr3(vcpu) & (X86_CR3_LAM_U48 | X86_CR3_LAM_U57);
+}
 
-A sidebar before the last ranking - the company "scores" - because=20
-the way scores are calculated has changed. The "score" statistics used
-to be very lenient, counting a single review as equal to 3 patches:
+> +{
+> +	return kvm_read_cr3(vcpu) & vcpu->arch.cr3_ctrl_bits;
+> +}
+> +
+>  static inline void kvm_mmu_load_pgd(struct kvm_vcpu *vcpu)
+>  {
+>  	u64 root_hpa = vcpu->arch.mmu->root.hpa;
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index c8961f45e3b1..deea9a9f0c75 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -3812,7 +3812,13 @@ static int mmu_alloc_shadow_roots(struct kvm_vcpu *vcpu)
+>  	hpa_t root;
+>  
+>  	root_pgd = kvm_mmu_get_guest_pgd(vcpu, mmu);
+> -	root_gfn = root_pgd >> PAGE_SHIFT;
+> +	/*
+> +	 * Guest PGD can be CR3 or EPTP (for nested EPT case). CR3 may contain
+> +	 * additional control bits (e.g. LAM control bits). To be generic,
+> +	 * unconditionally strip non-address bits when computing the GFN since
+> +	 * the guest PGD has already been checked for validity.
+> +	 */
 
-score =3D review_threads * 10 + (review_msgs - 1) * 2=20
-      - author_threads *  3 - (author_msgs / 2)
+Drop this comment, the code is self-explanatory, and the comment is incomplete,
+e.g. it can also be nCR3.
 
-The formula now ignores the number of patch sets (threads) but=20
-counts authored messages 8 times heavier:
+> +	root_gfn = (root_pgd & __PT_BASE_ADDR_MASK) >> PAGE_SHIFT;
+>  
+>  	if (mmu_check_root(vcpu, root_gfn))
+>  		return 1;
+> diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
+> index d39af5639ce9..7d2105432d66 100644
+> --- a/arch/x86/kvm/mmu/mmu_internal.h
+> +++ b/arch/x86/kvm/mmu/mmu_internal.h
+> @@ -21,6 +21,7 @@ extern bool dbg;
+>  #endif
+>  
+>  /* Page table builder macros common to shadow (host) PTEs and guest PTEs. */
+> +#define __PT_BASE_ADDR_MASK GENMASK_ULL(51, 12)
+>  #define __PT_LEVEL_SHIFT(level, bits_per_level)	\
+>  	(PAGE_SHIFT + ((level) - 1) * (bits_per_level))
+>  #define __PT_INDEX(address, level, bits_per_level) \
+> diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
+> index 0662e0278e70..394733ac9088 100644
+> --- a/arch/x86/kvm/mmu/paging_tmpl.h
+> +++ b/arch/x86/kvm/mmu/paging_tmpl.h
+> @@ -62,7 +62,7 @@
+>  #endif
+>  
+>  /* Common logic, but per-type values.  These also need to be undefined. */
+> -#define PT_BASE_ADDR_MASK	((pt_element_t)(((1ULL << 52) - 1) & ~(u64)(PAGE_SIZE-1)))
+> +#define PT_BASE_ADDR_MASK	((pt_element_t)__PT_BASE_ADDR_MASK)
+>  #define PT_LVL_ADDR_MASK(lvl)	__PT_LVL_ADDR_MASK(PT_BASE_ADDR_MASK, lvl, PT_LEVEL_BITS)
+>  #define PT_LVL_OFFSET_MASK(lvl)	__PT_LVL_OFFSET_MASK(PT_BASE_ADDR_MASK, lvl, PT_LEVEL_BITS)
+>  #define PT_INDEX(addr, lvl)	__PT_INDEX(addr, lvl, PT_LEVEL_BITS)
+> @@ -324,6 +324,7 @@ static int FNAME(walk_addr_generic)(struct guest_walker *walker,
+>  	trace_kvm_mmu_pagetable_walk(addr, access);
+>  retry_walk:
+>  	walker->level = mmu->cpu_role.base.level;
+> +	/* gpte_to_gfn() will strip non-address bits. */
 
-score =3D review_threads * 10 + (review_msgs - 1) * 2
-                            - (author_msgs * 4)
+Drop this comment too, it's not relevant to the immediate code, i.e. it'd be
+better suited about this code:
 
-There is little science to this. The goal used to be to reprimand
-companies which bombard us with patches (mostly stupid automated
-"fixes"). That problem has thankfully stopped.
+	table_gfn = gpte_to_gfn(pte);
 
-We can now set a more ambitious goal of a fair balance between code
-authorship and reviews. We want companies which produce code to still
-have a chance making it in the top positive scores, but at the same
-time negative scores to include companies which *do* review, just not
-enough.
+but IMO that code is quite self-explanatory too.
 
-With that out of the way here are the rankings according to the new
-formula:
+> @@ -7740,6 +7741,11 @@ static void vmx_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
+>  		vmx->msr_ia32_feature_control_valid_bits &=
+>  			~FEAT_CTL_SGX_LC_ENABLED;
+>  
+> +	if (guest_cpuid_has(vcpu, X86_FEATURE_LAM))
 
-Top balance scores (positive):        Bottom balance scores (negative):    =
-         =20
-   1 ( +1) [595] Corigine               1 (***) [55] Bartosz Golaszewski=20
-   2 ( -1) [359] Meta                   2 (***) [42] Intel              =20
-   3 ( +3) [204] Andrew Lunn            3 (***) [40] Bootlin            =20
-   4 (   ) [166] Google                 4 (***) [32] Pengutronix        =20
-   5 (   ) [101] RedHat                 5 (***) [30] Ar=C4=B1n=C3=A7 =C3=9C=
-NAL         =20
-   6 ( +2) [ 88] Linaro                 6 ( +9) [29] Trustnetic         =20
-   7 ( +9) [ 53] Enfabrica          =20
-   8 (+14) [ 38] Microsoft          =20
-   9 ( +1) [ 37] NXP                =20
-  10 (***) [ 34] Linux Foundation   =20
-  11 (+16) [ 33] Mojatatu           =20
-  12 ( -1) [ 24] Oracle             =20
-
-On the left side we can easily map to the individuals responsible=20
-for their company's position, so I won't cover most.
-Greg KH and Linus apparently respond to enough emails to put Linux
-Foundation at #10 :)
-It's good to see Pedro and Jamal (Mojatatu) make #11.
-
-On the right side we see Bartosz, Bootlin, and Pengutronix, so a lot=20
-of Open Source contractors who don't review other people's code,
-at least not on netdev.=20
-Intel makes the list at #2 because of the large volume of iwl-next
-postings which wasn't balanced with a sufficient increase in reviews.
-Arinc made one too many quick reposts of his series and makes the list=20
-at #5 ;)
-
-
-Another interesting (to me?) way of looking at this is to see in which
-percentile of review balance "score" the top code producers rank:
-
-How top authors rank in scores:
-  1  p99 [-42]  Intel
-  2   p0 [101]  RedHat
-  3   p3 [ 16]  nVidia
-  4   p2 [ 23]  Oracle
-  5   p0 [358]  Meta
-  6  p37 [  0]  Microchip
-  7  p99 [-32]  Pengutronix
-  8  p98 [-28]  AMD
-  9  p99 [-56]  Bartosz Golaszewski
- 10  p92 [ -9]  Huawei
- 11  p99 [-40]  Bootlin
- 12   p4 [ 10]  Broadcom
- 13   p0 [165]  Google
- 14  p19 [  1]  Isovalent
- 15  p96 [-24]  Alibaba
-
-The distribution is rather bi-modal, with most companies either doing
-great (<p5) or poorly (>p95). But it is possible to strike a more even
-balance (Microchip and Isovalent).
-
-Code: https://github.com/kuba-moo/ml-stat
-
-
-Thanks to everyone for a productive release cycle! Hopefully we can
-all find some time to catch a breath during the merge window and come
-back strong for the next one.. and the one after that.. and...
+This is wrong, KVM needs to check that the host supports LAM too, otherwise KVM
+will allow userspace to shove garbage into guest CR3 and induce VM-Entry failures
+and whatnot.  If we go the guest_can_use() route, this problem solves itself.
