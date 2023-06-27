@@ -2,85 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EF99740336
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 20:27:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3EA4740339
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 20:29:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231140AbjF0S1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 14:27:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53958 "EHLO
+        id S231143AbjF0S27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 14:28:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230373AbjF0S1E (ORCPT
+        with ESMTP id S229623AbjF0S25 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 14:27:04 -0400
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BBB1E58
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 11:27:02 -0700 (PDT)
-Received: by mail-qt1-x833.google.com with SMTP id d75a77b69052e-4007b5bafceso37741cf.1
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 11:27:02 -0700 (PDT)
+        Tue, 27 Jun 2023 14:28:57 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B14E71
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 11:28:55 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5704991ea05so65706677b3.1
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 11:28:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687890421; x=1690482421;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=p3Nmjy2pgfjuqrruYrf3lVaHDsPBe2Ms9OHkO4l14Tc=;
-        b=a5RlIMj6/IRppc+ipWDHPaQTI2NhmfAqOceI7FC6rDBUZ0YdWXpB5zfD+TDmPmokOg
-         jJXKx4J2oRR8E3NnFmWvYg9la8baydeNVr9oJbMJyt50K9AMIZlmte0xfGlr6TV3MML5
-         LrQAUxCQfhlj2l++9GUeDiQl/rQ+QmOHDqrNKf7heXFnN+EDTaAWQdahCnuSKR+hGYi8
-         mEYm2joPAYfJ/fx11Sys9/N3cPzfAaHa0lhslrsT7SZV8q4oWy5oGXQwkxGDn3xrr6JJ
-         AKbfCrZGMBQjGn035U+41RxpE/ToIdBPphfBiTFtcaLZRR63Up3cgl2i04ScxAi1WsUV
-         6uQg==
+        d=google.com; s=20221208; t=1687890534; x=1690482534;
+        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=pCEk4rjcfYTL2DuAl4m74mxfXYI4yN7w7niW6JdDvXw=;
+        b=Cm3bw124FnPJLd/hOVzZkDDEl6NNM4e2Hl/lg4rqzZFObSGD+uZnXFozeYjh0LOYLL
+         kpEDPktwyWqw0Pq7ozb4zkXc9QwiUAW+kmkiYBWTROZNSUezXf+9Rsv9cqOvedHA/I76
+         ryK1te8HJfEiHohIYLEA69RFYB+bmV+37MNrsT4ebstip6UaYunO7AdrjpaYjflhlpL6
+         xS8yCJmHsstL8q/t/CDMkfPTjMJAoTgn+5QT+1HYSIFM8haYxKCw/kaL8B2g9p/CpxVE
+         YTZo30pAo3ee7f6jXZWZIPJ6ae6c/EE7RzoncuCGrfwEJ/Jf8K3Ok1ReXADB6GJnX0AF
+         AsKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687890421; x=1690482421;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=p3Nmjy2pgfjuqrruYrf3lVaHDsPBe2Ms9OHkO4l14Tc=;
-        b=GJqZq1NnqTcOt9IUi62ygEgzmx9S+pbUEQWoaZaWxlH+mEhmdkcIrZ3GCnd0jLsKrg
-         Kjq2tT4SlJX/nUswAaPGSrYfSpJWhlPMqgBytyAmodqme26D2H9K8a+i7udVo3XagJmD
-         d9GXOFwr8Zro4d1Ap8e4eCPYzfuhgBufYn63GRrvxun8XG7TFhW8o0PfI3UQp3qGukAx
-         RKRQX5/aKmdne8u8CBL3cZBOpc+L4TImvSrUbNYPYqFxk0c4ZGX0kYLQPK/7AYTyWt+X
-         uzGiwTDR3n7u4Hm6TKZN7rqt6SUcnnKB97+804p7+KKJLCbQc/XFGfVVJqlpwOL7y8wA
-         KfnQ==
-X-Gm-Message-State: AC+VfDxalAsBN/QyKV7M9CKbRNUFN6HdXyh23L9Tcafywu/ok6hBS/9Z
-        iUyJrqW8RMnVyisZb3BK3R069Qti4ioFHSpIA5PLtg==
-X-Google-Smtp-Source: ACHHUZ7AEqZrzh/K1utyZf5ok0cHqv3xg8Py/k6kKIR4nUU8VzPiHpf2nmqNfAfLWWb4tXJtlvac6dFD7KRPewyjF7A=
-X-Received: by 2002:ac8:57ca:0:b0:3f8:6685:c944 with SMTP id
- w10-20020ac857ca000000b003f86685c944mr20146qta.14.1687890420797; Tue, 27 Jun
- 2023 11:27:00 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230626171430.3167004-1-ryan.roberts@arm.com>
- <20230626171430.3167004-2-ryan.roberts@arm.com> <CAOUHufacvArJh7NjL_3LT-e3s1X+bazkvbgvEU+KPKGKEoW+dw@mail.gmail.com>
- <2ff8ccf6-bf36-48b2-7dc2-e6c0d962f8b7@arm.com> <CAOUHufZoT-maN3kY5eYQmrYV48shmKAAancEvabXzfTDncDa9A@mail.gmail.com>
- <91e3364f-1d1b-f959-636b-4f60bf5a577b@arm.com>
-In-Reply-To: <91e3364f-1d1b-f959-636b-4f60bf5a577b@arm.com>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Tue, 27 Jun 2023 12:26:24 -0600
-Message-ID: <CAOUHufaEwY=cm8mBi4HSbxYBvAr_x4_vyZZM2NYHEt-U7KaFhA@mail.gmail.com>
-Subject: Re: [PATCH v1 01/10] mm: Expose clear_huge_page() unconditionally
-To:     Ryan Roberts <ryan.roberts@arm.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Yin Fengwei <fengwei.yin@intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-s390@vger.kernel.org
+        d=1e100.net; s=20221208; t=1687890534; x=1690482534;
+        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pCEk4rjcfYTL2DuAl4m74mxfXYI4yN7w7niW6JdDvXw=;
+        b=EQlU+I10KXD0RBGF1oe8XFe5R9X5QPdCKb0sFz17UkUW8bzeQ7Ep3R9xq6ftiYb3w6
+         RjwILoTxGrGMfsf+1kN8E0L4L3NR9QSskRWZGpGE4BRIcmg3yyrbi6Zju8jQI+UgbrqJ
+         UdLtxTt40l5Xzblxqb/ajLElw4O1x5/FhmWllHK9CGhcEse2jeQQJ8Sr+dHvfXqWmbdC
+         zxhyyDOizrJF7TW3LGgv2de6+RyuoYJSL6GT025W0jLAbKcWNdw24vnzW5FmGkWEelbF
+         ZFJ2TdEBSSMNldBOaiYpcWSfc8z4RlbEgBLrMV9CvOuNd6pEjAN3mB2aprrLwR2J7PMA
+         s3tg==
+X-Gm-Message-State: AC+VfDxGwOKZasDs7xkrbdblr0UdMC9qj/kRYd+yjzwlB6dJ93TX0/Wq
+        WhfWhllIIP1adr8fDbpt/eqTu6eYKfu0
+X-Google-Smtp-Source: ACHHUZ6wQDXh989UuoDBFM6nLfDD0nRgSuyNK+A4PNTa/4bB+SnOFzM6nso7l0EW6nj0faBVK5sPn3IhC3XE
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:a518:9a69:cf62:b4d9])
+ (user=irogers job=sendgmr) by 2002:a81:ac08:0:b0:56d:1b6:5360 with SMTP id
+ k8-20020a81ac08000000b0056d01b65360mr13365076ywh.5.1687890534617; Tue, 27 Jun
+ 2023 11:28:54 -0700 (PDT)
+Date:   Tue, 27 Jun 2023 11:28:34 -0700
+Message-Id: <20230627182834.117565-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+Subject: [PATCH v1] perf pmus: Add placeholder core PMU
+From:   Ian Rogers <irogers@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        James Clark <james.clark@arm.com>,
+        Suzuki Poulouse <suzuki.poulose@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yang Jihong <yangjihong1@huawei.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,143 +79,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 3:41=E2=80=AFAM Ryan Roberts <ryan.roberts@arm.com>=
- wrote:
->
-> On 27/06/2023 09:29, Yu Zhao wrote:
-> > On Tue, Jun 27, 2023 at 1:21=E2=80=AFAM Ryan Roberts <ryan.roberts@arm.=
-com> wrote:
-> >>
-> >> On 27/06/2023 02:55, Yu Zhao wrote:
-> >>> On Mon, Jun 26, 2023 at 11:14=E2=80=AFAM Ryan Roberts <ryan.roberts@a=
-rm.com> wrote:
-> >>>>
-> >>>> In preparation for extending vma_alloc_zeroed_movable_folio() to
-> >>>> allocate a arbitrary order folio, expose clear_huge_page()
-> >>>> unconditionally, so that it can be used to zero the allocated folio =
-in
-> >>>> the generic implementation of vma_alloc_zeroed_movable_folio().
-> >>>>
-> >>>> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
-> >>>> ---
-> >>>>  include/linux/mm.h | 3 ++-
-> >>>>  mm/memory.c        | 2 +-
-> >>>>  2 files changed, 3 insertions(+), 2 deletions(-)
-> >>>>
-> >>>> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> >>>> index 7f1741bd870a..7e3bf45e6491 100644
-> >>>> --- a/include/linux/mm.h
-> >>>> +++ b/include/linux/mm.h
-> >>>> @@ -3684,10 +3684,11 @@ enum mf_action_page_type {
-> >>>>   */
-> >>>>  extern const struct attribute_group memory_failure_attr_group;
-> >>>>
-> >>>> -#if defined(CONFIG_TRANSPARENT_HUGEPAGE) || defined(CONFIG_HUGETLBF=
-S)
-> >>>>  extern void clear_huge_page(struct page *page,
-> >>>>                             unsigned long addr_hint,
-> >>>>                             unsigned int pages_per_huge_page);
-> >>>> +
-> >>>> +#if defined(CONFIG_TRANSPARENT_HUGEPAGE) || defined(CONFIG_HUGETLBF=
-S)
-> >>>
-> >>> We might not want to depend on THP eventually. Right now, we still
-> >>> have to, unless splitting is optional, which seems to contradict
-> >>> 06/10. (deferred_split_folio()  is a nop without THP.)
-> >>
-> >> Yes, I agree - for large anon folios to work, we depend on THP. But I =
-don't
-> >> think that helps us here.
-> >>
-> >> In the next patch, I give vma_alloc_zeroed_movable_folio() an extra `o=
-rder`
-> >> parameter. So the generic/default version of the function now needs a =
-way to
-> >> clear a compound page.
-> >>
-> >> I guess I could do something like:
-> >>
-> >>  static inline
-> >>  struct folio *vma_alloc_zeroed_movable_folio(struct vm_area_struct *v=
-ma,
-> >>                                    unsigned long vaddr, gfp_t gfp, int=
- order)
-> >>  {
-> >>         struct folio *folio;
-> >>
-> >>         folio =3D vma_alloc_folio(GFP_HIGHUSER_MOVABLE | gfp,
-> >>                                         order, vma, vaddr, false);
-> >>         if (folio) {
-> >> #ifdef CONFIG_LARGE_FOLIO
-> >>                 clear_huge_page(&folio->page, vaddr, 1U << order);
-> >> #else
-> >>                 BUG_ON(order !=3D 0);
-> >>                 clear_user_highpage(&folio->page, vaddr);
-> >> #endif
-> >>         }
-> >>
-> >>         return folio;
-> >>  }
-> >>
-> >> But that's pretty messy and there's no reason why other users might co=
-me along
-> >> that pass order !=3D 0 and will be surprised by the BUG_ON.
-> >
-> > #ifdef CONFIG_LARGE_ANON_FOLIO // depends on CONFIG_TRANSPARENT_HUGE_PA=
-GE
-> > struct folio *alloc_anon_folio(struct vm_area_struct *vma, unsigned
-> > long vaddr, int order)
-> > {
-> >   // how do_huge_pmd_anonymous_page() allocs and clears
-> >   vma_alloc_folio(..., *true*);
->
-> This controls the mem allocation policy (see mempolicy.c::vma_alloc_folio=
-()) not
-> clearing. Clearing is done in __do_huge_pmd_anonymous_page():
->
->   clear_huge_page(page, vmf->address, HPAGE_PMD_NR);
+If loading a core PMU fails, legacy hardware/cache events may segv due
+to there being no PMU. Create a placeholder empty PMU for this
+case. This was discussed in:
+https://lore.kernel.org/lkml/20230614151625.2077-1-yangjihong1@huawei.com/
 
-Sorry for rushing this previously. This is what I meant. The #ifdef
-makes it safe to use clear_huge_page() without 01/10. I highlighted
-the last parameter to vma_alloc_folio() only because it's different
-from what you chose (not implying it clears the folio).
+Reported-by: Yang Jihong <yangjihong1@huawei.com>
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/perf/util/pmu.c  | 25 +++++++++++++++++++++++++
+ tools/perf/util/pmu.h  |  1 +
+ tools/perf/util/pmus.c |  7 ++++++-
+ 3 files changed, 32 insertions(+), 1 deletion(-)
 
-> > }
-> > #else
-> > #define alloc_anon_folio(vma, addr, order)
-> > vma_alloc_zeroed_movable_folio(vma, addr)
-> > #endif
->
-> Sorry I don't get this at all... If you are suggesting to bypass
-> vma_alloc_zeroed_movable_folio() entirely for the LARGE_ANON_FOLIO case
+diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
+index 8d5ecd4ff1a9..7f984a7f16ca 100644
+--- a/tools/perf/util/pmu.c
++++ b/tools/perf/util/pmu.c
+@@ -928,6 +928,31 @@ struct perf_pmu *perf_pmu__lookup(struct list_head *pmus, int dirfd, const char
+ 	return NULL;
+ }
+ 
++/* Creates the PMU when sysfs scanning fails. */
++struct perf_pmu *perf_pmu__create_placeholder_core_pmu(struct list_head *core_pmus)
++{
++	struct perf_pmu *pmu = zalloc(sizeof(*pmu));
++
++	if (!pmu)
++		return NULL;
++
++	pmu->name = strdup("cpu");
++	if (!pmu->name) {
++		free(pmu);
++		return NULL;
++	}
++
++	pmu->is_core = true;
++	pmu->type = PERF_TYPE_RAW;
++	pmu->cpus = cpu_map__online();
++
++	INIT_LIST_HEAD(&pmu->format);
++	INIT_LIST_HEAD(&pmu->aliases);
++	INIT_LIST_HEAD(&pmu->caps);
++	list_add_tail(&pmu->list, core_pmus);
++	return pmu;
++}
++
+ void perf_pmu__warn_invalid_formats(struct perf_pmu *pmu)
+ {
+ 	struct perf_pmu_format *format;
+diff --git a/tools/perf/util/pmu.h b/tools/perf/util/pmu.h
+index 8807a624e918..203b92860e3c 100644
+--- a/tools/perf/util/pmu.h
++++ b/tools/perf/util/pmu.h
+@@ -286,6 +286,7 @@ int perf_pmu__event_source_devices_fd(void);
+ int perf_pmu__pathname_fd(int dirfd, const char *pmu_name, const char *filename, int flags);
+ 
+ struct perf_pmu *perf_pmu__lookup(struct list_head *pmus, int dirfd, const char *lookup_name);
++struct perf_pmu *perf_pmu__create_placeholder_core_pmu(struct list_head *core_pmus);
+ void perf_pmu__delete(struct perf_pmu *pmu);
+ 
+ #endif /* __PMU_H */
+diff --git a/tools/perf/util/pmus.c b/tools/perf/util/pmus.c
+index 0866dee3fc62..3cd9de42139e 100644
+--- a/tools/perf/util/pmus.c
++++ b/tools/perf/util/pmus.c
+@@ -153,7 +153,12 @@ static void pmu_read_sysfs(bool core_only)
+ 
+ 	closedir(dir);
+ 	if (core_only) {
+-		read_sysfs_core_pmus = true;
++		if (!list_empty(&core_pmus))
++			read_sysfs_core_pmus = true;
++		else {
++			if (perf_pmu__create_placeholder_core_pmu(&core_pmus))
++				read_sysfs_core_pmus = true;
++		}
+ 	} else {
+ 		read_sysfs_core_pmus = true;
+ 		read_sysfs_all_pmus = true;
+-- 
+2.41.0.162.gfafddb0af9-goog
 
-Correct.
-
-> I don't
-> think that works because the arch code adds its own gfp flags there. For
-> example, arm64 adds __GFP_ZEROTAGS for VM_MTE VMAs.
-
-I think it's the opposite: it should be safer to reuse the THP code because
-1. It's an existing case that has been working for PMD_ORDER folios
-mapped by PTEs, and it's an arch-independent API which would be easier
-to review.
-2. Use vma_alloc_zeroed_movable_folio() for large folios is a *new*
-case. It's an arch-*dependent* API which I have no idea what VM_MTE
-does (should do) to large folios and don't plan to answer that for
-now.
-
-> Perhaps we can do away with an arch-owned vma_alloc_zeroed_movable_folio(=
-) and
-> replace it with a new arch_get_zeroed_movable_gfp_flags() then
-> alloc_anon_folio() add in those flags?
->
-> But I still think the cleanest, simplest change is just to unconditionall=
-y
-> expose clear_huge_page() as I've done it.
-
-The fundamental choice there as I see it is to whether the first step
-of large anon folios should lean toward the THP code base or the base
-page code base (I'm a big fan of the answer "Neither -- we should
-create something entirely new instead"). My POV is that the THP code
-base would allow us to move faster, since it's proven to work for a
-very similar case (PMD_ORDER folios mapped by PTEs).
