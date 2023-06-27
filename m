@@ -2,114 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E62A47402B5
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 19:56:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC6A77402B8
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 19:57:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231820AbjF0R4o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 13:56:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37194 "EHLO
+        id S231853AbjF0R4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 13:56:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbjF0R4m (ORCPT
+        with ESMTP id S229748AbjF0R4p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 13:56:42 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7EE71BD1
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 10:56:40 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-51d884a22e7so4652896a12.3
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 10:56:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1687888599; x=1690480599;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=BBM9HTbVE8IN9zkGnkp6xc3S5GpMqGP8gETPCnCzVXo=;
-        b=ZAKtTuJnvBJ0mMPXJRzdMshkWjH33bH2L3xcGz1iqCddlIVwQQwZ1nsVXMGqNKgCac
-         mZvJD56rmK9hLaxlIBxKHEFSXukX38e816WSScn+dwxbTI7YsYgQnIgRqc4RRywKuf7t
-         JSpVK5+5nTpdBcO1+ZukQyAfsMVyNn7LhRT/Y=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687888599; x=1690480599;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BBM9HTbVE8IN9zkGnkp6xc3S5GpMqGP8gETPCnCzVXo=;
-        b=bBfJOSplFs+oJ9VdcDufzcBxzQY/DHdppz++nvySNuN9ofL6+8+V2mbDsMxyRPMg7/
-         ZC7CRhfCLnfg4HRDHbCLl3n+PScjzKxc7lyrKcFeD1+T8VKDeDTEFkjsu4dpwLV0qa1V
-         YdcrnJfsELXpwAGX0dv65Ppy3Nk94Z8D30xcJne177RH5xatf46u1z0z47R5bnorplru
-         8whAZjbOS2DKYZaMDH3kywiw0Td53sNZ5vPyuFIT38aAlOYJQyx8sZ/JtrD3HkAKBuSj
-         Asb+KZ4LDymIM3GYqRGHufJ7KI2nAxby/XxXMfkfqpyYDlzzDjnZKmd7oZEf7UiBoXR2
-         2opA==
-X-Gm-Message-State: AC+VfDzRi/mFy1kmZq8hQpkbsTaEhv8T/ptFOV7Saa3uPxsIH+hMUzTQ
-        f/F1pJQivFBoc9FqjboSiMU6u6FvI7QoTFRWGnX4W3Ce
-X-Google-Smtp-Source: ACHHUZ6KejpghYiYux0DsDY2233MVbAlvA42+9QZOVXruvE0ce3QPuq3sIdq9m5Ru/w5zql1FCLnxA==
-X-Received: by 2002:a05:6402:1006:b0:518:72f2:2969 with SMTP id c6-20020a056402100600b0051872f22969mr22352910edu.9.1687888599079;
-        Tue, 27 Jun 2023 10:56:39 -0700 (PDT)
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com. [209.85.208.53])
-        by smtp.gmail.com with ESMTPSA id c4-20020aa7d604000000b0051a4a1abdbbsm4025304edr.49.2023.06.27.10.56.38
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Jun 2023 10:56:38 -0700 (PDT)
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-51d884a22e7so4652866a12.3
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 10:56:38 -0700 (PDT)
-X-Received: by 2002:aa7:c257:0:b0:51c:ef63:380a with SMTP id
- y23-20020aa7c257000000b0051cef63380amr7719283edo.27.1687888598013; Tue, 27
- Jun 2023 10:56:38 -0700 (PDT)
+        Tue, 27 Jun 2023 13:56:45 -0400
+Received: from port70.net (port70.net [81.7.13.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 82124296B;
+        Tue, 27 Jun 2023 10:56:41 -0700 (PDT)
+Received: by port70.net (Postfix, from userid 1002)
+        id D1130ABEC0C7; Tue, 27 Jun 2023 19:56:38 +0200 (CEST)
+Date:   Tue, 27 Jun 2023 19:56:38 +0200
+From:   Szabolcs Nagy <nsz@port70.net>
+To:     Stafford Horne <shorne@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux OpenRISC <linux-openrisc@vger.kernel.org>,
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        linux-mm@kvack.org, Rich Felker <dalias@libc.org>
+Subject: Re: [PATCH 3/4] openrisc: Support floating point user api
+Message-ID: <20230627175638.GD3630668@port70.net>
+References: <20230418165813.1900991-1-shorne@gmail.com>
+ <20230418165813.1900991-4-shorne@gmail.com>
+ <20230626213840.GA1236108@port70.net>
+ <ZJsRHzDbuTlXKNCG@antec>
 MIME-Version: 1.0
-References: <963d6eb8-6520-4c33-bbe8-6c76205bfd3d@paulmck-laptop>
-In-Reply-To: <963d6eb8-6520-4c33-bbe8-6c76205bfd3d@paulmck-laptop>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 27 Jun 2023 10:56:21 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whn4DGusRgq7ihBmu7vPBhvSDZsYN_ctef94E1rVbf5jA@mail.gmail.com>
-Message-ID: <CAHk-=whn4DGusRgq7ihBmu7vPBhvSDZsYN_ctef94E1rVbf5jA@mail.gmail.com>
-Subject: Re: [GIT PULL] RCU changes for v6.5
-To:     paulmck@kernel.org, Zhu Yanjun <zyjzyj2000@gmail.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
-        mingo@kernel.org, tglx@linutronix.de, rcu@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZJsRHzDbuTlXKNCG@antec>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 25 Jun 2023 at 08:35, Paul E. McKenney <paulmck@kernel.org> wrote:
->
->   git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git tags/rcu.2023.06.22a
->
-> o       Eliminate the single-argument variant of k[v]free_rcu() now
->         that all uses have been converted to k[v]free_rcu_mightsleep().
+* Stafford Horne <shorne@gmail.com> [2023-06-27 17:41:03 +0100]:
+> On Mon, Jun 26, 2023 at 11:38:40PM +0200, Szabolcs Nagy wrote:
+> > * Stafford Horne <shorne@gmail.com> [2023-04-18 17:58:12 +0100]:
+> > > Add support for handling floating point exceptions and forwarding the
+> > > SIGFPE signal to processes.  Also, add fpu state to sigcontext.
+> > > 
+> > > Signed-off-by: Stafford Horne <shorne@gmail.com>
+> > > ---
+> > ...
+> > > --- a/arch/openrisc/include/uapi/asm/sigcontext.h
+> > > +++ b/arch/openrisc/include/uapi/asm/sigcontext.h
+> > > @@ -28,6 +28,7 @@
+> > >  
+> > >  struct sigcontext {
+> > >  	struct user_regs_struct regs;  /* needs to be first */
+> > > +	struct __or1k_fpu_state fpu;
+> > >  	unsigned long oldmask;
+> > >  };
+> > 
+> > this seems to break userspace abi.
+> > glibc and musl have or1k abi without this field.
+> > 
+> > either this is a new abi where binaries opt-in with some marking
+> > and then the base sigcontext should be unmodified,
+> > 
+> > or the fp state needs to be added to the signal frame in a way that
+> > does not break existing abi (e.g. end of the struct ?) and also
+> > advertise the new thing via a hwcap, otherwise userspace cannot
+> > make use of it.
+> > 
+> > unless i'm missing something.
+> 
+> I think you are right, I meant to look into this but it must have slipped
+> though.  Is this something causing you issues or did you just notice it?
 
-Well, clearly not all users had been.
+i noticed it while trying to update musl headers to linux 6.4 uapi.
 
-The base of this RCU was v6.4-rc1, and when that commit was done, we
-still had a single-argument variant:
+> I didn't run into issues when running the glibc test suite, but I may have
+> missed it.
 
-  7e3f926bf453 ("rcu/kvfree: Eliminate k[v]free_rcu() single argument macro")
+i would only expect issues when accessing ucontext entries
+after uc_mcontext.regs in a signal handler registered with
+SA_SIGINFO.
 
-but look here:
+in particular uc_sigmask is after uc_mcontext on or1k and e.g.
+musl thread cancellation uses this entry to affect the mask on
+signal return which will not work on a 6.4 kernel (not tested).
 
-     git grep 'kfree_rcu([^,()][^,()]*)' 7e3f926bf453
+i don't think glibc has tests for the ucontext signal abi.
 
-results in
+> Just moving this to the end of the sigcontext may be all that is needed.
 
-   7e3f926bf453:drivers/infiniband/sw/rxe/rxe_verbs.c:     kfree_rcu(mr);
+that won't help since uc_sigmask comes after sigcontext in ucontext.
+it has to go to the end of ucontext or outside of ucontext then.
 
-so the RCU tree itself can not possibly have built cleanly.
+one way to have fpu in sigcontext is
 
-How the heck did this pass testing in linux-next? Did linux-next just
-assume that it was a merge error, and fix it up?
+struct sigcontext {
+	struct user_regs_struct regs;
+	unsigned long oldmask;
+	char padding[sizeof(__userspace_sigset_t)];
+	struct __or1k_fpu_state fpu;
+};
 
-Anyway, I *did* fix it up, changing the 'kfree_rcu()' to
-'kfree_rcu_mightsleep()', but no, this was not a merge artifact. This
-was purely "the RCU tree did not build on its own", and as a result
-the tree does not bisect cleanly if you have rdma enabled.
+but the kernel still has to interpret the padding in a bwcompat
+way. (and if libc wants to expose fpu in its ucontext then it
+needs a flag day abi break as the ucontext size is abi.)
 
-Adding rdma people to the participants just to let them know that this
-happened, but it's not their fault. This is on the RCU tree, and lack
-of proper coverage testing.
+(part of the userspace uc_sigmask is unused because sigset_t is
+larger than necessary so may be that can be reused but this is
+a hack as that's libc owned.)
 
-               Linus
+not sure how important this fpu field is, arm does not seem to
+have fpu state in ucontext and armhf works.
+
+there may be other ways, i'm adding Rich (musl maintainer) on cc
+in case he has an opinion.
