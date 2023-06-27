@@ -2,136 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ED1073FBF9
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 14:28:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A941C73FC04
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 14:31:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230486AbjF0M2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 08:28:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42264 "EHLO
+        id S230113AbjF0Mbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 08:31:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229926AbjF0M21 (ORCPT
+        with ESMTP id S229495AbjF0Mb3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 08:28:27 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 545D72706;
-        Tue, 27 Jun 2023 05:28:24 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-98e39784a85so464370566b.1;
-        Tue, 27 Jun 2023 05:28:24 -0700 (PDT)
+        Tue, 27 Jun 2023 08:31:29 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAC561999;
+        Tue, 27 Jun 2023 05:31:27 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-313e09a5b19so2833656f8f.0;
+        Tue, 27 Jun 2023 05:31:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687868902; x=1690460902;
-        h=content-transfer-encoding:to:subject:message-id:date:from
+        d=gmail.com; s=20221208; t=1687869086; x=1690461086;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tATW33xeNVNgsfO7kNHXzZcJ0gMJZAgbl6N8NUDs/RE=;
-        b=nTgRcX6rj9m25biFDQ+GiAvKhgT0s6sBGS6wrujE1mq8fwQT6kRc2XDapu/rPo8fL8
-         TOxxqyYuW83myTjNO2zsFHsxnECDbWMByunXlwhcMgJ9OWBYvSjR/cR+spB2ID7evDH1
-         OLEXKUcNvl3nZanq1vBw4Dw032wAvP8JN0Mr/KQd6Xp/uDnD8rN9ALfDHFKZVkS+0qQQ
-         jhw9/ZSEcTDcsYy2cuplY3aXpxsr0PCAIo5d/c+XC+z5mViBhOmNOWtX5FsseQrN0mcT
-         mArBBcgKnUNZEatu5TFYez+CL5SvlNlpE1JaDwwhaqb/+KaT30faRv1G8OU5CMqcoebv
-         aOgw==
+        bh=xa+nTJijQ9ASf8WlLQeUdpa+dFZwTDrfcItHW2kOSS0=;
+        b=jnG7SEBoHpt9OdYmEA6qDYlvUKAwVDw+SJrYRqe8s0FxpIpSYsd/DVnBjYvk2of1p5
+         7sYxzJDZyCHya9HeGhYKtx6+1CLYCTXv6pT+JJi8uGxPklu/fbeDK6H20KqJAed9Pk+F
+         sryVJ/yBE9BwE1wzNQp3pgFYxVUmvUVmO+FgSLXZnSg/0rovfigd0IeGZGKcpgweD+gQ
+         LEz40yMexBlrFrdBZEPDisLtSmQdeb11gm461PqFQ70j1sRoHJAeS17TnX9rQJm7UmJc
+         NrUax+uYKfCLZaNwxZbix/FbM1GUU4v9DWyAtfFuSp/spCD3zLyZ52SR+VUWW/i53MSU
+         o6Cg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687868902; x=1690460902;
-        h=content-transfer-encoding:to:subject:message-id:date:from
+        d=1e100.net; s=20221208; t=1687869086; x=1690461086;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=tATW33xeNVNgsfO7kNHXzZcJ0gMJZAgbl6N8NUDs/RE=;
-        b=Nlft5zqcHq8OM9afHRv3pDTltvAa546WZt46MN7EkqDXEkJ6SGetleOQGNJz185de9
-         sb91EH4tJSBzoZHlFio55q+h/mrE56Hx2SgShf7FDrsXDsGG85RzUN2yK9q/pBWjXpZz
-         6LO2CrwRFiIyMYiu+Q6OfJbEycxSKIDdmlL2GFicfZd11fKrquFoU0BPyLHaYZX0ZYR3
-         5JuJ/X/0Rrnuyc7orMJa98Bj3h57iP53v7tajVcfPVykfLg9J0sXOJwnrjGJUQjTAALE
-         8DFD463U1rK9R0soWuhZPzeRKJDa8jieDSljQQyTWfs5KG8igCh2iKYCwREWg6Qq/dW3
-         pz8Q==
-X-Gm-Message-State: AC+VfDy90bczbj7NrAFo8mFJkgt+YMtSOVahwgx1SlcGxkhJA7aDNxeO
-        OuEK5XF5A5WjED/G/x1/tD3UBlKlucpoR2Qtd+Q=
-X-Google-Smtp-Source: ACHHUZ5ApV7cvX4Q3CRArtLi2hrH4sXtiyypn8GcRYX+zEVHohR2QS2IdF+C/5GXLK6stLqSbf/y7TRXavlF2dEF0ug=
-X-Received: by 2002:a17:907:7ba5:b0:982:4b35:c0b6 with SMTP id
- ne37-20020a1709077ba500b009824b35c0b6mr31461984ejc.1.1687868902416; Tue, 27
- Jun 2023 05:28:22 -0700 (PDT)
+        bh=xa+nTJijQ9ASf8WlLQeUdpa+dFZwTDrfcItHW2kOSS0=;
+        b=GYbsk5XEmve9zNdVzbFA3syZyqnh7fCbg+e4bU6pMMkgMnNDbLEXxNnpWCvF5h6J+y
+         8vUMREejIC165gKddwJOKk76puAMY4Rt8p0cCJpwVIrsBxaCx1xr3Rb/MUu1gkLRBMy/
+         5UjzTcNAGerp7NYKje5HlYM/k4F9U0d+TAEMUUGHt7Lpq77dTjCFSl8vZQ9LggRlTGSa
+         JjOBkiNP1Kg+dj6KL65amxiQPMJP5TxTbKU+L5Lo+V81CW3YVV7FDuzikHz6b0OWOmhy
+         4F/Kr0vE+ur7i1cPDSTYcq2vVYlfYxM/Z4VByydefUhmDm1g0ZVy7MSq3jtbxyM8BSB/
+         tVUw==
+X-Gm-Message-State: AC+VfDzu0Wo12hGcmydZhXJNp0Y4HqSrX/gv4UWSkewJffV+BtFnWk/A
+        QftevCGJQc0MDDP8D8Pb9Vsl0tkglmnySy5LAQ0=
+X-Google-Smtp-Source: ACHHUZ7kd/kr3QaWqRB+9uv4Csc7z6jMqSymlgLD4iVmB8s7xd+Bx54w8K5LrFWX3fsARyqRx8XVs1/32cbASE/Ft4k=
+X-Received: by 2002:a5d:6dce:0:b0:30a:e63b:950 with SMTP id
+ d14-20020a5d6dce000000b0030ae63b0950mr33833828wrz.31.1687869086050; Tue, 27
+ Jun 2023 05:31:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230627081002.1768990-1-yqsun1997@gmail.com> <20230627104237.GA3601890@gnbcxd0016.gnb.st.com>
-In-Reply-To: <20230627104237.GA3601890@gnbcxd0016.gnb.st.com>
-From:   sun yq <yqsun1997@gmail.com>
-Date:   Tue, 27 Jun 2023 20:28:11 +0800
-Message-ID: <CAA0BgY_bKg4qXmtmWqHQW+EOvfXUG0FqRtAJ7A8C40uL1v8qVA@mail.gmail.com>
-Subject: Re: [PATCH] OOB read and write in mtk multiple places
-To:     yqsun1997@gmail.com, tiffany.lin@mediatek.com,
-        andrew-ct.chen@mediatek.com, yunfei.dong@mediatek.com,
-        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, 499671216@qq.com
+References: <CAA85sZukiFq4A+b9+en_G85eVDNXMQsnGc4o-4NZ9SfWKqaULA@mail.gmail.com>
+ <CAA85sZvm1dL3oGO85k4R+TaqBiJsggUTpZmGpH1+dqdC+U_s1w@mail.gmail.com>
+ <e7e49ed5-09e2-da48-002d-c7eccc9f9451@intel.com> <CAA85sZtyM+X_oHcpOBNSgF=kmB6k32bpB8FCJN5cVE14YCba+A@mail.gmail.com>
+ <22aad588-47d6-6441-45b2-0e685ed84c8d@intel.com> <CAA85sZti1=ET=Tc3MoqCX0FqthHLf6MSxGNAhJUNiMms1TfoKA@mail.gmail.com>
+ <CAA85sZvn04k7=oiTQ=4_C8x7pNEXRWzeEStcaXvi3v63ah7OUQ@mail.gmail.com>
+ <ffb554bfa4739381d928406ad24697a4dbbbe4a2.camel@redhat.com>
+ <CAA85sZunA=tf0FgLH=MNVYq3Edewb1j58oBAoXE1Tyuy3GJObg@mail.gmail.com>
+ <CAA85sZsH1tMwLtL=VDa5=GBdVNWgifvhK+eG-hQg69PeSxBWkg@mail.gmail.com>
+ <CAA85sZu=CzJx9QD87-vehOStzO9qHUSWk6DXZg3TzJeqOV5-aw@mail.gmail.com> <0a040331995c072c56fce58794848f5e9853c44f.camel@redhat.com>
+In-Reply-To: <0a040331995c072c56fce58794848f5e9853c44f.camel@redhat.com>
+From:   Ian Kumlien <ian.kumlien@gmail.com>
+Date:   Tue, 27 Jun 2023 14:31:13 +0200
+Message-ID: <CAA85sZuuwxtAQcMe3LHpFVeF7y-bVoHtO1nukAa2+NyJw3zcyg@mail.gmail.com>
+Subject: Re: [Intel-wired-lan] bug with rx-udp-gro-forwarding offloading?
+To:     Paolo Abeni <pabeni@redhat.com>
+Cc:     Alexander Lobakin <aleksander.lobakin@intel.com>,
+        intel-wired-lan <intel-wired-lan@lists.osuosl.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When using V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE, the number of planes is
-controlled by the user. Only checking the oob at the function may miss
-other functions, so it is appropriate to change the size of the macro.
-You can refer to other functions, such as
-mtk_dip_vb2_video_queue_setup, the max plane size of this module is 8
-
-
-On Tue, Jun 27, 2023 at 6:42=E2=80=AFPM Alain Volmat <alain.volmat@foss.st.=
+On Tue, Jun 27, 2023 at 11:19=E2=80=AFAM Paolo Abeni <pabeni@redhat.com> wr=
+ote:
+>
+> On Mon, 2023-06-26 at 20:59 +0200, Ian Kumlien wrote:
+> > On Mon, Jun 26, 2023 at 8:20=E2=80=AFPM Ian Kumlien <ian.kumlien@gmail.=
 com> wrote:
->
-> Hi,
->
-> I had a look at some places where this macro MTK_VCODEC_MAX_PLANES
-> is being used, such as q_data->bytesperline etc.
-> This patch seems to be increasing the table size from 3 to 8 but,
-> if my understanding is correct doesn't solve the issue that
-> (taking the example you give in vidioc_venc_g_fmt) the table
-> bytesperline is accessed taking into account a num_planes values which
-> is unchecked if appropriate for this driver.
->
-> What are the 8 planes you are referring to ?
->
-> While increasing the table to 8 might also be necessary, it seems to me
-> that the real OOB access issue should be solved by checking the num of
-> planes value.
->
-> Regards,
-> Alain
->
-> On Tue, Jun 27, 2023 at 04:10:02PM +0800, yqsun1997@gmail.com wrote:
-> > From: yqsun1997 <yqsun1997@gmail.com>
+> > >
+> > > Nevermind, I think I found it, I will loop this thing until I have a
+> > > proper trace....
 > >
-> > The num_planes max index is 8,
-> > but bytesperline and bytesperline in struct mtk_q_data,
-> > The max index is MTK_VCODEC_MAX_PLANES =3D=3D 3,
-> > so will cause OOB read and write in multiple places.like vidioc_venc_g_=
-fmt
-> > same as commit 8fbcf730
+> > Still some question marks, but much better
+>
+> Thanks!
 > >
-> > Signed-off-by: yqsun1997 <yqsun1997@gmail.com>
-> > ---
-> >  drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h b/=
-drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
-> > index 9acab54fd..c2c157675 100644
-> > --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
-> > +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
-> > @@ -22,7 +22,7 @@
-> >  #define MTK_VCODEC_DEC_NAME  "mtk-vcodec-dec"
-> >  #define MTK_VCODEC_ENC_NAME  "mtk-vcodec-enc"
-> >
-> > -#define MTK_VCODEC_MAX_PLANES        3
-> > +#define MTK_VCODEC_MAX_PLANES        8
-> >  #define MTK_V4L2_BENCHMARK   0
-> >  #define WAIT_INTR_TIMEOUT_MS 1000
-> >  #define IS_VDEC_LAT_ARCH(hw_arch) ((hw_arch) >=3D MTK_VDEC_LAT_SINGLE_=
-CORE)
-> > --
-> > 2.39.2
-> >
+> > cat bug.txt | ./scripts/decode_stacktrace.sh vmlinux
+> > [   62.624003] BUG: kernel NULL pointer dereference, address: 000000000=
+00000c0
+> > [   62.631083] #PF: supervisor read access in kernel mode
+> > [   62.636312] #PF: error_code(0x0000) - not-present page
+> > [   62.641541] PGD 0 P4D 0
+> > [   62.644174] Oops: 0000 [#1] PREEMPT SMP NOPTI
+> > [   62.648629] CPU: 1 PID: 913 Comm: napi/eno2-79 Not tainted 6.4.0 #36=
+4
+> > [   62.655162] Hardware name: Supermicro Super Server/A2SDi-12C-HLN4F,
+> > BIOS 1.7a 10/13/2022
+> > [   62.663344] RIP: 0010:__udp_gso_segment
+> > (./include/linux/skbuff.h:2858 ./include/linux/udp.h:23
+> > net/ipv4/udp_offload.c:228 net/ipv4/udp_offload.c:261
+> > net/ipv4/udp_offload.c:277)
+>
+> So it's faulting here:
+>
+> static struct sk_buff *__udpv4_gso_segment_list_csum(struct sk_buff *segs=
+)
+> {
+>         struct sk_buff *seg;
+>         struct udphdr *uh, *uh2;
+>         struct iphdr *iph, *iph2;
+>
+>         seg =3D segs;
+>         uh =3D udp_hdr(seg);
+>         iph =3D ip_hdr(seg);
+>
+>         if ((udp_hdr(seg)->dest =3D=3D udp_hdr(seg->next)->dest) &&
+>         // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>
+> The GSO segment has been assembled by skb_gro_receive_list()
+> I guess seg->next is NULL, which is somewhat unexpected as
+> napi_gro_complete() clears the gso_size when sending up the stack a
+> single frame.
+>
+> On the flip side, AFAICS, nothing prevents the stack from changing the
+> aggregated packet layout (e.g. pulling data and/or linearizing the
+> skb).
+>
+> In any case this looks more related to rx-gro-list then rx-udp-gro-
+> forwarding. I understand you have both feature enabled in your env?
+>
+> Side questions: do you have any non trivial nf/br filter rule?
+>
+> The following could possibly validate the above and avoid the issue,
+> but it's a bit papering over it. Could you please try it in your env?
+
+Will do as soon as i get home =3D)
+
+> Thanks!
+>
+> Paolo
+> ---
+> diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+> index 6c5915efbc17..75531686bfdf 100644
+> --- a/net/core/skbuff.c
+> +++ b/net/core/skbuff.c
+> @@ -4319,6 +4319,9 @@ struct sk_buff *skb_segment_list(struct sk_buff *sk=
+b,
+>
+>         skb->prev =3D tail;
+>
+> +       if (WARN_ON_ONCE(!skb->next))
+> +               goto err_linearize;
+> +
+>         if (skb_needs_linearize(skb, features) &&
+>             __skb_linearize(skb))
+>                 goto err_linearize;
+>
