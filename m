@@ -2,59 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3F8973F4CC
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 08:48:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3549E73F4D6
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 08:52:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229974AbjF0GsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 02:48:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44676 "EHLO
+        id S229828AbjF0GwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 02:52:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbjF0GsF (ORCPT
+        with ESMTP id S229799AbjF0GwM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 02:48:05 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1038D1734
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 23:48:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687848483; x=1719384483;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=c0x4IzZ5x7svya+o8vVZ3AnRHa0821u/ac4osGpmwik=;
-  b=Ee/C3GJoDBJNeOCj3Vr8DJ/TwQbhNoC0zqLI8H+V1VEzeUlAlaLWdDtT
-   t8AKGOvCyCu9pXs6ChhBbWVEaC4rbP280v9PJ7pRkK5J4bbBaAGHbHDAe
-   5icztexPBdJDtl+IVCoFM1QjMGiqV3zFRIeAXXyoEPav8LbvoAMPzWdyM
-   9k2lZ+FLOOMtkI6aP24jG/ub2SJEOcDPa+mZmjWHTGWT1nZmaAVrbMCck
-   2gDjbFVDdKy3zi1J5uEEg5uGlPW35fTqkTrCZ0LKvXYT0ibQqcfbpOLDd
-   rUCQHEthz2jPHF46U+jFm/WHgEqBq2MR5TEsNMn/F0p9XLSYh0k5dFxtw
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="360358655"
-X-IronPort-AV: E=Sophos;i="6.01,161,1684825200"; 
-   d="scan'208";a="360358655"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 23:48:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="786467750"
-X-IronPort-AV: E=Sophos;i="6.01,161,1684825200"; 
-   d="scan'208";a="786467750"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 26 Jun 2023 23:47:59 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qE2UY-000Bm1-2v;
-        Tue, 27 Jun 2023 06:47:58 +0000
-Date:   Tue, 27 Jun 2023 14:47:53 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: drivers/gpu/drm/sti/sti_mixer.c:145:47: sparse: sparse: incorrect
- type in argument 1 (different address spaces)
-Message-ID: <202306271413.5vS46KMc-lkp@intel.com>
-MIME-Version: 1.0
+        Tue, 27 Jun 2023 02:52:12 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F367D109;
+        Mon, 26 Jun 2023 23:52:08 -0700 (PDT)
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35R6lkxi014094;
+        Tue, 27 Jun 2023 06:51:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=pp1; bh=ljMzO1E71unERBxVtqDA2RJAX7kAFF0nnhouWnI+x8Y=;
+ b=Bb6b4LU5d1BFCqwd3S0uR+rF7w/+MRWWr/bg1agFbyVE8b6L2zkomk7FK5cVINKNdmpe
+ jffL4TbyHvSVh+l+vzEab5PVmWi2WscmXX7/tAhFhCTiH7k9YjU2wqvNdDBG4MDKSjXP
+ Ic7Kfg1o4i7H91OXfN9Nh7na3IYZvxKchHSquFSd3s+icQPu+I7Hm0bSujsbemCxNjfo
+ wwp1KV93bC0Kk2mTEESk+7vEU5qgKEQc66Bj5XdDauwf1k+Wih+DatPX5QxyrpDsTfwB
+ 7xW6XKdtj3t0agiOqXprtIacepjTASe8JJyA4PzTbNhGYUq9YrkBvTlPbHzlN5yhyPQK yw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rfttc82ep-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 27 Jun 2023 06:51:50 +0000
+Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 35R6mRKu015631;
+        Tue, 27 Jun 2023 06:51:50 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rfttc82ds-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 27 Jun 2023 06:51:50 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35R3onYl010114;
+        Tue, 27 Jun 2023 06:51:48 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma01fra.de.ibm.com (PPS) with ESMTPS id 3rdr451aec-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 27 Jun 2023 06:51:47 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35R6pjn342271132
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 27 Jun 2023 06:51:45 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 75DAD2004B;
+        Tue, 27 Jun 2023 06:51:45 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2881320043;
+        Tue, 27 Jun 2023 06:51:42 +0000 (GMT)
+Received: from li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com (unknown [9.109.253.169])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Tue, 27 Jun 2023 06:51:41 +0000 (GMT)
+Date:   Tue, 27 Jun 2023 12:21:38 +0530
+From:   Ojaswin Mujoo <ojaswin@linux.ibm.com>
+To:     Guoqing Jiang <guoqing.jiang@linux.dev>
+Cc:     linux-ext4@vger.kernel.org, "Theodore Ts'o" <tytso@mit.edu>,
+        Ritesh Harjani <riteshh@linux.ibm.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jan Kara <jack@suse.cz>,
+        Kemeng Shi <shikemeng@huaweicloud.com>,
+        Ritesh Harjani <ritesh.list@gmail.com>
+Subject: Re: [PATCH v2 09/12] ext4: Ensure ext4_mb_prefetch_fini() is called
+ for all prefetched BGs
+Message-ID: <ZJqG+rEl9DATNRIX@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
+References: <cover.1685449706.git.ojaswin@linux.ibm.com>
+ <05e648ae04ec5b754207032823e9c1de9a54f87a.1685449706.git.ojaswin@linux.ibm.com>
+ <c3173405-713d-d2eb-bd9c-af8b8c747533@linux.dev>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+In-Reply-To: <c3173405-713d-d2eb-bd9c-af8b8c747533@linux.dev>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: pIP5lKK82fE7DkKe64js4SX9CTWH7DqX
+X-Proofpoint-ORIG-GUID: nsge9KerDHTbCxBtf8Qx2XrdE4HLaU4K
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-27_03,2023-06-26_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
+ impostorscore=0 adultscore=0 lowpriorityscore=0 spamscore=0 mlxscore=0
+ phishscore=0 priorityscore=1501 mlxlogscore=999 bulkscore=0 clxscore=1011
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306270061
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,74 +98,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+On Tue, Jun 06, 2023 at 10:00:57PM +0800, Guoqing Jiang wrote:
+> Hello,
+> 
+> On 5/30/23 20:33, Ojaswin Mujoo wrote:
+> > Before this patch, the call stack in ext4_run_li_request is as follows:
+> > 
+> >    /*
+> >     * nr = no. of BGs we want to fetch (=s_mb_prefetch)
+> >     * prefetch_ios = no. of BGs not uptodate after
+> >     * 		    ext4_read_block_bitmap_nowait()
+> >     */
+> >    next_group = ext4_mb_prefetch(sb, group, nr, prefetch_ios);
+> >    ext4_mb_prefetch_fini(sb, next_group prefetch_ios);
+> > 
+> > ext4_mb_prefetch_fini() will only try to initialize buddies for BGs in
+> > range [next_group - prefetch_ios, next_group). This is incorrect since
+> > sometimes (prefetch_ios < nr), which causes ext4_mb_prefetch_fini() to
+> > incorrectly ignore some of the BGs that might need initialization. This
+> > issue is more notable now with the previous patch enabling "fetching" of
+> > BLOCK_UNINIT BGs which are marked buffer_uptodate by default.
+> > 
+> > Fix this by passing nr to ext4_mb_prefetch_fini() instead of
+> > prefetch_ios so that it considers the right range of groups.
+> 
+> Thanks for the series.
+> 
+> > Similarly, make sure we don't pass nr=0 to ext4_mb_prefetch_fini() in
+> > ext4_mb_regular_allocator() since we might have prefetched BLOCK_UNINIT
+> > groups that would need buddy initialization.
+> 
+> Seems ext4_mb_prefetch_fini can't be called by ext4_mb_regular_allocator
+> if nr is 0.
 
-First bad commit (maybe != root cause):
+Hi Guoqing,
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   1ef6663a587ba3e57dc5065a477db1c64481eedd
-commit: 09f6b27d5ddd9ad0ec096d1b0f8decdacc70f0f8 ARM: dove: multiplatform support
-date:   1 year, 3 months ago
-config: arm-randconfig-r071-20230627 (https://download.01.org/0day-ci/archive/20230627/202306271413.5vS46KMc-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.3.0
-reproduce: (https://download.01.org/0day-ci/archive/20230627/202306271413.5vS46KMc-lkp@intel.com/reproduce)
+Sorry I was on vacation so didn't get a chance to reply to this sooner.
+Let me explain what I meant by that statement in the commit message.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306271413.5vS46KMc-lkp@intel.com/
+So basically, the prefetch_ios output argument is incremented whenever
+ext4_mb_prefetch() reads a block group with !buffer_uptodate(bh).
+However, for BLOCK_UNINIT BGs the buffer is marked uptodate after
+initialization and hence prefetch_ios is not incremented when such BGs
+are prefetched. 
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/gpu/drm/sti/sti_mixer.c:145:47: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got void * @@
-   drivers/gpu/drm/sti/sti_mixer.c:145:47: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/gpu/drm/sti/sti_mixer.c:145:47: sparse:     got void *
->> drivers/gpu/drm/sti/sti_mixer.c:168:38: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void *addr @@     got void [noderef] __iomem * @@
-   drivers/gpu/drm/sti/sti_mixer.c:168:38: sparse:     expected void *addr
-   drivers/gpu/drm/sti/sti_mixer.c:168:38: sparse:     got void [noderef] __iomem *
+This leads to nr becoming 0 due to the following line (removed in this patch):
 
-vim +145 drivers/gpu/drm/sti/sti_mixer.c
+				if (prefetch_ios == curr_ios)
+					nr = 0;
 
-a5f81078a56c6a Vincent Abriou 2016-02-04  139  
-a5f81078a56c6a Vincent Abriou 2016-02-04  140  static void mixer_dbg_mxn(struct seq_file *s, void *addr)
-a5f81078a56c6a Vincent Abriou 2016-02-04  141  {
-a5f81078a56c6a Vincent Abriou 2016-02-04  142  	int i;
-a5f81078a56c6a Vincent Abriou 2016-02-04  143  
-a5f81078a56c6a Vincent Abriou 2016-02-04  144  	for (i = 1; i < 8; i++)
-a5f81078a56c6a Vincent Abriou 2016-02-04 @145  		seq_printf(s, "-0x%08X", (int)readl(addr + i * 4));
-a5f81078a56c6a Vincent Abriou 2016-02-04  146  }
-a5f81078a56c6a Vincent Abriou 2016-02-04  147  
-a5f81078a56c6a Vincent Abriou 2016-02-04  148  static int mixer_dbg_show(struct seq_file *s, void *arg)
-a5f81078a56c6a Vincent Abriou 2016-02-04  149  {
-a5f81078a56c6a Vincent Abriou 2016-02-04  150  	struct drm_info_node *node = s->private;
-a5f81078a56c6a Vincent Abriou 2016-02-04  151  	struct sti_mixer *mixer = (struct sti_mixer *)node->info_ent->data;
-a5f81078a56c6a Vincent Abriou 2016-02-04  152  
-a5f81078a56c6a Vincent Abriou 2016-02-04  153  	seq_printf(s, "%s: (vaddr = 0x%p)",
-a5f81078a56c6a Vincent Abriou 2016-02-04  154  		   sti_mixer_to_str(mixer), mixer->regs);
-a5f81078a56c6a Vincent Abriou 2016-02-04  155  
-a5f81078a56c6a Vincent Abriou 2016-02-04  156  	DBGFS_DUMP(GAM_MIXER_CTL);
-a5f81078a56c6a Vincent Abriou 2016-02-04  157  	mixer_dbg_ctl(s, sti_mixer_reg_read(mixer, GAM_MIXER_CTL));
-a5f81078a56c6a Vincent Abriou 2016-02-04  158  	DBGFS_DUMP(GAM_MIXER_BKC);
-a5f81078a56c6a Vincent Abriou 2016-02-04  159  	DBGFS_DUMP(GAM_MIXER_BCO);
-a5f81078a56c6a Vincent Abriou 2016-02-04  160  	DBGFS_DUMP(GAM_MIXER_BCS);
-a5f81078a56c6a Vincent Abriou 2016-02-04  161  	DBGFS_DUMP(GAM_MIXER_AVO);
-a5f81078a56c6a Vincent Abriou 2016-02-04  162  	DBGFS_DUMP(GAM_MIXER_AVS);
-a5f81078a56c6a Vincent Abriou 2016-02-04  163  	DBGFS_DUMP(GAM_MIXER_CRB);
-a5f81078a56c6a Vincent Abriou 2016-02-04  164  	mixer_dbg_crb(s, sti_mixer_reg_read(mixer, GAM_MIXER_CRB));
-a5f81078a56c6a Vincent Abriou 2016-02-04  165  	DBGFS_DUMP(GAM_MIXER_ACT);
-a5f81078a56c6a Vincent Abriou 2016-02-04  166  	DBGFS_DUMP(GAM_MIXER_MBP);
-a5f81078a56c6a Vincent Abriou 2016-02-04  167  	DBGFS_DUMP(GAM_MIXER_MX0);
-a5f81078a56c6a Vincent Abriou 2016-02-04 @168  	mixer_dbg_mxn(s, mixer->regs + GAM_MIXER_MX0);
-e9635133d47b9c Markus Elfring 2017-05-05  169  	seq_putc(s, '\n');
-a5f81078a56c6a Vincent Abriou 2016-02-04  170  	return 0;
-a5f81078a56c6a Vincent Abriou 2016-02-04  171  }
-a5f81078a56c6a Vincent Abriou 2016-02-04  172  
+hence ext4_mb_prefetch_fini() would never pre initialise the corresponding 
+buddy structures. Instead, these structures would then get initialized
+probably at a later point during the slower allocation criterias. The
+motivation of making sure the BLOCK_UNINIT BGs' buddies are pre
+initialized is so the faster allocation criterias can utilize the data
+to make better decisions.
 
-:::::: The code at line 145 was first introduced by commit
-:::::: a5f81078a56c6ab57b7db2402ac64c34338004c5 drm/sti: add debugfs entries for MIXER crtc
+Regards,
+ojaswin
 
-:::::: TO: Vincent Abriou <vincent.abriou@st.com>
-:::::: CC: Vincent Abriou <vincent.abriou@st.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> 
+> https://elixir.bootlin.com/linux/v6.4-rc5/source/fs/ext4/mballoc.c#L2816
+> 
+> Am I miss something?
+> 
+> Thanks,
+> Guoqing
+> 
