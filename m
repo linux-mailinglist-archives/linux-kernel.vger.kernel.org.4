@@ -2,248 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDEFF73F811
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 11:03:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 911CB73F817
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 11:04:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230488AbjF0JDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 05:03:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57110 "EHLO
+        id S230487AbjF0JEn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 05:04:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229987AbjF0JDv (ORCPT
+        with ESMTP id S231130AbjF0JEk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 05:03:51 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FB02F7
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 02:03:50 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-55b12286476so45309a12.1
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 02:03:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1687856630; x=1690448630;
-        h=user-agent:in-reply-to:content-transfer-encoding
-         :content-disposition:mime-version:references:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ixaYXWdqqrrJg8cQ7E6QHdJnqRvhIWUz6w33u+meqtA=;
-        b=a7wWg2p36hct93D9zA5W05eLIWgaP/shRnPWDWShYYVcwwnhQdhap0dwprneV88sEA
-         TyYXeKCPu8s28Kp5Jbe9io0sC/pMdJ3hH/FLGiD1gtAR7vcLwycSA1wT6mSpX8uGi6hH
-         3wtIus1/7GcCQ6Nq7k6qibDqu2MVDku52L2TlBwUtl4YPEmRlKCf57oqr9J6oMYYjQ9R
-         dYzT+2XN034S8jg+3ijUgfPX5K+mK8O3plZsHufay5hN3fUyzTu/tQq27KLBiLQUGbvc
-         Z9uuFjRAV48Sq5AqWlEf/vjCN8neTiLEErsYBKe/phZABYBW6kdoJonGK91UI/JljWX4
-         w74Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687856630; x=1690448630;
-        h=user-agent:in-reply-to:content-transfer-encoding
-         :content-disposition:mime-version:references:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ixaYXWdqqrrJg8cQ7E6QHdJnqRvhIWUz6w33u+meqtA=;
-        b=K0UcLmYNwOUT/33a+rQfWauRqX+2X08uCdM7IV5q3dNGg87quilhC9SKkpJu+9I+Cl
-         apELn108kqFXAxSNIzgbw7EfDW9Q9TxdR6ZuxJjtMlsFNO2ocEKu8AnRJPGzG6200Y8D
-         lVMPJ1qb44iD6iTWVUSy5hB5dslXU+OTKXCNqlO3T6HTLZ7LjQ5zQPpSw2XW7ss1wePc
-         bBW13rCTdgWvYSNLquVsbE/Jr4jW6rJWUmTx7RiHDsM3SF/E+BPb65q+LM9ybYzfzAdH
-         yv55GU9NhW/Cy4/Iiqan9eSSaTszRnfhm9FAAxtauveCSN5TYwJIA7ZCW3QyrRWluoKr
-         xnMQ==
-X-Gm-Message-State: AC+VfDynEQgTCDWumCIwdOYYGE3K47oSNURJkU2iArgZHo/JUIDdVcPK
-        q71LZI1GYz7alrZjeKXtqtM7fw==
-X-Google-Smtp-Source: ACHHUZ5jaLU4eL50/GBZAmrIESYCW9muKoFt5cKjNe7KFKdCJrnZKb0XTQ3ve826XHuWO1wonBcRtw==
-X-Received: by 2002:a17:90a:1b63:b0:262:ec64:f941 with SMTP id q90-20020a17090a1b6300b00262ec64f941mr3833170pjq.5.1687856629763;
-        Tue, 27 Jun 2023 02:03:49 -0700 (PDT)
-Received: from hsinchu16 (59-124-168-89.hinet-ip.hinet.net. [59.124.168.89])
-        by smtp.gmail.com with ESMTPSA id w5-20020a17090aea0500b002532ddc3a00sm7402441pjy.15.2023.06.27.02.03.46
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 27 Jun 2023 02:03:49 -0700 (PDT)
-Date:   Tue, 27 Jun 2023 17:03:44 +0800
-From:   Eric Lin <eric.lin@sifive.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Stephane Eranian <eranian@google.com>
-Cc:     mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, irogers@google.com, adrian.hunter@intel.com,
-        palmer@dabbelt.com, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        greentime.hu@sifive.com, vincent.chen@sifive.com
-Subject: Re: [PATCH] perf/core: Add pmu stop before unthrottling to prevent
- WARNING
-Message-ID: <20230627090343.GA11571@hsinchu16>
-References: <20230602094841.1225-1-eric.lin@sifive.com>
- <CAPqJEFpamQSbCcD0QJ16u7ctRf1=NYihod6gdZJfxFpE0YUVHQ@mail.gmail.com>
- <CABPqkBRyqsMnNbokBKepkWq1DtzfB0npXySGbKS1T3nQTwmaAw@mail.gmail.com>
- <20230621115811.GD2053369@hirez.programming.kicks-ass.net>
+        Tue, 27 Jun 2023 05:04:40 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2059.outbound.protection.outlook.com [40.107.94.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FE42F7;
+        Tue, 27 Jun 2023 02:04:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PB5zpfA8glo+ynGVbwCMQ+WhF7hyv23f7R8csRaTspYsI/ND2Swrv2dfVm41/XYqB5eHEV6cA7h7g9ciDODkZv8ohRip5uzOsWp95vVYQX9MHtzsp8gS9JWwp2zCDv68m2RP72ptrAzoZ4dIDk+bAXw9z6e7isjDCSv42Zb0H+fialJl6uaCOM8liRi2nsn5hXrQPSwbVdoWc+jgnXnoHc/qOlR7ahEaGWMMv6KQRpPk6p8CEjLxfj/hEUaVbKRFe/AQRQlfw9sU19K9lycLYIGSGIpug6PJt7obSUf8IeZtVxrdHfIikchDX4pWO8Shh+GtLIMe0hOalXhKQoNlTw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=x9b89EzISxBwXVsONoEtkzV8jayTk4gyfGPaU/Wbsrk=;
+ b=flntUZsTioGBZaWB8nl32Ko6O+AdO+Iuk9jygVb4Cbl4q1cmx98prFTx9/j92IZXmwMv5NC9Oh0KPVPhI5Q9wsh7i+UTjjhuBmoConnazmk4+us//FwNp1WzR5hmoh1hF5W+E7mbnYryiQcTBAb1zU9WVxwX9sdckMbKxf70zlWMIHCvYFdZLtv13Rn2wHw3h/y2NxCZoeVSvnA9rT3jKpZRJ9P1izQBSyidzw5G5iYu6lVMVACLMSmJvrYidqSK6lHsL52K0goBaRHhCsniINM3ZNx4PgPRFJQZI8F119QQ2sjU2FaCEnrm3910btriiBfMUWfPCIQLLa95lCcQIg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.233) smtp.rcpttodomain=linuxfoundation.org
+ smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=x9b89EzISxBwXVsONoEtkzV8jayTk4gyfGPaU/Wbsrk=;
+ b=OBL0H/BhFn8a9BzOh8YdmZaGeqhKurH8HX/A+/NHcbTs0ZcwwlLoZ7y5wQll70IAQgJGJdsZN9FXE8DzSR+pPd+iLt82jYjrD/pycUmFjm/1w8kqEv39F2m0Mej9upy+4inehanADpmTm49Lgj1b1f9wPuXHOe6rf/myorf7p6elELOWj0aUHNc3ILxo83V7hzGQrdjOHJLbZ2NrJzzgvX+nueClDKkwfTbzs4DpANKYs+E5sEvlxd/XflHtCjFAXdASPBpB5YKA+uU0QScLF2FNja8EXLafhO2iUbbFq/VexrHaelJKXi9+JqBKCwGmfLsEQs0ctY74gABmObwMVA==
+Received: from BN0PR04CA0161.namprd04.prod.outlook.com (2603:10b6:408:eb::16)
+ by DM4PR12MB9072.namprd12.prod.outlook.com (2603:10b6:8:be::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6521.24; Tue, 27 Jun 2023 09:04:36 +0000
+Received: from BN8NAM11FT088.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:eb:cafe::af) by BN0PR04CA0161.outlook.office365.com
+ (2603:10b6:408:eb::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.34 via Frontend
+ Transport; Tue, 27 Jun 2023 09:04:36 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.233) by
+ BN8NAM11FT088.mail.protection.outlook.com (10.13.177.81) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6500.47 via Frontend Transport; Tue, 27 Jun 2023 09:04:35 +0000
+Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
+ (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Tue, 27 Jun 2023
+ 02:04:26 -0700
+Received: from drhqmail202.nvidia.com (10.126.190.181) by
+ drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.37; Tue, 27 Jun 2023 02:04:25 -0700
+Received: from jonathanh-vm-01.nvidia.com (10.127.8.9) by mail.nvidia.com
+ (10.126.190.181) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37 via Frontend
+ Transport; Tue, 27 Jun 2023 02:04:25 -0700
+From:   Jon Hunter <jonathanh@nvidia.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <patches@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
+        <torvalds@linux-foundation.org>, <akpm@linux-foundation.org>,
+        <linux@roeck-us.net>, <shuah@kernel.org>, <patches@kernelci.org>,
+        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
+        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
+        <sudipm.mukherjee@gmail.com>, <srw@sladewatkins.net>,
+        <rwarsow@gmx.de>, <conor@kernel.org>,
+        <linux-tegra@vger.kernel.org>, <stable@vger.kernel.org>
+Subject: Re: [PATCH 4.14 00/26] 4.14.320-rc1 review
+In-Reply-To: <20230626180733.699092073@linuxfoundation.org>
+References: <20230626180733.699092073@linuxfoundation.org>
+X-NVConfidentiality: public
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230621115811.GD2053369@hirez.programming.kicks-ass.net>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <608095a8-ded0-4b3b-8c71-22227d24b01e@drhqmail202.nvidia.com>
+Date:   Tue, 27 Jun 2023 02:04:25 -0700
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT088:EE_|DM4PR12MB9072:EE_
+X-MS-Office365-Filtering-Correlation-Id: c7062adf-d543-4823-b50b-08db76ed87cd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ygtqByerMDUfa+XoYrTVgcPkzvnDVv4p8ZARIpEM1FcUxAq+7cXMD0IevrtYDuFwDyleilP/GTST+AwdiRav6q23cM7bWK0mbKEZoGX+jZMR9Bj8h5pDWM+VK8Fg81Hr+CJFRCALsp+W7JPqsZzvpoQl1QaG2HipQVACULtu1+2ojr9gYLOiAFxnECFsCbCKm2T2EQXh1z+7YLjmL/BWI5E2RYXp3yAietk9qHFt2KZ3TsJh7FyqGrxnBKVV0kpzuHpKQIx1U19y5ZaEpeLkcV/zsg/Dmlf+ffmE4TGTkE36s0SCUqsWNbt6dbWnOYAQzJ/YYWgt3PnlO24TFx4gTH6mrt5ADi9SRzqDIseO5HBmmDy8TJmjyGG1r2PJVZE9Y5rArjPNZbhJl6Vav3RxFkOnYMBw/LrWGh+S66uZeJXc6X8ibwKypiAFmxXszieNVuM6fADpANH2gl8Iqw2w0VvOWzQdnOjcQwgNhiJBDoqLPNbji0ncyZz2zTPNYiIzgCrSJTqXChtOuMJ1oT4v131AOvCsVqq3ap4IK4eG1nzMOO+cgRJpoPUeXxr/RE7mmlKoJRhbnPlSDGNe9y5Nm06h8OxfFQGbZhzMgx1k2j6zerDKQbi1XbbhGNqkdnMowpU2qLvbAIDpxBw60LY2Q/33l7iP3Qd76oIozfWzK1IyO/6T6PN7TL6HHUi8CnQapCw++ZsjgUdU2kfxz8BPxaWFELjGPfpStVht5/BGWSd5rPKcp4roP2TdZ75XnNTQR5EsnxgHhD1vEl2KaW3giZRLZS4F6TXrnKI206wxHe0=
+X-Forefront-Antispam-Report: CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(39860400002)(396003)(346002)(451199021)(46966006)(40470700004)(36840700001)(2906002)(186003)(82310400005)(82740400003)(7636003)(47076005)(336012)(426003)(26005)(356005)(36860700001)(40460700003)(966005)(40480700001)(31696002)(41300700001)(54906003)(86362001)(70206006)(316002)(478600001)(4326008)(6916009)(70586007)(31686004)(7416002)(5660300002)(8676002)(8936002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jun 2023 09:04:35.8758
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c7062adf-d543-4823-b50b-08db76ed87cd
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT088.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB9072
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 01:58:11PM +0200, Peter Zijlstra wrote:
-> On Tue, Jun 20, 2023 at 11:18:05PM -0700, Stephane Eranian wrote:
-> > On Tue, Jun 20, 2023 at 9:25 PM Eric Lin <eric.lin@sifive.com> wrote:
-> > >
-> > > CC: Stephane Eranian
-> > >
-> > > On Fri, Jun 2, 2023 at 5:49 PM Eric Lin <eric.lin@sifive.com> wrote:
-> > > >
-> > > > Currently, during the perf sampling, if the perf interrupt takes too long,
-> > > > perf framework will lower the perf_event_max_sample_rate. This will limit
-> > > > the number of samples per timer tick (max_samples_per_tick) and set hwc->interrupts
-> > > > to MAX_INTERRUPTS within the __perf_event_account_interrupt() function.
-> > > >
-> > > > Afterward, the perf framework will unthrottle the event in the timer interrupt
-> > > > handler, which triggers the driver's *_pmu_start() function. Most of the driver's
-> > > > *_pmu_start() functions will check the event->hw.state to determine whether this
-> > > > event has stopped. If the event has not stopped, a WARN_ON_ONCE() warning
-> > > > will be triggered as shown below:
-> > > >
-> > > > [ 2110.224723] ------------[ cut here ]------------
-> > > > [ 2110.224851] WARNING: CPU: 0 PID: 240 at drivers/perf/riscv_pmu.c:184 riscv_pmu_start+0x7c/0x8e
-> > > > [ 2110.225242] Modules linked in:
-> > > > [ 2110.225380] CPU: 0 PID: 240 Comm: ls Not tainted 6.4-rc4-g19d0788e9ef2 #1
-> > > > [ 2110.225574] Hardware name: SiFive (DT)
-> > > > [ 2110.225657] epc : riscv_pmu_start+0x7c/0x8e
-> > > > [ 2110.225834]  ra : riscv_pmu_start+0x28/0x8e
-> > > > [ 2110.225998] epc : ffffffff80aef864 ra : ffffffff80aef810 sp : ffff8f80004db6f0
-> > > > [ 2110.226135]  gp : ffffffff81c83750 tp : ffffaf80069f9bc0 t0 : ffff8f80004db6c0
-> > > > [ 2110.226245]  t1 : 0000000000000000 t2 : 000000000000001f s0 : ffff8f80004db720
-> > > > [ 2110.226367]  s1 : ffffaf8008ca1068 a0 : 0000ffffffffffff a1 : 0000000000000000
-> > > > [ 2110.226488]  a2 : 0000000000000001 a3 : 0000000000000870 a4 : 0000000000000000
-> > > > [ 2110.226605]  a5 : 0000000000000000 a6 : 0000000000000840 a7 : 0000000000000030
-> > > > [ 2110.226721]  s2 : 0000000000000000 s3 : ffffaf8005165800 s4 : ffffaf800424da00
-> > > > [ 2110.226838]  s5 : ffffffffffffffff s6 : ffffffff81cc7590 s7 : 0000000000000000
-> > > > [ 2110.226955]  s8 : 0000000000000006 s9 : 0000000000000001 s10: ffffaf807efbc340
-> > > > [ 2110.227064]  s11: ffffaf807efbbf00 t3 : ffffaf8006a16028 t4 : 00000000dbfbb796
-> > > > [ 2110.227180]  t5 : 0000000700000000 t6 : ffffaf8005269870
-> > > > [ 2110.227277] status: 0000000200000100 badaddr: 0000000000000000 cause: 0000000000000003
-> > > > [ 2110.227407] [<ffffffff80aef864>] riscv_pmu_start+0x7c/0x8e
-> > > > [ 2110.227622] [<ffffffff80185b56>] perf_adjust_freq_unthr_context+0x15e/0x174
-> > > > [ 2110.227961] [<ffffffff80188642>] perf_event_task_tick+0x88/0x9c
-> > > > [ 2110.228235] [<ffffffff800626a8>] scheduler_tick+0xfe/0x27c
-> > > > [ 2110.228463] [<ffffffff800b5640>] update_process_times+0x9a/0xba
-> > > > [ 2110.228690] [<ffffffff800c5bd4>] tick_sched_handle+0x32/0x66
-> > > > [ 2110.229007] [<ffffffff800c5e0c>] tick_sched_timer+0x64/0xb0
-> > > > [ 2110.229253] [<ffffffff800b5e50>] __hrtimer_run_queues+0x156/0x2f4
-> > > > [ 2110.229446] [<ffffffff800b6bdc>] hrtimer_interrupt+0xe2/0x1fe
-> > > > [ 2110.229637] [<ffffffff80acc9e8>] riscv_timer_interrupt+0x38/0x42
-> > > > [ 2110.229984] [<ffffffff80090a16>] handle_percpu_devid_irq+0x90/0x1d2
-> > > > [ 2110.230162] [<ffffffff8008a9f4>] generic_handle_domain_irq+0x28/0x36
-> > > >
-> > > > To prevent this warning, we should call the driver's *_pmu_stop() function before unthrottling
-> > > >
-> > > > Signed-off-by: Eric Lin <eric.lin@sifive.com>
-> > > > ---
-> > > >  kernel/events/core.c | 1 +
-> > > >  1 file changed, 1 insertion(+)
-> > > >
-> > > > diff --git a/kernel/events/core.c b/kernel/events/core.c
-> > > > index db016e418931..098c875abe88 100644
-> > > > --- a/kernel/events/core.c
-> > > > +++ b/kernel/events/core.c
-> > > > @@ -4128,6 +4128,7 @@ perf_adjust_freq_unthr_context(struct perf_event_context *ctx, bool unthrottle)
-> > > >
-> > > >                 if (hwc->interrupts == MAX_INTERRUPTS) {
-> > > >                         hwc->interrupts = 0;
-> > > > +                       event->pmu->stop(event, 0);
-> > 
-> > But how could the event have been stopped with a call to pmu->stop()
-> > during throttling?
+On Mon, 26 Jun 2023 20:11:02 +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.14.320 release.
+> There are 26 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Yeah, Changelog fails to explain how we got to the faulty state -- and
-> without that we can't judge if the proposed solution actually fixes the
-> problem or not.
+> Responses should be made by Wed, 28 Jun 2023 18:07:23 +0000.
+> Anything received after that time might be too late.
 > 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.14.320-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.14.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Hi Stephane, Peter,
+All tests passing for Tegra ...
 
-Most of the pmu driver will call *_pmu_stop(event,0) in the *_pmu_handle_irq() function and update the hwc->state with PERF_HES_STOPPED flag
-as below:
+Test results for stable-v4.14:
+    8 builds:	8 pass, 0 fail
+    16 boots:	16 pass, 0 fail
+    32 tests:	32 pass, 0 fail
 
-arch/alpha/kernel/perf_event.c:856:             if (perf_event_overflow(event, &data, regs)) {
-arch/alpha/kernel/perf_event.c-857-                     /* Interrupts coming too quickly; "throttle" the
-arch/alpha/kernel/perf_event.c-858-                      * counter, i.e., disable it for a little while.
-arch/alpha/kernel/perf_event.c-859-                      */
-arch/alpha/kernel/perf_event.c-860-                     alpha_pmu_stop(event, 0);
-arch/alpha/kernel/perf_event.c-861-             }
------
-arch/arc/kernel/perf_event.c:603:                       if (perf_event_overflow(event, &data, regs))
-arch/arc/kernel/perf_event.c-604-                               arc_pmu_stop(event, 0);
-arch/arc/kernel/perf_event.c-605-               }
------
-arch/x86/events/amd/core.c:935:         if (perf_event_overflow(event, &data, regs))
-arch/x86/events/amd/core.c-936-                 x86_pmu_stop(event, 0);
-arch/x86/events/amd/core.c-937- }
------
+Linux version:	4.14.320-rc1-g11aa1c2697f5
+Boards tested:	tegra124-jetson-tk1, tegra20-ventana,
+                tegra210-p2371-2180, tegra30-cardhu-a04
 
-However, some of the pmu drivers stop the event in the *_pmu_handle_irq() without update the hwc->state with PERF_HES_STOPPED flag
-as below:
+Tested-by: Jon Hunter <jonathanh@nvidia.com>
 
-arch/arm/kernel/perf_event_v7.c:994:            if (perf_event_overflow(event, &data, regs))
-arch/arm/kernel/perf_event_v7.c-995-                    cpu_pmu->disable(event); // <== not update with PERF_HES_STOPPED
-arch/arm/kernel/perf_event_v7.c-996-    }
-------
-arch/csky/kernel/perf_event.c:1142:             if (perf_event_overflow(event, &data, regs))
-arch/csky/kernel/perf_event.c-1143-                     csky_pmu_stop_event(event); // <== not update with PERF_HES_STOPPED
-arch/csky/kernel/perf_event.c-1144-     }
--------
-arch/loongarch/kernel/perf_event.c:492: if (perf_event_overflow(event, data, regs))
-arch/loongarch/kernel/perf_event.c-493-         loongarch_pmu_disable_event(idx);    // <== not update with PERF_HES_STOPPED
-arch/loongarch/kernel/perf_event.c-494-}
--------
-arch/mips/kernel/perf_event_mipsxx.c:794:       if (perf_event_overflow(event, data, regs))
-arch/mips/kernel/perf_event_mipsxx.c-795-               mipsxx_pmu_disable_event(idx); // <== not update with PERF_HES_STOPPED
-arch/mips/kernel/perf_event_mipsxx.c-796-}
-....
-
-Furthermore, these drivers did not add event->hw.state checking in *_pmu_start() before starting the event like x86 does:
-
-1497 static void x86_pmu_start(struct perf_event *event, int flags)
-1498 {
-1499     struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
-1500     int idx = event->hw.idx;
-1501
-1502     if (WARN_ON_ONCE(!(event->hw.state & PERF_HES_STOPPED)))
-1503         return;
-1504
-
-As a result, these drivers won't trigger the WARN_ON_ONCE warning as shown in this patch.
-
-However, if a pmu driver like RISC-V pmu which didn't call *_pmu_stop(event,0) without update the hwc->state with PERF_HES_STOPPED flag in the *_pmu_handle_irq() function
-but has event->hw.state checking in *_pmu_start(), it could trigger the WARN_ON_ONCE warning as shown in this patch.
-
-Therefore, I think we need to call pmu->stop() before unthrottling the event to prevent this warning.
-
-Or maybe we can add hwc->state checking before we call pmu->stop() as below:
-
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -4128,7 +4128,8 @@ perf_adjust_freq_unthr_context(struct perf_event_context *ctx, bool unthrottle)
-
-                if (hwc->interrupts == MAX_INTERRUPTS) {
-                        hwc->interrupts = 0;
--                       event->pmu->stop(event, 0);
-+                       if (!(hwc->state & PERF_HES_STOPPED))
-+                               event->pmu->stop(event, 0);
-                        perf_log_throttle(event, 1);
-                        event->pmu->start(event, 0);
-                }
-
-Thanks.
-
-Best Regards,
-Eric Lin.
-
-
-> > >
-> > > >                         perf_log_throttle(event, 1);
-> > > >                         event->pmu->start(event, 0);
-> > > >                 }
-> > > > --
-> > > > 2.17.1
-> > > >
+Jon
