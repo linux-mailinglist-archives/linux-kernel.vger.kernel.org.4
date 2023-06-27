@@ -2,62 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D49773D6C7
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 05:56:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 100BC73D5D2
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Jun 2023 04:32:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230355AbjFZD4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Jun 2023 23:56:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60916 "EHLO
+        id S230161AbjFZCcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Jun 2023 22:32:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231288AbjFZD4M (ORCPT
+        with ESMTP id S230043AbjFZCcp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Jun 2023 23:56:12 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D38C1B1;
-        Sun, 25 Jun 2023 20:54:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=MSWMWCd0byTrNHbSK/N1bhf0LnYGkMThKJt+8R8h11A=; b=U9Solak43lH5neqs+YjeuS0nWQ
-        xFg2kNqaF26r7swdIf8Uf6Mou2or9DVmFgjaH3YmhK5Qs4XpDIM1SGKKGK+G45/1dAuiHNzYZDIGH
-        F/tTCGM+t/TSkHzvsP1bAH/NZ2X/EECqiwI77j18/fbhOkrd4OL4VM0WBxsVslLzGgNHND7HP356s
-        m9p9uwD+mHcehKT1Vk9XDicvYNvh69ig1BOQOQtmCzOEdhygjhQCQWt8VMp/Tzjjlpu6YDMuM9wtN
-        ODJwjIt6XOfmNJBBNspQpfFUlRI/HlvHcnBO5jePecRZP5m0TAUZzo9blS/nHx6fkWS41J+SmD9ep
-        D3UQrNAQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qDdJ7-001IpL-NT; Mon, 26 Jun 2023 03:54:29 +0000
-Date:   Mon, 26 Jun 2023 04:54:29 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Lu Hongfei <luhongfei@vivo.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        "Darrick J. Wong" <djwong@kernel.org>, linux-xfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        opensource.kernel@vivo.com
-Subject: Re: [PATCH] fs: iomap: replace the ternary conditional operator with
- max_t()
-Message-ID: <ZJkL9TRyIfcnUjIt@casper.infradead.org>
-References: <20230626022212.30297-1-luhongfei@vivo.com>
+        Sun, 25 Jun 2023 22:32:45 -0400
+Received: from mail.nfschina.com (unknown [42.101.60.195])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 4CB8DB1
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Jun 2023 19:32:44 -0700 (PDT)
+Received: from localhost.localdomain (unknown [219.141.250.2])
+        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPA id B199760671F5C;
+        Mon, 26 Jun 2023 10:32:39 +0800 (CST)
+X-MD-Sfrom: zeming@nfschina.com
+X-MD-SrcIP: 219.141.250.2
+From:   Li zeming <zeming@nfschina.com>
+To:     tglx@linutronix.de
+Cc:     linux-kernel@vger.kernel.org, Li zeming <zeming@nfschina.com>
+Subject: [PATCH] =?UTF-8?q?time:=20posix-timers:=20Remove=20unnecessary=20?= =?UTF-8?q?=E2=80=980=E2=80=99=20values=20from=20error?=
+Date:   Wed, 28 Jun 2023 03:04:00 +0800
+Message-Id: <20230627190400.5501-1-zeming@nfschina.com>
+X-Mailer: git-send-email 2.18.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230626022212.30297-1-luhongfei@vivo.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_24_48,
+        RDNS_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 26, 2023 at 10:22:12AM +0800, Lu Hongfei wrote:
-> It would be better to replace the traditional ternary conditional
-> operator with max_t() in iomap_iter
+error is assigned first, so it does not need to initialize the assignment.
 
-No it wouldn't.
+Signed-off-by: Li zeming <zeming@nfschina.com>
+---
+ kernel/time/posix-timers.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-There are two possible meanings for iter->processed.  Either we
-processed a positive number of bytes, or it's an errno.  max_t()
-doesn't express that.  Your patch adds confusion, not reduces it.
+diff --git a/kernel/time/posix-timers.c b/kernel/time/posix-timers.c
+index 808a247205a9..4e9a1676101b 100644
+--- a/kernel/time/posix-timers.c
++++ b/kernel/time/posix-timers.c
+@@ -906,7 +906,7 @@ static int do_timer_settime(timer_t timer_id, int tmr_flags,
+ 	const struct k_clock *kc;
+ 	struct k_itimer *timr;
+ 	unsigned long flags;
+-	int error = 0;
++	int error;
+ 
+ 	if (!timespec64_valid(&new_spec64->it_interval) ||
+ 	    !timespec64_valid(&new_spec64->it_value))
+-- 
+2.18.2
+
