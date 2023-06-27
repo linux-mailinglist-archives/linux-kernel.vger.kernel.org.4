@@ -2,227 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3B3A73F048
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 03:20:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5801773F04E
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 03:22:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229527AbjF0BUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 21:20:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36434 "EHLO
+        id S230089AbjF0BVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 21:21:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229987AbjF0BUo (ORCPT
+        with ESMTP id S229703AbjF0BVp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 21:20:44 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1168A173C
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 18:20:42 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3fa5295fcc8so34235e9.1
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 18:20:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687828840; x=1690420840;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=MwvCpFW/GbNtPlS+NY4oiqTY4IcMkcTsbkaeYou0CDY=;
-        b=MrXhAAJE9l6zSW90GA8n65w4+eCK49qK/xWh8182A8ET/4h+ybVFaIi0tNHp5ac5Bo
-         rSqwJWk9svsna+Mu53daPYTGiqe5GaNwXjVx9VAHJrGU4cJp9aHc6voM4wN0s5KO3K/y
-         +O/kPFMf+XtRWmXwYPmeIZZ9a/iT9pfCfMFmllEJbgdnlm83bCiBqBl53Y68hN5RfxrM
-         9W8t86scw7RxHinoj/GwRSRaUlFZu8cWPJsBazjhm0IJUgY3S2JGoVFeg9iUh08ZYBsH
-         MrXf8fbQAP4jm8jnmhmKSKxtAXDdwE2qdS21V2aGV4Xqc14Vm/OnkU5s0Ss/9sij+5Mi
-         ptYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687828840; x=1690420840;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MwvCpFW/GbNtPlS+NY4oiqTY4IcMkcTsbkaeYou0CDY=;
-        b=Sj/n1Q/LBIP9IgYuryhaFdYjroftqqdKrVUMzg/DdU88sh0L0nWUSOjjlHuGDIbTq9
-         B7fh3mvfjHVqEztpq+5v+0kpgM+kgqwiMu3dXPjB8uWJRCUQwg/YUz4DXJxwdoc9+g+l
-         sv6L96NS8td6dWvJ0CwjKgj8fAVGqNgMYypL9h0MTLkJUM4trKj/MYFMxYn5pEpDE99v
-         hWgf+OmR2ENlgItxQ+f9YIgLxUo439NeDznvnz5HpTjUHYkalt4w8hyK3eIyU+lRh7Ag
-         +FzMxGLR+T8J4a2kavodN9DZslz+MNCdnWas1keOBJ6kfkXFpNd4ewBrSLtsAWdU3nqx
-         S6jg==
-X-Gm-Message-State: AC+VfDzI2C7bckz8AK3CYoea/Oko5KDXjoG1/FNjID6nj3/WunlhyqTT
-        ohjTmv2WXkdO4Dg348gCXs3IUNvsmlFckc+fL4khKw==
-X-Google-Smtp-Source: ACHHUZ4yNnIeW6xZpPLiaVRnq3DPPpO7aR3C7mWs6623sflXXuUQ+liw5rmNxwTYrcSkLr+wQPlWHm14UHK8qJMbQK8=
-X-Received: by 2002:a05:600c:4fcd:b0:3f6:f4b:d4a6 with SMTP id
- o13-20020a05600c4fcd00b003f60f4bd4a6mr283186wmq.7.1687828840459; Mon, 26 Jun
- 2023 18:20:40 -0700 (PDT)
+        Mon, 26 Jun 2023 21:21:45 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2116.outbound.protection.outlook.com [40.107.215.116])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1EB0173E;
+        Mon, 26 Jun 2023 18:21:43 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=V6Dcb5W+KmF0ly6k4OodOdUNUNI7x30LtvUFpl7a2QdTHj96bBB6BpsmSReyHSK9L2iMUmmpiZ59FBTGgQruGJQ+kotPbKGjIu5WktIOGy9dl1bwcemsHL9zjyFMLMhuisKhFU3mCcaqF4S5x5uIp4TrwrcwE2+lx7ubYkpnCyZvPOHbUteQ/g7olUBMr16WSN5NE1iHCqCY5vVDP4wTkYnuLuUY3ZG7fgEuV/ywwrQkKzjzIirfypTr+KsbQFd/VoP9NYX8bABOdISAcuu2oeQGu6pQm5UISVFw5M2JR9ereEaKDb2WsukzDeJEl6AmIyqrkIrPgiEiTTi/rm9SdA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wY5tA3V++FRLrpsAcsPaQBkCmzG17OjpSALkEpFk47I=;
+ b=FTKOAZeOvoJoXXAAf1NMEGDnqchwVeIl/2o0OyCYebCGDTCcQ9KwfOwNoNCZnIZr6IOUryuaYzJ7j7zBTwEGZTHSzHEJLPqZIDG+LiFYOaJhLk4IV3hqR6//9fmR6uqKcXyfvGQu4vd1E9Iy6kOLJ5XRgBxe2djR5QmGQFoFQ0OS15PMsVl28aNN9ofGetl7V56tudIiI/2raS2/ZXo3buQF21xs6xiPwCBvRyT9x3WaOf9FHvaxp1Ng9eDMlCPTOdrlq0KRnemIMN//OctEkw3WUrVe/UunclzTwU8LR3GtWHI+/3TEP7sTetuF7PAQCCjdvGaG8N+/mBuVCky/Fw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wY5tA3V++FRLrpsAcsPaQBkCmzG17OjpSALkEpFk47I=;
+ b=OfzWteAyQGSWlTZoR8YK+LVfhDuP0q79LCDE/CAke0mR+kPN1nDJDqiyDsz7/T9lpSI9jV+fzFkp76SbJSHZwrW6bzAk4V6Iu/9ay/QDaUgpYkhN6RLt9ApbKQiVaj3Y6ondKmc+TcE0TAn2cPXNLghtUAM6zfKcGooFqQjmR8XUNVTuoAsZJSaMjKwYHupld5/LyQwYZyxkZmW1bDjRD/7HPapUbwAFXFN5V9N+2+H+2Nw9SYStXmixHIOEHB3UNbUupwzbT93qgUCfK5xrrpm0n5YkOwHmO/291U1Mlovf+ZJiBo9BqjRCMzv1/DZqriABVIz73wfkHvBC3fgMkQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from PUZPR06MB5936.apcprd06.prod.outlook.com (2603:1096:301:11d::13)
+ by SI2PR06MB4378.apcprd06.prod.outlook.com (2603:1096:4:15a::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.26; Tue, 27 Jun
+ 2023 01:21:39 +0000
+Received: from PUZPR06MB5936.apcprd06.prod.outlook.com
+ ([fe80::adc0:c22:ffae:227b]) by PUZPR06MB5936.apcprd06.prod.outlook.com
+ ([fe80::adc0:c22:ffae:227b%6]) with mapi id 15.20.6500.045; Tue, 27 Jun 2023
+ 01:21:39 +0000
+From:   You Kangren <youkangren@vivo.com>
+To:     Kalle Valo <kvalo@kernel.org>, Dongliang Mu <dzm91@hust.edu.cn>,
+        You Kangren <youkangren@vivo.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Simon Horman <simon.horman@corigine.com>,
+        linux-wireless@vger.kernel.org (open list:RAYLINK/WEBGEAR 802.11
+        WIRELESS LAN DRIVER), linux-kernel@vger.kernel.org (open list)
+Cc:     opensource.kernel@vivo.com
+Subject: [PATCH v2] wifi: ray_cs: Replace the ternary conditional operator with min()
+Date:   Tue, 27 Jun 2023 09:21:26 +0800
+Message-Id: <20230627012129.4066-1-youkangren@vivo.com>
+X-Mailer: git-send-email 2.39.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR02CA0120.apcprd02.prod.outlook.com
+ (2603:1096:4:92::36) To PUZPR06MB5936.apcprd06.prod.outlook.com
+ (2603:1096:301:11d::13)
 MIME-Version: 1.0
-From:   Yuxiao Zhang <yuxiaozhang@google.com>
-Date:   Mon, 26 Jun 2023 18:20:29 -0700
-Message-ID: <CAOOoKeQ=b4u1C_FZ-OFHSfVt5Z9xw1KtpJ4316zubt46Tny41Q@mail.gmail.com>
-Subject: support pmsg record size larger than kmalloc limitation
-To:     keescook@chromium.org, tony.luck@intel.com, gpiccoli@igalia.com,
-        linux-hardening@vger.kernel.org
-Cc:     William Kennington <wak@google.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PUZPR06MB5936:EE_|SI2PR06MB4378:EE_
+X-MS-Office365-Filtering-Correlation-Id: ce2eac27-9a29-4983-16d3-08db76acdb2e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: FZcnstUn+2t26eHfOTreJNzTin376bsaMvEVruJ1+ozDQHuJCeI2uAg2F0MHU9R0KPJBQU0953PqikXP1YBMM7/HDr3beTxK0yRQhPOT0qVAOYu6LFzxk9PGQxPxY521AdAO/U9CxJtju8hysvgK6gLhnFcsOJQJyJQ28x+Tj22rWn4lvq/zAHnbJXcrU3wqLF93Cqesai+El34+AxvrMKQYFf6dIu6YcY/lg2YAl5HLQPEUFoCKNl96uKJasUGC6DP+FBMBcu/b1BHqK5EH5DvNwlqUBW2KzUhDLwQ5oUDq3G7NqSLQm6r+lrkt6+cylKvLJs6NCRca+WLOtNp1VrZn0ypuKJR8tBKTyDk/dsAjFuLASgf/yznnL9l+hW7uUuhxL0XWxXEjOUo3cp/ogvETYrSfD37KNdwitN5ceKOP1cXEETz7getIvUHt3M5YQGw4H6qsmVG3f48m056JXs9P7R7mJdUYfzUwG6huUgnPCrPT8is+xaH6OWwlD7XBqy3OKyAH7SiTGfOipj44qVtIYqh8f9sPG9Cb6JTJZr4HEGRIYt2G235VGFu3eXy2Ky2kX3f2NfmMDkFa3WuDSXmgWjGMInz1/6CnRCg5StWacoJPc//K+mfZIXaNrwDk
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PUZPR06MB5936.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(366004)(376002)(396003)(39860400002)(136003)(451199021)(2906002)(186003)(38350700002)(52116002)(6486002)(107886003)(38100700002)(2616005)(6666004)(83380400001)(1076003)(26005)(6512007)(6506007)(4744005)(110136005)(41300700001)(86362001)(478600001)(316002)(36756003)(66556008)(4326008)(66946007)(66476007)(5660300002)(8676002)(8936002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?UGxwCrna8XAdpYrrDq+sO2pxMB1o99o8LfQkKj/XqejRnfbA2V5L2JFExLlv?=
+ =?us-ascii?Q?8f5KJ7nnzGL0k6UisNehfnjyQZoVUXhkqtA+q5mBUIZWUtuYOHNBVt9308Lb?=
+ =?us-ascii?Q?kxazB7cFgei2BuP8T5bBHSAz9N4+0N6EuBYFDJWDU9M8IY8Agp1nCfhPssKs?=
+ =?us-ascii?Q?cxGvQbyPc3IjPfr2+u/2UGeL2LJ/EB+d4r1L9njkVaw+1MDROf8JVgNAIjGc?=
+ =?us-ascii?Q?kH5YVlI2BulrJE9tLljHM1ISHUWPPg9aVsb1eXPte7GvEKsXbSbF9eiDzcHQ?=
+ =?us-ascii?Q?C6inVjJ+QuqVumFMiCYQykr0u2FBT5h1G2GZzx4NtYwj99KN1YxsQTwt9Pgc?=
+ =?us-ascii?Q?jWb7aHp3T5aVuQhFXYZrvSfKPDzew6ggQ54pyB6e0gvlOVksbxJ0wof5ntW8?=
+ =?us-ascii?Q?pO2Ngw7dmarN5nKoKGK8NKm0JtdLVp4QpHvIW2L5A5r+hNrboyLhISRX44G1?=
+ =?us-ascii?Q?NtVRJLj0OiOubMSN39uVnDu1TtPl0owTDClH/+8TnVekr/CarRJrpklro8gV?=
+ =?us-ascii?Q?8xuHxJOePSqQuZTccYmY45NDG1c9UGm+xQxPVt85gjBq3JYXdYhgbqIE7W9v?=
+ =?us-ascii?Q?qBclQoUcuOq04hX6HjZNwmL9wH9T/4K80TRjNz2yGz8ECkGo55ydzcLGdd32?=
+ =?us-ascii?Q?kgCaw3wh+aC3GuTcIwv6byZL0Z/vAg6VTNpeCkoOe88c9S+IbbVJdSf6HIQy?=
+ =?us-ascii?Q?nYUmLm0cuxKa0LjCImvDax+24/j+8pD8emqAsbKWGl/BCbZWWfElTinUBvX0?=
+ =?us-ascii?Q?iwkfD1916XUAyae0M6ceD8pIrxr5lUiS60WuGFNd7XGzv2j+tfylyyuwWqM7?=
+ =?us-ascii?Q?GSO6vCPvV9McZpZkVwdoOQZEFLrdvXleIzrm6xb0wLak7r3Fvkuq0bfBjgRs?=
+ =?us-ascii?Q?w99bYUcap/YPdh5ol2K77s41PgPYTdB6pGg1Z9+xxQm3CEYugPB4ToDElOIg?=
+ =?us-ascii?Q?zidRSrMH5SCoE2ehXLjLDMVZvAFOupVkD2ONE63AIS3Nc8Kzeyt23bCtBZrg?=
+ =?us-ascii?Q?aku2zZk8NbD3MM8EVE27uPMhcBQuZVKq9y410LzoiqoKy2XPuJtP5jcWS2mS?=
+ =?us-ascii?Q?pgpcC8ehc9CNQNu18Tyg95aaMDedjmmP30CPRS3mRzCYOYHreM/1I3dgk11B?=
+ =?us-ascii?Q?YOos8Vkht/LuyRqTCVzzvgl3ZMMNi+aS8koa0YKUGixqqu5YwR0Wl7vUaNOI?=
+ =?us-ascii?Q?nA58wr8aswGxzo4b1CHVkWtVFIGiS7GDlUoyXlwIcD/cKMrVLHF8igzTJt3S?=
+ =?us-ascii?Q?rzbZsjUR8Byl/VcS4XfbgaaJyKdyHgEc37hmRi15wU2zLU0qJNYmyewtSgZm?=
+ =?us-ascii?Q?CcgWD1Rt17FEf7I3lvdeV6gFj62ez/lFUYmXwkTtWlf/DOw0ho+Er5DDAZkt?=
+ =?us-ascii?Q?6UU0VYmjp00HXT1T7jA4Oa/55FtBsF33r87gXZSWfhqqGwKxkbz/ToB7MV2e?=
+ =?us-ascii?Q?29Y6Rlzgxa8+9zgDx7mXSwMHDdOuxGz08PMHRgkE+mBQ0wgGNc2h+abNjzBW?=
+ =?us-ascii?Q?+fc5uCZgt5uWaoeSea6m53wVXtaysEZ1/27p3nYY9QpLUNgNdETvB3FAyVRx?=
+ =?us-ascii?Q?isEuLrxHCdtvwjTOaCopyQkoU+yyqqVevfE0SCZN?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ce2eac27-9a29-4983-16d3-08db76acdb2e
+X-MS-Exchange-CrossTenant-AuthSource: PUZPR06MB5936.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jun 2023 01:21:38.9752
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: iUUfBKNrLSt1D0d/emwNSGoVhDEt3A30RZM6flojiEu/vu8BaP/6CGcphBbGtCBUZD0mFxsMrLDlLnHcSTG6qg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR06MB4378
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi pstore maintainers,
+Replace the ternary conditional operator with min_t() to simplify the code
 
-Recently we are trying to use pmsg ramoops to store relatively large
-file. We found that even with enough space configured with pmsg-size,
-it still failed because of kmalloc limitation.
-
-We are thinking of using kvmalloc instead of kmalloc for ramoops pmsg
-record buffer. It seems ok to us that the memory is not physically
-contiguous. We want to consult with you whether it is safe to do so.
-
-Below is the patch file, note that the change only touches the pmsg
-ram path, we don't touch other paths like pstore zone. It is not yet a
-solution for all the use case in pstore, just an idea of how we want
-to address the issue. We test this on 5.15 and large file works fine.
-
------------------------------------
-
-From 5f7ac624d47b49ea827c1ad8e3b47534e0709ea3 Mon Sep 17 00:00:00 2001
-From: Yuxiao Zhang <yuxiaozhang@google.com>
-Date: Mon, 26 Jun 2023 16:40:40 -0700
-Subject: [PATCH] pstore: ramoops: support pmsg size larger than kmalloc
- limitation
-
-Current pmsg implementation is using kmalloc for pmsg record buffer,
-which has max size limits based on page size. Currently even we
-allocate enough space with pmsg-size, pmsg will still fail if the
-file size is larger than what kmalloc allowed.
-
-Since we don't need physical contiguous memory for pmsg buffer
-, we can use kvmalloc to avoid such limitation.
-
-Signed-off-by: Yuxiao Zhang <yuxiaozhang@google.com>
+Signed-off-by: You Kangren <youkangren@vivo.com>
 ---
- fs/pstore/inode.c    | 2 +-
- fs/pstore/platform.c | 9 +++++----
- fs/pstore/ram.c      | 5 +++--
- fs/pstore/ram_core.c | 3 ++-
- 4 files changed, 11 insertions(+), 8 deletions(-)
+ drivers/net/wireless/legacy/ray_cs.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/fs/pstore/inode.c b/fs/pstore/inode.c
-index ffbadb8b3032..df7fb2ad4599 100644
---- a/fs/pstore/inode.c
-+++ b/fs/pstore/inode.c
-@@ -54,7 +54,7 @@ static void free_pstore_private(struct
-pstore_private *private)
-  if (!private)
-  return;
-  if (private->record) {
-- kfree(private->record->buf);
-+ kvfree(private->record->buf);
-  kfree(private->record->priv);
-  kfree(private->record);
-  }
-diff --git a/fs/pstore/platform.c b/fs/pstore/platform.c
-index cbc0b468c1ab..f51e9460ac9d 100644
---- a/fs/pstore/platform.c
-+++ b/fs/pstore/platform.c
-@@ -32,6 +32,7 @@
- #include <linux/uaccess.h>
- #include <linux/jiffies.h>
- #include <linux/workqueue.h>
-+#include <linux/mm.h>
+diff --git a/drivers/net/wireless/legacy/ray_cs.c b/drivers/net/wireless/legacy/ray_cs.c
+index 8ace797ce951..5f97fcf5c4ba 100644
+--- a/drivers/net/wireless/legacy/ray_cs.c
++++ b/drivers/net/wireless/legacy/ray_cs.c
+@@ -2086,8 +2086,7 @@ static void ray_rx(struct net_device *dev, ray_dev_t *local,
+ 			rx_data(dev, prcs, pkt_addr, rx_len);
+ 
+ 		copy_from_rx_buff(local, (UCHAR *) &local->last_bcn, pkt_addr,
+-				  rx_len < sizeof(struct beacon_rx) ?
+-				  rx_len : sizeof(struct beacon_rx));
++				  min_t(rx_len < sizeof(struct beacon_rx)));
+ 
+ 		local->beacon_rxed = 1;
+ 		/* Get the statistics so the card counters never overflow */
+-- 
+2.39.0
 
- #include "internal.h"
-
-@@ -549,7 +550,7 @@ static int pstore_write_user_compat(struct
-pstore_record *record,
-  if (record->buf)
-  return -EINVAL;
-
-- record->buf = memdup_user(buf, record->size);
-+ record->buf = vmemdup_user(buf, record->size);
-  if (IS_ERR(record->buf)) {
-  ret = PTR_ERR(record->buf);
-  goto out;
-@@ -557,7 +558,7 @@ static int pstore_write_user_compat(struct
-pstore_record *record,
-
-  ret = record->psi->write(record);
-
-- kfree(record->buf);
-+ kvfree(record->buf);
- out:
-  record->buf = NULL;
-
-@@ -730,7 +731,7 @@ static void decompress_record(struct pstore_record *record)
-  return;
-
-  /* Swap out compressed contents with decompressed contents. */
-- kfree(record->buf);
-+ kvfree(record->buf);
-  record->buf = unzipped;
-  record->size = unzipped_len;
-  record->compressed = false;
-@@ -783,7 +784,7 @@ void pstore_get_backend_records(struct pstore_info *psi,
-  rc = pstore_mkfile(root, record);
-  if (rc) {
-  /* pstore_mkfile() did not take record, so free it. */
-- kfree(record->buf);
-+ kvfree(record->buf);
-  kfree(record->priv);
-  kfree(record);
-  if (rc != -EEXIST || !quiet)
-diff --git a/fs/pstore/ram.c b/fs/pstore/ram.c
-index ade66dbe5f39..296465b14fa9 100644
---- a/fs/pstore/ram.c
-+++ b/fs/pstore/ram.c
-@@ -20,6 +20,7 @@
- #include <linux/compiler.h>
- #include <linux/of.h>
- #include <linux/of_address.h>
-+#include <linux/mm.h>
-
- #include "internal.h"
- #include "ram_internal.h"
-@@ -268,7 +269,7 @@ static ssize_t ramoops_pstore_read(struct
-pstore_record *record)
-  /* ECC correction notice */
-  record->ecc_notice_size = persistent_ram_ecc_string(prz, NULL, 0);
-
-- record->buf = kmalloc(size + record->ecc_notice_size + 1, GFP_KERNEL);
-+ record->buf = kvmalloc(size + record->ecc_notice_size + 1, GFP_KERNEL);
-  if (record->buf == NULL) {
-  size = -ENOMEM;
-  goto out;
-@@ -282,7 +283,7 @@ static ssize_t ramoops_pstore_read(struct
-pstore_record *record)
-
- out:
-  if (free_prz) {
-- kfree(prz->old_log);
-+ kvfree(prz->old_log);
-  kfree(prz);
-  }
-
-diff --git a/fs/pstore/ram_core.c b/fs/pstore/ram_core.c
-index 966191d3a5ba..3453d493ec27 100644
---- a/fs/pstore/ram_core.c
-+++ b/fs/pstore/ram_core.c
-@@ -17,6 +17,7 @@
- #include <linux/slab.h>
- #include <linux/uaccess.h>
- #include <linux/vmalloc.h>
-+#include <linux/mm.h>
- #include <asm/page.h>
-
- #include "ram_internal.h"
-@@ -385,7 +386,7 @@ void *persistent_ram_old(struct persistent_ram_zone *prz)
-
- void persistent_ram_free_old(struct persistent_ram_zone *prz)
- {
-- kfree(prz->old_log);
-+ kvfree(prz->old_log);
-  prz->old_log = NULL;
-  prz->old_log_size = 0;
- }
---
-
--------------------------------------------
-Thanks in advance.
--Yuxiao
