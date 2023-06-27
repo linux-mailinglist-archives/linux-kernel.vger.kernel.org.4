@@ -2,158 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAB9173FC1A
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 14:40:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC07773FC1B
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 14:40:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230268AbjF0Mkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 08:40:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45466 "EHLO
+        id S230405AbjF0Mkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 08:40:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbjF0Mkd (ORCPT
+        with ESMTP id S230035AbjF0Mkf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 08:40:33 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C064213F
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 05:40:05 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f9b4a71623so43209115e9.1
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 05:40:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1687869604; x=1690461604;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QsX4SXg32pBoD8x6wheSWux3YvW6+LLlu5lLGvU4A08=;
-        b=NYX4MwTDi6LDbWSS2P+1hTN3MClyVGAhhslCEAPQIKnmlnbe25HJjHhRIRBb+f//w3
-         nsQztM7eoHxIWyjwPGDxcj6LrpYH6y4eQomxbFNJf9Js/a58EDwYlrfg+o5z3iFSd59z
-         dlHxlGieOEHIow0lzEbjmyEzYo562R+2dcbl60VsU06s8+uF75/daPwM4dSCJ/8TGI5d
-         4Xj9xEPxkZFJ08TX/yQTOxg61XdHXSYPYr3HIGlX7E4m9i80/RaucMWtOvk/blq/dF7D
-         iK8Gt0LCi6jYQiD60h50H6vu70SuJ+dwOA/RJkux6e0a+jfnzIRp+Rt02YyRzNh+0Qi+
-         PWCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687869604; x=1690461604;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QsX4SXg32pBoD8x6wheSWux3YvW6+LLlu5lLGvU4A08=;
-        b=dblJo3GDW6T9RN/5ce0M8ZZTxRXs+HMqVQ/RgGdlOHYpcpE8OtG+/NgVxvuHfkdCUa
-         yeBFwCzRKS9bGLKWJYi6hXYjiEvAX8Kzt8gi4vnA4X0nJSOz4RP10owrTTvqKilSJdPr
-         S06M9PQ33pQXN0sqc7zVvBZ6iOZa61DuqvuQOeKJ8tWKjRD0NAR8H3XJnD5Imugtdm4b
-         ePd8+kxNNA52nm42vko7prhnFeFCSGSQjZnk/sZoJvRy5fjUeZqcg6fBODMmI3qMQIEJ
-         eFasvo8Y/guCezruH9MLPdN5AfnMZu/aX2vPP745c4WfJcKoSLHbBFBJTLw4KzaarwSh
-         P+fg==
-X-Gm-Message-State: AC+VfDxkRJavrwkgNWZGpj8+vd8J8voq9lFQcoGjNbE73F+7rxeUPH0W
-        19QXNnB5fyb7pfQNNb3JkgWDtQ/7/QOcHKbee09ecw==
-X-Google-Smtp-Source: ACHHUZ78ealNaCFybT1aaDdFLU+JvYWx1kK5RakJszJjSRojkVh7ReDH9O/FAivG5fdaAExlu+rmt39S8z/PbXhiVIw=
-X-Received: by 2002:adf:ee51:0:b0:311:1dfb:2907 with SMTP id
- w17-20020adfee51000000b003111dfb2907mr21187428wro.68.1687869604088; Tue, 27
- Jun 2023 05:40:04 -0700 (PDT)
+        Tue, 27 Jun 2023 08:40:35 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43ADE268D
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 05:40:33 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id E8CC41F8C3;
+        Tue, 27 Jun 2023 12:40:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1687869631; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=sRDXYyjYq2aZJPbYdPZ7TDkJO6W/Spxbg8G9agS1s/c=;
+        b=UxRGLpzKE+7i9P2YS7a9iyAiQYrS7RxZ8ThjGgg+8F7CR+XrQJO6gGd+pXrheC38q3AhVj
+        W1EEDt0HeSRqxyoo0H0l639ou3rnRj6gVQ1crcvW1aK/dL18vQqohAWOfDzWwyS6Xa/M7s
+        KdZ4kCYZHqnOmBDGYb+yjgsfXkTb0Ts=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CCADE13462;
+        Tue, 27 Jun 2023 12:40:31 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ynuuL7/YmmSJTwAAMHmgww
+        (envelope-from <mhocko@suse.com>); Tue, 27 Jun 2023 12:40:31 +0000
+Date:   Tue, 27 Jun 2023 14:40:31 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        virtualization@lists.linux-foundation.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Jason Wang <jasowang@redhat.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Subject: Re: [PATCH v1 3/5] mm/memory_hotplug: make
+ offline_and_remove_memory() timeout instead of failing on fatal signals
+Message-ID: <ZJrYv0JIcrNyf2py@dhcp22.suse.cz>
+References: <20230627112220.229240-1-david@redhat.com>
+ <20230627112220.229240-4-david@redhat.com>
 MIME-Version: 1.0
-References: <20230426034001.16-1-cuiyunhui@bytedance.com> <CAMj1kXEKh9O-ndk3QFibJMYfMbG7vm-cLN2vVQM5eDsYK84NzQ@mail.gmail.com>
- <CAEEQ3wkJB5CKm33mHXUOPX5makYOHF8By6FYGnNzRkM-Mo72OQ@mail.gmail.com>
- <ZEj33QLZqEeL+/y4@FVFF77S0Q05N> <CAEEQ3wmDBJkfOeKCQfcnuE+1=1K0D2pzu+Sn+zPEWk+RHs0NFQ@mail.gmail.com>
- <CAP6exY+ydbzh1EkWTFejzwaW+PA-ySVO2Qj+CVJ1XbSMce2S9Q@mail.gmail.com>
- <CAP6exY+tqAU0j1TVEMTzTb18M6_mPH5bWWiAS=94gyDGTY3hyQ@mail.gmail.com>
- <CAEEQ3w=wBdpZWnUd2WWVBC3BtFiUp-PQtNAtdXE4cO4n0XT-fg@mail.gmail.com>
- <CAMj1kXFGpXEPtYpy1+bs13F2P_LLZf9rTMfYMU=6jzgd3=SEcw@mail.gmail.com>
- <CAEEQ3wnbXE0vJnQRLo5MhfDc-Q4PbNWBoWS-oMn71CcJU51JdA@mail.gmail.com>
- <CAMj1kXHfqkU2QxvjTkGBSkEcTf_HirbdOReOJwdpgz3hM8fBHw@mail.gmail.com>
- <CAEEQ3wn2n48TpNQ3MuvrRH4zzg28SaiOswunPeZ01jFm-TbJ5w@mail.gmail.com>
- <CAMj1kXHgaLD43jx0f6hn_j209LGT_4G+w5XEGaYB9znV5p9tdA@mail.gmail.com>
- <CAP6exYJRE8iM63SX3hQP9_5aKYcnN5x0KOAtZOgeEWU5bwLEBA@mail.gmail.com>
- <CAEEQ3wn2zHUZP8gs8ezCczQLdQJqU6MqAgpcG0YeDW2aYTz0TA@mail.gmail.com>
- <CAMj1kXFn7+W=ZGNcSLL6p383SbA8=wstutJ85+qvXzt2G66Seg@mail.gmail.com>
- <CAEEQ3wnXJVBLdqW6GRFuCKuBtr38uKHz7E2+P8TAv1_+b6kBKA@mail.gmail.com>
- <CAMj1kXFAsG0nH+2OcG3CBZYqKg=hCRHp8wAmVBFy9vNx6rWgOQ@mail.gmail.com>
- <CAEEQ3wkT_2GbdsjfA_VA+LeyCzdeQ+Bh+admyVjz7rE3cSWSxA@mail.gmail.com> <CAMj1kXGT04HeMqmr7BWYaNQM6jYzYFLGEJY7TNtig-t48n7CLg@mail.gmail.com>
-In-Reply-To: <CAMj1kXGT04HeMqmr7BWYaNQM6jYzYFLGEJY7TNtig-t48n7CLg@mail.gmail.com>
-From:   =?UTF-8?B?6L+Q6L6J5bSU?= <cuiyunhui@bytedance.com>
-Date:   Tue, 27 Jun 2023 20:39:52 +0800
-Message-ID: <CAEEQ3wmd4XayKV8BCk+1CZVDXdtCa3vvbhfJyhfkkBccE3fo6w@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH] firmware: added a firmware information
- passing method FFI
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        ron minnich <rminnich@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>, rafael@kernel.org,
-        lenb@kernel.org, jdelvare@suse.com, yc.hung@mediatek.com,
-        angelogioacchino.delregno@collabora.com,
-        allen-kh.cheng@mediatek.com, pierre-louis.bossart@linux.intel.com,
-        tinghan.shen@mediatek.com,
-        lkml - Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-acpi@vger.kernel.org,
-        =?UTF-8?B?6JGb5aOr5bu6?= <geshijian@bytedance.com>,
-        =?UTF-8?B?6Z+m5Lic?= <weidong.wd@bytedance.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230627112220.229240-4-david@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ard,
+On Tue 27-06-23 13:22:18, David Hildenbrand wrote:
+> John Hubbard writes [1]:
+> 
+>         Some device drivers add memory to the system via memory hotplug.
+>         When the driver is unloaded, that memory is hot-unplugged.
+> 
+>         However, memory hot unplug can fail. And these days, it fails a
+>         little too easily, with respect to the above case. Specifically, if
+>         a signal is pending on the process, hot unplug fails.
+> 
+>         [...]
+> 
+>         So in this case, other things (unmovable pages, un-splittable huge
+>         pages) can also cause the above problem. However, those are
+>         demonstrably less common than simply having a pending signal. I've
+>         got bug reports from users who can trivially reproduce this by
+>         killing their process with a "kill -9", for example.
 
->
-> I will defer to Mark or other DT experts to help decide on the naming
-> and general shape of these.
+This looks like a bug of the said driver no? If the tear down process is
+killed it could very well happen right before offlining so you end up in
+the very same state. Or what am I missing?
+ 
+> Especially with ZONE_MOVABLE, offlining is supposed to work in most
+> cases when offlining actually hotplugged (not boot) memory, and only fail
+> in rare corner cases (e.g., some driver holds a reference to a page in
+> ZONE_MOVABLE, turning it unmovable).
+> 
+> In these corner cases we really don't want to be stuck forever in
+> offline_and_remove_memory(). But in the general cases, we really want to
+> do our best to make memory offlining succeed -- in a reasonable
+> timeframe.
+> 
+> Reliably failing in the described case when there is a fatal signal pending
+> is sub-optimal. The pending signal check is mostly only relevant when user
+> space explicitly triggers offlining of memory using sysfs device attributes
+> ("state" or "online" attribute), but not when coming via
+> offline_and_remove_memory().
+> 
+> So let's use a timer instead and ignore fatal signals, because they are
+> not really expressive for offline_and_remove_memory() users. Let's default
+> to 30 seconds if no timeout was specified, and limit the timeout to 120
+> seconds.
 
-Okay, thanks.
+I really hate having timeouts back. They just proven to be hard to get
+right and it is essentially a policy implemented in the kernel. They
+simply do not belong to the kernel space IMHO.
 
+> This change is also valuable for virtio-mem in BBM (Big Block Mode) with
+> "bbm_safe_unplug=off", to avoid endless loops when stuck forever in
+> offline_and_remove_memory().
+> 
+> While at it, drop the "extern" from offline_and_remove_memory() to make
+> it fit into a single line.
+> 
+> [1] https://lkml.kernel.org/r/20230620011719.155379-1-jhubbard@nvidia.com
+> 
+> Signed-off-by: David Hildenbrand <david@redhat.com>
+> ---
+>  drivers/virtio/virtio_mem.c    |  2 +-
+>  include/linux/memory_hotplug.h |  2 +-
+>  mm/memory_hotplug.c            | 50 ++++++++++++++++++++++++++++++++--
+>  3 files changed, 50 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/virtio/virtio_mem.c b/drivers/virtio/virtio_mem.c
+> index cb8bc6f6aa90..f8792223f1db 100644
+> --- a/drivers/virtio/virtio_mem.c
+> +++ b/drivers/virtio/virtio_mem.c
+> @@ -738,7 +738,7 @@ static int virtio_mem_offline_and_remove_memory(struct virtio_mem *vm,
+>  		"offlining and removing memory: 0x%llx - 0x%llx\n", addr,
+>  		addr + size - 1);
+>  
+> -	rc = offline_and_remove_memory(addr, size);
+> +	rc = offline_and_remove_memory(addr, size, 0);
+>  	if (!rc) {
+>  		atomic64_sub(size, &vm->offline_size);
+>  		/*
+> diff --git a/include/linux/memory_hotplug.h b/include/linux/memory_hotplug.h
+> index 9fcbf5706595..d5f9e8b5a4a4 100644
+> --- a/include/linux/memory_hotplug.h
+> +++ b/include/linux/memory_hotplug.h
+> @@ -307,7 +307,7 @@ extern int offline_pages(unsigned long start_pfn, unsigned long nr_pages,
+>  			 struct zone *zone, struct memory_group *group);
+>  extern int remove_memory(u64 start, u64 size);
+>  extern void __remove_memory(u64 start, u64 size);
+> -extern int offline_and_remove_memory(u64 start, u64 size);
+> +int offline_and_remove_memory(u64 start, u64 size, unsigned int timeout_ms);
+>  
+>  #else
+>  static inline void try_offline_node(int nid) {}
+> diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
+> index 0d2151df4ee1..ca635121644a 100644
+> --- a/mm/memory_hotplug.c
+> +++ b/mm/memory_hotplug.c
+> @@ -152,6 +152,22 @@ void put_online_mems(void)
+>  
+>  bool movable_node_enabled = false;
+>  
+> +/*
+> + * Protected by the device hotplug lock: offline_and_remove_memory()
+> + * will activate a timer such that offlining cannot be stuck forever.
+> + *
+> + * With an active timer, fatal signals will be ignored, because they can be
+> + * counter-productive when dying user space triggers device unplug/driver
+> + * unloading that ends up offlining+removing device memory.
+> + */
+> +static bool mhp_offlining_timer_active;
+> +static atomic_t mhp_offlining_timer_expired;
+> +
+> +static void mhp_offline_timer_fn(struct timer_list *unused)
+> +{
+> +	atomic_set(&mhp_offlining_timer_expired, 1);
+> +}
+> +
+>  #ifndef CONFIG_MEMORY_HOTPLUG_DEFAULT_ONLINE
+>  int mhp_default_online_type = MMOP_OFFLINE;
+>  #else
+> @@ -1879,7 +1895,18 @@ int __ref offline_pages(unsigned long start_pfn, unsigned long nr_pages,
+>  	do {
+>  		pfn = start_pfn;
+>  		do {
+> -			if (fatal_signal_pending(current)) {
+> +			/*
+> +			 * If a timer is active, we're coming via
+> +			 * offline_and_remove_memory() and want to ignore even
+> +			 * fatal signals.
+> +			 */
+> +			if (mhp_offlining_timer_active) {
+> +				if (atomic_read(&mhp_offlining_timer_expired)) {
+> +					ret = -ETIMEDOUT;
+> +					reason = "timeout";
+> +					goto failed_removal_isolated;
+> +				}
+> +			} else if (fatal_signal_pending(current)) {
+>  				ret = -EINTR;
+>  				reason = "signal backoff";
+>  				goto failed_removal_isolated;
+> @@ -2232,11 +2259,17 @@ static int try_reonline_memory_block(struct memory_block *mem, void *arg)
+>   * memory is still in use. Primarily useful for memory devices that logically
+>   * unplugged all memory (so it's no longer in use) and want to offline + remove
+>   * that memory.
+> + *
+> + * offline_and_remove_memory() will not fail on fatal signals. Instead, it will
+> + * fail once the timeout has been reached and offlining was not completed. If
+> + * no timeout was specified, it will timeout after 30 seconds. The timeout is
+> + * limited to 120 seconds.
+>   */
+> -int offline_and_remove_memory(u64 start, u64 size)
+> +int offline_and_remove_memory(u64 start, u64 size, unsigned int timeout_ms)
+>  {
+>  	const unsigned long mb_count = size / memory_block_size_bytes();
+>  	uint8_t *online_types, *tmp;
+> +	struct timer_list timer;
+>  	int rc;
+>  
+>  	if (!IS_ALIGNED(start, memory_block_size_bytes()) ||
+> @@ -2261,9 +2294,22 @@ int offline_and_remove_memory(u64 start, u64 size)
+>  
+>  	lock_device_hotplug();
+>  
+> +	if (!timeout_ms)
+> +		timeout_ms = 30 * MSEC_PER_SEC;
+> +	timeout_ms = min_t(unsigned int, timeout_ms, 120 * MSEC_PER_SEC);
+> +
+> +	timer_setup_on_stack(&timer, mhp_offline_timer_fn, 0);
+> +	mod_timer(&timer, jiffies + msecs_to_jiffies(timeout_ms));
+> +	mhp_offlining_timer_active = true;
+> +
+>  	tmp = online_types;
+>  	rc = walk_memory_blocks(start, size, &tmp, try_offline_memory_block);
+>  
+> +	timer_delete_sync(&timer);
+> +	atomic_set(&mhp_offlining_timer_expired, 0);
+> +	mhp_offlining_timer_active = false;
+> +	destroy_timer_on_stack(&timer);
+> +
+>  	/*
+>  	 * In case we succeeded to offline all memory, remove it.
+>  	 * This cannot fail as it cannot get onlined in the meantime.
+> -- 
+> 2.40.1
 
-> However, as I have indicated twice now, it would be better to describe
-> the SMBIOS structured data directly, instead of passing the physical
-> address of one of the existing entry points. This avoids the need for
-> mapping and reserving additional pages that don't carry any relevant
-> information.
->
-> So the node in question should have at least (base, size) and the
-> major, minor and docrev version fields.
-
-Other platforms also need related memory to store this table, don't they?
-Coreboot also completes the construction of this table according to
-its existing code, rather than creating a new description method.
-
-Furthermore, As we discussed before, SMBIOS-related code should be
-placed in the general code, and an entry address is required to
-connect to dmi_scan_machine().
-according to what you said (base, size, region) how can it be
-connected to dmi_scan with an entry address?
-
-So, For SMBIOS, only keep the smbios part in drivers/firmware/ffi.c in
-this patch? If yes in terms of code structure, I will update it in v2.
-
-
-> SMBIOS is a separate set of firmware tables that have little
-> significance to the kernel itself, and describing it via DT makes
-> sense.
->
-> ACPI serves a similar purpose as DT, and so having both at the same
-> time results in a maintenance burden, where the arch code is forced to
-> reason about whether they are consistent with each other, and if not,
-> which description has precedence.
->
-
-Well... I don=E2=80=99t want to discuss too much, according to your
-suggestion, To implement acpi_arch_get_root_pointer() under
-arch/riscv.
-I'll update it on v2.
-
-> If the firmware uses DT as a conduit to deliver the ACPI system
-> description to the OS, it is probably better to pass this via the
-> /chosen node as a special boot argument.
->
-
-This is not the focus of our discussion this time, and we will discuss
-it when we discuss node naming with DTS experts.
-
-
-Thanks,
-Yunhui
+-- 
+Michal Hocko
+SUSE Labs
