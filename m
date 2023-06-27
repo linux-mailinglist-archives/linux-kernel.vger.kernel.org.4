@@ -2,81 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA21273FA9B
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 12:57:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5319373FAAD
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 13:01:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230486AbjF0K5j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 06:57:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58642 "EHLO
+        id S231388AbjF0LBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 07:01:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbjF0K5h (ORCPT
+        with ESMTP id S230522AbjF0LBj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 06:57:37 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7308A1BE4;
-        Tue, 27 Jun 2023 03:57:36 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1b7e66ff65fso25942895ad.0;
-        Tue, 27 Jun 2023 03:57:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687863456; x=1690455456;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Pr8SROad9OO/4TJb06TdXZu2wTOX69wCmDgB0z/3wFo=;
-        b=l/IkUZk50vSHN3AQH7gUq03hB0XIreUXuIfURSbu/oF9s5vb9vwupArgjGwTvTJYUj
-         oyvOvyOoFwhCRQ1RdqYjYWtJ5h2eCGzIH0h9CBeS6zXcs6m0nnYxHXphRd06m96UN5KP
-         Ib1dipSC7y0Rlc1CBgq/PfUzV9C+gS6bz4uBGNSQNU/i8uTsNMmkaZ1Mauk7hbxkpAB1
-         forzL8bXSw+0WyVQaWl43/NHWzV0flibgtNTBmTpvSOCTbtfi4iehqZNLhXaHHIeEO8f
-         s7E5PXboYH7wu7Zi1XlWw4wFaqfu4brwqGVOzPf7fr5FCPWDQGoIcnHpy1zKIMumG2C5
-         y7Ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687863456; x=1690455456;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Pr8SROad9OO/4TJb06TdXZu2wTOX69wCmDgB0z/3wFo=;
-        b=Ojz6xmZQMFddQwQNi0PPL6PsNXH2hJzt+acecVtL3PNiHAactkmtt7OALbaK69wMR8
-         2fX8vbW65OtxHaR+uSaEMrSPejmGNRmy3shzViHT7LN+05oFC8Ed1aalxuapGX06CiWB
-         YAs882og35R8t8f+9bgkNIZSiwHoBq4MlozcoEmG6nJk9qDAydxFawXXW0oLpgctMF7P
-         hwFGp8eDTvbDWuCG6fgc/lPLe+pEKWvieUBJg2qYlg3B2DDoAjj4nTCwGdozm5DmVXeJ
-         YrG09IgX3uEMq6XWo7Byq+LBZuN6cq+5CqdtgsX/FaUOVD8LTmmoa833eP9Vx5uzyA+x
-         24bg==
-X-Gm-Message-State: AC+VfDyuZGG3R0gjEmEjsyEE6YhcHlfHveB6K0i/CjmO6VlVuR5AFocq
-        UiMf/czFbdZcGKBwJq+f1h8=
-X-Google-Smtp-Source: ACHHUZ45ML7mn6h4txTGqQ3XW4VvhA9f/9IqPZLQT1fRUb6npg2JGsOM8Kh2YvtT57JI4a9F2DRx7w==
-X-Received: by 2002:a17:903:41c7:b0:1b5:5ad6:ce9d with SMTP id u7-20020a17090341c700b001b55ad6ce9dmr12334679ple.50.1687863455767;
-        Tue, 27 Jun 2023 03:57:35 -0700 (PDT)
-Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:1a:efea::75b])
-        by smtp.gmail.com with ESMTPSA id s24-20020a170902b19800b001ab18eaf90esm5703663plr.158.2023.06.27.03.57.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Jun 2023 03:57:35 -0700 (PDT)
-Message-ID: <d06bb33e-047f-c849-de6a-246bc361c7af@gmail.com>
-Date:   Tue, 27 Jun 2023 18:57:28 +0800
+        Tue, 27 Jun 2023 07:01:39 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1679E1BE4
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 04:01:38 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qE6R4-0007fq-JI; Tue, 27 Jun 2023 13:00:38 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qE6Qv-00AQAC-96; Tue, 27 Jun 2023 13:00:29 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qE6Qu-000ECV-GT; Tue, 27 Jun 2023 13:00:28 +0200
+Date:   Tue, 27 Jun 2023 13:00:25 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     miquel.raynal@bootlin.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
+        mmayer@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
+        florian.fainelli@broadcom.com, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@linaro.org, thara.gopinath@gmail.com,
+        heiko@sntech.de, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@foss.st.com, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, tglx@linutronix.de, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com,
+        srinivas.pandruvada@linux.intel.com,
+        DLG-Adam.Ward.opensource@dm.renesas.com, shangxiaojing@huawei.com,
+        bchihi@baylibre.com, wenst@chromium.org,
+        hayashi.kunihiko@socionext.com,
+        niklas.soderlund+renesas@ragnatech.se, chi.minghao@zte.com.cn,
+        johan+linaro@kernel.org, jernej.skrabec@gmail.com,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 01/15] genirq/devres: Add error information printing
+ for devm_request_threaded_irq()
+Message-ID: <20230627110025.vgtplc6nluiiuvoh@pengutronix.de>
+References: <20230627101215.58798-1-frank.li@vivo.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [EXTERNAL] Re: [PATCH 5/9] x86/hyperv: Use vmmcall to implement
- Hyper-V hypercall in sev-snp enlightened guest
-From:   Tianyu Lan <ltykernel@gmail.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, daniel.lezcano@linaro.org, arnd@arndb.de,
-        michael.h.kelley@microsoft.com, Tianyu Lan <tiala@microsoft.com>,
-        linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org, vkuznets@redhat.com
-References: <20230601151624.1757616-1-ltykernel@gmail.com>
- <20230601151624.1757616-6-ltykernel@gmail.com>
- <20230608132127.GK998233@hirez.programming.kicks-ass.net>
- <8b93aa93-903f-3a69-77f9-0c6b694d826b@gmail.com>
-In-Reply-To: <8b93aa93-903f-3a69-77f9-0c6b694d826b@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="t3yaxbxt6bm6emkg"
+Content-Disposition: inline
+In-Reply-To: <20230627101215.58798-1-frank.li@vivo.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -84,90 +75,85 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 6/8/2023 11:15 PM, Tianyu Lan wrote:
-> On 6/8/2023 9:21 PM, Peter Zijlstra wrote:
->> On Thu, Jun 01, 2023 at 11:16:18AM -0400, Tianyu Lan wrote:
->>> From: Tianyu Lan <tiala@microsoft.com>
->>>
->>> In sev-snp enlightened guest, Hyper-V hypercall needs
->>> to use vmmcall to trigger vmexit and notify hypervisor
->>> to handle hypercall request.
->>>
->>> There is no x86 SEV SNP feature flag support so far and
->>> hardware provides MSR_AMD64_SEV register to check SEV-SNP
->>> capability with MSR_AMD64_SEV_ENABLED bit. ALTERNATIVE can't
->>> work without SEV-SNP x86 feature flag. May add later when
->>> the associated flag is introduced.
->>>
->>> Signed-off-by: Tianyu Lan <tiala@microsoft.com>
->>> ---
->>>   arch/x86/include/asm/mshyperv.h | 44 ++++++++++++++++++++++++---------
->>>   1 file changed, 33 insertions(+), 11 deletions(-)
->>>
->>> diff --git a/arch/x86/include/asm/mshyperv.h 
->>> b/arch/x86/include/asm/mshyperv.h
->>> index 31c476f4e656..d859d7c5f5e8 100644
->>> --- a/arch/x86/include/asm/mshyperv.h
->>> +++ b/arch/x86/include/asm/mshyperv.h
->>> @@ -61,16 +61,25 @@ static inline u64 hv_do_hypercall(u64 control, 
->>> void *input, void *output)
->>>       u64 hv_status;
->>>   #ifdef CONFIG_X86_64
->>> -    if (!hv_hypercall_pg)
->>> -        return U64_MAX;
->>> +    if (hv_isolation_type_en_snp()) {
->>> +        __asm__ __volatile__("mov %4, %%r8\n"
->>> +                     "vmmcall"
->>> +                     : "=a" (hv_status), ASM_CALL_CONSTRAINT,
->>> +                       "+c" (control), "+d" (input_address)
->>> +                     :  "r" (output_address)
->>> +                     : "cc", "memory", "r8", "r9", "r10", "r11");
->>> +    } else {
->>> +        if (!hv_hypercall_pg)
->>> +            return U64_MAX;
->>> -    __asm__ __volatile__("mov %4, %%r8\n"
->>> -                 CALL_NOSPEC
->>> -                 : "=a" (hv_status), ASM_CALL_CONSTRAINT,
->>> -                   "+c" (control), "+d" (input_address)
->>> -                 :  "r" (output_address),
->>> -                THUNK_TARGET(hv_hypercall_pg)
->>> -                 : "cc", "memory", "r8", "r9", "r10", "r11");
->>> +        __asm__ __volatile__("mov %4, %%r8\n"
->>> +                     CALL_NOSPEC
->>> +                     : "=a" (hv_status), ASM_CALL_CONSTRAINT,
->>> +                       "+c" (control), "+d" (input_address)
->>> +                     :  "r" (output_address),
->>> +                    THUNK_TARGET(hv_hypercall_pg)
->>> +                     : "cc", "memory", "r8", "r9", "r10", "r11");
->>> +    }
->>>   #else
->>
->> Remains unanswered:
->>
->> https://nam06.safelinks.protection.outlook.com/?url=https%3A%2F%2Flkml.kernel.org%2Fr%2F20230516102912.GG2587705%2540hirez.programming.kicks-ass.net&data=05%7C01%7CTianyu.Lan%40microsoft.com%7C60a576eb67634ffa27b108db68234d5a%7C72f988bf86f141af91ab2d7cd011db47%7C1%7C0%7C638218273105649705%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=MFj67DON0K%2BUoUJbeaIA5oVTxyrzO3fb5DbxYgDWwX0%3D&reserved=0
->>
->> Would this not generate better code with an alternative?
-> 
-> 
-> Hi Peter:
->      Thanks to review. I put the explaination in the change log.
-> 
-> "There is no x86 SEV SNP feature(X86_FEATURE_SEV_SNP) flag
-> support so far and hardware provides MSR_AMD64_SEV register
-> to check SEV-SNP capability with MSR_AMD64_SEV_ENABLED bit
-> ALTERNATIVE can't work without SEV-SNP x86 feature flag."
-> There is no cpuid leaf bit to check AMD SEV-SNP feature.
-> 
-> After some Hyper-V doesn't provides SEV and SEV-ES guest before and so
-> may reuse X86_FEATURE_SEV and X86_FEATURE_SEV_ES flag as alternative
-> feature check for Hyper-V SEV-SNP guest. Will refresh patch.
-> 
+--t3yaxbxt6bm6emkg
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Hi Peter:
-      I tried using alternative for "vmmcall" and CALL_NOSPEC in a single
-Inline assembly. The output is different in the SEV-SNP mode. When SEV-
-SNP is enabled, thunk_target is not required. While it's necessary in
-the non SEV-SNP mode. Do you have any idea how to differentiate outputs 
-in the single Inline assembly which just like alternative works for
-assembler template.
+Hello,
 
+On Tue, Jun 27, 2023 at 06:12:01PM +0800, Yangtao Li wrote:
+> Ensure that all error handling branches print error information. In this
+> way, when this function fails, the upper-layer functions can directly
+> return an error code without missing debugging information. Otherwise,
+> the error message will be printed redundantly or missing.
+>=20
+> There are more than 700 calls to the devm_request_threaded_irq method.
+> Most drivers only request one interrupt resource, and these error
+> messages are basically the same. If error messages are printed
+> everywhere, more than 1000 lines of code can be saved by removing the
+> msg in the driver.
+>=20
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> ---
+>  kernel/irq/devres.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/kernel/irq/devres.c b/kernel/irq/devres.c
+> index f6e5515ee077..fcb946ffb7ec 100644
+> --- a/kernel/irq/devres.c
+> +++ b/kernel/irq/devres.c
+> @@ -58,8 +58,10 @@ int devm_request_threaded_irq(struct device *dev, unsi=
+gned int irq,
+> =20
+>  	dr =3D devres_alloc(devm_irq_release, sizeof(struct irq_devres),
+>  			  GFP_KERNEL);
+> -	if (!dr)
+> +	if (!dr) {
+> +		dev_err(dev, "Failed to allocate device resource data\n");
+>  		return -ENOMEM;
+> +	}
+> =20
+>  	if (!devname)
+>  		devname =3D dev_name(dev);
+> @@ -67,6 +69,7 @@ int devm_request_threaded_irq(struct device *dev, unsig=
+ned int irq,
+>  	rc =3D request_threaded_irq(irq, handler, thread_fn, irqflags, devname,
+>  				  dev_id);
+>  	if (rc) {
+> +		dev_err_probe(dev, rc, "Failed to request threaded irq%d: %d\n", irq, =
+rc);
+
+This changes semantics because dev_err_probe() is only supposed to be
+called in probe functions. Not sure about devm_request_threaded_irq, but
+its friend request_irq is called in the setup_irq (or open IIRC)
+callback of serial drivers.
+
+While I assume changing to dev_err_probe is a result of my concern that
+no error should be printed when rc=3D-EPROBEDEFER, my other concern that
+adding an error message to a generic allocation function is a bad idea
+still stands.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--t3yaxbxt6bm6emkg
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmSawUgACgkQj4D7WH0S
+/k7nEAf/Sl6IkhcKwJ4ubKgDKscqGnFI0cXLbwVB+ka4iZfjqT5YcryVy/7nzzc4
+i3/0+bkJ03exSpcwA2tD+lYPOiEOGjeP/zlVkVO4yUom1zTqv5nxhhV9RlGNaOh4
+078C0cl2BRqDJoTleXNliumh2XZAQwQRCBGjZvxF5nbgbz72DN9KCae20rqtrNGx
+B8kXn6gLq7G3/LyeuUxanxoyk0ok5qPOhbp7fCwRV5FFaq8p4C0AEQKp+IxGwBLm
+YaRpSdThVEGAPaK+FvneVS7geTX5lliN3me02TSHTRDgE4WrMcITeJ3kyImTjU+A
+wSYX7roBs61l4eBj3iITpZkOBqw6ww==
+=xLpK
+-----END PGP SIGNATURE-----
+
+--t3yaxbxt6bm6emkg--
