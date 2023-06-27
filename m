@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9C397406D1
+	by mail.lfdr.de (Postfix) with ESMTP id 2D8827406CF
 	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 01:19:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbjF0XTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 19:19:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41544 "EHLO
+        id S229957AbjF0XTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 19:19:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbjF0XTJ (ORCPT
+        with ESMTP id S229459AbjF0XTJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 27 Jun 2023 19:19:09 -0400
 Received: from mx1.sberdevices.ru (mx2.sberdevices.ru [45.89.224.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E586E2944
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E592F2945
         for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 16:19:06 -0700 (PDT)
 Received: from p-infra-ksmg-sc-msk02 (localhost [127.0.0.1])
-        by mx1.sberdevices.ru (Postfix) with ESMTP id 38CB5120007;
-        Wed, 28 Jun 2023 01:40:33 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 38CB5120007
+        by mx1.sberdevices.ru (Postfix) with ESMTP id 5CBE9120008;
+        Wed, 28 Jun 2023 01:40:34 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 5CBE9120008
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1687905633;
-        bh=pIiTNsqBpMxAZqv/NstgXhxXHNEujlfElFDDzZB/69s=;
+        s=mail; t=1687905634;
+        bh=fGkHaSpBhZc/5j/U10QNDIDrMkJ0Fz7Q81mDkVTHDy8=;
         h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:From;
-        b=ilqBpqSKF+NS4WPwx0RnsrBHZ/AXZviok0OdV3LOyaJly6kqvnY29eODnsE3X7xcH
-         AxU5XdJyQjXMFT9SElJE3rjVrQijFZsrge3mLj1xeg7dKO+OVU8MJH9osyZ/FDXuA9
-         poFxXu4CKjiVrzLEZ/xc8R0riBjxbMtQchemKKwT7oY4bbeEPjCw5r+hIlBlW8TmW9
-         fZfnqbBoZLKXh4/1A0QGUWfqHkVJF6Ehrethft0Qdpa6+KYWf/QAS5A8Nhvfi17gFI
-         Q+Uj3Ck71pUdXFqlGG86+b52vznwSwBh3JsrYcpoRxbzYqfrYRxZDylpFf0qFQQyAn
-         T1yFoyA0AOQww==
+        b=eTdBVcsYXOzcwKlEbqu8swR5qSIj+2HRsAJqr9FQwaOPIYw+OdTmaJvt4TQ1btO+0
+         ncPlcW6U707TNlb5oqMJdgjljQZUjlGrHKMAbf1VZlr6bAVzscjS30ciZff2rGWmDE
+         hgg0zSvHzi4qfVvP3YF9ZemOi75Yy9DpbdliP0nkWhj+LtnDVeEUzWK7jriU5UklFI
+         PqB0GTYGHkCvF7DKL1/k1T95rgO0W5srSKWhg06rn/B/KMEdU816BDPaPWstncA9pz
+         lZq1zpynJ+tbn8xpuFjT7hGGlkRydckkc7sHvuNvFOAudBbHjSmKvujmhJ0pUyf5JC
+         PPw2TcxlFL8AQ==
 Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
         by mx1.sberdevices.ru (Postfix) with ESMTPS;
-        Wed, 28 Jun 2023 01:40:32 +0300 (MSK)
+        Wed, 28 Jun 2023 01:40:33 +0300 (MSK)
 Received: from localhost.localdomain (100.64.160.123) by
  p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
@@ -49,9 +49,9 @@ CC:     <linux-iio@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>,
         <linux-amlogic@lists.infradead.org>, <kernel@sberdevices.ru>,
         George Stark <GNStark@sberdevices.ru>
-Subject: [PATCH v3 3/5] meson saradc: add enum for iio channel numbers
-Date:   Wed, 28 Jun 2023 01:37:16 +0300
-Message-ID: <20230627224017.1724097-4-gnstark@sberdevices.ru>
+Subject: [PATCH v3 4/5] meson saradc: add channel labels
+Date:   Wed, 28 Jun 2023 01:37:17 +0300
+Message-ID: <20230627224017.1724097-5-gnstark@sberdevices.ru>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230627224017.1724097-1-gnstark@sberdevices.ru>
 References: <20230627224017.1724097-1-gnstark@sberdevices.ru>
@@ -79,7 +79,7 @@ X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2023
 X-KSMG-AntiVirus-Status: Clean, skipped
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75,URIBL_BLOCKED autolearn=no
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,81 +87,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: George Stark <GNStark@sberdevices.ru>
-
-Add enum for iio channel numbers.
+Add attribute 'label' to all iio channels.
 
 Signed-off-by: George Stark <GNStark@sberdevices.ru>
 ---
- drivers/iio/adc/meson_saradc.c | 51 +++++++++++++++++++++-------------
- 1 file changed, 32 insertions(+), 19 deletions(-)
+ drivers/iio/adc/meson_saradc.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
 diff --git a/drivers/iio/adc/meson_saradc.c b/drivers/iio/adc/meson_saradc.c
-index 6e69b40b3309..803d7ca2e0fa 100644
+index b87f05dfb322..85970fe852af 100644
 --- a/drivers/iio/adc/meson_saradc.c
 +++ b/drivers/iio/adc/meson_saradc.c
-@@ -224,29 +224,42 @@ enum meson_sar_adc_chan7_mux_sel {
- 	CHAN7_MUX_CH7_INPUT = 0x7,
- };
+@@ -1058,8 +1058,20 @@ static int meson_sar_adc_calib(struct iio_dev *indio_dev)
+ 	return ret;
+ }
  
-+enum meson_sar_adc_channel_index {
-+	NUM_CHAN_0,
-+	NUM_CHAN_1,
-+	NUM_CHAN_2,
-+	NUM_CHAN_3,
-+	NUM_CHAN_4,
-+	NUM_CHAN_5,
-+	NUM_CHAN_6,
-+	NUM_CHAN_7,
-+	NUM_CHAN_TEMP,
-+	NUM_CHAN_SOFT_TIMESTAMP,
-+};
++static int read_label(struct iio_dev *indio_dev,
++		      struct iio_chan_spec const *chan,
++		      char *label)
++{
++	if (chan->type == IIO_TEMP)
++		return sprintf(label, "%s\n", "temp-sensor");
++	if (chan->type == IIO_VOLTAGE)
++		return sprintf(label, "channel-%d\n", chan->channel);
++	return 0;
++}
 +
- static const struct iio_chan_spec meson_sar_adc_iio_channels[] = {
--	MESON_SAR_ADC_CHAN(0),
--	MESON_SAR_ADC_CHAN(1),
--	MESON_SAR_ADC_CHAN(2),
--	MESON_SAR_ADC_CHAN(3),
--	MESON_SAR_ADC_CHAN(4),
--	MESON_SAR_ADC_CHAN(5),
--	MESON_SAR_ADC_CHAN(6),
--	MESON_SAR_ADC_CHAN(7),
--	IIO_CHAN_SOFT_TIMESTAMP(8),
-+	MESON_SAR_ADC_CHAN(NUM_CHAN_0),
-+	MESON_SAR_ADC_CHAN(NUM_CHAN_1),
-+	MESON_SAR_ADC_CHAN(NUM_CHAN_2),
-+	MESON_SAR_ADC_CHAN(NUM_CHAN_3),
-+	MESON_SAR_ADC_CHAN(NUM_CHAN_4),
-+	MESON_SAR_ADC_CHAN(NUM_CHAN_5),
-+	MESON_SAR_ADC_CHAN(NUM_CHAN_6),
-+	MESON_SAR_ADC_CHAN(NUM_CHAN_7),
-+	IIO_CHAN_SOFT_TIMESTAMP(NUM_CHAN_SOFT_TIMESTAMP),
+ static const struct iio_info meson_sar_adc_iio_info = {
+ 	.read_raw = meson_sar_adc_iio_info_read_raw,
++	.read_label = read_label,
  };
  
- static const struct iio_chan_spec meson_sar_adc_and_temp_iio_channels[] = {
--	MESON_SAR_ADC_CHAN(0),
--	MESON_SAR_ADC_CHAN(1),
--	MESON_SAR_ADC_CHAN(2),
--	MESON_SAR_ADC_CHAN(3),
--	MESON_SAR_ADC_CHAN(4),
--	MESON_SAR_ADC_CHAN(5),
--	MESON_SAR_ADC_CHAN(6),
--	MESON_SAR_ADC_CHAN(7),
--	MESON_SAR_ADC_TEMP_CHAN(8),
--	IIO_CHAN_SOFT_TIMESTAMP(9),
-+	MESON_SAR_ADC_CHAN(NUM_CHAN_0),
-+	MESON_SAR_ADC_CHAN(NUM_CHAN_1),
-+	MESON_SAR_ADC_CHAN(NUM_CHAN_2),
-+	MESON_SAR_ADC_CHAN(NUM_CHAN_3),
-+	MESON_SAR_ADC_CHAN(NUM_CHAN_4),
-+	MESON_SAR_ADC_CHAN(NUM_CHAN_5),
-+	MESON_SAR_ADC_CHAN(NUM_CHAN_6),
-+	MESON_SAR_ADC_CHAN(NUM_CHAN_7),
-+	MESON_SAR_ADC_TEMP_CHAN(NUM_CHAN_TEMP),
-+	IIO_CHAN_SOFT_TIMESTAMP(NUM_CHAN_SOFT_TIMESTAMP),
- };
- 
- struct meson_sar_adc_param {
+ static const struct meson_sar_adc_param meson_sar_adc_meson8_param = {
 -- 
 2.38.4
 
