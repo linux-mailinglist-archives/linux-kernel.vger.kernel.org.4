@@ -2,106 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98D7373FC2D
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 14:52:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E75C573FC39
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 14:54:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230146AbjF0MwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 08:52:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48938 "EHLO
+        id S230161AbjF0Myf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 08:54:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbjF0MwG (ORCPT
+        with ESMTP id S230029AbjF0Myc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 08:52:06 -0400
+        Tue, 27 Jun 2023 08:54:32 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F25D826BA
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 05:51:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F4EF270B
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 05:53:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687870281;
+        s=mimecast20190719; t=1687870427;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1VBXBjZTvnK2Wk6THBLyuE1SAvZbYMw379uCbCug7dM=;
-        b=O8vtjDCjg03k5zsEaLLRvFyFpiXq4dRTLpvZucAfyIC+JyeSX3YW7offcFa68E8q3OoewL
-        JLtarMRsQk/MaVgRRJKTQyrq08z1Mj7xgCc+r27eDftiH1G4eay2z3b0O7XlKwwkuI8L7X
-        ENDJqAqTt33nmoFptipkAxh6tDwYk6Y=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-346-PhUMrcKyO0GB2VKrbaM43g-1; Tue, 27 Jun 2023 08:51:16 -0400
-X-MC-Unique: PhUMrcKyO0GB2VKrbaM43g-1
-Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-635e2618aaeso3217796d6.0
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 05:51:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687870276; x=1690462276;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1VBXBjZTvnK2Wk6THBLyuE1SAvZbYMw379uCbCug7dM=;
-        b=LjDwLI9U0bf2uE53ByQln/V1q9aUxh+03E0iY4kcaglfRdWGzJTD4xCKDkUfYQVSNn
-         ErIF1AtRQYwrcxMEU6nCruRI6lbi+eBKxjwMX7IQ2NWZ5sJ6/XGfjJzDrTKig2rpdc1L
-         M8muPcQl4w7fTdqnzhkYLFZz3Gb4CL0QOp6pTsE60zFGFdHmnAda5f7R9MZ9fYQclBsy
-         S4fpYqqRurRPEjb7NfumBI6qAzQTnxV9Cd+ya3gt4l3piD7YIG3dZsj2SyXa4Up4it+i
-         pMTwSl/1OiHTeDKO4ir+QwELePHXj7XqZRUG6/iz/UYC3zBrsiWWR5D6zC6rneu4PwxB
-         LJbw==
-X-Gm-Message-State: AC+VfDwOGZG3BoT1FQxif2Ys3nQYZtNEDeICErGSZT0bJ5GZnJix4gmq
-        XL11mIN1DPozKjYrbqg9gAW/gPoexgDaaV7JqlBQqUwHr6dXsqsg947Jk24+cS0nacvtSLgLG/v
-        13uxkRLElWcy3xmFgfEBX7Ecm
-X-Received: by 2002:ad4:4eec:0:b0:635:ec47:bfa4 with SMTP id dv12-20020ad44eec000000b00635ec47bfa4mr2878237qvb.4.1687870276523;
-        Tue, 27 Jun 2023 05:51:16 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4gTWjIfL+wjZmdsUf7JwLTLQZrg6rwPJR/TQXtOCe/Cf6jCLoU+HW/e0eIxubgQP4k7rQzpg==
-X-Received: by 2002:ad4:4eec:0:b0:635:ec47:bfa4 with SMTP id dv12-20020ad44eec000000b00635ec47bfa4mr2878221qvb.4.1687870276281;
-        Tue, 27 Jun 2023 05:51:16 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-239-6.dyn.eolo.it. [146.241.239.6])
-        by smtp.gmail.com with ESMTPSA id mz14-20020a0562142d0e00b006300e92ea02sm4478170qvb.121.2023.06.27.05.51.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jun 2023 05:51:15 -0700 (PDT)
-Message-ID: <b0a0cb0fac4ebdc23f01d183a9de10731dc90093.camel@redhat.com>
-Subject: Re: Is ->sendmsg() allowed to change the msghdr struct it is given?
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Jakub Kicinski <kuba@kernel.org>,
-        David Howells <dhowells@redhat.com>
-Cc:     Ilya Dryomov <idryomov@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, ceph-devel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 27 Jun 2023 14:51:12 +0200
-In-Reply-To: <20230626142257.6e14a801@kernel.org>
-References: <3112097.1687814081@warthog.procyon.org.uk>
-         <20230626142257.6e14a801@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=oiS2ZLd5xTYzw9V7aNrU2pwdMi8VnXjBD6gkjizwpN8=;
+        b=KN5TDLaP7gbVDos5IpwbUO/Pm3hpDkgcDLLUgN6IPT0t9Doiyxdg1nXrCUd4HnBUDoMYSd
+        pRVoKqNpfDDCr68+MroRZ7+PStj5y9635rsaETMV7q76wVuERZULyrHt0PbZDSTC+MYPyx
+        o6cXZN0am2qcm/p3HP3w2lu3bNhVAzE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-590-ttLT2izKN-ejuW7POps_HQ-1; Tue, 27 Jun 2023 08:53:44 -0400
+X-MC-Unique: ttLT2izKN-ejuW7POps_HQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 18C828C80E9;
+        Tue, 27 Jun 2023 12:53:44 +0000 (UTC)
+Received: from ws.net.home (unknown [10.45.225.186])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7F228C00049;
+        Tue, 27 Jun 2023 12:53:43 +0000 (UTC)
+Date:   Tue, 27 Jun 2023 14:53:41 +0200
+From:   Karel Zak <kzak@redhat.com>
+To:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        util-linux@vger.kernel.org
+Subject: [ANNOUNCE] util-linux v2.39.1
+Message-ID: <20230627125341.uohy47xdqllxiisz@ws.net.home>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-06-26 at 14:22 -0700, Jakub Kicinski wrote:
-> On Mon, 26 Jun 2023 22:14:41 +0100 David Howells wrote:
-> > Do you know if ->sendmsg() might alter the msghdr struct it is passed a=
-s an
-> > argument? Certainly it can alter msg_iter, but can it also modify,
-> > say, msg_flags?
->=20
-> I'm not aware of a precedent either way.
-> Eric or Paolo would know better than me, tho.
 
-udp_sendmsg() can set the MSG_TRUNC bit in msg->msg_flags, so I guess
-that kind of actions are sort of allowed. Still, AFAICS, the kernel
-based msghdr is not copied back to the user-space, so such change
-should be almost a no-op in practice.
+The util-linux stable release v2.39.1 is available at
+    
+  http://www.kernel.org/pub/linux/utils/util-linux/v2.39/
+    
+Feedback and bug reports, as always, are welcomed.
+    
+  Karel
 
-@David: which would be the end goal for such action?
 
-Cheers,
 
-Paolo
+util-linux v2.39.1 Release Notes
+================================
+
+The main objective of this maintenance release is to address bugs in libmount and
+resolve the regression that occurred due to the v2.39 rewrite for the new kernel
+mount interface.
+
+The meson build system has also been enhanced.
+
+
+Changes between v2.39 and v2.39.1
+---------------------------------
+
+blkzone:
+   - don't take address of struct blk_zone  [Thomas Weißschuh]
+build-sys:
+   - add --disable-waitpid  [Frantisek Sumsal]
+   - don't call pkg-config --static if unnecessary  [Karel Zak]
+   - fix typo in waitpid check  [Thomas Weißschuh]
+   - only pass --failure-level if supported  [Thomas Weißschuh]
+cal:
+   - fix error message for bad -c argument  [Jakub Wilk]
+   - fix long option name for -c  [Jakub Wilk]
+ci:
+   - prevent prompts during installation  [Thomas Weißschuh]
+dmesg:
+   - make kmsg read() buffer big enough for kernel  [anteater]
+docs:
+   - update AUTHORS file  [Karel Zak]
+enosys:
+   - add support for MIPS, PowerPC and ARC  [Thomas Weißschuh]
+   - add support for loongarch  [Thomas Weißschuh]
+   - add support for sparc  [Thomas Weißschuh]
+   - split audit arch detection into dedicated header  [Thomas Weißschuh]
+hardlink:
+   - (man) add missing comma  [Jakub Wilk]
+lib:
+   - remove pager.c from libcommon  [Karel Zak]
+lib/ include/:
+   - cleanup license headers  [Karel Zak]
+lib/color-names:
+   - fix license header  [Karel Zak]
+lib/loopdev:
+   - consistently return error values from loopcxt_find_unused()  [Thomas Weißschuh]
+   - document function return values  [Thomas Weißschuh]
+lib/strutils:
+   - fix typo  [Jakub Wilk]
+libblkid:
+   - (bcache) also calculate checksum over journal buckets  [Thomas Weißschuh]
+   - (bcache) extend superblock definition  [Thomas Weißschuh]
+   - jfs - avoid undefined shift  [Milan Broz]
+libmount:
+   - (optlist) correctly detect ro status  [Thomas Weißschuh]
+   - always ignore user=<name>  [Karel Zak]
+   - check for availability of mount_setattr  [Thomas Weißschuh]
+   - cleanup enosys returns from mount hoop  [Karel Zak]
+   - don't call hooks after mount.<type> helper  [Karel Zak]
+   - don't call mount.<type> helper with usernames  [Karel Zak]
+   - don't pass option "defaults" to helper  [Thomas Weißschuh]
+   - fix options prepend/insert and merging  [Karel Zak]
+   - fix sync options between context and fs structs  [Karel Zak]
+   - introduce LIBMOUNT_FORCE_MOUNT2={always,never,auto}  [Karel Zak]
+libsmartcols:
+   - (samples)  fix format truncation warning  [Thomas Weißschuh]
+logger:
+   - initialize socket credentials contol union  [Karel Zak]
+losetup:
+   - deduplicate find_unused() logic  [Thomas Weißschuh]
+lsfd:
+   - (filter) weakly support ARRAY_STRING and ARRAY_NUMBER json types  [Masatake YAMATO]
+   - (tests) fix typo  [Thomas Weißschuh]
+   - use ARRAY_STRING for ENDPOINTS column in JSON output mode  [Masatake YAMATO]
+meson:
+   - add conditionalization for test progs  [Zbigniew Jędrzejewski-Szmek]
+   - check for _NL_TIME_WEEK_1STDAY in langinfo.h  [Christian Hesse]
+   - conditionalize waitpid  [Zbigniew Jędrzejewski-Szmek]
+   - implement HAVE_PTY  [Zbigniew Jędrzejewski-Szmek]
+   - include bash-completion for newgrp  [Christian Hesse]
+   - include bash-completion for write  [Christian Hesse]
+   - install chfn setuid  [Christian Hesse]
+   - install chsh setuid  [Christian Hesse]
+   - install mount setuid  [Christian Hesse]
+   - install newgrp setuid  [Christian Hesse]
+   - install su setuid  [Christian Hesse]
+   - install symlink for vigr man page  [Christian Hesse]
+   - install umount setuid  [Christian Hesse]
+   - install wall setgid  [Christian Hesse]
+   - install write setgid  [Christian Hesse]
+   - require 0.57  [Thomas Weißschuh]
+mkfs.minix:
+   - handle 64bit time on 32bit system  [Thomas Weißschuh]
+po:
+   - merge changes  [Karel Zak]
+   - update hr.po (from translationproject.org)  [Božidar Putanec]
+po-man:
+   - add ko.po (from translationproject.org)  [Seong-ho Cho]
+   - add ro.po (from translationproject.org)  [Remus-Gabriel Chelu]
+   - merge changes  [Karel Zak]
+   - update uk.po (from translationproject.org)  [Yuri Chornoivan]
+sfdisk:
+   - add hint about duplicate UUIDs when use dump  [Karel Zak]
+test_enosys:
+   - fix build on old kernels  [Thomas Weißschuh]
+test_uuidd:
+   - make pthread_t formatting more robust  [Thomas Weißschuh]
+tests:
+   - (lsfd) add a case for verifying ENDPOINTS column output in JSON mode  [Masatake YAMATO]
+   - (run.sh) detect builddir from working directory  [Thomas Weißschuh]
+   - backport mount_setattr test  [Karel Zak]
+   - backport special mount script  [Karel Zak]
+   - fix update special mount test output  [Karel Zak]
+tools:
+   - (asciidoctor) explicitly require extensions module  [Thomas Weißschuh]
+unshare:
+   - fix error message for unexpected time offsets  [Thomas Weißschuh]
+waitpid:
+   - only build when pidfd_open is available  [Thomas Weißschuh]
+
+-- 
+ Karel Zak  <kzak@redhat.com>
+ http://karelzak.blogspot.com
 
