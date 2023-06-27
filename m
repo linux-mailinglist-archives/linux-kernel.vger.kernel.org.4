@@ -2,193 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E75C573FC39
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 14:54:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA8A573FC3D
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 14:55:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230161AbjF0Myf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 08:54:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49804 "EHLO
+        id S230233AbjF0Myz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 08:54:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230029AbjF0Myc (ORCPT
+        with ESMTP id S229841AbjF0Mys (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 08:54:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F4EF270B
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 05:53:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687870427;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=oiS2ZLd5xTYzw9V7aNrU2pwdMi8VnXjBD6gkjizwpN8=;
-        b=KN5TDLaP7gbVDos5IpwbUO/Pm3hpDkgcDLLUgN6IPT0t9Doiyxdg1nXrCUd4HnBUDoMYSd
-        pRVoKqNpfDDCr68+MroRZ7+PStj5y9635rsaETMV7q76wVuERZULyrHt0PbZDSTC+MYPyx
-        o6cXZN0am2qcm/p3HP3w2lu3bNhVAzE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-590-ttLT2izKN-ejuW7POps_HQ-1; Tue, 27 Jun 2023 08:53:44 -0400
-X-MC-Unique: ttLT2izKN-ejuW7POps_HQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 18C828C80E9;
-        Tue, 27 Jun 2023 12:53:44 +0000 (UTC)
-Received: from ws.net.home (unknown [10.45.225.186])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7F228C00049;
-        Tue, 27 Jun 2023 12:53:43 +0000 (UTC)
-Date:   Tue, 27 Jun 2023 14:53:41 +0200
-From:   Karel Zak <kzak@redhat.com>
-To:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        util-linux@vger.kernel.org
-Subject: [ANNOUNCE] util-linux v2.39.1
-Message-ID: <20230627125341.uohy47xdqllxiisz@ws.net.home>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Tue, 27 Jun 2023 08:54:48 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E5A92944;
+        Tue, 27 Jun 2023 05:54:44 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 431B65C01D0;
+        Tue, 27 Jun 2023 08:54:41 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 27 Jun 2023 08:54:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1687870481; x=1687956881; bh=Il
+        Bb3apajPhN/l8gLah0GaLHQYTfmUxtdLJ9RjV0BfI=; b=WkeCwVfZDHVMO+MpRb
+        KzlnGYLTGdhc1hJmjiKDRwOnBqY2z57Fr1SxMUgz4dZHSy1xQpRRl6qC2xd/7wFH
+        8tAqeoMAxB4pLt4DXMtRlHf4mhSBuvFc1IMYjq2qxlugPMOcAfrLM/Kfo77GF06n
+        DAfYNxEHCyvF4d6MEyBBzeyTWxr4Koc5ThhTwfuUR+lFPBC8AfIIHqh2XMlk6uid
+        5CgOD2s7t1mrb0n1+GpBKyBSRiTX2TXVTmFSbYbaXPbFmJVEwmrsxsKL+OSW62rj
+        kZ7/e/XUkQ8H76giweWQ5DoaVBoyanNntQj/mTH5WIjFnrKqyZjvHeeARDjeQm5e
+        lsGg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1687870481; x=1687956881; bh=IlBb3apajPhN/
+        l8gLah0GaLHQYTfmUxtdLJ9RjV0BfI=; b=f7sKexIVSPqInL2fcESgFKBXUNLbZ
+        fbD34+KA5c4+wcPw8jTCxQhd3oOgXYGQM9NbadInyZl4pOYmoIzMDPjbBeszcQPu
+        SxZeU3FhAEzQ/5rrt8YXLxgqFf2ftb6DdXqpNqrQpBUT/+a+s8eJ2gykl+fp2tM/
+        WMIdDriRJHdUe/jw0NqutnuGELpUs86lWRarkWgZQ/FFV2d+X8HOfj0fhSe+Vomr
+        hWsXsrkRF2tGouQpiOG691IgreX8jr6PUjwdd1TNeqO3lO/DwyLrHN5SXxujXJPN
+        2YhcEV0QSzN09zkyvcCC0pvnYxJkRenFSkU1ZtPK01QRJlJBEmmyT7qjA==
+X-ME-Sender: <xms:ENyaZKlStiUDI71v2z9eXPoBbJj_fXA2caEiaeEy4HkhkgGl9ZSLjQ>
+    <xme:ENyaZB0kp-ZdUWg9T17Ui9KVmvNL7hWsmyw-NMJRlePGPvq6Jq3aIVTOBlTolSeGr
+    xF2cBHVNQxkxlfWuS8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrtddtgdduhecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:ENyaZIrGuMf4xHJ5grbl2j-xIZbft02DGFwUPv2zKTFPG7PZBEGAVQ>
+    <xmx:ENyaZOnwJwSma7IIF8Tht0fh9-D_9xWKeu3re7VUnCPgi41mKRFyKA>
+    <xmx:ENyaZI2tgggHmEUBUc0-IMGjg9S2uDm79jIRukj0auBxhRjii2n1VQ>
+    <xmx:EdyaZCM3E-tfO0_X23ZOyyNU-xH-9ocLC9K38h6hwDCGHss4_cYZMw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 7B94FB60086; Tue, 27 Jun 2023 08:54:40 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
+Mime-Version: 1.0
+Message-Id: <de4fe7d1-a0ae-40eb-a9d4-434802083e70@app.fastmail.com>
+In-Reply-To: <43a1f34a6b1c5a14519f3967dff5eb42e82ee88d.camel@linux.ibm.com>
+References: <20230522105049.1467313-1-schnelle@linux.ibm.com>
+ <7b5c40f3-d25b-4082-807d-4d75dc38886d@app.fastmail.com>
+ <43a1f34a6b1c5a14519f3967dff5eb42e82ee88d.camel@linux.ibm.com>
+Date:   Tue, 27 Jun 2023 14:53:59 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Niklas Schnelle" <schnelle@linux.ibm.com>,
+        "Richard Cochran" <richardcochran@gmail.com>,
+        "Heiko Carstens" <hca@linux.ibm.com>
+Cc:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Bjorn Helgaas" <bhelgaas@google.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+        "Alan Stern" <stern@rowland.harvard.edu>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        "Albert Ou" <aou@eecs.berkeley.edu>, linux-kernel@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-pci@vger.kernel.org, Netdev <netdev@vger.kernel.org>
+Subject: Re: [PATCH v5 00/44] treewide: Remove I/O port accessors for HAS_IOPORT=n
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jun 27, 2023, at 11:12, Niklas Schnelle wrote:
+> On Mon, 2023-05-22 at 13:29 +0200, Arnd Bergmann wrote:
+>> 
+>> Maybe let's give it another week to have more maintainers pick
+>> up stuff from v5, and then send out a v6 as separate submissions.
+>> 
+>>     Arnd
+>
+> Hi Arnd and All,
+>
+> I'm sorry there hasn't been an updated in a long time and we're missing
+> v6.5. I've been quite busy with other work and life. Speaking of, I
+> will be mostly out for around a month starting some time mid to end
+> July as, if all goes well, I'm expecting to become a dad. That said, I
+> haven't forgotten about this and your overall plan of sending per-
+> subsystem patches sounds good, just haven't had the time to also
+> incorporate the feedback.
 
-The util-linux stable release v2.39.1 is available at
-    
-  http://www.kernel.org/pub/linux/utils/util-linux/v2.39/
-    
-Feedback and bug reports, as always, are welcomed.
-    
-  Karel
+Ok, thanks for letting us know. I just checked to see that about half
+of your series has already made it into linux-next and is likely to
+be part of v6.5 or already in v6.4.
 
+Maybe you can start out by taking a pass at just resending the ones
+that don't need any changes and can just get picked up after -rc1,
+and then I'll try to have a look at whatever remains after that.
 
-
-util-linux v2.39.1 Release Notes
-================================
-
-The main objective of this maintenance release is to address bugs in libmount and
-resolve the regression that occurred due to the v2.39 rewrite for the new kernel
-mount interface.
-
-The meson build system has also been enhanced.
-
-
-Changes between v2.39 and v2.39.1
----------------------------------
-
-blkzone:
-   - don't take address of struct blk_zone  [Thomas Weißschuh]
-build-sys:
-   - add --disable-waitpid  [Frantisek Sumsal]
-   - don't call pkg-config --static if unnecessary  [Karel Zak]
-   - fix typo in waitpid check  [Thomas Weißschuh]
-   - only pass --failure-level if supported  [Thomas Weißschuh]
-cal:
-   - fix error message for bad -c argument  [Jakub Wilk]
-   - fix long option name for -c  [Jakub Wilk]
-ci:
-   - prevent prompts during installation  [Thomas Weißschuh]
-dmesg:
-   - make kmsg read() buffer big enough for kernel  [anteater]
-docs:
-   - update AUTHORS file  [Karel Zak]
-enosys:
-   - add support for MIPS, PowerPC and ARC  [Thomas Weißschuh]
-   - add support for loongarch  [Thomas Weißschuh]
-   - add support for sparc  [Thomas Weißschuh]
-   - split audit arch detection into dedicated header  [Thomas Weißschuh]
-hardlink:
-   - (man) add missing comma  [Jakub Wilk]
-lib:
-   - remove pager.c from libcommon  [Karel Zak]
-lib/ include/:
-   - cleanup license headers  [Karel Zak]
-lib/color-names:
-   - fix license header  [Karel Zak]
-lib/loopdev:
-   - consistently return error values from loopcxt_find_unused()  [Thomas Weißschuh]
-   - document function return values  [Thomas Weißschuh]
-lib/strutils:
-   - fix typo  [Jakub Wilk]
-libblkid:
-   - (bcache) also calculate checksum over journal buckets  [Thomas Weißschuh]
-   - (bcache) extend superblock definition  [Thomas Weißschuh]
-   - jfs - avoid undefined shift  [Milan Broz]
-libmount:
-   - (optlist) correctly detect ro status  [Thomas Weißschuh]
-   - always ignore user=<name>  [Karel Zak]
-   - check for availability of mount_setattr  [Thomas Weißschuh]
-   - cleanup enosys returns from mount hoop  [Karel Zak]
-   - don't call hooks after mount.<type> helper  [Karel Zak]
-   - don't call mount.<type> helper with usernames  [Karel Zak]
-   - don't pass option "defaults" to helper  [Thomas Weißschuh]
-   - fix options prepend/insert and merging  [Karel Zak]
-   - fix sync options between context and fs structs  [Karel Zak]
-   - introduce LIBMOUNT_FORCE_MOUNT2={always,never,auto}  [Karel Zak]
-libsmartcols:
-   - (samples)  fix format truncation warning  [Thomas Weißschuh]
-logger:
-   - initialize socket credentials contol union  [Karel Zak]
-losetup:
-   - deduplicate find_unused() logic  [Thomas Weißschuh]
-lsfd:
-   - (filter) weakly support ARRAY_STRING and ARRAY_NUMBER json types  [Masatake YAMATO]
-   - (tests) fix typo  [Thomas Weißschuh]
-   - use ARRAY_STRING for ENDPOINTS column in JSON output mode  [Masatake YAMATO]
-meson:
-   - add conditionalization for test progs  [Zbigniew Jędrzejewski-Szmek]
-   - check for _NL_TIME_WEEK_1STDAY in langinfo.h  [Christian Hesse]
-   - conditionalize waitpid  [Zbigniew Jędrzejewski-Szmek]
-   - implement HAVE_PTY  [Zbigniew Jędrzejewski-Szmek]
-   - include bash-completion for newgrp  [Christian Hesse]
-   - include bash-completion for write  [Christian Hesse]
-   - install chfn setuid  [Christian Hesse]
-   - install chsh setuid  [Christian Hesse]
-   - install mount setuid  [Christian Hesse]
-   - install newgrp setuid  [Christian Hesse]
-   - install su setuid  [Christian Hesse]
-   - install symlink for vigr man page  [Christian Hesse]
-   - install umount setuid  [Christian Hesse]
-   - install wall setgid  [Christian Hesse]
-   - install write setgid  [Christian Hesse]
-   - require 0.57  [Thomas Weißschuh]
-mkfs.minix:
-   - handle 64bit time on 32bit system  [Thomas Weißschuh]
-po:
-   - merge changes  [Karel Zak]
-   - update hr.po (from translationproject.org)  [Božidar Putanec]
-po-man:
-   - add ko.po (from translationproject.org)  [Seong-ho Cho]
-   - add ro.po (from translationproject.org)  [Remus-Gabriel Chelu]
-   - merge changes  [Karel Zak]
-   - update uk.po (from translationproject.org)  [Yuri Chornoivan]
-sfdisk:
-   - add hint about duplicate UUIDs when use dump  [Karel Zak]
-test_enosys:
-   - fix build on old kernels  [Thomas Weißschuh]
-test_uuidd:
-   - make pthread_t formatting more robust  [Thomas Weißschuh]
-tests:
-   - (lsfd) add a case for verifying ENDPOINTS column output in JSON mode  [Masatake YAMATO]
-   - (run.sh) detect builddir from working directory  [Thomas Weißschuh]
-   - backport mount_setattr test  [Karel Zak]
-   - backport special mount script  [Karel Zak]
-   - fix update special mount test output  [Karel Zak]
-tools:
-   - (asciidoctor) explicitly require extensions module  [Thomas Weißschuh]
-unshare:
-   - fix error message for unexpected time offsets  [Thomas Weißschuh]
-waitpid:
-   - only build when pidfd_open is available  [Thomas Weißschuh]
-
--- 
- Karel Zak  <kzak@redhat.com>
- http://karelzak.blogspot.com
-
+    Arnd
