@@ -2,154 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C252D73FCC4
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 15:23:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73FCB73FCC7
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 15:24:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230145AbjF0NXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 09:23:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33570 "EHLO
+        id S230023AbjF0NYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 09:24:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230493AbjF0NXd (ORCPT
+        with ESMTP id S230169AbjF0NXl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 09:23:33 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F091E10FC
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 06:23:26 -0700 (PDT)
-Received: from mail-oa1-f72.google.com (mail-oa1-f72.google.com [209.85.160.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id CC4E6423E7
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 13:23:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1687872204;
-        bh=kGUYnE5kbOca9vEprcX/3t5yld25R/LWby9O3ADDzRg=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=fJsIw+pK0wORKXNUix03NShtOtbN+d0+9VZZmTcqavmn1JaUyV2iIX4udBFo2ZjDk
-         UnL18UQaHgaWUAsFhY9MxSdCqDvoFDX+LX5hLEL23nC8wuvxMn2tldqmIFO+y61XyG
-         GOoaIOprRkO6GXS2caRu3v952VJZH07LebvGQ08CjV2XR2eHAH3WdmkRVtL14JrPOw
-         363MFuBmUtaJFP2NwoR+cX6O04MekoEnJPpRmBkyZuRiHsY8T62Jl+uycgaHPkvelw
-         ISlMb1GxU4Td3/PBYyyF7z6tQX9j9GXM87Gw7zSzbRTr58GJQm2yLUdM6xAsZL6B9+
-         pLWqqRPp9/zIA==
-Received: by mail-oa1-f72.google.com with SMTP id 586e51a60fabf-1b01364f044so3199427fac.3
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 06:23:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687872201; x=1690464201;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kGUYnE5kbOca9vEprcX/3t5yld25R/LWby9O3ADDzRg=;
-        b=HWPDJqHHnken/DLj/WgDmiHYhco8XthYOdymVm45WcsmmCSIDUAmMHjMB3yJIFlbAv
-         RaRk2LR1/9Y41y0HU5FjN9vaCABdEPPV6GbD8K5Ump1fJ0XLuTBca7iIlHRlPufwm+EK
-         n6QzK7BtVgvm9zfEpJrXMGZKXCvfNOe+ATYNbHno59SWsuvvOelMbUi7jIlKKzlAgSuT
-         oUemUrjKuuExPnZsCI8VWInz/coI4C4haQlCzc8rByGuR5ChDfc3v/lD96Dq2vHPEoAi
-         eGJQKB7tDkIa9feWtJlhSIlRXycwlGNf4MlukpvF/+pYJ7Idy6c8vMMDMutWbYzwjSQj
-         ZqjA==
-X-Gm-Message-State: AC+VfDxoNBHlsut8ZocOT4mk0BSUQL026Z0Q2zSTThmkskC2wUlr/Ld6
-        d5jV4hw/Dgn+Ic3K6TmmjscubjGacXudRT0BNOTdHakyvbWcTz3hdcsUCauGMB9q2wQSiKUnJgK
-        8NnqaGQqZwyfyr4C94DC5QbSWbafUMjQ6TinLJkT3IqS7koCV8jWqkDQWrA==
-X-Received: by 2002:a05:6870:c78a:b0:1b0:2506:8d21 with SMTP id dy10-20020a056870c78a00b001b025068d21mr7964593oab.24.1687872201574;
-        Tue, 27 Jun 2023 06:23:21 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6klQnDP05O6BeE2DX0RY76kLAjDdfaYcIZmBFRQRyLEgTtrGdlN0AHgTf9P9UjvdT73IDh07FtXl/emNvkQvE=
-X-Received: by 2002:a05:6870:c78a:b0:1b0:2506:8d21 with SMTP id
- dy10-20020a056870c78a00b001b025068d21mr7964581oab.24.1687872201309; Tue, 27
- Jun 2023 06:23:21 -0700 (PDT)
+        Tue, 27 Jun 2023 09:23:41 -0400
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDDE1199C
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 06:23:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:
+        Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=XXhdTWoMk14blpQJORYtPE+5yfyz5ZqdWBj8yIkLzts=; b=GVtsM/JAeN+WVIVK5y8d9+UwbL
+        vQvr+6+K0y1KIV1qun0KL0TPobxoP4ch9FaLw2AcFV+RiUHM4eUbU2aJOAEHPs6lTnlI/UGB3x9Q0
+        uHSyXWF1fI9dwNyrB+U5o8H4JRk7ajOxpvMdqI0gF++zcTN4Y06KyLNyKTRwz1v5Mh/IiapsMswEf
+        UNJtlpWufkEyzBNENgpCLTvPOgiWgj6MZA6/9VJVumIeeElrAEoFV+Gs5PR0lToOPlshD0/SkVCpu
+        7t5eMnMIKmw5ryXFHhP6kjt7TigQ9cxnS0I55bG3WO+68FWUhmlpRbIpvTxGdHdEnwvk0f8V3IV9v
+        DQ5bGx5A==;
+Received: from [179.113.218.86] (helo=steammachine.lan)
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+        id 1qE8fM-004Yyb-Bb; Tue, 27 Jun 2023 15:23:32 +0200
+From:   =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>
+To:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Cc:     kernel-dev@igalia.com, alexander.deucher@amd.com,
+        christian.koenig@amd.com, pierre-eric.pelloux-prayer@amd.com,
+        Simon Ser <contact@emersion.fr>,
+        Rob Clark <robdclark@gmail.com>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Stone <daniel@fooishbar.org>,
+        =?UTF-8?q?=27Marek=20Ol=C5=A1=C3=A1k=27?= <maraeo@gmail.com>,
+        Dave Airlie <airlied@gmail.com>,
+        =?UTF-8?q?Michel=20D=C3=A4nzer?= <michel.daenzer@mailbox.org>,
+        Samuel Pitoiset <samuel.pitoiset@gmail.com>,
+        =?UTF-8?q?Timur=20Krist=C3=B3f?= <timur.kristof@gmail.com>,
+        Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>,
+        Pekka Paalanen <pekka.paalanen@collabora.com>
+Subject: [PATCH v5 1/1] drm/doc: Document DRM device reset expectations
+Date:   Tue, 27 Jun 2023 10:23:23 -0300
+Message-ID: <20230627132323.115440-1-andrealmeid@igalia.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-References: <CA+CX+bjcvbtW2Wto1XF1dKcAbpGGisdyHAGHX12v3TchhLbKtg@mail.gmail.com>
- <CAPDyKFoTH0j1uVSKvY_d7boMdG0kt_WvmLEKenYG22ZJR=UmvA@mail.gmail.com>
-In-Reply-To: <CAPDyKFoTH0j1uVSKvY_d7boMdG0kt_WvmLEKenYG22ZJR=UmvA@mail.gmail.com>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Tue, 27 Jun 2023 21:23:10 +0800
-Message-ID: <CAAd53p4NPr7t2ykOVLfjRRSiO5oatMu-Kx6p=O=cTn239XY+Vw@mail.gmail.com>
-Subject: Re: rtsx_usb_sdmmc not detecting card insertion anymore
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Pascal Terjan <pterjan@gmail.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-mmc@vger.kernel.org, Ricky WU <ricky_wu@realtek.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 7:01=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.org=
-> wrote:
->
-> + Ricky WU, Kai Heng Feng, Oleksandr Natalenko
->
-> On Sat, 24 Jun 2023 at 22:39, Pascal Terjan <pterjan@gmail.com> wrote:
-> >
-> > Hi,
-> > I have an ASUS PN50 machine with a 0bda:0129 card reader. The card is
-> > not seen unless I reload the rtsx_usb_sdmmc module.
->
-> Thanks for reporting, let's see how we can move this forward.
->
-> I have looped in some of the people that has been involved in the
-> relevant changes for rtsx_usb. Let's see if they can help too.
->
-> >
-> > I found a Debian bug report for the same regression
-> > https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=3D993068 but nothing
-> > to see there.
-> >
-> > Trying to understand things I found
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/comm=
-it/?id=3D4dad599b8b5d1ffc5ef12a2edb13d15d537202ba
-> > which seemed related, so I first tried to revert it and that worked.
->
-> Okay! That's certainly good information. Are you willing to help
-> running further debug testings?
->
-> Unless I mistaken, I think we should avoid doing a plain revert
-> (assuming we can find another option) as it will cause us to waste a
-> lot of energy instead.
->
-> >
-> > Assuming the description is correct and the rtsx USB driver runtime
-> > resumes the rtsx_usb_sdmmc device when it detects that a new card has
-> > been inserted, I assume this means it doesn't detect that a card was
-> > inserted and the problem would be in rtsx_usb rather than
-> > rtsx_usb_sdmmc.
->
-> There is also another interesting commit, which was also part of the
-> re-work of the rtsx_usb_sdmmc driver that you pointed to above.
->
-> commit 883a87ddf2f1 (misc: rtsx_usb: Use USB remote wakeup signaling
-> for card insertion detection")
->
-> >
-> > I am not sure how to debug this further, usbmon doesn't see anything
-> > when I insert the card.
->
-> If you are willing to run some tests, I suggest to add some debug prints =
-in:
-> drivers/mmc/host/rtsx_usb_sdmmc.c
->   sdmmc_get_cd()
->   rtsx_usb_sdmmc_runtime_resume()
->   rtsx_usb_sdmmc_runtime_suspend()
->
-> sdmmc_get_cd() should be returning 1 when it finds that there is card
-> inserted, but of course the error path would be interesting too.
->
-> rtsx_usb_sdmmc_runtime_resume() may be called during probing of the
-> rtsx_usb_sdmmc driver. Beyond that point, it should also be called
-> when you insert an SD card. Just having a debug print in there should
-> help answer if that actually happens.
+Create a section that specifies how to deal with DRM device resets for
+kernel and userspace drivers.
 
-Adding kernel parameter "usbcore.dyndbg" can also help, it will print
-out what's going on at USB side.
+Acked-by: Pekka Paalanen <pekka.paalanen@collabora.com>
+Signed-off-by: André Almeida <andrealmeid@igalia.com>
+---
 
-Kai-Heng
+v4: https://lore.kernel.org/lkml/20230626183347.55118-1-andrealmeid@igalia.com/
 
->
-> Kind regards
-> Uffe
+Changes:
+ - Grammar fixes (Randy)
+
+ Documentation/gpu/drm-uapi.rst | 68 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 68 insertions(+)
+
+diff --git a/Documentation/gpu/drm-uapi.rst b/Documentation/gpu/drm-uapi.rst
+index 65fb3036a580..3cbffa25ed93 100644
+--- a/Documentation/gpu/drm-uapi.rst
++++ b/Documentation/gpu/drm-uapi.rst
+@@ -285,6 +285,74 @@ for GPU1 and GPU2 from different vendors, and a third handler for
+ mmapped regular files. Threads cause additional pain with signal
+ handling as well.
+ 
++Device reset
++============
++
++The GPU stack is really complex and is prone to errors, from hardware bugs,
++faulty applications and everything in between the many layers. Some errors
++require resetting the device in order to make the device usable again. This
++sections describes the expectations for DRM and usermode drivers when a
++device resets and how to propagate the reset status.
++
++Kernel Mode Driver
++------------------
++
++The KMD is responsible for checking if the device needs a reset, and to perform
++it as needed. Usually a hang is detected when a job gets stuck executing. KMD
++should keep track of resets, because userspace can query any time about the
++reset stats for an specific context. This is needed to propagate to the rest of
++the stack that a reset has happened. Currently, this is implemented by each
++driver separately, with no common DRM interface.
++
++User Mode Driver
++----------------
++
++The UMD should check before submitting new commands to the KMD if the device has
++been reset, and this can be checked more often if the UMD requires it. After
++detecting a reset, UMD will then proceed to report it to the application using
++the appropriate API error code, as explained in the section below about
++robustness.
++
++Robustness
++----------
++
++The only way to try to keep an application working after a reset is if it
++complies with the robustness aspects of the graphical API that it is using.
++
++Graphical APIs provide ways to applications to deal with device resets. However,
++there is no guarantee that the app will use such features correctly, and the
++UMD can implement policies to close the app if it is a repeating offender,
++likely in a broken loop. This is done to ensure that it does not keep blocking
++the user interface from being correctly displayed. This should be done even if
++the app is correct but happens to trigger some bug in the hardware/driver.
++
++OpenGL
++~~~~~~
++
++Apps using OpenGL should use the available robust interfaces, like the
++extension ``GL_ARB_robustness`` (or ``GL_EXT_robustness`` for OpenGL ES). This
++interface tells if a reset has happened, and if so, all the context state is
++considered lost and the app proceeds by creating new ones. If it is possible to
++determine that robustness is not in use, the UMD will terminate the app when a
++reset is detected, giving that the contexts are lost and the app won't be able
++to figure this out and recreate the contexts.
++
++Vulkan
++~~~~~~
++
++Apps using Vulkan should check for ``VK_ERROR_DEVICE_LOST`` for submissions.
++This error code means, among other things, that a device reset has happened and
++it needs to recreate the contexts to keep going.
++
++Reporting causes of resets
++--------------------------
++
++Apart from propagating the reset through the stack so apps can recover, it's
++really useful for driver developers to learn more about what caused the reset in
++first place. DRM devices should make use of devcoredump to store relevant
++information about the reset, so this information can be added to user bug
++reports.
++
+ .. _drm_driver_ioctl:
+ 
+ IOCTL Support on Device Nodes
+-- 
+2.41.0
+
