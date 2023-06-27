@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D6B3740527
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 22:48:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93F6874052D
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 22:48:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231481AbjF0UsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 16:48:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52154 "EHLO
+        id S229716AbjF0Uso (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 16:48:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230489AbjF0UsG (ORCPT
+        with ESMTP id S229840AbjF0Use (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 16:48:06 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF55210D7
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 13:48:03 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2b6a152a933so42716151fa.1
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 13:48:03 -0700 (PDT)
+        Tue, 27 Jun 2023 16:48:34 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F00D10D7
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 13:48:33 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4f86dbce369so6881990e87.0
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 13:48:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687898882; x=1690490882;
+        d=linaro.org; s=google; t=1687898911; x=1690490911;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=OA45c/xaQm/8v0q3zdahN+3s7QemecX5vnNWDdTNmVE=;
-        b=NrbYawTk+IbOjd0e+vE5nKImpTCP4PP0QeUjM/wDAxIZrtTMptQ38+OBbpg/ybppN2
-         MOCUyAGEVFZYCWstAu7xPjpl4i3qPgOj8AdKVxRMAb8qY9M3tNRY4QPnd+9r7N5EGxrF
-         ymLbqtUzDNz8K3PzP7L2pkb8/hhHtSKG/VA2N3W+g1xBuuOk1Wa1xXcKYS3M5SYr6ahm
-         UBKuwoRY+9LY+AHU2ZvrNsUQ2pj4Q/eBo7e2wHi28eVg1L4FxPQG/2aoN09GkMOG28zJ
-         O1rYX29H+o1vDa3zgYC/fjEv4OtW5yt+uQGzH1Gs035ZfnG/f+oeEvwBU9YdTyQC20Ys
-         j1xw==
+        bh=h5cuxxD3O/wTB2BSSAaaa+aPcVHglRupuBRpkNvhp/4=;
+        b=noeEPvhzwSHk1yr+PYO+SJGFRehpAwvLYYcJ2os8G6QThZlWNjba1cjaV/ACdEtn6y
+         UkgnNucmSeKLRThSp14WbUOgibmopor+LCDEUGfG9b44wFXNCPblqIUQPa+67y5j8V22
+         GuPubh8ldtsanayR27EljTM3iNBQY3JE+ylibTqf/PYwI8axRmq4n3jvsUKEN29XS9ej
+         0R9XoDHjXrbH3h6IgyPV/NB1ObmjRHvPpFY0YxyKhrPLRO5ERD+mPjfayhPgfv0NLHjs
+         Ui+UbzwHVTesR9K7j8C1qhVuSTtEW0VXMXQ9vfxGnadvqvxjsnqngQc7pkbbzirwXoHW
+         ddoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687898882; x=1690490882;
+        d=1e100.net; s=20221208; t=1687898911; x=1690490911;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OA45c/xaQm/8v0q3zdahN+3s7QemecX5vnNWDdTNmVE=;
-        b=QdNpXXGOGmqmdG9lH4qUlCpU/NAOIkKlXjMA41G/z9v3yC0lKMIs+sKt1UZS21hFeN
-         LxnK2Crm+cEnO4wTuw2hsQemvaOXgQd86+nAJf5i2n3fZPZ+yRhzTVNUZEWBgWXJXbeH
-         LlJf169+v+emKYCnWxRPsMtr+gWIDDhq8m0Bx4Gg2wAaocki6pPbE+66gWJUrmENm0Ew
-         loD8MznqgDrJhHPGUAMJnjof7S7A1i85DrDjv642D3Pp+qqr3nmgB81hGNisubfvvHKP
-         hcU7uM6IB30BLnU/omsPlxkORlp4btKoZE+7oRGlTKiFwQGtcgilkrxJ8ispIRZeuEfy
-         06xA==
-X-Gm-Message-State: AC+VfDxidWQdksvlDDZU7a4PhK+CVWflS6RLWzSK8PxT+skgG5pIPDQt
-        lYQtiNV/B1TXPaCxR4lngnhfEw==
-X-Google-Smtp-Source: ACHHUZ4x7OiookqL76PJ6QmT4hwDZzTCsj7kQ+WEHW63ZHmS7rrxNDUaxZu2JkPT4WtiQW7E3HQAoA==
-X-Received: by 2002:a05:6512:10cf:b0:4f9:657d:e4bd with SMTP id k15-20020a05651210cf00b004f9657de4bdmr11208436lfg.24.1687898881728;
-        Tue, 27 Jun 2023 13:48:01 -0700 (PDT)
+        bh=h5cuxxD3O/wTB2BSSAaaa+aPcVHglRupuBRpkNvhp/4=;
+        b=iNTKiu9jeStUeFXgnKYAMrkYBd3OAN5kaRzkhtkOPiY22L7SBU0HBlKYopNViwpXc4
+         cNkM1D+K0VA97uCt+cVlyjvr6oYAEczGeVzaL3Oa2R8Ucy4baxIoLqLugo0s80xwVyqc
+         5SzyWkNxW/I3Gf3gNfjdfqspgoz8RGwYfD2mZi75n/nJRAHmMJsylt1x8bDWsvfoGsfZ
+         lZCwvYEUqW6dpyyOfrr84Jp930sYxQ+YQHMoG4GYVnIxy96LUgzhqN03qVRpLa1E8mFh
+         Q++eNNkxDOXv3DOf6frpz0Snc+0bgDMKa3Iw5+jBQyOgJXKM6FbRNXuXt2aCnl5tek44
+         4aqg==
+X-Gm-Message-State: AC+VfDwwniISfjJYDsPbMOZTW8tIX2YzkoTf2wVU3UzVLStDUAja/+8E
+        Ur3Is4jhBJmb7IHS1S1JxTjehQ==
+X-Google-Smtp-Source: ACHHUZ4b2TcqgSOIUXbuevAdQp4iFlsG08HkdF6Rm3hdzogpclAKk2cDmnKVJ3bFLNwK1Ffq8nl9oQ==
+X-Received: by 2002:a05:6512:281f:b0:4fb:7665:9b0d with SMTP id cf31-20020a056512281f00b004fb76659b0dmr5269960lfb.12.1687898911109;
+        Tue, 27 Jun 2023 13:48:31 -0700 (PDT)
 Received: from [192.168.1.101] (abxj103.neoplus.adsl.tpnet.pl. [83.9.3.103])
-        by smtp.gmail.com with ESMTPSA id q18-20020a19a412000000b004f3b319ed4bsm1647406lfc.120.2023.06.27.13.47.59
+        by smtp.gmail.com with ESMTPSA id n25-20020a195519000000b004fb6c61e79bsm1206591lfe.117.2023.06.27.13.48.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Jun 2023 13:48:01 -0700 (PDT)
-Message-ID: <3cc619fc-4d48-919c-7e17-4b11a4e4dcd5@linaro.org>
-Date:   Tue, 27 Jun 2023 22:47:59 +0200
+        Tue, 27 Jun 2023 13:48:30 -0700 (PDT)
+Message-ID: <234628ff-359d-7058-a5ca-17b67be08ba5@linaro.org>
+Date:   Tue, 27 Jun 2023 22:48:28 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH v2 14/15] arm64: dts: qcom: sm6125: Add display hardware
- nodes
+Subject: Re: [PATCH v2 15/15] arm64: dts: qcom: sm6125-seine: Configure MDSS,
+ DSI and panel
 Content-Language: en-US
 To:     Marijn Suijten <marijn.suijten@somainline.org>,
         Andy Gross <agross@kernel.org>,
@@ -85,15 +85,15 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht,
         linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
         freedreno@lists.freedesktop.org, Lux Aliaga <they@mint.lgbt>
 References: <20230627-sm6125-dpu-v2-0-03e430a2078c@somainline.org>
- <20230627-sm6125-dpu-v2-14-03e430a2078c@somainline.org>
+ <20230627-sm6125-dpu-v2-15-03e430a2078c@somainline.org>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230627-sm6125-dpu-v2-14-03e430a2078c@somainline.org>
+In-Reply-To: <20230627-sm6125-dpu-v2-15-03e430a2078c@somainline.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -101,222 +101,92 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 27.06.2023 22:14, Marijn Suijten wrote:
-> Add the DT nodes that describe the MDSS hardware on SM6125, containing
-> one MDP (display controller) together with a single DSI and DSI PHY.  No
-> DisplayPort support is added for now.
+> Enable MDSS and DSI, and configure the Samsung SOFEF01-M ams597ut01
+> 6.0" 1080x2520 panel.
 > 
 > Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
 > ---
 Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
 Konrad
->  arch/arm64/boot/dts/qcom/sm6125.dtsi | 191 ++++++++++++++++++++++++++++++++++-
->  1 file changed, 189 insertions(+), 2 deletions(-)
+>  .../dts/qcom/sm6125-sony-xperia-seine-pdx201.dts   | 59 ++++++++++++++++++++++
+>  1 file changed, 59 insertions(+)
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sm6125.dtsi b/arch/arm64/boot/dts/qcom/sm6125.dtsi
-> index a5cc0d43d2d9..b21fa1256f95 100644
-> --- a/arch/arm64/boot/dts/qcom/sm6125.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm6125.dtsi
-> @@ -1204,12 +1204,199 @@ sram@4690000 {
->  			reg = <0x04690000 0x10000>;
->  		};
+> diff --git a/arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts b/arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts
+> index 9f8a9ef398a2..08d96d05da2e 100644
+> --- a/arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts
+> +++ b/arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts
+> @@ -179,6 +179,43 @@ &i2c3 {
+>  	/* Cirrus Logic CS35L41 boosted audio amplifier @ 40 */
+>  };
 >  
-> +		mdss: display-subsystem@5e00000 {
-> +			compatible = "qcom,sm6125-mdss";
-> +			reg = <0x05e00000 0x1000>;
-> +			reg-names = "mdss";
+> +&mdss {
+> +	status = "okay";
+> +};
 > +
-> +			interrupts = <GIC_SPI 186 IRQ_TYPE_LEVEL_HIGH>;
-> +			interrupt-controller;
-> +			#interrupt-cells = <1>;
+> +&mdss_dsi0 {
+> +	vdda-supply = <&pm6125_l18>;
+> +	status = "okay";
 > +
-> +			clocks = <&gcc GCC_DISP_AHB_CLK>,
-> +				 <&dispcc DISP_CC_MDSS_AHB_CLK>,
-> +				 <&dispcc DISP_CC_MDSS_MDP_CLK>;
-> +			clock-names = "iface",
-> +				      "ahb",
-> +				      "core";
+> +	panel@0 {
+> +		compatible = "samsung,sofef01-m-ams597ut01";
+> +		reg = <0>;
 > +
-> +			power-domains = <&dispcc MDSS_GDSC>;
+> +		reset-gpios = <&tlmm 90 GPIO_ACTIVE_LOW>;
 > +
-> +			iommus = <&apps_smmu 0x400 0x0>;
+> +		vddio-supply = <&pm6125_l12>;
 > +
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
-> +			ranges;
+> +		pinctrl-0 = <&mdss_dsi_active &mdss_te_active_sleep>;
+> +		pinctrl-1 = <&mdss_dsi_sleep &mdss_te_active_sleep>;
+> +		pinctrl-names = "default", "sleep";
 > +
-> +			status = "disabled";
-> +
-> +			mdss_mdp: display-controller@5e01000 {
-> +				compatible = "qcom,sm6125-dpu";
-> +				reg = <0x05e01000 0x83208>,
-> +				      <0x05eb0000 0x2008>;
-> +				reg-names = "mdp", "vbif";
-> +
-> +				interrupt-parent = <&mdss>;
-> +				interrupts = <0>;
-> +
-> +				clocks = <&gcc GCC_DISP_HF_AXI_CLK>,
-> +					 <&dispcc DISP_CC_MDSS_AHB_CLK>,
-> +					 <&dispcc DISP_CC_MDSS_ROT_CLK>,
-> +					 <&dispcc DISP_CC_MDSS_MDP_LUT_CLK>,
-> +					 <&dispcc DISP_CC_MDSS_MDP_CLK>,
-> +					 <&dispcc DISP_CC_MDSS_VSYNC_CLK>;
-> +				clock-names = "bus",
-> +					      "iface",
-> +					      "rot",
-> +					      "lut",
-> +					      "core",
-> +					      "vsync";
-> +				assigned-clocks = <&dispcc DISP_CC_MDSS_VSYNC_CLK>;
-> +				assigned-clock-rates = <19200000>;
-> +
-> +				operating-points-v2 = <&mdp_opp_table>;
-> +				power-domains = <&rpmpd SM6125_VDDCX>;
-> +
-> +				ports {
-> +					#address-cells = <1>;
-> +					#size-cells = <0>;
-> +
-> +					port@0 {
-> +						reg = <0>;
-> +						dpu_intf1_out: endpoint {
-> +							remote-endpoint = <&mdss_dsi0_in>;
-> +						};
-> +					};
-> +				};
-> +
-> +				mdp_opp_table: opp-table {
-> +					compatible = "operating-points-v2";
-> +
-> +					opp-192000000 {
-> +						opp-hz = /bits/ 64 <192000000>;
-> +						required-opps = <&rpmpd_opp_low_svs>;
-> +					};
-> +
-> +					opp-256000000 {
-> +						opp-hz = /bits/ 64 <256000000>;
-> +						required-opps = <&rpmpd_opp_svs>;
-> +					};
-> +
-> +					opp-307200000 {
-> +						opp-hz = /bits/ 64 <307200000>;
-> +						required-opps = <&rpmpd_opp_svs_plus>;
-> +					};
-> +
-> +					opp-384000000 {
-> +						opp-hz = /bits/ 64 <384000000>;
-> +						required-opps = <&rpmpd_opp_nom>;
-> +					};
-> +
-> +					opp-400000000 {
-> +						opp-hz = /bits/ 64 <400000000>;
-> +						required-opps = <&rpmpd_opp_turbo>;
-> +					};
-> +				};
-> +			};
-> +
-> +			mdss_dsi0: dsi@5e94000 {
-> +				compatible = "qcom,sm6125-dsi-ctrl", "qcom,mdss-dsi-ctrl";
-> +				reg = <0x05e94000 0x400>;
-> +				reg-names = "dsi_ctrl";
-> +
-> +				interrupt-parent = <&mdss>;
-> +				interrupts = <4>;
-> +
-> +				clocks = <&dispcc DISP_CC_MDSS_BYTE0_CLK>,
-> +					 <&dispcc DISP_CC_MDSS_BYTE0_INTF_CLK>,
-> +					 <&dispcc DISP_CC_MDSS_PCLK0_CLK>,
-> +					 <&dispcc DISP_CC_MDSS_ESC0_CLK>,
-> +					 <&dispcc DISP_CC_MDSS_AHB_CLK>,
-> +					 <&gcc GCC_DISP_HF_AXI_CLK>;
-> +				clock-names = "byte",
-> +					      "byte_intf",
-> +					      "pixel",
-> +					      "core",
-> +					      "iface",
-> +					      "bus";
-> +				assigned-clocks = <&dispcc DISP_CC_MDSS_BYTE0_CLK_SRC>,
-> +						  <&dispcc DISP_CC_MDSS_PCLK0_CLK_SRC>;
-> +				assigned-clock-parents = <&mdss_dsi0_phy 0>, <&mdss_dsi0_phy 1>;
-> +
-> +				operating-points-v2 = <&dsi_opp_table>;
-> +				power-domains = <&rpmpd SM6125_VDDCX>;
-> +
-> +				phys = <&mdss_dsi0_phy>;
-> +				phy-names = "dsi";
-> +
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +
-> +				status = "disabled";
-> +
-> +				ports {
-> +					#address-cells = <1>;
-> +					#size-cells = <0>;
-> +
-> +					port@0 {
-> +						reg = <0>;
-> +						mdss_dsi0_in: endpoint {
-> +							remote-endpoint = <&dpu_intf1_out>;
-> +						};
-> +					};
-> +
-> +					port@1 {
-> +						reg = <1>;
-> +						mdss_dsi0_out: endpoint {
-> +						};
-> +					};
-> +				};
-> +
-> +				dsi_opp_table: opp-table {
-> +					compatible = "operating-points-v2";
-> +
-> +					opp-164000000 {
-> +						opp-hz = /bits/ 64 <164000000>;
-> +						required-opps = <&rpmpd_opp_low_svs>;
-> +					};
-> +
-> +					opp-187500000 {
-> +						opp-hz = /bits/ 64 <187500000>;
-> +						required-opps = <&rpmpd_opp_svs>;
-> +					};
-> +				};
-> +			};
-> +
-> +			mdss_dsi0_phy: phy@5e94400 {
-> +				compatible = "qcom,sm6125-dsi-phy-14nm";
-> +				reg = <0x05e94400 0x100>,
-> +				      <0x05e94500 0x300>,
-> +				      <0x05e94800 0x188>;
-> +				reg-names = "dsi_phy",
-> +					    "dsi_phy_lane",
-> +					    "dsi_pll";
-> +
-> +				#clock-cells = <1>;
-> +				#phy-cells = <0>;
-> +
-> +				clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
-> +					 <&rpmcc RPM_SMD_XO_CLK_SRC>;
-> +				clock-names = "iface",
-> +					      "ref";
-> +
-> +				required-opps = <&rpmpd_opp_svs>;
-> +				power-domains = <&rpmpd SM6125_VDDMX>;
-> +
-> +				status = "disabled";
+> +		port {
+> +			panel_in: endpoint {
+> +				remote-endpoint = <&mdss_dsi0_out>;
 > +			};
 > +		};
+> +	};
+> +};
 > +
->  		dispcc: clock-controller@5f00000 {
->  			compatible = "qcom,sm6125-dispcc";
->  			reg = <0x05f00000 0x20000>;
->  			clocks = <&rpmcc RPM_SMD_XO_CLK_SRC>,
-> -				 <0>,
-> -				 <0>,
-> +				 <&mdss_dsi0_phy 0>,
-> +				 <&mdss_dsi0_phy 1>,
->  				 <0>,
->  				 <0>,
->  				 <0>,
+> +&mdss_dsi0_out {
+> +	remote-endpoint = <&panel_in>;
+> +	data-lanes = <0 1 2 3>;
+> +};
+> +
+> +&mdss_dsi0_phy {
+> +	status = "okay";
+> +};
+> +
+>  &pm6125_adc {
+>  	pinctrl-names = "default";
+>  	pinctrl-0 = <&camera_flash_therm &emmc_ufs_therm &rf_pa1_therm>;
+> @@ -469,6 +506,28 @@ vol_down_n: vol-down-n-state {
+>  		drive-strength = <2>;
+>  		bias-disable;
+>  	};
+> +
+> +	mdss_te_active_sleep: mdss-te-active-sleep-state {
+> +		pins = "gpio89";
+> +		function = "mdp_vsync";
+> +		drive-strength = <2>;
+> +		bias-pull-down;
+> +	};
+> +
+> +	mdss_dsi_active: mdss-dsi-active-state {
+> +		pins = "gpio90";
+> +		function = "gpio";
+> +		drive-strength = <8>;
+> +		bias-disable;
+> +	};
+> +
+> +	mdss_dsi_sleep: mdss-dsi-sleep-state {
+> +		pins = "gpio90";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +		bias-pull-down;
+> +	};
+> +
+>  };
+>  
+>  &usb3 {
 > 
