@@ -2,96 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA8A573FC3D
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 14:55:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7ED973FC48
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 14:56:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230233AbjF0Myz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 08:54:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50106 "EHLO
+        id S230304AbjF0M4d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 08:56:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229841AbjF0Mys (ORCPT
+        with ESMTP id S230138AbjF0M4b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 08:54:48 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E5A92944;
-        Tue, 27 Jun 2023 05:54:44 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 431B65C01D0;
-        Tue, 27 Jun 2023 08:54:41 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 27 Jun 2023 08:54:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1687870481; x=1687956881; bh=Il
-        Bb3apajPhN/l8gLah0GaLHQYTfmUxtdLJ9RjV0BfI=; b=WkeCwVfZDHVMO+MpRb
-        KzlnGYLTGdhc1hJmjiKDRwOnBqY2z57Fr1SxMUgz4dZHSy1xQpRRl6qC2xd/7wFH
-        8tAqeoMAxB4pLt4DXMtRlHf4mhSBuvFc1IMYjq2qxlugPMOcAfrLM/Kfo77GF06n
-        DAfYNxEHCyvF4d6MEyBBzeyTWxr4Koc5ThhTwfuUR+lFPBC8AfIIHqh2XMlk6uid
-        5CgOD2s7t1mrb0n1+GpBKyBSRiTX2TXVTmFSbYbaXPbFmJVEwmrsxsKL+OSW62rj
-        kZ7/e/XUkQ8H76giweWQ5DoaVBoyanNntQj/mTH5WIjFnrKqyZjvHeeARDjeQm5e
-        lsGg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1687870481; x=1687956881; bh=IlBb3apajPhN/
-        l8gLah0GaLHQYTfmUxtdLJ9RjV0BfI=; b=f7sKexIVSPqInL2fcESgFKBXUNLbZ
-        fbD34+KA5c4+wcPw8jTCxQhd3oOgXYGQM9NbadInyZl4pOYmoIzMDPjbBeszcQPu
-        SxZeU3FhAEzQ/5rrt8YXLxgqFf2ftb6DdXqpNqrQpBUT/+a+s8eJ2gykl+fp2tM/
-        WMIdDriRJHdUe/jw0NqutnuGELpUs86lWRarkWgZQ/FFV2d+X8HOfj0fhSe+Vomr
-        hWsXsrkRF2tGouQpiOG691IgreX8jr6PUjwdd1TNeqO3lO/DwyLrHN5SXxujXJPN
-        2YhcEV0QSzN09zkyvcCC0pvnYxJkRenFSkU1ZtPK01QRJlJBEmmyT7qjA==
-X-ME-Sender: <xms:ENyaZKlStiUDI71v2z9eXPoBbJj_fXA2caEiaeEy4HkhkgGl9ZSLjQ>
-    <xme:ENyaZB0kp-ZdUWg9T17Ui9KVmvNL7hWsmyw-NMJRlePGPvq6Jq3aIVTOBlTolSeGr
-    xF2cBHVNQxkxlfWuS8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrtddtgdduhecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:ENyaZIrGuMf4xHJ5grbl2j-xIZbft02DGFwUPv2zKTFPG7PZBEGAVQ>
-    <xmx:ENyaZOnwJwSma7IIF8Tht0fh9-D_9xWKeu3re7VUnCPgi41mKRFyKA>
-    <xmx:ENyaZI2tgggHmEUBUc0-IMGjg9S2uDm79jIRukj0auBxhRjii2n1VQ>
-    <xmx:EdyaZCM3E-tfO0_X23ZOyyNU-xH-9ocLC9K38h6hwDCGHss4_cYZMw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 7B94FB60086; Tue, 27 Jun 2023 08:54:40 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
-Mime-Version: 1.0
-Message-Id: <de4fe7d1-a0ae-40eb-a9d4-434802083e70@app.fastmail.com>
-In-Reply-To: <43a1f34a6b1c5a14519f3967dff5eb42e82ee88d.camel@linux.ibm.com>
-References: <20230522105049.1467313-1-schnelle@linux.ibm.com>
- <7b5c40f3-d25b-4082-807d-4d75dc38886d@app.fastmail.com>
- <43a1f34a6b1c5a14519f3967dff5eb42e82ee88d.camel@linux.ibm.com>
-Date:   Tue, 27 Jun 2023 14:53:59 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Niklas Schnelle" <schnelle@linux.ibm.com>,
-        "Richard Cochran" <richardcochran@gmail.com>,
-        "Heiko Carstens" <hca@linux.ibm.com>
-Cc:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Bjorn Helgaas" <bhelgaas@google.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
-        "Alan Stern" <stern@rowland.harvard.edu>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        "Albert Ou" <aou@eecs.berkeley.edu>, linux-kernel@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-pci@vger.kernel.org, Netdev <netdev@vger.kernel.org>
-Subject: Re: [PATCH v5 00/44] treewide: Remove I/O port accessors for HAS_IOPORT=n
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        Tue, 27 Jun 2023 08:56:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A8DB2D61
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 05:55:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687870525;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jRl7aKap1SeKgVZS63rqtI75g0CI3hogPpCfcoBBCMs=;
+        b=RpREXICvHLQwsrzFd8s14IssnGMNrOags+Q4gp9fKMKZu55y5MEqB16sZT359KsGHUdNLZ
+        cZgfBaEeNlxJ0nmuKCLJ+NoJPBlyRE1pFgBrRW8x+viWUl+AvfrFjCRu7+FZPc4BXnt0b2
+        1FYRocBk0nS21htfisXnuD7AI+Qp3Q4=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-167-keM8jgE9PueiPUbhi9U9qg-1; Tue, 27 Jun 2023 08:55:24 -0400
+X-MC-Unique: keM8jgE9PueiPUbhi9U9qg-1
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-765ad67e600so35760785a.0
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 05:55:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687870524; x=1690462524;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jRl7aKap1SeKgVZS63rqtI75g0CI3hogPpCfcoBBCMs=;
+        b=Y7vQ68iLuR6oeoxtJXTDsTU+6t+N8n5CvABwhj/jGuPlyBFZ8KeEJplEp8CyzMEgbX
+         9FTARwp178KOj8SkvW/bzKD/HmquBaZGeNKmB3Uj/TDvFWmTWLH08jjgbaLVDm1Hoonn
+         QKIAeKb3i8uG/kFyX26ZDfcNsHR3KHOWauW6Dhsy6thFvnF+UwfO94ojeDbmyZxvBQQS
+         U1IC+K6DajudLOa+dvTooR3pdgxlRBU8zE2IRoGMpSL30DhbmJHPFkFx9OZx/jXym9NP
+         zjPU5+N5y+ThJPcy7vpYboRQdjkfaJ4ayErHaZilwlO25t0bfOkKR99JSC26ZHq+SrW0
+         /ZZg==
+X-Gm-Message-State: AC+VfDwWAK8dO39dcqvif9+tSJtBjtr5w5oRugT9Kr0d4yZsP+p/+uwI
+        gaov8MMfi6S84paQUXRSC+mUoviIlTjcAWN3wEJsEuF0DOHApU2mOzwcNUajIkgsCtWxh6jcZ+D
+        CPop83OP3nSeB4ZQEDOWJwcb/
+X-Received: by 2002:a05:620a:190e:b0:765:3b58:99ab with SMTP id bj14-20020a05620a190e00b007653b5899abmr2670203qkb.4.1687870523897;
+        Tue, 27 Jun 2023 05:55:23 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5MVSVOTOJGm6y6OkidtOFcnyLv70o/VU/KFN2yDxpJyfTZKFyUUry0ejHmhywBuZIZSQ+qRw==
+X-Received: by 2002:a05:620a:190e:b0:765:3b58:99ab with SMTP id bj14-20020a05620a190e00b007653b5899abmr2670184qkb.4.1687870523654;
+        Tue, 27 Jun 2023 05:55:23 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-239-6.dyn.eolo.it. [146.241.239.6])
+        by smtp.gmail.com with ESMTPSA id j7-20020a05620a146700b00765516bd9f2sm3912923qkl.33.2023.06.27.05.54.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Jun 2023 05:54:07 -0700 (PDT)
+Message-ID: <1f4271105ac5be66e5130d487464680fc65bacc8.camel@redhat.com>
+Subject: Re: Is ->sendmsg() allowed to change the msghdr struct it is given?
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Jakub Kicinski <kuba@kernel.org>,
+        David Howells <dhowells@redhat.com>
+Cc:     Ilya Dryomov <idryomov@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>, ceph-devel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 27 Jun 2023 14:54:02 +0200
+In-Reply-To: <b0a0cb0fac4ebdc23f01d183a9de10731dc90093.camel@redhat.com>
+References: <3112097.1687814081@warthog.procyon.org.uk>
+         <20230626142257.6e14a801@kernel.org>
+         <b0a0cb0fac4ebdc23f01d183a9de10731dc90093.camel@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,30 +85,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023, at 11:12, Niklas Schnelle wrote:
-> On Mon, 2023-05-22 at 13:29 +0200, Arnd Bergmann wrote:
->> 
->> Maybe let's give it another week to have more maintainers pick
->> up stuff from v5, and then send out a v6 as separate submissions.
->> 
->>     Arnd
->
-> Hi Arnd and All,
->
-> I'm sorry there hasn't been an updated in a long time and we're missing
-> v6.5. I've been quite busy with other work and life. Speaking of, I
-> will be mostly out for around a month starting some time mid to end
-> July as, if all goes well, I'm expecting to become a dad. That said, I
-> haven't forgotten about this and your overall plan of sending per-
-> subsystem patches sounds good, just haven't had the time to also
-> incorporate the feedback.
+On Tue, 2023-06-27 at 14:51 +0200, Paolo Abeni wrote:
+> On Mon, 2023-06-26 at 14:22 -0700, Jakub Kicinski wrote:
+> > On Mon, 26 Jun 2023 22:14:41 +0100 David Howells wrote:
+> > > Do you know if ->sendmsg() might alter the msghdr struct it is passed=
+ as an
+> > > argument? Certainly it can alter msg_iter, but can it also modify,
+> > > say, msg_flags?
+> >=20
+> > I'm not aware of a precedent either way.
+> > Eric or Paolo would know better than me, tho.
+>=20
+> udp_sendmsg() can set the MSG_TRUNC bit in msg->msg_flags, so I guess
+> that kind of actions are sort of allowed.
 
-Ok, thanks for letting us know. I just checked to see that about half
-of your series has already made it into linux-next and is likely to
-be part of v6.5 or already in v6.4.
+Sorry, ENOCOFFEE here. It's actually udp_recvmsg() updating msg-
+>msg_flags.
 
-Maybe you can start out by taking a pass at just resending the ones
-that don't need any changes and can just get picked up after -rc1,
-and then I'll try to have a look at whatever remains after that.
+>  Still, AFAICS, the kernel
+> based msghdr is not copied back to the user-space, so such change
+> should be almost a no-op in practice.
 
-    Arnd
+This part should be correct.
+
+> @David: which would be the end goal for such action?
+
+Sorry for the noisy reply,
+
+Paolo
+
