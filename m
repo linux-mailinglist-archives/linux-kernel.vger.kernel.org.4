@@ -2,409 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FB9F7406B1
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 00:57:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B95F57406BB
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 01:03:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230080AbjF0W5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 18:57:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35472 "EHLO
+        id S230171AbjF0XDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 19:03:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjF0W5b (ORCPT
+        with ESMTP id S229645AbjF0XDA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 18:57:31 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A24982940;
-        Tue, 27 Jun 2023 15:57:28 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 444411F8AC;
-        Tue, 27 Jun 2023 22:57:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1687906647;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GEEbuR4SgcAhYDAVQkiILdHCrgZrt4xZaGwjOJMSplk=;
-        b=xGmRXkmLQ0kS1su/BnuAIkYfaI4bQlEcyyTbyDCTzdeTrDzCqQPTm6eb7A2/9oT/CjRcO8
-        p8pInZdIC1CN1xCzT0QJsiXYcFh708KhYXWCUL9Lmh7Vx+0Bm8AFt6ybwUj15jqQzbXNxQ
-        /rrkjDdeOF9drV+lz0ctnSUSWfZs0vw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1687906647;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GEEbuR4SgcAhYDAVQkiILdHCrgZrt4xZaGwjOJMSplk=;
-        b=WEkM3GvIqzX9ewMvatHIFrQSWIPJmlBqRjZlykntPMJs61kKJazdQSzh9L2miHVxGdCQ1d
-        V8Pa9sWkdwJSACDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E569B13276;
-        Tue, 27 Jun 2023 22:57:26 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id k2C6NlZpm2RnbgAAMHmgww
-        (envelope-from <pvorel@suse.cz>); Tue, 27 Jun 2023 22:57:26 +0000
-Date:   Wed, 28 Jun 2023 00:57:25 +0200
-From:   Petr Vorel <pvorel@suse.cz>
-To:     Amir Goldstein <amir73il@gmail.com>
-Cc:     Ahelenia =?iso-8859-2?Q?Ziemia=F1ska?= 
-        <nabijaczleweli@nabijaczleweli.xyz>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jan Kara <jack@suse.cz>,
-        Chung-Chiang Cheng <cccheng@synology.com>, ltp@vger.kernel.org
-Subject: Re: [LTP PATCH] inotify13: new test for fs/splice.c functions vs
- pipes vs inotify
-Message-ID: <20230627225725.GB93981@pevik>
-Reply-To: Petr Vorel <pvorel@suse.cz>
-References: <cover.1687884029.git.nabijaczleweli@nabijaczleweli.xyz>
- <44neh3sog5jaskc4zy6lwnld7hussp5sslx4fun47fr45mxe3a@q2jgkjwlq74f>
- <CAOQ4uxifYoKdup6gzyW0iV=KFBzTWu5T8=zq8s8pFw2X3+5xRg@mail.gmail.com>
+        Tue, 27 Jun 2023 19:03:00 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CAEADD
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 16:02:59 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-51d9123a8abso4012958a12.2
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 16:02:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1687906977; x=1690498977;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=PSVGx8MBJk7AabVQCKe77+o2ODNwpAskHokqpD0hzdk=;
+        b=GIrEXWaq2Kvyh7U+zJsbCYkjDRXC63BrjE0XMV7iguwOb7Py8uN2ICfsiIHTKEtXBw
+         wNjbwYF7eLbAbXRG8qTa9nMeDOURzv+veL1mUrwMh4h8zUmm5vLizdsSrB+fzPnam191
+         D2qX8RCX/RCxwFfuDbFquzLJiAGG12KNJnx/o=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687906977; x=1690498977;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PSVGx8MBJk7AabVQCKe77+o2ODNwpAskHokqpD0hzdk=;
+        b=Dtpf8uebeTjwCb0sxxockK/Z9Mr26XLro6sI5dqqr/lVq1CoDcOTBzHKyd1VQ6HPkd
+         8suXBlmXkIwX0pqoQo1/1q3Tq7F4es83aLdogC79JIZh3JlvkSZsk+Z48kd7sX9UzAKC
+         /djqdYU+ub6ynxJDxR5T/2ci3Zf9lM1FIH8oziw1CloYNkePJYQd+iZ7zbwIcw7j1RwY
+         Eg32Ern4zCQ/T+o1IjU8s/nSYJtYttHkc3J3DwVg+VA1pi7lCP5CO2T4KVTJ+9TA13JF
+         9q9Xa7cTocCuGk7EHU0CVRJdAI5ETcvTBu3eRg/EZ9nrLc2V18mRQ6zaavH0ipegxNSe
+         nANA==
+X-Gm-Message-State: AC+VfDwOiZU0frqRHfnobQISc3GkdyBoVTPu+iq0SsHusdRFJTs//zib
+        LxfWhqJ9igkAAhzcUmhdEO2+1pQKGlnpe+SKLasNMKAS
+X-Google-Smtp-Source: ACHHUZ6URWAEqy+qbJ3qk7BgVPbL1pKnhlklGnHuJRygDSog9KkqclYADCXps48KThhB2MCVpueBfw==
+X-Received: by 2002:aa7:de0f:0:b0:51d:7f4f:871 with SMTP id h15-20020aa7de0f000000b0051d7f4f0871mr7198578edv.8.1687906977716;
+        Tue, 27 Jun 2023 16:02:57 -0700 (PDT)
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com. [209.85.218.49])
+        by smtp.gmail.com with ESMTPSA id l22-20020a056402125600b005149b6ec1bdsm4120017edw.29.2023.06.27.16.02.57
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Jun 2023 16:02:57 -0700 (PDT)
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-98e0c1d5289so469642166b.2
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 16:02:57 -0700 (PDT)
+X-Received: by 2002:aa7:d4d5:0:b0:51d:3747:f88a with SMTP id
+ t21-20020aa7d4d5000000b0051d3747f88amr7469054edr.31.1687906976883; Tue, 27
+ Jun 2023 16:02:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOQ4uxifYoKdup6gzyW0iV=KFBzTWu5T8=zq8s8pFw2X3+5xRg@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230627110038.GCZJrBVqu/4BfdyBeN@fat_crate.local>
+ <CAHk-=wghuOwXtMH9u7RAW694BOwf_Q9TeWR2v=GgLy0gjTfu4A@mail.gmail.com>
+ <1982e4b4-3858-d456-6c90-92782b95726a@linux.intel.com> <CAHk-=wiQEj1cP7tnQ6Uw1jjFYnZmMdNgodga3b+rw98vBBvENg@mail.gmail.com>
+ <CAHk-=wgMw2VE8afWp4p6RyJKCvnkhNXx4XUByUOHUWKiAo=WLQ@mail.gmail.com> <51f58d51-d5bf-79a2-a32a-e6849a118123@linux.intel.com>
+In-Reply-To: <51f58d51-d5bf-79a2-a32a-e6849a118123@linux.intel.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 27 Jun 2023 16:02:40 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgtrxkRDR95y=U685LMd_ZR5TrLW0_LGoQi3v8Or11Yrw@mail.gmail.com>
+Message-ID: <CAHk-=wgtrxkRDR95y=U685LMd_ZR5TrLW0_LGoQi3v8Or11Yrw@mail.gmail.com>
+Subject: Re: [GIT PULL] x86/misc for 6.5
+To:     Arjan van de Ven <arjan@linux.intel.com>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Noah Goldstein <goldstein.w.n@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Tue, Jun 27, 2023 at 7:57 PM Ahelenia Ziemiańska
-> <nabijaczleweli@nabijaczleweli.xyz> wrote:
+On Tue, 27 Jun 2023 at 15:51, Arjan van de Ven <arjan@linux.intel.com> wrote:
+>
+> I'm not surprised though; running 2 parallel streams (where one stream has a fixed zero as input,
+> so can run OOO any time) .. can really have a performance change like this
 
-> > The only one that passes on 6.1.27-1 is sendfile_file_to_pipe.
+How much do people care?
 
-> > Link: https://lore.kernel.org/linux-fsdevel/jbyihkyk5dtaohdwjyivambb2gffyjs3dodpofafnkkunxq7bu@jngkdxx65pux/t/#u
-> > Signed-off-by: Ahelenia Ziemiańska <nabijaczleweli@nabijaczleweli.xyz>
-> > ---
-> > Formatted to clang-format defaults. Put the original Fixes:ed SHA in the
-> > metadata, that's probably fine, right?
+One of the advantages of just having that single "update_csum_40b()"
+function is that it's trivial to then manually unroll.
 
-> No. The git commit is for the commits that fix the problem.
-> This can only be added after your fixes are merged.
+With a 4-way unrolling, I get
 
-> I will let the LPT developers comment about style,
-> but I think LTP project wants tab indents.
-> I am personally unable to read this patch with so little indentation
-> and so much macroing.
+  02: 184.0 / 184.5 cycles (8b414316) Upcoming linux kernel version
+  04: 184.0 / 184.2 cycles (8b414316) Specialized to size 40
+  06: 89.4 / 102.5 cycles (512daed6) New version
+  22: 184.6 / 184.4 cycles (8b414316) Odd-alignment handling removed
 
-Yes, it's hard to read. Style formatting it would improve it little bit
-(make check-inotify13 is your friend, it complains a lot, also some spaces above
-if () would make it more readable), but there are other things, e.g. macros
-F2P(splice) and P2P(splice) should be functions (readability). Please have look
-at other inotify tests, they are fairly simple and easy to read.
+but doesn't most network hardware do the csum on its own anyway? How
+critical is csum_partial(), really?
 
-Also, this is a patch for LTP, you're supposed to post it also to LTP mailing
-list (ltp@lists.linux.it, you need to register to
-https://lists.linux.it/listinfo/ltp first).
+(The above is obviously your test thing modified for 1500 byte
+packets, still. With 40-byte packets, the 4-way unrolling obvious
+doesn't help, although it doesn't noticeably hurt either - it's just
+one more compare and branch)
 
-> >  testcases/kernel/syscalls/inotify/.gitignore  |   1 +
-> >  testcases/kernel/syscalls/inotify/inotify13.c | 246 ++++++++++++++++++
-> >  2 files changed, 247 insertions(+)
-> >  create mode 100644 testcases/kernel/syscalls/inotify/inotify13.c
-
-> > diff --git a/testcases/kernel/syscalls/inotify/.gitignore b/testcases/kernel/syscalls/inotify/.gitignore
-> > index f6e5c546a..b597ea63f 100644
-> > --- a/testcases/kernel/syscalls/inotify/.gitignore
-> > +++ b/testcases/kernel/syscalls/inotify/.gitignore
-> > @@ -10,3 +10,4 @@
-> >  /inotify10
-> >  /inotify11
-> >  /inotify12
-> > +/inotify13
-> > diff --git a/testcases/kernel/syscalls/inotify/inotify13.c b/testcases/kernel/syscalls/inotify/inotify13.c
-> > new file mode 100644
-> > index 000000000..c34f1dc9f
-> > --- /dev/null
-> > +++ b/testcases/kernel/syscalls/inotify/inotify13.c
-> > @@ -0,0 +1,246 @@
-> > +// SPDX-License-Identifier: GPL-2.0-or-later
-> > +/*\
-
-You need to add here:
-* [Description]
-
-> > + * Verify splice-family functions (and sendfile) generate IN_ACCESS
-> > + * for what they read and IN_MODIFY for what they write.
-> > + *
-> > + * Regression test for 983652c69199 and
-I guess there would be only 983652c69199 ("splice: report related fsnotify
-events").
-> > + * https://lore.kernel.org/linux-fsdevel/jbyihkyk5dtaohdwjyivambb2gffyjs3dodpofafnkkunxq7bu@jngkdxx65pux/t/#u
-This is some discussion, not a real patch. Not sure how much useful it is, until
-it results to fix accepted in the mainline kernel.
-
-> > + */
-> > +
-> > +#define _GNU_SOURCE
-> > +#include "config.h"
-> > +
-> > +#include <stdio.h>
-> > +#include <unistd.h>
-> > +#include <stdlib.h>
-> > +#include <fcntl.h>
-> > +#include <stdbool.h>
-> > +#include <inttypes.h>
-> > +#include <signal.h>
-> > +#include <sys/mman.h>
-> > +#include <sys/sendfile.h>
-> > +
-> > +#include "tst_test.h"
-> > +#include "tst_safe_macros.h"
-> > +#include "inotify.h"
-> > +
-> > +#if defined(HAVE_SYS_INOTIFY_H)
-> > +#include <sys/inotify.h>
-> > +
-> > +
-> > +static int pipes[2] = {-1, -1};
-> > +static int inotify = -1;
-> > +static int memfd = -1;
-> > +static int data_pipes[2] = {-1, -1};
-> > +
-> > +static void watch_rw(int fd) {
-> > +  char buf[64];
-> > +  sprintf(buf, "/proc/self/fd/%d", fd);
-> > +  SAFE_MYINOTIFY_ADD_WATCH(inotify, buf, IN_ACCESS | IN_MODIFY);
-> > +}
-> > +
-> > +static int compar(const void *l, const void *r) {
-> > +  const struct inotify_event *lie = l;
-> > +  const struct inotify_event *rie = r;
-> > +  return lie->wd - rie->wd;
-> > +}
-> > +
-> > +static void get_events(size_t evcnt, struct inotify_event evs[static evcnt]) {
-> > +  struct inotify_event tail, *itr = evs;
-> > +  for (size_t left = evcnt; left; --left)
-> > +    SAFE_READ(true, inotify, itr++, sizeof(struct inotify_event));
-> > +
-> > +  TEST(read(inotify, &tail, sizeof(struct inotify_event)));
-> > +  if (TST_RET != -1)
-> > +    tst_brk(TFAIL, "expect %zu events", evcnt);
-> > +  if (TST_ERR != EAGAIN)
-> > +    tst_brk(TFAIL | TTERRNO, "expected EAGAIN");
-> > +
-> > +  qsort(evs, evcnt, sizeof(struct inotify_event), compar);
-> > +}
-> > +
-> > +static void expect_event(struct inotify_event *ev, int wd, uint32_t mask) {
-> > +  if (ev->wd != wd)
-> > +    tst_brk(TFAIL, "expect event for wd %d got %d", wd, ev->wd);
-> > +  if (ev->mask != mask)
-> > +    tst_brk(TFAIL, "expect event with mask %" PRIu32 " got %" PRIu32 "", mask,
-> > +            ev->mask);
-> > +}
-> > +
-> > +#define F2P(splice)                                                            \
-> > +  SAFE_WRITE(SAFE_WRITE_RETRY, memfd, __func__, sizeof(__func__));             \
-> > +  SAFE_LSEEK(memfd, 0, SEEK_SET);                                              \
-> > +  watch_rw(memfd);                                                             \
-> > +  watch_rw(pipes[0]);                                                          \
-> > +  TEST(splice);                                                                \
-> > +  if (TST_RET == -1)                                                           \
-> > +    tst_brk(TBROK | TERRNO, #splice);                                          \
-> > +  if (TST_RET != sizeof(__func__))                                             \
-> > +    tst_brk(TBROK, #splice ": %" PRId64 "", TST_RET);                          \
-> > +                                                                               \
-> > +  /*expecting: IN_ACCESS memfd, IN_MODIFY pipes[0]*/                           \
-> > +  struct inotify_event events[2];                                              \
-> > +  get_events(ARRAY_SIZE(events), events);                                      \
-> > +  expect_event(events + 0, 1, IN_ACCESS);                                      \
-> > +  expect_event(events + 1, 2, IN_MODIFY);                                      \
-> > +                                                                               \
-> > +  char buf[sizeof(__func__)];                                                  \
-> > +  SAFE_READ(true, pipes[0], buf, sizeof(__func__));                            \
-> > +  if (memcmp(buf, __func__, sizeof(__func__)))                                 \
-> > +    tst_brk(TFAIL, "buf contents bad");
-> > +static void splice_file_to_pipe(void) {
-> > +  F2P(splice(memfd, NULL, pipes[1], NULL, 128 * 1024 * 1024, 0));
-> > +}
-> > +static void sendfile_file_to_pipe(void) {
-> > +  F2P(sendfile(pipes[1], memfd, NULL, 128 * 1024 * 1024));
-> > +}
-> > +
-> > +static void splice_pipe_to_file(void) {
-> > +  SAFE_WRITE(SAFE_WRITE_RETRY, pipes[1], __func__, sizeof(__func__));
-> > +  watch_rw(pipes[0]);
-> > +  watch_rw(memfd);
-> > +  TEST(splice(pipes[0], NULL, memfd, NULL, 128 * 1024 * 1024, 0));
-> > +  if(TST_RET == -1)
-> > +               tst_brk(TBROK | TERRNO, "splice");
-> > +       if(TST_RET != sizeof(__func__))
-> > +               tst_brk(TBROK, "splice: %" PRId64 "", TST_RET);
-> > +
-> > +       // expecting: IN_ACCESS pipes[0], IN_MODIFY memfd
-> > +       struct inotify_event events[2];
-> > +       get_events(ARRAY_SIZE(events), events);
-> > +       expect_event(events + 0, 1, IN_ACCESS);
-> > +       expect_event(events + 1, 2, IN_MODIFY);
-> > +
-> > +  char buf[sizeof(__func__)];
-> > +  SAFE_LSEEK(memfd, 0, SEEK_SET);
-> > +  SAFE_READ(true, memfd, buf, sizeof(__func__));
-> > +  if (memcmp(buf, __func__, sizeof(__func__)))
-> > +                tst_brk(TFAIL, "buf contents bad");
-> > +}
-> > +
-> > +#define P2P(splice)                                                            \
-> > +  SAFE_WRITE(SAFE_WRITE_RETRY, data_pipes[1], __func__, sizeof(__func__));     \
-> > +  watch_rw(data_pipes[0]);                                                     \
-> > +  watch_rw(pipes[1]);                                                          \
-> > +  TEST(splice);                                                                \
-> > +  if (TST_RET == -1)                                                           \
-> > +                tst_brk(TBROK | TERRNO, #splice);                              \
-> > +  if (TST_RET != sizeof(__func__))                                             \
-> > +                tst_brk(TBROK, #splice ": %" PRId64 "", TST_RET);              \
-> > +                                                                               \
-> > +  /* expecting: IN_ACCESS data_pipes[0], IN_MODIFY pipes[1] */                 \
-> > +  struct inotify_event events[2];                                              \
-> > +  get_events(ARRAY_SIZE(events), events);                                      \
-> > +  expect_event(events + 0, 1, IN_ACCESS);                                      \
-> > +  expect_event(events + 1, 2, IN_MODIFY);                                      \
-> > +                                                                               \
-> > +  char buf[sizeof(__func__)];                                                  \
-> > +  SAFE_READ(true, pipes[0], buf, sizeof(__func__));                            \
-> > +  if (memcmp(buf, __func__, sizeof(__func__)))                                 \
-> > +                tst_brk(TFAIL, "buf contents bad");
-> > +static void splice_pipe_to_pipe(void) {
-> > +  P2P(splice(data_pipes[0], NULL, pipes[1], NULL, 128 * 1024 * 1024, 0));
-> > +}
-> > +static void tee_pipe_to_pipe(void) {
-> > +  P2P(tee(data_pipes[0], pipes[1], 128 * 1024 * 1024, 0));
-> > +}
-> > +
-> > +static char vmsplice_pipe_to_mem_dt[32 * 1024];
-> > +static void vmsplice_pipe_to_mem(void) {
-> > +  memcpy(vmsplice_pipe_to_mem_dt, __func__, sizeof(__func__));
-> > +  watch_rw(pipes[0]);
-> > +  TEST(vmsplice(pipes[1],
-> > +                &(struct iovec){.iov_base = vmsplice_pipe_to_mem_dt,
-> > +                                .iov_len = sizeof(vmsplice_pipe_to_mem_dt)},
-> > +                1, SPLICE_F_GIFT));
-> > +  if (TST_RET == -1)
-> > +    tst_brk(TBROK | TERRNO, "vmsplice");
-> > +  if (TST_RET != sizeof(vmsplice_pipe_to_mem_dt))
-> > +    tst_brk(TBROK, "vmsplice: %" PRId64 "", TST_RET);
-> > +
-> > +  // expecting: IN_MODIFY pipes[0]
-> > +  struct inotify_event event;
-> > +  get_events(1, &event);
-> > +  expect_event(&event, 1, IN_MODIFY);
-> > +
-> > +  char buf[sizeof(__func__)];
-> > +  SAFE_READ(true, pipes[0], buf, sizeof(__func__));
-> > +  if (memcmp(buf, __func__, sizeof(__func__)))
-> > +    tst_brk(TFAIL, "buf contents bad");
-> > +}
-> > +
-> > +static void vmsplice_mem_to_pipe(void) {
-> > +  char buf[sizeof(__func__)];
-> > +  SAFE_WRITE(SAFE_WRITE_RETRY, pipes[1], __func__, sizeof(__func__));
-> > +  watch_rw(pipes[1]);
-> > +  TEST(vmsplice(pipes[0],
-> > +                &(struct iovec){.iov_base = buf, .iov_len = sizeof(buf)}, 1,
-> > +                0));
-> > +  if (TST_RET == -1)
-> > +    tst_brk(TBROK | TERRNO, "vmsplice");
-> > +  if (TST_RET != sizeof(buf))
-> > +    tst_brk(TBROK, "vmsplice: %" PRId64 "", TST_RET);
-> > +
-> > +  // expecting: IN_ACCESS pipes[1]
-> > +  struct inotify_event event;
-> > +  get_events(1, &event);
-> > +  expect_event(&event, 1, IN_ACCESS);
-> > +  if (memcmp(buf, __func__, sizeof(__func__)))
-> > +    tst_brk(TFAIL, "buf contents bad");
-> > +}
-> > +
-> > +typedef void (*tests_f)(void);
-> > +#define TEST_F(f) { f, #f }
-> > +static const struct {
-> > +        tests_f f;
-> > +        const char *n;
-> > +} tests[] = {
-> > +    TEST_F(splice_file_to_pipe),  TEST_F(sendfile_file_to_pipe),
-> > +    TEST_F(splice_pipe_to_file),  TEST_F(splice_pipe_to_pipe),
-> > +    TEST_F(tee_pipe_to_pipe),     TEST_F(vmsplice_pipe_to_mem),
-> > +    TEST_F(vmsplice_mem_to_pipe),
-> > +};
-> > +
-> > +static void run_test(unsigned int n)
-> > +{
-> > +       tst_res(TINFO, "%s", tests[n].n);
-> > +
-> > +       SAFE_PIPE2(pipes, O_CLOEXEC);
-> > +       SAFE_PIPE2(data_pipes, O_CLOEXEC);
-> > +       inotify = SAFE_MYINOTIFY_INIT1(IN_NONBLOCK | IN_CLOEXEC);
-> > +       if((memfd = memfd_create(__func__, MFD_CLOEXEC)) == -1)
-> > +               tst_brk(TCONF | TERRNO, "memfd");
-> > +       tests[n].f();
-
-> Normally, a test cases table would encode things like
-> the number of expected events and type of events.
-> The idea is that the test template has parametrized code
-> and not just a loop for test cases subroutines, but there
-> are many ways to write tests, so as long as it gets the job
-> done and is readable to humans, I don't mind.
-
-> Right now this test may do the job, but it is not readable
-> for this human ;-)
-> mostly because of the huge macros -
-> LTP is known for pretty large macros, but those are
-> for generic utilities and you have complete test cases
-> written as macros (templates).
-
-+100. We strive for simple readable code, which is not this one.
-
-Kind regards,
-Petr
-
-> > +       tst_res(TPASS, "ок");
-> > +}
-> > +
-> > +static void cleanup(void)
-> > +{
-> > +       if (memfd != -1)
-> > +               SAFE_CLOSE(memfd);
-> > +       if (inotify != -1)
-> > +               SAFE_CLOSE(inotify);
-> > +       if (pipes[0] != -1)
-> > +               SAFE_CLOSE(pipes[0]);
-> > +       if (pipes[1] != -1)
-> > +               SAFE_CLOSE(pipes[1]);
-> > +       if (data_pipes[0] != -1)
-> > +               SAFE_CLOSE(data_pipes[0]);
-> > +       if (data_pipes[1] != -1)
-> > +               SAFE_CLOSE(data_pipes[1]);
-> > +}
-> > +
-
-> This cleanup does not happen for every test case -
-> it happens only at the end of all the tests IIRC.
-
-> > +static struct tst_test test = {
-> > +       .max_runtime = 10,
-> > +       .cleanup = cleanup,
-> > +       .test = run_test,
-> > +       .tcnt = ARRAY_SIZE(tests),
-> > +       .tags = (const struct tst_tag[]) {
-> > +               {"linux-git", "983652c69199"},
-
-> Leave this out for now.
-
-> Thanks,
-> Amir.
+                  Linus
