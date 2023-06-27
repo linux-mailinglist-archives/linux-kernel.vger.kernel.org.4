@@ -2,131 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8BBE73F415
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 07:50:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3911A73F41E
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 07:53:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbjF0Fu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 01:50:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51020 "EHLO
+        id S229876AbjF0Fxm convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 27 Jun 2023 01:53:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjF0FuX (ORCPT
+        with ESMTP id S229780AbjF0FxZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 01:50:23 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9625E19A1
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 22:50:22 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qE1ak-0006z0-7r; Tue, 27 Jun 2023 07:50:18 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qE1ai-00ANCf-8q; Tue, 27 Jun 2023 07:50:16 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qE1ah-0009ps-Ed; Tue, 27 Jun 2023 07:50:15 +0200
-Date:   Tue, 27 Jun 2023 07:50:15 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Peng Fan <peng.fan@nxp.com>, Arnd Bergmann <arnd@arndb.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Linux Kernel Functional Testing <lkft@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Abel Vesa <abelvesa@kernel.org>
-Subject: Re: [PATCH] clk: imx: Drop inclusion of unused header
- <soc/imx/timer.h>
-Message-ID: <20230627055015.z37tqywbwykb6erp@pengutronix.de>
-References: <20230623071948.3254789-1-arnd@kernel.org>
- <3a843f15dda68375870c622869836e5c.sboyd@kernel.org>
+        Tue, 27 Jun 2023 01:53:25 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A555A19B0;
+        Mon, 26 Jun 2023 22:53:23 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id DFF4D808F;
+        Tue, 27 Jun 2023 13:53:14 +0800 (CST)
+Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 27 Jun
+ 2023 13:53:14 +0800
+Received: from localhost.localdomain (183.27.97.206) by EXMBX061.cuchost.com
+ (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 27 Jun
+ 2023 13:53:13 +0800
+From:   Xingyu Wu <xingyu.wu@starfivetech.com>
+To:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        "Daniel Lezcano" <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Xingyu Wu <xingyu.wu@starfivetech.com>,
+        Samin Guo <samin.guo@starfivetech.com>,
+        <linux-kernel@vger.kernel.org>, Conor Dooley <conor+dt@kernel.org>
+Subject: [PATCH v3 0/3] Add timer driver for StarFive JH7110 RISC-V SoC
+Date:   Tue, 27 Jun 2023 13:53:10 +0800
+Message-ID: <20230627055313.252519-1-xingyu.wu@starfivetech.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="oawwlp5mnvgmgmlb"
-Content-Disposition: inline
-In-Reply-To: <3a843f15dda68375870c622869836e5c.sboyd@kernel.org>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [183.27.97.206]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX061.cuchost.com
+ (172.16.6.61)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch serises are to add timer driver for the StarFive JH7110
+RISC-V SoC. The first patch adds documentation to describe device
+tree bindings. The subsequent patch adds timer driver and support
+JH7110 SoC. The last patch adds device node about timer in JH7110
+dts.
 
---oawwlp5mnvgmgmlb
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This timer has four free-running 32 bit counters and runs in 24MHz
+clock on StarFive JH7110 SoC. And each channel(counter) triggers
+an interrupt when timeout. They support one-shot mode and
+continuous-run mode.
 
-Hello,
+Changes since v2:
+- Rebased on 6.4-rc7.
+- Merged the header file into the c file.
+- Renamed the functions from 'starfive_' to 'jh7110_'
+- Used function 'clocksource_register_hz' instead of
+  'clocksource_mmio_init'.
 
-On Mon, Jun 26, 2023 at 04:44:00PM -0700, Stephen Boyd wrote:
-> Quoting Arnd Bergmann (2023-06-23 00:19:19)
-> > From: Arnd Bergmann <arnd@arndb.de>
-> >=20
-> > After removing this header in the clocksource tree, the clk drivers no
-> > longer build:
-> >=20
-> > drivers/clk/imx/clk-imx1.c:13:10: fatal error: 'soc/imx/timer.h' file n=
-ot found
-> > drivers/clk/imx/clk-imx27.c:11:10: fatal error: 'soc/imx/timer.h' file =
-not found
-> >=20
-> > This patch was originally posted as part of a three-patch series, but o=
-nly
-> > patches 1 and 3 got applied.
-> >=20
-> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> > Fixes: 9e9d7570485d7 ("clocksource/drivers/imx-gpt: Fold <soc/imx/timer=
-=2Eh> into its only user")
-> > Link: https://lore.kernel.org/all/20230328100531.879485-2-u.kleine-koen=
-ig@pengutronix.de/
-> > Signed-off-by: "Uwe Kleine-K=F6nig" <u.kleine-koenig@pengutronix.de>
-> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> > ---
->=20
-> Acked-by: Stephen Boyd <sboyd@kernel.org>
+v2: https://lore.kernel.org/all/20230320135433.144832-1-xingyu.wu@starfivetech.com/
 
-Just for the record, the original patch is already in
+Changes since v1: 
+- Added description about timer and modified properties' description
+  in dt-bindings.
+- Dropped the 'interrupt-names' and 'clock-frequency' in dt-bindings.
+- Renamed the functions and added 'starfive_'
+- Modified that the driver probe by platform bus.
 
-	https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git timers/core
+v1: https://lore.kernel.org/all/20221223094801.181315-1-xingyu.wu@starfivetech.com/
 
-as 011da162da2f915989a571b557867f7eea699000.
+Xingyu Wu (3):
+  dt-bindings: timer: Add timer for StarFive JH7110 SoC
+  clocksource: Add JH7110 timer driver
+  riscv: dts: jh7110: starfive: Add timer node
 
-Best regards
-Uwe
+ .../bindings/timer/starfive,jh7110-timer.yaml |  96 ++++
+ MAINTAINERS                                   |   7 +
+ arch/riscv/boot/dts/starfive/jh7110.dtsi      |  20 +
+ drivers/clocksource/Kconfig                   |  11 +
+ drivers/clocksource/Makefile                  |   1 +
+ drivers/clocksource/timer-jh7110.c            | 485 ++++++++++++++++++
+ 6 files changed, 620 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/timer/starfive,jh7110-timer.yaml
+ create mode 100644 drivers/clocksource/timer-jh7110.c
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+-- 
+2.17.1
 
---oawwlp5mnvgmgmlb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmSaeJYACgkQj4D7WH0S
-/k7xbQf/W45axEIXoDFnjWO3e7TYO/k6XChVN0LePYVfneRIcr3+XqjHIuBz3Nrg
-cAyTBo4276hr8In3dFw3rORyd4ZGFyo5N5kG50JnQFQ7zEy1VH+iOyW+2v3F6xtQ
-0SMiZt1SW3bkmG5InhlYdL3O02iLYDaqcPiwS7HVad2w2KlzGrc8UeVXXi3l/Ujo
-pGPu+0buShD7rFzWI7eIzAbLtvzWF1DhyrkEQLmnNyi61VSrBR832bvKTd7n4qeG
-f5QH9vrC60PIm1yHxrGa1XchSWwalPQBR35WgBBIHLnaCvPzXN1smi7tHRUAXTIs
-C/tl4fuDODyO54lkzPL8cu0hQlP1eg==
-=cYCp
------END PGP SIGNATURE-----
-
---oawwlp5mnvgmgmlb--
