@@ -2,132 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF0E773F087
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 03:29:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2083273F08D
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 03:31:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230158AbjF0B3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 21:29:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40352 "EHLO
+        id S230269AbjF0BbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 21:31:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbjF0B3j (ORCPT
+        with ESMTP id S230268AbjF0Baf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 21:29:39 -0400
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9555E52
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 18:29:37 -0700 (PDT)
-Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230627012933epoutp046750c031942762397c7b6aedccd2c78a~sX995dZcx1024810248epoutp04w
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 01:29:33 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230627012933epoutp046750c031942762397c7b6aedccd2c78a~sX995dZcx1024810248epoutp04w
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1687829373;
-        bh=b3Fxvw2RdgOBtY36dPh2SiCe80DAP1YXQXrnXO0PHq8=;
-        h=Subject:Reply-To:From:To:Date:References:From;
-        b=FD3lBD1Aa7RP2eS4/hFsvBqPf/8B123yLPoC43CoDmCInVEH/qmhsIJ3XJGISmXCD
-         iVm9yi8LSh3EgsjN267PnzjNpXpwUUcTB7HlWptYcq7wzfO6KFPkk6gMWLpLv11Ebo
-         taeIc7wOu/6JhtP7mMKemKJRG57RdJX96Bl9blZ4=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
-        20230627012933epcas2p27e02cfb103c73e2ae7afeacf9cb70f15~sX99We_X52977129771epcas2p2v;
-        Tue, 27 Jun 2023 01:29:33 +0000 (GMT)
-Received: from epsmges2p3.samsung.com (unknown [182.195.36.90]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4QqnF82fYBz4x9Q0; Tue, 27 Jun
-        2023 01:29:32 +0000 (GMT)
-X-AuditID: b6c32a47-c2bfa70000007f5e-4a-649a3b7c086e
-Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
-        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        C7.36.32606.C7B3A946; Tue, 27 Jun 2023 10:29:32 +0900 (KST)
-Mime-Version: 1.0
-Subject: [PATCH] scsi: ufs: Remove unused function declaration
-Reply-To: keosung.park@samsung.com
-Sender: Keoseong Park <keosung.park@samsung.com>
-From:   Keoseong Park <keosung.park@samsung.com>
-To:     ALIM AKHTAR <alim.akhtar@samsung.com>,
-        "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "quic_cang@quicinc.com" <quic_cang@quicinc.com>,
-        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
-        "mani@kernel.org" <mani@kernel.org>,
-        "quic_asutoshd@quicinc.com" <quic_asutoshd@quicinc.com>,
-        "quic_nguyenb@quicinc.com" <quic_nguyenb@quicinc.com>,
-        "Arthur.Simchaev@wdc.com" <Arthur.Simchaev@wdc.com>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20230627012931epcms2p76f458e0b2ce8a591b56bbcc6a2f1a3bb@epcms2p7>
-Date:   Tue, 27 Jun 2023 10:29:31 +0900
-X-CMS-MailID: 20230627012931epcms2p76f458e0b2ce8a591b56bbcc6a2f1a3bb
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrIJsWRmVeSWpSXmKPExsWy7bCmmW6N9awUg89NfBYP5m1js+icuIzV
-        4uXPq2wWBx92slhM+/CT2eLlIU2LR7efMVosurGNyWLv663sFpd3zWGz6L6+g83iwIdVjBbL
-        j/9jsljYMZfFYtK1DWwWU18cZ7dYuvUmo4Ogx+Ur3h6bVnWyedy5tofNY8KiA4weLSf3s3h8
-        X9/B5vHx6S0Wj4l76jz6tqxi9Pi8Sc6j/UA3UwB3VLZNRmpiSmqRQmpecn5KZl66rZJ3cLxz
-        vKmZgaGuoaWFuZJCXmJuqq2Si0+ArltmDtBPSgpliTmlQKGAxOJiJX07m6L80pJUhYz84hJb
-        pdSClJwC8wK94sTc4tK8dL281BIrQwMDI1OgwoTsjAtTHAsaOCo6d5s0MP5n62Lk5JAQMJGY
-        +uMhI4gtJLCDUeLGoeguRg4OXgFBib87hEHCwgJ2EtO2/GeBKFGS6Fq4lRkibiCxbvoeMJtN
-        QE9iyu87QGO4OEQEZrJJdN64AzWfV2JG+1MWCFtaYvvyrYwQtobEj2W9zBC2qMTN1W/ZYez3
-        x+ZD1YhItN47C1UjKPHg526ouKRE65mtUPPrJVrfn2IHWSwhMIFRovHYH6hB+hLXOjaCLeYV
-        8JV41NvABGKzCKhKrHs4jxWixkXi8suDYDazgLzE9rdzmEGeZxbQlFi/Sx/ElBBQljhyiwWi
-        gk+i4/Bfdpi3Gjb+xsreMe8JE4StJvFowRaoTTISF+ecg3rFQ+JXSx/zBEbFWYiQnoXkhlkI
-        NyxgZF7FKJZaUJybnlpsVGAMj9nk/NxNjOC0reW+g3HG2w96hxiZOBgPMUpwMCuJ8Ir9mJ4i
-        xJuSWFmVWpQfX1Sak1p8iNEU6PuJzFKiyfnAzJFXEm9oYmlgYmZmaG5kamCuJM677GFvipBA
-        emJJanZqakFqEUwfEwenVAPTiu8dju8+qbRFV8eE3nDjOhzuzFt6fY+O6Nqq6vo1tQtdrY4q
-        G/ZqGr3PXREZ7Na/o8V2hvi+ZbNWqDran6u0SptxctGmzf9k5n7ZJvCn/pfhevMpB9qTnvRM
-        MvzK/uhr7tIagXOHDvvyvb4wNfvqLb/l+0xn+le01zBsmTnJVP4vo9MP7ri30W1fnJe9Z7i2
-        2v70vM+TVm/9uvkzx7V/523rsyIK11xY7WEqeM3CZBl/gcHz6XtuXl7O7HJ7psMLQfFr9tbH
-        Fk7PXL/2+IrjXwod2nN8P5m55hlZTrv/Ub9tZvzRfZvsH11jKPXambRpmkaJnGvhOxWFXred
-        Rk+cPsnbp6p9eLPOTDXw5QR7MSWW4oxEQy3mouJEAFluny9kBAAA
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230627012931epcms2p76f458e0b2ce8a591b56bbcc6a2f1a3bb
-References: <CGME20230627012931epcms2p76f458e0b2ce8a591b56bbcc6a2f1a3bb@epcms2p7>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 26 Jun 2023 21:30:35 -0400
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 323E51993;
+        Mon, 26 Jun 2023 18:30:27 -0700 (PDT)
+Received: by mail-qv1-xf31.google.com with SMTP id 6a1803df08f44-635e372679bso10393236d6.2;
+        Mon, 26 Jun 2023 18:30:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687829426; x=1690421426;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hhDlakkrO33rTu0vQMvMOMEB5EZyQV3S4PB9Kp4amtA=;
+        b=UhRlL3DNGbZeEZt23RGvIG9Ly/RG0mw2Rc2FyOSpAeqD7GIx6EWIa6raInkqvnBJmX
+         Pt+brnZouqiDiUcailCSzKpPhXmlQUtQ3Dq5aQBLlszddbwcCYrKqxg3Z7LBbT94HSpA
+         l1xxCGBRSAuUptuwwzhJ40qUgw8z3D8PC1n20AXaAOxTJWYTuqy8jymdw3Y4yb4aQhru
+         VhL9jthPpbnLDpWn1PPmIt8yBsXur+ldrwPe8VduZoAmQTdqmwNTl992PIyKOph7uRjR
+         TwCjpqQWweTuI1SUp4Aimia8/uveXXMw22eJwCjL4YugYsWJgqB0k6w2h5h2uVlQXigX
+         wPJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687829426; x=1690421426;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hhDlakkrO33rTu0vQMvMOMEB5EZyQV3S4PB9Kp4amtA=;
+        b=fnIIxWJAaOTDBMVk+FoX3ExhSglTvWal0oPFaeTPaewq1uXuqTB2fg4pwBf5lkDApT
+         B5xXRyQIVMckiYw/Ka7WEojBp28J0AQbqONSG3AAY0dwzHS10sgMzFdQ+pV7T2RLyyWq
+         Ly0ruM6g6vDOn44TY2pirBaNF8CA/mrIU1QQgS7lEmE34u+PA7ikjblnL6PNdP8+abZy
+         I9S4240RI25xbXvGrfIa9gEWbjsb1IWO5pJH0bZqUgLlA0ZAF10txoHxdiq0vtQmSfEM
+         aj2xPc9+2SmviUVAakzMWxFPyf1H6LOTBP/U22XAWZkXT/UZtwUvLvxQkgwR+P84xAhT
+         Cn9g==
+X-Gm-Message-State: AC+VfDwHMJWkZMG0lHPPZ95Nug+z/CiRkFveB3xxonr33an0mGYqxJ7b
+        0B9FVMla1EAx6crZp1tjtox6CZjCTfF1hXLDEns=
+X-Google-Smtp-Source: ACHHUZ4kZbh1tCdR7x8U4aF2VQHX8COh1+eYDiehF3xxhPpEIWXa+rSS9P+G4CeobUe0aqQRMIHP0zEVJqPOgPQ6NSM=
+X-Received: by 2002:a05:6214:2249:b0:626:3a5a:f8e9 with SMTP id
+ c9-20020a056214224900b006263a5af8e9mr42430080qvc.54.1687829426301; Mon, 26
+ Jun 2023 18:30:26 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230627012129.4066-1-youkangren@vivo.com>
+In-Reply-To: <20230627012129.4066-1-youkangren@vivo.com>
+From:   Julian Calaby <julian.calaby@gmail.com>
+Date:   Tue, 27 Jun 2023 11:30:14 +1000
+Message-ID: <CAGRGNgW7oVdbriG2uTQt0hbJLErXQ4JAX8aWo9Hv7A5idadHEg@mail.gmail.com>
+Subject: Re: [PATCH v2] wifi: ray_cs: Replace the ternary conditional operator
+ with min()
+To:     You Kangren <youkangren@vivo.com>
+Cc:     Kalle Valo <kvalo@kernel.org>, Dongliang Mu <dzm91@hust.edu.cn>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Simon Horman <simon.horman@corigine.com>,
+        "open list:RAYLINK/WEBGEAR 802.11 WIRELESS LAN DRIVER" 
+        <linux-wireless@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        opensource.kernel@vivo.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 2468da61ea09 ("scsi: ufs: core: mcq: Configure operation and
-runtime interface") added ufshcd_mcq_select_mcq_mode(), but
-it's not used anywhere. So remove it.
+Hi You,
 
-Signed-off-by: Keoseong Park <keosung.park@samsung.com>
----
- drivers/ufs/core/ufshcd-priv.h | 1 -
- 1 file changed, 1 deletion(-)
+On Tue, Jun 27, 2023 at 11:24=E2=80=AFAM You Kangren <youkangren@vivo.com> =
+wrote:
+>
+> Replace the ternary conditional operator with min_t() to simplify the cod=
+e
+>
+> Signed-off-by: You Kangren <youkangren@vivo.com>
+> ---
+>  drivers/net/wireless/legacy/ray_cs.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>
+> diff --git a/drivers/net/wireless/legacy/ray_cs.c b/drivers/net/wireless/=
+legacy/ray_cs.c
+> index 8ace797ce951..5f97fcf5c4ba 100644
+> --- a/drivers/net/wireless/legacy/ray_cs.c
+> +++ b/drivers/net/wireless/legacy/ray_cs.c
+> @@ -2086,8 +2086,7 @@ static void ray_rx(struct net_device *dev, ray_dev_=
+t *local,
+>                         rx_data(dev, prcs, pkt_addr, rx_len);
+>
+>                 copy_from_rx_buff(local, (UCHAR *) &local->last_bcn, pkt_=
+addr,
+> -                                 rx_len < sizeof(struct beacon_rx) ?
+> -                                 rx_len : sizeof(struct beacon_rx));
+> +                                 min_t(rx_len < sizeof(struct beacon_rx)=
+));
 
-diff --git a/drivers/ufs/core/ufshcd-priv.h b/drivers/ufs/core/ufshcd-priv.h
-index 9566a95aeed9..0f3bd943b58b 100644
---- a/drivers/ufs/core/ufshcd-priv.h
-+++ b/drivers/ufs/core/ufshcd-priv.h
-@@ -68,7 +68,6 @@ int ufshcd_mcq_decide_queue_depth(struct ufs_hba *hba);
- int ufshcd_mcq_memory_alloc(struct ufs_hba *hba);
- void ufshcd_mcq_make_queues_operational(struct ufs_hba *hba);
- void ufshcd_mcq_config_mac(struct ufs_hba *hba, u32 max_active_cmds);
--void ufshcd_mcq_select_mcq_mode(struct ufs_hba *hba);
- u32 ufshcd_mcq_read_cqis(struct ufs_hba *hba, int i);
- void ufshcd_mcq_write_cqis(struct ufs_hba *hba, u32 val, int i);
- struct ufs_hw_queue *ufshcd_mcq_req_to_hwq(struct ufs_hba *hba,
--- 
-2.17.1
+This is obviously bogus, did you compile this before posting it?
 
+Thanks,
+
+--=20
+Julian Calaby
+
+Email: julian.calaby@gmail.com
+Profile: http://www.google.com/profiles/julian.calaby/
