@@ -2,138 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D05074065B
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 00:05:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 572D474065E
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 00:09:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229746AbjF0WFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 18:05:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50152 "EHLO
+        id S229814AbjF0WJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 18:09:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjF0WFL (ORCPT
+        with ESMTP id S229568AbjF0WJH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 18:05:11 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C84E0212A
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 15:05:09 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id 98e67ed59e1d1-26307d808a4so1479011a91.1
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 15:05:09 -0700 (PDT)
+        Tue, 27 Jun 2023 18:09:07 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD4C1BD5;
+        Tue, 27 Jun 2023 15:09:05 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-666fb8b1bc8so4947931b3a.1;
+        Tue, 27 Jun 2023 15:09:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1687903509; x=1690495509;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5DYHe4bnJRWcnzs0u1zgwhRUtJrGQi+1XUL5Mm+Ohjs=;
-        b=yMUwX+WrY5rt4zP0GksI635sC1Rp7YPOaGDvrzF3kYAXfvZhc0pBaStaiggmfgaMI2
-         uXHp5zmSiWZTeFXmec3EeLVLmX2Z3h7r2f8QlfT1pScDsv/oqbrB5Ld5dVQE138qdnMt
-         D0A9DQldSDNHP/92kOy7zkW29wihZorlu7uHsSqekq+A5O8GhYnfdq9yfbggInm8HGYN
-         pZDakz2K6IOYmmGOYjWISRAcEz6l1BI1yUXP9FcsoXj23q1vNUDkn1GouE9y3J1eJI3+
-         HSoen8uLEJ0DRWnfBp3+EBRV5/34Op2K5xWZu91IHqx9LUm1pVhJ3513uW+8lUg7ZTrx
-         Pk7w==
+        d=gmail.com; s=20221208; t=1687903745; x=1690495745;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tA3a6AQHrEenGtzOB2eYBghaGi3TiCA+RGOHLwGqL1Q=;
+        b=kiM9a7bnlsNHBZxD+dqKn33nrCtUMHAZzngTxsabk4vgvS55sFPxikliizQ4Gz36q2
+         XCYE52wKJolfC/VI8tFrvknMYrYFJQlG4R/Tsd5N5PYcid7Gk/h9iUXHNUfvU9DMEtnp
+         X9TsycWY/4pVRq6CRnNUTzMcEl1k7smMw5V4ENKahUPL3nlsYBByJzaqb2ek+HKnloLV
+         QILnk2kDREZAoV+gTLfYyE2R/OrVabY+7loThrzweziF6P1VrH/Mm9P97PdE23L5QeWW
+         KGmAhkrLDeRxXxqYpnJEQLUBI907BY26jzNVa5wcG/we6acPjD25Xfy1DhabEovCbMkZ
+         LQ1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687903509; x=1690495509;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5DYHe4bnJRWcnzs0u1zgwhRUtJrGQi+1XUL5Mm+Ohjs=;
-        b=jiwv8h8218CSyykLfTcIjCihTLjcgp2k2071FzT5D9OKPWym3ux5+z/Yj1P7lsFZx7
-         3nUcAYG8wPcjQQSt7RTL4cIKa8X7mKpl3QbjqKemU1aoEt136FUHqbBAGVfwfc0nt2fg
-         bZJZx7H7cqXPEOH36E8XV9rULVngyg63SIo5E7QLL/usbMMcWbP8Agywi64HdIFbwtW4
-         xQpxL/QsBTGXj8Ukw3aMyvL3d2ez0wXiCzL2Cnd+NlBA0jb6f/r3tnumMbggQvd2cfJn
-         oTX1Hqzs7L5yHebZmBA0/tr8Aoscpno3dFJLGpESO6Az0BRK/9NyxVtdfSBx3SwmXWLa
-         IoOg==
-X-Gm-Message-State: AC+VfDxZqvMs8pz8/B2Jgas487wWSOgb7E7sqQFR3sPPU+1sUlHPtxND
-        J7+iv+wJusceSEfxIBQrsOa6iw==
-X-Google-Smtp-Source: ACHHUZ51GdeT0rkklPTvRnFBvywqgG6ZZCt1e8bXjVFeoZTq0FBzGiBdbxrdCOG9WAlsKh01EySO3Q==
-X-Received: by 2002:a17:90a:19c9:b0:255:d86c:baec with SMTP id 9-20020a17090a19c900b00255d86cbaecmr33128882pjj.46.1687903509282;
-        Tue, 27 Jun 2023 15:05:09 -0700 (PDT)
-Received: from dread.disaster.area (pa49-186-94-37.pa.vic.optusnet.com.au. [49.186.94.37])
-        by smtp.gmail.com with ESMTPSA id q15-20020a17090a064f00b002533ce5b261sm8935406pje.10.2023.06.27.15.05.08
+        d=1e100.net; s=20221208; t=1687903745; x=1690495745;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tA3a6AQHrEenGtzOB2eYBghaGi3TiCA+RGOHLwGqL1Q=;
+        b=W6ntRZBNACIiJwFdGeEx7HNm0C63LZU35syQPHsnYBAH78ZPC64YrIIEroj0b1095F
+         ol8A1UYVjcsI5B26J2GfipT/06gu0LJC/0/k+PLABOXKkNjxOdSIaftwc06JYl9zmno1
+         G867LSKNnCrA7ygiYrs7AAaUCbJxIAxGQTCXWTIxIAqMthpd01qWyvodGMi8tyWLIXoX
+         JW9OG2kX3EgHlRNL04EfgqJKQPZwALJx9lDVQI7dh1Ed/Q/q4i/NAToeH5MjqPljU0wT
+         yoxUmwp/T7v82fvvGDN+X2j+oWi6+NiPGK4omwjuUmVJVTth6FeEQR+ex3FFhnXW6mC8
+         dCWw==
+X-Gm-Message-State: AC+VfDwGIMzERJmvs78I5lsAJwGhG/J1iboa41NvfB7X0+J0Pbq3tO3b
+        kQS++pQ8W6xIWLS76EnrFQc=
+X-Google-Smtp-Source: ACHHUZ5ep2ahFLcsl/z9kgo33yS4UwwJE7J8o2GhInyKKpuJbTjoYWG8SYfSxOYvXw3wIvHqj4+R8w==
+X-Received: by 2002:a05:6a00:3928:b0:64d:46b2:9a58 with SMTP id fh40-20020a056a00392800b0064d46b29a58mr40233682pfb.26.1687903744681;
+        Tue, 27 Jun 2023 15:09:04 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:eb71:7977:cb6e:6d32])
+        by smtp.gmail.com with ESMTPSA id s24-20020aa78d58000000b0064ff855751fsm5832856pfe.4.2023.06.27.15.09.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jun 2023 15:05:08 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.96)
-        (envelope-from <david@fromorbit.com>)
-        id 1qEGo6-00GzGq-0o;
-        Wed, 28 Jun 2023 08:05:06 +1000
-Date:   Wed, 28 Jun 2023 08:05:06 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     Jens Axboe <axboe@kernel.dk>, torvalds@linux-foundation.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-bcachefs@vger.kernel.org, Christoph Hellwig <hch@lst.de>
-Subject: Re: [GIT PULL] bcachefs
-Message-ID: <ZJtdEgbt+Wa8UHij@dread.disaster.area>
-References: <20230626214656.hcp4puionmtoloat@moria.home.lan>
- <aeb2690c-4f0a-003d-ba8b-fe06cd4142d1@kernel.dk>
- <20230627000635.43azxbkd2uf3tu6b@moria.home.lan>
- <91e9064b-84e3-1712-0395-b017c7c4a964@kernel.dk>
- <20230627020525.2vqnt2pxhtgiddyv@moria.home.lan>
- <b92ea170-d531-00f3-ca7a-613c05dcbf5f@kernel.dk>
- <23922545-917a-06bd-ec92-ff6aa66118e2@kernel.dk>
- <20230627201524.ool73bps2lre2tsz@moria.home.lan>
+        Tue, 27 Jun 2023 15:09:04 -0700 (PDT)
+Date:   Tue, 27 Jun 2023 15:09:01 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Eray =?iso-8859-1?Q?Or=E7unus?= <erayorcunus@gmail.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] HID: input: fix mapping for camera access keys
+Message-ID: <ZJtd/fMXRUgq20TW@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230627201524.ool73bps2lre2tsz@moria.home.lan>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 04:15:24PM -0400, Kent Overstreet wrote:
-> On Tue, Jun 27, 2023 at 11:16:01AM -0600, Jens Axboe wrote:
-> > On 6/26/23 8:59?PM, Jens Axboe wrote:
-> > > On 6/26/23 8:05?PM, Kent Overstreet wrote:
-> > >> On Mon, Jun 26, 2023 at 07:13:54PM -0600, Jens Axboe wrote:
-> > >>> Doesn't reproduce for me with XFS. The above ktest doesn't work for me
-> > >>> either:
-> > >>
-> > >> It just popped for me on xfs, but it took half an hour or so of looping
-> > >> vs. 30 seconds on bcachefs.
-> > > 
-> > > OK, I'll try and leave it running overnight and see if I can get it to
-> > > trigger.
-> > 
-> > I did manage to reproduce it, and also managed to get bcachefs to run
-> > the test. But I had to add:
-> > 
-> > diff --git a/check b/check
-> > index 5f9f1a6bec88..6d74bd4933bd 100755
-> > --- a/check
-> > +++ b/check
-> > @@ -283,7 +283,7 @@ while [ $# -gt 0 ]; do
-> >  	case "$1" in
-> >  	-\? | -h | --help) usage ;;
-> >  
-> > -	-nfs|-afs|-glusterfs|-cifs|-9p|-fuse|-virtiofs|-pvfs2|-tmpfs|-ubifs)
-> > +	-nfs|-afs|-glusterfs|-cifs|-9p|-fuse|-virtiofs|-pvfs2|-tmpfs|-ubifs|-bcachefs)
-> >  		FSTYP="${1:1}"
-> >  		;;
-> >  	-overlay)
-> 
-> I wonder if this is due to an upstream fstests change I haven't seen
-> yet, I'll have a look.
+Commit 9f4211bf7f81 ("HID: add mapping for camera access keys") added
+mapping for the camera access keys, but unfortunately used wrong usage
+codes for them. HUTRR72[1] specifies that camera access controls use 0x76,
+0x077 and 0x78 usages in the consumer control page. Previously mapped 0xd5,
+0xd6 and 0xd7 usages are actually defined in HUTRR64[2] as game recording
+controls.
 
-Run mkfs.bcachefs on the testdir first. fstests tries to probe the
-filesystem type to test if $FSTYP is not set. If it doesn't find a
-filesystem or it is unsupported, it will use the default (i.e. XFS).
-There should be no reason to need to specify the filesystem type for
-filesystems that blkid recognises. from common/config:
+[1] https://www.usb.org/sites/default/files/hutrr72_-_usages_to_control_camera_access_0.pdf
+[2] https://www.usb.org/sites/default/files/hutrr64b_-_game_recording_controllers_0.pdf
 
-        # Autodetect fs type based on what's on $TEST_DEV unless it's been set
-        # externally
-        if [ -z "$FSTYP" ] && [ ! -z "$TEST_DEV" ]; then
-                FSTYP=`blkid -c /dev/null -s TYPE -o value $TEST_DEV`
-        fi
-        FSTYP=${FSTYP:=xfs}
-        export FSTYP
+Fixes: 9f4211bf7f81 ("HID: add mapping for camera access keys")
+Cc: stable@vger.kernel.org
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+---
+ drivers/hid/hid-input.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-Cheers,
-
-Dave.
+diff --git a/drivers/hid/hid-input.c b/drivers/hid/hid-input.c
+index 7fc967964dd8..d7b5ace90bd8 100644
+--- a/drivers/hid/hid-input.c
++++ b/drivers/hid/hid-input.c
+@@ -1085,6 +1085,10 @@ static void hidinput_configure_usage(struct hid_input *hidinput, struct hid_fiel
+ 		case 0x074: map_key_clear(KEY_BRIGHTNESS_MAX);		break;
+ 		case 0x075: map_key_clear(KEY_BRIGHTNESS_AUTO);		break;
+ 
++		case 0x076: map_key_clear(KEY_CAMERA_ACCESS_ENABLE);	break;
++		case 0x077: map_key_clear(KEY_CAMERA_ACCESS_DISABLE);	break;
++		case 0x078: map_key_clear(KEY_CAMERA_ACCESS_TOGGLE);	break;
++
+ 		case 0x079: map_key_clear(KEY_KBDILLUMUP);	break;
+ 		case 0x07a: map_key_clear(KEY_KBDILLUMDOWN);	break;
+ 		case 0x07c: map_key_clear(KEY_KBDILLUMTOGGLE);	break;
+@@ -1131,9 +1135,6 @@ static void hidinput_configure_usage(struct hid_input *hidinput, struct hid_fiel
+ 		case 0x0cd: map_key_clear(KEY_PLAYPAUSE);	break;
+ 		case 0x0cf: map_key_clear(KEY_VOICECOMMAND);	break;
+ 
+-		case 0x0d5: map_key_clear(KEY_CAMERA_ACCESS_ENABLE);		break;
+-		case 0x0d6: map_key_clear(KEY_CAMERA_ACCESS_DISABLE);		break;
+-		case 0x0d7: map_key_clear(KEY_CAMERA_ACCESS_TOGGLE);		break;
+ 		case 0x0d8: map_key_clear(KEY_DICTATE);		break;
+ 		case 0x0d9: map_key_clear(KEY_EMOJI_PICKER);	break;
+ 
 -- 
-Dave Chinner
-david@fromorbit.com
+2.41.0.178.g377b9f9a00-goog
+
+
+-- 
+Dmitry
