@@ -2,178 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B419D73F3F2
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 07:30:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EDED73F3F6
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 07:32:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230163AbjF0Fae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 01:30:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48508 "EHLO
+        id S230171AbjF0Fcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 01:32:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbjF0Faa (ORCPT
+        with ESMTP id S229689AbjF0Fcp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 01:30:30 -0400
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35C27173B
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 22:30:27 -0700 (PDT)
-Received: by mail-qt1-x82a.google.com with SMTP id d75a77b69052e-4007b5bafceso112981cf.1
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 22:30:27 -0700 (PDT)
+        Tue, 27 Jun 2023 01:32:45 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4104D1734
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 22:32:44 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3fb4146e8fcso8757245e9.0
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 22:32:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687843826; x=1690435826;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Tr6z7HXoBtRJiy9wIGxM4+Vh8ji4UZ7Pb/0A3wtEW+4=;
-        b=RVa8Qm3kb8eoPf1kUKXDt9afcKa8JJGNOR1UFa/0AXvcyyeUBXp0NPK1D2+mSv1Sh5
-         rpQwalJ7ERXwii22vOhV4jdreZ71bDgoFL91oi5ZvAytI2TnTqKdZwsJJQksiPAb9F5A
-         eMtWcHbSMLPm/8/NAY764PCtLSzNEpaHonyQA9ibN2YB1nec+NhxYXg3DPSBci/Mieiy
-         hfXmyBnF32aUNEdMMETSpTgoQF29B/RzDOVAEaK0wjkiw/1dwDOIrB71dOGzSLXH2WRw
-         abdGK1RCBPpBQm75z0N+Eb1oHSROhMs00hs7GqWlUPqWns8MaEPXjUrfpNiqrC14TiiP
-         ftdg==
+        d=linaro.org; s=google; t=1687843962; x=1690435962;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ooF2+9s/dYxk4t4QZ6dr9+cLdLfWELP5XjTCQq5ybIM=;
+        b=iPNim+rvo2A1bn4dMUpbF1e0wz6EHmQxUGg3fxS/+RmnfHG3J5BVlUWPudJHtH2vP8
+         YjqFyw/UGGt17s8u9TU6IQq+4HFYI8r7SpVepLLM6d6YG52UjNvRTbzcVS2qqSO/bvoO
+         kIzZ7bdb6MFPTOU2pgG3yd7iuvPxsPb6+zzjYIpoRDyrASAGY+jKEVnnnOzw76GM0/ch
+         Dtjy7JhZd8qqO/3fS5uJ3uDAxkmyI/nNc7aOg12onfRM6yluoX3USBNrkmwxUsGEaLxU
+         b9/6zfoWKBsZMdvTrB3nXg8UNo7575e2HYb4IY2h9B47hfUhESpgAA6/DmUh/Ti7xu6Y
+         rahg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687843826; x=1690435826;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Tr6z7HXoBtRJiy9wIGxM4+Vh8ji4UZ7Pb/0A3wtEW+4=;
-        b=W74eQy9mwIHb7fNjneo8LMFRGYiJOvUm6hYsGqK0RHTtIWrIyrCox2nZWa41uOhCu3
-         pwlDm5h5vJjcHmv0PKt9zFOaX0IBszVzvZVdZ6lWg+aQA7cbJwD12/UmSCUjXryDk8jV
-         OytR6NuA+kH3z4Y6LT6FFqR810aAmdLT5jFIappct6COOWLN2Ic4GAh7GGb3TvVu3B7M
-         p1mgrYPc98/ePHgryNrJHpz8eHdj4v9nxSjsBxF3MxVveXmMed9K4JReKJ97KhjUxLxg
-         +jt0XN2klYMx5837fkTvuyGF0cZHn6+NpZ/BERy9JqsBqB+cOt3Or6v1jNmCqk+zxJ2x
-         thkg==
-X-Gm-Message-State: AC+VfDy3p3AH6qR7/nLNGl6EY3eIprBGO07ufqhV+xsPI2TedEtNa2L7
-        P9r2WRz0TWR9ldFg7hEdLtFgV9AgeyjyZ/6ddaS1Ow==
-X-Google-Smtp-Source: ACHHUZ53Gqj9pbs/heeF8njdErsrbiCtEuLOgb4nbpjNe6JZUe+y5NpTAJ4tEKixwEP+mIc66585aRjMV7mzdReURHY=
-X-Received: by 2002:ac8:5708:0:b0:3f3:75c2:7466 with SMTP id
- 8-20020ac85708000000b003f375c27466mr100849qtw.8.1687843826024; Mon, 26 Jun
- 2023 22:30:26 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687843962; x=1690435962;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ooF2+9s/dYxk4t4QZ6dr9+cLdLfWELP5XjTCQq5ybIM=;
+        b=I9+JpjEeQIznwZMRf6M8R/LleiIItGYCxJJeiwIrAHquxbJu2Yc4nGBfWz0dr+H+xc
+         i5J7A24Lbfs0TxxPCoWqvVFpzma2SK2aScoqhkKyqQPv3oRKlY/BtEQe0/fLO5sxkFmZ
+         VNTtUFryl5NYvSyDaMxTzwD8QrKFrzmuuX850OfkeRgjxV4Rn8QYZGKOsGuMtx+y1XZq
+         wXnmUl2N8aUKes4M7L2XinGLs/z5TPHj00pNKmNnyk0qYtdBZ+8dmbA4rm0DI7ECLKJU
+         MXn38pyb+VzyVbJFcV3I0AjgYiWxSvG1CwtM8iw2cqR1K6YZXJSQ1s9TLKszDhs+03cM
+         eHBQ==
+X-Gm-Message-State: AC+VfDx0S1bPtGbfZ/zuS9ZHStfFdUW6BcnSPxg0UfpaBoPdoDh9Qqec
+        wY4WZLtE0+qbsRl3I8fksXYqeg==
+X-Google-Smtp-Source: ACHHUZ7/KMGanhWpS4V6XigbARqv+ptaFhhnRebXUfv/XgANDJmcyk+nRrK/8gABHNSsbrCfv0MRJg==
+X-Received: by 2002:a05:600c:3657:b0:3f6:8ba:6ea2 with SMTP id y23-20020a05600c365700b003f608ba6ea2mr28557361wmq.15.1687843962270;
+        Mon, 26 Jun 2023 22:32:42 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id x26-20020a1c7c1a000000b003fa740ef99esm9405573wmc.45.2023.06.26.22.32.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jun 2023 22:32:39 -0700 (PDT)
+Date:   Tue, 27 Jun 2023 08:32:36 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Sasha Levin <sashal@kernel.org>,
+        Markus Elfring <Markus.Elfring@web.de>,
+        linux-perf-users@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Ivan Babrou <ivan@cloudflare.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>, cocci@inria.fr
+Subject: Re: [PATCH v2] perf unwind: Fix map reference counts
+Message-ID: <a9732501-3eff-4b94-a9b2-53e5e5e5be1d@kadam.mountain>
+References: <20230623043107.4077510-1-irogers@google.com>
+ <64741e8e-e81a-afb9-9ce3-9c2d6baab44a@web.de>
+ <CAP-5=fVwhiGJEqTST2bfX8cUALpnTxELSHrvKtyJEPjqQjOacQ@mail.gmail.com>
+ <35569055-0873-4d5d-8c9c-78c818e9aa26@moroto.mountain>
+ <CAP-5=fWDnLDox3apMmvXmzVurFA=+sj7SEOOD7_2fam2VrGokA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230626171430.3167004-1-ryan.roberts@arm.com>
- <20230626171430.3167004-4-ryan.roberts@arm.com> <CAOUHufZKM+aS_hYQ5nDUHh74UQwWipJ27Na5Sw4n+RDqnwyWHA@mail.gmail.com>
-In-Reply-To: <CAOUHufZKM+aS_hYQ5nDUHh74UQwWipJ27Na5Sw4n+RDqnwyWHA@mail.gmail.com>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Mon, 26 Jun 2023 23:29:49 -0600
-Message-ID: <CAOUHufZeFTjzO6nSFz7Y=5rBGPzY+_eeN3f8W+g0u6AqosdmuQ@mail.gmail.com>
-Subject: Re: [PATCH v1 03/10] mm: Introduce try_vma_alloc_movable_folio()
-To:     Ryan Roberts <ryan.roberts@arm.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Yin Fengwei <fengwei.yin@intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-s390@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAP-5=fWDnLDox3apMmvXmzVurFA=+sj7SEOOD7_2fam2VrGokA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 26, 2023 at 8:34=E2=80=AFPM Yu Zhao <yuzhao@google.com> wrote:
->
-> On Mon, Jun 26, 2023 at 11:14=E2=80=AFAM Ryan Roberts <ryan.roberts@arm.c=
-om> wrote:
-> >
-> > Opportunistically attempt to allocate high-order folios in highmem,
-> > optionally zeroed. Retry with lower orders all the way to order-0, unti=
-l
-> > success. Although, of note, order-1 allocations are skipped since a
-> > large folio must be at least order-2 to work with the THP machinery. Th=
-e
-> > user must check what they got with folio_order().
-> >
-> > This will be used to oportunistically allocate large folios for
-> > anonymous memory with a sensible fallback under memory pressure.
-> >
-> > For attempts to allocate non-0 orders, we set __GFP_NORETRY to prevent
-> > high latency due to reclaim, instead preferring to just try for a lower
-> > order. The same approach is used by the readahead code when allocating
-> > large folios.
-> >
-> > Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
-> > ---
-> >  mm/memory.c | 33 +++++++++++++++++++++++++++++++++
-> >  1 file changed, 33 insertions(+)
-> >
-> > diff --git a/mm/memory.c b/mm/memory.c
-> > index 367bbbb29d91..53896d46e686 100644
-> > --- a/mm/memory.c
-> > +++ b/mm/memory.c
-> > @@ -3001,6 +3001,39 @@ static vm_fault_t fault_dirty_shared_page(struct=
- vm_fault *vmf)
-> >         return 0;
-> >  }
-> >
-> > +static inline struct folio *vma_alloc_movable_folio(struct vm_area_str=
-uct *vma,
-> > +                               unsigned long vaddr, int order, bool ze=
-roed)
-> > +{
-> > +       gfp_t gfp =3D order > 0 ? __GFP_NORETRY | __GFP_NOWARN : 0;
-> > +
-> > +       if (zeroed)
-> > +               return vma_alloc_zeroed_movable_folio(vma, vaddr, gfp, =
-order);
-> > +       else
-> > +               return vma_alloc_folio(GFP_HIGHUSER_MOVABLE | gfp, orde=
-r, vma,
-> > +                                                               vaddr, =
-false);
-> > +}
-> > +
-> > +/*
-> > + * Opportunistically attempt to allocate high-order folios, retrying w=
-ith lower
-> > + * orders all the way to order-0, until success. order-1 allocations a=
-re skipped
-> > + * since a folio must be at least order-2 to work with the THP machine=
-ry. The
-> > + * user must check what they got with folio_order(). vaddr can be any =
-virtual
-> > + * address that will be mapped by the allocated folio.
-> > + */
-> > +static struct folio *try_vma_alloc_movable_folio(struct vm_area_struct=
- *vma,
-> > +                               unsigned long vaddr, int order, bool ze=
-roed)
-> > +{
-> > +       struct folio *folio;
-> > +
-> > +       for (; order > 1; order--) {
-> > +               folio =3D vma_alloc_movable_folio(vma, vaddr, order, ze=
-roed);
-> > +               if (folio)
-> > +                       return folio;
-> > +       }
-> > +
-> > +       return vma_alloc_movable_folio(vma, vaddr, 0, zeroed);
-> > +}
->
-> I'd drop this patch. Instead, in do_anonymous_page():
->
->   if (IS_ENABLED(CONFIG_ARCH_WANTS_PTE_ORDER))
->     folio =3D vma_alloc_zeroed_movable_folio(vma, addr,
-> CONFIG_ARCH_WANTS_PTE_ORDER))
->
->   if (!folio)
->     folio =3D vma_alloc_zeroed_movable_folio(vma, addr, 0);
+Ah, great.  Thanks, Ian.
 
-I meant a runtime function arch_wants_pte_order() (Its default
-implementation would return 0.)
+The Reference Count Checking page is good information.  There is a bunch
+of interest in doing better QC so this stuff is good to know.
+
+So in this case, it's probably difficult to assign a Fixes tag and that's
+fine.  Whatever.  But I'm not a huge fan of the "Leave off the Fixes tag"
+approach to preventing backports.  There should be a better system for
+that.  Maybe there should be a tag for that?  Or possibly that's too
+complicated...  I'm not sure.
+
+Anyway, let's leave it for now.  If it's really a problem then we'll run
+into it again later and we can think about it at that point.
+
+regards,
+dan carpenter
