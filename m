@@ -2,151 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 064BA73FB3F
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 13:38:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA64273FB41
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 13:41:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231651AbjF0Lis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 07:38:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48916 "EHLO
+        id S230350AbjF0LlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 07:41:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229887AbjF0Lio (ORCPT
+        with ESMTP id S229838AbjF0LlF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 07:38:44 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 178182D62
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 04:38:27 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f122ff663eso6010574e87.2
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 04:38:27 -0700 (PDT)
+        Tue, 27 Jun 2023 07:41:05 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CE0B19B0
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 04:41:03 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-31297125334so3857184f8f.0
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 04:41:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687865906; x=1690457906;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YfWH0OQlsg+dvWsXTp6JCSMfE+H9UOwW5z/wnfAlqDM=;
-        b=g0JjsRF1zHQRW4jZzWYMLCLGoymlc17mLqx1F9Ai41Cisd+FAVNuut0V6+6zRCyKsZ
-         1Ey6SPBm57SH7KeUf3V1TLpVJD/1fY5K22ORSG+qIFuDornGDg7RClO6wnnB1fXf1QJi
-         ZQUkzKUy/qws7TMjW1ec0/SxI6D0nreH4i7Uo9vpbD1zbNWI2a/GBtoybyfvWud1n26f
-         arC0AB1M69QRJZrVi83jF39slVbATFzrLec8H5MwcoQj5l+vZevlAL3iD6TlZe8S+x5r
-         Oo+qljD5aGAv/Zk03pzB+AtelXcdQiLzGqar87fqc8IPAaHNZXiPjIS8kiiB86McFoz3
-         mzkg==
+        d=gmail.com; s=20221208; t=1687866062; x=1690458062;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=Gsocut1RLICHqyRanQnJqv4Xl4Nj+KV9T+GNDDTjHL8=;
+        b=U55x36O0p0TasOBMJMqOYa2/T4ObQ4tIUw/l+5mcsrKESqEHMVDfK5tFEU+4BT5Cqn
+         0ngWR3KItiJk/Cfh3QPWIDPSGfNHz7o0Gu+2kIX+m4ugk//SiS5XKEAAgD5dH2/KOQ+8
+         98xm5zHGwJKv2poDBaLtIhHU3dKQPlrHh6aoYJj1wP5shAlvHlVmOzuxmWSCiJG9uR5T
+         lzVEhwjzwdei+pYu3gMJftmcHStW+pMSyvj2DWcrEwSv7gT9BsGMMY3JI+FyS4LsbfsJ
+         KfFbeJG8OCzT5oguiNa5MmtWJocWLFOAb9F9ADIrh6K1E187UECayRqDu2Thl1/6+ayG
+         XNNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687865906; x=1690457906;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YfWH0OQlsg+dvWsXTp6JCSMfE+H9UOwW5z/wnfAlqDM=;
-        b=WUNsPNMUe9me2DO2ELU/Xb4UIVfqkDTaa1Q9C8+gZ217cvmVdBsVX87NbVp6LqvK9e
-         zn9vfDP58RTvNExl4e0vh4mi393YlZPQ/Wgt1dD1IS+rOYb3kPBXJsa+sbT0gtlD7q72
-         KN5KOqaf+rw6OV5HiycqpdVUyhlngaTv9fLmKof7AcThfvCvv9cNoiT5ZsnEhk/yjsJ5
-         T4zFhwe4k0rIfEf10X6P9RZxeDS2r3gTPps5Zsn5EE32z1Gl3djuYf4WzXHqXQtRHQBK
-         XOr3a3HcutB0ucTK/MQSR7u/9gGuyBmD0JTF3TTFY3rb7zapc4SOa58n8IEViKY54KdT
-         ZL+g==
-X-Gm-Message-State: AC+VfDyZJ3w0MxgJeW4MiayWeJfCucylIR2GhADyZxMiyLg9xsahYOyx
-        KMyzjTb2ssqjCejlzbQ9MfkqAw==
-X-Google-Smtp-Source: ACHHUZ5CK70G/4mbB1hUPJkh1Rn4Fjo/i/K+ZfnRSo16urKoN8y/vTKwRLbwuw2xbYORIKVP019tsA==
-X-Received: by 2002:a05:6512:eaa:b0:4fb:7cea:882a with SMTP id bi42-20020a0565120eaa00b004fb7cea882amr2756090lfb.3.1687865905789;
-        Tue, 27 Jun 2023 04:38:25 -0700 (PDT)
-Received: from linaro.org ([62.231.110.100])
-        by smtp.gmail.com with ESMTPSA id v4-20020a05600c214400b003fa95890484sm6015915wml.20.2023.06.27.04.38.24
+        d=1e100.net; s=20221208; t=1687866062; x=1690458062;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Gsocut1RLICHqyRanQnJqv4Xl4Nj+KV9T+GNDDTjHL8=;
+        b=WFSUIUKFPJ7ZSPWbzsty816NCqGyNBS6JYktEgApx0d8B7sFZDR6yXvfrmVVkOOdz3
+         QrkJkmzat1hJc1lpiO2uSN63zBJOhBDBPhj2/5lNthnBY84ZjeLRuZ6g226gWjCVxqJ0
+         JcRzs24bBzlz3yAadH0PaEHzeJ2gUh9ADiDhZV9gIKCQhlnAsRjptR69ojz9H/3Vcj3C
+         WvgcTQkpRZKz28a+cUQpwVrzbqKVj8LzMXjPyWD/gPoS27t7DsSC0/FK/SG/z3cu3/d1
+         QUVVUPuoOk4mgyUmulCOENg0iqfoIO82mnUzXAlaWi07COLaYDJMsusQI+8GT2suBCgl
+         dwTA==
+X-Gm-Message-State: AC+VfDypqmdmuqDZlOEvAY6fIXuO3CERQV1O1nfO5afYk31xEPzBGB6c
+        u05c/nHKoydHm9uofJqee1w=
+X-Google-Smtp-Source: ACHHUZ7b02q9hbG/jg1FJ/AjoJKSB3O2cA+zgdpi3fdBzCRtFkDXymZilCRP0/axlO/JLk3bzoeuYw==
+X-Received: by 2002:adf:e9cb:0:b0:313:f4e4:9e4 with SMTP id l11-20020adfe9cb000000b00313f4e409e4mr4429550wrn.15.1687866061985;
+        Tue, 27 Jun 2023 04:41:01 -0700 (PDT)
+Received: from gmail.com (1F2EF7E2.nat.pool.telekom.hu. [31.46.247.226])
+        by smtp.gmail.com with ESMTPSA id 14-20020a05600c020e00b003f8d6647661sm13394034wmi.15.2023.06.27.04.41.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jun 2023 04:38:25 -0700 (PDT)
-Date:   Tue, 27 Jun 2023 14:38:23 +0300
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        avel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Mike Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Taniya Das <tdas@qti.qualcomm.com>, linux-pm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [RFC PATCH 2/2] clk: qcom: gdsc: Add support for set_hwmode_dev
-Message-ID: <ZJrKL5+JHzOgHQl5@linaro.org>
-References: <20230627104033.3345659-1-abel.vesa@linaro.org>
- <20230627104033.3345659-2-abel.vesa@linaro.org>
- <666f7313-f0a2-6a94-f591-eb354df083dd@linaro.org>
+        Tue, 27 Jun 2023 04:41:01 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Tue, 27 Jun 2023 13:40:59 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Subject: [GIT PULL] x86/mm changes for v6.5
+Message-ID: <ZJrKy3TzC2b/R5X1@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <666f7313-f0a2-6a94-f591-eb354df083dd@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23-06-27 12:47:24, Konrad Dybcio wrote:
-> On 27.06.2023 12:40, Abel Vesa wrote:
-> > Implement the GDSC specific genpd set_hwmode_dev callback in order to
-> > switch the HW control on or off. For any GDSC that supports HW control
-> > set this callback in order to allow its consumers to control it.
-> > 
-> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> > ---
-> Currently all GDSCs with flags & HW_CTRL enable hw ctrl mode implicilty.
-> I didn't get any cover letter with these patches.. are you planning on
-> retiring that behavior? Presumably after adding a matching pair of set_hwmode
-> in venus!
 
-I didn't think a cover letter was needed here. After a chat offline with
-Taniya about this and it seems there is at least one consumer driver
-that needs to switch back and forth the HW control bit. For the rest of
-the consumers, the safest way is to assume that they expect their GDSC
-to be in HW control mode from the moment it is enabled until it gets
-disabled. One example of this is venus.
+Linus,
 
-> 
-> fwiw this patch lgtm
-> 
-> Konrad
-> >  drivers/clk/qcom/gdsc.c | 22 ++++++++++++++++++++++
-> >  1 file changed, 22 insertions(+)
-> > 
-> > diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
-> > index 5358e28122ab..9a04bf2e4379 100644
-> > --- a/drivers/clk/qcom/gdsc.c
-> > +++ b/drivers/clk/qcom/gdsc.c
-> > @@ -314,6 +314,26 @@ static int gdsc_enable(struct generic_pm_domain *domain)
-> >  	return 0;
-> >  }
-> >  
-> > +static int gdsc_set_hwmode_dev(struct generic_pm_domain *domain,
-> > +			       struct device *dev, bool enable)
-> > +{
-> > +	int ret = gdsc_hwctrl(domain_to_gdsc(domain), enable);
-> > +
-> > +	if (ret)
-> > +		goto out;
-> > +
-> > +	/*
-> > +	 * Wait for the GDSC to go through a power down and
-> > +	 * up cycle.  In case there is a status polling going on
-> > +	 * before the power cycle is completed it might read an
-> > +	 * wrong status value.
-> > +	 */
-> > +	udelay(1);
-> > +
-> > +out:
-> > +	return ret;
-> > +}
-> > +
-> >  static int gdsc_disable(struct generic_pm_domain *domain)
-> >  {
-> >  	struct gdsc *sc = domain_to_gdsc(domain);
-> > @@ -451,6 +471,8 @@ static int gdsc_init(struct gdsc *sc)
-> >  		sc->pd.power_off = gdsc_disable;
-> >  	if (!sc->pd.power_on)
-> >  		sc->pd.power_on = gdsc_enable;
-> > +	if (sc->flags & HW_CTRL)
-> > +		sc->pd.set_hwmode_dev = gdsc_set_hwmode_dev;
-> >  
-> >  	ret = pm_genpd_init(&sc->pd, NULL, !on);
-> >  	if (ret)
+Please pull the latest x86/mm git tree from:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86-mm-2023-06-27
+
+   # HEAD: 78841cd185aa74bc92d3ac2c63a870395caaa086 x86/mm: Remove Xen-PV leftovers from init_32.c
+
+Changes in this cycle were:
+
+- Remove Xen-PV leftovers from init_32.c
+
+- Fix __swp_entry_to_pte() warning splat for Xen PV guests,
+  triggered on CONFIG_DEBUG_VM_PGTABLE=y
+
+ Thanks,
+
+	Ingo
+
+------------------>
+Juergen Gross (2):
+      x86/mm: Fix __swp_entry_to_pte() for Xen PV guests
+      x86/mm: Remove Xen-PV leftovers from init_32.c
+
+
+ arch/x86/include/asm/pgtable_64.h |  4 ++--
+ arch/x86/mm/init_32.c             | 17 ++---------------
+ 2 files changed, 4 insertions(+), 17 deletions(-)
