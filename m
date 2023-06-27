@@ -2,134 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D11B173FBF7
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 14:28:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ED1073FBF9
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 14:28:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230415AbjF0M2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 08:28:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42082 "EHLO
+        id S230486AbjF0M2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 08:28:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230012AbjF0M2N (ORCPT
+        with ESMTP id S229926AbjF0M21 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 08:28:13 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9A991999;
-        Tue, 27 Jun 2023 05:28:09 -0700 (PDT)
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35RCLIr3017495;
-        Tue, 27 Jun 2023 12:28:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : content-type : content-transfer-encoding :
- mime-version; s=pp1; bh=1hU+vsd8h40bP1k4AwxoMoM9fqoy0vAXT2UYfeYQWPk=;
- b=LUxxHDZSpG+JL4J9nTS4MpJ+r1bQWOsWdMRwWaPZlEEDSbbd1vE3LDEYjOwdzQ16Y/Oe
- aNgcFzCXv/S/6J5SBoadihwliKf/dw87T3AbI18Rscr3llTAg6b3MoRVlLYeIHdkq4bk
- L4kH3tuzab0oULvXp32xBZrhA015e9CypgyjTWRW6dVL7uCTm7grYq9Tuynlj3JKOf++
- z8MyRp1iajzcmg1s/4V69BQIqOHnOvWdRqz7v7+otI7Qi0iqklFZmZ1WAomB2ldweANQ
- VumT94BWWvxDTWz2v6muoY0E04wUE7FTZPJ1B/cL67/PfJV+uNdNLojtoEEvPV/PPhcO Fg== 
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rfypxg6ky-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Jun 2023 12:28:08 +0000
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35RAmZeF025152;
-        Tue, 27 Jun 2023 12:28:07 GMT
-Received: from smtprelay06.dal12v.mail.ibm.com ([9.208.130.100])
-        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3rdr45rgs3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Jun 2023 12:28:07 +0000
-Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
-        by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35RCS7ov42467824
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 27 Jun 2023 12:28:07 GMT
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1864F58056;
-        Tue, 27 Jun 2023 12:28:07 +0000 (GMT)
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CE6ED58052;
-        Tue, 27 Jun 2023 12:28:06 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.149.212])
-        by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 27 Jun 2023 12:28:06 +0000 (GMT)
-Message-ID: <bdea3a9112c28fd6c2c158a14b632f89dba53ac6.camel@linux.ibm.com>
-Subject: [GIT PULL] integrity: susbystem updates for v6.5
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Tue, 27 Jun 2023 08:28:06 -0400
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: YWHezjY4nM-U9l3gxhxld4C764K5tpps
-X-Proofpoint-GUID: YWHezjY4nM-U9l3gxhxld4C764K5tpps
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Tue, 27 Jun 2023 08:28:27 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 545D72706;
+        Tue, 27 Jun 2023 05:28:24 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-98e39784a85so464370566b.1;
+        Tue, 27 Jun 2023 05:28:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687868902; x=1690460902;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tATW33xeNVNgsfO7kNHXzZcJ0gMJZAgbl6N8NUDs/RE=;
+        b=nTgRcX6rj9m25biFDQ+GiAvKhgT0s6sBGS6wrujE1mq8fwQT6kRc2XDapu/rPo8fL8
+         TOxxqyYuW83myTjNO2zsFHsxnECDbWMByunXlwhcMgJ9OWBYvSjR/cR+spB2ID7evDH1
+         OLEXKUcNvl3nZanq1vBw4Dw032wAvP8JN0Mr/KQd6Xp/uDnD8rN9ALfDHFKZVkS+0qQQ
+         jhw9/ZSEcTDcsYy2cuplY3aXpxsr0PCAIo5d/c+XC+z5mViBhOmNOWtX5FsseQrN0mcT
+         mArBBcgKnUNZEatu5TFYez+CL5SvlNlpE1JaDwwhaqb/+KaT30faRv1G8OU5CMqcoebv
+         aOgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687868902; x=1690460902;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tATW33xeNVNgsfO7kNHXzZcJ0gMJZAgbl6N8NUDs/RE=;
+        b=Nlft5zqcHq8OM9afHRv3pDTltvAa546WZt46MN7EkqDXEkJ6SGetleOQGNJz185de9
+         sb91EH4tJSBzoZHlFio55q+h/mrE56Hx2SgShf7FDrsXDsGG85RzUN2yK9q/pBWjXpZz
+         6LO2CrwRFiIyMYiu+Q6OfJbEycxSKIDdmlL2GFicfZd11fKrquFoU0BPyLHaYZX0ZYR3
+         5JuJ/X/0Rrnuyc7orMJa98Bj3h57iP53v7tajVcfPVykfLg9J0sXOJwnrjGJUQjTAALE
+         8DFD463U1rK9R0soWuhZPzeRKJDa8jieDSljQQyTWfs5KG8igCh2iKYCwREWg6Qq/dW3
+         pz8Q==
+X-Gm-Message-State: AC+VfDy90bczbj7NrAFo8mFJkgt+YMtSOVahwgx1SlcGxkhJA7aDNxeO
+        OuEK5XF5A5WjED/G/x1/tD3UBlKlucpoR2Qtd+Q=
+X-Google-Smtp-Source: ACHHUZ5ApV7cvX4Q3CRArtLi2hrH4sXtiyypn8GcRYX+zEVHohR2QS2IdF+C/5GXLK6stLqSbf/y7TRXavlF2dEF0ug=
+X-Received: by 2002:a17:907:7ba5:b0:982:4b35:c0b6 with SMTP id
+ ne37-20020a1709077ba500b009824b35c0b6mr31461984ejc.1.1687868902416; Tue, 27
+ Jun 2023 05:28:22 -0700 (PDT)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-27_08,2023-06-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- impostorscore=0 bulkscore=0 adultscore=0 clxscore=1011 phishscore=0
- spamscore=0 priorityscore=1501 mlxscore=0 mlxlogscore=964 malwarescore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306270111
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230627081002.1768990-1-yqsun1997@gmail.com> <20230627104237.GA3601890@gnbcxd0016.gnb.st.com>
+In-Reply-To: <20230627104237.GA3601890@gnbcxd0016.gnb.st.com>
+From:   sun yq <yqsun1997@gmail.com>
+Date:   Tue, 27 Jun 2023 20:28:11 +0800
+Message-ID: <CAA0BgY_bKg4qXmtmWqHQW+EOvfXUG0FqRtAJ7A8C40uL1v8qVA@mail.gmail.com>
+Subject: Re: [PATCH] OOB read and write in mtk multiple places
+To:     yqsun1997@gmail.com, tiffany.lin@mediatek.com,
+        andrew-ct.chen@mediatek.com, yunfei.dong@mediatek.com,
+        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, 499671216@qq.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+When using V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE, the number of planes is
+controlled by the user. Only checking the oob at the function may miss
+other functions, so it is appropriate to change the size of the macro.
+You can refer to other functions, such as
+mtk_dip_vb2_video_queue_setup, the max plane size of this module is 8
 
-Contains an i_version change, one bug fix, and three kernel doc fixes:
 
-- Instead of IMA detecting file change by directly accesssing
-i_version, it now calls vfs_getattr_nosec().
-
-- The bug fix addresses a race condition when inserting a new node in
-the iint rb-tree.
-
-thanks,
-
-Mimi
-
-The following changes since commit f1fcbaa18b28dec10281551dfe6ed3a3ed80e3d6:
-
-  Linux 6.4-rc2 (2023-05-14 12:51:40 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git tags/integrity-v6.5
-
-for you to fetch changes up to 95526d13038c2bbddd567a4d8e39fac42484e182:
-
-  ima: Fix build warnings (2023-06-06 09:37:23 -0400)
-
-----------------------------------------------------------------
-integrity-v6.5
-
-----------------------------------------------------------------
-Jeff Layton (1):
-      IMA: use vfs_getattr_nosec to get the i_version
-
-Roberto Sassu (3):
-      evm: Complete description of evm_inode_setattr()
-      evm: Fix build warnings
-      ima: Fix build warnings
-
-Tianjia Zhang (1):
-      integrity: Fix possible multiple allocation in integrity_inode_get()
-
- security/integrity/evm/evm_crypto.c |  2 +-
- security/integrity/evm/evm_main.c   |  4 +++-
- security/integrity/iint.c           | 15 +++++++++------
- security/integrity/ima/ima_api.c    |  9 ++++++---
- security/integrity/ima/ima_main.c   | 12 ++++++++----
- security/integrity/ima/ima_modsig.c |  3 +++
- security/integrity/ima/ima_policy.c |  3 ++-
- 7 files changed, 32 insertions(+), 16 deletions(-)
-
+On Tue, Jun 27, 2023 at 6:42=E2=80=AFPM Alain Volmat <alain.volmat@foss.st.=
+com> wrote:
+>
+> Hi,
+>
+> I had a look at some places where this macro MTK_VCODEC_MAX_PLANES
+> is being used, such as q_data->bytesperline etc.
+> This patch seems to be increasing the table size from 3 to 8 but,
+> if my understanding is correct doesn't solve the issue that
+> (taking the example you give in vidioc_venc_g_fmt) the table
+> bytesperline is accessed taking into account a num_planes values which
+> is unchecked if appropriate for this driver.
+>
+> What are the 8 planes you are referring to ?
+>
+> While increasing the table to 8 might also be necessary, it seems to me
+> that the real OOB access issue should be solved by checking the num of
+> planes value.
+>
+> Regards,
+> Alain
+>
+> On Tue, Jun 27, 2023 at 04:10:02PM +0800, yqsun1997@gmail.com wrote:
+> > From: yqsun1997 <yqsun1997@gmail.com>
+> >
+> > The num_planes max index is 8,
+> > but bytesperline and bytesperline in struct mtk_q_data,
+> > The max index is MTK_VCODEC_MAX_PLANES =3D=3D 3,
+> > so will cause OOB read and write in multiple places.like vidioc_venc_g_=
+fmt
+> > same as commit 8fbcf730
+> >
+> > Signed-off-by: yqsun1997 <yqsun1997@gmail.com>
+> > ---
+> >  drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h b/=
+drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
+> > index 9acab54fd..c2c157675 100644
+> > --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
+> > +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
+> > @@ -22,7 +22,7 @@
+> >  #define MTK_VCODEC_DEC_NAME  "mtk-vcodec-dec"
+> >  #define MTK_VCODEC_ENC_NAME  "mtk-vcodec-enc"
+> >
+> > -#define MTK_VCODEC_MAX_PLANES        3
+> > +#define MTK_VCODEC_MAX_PLANES        8
+> >  #define MTK_V4L2_BENCHMARK   0
+> >  #define WAIT_INTR_TIMEOUT_MS 1000
+> >  #define IS_VDEC_LAT_ARCH(hw_arch) ((hw_arch) >=3D MTK_VDEC_LAT_SINGLE_=
+CORE)
+> > --
+> > 2.39.2
+> >
