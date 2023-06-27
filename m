@@ -2,88 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DE8773F845
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 11:08:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D757273F849
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 11:08:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232043AbjF0JIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 05:08:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59910 "EHLO
+        id S230029AbjF0JIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 05:08:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232046AbjF0JHi (ORCPT
+        with ESMTP id S230344AbjF0JIc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 05:07:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBEFF99;
-        Tue, 27 Jun 2023 02:07:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F7E86108C;
-        Tue, 27 Jun 2023 09:07:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 087EEC433C8;
-        Tue, 27 Jun 2023 09:07:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687856855;
-        bh=TjvnIUutoha4FVKthOxFxk086EeAI1ezUBKjYwysZoo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=AplOOHE1phsv72enJdweaK2cufs9vTT5p4XmJvTMx26ObcBWxbTpca6FNhJFe/KV/
-         EEPlrCnR1o0kL8oI5JBbTS8d1Vxu0epX0nxaiIzJQ27BSOlX6TGVLbSGjuRAeUbLMV
-         nsHAWlfsiXqzB6dl27IZEqDwfomcLh9tKSr8TxD4e5d+DqrJOanhB2zYiIBADBJEcd
-         DOwWojLp3PizZ+bhpQP09tbglrQXTGghIca1sC6blgvR5tOZsw69S9OApcZi+8wxm5
-         Y8LDPhKxHIclXxvqrtU7rtlShrWJon4CZPaz5lGPPYySIWGvgNlReegwYOK89YI7oZ
-         uDbHcIqIS8aIg==
-Message-ID: <e1c53cd8-9875-08dc-5662-58f868c40628@kernel.org>
-Date:   Tue, 27 Jun 2023 11:07:22 +0200
+        Tue, 27 Jun 2023 05:08:32 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CDF92136
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 02:08:21 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2b6a0d91e80so30362571fa.3
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 02:08:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google; t=1687856900; x=1690448900;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=stjT86fYKuiXvBaSB2WoO7+BJHVe758I2dhXd0cbDAY=;
+        b=aCwv8XyJHIxBZ7JHg3Ta+tupjTY51coWUiGxvF+8zG4tycNrHZantd4GIiR/WcS3Qb
+         CbVZRuCHlNjtORe1Kk4FgR5sMDgXXcHf9jz8shD6qo0bxGca2LYRGxplBVD5K8bGo/UG
+         MWYAKhrWrXAszGh6QPpdw2hWo1YabMiri8ThqUHJMpBmip9CwF/iJUgqseSds5wf/m5R
+         WdEOcTV3RNfMiVoT6Cqdo43CeTkP0QtPOA8q7nopsKwCm14ZSXD7XhFltpX+IcJ8DLVP
+         Mb69xZL0ioOz+85DYEhWp/CwBnx9rjLqMl2EIAko1P/+XrJaouvShtYnQvB+mevwTHVq
+         w/Zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687856900; x=1690448900;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=stjT86fYKuiXvBaSB2WoO7+BJHVe758I2dhXd0cbDAY=;
+        b=IHrYUTpR+ZuVnm8Tk5nyKJsRNJ1Nis0dGy1qs7qqW5WiLmqItKxj20JcPsEmV8C+LJ
+         CC9ChpsjA+9S44dG7qANskyVliUgWnZxl0SA9NJM67MOhx/vKO8ha+HbEDcm5OEHwVd9
+         gxCr524zV6U8mqv+aMeKhTXVOh/i33l050GIvyTnhxFUDRmO1litQmqMgzef6gWqwsB2
+         ZagRaMh5tanSkwg092YceKEJUkwNg//89CVknI18zT9ontRBXnP7IFt0dr89Mukza+xk
+         L9u9Aosa8n2Bh4EcjTNMU1AxxhhayR2KHw8y1pjVunfIecLjuHMxfrV3ZThWSc2opT/u
+         DgOg==
+X-Gm-Message-State: AC+VfDzWcZhaaAlt03GA4TMMCWT4W7e3D2twuI257xTu0AzkNaSWkLs2
+        aIyIMSLNXhLUyJ5eM8HjudpEmD2XmVVLIBH3efCJQw==
+X-Google-Smtp-Source: ACHHUZ5BN9eKyi0r0qJ9h2elSHMi5KeDf7a+rpIa0hLeV58ADMjKts8uASQ2aziaU/7hkENIVNUMhtca7rKAg++nyAg=
+X-Received: by 2002:a2e:6e16:0:b0:2b5:950a:711c with SMTP id
+ j22-20020a2e6e16000000b002b5950a711cmr8404984ljc.10.1687856899530; Tue, 27
+ Jun 2023 02:08:19 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 03/15] dt-bindings: clock: qcom,dispcc-sm6125: Require GCC
- PLL0 DIV clock
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        Lux Aliaga <they@mint.lgbt>
-References: <52c57cab-10cf-2e7e-2c1d-fa6506786d45@linaro.org>
- <jmtjuya4c423rmdlo4ubvvqndbxvgapal5otjqnejdpdd25izp@kewbjmqdu2xs>
- <6311f26f-79ee-c471-649f-5e0b4629cfcc@linaro.org>
- <uuy5prkjhhs66te7h6z3pu4lzj2cfbiqk6ftjijwoeqpw573av@ogs6cboanvzc>
- <ziykmixskqkgheigefvyo4q3katbc4uix6jtcg7mncs25z4tj5@5gykrfgns4bm>
- <16731023-7dc7-d43d-1b16-fda44c0948ed@linaro.org>
- <yofju7jp7vmv33x7dzvzoelpumfsz3fjqy2ozakfphsuysunon@pglt2wzlsjex>
- <683a6f7e-bf1a-aff2-070b-472fb14e0353@linaro.org>
- <3nnk4xvmpnum2q6g6c6crjlqq3ra7j2z5zis53xcqbvevymuhz@mkffvs45n6ut>
- <145ab255-b3f8-1c6c-824d-5f1b40568d30@linaro.org>
- <makhh4ebdmoa5f6r4mbx4g2v2cpcsi74wqf3622dxuli4w7tb6@els2rvqcnvgz>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <makhh4ebdmoa5f6r4mbx4g2v2cpcsi74wqf3622dxuli4w7tb6@els2rvqcnvgz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20230602094841.1225-1-eric.lin@sifive.com> <CAPqJEFpamQSbCcD0QJ16u7ctRf1=NYihod6gdZJfxFpE0YUVHQ@mail.gmail.com>
+ <CABPqkBRyqsMnNbokBKepkWq1DtzfB0npXySGbKS1T3nQTwmaAw@mail.gmail.com> <20230621115811.GD2053369@hirez.programming.kicks-ass.net>
+In-Reply-To: <20230621115811.GD2053369@hirez.programming.kicks-ass.net>
+From:   Eric Lin <eric.lin@sifive.com>
+Date:   Tue, 27 Jun 2023 17:08:07 +0800
+Message-ID: <CAPqJEFpV8a8D7eA0sspjvThvBxdZhSLPTEbEzN7WiGCAzSnYYg@mail.gmail.com>
+Subject: Re: [PATCH] perf/core: Add pmu stop before unthrottling to prevent WARNING
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Stephane Eranian <eranian@google.com>
+Cc:     mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, irogers@google.com, adrian.hunter@intel.com,
+        palmer@dabbelt.com, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        greentime.hu@sifive.com, vincent.chen@sifive.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,39 +75,221 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/06/2023 11:02, Marijn Suijten wrote:
->>>>> So deleting a new item at the end does not matter.  But what if I respin
->>>>> this patch to add the new clock _at the end_, which will then be at the
->>>>> same index as the previous GCC_DISP_AHB_CLK?
->>>>
->>>> I think you know the answer, right? What do you want to prove? That two
->>>> independent changes can have together negative effect? We know this.
->>>
->>> The question is whether this is allowed?
->>
->> That would be an ABI break and I already explained if it is or is not
->> allowed.
-> 
-> How should we solve it then, if we cannot remove GCC_DISP_AHB_CLK in one
-> patch and add GCC_DISP_GPLL0_DIV_CLK_SRC **at the end** in the next
-> patch?  Keep an empty spot at the original index of GCC_DISP_AHB_CLK?
+On Wed, Jun 21, 2023 at 01:58:11PM +0200, Peter Zijlstra wrote:
+> On Tue, Jun 20, 2023 at 11:18:05PM -0700, Stephane Eranian wrote:
+> > On Tue, Jun 20, 2023 at 9:25=E2=80=AFPM Eric Lin <eric.lin@sifive.com> =
+wrote:
+> > >
+> > > CC: Stephane Eranian
+> > >
+> > > On Fri, Jun 2, 2023 at 5:49=E2=80=AFPM Eric Lin <eric.lin@sifive.com>=
+ wrote:
+> > > >
+> > > > Currently, during the perf sampling, if the perf interrupt takes to=
+o long,
+> > > > perf framework will lower the perf_event_max_sample_rate. This will=
+ limit
+> > > > the number of samples per timer tick (max_samples_per_tick) and set=
+ hwc->interrupts
+> > > > to MAX_INTERRUPTS within the __perf_event_account_interrupt() funct=
+ion.
+> > > >
+> > > > Afterward, the perf framework will unthrottle the event in the time=
+r interrupt
+> > > > handler, which triggers the driver's *_pmu_start() function. Most o=
+f the driver's
+> > > > *_pmu_start() functions will check the event->hw.state to determine=
+ whether this
+> > > > event has stopped. If the event has not stopped, a WARN_ON_ONCE() w=
+arning
+> > > > will be triggered as shown below:
+> > > >
+> > > > [ 2110.224723] ------------[ cut here ]------------
+> > > > [ 2110.224851] WARNING: CPU: 0 PID: 240 at drivers/perf/riscv_pmu.c=
+:184 riscv_pmu_start+0x7c/0x8e
+> > > > [ 2110.225242] Modules linked in:
+> > > > [ 2110.225380] CPU: 0 PID: 240 Comm: ls Not tainted 6.4-rc4-g19d078=
+8e9ef2 #1
+> > > > [ 2110.225574] Hardware name: SiFive (DT)
+> > > > [ 2110.225657] epc : riscv_pmu_start+0x7c/0x8e
+> > > > [ 2110.225834]  ra : riscv_pmu_start+0x28/0x8e
+> > > > [ 2110.225998] epc : ffffffff80aef864 ra : ffffffff80aef810 sp : ff=
+ff8f80004db6f0
+> > > > [ 2110.226135]  gp : ffffffff81c83750 tp : ffffaf80069f9bc0 t0 : ff=
+ff8f80004db6c0
+> > > > [ 2110.226245]  t1 : 0000000000000000 t2 : 000000000000001f s0 : ff=
+ff8f80004db720
+> > > > [ 2110.226367]  s1 : ffffaf8008ca1068 a0 : 0000ffffffffffff a1 : 00=
+00000000000000
+> > > > [ 2110.226488]  a2 : 0000000000000001 a3 : 0000000000000870 a4 : 00=
+00000000000000
+> > > > [ 2110.226605]  a5 : 0000000000000000 a6 : 0000000000000840 a7 : 00=
+00000000000030
+> > > > [ 2110.226721]  s2 : 0000000000000000 s3 : ffffaf8005165800 s4 : ff=
+ffaf800424da00
+> > > > [ 2110.226838]  s5 : ffffffffffffffff s6 : ffffffff81cc7590 s7 : 00=
+00000000000000
+> > > > [ 2110.226955]  s8 : 0000000000000006 s9 : 0000000000000001 s10: ff=
+ffaf807efbc340
+> > > > [ 2110.227064]  s11: ffffaf807efbbf00 t3 : ffffaf8006a16028 t4 : 00=
+000000dbfbb796
+> > > > [ 2110.227180]  t5 : 0000000700000000 t6 : ffffaf8005269870
+> > > > [ 2110.227277] status: 0000000200000100 badaddr: 0000000000000000 c=
+ause: 0000000000000003
+> > > > [ 2110.227407] [<ffffffff80aef864>] riscv_pmu_start+0x7c/0x8e
+> > > > [ 2110.227622] [<ffffffff80185b56>] perf_adjust_freq_unthr_context+=
+0x15e/0x174
+> > > > [ 2110.227961] [<ffffffff80188642>] perf_event_task_tick+0x88/0x9c
+> > > > [ 2110.228235] [<ffffffff800626a8>] scheduler_tick+0xfe/0x27c
+> > > > [ 2110.228463] [<ffffffff800b5640>] update_process_times+0x9a/0xba
+> > > > [ 2110.228690] [<ffffffff800c5bd4>] tick_sched_handle+0x32/0x66
+> > > > [ 2110.229007] [<ffffffff800c5e0c>] tick_sched_timer+0x64/0xb0
+> > > > [ 2110.229253] [<ffffffff800b5e50>] __hrtimer_run_queues+0x156/0x2f=
+4
+> > > > [ 2110.229446] [<ffffffff800b6bdc>] hrtimer_interrupt+0xe2/0x1fe
+> > > > [ 2110.229637] [<ffffffff80acc9e8>] riscv_timer_interrupt+0x38/0x42
+> > > > [ 2110.229984] [<ffffffff80090a16>] handle_percpu_devid_irq+0x90/0x=
+1d2
+> > > > [ 2110.230162] [<ffffffff8008a9f4>] generic_handle_domain_irq+0x28/=
+0x36
+> > > >
+> > > > To prevent this warning, we should call the driver's *_pmu_stop() f=
+unction before unthrottling
+> > > >
+> > > > Signed-off-by: Eric Lin <eric.lin@sifive.com>
+> > > > ---
+> > > >  kernel/events/core.c | 1 +
+> > > >  1 file changed, 1 insertion(+)
+> > > >
+> > > > diff --git a/kernel/events/core.c b/kernel/events/core.c
+> > > > index db016e418931..098c875abe88 100644
+> > > > --- a/kernel/events/core.c
+> > > > +++ b/kernel/events/core.c
+> > > > @@ -4128,6 +4128,7 @@ perf_adjust_freq_unthr_context(struct perf_ev=
+ent_context *ctx, bool unthrottle)
+> > > >
+> > > >                 if (hwc->interrupts =3D=3D MAX_INTERRUPTS) {
+> > > >                         hwc->interrupts =3D 0;
+> > > > +                       event->pmu->stop(event, 0);
+> >
+> > But how could the event have been stopped with a call to pmu->stop()
+> > during throttling?
+>
+> Yeah, Changelog fails to explain how we got to the faulty state -- and
+> without that we can't judge if the proposed solution actually fixes the
+> problem or not.
+>
 
-I don't know if you are trolling me or really asking question, so just
-in case it is the latter:
+Hi Stephane, Peter,
 
-"No one is locked into the ABI. SoC maintainer decides on this. "
+Most of the pmu driver will call *_pmu_stop(event,0) in the
+*_pmu_handle_irq() function and update the hwc->state with
+PERF_HES_STOPPED flag as below:
 
-Also:
-https://lore.kernel.org/linux-arm-msm/20230608152759.GA2721945-robh@kernel.org/
+arch/alpha/kernel/perf_event.c:856:             if
+(perf_event_overflow(event, &data, regs)) {
+arch/alpha/kernel/perf_event.c-857-                     /* Interrupts
+coming too quickly; "throttle" the
+arch/alpha/kernel/perf_event.c-858-                      * counter,
+i.e., disable it for a little while.
+arch/alpha/kernel/perf_event.c-859-                      */
+arch/alpha/kernel/perf_event.c-860-
+alpha_pmu_stop(event, 0);
+arch/alpha/kernel/perf_event.c-861-             }
+-----
+arch/arc/kernel/perf_event.c:603:                       if
+(perf_event_overflow(event, &data, regs))
+arch/arc/kernel/perf_event.c-604-
+arc_pmu_stop(event, 0);
+arch/arc/kernel/perf_event.c-605-               }
+-----
+arch/x86/events/amd/core.c:935:         if (perf_event_overflow(event,
+&data, regs))
+arch/x86/events/amd/core.c-936-                 x86_pmu_stop(event, 0);
+arch/x86/events/amd/core.c-937- }
+-----
 
-https://lore.kernel.org/linux-arm-msm/CAL_JsqKOq+PdjUPVYqdC7QcjGxp-KbAG_O9e+zrfY7k-wRr1QQ@mail.gmail.com/
+However, some of the pmu drivers stop the event in the
+*_pmu_handle_irq() without updating the hwc->state with
+PERF_HES_STOPPED flag as below:
 
-https://lore.kernel.org/linux-arm-msm/20220602143245.GA2256965-robh@kernel.org/
+arch/arm/kernel/perf_event_v7.c:994:            if
+(perf_event_overflow(event, &data, regs))
+arch/arm/kernel/perf_event_v7.c-995-
+cpu_pmu->disable(event); // <=3D=3D not update with PERF_HES_STOPPED
+arch/arm/kernel/perf_event_v7.c-996-    }
+------
+arch/csky/kernel/perf_event.c:1142:             if
+(perf_event_overflow(event, &data, regs))
+arch/csky/kernel/perf_event.c-1143-
+csky_pmu_stop_event(event); // <=3D=3D not update with PERF_HES_STOPPED
+arch/csky/kernel/perf_event.c-1144-     }
+-------
+arch/loongarch/kernel/perf_event.c:492: if (perf_event_overflow(event,
+data, regs))
+arch/loongarch/kernel/perf_event.c-493-
+loongarch_pmu_disable_event(idx);    // <=3D=3D not update with
+PERF_HES_STOPPED
+arch/loongarch/kernel/perf_event.c-494-}
+-------
+arch/mips/kernel/perf_event_mipsxx.c:794:       if
+(perf_event_overflow(event, data, regs))
+arch/mips/kernel/perf_event_mipsxx.c-795-
+mipsxx_pmu_disable_event(idx); // <=3D=3D not update with PERF_HES_STOPPED
+arch/mips/kernel/perf_event_mipsxx.c-796-}
+....
 
-https://lore.kernel.org/linux-arm-msm/20220601202452.GA365963-robh@kernel.org/
+Furthermore, these drivers did not add event->hw.state checking in
+*_pmu_start() before starting the event like x86 does:
 
-Any many more.
+1497 static void x86_pmu_start(struct perf_event *event, int flags)
+1498 {
+1499     struct cpu_hw_events *cpuc =3D this_cpu_ptr(&cpu_hw_events);
+1500     int idx =3D event->hw.idx;
+1501
+1502     if (WARN_ON_ONCE(!(event->hw.state & PERF_HES_STOPPED)))
+1503         return;
+1504
 
-Best regards,
-Krzysztof
+As a result, these drivers won't trigger the WARN_ON_ONCE warning as
+shown in this patch.
 
+However, if a pmu driver like RISC-V pmu which didn't call
+*_pmu_stop(event,0) without updating the hwc->state with
+PERF_HES_STOPPED flag in the *_pmu_handle_irq() function
+but has event->hw.state checking in *_pmu_start(), it could trigger
+the WARN_ON_ONCE warning as shown in this patch.
+
+Therefore, I think we need to call pmu->stop() before unthrottling the
+event to prevent this warning.
+
+Or maybe we can add hwc->state checking before we call pmu->stop() as below=
+:
+
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -4128,7 +4128,8 @@ perf_adjust_freq_unthr_context(struct
+perf_event_context *ctx, bool unthrottle)
+
+                if (hwc->interrupts =3D=3D MAX_INTERRUPTS) {
+                        hwc->interrupts =3D 0;
+-                       event->pmu->stop(event, 0);
++                       if (!(hwc->state & PERF_HES_STOPPED))
++                               event->pmu->stop(event, 0);
+                        perf_log_throttle(event, 1);
+                        event->pmu->start(event, 0);
+                }
+
+Thanks.
+
+Best Regards,
+Eric Lin.
+
+
+> > >
+> > > >                         perf_log_throttle(event, 1);
+> > > >                         event->pmu->start(event, 0);
+> > > >                 }
+> > > > --
+> > > > 2.17.1
+> > > >
