@@ -2,70 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B44173FF3F
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 17:05:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD8C673FF4D
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 17:08:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230326AbjF0PF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 11:05:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34106 "EHLO
+        id S231376AbjF0PIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 11:08:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229888AbjF0PFX (ORCPT
+        with ESMTP id S229680AbjF0PIm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 11:05:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD94010C;
-        Tue, 27 Jun 2023 08:05:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6AB77611D0;
-        Tue, 27 Jun 2023 15:05:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C43D5C433C0;
-        Tue, 27 Jun 2023 15:05:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687878321;
-        bh=Igz0+zgGNJxPGQdFDxdiXQoZkx8c/w5HnwZQxadYHqo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sY5xqp8KFH5K2TytOrPvOSlVZUDMVlxctCX4GF6T64MVLMsOd5DqbrxsxdQaTRwnl
-         jyHY1brJ5qHPBMiPykAtJ4pW+Pflt02M35IaTR5OhHa7F4lWVEVTthnb0L1A7BpBHJ
-         +Za71JzLRBawLG65EUWaW6Fq501xbbsxSWTD9H4H+/APsrMA6TbC5JqaGZc4gRhFhc
-         +PB4vjjeNlthwBVGUtrd+LRMoYqiA72vbI0XCWvPCfcoRtwlGRkTcg0yGjNQ8QfVve
-         zfJdYOdhp6NLKsQ3O0GWCFFABlXQ1Ej2Vwvk6zyKzfgz673YDnpQRrwNtNKru1icXm
-         P7tTmsZAUB/JA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1qEAFr-0003xi-H7; Tue, 27 Jun 2023 17:05:19 +0200
-Date:   Tue, 27 Jun 2023 17:05:19 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Krishna Kurapati <quic_kriskura@quicinc.com>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com,
-        quic_jackp@quicinc.com, quic_harshq@quicinc.com,
-        ahalaney@redhat.com, quic_shazhuss@quicinc.com
-Subject: Re: [PATCH v9 07/10] usb: dwc3: qcom: Add multiport suspend/resume
- support for wrapper
-Message-ID: <ZJr6r-cdDCFDc89R@hovoldconsulting.com>
-References: <20230621043628.21485-1-quic_kriskura@quicinc.com>
- <20230621043628.21485-8-quic_kriskura@quicinc.com>
+        Tue, 27 Jun 2023 11:08:42 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DF4C10CC;
+        Tue, 27 Jun 2023 08:08:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687878521; x=1719414521;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=IA11Aco+T/x16l6i98pdxr6nAnpI3sTZ+UOpKHDDBJQ=;
+  b=R8MofxyQ5xqpl+kpl6KBCo1UcWyJWH1iT5VP8FG3gPeXJFDIFo2PxV9e
+   a3gAR+1eI3nbXUe8LWhYlvmP/YbDtoRX7supqro3fWKC+0tLvX6kILeVk
+   jSBUHmKWZySu50lcVaZaqYAXa6jswOhJUTWbbubi6eKd/QkjHsjcloZQ1
+   P+EoFO1wKur/lSOxhYK2Eoztk3m1Y6x4O6tKHahbqvygvKpSlkQpFE3Ko
+   X2PIDablPmQCJGOTMH00Q/js82Io6ycdbtNhwVyW9xLh+TRt8e4Anpfey
+   Vo8q8605nqn7SXSX4Pixu8GLE6LWMpzZwkFs2nTJWxUjjvfakxBLOO5mC
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="364144632"
+X-IronPort-AV: E=Sophos;i="6.01,162,1684825200"; 
+   d="scan'208";a="364144632"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 08:06:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="840717944"
+X-IronPort-AV: E=Sophos;i="6.01,162,1684825200"; 
+   d="scan'208";a="840717944"
+Received: from btalbott-mobl.amr.corp.intel.com (HELO [10.212.238.85]) ([10.212.238.85])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 08:06:12 -0700
+Message-ID: <487cc70c-9cb1-2b00-acb3-a1410c8be7c0@intel.com>
+Date:   Tue, 27 Jun 2023 08:06:12 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230621043628.21485-8-quic_kriskura@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 21/24] x86/sgx: use vmalloc_array and vcalloc
+Content-Language: en-US
+To:     Julia Lawall <julia.lawall@inria.fr>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        kernel-janitors@vger.kernel.org, keescook@chromium.org,
+        christophe.jaillet@wanadoo.fr, kuba@kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        linux-sgx@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230627144339.144478-1-Julia.Lawall@inria.fr>
+ <20230627144339.144478-22-Julia.Lawall@inria.fr>
+ <004bc553-4dca-070b-c203-adcb50d4112d@intel.com>
+ <896979d6-7365-e75-52fe-ad929e3e8620@inria.fr>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <896979d6-7365-e75-52fe-ad929e3e8620@inria.fr>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,150 +74,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 10:06:25AM +0530, Krishna Kurapati wrote:
-> QCOM SoC SA8295P's tertiary quad port controller supports 2 HS+SS
-> ports and 2 HS only ports. Add support for configuring PWR_EVENT_IRQ's
-> for all the ports during suspend/resume.
+On 6/27/23 08:01, Julia Lawall wrote:
+> If it is certain that no overflow is possible, then perhaps it is fine to
+> drop the patch? 
 
-Please be more specific here. You don't seem to be configuring anything.
+It's impossible in practice in this case because the code is 64-bit only
+and uses an 'unsigned long'.  But, like I said, I can see that same
+vmalloc() being copied-and-pasted or moved to a 32-bit system and
+theoretically causing problems in rare scenarios.
 
-> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> ---
->  drivers/usb/dwc3/dwc3-qcom.c | 48 +++++++++++++++++++++++++++++++-----
->  1 file changed, 42 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> index 3ab48a6925fe..699485a85233 100644
-> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> @@ -37,7 +37,11 @@
->  #define PIPE3_PHYSTATUS_SW			BIT(3)
->  #define PIPE_UTMI_CLK_DIS			BIT(8)
->  
-> -#define PWR_EVNT_IRQ_STAT_REG			0x58
-> +#define PWR_EVNT_IRQ1_STAT_REG			0x58
-> +#define PWR_EVNT_IRQ2_STAT_REG			0x1dc
-> +#define PWR_EVNT_IRQ3_STAT_REG			0x228
-> +#define PWR_EVNT_IRQ4_STAT_REG			0x238
-> +
->  #define PWR_EVNT_LPM_IN_L2_MASK			BIT(4)
->  #define PWR_EVNT_LPM_OUT_L2_MASK		BIT(5)
->  
-> @@ -93,6 +97,13 @@ struct dwc3_qcom {
->  	struct icc_path		*icc_path_apps;
->  };
->  
-> +static u32 pwr_evnt_irq_stat_reg_offset[4] = {
-> +	PWR_EVNT_IRQ1_STAT_REG,
-> +	PWR_EVNT_IRQ2_STAT_REG,
-> +	PWR_EVNT_IRQ3_STAT_REG,
-> +	PWR_EVNT_IRQ4_STAT_REG,
-> +};
-> +
->  static inline void dwc3_qcom_setbits(void __iomem *base, u32 offset, u32 val)
->  {
->  	u32 reg;
-> @@ -417,17 +428,37 @@ static void dwc3_qcom_enable_interrupts(struct dwc3_qcom *qcom)
->  	dwc3_qcom_enable_wakeup_irq(qcom->ss_phy_irq[0], 0);
->  }
->  
-> +static u8 dwc3_qcom_get_port_info(struct dwc3_qcom *qcom)
-
-"port_info" is not very specific, call it get_num_ports() or similar.
-
-> +{
-> +	struct dwc3 __maybe_unused *dwc = platform_get_drvdata(qcom->dwc3);
-
-__maybe unused makes no sense here.
-
-> +
-> +	if (dwc3_qcom_is_host(qcom))
-> +		return dwc->num_usb2_ports;
-
-Here you're accessing the core driver data again, which we want to
-avoid going forward so this at least warrants a FIXME to rework this as
-well.
-
-> +
-> +	/*
-> +	 * If not in host mode, either dwc was not probed
-> +	 * or we are in device mode, either case checking for
-> +	 * only first pwr event irq would suffice.
-
-Rewrap comment at 80 columns.
-
-> +	 */
-> +
-> +	return 1;
-> +}
-> +
->  static int dwc3_qcom_suspend(struct dwc3_qcom *qcom, bool wakeup)
->  {
->  	u32 val;
->  	int i, ret;
-> +	u8 num_ports;
-
-Move first.
-
->  	if (qcom->is_suspended)
->  		return 0;
->  
-> -	val = readl(qcom->qscratch_base + PWR_EVNT_IRQ_STAT_REG);
-> -	if (!(val & PWR_EVNT_LPM_IN_L2_MASK))
-> +	num_ports = dwc3_qcom_get_port_info(qcom);
-> +	for (i = 0; i < num_ports; i++) {
-> +		val = readl(qcom->qscratch_base + pwr_evnt_irq_stat_reg_offset[i]);
-> +		if (!(val & PWR_EVNT_LPM_IN_L2_MASK))
->  		dev_err(qcom->dev, "HS-PHY not in L2\n");
-
-This line is not indented properly.
-
-Make sure to run checkpatch before submitting so that I don't have to
-point out things like this again.
-
-> +	}
->  
->  	for (i = qcom->num_clocks - 1; i >= 0; i--)
->  		clk_disable_unprepare(qcom->clks[i]);
-> @@ -452,12 +483,14 @@ static int dwc3_qcom_suspend(struct dwc3_qcom *qcom, bool wakeup)
->  
->  static int dwc3_qcom_resume(struct dwc3_qcom *qcom, bool wakeup)
->  {
-> +	int num_ports;
->  	int ret;
->  	int i;
->  
->  	if (!qcom->is_suspended)
->  		return 0;
->  
-> +	num_ports = dwc3_qcom_get_port_info(qcom);
-
-Move below to where you use num_ports.
-
->  	if (dwc3_qcom_is_host(qcom) && wakeup)
->  		dwc3_qcom_disable_interrupts(qcom);
->  
-> @@ -474,9 +507,12 @@ static int dwc3_qcom_resume(struct dwc3_qcom *qcom, bool wakeup)
->  	if (ret)
->  		dev_warn(qcom->dev, "failed to enable interconnect: %d\n", ret);
->  
-> -	/* Clear existing events from PHY related to L2 in/out */
-
-No need to move the comment.
-
-> -	dwc3_qcom_setbits(qcom->qscratch_base, PWR_EVNT_IRQ_STAT_REG,
-> -			  PWR_EVNT_LPM_IN_L2_MASK | PWR_EVNT_LPM_OUT_L2_MASK);
-> +	for (i = 0; i < num_ports; i++) {
-> +		/* Clear existing events from PHY related to L2 in/out */
-> +		dwc3_qcom_setbits(qcom->qscratch_base,
-> +			pwr_evnt_irq_stat_reg_offset[i],
-> +			PWR_EVNT_LPM_IN_L2_MASK | PWR_EVNT_LPM_OUT_L2_MASK);
-
-Indent continuation lines at least two tabs further than the previous
-line.
-
-> +	}
->  
->  	qcom->is_suspended = false;
-
-Johan
+I'd probably just drop this patch.
