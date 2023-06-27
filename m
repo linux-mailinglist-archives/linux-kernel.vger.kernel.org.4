@@ -2,213 +2,436 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B465D73FA48
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 12:34:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 453A773FA4A
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 12:34:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230365AbjF0KeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 06:34:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48348 "EHLO
+        id S230436AbjF0Kec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 06:34:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229988AbjF0KeP (ORCPT
+        with ESMTP id S229988AbjF0Ke3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 06:34:15 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD51C9;
-        Tue, 27 Jun 2023 03:34:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687862054; x=1719398054;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=D8lGQeJHXd5lLlVYEIXFTBf7yk0REWRERwOvPoF8lf4=;
-  b=dMFn/Ym16yL7od8GCoB/O5YBcGicbzKkZUR4xmBbvbLbSeo3XR1qfLUf
-   WJAFZC9UEc8awLd78kpd7xCL8Z/g8Yqlv7U9FOVk7xBXqRFB5CjcYZdqv
-   qFqq5v2kGeuNgS2A/gSLpnjBM0tOozI7ewEolYWmkqKCCa9gmBQiBPFXs
-   GFQNVCox9ST2Hh1kGELbLisetG4sAU1yIMr1GhWudxyF3IF53zGRO38pG
-   2S92v1j0L4V+i6RV7ci51QGRJ2eeeQeESO5nr6Omig4p/SKwNF+9BFy+O
-   63eSfr/sprgwJxnJNBAIa28ouAOZGMj0gkk9AqpyESps5IkRqI9rcvMjh
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="341125419"
-X-IronPort-AV: E=Sophos;i="6.01,162,1684825200"; 
-   d="scan'208";a="341125419"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 03:34:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="963140714"
-X-IronPort-AV: E=Sophos;i="6.01,162,1684825200"; 
-   d="scan'208";a="963140714"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by fmsmga006.fm.intel.com with ESMTP; 27 Jun 2023 03:34:13 -0700
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Tue, 27 Jun 2023 03:34:13 -0700
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Tue, 27 Jun 2023 03:34:12 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27 via Frontend Transport; Tue, 27 Jun 2023 03:34:12 -0700
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.169)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Tue, 27 Jun 2023 03:34:12 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=g9bXGCpiMDTdGTAC+JSeFZljySxzGicBYCbgS1ih+negxLh26G+VWXLU9cbLDiWOfsz03C+IqACTmnZOMPkaWVP8sPOSrEo7iJ/xunjHcB/6TRrZTimWo9IXXaFNhWadU6o79JpdEiReDbrma+pjLqCOd1RpchsVftCThbCV4kUtk5FDeP1jHPngYfT0stI0RWg5KW7Y2HPZnIgr1GYz2IEaoXqZMW96O1sfOZNfIo0h9bs3399HN5aQre0qzpx8bqImWG4DihfOE5xxm/xpu7ORann/gTj70xGLfLHqtqOmAqF0Ni1htak3T1HeocHe58T0oDS66v920ePl3/X1Yg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=D8lGQeJHXd5lLlVYEIXFTBf7yk0REWRERwOvPoF8lf4=;
- b=DCvBhNyw2uxePXDaQDimLFAXaX2iiIARRQlFKGyPq7FkUp++PZGhlCF0Vxwg0+vvjoaizJgsMYNbzCpDoOEtxx4u7llmGNn97AncbyDRAPWai3Gkxatv6U1yzgq3pIG/iaZsjmftPxiA37/N2RPpKzWQzjZj1FlAXYW6IvMtknBmZ8JROa9hzzBjcvw/xLepgZWGAuZA2i8PhAbbmgnMv26oLDcnBUaATfR3Orq8ZV0rSBQnWY5y9T9I+SrpgqT2CGg47D8JcrvW/IVvJdFGiw2vxuGEV6LAQVPK+dxok2jVRNJG9oRYvGMKNutArqLQcZfOdrK5QVQoksrVWiPv+w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
- by PH0PR11MB4807.namprd11.prod.outlook.com (2603:10b6:510:3a::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24; Tue, 27 Jun
- 2023 10:34:04 +0000
-Received: from BL1PR11MB5978.namprd11.prod.outlook.com
- ([fe80::19b7:466f:32ac:b764]) by BL1PR11MB5978.namprd11.prod.outlook.com
- ([fe80::19b7:466f:32ac:b764%3]) with mapi id 15.20.6521.026; Tue, 27 Jun 2023
- 10:34:04 +0000
-From:   "Huang, Kai" <kai.huang@intel.com>
-To:     "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>
-CC:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "nik.borisov@suse.com" <nik.borisov@suse.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "imammedo@redhat.com" <imammedo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>, "Gao, Chao" <chao.gao@intel.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "Williams, Dan J" <dan.j.williams@intel.com>
-Subject: Re: [PATCH v12 07/22] x86/virt/tdx: Add skeleton to enable TDX on
- demand
-Thread-Topic: [PATCH v12 07/22] x86/virt/tdx: Add skeleton to enable TDX on
- demand
-Thread-Index: AQHZqDWtW8hO2PRC3kCMr0lha9GzWK+eaRwAgAAMPoA=
-Date:   Tue, 27 Jun 2023 10:34:04 +0000
-Message-ID: <d6a0fb32ebcdeb6c38ebe8e2b03f034f42360c0f.camel@intel.com>
-References: <cover.1687784645.git.kai.huang@intel.com>
-         <104d324cd68b12e14722ee5d85a660cccccd8892.1687784645.git.kai.huang@intel.com>
-         <20230627095012.ln47s62pqzdrnb7x@box.shutemov.name>
-In-Reply-To: <20230627095012.ln47s62pqzdrnb7x@box.shutemov.name>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.48.2 (3.48.2-1.fc38) 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BL1PR11MB5978:EE_|PH0PR11MB4807:EE_
-x-ms-office365-filtering-correlation-id: df2b907b-2091-4e38-7e8e-08db76fa07a9
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: PEvF0ik2iXyG+barpBoaZ7vzO0i8pH9n7Uxr9lpmYc7hB+AzsVeO+IS3GV/3bnANID+XtjguF4U6pLLf50slS54YjHdwd5Lp+kjh3CKVkeTfWQSdYG5CD6JPLhFnY61Le0HJHRxoRMMJJoFQA5szNx3DigXzJOF4VNEWK/7kcFT01JjbNMVEjYkufHi3WR35giY0opZlK3qo82DuO4MHd8qdNvHjcNeMZ/FzdnUILWlTepoLBP2fqVwGYNdXGO7SNbCqeS/7XzsqcdVlu99/cmjYjfGBZP1cQ1/nm9dzWmfORnNHTlZKbw04gIARFwiECQ/s5WV9gvsPpjPX/CcL1z14xJ6B/GlfV0NA9/wfCQQ952EtjqT0dWU4HwykiWfdCbLpe5Ur1fPqx2HxOg6O9msUczLXaXxRqFqVIXsS5pJUEqI8ZkARDkuHn98X+rBKaVGu9tQlPTkxBSagzJjYbQJeG2nzEdxWxa8dgLtEX6xJgXftn+D1guETcCMTXwFFR725q/I+1hH2Uar+vmA4MHIRH3A528iKQ6Jc5ba73nCYbxlSwxpJBvTB/7Y92fFKtS+npQBFLLOzVs+sJZqp2sVMIypnttoj42PbmULhPyQ=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(376002)(39860400002)(396003)(366004)(346002)(451199021)(83380400001)(316002)(966005)(8936002)(6486002)(71200400001)(8676002)(54906003)(4326008)(41300700001)(36756003)(122000001)(86362001)(82960400001)(38100700002)(64756008)(2616005)(7416002)(4744005)(5660300002)(66946007)(66556008)(66476007)(6512007)(66446008)(6916009)(2906002)(478600001)(186003)(91956017)(76116006)(26005)(38070700005)(6506007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?eGlnb3FVdGNCQk1SZU5kR0tRMnpXSFZtdmxRTUpyVGhUZ3hXb05ZN2MxY01k?=
- =?utf-8?B?OEJNN3poMWFsQWFUQms0K3MxUmYxUHNSSDQ0eFhzaHJJVFBPWFZiN2g3NUFm?=
- =?utf-8?B?d1UrUEdYZ2oweldPSVNsbmt3RGNZZVNCR2ZYaTZIb1B4dWs3VFRJVWhJckVJ?=
- =?utf-8?B?TllCd0piTWE2Y2FwczhWWU5tNGhySVRsSjFDTlFCd1ZuSUpKQzVkWmlWYnRx?=
- =?utf-8?B?QVN2THRhVTVYMjkrOVdHZlR1NVEydnNMclNFWTBYS09ZTGtTSEVHL3pIMEtx?=
- =?utf-8?B?OFJUMmY2VXpqbFd5MHB4NXRBOVpWTDBjKzZsQkNocFVDaGdZN25ncjNwOVBZ?=
- =?utf-8?B?enFVcjZJODFrdXZZdjZPYTA4cDNBazY2cmFPVnNkY2dUdHRoRmtOVlJZanZB?=
- =?utf-8?B?UG1iUWx0YmM4Z2g0WkwxeDRsZ1REUkNLU3ArSElZVEhTcU5YK2J3NzNzMGlM?=
- =?utf-8?B?VjFydUV3MW9SUWgxOXlyOFRwRnFYaHdIcXZleXRYL3lwNGNDNmNqSXlWaEZS?=
- =?utf-8?B?dmVtd0VROFgxTGhrdzNIY0RVRzQ2Vmg5NlhyaERFQ1g5OGNWNlIwclgveDhN?=
- =?utf-8?B?ODlleTB6ZzlnWS95am5QL1RQRTlZRE5Yd0YwdHlRWWtVazliNDJkQU1ONnBh?=
- =?utf-8?B?Zk9RR0xoenV3ajhKcHJZZlRHR0RscEFBakFrUE0vZ3dSeGxreUEvdVBGUFNq?=
- =?utf-8?B?YkpiYjZMczdJcldFdTFqdkJIaHFCdUl0U1N0bHFmYXlyYnF6MTBERGF6YjVk?=
- =?utf-8?B?aG94NmdrZmY5ZFIyNlJGZ1pWVG8yaTdWd0l0ZlhPL0FDU2QvbXZyYXlxYkl3?=
- =?utf-8?B?QllQdWhXM1pKN0lQV2c2YW91K2RRVVZjbkRQMG5rNzBUNXZpMjdpamhweGdC?=
- =?utf-8?B?VmQ1WTVaVTZvNFZIdVRZcGhDcXBZQnArY1lrMTZUWEpXNmlNNmVWZG5TUzY5?=
- =?utf-8?B?RGZGdHRtckx2NjdNTU5aRy96OUZaZzhNTTRzaFBobUR1bEdMR29XRndOYWE5?=
- =?utf-8?B?ek15TFRnUmh1aE5Xa2tiZ0pHNW53clFSVklhaVh2c0RQSXVOZFhuTHdTTTNu?=
- =?utf-8?B?QTVmdWpqVHRRL2R4Mk10VzVtMUlhVk9nMzJoZTBXSDBjelRpT3hyWisrTnBn?=
- =?utf-8?B?K2dTZ0U1RGRiS0tpVmo1WjlBcjh0VVdZZjc3T0pyZnB1RjdSdEx3MnM4TjFL?=
- =?utf-8?B?NE45aEl5NExGS0pLYVBOeUZyNnludWJWeWhpNVFsUUVjNmVZOTBQeUREUUVI?=
- =?utf-8?B?Z1pJM0M2NmwzWk1sdlBoM3NUNXE2VUloYzRQOWtRRU9vOHptUUx6MHVvSTdC?=
- =?utf-8?B?aXVaQXJicWxWNHFTcVhyR0hlbnNSVmVsWng5TEYrMUJOSW1VUXlOQzJRL1dx?=
- =?utf-8?B?TkNZYjI3NzlNbVNXK1E4MlhvUHpvSG1idlF4VllNNW1RMGFUdzJxM2tCT3hm?=
- =?utf-8?B?ekxrYzlaSUhaY3VFRk56b1lFQjk5QklhMk15MEp2Y1hBVmF2aTVJQVltRmM2?=
- =?utf-8?B?a1dPT3E5a1djemRKZ0xyY0FQMCtQQnY3S0hHUWNWQW0zSzZzS21ZbjBoYUQy?=
- =?utf-8?B?dVl1VGdlSW9iY0R4YkFsNlFiejJSRnd2cGtxNCt5NW1LZFJHcE9Fd3J5TUVH?=
- =?utf-8?B?bnpMYUZFclg5YjczT0dqazlRUWd0TnUwL3dxcXpPZFk2eGM4RWpJZGxqVi9w?=
- =?utf-8?B?cm12eHYwQlhNL1g5OE0xa3J2UU5RanhaZmREMks3Y3dBMnRPNDFaRmtmVnVP?=
- =?utf-8?B?YVRsNzdseWhyZzgvV2NYY3UyVmROd0czWEFGcG9GUEVKTEJpY2ExVlZvdkF6?=
- =?utf-8?B?emwrLytxZEw0QXQ0L201RDhYNXgvVW1TL1lLMVdrZitkTTRvSHEyQ2RpZUJE?=
- =?utf-8?B?Y2xFbWNsMW9BQ05BeUhmU3VTYTFPVW9VK1htK3JndFV3ZDk4WFJnNVhFQ0JX?=
- =?utf-8?B?UVYxaTRaNmg5aEZhOUxwRmVheHlCTG9wcVBvSFNCM3V2cWtQbHY1NTdjVjF6?=
- =?utf-8?B?eFVDMi9uaEhIVmwzMVZyc0xLYkZuOC8wb21KeGNwOEpWQkxvTDdMRmFwcjdV?=
- =?utf-8?B?QmxtZG4rTWZEbWo4VURnRHh0M1prWlpPRkZiS3pyck4wdngxZGVWV1dNRDVL?=
- =?utf-8?Q?WQGdzWw7dvstYSBBUNPJDROHv?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <2768A6E3C8BEF7409524921ABFF6B470@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Tue, 27 Jun 2023 06:34:29 -0400
+Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B86EE183
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 03:34:23 -0700 (PDT)
+Received: from submission (posteo.de [185.67.36.169]) 
+        by mout02.posteo.de (Postfix) with ESMTPS id 0DB48240101
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 12:34:17 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+        t=1687862057; bh=wFrR56LpGnHjBBdhM5HE5PlJVK8qjPz+l6xZAIBnm8I=;
+        h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:
+         Content-Disposition:Content-Transfer-Encoding:From;
+        b=aeVRi58RxvCoOWNOnoJlrWMeI4PM7fGEHfuDMI7xpu43loSl0xbMfHHVxLwxpWuEq
+         oqOdbgdH4rOe9GRDmj4/WhPIZsbGxjy/cC9ge2VfNH/GbyfdBobZI2KBQd7P25rrj8
+         ZsggqRuBTVQk/3X7p7b0ciqhgF89gpiR9waHRNWrAx31N0P/NYTR0ebq6MpSSg2Mk2
+         Pa/Fcp14IGY6zRdcyczPJZLYfSfC15O1gxsNNvwAm2sor+rNdfoEBSkL/HFRbNqdZ2
+         PQKLWrBTIqRFutudTKZiEicySPE0GhW/35oRwb5Eff/WsoSGydrBUy2n4LG9ozDFai
+         cnY7OiVKIHlOA==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4Qr1Kd2F6kz9rxK;
+        Tue, 27 Jun 2023 12:34:12 +0200 (CEST)
+Date:   Tue, 27 Jun 2023 10:34:06 +0000
+From:   Anne Macedo <retpolanne@posteo.net>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Christian Lamparter <chunkeey@googlemail.com>,
+        Rene Treffer <treffer@measite.de>
+Subject: Re: [PATCH] usb: host: xhci: remove renesas rom wiping
+Message-ID: <eyy5flllixic3lmusslom7nt3cailisjndcn4bymkhekvdodnz@y2gylsbenekz>
+References: <20230626204910.728-3-retpolanne@posteo.net>
+ <ZJqUMWv1jM2KQsYu@matsya>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: df2b907b-2091-4e38-7e8e-08db76fa07a9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Jun 2023 10:34:04.4999
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: HXhvJRiFXPVX+KJT0RDJkNZgIjIpUKYUTeWI37FpDzJYYRnO2yhagyMKzkqfyz8Ow6P2LEb77TBaV2hwTNrfFQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB4807
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZJqUMWv1jM2KQsYu@matsya>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVHVlLCAyMDIzLTA2LTI3IGF0IDEyOjUwICswMzAwLCBraXJpbGwuc2h1dGVtb3ZAbGludXgu
-aW50ZWwuY29tIHdyb3RlOg0KPiBPbiBUdWUsIEp1biAyNywgMjAyMyBhdCAwMjoxMjozN0FNICsx
-MjAwLCBLYWkgSHVhbmcgd3JvdGU6DQo+ID4gKwkvKg0KPiA+ICsJICogVGhlIFREWCBtb2R1bGUg
-Z2xvYmFsIGluaXRpYWxpemF0aW9uIG9ubHkgbmVlZHMgdG8gYmUgZG9uZQ0KPiA+ICsJICogb25j
-ZSBvbiBhbnkgY3B1Lg0KPiA+ICsJICovDQo+ID4gKwlyYXdfc3Bpbl9sb2NrX2lycXNhdmUoJnRk
-eF9nbG9iYWxfaW5pdF9sb2NrLCBmbGFncyk7DQo+IA0KPiBJIGRvbid0IHVuZGVyc3RhbmQgaG93
-IHRoZSBjb21tZW50IGp1c3RpZmllcyB1c2luZyByYXcgc3BpbiBsb2NrLg0KPiANCg0KVGhpcyBj
-b21tZW50IGlzIGZvciB1c2luZyBsb2NrIGluIGdlbmVyYWwuICBUaGUgcmVhc29uIHRvIHVzZSBy
-YXdfIHZlcnNpb24gaXMNCmJlY2F1c2UgdGhpcyBmdW5jdGlvbiBnZXRzIGNhbGxlZCBpbiBJUlEg
-Y29udGV4dCwgYW5kIGZvciBQUkVFTVBUX1JUIGtlcm5lbCB0aGUNCm5vcm1hbCBzcGlubG9jayBp
-cyBjb252ZXJ0ZWQgdG8gc2xlZXBpbmcgbG9jay4NCg0KRGF2ZSBzdWdnZXN0ZWQgdG8gY29tbWVu
-dCBvbiB0aGUgZnVuY3Rpb24gcmF0aGVyIHRoYW4gY29tbWVudCBvbiB0aGUNCnJhd19zcGluX2xv
-Y2sgZGlyZWN0bHksIGUuZy4sICBubyBvdGhlciBrZXJuZWwgY29kZSBkb2VzIHRoYXQ6DQoNCmh0
-dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xpbnV4LW1tL2QyYjNiYzVlLTEzNzEtMGM1MC04ZWNiLTY0
-ZmM3MDkxN2Q0MkBpbnRlbC5jb20vDQoNClNvIEkgY29tbWVudGVkIHRoZSBmdW5jdGlvbiBpbiB0
-aGlzIHZlcnNpb246DQoNCisvKg0KKyAqIERvIHRoZSBtb2R1bGUgZ2xvYmFsIGluaXRpYWxpemF0
-aW9uIGlmIG5vdCBkb25lIHlldC4NCisgKiBJdCdzIGFsd2F5cyBjYWxsZWQgd2l0aCBpbnRlcnJ1
-cHRzIGFuZCBwcmVlbXB0aW9uIGRpc2FibGVkLg0KKyAqLw0K
+On Tue, Jun 27, 2023 at 01:18:01PM +0530, Vinod Koul wrote:
+> On 26-06-23, 20:49, Anne Macedo wrote:
+> > Cards based on Renesas uPD72020x currently have their ROM wiped on
+> > module start if they have an external ROM. This means that every time
+> > you start up the module, the ROM gets cleaned up and the firmware
+> > redownloaded.
+> 
+> Nak, that is not the correct understanding of the code!
+> 
+> In function renesas_xhci_check_request_fw(), we check ROM status first
+> and if it is already programmed, we skip.. Not sure why you are assuming
+> it is wiped every time!
+
+So, these are the DMESG messages I get during this step - it's a freshly
+booted machine and I kept the modules blocklisted until I was ready to
+test it:
+
+# renesas_xhci_check_request_fw -> renesas_check_rom
+[  291.497544] xhci_hcd 0000:06:00.0: External ROM exists
+
+# renesas_xhci_check_request_fw -> renesas_check_rom_state
+[  291.497551] xhci_hcd 0000:06:00.0: Found ROM version: 2026
+[  291.497558] xhci_hcd 0000:06:00.0: ROM exists
+[  291.497560] xhci_hcd 0000:06:00.0: Unknown ROM status ...
+
+# renesas_xhci_check_request_fw -> renesas_fw_check_running
+[  291.497569] xhci_hcd 0000:06:00.0: FW is not ready/loaded yet.
+# From this point, I believe that the module could not detect that
+# there's a valid firmware running on the card
+
+# renesas_xhci_check_request_fw -> renesas_load_fw -> renesas_check_rom
+[  291.497985] xhci_hcd 0000:06:00.0: External ROM exists
+
+# renesas_xhci_check_request_fw -> renesas_load_fw -> renesas_rom_erase
+[  291.497996] xhci_hcd 0000:06:00.0: Performing ROM Erase...
+[  291.523737] xhci_hcd 0000:06:00.0: ROM Erase... Done success
+
+# renesas_xhci_check_request_fw -> renesas_load_fw -> renesas_setup_rom
+[  319.410895] xhci_hcd 0000:06:00.0: Download to external ROM TO: 0
+[  319.410904] xhci_hcd 0000:06:00.0: ROM load failed, falling back on FW load
+
+# renesas_xhci_check_request_fw -> renesas_load_fw -> renesas_fw_download -> renesas_fw_download_image
+[  319.552909] xhci_hcd 0000:06:00.0: Timeout for Set DATAX step: 2
+[  319.552914] xhci_hcd 0000:06:00.0: Firmware Download Step 2 failed at position 8 bytes with (-110).
+[  319.552918] xhci_hcd 0000:06:00.0: firmware failed to download (-110).
+[  319.552927] xhci_hcd: probe of 0000:06:00.0 failed with error -110
+
+These are failing due to the timeouts that I noticed on [1]. But the
+timeouts aren't actually the problem – I added a bpftrace program to
+trace all of the pci reads and functions from the module [2]. The output
+is pretty interesting:
+
+Renesas download image has been called with iterator i=33
+Reading the config register f7 from PCI 1912:0014 - content 84f8b100
+Writing the config register fc from PCI 1912:0014 - content e4251764
+Writing the config register f7 from PCI 1912:0014 - content 0002
+Renesas download image has been called with iterator i=34
+Reading the config register f7 from PCI 1912:0014 - content 84f8b100
+Reading the config register f7 from PCI 1912:0014 - content 84f8b300
+# Thousands of logs later...
+Reading the config register f7 from PCI 1912:0014 - content 84f8b300
+Writing the config register f8 from PCI 1912:0014 - content 5c591724
+Writing the config register f7 from PCI 1912:0014 - content 0001
+
+If I understood correctly, every "step" is a DWORD, sent from
+renesas_fw_download to renesas_fw_download_image, so for each DWORD a
+block is sent to renesas_fw_download_image. After the 34th block, just
+one byte from the F7 register changes and it locks for seconds until it
+changes for the content of the firmware file (I checked with xxd and the
+F8 register has exactly the same content as the 34th DWORD block). And
+then F7 becomes 0000 or 0001 whether it is setting DATA0 or DATA1.
+
+This was timing out on my machine, and I believe this was also timing
+out in your environment, according to this message [3]. Some people on
+the Lenovo forums also had the same problem on the step 34 [4].
+
+Anyways, I manually increased the timeout to make the ROM programming
+and FW download go through, so my card was stable, but whenever I would
+boot onto another kernel build, it would get erased and overwritten. So
+it is true that it gets erased *at least* during the first module
+startup. 
+
+Without the ROM erase, the module startup goes through blazingly fast on
+this card. Card gets recognized, USB-C works, if I want to use USB-C on
+boot (which is my plan) it will not impact boot times as well. 
+
+I know removing completely this path may not be ideal, but erasing the
+ROM on every boot, at least for this card (I'm buying other cards with
+the same chipset to analyse the behaviour, but they are coming from
+China to Brazil, so it's going to take a while), is not ideal as these
+specific blocks that I mentioned take a long time to be overwritten. 
+
+For *my* card it seems better not to erase the ROM, as it is stable from
+other boots. To me, it seems like the module is touching the ROM
+unnecessarily.
+
+Do you have any suggestions for improving this module, taking into
+consideration this context that I provided? 
+
+[1] https://patchwork.kernel.org/project/linux-usb/patch/20230618224656.2476-2-retpolanne@posteo.net/
+[2] https://github.com/retpolanne/kernel-workspace/blob/main/bpf/renesas-pci-trace.bt
+[3] https://lore.kernel.org/lkml/20190626070658.GP2962@vkoul-mobl/
+[4] https://forums.lenovo.com/t5/Other-Linux-Discussions/P14s-Gen-2-AMD-Linux-boot-errors/m-p/5206830
+
+> 
+>         /* Check if device has ROM and loaded, if so skip everything */
+>         has_rom = renesas_check_rom(pdev);
+>         if (has_rom) {
+>                 err = renesas_check_rom_state(pdev);
+>                 if (!err)
+>                         return 0;
+>                 else if (err != -ENOENT)
+>                         has_rom = false;
+>         }
+> 
+> Erasing ROM is part of ROM programming sequence and is also required to
+> if we ever have to recover, so this patch is NAKed by me
+> 
+> > Wiping the ROM all the time is not necessary and can lead to situations
+> > where, for example, people with stable firmwares might have their card fail
+> > due to incomplete flashes (due to timeouts, for example).
+> > 
+> > Another case is when PCI configs are set up after the ROM is flashed
+> > (e.g. disabling hotplugging). The ROM wipe and reflash process will
+> > overwrite these configs.
+> 
+> Why would ROM programming overwrite PCI config, does your device update
+> that. In case you are programming config space you should redo that
+> after ROM load (which should be done once)
+> 
+> > Also, the current ROM setup can't work: the flash layout contains more
+> > than the firmware – for uploading, it needs to be prefixed with ~40
+> > bytes that differ by card vendor. This config is documented on the
+> > "uPD720201/uPD720202 User's Manual", section 6.3 (Data Format).
+> 
+> I assure you it works for me on a publicly available Qualcomm Robotics
+> RB3 board  and many people who have tested. It may not work for you, but
+> you need to investigate better on what might be the cause. Btw what are
+> you testing this on..
+
+I'm testing on a Panhong PH61 Rev.1.3 21K30 PCI-E controller card. It
+has a Puya P25Q40H ROM. I know it's a rather obscure card, but it was
+the only one that was easily available on my local marketplace. 
+> 
+> > This patch, if applied, removes the cleanup and the setup of the Renesas
+> > ROM as to not make it wipe and reset the ROM.
+> > 
+> > It also reduces load time, especially during boot, as problems with the
+> > EEPROM chip or CRC checks might take some time during reflashing and
+> > possibly lead to timeouts. Since the ROM is already flashed (either
+> > manually by a tool such as uPD72020x-load or by the kernel module) it
+> 
+> where is this tool, I have not heard of it, is it publicly available,
+> where can I find the source of this tool?
+
+This is the repo: https://github.com/markusj/upd72020x-load
+
+> 
+> > just needs to be loaded during module startup.
+> > 
+> > Suggested-by: Rene Treffer <treffer@measite.de>
+> > Signed-off-by: Anne Macedo <retpolanne@posteo.net>
+> > ---
+> >  drivers/usb/host/xhci-pci-renesas.c | 188 ----------------------------
+> >  1 file changed, 188 deletions(-)
+> > 
+> > diff --git a/drivers/usb/host/xhci-pci-renesas.c b/drivers/usb/host/xhci-pci-renesas.c
+> > index 93f8b355bc70..28656beb808d 100644
+> > --- a/drivers/usb/host/xhci-pci-renesas.c
+> > +++ b/drivers/usb/host/xhci-pci-renesas.c
+> > @@ -375,199 +375,11 @@ static int renesas_fw_download(struct pci_dev *pdev,
+> >  	return 0;
+> >  }
+> >  
+> > -static void renesas_rom_erase(struct pci_dev *pdev)
+> > -{
+> > -	int retval, i;
+> > -	u8 status;
+> > -
+> > -	dev_dbg(&pdev->dev, "Performing ROM Erase...\n");
+> > -	retval = pci_write_config_dword(pdev, RENESAS_DATA0,
+> > -					RENESAS_ROM_ERASE_MAGIC);
+> > -	if (retval) {
+> > -		dev_err(&pdev->dev, "ROM erase, magic word write failed: %d\n",
+> > -			pcibios_err_to_errno(retval));
+> > -		return;
+> > -	}
+> > -
+> > -	retval = pci_read_config_byte(pdev, RENESAS_ROM_STATUS, &status);
+> > -	if (retval) {
+> > -		dev_err(&pdev->dev, "ROM status read failed: %d\n",
+> > -			pcibios_err_to_errno(retval));
+> > -		return;
+> > -	}
+> > -	status |= RENESAS_ROM_STATUS_ERASE;
+> > -	retval = pci_write_config_byte(pdev, RENESAS_ROM_STATUS, status);
+> > -	if (retval) {
+> > -		dev_err(&pdev->dev, "ROM erase set word write failed\n");
+> > -		return;
+> > -	}
+> > -
+> > -	/* sleep a bit while ROM is erased */
+> > -	msleep(20);
+> > -
+> > -	for (i = 0; i < RENESAS_RETRY; i++) {
+> > -		retval = pci_read_config_byte(pdev, RENESAS_ROM_STATUS,
+> > -					      &status);
+> > -		status &= RENESAS_ROM_STATUS_ERASE;
+> > -		if (!status)
+> > -			break;
+> > -
+> > -		mdelay(RENESAS_DELAY);
+> > -	}
+> > -
+> > -	if (i == RENESAS_RETRY)
+> > -		dev_dbg(&pdev->dev, "Chip erase timedout: %x\n", status);
+> > -
+> > -	dev_dbg(&pdev->dev, "ROM Erase... Done success\n");
+> > -}
+> > -
+> > -static bool renesas_setup_rom(struct pci_dev *pdev, const struct firmware *fw)
+> > -{
+> > -	const u32 *fw_data = (const u32 *)fw->data;
+> > -	int err, i;
+> > -	u8 status;
+> > -
+> > -	/* 2. Write magic word to Data0 */
+> > -	err = pci_write_config_dword(pdev, RENESAS_DATA0,
+> > -				     RENESAS_ROM_WRITE_MAGIC);
+> > -	if (err)
+> > -		return false;
+> > -
+> > -	/* 3. Set External ROM access */
+> > -	err = pci_write_config_byte(pdev, RENESAS_ROM_STATUS,
+> > -				    RENESAS_ROM_STATUS_ACCESS);
+> > -	if (err)
+> > -		goto remove_bypass;
+> > -
+> > -	/* 4. Check the result */
+> > -	err = pci_read_config_byte(pdev, RENESAS_ROM_STATUS, &status);
+> > -	if (err)
+> > -		goto remove_bypass;
+> > -	status &= GENMASK(6, 4);
+> > -	if (status) {
+> > -		dev_err(&pdev->dev,
+> > -			"setting external rom failed: %x\n", status);
+> > -		goto remove_bypass;
+> > -	}
+> > -
+> > -	/* 5 to 16 Write FW to DATA0/1 while checking SetData0/1 */
+> > -	for (i = 0; i < fw->size / 4; i++) {
+> > -		err = renesas_fw_download_image(pdev, fw_data, i, true);
+> > -		if (err) {
+> > -			dev_err(&pdev->dev,
+> > -				"ROM Download Step %d failed at position %d bytes with (%d)\n",
+> > -				 i, i * 4, err);
+> > -			goto remove_bypass;
+> > -		}
+> > -	}
+> > -
+> > -	/*
+> > -	 * wait till DATA0/1 is cleared
+> > -	 */
+> > -	for (i = 0; i < RENESAS_RETRY; i++) {
+> > -		err = pci_read_config_byte(pdev, RENESAS_ROM_STATUS_MSB,
+> > -					   &status);
+> > -		if (err)
+> > -			goto remove_bypass;
+> > -		if (!(status & (BIT(0) | BIT(1))))
+> > -			break;
+> > -
+> > -		udelay(RENESAS_DELAY);
+> > -	}
+> > -	if (i == RENESAS_RETRY) {
+> > -		dev_err(&pdev->dev, "Final Firmware ROM Download step timed out\n");
+> > -		goto remove_bypass;
+> > -	}
+> > -
+> > -	/* 17. Remove bypass */
+> > -	err = pci_write_config_byte(pdev, RENESAS_ROM_STATUS, 0);
+> > -	if (err)
+> > -		return false;
+> > -
+> > -	udelay(10);
+> > -
+> > -	/* 18. check result */
+> > -	for (i = 0; i < RENESAS_RETRY; i++) {
+> > -		err = pci_read_config_byte(pdev, RENESAS_ROM_STATUS, &status);
+> > -		if (err) {
+> > -			dev_err(&pdev->dev, "Read ROM status failed:%d\n",
+> > -				pcibios_err_to_errno(err));
+> > -			return false;
+> > -		}
+> > -		status &= RENESAS_ROM_STATUS_RESULT;
+> > -		if (status ==  RENESAS_ROM_STATUS_SUCCESS) {
+> > -			dev_dbg(&pdev->dev, "Download ROM success\n");
+> > -			break;
+> > -		}
+> > -		udelay(RENESAS_DELAY);
+> > -	}
+> > -	if (i == RENESAS_RETRY) { /* Timed out */
+> > -		dev_err(&pdev->dev,
+> > -			"Download to external ROM TO: %x\n", status);
+> > -		return false;
+> > -	}
+> > -
+> > -	dev_dbg(&pdev->dev, "Download to external ROM succeeded\n");
+> > -
+> > -	/* Last step set Reload */
+> > -	err = pci_write_config_byte(pdev, RENESAS_ROM_STATUS,
+> > -				    RENESAS_ROM_STATUS_RELOAD);
+> > -	if (err) {
+> > -		dev_err(&pdev->dev, "Set ROM execute failed: %d\n",
+> > -			pcibios_err_to_errno(err));
+> > -		return false;
+> > -	}
+> > -
+> > -	/*
+> > -	 * wait till Reload is cleared
+> > -	 */
+> > -	for (i = 0; i < RENESAS_RETRY; i++) {
+> > -		err = pci_read_config_byte(pdev, RENESAS_ROM_STATUS, &status);
+> > -		if (err)
+> > -			return false;
+> > -		if (!(status & RENESAS_ROM_STATUS_RELOAD))
+> > -			break;
+> > -
+> > -		udelay(RENESAS_DELAY);
+> > -	}
+> > -	if (i == RENESAS_RETRY) {
+> > -		dev_err(&pdev->dev, "ROM Exec timed out: %x\n", status);
+> > -		return false;
+> > -	}
+> > -
+> > -	return true;
+> > -
+> > -remove_bypass:
+> > -	pci_write_config_byte(pdev, RENESAS_ROM_STATUS, 0);
+> > -	return false;
+> > -}
+> > -
+> >  static int renesas_load_fw(struct pci_dev *pdev, const struct firmware *fw)
+> >  {
+> >  	int err = 0;
+> > -	bool rom;
+> > -
+> > -	/* Check if the device has external ROM */
+> > -	rom = renesas_check_rom(pdev);
+> > -	if (rom) {
+> > -		/* perform chip erase first */
+> > -		renesas_rom_erase(pdev);
+> > -
+> > -		/* lets try loading fw on ROM first */
+> > -		rom = renesas_setup_rom(pdev, fw);
+> > -		if (!rom) {
+> > -			dev_dbg(&pdev->dev,
+> > -				"ROM load failed, falling back on FW load\n");
+> > -		} else {
+> > -			dev_dbg(&pdev->dev,
+> > -				"ROM load success\n");
+> > -			goto exit;
+> > -		}
+> > -	}
+> >  
+> >  	err = renesas_fw_download(pdev, fw);
+> > -
+> > -exit:
+> >  	if (err)
+> >  		dev_err(&pdev->dev, "firmware failed to download (%d).", err);
+> >  	return err;
+> > -- 
+> > 2.41.0
+> 
+> -- 
+> ~Vinod
