@@ -2,84 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 438D873F76D
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 10:35:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DBB773F776
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 10:35:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230308AbjF0Ifi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 04:35:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40504 "EHLO
+        id S230413AbjF0Ifm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 04:35:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230384AbjF0IeX (ORCPT
+        with ESMTP id S230418AbjF0Ie3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 04:34:23 -0400
-Received: from mail.208.org (unknown [183.242.55.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A312119AE
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 01:34:22 -0700 (PDT)
-Received: from mail.208.org (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTP id 4QqygH5h2HzBJfs8
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 16:34:19 +0800 (CST)
-Authentication-Results: mail.208.org (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)" header.d=208.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
-        content-transfer-encoding:content-type:message-id:user-agent
-        :subject:to:from:date:mime-version; s=dkim; t=1687854859; x=
-        1690446860; bh=AVUeC2KFJQJ80unQBOeT1iMT0E/ys0sUKune3NAaX8U=; b=g
-        fMv4Q1BErQso1Fg6kjt8FmLRNzSXy3JdUtRBH96kWR2sfyq03iF/cL9EZmGWyVgu
-        kc8khQHLWqp5SNoXH0Vs++BByCsOaS83lwc7LSi4IwfarWXeFMPOy4sQsWpGbHNJ
-        xWNWa7aLin6bTBumVz8JTp+kXC1CbuTuaHzW9M4DrBYCBkiLFLUyClFubyLNhNZE
-        WFCX5/Yzc07Ik4ITOhGCjfYM4IG6Bee79i/CwYuBlZcvafJjGTCsLzc2vJ9CSuAq
-        LI9g0CIcvIKAI1jbkyXhVNn1xJzYtLhzGNK6dajiDjQUZkQk9ynz22RSNbL9d/BW
-        w5RExsFpv14Mnaa6abdNA==
-X-Virus-Scanned: amavisd-new at mail.208.org
-Received: from mail.208.org ([127.0.0.1])
-        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id E7pfxM27LnZi for <linux-kernel@vger.kernel.org>;
-        Tue, 27 Jun 2023 16:34:19 +0800 (CST)
-Received: from localhost (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTPSA id 4QqygH19BGzBJBHT;
-        Tue, 27 Jun 2023 16:34:19 +0800 (CST)
+        Tue, 27 Jun 2023 04:34:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30F0BB5;
+        Tue, 27 Jun 2023 01:34:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A87876108C;
+        Tue, 27 Jun 2023 08:34:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9D4BC433C8;
+        Tue, 27 Jun 2023 08:34:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1687854867;
+        bh=LpYzTTgFSg3p+saxrHUHIACgeU0lbQpU2jiX71kgerE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=m7euaNk9N65WbQ3C7243wEXopSEpdCt14ep7fgnZH5QH6dn6ByCaRLx13uv1bcy7x
+         TeHXaKaPrHb61TEAO7kvisDsb6OEv4nQwNi9QtqkfoquBzU5UaZ21Rve97llkr4m+0
+         rfXUyhlWCGaRsF5TovJRuUDPJuwu6huuJycJei8s=
+Date:   Tue, 27 Jun 2023 10:34:19 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     baomingtong001@208suo.com
+Cc:     jstultz@google.com, tglx@linutronix.de, sboyd@kernel.org,
+        shuah@kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] selftests: timers: set-timer-lat: Remove unneeded
+ semicolon
+Message-ID: <2023062702-trusting-thorn-419e@gregkh>
+References: <2a1861f16769deb2f831b6daf14a1e8d@208suo.com>
 MIME-Version: 1.0
-Date:   Tue, 27 Jun 2023 16:34:19 +0800
-From:   baomingtong001@208suo.com
-To:     gupt21@gmail.com, jikos@kernel.org, benjamin.tissoires@redhat.com
-Cc:     linux-i2c@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] HID: mcp2221: Remove unneeded semicolon
-User-Agent: Roundcube Webmail
-Message-ID: <e180a7c6af0c569be9a950ff25667bc7@208suo.com>
-X-Sender: baomingtong001@208suo.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2a1861f16769deb2f831b6daf14a1e8d@208suo.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-./drivers/hid/hid-mcp2221.c:1027:3-4: Unneeded semicolon
+On Tue, Jun 27, 2023 at 04:10:42PM +0800, baomingtong001@208suo.com wrote:
+> ./tools/testing/selftests/timers/set-timer-lat.c:83:2-3: Unneeded semicolon
 
-Signed-off-by: Mingtong Bao <baomingtong001@208suo.com>
----
-  drivers/hid/hid-mcp2221.c | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
+What does this mean?
 
-diff --git a/drivers/hid/hid-mcp2221.c b/drivers/hid/hid-mcp2221.c
-index 72883e0ce757..38e795c58764 100644
---- a/drivers/hid/hid-mcp2221.c
-+++ b/drivers/hid/hid-mcp2221.c
-@@ -1024,7 +1024,7 @@ static int mcp_iio_channels(struct mcp2221 *mcp)
-  			break;
-  		default:
-  			continue;
--		};
-+		}
+> 
+> Signed-off-by: Mingtong Bao <baomingtong001@208suo.com>
 
-  		chan->type = IIO_VOLTAGE;
-  		chan->indexed = 1;
--- 
-2.40.1
+Does not match your From: line in your email client :(
 
