@@ -2,179 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B816E73F6D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 10:20:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90FC773F6E3
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 10:21:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231562AbjF0IUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 04:20:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58148 "EHLO
+        id S231630AbjF0IVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 04:21:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230054AbjF0IUE (ORCPT
+        with ESMTP id S231617AbjF0IVt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 04:20:04 -0400
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 108EDE5;
-        Tue, 27 Jun 2023 01:20:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1687853998; bh=FNm89gkdhid/F9i0RK3rbfD/L/HwpUHHCTG+95nssus=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=xoWamd7VJHJpaAmhRrr9sJ9Ih38xFEyD6qLt6k/qDNKZOVjq1NqVRIKh07ClO53M9
-         kaBZux4vXrf3vFscj2Oa33lclnuqe6k4TRkqNXF1WgHj2roXq5gPmfQx1bCO381a/Y
-         bE+/Tg3JgyUQoRqUGPibLrrFr5mDYAGoy26Tzibw=
-Received: from [100.100.34.13] (unknown [220.248.53.61])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 017D96011B;
-        Tue, 27 Jun 2023 16:19:57 +0800 (CST)
-Message-ID: <18bc1f6b-5299-2628-82b7-55f3848e856a@xen0n.name>
-Date:   Tue, 27 Jun 2023 16:19:56 +0800
+        Tue, 27 Jun 2023 04:21:49 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DFBB91B1;
+        Tue, 27 Jun 2023 01:21:46 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 35R8KNutC003421, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 35R8KNutC003421
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
+        Tue, 27 Jun 2023 16:20:23 +0800
+Received: from RTEXDAG02.realtek.com.tw (172.21.6.101) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Tue, 27 Jun 2023 16:20:23 +0800
+Received: from RTEXH36505.realtek.com.tw (172.21.6.25) by
+ RTEXDAG02.realtek.com.tw (172.21.6.101) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Tue, 27 Jun 2023 16:20:22 +0800
+Received: from localhost.localdomain (172.21.252.101) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server id
+ 15.1.2375.32 via Frontend Transport; Tue, 27 Jun 2023 16:20:22 +0800
+From:   Stanley Chang <stanley_chang@realtek.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Stanley Chang <stanley_chang@realtek.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Ray Chi <raychi@google.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Flavio Suligoi <f.suligoi@asem.it>,
+        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
+Subject: [PATCH v5 1/5] usb: phy: add usb phy notify port status API
+Date:   Tue, 27 Jun 2023 16:19:57 +0800
+Message-ID: <20230627082022.22902-1-stanley_chang@realtek.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [PATCH v15 05/30] LoongArch: KVM: Add vcpu related header files
-To:     Tianrui Zhao <zhaotianrui@loongson.cn>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        loongarch@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
-        Mark Brown <broonie@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Oliver Upton <oliver.upton@linux.dev>, maobibo@loongson.cn,
-        Xi Ruoyao <xry111@xry111.site>, tangyouling@loongson.cn
-References: <20230626084752.1138621-1-zhaotianrui@loongson.cn>
- <20230626084752.1138621-6-zhaotianrui@loongson.cn>
-Content-Language: en-US
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <20230626084752.1138621-6-zhaotianrui@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-KSE-ServerInfo: RTEXDAG02.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/6/26 16:47, Tianrui Zhao wrote:
-> Add LoongArch vcpu related header files, including vcpu csr
-> information, irq number defines, and some vcpu interfaces.
-> 
-> Reviewed-by: Bibo Mao <maobibo@loongson.cn>
-> Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
-> ---
->   arch/loongarch/include/asm/insn-def.h  |  55 ++++++
->   arch/loongarch/include/asm/kvm_csr.h   | 231 +++++++++++++++++++++++++
->   arch/loongarch/include/asm/kvm_vcpu.h  |  97 +++++++++++
->   arch/loongarch/include/asm/loongarch.h |  20 ++-
->   arch/loongarch/kvm/trace.h             | 168 ++++++++++++++++++
->   5 files changed, 566 insertions(+), 5 deletions(-)
->   create mode 100644 arch/loongarch/include/asm/insn-def.h
->   create mode 100644 arch/loongarch/include/asm/kvm_csr.h
->   create mode 100644 arch/loongarch/include/asm/kvm_vcpu.h
->   create mode 100644 arch/loongarch/kvm/trace.h
-> 
-> diff --git a/arch/loongarch/include/asm/insn-def.h b/arch/loongarch/include/asm/insn-def.h
-> new file mode 100644
-> index 000000000000..e285ee108fb0
-> --- /dev/null
-> +++ b/arch/loongarch/include/asm/insn-def.h
-> @@ -0,0 +1,55 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +
-> +#ifndef __ASM_INSN_DEF_H
-> +#define __ASM_INSN_DEF_H
-> +
-> +#include <linux/stringify.h>
-> +#include <asm/gpr-num.h>
-> +#include <asm/asm.h>
-> +
-> +#define INSN_STR(x)		__stringify(x)
-> +#define CSR_RD_SHIFT		0
-> +#define CSR_RJ_SHIFT		5
-> +#define CSR_SIMM14_SHIFT	10
-> +#define CSR_OPCODE_SHIFT	24
-> +
-> +#define DEFINE_INSN_CSR							\
-> +	__DEFINE_ASM_GPR_NUMS						\
-> +"	.macro insn_csr, opcode, rj, rd, simm14\n"			\
-> +"	.4byte	((\\opcode << " INSN_STR(CSR_OPCODE_SHIFT) ") |"	\
-> +"		 (.L__gpr_num_\\rj << " INSN_STR(CSR_RJ_SHIFT) ") |"	\
-> +"		 (.L__gpr_num_\\rd << " INSN_STR(CSR_RD_SHIFT) ") |"	\
-> +"		 (\\simm14 << " INSN_STR(CSR_SIMM14_SHIFT) "))\n"	\
-> +"	.endm\n"
-> +
-> +#define UNDEFINE_INSN_CSR						\
-> +"	.purgem insn_csr\n"
-> +
-> +#define __INSN_CSR(opcode, rj, rd, simm14)				\
-> +	DEFINE_INSN_CSR							\
-> +	"insn_csr " opcode ", " rj ", " rd ", " simm14 "\n"		\
-> +	UNDEFINE_INSN_CSR
-> +
-> +
-> +#define INSN_CSR(opcode, rj, rd, simm14)				\
-> +	__INSN_CSR(LARCH_##opcode, LARCH_##rj, LARCH_##rd,		\
-> +		   LARCH_##simm14)
-> +
-> +#define __ASM_STR(x)		#x
-> +#define LARCH_OPCODE(v)		__ASM_STR(v)
-> +#define LARCH_SIMM14(v)		__ASM_STR(v)
-> +#define __LARCH_REG(v)		__ASM_STR(v)
-> +#define LARCH___RD(v)		__LARCH_REG(v)
-> +#define LARCH___RJ(v)		__LARCH_REG(v)
-> +#define LARCH_OPCODE_GCSR	LARCH_OPCODE(5)
-> +
-> +#define GCSR_read(csr, rd)						\
-> +	INSN_CSR(OPCODE_GCSR, __RJ(zero), __RD(rd), SIMM14(csr))
-> +
-> +#define GCSR_write(csr, rd)						\
-> +	INSN_CSR(OPCODE_GCSR, __RJ($r1), __RD(rd), SIMM14(csr))
-> +
-> +#define GCSR_xchg(csr, rj, rd)						\
-> +	INSN_CSR(OPCODE_GCSR, __RJ(rj), __RD(rd), SIMM14(csr))
-> +
-> +#endif /* __ASM_INSN_DEF_H */
+In Realtek SoC, the parameter of usb phy is designed to can dynamic
+tuning base on port status. Therefore, add a notify callback of phy
+driver when usb port status change.
 
-I still find this unnecessarily complex. First of all this is 
-reinventing infra that's already available as the "parse_r" helper 
-(check out include/asm/tlb.h in v6.4), but the only usage of the helper 
-has just been removed, so it's probably a signal saying this practice 
-may not last for long -- people are no longer in a situation like back 
-in the MIPS era when toolchain support are not guaranteed (or even 
-allowed upstream).
+The Realtek phy driver is designed to dynamically adjust disconnection
+level and calibrate phy parameters. When the device connected bit changes
+and when the disconnected bit changes, do port status change notification:
 
-Secondly, while support for older compilers is nice-to-have, but users 
-of upstream kernels also already effectively depend on very recent 
-toolchains (if not bleeding-edge). So we can just probe for support and 
-just use proper mnemonics and automatically get support soon, because we 
-can expect most of them to pick up upstream changes very quickly. That's 
-to say, if we have something like:
+Check if portstatus is USB_PORT_STAT_CONNECTION and portchange is
+USB_PORT_STAT_C_CONNECTION.
+1. The device is connected, the driver lowers the disconnection level and
+   calibrates the phy parameters.
+2. The device disconnects, the driver increases the disconnect level and
+   calibrates the phy parameters.
 
-# arch/loongarch/Kconfig
-config LOONGARCH
-     # ...
-     select HAVE_KVM if AS_HAS_LVZ_EXTENSION
+When controller to notify connect that device is already ready. If we
+adjust the disconnection level in notify_connect, the disconnect may have
+been triggered at this stage. So we need to change that as early as
+possible. Therefore, we add an api to notify phy the port status changes.
 
-config AS_HAS_LVZ_EXTENSION
-     def_bool $(as-instr,gcsrrd \$t0$(comma)\$t1$(comma)123)
+Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
+---
+v4 to v5 change:
+    No change
+v3 to v4 change:
+    Fix the warning for checkpatch with strict.
+v2 to v3 change:
+    Add more comments about the reason for adding this api
+v1 to v2 change:
+    No change
+---
+ drivers/usb/core/hub.c  | 13 +++++++++++++
+ include/linux/usb/phy.h | 13 +++++++++++++
+ 2 files changed, 26 insertions(+)
 
-Then support is guaranteed for all KVM code and this cruft can go away, 
-and then the feature will likely be available in a few months.
-
-FYI, support for LSX and LASX instructions are already posted by your 
-fellow toolchain folks [1], so it's 100% doable for them to add support 
-despite the manuals not being available yet. Just coordinate with them a 
-bit...
-
-[1]: https://sourceware.org/pipermail/binutils/2023-June/127990.html
-
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index 97a0f8faea6e..10f3364c3fc2 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -614,6 +614,19 @@ static int hub_ext_port_status(struct usb_hub *hub, int port1, int type,
+ 		ret = 0;
+ 	}
+ 	mutex_unlock(&hub->status_mutex);
++
++	if (!ret) {
++		struct usb_device *hdev = hub->hdev;
++
++		if (hdev && !hdev->parent) {
++			struct usb_hcd *hcd = bus_to_hcd(hdev->bus);
++
++			if (hcd->usb_phy)
++				usb_phy_notify_port_status(hcd->usb_phy,
++							   port1 - 1, *status, *change);
++		}
++	}
++
+ 	return ret;
+ }
+ 
+diff --git a/include/linux/usb/phy.h b/include/linux/usb/phy.h
+index e4de6bc1f69b..b513749582d7 100644
+--- a/include/linux/usb/phy.h
++++ b/include/linux/usb/phy.h
+@@ -144,6 +144,10 @@ struct usb_phy {
+ 	 */
+ 	int	(*set_wakeup)(struct usb_phy *x, bool enabled);
+ 
++	/* notify phy port status change */
++	int	(*notify_port_status)(struct usb_phy *x, int port,
++				      u16 portstatus, u16 portchange);
++
+ 	/* notify phy connect status change */
+ 	int	(*notify_connect)(struct usb_phy *x,
+ 			enum usb_device_speed speed);
+@@ -316,6 +320,15 @@ usb_phy_set_wakeup(struct usb_phy *x, bool enabled)
+ 		return 0;
+ }
+ 
++static inline int
++usb_phy_notify_port_status(struct usb_phy *x, int port, u16 portstatus, u16 portchange)
++{
++	if (x && x->notify_port_status)
++		return x->notify_port_status(x, port, portstatus, portchange);
++	else
++		return 0;
++}
++
+ static inline int
+ usb_phy_notify_connect(struct usb_phy *x, enum usb_device_speed speed)
+ {
 -- 
-WANG "xen0n" Xuerui
-
-Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
+2.34.1
 
