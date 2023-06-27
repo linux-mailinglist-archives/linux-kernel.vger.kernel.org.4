@@ -2,202 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0A9E73FFD2
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 17:36:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 185B773FFD7
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 17:36:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230297AbjF0PgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 11:36:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49884 "EHLO
+        id S232052AbjF0Pgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 11:36:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231540AbjF0Pf6 (ORCPT
+        with ESMTP id S231786AbjF0Pg1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 11:35:58 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E7EE2D73;
-        Tue, 27 Jun 2023 08:35:57 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-bd77424c886so4987467276.0;
-        Tue, 27 Jun 2023 08:35:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687880156; x=1690472156;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=t34dMh1LA/z2OKAJ4jAEU30sT39Ov42eZVuKu2QRsXc=;
-        b=S+67Q0u8wsg3If6D4hJuslAKZBSdftW/X7Z9Lhs5DwloQrx3Y3V/Ot2iGYMNWxrTli
-         CgA9fAu+7JuY74dZkw0uSny8SRyv1lycWzajbFsJxsZy3dkgGM0yqaMsHeTUSXd46ZLa
-         jdsKzIffZrEsyFltQW7l3d5Rpel9lNxhJxgs0WttAlAD5o+IDA2POcsMhzuI7aKPr3Xl
-         gpw/WBfoTDzq648VM5WmvamopgUpNEgK+FmLqAddQgR5TUFGRw9FgUSypwSq3R0o2p7V
-         QmSM6jHUKUemiU1DmkkIXpfYsubczgXudLAW97TqhdMNUBqJJMFCH5JOPxdkP4nTniUq
-         WsCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687880156; x=1690472156;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=t34dMh1LA/z2OKAJ4jAEU30sT39Ov42eZVuKu2QRsXc=;
-        b=JxmRjYdyyxL4Iuv+XoJ3CjYEd2TtR2nYTvxMccN4/OjbcA0WKoL/hsbsHD9Hk4T7+z
-         DXFvcNRWRBtIOJaRbgpS6iQCVxjmZCz3ERDlOzQSAhWuNa0U8F/3rIlxZwrjQDM3Gp0k
-         gPR+uN/Y9xC7wXHl4z+GWgFPncBKv1j6/cNrYcoY0I88zfaPlHc+d1xmwJt9jindHSoj
-         36fvLUCHYL1MHdFi6+aYu5i4ASpqQb6fd+08/2EKlMVZv6tlxs+Nywdg84utMhXl90Lz
-         0R24vbsMddwInZx/NdUMp/3yRiRhvsvE8E2loinOpxU/TsB4qtLEieGeCGTeEmrdg0th
-         Yn8g==
-X-Gm-Message-State: AC+VfDyNQGSRcJTEf0y7fc7wBm03hZMnFVCU53mGEBbvXFnkUCc5Sm4I
-        O+1Elwz9Ka03yRnAgj7QOjMcq8mWHvueTTLwH5Q=
-X-Google-Smtp-Source: ACHHUZ6SEN56fCOhEJtNpJlypow/HFGRuO5Q0veZ7YY+Ggdc+XjZp36+8hCy7Te++rx9lAuzJUgUrKeDS/Kau4IehjY=
-X-Received: by 2002:a25:492:0:b0:c11:8be2:ff4 with SMTP id 140-20020a250492000000b00c118be20ff4mr10793243ybe.4.1687880156456;
- Tue, 27 Jun 2023 08:35:56 -0700 (PDT)
+        Tue, 27 Jun 2023 11:36:27 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05CB02D66
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 08:36:25 -0700 (PDT)
+Received: from cwcc.thunk.org (pool-173-48-119-246.bstnma.fios.verizon.net [173.48.119.246])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 35RFaIHH013049
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 27 Jun 2023 11:36:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1687880179; bh=jfG1GFuhPoMAosl3VLkDP5qeRDVr/htHFmqRKU3oBGU=;
+        h=Date:From:To:Cc:Subject;
+        b=nNudwhU0EzN0K3XDV/e71Og2Elu+M4VLElDqlmLZFJoD9FAPXZbbQZyS7rAiWdUBU
+         o3XOsNBwUIkinY4iIRAf1DjrFM4CoAaWFQWztj4z0qPDZ5EpfjDEx082yrJ7OBXFpw
+         h0m+iN7sxUznJjol45GHscBgRH9UuQSkQMOY0RS8cGUaeYV1i/lPexaazKKGibq6Hr
+         hgR8yOFY8J5qQV/tKCLH4YNqhqsKJjZiCl4TuiCWHjfZdxGyoaWJ4Lf7AgSO/wX9MO
+         rhe/sZzwemi9pjiRaXu/lIQc/T028bRcdrPJE2uZXpVH+uLmAPRXNy5q0zLTwMJBQL
+         zyScY8Q0+e3Qw==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 3DA4D15C027E; Tue, 27 Jun 2023 11:36:18 -0400 (EDT)
+Date:   Tue, 27 Jun 2023 11:36:18 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Developers List <linux-kernel@vger.kernel.org>,
+        Ext4 Developers List <linux-ext4@vger.kernel.org>
+Subject: [GIT PULL] ext4 updates for 6.5
+Message-ID: <20230627153618.GA329146@mit.edu>
 MIME-Version: 1.0
-References: <20230627092633.2135105-1-tmricht@linux.ibm.com>
-In-Reply-To: <20230627092633.2135105-1-tmricht@linux.ibm.com>
-From:   Namhyung Kim <namhyung@gmail.com>
-Date:   Tue, 27 Jun 2023 08:35:44 -0700
-Message-ID: <CAM9d7cjmmx2GQ7QQj3wBe1KkqgVNzoYbMuLeasVUWuZeLWUE9A@mail.gmail.com>
-Subject: Re: [PATCH] perf/test: perf test case Daemon operations dumps core
-To:     Thomas Richter <tmricht@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org, irogers@google.com, hca@linux.ibm.com,
-        svens@linux.ibm.com, gor@linux.ibm.com, sumanthk@linux.ibm.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+The following changes since commit f451fd97dd2b78f286379203a47d9d295c467255:
 
-On Tue, Jun 27, 2023 at 2:39=E2=80=AFAM Thomas Richter <tmricht@linux.ibm.c=
-om> wrote:
->
-> The perf test case Daemon operations dumps core all the time.
-> I narrowed it down to this invocation:
+  ext4: drop the call to ext4_error() from ext4_get_group_info() (2023-06-14 22:24:05 -0400)
 
-Jiri sent the same fix already.  I'll add your Reported-by, ok?
+are available in the Git repository at:
 
-https://lore.kernel.org/all/20230626201606.2514679-1-jolsa@kernel.org/
+  https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git tags/ext4_for_linus
 
-Thanks,
-Namhyung
+for you to fetch changes up to 2ef6c32a914b85217b44a0a2418e830e520b085e:
+
+  ext4: avoid updating the superblock on a r/o mount if not needed (2023-06-26 19:36:45 -0400)
 
 
->
-> Segmentation fault (core dumped)
-> ....
-> (gdb) where
->     at builtin-daemon.c:1527
->     argv=3D0x3ffe66f9630) at perf.c:323
->     at perf.c:377
->     at perf.c:421
-> (gdb)
->
-> Normally this goes unnoticed, the core dumps are only shown in
-> verbose mode and when core dump generation is enabled on fedora 38:
->
->  # ./perf test daemon
->  80: daemon operations                   : Ok
->  # ll core*
-> -rw------- 1 root root 3551232 Jun 27 10:08 core.4586
-> -rw------- 1 root root 3551232 Jun 27 10:08 core.4688
-> -rw------- 1 root root 3551232 Jun 27 10:08 core.4812
-> -rw------- 1 root root 3551232 Jun 27 10:08 core.4857
-> -rw------- 1 root root 3551232 Jun 27 10:08 core.4893
-> -rw------- 1 root root 3551232 Jun 27 10:08 core.4933
-> -rw------- 1 root root 3551232 Jun 27 10:08 core.4947
-> -rw------- 1 root root 3551232 Jun 27 10:08 core.4949
->  # ./perf test -v daemon
->  80: daemon operations                  :
-> --- start ---
-> test child forked, pid 4974
-> test daemon list
-> ./tests/shell/daemon.sh: line 133:  4980 Segmentation fault \
->                 (core dumped) perf daemon start --config ${config}
-> test daemon reconfig
-> ./tests/shell/daemon.sh: line 133:  5082 Segmentation fault \
->                 (core dumped) perf daemon start --config ${config}
-> test daemon stop
-> ./tests/shell/daemon.sh: line 133:  5206 Segmentation fault \
->                 (core dumped) perf daemon start --config ${config}
-> test daemon signal
-> ./tests/shell/daemon.sh: line 133:  5250 Segmentation fault \
->                 (core dumped) perf daemon start --config ${config}
-> signal 12 sent to session 'test [5252]'
-> signal 12 sent to session 'test [5252]'
-> test daemon ping
-> ./tests/shell/daemon.sh: line 133:  5286 Segmentation fault \
->                 (core dumped) perf daemon start --config ${config}
-> test daemon lock
-> ./tests/shell/daemon.sh: line 133:  5326 Segmentation fault \
->                 (core dumped) perf daemon start --config ${config}
-> test child finished with 0
-> ---- end ----
-> daemon operations: Ok
->  # ll core*|wc -l
-> 16
->  #
->
-> The root cause is in function cmd_daemon():
->
->     argc =3D parse_options(argc, argv, daemon_options, daemon_usage,
->                          PARSE_OPT_STOP_AT_NON_OPTION);
->
->     if (argc) {
->         if (!strcmp(argv[0], "start"))
->                 ret =3D __cmd_start(&__daemon, daemon_options, argc,
->                                   argv);
->         if (!strcmp(argv[0], "signal"))
->                     ^^^^^^^
-> Parameter argv[0] is set to NULL in function __cmd_start() and the
-> next strcmp() accesses a NULL pointer.
->
-> Output after:
->
->  # ./perf daemon start --config /tmp/perf-daemon-config
->  #
->  # ./perf test -v daemon
->  80: daemon operations                                               :
-> --- start ---
-> test child forked, pid 6517
-> test daemon list
-> test daemon reconfig
-> test daemon stop
-> test daemon signal
-> signal 12 sent to session 'test [6780]'
-> signal 12 sent to session 'test [6780]'
-> test daemon ping
-> test daemon lock
-> test child finished with 0
-> ---- end ----
-> daemon operations: Ok
->  #
->
-> Fixes: 92294b906e6c ("perf daemon: Dynamically allocate path to perf")
->
-> Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
-> ---
->  tools/perf/builtin-daemon.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/perf/builtin-daemon.c b/tools/perf/builtin-daemon.c
-> index f5674d824a40..83954af36753 100644
-> --- a/tools/perf/builtin-daemon.c
-> +++ b/tools/perf/builtin-daemon.c
-> @@ -1524,7 +1524,7 @@ int cmd_daemon(int argc, const char **argv)
->         if (argc) {
->                 if (!strcmp(argv[0], "start"))
->                         ret =3D __cmd_start(&__daemon, daemon_options, ar=
-gc, argv);
-> -               if (!strcmp(argv[0], "signal"))
-> +               else if (!strcmp(argv[0], "signal"))
->                         ret =3D __cmd_signal(&__daemon, daemon_options, a=
-rgc, argv);
->                 else if (!strcmp(argv[0], "stop"))
->                         ret =3D __cmd_stop(&__daemon, daemon_options, arg=
-c, argv);
-> --
-> 2.41.0
->
+Note: there are some minor merge conflicts; see below for the merge
+fixup I used before doing my final regression tests.
+
+
+----------------------------------------------------------------
+Various cleanups and bug fixes in ext4's extent status tree,
+journalling, and block allocator subsystems.  Also improve performance
+for parallel DIO overwrites.
+
+----------------------------------------------------------------
+Baokun Li (14):
+      ext4: only update i_reserved_data_blocks on successful block allocation
+      ext4: add a new helper to check if es must be kept
+      ext4: factor out __es_alloc_extent() and __es_free_extent()
+      ext4: use pre-allocated es in __es_insert_extent()
+      ext4: use pre-allocated es in __es_remove_extent()
+      ext4: using nofail preallocation in ext4_es_remove_extent()
+      ext4: using nofail preallocation in ext4_es_insert_delayed_block()
+      ext4: using nofail preallocation in ext4_es_insert_extent()
+      ext4: make ext4_es_remove_extent() return void
+      ext4: make ext4_es_insert_delayed_block() return void
+      ext4: make ext4_es_insert_extent() return void
+      ext4: make ext4_zeroout_es() return void
+      ext4: turn quotas off if mount failed after enabling quotas
+      ext4: refactoring to use the unified helper ext4_quotas_off()
+
+Brian Foster (1):
+      ext4: allow concurrent unaligned dio overwrites
+
+Chao Yu (1):
+      ext4: fix to check return value of freeze_bdev() in ext4_shutdown()
+
+Kemeng Shi (11):
+      ext4: fix wrong unit use in ext4_mb_normalize_request
+      ext4: fix unit mismatch in ext4_mb_new_blocks_simple
+      ext4: fix wrong unit use in ext4_mb_find_by_goal
+      ext4: treat stripe in block unit
+      ext4: add EXT4_MB_HINT_GOAL_ONLY test in ext4_mb_use_preallocated
+      ext4: remove ext4_block_group and ext4_block_group_offset declaration
+      ext4: try all groups in ext4_mb_new_blocks_simple
+      ext4: get block from bh in ext4_free_blocks for fast commit replay
+      ext4: remove unused parameter from ext4_mb_new_blocks_simple()
+      ext4: fix wrong unit use in ext4_mb_clear_bb
+      ext4: fix wrong unit use in ext4_mb_new_blocks
+
+Matthew Wilcox (1):
+      ext4: Call fsverity_verify_folio()
+
+Ojaswin Mujoo (9):
+      ext4: Convert mballoc cr (criteria) to enum
+      ext4: Add per CR extent scanned counter
+      ext4: Add counter to track successful allocation of goal length
+      ext4: Avoid scanning smaller extents in BG during CR1
+      ext4: Don't skip prefetching BLOCK_UNINIT groups
+      ext4: Ensure ext4_mb_prefetch_fini() is called for all prefetched BGs
+      ext4: Abstract out logic to search average fragment list
+      ext4: Add allocation criteria 1.5 (CR1_5)
+      ext4: Give symbolic names to mballoc criterias
+
+Ritesh Harjani (6):
+      ext4: kill unused function ext4_journalled_write_inline_data
+      ext4: Change remaining tracepoints to use folio
+      ext4: Make mpage_journal_page_buffers use folio
+      ext4: Make ext4_write_inline_data_end() use folio
+      ext4: mballoc: Remove useless setting of ac_criteria
+      ext4: Remove unused extern variables declaration
+
+Theodore Ts'o (2):
+      ext4: clean up mballoc criteria comments
+      ext4: avoid updating the superblock on a r/o mount if not needed
+
+Zhang Yi (8):
+      jbd2: remove unused feature macros
+      jbd2: switch to check format version in superblock directly
+      jbd2: factor out journal initialization from journal_get_superblock()
+      jbd2: remove j_format_version
+      jbd2: continue to record log between each mount
+      ext4: add journal cycled recording support
+      ext4: update doc about journal superblock description
+      jbd2: skip reading super block if it has been verified
+
+Zhihao Cheng (2):
+      ext4: Fix reusing stale buffer heads from last failed mounting
+      ext4: ext4_put_super: Remove redundant checking for 'sbi->s_journal_bdev'
+
+ Documentation/filesystems/ext4/journal.rst |   7 +-
+ fs/ext4/ext4.h                             |  89 +++--
+ fs/ext4/extents.c                          |  49 +--
+ fs/ext4/extents_status.c                   | 207 +++++++-----
+ fs/ext4/extents_status.h                   |  14 +-
+ fs/ext4/file.c                             |  86 ++---
+ fs/ext4/indirect.c                         |   8 +
+ fs/ext4/inline.c                           |  39 +--
+ fs/ext4/inode.c                            | 114 +++----
+ fs/ext4/ioctl.c                            |   5 +-
+ fs/ext4/mballoc.c                          | 644 ++++++++++++++++++++++++------------
+ fs/ext4/mballoc.h                          |  16 +-
+ fs/ext4/readpage.c                         |   2 +-
+ fs/ext4/super.c                            |  86 +++--
+ fs/ext4/sysfs.c                            |   2 +
+ fs/jbd2/journal.c                          |  78 ++---
+ fs/jbd2/recovery.c                         |  22 +-
+ include/linux/jbd2.h                       |  42 +--
+ include/trace/events/ext4.h                |  44 ++-
+ 19 files changed, 939 insertions(+), 615 deletions(-)
+
+
+commit 4b50c2604f922d0cdd4940d338506ecf817cba14
+Merge: 1ef6663a587b 2ef6c32a914b
+Author: Theodore Ts'o <tytso@mit.edu>
+Date:   Tue Jun 27 00:23:58 2023 -0400
+
+    Merge branch 'dev' into test
+
+diff --cc fs/ext4/ioctl.c
+index 961284cc9b65,55be1b8a6360..331859511f80
+--- a/fs/ext4/ioctl.c
++++ b/fs/ext4/ioctl.c
+@@@ -793,10 -793,18 +793,11 @@@ static int ext4_ioctl_setproject(struc
+  }
+  #endif
+  
+ -static int ext4_shutdown(struct super_block *sb, unsigned long arg)
+ +int ext4_force_shutdown(struct super_block *sb, u32 flags)
+  {
+  	struct ext4_sb_info *sbi = EXT4_SB(sb);
+ -	__u32 flags;
++ 	int ret;
+  
+ -	if (!capable(CAP_SYS_ADMIN))
+ -		return -EPERM;
+ -
+ -	if (get_user(flags, (__u32 __user *)arg))
+ -		return -EFAULT;
+ -
+  	if (flags > EXT4_GOING_FLAGS_NOLOGFLUSH)
+  		return -EINVAL;
+  
+diff --cc fs/ext4/super.c
+index eaa5858d5285,c638b0db3b2b..c94ebf704616
+--- a/fs/ext4/super.c
++++ b/fs/ext4/super.c
+@@@ -1133,7 -1128,13 +1133,13 @@@ static void ext4_blkdev_remove(struct e
+  	struct block_device *bdev;
+  	bdev = sbi->s_journal_bdev;
+  	if (bdev) {
++ 		/*
++ 		 * Invalidate the journal device's buffers.  We don't want them
++ 		 * floating about in memory - the physical journal device may
++ 		 * hotswapped, and it breaks the `ro-after' testing code.
++ 		 */
++ 		invalidate_bdev(bdev);
+ -		ext4_blkdev_put(bdev);
+ +		blkdev_put(bdev, sbi->s_sb);
+  		sbi->s_journal_bdev = NULL;
+  	}
+  }
