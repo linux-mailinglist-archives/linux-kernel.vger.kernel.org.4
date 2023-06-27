@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31E447404C5
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 22:15:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 876AD7404C4
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 22:15:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231437AbjF0UPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 16:15:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35832 "EHLO
+        id S231552AbjF0UPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 16:15:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231203AbjF0UOj (ORCPT
+        with ESMTP id S231210AbjF0UOj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 27 Jun 2023 16:14:39 -0400
-Received: from relay07.th.seeweb.it (relay07.th.seeweb.it [5.144.164.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E257C26BC;
-        Tue, 27 Jun 2023 13:14:37 -0700 (PDT)
+Received: from relay06.th.seeweb.it (relay06.th.seeweb.it [5.144.164.167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4E4D2716;
+        Tue, 27 Jun 2023 13:14:38 -0700 (PDT)
 Received: from Marijn-Arch-PC.localdomain (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id B9B313F4E7;
-        Tue, 27 Jun 2023 22:14:34 +0200 (CEST)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 183E03F6B1;
+        Tue, 27 Jun 2023 22:14:36 +0200 (CEST)
 From:   Marijn Suijten <marijn.suijten@somainline.org>
-Date:   Tue, 27 Jun 2023 22:14:25 +0200
-Subject: [PATCH v2 10/15] dt-bindings: msm: dsi-phy-14nm: Document SM6125
- variant
+Date:   Tue, 27 Jun 2023 22:14:26 +0200
+Subject: [PATCH v2 11/15] drm/msm/dsi: Reuse QCM2290 14nm DSI PHY
+ configuration for SM6125
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230627-sm6125-dpu-v2-10-03e430a2078c@somainline.org>
+Message-Id: <20230627-sm6125-dpu-v2-11-03e430a2078c@somainline.org>
 References: <20230627-sm6125-dpu-v2-0-03e430a2078c@somainline.org>
 In-Reply-To: <20230627-sm6125-dpu-v2-0-03e430a2078c@somainline.org>
 To:     Andy Gross <agross@kernel.org>,
@@ -57,8 +57,7 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht,
         linux-kernel@vger.kernel.org,
         Krzysztof Kozlowski <krzk@kernel.org>,
         linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, Lux Aliaga <they@mint.lgbt>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+        freedreno@lists.freedesktop.org, Lux Aliaga <they@mint.lgbt>
 X-Mailer: b4 0.12.3
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
@@ -69,48 +68,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document availability of the 14nm DSI PHY on SM6125.  Note that this
-compatible uses the SoC-suffix variant, intead of postfixing an
-arbitrary number without the sm/sdm portion.  The PHY is not powered by
-a vcca regulator like on most SoCs, but by the MX power domain that is
-provided via the power-domains property and a single corresponding
-required-opps.
+SM6125 features only a single PHY (despite a secondary PHY PLL source
+being available to the disp_cc_mdss_pclk0_clk_src clock), and downstream
+sources for this "trinket" SoC do not define the typical "vcca"
+regulator to be available nor used.  This, including the register offset
+is identical to QCM2290, whose config struct can trivially be reused.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
 ---
- .../devicetree/bindings/display/msm/dsi-phy-14nm.yaml         | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ drivers/gpu/drm/msm/dsi/phy/dsi_phy.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/display/msm/dsi-phy-14nm.yaml b/Documentation/devicetree/bindings/display/msm/dsi-phy-14nm.yaml
-index a43e11d3b00d..183a26f8a6dc 100644
---- a/Documentation/devicetree/bindings/display/msm/dsi-phy-14nm.yaml
-+++ b/Documentation/devicetree/bindings/display/msm/dsi-phy-14nm.yaml
-@@ -19,6 +19,7 @@ properties:
-       - qcom,dsi-phy-14nm-2290
-       - qcom,dsi-phy-14nm-660
-       - qcom,dsi-phy-14nm-8953
-+      - qcom,sm6125-dsi-phy-14nm
- 
-   reg:
-     items:
-@@ -35,6 +36,16 @@ properties:
-   vcca-supply:
-     description: Phandle to vcca regulator device node.
- 
-+  power-domains:
-+    description:
-+      A phandle and PM domain specifier for an optional power domain.
-+    maxItems: 1
-+
-+  required-opps:
-+    description:
-+      A phandle to an OPP node describing an optional performance point.
-+    maxItems: 1
-+
- required:
-   - compatible
-   - reg
+diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
+index 9d5795c58a98..05621e5e7d63 100644
+--- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
++++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
+@@ -561,6 +561,8 @@ static const struct of_device_id dsi_phy_dt_match[] = {
+ 	  .data = &dsi_phy_14nm_660_cfgs },
+ 	{ .compatible = "qcom,dsi-phy-14nm-8953",
+ 	  .data = &dsi_phy_14nm_8953_cfgs },
++	{ .compatible = "qcom,sm6125-dsi-phy-14nm",
++	  .data = &dsi_phy_14nm_2290_cfgs },
+ #endif
+ #ifdef CONFIG_DRM_MSM_DSI_10NM_PHY
+ 	{ .compatible = "qcom,dsi-phy-10nm",
 
 -- 
 2.41.0
