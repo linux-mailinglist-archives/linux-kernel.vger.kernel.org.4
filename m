@@ -2,95 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6E4073FDCB
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 16:26:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC7EC73FDC6
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 16:26:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231476AbjF0O01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 10:26:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33272 "EHLO
+        id S230385AbjF0O0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 10:26:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231165AbjF0O0V (ORCPT
+        with ESMTP id S229664AbjF0O0K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 10:26:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A0712726
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 07:25:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687875930;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vGSc4mdTDNNjtXngrQkAE2Vk0OODhwWQe551QFWP1tI=;
-        b=EVkoLytFYy0mqJNyHjPP134Jtenk6/4ws5mh3ON6tJw/nBSuZt6fnH1TyBjT9V2MwyY0xx
-        v/PKnG2HbClxx6YTmZ4MndPBl1cnqemCzCVS/xl8/T1CfXaBJfauywm7XoiBlUa5z8ao7O
-        KAgJV73IAtI0EKTdVgDkwYMnSc17i4M=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-132-QHwrs4MWNLqzQbNk9xZKBw-1; Tue, 27 Jun 2023 10:25:19 -0400
-X-MC-Unique: QHwrs4MWNLqzQbNk9xZKBw-1
-Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-94a348facbbso273769766b.1
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 07:25:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687875915; x=1690467915;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vGSc4mdTDNNjtXngrQkAE2Vk0OODhwWQe551QFWP1tI=;
-        b=Wpa1gO1FJ69uOBwAYUeflVtO33ypMlO4L6YYAfJU2hC71QHDa33BaGf6tihtWkJJ2j
-         NkBs+s3fcbfazvIOfidkKEuQ4wW3eXiXHXVWKPg3cG9Rh//F2PhgyIQo1/IDX/tF0/ek
-         pQOH8QoOEfVQNUjsLMV0PeuwsjaBaU1PznpQMRughKSjOSZpqJ6DnG6ocBCl9rbkrIUZ
-         C50WdTyz+G5+SWfZ7mRoXO9nrKiz/k148J789oRM5srgsJSyaSMEjM0YRO5uWZBPMJjA
-         NpSmzUJgkm9G+RdoTkSrkdMNpgWSZLgcKyyzBm9EkHgS5oAS8l5XjkOnTnuyXw+m8AjC
-         7E3w==
-X-Gm-Message-State: AC+VfDwJdfVS5wpFMPb4V822eHzH2dzA6r+Vh52PAUL9x6UfdV4x33sV
-        hhYL4+hLx48qPmeBEyWRz+eSQqAZf5Adt3zDjz9epHWrLd/95JioizRB4M7cGCNEWQBuk64cEcv
-        MuM+7C+FZOwz4ETvt6p2jmbcF
-X-Received: by 2002:a17:906:da8b:b0:982:26c5:6525 with SMTP id xh11-20020a170906da8b00b0098226c56525mr32188641ejb.60.1687875914703;
-        Tue, 27 Jun 2023 07:25:14 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6i5PkNbA3Uw3V9yHzNgEF6zgc+6XvzXai4Ju+na594EFjrV8ZjoKAuLT8tuRH4vcpCqG3Dfw==
-X-Received: by 2002:a17:906:da8b:b0:982:26c5:6525 with SMTP id xh11-20020a170906da8b00b0098226c56525mr32188620ejb.60.1687875914199;
-        Tue, 27 Jun 2023 07:25:14 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id qn1-20020a170907210100b0098e42bef731sm3234766ejb.169.2023.06.27.07.25.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jun 2023 07:25:13 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 2921ABBFF6C; Tue, 27 Jun 2023 16:25:13 +0200 (CEST)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Daniel Xu <dxu@dxuuu.xyz>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, coreteam@netfilter.org,
-        netfilter-devel@vger.kernel.org, fw@strlen.de, daniel@iogearbox.net
-Cc:     dsahern@kernel.org
-Subject: Re: [PATCH bpf-next 0/7] Support defragmenting IPv(4|6) packets in BPF
-In-Reply-To: <cover.1687819413.git.dxu@dxuuu.xyz>
-References: <cover.1687819413.git.dxu@dxuuu.xyz>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Tue, 27 Jun 2023 16:25:13 +0200
-Message-ID: <874jmthtiu.fsf@toke.dk>
+        Tue, 27 Jun 2023 10:26:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD4C0270F;
+        Tue, 27 Jun 2023 07:26:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 42F3D611BD;
+        Tue, 27 Jun 2023 14:26:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F031BC433C0;
+        Tue, 27 Jun 2023 14:26:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687875966;
+        bh=uDJwemZzdMrOBvxK/AXpAI2LRxFTXEFs44rnTL8ZOZk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DEdXUCDuqP2Dm8vOi1EYAJBeECL8d/BnYXnLZ0oLD0u3fDKvvNPBeJaFYR0St/nvq
+         Idxh3zi/j9KFsoEp8OTS9nIvyI4cOu7pCEt8otBg+ycDND2/5r6gJhjUrT9iuOaTCW
+         MLZ9pMTximAMwn+DLFvrZMxKBUixwP4II6MbiSnfFywq4vfmTj+IfPL/P1XLRyJ1MS
+         lH2wYIWvnqqieue0s/a2admPtEfAhBwNsJ+nDiTnUfUslO6txDMGBbqTCJ7oRYZpMg
+         WixZId4LkT/yIiMe6eHWtg/xjS18ySpW56fRY0od13XApFDCKp4niiWvmXaTrgbP8v
+         R3t8nX2nNoIuQ==
+Date:   Tue, 27 Jun 2023 15:25:58 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Lee Jones <lee@kernel.org>
+Cc:     Rob Herring <robh@kernel.org>,
+        "Sahin, Okan" <Okan.Sahin@analog.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Cosmin Tanislav <demonsingur@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        Marcus Folkesson <marcus.folkesson@gmail.com>,
+        "Bolboaca, Ramona" <Ramona.Bolboaca@analog.com>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        "Tilki, Ibrahim" <Ibrahim.Tilki@analog.com>,
+        William Breathitt Gray <william.gray@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Haibo Chen <haibo.chen@nxp.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
+Subject: Re: [PATCH v7 5/5] mfd: max77541: Add ADI MAX77541/MAX77540 PMIC
+ Support
+Message-ID: <100c68b2-94e8-4b14-87e5-2579e32690ad@sirena.org.uk>
+References: <20230412111256.40013-1-okan.sahin@analog.com>
+ <20230412111256.40013-6-okan.sahin@analog.com>
+ <20230420103438.GI9904@google.com>
+ <09eb8e4c-3e73-41f0-bf42-8ddf3c4254ec@sirena.org.uk>
+ <20230421073938.GO996918@google.com>
+ <82612171-46d7-4d82-a8fc-c7d6a99d57e9@sirena.org.uk>
+ <MN2PR03MB516860989BD8ED6AC9A767FBE755A@MN2PR03MB5168.namprd03.prod.outlook.com>
+ <20230621171315.GL10378@google.com>
+ <20230626175443.GA3446604-robh@kernel.org>
+ <20230627135615.GF10378@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="12/sRpg/phEKl7LJ"
+Content-Disposition: inline
+In-Reply-To: <20230627135615.GF10378@google.com>
+X-Cookie: Money is the root of all wealth.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> The basic idea is we bump a refcnt on the netfilter defrag module and
-> then run the bpf prog after the defrag module runs. This allows bpf
-> progs to transparently see full, reassembled packets. The nice thing
-> about this is that progs don't have to carry around logic to detect
-> fragments.
 
-One high-level comment after glancing through the series: Instead of
-allocating a flag specifically for the defrag module, why not support
-loading (and holding) arbitrary netfilter modules in the UAPI? If we
-need to allocate a new flag every time someone wants to use a netfilter
-module along with BPF we'll run out of flags pretty quickly :)
+--12/sRpg/phEKl7LJ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--Toke
+On Tue, Jun 27, 2023 at 02:56:15PM +0100, Lee Jones wrote:
+> On Mon, 26 Jun 2023, Rob Herring wrote:
 
+> > The whole series has all the acks/reviews needed for you to apply the=
+=20
+> > whole thing, so why not take the whole thing? Plus this series has been=
+=20
+> > sitting for 2 months. Not a great experience for submitters...
+
+> Patches are missing Acked-by tags.
+
+>   Reviewed-by !=3D Acked-by
+
+> I cannot merge other subsystem's patches without and Acked-by.
+
+Things should be OK to merge if they've got a Reviewed-by, that's
+generally treated a lot like a stronger ack and people won't tend to
+bother with an ack if they've done enough that they're happy to do a
+Reviewed-by.
+
+In any case, there's no need to hold all the bits that do seem OK for
+some leaf driver that has some problems, the leaf driver can always get
+applied incrementally either in the same branch or in another tree based
+on a cross tree merge.  That way the bits that are fine can make
+progress and there's less people getting the resends of the bits that
+still need work.
+
+--12/sRpg/phEKl7LJ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSa8XYACgkQJNaLcl1U
+h9DCtAf/dIu/8hV1d6moGpMw2IIza17xHbBQfMN4qTjMGfkXqadno+1s9FDDyfa6
+3/EAtmM86dfgix6p+NbmD0EJEIFvUJqE4+gRSWsa3sGMznXwxj8vRJLDrQXG4Yce
+/AzubINZ50r08aNaDCS/6QQLqxFQjRu+Jm9trF4Pn3nyEoO4/RG1qM2rsnGPaDZE
+5/+a2DKRgan/xniWIXw451/n75k8zRSPMlfNOV5hJswoljr5ypDwBOtLKWa6iQHk
+zHcgOql78+LUeSDALWjwrwOTBCjd/BLzt0DQzDRy8yDjacw3qIVk/TOwlafJeuze
+bkd07euBxNOcaCZ1M9004Q77sylAxA==
+=DUXT
+-----END PGP SIGNATURE-----
+
+--12/sRpg/phEKl7LJ--
