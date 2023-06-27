@@ -2,146 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A336873FA73
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 12:47:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D359773FA76
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 12:48:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230313AbjF0Krd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 06:47:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53806 "EHLO
+        id S231298AbjF0KsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 06:48:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230338AbjF0Kr3 (ORCPT
+        with ESMTP id S230310AbjF0KsS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 06:47:29 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD6910DA
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 03:47:27 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4fb7dc16ff0so1525765e87.2
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 03:47:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687862846; x=1690454846;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=J1SHGwGuvf7TJ44kiTcp4e9FkY6Rq97j93XtcOVoz2c=;
-        b=r0BPfdJx5aI3GWkMBEcnqTSB9t/Ep96KxepdubMaysDsN0GtPFxft7YIVUb5rClEcb
-         RQXqC+dmTq5S8gzToH6s23b9qJ4uE1HdDyp0S+ahrwZNy3kVpOYgr6ooADDLja7fHrE2
-         ra8IQWuSQrr7HfhfhvXnwvSECN0IwRsS74Suy+OSJvp+9VPSVWFpnUulvwD1eEunz5jR
-         QVwaLzj0etyYnRPaPdeaNydVk/srVN0AkR9GAeUVwhCx4jX+Q5fhbOT9zt2LExEJPO5g
-         Ld6W/vsngLqOCITkB/LEzT802uvFBg8vakIwTZIsm7mjtjtgjVwjNZyddxEtYMffk1hM
-         lruQ==
+        Tue, 27 Jun 2023 06:48:18 -0400
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB34F10D8;
+        Tue, 27 Jun 2023 03:48:17 -0700 (PDT)
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-66c729f5618so2867715b3a.1;
+        Tue, 27 Jun 2023 03:48:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687862846; x=1690454846;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=J1SHGwGuvf7TJ44kiTcp4e9FkY6Rq97j93XtcOVoz2c=;
-        b=Nfn4qqCLiTFr/Sqybmr/48demUTktocfAWwHN9UKXGhAjL0AEjeqQvkxEh1cY6Cbiv
-         5Ze5IBh51MsRyBNWO0g5Gz6mqOeUZNzcDQeCoEjDOA0XMCc6sQL+XGWF5HZSeLPAOWA/
-         FxfZPPcLtF+ihvU8gKuvpA2QO/CcK+9uaX4/NuMK09FX2O/vVSgx2Y6tOQJhjjmEHPbw
-         xK/5AJPBKYQgaTb6zz3gYaUuTv5Jnd3NgTzrfYECGgwturkFt0X6joNfM57d2P2JCbmy
-         Q1JqyrcNPflREC1da+q5OSAODWD/DP9P7i0mNSgppJqcx90UkAP4seXetvgjITYJO+9a
-         uTiA==
-X-Gm-Message-State: AC+VfDwD9TQGio8OXHabRjdh3iuxpBTQe+mS0GJThW1aaSvyJ3B3zHAZ
-        u03MHjEePviZbuVPTOcUFOariA==
-X-Google-Smtp-Source: ACHHUZ5XoxbXkZwCIMhIogXDuBuSOaYlBh89UCR5cRagoOQ0u9dTXoQUoK29nPvY4Ig4NxMsxkEHLQ==
-X-Received: by 2002:ac2:5105:0:b0:4fb:894f:466a with SMTP id q5-20020ac25105000000b004fb894f466amr415750lfb.7.1687862846077;
-        Tue, 27 Jun 2023 03:47:26 -0700 (PDT)
-Received: from [192.168.1.101] (abxj103.neoplus.adsl.tpnet.pl. [83.9.3.103])
-        by smtp.gmail.com with ESMTPSA id er13-20020a05651248cd00b004fb788f67dfsm593298lfb.105.2023.06.27.03.47.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Jun 2023 03:47:25 -0700 (PDT)
-Message-ID: <666f7313-f0a2-6a94-f591-eb354df083dd@linaro.org>
-Date:   Tue, 27 Jun 2023 12:47:24 +0200
+        d=1e100.net; s=20221208; t=1687862897; x=1690454897;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=N8kR5N8k1cATdBJ+KhZdRci8FZk5P5nCz0LfFdh3fX4=;
+        b=NWDaF18hqry3cIREP7vfFyG9g6N0hWt0Eiae0MFkQ+IjDTLgpS4w6ViKPrKKS7w4Ra
+         2kE3s31dAIUSJn7py54r/bPGUH4uLQ6bs4hStGMDVIi0SsPcFmxrJZ3SBeijQuF03Lhx
+         04IaY4LAgzxq63Z3TFwRsypIjlksV0zN8loBAimA3xTosGHQ0hDRJYGhVElY9xVNlJ22
+         Fl/r0fgi9g3aZRJzD/tGKG4nkM8DpH7qx3UOeqBRVJ9WSlYM06jzOROTNUfrtQmA1o63
+         ok4s+Q7q498Pa637JdL5XsDFdmAmvkYJRUM38RP2Fu1LoSiworitELQdCYhoXbd/4IXD
+         K28w==
+X-Gm-Message-State: AC+VfDwCRZAPHpfhLh3Xg9rteit7DhgDdQFX+u0VKLm+eyLPWz+8//Cj
+        TdkC2vDVk5RmaZFnmgo6vas=
+X-Google-Smtp-Source: ACHHUZ5tgtCulcm7hoVplGcarYJQ0IMFJCwGAz7GA7wJbXixNt/NX0oiVwmcSOn6w0VAWhJilFBySw==
+X-Received: by 2002:a05:6a00:c86:b0:676:76ea:e992 with SMTP id a6-20020a056a000c8600b0067676eae992mr6523213pfv.5.1687862897025;
+        Tue, 27 Jun 2023 03:48:17 -0700 (PDT)
+Received: from localhost (fpd11144dd.ap.nuro.jp. [209.17.68.221])
+        by smtp.gmail.com with ESMTPSA id d25-20020aa78159000000b0064378c52398sm5184966pfn.25.2023.06.27.03.48.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Jun 2023 03:48:15 -0700 (PDT)
+Date:   Tue, 27 Jun 2023 19:48:14 +0900
+From:   Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
+To:     Vidya Sagar <vidyas@nvidia.com>
+Cc:     lpieralisi@kernel.org, robh@kernel.org, bhelgaas@google.com,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        Sergey.Semin@baikalelectronics.ru, linux-pci@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kthota@nvidia.com, mmaddireddy@nvidia.com, sagar.tv@gmail.com
+Subject: Re: [PATCH V3] Revert "PCI: tegra194: Enable support for 256 Byte
+ payload"
+Message-ID: <20230627104814.GA3676313@rocinante>
+References: <20230619014218.1970846-1-vidyas@nvidia.com>
+ <20230619102604.3735001-1-vidyas@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [RFC PATCH 2/2] clk: qcom: gdsc: Add support for set_hwmode_dev
-Content-Language: en-US
-To:     Abel Vesa <abel.vesa@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        avel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Mike Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Taniya Das <tdas@qti.qualcomm.com>
-Cc:     linux-pm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org
-References: <20230627104033.3345659-1-abel.vesa@linaro.org>
- <20230627104033.3345659-2-abel.vesa@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230627104033.3345659-2-abel.vesa@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230619102604.3735001-1-vidyas@nvidia.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27.06.2023 12:40, Abel Vesa wrote:
-> Implement the GDSC specific genpd set_hwmode_dev callback in order to
-> switch the HW control on or off. For any GDSC that supports HW control
-> set this callback in order to allow its consumers to control it.
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> ---
-Currently all GDSCs with flags & HW_CTRL enable hw ctrl mode implicilty.
-I didn't get any cover letter with these patches.. are you planning on
-retiring that behavior? Presumably after adding a matching pair of set_hwmode
-in venus!
+Hello,
 
-fwiw this patch lgtm
-
-Konrad
->  drivers/clk/qcom/gdsc.c | 22 ++++++++++++++++++++++
->  1 file changed, 22 insertions(+)
+> This reverts commit 4fb8e46c1bc4 ("PCI: tegra194: Enable
+> support for 256 Byte payload").
 > 
-> diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
-> index 5358e28122ab..9a04bf2e4379 100644
-> --- a/drivers/clk/qcom/gdsc.c
-> +++ b/drivers/clk/qcom/gdsc.c
-> @@ -314,6 +314,26 @@ static int gdsc_enable(struct generic_pm_domain *domain)
->  	return 0;
->  }
->  
-> +static int gdsc_set_hwmode_dev(struct generic_pm_domain *domain,
-> +			       struct device *dev, bool enable)
-> +{
-> +	int ret = gdsc_hwctrl(domain_to_gdsc(domain), enable);
-> +
-> +	if (ret)
-> +		goto out;
-> +
-> +	/*
-> +	 * Wait for the GDSC to go through a power down and
-> +	 * up cycle.  In case there is a status polling going on
-> +	 * before the power cycle is completed it might read an
-> +	 * wrong status value.
-> +	 */
-> +	udelay(1);
-> +
-> +out:
-> +	return ret;
-> +}
-> +
->  static int gdsc_disable(struct generic_pm_domain *domain)
->  {
->  	struct gdsc *sc = domain_to_gdsc(domain);
-> @@ -451,6 +471,8 @@ static int gdsc_init(struct gdsc *sc)
->  		sc->pd.power_off = gdsc_disable;
->  	if (!sc->pd.power_on)
->  		sc->pd.power_on = gdsc_enable;
-> +	if (sc->flags & HW_CTRL)
-> +		sc->pd.set_hwmode_dev = gdsc_set_hwmode_dev;
->  
->  	ret = pm_genpd_init(&sc->pd, NULL, !on);
->  	if (ret)
+> Consider a PCIe hierarchy with a PCIe switch and a device connected
+> downstream of the switch that has support for MPS which is the minimum in
+> the hierarchy, and root port programmed with an MPS in its DevCtl register
+> that is greater than the minimum. In this scenario, the default bus
+> configuration of the kernel i.e. "PCIE_BUS_DEFAULT" doesn't configure the
+> MPS settings in the hierarchy correctly resulting in the device with
+> support for minimum MPS in the hierarchy receiving the TLPs of size more
+> than that. Although this can be addressed by appending "pci=pcie_bus_safe"
+> to the kernel command line, it doesn't seem to be a good idea to always
+> have this commandline argument even for the basic functionality to work.
+> 
+> Reverting commit 4fb8e46c1bc4 ("PCI: tegra194: Enable support for 256
+> Byte payload") avoids this requirement and ensures that the basic
+> functionality of the devices irrespective of the hierarchy and the MPS of
+> the devices in the hierarchy.
+> 
+> To reap the benefits of having support for higher MPS, optionally, one can
+> always append the kernel command line with "pci=pcie_bus_perf".
+
+Applied to controller/tegra194, thank you!
+
+[1/1] Revert "PCI: tegra194: Enable support for 256 Byte payload"
+      https://git.kernel.org/pci/pci/c/606295f16360
+
+	Krzysztof
