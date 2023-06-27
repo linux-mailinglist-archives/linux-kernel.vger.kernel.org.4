@@ -2,99 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F28A073F0FB
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 04:55:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6418B73F100
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 04:56:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229740AbjF0Czh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 22:55:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57040 "EHLO
+        id S230494AbjF0C4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 22:56:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjF0Czc (ORCPT
+        with ESMTP id S230482AbjF0C4U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 22:55:32 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 725CF19A1
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 19:55:31 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id d75a77b69052e-401d1d967beso136301cf.0
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 19:55:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687834530; x=1690426530;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=K6m+wEFcEkBY8kPY3Kx1wllLpYaRIsGxbOUyAAHvddU=;
-        b=ExOjo+32OkxgczlDHvAA93Sbizsv21cvgNnqKyveTvbuoZMVxqcmZEgPgSllcehguu
-         dbX+ENH+6Ay2FKPsfQQPRgwk9gig7UN/Bqn5dy0/3Lt52aEGpC6a0CWZuDlLqxGVuynQ
-         ePD+CMarbkoMLKhi58XFMsuv2TxpZMqD4UY8o5PNiJT66wQAkDvlNiFFn0BYTqgMvXPt
-         9NcqlCm40PM9effdAviY9KeE8HRGVu4E/rigBJg7RATr+OyC7hI4fz3nHHxtdPodsK9Y
-         PNjY12fUxpUwZPWspB5JgiUTyLdHqVtoy8OZEW6quF96sK7Xy1kFz342QD8ZJJbxbPpN
-         +zpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687834530; x=1690426530;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=K6m+wEFcEkBY8kPY3Kx1wllLpYaRIsGxbOUyAAHvddU=;
-        b=GYEkHHHyYE+sBbgKkaOcWW6BK2YeMKYixksHiwtlnSK9ADHqTxDPsrxJ0PzyPbiQNx
-         O8JGvWoIXdJQq54nsuXJ9pS1SG6daBsk7BeSop3iax3dPmApHvanr+gsOKE6pR6+yhAP
-         sKiEdmClP+i0kEwnmepJ+V7zAJzZOtQ0uN/Sc3g4FS2XFDz4K1cFt6vTkmGpaGAqINkZ
-         zXjkIETkQ9qKFoSmwug4lfx6M7zTk1cPg5oFFpt4SdA4JDAnRen4UEn04qYitn9EpbQ2
-         mSpPP+IjCWhxVJ/CxBg63W7qyy9GIp47XxRmimZrF+xsvIaOf908F5Su1SvC6Sc/9O/Y
-         YpJw==
-X-Gm-Message-State: AC+VfDwZfhftNqo6DM+Bd1T0BD9xwXB65kYYboUGqfBlnUzp3AS2Yga/
-        6HKPAY82gfVmk3WRb/vw3nqlVTSbrqQ7DwDRfHerZg==
-X-Google-Smtp-Source: ACHHUZ4HHpDDlpCkNylVwPD6Vtl3Tw7Wkd/6GWnr7BTs/XNVIfH6MktIHos0KxldS43iWx3GtWhQNV7SWLRv/Puj8+4=
-X-Received: by 2002:a05:622a:d1:b0:3f0:af20:1a37 with SMTP id
- p17-20020a05622a00d100b003f0af201a37mr70012qtw.15.1687834530512; Mon, 26 Jun
- 2023 19:55:30 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230626171430.3167004-1-ryan.roberts@arm.com> <20230626171430.3167004-7-ryan.roberts@arm.com>
-In-Reply-To: <20230626171430.3167004-7-ryan.roberts@arm.com>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Mon, 26 Jun 2023 20:54:54 -0600
-Message-ID: <CAOUHufYBSc=RKpPg4PuHduJiWKOe+vpA_rZVo-9-gFvVue0huQ@mail.gmail.com>
-Subject: Re: [PATCH v1 06/10] mm: Allow deferred splitting of arbitrary large
- anon folios
-To:     Ryan Roberts <ryan.roberts@arm.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Yin Fengwei <fengwei.yin@intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-s390@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 26 Jun 2023 22:56:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8311119AC;
+        Mon, 26 Jun 2023 19:56:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 63BA260FE7;
+        Tue, 27 Jun 2023 02:56:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C4EF1C433C8;
+        Tue, 27 Jun 2023 02:56:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687834576;
+        bh=QzGAndb5ala/OezbZU5QtRA6XqWtb+YoTMGRoQ9TcWw=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=GQyeWbGcS5vbQvJzXl6jOAqUBxAiwngpJTHfMdiyfzcRqy6KXnA+bWBjRwcDg/kRO
+         sE6558yC0HQT8ure8vz6uRywNiLVV0Q4OhwcWz/yO+9xs0QnOjvCHmMja4aJNpQD4H
+         1qa884Vjg/SY4ccjE4ePwgaxEzJo/2n54cIqzBNBQArvEPHyTfjaBe074UI7q65ZUf
+         uMJZDyQHkuGkzEQM9CGVhN1Qiu/acwQOcElLQyZrWQ8eLYwPejflOGB6sKvBTNzX2L
+         ueE/UslrcHdAgKFap/sEZ1vkCn84bRwjnkQFubsddKCUuUSOYGnH+4WzvYGypJzsz0
+         dyZwLxHdvPmpg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A9EF7C43170;
+        Tue, 27 Jun 2023 02:56:16 +0000 (UTC)
+Subject: Re: [GIT PULL] ACPI updates for v6.5-rc1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAJZ5v0h88c==8MP7H98oJo1tzY-i1isuru-axwLpSQ0ouG_COA@mail.gmail.com>
+References: <CAJZ5v0h88c==8MP7H98oJo1tzY-i1isuru-axwLpSQ0ouG_COA@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAJZ5v0h88c==8MP7H98oJo1tzY-i1isuru-axwLpSQ0ouG_COA@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-6.5-rc1
+X-PR-Tracked-Commit-Id: 01fee479846bb13139d339b11e04bf327200cac9
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: bb6950556d4b1dd1226c1f09e84b53cb37e5340f
+Message-Id: <168783457668.6991.18423126585588916709.pr-tracker-bot@kernel.org>
+Date:   Tue, 27 Jun 2023 02:56:16 +0000
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 26, 2023 at 11:15=E2=80=AFAM Ryan Roberts <ryan.roberts@arm.com=
-> wrote:
->
-> With the introduction of large folios for anonymous memory, we would
-> like to be able to split them when they have unmapped subpages, in order
-> to free those unused pages under memory pressure. So remove the
-> artificial requirement that the large folio needed to be at least
-> PMD-sized.
->
-> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
+The pull request you sent on Mon, 26 Jun 2023 19:18:50 +0200:
 
-Reviewed-by: Yu Zhao <yuzhao@google.com>
+> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-6.5-rc1
+
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/bb6950556d4b1dd1226c1f09e84b53cb37e5340f
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
