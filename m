@@ -2,191 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93F6874052D
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 22:48:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88AEF74052F
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 22:49:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbjF0Uso (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 16:48:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52486 "EHLO
+        id S231224AbjF0Uth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 16:49:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229840AbjF0Use (ORCPT
+        with ESMTP id S229645AbjF0Utf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 16:48:34 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F00D10D7
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 13:48:33 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4f86dbce369so6881990e87.0
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 13:48:32 -0700 (PDT)
+        Tue, 27 Jun 2023 16:49:35 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D92AEED
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 13:49:33 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2b6994a8ce3so47773291fa.1
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 13:49:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687898911; x=1690490911;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=h5cuxxD3O/wTB2BSSAaaa+aPcVHglRupuBRpkNvhp/4=;
-        b=noeEPvhzwSHk1yr+PYO+SJGFRehpAwvLYYcJ2os8G6QThZlWNjba1cjaV/ACdEtn6y
-         UkgnNucmSeKLRThSp14WbUOgibmopor+LCDEUGfG9b44wFXNCPblqIUQPa+67y5j8V22
-         GuPubh8ldtsanayR27EljTM3iNBQY3JE+ylibTqf/PYwI8axRmq4n3jvsUKEN29XS9ej
-         0R9XoDHjXrbH3h6IgyPV/NB1ObmjRHvPpFY0YxyKhrPLRO5ERD+mPjfayhPgfv0NLHjs
-         Ui+UbzwHVTesR9K7j8C1qhVuSTtEW0VXMXQ9vfxGnadvqvxjsnqngQc7pkbbzirwXoHW
-         ddoA==
+        d=linux-foundation.org; s=google; t=1687898972; x=1690490972;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=vt+JhOMyOcPiZWyS5N8b6JaFlqcnPvkA4fl5T3chmMY=;
+        b=ejnDLJc8Ktcrnrr9zztrFiKUNQsbVoLhW0veAolOW8qy3AJR+i0nMgNKLX/p8+aQDq
+         xkTfaoy2kjSVNCTcud7LJPbf0xSkLZShvDy4wV9DINYh8tCRA/k7k3A8hRDClsHEYkjf
+         u/mJSAlyxysDgkQczLK3guWsxTbtIS5VoLX+o=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687898911; x=1690490911;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=h5cuxxD3O/wTB2BSSAaaa+aPcVHglRupuBRpkNvhp/4=;
-        b=iNTKiu9jeStUeFXgnKYAMrkYBd3OAN5kaRzkhtkOPiY22L7SBU0HBlKYopNViwpXc4
-         cNkM1D+K0VA97uCt+cVlyjvr6oYAEczGeVzaL3Oa2R8Ucy4baxIoLqLugo0s80xwVyqc
-         5SzyWkNxW/I3Gf3gNfjdfqspgoz8RGwYfD2mZi75n/nJRAHmMJsylt1x8bDWsvfoGsfZ
-         lZCwvYEUqW6dpyyOfrr84Jp930sYxQ+YQHMoG4GYVnIxy96LUgzhqN03qVRpLa1E8mFh
-         Q++eNNkxDOXv3DOf6frpz0Snc+0bgDMKa3Iw5+jBQyOgJXKM6FbRNXuXt2aCnl5tek44
-         4aqg==
-X-Gm-Message-State: AC+VfDwwniISfjJYDsPbMOZTW8tIX2YzkoTf2wVU3UzVLStDUAja/+8E
-        Ur3Is4jhBJmb7IHS1S1JxTjehQ==
-X-Google-Smtp-Source: ACHHUZ4b2TcqgSOIUXbuevAdQp4iFlsG08HkdF6Rm3hdzogpclAKk2cDmnKVJ3bFLNwK1Ffq8nl9oQ==
-X-Received: by 2002:a05:6512:281f:b0:4fb:7665:9b0d with SMTP id cf31-20020a056512281f00b004fb76659b0dmr5269960lfb.12.1687898911109;
-        Tue, 27 Jun 2023 13:48:31 -0700 (PDT)
-Received: from [192.168.1.101] (abxj103.neoplus.adsl.tpnet.pl. [83.9.3.103])
-        by smtp.gmail.com with ESMTPSA id n25-20020a195519000000b004fb6c61e79bsm1206591lfe.117.2023.06.27.13.48.29
+        d=1e100.net; s=20221208; t=1687898972; x=1690490972;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vt+JhOMyOcPiZWyS5N8b6JaFlqcnPvkA4fl5T3chmMY=;
+        b=E7QK1uaOH9InQs557H04+jXuvcxthZbJIrA/BxyXygbrPDY0AOBKvkKSaf9WKfJni3
+         sZO2xeWGPyY+WKKwyTayB/g6L17DgLSIm1e0WCNLwBVnmRQuvTSG/opbo6wuNHqa97I5
+         Z4erdh0GzyPGofOlUR9IZvgHgxILD7RnDwSXV1RRh3b5WjVRSfj9rdHzE71sRl0Wlgjh
+         16SpMTVy/cJJjbtiUL1mMQtCthRGOhIKv8NS6hRZHjujiQkItz4qw6duY33bi2EiEdmN
+         obmmhlUf9Oe0nx3JcolOZuau/Zb15irfnb0PV0RaRTw181lEBEcObHOX10LdfnZw1I2i
+         HG0Q==
+X-Gm-Message-State: AC+VfDyZS0mo51etQy/IJUtQEiqkACqARRfcTmFD7dQKY+oirNsLXlS6
+        UBuByvnzrTEDqz8prA2ZdWtOPLiv9kslLlkiG7CwlQGR
+X-Google-Smtp-Source: ACHHUZ4z3UUwnRz6VQc4IbogHZSrIWxdBICc7B9sqP+Lac288pT3Oc9A7b1rsg1ZKqTgsLHIRj9kYA==
+X-Received: by 2002:a05:651c:105b:b0:2b6:9884:98c7 with SMTP id x27-20020a05651c105b00b002b6988498c7mr5487564ljm.44.1687898971740;
+        Tue, 27 Jun 2023 13:49:31 -0700 (PDT)
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com. [209.85.208.47])
+        by smtp.gmail.com with ESMTPSA id v4-20020a170906858400b0098e025cda39sm4460016ejx.70.2023.06.27.13.49.30
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Jun 2023 13:48:30 -0700 (PDT)
-Message-ID: <234628ff-359d-7058-a5ca-17b67be08ba5@linaro.org>
-Date:   Tue, 27 Jun 2023 22:48:28 +0200
+        Tue, 27 Jun 2023 13:49:31 -0700 (PDT)
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-51d9123a8abso3907562a12.2
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 13:49:30 -0700 (PDT)
+X-Received: by 2002:aa7:d748:0:b0:51d:982d:cb77 with SMTP id
+ a8-20020aa7d748000000b0051d982dcb77mr5048716eds.33.1687898970482; Tue, 27 Jun
+ 2023 13:49:30 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2 15/15] arm64: dts: qcom: sm6125-seine: Configure MDSS,
- DSI and panel
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, Lux Aliaga <they@mint.lgbt>
-References: <20230627-sm6125-dpu-v2-0-03e430a2078c@somainline.org>
- <20230627-sm6125-dpu-v2-15-03e430a2078c@somainline.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230627-sm6125-dpu-v2-15-03e430a2078c@somainline.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230627110038.GCZJrBVqu/4BfdyBeN@fat_crate.local>
+ <CAHk-=wghuOwXtMH9u7RAW694BOwf_Q9TeWR2v=GgLy0gjTfu4A@mail.gmail.com>
+ <CAHk-=wi9Uwo3-uwB4rT=wK2VKhGq3yEp_U-b2kruogCT=13Mjg@mail.gmail.com> <20230627203829.GKZJtIxQhQoC6erNva@fat_crate.local>
+In-Reply-To: <20230627203829.GKZJtIxQhQoC6erNva@fat_crate.local>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 27 Jun 2023 13:49:12 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whR90bEKrOKmk0O8KtX77bTFQGu3ykDDRhTGwmAw8HzYg@mail.gmail.com>
+Message-ID: <CAHk-=whR90bEKrOKmk0O8KtX77bTFQGu3ykDDRhTGwmAw8HzYg@mail.gmail.com>
+Subject: Re: [GIT PULL] x86/misc for 6.5
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Noah Goldstein <goldstein.w.n@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Content-Type: multipart/mixed; boundary="0000000000008d9a5905ff229ade"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27.06.2023 22:14, Marijn Suijten wrote:
-> Enable MDSS and DSI, and configure the Samsung SOFEF01-M ams597ut01
-> 6.0" 1080x2520 panel.
-> 
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+--0000000000008d9a5905ff229ade
+Content-Type: text/plain; charset="UTF-8"
 
-Konrad
->  .../dts/qcom/sm6125-sony-xperia-seine-pdx201.dts   | 59 ++++++++++++++++++++++
->  1 file changed, 59 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts b/arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts
-> index 9f8a9ef398a2..08d96d05da2e 100644
-> --- a/arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts
-> +++ b/arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts
-> @@ -179,6 +179,43 @@ &i2c3 {
->  	/* Cirrus Logic CS35L41 boosted audio amplifier @ 40 */
->  };
->  
-> +&mdss {
-> +	status = "okay";
-> +};
-> +
-> +&mdss_dsi0 {
-> +	vdda-supply = <&pm6125_l18>;
-> +	status = "okay";
-> +
-> +	panel@0 {
-> +		compatible = "samsung,sofef01-m-ams597ut01";
-> +		reg = <0>;
-> +
-> +		reset-gpios = <&tlmm 90 GPIO_ACTIVE_LOW>;
-> +
-> +		vddio-supply = <&pm6125_l12>;
-> +
-> +		pinctrl-0 = <&mdss_dsi_active &mdss_te_active_sleep>;
-> +		pinctrl-1 = <&mdss_dsi_sleep &mdss_te_active_sleep>;
-> +		pinctrl-names = "default", "sleep";
-> +
-> +		port {
-> +			panel_in: endpoint {
-> +				remote-endpoint = <&mdss_dsi0_out>;
-> +			};
-> +		};
-> +	};
-> +};
-> +
-> +&mdss_dsi0_out {
-> +	remote-endpoint = <&panel_in>;
-> +	data-lanes = <0 1 2 3>;
-> +};
-> +
-> +&mdss_dsi0_phy {
-> +	status = "okay";
-> +};
-> +
->  &pm6125_adc {
->  	pinctrl-names = "default";
->  	pinctrl-0 = <&camera_flash_therm &emmc_ufs_therm &rf_pa1_therm>;
-> @@ -469,6 +506,28 @@ vol_down_n: vol-down-n-state {
->  		drive-strength = <2>;
->  		bias-disable;
->  	};
-> +
-> +	mdss_te_active_sleep: mdss-te-active-sleep-state {
-> +		pins = "gpio89";
-> +		function = "mdp_vsync";
-> +		drive-strength = <2>;
-> +		bias-pull-down;
-> +	};
-> +
-> +	mdss_dsi_active: mdss-dsi-active-state {
-> +		pins = "gpio90";
-> +		function = "gpio";
-> +		drive-strength = <8>;
-> +		bias-disable;
-> +	};
-> +
-> +	mdss_dsi_sleep: mdss-dsi-sleep-state {
-> +		pins = "gpio90";
-> +		function = "gpio";
-> +		drive-strength = <2>;
-> +		bias-pull-down;
-> +	};
-> +
->  };
->  
->  &usb3 {
-> 
+On Tue, 27 Jun 2023 at 13:38, Borislav Petkov <bp@alien8.de> wrote:
+>
+> And there's a third kind who relax by the pool with a nice drink,
+> *while* playing around with inline asm. ;-P
+
+That explains a lot.
+
+> Btw, I'll send you a new version of this pull request with this patch
+> dropped to let folks experiment with it more.
+
+Oh, I already merged it. I don't hate the change, I just looked at it
+and went "I would have done that differently" and started playing
+around with it.
+
+There's nothing hugely *wrong* with the code I merged, but I do think
+that it did too much inside the inline asm (ie looping inside the asm,
+but also initializing values that could have - and should have - just
+been given as inputs to the asm).
+
+And the whole "why have two different versions for 40-byte and 64-byte
+areas, when you _could_ just do it with one 40-byte one that you then
+also just unroll".
+
+So I _think_ my version is nicer and shorter - assuming it works and
+there are no other bugs than the one I already noticed - but I don't
+think it's a huge deal.
+
+Anyway, before I throw my patch away, I'll just post it with the
+trivial fixes to use "+r", and with the "volatile" removed (I add
+"volatile" to asms by habit, but this one really isn't volatile).
+
+I just checked that both gcc and clang seem to be happy with it, but
+that's the only testing this patch has gotten: it compiles for me.
+
+Do with it what you will.
+
+                 Linus
+
+--0000000000008d9a5905ff229ade
+Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
+Content-Disposition: attachment; filename="patch.diff"
+Content-Transfer-Encoding: base64
+Content-ID: <f_ljerge1u0>
+X-Attachment-Id: f_ljerge1u0
+
+IGFyY2gveDg2L2xpYi9jc3VtLXBhcnRpYWxfNjQuYyB8IDY2ICsrKysrKysrKysrKysrKysrKy0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLQogMSBmaWxlIGNoYW5nZWQsIDI4IGluc2VydGlvbnMoKyks
+IDM4IGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL2FyY2gveDg2L2xpYi9jc3VtLXBhcnRpYWxf
+NjQuYyBiL2FyY2gveDg2L2xpYi9jc3VtLXBhcnRpYWxfNjQuYwppbmRleCBjZWEyNWNhOGI4Y2Yu
+LjYxZThjM2Q5N2MwNCAxMDA2NDQKLS0tIGEvYXJjaC94ODYvbGliL2NzdW0tcGFydGlhbF82NC5j
+CisrKyBiL2FyY2gveDg2L2xpYi9jc3VtLXBhcnRpYWxfNjQuYwpAQCAtMzMsNiArMzMsMjAgQEAg
+c3RhdGljIGlubGluZSBfX3dzdW0gY3N1bV90YWlsKHU2NCB0ZW1wNjQsIGludCBvZGQpCiAJcmV0
+dXJuIChfX2ZvcmNlIF9fd3N1bSlyZXN1bHQ7CiB9CiAKK3N0YXRpYyBpbmxpbmUgdW5zaWduZWQg
+bG9uZyB1cGRhdGVfY3N1bV80MGIodW5zaWduZWQgbG9uZyBzdW0sIGNvbnN0IHVuc2lnbmVkIGxv
+bmcgbVs1XSkKK3sKKwlhc20oImFkZHEgJTEsJTBcblx0IgorCSAgICAgImFkY3EgJTIsJTBcblx0
+IgorCSAgICAgImFkY3EgJTMsJTBcblx0IgorCSAgICAgImFkY3EgJTQsJTBcblx0IgorCSAgICAg
+ImFkY3EgJTUsJTBcblx0IgorCSAgICAgImFkY3EgJDAsJTAiCisJCToiK3IiIChzdW0pCisJCToi
+bSIgKG1bMF0pLCAibSIgKG1bMV0pLCAibSIgKG1bMl0pLAorCQkgIm0iIChtWzNdKSwgIm0iICht
+WzRdKSk7CisJcmV0dXJuIHN1bTsKK30KKwogLyoKICAqIERvIGEgY2hlY2tzdW0gb24gYW4gYXJi
+aXRyYXJ5IG1lbW9yeSBhcmVhLgogICogUmV0dXJucyBhIDMyYml0IGNoZWNrc3VtLgpAQCAtNjQs
+NDcgKzc4LDIzIEBAIF9fd3N1bSBjc3VtX3BhcnRpYWwoY29uc3Qgdm9pZCAqYnVmZiwgaW50IGxl
+biwgX193c3VtIHN1bSkKIAkgKiBoYXMgbm90aWNlYWJsZSBuZWdhdGl2ZSBhZmZlY3Qgb24gY29k
+ZWdlbiBmb3IgYWxsIG90aGVyIGNhc2VzIHdpdGgKIAkgKiBtaW5pbWFsIHBlcmZvcm1hbmNlIGJl
+bmVmaXQgaGVyZS4KIAkgKi8KLQlpZiAobGVuID09IDQwKSB7Ci0JCWFzbSgiYWRkcSAwKjgoJVtz
+cmNdKSwlW3Jlc11cblx0IgotCQkgICAgImFkY3EgMSo4KCVbc3JjXSksJVtyZXNdXG5cdCIKLQkJ
+ICAgICJhZGNxIDIqOCglW3NyY10pLCVbcmVzXVxuXHQiCi0JCSAgICAiYWRjcSAzKjgoJVtzcmNd
+KSwlW3Jlc11cblx0IgotCQkgICAgImFkY3EgNCo4KCVbc3JjXSksJVtyZXNdXG5cdCIKLQkJICAg
+ICJhZGNxICQwLCVbcmVzXSIKLQkJICAgIDogW3Jlc10gIityIih0ZW1wNjQpCi0JCSAgICA6IFtz
+cmNdICJyIihidWZmKSwgIm0iKCooY29uc3QgY2hhcigqKVs0MF0pYnVmZikpOworCWlmIChsaWtl
+bHkobGVuID09IDQwKSkgeworCQl0ZW1wNjQgPSB1cGRhdGVfY3N1bV80MGIodGVtcDY0LCBidWZm
+KTsKIAkJcmV0dXJuIGNzdW1fdGFpbCh0ZW1wNjQsIG9kZCk7CiAJfQotCWlmICh1bmxpa2VseShs
+ZW4gPj0gNjQpKSB7Ci0JCS8qCi0JCSAqIEV4dHJhIGFjY3VtdWxhdG9ycyBmb3IgYmV0dGVyIElM
+UCBpbiB0aGUgbG9vcC4KLQkJICovCi0JCXU2NCB0bXBfYWNjdW0sIHRtcF9jYXJyaWVzOwogCi0J
+CWFzbSgieG9ybCAla1t0bXBfYWNjdW1dLCVrW3RtcF9hY2N1bV1cblx0IgotCQkgICAgInhvcmwg
+JWtbdG1wX2NhcnJpZXNdLCVrW3RtcF9jYXJyaWVzXVxuXHQiCi0JCSAgICAic3VibCAkNjQsICVb
+bGVuXVxuXHQiCi0JCSAgICAiMTpcblx0IgotCQkgICAgImFkZHEgMCo4KCVbc3JjXSksJVtyZXNd
+XG5cdCIKLQkJICAgICJhZGNxIDEqOCglW3NyY10pLCVbcmVzXVxuXHQiCi0JCSAgICAiYWRjcSAy
+KjgoJVtzcmNdKSwlW3Jlc11cblx0IgotCQkgICAgImFkY3EgMyo4KCVbc3JjXSksJVtyZXNdXG5c
+dCIKLQkJICAgICJhZGNsICQwLCVrW3RtcF9jYXJyaWVzXVxuXHQiCi0JCSAgICAiYWRkcSA0Kjgo
+JVtzcmNdKSwlW3RtcF9hY2N1bV1cblx0IgotCQkgICAgImFkY3EgNSo4KCVbc3JjXSksJVt0bXBf
+YWNjdW1dXG5cdCIKLQkJICAgICJhZGNxIDYqOCglW3NyY10pLCVbdG1wX2FjY3VtXVxuXHQiCi0J
+CSAgICAiYWRjcSA3KjgoJVtzcmNdKSwlW3RtcF9hY2N1bV1cblx0IgotCQkgICAgImFkY2wgJDAs
+JWtbdG1wX2NhcnJpZXNdXG5cdCIKLQkJICAgICJhZGRxICQ2NCwgJVtzcmNdXG5cdCIKLQkJICAg
+ICJzdWJsICQ2NCwgJVtsZW5dXG5cdCIKLQkJICAgICJqZ2UgMWJcblx0IgotCQkgICAgImFkZHEg
+JVt0bXBfYWNjdW1dLCVbcmVzXVxuXHQiCi0JCSAgICAiYWRjcSAlW3RtcF9jYXJyaWVzXSwlW3Jl
+c11cblx0IgotCQkgICAgImFkY3EgJDAsJVtyZXNdIgotCQkgICAgOiBbdG1wX2FjY3VtXSAiPSZy
+Iih0bXBfYWNjdW0pLAotCQkgICAgICBbdG1wX2NhcnJpZXNdICI9JnIiKHRtcF9jYXJyaWVzKSwg
+W3Jlc10gIityIih0ZW1wNjQpLAotCQkgICAgICBbbGVuXSAiK3IiKGxlbiksIFtzcmNdICIrciIo
+YnVmZikKLQkJICAgIDogIm0iKCooY29uc3QgY2hhciAqKWJ1ZmYpKTsKKwkvKiBEbyB0d28gNDAt
+Ynl0ZSBjaHVua3MgaW4gcGFyYWxsZWwgdG8gZ2V0IGJldHRlciBJTFAgKi8KKwlpZiAobGlrZWx5
+KGxlbiA+PSA4MCkpIHsKKwkJdTY0IHRlbXA2NF8yID0gMDsKKwkJZG8geworCQkJdGVtcDY0ID0g
+dXBkYXRlX2NzdW1fNDBiKHRlbXA2NCwgYnVmZik7CisJCQl0ZW1wNjRfMiA9IHVwZGF0ZV9jc3Vt
+XzQwYih0ZW1wNjRfMiwgYnVmZiArIDQwKTsKKwkJCWJ1ZmYgKz0gODA7CisJCQlsZW4gLT0gODA7
+CisJCX0gd2hpbGUgKGxlbiA+PSA4MCk7CisJCWFzbSgiYWRkcSAlMSwlMFxuXHQiCisJCSAgICAi
+YWRjcSAkMCwlMCIKKwkJICAgIDoiK3IiICh0ZW1wNjQpOiAiciIgKHRlbXA2NF8yKSk7CiAJfQog
+CiAJaWYgKGxlbiAmIDMyKSB7Cg==
+--0000000000008d9a5905ff229ade--
