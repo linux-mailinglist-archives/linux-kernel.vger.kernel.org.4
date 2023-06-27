@@ -2,336 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85C1E73F600
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 09:48:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A49F473F605
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 09:49:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230070AbjF0HsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 03:48:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41730 "EHLO
+        id S231451AbjF0HtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 03:49:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231451AbjF0HsK (ORCPT
+        with ESMTP id S231472AbjF0Hs5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 03:48:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A591BEF;
-        Tue, 27 Jun 2023 00:48:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B6D96104F;
-        Tue, 27 Jun 2023 07:48:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35056C433C8;
-        Tue, 27 Jun 2023 07:48:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687852085;
-        bh=ZKJdk7+eb922UMMNDLeGRBSkHEMaZY+MyhMR+FRX4dg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QAYH7fThraQBh3W2I3HGXofUGkQ0inKnXYqn1U1rfQsXpW6+CXWbIfU5Nroq938fK
-         3aPLQdNauvp8TGiLZiv0UTEfMLt2UBpyjAaiABRay7wOFCt9xVMKfcgmH0w5rcZKDp
-         I+YWCqBz4mROI9QWEYTBmUjd6mT9fMoeq2tCL5GucVNa284duKUnf+B8tpy8MfpvTj
-         NzEodcc6qtOXhI8GiQxCb82AB57j39DK76LxAzFOW6NpheDKaR39V1sPsxqg0AvEKy
-         /uF93zqDB8pVIQwdaedVeMoZlmoNLDGiJ8SQjwmO+wXnNG6a/NpPvU0qpvvVCjZiX6
-         AkuSmyMYdIn0g==
-Date:   Tue, 27 Jun 2023 13:18:01 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Anne Macedo <retpolanne@posteo.net>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Christian Lamparter <chunkeey@googlemail.com>,
-        Rene Treffer <treffer@measite.de>
-Subject: Re: [PATCH] usb: host: xhci: remove renesas rom wiping
-Message-ID: <ZJqUMWv1jM2KQsYu@matsya>
-References: <20230626204910.728-3-retpolanne@posteo.net>
+        Tue, 27 Jun 2023 03:48:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 118E8F7
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 00:48:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687852093;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=whaOhWVIaKHzUbZWclTPzFtnTVD/3jITld51dEdWQ0A=;
+        b=MaK30NahsOXLpiw5LuaBIl0FvjQ3hcZBApEg0T+GxeU6Ap8qca17buBL2veYiJgVaCw1gs
+        ATUU20Z6IjPcM0vhbj4cEh4+xB6/A80oJjfwgOYChlGQHVBjBKzs+n4SJhVMQ/vJ54H6fv
+        cIPmLIxLfNfFGUZ6gKFeQJR38cYcci4=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-335-1DGTIHzZM6iJ6CvthQrTZw-1; Tue, 27 Jun 2023 03:48:11 -0400
+X-MC-Unique: 1DGTIHzZM6iJ6CvthQrTZw-1
+Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-988907e1b15so378175766b.3
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 00:48:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687852090; x=1690444090;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=whaOhWVIaKHzUbZWclTPzFtnTVD/3jITld51dEdWQ0A=;
+        b=TNVV8++AtL0wS5JWPsMXoVr7KlwSyHgNRvczLmFHXoTecs+v6u2dlRlsFLEZ3EnDfY
+         U9LNDzJoUYF4ejrovUkxKn9qur5CPHdB2xOLgceGik5u6ABvU7Si+629tSrJ2TwSGxDa
+         thXTHzv7YPYpRaTFCpas760874zUyYSl0MAh3qW99WiKedUM0Poy41eSNVmL0mizLa7T
+         HosYuZwA5ZRnwUC3qMC0n6RF93n2Qa+MfdSjXCSobwIvZMJHLz3OuAcYLwHniEkbkdW7
+         u51M7C6yYnVCHYRagYNAXkr6UeoTaAA54Z/BWOgf5dqB9MtggCIi/lymill9q8epn9l+
+         O11w==
+X-Gm-Message-State: AC+VfDzNZ36F20QKmisdTUCsRobJNprLzYVqJBjIrbf6LIhTK96YJlwD
+        pqnRVBSgdmuavJD174ZVRNeSrrj3XtIdafBiK/SX4aIQoegEs5KNCWPFPThv2GOhgNs31SsbvQD
+        xovP/1qkRE67E5f783Z6plCFD
+X-Received: by 2002:a17:906:da84:b0:988:f307:aea7 with SMTP id xh4-20020a170906da8400b00988f307aea7mr21595728ejb.7.1687852090423;
+        Tue, 27 Jun 2023 00:48:10 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5ob/ReyhK7BIZNcKDNmnYWuzv3zeM/wIdMcpgjlvuvypLCy8x/HUywv68r17c73ooOglaGQw==
+X-Received: by 2002:a17:906:da84:b0:988:f307:aea7 with SMTP id xh4-20020a170906da8400b00988f307aea7mr21595713ejb.7.1687852090093;
+        Tue, 27 Jun 2023 00:48:10 -0700 (PDT)
+Received: from sgarzare-redhat (host-87-11-6-160.retail.telecomitalia.it. [87.11.6.160])
+        by smtp.gmail.com with ESMTPSA id s16-20020a170906355000b00991ba677d92sm2190941eja.84.2023.06.27.00.48.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Jun 2023 00:48:09 -0700 (PDT)
+Date:   Tue, 27 Jun 2023 09:48:06 +0200
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>
+Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@sberdevices.ru, oxffffaa@gmail.com
+Subject: Re: [RFC PATCH v1 2/4] virtio/vsock: support MSG_PEEK for
+ SOCK_SEQPACKET
+Message-ID: <4pcexfrdtuisz53c4sb4pse4cyjw7zsuwtqsnnul23njo4ab5l@4jvdk6buxmj3>
+References: <20230618062451.79980-1-AVKrasnov@sberdevices.ru>
+ <20230618062451.79980-3-AVKrasnov@sberdevices.ru>
+ <yiy3kssoiyzs6ehnlo7g2xsb26zee5vih3jpgyc7i3dvfcyfpv@xvokxez3lzpo>
+ <9553a82f-ce31-e2e0-ff62-8abd2a6b639b@sberdevices.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230626204910.728-3-retpolanne@posteo.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <9553a82f-ce31-e2e0-ff62-8abd2a6b639b@sberdevices.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26-06-23, 20:49, Anne Macedo wrote:
-> Cards based on Renesas uPD72020x currently have their ROM wiped on
-> module start if they have an external ROM. This means that every time
-> you start up the module, the ROM gets cleaned up and the firmware
-> redownloaded.
+On Tue, Jun 27, 2023 at 07:34:29AM +0300, Arseniy Krasnov wrote:
+>
+>
+>On 26.06.2023 19:28, Stefano Garzarella wrote:
+>> On Sun, Jun 18, 2023 at 09:24:49AM +0300, Arseniy Krasnov wrote:
+>>> This adds support of MSG_PEEK flag for SOCK_SEQPACKET type of socket.
+>>> Difference with SOCK_STREAM is that this callback returns either length
+>>> of the message or error.
+>>>
+>>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>>> ---
+>>> net/vmw_vsock/virtio_transport_common.c | 63 +++++++++++++++++++++++--
+>>> 1 file changed, 60 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
+>>> index 2ee40574c339..352d042b130b 100644
+>>> --- a/net/vmw_vsock/virtio_transport_common.c
+>>> +++ b/net/vmw_vsock/virtio_transport_common.c
+>>> @@ -460,6 +460,63 @@ virtio_transport_stream_do_dequeue(struct vsock_sock *vsk,
+>>>     return err;
+>>> }
+>>>
+>>> +static ssize_t
+>>> +virtio_transport_seqpacket_do_peek(struct vsock_sock *vsk,
+>>> +                   struct msghdr *msg)
+>>> +{
+>>> +    struct virtio_vsock_sock *vvs = vsk->trans;
+>>> +    struct sk_buff *skb;
+>>> +    size_t total, len;
+>>> +
+>>> +    spin_lock_bh(&vvs->rx_lock);
+>>> +
+>>> +    if (!vvs->msg_count) {
+>>> +        spin_unlock_bh(&vvs->rx_lock);
+>>> +        return 0;
+>>> +    }
+>>> +
+>>> +    total = 0;
+>>> +    len = msg_data_left(msg);
+>>> +
+>>> +    skb_queue_walk(&vvs->rx_queue, skb) {
+>>> +        struct virtio_vsock_hdr *hdr;
+>>> +
+>>> +        if (total < len) {
+>>> +            size_t bytes;
+>>> +            int err;
+>>> +
+>>> +            bytes = len - total;
+>>> +            if (bytes > skb->len)
+>>> +                bytes = skb->len;
+>>> +
+>>> +            spin_unlock_bh(&vvs->rx_lock);
+>>> +
+>>> +            /* sk_lock is held by caller so no one else can dequeue.
+>>> +             * Unlock rx_lock since memcpy_to_msg() may sleep.
+>>> +             */
+>>> +            err = memcpy_to_msg(msg, skb->data, bytes);
+>>> +            if (err)
+>>> +                return err;
+>>> +
+>>> +            spin_lock_bh(&vvs->rx_lock);
+>>> +        }
+>>> +
+>>> +        total += skb->len;
+>>> +        hdr = virtio_vsock_hdr(skb);
+>>> +
+>>> +        if (le32_to_cpu(hdr->flags) & VIRTIO_VSOCK_SEQ_EOM) {
+>>> +            if (le32_to_cpu(hdr->flags) & VIRTIO_VSOCK_SEQ_EOR)
+>>> +                msg->msg_flags |= MSG_EOR;
+>>> +
+>>> +            break;
+>>> +        }
+>>> +    }
+>>> +
+>>> +    spin_unlock_bh(&vvs->rx_lock);
+>>> +
+>>> +    return total;
+>>
+>> Should we return the minimum between total and len?
+>
+>I guess no, because seqpacket dequeue callback always returns length of message,
+>then, in af_vsock.c we return either number of bytes read or length of message
+>depending on MSG_TRUNC flags.
 
-Nak, that is not the correct understanding of the code!
+Right! We should always return the total lenght of the packet.
 
-In function renesas_xhci_check_request_fw(), we check ROM status first
-and if it is already programmed, we skip.. Not sure why you are assuming
-it is wiped every time!
+Thanks,
+Stefano
 
-        /* Check if device has ROM and loaded, if so skip everything */
-        has_rom = renesas_check_rom(pdev);
-        if (has_rom) {
-                err = renesas_check_rom_state(pdev);
-                if (!err)
-                        return 0;
-                else if (err != -ENOENT)
-                        has_rom = false;
-        }
+>
+>Thanks, Arseniy
+>
+>>
+>> Thanks,
+>> Stefano
+>>
+>>> +}
+>>> +
+>>> static int virtio_transport_seqpacket_do_dequeue(struct vsock_sock *vsk,
+>>>                          struct msghdr *msg,
+>>>                          int flags)
+>>> @@ -554,9 +611,9 @@ virtio_transport_seqpacket_dequeue(struct vsock_sock *vsk,
+>>>                    int flags)
+>>> {
+>>>     if (flags & MSG_PEEK)
+>>> -        return -EOPNOTSUPP;
+>>> -
+>>> -    return virtio_transport_seqpacket_do_dequeue(vsk, msg, flags);
+>>> +        return virtio_transport_seqpacket_do_peek(vsk, msg);
+>>> +    else
+>>> +        return virtio_transport_seqpacket_do_dequeue(vsk, msg, flags);
+>>> }
+>>> EXPORT_SYMBOL_GPL(virtio_transport_seqpacket_dequeue);
+>>>
+>>> -- 
+>>> 2.25.1
+>>>
+>>
+>
 
-Erasing ROM is part of ROM programming sequence and is also required to
-if we ever have to recover, so this patch is NAKed by me
-
-> Wiping the ROM all the time is not necessary and can lead to situations
-> where, for example, people with stable firmwares might have their card fail
-> due to incomplete flashes (due to timeouts, for example).
-> 
-> Another case is when PCI configs are set up after the ROM is flashed
-> (e.g. disabling hotplugging). The ROM wipe and reflash process will
-> overwrite these configs.
-
-Why would ROM programming overwrite PCI config, does your device update
-that. In case you are programming config space you should redo that
-after ROM load (which should be done once)
-
-> Also, the current ROM setup can't work: the flash layout contains more
-> than the firmware â€“ for uploading, it needs to be prefixed with ~40
-> bytes that differ by card vendor. This config is documented on the
-> "uPD720201/uPD720202 User's Manual", section 6.3 (Data Format).
-
-I assure you it works for me on a publicly available Qualcomm Robotics
-RB3 board  and many people who have tested. It may not work for you, but
-you need to investigate better on what might be the cause. Btw what are
-you testing this on..
-
-> This patch, if applied, removes the cleanup and the setup of the Renesas
-> ROM as to not make it wipe and reset the ROM.
-> 
-> It also reduces load time, especially during boot, as problems with the
-> EEPROM chip or CRC checks might take some time during reflashing and
-> possibly lead to timeouts. Since the ROM is already flashed (either
-> manually by a tool such as uPD72020x-load or by the kernel module) it
-
-where is this tool, I have not heard of it, is it publicly available,
-where can I find the source of this tool?
-
-> just needs to be loaded during module startup.
-> 
-> Suggested-by: Rene Treffer <treffer@measite.de>
-> Signed-off-by: Anne Macedo <retpolanne@posteo.net>
-> ---
->  drivers/usb/host/xhci-pci-renesas.c | 188 ----------------------------
->  1 file changed, 188 deletions(-)
-> 
-> diff --git a/drivers/usb/host/xhci-pci-renesas.c b/drivers/usb/host/xhci-pci-renesas.c
-> index 93f8b355bc70..28656beb808d 100644
-> --- a/drivers/usb/host/xhci-pci-renesas.c
-> +++ b/drivers/usb/host/xhci-pci-renesas.c
-> @@ -375,199 +375,11 @@ static int renesas_fw_download(struct pci_dev *pdev,
->  	return 0;
->  }
->  
-> -static void renesas_rom_erase(struct pci_dev *pdev)
-> -{
-> -	int retval, i;
-> -	u8 status;
-> -
-> -	dev_dbg(&pdev->dev, "Performing ROM Erase...\n");
-> -	retval = pci_write_config_dword(pdev, RENESAS_DATA0,
-> -					RENESAS_ROM_ERASE_MAGIC);
-> -	if (retval) {
-> -		dev_err(&pdev->dev, "ROM erase, magic word write failed: %d\n",
-> -			pcibios_err_to_errno(retval));
-> -		return;
-> -	}
-> -
-> -	retval = pci_read_config_byte(pdev, RENESAS_ROM_STATUS, &status);
-> -	if (retval) {
-> -		dev_err(&pdev->dev, "ROM status read failed: %d\n",
-> -			pcibios_err_to_errno(retval));
-> -		return;
-> -	}
-> -	status |= RENESAS_ROM_STATUS_ERASE;
-> -	retval = pci_write_config_byte(pdev, RENESAS_ROM_STATUS, status);
-> -	if (retval) {
-> -		dev_err(&pdev->dev, "ROM erase set word write failed\n");
-> -		return;
-> -	}
-> -
-> -	/* sleep a bit while ROM is erased */
-> -	msleep(20);
-> -
-> -	for (i = 0; i < RENESAS_RETRY; i++) {
-> -		retval = pci_read_config_byte(pdev, RENESAS_ROM_STATUS,
-> -					      &status);
-> -		status &= RENESAS_ROM_STATUS_ERASE;
-> -		if (!status)
-> -			break;
-> -
-> -		mdelay(RENESAS_DELAY);
-> -	}
-> -
-> -	if (i == RENESAS_RETRY)
-> -		dev_dbg(&pdev->dev, "Chip erase timedout: %x\n", status);
-> -
-> -	dev_dbg(&pdev->dev, "ROM Erase... Done success\n");
-> -}
-> -
-> -static bool renesas_setup_rom(struct pci_dev *pdev, const struct firmware *fw)
-> -{
-> -	const u32 *fw_data = (const u32 *)fw->data;
-> -	int err, i;
-> -	u8 status;
-> -
-> -	/* 2. Write magic word to Data0 */
-> -	err = pci_write_config_dword(pdev, RENESAS_DATA0,
-> -				     RENESAS_ROM_WRITE_MAGIC);
-> -	if (err)
-> -		return false;
-> -
-> -	/* 3. Set External ROM access */
-> -	err = pci_write_config_byte(pdev, RENESAS_ROM_STATUS,
-> -				    RENESAS_ROM_STATUS_ACCESS);
-> -	if (err)
-> -		goto remove_bypass;
-> -
-> -	/* 4. Check the result */
-> -	err = pci_read_config_byte(pdev, RENESAS_ROM_STATUS, &status);
-> -	if (err)
-> -		goto remove_bypass;
-> -	status &= GENMASK(6, 4);
-> -	if (status) {
-> -		dev_err(&pdev->dev,
-> -			"setting external rom failed: %x\n", status);
-> -		goto remove_bypass;
-> -	}
-> -
-> -	/* 5 to 16 Write FW to DATA0/1 while checking SetData0/1 */
-> -	for (i = 0; i < fw->size / 4; i++) {
-> -		err = renesas_fw_download_image(pdev, fw_data, i, true);
-> -		if (err) {
-> -			dev_err(&pdev->dev,
-> -				"ROM Download Step %d failed at position %d bytes with (%d)\n",
-> -				 i, i * 4, err);
-> -			goto remove_bypass;
-> -		}
-> -	}
-> -
-> -	/*
-> -	 * wait till DATA0/1 is cleared
-> -	 */
-> -	for (i = 0; i < RENESAS_RETRY; i++) {
-> -		err = pci_read_config_byte(pdev, RENESAS_ROM_STATUS_MSB,
-> -					   &status);
-> -		if (err)
-> -			goto remove_bypass;
-> -		if (!(status & (BIT(0) | BIT(1))))
-> -			break;
-> -
-> -		udelay(RENESAS_DELAY);
-> -	}
-> -	if (i == RENESAS_RETRY) {
-> -		dev_err(&pdev->dev, "Final Firmware ROM Download step timed out\n");
-> -		goto remove_bypass;
-> -	}
-> -
-> -	/* 17. Remove bypass */
-> -	err = pci_write_config_byte(pdev, RENESAS_ROM_STATUS, 0);
-> -	if (err)
-> -		return false;
-> -
-> -	udelay(10);
-> -
-> -	/* 18. check result */
-> -	for (i = 0; i < RENESAS_RETRY; i++) {
-> -		err = pci_read_config_byte(pdev, RENESAS_ROM_STATUS, &status);
-> -		if (err) {
-> -			dev_err(&pdev->dev, "Read ROM status failed:%d\n",
-> -				pcibios_err_to_errno(err));
-> -			return false;
-> -		}
-> -		status &= RENESAS_ROM_STATUS_RESULT;
-> -		if (status ==  RENESAS_ROM_STATUS_SUCCESS) {
-> -			dev_dbg(&pdev->dev, "Download ROM success\n");
-> -			break;
-> -		}
-> -		udelay(RENESAS_DELAY);
-> -	}
-> -	if (i == RENESAS_RETRY) { /* Timed out */
-> -		dev_err(&pdev->dev,
-> -			"Download to external ROM TO: %x\n", status);
-> -		return false;
-> -	}
-> -
-> -	dev_dbg(&pdev->dev, "Download to external ROM succeeded\n");
-> -
-> -	/* Last step set Reload */
-> -	err = pci_write_config_byte(pdev, RENESAS_ROM_STATUS,
-> -				    RENESAS_ROM_STATUS_RELOAD);
-> -	if (err) {
-> -		dev_err(&pdev->dev, "Set ROM execute failed: %d\n",
-> -			pcibios_err_to_errno(err));
-> -		return false;
-> -	}
-> -
-> -	/*
-> -	 * wait till Reload is cleared
-> -	 */
-> -	for (i = 0; i < RENESAS_RETRY; i++) {
-> -		err = pci_read_config_byte(pdev, RENESAS_ROM_STATUS, &status);
-> -		if (err)
-> -			return false;
-> -		if (!(status & RENESAS_ROM_STATUS_RELOAD))
-> -			break;
-> -
-> -		udelay(RENESAS_DELAY);
-> -	}
-> -	if (i == RENESAS_RETRY) {
-> -		dev_err(&pdev->dev, "ROM Exec timed out: %x\n", status);
-> -		return false;
-> -	}
-> -
-> -	return true;
-> -
-> -remove_bypass:
-> -	pci_write_config_byte(pdev, RENESAS_ROM_STATUS, 0);
-> -	return false;
-> -}
-> -
->  static int renesas_load_fw(struct pci_dev *pdev, const struct firmware *fw)
->  {
->  	int err = 0;
-> -	bool rom;
-> -
-> -	/* Check if the device has external ROM */
-> -	rom = renesas_check_rom(pdev);
-> -	if (rom) {
-> -		/* perform chip erase first */
-> -		renesas_rom_erase(pdev);
-> -
-> -		/* lets try loading fw on ROM first */
-> -		rom = renesas_setup_rom(pdev, fw);
-> -		if (!rom) {
-> -			dev_dbg(&pdev->dev,
-> -				"ROM load failed, falling back on FW load\n");
-> -		} else {
-> -			dev_dbg(&pdev->dev,
-> -				"ROM load success\n");
-> -			goto exit;
-> -		}
-> -	}
->  
->  	err = renesas_fw_download(pdev, fw);
-> -
-> -exit:
->  	if (err)
->  		dev_err(&pdev->dev, "firmware failed to download (%d).", err);
->  	return err;
-> -- 
-> 2.41.0
-
--- 
-~Vinod
