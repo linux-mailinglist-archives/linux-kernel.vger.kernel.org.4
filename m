@@ -2,34 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AF4E73FBB5
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 14:08:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B21DA73FBB3
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 14:08:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231835AbjF0MIw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 08:08:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34418 "EHLO
+        id S231812AbjF0MIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 08:08:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231800AbjF0MIn (ORCPT
+        with ESMTP id S231793AbjF0MIn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 27 Jun 2023 08:08:43 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 759B91999
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 05:08:42 -0700 (PDT)
-Received: from dggpemm500014.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Qr3Lv3X7czMnhv;
-        Tue, 27 Jun 2023 20:05:27 +0800 (CST)
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F946198D
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 05:08:41 -0700 (PDT)
+Received: from dggpemm500014.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Qr3QG5QRCzqV0Q;
+        Tue, 27 Jun 2023 20:08:22 +0800 (CST)
 Received: from localhost.localdomain (10.175.112.125) by
  dggpemm500014.china.huawei.com (7.185.36.153) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Tue, 27 Jun 2023 20:08:37 +0800
+ 15.1.2507.27; Tue, 27 Jun 2023 20:08:38 +0800
 From:   Wupeng Ma <mawupeng1@huawei.com>
 To:     <akpm@linux-foundation.org>
 CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
         <mawupeng1@huawei.com>
-Subject: [PATCH 0/2] fix WARN_ON in add_to_avail_list
-Date:   Tue, 27 Jun 2023 20:08:31 +0800
-Message-ID: <20230627120833.2230766-1-mawupeng1@huawei.com>
+Subject: [PATCH 1/2] swap: Cleanup duplicated WARN_ON in add_to_avail_list
+Date:   Tue, 27 Jun 2023 20:08:32 +0800
+Message-ID: <20230627120833.2230766-2-mawupeng1@huawei.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230627120833.2230766-1-mawupeng1@huawei.com>
+References: <20230627120833.2230766-1-mawupeng1@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -48,23 +50,30 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Ma Wupeng <mawupeng1@huawei.com>
 
-Our test find a WARN_ON in add_to_avail_list. During add_to_avail_list,
-avail_lists is already in swap_avail_heads, while lead to this WARN_ON.
+Empty check for plist_node is checked in add_to_avail_list and plist_add.
+Drop the duplicate one in add_to_avail_list.
 
-During swapoff, try_to_unuse fail to alloc memory due to memory limit and
-this lead the failure of swapoff and casing re-insert swap space back into
-swap_list. During _enable_swap_info, this swap device is added to avail
-list even this swap device if full. At the same time, one entry in this
-full swap device in released and try to add this device into avail list
-and found it is already in the avail list. This cause this WARN_ON.
+Signed-off-by: Ma Wupeng <mawupeng1@huawei.com>
+---
+ mm/swapfile.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-Ma Wupeng (2):
-  swap: Cleanup duplicated WARN_ON in add_to_avail_list
-  swap: Stop add to avail list is swap is full
-
- mm/swapfile.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
-
+diff --git a/mm/swapfile.c b/mm/swapfile.c
+index 274bbf797480..879cb80bf37b 100644
+--- a/mm/swapfile.c
++++ b/mm/swapfile.c
+@@ -713,10 +713,8 @@ static void add_to_avail_list(struct swap_info_struct *p)
+ 	int nid;
+ 
+ 	spin_lock(&swap_avail_lock);
+-	for_each_node(nid) {
+-		WARN_ON(!plist_node_empty(&p->avail_lists[nid]));
++	for_each_node(nid)
+ 		plist_add(&p->avail_lists[nid], &swap_avail_heads[nid]);
+-	}
+ 	spin_unlock(&swap_avail_lock);
+ }
+ 
 -- 
 2.25.1
 
