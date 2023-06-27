@@ -2,129 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3597D740404
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 21:33:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F16E8740406
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 21:34:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230152AbjF0TdR convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 27 Jun 2023 15:33:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50020 "EHLO
+        id S229957AbjF0TeA convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 27 Jun 2023 15:34:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbjF0TdP (ORCPT
+        with ESMTP id S229483AbjF0Td7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 15:33:15 -0400
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30A9B1BC3;
-        Tue, 27 Jun 2023 12:33:14 -0700 (PDT)
-Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-c13b0941a38so338689276.0;
-        Tue, 27 Jun 2023 12:33:14 -0700 (PDT)
+        Tue, 27 Jun 2023 15:33:59 -0400
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BCA31BC3;
+        Tue, 27 Jun 2023 12:33:58 -0700 (PDT)
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-5700b15c12fso52289837b3.1;
+        Tue, 27 Jun 2023 12:33:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687894393; x=1690486393;
+        d=1e100.net; s=20221208; t=1687894437; x=1690486437;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=c6I1qDNxrhaapOFb46VGvBuvtnmrp2kBctslbEeEODg=;
-        b=aPZE4jt/XY6t6chgiKySDHn36EuvSmuYXXwHF9YKEIcBp7NS7JHmBI1WQfuwi3oKrL
-         Dm3OrEPDigj2xXB37dcmlq4OTa+Uz0uSJkUAh59Kq7I7FNXGxxYnDV2jFcn9GUpRYIam
-         WBo+13eYgvPtBMr9tmQStOtmsb1Iz76rvLAdVq7VoWzrEMODfEV7IU/aF46gAD7rJJH+
-         JLpwTQRqj8BctBfzEvYQsImtp1KpkkQNxvQ/AaaJPqXXuIemkkkGLV2RJy1suiqSY057
-         Yjrndn+CeocVHBb9xA8z3jAJSDHCG6H6tSjQKB6lPKBMhlJIRWiwTqhsdlbkwzbhMHoH
-         rhuA==
-X-Gm-Message-State: AC+VfDw9R/gMwcKbGcjxW57vRzOkUKC2JY8hBMMHLMcRX2NeoyH/W8UL
-        f/4xd2goCbUuupd5d0ftFkVoBJX6N90/x90opQM=
-X-Google-Smtp-Source: ACHHUZ5ARinfQ03+Wn7zCCdzOEc4NDbJs+cCh1o88sZhvU8Ng6O9KNQ+LB0QE+64kS3i1/NyFuQJY8+6toXVgGkQgKs=
-X-Received: by 2002:a25:dc91:0:b0:bce:bed4:29f6 with SMTP id
- y139-20020a25dc91000000b00bcebed429f6mr138892ybe.17.1687894393221; Tue, 27
- Jun 2023 12:33:13 -0700 (PDT)
+        bh=nEEQwXF6153JBPAVoTjMd1AVh+oNM4vqAmX0ynTyiqE=;
+        b=AF2w6bgthwYBxLkX70SaP35HCkk7GtKB+tyiVZFHr/6Yl+waihjqZwD8ScCUXINnKC
+         jJnyRoSp07F0JFdKKUBtKU4MD8nS+fS3oTi6/wg/yCntMDaPUJfVUeuZMfTsZu0yuC5B
+         ianPpixnGjeCdjuyUZHvGIdkbZtCg4jB8hHYpZBri57BeJt4IybsrXDhf1pjLA1z1D9b
+         2PZTI0lxKr2zBkWU9CYfPpHrB5Wnsc9NgL5XyliZHt/WLqQApVGo0SxbdEN10YTdn5Ri
+         VdURM0WvqaOK6OTLGZ4HjjQsWH47wHqGh0jvLNpAFeDlwGE6nnZ11jjVbSqCm9eVaswR
+         Dv6g==
+X-Gm-Message-State: AC+VfDwsntPd73+/XT5VNYOFKAluqsuvuelXc+2HXpPl1zeFVX/0Wm3a
+        kSYSf+oIXaqXq+Mzuq8u0/dTCmHRPX5f8AZzqXk=
+X-Google-Smtp-Source: ACHHUZ4RDHiTTnTdXB6PlN9mTF5J4NX2BboW/pyuodYfFqe5grFk1xYdA6rWB6mEFqZ4xiZnA9XlV/Qc2ef1FuhnWCk=
+X-Received: by 2002:a25:b09f:0:b0:be3:bf87:3ebc with SMTP id
+ f31-20020a25b09f000000b00be3bf873ebcmr30298883ybj.56.1687894437518; Tue, 27
+ Jun 2023 12:33:57 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230626201606.2514679-1-jolsa@kernel.org> <CAM9d7chMGzEJ3GKyxXD-RwUpjje7u3Cp810TRD+ZGgCT+mFrEQ@mail.gmail.com>
- <ZJqfUL1gnkTbUx5n@krava>
-In-Reply-To: <ZJqfUL1gnkTbUx5n@krava>
+References: <20230626053048.257959-1-irogers@google.com> <CAM9d7cgrVEUBrmF4+w02ENQwSG-Ek6H_O7B0cUgPxv_wvsj5MQ@mail.gmail.com>
+In-Reply-To: <CAM9d7cgrVEUBrmF4+w02ENQwSG-Ek6H_O7B0cUgPxv_wvsj5MQ@mail.gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Tue, 27 Jun 2023 12:33:02 -0700
-Message-ID: <CAM9d7chRtGNG6KLkWQRBz0aNVwDJWm-StPbMuXN4bumpUsNG-g@mail.gmail.com>
-Subject: Re: [PATCH] perf tools: Add missing else to cmd_daemon subcommand condition
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <a.p.zijlstra@chello.nl>,
-        Ingo Molnar <mingo@kernel.org>,
+Date:   Tue, 27 Jun 2023 12:33:46 -0700
+Message-ID: <CAM9d7ci8ywh47tkdQOo-Y4QDvUquwSJhUDCg3ezmErjsitdTjA@mail.gmail.com>
+Subject: Re: [PATCH v1] perf pmu: Correct auto_merge_stats test
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Ian Rogers <irogers@google.com>,
+        Jiri Olsa <jolsa@kernel.org>,
         Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org
+        Kan Liang <kan.liang@linux.intel.com>,
+        James Clark <james.clark@arm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andi Kleen <ak@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 1:35 AM Jiri Olsa <olsajiri@gmail.com> wrote:
+On Mon, Jun 26, 2023 at 3:15 PM Namhyung Kim <namhyung@kernel.org> wrote:
 >
-> On Mon, Jun 26, 2023 at 01:58:48PM -0700, Namhyung Kim wrote:
-> > Hi Jiri,
-> >
-> > On Mon, Jun 26, 2023 at 1:16 PM Jiri Olsa <jolsa@kernel.org> wrote:
-> > >
-> > > Namhyung reported segfault in perf daemon start command.
-> > >
-> > > It's caused by extra check on argv[0] which is set to NULL by previous
-> > > __cmd_start call. Adding missing else to skip the extra check.
-> > >
-> > > Fixes: 92294b906e6c ("perf daemon: Dynamically allocate path to perf")
-> > > Reported-by: Namhyung Kim <namhyung@kernel.org>
-> > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> >
-> > Thanks for the fix.  Now it runs ok.
-> >
-> > Before:
-> >   $ sudo ./perf test -v daemon
-> >    85: daemon operations                                               :
-> >   --- start ---
-> >   test child forked, pid 82420
-> >   test daemon list
-> >   ./tests/shell/daemon.sh: line 133: 82426 Segmentation fault
-> > perf daemon start --config ${config}
-> >   test daemon reconfig
-> >   ./tests/shell/daemon.sh: line 133: 82520 Segmentation fault
-> > perf daemon start --config ${config}
-> >   test daemon stop
-> >   ./tests/shell/daemon.sh: line 133: 82636 Segmentation fault
-> > perf daemon start --config ${config}
-> >   test daemon signal
-> >   ./tests/shell/daemon.sh: line 133: 82674 Segmentation fault
-> > perf daemon start --config ${config}
-> >   signal 12 sent to session 'test [82676]'
-> >   signal 12 sent to session 'test [82676]'
-> >   test daemon ping
-> >   ./tests/shell/daemon.sh: line 133: 82702 Segmentation fault
-> > perf daemon start --config ${config}
-> >   test daemon lock
-> >   ./tests/shell/daemon.sh: line 133: 82734 Segmentation fault
-> > perf daemon start --config ${config}
-> >   test child finished with 0
-> >   ---- end ----
-> >   daemon operations: Ok
-> >
-> > Maybe we need to investigate more why it was ok..
-> > But at least I don't see segfaults anymore
+> Hi Ian,
 >
-> yea, for some reason parse_options would put NULL into argv[0]
+> On Sun, Jun 25, 2023 at 10:31 PM Ian Rogers <irogers@google.com> wrote:
+> >
+> > The original logic was:
+> > https://lore.kernel.org/all/20230527072210.2900565-35-irogers@google.com/
+> > return !is_pmu_hybrid(pmu->name)
+> >
+> > is_pmu_hybrid was removed but with the incorrect condition which was
+> > fixed for core PMUs but not uncore. This change fixes both.
+> >
+> > Fixes: e23421426e13 ("perf pmu: Correct perf_pmu__auto_merge_stats() affecting hybrid")
+> > Signed-off-by: Ian Rogers <irogers@google.com>
 >
-> I'll try to check what changed, in any case the fix makes the
-> condition alligned with the other legs and fixes the segfault
-
-Yep, thanks for checking.
-
-In the meantime, Thomas Richter reported the same problem and
-fix.  I'll take yours but leave it for the record.
-
-  http://lore.kernel.org/r/20230627092633.2135105-1-tmricht@linux.ibm.com
+> Tested-by: Namhyung Kim <namhyung@kernel.org>
 
 Applied to perf-tools-next, thanks!
