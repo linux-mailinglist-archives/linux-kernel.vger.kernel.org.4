@@ -2,52 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED76C73F798
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 10:42:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FA1473F792
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 10:41:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230451AbjF0ImJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 04:42:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45632 "EHLO
+        id S230479AbjF0Ilo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 04:41:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231476AbjF0ImC (ORCPT
+        with ESMTP id S230392AbjF0Ilk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 04:42:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48A4A10D7
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 01:41:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D223F6104F
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 08:41:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2B2CC433C8;
-        Tue, 27 Jun 2023 08:41:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687855315;
-        bh=CNvVf0CW9zYR+RPLZwjcn4zfHDWpIun9htkTMtA7UeE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ujAkgVWnE9vlOctMQ8bg7nbHy7a+78JOiG+v/bB30j2UiM5d1zIcFitl3KrMKuaBZ
-         +OaazkSXYNCzO089SebZXOeE3kO39tj4xdDeplKy21bZVBm16xNTsKIY4OmtEAugVn
-         AXSmiYkpBecwvw9LQqLdis1232nnWIqAYSh4ZeOd4532y6eUnFT4d9+VPh8EXgNn1l
-         Q8tlY7TxmmJiCT8FFGWwgyVbXrLVKV16/LVErA/kuiYCTnpVrqsDa5ACLtZy/biyO5
-         AdxCOava3nBcmv3CBkeUuO6Am9NGxY14noWxHre3F3DLZyHeUADQjHA3K8gru9osnI
-         qm6koZQNiqcHw==
-Date:   Tue, 27 Jun 2023 11:40:58 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Claudio Migliorelli <claudio.migliorelli@mail.polimi.it>,
-        Yuwei Guan <ssawgyw@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] memblock: small updates for v6.5-rc1
-Message-ID: <20230627084058.GM52412@kernel.org>
+        Tue, 27 Jun 2023 04:41:40 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 60978E3
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 01:41:38 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.43])
+        by gateway (Coremail) with SMTP id _____8Dxc8TAoJpkcvYCAA--.4787S3;
+        Tue, 27 Jun 2023 16:41:36 +0800 (CST)
+Received: from [10.20.42.43] (unknown [10.20.42.43])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxzyO_oJpknq4LAA--.7367S3;
+        Tue, 27 Jun 2023 16:41:35 +0800 (CST)
+Message-ID: <766f323a-efcf-6552-f7e5-a736830c3f12@loongson.cn>
+Date:   Tue, 27 Jun 2023 16:41:35 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] drm: Remove the deprecated drm_put_dev() function
+Content-Language: en-US
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian Koenig <christian.koenig@amd.com>,
+        Pan Xinhui <Xinhui.Pan@amd.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org
+References: <20230625050901.393055-1-suijingfeng@loongson.cn>
+ <4672fc8d-ca95-6d00-1303-cb5968c51703@suse.de>
+From:   Sui Jingfeng <suijingfeng@loongson.cn>
+Organization: Loongson
+In-Reply-To: <4672fc8d-ca95-6d00-1303-cb5968c51703@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8AxzyO_oJpknq4LAA--.7367S3
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBj93XoW3Xr48Jw1UGr4Uur4fZw1kWFX_yoW7uF4fpF
+        s3JFyrtrWUtFs5Gr17JF17CFy5Jw47t3WfWr18Ga43Wrs8Ary0qF9xXry0gryUJrW8Ar1F
+        yF15XF1UZFyUCFcCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUPab4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+        xVW8Jr0_Cr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
+        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
+        AVWUtwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
+        8JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vI
+        r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67
+        AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIY
+        rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14
+        v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWx
+        JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU4R6wDU
+        UUU
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,40 +74,198 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Hi,
 
-The following changes since commit 44c026a73be8038f03dbdeef028b642880cf1511:
+On 2023/6/26 15:56, Thomas Zimmermann wrote:
+> Hi
+>
+> Am 25.06.23 um 07:09 schrieb Sui Jingfeng:
+>> As this function can be replaced with drm_dev_unregister() + 
+>> drm_dev_put(),
+>> it is already marked as deprecated, so remove it. No functional change.
+>>
+>> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+>> ---
+>>   drivers/gpu/drm/drm_drv.c           | 28 ----------------------------
+>>   drivers/gpu/drm/drm_pci.c           |  3 ++-
+>>   drivers/gpu/drm/radeon/radeon_drv.c |  3 ++-
+>>   include/drm/drm_drv.h               |  1 -
+>>   4 files changed, 4 insertions(+), 31 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/drm_drv.c b/drivers/gpu/drm/drm_drv.c
+>> index 12687dd9e1ac..5057307fe22a 100644
+>> --- a/drivers/gpu/drm/drm_drv.c
+>> +++ b/drivers/gpu/drm/drm_drv.c
+>> @@ -406,34 +406,6 @@ void drm_minor_release(struct drm_minor *minor)
+>>    * possibly leaving the hardware enabled.
+>>    */
+>>   -/**
+>> - * drm_put_dev - Unregister and release a DRM device
+>> - * @dev: DRM device
+>> - *
+>> - * Called at module unload time or when a PCI device is unplugged.
+>> - *
+>> - * Cleans up all DRM device, calling drm_lastclose().
+>> - *
+>> - * Note: Use of this function is deprecated. It will eventually go away
+>> - * completely.  Please use drm_dev_unregister() and drm_dev_put() 
+>> explicitly
+>> - * instead to make sure that the device isn't userspace accessible 
+>> any more
+>> - * while teardown is in progress, ensuring that userspace can't 
+>> access an
+>> - * inconsistent state.
+>> - */
+>> -void drm_put_dev(struct drm_device *dev)
+>> -{
+>> -    DRM_DEBUG("\n");
+>> -
+>> -    if (!dev) {
+>> -        DRM_ERROR("cleanup called no dev\n");
+>> -        return;
+>> -    }
+>> -
+>> -    drm_dev_unregister(dev);
+>> -    drm_dev_put(dev);
+>> -}
+>> -EXPORT_SYMBOL(drm_put_dev);
+>> -
+>>   /**
+>>    * drm_dev_enter - Enter device critical section
+>>    * @dev: DRM device
+>> diff --git a/drivers/gpu/drm/drm_pci.c b/drivers/gpu/drm/drm_pci.c
+>> index 39d35fc3a43b..b3a68a92eaa6 100644
+>> --- a/drivers/gpu/drm/drm_pci.c
+>> +++ b/drivers/gpu/drm/drm_pci.c
+>> @@ -257,7 +257,8 @@ void drm_legacy_pci_exit(const struct drm_driver 
+>> *driver,
+>>                        legacy_dev_list) {
+>>               if (dev->driver == driver) {
+>>                   list_del(&dev->legacy_dev_list);
+>> -                drm_put_dev(dev);
+>> +                drm_dev_unregister(dev);
+>> +                drm_dev_put(dev);
+>>               }
+>>           }
+>>           mutex_unlock(&legacy_dev_list_lock);
+>> diff --git a/drivers/gpu/drm/radeon/radeon_drv.c 
+>> b/drivers/gpu/drm/radeon/radeon_drv.c
+>> index e4374814f0ef..a4955ae10659 100644
+>> --- a/drivers/gpu/drm/radeon/radeon_drv.c
+>> +++ b/drivers/gpu/drm/radeon/radeon_drv.c
+>> @@ -357,7 +357,8 @@ radeon_pci_remove(struct pci_dev *pdev)
+>>   {
+>>       struct drm_device *dev = pci_get_drvdata(pdev);
+>>   -    drm_put_dev(dev);
+>
+> Did you verify that dev cannot be NULL here? There was a check in 
+> drm_put_dev() for !dev.
+>
 
-  Linux 6.4-rc3 (2023-05-21 14:05:48 -0700)
+I have verified :
 
-are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/rppt/memblock memblock-v6.5-rc1
+1)
 
-for you to fetch changes up to de649e7f5edb2e61dbd3d64deae44cb165e657ad:
+If there is no radeon card(say R5-340) mounted in the system,  I 
+modprobe the radeon.ko manually.
 
-  memblock: Update nid info in memblock debugfs (2023-06-02 08:23:41 +0300)
+then both the radeon_pci_probe() and the radeon_pci_remove() function 
+won't get called.
 
-----------------------------------------------------------------
-memblock: small updates for 6.5-rc1
+There is no chance that the driver_probe_device() function getting called.
 
-* add test for memblock_alloc_node()
-* minor coding style fixes
-* add flags and nid info in memblock debugfs
 
-----------------------------------------------------------------
-Claudio Migliorelli (2):
-      Add tests for memblock_alloc_node()
-      Fix some coding style errors in memblock.c
+|- driver_register()
 
-Yuwei Guan (2):
-      memblock: Add flags and nid info in memblock debugfs
-      memblock: Update nid info in memblock debugfs
+|-- bus_add_driver()
 
- mm/memblock.c                                | 34 +++++++++++++++++++----
- tools/testing/memblock/tests/alloc_nid_api.c | 40 ++++++++++++++++++++++++++++
- 2 files changed, 69 insertions(+), 5 deletions(-)
+|--- driver_attach()
 
+|---- bus_for_each_dev(drv->bus, NULL, drv, __driver_attach)
+
+|----- __driver_attach()
+
+|------ __device_attach_driver()
+
+// There is no chance that the driver_probe_device() function get called.
+
+|------- driver_probe_device(drv, dev)
+
+```
+
+
+2)  normal case:
+
+
+If there are radeon cards mounted in the system,
+
+then as long as the pci_set_drvdata(pdev, dev) get called,
+
+the 'driver_data' member of struct device will hold the pointer to the 
+'struct drm_device';
+
+So, it will be fine as long as the radeon.ko get loaded normally.
+
+
+I'm sure it will works as expected on normal case, with 100% confident.
+
+
+3) Abnormal case
+
+If there is a error happen before the 'pci_set_drvdata(pdev, dev)' 
+function get called.
+
+It is also don't need to worry, if the ->probe() failed, then the 
+->remove will be get called.
+
+
+I have verified that
+
+if the ->probe() failed, then the ->remove will be get called.
+
+I'm doing the test by add a line before the drm_dev_alloc()
+
+function in the body of radeon_pci_probe() function.
+
+See below:
+
+```
+
+     return -ENODEV;
+
+     dev = drm_dev_alloc(&kms_driver, &pdev->dev);
+     if (IS_ERR(dev))
+         return PTR_ERR(dev);
+
+     ret = pci_enable_device(pdev);
+     if (ret)
+         goto err_free;
+```
+
+
+So, there is no problem, as far as I can see.
+
+
+> Best regards
+> Thomas
+>
+>> +    drm_dev_unregister(dev);
+>> +    drm_dev_put(dev);
+>>   }
+>>     static void
+>> diff --git a/include/drm/drm_drv.h b/include/drm/drm_drv.h
+>> index 89e2706cac56..289c97b12e82 100644
+>> --- a/include/drm/drm_drv.h
+>> +++ b/include/drm/drm_drv.h
+>> @@ -511,7 +511,6 @@ void drm_dev_unregister(struct drm_device *dev);
+>>     void drm_dev_get(struct drm_device *dev);
+>>   void drm_dev_put(struct drm_device *dev);
+>> -void drm_put_dev(struct drm_device *dev);
+>>   bool drm_dev_enter(struct drm_device *dev, int *idx);
+>>   void drm_dev_exit(int idx);
+>>   void drm_dev_unplug(struct drm_device *dev);
+>
 -- 
-Sincerely yours,
-Mike.
+Jingfeng
+
