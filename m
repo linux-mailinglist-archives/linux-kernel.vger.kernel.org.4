@@ -2,121 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1697674018E
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 18:43:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17BF5740191
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 18:44:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231853AbjF0Qnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 12:43:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60466 "EHLO
+        id S231942AbjF0Qo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 12:44:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230424AbjF0Qn3 (ORCPT
+        with ESMTP id S229568AbjF0Qo2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 12:43:29 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F0B109;
-        Tue, 27 Jun 2023 09:43:29 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-6686a05bc66so3016317b3a.1;
-        Tue, 27 Jun 2023 09:43:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687884208; x=1690476208;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qy8/BA41lOJ9tHciVEFoPKVGOra2xL33Ff1AOugAL5g=;
-        b=FwCVNSPx8LXb6QTh7PdSqwrtSvAIf/zDW4EARi28pobQc75y5eN8Z2hpzA14/sX/k4
-         sP1RLiYE0RZL/qd4NtLiC///7VDecwKeu7J3hyW0X6zsCgkx5nd0Tt6Rp82j7uNFvXcj
-         XEwNwxjKLmYgCJg441CQSefrlqxkjYdO3j2nG1aX4vps+Qhw2Veho45XIKEOY0fap8PR
-         3lykX7x3kIQmyuDUm8gu3kt1zdFjl+y/Nv72Cv9eXS9QJ9Jp5hDYpa7lshd7S3exgus0
-         pPXWmaDnsdtCbxW7a5UM3bt6lzkbwyLASqBXQ4OIO0FV11ChvuhnuOs0gUDYHBInN2xq
-         DbcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687884208; x=1690476208;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qy8/BA41lOJ9tHciVEFoPKVGOra2xL33Ff1AOugAL5g=;
-        b=HXteeD3HV+Hv9zlUCnKR4m/3W7tJkJLH0oXyqW4ueoeflCfPTqbGFnA5JHDUAAZ4wj
-         0aOQ3gQMKAX490O4OB73u9xGi5Hxa9kS6hWJCKWJ43vAmKNvpL7zVLcTUr8MhZqA6Gb2
-         Am+DWWGNCLdFAxHCH+lr+P5Ynz2oBaQB3XTVmC6Qqnol8tr5j7AsORuiRmzBZ/aFStx5
-         7jGWabVYhempDTM3kYF9+AiINBmlLID3wpyH+lWU/B7YEvgIR9uDQR7a1QdIZTiDYNCQ
-         RoGuqe7vKpNv6Tj3x3mka+P94slZUQ1BKv3Gh1FwYDfwZhhSjasf9cgSayix0ISDVgSG
-         N1Gw==
-X-Gm-Message-State: AC+VfDypZXQbhL14rV3n5PH4BPpk594shU3VAoThsdbwgNgCJ/wFxAEg
-        4mRx5Dod7VcTW65a2MX97rChGM9YsELEHg==
-X-Google-Smtp-Source: ACHHUZ5nR3SzvcwXIaA2STdJUbtdQU1KzmmjZQuZPBMKm/Wdu30ozJAOtD5F3e9gZWX4UsiH2KBDoA==
-X-Received: by 2002:a05:6a20:7f82:b0:11a:efaa:eb43 with SMTP id d2-20020a056a207f8200b0011aefaaeb43mr33140157pzj.3.1687884208460;
-        Tue, 27 Jun 2023 09:43:28 -0700 (PDT)
-Received: from 377044c6c369.cse.ust.hk (191host097.mobilenet.cse.ust.hk. [143.89.191.97])
-        by smtp.gmail.com with ESMTPSA id u5-20020aa78485000000b00671eb039b23sm4410638pfn.58.2023.06.27.09.43.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jun 2023 09:43:27 -0700 (PDT)
-From:   Chengfeng Ye <dg573847474@gmail.com>
-To:     sean.wang@mediatek.com, vkoul@kernel.org, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com
-Cc:     dmaengine@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Chengfeng Ye <dg573847474@gmail.com>
-Subject: [PATCH] dmaengine: mediatek: mtk-hsdma: fix potential deadlock on &vc->lock
-Date:   Tue, 27 Jun 2023 16:43:09 +0000
-Message-Id: <20230627164309.59922-1-dg573847474@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 27 Jun 2023 12:44:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BFFE97;
+        Tue, 27 Jun 2023 09:44:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 225C3611E4;
+        Tue, 27 Jun 2023 16:44:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D740DC433C0;
+        Tue, 27 Jun 2023 16:44:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687884266;
+        bh=lHpE7is/FZcQr+hDU6WcWf9dfsLK5ZXUTlGo/Cptkaw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=VY+hhdpFmdc935OmKzseZ1dgmGT0CymD+28Bt3tziPVxEilu4rKvy5y8Vqpe3qhhG
+         RWYXsXlVuCTBMew1JuSb9PAvEjwwdM/ocuY9rizMxh5HBo0utu0YApFNi1qms8P9Pu
+         ohZpvFwytPjJCF2JqiWHbcHzlH/AIHLkvrbkpyZkcdfJ/wZd/NY15eynAKOvfzxP7P
+         fA6isFbK4J3ksTW5+RhkA1WgrH6+eyWZwVz9oo3p/9j/8Vd1sMUy+yEmvvH0qp1qCI
+         XFyIfbY5qDsGzlsotH9z6hJo8wGp+eVyQJvk1gOo+SMVOp4UL52kGrDb1BbVtyDqY1
+         qHNgzl5AyBfVQ==
+From:   SeongJae Park <sj@kernel.org>
+To:     SeongJae Park <sj@kernel.org>
+Cc:     Jiri Olsa <olsajiri@gmail.com>, martin.lau@linux.dev,
+        ast@kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alexander Egorenkov <Alexander.Egorenkov@ibm.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] btf: warn but return no error for NULL btf from __register_btf_kfunc_id_set()
+Date:   Tue, 27 Jun 2023 16:44:24 +0000
+Message-Id: <20230627164424.81241-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230627163750.81178-1-sj@kernel.org>
+References: 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As &vc->lock is acquired by the irq mtk_hsdma_irq(), other process
-context code acquiring the lock should disable irq. The terminate
-callback mtk_hsdma_terminate_all() acquires the same lock without
-closing irq.
+On Tue, 27 Jun 2023 16:37:50 +0000 SeongJae Park <sj@kernel.org> wrote:
 
-Possible deadlock scenario:
-mtk_hsdma_free_active_desc()
-    -> spin_lock(&hvc->vc.lock)
-        <irq interrupt>
-        -> mtk_hsdma_irq()
-        -> mtk_hsdma_free_rooms_in_ring()
-        -> spin_lock(&hvc->vc.lock)  (deadlock here)
+> Hi Jiri,
+> 
+> On Tue, 27 Jun 2023 18:20:39 +0200 Jiri Olsa <olsajiri@gmail.com> wrote:
+> 
+> > On Mon, Jun 26, 2023 at 06:11:20PM +0000, SeongJae Park wrote:
+> > > __register_btf_kfunc_id_set() assumes .BTF to be part of the module's
+> > > .ko file if CONFIG_DEBUG_INFO_BTF is enabled.  If that's not the case,
+> > > the function prints an error message and return an error.  As a result,
+> > > such modules cannot be loaded.
+> > > 
+> > > However, the section could be stripped out during a build process.  It
+> > > would be better to let the modules loaded, because their basic
+> > > functionalities have no problem[1], though the BTF functionalities will
+> > > not be supported.  Make the function to lower the level of the message
+> > > from error to warn, and return no error.
+> > > 
+> > > [1] https://lore.kernel.org/bpf/20220219082037.ow2kbq5brktf4f2u@apollo.legion/
+> > > 
+> > > Reported-by: Alexander Egorenkov <Alexander.Egorenkov@ibm.com>
+> > > Link: https://lore.kernel.org/bpf/87y228q66f.fsf@oc8242746057.ibm.com/
+> > > Suggested-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> > > Link: https://lore.kernel.org/bpf/20220219082037.ow2kbq5brktf4f2u@apollo.legion/
+> > > Fixes: dee872e124e8 ("bpf: Populate kfunc BTF ID sets in struct btf")
+> > 
+> > should it be this one in Fixes instead?
+> >   c446fdacb10d bpf: fix register_btf_kfunc_id_set for !CONFIG_DEBUG_INFO_BTF
+> 
+> The commit c446fdacb10d was trying to fix commit dee872e124e8, which this patch
+> is claiming to fix, by relaxing the check.  Nevertheless, it seems the check
+> need to further relaxed, and therefore I wrote this patch.
+> 
+> For the reason, I was thinking this patch is directly fixing c446fdacb10d, but
+> is also fixing a problem originally introduced by dee872e124e8.   Nevertheless,
+> as the dee872e124e8 also has the Fixes tag, I think your suggestion makes
 
-This flaw was found using an experimental static analysis tool we are
-developing for irq-related deadlock.
+s/dee872e124e8 also has /c446fdacb10d also has /
 
-The tentative patch fix the potential deadlock by spin_lock_irqsave().
+Sorry if it made anyone be confused.
 
-Signed-off-by: Chengfeng Ye <dg573847474@gmail.com>
----
- drivers/dma/mediatek/mtk-hsdma.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/dma/mediatek/mtk-hsdma.c b/drivers/dma/mediatek/mtk-hsdma.c
-index 69cc61c0b262..6b6773575893 100644
---- a/drivers/dma/mediatek/mtk-hsdma.c
-+++ b/drivers/dma/mediatek/mtk-hsdma.c
-@@ -757,18 +757,19 @@ static void mtk_hsdma_free_active_desc(struct dma_chan *c)
- {
- 	struct mtk_hsdma_vchan *hvc = to_hsdma_vchan(c);
- 	bool sync_needed = false;
-+	unsigned long flags;
- 
- 	/*
- 	 * Once issue_synchronize is being set, which means once the hardware
- 	 * consumes all descriptors for the channel in the ring, the
- 	 * synchronization must be notified immediately it is completed.
- 	 */
--	spin_lock(&hvc->vc.lock);
-+	spin_lock_irqsave(&hvc->vc.lock, flags);
- 	if (!list_empty(&hvc->desc_hw_processing)) {
- 		hvc->issue_synchronize = true;
- 		sync_needed = true;
- 	}
--	spin_unlock(&hvc->vc.lock);
-+	spin_unlock_irqrestore(&hvc->vc.lock, flags);
- 
- 	if (sync_needed)
- 		wait_for_completion(&hvc->issue_completion);
--- 
-2.17.1
+Thanks,
+SJ
 
+[...]
