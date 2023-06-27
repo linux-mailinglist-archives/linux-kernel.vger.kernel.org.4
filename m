@@ -2,105 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FBFB73F11A
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 05:00:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6374773F11E
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 05:02:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230054AbjF0DAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 23:00:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60784 "EHLO
+        id S229584AbjF0DCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 23:02:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230019AbjF0DA3 (ORCPT
+        with ESMTP id S229808AbjF0DCB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 23:00:29 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C73851BE4
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 19:59:58 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1b7dfb95761so5910195ad.1
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 19:59:58 -0700 (PDT)
+        Mon, 26 Jun 2023 23:02:01 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2638ED
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 20:01:59 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id d75a77b69052e-401d1d967beso137751cf.0
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 20:01:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1687834786; x=1690426786;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yeTs2x7FuNxv9o3OBIy1/YYpxTDNDnMo15MSc7SpQnw=;
-        b=AnpQ1fZw9c1pRqwYx1AVGzSUxagUrOUA6Xqbrwaw71ngDcJL2I07B6LjUuf3vb4oFi
-         9bszs4UpLXHLpjM10Vy67mJf0XaoD0wrff/DWf8dJJTrj6W67Qgj8XriWleKnjPb50ZX
-         BJqrp2PTIu/k6Ug6Sl6NOYFUN+JKp+y7/x8FINP2OcFNpui/YOMmI/L8iq2U4fOJl4XS
-         r7/3zKZOTnbFbuzhMJ1PTlqO6O+5dtjiiL+7m8CH5AGIepoejxOL38mMsn1sX7vWQCo7
-         +jI2ldRsrL78rxw++OO6euxUnZjZxFxLCXOogFUKAz5NI2zjeEZs6wa1gEIyvdMO32G+
-         utQA==
+        d=google.com; s=20221208; t=1687834919; x=1690426919;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Dubf60A5K0NzNIP7xjDZqZozn3KVMPgogoe8ASnGAZg=;
+        b=PDCiQ+OMm+ZYhItlBm9CJOAjt3arCBaIPefCRV+cRGlKtmTkgJuKH7kAOKyAbCQJzL
+         BCdmcPnotA0n4v9avoXLaITUGQgCoZm0BKEirmoOrgdrv8GGmlOoIokTT8s6lPxZIxSr
+         eePAgRbrFZroffClytmh37SqL9NSTT2FHr7ZtV7QGlDkmk6KAHHYcWPVhpXKOVGr8Tr7
+         Xvj/gX5em4lLmUFwa2ra0Yw/kozeJB+nK/9f/BgOWwSt6jpUIMH8XIdAtL1yeNznNHSz
+         i5guqpOz9eCzUhqIk6gXiuPNKiSeUkePu5MwafnJai+nUz1Z0jF1fVOyqLoOaTDwUabC
+         0MkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687834786; x=1690426786;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yeTs2x7FuNxv9o3OBIy1/YYpxTDNDnMo15MSc7SpQnw=;
-        b=NfwUNYn5VmPQPoHxxJJ2qBM7kWG5yyiIn2aUfcn3YkSv2DdQ4ON156Nc7qI6wK96XX
-         +GUCIu+WrpqLHnvAqfnf4XKX1mHToRLZLXZYGfbaY0wyIZl8enkep8EcJl+kRpRLWm3X
-         dbN2ucs8NjX4gVYcTk1OsZrMXOWfO3TBA9a+evW4Gdc7Q1JbSBTx7eELbaRkmEPnq40H
-         +QZJAhAeov21hNPJgGqGm6FRVXClcDvWAdW6/NeSbr5yuNdbyyTRY7/KW0KJFXfgi/TM
-         NSkWz9HAN77zUREJ5RXvs+m6p5B828vshkBSh7tVj4iODRjcH3ST8Hqe08K/X1DYIaAD
-         1VGg==
-X-Gm-Message-State: AC+VfDxugMx4d5YzZPxbPJcFHD38TNY2uvKOSdeEIntKQI1c2mc7vL0p
-        rN7pWEC07uZ2kJ+/s0UXHhlZ1g==
-X-Google-Smtp-Source: ACHHUZ4d7XvDYPH3zVtn9vzYg6hQnpjpNIaPRZYnulEQKGPmJjOA+f4681uFVeHVXNE/cpSL3lFNsQ==
-X-Received: by 2002:a17:903:1105:b0:1b3:ebda:654e with SMTP id n5-20020a170903110500b001b3ebda654emr36428950plh.5.1687834786221;
-        Mon, 26 Jun 2023 19:59:46 -0700 (PDT)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id jd1-20020a170903260100b001b7fad412f9sm3126839plb.226.2023.06.26.19.59.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Jun 2023 19:59:45 -0700 (PDT)
-Message-ID: <784c3e6a-75bd-e6ca-535a-43b3e1daf643@kernel.dk>
-Date:   Mon, 26 Jun 2023 20:59:44 -0600
+        d=1e100.net; s=20221208; t=1687834919; x=1690426919;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Dubf60A5K0NzNIP7xjDZqZozn3KVMPgogoe8ASnGAZg=;
+        b=iyefE0rR5FXX6IDEXgtHAduoHr2fmo8ZGOrCKS04xtdYwCoL8WyCpJtgRPQqV7La2D
+         QmyEZt79ukA3G9JmArRQd3amdl7tyF+2BEmHqvOEhd7C6/Ld+QqhP5rNSN75euPZF6WJ
+         d2Qw69I035TXKc1ntnoFYpAZH9uAfaIwuwl7IIxIddKTit7pEBJvPNcF9kSAk4xkB2U1
+         g0EW5ZbeaQreEreWOHLRJAzTVpSZCNaGsVl2sd5YoodrxN5h4B1N9qU8gK2OLw3KZ6hx
+         oJOjXf4302meZQWOW9qmKIYxCs4rfHEqVqKJ9o1gmLTHFljCIIzNxxNrgIx4z3eWLck+
+         EExA==
+X-Gm-Message-State: AC+VfDyRXk5puFqLNwIP15lp+RKAu3QDfX7rqtSZisF6IWnOXL6he7oB
+        K3HuBJTadEwv669PI5KdLiO/8F53Wcz2YhUcP85fJA==
+X-Google-Smtp-Source: ACHHUZ5kSZ0VxsoAPI4/7ibeP7x8z7uQzBQxZXwrk6r4ft671XydiY3Jw1m0BE4SFdIns2MuaVANBIMzMf5b0M5GeEY=
+X-Received: by 2002:a05:622a:1a0e:b0:3f9:a73b:57bb with SMTP id
+ f14-20020a05622a1a0e00b003f9a73b57bbmr69998qtb.4.1687834918926; Mon, 26 Jun
+ 2023 20:01:58 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [GIT PULL] bcachefs
-Content-Language: en-US
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-bcachefs@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>
-References: <20230626214656.hcp4puionmtoloat@moria.home.lan>
- <aeb2690c-4f0a-003d-ba8b-fe06cd4142d1@kernel.dk>
- <20230627000635.43azxbkd2uf3tu6b@moria.home.lan>
- <91e9064b-84e3-1712-0395-b017c7c4a964@kernel.dk>
- <20230627023337.dordpfdxaad56hdn@moria.home.lan>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20230627023337.dordpfdxaad56hdn@moria.home.lan>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230626171430.3167004-1-ryan.roberts@arm.com> <20230626171430.3167004-11-ryan.roberts@arm.com>
+In-Reply-To: <20230626171430.3167004-11-ryan.roberts@arm.com>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Mon, 26 Jun 2023 21:01:22 -0600
+Message-ID: <CAOUHufarua_JmnTu5NM-W3K4Togw+24F=Pf0HU0ZOjuwbRMC0A@mail.gmail.com>
+Subject: Re: [PATCH v1 10/10] mm: Allocate large folios for anonymous memory
+To:     Ryan Roberts <ryan.roberts@arm.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Yin Fengwei <fengwei.yin@intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-s390@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/26/23 8:33?PM, Kent Overstreet wrote:
-> On Mon, Jun 26, 2023 at 07:13:54PM -0600, Jens Axboe wrote:
->> fs/bcachefs/alloc_background.c: In function ?bch2_check_alloc_info?:
->> fs/bcachefs/alloc_background.c:1526:1: warning: the frame size of 2640 bytes is larger than 2048 bytes [-Wframe-larger-than=]
->>  1526 | }
->>       | ^
->> fs/bcachefs/reflink.c: In function ?bch2_remap_range?:
->> fs/bcachefs/reflink.c:388:1: warning: the frame size of 2352 bytes is larger than 2048 bytes [-Wframe-larger-than=]
->>   388 | }
->>       | ^
-> 
-> What version of gcc are you using? I'm not seeing either of those
-> warnings - I'm wondering if gcc recently got better about stack usage
-> when inlining.
+On Mon, Jun 26, 2023 at 11:15=E2=80=AFAM Ryan Roberts <ryan.roberts@arm.com=
+> wrote:
+>
+> With all of the enabler patches in place, modify the anonymous memory
+> write allocation path so that it opportunistically attempts to allocate
+> a large folio up to `max_anon_folio_order()` size (This value is
+> ultimately configured by the architecture). This reduces the number of
+> page faults, reduces the size of (e.g. LRU) lists, and generally
+> improves performance by batching what were per-page operations into
+> per-(large)-folio operations.
+>
+> If CONFIG_LARGE_ANON_FOLIO is not enabled (the default) then
+> `max_anon_folio_order()` always returns 0, meaning we get the existing
+> allocation behaviour.
+>
+> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
+> ---
+>  mm/memory.c | 159 +++++++++++++++++++++++++++++++++++++++++++++++-----
+>  1 file changed, 144 insertions(+), 15 deletions(-)
+>
+> diff --git a/mm/memory.c b/mm/memory.c
+> index a8f7e2b28d7a..d23c44cc5092 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -3161,6 +3161,90 @@ static inline int max_anon_folio_order(struct vm_a=
+rea_struct *vma)
+>                 return CONFIG_LARGE_ANON_FOLIO_NOTHP_ORDER_MAX;
+>  }
+>
+> +/*
+> + * Returns index of first pte that is not none, or nr if all are none.
+> + */
+> +static inline int check_ptes_none(pte_t *pte, int nr)
+> +{
+> +       int i;
+> +
+> +       for (i =3D 0; i < nr; i++) {
+> +               if (!pte_none(ptep_get(pte++)))
+> +                       return i;
+> +       }
+> +
+> +       return nr;
+> +}
+> +
+> +static int calc_anon_folio_order_alloc(struct vm_fault *vmf, int order)
 
-Using:
-
-gcc (Debian 13.1.0-6) 13.1.0
-
-and it's on arm64, fwiw.
-
--- 
-Jens Axboe
-
+As suggested previously in 03/10, we can leave this for later.
