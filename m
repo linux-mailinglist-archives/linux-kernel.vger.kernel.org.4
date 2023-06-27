@@ -2,115 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7ED973FC48
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 14:56:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26A8073FC40
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 14:55:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230304AbjF0M4d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 08:56:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51044 "EHLO
+        id S229524AbjF0MzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 08:55:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230138AbjF0M4b (ORCPT
+        with ESMTP id S230326AbjF0My4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 08:56:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A8DB2D61
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 05:55:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687870525;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jRl7aKap1SeKgVZS63rqtI75g0CI3hogPpCfcoBBCMs=;
-        b=RpREXICvHLQwsrzFd8s14IssnGMNrOags+Q4gp9fKMKZu55y5MEqB16sZT359KsGHUdNLZ
-        cZgfBaEeNlxJ0nmuKCLJ+NoJPBlyRE1pFgBrRW8x+viWUl+AvfrFjCRu7+FZPc4BXnt0b2
-        1FYRocBk0nS21htfisXnuD7AI+Qp3Q4=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-167-keM8jgE9PueiPUbhi9U9qg-1; Tue, 27 Jun 2023 08:55:24 -0400
-X-MC-Unique: keM8jgE9PueiPUbhi9U9qg-1
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-765ad67e600so35760785a.0
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 05:55:24 -0700 (PDT)
+        Tue, 27 Jun 2023 08:54:56 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7936F2715;
+        Tue, 27 Jun 2023 05:54:54 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2b5c231f842so42985711fa.2;
+        Tue, 27 Jun 2023 05:54:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687870493; x=1690462493;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8YE7wSDf9+kixNjK3SC5HyvOe27Psh650QQ7iYwckpg=;
+        b=cjChsABwaIiGiXFxDFxskK6sd1HRgZdRbC2eVH6wCVvr1AQrgInU+xKmVehbzpUzCc
+         Ikpsh4LS5zq2zS3tYFKlFcY2TqDY0RTPND2efixaWg5ilaALZ06VJeA9KR9EvBgIs/EH
+         k+4y3YgEIdJ7wMCGOmrLLOLXprttiBkx4N7vby4VzOg9mg1wvN9j+tCPuXxAggVk2f8I
+         vtSeSDVDPP9GWwRwBA06A6OR+T2BEoRiiLnUiVSfUKh1+tgeWdpuFxnsYC5jFKx9kEec
+         U+mvIorg2MMU2p14fPMWPuI1d8qRtYzdaOB5lT9aVav8LRJyKFbcbc/8mBYtYiZJoclX
+         KGCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687870524; x=1690462524;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jRl7aKap1SeKgVZS63rqtI75g0CI3hogPpCfcoBBCMs=;
-        b=Y7vQ68iLuR6oeoxtJXTDsTU+6t+N8n5CvABwhj/jGuPlyBFZ8KeEJplEp8CyzMEgbX
-         9FTARwp178KOj8SkvW/bzKD/HmquBaZGeNKmB3Uj/TDvFWmTWLH08jjgbaLVDm1Hoonn
-         QKIAeKb3i8uG/kFyX26ZDfcNsHR3KHOWauW6Dhsy6thFvnF+UwfO94ojeDbmyZxvBQQS
-         U1IC+K6DajudLOa+dvTooR3pdgxlRBU8zE2IRoGMpSL30DhbmJHPFkFx9OZx/jXym9NP
-         zjPU5+N5y+ThJPcy7vpYboRQdjkfaJ4ayErHaZilwlO25t0bfOkKR99JSC26ZHq+SrW0
-         /ZZg==
-X-Gm-Message-State: AC+VfDwWAK8dO39dcqvif9+tSJtBjtr5w5oRugT9Kr0d4yZsP+p/+uwI
-        gaov8MMfi6S84paQUXRSC+mUoviIlTjcAWN3wEJsEuF0DOHApU2mOzwcNUajIkgsCtWxh6jcZ+D
-        CPop83OP3nSeB4ZQEDOWJwcb/
-X-Received: by 2002:a05:620a:190e:b0:765:3b58:99ab with SMTP id bj14-20020a05620a190e00b007653b5899abmr2670203qkb.4.1687870523897;
-        Tue, 27 Jun 2023 05:55:23 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5MVSVOTOJGm6y6OkidtOFcnyLv70o/VU/KFN2yDxpJyfTZKFyUUry0ejHmhywBuZIZSQ+qRw==
-X-Received: by 2002:a05:620a:190e:b0:765:3b58:99ab with SMTP id bj14-20020a05620a190e00b007653b5899abmr2670184qkb.4.1687870523654;
-        Tue, 27 Jun 2023 05:55:23 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-239-6.dyn.eolo.it. [146.241.239.6])
-        by smtp.gmail.com with ESMTPSA id j7-20020a05620a146700b00765516bd9f2sm3912923qkl.33.2023.06.27.05.54.04
+        d=1e100.net; s=20221208; t=1687870493; x=1690462493;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8YE7wSDf9+kixNjK3SC5HyvOe27Psh650QQ7iYwckpg=;
+        b=HpZiIdB0OoPTtFfpXqsu6Yv+bCA803HOR5N3wVqTfMwCJ5USHG8U/od4Wby6LVuE8Y
+         P37zo2W8cwjHC+liWwnAGzhrh25kecJracXTgZqTSOJzZEDB8thS7CDl4icJBvQznzKN
+         vIoG/l1jgQKGI2Qt6XVqlgwT/2b41Y3V6veCTt+UFAv1EN5TnK9QwpwQ5nkCw8KdLT9E
+         4qYrSPtMO5VjmKK1mQWOYXOAlCBgmunV5qJrorCAdagIMvepyhcTtguTQaaTLWIfA3LN
+         YDY8du9PRGyZmz+1506oyZQDgNtuzLi/Tm04uMNn65LKGlhOZO/8CW727LXQudVWmgiq
+         GUew==
+X-Gm-Message-State: AC+VfDyHh1083B8gQgAvtIxWaTYJvW4SeulsrSMyYOyKLEuon/dxWSNn
+        NolqUMIvLWZUoeS/O6rUtDb3m0Ro4R8=
+X-Google-Smtp-Source: ACHHUZ5gkQTil60/IJCpxMy96qfRyWmGyiGxmtKV0FFui1C5evBEIgoYE3C3DgSY38t9mhHAHX1Ipg==
+X-Received: by 2002:a2e:9e4f:0:b0:2b1:b4e9:4c3 with SMTP id g15-20020a2e9e4f000000b002b1b4e904c3mr21755792ljk.2.1687870492431;
+        Tue, 27 Jun 2023 05:54:52 -0700 (PDT)
+Received: from mobilestation ([109.194.233.142])
+        by smtp.gmail.com with ESMTPSA id o10-20020a2e730a000000b002b217532064sm1737956ljc.33.2023.06.27.05.54.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jun 2023 05:54:07 -0700 (PDT)
-Message-ID: <1f4271105ac5be66e5130d487464680fc65bacc8.camel@redhat.com>
-Subject: Re: Is ->sendmsg() allowed to change the msghdr struct it is given?
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Jakub Kicinski <kuba@kernel.org>,
-        David Howells <dhowells@redhat.com>
-Cc:     Ilya Dryomov <idryomov@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, ceph-devel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 27 Jun 2023 14:54:02 +0200
-In-Reply-To: <b0a0cb0fac4ebdc23f01d183a9de10731dc90093.camel@redhat.com>
-References: <3112097.1687814081@warthog.procyon.org.uk>
-         <20230626142257.6e14a801@kernel.org>
-         <b0a0cb0fac4ebdc23f01d183a9de10731dc90093.camel@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Tue, 27 Jun 2023 05:54:51 -0700 (PDT)
+Date:   Tue, 27 Jun 2023 15:54:49 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     linux-pci@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Shawn Lin <shawn.lin@rock-chips.com>,
+        Simon Xue <xxm@rock-chips.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kernel@collabora.com
+Subject: Re: [PATCH v1 2/4] dt-bindings: PCI: dwc: rockchip: Add missing
+ legacy-interrupt-controller
+Message-ID: <6ewtsaw72474pwvdohpapwnmbevivlkmagwnv7r7ggixhhmo6e@fcl74rn2rlqz>
+References: <20230616170022.76107-1-sebastian.reichel@collabora.com>
+ <20230616170022.76107-3-sebastian.reichel@collabora.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230616170022.76107-3-sebastian.reichel@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-06-27 at 14:51 +0200, Paolo Abeni wrote:
-> On Mon, 2023-06-26 at 14:22 -0700, Jakub Kicinski wrote:
-> > On Mon, 26 Jun 2023 22:14:41 +0100 David Howells wrote:
-> > > Do you know if ->sendmsg() might alter the msghdr struct it is passed=
- as an
-> > > argument? Certainly it can alter msg_iter, but can it also modify,
-> > > say, msg_flags?
-> >=20
-> > I'm not aware of a precedent either way.
-> > Eric or Paolo would know better than me, tho.
->=20
-> udp_sendmsg() can set the MSG_TRUNC bit in msg->msg_flags, so I guess
-> that kind of actions are sort of allowed.
+On Fri, Jun 16, 2023 at 07:00:20PM +0200, Sebastian Reichel wrote:
+> Rockchip RK356x and RK3588 handle legacy interrupts via a ganged
+> interrupts. The RK356x DT implements this via a sub-node named
+> "legacy-interrupt-controller", just like a couple of other PCIe
+> implementations. This adds proper documentation for this and updates
+> the example to avoid regressions.
+> 
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> ---
+>  .../bindings/pci/rockchip-dw-pcie.yaml        | 24 +++++++++++++++++++
+>  1 file changed, 24 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/pci/rockchip-dw-pcie.yaml b/Documentation/devicetree/bindings/pci/rockchip-dw-pcie.yaml
+> index 98e45d2d8dfe..bf81d306cc80 100644
+> --- a/Documentation/devicetree/bindings/pci/rockchip-dw-pcie.yaml
+> +++ b/Documentation/devicetree/bindings/pci/rockchip-dw-pcie.yaml
+> @@ -67,6 +67,22 @@ properties:
+>        - const: legacy
+>        - const: err
+>  
+> +  legacy-interrupt-controller:
+> +    description: Interrupt controller node for handling legacy PCI interrupts.
+> +    type: object
+> +    properties:
+> +      "#address-cells":
+> +        const: 0
+> +
+> +      "#interrupt-cells":
+> +        const: 1
+> +
 
-Sorry, ENOCOFFEE here. It's actually udp_recvmsg() updating msg-
->msg_flags.
+> +      "interrupt-controller": true
 
->  Still, AFAICS, the kernel
-> based msghdr is not copied back to the user-space, so such change
-> should be almost a no-op in practice.
+redundant quotes.
 
-This part should be correct.
+> +
+> +      interrupts:
+> +        items:
+> +          - description: combined legacy interrupt
 
-> @David: which would be the end goal for such action?
+Missing the "additionalProperties" qualifier and the "required"
+property.
 
-Sorry for the noisy reply,
+-Serge(y)
 
-Paolo
-
+> +
+>    msi-map: true
+>  
+>    num-lanes: true
+> @@ -148,6 +164,14 @@ examples:
+>              reset-names = "pipe";
+>              #address-cells = <3>;
+>              #size-cells = <2>;
+> +
+> +            legacy-interrupt-controller {
+> +                interrupt-controller;
+> +                #address-cells = <0>;
+> +                #interrupt-cells = <1>;
+> +                interrupt-parent = <&gic>;
+> +                interrupts = <GIC_SPI 72 IRQ_TYPE_EDGE_RISING>;
+> +            };
+>          };
+>      };
+>  ...
+> -- 
+> 2.39.2
+> 
