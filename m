@@ -2,112 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B43473FBD5
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 14:15:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B27F73FBDA
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 14:17:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbjF0MPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 08:15:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38318 "EHLO
+        id S229897AbjF0MRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 08:17:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbjF0MPU (ORCPT
+        with ESMTP id S229468AbjF0MRM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 08:15:20 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3973819A8;
-        Tue, 27 Jun 2023 05:15:17 -0700 (PDT)
-Received: from loongson.cn (unknown [117.81.87.34])
-        by gateway (Coremail) with SMTP id _____8CxpMTT0ppk8BYDAA--.4879S3;
-        Tue, 27 Jun 2023 20:15:15 +0800 (CST)
-Received: from localhost.localdomain (unknown [117.81.87.34])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bx3yO60ppkXxIMAA--.8320S2;
-        Tue, 27 Jun 2023 20:15:14 +0800 (CST)
-From:   WANG Rui <wangrui@loongson.cn>
-To:     Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>
-Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, WANG Rui <wangrui@loongson.cn>
-Subject: [PATCH] rust: build: Define MODULE macro iif the CONFIG_MODULES is enabled
-Date:   Tue, 27 Jun 2023 20:14:22 +0800
-Message-ID: <20230627121422.112246-1-wangrui@loongson.cn>
-X-Mailer: git-send-email 2.41.0
+        Tue, 27 Jun 2023 08:17:12 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C741BE7;
+        Tue, 27 Jun 2023 05:17:10 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f4b2bc1565so6194691e87.2;
+        Tue, 27 Jun 2023 05:17:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687868229; x=1690460229;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zw0XO0K/YJZaGpOs6ScnOWaE2Vp0kSyIA1FOyq+ley8=;
+        b=Y4ZPTg47KBLzs+cPPRkoB4QEQJogOjJOdJjCAiLhGsqferI0CkZhck89KuGf/qZK8m
+         cNG79iYsCpGh0vUfoB1GfwwePp2dBEDo5S6JuiBMe/6lFyJbRGHCQ2453o4AMhZdaxoh
+         zciAkf+nZLm0WQYQYHqenxg3BBIiolRGNJvo/hWrPvw1G3LZnIwCoSQhstGxhC7wWoYO
+         OMQDJAeMLg4K6a+41nFCSWvQVgrXcJxe/w0XgAp9B5YqFkb5PSVqGvg4kdHi/+c2H1Rl
+         6id7Y9bLkRlvGKrNwhweQaiusg7KVIpmU12Fh/+hjFVrQXIDpL2mXonMgkpmfyBtATqM
+         3JMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687868229; x=1690460229;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zw0XO0K/YJZaGpOs6ScnOWaE2Vp0kSyIA1FOyq+ley8=;
+        b=dj6upq1M448AKv10Z/A+EFHbm9P2McPvbUOCqD/51JLI+a7HpnL07i5C8E6MM5tiAN
+         PYioXfEwXS6PC+Y7NkhUBf5wh+FJLUCfZ97GowuN+bemMG/Cqb2GR4CptcD5TaNSLBba
+         XA5zIarAjrWU+aw/wdIdeWMdfQd1BZLtbjHTzwZT33Mf0TiatEa3JKEl0yBighsNo/IR
+         s62ktiUzrChp0me/STanU/mvfSm8d4xlSg24mgnAzhPxyabPesfi5F4TJx7aHR7YaAcp
+         /2q5ONE47+wjyp3i0AyXGg4uTIPhHklP/02Fgdx9EFAP2NfVjqNo7Z5wmNqvtR5r5tYE
+         rwJA==
+X-Gm-Message-State: AC+VfDyOgDfv3GUljXMJgUJjBmKhLjBE4GTiyKRXjP3e5osOXj/FImWh
+        eU//QFf0aL/IKk7lq35jtHN5lJo6//M=
+X-Google-Smtp-Source: ACHHUZ4AZlBP0GXgHdZROjji+plUNPA9EpkAsuHPth/8ra4buZBwQysFftdpJP81W+FGiOrbApH5Lg==
+X-Received: by 2002:a19:505d:0:b0:4f8:5ede:d447 with SMTP id z29-20020a19505d000000b004f85eded447mr15585676lfj.28.1687868228732;
+        Tue, 27 Jun 2023 05:17:08 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id c1-20020a056000104100b003140039f318sm1504556wrx.69.2023.06.27.05.17.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Jun 2023 05:17:07 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] power: supply: bd99954: make read-only array sub_status_reg
+Date:   Tue, 27 Jun 2023 13:17:07 +0100
+Message-Id: <20230627121707.722021-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Bx3yO60ppkXxIMAA--.8320S2
-X-CM-SenderInfo: pzdqw2txl6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7tFWDKFyfuw1xtF13Ww4DAwc_yoW8Gw1fpF
-        97W3W8Ka15GF4DtFW8Ary5WF12q34UJ34Dua1DX3y2qFZxJ3sxK3yftFZagrW7ZF4xX34F
-        qFs7uayaga4UCwbCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUB2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-        xVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
-        AVWUtwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7V
-        AKI48JMxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY
-        6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7
-        xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xII
-        jxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw2
-        0EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x02
-        67AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU2txhDUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The LoongArch does not currently support modules when built with clang.
-A pre-processor error is expected on building modules, that's caused by:
+Don't populate the read-only array on the stack, instead make it
+static const.
 
- #if defined(MODULE) && defined(CONFIG_AS_HAS_EXPLICIT_RELOCS)
- # if __has_attribute(model)
- #  define PER_CPU_ATTRIBUTES __attribute__((model("extreme")))
- # else
- #  error compiler support for the model attribute is necessary when a recent assembler is used
- # endif
- #endif
-
-This also happens with bindgen too, so it would be better to define
-MODULE macro if and only if the CONFIG_MODULES is enabled.
-
-Signed-off-by: WANG Rui <wangrui@loongson.cn>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
- rust/Makefile | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/power/supply/bd99954-charger.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/rust/Makefile b/rust/Makefile
-index fc8cdcfcc9e5..d31d9fa27ef0 100644
---- a/rust/Makefile
-+++ b/rust/Makefile
-@@ -295,12 +295,16 @@ endif
+diff --git a/drivers/power/supply/bd99954-charger.c b/drivers/power/supply/bd99954-charger.c
+index 086dcf4033c1..1ed1d9f99fb3 100644
+--- a/drivers/power/supply/bd99954-charger.c
++++ b/drivers/power/supply/bd99954-charger.c
+@@ -536,7 +536,7 @@ static irqreturn_t bd9995x_irq_handler_thread(int irq, void *private)
  
- bindgen_c_flags_final = $(bindgen_c_flags_lto) -D__BINDGEN__
- 
-+ifdef CONFIG_MODULES
-+bindgen_c_flags_final += -DMODULE
-+endif
-+
- quiet_cmd_bindgen = BINDGEN $@
-       cmd_bindgen = \
- 	$(BINDGEN) $< $(bindgen_target_flags) \
- 		--use-core --with-derive-default --ctypes-prefix core::ffi --no-layout-tests \
- 		--no-debug '.*' \
--		-o $@ -- $(bindgen_c_flags_final) -DMODULE \
-+		-o $@ -- $(bindgen_c_flags_final) \
- 		$(bindgen_target_cflags) $(bindgen_target_extra)
- 
- $(obj)/bindings/bindings_generated.rs: private bindgen_target_flags = \
+ 	for_each_set_bit(i, &tmp, 7) {
+ 		int sub_status, sub_mask;
+-		int sub_status_reg[] = {
++		static const int sub_status_reg[] = {
+ 			INT1_STATUS, INT2_STATUS, INT3_STATUS, INT4_STATUS,
+ 			INT5_STATUS, INT6_STATUS, INT7_STATUS,
+ 		};
 -- 
-2.41.0
+2.39.2
 
