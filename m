@@ -2,84 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7FC573F745
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 10:31:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0664A73F741
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 10:31:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231843AbjF0Ibo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 04:31:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37324 "EHLO
+        id S230209AbjF0IbI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 04:31:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231583AbjF0IbR (ORCPT
+        with ESMTP id S231775AbjF0Iak (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 04:31:17 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7615430D8
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 01:30:00 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id d75a77b69052e-4007b5bafceso153321cf.1
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 01:30:00 -0700 (PDT)
+        Tue, 27 Jun 2023 04:30:40 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A71E2D5E
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 01:29:39 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-98e1ccc6673so387684666b.3
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 01:29:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687854598; x=1690446598;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=fairphone.com; s=fair; t=1687854571; x=1690446571;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=42jADAOC7MZeTbDlvQImONhBTFD+TYlgsjaZgjq+r6w=;
-        b=VpUHivcqvdUZrgCRoZwbsCsrDHhYaYFcsFaeAfGB+kCFckJgv9C01BvGN7jtR5nsY4
-         HQcueTVDNqcIMaUYqjBVwihu6lYI6bfIM3pKFCtOYc7iaIumcdkrpQuM/LMDhLV1YoII
-         sN+SrgrTedc0+L9S4RRMyWUtAZ3mBNF40ufDFY+rRoM4mNQOBfPdAXOrKLfC+DTXxl1T
-         tC9pivLeFKSbhdaC0QRd6FoML3RCBD2NWh9k9jCs4Lma13vQN5ZuOaIzCrfSnQlro4qX
-         MabKVbrPXuLu/C79k5WxkAoG21mlNwBJ8ocvaep3wOCVgalzbEjgVw/ubMrj6jPz4ekv
-         VwYw==
+        bh=fqX5DHgOV5JQh3n7wQTrKqWa0S9nC80jd5IBZP65NGs=;
+        b=a4GBqxpv7jmHHEKUWeBkMva7W8g70p2YDS9GOd07Uc026C9bLeWu0YTtk0uNpHY9AM
+         n6EJOWy+3oafyfX58MRJtYU7Gv5CCMH4n68fNbXwD/RiLNPDUl3FKnvsGlYYCPTPS0Fk
+         A145SpaxENj2UwkTrlvH6FuXf4tcGJPUgqZbRsTiOOJZiBaI47prE0BaPIasVX5WoChS
+         b9b1Np5DrL0nHV8qCVMpOqMG2tomiTFGwZxcWAqKGfi5CFBeUMHJwESu0Elojtbat8FE
+         sAPaqG61Rfs5IE+jnGIGf2LCn5RSfJlx+c5QiFIb+DBTFgimDYgKPo9XR6cg/dAGs+an
+         oJIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687854598; x=1690446598;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=42jADAOC7MZeTbDlvQImONhBTFD+TYlgsjaZgjq+r6w=;
-        b=IcG0CnSuQUiJkHRSGnVNTqA510O1rZuxAqVZ+Rnz7o+4i7LI3v1LmbwOHA1ZtZEGNc
-         t8D0wJNhqTc+BzGWe+URYXzxvoVGxSvmAG4VfIVpkpXujkGcjoLJaZO86kwq0Md7e779
-         ChHqUpMHau1H+v4r9qAOVDaRCbk4F8aT48BurRDPEI4MhkKmWoSaeX6wzS+EFg9W7jXS
-         dGQyOU9Ijl7kfDNGLJI15GwlfIzSCYKzC4RkUDu8YznvEEtQAQiMGCZHfqXLuCkFAt9P
-         kT4QFTSO7yO7nTIFZlNZxI1WYVkDZ6ACkv8pxezaFuBMvVvHcTudj45s8oapnTAIdVR7
-         dADg==
-X-Gm-Message-State: AC+VfDxEA3LVFbV8sgznCZ6OM2+CKYKJsuVNGnXHoipla9ZzoqOaIk/t
-        EciuALthpeArPXfTTZegGgnb9Kq64z5hYaQSfiUhVw==
-X-Google-Smtp-Source: ACHHUZ7VSWNEPBv6EO/KQhU17J+bBSs3DTF1ZjREFJjlroYQvM0LGCDq5w6tGC66l2NxGKuHVUaC3aBPWro3od4ACDk=
-X-Received: by 2002:ac8:5fd6:0:b0:3ef:3083:a437 with SMTP id
- k22-20020ac85fd6000000b003ef3083a437mr130383qta.18.1687854598290; Tue, 27 Jun
- 2023 01:29:58 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230626171430.3167004-1-ryan.roberts@arm.com>
- <20230626171430.3167004-2-ryan.roberts@arm.com> <CAOUHufacvArJh7NjL_3LT-e3s1X+bazkvbgvEU+KPKGKEoW+dw@mail.gmail.com>
- <2ff8ccf6-bf36-48b2-7dc2-e6c0d962f8b7@arm.com>
-In-Reply-To: <2ff8ccf6-bf36-48b2-7dc2-e6c0d962f8b7@arm.com>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Tue, 27 Jun 2023 02:29:22 -0600
-Message-ID: <CAOUHufZoT-maN3kY5eYQmrYV48shmKAAancEvabXzfTDncDa9A@mail.gmail.com>
-Subject: Re: [PATCH v1 01/10] mm: Expose clear_huge_page() unconditionally
-To:     Ryan Roberts <ryan.roberts@arm.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Yin Fengwei <fengwei.yin@intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-s390@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        d=1e100.net; s=20221208; t=1687854571; x=1690446571;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=fqX5DHgOV5JQh3n7wQTrKqWa0S9nC80jd5IBZP65NGs=;
+        b=XOPY1dnmV/JYUTkCvXkWQKd8HKYjMaTXQ5WIVSaOi8Qnzg1ppVQv1+IskDeciNHwPQ
+         YDKAvXRXAwBOLjtqSeUZEmNLLFGxitNmQgo50j+StJ8EvZzsOXnec8FN8SkepDe9lyLe
+         Rw3N01Wa6OOxiNpenyIXYU3ZL4OBSVhzbHPB6MPx5cTU2VX7aCXIDyVljUqVBZKFp/0u
+         K36XD9md2eX7rKsJTX0QKZU9mhzExDwO6t/DVeF58Y+haIts/GaJccJC+XTWkBYTLimw
+         vZRZUWKxtRQtWZB1DBNlpjsOIvI/aAClXoQ3JQkyj6nQ3HsEZpyUuvYdB5s+9Wc8nwAG
+         AH5g==
+X-Gm-Message-State: AC+VfDxPh5/exZBipEDj2lwWWFHCmoUR90HFNjCtpf++9fvkLiCInl8d
+        h5rUDovhHo2ty+Qce52pWnmcDA==
+X-Google-Smtp-Source: ACHHUZ77eTguqYS4KE49xThLrCpVm5BbKtN84P5H1lk8As6ayJ7KnW61tc4r0vgr+44A4yGyfCjF7A==
+X-Received: by 2002:a17:906:974f:b0:98c:df38:517b with SMTP id o15-20020a170906974f00b0098cdf38517bmr15489785ejy.33.1687854571341;
+        Tue, 27 Jun 2023 01:29:31 -0700 (PDT)
+Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
+        by smtp.gmail.com with ESMTPSA id ot6-20020a170906ccc600b0098df7d0e096sm3955863ejb.54.2023.06.27.01.29.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Jun 2023 01:29:31 -0700 (PDT)
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=UTF-8
+Date:   Tue, 27 Jun 2023 10:29:30 +0200
+Message-Id: <CTNAIDCV0BIO.2JMX8MXEQ197U@otso>
+Cc:     <linux-arm-msm@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <~postmarketos/upstreaming@lists.sr.ht>,
+        <phone-devel@vger.kernel.org>, "Eric Biggers" <ebiggers@google.com>
+Subject: Re: [PATCH v4 3/3] dt-bindings: ufs: qcom: Fix sm8450 bindings
+From:   "Luca Weiss" <luca.weiss@fairphone.com>
+To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
+        "Andy Gross" <agross@kernel.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+        "Alim Akhtar" <alim.akhtar@samsung.com>,
+        "Avri Altman" <avri.altman@wdc.com>,
+        "Bart Van Assche" <bvanassche@acm.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        "Iskren Chernev" <me@iskren.info>,
+        "Manivannan Sadhasivam" <mani@kernel.org>,
+        "Conor Dooley" <conor+dt@kernel.org>
+X-Mailer: aerc 0.15.1
+References: <20221209-dt-binding-ufs-v4-0-14ced60f3d1b@fairphone.com>
+ <20221209-dt-binding-ufs-v4-3-14ced60f3d1b@fairphone.com>
+ <1f94de94-c5bd-738d-5fbe-907558333cb2@linaro.org>
+In-Reply-To: <1f94de94-c5bd-738d-5fbe-907558333cb2@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,88 +88,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 1:21=E2=80=AFAM Ryan Roberts <ryan.roberts@arm.com>=
- wrote:
+On Mon Jun 26, 2023 at 10:27 AM CEST, Krzysztof Kozlowski wrote:
+> On 26/06/2023 10:15, Luca Weiss wrote:
+> > SM8450 actually supports ICE (Inline Crypto Engine) so adjust the
+> > bindings and the example to match.
+> >=20
+> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > Reviewed-by: Eric Biggers <ebiggers@google.com>
+> > Reviewed-by: Iskren Chernev <me@iskren.info>
+> > Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
 >
-> On 27/06/2023 02:55, Yu Zhao wrote:
-> > On Mon, Jun 26, 2023 at 11:14=E2=80=AFAM Ryan Roberts <ryan.roberts@arm=
-.com> wrote:
-> >>
-> >> In preparation for extending vma_alloc_zeroed_movable_folio() to
-> >> allocate a arbitrary order folio, expose clear_huge_page()
-> >> unconditionally, so that it can be used to zero the allocated folio in
-> >> the generic implementation of vma_alloc_zeroed_movable_folio().
-> >>
-> >> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
-> >> ---
-> >>  include/linux/mm.h | 3 ++-
-> >>  mm/memory.c        | 2 +-
-> >>  2 files changed, 3 insertions(+), 2 deletions(-)
-> >>
-> >> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> >> index 7f1741bd870a..7e3bf45e6491 100644
-> >> --- a/include/linux/mm.h
-> >> +++ b/include/linux/mm.h
-> >> @@ -3684,10 +3684,11 @@ enum mf_action_page_type {
-> >>   */
-> >>  extern const struct attribute_group memory_failure_attr_group;
-> >>
-> >> -#if defined(CONFIG_TRANSPARENT_HUGEPAGE) || defined(CONFIG_HUGETLBFS)
-> >>  extern void clear_huge_page(struct page *page,
-> >>                             unsigned long addr_hint,
-> >>                             unsigned int pages_per_huge_page);
-> >> +
-> >> +#if defined(CONFIG_TRANSPARENT_HUGEPAGE) || defined(CONFIG_HUGETLBFS)
-> >
-> > We might not want to depend on THP eventually. Right now, we still
-> > have to, unless splitting is optional, which seems to contradict
-> > 06/10. (deferred_split_folio()  is a nop without THP.)
->
-> Yes, I agree - for large anon folios to work, we depend on THP. But I don=
-'t
-> think that helps us here.
->
-> In the next patch, I give vma_alloc_zeroed_movable_folio() an extra `orde=
-r`
-> parameter. So the generic/default version of the function now needs a way=
- to
-> clear a compound page.
->
-> I guess I could do something like:
->
->  static inline
->  struct folio *vma_alloc_zeroed_movable_folio(struct vm_area_struct *vma,
->                                    unsigned long vaddr, gfp_t gfp, int or=
-der)
->  {
->         struct folio *folio;
->
->         folio =3D vma_alloc_folio(GFP_HIGHUSER_MOVABLE | gfp,
->                                         order, vma, vaddr, false);
->         if (folio) {
-> #ifdef CONFIG_LARGE_FOLIO
->                 clear_huge_page(&folio->page, vaddr, 1U << order);
-> #else
->                 BUG_ON(order !=3D 0);
->                 clear_user_highpage(&folio->page, vaddr);
-> #endif
->         }
->
->         return folio;
->  }
->
-> But that's pretty messy and there's no reason why other users might come =
-along
-> that pass order !=3D 0 and will be surprised by the BUG_ON.
+> SM8450 should be rather converted to qcom,ice.
 
-#ifdef CONFIG_LARGE_ANON_FOLIO // depends on CONFIG_TRANSPARENT_HUGE_PAGE
-struct folio *alloc_anon_folio(struct vm_area_struct *vma, unsigned
-long vaddr, int order)
-{
-  // how do_huge_pmd_anonymous_page() allocs and clears
-  vma_alloc_folio(..., *true*);
-}
-#else
-#define alloc_anon_folio(vma, addr, order)
-vma_alloc_zeroed_movable_folio(vma, addr)
-#endif
+In v5 sm8450 is now using ICE, both in dtsi and binding example. But I
+guess you could also argue reg-names should be purged from dtsi and
+binding completely and to convert all existing dtsi to use the
+standalone ice node, right?
+
+But I'd also like for this series to finally land at some point, we can
+do this later, okay?
+
+Regards
+Luca
+
+>
+> Best regards,
+> Krzysztof
+
