@@ -2,64 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2CD373FAE1
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 13:16:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ACFC73FAE4
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 13:17:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231451AbjF0LQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 07:16:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36358 "EHLO
+        id S231564AbjF0LRB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 07:17:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231287AbjF0LQl (ORCPT
+        with ESMTP id S229814AbjF0LQz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 07:16:41 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0F7A1FE2;
-        Tue, 27 Jun 2023 04:16:39 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id 5614622812f47-39ea511930eso3565593b6e.1;
-        Tue, 27 Jun 2023 04:16:39 -0700 (PDT)
+        Tue, 27 Jun 2023 07:16:55 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41B72213A;
+        Tue, 27 Jun 2023 04:16:43 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-67ef5af0ce8so124625b3a.2;
+        Tue, 27 Jun 2023 04:16:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687864599; x=1690456599;
+        d=gmail.com; s=20221208; t=1687864602; x=1690456602;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=d2K0OuQGxCrdsKt9Q57JYfi5owLHsSbU96G7U8K7Wyc=;
-        b=CLCvM5Ht93QC4AHE/cHmirC2W6l/TIb1ObX5XhXGP8SHTXzvEs2lCRw+Oeri1hVkQC
-         HBmppRBNLP+85jU+6Prb0ahTKN+wZFA5T912jwD8hLJE1CHl6nSV86KRVapsPkxtpxB9
-         MGRWGHhT81tjm6G+Tgrec5vxJtGBtncLmbh9QefCTGC1KWQ0cepAUTejlZYJf08Jxrd5
-         7bjth7uO4z8JVkSr11qDSFlldY3tfWAYoNy2aHgNxqvRfWjSnAC2tztXuRGciow1vhK+
-         h/syJOQewa9LCZ+u/qNZpH4JTGKfxuTOMRIoW5kB1H3Rx6/a1h7OX2Mhar9Rm7tN7v1z
-         nWow==
+        bh=DFNRYkJFul3uxQnpIVJKj4lTZ10bNSEM4pJM0DfkaGQ=;
+        b=riD3tkb/ZxO7sMN6XdzjQcynh1Awf51wX5fjr/TV5g2bWLVQHFkKGLZef9j6vpnaba
+         y38tYCvUPfdAdXbDaWYd8mDKqjC71Y9VDe2zFI1kQQA79D7gP7JEQenTyauoReqj/V38
+         acQviFLaUFncSC7JFg0cnK3O7irJSAYY9nRTFuUwdYDjYD4zaP5NCWtRo475GOD2x0ZZ
+         Z3gL2dIsEP+PlgdEfi7rnoZ6oAPxFTmQ2IZ75hNPrb1bBmhS6ZFJovclqAq/zP1sOhuS
+         c2R+D9PhVAXaMQgqkwVPaaNWgsiyjevu1E1dsotLhPjfqOih+1Tlj+5Ia6ODSik85YkT
+         w+Gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687864599; x=1690456599;
+        d=1e100.net; s=20221208; t=1687864602; x=1690456602;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=d2K0OuQGxCrdsKt9Q57JYfi5owLHsSbU96G7U8K7Wyc=;
-        b=VzescK2zvPYFyApaI5fzssmN8OE1gMSPPX31KE24N7Ex4NOklCMruxjVPUfhTHNmKJ
-         I80K3gYevu+qGp1IXHEJ6dPo14aGYd3YJcTOCU5d23fYpPHn1KJatW21lCULVMPhv7m8
-         jWYNa5HfmqH2d/GyjCY8MnwLq+nLMycbzw+AOmR8T2WGZHZey3F7YP/CwfDvkbBG5jYo
-         d+5iwmVLGlDnVwuQdLslSLW9WIElok3PKTXVjAC3ip9CvbenSNJX+gZvMutPdgrVs3f2
-         Y7gMptjK2Pze+sZ218ZKY7Y35Kd4m9ovHAvHMPlQzdOdFdfYNQb8ZOwFIvQ2Z7J2Q7vT
-         WngQ==
-X-Gm-Message-State: AC+VfDwSrHRAJhQUgFpEncZ2GISs7T/dXSGLKk1dVx0PYsXRx4C1nWRq
-        6cWLsaEusw7804S+xlJh+2Q=
-X-Google-Smtp-Source: ACHHUZ6mnka0WW9MVoMGh7/o2+bdi8ZgTA17NxscHP0+9UmQ8Asw92nbo6Zj8qGPGWMQpIW9ln/+GA==
-X-Received: by 2002:a05:6808:2202:b0:3a1:aa90:d486 with SMTP id bd2-20020a056808220200b003a1aa90d486mr17879039oib.26.1687864598842;
-        Tue, 27 Jun 2023 04:16:38 -0700 (PDT)
+        bh=DFNRYkJFul3uxQnpIVJKj4lTZ10bNSEM4pJM0DfkaGQ=;
+        b=W3roM9eO4sNShpVSRrIAQclGD/TnnJZbpbFMyPTdOctpf16Iyd9hSzxPtHmBKUP9vW
+         i8FaoZ7Iarj3qw41YX0nfnrrY5wxm6NLPNG7iNdNR/EohH5+2y5EUoi6mMvDvUwrLKDI
+         6kYH9PA7Rzn05wZAAsNODtyIka8EYtIAogqL2wfR20Uz86UVp2QRBSFFqWkthDCHCkZH
+         rB/PBh2qP9T5N612mfx7MiOLTAT69FEqxe5Yc242XQWnq8zig1Xaa2sPUFARmVbNhMe/
+         64Zjs6MC10ErYj47J093bRWxoOEt8L3q0eg9g76ZVf+3R3ujsEdQZO7NZrwOaa5femeN
+         oHBw==
+X-Gm-Message-State: AC+VfDylBqrpNGxOR2GWUbYsaTmWeeUpUlT7jFXshSB/Qa18zX3qw3Pw
+        MCV6F6+X2gy6k+faqYQSnIzoy8TBki4AbA==
+X-Google-Smtp-Source: ACHHUZ60AzKSYLh8p4Rb4XirIuSFDC/Tbx/HHno5EeLmV9gTRD15P5HC35cYhK/BRHBchDAG9iVIMg==
+X-Received: by 2002:a17:90a:ab0d:b0:25e:bd1d:4f0c with SMTP id m13-20020a17090aab0d00b0025ebd1d4f0cmr28286507pjq.10.1687864602484;
+        Tue, 27 Jun 2023 04:16:42 -0700 (PDT)
 Received: from localhost.localdomain ([58.240.82.166])
-        by smtp.gmail.com with ESMTPSA id 8-20020a17090a004800b00262d6ac0140sm5438658pjb.9.2023.06.27.04.16.35
+        by smtp.gmail.com with ESMTPSA id 8-20020a17090a004800b00262d6ac0140sm5438658pjb.9.2023.06.27.04.16.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jun 2023 04:16:38 -0700 (PDT)
+        Tue, 27 Jun 2023 04:16:42 -0700 (PDT)
 From:   Song Shuai <suagrfillet@gmail.com>
 To:     paul.walmsley@sifive.com, palmer@dabbelt.com,
         aou@eecs.berkeley.edu, rostedt@goodmis.org, mhiramat@kernel.org,
         mark.rutland@arm.com, guoren@kernel.org, suagrfillet@gmail.com,
         bjorn@rivosinc.com, jszhang@kernel.org, conor.dooley@microchip.com
 Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, songshuaishuai@tinylab.org
-Subject: [PATCH V11 3/5] riscv: ftrace: Add DYNAMIC_FTRACE_WITH_DIRECT_CALLS support
-Date:   Tue, 27 Jun 2023 19:16:10 +0800
-Message-Id: <20230627111612.761164-4-suagrfillet@gmail.com>
+        linux-trace-kernel@vger.kernel.org, songshuaishuai@tinylab.org,
+        Evgenii Shatokhin <e.shatokhin@yadro.com>
+Subject: [PATCH V11 4/5] samples: ftrace: Add riscv support for SAMPLE_FTRACE_DIRECT[_MULTI]
+Date:   Tue, 27 Jun 2023 19:16:11 +0800
+Message-Id: <20230627111612.761164-5-suagrfillet@gmail.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20230627111612.761164-1-suagrfillet@gmail.com>
 References: <20230627111612.761164-1-suagrfillet@gmail.com>
@@ -76,95 +77,241 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds DYNAMIC_FTRACE_WITH_DIRECT_CALLS support for RISC-V.
+select HAVE_SAMPLE_FTRACE_DIRECT and HAVE_SAMPLE_FTRACE_DIRECT_MULTI
+for ARCH_RV64I in arch/riscv/Kconfig. And add riscv asm code for
+the ftrace-direct*.c files in samples/ftrace/.
 
-select the DYNAMIC_FTRACE_WITH_DIRECT_CALLS to provide the
-register_ftrace_direct[_multi] interfaces allowing users to register
-the customed trampoline (direct_caller) as the mcount for one or
-more target functions. And modify_ftrace_direct[_multi] are also
-provided for modifying direct_caller.
-
-To make the direct_caller and the other ftrace hooks (eg. function/fgraph
-tracer, k[ret]probes) co-exist, a temporary register is nominated to
-store the address of direct_caller in ftrace_regs_caller. After the
-setting of the address direct_caller by direct_ops->func and the
-RESTORE_REGS in ftrace_regs_caller, direct_caller will be jumped to
-by the `jr` inst.
-
+Link: https://lore.kernel.org/linux-riscv/c68bac83-5c88-80b1-bac9-e1fd4ea8f07e@yadro.com/T/#ma13012560331c66b051b580b3ab4a04ba44455ec
+Tested-by: Evgenii Shatokhin <e.shatokhin@yadro.com>
 Signed-off-by: Song Shuai <suagrfillet@gmail.com>
 Tested-by: Guo Ren <guoren@kernel.org>
 Signed-off-by: Guo Ren <guoren@kernel.org>
 Acked-by: Björn Töpel <bjorn@rivosinc.com>
 ---
- arch/riscv/Kconfig              |  1 +
- arch/riscv/include/asm/ftrace.h |  8 ++++++++
- arch/riscv/kernel/mcount-dyn.S  | 10 ++++++++++
- 3 files changed, 19 insertions(+)
+ arch/riscv/Kconfig                          |  2 ++
+ samples/ftrace/ftrace-direct-modify.c       | 34 ++++++++++++++++++
+ samples/ftrace/ftrace-direct-multi-modify.c | 40 +++++++++++++++++++++
+ samples/ftrace/ftrace-direct-multi.c        | 24 +++++++++++++
+ samples/ftrace/ftrace-direct-too.c          | 27 ++++++++++++++
+ samples/ftrace/ftrace-direct.c              | 23 ++++++++++++
+ 6 files changed, 150 insertions(+)
 
 diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 756d854e6cdd..c3e678450acf 100644
+index c3e678450acf..35d8255a12c6 100644
 --- a/arch/riscv/Kconfig
 +++ b/arch/riscv/Kconfig
-@@ -145,6 +145,7 @@ config RISCV
- 	select UACCESS_MEMCPY if !MMU
- 	select ZONE_DMA32 if 64BIT
- 	select HAVE_DYNAMIC_FTRACE if !XIP_KERNEL && MMU && (CLANG_SUPPORTS_DYNAMIC_FTRACE || GCC_SUPPORTS_DYNAMIC_FTRACE)
-+	select HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
- 	select HAVE_DYNAMIC_FTRACE_WITH_REGS if HAVE_DYNAMIC_FTRACE
- 	select HAVE_FTRACE_MCOUNT_RECORD if !XIP_KERNEL
- 	select HAVE_FUNCTION_GRAPH_TRACER
-diff --git a/arch/riscv/include/asm/ftrace.h b/arch/riscv/include/asm/ftrace.h
-index 84f856a3286e..84904c1e4369 100644
---- a/arch/riscv/include/asm/ftrace.h
-+++ b/arch/riscv/include/asm/ftrace.h
-@@ -114,6 +114,14 @@ struct ftrace_regs;
- void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
- 		       struct ftrace_ops *op, struct ftrace_regs *fregs);
- #define ftrace_graph_func ftrace_graph_func
+@@ -122,6 +122,8 @@ config RISCV
+ 	select HAVE_POSIX_CPU_TIMERS_TASK_WORK
+ 	select HAVE_REGS_AND_STACK_ACCESS_API
+ 	select HAVE_RSEQ
++	select HAVE_SAMPLE_FTRACE_DIRECT
++	select HAVE_SAMPLE_FTRACE_DIRECT_MULTI
+ 	select HAVE_STACKPROTECTOR
+ 	select HAVE_SYSCALL_TRACEPOINTS
+ 	select IRQ_DOMAIN
+diff --git a/samples/ftrace/ftrace-direct-modify.c b/samples/ftrace/ftrace-direct-modify.c
+index 06d889149012..e90ca7b68314 100644
+--- a/samples/ftrace/ftrace-direct-modify.c
++++ b/samples/ftrace/ftrace-direct-modify.c
+@@ -22,6 +22,40 @@ extern void my_tramp2(void *);
+ 
+ static unsigned long my_ip = (unsigned long)schedule;
+ 
++#ifdef CONFIG_RISCV
 +
-+static inline void
-+__arch_ftrace_set_direct_caller(struct pt_regs *regs, unsigned long addr)
-+{
-+		regs->t1 = addr;
-+}
-+#define arch_ftrace_set_direct_caller(fregs, addr) \
-+	__arch_ftrace_set_direct_caller(&(fregs)->regs, addr)
- #endif /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
- 
- #endif /* __ASSEMBLY__ */
-diff --git a/arch/riscv/kernel/mcount-dyn.S b/arch/riscv/kernel/mcount-dyn.S
-index fb8286b80cfc..b6f4e1847d61 100644
---- a/arch/riscv/kernel/mcount-dyn.S
-+++ b/arch/riscv/kernel/mcount-dyn.S
-@@ -231,6 +231,7 @@ ENDPROC(ftrace_caller)
- 
- #else /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
- ENTRY(ftrace_regs_caller)
-+	mv	t1, zero
- 	SAVE_ABI_REGS 1
- 	PREPARE_ARGS
- 
-@@ -239,7 +240,10 @@ ftrace_regs_call:
- 	call	ftrace_stub
- 
- 	RESTORE_ABI_REGS 1
-+	bnez	t1,.Ldirect
- 	jr	t0
-+.Ldirect:
-+	jr	t1
- ENDPROC(ftrace_regs_caller)
- 
- ENTRY(ftrace_caller)
-@@ -254,3 +258,9 @@ ftrace_call:
- 	jr	t0
- ENDPROC(ftrace_caller)
- #endif /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
++asm (
++"	.pushsection    .text, \"ax\", @progbits\n"
++"	.type		my_tramp1, @function\n"
++"	.globl		my_tramp1\n"
++"   my_tramp1:\n"
++"	addi	sp,sp,-16\n"
++"	sd	t0,0(sp)\n"
++"	sd	ra,8(sp)\n"
++"	call	my_direct_func1\n"
++"	ld	t0,0(sp)\n"
++"	ld	ra,8(sp)\n"
++"	addi	sp,sp,16\n"
++"	jr	t0\n"
++"	.size		my_tramp1, .-my_tramp1\n"
 +
-+#ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
-+SYM_CODE_START(ftrace_stub_direct_tramp)
-+	jr	t0
-+SYM_CODE_END(ftrace_stub_direct_tramp)
-+#endif /* CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS */
++"	.type		my_tramp2, @function\n"
++"	.globl		my_tramp2\n"
++"   my_tramp2:\n"
++"	addi	sp,sp,-16\n"
++"	sd	t0,0(sp)\n"
++"	sd	ra,8(sp)\n"
++"	call	my_direct_func2\n"
++"	ld	t0,0(sp)\n"
++"	ld	ra,8(sp)\n"
++"	addi	sp,sp,16\n"
++"	jr	t0\n"
++"	.size		my_tramp2, .-my_tramp2\n"
++"	.popsection\n"
++);
++
++#endif /* CONFIG_RISCV */
++
+ #ifdef CONFIG_X86_64
+ 
+ #include <asm/ibt.h>
+diff --git a/samples/ftrace/ftrace-direct-multi-modify.c b/samples/ftrace/ftrace-direct-multi-modify.c
+index 62f6b681999e..5a81af7b3af3 100644
+--- a/samples/ftrace/ftrace-direct-multi-modify.c
++++ b/samples/ftrace/ftrace-direct-multi-modify.c
+@@ -20,6 +20,46 @@ void my_direct_func2(unsigned long ip)
+ extern void my_tramp1(void *);
+ extern void my_tramp2(void *);
+ 
++#ifdef CONFIG_RISCV
++
++asm (
++"	.pushsection    .text, \"ax\", @progbits\n"
++"	.type		my_tramp1, @function\n"
++"	.globl		my_tramp1\n"
++"   my_tramp1:\n"
++"       addi	sp,sp,-24\n"
++"       sd	a0,0(sp)\n"
++"       sd	t0,8(sp)\n"
++"       sd	ra,16(sp)\n"
++"       mv	a0,t0\n"
++"       call	my_direct_func1\n"
++"       ld	a0,0(sp)\n"
++"       ld	t0,8(sp)\n"
++"       ld	ra,16(sp)\n"
++"       addi	sp,sp,24\n"
++"	jr	t0\n"
++"	.size		my_tramp1, .-my_tramp1\n"
++
++"	.type		my_tramp2, @function\n"
++"	.globl		my_tramp2\n"
++"   my_tramp2:\n"
++"       addi	sp,sp,-24\n"
++"       sd	a0,0(sp)\n"
++"       sd	t0,8(sp)\n"
++"       sd	ra,16(sp)\n"
++"       mv	a0,t0\n"
++"       call	my_direct_func2\n"
++"       ld	a0,0(sp)\n"
++"       ld	t0,8(sp)\n"
++"       ld	ra,16(sp)\n"
++"       addi	sp,sp,24\n"
++"	jr	t0\n"
++"	.size		my_tramp2, .-my_tramp2\n"
++"	.popsection\n"
++);
++
++#endif /* CONFIG_RISCV */
++
+ #ifdef CONFIG_X86_64
+ 
+ #include <asm/ibt.h>
+diff --git a/samples/ftrace/ftrace-direct-multi.c b/samples/ftrace/ftrace-direct-multi.c
+index 5482cf616b43..0e9bb94edade 100644
+--- a/samples/ftrace/ftrace-direct-multi.c
++++ b/samples/ftrace/ftrace-direct-multi.c
+@@ -15,6 +15,30 @@ void my_direct_func(unsigned long ip)
+ 
+ extern void my_tramp(void *);
+ 
++#ifdef CONFIG_RISCV
++
++asm (
++"       .pushsection    .text, \"ax\", @progbits\n"
++"       .type           my_tramp, @function\n"
++"       .globl          my_tramp\n"
++"   my_tramp:\n"
++"       addi	sp,sp,-24\n"
++"       sd	a0,0(sp)\n"
++"       sd	t0,8(sp)\n"
++"       sd	ra,16(sp)\n"
++"       mv	a0,t0\n"
++"       call	my_direct_func\n"
++"       ld	a0,0(sp)\n"
++"       ld	t0,8(sp)\n"
++"       ld	ra,16(sp)\n"
++"       addi	sp,sp,24\n"
++"       jr	t0\n"
++"       .size           my_tramp, .-my_tramp\n"
++"       .popsection\n"
++);
++
++#endif /* CONFIG_RISCV */
++
+ #ifdef CONFIG_X86_64
+ 
+ #include <asm/ibt.h>
+diff --git a/samples/ftrace/ftrace-direct-too.c b/samples/ftrace/ftrace-direct-too.c
+index a05bc2cc2261..5c319db48af2 100644
+--- a/samples/ftrace/ftrace-direct-too.c
++++ b/samples/ftrace/ftrace-direct-too.c
+@@ -17,6 +17,33 @@ void my_direct_func(struct vm_area_struct *vma,
+ 
+ extern void my_tramp(void *);
+ 
++#ifdef CONFIG_RISCV
++
++asm (
++"       .pushsection    .text, \"ax\", @progbits\n"
++"       .type           my_tramp, @function\n"
++"       .globl          my_tramp\n"
++"   my_tramp:\n"
++"       addi	sp,sp,-40\n"
++"       sd	a0,0(sp)\n"
++"       sd	a1,8(sp)\n"
++"       sd	a2,16(sp)\n"
++"       sd	t0,24(sp)\n"
++"       sd	ra,32(sp)\n"
++"       call	my_direct_func\n"
++"       ld	a0,0(sp)\n"
++"       ld	a1,8(sp)\n"
++"       ld	a2,16(sp)\n"
++"       ld	t0,24(sp)\n"
++"       ld	ra,32(sp)\n"
++"       addi	sp,sp,40\n"
++"       jr	t0\n"
++"       .size           my_tramp, .-my_tramp\n"
++"       .popsection\n"
++);
++
++#endif /* CONFIG_RISCV */
++
+ #ifdef CONFIG_X86_64
+ 
+ #include <asm/ibt.h>
+diff --git a/samples/ftrace/ftrace-direct.c b/samples/ftrace/ftrace-direct.c
+index 06879bbd3399..ca95506b0350 100644
+--- a/samples/ftrace/ftrace-direct.c
++++ b/samples/ftrace/ftrace-direct.c
+@@ -14,6 +14,29 @@ void my_direct_func(struct task_struct *p)
+ 
+ extern void my_tramp(void *);
+ 
++#ifdef CONFIG_RISCV
++
++asm (
++"       .pushsection    .text, \"ax\", @progbits\n"
++"       .type           my_tramp, @function\n"
++"       .globl          my_tramp\n"
++"   my_tramp:\n"
++"       addi	sp,sp,-24\n"
++"       sd	a0,0(sp)\n"
++"       sd	t0,8(sp)\n"
++"       sd	ra,16(sp)\n"
++"       call	my_direct_func\n"
++"       ld	a0,0(sp)\n"
++"       ld	t0,8(sp)\n"
++"       ld	ra,16(sp)\n"
++"       addi	sp,sp,24\n"
++"       jr	t0\n"
++"       .size           my_tramp, .-my_tramp\n"
++"       .popsection\n"
++);
++
++#endif /* CONFIG_RISCV */
++
+ #ifdef CONFIG_X86_64
+ 
+ #include <asm/ibt.h>
 -- 
 2.20.1
 
