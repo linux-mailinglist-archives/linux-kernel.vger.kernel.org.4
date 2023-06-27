@@ -2,127 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A60D37400CB
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 18:23:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55EDE7400CF
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 18:23:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230249AbjF0QXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 12:23:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45144 "EHLO
+        id S230493AbjF0QXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 12:23:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbjF0QXK (ORCPT
+        with ESMTP id S229845AbjF0QXk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 12:23:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A2CE1FF0;
-        Tue, 27 Jun 2023 09:23:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E743611D4;
-        Tue, 27 Jun 2023 16:23:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CD1BC433C0;
-        Tue, 27 Jun 2023 16:23:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687882988;
-        bh=X7C7c+mN0VpeHK+Ecm9oxh43Gqr/gyJV3O7Y5jth8xA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=tSPi7/uDtxqfHqRTF6IbAWQW8/3OiYU+wZWpSb0uiTAc+vMsUawt2XKn4Hp6EbklJ
-         1okL5JcYassR84iRuRkwC741bSR8W25HoTWBcUYgYoaMEhnLGwEF22tQNhCFX8bSHF
-         FjsX4JlAPveulCI5S4GXjzrrsBkedfdH34gXrFSvJrR804Tbmmg4tsOvLO87kpEZaN
-         ui0iclTiL4bRAqDa+J1BW5LcfIBPbRKAy9vQPLDtBdh+v2cDXZgRKYY2bjcuSkFGty
-         ZULNPOykMMaMTMMRC0jglcUoRQ0uZuV7P0O1PfLLLqA1kHqL9qZeTuY+jsugYkYhMJ
-         n7YOKmDVk2t0A==
-Date:   Wed, 28 Jun 2023 01:23:05 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH] fprobe: Release rethook after the ftrace_ops is
- unregistered
-Message-Id: <20230628012305.978e34d44f1a53fe20327fde@kernel.org>
-In-Reply-To: <20230627233306.b9b04d75f86944466f6534c2@kernel.org>
-References: <20230615115236.3476617-1-jolsa@kernel.org>
-        <20230627233306.b9b04d75f86944466f6534c2@kernel.org>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 27 Jun 2023 12:23:40 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C005E1FF0
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 09:23:38 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id 3f1490d57ef6-c11e2b31b95so3772641276.3
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 09:23:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687883018; x=1690475018;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qymS9y/iBQJ/Nbtgv3hEJrG0PMa0rrPgMrPQ2j32eRU=;
+        b=cX6aE86FpHdfRFsdIIgbTpEgKD/Vu2YaitK2vLRrQg49v5sfKauLKa+/hmPC64QbWN
+         lZYVvZRR80L6HLdIU1vhGPGJgnwsxf1Bb1wEeoKAGrBVzk9Snfun7mghg9W+u+hgR67X
+         LKWGZLIeNqusorujboi2uhuN3vpDdOMs35gUGte5KRAInUeSoXLZgk1a1evNWDsoxNxs
+         w9Yfer2GlW92ulsQm+8CRdz7cjowDs3WNqV7wk0jO6lpXK1T/0JYTv0w9+eN9kPgEFGd
+         fPoLKr1qMrEYyPrEv4eyZ/0ZuMTU/sWbL0AjFqwNzLkgZd/fbZjfirILKN37PGDUIk+G
+         NM9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687883018; x=1690475018;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qymS9y/iBQJ/Nbtgv3hEJrG0PMa0rrPgMrPQ2j32eRU=;
+        b=geYK3AI5u6Yb9ulPw4WNAkZGCJWEg7yHxcP2+iLlWJWQsklN265rZsymhNybrnytOk
+         dIm6NlnTvLx7HoCeqlhRidGEWMwBFLrrqnAGdqBz+giPYcxJuBtgyyGtRwqcBtiImyMx
+         6zjc45zhug6JTxvY85QD0urpHL3nBadT2wSnYwyb5I11uDsh1OX8VJyp6d+jsWpKLFC6
+         S9C/TO93PpvzeWeead7PWLUQFBdB+3NJvuFdtsS2B0jBGE2JlOMHlUO/3zPFPXYz19bI
+         /JMMZhm2GEDY8xRT+AUky8n8Cd5W7MJ3QIJplW9n+iY5vZ/adNmPkAiGrmqoOHNRSyDd
+         4bJw==
+X-Gm-Message-State: AC+VfDyNrg+j3+z8EPcBb0UpoS1i/yni67lBM5faU4jW0SuH9xjSVUHR
+        8ZClb8k4DvC8UzsXfEpZIpMkMrUDgNGTzGgVtDac+A==
+X-Google-Smtp-Source: ACHHUZ55vtvWXDpDJ91JhVYJu5OqOdjEzz1lOxA79ilXOPa63gdyb/WDbHmi+KEDsz//Yk8mxcBPvYE5d1gzq1EXwZk=
+X-Received: by 2002:a05:6902:1342:b0:c1c:f99e:ef55 with SMTP id
+ g2-20020a056902134200b00c1cf99eef55mr6600031ybu.57.1687883017742; Tue, 27 Jun
+ 2023 09:23:37 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230627042321.1763765-1-surenb@google.com> <20230627042321.1763765-8-surenb@google.com>
+ <ZJsFFzKG3W7UPCeo@x1n>
+In-Reply-To: <ZJsFFzKG3W7UPCeo@x1n>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Tue, 27 Jun 2023 09:23:26 -0700
+Message-ID: <CAJuCfpFC05vCwAONO7YxG=LhqteyYmOy1Nprg2NyjQ6hKaHgOA@mail.gmail.com>
+Subject: Re: [PATCH v3 7/8] mm: drop VMA lock before waiting for migration
+To:     Peter Xu <peterx@redhat.com>
+Cc:     akpm@linux-foundation.org, willy@infradead.org, hannes@cmpxchg.org,
+        mhocko@suse.com, josef@toxicpanda.com, jack@suse.cz,
+        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
+        michel@lespinasse.org, liam.howlett@oracle.com, jglisse@google.com,
+        vbabka@suse.cz, minchan@google.com, dave@stgolabs.net,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com, hdanton@sina.com,
+        apopple@nvidia.com, ying.huang@intel.com, david@redhat.com,
+        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
+        viro@zeniv.linux.org.uk, brauner@kernel.org,
+        pasha.tatashin@soleen.com, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 27 Jun 2023 23:33:06 +0900
-Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
+On Tue, Jun 27, 2023 at 8:49=E2=80=AFAM Peter Xu <peterx@redhat.com> wrote:
+>
+> On Mon, Jun 26, 2023 at 09:23:20PM -0700, Suren Baghdasaryan wrote:
+> > migration_entry_wait does not need VMA lock, therefore it can be
+> > dropped before waiting.
+>
+> Hmm, I'm not sure..
+>
+> Note that we're still dereferencing *vmf->pmd when waiting, while *pmd is
+> on the page table and IIUC only be guaranteed if the vma is still there.
+> If without both mmap / vma lock I don't see what makes sure the pgtable i=
+s
+> always there.  E.g. IIUC a race can happen where unmap() runs right after
+> vma_end_read() below but before pmdp_get_lockless() (inside
+> migration_entry_wait()), then pmdp_get_lockless() can read some random
+> things if the pgtable is freed.
 
-> > diff --git a/kernel/trace/fprobe.c b/kernel/trace/fprobe.c
-> > index 18d36842faf5..0121e8c0d54e 100644
-> > --- a/kernel/trace/fprobe.c
-> > +++ b/kernel/trace/fprobe.c
-> > @@ -364,19 +364,13 @@ int unregister_fprobe(struct fprobe *fp)
-> >  		    fp->ops.saved_func != fprobe_kprobe_handler))
-> >  		return -EINVAL;
-> >  
-> > -	/*
-> > -	 * rethook_free() starts disabling the rethook, but the rethook handlers
-> > -	 * may be running on other processors at this point. To make sure that all
-> > -	 * current running handlers are finished, call unregister_ftrace_function()
-> > -	 * after this.
-> > -	 */
+That sounds correct. I thought ptl would keep pmd stable but there is
+time between vma_end_read() and spin_lock(ptl) when it can be freed
+from under us. I think it would work if we do vma_end_read() after
+spin_lock(ptl) but that requires code refactoring. I'll probably drop
+this optimization from the patchset for now to keep things simple and
+will get back to it later.
 
-Oh, wait, here is an important comment. If a rethook handler is still running
-(because it hooks target function exit), returning from unregister_fprobe()
-right after rethook_free() may cause another issue.
-
-rethook_free() clears 'rh->handler', so after calling rethook_free(), we
-can ensure no NEW rethook handler (means fprobe_exit_handler()) is called.
-However, it doesn't mean there is no current running fprobe_exit_handler().
-Thus if unregister_fprobe() caller releases the 'fp' right after returning
-from unregister_fprobe(), current running fprobe_exit_handler() can access
-'fp' (use-after-free).
-
-Thus we need to add below code with this patch;
-	/*
-	 * The rethook handlers may be running on other processors at this point.
-	 * To make sure that all current running handlers are finished, disable
-	 * rethook by clearing handler and call unregister_ftrace_function()
-	 * to ensure all running rethook handlers exit. And call rethook_free().
-	 */
-	if (fp->rethook)
-		WRITE_ONCE(fp->rethook->handler, NULL);
-
-> > -	if (fp->rethook)
-> > -		rethook_free(fp->rethook);
-> > -
-> >  	ret = unregister_ftrace_function(&fp->ops);
-> >  	if (ret < 0)
-> >  		return ret;
-> >  
-> > +	if (fp->rethook)
-> > +		rethook_free(fp->rethook);
+>
+> >
+> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > ---
+> >  mm/memory.c | 14 ++++++++++++--
+> >  1 file changed, 12 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/mm/memory.c b/mm/memory.c
+> > index 5caaa4c66ea2..bdf46fdc58d6 100644
+> > --- a/mm/memory.c
+> > +++ b/mm/memory.c
+> > @@ -3715,8 +3715,18 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
+> >       entry =3D pte_to_swp_entry(vmf->orig_pte);
+> >       if (unlikely(non_swap_entry(entry))) {
+> >               if (is_migration_entry(entry)) {
+> > -                     migration_entry_wait(vma->vm_mm, vmf->pmd,
+> > -                                          vmf->address);
+> > +                     /* Save mm in case VMA lock is dropped */
+> > +                     struct mm_struct *mm =3D vma->vm_mm;
 > > +
-> >  	ftrace_free_filter(&fp->ops);
-> >  
-> >  	return ret;
-
-Thank you,
-
-> > -- 
-> > 2.40.1
-> > 
-> 
-> 
-> -- 
-> Masami Hiramatsu (Google) <mhiramat@kernel.org>
-
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > +                     if (vmf->flags & FAULT_FLAG_VMA_LOCK) {
+> > +                             /*
+> > +                              * No need to hold VMA lock for migration=
+.
+> > +                              * WARNING: vma can't be used after this!
+> > +                              */
+> > +                             vma_end_read(vma);
+> > +                             ret |=3D VM_FAULT_COMPLETED;
+> > +                     }
+> > +                     migration_entry_wait(mm, vmf->pmd, vmf->address);
+> >               } else if (is_device_exclusive_entry(entry)) {
+> >                       vmf->page =3D pfn_swap_entry_to_page(entry);
+> >                       ret =3D remove_device_exclusive_entry(vmf);
+> > --
+> > 2.41.0.178.g377b9f9a00-goog
+> >
+>
+> --
+> Peter Xu
+>
