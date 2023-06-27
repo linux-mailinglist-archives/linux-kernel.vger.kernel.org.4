@@ -2,56 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDBC77403B1
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 21:01:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E0CC7403B8
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 21:02:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230473AbjF0TBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 15:01:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39750 "EHLO
+        id S231255AbjF0TCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 15:02:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjF0TBK (ORCPT
+        with ESMTP id S229504AbjF0TBz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 15:01:10 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D550119A9;
-        Tue, 27 Jun 2023 12:01:09 -0700 (PDT)
-Received: from [192.168.10.54] (unknown [182.179.162.32])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Tue, 27 Jun 2023 15:01:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95AD8116;
+        Tue, 27 Jun 2023 12:01:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E48DF6607155;
-        Tue, 27 Jun 2023 20:01:06 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1687892468;
-        bh=/9PrOHnvrybO+vm7KEMCWRQ/zQkS6KYWvsrScJjK7KY=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=NQstSq2G2pKMTArKMF7wiQZ7161dBYh0/WOHI7OckZnQpgxDo34ElDUL2Oylrgltp
-         vdngVF4HMSH88fluxuIMFYAEicAWMv0WsQe3xYy7eJvw6/ae8wG0zC5km2sJ63IiVE
-         b0EBEI1lTPVwb8T3nvrtQ4rtRlKaFP1iCTGpQE1vX8F++tjNCYEKNaN6E9nNYTf/zf
-         HkFbMmOVQ5lA4kqs3Up0TECHJ3bFIfY0gN7sVboYUtKyBe/0m3U/tbKtxmC29Zbj2u
-         tJd4hKGzFZrg2gT+QewrnyT18B18Efqudvb7FhCpmpB2UAJG1K6q1Y1YMtHysgESej
-         SGe2PH4arzLvQ==
-Message-ID: <758f6c94-ac29-5e9c-f5c1-68210c2427ab@collabora.com>
-Date:   Wed, 28 Jun 2023 00:01:01 +0500
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 31CBF611FB;
+        Tue, 27 Jun 2023 19:01:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8609DC433CA;
+        Tue, 27 Jun 2023 19:01:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687892513;
+        bh=pd5ltRiIOaj/yKrVyXhVz/cvhptO3VIDm67Rl/G6O3w=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=hu99a1SWwpcgIUDdVf7+kAjL0QITH77k2W2SSELAO6KDmkUvtU0rnRrwkXISvXaS2
+         1+S9tUbZidslBPc7VO9enIKPIwC4VAuBpvuyZSHlU+JO9gOZsmK5Z5zXnYsBEH8pOA
+         v08UdZMQi+L4/AhGcZKh0yDQ5v45TeLr7Bu/j2IDHqhrBoUZ3GlU8h9e9HpnhFjZAS
+         /VPpaYooNuc5jyqCarUFfsJMOwYMX3IzXx/gJAbAj6jQ1Sufhfa0k+ebb0n6pjnd6u
+         A6mp0Eww6G/vVF08cndZhzK1zYTfPIsALhJWOiHP8b4QW+LnvK6MO3Me0XFsZP5+lF
+         hiKckaMgNmavQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 598EEC64457;
+        Tue, 27 Jun 2023 19:01:53 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2] selftests: prctl: Add new prctl test for PR_SET_NAME
-Content-Language: en-US
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        Osama Muhammad <osmtendev@gmail.com>, shuah@kernel.org
-References: <20230607153600.15816-1-osmtendev@gmail.com>
- <b7a3219e-4e0a-7a08-439a-a8a6e35271ca@linuxfoundation.org>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <b7a3219e-4e0a-7a08-439a-a8a6e35271ca@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Subject: Re: [PATCH] Bluetooth: MAINTAINERS: add Devicetree bindings to Bluetooth
+ drivers
+From:   patchwork-bot+bluetooth@kernel.org
+Message-Id: <168789251335.11348.15831606026121795757.git-patchwork-notify@kernel.org>
+Date:   Tue, 27 Jun 2023 19:01:53 +0000
+References: <20230621060949.5760-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230621060949.5760-1-krzysztof.kozlowski@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,33 +63,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/10/23 2:43 AM, Shuah Khan wrote:
-> On 6/7/23 09:36, Osama Muhammad wrote:
->> This patch will add the new test, which covers the prctl call
->> PR_SET_NAME command. The test tries to give a name using the PR_SET_NAME
->> call and then confirm it that it changed correctly by using  PR_GET_NAME.
->> It also tries to rename it with empty name.In the test PR_GET_NAME is
->> tested by passing null pointer to it and check its behaviour.
->>
->> Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
->>
->> ---
->> changes since v1:
->>     -Used TASK_COMM_LEN instead of using numerical value 16.
+Hello:
+
+This patch was applied to bluetooth/bluetooth-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Wed, 21 Jun 2023 08:09:49 +0200 you wrote:
+> The Devicetree bindings should be picked up by subsystem maintainers,
+> but respective pattern for Bluetooth drivers was missing.
 > 
-> Please add linux/sched.h here as an include to pull this.
-> It is good to add an explicit include as opposed taking
-> a chance on it being included from another include.
-TASK_COMM_LEN is defined in include/linux/sched.h. It is only to be used by
-the kernel.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  MAINTAINERS | 1 +
+>  1 file changed, 1 insertion(+)
 
-If we look at include/uapi/linux/sched.h, TASK_COMM_LEN isn't defined. So
-this test looks good to me.
+Here is the summary with links:
+  - Bluetooth: MAINTAINERS: add Devicetree bindings to Bluetooth drivers
+    https://git.kernel.org/bluetooth/bluetooth-next/c/533bbc7ce562
 
-> 
-> thanks,
-> -- Shuah
-
+You are awesome, thank you!
 -- 
-BR,
-Muhammad Usama Anjum
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
