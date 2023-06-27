@@ -2,145 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1DB97400D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 18:23:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76A777400D7
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 18:24:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231267AbjF0QXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 12:23:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45432 "EHLO
+        id S231642AbjF0QYF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 12:24:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231200AbjF0QXo (ORCPT
+        with ESMTP id S231723AbjF0QX6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 12:23:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EDBC1FF0;
-        Tue, 27 Jun 2023 09:23:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C83EA611D8;
-        Tue, 27 Jun 2023 16:23:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58BEFC433C9;
-        Tue, 27 Jun 2023 16:23:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687883022;
-        bh=DSpyRxprW3MPfkhjPF5yXCDbAEFb7zNN+CnoAFHKHDI=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=bMs4+nSR1W39m4QCMlBeLxy90os9T7tM9/ADdF1aARQ78hSxdCbmkJ9PNaQYK19Ju
-         zT5Km1Rls5PK5FwBcnCRm2u8vhBzSgBJE5pybKa7pHa31ysYrrbUPq7/32BtO9VW/e
-         R+cvLIVm21mnF9w4lni7NkFqS4JFMdRnADZPQ0Y8FYR6qPIZ9BDRgOZkYqv7VDfx0p
-         5yOrxdfxFqXR1PCK0T3PIpSQtr5bItmHVnua3DOpngwk60cVGSFIi4tMAW8hwf7URl
-         TqF+XYGeZN0QcUZ1dc5VHIP4tDsuwIlUCUmOZh44BSKeWuSWDJkLyb3wRycnRhv69Y
-         vZfR6LZL4Tnaw==
-Message-ID: <b18c49ada119b6904b92375a847ce8c764cb1663.camel@kernel.org>
-Subject: Re: [PATCH 0/2] v3: F_OFD_GETLK extension to read lock info
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Stas Sergeev <stsp2@yandex.ru>, linux-kernel@vger.kernel.org
-Cc:     Chuck Lever <chuck.lever@oracle.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org, linux-api@vger.kernel.org
-Date:   Tue, 27 Jun 2023 12:23:40 -0400
-In-Reply-To: <20230622165225.2772076-1-stsp2@yandex.ru>
-References: <20230622165225.2772076-1-stsp2@yandex.ru>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
+        Tue, 27 Jun 2023 12:23:58 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32EF430EC;
+        Tue, 27 Jun 2023 09:23:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=/4TlpfcV9w6VY9Wp7NMoSSjTCcDuCDvKDEUtb/e8aoY=; b=TSd0mxAFGlDcWEi9yXYnWluOUs
+        NldrvE0DKu1dHstL1JbzHINhrsfGcxz5LnCr5JS37ath2Ad9iVy/m5muvX4guNZ16jtoNWrtqGOvm
+        eZNQ0U5lHgWJEqRiExXBRaN4r4JqxAgc4fz4GxJRRzhYMANh4SKueIOWGtsUCxKZ9LZZvGMIH7UaU
+        rJrK4a/x13v4sAa1AzeEEaVg/JpWQiw2vMqt1bfX8/oVxivdyPzX8FJqYXFvybb301UzLa5hZ+dvi
+        Wx85YNW9fxLnRzdLddyCmbgWFNF237gROBrD6jAGbmmz0Yu7TyVXiD+HESVQMEO8JVpoTZ1i33uTj
+        U6IqmO6g==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qEBTt-00DdCA-01;
+        Tue, 27 Jun 2023 16:23:53 +0000
+Message-ID: <0d8f8e2b-166b-14bc-6879-a2521ea5b23d@infradead.org>
+Date:   Tue, 27 Jun 2023 09:23:51 -0700
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 1/1] Add a new sysctl to disable io_uring system-wide
+Content-Language: en-US
+To:     Matteo Rizzo <matteorizzo@google.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, io-uring@vger.kernel.org
+Cc:     jordyzomer@google.com, evn@google.com, poprdi@google.com,
+        corbet@lwn.net, axboe@kernel.dk, asml.silence@gmail.com,
+        akpm@linux-foundation.org, keescook@chromium.org,
+        rostedt@goodmis.org, dave.hansen@linux.intel.com,
+        ribalda@chromium.org, chenhuacai@kernel.org, steve@sk2.org,
+        gpiccoli@igalia.com, ldufour@linux.ibm.com
+References: <20230627120058.2214509-1-matteorizzo@google.com>
+ <20230627120058.2214509-2-matteorizzo@google.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230627120058.2214509-2-matteorizzo@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-06-22 at 21:52 +0500, Stas Sergeev wrote:
-> This extension allows to use F_UNLCK on query, which currently returns
-> EINVAL. Instead it can be used to query the locks on a particular fd -
-> something that is not currently possible. The basic idea is that on
-> F_OFD_GETLK, F_UNLCK would "conflict" with (or query) any types of the
-> lock on the same fd, and ignore any locks on other fds.
->=20
-> Use-cases:
->=20
-> 1. CRIU-alike scenario when you want to read the locking info from an
-> fd for the later reconstruction. This can now be done by setting
-> l_start and l_len to 0 to cover entire file range, and do F_OFD_GETLK.
-> In the loop you need to advance l_start past the returned lock ranges,
-> to eventually collect all locked ranges.
->=20
-> 2. Implementing the lock checking/enforcing policy.
-> Say you want to implement an "auditor" module in your program,
-> that checks that the I/O is done only after the proper locking is
-> applied on a file region. In this case you need to know if the
-> particular region is locked on that fd, and if so - with what type
-> of the lock. If you would do that currently (without this extension)
-> then you can only check for the write locks, and for that you need to
-> probe the lock on your fd and then open the same file via another fd and
-> probe there. That way you can identify the write lock on a particular
-> fd, but such trick is non-atomic and complex. As for finding out the
-> read lock on a particular fd - impossible.
-> This extension allows to do such queries without any extra efforts.
->=20
-> 3. Implementing the mandatory locking policy.
-> Suppose you want to make a policy where the write lock inhibits any
-> unlocked readers and writers. Currently you need to check if the
-> write lock is present on some other fd, and if it is not there - allow
-> the I/O operation. But because the write lock can appear at any moment,
-> you need to do that under some global lock, which can be released only
-> when the I/O operation is finished.
-> With the proposed extension you can instead just check the write lock
-> on your own fd first, and if it is there - allow the I/O operation on
-> that fd without using any global lock. Only if there is no write lock
-> on this fd, then you need to take global lock and check for a write
-> lock on other fds.
->=20
->=20
-> The second patch adds a test-case for OFD locks.
-> It tests both the generic things and the proposed extension.
->=20
->=20
-> The third patch is a proposed man page update for fcntl(2)
-> (not for the linux source tree)
->=20
->=20
-> Changes in v3:
-> - Move selftest to selftests/filelock
->=20
-> Changes in v2:
-> - Dropped the l_pid extension patch and updated test-case accordingly.
->=20
-> Stas Sergeev (2):
->   fs/locks: F_UNLCK extension for F_OFD_GETLK
->   selftests: add OFD lock tests
->=20
->  fs/locks.c                                  |  23 +++-
->  tools/testing/selftests/filelock/Makefile   |   5 +
->  tools/testing/selftests/filelock/ofdlocks.c | 132 ++++++++++++++++++++
->  3 files changed, 157 insertions(+), 3 deletions(-)
->  create mode 100644 tools/testing/selftests/filelock/Makefile
->  create mode 100644 tools/testing/selftests/filelock/ofdlocks.c
->=20
-> CC: Jeff Layton <jlayton@kernel.org>
-> CC: Chuck Lever <chuck.lever@oracle.com>
-> CC: Alexander Viro <viro@zeniv.linux.org.uk>
-> CC: Christian Brauner <brauner@kernel.org>
-> CC: linux-fsdevel@vger.kernel.org
-> CC: linux-kernel@vger.kernel.org
-> CC: Shuah Khan <shuah@kernel.org>
-> CC: linux-kselftest@vger.kernel.org
-> CC: linux-api@vger.kernel.org
->=20
+Hi--
 
-I've taken the first two patches into my locks-next branch, so they
-should end up in linux-next soon. Adding support for testing this to
-fstests is a hard requirement before this will be merged into mainline.
+On 6/27/23 05:00, Matteo Rizzo wrote:
+> diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
+> index d85d90f5d000..3c53a238332a 100644
+> --- a/Documentation/admin-guide/sysctl/kernel.rst
+> +++ b/Documentation/admin-guide/sysctl/kernel.rst
+> @@ -450,6 +450,20 @@ this allows system administrators to override the
+>  ``IA64_THREAD_UAC_NOPRINT`` ``prctl`` and avoid logs being flooded.
+>  
+>  
+> +io_uring_disabled
+> +=========================
+> +
+> +Prevents all processes from creating new io_uring instances. Enabling this
+> +shrinks the kernel's attack surface.
+> +
+> += =============================================================
+> +0 All processes can create io_uring instances as normal. This is the default
+> +  setting.
+> +1 io_uring is disabled. io_uring_setup always fails with -EPERM. Existing
+> +  io_uring instances can still be used.
+> += =============================================================
 
-Thanks,
---=20
-Jeff Layton <jlayton@kernel.org>
+These table lines should be extended at least as far as the text that they
+enclose. I.e., the top and bottom lines should be like:
+
+> += ==========================================================================
+
+thanks.
+-- 
+~Randy
