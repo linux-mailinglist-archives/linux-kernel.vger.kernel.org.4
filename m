@@ -2,179 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63B017405C7
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 23:43:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA6297405CA
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 23:44:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230332AbjF0VnX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 17:43:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42696 "EHLO
+        id S230399AbjF0Voc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 17:44:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230271AbjF0VnU (ORCPT
+        with ESMTP id S230271AbjF0Voa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 17:43:20 -0400
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 098472726
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 14:43:19 -0700 (PDT)
-Received: by mail-oi1-x231.google.com with SMTP id 5614622812f47-39ed35dfa91so3765946b6e.3
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 14:43:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687902198; x=1690494198;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MSllMEfZxRxH/Ncdk3MCdEqFObJmS1OPb8q9+W1DegI=;
-        b=2+sKZNQhP9V45I8qJWmARf2B8RZm3gD3w1G+fLrVbz3etG8Oy46GcaOZIS6i7K3h/K
-         SnY+Z8y93mRayVYzD/bBmI80k6bOpZEltc522mgvrW4dvBA20utkIhJVmxipLS63eotD
-         OyLxRMnsUYN/ZiQUZzCEJJzijs2bOmz42QDP0WZjEI6cTrxikwWePyRBiuQ5A9UsY3dC
-         HKRakkm9SFetS+kNfa6Lt+7YxydPGWd5AFikKCGvrj1w+1hBmz0IlQzke2XDQmZMWaJi
-         uq+Mg+T2/IijmOF+rcVsmhWxm+1bEl6ldl8lqzk8I27SotQNuNZbyDyOsVEeygiRqyqr
-         bXoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687902198; x=1690494198;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MSllMEfZxRxH/Ncdk3MCdEqFObJmS1OPb8q9+W1DegI=;
-        b=ZC6G1kiD2YDk5KbZ6wuVNrm0nnYw+P8RpI0xwa0eQrT0B5DwYNqrY6Ooy3OSJakwGG
-         f+NVlcLxco/UED9btabUJJ0r99uhqdlO3rahHDPAl36CclmPY71bgTGPNJM+S460A06+
-         PR+KwVfyMpgjqrv8DPFJv+Hjs0doM9xHhUfz7KyENlJFBPOjoX0kyH9FEnxeiLBdE9Hp
-         JB+U2d9Wrmh9cJGFR75sGfwiiBlDUR2qCRgQ9+rmaBUqMbUvVbj+sKhpi7zzbPp1wVhU
-         rMn57Xv6RtLbUcp2Udso0F6hqZPtzj8ACWSoNEiJB5Dvy0BwRHr1mMRr7GuI1qf7v+j3
-         UJKQ==
-X-Gm-Message-State: AC+VfDy6qTXsdStIxCKeqbprYz/5Lx8Q+pvYeztkzUOWOEgAMnmnWJzn
-        Paql+vXAQxrtHc/NIeL2UmjRvlR8hT1uQqYzXD3l/g==
-X-Google-Smtp-Source: ACHHUZ5NN7n+x2d9nfA/dWjNvQsLrsGjE2IAN6NXyzlKoA60nHqa/WX6aQ+BhuHdTgfam03zZqGyClh2IrEsyhW5Whg=
-X-Received: by 2002:a05:6808:21a2:b0:3a2:de7b:775f with SMTP id
- be34-20020a05680821a200b003a2de7b775fmr2907663oib.22.1687902198145; Tue, 27
- Jun 2023 14:43:18 -0700 (PDT)
+        Tue, 27 Jun 2023 17:44:30 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA59B2706
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 14:44:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687902269; x=1719438269;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Svsx6iLkTeK0LMangiMD1jOJsXTrHAZiBNrsTtgiQuY=;
+  b=XVwPowF4ZQ2GhBFqsPaHBhHR0BWwMVf6EpQKuDId+E0BsC/gRcg4aZuI
+   SiJQlBsJl9JTr82oeVWxhVkxbTNFty0FtjDm2Ob0Wr3d+QAPe3AmMq5WB
+   YX3G2KBrvpfO/d+YKTsbqEl5UjJh8k9NSfQpUwlpWV4+4K+mKckJCYwsg
+   2Bfz3xlc6+pTadaHiM6cOgPom/TgUC+38LkFnUW3+KofKNXtaZsCqv15s
+   MOgeYopfgpe4uBrX4Nsj5ovxWEOMBJr37Hb+9YtKHpkKEcbA9rtbmefBk
+   yIwZqgfmMq/CslKdMP3Uvit2unN7rXlYy4WnL6URu7FnPeYNZu/xi4IGP
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="361730451"
+X-IronPort-AV: E=Sophos;i="6.01,163,1684825200"; 
+   d="scan'208";a="361730451"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 14:44:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="861255577"
+X-IronPort-AV: E=Sophos;i="6.01,163,1684825200"; 
+   d="scan'208";a="861255577"
+Received: from avandeve-mobl1.amr.corp.intel.com (HELO [10.209.78.231]) ([10.209.78.231])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 14:44:14 -0700
+Message-ID: <1982e4b4-3858-d456-6c90-92782b95726a@linux.intel.com>
+Date:   Tue, 27 Jun 2023 14:44:14 -0700
 MIME-Version: 1.0
-References: <20230626201713.1204982-1-surenb@google.com> <ZJn1tQDgfmcE7mNG@slm.duckdns.org>
- <20230627-kanon-hievt-bfdb583ddaa6@brauner> <CAJuCfpECKqYiekDK6Zw58w10n1T4Q3R+2nymfHX2ZGfQVDC3VQ@mail.gmail.com>
- <20230627-ausgaben-brauhaus-a33e292558d8@brauner> <ZJstlHU4Y3ZtiWJe@slm.duckdns.org>
- <CAJuCfpFUrPGVSnZ9+CmMz31GjRNN+tNf6nUmiCgx0Cs5ygD64A@mail.gmail.com>
-In-Reply-To: <CAJuCfpFUrPGVSnZ9+CmMz31GjRNN+tNf6nUmiCgx0Cs5ygD64A@mail.gmail.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Tue, 27 Jun 2023 14:43:06 -0700
-Message-ID: <CAJuCfpFe2OdBjZkwHW5UCFUbnQh7hbNeqs7B99PXMXdFNjKb5Q@mail.gmail.com>
-Subject: Re: [PATCH 1/2] kernfs: add kernfs_ops.free operation to free
- resources tied to the file
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Christian Brauner <brauner@kernel.org>, gregkh@linuxfoundation.org,
-        peterz@infradead.org, lujialin4@huawei.com,
-        lizefan.x@bytedance.com, hannes@cmpxchg.org, mingo@redhat.com,
-        ebiggers@kernel.org, oleg@redhat.com, akpm@linux-foundation.org,
-        viro@zeniv.linux.org.uk, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [GIT PULL] x86/misc for 6.5
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Noah Goldstein <goldstein.w.n@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+References: <20230627110038.GCZJrBVqu/4BfdyBeN@fat_crate.local>
+ <CAHk-=wghuOwXtMH9u7RAW694BOwf_Q9TeWR2v=GgLy0gjTfu4A@mail.gmail.com>
+From:   Arjan van de Ven <arjan@linux.intel.com>
+In-Reply-To: <CAHk-=wghuOwXtMH9u7RAW694BOwf_Q9TeWR2v=GgLy0gjTfu4A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 1:09=E2=80=AFPM Suren Baghdasaryan <surenb@google.c=
-om> wrote:
->
-> On Tue, Jun 27, 2023 at 11:42=E2=80=AFAM Tejun Heo <tj@kernel.org> wrote:
-> >
-> > Hello, Christian.
-> >
-> > On Tue, Jun 27, 2023 at 07:30:26PM +0200, Christian Brauner wrote:
-> > ...
-> > > ->release() was added in
-> > >
-> > >     commit 0e67db2f9fe91937e798e3d7d22c50a8438187e1
-> > >     kernfs: add kernfs_ops->open/release() callbacks
-> > >
-> > >     Add ->open/release() methods to kernfs_ops.  ->open() is called w=
-hen
-> > >     the file is opened and ->release() when the file is either releas=
-ed or
-> > >     severed.  These callbacks can be used, for example, to manage
-> > >     persistent caching objects over multiple seq_file iterations.
-> > >
-> > >     Signed-off-by: Tejun Heo <tj@kernel.org>
-> > >     Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > >     Acked-by: Acked-by: Zefan Li <lizefan@huawei.com>
-> > >
-> > > which mentions "either releases or severed" which imho already points=
- to
-> > > separate methods.
-> >
-> > This is because kernfs has revoking operation which doesn't exist for o=
-ther
-> > filesystems. Other filesystem implemenations can't just say "I'm done. =
-Bye!"
-> > and go away. Even if the underlying filesystem has completely failed, t=
-he
-> > code still has to remain attached and keep aborting operations.
-> >
-> > However, kernfs serves as the midlayer to a lot of device drivers and o=
-ther
-> > internal subsystems and it'd be really inconvenient for each of them to=
- have
-> > to implement "I want to go away but I gotta wait out this user who's ho=
-lding
-> > onto my tuning knob file". So, kernfs exposes a revoke or severing sema=
-ntics
-> > something that's exposing interface through kernfs wants to stop doing =
-so.
-> >
-> > If you look at it from file operation implementation POV, this seems ex=
-actly
-> > like ->release. All open files are shutdown and there won't be any futu=
-re
-> > operations. After all, revoke is forced closing of all fd's. So, for mo=
-st
-> > users, treating severing just like ->release is the right thing to do.
-> >
-> > The PSI file which caused this is a special case because it attaches
-> > something to its kernfs file which outlives the severing operation bypa=
-ssing
-> > kernfs infra. A more complete way to fix this would be supporting the
-> > required behavior from kernfs side, so that the PSI file operates on ke=
-rnfs
-> > interface which knows the severing event and detaches properly. That sa=
-id,
-> > currently, this is very much an one-off.
-> >
-> > Suren, if you're interested, it might make sense to pipe poll through k=
-ernfs
-> > properly so that it has its kernfs operation and kernfs can sever it. T=
-hat
-> > said, as this is a fix for something which is currently causing crashes=
-,
-> > it'd be better to merge this simpler fix first no matter what.
->
-> I'm happy to implement the right fix if you go into more details.
-> AFAIKT kernfs_ops already has poll() operation, we are hooking
-> cgroup_file_poll() to it and using kernfs_generic_poll(). I thought
-> this is the right way to pipe poll through kernfs but if that's
-> incorrect, please let me know. I'm happy to fix that.
+On 6/27/2023 1:11 PM, Linus Torvalds wrote:
+> On Tue, 27 Jun 2023 at 04:00, Borislav Petkov <bp@alien8.de> wrote:
+>>
+>> - Improve csum_partial()'s performance
+> 
+> Honestly, looking at that patch, my reaction is "why did it get
+> unrolled in 64-byte chunks, if 40 bytes is the magic value"?
+> 
+> Particularly when there is then that "do a carry op each 32 bytes to
+> make 32-byte chunks independent and increase ILP". So even the 64-byte
+> case isn't *actuall* doing a 64-byte unrolling, it's really doing two
+> 32-byte unrollings in parallel.
+> 
+> So you have three "magic" values, and the only one that really matters
+> is likely the 40-byte one.
+> 
+> Yes, yes, 64 bytes is the usual cacheline size, and is "traditional"
+> for unrolling. But there's nothing really magical about it here.
+> 
+> End result: wouldn't it have been nice to just do 40-byte chunks, and
+> make the 64-byte "two overlapping 32-byte chunks" be two of the
+> 40-byte chunks.
+> 
+> Something like the (ENTIRELY UNTESTED!) attached patch?
+> 
+> Again: this is *not* tested. I took a quick look at the generated
+> assembly, and it looked roughly like what I expected it to look like,
+> but it may be complete garbage.
+> 
+> I added a couple of "likely()" things just because it made the
+> generated asm look more natural (ie it followed the order of the
+> source code there), they are otherwise questionable annotations.
+> 
+> Finally: did I already mention that this is completely untested?
 
-Ah, sorry, for PSI we are not using kernfs_generic_poll(), so my claim
-misrepresents the situation. Let me look into how
-kernfs_generic_poll() is implemented and maybe I can find a better
-solution for PSI.
-Thanks,
-Suren.
+fwiw long flights and pools have a relation; I made a userspace testbench
+for this some time ago: https://github.com/fenrus75/csum_partial
+in case one would actually WANT to test ;)
 
-> Thanks,
-> Suren.
->
-> >
-> > Thanks.
->
-> >
-> > --
-> > tejun
+
