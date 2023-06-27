@@ -2,88 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B047574019D
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 18:50:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF8857401A1
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 18:51:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230429AbjF0Qu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 12:50:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34722 "EHLO
+        id S231657AbjF0Qvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 12:51:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231324AbjF0QuW (ORCPT
+        with ESMTP id S230284AbjF0QvZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 12:50:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6A2E186
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 09:50:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 66ACF611EB
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 16:50:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BE9D4C433C9;
-        Tue, 27 Jun 2023 16:50:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687884620;
-        bh=DcBFHXhRAWFmRLSZK2RajKpsfjr2KTMlxNIK0yzVQZM=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=IiZxg11iz2NXInO20/34IniSrFfhWL7Pw2bbjGU6m4lq8d28RXgUICpWOTt+mXruH
-         TTl3hkS2f9K4aa0ijDhZ7HusVR1xwBW4/Ocwk+BoW+b/QW5XJgod/0AGppGATjTEMK
-         /YvceUb7XjrojDkfcOFpPCjKeJvXOdd16DXab4+XEWy6dLijHt+qRg2yFZt+tM4w6f
-         U69nxVoAMvWxaMyaAKjd8TfwQ9WMopdSfXDSsAPsRobr69fJtsmQ51q4KzPxJP0GfP
-         HOwZIS3ef9+7d+QCqWtxe9zIkrVFDuv9Zj5Kr/AnMgtpm4BhXbgcwlE4949R5rws0M
-         Cltegzdq2cPPw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A08EAE53800;
-        Tue, 27 Jun 2023 16:50:20 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 27 Jun 2023 12:51:25 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E699E11B
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 09:51:23 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3fbab0d0b88so602395e9.0
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 09:51:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687884682; x=1690476682;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=U+ghELfAbO0R2iBEq1LRki0jyaslOJziYlRqk/abt60=;
+        b=YN8xqJyCcfIsFN5ItLxMYi7S50o/mbnKJLTAsU5g1qeod6zCgluQd/7dt6sYI9Iaj3
+         sZHXPNaZM+LiJPVTh/kam3Wutv9Se+HqE688ZfC421r7kBGkJSGQP0kvSZz3pDnY6v53
+         lwS9i6vb112cH/GyHfwIznBUFSj39UXa0racgSbxDqu2TXt1PM5Vfo80I+2VKS9s41Ly
+         WBp9mirzJ5sAXh+bOBxsp3zH2XwrTFg/mO/izcyBqnzuZuebZ72l9ff3on747H4U2SpW
+         1E7Kddd40pzYz248nakUcPwqrOczJ4QrwNTHe8XvcwLTOc0XYYsxF9/DjigUZZbt8wpc
+         /6qA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687884682; x=1690476682;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=U+ghELfAbO0R2iBEq1LRki0jyaslOJziYlRqk/abt60=;
+        b=RaTNNMqHf/wKqCaGf4IkLZb9t6OMxLJcRQT3yXhRe4tTGBA+ls6gb2QLTLZvj1bEgY
+         5cBL7j67lvXgI4Wz7F07hzpfuZ0qes9FCY4y/ff7zaL+Nt0cJ0LMzaeqWlC3zG8gNpW0
+         16RHCvTeAKM3Vny1cCe/08Pmz+tilIOCxvEnFEb7nkBTJXHOzjh/BDhGNjZd0+Yymemm
+         KY2mc7JYWQ9WGfPa9DHZWqCeuFeaBNpJ5IRjJoXionKB+NFBx15sJd6FohonVfWal1Q1
+         Xf3IC0t0he6cXk03u70KrKannc0A5fEmBSHqetyBpC1d9ojLS5Qkau9YUsaoN6G3j4k5
+         GNnw==
+X-Gm-Message-State: AC+VfDzMbTdIlbDvu8klD7Y+KTCLt0nm2nrHetVyP7igGPf+JucOS4j+
+        RxughFSUg30Jv0FztsR3RArpog==
+X-Google-Smtp-Source: ACHHUZ5TeYUj7/7HDBAlPldZyXIYBI7vmCrqF9hOAg0Jk1yTzlA3HVAZWU6tAaOodr2QXV3fBfGLFQ==
+X-Received: by 2002:a05:600c:511f:b0:3fa:9996:8e03 with SMTP id o31-20020a05600c511f00b003fa99968e03mr5802169wms.10.1687884682415;
+        Tue, 27 Jun 2023 09:51:22 -0700 (PDT)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id 24-20020a05600c229800b003fa98908014sm5986545wmf.8.2023.06.27.09.51.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Jun 2023 09:51:21 -0700 (PDT)
+Message-ID: <88cdfdec-b498-ad1d-6f87-a5595ffcdc5c@linaro.org>
+Date:   Tue, 27 Jun 2023 17:51:19 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] net: dsa: avoid suspicious RCU usage for synced
- VLAN-aware MAC addresses
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168788462065.27533.11355169093087204068.git-patchwork-notify@kernel.org>
-Date:   Tue, 27 Jun 2023 16:50:20 +0000
-References: <20230626154402.3154454-1-vladimir.oltean@nxp.com>
-In-Reply-To: <20230626154402.3154454-1-vladimir.oltean@nxp.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     netdev@vger.kernel.org, andrew@lunn.ch, f.fainelli@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, simon.horman@corigine.com,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 04/11] arm64: dts: qcom: apq8039-t2: Drop inexistent
+ property
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        cros-qcom-dts-watchers@chromium.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Benjamin Li <benl@squareup.com>,
+        James Willcox <jwillcox@squareup.com>,
+        Joseph Gates <jgates@squareup.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Zac Crosby <zac@squareup.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Banajit Goswami <bgoswami@quicinc.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Lee Jones <lee@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Xu Yang <xu.yang_2@nxp.com>, Peng Fan <peng.fan@nxp.com>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Jun Nie <jun.nie@linaro.org>, Max Chen <mchen@squareup.com>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Vivek Gautam <vivek.gautam@codeaurora.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Vincent Knecht <vincent.knecht@mailoo.org>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        alsa-devel@alsa-project.org, iommu@lists.linux.dev,
+        linux-usb@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>, Rob Herring <robh@kernel.org>,
+        Andy Gross <andy.gross@linaro.org>
+References: <20230627-topic-more_bindings-v1-0-6b4b6cd081e5@linaro.org>
+ <20230627-topic-more_bindings-v1-4-6b4b6cd081e5@linaro.org>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <20230627-topic-more_bindings-v1-4-6b4b6cd081e5@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Mon, 26 Jun 2023 18:44:02 +0300 you wrote:
-> When using the felix driver (the only one which supports UC filtering
-> and MC filtering) as a DSA master for a random other DSA switch, one can
-> see the following stack trace when the downstream switch ports join a
-> VLAN-aware bridge:
+On 27/06/2023 17:24, Konrad Dybcio wrote:
+> 'pin-switch-delay-us' is not used anywhere in the mainline kernel.
+> Drop it.
 > 
-> =============================
-> WARNING: suspicious RCU usage
-> 
-> [...]
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
 
-Here is the summary with links:
-  - [net] net: dsa: avoid suspicious RCU usage for synced VLAN-aware MAC addresses
-    https://git.kernel.org/netdev/net/c/d06f925f1397
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
