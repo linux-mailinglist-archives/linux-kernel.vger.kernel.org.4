@@ -2,107 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 305DF73FD44
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 15:55:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9D4673FD47
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 15:56:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230377AbjF0Nz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 09:55:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48828 "EHLO
+        id S229680AbjF0N41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 09:56:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbjF0NzZ (ORCPT
+        with ESMTP id S229567AbjF0N4Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 09:55:25 -0400
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E42A2129
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 06:55:24 -0700 (PDT)
-Received: by mail-qt1-x833.google.com with SMTP id d75a77b69052e-401d1d967beso274931cf.0
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 06:55:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687874123; x=1690466123;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QGOH63jgnVEs2f+80uEeHRGpcn2owuUaHFI+XI/Lwro=;
-        b=4jpRsGb+eEeMvdz049rnzuwxgDroNMoFwnA24xUhw8wYNtRIr6lxsWdA/P/rFb0HkR
-         lDMop5UXZhkkHrT2PhbP0SKfe09XFulHDdDX7kkilQf397tCis5Gm4Ywd+bYh4ZmbyFe
-         jrMCqd+JLCEHFz9pIpK7fUCljELdHdGRI74Ie6SO3a44srbGtPWzvAA5qD8MLuuVvuYO
-         4Ak7S0APJbZNLpYXYwifpTCaM6htT0oZSZ1YSeh1TbD0iUMTTAEb+1vvq3HGMEXyOz5r
-         wcFAhd+BLPd3Cvh8SBMl56DYXOoNFsknCSE53CCdmANx6sZcdJkXuUe1gJC3leihqpqG
-         ao6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687874123; x=1690466123;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QGOH63jgnVEs2f+80uEeHRGpcn2owuUaHFI+XI/Lwro=;
-        b=U3xlrsQ+4GBsJAz5YIVIHxjQdauyNr5YMsqTEVScS7ORqlWkBQyybUvJR8auccS5uT
-         It/Xex2kb6+9cHvQc5Qo4ipmdYmQdUMq9mgf5z83gSikeia/xcXvPELtWGFxw0O2jTX3
-         9StxosEJZaCQGKioh1WRk5zwIhESe883xr2t4Zse7C/U/ol1SWHSHiL6ZEEnnxeD1bmo
-         a/3q11vcwfK6eNmTxfiIMYPrVuev72p7A+SnQc3FSYptc3dPBXfYzkjNgdfL8Lnsz9d5
-         I1kEHY03u/Vnt90pi8sPuBM1H26Vi0trvAepyHFS/7YXOo6o25tbegGCl5LSkEjOFOHr
-         Tt8A==
-X-Gm-Message-State: AC+VfDwr9Ytu7Lt7MoDJDaYRtjOrapSB0lZS+4GJueH5TXgThvj+/09s
-        g7lQywEGb4TA+rxcmhHU/qHSMSIl9b4jeruyOJow3g==
-X-Google-Smtp-Source: ACHHUZ5GPkxVhmJt7C7Zmwoh0e7IvTuPuxE1QBH9E9t9bnIcJaaMSg5SFknMlx4nZK8GGimQ2eJFlpxzPfLF6K79RdI=
-X-Received: by 2002:ac8:5708:0:b0:3f3:75c2:7466 with SMTP id
- 8-20020ac85708000000b003f375c27466mr182910qtw.8.1687874122873; Tue, 27 Jun
- 2023 06:55:22 -0700 (PDT)
+        Tue, 27 Jun 2023 09:56:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22183211B;
+        Tue, 27 Jun 2023 06:56:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B20DA611AA;
+        Tue, 27 Jun 2023 13:56:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF733C433C9;
+        Tue, 27 Jun 2023 13:56:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687874183;
+        bh=E4G5QaWDfviVyRBgE/mtHmjt/TgaKJD7ZOMkrRJ8Cvo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AqoFcXvTw8DyOug1fHyH3NWpPSLDXDdIq8PV8oekhHdacYfVxJoUnYX1iHk/XpgcU
+         81n4iB8yDyfqrhuLguDwi564YXqm7nLhRy7UzdN0gSHjmVrp86najDXAhbI6C9x3UF
+         +thGwNM8e6Rh4eNklv6R0VYHyLXoyisPCsULjJNgBzKpPtvtXxqXzsuKRsYGCUdjl6
+         yZNfJ+VJdfnA61puendJvBHMd9ezU3sa3W++2eUnR/h1KHRyrac1/u2EfheYOEJOS8
+         LA+7gnV15sNSZFv4Yt9uk7bK+LYbFuqg5aFXiZAS+zYogP/yVBCHX90/PQtx5dj1We
+         xyLlrQyD1L4Xw==
+Date:   Tue, 27 Jun 2023 14:56:15 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     "Sahin, Okan" <Okan.Sahin@analog.com>,
+        Mark Brown <broonie@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Cosmin Tanislav <demonsingur@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        Marcus Folkesson <marcus.folkesson@gmail.com>,
+        "Bolboaca, Ramona" <Ramona.Bolboaca@analog.com>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        "Tilki, Ibrahim" <Ibrahim.Tilki@analog.com>,
+        William Breathitt Gray <william.gray@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Haibo Chen <haibo.chen@nxp.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
+Subject: Re: [PATCH v7 5/5] mfd: max77541: Add ADI MAX77541/MAX77540 PMIC
+ Support
+Message-ID: <20230627135615.GF10378@google.com>
+References: <20230412111256.40013-1-okan.sahin@analog.com>
+ <20230412111256.40013-6-okan.sahin@analog.com>
+ <20230420103438.GI9904@google.com>
+ <09eb8e4c-3e73-41f0-bf42-8ddf3c4254ec@sirena.org.uk>
+ <20230421073938.GO996918@google.com>
+ <82612171-46d7-4d82-a8fc-c7d6a99d57e9@sirena.org.uk>
+ <MN2PR03MB516860989BD8ED6AC9A767FBE755A@MN2PR03MB5168.namprd03.prod.outlook.com>
+ <20230621171315.GL10378@google.com>
+ <20230626175443.GA3446604-robh@kernel.org>
 MIME-Version: 1.0
-References: <20230627105209.15163-1-dg573847474@gmail.com>
-In-Reply-To: <20230627105209.15163-1-dg573847474@gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Tue, 27 Jun 2023 15:55:11 +0200
-Message-ID: <CANn89iJRaT1B=HwWDsEdcAUZzYERzeR8iwGYHZuLcy+G4G39Lw@mail.gmail.com>
-Subject: Re: [PATCH] net/802/garp: fix potential deadlock on &app->lock
-To:     Chengfeng Ye <dg573847474@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230626175443.GA3446604-robh@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 12:52=E2=80=AFPM Chengfeng Ye <dg573847474@gmail.co=
-m> wrote:
->
-> As &app->lock is also acquired by the timer garp_join_timer() which
-> which executes under soft-irq context, code executing under process
-> context should disable irq before acquiring the lock, otherwise
-> deadlock could happen if the process context hold the lock then
-> preempt by the interruption.
->
-> garp_pdu_rcv() is one such function that acquires &app->lock, but I
-> am not sure whether it is called with irq disable outside thus the
-> patch could be false.
->
-> Possible deadlock scenario:
-> garp_pdu_rcv()
->     -> spin_lock(&app->lock)
->         <timer interrupt>
+On Mon, 26 Jun 2023, Rob Herring wrote:
 
-This can not happen.
+> On Wed, Jun 21, 2023 at 06:13:15PM +0100, Lee Jones wrote:
+> > On Tue, 13 Jun 2023, Sahin, Okan wrote:
+> > 
+> > > >On Fri, Apr 21, 2023 at 08:39:38AM +0100, Lee Jones wrote:
+> > > >
+> > > >> I'll try anything once!
+> > > >
+> > > >> Fair warning, I think this is going to massively complicate things.
+> > > >
+> > > >> Either we're going to be left with a situation where child-driver
+> > > >> maintainers are scrabbling around looking for previous versions for the
+> > > >> MFD pull-request or contributors being forced to wait a full cycle for
+> > > >> their dependencies to arrive in the maintainer's base.
+> > > >
+> > > >If people are resending after the MFD has gone in they really ought to
+> > > >be including the pull request in the cover letter, with some combination
+> > > >of either referencing the mail or just saying "this depends on the
+> > > >signed tag at url+tag", the same way they would for any other dependency.
+> > > >
+> > > >I can't see how you applying stuff when you can slow things down TBH,
+> > > >the MFD bits will be applied faster and either people can pull in a
+> > > >shared tag or you can apply more commits on top of the existing core
+> > > >driver.
+> > > >
+> > > >> I'm not sure why simply providing your Ack when you're happy with the
+> > > >> driver and forgetting about the set until the pull-request arrives, like
+> > > >> we've been doing for nearly a decade now, isn't working for you anymore
+> > > >> but I'm mostly sure this method will be a regression.
+> > > >
+> > > >Like I said I've not been doing that, I've mostly been just applying the
+> > > >driver when it's ready.  This might not have been so visible to you
+> > > >since it means that the regulator driver doesn't appear in the series by
+> > > >the time the MFD settles down.  The whole "Acked-for-MFD" has always
+> > > >been a bit confusing TBH, it's not a normal ack ("go ahead and apply
+> > > >this, I'm fine with it") so it was never clear what the intention was.
+> > > >
+> > > >Before I started just applying the drivers there used to be constant
+> > > >problems with things like tags going missing (which some of the time is
+> > > >the submitter just not carrying them but can also be the result of some
+> > > >churn causing them to be deliberately dropped due to changes) or
+> > > >forgetting the series as you suggest and then not looking at some other
+> > > >very similarly named series that was also getting lots of versions after
+> > > >thinking it was one that had been reviewed already.  It was all very
+> > > >frustrating.  Not doing the tags until the dependencies have settled
+> > > >down means that if it's in my inbox it at least consistently needs some
+> > > >kind of attention and that the submitter didn't drop tags or anything so
+> > > >I know why there's no tag on it even though the version number is high,
+> > > >though it's not ideal either.
+> > > 
+> > > Hi Mark and Lee,
+> > > 
+> > > Is there anything that I need to do for this patch set. I have received reviewed
+> > > by tag for all of them so far. 
+> > 
+> > Since we are so late in the day, I'm going to just apply this for v6.5.
+> > 
+> > The remainder can then be applied, friction free, for v6.6.
+> 
+> Now we have undocmented bindings in use by the driver (as pointed out by 
+> 'make dt_compatible_check').
+> 
+> The whole series has all the acks/reviews needed for you to apply the 
+> whole thing, so why not take the whole thing? Plus this series has been 
+> sitting for 2 months. Not a great experience for submitters...
 
-RX handlers are called from BH context, and rcu_read_lock()
+Patches are missing Acked-by tags.
 
-See net/core/dev.c,  deliver_skb() and netif_receive_skb()
+  Reviewed-by != Acked-by
 
+I cannot merge other subsystem's patches without and Acked-by.
 
->         -> garp_join_timer()
->         -> spin_lock(&app->lock)
->
-> This flaw was found using an experimental static analysis tool we are
-> developing for irq-related deadlock.
->
-> The tentative patch fix the potential deadlock by spin_lock_irqsave(),
-> or it should be fixed with spin_lock_bh() if it is a real bug? I am
-> not very sure.
-
-I guess more work is needed at your side :)
+-- 
+Lee Jones [李琼斯]
