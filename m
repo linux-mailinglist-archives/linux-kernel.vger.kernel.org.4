@@ -2,111 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9A1973FFDF
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 17:37:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDBC273FFE4
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 17:38:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231657AbjF0Phr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 11:37:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51212 "EHLO
+        id S229926AbjF0Pir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 11:38:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbjF0Phm (ORCPT
+        with ESMTP id S229562AbjF0Pio (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 11:37:42 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8800810D5;
-        Tue, 27 Jun 2023 08:37:41 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-313df030ccaso4416543f8f.1;
-        Tue, 27 Jun 2023 08:37:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687880260; x=1690472260;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=05iaNFO9lF/8ux6dacOd00yFXxHKqE9KRL91PmH4iR8=;
-        b=HDiL5kKJ++QF2ciUWwq5MHxKmUazYLWtD6TMmVxJP8G6PhkCBcqJ+IZRvi5Cj7cROX
-         R/RYu6m5U2AfCbcxn82t0MW2AWEKIPCPTCNM9+E2barnHVmwmRgk2ATKAwXDeONfdwQr
-         77Yl6C4fmJlVWhsgxn+PX3o4Xg+likPCVE5dEbfXvDiM/KVXYk9ZkaM1VLLGiLUZeAW+
-         UwvuSQEWw+vsLeOZH/aDLzSV0DfMHiMpOHTtv1G2A9mwKybKU/aImvNNWxV9Orj1DNs3
-         9gvqzjSq1g9OvDQVmJeJwPhwXWdhLpsGvFw3Kpuhj/VVBBz6iVn2eKXiiH0f/5DTSMvh
-         kVQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687880260; x=1690472260;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=05iaNFO9lF/8ux6dacOd00yFXxHKqE9KRL91PmH4iR8=;
-        b=DSl0PF4B0yzoLUb+M/fh/a7aQdT84uGuQ6AA/5/mtPPibndsWDVx76BAtBtW1C2cqL
-         1eGdPOgAlzSFfYMVNbw23zQaKc4OZ3X0+hLzQSCBckkSFEyDylobBbZ/+h0Q0PUGipFe
-         zH0PNkYjnf8c/98kkrwciXiC++TH2eQPm+hIJ/Bs3zxKMrFI93QudSMtcByJMpZ4lIUU
-         wzGO/H6xtpZmgyZUiXB4EsNlTMTPJeN/AxIitA2oqLGEpmN8bjPBThxpn2PTULaPArbF
-         Pb9GvYYTOxCPyfGoAvIi6RAPVn4kgKnDZ8LDLlp7HPiucZY5kCMCzZk8DevtPqF1seRj
-         m9YQ==
-X-Gm-Message-State: AC+VfDzcIUJcqB0Fh7MzIS7GyB2a3Ohd6rPgwj6RXsjFy64RSUdUehPB
-        a8S2NREfqUVQSwsPjPdXxKM=
-X-Google-Smtp-Source: ACHHUZ4xuhPVqi/+8MF/Jjb+zsL9pz37GeZY7l0b2Z51yIpe/o3441sUxo3rEz+abIWpiSEvl1C2Uw==
-X-Received: by 2002:a5d:4e8f:0:b0:30f:c703:8be3 with SMTP id e15-20020a5d4e8f000000b0030fc7038be3mr24263683wru.42.1687880259519;
-        Tue, 27 Jun 2023 08:37:39 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id v10-20020a5d590a000000b0030631a599a0sm10707214wrd.24.2023.06.27.08.37.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jun 2023 08:37:38 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next][V2] media: bt8xx: make read-only arrays static
-Date:   Tue, 27 Jun 2023 16:37:38 +0100
-Message-Id: <20230627153738.736026-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.39.2
+        Tue, 27 Jun 2023 11:38:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 701D7113;
+        Tue, 27 Jun 2023 08:38:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EE2F0611D7;
+        Tue, 27 Jun 2023 15:38:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40F2DC433C8;
+        Tue, 27 Jun 2023 15:38:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687880322;
+        bh=PmrK36dDdd2L2+DlUioVyo1zm8aKUBPdauoPttVDtZE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=krDmM+So1ReT1wPk/1mMSMhMV+PkkUZQAWbaxZ8foAwJD+sGeDVjBLjfi5HLQ/+1n
+         6cOlsm3k5MkbM15rinhcKnb0e8flPgBV5bNeCUqpn6DFfSBgm+pNk7p6aUoDQQHxsz
+         uQWVgQqGyUPf64ypnqYTDabey/DKFu3LtGFujX47SrW5mK1OHCeZplfGr7pFwpskl6
+         HpSvVayKqhZiMcbjt6/kRQhJ+pW907iBBiuwCaC73tjol9rITB4AISrLwk/mRHAsSo
+         4E0sMGzaTFnhHcq12naZw51rGTTmN90Hd7zwNA4sOO1ppKgad3SSPyEZ5I4dA0P1BM
+         pvy62d28nw68A==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1qEAm7-0004DS-6N; Tue, 27 Jun 2023 17:38:39 +0200
+Date:   Tue, 27 Jun 2023 17:38:39 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com,
+        quic_jackp@quicinc.com, quic_harshq@quicinc.com,
+        ahalaney@redhat.com, quic_shazhuss@quicinc.com
+Subject: Re: [PATCH v9 01/10] dt-bindings: usb: qcom,dwc3: Add bindings for
+ SC8280 Multiport
+Message-ID: <ZJsCf3nYrikF7nZc@hovoldconsulting.com>
+References: <20230621043628.21485-1-quic_kriskura@quicinc.com>
+ <20230621043628.21485-2-quic_kriskura@quicinc.com>
+ <ZJrGG6FXWLacRLbg@hovoldconsulting.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZJrGG6FXWLacRLbg@hovoldconsulting.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Don't populate the arrays on the stack, instead make them static const.
-Also add spaces between values to clean up checkpatch style warnings.
+On Tue, Jun 27, 2023 at 01:20:59PM +0200, Johan Hovold wrote:
+> On Wed, Jun 21, 2023 at 10:06:19AM +0530, Krishna Kurapati wrote:
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
+> > +          items:
+> > +            - const: dp1_hs_phy_irq
+> > +            - const: dm1_hs_phy_irq
+> > +            - const: dp2_hs_phy_irq
+> > +            - const: dm2_hs_phy_irq
+> > +            - const: dp3_hs_phy_irq
+> > +            - const: dm4_hs_phy_irq
+> > +            - const: dp4_hs_phy_irq
+> > +            - const: dm4_hs_phy_irq
+> > +            - const: ss1_phy_irq
+> > +            - const: ss2_phy_irq
+> > +            - const: pwr_event_1
+> > +            - const: pwr_event_2
+> > +            - const: pwr_event_3
+> > +            - const: pwr_event_4
+> 
+> The naming here is inconsistent and interrupts should not have "_irq"
+> suffixes (even if some of the current ones do for historical reasons).
+> 
+> I believe these should be named
+> 
+> 	pwr_event_1
+> 	dp_hs_phy_1
+> 	dm_hs_phy_1
+> 	ss_phy_1
+> 
+> 	pwr_event_2
+> 	dp_hs_phy_2
+> 	dm_hs_phy_2
+> 	ss_phy_2
+> 
+> 	pwr_event_3
+> 	dp_hs_phy_3
+> 	dm_hs_phy_3
+> 
+> 	pwr_event_4
+> 	dp_hs_phy_4
+> 	dm_hs_phy_4
+> 
+> or similar and be grouped by port while using the the
+> qcom,sc8280xp-dwc ordering for the individual lines.
 
-V2: actually fix up the spaces correctly
+Perhaps the ordering you suggested is fine too, but I'd probably move
+the pwr_event ones first to match qcom,sc8280xp-dwc then, that is:
 
----
- drivers/media/pci/bt8xx/dvb-bt8xx.c | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
+ 	pwr_event_1
+ 	pwr_event_2
+ 	pwr_event_3
+ 	pwr_event_4
+ 	dp_hs_phy_1
+ 	dm_hs_phy_1
+ 	dp_hs_phy_2
+ 	dm_hs_phy_2
+ 	dp_hs_phy_3
+ 	dm_hs_phy_3
+ 	dp_hs_phy_4
+ 	dm_hs_phy_4
+ 	ss_phy_1
+ 	ss_phy_2
 
-diff --git a/drivers/media/pci/bt8xx/dvb-bt8xx.c b/drivers/media/pci/bt8xx/dvb-bt8xx.c
-index 4cb890b949c3..390cbba6c065 100644
---- a/drivers/media/pci/bt8xx/dvb-bt8xx.c
-+++ b/drivers/media/pci/bt8xx/dvb-bt8xx.c
-@@ -190,11 +190,15 @@ static int cx24108_tuner_set_params(struct dvb_frontend *fe)
- 	u32 freq = c->frequency;
- 	int i, a, n, pump;
- 	u32 band, pll;
--	u32 osci[]={950000,1019000,1075000,1178000,1296000,1432000,
--		1576000,1718000,1856000,2036000,2150000};
--	u32 bandsel[]={0,0x00020000,0x00040000,0x00100800,0x00101000,
--		0x00102000,0x00104000,0x00108000,0x00110000,
--		0x00120000,0x00140000};
-+	static const u32 osci[] = {
-+		950000, 1019000, 1075000, 1178000, 1296000, 1432000,
-+		1576000, 1718000, 1856000, 2036000, 2150000
-+	};
-+	static const u32 bandsel[] = {
-+		0, 0x00020000, 0x00040000, 0x00100800, 0x00101000,
-+		0x00102000, 0x00104000, 0x00108000, 0x00110000,
-+		0x00120000, 0x00140000
-+	};
- 
- 	#define XTAL 1011100 /* Hz, really 1.0111 MHz and a /10 prescaler */
- 	dprintk("cx24108 debug: entering SetTunerFreq, freq=%d\n", freq);
--- 
-2.39.2
+so we have them grouped as pwr_event followed by HS and with SS last.
 
+> Side note: Please note how the above interrupt properties can also be
+> used to infer the number of HS and SS ports.
+
+Johan
