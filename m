@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B81727402EF
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 20:11:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 562397402F1
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 20:11:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231305AbjF0SLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 14:11:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42908 "EHLO
+        id S231526AbjF0SLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 14:11:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230468AbjF0SLH (ORCPT
+        with ESMTP id S231158AbjF0SLL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 14:11:07 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D36FF2733
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 11:11:05 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-573d70da2dcso61561297b3.1
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 11:11:05 -0700 (PDT)
+        Tue, 27 Jun 2023 14:11:11 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BFE22D4C
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 11:11:08 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-573d70da2dcso61561877b3.1
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 11:11:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687889465; x=1690481465;
+        d=google.com; s=20221208; t=1687889467; x=1690481467;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=HmcwCCrzohBexPPxiwkNS29383WCu9lx0QPsW2KVyZ4=;
-        b=aei3beb4q3x++WPIPe0QnHzZckcCFW4R3vf2GZueNTS8EH1ej5AXfNxSKeKke4OnW4
-         pA1YiiyKDg4RiHfInlERXtFstvo8F+W0YaAE+KQJjwrFblA/gDRz1CNUUrPC2w2JQil3
-         /Wra5Ojjv9MsDQI5HT4WZil3DOlquS7Yg0g4ytIrnu96YIlrFydfvyZzAezPCh/AEdFB
-         rRhqPAkPurZjCa/Bls2FsuQpCBCe+AU4YlqrMa6qVUXBaNjbpW5dfNvPrvt+gulyeI6z
-         hZY6zNeqiTqUAdNOa6piRZ3r0WzZRF4/9Mff9lv3m+nnFLcYoEpQVXsLvBCl3X/F32rh
-         wojA==
+        bh=StcgeFnI4n9LLLvk4G7O6CbzjZValP2DfB//GyhRxDI=;
+        b=7fT/jL8m9VFgKdPRPOi4B5qlF4mYEdel0EQFlq0HfSkH8ap+Sk7AXUq4SgGGOkq6RF
+         vfeOeoptamRzNTV5P2QRXdwht66ZNBjz8u98EcDYBkOk5W5sk81TsFV9qyXqHoaLs5sz
+         E5tOga4zvvyQTk4erCcpikGhS6PUt6Oc9Xd+6YmkRck6UxZYnnUgH8A4kWHHIPYokdBQ
+         W2Gu5kN7E/p20ktY0+1JrqRVWCg926kaGSbVpEx21KKT4uQeK+YXeu6Rl2a1e1EhLoGT
+         LmeExdSr0MympjvgYodvQf5FrL+HMOsnsKqVhELrLn+KZ5dsnyBKiaXvhd4/xD7s7Ok3
+         Okdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687889465; x=1690481465;
+        d=1e100.net; s=20221208; t=1687889467; x=1690481467;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HmcwCCrzohBexPPxiwkNS29383WCu9lx0QPsW2KVyZ4=;
-        b=BSFK5tT1CSR6rWpsO9+f3IHvjRAezngic7YpcaR/QkR8kb5HiEhLQm6I7XA7KwEFZc
-         nyAtoN6eIyzGtBdtY5gK5If6L1BmkbQALJm36cMo7Xfr751E8KOi19I7GGFHbow6Ilmi
-         8IBqb4vJUEEZBQGCdQm/Mwry18BCALAF7GXmTaDrr1yzCFhI/4rD16QkbluPdIgU9wzM
-         B+PCi2N9ag2nHFIbVRJlOIrCEFcXEn2WMbT9pWT8XC53O/43rpuFQaSMmWpJoo6/3ZM0
-         5C6HXENQe3sAJj57+Sd1SU8pifYhsjPKN052Ddh7uSfKjtfKLCjWe/w02aGSicAve9q6
-         vnYw==
-X-Gm-Message-State: AC+VfDwfG98+cDDykOspbF5fRKnEr5oEQbjJwJrO4tEsMRV4lIQYdkD2
-        +baiifLNPSO0vAubhlMcUhfPHubNMO4y
-X-Google-Smtp-Source: ACHHUZ4/a+LchMST3LH5uXgoZ0tXTL1BebqlP5Oj8R+ArkMhvomyHOWsaMi0FEXWPrdUw3IQVWMEMjhABDIT
+        bh=StcgeFnI4n9LLLvk4G7O6CbzjZValP2DfB//GyhRxDI=;
+        b=eTxpnVR++c6PnMb0cfHmBqdyc+VykMCLmecUkAxlKFhTEUC91OuMzdv4FTMXdaNInm
+         vAXQ3rzGJZU5WUtOv2k2INzsNp4ftaFRM1DouzBLpnRMkjei4yemHQYvdRzNWHf4rZLx
+         zTaGaSkTVMsNQquQTJfZLFihvbuGqjLd3QrMKcRBXXBkGF1LB1GatseKTfPvgAaIzVuY
+         ObsT40/D05erBeW9PgsuP4zlpWOQvViS5zqQDhYgdI2TQ8JIJzUnZFSzn6pSbcwlYUYx
+         jvUMiSe09wWhd1GcEoFcNxYNA0Bs397WHEyCAM/NqlxisANUrV/SH4xbhQiXci5cKXJa
+         jrCA==
+X-Gm-Message-State: AC+VfDyw9TiVaeiPEm7HIHR9a1icAAjg9I6172ascarrgF+rcSUUUoNU
+        Ko9wl0B2OeF5nncVVtKEuxbgLHgj6P9n
+X-Google-Smtp-Source: ACHHUZ5Op7YTRWS0VwHR9qRGvjW0o4XHD6oxkOBCTvBdbBFCZ4OTsZUg/zDMYyJ9dDx9txiWTt/otuxf8T0X
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:a518:9a69:cf62:b4d9])
- (user=irogers job=sendgmr) by 2002:a25:ad9f:0:b0:bce:5d6f:87a with SMTP id
- z31-20020a25ad9f000000b00bce5d6f087amr7873345ybi.1.1687889465014; Tue, 27 Jun
- 2023 11:11:05 -0700 (PDT)
-Date:   Tue, 27 Jun 2023 11:10:27 -0700
+ (user=irogers job=sendgmr) by 2002:a0d:ec4a:0:b0:56d:21a1:16a1 with SMTP id
+ r10-20020a0dec4a000000b0056d21a116a1mr13933293ywn.5.1687889467366; Tue, 27
+ Jun 2023 11:11:07 -0700 (PDT)
+Date:   Tue, 27 Jun 2023 11:10:28 -0700
 In-Reply-To: <20230627181030.95608-1-irogers@google.com>
-Message-Id: <20230627181030.95608-11-irogers@google.com>
+Message-Id: <20230627181030.95608-12-irogers@google.com>
 Mime-Version: 1.0
 References: <20230627181030.95608-1-irogers@google.com>
 X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-Subject: [PATCH v2 10/13] perf parse-events: Additional error reporting
+Subject: [PATCH v2 11/13] perf parse-events: Populate error column for
+ BPF/tracepoint events
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -78,98 +79,353 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When no events or PMUs match report an error for event_pmu:
+Follow convention from parse_events_terms__num/str and pass the
+YYLTYPE for the location.
 
-Before:
-```
-$ perf stat -e 'asdfasdf' -a sleep 1
-Run 'perf list' for a list of valid events
-
- Usage: perf stat [<options>] [<command>]
-
-    -e, --event <event>   event selector. use 'perf list' to list available events
-```
-
-After:
-```
-$ perf stat -e 'asdfasdf' -a sleep 1
-event syntax error: 'asdfasdf'
-                     \___ Bad event name
-
-Unabled to find PMU or event on a PMU of 'asdfasdf'
-Run 'perf list' for a list of valid events
-
- Usage: perf stat [<options>] [<command>]
-
-    -e, --event <event>   event selector. use 'perf list' to list available events
-```
-
-Fixes the inadvertent removal when hybrid parsing was modified.
-
-Fixes: ("70c90e4a6b2f perf parse-events: Avoid scanning PMUs before parsing")
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/parse-events.y | 25 +++++++++++++++++++------
- 1 file changed, 19 insertions(+), 6 deletions(-)
+ tools/perf/tests/bpf.c         |  2 +-
+ tools/perf/util/parse-events.c | 80 ++++++++++++++++++++--------------
+ tools/perf/util/parse-events.h |  8 ++--
+ tools/perf/util/parse-events.y |  6 +--
+ 4 files changed, 57 insertions(+), 39 deletions(-)
 
-diff --git a/tools/perf/util/parse-events.y b/tools/perf/util/parse-events.y
-index f090a85c4518..a636a7db6e6f 100644
---- a/tools/perf/util/parse-events.y
-+++ b/tools/perf/util/parse-events.y
-@@ -291,7 +291,6 @@ PE_NAME opt_pmu_config
+diff --git a/tools/perf/tests/bpf.c b/tools/perf/tests/bpf.c
+index 8beb46066034..31796f2a80f4 100644
+--- a/tools/perf/tests/bpf.c
++++ b/tools/perf/tests/bpf.c
+@@ -124,7 +124,7 @@ static int do_test(struct bpf_object *obj, int (*func)(void),
+ 	parse_state.error = &parse_error;
+ 	INIT_LIST_HEAD(&parse_state.list);
+ 
+-	err = parse_events_load_bpf_obj(&parse_state, &parse_state.list, obj, NULL);
++	err = parse_events_load_bpf_obj(&parse_state, &parse_state.list, obj, NULL, NULL);
+ 	parse_events_error__exit(&parse_error);
+ 	if (err == -ENODATA) {
+ 		pr_debug("Failed to add events selected by BPF, debuginfo package not installed\n");
+diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
+index f31f233e395f..fdd304fbed7c 100644
+--- a/tools/perf/util/parse-events.c
++++ b/tools/perf/util/parse-events.c
+@@ -499,7 +499,7 @@ int parse_events_add_cache(struct list_head *list, int *idx, const char *name,
+ 
+ #ifdef HAVE_LIBTRACEEVENT
+ static void tracepoint_error(struct parse_events_error *e, int err,
+-			     const char *sys, const char *name)
++			     const char *sys, const char *name, int column)
  {
- 	struct parse_events_state *parse_state = _parse_state;
- 	struct list_head *list = NULL, *orig_terms = NULL, *terms= NULL;
--	struct parse_events_error *error = parse_state->error;
- 	char *pattern = NULL;
+ 	const char *str;
+ 	char help[BUFSIZ];
+@@ -526,18 +526,19 @@ static void tracepoint_error(struct parse_events_error *e, int err,
+ 	}
  
- #define CLEANUP						\
-@@ -303,9 +302,6 @@ PE_NAME opt_pmu_config
- 		free(pattern);				\
- 	} while(0)
- 
--	if (error)
--		error->idx = @1.first_column;
--
- 	if (parse_events_copy_term_list($2, &orig_terms)) {
- 		CLEANUP;
- 		YYNOMEM;
-@@ -360,6 +356,14 @@ PE_NAME opt_pmu_config
- 			$2 = NULL;
- 		}
- 		if (!ok) {
-+			struct parse_events_error *error = parse_state->error;
-+			char *help;
-+
-+			if (asprintf(&help, "Unabled to find PMU or event on a PMU of '%s'", $1) < 0)
-+				help = NULL;
-+			parse_events_error__handle(error, @1.first_column,
-+						   strdup("Bad event or PMU"),
-+						   help);
- 			CLEANUP;
- 			YYABORT;
- 		}
-@@ -376,9 +380,18 @@ PE_NAME sep_dc
- 	int err;
- 
- 	err = parse_events_multi_pmu_add(_parse_state, $1, NULL, &list);
--	free($1);
--	if (err < 0)
-+	if (err < 0) {
-+		struct parse_events_state *parse_state = _parse_state;
-+		struct parse_events_error *error = parse_state->error;
-+		char *help;
-+
-+		if (asprintf(&help, "Unabled to find PMU or event on a PMU of '%s'", $1) < 0)
-+			help = NULL;
-+		parse_events_error__handle(error, @1.first_column, strdup("Bad event name"), help);
-+		free($1);
- 		PE_ABORT(err);
-+	}
-+	free($1);
- 	$$ = list;
+ 	tracing_path__strerror_open_tp(err, help, sizeof(help), sys, name);
+-	parse_events_error__handle(e, 0, strdup(str), strdup(help));
++	parse_events_error__handle(e, column, strdup(str), strdup(help));
  }
  
+ static int add_tracepoint(struct list_head *list, int *idx,
+ 			  const char *sys_name, const char *evt_name,
+ 			  struct parse_events_error *err,
+-			  struct list_head *head_config)
++			  struct list_head *head_config, void *loc_)
+ {
++	YYLTYPE *loc = loc_;
+ 	struct evsel *evsel = evsel__newtp_idx(sys_name, evt_name, (*idx)++);
+ 
+ 	if (IS_ERR(evsel)) {
+-		tracepoint_error(err, PTR_ERR(evsel), sys_name, evt_name);
++		tracepoint_error(err, PTR_ERR(evsel), sys_name, evt_name, loc->first_column);
+ 		return PTR_ERR(evsel);
+ 	}
+ 
+@@ -556,7 +557,7 @@ static int add_tracepoint(struct list_head *list, int *idx,
+ static int add_tracepoint_multi_event(struct list_head *list, int *idx,
+ 				      const char *sys_name, const char *evt_name,
+ 				      struct parse_events_error *err,
+-				      struct list_head *head_config)
++				      struct list_head *head_config, YYLTYPE *loc)
+ {
+ 	char *evt_path;
+ 	struct dirent *evt_ent;
+@@ -565,13 +566,13 @@ static int add_tracepoint_multi_event(struct list_head *list, int *idx,
+ 
+ 	evt_path = get_events_file(sys_name);
+ 	if (!evt_path) {
+-		tracepoint_error(err, errno, sys_name, evt_name);
++		tracepoint_error(err, errno, sys_name, evt_name, loc->first_column);
+ 		return -1;
+ 	}
+ 	evt_dir = opendir(evt_path);
+ 	if (!evt_dir) {
+ 		put_events_file(evt_path);
+-		tracepoint_error(err, errno, sys_name, evt_name);
++		tracepoint_error(err, errno, sys_name, evt_name, loc->first_column);
+ 		return -1;
+ 	}
+ 
+@@ -588,11 +589,11 @@ static int add_tracepoint_multi_event(struct list_head *list, int *idx,
+ 		found++;
+ 
+ 		ret = add_tracepoint(list, idx, sys_name, evt_ent->d_name,
+-				     err, head_config);
++				     err, head_config, loc);
+ 	}
+ 
+ 	if (!found) {
+-		tracepoint_error(err, ENOENT, sys_name, evt_name);
++		tracepoint_error(err, ENOENT, sys_name, evt_name, loc->first_column);
+ 		ret = -1;
+ 	}
+ 
+@@ -604,19 +605,19 @@ static int add_tracepoint_multi_event(struct list_head *list, int *idx,
+ static int add_tracepoint_event(struct list_head *list, int *idx,
+ 				const char *sys_name, const char *evt_name,
+ 				struct parse_events_error *err,
+-				struct list_head *head_config)
++				struct list_head *head_config, YYLTYPE *loc)
+ {
+ 	return strpbrk(evt_name, "*?") ?
+-	       add_tracepoint_multi_event(list, idx, sys_name, evt_name,
+-					  err, head_config) :
+-	       add_tracepoint(list, idx, sys_name, evt_name,
+-			      err, head_config);
++		add_tracepoint_multi_event(list, idx, sys_name, evt_name,
++					   err, head_config, loc) :
++		add_tracepoint(list, idx, sys_name, evt_name,
++			       err, head_config, loc);
+ }
+ 
+ static int add_tracepoint_multi_sys(struct list_head *list, int *idx,
+ 				    const char *sys_name, const char *evt_name,
+ 				    struct parse_events_error *err,
+-				    struct list_head *head_config)
++				    struct list_head *head_config, YYLTYPE *loc)
+ {
+ 	struct dirent *events_ent;
+ 	DIR *events_dir;
+@@ -624,7 +625,7 @@ static int add_tracepoint_multi_sys(struct list_head *list, int *idx,
+ 
+ 	events_dir = tracing_events__opendir();
+ 	if (!events_dir) {
+-		tracepoint_error(err, errno, sys_name, evt_name);
++		tracepoint_error(err, errno, sys_name, evt_name, loc->first_column);
+ 		return -1;
+ 	}
+ 
+@@ -640,7 +641,7 @@ static int add_tracepoint_multi_sys(struct list_head *list, int *idx,
+ 			continue;
+ 
+ 		ret = add_tracepoint_event(list, idx, events_ent->d_name,
+-					   evt_name, err, head_config);
++					   evt_name, err, head_config, loc);
+ 	}
+ 
+ 	closedir(events_dir);
+@@ -653,6 +654,7 @@ struct __add_bpf_event_param {
+ 	struct parse_events_state *parse_state;
+ 	struct list_head *list;
+ 	struct list_head *head_config;
++	YYLTYPE *loc;
+ };
+ 
+ static int add_bpf_event(const char *group, const char *event, int fd, struct bpf_object *obj,
+@@ -679,7 +681,7 @@ static int add_bpf_event(const char *group, const char *event, int fd, struct bp
+ 
+ 	err = parse_events_add_tracepoint(&new_evsels, &parse_state->idx, group,
+ 					  event, parse_state->error,
+-					  param->head_config);
++					  param->head_config, param->loc);
+ 	if (err) {
+ 		struct evsel *evsel, *tmp;
+ 
+@@ -706,12 +708,14 @@ static int add_bpf_event(const char *group, const char *event, int fd, struct bp
+ int parse_events_load_bpf_obj(struct parse_events_state *parse_state,
+ 			      struct list_head *list,
+ 			      struct bpf_object *obj,
+-			      struct list_head *head_config)
++			      struct list_head *head_config,
++			      void *loc)
+ {
+ 	int err;
+ 	char errbuf[BUFSIZ];
+-	struct __add_bpf_event_param param = {parse_state, list, head_config};
++	struct __add_bpf_event_param param = {parse_state, list, head_config, loc};
+ 	static bool registered_unprobe_atexit = false;
++	YYLTYPE test_loc = {.first_column = -1};
+ 
+ 	if (IS_ERR(obj) || !obj) {
+ 		snprintf(errbuf, sizeof(errbuf),
+@@ -742,6 +746,9 @@ int parse_events_load_bpf_obj(struct parse_events_state *parse_state,
+ 		goto errout;
+ 	}
+ 
++	if (!param.loc)
++		param.loc = &test_loc;
++
+ 	err = bpf__foreach_event(obj, add_bpf_event, &param);
+ 	if (err) {
+ 		snprintf(errbuf, sizeof(errbuf),
+@@ -751,7 +758,7 @@ int parse_events_load_bpf_obj(struct parse_events_state *parse_state,
+ 
+ 	return 0;
+ errout:
+-	parse_events_error__handle(parse_state->error, 0,
++	parse_events_error__handle(parse_state->error, param.loc->first_column,
+ 				strdup(errbuf), strdup("(add -v to see detail)"));
+ 	return err;
+ }
+@@ -839,11 +846,13 @@ int parse_events_load_bpf(struct parse_events_state *parse_state,
+ 			  struct list_head *list,
+ 			  char *bpf_file_name,
+ 			  bool source,
+-			  struct list_head *head_config)
++			  struct list_head *head_config,
++			  void *loc_)
+ {
+ 	int err;
+ 	struct bpf_object *obj;
+ 	LIST_HEAD(obj_head_config);
++	YYLTYPE *loc = loc_;
+ 
+ 	if (head_config)
+ 		split_bpf_config_terms(head_config, &obj_head_config);
+@@ -863,12 +872,12 @@ int parse_events_load_bpf(struct parse_events_state *parse_state,
+ 						   -err, errbuf,
+ 						   sizeof(errbuf));
+ 
+-		parse_events_error__handle(parse_state->error, 0,
++		parse_events_error__handle(parse_state->error, loc->first_column,
+ 					strdup(errbuf), strdup("(add -v to see detail)"));
+ 		return err;
+ 	}
+ 
+-	err = parse_events_load_bpf_obj(parse_state, list, obj, head_config);
++	err = parse_events_load_bpf_obj(parse_state, list, obj, head_config, loc);
+ 	if (err)
+ 		return err;
+ 	err = parse_events_config_bpf(parse_state, obj, &obj_head_config);
+@@ -885,9 +894,12 @@ int parse_events_load_bpf(struct parse_events_state *parse_state,
+ int parse_events_load_bpf_obj(struct parse_events_state *parse_state,
+ 			      struct list_head *list __maybe_unused,
+ 			      struct bpf_object *obj __maybe_unused,
+-			      struct list_head *head_config __maybe_unused)
++			      struct list_head *head_config __maybe_unused,
++			      void *loc_)
+ {
+-	parse_events_error__handle(parse_state->error, 0,
++	YYLTYPE *loc = loc_;
++
++	parse_events_error__handle(parse_state->error, loc->first_column,
+ 				   strdup("BPF support is not compiled"),
+ 				   strdup("Make sure libbpf-devel is available at build time."));
+ 	return -ENOTSUP;
+@@ -897,9 +909,12 @@ int parse_events_load_bpf(struct parse_events_state *parse_state,
+ 			  struct list_head *list __maybe_unused,
+ 			  char *bpf_file_name __maybe_unused,
+ 			  bool source __maybe_unused,
+-			  struct list_head *head_config __maybe_unused)
++			  struct list_head *head_config __maybe_unused,
++			  void *loc_)
+ {
+-	parse_events_error__handle(parse_state->error, 0,
++	YYLTYPE *loc = loc_;
++
++	parse_events_error__handle(parse_state->error, loc->first_column,
+ 				   strdup("BPF support is not compiled"),
+ 				   strdup("Make sure libbpf-devel is available at build time."));
+ 	return -ENOTSUP;
+@@ -1433,8 +1448,9 @@ static int get_config_chgs(struct perf_pmu *pmu, struct list_head *head_config,
+ int parse_events_add_tracepoint(struct list_head *list, int *idx,
+ 				const char *sys, const char *event,
+ 				struct parse_events_error *err,
+-				struct list_head *head_config)
++				struct list_head *head_config, void *loc_)
+ {
++	YYLTYPE *loc = loc_;
+ #ifdef HAVE_LIBTRACEEVENT
+ 	if (head_config) {
+ 		struct perf_event_attr attr;
+@@ -1446,17 +1462,17 @@ int parse_events_add_tracepoint(struct list_head *list, int *idx,
+ 
+ 	if (strpbrk(sys, "*?"))
+ 		return add_tracepoint_multi_sys(list, idx, sys, event,
+-						err, head_config);
++						err, head_config, loc);
+ 	else
+ 		return add_tracepoint_event(list, idx, sys, event,
+-					    err, head_config);
++					    err, head_config, loc);
+ #else
+ 	(void)list;
+ 	(void)idx;
+ 	(void)sys;
+ 	(void)event;
+ 	(void)head_config;
+-	parse_events_error__handle(err, 0, strdup("unsupported tracepoint"),
++	parse_events_error__handle(err, loc->first_column, strdup("unsupported tracepoint"),
+ 				strdup("libtraceevent is necessary for tracepoint support"));
+ 	return -1;
+ #endif
+diff --git a/tools/perf/util/parse-events.h b/tools/perf/util/parse-events.h
+index b37e5ee193a8..cabbe70adb82 100644
+--- a/tools/perf/util/parse-events.h
++++ b/tools/perf/util/parse-events.h
+@@ -169,18 +169,20 @@ int parse_events_name(struct list_head *list, const char *name);
+ int parse_events_add_tracepoint(struct list_head *list, int *idx,
+ 				const char *sys, const char *event,
+ 				struct parse_events_error *error,
+-				struct list_head *head_config);
++				struct list_head *head_config, void *loc);
+ int parse_events_load_bpf(struct parse_events_state *parse_state,
+ 			  struct list_head *list,
+ 			  char *bpf_file_name,
+ 			  bool source,
+-			  struct list_head *head_config);
++			  struct list_head *head_config,
++			  void *loc);
+ /* Provide this function for perf test */
+ struct bpf_object;
+ int parse_events_load_bpf_obj(struct parse_events_state *parse_state,
+ 			      struct list_head *list,
+ 			      struct bpf_object *obj,
+-			      struct list_head *head_config);
++			      struct list_head *head_config,
++			      void *loc);
+ int parse_events_add_numeric(struct parse_events_state *parse_state,
+ 			     struct list_head *list,
+ 			     u32 type, u64 config,
+diff --git a/tools/perf/util/parse-events.y b/tools/perf/util/parse-events.y
+index a636a7db6e6f..50f5b819de37 100644
+--- a/tools/perf/util/parse-events.y
++++ b/tools/perf/util/parse-events.y
+@@ -567,7 +567,7 @@ tracepoint_name opt_event_config
+ 		error->idx = @1.first_column;
+ 
+ 	err = parse_events_add_tracepoint(list, &parse_state->idx, $1.sys, $1.event,
+-					error, $2);
++					error, $2, &@1);
+ 
+ 	parse_events_terms__delete($2);
+ 	free($1.sys);
+@@ -640,7 +640,7 @@ PE_BPF_OBJECT opt_event_config
+ 	list = alloc_list();
+ 	if (!list)
+ 		YYNOMEM;
+-	err = parse_events_load_bpf(parse_state, list, $1, false, $2);
++	err = parse_events_load_bpf(parse_state, list, $1, false, $2, &@1);
+ 	parse_events_terms__delete($2);
+ 	free($1);
+ 	if (err) {
+@@ -658,7 +658,7 @@ PE_BPF_SOURCE opt_event_config
+ 	list = alloc_list();
+ 	if (!list)
+ 		YYNOMEM;
+-	err = parse_events_load_bpf(_parse_state, list, $1, true, $2);
++	err = parse_events_load_bpf(_parse_state, list, $1, true, $2, &@1);
+ 	parse_events_terms__delete($2);
+ 	if (err) {
+ 		free(list);
 -- 
 2.41.0.162.gfafddb0af9-goog
 
