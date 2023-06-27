@@ -2,155 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DFED73FD1A
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 15:46:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 991C273FD19
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 15:46:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229513AbjF0Nq2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 09:46:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42580 "EHLO
+        id S230482AbjF0NqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 09:46:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230479AbjF0Nq0 (ORCPT
+        with ESMTP id S230336AbjF0NqN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 09:46:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E284C2115
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 06:45:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687873536;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ke8XtFgDnQ3FKSI0uaIkAHLijeswZt+d/C720oEmj8g=;
-        b=YsuE1nPoIDEAMvK+/zuLYxdOk+c++7H61lsYy6wRPMFMVYN6TOMDYqZG60N94yy5WEUhzf
-        fFG0oQfPdjE1i5hY3dxyx/gHFu30H6byecdf3ydgQ0xPxeaDxtUR5/ljUwqYWaOD0Cf8mH
-        I9pz/Lgj7wY5wrE4Uyb0q4Kq6Vnnl1c=
-Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com
- [209.85.214.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-155-2H2lRl8zMAG6hi1PdoXlIQ-1; Tue, 27 Jun 2023 09:45:34 -0400
-X-MC-Unique: 2H2lRl8zMAG6hi1PdoXlIQ-1
-Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-1b8303cd306so300675ad.2
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 06:45:34 -0700 (PDT)
+        Tue, 27 Jun 2023 09:46:13 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B04C62120
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 06:46:11 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-991fee3a6b1so162482466b.0
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 06:46:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687873570; x=1690465570;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=C6GDo/PCyqeJlmAp+L1F523ncEm2Dlcbpi4EhLPM6dU=;
+        b=VjJou39mArRU2SgqQPw9V/Fz0rmQl9FBZLCoxY1lHgZdRbLHHVGzyXkrWFhuuFq4XR
+         R5pa8lUtxrOOEdaKith9uy4f0YD+o98lEuHj5GVNuivN6JEfk4qQRuMQeXUlZlO+8rqU
+         rMihmvUxzZSY6fTIrlujRJKWA5yxkrtiQ6cgk2ofBJOGScGE6zlmwTZWCzX9X3l8e+XE
+         /NLwgwbLVnFwsM6c6+tzQ/ydZOuGgJASHvbnNofhr5RzGitmrEr1nf0gu3TdH5U6Khg5
+         FD8H9Ge4+ZJUGRY0uwAEA+xHePEo/2N1kNxvk5lHgU9qx3eUxxrphBTBxR6KUQ7daEvT
+         596A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687873533; x=1690465533;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ke8XtFgDnQ3FKSI0uaIkAHLijeswZt+d/C720oEmj8g=;
-        b=R1AmgRdsd52jzJtzbecvj8w2pshiqeWN9Z30db3L9BJ16DPiLKiHlaqb02BXZjZ4qi
-         PYWC5Vc4KFR6KsroXkyM10SGc9xikhjTtjZo5Z266/plq3erVEVzUGasFg4SSryKxof9
-         IKUYEjBHHkdKgi3ss0xRgzV77dOtysBcPvtcOXLEQu9tyi0lySWRRvx9d0Inab1lfUA3
-         VSykjpJZ3aHaqVgP50uGMkZ/YAVyZCW7TkaoGVB9w5/PMWrzUQlon3gazbmlF++BtFef
-         bFEsdZfkP+jau/YhFiBr1frlEmj0rkdAxva5kA2baYiq59A9tVPYCazTkcC5kyGqOLr+
-         M5uQ==
-X-Gm-Message-State: AC+VfDybEHdmJ5ChA6qZ8iMQSO579Q2dPU5SYWGe0922wWZcx4h6ToRX
-        +7l1t32AW1OIIdY3y4t/cSJ23TFL7lxrVsVr4Ihoes36J4+MpNz14ZAGpGZEouNA9xjAC0QRYTI
-        v/HwIHAQmRNHSARMYWA7O1uoSk8dqX7EdA9V2paCZbwNBoi42
-X-Received: by 2002:a17:902:b193:b0:1b5:1654:96d4 with SMTP id s19-20020a170902b19300b001b5165496d4mr7092072plr.4.1687873533134;
-        Tue, 27 Jun 2023 06:45:33 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6IthMHxZNbH8GTaGgIOza/GtvEVEKrKV37oXPkunKMrBHpu386zDko3S+M9ZBeuKxpniGopjQCoXrgnCg6hFs=
-X-Received: by 2002:a17:902:b193:b0:1b5:1654:96d4 with SMTP id
- s19-20020a170902b19300b001b5165496d4mr7092055plr.4.1687873532820; Tue, 27 Jun
- 2023 06:45:32 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687873570; x=1690465570;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=C6GDo/PCyqeJlmAp+L1F523ncEm2Dlcbpi4EhLPM6dU=;
+        b=jtOwU9Y6GpgAaNkPiyJy3t+WpQUEx6I99TaL51WjeIXgFvBaRoYH8sIXOPJ+ER0F8v
+         YPP9VlqWj82ti1A++hDuMkLmGw9ZoyNQY/qTLs4ml/dc/9eKgmJxsDf3TS/GpevT4W7T
+         a/1qow8dXTrl3NJ4eB/StYIKWgn7soVKvPsAYxoGNZC4Sadcd0zEzn14Yfd/3CWvwJTp
+         p8GJV7JbjQgnZ4MgGKrcMVSgiBti7eShlNP9B8L1aiyUFkJt/jA3Lp+bZk/KLJt1J+LW
+         1yYRz9o+q5xYGfKwv8aJ2uRnVcLPIdGk8gOzwnkqTaQjZU15s9iadsrjq3Vt6X+ASI4u
+         nGJw==
+X-Gm-Message-State: AC+VfDwcPBH+UC1F06yLhms70+ZFVgIy1+mXo56T9u7EW3fj8GOr2L57
+        LjeIVsphxquG2kAo02zNB+lUAg==
+X-Google-Smtp-Source: ACHHUZ7IYXJwXk1SNEMr8oz4RHlt3J2yBev4bixokO+Gc4xB2ZZl/W+WNtdQLEJHfex8XUxvCy52iw==
+X-Received: by 2002:a17:907:3e16:b0:978:a186:464f with SMTP id hp22-20020a1709073e1600b00978a186464fmr31854500ejc.39.1687873570345;
+        Tue, 27 Jun 2023 06:46:10 -0700 (PDT)
+Received: from [10.230.170.72] (46-253-189-43.dynamic.monzoon.net. [46.253.189.43])
+        by smtp.gmail.com with ESMTPSA id s17-20020a170906bc5100b009920a690cd9sm1018937ejv.59.2023.06.27.06.46.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Jun 2023 06:46:09 -0700 (PDT)
+Message-ID: <3b8156f3-ae92-b7ed-60d5-b7558903e179@linaro.org>
+Date:   Tue, 27 Jun 2023 15:46:08 +0200
 MIME-Version: 1.0
-References: <ZJk1XTtgLFxIcxzp@bu2204.myguest.virtualbox.org>
-In-Reply-To: <ZJk1XTtgLFxIcxzp@bu2204.myguest.virtualbox.org>
-From:   Andreas Gruenbacher <agruenba@redhat.com>
-Date:   Tue, 27 Jun 2023 15:45:20 +0200
-Message-ID: <CAHc6FU6P-BK=rU2w6JcswJsf93TwgvtUNNBe8LU4n2djuNjn_Q@mail.gmail.com>
-Subject: Re: [PATCH v2] gfs2: Replace deprecated kmap_atomic() by kmap_local_page()
-To:     Deepak R Varma <drv@mailo.com>
-Cc:     Bob Peterson <rpeterso@redhat.com>, cluster-devel@redhat.com,
-        linux-kernel@vger.kernel.org, Ira Weiny <ira.weiny@intel.com>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Sumitra Sharma <sumitraartsy@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v5 1/5] dt-bindings: ufs: qcom: Add reg-names property for
+ ICE
+Content-Language: en-US
+To:     Luca Weiss <luca.weiss@fairphone.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Iskren Chernev <me@iskren.info>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+References: <20221209-dt-binding-ufs-v5-0-c9a58c0a53f5@fairphone.com>
+ <20221209-dt-binding-ufs-v5-1-c9a58c0a53f5@fairphone.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221209-dt-binding-ufs-v5-1-c9a58c0a53f5@fairphone.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 26, 2023 at 8:51=E2=80=AFAM Deepak R Varma <drv@mailo.com> wrot=
-e:
-> kmap_atomic() is deprecated in favor of kmap_local_{folio,page}().
-
-I'll apply this, convert the remaining instances of kmap_atomic(), and
-switch to memcpy_{from,to}_page() where appropriate.
-
-Thanks,
-Andreas
-
-> Therefore, replace kmap_atomic() with kmap_local_page() in
-> gfs2_internal_read() and stuffed_readpage().
->
-> kmap_atomic() disables page-faults and preemption (the latter only for
-> !PREEMPT_RT kernels), However, the code within the mapping/un-mapping in
-> gfs2_internal_read() and stuffed_readpage() does not depend on the
-> above-mentioned side effects.
->
-> Therefore, a mere replacement of the old API with the new one is all that
-> is required (i.e., there is no need to explicitly add any calls to
-> pagefault_disable() and/or preempt_disable()).
->
-> Signed-off-by: Deepak R Varma <drv@mailo.com>
+On 27/06/2023 10:28, Luca Weiss wrote:
+> The code in ufs-qcom-ice.c needs the ICE reg to be named "ice". Add this
+> in the bindings so the existing dts can validate successfully.
+> 
+> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
 > ---
-> Note: The Patch is build tested only. I will be happy to run recommended =
-testing
-> with some guidance if required.
->
-> Changes in v2:
->    - Update patch description to correct the replacement function name fr=
-om
->      kmap_local_folio to kmap_local _page
->
->
->  fs/gfs2/aops.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/fs/gfs2/aops.c b/fs/gfs2/aops.c
-> index 3b41542d6697..7bd92054d353 100644
-> --- a/fs/gfs2/aops.c
-> +++ b/fs/gfs2/aops.c
-> @@ -432,10 +432,10 @@ static int stuffed_readpage(struct gfs2_inode *ip, =
-struct page *page)
->         if (error)
->                 return error;
->
-> -       kaddr =3D kmap_atomic(page);
-> +       kaddr =3D kmap_local_page(page);
->         memcpy(kaddr, dibh->b_data + sizeof(struct gfs2_dinode), dsize);
->         memset(kaddr + dsize, 0, PAGE_SIZE - dsize);
-> -       kunmap_atomic(kaddr);
-> +       kunmap_local(kaddr);
->         flush_dcache_page(page);
->         brelse(dibh);
->         SetPageUptodate(page);
-> @@ -498,12 +498,12 @@ int gfs2_internal_read(struct gfs2_inode *ip, char =
-*buf, loff_t *pos,
->                                 continue;
->                         return PTR_ERR(page);
->                 }
-> -               p =3D kmap_atomic(page);
-> +               p =3D kmap_local_page(page);
->                 amt =3D size - copied;
->                 if (offset + size > PAGE_SIZE)
->                         amt =3D PAGE_SIZE - offset;
->                 memcpy(buf + copied, p + offset, amt);
-> -               kunmap_atomic(p);
-> +               kunmap_local(p);
->                 put_page(page);
->                 copied +=3D amt;
->                 index++;
-> --
-> 2.34.1
->
->
->
+>  Documentation/devicetree/bindings/ufs/qcom,ufs.yaml | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+> 
+
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
 
