@@ -2,130 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5D2273FA2D
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 12:26:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6537B73FA30
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 12:26:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230210AbjF0KZw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 06:25:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44266 "EHLO
+        id S232047AbjF0K0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 06:26:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230479AbjF0KZN (ORCPT
+        with ESMTP id S231208AbjF0K0C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 06:25:13 -0400
-Received: from mail.astralinux.ru (mail.astralinux.ru [217.74.38.119])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1A8D3AA3;
-        Tue, 27 Jun 2023 03:23:53 -0700 (PDT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.astralinux.ru (Postfix) with ESMTP id A7DB4186677E;
-        Tue, 27 Jun 2023 13:23:51 +0300 (MSK)
-Received: from mail.astralinux.ru ([127.0.0.1])
-        by localhost (rbta-msk-vsrv-mail01.astralinux.ru [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id nhyyPPXG8I23; Tue, 27 Jun 2023 13:23:51 +0300 (MSK)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.astralinux.ru (Postfix) with ESMTP id 079BA1866712;
-        Tue, 27 Jun 2023 13:23:51 +0300 (MSK)
-X-Virus-Scanned: amavisd-new at astralinux.ru
-Received: from mail.astralinux.ru ([127.0.0.1])
-        by localhost (rbta-msk-vsrv-mail01.astralinux.ru [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id GJLLlds1rppm; Tue, 27 Jun 2023 13:23:50 +0300 (MSK)
-Received: from anastasia-huawei.. (unknown [89.222.134.55])
-        by mail.astralinux.ru (Postfix) with ESMTPSA id 23BD41865B39;
-        Tue, 27 Jun 2023 13:23:49 +0300 (MSK)
-From:   Anastasia Belova <abelova@astralinux.ru>
-To:     stable@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Anastasia Belova <abelova@astralinux.ru>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Xiaomeng Tong <xiam0nd.tong@gmail.com>,
-        Tsuchiya Yuto <kitakar@gmail.com>, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH 5.10 1/1] media: atomisp: fix "variable dereferenced before check 'asd'"
-Date:   Tue, 27 Jun 2023 13:23:34 +0300
-Message-Id: <20230627102334.18781-2-abelova@astralinux.ru>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230627102334.18781-1-abelova@astralinux.ru>
-References: <20230627102334.18781-1-abelova@astralinux.ru>
+        Tue, 27 Jun 2023 06:26:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40CD33AAA;
+        Tue, 27 Jun 2023 03:24:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F6D661117;
+        Tue, 27 Jun 2023 10:24:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D5F7C433C9;
+        Tue, 27 Jun 2023 10:24:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1687861466;
+        bh=F1Hg7UsWABbNZA5AQvDBMQsjEQe6h9OaplyEUWz37bw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=V2NwjqsUMcDX/nRTxfVAJKchvBq0J8/jCjoiPE/BVWSq5g708DSLg16ic9OHGuGIA
+         yuU5bxvGd6YG+SSKFuayAVa/x5wvWepMKMdGGFdgfHwAvR+pb341M0KuWKavjeak5J
+         sma7fq1Z3LAEcoV/YQiR7MTXGlucUZab2xSmpk5M=
+Date:   Tue, 27 Jun 2023 12:24:24 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Petr Tesarik <petrtesarik@huaweicloud.com>
+Cc:     Stefano Stabellini <sstabellini@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Kees Cook <keescook@chromium.org>,
+        Saravana Kannan <saravanak@google.com>,
+        "moderated list:XEN HYPERVISOR ARM" <xen-devel@lists.xenproject.org>,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        "open list:XEN SWIOTLB SUBSYSTEM" <iommu@lists.linux.dev>,
+        Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>, petr@tesarici.cz
+Subject: Re: [PATCH v3 1/7] swiotlb: make io_tlb_default_mem local to
+ swiotlb.c
+Message-ID: <2023062745-routing-palace-d0b4@gregkh>
+References: <cover.1687859323.git.petr.tesarik.ext@huawei.com>
+ <a1ef6eeab8b64fac817b9734da4a056f05a68d01.1687859323.git.petr.tesarik.ext@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a1ef6eeab8b64fac817b9734da4a056f05a68d01.1687859323.git.petr.tesarik.ext@huawei.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tsuchiya Yuto <kitakar@gmail.com>
+On Tue, Jun 27, 2023 at 11:54:23AM +0200, Petr Tesarik wrote:
+> +/**
+> + * is_swiotlb_active() - check if the software IO TLB is initialized
+> + * @dev:	Device to check, or %NULL for the default IO TLB.
+> + */
+>  bool is_swiotlb_active(struct device *dev)
+>  {
+> -	struct io_tlb_mem *mem = dev->dma_io_tlb_mem;
+> +	struct io_tlb_mem *mem = dev
+> +		? dev->dma_io_tlb_mem
+> +		: &io_tlb_default_mem;
 
-commit ac56760a8bbb4e654b2fd54e5de79dd5d72f937d upstream.
+That's impossible to read and maintain over time, sorry.
 
-There are two occurrences where the variable 'asd' is dereferenced
-before check. Fix this issue by using the variable after the check.
+Please use real "if () else" lines, so that it can be maintained over
+time.
 
-Link: https://lore.kernel.org/linux-media/20211122074122.GA6581@kili/
+thanks,
 
-Link: https://lore.kernel.org/linux-media/20211201141904.47231-1-kitakar@=
-gmail.com
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Tsuchiya Yuto <kitakar@gmail.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Signed-off-by: Anastasia Belova <abelova@astralinux.ru>
----
- drivers/staging/media/atomisp/pci/atomisp_cmd.c   | 3 ++-
- drivers/staging/media/atomisp/pci/atomisp_ioctl.c | 3 ++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_cmd.c b/drivers/st=
-aging/media/atomisp/pci/atomisp_cmd.c
-index 20c19e08968e..613bd9620224 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_cmd.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_cmd.c
-@@ -5243,7 +5243,7 @@ static int atomisp_set_fmt_to_isp(struct video_devi=
-ce *vdev,
- 	int (*configure_pp_input)(struct atomisp_sub_device *asd,
- 				  unsigned int width, unsigned int height) =3D
- 				      configure_pp_input_nop;
--	u16 stream_index =3D atomisp_source_pad_to_stream_id(asd, source_pad);
-+	u16 stream_index;
- 	const struct atomisp_in_fmt_conv *fc;
- 	int ret, i;
-=20
-@@ -5252,6 +5252,7 @@ static int atomisp_set_fmt_to_isp(struct video_devi=
-ce *vdev,
- 			__func__, vdev->name);
- 		return -EINVAL;
- 	}
-+	stream_index =3D atomisp_source_pad_to_stream_id(asd, source_pad);
-=20
- 	v4l2_fh_init(&fh.vfh, vdev);
-=20
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c b/drivers/=
-staging/media/atomisp/pci/atomisp_ioctl.c
-index 8a0648fd7c81..4615e4cae718 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
-@@ -1123,7 +1123,7 @@ int __atomisp_reqbufs(struct file *file, void *fh,
- 	struct ia_css_frame *frame;
- 	struct videobuf_vmalloc_memory *vm_mem;
- 	u16 source_pad =3D atomisp_subdev_source_pad(vdev);
--	u16 stream_id =3D atomisp_source_pad_to_stream_id(asd, source_pad);
-+	u16 stream_id;
- 	int ret =3D 0, i =3D 0;
-=20
- 	if (!asd) {
-@@ -1131,6 +1131,7 @@ int __atomisp_reqbufs(struct file *file, void *fh,
- 			__func__, vdev->name);
- 		return -EINVAL;
- 	}
-+	stream_id =3D atomisp_source_pad_to_stream_id(asd, source_pad);
-=20
- 	if (req->count =3D=3D 0) {
- 		mutex_lock(&pipe->capq.vb_lock);
---=20
-2.39.0
-
+greg k-h
