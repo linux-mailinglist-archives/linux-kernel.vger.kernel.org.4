@@ -2,167 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6B1173F0EA
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 04:42:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A9F873F0F1
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 04:48:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229578AbjF0Cmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 22:42:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54916 "EHLO
+        id S230104AbjF0Cr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 22:47:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbjF0Cm0 (ORCPT
+        with ESMTP id S230016AbjF0Crz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 22:42:26 -0400
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2128.outbound.protection.outlook.com [40.107.117.128])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88414173A;
-        Mon, 26 Jun 2023 19:42:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=db0zS1AImQftSn+Z6rAs0mnBkKcNAkxLcwAoS2ZAltXP0wgdccfkT8gvjvlhjr7IT9mVPdsbvSuvOOdmXdOoNyRg1wh6hpugFwEoD0F7JGqPgSm/aLQZ0NHuULXl8uGysi0FksB7Xjd8Gxuwt2ahO5Xd+esaAiJHjk/x/RMF6QQNL2HZ4uXh3osvgbkFqlV2elmYqIlyMZYHRtnzDAQHuo80QQaHrkRCj+0cTIusXpFgJJDkf9QxQwmNvmWEeK4UUNLQYlUdSpcl9AFZ2vtsuPYss3by2OdGQm6vGYQsYhocG1K5g4yS+c75XUlRyEcrz4hUJeY6W/kZ6o2dwP5FEA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UOGB5c45cFt4pHBDtBGsipeS7s7UAioafrQLcGXqeZM=;
- b=lKKTJMvfhMPh4bcrzgKbVKLhiu1lN3YLacNLO1jiEeLGIqtHKDIerQGmO7I9eXG2N5nCR3xoBMX4icxYlXyeN6vu2VLS5QqXXhefB03jE3hnCuhGjc3JMMTVtbynLtU642etYuk8ngX+gZK76okd8EJRNt/nQNqsOYNi819ow8AUiILsa+qUzvGGUMf5i6bkXrX7ARcGT/cDi7QeJsf4Wf5B/YHk2mSuT8MYHp+pKUvwwlIz3NT4ieJ52htwdK0sKios+mXhUF0Y9CmyiUK5UJ03FuyYaK6y3YuWWIFpglU9UpHCmvsBqnosvfJQnSOFeVbN0W2I8S3l11vkr45QSQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UOGB5c45cFt4pHBDtBGsipeS7s7UAioafrQLcGXqeZM=;
- b=EMAnyei5KJofEeQpSNpxNbKyNVhXGb4xSa+iLaAeJGtiuZs8TsTixKDenqybQkeqLTqr6hbF2N1ObxMsyj9LtU5JYY7uKPzEC0FJTgNeVQ7PHEUA873zBC3aJmyx5xFKzZHi646YizbRodADaJIBFBK/IBmg8r/H0UKP3Fakv/d0ftYmluFutoqweWdMIr7oq49aAx48WNI1FQHTX/SbklOEppTHtrP3poNP4VaqNBu7WvRY1YoyOFFiKkOZdvM5co2fXWA0LFLifYKEGxzxLDc9/XljaOlJAJhKrPCzXgUhNYEjGbOt3qpp5XAv98PurQUNOx6+R2IJoHRw+Msipg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from PUZPR06MB5936.apcprd06.prod.outlook.com (2603:1096:301:11d::13)
- by TYSPR06MB6528.apcprd06.prod.outlook.com (2603:1096:400:47a::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.23; Tue, 27 Jun
- 2023 02:42:20 +0000
-Received: from PUZPR06MB5936.apcprd06.prod.outlook.com
- ([fe80::adc0:c22:ffae:227b]) by PUZPR06MB5936.apcprd06.prod.outlook.com
- ([fe80::adc0:c22:ffae:227b%6]) with mapi id 15.20.6500.045; Tue, 27 Jun 2023
- 02:42:19 +0000
-From:   You Kangren <youkangren@vivo.com>
-To:     Kalle Valo <kvalo@kernel.org>, You Kangren <youkangren@vivo.com>,
-        Dongliang Mu <dzm91@hust.edu.cn>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Simon Horman <simon.horman@corigine.com>,
-        linux-wireless@vger.kernel.org (open list:RAYLINK/WEBGEAR 802.11
-        WIRELESS LAN DRIVER), linux-kernel@vger.kernel.org (open list)
-Cc:     opensource.kernel@vivo.com
-Subject: [PATCH v2] wifi: ray_cs: Remove unnecessary conditional statements
-Date:   Tue, 27 Jun 2023 10:42:07 +0800
-Message-Id: <20230627024211.18385-1-youkangren@vivo.com>
-X-Mailer: git-send-email 2.39.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR02CA0101.apcprd02.prod.outlook.com
- (2603:1096:4:92::17) To PUZPR06MB5936.apcprd06.prod.outlook.com
- (2603:1096:301:11d::13)
+        Mon, 26 Jun 2023 22:47:55 -0400
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4867A19A8
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 19:47:54 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id d75a77b69052e-40079620a83so134511cf.0
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 19:47:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687834073; x=1690426073;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lOHMGk1IHW9nIXyoyhy6ScxjHGO05nJh9iYXmQJ8lRg=;
+        b=4Hxtqyz9AC5uq4MuNdUiUTytvXCSHBztZ8M76g0ceKIjnz0PJbRxq4j9xf48iqBl8z
+         uOAa0SjGLlNiOmuesNGIjV6ZEtAaql+t7LaLclTsqLdjWGgtUyTYHYxqyoUKW5PZ8+oA
+         CPN8+kFMBzGza8w1PEdpNYj3T/H/D2g1+h2yVb1dOKdEkXl3MW7xWHGuBNIsJuI2dpbL
+         u9j8wwh7+YY8qKVkw+4OZp6+QPdQwuDjHdLCq2f4ovoXXEUt0D33oYlhzfMu86LnMiFd
+         H0aY0bwtPf9reOaOak+4TqM+JB8fShj+0qc6i2vJ8aAkdg1fOGJQnnkCnCjBag5lncQf
+         /4HA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687834073; x=1690426073;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lOHMGk1IHW9nIXyoyhy6ScxjHGO05nJh9iYXmQJ8lRg=;
+        b=aPRKv5njxJ80fRhw2Chm2/ja55w5Vs9PiELsHYO6wR8d3/ucQKrvX7bEbzFvNlFu2I
+         7Y5fOROKrh89uCdl01MTUo8LX0/TOqrA/dmkuhx4lfGhOUDCpI0DcG/HZabyRAp3etS/
+         U5ScdHjcqEMHwB96EjpDUEJGWy7Wr5+5+URAlpEJTENs2PgEa10RCzg2te1Gq1ACQAsJ
+         Cmy9h7x0jMUzGbxfXmpM+Gh8Q8Yq9vTjSCZJQwvC1Ke4uQzYHDBfrdyF30iZMDF75V58
+         +Ra8jF2q9jEXvExwAt9RSWa2zt0LSJj8ZP1pyxNV10Y0qso41aJhBGbtqn1X8OCx/oDU
+         B1Rg==
+X-Gm-Message-State: AC+VfDxthl9IjGrRAXooKlkSTGoiUZOZ/e/g1WzkWAW2GZ5Pg0JSnpzE
+        ea63TopGWrbIvlcDhqFms1mIP5xplTs8dsKf3NO5Ag==
+X-Google-Smtp-Source: ACHHUZ6c1tU80i2NFgJWtDiNUQ4dKD46I90OznjvJZlr0ZavKr0VLoNsmAzWutpLRTPpKjM4PW0xSA6rqZaKASxRktE=
+X-Received: by 2002:a05:622a:5c8:b0:3ef:3361:75d5 with SMTP id
+ d8-20020a05622a05c800b003ef336175d5mr537286qtb.11.1687834073238; Mon, 26 Jun
+ 2023 19:47:53 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PUZPR06MB5936:EE_|TYSPR06MB6528:EE_
-X-MS-Office365-Filtering-Correlation-Id: e251c4ef-4e35-47aa-1b26-08db76b82065
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: cDSMzT3DBusG24E/CelomkNwRb5hjHiuQP4zoMr1oZ1EvIqBVZZKvlt6bFlI1qcmJIRk4VNHSp4/7aufwLQNVQY67QcA4/sffVThOeKrQOwkZSF7l78Yee1NaFZn12N+oHUTQ46zbbbIC3Zu/cmaBDKuAk7CqSlMR86kO2eIIUcSUQHwXRKpfin2nBEUP0i5X07cCD6Ex47eBOqJcOMfQcd0LKblxdnja0q2BTUiXBfyuqTf/M9dIT2u2CREEWI7rMoaOzkWeCqJR8IDiS9O/pa6H29699qECKS6i3GkUh+FLlik8HqHKGOn5rUFqlg8bXIHFiQ38gElDeWvgp3rP2CPit08vOYQIrWkkYhJQ8IporC8PgITud4F1122cb7s5vNKG1rQtPODmTTst7jmnKBfZ4pgqT5qtRFvrtGLnEgMxGTbGnzkWw8fchMAXasMGWvpJlqAbUADGbtE2JliXTKMZ6XXpSScxcMS4EwM+1vpBefvB4HN40MukfAJafpHPEpyoCD8xIBsV4gIwjsVRQp32e8tAo6p0ywospGJBiOH0tHXIF0g08imXtiVaGY5WB8jqW3vWazc2sBtcefQRD5AqIYH30EIxMV+30PofmWWhLAj6nDll3x7kA829b5s
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PUZPR06MB5936.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(39860400002)(376002)(366004)(346002)(451199021)(5660300002)(66946007)(66556008)(4326008)(66476007)(478600001)(36756003)(316002)(8676002)(8936002)(2906002)(110136005)(86362001)(41300700001)(6486002)(52116002)(186003)(38350700002)(6512007)(26005)(6506007)(1076003)(2616005)(38100700002)(107886003)(6666004)(83380400001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vrd3RBjginTj5+HuR1ZRZ32vLAP3ZYxcE8y6Cf9PRbOa1jlU7yyV+gcVGqh5?=
- =?us-ascii?Q?eGADeQ31OnE2oTbdzxM36XAl4d45HDIK4ULFH7aAXnXXBYne5gBf+wumpV5g?=
- =?us-ascii?Q?fchOx97aHjcvXiu+1YWfMFN7s44WiRrNMA3/wx4eIcX3+VO9+ge8tg8P9RDe?=
- =?us-ascii?Q?10YwLRWzvGJ32Zy6Mge2BrB3OaWG49rByxywJnb5eNCPhIhc+8M/DmpCyppg?=
- =?us-ascii?Q?+6Ze5cMIZTSPFZ+zE8HkdnChqVgVMKD0zr7/66Fw13o70TVYq4iNZObbPLlF?=
- =?us-ascii?Q?m0ySY0ZwZ4xEoOW0GdAVkzcK3p/RUmrTsEl4JCSUHciKzielFgWVwTmdRp6J?=
- =?us-ascii?Q?e+o+Tg1jgh/WpJQPwYFeCYOLFg5JTrtGb7cT3NIHcW3chk1mz4hz2NAtXpyf?=
- =?us-ascii?Q?qi0AbJFS+NlilXfAUkfrh4Ux7xs3OqFLPYVrHCjLFVNfOlqJNJNw+qoPXzAz?=
- =?us-ascii?Q?A+V8AHih9IV6rBnULFaNycsSGc3j9fh50EvLuJlNUb298AOf0xNSCiI7TpJ/?=
- =?us-ascii?Q?h1iLMz5G614pXZ5pPX7NuQoA1Dbsj7VrZLGEL+PFPt8JMdDyDjEkc7atf4w3?=
- =?us-ascii?Q?lmZO6GuZufuX9lYqRxFx2PcyJ6NO87gCfNDjovwtsnD+TXqYLukvzIhPK0/G?=
- =?us-ascii?Q?s8QBcRL4/bJqcvkND1WWb644DS6u4h2GUtSM3vy5H9cbPHaqLjQSV1rLwjMb?=
- =?us-ascii?Q?+1tIOj3/rjkOnknddgfrTQm7aWrwHj6wZ7sKTTnE0I9ZDDAB/EU3AjdrZv+W?=
- =?us-ascii?Q?LX30pEzALpszkqnXXFVBqQlXS0zzjGrXYLhGmopUq09Sovw5dO/+Q2clat9R?=
- =?us-ascii?Q?MJAv+WSsjqpuLsBrWBp1JXUQ0MolIDPJ7+TeOvCOeyTYf0uTNWdzCOtOiO38?=
- =?us-ascii?Q?pFmoZGq641gPa0e25eEAEKrxJlrM9lYJTIPBv+/tEzvKJ0X0n/aiSduquLSI?=
- =?us-ascii?Q?6itUN+qBjtzMB/GAEmSYOlrxeF7tgX6dI6lUhwoKzKiAlDzCNFRlJ/YpcCa4?=
- =?us-ascii?Q?HgOYmWBmG6FwjtO6tP7gziJBTcJi1U3LxGlpd2Slhv6dt8u9DZy32FP2i7D+?=
- =?us-ascii?Q?CvIqjHgk7id5FN9CqbwXAmvhSSoeu4Zcp2+GXi7wOWhBT0itrPugb+mTy+cN?=
- =?us-ascii?Q?Sp08+iQ127qXobJHRMDi7zJc2F3dbdWngnIN5gqM4shOhIXDMMgyBGGNI7hz?=
- =?us-ascii?Q?SS8d0LH9TlJCEOJI4ZPYTxWk6XV6RPXZNzBKviR2Ar1/dkCo/AR80KPLcv/s?=
- =?us-ascii?Q?Blry1zNMXGF3EhsTFdw5gPHaNp2fkoWhZhFJhR+hD8x97wRqCZAhvI7NJoQh?=
- =?us-ascii?Q?E9Wt6ulyehKegoVmqXkiyhTzxij3zAFH7o1ai4Bott8PVTJe/iUFYbRrgKmV?=
- =?us-ascii?Q?AR5l8zwpG0xMiFvlbDwVa1dQ3Yw91THbR6Bpeb1YxJXCjH0gGGJGERwQxrJP?=
- =?us-ascii?Q?k+fNaSNdzDbkRlvYOTK5565SOpohOgiCpxOf0gl6St7KVMqyp34VDuJYvcrr?=
- =?us-ascii?Q?UCv+s4UXF8l9Zo0DrZmf8AcjBC1KoDa2uhzgtkPMYPk7rBBujVio8mWP0Iim?=
- =?us-ascii?Q?YjzRSbZwpcH2NVEoTuqEYBskz2AUpbQr7Nk462gD?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e251c4ef-4e35-47aa-1b26-08db76b82065
-X-MS-Exchange-CrossTenant-AuthSource: PUZPR06MB5936.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jun 2023 02:42:19.4572
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: lQh2trPDZukMiH/T9SSBY3crT9rnWWbZoRsT/LgO07hkNGXMAi+ZsKAEEYc6Nu1/ZtLH43nPX/i0OHxu+Bn9JA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYSPR06MB6528
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230626171430.3167004-1-ryan.roberts@arm.com> <20230626171430.3167004-9-ryan.roberts@arm.com>
+In-Reply-To: <20230626171430.3167004-9-ryan.roberts@arm.com>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Mon, 26 Jun 2023 20:47:17 -0600
+Message-ID: <CAOUHufZ5pAR=ySs7YyoUpum2_6tJ9jM-H608ZeQucguNGAfKTw@mail.gmail.com>
+Subject: Re: [PATCH v1 08/10] mm: Kconfig hooks to determine max anon folio
+ allocation order
+To:     Ryan Roberts <ryan.roberts@arm.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Yin Fengwei <fengwei.yin@intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-s390@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove unnecessary conditional statements to simplify the code
+On Mon, Jun 26, 2023 at 11:15=E2=80=AFAM Ryan Roberts <ryan.roberts@arm.com=
+> wrote:
+>
+> For variable-order anonymous folios, we need to determine the order that
+> we will allocate. From a SW perspective, the higher the order we
+> allocate, the less overhead we will have; fewer faults, fewer folios in
+> lists, etc. But of course there will also be more memory wastage as the
+> order increases.
+>
+> From a HW perspective, there are memory block sizes that can be
+> beneficial to reducing TLB pressure. arm64, for example, has the ability
+> to map "contpte" sized chunks (64K for a 4K base page, 2M for 16K and
+> 64K base pages) such that one of these chunks only uses a single TLB
+> entry.
+>
+> So we let the architecture specify the order of the maximally beneficial
+> mapping unit when PTE-mapped. Furthermore, because in some cases, this
+> order may be quite big (and therefore potentially wasteful of memory),
+> allow the arch to specify 2 values; One is the max order for a mapping
+> that _would not_ use THP if all size and alignment constraints were met,
+> and the other is the max order for a mapping that _would_ use THP if all
+> those constraints were met.
+>
+> Implement this with Kconfig by introducing some new options to allow the
+> architecture to declare that it supports large anonymous folios along
+> with these 2 preferred max order values. Then introduce a user-facing
+> option, LARGE_ANON_FOLIO, which defaults to disabled and can only be
+> enabled if the architecture has declared its support. When disabled, it
+> forces the max order values, LARGE_ANON_FOLIO_NOTHP_ORDER_MAX and
+> LARGE_ANON_FOLIO_THP_ORDER_MAX to 0, meaning only a single page is ever
+> allocated.
+>
+> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
+> ---
+>  mm/Kconfig  | 39 +++++++++++++++++++++++++++++++++++++++
+>  mm/memory.c |  8 ++++++++
+>  2 files changed, 47 insertions(+)
+>
+> diff --git a/mm/Kconfig b/mm/Kconfig
+> index 7672a22647b4..f4ba48c37b75 100644
+> --- a/mm/Kconfig
+> +++ b/mm/Kconfig
+> @@ -1208,4 +1208,43 @@ config PER_VMA_LOCK
+>
+>  source "mm/damon/Kconfig"
+>
+> +config ARCH_SUPPORTS_LARGE_ANON_FOLIO
+> +       def_bool n
+> +       help
+> +         An arch should select this symbol if wants to allow LARGE_ANON_=
+FOLIO
+> +         to be enabled. It must also set the following integer values:
+> +         - ARCH_LARGE_ANON_FOLIO_NOTHP_ORDER_MAX
+> +         - ARCH_LARGE_ANON_FOLIO_THP_ORDER_MAX
+> +
+> +config ARCH_LARGE_ANON_FOLIO_NOTHP_ORDER_MAX
+> +       int
+> +       help
+> +         The maximum size of folio to allocate for an anonymous VMA PTE-=
+mapping
+> +         that does not have the MADV_HUGEPAGE hint set.
+> +
+> +config ARCH_LARGE_ANON_FOLIO_THP_ORDER_MAX
+> +       int
+> +       help
+> +         The maximum size of folio to allocate for an anonymous VMA PTE-=
+mapping
+> +         that has the MADV_HUGEPAGE hint set.
+> +
+> +config LARGE_ANON_FOLIO
+> +       bool "Allocate large folios for anonymous memory"
+> +       depends on ARCH_SUPPORTS_LARGE_ANON_FOLIO
+> +       default n
+> +       help
+> +         Use large (bigger than order-0) folios to back anonymous memory=
+ where
+> +         possible. This reduces the number of page faults, as well as ot=
+her
+> +         per-page overheads to improve performance for many workloads.
+> +
+> +config LARGE_ANON_FOLIO_NOTHP_ORDER_MAX
+> +       int
+> +       default 0 if !LARGE_ANON_FOLIO
+> +       default ARCH_LARGE_ANON_FOLIO_NOTHP_ORDER_MAX
+> +
+> +config LARGE_ANON_FOLIO_THP_ORDER_MAX
+> +       int
+> +       default 0 if !LARGE_ANON_FOLIO
+> +       default ARCH_LARGE_ANON_FOLIO_THP_ORDER_MAX
+> +
+>  endmenu
 
-Signed-off-by: You Kangren <youkangren@vivo.com>
----
- drivers/net/wireless/legacy/ray_cs.c | 30 ++++++----------------------
- 1 file changed, 6 insertions(+), 24 deletions(-)
-
-diff --git a/drivers/net/wireless/legacy/ray_cs.c b/drivers/net/wireless/legacy/ray_cs.c
-index 5f97fcf5c4ba..e4ea22316a03 100644
---- a/drivers/net/wireless/legacy/ray_cs.c
-+++ b/drivers/net/wireless/legacy/ray_cs.c
-@@ -2115,30 +2115,12 @@ static void rx_data(struct net_device *dev, struct rcs __iomem *prcs,
- 	u_char linksrcaddr[ETH_ALEN];	/* Other end of the wireless link */
- #endif
- 
--	if (!sniffer) {
--		if (translate) {
--/* TBD length needs fixing for translated header */
--			if (rx_len < (ETH_HLEN + RX_MAC_HEADER_LENGTH) ||
--			    rx_len >
--			    (dev->mtu + RX_MAC_HEADER_LENGTH + ETH_HLEN +
--			     FCS_LEN)) {
--				pr_debug(
--				      "ray_cs invalid packet length %d received\n",
--				      rx_len);
--				return;
--			}
--		} else { /* encapsulated ethernet */
--
--			if (rx_len < (ETH_HLEN + RX_MAC_HEADER_LENGTH) ||
--			    rx_len >
--			    (dev->mtu + RX_MAC_HEADER_LENGTH + ETH_HLEN +
--			     FCS_LEN)) {
--				pr_debug(
--				      "ray_cs invalid packet length %d received\n",
--				      rx_len);
--				return;
--			}
--		}
-+	/* TBD length needs fixing for translated header */
-+	if (!sniffer && (rx_len < (ETH_HLEN + RX_MAC_HEADER_LENGTH) ||
-+			 rx_len > (dev->mtu + RX_MAC_HEADER_LENGTH +
-+				 ETH_HLEN + FCS_LEN))) {
-+		pr_debug("ray_cs invalid packet length %d received\n", rx_len);
-+		return;
- 	}
- 	pr_debug("ray_cs rx_data packet\n");
- 	/* If fragmented packet, verify sizes of fragments add up */
--- 
-2.39.0
-
+I don't think an MVP should add this many Kconfigs. One Kconfig sounds
+reasonable to me for now.
