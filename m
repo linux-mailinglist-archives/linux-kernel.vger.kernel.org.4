@@ -2,78 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16FD974028E
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 19:48:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CA1F740293
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 19:48:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231793AbjF0RsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 13:48:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33176 "EHLO
+        id S229818AbjF0Rs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 13:48:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229818AbjF0Rrt (ORCPT
+        with ESMTP id S231642AbjF0Rs1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 13:47:49 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D200272D;
-        Tue, 27 Jun 2023 10:47:48 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35RDnsBi028806;
-        Tue, 27 Jun 2023 17:47:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=cYQmnZv/Cl41q2rKNXtecqwirgwHkJYw3zbiXE3eNmE=;
- b=WSQXsW2L3kE1JOkjeZlYdVxtaoVjxrkzApxBhiKzGUiBlNGikfWye2yS4xrFppUkSiNy
- kVU3oMmhDzvjzHEQqspbNfgaWhEdLLfXWasNVEL4c6gG6KpyFAzu4iQDzdj6tfUtkFHO
- QFtFPBB8Vq6JQJZVIQ2Qq95RsJW9BePZdmPIGeeKiYfj4RMPTD3LJodx0F3rQ4tCwKgp
- LUTNtZbt7lVt2F5h0DH8jjBuYM4iqRilmKUYdzimtSSETg8XnmwedT4vqBM/llV45roN
- GSeG26GHSPzfPgiD1m2sgf+5q8jub8qaUGDZwsjMlvw5orHujnPRqnr3b/Jsd37Zg68I VQ== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rfcvtu5f6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Jun 2023 17:47:45 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35RHlhlm006596
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Jun 2023 17:47:43 GMT
-Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 27 Jun
- 2023 10:47:43 -0700
-Message-ID: <682ec499-ca01-51fe-340b-f5534599cc83@quicinc.com>
-Date:   Tue, 27 Jun 2023 11:47:42 -0600
+        Tue, 27 Jun 2023 13:48:27 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FB472D45;
+        Tue, 27 Jun 2023 10:48:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=FkjBSg6uoUaP1660acxrdbQw+ZjRrdzj3qfDG7Xdht8=; b=jJAvpHIdX1oIKrhsbdgIcxAnGx
+        64Bxk1WkH7XsMFWOI50daUyx6jeuxLAJ+dEF8WUlPWWfOijShufVqVEvUOgkxt5T+eZQB84x1JW8i
+        oHqDgxJVQlfAnRulXAd6GfjutKthoIyX5S7RfUkyl/ve2ocPcJ0r1jwEZ0IIUicgIvxJB1RLWg2rD
+        QcYAZV/BOLqmVicpBlizKiBLHwZFctUEPwWnHFFPVRhGHF3fo8Hy36b6ptVAOelzHc2vut6j3ncXI
+        vjXHUMBwsvqT7i2zdzzXtC9myd6v+baY4KLA3DlTHj9VLoAeJUYXvekbsvHXnekwhjePvdd6Iu23M
+        K1H0r/jA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qECnc-002whb-47; Tue, 27 Jun 2023 17:48:20 +0000
+Date:   Tue, 27 Jun 2023 18:48:20 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Sumitra Sharma <sumitraartsy@gmail.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ira Weiny <ira.weiny@intel.com>,
+        Fabio <fmdefrancesco@gmail.com>, Deepak R Varma <drv@mailo.com>
+Subject: Re: [PATCH] fs/vboxsf: Replace kmap() with kmap_local_{page, folio}()
+Message-ID: <ZJsg5GL79MIOzbRf@casper.infradead.org>
+References: <20230627135115.GA452832@sumitra.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH] dt-bindings: clock: qcom: Update my email address
-Content-Language: en-US
-To:     Taniya Das <quic_tdas@quicinc.com>
-CC:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <mturquette@baylibre.com>, <robh+dt@kernel.org>, <sboyd@kernel.org>
-References: <20230627173123.9221-1-quic_tdas@quicinc.com>
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-In-Reply-To: <20230627173123.9221-1-quic_tdas@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: bQVrNmu43njXJipJvvClg3f1gKb5Qkiq
-X-Proofpoint-GUID: bQVrNmu43njXJipJvvClg3f1gKb5Qkiq
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-27_12,2023-06-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
- adultscore=0 suspectscore=0 spamscore=0 lowpriorityscore=0 clxscore=1011
- malwarescore=0 priorityscore=1501 mlxscore=0 mlxlogscore=503 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
- definitions=main-2306270161
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230627135115.GA452832@sumitra.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,10 +50,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/27/2023 11:31 AM, Taniya Das wrote:
-> Update my email address from the defunct codeaurora.org domain to the
-> current quicinc.com domain.
-> 
-> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
+On Tue, Jun 27, 2023 at 06:51:15AM -0700, Sumitra Sharma wrote:
+> +++ b/fs/vboxsf/file.c
+> @@ -234,7 +234,7 @@ static int vboxsf_read_folio(struct file *file, struct folio *folio)
+>  	u8 *buf;
+>  	int err;
+>  
+> -	buf = kmap(page);
+> +	buf = kmap_local_folio(folio, off);
 
-Reviewed-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+Did you test this?  'off' is the offset in the _file_.  Whereas
+kmap_local_folio() takes the offset within the _folio_.  They have
+different types (loff_t vs size_t) to warn you that they're different
+things.
+
