@@ -2,70 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0531374031F
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 20:23:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43F4D740328
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 20:25:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230453AbjF0SXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 14:23:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51878 "EHLO
+        id S229483AbjF0SY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 14:24:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229733AbjF0SXL (ORCPT
+        with ESMTP id S231131AbjF0SYu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 14:23:11 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2589B107;
-        Tue, 27 Jun 2023 11:23:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687890190; x=1719426190;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=X8aFP6n5+e9dFtrJDRcwbrABsg9kq0BYA5F9HfO3IHY=;
-  b=bL6ATSs0GeLWfYZwiu08neoVBr1iTRS4TLXJJHap4mgUM+1CigvZ3zjR
-   24lPoEn5NditnlxK7TUeFJa53X+VjH5oROR6Yi+apfKE+rU5KQisTIeN7
-   33yGLTZGNk3JarKFAag5a0zPjSHzrqeykAf6Cq/SoNAr5a7NS24jIWuqA
-   0dfKHR5zHkYb0ZCuzob6NKoMuoBYWSVxAu3J/FQrYZqbtwnIxTMnhsrtK
-   3gHDvdFgbth1hAZ3oeftXKsLOcWnbZsR50KH6T3HqtdCqhj1Fbpxc0a5s
-   FzxFrR3Vby2M+sl3IagHk9/6IGF/Qf+Md4tcAtAAW0jcv7spuH7XUAv3e
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="359148466"
-X-IronPort-AV: E=Sophos;i="6.01,163,1684825200"; 
-   d="scan'208";a="359148466"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 11:23:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="716633644"
-X-IronPort-AV: E=Sophos;i="6.01,163,1684825200"; 
-   d="scan'208";a="716633644"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga002.jf.intel.com with ESMTP; 27 Jun 2023 11:23:05 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qEDLE-000OhP-03;
-        Tue, 27 Jun 2023 21:23:04 +0300
-Date:   Tue, 27 Jun 2023 21:23:03 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Xu Yilun <yilun.xu@intel.com>
-Cc:     Peter Colberg <peter.colberg@intel.com>, hao.wu@intel.com,
-        gregkh@linuxfoundation.org, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org, aaron.j.grier@intel.com,
-        tianfei.zhang@intel.com, russell.h.weight@intel.com,
-        matthew.gerlach@linux.intel.com, marpagan@redhat.com,
-        lgoncalv@redhat.com
-Subject: Re: [PATCH v2] fpga: dfl: afu: use PFN_DOWN() and PFN_PHYS() helper
- macros
-Message-ID: <ZJspBy/imk1qH+s2@smile.fi.intel.com>
-References: <2023061908-subscribe-persuader-9b9f@gregkh>
- <20230619195634.11366-1-peter.colberg@intel.com>
- <ZJqBE1mCjSaRIvyt@yilunxu-OptiPlex-7050>
+        Tue, 27 Jun 2023 14:24:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CDECB8;
+        Tue, 27 Jun 2023 11:24:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CF1E7611F1;
+        Tue, 27 Jun 2023 18:24:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59CB0C433C0;
+        Tue, 27 Jun 2023 18:24:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687890288;
+        bh=U0Ae3RQ4h+5yMS5yiPM4dAg4Cs5OyI4YsmDbSn9P54M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iBWhHyi7OhQxiwwl1PoY0idtgffmlQUHdUCFfMJgHk+cdg8J3eNys3Slb4cxWnCof
+         X/6NljQ13ZORuOfC5mtqQF6jL5eECEGZWYoycQr3WgWNv4WKTY8mD2Lm/vj5hB2H3U
+         SH3tZN3MLf7ggPvxZ3/YEqEn+B4jcwq4n8Aav6fw81+NT39/M4dfBgxAqymEN+EYaE
+         jqCtAr/PSn/OrT6HJSKM9PK8lixaCmT8U1O3zPdtth3oe3DQRC++0U9f92PFAFLpuV
+         vfR4QLL1J5OWOYZkPMCc1oK33pI/kTdwJEhdoK4B7AseSVcECzgV7/0UJ9rtaRsiat
+         Mk3Z0hx1E77QA==
+Date:   Tue, 27 Jun 2023 19:24:39 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Charlie Jenkins <charlie@rivosinc.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Zong Li <zong.li@sifive.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guo Ren <guoren@kernel.org>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Sergey Matyukevich <sergey.matyukevich@syntacore.com>,
+        David Hildenbrand <david@redhat.com>,
+        Mayuresh Chitale <mchitale@ventanamicro.com>,
+        Qinglin Pan <panqinglin2020@iscas.ac.cn>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Brian Cain <bcain@quicinc.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Anup Patel <anup@brainfault.org>,
+        Sunil V L <sunilvl@ventanamicro.com>,
+        Evan Green <evan@rivosinc.com>,
+        Guillaume Tucker <guillaume.tucker@collabora.com>,
+        Mark Brown <broonie@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:EXEC & BINFMT API" <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH 0/2] Restrict address space for sv39,sv48,sv57
+Message-ID: <20230627-eternity-mulberry-e1f4babf06a1@spud>
+References: <20230626183611.40479-1-charlie@rivosinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="ZFVJLaa7EzBd/kk7"
 Content-Disposition: inline
-In-Reply-To: <ZJqBE1mCjSaRIvyt@yilunxu-OptiPlex-7050>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+In-Reply-To: <20230626183611.40479-1-charlie@rivosinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,48 +92,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 02:26:27PM +0800, Xu Yilun wrote:
-> On 2023-06-19 at 15:56:34 -0400, Peter Colberg wrote:
 
-...
+--ZFVJLaa7EzBd/kk7
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > -	int npages = region->length >> PAGE_SHIFT;
-> > +	int npages = PFN_DOWN(region->length);
-> 
-> I don't much prefer this change, it is not doing the phy addr to pfn
-> convertion. The macro name doesn't match what is doing here.
+Hey Charlie,
 
-This macro converts length to pages. And it's not about phy addr.
+On Mon, Jun 26, 2023 at 11:36:02AM -0700, Charlie Jenkins wrote:
+> Make sv39 the default address space for mmap as some applications
+> currently depend on this assumption. The RISC-V specification enforces
+> that bits outside of the virtual address range are not used, so
+> restricting the size of the default address space as such should be
+> temporary. A hint address passed to mmap will cause the largest address
+> space that fits entirely into the hint to be used. If the hint is less
+> than or equal to 1<<38, a 39-bit address will be used. After an address
+> space is completely full, the next smallest address space will be used.
+>=20
+> Documentation is also added to the RISC-V virtual memory section to expla=
+in
+> these changes.
 
-...
+I don't know what went wrong here, but this never ended up in patchwork
+for some reason, although it has appeared on lore. That seems to be via
+the docs mailing list, rather than linux-riscv. Could you speak to Atish
+and see if he knows what went wrong?
 
-> > -	long npages = region->length >> PAGE_SHIFT;
-> > +	long npages = PFN_DOWN(region->length);
-> 
-> ditto
+Cheers,
+Conor.
 
-Ditto.
+>=20
+> Charlie Jenkins (2):
+>   RISC-V: mm: Restrict address space for sv39,sv48,sv57
+>   RISC-V: mm: Update documentation and include test
+>=20
+>  Documentation/riscv/vm-layout.rst             | 20 ++++++++
+>  arch/riscv/include/asm/elf.h                  |  2 +-
+>  arch/riscv/include/asm/pgtable.h              | 21 ++++++--
+>  arch/riscv/include/asm/processor.h            | 41 +++++++++++++---
+>  tools/testing/selftests/riscv/Makefile        |  2 +-
+>  tools/testing/selftests/riscv/mm/Makefile     | 22 +++++++++
+>  .../selftests/riscv/mm/testcases/mmap.c       | 49 +++++++++++++++++++
+>  7 files changed, 144 insertions(+), 13 deletions(-)
+>  create mode 100644 tools/testing/selftests/riscv/mm/Makefile
+>  create mode 100644 tools/testing/selftests/riscv/mm/testcases/mmap.c
+>=20
+>=20
+> base-commit: eef509789cecdce895020682192d32e8bac790e8
+> --=20
+> 2.34.1
+>=20
 
-...
+--ZFVJLaa7EzBd/kk7
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> > -	int npages = region->length >> PAGE_SHIFT;
-> > +	int npages = PFN_DOWN(region->length);
-> 
-> ditto
+-----BEGIN PGP SIGNATURE-----
 
-Ditto.
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJspZgAKCRB4tDGHoIJi
+0ilsAQC1hx/GF+DR3SpYjaRTOUhL/owNo2aM6O7rh8R9fc3o4QD7Bln7maXQOnuM
+AlYliIy/ysDkNeLNH5z4t4XUqM/PLgI=
+=za3L
+-----END PGP SIGNATURE-----
 
-...
-
-> > -	offset = vma->vm_pgoff << PAGE_SHIFT;
-> > +	offset = PFN_PHYS(vma->vm_pgoff);
-> 
-> ditto. The variables are offsets within file, not phys addr & pfn.
-
-Here I probably can agree.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+--ZFVJLaa7EzBd/kk7--
