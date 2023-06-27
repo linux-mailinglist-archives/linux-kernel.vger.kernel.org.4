@@ -2,95 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF1FE73FB28
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 13:33:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FEBD73FB2F
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 13:36:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231522AbjF0LdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 07:33:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46408 "EHLO
+        id S231561AbjF0Lgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 07:36:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231438AbjF0Lc6 (ORCPT
+        with ESMTP id S231410AbjF0Lgb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 07:32:58 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67C2326B8;
-        Tue, 27 Jun 2023 04:32:57 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2b69a48368fso40301541fa.0;
-        Tue, 27 Jun 2023 04:32:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687865575; x=1690457575;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=latEXESOogZnUPOdUSC1WbprrLaf0ZKBvwN2Fizyc0w=;
-        b=SVXDWSDmBzVoIu4D2vclVwhFmmc6g4IsDJlpskbMT9qU4+qYosbHhFmFJydwkLbol+
-         RykW0MvYUyQf4xD/X3hWvkAYKmUHqQ61pqu7IBpYvuImZB7j+/wdvVhi/nAJxqhKMo3y
-         ZEw/DEhiGCQJTsfjR6O+7kLo+2A5us3qkp4OKDLpzeZcgALr0gJcCvaUrGFhjE6xL5b7
-         alHUUHavuGQRs0HgelnEkBUZQFFekVrkG0Hpa+rUTp3UOoQbYTZ2iZMexMRA3a1hlo2D
-         CXeGXUoUXHuN9Gug694Ev0pMoLj3/T0XTlYie3CGC+pw7Sj10FjBb9xXBaimwkgy6Txv
-         5r4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687865575; x=1690457575;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=latEXESOogZnUPOdUSC1WbprrLaf0ZKBvwN2Fizyc0w=;
-        b=MMcW1ZDVCDhZIWutzlJ1PKDSpFXbBsY5BBsmQ7mdOiPrL4bYDQ/4MjGWH4ZFyv9gM+
-         Rus/mGXjYDqEUpe/PYTv+5Vw4LG461+c5WluK04EWnCbS6LW6t2xFRfCUtRyDtCA/Ki+
-         ZteaXgosLrSSvD844IFWKhiWUuCrzHsE2pYR/mGKv0P95FRbevbnWRsMecUB2yjbaFVB
-         R4ZJGwImoIAeg7V07fUbXHtlQ8DbginEA8M8Dp4xrMnwRNsGJJc5tDR9lQcVOqBFkd0x
-         LehmSH6cLzHJ9dECgx/KM+b9A3a6FJJ50f34OrMKNApH/OTMtAWpisy1n1YzSgXWlv3b
-         q9CQ==
-X-Gm-Message-State: AC+VfDyShe/TdA6/3e6fIi33bDIdX3EcMD7pRuwYRw3nvezIBX90rc2T
-        pCB5aSjvmYO38xbqe1DeKkE=
-X-Google-Smtp-Source: ACHHUZ4+fT4OuXpoIilYTnkrqDKpDJyrPtrc9BdzgajLJRgmaHKRTRVwrIPAKVjVZJaxUcf9rhkRxQ==
-X-Received: by 2002:a19:6d0c:0:b0:4f8:4245:ed57 with SMTP id i12-20020a196d0c000000b004f84245ed57mr19871536lfc.35.1687865575347;
-        Tue, 27 Jun 2023 04:32:55 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id f10-20020a7bcd0a000000b003fa99969e61sm4868605wmj.45.2023.06.27.04.32.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jun 2023 04:32:54 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Clemens Ladisch <clemens@ladisch.de>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] ALSA: oxfw: make read-only const array models static
-Date:   Tue, 27 Jun 2023 12:32:53 +0100
-Message-Id: <20230627113253.700065-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.39.2
+        Tue, 27 Jun 2023 07:36:31 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1608326B8;
+        Tue, 27 Jun 2023 04:36:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687865791; x=1719401791;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=b60RLvgCgE69eplE2j+D0M1hJ0JYNceI2V64TdDSM24=;
+  b=CSc+55OxcVET9qKusGJOdCQOvSjOXZv7/D0JoflxRXx9f8p4jZ0swpnq
+   lxwhMpR3JvsLSdFQVCNSX0kBIpv/H42WQTJt0fX5tuQeODLrNu5OmHUxd
+   TMPHeOmjtFTUVtjVLLBg4j6n7e2R0SC8q3tRVpioNscA3Vji8Ow9QZUgj
+   35G9NCJDY8ibqZLyOVj/P15TzDgMFJIOVVCFlIO954n8N/E0Z1KgFmTGv
+   WVwqBGGLGvYO4HieOCt4c/KC7h4d4i7UrZagmJ/zYOn1UZkJHKTLMuW2n
+   mXbDm/AvqP+z2TjsF6Pmx7V33WNWWowBYc5BnlpuJ/gTmNrwTzDu8ogVM
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="361586295"
+X-IronPort-AV: E=Sophos;i="6.01,162,1684825200"; 
+   d="scan'208";a="361586295"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 04:36:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="806445038"
+X-IronPort-AV: E=Sophos;i="6.01,162,1684825200"; 
+   d="scan'208";a="806445038"
+Received: from rbhaumik-mobl2.ger.corp.intel.com (HELO box.shutemov.name) ([10.251.217.121])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 04:36:23 -0700
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id D57B0103738; Tue, 27 Jun 2023 14:36:20 +0300 (+03)
+Date:   Tue, 27 Jun 2023 14:36:20 +0300
+From:   "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>
+To:     "Huang, Kai" <kai.huang@intel.com>
+Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "nik.borisov@suse.com" <nik.borisov@suse.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "imammedo@redhat.com" <imammedo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>, "Gao, Chao" <chao.gao@intel.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "Williams, Dan J" <dan.j.williams@intel.com>
+Subject: Re: [PATCH v12 05/22] x86/virt/tdx: Add SEAMCALL infrastructure
+Message-ID: <20230627113620.pnxqp7cel66zuldi@box.shutemov.name>
+References: <cover.1687784645.git.kai.huang@intel.com>
+ <b2a875fd855145728744617ac4425a06d8b46c90.1687784645.git.kai.huang@intel.com>
+ <20230627094856.6udzuhzhygc4nzit@box.shutemov.name>
+ <102e45dd81589625ed064a742508597e0d118375.camel@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <102e45dd81589625ed064a742508597e0d118375.camel@intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Don't populate the const array on the stack, instead make it static.
+On Tue, Jun 27, 2023 at 10:28:20AM +0000, Huang, Kai wrote:
+> > Or is that wrapper only used for never-fail SEAMCALLs? If so, please
+> > document it.
+> > 
+> 
+> How about adding below?
+> 
+> 	Use __seamcall() directly in cases that printing error message isn't
+> 	desired, e.g., when SEAMCALL can legally fail with BUSY and the caller
+> 	wants to retry.
+> 
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- sound/firewire/oxfw/oxfw.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Looks good to me.
 
-diff --git a/sound/firewire/oxfw/oxfw.c b/sound/firewire/oxfw/oxfw.c
-index 9523479fa94a..63d40f1a914f 100644
---- a/sound/firewire/oxfw/oxfw.c
-+++ b/sound/firewire/oxfw/oxfw.c
-@@ -44,7 +44,7 @@ struct compat_info {
- 
- static bool detect_loud_models(struct fw_unit *unit)
- {
--	const char *const models[] = {
-+	static const char *const models[] = {
- 		"Onyxi",
- 		"Onyx-i",
- 		"Onyx 1640i",
 -- 
-2.39.2
-
+  Kiryl Shutsemau / Kirill A. Shutemov
