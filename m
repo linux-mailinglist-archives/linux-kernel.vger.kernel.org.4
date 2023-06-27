@@ -2,129 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B47DE73FBE1
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 14:20:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEED773FBE8
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 14:22:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230109AbjF0MUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 08:20:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39882 "EHLO
+        id S230249AbjF0MWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 08:22:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjF0MUB (ORCPT
+        with ESMTP id S230138AbjF0MWc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 08:20:01 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E62731999;
-        Tue, 27 Jun 2023 05:19:59 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2b69e6cce7dso37085501fa.2;
-        Tue, 27 Jun 2023 05:19:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687868398; x=1690460398;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=iZBRO+X3paThKk+MmzNq9+BGJ0hxRpP3TLZQHUudoOA=;
-        b=rkWAm1ADq12z0SXn/Nh9CR+6SU/6HzEv8u8Lbh6hltITBw/8S6l//V3UDxzFMbw16r
-         i1701QGXayvqF7ZHyboxKnmY9MWQ7XVuJ6+8BqRdP4UO/mrtDbh7AM0CPCsxAPEQttB7
-         BQUk+cxmJI51j86nQUmbyrcsUYX7qyfKiul+OhFdZSfHjJ5tbWqrohcwHp27eGJLl798
-         Ru8oFzmLKWq4NLeF+gp36mJ/9ZjfSZinNoAFtSFquMo0JDBAKaKux0fwV3emZTJOpgMn
-         xDhtUaNYr16dU6ERQd1l6i8t4Eh4A96cBvAubnTlm4A3tr16a2srSN8Q2Mj8mFULTF+i
-         SO1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687868398; x=1690460398;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iZBRO+X3paThKk+MmzNq9+BGJ0hxRpP3TLZQHUudoOA=;
-        b=I1nE3jgdWl0wHxxQjNysySOEGYNBbSMJFIq79pxsD8GK95cU3E4C2Lgy6gy7MHp5Kf
-         H4LIwUOcdWtHiUXrpjXauUvx60G1eIChC4xq+osZZG2InFR2jZV52u6dx4enRrd9qs+L
-         PGaBs7j7YurzFtgonu9oTUZ+FbKm26pPoRtJ0u3t0nRh/hS1Rn5w4/X9jtu0RM/Bc/Sx
-         +kNRItwFgtB/oIuCfiuwpvaArOyfQpNsJ8rbYaCYU0caBstHAV2BrQJy/Trs6ZewUbDd
-         OE/8Nbw3hl9V6K2fINveUXmvaRIZh4R/1S37cKWt1U1cQbHsnogHEKPTVbN+3MNyWV5g
-         xHkA==
-X-Gm-Message-State: AC+VfDyGXFdxITi4cqJcKsfRkIGdoKijeryYaYaqre4A8wo8uRRt5ozJ
-        BY2HyqiRH5b0r9XCMXgU5uw=
-X-Google-Smtp-Source: ACHHUZ6ZdlfEPxn7Ed0+iaM3WCuxa27iQquL4Z5Cz/jXe2bpcFIDMotV/pP4MwZ8x94+hCXf864wkQ==
-X-Received: by 2002:a2e:948b:0:b0:2b4:491d:8d53 with SMTP id c11-20020a2e948b000000b002b4491d8d53mr19561334ljh.45.1687868397832;
-        Tue, 27 Jun 2023 05:19:57 -0700 (PDT)
-Received: from skbuf ([188.25.159.134])
-        by smtp.gmail.com with ESMTPSA id i23-20020a50fc17000000b0051c7b5692easm3769981edr.7.2023.06.27.05.19.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jun 2023 05:19:57 -0700 (PDT)
-Date:   Tue, 27 Jun 2023 15:19:55 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Ravi Gunasekaran <r-gunasekaran@ti.com>
-Cc:     Ido Schimmel <idosch@nvidia.com>, kuba@kernel.org,
-        Nikolay Aleksandrov <razor@blackwall.org>, davem@davemloft.net,
-        edumazet@google.com, pabeni@redhat.com, bigeasy@linutronix.de,
-        simon.horman@corigine.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, rogerq@kernel.org
-Subject: Re: [PATCH v2 net-next] net: hsr: Disable promiscuous mode in
- offload mode
-Message-ID: <20230627121955.4mhwwkc3i4knrsxg@skbuf>
-References: <20230614114710.31400-1-r-gunasekaran@ti.com>
- <20230615223736.0577fb11@kernel.org>
- <ZJA4fIH6vm9cO2VG@shredder>
- <a93ff762-215b-fbc1-9e23-b186421cb176@ti.com>
+        Tue, 27 Jun 2023 08:22:32 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2052.outbound.protection.outlook.com [40.107.117.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27EE11BE8
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 05:22:30 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mUNv2EBrJPodZxDTZQj1hoFx4sehpadyHMI2jZlHYLyhwwXr5deFqXFxQCM+7C1SNSS8scDVYKy0c1Foo8TUIIsQf7RcByYx8lrzY1D02c6tpiDovGO+TgtlLjUeeZ35NCtwzQboz09z4UCh+vqTL0oEVVh0KdADOeNBduxsGzKJ+jTgR3fNi0wRdccKoCzJdf1+ck2M2yEDkt/kEwri4lpyJHt+HJ2C5MiLwG1T6rS+QV2bt0JSDKXTB1SYOb9mwRKbOZikSdg1N5W/gnl+FPg3E4EZGwhc1NHZ4VduJZ7W8441u1rrSxK7Mz2m11uvxMl/e4Ynu8hL+gvGPzu0pQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RVRJ4yj55AQDnJwiQ4jidx5L+KkMG/7iVIne/1PWLHg=;
+ b=IT159XsOV6MJi30kPEX+kJ4b56Aje2jSFL0F3yr2k/tQJe5XQHqKa1xBFscCRR8RWPEfDXtn1pQQESNqcO5ZzUu+hd1//FzELXncjiTvsP2NryhXY2aEiHi//isxEalSUs+YNe4adkB/6uvv5sz3plQRHBl6ERxh3IeCd//SzCSY8MmiOGNoADUWO5tllWEc/TmpZddBR9pBPlrwwy2JamsOCNEy81yOJGKRrn11rRaYb62TkX7Yf187R35bfMXtH4IsEyb8HA11yUSXGxpSx4Ct+5LN+ctuxV7GH/WBjI5yLzK3lg7xiltJ3HIP5YOmu47k3vswE7VBsvELzPJb8w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oppo.com; dmarc=pass action=none header.from=oppo.com;
+ dkim=pass header.d=oppo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oppo.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RVRJ4yj55AQDnJwiQ4jidx5L+KkMG/7iVIne/1PWLHg=;
+ b=P/SYs1ZdVhI1x/AzWcR82nRQY8u/tKfPoNZEm52owc80fTZ4PQTUZ4IFHt6j/PKwi0H5EmRm9yPLRP/+1+MjnZPLtHtNowzsyqivGkh5yc5KVz5BQnnyDe6H9Hi3vtTiGkXy+fsRtalufAS98njAc/xJ9zsP09qdqrWFxZRGXT0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oppo.com;
+Received: from SI2PR02MB5148.apcprd02.prod.outlook.com (2603:1096:4:153::6) by
+ PSBPR02MB4469.apcprd02.prod.outlook.com (2603:1096:301:e::15) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6521.23; Tue, 27 Jun 2023 12:22:26 +0000
+Received: from SI2PR02MB5148.apcprd02.prod.outlook.com
+ ([fe80::6297:13a6:41f1:e471]) by SI2PR02MB5148.apcprd02.prod.outlook.com
+ ([fe80::6297:13a6:41f1:e471%7]) with mapi id 15.20.6521.026; Tue, 27 Jun 2023
+ 12:22:25 +0000
+From:   Sheng Yong <shengyong@oppo.com>
+To:     jaegeuk@kernel.org, chao@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Sheng Yong <shengyong@oppo.com>
+Subject: [PATCH RFC] f2fs: only set release for file that has compressed data
+Date:   Tue, 27 Jun 2023 20:21:53 +0800
+Message-Id: <20230627122153.1557656-1-shengyong@oppo.com>
+X-Mailer: git-send-email 2.40.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2P153CA0001.APCP153.PROD.OUTLOOK.COM (2603:1096:4:140::7)
+ To SI2PR02MB5148.apcprd02.prod.outlook.com (2603:1096:4:153::6)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a93ff762-215b-fbc1-9e23-b186421cb176@ti.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SI2PR02MB5148:EE_|PSBPR02MB4469:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1ad00763-6d3d-4fe7-bace-08db77092a39
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: yQRSpoBPYRELFqlsPMVlDhgnnzsj6qluOWxxJe0joJDX4pS9NzV5E1uWamu5y/czaSdWFJ7HPHtBozgN9AwkoPESbUPbhUk0oZVvAwYWVveRPiNVukuKACj4C2L9/icTnOz6lcqcLxVwB3Vy9GHjgf1m7T8i/55IA89TQ2i1dxpCiIYCZRjgeoOp3TCDe+dHt3j/rKRwpj7p5KFrwPvEzUN4HQYKWoB4HbSu3ooRVokIjT5CAWaqY+sqmYnLDZkihw1USGfvHy5zM58npQ3Z/OmRAbT1tKobZQINp77rUctiU9tIquRp9ddSlHrUa0ARrE5koglKdpuLHsiv13gU5Fkp9RspdDbVibQjwPVU0WKChZILCOZt+xZ6yfwMiOLTmQ3REAw3d28xgjkimOSpNBqpyf16gYT0jdr/nc0Mj+txDsGvjMNmwFXf32MI0/FlrIhtipSAEnYa/LFLsOC9eVQ0E+TpKiHZvMXd/Tzl5IW/owyRwVIZWngrnKoZBdsyVTDlhv1Wyem3Nnp1YaCly1ltLGr5IdLSt/e3u/SEGzdXj44oiItlT4R/BVExgrD//9wUXmge1r+B6w7EcpwxhSCB5e89RLjBopJIcuJYq0cPqsFF5xquhBt3IEuS4J4d
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SI2PR02MB5148.apcprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(39860400002)(366004)(376002)(346002)(396003)(451199021)(6506007)(66476007)(36756003)(38100700002)(5660300002)(41300700001)(8676002)(66556008)(86362001)(66946007)(38350700002)(6486002)(186003)(1076003)(2616005)(316002)(107886003)(52116002)(478600001)(26005)(4326008)(4744005)(6512007)(2906002)(83380400001)(8936002)(6666004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vb+thm+6V7MtjslUv3qRt8aUCbVPia0/WsPdSJnW6YeJdxKPm3I31PXQ4Q7j?=
+ =?us-ascii?Q?6alSSSulo40wwY4A3bmnbtLRt5a4lJE+98MsVuxRRvmsEnNT4ixxnM4cOWfp?=
+ =?us-ascii?Q?VfnHXRN2FO05yifKdPl6ex+eS34wVQkT/X0/hMRPtQ3H+Tn60dWN6DUqnl32?=
+ =?us-ascii?Q?GQehw3FcOPL5zavmsTs2nOkxcwLge2kMwLZGxVhxCG0twYc31JVVzIvDOVaL?=
+ =?us-ascii?Q?k23kfB3ZJmRXsD7b18fg5gNlAoLRbuyxS470NKqZ1gqLhUI9XzeRttexGBRE?=
+ =?us-ascii?Q?NWcyofH1n+vrVdxQgh3rWLvYLZPc/7xMNveTnZhGlzVxl5dvrZJJFb1gVrU+?=
+ =?us-ascii?Q?O48tvBFze4At75usEeELLzbgfYUbg4AEEtbCs9W5HjZ/eeaxN1FSHEyyfK9t?=
+ =?us-ascii?Q?3oeeKH3o6zRdmKvVnp+Jxm8dlKKdPKUTx5OmHvkrct/qXrnUSmX/0nfAqXQj?=
+ =?us-ascii?Q?fgqgj5vCO9ACQMHYYmWQAXIqcitYy2yrO+hxjFiHZZgeA4PwUAaxnwPXF8tl?=
+ =?us-ascii?Q?FlSq4ZLXzzfjhD9fd5tVj7qjWw/D5MwGhR2RGCPjNAORooEscg8uXrnzP2fh?=
+ =?us-ascii?Q?Kxeddf2puz3R89VfY5ku91S7HtlIgL3iuldsZMMD2cmZFKvuW9p9HuQDcGtZ?=
+ =?us-ascii?Q?Tq5MvjdDs766+TALZ8NKaKINBfZ0MS6UY8PHqwXcfOBF01/HgU33I51bqice?=
+ =?us-ascii?Q?6vekKJdmrOcBePiJ5gUo4b/jcrDTKhYiNOmBypzHhtrey1Q5EgoV/ZThRyiZ?=
+ =?us-ascii?Q?vTtgyR6gWcONh0Ed5dUZ5ocN4txl0AEMqPjGd3yG2O1nbUEvsVCchfwY7OBF?=
+ =?us-ascii?Q?0dV7uBnWrP+UppentSvubLGGxfIAXniQA8LjlzELsdwzVSVPtPuingv4MnmZ?=
+ =?us-ascii?Q?Sm0RT9akx9h96xOyohZXn9iPr5mkH1OOY5IzotCPFGUUpa2QA7S+oopGfNjO?=
+ =?us-ascii?Q?bnh087lrjfNWnUnYdtBIZAPQovv1UasPmMyXfMNKFsCBiOzFIygD7SPKw+fk?=
+ =?us-ascii?Q?+ePPU36I0/ucQEF32FKfIzid3c5HLsU687ZAzOyWd5b9+PTFT2YewNsqFZ18?=
+ =?us-ascii?Q?6dbCcf/sQcVfaHa7XWFaHW51EVYhNvHn+vmAEL1zRPQECNRV9RfguWtzsX3j?=
+ =?us-ascii?Q?NlRNJJcVnPsAWDwbjB/ZVT/63pljRE1yShDCMC5kQHin8MlPb3qUpDBjvTPn?=
+ =?us-ascii?Q?JO0/DWHvNtwM5oc2U6PQaWAU1NgqpY/B4zyvDNmZ4+YhdHbFVduSqIWkgYx9?=
+ =?us-ascii?Q?clCqkaidvMnPHiG91x7/LOIq/W62YyiFiWYAArdSyYJV0mKMyFyl7Xbpqvut?=
+ =?us-ascii?Q?2KnTaDuF/0jR+dvLxsNYyA/dUr/hx9qvUbcPAv0hFYKUB3nOhcVQK+RhqOvR?=
+ =?us-ascii?Q?zQSVhRcjh/xXI8iGrqE4VIp5WuJwapm39PGn2IPzG+nX1UCkLHbKpX3nLfhI?=
+ =?us-ascii?Q?S88jSWwiBHQKNQZRCEo9og4KPUiuCSXBgYJt8umrBd1JVCTZeDWF/xxmVkQi?=
+ =?us-ascii?Q?0kvpoDUmJqgkfHZ/2NMlQad9YEBxzYdXR+w9Z0gWV/RM+xIVno9UKtPHQ/xT?=
+ =?us-ascii?Q?pdPSJVc2PxYnHe2h82qoktr6Jb4j/k+gE3wV7FFu?=
+X-OriginatorOrg: oppo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1ad00763-6d3d-4fe7-bace-08db77092a39
+X-MS-Exchange-CrossTenant-AuthSource: SI2PR02MB5148.apcprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jun 2023 12:22:25.1357
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f1905eb1-c353-41c5-9516-62b4a54b5ee6
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: gfc7DhzkzDk24AOHR4mAAsinEVnXqiNHAuBKChIY0x4E/0bE13HBzMzbq6RrViLlQSOMzUVnQulolw5RCz01aw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PSBPR02MB4469
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 19, 2023 at 05:37:16PM +0530, Ravi Gunasekaran wrote:
-> > It's not clear to me why you want to disable promiscuous mode. I'm not
-> > familiar with HSR, but I assume you want the hardware to forward all the
-> > packets between the two ports and not only specific DMACs.
-> >
-> > How does the underlying device implement "promiscuous mode" that you
-> > benefit from disabling it?
->
-> While creating an HSR interface using two slave nodes, the promiscuous mode
-> is set via dev_set_promiscuity() in hsr_portdev_setup() for both the ports.
-> And then in the HSR driver, a packet is forwarded to the other
-> slave port (physical port) and also the HSR master if it is intended for it.
->
-> Before forwarding, a check is done in
->
-> static void hsr_forward_do(struct hsr_frame_info *frame)
-> {
-> ...
->
-> if (hsr->proto_ops->drop_frame &&
->     hsr->proto_ops->drop_frame(frame, port))
->          continue;
->
-> ...
-> }
->
-> And the drop_frame callback is as below
->
-> bool hsr_drop_frame(struct hsr_frame_info *frame, struct hsr_port *port)
-> {
->         if (port->dev->features & NETIF_F_HW_HSR_FWD)
->                 return prp_drop_frame(frame, port);
->
->         return false;
-> }
->
->
-> The driver drops these packets and does not forward to any port at all.
-> But since promiscuous mode is enabled, CPU cycles are consumed. So benefit
-> of disabling promiscuous mode is saving CPU cycles.
->
-> So in this patch, I check for NETIF_F_HW_HSR_FWD and then take a
-> call to enable/disable the promiscuous mode during HSR interface creation.
+If a file is not comprssed yet or does not have compressed data,
+for example, its data has a very low compression ratio, do not
+set FI_COMPRESS_RELEASED flag.
 
-Can the hardware be configured to not send to the CPU packets that the
-CPU is going to drop anyway? IFF_PROMISC is about receiving packets with
-any MAC DA, not about sending all packets to the CPU. With offloading
-drivers, there is a difference between the 2, because the RX path of a
-port is not necessarily the same as the CPU receive path - the
-destination of a packet can simply be another port.
+Signed-off-by: Sheng Yong <shengyong@oppo.com>
+---
+ fs/f2fs/file.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+index b1a4de3b53e01..0f54c1ff02f71 100644
+--- a/fs/f2fs/file.c
++++ b/fs/f2fs/file.c
+@@ -3510,13 +3510,15 @@ static int f2fs_release_compress_blocks(struct file *filp, unsigned long arg)
+ 	if (ret)
+ 		goto out;
+ 
++	if (!atomic_read(&F2FS_I(inode)->i_compr_blocks)) {
++		ret = -EPERM;
++		goto out;
++	}
++
+ 	set_inode_flag(inode, FI_COMPRESS_RELEASED);
+ 	inode->i_ctime = current_time(inode);
+ 	f2fs_mark_inode_dirty_sync(inode, true);
+ 
+-	if (!atomic_read(&F2FS_I(inode)->i_compr_blocks))
+-		goto out;
+-
+ 	f2fs_down_write(&F2FS_I(inode)->i_gc_rwsem[WRITE]);
+ 	filemap_invalidate_lock(inode->i_mapping);
+ 
+-- 
+2.40.1
+
