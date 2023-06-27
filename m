@@ -2,74 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2958773FD5D
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 16:07:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3575E73FD5B
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 16:06:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231378AbjF0OHW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 10:07:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51984 "EHLO
+        id S231365AbjF0OGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 10:06:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231351AbjF0OHU (ORCPT
+        with ESMTP id S229957AbjF0OGx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 10:07:20 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FA872D6A;
-        Tue, 27 Jun 2023 07:07:18 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35RDPSLg028459;
-        Tue, 27 Jun 2023 16:06:58 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=selector1; bh=ua1duTEqW5T5GC/jOwW1wwLIXtNNQBIm6X1goj4Ur48=;
- b=Z6mbBX/eqCNPGEa54p9IF127hCNBgjNjrDkmb6pEuKordVcGYpas1Dxk3Ma1R7ik7h7m
- oEL2o8UGaKyrqrO9k7J7kxTXUuipLc7efEpDS9xuIxJ3nlJZZ5N5GOsZ+IC/yLTDlRv4
- d2nAfjI1oU+pLTTSd06JW6AMSqOX8sfevoeOgzxpvio2Uknihqv7LhZK9iKmZzr4rsvj
- TFO7o+Q3mIMZVuetOmd8REzPUYOP1U0PwmE5J/y8aq8Gu3Ld9Og6p6fraboq9DfIYWDB
- vzSiZZv121CP6/WsTQ/RsAfRBo8II7VNlV45K2vT6Ohqo29Izuonjl2F3iaoTGABOCyE mg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3rg0n188qv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Jun 2023 16:06:58 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 67515100057;
-        Tue, 27 Jun 2023 16:06:50 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 5DB4323C6AC;
-        Tue, 27 Jun 2023 16:06:50 +0200 (CEST)
-Received: from gnbcxd0016.gnb.st.com (10.129.178.213) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Tue, 27 Jun
- 2023 16:06:49 +0200
-Date:   Tue, 27 Jun 2023 16:06:40 +0200
-From:   Alain Volmat <alain.volmat@foss.st.com>
-To:     <yqsun1997@gmail.com>
-CC:     <mchehab@kernel.org>, <matthias.bgg@gmail.com>,
-        <angelogioacchino.delregno@collabora.com>,
-        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <499671216@qq.com>
-Subject: Re: [PATCH] OOB read and write in mdp_prepare_buffer
-Message-ID: <20230627140640.GA3605278@gnbcxd0016.gnb.st.com>
-Mail-Followup-To: yqsun1997@gmail.com, mchehab@kernel.org,
-        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, 499671216@qq.com
-References: <20230627082731.1769620-1-yqsun1997@gmail.com>
+        Tue, 27 Jun 2023 10:06:53 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD393295B;
+        Tue, 27 Jun 2023 07:06:50 -0700 (PDT)
+Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Qr62c2BvtzqTcQ;
+        Tue, 27 Jun 2023 22:06:32 +0800 (CST)
+Received: from [10.174.177.174] (10.174.177.174) by
+ dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Tue, 27 Jun 2023 22:06:47 +0800
+Message-ID: <9dbd6a1b-4e24-bb6d-1fec-923325ca1cb6@huawei.com>
+Date:   Tue, 27 Jun 2023 22:06:47 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230627082731.1769620-1-yqsun1997@gmail.com>
-X-Disclaimer: ce message est personnel / this message is private
-X-Originating-IP: [10.129.178.213]
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-27_10,2023-06-27_01,2023-05-22_02
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH] quota: fix race condition between dqput() and
+ dquot_mark_dquot_dirty()
+Content-Language: en-US
+To:     Jan Kara <jack@suse.cz>
+CC:     <linux-fsdevel@vger.kernel.org>, <linux-ext4@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>,
+        <yangerkun@huawei.com>, <chengzhihao1@huawei.com>,
+        <yukuai3@huawei.com>, Baokun Li <libaokun1@huawei.com>
+References: <20230616085608.42435-1-libaokun1@huawei.com>
+ <20230616152824.ndpgvkegvvip2ahh@quack3>
+ <c8daf4a0-769f-f769-50f6-8b7063542499@huawei.com>
+ <20230622145620.hk3bdjxtlr64gtzl@quack3>
+ <b73894fc-0c7a-0503-25ad-ab5a9dfbd852@huawei.com>
+ <20230626130957.kvfli23djxc2opkq@quack3>
+ <2486ec73-55e0-00cb-fc76-97b9b285a9ce@huawei.com>
+ <20230627083406.hhjf55e2tqnwqaf6@quack3>
+ <fe7d3b03-4d08-34ac-a695-a5c57c751aeb@huawei.com>
+ <20230627092829.d3s3x4nkprux7jmo@quack3>
+From:   Baokun Li <libaokun1@huawei.com>
+In-Reply-To: <20230627092829.d3s3x4nkprux7jmo@quack3>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.174]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml500021.china.huawei.com (7.185.36.21)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,57 +63,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 2023/6/27 17:28, Jan Kara wrote:
+> On Tue 27-06-23 17:08:27, Baokun Li wrote:
+>> Hello!
+>>
+>> On 2023/6/27 16:34, Jan Kara wrote:
+>>> Hello!
+>>>
+>>> On Mon 26-06-23 21:55:49, Baokun Li wrote:
+>>>> On 2023/6/26 21:09, Jan Kara wrote:
+>>>>> On Sun 25-06-23 15:56:10, Baokun Li wrote:
+>>>>>>>> I think we can simply focus on the race between the DQ_ACTIVE_B flag and
+>>>>>>>> the DQ_MOD_B flag, which is the core problem, because the same quota
+>>>>>>>> should not have both flags. These two flags are protected by dq_list_lock
+>>>>>>>> and dquot->dq_lock respectively, so it makes sense to add a
+>>>>>>>> wait_on_dquot() to ensure the accuracy of DQ_ACTIVE_B.
+>>>>>>> But the fundamental problem is not only the race with DQ_MOD_B setting. The
+>>>>>>> dquot structure can be completely freed by the time
+>>>>>>> dquot_claim_space_nodirty() calls dquot_mark_dquot_dirty() on it. That's
+>>>>>>> why I think making __dquot_transfer() obey dquot_srcu rules is the right
+>>>>>>> solution.
+>>>>>> Yes, now I also think that making __dquot_transfer() obey dquot_srcu
+>>>>>> rules is a better solution. But with inode->i_lock protection, why would
+>>>>>> the dquot structure be completely freed?
+>>>>> Well, when dquot_claim_space_nodirty() calls mark_all_dquot_dirty() it does
+>>>>> not hold any locks (only dquot_srcu). So nothing prevents dquot_transfer()
+>>>>> to go, swap dquot structure pointers and drop dquot references and after
+>>>>> that mark_all_dquot_dirty() can use a stale pointer to call
+>>>>> mark_dquot_dirty() on already freed memory.
+>>>>>
+>>>> No, this doesn't look like it's going to happen.  The
+>>>> mark_all_dquot_dirty() uses a pointer array pointer, the dquot in the
+>>>> array is dynamically changing, so after swap dquot structure pointers,
+>>>> mark_all_dquot_dirty() uses the new pointer, and the stale pointer is
+>>>> always destroyed after swap, so there is no case of using the stale
+>>>> pointer here.
+>>> There is a case - CPU0 can prefetch the values from dquots[] array into its
+>>> local cache, then CPU1 can update the dquots[] array (these writes can
+>>> happily stay in CPU1 store cache invisible to other CPUs) and free the
+>>> dquots via dqput(). Then CPU0 can pass the prefetched dquot pointers to
+>>> mark_dquot_dirty(). There are no locks or memory barries preventing CPUs
+>>> from ordering instructions and memory operations like this in the code...
+>>> You can read Documentation/memory-barriers.txt about all the perils current
+>>> CPU architecture brings wrt coordination of memory accesses among CPUs ;)
+>>>
+>>> 								Honza
+>> Got it!
+>>
+>> Sorry for misunderstanding you (I thought "completely freed" meant
+>> dquot_destroy(), but you should have meant dquot_release()).
+> Well, the dquot can even get to dquot_destroy(). There's nothing really
+> preventing CPU2 going into memory reclaim and free the dquot in
+> dqcache_shrink_scan() still before CPU0 even calls mark_dquot_dirty() on
+> it. Sure such timing on real hardware is very unlikely but in a VM where a
+> virtual CPU can get starved for a significant amount of time this could
+> happen.
+>
+> 								Honza
+Yes, invalidate_dquots() calling do_destroy_dquot() does not have this 
+problem
+because it calls synchronize_srcu(&dquot_srcu) in drop_dquot_ref() before.
 
-On Tue, Jun 27, 2023 at 04:27:31PM +0800, yqsun1997@gmail.com wrote:
-> From: yqsun1997 <yqsun1997@gmail.com>
-> 
-> Because format in struct img_image_buffer max index is IMG_MAX_PLANES ==3,
-> The num_planes max index is 8.so will be OOB like in mdp_prepare_buffer.
+However, calling do_destroy_dquot() from dqcache_shrink_scan() is not
+protected, and calling dqcache_shrink_scan() after P3 execution will trigger
+the UAF by calling do_destroy_dquot() twice, as shown in function graph 1
+in the patch description; If dqcache_shrink_scan() is called after dquot is
+added to free_dquots and before P3 is executed, the UAF may be
+triggered in dquot_mark_dquot_dirty().
 
-Similarly as your other patch, could you describe why you need to
-increase the IMG_MAX_PLANES while I suspect your driver only needs to
-deal with 3 planes.  While the maximum num_planes value that can be
-given by the user is 8, this has to be first compared to the configured
-format prior to reaching this function.
-
-> 
-> static void mdp_prepare_buffer(struct img_image_buffer *b,
->                                struct mdp_frame *frame, struct vb2_buffer *vb)
-> {
->         struct v4l2_pix_format_mplane *pix_mp = &frame->format.fmt.pix_mp;
->         unsigned int i;
-> 
->         b->format.colorformat = frame->mdp_fmt->mdp_color;
->         b->format.ycbcr_prof = frame->ycbcr_prof;
->         for (i = 0; i < pix_mp->num_planes; ++i) {
->                 u32 stride = mdp_fmt_get_stride(frame->mdp_fmt,
->                         pix_mp->plane_fmt[i].bytesperline, i);
-> 
->                 b->format.plane_fmt[i].stride = stride;  //oob
->                 ......
-> 
-> Signed-off-by: yqsun1997 <yqsun1997@gmail.com>
-> ---
->  drivers/media/platform/mediatek/mdp3/mtk-mdp3-type.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-type.h b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-type.h
-> index ae0396806..e2e991a34 100644
-> --- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-type.h
-> +++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-type.h
-> @@ -11,7 +11,7 @@
->  
->  #define IMG_MAX_HW_INPUTS	3
->  #define IMG_MAX_HW_OUTPUTS	4
-> -#define IMG_MAX_PLANES		3
-> +#define IMG_MAX_PLANES		8
->  #define IMG_MAX_COMPONENTS	20
->  
->  struct img_crop {
-> -- 
-> 2.39.2
-> 
-
-Regards,
-Alain
+Thank you for your patient explanation!
+The new version of the solution is almost complete, and is doing some stress
+testing, which I will send out once it passes.
+-- 
+With Best Regards,
+Baokun Li
+.
