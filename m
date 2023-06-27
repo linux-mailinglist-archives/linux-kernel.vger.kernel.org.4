@@ -2,71 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FFA174005E
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 18:08:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A4F4740067
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 18:09:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232272AbjF0QIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 12:08:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36534 "EHLO
+        id S232006AbjF0QJS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 12:09:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232137AbjF0QIh (ORCPT
+        with ESMTP id S230401AbjF0QJQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 12:08:37 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3223930FF;
-        Tue, 27 Jun 2023 09:08:34 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-98df69cacd1so303552666b.1;
-        Tue, 27 Jun 2023 09:08:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687882111; x=1690474111;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Tpd3lAFkgPOZAmtsEdYx4agOG1zhm3c7wmN24nFCRP8=;
-        b=q06GNPWOebOMOVK5HxSGaEx7LPlAXSxIc/Aq8MQqa1KOppEIqGqtMhwG4NpjZkOm9S
-         AFyR5QRFV5Y4HWjtBCFBNLrJk5S4Lc7K8YZNHrIZdxMmDQA/+lLQ3p8y9UgKzJsIf86A
-         6mgRi6asDKOmW/iWnEEaxh6aCjW2wpoxwylPIFbl3o9t7f68PKixGMqc9eY+4A0mQYyK
-         /NKPB7mafWWAJMN3H/YcHBf8569Pxbdxn2kFSPB9d/Zx+IZTpfRyXx13QuiKS/N9+aK/
-         qXilL+LWm4uaO9ESacaaI9YCZeZXSWrdMC3YtgW+4T2fSzrERUBgn1BaSIhHBSbx3TEd
-         2oEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687882111; x=1690474111;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Tpd3lAFkgPOZAmtsEdYx4agOG1zhm3c7wmN24nFCRP8=;
-        b=Tf7oe1AACsmCnbfhu/0NRKfe6T+07LH+TWtI1Hb1ZRkMsgt+MAFDH5ONX6kWM5fY+f
-         QwurXlBnM9tPohvOiiaXrKdvERvCb8vDjE2y2H5sHN/ng2qcAi98AcIOmGMuIxjGxj89
-         iLKZLFVRR0khDgi22tdH/G3E7kv3f9Zp/nSPHRAhaZKXh7lXNqPlT6Si14noQfTyA5NC
-         Kzm1OwE1WUdHSYqjVv9qCiFp92YIMo1zqcf7mVQa6Y49505FDISnBlq7cYVlsNIgHn3A
-         aoet7zhHTYBF+r3W+Zh7Cb9QhI9BNdAcTi5ifaG5a2CqVROkQdMRU3cs7vheCZJ7usEG
-         6hbQ==
-X-Gm-Message-State: AC+VfDxcAb1/TNIsDbRQ6eLPf/7KGaWqQEce6bu+tutM3BcK0zYiqevB
-        tjnYIR/nYocPLLpLTVOkUIi950noMnh5UfQJt1bJ7DX8Zd9ySQ==
-X-Google-Smtp-Source: ACHHUZ5eFupuDSzxk+XYCDYxcusnVKqMDv7K7KW/OxsPLBOsMdd40uQa4uFTdLNO9TafVR9bMvBKw7UkvrKS5CDSshk=
-X-Received: by 2002:a17:907:803:b0:982:cfe2:32fe with SMTP id
- wv3-20020a170907080300b00982cfe232femr28075108ejb.63.1687882111373; Tue, 27
- Jun 2023 09:08:31 -0700 (PDT)
+        Tue, 27 Jun 2023 12:09:16 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1834D3590
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 09:09:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=mrpMVPePqZcp/TARbg/0wmIdMAyOFZ9lEopNh2bXlGI=; b=IVmklvoTr61w2Y5JHaAluqrrkB
+        QwielsATQOForcre5ApJ9MjIbkF8fEFy/wGOG5WKWKvMU/lKVfOBu4NlEZ2iqPT5uV0eBbi5Yt80Q
+        5CZ4Tm9aJCdXIx9Rwa9o6bc86Okrc+tMhsr2vY35p3QeVwJJJyrkWy1IjE+hnwrXFrKANLxjiSqF4
+        QBYV3cnNUvN8HliTm0RlH4XHR028lTdYvGV2al0Ju3+ctFHtngCtSkjPM1zlylzCajOm42iR/4Znq
+        DMBUpYOOBapxI87fWPI2/ETyetfW6hkI1pBktjX8FXUuqCocpjiZexjEjrdxdCZW96K4Kp9AAQCaO
+        WURxOjjg==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qEBFW-00DbMZ-1S;
+        Tue, 27 Jun 2023 16:09:02 +0000
+Message-ID: <a64df916-b945-1f6b-4888-a393bd75d9a1@infradead.org>
+Date:   Tue, 27 Jun 2023 09:09:01 -0700
 MIME-Version: 1.0
-References: <3199652.1687873788@warthog.procyon.org.uk> <20230627085928.6569353e@kernel.org>
-In-Reply-To: <20230627085928.6569353e@kernel.org>
-From:   Ilya Dryomov <idryomov@gmail.com>
-Date:   Tue, 27 Jun 2023 18:08:19 +0200
-Message-ID: <CAOi1vP-ogmcKE3brjEsm+zLvcXJa_5tGjv_XMsrnZuZUhXonhQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v3] libceph: Partially revert changes to support MSG_SPLICE_PAGES
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     David Howells <dhowells@redhat.com>, netdev@vger.kernel.org,
-        Xiubo Li <xiubli@redhat.com>, Jeff Layton <jlayton@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v5 1/1] drm/doc: Document DRM device reset expectations
+Content-Language: en-US
+To:     =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>,
+        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Cc:     kernel-dev@igalia.com, alexander.deucher@amd.com,
+        christian.koenig@amd.com, pierre-eric.pelloux-prayer@amd.com,
+        Simon Ser <contact@emersion.fr>,
+        Rob Clark <robdclark@gmail.com>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Stone <daniel@fooishbar.org>,
+        =?UTF-8?B?J01hcmVrIE9sxaHDoWsn?= <maraeo@gmail.com>,
+        Dave Airlie <airlied@gmail.com>,
+        =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel.daenzer@mailbox.org>,
+        Samuel Pitoiset <samuel.pitoiset@gmail.com>,
+        =?UTF-8?Q?Timur_Krist=c3=b3f?= <timur.kristof@gmail.com>,
+        Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
+        Pekka Paalanen <pekka.paalanen@collabora.com>
+References: <20230627132323.115440-1-andrealmeid@igalia.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230627132323.115440-1-andrealmeid@igalia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,63 +68,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 5:59=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wr=
-ote:
->
-> On Tue, 27 Jun 2023 14:49:48 +0100 David Howells wrote:
-> > Fix the mishandling of MSG_DONTWAIT and also reinstates the per-page
-> > checking of the source pages (which might have come from a DIO write by
-> > userspace) by partially reverting the changes to support MSG_SPLICE_PAG=
-ES
-> > and doing things a little differently.  In messenger_v1:
-> >
-> >  (1) The ceph_tcp_sendpage() is resurrected and the callers reverted to=
- use
-> >      that.
-> >
-> >  (2) The callers now pass MSG_MORE unconditionally.  Previously, they w=
-ere
-> >      passing in MSG_MORE|MSG_SENDPAGE_NOTLAST and then degrading that t=
-o
-> >      just MSG_MORE on the last call to ->sendpage().
-> >
-> >  (3) Make ceph_tcp_sendpage() a wrapper around sendmsg() rather than
-> >      sendpage(), setting MSG_SPLICE_PAGES if sendpage_ok() returns true=
- on
-> >      the page.
-> >
-> > In messenger_v2:
-> >
-> >  (4) Bring back do_try_sendpage() and make the callers use that.
-> >
-> >  (5) Make do_try_sendpage() use sendmsg() for both cases and set
-> >      MSG_SPLICE_PAGES if sendpage_ok() is set.
-> >
-> > Fixes: 40a8c17aa770 ("ceph: Use sendmsg(MSG_SPLICE_PAGES) rather than s=
-endpage")
-> > Fixes: fa094ccae1e7 ("ceph: Use sendmsg(MSG_SPLICE_PAGES) rather than s=
-endpage()")
-> > Reported-by: Ilya Dryomov <idryomov@gmail.com>
->
-> Ilya, would you be okay if we sent the 6.5 PR without this and then
-> we can either follow up with a PR in a few days or you can take this
-> via your tree?
->
-> Or you could review it now, that'd also work :)
->
-> In hindsight we should have pushed harder to make the FS changes as
-> small as possible for sendpage removal, so that they can go in via
-> the appropriate tree with an appropriate level of scrutiny for 6.6,
-> lesson learned :(
+Hi André,
 
-Hi Jakub,
+I have just a few more below:
 
-This patch looks good to me.  I have been meaning to actually test
-it, but, if time is of the essence, I'm OK with it being merged via
-the networking tree now.
+On 6/27/23 06:23, André Almeida wrote:
+> Create a section that specifies how to deal with DRM device resets for
+> kernel and userspace drivers.
+> 
+> Acked-by: Pekka Paalanen <pekka.paalanen@collabora.com>
+> Signed-off-by: André Almeida <andrealmeid@igalia.com>
+> ---
+> 
+> v4: https://lore.kernel.org/lkml/20230626183347.55118-1-andrealmeid@igalia.com/
+> 
+> Changes:
+>  - Grammar fixes (Randy)
+> 
+>  Documentation/gpu/drm-uapi.rst | 68 ++++++++++++++++++++++++++++++++++
+>  1 file changed, 68 insertions(+)
+> 
+> diff --git a/Documentation/gpu/drm-uapi.rst b/Documentation/gpu/drm-uapi.rst
+> index 65fb3036a580..3cbffa25ed93 100644
+> --- a/Documentation/gpu/drm-uapi.rst
+> +++ b/Documentation/gpu/drm-uapi.rst
+> @@ -285,6 +285,74 @@ for GPU1 and GPU2 from different vendors, and a third handler for
+>  mmapped regular files. Threads cause additional pain with signal
+>  handling as well.
+>  
+> +Device reset
+> +============
+> +
+> +The GPU stack is really complex and is prone to errors, from hardware bugs,
+> +faulty applications and everything in between the many layers. Some errors
+> +require resetting the device in order to make the device usable again. This
+> +sections describes the expectations for DRM and usermode drivers when a
 
-Reviewed-by: Ilya Dryomov <idryomov@gmail.com>
+   section
 
-Thanks,
+> +device resets and how to propagate the reset status.
+> +
+> +Kernel Mode Driver
+> +------------------
+> +
+> +The KMD is responsible for checking if the device needs a reset, and to perform
+> +it as needed. Usually a hang is detected when a job gets stuck executing. KMD
+> +should keep track of resets, because userspace can query any time about the
+> +reset stats for an specific context. This is needed to propagate to the rest of
 
-                Ilya
+               for a specific
+
+stats or status?
+
+> +the stack that a reset has happened. Currently, this is implemented by each
+> +driver separately, with no common DRM interface.
+> +
+> +User Mode Driver
+> +----------------
+> +
+> +The UMD should check before submitting new commands to the KMD if the device has
+> +been reset, and this can be checked more often if the UMD requires it. After
+> +detecting a reset, UMD will then proceed to report it to the application using
+> +the appropriate API error code, as explained in the section below about
+> +robustness.
+> +
+> +Robustness
+> +----------
+> +
+> +The only way to try to keep an application working after a reset is if it
+> +complies with the robustness aspects of the graphical API that it is using.
+> +
+> +Graphical APIs provide ways to applications to deal with device resets. However,
+> +there is no guarantee that the app will use such features correctly, and the
+> +UMD can implement policies to close the app if it is a repeating offender,
+> +likely in a broken loop. This is done to ensure that it does not keep blocking
+> +the user interface from being correctly displayed. This should be done even if
+> +the app is correct but happens to trigger some bug in the hardware/driver.
+> +
+> +OpenGL
+> +~~~~~~
+> +
+> +Apps using OpenGL should use the available robust interfaces, like the
+> +extension ``GL_ARB_robustness`` (or ``GL_EXT_robustness`` for OpenGL ES). This
+> +interface tells if a reset has happened, and if so, all the context state is
+> +considered lost and the app proceeds by creating new ones. If it is possible to
+> +determine that robustness is not in use, the UMD will terminate the app when a
+> +reset is detected, giving that the contexts are lost and the app won't be able
+> +to figure this out and recreate the contexts.
+> +
+> +Vulkan
+> +~~~~~~
+> +
+> +Apps using Vulkan should check for ``VK_ERROR_DEVICE_LOST`` for submissions.
+> +This error code means, among other things, that a device reset has happened and
+> +it needs to recreate the contexts to keep going.
+> +
+> +Reporting causes of resets
+> +--------------------------
+> +
+> +Apart from propagating the reset through the stack so apps can recover, it's
+> +really useful for driver developers to learn more about what caused the reset in
+> +first place. DRM devices should make use of devcoredump to store relevant
+
+   the first place.
+
+> +information about the reset, so this information can be added to user bug
+> +reports.
+> +
+>  .. _drm_driver_ioctl:
+>  
+>  IOCTL Support on Device Nodes
+
+and with those addressed:
+
+Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+
+Thanks for adding the documentation.
+
+-- 
+~Randy
