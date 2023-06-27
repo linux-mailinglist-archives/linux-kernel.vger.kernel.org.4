@@ -2,173 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1A517401AF
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 18:52:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDA7C7401B5
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 18:55:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232055AbjF0Qwm convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 27 Jun 2023 12:52:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36148 "EHLO
+        id S229647AbjF0Qzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 12:55:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231345AbjF0Qwj (ORCPT
+        with ESMTP id S229454AbjF0Qza (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 12:52:39 -0400
-Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 094AF10F;
-        Tue, 27 Jun 2023 09:52:36 -0700 (PDT)
-Received: by mail-oi1-f182.google.com with SMTP id 5614622812f47-3a04cb10465so3423329b6e.3;
-        Tue, 27 Jun 2023 09:52:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687884755; x=1690476755;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3lIZI96K9vdLoSwUwpQZZH+ZWrx3VsFWqYpi3+69yqU=;
-        b=j8UVkCGUTQm4cypu9sZY06fFuoeRVjQB3Tcp1KkWVs8FGlEHu5iHdNIL4L9wAZSM3g
-         o4IxO8Yjz1rxMpjtE0FC2o+TnQVwgEALAAeErTkDjqwi9Txf4BFzLkDPhmxurP8dOGvv
-         6sBmGi48HC+3bWDJAN9+L8+tOUyW0OQshYw3hG3ayOYi9hCVkkay00SSMPSnOOeg/8oT
-         /RfaJjmecA8jEludnHWb5IJaeqiO3yIiPyuqsHeZWrUYYc0lBFfJEZfvTj+MKg8fqRs5
-         buW6R+8RofQtFLa49bmBVE2sw9UTywsX2woGDUBwI0GcPVUY2mavaXttbB14mwpFnMXH
-         MYsw==
-X-Gm-Message-State: AC+VfDyA0/0QXiyqbweQsnfFKdaey+PECZBQGXRxM4Hd3MUGu+nNAybG
-        uJRNp8H4MIRqzCRL9XaME3Ew094+gDnpUecO
-X-Google-Smtp-Source: ACHHUZ7sEtTDbMtXMYZM4wQdcH42Gj87XiCWCRSbYSHNx3mT9t9vREEcit/ZxlmEgYFy4cLekney/A==
-X-Received: by 2002:a05:6808:3098:b0:3a3:3a0b:aab8 with SMTP id bl24-20020a056808309800b003a33a0baab8mr1642135oib.48.1687884755254;
-        Tue, 27 Jun 2023 09:52:35 -0700 (PDT)
-Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com. [209.85.210.47])
-        by smtp.gmail.com with ESMTPSA id l1-20020a544501000000b003a3600182f8sm337192oil.57.2023.06.27.09.52.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Jun 2023 09:52:34 -0700 (PDT)
-Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-6b44b5adfd3so3927087a34.3;
-        Tue, 27 Jun 2023 09:52:34 -0700 (PDT)
-X-Received: by 2002:a05:6358:f55:b0:132:d3b1:c34a with SMTP id
- c21-20020a0563580f5500b00132d3b1c34amr12105551rwj.7.1687884753801; Tue, 27
- Jun 2023 09:52:33 -0700 (PDT)
+        Tue, 27 Jun 2023 12:55:30 -0400
+Received: from tarta.nabijaczleweli.xyz (unknown [139.28.40.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EA06397;
+        Tue, 27 Jun 2023 09:55:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
+        s=202305; t=1687884923;
+        bh=JbdHKDIIKTI2/zLdYwnwsm7aGJ9yF1yJAJVd+rjxLKE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MUO1vDXxXz65himZ9pbtz3C9L+ROPw+Lh6PGBVcZpo2R1LG+J2X1rMfA/P6bk2MfA
+         YQl769QrR2gOTNNjJVLEtY57Bump4i0jvV+oeG+LqKpHnKJwazU0tFN+hd+04G02Wu
+         Cm5UXQV1MOuBm3uGdJ7jU6o+smeBu4rKzXq24aWfyQcvd/QEWEgjYSHauXmT9JgxPb
+         cy+UC6Vf7gGot7CszkTcPhxdu1y+Jb7mfxqz9UbYoHzb8odyQyiklbM3F4fWPGCRbw
+         rwU+/Gi1+yaQrcovrHIti/GZCG6/yqUN41/TjUlSV3hMyqKSOkxCa+hXcHwP7KVC68
+         lsPejDrYmTyqw==
+Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
+        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id 914181A88;
+        Tue, 27 Jun 2023 18:55:23 +0200 (CEST)
+Date:   Tue, 27 Jun 2023 18:55:22 +0200
+From:   Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= 
+        <nabijaczleweli@nabijaczleweli.xyz>
+To:     Amir Goldstein <amir73il@gmail.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jan Kara <jack@suse.cz>,
+        Chung-Chiang Cheng <cccheng@synology.com>, ltp@vger.kernel.org
+Subject: [PATCH v3 0/3+1] fanotify accounting for fs/splice.c
+Message-ID: <cover.1687884029.git.nabijaczleweli@nabijaczleweli.xyz>
+References: <CAOQ4uxh7i_s4R9pFJPENALdWGG5-dDhqPLEUXuJqSoHraktFiA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230327121317.4081816-1-arnd@kernel.org> <20230327121317.4081816-22-arnd@kernel.org>
- <OS0PR01MB5922EDAFCD6DA0313DB99C5E86989@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <66899d69-1339-4a61-8612-6f8e452b0b26@app.fastmail.com>
-In-Reply-To: <66899d69-1339-4a61-8612-6f8e452b0b26@app.fastmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 27 Jun 2023 18:52:22 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdV5gT1GDLODsUe0XibPRsRHazF4K-UhxTOQCjtC9Ba4mQ@mail.gmail.com>
-Message-ID: <CAMuHMdV5gT1GDLODsUe0XibPRsRHazF4K-UhxTOQCjtC9Ba4mQ@mail.gmail.com>
-Subject: Re: [PATCH 21/21] dma-mapping: replace custom code with generic implementation
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Arnd Bergmann <arnd@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, guoren <guoren@kernel.org>,
-        Brian Cain <bcain@quicinc.com>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        "Conor.Dooley" <conor.dooley@microchip.com>,
-        "linux-snps-arc@lists.infradead.org" 
-        <linux-snps-arc@lists.infradead.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-oxnas@groups.io" <linux-oxnas@groups.io>,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
-        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-openrisc@vger.kernel.org" <linux-openrisc@vger.kernel.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="f6uaq6n3eobdp347"
+Content-Disposition: inline
+In-Reply-To: <CAOQ4uxh7i_s4R9pFJPENALdWGG5-dDhqPLEUXuJqSoHraktFiA@mail.gmail.com>
+User-Agent: NeoMutt/20230517
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_RDNS_DYNAMIC_FP,
+        RDNS_DYNAMIC,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 2:52 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> On Thu, Apr 13, 2023, at 14:13, Biju Das wrote:
-> > FYI, this patch breaks on RZ/G2L SMARC EVK board and Arnd will send V2
-> > for fixing this issue.
-> >
-> > [10:53] <biju> [    3.384408] Unable to handle kernel paging request at
-> > virtual address 000000004afb0080
->
-> Right, sorry about this, I accidentally removed the 'phys_to_virt()'
-> conversion on arm64.
 
-Meh, I missed that, so I ended up bisecting this same failure...
+--f6uaq6n3eobdp347
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This patch is now commit 801f1883c4bb70cc ("dma-mapping: replace
-custom code with generic implementation") in esmil/jh7100-dmapool,
-and broke booting on R-Car Gen3.
+In 1/3 I've applied if/else if/else tree like you said,
+and expounded a bit in the message.
 
-The following gmail-whitespace-damaged patch fixes that:
+This is less pretty now, however, since it turns out that
+iter_file_splice_write() already marks the out fd as written because it
+writes to it via vfs_iter_write(), and that sent a double notification.
 
-diff --git a/arch/arm64/mm/dma-mapping.c b/arch/arm64/mm/dma-mapping.c
-index 97b7cea5eb23aedd..77e0b68b43e5849a 100644
---- a/arch/arm64/mm/dma-mapping.c
-+++ b/arch/arm64/mm/dma-mapping.c
-@@ -15,17 +15,23 @@
+$ git grep -F .splice_write | grep -v iter_file_splice_write
+drivers/char/mem.c:     .splice_write   =3D splice_write_null,
+drivers/char/virtio_console.c:  .splice_write =3D port_fops_splice_write,
+fs/fuse/dev.c:  .splice_write   =3D fuse_dev_splice_write,
+fs/gfs2/file.c: .splice_write   =3D gfs2_file_splice_write,
+fs/gfs2/file.c: .splice_write   =3D gfs2_file_splice_write,
+fs/overlayfs/file.c:    .splice_write   =3D ovl_splice_write,
+net/socket.c:   .splice_write =3D generic_splice_sendpage,
+scripts/coccinelle/api/stream_open.cocci:    .splice_write =3D splice_write=
+_f,
 
- static inline void arch_dma_cache_wback(phys_addr_t paddr, size_t size)
- {
--       dcache_clean_poc(paddr, paddr + size);
-+       unsigned long start = (unsigned long)phys_to_virt(paddr);
-+
-+       dcache_clean_poc(start, start + size);
+Of these, splice_write_null() doesn't mark out as written
+(but it's for /dev/null so I think this is expected),
+and I haven't been able to visually confirm whether
+port_fops_splice_write() and generic_splice_sendpage() do.
+
+All the others delegate to iter_file_splice_write().
+
+In 2/3 I fixed the vmsplice notification placement
+(access from pipe, modify to pipe).
+
+I'm following this up with an LTP patch, where only sendfile_file_to_pipe
+passes on 6.1.27-1 and all tests pass on v6.4 + this patchset.
+
+Ahelenia Ziemia=C5=84ska (3):
+  splice: always fsnotify_access(in), fsnotify_modify(out) on success
+  splice: fsnotify_access(fd)/fsnotify_modify(fd) in vmsplice
+  splice: fsnotify_access(in), fsnotify_modify(out) on success in tee
+
+ fs/splice.c | 43 +++++++++++++++++++++++++------------------
+ 1 file changed, 25 insertions(+), 18 deletions(-)
+
+
+Interdiff against v2:
+diff --git a/fs/splice.c b/fs/splice.c
+index 3234aaa6e957..0427f0a91c7d 100644
+--- a/fs/splice.c
++++ b/fs/splice.c
+@@ -1155,10 +1155,7 @@ long do_splice(struct file *in, loff_t *off_in, stru=
+ct file *out,
+ 			flags |=3D SPLICE_F_NONBLOCK;
+=20
+ 		ret =3D splice_pipe_to_pipe(ipipe, opipe, len, flags);
+-		goto notify;
+-	}
+-
+-	if (ipipe) {
++	} else if (ipipe) {
+ 		if (off_in)
+ 			return -ESPIPE;
+ 		if (off_out) {
+@@ -1188,10 +1185,10 @@ long do_splice(struct file *in, loff_t *off_in, str=
+uct file *out,
+ 		else
+ 			*off_out =3D offset;
+=20
+-		goto notify;
+-	}
+-
+-	if (opipe) {
++		// ->splice_write already marked out
++		// as modified via vfs_iter_write()
++		goto noaccessout;
++	} else if (opipe) {
+ 		if (off_out)
+ 			return -ESPIPE;
+ 		if (off_in) {
+@@ -1211,17 +1208,14 @@ long do_splice(struct file *in, loff_t *off_in, str=
+uct file *out,
+ 			in->f_pos =3D offset;
+ 		else
+ 			*off_in =3D offset;
++	} else
++		return -EINVAL;
+=20
+-		goto notify;
+-	}
+-
+-	return -EINVAL;
+-
+-notify:
+-	if (ret > 0) {
+-		fsnotify_access(in);
++	if (ret > 0)
+ 		fsnotify_modify(out);
+-	}
++noaccessout:
++	if (ret > 0)
++		fsnotify_access(in);
+=20
+ 	return ret;
  }
-
- static inline void arch_dma_cache_inv(phys_addr_t paddr, size_t size)
- {
--       dcache_inval_poc(paddr, paddr + size);
-+       unsigned long start = (unsigned long)phys_to_virt(paddr);
+@@ -1352,6 +1346,9 @@ static long vmsplice_to_user(struct file *file, struc=
+t iov_iter *iter,
+ 		pipe_unlock(pipe);
+ 	}
+=20
++	if (ret > 0)
++		fsnotify_access(file);
 +
-+       dcache_inval_poc(start, start + size);
+ 	return ret;
  }
-
- static inline void arch_dma_cache_wback_inv(phys_addr_t paddr, size_t size)
- {
--       dcache_clean_inval_poc(paddr, paddr + size);
-+       unsigned long start = (unsigned long)phys_to_virt(paddr);
-+
-+       dcache_clean_inval_poc(start, start + size);
+=20
+@@ -1381,8 +1378,10 @@ static long vmsplice_to_pipe(struct file *file, stru=
+ct iov_iter *iter,
+ 	if (!ret)
+ 		ret =3D iter_to_pipe(iter, pipe, buf_flag);
+ 	pipe_unlock(pipe);
+-	if (ret > 0)
++	if (ret > 0) {
+ 		wakeup_pipe_readers(pipe);
++		fsnotify_modify(file);
++	}
+ 	return ret;
  }
+=20
+@@ -1447,9 +1446,6 @@ SYSCALL_DEFINE4(vmsplice, int, fd, const struct iovec=
+ __user *, uiov,
+ 	else
+ 		error =3D vmsplice_to_user(f.file, &iter, flags);
+=20
+-	if (error > 0)
+-		fsnotify_modify(f.file);
+-
+ 	kfree(iov);
+ out_fdput:
+ 	fdput(f);
+--=20
+2.39.2
 
- static inline bool arch_sync_dma_clean_before_fromdevice(void)
+--f6uaq6n3eobdp347
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Gr{oetje,eeting}s,
+-----BEGIN PGP SIGNATURE-----
 
-                        Geert
+iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmSbFHcACgkQvP0LAY0m
+WPH3ZBAArBN/sYgOWaVpxfOvMsGOhp9aYKSVVR44HMgkx6eWFL3zMiTBI2Ear5as
+0CMjZGJFhsJeDRvM/r06vOC25axhDrxFDtuL7+4X79DmehbnXlrgUWo6HmcK6tFy
+uATiSVA+JeMqtO0P6dxwLNoByoeJN5nAxRNcq19fsHhhgMBhnNUxbj6vNSLAv/aR
+krW/EN4aNI02eEbib2xzc5xOWeq351bYfCqYFYRPp4B2mbMeGtnNfVLwVO56A2fN
+bIpNR3EmqgygLdDfrJLHh/H8ywsYR/+GLWRvGq6PB1F3EbxBhzlgH6ACDJy2Juv3
+5yZrvbrDLCdwXgiEZ/Q55Y1bq4nehwr1OA3otzPUaUWU+v+JnMnt0QFjEIFgp6v/
+rCt7NCbaEcRfvqQ1INsAQBZY7e2dKc21qq6k3W4oBvRRv2XGWEhpiYeUv41d4Qqr
+Tx93C+CuHHY2HdbrDtoHWvJ+IrXCInUD6elAGQ/I7nODsWxgm1QlSIN8E0X9qSym
+v38HwiEJxtIB2ydBspYvQi12Zs5Yb5g7dv96Klra6rnFAdE5DMwjd2ZZcQzl8EQy
+9A0XSkDRfK/mkxWc+v0bV8uniE2M8s9WoJQpZleFlNFWpKvX6Xg1UEOb/YLMgCnZ
+811ReQuztcWs1ZzfQW0ddu3jBO1LMBGHgqNw+pI54dNBJNCLN9M=
+=6qu6
+-----END PGP SIGNATURE-----
 
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+--f6uaq6n3eobdp347--
