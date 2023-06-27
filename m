@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F37973FEB2
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 16:45:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AE8773FEBE
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 16:46:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231932AbjF0Op3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 10:45:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43460 "EHLO
+        id S231962AbjF0Opm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 10:45:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232063AbjF0Ooy (ORCPT
+        with ESMTP id S232169AbjF0OpF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 10:44:54 -0400
+        Tue, 27 Jun 2023 10:45:05 -0400
 Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7E1730F9;
-        Tue, 27 Jun 2023 07:44:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9313B2D69;
+        Tue, 27 Jun 2023 07:44:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=inria.fr; s=dc;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=EVWsKZHA5sOX60HufObe+UOCTdtjhEjhk52tD7khaXk=;
-  b=YiBhSF6iFx9Y7bUlk/oeZ9e9XBU2wtUjxdXzeaWAa04130mi7xMLwQ7/
-   D5clOwTGrRgCVQj0YszXht1xsutUj8JN6X+TOWF432vl0LvK2epGu++PW
-   JSpcR1yhL2M21hPKmCNNbg74dczchrf+cqRoFMmR/AbJ/HrTa9At4AYdg
-   U=;
+  bh=e/q9GJUjVjbhzGKibBqdfdyRa1uJDPYc59CeSzfnNk0=;
+  b=LFjLqDcUJOS8QiGxmMwTJ1y4Iep+0HGsVtpDuCawBY5+SQrzARKEYY+e
+   LpJ/2nlUx2u6cO9WYFeUn5ZI5IackFgqx7NrkFGfOUSrq5MH+vXpPKEWq
+   4rRq0ltEIc/oqu2mZbmlmaagNsebxFirot+mQAJKsleackI83o/NMh+pZ
+   A=;
 Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
 X-IronPort-AV: E=Sophos;i="6.01,162,1684792800"; 
-   d="scan'208";a="114936319"
+   d="scan'208";a="114936320"
 Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
   by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 16:43:51 +0200
 From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     Veerasenareddy Burru <vburru@marvell.com>
+To:     =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>
 Cc:     kernel-janitors@vger.kernel.org, keescook@chromium.org,
         christophe.jaillet@wanadoo.fr, kuba@kernel.org,
-        Abhijit Ayarekar <aayarekar@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 02/24] octeon_ep: use vmalloc_array and vcalloc
-Date:   Tue, 27 Jun 2023 16:43:17 +0200
-Message-Id: <20230627144339.144478-3-Julia.Lawall@inria.fr>
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 03/24] drm/gud: use vmalloc_array and vcalloc
+Date:   Tue, 27 Jun 2023 16:43:18 +0200
+Message-Id: <20230627144339.144478-4-Julia.Lawall@inria.fr>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20230627144339.144478-1-Julia.Lawall@inria.fr>
 References: <20230627144339.144478-1-Julia.Lawall@inria.fr>
@@ -108,19 +106,19 @@ v2: Use vmalloc_array and vcalloc instead of array_size.
 This also leaves a multiplication of a constant by a sizeof
 as is.  Two patches are thus dropped from the series.
 
- drivers/net/ethernet/marvell/octeon_ep/octep_rx.c |    2 +-
+ drivers/gpu/drm/gud/gud_pipe.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff -u -p a/drivers/net/ethernet/marvell/octeon_ep/octep_rx.c b/drivers/net/ethernet/marvell/octeon_ep/octep_rx.c
---- a/drivers/net/ethernet/marvell/octeon_ep/octep_rx.c
-+++ b/drivers/net/ethernet/marvell/octeon_ep/octep_rx.c
-@@ -158,7 +158,7 @@ static int octep_setup_oq(struct octep_d
- 		goto desc_dma_alloc_err;
- 	}
+diff -u -p a/drivers/gpu/drm/gud/gud_pipe.c b/drivers/gpu/drm/gud/gud_pipe.c
+--- a/drivers/gpu/drm/gud/gud_pipe.c
++++ b/drivers/gpu/drm/gud/gud_pipe.c
+@@ -390,7 +390,7 @@ static int gud_fb_queue_damage(struct gu
+ 	mutex_lock(&gdrm->damage_lock);
  
--	oq->buff_info = vzalloc(oq->max_count * OCTEP_OQ_RECVBUF_SIZE);
-+	oq->buff_info = vcalloc(oq->max_count, OCTEP_OQ_RECVBUF_SIZE);
- 	if (unlikely(!oq->buff_info)) {
- 		dev_err(&oct->pdev->dev,
- 			"Failed to allocate buffer info for OQ-%d\n", q_no);
+ 	if (!gdrm->shadow_buf) {
+-		gdrm->shadow_buf = vzalloc(fb->pitches[0] * fb->height);
++		gdrm->shadow_buf = vcalloc(fb->pitches[0], fb->height);
+ 		if (!gdrm->shadow_buf) {
+ 			mutex_unlock(&gdrm->damage_lock);
+ 			return -ENOMEM;
 
