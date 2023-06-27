@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D3C073FBBE
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 14:09:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8843273FBBF
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 14:09:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231854AbjF0MJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 08:09:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35222 "EHLO
+        id S231893AbjF0MJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 08:09:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231841AbjF0MJc (ORCPT
+        with ESMTP id S231863AbjF0MJf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 08:09:32 -0400
-Received: from out-2.mta1.migadu.com (out-2.mta1.migadu.com [IPv6:2001:41d0:203:375::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD2E6199C
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 05:09:30 -0700 (PDT)
+        Tue, 27 Jun 2023 08:09:35 -0400
+Received: from out-59.mta1.migadu.com (out-59.mta1.migadu.com [95.215.58.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7560E212B
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 05:09:33 -0700 (PDT)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1687867769;
+        t=1687867771;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=V2dtlX5xWTLahOFf3Fslyq5xkemB+V+IMRf77iTil6I=;
-        b=mkDkI0OESoDGaRtSLk6gglXQ8TbHSu8npIrgxY/bH+9lX3lHz7L06NPIVLmBjq2FznIp2j
-        e7/Ly4MiXHQSDMgZxWpui2OyH2v5CmV8MP2fKUo3cEnhkkafy9L56fa00s2rfwN7d491DI
-        eOkqpf/CRyHOsxLSehrXVlPGFvIboUE=
+        bh=hdKaqogn/I3BFaAaWb1R9T3dUmGgvZb8Wo54xKMjRbQ=;
+        b=tKbN3wBPkiIT2z6p9v+pV9wWBJg62XsRXb4rg80bF4qg7PWSmOn1tZ3NRdGzEVvbmXaWgj
+        KnTVANboxGHno6nqoVg7aZ62GhWJna8xNAE8KxQ/rBtIeqCaQJkUT4r8I3VSkGkgxZ81hm
+        bGgi45C5DAR53qM4s1Z2kCZ4qnc9+Es=
 From:   chengming.zhou@linux.dev
 To:     axboe@kernel.dk, tj@kernel.org, hch@lst.de, ming.lei@redhat.com
 Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
         zhouchengming@bytedance.com
-Subject: [PATCH 2/4] blk-flush: count inflight flush_data requests
-Date:   Tue, 27 Jun 2023 20:08:52 +0800
-Message-Id: <20230627120854.971475-3-chengming.zhou@linux.dev>
+Subject: [PATCH 3/4] blk-flush: reuse rq queuelist in flush state machine
+Date:   Tue, 27 Jun 2023 20:08:53 +0800
+Message-Id: <20230627120854.971475-4-chengming.zhou@linux.dev>
 In-Reply-To: <20230627120854.971475-1-chengming.zhou@linux.dev>
 References: <20230627120854.971475-1-chengming.zhou@linux.dev>
 MIME-Version: 1.0
@@ -40,8 +40,8 @@ Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -50,96 +50,85 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Chengming Zhou <zhouchengming@bytedance.com>
 
-The flush state machine use a double list to link all inflight
-flush_data requests, to avoid issuing separate post-flushes for
-these flush_data requests which shared PREFLUSH.
+Since we don't need to maintain inflight flush_data requests list
+anymore, we can reuse rq->queuelist for flush pending list.
 
-So we can't reuse rq->queuelist, this is why we need rq->flush.list
-
-In preparation of the next patch that reuse rq->queuelist for flush
-state machine, we change the double linked list to a u64 counter,
-which count all inflight flush_data requests.
-
-This is ok since we only need to know if there is any inflight
-flush_data request, so a u64 counter is good. The only problem I can
-think of is that u64 counter may overflow, which should be unlikely happen.
+This patch decrease the size of struct request by 16 bytes.
 
 Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
 ---
- block/blk-flush.c | 9 +++++----
- block/blk.h       | 5 ++---
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ block/blk-flush.c      | 12 +++++-------
+ include/linux/blk-mq.h |  1 -
+ 2 files changed, 5 insertions(+), 8 deletions(-)
 
 diff --git a/block/blk-flush.c b/block/blk-flush.c
-index dba392cf22be..bb7adfc2a5da 100644
+index bb7adfc2a5da..81588edbe8b0 100644
 --- a/block/blk-flush.c
 +++ b/block/blk-flush.c
-@@ -187,7 +187,8 @@ static void blk_flush_complete_seq(struct request *rq,
+@@ -183,14 +183,13 @@ static void blk_flush_complete_seq(struct request *rq,
+ 		/* queue for flush */
+ 		if (list_empty(pending))
+ 			fq->flush_pending_since = jiffies;
+-		list_move_tail(&rq->flush.list, pending);
++		list_move_tail(&rq->queuelist, pending);
  		break;
  
  	case REQ_FSEQ_DATA:
--		list_move_tail(&rq->flush.list, &fq->flush_data_in_flight);
-+		list_del_init(&rq->flush.list);
-+		fq->flush_data_in_flight++;
+-		list_del_init(&rq->flush.list);
+ 		fq->flush_data_in_flight++;
  		spin_lock(&q->requeue_lock);
- 		list_add_tail(&rq->queuelist, &q->flush_list);
+-		list_add_tail(&rq->queuelist, &q->flush_list);
++		list_move_tail(&rq->queuelist, &q->flush_list);
  		spin_unlock(&q->requeue_lock);
-@@ -299,7 +300,7 @@ static void blk_kick_flush(struct request_queue *q, struct blk_flush_queue *fq,
- 		return;
+ 		blk_mq_kick_requeue_list(q);
+ 		break;
+@@ -202,7 +201,7 @@ static void blk_flush_complete_seq(struct request *rq,
+ 		 * flush data request completion path.  Restore @rq for
+ 		 * normal completion and end it.
+ 		 */
+-		list_del_init(&rq->flush.list);
++		list_del_init(&rq->queuelist);
+ 		blk_flush_restore_request(rq);
+ 		blk_mq_end_request(rq, error);
+ 		break;
+@@ -258,7 +257,7 @@ static enum rq_end_io_ret flush_end_io(struct request *flush_rq,
+ 	fq->flush_running_idx ^= 1;
  
- 	/* C2 and C3 */
--	if (!list_empty(&fq->flush_data_in_flight) &&
-+	if (fq->flush_data_in_flight &&
- 	    time_before(jiffies,
- 			fq->flush_pending_since + FLUSH_PENDING_TIMEOUT))
- 		return;
-@@ -374,6 +375,7 @@ static enum rq_end_io_ret mq_flush_data_end_io(struct request *rq,
- 	 * the comment in flush_end_io().
- 	 */
- 	spin_lock_irqsave(&fq->mq_flush_lock, flags);
-+	fq->flush_data_in_flight--;
- 	blk_flush_complete_seq(rq, fq, REQ_FSEQ_DATA, error);
- 	spin_unlock_irqrestore(&fq->mq_flush_lock, flags);
+ 	/* and push the waiting requests to the next stage */
+-	list_for_each_entry_safe(rq, n, running, flush.list) {
++	list_for_each_entry_safe(rq, n, running, queuelist) {
+ 		unsigned int seq = blk_flush_cur_seq(rq);
  
-@@ -445,7 +447,7 @@ bool blk_insert_flush(struct request *rq)
- 		blk_rq_init_flush(rq);
- 		rq->flush.seq |= REQ_FSEQ_POSTFLUSH;
- 		spin_lock_irq(&fq->mq_flush_lock);
--		list_move_tail(&rq->flush.list, &fq->flush_data_in_flight);
-+		fq->flush_data_in_flight++;
- 		spin_unlock_irq(&fq->mq_flush_lock);
- 		return false;
- 	default:
-@@ -496,7 +498,6 @@ struct blk_flush_queue *blk_alloc_flush_queue(int node, int cmd_size,
+ 		BUG_ON(seq != REQ_FSEQ_PREFLUSH && seq != REQ_FSEQ_POSTFLUSH);
+@@ -292,7 +291,7 @@ static void blk_kick_flush(struct request_queue *q, struct blk_flush_queue *fq,
+ {
+ 	struct list_head *pending = &fq->flush_queue[fq->flush_pending_idx];
+ 	struct request *first_rq =
+-		list_first_entry(pending, struct request, flush.list);
++		list_first_entry(pending, struct request, queuelist);
+ 	struct request *flush_rq = fq->flush_rq;
  
- 	INIT_LIST_HEAD(&fq->flush_queue[0]);
- 	INIT_LIST_HEAD(&fq->flush_queue[1]);
--	INIT_LIST_HEAD(&fq->flush_data_in_flight);
+ 	/* C1 described at the top of this file */
+@@ -386,7 +385,6 @@ static enum rq_end_io_ret mq_flush_data_end_io(struct request *rq,
+ static void blk_rq_init_flush(struct request *rq)
+ {
+ 	rq->flush.seq = 0;
+-	INIT_LIST_HEAD(&rq->flush.list);
+ 	rq->rq_flags |= RQF_FLUSH_SEQ;
+ 	rq->flush.saved_end_io = rq->end_io; /* Usually NULL */
+ 	rq->end_io = mq_flush_data_end_io;
+diff --git a/include/linux/blk-mq.h b/include/linux/blk-mq.h
+index 070551197c0e..96644d6f8d18 100644
+--- a/include/linux/blk-mq.h
++++ b/include/linux/blk-mq.h
+@@ -178,7 +178,6 @@ struct request {
  
- 	return fq;
+ 	struct {
+ 		unsigned int		seq;
+-		struct list_head	list;
+ 		rq_end_io_fn		*saved_end_io;
+ 	} flush;
  
-diff --git a/block/blk.h b/block/blk.h
-index 608c5dcc516b..686712e13835 100644
---- a/block/blk.h
-+++ b/block/blk.h
-@@ -15,15 +15,14 @@ struct elevator_type;
- extern struct dentry *blk_debugfs_root;
- 
- struct blk_flush_queue {
-+	spinlock_t		mq_flush_lock;
- 	unsigned int		flush_pending_idx:1;
- 	unsigned int		flush_running_idx:1;
- 	blk_status_t 		rq_status;
- 	unsigned long		flush_pending_since;
- 	struct list_head	flush_queue[2];
--	struct list_head	flush_data_in_flight;
-+	unsigned long		flush_data_in_flight;
- 	struct request		*flush_rq;
--
--	spinlock_t		mq_flush_lock;
- };
- 
- bool is_flush_rq(struct request *req);
 -- 
 2.39.2
 
