@@ -2,93 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4199F740309
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 20:16:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6915574030E
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 20:17:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230253AbjF0SQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 14:16:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47988 "EHLO
+        id S230232AbjF0SR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 14:17:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231305AbjF0SQC (ORCPT
+        with ESMTP id S229495AbjF0SRY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 14:16:02 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0EB397
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 11:16:00 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4f8777caaa1so6906745e87.3
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 11:16:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1687889759; x=1690481759;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=AhTPOEOj0BqxLY9QE/JlifSVTXobVSdIih6u1SdRovk=;
-        b=NHqPmZG+gvs0hXwQO+IFOjNdZ+oKfc/qHB1hP/sKw/JujEh2s7IyKS6rYaKiqxBm4p
-         bMIai8Xiu17vEWjkbtBDJw738ylRuAiiWr6J+9Sqjf+UXRJSAH3vy0jB4dvCbulJ650S
-         UbR6GSiqyXYEOfeHUGvh1im0sQSy6CwnJKU10=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687889759; x=1690481759;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AhTPOEOj0BqxLY9QE/JlifSVTXobVSdIih6u1SdRovk=;
-        b=YvtLvfzqS6ZmX6SgvvCWXVmB4s4SsTIccXpTVBVqn+qfWcZNrRAFQ65KCKgENMrLJF
-         /zQALxFVQyPAQMYBtz8hxZiGxRfyXV/0I3p4v8WTWLajqebNym5ydR0U2hnWrfvwY3aI
-         6R/vjTH7i3WSpZ+TNAMBXDDzUaAaByFZ8zbr5ukYcv5Qi1RIUToxOpuN8M7Sxipbr0Rv
-         wvcQlnajgBS6Onow9ctZ1ts/K9HO5u7nIfqbQlGRCrBlJEib6OaGuZq3vB6cHhqT5zSN
-         GgTnhIckWe2WdkU3YFCnJYv1oGp16ek1IakZJpy67udoMgeqN0AnxrrZTqOxF9AxC1ji
-         J4KQ==
-X-Gm-Message-State: AC+VfDyrNpPdy8vJ6TWBZcWsniggWK5YZfTn/nRf2OgUMraicKE/pQ75
-        qifp5XHyv+lQi+fWgGiU+z5zpH5o+6kp6I40BZUBrLCe
-X-Google-Smtp-Source: ACHHUZ5a0TRz6bg/zmHLocnF8+ywTSiiYhUx0Ac8fHicbl2g6+6FO8KqBVjxk+aUE8xElKrf6ftBgQ==
-X-Received: by 2002:a05:6512:ea7:b0:4f7:6b72:3323 with SMTP id bi39-20020a0565120ea700b004f76b723323mr18668272lfb.55.1687889758399;
-        Tue, 27 Jun 2023 11:15:58 -0700 (PDT)
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com. [209.85.167.49])
-        by smtp.gmail.com with ESMTPSA id r11-20020ac25a4b000000b004fb7da93c24sm463409lfn.273.2023.06.27.11.15.57
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Jun 2023 11:15:57 -0700 (PDT)
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-4fa48b5dc2eso5028318e87.1
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 11:15:57 -0700 (PDT)
-X-Received: by 2002:a19:4f5a:0:b0:4f4:d071:be48 with SMTP id
- a26-20020a194f5a000000b004f4d071be48mr18541427lfk.14.1687889757421; Tue, 27
- Jun 2023 11:15:57 -0700 (PDT)
+        Tue, 27 Jun 2023 14:17:24 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B2C210D;
+        Tue, 27 Jun 2023 11:17:16 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id D66EC601E5;
+        Tue, 27 Jun 2023 20:17:13 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1687889833; bh=ISK3WC7f1l2wOaOMFHmv6Z7JIkw/SwNFhMBbaXzowYQ=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=Xx42ERRRISfNNmdOETgFTWFSxJ3UjszyxRw64dmTf4712Z2xMfh617FajqTG7V/hU
+         6U02tQPafJbNffod085mctIGqMzuuBuP3snjs64hA7l+uGF4qeXkwwG6rRp3n7QNRB
+         pyFiz2RMUjJzAJc/mKPeo1x0S1MYCyfxzZUrzCXMMnYLKWaQU/Q+b0OUfeXF9mP439
+         g+KmavotNI5HOpTGdzk6RtmaSQMZP4brr4XhEeAgEw+67MppQloCVbiMrMMoYWpcQI
+         ddG8nDkHJryZ4AdeJeya0wcZALmDeRYPyyAnrShcG/FcBMXapRJtyov2L0yIWGeUEb
+         rqshiBUPstm0g==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id SCEbsrVQbiXl; Tue, 27 Jun 2023 20:17:11 +0200 (CEST)
+Received: from [192.168.1.6] (unknown [94.250.191.183])
+        by domac.alu.hr (Postfix) with ESMTPSA id 6710B601CE;
+        Tue, 27 Jun 2023 20:16:57 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1687889831; bh=ISK3WC7f1l2wOaOMFHmv6Z7JIkw/SwNFhMBbaXzowYQ=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=v+kSAdB6RJWrNsYkIUcNB8qjZOomA1u5bB/1YTnQarkI1Mnob4INT4G9u/xk3dr4k
+         FUTi+NX/P8QN/Q9HeyxcDqeJ3eXMbRuyDUiTOpQ/eR7fsMLObwlLdfIG5bZ9qUhg+J
+         Vry3bBQGmRNpU278B+FFHOmEENlTj/I+eQ/kVrHT052B3P2cIJ118X0E1lW7r6JOjc
+         FJnPwKVw4iI4yamigMijZfS5Rdc6Hkm6zP+9qV+7bNAC7+W8i7waCtAY7iDFhtDzmE
+         xpxHwjOrS78rXDtgpzRsTNy3TKnnJrR68LA7U+9wCE42ubbtol19ziU+pWPWvLBRrF
+         FB/yXhRmRroWQ==
+Message-ID: <721575ee-4a48-dab1-eabd-32428c20cc72@alu.unizg.hr>
+Date:   Tue, 27 Jun 2023 20:16:51 +0200
 MIME-Version: 1.0
-References: <b0bb8387-9216-0fe7-61e9-7e2daceeef20@linuxfoundation.org>
-In-Reply-To: <b0bb8387-9216-0fe7-61e9-7e2daceeef20@linuxfoundation.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 27 Jun 2023 11:15:40 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whvD6pq-7vp-cCMEnS+EOp2TmLxFKPS3Nw+Ncqt0XZVGw@mail.gmail.com>
-Message-ID: <CAHk-=whvD6pq-7vp-cCMEnS+EOp2TmLxFKPS3Nw+Ncqt0XZVGw@mail.gmail.com>
-Subject: Re: [GIT PULL] Kselftest update for Linux 6.5-rc1
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     shuah <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [BUG] btrfs: MAX_LOCKDEP_CHAIN_HLOCKS too low!
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+To:     dsterba@suse.cz
+Cc:     linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>
+References: <5ce1e20e-019b-373f-f412-31fdb2c2379d@alu.unizg.hr>
+ <ffa970c3-6907-023b-c8fb-7438694b24ef@gmx.com>
+ <20230627142739.GB16168@twin.jikos.cz>
+ <ca3f483e-38fc-786b-d85b-35d543a701a9@alu.unizg.hr>
+Content-Language: en-US
+In-Reply-To: <ca3f483e-38fc-786b-d85b-35d543a701a9@alu.unizg.hr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 25 Jun 2023 at 08:42, Shuah Khan <skhan@linuxfoundation.org> wrote:
->
-> Please pull the following Kselftest update for Linux 6.5-rc1.
+On 6/27/23 18:27, Mirsad Goran Todorovac wrote:
+> Hi, Qu, David,
+> 
+> On 6/27/23 16:27, David Sterba wrote:
+>> On Tue, Jun 27, 2023 at 08:19:37AM +0800, Qu Wenruo wrote:
+>>>
+>>> On 2023/6/27 07:40, Mirsad Goran Todorovac wrote:
+>>>> Hi,
+>>>>
+>>>> There is a bug apparently in btrfs file system.
+>>>>
+>>>> The platform is an assembled box with Ryzen 9 processor and ASRock X670E PG
+>>>> Lightning motherboard.
+>>>>
+>>>> I do not have a reproducer, just kernel log:
+>>>>
+>>>> Jun 26 20:41:58 defiant kernel: [ 2273.786736] BUG:
+>>>> MAX_LOCKDEP_CHAIN_HLOCKS too low!
+>>>
+>>> This is really what it said.
+>>>
+>>> The setting is too low for certain workload.
+>>>
+>>> In fact Fedora is already increasing this value.
+>>> If you want lockdep, I guess that's the only way to go.
+>>
+>> https://btrfs.readthedocs.io/en/latest/dev/Development-notes.html#bug-max-lockdep-chain-hlocks-too-low
+>>
+>> As the reports will probably keep coming until lockdep changes I'll move
+>> the answer to a more user-visible page.
+> 
+> Thank you for your prompt response. It wasn't obvious from the kernel
+> message though which .config setting needs adjustment.
+> 
+> I am yet unable to tell whether the lockdep setting being too low and
+> turning off the locking correctness validator caused the kernel crash, but
+> I will know more after restarting the kselftest with the new lockdep
+> setting ...
 
-Hmm. I pulled this, but it causes multiple objtool warnings.
+P.S.
 
-The cause seems to be __kunit_abort() being no-return and objtool
-having not being told about it, and I'm double-checking the fix for
-that.
+I heard it is uncool to answer one's own email, but I have been unable to
+reproduce the crash of yesterday without or with pcscd smartcard daemon
+in debug mode.
 
-But I'm unhappy with how clearly nobody seems to have looked at
-non-fatal warning output again.
+This of course doesn't mean that the LOCKDEP setting was a direct cause
+of crash, I believe that findings are inconclusive. (IMHO, correct locking
+should work even with locking correctness validator turned off.)
 
-This was why we made the kernel use -Werror, because people would
-ignore build warnings that weren't fatal. Now objtool warnings seem to
-be triggering the same laissez-faire behavior.
+FYI, here are the crash logs, in case it could help improve btrfs:
 
-               Linus
+[1] https://domac.alu.unizg.hr/~mtodorov/linux/crashes/2023-06-27/
+
+Best regards,
+Mirsad Todorovac
