@@ -2,159 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EF7B73FFCC
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 17:35:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73E5D73FFD0
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 17:35:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231352AbjF0Pfc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 11:35:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49612 "EHLO
+        id S231510AbjF0Pfw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 11:35:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbjF0Pf3 (ORCPT
+        with ESMTP id S229562AbjF0Pfu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 11:35:29 -0400
-Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679F42978;
-        Tue, 27 Jun 2023 08:35:28 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.west.internal (Postfix) with ESMTP id D527D2B0013F;
-        Tue, 27 Jun 2023 11:35:22 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Tue, 27 Jun 2023 11:35:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1687880122; x=1687887322; bh=Ma
-        Wd3XEowwvLUFCc41uoQ1RE2kMoRIlrDDw0f1G5UY8=; b=Fs0XZFqcF1Z6kxWEqj
-        VyipIL1Lu2IQBe6WPOIhyccgGX5pW5thA0IpIpbrLMyRZP46FokJJG4n8nge6xrd
-        wPZDY+RpHlYiMHbTEKOu2REa5lfjAvtfeRplS3fQrQVkr7vM3+OT9gKOQSTbscub
-        B8633BC4A1OB2ZHv2WKhM/Z3jGftxhXO8mrY5sex96hQ9iZOiwUcjNSS6pxkG9rq
-        4UwbkU6eUdBRhYz00e3DymWK2h30gFAeXrypMHue27O2Jflbx7+g2lggx4U1fXqU
-        KrtZZwzQcFpB7CWvAFM6YSVq2UZtnVqmdBMMOYUFFhlTJP0gmlv/YU5kr4x2JCRe
-        lXyg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1687880122; x=1687887322; bh=MaWd3XEowwvLU
-        FCc41uoQ1RE2kMoRIlrDDw0f1G5UY8=; b=j9ZSCj7W+XQf8JkJmrPDFf7EOxMTB
-        tqpymNDN9SIS7JTjR0gqqySkBRVgGPlNr8FQZCFfRcjlQx7IXrirGJH6D7aBaqPs
-        Z9AZoTDeJMQg08S6ImwCc4hNp0yKrSZqWISMHPmKhAPXtKeArXRJ+WKUHOTNo1Be
-        ByNZVCUa+1HJJ2lU9IDKk6j0io8jicWURhhuWVlZiiTnAqi9XPbyUUlzUgrZHRd5
-        a/bAh8a817zKOYuku1V0Ow+I0cSSq+FfF1fFIXn9NvivMXIXNBn1B/Xe0rp6mvlR
-        +5GP662che8RMu08ZyxWWK18q0j2d4Mjj1jYXVnGIO3xGbPVYMkwvwLPg==
-X-ME-Sender: <xms:uQGbZBx6DGW6t-IECKNUw9WFzYNO294lwPkVNHxyHlz_3F6G3EF6HQ>
-    <xme:uQGbZBRCy13UqbAxIjL1uoQ0lx2HM4dxvIdNQaHQnKTQqE7zuc0k2JaIleHXPT9ye
-    jweR9REd79c82u06g>
-X-ME-Received: <xmr:uQGbZLVyucbrKlXZfODVGfTwDAq0TkrrQoL2WKfzbiDmdUrmWFEfwApHG7FptRznwUrRTimviu8aa6jxWKWmqfngLEBo8zGbeboD>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrtddtgdegkecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenfg
-    hrlhcuvffnffculdejtddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtsfdttddt
-    vdenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihusegugihuuhhurdighiiiqeenuc
-    ggtffrrghtthgvrhhnpedvfeekteduudefieegtdehfeffkeeuudekheduffduffffgfeg
-    iedttefgvdfhvdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpegugihusegugihuuhhurdighiii
-X-ME-Proxy: <xmx:ugGbZDjhwzOYxW82dEuuydsSiFPt6dk92wWs2bXOdWBfZEnthxCS5w>
-    <xmx:ugGbZDD5onJICIyrRsab8yj9lDnwB5wntHPq9i8M9-jUzu5r67Tf_Q>
-    <xmx:ugGbZMLVaxTNm5BPF_9vLR3xOAbGZgGjCcWXjiz5zfYxLoOwfrOVWg>
-    <xmx:ugGbZFzStJSByafpx22ow7dsPAOzBtJREFBZQ6xrOy9l9mqE81gHgsDSFqg>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 27 Jun 2023 11:35:20 -0400 (EDT)
-Date:   Tue, 27 Jun 2023 09:35:19 -0600
-From:   Daniel Xu <dxu@dxuuu.xyz>
-To:     Florian Westphal <fw@strlen.de>
-Cc:     daniel@iogearbox.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, pablo@netfilter.org, andrii@kernel.org,
-        davem@davemloft.net, ast@kernel.org, kadlec@netfilter.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, netdev@vger.kernel.org, dsahern@kernel.org
-Subject: Re: [PATCH bpf-next 4/7] netfilter: bpf: Support
- BPF_F_NETFILTER_IP_DEFRAG in netfilter link
-Message-ID: <5hnelxxsrwyon36k3t7uhxbdaqu4ku246vkec6kxkfkqivkcsm@xusgh57bm2xj>
-References: <cover.1687819413.git.dxu@dxuuu.xyz>
- <242c66138bf4ec8aa26b29d736fb48242b4164ce.1687819413.git.dxu@dxuuu.xyz>
- <20230627111248.GH3207@breakpoint.cc>
+        Tue, 27 Jun 2023 11:35:50 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C69512D50
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 08:35:47 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id 3f1490d57ef6-bff4f1e93caso4696530276.0
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 08:35:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687880147; x=1690472147;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rhNxLFGpu4iF1+tBl9GUqQA+nvSIsmhRHaz0sstddl4=;
+        b=Z+dXs+eoUJpPLQpLki49VLgu/9v3VfZFLuMBbqLgYFgFxGVThgpVF86ZJwnl7Ut7cn
+         JZuq/uE0kHAPz2ZpN/yjwi3iSAz7tW4K5rofSml+DOyr6LJm1su+NMLkyladOA/97nkp
+         RF24r8XAXIueBDJdl1f9Xs7DG38o7MVTYNyu2z40azPwik/de+ViP4gdVQmH8XJCPeZf
+         4ZhmLCMrPc5zITSTq/sFhJkB0m+TZ0EGEzoSUkOHVgKp+JQwEzZpUuGDdMvyZgVPUeYc
+         sg8NFtpkYEc72Ghdy4er+vytTMzrAISl8zIwY1gvGCh3PynxREVHWzKpj7VrC8dNi4JC
+         KFiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687880147; x=1690472147;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rhNxLFGpu4iF1+tBl9GUqQA+nvSIsmhRHaz0sstddl4=;
+        b=QjKZeC1tQyDDzHzy1tq3IOMqRa9xA1xfNxCDFi/mLnDEgrCsRJqtAHBxGFsnniFRE/
+         xvqpA34MnVgJPfgbJTcm6xW/I2ykzRIaN8IUdc7QKPTPsqV7al/HUDPlgu6FkF0X3fmY
+         aBN0uqX4rxLayHN6CF6RpDPbYpC7riRgpsW2p08myAd/gMm9yg4LXzOVKM25mvr0NBgX
+         WIQuKwTyzs5CIccvNV/N1OPnqBT+Axf6d+pBt9YPyk/MsCfjg4Cch3vQkybTPxC32P+y
+         ttpYiW/hwdcSEDHXjYEJYBGngW2H1gmcM9EORCdTldnGrNuPeBQnHSjsheKHZyKKbtwo
+         BScQ==
+X-Gm-Message-State: AC+VfDzzRvtRw6D0inaEP9uG1OpuKzpUF1ckAsK9WFrhb6vGREx3Cx/t
+        hhkmU5UgOaURRfrsx7P6Yh4bNaZBZ1ws+/2mprcS1Q==
+X-Google-Smtp-Source: ACHHUZ45C84F8vXdusgYm2ISHNmBkm7kQEA2MlZgv/6RCllE4EV196ruC3PfGHK8PoauQ0Z+TeaJmhdhbmHMYIcuuhg=
+X-Received: by 2002:a25:2513:0:b0:c12:d2b:5428 with SMTP id
+ l19-20020a252513000000b00c120d2b5428mr8693622ybl.29.1687880146789; Tue, 27
+ Jun 2023 08:35:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230627111248.GH3207@breakpoint.cc>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230627042321.1763765-1-surenb@google.com> <20230627042321.1763765-8-surenb@google.com>
+ <875y792uu7.fsf@nvdebian.thelocal>
+In-Reply-To: <875y792uu7.fsf@nvdebian.thelocal>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Tue, 27 Jun 2023 08:35:35 -0700
+Message-ID: <CAJuCfpHSe8+h+wG6RxepiqxZiGDoyQJcMnZ7kkSeNbAzgEYROQ@mail.gmail.com>
+Subject: Re: [PATCH v3 7/8] mm: drop VMA lock before waiting for migration
+To:     Alistair Popple <apopple@nvidia.com>
+Cc:     akpm@linux-foundation.org, willy@infradead.org, hannes@cmpxchg.org,
+        mhocko@suse.com, josef@toxicpanda.com, jack@suse.cz,
+        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
+        michel@lespinasse.org, liam.howlett@oracle.com, jglisse@google.com,
+        vbabka@suse.cz, minchan@google.com, dave@stgolabs.net,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com, hdanton@sina.com,
+        peterx@redhat.com, ying.huang@intel.com, david@redhat.com,
+        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
+        viro@zeniv.linux.org.uk, brauner@kernel.org,
+        pasha.tatashin@soleen.com, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 01:12:48PM +0200, Florian Westphal wrote:
-> Daniel Xu <dxu@dxuuu.xyz> wrote:
-> > +static int bpf_nf_enable_defrag(struct bpf_nf_link *link)
-> > +{
-> > +	int err;
+On Tue, Jun 27, 2023 at 1:06=E2=80=AFAM Alistair Popple <apopple@nvidia.com=
+> wrote:
+>
+>
+> Suren Baghdasaryan <surenb@google.com> writes:
+>
+> > migration_entry_wait does not need VMA lock, therefore it can be
+> > dropped before waiting.
+> >
+> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > ---
+> >  mm/memory.c | 14 ++++++++++++--
+> >  1 file changed, 12 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/mm/memory.c b/mm/memory.c
+> > index 5caaa4c66ea2..bdf46fdc58d6 100644
+> > --- a/mm/memory.c
+> > +++ b/mm/memory.c
+> > @@ -3715,8 +3715,18 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
+> >       entry =3D pte_to_swp_entry(vmf->orig_pte);
+> >       if (unlikely(non_swap_entry(entry))) {
+> >               if (is_migration_entry(entry)) {
+> > -                     migration_entry_wait(vma->vm_mm, vmf->pmd,
+> > -                                          vmf->address);
+> > +                     /* Save mm in case VMA lock is dropped */
+> > +                     struct mm_struct *mm =3D vma->vm_mm;
 > > +
-> > +	switch (link->hook_ops.pf) {
-> > +#if IS_ENABLED(CONFIG_NF_DEFRAG_IPV4)
-> > +	case NFPROTO_IPV4:
-> > +		const struct nf_defrag_v4_hook *v4_hook;
-> > +
-> > +		err = request_module("nf_defrag_ipv4");
-> > +		if (err)
-> > +			return err;
-> > +
-> > +		rcu_read_lock();
-> > +		v4_hook = rcu_dereference(nf_defrag_v4_hook);
-> > +		err = v4_hook->enable(link->net);
-> > +		rcu_read_unlock();
-> 
-> I'd reverse this, first try rcu_dereference(), then modprobe
-> if thats returned NULL.
+> > +                     if (vmf->flags & FAULT_FLAG_VMA_LOCK) {
+> > +                             /*
+> > +                              * No need to hold VMA lock for migration=
+.
+> > +                              * WARNING: vma can't be used after this!
+> > +                              */
+> > +                             vma_end_read(vma);
+> > +                             ret |=3D VM_FAULT_COMPLETED;
+>
+> Doesn't this need to also set FAULT_FLAG_LOCK_DROPPED to ensure we don't
+> call vma_end_read() again in __handle_mm_fault()?
 
-Ack.
+Uh, right. Got lost during the last refactoring. Thanks for flagging!
 
-> 
-> > +static void bpf_nf_disable_defrag(struct bpf_nf_link *link)
-> > +{
-> > +	switch (link->hook_ops.pf) {
-> > +#if IS_ENABLED(CONFIG_NF_DEFRAG_IPV4)
-> > +	case NFPROTO_IPV4:
-> > +		const struct nf_defrag_v4_hook *v4_hook;
-> > +
-> > +		rcu_read_lock();
-> > +		v4_hook = rcu_dereference(nf_defrag_v4_hook);
-> > +		v4_hook->disable(link->net);
-> > +		rcu_read_unlock();
-> 
-> if (v4_hook)
-> 	v4_hook->disable()
-> 
-> Else we get trouble on manual 'rmmod'.
-
-Ah good catch, thanks.
-
-> 
-> > +	/* make sure conntrack confirm is always last */
-> > +	prio = attr->link_create.netfilter.priority;
-> > +	if (prio == NF_IP_PRI_FIRST)
-> > +		return -ERANGE;  /* sabotage_in and other warts */
-> > +	else if (prio == NF_IP_PRI_LAST)
-> > +		return -ERANGE;  /* e.g. conntrack confirm */
-> > +	else if ((attr->link_create.netfilter.flags & BPF_F_NETFILTER_IP_DEFRAG) &&
-> > +		 (prio > NF_IP_PRI_FIRST && prio <= NF_IP_PRI_CONNTRACK_DEFRAG))
-> > +		return -ERANGE;  /* cannot use defrag if prog runs before nf_defrag */
-> 
-> You could elide the (prio > NF_IP_PRI_FIRST, its already handled by
-> first conditional.  Otherwise this looks good to me.
-> 
-
-Ah, right. It's INT_MIN.
-
-
-Thanks,
-Daniel
+>
+> > +                     }
+> > +                     migration_entry_wait(mm, vmf->pmd, vmf->address);
+> >               } else if (is_device_exclusive_entry(entry)) {
+> >                       vmf->page =3D pfn_swap_entry_to_page(entry);
+> >                       ret =3D remove_device_exclusive_entry(vmf);
+>
