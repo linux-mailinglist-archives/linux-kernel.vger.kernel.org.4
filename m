@@ -2,394 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0182D74055A
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 22:59:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EA0F74055F
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 23:01:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbjF0U7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 16:59:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59052 "EHLO
+        id S230356AbjF0VBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 17:01:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjF0U7V (ORCPT
+        with ESMTP id S230002AbjF0VBP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 16:59:21 -0400
-Received: from tarta.nabijaczleweli.xyz (unknown [139.28.40.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C0F7FF2;
-        Tue, 27 Jun 2023 13:59:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
-        s=202305; t=1687899558;
-        bh=cCPA9gHUAzZnPeQczg3AkMUdgYMOFvdXzDxq+UdqXHk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=D7bdg+lMx7cOjryXowRwFAneeyhPYCFLmfGhYN0bjVSt055/r40I8hMOmYdzqMrZJ
-         OVyaW3q4KCF+R4HSgz5vPMqtvGl0R6dWmheY6BDofBXTUMBQJbpWbNJfK0dB1H/hCE
-         Hub+ZsTyLNVdQDVm5S/G4Mjka2yAe+YdC8RyM8Cf0DTFFsYPoTYCJLa3gBiqbusX6l
-         Q0zvi18BMRlK+7hU32/n0YqkIoaJ/jBMxPR2QEho/nmpQPPhg0L+qJjB1FCFKpoAUf
-         Qmd6qPwyqswfzSsHnmJSFl/ptw4Ej0o0licRAZan/WgedJVezJ1BeNvESd5fVhSxH2
-         mKyWWAPskjzvg==
-Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
-        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id CD80513AA;
-        Tue, 27 Jun 2023 22:59:18 +0200 (CEST)
-Date:   Tue, 27 Jun 2023 22:59:17 +0200
-From:   Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= 
-        <nabijaczleweli@nabijaczleweli.xyz>
-To:     Amir Goldstein <amir73il@gmail.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jan Kara <jack@suse.cz>,
-        Chung-Chiang Cheng <cccheng@synology.com>, ltp@lists.linux.it
-Subject: [LTP RFC PATCH v2] inotify13: new test for fs/splice.c functions vs
- pipes vs inotify
-Message-ID: <ajkeyn2sy35h6ctfbupom4xg3ozoxxgsojdvu7vebac44zqped@ecnusnv6daxn>
-References: <CAOQ4uxifYoKdup6gzyW0iV=KFBzTWu5T8=zq8s8pFw2X3+5xRg@mail.gmail.com>
+        Tue, 27 Jun 2023 17:01:15 -0400
+Received: from gproxy4-pub.mail.unifiedlayer.com (gproxy4-pub.mail.unifiedlayer.com [69.89.23.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD7CF10F0
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 14:01:14 -0700 (PDT)
+Received: from cmgw15.mail.unifiedlayer.com (unknown [10.0.90.130])
+        by progateway6.mail.pro1.eigbox.com (Postfix) with ESMTP id 761111004955A
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 21:01:14 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id EFoIqTewtxKeeEFoIq9JIy; Tue, 27 Jun 2023 21:01:14 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=NvUUz+RJ c=1 sm=1 tr=0 ts=649b4e1a
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=of4jigFt-DYA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=rk1l2mXW63bgfV5RT+AktSRQGUCFyMbOSRPrG+EAksk=; b=P1XxE2oy0BFOIEj2+XgIS3MBXZ
+        Y6qaxiPxwnAc8aut3jQBHEkdsVZi5XaUuOxVaPs/mn5XaNv89lXP5whl/IUrXfBWRJ9gqDmrtYzEP
+        WXKa4cr90LVWdgmzjsakOW3de7Qn1dWL9FpXe9tnv+DwecDj4xUJe5X17jnv+vFDksWZApn0y1Hdu
+        RA56ZOI/k4xbvG7YzHX/y/PnyySyKI458mHkMINFJ5b+sd2Mq6UqV8FN5R8PzsWZnocmdniNHoHwc
+        4NjE6cFxILGwv+YUNsy103D81jXm88sFT6tTZmhTKkcxWumHIuL9lEpSYSaQnkUS29Or+NLwnhKOh
+        +VXWOR9Q==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:45656 helo=[10.0.1.47])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1qEFoH-003oAQ-7K;
+        Tue, 27 Jun 2023 15:01:13 -0600
+Subject: Re: [PATCH 6.1 000/170] 6.1.36-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org
+References: <20230626180800.476539630@linuxfoundation.org>
+In-Reply-To: <20230626180800.476539630@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <4d050557-ec87-bb74-6de4-5cfc2e292389@w6rz.net>
+Date:   Tue, 27 Jun 2023 14:01:10 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="aadmf3i7azbjbqpw"
-Content-Disposition: inline
-In-Reply-To: <CAOQ4uxifYoKdup6gzyW0iV=KFBzTWu5T8=zq8s8pFw2X3+5xRg@mail.gmail.com>
-User-Agent: NeoMutt/20230517
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_RDNS_DYNAMIC_FP,
-        RDNS_DYNAMIC,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1qEFoH-003oAQ-7K
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:45656
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 4
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 6/26/23 11:09 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.36 release.
+> There are 170 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 28 Jun 2023 18:07:23 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.36-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
---aadmf3i7azbjbqpw
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-The only one that passes on 6.1.27-1 is sendfile_file_to_pipe.
+Tested-by: Ron Economos <re@w6rz.net>
 
-Link: https://lore.kernel.org/linux-fsdevel/jbyihkyk5dtaohdwjyivambb2gffyjs=
-3dodpofafnkkunxq7bu@jngkdxx65pux/t/#u
-Signed-off-by: Ahelenia Ziemia=C5=84ska <nabijaczleweli@nabijaczleweli.xyz>
----
-Whitespace-only changes against v1.
-Marking as RFC since we have no commit SHA to reference.
-
-I didn't find any style opinions in the repository, so I just let
-clang-format rip. Apparently, according to a /github wiki page/:
-  https://github.com/linux-test-project/ltp/wiki/Test-Writing-Guidelines#2-=
-coding-style
-which is /only referenced/ from a 2020 issue:
-  https://github.com/linux-test-project/ltp/issues/631
-LTP uses the kernel style.
-
-Could've fooled me, because the other inotify tests are definitely not
-in the kernel style.
-
-Re-formatted the whole file with the linux .clang-format.
-
- testcases/kernel/syscalls/inotify/.gitignore  |   1 +
- testcases/kernel/syscalls/inotify/inotify13.c | 260 ++++++++++++++++++
- 2 files changed, 261 insertions(+)
- create mode 100644 testcases/kernel/syscalls/inotify/inotify13.c
-
-diff --git a/testcases/kernel/syscalls/inotify/.gitignore b/testcases/kerne=
-l/syscalls/inotify/.gitignore
-index f6e5c546a..b597ea63f 100644
---- a/testcases/kernel/syscalls/inotify/.gitignore
-+++ b/testcases/kernel/syscalls/inotify/.gitignore
-@@ -10,3 +10,4 @@
- /inotify10
- /inotify11
- /inotify12
-+/inotify13
-diff --git a/testcases/kernel/syscalls/inotify/inotify13.c b/testcases/kern=
-el/syscalls/inotify/inotify13.c
-new file mode 100644
-index 000000000..8c2cd4cf1
---- /dev/null
-+++ b/testcases/kernel/syscalls/inotify/inotify13.c
-@@ -0,0 +1,260 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*\
-+ * Verify splice-family functions (and sendfile) generate IN_ACCESS
-+ * for what they read and IN_MODIFY for what they write.
-+ *
-+ * Regression test for 983652c69199 and
-+ * https://lore.kernel.org/linux-fsdevel/jbyihkyk5dtaohdwjyivambb2gffyjs3d=
-odpofafnkkunxq7bu@jngkdxx65pux/t/#u
-+ */
-+
-+#define _GNU_SOURCE
-+#include "config.h"
-+
-+#include <stdio.h>
-+#include <unistd.h>
-+#include <stdlib.h>
-+#include <fcntl.h>
-+#include <stdbool.h>
-+#include <inttypes.h>
-+#include <signal.h>
-+#include <sys/mman.h>
-+#include <sys/sendfile.h>
-+
-+#include "tst_test.h"
-+#include "tst_safe_macros.h"
-+#include "inotify.h"
-+
-+#if defined(HAVE_SYS_INOTIFY_H)
-+#include <sys/inotify.h>
-+
-+static int pipes[2] =3D { -1, -1 };
-+static int inotify =3D -1;
-+static int memfd =3D -1;
-+static int data_pipes[2] =3D { -1, -1 };
-+
-+static void watch_rw(int fd)
-+{
-+	char buf[64];
-+	sprintf(buf, "/proc/self/fd/%d", fd);
-+	SAFE_MYINOTIFY_ADD_WATCH(inotify, buf, IN_ACCESS | IN_MODIFY);
-+}
-+
-+static int compar(const void *l, const void *r)
-+{
-+	const struct inotify_event *lie =3D l;
-+	const struct inotify_event *rie =3D r;
-+	return lie->wd - rie->wd;
-+}
-+
-+static void get_events(size_t evcnt, struct inotify_event evs[static evcnt=
-])
-+{
-+	struct inotify_event tail, *itr =3D evs;
-+	for (size_t left =3D evcnt; left; --left)
-+		SAFE_READ(true, inotify, itr++, sizeof(struct inotify_event));
-+
-+	TEST(read(inotify, &tail, sizeof(struct inotify_event)));
-+	if (TST_RET !=3D -1)
-+		tst_brk(TFAIL, ">%zu events", evcnt);
-+	if (TST_ERR !=3D EAGAIN)
-+		tst_brk(TFAIL | TTERRNO, "expected EAGAIN");
-+
-+	qsort(evs, evcnt, sizeof(struct inotify_event), compar);
-+}
-+
-+static void expect_event(struct inotify_event *ev, int wd, uint32_t mask)
-+{
-+	if (ev->wd !=3D wd)
-+		tst_brk(TFAIL, "expect event for wd %d got %d", wd, ev->wd);
-+	if (ev->mask !=3D mask)
-+		tst_brk(TFAIL,
-+			"expect event with mask %" PRIu32 " got %" PRIu32 "",
-+			mask, ev->mask);
-+}
-+
-+#define F2P(splice)                                                      \
-+	SAFE_WRITE(SAFE_WRITE_RETRY, memfd, __func__, sizeof(__func__)); \
-+	SAFE_LSEEK(memfd, 0, SEEK_SET);                                  \
-+	watch_rw(memfd);                                                 \
-+	watch_rw(pipes[0]);                                              \
-+	TEST(splice);                                                    \
-+	if (TST_RET =3D=3D -1)                                               \
-+		tst_brk(TBROK | TERRNO, #splice);                        \
-+	if (TST_RET !=3D sizeof(__func__))                                 \
-+		tst_brk(TBROK, #splice ": %" PRId64 "", TST_RET);        \
-+                                                                         \
-+	/* expecting: IN_ACCESS memfd, IN_MODIFY pipes[0] */             \
-+	struct inotify_event events[2];                                  \
-+	get_events(ARRAY_SIZE(events), events);                          \
-+	expect_event(events + 0, 1, IN_ACCESS);                          \
-+	expect_event(events + 1, 2, IN_MODIFY);                          \
-+                                                                         \
-+	char buf[sizeof(__func__)];                                      \
-+	SAFE_READ(true, pipes[0], buf, sizeof(__func__));                \
-+	if (memcmp(buf, __func__, sizeof(__func__)))                     \
-+		tst_brk(TFAIL, "buf contents bad");
-+static void splice_file_to_pipe(void)
-+{
-+	F2P(splice(memfd, NULL, pipes[1], NULL, 128 * 1024 * 1024, 0));
-+}
-+static void sendfile_file_to_pipe(void)
-+{
-+	F2P(sendfile(pipes[1], memfd, NULL, 128 * 1024 * 1024));
-+}
-+
-+static void splice_pipe_to_file(void)
-+{
-+	SAFE_WRITE(SAFE_WRITE_RETRY, pipes[1], __func__, sizeof(__func__));
-+	watch_rw(pipes[0]);
-+	watch_rw(memfd);
-+	TEST(splice(pipes[0], NULL, memfd, NULL, 128 * 1024 * 1024, 0));
-+	if (TST_RET =3D=3D -1)
-+		tst_brk(TBROK | TERRNO, "splice");
-+	if (TST_RET !=3D sizeof(__func__))
-+		tst_brk(TBROK, "splice: %" PRId64 "", TST_RET);
-+
-+	/* expecting: IN_ACCESS pipes[0], IN_MODIFY memfd */
-+	struct inotify_event events[2];
-+	get_events(ARRAY_SIZE(events), events);
-+	expect_event(events + 0, 1, IN_ACCESS);
-+	expect_event(events + 1, 2, IN_MODIFY);
-+
-+	char buf[sizeof(__func__)];
-+	SAFE_LSEEK(memfd, 0, SEEK_SET);
-+	SAFE_READ(true, memfd, buf, sizeof(__func__));
-+	if (memcmp(buf, __func__, sizeof(__func__)))
-+		tst_brk(TFAIL, "buf contents bad");
-+}
-+
-+#define P2P(splice)                                                  \
-+	SAFE_WRITE(SAFE_WRITE_RETRY, data_pipes[1], __func__,        \
-+		   sizeof(__func__));                                \
-+	watch_rw(data_pipes[0]);                                     \
-+	watch_rw(pipes[1]);                                          \
-+	TEST(splice);                                                \
-+	if (TST_RET =3D=3D -1)                                           \
-+		tst_brk(TBROK | TERRNO, #splice);                    \
-+	if (TST_RET !=3D sizeof(__func__))                             \
-+		tst_brk(TBROK, #splice ": %" PRId64 "", TST_RET);    \
-+                                                                     \
-+	/* expecting: IN_ACCESS data_pipes[0], IN_MODIFY pipes[1] */ \
-+	struct inotify_event events[2];                              \
-+	get_events(ARRAY_SIZE(events), events);                      \
-+	expect_event(events + 0, 1, IN_ACCESS);                      \
-+	expect_event(events + 1, 2, IN_MODIFY);                      \
-+                                                                     \
-+	char buf[sizeof(__func__)];                                  \
-+	SAFE_READ(true, pipes[0], buf, sizeof(__func__));            \
-+	if (memcmp(buf, __func__, sizeof(__func__)))                 \
-+		tst_brk(TFAIL, "buf contents bad");
-+static void splice_pipe_to_pipe(void)
-+{
-+	P2P(splice(data_pipes[0], NULL, pipes[1], NULL, 128 * 1024 * 1024, 0));
-+}
-+static void tee_pipe_to_pipe(void)
-+{
-+	P2P(tee(data_pipes[0], pipes[1], 128 * 1024 * 1024, 0));
-+}
-+
-+static char vmsplice_pipe_to_mem_dt[32 * 1024];
-+static void vmsplice_pipe_to_mem(void)
-+{
-+	memcpy(vmsplice_pipe_to_mem_dt, __func__, sizeof(__func__));
-+	watch_rw(pipes[0]);
-+	TEST(vmsplice(
-+		pipes[1],
-+		&(struct iovec){ .iov_base =3D vmsplice_pipe_to_mem_dt,
-+				 .iov_len =3D sizeof(vmsplice_pipe_to_mem_dt) },
-+		1, SPLICE_F_GIFT));
-+	if (TST_RET =3D=3D -1)
-+		tst_brk(TBROK | TERRNO, "vmsplice");
-+	if (TST_RET !=3D sizeof(vmsplice_pipe_to_mem_dt))
-+		tst_brk(TBROK, "vmsplice: %" PRId64 "", TST_RET);
-+
-+	/* expecting: IN_MODIFY pipes[0] */
-+	struct inotify_event event;
-+	get_events(1, &event);
-+	expect_event(&event, 1, IN_MODIFY);
-+
-+	char buf[sizeof(__func__)];
-+	SAFE_READ(true, pipes[0], buf, sizeof(__func__));
-+	if (memcmp(buf, __func__, sizeof(__func__)))
-+		tst_brk(TFAIL, "buf contents bad");
-+}
-+
-+static void vmsplice_mem_to_pipe(void)
-+{
-+	char buf[sizeof(__func__)];
-+	SAFE_WRITE(SAFE_WRITE_RETRY, pipes[1], __func__, sizeof(__func__));
-+	watch_rw(pipes[1]);
-+	TEST(vmsplice(pipes[0],
-+		      &(struct iovec){ .iov_base =3D buf,
-+				       .iov_len =3D sizeof(buf) },
-+		      1, 0));
-+	if (TST_RET =3D=3D -1)
-+		tst_brk(TBROK | TERRNO, "vmsplice");
-+	if (TST_RET !=3D sizeof(buf))
-+		tst_brk(TBROK, "vmsplice: %" PRId64 "", TST_RET);
-+
-+	/* expecting: IN_ACCESS pipes[1] */
-+	struct inotify_event event;
-+	get_events(1, &event);
-+	expect_event(&event, 1, IN_ACCESS);
-+	if (memcmp(buf, __func__, sizeof(__func__)))
-+		tst_brk(TFAIL, "buf contents bad");
-+}
-+
-+typedef void (*tests_f)(void);
-+#define TEST_F(f)      \
-+	{              \
-+		f, #f, \
-+	}
-+static const struct {
-+	tests_f f;
-+	const char *n;
-+} tests[] =3D {
-+	TEST_F(splice_file_to_pipe),  TEST_F(sendfile_file_to_pipe),
-+	TEST_F(splice_pipe_to_file),  TEST_F(splice_pipe_to_pipe),
-+	TEST_F(tee_pipe_to_pipe),     TEST_F(vmsplice_pipe_to_mem),
-+	TEST_F(vmsplice_mem_to_pipe),
-+};
-+
-+static void run_test(unsigned int n)
-+{
-+	tst_res(TINFO, "%s", tests[n].n);
-+
-+	SAFE_PIPE2(pipes, O_CLOEXEC);
-+	SAFE_PIPE2(data_pipes, O_CLOEXEC);
-+	inotify =3D SAFE_MYINOTIFY_INIT1(IN_NONBLOCK | IN_CLOEXEC);
-+	if ((memfd =3D memfd_create(__func__, MFD_CLOEXEC)) =3D=3D -1)
-+		tst_brk(TCONF | TERRNO, "memfd");
-+	tests[n].f();
-+	tst_res(TPASS, "=D0=BE=D0=BA");
-+}
-+
-+static void cleanup(void)
-+{
-+	if (memfd !=3D -1)
-+		SAFE_CLOSE(memfd);
-+	if (inotify !=3D -1)
-+		SAFE_CLOSE(inotify);
-+	if (pipes[0] !=3D -1)
-+		SAFE_CLOSE(pipes[0]);
-+	if (pipes[1] !=3D -1)
-+		SAFE_CLOSE(pipes[1]);
-+	if (data_pipes[0] !=3D -1)
-+		SAFE_CLOSE(data_pipes[0]);
-+	if (data_pipes[1] !=3D -1)
-+		SAFE_CLOSE(data_pipes[1]);
-+}
-+
-+static struct tst_test test =3D {
-+	.max_runtime =3D 10,
-+	.cleanup =3D cleanup,
-+	.test =3D run_test,
-+	.tcnt =3D ARRAY_SIZE(tests),
-+	.tags =3D (const struct tst_tag[]){ { "linux-git", "983652c69199" }, {} },
-+};
-+
-+#else
-+TST_TEST_TCONF("system doesn't have required inotify support");
-+#endif
---=20
-2.39.2
-
---aadmf3i7azbjbqpw
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmSbTaUACgkQvP0LAY0m
-WPGNNRAAi6Lq2fRPTqF97WtfGi8Gfxt8iKcK1m8DKj9cHd4VbJNRZVl3FYvMOgAW
-Al8SkLG4oTHtYwBkEVDzWzTucc5SlyTHDebDEoW84H9HufMoTrobw2o8w4KSYLKr
-27nRXvBDqq7hWsiLe/5EZTM09HAvda/iCisL3TzWWdbwX1tMU6rOx5iLe2NoInyy
-b4vtyQAbSc+WcbzMMlF239KrwJx+2fxRnh0MyWVTap9nmoNbHmE3FBsdTTXYXxVn
-Fa7n78nuDKWyHCP24Lw9979Amn4DuFvm3IlIa4Du/Jc5NJil1tL+3C3RmiLw1sXv
-kmz3yjaiomm52JggY1/7dgZzebfu7XW0ULR6r8Wzr/VPtsHl0wJjxe3XXMv3VHDQ
-I/74GpC78RAZE6m6YCJHxqCpre6aGBn+DfTp4D7yunR0on9vAPx4BIeAruUCR+X2
-buXBLNHaz1N5SUHMNmY/fS4iDWH3MizsR0xAEqZ4npJYHBIcKJ11pX/SpPSJYZTv
-r7S5xuTbplOM1o0q8egDIcF9AOWFYZAfEXBTUCMY4Q387V4D8EcMlG7jwrrGkfO+
-xEs3qYhZjwjYfFhYDvTrcAd5vyoDOLx2q6rkJXs+3r4EymPA/YuB+3itTjPEVKJj
-uiBoV0coS/qMpPURsYSAUqIm/TkNB87Nsyt9U+NgXhDFLNuRz6c=
-=Mxnw
------END PGP SIGNATURE-----
-
---aadmf3i7azbjbqpw--
