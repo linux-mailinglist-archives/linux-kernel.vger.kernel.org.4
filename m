@@ -2,195 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E56FD7403BF
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 21:04:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DD057403C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 21:04:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231314AbjF0TD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 15:03:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40732 "EHLO
+        id S231543AbjF0TEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 15:04:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230327AbjF0TDz (ORCPT
+        with ESMTP id S231396AbjF0TEF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 15:03:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 161F0122
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 12:03:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687892587;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=sCI/D1beeMuSDdc7buAbwdUV7v4DV3y3fmbUulZO5CA=;
-        b=ikJzfkTJOd1F9vobjnDAkp0JT9yNC7CIG1xiY0nP5Kz2sGfxuEjePMQPq4T9H8ZDtbqdPN
-        KeJJpzsllAE4IOAR+kw0L8q51fjjsWbBqfH9VEd225r1j/67Jswg33kWOn7BmxVjsGfMeR
-        +znsUeVzF4+305TbP1+4cHNK+TazPN0=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-6-ArLMsJJIOvWM1THfmZi-ew-1; Tue, 27 Jun 2023 15:03:04 -0400
-X-MC-Unique: ArLMsJJIOvWM1THfmZi-ew-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 27 Jun 2023 15:04:05 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C96D11BD5;
+        Tue, 27 Jun 2023 12:04:02 -0700 (PDT)
+Received: from [192.168.10.54] (unknown [182.179.162.32])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C760328088B1;
-        Tue, 27 Jun 2023 19:02:44 +0000 (UTC)
-Received: from toolbox (unknown [10.2.17.15])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7AEBC200A3AD;
-        Tue, 27 Jun 2023 19:02:42 +0000 (UTC)
-Date:   Tue, 27 Jun 2023 12:02:40 -0700
-From:   Chris Leech <cleech@redhat.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     netdev@vger.kernel.org,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Mike Christie <michael.christie@oracle.com>,
-        Lee Duncan <lduncan@suse.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Al Viro <viro@zeniv.linux.org.uk>, open-iscsi@googlegroups.com,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
-Subject: Re: [PATCH net-next v5 11/16] scsi: iscsi_tcp: Use
- sendmsg(MSG_SPLICE_PAGES) rather than sendpage
-Message-ID: <ZJsyUK8DMN+P0nQo@toolbox>
-References: <20230623225513.2732256-1-dhowells@redhat.com>
- <20230623225513.2732256-12-dhowells@redhat.com>
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id D55856607155;
+        Tue, 27 Jun 2023 20:03:59 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1687892641;
+        bh=2pkER0ZvYT5GddTzJ80ZqUr+7MVPSyIBtKVbKbTiFgw=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=eCtQhi2sazyGTHceRRSU9/qx1KZzby4PEdvhwrf/9NeSXVAVpLNJ+54zehqWX91M4
+         sgryi6syvyWZlpiV2zO10F66IJaXrTpBibAAp5WjN6suQI2oOrO8hZqscqbRaYDGoD
+         EzfYtA8p/jEnZbi2ru7BoJfUzvoiQjXuHhk8IprwcfkfddzIAZD470zpSjfbyxeqWJ
+         oVMjLz5RgfbnLtodD9s7IzMRfUNCcI2quiGyxqnqKf10qFpAKMYdRVUMhP0uNoltkZ
+         J7pxhU2BMsjIwk8piEiQoS6AWGC2T47y798akn5+kTjRneNh+y4W6Ievg0SS235dzl
+         RKR2TQPdn/Vzw==
+Message-ID: <5a5ccd98-7e4c-2108-aa4a-cd7c3ecd95dc@collabora.com>
+Date:   Wed, 28 Jun 2023 00:03:56 +0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230623225513.2732256-12-dhowells@redhat.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>, shuah@kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2] selftests: prctl: Add new prctl test for PR_SET_NAME
+Content-Language: en-US
+To:     Osama Muhammad <osmtendev@gmail.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230607153600.15816-1-osmtendev@gmail.com>
+ <b7a3219e-4e0a-7a08-439a-a8a6e35271ca@linuxfoundation.org>
+ <CAK6rUAMODPLQeUawXMW_RNiJFdukOqdhS5GA5XRAq4U9bnQdNg@mail.gmail.com>
+ <3c03e28b-8006-a4ac-30bc-6aaf83ccb5d5@linuxfoundation.org>
+ <CAK6rUAObT-kQVGddhvxxtaKPcuaDddM6ipEDXuECCFtpR-GV6w@mail.gmail.com>
+ <CAK6rUAMuYTUhqcGmDrmeEWnigy3X4OxNb4zmHc0TmcVJ79MyHg@mail.gmail.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <CAK6rUAMuYTUhqcGmDrmeEWnigy3X4OxNb4zmHc0TmcVJ79MyHg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 23, 2023 at 11:55:08PM +0100, David Howells wrote:
-> Use sendmsg() with MSG_SPLICE_PAGES rather than sendpage.  This allows
-> multiple pages and multipage folios to be passed through.
-> 
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> Reviewed-by: Mike Christie <michael.christie@oracle.com>
-> cc: Lee Duncan <lduncan@suse.com>
-> cc: Chris Leech <cleech@redhat.com>
-> cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
-> cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-> cc: "David S. Miller" <davem@davemloft.net>
-> cc: Eric Dumazet <edumazet@google.com>
-> cc: Jakub Kicinski <kuba@kernel.org>
-> cc: Paolo Abeni <pabeni@redhat.com>
-> cc: Jens Axboe <axboe@kernel.dk>
-> cc: Matthew Wilcox <willy@infradead.org>
-> cc: Al Viro <viro@zeniv.linux.org.uk>
-> cc: open-iscsi@googlegroups.com
-> cc: linux-scsi@vger.kernel.org
-> cc: target-devel@vger.kernel.org
-> cc: netdev@vger.kernel.org
-> ---
-> 
-> Notes:
->     ver #5)
->      - Split iscsi changes into client and target patches
-> 
->  drivers/scsi/iscsi_tcp.c | 26 ++++++++++----------------
->  drivers/scsi/iscsi_tcp.h |  2 --
->  2 files changed, 10 insertions(+), 18 deletions(-)
+Hi,
 
-This seems good to me.
+Thank you for the patch. This patch cleanly applies on next-20230627.
 
-Reviewed-by: Chris Leech <cleech@redhat.com>
- 
-> diff --git a/drivers/scsi/iscsi_tcp.c b/drivers/scsi/iscsi_tcp.c
-> index 9637d4bc2bc9..9ab8555180a3 100644
-> --- a/drivers/scsi/iscsi_tcp.c
-> +++ b/drivers/scsi/iscsi_tcp.c
-> @@ -301,35 +301,32 @@ static int iscsi_sw_tcp_xmit_segment(struct iscsi_tcp_conn *tcp_conn,
->  
->  	while (!iscsi_tcp_segment_done(tcp_conn, segment, 0, r)) {
->  		struct scatterlist *sg;
-> +		struct msghdr msg = {};
-> +		struct bio_vec bv;
->  		unsigned int offset, copy;
-> -		int flags = 0;
->  
->  		r = 0;
->  		offset = segment->copied;
->  		copy = segment->size - offset;
->  
->  		if (segment->total_copied + segment->size < segment->total_size)
-> -			flags |= MSG_MORE | MSG_SENDPAGE_NOTLAST;
-> +			msg.msg_flags |= MSG_MORE;
->  
->  		if (tcp_sw_conn->queue_recv)
-> -			flags |= MSG_DONTWAIT;
-> +			msg.msg_flags |= MSG_DONTWAIT;
->  
-> -		/* Use sendpage if we can; else fall back to sendmsg */
->  		if (!segment->data) {
-> +			if (!tcp_conn->iscsi_conn->datadgst_en)
-> +				msg.msg_flags |= MSG_SPLICE_PAGES;
->  			sg = segment->sg;
->  			offset += segment->sg_offset + sg->offset;
-> -			r = tcp_sw_conn->sendpage(sk, sg_page(sg), offset,
-> -						  copy, flags);
-> +			bvec_set_page(&bv, sg_page(sg), copy, offset);
->  		} else {
-> -			struct msghdr msg = { .msg_flags = flags };
-> -			struct kvec iov = {
-> -				.iov_base = segment->data + offset,
-> -				.iov_len = copy
-> -			};
-> -
-> -			r = kernel_sendmsg(sk, &msg, &iov, 1, copy);
-> +			bvec_set_virt(&bv, segment->data + offset, copy);
->  		}
-> +		iov_iter_bvec(&msg.msg_iter, ITER_SOURCE, &bv, 1, copy);
->  
-> +		r = sock_sendmsg(sk, &msg);
->  		if (r < 0) {
->  			iscsi_tcp_segment_unmap(segment);
->  			return r;
-> @@ -746,7 +743,6 @@ iscsi_sw_tcp_conn_bind(struct iscsi_cls_session *cls_session,
->  	sock_no_linger(sk);
->  
->  	iscsi_sw_tcp_conn_set_callbacks(conn);
-> -	tcp_sw_conn->sendpage = tcp_sw_conn->sock->ops->sendpage;
->  	/*
->  	 * set receive state machine into initial state
->  	 */
-> @@ -777,8 +773,6 @@ static int iscsi_sw_tcp_conn_set_param(struct iscsi_cls_conn *cls_conn,
->  			return -ENOTCONN;
->  		}
->  		iscsi_set_param(cls_conn, param, buf, buflen);
-> -		tcp_sw_conn->sendpage = conn->datadgst_en ?
-> -			sock_no_sendpage : tcp_sw_conn->sock->ops->sendpage;
->  		mutex_unlock(&tcp_sw_conn->sock_lock);
->  		break;
->  	case ISCSI_PARAM_MAX_R2T:
-> diff --git a/drivers/scsi/iscsi_tcp.h b/drivers/scsi/iscsi_tcp.h
-> index 68e14a344904..89a6fc552f0b 100644
-> --- a/drivers/scsi/iscsi_tcp.h
-> +++ b/drivers/scsi/iscsi_tcp.h
-> @@ -47,8 +47,6 @@ struct iscsi_sw_tcp_conn {
->  	/* MIB custom statistics */
->  	uint32_t		sendpage_failures_cnt;
->  	uint32_t		discontiguous_hdr_cnt;
-> -
-> -	ssize_t (*sendpage)(struct socket *, struct page *, int, size_t, int);
->  };
->  
->  struct iscsi_sw_tcp_host {
+Unrelated to this patch:
+I'm not sure if this patch was written against linux next. Always try to
+send patches against latest next tag from following repo:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+
+On 6/26/23 11:36 PM, Osama Muhammad wrote:
+> Hi Shuah,
 > 
+> Any feedback on this patch?.
+> 
+> Thanks,
+> Osama
+> 
+> 
+> On Sat, 17 Jun 2023 at 18:01, Osama Muhammad <osmtendev@gmail.com> wrote:
+>>
+>> Hi,
+>>
+>> Yes, I did install the latest kernel headers and TASK_COMM_LEN is not
+>> accessible in userspace.
+>>
+>> I looked into the test which uses TASK_COMM_LEN but the test defines
+>> it in its own header file.
+>>
+>> Example:  https://elixir.bootlin.com/linux/latest/source/tools/testing/selftests/bpf/progs/pyperf.h#L13
+>>
+>> TASK_COMM_LEN is defined in include/linux/sched.h, but this header
+>> file is not exposed to userspace.
+>>
+>> TASK_COMM_LEN is not defined in /include/uapi/linux/sched.h which is
+>> exposed to userspace kernel headers.
+>> Please find the link to the header file exposed to user space :-
+>> -https://elixir.bootlin.com/linux/v5.15.116/source/include/uapi/linux/sched.h
+>>
+>> As for arm64/abi/tpidr2.c It includes linux/sched.h which will be
+>> /include/uapi/linux/sched.h because the user space program is
+>> including it.
+>> So it also cannot use TASK_COMM_LEN directly.
+>>
+>> Regards,
+>> Osama
+>>
+>> On Tue, 13 Jun 2023 at 02:56, Shuah Khan <skhan@linuxfoundation.org> wrote:
+>>>
+>>> On 6/10/23 07:01, Osama Muhammad wrote:
+>>>> Hi all,
+>>>>
+>>>> I looked into it and tried to use TASK_COMM_LEN in the test. Even
+>>>> though I included "linux/sched.h '', I was not able to compile the
+>>>> test because it couldn't find it in the header file.
+>>>> I dived deep into the issue and turns out header file mapped in
+>>>> /usr/include/linux/sched.h is actually mapped to
+>>>> /include/uapi/linux/sched.h[1] in linux source,
+>>>> where TASK_COMM_LEN is not even defined. Instead TASK_COMM_LEN is
+>>>> defined in /include/linux/sched.h which is not mapped to any header
+>>>> files in
+>>>> userspace(/(/usr/include/linux).
+>>>> I also tried to find the TASK_COM_LEN in /usr/include/linux/ but I
+>>>> couldn't find it. Following are the search results.
+>>>> grep -rnw '/usr/include/linux/' -e 'TASK_COMM_LEN"
+>>>> RESULTS OF COMMAND :- /usr/include/linux/taskstats.h:38:#define
+>>>> TS_COMM_LEN 32 /* should be >= TASK_COMM_LEN
+>>>> Based on this information, I have two questions:
+>>>> 1. Would this require a fix to move 'TASK_COMM_LEN' macro from
+>>>> /include/linux/sched.h to UAPI headers /include/uapi/linux/sched.h.
+>>>> 2. Is there any other way to access TASK_COMM_LEN in the selftest that
+>>>> I'm not aware of?
+>>>>
+>>>> [1]:-https://elixir.bootlin.com/linux/v5.15.116/source/include/uapi/linux/sched.h
+>>>>
+>>>
+>>> The best source is Linux mainline.
+>>>
+>>> Take a look at test files that include linux/sched.h
+>>>
+>>> arm64/abi/tpidr2.c is one of them.
+>>>
+>>> Did you install headers before compiling the test?
+>>>   make headers_install
+>>>
+>>> thanks,
+>>> -- Shuah
+>>>
+>>>
 
+-- 
+BR,
+Muhammad Usama Anjum
