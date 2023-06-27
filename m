@@ -2,119 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31FE2740599
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 23:31:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AED074059F
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 23:32:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230003AbjF0Vbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 17:31:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36254 "EHLO
+        id S230281AbjF0Vcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 17:32:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjF0Vbn (ORCPT
+        with ESMTP id S230220AbjF0Vci (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 17:31:43 -0400
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36091F5
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 14:31:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=HhfdKor3rdtZnPNJc3y75iM+mV1CbPl8HuUmtaB3724=; b=bOVCO+/GXHsB/vPZil7nxKnAcZ
-        mUEd8dGgo7tKTqvvaUH+2nRi7DSw7nlClFNqTfLG+gF/VAaEiLb8RBltUxciS4fpB6xR5WswhocUx
-        jTPm6TFqotWNjNfWUK2xObVFUgMLKwgAqCL9mJaPmxSEl0nqx4cUOWLpAAqxyH0ZC1wlPbv23DbiM
-        VDZN32hvg1cmcUC2udqPABocExg1lP1UlaNu4uYPs+5KC4hJLl5MHTG3u5Sm/dMfQfMpKSD7JPC5I
-        AgJI4eQr2dN31xLRap3PJy+Vl8qfnrui8yAUYF8QKCfualP6RGDEc3Z5XpK3OQtOjdp0Yej7hbWdH
-        rldu+IYg==;
-Received: from [179.113.218.86] (helo=[192.168.1.111])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1qEGHi-004rUB-GO; Tue, 27 Jun 2023 23:31:38 +0200
-Message-ID: <4302638a-c33b-7355-5201-d3020f5b1525@igalia.com>
-Date:   Tue, 27 Jun 2023 18:31:33 -0300
+        Tue, 27 Jun 2023 17:32:38 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04E0326A2
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 14:32:37 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3fa5295fcc8so14385e9.1
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 14:32:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687901555; x=1690493555;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=vBhxhafrmPoDCGdqjKc9mBa0s+AeY93UiHiuOTi6c0c=;
+        b=IqzCM3GAOil/W3cKBHtomS1M+XcQtUSy9IOWEb+mdQ0tT1BSqo12PfqVjoga6qeUe7
+         S27ib80F2LPfJ1nNT0J3r/G5GLlrEVm/a6IT6pWqUzAZQ9i3rrP1dy3omAqaWAigmHI9
+         O5pGIFzvKcPweBV/jwYx8xoVzD+aYYElBGWVSVMzTGjX582beycKVR+CVeLMpRcZwreW
+         dE9eYz+uN76+rluCvYIE8i51Lm8lqWTvyuctu6R6hNVX0nCwyrsmAwqMNzlkro1RKLXA
+         j0gcFTTHrKf4dn3Ow5+N4P7gm2RBkg4dK4GrxEXNxBk3Vmv0wFAwZTDXsZ9xnUbQHpjB
+         nMMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687901555; x=1690493555;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vBhxhafrmPoDCGdqjKc9mBa0s+AeY93UiHiuOTi6c0c=;
+        b=UbK8SAR9aD8LNYjp41QQ0Qbk8R/Tl6GPsgQ/q33P4SDNI+R9W+RpuwkDRpNpbcVUyx
+         texVEx8Nh6rR/XXdobAzQmjxp03MnmjJDmGRck0z+Axwuj/02gwLRuNotBfRb/htZSnR
+         dBe8yx9zVthCgyIMdd82LCaugU54TmRLhnHLMV+9JImUceaqzXHt4XkcnkoIX7YsXMmT
+         tObMpu83QBrHZCAqaBhKOuZJLuH1oBvIu8A5nmw3Hspt5WMfp22sCi+8Hyb3IVPw8/kX
+         lOu8ffYCdONMqrKQLN/F9w5fkIewyrlfkdKIEsNNhGxrXjVncjADX/t0a7v3gFdBeHmD
+         F+WA==
+X-Gm-Message-State: AC+VfDzZ1pC/l+NCxuyXDjC6XnEiZboPmCyFxJTp0uXK6M5xYlzbw48n
+        g7S1k/xbm6jwvr3paQnx1QdQro+05Jdou6xMjkE+P3UUORmfUsYLCnU4jA==
+X-Google-Smtp-Source: ACHHUZ4xyp6XRFf8g2hZmJdd3Ob4jF0dbXgnY08rNDx7BMDyvghjMNtWJCze+rj1wzGECwBGFoSMbiqg3JIP/cwqFes=
+X-Received: by 2002:a05:600c:1da9:b0:3f1:9a3d:4f7f with SMTP id
+ p41-20020a05600c1da900b003f19a3d4f7fmr2866wms.1.1687901555412; Tue, 27 Jun
+ 2023 14:32:35 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v5 1/1] drm/doc: Document DRM device reset expectations
-Content-Language: en-US
-To:     =?UTF-8?B?TWFyZWsgT2zFocOhaw==?= <maraeo@gmail.com>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        amd-gfx mailing list <amd-gfx@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel.daenzer@mailbox.org>,
-        Simon Ser <contact@emersion.fr>,
-        =?UTF-8?Q?Timur_Krist=c3=b3f?= <timur.kristof@gmail.com>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Samuel Pitoiset <samuel.pitoiset@gmail.com>,
-        kernel-dev@igalia.com, Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
-        "Deucher, Alexander" <alexander.deucher@amd.com>,
-        Pekka Paalanen <pekka.paalanen@collabora.com>,
-        Dave Airlie <airlied@gmail.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-References: <20230627132323.115440-1-andrealmeid@igalia.com>
- <CAAxE2A4Hquz9bJNSEaUtBoJC3qbLBPYXd8i3JX9AhNUx_iUKpg@mail.gmail.com>
-From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>
-In-Reply-To: <CAAxE2A4Hquz9bJNSEaUtBoJC3qbLBPYXd8i3JX9AhNUx_iUKpg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <b0bb8387-9216-0fe7-61e9-7e2daceeef20@linuxfoundation.org> <CAHk-=whvD6pq-7vp-cCMEnS+EOp2TmLxFKPS3Nw+Ncqt0XZVGw@mail.gmail.com>
+In-Reply-To: <CAHk-=whvD6pq-7vp-cCMEnS+EOp2TmLxFKPS3Nw+Ncqt0XZVGw@mail.gmail.com>
+From:   David Gow <davidgow@google.com>
+Date:   Wed, 28 Jun 2023 05:32:22 +0800
+Message-ID: <CABVgOSnE-A+t9DLnjJpOpSiL1_w1cKDawnmkBpMJy6saYefQ-g@mail.gmail.com>
+Subject: Re: [GIT PULL] Kselftest update for Linux 6.5-rc1
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>, shuah <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000a5ccfa05ff2334b2"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marek,
+--000000000000a5ccfa05ff2334b2
+Content-Type: text/plain; charset="UTF-8"
 
-Em 27/06/2023 15:57, Marek Olšák escreveu:
-> On Tue, Jun 27, 2023, 09:23 André Almeida <andrealmeid@igalia.com 
-> <mailto:andrealmeid@igalia.com>> wrote:
-> 
->     +User Mode Driver
->     +----------------
->     +
->     +The UMD should check before submitting new commands to the KMD if
->     the device has
->     +been reset, and this can be checked more often if the UMD requires
->     it. After
->     +detecting a reset, UMD will then proceed to report it to the
->     application using
->     +the appropriate API error code, as explained in the section below about
->     +robustness.
-> 
-> 
-> The UMD won't check the device status before every command submission 
-> due to ioctl overhead. Instead, the KMD should skip command submission 
-> and return an error that it was skipped.
+On Wed, 28 Jun 2023 at 02:17, Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Sun, 25 Jun 2023 at 08:42, Shuah Khan <skhan@linuxfoundation.org> wrote:
+> >
+> > Please pull the following Kselftest update for Linux 6.5-rc1.
+>
+> Hmm. I pulled this, but it causes multiple objtool warnings.
+>
+> The cause seems to be __kunit_abort() being no-return and objtool
+> having not being told about it, and I'm double-checking the fix for
+> that.
+>
 
-I wrote like this because when reading the source code for 
-vk::check_status()[0] and Gallium's si_flush_gfx_cs()[1], I was under 
-the impression that UMD checks the reset status before every 
-submission/flush.
+Sorry about that: the fix for this was put in the objtool tree to
+avoid some merge conflicts (the noreturn list was moved):
+https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?h=objtool/core&id=ff9a6459bbec06df7da2545020d7383aba13b3fb
 
-Is your comment about of how things are currently implemented, or how 
-they would ideally work? Either way I can apply your suggestion, I just 
-want to make it clear.
+-- David
 
-[0] 
-https://elixir.bootlin.com/mesa/mesa-23.1.3/source/src/vulkan/runtime/vk_device.h#L142
-[1] 
-https://elixir.bootlin.com/mesa/mesa-23.1.3/source/src/gallium/drivers/radeonsi/si_gfx_cs.c#L83
+--000000000000a5ccfa05ff2334b2
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-> 
-> The only case where that won't be applicable is user queues where 
-> drivers don't call into the kernel to submit work, but they do call into 
-> the kernel to create a dma_fence. In that case, the call to create a 
-> dma_fence can fail with an error.
-> 
-> Marek
-
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+9IGQSBx2i4m+hGXJpET+MEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQCRI3Z4cAidgFcv
+Usqdz765x6KMZSfg/WtFrYg8ewsP2NpCxVM2+EhPyyEQ0k0DhtzdtGoI/Ug+jdFDyCKB9P2+EPLh
+iMjMnFILp7Zs4r18ECHlvZuDZfH9m0BchXIxu5jLIuQyKUWrCRDZZEDNr510ZhhVfYSFPA8ms1nk
+jyzYFOHYQyv5IfML/3IBFKlON5OZa+V8EZYULYcNkp03DdWglafj7SXZ1/XgAbVYrC381UvrsYN8
+jndVvoa1GWwe+NVlIIK7Q3uAjV3qLEDQpaNPg1rr0oAn6YmvTccjVMqj2YNwN+RHhKNzgRGxY5ct
+FaN+8fXZhRhpv3bVbAWuPZXoMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABAz5xDls09r2CKyYRqnNbMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDm
+d1dKXckH0z6CDGIH8Pho9bInbTgKP2IT7uP6D+vZgTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzA2MjcyMTMyMzVaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAKpf0AIMznIzjMWSL7ZAL
+vvNJ9R2vrnELFTWbYWRNC+oDCnVfhMB4OBXFaZ/R2kA8AkI8fBwvVPo9FbVUeR/HFXL8emvgcGQM
+oc8wjjVb7FFBkdDHBRKo8Bnib9RzeLOhtQhCgWrenFQ2ZlgFZ5oqF5U3kbQeuQ5JVsZRJrc2crGG
+mwaa2ShrzUaWIfqclf3+hKcXF0+F9+nV8AeTLITKBiGc+Oax7iiO5bb/Dj9J4HeoEwZZMAHjQll3
+n6mIPjNj2iti8aQyP3gy2YWBO5UYj/BmvvSjyG5OUhtgX5Wf4nDYxPByM5bU5D2xCGY5vlF/XkOq
+etePY3dfTZevMh7TuQ==
+--000000000000a5ccfa05ff2334b2--
