@@ -2,148 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B9B873F7C4
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 10:51:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D74F73F7CF
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 10:52:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231802AbjF0Iv1 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 27 Jun 2023 04:51:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50518 "EHLO
+        id S229897AbjF0IwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 04:52:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231329AbjF0IvY (ORCPT
+        with ESMTP id S231916AbjF0IwJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 04:51:24 -0400
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70CEF120;
-        Tue, 27 Jun 2023 01:51:23 -0700 (PDT)
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-56fff21c2ebso44861717b3.3;
-        Tue, 27 Jun 2023 01:51:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687855882; x=1690447882;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xP6wkKdVTdDwoYQc7PHGzeZpIcm2xdCM8uEJq+8Vkio=;
-        b=l12gasXUj2XRwFouiEjuWIhTAQGAalLkLVUPPka9MQMiSsOz7eU5wq8EiYlWAUVb/S
-         Vyw8G5qwbFwhoOYLqKDcra7iULTKHTSYUZoRL1PekVHNkn18s75HOgP9agNom9wi6eCR
-         7L1LqH4F3yCcHJ1+yzl2IkxCu+nrICjJT2C9ZyvdBK6civTUfQrWdVKAv0kBFNQ2WZ9H
-         LFkzMuUkAmJaLYwn79jb/mYVWPrHkOGwSq2ce1Vd9MOJY8P74uWjwpfqJ9NLNoN8WEmQ
-         prUv0uMV1k1oJqC+I9yt72td1HoojLw4z7iCdsPsELbHDGl+NEMut4poXQ9/TXrs1M5w
-         saMA==
-X-Gm-Message-State: AC+VfDwxKAdrhgQjSUQpebPk/xuY1RLlcJcSHIJ8Vh3/fNgThkVpT80T
-        T0MbdjHr9zjb2omsfgU1EvZiY+U+BiyLSAib
-X-Google-Smtp-Source: ACHHUZ7emZ+6IvN3nOcxlWYDgCXYbPcOWCJxn7/jdwuF8Lihuh29GbhFBby2WisvwMH6RzzfSombXw==
-X-Received: by 2002:a0d:ca56:0:b0:573:974a:d264 with SMTP id m83-20020a0dca56000000b00573974ad264mr19941490ywd.49.1687855882071;
-        Tue, 27 Jun 2023 01:51:22 -0700 (PDT)
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com. [209.85.219.182])
-        by smtp.gmail.com with ESMTPSA id b126-20020a816784000000b005731f3c8989sm1705873ywc.62.2023.06.27.01.51.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Jun 2023 01:51:21 -0700 (PDT)
-Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-c14476f8401so3181264276.3;
-        Tue, 27 Jun 2023 01:51:21 -0700 (PDT)
-X-Received: by 2002:a25:29c6:0:b0:c1b:2fab:b802 with SMTP id
- p189-20020a2529c6000000b00c1b2fabb802mr6022656ybp.17.1687855881181; Tue, 27
- Jun 2023 01:51:21 -0700 (PDT)
+        Tue, 27 Jun 2023 04:52:09 -0400
+Received: from mx1.zhaoxin.com (MX1.ZHAOXIN.COM [210.0.225.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DDF110E2
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 01:52:01 -0700 (PDT)
+X-ASG-Debug-ID: 1687855917-086e231499081d0001-xx1T2L
+Received: from ZXSHMBX3.zhaoxin.com (ZXSHMBX3.zhaoxin.com [10.28.252.165]) by mx1.zhaoxin.com with ESMTP id dxNmhWSMvw4jselI (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Tue, 27 Jun 2023 16:51:57 +0800 (CST)
+X-Barracuda-Envelope-From: RunaGuo-oc@zhaoxin.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX3.zhaoxin.com
+ (10.28.252.165) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Tue, 27 Jun
+ 2023 16:51:57 +0800
+Received: from [10.29.8.9] (10.29.8.9) by zxbjmbx1.zhaoxin.com (10.29.252.163)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Tue, 27 Jun
+ 2023 16:51:55 +0800
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
+Subject: Re: [PATCH] Signed-off-by: Runa Guo-oc <RunaGuo-oc@zhaoxin.com>
+X-Barracuda-RBL-Trusted-Forwarder: 10.29.8.9
+To:     Damien Le Moal <dlemoal@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-ide@vger.kernel.org>
+X-ASG-Orig-Subj: Re: [PATCH] Signed-off-by: Runa Guo-oc <RunaGuo-oc@zhaoxin.com>
+CC:     <CobeChen@zhaoxin.com>, <TimGuo@zhaoxin.com>,
+        <TonyWWang@zhaoxin.com>, <LeoLiu@zhaoxin.com>,
+        <RunaGuo@zhaoxin.com>
+References: <1686901766-4928-1-git-send-email-RunaGuo-oc@zhaoxin.com>
+ <ccabf88b-2e2c-876d-e47a-8d142e27d638@kernel.org>
+ <70853f13-f74e-d9bb-89f7-4c804f1fa8a4@zhaoxin.com>
+ <330d93ee-b4b6-2397-2b7c-eb4d99676f87@kernel.org>
+ <b330e18d-4fd3-2649-aafd-4f941c111803@zhaoxin.com>
+ <73aa50fd-2028-c492-59cd-b740a827e90c@kernel.org>
+From:   Runa Guo-oc <RunaGuo-oc@zhaoxin.com>
+Message-ID: <017f61a6-dd4e-635b-be57-0954296b2db9@zhaoxin.com>
+Date:   Tue, 27 Jun 2023 16:51:48 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-References: <20230623081242.109131-1-tanure@linux.com> <20230623081242.109131-3-tanure@linux.com>
- <a885b97e-aaf0-cb72-f25b-71054d6d3fe2@linaro.org> <CAJX_Q+2qZg+RuwxmnM3rzs_akt_UMJRx+=aMxf72P-sGNjm9uw@mail.gmail.com>
- <4fba1603-5741-ec1b-122f-d6a92803f49a@linaro.org>
-In-Reply-To: <4fba1603-5741-ec1b-122f-d6a92803f49a@linaro.org>
-Reply-To: tanure@linux.com
-From:   Lucas Tanure <tanure@linux.com>
-Date:   Tue, 27 Jun 2023 09:51:09 +0100
-X-Gmail-Original-Message-ID: <CAJX_Q+3GX5NEtx7DA-vapU45dVooTpXxrwUZsNVAKd9JN2kKXA@mail.gmail.com>
-Message-ID: <CAJX_Q+3GX5NEtx7DA-vapU45dVooTpXxrwUZsNVAKd9JN2kKXA@mail.gmail.com>
-Subject: Re: [PATCH v5 2/4] dt-bindings: serial: amlogic,meson-uart: Add
- compatible string for T7
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>, Nick <nick@khadas.com>,
-        Artem <art@khadas.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <73aa50fd-2028-c492-59cd-b740a827e90c@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.29.8.9]
+X-ClientProxiedBy: ZXSHCAS1.zhaoxin.com (10.28.252.161) To
+ zxbjmbx1.zhaoxin.com (10.29.252.163)
+X-Barracuda-Connect: ZXSHMBX3.zhaoxin.com[10.28.252.165]
+X-Barracuda-Start-Time: 1687855917
+X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
+X-Barracuda-URL: https://10.28.252.35:4443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at zhaoxin.com
+X-Barracuda-Scan-Msg-Size: 4373
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
+X-Barracuda-Spam-Score: -2.02
+X-Barracuda-Spam-Status: No, SCORE=-2.02 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.110596
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 23, 2023 at 6:56 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 23/06/2023 19:53, Lucas Tanure wrote:
-> > On Fri, Jun 23, 2023 at 9:51 AM Krzysztof Kozlowski
-> > <krzysztof.kozlowski@linaro.org> wrote:
-> >>
-> >> On 23/06/2023 10:12, Lucas Tanure wrote:
-> >>> Amlogic T7 SoCs uses the same UART controller as S4 SoCs and G12A.
-> >>> There is no need for an extra compatible line in the driver, but
-> >>> add T7 compatible line for documentation.
-> >>>
-> >>> Signed-off-by: Lucas Tanure <tanure@linux.com>
-> >>> ---
-> >>>  .../devicetree/bindings/serial/amlogic,meson-uart.yaml        | 4 ++++
-> >>>  1 file changed, 4 insertions(+)
-> >>>
-> >>> diff --git a/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml b/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
-> >>> index 01ec45b3b406..ad970c9ed1c7 100644
-> >>> --- a/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
-> >>> +++ b/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
-> >>> @@ -50,6 +50,10 @@ properties:
-> >>>          items:
-> >>>            - const: amlogic,meson-g12a-uart
-> >>>            - const: amlogic,meson-gx-uart
-> >>> +      - description: UART controller on T7 compatible SoCs
-> >>
-> >> Your description is rather incorrect. This is UART on SoCs compatible
-> >> with S4, not with T7. Otherwise what do you expect to grow later when
-> >> adding more compatible devices? Just drop the description, it's kind of
-> >> obvious when done correctly (but can be misleading if done wrong).
-> >>
-> >> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> >>
-> > Sorry, but S4 is already added in another way, which accepts just an
-> > S4 compatible string.
-> > But for T7 we need a fallback.
-> > Could you let me know what you're asking here? Redo S4 and add T7? Or
-> > do T7 in another different way that I didn't get?
->
-> I comment only about the description, so why touching anything else? You
-> did not add here T7 compatible SoCs. You added here S4 compatible SoCs.
->
-> > Do you want a v6 patch series? If yes, could you be more clear about
-> > how you want it?
->
-> No need. If you are going to send v6, you can as well drop the description.
->
-I can't just remove that line, as it doesn't pass the checks.
-I will change it to S4.
+On 2023/6/27 16:02, Damien Le Moal wrote:
+> On 6/27/23 16:17, Runa Guo-oc wrote:
+>> On 2023/6/26 20:40, Damien Le Moal wrote:
+>>> On 6/26/23 20:29, Runa Guo-oc wrote:
+>>>> On 2023/6/16 16:34, Damien Le Moal wrote:
+>>>>> On 6/16/23 16:49, Runa Guo-oc wrote:
+>>>>>> [PATCH] ata:sata_zhaoxin: Add support for ZhaoXin Serial ATA
+>>>>>
+>>>>> Broken patch: the email subject is your SoB instead of the above line, which
+>>>>> should not be part of the message (it should be the subject). Please reformat
+>>>>> and resend.
+>>>>>
+>>>>
+>>>> Okay.
+>>>>
+>>>>>>
+>>>>>> Add ZhaoXin Serial ATA support for ZhaoXin CUPs.
+>>>>>
+>>>>> What is "ZhaoXin" ?
+>>>>
+>>>> Zhaoxin is a Chinese company that has mastered the core technology
+>>>> of independent general-purpose processors and its system platform chips,
+>>>> and is committed to providing users with efficient, compatible and secure
+>>>> independent general-purpose processors, chipsets and other products.
+>>>> for more information, you can visit here: https://www.zhaoxin.com/.
+>>>
+>>> A company marketing message is not very informative, technically speaking. What
+>>> is this chipset and on what board/machine can it be found ? That is the more
+>>> relevant information we need in this commit message.
+>>>
+>>
+>> The reason why it is called Zhaoxin SATA is actually to express that it
+>> applies
+>> to all Zhaoxin support of its separate chipset/SOC, for example,
+>> ZX-100S/ZX-200
+>> chipsets.
+> 
+> That is fine. I do not need a reason for the name. what I would like to see is
+> information about which product/board/soc this driver will be needed for. So
+> something like the above is actually fine (may be a little more details if you
+> have).
+> 
+For more details, take ZX-200 as an example to illustrate.
+ZX-200 is an TSMC 40nm chip that integrates PCIE EP/RC and internal SB
+controllers
+(Serial ATA, Universal Serial Bus Controller, Network Interface
+Controller, SPI, and so on).
 
->
-> ---
->
-> This is an automated instruction, just in case, because many review tags
-> are being ignored. If you do not know the process, here is a short
-> explanation:
->
-> Please add Acked-by/Reviewed-by/Tested-by tags when posting new
-> versions, under or above your Signed-off-by tag. Tools like b4 can help
-> here. However, there's no need to repost patches *only* to add the tags.
-> The upstream maintainer will do that for acks received on the version
-> they apply.
->
-> https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
->
-> Best regards,
-> Krzysztof
->
+And information about SATA is as follows:
+•	Serial ATA
+•	Compliant with Serial ATA Specification Revision 3.2
+•	Support AHCI compliant with AHCI Specification 1.3.1
+•	Internal SATA PHY supports 1.5G, 3G and 6G speed. Up to 4 ports
+•	Support 4 SATA ports for one SATA bus master, primary channel and
+secondary channel
+•	Support Partial/Slumber/Auto Partial to Slumber/HIPM/DIPM, support DEVSLP
+•	Support Esata/SATA Express
+•	Support M.2
+•	Support Listen Mode (both AHCI controller and legacy SATA controller )
+•	Support MPS/DevSleep(AHCI controller only)
+•	Do not support compatible mode
+•	Do not support port multiplier
+•	Do not support SGPIO
+•	Do not support CPD
+•	Support Hot-plug and MSI-X
+•	Support FLR
+
+>>
+>>>>
+>>>>> And what is "CUPs" ? Please spell this out.
+>>>>>
+>>>>
+>>>> Yes, this is  a spelling error.
+>>>>
+>>>>>>
+>>>>>> Signed-off-by: Runa Guo-oc <RunaGuo-oc@zhaoxin.com>
+>>>>>> ---
+>>>>>>  drivers/ata/Kconfig        |   8 +
+>>>>>>  drivers/ata/Makefile       |   1 +
+>>>>>>  drivers/ata/sata_zhaoxin.c | 384 +++++++++++++++++++++++++++++++++++++++++++++
+>>>>>>  3 files changed, 393 insertions(+)
+>>>>>>  create mode 100644 drivers/ata/sata_zhaoxin.c
+>>>>>>
+>>>>>> diff --git a/drivers/ata/Kconfig b/drivers/ata/Kconfig
+>>>>>> index 42b51c9..ae327f3 100644
+>>>>>> --- a/drivers/ata/Kconfig
+>>>>>> +++ b/drivers/ata/Kconfig
+>>>>>> @@ -553,6 +553,14 @@ config SATA_VITESSE
+>>>>>>  
+>>>>>>  	  If unsure, say N.
+>>>>>>  
+>>>>>> +config SATA_ZHAOXIN
+>>>>>> +	tristate "ZhaoXin SATA support"
+>>>
+>>> Same here. If ZhaoXin is only a company name, we need also a chipset model to be
+>>> informative regarding which HW this driver serves.
+>>>
+>>
+>> As mentioned before, the chipset models this driver serves  are ZX-100S
+>> and ZX-200
+>> currently.
+> 
+> Fine. Just say so in the Kconfig entry then.
+> If in the future your company produces a different chipset model that needs a
+> different driver, then the entries can be clearly differentiated even if they
+> use the same company name (ZhaoXin). E.g. "ZhaoXin ZX-100S and ZX-200 chipset
+> support" vs "ZhaoXin XYZ-newgen chipset support". Adding entries should not
+> require modifying existing entries.
+> 
+> 
+> 
+
+I got it. I'll add these information in Kconfig entry briefly next time.
+Thank you for your  advice and detailed explanation.
