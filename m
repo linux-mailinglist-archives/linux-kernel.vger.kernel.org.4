@@ -2,63 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 754A473FC47
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 14:56:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A35AF73FC4F
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 14:59:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230195AbjF0M4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 08:56:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51212 "EHLO
+        id S230417AbjF0M7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 08:59:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbjF0M4Q (ORCPT
+        with ESMTP id S229841AbjF0M7M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 08:56:16 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBBED26BA;
-        Tue, 27 Jun 2023 05:56:15 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3fa7512e599so55157345e9.2;
-        Tue, 27 Jun 2023 05:56:15 -0700 (PDT)
+        Tue, 27 Jun 2023 08:59:12 -0400
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 545C4E1;
+        Tue, 27 Jun 2023 05:59:11 -0700 (PDT)
+Received: by mail-qv1-xf2a.google.com with SMTP id 6a1803df08f44-635dbfa710dso18548336d6.0;
+        Tue, 27 Jun 2023 05:59:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687870574; x=1690462574;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0CmpeFe/W7bct0on6Cvz9lgbR3MqPfbzft85pRxf6ro=;
-        b=g4OCr0xCnqtOLwIff9cOjbimo678mSohP7uVU+SD3EwzZ17aTKL42gv2ikphvZsson
-         5g6ylW6ZyahqPBuFpa+opBxL8HbO9AgV52ftmztGHHX4jfHHjuxpiwu6zmnQ7IEZ9DwF
-         4ZF+Yx+ozMUfGWsl57m0KyXjmbFERhb4/PW8Xktz3dQMg4/hnxcY/iUi7bpMxRJPa4Yu
-         XkIpxBjyIygPv/ik0WZhzZTW24DFy14gP9TkOXvLR1eu5aArTsAy0SeD5Po0PtPKpFuc
-         wJ//VE+td7ipEXQyL67jvpywdnqquB7g/8lDcFxWhrU/wnxZHyAKkHnAkYyNyQ74Z/cY
-         K4XQ==
+        d=gmail.com; s=20221208; t=1687870750; x=1690462750;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Q5+DuaCiOR+WAyBglQbQg08A79GQ+8qOpe+uAJINk1c=;
+        b=m0CC08U9FXkhchI54swpLsV6pI+g0px1bOiqzSuiiPa/mJruusL7KGGgD/ORhipJyM
+         5Z2sEQBsuEpSn8k12lr7hL2ta3/Bb0ZLy0Gp122QZSq0rLgi0b1banHOuhE1s9CXhnq0
+         jCWopxGWJZtyoIO2fLvsSK9y7QK7FBWyFQsAxM91HMWmPMVYV0u/of131gfQ65rSnnBg
+         XZZfd2MyLqF2cN7eI5HdYNNIJRL8N9keF+sUJy5dXDWnCYYyQGwUTyXubHWoblPLJQ1h
+         YhkFI1GVpgFupPMfhQdOk2HuJINgf0MJoXTe21+bWdNpX/L8SaUrgcd0TpTy+K/RVG39
+         HZYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687870574; x=1690462574;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0CmpeFe/W7bct0on6Cvz9lgbR3MqPfbzft85pRxf6ro=;
-        b=RREWShUzvQh8876NqqIzDdmQeHA9dfxUAwcRC65DAfbD/qUJC4PiopD1FTsh2Otlrp
-         P666M4PhwpEgdDb9XH2wEiPMJy4FSBHizagB4aHLW4Kt4ibojM4QkjpkcM2i0L2Naw8q
-         CVlY6PZXF15vjUvdkVPeHJwOLYtxQS6EPfd/awU8kdynQ35KkW8MtxbAhmaOvoD7IPH3
-         xglb/Z3JbQE0qICmFPtj0CKGD+LvmBkgyrr1CyjOU8g6JAVCu+D529qMjMt1sy9HYA9S
-         WT5uvatrvCQFkvfdE1nFQlRJYnf5H64Znzf6xbL6dz2HCSy/NHResbE42yOOU84bFLc/
-         yLPA==
-X-Gm-Message-State: AC+VfDwUfOv07y0hpoxcHMos47297h/9DlKGRbIRmz4loJLjxwvKZD3s
-        ql6UAPHRBe5h1LSBbGZsxyoYubN0uyC8sg==
-X-Google-Smtp-Source: ACHHUZ7zKsWmfe9syFfOnBXnGTnLWMSLV/h5hNjDh/rD9v8tbqRWdWWlu+EGK0726d1L4A3TSdoh6A==
-X-Received: by 2002:a1c:7705:0:b0:3fa:c3e8:901a with SMTP id t5-20020a1c7705000000b003fac3e8901amr3249818wmi.25.1687870574209;
-        Tue, 27 Jun 2023 05:56:14 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id x9-20020a05600c21c900b003fb41491670sm3321616wmj.24.2023.06.27.05.56.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jun 2023 05:56:13 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] PCI: ibmphp: make read-only arrays static
-Date:   Tue, 27 Jun 2023 13:56:12 +0100
-Message-Id: <20230627125612.724764-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.39.2
+        d=1e100.net; s=20221208; t=1687870750; x=1690462750;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Q5+DuaCiOR+WAyBglQbQg08A79GQ+8qOpe+uAJINk1c=;
+        b=cAmVUxDqOzU+sg8ZFbWldAc3uUdqG6SLCejl0mD9XI7r1PGcvDdV985DaiuykzQuff
+         qgOdhO2In5z/4WE023iqPa5UG9WoIGs+F8cb50d8IjmDc7dINno1JiuvcD8m0EDhvvVM
+         kvIrlt8lsHNrn57R9GhGb7Y5atEbSvQQhRdwdxz7qDi7VJ1IgWHLqPaupDpdY4W8OJdl
+         DaTsEhcqwa9JjPesTpFjZjZchaHx4GE2JxuriSdyFrGYDiaV0sG21VnDS8gjJNRojRjt
+         6VQVtOzmqTcIv3FYgjVQjiYpq0kasR3l7w1vepExnma+KEzWb7PYyLu9RbBMHGdFpuDf
+         9kgw==
+X-Gm-Message-State: AC+VfDy4/xdh0xTzydk/3FfAyTj7sPKbt+KJqMYudKcRXRaEznKwdTEZ
+        O26yDTKWDhXYrXm9CjYDssEgQVr3BvyU1U+8sw0=
+X-Google-Smtp-Source: ACHHUZ7+L3rt8Etz7M+6oZM4CgUMh79FhCOfRxyrdMbPFyBlJyxEgk6URk9C0QQdVRaEcqHAjx0Q6qJjixNcDd9/2tU=
+X-Received: by 2002:a05:6214:20e4:b0:62d:edf6:6dcd with SMTP id
+ 4-20020a05621420e400b0062dedf66dcdmr33702421qvk.51.1687870750297; Tue, 27 Jun
+ 2023 05:59:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <20230626102752.1583-1-youkangren@vivo.com> <CAGRGNgW_eeM2h7JBe98asaYjnF8hwAr50n8dfSabeK2H0u4=Qg@mail.gmail.com>
+ <PUZPR06MB59369ADE01FB04AD9A7279A9AA27A@PUZPR06MB5936.apcprd06.prod.outlook.com>
+In-Reply-To: <PUZPR06MB59369ADE01FB04AD9A7279A9AA27A@PUZPR06MB5936.apcprd06.prod.outlook.com>
+From:   Julian Calaby <julian.calaby@gmail.com>
+Date:   Tue, 27 Jun 2023 22:58:58 +1000
+Message-ID: <CAGRGNgV=aNXvVZ8QkxE8R3Lr7edm6BPZ3adi5E23QeFO-q7nRw@mail.gmail.com>
+Subject: Re: [PATCH] wifi: ray_cs: Remove invalid conditional statements
+To:     =?UTF-8?B?5bCk5bq35LuB?= <youkangren@vivo.com>
+Cc:     Kalle Valo <kvalo@kernel.org>, Dongliang Mu <dzm91@hust.edu.cn>,
+        Simon Horman <simon.horman@corigine.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        "open list:RAYLINK/WEBGEAR 802.11 WIRELESS LAN DRIVER" 
+        <linux-wireless@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "opensource.kernel" <opensource.kernel@vivo.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -69,62 +75,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Don't populate the arrays on the stack, instead make them static const.
+Hi,
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/pci/hotplug/ibmphp_pci.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+On Tue, Jun 27, 2023 at 10:44=E2=80=AFPM =E5=B0=A4=E5=BA=B7=E4=BB=81 <youka=
+ngren@vivo.com> wrote:
+>
+> Dear Julian,
+>
+>     I found a warning at compiling time that the if and else branches had=
+ no effect here. I looked at the code and found that the contents of both b=
+ranches were the same, so I merged the contents of both branches into one a=
+nd committed the changes.
 
-diff --git a/drivers/pci/hotplug/ibmphp_pci.c b/drivers/pci/hotplug/ibmphp_pci.c
-index 754c3f23282e..50038e5f9ca4 100644
---- a/drivers/pci/hotplug/ibmphp_pci.c
-+++ b/drivers/pci/hotplug/ibmphp_pci.c
-@@ -329,7 +329,7 @@ int ibmphp_configure_card(struct pci_func *func, u8 slotno)
- static int configure_device(struct pci_func *func)
- {
- 	u32 bar[6];
--	u32 address[] = {
-+	static const u32 address[] = {
- 		PCI_BASE_ADDRESS_0,
- 		PCI_BASE_ADDRESS_1,
- 		PCI_BASE_ADDRESS_2,
-@@ -564,7 +564,7 @@ static int configure_bridge(struct pci_func **func_passed, u8 slotno)
- 	struct resource_node *pfmem = NULL;
- 	struct resource_node *bus_pfmem[2] = {NULL, NULL};
- 	struct bus_node *bus;
--	u32 address[] = {
-+	static const u32 address[] = {
- 		PCI_BASE_ADDRESS_0,
- 		PCI_BASE_ADDRESS_1,
- 		0
-@@ -1053,7 +1053,7 @@ static struct res_needed *scan_behind_bridge(struct pci_func *func, u8 busno)
- 	int howmany = 0;	/*this is to see if there are any devices behind the bridge */
- 
- 	u32 bar[6], class;
--	u32 address[] = {
-+	static const u32 address[] = {
- 		PCI_BASE_ADDRESS_0,
- 		PCI_BASE_ADDRESS_1,
- 		PCI_BASE_ADDRESS_2,
-@@ -1182,7 +1182,7 @@ static struct res_needed *scan_behind_bridge(struct pci_func *func, u8 busno)
- static int unconfigure_boot_device(u8 busno, u8 device, u8 function)
- {
- 	u32 start_address;
--	u32 address[] = {
-+	static const u32 address[] = {
- 		PCI_BASE_ADDRESS_0,
- 		PCI_BASE_ADDRESS_1,
- 		PCI_BASE_ADDRESS_2,
-@@ -1310,7 +1310,7 @@ static int unconfigure_boot_bridge(u8 busno, u8 device, u8 function)
- 	struct resource_node *mem = NULL;
- 	struct resource_node *pfmem = NULL;
- 	struct bus_node *bus;
--	u32 address[] = {
-+	static const u32 address[] = {
- 		PCI_BASE_ADDRESS_0,
- 		PCI_BASE_ADDRESS_1,
- 		0
--- 
-2.39.2
+That's great, but it needs to be in the commit message.
 
+Thanks,
+
+--=20
+Julian Calaby
+
+Email: julian.calaby@gmail.com
+Profile: http://www.google.com/profiles/julian.calaby/
