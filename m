@@ -2,115 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D6987401ED
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 19:10:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A22C7401EE
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 19:11:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231191AbjF0RJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 13:09:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43314 "EHLO
+        id S230523AbjF0RKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 13:10:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230507AbjF0RJl (ORCPT
+        with ESMTP id S229567AbjF0RKm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 13:09:41 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21D6198D
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 10:09:39 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id 3f1490d57ef6-bfee679b7efso4697887276.0
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 10:09:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687885779; x=1690477779;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AEfOOj7zZRsR4093w5Xezdtfqq/JXEJS/CeyQ2VX6y0=;
-        b=qAGBVo+6BR+jme9c+D+CU2a/HdzfRO4Smyw+4vv/W4I1jKgLWzo2vd5hMJUHdw3fkX
-         IJNH8qRtKo+5gPnluLFgDX0SPxosg2Tr1jNfFqqoiSu11uqRJYvDMtanGXBT1x0IkF6Y
-         ba6+9LwZiwkO7sWkoB43e404iG9OBoNL5QBSX0MGxliMIjCNPke9m99etfmYL8jhdCUV
-         tX883ywh8R4BwLNDanA/fkNoFWFXCJC5yWiuCCLPQoJxcVJR+gMgtIVUupMj4ruxQvGL
-         ebhN165884+Diht68TH0anDDe0ObeWm+6pLlX+boJpCHjSxzQPWEWJVmPkxSSa+JouHz
-         JL0w==
+        Tue, 27 Jun 2023 13:10:42 -0400
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EB871708;
+        Tue, 27 Jun 2023 10:10:41 -0700 (PDT)
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-6689430d803so2715724b3a.0;
+        Tue, 27 Jun 2023 10:10:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687885779; x=1690477779;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AEfOOj7zZRsR4093w5Xezdtfqq/JXEJS/CeyQ2VX6y0=;
-        b=YpQ0d6yQhpzhiP6bWF4wm9P65qOQsg3pIRc5vCXRdYg0pCUIElTMCtiMOrFagWFiS+
-         fZ+LuzLqcb/HHoFV+ivRwCkLT1BYB9S5HxlyQdlFRIPxNSyLCRSCR8QVv378VXuqp6Je
-         mZZqqMozPMQGQ5TkkiHfeMzStciTEhZewvK40wZ0acYzLmFJHyUWOSnMD93BLv+AqEVk
-         2AKPDCUUvYgHCgAFxTnvidR6QNa9dFczZOFGFvOQiNmeaTPHH+OxQHeFHyKXBOcFmCQx
-         OzrlxKZAHGnzVVmVk+OIH7z3K+TbOewJA4/iPAOh//fcHpzrTETbwYDhZwFyxrP8l+iK
-         zWyg==
-X-Gm-Message-State: AC+VfDw+NxT/nAcRD2rylW25ThLsegULAR0a70gcJTR0AGpULONJJFC5
-        hNZqHnYpCnhaDxMqxxJ0tmNqS9tNuFj4yilaOSMt+A==
-X-Google-Smtp-Source: ACHHUZ7BtHxgVW1W1XrKrjwW5U8vVpsEPZv6JStuwihqH7MgrzQKZ6h1CfZqEbifWrFKNPuWb1XHCmKI5k0ybOr7NLI=
-X-Received: by 2002:a25:2903:0:b0:bff:d530:f06 with SMTP id
- p3-20020a252903000000b00bffd5300f06mr16876866ybp.41.1687885778638; Tue, 27
- Jun 2023 10:09:38 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687885841; x=1690477841;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QCwreXgAeapFWNeRBQ+PIDdq1pcxDkY0t7LqXpgTL40=;
+        b=Jpm7sVu9mTIi9yW+4WcKRT72q+gwbNkg+u+zWHhO8PtzBLIYS6MQNd5zk2yzgv8obK
+         zRN6zYtkdWOiGGSKx8zL99yX8w1s3Gf/Gd58ABW+J3hjEZ0M2HPOAgw51nVhLQ5uZen8
+         bStQWyjRjUwfTUknzv6hPBrU6LbWwWBC8ATE4isgXHOWYB0zaJIvr+bbSqCm1/5EvlyH
+         l7rIvVEEIVP4iWB23EKTXtCv0zB/dbEZpTtO1Kb0pvL+aMFgWYBHlZF9SVAVcKZ4+2O1
+         lGJBQMZPCIoSlFL8irTiPFBaXEsltqCVf63Tz/711YYezawmjBre3IwzrjdwtORGVIH0
+         NRLg==
+X-Gm-Message-State: AC+VfDx8nDq1rjQng4QrdhVJJAcnm198MWljH/WeuYXQ46u6u7Dr0Duq
+        emKdTGZigOpt3tx5o8vU2OM=
+X-Google-Smtp-Source: ACHHUZ5WBVWb24zJ8B+PGseJCvivZdeiOCS3o/HCt1+PPio2kpc7GKG41VcUoceRKshrgljk89ecbQ==
+X-Received: by 2002:a05:6a00:1356:b0:67f:e74a:d309 with SMTP id k22-20020a056a00135600b0067fe74ad309mr615067pfu.30.1687885840698;
+        Tue, 27 Jun 2023 10:10:40 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:5a8b:4bea:e452:f031? ([2620:15c:211:201:5a8b:4bea:e452:f031])
+        by smtp.gmail.com with ESMTPSA id t17-20020a62ea11000000b0066355064acbsm5644002pfh.104.2023.06.27.10.10.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Jun 2023 10:10:40 -0700 (PDT)
+Message-ID: <e8924389-985a-42ad-9daf-eca2bf12fa57@acm.org>
+Date:   Tue, 27 Jun 2023 10:10:36 -0700
 MIME-Version: 1.0
-References: <20230626201713.1204982-1-surenb@google.com> <ZJn1tQDgfmcE7mNG@slm.duckdns.org>
- <20230627-kanon-hievt-bfdb583ddaa6@brauner>
-In-Reply-To: <20230627-kanon-hievt-bfdb583ddaa6@brauner>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Tue, 27 Jun 2023 10:09:27 -0700
-Message-ID: <CAJuCfpECKqYiekDK6Zw58w10n1T4Q3R+2nymfHX2ZGfQVDC3VQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] kernfs: add kernfs_ops.free operation to free
- resources tied to the file
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Tejun Heo <tj@kernel.org>, gregkh@linuxfoundation.org,
-        peterz@infradead.org, lujialin4@huawei.com,
-        lizefan.x@bytedance.com, hannes@cmpxchg.org, mingo@redhat.com,
-        ebiggers@kernel.org, oleg@redhat.com, akpm@linux-foundation.org,
-        viro@zeniv.linux.org.uk, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 1/1] Add a new sysctl to disable io_uring system-wide
+Content-Language: en-US
+To:     Matteo Rizzo <matteorizzo@google.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, io-uring@vger.kernel.org
+Cc:     jordyzomer@google.com, evn@google.com, poprdi@google.com,
+        corbet@lwn.net, axboe@kernel.dk, asml.silence@gmail.com,
+        akpm@linux-foundation.org, keescook@chromium.org,
+        rostedt@goodmis.org, dave.hansen@linux.intel.com,
+        ribalda@chromium.org, chenhuacai@kernel.org, steve@sk2.org,
+        gpiccoli@igalia.com, ldufour@linux.ibm.com
+References: <20230627120058.2214509-1-matteorizzo@google.com>
+ <20230627120058.2214509-2-matteorizzo@google.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20230627120058.2214509-2-matteorizzo@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 1:24=E2=80=AFAM Christian Brauner <brauner@kernel.o=
-rg> wrote:
->
-> On Mon, Jun 26, 2023 at 10:31:49AM -1000, Tejun Heo wrote:
-> > On Mon, Jun 26, 2023 at 01:17:12PM -0700, Suren Baghdasaryan wrote:
-> > > diff --git a/include/linux/kernfs.h b/include/linux/kernfs.h
-> > > index 73f5c120def8..a7e404ff31bb 100644
-> > > --- a/include/linux/kernfs.h
-> > > +++ b/include/linux/kernfs.h
-> > > @@ -273,6 +273,11 @@ struct kernfs_ops {
-> > >      */
-> > >     int (*open)(struct kernfs_open_file *of);
-> > >     void (*release)(struct kernfs_open_file *of);
-> > > +   /*
-> > > +    * Free resources tied to the lifecycle of the file, like a
-> > > +    * waitqueue used for polling.
-> > > +    */
-> > > +   void (*free)(struct kernfs_open_file *of);
-> >
-> > I think this can use a bit more commenting - ie. explain that release m=
-ay be
-> > called earlier than the actual freeing of the file and how that can lea=
-d to
-> > problems. Othre than that, looks fine to me.
->
-> It seems the more natural thing to do would be to introduce a ->drain()
-> operation and order it before ->release(), no?
+On 6/27/23 05:00, Matteo Rizzo wrote:
+> +Prevents all processes from creating new io_uring instances. Enabling this
+> +shrinks the kernel's attack surface.
+> +
+> += =============================================================
+> +0 All processes can create io_uring instances as normal. This is the default
+> +  setting.
+> +1 io_uring is disabled. io_uring_setup always fails with -EPERM. Existing
+> +  io_uring instances can still be used.
+> += =============================================================
 
-I assume you mean we should add a ->drain() operation and call it when
-kernfs_drain_open_files()  causes kernfs_release_file()? That would
-work but if any existing release() handler counts on the current
-behavior (release() being called while draining) then we should find
-and fix these. Hopefully they don't really depend on the current
-behavior but I dunno.
+I'm using fio + io_uring all the time on Android devices. I think we need a
+better solution than disabling io_uring system-wide, e.g. a mechanism based
+on SELinux that disables io_uring for apps and that keeps io_uring enabled
+for processes started via 'adb root && adb shell ...'
+
+Bart.
+
