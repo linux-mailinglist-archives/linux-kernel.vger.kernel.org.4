@@ -2,57 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C6CD73F03E
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 03:17:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3B3A73F048
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 03:20:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230025AbjF0BRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 21:17:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35234 "EHLO
+        id S229527AbjF0BUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 21:20:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229810AbjF0BRl (ORCPT
+        with ESMTP id S229987AbjF0BUo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 21:17:41 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679C5173A
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 18:17:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687828660; x=1719364660;
-  h=date:from:to:cc:subject:message-id;
-  bh=v3GTdvmwcsLVC3N6+L8X4g8hyaR0pYUvTpG/edSE+D8=;
-  b=PynHW6zhX1B6bhGNhdKOtgXd+MjOMIImw0TcGHBo1zP7awBnSBbva3Ui
-   kdYelWvkXPn2dVtIYlnqRFUt1/cEgAJG2oO80JuHcLZrCPiZ5d+X0KsqV
-   jdK1NG4rnAWpbUcrOc1OfOn+jrip87JwIYcya2c2l6OBlr5G9eoMDtj8z
-   pv4vb60RUI0AEbFuhF56h34EohJGVvZVjmi7xeKb6EvSSDz/5ZasFdrH7
-   Tf5g1HbleuDeEkXVACD5kwfWEZCudo93+UUcu/Z5fi5+QmKiw8Anr6Y6P
-   uufU0NNZwmgpkLWw5xjmxJrNQYBXDMfkyqi0coHQ4fJls3OMgdnHotbn5
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="360301972"
-X-IronPort-AV: E=Sophos;i="6.01,161,1684825200"; 
-   d="scan'208";a="360301972"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 18:17:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="746027496"
-X-IronPort-AV: E=Sophos;i="6.01,161,1684825200"; 
-   d="scan'208";a="746027496"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 26 Jun 2023 18:17:38 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qDxKr-000BIo-2V;
-        Tue, 27 Jun 2023 01:17:37 +0000
-Date:   Tue, 27 Jun 2023 09:17:11 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Subject: [gustavoars:testing/fam01-next20230620] BUILD REGRESSION
- f88731de11436a7eaa371fd5179e5daf0446316f
-Message-ID: <202306270908.MNgeCq9L-lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        Mon, 26 Jun 2023 21:20:44 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1168A173C
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 18:20:42 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3fa5295fcc8so34235e9.1
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 18:20:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687828840; x=1690420840;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=MwvCpFW/GbNtPlS+NY4oiqTY4IcMkcTsbkaeYou0CDY=;
+        b=MrXhAAJE9l6zSW90GA8n65w4+eCK49qK/xWh8182A8ET/4h+ybVFaIi0tNHp5ac5Bo
+         rSqwJWk9svsna+Mu53daPYTGiqe5GaNwXjVx9VAHJrGU4cJp9aHc6voM4wN0s5KO3K/y
+         +O/kPFMf+XtRWmXwYPmeIZZ9a/iT9pfCfMFmllEJbgdnlm83bCiBqBl53Y68hN5RfxrM
+         9W8t86scw7RxHinoj/GwRSRaUlFZu8cWPJsBazjhm0IJUgY3S2JGoVFeg9iUh08ZYBsH
+         MrXf8fbQAP4jm8jnmhmKSKxtAXDdwE2qdS21V2aGV4Xqc14Vm/OnkU5s0Ss/9sij+5Mi
+         ptYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687828840; x=1690420840;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MwvCpFW/GbNtPlS+NY4oiqTY4IcMkcTsbkaeYou0CDY=;
+        b=Sj/n1Q/LBIP9IgYuryhaFdYjroftqqdKrVUMzg/DdU88sh0L0nWUSOjjlHuGDIbTq9
+         B7fh3mvfjHVqEztpq+5v+0kpgM+kgqwiMu3dXPjB8uWJRCUQwg/YUz4DXJxwdoc9+g+l
+         sv6L96NS8td6dWvJ0CwjKgj8fAVGqNgMYypL9h0MTLkJUM4trKj/MYFMxYn5pEpDE99v
+         hWgf+OmR2ENlgItxQ+f9YIgLxUo439NeDznvnz5HpTjUHYkalt4w8hyK3eIyU+lRh7Ag
+         +FzMxGLR+T8J4a2kavodN9DZslz+MNCdnWas1keOBJ6kfkXFpNd4ewBrSLtsAWdU3nqx
+         S6jg==
+X-Gm-Message-State: AC+VfDzI2C7bckz8AK3CYoea/Oko5KDXjoG1/FNjID6nj3/WunlhyqTT
+        ohjTmv2WXkdO4Dg348gCXs3IUNvsmlFckc+fL4khKw==
+X-Google-Smtp-Source: ACHHUZ4yNnIeW6xZpPLiaVRnq3DPPpO7aR3C7mWs6623sflXXuUQ+liw5rmNxwTYrcSkLr+wQPlWHm14UHK8qJMbQK8=
+X-Received: by 2002:a05:600c:4fcd:b0:3f6:f4b:d4a6 with SMTP id
+ o13-20020a05600c4fcd00b003f60f4bd4a6mr283186wmq.7.1687828840459; Mon, 26 Jun
+ 2023 18:20:40 -0700 (PDT)
+MIME-Version: 1.0
+From:   Yuxiao Zhang <yuxiaozhang@google.com>
+Date:   Mon, 26 Jun 2023 18:20:29 -0700
+Message-ID: <CAOOoKeQ=b4u1C_FZ-OFHSfVt5Z9xw1KtpJ4316zubt46Tny41Q@mail.gmail.com>
+Subject: support pmsg record size larger than kmalloc limitation
+To:     keescook@chromium.org, tony.luck@intel.com, gpiccoli@igalia.com,
+        linux-hardening@vger.kernel.org
+Cc:     William Kennington <wak@google.com>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,135 +65,164 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/fam01-next20230620
-branch HEAD: f88731de11436a7eaa371fd5179e5daf0446316f  readdir: Replace one-element arrays with flexible-array members
+Hi pstore maintainers,
 
-Error/Warning: (recently discovered and may have been fixed)
+Recently we are trying to use pmsg ramoops to store relatively large
+file. We found that even with enough space configured with pmsg-size,
+it still failed because of kmalloc limitation.
 
-arch/m68k/include/asm/io_no.h:17:11: warning: array subscript 0 is outside array bounds of 'volatile u8[0]' {aka 'volatile unsigned char[]'} [-Warray-bounds]
-arch/sparc/mm/init_64.c:3057:31: error: array subscript -1 is outside array bounds of 'char[]' [-Werror=array-bounds]
+We are thinking of using kvmalloc instead of kmalloc for ramoops pmsg
+record buffer. It seems ok to us that the memory is not physically
+contiguous. We want to consult with you whether it is safe to do so.
 
-Error/Warning ids grouped by kconfigs:
+Below is the patch file, note that the change only touches the pmsg
+ram path, we don't touch other paths like pstore zone. It is not yet a
+solution for all the use case in pstore, just an idea of how we want
+to address the issue. We test this on 5.15 and large file works fine.
 
-gcc_recent_errors
-|-- m68k-randconfig-r034-20230620
-|   `-- arch-m68k-include-asm-io_no.h:warning:array-subscript-is-outside-array-bounds-of-volatile-u8-aka-volatile-unsigned-char
-`-- sparc-allyesconfig
-    `-- arch-sparc-mm-init_64.c:error:array-subscript-is-outside-array-bounds-of-char
+-----------------------------------
 
-elapsed time: 9058m
+From 5f7ac624d47b49ea827c1ad8e3b47534e0709ea3 Mon Sep 17 00:00:00 2001
+From: Yuxiao Zhang <yuxiaozhang@google.com>
+Date: Mon, 26 Jun 2023 16:40:40 -0700
+Subject: [PATCH] pstore: ramoops: support pmsg size larger than kmalloc
+ limitation
 
-configs tested: 106
-configs skipped: 6
+Current pmsg implementation is using kmalloc for pmsg record buffer,
+which has max size limits based on page size. Currently even we
+allocate enough space with pmsg-size, pmsg will still fail if the
+file size is larger than what kmalloc allowed.
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r002-20230620   gcc  
-arc                              alldefconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                     haps_hs_smp_defconfig   gcc  
-arc                  randconfig-r024-20230620   gcc  
-arc                  randconfig-r043-20230620   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                          moxart_defconfig   clang
-arm                  randconfig-r036-20230620   gcc  
-arm                  randconfig-r046-20230620   clang
-arm                         wpcm450_defconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-csky                                defconfig   gcc  
-hexagon              randconfig-r003-20230620   clang
-hexagon              randconfig-r016-20230620   clang
-hexagon              randconfig-r041-20230620   clang
-hexagon              randconfig-r045-20230620   clang
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-r004-20230620   clang
-i386         buildonly-randconfig-r005-20230620   clang
-i386         buildonly-randconfig-r006-20230620   clang
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-i001-20230620   clang
-i386                 randconfig-i002-20230620   clang
-i386                 randconfig-i003-20230620   clang
-i386                 randconfig-i004-20230620   clang
-i386                 randconfig-i005-20230620   clang
-i386                 randconfig-i006-20230620   clang
-i386                 randconfig-i011-20230620   gcc  
-i386                 randconfig-i012-20230620   gcc  
-i386                 randconfig-i013-20230620   gcc  
-i386                 randconfig-i014-20230620   gcc  
-i386                 randconfig-i015-20230620   gcc  
-i386                 randconfig-i016-20230620   gcc  
-i386                 randconfig-r012-20230620   gcc  
-i386                 randconfig-r033-20230620   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r005-20230620   gcc  
-m68k                             allmodconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r004-20230620   gcc  
-m68k                 randconfig-r034-20230620   gcc  
-m68k                 randconfig-r035-20230620   gcc  
-microblaze                      mmu_defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                           ip22_defconfig   clang
-mips                     loongson1c_defconfig   clang
-mips                      loongson3_defconfig   gcc  
-mips                 randconfig-r025-20230620   clang
-mips                          rb532_defconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r001-20230620   gcc  
-nios2                randconfig-r006-20230620   gcc  
-openrisc                  or1klitex_defconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                 mpc832x_rdb_defconfig   clang
-powerpc              randconfig-r015-20230620   gcc  
-powerpc              randconfig-r022-20230620   gcc  
-powerpc                      walnut_defconfig   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r032-20230620   clang
-riscv                randconfig-r042-20230620   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r044-20230620   gcc  
-sh                               allmodconfig   gcc  
-sh                           se7751_defconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r013-20230620   gcc  
-sparc64              randconfig-r021-20230620   gcc  
-sparc64              randconfig-r026-20230620   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-r001-20230620   clang
-x86_64       buildonly-randconfig-r002-20230620   clang
-x86_64       buildonly-randconfig-r003-20230620   clang
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
+Since we don't need physical contiguous memory for pmsg buffer
+, we can use kvmalloc to avoid such limitation.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Signed-off-by: Yuxiao Zhang <yuxiaozhang@google.com>
+---
+ fs/pstore/inode.c    | 2 +-
+ fs/pstore/platform.c | 9 +++++----
+ fs/pstore/ram.c      | 5 +++--
+ fs/pstore/ram_core.c | 3 ++-
+ 4 files changed, 11 insertions(+), 8 deletions(-)
+
+diff --git a/fs/pstore/inode.c b/fs/pstore/inode.c
+index ffbadb8b3032..df7fb2ad4599 100644
+--- a/fs/pstore/inode.c
++++ b/fs/pstore/inode.c
+@@ -54,7 +54,7 @@ static void free_pstore_private(struct
+pstore_private *private)
+  if (!private)
+  return;
+  if (private->record) {
+- kfree(private->record->buf);
++ kvfree(private->record->buf);
+  kfree(private->record->priv);
+  kfree(private->record);
+  }
+diff --git a/fs/pstore/platform.c b/fs/pstore/platform.c
+index cbc0b468c1ab..f51e9460ac9d 100644
+--- a/fs/pstore/platform.c
++++ b/fs/pstore/platform.c
+@@ -32,6 +32,7 @@
+ #include <linux/uaccess.h>
+ #include <linux/jiffies.h>
+ #include <linux/workqueue.h>
++#include <linux/mm.h>
+
+ #include "internal.h"
+
+@@ -549,7 +550,7 @@ static int pstore_write_user_compat(struct
+pstore_record *record,
+  if (record->buf)
+  return -EINVAL;
+
+- record->buf = memdup_user(buf, record->size);
++ record->buf = vmemdup_user(buf, record->size);
+  if (IS_ERR(record->buf)) {
+  ret = PTR_ERR(record->buf);
+  goto out;
+@@ -557,7 +558,7 @@ static int pstore_write_user_compat(struct
+pstore_record *record,
+
+  ret = record->psi->write(record);
+
+- kfree(record->buf);
++ kvfree(record->buf);
+ out:
+  record->buf = NULL;
+
+@@ -730,7 +731,7 @@ static void decompress_record(struct pstore_record *record)
+  return;
+
+  /* Swap out compressed contents with decompressed contents. */
+- kfree(record->buf);
++ kvfree(record->buf);
+  record->buf = unzipped;
+  record->size = unzipped_len;
+  record->compressed = false;
+@@ -783,7 +784,7 @@ void pstore_get_backend_records(struct pstore_info *psi,
+  rc = pstore_mkfile(root, record);
+  if (rc) {
+  /* pstore_mkfile() did not take record, so free it. */
+- kfree(record->buf);
++ kvfree(record->buf);
+  kfree(record->priv);
+  kfree(record);
+  if (rc != -EEXIST || !quiet)
+diff --git a/fs/pstore/ram.c b/fs/pstore/ram.c
+index ade66dbe5f39..296465b14fa9 100644
+--- a/fs/pstore/ram.c
++++ b/fs/pstore/ram.c
+@@ -20,6 +20,7 @@
+ #include <linux/compiler.h>
+ #include <linux/of.h>
+ #include <linux/of_address.h>
++#include <linux/mm.h>
+
+ #include "internal.h"
+ #include "ram_internal.h"
+@@ -268,7 +269,7 @@ static ssize_t ramoops_pstore_read(struct
+pstore_record *record)
+  /* ECC correction notice */
+  record->ecc_notice_size = persistent_ram_ecc_string(prz, NULL, 0);
+
+- record->buf = kmalloc(size + record->ecc_notice_size + 1, GFP_KERNEL);
++ record->buf = kvmalloc(size + record->ecc_notice_size + 1, GFP_KERNEL);
+  if (record->buf == NULL) {
+  size = -ENOMEM;
+  goto out;
+@@ -282,7 +283,7 @@ static ssize_t ramoops_pstore_read(struct
+pstore_record *record)
+
+ out:
+  if (free_prz) {
+- kfree(prz->old_log);
++ kvfree(prz->old_log);
+  kfree(prz);
+  }
+
+diff --git a/fs/pstore/ram_core.c b/fs/pstore/ram_core.c
+index 966191d3a5ba..3453d493ec27 100644
+--- a/fs/pstore/ram_core.c
++++ b/fs/pstore/ram_core.c
+@@ -17,6 +17,7 @@
+ #include <linux/slab.h>
+ #include <linux/uaccess.h>
+ #include <linux/vmalloc.h>
++#include <linux/mm.h>
+ #include <asm/page.h>
+
+ #include "ram_internal.h"
+@@ -385,7 +386,7 @@ void *persistent_ram_old(struct persistent_ram_zone *prz)
+
+ void persistent_ram_free_old(struct persistent_ram_zone *prz)
+ {
+- kfree(prz->old_log);
++ kvfree(prz->old_log);
+  prz->old_log = NULL;
+  prz->old_log_size = 0;
+ }
+--
+
+-------------------------------------------
+Thanks in advance.
+-Yuxiao
