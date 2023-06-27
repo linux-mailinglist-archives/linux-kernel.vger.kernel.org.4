@@ -2,128 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6977B74067D
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 00:36:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C2857406B3
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 00:59:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229789AbjF0WgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 18:36:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57276 "EHLO
+        id S230119AbjF0W6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 18:58:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbjF0WgG (ORCPT
+        with ESMTP id S229454AbjF0W6v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 18:36:06 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D476C102
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 15:36:04 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-51d9123a8abso3992202a12.2
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 15:36:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1687905363; x=1690497363;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zsdnBmMjPd9jj5iSbNeuekac37JTK9P9U9w8CL0+t24=;
-        b=ZU4XTyh6wxe4WT7LkJI5PuCgGBOoFCiYS04Bf2RKwo/rEDhZ3uxeTbfDPFyJugvts7
-         zIplsqkHYddHMwXwFMp53VyEK6AAmtuM1pV+r1QijSlAXtPM09AawENAjAv9nXqhSJq+
-         +YdRIdB7eADSAkFqk5MpGTw1mU5r0Ei0B/p98=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687905363; x=1690497363;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zsdnBmMjPd9jj5iSbNeuekac37JTK9P9U9w8CL0+t24=;
-        b=CcZH0IhZNWG/G12SRneSVwDlbjoKvrbLafEP130BW0YAhjxJeREUTcywgAZSUE2LBG
-         1r+dafyPk1YCh0wn2Jg1mYslWRFmjnaIfEEymlpdON/DyuyK1pA+YXHARywOgIkM4/TQ
-         hQm/00I2igKEoIeLap0eTAfzpSHm/SlF70fBh6YvOjFru6YejJl4uU2zZygiM6fycjUd
-         lRnfJw7vD63mlZsGBvrkdBVkPLS96FcRzrCr/uks5QBT1mC6P7xrMIvYI9i4NPS4feTZ
-         faibO27/bMudPCRuQvHdRtglOCFm+OU6tYs5hi6ylGj8bBzJcZO32twPCdkosdEviugz
-         UvLw==
-X-Gm-Message-State: AC+VfDxGyQmHEA1pNK/D02gQizTjPTRKzHkBOy5eaXi01Fiqym9siq3Y
-        YmExcGFHXf9c+/GqWB536dbTE1nwLzythjEccxpWmp3T
-X-Google-Smtp-Source: ACHHUZ7Txl2PSgopoXHE+MXsqz8y+ugnaUOm8/cy9d1A8xX26oOIq/ukxTa10HzmT9IuGxrTixtOuw==
-X-Received: by 2002:a17:907:802:b0:982:a454:6d20 with SMTP id wv2-20020a170907080200b00982a4546d20mr27134113ejb.54.1687905363238;
-        Tue, 27 Jun 2023 15:36:03 -0700 (PDT)
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com. [209.85.208.53])
-        by smtp.gmail.com with ESMTPSA id lh8-20020a170906f8c800b009923998c8acsm851254ejb.20.2023.06.27.15.36.02
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Jun 2023 15:36:02 -0700 (PDT)
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-51d9123a8abso3992182a12.2
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 15:36:02 -0700 (PDT)
-X-Received: by 2002:aa7:ca55:0:b0:51d:9e0c:1396 with SMTP id
- j21-20020aa7ca55000000b0051d9e0c1396mr3815425edt.35.1687905361768; Tue, 27
- Jun 2023 15:36:01 -0700 (PDT)
+        Tue, 27 Jun 2023 18:58:51 -0400
+X-Greylist: delayed 600 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 27 Jun 2023 15:58:47 PDT
+Received: from mx1.sberdevices.ru (mx1.sberdevices.ru [37.18.73.165])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8C8926B9;
+        Tue, 27 Jun 2023 15:58:46 -0700 (PDT)
+Received: from p-infra-ksmg-sc-msk01 (localhost [127.0.0.1])
+        by mx1.sberdevices.ru (Postfix) with ESMTP id 9F9A3100002;
+        Wed, 28 Jun 2023 01:40:26 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 9F9A3100002
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1687905626;
+        bh=e1cUKFmZg0TXaiRU2tWtXncs27m+jCxjdlCXc/znU2A=;
+        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:From;
+        b=hHjrbZftTb+sAPRvW49lU2m6Q22wjlLjFVYWuTRoWM0rAqaEX527ySUIM/O3Hf9FK
+         7wLAISq4jEwdksx+p25tWkFZ8GXWa9chHdfceqc7/S7LGqGkaYD+rmYAp4+azoo3W/
+         3AwyGT/ZSBTIMol6wtgRyAWfrbN2mHFdLy5UgLf0NWft2qGd/xvUMjgTLX64A2S9hj
+         9u7VeF93CdsAAu2KAnyGUUgvCY1iR/mDTHTpdUutXsCpAw5OmiQTcepdcBuxYM+6sT
+         1MaWay06ZswESyvsZfgSetuX2j111TA6TuARs8gilaNSO3RhMHhOEFpTBZsrM/sL0G
+         9rtdduGZseI6Q==
+Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx1.sberdevices.ru (Postfix) with ESMTPS;
+        Wed, 28 Jun 2023 01:40:26 +0300 (MSK)
+Received: from localhost.localdomain (100.64.160.123) by
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Wed, 28 Jun 2023 01:39:30 +0300
+From:   George Stark <gnstark@sberdevices.ru>
+To:     <jic23@kernel.org>, <lars@metafoo.de>, <neil.armstrong@linaro.org>,
+        <khilman@baylibre.com>, <jbrunet@baylibre.com>,
+        <martin.blumenstingl@googlemail.com>,
+        <andriy.shevchenko@linux.intel.com>, <nuno.sa@analog.com>,
+        <gnstark@sberdevices.ru>
+CC:     <linux-iio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-amlogic@lists.infradead.org>, <kernel@sberdevices.ru>,
+        George Stark <GNStark@sberdevices.ru>
+Subject: [PATCH v3 0/5] meson saradc: add iio channels to read channel 7 mux inputs
+Date:   Wed, 28 Jun 2023 01:37:13 +0300
+Message-ID: <20230627224017.1724097-1-gnstark@sberdevices.ru>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-References: <20230627221430.464073-1-dinguyen@kernel.org>
-In-Reply-To: <20230627221430.464073-1-dinguyen@kernel.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 27 Jun 2023 15:35:45 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgh1CDUTJD+F_utKnbW6d=wApBMC4D8hMfOs15bAn23Bg@mail.gmail.com>
-Message-ID: <CAHk-=wgh1CDUTJD+F_utKnbW6d=wApBMC4D8hMfOs15bAn23Bg@mail.gmail.com>
-Subject: Re: [PATCH] Revert "nios2: Convert __pte_free_tlb() to use ptdescs"
-To:     Dinh Nguyen <dinguyen@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux@roeck-us.net,
-        vishal.moola@gmail.com, akpm@linux-foundation.org,
-        sfr@canb.auug.org.au
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [100.64.160.123]
+X-ClientProxiedBy: p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) To
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
+X-KSMG-Rule-ID: 10
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Lua-Profiles: 178297 [Jun 27 2023]
+X-KSMG-AntiSpam-Version: 5.9.59.0
+X-KSMG-AntiSpam-Envelope-From: GNStark@sberdevices.ru
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Auth: dkim=none
+X-KSMG-AntiSpam-Info: LuaCore: 517 517 b0056c19d8e10afbb16cb7aad7258dedb0179a79, {Tracking_uf_ne_domains}, {Tracking_from_domain_doesnt_match_to}, p-i-exch-sc-m01.sberdevices.ru:5.0.1,7.1.1;lore.kernel.org:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;sberdevices.ru:5.0.1,7.1.1;127.0.0.199:7.1.2, FromAlignment: s, {Tracking_white_helo}, ApMailHostAddress: 100.64.160.123
+X-MS-Exchange-Organization-SCL: -1
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiPhishing: Clean, bases: 2023/06/27 21:22:00
+X-KSMG-LinksScanning: Clean, bases: 2023/06/27 21:22:00
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2023/06/27 18:27:00 #21588965
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 27 Jun 2023 at 15:14, Dinh Nguyen <dinguyen@kernel.org> wrote:
->
-> This reverts commit 6ebe94baa2b9ddf3ccbb7f94df6ab26234532734.
->
-> The patch "nios2: Convert __pte_free_tlb() to use ptdescs" was supposed
-> to go together with a patchset that Vishal Moola had planned taking it
-> through the mm tree. By just having this patch, all NIOS2 builds are
-> broken.
+From: George Stark <GNStark@sberdevices.ru>
 
-This is now at least the third time just this merge window where some
-base tree was broken, and people thought that linux-next is some kind
-of testing ground for it all.
+Changelog:
 
-NO!
+v1->v2:
+split refactoring patch [1] into 4 smaller patches, fix comment style
 
-Linux-next is indeed for testing, and for finding situations where
-there are interactions between different trees.
+[1] https://lore.kernel.org/lkml/20230621062715.455652-2-gnstark@sberdevices.ru/
 
-But linux-next is *not* a replacement for "this tree has to work on
-its own". THAT testing needs to be done independently, and *before* a
-tree hits linux-next.
+v2->v3:
+remove patch 'meson saradc: unite iio channel array definitions' [1] after discussion
 
-It is *NOT* ok to say "this will work in combination with that other
-tree". EVERY SINGLE TREE needs to work on its own, because otherwise
-you cannot bisect the end result sanely.
+patch 'meson saradc: add enum for iio channel array indexes'
+  - change enum items prefix from INDEX_ to NUM_ since name 'channel index' is
+  more relevant to channel array index in iio world and with 2 tables our array index is
+  not always equal to channel number
+  - resolve conflicts after deleting [1]
+  - update commit message, previous patch [2]
+  - return channel number for temp channel. It wasn't used and isn't used currently
+  but may need later
 
-We apparently had the NIOS2 tree being broken. And the RCU tree was
-broken. And the KUnit tree was broken.
+patch meson saradc: support reading from channel 7 mux inputs
+  - resolve conflicts after deleting [1]
+  - update commit message, previous patch [3]
+  - add routine find_channel_by_num to get channel by channel number
 
-In all those cases, the base tree did not compile properly on its own,
-and linux-next "magically fixed" it by either having Stephen Rothwell
-literally fix the build breakage by hand, or by having some other tree
-hide the problem.
+[1] https://lore.kernel.org/lkml/20230623022334.791026-4-gnstark@sberdevices.ru/
+[2] https://lore.kernel.org/lkml/20230623022334.791026-5-gnstark@sberdevices.ru/
+[3] https://lore.kernel.org/lkml/20230623022334.791026-7-gnstark@sberdevices.ru/
 
-This is very much not ok.
+George Stark (5):
+  meson saradc: move enums declaration before variables declaration
+  meson saradc: move meson_sar_adc_set_chan7_mux routine upper
+  meson saradc: add enum for iio channel numbers
+  meson saradc: add channel labels
+  meson saradc: support reading from channel 7 mux inputs
 
-I'm not sure why it happened so much this release, but this needs to
-stop. People need to realize that you can't just throw shit at the
-wall and see if it sticks. You need to test your own trees *first*,
-and *independently* of other peoples trees.
+ drivers/iio/adc/meson_saradc.c | 165 +++++++++++++++++++++++++--------
+ 1 file changed, 126 insertions(+), 39 deletions(-)
 
-Then, if  you have done basic testing, you can then have it in
-linux-next and that hopefully then finds any issues with bad
-interactions with other trees, and maybe also ends up getting more
-coverage testing on odd architectures and with odd configurations.
+-- 
+2.38.4
 
-But linux-next must not in *any* way be a replacement for doing basic
-testing on your own tree first.
-
-                  Linus
