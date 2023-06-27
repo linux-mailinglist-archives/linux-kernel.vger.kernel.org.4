@@ -2,68 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D4E87403F5
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 21:18:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83C767403FA
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 21:20:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbjF0TS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 15:18:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46808 "EHLO
+        id S230238AbjF0TUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 15:20:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjF0TS0 (ORCPT
+        with ESMTP id S229924AbjF0TUb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 15:18:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53EA3E6C
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 12:18:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        Tue, 27 Jun 2023 15:20:31 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E590AE6C;
+        Tue, 27 Jun 2023 12:20:29 -0700 (PDT)
+Received: from [192.168.10.54] (unknown [182.179.162.32])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DB8FF6120E
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 19:18:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F25C5C433C8;
-        Tue, 27 Jun 2023 19:18:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687893504;
-        bh=uwzZUjZSCfj7+frIlsvFzZuiym3U7S7pNMgIXSdtB4Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=p89b6LX3hLunHjDY3X4M9F1r/ot+U5G1vIelARlufBDGrahv2EeW1K5E8jShoR0AL
-         Eez//ApvuP6lQfl3ln4QNkBjQhNSDVWrwdof9FiWWZvyDQcakaDKVJA+UVcHyjlMXY
-         YMW6xbMP08W82OGPQjLBSh2KQWfQyOIqfSxBig3nipuLY596mkuHKAGwISc2hYjVLA
-         OdnOnfHZa9J1YBGX5z22QUlqdD+zT23S4rAaeaVq+CrmkWCa4r8SXrJfe0Mph63Mqf
-         2E1BB7jDdM9AHEVw4jm8CHIdFxwaMHSbXyR2hHHRG8tv/IuAhKiagovj0DGDn+WIqA
-         DdlKQQ7zq/mew==
-Date:   Tue, 27 Jun 2023 20:18:18 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     "Hongren (Zenithal) Zheng" <i@zenithal.me>
-Cc:     Evan Green <evan@rivosinc.com>, Samuel Ortiz <sameo@rivosinc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org, linux@rivosinc.com,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
-        Anup Patel <apatel@ventanamicro.com>,
-        linux-kernel@vger.kernel.org, Guo Ren <guoren@kernel.org>,
-        Atish Patra <atishp@rivosinc.com>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
-        Jiatai He <jiatai2021@iscas.ac.cn>
-Subject: Re: [PATCH 1/3] RISC-V: add Bitmanip/Scalar Crypto parsing from DT
-Message-ID: <20230627-projector-rockband-cac4bd138338@spud>
-References: <20230627143747.1599218-1-sameo@rivosinc.com>
- <20230627143747.1599218-2-sameo@rivosinc.com>
- <CALs-HssMkVikspnEi-Ek2t=ABvFvgptAhsBjk1+aLuVjiP7P7w@mail.gmail.com>
- <20230627-debating-twelve-da2c1ed60948@spud>
- <ZJsyntnQ/FDXgNPk@Sun>
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id C722C6602B7B;
+        Tue, 27 Jun 2023 20:20:20 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1687893628;
+        bh=F15IKQFG8u9IA2svUTjlj+/hsiBSNLiVRfc6Ea4qK5Y=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=LOFsHOBX4U4Uy7UEUZWZ9MD/sgEEQnXUPJ+PgInwntLBz8NCYLV2NWdKQC6xJSN9t
+         5PMAm0JXmkf5t+AuNrzjesiNU0aV8cXovWxXYwIo9CdyBjX2SF+SsDzHt7FQD6pdnq
+         AyB4LtU3+GIGkwCpiWzVppiq+uUONypRnev2BLiFqwftfArFrV0c+va3i+VamrQceM
+         5PDZmAJUNG5ULcVU52WtGNB4O/sW9hbubxcey/dBnPc0TB2COuFDtfrnh0AoDm1wWF
+         Z0Z/OPHd41D5S6/n7POqDERCDuvHs4R9ym079MJE6BQZglz28kGtEBN70vs2HGRj7s
+         wyzaL6AVZZnLg==
+Message-ID: <6ac9c60e-0a6b-110a-cace-97afbd9708a0@collabora.com>
+Date:   Wed, 28 Jun 2023 00:20:16 +0500
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="3UzS4ywJFe4Sz/og"
-Content-Disposition: inline
-In-Reply-To: <ZJsyntnQ/FDXgNPk@Sun>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v21 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+Content-Language: en-US
+To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Andrei Vagin <avagin@gmail.com>
+References: <20230626113156.1274521-1-usama.anjum@collabora.com>
+ <20230626113156.1274521-3-usama.anjum@collabora.com>
+ <ZJo/gOnTmwEQPLF8@gmail.com>
+ <13ea54c0-25a3-285c-f47e-d6da11c91795@collabora.com>
+ <CABb0KFGn=3oAYa+wsf=iWr1Ss=en9+m11JOijEibXJLFDAkvjQ@mail.gmail.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <CABb0KFGn=3oAYa+wsf=iWr1Ss=en9+m11JOijEibXJLFDAkvjQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,50 +86,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Thanks Michał for replying.
 
---3UzS4ywJFe4Sz/og
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 6/27/23 11:52 PM, Michał Mirosław wrote:
+> On Tue, 27 Jun 2023 at 11:00, Muhammad Usama Anjum
+> <usama.anjum@collabora.com> wrote:
+>>
+>> Hi Andrei and Michal,
+>>
+>> Lets resolve last two points. Please reply below.
+>>
+>> On 6/27/23 6:46 AM, Andrei Vagin wrote:
+> [...]
+>>> And we need to report an address where it stopped scanning.
+>>> We can do that by adding zero length vector.
+>> I don't want to do multiplexing the ending address in vec. Can we add
+>> end_addr variable in struct pm_scan_arg to always return the ending address?
+>>
+>> struct pm_scan_arg {
+>>         ...
+>>         _u64 end_addr;
+>> };
+> 
+> The idea to emit a zero-length entry for the end looks nice. This has
+> the disadvantage that we'd need to either reserve one entry for the
+> ending marker or stop the walk after the last entry is no longer
+> matching.
+This is ambiguous.
 
-On Wed, Jun 28, 2023 at 03:03:58AM +0800, Hongren (Zenithal) Zheng wrote:
-> On Tue, Jun 27, 2023 at 07:48:15PM +0100, Conor Dooley wrote:
-> > On Tue, Jun 27, 2023 at 11:14:30AM -0700, Evan Green wrote:
-> > > On Tue, Jun 27, 2023 at 7:38=E2=80=AFAM Samuel Ortiz <sameo@rivosinc.=
-com> wrote:
-> > > >
-> > > > From: "Hongren (Zenithal) Zheng" <i@zenithal.me>
-> > > >
-> > > > This patch parses Zb/Zk related string from DT and
-> >=20
-> > %s/This patch//
-> >=20
-> > > > output them in cpuinfo
-> > > >
-> > > > One thing worth noting is that if DT provides zk,
-> > > > all zbkb, zbkc, zbkx and zkn, zkr, zkt would be enabled.
-> >=20
-> > Please explain why this is okay.
->=20
-> From riscv scalar crypto spec, zk is a shorthand
-> for zkn, zkr and zkt and zkn also includes zbkb, zbkc
-> and zbkx.
+> 
+> Another solution would be to rewrite 'start' and 'len'. The caller
+> would be forced to use non-const `pm_scan_arg`, but I expect the `vec`
+> pointer would normally be written anyway (unless using only a
+> statically-allocated buffer).
+> Also, if the 'len' is replaced with 'end' that would make the ioctl
+> easily restartable (just call again if start != end).
+Nice idea. But returning ending address in len seems a bit strange.
 
-Hmm, seems you misunderstood, sorry about that.
-What I was looking for is an explanation of this in the commit message.
+pm_scan_arg already has 11 members. Wouldn't it be okay to add one more? It
+would be straight forward as well.
 
-Hope that helps,
-Conor.
+If nobody replies until tomorrow, I'll start returning ending address in len.
 
---3UzS4ywJFe4Sz/og
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+> 
+> Best Regards
+> Michał Mirosław
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJs1+gAKCRB4tDGHoIJi
-0sEhAP4gjuEYPLur3H8NK87xQ6PWeP9nG9Wm91xRu6Yk/PC/VAEA42C+FQ5GUpKv
-Bf/0pPRGWuoqFLtpo0WEjUWORA7hKAk=
-=ZW5q
------END PGP SIGNATURE-----
-
---3UzS4ywJFe4Sz/og--
+-- 
+BR,
+Muhammad Usama Anjum
