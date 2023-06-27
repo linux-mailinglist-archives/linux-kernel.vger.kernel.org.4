@@ -2,51 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B3CF73F12D
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 05:10:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72B4973F133
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 05:15:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229912AbjF0DKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 23:10:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34926 "EHLO
+        id S229983AbjF0DPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 23:15:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229806AbjF0DK1 (ORCPT
+        with ESMTP id S229939AbjF0DO6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 23:10:27 -0400
-Received: from out-63.mta0.migadu.com (out-63.mta0.migadu.com [91.218.175.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31C87109
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 20:10:23 -0700 (PDT)
-Date:   Mon, 26 Jun 2023 23:10:17 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1687835422;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vmhUBX2ZB02c55g8bPJJRmeg86fh2l+wtqC8zBugzrE=;
-        b=QK0+2kTQHocajlf/RthIsGxma3rgM28r8KUUo1kPstKGHYeKX6ExSJ4iqYg4auuCq71g71
-        derzIg/bc/Lw6y1rucZSGUvx487a/eBvu7rXXSAjSCBV5K/iijPqmLW/7IYLplpGtbLb/f
-        r62DnMdF2h3Agxa9pN39vI5AG9k+nOM=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-bcachefs@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: [GIT PULL] bcachefs
-Message-ID: <20230627031017.en6rkwih7ygbfibc@moria.home.lan>
-References: <20230626214656.hcp4puionmtoloat@moria.home.lan>
- <aeb2690c-4f0a-003d-ba8b-fe06cd4142d1@kernel.dk>
- <20230627000635.43azxbkd2uf3tu6b@moria.home.lan>
- <91e9064b-84e3-1712-0395-b017c7c4a964@kernel.dk>
- <20230627020525.2vqnt2pxhtgiddyv@moria.home.lan>
- <b92ea170-d531-00f3-ca7a-613c05dcbf5f@kernel.dk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b92ea170-d531-00f3-ca7a-613c05dcbf5f@kernel.dk>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        Mon, 26 Jun 2023 23:14:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3F1EE58
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 20:14:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 775A560FD0
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 03:14:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id CEAA3C433C8;
+        Tue, 27 Jun 2023 03:14:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687835695;
+        bh=HZyX3VGyr8HmjzkZK+EkZ6R/a20i8r5luDsdNY+AurU=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=cnAI4yMM4fFtupMnq9WJd8L1n5IJ4f2fm0V9y2kfEE2MKMaAkLJXM3l+JSVBBNtwP
+         kUM70iApA3JEAubwvjAGf+U4UHBwX4HrWfMO1XfswVVXh4uYRNxaLEu3NH3JGbPHBu
+         beLuAo255d1tVZgcBnS6CvrLDzi4OelVkt68tLutuWvtA+MdTVxZxy+Gnv2PtSthzV
+         ZA8bsWPwNb84egwwOxDtOVRQeD+8RBL2bz7LZjzQqiYVcpyXGm6BtX7r8PhNZJWwD+
+         y+rvotav8BiN8JeThDRfozQi4S6yXStdteWI7XZasFcmuVsr35HAAzLa+Ru27Gffyb
+         UMG8EseQqyA9A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BC21AE537FE;
+        Tue, 27 Jun 2023 03:14:55 +0000 (UTC)
+Subject: Re: [GIT PULL] chrome-platform changes for v6.5
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <ZJko2ipBSy8eM/+2@google.com>
+References: <ZJko2ipBSy8eM/+2@google.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <ZJko2ipBSy8eM/+2@google.com>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git tags/tag-chrome-platform-for-v6.5
+X-PR-Tracked-Commit-Id: 2b8cc5858a07ab75ce98cae720e263e1c1b0d1d9
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 1ef6663a587ba3e57dc5065a477db1c64481eedd
+Message-Id: <168783569576.18094.6541808729976898231.pr-tracker-bot@kernel.org>
+Date:   Tue, 27 Jun 2023 03:14:55 +0000
+To:     Tzung-Bi Shih <tzungbi@kernel.org>
+Cc:     torvalds@linux-foundation.org, pmalani@chromium.org,
+        bleung@chromium.org, groeck@chromium.org, tzungbi@kernel.org,
+        linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,71 +63,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 26, 2023 at 08:59:13PM -0600, Jens Axboe wrote:
-> On 6/26/23 8:05?PM, Kent Overstreet wrote:
-> > On Mon, Jun 26, 2023 at 07:13:54PM -0600, Jens Axboe wrote:
-> >> Doesn't reproduce for me with XFS. The above ktest doesn't work for me
-> >> either:
-> > 
-> > It just popped for me on xfs, but it took half an hour or so of looping
-> > vs. 30 seconds on bcachefs.
-> 
-> OK, I'll try and leave it running overnight and see if I can get it to
-> trigger.
-> 
-> >> ~/git/ktest/build-test-kernel run -ILP ~/git/ktest/tests/bcachefs/xfstests.ktest/generic/388
-> >> realpath: /home/axboe/git/ktest/tests/bcachefs/xfstests.ktest/generic/388: Not a directory
-> >> Error 1 at /home/axboe/git/ktest/build-test-kernel 262 from: ktest_test=$(realpath "$1"), exiting
-> >>
-> >> and I suspect that should've been a space, but:
-> >>
-> >> ~/git/ktest/build-test-kernel run -ILP ~/git/ktest/tests/bcachefs/xfstests.ktest generic/388
-> >> Running test xfstests.ktest on m1max at /home/axboe/git/linux-block
-> >> No tests found
-> >> TEST FAILED
-> > 
-> > doh, this is because we just changed it to pick up the list of tests
-> > from the test lists that fstests generated.
-> > 
-> > Go into ktest/tests/xfstests and run make and it'll work. (Doesn't
-> > matter if make fails due to missing libraries, it'll re-run make inside
-> > the VM where the dependencies will all be available).
-> 
-> OK, I'll try that as well.
-> 
-> BTW, ran into these too. Didn't do anything, it was just a mount and
-> umount trying to get the test going:
-> 
-> axboe@m1max-kvm ~/g/k/t/xfstests> sudo cat /sys/kernel/debug/kmemleak
-> unreferenced object 0xffff000201a5e000 (size 1024):
->   comm "bch-copygc/nvme", pid 11362, jiffies 4295015821 (age 6863.776s)
->   hex dump (first 32 bytes):
->     40 00 00 00 00 00 00 00 62 aa e8 ee 00 00 00 00  @.......b.......
->     10 e0 a5 01 02 00 ff ff 10 e0 a5 01 02 00 ff ff  ................
->   backtrace:
->     [<000000002668da56>] slab_post_alloc_hook.isra.0+0xb4/0xbc
->     [<000000006b0b510c>] __kmem_cache_alloc_node+0xd0/0x178
->     [<00000000041cfdde>] __kmalloc_node+0xac/0xd4
->     [<00000000e1556d66>] kvmalloc_node+0x54/0xe4
->     [<00000000df620afb>] bucket_table_alloc.isra.0+0x44/0x120
->     [<000000005d44ce16>] rhashtable_init+0x148/0x1ac
->     [<00000000fdca7475>] bch2_copygc_thread+0x50/0x2e4
->     [<00000000ea76e08f>] kthread+0xc4/0xd4
->     [<0000000068107ad6>] ret_from_fork+0x10/0x20
-> unreferenced object 0xffff000200eed800 (size 1024):
->   comm "bch-copygc/nvme", pid 13934, jiffies 4295086192 (age 6582.296s)
->   hex dump (first 32 bytes):
->     40 00 00 00 00 00 00 00 e8 a5 2a bb 00 00 00 00  @.........*.....
->     10 d8 ee 00 02 00 ff ff 10 d8 ee 00 02 00 ff ff  ................
->   backtrace:
->     [<000000002668da56>] slab_post_alloc_hook.isra.0+0xb4/0xbc
->     [<000000006b0b510c>] __kmem_cache_alloc_node+0xd0/0x178
->     [<00000000041cfdde>] __kmalloc_node+0xac/0xd4
->     [<00000000e1556d66>] kvmalloc_node+0x54/0xe4
->     [<00000000df620afb>] bucket_table_alloc.isra.0+0x44/0x120
->     [<000000005d44ce16>] rhashtable_init+0x148/0x1ac
->     [<00000000fdca7475>] bch2_copygc_thread+0x50/0x2e4
->     [<00000000ea76e08f>] kthread+0xc4/0xd4
->     [<0000000068107ad6>] ret_from_fork+0x10/0x20
+The pull request you sent on Mon, 26 Jun 2023 13:57:46 +0800:
 
-yup, missing a rhashtable_destroy() call, I'll do some kmemleak testing
+> https://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git tags/tag-chrome-platform-for-v6.5
+
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/1ef6663a587ba3e57dc5065a477db1c64481eedd
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
