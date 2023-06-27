@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E92ED740409
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 21:38:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F3E874040A
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 21:38:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229982AbjF0TiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 15:38:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51444 "EHLO
+        id S230183AbjF0TiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 15:38:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbjF0TiB (ORCPT
+        with ESMTP id S230115AbjF0TiV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 15:38:01 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DD2519B0
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 12:38:00 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1b80f2ed810so13240775ad.0
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 12:38:00 -0700 (PDT)
+        Tue, 27 Jun 2023 15:38:21 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AB1426B7
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 12:38:15 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1b7f68f1c9eso27430435ad.2
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 12:38:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1687894680; x=1690486680;
-        h=mime-version:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=OEZDMhG7rx1pRbvYJd/KZHhGempgDxPd4m7U4c02lKk=;
-        b=aoiqH0CNlNa4UCNqVgOqQ2c7AG+6ac10idG0IQQ77LLCv9BFmkuxC406gadPAFOsJ+
-         MIAc+mvsFgXGy4h7O+VaUsUNKN7XkawwAJ1dns8eeLKhjLOgMFYSbZN74TU5fB/46gVm
-         ay6AZaLypoi7lDvUNKCPvanXITcLcu6bWU+Dw=
+        d=broadcom.com; s=google; t=1687894695; x=1690486695;
+        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9sRDVdhVXF20t74m0nwGTpI6Lg1jpaS1EEnPgZIqnMk=;
+        b=Tv/EGcdknpW6cm5v1J8docAsGHyhUgrPq6/xEmLSuFvAq4LFVq0LQvNH0AHlj7/NuR
+         jKdGAIWGkYejR+434oyWgZMGJxfecbkXIODFQKESbAnQYul+8+gxsva/CItmusio76DR
+         smlXympi9M6TC67AaAzqRHQSkXYGsPzkzf7b0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687894680; x=1690486680;
-        h=mime-version:message-id:date:subject:cc:to:from:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OEZDMhG7rx1pRbvYJd/KZHhGempgDxPd4m7U4c02lKk=;
-        b=V9ElTBiSkMweo2HzBoi0av4HeGTrmFSobkKBqta7Y+czy9Iqf5ovwoqAGK8fEhFQg3
-         B7hjxmEuz7ticY4Pe402/URNKH5ucG0wYVZYXw3HOgKdKy1/p2GJI+uiGKGv28yUUUNu
-         Pwo/uoL0rCDJ2eZLxPxmdVNinEdP0gDnD0i+ctbrbHpL0uEivpB3SdcT8enoEC6n7CCa
-         2HNnN+ZFiyrRBW/IuTnD2Pr9qEIjO48qBIewPLKvlyRGu5YXjWj10mw8W7QfNKk6+9UA
-         6BRlw60vt5WOYPKbpnYIUg/l9yV8SYRsIZ71pDf1i5HVZfIuFs4quzCxZXRYQdL8z26Z
-         AwZw==
-X-Gm-Message-State: AC+VfDzR/tkj9WoaecHGfrSWz33d681J8wJq5/06cVQDnvwklvZvFRjw
-        TpgEPdw3UQSdUBjhQnhvQ6DJ9Q==
-X-Google-Smtp-Source: ACHHUZ54C7rokrTD1qkNGB2HFWvK9t0iD+383OtaioXqJc62ICBwJ+zylO6V8u9YsfsikPN1OSeM1w==
-X-Received: by 2002:a17:903:1105:b0:1b7:c666:dc5b with SMTP id n5-20020a170903110500b001b7c666dc5bmr8102344plh.20.1687894680078;
-        Tue, 27 Jun 2023 12:38:00 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687894695; x=1690486695;
+        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9sRDVdhVXF20t74m0nwGTpI6Lg1jpaS1EEnPgZIqnMk=;
+        b=AoxDztgTQUfMGQw1ESuIrB4hhdgk9mq6p/0eX+eWKv5wJNw8P1t0CCObSkBkDEzdV7
+         GcE1/QBvzZcvwdxH9JyBMLivEuoBtlHTn446LZlfRhWRJYjxn+luy/0qtuo1YfDPmYdN
+         WC7OuuJGWxluzaqdW+QJBLEPwi4egO/JQmx2GAWlxNJs7fkOEKV3Me+uOKTr+Rnv4ia7
+         0SqSxzPY8CzvCITrbEouLDV6KuHY6rAMOidDLDWxeauV5Lm/GGKoz8Zs/MG2tI3j3lQc
+         nrqZFzTG2P3sIz3JAtAuOvtbMm0D6XKygKN72Q2opbBeyi8Rva1u1IgATPOnmN0oNUr9
+         8hGA==
+X-Gm-Message-State: AC+VfDx5AJ3Xb9BfxnkyL+BxHV+T55gu4cqlEMJOHhXYvkFo/gNT/L0Q
+        aA9QF/GJ/ofFYaWpXyRSaZ5Xkw==
+X-Google-Smtp-Source: ACHHUZ5qdJ/Ax9skoipCfxrncDfSlOh5OtlrqtFW9zZ+meBkVPL6J04ds0o6AicSqoIHlci3WCEkrg==
+X-Received: by 2002:a17:903:246:b0:1a6:d15f:3ce1 with SMTP id j6-20020a170903024600b001a6d15f3ce1mr14129693plh.34.1687894694663;
+        Tue, 27 Jun 2023 12:38:14 -0700 (PDT)
 Received: from ubuntu-22.localdomain ([192.19.222.250])
-        by smtp.gmail.com with ESMTPSA id g7-20020a1709026b4700b001b7f40a8959sm4986919plt.76.2023.06.27.12.37.56
+        by smtp.gmail.com with ESMTPSA id g7-20020a1709026b4700b001b7f40a8959sm4986919plt.76.2023.06.27.12.38.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jun 2023 12:37:58 -0700 (PDT)
+        Tue, 27 Jun 2023 12:38:13 -0700 (PDT)
 From:   William Zhang <william.zhang@broadcom.com>
 To:     Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
         Linux MTD List <linux-mtd@lists.infradead.org>
@@ -53,61 +53,190 @@ Cc:     f.fainelli@gmail.com, rafal@milecki.pl, kursad.oney@broadcom.com,
         anand.gore@broadcom.com, dregan@mail.com, kamal.dasu@broadcom.com,
         tomer.yacoby@broadcom.com, dan.beygelman@broadcom.com,
         William Zhang <william.zhang@broadcom.com>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
         Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
         Vignesh Raghavendra <vigneshr@ti.com>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
         Richard Weinberger <richard@nod.at>,
         Boris Brezillon <bbrezillon@kernel.org>,
         Kamal Dasu <kdasu.kdev@gmail.com>
-Subject: [PATCH v3 0/5] mtd: rawnand: brcmnand: driver and doc updates
-Date:   Tue, 27 Jun 2023 12:37:33 -0700
-Message-Id: <20230627193738.19596-1-william.zhang@broadcom.com>
+Subject: [PATCH v3 1/5] mtd: rawnand: brcmnand: Fix ECC level field setting for v7.2 controller
+Date:   Tue, 27 Jun 2023 12:37:34 -0700
+Message-Id: <20230627193738.19596-2-william.zhang@broadcom.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230627193738.19596-1-william.zhang@broadcom.com>
+References: <20230627193738.19596-1-william.zhang@broadcom.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000d7c0d505ff219afc"
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIME_NO_TEXT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+        boundary="000000000000b6ba2c05ff219bb1"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000d7c0d505ff219afc
+--000000000000b6ba2c05ff219bb1
 Content-Transfer-Encoding: 8bit
 
-This patch series include the accumulative updates and fixes for the
-brcmnand driver. The bcmbca SoC related updates are removed from v2 and
-will send separate patch series for that. v3 series adds a new patch for
-mtd oobsize fix.
+v7.2 controller has different ECC level field size and shift in the acc
+control register than its predecessor and successor controller. It needs
+to be set specifically.
 
-Changes in v3:
-- Fix kernel test robot sparse warning
-- Add a new patch for mtd oobsize fix
+Fixes: decba6d47869 ("mtd: brcmnand: Add v7.2 controller support")
+Signed-off-by: William Zhang <william.zhang@broadcom.com>
+Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
 
+---
+
+Changes in v3: None
 Changes in v2:
 - Use driver static data for ECC level shift
-- Handle the remaining unaligned oob data after the oob data write loop
 
-William Zhang (5):
-  mtd: rawnand: brcmnand: Fix ECC level field setting for v7.2 controller
-  mtd: rawnand: brcmnand: Fix potential false time out warning
-  mtd: rawnand: brcmnand: Fix crash during the panic_write
-  mtd: rawnand: brcmnand: Fix potential out-of-bounds access in oob write
-  mtd: rawnand: brcmnand: Fix mtd oobsize
+ drivers/mtd/nand/raw/brcmnand/brcmnand.c | 74 +++++++++++++-----------
+ 1 file changed, 41 insertions(+), 33 deletions(-)
 
- drivers/mtd/nand/raw/brcmnand/brcmnand.c | 114 +++++++++++++++--------
- 1 file changed, 76 insertions(+), 38 deletions(-)
-
+diff --git a/drivers/mtd/nand/raw/brcmnand/brcmnand.c b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
+index 2e9c2e2d9c9f..69709419516a 100644
+--- a/drivers/mtd/nand/raw/brcmnand/brcmnand.c
++++ b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
+@@ -272,6 +272,7 @@ struct brcmnand_controller {
+ 	const unsigned int	*page_sizes;
+ 	unsigned int		page_size_shift;
+ 	unsigned int		max_oob;
++	u32			ecc_level_shift;
+ 	u32			features;
+ 
+ 	/* for low-power standby/resume only */
+@@ -596,6 +597,34 @@ enum {
+ 	INTFC_CTLR_READY		= BIT(31),
+ };
+ 
++/***********************************************************************
++ * NAND ACC CONTROL bitfield
++ *
++ * Some bits have remained constant throughout hardware revision, while
++ * others have shifted around.
++ ***********************************************************************/
++
++/* Constant for all versions (where supported) */
++enum {
++	/* See BRCMNAND_HAS_CACHE_MODE */
++	ACC_CONTROL_CACHE_MODE				= BIT(22),
++
++	/* See BRCMNAND_HAS_PREFETCH */
++	ACC_CONTROL_PREFETCH				= BIT(23),
++
++	ACC_CONTROL_PAGE_HIT				= BIT(24),
++	ACC_CONTROL_WR_PREEMPT				= BIT(25),
++	ACC_CONTROL_PARTIAL_PAGE			= BIT(26),
++	ACC_CONTROL_RD_ERASED				= BIT(27),
++	ACC_CONTROL_FAST_PGM_RDIN			= BIT(28),
++	ACC_CONTROL_WR_ECC				= BIT(30),
++	ACC_CONTROL_RD_ECC				= BIT(31),
++
++	ACC_CONTROL_ECC_SHIFT				= 16,
++	/* Only for v7.2 */
++	ACC_CONTROL_ECC_EXT_SHIFT			= 13,
++};
++
+ static inline bool brcmnand_non_mmio_ops(struct brcmnand_controller *ctrl)
+ {
+ #if IS_ENABLED(CONFIG_MTD_NAND_BRCMNAND_BCMA)
+@@ -737,6 +766,12 @@ static int brcmnand_revision_init(struct brcmnand_controller *ctrl)
+ 	else if (of_property_read_bool(ctrl->dev->of_node, "brcm,nand-has-wp"))
+ 		ctrl->features |= BRCMNAND_HAS_WP;
+ 
++	/* v7.2 has different ecc level shift in the acc register */
++	if (ctrl->nand_version == 0x0702)
++		ctrl->ecc_level_shift = ACC_CONTROL_ECC_EXT_SHIFT;
++	else
++		ctrl->ecc_level_shift = ACC_CONTROL_ECC_SHIFT;
++
+ 	return 0;
+ }
+ 
+@@ -931,30 +966,6 @@ static inline int brcmnand_cmd_shift(struct brcmnand_controller *ctrl)
+ 	return 0;
+ }
+ 
+-/***********************************************************************
+- * NAND ACC CONTROL bitfield
+- *
+- * Some bits have remained constant throughout hardware revision, while
+- * others have shifted around.
+- ***********************************************************************/
+-
+-/* Constant for all versions (where supported) */
+-enum {
+-	/* See BRCMNAND_HAS_CACHE_MODE */
+-	ACC_CONTROL_CACHE_MODE				= BIT(22),
+-
+-	/* See BRCMNAND_HAS_PREFETCH */
+-	ACC_CONTROL_PREFETCH				= BIT(23),
+-
+-	ACC_CONTROL_PAGE_HIT				= BIT(24),
+-	ACC_CONTROL_WR_PREEMPT				= BIT(25),
+-	ACC_CONTROL_PARTIAL_PAGE			= BIT(26),
+-	ACC_CONTROL_RD_ERASED				= BIT(27),
+-	ACC_CONTROL_FAST_PGM_RDIN			= BIT(28),
+-	ACC_CONTROL_WR_ECC				= BIT(30),
+-	ACC_CONTROL_RD_ECC				= BIT(31),
+-};
+-
+ static inline u32 brcmnand_spare_area_mask(struct brcmnand_controller *ctrl)
+ {
+ 	if (ctrl->nand_version == 0x0702)
+@@ -967,18 +978,15 @@ static inline u32 brcmnand_spare_area_mask(struct brcmnand_controller *ctrl)
+ 		return GENMASK(4, 0);
+ }
+ 
+-#define NAND_ACC_CONTROL_ECC_SHIFT	16
+-#define NAND_ACC_CONTROL_ECC_EXT_SHIFT	13
+-
+ static inline u32 brcmnand_ecc_level_mask(struct brcmnand_controller *ctrl)
+ {
+ 	u32 mask = (ctrl->nand_version >= 0x0600) ? 0x1f : 0x0f;
+ 
+-	mask <<= NAND_ACC_CONTROL_ECC_SHIFT;
++	mask <<= ACC_CONTROL_ECC_SHIFT;
+ 
+ 	/* v7.2 includes additional ECC levels */
+-	if (ctrl->nand_version >= 0x0702)
+-		mask |= 0x7 << NAND_ACC_CONTROL_ECC_EXT_SHIFT;
++	if (ctrl->nand_version == 0x0702)
++		mask |= 0x7 << ACC_CONTROL_ECC_EXT_SHIFT;
+ 
+ 	return mask;
+ }
+@@ -992,8 +1000,8 @@ static void brcmnand_set_ecc_enabled(struct brcmnand_host *host, int en)
+ 
+ 	if (en) {
+ 		acc_control |= ecc_flags; /* enable RD/WR ECC */
+-		acc_control |= host->hwcfg.ecc_level
+-			       << NAND_ACC_CONTROL_ECC_SHIFT;
++		acc_control &= ~brcmnand_ecc_level_mask(ctrl);
++		acc_control |= host->hwcfg.ecc_level << ctrl->ecc_level_shift;
+ 	} else {
+ 		acc_control &= ~ecc_flags; /* disable RD/WR ECC */
+ 		acc_control &= ~brcmnand_ecc_level_mask(ctrl);
+@@ -2561,7 +2569,7 @@ static int brcmnand_set_cfg(struct brcmnand_host *host,
+ 	tmp &= ~brcmnand_ecc_level_mask(ctrl);
+ 	tmp &= ~brcmnand_spare_area_mask(ctrl);
+ 	if (ctrl->nand_version >= 0x0302) {
+-		tmp |= cfg->ecc_level << NAND_ACC_CONTROL_ECC_SHIFT;
++		tmp |= cfg->ecc_level << ctrl->ecc_level_shift;
+ 		tmp |= cfg->spare_area_size;
+ 	}
+ 	nand_writereg(ctrl, acc_control_offs, tmp);
 -- 
 2.37.3
 
 
---000000000000d7c0d505ff219afc
+--000000000000b6ba2c05ff219bb1
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -178,13 +307,13 @@ VhYAxZlzj7tSjUIM7G7IhyfqPC46GKJ/4x+Amz1Z6YxNGy71L68kYD6hIbBcA5AM42QBUufly6Oa
 urb/KlmDGfVrIRYDbL0ckhGQIP5c6L+kSQZ2sHnQK0e0WgIaZYxaPYeY5u0GLCOze+3vyRMxggJt
 MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
 VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwxuh2XG3FXRL1W
-JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIAAqaR8VrQhReQxr4ch61E8eyf8W
-WPIu39PqeLkgLSYxMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
-MDYyNzE5MzgwMFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
+JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEILq16ePH3ZF7BtHF49Tp7V1ct/2b
+xojyPZ2/kHR7mbjcMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
+MDYyNzE5MzgxNVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
 CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQAcGynYPldb+qBJPw05xjDqc1ECwSwjG9vXUy/JHVDvXWg3
-8R2fRyB9trC+qLz0IRTuFIKAwCIYJonITx2WWZflV6lQ+5Kvo6J58moMAfjCYpLlShfo3mzgJ6D2
-dvG3caN8HqH+0aLQQbyn4pjusvMlVafLrjc//fs7iPlUU/RE5TK1RH2Jv27hKMywoNlhka25RWNn
-jGqeZjzuhSrya84wxpdw1dhOsgma4AZ0Yiz+EdRhRVldjwvttkHwoSLlvZw9k97VeFWUaWOcEn7O
-6DHGkxyTKcGHiorP0r4xjwa2vrh1zFYMEwSBC4rAO7mMKi39jjRqHP1+cNx0P0OXqhAA
---000000000000d7c0d505ff219afc--
+AwQCATANBgkqhkiG9w0BAQEFAASCAQC06XbHaUSwoxbF1XVBDvwGwGGdbN2/sRBbog217/clihPS
+z5Edo/5hQq6Y8TaC28TMSxM9Aq0vLShkZaXN4f1fiXBIIi9RJim5krF5ZBMxcszPUlnWgSOSz3WU
+8kLM/i5DO+I7dffpv6l0ka1Cne/097DFJw6FEjZSh4sZrE6HIS+uZVNuosrb1AgyRoFDedptSJvs
+tW9es8+jf/UuvOF01PiDjGVMRHB1fLJbnTDH4jLTsiEGc4YiQ/AWmsvC1ygx9M8eoLTykt8K1tdx
+ZgqjCLs4R5fJprwmlcKn3ZNXMywG60BCsszZFI+MnTD1SxbCA7QK8xgAhucYebJMCTA4
+--000000000000b6ba2c05ff219bb1--
