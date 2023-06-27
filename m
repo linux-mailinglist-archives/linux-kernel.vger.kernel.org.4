@@ -2,78 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAAB273FA53
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 12:39:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9568573FA58
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 12:40:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230471AbjF0KjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 06:39:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50010 "EHLO
+        id S231298AbjF0Kks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 06:40:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbjF0KjE (ORCPT
+        with ESMTP id S229788AbjF0Kkq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 06:39:04 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77BCCE5F;
-        Tue, 27 Jun 2023 03:39:02 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id 5614622812f47-3a0423ea749so3545687b6e.0;
-        Tue, 27 Jun 2023 03:39:02 -0700 (PDT)
+        Tue, 27 Jun 2023 06:40:46 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 115FBE5A
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 03:40:45 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-3112c11fdc9so3834177f8f.3
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 03:40:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687862341; x=1690454341;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rCgvLgi3BLx22tE+6LcdRjHHTXAUCqzO3DhXE5/At3c=;
-        b=j4V/TgPYZOOMjOgLDAi/Fq1Y8RqRGFE7b4qGJRTHhPIZyNGDGr5yqNQrewztFtf4+H
-         ad9pajr2f7m4EQWCIIZ7UZtZio4GJYgTjDdtTPHRGE4J1sMKSakHqDbNf898iQmg84X0
-         oZdd9dQqPDhhXjPDGdGXik6nfCbkAaHgghtffDg3ccxxkGJQf524luAiz9KkLkiLd579
-         lMYpgQWhUnJhY6/kXmGgYvSBMyPZsdHMrkRhn0njqEixyf3AQPrdjzrW8+zSLjuVEOu1
-         FIRpBegrkGSWtArlAliOUuhNUyJLd7Q/kZI1AwHQBoLKNwl9o8TL/uhfCE7FAt29AuY3
-         GNUQ==
+        d=linaro.org; s=google; t=1687862443; x=1690454443;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XNWf4XrzpOMeSduBCIvkxhctVOzqSSmAJ8R1LK8bH5w=;
+        b=v0kohGNzQndW2yQwqx2w8zwRIoXdd0x63JIBhZR/Qo1PuXH+wh4+0Vqs7AaTXb8vAH
+         tBlwNu76zMuSVaeWkKEVoV6AUIvN3mBi2M2bpMG3H5LQZyPBpPgtxwWx7Kby0/bm/1Pd
+         4wurTqEtwjL1R9QnX50LRsLPVET4OTGm43r/yftAsap1BE7kiz2XO+eRaQ6DnXsLkO6e
+         1m3/jDV2SokiIMCqdeQCb1xWVYEOA5mepuT9JhQSe38lAln9ZreztOarjZuSLm6gPh2k
+         Ph3wGYfXlSxmd7kd8iZvPmRJRpwlz9Z1lIDKH9zdpt6GQzGj7sA9MrcxPemGfUdQALCH
+         k/2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687862341; x=1690454341;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rCgvLgi3BLx22tE+6LcdRjHHTXAUCqzO3DhXE5/At3c=;
-        b=T9JErj7YzEUXHieuFPmwfDGAPn8ndARjFsyv9aRwv+Dioxud26OV/dw12J+96r+ABc
-         l06EWfB5TeldSJX6FH3OZ5KyBhJ3+3te9JSu7mA9bP/5GP3Sp1BnL2bHO9DUDI8N/Dni
-         DAnMw6vFmjKcqJCVHMmQPiUtDIrid8jCS9fVB5Eyjp96zThZcg2zZYLwfdhq9+KuNgqC
-         4olIgUK4fsAtKjeLn8mePAlYM2la8/zBOY07Vn3JmDavIN/Zuu7dsEx4R9n5m6AN7FIU
-         uW7ls5n6z2F8UIDCeZIL/1yiTqUJJIsBnyGxM3ev++LXhmgMp/AOfHPwk/CXaNdjzpem
-         tP4A==
-X-Gm-Message-State: AC+VfDzLSnSmwYBxniSlMWtc+4p8XA6fJYUX5m9LgUBkEfsWwcD4q1xe
-        WR1SB8MJkDRHTGuBHbW5MvFXnVf0uYz36xhSGuWStQNIQqQ=
-X-Google-Smtp-Source: ACHHUZ5H3GRoBym0b9/SiurE+jEIsHMp41/GcQAaG06YOaSsX0tGI2WlPTg+w61l4Kgc2zfz1Xr4qbgyrRqgP6044mA=
-X-Received: by 2002:a05:6808:424d:b0:38e:a824:27d3 with SMTP id
- dp13-20020a056808424d00b0038ea82427d3mr30392455oib.27.1687862341491; Tue, 27
- Jun 2023 03:39:01 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230531125535.676098-1-hch@lst.de> <20230531125535.676098-9-hch@lst.de>
- <c1391658-d785-4b2f-ba7e-01e4668685d7@roeck-us.net> <20230626075325.GA26851@lst.de>
- <7e708dfa-4019-fe28-afbd-91ad847fada0@roeck-us.net>
-In-Reply-To: <7e708dfa-4019-fe28-afbd-91ad847fada0@roeck-us.net>
-From:   Max Filippov <jcmvbkbc@gmail.com>
-Date:   Tue, 27 Jun 2023 03:38:50 -0700
-Message-ID: <CAMo8BfLtEw2jdRC-pK4kYuqmgEy-0QgXDodiF+gZEMygNQQBbA@mail.gmail.com>
-Subject: Re: [PATCH 08/24] init: pass root_device_name explicitly
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        d=1e100.net; s=20221208; t=1687862443; x=1690454443;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XNWf4XrzpOMeSduBCIvkxhctVOzqSSmAJ8R1LK8bH5w=;
+        b=OT0tmsREGv8hHwtrnV4dZuDXuQbq8Fo+NM/xNaHhG29L431MLsXC/o4hojcyaL7nrT
+         XdItBKW0bBqnFUf4CBsTBU8y5UM8KZbES6IRK7AdZfdlB5tdVzIFVsNEwXvCUzrY8oeV
+         zUBuJ9yeehp2GQbhK7+F1ewJDKDPJZ2ZabOLSTOqXeom8zqoi4253fsqj8PsbDyGScYb
+         Tjp50yeQW/0CmnqYf0rfTlkK9OuVBDIqUCx0vBP0J4Wtr5mdlPCXIjA7VHzY2B+YqjTh
+         8rbcBZ7p9p+1maaP4gYpKd692eft7cf7yPUwRTQ6MO2cuL6dIHuLlc7oBdSG13I5oCaj
+         LkPA==
+X-Gm-Message-State: AC+VfDygHoKvTlPCUA4lkqfDU7vVV2g5+5i7p/WnshQBmYSicbKbdBD6
+        zWhk5LzwNuWbuMd7TairGz1aDG9DnvIKVlgqnY0=
+X-Google-Smtp-Source: ACHHUZ4RWdwlfmE4HxDH85NtG4N+3LRB9BQsLJLeEYH8wtwl67F/1B1j3/l4x4dNuo9wx0QB51ijpQ==
+X-Received: by 2002:a5d:4ad0:0:b0:313:f98a:1fd3 with SMTP id y16-20020a5d4ad0000000b00313f98a1fd3mr2072465wrs.27.1687862443390;
+        Tue, 27 Jun 2023 03:40:43 -0700 (PDT)
+Received: from hackbox.lan ([62.231.110.100])
+        by smtp.gmail.com with ESMTPSA id a10-20020adfdd0a000000b0030af15d7e41sm10203750wrm.4.2023.06.27.03.40.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Jun 2023 03:40:42 -0700 (PDT)
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        avel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Joern Engel <joern@lazybastard.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Loic Poulain <loic.poulain@linaro.org>, dm-devel@redhat.com,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Taniya Das <tdas@qti.qualcomm.com>
+Cc:     linux-pm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org
+Subject: [RFC PATCH 1/2] PM: domains: Allow devices attached to genpd to be managed by HW
+Date:   Tue, 27 Jun 2023 13:40:32 +0300
+Message-Id: <20230627104033.3345659-1-abel.vesa@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,48 +80,150 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 26, 2023 at 8:10=E2=80=AFAM Guenter Roeck <linux@roeck-us.net> =
-wrote:
->
-> On 6/26/23 00:53, Christoph Hellwig wrote:
-> > On Fri, Jun 23, 2023 at 05:08:59PM -0700, Guenter Roeck wrote:
-> >> Hi,
-> >>
-> >> On Wed, May 31, 2023 at 02:55:19PM +0200, Christoph Hellwig wrote:
-> >>> Instead of declaring root_device_name as a global variable pass it as=
- an
-> >>> argument to the functions using it.
-> >>>
-> >>> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> >>
-> >> This patch results in the following build error when trying to build
-> >> xtensa:tinyconfig.
-> >>
-> >> WARNING: modpost: vmlinux: section mismatch in reference: strcpy.isra.=
-0+0x14 (section: .text.unlikely) -> initcall_level_names (section: .init.da=
-ta)
-> >> ERROR: modpost: Section mismatches detected.
-> >
-> > I can reproduce these with gcc 13.1 on xtensa, but the report makes
-> > no sense to me.  If I disable CONFIG_CC_OPTIMIZE_FOR_SIZE it now report=
-s
-> > a similar warning for put_page intead of strcpy which seems just as
-> > arcance.
-> >
->
-> I don't see that (I tried 11.3, 11.4, 12.3, and 13.1), but then I am not =
-sure
-> if this is worth tracking down. I just force CONFIG_SECTION_MISMATCH_WARN=
-_ONLY=3Dy
-> for xtensa builds instead.
+From: Ulf Hansson <ulf.hansson@linaro.org>
 
-I believe it's yet another manifestation of the following issue:
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D92938
+Some power-domains may be capable of relying on the HW to control the power
+for a device that's hooked up to it. Typically, for these kinds of
+configurations the device doesn't really need to be attached to a PM domain
+(genpd), from Linux point of view. However, in some cases the behaviour of
+the power-domain and its device can be changed in runtime.
 
-Hunting is still on my todo list, but it's quite low, so I guess
-forcing CONFIG_SECTION_MISMATCH_WARN_ONLY=3Dy for xtensa
-is the right thing to do for now.
+To allow a consumer driver to change the behaviour of the PM domain for its
+device, let's provide a new function, dev_pm_genpd_set_hwmode(). Moreover,
+let's add a corresponding optional genpd callback, ->set_hwmode_dev(),
+which the genpd provider should implement if it can support switching
+between HW controlled mode and SW controlled mode.
 
---=20
-Thanks.
--- Max
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+---
+ drivers/base/power/domain.c | 66 +++++++++++++++++++++++++++++++++++++
+ include/linux/pm_domain.h   | 15 +++++++++
+ 2 files changed, 81 insertions(+)
+
+diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+index 5cb2023581d4..23286853d1d0 100644
+--- a/drivers/base/power/domain.c
++++ b/drivers/base/power/domain.c
+@@ -541,6 +541,72 @@ void dev_pm_genpd_synced_poweroff(struct device *dev)
+ }
+ EXPORT_SYMBOL_GPL(dev_pm_genpd_synced_poweroff);
+ 
++/**
++ * dev_pm_genpd_set_hwmode - Set the HW mode for the device and its PM domain.
++ *
++ * @dev: Device for which the HW-mode should be changed.
++ * @enable: Value to set or unset the HW-mode.
++ *
++ * Some PM domains can rely on HW signals to control the power for a device. To
++ * allow a consumer driver to switch the behaviour for its device in runtime,
++ * which may be beneficial from a latency or energy point of view, this function
++ * may be called.
++ *
++ * It is assumed that the users guarantee that the genpd wouldn't be detached
++ * while this routine is getting called.
++ *
++ * Returns 0 on success and negative error values on failures.
++ */
++int dev_pm_genpd_set_hwmode(struct device *dev, bool enable)
++{
++	struct generic_pm_domain *genpd;
++	int ret = 0;
++
++	genpd = dev_to_genpd_safe(dev);
++	if (!genpd)
++		return -ENODEV;
++
++	if (!genpd->set_hwmode_dev)
++		return -EOPNOTSUPP;
++
++	genpd_lock(genpd);
++
++	if (dev_gpd_data(dev)->hw_mode == enable)
++		goto out;
++
++	ret = genpd->set_hwmode_dev(genpd, dev, enable);
++	if (!ret)
++		dev_gpd_data(dev)->hw_mode = enable;
++
++out:
++	genpd_unlock(genpd);
++	return ret;
++}
++EXPORT_SYMBOL_GPL(dev_pm_genpd_set_hwmode);
++
++/**
++ * dev_pm_genpd_get_hwmode - Get the HW mode setting for the device.
++ *
++ * @dev: Device for which the current HW-mode setting should be fetched.
++ *
++ * This helper function allows consumer drivers to fetch the current HW mode
++ * setting of its the device.
++ *
++ * It is assumed that the users guarantee that the genpd wouldn't be detached
++ * while this routine is getting called.
++ */
++bool dev_pm_genpd_get_hwmode(struct device *dev)
++{
++	struct generic_pm_domain *genpd;
++
++	genpd = dev_to_genpd_safe(dev);
++	if (!genpd)
++		return false;
++
++	return dev_gpd_data(dev)->hw_mode;
++}
++EXPORT_SYMBOL_GPL(dev_pm_genpd_get_hwmode);
++
+ static int _genpd_power_on(struct generic_pm_domain *genpd, bool timed)
+ {
+ 	unsigned int state_idx = genpd->state_idx;
+diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+index f776fb93eaa0..8f60c36851d5 100644
+--- a/include/linux/pm_domain.h
++++ b/include/linux/pm_domain.h
+@@ -146,6 +146,8 @@ struct generic_pm_domain {
+ 	int (*set_performance_state)(struct generic_pm_domain *genpd,
+ 				     unsigned int state);
+ 	struct gpd_dev_ops dev_ops;
++	int (*set_hwmode_dev)(struct generic_pm_domain *domain,
++			      struct device *dev, bool enable);
+ 	int (*attach_dev)(struct generic_pm_domain *domain,
+ 			  struct device *dev);
+ 	void (*detach_dev)(struct generic_pm_domain *domain,
+@@ -208,6 +210,7 @@ struct generic_pm_domain_data {
+ 	unsigned int performance_state;
+ 	unsigned int default_pstate;
+ 	unsigned int rpm_pstate;
++	bool hw_mode;
+ 	void *data;
+ };
+ 
+@@ -237,6 +240,8 @@ int dev_pm_genpd_remove_notifier(struct device *dev);
+ void dev_pm_genpd_set_next_wakeup(struct device *dev, ktime_t next);
+ ktime_t dev_pm_genpd_get_next_hrtimer(struct device *dev);
+ void dev_pm_genpd_synced_poweroff(struct device *dev);
++int dev_pm_genpd_set_hwmode(struct device *dev, bool enable);
++bool dev_pm_genpd_get_hwmode(struct device *dev);
+ 
+ extern struct dev_power_governor simple_qos_governor;
+ extern struct dev_power_governor pm_domain_always_on_gov;
+@@ -305,6 +310,16 @@ static inline ktime_t dev_pm_genpd_get_next_hrtimer(struct device *dev)
+ static inline void dev_pm_genpd_synced_poweroff(struct device *dev)
+ { }
+ 
++static inline int dev_pm_genpd_set_hwmode(struct device *dev, bool enable)
++{
++	return -EOPNOTSUPP;
++}
++
++static inline bool dev_pm_genpd_get_hwmode(struct device *dev)
++{
++	return false;
++}
++
+ #define simple_qos_governor		(*(struct dev_power_governor *)(NULL))
+ #define pm_domain_always_on_gov		(*(struct dev_power_governor *)(NULL))
+ #endif
+-- 
+2.34.1
+
