@@ -2,287 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13F5C73FA31
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 12:26:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68EEE73FA39
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 12:28:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232065AbjF0K0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 06:26:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43926 "EHLO
+        id S229690AbjF0K2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 06:28:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231359AbjF0K0D (ORCPT
+        with ESMTP id S231246AbjF0K2X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 06:26:03 -0400
-Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 397AA3AAF;
-        Tue, 27 Jun 2023 03:24:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1687861473; x=1719397473;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=K3w7zVWa+TdlBYagDsxZoA0pvWubZFkVo4OSiyDgsEE=;
-  b=ArGj6Q2KDeDKegC/lUVoylvhfAcxmx5jrddY7Hk8ONzfdkpRefFav6cS
-   E1SDPgsNRO50qnUDyjzk9E+EWtzW2apcB3GAPdtyzeitD1frjbZ5EORV0
-   CZ02aB9+Pi/EYJZw+z3u6HzGdrQKrKPl8aV4Vx5JgNEHVCpwEALY7Pc8F
-   BEr3v8JXgt7MVtfjHyh5QM+9P/UXVV/E2JS6EYUZJ975NH7dqyBKBURDq
-   7tNzJ7cC0f7Xrs/WTaF81fBazN4zAIgao0z6IRghFb5hRl/ekG8fw95To
-   I2B31LeHqAGUcrmuopEE2JDex0VFs2tm0yUy3JligPDyziqMgtvQ8AoXL
-   Q==;
-X-IronPort-AV: E=Sophos;i="6.01,162,1684771200"; 
-   d="scan'208";a="236333225"
-Received: from mail-bn8nam11lp2168.outbound.protection.outlook.com (HELO NAM11-BN8-obe.outbound.protection.outlook.com) ([104.47.58.168])
-  by ob1.hgst.iphmx.com with ESMTP; 27 Jun 2023 18:24:30 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=odXxVxb4O2LCLE6ZwWko2jxBkBJ5BgVblcTyyReE1Dbl4PZsmTEVfKc47KSbn70vRV47nUrWf8+UQcW45BJMHeNokPAkSz1ooYM20vES2hFy9l+5YvM5VbzMvUNXyWKmOMvmcs1HVHUdG0b1P9VzjV7jnUyN7PVRXjsib35jtrABrCzgiz1OmoWn520FbItVOKNcmeLJqknir1Mq06JnExVDB+SG2CDQ8A0jSfj7DislTGdSSCnOuuZItQhSCJ9urZShgIDTK0bWCnLnLEJ853x6NAzwLfUMviIK/CrTseqLU5doR+UPCCmMrrDLuy0psQJInHzC5um5Kd6tygdfJA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+bUeUqY0Bd45Ri827UHjn64ljHdWDasB72dtOTcW12Q=;
- b=THwT+uftFcAV6VUn5rbvWVO78TEvm6MZ9tvnxKLIiNKn9VkQ+dMnYple6757Yxo2NrNmijQPa6REiXxsAihGA86Jic4a572Gy3nxPlfo8CeEy8LFmQuQJHLydbmsdkOl5RKscI6rOQ1riXfXP8IYi+zRuq57GEwaxj9thC4JB+CO/22xZr3hFW/63SxkexC6fcJ4N6x5hhvIx9QwMYNFVAMC5bYJwR7cdYTgdt3gBpp7RjdOWixeJsVeLzLGRko6ARolMIAuWLvIRNqjuxHD1J3ZqQBFGuvRWe2rugmQGxgi7nZv42hex8Mv97aSe9TnTRbrvrczHqFmGIm5fZyDIA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
- header.d=wdc.com; arc=none
+        Tue, 27 Jun 2023 06:28:23 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83E0AF4
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 03:28:21 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3fa96fd7a01so24467275e9.1
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 03:28:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+bUeUqY0Bd45Ri827UHjn64ljHdWDasB72dtOTcW12Q=;
- b=oE1P2FPTJjLcHivQaLFfR5hI11u2eQv70zgv90TwHAqnvdx4FHs79q8zeLxG47s+GSyIqc3JDcq61RYsUQukLZAjLXNmHDt8zvJgH1rRuUXNjG0E9rRLTKkVNzFd9+gV6kCbJO0rbwa+8vvgCq/SdudqXvZlk+R4tC0YA39bOwg=
-Received: from DM8PR04MB8037.namprd04.prod.outlook.com (2603:10b6:8:f::6) by
- BY5PR04MB6518.namprd04.prod.outlook.com (2603:10b6:a03:1d4::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.23; Tue, 27 Jun
- 2023 10:24:26 +0000
-Received: from DM8PR04MB8037.namprd04.prod.outlook.com
- ([fe80::bfa:d453:e7e9:8f98]) by DM8PR04MB8037.namprd04.prod.outlook.com
- ([fe80::bfa:d453:e7e9:8f98%7]) with mapi id 15.20.6521.024; Tue, 27 Jun 2023
- 10:24:26 +0000
-From:   Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>
-To:     Daniel Wagner <dwagner@suse.de>
-CC:     "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Shin'ichiro Kawasaki <shinichiro@fastmail.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Hannes Reinecke <hare@suse.de>,
-        James Smart <jsmart2021@gmail.com>,
-        Martin Belanger <Martin.Belanger@dell.com>
-Subject: Re: [PATCH blktests v1 3/3] nvme/{041,042,043,044,045}: Use default
- hostnqn and hostid
-Thread-Topic: [PATCH blktests v1 3/3] nvme/{041,042,043,044,045}: Use default
- hostnqn and hostid
-Thread-Index: AQHZqOGMfejaWL3WEUaOrMmB0dz8+A==
-Date:   Tue, 27 Jun 2023 10:24:26 +0000
-Message-ID: <d7ydoif4dhrlndwks6kv6meys3mrjva4vrwt7tbndr2gytvyof@3bivhzxfg2q4>
-References: <20230620132703.20648-1-dwagner@suse.de>
- <20230620132703.20648-4-dwagner@suse.de>
-In-Reply-To: <20230620132703.20648-4-dwagner@suse.de>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wdc.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM8PR04MB8037:EE_|BY5PR04MB6518:EE_
-x-ms-office365-filtering-correlation-id: 3ff5e2dd-95f7-4d39-11e2-08db76f8af34
-wdcipoutbound: EOP-TRUE
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: mkO0Jt8npAGk0sTv4iehRB35GMtlXC2AJOEvXl2gstTNiRw6eaHOO4CNWDTeXLhDuuikmwJ7CqjXsi1VEBv1smiXXcz1q9XEpH9JCqTHpyhQuosKXw0WLaPC3CO6lGBl1WrtZJzGz+dA1CHXWWXyow9wf2xIxbsah+WN6EVp2M2EQePpWQ/yb1uUxztXcJjEj0l6hSwXD+hNfb+Mh1DHle2sOoIHbzV085/l+Lj+jKU4jdRJptDWAYtArvaC3kRf7N+V5P71BBQrK1TxDodaW32JTzRK/4xdIiEOpPes4jny+ynm7Y7PVncX0pK/T8wSMwK6Fk9fx8Uo28ROote8O9ii4RF98SmrsnPcZbwAYZUDUvBMvAplh8cSNcZdyjM0aLcbDg1kmO7/Q9fZINUrPLMuoZebM12ZSgunTOKPIZYHvqY6t4wm7wo1Ds67l50v+tlVQDxPsGxXAX3kOjaSCRFtWfVEzLfkFJKhb0I61+34PQx8ioQE3OAD4Mp+10Dxdq2ymG6snqXug2QnASV49F0JAGPULGY/EtxAx9GMCaScAscDRZPxyEMUbqbtpLMxJSp9QMM8O4v1EJ9DyZcyszbSyS5BX7SBBnHW2wLz3UWXBxfuFrwKI/QhpPheth/a
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR04MB8037.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(7916004)(396003)(39860400002)(346002)(366004)(136003)(376002)(451199021)(38100700002)(5660300002)(44832011)(86362001)(33716001)(41300700001)(7416002)(66476007)(6916009)(8936002)(64756008)(91956017)(38070700005)(66446008)(8676002)(66556008)(316002)(66946007)(122000001)(4326008)(76116006)(82960400001)(478600001)(6486002)(2906002)(186003)(6506007)(9686003)(6512007)(71200400001)(26005)(83380400001)(54906003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?YgBQ4d9OSa8c9p4Wkv3T4GiIfJL95yct+aMRq58PrEJdEz251sHRNQ1s/vZF?=
- =?us-ascii?Q?WgoJBl9rCMOqK5Ubq9uEjuX8sN2UTAidABof5UTVL85ln4Xq+ihMP181OCBj?=
- =?us-ascii?Q?24Jf1zli6r1V8DggPmzjQJMfMeUDCy9vsORv18E6t5nmkrPCVqEJrdN3m6Uo?=
- =?us-ascii?Q?MXVx8PPKGuV/w/smFvupAEc9D4yv/5PbNqKZS1ENp1lX95jEQXAOZEJvJTfJ?=
- =?us-ascii?Q?GAyNFmRehq3SjaQ8HyynPX43GOmyCkrafdx3n2gPMwUG/SEgNua9qD9/o52j?=
- =?us-ascii?Q?Ku9K9R5ytvamRphrh9hgLevsKtN+kZiQAr1inGG4XKIwgBaL7uC6YDHw3VDL?=
- =?us-ascii?Q?xjaTMPiveOjwDWRD6FivfZHjg15HAdwU1Xs0Wm5UeCLV8T2ScPxiyra2In7M?=
- =?us-ascii?Q?2xgNA0Br+oUly20SPmgqQYuQP6qPbGgcrW8SBUG4wggWsAVVyEWQAymMsdYN?=
- =?us-ascii?Q?vlKh0m8d2EBrybIcrEg+paMG6+KWf7G8rLNoohxJvNpRZ7p9jDVM6t8h+cWb?=
- =?us-ascii?Q?K8pVyVx5jV8R2wyWNAX+27yQr4OjeNRoGzVGped6+m7qI3JUi89I8kIUg8N/?=
- =?us-ascii?Q?A5R13fU3D4Qh1JrhJgGT+AC4KrsuqDwqUdMRpO9ZkVA1glkNrjtaceWMWl2m?=
- =?us-ascii?Q?WuRaHTrtJec2nU6nwyG/uXcNs313qOmjBWc+AZxnHwZc04kZbJkR39sCeJTR?=
- =?us-ascii?Q?FLMvTUHSw71+GkcapbE67XS+Lyq14PHSICxEqqKaksbMdANY0JFi2gjGCf3u?=
- =?us-ascii?Q?pnWo2ZT+kKgbbzp3I5sD8cCPGCK1KrgtDvifG+f7ila69EYWhafFIopTu/GO?=
- =?us-ascii?Q?ZqEb1pJkKaAvgjVOeDFDi1ueSDLc+Xe8kZM/V9ewtdYWKuLwsccaGcWOy3z4?=
- =?us-ascii?Q?Oi0UgYa3IqcNbnNgsB3UxdY0nbjVqDXTGFZnLjyWUxl4rlHYrGnW3EXsGkXf?=
- =?us-ascii?Q?ZwocI86ZIgSW811kS2vdrSWiK20nfovbx5J6nBVrFDjTRq7FSpLWKG9YjHPl?=
- =?us-ascii?Q?djzQT6eQx0DrNewk8RLwTZV8uDspYSih6y+aGKAidnDBoCxCnEr97SrIwQaz?=
- =?us-ascii?Q?ZP+j03SGCgSFScUDfVFqZPL3gJHU7ygD1FqNirve79cmK81o6IKFJCUimQR4?=
- =?us-ascii?Q?kvjREsYSkH1yqmdiTOJa19BcWTN0o4Ps1mF+9kuA8vBuUBJY1OWr/mCrhAks?=
- =?us-ascii?Q?OamPIpkX+Rjg+3VN3sIQs3w6z8TlAoefTkzE1ql83ldHQOYS4JX6xyS7jbL9?=
- =?us-ascii?Q?4tqJXp+XSgwyvkAOKL4Yz5RkC2hKTaiIEX7yFlZVHosRxDgG/hFeO/GypSpQ?=
- =?us-ascii?Q?h6+AvLaltTFybzx7+xam0j6cSUSFFxp8WoolVJrN998A6ks0rwCX7WqtT6ez?=
- =?us-ascii?Q?Jdk70aRdpwOZFzjuKw/K3TyRtoqGhvdLdeKxORLrj8rMYj1A6RQUIhtsa4WR?=
- =?us-ascii?Q?vlSTscytgXyc3oM3SkIvOpwfzq/Dfzhg7iuMtOv9SY8LfZqWMDZnOX1osOaZ?=
- =?us-ascii?Q?CSgITDl5462VuVCBl+nFOXZxtHmo4+EAJqMq+tpItHpx0MqbTdI5uvtwx5ub?=
- =?us-ascii?Q?SHzKhuwjcbcTWXRjwcgIj9XLwM8oE3sDAKO1ZX9SRg3s4jbbdCalR9TwIe3A?=
- =?us-ascii?Q?ZYqzuML23+fHBxQD0xpQWpA=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <15A82B084EEEBB48BC2B5CD2AA2AE7C2@namprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        d=linaro.org; s=google; t=1687861700; x=1690453700;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Gmf7swzBx3zmrorxZOdEgYZz3vMgCASZCN0hJOkIo00=;
+        b=C+BVtYn4jX0LRy0VrAz6Tpink6WrpV7gikawtc8z6OICC9zRejV4euVhEN7qDurUc4
+         I10v4x8VsvLNbjrUd0sigj2DP8SNn0yP4q3PpTmvlBr8qALYshj5BXKrSILx8V9DFiBz
+         4GvIQ3bQaSMtkaieP5dfIeXqPgQDS9KETd60dZ4ix3c/ckSMKh4Lyeq6OLsPB2tnVCVF
+         r8dEOPcgigBTLHy9fu59BNAsyRfs4OEh5LYoH4Qvx98EonKQ3VHEcOY29vpq2t+B5tTi
+         ywNEh7XU/A8bJQFbO3O/iFSoV3A/uMEFAEbntTtQ42fR777djBZbWkYChLlvgg+Bb4W1
+         QBNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687861700; x=1690453700;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Gmf7swzBx3zmrorxZOdEgYZz3vMgCASZCN0hJOkIo00=;
+        b=UYA642BroZ4p92/5mMlGPkbXeLqPV6I4y98Q9/5H+exF9FO4Mbh5cpBZDW3HyACuwE
+         zklkKBTlowHcKcXD8+1dtcfGVbP3f6YhjhLig8VKYWbVTan1rv2ZVhCHbzqFp3pi8uTx
+         +FJEepZrV/uvo1x826P3ldZxrytQVnvEsPRHRC4/TVgTvGIxKzQl5Z8znsPZC1z36QRJ
+         cGUUBgXwlCh5omcp5jpLx0IaMLT1c36Vd9ElX6OYbT8uv5X1aqWasIGRZhvbbjlsu5sK
+         0Tiye9gq32XGOr+zX0voRpLGr3A9jZvaIhd+hiWkMgbAHoJRaf3/mi7WgYR8D7vHAm3W
+         dOwQ==
+X-Gm-Message-State: AC+VfDw2ZzccLLo0dG7KkDU7I2LWLQ97/sfY7/9lbQOosMaxecjDIlXr
+        AWvmMxvfDitpCmyVRTxOExqlAQ==
+X-Google-Smtp-Source: ACHHUZ5XMObNZEMfu2qUXIhZuLUJ2ha5NxMgYWPdt3EyCo1TufdxxWi8w5C9EWlJPCA81JQywXQslA==
+X-Received: by 2002:a7b:cc15:0:b0:3f9:846:d892 with SMTP id f21-20020a7bcc15000000b003f90846d892mr24473786wmh.9.1687861699917;
+        Tue, 27 Jun 2023 03:28:19 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id h2-20020a1ccc02000000b003fa74bff02asm10232352wmb.26.2023.06.27.03.28.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Jun 2023 03:28:19 -0700 (PDT)
+Message-ID: <689ffb7b-9efb-ecec-61f5-9d8b00f9906b@linaro.org>
+Date:   Tue, 27 Jun 2023 12:28:14 +0200
 MIME-Version: 1.0
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?wgMMjcY/Ogp6DcqwZrmBeVDwERHuWbEnW7guh5KMBqGtIHurK2ObkyEF2Z8U?=
- =?us-ascii?Q?aC98bKk7Z4hvbd+SD6S2ymUnBeSkpVdKYDmbltZRIjduQOIjBVmhcgXuV4Kj?=
- =?us-ascii?Q?Ihgu4pjWVRyBBV8iUAsKigUlULxZgouvPwa5Z9hZmMtCgvF+7C5NY5VmSIb6?=
- =?us-ascii?Q?2iT26YU8ltm68JDeofJUeSKQf4bxmVw3P4FZnXcHeF+Ul6H8Z3cfFgl5eL8b?=
- =?us-ascii?Q?XgvCXRO/03C1RsDiuHoC9jo5ILNzceDGmtdmungfQOowiyucd0+B9iEroNfJ?=
- =?us-ascii?Q?9m9nzRzw6wKOoqmjA7WzbDMr5UVTbDcXn8hEQf1a7rYGu53P0S+RzoPDdgrY?=
- =?us-ascii?Q?be0Iwfitqk9ZBcN542TZZi6BfbAPjgKODsXUVaICC7eRJ9jJUU+v+Na920gt?=
- =?us-ascii?Q?MS53Fp7l3GVB7gcb+Dirq1fAttK/nAhQI4ZjD2ejrgKbsufwOC/cY6D2b9cC?=
- =?us-ascii?Q?zu+YVhH3ZWOxKdgaCK3mgdybG6A5k7g7zvyzP/2tqyyTwE7PSnh9Jt/jqOnu?=
- =?us-ascii?Q?7XSvhDML4qarvKYim3X120mN7ddPGzKBFN6J7Qlipuw5X3iSVhSDppOdjdIM?=
- =?us-ascii?Q?VuyWUEIVlAyj5iak3i1dvn8CTfaFGPNhwfDwWTpmiNFgoks/JJDEWp3IMmxm?=
- =?us-ascii?Q?RhWeTUBrcIscWmtW53CderZBLuTgzVM2YNx028YDGavyhF84mVDjMGt13VSK?=
- =?us-ascii?Q?xi3ZlpQJhwpj8I7nAE2W2zNi0E2lG9CWWWgFD1GZZ+v1nLplDKTV114Qzaqi?=
- =?us-ascii?Q?47Go5YFbSDDOQ80do+wSNb+fBlSpEqpD9LNO7dNwLkXBLXXX7ngQBbwPNwze?=
- =?us-ascii?Q?/zt70CBxDpAhE1r80yA3B4a5sOLGXwoMtSZ2vC34WM61+cE4gsxiOAxQ9EEe?=
- =?us-ascii?Q?NPlNSn7d+280/TtLmsP3D5Q2SXvzrGYBAkJPDt9LhGTZdSQWZkuJ/Dugiz+z?=
- =?us-ascii?Q?EwetbbCUQAc6XnB6j6J+uw9rxefG+Qr8srR2BIrXFmlSPkPK1/SmBnnP+Rju?=
- =?us-ascii?Q?5rpZ?=
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM8PR04MB8037.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3ff5e2dd-95f7-4d39-11e2-08db76f8af34
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Jun 2023 10:24:26.5925
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ww0PCR7ohGyWKWtJvfxMTnxw0uRMPJRAqfqy3dRfY2C5GDaVDwT0ygtvsLcdDk2wmoccuLBUDap5sfCAKhyWoRXUhfcBSLr9tifooJMpW/g=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR04MB6518
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2 01/15] genirq/devres: Add error information printing
+ for devm_request_threaded_irq()
+Content-Language: en-US
+To:     Yangtao Li <frank.li@vivo.com>, miquel.raynal@bootlin.com,
+        rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
+        rui.zhang@intel.com, mmayer@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com,
+        florian.fainelli@broadcom.com, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@linaro.org, thara.gopinath@gmail.com,
+        heiko@sntech.de, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@foss.st.com, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, tglx@linutronix.de, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com,
+        srinivas.pandruvada@linux.intel.com,
+        DLG-Adam.Ward.opensource@dm.renesas.com, shangxiaojing@huawei.com,
+        bchihi@baylibre.com, wenst@chromium.org,
+        u.kleine-koenig@pengutronix.de, hayashi.kunihiko@socionext.com,
+        niklas.soderlund+renesas@ragnatech.se, chi.minghao@zte.com.cn,
+        johan+linaro@kernel.org, jernej.skrabec@gmail.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-tegra@vger.kernel.org, linux-mediatek@lists.infradead.org
+References: <20230627101215.58798-1-frank.li@vivo.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230627101215.58798-1-frank.li@vivo.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Jun 20, 2023 / 15:27, Daniel Wagner wrote:
-> The host might have enabled the udev/systemd auto connect feature.
-> This disturbs the blktests for the fc transport. nvme-cli is able
-> to distinguish between the different invocations via the --context
-> option. In order to get this working we have to use the default
-> hostnqn and hostid and not randon generated IDs for every single
-
-Nit: s/randon/random/, probably.
-
-Other than that this patch looks good to me.
-
-> run.
->=20
-> Signed-off-by: Daniel Wagner <dwagner@suse.de>
+On 27/06/2023 12:12, Yangtao Li wrote:
+> Ensure that all error handling branches print error information. In this
+> way, when this function fails, the upper-layer functions can directly
+> return an error code without missing debugging information. Otherwise,
+> the error message will be printed redundantly or missing.
+> 
+> There are more than 700 calls to the devm_request_threaded_irq method.
+> Most drivers only request one interrupt resource, and these error
+> messages are basically the same. If error messages are printed
+> everywhere, more than 1000 lines of code can be saved by removing the
+> msg in the driver.
+> 
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
 > ---
->  tests/nvme/041 | 8 ++------
->  tests/nvme/042 | 8 ++------
->  tests/nvme/043 | 8 ++------
->  tests/nvme/044 | 8 ++------
->  tests/nvme/045 | 8 ++------
->  5 files changed, 10 insertions(+), 30 deletions(-)
->=20
-> diff --git a/tests/nvme/041 b/tests/nvme/041
-> index 308655dd6090..5b04b99b128e 100755
-> --- a/tests/nvme/041
-> +++ b/tests/nvme/041
-> @@ -30,12 +30,8 @@ test() {
-> =20
->  	echo "Running ${TEST_NAME}"
-> =20
-> -	hostid=3D"$(uuidgen)"
-> -	if [ -z "$hostid" ] ; then
-> -		echo "uuidgen failed"
-> -		return 1
-> -	fi
-> -	hostnqn=3D"nqn.2014-08.org.nvmexpress:uuid:${hostid}"
-> +	hostid=3D"${def_hostid}"
-> +	hostnqn=3D"${def_hostnqn}"
->  	hostkey=3D"$(nvme gen-dhchap-key -n ${subsys_name} 2> /dev/null)"
->  	if [ -z "$hostkey" ] ; then
->  		echo "nvme gen-dhchap-key failed"
-> diff --git a/tests/nvme/042 b/tests/nvme/042
-> index fed2efead013..8df5ed37aacc 100755
-> --- a/tests/nvme/042
-> +++ b/tests/nvme/042
-> @@ -32,12 +32,8 @@ test() {
-> =20
->  	echo "Running ${TEST_NAME}"
-> =20
-> -	hostid=3D"$(uuidgen)"
-> -	if [ -z "$hostid" ] ; then
-> -		echo "uuidgen failed"
-> -		return 1
-> -	fi
-> -	hostnqn=3D"nqn.2014-08.org.nvmexpress:uuid:${hostid}"
-> +	hostid=3D"${def_hostid}"
-> +	hostnqn=3D"${def_hostnqn}"
-> =20
->  	_setup_nvmet
-> =20
-> diff --git a/tests/nvme/043 b/tests/nvme/043
-> index a030884aa4ed..b591e39d0706 100755
-> --- a/tests/nvme/043
-> +++ b/tests/nvme/043
-> @@ -33,12 +33,8 @@ test() {
-> =20
->  	echo "Running ${TEST_NAME}"
-> =20
-> -	hostid=3D"$(uuidgen)"
-> -	if [ -z "$hostid" ] ; then
-> -		echo "uuidgen failed"
-> -		return 1
-> -	fi
-> -	hostnqn=3D"nqn.2014-08.org.nvmexpress:uuid:${hostid}"
-> +	hostid=3D"${def_hostid}"
-> +	hostnqn=3D"${def_hostnqn}"
-> =20
->  	_setup_nvmet
-> =20
-> diff --git a/tests/nvme/044 b/tests/nvme/044
-> index 9928bcc55397..fca0897af27b 100755
-> --- a/tests/nvme/044
-> +++ b/tests/nvme/044
-> @@ -32,12 +32,8 @@ test() {
-> =20
->  	echo "Running ${TEST_NAME}"
-> =20
-> -	hostid=3D"$(uuidgen)"
-> -	if [ -z "$hostid" ] ; then
-> -		echo "uuidgen failed"
-> -		return 1
-> -	fi
-> -	hostnqn=3D"nqn.2014-08.org.nvmexpress:uuid:${hostid}"
-> +	hostid=3D"${def_hostid}"
-> +	hostnqn=3D"${def_hostnqn}"
-> =20
->  	hostkey=3D"$(nvme gen-dhchap-key -n ${subsys_name} 2> /dev/null)"
->  	if [ -z "$hostkey" ] ; then
-> diff --git a/tests/nvme/045 b/tests/nvme/045
-> index 26a55335a92c..eca629a18691 100755
-> --- a/tests/nvme/045
-> +++ b/tests/nvme/045
-> @@ -36,12 +36,8 @@ test() {
-> =20
->  	echo "Running ${TEST_NAME}"
-> =20
-> -	hostid=3D"$(uuidgen)"
-> -	if [ -z "$hostid" ] ; then
-> -		echo "uuidgen failed"
-> -		return 1
-> -	fi
-> -	hostnqn=3D"nqn.2014-08.org.nvmexpress:uuid:${hostid}"
-> +	hostid=3D"${def_hostid}"
-> +	hostnqn=3D"${def_hostnqn}"
-> =20
->  	hostkey=3D"$(nvme gen-dhchap-key -n ${subsys_name} 2> /dev/null)"
->  	if [ -z "$hostkey" ] ; then
-> --=20
-> 2.41.0
-> =
+>  kernel/irq/devres.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/irq/devres.c b/kernel/irq/devres.c
+> index f6e5515ee077..fcb946ffb7ec 100644
+> --- a/kernel/irq/devres.c
+> +++ b/kernel/irq/devres.c
+> @@ -58,8 +58,10 @@ int devm_request_threaded_irq(struct device *dev, unsigned int irq,
+>  
+>  	dr = devres_alloc(devm_irq_release, sizeof(struct irq_devres),
+>  			  GFP_KERNEL);
+> -	if (!dr)
+> +	if (!dr) {
+> +		dev_err(dev, "Failed to allocate device resource data\n");
+
+I don't understand why did you send v2:
+1. Without responding to my comments - either by implementing them or
+continuing the discussion
+2. Without changelog explaining what happened here
+
+My comments for v1 stand. Please do not ignore them, respond. If sending
+new version, then usually one per day is max and of course provide
+changelog.
+
+>  		return -ENOMEM;
+> +	}
+>  
+>  	if (!devname)
+>  		devname = dev_name(dev);
+> @@ -67,6 +69,7 @@ int devm_request_threaded_irq(struct device *dev, unsigned int irq,
+>  	rc = request_threaded_irq(irq, handler, thread_fn, irqflags, devname,
+>  				  dev_id);
+>  	if (rc) {
+> +		dev_err_probe(dev, rc, "Failed to request threaded irq%d: %d\n", irq, rc);
+
+Why printing rc twice? Did you test this patch? Does not look like.
+
+Best regards,
+Krzysztof
+
