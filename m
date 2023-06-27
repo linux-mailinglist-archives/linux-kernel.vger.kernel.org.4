@@ -2,182 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66D6373F48C
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 08:32:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6D6873F48D
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 08:33:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230234AbjF0Gb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 02:31:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37498 "EHLO
+        id S230272AbjF0GdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 02:33:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230041AbjF0Gbx (ORCPT
+        with ESMTP id S229742AbjF0GdB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 02:31:53 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13D2710E7
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 23:31:52 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3fa96fd7a01so22082945e9.1
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 23:31:52 -0700 (PDT)
+        Tue, 27 Jun 2023 02:33:01 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6612E5A;
+        Mon, 26 Jun 2023 23:33:00 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-668704a5b5bso3833160b3a.0;
+        Mon, 26 Jun 2023 23:33:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687847510; x=1690439510;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2Si6Ds0vIKrIAT8qa+H99PovIF2KoNnQmkzHNG/XuQM=;
-        b=eG5lY8yijNXzzf3FRRqqA8mkVVZD/ep6BhD3iqM++Qe5YM7Jw3V8PHtl+B79iaRgrq
-         xuURBt6ROXEgdl871/hStZQAwLbpZ3p/VWFKxXwrN7Z/WHM4+yBr/qpGm/nargXSyzgz
-         uH+yq4fyGkBZSDWqEsGNFtKbIrlWQnZ6wgnwKHZQQ1+/V5eOYlV0/fcc/saWotFFDjkz
-         e3uwwnC8dRp8r745K1pPOuLXLAu9oH2ViJv1Q5ISsX9UP/mV6Fuj4w2TzkpEnrOBkgS3
-         9sViazOiUny/Gz4XrvmOAKRx2k3heN+BlbowsWHasHTgO5SJnZKfAJuF8NwsXOIXXaUg
-         CH4g==
+        d=gmail.com; s=20221208; t=1687847580; x=1690439580;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=ehmbUEpgbaPxTlOJARi3abmL78zdkNcEfVy/qADnbcM=;
+        b=AToRD3ykPoY/AN8fvJ/dx+eeMxKOReHuGXxTSshorr42HPQAI8EZr/j6cnARnBZeEG
+         jdqcI6BeazSy8KnVxwdKKr/AmGORy1wc/BkPoIqMR0fE7I6aNUXAnhGJ9CS5jzj6eBLi
+         pXjxSMHi4RBBZAv+BPXAE/delZ/R1cdfazYcUMw0PjlK17A5aon+9nfZObsWb3LsiLbo
+         5NkFziYZlOOtrmgjIyZElABW10i3uHuhvff4gw7hL7nkH1jOSBiB6Vbi0bK6CoDMYhmT
+         nH7zJ4DBa6Iba44XxWeFcm7C1Y74kmwLRDuu3q2tPtZNqoa8JsQdVjqLAMpaLeym2Z5A
+         LMYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687847510; x=1690439510;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2Si6Ds0vIKrIAT8qa+H99PovIF2KoNnQmkzHNG/XuQM=;
-        b=SdOL1zk2eMP+26Q/2KEeQUJG6xEWF/PH9srGX1FZCmTXjz2IS8iuLrp3YX13yGmg5o
-         FE8FpIT0gMClnP4y5/5HYrjTsJc3Yf8RKpji+b9atOk+mCcJ1O/sm0sxJc+vxdl7ixQ+
-         Tqu2Ap2I/wvjKwZhyGUa0DuFW1Uer9vR69vCCwt0u23a7bmG6Abvl44Olq8Oi9rRHH3R
-         tSnL3HFcyJPka4gLF5coNhtbq22Ty29FmeAio+XLUMGzZXOIQxop63fAKTrLRFsclQ1c
-         yqnlW947XSdSUHEq+4T9oX/SldvWKwyVrgr9MwJjPcfJDiOO/9GhpIaCHz8y4BpxEDvy
-         bmBQ==
-X-Gm-Message-State: AC+VfDwv40Dmn3FpkzT6M2FMpfenv5m0TRV+IPVL8eRC1LhLzCyPk5kH
-        IlcaQ32YJEw3Rh7vMoOYeWPn1w==
-X-Google-Smtp-Source: ACHHUZ53P6WSxwvCC9/82qPryhwIdfcc93magNjJodg3igFyBNXpveK+rrY1ms23FTFs/2K5WkZXzg==
-X-Received: by 2002:a5d:5307:0:b0:313:f60d:4958 with SMTP id e7-20020a5d5307000000b00313f60d4958mr2687932wrv.53.1687847510435;
-        Mon, 26 Jun 2023 23:31:50 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id j9-20020a5d4649000000b0030aefa3a957sm9349967wrs.28.2023.06.26.23.31.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Jun 2023 23:31:49 -0700 (PDT)
-Message-ID: <1ed60d4d-8e94-78b1-17ad-4305cadf867c@linaro.org>
-Date:   Tue, 27 Jun 2023 08:31:47 +0200
+        d=1e100.net; s=20221208; t=1687847580; x=1690439580;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ehmbUEpgbaPxTlOJARi3abmL78zdkNcEfVy/qADnbcM=;
+        b=Hiv85xlfedM15IQtqggUWVOPwjjk2TV3M0tOVfjFlLn5Mx3IWQZ8uXBmIp9PhXv2AH
+         VZecFPmc5Qoou6vmsJ1T+e9rDoHNaz54/q+yrhIauzcSkLn31kEgE6GrNzOW3fiQSr04
+         fR6pzacvMq+Lr4i93UUA+/4+TDqWVtoE5t8KWK5xCt8FzHcLocxzW2Ens8vo4abxb5hs
+         mejHoBMWeJir4OzKmNmcouHSkV2nK/FHJ5nSSCT2lNuCd/yx2AG/unQJpe8rR2vYQoAf
+         osqhdH3S4bvWXNpvssUlVTg3DLYlL18xEASG475xQy/qZ1pFF3Xqj7L8++GtZeq+S0pK
+         Fw1w==
+X-Gm-Message-State: AC+VfDzujk99UXTaD/R9qjqb6bXW8iZbdTldJuAxP7y3z1n4IliYM8iK
+        9tgPj9jZmAMhTPwffggmIWc=
+X-Google-Smtp-Source: ACHHUZ5wNhHnqaq4167hCYZOqyRIuyVddabXOsqeV8f0cER2+oATvXvcfEKXnKh4h+auiqEPp+nlWw==
+X-Received: by 2002:a05:6a20:748d:b0:126:92de:b893 with SMTP id p13-20020a056a20748d00b0012692deb893mr9777862pzd.31.1687847580168;
+        Mon, 26 Jun 2023 23:33:00 -0700 (PDT)
+Received: from moohyul.svl.corp.google.com ([2620:15c:2a3:200:1663:6fac:d111:59cf])
+        by smtp.gmail.com with ESMTPSA id d25-20020aa78159000000b0064378c52398sm4709694pfn.25.2023.06.26.23.32.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jun 2023 23:32:59 -0700 (PDT)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org
+Subject: [PATCH] perf test: Fix a compile error on pe-file-parsing.c
+Date:   Mon, 26 Jun 2023 23:32:57 -0700
+Message-ID: <20230627063257.549005-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] ASoC: dt-bindings: nau8821: Convert to dtschema
-Content-Language: en-US
-To:     Seven Lee <wtli@nuvoton.com>, broonie@kernel.org
-Cc:     lgirdwood@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, YHCHuang@nuvoton.com,
-        KCHSU0@nuvoton.com, CTLIN0@nuvoton.com, SJLIN0@nuvoton.com,
-        scott6986@gmail.com, supercraig0719@gmail.com, dardar923@gmail.com
-References: <20230626104619.1112588-1-wtli@nuvoton.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230626104619.1112588-1-wtli@nuvoton.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/06/2023 12:46, Seven Lee wrote:
-> Convert the NAU8821 audio CODEC bindings to DT schema.
-> 
-> Signed-off-by: Seven Lee <wtli@nuvoton.com>
-> ---
+The dso__find_symbol_by_name() should be have idx pointer argument.
+Found during the build-test.
 
-Thank you for your patch. There is something to discuss/improve.
+  $ make build-test
+  ...
+    CC      /tmp/tmp.6JwPK1xbWG/tests/pe-file-parsing.o
+  tests/pe-file-parsing.c: In function ‘run_dir’:
+  tests/pe-file-parsing.c:64:15: error: too few arguments to function ‘dso__find_symbol_by_name’
+     64 |         sym = dso__find_symbol_by_name(dso, "main");
+        |               ^~~~~~~~~~~~~~~~~~~~~~~~
+  In file included from tests/pe-file-parsing.c:16:
+  /usr/local/google/home/namhyung/project/linux/tools/perf/util/symbol.h:135:16: note: declared here
+    135 | struct symbol *dso__find_symbol_by_name(struct dso *dso, const char *name, size_t *idx);
+        |                ^~~~~~~~~~~~~~~~~~~~~~~~
 
-> +
-> +  nuvoton,jkdet-pull-up:
-> +    description: Pull-up JKDET pin. If set then JKDET pin is pull up,
-> +      otherwise pull down.
-> +    type: boolean
-> +
-> +  nuvoton,jkdet-polarity:
-> +    description: JKDET pin polarity.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    enum:
-> +      - 0 # active high
-> +      - 1 # active low
-> +    default: 1
-> +
-> +  nuvoton,micbias-voltage:
-> +    description: MICBIAS output level select.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    enum:
-> +      - 0 # VDDA
-> +      - 1 # VDDA * 1
-> +      - 2 # VDDA * 1.1
-> +      - 3 # VDDA * 1.2
-> +      - 4 # VDDA * 1.3
-> +      - 5 # VDDA * 1.4
-> +      - 6 # VDDA * 1.53
-> +      - 7 # VDDA * 1.53
-> +    default: 6
-> +
-> +  nuvoton,vref-impedance:
-> +    description: VMID Tie-off impedance select.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    enum:
-> +      - 0 # open(default)
+Fixes: 259dce914e93 ("perf symbol: Remove symbol_name_rb_node")
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+---
+ tools/perf/Makefile.config         | 13 ++++++++++---
+ tools/perf/tests/pe-file-parsing.c |  3 ++-
+ 2 files changed, 12 insertions(+), 4 deletions(-)
 
-Drop "(default)"
-
-> +      - 1 # 25KOhms
-> +      - 2 # 125KOhms
-> +      - 3 # 2.5KOhms
-> +    default: 2
-
-You wrote that default is 0
-
-> +
-> +  nuvoton,jack-insert-debounce:
-> +    description: number from 0 to 7 that sets debounce time to 2^(n+2)ms.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    maximum: 7
-> +    default: 7
-> +
-> +  nuvoton,jack-eject-debounce:
-> +    description: number from 0 to 7 that sets debounce time to 2^(n+2)ms.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    maximum: 7
-> +    default: 0
-> +
-> +  nuvoton,dmic-clk-threshold:
-> +    description: DMIC clock speed expected value. Unit is Hz.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    default: 3072000
-> +
-
-You miss nuvoton,key_enable. If this is intentional, mention and shortly
-explain deviations from pure conversion in the commit msg.
-
-> +  '#sound-dai-cells':
-> +    const: 0
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/gpio/gpio.h>
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    i2c {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +        codec@1b {
-> +            #sound-dai-cells = <0>;
-> +            compatible = "nuvoton,nau8821";
-> +            reg = <0x1b>;
-
-compatible is first property, reg is second. Therefore put
-sound-dai-cells somewhere further.
-
-
-
-Best regards,
-Krzysztof
+diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+index 78411252b72a..0609c19caabd 100644
+--- a/tools/perf/Makefile.config
++++ b/tools/perf/Makefile.config
+@@ -315,6 +315,9 @@ FEATURE_CHECK_LDFLAGS-libpython := $(PYTHON_EMBED_LDOPTS)
+ 
+ FEATURE_CHECK_LDFLAGS-libaio = -lrt
+ 
++FEATURE_CHECK_LDFLAGS-disassembler-four-args = -lbfd -lopcodes -ldl
++FEATURE_CHECK_LDFLAGS-disassembler-init-styled = -lbfd -lopcodes -ldl
++
+ CORE_CFLAGS += -fno-omit-frame-pointer
+ CORE_CFLAGS += -ggdb3
+ CORE_CFLAGS += -funwind-tables
+@@ -344,8 +347,8 @@ ifneq ($(TCMALLOC),)
+ endif
+ 
+ ifeq ($(FEATURES_DUMP),)
+-# We will display at the end of this Makefile.config, using $(call feature_display_entries),
+-# as we may retry some feature detection here.
++# We will display at the end of this Makefile.config, using $(call feature_display_entries)
++# As we may retry some feature detection here, see the disassembler-four-args case, for instance
+   FEATURE_DISPLAY_DEFERRED := 1
+ include $(srctree)/tools/build/Makefile.feature
+ else
+@@ -907,9 +910,13 @@ ifdef BUILD_NONDISTRO
+ 
+     ifeq ($(feature-libbfd-liberty), 1)
+       EXTLIBS += -lbfd -lopcodes -liberty
++      FEATURE_CHECK_LDFLAGS-disassembler-four-args += -liberty -ldl
++      FEATURE_CHECK_LDFLAGS-disassembler-init-styled += -liberty -ldl
+     else
+       ifeq ($(feature-libbfd-liberty-z), 1)
+         EXTLIBS += -lbfd -lopcodes -liberty -lz
++        FEATURE_CHECK_LDFLAGS-disassembler-four-args += -liberty -lz -ldl
++        FEATURE_CHECK_LDFLAGS-disassembler-init-styled += -liberty -lz -ldl
+       endif
+     endif
+     $(call feature_check,disassembler-four-args)
+@@ -1333,6 +1340,6 @@ endif
+ 
+ # re-generate FEATURE-DUMP as we may have called feature_check, found out
+ # extra libraries to add to LDFLAGS of some other test and then redo those
+-# tests.
++# tests, see the block about libbfd, disassembler-four-args, for instance.
+ $(shell rm -f $(FEATURE_DUMP_FILENAME))
+ $(foreach feat,$(FEATURE_TESTS),$(shell echo "$(call feature_assign,$(feat))" >> $(FEATURE_DUMP_FILENAME)))
+diff --git a/tools/perf/tests/pe-file-parsing.c b/tools/perf/tests/pe-file-parsing.c
+index c09a9fae1689..fff58b220c07 100644
+--- a/tools/perf/tests/pe-file-parsing.c
++++ b/tools/perf/tests/pe-file-parsing.c
+@@ -34,6 +34,7 @@ static int run_dir(const char *d)
+ 	struct dso *dso;
+ 	struct symbol *sym;
+ 	int ret;
++	size_t idx;
+ 
+ 	scnprintf(filename, PATH_MAX, "%s/pe-file.exe", d);
+ 	ret = filename__read_build_id(filename, &bid);
+@@ -61,7 +62,7 @@ static int run_dir(const char *d)
+ 	TEST_ASSERT_VAL("Failed to load symbols", ret == 0);
+ 
+ 	dso__sort_by_name(dso);
+-	sym = dso__find_symbol_by_name(dso, "main");
++	sym = dso__find_symbol_by_name(dso, "main", &idx);
+ 	TEST_ASSERT_VAL("Failed to find main", sym);
+ 	dso__delete(dso);
+ 
+-- 
+2.41.0.162.gfafddb0af9-goog
 
